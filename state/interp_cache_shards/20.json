@@ -9845,5 +9845,225 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eb42ebfbed24": {
+  "identity": {
+   "one_liner": "Go 电商 REST API，模块化单体+六边形架构后端服务",
+   "review": "KomeCore 是用 Go 编写的电商后端 REST API，提供多店铺目录、购物车结账、优惠券、支付对账、物流履约、评价收藏及员工管理等功能，采用模块化单体、六边形架构与 CQRS 等模式。它面向需要自建电商平台的开发者，通过 DB_TARGET 支持 PostgreSQL、Supabase 和 SQL Server，可经 Docker Compose 或 make 命令本地运行，并提供 Postman/Bruno/OpenAPI 等 API 测试集合。",
+   "highlights": [
+    "提供多店铺商品目录、购物车、折扣促销、支付对账、物流履约与员工管理等电商功能模块",
+    "实现模块化单体、六边形架构、CQRS、Saga-Lite 补偿事务与 Outbox 等模式",
+    "通过 pgx/v5 与 go-mssqldb 支持 PostgreSQL 与 SQL Server 双方言，附带迁移与种子数据脚本"
+   ],
+   "use_cases": [
+    "作为电商平台的订单、商品与支付后端服务",
+    "学习 Go 下模块化单体与六边形架构的工程实践",
+    "基于现成 API 集合（Postman/OpenAPI）进行接口测试与二次开发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Relational Database**|PostgreSQL & SQL Server|`pgx/v5`, `go-mssqldb`| ／ > **Environment Setup**: Copy `.env.example` to `.env`. Configure `DB_TARGET` (`postgres` · `supabase` · `sqlserver`), `STORAGE_PROVIDER` (`supabase` · `gcs` · `noop`), and `REDIS_ENABLED` (`true` · `false`). Schema migrations live in `migrations/<dialect>/` a",
+     "lines": [
+      53,
+      62
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|**Relational Database**|PostgreSQL & SQL Server|`pgx/v5`, `go-mssqldb`| ／ > **Environment Setup**: Copy `.env.example` to `.env`. Configure `DB_TARGET` (`postgres` · `supabase` · `sqlserver`), `STORAGE_PROVIDER` (`supabase` · `gcs` · `noop`), and `REDIS_ENABLED` (`true` · `false`). Schema migrations live in `migrations/<dialect>/` a",
+     "lines": [
+      53,
+      62
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 PostgreSQL/SQL Server 存储数据的电商应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Clean, scalable backend service engineered for modern e-commerce platforms in Go. ／ |**Relational Database**|PostgreSQL & SQL Server|`pgx/v5`, `go-mssqldb`| ／ > **Environment Setup**: Copy `.env.example` to `.env`. Configure `DB_TARGET` (`postgres` · `supabase` · `sqlserver`), `STORAGE_PROVIDER` (`supabase` · `gcs` · `noop`), and `REDIS_ENABLED` (`true` · `false`). Schema migrations live in `migrations/<dialect>/` and seed data in `seeds/<dialect>/`.",
+   "evidence_lines": [
+    3,
+    53,
+    62
+   ]
+  },
+  "fn": "Deuterrr/komecore",
+  "sha": "eb42ebfbed24",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "600a0ea3c5ad": {
+  "identity": {
+   "one_liner": "单二进制 Go 公共 feed 服务，ed25519 签名消息，SQLite 存储",
+   "review": "exe-hub 是用 Go 编写的公共动态 feed 服务，任何人都可运行 hub；写入为 ed25519 签名消息，存储于 SQLite（WAL 模式，append-only messages 表），图片存 IPFS，支持 hub 间一跳复制、Solana 代币准入、Web Push 及可选 Ollama 翻译。面向想自建 feed 节点的用户，通过 go build 或 Docker Compose 部署。",
+   "highlights": [
+    "写入为 ed25519 签名 envelope，消息 id 为内容 SHA-256，重试幂等",
+    "SQLite WAL 模式存储，raw envelope 为唯一事实来源，派生表可重放重建",
+    "支持 hub 间一跳复制、Solana 代币门控、IPFS 图片 pin 与公开 HTTP 读取 API"
+   ],
+   "use_cases": [
+    "自托管公共 feed/社交节点",
+    "基于签名消息的小型去中心化内容发布",
+    "多 hub 间手动策展的内容同步"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "ed25519-signed messages, reads are public HTTP, storage is SQLite, pictures ／ (`vapid_p256`) in the state directory, beside the SQLite database. ／ - **Storage.** SQLite in WAL mode. The `messages` table is the append-only",
+     "lines": [
+      5,
+      27,
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "exe-hub 是使用 SQLite 存储自身数据的应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Go binary. Anyone can run a hub; a key is an account. Writes arrive as ／ - **Storage.** SQLite in WAL mode. The `messages` table is the append-only ／ `Retry-After` inside it). Bans live in SQLite as signed admin messages, so",
+   "evidence_lines": [
+    4,
+    88,
+    135
+   ]
+  },
+  "fn": "livid/exe-hub",
+  "sha": "600a0ea3c5ad",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "42eae991b079": {
+  "identity": {
+   "one_liner": "自托管 webhook 投递平台，以 PostgreSQL 为唯一依赖",
+   "review": "Sparrow 是自托管的 webhook 投递服务，提供异步扇出、退避重试、Standard Webhooks 签名、端点健康跟踪、投递历史和内嵌 Svelte 仪表板。面向需要向客户发送 webhook 的服务方；单 Go 二进制运行，用 PostgreSQL 同时存数据和充当 River 任务队列，无需 Redis 或消息代理，payload 不出内网。",
+   "highlights": [
+    "以 PostgreSQL 为唯一依赖，单二进制运行，通过 River 实现任务队列",
+    "支持 HMAC-SHA256 与可选 Ed25519 签名（Standard Webhooks 格式）、退避重试与每端点健康跟踪",
+    "提供 Go 模板 payload 变换、OpenAPI 3.1 文档及可嵌入的消费者自助门户"
+   ],
+   "use_cases": [
+    "自托管向订阅方投递 webhook 的服务",
+    "替代在业务系统内自建 webhook 重试、签名与投递历史逻辑",
+    "作为事件分发网关接 Stripe/GitHub 等来源并路由到 Slack、S3 等目标"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Self-hosted webhook delivery. Retries, signing, health tracking, and a dashboard, with PostgreSQL as the only dependency.** ／ It is one Go binary with an embedded Svelte dashboard. No Redis, no broker, no sidecar workers. PostgreSQL holds the data and, through River, the job queue too. Payloads never leave your network.",
+     "lines": [
+      5,
+      21
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "- **Shaped for the receiver**: per-subscription Go templates reshape payloads; shipped recipes turn an event into a Slack, Discord, PagerDuty, ntfy, ClickHouse, Twilio, SendGrid, or CloudEvents call with no glue service.",
+     "lines": [
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 PostgreSQL 用于存放数据并承担 River 任务队列，Sparrow 是使用数据库的应用服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Self-hosted webhook delivery. Retries, signing, health tracking, and a dashboard, with PostgreSQL as the only dependency.** ／ It is one Go binary with an embedded Svelte dashboard. No Redis, no broker, no sidecar workers. PostgreSQL holds the data and, through River, the job queue too. Payloads never leave your network. ／ your services ──▶ Sparrow API + dashboard ──▶ PostgreSQL + River ──▶ signed deliveries to subscribers",
+   "evidence_lines": [
+    5,
+    21,
+    24
+   ]
+  },
+  "fn": "sarathsp06/sparrow",
+  "sha": "42eae991b079",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

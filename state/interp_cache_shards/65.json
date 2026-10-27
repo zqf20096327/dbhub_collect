@@ -10225,5 +10225,136 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2dcd1a3a8e51": {
+  "identity": {
+   "one_liner": "面向 SQL Server 与 Azure SQL/Synapse 的脚本与查询集合",
+   "review": "这是 Sérgio Fonseca 自 2005 年以来收集的个人脚本库，包含 SQL Server/Azure SQL 诊断（DMV、锁、死锁、Extended Events）、Synapse 与 Fabric 管理、PowerShell 及 Spark 等类别的独立脚本与代码片段。面向数据库管理员与 Azure 运维人员，需逐个文件审阅并替换环境参数后手动运行，不构成统一工具。",
+   "highlights": [
+    "提供 SQL Server/Azure SQL 诊断脚本，涵盖 DMV、等待、锁、死锁、索引、内存、I/O、tempdb 与 Extended Events",
+    "包含 Synapse 专用/无服务器 SQL 示例及通过 REST API 暂停/恢复、恢复 SQL 池的操作脚本",
+    "附有运行前检查清单，说明各脚本类型所需的客户端、模块与权限"
+   ],
+   "use_cases": [
+    "SQL Server 性能诊断与故障排查时查找参考查询",
+    "Azure Synapse/Fabric 工作区的日常管理与元数据操作",
+    "Azure 资源管理任务的 PowerShell 脚本参考"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "The collection focuses on SQL Server, Azure SQL, Azure Synapse Analytics, Microsoft Fabric, and Azure administration, with additional Windows, macOS, Spark, and .NET utilities. It includes both original work and material collected from other authors. ／ |SQL|SQL Server and Azure SQL diagnostics, DMVs, waits and locks, deadlocks, indexes, memory, I/O, tempdb, permissions, Extended Events, storage access, and connection tests.| ／ |T-SQL (`.sql`)|A SQL client such as SQL Server Management Studio (SSMS), a compatible SQL Server/Azure SQL/Synapse/Fabric endpoint, and permissions for the statements and diagnostic views used. Syntax and DMV availability differ across engines.|",
+     "lines": [
+      5,
+      13,
+      42
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库内容是为 SQL Server/Azure SQL 生态服务的诊断与管理脚本集合，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可（LICENSE 文件，版权 2019 Sérgio C Fonseca）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The collection focuses on SQL Server, Azure SQL, Azure Synapse Analytics, Microsoft Fabric, and Azure administration, with additional Windows, macOS, Spark, and .NET utilities. It includes both original work and material collected from other authors. ／ |SQL|SQL Server and Azure SQL diagnostics, DMVs, waits and locks, deadlocks, indexes, memory, I/O, tempdb, permissions, Extended Events, storage access, and connection tests.|",
+   "evidence_lines": [
+    5,
+    13
+   ]
+  },
+  "fn": "FonsecaSergio/ScriptCollection",
+  "sha": "2dcd1a3a8e51",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "196460430da7": {
+  "identity": {
+   "one_liner": "自建 NAS 导航页与容器面板，集成网关，单文件 SQLite + FastAPI 实现",
+   "review": "NavPage 是部署在自有 NAS 上的导航页与容器面板，用于把 Docker 容器自动生成卡片并区分内外网访问地址。面向自建 NAS 用户，内置反向代理、HTTPS 证书、DDNS、WAF 与 FRP 隧道管理，凭据存储于本地 SQLite 文件，通过 docker compose 一条命令部署。",
+   "highlights": [
+    "自动扫描 Docker 容器并按 compose 项目归类生成卡片，按客户端来源自动切换内网/外网地址",
+    "内置网关提供反向代理、ACME DNS-01 证书签发与续期、DDNS、WAF 和 FRP 隧道",
+    "支持一键部署远端 frps 节点，并提供 zip 格式的整体备份与恢复"
+   ],
+   "use_cases": [
+    "家庭 NAS / 自托管服务器上统一管理容器入口地址",
+    "无公网 IP 环境下通过 VPS + FRP 暴露内网容器服务",
+    "集中管理反向代理、HTTPS 证书与 DDNS 配置"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 凭据（SSH 密码、私钥、DNS Token、frp Token）只存在本地 SQLite，接口返回一律打码。",
+     "lines": [
+      259
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储自身凭据与运行数据的 NAS 面板应用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "部署在自己 NAS 上的导航页：自动把 Docker 容器变成卡片，同一张卡同时记内网和外网地址， ／ - 凭据（SSH 密码、私钥、DNS Token、frp Token）只存在本地 SQLite，接口返回一律打码。 ／ app/            FastAPI 后端（main.py 路由、db.py 存储、gw/ 网关各模块）",
+   "evidence_lines": [
+    7,
+    259,
+    264
+   ]
+  },
+  "fn": "yuwancumian2009/NavPage",
+  "sha": "196460430da7",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

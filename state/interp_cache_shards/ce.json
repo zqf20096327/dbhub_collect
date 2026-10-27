@@ -11400,5 +11400,79 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5d8074175069": {
+  "identity": {
+   "one_liner": "TiDB 的官方 Homebrew formula 仓库，用于 macOS 安装 tidb-server 与 tiup",
+   "review": "该仓库是 PingCAP 维护的 Homebrew tap，提供 tidb-server 与 tiup 两个 formula，用于在 macOS 上通过 brew 安装和以 brew services 方式运行 TiDB 单节点（内置 unistore 存储，无需 TiKV/PD）。默认以 auth_socket 插件启动 root、socket 置于 0700 目录并关闭未认证 HTTP 端点，适合本机开发测试环境使用。",
+   "highlights": [
+    "提供 brew install tidb-server 与 tiup 的安装方式，支持 brew services 启动注册",
+    "tidb-server 以单节点内置 unistore 引擎运行，无需 TiKV 或 PD",
+    "默认配置使用 auth_socket 插件、私有 socket 目录，并禁用未认证的 /metrics 等端点"
+   ],
+   "use_cases": [
+    "在 macOS 上通过 Homebrew 本地安装运行 TiDB 进行开发测试",
+    "以 brew services 方式将 tidb-server 注册为登录时启动的服务",
+    "安装内置 TUF 信任锚的 tiup 工具"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "Homebrew formulae for TiDB. ／ brew install tidb-server",
+     "lines": [
+      3,
+      9
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "mysql -S \"$(brew --prefix)/var/tidb-run/tidb.sock\" -uroot",
+     "lines": [
+      24
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库为 TiDB 数据库本体提供 Homebrew 分发与安装配方，属数据库生态的分发工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Homebrew formulae for TiDB. ／ brew install tidb-server ／ TiDB v26.3.21, single node on the built-in `unistore` engine (no TiKV or PD",
+   "evidence_lines": [
+    3,
+    9,
+    15
+   ]
+  },
+  "fn": "pingcap/homebrew-brew",
+  "sha": "5d8074175069",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

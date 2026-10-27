@@ -10870,5 +10870,205 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6ae52dbe34ae": {
+  "identity": {
+   "one_liner": "基于 PHP 与 MySQL 的开源电商商店系统",
+   "review": "modified 是一个面向真实线上商店的开源电商系统，使用 PHP 开发并以 MySQL/MariaDB 作为数据存储，采用模块化架构，提供支付与物流集成、多语言支持及插件扩展机制，由社区维护并持续更新。适用于需要自建网店、可定制开发的商家与 PHP 开发者。",
+   "highlights": [
+    "提供完整电商商店功能，含支付与物流集成",
+    "模块化架构，支持扩展插件与自定义开发",
+    "支持多语言，使用 PHP 与 MySQL/MariaDB 技术栈"
+   ],
+   "use_cases": [
+    "商家自建线上商店",
+    "开发者基于模块机制进行二次定制",
+    "多语言跨境零售场景的网店搭建"
+   ],
+   "classification": {
+    "cat": "应用",
+    "db_verdicts": [
+     {
+      "db": "MySQL",
+      "rel": "support",
+      "lines": [
+       3,
+       30
+      ]
+     },
+     {
+      "db": "MariaDB",
+      "rel": "support",
+      "lines": [
+       30
+      ]
+     }
+    ],
+    "eco": "app",
+    "eco_why": "README 表明这是以 MySQL 为数据存储的电商应用系统，而非为数据库生态服务的工具。",
+    "ai": {
+     "flag": false,
+     "kind": []
+    },
+    "persona": "use",
+    "official": {
+     "flag": false,
+     "of": null
+    }
+   },
+   "signals": {
+    "status": "active",
+    "license_note": "README 仅声明 open-source，未注明具体许可证",
+    "install": [
+     "source"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     3,
+     20,
+     30
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A proven open-source eCommerce system based on PHP & MySQL - actively maintained and continuously modernized by the community. ／ - MySQL / MariaDB",
+     "lines": [
+      3,
+      30
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MySQL / MariaDB",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是以 MySQL 为数据存储的电商应用系统，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "README 仅声明 open-source，未注明具体许可证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A proven open-source eCommerce system based on PHP & MySQL - actively maintained and continuously modernized by the community. ／ - 🛒 Complete eCommerce shop system ／ - MySQL / MariaDB",
+   "evidence_lines": [
+    3,
+    20,
+    30
+   ]
+  },
+  "fn": "modified-shop/modified-shop",
+  "sha": "6ae52dbe34ae",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5dfc5d04459d": {
+  "identity": {
+   "one_liner": "读英文网页时自动标注生词的浏览器扩展+本地引擎，数据存单个 SQLite 文件",
+   "review": "OpenGloss 是一个被动英语词汇习得工具：浏览器扩展在英文网页上内联标注生词（三档熟悉度配色），本地 FastAPI 引擎基于事件溯源重放计算词的熟悉度，全部数据存于本机一个 SQLite 文件，零遥测。面向每天读英文内容的四六级/技术阅读者；标注统计不需 LLM，聊天与义项影子实验需配置 LLM key。",
+   "highlights": [
+    "浏览器扩展在英文网页上内联标注生词，悬停显示释义与熟悉度 S 值",
+    "事件溯源数据模型：学习历史为只追加事件，熟悉度可从事件重放得出",
+    "本地优先：全部数据存于本机单个 SQLite 文件（pae.db），支持 VACUUM INTO 单文件快照备份"
+   ],
+   "use_cases": [
+    "在阅读英文技术文档/GitHub README/论文时被动积累词汇",
+    "四六级词汇在日常阅读中的自然覆盖（基于 ECDICT 词典的大纲标注）",
+    "需要数据完全本地、无遥测的词汇学习场景"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Local-first: everything lives in a single SQLite file on your machine, with zero telemetry. Built for people who read ／ **方式一（省事·推荐）**：从 Releases 下载构建好的 `dict.sqlite`， ／ python scripts/build_dict.py --csv resources/ECDICT/ecdict.csv --out resources/ECDICT/dict.sqlite",
+     "lines": [
+      13,
+      114,
+      124
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 文件存储学习记录、对话与词典数据，属于使用数据库的应用而非为数据库生态服务的工具",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> Local-first: everything lives in a single SQLite file on your machine, with zero telemetry. Built for people who read ／ - **事件溯源**：你的学习历史是一串只追加的事件，熟悉度随时可以从零重放出来。数据是你的，全在本地一个 `pae.db`，备份 = 复制文件。 ／ - 所有数据本地：学习记录、对话、事实、参数——一个 `pae.db`",
+   "evidence_lines": [
+    13,
+    231,
+    240
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "luomeii/OpenGloss",
+  "sha": "5dfc5d04459d",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

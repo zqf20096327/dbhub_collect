@@ -10898,5 +10898,205 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7d62c24cf502": {
+  "identity": {
+   "one_liner": "Rust 编写的无头 CMS，单二进制加单个 Postgres 数据库",
+   "review": "TachyonCMS 是用 Rust 实现的无头 CMS，用户定义内容类型后自动生成 REST API，依赖单个 PostgreSQL 数据库存取内容。提供角色权限、集合/字段级访问规则、过滤排序分页等能力，面向需要 API 优先内容管理的开发者和编辑团队；目前处于 pre-alpha，管理 UI、媒体、草稿和 GraphQL 尚未实现。",
+   "highlights": [
+    "通过 API 定义集合与字段并自动生成内容 REST API，支持过滤、排序、分页、关系填充与虚拟/连接字段",
+    "提供四种内置角色与可自定义角色，支持集合、全局和字段三个层级的访问规则",
+    "认证支持会话 cookie、bearer token 和带作用域的 API key"
+   ],
+   "use_cases": [
+    "为网站或应用提供内容 API 后端",
+    "需要按角色和字段精细控制读写权限的内容发布场景",
+    "以 API 优先方式管理结构化内容（如博客、站点设置）"
+   ],
+   "doc_note": "L6 自述 pre-alpha，admin UI/media/drafts/GraphQL 未实现"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A headless CMS written in Rust. One binary, one Postgres database, and an API generated from the content types you define.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明它是一个使用单个 Postgres 数据库存取内容的 CMS 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A headless CMS written in Rust. One binary, one Postgres database, and an API generated from the content types you define. ／ > TachyonCMS is pre-alpha. The core content API, sign-in and access rules work today. The admin UI, media, drafts and GraphQL don't exist yet, so don't put it on a public network. Watch the repo to follow along, or jump in. ／ You'll need Rust (stable), Docker, and `sqlx-cli` if you plan to change queries.",
+   "evidence_lines": [
+    3,
+    6,
+    36
+   ]
+  },
+  "fn": "tachyon-cms/tachyoncms",
+  "sha": "7d62c24cf502",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "283b0a2c4220": {
+  "identity": {
+   "one_liner": "自托管、无模型的 Git 仓库知识库，用 Tree-sitter 和 SQLite FTS5 建索引",
+   "review": "将 GitHub/GitLab 仓库导入为可检索知识库，支持文档、代码与符号搜索，并提供只读 MCP 接口供 AI 客户端查询。面向需要私有化检索代码与文档的团队或个人，无需 GPU 或模型服务，仅用 SQLite FTS5 和 Tree-sitter 做关键词与结构化检索。当前为 0.2.0 早期版本，单实例单工作器，无 SSO 和角色级授权。",
+   "highlights": [
+    "支持批量导入 GitHub/GitLab 组、组织及私有仓库并建立跨仓库索引",
+    "提供只读 MCP 接口，包含搜索、源码读取、符号查询和调用线索等工具",
+    "基于 Git 固定快照、Tree-sitter 与 SQLite FTS5，CPU 即可运行"
+   ],
+   "use_cases": [
+    "团队私有化部署的代码与文档检索知识库",
+    "为 AI 客户端提供只读的代码知识库 MCP 接入",
+    "跨仓库搜索代码符号与调用关系"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "基于 Git 固定快照、Tree-sitter 和 SQLite FTS5，采用 MIT 许可。当前为 `0.2.0` 早期版本。 ／ Parse --> DB[SQLite / FTS5] ／ - 数据默认在 `.data/`，数据库为 `repoknow.sqlite3`；`REPOKNOW_DATA_DIR` 可指定其他位置，`REPOKNOW_PORT` 可调整本机管理脚本端口。",
+     "lines": [
+      11,
+      31,
+      165
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 作为自身存储数据的数据库，而非为数据库生态提供工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "基于 Git 固定快照、Tree-sitter 和 SQLite FTS5，采用 MIT 许可。当前为 `0.2.0` 早期版本。 ／   Parse --> DB[SQLite / FTS5] ／ - 数据默认在 `.data/`，数据库为 `repoknow.sqlite3`；`REPOKNOW_DATA_DIR` 可指定其他位置，`REPOKNOW_PORT` 可调整本机管理脚本端口。",
+   "evidence_lines": [
+    11,
+    31,
+    165
+   ]
+  },
+  "fn": "gdpu11/repoknow",
+  "sha": "283b0a2c4220",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7439c5b51f17": {
+  "identity": {
+   "one_liner": "openGauss 社区安全治理文档仓库",
+   "review": "openGauss 社区 SIG Security 小组的仓库，用于存放安全流程、安全指导和合规准则等文档，并负责接收安全问题报告、开展安全治理与 License 合规、第三方组件准入审查。面向 openGauss 社区贡献者和安全响应人员使用。",
+   "highlights": [
+    "接收和响应 openGauss 社区安全问题报告",
+    "提供安全流程、安全指导、合规准则文档",
+    "开展 License 合规与第三方组件准入审查"
+   ],
+   "use_cases": [
+    "提交或查阅 openGauss 社区安全漏洞处理流程",
+    "查阅社区安全指导与合规准则文档"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "openGauss社区SIG Security小组负责接收和响应openGauss社区安全问题报告、提供社区安全指导，开展安全治理。同时负责openGauss社区License合规、开源第三方组件准入等合规审查工作。",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库为 openGauss 数据库社区提供安全治理与合规文档，属数据库生态服务的官方组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "openGauss"
+   },
+   "dbs": [
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "openGauss社区SIG Security小组负责接收和响应openGauss社区安全问题报告、提供社区安全指导，开展安全治理。同时负责openGauss社区License合规、开源第三方组件准入等合规审查工作。 ／ security仓库用于SIG Security小组存放安全流程、安全指导、合规准则等相关的文档。",
+   "evidence_lines": [
+    5,
+    7
+   ]
+  },
+  "fn": "opengauss-mirror/security",
+  "sha": "7439c5b51f17",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

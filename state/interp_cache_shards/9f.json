@@ -12005,5 +12005,70 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d5bde7a28f40": {
+  "identity": {
+   "one_liner": "Windows 带宽统计工具，读取接口计数器并存储于本地 SQLite",
+   "review": "OctetLedger 是面向 Windows 用户的流量用量统计程序，不抓包，通过每分钟读取系统网络接口计数器，把差值写入用户目录下的 SQLite 文件，并生成小时/日/月报表、预算告警、对比与本地仪表盘，支持 CLI、JSON、CSV 输出。数据完全离线保存在本机，不记录站点、IP 或包内容；按应用统计需管理员权限的 ETW 监控且为可选功能。",
+   "highlights": [
+    "通过读取 Windows 接口计数器差值记录流量历史，无需抓包，每分钟采样一次",
+    "提供小时/日/周/月报表、月度预算与周期对比、JSON/CSV 机器可读输出及本地 dashboard",
+    "数据存储于用户目录下的离线 SQLite 文件，支持保留策略、完整性检查、自动备份与回滚更新"
+   ],
+   "use_cases": [
+    "在 Windows 上跟踪每月上/下行流量用量与预算余量",
+    "需要本地私有流量统计、不安装服务或管理员权限的场景",
+    "以 JSON/CSV 导出流量数据供脚本或电子表格处理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Windows interface counters, stores only counter differences in SQLite, and turns them into useful ／ |Ownership|Offline-first SQLite database under your Windows profile|",
+     "lines": [
+      11,
+      21
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 存储自身的流量统计数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Windows interface counters, stores only counter differences in SQLite, and turns them into useful ／ |Ownership|Offline-first SQLite database under your Windows profile|",
+   "evidence_lines": [
+    11,
+    21
+   ]
+  },
+  "fn": "Roman-Cuisset/octet-ledger",
+  "sha": "d5bde7a28f40",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

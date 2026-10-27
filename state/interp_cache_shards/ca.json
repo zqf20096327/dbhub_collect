@@ -9991,5 +9991,83 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "99188b008b4d": {
+  "identity": {
+   "one_liner": "企业 AI 资产治理平台，统一管理 MCP/Skill/Agent 的身份、权限、计量与审计",
+   "review": "元冰可是一个自托管的企业 AI 资产治理平台，把 MCP 服务、Skill、Agent、AI 应用等统一登记为资产，提供生命周期状态机、权限声明、部门×Agent×Skill 三维成本归集和审计日志。面向需要对内部 AI 资产做治理和追责的企业运维方。基于 cordis 插件架构，默认 JSON 存储，可选 SQLite 后端，Postgres 多节点 HA 尚在规划中。",
+   "highlights": [
+    "29 个插件包覆盖身份、MCP、Skill、Agent、模型渠道、计量、审计等域，可按需启停",
+    "支持 PLATFORM_STORAGE=sqlite 切换 SQLite 后端（WAL + 事务，首启自动回填 JSON 数据）",
+    "平台自身可作为 MCP Server，86 个注册工具均声明最小权限 permission"
+   ],
+   "use_cases": [
+    "企业需要统一登记、审批和生命周期管理散落各处的 MCP 服务与 Agent",
+    "按部门/Agent/Skill 维度归集模型调用成本与用量报表",
+    "需要审计日志与调用权限追溯的 AI 资产合规场景"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "(`data/txnstore.db`)。**两种形态都是单进程、无水平扩展**——多节点 HA 需要 Postgres",
+     "lines": [
+      196
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "企业单节点部署建议开启 SQLite 集合后端(数据完整性 / 内存有界,详见「诚实边界」): ／ PLATFORM_STORAGE=sqlite npm start # 业务集合切换 SQLite 后端(WAL + 事务,首启自动回填既有 JSON 数据)",
+     "lines": [
+      83,
+      86
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是治理 AI 资产的平台工具，SQLite 仅作为其可选存储后端，自身不依赖数据库业务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 元冰可 · 企业 AI 资源管理平台 ／ 企业单节点部署建议开启 SQLite 集合后端(数据完整性 / 内存有界,详见「诚实边界」): ／ **MCP**——平台即 MCP Server,任意 MCP 客户端可直接接入;86 个注册工具",
+   "evidence_lines": [
+    1,
+    83,
+    178
+   ]
+  },
+  "fn": "01men/ybkkasi",
+  "sha": "99188b008b4d",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

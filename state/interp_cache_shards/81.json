@@ -10715,5 +10715,228 @@
   "generated_at": "2026-10-25",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "0aca1d1b5a7d": {
+  "identity": {
+   "one_liner": "通过 Proton Bridge 提供 Proton Mail 的 MCP 服务器与 CLI",
+   "review": "这是一个基于 Proton Bridge 本地 IMAP/SMTP 网关构建的 MCP 服务器和 CLI，供 Claude Desktop、Claude Code 等 MCP 客户端或脚本读取、搜索、起草和发送 Proton 邮件，共 116 个工具；本地维护 SQLite 全文索引支持搜索，提供只读、仅草稿等模式作为安全控制，需 Proton Bridge 持续运行且需 Node.js 24 以上。",
+   "highlights": [
+    "提供 116 个 MCP 工具及对应的完整 CLI，支持读取、搜索、起草、发送和整理邮件",
+    "在本地 SQLite 索引上实现全文本地搜索，后台同步保持索引与服务器一致",
+    "支持 read-only、drafts 等运行模式、发送门控和破坏性操作确认"
+   ],
+   "use_cases": [
+    "从 Claude Desktop 或其他 MCP 客户端管理 Proton Mail 收件箱",
+    "用 CLI/脚本/cron 对 Proton 邮箱做自动化分拣和批量处理",
+    "在无头机器上以本地索引方式检索邮件"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install ／ |`search_indexed_emails` (local SQLite index)|~10 ms| ／ - The local index lives at `PROTONMAIL_DATA_DIR/mail-index.sqlite`. Background sync and IMAP IDLE keep it warm.",
+     "lines": [
+      120,
+      546,
+      616
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 存储自身维护的本地邮件索引，数据库为其应用数据层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mail inbox: read, search, send, draft, triage threads, manage folders, save attachments, and more — 116 MCP tools in total. Most of the same capabilities are also available as a full CLI for scripting, cron, and piped automation — no Claude required. ／ **How this relates to Proton Bridge.** This is a layer on top of Proton Mail Bridge, not a replacement for it. Bridge is Proton's official, local IMAP/SMTP gateway and the only supported way to reach a Proton mailbox from other software; this project talks to it. Bridge's own `--cli` mode manages Bridge itself (signing in, account details and the Bridge password, ports and other settings), it is not a mail client. Proton does not publish a terminal mail client, so reading, searching, drafting and sending from Claude or a script is what this adds on top, together with the safety controls above. Bridge has to be running and signed in. ／ The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install leaves the working one untouched. The config is merged, not replaced: existing `env` keys you added by hand are kept, and the config is rewritten atomically (the newest 5 `.bak-*` copies are kept). Passwords are never printed. Run `npm run check:claude-desktop` to verify an install; it exits non-zero when the command, the runtime or the database module is broken.",
+   "evidence_lines": [
+    21,
+    56,
+    120
+   ]
+  },
+  "fn": "googlarz/proton-mail-bridge-client",
+  "sha": "0aca1d1b5a7d",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "85ae8f352f0a": {
+  "identity": {
+   "one_liner": "键盘驱动的终端表格数据浏览器，直接打开 CSV/Excel/SQLite 等文件",
+   "review": "tuitab 是一个 Rust 编写的终端表格数据探索工具，可打开 CSV、JSON、Parquet、Excel、SQLite、DuckDB 等格式，提供过滤、排序、透视、JOIN、计算列和图表功能，并可直接编辑 SQLite/DuckDB 表后写回。面向需要在 shell 中分析数据的开发者与数据人员，通过 cargo、brew、apt 等方式安装。",
+   "highlights": [
+    "直接读取并写回 SQLite 与 DuckDB 数据库文件，编辑操作以事务执行并先展示 SQL 语句",
+    "内置 Polars 引擎，支持透视、跨文件 JOIN、去重、窗口函数与终端内图表渲染",
+    "提供 --mcp 参数启动 MCP 服务器，供 AI 助手调用其计算能力，可选 --mcp-write 开启写入"
+   ],
+   "use_cases": [
+    "在终端中浏览、过滤和统计分析 CSV/Parquet/Excel 等表格文件",
+    "直接编辑 SQLite/DuckDB 数据库表的单元格、行列结构并保存回原文件",
+    "在多种结构化格式（如 TOML 与 YAML）之间转换数据"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Open **CSV · JSON · YAML · TOML · Parquet · Excel · SQLite · DuckDB** straight from your shell — ／ - **Build a database from nothing** — `tuitab inventory.sqlite` on a file that does not ／ - **Edit a database table and save it back** — open a SQLite or DuckDB table, edit",
+     "lines": [
+      10,
+      48,
+      54
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "psql -c \"SELECT * FROM orders\" --csv | tuitab -t csv",
+     "lines": [
+      262
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明该工具直接读取、编辑并写回 SQLite/DuckDB 数据库文件，为数据操作提供服务而非以某数据库为后端的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Open **CSV · JSON · YAML · TOML · Parquet · Excel · SQLite · DuckDB** straight from your shell — ／ - **Edit a database table and save it back** — open a SQLite or DuckDB table, edit ／ - **MCP server** — `tuitab --mcp` exposes the same engine to an AI assistant, so it",
+   "evidence_lines": [
+    10,
+    54,
+    69
+   ]
+  },
+  "fn": "denisotree/tuitab",
+  "sha": "85ae8f352f0a",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "be6f114e0d29": {
+  "identity": {
+   "one_liner": "面向 .NET 开发者的 Oracle 数据库浏览与编辑工具",
+   "review": "FerretSharp 是一个运行在 Windows 上的 Oracle 数据库图形化浏览与编辑工具，面向日常使用 Oracle 的 .NET 开发者。它提供工作区隔离会话、外键导航、沙箱式事务编辑、SQL 编辑器、schema 比较，并可加载 EF Core 项目模型，将实体/属性名映射到表列并提供 LINQ 控制台。仅支持 Oracle，界面提供英德双语。",
+   "highlights": [
+    "提供工作区与显式事务编辑，生产连接默认以只读事务运行",
+    "支持外键导航及基于 EF Core 模型的非外键关系跳转，附带 LINQ 控制台显示生成的 SQL",
+    "包含 SQL 编辑器、执行计划查看与跨连接 schema 比较"
+   ],
+   "use_cases": [
+    ".NET 开发者日常查看与编辑 Oracle 数据表",
+    "通过 EF Core 模型以 C# 实体名浏览表和构造 LINQ 查询",
+    "对比 Dev/Test/Prod 等环境的 schema 差异并生成 DDL 建议"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "An Oracle database explorer for .NET developers – with workspaces, foreign-key navigation, ／ developer works with an Oracle database day to day: ／ read-only by default, enforced by Oracle itself.",
+     "lines": [
+      5,
+      24,
+      31
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具专为 Oracle 数据库提供浏览、编辑、schema 比较等管理功能，为数据库生态服务而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " An Oracle database explorer for .NET developers – with workspaces, foreign-key navigation, ／ General-purpose database tools know your schema, but not your application. FerretSharp is built around the way a .NET ／ Link a connection to your EF Core project (EF Core 8 or later) and FerretSharp loads the compiled model in a separate",
+   "evidence_lines": [
+    5,
+    23,
+    146
+   ]
+  },
+  "fn": "JuliusFo/FerretSharp",
+  "sha": "be6f114e0d29",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9314,5 +9314,148 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5601c91138ab": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式三模数据库引擎，融合向量、图与文档存储",
+   "review": "TriviumDB 是一个纯 Rust 编写的嵌入式数据库引擎，在单一存储内核中同时提供向量检索、属性图谱和 JSON 文档存储，支持 Rom 单文件与 Mmap 双模式、TQL 查询语言和内嵌图算法。面向 Agent 记忆、RAG 和知识图谱应用的开发者，通过 Python/Node.js/Rust API 进程内使用；当前为 beta 阶段，多写并发依赖进程级写锁。",
+   "highlights": [
+    "在单一存储内核中原生提供向量检索、属性图谱和文档元数据三种数据模型，共享事务与 WAL",
+    "提供 TQL 查询语言，支持向量召回、BM25/AC 文本召回、图扩展、图算法、集合代数与聚合的自由编排",
+    "通过 PyO3/napi-rs 提供 Python 与 Node.js 绑定，支持 pip/npm/cargo 安装及 Rom/Mmap 双存储模式切换"
+   ],
+   "use_cases": [
+    "AI Agent 长期记忆：对话节点存储向量与原文，沿关系链扩散召回",
+    "个人知识库：笔记切片入库，语义搜索与图谱导航结合",
+    "游戏 NPC 认知引擎：事件存为带向量节点，检索相关记忆生成回应"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|维度|SQLite|pgvector|Kùzu|Qdrant|Neo4j|SurrealDB|LanceDB|**TriviumDB**| ／ |嵌入式便携存储|✅ 单文件|❌ PG 服务|✅ 单文件|⚠️ 内存/目录嵌入式|❌ JVM 服务|✅ 可切换|⚠️ 目录嵌入式|✅ Rom 单 `.tdb` / Mmap 同代文件集|",
+     "lines": [
+      383,
+      389
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "我们的目标是成为 **AI 应用领域的 SQLite**： ／ |② 存数据|调 SQLite 写入时间、场景|↑ 同一步，payload 里就是 JSON| ／ |💾 **双模式存储**|Mmap（大模型极速分体冷启动） / Rom（传统 SQLite 级单文件打包携带），无缝热切换| ／ |维度|SQLite|pgvector|Kùzu|Qdrant|Neo4j|SurrealDB|LanceDB|**TriviumDB**| ／ > **并发多写模型**是 TriviumDB 当前明确的短板：Writer 通过进程级排他文件锁独占写路径，多读并发依赖 ReadOnly 共享锁，跨进程无锁读依赖 Immutable 不可换代际。这与 SQLite（WAL 单写）和原版 Kùzu（单进程写）同为嵌入式架构的常见取舍；需要高并发多写的场景，应选择服务端（Qdrant/Neo4j/pgvector）或分布式（SurrealDB）/MVCC 表格式（LanceDB）方案。",
+     "lines": [
+      28,
+      68,
+      221,
+      383,
+      397
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库引擎内核，为 AI 应用提供进程内存储能力，而非使用其他数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TriviumDB 是一个用纯 Rust 编写的**嵌入式三模数据库引擎**，将**向量检索（Vector）**、**属性图谱（Graph）**和**文档型元数据（Document）**原生融合在同一个存储内核中。Rom 模式保持单个 `*.tdb` 的便携性；默认 Mmap 模式使用受同一 generation 协议保护的分离 sidecar。 ／ > TriviumDB 为 Agent、RAG 和知识图谱应用提供进程内的向量、图与文档存储。宿主应用通过 Rust、Python 或 Node.js API 管理数据库实例、查询和持久化。 ／ uv pip install triviumdb",
+   "evidence_lines": [
+    26,
+    15,
+    96
+   ]
+  },
+  "fn": "YoKONCy/TriviumDB",
+  "sha": "5601c91138ab",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3ffa621238cd": {
+  "identity": {
+   "one_liner": "基于 Odoo 20 的自托管软件工厂平台，含 BFF 与可观测性",
+   "review": "core-odoo 将 Odoo 20 用作可复用后端骨架，提供声明式 BFF、dev/staging/prod 隔离环境、模块生成脚手架、审批部署和由 Prometheus/Loki/Grafana 组成的可观测性栈，全部运行在单台 Docker 主机上，面向需要类 Odoo.sh 工作流的开发与运维团队。平台本体 Apache-2.0，Odoo 模块为 LGPL-3.0。",
+   "highlights": [
+    "提供声明式 BFF，通过 backend.yaml 暴露模型/字段",
+    "包含 Prometheus、Loki、Grafana、Alertmanager、Uptime Kuma 可观测性组件",
+    "支持多用户面板、角色权限与生产环境审批部署"
+   ],
+   "use_cases": [
+    "在单 Docker 主机上为 Odoo 项目搭建 dev/staging/prod 环境流水线",
+    "生成带测试的 Odoo 模块与前端并进行版本化部署",
+    "集中查看项目环境指标与日志的运维面板"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该平台本身构建在 Odoo 之上，使用数据库存储业务数据，属于使用数据库的应用/平台",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：平台 Apache-2.0，Odoo 模块 LGPL-3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Self-hosted, distributable software factory built on Odoo 20.** ／ observability — all on a single Docker host. ／ - **Observability** — Prometheus, Loki, Grafana, Alertmanager, Uptime Kuma.",
+   "evidence_lines": [
+    3,
+    10,
+    33
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "devcristianlopez/core-odoo",
+  "sha": "3ffa621238cd",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

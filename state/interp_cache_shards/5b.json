@@ -9023,5 +9023,146 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dd97a3f41bfe": {
+  "identity": {
+   "one_liner": "C# 编写的 Albion Online MMO 本地服务器模拟器，用于协议学习",
+   "review": "用 C#/.NET 10 实现的 Albion Online 本地服务器模拟器，覆盖登录、游戏、聊天服务器与世界观模拟，供个人在本地或局域网学习 MMO 客户端/服务器协议使用；需要自行拥有游戏客户端的 GameData 文件才能启动，仅针对特定客户端版本构建，以 SQLite 做持久化并带 schema 迁移。",
+   "highlights": [
+    "实现 Photon UDP 传输、Protocol18 序列化与 DH/AES 加密握手的服务器端模拟",
+    "使用 SQLite 持久化并支持 schema 迁移，账号采用 PBKDF2 密码",
+    "内置离线自测程序，可在无网络环境下运行并输出 JSON 报告"
+   ],
+   "use_cases": [
+    "学习 MMO 客户端/服务器协议与游戏服务器架构",
+    "在本地或局域网进行单机或好友间的小规模游戏模拟",
+    "对自己的会话抓包做协议解码分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "with PBKDF2 passwords, several characters per account, GM levels and a chat command system, SQLite persistence with",
+     "lines": [
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是用 SQLite 做账号/世界数据持久化的游戏服务器应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An educational server emulator, written in C# (.NET 10), for studying how an MMO client and server talk to each other ／  with PBKDF2 passwords, several characters per account, GM levels and a chat command system, SQLite persistence with ／ dotnet run --project src/AlbionLocal.Server --no-launch-profile -- -v --Paths:ClientGameData=\"C:/Games/AlbionOnline/game/Albion-Online_Data/StreamingAssets/GameData\"",
+   "evidence_lines": [
+    3,
+    32,
+    106
+   ]
+  },
+  "fn": "MrGreenCheezz/albion-local-server",
+  "sha": "dd97a3f41bfe",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8d4cf319617f": {
+  "identity": {
+   "one_liner": "VastBase/openGauss/PostgreSQL 离线应急数据恢复工具",
+   "review": "vbdul 是一款面向 VastBase/PostgreSQL 的应急数据恢复工具，在数据库无法启动、误删表或数据且无备份时，直接解析磁盘数据文件、扫描空闲页面、挖掘 WAL 来抢救数据，并支持基于 ProBackup 的时间点恢复。供 DBA 与运维人员使用；仅支持 Heap 行存引擎，正式版需 license。",
+   "highlights": [
+    "直接解析磁盘数据文件与文件系统空闲页面，离线恢复 DROP TABLE/TRUNCATE 误删数据",
+    "内置 logminer 从 WAL 挖掘 INSERT/DELETE/UPDATE 并按事务恢复",
+    "支持 PostgreSQL 10~17 及多种 VastBase 内核版本，导出 COPY 文本格式并生成 psql 导入脚本"
+   ],
+   "use_cases": [
+    "数据库无法启动且无备份时从数据文件抢救数据",
+    "误执行 DROP TABLE/TRUNCATE 后在页面被覆写前恢复数据",
+    "通过 WAL 挖掘定位误操作事务并恢复被误删/误改的行"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|db_type|是|`vastbase` 或 `postgresql`，按实例内核填；填错直接报错退出| ／ |data_dir|是|数据目录（VastBase 如 `/home/vastbase/data/vastbase`；PG 如 `/var/lib/pgsql/17/data`）| ／ |postgresql|pg10 ~ pg17|对应 PostgreSQL 10 ~ 17|",
+     "lines": [
+      34,
+      36,
+      58
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "vbdul 是一款 VastBase 数据库应急数据恢复工具，类似 Oracle ODU。在数据库无法启动、误删表/数据、无备份的极端场景下，直接从磁盘数据文件中抢救恢复数据。 ／ |ora_number|否|VastBase Oracle 兼容 NUMBER 的显示方式，默认 `on`|",
+     "lines": [
+      3,
+      44
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 VastBase/PostgreSQL 数据库提供离线数据恢复能力，属数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "正式版需向供应商申请 license（受限模式），Beta 版无需 license",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "vbdul 是一款 VastBase 数据库应急数据恢复工具，类似 Oracle ODU。在数据库无法启动、误删表/数据、无备份的极端场景下，直接从磁盘数据文件中抢救恢复数据。 ／ |db_type|是|`vastbase` 或 `postgresql`，按实例内核填；填错直接报错退出| ／ - 仅支持 Heap（行存）引擎；ustore（undo 引擎）、cstore（列存引擎）暂不支持",
+   "evidence_lines": [
+    3,
+    34,
+    218
+   ]
+  },
+  "fn": "LiXiangYu0612/vbdul",
+  "sha": "8d4cf319617f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

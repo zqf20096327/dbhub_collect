@@ -11025,5 +11025,130 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9fa742dca3d4": {
+  "identity": {
+   "one_liner": "自托管个人网盘，Go 后端以 SQLite 存储，面向小内存 VPS",
+   "review": "PocketDrive 是一个自托管个人网盘应用，前端 React、后端 Go，数据与配置用 SQLite 存储，无需单独部署数据库或缓存。提供文件管理、WebDAV、aria2 离线下载、在线预览、Markdown 笔记、分享等功能，定位于 512MB–1GB 内存的小型 VPS，单用户设计。安装以 Docker 镜像和一键脚本为主。",
+   "highlights": [
+    "提供 WebDAV 访问、aria2 离线下载、在线预览、分享与 Markdown 笔记功能",
+    "使用 SQLite 存储，无需独立数据库进程，支持环境变量配置数据库路径",
+    "支持 WebDAV、Docker 编排部署与外部 R2/S3 存储挂载"
+   ],
+   "use_cases": [
+    "在小内存 VPS 上自托管个人文件网盘",
+    "通过 WebDAV 在客户端读写网盘文件",
+    "在服务器上用 aria2 做 HTTP/磁力/种子离线下载"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "自托管个人网盘,专为小内存 VPS设计。前端 React,后端 Go ,SQLite 存储。 ／ 虽然轻量，但功能不减。存储采用 SQLite，支持 WebDAV，内置 aria2 离线下载，还能自动更新 Tracker。文件预览直接调用浏览器能力，不堆插件。 ／ |`/opt/pocketdrive/config`|SQLite 配置库、缩略图缓存、分片上传暂存|",
+     "lines": [
+      5,
+      11,
+      136
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储自身数据与配置的网盘应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "自托管个人网盘,专为小内存 VPS设计。前端 React,后端 Go ,SQLite 存储。 ／ 脚本会自动:装 docker(如果没有)→ 建 `/opt/pocketdrive` → 生成随机密码和 aria2 RPC 密钥 →",
+   "evidence_lines": [
+    5,
+    49
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "lqlcj/PocketDrive",
+  "sha": "9fa742dca3d4",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::恢复通过pxd创建的polardbx容器组件": {
+  "identity": {
+   "one_liner": "恢复通过pxd创建的PolarDB-X容器组件的工具",
+   "review": "基于简介：该项目用于恢复通过 pxd 创建的 PolarDB-X 容器组件，面向使用 pxd 部署 PolarDB-X 的运维人员。简介未说明具体恢复机制、支持范围与安装方式，实际能力需以仓库文档为准，此处仅作保守编目。",
+   "highlights": [
+    "针对通过 pxd 创建的 PolarDB-X 容器组件执行恢复操作"
+   ],
+   "use_cases": [
+    "pxd 部署的 PolarDB-X 容器组件异常后的恢复"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PolarDB",
+     "rel": "support",
+     "quote": "恢复通过pxd创建的polardbx容器组件"
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 PolarDB-X 容器组件提供恢复功能，服务于该数据库生态的运维环节",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PolarDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "恢复通过pxd创建的polardbx容器组件"
+  },
+  "fn": "RandolphChin/PolarDBX-recovery",
+  "sha": "desc::恢复通过pxd创建的polardbx容器组件",
+  "source": "desc",
+  "generated_at": "2026-10-27",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

@@ -8688,5 +8688,198 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a5e42d69df99": {
+  "identity": {
+   "one_liner": "多生态软件包代理/缓存服务器，支持 RubyGems、crates.io、npm",
+   "review": "Vein 是一个软件包代理与镜像/缓存服务器，为 RubyGems、crates.io 和 npm 生态提供代理缓存能力，通过 Cargo feature 按需启用各 registry 路由，并包含 MCP 代码上下文提供等附加组件。适合需要搭建内部包代理缓存的基础设施使用者，采用 BSD-3-Clause 许可。",
+   "highlights": [
+    "支持 RubyGems、crates.io、npm 三种 registry 的代理缓存，可通过 Cargo feature 裁剪启用的 registry",
+    "未启用的 registry 请求返回 404 并拒绝相关配置",
+    "内置 GitHits 代码上下文提供器（MCP 工具），默认关闭需配置开启"
+   ],
+   "use_cases": [
+    "为开发团队搭建内部软件包代理缓存",
+    "只代理特定生态（如仅 crates.io）的镜像服务",
+    "提供开源代码/文档上下文查询的 MCP 工具部署"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 描述其为为包管理生态提供代理/缓存服务的组件，不依赖某数据库存储业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BSD-3-Clause",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A fast, intelligent multi-ecosystem package proxy/cache for RubyGems, crates.io, and npm. ／ Each registry is a Cargo feature, all three on by default: `gems`, `crates`, `npm`.",
+   "evidence_lines": [
+    3,
+    9
+   ]
+  },
+  "fn": "contriboss/vein",
+  "sha": "a5e42d69df99",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6bfe14bf6c3c": {
+  "identity": {
+   "one_liner": "面向小工厂的本地订单、送货与对账应用",
+   "review": "这是一个运行在 Windows 单机上的小工厂业务工具，覆盖录单、分批送货、客户对账和结算归档流程，面向小型生产工厂的老板与跟单、送货、对账人员。订单可从照片/PDF 识别生成候选明细，由人工核对确认；数据与识别模型均在本地，断网可用。预览阶段不保证数据升级，仅支持单机。源码开发需独立的 PostgreSQL。",
+   "highlights": [
+    "提供从订单照片/PDF 识别到人工核对生成订单的录单流程",
+    "支持按订单行分批送货、作废回退数量，以及分期间对账与结算",
+    "数据与本地识别模型均存于本机，离线可用，支持 CNY/USD 分别记账"
+   ],
+   "use_cases": [
+    "小型生产工厂记录客户订单、登记送货并跟踪未交数量",
+    "月末按客户 Excel 模板生成并核对对账单",
+    "贸易公司管理客户订单、分批交货与对账"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "需要 Windows、Node.js 24（准确范围见 `package.json`）、uv、Python 3.14 和独立的 PostgreSQL，首次安装开发依赖需要联网。按本地运行说明准备依赖、配置、显式迁移和首个本地账号后再启动；启动本身不会自动迁移或重置数据。",
+     "lines": [
+      101
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用自带数据库存本机业务数据，从源码运行需独立 PostgreSQL，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 给小工厂老板和办公室人员的订单、送货与对账工具。 ／ **数据只在这台电脑上。** 离线安装包自带数据库和本地识别模型。订单原件、送货记录、对账文件都存在本机，不经过云端，不用注册在线账号，断网也能用。 ／ 需要 Windows、Node.js 24（准确范围见 `package.json`）、uv、Python 3.14 和独立的 PostgreSQL，首次安装开发依赖需要联网。按本地运行说明准备依赖、配置、显式迁移和首个本地账号后再启动；启动本身不会自动迁移或重置数据。",
+   "evidence_lines": [
+    5,
+    31,
+    101
+   ]
+  },
+  "fn": "Doublzzz/FactoryFlow",
+  "sha": "6bfe14bf6c3c",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1cb2282b7f77": {
+  "identity": {
+   "one_liner": "面向游戏社区的多 Agent 热点情报采集与增长创意生成系统",
+   "review": "一个以 TapTap 为首个接入平台的 AI 自动化系统，通过主/子 Agent 从全网热点中产出情报档案、素材与增长创意，并用网页阅读界面交付。任务编排与证据、成果、图索引等数据保存在 SQLite，用 FastAPI 提供接口，React 前端展示。项目处于 Alpha，要求 Python 3.11+ 与 Node.js，浏览器与 OCR 工具需另行配置。",
+   "highlights": [
+    "SQLite 用于持久任务编排，保存证据、解读、成果、图索引与运行记录",
+    "NetworkX + SQLite 图索引支持实体、事件与来源主张的关系检索和主题分组",
+    "内置断言-引用核对，证据不足的成果保留为草稿不进入素材库"
+   ],
+   "use_cases": [
+    "为游戏社区持续追踪热点并沉淀情报与素材",
+    "生成附执行条件的增长创意草案供运营参考",
+    "本地部署的成果阅读与检索网站"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Python + SQLite|V3 持久任务编排，保存证据、解读、成果、图索引与运行记录| ／ |NetworkX + SQLite 图索引|实体、事件、来源主张与玩家需求的有依据关系检索和主题分组| ／ **LangGraph / LangChain**：旧版 L4 用 `StateGraph`、节点、条件边与有限修订组织分析；历史巡检图另有 SQLite 检查点与中断恢复。未安装依赖时明确记录标准库回退。LangChain 的完整链式应用不是当前 V3 主链路，不能把依赖关系写成已使用全部框架能力。详细用法、模块位置和状态保存方式见技术栈与历史编排。",
+     "lines": [
+      48,
+      54,
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 SQLite 用于保存项目自身的任务编排、证据与成果数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Python + SQLite|V3 持久任务编排，保存证据、解读、成果、图索引与运行记录| ／ 这是面向 TapTap 内容与运营场景的个人开源项目，非 TapTap 官方项目，不使用其内部业务数据。项目的目标是让使用者打开网站就能阅读分类成果；有疑问时，可以沿创意、情报、热点解读回到原始来源，而无需自己启动采集或生成任务。 ／ |LangGraph|保留的旧版分析图与巡检图；当前 V3 业务编排使用自己的持久队列|",
+   "evidence_lines": [
+    48,
+    11,
+    56
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "hccccc01333/taptap-hotspot-intel",
+  "sha": "1cb2282b7f77",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8703,5 +8703,263 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "935122833188": {
+  "identity": {
+   "one_liner": "text-to-SQL 模式访问控制库，按调用者授权过滤 schema",
+   "review": "schemagate 是一个 Python 库/CLI，用于在 text-to-SQL 流程中先按调用者身份过滤 schema，使无权限的表不出现在提示词中，兼容 LangChain、MCP 及任意 SQL agent，并声称可减少提示词 token 消耗。适用于为 LLM SQL agent 构建访问控制的开发者；依赖 SQLAlchemy，支持 Postgres、Oracle、MySQL、SQL Server、SQLite，提供本地 browser 页面调试选择结果。",
+   "highlights": [
+    "按调用者 principal/role 过滤 schema，未授权表不出现在发给模型的提示中",
+    "提供 CLI、Python API 与本地 studio 页面，支持 LangChain、MCP 等集成",
+    "通过 pip extras 提供 postgres/oracle/mssql/mysql 驱动，wheel 携带 PEP 740 签名"
+   ],
+   "use_cases": [
+    "为 text-to-SQL agent 增加表级访问控制，避免 RLS 静默过滤导致的误导性空结果",
+    "缩减大型 schema 下每次调用的提示词 token 开销",
+    "本地无密钥运行 schema 选择（BM25 加离线向量化）"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than rank ／ --url \"postgresql+psycopg://user:pw@host/db\" --answer --provider <provider> --model <model-id> ／ pip install 'schemagate[postgres]'     'schemagate[oracle]'",
+     "lines": [
+      16,
+      63,
+      169
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than rank ／ pip install 'schemagate[mssql]' 'schemagate[mysql]'",
+     "lines": [
+      16,
+      170
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than rank ／ pip install 'schemagate[postgres]' 'schemagate[oracle]'",
+     "lines": [
+      16,
+      169
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than rank ／ pip install 'schemagate[mssql]' 'schemagate[mysql]' ／ `[mssql]`, or `schemagate[all]` for the lot:",
+     "lines": [
+      16,
+      170,
+      221
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than rank",
+     "lines": [
+      16
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|MySQL / MariaDB|certified live on MySQL 8.4.11, 10/10, **in CI on every push** against a service container, plus the GRANT reader suite: all three privilege levels, the role graph, and the role-only blind spot MySQL cannot report. MariaDB has not been run| ／ saying plainly: MariaDB is inferred from MySQL rather than run. Point the",
+     "lines": [
+      957,
+      960
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库上的 text-to-SQL agent 提供 schema 级访问控制组件，属数据库生态服务工具而非使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than ranked low. Works with LangChain, MCP, or any SQL agent, on Postgres, Oracle, MySQL, SQL Server and SQLite. ／ pip install 'schemagate[postgres]'     'schemagate[oracle]' ／ Drivers come as extras — `schemagate[postgres]`, `[oracle]`, `[mysql]`,",
+   "evidence_lines": [
+    16,
+    169,
+    220
+   ]
+  },
+  "fn": "ashishsinha1602/schemagate",
+  "sha": "935122833188",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "345824b14fd8": {
+  "identity": {
+   "one_liner": "全栈工程师个人主页 README，展示项目、技能与证书",
+   "review": "这是 Syed Ahmer Shah 的 GitHub 个人资料页，介绍其为全栈工程师，列出六个自建 Web 平台（多数使用 MySQL 存储）、13 项认证及 LeetCode 记录，附作品集网站与联系方式。面向潜在雇主与客户，自身不提供可安装运行的软件，仅为个人档案。",
+   "highlights": [
+    "列出六个自建项目及其技术栈，多项目声明使用 MySQL 存储数据（L54、L78、L100 等）",
+    "包含技能矩阵、13 项可验证证书与教育经历的结构化清单",
+    "提供作品集网站 ahmershah.dev 及多平台联系方式索引"
+   ],
+   "use_cases": [
+    "了解该开发者的技术栈与项目经历",
+    "招聘或外包合作的背景参考"
+   ],
+   "分类说明": "个人档案页，非数据库相关工具；因声明使用 MySQL 存数据归 eco=app，cat 固定为应用"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL 8.4 ／ MySQL 8",
+     "lines": [
+      54,
+      78
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "|**Backend & data**|Node.js `●●●●○` · Express `●●●●○` · MySQL `●●●○○` · MongoDB `●●●○○` · SQL Server `●●●○○` · Django `●●●○○`|",
+     "lines": [
+      186
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 展示的个人项目中声明使用 MySQL 等数据库存数据，本人是数据库的使用者而非生态工具开发者",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Software Engineer · Full-Stack Developer · Laravel · Django · React · MySQL ／  MySQL 8.4 ／ |**Backend & data**|Node.js `●●●●○` · Express `●●●●○` · MySQL `●●●○○` · MongoDB `●●●○○` · SQL Server `●●●○○` · Django `●●●○○`|",
+   "evidence_lines": [
+    5,
+    54,
+    186
+   ]
+  },
+  "fn": "ahmershahdev/ahmershahdev",
+  "sha": "345824b14fd8",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "addaab26339e": {
+  "identity": {
+   "one_liner": "算法竞赛训练工作台桌面应用，SQLite 本机存储训练数据",
+   "review": "一款面向算法竞赛选手的 Windows 桌面训练工作台，提供题库与图文题解、C++ 编辑与本地样例评测、向 Codeforces 等四个平台的原站后台提交、模拟赛、知识清单与训练记录，数据用 SQLite 存于本机，账号数据可服务端同步。开发运行需 Python 后端与 npm 前端。",
+   "highlights": [
+    "内置 13,000+ 题目、题面存档、题解与讲义的题库，支持筛选、抽题与模拟赛生成",
+    "支持 C++ 本地样例评测与向四个原站平台的后台官方提交",
+    "训练记录、草稿、代码等账号数据可跨设备同步，SQLite 数据库随安装保留"
+   ],
+   "use_cases": [
+    "算法竞赛选手的日常刷题与知识掌握度追踪",
+    "组织或参加模拟赛与重现赛训练",
+    "本地编写与样例验证 C++ 题解代码后提交原站"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "保存草稿并退出 TB 后安装到原目录，个人数据库、代码和导入内容保留。自动更新会先保存草稿、在线备份 SQLite、验证 SHA-256，再替换程序。跨电脑使用同一账号时，各电脑应升级到同一版本。原站登录保存在 TB 专用浏览器中，无需扩展。",
+     "lines": [
+      17
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以 SQLite 存储本机训练数据（L17），SQLite 仅作应用存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "保存草稿并退出 TB 后安装到原目录，个人数据库、代码和导入内容保留。自动更新会先保存草稿、在线备份 SQLite、验证 SHA-256，再替换程序。跨电脑使用同一账号时，各电脑应升级到同一版本。原站登录保存在 TB 专用浏览器中，无需扩展。 ／ Windows 10/11 x64。用户版安装包包含 C++ 编译器、Python 3 运行时和离线 WebView2；便携版需要完整解压。GitHub 仅公开用户版；管理员程序仅供维护者本机自用。发布页提供校验清单及从 1.4.16 升级的增量包；更旧版本可使用完整 Setup。管理员只保留维护者本机程序和快捷方式。 ／ 原站 AC 才计入通过成绩；运行公开样例不会冒充 AC。1.3.2 全部计时训练通过原站浏览器提交，本地仍可运行样例；历史本地评测记录保留其真实范围。排行榜显示等级与能力段位，支持每日一次爱心和私密留言。",
+   "evidence_lines": [
+    17,
+    15,
+    84
+   ]
+  },
+  "fn": "3097729287/acm-algo-trainer",
+  "sha": "addaab26339e",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

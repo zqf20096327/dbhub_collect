@@ -10629,5 +10629,144 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2fbf63a5fb55": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地 AI 代理记忆库，MCP 服务，审核后入库",
+   "review": "memory-eternal 是一个为 AI 编码代理（DSH、Claude Code、Codex、Cursor 等 MCP 客户端）提供持久记忆的本地工具。记忆卡片默认进入待审队列，人工批准后写入单一 SQLite 库，所有状态变更追加到不可变审计日志，并内置 token 记账统计 recall 收益。通过 npm 安装，提供 Web UI、终端 TUI 和 MCP 服务三种入口，数据全部存本机。",
+   "highlights": [
+    "记忆卡片需人工审核后写入，所有状态变更追加到 SQLite 层强制执行的不可变审计日志",
+    "通过 MCP 协议向 Claude Code、Codex、Cursor 等客户端提供同一本地记忆库",
+    "内置 token ledger 记录 recall 注入字符数与蒸馏调用成本"
+   ],
+   "use_cases": [
+    "为多会话 AI 编码代理提供跨会话记忆与上下文复用",
+    "需要人工审核与审计追踪的记忆写入流程",
+    "自托管、无云依赖的本地 agent 记忆管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Local-first, review-gated, measurable — one SQLite vault shared by DSH, Claude Code, Codex, Cursor and any MCP client.",
+     "lines": [
+      16
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明工具以 SQLite 作为自身数据的存储介质，为 AI 代理提供记忆服务，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Local-first, review-gated, measurable — one SQLite vault shared by DSH, Claude Code, Codex, Cursor and any MCP client. ／ - every status change is appended to an **immutable audit log** (who / what / when / why) — enforced at the SQLite layer, not by convention;",
+   "evidence_lines": [
+    16,
+    84
+   ]
+  },
+  "fn": "EternalNight996/memory-eternal",
+  "sha": "2fbf63a5fb55",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b616085fddae": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的自托管开源 BaaS，单个 Rust 二进制",
+   "review": "Nelcota 是一个运行在自有 VPS 上的开源 backend-as-a-service：用户以 SQL 编写 schema，系统据此生成 REST API，并提供认证、文件存储、Webhook、管理面板及备份/告警等主机运维能力；授权依赖 PostgreSQL 的 grants 与 RLS 策略，数据与策略保持普通 SQL 可导出。面向希望自托管后端服务的开发者；目前版本为 0.x，realtime 订阅、edge functions、MFA 等功能尚未实现。",
+   "highlights": [
+    "由 SQL schema 生成 REST API，包含过滤、关系、RPC 与 OpenAPI",
+    "认证支持 email/password、magic links、OAuth/OIDC、Ed25519 JWT 与刷新令牌轮换",
+    "每个请求以调用者角色与 JWT claims 在 PostgreSQL 事务中执行，RLS 策略全链路生效；提供备份、PITR 与告警等主机操作"
+   ],
+   "use_cases": [
+    "在自有 VPS 上自托管应用后端（API、认证、文件存储）",
+    "以 SQL/RLS 为授权中心的多租户数据服务",
+    "需要管理面板、迁移与备份运维的单服务器项目托管"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "in a single Rust binary, secured by PostgreSQL row-level security. ／ your app ──HTTPS──▶ Caddy ──▶ nelcota (one binary) ──▶ PostgreSQL 17 ／ Each request runs in a PostgreSQL transaction with the caller's role and JWT",
+     "lines": [
+      6,
+      33,
+      40
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为 PostgreSQL 提供生成 API、认证、管理面板与备份等生态服务能力，而非仅把数据库当作存储使用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Nelcota is an open source backend-as-a-service you run on your own VPS. Write ／ - **Host operations**: isolated projects per server, backups, point-in-time recovery and alerts. ／ your app ──HTTPS──▶ Caddy ──▶ nelcota (one binary) ──▶ PostgreSQL 17",
+   "evidence_lines": [
+    16,
+    24,
+    33
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Nelcota/Nelcota",
+  "sha": "b616085fddae",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

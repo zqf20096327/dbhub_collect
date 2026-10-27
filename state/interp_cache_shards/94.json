@@ -10991,5 +10991,150 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dcb96db9e085": {
+  "identity": {
+   "one_liner": "Docker Compose 编排的 LEMP 开发环境栈模板",
+   "review": "该仓库提供一份 docker-compose 配置，用于一键启动包含 Linux、Nginx、PHP 7.2 (FPM) 与 MariaDB 10.3.9 的本地开发环境，可通过 .env 环境变量配置容器名与 root 密码，并提供进入各容器的命令。适合需要快速搭建 PHP + Nginx + MariaDB 本地开发环境的开发者；仓库已归档，作者声明不再维护。",
+   "highlights": [
+    "通过 docker-compose up 启动 Nginx 1.13.6、PHP 7.2 (FPM) 与 MariaDB 10.3.9 组成的栈",
+    "支持通过 .env 环境变量配置容器名称与 MySQL root 密码",
+    "PHP 容器可选启用 MySQLi 驱动，Nginx 配置文件随仓库提供"
+   ],
+   "use_cases": [
+    "本地快速搭建 PHP + Nginx + MariaDB 开发环境",
+    "以容器方式隔离运行各组件并用 docker exec 进入调试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* PHP 7.2 (FPM) - With MySQLi driver optionally (Uncomment line from php.Dockerfile) ／ |MYSQL_ROOT_PASSWORD|The MySQL root password used when creating the container.|",
+     "lines": [
+      13,
+      26
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "This repository contains a little `docker-compose` configuration to start a `LEMP (Linux, Nginx, MariaDB, PHP)` stack. ／ * MariaDB 10.3.9 ／ * `{APP_NAME}-mariadb`",
+     "lines": [
+      7,
+      15,
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是包含 MariaDB 组件的 LEMP 开发环境栈，非为数据库生态服务的独立工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "discontinued",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This repository contains a little `docker-compose` configuration to start a `LEMP (Linux, Nginx, MariaDB, PHP)` stack. ／ * MariaDB 10.3.9",
+   "evidence_lines": [
+    7,
+    15
+   ]
+  },
+  "fn": "stevenliebregt/docker-compose-lemp-stack",
+  "sha": "dcb96db9e085",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "debd95a0e108": {
+  "identity": {
+   "one_liner": "自托管 MCP 记忆服务器，以 PostgreSQL+pgvector 作持久存储",
+   "review": "Dense-Mem 是一个以 Streamable HTTP 提供 MCP 接口的记忆服务器，用于为 AI 客户端保存带证据溯源、生命周期管理和权限门控召回的记忆数据，数据以 PostgreSQL 与 pgvector 为唯一持久存储，支持 Docker Compose 单机部署与多实例 Redis 协调，面向需要自托管 AI 记忆服务的团队。",
+   "highlights": [
+    "提供 MCP over Streamable HTTP 接口及用户/控制双 Portal",
+    "以 PostgreSQL+pgvector 实现持久化、溯源与向量检索，支持自动迁移与慢查询日志配置",
+    "支持 OpenAI 兼容嵌入/校验端点及 Ollama 本地部署"
+   ],
+   "use_cases": [
+    "为 AI 客户端提供带溯源的记忆读写服务",
+    "单机 Docker Compose 或多实例 Redis 协调的自托管部署",
+    "使用 Ollama 等本地模型运行全本地记忆服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL is the durable authority for knowledge, lifecycle, provenance, ／ The base stack uses PostgreSQL with pgvector as the only durable authority. ／ the process. PostgreSQL slow-query logging uses",
+     "lines": [
+      20,
+      74,
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PostgreSQL 是其唯一持久存储，该服务面向 AI 客户端而非数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL is the durable authority for knowledge, lifecycle, provenance, ／ The base stack uses PostgreSQL with pgvector as the only durable authority.",
+   "evidence_lines": [
+    20,
+    74
+   ]
+  },
+  "fn": "markhuangai/dense-mem",
+  "sha": "debd95a0e108",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

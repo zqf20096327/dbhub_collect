@@ -9616,5 +9616,215 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ba4f93ccde28": {
+  "identity": {
+   "one_liner": "终端日历/待办/日志管理器，本地 SQLite 存储",
+   "review": "chroncal 是一个以终端为主的日历、待办和日志管理工具，提供 TUI 交互界面与可脚本化的 CLI，支持 iCalendar (RFC 5545) 导入导出和 CalDAV 同步，数据存储在单个本地 SQLite 文件中并自动迁移。适合希望在本地管理日历数据、并通过脚本或 JSON 输出做自动化处理的命令行用户。",
+   "highlights": [
+    "支持 iCal 导入导出与 CalDAV 同步，覆盖 VEVENT、VTODO、VJOURNAL、VALARM、VTIMEZONE",
+    "数据存储于本地 SQLite 文件并自动执行 schema 迁移",
+    "提供 TUI 与 CLI 两种访问方式，输出支持 text 和 JSON 格式"
+   ],
+   "use_cases": [
+    "在终端中交互式管理日历、待办与日志",
+    "通过脚本自动化读取事件、待办和 free/busy 查询结果",
+    "与远程 CalDAV 服务器（含 Google）同步日历数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "chroncal is a terminal calendar. SQLite stores the data. The program supports full iCal import and export, and CalDAV sync. Launch the TUI for an interactive calendar. Use the CLI to script access to events, todos, journals, alarms, free/busy queries, and cale ／ - **SQLite storage** with automatic migrations",
+     "lines": [
+      14,
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该程序用 SQLite 存储自身日历数据，SQLite 是其内部数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "chroncal is a terminal calendar. SQLite stores the data. The program supports full iCal import and export, and CalDAV sync. Launch the TUI for an interactive calendar. Use the CLI to script access to events, todos, journals, alarms, free/busy queries, and calendars. ／ - **SQLite storage** with automatic migrations",
+   "evidence_lines": [
+    14,
+    34
+   ]
+  },
+  "fn": "DouglasdeMoura/chroncal",
+  "sha": "ba4f93ccde28",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2679c2779a1d": {
+  "identity": {
+   "one_liner": "为编码代理提供 Markdown 记忆的 MCP 服务器",
+   "review": "Renor 是面向 Claude Code、Codex、Cursor 等编码代理的本地记忆服务：代理保存的事实以 Markdown 文件写入指定文件夹，通过 MCP（stdio 或 HTTP）供其他代理检索，搜索索引用 SQLite 存储、可由 index 命令重建。默认无嵌入模型时按精确词匹配，可配置 OpenAI 或本地嵌入。单用户设计，本地运行，适合希望跨会话、跨代理复用项目决策与笔记的个人开发者。",
+   "highlights": [
+    "将代理保存的事实与笔记以 Markdown 文件形式存于本地 VAULT_PATH 文件夹，用户可任意编辑",
+    "通过 MCP（stdio/HTTP）向 Claude Code、Codex、Cursor 等客户端提供记忆读写，支持多代理工具",
+    "搜索索引为派生 SQLite 数据库，可用 `node dist/cli.js index` 从 Markdown 重建；可选 OpenAI 或本地嵌入模型"
+   ],
+   "use_cases": [
+    "让编码代理跨会话记住项目决策、纠正记录等上下文",
+    "在 Claude Code、Codex、Cursor 等多个代理间共享同一份记忆",
+    "在 Obsidian 等已有 Markdown 仓库上建立可被代理检索的记忆库"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Search index|SQLite at `$VAULT_PATH/.semantic-memory/index.db`. Derived: `node dist/cli.js index` rebuilds it from the Markdown.|",
+     "lines": [
+      96
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明搜索索引为内部派生的 SQLite 数据库文件，SQLite 仅作为本应用的存储组件使用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "当前为 Apache-2.0；1.0.0 曾为 AGPL-3.0，上游导入文件为 ISC",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Renor is memory for coding agents: it keeps what you tell Claude Code, Codex or Cursor in a folder of Markdown files on your machine, and serves it back to any of them over MCP.** ／ |What agents save|Appended as Markdown in the same folder: facts to `System/Memory Events Ledger.md`, notes to `Memory/Daily/<date>.md`.| ／ |Search index|SQLite at `$VAULT_PATH/.semantic-memory/index.db`. Derived: `node dist/cli.js index` rebuilds it from the Markdown.|",
+   "evidence_lines": [
+    8,
+    95,
+    96
+   ]
+  },
+  "fn": "renorai/renor-engine",
+  "sha": "2679c2779a1d",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "11bcb4429ea4": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码代理路线图桌面应用，通过 MCP 提案-审批管理计划",
+   "review": "The Blueprint 是一款 Windows 桌面应用，把项目组织为 Workspace/Blueprint/Action/Plan/Checkpoint 结构，AI 编码代理（Claude Code、Codex）通过 MCP 工具读取结构、提交编号提案，用户在界面上审批后才生效，计划完成需附运行证据。数据存储为本机 SQLite 文件，可用 cargo 构建以本地 Web 服务器模式运行。",
+   "highlights": [
+    "代理通过 MCP 工具（如 listar_blueprints、propor_blueprint、marcar_concluido）读取结构、提交提案与标记完成",
+    "所有变更以编号提案形式提交，用户在 Planejar 界面审批后才写入数据",
+    "计划完成须附运行命令或测试及其结果作为证据，数据存于本地 SQLite 文件"
+   ],
+   "use_cases": [
+    "使用 Claude Code 或 Codex 等编码代理时审批和管理其项目计划",
+    "需要本地、无遥测的项目路线图与进度追踪",
+    "记录代理执行结果作为计划完成的证据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Small and private.** One ~2.5 MB executable, a SQLite file on your machine, no account, no telemetry.",
+     "lines": [
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用将自身数据存储为本机 SQLite 文件，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Your coding agent (Claude Code, Codex) plans and builds fast. The cost is a plan you never reviewed and a \"done\" you cannot check. The Blueprint is a small desktop app that holds your whole project as one sheet, and your own agent talks to it over MCP: ／ - **Small and private.** One ~2.5 MB executable, a SQLite file on your machine, no account, no telemetry. ／ The agent reads the structure, proposes changes, reports progress and marks plans done through MCP tools (`listar_blueprints`, `ler_blueprint`, `propor_blueprint`, `registrar_progresso`, `marcar_concluido` and more; full list). You start an action yourself, with a confirmed click or the `blueprint claude` command, so the app never sends work to an agent on its own. Plans are sized for AI pace (0.5 to 4 hours) and the app measures how long each one really took. The model in detail.",
+   "evidence_lines": [
+    17,
+    22,
+    45
+   ]
+  },
+  "fn": "hugorolimf/the-blueprint",
+  "sha": "11bcb4429ea4",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10296,5 +10296,81 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2661040eb476": {
+  "identity": {
+   "one_liner": "Rust 重写的 Moqui 应用框架，内置嵌入式 Postgres 运行",
+   "review": "MR Moqui 是用 Rust 对 Moqui Java 框架的重写，包含 entity/service facade、XML 屏幕渲染和 QuickJS 脚本引擎，默认使用嵌入式 Postgres，也支持外部 Postgres 与 MySQL 配置。面向 Moqui 生态的开发者与从 Java 版迁移的部署方，当前仍处于开发完善阶段，Run & Deploy 指南尚未提供。",
+   "highlights": [
+    "默认以嵌入式 Postgres（postgresql_embedded）运行，可切换外部数据库",
+    "以 QuickJS 作为服务端脚本与模板的 JavaScript 引擎，XML 作为配置与实体规范语言",
+    "组件可提供链接进二进制的 Rust 服务、工具与模板渲染器"
+   ],
+   "use_cases": [
+    "运行或开发基于 Moqui 框架的业务应用（如 ERP、协作组件）",
+    "从 Moqui Java 部署或组件向 Rust 版迁移",
+    "需要单二进制内嵌数据库即可启动的 Web 服务部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This builds the Dev binary (target/develop/moqui: the web server on embedded Postgres, PDF, SMTP, git hosting, SSH and the dev tools) and uses it to load data and run. Add `--release` to each of the 3 commands to build and use the release binary with the full  ／ - Default to an embedded Postgres (`postgresql_embedded`, theseus) when no external database is configured, and use an external Postgres when one is. The same engine backs the sim-mode overlay. ／ - Make OpenSearch optional from day one by planning a search interface that can be satisfied by Postgres full-text search and JSON operators.",
+     "lines": [
+      11,
+      50,
+      51
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Setting `entity_ds_db_conf` to `postgres`, `mysql` or `mysql8`, with the other `entity_ds_*` ／ Podman and systemd are in `podman/README.md`. One image runs alone, on embedded Postgres, or with the external databases this tree supports: Postgres, Postgres and OpenSearch, or MySQL and OpenSearch. `systemd/moqui.service` runs that same binary with no conta",
+     "lines": [
+      104,
+      163
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用嵌入式/外部数据库存取数据的 Web 应用框架，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This builds the Dev binary (target/develop/moqui: the web server on embedded Postgres, PDF, SMTP, git hosting, SSH and the dev tools) and uses it to load data and run. Add `--release` to each of the 3 commands to build and use the release binary with the full toolset included: SSH/SFTP, OAuth2/OIDC, SMTP/IMAP/POP, Git, XLSX, and image processing. ／ - Default to an embedded Postgres (`postgresql_embedded`, theseus) when no external database is configured, and use an external Postgres when one is. The same engine backs the sim-mode overlay.",
+   "evidence_lines": [
+    11,
+    50
+   ]
+  },
+  "fn": "moqui/mr-moqui",
+  "sha": "2661040eb476",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

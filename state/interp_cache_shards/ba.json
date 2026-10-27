@@ -10568,5 +10568,201 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9c0b23c6f676": {
+  "identity": {
+   "one_liner": "智利公开数据集库，交付 Parquet/Polars/DuckDB/SQLite/Excel 格式数据",
+   "review": "chile-hub 是一个 Python 数据包，将智利官方公开数据（地理、人口、经济、卫生、教育、选区等 22 个图层）清洗、规范化并校验后打包发布，用户通过 pip 安装后一行代码即可读取数据，输出格式包含 Parquet、Polars、DuckDB、SQLite 和 Excel。首次运行从 GitHub Releases 下载并做 SHA256 校验后缓存。面向需要使用智利公开数据做分析或构建管道的数据开发者。",
+   "highlights": [
+    "提供 22 个可发布数据图层（地理、人口普查、经济指标、卫生与教育机构、选区等）",
+    "数据以 Parquet、Polars、DuckDB、SQLite、JSON、Excel 多种格式交付",
+    "内置 JSON Schema 契约校验、来源溯源报告、漂移检测与 fail-loud 管道"
+   ],
+   "use_cases": [
+    "将智利官方数据接入 Python/SQL 分析流程或 CI",
+    "按行政区划代码（CUT）关联客户、学校、卫生机构等业务数据",
+    "在浏览器中用 DuckDB-WASM SQL 探索器直接查询 Parquet 数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Analizar datos oficiales desde Python o SQL|Parquet + Polars + DuckDB + SQLite| ／ > - ¿Cómo llevo datos oficiales a Polars, DuckDB, SQLite, Excel o CI sin depender de enlaces cambiantes? ／ |**Base de datos**|`chile_data.db`|SQLite para aplicaciones embebidas|",
+     "lines": [
+      38,
+      105,
+      240
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 是该数据包的交付/内嵌存储格式之一（chile_data.db），项目本身是使用数据库的数据产品而非为数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（代码）；数据图层各自带 CC BY/CC0 等许可",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Analizar datos oficiales desde Python o SQL|Parquet + Polars + DuckDB + SQLite| ／ pip install chile-hub",
+   "evidence_lines": [
+    38,
+    51
+   ]
+  },
+  "fn": "cortega26/chile-hub",
+  "sha": "9c0b23c6f676",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b0c1bb6d25a3": {
+  "identity": {
+   "one_liner": "自托管 issue 跟踪与项目管理平台，Go+SvelteKit，PostgreSQL 存储",
+   "review": "Kuayle 是一个自托管的 issue 跟踪和项目管理系统，提供工作区、团队、issue、循环、甘特图、分析、GitHub 集成、WebSocket 实时事件，以及面向 Agentic Coding 的 Dev Machines 子系统。README 说明其发布版本为可运行的 MVP，数据库迁移随仓库提供；企业身份、wiki 等功能尚未包含。适合需要自托管 issue 工作流的团队/运维人员部署使用。",
+   "highlights": [
+    "提供 issue、循环、项目、保存视图、Webhook、GitHub App 集成与 WebSocket 实时事件",
+    "自 v0.1.13 起提供可选的 Dev Machines 多容器子系统，支持多种 agent provider",
+    "提供基于 Docker Compose 的参考自托管部署栈（Caddy、PostgreSQL、Redis）"
+   ],
+   "use_cases": [
+    "团队自托管 issue 跟踪与 sprint/循环管理",
+    "需要甘特图、分析看板与 GitHub 状态联动的项目管理",
+    "基于 Dev Machines 在 issue 工作树上运行编码 agent"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Database**|PostgreSQL 17|Primary data store, raw SQL via sqlx/pgx, no ORM|",
+     "lines": [
+      136
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 17 为其主数据存储，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0，单一公共仓库，无付费层",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Kuayle's published releases are runnable MVPs, not a mature enterprise platform. The repository includes the Go API, SvelteKit frontend, database migrations, development tooling, and reference self-hosting configuration. ／ |**Self-hosting**|Reference Docker Compose stack with Caddy, PostgreSQL, Redis, backend, frontend, an update script, and dedicated config in `selfhosting/`.|",
+   "evidence_lines": [
+    20,
+    29
+   ]
+  },
+  "fn": "carbogninalberto/kuayle",
+  "sha": "b0c1bb6d25a3",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e9e70b59487c": {
+  "identity": {
+   "one_liner": "自托管儿童电视遥控应用，家长审批视频投放 Chromecast 并计时",
+   "review": "Tellybox 是一个自托管的家庭应用：家长从 YouTube 添加并审批视频或播放列表，应用用 yt-dlp 下载为 MP4 后投放到 Chromecast，配合 SponsorBlock 剪除赞助片段、按章节自动拆分长视频，并为每个孩子提供每日观看时长限制。数据存储在单个 SQLite 文件中，自带 backup 命令。适合有幼儿并使用 Chromecast 的家庭，通过 Docker 在本地服务器运行。",
+   "highlights": [
+    "下载并投放家长审批的 MP4 视频到 Chromecast，可自动剪除 SponsorBlock 片段并拆分长视频为剧集",
+    "为每个孩子提供每日时长配额、会话上限和家长远程控制（加时、禁用、停止）",
+    "数据存于单个 SQLite 文件，内置 tellybox backup 命令生成一致备份"
+   ],
+   "use_cases": [
+    "为不识字的幼儿提供无广告、无推荐的视频点播界面",
+    "需要每日观看时长限制和家长远程接管的家庭",
+    "通过 Home Assistant 集成纳入智能家居自动化"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Storage:** everything lives in one SQLite file plus a media folder, so a backup is a single file. A built-in `tellybox backup` command makes a consistent copy while everything keeps running. ／ **Stack:** Python 3.12, FastAPI, pychromecast, yt-dlp, ffmpeg and SQLite, plus OpenCV and Tesseract for splitting. The frontend and the TV receiver are vanilla JavaScript and CSS with no build step, and the admin pages are server-rendered Jinja templates.",
+     "lines": [
+      149,
+      151
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 SQLite 用于存储应用自身数据（所有内容存于一个 SQLite 文件），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tellybox is a small self-hosted app that replaces all of that: ／ - **It stays at home.** It runs in Docker on your own server and is reachable only on your network (and your Tailscale tailnet). There are no accounts, no cloud and no telemetry.",
+   "evidence_lines": [
+    9,
+    18
+   ]
+  },
+  "fn": "sandermvanvliet/Tellybox",
+  "sha": "e9e70b59487c",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -12330,5 +12330,341 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "857889686806": {
+  "identity": {
+   "one_liner": "数据库迁移工具，支持 SQL 迁移与 Go 函数，提供 CLI 与库两种形态",
+   "review": "goose 是一个用 Go 编写的数据库 schema 迁移工具，通过增量 SQL 文件（含 Up/Down 注解）或 Go 函数管理 schema 变更，支持嵌入式迁移、乱序迁移、数据 seeding 和环境变量替换，可按需裁剪内置驱动以减小二进制体积。适合开发与运维人员在多数据库项目中执行版本化的 schema 升降级操作。",
+   "highlights": [
+    "支持 SQL 迁移与 Go 函数迁移两种编写方式，支持迁移文件嵌入二进制",
+    "提供 up/down/status/version 等命令进行版本升降级与状态查询",
+    "支持乱序迁移（-allow-missing）、数据 seeding 与 SQL 中的环境变量替换"
+   ],
+   "use_cases": [
+    "为应用数据库 schema 建立版本化迁移流程",
+    "在 CI 管道中用 fix 命令将时间戳版本转换为顺序版本",
+    "以库形式嵌入 Go 程序执行迁移（goose.Up）"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Postgres, MySQL, MariaDB, Spanner, SQLite, ／ go build -tags='no_postgres no_mysql no_sqlite3 no_ydb' -o goose ./cmd/goose ／ GOOSE_DRIVER=postgres",
+     "lines": [
+      15,
+      35,
+      168
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Postgres, MySQL, MariaDB, Spanner, SQLite, ／ go build -tags='no_postgres no_mysql no_sqlite3 no_ydb' -o goose ./cmd/goose ／ Note: for MySQL and MariaDB (use the `mysql` driver) parseTime flag must be enabled.",
+     "lines": [
+      15,
+      35,
+      137
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Postgres, MySQL, MariaDB, Spanner, SQLite, ／ go build -tags='no_postgres no_mysql no_sqlite3 no_ydb' -o goose ./cmd/goose",
+     "lines": [
+      15,
+      35
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "YDB, ClickHouse, MSSQL, Vertica, and more.",
+     "lines": [
+      16
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "YDB, ClickHouse, MSSQL, Vertica, and more. ／ * ClickHouse only fully supports some clickhouse",
+     "lines": [
+      16,
+      327
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- Postgres, MySQL, MariaDB, Spanner, SQLite, ／ Note: for MySQL and MariaDB (use the `mysql` driver) parseTime flag must be enabled. ／ Note: for MySQL and MariaDB",
+     "lines": [
+      15,
+      137,
+      139
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确定位为数据库迁移工具，用于管理数据库 schema，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Goose is a database migration tool. Both a CLI and a library. ／ Manage your **database schema** by creating incremental SQL changes or Go functions. ／ - Works against multiple databases:",
+   "evidence_lines": [
+    8,
+    10,
+    14
+   ]
+  },
+  "fn": "pressly/goose",
+  "sha": "857889686806",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "841d9da3a251": {
+  "identity": {
+   "one_liner": "自托管 GitHub Actions 临时 runner 集群控制器，单二进制+SQLite",
+   "review": "Zoomies 是一个自托管的 GitHub Actions runner 集群控制器：监听 workflow_job webhook，为每个任务启动一次性 runner 并在结束后销毁，支持 GitHub App 认证、多主机多操作系统代理、CPU/内存弹性分配、Prometheus 指标、Web UI 和夜间备份到 S3。适合需要为自建硬件或云主机批量管理临时 runner 的团队；不依赖 Kubernetes 或独立数据库服务器，状态存于 SQLite。",
+   "highlights": [
+    "为每个排队任务启动临时 runner，任务结束即销毁，默认单任务一 runner",
+    "以 GitHub App 身份认证并生成单次使用 JIT 注册 token",
+    "内置 SQLite 存储状态，提供 Prometheus 指标、审计日志与 S3 兼容备份"
+   ],
+   "use_cases": [
+    "为 GitHub 组织或仓库自建弹性 runner 集群",
+    "将自有硬件（含 NAT 后主机）接入 GitHub Actions",
+    "通过 Web UI 集中观测和管理多主机 runner 池"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Single Go binary. SQLite. AGPL-3.0. ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+     "lines": [
+      16,
+      101
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明使用 SQLite 存储自身状态（state），SQLite 是内部依赖而非服务对象，项目本身服务于 GitHub Actions CI 场景",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Single Go binary. SQLite. AGPL-3.0. ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+   "evidence_lines": [
+    16,
+    101
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "eyupio/zoomies",
+  "sha": "841d9da3a251",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3212747dcb15": {
+  "identity": {
+   "one_liner": "ASP.NET Core 自托管 Web 应用，集成财务、日历、看板与管理后台",
+   "review": "Maroik 是一个单人开发、自托管运行的 ASP.NET Core MVC Web 应用，包含记账与预算（内置 Excel 兼容公式引擎）、日历与邮件提醒、公告板、看板、个人文件盘和基于角色的用户管理。采用 DDD + Clean Architecture，用 NetArchTest 与 Testcontainers 中的真实 PostgreSQL、RabbitMQ 做测试，2025-04 起数据库由 MariaDB 迁移到 PostgreSQL。",
+   "highlights": [
+    "包含财务管理、预算表格（Excel 兼容公式引擎）、日历、公告板、看板、文件管理与角色权限管理八大功能模块",
+    "采用 DDD + Clean Architecture，以 NetArchTest 架构规则和测试优先开发约束分层依赖",
+    "金额以 numeric(20,4) 存储，收入支出更新在同一事务的行锁下完成；测试中使用 Testcontainers 运行真实 PostgreSQL 与 RabbitMQ"
+   ],
+   "use_cases": [
+    "个人或小型团队的记账、预算与资产管理",
+    "自托管的日历日程、公告板与看板协作",
+    "需要用户管理、文件存储与管理后台的内部站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Test-first development.** Every change starts with a failing test, including the log entries it must write; real PostgreSQL and RabbitMQ run in Testcontainers instead of mocks wherever the behaviour depends on them. ／ |2025-04|MariaDB → PostgreSQL|",
+     "lines": [
+      90,
+      126
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|2021-05|Project starts as *MyLaboratory*: ASP.NET Core (2.1 → .NET 5) with MariaDB, run under docker-compose from the first week| ／ |2021-12|MariaDB 10.6| ／ |2025-04|MariaDB → PostgreSQL|",
+     "lines": [
+      107,
+      111,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述这是一个使用 PostgreSQL 存数据的业务 Web 应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Maroik is a modern web application built with ASP.NET Core MVC, featuring a comprehensive set of tools for personal and business management. It includes features such as expense tracking, spreadsheet-style budgets, calendar management with e-mail reminders, bulletin boards, a personal Kanban board, a personal file drive, and role-based user management. ／ - **Test-first development.** Every change starts with a failing test, including the log entries it must write; real PostgreSQL and RabbitMQ run in Testcontainers instead of mocks wherever the behaviour depends on them.",
+   "evidence_lines": [
+    8,
+    90
+   ]
+  },
+  "fn": "IkhyeonJo/Maroik",
+  "sha": "3212747dcb15",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0722f6717c6a": {
+  "identity": {
+   "one_liner": "CVE 离线情报 CLI/MCP 服务器，将漏洞数据索引为本地 SQLite 库供查询",
+   "review": "crowbar 是一个安全情报工具：从 NVD、CISA KEV、EPSS、Exploit-DB 等公开数据源抓取 CVE 与利用信息，写入本地 SQLite + FTS5 索引，供终端、CI 或 AI agent（MCP）离线查询。面向需要漏洞分诊与利用情报的开发者与安全人员。限制：不做漏洞扫描或利用执行，首次索引需下载数百 MB 数据。",
+   "highlights": [
+    "将多个漏洞数据源写入本地 SQLite + FTS5 数据库，离线查询无 API 与速率限制",
+    "提供 MCP 服务器与 CLI 两种使用方式，支持 Claude Code、Cursor 等宿主",
+    "支持 lite/medium/heavy/extreme 四档索引规模与每日自动刷新"
+   ],
+   "use_cases": [
+    "在 CI 或终端中离线查询产品版本的已知漏洞与利用情况",
+    "为 AI 编程代理提供基于本地索引的漏洞问答能力",
+    "按 KEV/EPSS/CVSS 排序进行漏洞分诊与趋势跟踪"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite + FTS5 database you query from your terminal, your CI or your agent. It ／ on *your* index. They are local SQLite lookups on indexed columns, with no",
+     "lines": [
+      32,
+      148
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为安全工作流提供独立 CLI/索引工具，SQLite 仅作为其本地存储层而非业务数据存储",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "index: it retrieves NVD, CISA KEV, EPSS, SSVC, the CVE List, Exploit-DB, Nuclei, ／ SQLite + FTS5 database you query from your terminal, your CI or your agent. It ／ MCP server",
+   "evidence_lines": [
+    30,
+    32,
+    10
+   ]
+  },
+  "fn": "kushvinth/crowbar",
+  "sha": "0722f6717c6a",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11210,5 +11210,137 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2950283ad8c6": {
+  "identity": {
+   "one_liner": "自托管的访问日志分析与安全监控工具，数据存于 SQLite",
+   "review": "Skald 从 Web 服务器的访问日志读取流量，将请求归入真人、AI 助手、搜索引擎、爬虫等五类并独立复核计数，同时提供扫描器、攻击尝试等安全监控面板；面向自托管网站的管理者，用 Python 实现并将数据写入 SQLite 文件，可经 Docker 运行，不拦截流量。",
+   "highlights": [
+    "读取 Web 服务器访问日志，将请求分为五个互斥分组并做独立复核",
+    "识别 AI 爬虫与助手流量，并按用途（训练/应答/引用点击）分类",
+    "提供安全监控：扫描器、攻击尝试、伪造浏览器与封禁清单导出"
+   ],
+   "use_cases": [
+    "统计 JavaScript 埋点无法覆盖的 AI 助手与爬虫访问",
+    "从访问日志排查针对站点的扫描与探测行为",
+    "自托管的无 Cookie 网站访问分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|**SQLite**: `history.sqlite` (daily totals), `accounts.sqlite`, `conversions.sqlite`. One file each, easy to back up.|",
+     "lines": [
+      749
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将数据存储在 SQLite 文件中，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Skald reads the one record that sees every visit: **your web server's access log.** Every request",
+   "evidence_lines": [
+    43
+   ]
+  },
+  "fn": "spcaeo/skald",
+  "sha": "2950283ad8c6",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ab4ea189f51d": {
+  "identity": {
+   "one_liner": "基于 SpringBoot 与 Vue 的库房订单物流调度系统",
+   "review": "一套覆盖用户下单、商家运营、平台管理三端的仓储与物流调度应用，包含订单履约、库存预警、车辆调度、采购管理、会员积分等模块。使用 SpringBoot + MybatisPlus + MySQL + Redis 后端与 Vue 前端。面向多商家入驻电商、仓配调度等业务场景，README 显示部署讲解等资源需联系作者获取。",
+   "highlights": [
+    "覆盖管理员、商家、用户三类角色，包含订单履约、库存预警、保质期预警、车辆调度、采购管理等模块",
+    "后端采用 SpringBoot、MybatisPlus、MySQL、Redis，前端采用 Vue，集成微信支付/支付宝在线支付",
+    "提供库存阈值补货预警、临期商品分级预警与 FEFO 出库策略功能"
+   ],
+   "use_cases": [
+    "多商家入驻的电商物流平台",
+    "企业自营仓储与配送调度",
+    "生鲜/食品/医药等有保质期要求的行业物流"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明系统以 MySQL 作为数据库、Redis 作为缓存存业务数据，属使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目是一套面向**多商家入驻 + 自营仓储 + 自有/外协车队调度**的综合性物流调度平台，采用前后端分离架构，覆盖**管理员（平台）、商家、终端用户**三类核心角色。系统围绕\"用户下单→订单履约→库存扣减→车辆调度→物流配送→用户签收评价\"的核心业务流程设计，同时集成采购管理、供应商管理、库存预警、保质期预警、车辆调度等模块，构建一体化的供应链协同与物流调度平台。 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    5,
+    26,
+    31
+   ]
+  },
+  "fn": "Fankekeke/logistics_order_cos",
+  "sha": "ab4ea189f51d",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

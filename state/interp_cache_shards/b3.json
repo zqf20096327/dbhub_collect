@@ -11047,5 +11047,143 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "80f9a78efc25": {
+  "identity": {
+   "one_liner": "Supabase 的 Flutter/Dart 客户端库集合",
+   "review": "该仓库是 Supabase 官方维护的 Dart 与 Flutter 客户端库 monorepo，包含 supabase_flutter、supabase、类型生成器 supabase_typegen、测试包 supabase_test 及 OAuth 认证包等子包，通过 Supabase CLI 生成带类型的数据库 schema 供查询使用。适合用 Flutter/Dart 构建 Supabase 应用的开发者，安装走 pub，测试可对接本地 Supabase 栈。",
+   "highlights": [
+    "提供 supabase_flutter、supabase、supabase_typegen、supabase_test 等多个子包",
+    "支持通过 Supabase CLI 生成带类型的数据库 schema 并据此查询",
+    "内置 AI 编码代理的 skills 安装命令，并向测试包提供内存 realtime socket 与 HTTP stub"
+   ],
+   "use_cases": [
+    "Flutter/Dart 应用接入 Supabase 后端",
+    "生成类型安全的数据库 schema 用于查询",
+    "对使用 SupabaseClient 的代码做本地测试"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   }
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为 Supabase（基于 PostgreSQL 的后端平台）提供 Dart/Flutter 客户端库，属数据库生态服务组件",
+   "persona": "use",
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   },
+   "dbs": [],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Flutter client library for Supabase. ／ This repository holds the Supabase client libraries for Dart and Flutter. ／ |`supabase_typegen`|Generating the typed database schema, as a dev dependency|",
+   "evidence_lines": [
+    9,
+    21,
+    32
+   ]
+  },
+  "fn": "supabase/supabase-flutter",
+  "sha": "80f9a78efc25",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7bb988b6ea73": {
+  "identity": {
+   "one_liner": "SQLite VFS，经 gRPC 将数据库存储置于远端服务",
+   "review": "这是一个 SQLite VFS 实现，将 SQLite 的页面读写通过 gRPC 转发给独立服务，由后端存储（如 FoundationDB、Postgres 或对象存储）保存数据，SQLite 无需修改即可使用。它提供单请求原子提交、写租约和一致性只读副本，并附确定性模拟器做验证。适合需要给每个用户或租户独立 SQLite 数据库、且希望复用既有存储后端的开发者。",
+   "highlights": [
+    "以 VFS 方式接入原版 SQLite，无需修改 SQLite 本身",
+    "每个事务以一次原子 Commit 发送，支持只读副本读取一致版本",
+    "附带确定性模拟器，可在故障场景下校验行为"
+   ],
+   "use_cases": [
+    "为多租户场景中每个用户提供独立 SQLite 数据库",
+    "将 SQLite 数据落到 FoundationDB、Postgres 或对象存储等既有后端",
+    "构建读写分离的只读副本客户端"
+   ],
+   "cat_note": "作为 SQLite 存储层/VFS 实现归内核/引擎"
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A SQLite VFS that stores databases behind a small gRPC service, so any datastore can hold SQLite databases. Stock SQLite runs on it unchanged, each transaction reaches the server as one atomic commit, and read-only replicas read consistent versions. ／ Give every user, tenant or agent its own SQLite database, kept in FoundationDB, Postgres, an object store or whatever you already run. Your server stores pages and leases; the VFS handles SQLite's locking, journaling and caching. ／ - **Your storage, stock SQLite.** The server is a plain gRPC service in any language, over any store. SQLite needs no patches: link the VFS in, or load it at runtime. See Writing a server.",
+     "lines": [
+      3,
+      5,
+      14
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|`atomic_commit`|apply many writes in one transaction: FoundationDB, Postgres, DynamoDB, most databases|One `Commit` per transaction. The server stores only the main file. Every rollback-journal mode works, and `memory` is cheapest; WAL is refused.|",
+     "lines": [
+      178
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite 提供远程存储的 VFS/服务组件，属于数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A SQLite VFS that stores databases behind a small gRPC service, so any datastore can hold SQLite databases. Stock SQLite runs on it unchanged, each transaction reaches the server as one atomic commit, and read-only replicas read consistent versions. ／ Give every user, tenant or agent its own SQLite database, kept in FoundationDB, Postgres, an object store or whatever you already run. Your server stores pages and leases; the VFS handles SQLite's locking, journaling and caching. ／ > This is early software. A deterministic simulator checks the guarantees below, but gRPSQLite has not run in production.",
+   "evidence_lines": [
+    3,
+    5,
+    8
+   ]
+  },
+  "fn": "danthegoodman1/gRPSQLite",
+  "sha": "7bb988b6ea73",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

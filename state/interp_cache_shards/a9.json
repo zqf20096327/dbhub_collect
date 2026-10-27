@@ -11130,5 +11130,125 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ae7e1e7a1160": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式 SQL 数据库，含类型化 ORM 与可插拔存储",
+   "review": "KiteSQL 是用 Rust 编写的嵌入式关系数据库，直接嵌入应用运行、无需外部服务，支持 SQL 2016 大部分语法、类型化 ORM 与迁移、以及 RocksDB/LMDB/内存等可插拔 KV 存储后端，并提供 Shell、WebAssembly 和 Python 绑定。适合需要在 Rust/Python/WASM 应用内直接执行 SQL 的开发者；TPC-C 基准在无 fsync 提交、单核绑定的条件下测得，复现时需注意该条件。",
+   "highlights": [
+    "支持 SQL 2016 大部分语法，数据与元数据存储于 RocksDB、LMDB 或内存 KV 后端",
+    "提供带 schema 迁移的类型化 ORM（orm feature）及构建器风格查询",
+    "提供 Shell、WebAssembly 与 Python 绑定"
+   ],
+   "use_cases": [
+    "在 Rust 应用内嵌 SQL 能力，无需部署独立数据库服务",
+    "通过 WebAssembly 或 Python 在浏览器/脚本环境中运行 SQL 数据库",
+    "按读/写负载选择 LMDB 或 RocksDB 存储后端进行 OLTP 场景测试"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**KiteSQL** is a lightweight embedded relational database written in Rust, inspired by **MyRocks** and **SQLite**. It runs inside your application with no external service: execute SQL directly, or use typed ORM models, migrations, and builder-style queries. ／ `make tpcc` runs the benchmark (`--backend kitesql-lmdb|kitesql-rocksdb|sqlite`); `make tpcc-dual` cross-checks every statement against SQLite. ／ |SQLite (WAL, `synchronous=OFF`)|191484|274|41|33|343|268|",
+     "lines": [
+      18,
+      80,
+      88
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是嵌入式数据库引擎本身，为应用提供 SQL 能力，而非使用外部数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**KiteSQL** is a lightweight embedded relational database written in Rust, inspired by **MyRocks** and **SQLite**. It runs inside your application with no external service: execute SQL directly, or use typed ORM models, migrations, and builder-style queries. ／ - All metadata and data stored in KV storage (RocksDB, LMDB, or in-memory) ／ |`build_rocksdb()`|RocksDB (default feature `rocksdb`), stronger for write-heavy workloads|",
+   "evidence_lines": [
+    18,
+    21,
+    41
+   ]
+  },
+  "fn": "KipData/KiteSQL",
+  "sha": "ae7e1e7a1160",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2cd9a2e285cd": {
+  "identity": {
+   "one_liner": "OceanBase 相关仓库，README 信息不足",
+   "review": "该仓库 README 仅含标题一行，无法确认其具体功能、目标用户与运行方式。从仓库名看与 OceanBase 相关，但缺乏安装说明、使用文档或功能描述，需要进一步查看代码与文档才能编目。",
+   "highlights": [
+    "README 仅包含项目名称，无可验证的功能说明"
+   ],
+   "use_cases": [
+    "待补充仓库信息后确认"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "# oceanbase-2026",
+     "lines": [
+      1
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 无内容，无法判断是服务数据库生态的工具还是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "# oceanbase-2026",
+   "evidence_lines": [
+    1
+   ]
+  },
+  "fn": "AsyncOwl-2013/oceanbase-2026",
+  "sha": "2cd9a2e285cd",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

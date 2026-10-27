@@ -10524,5 +10524,141 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a2a5a3051029": {
+  "identity": {
+   "one_liner": "Rust 编写的 Postgres 兼容数据库运行时，单进程承载大量一次性数据库",
+   "review": "PGX 用 Rust 实现了一个兼容 Postgres 线协议与 SQL 方言的数据库运行时，通过 sealed template 加写时复制（ZFS clone）在毫秒级创建隔离数据库，供 AI agent、CI、per-PR、测试与预览环境使用，明确声明不适用于生产主库、非崩溃安全、不支持 C 扩展。面向需要大量短生命周期数据库的开发与 agent 工作流。",
+   "highlights": [
+    "单进程运行时承载成百上千个隔离数据库，空闲每个占约 70 KB 内存",
+    "基于 ZFS 写时复制克隆，从模板毫秒级创建数据库分支",
+    "兼容 Postgres 线协议与 SQL 方言，Rails、Django、Prisma、SQLAlchemy、node-postgres 可直接运行"
+   ],
+   "use_cases": [
+    "为 AI coding agent 提供每人一个的短生命周期 Postgres 数据库",
+    "CI/PR 级别的按需测试与预览数据库",
+    "基于生产脱敏副本的临时分支环境"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "PGX speaks the Postgres wire protocol and SQL dialect. Rails, Django, ／ Postgres 18.6",
+     "lines": [
+      39,
+      6
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 agent 与 CI 提供一次性数据库运行时，属于服务数据库使用场景的基础设施组件",
+   "persona": "build",
+   "dbs": [],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PGX is a database runtime for short-lived Postgres databases: agent ／ PGX speaks the Postgres wire protocol and SQL dialect. Rails, Django, ／ - **Not crash-safe.** The PGX profile runs with `fsync = off`.",
+   "evidence_lines": [
+    31,
+    39,
+    272
+   ]
+  },
+  "fn": "pgrundev/pgx",
+  "sha": "a2a5a3051029",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "53f4824dd1e4": {
+  "identity": {
+   "one_liner": "Telegram 聊天/论坛导出工具，消息写入 SQLite 并按话题分目录",
+   "review": "这是一个命令行工具，用于把整个 Telegram 聊天或论坛导出为本地存档：消息写入 SQLite 数据库，同时按论坛话题生成文件夹，并提供 index.html 离线阅读器。它通过 Telethon 使用 Telegram 的数据导出模式，支持多账号并行下载、断点续传、按日期/作者/类型过滤。适合需要批量备份或离线检索 Telegram 聊天记录的个人用户，使用前需在 my.telegram.org 申请 api_id/api_hash。",
+   "highlights": [
+    "多账号并行下载消息，进度每 100 条提交到 SQLite，支持中断续传与增量更新",
+    "消息按论坛话题分目录输出，可导出 txt/jsonl/html 离线阅读文件",
+    "支持按日期、作者、消息类型过滤导出，支持 SOCKS5/HTTP 代理"
+   ],
+   "use_cases": [
+    "批量备份 Telegram 群组/频道聊天记录到本地",
+    "导出论坛群组并按话题归档，生成可离线浏览的 HTML 阅读器",
+    "定期增量更新已导出聊天（配合 cron 和 --update-all）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Dump an entire Telegram chat into SQLite and a folder per forum topic at **over 100,000 messages a minute**. It runs Telegram's own data-export mode with parallel workers on several accounts, so a chat of several hundred thousand messages is done in minutes: a ／ - Progress is committed to SQLite every 100 messages. An interrupted run resumes where it stopped, and later runs fetch only new messages and append them to the files, so a repeat run of a large chat takes seconds. When a forum topic is renamed, its folder is  ／ - `index.html` to read the dump in a browser, offline; `messages.txt` for reading in an editor, `messages.jsonl` for scripts, and the SQLite database for queries.",
+     "lines": [
+      13,
+      28,
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该 Telegram 导出工具自身的本地存储，README 未提供面向数据库生态的功能",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dump an entire Telegram chat into SQLite and a folder per forum topic at **over 100,000 messages a minute**. It runs Telegram's own data-export mode with parallel workers on several accounts, so a chat of several hundred thousand messages is done in minutes: about 4× faster than Telegram Desktop's own export, and a whole forum in one pass instead of topic by topic. ／ - Progress is committed to SQLite every 100 messages. An interrupted run resumes where it stopped, and later runs fetch only new messages and append them to the files, so a repeat run of a large chat takes seconds. When a forum topic is renamed, its folder is renamed too.",
+   "evidence_lines": [
+    13,
+    28
+   ]
+  },
+  "fn": "renkagod/tg-chat-dump",
+  "sha": "53f4824dd1e4",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

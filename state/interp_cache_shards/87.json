@@ -9174,5 +9174,172 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eae9a3aae560": {
+  "identity": {
+   "one_liner": "基于 XSD 生成关系模型，将 XML 文件解析加载入 SQL 数据库的 Python 包",
+   "review": "xml2db 是一个 Python 包和 CLI 工具，从 XSD schema 自动生成带外键关系的表结构，将复杂嵌套的 XML 文件解析加载到关系数据库，并可从数据库导回 XML。通过 sqlalchemy 支持多种后端，集成测试覆盖 PostgreSQL、MySQL、SQL Server、DuckDB。适合需要将符合固定 XSD 的 XML 数据流入库存入 SQL 供查询分析的数据工程场景；要求提供 XSD schema。",
+   "highlights": [
+    "根据 XSD schema 自动生成带外键关系的数据库表模型，无需自定义映射规则",
+    "通过 sqlalchemy 连接多种数据库后端，集成测试覆盖 PostgreSQL、MySQL、MS SQL Server 和 DuckDB",
+    "提供 CLI 子命令（serve/import/render），支持 ERD、DDL 输出及 XML 导入"
+   ],
+   "use_cases": [
+    "将复杂嵌套的 XML 数据文件批量加载进关系数据库进行 SQL 查询",
+    "ELT 流水线中作为 XML 数据装载环节",
+    "从 XSD 生成 SQL 建表 DDL 或 ER 图浏览 schema 结构"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Automated integration tests run against PostgreSQL, MySQL, MS SQL Server and DuckDB. You may have to install additional ／ packages to connect to your database (e.g. `psycopg2` or `psycopg` for PostgreSQL, `pymysql` or `mysqlclient` for ／ and for database-specific guides: PostgreSQL,",
+     "lines": [
+      17,
+      18,
+      36
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Automated integration tests run against PostgreSQL, MySQL, MS SQL Server and DuckDB. You may have to install additional ／ packages to connect to your database (e.g. `psycopg2` or `psycopg` for PostgreSQL, `pymysql` or `mysqlclient` for ／ MySQL, `pyodbc` for MS SQL Server, or `duckdb-engine` for DuckDB). Through DuckDB, the loaded tables can also be ／ MySQL and MariaDB,",
+     "lines": [
+      17,
+      18,
+      19,
+      38
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Automated integration tests run against PostgreSQL, MySQL, MS SQL Server and DuckDB. You may have to install additional ／ MySQL, `pyodbc` for MS SQL Server, or `duckdb-engine` for DuckDB). Through DuckDB, the loaded tables can also be ／ SQL Server,",
+     "lines": [
+      17,
+      19,
+      37
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MySQL and MariaDB,",
+     "lines": [
+      38
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该包为将 XML 数据装载入关系数据库提供通用加载能力，是为数据库生态服务的工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`xml2db` is a Python package that parses and loads XML files into a relational database. It handles complex ／ Starting from an XSD schema which represents a given XML structure, `xml2db` builds a data model, i.e. a set of database ／ This package uses `sqlalchemy` to interact with the database, so it should work with different database backends.",
+   "evidence_lines": [
+    3,
+    12,
+    16
+   ]
+  },
+  "fn": "cre-dev/xml2db",
+  "sha": "eae9a3aae560",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4ce1c0feffd0": {
+  "identity": {
+   "one_liner": "基于 MCP 的知识图谱式 AI 记忆服务，数据以 PostgreSQL 为权威存储",
+   "review": "FaultLine 为本地 AI 提供持久化记忆：将事实写入结构化知识图谱，写入前经验证门控，支持更正归档旧值，并通过 /expand 学习领域本体。每个用户使用独立的 PostgreSQL schema 实现多租户隔离。面向运行 Ollama、OpenWebUI、Claude Desktop 等本地/自托管 LLM 的用户，通过 MCP（:8002）供多客户端共享同一记忆库。",
+   "highlights": [
+    "以 MCP server（端口 8002）暴露记忆工具，支持 OpenWebUI、Claude Desktop、Cursor 等客户端共享同一记忆库",
+    "每个用户使用独立的 PostgreSQL schema（faultline_<user_id>），通过 SET search_path 实现租户隔离",
+    "提供 /expand 命令，可从在线文档或训练知识构建领域本体"
+   ],
+   "use_cases": [
+    "为自托管的本地 LLM 会话添加可更正、可验证的持久记忆",
+    "多用户环境下按租户隔离 AI 记忆的自部署服务",
+    "网络设备、主机信息等结构化事实的长期记录与查询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Every user gets a **physically separate PostgreSQL schema** (`faultline_<user_id>`) — the sole user-memory boundary. Each request binds to the caller's schema via `SET search_path` **without `public`**, so one tenant's queries cannot even *name* another tenant",
+     "lines": [
+      128
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明用户记忆以 PostgreSQL schema 存储并由数据库强制隔离边界，PostgreSQL 是其数据存储层。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Every user gets a **physically separate PostgreSQL schema** (`faultline_<user_id>`) — the sole user-memory boundary. Each request binds to the caller's schema via `SET search_path` **without `public`**, so one tenant's queries cannot even *name* another tenant's tables. There is no shared `user_id` column to filter on and forget — the boundary **is** the schema, enforced by the database. (User memory is PostgreSQL-only; the vector tier is retired, so there are no per-user vector collections in the memory path.) ／ **2. How your chat client calls FaultLine's memory tools** — all through the **MCP server on `:8002`** (Bearer `MCP_API_KEY`). Any number of clients can share one store at once: ／ - **OpenWebUI** → **native MCP recommended** (Settings → Admin → Integrations, 0.6.31+); OpenAPI tool server also supported *(below)*",
+   "evidence_lines": [
+    128,
+    191,
+    193
+   ]
+  },
+  "fn": "tkalevra/FaultLine",
+  "sha": "4ce1c0feffd0",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

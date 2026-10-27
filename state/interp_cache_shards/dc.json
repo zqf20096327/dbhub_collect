@@ -9795,5 +9795,62 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "83e27340f49b": {
+  "identity": {
+   "one_liner": "嵌入式向量数据库库，进程内本地存储嵌入向量用于语义检索",
+   "review": "SrvDB 是一个以 Rust 为核心、提供 Python 绑定的嵌入式向量数据库库，运行在应用进程内，无需服务器、Docker 或网络，将 embeddings 存储在本地磁盘。提供 flat/HNSW/IVF/SQ8/PQ 等索引模式，声明 persist() 返回后数据可抵御崩溃。适合需要本地语义检索、离线 RAG 或 AI agent 记忆的开发者，通过 pip 或 cargo 安装使用。",
+   "highlights": [
+    "提供 flat、hnsw、ivf、sq8、pq、auto 六种索引模式，可在一到多个维度（速度/存储/精度）间切换",
+    "声明崩溃安全保证：persist() 返回后数据可在进程崩溃或断电后恢复",
+    "同时提供 Python（PyPI）与 Rust（crates.io）接口，支持 128–4096 维的任意 embedding 模型"
+   ],
+   "use_cases": [
+    "本地文档 RAG（配合本地 LLM 与 sentence-transformers）",
+    "AI agent 的持久化记忆（重启后保留的 remember/recall/forget）",
+    "桌面/CLI/笔记应用内的语义搜索与离线、air-gapped 场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它本身是嵌入向量存储引擎/数据库库，为应用（RAG、AI 记忆）提供存储能力，而非使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SrvDB** (spelled S-R-V-D-B) is an open-source **embedded vector database** ／ - 🦅 **In-process, offline.** A library, not a service: no server, no Docker, ／ - 🛡️ **Crash-safe by design.** After `persist()` returns, your data survives a",
+   "evidence_lines": [
+    23,
+    33,
+    35
+   ]
+  },
+  "fn": "Srinivas26k/srvdb",
+  "sha": "83e27340f49b",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

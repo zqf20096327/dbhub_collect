@@ -11715,5 +11715,59 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8e1e4d2e7138": {
+  "identity": {
+   "one_liner": "在 Tidbyt 设备上显示 Barclays Center 活动日历的应用",
+   "review": "这是一个 Go 编写的后端加 Pixlet 应用的个人项目：抓取 barclayscenter.com 活动页面，记录事件首次出现时间以标记'新增'，并保留已下架事件作为历史；通过 GitHub Actions 每 30 分钟向 Tidbyt 设备推送渲染图，部署于 Fly.io 且缩容到零。面向拥有 Tidbyt 显示设备的个人用户，数据非官方，不涉及数据库生态。",
+   "highlights": [
+    "Go 后端在请求到达时抓取活动页，距上次抓取超过 20 分钟才重新抓取",
+    "保留场地已下架的事件作为历史记录（最多一年），支持'最近新增'标记",
+    "GitHub Actions 每 30 分钟渲染 Pixlet 应用并推送到 Tidbyt 设备"
+   ],
+   "use_cases": [
+    "在 Tidbyt 设备上查看 Barclays Center 今日及近期活动",
+    "需要按到达时间区分'新增'活动的日历跟踪",
+    "自托管 Fly.io scale-to-zero 抓取服务的参考部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是一个抓取活动数据并渲染显示的应用，README 未涉及为任何数据库生态提供工具或组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "        │  scrape (Go, on request) ／ - `backend/` is a small Go service. It scrapes the events page when a request arrives and the last scrape is older than 20 minutes. It remembers every event it sees, including when it first saw it, which is how \"recently added\" works. The venue drops events from its listing once they are over, so the backend keeps them and serves them as past events (newest first, up to a year; the Tidbyt app does not show them yet). That history starts empty and fills in as events pass. The first scrape is a baseline, so nothing shows as new on day one. ／ - `tidbyt/barclays.star` is the Pixlet app. It draws one screen of four rows: the most recent past event, today, and the next events. Long titles scroll.",
+   "evidence_lines": [
+    15,
+    20,
+    22
+   ]
+  },
+  "fn": "vnctaing/barclays-center-tidbyt-app",
+  "sha": "8e1e4d2e7138",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

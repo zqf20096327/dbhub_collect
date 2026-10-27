@@ -10728,5 +10728,134 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f648e3675d53": {
+  "identity": {
+   "one_liner": "本地 AI PR 审查工作台，基于 git worktree 隔离执行",
+   "review": "这是一个桌面端 PR 审查工具，通过 gh CLI 拉取仓库 PR 队列，调用 Claude 或 Codex 在隔离的 git worktree 中进行审查、修复和功能开发，所有发布到 GitHub 的评论需经用户在 UI 中勾选确认。使用 Nuxt 4 + Electron 构建，数据存储在本地 SQLite 数据库（better-sqlite3 + drizzle），提供 macOS/Windows/Linux 桌面包，也可从源码构建，需 gh 和 AI 提供商登录。",
+   "highlights": [
+    "在隔离的只读 git worktree 中运行 AI 审查，生成含 severity 和 path:line 的结构化 findings",
+    "通过 gh API 发布评论，发布前提供预览和逐条人工勾选确认",
+    "使用 better-sqlite3 + drizzle 在首次启动时自动创建本地 SQLite 数据库"
+   ],
+   "use_cases": [
+    "批量审查仓库的整个 PR 队列",
+    "让 AI 在隔离 worktree 中修复 PR 或开发新分支功能",
+    "在代码不出本机的前提下生成 GitHub PR 评论草稿"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "On first start, **the SQLite database (`./data/cockpit.db`) is created automatically**. The default worktree location is `.pr-cockpit-worktrees/` inside each project's local clone, so IDEs can discover it like normal repo-local worktrees (VS Code needs `git.re",
+     "lines": [
+      155
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身使用 SQLite 存储本地数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Nuxt 4 + @nuxt/ui (Tailwind v4) · better-sqlite3 + drizzle · `@anthropic-ai/claude-agent-sdk` · `@openai/codex-sdk` · local `gh` CLI · Electron packaging that runs Nitro under Electron's Node mode. ／ On first start, **the SQLite database (`./data/cockpit.db`) is created automatically**. The default worktree location is `.pr-cockpit-worktrees/` inside each project's local clone, so IDEs can discover it like normal repo-local worktrees (VS Code needs `git.repositoryScanMaxDepth` set to `2` or `-1`; the default of 1 only scans one level down). The directory is added to the project's `.git/info/exclude`, keeping the main repo's `git status` clean. Startup recovery moves existing persistent worktrees from the old `./data/worktrees` location when they still exist. No manual migration is required. The Drizzle schema is set up on the fly (`ensureSchema()` / `ensureColumns()` in `core/db/client.ts`).",
+   "evidence_lines": [
+    88,
+    155
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "taovc/pr-cockpit",
+  "sha": "f648e3675d53",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f26522bcd08c": {
+  "identity": {
+   "one_liner": "AI 开发项目宪章生成器，从 brief 生成 14 份架构文档",
+   "review": "Kortext 用于在 AI 编码开始前生成项目宪法：由 10 个专家角色从 BRIEF.md 生成 PRODUCT、ARCHITECTURE、DATABASE 等 14 份文档，供 Claude Code、Codex 等 agent CLI 在开发中反复引用；逐文档人工评审，支持从已有代码库启动。MIT 许可，本地运行，自身无需 API key。适合用 AI agent 做开发的团队与个人。",
+   "highlights": [
+    "从 BRIEF.md 由 10 个专家角色生成 14 份架构文档",
+    "支持对既有代码库做分析并给出建议",
+    "本地运行，自身不需要 API key，无遥测"
+   ],
+   "use_cases": [
+    "AI agent 开发前固化项目规则与架构约定",
+    "对已有项目补充结构化文档",
+    "在开发前对 brief 做充分性与风险分析"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未表明其为数据库生态服务的工具或依赖特定数据库存数据，仅提及生成 DATABASE.md 文档。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "From the **`BRIEF.md`** you provide, **10 expert personas** write **14 architecture documents** — the one source of truth the model comes back to, every time. ／ From the brief, Kortext produces `PRODUCT.md`, `STACK.md`, `STRUCTURE.md`, `ARCHITECTURE.md`, `DESIGN.md`, `GROWTH.md`, `SECURITY.md`, `ENVIRONMENT.md`, `DATABASE.md`, `API.md`, `LEGAL.md`, `CONTENT.md`, `ENGINEERING.md`, `TEST.md`. And, at the very end, an optional `EXPERIENCE.md` with its `PROMPTS.md`. ／ From there on you carry on building with whatever AI tool, in whatever client, you already use.",
+   "evidence_lines": [
+    19,
+    25,
+    37
+   ]
+  },
+  "fn": "erayendes/kortext",
+  "sha": "f26522bcd08c",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8033,5 +8033,171 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0c2175039d4a": {
+  "identity": {
+   "one_liner": "代码优先的工作流、应用与AI代理平台，用Postgres作队列与状态存储",
+   "review": "Windmill 是一个自托管的代码优先工作流编排平台，将脚本自动生成 UI、API 和定时任务，并可组合成 flow、数据管道或 React/Svelte 应用；业务团队可用 AI 构建，工程师通过评审与 Git 同步控制发布。平台自身依赖 Postgres 存储作业队列与工作区状态，也提供托管数据表、DuckDB 查询等数据能力。适合需要内部工具与工作流自动化的团队，AGPLv3 许可，商业版另售。",
+   "highlights": [
+    "支持 Python、TypeScript、Go、Bash 等 20+ 语言编写脚本，可由调度、webhook、HTTP、Kafka 等触发",
+    "提供 MCP server、AI sessions 与 Git 同步，脚本与 flow 可通过评审流程部署",
+    "数据 tables 提供 workspace 级托管 Postgres 表，DuckDB 脚本可查询 S3/Azure Blob 文件与 Postgres、MySQL、BigQuery"
+   ],
+   "use_cases": [
+    "构建内部工具与管理界面",
+    "定时任务与数据管道编排",
+    "让业务团队通过 AI 构建脚本/应用并由工程师评审上线"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Data tables give each workspace managed Postgres tables, queried with type-checked SQL from TypeScript, Python and DuckDB scripts without exposing a connection string. ／ - **Database**: Postgres (compatible with Aurora, Cloud SQL, Neon, Azure PostgreSQL)",
+     "lines": [
+      96,
+      128
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- DuckDB scripts query S3 and Azure Blob files (CSV, Parquet, JSON), data tables, Postgres, MySQL and BigQuery in SQL, on your workers.",
+     "lines": [
+      97
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Windmill 依赖 Postgres 存储自身作业队列与全部工作区状态，是使用数据库的应用平台",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPLv3 开源，另有商业许可与专有实例（open-core）",
+   "install": [
+    "docker",
+    "helm",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Database**: Postgres (compatible with Aurora, Cloud SQL, Neon, Azure PostgreSQL) ／ - **Backend**: Rust - stateless API servers and workers pulling jobs from a Postgres queue ／ Stateless API servers and workers share a PostgreSQL database that holds the job queue and all workspace state (remote agent workers go through the API servers instead). Workers pull jobs by tag, so each worker group can run in its own network, for example dev workers that only reach dev systems and prod workers that only run reviewed code.",
+   "evidence_lines": [
+    128,
+    129,
+    168
+   ]
+  },
+  "fn": "windmill-labs/windmill",
+  "sha": "0c2175039d4a",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5d68fd96ddf3": {
+  "identity": {
+   "one_liner": "WSL2 上一键搭建 PHP LAMP/LAPP 原生 systemd 开发环境",
+   "review": "该项目通过 PowerShell 脚本在 Windows 11 的 WSL2 中自动安装 Debian/Ubuntu，并部署 PHP 5.6–8.5、Apache、MariaDB 11.8、PostgreSQL 18、Redis 等，全部以原生 systemd 服务运行而非容器。面向需要在 Windows 上搭建贴近生产环境的 PHP 开发者，支持自动化与手动安装、幂等重跑，明确面向本地开发（仅监听 127.0.0.1，未做互联网加固）。",
+   "highlights": [
+    "一键脚本安装 PHP 5.6–8.5、Apache、MariaDB 11.8、PostgreSQL 18、Redis，以原生 systemd 服务运行",
+    "提供 Windows 侧与 Linux 侧两套安装入口，支持 DryRun、指定发行版与 PHP 版本等参数",
+    "安装脚本具有收敛性，重复运行只处理差异项"
+   ],
+   "use_cases": [
+    "在 Windows 11 上为 PHP 项目搭建与生产 VM 相似的本地开发环境",
+    "同一 Apache 上以每站点独立 PHP 版本托管多个本地站点",
+    "在云 VM 或裸机上以 bash 脚本安装 LAMP/LAPP 技术栈"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. The stack runs as **native systemd services** (MariaDB, PostgreSQL, Redis) and as per-user processes for the local sites (`gash hte`). When a client's production runs on a plain VM, a shared hosting or a server where containers are not an option, the develo ／ > TL;DR: PHP 5.6 to **8.5** (CLI + FPM), Apache 2.4, **MariaDB 11.8 LTS**, **PostgreSQL 18**, Redis, Composer 2 and 1, Gash with `gash hte` for local sites, Node LTS via nvm. ／ 4. **PostgreSQL 18** from the official pgdg repository",
+     "lines": [
+      14,
+      19,
+      24
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "1. PHP from packages.sury.org, on Debian and Ubuntu alike (it is absorbing `ppa:ondrej/php`, which an existing Ubuntu install may keep): every version from 5.6 to 8.5, with the usual extensions (intl, gd, imagick, mysql, pgsql, redis, memcached, xml, zip, ...)",
+     "lines": [
+      21
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "`LAMP` stands for **L**inux, **A**pache, **M**ySQL/MariaDB and **P**HP; `LAPP` for **L**inux, **A**pache, **P**ostgreSQL and **P**HP. Both are long-standing open-source stacks for dynamic web applications. ／ 2. The stack runs as **native systemd services** (MariaDB, PostgreSQL, Redis) and as per-user processes for the local sites (`gash hte`). When a client's production runs on a plain VM, a shared hosting or a server where containers are not an option, the develo ／ > TL;DR: PHP 5.6 to **8.5** (CLI + FPM), Apache 2.4, **MariaDB 11.8 LTS**, **PostgreSQL 18**, Redis, Composer 2 and 1, Gash with `gash hte` for local sites, Node LTS via nvm.",
+     "lines": [
+      9,
+      14,
+      19
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为开发环境安装器，负责在 WSL2 中安装并配置 MariaDB/PostgreSQL/Redis 等服务，属于为数据库栈服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "2. The stack runs as **native systemd services** (MariaDB, PostgreSQL, Redis) and as per-user processes for the local sites (`gash hte`). When a client's production runs on a plain VM, a shared hosting or a server where containers are not an option, the development environment should resemble it as much as possible: many PHP versions side by side, switchable per site, on the same Apache and databases. ／ > TL;DR: PHP 5.6 to **8.5** (CLI + FPM), Apache 2.4, **MariaDB 11.8 LTS**, **PostgreSQL 18**, Redis, Composer 2 and 1, Gash with `gash hte` for local sites, Node LTS via nvm. ／ 3. **MariaDB 11.8 LTS** (EOL 13 February 2030), tuned for development, with a `default` user for your applications",
+   "evidence_lines": [
+    14,
+    19,
+    23
+   ]
+  },
+  "fn": "mauriziofonte/win11-wsl2-ubuntu-debian-setup",
+  "sha": "5d68fd96ddf3",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

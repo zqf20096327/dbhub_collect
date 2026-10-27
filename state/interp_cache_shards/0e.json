@@ -11263,5 +11263,148 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "34015d95edf7": {
+  "identity": {
+   "one_liner": "本地无登录的拉美求职聚合应用，用 SQLite 存数据",
+   "review": "JobFilter 是一个本地运行的求职搜索应用，抓取拉美多个招聘平台的职位，按用户技能画像着色匹配度，并自动拉黑重复发布职位的企业。数据存储在本机 SQLite（bun:sqlite 或 better-sqlite3），无需登录任何平台，适合拉美求职者个人使用；README 提示部分平台禁止抓取。",
+   "highlights": [
+    "聚合搜索 GetOnBoard、Computrabajo、LinkedIn 等 8 个拉美招聘平台并支持增量搜索",
+    "按 profile 目录中 keywords/skills/location 配置生成职位匹配度热力图",
+    "自动识别 3 个月内重复发布 3 次以上的职位并加入黑名单"
+   ],
+   "use_cases": [
+    "个人每日批量检索拉美招聘平台的职位",
+    "过滤重复发布职位的企业",
+    "按个人技能栈评估职位匹配度"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🔒 **Local y sin login.** Tus datos quedan en un SQLite en tu máquina. El script nunca usa ／ |`bun run dev`|Arranca la app con Bun (usa `bun:sqlite`) y abre el navegador.| ／ |`bun run dev:node`|Igual, con Node (usa `better-sqlite3`).|",
+     "lines": [
+      41,
+      95,
+      96
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明用户数据存储在本机 SQLite（bun:sqlite / better-sqlite3），项目是使用数据库的终端应用而非为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🔒 **Local y sin login.** Tus datos quedan en un SQLite en tu máquina. El script nunca usa ／ |`bun run dev`|Arranca la app con Bun (usa `bun:sqlite`) y abre el navegador.| ／ |`bun run dev:node`|Igual, con Node (usa `better-sqlite3`).|",
+   "evidence_lines": [
+    41,
+    95,
+    96
+   ]
+  },
+  "fn": "SebastianAsprino/jobfilter",
+  "sha": "34015d95edf7",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "10ce19b936e0": {
+  "identity": {
+   "one_liner": "基于 FastAPI 的密钥保管 API，Fernet 加密后存入 PostgreSQL",
+   "review": "一个学习型项目，实现带用户注册、JWT 认证与按用户隔离的密钥存储 REST API，密钥值经 Fernet 加密后持久化到 PostgreSQL，并支持密钥轮换与审计事件记录。面向学习者与作品集展示，README 明确声明非生产就绪，禁止存放真实敏感凭据，部署需自行提供 TLS 连接与生产密钥。",
+   "highlights": [
+    "提供带 JWT 认证与按用户数据隔离的密钥 CRUD REST API",
+    "密钥值在持久化到 PostgreSQL 前经 Fernet 加密，支持密钥轮换脚本",
+    "记录 secret 操作的审计事件，并通过 Docker Compose 运行本地开发环境"
+   ],
+   "use_cases": [
+    "学习认证、加密存储、密钥轮换与审计等后端安全控制的全流程",
+    "作为 FastAPI + SQLAlchemy 异步数据库访问的参考实现",
+    "本地开发环境中练习集成测试与 CI 流水线"
+   ],
+   "review_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A learning-focused FastAPI service for authenticated, owner-scoped secret storage. Secret values are encrypted with Fernet before being persisted to PostgreSQL. ／ * PostgreSQL",
+     "lines": [
+      15,
+      37
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明密钥值加密后持久化到 PostgreSQL，该服务使用 PostgreSQL 存储数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A learning-focused FastAPI service for authenticated, owner-scoped secret storage. Secret values are encrypted with Fernet before being persisted to PostgreSQL. ／ **Status:** This is a learning and portfolio project, not production ready. Do not store real credentials or sensitive data in it.",
+   "evidence_lines": [
+    15,
+    17
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "MugdhoAI/vault-api",
+  "sha": "10ce19b936e0",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

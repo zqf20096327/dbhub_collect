@@ -10373,5 +10373,167 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6d30602b777d": {
+  "identity": {
+   "one_liner": "AI 编码代理的邮件式协调层，基于 FastMCP+Git+SQLite",
+   "review": "为并行运行的多个 AI 编码代理提供身份注册、收件箱、可检索消息线程与咨询性文件租约的协调服务，经 FastMCP HTTP 服务器暴露，数据以 Git 存审计工件、SQLite 做索引查询。面向 Claude Code、Codex 等 MCP 客户端。此 Python 版已弃用，由 Rust 重写版 mcp_agent_mail_rust 接替，新装用户应使用后者。",
+   "highlights": [
+    "提供代理身份注册、收件箱/发件箱与可搜索消息线程",
+    "支持对文件/glob 的咨询性文件预留租约以传递变更意图",
+    "以 Git 存储可审计工件、SQLite 支撑索引与查询"
+   ],
+   "use_cases": [
+    "多个编码代理并行修改同一代码库时的冲突协调",
+    "跨工具链的代理间异步消息与上下文传递",
+    "需要人类可审计的操作记录与文件占用声明的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Think of it as asynchronous email + directory + change-intent signaling for your agents, backed by Git (for human-auditable artifacts) and SQLite (for indexing and queries).",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README L11 说明 SQLite 用于该项目的索引与查询，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "deprecated",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Think of it as asynchronous email + directory + change-intent signaling for your agents, backed by Git (for human-auditable artifacts) and SQLite (for indexing and queries). ／ Status: Maintenance mode. This Python implementation is superseded by the Rust rewrite and is no longer actively developed; new installs should use mcp_agent_mail_rust. The original design is captured in detail in `docs/planning/project_idea_and_guide.md` (start with the original prompt at the top of that file). ／ A mail-like coordination layer for coding agents, exposed as an HTTP-only FastMCP server. It gives agents memorable identities, an inbox/outbox, searchable message history, and voluntary file reservation \"leases\" to avoid stepping on each other.",
+   "evidence_lines": [
+    11,
+    13,
+    9
+   ]
+  },
+  "fn": "Dicklesworthstone/mcp_agent_mail",
+  "sha": "6d30602b777d",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "851ff353a8c5": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的本地只读数据库 MCP 网关",
+   "review": "DataNexa 是运行在本机的数据库 MCP 服务，将 SQLite、MySQL、PostgreSQL 及 JDBC 兼容库聚合到单一 localhost 端点供 AI Agent 访问。通过 SQL 语法树校验强制只读，限制返回行数、执行时间和连接数，并保留本地审计记录、提供 Tauri 桌面端管理界面，适用于需要受控数据访问的 AI 应用场景。",
+   "highlights": [
+    "通过 MCP 协议提供表结构发现、数据采样、只读 SQL、查询计划等工具，聚合多个数据库连接到单一本地端点",
+    "基于 SQL 语法树校验拦截非只读语句，并支持行数、超时、连接池上限限制与 Bearer Token 鉴权",
+    "保留本地审计记录，支持 SQL 字面量脱敏、按天数自动清理，密码存入操作系统凭证库"
+   ],
+   "use_cases": [
+    "AI Agent 需要访问多个数据库且只有一份 MCP 配置的场景",
+    "无法申请只读数据库账号时，前置只读网关收窄风险面",
+    "需要本地留存 AI 数据访问审计记录的合规场景"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "DataNexa 原生支持 SQLite、MySQL 和 PostgreSQL，并通过 JDBC 支持(技术预览)连接更多数据库。桌面端基于 Tauri、React 与 Rust 构建。 ／ - 统一管理 SQLite、MySQL 和 PostgreSQL 只读连接",
+     "lines": [
+      15,
+      29
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "DataNexa 原生支持 SQLite、MySQL 和 PostgreSQL，并通过 JDBC 支持(技术预览)连接更多数据库。桌面端基于 Tauri、React 与 Rust 构建。 ／ - 统一管理 SQLite、MySQL 和 PostgreSQL 只读连接",
+     "lines": [
+      15,
+      29
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "DataNexa 原生支持 SQLite、MySQL 和 PostgreSQL，并通过 JDBC 支持(技术预览)连接更多数据库。桌面端基于 Tauri、React 与 Rust 构建。 ／ - 统一管理 SQLite、MySQL 和 PostgreSQL 只读连接",
+     "lines": [
+      15,
+      29
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为数据库访问提供 MCP 网关、只读校验与审计功能，是为数据库生态服务的工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "DataNexa 是一个运行在本机的数据库 MCP 服务。它为 AI Agent 提供统一、受控且可审计的数据访问入口，在执行查询前应用只读策略，并对返回行数、执行时间和连接数量进行限制。 ／ **拿不到只读账号时，前置一道防线。** 理想情况下，AI 应当使用数据库只读账号访问数据；但现实中，我们未必能为每套企业数据申请到只读账号。DataNexa 在 Agent 与数据库之间充当前置网关：基于 SQL 语法树校验，非只读语句一律拦截，同时限制返回行数、执行时间与连接数量——在无法变更账号权限时，尽可能收窄风险面。 ／ - 保留本地审计记录，支持按保存天数自动清理，并可对 SQL 字面量进行脱敏",
+   "evidence_lines": [
+    13,
+    23,
+    36
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "MingoZacwu/DataNexa",
+  "sha": "851ff353a8c5",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10850,5 +10850,250 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2ed4fa47f4e9": {
+  "identity": {
+   "one_liner": "数据库查询的 PR 式审批网关，用于生产访问管控",
+   "review": "Kviklet 是一个自托管的数据库访问审批工具，为 SQL 查询和限时会话提供类似 Pull Request 的审查/批准流程，记录执行语句并支持 OIDC/SAML/LDAP 单点登录。面向需要合规管控生产数据库访问的工程团队，通过 Docker 容器部署；SAML、数据库代理、MCP Server 等功能需企业许可。",
+   "highlights": [
+    "提供针对单条 SQL 语句和限时会话的审查与批准工作流",
+    "记录每条已执行语句并关联用户与请求，形成审计日志",
+    "支持 OIDC、SAML、LDAP 等身份认证方式"
+   ],
+   "use_cases": [
+    "工程团队对生产数据库查询执行双人审查流程",
+    "以临时凭证/临时会话替代共享数据库密码",
+    "保留生产数据库手动访问的完整语句审计记录"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Supported databases are **Postgres**, **MySQL**, **MariaDB**, **MS SQL Server** and **MongoDB**.",
+     "lines": [
+      14
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Supported databases are **Postgres**, **MySQL**, **MariaDB**, **MS SQL Server** and **MongoDB**.",
+     "lines": [
+      14
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Supported databases are **Postgres**, **MySQL**, **MariaDB**, **MS SQL Server** and **MongoDB**.",
+     "lines": [
+      14
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Supported databases are **Postgres**, **MySQL**, **MariaDB**, **MS SQL Server** and **MongoDB**.",
+     "lines": [
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Kviklet 为多种数据库提供访问审批、代理与审计服务，自身用 PostgreSQL 存元数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "核心开源，企业功能（SAML、代理、MCP Server 等）需企业许可",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Kviklet (pronounced Quick-let) applies the Four-Eyes Principle to production database access, with a pull request-like review and approval workflow for individual SQL statements or time-limited database sessions. Engineers can review and approve each other’s requests without routing every query through a DBA or operations team. ／ Supported databases are **Postgres**, **MySQL**, **MariaDB**, **MS SQL Server** and **MongoDB**. ／ - **Proxy** (Postgres, MariaDB, MySQL): Use your preferred database client through an approved temporary-access session with a temporary password. Executed statements are recorded in Kviklet’s audit log.",
+   "evidence_lines": [
+    10,
+    14,
+    35
+   ]
+  },
+  "fn": "kviklet/kviklet",
+  "sha": "2ed4fa47f4e9",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "103fd08f5036": {
+  "identity": {
+   "one_liner": "PostgreSQL schema 迁移与设计规范的 SQL linter/formatter",
+   "review": "pgrubic 是面向 PostgreSQL 的 SQL 静态分析和格式化工具，提供 100+ 条规则，检查 schema 迁移和设计最佳实践，可自动修复违规（如为索引创建语句补 concurrently），支持 lint PL/pgSQL 函数和 DO 块中的迁移语句，格式化采用 River 风格。可通过 PyPI、Docker、GitHub Actions、pre-commit 安装，要求 Python 3.12+，适合在 CI 或本地工作流中使用。",
+   "highlights": [
+    "提供 100+ 条 lint 规则并支持自动修复违规",
+    "可对 PL/pgSQL 函数与 DO 块中的迁移语句执行 lint",
+    "支持 CLI、库调用、pre-commit、GitHub Actions、Docker、浏览器多种使用方式"
+   ],
+   "use_cases": [
+    "CI 流水线中对 SQL 迁移文件做静态检查",
+    "统一团队 DDL/DML 代码格式风格",
+    "pre-commit 阶段自动修复 SQL 规范问题"
+   ],
+   "license_note": "",
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "pgrubic is a PostgreSQL linter and formatter for schema migrations and design best practices.",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 的 schema 迁移和 SQL 设计提供 lint/format 服务，是数据库生态工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pgrubic is a PostgreSQL linter and formatter for schema migrations and design best practices. ／ - Over 100+ rules ／ pip install pgrubic",
+   "evidence_lines": [
+    27,
+    31,
+    52
+   ]
+  },
+  "fn": "bolajiwahab/pgrubic",
+  "sha": "103fd08f5036",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "687be9d38faa": {
+  "identity": {
+   "one_liner": "Python/Django/DRF 后端开发课程，含 PostgreSQL 与 AWS 部署",
+   "review": "这是一个后端开发教学课程仓库，按模块讲授 HTTP、Django ORM、DRF、关系数据库（从 SQLite 迁移到 PostgreSQL）、JWT 认证，以及 AWS EC2/RDS 生产部署。配套示例电商 API 项目，学习者通过克隆仓库、安装依赖、运行迁移和开发服务器进行练习，目标读者为后端初学者。",
+   "highlights": [
+    "课程包含 Python、Django、DRF、PostgreSQL 与 AWS 部署的模块化大纲",
+    "提供本地开发环境搭建步骤：虚拟环境、依赖安装、数据库迁移、创建超级用户、运行开发服务器",
+    "示例项目提供产品 CRUD API 端点，可用 Postman 测试"
+   ],
+   "use_cases": [
+    "后端开发入门学习",
+    "学习 Django ORM 与 PostgreSQL 数据库设计",
+    "学习 AWS EC2/RDS/Nginx 生产部署流程"
+   ],
+   "review_2": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A practical, project-based curriculum designed to take you from backend fundamentals to deploying production-ready REST APIs on AWS. Built with **Python**, **Django**, **Django REST Framework (DRF)**, **PostgreSQL**, **Nginx**, **Gunicorn**, and **AWS (EC2 & R ／ M3 --> M4[\"Module 4: Relational Databases<br/>PostgreSQL, Migrations, Query Optimization\"] ／ - **Database:** PostgreSQL (Production) / SQLite (Local Dev)",
+     "lines": [
+      3,
+      24,
+      51
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**2. Django & ORM**|Project architecture, Django Apps, SQLite to PostgreSQL|E-commerce database models| ／ - **Database:** PostgreSQL (Production) / SQLite (Local Dev)",
+     "lines": [
+      32,
+      51
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是一个使用 PostgreSQL/SQLite 存数据的 Django 教学示例项目，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Database:** PostgreSQL (Production) / SQLite (Local Dev) ／ 2. **PostgreSQL Database:** Provision an Amazon RDS PostgreSQL instance and point `DATABASES['default']` in `settings.py` via environment variables.",
+   "evidence_lines": [
+    51,
+    112
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "codewithmuh/backend_course",
+  "sha": "687be9d38faa",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11237,5 +11237,199 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d4bec22959b0": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 PostgreSQL 的 30 人以内团队聊天应用",
+   "review": "Tofu Chat 是一个开源团队即时通讯应用，提供私信、spaces、话题串、文件分享和语音消息，面向 30 人以内的小团队。数据存储使用 PostgreSQL，身份认证依赖 Supabase 与 Google 登录，默认通过 Tofu 平台托管部署，也可用 Node.js 22.13+ 本地运行。视频通话与后台推送等能力未包含。",
+   "highlights": [
+    "提供私信、spaces、threads、文件（单文件最大 5 MiB）与语音消息等聊天功能",
+    "使用 PostgreSQL 存储会话数据，Supabase 提供身份服务",
+    "支持本地运行（npm run dev）与通过 Tofu 平台自部署"
+   ],
+   "use_cases": [
+    "小团队内部沟通与话题讨论",
+    "通过 Fork 仓库在 Tofu 上部署自托管聊天服务",
+    "本地开发环境下使用内置 demo 体验应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A connected workspace needs PostgreSQL and Supabase identity settings. Tofu supplies these for the hosted app; .env.example lists the settings for your own deployment. Self-hosted Google sign-in also needs an authorized Tofu OAuth broker setup; setting `TOFU_S ／ Built with Next.js, React and TypeScript, with PostgreSQL for conversations and Supabase for identity. ／ The test suite includes unit tests, embedded SQL checks, native PostgreSQL and API integration, browser flows, failure injection and screenshot regressions. See the testing guide for coverage, CI, browser setup and source-bound integration checks. Screenshots ",
+     "lines": [
+      56,
+      60,
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该应用使用 PostgreSQL 存储会话数据、Supabase 提供身份服务，本身不服务数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可，捆绑字体、图标与 emoji 数据保留各自许可",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tofu connects the hosting and services; your agent builds and checks the app. The app has no service address built in: Tofu provides the database and its certificate (`DATABASE_URL`, `SUPABASE_CA_CERT`), the identity service (`SUPABASE_URL`, `SUPABASE_ANON_KEY`) and where Google sign-in starts (`TOFU_SIGN_IN_URL`), so the same code runs on whichever backend Tofu connects. This is a server app with a database, so it needs Tofu's Pro hosting. See current plans before deploying. ／ A connected workspace needs PostgreSQL and Supabase identity settings. Tofu supplies these for the hosted app; .env.example lists the settings for your own deployment. Self-hosted Google sign-in also needs an authorized Tofu OAuth broker setup; setting `TOFU_SIGN_IN_URL` alone does not configure it, and without it the Google button stays off. Keep populated environment files and credentials out of Git. See runtime and data handling for authorization, limits and retry behavior. ／ Built with Next.js, React and TypeScript, with PostgreSQL for conversations and Supabase for identity.",
+   "evidence_lines": [
+    43,
+    56,
+    60
+   ]
+  },
+  "fn": "airisorg/tofu-chat",
+  "sha": "d4bec22959b0",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "720ad1b19afd": {
+  "identity": {
+   "one_liner": "面向企业数据仓库的 AI 分析平台，自建上下文层生成 SQL",
+   "review": "Myriade 连接既有数据仓库，从 schema、元数据和查询历史构建上下文层，提供自然语言分析、SQL 生成与解释、数据质量检测和 dbt 集成，面向数据团队。商业化运作：镜像私有，需联系获取密钥后通过脚本在 Ubuntu 20.04+/Debian 11+ 自托管安装，代码未公开下载渠道。",
+   "highlights": [
+    "从数据仓库的 schema、元数据与查询历史构建上下文层，并集成 dbt 模型与文档",
+    "生成并解释 SQL，检测数据质量问题和异常，提供血缘溯源",
+    "通过一键脚本自托管安装，支持 SSL 证书配置"
+   ],
+   "use_cases": [
+    "在缺少文档、语义层或 dbt 覆盖不全的仓库上做自然语言数据分析",
+    "数据团队对 AI 生成的分析进行审核与控制",
+    "自动生成表、列和指标的文档"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "连接数据仓库并为其提供分析与治理能力，属于为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "私有镜像，按请求自托管，代码未公开分发",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Myriade connects to an existing data warehouse, builds the missing context layer, and provides a reliable AI analyst for natural language analytics.** ／ - generates and explains SQL ／ Myriade is self-hosted on request: contact us through the demo link below. Images are private; we send each customer one line that carries their read-only access key.",
+   "evidence_lines": [
+    3,
+    13,
+    31
+   ]
+  },
+  "fn": "myriade-ai/myriade",
+  "sha": "720ad1b19afd",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "658991dfd29f": {
+  "identity": {
+   "one_liner": "自托管的 MCP 长期记忆服务器，Markdown 存储加混合检索",
+   "review": "Hippocampus 是一个可自行部署的 MCP 记忆服务器，把记忆以纯 Markdown 文件保存，并用 SQLite FTS5、本地 ONNX 向量嵌入和知识图谱链接做混合检索，通过 Claude Code hooks 在每次提示时自动召回。面向使用 Claude Code 及其他 MCP 客户端、需要在多会话多机器间共享记忆的开发者；检索钩子功能仅限 Claude Code，嵌入模型在本地运行。",
+   "highlights": [
+    "提供 BM25（SQLite FTS5）、本地向量嵌入与知识图谱链接三路混合检索，使用 Reciprocal Rank Fusion 融合",
+    "以纯 Markdown 文件存储记忆，索引可随时删除并用 hippocampus sync --full 重建",
+    "通过 MCP over streamable HTTP 提供 search_memory、save_memory、list_pending 等工具，并支持 Claude Code 的自动召回与整理 hooks"
+   ],
+   "use_cases": [
+    "为 Claude Code 等多个会话和机器提供共享的长期记忆",
+    "跟踪基础设施相关待办事项（active/pending/resolved 状态管理）",
+    "本地运行嵌入模型、不经第三方 API 管理个人/团队笔记式记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "as plain Markdown files, indexes them in SQLite, and finds them with **hybrid ／ 1. **BM25** (SQLite FTS5) for exact names, ports, flags and numbers;",
+     "lines": [
+      15,
+      84
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用 SQLite 做索引的 MCP 记忆应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Hippocampus is an **MCP memory server** you run yourself. It stores memories ／ Memories are **plain Markdown files**. The database is only an index you can ／ delete and rebuild at any time. Embeddings run **locally** (ONNX): no API key",
+   "evidence_lines": [
+    14,
+    43,
+    44
+   ]
+  },
+  "fn": "marcelinollima/hippocampus",
+  "sha": "658991dfd29f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

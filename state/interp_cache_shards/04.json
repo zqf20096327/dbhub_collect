@@ -10670,5 +10670,80 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "74a195ae75a2": {
+  "identity": {
+   "one_liner": "浏览器原生的超轻量关系型数据库引擎，TypeScript 转 C 编译为 Wasm",
+   "review": "WebDB 是一个从零构建、面向浏览器的嵌入式关系数据库引擎，提供 SQL 查询、ACID 事务、索引/连接与 OPFS/IndexedDB 持久化，核心通过 TypeScript-to-C 转译器生成 C99 再编译为约 13-50 KB 的 Wasm。面向构建离线优先 Web 应用的前端开发者。README 自述处于早期原型阶段，V1 为 JS 引擎，C/Wasm 版本尚未完成。",
+   "highlights": [
+    "Wasm 体积小于 50 KB，通过 TypeScript Query Builder 编译为二进制字节码、由 Wasm 核心执行",
+    "原生适配异步浏览器存储：OPFS、IndexedDB，并支持经 HTTP Range 请求从 S3/CDN 按需流式读取页面",
+    "支持 ACID 事务（WAL + 自动回滚）、查询计划检查与字节码反汇编，跨标签页协调委托 Web Locks API"
+   ],
+   "use_cases": [
+    "离线优先 Web 应用中替代 IndexedDB 的关系查询需求",
+    "在浏览器端嵌入轻量 SQL 存储而无需服务器或大型 Wasm 移植",
+    "在 Web Worker 中使用 OPFS 进行本地持久化数据读写"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**WebDB** is an ultra-lightweight, relational database built from scratch specifically for the web. Think of it as **SQLite reimagined for modern browsers**—bringing true SQL capabilities, ACID transactions, and persistent storage to offline-first apps without ／ - 🪶 **Tiny Footprint (&lt;50 KB Wasm):** Up to 90%+ smaller than ported desktop SQLite or Postgres (PGlite) builds. ／ |**In-Browser Benchmark Suite**|Live comparative benchmarking engine measuring throughput (ops/sec), latency, and memory allocations against Raw JS Arrays, Native IndexedDB, and official SQLite WASM on your hardware.|**Run Benchmarks →**| ／ Web developers building offline apps have long been stuck between two extremes: **IndexedDB** is an awkward key-value cursor store lacking relational queries, joins, and aggregations; while **ported desktop engines (like SQLite or Postgres/PGlite)** drag 1 MB ",
+     "lines": [
+      21,
+      23,
+      37,
+      41
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- 🪶 **Tiny Footprint (&lt;50 KB Wasm):** Up to 90%+ smaller than ported desktop SQLite or Postgres (PGlite) builds. ／ Web developers building offline apps have long been stuck between two extremes: **IndexedDB** is an awkward key-value cursor store lacking relational queries, joins, and aggregations; while **ported desktop engines (like SQLite or Postgres/PGlite)** drag 1 MB ",
+     "lines": [
+      23,
+      41
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它本身是数据库引擎，README 未表明为其他数据库生态服务的工具或仅使用现有数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " An ultra-lean (&lt;50 KB), and powerful browser-native relational database engine built from scratch in C compiled to WASM. ／ **WebDB** is an ultra-lightweight, relational database built from scratch specifically for the web. Think of it as **SQLite reimagined for modern browsers**—bringing true SQL capabilities, ACID transactions, and persistent storage to offline-first apps without multi-megabyte bundles or complex server headers. ／ - **V1 (C-Style JS Engine):** The initial release is built in **strict C-style TypeScript/JavaScript** (direct `ArrayBuffer` pointer arithmetic, flat structs, and zero heap allocations). Writing V1 in JS accelerates the development cycle, simplifies debugging, and creates an instant feedback loop with the web community.",
+   "evidence_lines": [
+    5,
+    21,
+    66
+   ]
+  },
+  "fn": "ahmad-moussawi/webdb",
+  "sha": "74a195ae75a2",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

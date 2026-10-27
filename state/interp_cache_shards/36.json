@@ -10770,5 +10770,80 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2e6bddf86d5f": {
+  "identity": {
+   "one_liner": "Flask+SQLite 学生请假与两级审批系统原型",
+   "review": "该项目是香港科技大学（广州）背景的学生缺勤与学业调适系统，包含可运行的 Flask+SQLite 原型（两级审批、CSRF 防护、附件权限、课表受影响课程预览、183 项冒烟测试）、企业级设计提案包（含 PostgreSQL DDL）及个人创意作业三部分。面向学生、导师、教务等多角色使用，通过 python app.py 在本机 5055 端口运行，MIT 许可发布。",
+   "highlights": [
+    "实现学生请假、导师到院系两级审批流程，并支持按课表预览请假影响的课程",
+    "包含 CSRF 防护、附件访问控制、登录限流持久化、事务原子写与乐观并发守卫等安全机制",
+    "提供含 PostgreSQL DDL 的企业级设计提案包，CI 冒烟测试套件含 183 项检查"
+   ],
+   "use_cases": [
+    "学校/院系部署学生请假申请与多级审批",
+    "作为 Flask+SQLite Web 应用开发的教学参考原型",
+    "请假超 3 天或官方活动缺勤的导师→院系复核流程管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite (survives restarts and multi-worker deployments), password resets invalidate every ／ SQLite write lock for the whole connection — emails are now queued and sent only after ／ |`leave-system/`|Flask + SQLite prototype (**v1.2.0**) — student leave, two-level approval (advisor → faculty), CSRF protection, attachment access control + content sniffing, timetable-based affected-course preview, DB-persisted login throttle (IP+account and ",
+     "lines": [
+      20,
+      44,
+      54
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|`saas/`|Enterprise design package for HKUST(GZ): PRD, architecture & API, data & security, UI design, roadmap & cost, plus full PostgreSQL DDL|企業級設計提案包（6 頁中英對照）＋完整資料庫 DDL|",
+     "lines": [
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储数据的学生请假审批应用，数据库为其自身业务服务而非服务数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`leave-system/`|Flask + SQLite prototype (**v1.2.0**) — student leave, two-level approval (advisor → faculty), CSRF protection, attachment access control + content sniffing, timetable-based affected-course preview, DB-persisted login throttle (IP+account and account-only keys), session invalidation on password change, common-weak-password blocklist, paginated notifications with per-item read, atomic approval transactions with concurrency guards, scope isolation on approvals/detail/dashboard, admin audit-log page, leave-type administration, transaction-safe deferred email delivery, status-filtered all-requests view, paginated account admin, streamed CSV export, 183-check smoke suite. Runs at `http://127.0.0.1:5055`|可執行原型：學生請假、兩級審批、CSRF 防護、附件權限＋內容嗅探、課表受影響課程、限流持久化、改密碼登出所有 session、弱密碼擋鎖、通知分頁＋單則已讀、審批交易原子化與併發守衛、範圍隔離（審批／詳情／儀表板）、後台稽核日誌、交易提交後才寄通知郵件、全部假單狀態篩選、帳號管理分頁、CSV 串流匯出| ／ |`saas/`|Enterprise design package for HKUST(GZ): PRD, architecture & API, data & security, UI design, roadmap & cost, plus full PostgreSQL DDL|企業級設計提案包（6 頁中英對照）＋完整資料庫 DDL| ／ python app.py            # http://127.0.0.1:5055",
+   "evidence_lines": [
+    54,
+    55,
+    63
+   ]
+  },
+  "fn": "Jeng-linLi/student-absence-system",
+  "sha": "2e6bddf86d5f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

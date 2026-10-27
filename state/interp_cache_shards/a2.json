@@ -10522,5 +10522,146 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "35eaa902578f": {
+  "identity": {
+   "one_liner": "基于 .NET/Avalonia 的开源 PostgreSQL GUI 客户端",
+   "review": "pgNimbus 是一个用 .NET 10 与 Avalonia 编写的 PostgreSQL 图形客户端，提供 SQL 编辑、结果编辑、EXPLAIN 树、锁监控、pg_dump/pg_restore 备份恢复和 SSH 隧道连接等功能，以 NativeAOT 原生二进制发布。面向需要频繁短查询的生产数据库开发者和 DBA。当前主要面向 Windows，macOS 与 Linux 版本标注为 beta，且不含 AI 功能。",
+   "highlights": [
+    "提供 SQL 编辑器，支持按 search_path 解析的自动补全、格式化与查询历史",
+    "内置基于 pg_dump/pg_restore 的数据库、schema 与单表备份恢复，以及 EXPLAIN ANALYZE 树视图和 pg_stat_statements 慢查询查看",
+    "支持 SSH 隧道、TLS 验证、服务器端强制的只读连接和生产连接的写保护模式"
+   ],
+   "use_cases": [
+    "日常查询、查看行数据与编辑生产环境中的单个值",
+    "排查锁等待与会话活动（who-blocks-whom、取消/终止查询）",
+    "通过 GUI 对数据库、schema 或表执行备份与恢复"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A fast PostgreSQL client that talks to your database and nothing else. ／ Since then 1.1 made large databases quick to move around in, 1.2 added backing up and restoring a database, a schema or a single table through PostgreSQL's own `pg_dump` and `pg_restore`, and 1.2.1 made a connection marked Production open with writes off until ／ - Schema tree read from `pg_catalog`: materialized views, partitioned tables, relation sizes, DDL for any table or view.",
+     "lines": [
+      5,
+      29,
+      102
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "Where it sits among the alternatives: pgAdmin and DBeaver are powerful but heavy. TablePlus is fast and polished, but closed source and paid. Beekeeper Studio is open source but runs on Electron. HeidiSQL is native and fast, but dated and MySQL-first.",
+     "lines": [
+      39
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 提供客户端管理能力的工具，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A fast PostgreSQL client that talks to your database and nothing else. ／ |Windows (recommended)|**Microsoft Store**, signed and self-updating, or `winget install pgNimbus --source msstore`| ／ - Back up a database, a schema or a table with PostgreSQL's own `pg_dump`, as an archive or a readable `.sql` script, and restore an archive into a new database or the current one, all or nothing. pgNimbus finds `pg_dump` and `pg_restore` where PostgreSQL, pgAdmin, Postgres.app or Homebrew installed them, and says exactly how to install them when it can't.",
+   "evidence_lines": [
+    5,
+    57,
+    109
+   ]
+  },
+  "fn": "Shman4ik/pgNimbus",
+  "sha": "35eaa902578f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "911279cd0f2c": {
+  "identity": {
+   "one_liner": "C++17 + Qt 即时通信系统，含客户端与 TCP/TLS 服务端",
+   "review": "听澜是一个即时通信系统，提供 Windows Qt Widgets 客户端、Android 客户端和独立服务端，通过 TCP/TLS 传输消息，服务端使用 SQLite 存储数据，支持私聊、群组、朋友圈、文件传输等功能。面向想要自行部署服务器的维护者及其普通用户，仓库保持私有，发行包需有仓库访问权限才能获取。",
+   "highlights": [
+    "提供 Windows Qt Widgets 客户端、Android 客户端与独立服务端，使用 TCP/TLS 通信",
+    "支持私聊文件传输：HTTPS 分块上传、Range 下载、暂停/恢复、SHA-256 校验",
+    "通过 CMake 构建，支持 Windows 与 Ubuntu 服务端部署"
+   ],
+   "use_cases": [
+    "自建即时通信服务器供局域网或云端用户使用",
+    "私聊、群组、朋友圈等社交消息场景",
+    "带 TLS 证书与连接码接入的私有部署通信"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "当前版本 **5.6.2**。Qt 6.8.3、C++17、CMake，Windows 使用 Qt Widgets 客户端，独立服务端使用 Qt TCP/TLS 与 SQLite。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明服务端使用 SQLite 存储数据，属于使用数据库的应用系统",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "当前版本 **5.6.2**。Qt 6.8.3、C++17、CMake，Windows 使用 Qt Widgets 客户端，独立服务端使用 Qt TCP/TLS 与 SQLite。 ／ network/              帧编码、TCP/TLS、连接和消息协议 ／ 真实用户数据、数据库、证书/私钥、收款二维码、SDK、生成的 EXE 和本机恢复记录不上传。`.gitignore` 不会删除这些本机文件；新电脑从源码构建使用收款占位图。详见 资源说明。",
+   "evidence_lines": [
+    3,
+    24,
+    28
+   ]
+  },
+  "fn": "Dramadan-wow/tinglan",
+  "sha": "911279cd0f2c",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8835,5 +8835,214 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "49041db708d2": {
+  "identity": {
+   "one_liner": "AI 智能体的进程内持久记忆、反思与安全层，内置 MCP 服务器",
+   "review": "CogniCore 是一个为 AI 智能体提供跨会话持久记忆、失败反思与提示注入防护的 Python 库，采用 BM25 + 多跳检索且不依赖向量数据库或嵌入服务器。面向 AI 智能体与 Claude Code、Cursor 等 MCP 客户端开发者，通过 pip 安装，提供 CLI、回放分支、签名记忆包导入导出等功能；语义检索与 RL 训练需安装可选扩展。",
+   "highlights": [
+    "提供跨会话/跨进程的记忆存取、反思归纳与提示注入/jailbreak 拦截，无强制依赖",
+    "内置 MCP 服务器（含托管端点与 OAuth 2.1 授权），支持 Claude Code、Cursor 等 MCP 客户端",
+    "支持决策回放与分支、Ed25519 签名记忆包导入导出（fail-closed 校验），附 CLI 与 LongMemEval 基准脚本"
+   ],
+   "use_cases": [
+    "为多次运行的 AI 智能体保留已尝试/已失败的经验上下文",
+    "通过 MCP 为 Claude Code/Cursor 等客户端添加持久记忆",
+    "在智体间以签名包形式迁移已验证记忆"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 仅说明其为 AI 智能体记忆层且不依赖向量数据库，未见明确为某数据库生态服务的适配或依赖声明",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CogniCore is a memory and reflection layer that keeps it. It runs in-process, on plain Python — ／ |**MCP server**|Use CogniCore from Claude Code, Cursor and any other MCP-compatible client| ／ |`cognicore/`|The library: memory, agents, environments, safety, evaluation, training, observability, and the hosted MCP connectors (`cognicore/connectors/`)|",
+   "evidence_lines": [
+    21,
+    64,
+    233
+   ]
+  },
+  "fn": "cognicore-dev/cognicore-env",
+  "sha": "49041db708d2",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e76c91a454d6": {
+  "identity": {
+   "one_liner": "Nessus 漏洞复核 TUI，结果入 SQLite 并经 MCP 暴露",
+   "review": "Cerno 是一个终端 UI 工具，用于将 .nessus 扫描结果导入本地 SQLite 数据库，浏览与分诊漏洞发现，并对受影响主机发起 nmap/NetExec/Metasploit 等命令，同时记录复核进度与会话历史；它还内置 MCP server，可由 MCP 客户端程序化查询和生成命令。面向渗透测试与漏洞管理场景，依赖 Python 3.11+，可选依赖 claude CLI 与 proxychains4。",
+   "highlights": [
+    "支持导入 .nessus 文件并持久化到本地 SQLite 数据库（~/.cerno/cerno.db）",
+    "提供 MCP server，可从 MCP 客户端查询发现结果并生成命令",
+    "支持通过 proxychains4 将工具执行路由经 SOCKS5 代理"
+   ],
+   "use_cases": [
+    "渗透测试中批量分诊 Nessus 扫描发现并对主机发起验证/利用命令",
+    "跨多次扫描跟踪主机风险与复核进度",
+    "通过 MCP 客户端程序化驱动测试流程"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 💾 SQLite-backed persistence — never lose review progress; track risk across scans ／ 1. **Import** — parse one or more `.nessus` files into a local SQLite database (`~/.cerno/cerno.db`).",
+     "lines": [
+      9,
+      54
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "**Supported protocols:** SMB, SSH, LDAP, MSSQL, RDP, WinRM, FTP, NFS, VNC, WMI",
+     "lines": [
+      203
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将扫描数据持久存储于 SQLite 数据库，SQLite 是其自身的数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A **TUI tool** for reviewing Nessus scan findings and orchestrating security tools (**nmap**, **NetExec**, custom commands). Import `.nessus` files into a SQLite database for organized, persistent vulnerability verification and exploitation. ／ 1. **Import** — parse one or more `.nessus` files into a local SQLite database (`~/.cerno/cerno.db`). ／ The same database and tooling are also exposed over the Model Context Protocol, so an MCP client (e.g. Claude CLI) can query findings and generate commands programmatically.",
+   "evidence_lines": [
+    5,
+    54,
+    59
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ridgebackinfosec/cerno",
+  "sha": "e76c91a454d6",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "573b9904a7ff": {
+  "identity": {
+   "one_liner": "AI Agent 自组织记忆系统插件，SQLite 存储本地记忆",
+   "review": "Limbic 是为 Hermes Agent 设计的本地记忆插件，提供 remember/recall/forget 三个工具，通过信任评分、衰减和后台清扫实现记忆的自组织管理，存储与成熟度由 SQLite 处理，嵌入与 NLI 用本地 ONNX 模型，不调用 LLM。面向 Hermes Agent 的使用者和运维者，支持多用户记忆隔离；需约 700MB 内存与 1GB 模型缓存，商用需另行授权。",
+   "highlights": [
+    "提供 remember/recall/forget 三个 Agent 工具，实现记忆的存储、检索与遗忘",
+    "支持多用户模式，按用户隔离记忆桶，含 guardian 写入语义",
+    "提供运维命令：遗忘、单条事实删除、数据导出，删除写入哈希墓碑记录"
+   ],
+   "use_cases": [
+    "为 Hermes Agent 提供长期记忆能力",
+    "多用户聊天场景下按用户隔离 Agent 记忆",
+    "需要数据删除/导出合规流程的本地记忆部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Maturity is handled atomically by SQLite triggers ／ provider: sqlite",
+     "lines": [
+      30,
+      82
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该 Hermes Agent 记忆插件的存储后端，不服务于数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial 1.0.0（source-available），非商业使用免费，商用需另行授权",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Limbic is a self-organising local memory system for AI agents. It stores facts, learns which ones matter through interaction, and surfaces the right context at the right time — without ever calling an LLM. Designed for Hermes Agent and implements the upstream `MemoryProvider` ABC. ／ - Maturity is handled atomically by SQLite triggers ／   provider: sqlite",
+   "evidence_lines": [
+    8,
+    30,
+    82
+   ]
+  },
+  "fn": "dyiapanis/limbic",
+  "sha": "573b9904a7ff",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

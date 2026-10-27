@@ -11221,5 +11221,374 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "afeff9eaca19": {
+  "identity": {
+   "one_liner": "面向 Agent 的本地多数据库 CLI，封装连接、查询与只读控制",
+   "review": "agent-database-cli 是用 Rust 编写、通过 npm 分发的本地 CLI 工具，供 AI Agent 调用执行数据库连接、SQL/Redis/MongoDB 命令执行和元信息读取。支持 MySQL、PostgreSQL、Redis、Oracle、MongoDB 五类连接，默认只读并提供命令黑名单、密码本地加密和 SSH 隧道；Oracle 依赖 SQLcl 或 Instant Client，写入需显式关闭只读。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、Redis、Oracle、MongoDB 的连接、查询与元信息读取，含 Redis 集群与 SSH 隧道",
+    "默认只读模式加命令黑名单两级安全检查，密码通过本地密文引用加密保存",
+    "提供本地 daemon 连接复用、查询超时控制和可视化配置编辑页面"
+   ],
+   "use_cases": [
+    "让 Claude Code / Codex 等 AI Agent 在受控只读前提下查询生产或本地数据库",
+    "统一管理多类型数据库连接配置，按分组和标签筛选",
+    "为高危 SQL 或 Redis 命令设置黑名单拦截"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "MySQL · PostgreSQL · Redis · Oracle · MongoDB · 只读模式 · 命令黑名单 · SQLcl Oracle · 本地 daemon ／ `agent-database-cli` 是一个面向 Agent 的本地多数据库 CLI 工具，用 Rust 封装 MySQL、PostgreSQL、Redis、Oracle、MongoDB 的连接、查询、元信息读取、只读控制、命令黑名单和密码加密能力。 ／ |PostgreSQL|`postgres`|Rust 原生驱动 `tokio-postgres`|暂不支持切换|",
+     "lines": [
+      5,
+      20,
+      37
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL · PostgreSQL · Redis · Oracle · MongoDB · 只读模式 · 命令黑名单 · SQLcl Oracle · 本地 daemon ／ `agent-database-cli` 是一个面向 Agent 的本地多数据库 CLI 工具，用 Rust 封装 MySQL、PostgreSQL、Redis、Oracle、MongoDB 的连接、查询、元信息读取、只读控制、命令黑名单和密码加密能力。 ／ |MySQL|`mysql`|Rust 原生驱动 `mysql_async`|暂不支持切换|",
+     "lines": [
+      5,
+      20,
+      36
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "MySQL · PostgreSQL · Redis · Oracle · MongoDB · 只读模式 · 命令黑名单 · SQLcl Oracle · 本地 daemon ／ `agent-database-cli` 是一个面向 Agent 的本地多数据库 CLI 工具，用 Rust 封装 MySQL、PostgreSQL、Redis、Oracle、MongoDB 的连接、查询、元信息读取、只读控制、命令黑名单和密码加密能力。 ／ |Oracle|`oracle`|SQLcl|支持两种驱动：默认 SQLcl （需要自行安装）；可切换oracledb（需要 Oracle Instant Client）|",
+     "lines": [
+      5,
+      20,
+      40
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Agent 调用数据库而服务的 CLI 工具组件，自身不依赖某个数据库存储业务数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`agent-database-cli` 是一个面向 Agent 的本地多数据库 CLI 工具，用 Rust 封装 MySQL、PostgreSQL、Redis、Oracle、MongoDB 的连接、查询、元信息读取、只读控制、命令黑名单和密码加密能力。 ／ - 对指定数据库执行 SQL、Redis 命令或 MongoDB JSON 命令 ／ - 按单个数据库配置启用只读模式和命令黑名单",
+   "evidence_lines": [
+    20,
+    25,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "sleepinginsummer/agent-database-cli",
+  "sha": "afeff9eaca19",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a90921c17137": {
+  "identity": {
+   "one_liner": "企业技术支持场景的 RAG 检索问答与受控工单 Agent 后端",
+   "review": "该项目是一个面向企业技术支持的 FastAPI 后端，提供知识库检索问答（含拒答）、带人工审批的工单创建流程，并以 TechQA 语料构建检索与生成评测基准。运行时默认使用 Chroma Dense 检索，数据经 SQL 后端与 SQLite 存储，Hybrid 检索与实验问答需显式开启开关并配置 DashScope 凭据。适合需要可控、可审计问答与工单升级流程的团队部署使用。",
+   "highlights": [
+    "提供 /rag/search 与 /rag/ask 接口，返回带来源的答案并支持低相关拒答",
+    "工单 Agent 采用预览-确认两阶段流程，真实建单前需服务端审批草稿校验",
+    "包含基于 TechQA（28,481 篇文档、910 条问答记录）的检索与生成/拒答评测框架"
+   ],
+   "use_cases": [
+    "企业技术支持知识库检索问答与低相关拒答",
+    "需人工审批的工单分类与创建流程",
+    "RAG 检索、生成与失败归因的离线评测"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "离线集成检查：`pytest tests/test_hybrid_search.py -k ticket_hybrid_document_to_decision`。通过真实 Uvicorn 回环 HTTP、JWT、上传/索引、临时 SQLite 与 Chroma，分别验证 Hybrid 预览后的确认、拒绝和取消，以及 trace/metrics 查询、租户与角色隔离；只有显式确认会在临时库产生测试工单。外部 embedding/rerank 使用替身，不是检索质量或并发审批验收，不外发资料、不修改日常数据。 ／ 真实模式只发送脚本内固定的四篇虚构说明及两个查询，使用独立临时 SQLite、Chroma 与上传目录，经过 ASGI 路由及 Demo JWT 认证，不连接已运行的服务、不改现有数据库和开关。检查默认 Dense、Hybrid 简单排序、租户/分类隔离、删除生效、空语料零调用及检索审计；不是 HTTP 网络部署验收或准确率评测。 ／ 先创建默认 SQLite 父目录，再将 `.env` 载入迁移进程；",
+     "lines": [
+      122,
+      209,
+      544
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统使用 SQLite 存储业务数据（迁移进程、临时测试库），Chroma 作向量检索，属使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向**企业技术支持**场景，构建知识检索、回答 / 拒答与工单升级一体化的 **RAG + 受控工单 Agent 后端**。 ／ 真实模式只发送脚本内固定的四篇虚构说明及两个查询，使用独立临时 SQLite、Chroma 与上传目录，经过 ASGI 路由及 Demo JWT 认证，不连接已运行的服务、不改现有数据库和开关。检查默认 Dense、Hybrid 简单排序、租户/分类隔离、删除生效、空语料零调用及检索审计；不是 HTTP 网络部署验收或准确率评测。",
+   "evidence_lines": [
+    5,
+    209
+   ]
+  },
+  "fn": "Air000000/Enterprise-Support-AI-Copilot-API",
+  "sha": "a90921c17137",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a1bded485a0f": {
+  "identity": {
+   "one_liner": "本地运行的桌面 AI 聊天工作区，集成 QQ、记忆、知识库与 MCP 工具扩展",
+   "review": "Superstring 是一个运行于 Windows/macOS/Linux 的本地 Agent 聊天应用，用于日常陪伴与对话，支持网页会话、QQ 群聊与私聊、长期记忆、知识库和 MCP 工具扩展。数据保存在本机，不提供云同步；QQ 接入依赖 NapCat 等 OneBot 11 实现，托管方式目前限 Windows x64 源码运行。适合希望在本地部署个人 AI 陪伴助手的用户。",
+   "highlights": [
+    "支持网页对话、QQ 群聊与私聊统一管理，可配置记忆、知识库与按会话覆盖的方案",
+    "提供 MCP 客户端（stdio/HTTP/SSE）、QuickJS WASM 沙箱程序化工具调用与本地审批授权机制",
+    "支持本机托管或独立连接 OneBot 11 服务（如 NapCat）接入 QQ，消息与配置保存在本机"
+   ],
+   "use_cases": [
+    "在本地搭建可自定义身份、模型与提示词的个人 AI 陪伴助手",
+    "让 Agent 参与 QQ 群聊与私聊，支持主动接话、表情回复与引用/@",
+    "通过 MCP 与技能目录扩展 Agent 的资料读取、联网研究等工具能力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该项目是使用数据库（主题标签含 sqlite）存储本地数据的桌面聊天应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "本地 Agent 工作区，主要用于日常陪伴与聊天，支持网页对话、QQ 群聊与私聊、记忆、知识库、MCP 工具扩展与技能管理。 ／ Superstring 运行在本地，支持 Windows、macOS 与 Linux。会话记录、配置、长期记忆与密钥保存在本机，不提供云端数据同步服务，也不要求注册云端账号；调用已配置的模型服务商或工具服务时，仅按已授予的权限将必要的上下文与参数发送至对应端点。 ／ - **扩展与 MCP 客户端**：在「扩展 → 工具」中查看已注册的系统工具与外部 MCP 工具；支持通过 stdio、HTTP 与 SSE 连接外部 Model Context Protocol 服务，登记的服务默认未启用，支持配置超时与结果限额；环境变量凭据仅保存变量名。",
+   "evidence_lines": [
+    7,
+    20,
+    124
+   ]
+  },
+  "fn": "Verdspair/superstring",
+  "sha": "a1bded485a0f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "927de06485b5": {
+  "identity": {
+   "one_liner": "面向Yandex Tracker与Jira的自托管冲刺规划看板应用",
+   "review": "这是一个自托管的敏捷冲刺规划工具，将Yandex Tracker或Jira中的任务按人/按天排布到看板泳道，提供积压管理、燃尽图、实际进度时间线和回顾板，任务本体仍留在原跟踪器中。部署基于Docker Compose，使用PostgreSQL存储，多实例实时协作需Redis，并通过内置MCP服务器供AI代理读取和提议冲刺修改。适合使用上述跟踪器且需要可视化排期的团队。",
+   "highlights": [
+    "支持对接Yandex Tracker与Jira，按工作日网格与人员泳道展示冲刺任务",
+    "内置MCP服务器，允许代理读取计划并提出修改，需用户确认后应用",
+    "提供积压过滤、燃尽图、回顾板与多人实时协作（presence与卡片锁定）"
+   ],
+   "use_cases": [
+    "使用Yandex Tracker或Jira的团队进行冲刺排期与人员分配",
+    "迭代回顾与燃尽分析",
+    "多实例部署下的团队实时协作规划"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# POSTGRES_PASSWORD, AUTH_SESSION_SECRET (≥32), ORG_SECRETS_ENCRYPTION_KEY (64 hex)",
+     "lines": [
+      78
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用PostgreSQL存数据、对接跟踪器API的自托管规划应用，非数据库生态工具。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0（含NOTICE署名）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Планер спринтов для Яндекс Трекера и Jira ／ # POSTGRES_PASSWORD, AUTH_SESSION_SECRET (≥32), ORG_SECRETS_ENCRYPTION_KEY (64 hex) ／ docker compose -f docker-compose.yml -f docker-compose.hub.yml up -d",
+   "evidence_lines": [
+    5,
+    78,
+    79
+   ]
+  },
+  "fn": "Dinkimom/beer-tracker",
+  "sha": "927de06485b5",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "142c95d40056": {
+  "identity": {
+   "one_liner": "基于 Flutter 与 Node.js/PostgreSQL 的多模块 ERP 与零售/餐饮 POS 系统",
+   "review": "一个面向零售、餐饮、多门店与快速商务场景的 ERP 与 POS 套件，包含餐饮管理、库存、复式记账、HR 与薪资等模块，客户端为 Flutter，后端为 Node.js/Express + PostgreSQL，支持本地离线运行与云端（如 Render）部署同步，通过安装器或环境变量配置，适合零售餐饮企业部署使用。",
+   "highlights": [
+    "包含餐饮 POS、零售库存、复式记账财务、HR 薪资等多个业务模块",
+    "提供本地离线运行与 PostgreSQL 云端部署的同步机制",
+    "含 POS 管理端、骑手端、顾客自助点餐端、供应商门户多个应用入口"
+   ],
+   "use_cases": [
+    "零售门店与多分支门店的收银与库存管理",
+    "餐厅堂食、外卖与后厨出餐流程管理",
+    "企业财务记账、进销存与人事薪资管理"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Famalth Lynx** is a comprehensive, production-ready ERP and Multi-Module POS solution built with a cross-platform **Flutter** client and high-performance **Node.js / PostgreSQL** backend. Designed for hybrid retail stores, restaurants, multi-branch operation ／ - **Cloud & Offline Resilience**: Runs locally on Windows POS terminals with offline fallback, and synchronizes automatically with PostgreSQL cloud deployments. ／ |**Database**|`DATABASE_URL`|`postgresql://user:pass@dpg-xyz.render.com/dbname`|PostgreSQL connection string (Triggers Cloud SaaS mode)|",
+     "lines": [
+      3,
+      41,
+      63
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用 PostgreSQL 作为后端存储数据的 ERP/POS 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Famalth Lynx** is a comprehensive, production-ready ERP and Multi-Module POS solution built with a cross-platform **Flutter** client and high-performance **Node.js / PostgreSQL** backend. Designed for hybrid retail stores, restaurants, multi-branch operations, and enterprise inventory management. ／ |**Database**|`DATABASE_URL`|`postgresql://user:pass@dpg-xyz.render.com/dbname`|PostgreSQL connection string (Triggers Cloud SaaS mode)|",
+   "evidence_lines": [
+    3,
+    63
+   ]
+  },
+  "fn": "famalthtechnologies/famalth-lynx-pos",
+  "sha": "142c95d40056",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

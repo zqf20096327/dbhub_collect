@@ -11409,5 +11409,281 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "55ba45dffcf3": {
+  "identity": {
+   "one_liner": "LeetCode 题目的 Java 解答集合，含算法与数据库题解",
+   "review": "该仓库收录 LeetCode 各题的 Java 解答，按算法题号区间、数据库、Shell、JavaScript 分目录，并提供数据结构与算法范式的总结文档。面向准备编程面试的开发者，使用 IntelliJ/Gradle 导入本地运行。README 未涉及数据库工具或驱动，仅含数据库题目分类。",
+   "highlights": [
+    "提供 LeetCode 算法题（题号 1–4999）的 Java 解答目录",
+    "包含数据结构与算法范式的总结与模板（回溯、二分、DFS、滑动窗口等）",
+    "设有数据库、Shell、JavaScript 题目分类"
+   ],
+   "use_cases": [
+    "编程面试准备的算法刷题参考",
+    "数据结构与算法知识速查",
+    "数据库类 LeetCode 题目的解答查阅"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "仓库只是包含数据库类 LeetCode 题解的应用/内容集合，不提供任何数据库生态工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## Database ／ 1. Install IntelliJ on your machine, either CE or UE. ／ 3. import this project as a new project (does need to be imported as a gradle project)",
+   "evidence_lines": [
+    39,
+    52,
+    54
+   ]
+  },
+  "fn": "fishercoder1534/Leetcode",
+  "sha": "55ba45dffcf3",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a8b94c2577dc": {
+  "identity": {
+   "one_liner": "开源自托管笔记应用，以类型化对象存储笔记与任务，本地优先",
+   "review": "Vasta 是一个开源、可自托管的个人知识管理应用，把页面、任务、书籍等作为带属性的类型化对象管理，支持每日笔记、看板、日历与协作空间。数据以 SQLite 存储，本地优先、离线可用，可通过 Docker 部署服务器在多设备间同步；适合个人及小团队用户，当前处于 alpha 阶段。",
+   "highlights": [
+    "本地优先，每设备保留 SQLite 副本，离线编辑可合并（CRDT）",
+    "通过 MCP 端点和 CLI 供外部代理读写笔记，含令牌鉴权",
+    "支持桌面端（macOS/Windows/Linux）、Web/PWA 及 Docker 自托管"
+   ],
+   "use_cases": [
+    "个人笔记、任务与每日记录管理",
+    "小团队共享空间协作（看板、评论、@提及）",
+    "为本地部署的 AI 代理提供笔记读写接口"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "self-hosted servers run on Postgres and Redis, next to their own services. Vasta's server is one container",
+     "lines": [
+      141
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Offline first**: each device keeps a copy in SQLite. Edits made offline on two devices merge. ／ and one SQLite file, and it focuses on daily notes, typed objects and quick capture: Telegram, ／ core/ data model, SQLite schema, sync, media store",
+     "lines": [
+      116,
+      142,
+      205
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Vasta 本身是使用 SQLite 存储笔记数据的应用，Postgres 仅在与其他产品对比时被提及",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Vasta is an open-source, self-hosted alternative to Capacities and Notion. It keeps everything as ／ - **Offline first**: each device keeps a copy in SQLite. Edits made offline on two devices merge. ／  self-hosted servers run on Postgres and Redis, next to their own services. Vasta's server is one container",
+   "evidence_lines": [
+    23,
+    116,
+    141
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ariedotme/vasta",
+  "sha": "a8b94c2577dc",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "71ceff02c185": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 AI 代理本地持久化记忆系统",
+   "review": "为 AI 代理提供本地优先的共享记忆，用 SQLite 存储带归属的事件与断言，代理通过 MCP 或 CLI 检索记忆、记录观察并交换检查点；向量检索可选，不依赖 Ollama、Mem0 或付费 API，存储前会脱敏疑似密钥。适合需要跨会话延续任务状态的代理使用者。",
+   "highlights": [
+    "通过 MCP（HTTP 或 stdio）与 CLI 提供六个记忆工具，含查询、记录、检查点等能力",
+    "事件与断言存储于 SQLite，记录保留作者、证据与类型（observed/decision/assumption）",
+    "内置 Web 视图、health 接口、计划任务与备份，写入路径外置嵌入计算"
+   ],
+   "use_cases": [
+    "AI 代理跨会话交接任务时的记忆持久化",
+    "本地运行的多代理共享决策与事实记录",
+    "通过 CLI/Web 查看项目任务、事实与时间线"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Chronicle stores attributed events and current assertions in SQLite. Agents use",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Chronicle 使用 SQLite 存储事件与断言数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Chronicle stores attributed events and current assertions in SQLite. Agents use ／ MCP or the CLI to search, record observations, and exchange checkpoints. Local",
+   "evidence_lines": [
+    10,
+    11
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Beiev/max-chronicle",
+  "sha": "71ceff02c185",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f852477e9d60": {
+  "identity": {
+   "one_liner": "自托管 SolaX 逆变器监控：本地网络轮询遥测，SQLite 存储，Web 仪表盘展示",
+   "review": "这是一个用 Rust 编写的自托管 SolaX 逆变器监控系统，每五秒通过本地网络轮询逆变器遥测数据，将原始读数和每日汇总存入 SQLite，并通过 HTTP API 和 SSE 向浏览器仪表盘提供实时功率、发电量与历史趋势。面向拥有 SolaX 逆变器（已在 X1 Mini G4 上验证）的用户，需以 Docker 或源码方式运行。",
+   "highlights": [
+    "提供每五秒间隔的本地网络遥测轮询，SQLite 存储原始读数与每日汇总",
+    "提供 HTTP API 与 Server-Sent Events，向浏览器仪表盘流式推送实时更新",
+    "提供 Docker 镜像运行方式，并包含 Rust/TypeScript 前后端工作区与测试"
+   ],
+   "use_cases": [
+    "家用 SolaX 逆变器实时功率与发电量监控",
+    "历史发电数据的趋势分析与每日汇总查看",
+    "逆变器温度与输出功率关系研究（如热降额诊断）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A self-hosted SolaX inverter monitor. It polls the inverter over the local network, stores readings in SQLite, and serves a web dashboard for live power, energy generation, and historical trends. ／ |`server/`|The poller, SQLite store, `/api/v1`, and the built screens it serves| ／ - **Persistence:** SQLite stores raw readings and daily summaries for historical analysis.",
+     "lines": [
+      3,
+      11,
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储自身遥测数据的监控应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted SolaX inverter monitor. It polls the inverter over the local network, stores readings in SQLite, and serves a web dashboard for live power, energy generation, and historical trends. ／ - **Persistence:** SQLite stores raw readings and daily summaries for historical analysis.",
+   "evidence_lines": [
+    3,
+    27
+   ]
+  },
+  "fn": "MohanaManikandan/solax-monitor",
+  "sha": "f852477e9d60",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -12177,5 +12177,268 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b49b8c190267": {
+  "identity": {
+   "one_liner": "分布式 SQL 读任务队列服务器，异步执行报表查询并写入结果库",
+   "review": "DungBeetle 是一个单二进制的分布式任务服务器，用于排队和异步执行重型 SQL 读查询（如报表），任务从 .sql 文件注册，结果写入独立的结果/缓存数据库供后续查询。适合需要将报表负载从主数据库剥离的应用开发者与后端团队。支持 Redis/AMQP 等消息代理做分布式队列。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、ClickHouse 作为源数据库，MySQL/PostgreSQL 作为结果库",
+    "从 .sql 文件读取查询并注册为任务，通过 HTTP API 管理作业与作业组",
+    "基于 Redis/AMQP 等公共代理后端实现多进程、多线程分布式队列"
+   ],
+   "use_cases": [
+    "应用中面向用户的报表异步生成，避免查询阻塞主库",
+    "大量并发 SQL 读任务的排队与限流",
+    "查询结果的缓存层，供后续切片/过滤查询"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Supports MySQL, PostgreSQL, ClickHouse as source databases. ／ - Supports MySQL and PostgreSQL as result / cache databases for job results. ／ |`postgres`|`postgres://user:password@host:5432/dbname?sslmode=disable`|",
+     "lines": [
+      9,
+      10,
+      57
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Supports MySQL, PostgreSQL, ClickHouse as source databases. ／ - Supports MySQL and PostgreSQL as result / cache databases for job results. ／ |`mysql`|`user:password@tcp(host:3306)/dbname`|",
+     "lines": [
+      9,
+      10,
+      58
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- Supports MySQL, PostgreSQL, ClickHouse as source databases. ／ |`clickhouse`|`tcp://host:9000?username=user&password=password&database=dbname`|",
+     "lines": [
+      9,
+      59
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQL 数据库生态提供作业队列服务，管理针对数据库的查询执行与结果回写，属生态工具而非使用数据库的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DungBeetle is a lightweight, single binary distributed job server designed for queuing and asynchronously executing large numbers of SQL read jobs (eg: reports) against SQL databases. When the read jobs are executed, the results are written to separate ephemeral results databases (where the results of every job is its own dedicated table), enabling faster retrieval. ／ - Supports MySQL, PostgreSQL, ClickHouse as source databases. ／ - Supports multi-process, multi-threaded, asynchronous distributed job queueing via a common broker backend (Redis, AMQP etc.)",
+   "evidence_lines": [
+    3,
+    9,
+    13
+   ]
+  },
+  "fn": "zerodha/dungbeetle",
+  "sha": "b49b8c190267",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "416acf39c3f4": {
+  "identity": {
+   "one_liner": "基于 Go+React+SQLite+FFmpeg 的家庭媒体服务器",
+   "review": "Nowen Video 是一个面向 NAS 与自托管用户的家庭影音平台，提供媒体扫描、元数据刮削（TMDb/豆瓣等）、影视库管理、HLS 转码与多端播放，客户端覆盖 Web、Tauri 桌面端与 Android。数据持久化使用 SQLite（WAL 模式，GORM 访问），通过 Docker/Compose/fnOS .fpk 部署，采用 GPL-3.0 协议。",
+   "highlights": [
+    "提供媒体扫描、元数据刮削、影视库管理、播放、Remux 与按需 HLS 转码链路",
+    "支持 Intel/AMD /dev/dri 硬件加速，并提供软件转码兜底",
+    "提供 Web、Tauri 桌面端与 Android 客户端，默认开启 Emby/Jellyfin 兼容接口"
+   ],
+   "use_cases": [
+    "NAS 或家庭服务器上自托管私人影音库",
+    "多端（Web/桌面/Android）访问与转码播放家庭媒体",
+    "需 Emby/Jellyfin 兼容接口的客户端接入场景"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Nowen Video（弄文影视）是基于 **Go + React + SQLite + FFmpeg** 构建的家庭媒体平台，面向 NAS、家庭服务器和自托管用户。 ／ - SQLite WAL 持久化 ／ |`NOWEN_DATABASE_DB_PATH`|`/data/nowen.db`|SQLite 数据库路径|",
+     "lines": [
+      22,
+      133,
+      286
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明基于 Go + React + SQLite 构建家庭媒体平台，SQLite 作为其数据存储使用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Nowen Video（弄文影视）是基于 **Go + React + SQLite + FFmpeg** 构建的家庭媒体平台，面向 NAS、家庭服务器和自托管用户。 ／ - SQLite WAL 持久化 ／ **后端**：Go 1.25 · Gin · GORM · SQLite (WAL) · Zap · Viper · gorilla/websocket · fsnotify · FFmpeg 8.1.2",
+   "evidence_lines": [
+    22,
+    133,
+    306
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "cropflre/nowen-video",
+  "sha": "416acf39c3f4",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0137b369a3fd": {
+  "identity": {
+   "one_liner": "GitHub 个人自动更新的公开个人主页",
+   "review": "这是一个 GitHub Profile README 仓库，通过 GitHub Actions 等机制自动展示作者的提交数、Issue、PR 和获星数据，并附个人项目链接（如 BinaryTree）与赞助信息。面向浏览其 GitHub 主页的访客与潜在合作者。topic 中的 mysql 在可见 README 范围内无对应内容，无法验证。",
+   "highlights": [
+    "自动展示提交、Issue、PR 和 star 统计",
+    "包含个人项目与赞助信息展示"
+   ],
+   "use_cases": [
+    "GitHub 个人主页展示",
+    "个人项目推广"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "可见 README 内容未显示其服务数据库生态，主题标签中的 mysql 未见 README 证据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Since joining GitHub, I've made **6828** commits, raised **493** issues, and submitted **216** pull requests — earning **1759** stars across **142** personal projects. Work with me.",
+   "evidence_lines": [
+    3
+   ]
+  },
+  "fn": "lifeparticle/lifeparticle",
+  "sha": "0137b369a3fd",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "063e86ffa06c": {
+  "identity": {
+   "one_liner": "Rust 编写的分布式 SQL 数据库，含 Raft、MVCC 与 SQL 引擎",
+   "review": "toyDB 是一个用 Rust 从零实现的教学用分布式 SQL 数据库，包含 Raft 共识、MVCC 快照隔离事务、可插拔存储引擎（BitCask/内存）和带启发式优化的查询引擎。它面向想理解数据库内部原理的开发者，性能、可扩展性与可用性被明确列为非目标，不适合生产用途，通过 cargo 构建并可用内置 toysql 客户端连接。",
+   "highlights": [
+    "提供 Raft 共识实现的线性一致状态机复制与 MVCC 快照隔离事务",
+    "提供可插拔存储引擎（BitCask 与内存后端）和支持 join、聚合、事务的 SQL 接口",
+    "自带 workload 基准工具与基于 Goldenscripts 的测试体系"
+   ],
+   "use_cases": [
+    "学习分布式 SQL 数据库内部架构与概念",
+    "在本地搭建多节点集群进行 Raft/MVCC/SQL 行为实验",
+    "通过 benchmark 工具观察不同存储引擎下的工作负载表现"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "toyDB 本身是一个独立的数据库引擎实现，而不是为某个既有数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Distributed SQL database in Rust, built from scratch as an educational project. Main features: ／ toyDB's architecture is fairly typical for a distributed SQL database: a transactional ／ toyDB is not optimized for performance, but comes with a `workload` benchmark tool that can run",
+   "evidence_lines": [
+    3,
+    71,
+    93
+   ]
+  },
+  "fn": "deepdigger69/toydb",
+  "sha": "063e86ffa06c",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

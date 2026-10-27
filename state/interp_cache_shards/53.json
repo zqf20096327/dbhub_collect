@@ -10269,5 +10269,74 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0f6ba734a5bc": {
+  "identity": {
+   "one_liner": "多 AI 编码代理协调工具，提供任务图与消息线程",
+   "review": "a-stack 用 Go 编写，为在同一项目工作的多个 AI 编码代理提供共享任务图、任务邮件和浏览器实时视图，代理通过命令行读写任务并通过 MCP 或 hooks 集成。数据保存在本地单个 SQLite 数据库中，仅监听 127.0.0.1。面向使用 Claude Code、Codex 等代理的开发者。",
+   "highlights": [
+    "提供共享任务图、任务邮件和只读浏览器实时视图",
+    "单个二进制文件，数据存储于本地 SQLite 数据库，仅接受 127.0.0.1 连接",
+    "通过 MCP 暴露代理任务与邮件工具，并支持 Claude Code、Codex、Pi、OpenCode 的 hooks"
+   ],
+   "use_cases": [
+    "多代理协作开发时跟踪任务分配、依赖与阻塞状态",
+    "代理崩溃或上下文压缩后恢复工作进度",
+    "人工在浏览器中回答代理提出的问题并跟进进度"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The Agents use the `a-stack` command line for all of this. a-stack is one binary with one SQLite database. It keeps all data on your computer, accepts connections only on `127.0.0.1` and needs no account. View links work once, and releases are signed. Windows ",
+     "lines": [
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 a-stack 是单一二进制、使用一个 SQLite 数据库保存自身数据，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The Agents use the `a-stack` command line for all of this. a-stack is one binary with one SQLite database. It keeps all data on your computer, accepts connections only on `127.0.0.1` and needs no account. View links work once, and releases are signed. Windows support is new and not yet tested on a real Windows machine. ／ Works with Claude Code, Codex, Pi and OpenCode (with hooks), Herdr (optional, not on Windows) and any agent with a shell, such as Copilot CLI, Cursor CLI or Gemini CLI. Runs on Linux, macOS and Windows. ／ - Agent tools over MCP: `a-stack mcp` exposes one Agent's Task and mail tools to Claude Code, Codex, Pi and other MCP clients.",
+   "evidence_lines": [
+    29,
+    16,
+    120
+   ]
+  },
+  "fn": "mzmzeee/a-stack",
+  "sha": "0f6ba734a5bc",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

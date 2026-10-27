@@ -10255,5 +10255,282 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "02becd986c99": {
+  "identity": {
+   "one_liner": "基于 etcd/Consul/Patroni 状态管理虚拟 IP 的高可用组件",
+   "review": "vip-manager 是一个用 Go 编写的虚拟 IP 管理工具，通过监控 etcd、Consul 或 Patroni REST API 中的 leader 状态键，在主节点上注册、在备节点上注销虚拟 IP，常与 Patroni 配合用于 PostgreSQL 集群的故障切换。支持 basic 和 Hetzner API 两种管理方式，本地注册 VIP 需要超级用户权限。",
+   "highlights": [
+    "支持通过 etcd、Consul 或 Patroni REST API 监控 leader 状态并管理虚拟 IP",
+    "支持通过 flags、环境变量、YAML 配置文件配置，优先级为 flag > env > config",
+    "提供 basic（本地网卡）与 hetzner（Hetzner Robot/Cloud API）两种 VIP 管理方式"
+   ],
+   "use_cases": [
+    "Patroni/PostgreSQL 高可用集群的虚拟 IP 故障切换",
+    "基于 etcd 或 Consul 作 DCS 的主备切换 VIP 管理",
+    "Hetzner 云环境通过 API 漂移 Floating IP"
+   ]
+  },
+  "classification": {
+   "cat": "高可用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "## PostgreSQL prerequisites ／ For any virtual IP based solutions to work in general with Postgres you need to make sure that it is configured to automatically scan and bind",
+     "lines": [
+      68,
+      70
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 高可用集群提供虚拟 IP 管理组件，本身不存储业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Manages a virtual IP based on state kept in `etcd`, `Consul` or using `Patroni` REST API ／ ## PostgreSQL prerequisites ／ |`trigger-key`|`VIP_TRIGGER_KEY`|yes|`/service/pgcluster/leader`|The key in the DCS or the Patroni REST endpoint (e.g. `/leader`) that will be monitored by vip-manager. Must match `<namespace>/<scope>/leader` from Patroni config. When the value returned by the DCS equals `trigger-value`, vip-manager will make sure that the virtual IP is registered to this machine. If it does not match, vip-manager makes sure that the virtual IP is not registered to this machine.|",
+   "evidence_lines": [
+    9,
+    68,
+    123
+   ]
+  },
+  "fn": "cybertec-postgresql/vip-manager",
+  "sha": "02becd986c99",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "185d5e471dac": {
+  "identity": {
+   "one_liner": "基于 Django 的 STAC API 地理空间数据目录服务",
+   "review": "service-stac 是瑞士 geoadmin 开发的 Django 服务，提供并管理打包地理空间数据及其元数据的 STAC API（v0.9.0 规范扩展）。数据元数据存于 Postgres/PostGIS，资产文件存 S3（本地用 Moto 模拟），面向需要发布地理空间数据集合的场景。README 明确指出当前本地开发配置不适用于生产环境。",
+   "highlights": [
+    "实现并扩展 STAC API 规范 v0.9.0，用于管理打包地理空间数据及元数据",
+    "使用 Postgres+PostGIS 存储元数据、S3 存储数据资产",
+    "内置 OpenTelemetry 程序化插桩，支持 Django/psycopg/boto 等追踪"
+   ],
+   "use_cases": [
+    "搭建地理空间数据目录的 STAC API 服务",
+    "管理带元数据的打包地理空间数据集合",
+    "基于 Django 的空间数据后端服务二次开发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The other services that are used (Postgres with PostGIS extension for metadata and Moto Server as local S3 replacement) are wrapped in a docker compose. ／ Starting postgres and Moto Server is done with a simple ／ - a local postgres (>= 12.0) running",
+     "lines": [
+      129,
+      131,
+      143
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "服务使用 Postgres/PostGIS 存储元数据、S3 存储资产，属于使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`service-stac` provides and manages access to packaged geospatial data and their metadata. It implements and extends the **STAC API** specification version 0.9.0 radiantearth/stac-spec/tree/v0.9.0/api-spec. Currently the **STAC API** has been split from the main **STAC SPEC** repository into radiantearth/stac-api-spec, which is under active development until the release 1.0-beta. ／ The other services that are used (Postgres with PostGIS extension for metadata and Moto Server as local S3 replacement) are wrapped in a docker compose. ／ The service use two other services to run, Postgres with a PostGIS extension and S3.",
+   "evidence_lines": [
+    14,
+    129,
+    190
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "geoadmin/service-stac",
+  "sha": "185d5e471dac",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a3fc88ed666d": {
+  "identity": {
+   "one_liner": "本地AI会话归档系统，统一收集检索多种AI工具历史",
+   "review": "Polylogue 用 Rust 实现本地归档，把 Claude Code、Codex、Gemini CLI 及 ChatGPT 导出等会话历史原样收集到本地 archive.db，提供命令行查询、MCP 服务和 Web 阅读器，支持全文与向量检索、用量统计和凭据脱敏。归档数据用 SQLite 存储（archive.db、index.db、embeddings.db）。适合需要本地留存并检索 AI 会话记录的个人和 agent 操作者。",
+   "highlights": [
+    "支持从 Claude Code、Codex、Gemini CLI 等工具本地文件及 ChatGPT 等导出 ZIP 导入会话",
+    "提供 CLI 查询、全文与嵌入向量检索、MCP over stdio、HTTP API 和 Web 阅读器",
+    "输出中掩码凭据（API 密钥、token、私钥），存储字节不改动"
+   ],
+   "use_cases": [
+    "统一归档并检索多个 AI 工具的会话历史",
+    "为 agent 提供会话开始的上下文简报与接管上下文（MCP/hooks）",
+    "统计 AI 使用量、token 成本与订阅配额"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- `crates/store`: every SQLite connection and write, and the blob store.",
+     "lines": [
+      164
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明归档数据存于 SQLite 的 archive.db、index.db、embeddings.db（crates/store），SQLite 是其存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The archive is `$XDG_DATA_HOME/polylogue` (`~/.local/share/polylogue`). It",
+   "evidence_lines": [
+    41
+   ]
+  },
+  "fn": "Sinity/polylogue",
+  "sha": "a3fc88ed666d",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "819745a5321b": {
+  "identity": {
+   "one_liner": "客服运维工作台：经 MCP 工具调查事件、人工审批后执行修复并验证结果",
+   "review": "这是一个面向支持运维场景的工作区应用：通过 MCP 工具读取账号与事件数据，检索版本化处理流程，操作员审批后由 worker 执行修复并读回验证。后端 FastAPI + PostgreSQL 17，前端 React/TypeScript，含离线可复现驱动与 OpenRouter Live 模式。README 明确说明这是作品集演示，生产使用需接入真实业务连接器。",
+   "highlights": [
+    "通过 stdio MCP 适配器提供七个类型化工具，访问绑定租户、操作者与 worker 租约",
+    "审批流：模型不能自行批准操作，修复执行前后读回账号验证结果",
+    "基于 PostgreSQL 全文检索的版本过滤查询，并提供可评估的回退机制"
+   ],
+   "use_cases": [
+    "SaaS 客服事件的调查、审批与修复演示",
+    "human-in-the-loop 代理工作流的评估实验",
+    "本地复现 MCP 工具调用与检索评估"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Native development requires Python 3.12+, Node 24+, and PostgreSQL 17: ／ **Python 3.12 · FastAPI · PostgreSQL 17 · React · TypeScript · Vite · MCP · Docker Compose** ／ - Durable PostgreSQL jobs with renewable leases, checkpoints, cancellation, and bounded recovery.",
+     "lines": [
+      52,
+      65,
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用使用 PostgreSQL 17 存储作业、检索与执行记录，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A customer reports a problem. The investigator reads account and event data through scoped MCP tools, finds the applicable versioned procedure, and returns evidence with a proposed next step. An operator reviews the exact event and expected effect. The worker executes the approved operation once, reads the account again, and prepares a customer reply. ／ **Python 3.12 · FastAPI · PostgreSQL 17 · React · TypeScript · Vite · MCP · Docker Compose** ／ This release is a runnable portfolio demonstration. Production adoption requires real business connectors, production identity and access management, organization-specific policies, and validation against real support cases. The laboratory's destination acknowledgement is simulated state, not a request to an external receiver. See limitations.",
+   "evidence_lines": [
+    13,
+    65,
+    110
+   ]
+  },
+  "fn": "EshkirenokCode/S-AI-pport",
+  "sha": "819745a5321b",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

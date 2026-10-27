@@ -9347,5 +9347,79 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d57031ebaa69": {
+  "identity": {
+   "one_liner": "OpenMuse 的独立版，对话存自托管 Postgres/PGlite 的个人 AI agent",
+   "review": "这是 CopilotKit OpenMuse 的一个 fork，把上游托管在 CopilotKit Intelligence 的聊天存储改为写入用户自己的 Postgres 或内嵌 PGlite，回复经自建服务器以 SSE 流式返回，无需托管 key。适合想自托管个人 AI agent、自行掌控对话数据的开发者。README 标注为 alpha（v0.1.0），本地模式不提供跨设备实时线程同步等上游功能。",
+   "highlights": [
+    "对话、线程列表存于自托管 Postgres 或内嵌 PGlite，聊天表在启动时自动创建",
+    "回复由自建服务器通过 SSE 流式传输，支持中断回复在启动后恢复",
+    "提供 CHAT_RETENTION_DAYS 保留期设置与本地/托管双模式切换"
+   ],
+   "use_cases": [
+    "自托管个人 AI agent，对话数据存自有数据库",
+    "无需 CopilotKit Intelligence key 的本地聊天模式运行",
+    "基于自有 Postgres 的生产部署（DATABASE_URL + 独立 task worker）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Self-hosted OpenMuse: a personal AI agent whose conversations live in your own Postgres, not a hosted chat cloud.** ／ *个人 AI agent 的独立版：对话存在你自己的 Postgres 里，不依赖托管聊天云。* ／ - Conversations, thread lists and the main chat are stored in your own Postgres (embedded PGlite by default).",
+     "lines": [
+      3,
+      5,
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目使用 Postgres/PGlite 存储自身对话数据，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Conversations, thread lists and the main chat are stored in your own Postgres (embedded PGlite by default). ／ |`DATABASE_URL`|unset|Unset: embedded PGlite in `DATA_DIR/postgres`. Set: that Postgres server.| ／ The chat tables (`chat_threads`, `chat_runs`, `chat_events`) are created on startup in either database. A step-by-step walkthrough for `DATABASE_URL`, including the separate task worker, is in docs/POSTGRES.md.",
+   "evidence_lines": [
+    32,
+    97,
+    108
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "caspianchan31/openmuse-standalone",
+  "sha": "d57031ebaa69",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

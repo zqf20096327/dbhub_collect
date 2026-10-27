@@ -11133,5 +11133,132 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "923cb4412834": {
+  "identity": {
+   "one_liner": "Rust/Bevy 编写的 3BLD/WCA 魔方训练桌面应用，含 FSRS-5 间隔复习与 SQLite 持久化",
+   "review": "这是一个面向三盲（3BLD）及 WCA 多项目的魔方训练桌面程序，提供 3-style 打谱、记忆训练、计时还原和多项目公式库，所有公式经模拟立方体机械验证，复习由 FSRS-5 调度。用户数据以 SQLite 数据库存储于本地用户目录。面向盲拧练习者，需 Rust 工具链从源码构建运行。",
+   "highlights": [
+    "提供 3-style 打谱、记忆训练、计时还原及覆盖 CFOP、OH、2x2 至 7x7、pyraminx 等多项目的公式库",
+    "所有公式通过事件引擎模拟立方体做机械验证，含两级校验与 fuzz/mutation 测试链",
+    "使用 FSRS-5 间隔复习调度器安排每个卡片的复习，用户数据以 SQLite 持久化"
+   ],
+   "use_cases": [
+    "3BLD 盲拧选手进行 3-style 公式打谱与记忆训练",
+    "按 FSRS-5 间隔复习安排各公式案例的日常练习",
+    "本地检索与验证多项目 WCA 公式集（含 Tommy Cherry、Charlie Eggins 数据集重建）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "1. User data. `blind-trainer.db`, a SQLite database in the user dir: `%APPDATA%/blind-trainer` on Windows, `~/.local/share/blind-trainer` otherwise (`$XDG_DATA_HOME/blind-trainer` when the variable is set). Schema changes run as numbered migrations from `db/mi",
+     "lines": [
+      226
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该程序以 SQLite 数据库存储用户数据（blind-trainer.db），SQLite 仅作其本地持久化用途",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A desktop 3BLD trainer: 3-style drilling, memo training, and timed solves, plus a multi-event alg repository covering CFOP, OH, 2x2, big cubes 4x4 to 7x7, pyraminx, megaminx, skewb, square-1, and FTO, every case drilled under the same FSRS-5 scheduler. Every alg is mechanically verified against an emulated cube or its own event engine, so misspellings and wrong algs never contaminate muscle memory. Alg data is the reconstructed Tommy Cherry and Charlie Eggins sets plus seed packs, sha-256 pinned under ref_ground/. ／ the bt-data pipeline, ref_ground corpus and packs through the loader into the SQLite stores and FSRS-5",
+   "evidence_lines": [
+    7,
+    156
+   ]
+  },
+  "fn": "lavantien/blind-trainer",
+  "sha": "923cb4412834",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "91e838567dfa": {
+  "identity": {
+   "one_liner": "OceanBase seekdb 赛道参赛作答仓库模板",
+   "review": "这是 2026 第六届 OceanBase 数据库大赛 seekdb 方向的参赛仓库，当前仅完成初始化。它提供赛题作答的目录约定（solutions、patches、sql、results 等）、提交规范和进度表，用于记录问题分析、补丁与复现步骤；seekdb 本体的构建方法需参考其官方上游仓库，本仓库自身不包含可运行的代码。",
+   "highlights": [
+    "提供赛题作答的单题目录模板与提交规范",
+    "维护指向 seekdb 官方源码与 Apache-2.0 许可的上游说明",
+    "以补丁（patches）形式记录相对官方源码的改动"
+   ],
+   "use_cases": [
+    "参赛者按题组织 seekdb 赛题的作答、实验与结果",
+    "记录对官方源码的补丁、构建方式与复现步骤"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "2026 第六届 OceanBase 数据库大赛 · **OceanBase seekdb 方向**参赛仓库。 ／ - 官方源码：https://github.com/oceanbase/seekdb",
+     "lines": [
+      3,
+      15
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库目前仅为参赛作答的目录与规范模板，尚无针对数据库的工具实现或数据存储使用证据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0，模板导入自 VeryPond/seekdb-2026 并保留提交历史",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 当前阶段：仓库初始化，赛题作答待开展。 ／ 本仓库用于管理参赛作答、补丁、实验和说明。seekdb 的构建与运行方法请参考官方仓库，每道题的具体操作写在对应目录的 README 中。 ／ 本仓库内容遵循 Apache-2.0。",
+   "evidence_lines": [
+    7,
+    50,
+    74
+   ]
+  },
+  "fn": "mintian286/seekdb-2026-template",
+  "sha": "91e838567dfa",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

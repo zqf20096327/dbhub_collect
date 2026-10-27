@@ -10991,5 +10991,211 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "275aa6fbadba": {
+  "identity": {
+   "one_liner": "基于 Next.js + Prisma + MySQL 的 SaaS AI 平台应用",
+   "review": "一个 Next.js 构建的 SaaS AI 应用，集成 OpenAI 与 Replicate 提供对话、图像、代码、音乐生成等功能，使用 Prisma ORM 连接 MySQL（如 Aiven 托管实例）存数据，配合 Clerk 认证与 Stripe 计费。面向想自部署或学习该类全栈 AI 应用的开发者，需自行配置多项 API 密钥与数据库 URL。",
+   "highlights": [
+    "集成 OpenAI 与 Replicate API，提供对话、图像、代码、音乐生成功能",
+    "使用 Prisma ORM 连接 MySQL 数据库（README 演示 Aiven 托管部署）",
+    "集成 Clerk 认证、Stripe 计费与 Crisp 客服组件"
+   ],
+   "use_cases": [
+    "自部署多模态 AI 生成功能的 SaaS 站点",
+    "学习 Next.js + Prisma + Stripe 全栈集成示例",
+    "基于该代码库二次开发自己的 AI 应用"
+   ],
+   "notes": "README 未声明运行状态，按仓库维护徽章与持续提交记 active；安装依赖 npm/pnpm 与源码克隆"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "If you don't have an Aiven account, sign up here. After creating an account, set up a MySQL database. In the Aiven dashboard, find your database connection details and construct the `DATABASE_URL` in the following format: ／ DATABASE_URL=\"mysql://<username>:<password>@<host>:<port>/genius-ai?ssl-mode=REQUIRED\" ／ React JS Next JS Typescript Tailwind CSS Netlify Prisma MySQL",
+     "lines": [
+      54,
+      57,
+      124
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "- @prisma/adapter-mariadb: ^7.10.0",
+     "lines": [
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其为使用 MySQL 存储数据的 Next.js 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "If you don't have an Aiven account, sign up here. After creating an account, set up a MySQL database. In the Aiven dashboard, find your database connection details and construct the `DATABASE_URL` in the following format: ／ React JS Next JS Typescript Tailwind CSS Netlify Prisma MySQL",
+   "evidence_lines": [
+    54,
+    124
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "sanidhyy/genius-ai",
+  "sha": "275aa6fbadba",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3a8f65d4f6fc": {
+  "identity": {
+   "one_liner": "通过 Telegram Business API 将 AI agent 接入个人 Telegram 的 MCP 桥接器",
+   "review": "该项目把个人 Telegram 消息经官方 Business API 转入本地 SQLite/FTS5 存档，并以 MCP server 形式向 Claude Code 等 MCP 客户端提供搜索、读取、起草回复等 9 个工具；每条回复默认需用户在 Telegram 内确认发送。面向想让 AI agent 安全访问个人 Telegram 消息的用户，需自建 bot 并运行 24/7 daemon。",
+   "highlights": [
+    "实现 MCP server，提供 9 个工具（list_chats、get_history、search_messages、draft_reply 等）",
+    "支持 SQLite/FTS5 全文搜索的永久本地消息存档",
+    "默认回复需用户确认，消息内容以 UNTRUSTED 标记包裹以隔离提示注入"
+   ],
+   "use_cases": [
+    "让 AI agent 读取并搜索个人 Telegram 聊天历史",
+    "AI 起草回复后经用户确认发送消息",
+    "长期归档个人聊天记录并供 agent 构建记忆"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "stays in one local SQLite file either way.",
+     "lines": [
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目只是使用 SQLite 存储自身消息存档，核心功能是连接 Telegram 与 AI agent，不服务于数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "stays in one local SQLite file either way. ／ - The daemon runs 24/7 and stores every personal message (Telegram does not provide ／ - 9 MCP tools: `list_chats`, `get_history`, `search_messages`, `get_context`,",
+   "evidence_lines": [
+    45,
+    66,
+    73
+   ]
+  },
+  "fn": "AndyShaman/telegram-business-bridge",
+  "sha": "3a8f65d4f6fc",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::大型在线教育平台项目群 — DDD+Saga+BFF+多级缓存+多活部署 (15微服务+前端monorepo) — Architecture score 91/A, TOGAF 9/9 complia": {
+  "identity": {
+   "one_liner": "基于DDD与微服务架构的在线教育平台项目群",
+   "review": "简介表明这是一组用于在线教育场景的微服务项目，包含15个微服务和前端monorepo，采用DDD、Saga、BFF、多级缓存和多活部署架构，使用Go、Python、Spring Boot开发，运行于Kubernetes，主题标签中出现TiDB。基于简介编目，无README，具体功能与限制无法进一步验证。",
+   "highlights": [
+    "包含15个微服务与前端monorepo",
+    "采用DDD、Saga、BFF与多级缓存架构",
+    "支持多活部署，使用Kubernetes"
+   ],
+   "use_cases": [
+    "在线教育平台场景",
+    "微服务架构参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该项目是使用数据库的在线教育业务应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "大型在线教育平台项目群 — DDD+Saga+BFF+多级缓存+多活部署 (15微服务+前端monorepo)"
+  },
+  "fn": "tianqiongenze/education-platform",
+  "sha": "desc::大型在线教育平台项目群 — DDD+Saga+BFF+多级缓存+多活部署 (15微服务+前端monorepo) — Architecture score 91/A, TOGAF 9/9 complia",
+  "source": "desc",
+  "generated_at": "2026-10-27",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

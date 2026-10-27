@@ -13575,5 +13575,73 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "46332131830e": {
+  "identity": {
+   "one_liner": "本地 RAG 系统：多源索引进单一 SQLite，附 MCP 服务",
+   "review": "这是一个 macOS 本地运行的 RAG 检索系统，把 Obsidian、邮件、Calibre、RSS、代码仓库等来源索引进单个 SQLite 数据库（sqlite-vec 向量 + FTS5 全文检索），并提供关联图扩展查询。面向 macOS 个人用户，经菜单栏 GUI 或 CLI 使用；内置 MCP 服务器供 Claude Desktop/Code 查询。依赖 Ollama 做 embedding，需 Go 1.26+ 与 CGO。",
+   "highlights": [
+    "将多来源内容索引进单一 SQLite 数据库，支持向量 + 全文混合检索",
+    "内置 MCP 服务器（Streamable HTTP 与 stdio），提供 5 个 MCP 工具",
+    "提供关系图功能，可按关系一跳/两跳扩展检索结果"
+   ],
+   "use_cases": [
+    "macOS 个人知识库的本地检索与问答",
+    "让 Claude Desktop/Claude Code 通过 MCP 查询个人数据",
+    "索引 Obsidian 笔记、邮件、电子书、RSS、代码仓库等来源"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A fully local, privacy-preserving RAG (Retrieval Augmented Generation) system for macOS. Indexes personal knowledge from multiple sources into a single SQLite database with hybrid vector + full-text search, plus a **relation graph** so a result can be expanded",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明系统将个人知识索引存储进 SQLite 数据库，SQLite 是其数据存储本体而非被服务的对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A fully local, privacy-preserving RAG (Retrieval Augmented Generation) system for macOS. Indexes personal knowledge from multiple sources into a single SQLite database with hybrid vector + full-text search, plus a **relation graph** so a result can be expanded into what it is connected to — not only into what resembles it. Runs as a menu bar app with built-in MCP server so Claude Desktop and Claude Code can query your personal knowledge base directly. ／ |`db_path`|`~/.local-rag/rag.db`|SQLite database location|",
+   "evidence_lines": [
+    3,
+    219
+   ]
+  },
+  "fn": "sebastianhutter/local-rag",
+  "sha": "46332131830e",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

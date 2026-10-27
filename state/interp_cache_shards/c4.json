@@ -11361,5 +11361,111 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "790a8a6fd54a": {
+  "identity": {
+   "one_liner": "自托管的 Linktree 类链接主页应用，用 SQLite 存储数据",
+   "review": "LinkBreeze 是一个可自行部署的链接聚合主页（link-in-bio）应用，提供多页面、主题定制、无 Cookie 访问统计、链接定时调度、二维码、自定义域名、定时备份等功能，面向个人创作者与需要自托管数据的用户；基于 Next.js 构建，数据存于 SQLite，通过 Docker/脚本一键部署，配置依赖环境变量。",
+   "highlights": [
+    "支持多页面、主题预设与 token 级自定义，从 Linktree、Bento、Hopp.bio 等导入数据",
+    "内置隐私优先分析（视图、点击、来源、设备，IP 哈希、自动清理）与应用内定时备份",
+    "提供 Docker/Podman 镜像、Compose 文件、Kubernetes 配置及源码部署方式"
+   ],
+   "use_cases": [
+    "个人/创作者搭建自托管的链接聚合主页",
+    "需要迁移 Linktree 等平台数据并保留访问统计的场景",
+    "通过自定义域名与二维码分发链接的场景"
+   ],
+   "eco_why": "应用使用 SQLite 存储自身数据，并非为数据库生态服务的工具",
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "lines": [
+      184,
+      275
+     ]
+    }
+   ],
+   "dbs": [],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "persona": "use",
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ],
+   "confidence": "high",
+   "evidence_lines": [
+    184,
+    275
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Scheduled SQLite backups (raw dump sidecar, S3 offsite)|`docker-compose.with-backup.yml`| ／ |`DATABASE_PATH`|`./data/linkbreeze.db`|SQLite database file path|",
+     "lines": [
+      184,
+      275
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用使用 SQLite 存储自身数据，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`DATABASE_PATH`|`./data/linkbreeze.db`|SQLite database file path| ／ |Scheduled SQLite backups (raw dump sidecar, S3 offsite)|`docker-compose.with-backup.yml`| ／  🧭 Migration Wizard Import from Linktree, Bento, Hopp.bio, LittleLink or any HTML/JSON export",
+   "evidence_lines": [
+    275,
+    184,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "OmniRise/LinkBreeze",
+  "sha": "790a8a6fd54a",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

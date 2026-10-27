@@ -10543,5 +10543,81 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "78172d291d2c": {
+  "identity": {
+   "one_liner": "ClickHouse 性能监控与优化工具，单容器部署",
+   "review": "QueryDog 是一个针对 ClickHouse 的性能与活动监控工具，通过 Docker 容器运行 Web UI 和 CLI。它从 client 文件夹以只读方式加载 SQL 检查、性能查询和数据质量断言，由内置调度器定时执行，并通过规则发送告警；运行历史与配置存储在内置 SQLite 数据库中。适合运维 ClickHouse 集群、需要持续跟踪查询性能和数据质量的团队。",
+   "highlights": [
+    "提供 Web UI 与 CLI，可视化查询性能与后台活动并跟踪慢查询耗时",
+    "支持 SQL 编写的监控检查、数据质量断言与告警规则（severity、schedule、阈值等）",
+    "内置调度器定时对多个环境运行检查，运行历史存于 SQLite"
+   ],
+   "use_cases": [
+    "持续监控 ClickHouse 集群的查询性能与后台活动",
+    "以 SQL 断言方式做数据质量检查并配置告警",
+    "通过 CLI 探查 schema、查看最慢查询"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "QueryDog is a powerful tool for ClickHouse performance optimisation. Visualise query performance and background activity, identify bottlenecks and optimise cluster performance with a single container. ／ Every environment needs a `host` — QueryDog refuses to start and names the offending entry if one is blank. To reach a ClickHouse running on your own machine, use `host.docker.internal` rather than `localhost`: inside the container `localhost` is the container ／ Connecting to a ClickHouse on your own machine (Linux)",
+     "lines": [
+      1,
+      27,
+      52
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Settings, run history (with the environment of every run), recommendations, alerting state and the scheduler log are stored in a SQLite database at `data/querydog.db` (`QUERYDOG_DATA_DIR` moves it). It uses Node's built-in `node:sqlite`, so there is nothing to",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为 ClickHouse 提供性能监控、检查与告警服务，ClickHouse 是其服务的目标数据库而非存储自身数据（自身数据存 SQLite）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "QueryDog is a powerful tool for ClickHouse performance optimisation. Visualise query performance and background activity, identify bottlenecks and optimise cluster performance with a single container. ／ |`monitoring/`|`.sql` checks, each with an optional `.md` description. A check returns rows when something needs attention.| ／ The `scheduler:` section of `querydog.yml` runs the monitoring checks, data quality checks, performance queries and recommendations on a timer against every configured environment (or the ones you list). It calls the same API as Run / Run all in the UI, so scheduled and manual runs behave identically. Each environment can opt out with `scheduler: false` or override job intervals with its own `scheduler: { jobs: ... }`. See docs/README.md for the options; Settings › Scheduler shows the configuration, each job's last and next run per environment, and the log.",
+   "evidence_lines": [
+    1,
+    37,
+    46
+   ]
+  },
+  "fn": "New-Cadence/QueryDog",
+  "sha": "78172d291d2c",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

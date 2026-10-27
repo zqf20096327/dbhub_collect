@@ -10798,5 +10798,398 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "093777ae4edf": {
+  "identity": {
+   "one_liner": "嵌入式单文件双时态图数据库，支持 Datalog 查询",
+   "review": "Minigraf 是一个用 Rust 编写的嵌入式单文件图数据库，提供 Datalog 查询、双时态时间旅行和窗口函数，支持 WASM/浏览器运行及 Python、Node.js、Java、Swift、C 等多语言绑定。面向 AI Agent 记忆、移动端离线存储等场景；设计上不做分布式和客户端-服务器模式，优化目标为小于 100 万节点的规模。",
+   "highlights": [
+    "支持 Datalog 查询，含递归规则与窗口函数，以及双时态（事务时间+有效时间）查询",
+    "以单文件形式嵌入运行，支持原生、WASM/浏览器、移动端等多种平台绑定",
+    "通过 PyPI、npm、crates.io、Maven Central 等发布多语言绑定，并提供 REPL 二进制"
+   ],
+   "use_cases": [
+    "AI Agent 的图记忆存储，支持信念修正与历史状态回放审计",
+    "移动应用离线优先存储，可追溯修正历史记录",
+    "浏览器内嵌数据存储与可视化（IndexedDB 支撑的 WASM 版本）"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "> **Embedded graph memory for AI agents, mobile apps, and the browser** — the SQLite of bi-temporal graph databases ／ A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ |Feature|Minigraf|XTDB|Cozo|Neo4j|SQLite|",
+     "lines": [
+      12,
+      14,
+      93
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该项目本身是嵌入式图数据库引擎，而非为其他数据库服务的工具或使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT OR Apache-2.0 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ Minigraf is a **single-file embedded graph database** that lets you: ／ Minigraf runs as:",
+   "evidence_lines": [
+    14,
+    22,
+    174
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "project-minigraf/minigraf",
+  "sha": "093777ae4edf",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "477f031da239": {
+  "identity": {
+   "one_liner": "多上游AI编码渠道聚合网关，封装为OpenAI兼容API",
+   "review": "把 CodeBuddy、TRAE SOLO、OpenCode Zen、Kilo、Qoder、CodeArts、OfficeAce 等上游渠道封装为 OpenAI/Anthropic 兼容 API，提供公共凭证池、健康度调度、会话粘性、额度探测与签到自动化。面向需要统一调用这些编码渠道的团队或个人；账号与角色数据存 SQLite，通过 uv 或 Docker 部署，README 声明属逆向接口、仅供学习研究。",
+   "highlights": [
+    "提供 OpenAI / Responses / Anthropic 兼容端点，支持流式与非流式响应",
+    "实现多渠道凭证池调度：健康度选号、到期额度优先、多轮会话粘同一凭证",
+    "内置三角色权限体系、审计日志、服务端日志与用量统计管理台"
+   ],
+   "use_cases": [
+    "统一多个 AI 编码渠道凭证，供团队通过 OpenAI 兼容接口调用",
+    "需要按人用量统计、成本估算与审计的渠道代理部署",
+    "自动执行上游渠道签到、额度探测与 token 预刷新等维护任务"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **三角色**：`admin` / `operator` / `viewer`，存 SQLite；一次性激活链接、首登强制改密、改角色 / 停用即时吊销会话；登录与写操作留审计。 ／ `scripts/create_user.py` 直写 SQLite（`--db` 或 `DATA_DIR`；默认 `data/coding2api.sqlite3`）。老部署 `secrets/users.txt` 启动导入一次，不覆盖已存在。 ／ 账号存 SQLite `users` 表；「用户管理」页（仅管理员）增删改。",
+     "lines": [
+      15,
+      59,
+      76
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明账号、用户与角色数据存 SQLite（users 表），SQLite 仅作本应用自身存储，非服务其他数据库的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **三角色**：`admin` / `operator` / `viewer`，存 SQLite；一次性激活链接、首登强制改密、改角色 / 停用即时吊销会话；登录与写操作留审计。 ／ `scripts/create_user.py` 直写 SQLite（`--db` 或 `DATA_DIR`；默认 `data/coding2api.sqlite3`）。老部署 `secrets/users.txt` 启动导入一次，不覆盖已存在。 ／ 账号存 SQLite `users` 表；「用户管理」页（仅管理员）增删改。",
+   "evidence_lines": [
+    15,
+    59,
+    76
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "RobbsLuo/Coding2API",
+  "sha": "477f031da239",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "872a9904d443": {
+  "identity": {
+   "one_liner": "Coolify 服务器迁移工具，一条命令备份并恢复应用到新服务器",
+   "review": "这是一个面向 Coolify v4.3–v4.5 的命令行迁移工具，用于把单个项目、部分资源或整台服务器上的应用、数据库、卷、环境变量和域名备份后在另一台服务器上恢复。数据库用 pg_dumpall/mysqldump 原生导出，备份经 age 加密并通过 HTTPS 分享码传输，要求两端 Coolify 版本一致。",
+   "highlights": [
+    "备份内容包含项目、环境变量、secrets、卷、文件、镜像和代理配置，恢复后由 Coolify 启动",
+    "PostgreSQL、MySQL、MariaDB 使用原生 dump 工具在运行中导出",
+    "备份整体 age 加密，传输经 HTTPS 并校验证书，恢复前执行预检与回滚"
+   ],
+   "use_cases": [
+    "把单个 Coolify 应用或项目从旧服务器搬到新服务器",
+    "整台 Coolify 服务器到新机器的迁移",
+    "生成加密备份并通过分享链接传输到无 SSH 互通的目标服务器"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|🗄️ **Native database dumps**|PostgreSQL, MySQL and MariaDB are saved with `pg_dumpall` / `mysqldump` while they keep running, and loaded with the same image on the target.|",
+     "lines": [
+      116
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|🗄️ **Native database dumps**|PostgreSQL, MySQL and MariaDB are saved with `pg_dumpall` / `mysqldump` while they keep running, and loaded with the same image on the target.|",
+     "lines": [
+      116
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|🗄️ **Native database dumps**|PostgreSQL, MySQL and MariaDB are saved with `pg_dumpall` / `mysqldump` while they keep running, and loaded with the same image on the target.|",
+     "lines": [
+      116
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 Coolify 平台提供备份与迁移能力，并对其上的 PostgreSQL/MySQL/MariaDB 执行原生 dump，属于为数据库及托管平台服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Migrate Coolify to a new server: back up one domain, a few, or a whole Coolify server — then restore it on another Coolify by pasting one command. ／ Coolify's own backup covers its database. Moving **one app** to a new server — with its database data, volumes, env vars, domains and the exact built image — is a manual afternoon. Coolify Mirror makes it one menu: ／ |🗄️ **Native database dumps**|PostgreSQL, MySQL and MariaDB are saved with `pg_dumpall` / `mysqldump` while they keep running, and loaded with the same image on the target.|",
+   "evidence_lines": [
+    10,
+    109,
+    116
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "mtalavi/coolify-mirror",
+  "sha": "872a9904d443",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "78fd318ede6d": {
+  "identity": {
+   "one_liner": "seekdb 的多语言客户端绑定库，提供 C SDK、CLI 与 Python/Node 接口",
+   "review": "该项目为 OceanBase 的 seekdb 提供多语言客户端绑定：核心为 C11 实现的 libseekdb 共享库（含 libseekdb_driver 兼容符号链接），附带交互式 SQL 客户端 seekdb_cli、备份恢复工具（seekdb-dump/restore）与 Python 扩展，通过 CMake 构建，支持 Linux/macOS/Windows。面向需要以 C 或 Python 嵌入和访问 seekdb 的开发者；构建需通过 SEEKDB_BIN 提供 seekdb 服务器二进制。",
+   "highlights": [
+    "提供 C11 实现的 libseekdb 共享库与公共 C API 头文件，含 Python 扩展（cp311/cp312+abi3 wheel）与交互式 CLI",
+    "包含 seekdb-dump/restore 备份恢复工具，输出 mysql 兼容 SQL 并支持管道压缩",
+    "提供 Linux（manylinux 2.28）、macOS、Windows 三平台构建脚本与带 sha256 校验的 C SDK 发布包流程"
+   ],
+   "use_cases": [
+    "在 C 或 Python 应用中嵌入访问 seekdb",
+    "对 seekdb 数据库执行备份/恢复与 SQL 交互",
+    "构建面向多平台的 seekdb 客户端 SDK 发布包"
+   ],
+   "type": "tool"
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "The output is mysql-compatible SQL and supports pipelines such as",
+     "lines": [
+      189
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "The repo uses git submodules (mariadb-connector-c, googletest). Clone with `--recursive`:",
+     "lines": [
+      18
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "- an `oceanbase/seekdb` branch, tag, or commit for the embedded server; ／ --seekdb-git-url https://github.com/oceanbase/seekdb.git \\ ／ SEEKDB_GIT_URL=https://github.com/oceanbase/seekdb.git \\",
+     "lines": [
+      118,
+      224,
+      239
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 seekdb 数据库提供客户端绑定库、CLI 与构建发布工具链，服务于数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "OceanBase"
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "C library, CLI, Python, Java, Android, and Node.js bindings for seekdb. ／ The core shared library (`libseekdb`, with a `libseekdb_driver` compatibility symlink) is implemented in **C11** (`lib/src/*.c`) and does not link against `libstdc++` or `libc++` (checked in CI via `readelf`); embedders only need a C toolchain to build and pthreads at runtime. The CLI (`seekdb_cli`) is also implemented in C11 (`lib/src/seekdb_cli.c`). The bundled **seekdb server binary** is a separate C++ product and may depend on `libstdc++`; issue #6 applies only to `libseekdb`. C++ is also used for gtest-based integration tests and the optional nanobind Python extension. ／ - an `oceanbase/seekdb` branch, tag, or commit for the embedded server;",
+   "evidence_lines": [
+    3,
+    5,
+    118
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "pypi"
+   ]
+  },
+  "fn": "oceanbase/seekdb-bindings",
+  "sha": "78fd318ede6d",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b8670947e458": {
+  "identity": {
+   "one_liner": "自托管家庭气象站面板，聚合 Ambient 观测与 Open-Meteo 预报",
+   "review": "Midway Weather 是一个基于 Laravel 和 SQLite 的自托管天气显示应用，从 AmbientWeather.net API 每分钟采集观测数据，结合 Open-Meteo 七日预报、雷达地图和历史趋势，渲染为可自定义的桌面/手机仪表盘。面向 Ambient Weather 站的家庭用户，通过 cron 调度器运行采集，PWA 支持免安装移动访问。",
+   "highlights": [
+    "每分钟采集 Ambient Weather 观测并持久化到本地 SQLite，含历史聚合与每日修剪",
+    "提供可编辑的仪表盘布局、主题、标语及带认证的后台管理界面",
+    "支持 PWA 安装和响应式移动布局，无需前端构建步骤"
+   ],
+   "use_cases": [
+    "用树莓派或闲置设备在客厅展示自家气象站的实时读数",
+    "需要长期本地保存观测历史并查看趋势变化的家庭气象站用户"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "├→ SQLite → Blade dashboard + JSON APIs ／ The application uses **Laravel 13, PHP, SQLite, Blade, vanilla JavaScript, CSS, and locally bundled Leaflet**. There is no frontend build step, Redis requirement, or queue worker requirement with the example configuration. Node.js is used for contract validati ／ You need **PHP 8.3+**, **Composer 2**, the PHP extensions required by the locked dependencies, and **PDO SQLite / SQLite3**. The PHP runtime must also support Laravel's usual extensions, including mbstring, DOM/XML, cURL, and OpenSSL. Composer validates depend",
+     "lines": [
+      66,
+      73,
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用将气象观测数据存储在本地 SQLite 数据库中",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "                                                                      ├→ SQLite → Blade dashboard + JSON APIs ／ The application uses **Laravel 13, PHP, SQLite, Blade, vanilla JavaScript, CSS, and locally bundled Leaflet**. There is no frontend build step, Redis requirement, or queue worker requirement with the example configuration. Node.js is used for contract validation during development and CI.",
+   "evidence_lines": [
+    66,
+    73
+   ]
+  },
+  "fn": "thenumber3/midway-weather",
+  "sha": "b8670947e458",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

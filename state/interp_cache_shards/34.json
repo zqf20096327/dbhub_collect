@@ -10238,5 +10238,210 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fbc2c88c851f": {
+  "identity": {
+   "one_liner": "QQ 群通知转待办与日历的本地自托管工具",
+   "review": "从指定 QQ 群读取消息，过滤闲聊并提取通知、行动项和截止时间，集中到网页待办台，支持 .ics 日历订阅和多通道推送。数据通过 SQLite 存储在本机，面向需要在多个 QQ 群中跟踪作业与考试安排的个人用户。支持 Windows 安装包、Linux/macOS 源码部署及安卓客户端；NapCat 为第三方 QQ 协议客户端，存在风控风险，许可证为 MIT 上游部分与 PolyForm Noncommercial 新增部分的双许可。",
+   "highlights": [
+    "从 QQ 群消息中提取通知、行动项和截止时间，提供网页待办台与月历视图",
+    "支持 .ics 日历订阅、WxPusher/Server酱/PushPlus/Webhook 推送通道",
+    "支持一键备份 SQLite 数据库，提供 Windows 出货包、安卓 App 和 Tailscale/公网访问"
+   ],
+   "use_cases": [
+    "学生集中管理散布在多个 QQ 群中的作业、报名和考试时间",
+    "自托管场景下将 QQ 群通知转为待办并同步到手机日历",
+    "通过 Webhook 将群通知转发到钉钉、企微、飞书等端点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 设置页可一键备份数据库；ZIP 只包含 SQLite 数据库，不包含配置、令牌或日志。 ／ |`qq_live_digest/store.py`|SQLite 存储、去重和恢复| ／ 不要提交 `.env`、日志、SQLite、附件缓存或任何含 Token、UID、API Key 的文件。提交 Issue 和截图前，请打码 QQ 号、群号、域名、本机路径与消息内容。若密钥泄露，应立即作废并重新生成。",
+     "lines": [
+      73,
+      174,
+      218
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 用于本项目自身存储消息、去重和恢复，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：上游 qq-live-digest 及派生部分 MIT，新增部分 PolyForm Noncommercial 1.0.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "从指定 QQ 群读取消息，过滤闲聊，提取通知、行动项和截止时间，集中到网页待办台，也可订阅手机日历。 ／ |`qq_live_digest/receiver.py`|接收 NapCat OneBot v11 上报| ／ |`qq_live_digest/store.py`|SQLite 存储、去重和恢复|",
+   "evidence_lines": [
+    5,
+    173,
+    174
+   ]
+  },
+  "fn": "ExpertKT/notice-hub",
+  "sha": "fbc2c88c851f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "384ca4a66852": {
+  "identity": {
+   "one_liner": "Flutter 跨平台 AI 聊天客户端，本地 SQLite 存储对话",
+   "review": "LumenFlow 是一个基于 Flutter 的 AI 聊天应用，运行于 Android、iOS、Windows、Linux 和 macOS，接入 OpenAI、Claude、Gemini 等 13 类平台，支持流式响应、工具调用与 MCP 服务器。数据层使用 SQLite 存储对话、消息与附件，支持导出 TXT/JSON/PDF。适合需要在本地设备上管理多平台 AI 对话的个人用户。",
+   "highlights": [
+    "支持 13 类 AI 平台接入，含流式响应与思考模式输出",
+    "内置工具调用运行时与 Streamable HTTP MCP 服务器连接",
+    "使用 SQLite 存储对话、消息、附件，支持外键、索引与事务"
+   ],
+   "use_cases": [
+    "在本地设备上统一管理多平台 AI 对话",
+    "通过 MCP 与内置工具执行模型工具调用循环",
+    "导出与备份对话记录为 TXT/JSON/PDF 格式"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> A local-first, cross-platform AI chat client built with Flutter. 13 AI platforms, streaming chat, tool calling, MCP, SQLite storage, and native CJK/PDF support. ／ LumenFlow (Chinese: 流光) is a Flutter-based AI chat application for Android, iOS, Windows, Linux, and macOS. It combines multi-platform model access, a tool-calling agent runtime, local SQLite storage, and a Cupertino-style interface. ／ - **SQLite storage** with foreign keys, indexes, transactions, and automatic migration from legacy SharedPreferences.",
+     "lines": [
+      3,
+      9,
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其使用 SQLite 存储对话、消息与附件数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，捆绑的 Noto Sans SC 字体为 OFL-1.1",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "LumenFlow (Chinese: 流光) is a Flutter-based AI chat application for Android, iOS, Windows, Linux, and macOS. It combines multi-platform model access, a tool-calling agent runtime, local SQLite storage, and a Cupertino-style interface. ／ - **SQLite storage** with foreign keys, indexes, transactions, and automatic migration from legacy SharedPreferences. ／ |`sqlite3`|Conversation, message, attachment, and settings storage|",
+   "evidence_lines": [
+    9,
+    54,
+    114
+   ]
+  },
+  "fn": "HuanMeng-official/LumenFlow",
+  "sha": "384ca4a66852",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f0c07da0edf4": {
+  "identity": {
+   "one_liner": "TypeScript 事务性 outbox webhook 投递库，事件存入 PostgreSQL",
+   "review": "这是一个 TypeScript npm 库，为应用内嵌 webhook 投递能力：调用 publish() 将类型化事件与投递记录写入 PostgreSQL，由独立 worker 签名发送 Standard Webhooks 请求并重试、记录每次尝试，接收方用 parseWebhook() 验签。适用于需要在自家应用中实现可靠 webhook 发送的 TypeScript 开发者。要求 Node.js 24+ 与 PostgreSQL 16–18，事件存储直接依赖 PostgreSQL 而非通用 ORM 抽象。",
+   "highlights": [
+    "提供 publish() 将事件与每个 endpoint 的投递记录写入 PostgreSQL，由 worker 签名发送并重试",
+    "实现 Standard Webhooks 签名格式，接收方调用 parseWebhook() 验证请求",
+    "提供 Better Auth 插件用于已登录用户管理自己的 endpoint"
+   ],
+   "use_cases": [
+    "在 TypeScript 应用中实现事务性 outbox 模式的 webhook 发送",
+    "为 Better Auth 用户体系提供自助 endpoint 管理与事件订阅",
+    "在接收侧对 webhook 请求做签名验证与去重"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "You publish typed events. Good Webhooks stores them in your PostgreSQL database, and a worker you run delivers signed Standard Webhooks requests, retries failures, and records every attempt. Receivers verify a request with one function. Endpoint management wor ／ npm install good-webhooks pg zod",
+     "lines": [
+      15,
+      24
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为应用提供基于 PostgreSQL 的 webhook 投递基础设施，数据库是其存储后端而非其业务用途。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "You publish typed events. Good Webhooks stores them in your PostgreSQL database, and a worker you run delivers signed Standard Webhooks requests, retries failures, and records every attempt. Receivers verify a request with one function. Endpoint management works standalone, through the Better Auth plugin, or with your own sender. ／ npm install good-webhooks pg zod ／ Requires Node.js 24 or later. Built-in delivery and standalone management need PostgreSQL 16, 17, or 18. Better Auth management uses your existing Better Auth database adapter. See installation for each setup's dependencies and the compatibility policy for tested versions.",
+   "evidence_lines": [
+    15,
+    24,
+    27
+   ]
+  },
+  "fn": "pplytas/good-webhooks",
+  "sha": "f0c07da0edf4",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

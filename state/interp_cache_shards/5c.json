@@ -8649,5 +8649,73 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5a4ce73cfde3": {
+  "identity": {
+   "one_liner": "本地 MCP 技能管理服务器，用 Ollama 嵌入+SQLite 做语义检索与使用数据自策展",
+   "review": "the-librarian 是一个 MCP 服务器，用于在 coding agent 与本地技能（SKILL.md）集合之间做按需推荐：agent 以自然语言描述意图，服务器用 Ollama 生成嵌入、在 SQLite 中做余弦相似度检索，经 MMR 多样性、新近衰减、可选 Apple 设端模型重排后返回短名单，agent 通过 librarian_report 回报结果形成策展循环。数据（技能、嵌入、查询与结果日志）全部存于本地 SQLite，面向使用 Claude Code 等 MCP 客户端的本地用户。安装方式为 git clone 后用 uv 建 Python 3.12 虚拟环境。",
+   "highlights": [
+    "提供 librarian_find/get/brainstorm/report/reindex/stats 六个 MCP 工具，覆盖检索、交付、回报与统计",
+    "使用 Ollama 嵌入与 SQLite 向量余弦检索，支持 MMR 多样性选择与新近衰减防重复推荐",
+    "可选 Apple Intelligence 设端 Foundation Model 做重排，失败时回退纯嵌入排序"
+   ],
+   "use_cases": [
+    "为大量本地 agent 技能集合做按意图的语义按需分发，避免全部装入上下文",
+    "基于查询与结果日志做技能集合的周期性策展（淘汰不 surfaced、改写低成功率描述）",
+    "为 Claude Code 等 agent 配置本地技能推荐习惯（附带的 using-the-skill-librarian 技能）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> *\"So the full shape: SQLite (skills, embeddings, query log, outcome log) + FastMCP + two read tools + one write tool. Maybe 300 lines of Python. It's small, it's one thing, and it compounds.\"* ／ Every stage is local and free: Ollama embeddings, SQLite, and (optionally) Apple Intelligence. ／ - DB is SQLite WAL at `~/.skill_librarian/librarian.db`; `query_log` and `outcome_log` are append-only — no tool deletes or rewrites log rows.",
+     "lines": [
+      25,
+      35,
+      150
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其技能、嵌入与日志的本地存储（~/.skill_librarian/librarian.db），项目本身是面向 agent 的技能管理 MCP 服务器，不服务于数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> *\"So the full shape: SQLite (skills, embeddings, query log, outcome log) + FastMCP + two read tools + one write tool. Maybe 300 lines of Python. It's small, it's one thing, and it compounds.\"* ／ Every stage is local and free: Ollama embeddings, SQLite, and (optionally) Apple Intelligence.",
+   "evidence_lines": [
+    25,
+    35
+   ]
+  },
+  "fn": "aka-kika/the-librarian",
+  "sha": "5a4ce73cfde3",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

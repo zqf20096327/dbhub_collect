@@ -9818,5 +9818,225 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e3d15e89c0a7": {
+  "identity": {
+   "one_liner": "基于 SQLite 的零云端 AI Agent 记忆层，支持 MCP 接入",
+   "review": "Mnemosyne 是一个为 AI Agent 提供持久记忆的 Python 库，数据存储在单个 SQLite 文件中，通过 sqlite-vec 加 FTS5 实现混合检索，内置 MCP 服务器和 Python SDK，可接入 Cursor、Claude Code、OpenWebUI 等框架。支持可选的端到端加密同步。适合需要为本地或自托管 Agent 添加长期记忆能力的开发者。",
+   "highlights": [
+    "提供 MCP 服务器（stdio/SSE）与 Python SDK 两种接入方式",
+    "在 SQLite 内实现向量 + FTS5 混合检索（sqlite-vec 与 Hamming 距离计算）",
+    "同步通道支持客户端加密（Fernet / PyNaCl）"
+   ],
+   "use_cases": [
+    "为 MCP 兼容客户端（Cursor、Claude Code 等）添加持久记忆",
+    "本地优先、无云端依赖的 Agent 记忆存储",
+    "自托管场景下带加密同步的记忆层部署"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "*Zero-cloud AI memory that works everywhere. SQLite-backed. One pure-Python dependency.* ／ - **Episodic memory** -- Long-term storage with sqlite-vec + FTS5 hybrid search ／ **Hybrid scoring:** 50% vector similarity + 30% FTS5 rank + 20% importance, all inside SQLite.",
+     "lines": [
+      5,
+      151,
+      154
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|**Local-first**|✅ SQLite|⚠️ Hybrid|❌ Docker+PG|⚠️ PG+worker|❌ SaaS|✅ SQLite|✅ Embedded| ／ |**Zero deps**|✅ pip only|❌ Qdrant/PG|❌ PG+vector|❌ PG+3 LLMs|❌ SaaS infra|✅ pip only|✅ pip only|",
+     "lines": [
+      162,
+      163
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 AI Agent 生态提供记忆能力的组件，SQLite 作为其内置存储引擎被使用，README 的对比表中提及 PG 仅为竞品特征说明。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "*Zero-cloud AI memory that works everywhere. SQLite-backed. One pure-Python dependency.* ／ **Mnemosyne** is a universal, Hermes-first memory layer that works with any agent framework (Claude Code, Cursor, Codex, OpenWebUI, OpenClaw, or your own custom agent). One `pip install`, one SQLite database. No external services required. ／ - **Episodic memory** -- Long-term storage with sqlite-vec + FTS5 hybrid search",
+   "evidence_lines": [
+    5,
+    18,
+    151
+   ]
+  },
+  "fn": "mnemosyne-oss/mnemosyne",
+  "sha": "e3d15e89c0a7",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "365500d3b323": {
+  "identity": {
+   "one_liner": "基于 aiogram 与 yt-dlp 的 Telegram 媒体下载机器人",
+   "review": "一个 Telegram 媒体下载机器人项目，面向 Telegram 用户，通过 yt-dlp 从 YouTube、TikTok、Instagram 等平台下载视频或音频。采用 Clean Architecture 分层，用独立进程隔离 yt-dlp 的阻塞调用，通过 Redis pub/sub 传输实时进度，并借助自托管 Bot API 服务器突破 50 MB 上传限制；数据存储使用 PostgreSQL，任务队列使用 arq。支持通过 Docker Compose 部署运行。",
+   "highlights": [
+    "下载在独立 OS 进程中运行，超时通过 terminate() 终止，进度经队列与 Redis pub/sub 推送到聊天消息",
+    "可选自托管 telegram-bot-api 容器，将上传上限从 50 MB 提升至 2000 MB",
+    "提供两步确认流程（预览/格式/质量选择）、Redis 滑动窗口限流与 ru/en 双语界面"
+   ],
+   "use_cases": [
+    "部署 Telegram 机器人按链接下载视频或 MP3",
+    "下载超过 Bot API 50 MB 限制的大文件（配合自托管 Bot API）",
+    "作为 Clean Architecture 与 asyncio/aiogram 结构的参考实现阅读或复用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 16|Via SQLAlchemy 2 (async) + asyncpg|",
+     "lines": [
+      54
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Testing|pytest, pytest-asyncio, pytest-cov, aiosqlite|343 tests; repositories tested against SQLite; coverage gate on core layers|",
+     "lines": [
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目本身是使用 PostgreSQL 与 Redis 存储和协调状态的 Telegram 机器人应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A production-grade Telegram bot that downloads media from YouTube, TikTok, Instagram, X/Twitter and VK via `yt-dlp` — built as the core of a future SaaS platform rather than as a single-file script. ／ |Database|PostgreSQL 16|Via SQLAlchemy 2 (async) + asyncpg| ／ |Infrastructure|Docker, Docker Compose|Multi-stage, non-root image; five services|",
+   "evidence_lines": [
+    10,
+    54,
+    62
+   ]
+  },
+  "fn": "IvanSytnik/Universal-Media-Downloader",
+  "sha": "365500d3b323",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "61b2900592b9": {
+  "identity": {
+   "one_liner": "基于 NestJS+React+Prisma+PostgreSQL 的库存与订单管理系统",
+   "review": "这是一个库存与订单管理系统，包含 React 前端与 NestJS 后端两个应用，共享 PostgreSQL 数据库，通过 Prisma 管理 schema、迁移与查询，并用 Docker Compose 编排本地 PostgreSQL 16 与应用启动，提供 /api/v1 REST 接口与 Swagger 文档。适合需要集中管理产品、供应商和订单流程的团队或开发者本地部署使用；前端仍在开发中，后端核心功能已实现并有测试覆盖。",
+   "highlights": [
+    "提供产品、库存、订单与供应商管理的 REST API（/api/v1）并附 Swagger 文档",
+    "通过 Prisma 管理 PostgreSQL 数据库 schema、自动迁移与种子数据",
+    "使用 Docker Compose 一键启动，含 GitHub Actions 单元与 E2E 测试"
+   ],
+   "use_cases": [
+    "需要统一管理库存、订单和供应商信息的小型业务场景",
+    "基于 Docker Compose 本地部署并二次开发的自建库存系统",
+    "以 NestJS REST API 为后端对接自研前端或客户端的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ The project is organized as two independent applications backed by a shared PostgreSQL database. ／ - **Database:** PostgreSQL for persistent data storage.",
+     "lines": [
+      11,
+      29,
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该项目以 PostgreSQL 作为持久化存储，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An inventory and order management system designed to bring product tracking, supplier management, and order operations into one place. ／ The project is organized as two independent applications backed by a shared PostgreSQL database. ／ - **Database:** PostgreSQL for persistent data storage.",
+   "evidence_lines": [
+    23,
+    29,
+    33
+   ]
+  },
+  "fn": "Mohamed-Alkafory/inventory-management-system",
+  "sha": "61b2900592b9",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

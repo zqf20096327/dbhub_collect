@@ -11014,5 +11014,146 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7b5e1532c5e6": {
+  "identity": {
+   "one_liner": "TypeScript 的 ClickHouse schema 管理与迁移 CLI",
+   "review": "chkit 是面向 TypeScript 项目的 ClickHouse schema 管理命令行工具，支持在代码中定义表、视图、物化视图和字典，生成可审查的 SQL 迁移文件，检测线上 schema 漂移，并提供零停机结构迁移（cutover）、代码生成及 CI 集成。面向使用 ClickHouse 并希望以代码方式管理 schema 的开发者，通过 npm/bun 安装。",
+   "highlights": [
+    "在代码中定义 ClickHouse 表、视图、物化视图和字典，生成可审查的 SQL 迁移",
+    "检测线上 schema 漂移，check --strict 可作为 CI 门禁",
+    "提供插件生成 TypeScript 类型与 Zod schema，支持零停机 cutover 迁移"
+   ],
+   "use_cases": [
+    "TypeScript 项目中以代码方式管理 ClickHouse schema 与迁移历史",
+    "CI/CD 流水线中校验迁移与 schema 漂移",
+    "对已填充数据表做无停机结构调整或存量 schema 接管"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**ClickHouse schema management in TypeScript.** ／ Define ClickHouse schemas in code, generate reviewable SQL migrations, and detect live schema drift from the terminal or CI. chkit manages tables, views, materialized views and dictionaries alongside your application. ／ Supply your actual development database connection through `CLICKHOUSE_URL` (HTTP/HTTPS endpoint and port), `CLICKHOUSE_USER`, `CLICKHOUSE_PASSWORD`, and `CLICKHOUSE_DB`. An intentionally blank password is allowed; an absent password is missing information. Ke",
+     "lines": [
+      3,
+      9,
+      37
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 ClickHouse 数据库提供 schema 定义、迁移生成与漂移检测的工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**ClickHouse schema management in TypeScript.** ／ Define ClickHouse schemas in code, generate reviewable SQL migrations, and detect live schema drift from the terminal or CI. chkit manages tables, views, materialized views and dictionaries alongside your application.",
+   "evidence_lines": [
+    3,
+    9
+   ]
+  },
+  "fn": "obsessiondb/chkit",
+  "sha": "7b5e1532c5e6",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3ef4712a6e78": {
+  "identity": {
+   "one_liner": "Rust 编写的开源电商 API 框架，含管理后台与店面，可扩展插件",
+   "review": "Hypha 是一个用 Rust 实现的电商框架与平台，提供目录、价格、折扣、结账、订单、客户等功能域，支持运行在原生服务器或 Cloudflare Workers 上，通过 Postgres 存储数据，并经 WebAssembly 与端口抽象使同一核心可在两种宿主运行。它面向需要自建电商 API 的开发者，内置 Next.js 管理面板和店面，还提供 MCP 服务器让 AI 代理以可预览、可人工审批的方式执行管理操作。README 注明项目处于公开 beta、尚未经生产验证。",
+   "highlights": [
+    "支持原生服务器与 Cloudflare Workers 两种宿主，核心编译为 WebAssembly，存储通过适配器（hypha-store-postgres、hypha-store-s3）接入",
+    "提供 OAuth 2.1 应用、Rust 插件（spores）、webhooks、OpenAPI 与 typed SDK 等扩展机制",
+    "内置 MCP 服务器，管理写操作可精确预览并由员工审批"
+   ],
+   "use_cases": [
+    "需要无头电商 API 并自行搭建前端的团队",
+    "部署到服务器（Docker/Caddy）或 Cloudflare Workers 的电商站点",
+    "让 AI 代理在人工审批下操作商店管理任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **A server:** the native host (Rust, axum) on Postgres, deployed with Docker and Caddy ／ - **Cloudflare Workers:** the same core compiled to WebAssembly, on Postgres through ／ |`crates/hypha-store-postgres`, `crates/hypha-store-s3`|Storage adapters|",
+     "lines": [
+      31,
+      33,
+      94
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是使用 Postgres 存储数据的电商平台/应用，Postgres 仅作为其存储适配器",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "README 可见部分写明 Apache License 2.0，'either of' 措辞提示可能为双许可，全文未见完整清单",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **A server:** the native host (Rust, axum) on Postgres, deployed with Docker and Caddy ／ |`crates/hypha-store-postgres`, `crates/hypha-store-s3`|Storage adapters| ／ **An open-source commerce API in Rust, with an admin panel and a storefront.** It runs on",
+   "evidence_lines": [
+    31,
+    94,
+    3
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "hyphacommerce/hypha",
+  "sha": "3ef4712a6e78",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

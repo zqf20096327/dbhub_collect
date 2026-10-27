@@ -10285,5 +10285,188 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1ac9481c8240": {
+  "identity": {
+   "one_liner": "Go + Next.js 实现的 Discourse 风格开源论坛",
+   "review": "Casnode 是一个开源论坛程序，界面与功能对标 Discourse，用 Go（beego/xorm）和 Next.js 实现，登录通过 Casdoor SSO 完成。它面向需要自建社区论坛的用户，通过 xorm 支持 MySQL、PostgreSQL、SQLite 和 SQL Server 存数据，首次启动时自动建表，支持 Docker 或源码部署。",
+   "highlights": [
+    "通过 xorm 支持 MySQL、PostgreSQL、SQLite、SQL Server，首次启动自动创建数据库和表",
+    "通过 Casdoor 实现单点登录，接入 GitHub、Google、微信、SAML、LDAP 等 100+ 登录源",
+    "服务端渲染全部页面，输出 Open Graph、JSON-LD、sitemap 和 RSS，支持 Markdown、全文搜索、置顶/归档等版主功能"
+   ],
+   "use_cases": [
+    "需要自托管社区论坛并复用已有数据库的团队",
+    "需要服务端渲染以利于搜索引擎收录的社区站点",
+    "需要通过 Casdoor 对接企业 SSO 登录源的内部社区"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Fast server-rendered pages for search engines, sign-in through Casdoor, and your choice of MySQL, PostgreSQL, SQLite or SQL Server. ／ - **Runs on the database you already have.** xorm talks to MySQL, PostgreSQL, SQLite ／ |Database|MySQL, PostgreSQL, SQLite, SQL Server|",
+     "lines": [
+      4,
+      38,
+      67
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Fast server-rendered pages for search engines, sign-in through Casdoor, and your choice of MySQL, PostgreSQL, SQLite or SQL Server. ／ - **Runs on the database you already have.** xorm talks to MySQL, PostgreSQL, SQLite ／ |Database|MySQL, PostgreSQL, SQLite, SQL Server|",
+     "lines": [
+      4,
+      38,
+      67
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Fast server-rendered pages for search engines, sign-in through Casdoor, and your choice of MySQL, PostgreSQL, SQLite or SQL Server. ／ - **Runs on the database you already have.** xorm talks to MySQL, PostgreSQL, SQLite ／ |Database|MySQL, PostgreSQL, SQLite, SQL Server|",
+     "lines": [
+      4,
+      38,
+      67
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Fast server-rendered pages for search engines, sign-in through Casdoor, and your choice of MySQL, PostgreSQL, SQLite or SQL Server. ／ and SQL Server; the database and tables are created on first start. ／ |Database|MySQL, PostgreSQL, SQLite, SQL Server|",
+     "lines": [
+      4,
+      39,
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Casnode 是使用数据库存储论坛数据的应用程序，README 明确说明通过 xorm 连接各数据库并存数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " An open-source forum with the look and features of Discourse, built with Go and Next.js. ／ - **Runs on the database you already have.** xorm talks to MySQL, PostgreSQL, SQLite ／ |Database|MySQL, PostgreSQL, SQLite, SQL Server|",
+   "evidence_lines": [
+    3,
+    38,
+    67
+   ]
+  },
+  "fn": "casnode/casnode",
+  "sha": "1ac9481c8240",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c5005306d13f": {
+  "identity": {
+   "one_liner": "AiR 平台中央后端服务，提供 HTTP/gRPC API 并协调微服务",
+   "review": "这是 AiR 平台的中央后端编排服务，用 Go 编写，提供 HTTP/gRPC 接口，管理用户、会话、AI 模型与集成渠道（Telegram、WhatsApp 等），并内置 MCP server、语音代理、AES-GCM 数据加密与 VictoriaMetrics 监控。数据存储于 MariaDB/MySQL，通过 Docker Compose 部署，面向搭建和运营该 AI 平台的用户。",
+   "highlights": [
+    "提供认证（JWT、TOTP、Google OAuth）、用户/AI 模型/会话管理与 MCP server",
+    "每个用户持有独立 MasterKey，敏感数据以 AES-GCM 加密存储，支持密钥轮换",
+    "通过 Docker Compose 部署，附带 VictoriaMetrics/VictoriaLogs/Perses 监控栈"
+   ],
+   "use_cases": [
+    "作为 AiR 平台微服务架构的中央 API 网关与编排后端",
+    "需要托管 AI 模型接入、聊天渠道集成与用户数据加密存储的后端场景",
+    "基于 gRPC 契约扩展自有微服务接入该平台"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "├── air_db (MariaDB/MySQL) ／ Go 1.25, Gin, gRPC, Protocol Buffers, WebSocket, MariaDB/MySQL, Redis, MinIO/S3, AES-GCM, JWT, TOTP, Google OAuth, MCP Streamable HTTP, Docker, Envoy, Swagger/OpenAPI, VictoriaMetrics, VictoriaLogs, Perses, Vector and cAdvisor.",
+     "lines": [
+      35,
+      53
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "├── air_db (MariaDB/MySQL) ／ Go 1.25, Gin, gRPC, Protocol Buffers, WebSocket, MariaDB/MySQL, Redis, MinIO/S3, AES-GCM, JWT, TOTP, Google OAuth, MCP Streamable HTTP, Docker, Envoy, Swagger/OpenAPI, VictoriaMetrics, VictoriaLogs, Perses, Vector and cAdvisor.",
+     "lines": [
+      35,
+      53
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其为 AiR 平台的后端应用，使用 MariaDB/MySQL 存储用户、会话与配置数据（L35-L36）。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`air_orchestrator` is the central backend service of the AiR platform. It provides HTTP/gRPC APIs, manages users, conversations, AI models and integrations, and coordinates communication channels and supporting microservices. ／ ├── air_db (MariaDB/MySQL) ／ Go 1.25, Gin, gRPC, Protocol Buffers, WebSocket, MariaDB/MySQL, Redis, MinIO/S3, AES-GCM, JWT, TOTP, Google OAuth, MCP Streamable HTTP, Docker, Envoy, Swagger/OpenAPI, VictoriaMetrics, VictoriaLogs, Perses, Vector and cAdvisor.",
+   "evidence_lines": [
+    11,
+    35,
+    53
+   ]
+  },
+  "fn": "ikermy/air_orchestrator",
+  "sha": "c5005306d13f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

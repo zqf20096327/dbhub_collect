@@ -8782,5 +8782,70 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5acb3c12d695": {
+  "identity": {
+   "one_liner": "事件驱动的订单、库存与履约演示平台",
+   "review": "由三个 Java 服务组成的事件驱动订单、库存与履约平台，通过 Kafka 在服务间传递业务事件，每个服务独立持有 PostgreSQL 数据库与 schema，并提供 React 运营工作台与 Keycloak 登录。面向个人工程作品展示与本地学习演示，明确声明未覆盖生产 TLS、高可用、容量压测与公开部署。",
+   "highlights": [
+    "订单、库存、履约三服务经 Kafka 通信，采用事务性 outbox 与至少一次投递、死信主题与幂等处理",
+    "各服务独立拥有 PostgreSQL schema 与事务，服务间通过事件而非跨库查询交换数据",
+    "提供 Docker Compose 与单节点 kind/Kubernetes 本地部署，含 Prometheus、Grafana、OpenTelemetry/Tempo 可选观测栈"
+   ],
+   "use_cases": [
+    "本地学习事件驱动架构、事务性 outbox 与最终一致性模式",
+    "作为带真实 PostgreSQL/Kafka 集成测试与 CI 工作流的工程参考项目",
+    "演示 Keycloak OAuth2/OIDC 授权与 React 运营工作台的搭建方式"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "An event-driven order, inventory and fulfillment platform built as a personal engineering portfolio project. Three Java services coordinate stock reservations and manual dispatch through Kafka, with a React operations workspace and independently owned PostgreS",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL 存储业务与身份数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可，捆绑的第三方文件保留各自原许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An event-driven order, inventory and fulfillment platform built as a personal engineering portfolio project. Three Java services coordinate stock reservations and manual dispatch through Kafka, with a React operations workspace and independently owned PostgreSQL databases. ／ |Persistence and messaging|PostgreSQL 18.6, Flyway, Apache Kafka 4.2.2|",
+   "evidence_lines": [
+    6,
+    55
+   ]
+  },
+  "fn": "PantelisZara/Warexis",
+  "sha": "5acb3c12d695",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

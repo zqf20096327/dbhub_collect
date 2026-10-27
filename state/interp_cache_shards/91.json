@@ -10938,5 +10938,86 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1cebe5a1dd4f": {
+  "identity": {
+   "one_liner": "纯 Rust 编写的读取 Access 数据库文件（.mdb/.accdb）的库与 CLI 工具",
+   "review": "jetdb 提供 Rust 库和 CLI 两种形态，用于读取 Microsoft Access 数据库文件的表结构、行数据、查询 SQL、VBA 代码、窗体报表与宏，支持 Access 97 至 2019 格式，可导出 CSV 和为 SQLite/PostgreSQL/MySQL 生成 DDL。纯 Rust 实现无 FFI，支持 WASM 在浏览器运行；限制为只读、仅全表扫描。适合需要程序化解析 Access 文件的开发者与数据迁移人员。",
+   "highlights": [
+    "纯 Rust 实现无 C/C++ 依赖与 FFI，支持 macOS/Windows/Linux 及 WebAssembly 目标",
+    "读取表元数据、行数据、复杂列（附件/多值/版本历史）、宏、VBA 与窗体报表设计",
+    "解密 RC4/AES 加密数据库与密码保护的 .accdb 文件"
+   ],
+   "use_cases": [
+    "从 Access 数据库导出数据为 CSV 或生成 SQLite/PostgreSQL/MySQL 的 DDL",
+    "在浏览器或 Node.js 中通过 jetdb-wasm 读取 .mdb/.accdb 文件",
+    "恢复 Access 保存查询中的 SQL 与提取 VBA 模块源码"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- Generate DDL for SQLite, PostgreSQL, MySQL, and Access SQL",
+     "lines": [
+      72
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- Generate DDL for SQLite, PostgreSQL, MySQL, and Access SQL",
+     "lines": [
+      72
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- Generate DDL for SQLite, PostgreSQL, MySQL, and Access SQL",
+     "lines": [
+      72
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "提供读取 Access 数据库文件的库与 CLI，是为数据库文件解析/迁移服务的工具而非使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：MIT OR Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Rust library and CLI tool for reading Microsoft Access database files (.mdb / .accdb). ／ Written in pure Rust with no C/C++ dependencies or FFI, so it works out of the box on macOS, Windows, and Linux. Supports Access 97 (Jet3) through Access 2019 (ACE17). ／ - Generate DDL for SQLite, PostgreSQL, MySQL, and Access SQL",
+   "evidence_lines": [
+    11,
+    13,
+    72
+   ]
+  },
+  "fn": "dominion525/jetdb",
+  "sha": "1cebe5a1dd4f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

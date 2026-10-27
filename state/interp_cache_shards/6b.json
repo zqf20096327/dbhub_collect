@@ -10820,5 +10820,168 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9b48dac77d9b": {
+  "identity": {
+   "one_liner": "代码仓库分析工具，静态解析生成数据库 ERD 与架构图",
+   "review": "DomoScope 是一个开源的代码仓库静态分析与可视化工具，提供 npm CLI、终端交互和 Web 仪表盘，可解析项目架构、依赖图、API 路由、数据库表关系并生成 ERD 和文档，同时内置 MCP server 供 AI 编码代理调用。面向开发者、架构师及 AI 代理，用于逆向理解既有代码库；它通过解析 SQL DDL、ORM 定义等方式读取数据库 schema，本身不连接或管理数据库实例。",
+   "highlights": [
+    "提供 npm CLI 与交互式终端，支持架构分析、依赖图导出、文档生成、安全审计等子命令",
+    "内置 MCP server（stdio 与 HTTP/SSE 双传输），提供 get_database_erd 等工具供 AI 客户端调用",
+    "数据库 ERD 引擎支持解析 PostgreSQL/MySQL/SQLite/MariaDB 的 SQL DDL 以及 Prisma、TypeORM、Drizzle、Mongoose 等 ORM 定义"
+   ],
+   "use_cases": [
+    "对既有代码库做架构与数据库 schema 的逆向梳理，生成 ERD 与文档",
+    "为 AI 编码代理提供代码库结构与数据库关系的 MCP 查询接口",
+    "静态扫描仓库中的硬编码密钥与潜在漏洞"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* **SQL DDL**: PostgreSQL, MySQL, SQLite, and MariaDB `CREATE TABLE`, `FOREIGN KEY (...) REFERENCES ...`, `CONSTRAINT`, and schema prefixes (`public.users`, `auth.users`).",
+     "lines": [
+      135
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* **SQL DDL**: PostgreSQL, MySQL, SQLite, and MariaDB `CREATE TABLE`, `FOREIGN KEY (...) REFERENCES ...`, `CONSTRAINT`, and schema prefixes (`public.users`, `auth.users`).",
+     "lines": [
+      135
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* **SQL DDL**: PostgreSQL, MySQL, SQLite, and MariaDB `CREATE TABLE`, `FOREIGN KEY (...) REFERENCES ...`, `CONSTRAINT`, and schema prefixes (`public.users`, `auth.users`).",
+     "lines": [
+      135
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* **SQL DDL**: PostgreSQL, MySQL, SQLite, and MariaDB `CREATE TABLE`, `FOREIGN KEY (...) REFERENCES ...`, `CONSTRAINT`, and schema prefixes (`public.users`, `auth.users`).",
+     "lines": [
+      135
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具解析代码库中的数据库 schema 并生成 ERD/文档，是为数据库生态服务的分析工具而非使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### Polyglot Database ERD Engine ／ * **SQL DDL**: PostgreSQL, MySQL, SQLite, and MariaDB `CREATE TABLE`, `FOREIGN KEY (...) REFERENCES ...`, `CONSTRAINT`, and schema prefixes (`public.users`, `auth.users`). ／ ### Model Context Protocol (MCP) Server",
+   "evidence_lines": [
+    127,
+    135,
+    100
+   ]
+  },
+  "fn": "darknecrocities/DomoScope",
+  "sha": "9b48dac77d9b",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5e151ce433f5": {
+  "identity": {
+   "one_liner": "摄像头监控 Web 面板，管理媒体流与检测告警",
+   "review": "SentriX 是一个用于管理摄像头、查看实时流和查询检测、告警与推理指标的单体 Web 应用，前端为 SvelteKit，通过服务端路由调用 FastAPI 推理后端，流媒体由 MediaMTX 提供，数据持久化由后端负责（Neon PostgreSQL）。面向需要集中查看摄像头分析结果的场景，README 注明当前为学术原型，缺少认证、授权与审计等生产级控制。",
+   "highlights": [
+    "提供摄像头注册、激活、重试与删除管理功能",
+    "支持 WebRTC 流播放与检测/告警历史查询（按类别和日期过滤）",
+    "展示帧数、延迟等运行指标，通过环境变量配置 FastAPI 与 MediaMTX 集成"
+   ],
+   "use_cases": [
+    "集中监控多路摄像头及其分析结果",
+    "查询检测与告警历史记录",
+    "查看推理服务的运行状态指标"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Base de datos|Neon PostgreSQL, administrada por el backend|",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该仓库是使用 Neon PostgreSQL 存储数据的 Web 应用前端，非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "README 声明当前未附带分发许可，代码视为作者保留权利",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Base de datos|Neon PostgreSQL, administrada por el backend| ／ SentriX centraliza la supervisión de cámaras conectadas a una infraestructura de streaming e inferencia. La interfaz permite registrar cámaras, iniciar o reintentar su procesamiento, observar el video en vivo y revisar la actividad producida por el servicio de análisis. ／ Este repositorio contiene la aplicación web. La inferencia, el acceso a los streams y la persistencia se realizan mediante servicios externos configurados por variables de entorno.",
+   "evidence_lines": [
+    49,
+    13,
+    15
+   ]
+  },
+  "fn": "picantitoDev/sentryx-surveillance",
+  "sha": "5e151ce433f5",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

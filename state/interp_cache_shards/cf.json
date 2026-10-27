@@ -10809,5 +10809,169 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "92705266b891": {
+  "identity": {
+   "one_liner": "开源 AI 模拟面试系统，含数字人提问、Docker 沙箱判题与逐题评分",
+   "review": "这是一个面向求职开发者的 AI 面试训练系统：输入岗位 JD 和简历后生成题目，通过数字人面试官进行可录制、可回放的视频模拟面试，并提供 Docker 隔离沙箱运行 Java、Python 等五种语言的代码笔试。后端为 Java 21 + Spring Boot，数据层使用 PostgreSQL 16 + pgvector 与 Redis，需配置百炼 API Key 方可启用真实转写与评分。",
+   "highlights": [
+    "数字人面试官逐题提问与追问，录像可回放并生成逐题结构化反馈",
+    "代码笔试在一次性 Docker 容器中运行，禁网、只读文件系统并限制 CPU/内存",
+    "支持简历上传解析、AI 优化及导出 Markdown/Word/PDF"
+   ],
+   "use_cases": [
+    "准备校招、社招、转岗面试的开发者进行模拟面试练习",
+    "组织作业布置与同伴互评的学习小组或教学场景",
+    "需要带沙箱判题的编程笔试环境"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|数据|PostgreSQL 16 + pgvector · Redis 7 · Flyway| ／ - 已完成真实 PostgreSQL、Redis、S3 兼容存储和真实模型供应商的链路验证。",
+     "lines": [
+      204,
+      215
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|执行|Docker 隔离沙箱 · SQLite · 5 种编程语言|",
+     "lines": [
+      206
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个以 PostgreSQL/Redis 存储数据的完整面试训练应用，数据库为其内部组件而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0，基于 guangge 的 AI-Interview 重构",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|数据|PostgreSQL 16 + pgvector · Redis 7 · Flyway| ／ |执行|Docker 隔离沙箱 · SQLite · 5 种编程语言| ／ - 已完成真实 PostgreSQL、Redis、S3 兼容存储和真实模型供应商的链路验证。",
+   "evidence_lines": [
+    204,
+    206,
+    215
+   ]
+  },
+  "fn": "xgwangdl/AI-Interview",
+  "sha": "92705266b891",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "63b10a8ac2e0": {
+  "identity": {
+   "one_liner": "Django+DRF 应用样板，Docker Compose 一键启动全栈开发环境",
+   "review": "这是一个为 Django/DRF 应用准备的预配置开发环境样板，通过 Docker Compose 一条命令拉起 Django API、PostgreSQL、Elasticsearch、Celery/Celery Beat 与 Swagger 文档等服务，并提供管理命令和端口参考。适合需要快速搭建带异步任务、全文搜索和数据库持久化的后端项目团队使用；MIT 许可，仅面向开发环境搭建。",
+   "highlights": [
+    "一条 docker compose 命令启动 Django、PostgreSQL、Elasticsearch、Celery 与 Swagger 服务",
+    "内置 Celery worker 与 Celery Beat 周期任务调度",
+    "PostgreSQL 配置了卷持久化，Swagger/OpenAPI 文档位于 /api/docs/"
+   ],
+   "use_cases": [
+    "快速初始化 Django/DRF 后端项目的开发环境",
+    "需要异步任务与定时任务的 Django 应用开发",
+    "需要全文搜索（Elasticsearch）集成的后端项目"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A batteries-included, modular boilerplate and development environment for **Django 4.2+** and **Django REST Framework (DRF)**. Pre-configured with **Docker Compose**, **PostgreSQL**, **Elasticsearch**, **Celery** (asynchronous workers + scheduler), and **Swagg ／ - 🗄️ **Production PostgreSQL:** Resilient relational database layer pre-configured with volume persistence. ／ |**PostgreSQL**|`localhost:5432`|Relational database connection|",
+     "lines": [
+      3,
+      37,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PostgreSQL 作为应用的关系数据库层被使用，样板本身是 Django 应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A batteries-included, modular boilerplate and development environment for **Django 4.2+** and **Django REST Framework (DRF)**. Pre-configured with **Docker Compose**, **PostgreSQL**, **Elasticsearch**, **Celery** (asynchronous workers + scheduler), and **Swagger / OpenAPI** interactive documentation. ／ - 🗄️ **Production PostgreSQL:** Resilient relational database layer pre-configured with volume persistence. ／ docker compose -f \"./build-process/docker-compose-django-backend.yml\" up -d --build",
+   "evidence_lines": [
+    3,
+    37,
+    62
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "codewithmuh/django-starter-kit",
+  "sha": "63b10a8ac2e0",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10356,5 +10356,72 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "54ffa810a61c": {
+  "identity": {
+   "one_liner": "异步多智能体会话编排框架，内置 SQLite 会话持久化",
+   "review": "chatflow-agent 是一个 async-first 的 Python 多智能体会话编排框架，供开发者构建 WhatsApp、Telegram、FastAPI Webhook 与 CLI 渠道的对话机器人。它内置 SQLiteSessionStore（基于标准 sqlite3 模块与 WAL）持久化会话与专家代理状态，支持回合回滚与按会话加锁，LLM 引擎经 httpx 直连多家提供商，无需额外 SDK。",
+   "highlights": [
+    "内置 SQLiteSessionStore，基于标准 sqlite3 模块实现会话持久化，支持 WAL 与原子事务（L387-389 窗口外）",
+    "通过 httpx REST 直连 Gemini、OpenAI、Claude、Grok、DeepSeek、Groq、Ollama、vLLM 等引擎，核心运行时依赖仅 pydantic 与 httpx",
+    "提供 WhatsApp (Meta Cloud API)、Telegram、FastAPI Webhook、CLI 渠道适配器，并内置 HMAC webhook 安全校验与回合回滚"
+   ],
+   "use_cases": [
+    "为 WhatsApp/Telegram 等渠道构建多智能体对话机器人",
+    "需要跨重启持久化会话与专家代理移交状态的对话应用",
+    "接入本地模型（Ollama/vLLM）的 LLM 代理应用开发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`chatflow-agent` is an async-first Python framework for orchestrating multi-agent conversational workflows across real-world messaging channels. Inspired by lightweight agent handoff patterns, it combines provider-agnostic LLM engines with built-in concurrency ／ # Core framework (all LLM engines via HTTPX, SQLite & in-memory stores, CLI channel)",
+     "lines": [
+      18,
+      40
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是多智能体对话框架，使用 SQLite 存储自身会话数据，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`chatflow-agent` is an async-first Python framework for orchestrating multi-agent conversational workflows across real-world messaging channels. Inspired by lightweight agent handoff patterns, it combines provider-agnostic LLM engines with built-in concurrency locks, transactional turn rollbacks, SQLite persistence, and turnkey channel adapters for **WhatsApp (Meta Cloud API)**, **Telegram**, **FastAPI Webhooks**, and **CLI**. ／ # Core framework (all LLM engines via HTTPX, SQLite & in-memory stores, CLI channel)",
+   "evidence_lines": [
+    18,
+    40
+   ]
+  },
+  "fn": "GustavoBaranda/chatflow-agent",
+  "sha": "54ffa810a61c",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

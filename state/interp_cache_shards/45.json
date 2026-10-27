@@ -11348,5 +11348,232 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f2a6ecd2102d": {
+  "identity": {
+   "one_liner": "多层语音生物识别认证系统，含深度伪造检测与说话人验证",
+   "review": "这是一个语音认证应用系统，通过四层安全流程（深度伪造检测、短语验证、说话人声纹比对、EMA 自适应声纹更新）处理音频后授予访问。使用 FastAPI 后端、React 前端、PostgreSQL（生产）或 SQLite（开发）存储数据，提供注册、 enrollment、挑战-应答验证等 REST API，面向需要语音身份验证的研究与开发场景。",
+   "highlights": [
+    "实现四层顺序安全检查管道：深度伪造检测、ASR 短语验证、ECAPA-TDNN 说话人验证、EMA 自适应声纹",
+    "使用单次 HMAC-SHA256 令牌（90 秒 TTL）实现挑战-应答机制",
+    "提供 FastAPI REST API 与 Docker/Render 部署配置"
+   ],
+   "use_cases": [
+    "需要语音作为认证因子的应用接入",
+    "语音深度伪造与反欺骗检测的研究基线",
+    "说话人识别/验证模型（ECAPA-TDNN、Wav2Vec2、Whisper）的工程化集成参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 15 / SQLite|Data persistence| ／ - PostgreSQL for production, SQLite for development ／ - PostgreSQL 15+ (or use SQLite for development)",
+     "lines": [
+      34,
+      55,
+      160
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 15 / SQLite|Data persistence| ／ - PostgreSQL for production, SQLite for development ／ - PostgreSQL 15+ (or use SQLite for development)",
+     "lines": [
+      34,
+      55,
+      160
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 PostgreSQL/SQLite 存储数据的语音认证应用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A production-ready voice authentication system that combines four security layers: deepfake detection, phrase verification, speaker recognition, and adaptive voiceprint evolution. ／ |Database|PostgreSQL 15 / SQLite|Data persistence| ／ - PostgreSQL for production, SQLite for development",
+   "evidence_lines": [
+    11,
+    34,
+    55
+   ]
+  },
+  "fn": "Speech-Synthesis/AAA_Baselines",
+  "sha": "f2a6ecd2102d",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4e214e8a3304": {
+  "identity": {
+   "one_liner": "Windows 本地 PHP 开发环境桌面应用，一键管理 Apache/Nginx、PHP 与 MariaDB",
+   "review": "lampRabit 是一个基于 Tauri（Rust + React）构建的本地 PHP 开发环境，面向在 Windows 上做 PHP 开发的用户，一键安装并运行 Apache/Nginx、多版本 PHP、MariaDB、Mailpit、缓存与 Memcached，并将 www 下每个目录映射为 https://<folder>.test 域名，附带 phpMyAdmin/Adminer、日志、健康检查与隧道分享。macOS 与 Linux 支持处于预览阶段，Apache/Nginx/PHP 在这两个平台尚不能从应用内下载。",
+   "highlights": [
+    "一键安装管理 Apache/Nginx、多版本 PHP、MariaDB、Mailpit、Redis 兼容缓存与 Memcached",
+    "支持按站点配置 PHP 版本、Web 服务器与 HTTPS，并内置本地 CA 签发证书",
+    "提供实时日志、健康检查、端口冲突检测、诊断报告及 Cloudflare Tunnel/ngrok 站点分享"
+   ],
+   "use_cases": [
+    "在 Windows 本地搭建 PHP 开发环境替代手工组装 XAMPP/Laragon 式堆栈",
+    "在同一台机器上并行运行多个 PHP 版本并按站点切换配置",
+    "从 XAMPP 或 Laragon 迁移本地站点与数据库"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **One-click stack.** Apache and/or Nginx, PHP, MariaDB, Mailpit, a Redis-compatible cache and Memcached. Runtimes download on demand, checksum-verified, and you can keep several versions installed. ／ |MariaDB|✅|Coming soon|✅|",
+     "lines": [
+      24,
+      61
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Command line ready.** Put `php`, `composer`, `mysql` and friends on your PATH with one switch; Node.js is managed through NVM.",
+     "lines": [
+      32
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为本地开发环境提供 MariaDB 等数据库运行时的一键安装、版本管理与服务启停。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **One-click stack.** Apache and/or Nginx, PHP, MariaDB, Mailpit, a Redis-compatible cache and Memcached. Runtimes download on demand, checksum-verified, and you can keep several versions installed. ／ |MariaDB|✅|Coming soon|✅| ／ lampRabit is built with Tauri 2 (Rust) and React + TypeScript.",
+   "evidence_lines": [
+    24,
+    61,
+    98
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Shivam-SV/LampRabit",
+  "sha": "4e214e8a3304",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "817976de727d": {
+  "identity": {
+   "one_liner": "黑马点评深度魔改学习项目，聚焦秒杀与一致性架构升级",
+   "review": "基于黑马点评课程项目的深度魔改学习仓库，将单模块 MVC 升级为 9 模块 DDD 分层，实现 Redis Lua 预扣、RocketMQ 异步建单、四级数据一致性兜底、多级缓存及 JVM 故障演练与压测闭环。运行需 JDK 21、MySQL 8、Redis 与 RocketMQ，通过 Maven 打包后以 jar 启动，仅用于个人学习。",
+   "highlights": [
+    "秒杀链路采用 Redis Lua 原子预扣与 RocketMQ 异步建单，配本地消息表、建单校验、恢复任务、对账补偿四级兜底",
+    "实现三级读取缓存（Caffeine → Redis 逻辑过期 → MySQL）与广播失效机制，可配置回退单级链路",
+    "提供 7 类 JVM 故障注入开关、JMeter 压测脚本与 Prometheus 指标接入"
+   ],
+   "use_cases": [
+    "学习高并发秒杀场景下的一致性保障与异步架构设计",
+    "参考 DDD 多模块分层与自研任务链/状态机引擎的实现",
+    "开展 JVM 故障演练与压测排查训练"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL ／ |数据访问|MyBatis-Plus 3.5（spring-boot3-starter）、MySQL 8（mysql-connector-j）| ／ - MySQL 8.x（库名 `dingping`，建表 SQL 见课程资料 `hmdp.sql`；闪赔审计表补丁见 `db/patch_payout_audit_log.sql`） ／ |`DB_HOST` / `DB_PORT` / `DB_NAME`|MySQL 地址|localhost / 3306 / dingping|",
+     "lines": [
+      12,
+      112,
+      132,
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 MySQL、Redis、RocketMQ 存储数据的点评类平台应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "一个基于**黑马点评**（大众点评类本地生活平台）的**深度魔改学习项目** ／ |数据访问|MyBatis-Plus 3.5（spring-boot3-starter）、MySQL 8（mysql-connector-j）| ／ - MySQL 8.x（库名 `dingping`，建表 SQL 见课程资料 `hmdp.sql`；闪赔审计表补丁见 `db/patch_payout_audit_log.sql`）",
+   "evidence_lines": [
+    5,
+    112,
+    132
+   ]
+  },
+  "fn": "Nina-noSchool/hmdp-ultra",
+  "sha": "817976de727d",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10770,5 +10770,171 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1826a5b060c2": {
+  "identity": {
+   "one_lmer": "自托管开源LMS，Next.js+PostgreSQL的在线课程学习平台",
+   "one_liner": "自托管开源 LMS，Next.js 应用，PostgreSQL 存储课程与订单数据",
+   "review": "这是一个开源可自托管的学习管理系统，提供课程目录、视频课堂、测验、人工批改作业、可验证证书以及 Stripe/Razorpay 订阅计费，并带 /admin 控制台；面向需要自营课程的教育机构、培训团队和课程创作者。数据存于 PostgreSQL，配合 Redis，本地可用 AWS 模拟器运行，生产通过 Terraform 部署 AWS。",
+   "highlights": [
+    "提供课程目录、视频课堂、测验、作业评审与公开可验证的证书",
+    "支持 Stripe 与 Razorpay 双支付网关，含订阅、优惠券与退款",
+    "提供 13 个 Terraform 模块，支持本地模拟器与 AWS 部署"
+   ],
+   "use_cases": [
+    "教育机构或培训团队自托管课程平台",
+    "个人创作者销售课程与订阅",
+    "需要本地/私有化部署的学习平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 16 ／ Visitors, learners, instructors, staff and the operator use one web app backed by the API, a worker, Postgres and Redis; the API calls Stripe, Razorpay, euron-video-system, S3, mail and an optional AI provider, and the first three send signed webhooks back ／ |API|Node.js 22, Express 5, Kysely on PostgreSQL 16 (full-text and trigram search), zod|",
+     "lines": [
+      8,
+      184,
+      267
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该 Web 应用由 API、worker、Postgres 和 Redis 支撑，用于存储课程与业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " PostgreSQL 16 ／ **Euron Open LMS** is an open-source, self-hosted **learning platform for an academy, a ／ |**Apps**|Web app (Next.js) with the `/admin` control plane, API, background worker, and a stubs server standing in for Stripe, Razorpay, OpenAI and euron-video-system|",
+   "evidence_lines": [
+    8,
+    34,
+    121
+   ]
+  },
+  "fn": "euron-sde-team/euron-open-lms",
+  "sha": "1826a5b060c2",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0bf4141b1e97": {
+  "identity": {
+   "one_liner": "GaussDB/openGauss 诊断智能体后端，网关+K8s 隔离用户环境",
+   "review": "该仓库是 GaussDB 数据库智能体项目的后端部分，包含接入网关、用户运行环境镜像与知识库导入环境三个组件，部署于 Kubernetes，按工号为每个用户提供隔离的 Pod 环境并运行 opencode 与 17 个诊断技能，状态存储在 NAS 卷上。面向实施、运维、开发与前端协作方，文档涵盖构建、部署、接口契约与测试；仓库不含前端，需与前端方联合接入。",
+   "highlights": [
+    "提供接入网关，实现工号认证、用户环境分配与对话/报告的反向代理，含 /admin/* 控制 API",
+    "每个用户运行隔离环境（opencode 1.18.27 + 17 个诊断技能 + 知识库只读查询），凭据经代理管理，模型 Key 不进模型容器",
+    "以契约测试约束前后端接口一致性，含技能、容器、网关、部署脚本四组测试"
+   ],
+   "use_cases": [
+    "在 Kubernetes 上为多个用户提供 GaussDB/openGauss 诊断对话服务的企业内部部署",
+    "需要按工号隔离运行环境并统一接入网关与身份认证（SSO）的场景",
+    "前后端分离协作下通过契约文件管理报告与对话接口的联合开发"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "text2sql"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "GaussDB 数据库智能体的**后端**：把 opencode 与 GaussDB / openGauss 诊断技能放进 Kubernetes。",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "GaussDB 数据库智能体的**后端**：把 opencode 与 GaussDB / openGauss 诊断技能放进 Kubernetes。",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|NAS|—|一个 RWX 卷|唯一的状态所在：`users/<工号>/`（会话、报告）、`kb/`（知识库与索引 `kb/index/store.sqlite`）|",
+     "lines": [
+      25
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该系统使用数据库存储会话/知识库索引（store.sqlite）并面向 GaussDB/openGauss 诊断服务，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "openGauss",
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "技能代码为 Apache License 2.0，仓库其余部分未说明许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "GaussDB 数据库智能体的**后端**：把 opencode 与 GaussDB / openGauss 诊断技能放进 Kubernetes。 ／ 每个用户一个隔离的环境（按需建 Pod，或固定池化的槽位），状态全部在 NAS 上；接入网关负责认身份、分配环境、反向代理。 ／ |NAS|—|一个 RWX 卷|唯一的状态所在：`users/<工号>/`（会话、报告）、`kb/`（知识库与索引 `kb/index/store.sqlite`）|",
+   "evidence_lines": [
+    3,
+    4,
+    25
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "sqlrush/gh_gs_k8s_agent",
+  "sha": "0bf4141b1e97",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

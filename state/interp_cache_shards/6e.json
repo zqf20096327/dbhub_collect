@@ -9375,5 +9375,153 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b2fd2304fbeb": {
+  "identity": {
+   "one_liner": "达梦数据库 Prometheus 监控指标采集器",
+   "review": "这是一个专为达梦 DM8 数据库设计的 Prometheus 采集器，通过 SQL 读取数据库性能视图并暴露 /metrics 端点，支持多数据源并发采集、自定义 SQL 指标、Basic Auth 与配置加密，并附带 Grafana 面板模板与告警规则，供需要监控达梦实例的运维人员部署使用；要求 DM8 及以上版本，v1.2.0 后采用 TOML 多数据源配置。",
+   "highlights": [
+    "支持同时采集多个达梦数据库实例的性能指标，提供 30+ 种监控指标",
+    "支持通过 SQL 定义自定义监控指标，无需修改源代码",
+    "提供内置 Grafana 8.5+ 面板模板与 Prometheus 告警规则"
+   ],
+   "use_cases": [
+    "多实例达梦数据库的统一性能监控与告警",
+    "基于自定义 SQL 采集业务或表空间级别的指标",
+    "配合 Grafana 构建达梦数据库监控面板"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "Dameng Exporter - 达梦数据库 Prometheus 监控采集器 ／ Dameng Exporter 是一个专为达梦数据库（DM8）设计的 Prometheus 监控数据采集器，提供全面的数据库性能指标采集和监控能力。",
+     "lines": [
+      1,
+      22
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为达梦数据库提供 Prometheus 指标采集组件，是为数据库生态服务的工具，不使用数据库存自身数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dameng Exporter 是一个专为达梦数据库（DM8）设计的 Prometheus 监控数据采集器，提供全面的数据库性能指标采集和监控能力。 ／ - 🚀 **多数据源支持** - 支持同时监控多个达梦数据库实例 ／ - 🐳 **容器化部署** - 提供 Docker 镜像，支持 amd64/arm64 架构",
+   "evidence_lines": [
+    22,
+    30,
+    38
+   ]
+  },
+  "fn": "gaoyuan98/dameng_exporter",
+  "sha": "b2fd2304fbeb",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "029747474d42": {
+  "identity": {
+   "one_liner": "自托管多用户间隔重复记忆卡服务，内置FSRS v6调度与MCP服务器",
+   "review": "Engram 是一个用 Go 编写的自托管间隔重复（SRS）闪卡服务，支持 10 种卡片类型、Markdown/TeX 渲染、多用户与卡组共享、OIDC 单点登录。内置 MCP 服务器提供 19 个工具供 LLM/代理创建、复习和导出卡片；存储层支持内嵌 SQLite（个人/测试）与 PostgreSQL（多用户部署），通过 Docker 部署。",
+   "highlights": [
+    "实现 FSRS v6 调度算法并支持自定义参数优化",
+    "内置 MCP 服务器，提供 19 个工具供 LLM 客户端搜索、创建、更新、复习和导出卡片",
+    "支持 SQLite 与 PostgreSQL 两种数据库驱动，提供 REST API 与 PWA"
+   ],
+   "use_cases": [
+    "个人或团队自托管间隔重复学习与记忆卡复习",
+    "通过 MCP 客户端（如 Claude Desktop、Cursor）以 AI 代理自动化卡片管理与复习流程",
+    "多用户场景下共享卡组并隔离各自的复习进度"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For multi-user deployments, PostgreSQL is recommended. ／ image: postgres:18 ／ |`DB_DRIVER`|Database driver (`sqlite` or `postgres`)|`postgres` (or `sqlite`)|",
+     "lines": [
+      86,
+      93,
+      133
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Uses an embedded SQLite database suitable for personal use or testing: ／ |`DB_DRIVER`|Database driver (`sqlite` or `postgres`)|`postgres` (or `sqlite`)| ／ |`DB_DSN`|Database connection string or SQLite file path|`postgres://user:pass@localhost:5432/engram?sslmode=disable`|",
+     "lines": [
+      72,
+      133,
+      134
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Engram 是使用 SQLite/PostgreSQL 存储自身数据的 SRS 应用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Uses an embedded SQLite database suitable for personal use or testing: ／ For multi-user deployments, PostgreSQL is recommended. ／ |`DB_DRIVER`|Database driver (`sqlite` or `postgres`)|`postgres` (or `sqlite`)|",
+   "evidence_lines": [
+    72,
+    86,
+    133
+   ]
+  },
+  "fn": "bestnite/engram",
+  "sha": "029747474d42",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

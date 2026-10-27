@@ -10802,5 +10802,159 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e33a78a73065": {
+  "identity": {
+   "one_liner": "AI 智能体共享记忆服务，模拟脑区分区+觉醒/睡眠周期，以 SQLite 存储",
+   "review": "该项目为多个 AI 智能体提供一份共享记忆库：13 个脑区分区组织、觉醒/睡眠循环、记忆防火墙与审计日志，智能体可通过 REST API、SDK 或 MCP 接入读写同一份记忆。默认零配置离线运行（规则+模板），可选接入 Claude/GPT/Gemini 等任意 LLM；存储为单文件 SQLite，Postgres 支持仅在路线图中。适合需要跨智能体共享、治理与查看记忆的团队。",
+   "highlights": [
+    "提供 REST API、SDK 与 MCP 三种接入方式，多智能体共享一份记忆",
+    "按关系设定 private/shared/global 作用域、写入策略与 append-only 审计日志",
+    "UI 实时展示请求经过 13 个脑区的调用轨迹，支持英/越/日三语"
+   ],
+   "use_cases": [
+    "多智能体共享知识、避免重复回答客户问题",
+    "需要记忆访问治理、防记忆投毒与审计的场景",
+    "带可视化追踪的智能体记忆系统搭建与演示"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **One SQLite file.** `docker compose up -d` and you have the API, the MCP server and the UI. No vector database, graph database or Postgres to run. ／ |Storage to run|**One SQLite file**|A vector store of your choice (Qdrant, pgvector, Chroma…)|The Letta server and its database|A graph database (Neo4j, FalkorDB, Kuzu, Neptune)| ／ Both go away with the move to PostgreSQL + pgvector (see the Roadmap).",
+     "lines": [
+      43,
+      53,
+      301
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **One SQLite file.** `docker compose up -d` and you have the API, the MCP server and the UI. No vector database, graph database or Postgres to run. ／ |Storage to run|**One SQLite file**|A vector store of your choice (Qdrant, pgvector, Chroma…)|The Letta server and its database|A graph database (Neo4j, FalkorDB, Kuzu, Neptune)| ／ Storage is **SQLite** via `better-sqlite3`. Prebuilt binaries exist for Linux, macOS and Windows; on other platforms `npm install` needs Python, make and a C++ compiler. Docker and an NVIDIA GPU are only needed to run a local model on vLLM.",
+     "lines": [
+      43,
+      53,
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用 SQLite 存储数据的智能体记忆应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **One SQLite file.** `docker compose up -d` and you have the API, the MCP server and the UI. No vector database, graph database or Postgres to run. ／ Storage is **SQLite** via `better-sqlite3`. Prebuilt binaries exist for Linux, macOS and Windows; on other platforms `npm install` needs Python, make and a C++ compiler. Docker and an NVIDIA GPU are only needed to run a local model on vLLM.",
+   "evidence_lines": [
+    43,
+    91
+   ]
+  },
+  "fn": "leluong141996-dev/Agent-Brain-Hub",
+  "sha": "e33a78a73065",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "13e712fcf8a1": {
+  "identity": {
+   "one_liner": "以段落为锚点的 PDF 论文阅读器，支持逐段翻译、AI 问答与笔记",
+   "review": "PaperLens 是一个本地运行的 PDF 论文阅读工具：将论文切分为段落块，用户可对任一段落翻译、提问或生成笔记，问答以整篇论文为上下文，数据存储在本地 SQLite 中。面向需要精读文献并留存问答记录的研究者。需要自行配置 OpenAI 兼容的模型接口，仅支持带文本层的 PDF。",
+   "highlights": [
+    "提供逐段翻译、以段落为锚点的 AI 问答与四种笔记模板，问答流式输出并支持 KaTeX 公式渲染",
+    "使用 PyMuPDF 等解析 PDF，实现双栏阅读顺序、断词修复与图表公式检测",
+    "阅读记录（笔记、问答、翻译）存储于本地 SQLite，可导出 Markdown，支持自定义壁纸皮肤"
+   ],
+   "use_cases": [
+    "精读英文论文时对特定段落翻译或提问",
+    "为论文整理结构化阅读笔记并导出 Markdown",
+    "本地管理个人文献库（分类、已读未读状态）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|SQLite|Blocks, translations, notes, conversations, paper notes| ／ | |- app/ API, parsing, retrieval, model calls, skins, SQLite",
+     "lines": [
+      146,
+      156
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身是使用数据库的应用，SQLite 仅作为其本地存储组件，README 未声称 SQLite 适配或为生态服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Storage|SQLite|Blocks, translations, notes, conversations, paper notes| ／ |- backend/ ／ Runtime data lives in `data/`: `library.db`, uploaded PDFs, your own skins and `agent.md`.",
+   "evidence_lines": [
+    146,
+    155,
+    162
+   ]
+  },
+  "fn": "ZaraSheven/PaperLens",
+  "sha": "13e712fcf8a1",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

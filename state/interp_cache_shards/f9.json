@@ -9319,5 +9319,130 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4150adf7c927": {
+  "identity": {
+   "one_liner": "本地优先的 MCP 记忆服务器，零依赖，用 SQLite 存储AI代理记忆",
+   "review": "Mnemosyne OS 是面向 AI 代理的本地优先 MCP 记忆服务器，提供 Python 库、CLI、HTTP API 和 MCP server 四种使用方式，数据存储在用户自己的 SQLite 文件中，无第三方依赖、可离线运行。工具名与 Mem0 兼容便于迁移，LLM/嵌入/向量存储适配器均可选并支持降级回退。适合需要在本地为 LLM 代理持久化对话记忆的开发者。",
+   "highlights": [
+    "提供 52 个 MCP 工具，工具名与 Mem0 兼容，现有客户端无需修改提示词即可切换",
+    "以 SQLite 文件存储记忆与向量，支持实体图、多信号检索（语义+BM25+图+时间+标签）与分层记忆",
+    "包含 SHA-256 哈希链审计账本与 verify_integrity 校验，LLM/嵌入/向量存储适配器均可独立选配并显式降级"
+   ],
+   "use_cases": [
+    "为 AI 代理/LLM 应用提供本地持久化记忆（MCP server 或 Python 库）",
+    "从 Mem0 等记忆方案迁移而无需改动现有提示词",
+    "离线或无 API key 环境下的记忆提取与检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "dependencies, SQLite on your own disk, 52 MCP tools with Mem0-compatible ／ Four-dimensional scoping <code>user_id</code> / <code>agent_id</code> / <code>run_id</code> / <code>app_id</code> — enforced by physical isolation : one SQLite file per scope, rather than shared rows with a filter applied. ／ Graph memory, always on Entity linking and multi-hop traversal live in the same SQLite file. No external graph database required.",
+     "lines": [
+      26,
+      207,
+      210
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 SQLite 作为自身记忆数据的内置存储，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 自托管无功能限制，另有付费 SaaS 托管版",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Local-first MCP memory server for AI agents.** Zero third-party ／ dependencies, SQLite on your own disk, 52 MCP tools with Mem0-compatible ／ Use it as a **Python library**, a **CLI**, an **HTTP API**, or an **MCP server**:",
+   "evidence_lines": [
+    25,
+    26,
+    36
+   ]
+  },
+  "fn": "MnemosyneOS/mnemosyne",
+  "sha": "4150adf7c927",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3cc6cf2498ad": {
+  "identity": {
+   "one_liner": "内存键值存储服务器，实现 Redis 协议（RESP2/RESP3）",
+   "review": "kvllay 是一个 C++ 编写的内存键值存储服务器，兼容 redis-cli 与官方 SDK。它实现字符串、列表、哈希等命令、AUTH 认证、事务、快照与 AOF 持久化、多 Reactor 网络引擎与分片锁，提供 Docker 镜像、预编译二进制和源码构建方式，面向需要内存键值服务的开发与运维场景。",
+   "highlights": [
+    "支持 RESP2/RESP3 协议、AUTH 认证、MULTI/EXEC 事务及字符串/列表/哈希等命令集",
+    "提供快照（dump.kvl）与 AOF 持久化，采用无 fork 的同步/异步写入实现",
+    "基于 epoll/WSAPoll 的多 Reactor 网络引擎，支持 32 路分片锁与可插拔分配器（jemalloc/mimalloc/libc）"
+   ],
+   "use_cases": [
+    "使用 redis-cli 或 Redis SDK 接入的内存缓存/键值存储场景",
+    "消息缓冲、任务队列、限流计数等基于列表与计数器结构的应用",
+    "需要轻量 Docker 镜像（<1.8 MB）或跨 Linux/Windows 部署的环境"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "它自身是数据库服务器而非为其他数据库服务的工具或普通应用，README 未界定其相对数据库生态的角色。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " In-memory key-value store ／ - **RESP2 Protocol**: full support for Redis command formats (arrays, bulk strings, errors, integers, inline commands). ／ - **Zero-Fork Persistence (Snapshots & AOF)**:",
+   "evidence_lines": [
+    4,
+    13,
+    52
+   ]
+  },
+  "fn": "thekeny/kvllay",
+  "sha": "3cc6cf2498ad",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

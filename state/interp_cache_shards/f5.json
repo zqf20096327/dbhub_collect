@@ -10481,5 +10481,232 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4d95d24497ee": {
+  "identity": {
+   "one_liner": "GitHub Action，在 CI 运行器上安装并启动 PostgreSQL 服务",
+   "review": "这是一个 GitHub Action，用于在 Linux、macOS 和 Windows 运行器上安装并启动 PostgreSQL 服务器，供后续 CI 步骤连接使用。可参数化指定大版本（15–18）、用户名、密码、端口、最大连接数，按需开启 SSL，并输出连接 URI 和服务名。面向需要在 CI 中跑集成测试或数据库相关作业的开发者。",
+   "highlights": [
+    "支持在 Linux、macOS 和 Windows 运行器（含 partner runners）上运行",
+    "PostgreSQL 大版本可参数化，支持 15、16、17、18",
+    "可按需开启 SSL，并将 PostgreSQL 客户端应用加入 PATH"
+   ],
+   "use_cases": [
+    "在 GitHub Actions CI 中为集成测试提供 PostgreSQL 实例",
+    "在 macOS/Windows 运行器上验证依赖 PostgreSQL 的项目",
+    "以固定版本和连接参数标准化 CI 中的数据库环境"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# setup-postgres ／ This action sets up a PostgreSQL server for the rest of the job. Here are some ／ * PostgreSQL version can be parametrized.",
+     "lines": [
+      1,
+      7,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该 Action 为 CI 作业安装和配置 PostgreSQL 服务器，是为数据库生态服务的工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This action sets up a PostgreSQL server for the rest of the job. Here are some ／ * PostgreSQL version can be parametrized. ／ |postgres-version|The PostgreSQL major version to install. Supported values: \"15\", \"16\", \"17\", \"18\".|`18`|",
+   "evidence_lines": [
+    7,
+    11,
+    25
+   ]
+  },
+  "fn": "ikalnytskyi/action-setup-postgres",
+  "sha": "4d95d24497ee",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "801e06c3ee59": {
+  "identity": {
+   "one_liner": "跨数据库 JavaFX 桌面客户端，保证 DECIMAL/Int64/Decimal128 精度无损",
+   "review": "Plainly 是一个 JavaFX 桌面数据库管理客户端，支持 MySQL、PostgreSQL、Oracle、SQL Server、达梦、SQLite、H2、Redis、MongoDB 等库。核心机制是用字符串作为值的唯一载体、单点转换和一致性精度测试来禁止有损数值转换，同时提供数据编辑、结构设计器、ER 图、导入导出、结构同步等功能。适合需要处理高精度十进制数据的开发与运维人员；Linux/macOS 打包未经真机验证。",
+   "highlights": [
+    "以字符串承载全部值，唯一转换点用 getBigDecimal/toPlainString 保证 DECIMAL(38,10)、Int64、Decimal128 端到端无损",
+    "提供数据网格编辑、表结构设计器、ER 图、数据字典、结构同步、导入导出、手动事务等管理功能",
+    "PrecisionConformanceTest 精度一致性测试作为新增数据库驱动的准入门槛"
+   ],
+   "use_cases": [
+    "需要精确查看和编辑高精度十进制数值（如金额字段）的场景",
+    "跨多种数据库（含达梦、openGauss、OceanBase 等国产库）的统一管理客户端",
+    "两库间结构比对、同步脚本生成与执行"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "▎ A cross-database desktop client that never lets a value pass through a double — DECIMAL(38,10), Int64 and Decimal128 stay exact end to end. MySQL, PostgreSQL, Oracle, SQL Server, DM, SQLite, H2, Redis, MongoDB. ／ 支持的数据库：MySQL / MariaDB、PostgreSQL、SQLite、H2、Oracle、达梦 DM8、SQL Server、 ／ 前面成功的那些已经生效且撤不回来。只有 PostgreSQL、SQLite、SQL Server 支持事务性 DDL。",
+     "lines": [
+      3,
+      96,
+      232
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "▎ A cross-database desktop client that never lets a value pass through a double — DECIMAL(38,10), Int64 and Decimal128 stay exact end to end. MySQL, PostgreSQL, Oracle, SQL Server, DM, SQLite, H2, Redis, MongoDB. ／ |服务器状态|连接数、慢查询这类实例指标；可结束卡住的会话（MySQL / PG）| ／ 支持的数据库：MySQL / MariaDB、PostgreSQL、SQLite、H2、Oracle、达梦 DM8、SQL Server、 ／ |MySQL 8.0.46|22 通过 / 0 不通过|通过（空串不是 NULL）|",
+     "lines": [
+      3,
+      90,
+      96,
+      366
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "▎ A cross-database desktop client that never lets a value pass through a double — DECIMAL(38,10), Int64 and Decimal128 stay exact end to end. MySQL, PostgreSQL, Oracle, SQL Server, DM, SQLite, H2, Redis, MongoDB. ／ 支持的数据库：MySQL / MariaDB、PostgreSQL、SQLite、H2、Oracle、达梦 DM8、SQL Server、 ／ |Oracle 23ai|18 通过 / 0 不通过 / 5 厂商行为|厂商行为，和改动前一致|",
+     "lines": [
+      3,
+      96,
+      367
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "▎ A cross-database desktop client that never lets a value pass through a double — DECIMAL(38,10), Int64 and Decimal128 stay exact end to end. MySQL, PostgreSQL, Oracle, SQL Server, DM, SQLite, H2, Redis, MongoDB. ／ 支持的数据库：MySQL / MariaDB、PostgreSQL、SQLite、H2、Oracle、达梦 DM8、SQL Server、",
+     "lines": [
+      3,
+      96
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "▎ A cross-database desktop client that never lets a value pass through a double — DECIMAL(38,10), Int64 and Decimal128 stay exact end to end. MySQL, PostgreSQL, Oracle, SQL Server, DM, SQLite, H2, Redis, MongoDB. ／ 支持的数据库：MySQL / MariaDB、PostgreSQL、SQLite、H2、Oracle、达梦 DM8、SQL Server、",
+     "lines": [
+      3,
+      96
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "支持的数据库：MySQL / MariaDB、PostgreSQL、SQLite、H2、Oracle、达梦 DM8、SQL Server、",
+     "lines": [
+      96
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "Redis、MongoDB、人大金仓 KingBase、OceanBase、GaussDB / openGauss。",
+     "lines": [
+      97
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "支持的数据库：MySQL / MariaDB、PostgreSQL、SQLite、H2、Oracle、达梦 DM8、SQL Server、 ／ Oracle、达梦、MongoDB 与 GaussDB / openGauss 已在真实实例上跑过一致性自检（见下）。 ／ |达梦 8.1.2|22 通过 / 0 不通过|**通过**|",
+     "lines": [
+      96,
+      99,
+      368
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "Redis、MongoDB、人大金仓 KingBase、OceanBase、GaussDB / openGauss。 ／ Oracle、达梦、MongoDB 与 GaussDB / openGauss 已在真实实例上跑过一致性自检（见下）。 ／ ## openGauss 的精度实测",
+     "lines": [
+      97,
+      99,
+      339
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "Redis、MongoDB、人大金仓 KingBase、OceanBase、GaussDB / openGauss。 ／ Oracle、达梦、MongoDB 与 GaussDB / openGauss 已在真实实例上跑过一致性自检（见下）。",
+     "lines": [
+      97,
+      99
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为跨数据库管理客户端，为连接和操作多种数据库提供界面工具，属数据库生态工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB",
+    "OceanBase",
+    "Dameng",
+    "openGauss",
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "▎ A cross-database desktop client that never lets a value pass through a double — DECIMAL(38,10), Int64 and Decimal128 stay exact end to end. MySQL, PostgreSQL, Oracle, SQL Server, DM, SQLite, H2, Redis, MongoDB. ／ 跨数据库管理工具。JavaFX 桌面应用，出 Windows、Linux、macOS 三个平台的安装包。 ／ 支持的数据库：MySQL / MariaDB、PostgreSQL、SQLite、H2、Oracle、达梦 DM8、SQL Server、",
+   "evidence_lines": [
+    3,
+    5,
+    96
+   ]
+  },
+  "fn": "dhsolo/plainly",
+  "sha": "801e06c3ee59",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

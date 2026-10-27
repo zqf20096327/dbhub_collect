@@ -9182,5 +9182,214 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "95e1dda68b02": {
+  "identity": {
+   "one_liner": "AI 编码代理的本地项目记忆与证据层，索引仓库到 SQLite",
+   "review": "为 AI 编码代理提供本地优先的项目记忆：将 Git 仓库索引为项目级 SQLite 库，记录符号、导入、证据与时间状态，并通过 CLI/MCP 输出带证据标签和 token 预算的上下文包，供多智能体主机会话续接使用。当前为 v1.1.0-alpha.11 早期版本，支持 Windows/macOS/Linux，联邦共享默认关闭。",
+   "highlights": [
+    "将仓库索引为项目级 SQLite 库，读取内容哈希、符号、导入与证据并保留时间状态",
+    "提供本地 stdio MCP 及 Codex、Claude Code、Cursor 等主机的接入配方",
+    "支持查询只读访问、写入队列、加密联邦作用域与离线同步"
+   ],
+   "use_cases": [
+    "AI 编码代理会话续接与上下文准备",
+    "项目移交与决策记录回顾",
+    "本地私有项目的证据溯源与漂移检测"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Keep project data private|Local SQLite, no telemetry, no cloud database, explicit capture grants| ／ Rta-Smriti indexes the canonical Git checkout into project-scoped SQLite. It records ／ CLI and MCP context retrieval use validated query-only SQLite connections. Watcher,",
+     "lines": [
+      68,
+      100,
+      126
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为 AI 编码代理生态提供基于 SQLite 的项目记忆工具，SQLite 是其存储实现而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Rta-Smriti indexes the canonical Git checkout into project-scoped SQLite. It records ／ |Use multiple AI coding hosts|Local stdio MCP plus recipes for Codex, Claude Code, Cursor, Zed, OpenCode, and Gemini CLI| ／ > **Current maturity:** `v1.1.0-alpha.11` is an advanced early-adopter release for Windows,",
+   "evidence_lines": [
+    100,
+    67,
+    33
+   ]
+  },
+  "fn": "sulabhdubey/rta-smriti-brain",
+  "sha": "95e1dda68b02",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b2569aeee3de": {
+  "identity": {
+   "one_liner": "本地运行的 iOS/macOS 文档问答应用，含OCR、混合检索与引用溯源",
+   "review": "一款在本地设备上处理 PDF、Office、音视频等文件的文档问答应用：构建私有索引，用向量+BM25 混合检索生成带页码引用的回答。面向需要在本地处理医疗、法律、财务等私有文档的 Apple 平台用户。索引、检索、验证全部离线执行，可选 Apple Private Cloud Compute 参与生成答案，使用 SQLite FTS5 与 BNNS 向量库存储索引。",
+   "highlights": [
+    "本地执行导入、索引、检索、排序与验证，不上传文件",
+    "向量检索与 BM25 并行运行，经 RRF 融合与交叉编码器重排",
+    "支持 Siri/快捷指令/Spotlight 集成与 iCloud 库同步"
+   ],
+   "use_cases": [
+    "在 iPhone/Mac 上对私有 PDF 与扫描件提问并核对引用来源",
+    "离线环境下的文档检索与问答",
+    "通过快捷指令与 Siri 调用文档库查询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Indexing**|`SQLiteFullTextService.swift`, `BNNSVectorDatabase.swift`|SQLite FTS5 and BNNS-accelerated vector storage|",
+     "lines": [
+      153
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述其为使用 SQLite FTS5 与 BNNS 向量库做本地存储的终端应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "them, builds a private searchable index, and answers questions about them with ／ **It runs on your device.** Ingestion, indexing, retrieval, ranking, and ／ |**Indexing**|`SQLiteFullTextService.swift`, `BNNSVectorDatabase.swift`|SQLite FTS5 and BNNS-accelerated vector storage|",
+   "evidence_lines": [
+    13,
+    18,
+    153
+   ]
+  },
+  "fn": "Gunnarguy/OpenIntelligence",
+  "sha": "b2569aeee3de",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b31806c9dd16": {
+  "identity": {
+   "one_liner": "Brawlhalla 玩家数据追踪应用，含 Web、Discord 机器人与桌面覆盖层",
+   "review": "这是一个 Brawlhalla 游戏玩家追踪系统，提供玩家统计、排行榜、氏族、评分历史和对手信息，包含 Web 应用、Discord 机器人和 Windows 桌面覆盖层。使用 Bun + Next.js + Hono + tRPC 开发，持久层为 PostgreSQL 16 + Drizzle ORM，通过 Brawlhalla API 获取数据，本地以 Docker Compose 和源码方式运行。",
+   "highlights": [
+    "提供玩家档案、排行榜、氏族和评分历史等玩家数据功能",
+    "包含 Discord 机器人 slash 命令与 Windows 桌面对手检测覆盖层",
+    "使用 PostgreSQL 实现刷新、调度、重试和去重等持久化操作"
+   ],
+   "use_cases": [
+    "追踪 Brawlhalla 玩家排名与评分历史",
+    "通过 Discord 查询玩家和氏族信息",
+    "对局中查看对手实时信息"
+   ],
+   "verification_notes": "——"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Durable refresh operations:** PostgreSQL-backed refresh, ranking, discovery, and projection work ／ |Data|PostgreSQL 16 + Drizzle ORM|",
+     "lines": [
+      21,
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PostgreSQL 用于存储该应用的刷新、调度等持久化数据（L21、L33、L46），项目本身是面向 Brawlhalla 玩家的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Durable refresh operations:** PostgreSQL-backed refresh, ranking, discovery, and projection work ／ |Data|PostgreSQL 16 + Drizzle ORM|",
+   "evidence_lines": [
+    21,
+    46
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "NickTacke/brawltome",
+  "sha": "b31806c9dd16",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

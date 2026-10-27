@@ -11392,5 +11392,155 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0a277b04a482": {
+  "identity": {
+   "one_liner": "本地优先的 AI 简历工作台，FastAPI+React+SQLite 单机应用",
+   "review": "一个面向求职者的桌面/自托管简历工作台，覆盖岗位解析、AI 定制简历生成、事实台账防虚构、多格式导出、自动投递与模拟面试等流程。数据以 SQLite 存于本机，需自配模型服务商接口才能用 AI 功能，不配模型时解析、检查、导出等本地功能仍可用。",
+   "highlights": [
+    "提供岗位解析、AI 简历生成、匹配度分析、模拟面试、投递管理与求职统计等模块",
+    "事实台账机制：仅用户确认过的事实参与生成，生成结果与资料库比对并给出防虚构警告",
+    "支持 PDF/Word/Markdown/纯文本/JSON/HTML 六种格式导出与一键脱敏"
+   ],
+   "use_cases": [
+    "求职期间集中管理岗位、简历版本与投递进度",
+    "需要按岗位 JD 定制简历并核对内容真实性",
+    "离线或本地环境下制作与导出简历"
+   ],
+   "分类说明": "作为使用 SQLite 存储数据的应用，不针对数据库生态提供服务"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**简历和资料存在哪**|你自己电脑上的本地数据目录（SQLite + 附件），可随时整份拷走|对方的服务器，导出要走会员| ／ 简历通架构图：React 前端 → 同源 /api → FastAPI 后端 → 本地 SQLite / 你配置的模型服务商 / 本机浏览器",
+     "lines": [
+      50,
+      378
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明数据以本地 SQLite 存储，该项目是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**简历和资料存在哪**|你自己电脑上的本地数据目录（SQLite + 附件），可随时整份拷走|对方的服务器，导出要走会员| ／ **本地优先的 AI 简历工作台：不注册、不登录，数据只存在你自己的电脑上。**",
+   "evidence_lines": [
+    50,
+    13
+   ]
+  },
+  "fn": "magicapple123/ResumeForge",
+  "sha": "0a277b04a482",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "becd07b85adb": {
+  "identity": {
+   "one_liner": "自托管读书摘录管理应用，用 SQLite 存储书籍、笔记与写作",
+   "review": "Nostos 是一个开源自托管的摘录本应用，面向读书和写作者，支持阅读 EPUB、PDF 和有声书，保存带出处的段落笔记，并在写作室中引用。它以单个 Docker 容器运行，数据（含 SQLite 数据库）存于本地卷，技术栈为 .NET 10 + Angular。它只是一个使用 SQLite 存数据的应用，而非数据库生态工具。",
+   "highlights": [
+    "支持阅读 EPUB、PDF、TXT、MOBI 及多种格式有声书",
+    "以单个 Docker 容器本地运行，使用 SQLite 存储数据",
+    "支持笔记导出为 Markdown 和 .nostos 备份归档"
+   ],
+   "use_cases": [
+    "个人阅读与摘录笔记管理（自托管）",
+    "带引注的写作与草稿整理",
+    "本地优先的书库管理与全文检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Own your data:** Runs locally as a single Docker container with SQLite. Export notes and highlights as plain Markdown or full `.nostos` backups anytime. ／ Nostos is one product with two deployments. **SelfHosted** (this repository) runs on its own with SQLite, local files, local backups and your own AI provider. **Nostos Cloud** adds private hosting pieces (sign-in, managed storage, billing, managed AI) around t ／ ├── Nostos.Backend/ # the SelfHosted host: SQLite, local files, backups, your own AI keys",
+     "lines": [
+      33,
+      153,
+      158
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **For developers and agents:** REST API · Library skill for agents · Deployment capabilities · PostgreSQL compatibility",
+     "lines": [
+      173
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个自托管读书写作应用，SQLite 只是其内置的本地存储数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " - **Own your data:** Runs locally as a single Docker container with SQLite. Export notes and highlights as plain Markdown or full `.nostos` backups anytime. ／ Nostos is one product with two deployments. **SelfHosted** (this repository) runs on its own with SQLite, local files, local backups and your own AI provider. **Nostos Cloud** adds private hosting pieces (sign-in, managed storage, billing, managed AI) around the same product and the same app. See the public/private boundary. ／ ├── Nostos.Backend/    # the SelfHosted host: SQLite, local files, backups, your own AI keys",
+   "evidence_lines": [
+    33,
+    153,
+    158
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Christian-Gennari/Nostos",
+  "sha": "becd07b85adb",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

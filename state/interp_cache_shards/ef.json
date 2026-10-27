@@ -10421,5 +10421,215 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "07fc396fcd0a": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的自托管长期记忆引擎，提供混合检索与认知治理",
+   "review": "aiduMEI 是一个为 AI Agent 提供长期记忆的单机自托管服务：宿主（MCP 客户端、Hermes、Claude Code 等）管短期对话，它通过读/写/萃取三条钩子负责长期记忆的写入、检索与会话提炼，内置向量+BM25 混合检索、遗忘曲线、记忆图谱与 Web 控制台。存储使用嵌入式向量库与 SQLite，面向需要给 Agent 加记忆能力的开发者与运维者。README 自述处于功能快速迭代期，跑分数据为试跑读数，作者声明不可复现。",
+   "highlights": [
+    "提供记忆读写/萃取钩子与 REST API，接入 Hermes、Claude Code、Cursor 等 MCP 客户端宿主",
+    "实现向量 + 中文 BM25/trigram + cross-encoder 混合检索、六型记忆分类与记忆图谱（graph_memory）",
+    "提供零构建 Web 控制台（/ui）用于记忆查看、调整、溯源与 Markdown 导出"
+   ],
+   "use_cases": [
+    "为 LLM Agent 增加跨会话长期记忆注入与自动写入",
+    "自托管环境下对 Agent 记忆进行可视化查看、溯源与导出",
+    "多模型供应商切换场景下的记忆检索与分类（可配置决策模型）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**共同项**：CPU 2 核足够、闲时 < 1%；`/search` 单次 0.14~0.23s；冷启动 5.2s；数据盘千级记忆约 13 MB 向量 + 数百 KB SQLite；前端 0 依赖；Python 3.10–3.12。 ／ > 其余的轻是刻意设计：向量库嵌入式落盘（无独立进程/端口）、不吃 GPU、相关性闸门先拦闲聊、SQLite+FTS5 兜底。一句话：**云端档 1 核 1G 跑得动；自动挡/本地档建议 2 核 2G 起步。**",
+     "lines": [
+      277,
+      282
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 与嵌入式向量库存数据，属于使用数据库的 AI 记忆服务，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 让你的 AI Agent **真正记住你**：混合检索 + 认知治理 + 可视化控制台 + 双引擎自动挡，**单机自托管**，MIT。 ／ > 宿主（Hermes / Claude Code / Codex CLI / Cursor / 任何 MCP 客户端）管短期对话，aiduMEI 管长期记忆。",
+   "evidence_lines": [
+    5,
+    6
+   ]
+  },
+  "fn": "monkey2jack/aiduMEI",
+  "sha": "07fc396fcd0a",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cb1fbf285966": {
+  "identity": {
+   "one_liner": "基于单文件 SQLite 的 MCP 记忆服务器与 Graph RAG 工具",
+   "review": "该项目把用户已有的 markdown 笔记（含 Obsidian vault）索引为向量加 wikilink 图，提供 MCP 服务器和 CLI，使 Claude Code、Cursor、Codex 等 MCP 客户端在会话间保持长期记忆。向量检索找入口、手工 wikilink 做图扩展、交叉编码器重排，全部状态持久化在一个 SQLite 文件里，无需图数据库和 ETL。项目自述为 pilot 状态，无增量索引，测试覆盖不均。",
+   "highlights": [
+    "提供 MCP 服务器与 CLI（sgm-index/sgm-ask/sgm-mcp/sgm-stats），pip 可安装",
+    "用单个 SQLite 文件持久化向量索引、每轮台账与遥测，无图数据库、无 ETL、无服务器",
+    "支持 A/B 对比查询（--ab）与可复现的公开基准 bench/，含召回率、逐字引用与拒答指标"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Codex 等编码代理提供跨会话的长期记忆",
+    "对已有 Obsidian/Logseq/纯 markdown 笔记库做图增强的关联检索",
+    "在本地笔记语料上运行和对比向量检索与图检索的召回效果"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One SQLite file, no graph database, no ETL pass, no server.** ／ SQLite is the only database (`schema.sql`).",
+     "lines": [
+      12,
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目将 SQLite 作为自身的嵌入式存储，为 AI 代理提供记忆服务，而非为数据库生态服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Long-term memory for coding agents that lives in the notes you already keep: an MCP server ／ Graph RAG on SQLite for AI agents — a working pilot, not a framework. It is the extracted ／ SQLite is the only database (`schema.sql`).",
+   "evidence_lines": [
+    5,
+    61,
+    65
+   ]
+  },
+  "fn": "tonydzi/sqlite-graph-memory",
+  "sha": "cb1fbf285966",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ba7d2cc463eb": {
+  "identity": {
+   "one_liner": "无密钥多主题解析器，将 Reddit/论坛/搜索结果聚合写入 SQLite+FTS5",
+   "review": "一个 Python 编写的多源内容解析与聚合系统，把 Reddit、Discourse/HN 等论坛、多家搜索引擎、X/Twitter 及商品卡片抓取进同一 SQLite+FTS5 库，含去重、评分、滥用信息标注，并提供 Web 面板与 Telegram 机器人（订阅、频道推送、搜索命令）。面向 OSINT 与技术情报收集者；安装需 pip 装依赖，付费搜索 API 可选配钥匙，869 个内置源。",
+   "highlights": [
+    "内置 589 个源（869 条目）覆盖论文、公司博客、社区、安全资讯等 9-11 类，每源独立适配器并可开关",
+    "提供 Web 面板（feed/来源/运行/abuse 视图、CSV 导出）和 Telegram 机器人（/new /abuse /find 等命令、频道自动推送）",
+    "支持多个无需 API 密钥的提供方（Reddit pushpush、DuckDuckGo/Bing/Mojeek HTML、fxtwitter），付费提供方按环境密钥自动启用"
+   ],
+   "use_cases": [
+    "技术/安全情报的持续采集与全文检索",
+    "构建个人 OSINT 信息流并经 Telegram 频道分发",
+    "追踪 LLM/AI 领域的发布、模型与基准榜单动态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Один парсер под любую тему: Reddit, форумы, поисковики, X/Twitter, карточки товаров и платные search-API — в одну SQLite-базу с FTS5, дедупом и рейтингом. ／ |соединения SQLite|`with conn()` коммитит без `close()`: 200 вызовов → +76 хендлов|`with db()` (commit/rollback/close): 200 вызовов → +0| ／ Состояние источников — таблицы `source_flags` и `source_custom` в той же SQLite (`data/omni.sqlite3`).",
+     "lines": [
+      21,
+      96,
+      166
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为解析数据的存储后端使用，项目本体是采集解析应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Один парсер под любую тему: Reddit, форумы, поисковики, X/Twitter, карточки товаров и платные search-API — в одну SQLite-базу с FTS5, дедупом и рейтингом. ／ python -m omni serve --port 8077 ／ pip install -r requirements.txt",
+   "evidence_lines": [
+    21,
+    53,
+    110
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Eveningzumpassage/omni-parse",
+  "sha": "ba7d2cc463eb",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

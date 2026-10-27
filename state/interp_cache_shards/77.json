@@ -11103,5 +11103,143 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c7fe16bc5790": {
+  "identity": {
+   "one_liner": "Node.js 的 Microsoft SQL Server 客户端驱动库",
+   "review": "node-mssql 是 Node.js 平台访问 SQL Server 的客户端库，默认使用纯 JavaScript 实现的 Tedious 驱动，可选配 MSNodeSQLv8 原生驱动以支持 Windows 认证。提供连接池、事务、预编译语句、流式读取等能力，适合需要在 Node 应用中读写 SQL Server 的开发者。",
+   "highlights": [
+    "默认基于 Tedious 纯 JavaScript 驱动，可跨平台运行，可选 MSNodeSQLv8 原生驱动",
+    "内置连接池管理，支持全局连接池与自定义多池管理",
+    "支持事务、预编译语句、流式读取大结果集与参数化查询防注入"
+   ],
+   "use_cases": [
+    "Node.js 应用连接和查询 SQL Server 数据库",
+    "需要处理大量行数据的流式读取场景",
+    "Express 等 Web 应用中维护复用数据库连接池"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "# node-mssql ／ **Microsoft SQL Server client for Node.js** ／ - [MSNodeSQLv8][msnodesqlv8-url] (Microsoft / Contributors Node V8 Driver for Node.js for SQL Server, v2-v6 native - Windows or Linux/macOS 64 bits only)",
+     "lines": [
+      1,
+      3,
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQL Server 提供 Node.js 客户端驱动/连接能力，是数据库生态中的开发库组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Microsoft SQL Server client for Node.js** ／ - [Tedious][tedious-url] (pure JavaScript - Windows/macOS/Linux, default) ／ An important concept to understand when using this library is Connection Pooling as this library uses connection pooling extensively. As one Node JS process is able to handle multiple requests at once, we can take advantage of this long running process to create a pool of database connections for reuse; this saves overhead of connecting to the database for each request",
+   "evidence_lines": [
+    3,
+    9,
+    204
+   ]
+  },
+  "fn": "tediousjs/node-mssql",
+  "sha": "c7fe16bc5790",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a22c53043fd8": {
+  "identity": {
+   "one_liner": "记录照片 EXIF 参数的 Next.js 摄影博客模板，数据存于 Postgres",
+   "review": "一个基于 Next.js 的照片博客模板，上传照片时提取光圈、快门、ISO 等 EXIF 信息展示，支持标签组织、无限滚动、OG 图片生成、AI 文本描述等。面向想自建摄影展示站的摄影师，通过 Vercel 一键部署，需要 Vercel Postgres 与 Blob 存储，可切换为其他兼容 Postgres 的供应商。",
+   "highlights": [
+    "上传照片时自动提取 EXIF 相机参数（光圈、快门、ISO）",
+    "支持 AI 生成照片标题/描述/标签，可通过 Vercel AI Gateway 或 OpenAI 兼容端点配置",
+    "提供自动 OG 图片生成、RSS/JSON feed、按标签/相机/镜头等维度的分类与排序配置"
+   ],
+   "use_cases": [
+    "摄影师自建展示作品的照片博客",
+    "需要记录并展示拍摄参数的个人图片站",
+    "基于 Vercel 快速部署的可定制 Next.js 模板项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. Add required storage (Vercel Postgres + Vercel Blob) as part of template installation",
+     "lines": [
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是将数据（照片元信息）存储在 Vercel Postgres 中的博客应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "2. Add required storage (Vercel Postgres + Vercel Blob) as part of template installation ／  - _Preferred postgres provider: Neon, from Vercel Marketplace_",
+   "evidence_lines": [
+    47,
+    49
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "sambecker/exif-photo-blog",
+  "sha": "a22c53043fd8",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

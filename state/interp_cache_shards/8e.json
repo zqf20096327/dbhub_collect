@@ -8535,5 +8535,145 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "85c12514d2a7": {
+  "identity": {
+   "one_liner": "自托管项目管理工具，含看板、依赖图、自动化与 MCP 支持",
+   "review": "Kanera 是一个项目管理应用，提供看板、表格、日历、依赖地图等多种视图，支持任务、标签、自定义字段、触发式自动化和实时协作。面向需要跨项目、跨团队协调工作的团队，可使用托管服务或自托管。它基于 Angular、Fastify、PostgreSQL 与 Drizzle ORM 构建，并提供 REST API、CLI、SDK 和 MCP 服务器供 AI 代理接入。",
+   "highlights": [
+    "提供 Kanban、Table、Calendar、Dependencies、Timeline 等多种视图，支持跨看板的 Blocks/Blocked by 依赖链",
+    "提供 MCP server、CLI、TypeScript SDK 和 REST API/webhooks 接入层，支持 AI 代理领取和更新卡片",
+    "支持基于触发的自动化、多渠道通知（Slack/Discord/Telegram/Zulip/ntfy/Gotify）和实时协作"
+   ],
+   "use_cases": [
+    "团队跨项目、跨客户的任务分配与进度跟踪",
+    "通过依赖地图和时间线识别阻塞工作与关键路径",
+    "将 AI 编码代理接入工作流，指派任务并追踪代理执行进度"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Kanera is a pnpm monorepo built with Angular 22, Fastify 5, Socket.IO 4, PostgreSQL 18, Drizzle ORM, and Valkey. ／ The example environment uses PostgreSQL on `localhost:5433` and Valkey on `localhost:6379`. Replace `JWT_SECRET` and `MEDIA_SIGNING_SECRET` with unique random values before exposing the application outside your machine. See `.env.full.example` for optional set",
+     "lines": [
+      223,
+      249
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Kanera 是使用 PostgreSQL 存储数据的项目管理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Use the hosted service and get started in minutes, or self-host Kanera on your own infrastructure.",
+   "evidence_lines": [
+    13
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "happendev/Kanera",
+  "sha": "85c12514d2a7",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "633a54a97e1d": {
+  "identity": {
+   "one_liner": "自托管 iOS 推送通知服务器，curl 发送、手机回复，用 Go+SQLite 存储",
+   "review": "这是一个自托管的 iOS 推送通知服务：用户脚本通过一次 curl 发送消息，服务器经 APNs 推送到 iPhone，iOS 应用可查看历史并回传按钮、输入框等交互结果。整个服务为一个 Go 二进制加一个 SQLite 文件，无需独立数据库或 Redis，支持 MCP 端点供 agent 调用，提供 Docker、二进制和源码部署方式。适合需要向自己 iPhone 推送脚本或任务通知并收集回复的开发者和自托管用户。",
+   "highlights": [
+    "支持通过 curl 以纯文本、查询串、multipart 或 JSON 发送消息，正文支持 Markdown、表格、代码和图片且无长度限制",
+    "支持交互回复：按钮、复选框、滑块、文本输入，答案以签名 POST 回调到指定 URL",
+    "提供基于 streamable HTTP 的 MCP 端点，并支持 send/batch 批量发送与多设备历史同步"
+   ],
+   "use_cases": [
+    "脚本或 CI 任务完成后向 iPhone 推送构建结果等通知",
+    "agent 通过 MCP 端点发送通知并接收用户回复",
+    "自托管场景下保存消息历史并供多台设备同步查看"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Knockbox is one Go binary and one SQLite file. It stores your messages, pushes them",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 存储自己的消息数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Knockbox is one Go binary and one SQLite file. It stores your messages, pushes them ／ **No database server, no Redis** — the whole thing is a binary and a `.db` file. ／ |**An endpoint for agents**|The same credential is an MCP endpoint over streamable HTTP, exposing one tool. →|",
+   "evidence_lines": [
+    18,
+    60,
+    71
+   ]
+  },
+  "fn": "aichy126/knockbox",
+  "sha": "633a54a97e1d",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

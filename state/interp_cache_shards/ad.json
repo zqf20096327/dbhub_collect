@@ -10738,5 +10738,72 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "48a2eed280d6": {
+  "identity": {
+   "one_liner": "轻量自托管应用监控工具，Go 单二进制采集指标存入 SQLite 并内置历史图表",
+   "review": "StatLite 是一个面向 VPS 和小型服务器的自托管应用监控工具，用 Go 编写，单个二进制即可轮询多个应用端点，将流量、延迟、CPU、内存等指标存入本地 SQLite 并内置历史图表，无需 Prometheus/Grafana。提供 Spring Boot、Quarkus、Micronaut 集成及通用 JSON 指标端点。注意：无内置仪表盘/API 认证，远程暴露需自行处理访问安全。",
+   "highlights": [
+    "单个 Go 二进制轮询多个应用，指标存储在本地 SQLite，不向第三方 SaaS 发送指标",
+    "支持 Spring Boot Actuator、Quarkus、Micronaut 及任意语言的 JSON 指标端点（FastAPI、Express、Django 等有集成指南）",
+    "通过 Homebrew、安装脚本或官方 Docker 镜像（amd64/arm64）运行"
+   ],
+   "use_cases": [
+    "为资源受限的小型服务器/VPS 上的应用采集流量、延迟与健康指标",
+    "不部署 Prometheus/Grafana 技术栈时的轻量监控替代运行方案",
+    "通过固定 JSON 指标端点接入任意语言编写的应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "metrics locally in SQLite, and provides built-in historical",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该监控工具自身的本地指标存储被使用，并非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "on VPSs and small servers. One Go binary polls multiple applications, stores ／ metrics locally in SQLite, and provides built-in historical ／ StatLite is built for resource-constrained servers.",
+   "evidence_lines": [
+    10,
+    11,
+    25
+   ]
+  },
+  "fn": "PVRLabs/statlite",
+  "sha": "48a2eed280d6",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

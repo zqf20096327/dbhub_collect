@@ -10280,5 +10280,219 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e897c55c4f97": {
+  "identity": {
+   "one_liner": "Postgres 语言服务器，基于 libpg_query 提供 LSP 工具链",
+   "review": "为 Postgres 开发提供的语言工具集合与 LSP 实现，基于 Postgres 自身解析器 libpg_query 保证语法兼容，通过 LSP、CLI、HTTP API 和 WebAssembly 模块提供自动补全、类型检查、诊断、格式化与迁移/数据库 lint 等功能，适用于在 VSCode、Neovim、Zed 等编辑器中开发 Postgres 的开发者。",
+   "highlights": [
+    "基于 libpg_query 解析器，通过 LSP、CLI、HTTP API 与 WebAssembly 提供功能",
+    "支持自动补全、悬停提示、语法诊断、类型检查、格式化",
+    "支持迁移 lint、数据库 lint 及 PL/pgSQL"
+   ],
+   "use_cases": [
+    "在编辑器中获得 Postgres SQL 的补全与类型检查",
+    "对数据库迁移文件进行 lint 检查",
+    "集成到自有工具链（HTTP API / WASM）中做 SQL 分析"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres Language Server ／ A collection of language tools and a Language Server Protocol (LSP) implementation for Postgres, focusing on developer experience and reliable SQL tooling. ／ This project provides a toolchain for Postgres development, built on Postgres' own parser `libpg_query` to ensure 100% syntax compatibility. It is built on a Server-Client architecture with a transport-agnostic design. All features can be accessed through the ",
+     "lines": [
+      1,
+      3,
+      15
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Postgres 开发提供 LSP 与 SQL 工具链的组件，本身不存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " A collection of language tools and a Language Server Protocol (LSP) implementation for Postgres, focusing on developer experience and reliable SQL tooling. ／ This project provides a toolchain for Postgres development, built on Postgres' own parser `libpg_query` to ensure 100% syntax compatibility. It is built on a Server-Client architecture with a transport-agnostic design. All features can be accessed through the Language Server Protocol, a CLI, HTTP APIs, and a WebAssembly module. The goal is to make all the great Postgres tooling out there as accessible as possible, and to build anything that is missing ourselves.",
+   "evidence_lines": [
+    3,
+    15
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "supabase-community/postgres-language-server",
+  "sha": "e897c55c4f97",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "893dd30ee5df": {
+  "identity": {
+   "one_liner": "自托管 GEO 分析系统，观测 AI 爬虫与 AI 引荐流量",
+   "review": "GeoPulse 是一个自托管的 GEO（生成式引擎优化）分析应用，把访客行为、AI 爬虫活动、内容目录覆盖、AI 回答观测和 AI 引荐转化五类数据汇入同一站点上下文。面向企业站、内容站、媒体站、开发者文档及服务多站点的 GEO 团队。技术栈为 Fastify + PostgreSQL 16，通过 docker compose 部署，跟踪无 cookie，日志需手动导入，v1 导入为同步执行、无外部队列。",
+   "highlights": [
+    "汇总五类数据线：访客行为、AI 爬虫活动、内容目录覆盖、AI 回答观测、AI 引荐转化",
+    "每个指标携带五种状态（known/known_zero/missing_input/insufficient/unsupported），缺失不渲染为零",
+    "支持导入 nginx/apache/cloudfront/JSON 格式访问日志及 sitemap/CSV/JSON 内容目录，IP 经每日盐值哈希后丢弃"
+   ],
+   "use_cases": [
+    "监测 AI 爬虫对站点页面的抓取与覆盖盲区",
+    "追踪 AI 搜索带来的引荐会话与转化",
+    "多站点组合的内容覆盖与抓取新鲜度巡检"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Stack: Fastify + PostgreSQL 16",
+     "lines": [
+      8
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明技术栈 Fastify + PostgreSQL 16，数据库用于存储该分析应用自身的数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Stack: Fastify + PostgreSQL 16 ／ Self-hosted GEO (Generative Engine Optimization) analytics for websites and AI crawlers. It puts five data lines into one site context: **visitor behaviour**, **AI crawler activity**, **content catalogue coverage**, **AI answer observations**, and **AI referral conversions**.",
+   "evidence_lines": [
+    8,
+    23
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "lklbar666/geopulse",
+  "sha": "893dd30ee5df",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "92bca3b487b1": {
+  "identity": {
+   "one_liner": "自托管后端，兼容 Firebase 官方 SDK，单 Go 二进制加 PostgreSQL",
+   "review": "Aruma 是一个自托管的 Firebase 替代后端，用 Go 实现认证、Realtime Database 等服务，客户端继续使用官方 Firebase SDK，仅替换配置文件。数据存储于 PostgreSQL，并依赖其行级安全实现项目隔离。适合希望自托管 BaaS 后端的开发者；目前 pre-1.0，Security Rules、Cloud Storage 与 Firestore 尚未完成。",
+   "highlights": [
+    "提供与官方 Firebase SDK（Web/iOS/Android/Flutter/Admin）协议兼容的自托管后端服务",
+    "使用 PostgreSQL 存储数据，通过行级安全实现项目间隔离",
+    "内置 Web 管理控制台与 arumactl CLI，提供项目、用户、规则与数据管理"
+   ],
+   "use_cases": [
+    "自托管替换 Firebase 后端，保留现有客户端 SDK 代码",
+    "需要自有 PostgreSQL 数据存储的多项目移动/Web 应用后端",
+    "本地或私有服务器上运行认证与实时数据库服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "One Go binary and PostgreSQL. Your apps keep the official SDKs and your application code does not change.",
+     "lines": [
+      4
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|`test/`|Acceptance, isolation, compatibility, oracle and smoke tests|",
+     "lines": [
+      131
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以 PostgreSQL 作为自身数据存储运行后端服务，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One Go binary and PostgreSQL. Your apps keep the official SDKs and your application code does not change. ／ - **Own your data.** Run it on a cheap VPS, on your own servers, or wherever PostgreSQL runs. One binary, one database, no per-operation billing. ／ Aruma is pre-1.0 and under active development. Services land one at a time, each closed with a compatibility report before the next one starts.",
+   "evidence_lines": [
+    4,
+    20,
+    28
+   ]
+  },
+  "fn": "arumadev/aruma",
+  "sha": "92bca3b487b1",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

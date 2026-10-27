@@ -11432,5 +11432,244 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "953f097c638c": {
+  "identity": {
+   "one_liner": "Rust 编写的 PostgreSQL 逻辑/物理复制 WAL 流解析与消费库",
+   "review": "这是一个 Rust 库，用于通过逻辑复制协议解析并流式消费 PostgreSQL 的 WAL 日志，同时支持物理复制与 BASE_BACKUP。面向需要在 Rust 应用中实现 CDC、快照初始化或备份数据流的开发者，提供类型安全消息解析、serde 行反序列化、复制槽管理、LSN 反馈及初始快照能力，默认纯 Rust TLS 后端，libpq 后端可选。",
+   "highlights": [
+    "实现 PostgreSQL 逻辑复制协议 v1-4、物理复制流及 BASE_BACKUP 命令",
+    "提供 serde 类型化行反序列化、复制槽管理与线程安全 LSN 反馈",
+    "支持 no_std/wasm 解析器构建，默认 rustls 后端无需 libpq 与 OpenSSL"
+   ],
+   "use_cases": [
+    "从 PostgreSQL WAL 构建 CDC 数据管道",
+    "消费端初始快照拷贝加增量流式订阅",
+    "物理 standby 流复制或基础备份工具开发"
+   ],
+   "review2": ""
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pg-walstream ／ A high-performance Rust library for PostgreSQL logical and physical replication protocol parsing and streaming. Provides a robust, type-safe interface for consuming PostgreSQL Write-Ahead Log (WAL) streams. ／ - **Full Logical Replication Support**: Implements PostgreSQL logical replication protocol versions 1-4",
+     "lines": [
+      8,
+      10,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 复制协议提供解析与流式消费能力的开发库，服务于数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A high-performance Rust library for PostgreSQL logical and physical replication protocol parsing and streaming. Provides a robust, type-safe interface for consuming PostgreSQL Write-Ahead Log (WAL) streams. ／ - **Full Logical Replication Support**: Implements PostgreSQL logical replication protocol versions 1-4",
+   "evidence_lines": [
+    10,
+    14
+   ]
+  },
+  "fn": "isdaniel/pg-walstream",
+  "sha": "953f097c638c",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a6c6878b1051": {
+  "identity": {
+   "one_liner": "基于 Postgres+pgvector 的 AI 编码代理自托管长期记忆存储（MCP 服务器）",
+   "review": "为 Claude Code 等 MCP 客户端提供长期记忆：文档 RAG（组件约束映射、RRF 混合检索、cross-encoder 重排）与双时间轴个人记忆，通过 MCP 工具与 Claude Code hooks 两类接口交付，约束注入在编辑前由 hook 触发。面向使用 AI 编码代理的开发者，需自备 Postgres 与本地嵌入模型（Ollama/TEI），不索引代码符号。",
+   "highlights": [
+    "提供 MCP 工具接口与 Claude Code hooks 两类接口，后者实现编辑前约束注入与记忆自动召回",
+    "Tier 2 检索用 RRF 融合稠密（bge-m3/HNSW）与词法（tsvector）结果，可选 cross-encoder 重排",
+    "个人记忆采用双时间轴、supersede-not-overwrite 与人工审核队列，并提供 ./hm doctor 诊断脚本"
+   ],
+   "use_cases": [
+    "为 AI 编码代理建立可检索的仓库文档与架构约束知识库",
+    "跨会话保存代理工作中的事实、偏好与决策记录",
+    "自托管部署（单机或 Kubernetes），避免依赖云端记忆服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres-backed store that gives an agent (Claude Code, or any MCP client) two things: ／ One store (Postgres + pgvector), local-model friendly",
+     "lines": [
+      10,
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "以 Postgres+pgvector 作为自身数据存储的 MCP 记忆服务器，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postgres-backed store that gives an agent (Claude Code, or any MCP client) two things: ／ One store (Postgres + pgvector), local-model friendly",
+   "evidence_lines": [
+    10,
+    18
+   ]
+  },
+  "fn": "Recluse/HyperMnesia",
+  "sha": "a6c6878b1051",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d9d65eefa88e": {
+  "identity": {
+   "one_liner": "单文件桌面数据库应用，Access 式表格/表单，后端可连 PostgreSQL/MySQL",
+   "review": "Jubako 是一个面向 Omarchy/Linux 桌面用户的类 Access 本地数据库应用：数据存为单个 .jubadb 文件（普通 SQLite 文件），支持从 CSV/Excel 导入、网格与表单编辑、筛选与保存视图、打印/PDF 报告，并提供命令行和 MCP server。除本地文件外，可将数据库指向已有的 PostgreSQL 或 MySQL/MariaDB 服务器（依赖 psycopg/PyMySQL）。适合不想写 SQL、不搭服务器就能管理表格数据的个人用户。",
+   "highlights": [
+    "支持从 CSV/Excel 导入并自动推断列类型，导出为 CSV/Excel/PDF",
+    "提供网格、表单、筛选器、保存视图与分组打印报告",
+    "内置命令行工具与 MCP server，供脚本和代理执行相同操作；数据库文件为普通 SQLite 文件"
+   ],
+   "use_cases": [
+    "个人在本地单文件中管理联系人、库存、项目等表格数据",
+    "把现有电子表格转换为可筛选、可打印报表的数据库",
+    "让 MCP 客户端代理代为执行导入、查询、导出等数据库操作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "If you already run a **PostgreSQL** or **MySQL / MariaDB** server, you can point ／ |A PostgreSQL server|A server you already run.|`psycopg`| ／ uv pip install -e '.[postgres]' # PostgreSQL",
+     "lines": [
+      96,
+      103,
+      190
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "If you already run a **PostgreSQL** or **MySQL / MariaDB** server, you can point ／ |A MySQL or MariaDB server|A server you already run.|`PyMySQL`| ／ uv pip install -e '.[mysql]' # MySQL / MariaDB",
+     "lines": [
+      96,
+      104,
+      191
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`.jubadb`. It is an ordinary SQLite file, so nothing is locked away.",
+     "lines": [
+      91
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "If you already run a **PostgreSQL** or **MySQL / MariaDB** server, you can point ／ |A MySQL or MariaDB server|A server you already run.|`PyMySQL`| ／ uv pip install -e '.[mysql]' # MySQL / MariaDB",
+     "lines": [
+      96,
+      104,
+      191
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 SQLite（以及可选的 PostgreSQL/MySQL/MariaDB）存储数据的桌面应用，不是为数据库生态服务的工具或组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`.jubadb`. It is an ordinary SQLite file, so nothing is locked away. ／ If you already run a **PostgreSQL** or **MySQL / MariaDB** server, you can point ／ |A PostgreSQL server|A server you already run.|`psycopg`|",
+   "evidence_lines": [
+    91,
+    96,
+    103
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "ninepointlabs/jubako",
+  "sha": "d9d65eefa88e",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

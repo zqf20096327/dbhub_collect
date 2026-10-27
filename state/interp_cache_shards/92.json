@@ -10229,5 +10229,82 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d06440dd15af": {
+  "identity": {
+   "one_liner": "自托管 Laravel 监控代理，采集 Nightwatch 遥测写入 PostgreSQL",
+   "review": "这是一个 MIT 许可的 Laravel 包，作为代理接收 laravel/nightwatch SDK 的遥测数据：经 ReactPHP 非阻塞 TCP 摄入，先缓存在本地 SQLite WAL，再通过 COPY 协议写入用户自备的 PostgreSQL。供需要自托管 APM、要求数据不出网的 Laravel 开发者使用；要求 PHP 8.2+ 与 PostgreSQL 14+，数据自动迁移在启动时执行。",
+   "highlights": [
+    "通过 COPY 协议将 12 类 Nightwatch 遥测记录写入用户控制的 PostgreSQL，表以 nightowl_ 前缀并文档化 schema",
+    "提供异常指纹归组、新问题告警（Email/Webhook/Slack/Discord）、阈值性能问题与代理健康诊断",
+    "启动时自动执行 schema 迁移，支持多环境共享一个数据库并按 environment 列分区"
+   ],
+   "use_cases": [
+    "为 Laravel 应用搭建自托管 APM，遥测数据保留在自己的 PostgreSQL 中",
+    "结合 psql、Metabase 或自建 UI 直接查询原始遥测行数据",
+    "在无法或不愿使用托管平台时收集请求、查询、作业、异常等记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "3. **Drains them into a PostgreSQL database you provision** via the COPY protocol. Telemetry never leaves your network. ／ - PostgreSQL **14+** (16 or 17 recommended) ／ The agent writes telemetry **directly to your PostgreSQL database**. Request, query, exception and log data is never sent to NightOwl.",
+     "lines": [
+      18,
+      176,
+      181
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "2. **Buffers them in a local SQLite WAL** with non-blocking ReactPHP ingest. An ingest-only benchmark accepted 13,400 payloads/s on a single instance; see the throughput guide for drain numbers. ／ - PHP **8.2+** with extensions: `pdo_pgsql`, `pdo_sqlite` (always), `pcntl` + `posix` (for the async driver), `zlib` (for gzipped payloads)",
+     "lines": [
+      17,
+      175
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目将 PostgreSQL 和 SQLite 作为自身遥测数据的存储后端使用，而非为数据库生态提供服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "NightOwl Agent is an MIT-licensed Laravel package that: ／ 3. **Drains them into a PostgreSQL database you provision** via the COPY protocol. Telemetry never leaves your network. ／ - PostgreSQL **14+** (16 or 17 recommended)",
+   "evidence_lines": [
+    14,
+    18,
+    176
+   ]
+  },
+  "fn": "lemed99/nightowl-agent",
+  "sha": "d06440dd15af",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

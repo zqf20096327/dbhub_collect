@@ -10685,5 +10685,230 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "52b2429dedaf": {
+  "identity": {
+   "one_liner": "计算机使用代理（CUA）资源的来源可溯开源目录，含 JSONL/SQLite 数据",
+   "review": "该仓库整理并持续发现计算机使用代理领域的论文、模型、数据集、基准、框架与工具，每条记录带来源与审核状态，提供检索脚本和可克隆的 JSONL/SQLite 目录数据，供研究者、RAG 系统与代理直接使用。数据每日三次定时扫描更新，目录随每次扫描变化，引用需固定具体版本。",
+   "highlights": [
+    "提供 3,268 条资源记录的检索与过滤，含论文、基准、数据集、模型、框架、工具等类别",
+    "提供 Python 脚本（catalog.py）本地检索目录，输出 JSON，无需额外依赖",
+    "目录数据以 JSONL/SQLite 形式提交，面向人与 RAG/代理系统克隆复用"
+   ],
+   "use_cases": [
+    "检索和筛选计算机使用代理相关论文、基准与训练数据",
+    "为 RAG 系统或代理提供带审核状态和来源的目录数据",
+    "跟踪 GUI 代理领域新资源，每日定时发现与审核"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Use SQLite to join resources, environment/topic facets, and reviewed relations. See query examples. `data/catalog.jsonl` is committed; SQLite and JSON array exports are reproducible local build products.",
+     "lines": [
+      189
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明仓库用 SQLite 存储和联结目录数据，SQLite 是其自身数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A source-backed collection of papers, models, datasets, benchmarks and tools for agents that use computers. ／ **For people, RAG systems, and agents — clone the complete catalog:**",
+   "evidence_lines": [
+    7,
+    25
+   ]
+  },
+  "fn": "reacher-z/Awesome-CUA",
+  "sha": "52b2429dedaf",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9b54242d6ac0": {
+  "identity": {
+   "one_liner": "Rust 编写的 MCP 服务器，为编码代理提供基于 SQLite 的跨会话记忆",
+   "review": "Engram 是一个用 Rust 实现的 MCP 服务器，让编码代理在多个会话间延续记忆：会话结束时代理写入交接记录，下个分支会话从记录恢复，并维护项目 todos、ADR 与事实检索（BM25+本地 ONNX 嵌入）。数据存于单个本地 SQLite 文件，不上传云端。面向 Claude Code 等 MCP 客户端用户，限制为单用户、单节点、无鉴权。",
+   "highlights": [
+    "按 git 分支链式组织交接记录，避免不同分支上下文混淆",
+    "结合 BM25 与本地 ONNX 嵌入做语义检索，记忆可被取代、删除后可恢复",
+    "通过 engam-cli 与 ssh 在两台机器间同步项目记忆"
+   ],
+   "use_cases": [
+    "编码代理跨会话恢复工作上下文",
+    "团队/个人在同一仓库的多个分支间管理任务与架构决策",
+    "多台开发机之间同步代理会话记忆"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything stays on your machine: one SQLite file and a small local embedding model. Nothing is sent to a cloud service, and storing a memory never calls an LLM.",
+     "lines": [
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为编码代理提供记忆服务的 MCP 服务器组件，SQLite 仅作为其本地存储后端。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Engram is an MCP server that gives a coding agent memory across sessions. At the end of a session the agent writes a handoff: what it decided, what blocks it, what it tried and abandoned. The next session on that branch starts from it, with the project's open todos alongside. ／ Everything stays on your machine: one SQLite file and a small local embedding model. Nothing is sent to a cloud service, and storing a memory never calls an LLM. ／ cargo install engram_mcp",
+   "evidence_lines": [
+    11,
+    13,
+    29
+   ]
+  },
+  "fn": "edg-l/engram-mcp",
+  "sha": "9b54242d6ac0",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "72ab24a03533": {
+  "identity": {
+   "one_liner": "本体驱动的代码库索引与查询服务，解析多语言源码入本地 SQLite 图并提供 MCP 工具",
+   "review": "CodeExplorer 将 C#、TypeScript/JS、Go、Python、SQL 等源码、清单、端点与 SQL schema 索引为本地 SQLite 图数据库，通过 OpenCypher-to-SQL 编译器查询，并以 MCP 服务暴露架构图、调用链、数据血缘与影响分析工具。面向使用 AI 编码代理（Claude Code、Cursor 等）的开发团队，另提供 VS Code 扩展与 CI 架构门禁；数据全量存于本地。",
+   "highlights": [
+    "解析多语言源码、HTTP/gRPC/GraphQL 端点、消息代理拓扑与 SQL schema 到本地 SQLite 图，支持 OpenCypher 只读查询",
+    "提供 MCP 工具集：架构图查询、调用链追踪、数据血缘（表读写方）与影响分析",
+    "支持在 CI 中用 OpenCypher 规则执行语义架构门禁，并配合 SHA-256 ratchet 基线管理存量违规"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供低 token 的代码架构上下文与跨服务调用/血缘分析",
+    "微服务仓库的架构可视化与边界规则检查（IDE 与 CI）",
+    "数据库表的读写方血缘梳理与改动影响评估"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**SQL**|`.sql` & embedded SQL strings|T-SQL, PostgreSQL, MySQL, SQLite, ClickHouse, BigQuery DDL & CRUD lineage (`READS_FROM`, `WRITES_TO`)|",
+     "lines": [
+      218
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**SQL**|`.sql` & embedded SQL strings|T-SQL, PostgreSQL, MySQL, SQLite, ClickHouse, BigQuery DDL & CRUD lineage (`READS_FROM`, `WRITES_TO`)|",
+     "lines": [
+      218
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**SQL**|`.sql` & embedded SQL strings|T-SQL, PostgreSQL, MySQL, SQLite, ClickHouse, BigQuery DDL & CRUD lineage (`READS_FROM`, `WRITES_TO`)|",
+     "lines": [
+      218
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**SQL**|`.sql` & embedded SQL strings|T-SQL, PostgreSQL, MySQL, SQLite, ClickHouse, BigQuery DDL & CRUD lineage (`READS_FROM`, `WRITES_TO`)|",
+     "lines": [
+      218
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它解析 SQL schema 与数据库血缘为开发流程提供服务，内嵌 SQLite 仅作自身图存储引擎",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It indexes polyglot source files, project manifests, HTTP/gRPC/GraphQL endpoints, message broker topologies, and SQL schemas into a single local SQLite graph (`.codeexplorer/graph.db`) powered by an embedded OpenCypher-to-SQL compiler: ／ Running `ce mcp` exposes the indexed SQLite graph over the Model Context Protocol:",
+   "evidence_lines": [
+    15,
+    105
+   ]
+  },
+  "fn": "vmikhailov/code-explorer",
+  "sha": "72ab24a03533",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

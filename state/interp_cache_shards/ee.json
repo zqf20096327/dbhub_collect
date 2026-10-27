@@ -9643,5 +9643,116 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "38ba59c3c38d": {
+  "identity": {
+   "one_liner": "Azure Functions Python v2 的 SQLAlchemy 数据库绑定与轮询触发器库",
+   "review": "基于 SQLAlchemy 为 Azure Functions Python v2 提供数据库集成辅助的 Python 库，通过 @db.input/@db.output/@db.trigger 等装饰器实现查询注入、写入注入与基于 timer trigger 的轮询伪触发器。支持任何有 SQLAlchemy 方言的数据库，内置 PostgreSQL、MySQL、SQL Server 测试路径；它不向 Functions host 注册原生绑定，README 标注为实验性、不建议用于生产。",
+   "highlights": [
+    "提供 @db.input/@db.output/@db.inject_reader/@db.inject_writer 装饰器，实现查询结果与读写客户端注入",
+    "提供基于 cursor-column 轮询的伪触发器，含 checkpoint、lease、批处理与 at-least-once 语义",
+    "支持任何有 SQLAlchemy 方言的数据库，内置 PostgreSQL、MySQL、SQL Server 的 pip extras"
+   ],
+   "use_cases": [
+    "在 Azure Functions Python v2 中以装饰器方式读写多种关系数据库",
+    "需要基于轮询的数据库变更触发（checkpoint/lease/at-least-once）",
+    "不依赖原生 Functions 扩展的本地可测试数据库集成"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **No unified multi-dialect binding layer** — PostgreSQL, MySQL, SQLite, Oracle, DuckDB, CockroachDB, and other SQLAlchemy dialects each require custom code. ／ - You need PostgreSQL, MySQL, SQLite, Oracle, DuckDB, CockroachDB, or another SQLAlchemy dialect. ／ - **Any SQLAlchemy database** — PostgreSQL, MySQL, SQL Server out of the box; Oracle, CockroachDB, DuckDB, and any other dialect with one extra `pip install`.",
+     "lines": [
+      35,
+      45,
+      59
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **No unified multi-dialect binding layer** — PostgreSQL, MySQL, SQLite, Oracle, DuckDB, CockroachDB, and other SQLAlchemy dialects each require custom code. ／ - You need PostgreSQL, MySQL, SQLite, Oracle, DuckDB, CockroachDB, or another SQLAlchemy dialect. ／ - **Any SQLAlchemy database** — PostgreSQL, MySQL, SQL Server out of the box; Oracle, CockroachDB, DuckDB, and any other dialect with one extra `pip install`.",
+     "lines": [
+      35,
+      45,
+      59
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **No unified multi-dialect binding layer** — PostgreSQL, MySQL, SQLite, Oracle, DuckDB, CockroachDB, and other SQLAlchemy dialects each require custom code. ／ - You need PostgreSQL, MySQL, SQLite, Oracle, DuckDB, CockroachDB, or another SQLAlchemy dialect. ／ - **Any SQLAlchemy database** — PostgreSQL, MySQL, SQL Server out of the box; Oracle, CockroachDB, DuckDB, and any other dialect with one extra `pip install`.",
+     "lines": [
+      35,
+      45,
+      59
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **No unified multi-dialect binding layer** — PostgreSQL, MySQL, SQLite, Oracle, DuckDB, CockroachDB, and other SQLAlchemy dialects each require custom code. ／ - You need PostgreSQL, MySQL, SQLite, Oracle, DuckDB, CockroachDB, or another SQLAlchemy dialect. ／ - PostgreSQL, MySQL, SQLite, or any other SQLAlchemy dialect → this package.",
+     "lines": [
+      35,
+      45,
+      70
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- You target Azure SQL Database or SQL Server. ／ - **Any SQLAlchemy database** — PostgreSQL, MySQL, SQL Server out of the box; Oracle, CockroachDB, DuckDB, and any other dialect with one extra `pip install`. ／ |Databases|Azure SQL Database, SQL Server|PostgreSQL, MySQL, SQL Server + any SQLAlchemy dialect (BYOD)|",
+     "lines": [
+      52,
+      59,
+      76
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明它是为 Azure Functions Python v2 提供数据库绑定式集成的库（pip 包），为使用数据库的应用服务而非自身业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLAlchemy-powered database integration helpers for **Azure Functions Python v2** — binding-style decorators for input/output/client injection and a poll-based pseudo trigger that works with **any database that ships a SQLAlchemy dialect**. ／ > This package does **not** register native Azure Functions bindings with the Functions host. The `@db.input` / `@db.output` / `@db.trigger` decorators are Python function wrappers that resolve data, inject writers, or poll for changes around your handler. For runtime-native Azure SQL bindings, use the official extension (see below). ／ > **Note:** The built-in extras (PostgreSQL, MySQL, SQL Server) are the tested path. Other dialects work through SQLAlchemy compatibility but are not explicitly tested by this project. Exact connection URL syntax varies by driver — check your driver's documentation.",
+   "evidence_lines": [
+    20,
+    23,
+    122
+   ]
+  },
+  "fn": "yeongseon/azure-functions-db-python",
+  "sha": "38ba59c3c38d",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

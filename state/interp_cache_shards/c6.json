@@ -11482,5 +11482,321 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5d81eb889ac1": {
+  "identity": {
+   "one_liner": "Rust 语言的 SQLite 绑定库",
+   "review": "Rusqlite 提供在 Rust 中使用 SQLite 的人机工程学封装，包含连接管理、查询执行及备份、窗口函数、扩展加载等可选特性。它通过 Cargo 依赖引入，可选择捆绑编译 SQLite 或链接系统库，供 Rust 开发者在应用中操作 SQLite 数据库。",
+   "highlights": [
+    "提供 SQLite 的 Rust 语言绑定与连接 API",
+    "支持 bundled 特性自动编译链接 SQLite，以及 SQLCipher 加密链接",
+    "提供备份、窗口函数、虚表、扩展加载等可选特性"
+   ],
+   "use_cases": [
+    "Rust 应用中读写 SQLite 数据库",
+    "需要内嵌 SQLite 并在 Windows 等平台简化链接的场景",
+    "使用 SQLCipher 加密数据库的 Rust 项目"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Rusqlite is an ergonomic wrapper for using SQLite from Rust. ／ ### Supported SQLite Versions ／ The base `rusqlite` package supports SQLite version 3.45.3 or newer. If you need",
+     "lines": [
+      11,
+      35,
+      37
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Historically, the API was based on the one from `rust-postgres`. However, the two have diverged in many ways, and no compatibility between the two is intended.",
+     "lines": [
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供在 Rust 中使用 SQLite 的绑定封装，属于为数据库服务的开发组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Rusqlite is an ergonomic wrapper for using SQLite from Rust. ／ ### Supported SQLite Versions",
+   "evidence_lines": [
+    11,
+    35
+   ]
+  },
+  "fn": "rusqlite/rusqlite",
+  "sha": "5d81eb889ac1",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bf7a3a649009": {
+  "identity": {
+   "one_liner": "自托管 GitHub Actions 缓存服务器，兼容 actions/cache",
+   "review": "用 Rust 编写的自托管 GitHub Actions 缓存服务器，作为官方托管缓存服务的替代运行，工作流中的 actions/cache 无需修改即可使用。支持 S3、GCS、Azure Blob 或文件系统存储，并可用 SQLite、Postgres 或 MySQL 作为后端存储。面向需要自托管 CI 缓存的 GitHub Actions 用户，提供 Docker 镜像和文档站点。",
+   "highlights": [
+    "兼容官方 actions/cache action，无需修改 workflow 文件",
+    "单个 Rust 二进制，支持 S3/GCS/Azure Blob/文件系统存储",
+    "可用 SQLite、Postgres 或 MySQL 作为存储后端，提供 Docker 镜像部署"
+   ],
+   "use_cases": [
+    "自托管 GitHub Actions 缓存服务",
+    "在私有环境中控制 CI 缓存数据",
+    "配合 actions/cache 的项目无需改工作流即可切换缓存服务端"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该项目将 SQLite/Postgres/MySQL 作为自身缓存数据的存储后端使用，而非为某数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This is a fast, lightweight, self-hosted drop-in replacement for the official GitHub hosted cache server, written in Rust. It is compatible with the official `actions/cache` action, so there is no need to change your workflow files and it even works with packages that internally use `actions/cache`. ／ 👉 <https://gha-cache-server.falcondev.io/getting-started> 👈",
+   "evidence_lines": [
+    3,
+    22
+   ]
+  },
+  "fn": "falcondev-oss/github-actions-cache-server",
+  "sha": "bf7a3a649009",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f5600a249339": {
+  "identity": {
+   "one_liner": "dbt 插件，按代码与上游数据版本决定复用或重建节点",
+   "review": "dbt-hodor 是一个在 dbt 内部运行的开源自托管插件，对每个选中节点哈希其编译 SQL 与配置、检查上游数据版本，据此返回复用或重建的决定，失败时一律回退为普通 dbt 构建。面向使用 dbt 的数据工程团队，状态可存于 Databricks Delta、Postgres 或本地 DuckDB，当前处于早期开发阶段，默认仅以 shadow 模式记录决定。",
+   "highlights": [
+    "对每个节点计算代码哈希并检查上游数据版本，返回 reuse/build 决定及原因码",
+    "提供 off/shadow/on 三种模式，安装后默认不跳过任何节点",
+    "所有决定失败均回退为普通 dbt 构建，不会中断 dbt 运行"
+   ],
+   "use_cases": [
+    "在 CI 中复用上一轮已构建的未变更模型（Slim CI）",
+    "减少调度运行中未变更节点的重复构建",
+    "以 shadow 模式对比 dbt State 的选择结果"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It needs no dbt platform account and sends nothing to external services. State lives in a Delta table on Databricks, in a Postgres database such as Databricks Lakebase, or in a local DuckDB file. It supports the `databricks`, `trino`, `snowflake` and `duckdb`  ／ |`hodor_store`|`HODOR_STORE`|`trino` on the `trino` adapter, `delta` on every other adapter|`delta`, `duckdb`, `postgres` (alias `lakebase`), `trino`| ／ |`postgres` (alias `lakebase`)|`<hodor_schema>.<hodor_table>` in the Postgres database `hodor_database`|the schema and the table|",
+     "lines": [
+      15,
+      105,
+      124
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该插件为 dbt 数据构建流程提供节点复用判定服务，并通过专用 store 支持 Postgres 存储状态，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dbt-hodor is a free, self-hosted alternative to dbt Labs' dbt State. It runs inside dbt. For every selected node it decides whether to reuse the object that is already in the warehouse or to build it again. A node is reused when its logic has not changed and its upstream data has not changed since the last build. ／ It needs no dbt platform account and sends nothing to external services. State lives in a Delta table on Databricks, in a Postgres database such as Databricks Lakebase, or in a local DuckDB file. It supports the `databricks`, `trino`, `snowflake` and `duckdb` adapters: see Adapters. ／ > **Status: early development.** hodor has end-to-end tests on dbt-duckdb and live tests on a Databricks SQL warehouse and on Databricks Lakebase; the test docs list what they cover. It has not run in a large production project yet. Before enabling reuse in production, run in shadow mode for at least a week of scheduled runs and review its decisions. See the rollout guidance. Changes between releases, including the breaking ones, are in Upgrading.",
+   "evidence_lines": [
+    13,
+    15,
+    17
+   ]
+  },
+  "fn": "alaturqua/dbt-hodor",
+  "sha": "f5600a249339",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9c0c7be09e2b": {
+  "identity": {
+   "one_liner": "macOS 原生 CSV 探索器，将 CSV 导入为 SQLite 表用 SQL 查询",
+   "review": "Virgule 是一款 macOS 原生应用，用户通过拖放或文件选择器导入 CSV/TSV 文件，Rust 引擎将其流式写入应用管理的本地 SQLite 缓存，每个文件对应一张表，用户可用只读 SQL（SELECT/WITH/EXPLAIN）查询并导出结果。面向需要在 Mac 上用 SQL 分析 CSV 数据的用户；需自行用 Xcode 从源码构建，仅支持 Apple Silicon 且要求 macOS 26 以上。",
+   "highlights": [
+    "将每个导入的 CSV/TSV 文件映射为本地 SQLite 表，支持 $file 与 $row_id 引用",
+    "仅接受只读查询（SELECT/WITH/EXPLAIN），拒绝修改数据库的语句，不改动源文件",
+    "支持多分隔符、多编码检测、表头可选，网格按需分页加载"
+   ],
+   "use_cases": [
+    "在 Mac 上用 SQL 浏览、过滤和聚合大型 CSV 数据集",
+    "对 CSV 数据做探索性分析并导出查询结果为新 CSV",
+    "只读场景下查看 CSV 数据而不修改原始文件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Virgule is a native macOS CSV explorer powered by Swift, Rust, and SQLite. Browse large datasets, search and sort rows, or write SQL to filter, aggregate, and calculate—all without modifying your original files. ／ Every imported file becomes a local SQLite table. Use `$file` to refer to the currently opened CSV, regardless of its filename: ／ Rust streams the CSV into an application-managed SQLite cache in the macOS cache directory. Queries run against that local cache, and the grid loads only the result pages it needs. Virgule never writes to the source CSV or stores its cache next to it. Export c",
+     "lines": [
+      5,
+      23,
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用使用 SQLite 作为本地缓存存储导入的 CSV 数据，SQLite 是其内部组件而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Virgule is a native macOS CSV explorer powered by Swift, Rust, and SQLite. Browse large datasets, search and sort rows, or write SQL to filter, aggregate, and calculate—all without modifying your original files. ／ Rust streams the CSV into an application-managed SQLite cache in the macOS cache directory. Queries run against that local cache, and the grid loads only the result pages it needs. Virgule never writes to the source CSV or stores its cache next to it. Export creates a separate CSV file. ／ Virgule focuses on exploring CSV data through a native interface and SQL. Cell editing, spreadsheet formulas, and source-file rewriting are outside its scope.",
+   "evidence_lines": [
+    5,
+    50,
+    102
+   ]
+  },
+  "fn": "pyrou/virgule",
+  "sha": "9c0c7be09e2b",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "78c33d15002b": {
+  "identity": {
+   "one_liner": ".NET 纯托管 Raft 共识库，可替换存储与传输",
+   "review": "raft-cs 是面向 .NET 的纯托管 Raft 共识算法实现库，提供预投票、日志复制、快照压缩、联合共识成员变更等能力，存储与传输均可替换（内置内存/文件 WAL 存储与 NanoMsg 传输），支持 NativeAOT。通过 NuGet 包安装，供需要在 .NET 应用中构建副本一致性节点的开发者使用，与 TiDB 仅在 raft-rs 对齐测试层面存在参照关系。",
+   "highlights": [
+    "实现 Raft 共识：leader 选举（含 pre-vote）、日志复制、快照与日志压缩、joint-consensus 成员变更、leadership transfer",
+    "提供 IRaftStorage 与 IRaftTransport 抽象，附带内存/文件 WAL 存储与 NanoMsg 传输实现",
+    "支持 NativeAOT 与 trimming，目标框架含 netstandard2.0/2.1 及 net8.0-10.0"
+   ],
+   "use_cases": [
+    "在 .NET 应用中构建多副本强一致状态机",
+    "需要可插拔存储/传输的 Raft 学习与实验环境",
+    "参考 raft-rs 行为对齐的跨实现一致性验证"
+   ],
+   "use_cases_build": ""
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 描述的是通用 .NET Raft 共识库，未声明为特定数据库生态服务的工具或组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A pure-managed, **NativeAOT-ready** implementation of the **Raft consensus algorithm** for modern .NET. No native dependency. ／ `Raft` is a customizable **core consensus module** — modeled on tikv/raft-rs — with **bring-your-own log, state machine, and transport**. The deterministic state machine (`RaftCore`) is wrapped by an asynchronous `RaftNode` that owns timers, transport, and storage, so you get a working replica out of the box and can swap any piece.",
+   "evidence_lines": [
+    5,
+    7
+   ]
+  },
+  "fn": "marcschier/raft-cs",
+  "sha": "78c33d15002b",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9442,5 +9442,138 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c227658f1976": {
+  "identity": {
+   "one_liner": "Linux QQ 群聊 Agent，经 OneBot v11 协议端接入并内置控制台",
+   "review": "一个部署在 Linux 上的 QQ 群聊机器人，连接 OneBot v11 协议端收发消息，调用 OpenAI Chat Completions 兼容模型生成回复，消息与状态经 SQLite/WAL 持久化，并提供网页控制台、插件/技能包、语音转写与运维命令。适合自托管 Linux 服务器、想让 QQ 群机器人具备分条发言与主动发言能力的用户；运行依赖外部协议端与模型服务。",
+   "highlights": [
+    "提供分条发言、表情包收发、长期记忆检索（FTS5）与持久化提醒",
+    "提供网页控制台、插件子进程权限模型与 src/ops.js 运维命令",
+    "支持 Docker 与一键安装脚本部署，备份支持 AES-256-GCM 加密与恢复演练"
+   ],
+   "use_cases": [
+    "QQ 群自动化客服与陪伴机器人",
+    "带权限审计与备份的自托管机器人运维",
+    "基于插件/技能包扩展群聊能力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "-> SQLite/WAL 消息状态机 ／ |磁盘|10GB 空闲，本机盘；SQLite 不支持 NFS/SMB| ／ - 校验参数、源码与 Node.js 的 `node:sqlite` 能力； ／ - `messages.sqlite`：消息、租约与出站状态；",
+     "lines": [
+      115,
+      172,
+      294,
+      455
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **预期可用**：Debian 12/13、Ubuntu 26.04、Rocky Linux 9、AlmaLinux 9、Fedora、CentOS Stream、RHEL、Oracle Linux、Amazon Linux、Arch/Manjaro、openSUSE Leap/Tumbleweed、SLES、openEuler、Anolis、麒麟/UOS（按 dnf/yum/zypper/pacman 尝试）。Debian 12 官方仓库只有 Compose v1，需先按 Docker 官方文档配置 apt ",
+     "lines": [
+      180
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身使用 SQLite 存储消息、租约与身份索引等业务数据，是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "  -> SQLite/WAL 消息状态机",
+   "evidence_lines": [
+    115
+   ]
+  },
+  "fn": "sakurawwwxh/qq-agent-plus",
+  "sha": "c227658f1976",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d7be05b2ea4f": {
+  "identity": {
+   "one_liner": "基于IMAS数据结构的托卡马克科研数据分析框架",
+   "review": "VAFT 是一个面向托卡马克聚变研究的科学框架，将诊断实验数据、等离子体平衡重建和模拟结果映射到 IMAS 公共数据结构，记录处理历史以支持可追溯与可复现的分析流程，并附带 VEST 托卡马克的参考实现与离线样本数据。面向聚变研究人员，通过 pip 安装，样本使用无需数据库凭证。",
+   "highlights": [
+    "将设备特定诊断数据映射到 IMAS Data Dictionary 公共数据模型，通过 OMAS Python 接口访问",
+    "记录配置、校准与溯源信息，支持工作流可追溯和结果可复现",
+    "提供 VEST 托卡马克参考实现及无需凭证的离线样本数据"
+   ],
+   "use_cases": [
+    "托卡马克实验数据的组织、分析与可视化",
+    "跨装置的等离子体平衡重建与剖面拟合研究",
+    "实验、模拟与数据驱动研究的统一数据交换"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是使用逐炮数据库存储和分析聚变数据的科研框架，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**VAFT is a scientific framework for organizing and analyzing tokamak data using IMAS structures.** It connects experimental data, reconstructed plasma states, simulation results, and analysis workflows through shared data structures and recorded processing history. ／ The VEST tokamak at Seoul National University provides the concrete reference implementation. The diagram follows one shot from VEST through experimental data processing into a per-shot database. ／ pip install vaft",
+   "evidence_lines": [
+    9,
+    50,
+    61
+   ]
+  },
+  "fn": "VEST-Tokamak/vaft",
+  "sha": "d7be05b2ea4f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

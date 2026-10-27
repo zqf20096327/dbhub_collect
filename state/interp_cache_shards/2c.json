@@ -11617,5 +11617,156 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "59a0f23fbe3a": {
+  "identity": {
+   "one_liner": "RAG 研究助手，基于 LangGraph 状态机做证据核查与引用标注",
+   "review": "CiteRight 是一个基于文档和网络回答问题的研究助手，用 LangGraph 状态机（17 个节点）编排检索、计算器、网页搜索等步骤，FastAPI 提供服务、React 提供 UI。核心机制是回答前的 grounding 校验：把每个事实性断言映射到证据，无证据或与来源矛盾的断言被移除，无法支撑时拒答。需 Python 3.11+、Node 22.12+ 及 Groq 或 OpenAI API key，支持 Docker 部署。",
+   "highlights": [
+    "提供基于 PDF/Markdown 文档的混合检索（向量+BM25，融合重排）并带来源与章节引用",
+    "实现 grounding 校验器，将答案断言映射到证据并拒绝伪造引用与矛盾断言",
+    "内置审核模型、计算器工具、按用户的会话持久化与网页搜索人工审批流程"
+   ],
+   "use_cases": [
+    "对本地 PDF/Markdown 文档集做带引用的问答检索",
+    "需要答案经过证据核查、不编造内容的研究辅助场景",
+    "需要人工审批网页搜索、含安全审核的 LLM 应用部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是使用检索与存储能力回答问题的终端应用，README 内无任何数据库生态组件的适配或服务证据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A research assistant that answers from your documents and the web, cites where each claim came ／ The flow is a LangGraph state machine with one node per step (17 in total), served by FastAPI ／ Data (accounts, conversations, document index) persists in the `citeright_data` volume.",
+   "evidence_lines": [
+    3,
+    36,
+    82
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Theepankumargandhi/Multi-Agent-Orchestration",
+  "sha": "59a0f23fbe3a",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e4afeb113f28": {
+  "identity": {
+   "one_liner": "多语言微服务英语学习平台，基于 TiDB 读写分离与 K8s 部署",
+   "review": "这是一个英语学习平台应用，由 19 个业务服务组成，使用 Go/Java/Python/Rust 四种语言实现，数据存储采用 TiDB v8.5（经 HikariCP 路由实现读写分离），并配合 Redis Cluster 缓存、Pulsar 事件总线、Netty 边缘接入，运行于 K8s。面向需要可动手部署验证的全栈微服务实践场景；README 记录了单节点集群验证拓扑，Seata 已停用，改用事件驱动最终一致性。",
+   "highlights": [
+    "19 个业务服务横跨 Java Spring Boot、Go gin、Python Litestar、Rust axum 四种语言",
+    "自研 esp-rw-java 读写分离组件（@DataSource AOP + RoutingHolder），后端为 TiDB v8.5 多区域 PD/TiKV 拓扑",
+    "包含 Netty 边缘接入、LMAX Disruptor 两级流水线、Pulsar 事件总线、Caffeine + Redis Cluster 两级缓存及 OTel 可观测链路"
+   ],
+   "use_cases": [
+    "在 K8s 单节点环境部署和手动验证一套多语言微服务平台的完整拓扑",
+    "基于 TiDB 读写分离与 schema-per-service 模式的业务系统实践",
+    "英语学习场景的课程内容、社区圈子、排行榜功能使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "TiDB ／ > 19 business services (Go / Java / Python / Rust) + TiDB read-write splitting + Redis Cluster + Pulsar event bus + two-stage LMAX Disruptor pipelines + Netty edge ingress. ／ |**Storage**|TiDB v8.5 (PD/TiKV across aws/azure/gcp regions) + read-write splitting (`esp-rw-java` RoutingHolder / `@DataSource` AOP) + schema-per-service evolution|",
+     "lines": [
+      6,
+      15,
+      27
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "|Storage|TiDB primary/follower :4000 (MySQL wire); CockroachDB ×3 in `ns esp-crdb` (`crdb-public:26257`, PG wire) as measured benchmark alternative| ／ |Database|TiDB v8.5 (MySQL wire, HTAP)|Horizontal scaling + MySQL ecosystem compatibility; PD/TiKV across three regions simulating multi-AZ; AUTO_RANDOM keys prevent hotspots; CockroachDB evaluated and rejected by measurement (see dedicated chapter)|",
+     "lines": [
+      65,
+      76
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "- **Protocol difference**: CRDB speaks PostgreSQL-wire; the cluster has no psycopg2/psql client pod (Python side has pymysql only, MySQL-wire, incompatible).",
+     "lines": [
+      287
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 TiDB 存储业务数据的英语学习平台应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> **Truthful AI English education platform (Verity / 洁语 / ESP)** — a polyglot microservice platform built to professor-grade industrial standards: ／ |**Storage**|TiDB v8.5 (PD/TiKV across aws/azure/gcp regions) + read-write splitting (`esp-rw-java` RoutingHolder / `@DataSource` AOP) + schema-per-service evolution| ／ - Infrastructure namespace `ekb-m2-aws-us-east-1`: TiDB (v8.5, root passwordless, DB `esp`), Redis Cluster (6 nodes), Pulsar, Milvus/Neo4j/MinIO (shared platform base)",
+   "evidence_lines": [
+    14,
+    27,
+    118
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "tianqiongenze/English-Study-Platform",
+  "sha": "e4afeb113f28",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

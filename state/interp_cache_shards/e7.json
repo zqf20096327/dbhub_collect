@@ -11284,5 +11284,253 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fc986d95e572": {
+  "identity": {
+   "one_liner": ".NET 嵌入式 NoSQL 文档数据库，单文件存储",
+   "review": "LiteDB 是一个用纯 C# 实现的嵌入式 NoSQL 文档数据库，数据存于单个文件，提供类 MongoDB 的文档 API、BSON 序列化、LINQ 查询、ACID 事务与 WAL 恢复，通过 NuGet 分发并内嵌到应用中运行。面向 .NET 开发者，适用于桌面/本地小型应用、应用文件格式、小型网站及每用户独立数据库的场景。",
+   "highlights": [
+    "单数据文件存储的嵌入式文档数据库，100% C# 实现，单 DLL 小于 450kb",
+    "支持 ACID 事务、WAL 写后恢复、线程安全读写与字段索引",
+    "提供 LINQ 查询、SQL-Like 命令、POCO 到 BsonDocument 映射及文件/流存储"
+   ],
+   "use_cases": [
+    "桌面/本地小型应用的嵌入式数据存储",
+    "作为应用文件格式保存数据",
+    "每账户/用户独立数据库的数据存储"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- Single data file storage (like SQLite)",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是 .NET 生态的嵌入式数据库引擎本身，为应用提供文档存储能力。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "LiteDB is a small, fast and lightweight .NET NoSQL embedded database. ／ - 100% C# code for .NET 4.5 / NETStandard 1.3/2.0 in a single DLL (less than 450kb) ／ - Install from NuGet: `Install-Package LiteDB`",
+   "evidence_lines": [
+    7,
+    11,
+    24
+   ]
+  },
+  "fn": "litedb-org/LiteDB",
+  "sha": "fc986d95e572",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "469e957369b9": {
+  "identity": {
+   "one_liner": "家庭/小型办公网络安全监控工具，用 Zeek 流量镜像加 AI 分诊",
+   "review": "tapwatch 通过镜像端口上的 Zeek、路由器 syslog 和可选 osquery 端点代理采集数据，用纯 Python 检测器识别新设备、信标、DNS 隧道等异常，并提供带护栏的 LLM 分诊与无 JavaScript 的案件处理台。面向家庭或小型办公环境的自托管用户；依赖 SQLite 存储，需 Docker/WSL 或 systemd 环境运行。",
+   "highlights": [
+    "提供 44 种检测用例（网络、主机、长周期），每种为含测试与规格说明的 Python 检测器",
+    "支持带护栏的 AI 分诊：代码事实设定模型判断的上下界，模型无法越过",
+    "提供 selfcheck 自检命令，可回放脚本化攻击与误报样本并报告检出率"
+   ],
+   "use_cases": [
+    "家庭或小型办公网络中的设备与流量异常监控",
+    "路由器镜像端口流量检测（信标、DNS 隧道、 rogue DHCP 等）",
+    "利用 osquery 在终端主机上进行程序溯源与 Agent 识别"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Few dependencies.** Standard-library Python plus PyYAML, SQLite, and Zeek in Docker. Runs",
+     "lines": [
+      108
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目以数据库（SQLite）作为自身依赖存储数据并运行监控逻辑，属使用数据库的应用类工具，但主要生态位为网络安全监控工具，非数据库生态工具，判定为 tool 存疑，按保守判定使用 support",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可（L5）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Network security monitoring for a home or small office: Zeek on a mirror port, the router's ／ - **Few dependencies.** Standard-library Python plus PyYAML, SQLite, and Zeek in Docker. Runs ／  newer one. Docker: `git pull`, then `docker compose -f deploy/docker-compose.yml up -d --build`.",
+   "evidence_lines": [
+    8,
+    108,
+    91
+   ]
+  },
+  "fn": "barnabys-drew/tapwatch",
+  "sha": "469e957369b9",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dded8db16dda": {
+  "identity": {
+   "one_liner": "ThinkPHP8/ThinkORM 的达梦等国产数据库驱动包",
+   "review": "这是 bingher/db 的 fork，为未安装 Oracle 兼容字典视图的达梦 DM8 提供连接驱动，改用达梦原生系统表获取字段表信息并调整标识符大小写处理，另提供 GBase8s、OpenGauss、KingBase 连接配置及可选的 Meilisearch 客户端，供 ThinkPHP8 项目开发者接入国产数据库使用。",
+   "highlights": [
+    "提供 DM、GBase、Gauss、Kdb 等 ThinkORM 连接器与配置示例",
+    "DM 连接器改用 SYSOBJECTS/SYSCOLUMNS 原生系统表实现 getFields/getTables",
+    "包含可选的 ThinkORM 风格 Meilisearch 客户端"
+   ],
+   "use_cases": [
+    "ThinkPHP8 项目连接达梦 DM8（精简发行版）",
+    "通过 ThinkORM 连接 GBase8s、OpenGauss、KingBase",
+    "在 ThinkORM 中以 ORM 写法操作 Meilisearch"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "`DBCOMPATIBILITY` 取值范围：A、B、C、PG。分别表示兼容 O、MY、TD和POSTGRES",
+     "lines": [
+      170
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- MySQL迁移openGauss ／ - 【数据库迁移系列】使用pg_chameleon将数据从MySQL迁移至openGauss数据库 ／ - 创建兼容mysql的数据库",
+     "lines": [
+      159,
+      160,
+      168
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "> **本包说明**：`amo1943/dm-db` 是 `bingher/db` 的 fork，专为**未安装 Oracle 兼容字典视图**的达梦 DM8 发行版适配。与原包差异：",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "# think-orm driver for DM(达梦),GBase8s(南大通用),OpenGauss(高斯),KingBase(金仓) ／ > **本包说明**：`amo1943/dm-db` 是 `bingher/db` 的 fork，专为**未安装 Oracle 兼容字典视图**的达梦 DM8 发行版适配。与原包差异： ／ > 1. `src/connector/DM.php`：`getFields()` / `getTables()` 改为使用达梦原生系统表 `SYSOBJECTS` / `SYSCOLUMNS`（原实现依赖 `DBA_OBJECTS`、`ALL_TABLES` 等 Oracle 兼容视图，精简版 DM8 中不存在会报\"无效的表或视图\"）。",
+     "lines": [
+      1,
+      3,
+      5
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "# think-orm driver for DM(达梦),GBase8s(南大通用),OpenGauss(高斯),KingBase(金仓) ／ ## OpenGauss(高斯)",
+     "lines": [
+      1,
+      38
+     ]
+    },
+    {
+     "db": "GBase",
+     "rel": "support",
+     "quote": "'default' => env('DB_DRIVER', 'gbase'), ／ Meilisearch 客户端为**可选功能**，按需安装其 SDK 依赖即可（不安装不影响达梦/GBase 等既有驱动）：",
+     "lines": [
+      34,
+      71
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "包为达梦、GBase、OpenGauss、金仓提供 ThinkORM 数据库驱动连接器，属于服务数据库生态的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng",
+    "openGauss",
+    "GBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# think-orm driver for DM(达梦),GBase8s(南大通用),OpenGauss(高斯),KingBase(金仓) ／ > 1. `src/connector/DM.php`：`getFields()` / `getTables()` 改为使用达梦原生系统表 `SYSOBJECTS` / `SYSCOLUMNS`（原实现依赖 `DBA_OBJECTS`、`ALL_TABLES` 等 Oracle 兼容视图，精简版 DM8 中不存在会报\"无效的表或视图\"）。 ／     'default'         => env('DB_DRIVER', 'gbase'),",
+   "evidence_lines": [
+    1,
+    5,
+    34
+   ]
+  },
+  "fn": "amoleexx/dm-db",
+  "sha": "dded8db16dda",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

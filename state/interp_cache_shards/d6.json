@@ -10561,5 +10561,79 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "891af2141a8a": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 跨会话记忆插件，七层 SQLite 存储加 BM25 检索",
+   "review": "为 DeepSeek Harness（DSH）提供跨会话长期记忆的插件，将记忆分为 soul/user/project/fact/lesson/topic/rules 七层并各存一张 SQLite 表，提供首轮注入、每消息关键词命中、BM25 检索与空闲窗口 dream 整理，含八个 memory_* 工具。面向 DSH 用户，依赖 dsh 0.1.5 及其插件机制。",
+   "highlights": [
+    "七层记忆各存一张 SQLite 表，支持写入去重合并与按 updated_at 展示时间戳",
+    "memory_search 工具基于 BM25 加近期权重检索，支持 level/project/status/days 过滤",
+    "零运行时依赖，使用 node:sqlite 与自包含 esbuild 产物"
+   ],
+   "use_cases": [
+    "为 DSH agent 会话提供跨会话的长期记忆存取",
+    "按项目锚定检索事实、教训与规则等记忆条目",
+    "在窗口空闲时段自动整理与总结记忆"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **七层记忆**：`soul`（AI 自身）/ `user`（用户信息与偏好）/ `project`（项目信息，含 `subcategory`）/ `fact`（原子事实）/ `lesson`（教训与纠正）/ `topic`（进行中的话题，带目标句）/ `rules`（设计原则与行为准则）。每层一张 SQLite 表，UUID 带时间前缀，id 顺序即创建顺序。 ／ - **零运行时依赖**：`node:sqlite` + 自包含 esbuild 产物（`lib/index.js`）。**无原生模块。**",
+     "lines": [
+      12,
+      23
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明插件以 SQLite 表存储自身记忆数据，SQLite 是其依赖的存储库而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "为 DeepSeek Harness（DSH）打造的跨会话记忆插件。 ／ - **七层记忆**：`soul`（AI 自身）/ `user`（用户信息与偏好）/ `project`（项目信息，含 `subcategory`）/ `fact`（原子事实）/ `lesson`（教训与纠正）/ `topic`（进行中的话题，带目标句）/ `rules`（设计原则与行为准则）。每层一张 SQLite 表，UUID 带时间前缀，id 顺序即创建顺序。 ／ dsh plugin --profile web add github:Phant0Meow/dsh-meow-memory",
+   "evidence_lines": [
+    6,
+    12,
+    30
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Phant0Meow/dsh-meow-memory",
+  "sha": "891af2141a8a",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

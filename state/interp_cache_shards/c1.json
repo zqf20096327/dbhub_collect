@@ -10794,5 +10794,70 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1f146ba37a0a": {
+  "identity": {
+   "one_liner": "自托管 DMARC 报告分析器，单容器运行并使用 SQLite 存储",
+   "review": "Marcan 从 IMAP 邮箱读取 DMARC 聚合报告，按 RFC 7489 重新计算 SPF/DKIM 对齐，进行实时 DNS 检查并在 Web 仪表板展示，数据保存在单个 SQLite 文件中。面向需要管理自有域名邮件合规的个人和 MSP。限制：仅支持一个 IMAP 邮箱、仅聚合报告、不支持 OAuth2 邮箱，登录依赖前置反向代理。",
+   "highlights": [
+    "基于 Public Suffix List 重新计算每条记录的 SPF/DKIM 对齐，而非信任报告方结论",
+    "对 DMARC、SPF、DKIM、MTA-STS、TLS-RPT、BIMI 提供实时 DNS 检查并给出 0–100 评分",
+    "提供变更告警、月度客户报告邮件、CSV 导出，且对邮箱只读"
+   ],
+   "use_cases": [
+    "域名所有者自托管分析 DMARC 聚合报告并检查邮件认证配置",
+    "MSP 为多个组织的域名生成月度合规报告与告警",
+    "区分邮件转发导致的失败与真实投递失败"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Marcan reads DMARC aggregate reports from an IMAP mailbox, checks your domains' SPF, DKIM and DMARC records live, and shows the results in a web dashboard. It is one Rust binary with the UI built in, and it keeps everything in one SQLite file.",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明它将所有数据保存在单个 SQLite 文件中，SQLite 仅作为其存储介质",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "自有域名免费使用，为客户端运营需告知来源或购买许可，代码全部开放",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Marcan reads DMARC aggregate reports from an IMAP mailbox, checks your domains' SPF, DKIM and DMARC records live, and shows the results in a web dashboard. It is one Rust binary with the UI built in, and it keeps everything in one SQLite file. ／ > **Public beta (0.x).** Expect rough edges, and back up your database before upgrading: the schema may still change. ／ docker run --rm -p 127.0.0.1:8080:8080 -v marcan-data:/data ghcr.io/mavgit1/marcan:latest",
+   "evidence_lines": [
+    5,
+    15,
+    36
+   ]
+  },
+  "fn": "mavgit1/marcan-dmarc",
+  "sha": "1f146ba37a0a",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

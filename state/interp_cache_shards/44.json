@@ -10351,5 +10351,157 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "16e2c0749484": {
+  "identity": {
+   "one_liner": "AI 代理可操作的 CRM，支持 MCP/REST 访问",
+   "review": "Margince 是一个源码可得（BUSL 1.1，非开源）的 CRM 系统，从邮件、会议和日历自动填充记录，AI 代理通过 MCP 或 REST 以用户同等权限操作。使用 Go + React + PostgreSQL 构建，面向需要自托管的销售团队，通过 Docker Compose 本地部署，需 Go 1.27、Node 24 等工具链，无配置界面，定制靠修改代码。",
+   "highlights": [
+    "代理通过 MCP 或 REST 连接，使用与用户相同的权限引擎",
+    "每次 AI 变更可查看其来源数据",
+    "支持本地模型（Ollama/vLLM）或云模型的 sovereign 模式限制外发",
+    "单安装仅服务一家公司，支持自托管 Docker 部署"
+   ],
+   "use_cases": [
+    "团队使用 AI 代理协作管理客户与商机",
+    "需自托管并控制 AI 数据外发的 CRM 场景",
+    "在代码中定制字段与工作流程的销售团队"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. Start the stack: `make dev`. It starts Postgres, Redis, the API and the web app, then returns.",
+     "lines": [
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明启动栈时启动 Postgres 作为应用自身的数据存储，Margince 是使用数据库的 CRM 应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "源码可得，Business Source License 1.1，非开源",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Margince is a CRM that fills its own records from mail, meetings and calendars. AI agents work in it under ／ 2. Start the stack: `make dev`. It starts Postgres, Redis, the API and the web app, then returns. ／ The core is a Go module in `backend/` and a React app in `frontend/`. The API contract is",
+   "evidence_lines": [
+    3,
+    29,
+    51
+   ]
+  },
+  "fn": "margince/margince",
+  "sha": "16e2c0749484",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e5ccc84c123f": {
+  "identity": {
+   "one_liner": "自托管 AI 令牌池网关，按成员分发密钥、配额与泄漏检测",
+   "review": "Tributary 是一个可自托管的 AI 网关/令牌池系统：成员持有个体 API key，请求经网关计量、配额校验和 IP 指纹后才转发上游，池主以信封加密保管供应商密钥；附带 Next.js 仪表盘和 Solana 结算市场方向。面向需要治理组织内 AI 用量的团队/个人，部署为单容器 Docker 服务，数据库支持 SQLite 与 Postgres 双后端。",
+   "highlights": [
+    "按成员发放 API key，请求在网关侧完成计量、配额检查与 IP 指纹识别（L66-L67）",
+    "池主持有的供应商密钥以信封加密存储，异常信号（异地旅行、跨国家 key 共享）以 review flags 呈现（L68-L70）",
+    "提供 Rust 网关（axum workspace）与 Next.js 仪表盘，单容器 Docker 部署，OpenAI 兼容契约测试（L85-L88, L109）"
+   ],
+   "use_cases": [
+    "组织/团队对成员的 AI token 用量做配额与审计治理",
+    "将自有上游额度池化后按成员分发使用",
+    "需要泄漏信号（key 共享、异常 IP）监测的自托管 AI 网关场景"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "docker exec -it -e TRIBUTARY_DATABASE_URL=sqlite:///data/tributary.db \\",
+     "lines": [
+      40
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`deploy/README.md`|Detailed ops: ports, reverse proxies (the trusted-proxy setting matters), backups, Postgres, healthchecks, quota behavior|",
+     "lines": [
+      76
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 AI 供应商调用提供网关/代理组件，并使用 SQLite/Postgres 作为自身存储后端，属为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "FSL-1.1-ALv2（源可得许可，各版本两年后转 Apache-2.0），主题标签注明 open-core",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Status: v0.1.0 — self-hostable AI token pools** (gateway, org pools, ／ every request is metered, quota-checked, and IP-fingerprinted at the ／ |`CONTRIBUTING.md`|Conventions (teaching comments, dual-DB rule) and dev setup|",
+   "evidence_lines": [
+    8,
+    66,
+    79
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Phat1911/Tributary",
+  "sha": "e5ccc84c123f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

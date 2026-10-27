@@ -10667,5 +10667,71 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7a3bbfe244d5": {
+  "identity": {
+   "one_liner": "本地优先的漫画库与阅读器，用 SQLite 存储元数据",
+   "review": "Mitsu 是运行在本机的漫画库管理和阅读应用，支持导入 CBZ/ZIP/图片文件夹和远程画廊，提供阅读进度保存、收藏、集合组织等功能，前后端分别为 Next.js 与 FastAPI，数据（元数据、集合、任务、设置）存于本地 SQLite 数据库。适合想在个人电脑上自管理漫画收藏、不需要云服务的个人用户。备份需手动复制 data 目录下的数据库与库文件。",
+   "highlights": [
+    "支持导入 CBZ、ZIP、图片文件夹及注册库根目录，带任务进度、重试与取消",
+    "阅读器支持单页/连续滚动、RTL/LTR、自动保存进度",
+    "所有数据（SQLite 数据库、库文件、缩略图）保存在本地 data 目录，可手动备份"
+   ],
+   "use_cases": [
+    "个人本地漫画收藏的导入、组织与阅读",
+    "无需账号和云服务的离线阅读管理",
+    "通过库根目录反复增量导入画廊文件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`MITSU_DATA_DIR`|`<repo>/data`|SQLite database, thumbnails, and cache| ／ │ Tailwind CSS v4 │ /api/v1 rewrite │ SQLAlchemy + SQLite │",
+     "lines": [
+      102,
+      116
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储画廊元数据的漫画阅读应用，数据库仅为内部存储组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Mitsu is a **local-first** manga library and reader. It runs entirely on your own machine — no accounts, no cloud, no telemetry. Import CBZ, ZIP, image folders, or remote galleries, read them in a focused reader, and keep your collection organised in collections and reading lists. The interface is mobile-first, with an iOS-style navigation shell, and works just as well on a desktop browser. ／ |`MITSU_DATA_DIR`|`<repo>/data`|SQLite database, thumbnails, and cache| ／ - `data/database/mitsu.db` — gallery metadata, collections, jobs, and settings",
+   "evidence_lines": [
+    14,
+    102,
+    149
+   ]
+  },
+  "fn": "Chandu4143/mitsu",
+  "sha": "7a3bbfe244d5",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

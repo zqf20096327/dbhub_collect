@@ -11120,5 +11120,271 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cd600636b941": {
+  "identity": {
+   "one_liner": "面向 .NET 11 的加密嵌入式数据库引擎，含 gRPC 服务器模式",
+   "review": "SharpCoreDB 是一个用 C# 编写的嵌入式数据库引擎，支持 AES-256-GCM 静态加密、ACID 事务、向量搜索、图算法与 GraphRAG，可通过内嵌或 gRPC（HTTP/2/3）服务器两种方式部署，通过 NuGet 分发 27 个包。面向需要在 .NET 生态内获得 SQLite 式简洁性与服务器级能力的开发团队；要求 .NET 11 SDK 构建，仅面向 net11.0/net10.0。",
+   "highlights": [
+    "提供嵌入式与 gRPC 服务器（HTTP/2 + HTTP/3）两种部署模式",
+    "支持 AES-256-GCM 静态加密、WAL 与崩溃一致性发布门禁",
+    "内置向量搜索、分析查询与 GraphRAG/图算法，使用 SIMD 指令集加速"
+   ],
+   "use_cases": [
+    "在 .NET 应用中嵌入加密单文件存储",
+    "通过 gRPC 提供带 TLS/JWT/RBAC 的网络数据库服务",
+    "需要向量搜索与图算法的数据分析场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "is answered by the engine itself (so REST and the embedded API see the catalog the PG handshake does),",
+     "lines": [
+      312
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "compat",
+     "quote": "- **SQLite compatibility:** supported SQLite syntax and features are never fewer than SQLite's; extra",
+     "lines": [
+      94
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库引擎/存储组件，README 提供引擎、providers 与服务器供 .NET 应用集成",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Embedded engine + production gRPC server in one ecosystem** ／ SharpCoreDB is for .NET teams that want **SQLite-like simplicity**, **enterprise-grade security**, and **server-scale capabilities** without leaving the .NET ecosystem. ／ - **One stack, two deployment models**: embedded and server mode",
+   "evidence_lines": [
+    6,
+    17,
+    103
+   ]
+  },
+  "fn": "MPCoreDeveloper/SharpCoreDB",
+  "sha": "cd600636b941",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3d6b820dc705": {
+  "identity": {
+   "one_liner": "自托管 AI 漫画/视频生成工作室，结构化流水线生成",
+   "review": "OpenManga 是一个自托管的内容生产工具，把故事转为结构化状态（角色、章节、场景、分镜规格），再通过用户自备的 AI 服务商密钥生成图像与旁白，支持本地 TTS（Kokoro-82M）合成语音，并输出漫画页、PDF、EPUB、webtoon 条漫和 MP4 视频。数据存储使用 PostgreSQL，通过 Docker Compose 部署 postgres、redis 等服务。适合需要批量、可控成本地制作 AI 插画漫画或解说视频的创作者。",
+   "highlights": [
+    "提供从故事分析、角色参考、分镜生成到字幕排版的完整流水线，支持按项目预算上限控制生成成本",
+    "支持多种导出格式：PNG/JPG 页序、PDF（含 KDP 尺寸）、PSD 分层文件、CBZ、EPUB、MP4 视频及 YouTube 发布包",
+    "可完全离线运行文本步骤（粘贴任意聊天回复验证）并使用本地 Kokoro-82M 语音合成，无强制 API 密钥"
+   ],
+   "use_cases": [
+    "自托管制作连贯角色的 AI 生成漫画、条漫或网漫连载",
+    "批量生产带旁白解说的视频内容并打包 YouTube 发布物料",
+    "无 API 密钥的演示或低成本试用场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "cp .env.example .env # set POSTGRES_PASSWORD, SESSION_SECRET (openssl rand -hex 32), public URLs, INITIAL_ADMIN_* ／ docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d postgres redis kokoro",
+     "lines": [
+      157,
+      186
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 的 docker compose 命令启动 postgres 和 redis 服务，PostgreSQL 作为该应用的存储依赖。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted production tool for consistent AI-generated manhwa, manga, webtoons and illustrated recaps. It is not \"story → giant prompt → comic.png\": the story becomes structured state (cast, world, chapters, scenes, pages, panel specs), canonical references pin identity, panels are generated cheaply and versioned, and lettering, layout, narration and exports are deterministic.",
+   "evidence_lines": [
+    23
+   ]
+  },
+  "fn": "pr0h0/OpenManga",
+  "sha": "3d6b820dc705",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "85fad4ff62c8": {
+  "identity": {
+   "one_liner": "基于 Gmail 解析的求职申请追踪 Web 应用",
+   "review": "一个读取 Gmail 邮件并自动识别求职申请的应用：通过 OAuth2 连接用户 Gmail，用正则模式提取公司、职位与申请状态，提供统计看板和 Excel/CSV 导出。面向求职者、职业教练等个人用户；README 称无数据存储（stateless），当前因 Gmail API 配额限制测试阶段仅开放 100 用户。",
+   "highlights": [
+    "通过 OAuth2 连接 Gmail，用正则模式自动提取公司、职位与申请状态",
+    "提供申请统计、状态分布与时间线分析看板",
+    "支持导出 Excel (.xlsx)、CSV 及适配 Google Sheets 的格式"
+   ],
+   "use_cases": [
+    "求职者自动整理和追踪求职申请邮件",
+    "职业教练帮助客户组织求职流程",
+    "学生管理实习与校招申请"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 将其定位为面向求职者的应用，技术栈含 Next.js/API 路由，未出现任何数据库相关组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "An intelligent job application tracking system that automatically parses your Gmail to extract and organize job application emails, providing analytics and export capabilities. ／ - **Job Seekers**: Track all applications automatically without manual entry ／ - **Next.js API Routes** - Serverless backend functions",
+   "evidence_lines": [
+    3,
+    113,
+    47
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Tomiwajin/CareerSync",
+  "sha": "85fad4ff62c8",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f4545bfd0fb1": {
+  "identity": {
+   "one_liner": "开源 AI 获客对话 CMS，基于 Next.js + PostgreSQL 自托管",
+   "review": "ONIR CMS 是一个用于销售获客（prospecting）的 AI 对话内容管理系统：创建公开聊天链接收集访客信息、生成线索档案并支持多组织租户隔离。面向需要自托管获客机器人的团队，通过 pg 以原生 SQL 使用 PostgreSQL 16 存储，提供 Docker 与 Node.js 两种部署方式，目前处于 alpha（0.x）阶段。",
+   "highlights": [
+    "提供公开聊天链接机制，包含加密令牌、过期、撤销与访客同意",
+    "支持多组织租户隔离及 OpenAI 兼容 AI 供应商密钥管理",
+    "通过 GitHub Container Registry 发布 Docker 镜像用于自托管"
+   ],
+   "use_cases": [
+    "销售获客场景的 AI 对话链接与线索收集",
+    "多组织隔离的自托管 CMS 部署",
+    "基于 OpenAI 兼容模型的对话式信息采集"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL 16, SQL brut via `pg` ／ |`DATABASE_URL`|Connexion PostgreSQL|",
+     "lines": [
+      39,
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL 存储数据的 CMS 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可，README 提及未来可能有单独私有仓库的付费模块",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- PostgreSQL 16, SQL brut via `pg` ／ |`DATABASE_URL`|Connexion PostgreSQL| ／ **ONIR CMS** est un CMS open source de prospection et de conversation assistée par IA.",
+   "evidence_lines": [
+    39,
+    88,
+    3
+   ]
+  },
+  "fn": "RINOHeinrich1/onir-cms",
+  "sha": "f4545bfd0fb1",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

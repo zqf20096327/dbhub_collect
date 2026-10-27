@@ -10938,5 +10938,237 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e43572a976ed": {
+  "identity": {
+   "one_liner": "社保/电子政务后端参考实现，Spring MVC + MyBatis + Oracle",
+   "review": "Mestudy 是一个省级社保与网上政务服务平台后端的多模块 Maven 参考实现，包含 5 个 Spring MVC + MyBatis 模块、约 350 个 HTTP 接口、Axis SOAP 集成与 Redis 会话缓存，使用 Oracle 多 schema 存储。面向需要构建或维护同形态系统的 Java 工程师，作为参考架构阅读；需 JDK 8、Tomcat、Oracle 和 Redis 才能运行，其中一个模块依赖私有框架无法公开构建。",
+   "highlights": [
+    "5 个 Spring MVC + MyBatis 模块，约 350 个 HTTP 接口，统一响应封装",
+    "MyBatis 映射 Oracle 多 schema，c3p0 多数据源装配，Redis 会话与字典缓存",
+    "Axis SOAP 桥接遗留政务/HIS 系统，并提供带心跳续期的令牌认证客户端 SDK"
+   ],
+   "use_cases": [
+    "社保经办、社保卡、就业、医院挂号等政务业务流程的参考架构",
+    "需要 SOAP 对接遗留政务系统的 Java 集成模式参考",
+    "多数据源 + MyBatis + Oracle 的传统 Spring 工程结构示例"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "MyBatis mappers against Oracle, Redis-backed sessions, SOAP bridges to legacy ／ |Database|Oracle 10g/11g|Multiple schemas per module| ／ - Oracle and Redis instances if you want the application to actually start",
+     "lines": [
+      25,
+      94,
+      111
+     ]
+    }
+   ],
+   "dbs": [
+    "Oracle"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 Oracle 存数据、Redis 做会话缓存的政务业务后端系统，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A reference implementation of a Chinese social-insurance / e-government service platform, built on Spring MVC 4 + MyBatis 3.** ／ |Database|Oracle 10g/11g|Multiple schemas per module| ／ MyBatis mappers against Oracle, Redis-backed sessions, SOAP bridges to legacy",
+   "evidence_lines": [
+    3,
+    94,
+    25
+   ]
+  },
+  "fn": "zengyunhua/Mestudy",
+  "sha": "e43572a976ed",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b5ede2c91b6f": {
+  "identity": {
+   "one_liner": "Flask + PostgreSQL 的动漫社社团网站，含论坛、番剧资源与萌战系统",
+   "review": "这是一个面向学校动漫社团的网站应用，提供社员论坛、番剧资源与百科、萌战赛事、通知中心和管理后台等功能。使用 Flask 与 SQLAlchemy 访问 PostgreSQL（经 Supabase），演示/测试模式下以 SQLite 内存库运行；仅社员登录访问，不开放注册，部署依赖 Vercel 与 Supabase。",
+   "highlights": [
+    "提供论坛、番剧资源审核、萌战赛事、通知中心、管理后台等模块",
+    "使用 Flask + SQLAlchemy 访问 PostgreSQL（Supabase），演示模式以 SQLite 内存库运行",
+    "含 pytest 与 Playwright 测试，支持 PWA 与 Vercel 部署"
+   ],
+   "use_cases": [
+    "动漫社等社团搭建仅成员可访问的展示与社区网站",
+    "需要线上投票赛事（萌战）流程管理的社团活动",
+    "基于 Flask + Supabase 的小型 Web 应用改造模板"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|ORM / 数据库|SQLAlchemy 2.0 / PostgreSQL（Supabase；测试用 SQLite 内存库）|",
+     "lines": [
+      135
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "$env:TESTING = \"1\"; $env:DATABASE_URL = \"sqlite:///:memory:\"; python run.py ／ TESTING=1 DATABASE_URL=sqlite:///:memory: python run.py ／ > ⚠️ 演示账号与演示数据只在 **SQLite 库**上生成（v4.31.8 起强制校验：`TESTING=1` + 非 Vercel + SQLite 三条缺一不可）。本地 `.env` 的 `DATABASE_URL` 若指向线上库，起服务时务必显式覆盖成 `DATABASE_URL=sqlite:///:memory:`，否则演示数据会被拒绝写入（保护生产库）。",
+     "lines": [
+      100,
+      102,
+      107
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL（Supabase）与 SQLite 存储数据的应用系统，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "动漫社网站：社团展示、社员论坛、番剧资源与百科、动漫资讯、线上萌战、AI 看板娘 ／ 需要连真实数据库时：在 Supabase 建库后填好 `.env` 的 `DATABASE_URL`，执行 `python init.py` 再 `python run.py`。 ／ |ORM / 数据库|SQLAlchemy 2.0 / PostgreSQL（Supabase；测试用 SQLite 内存库）|",
+   "evidence_lines": [
+    17,
+    116,
+    135
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "N-zihan/anime-club-website",
+  "sha": "b5ede2c91b6f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "475cb1d3f2e5": {
+  "identity": {
+   "one_liner": "goInception 个人分支：SQL 审核/执行/备份/回滚工具，升级至 TiDB parser 支持 MySQL 8.0 语法",
+   "review": "goInception 的个人维护分支，提供 SQL 审计、执行、备份与回滚语句生成，基于可配置规则解析 SQL 并返回审核结果。该分支将 SQL 解析器升级为 pingcap/tidb/pkg/parser，增加 MySQL 8.0 语法支持，并修复 CTE 审计误报、panic 崩溃等问题，另附对真实 MySQL 8 实例的集成测试。供需要 MySQL 8 语法审核的运维/DBA 使用，声明为个人学习与内部用途，非官方发布。",
+   "highlights": [
+    "对 SQL 进行审核、执行、备份并生成回滚语句，基于可配置规则返回审核结果",
+    "升级至 github.com/pingcap/tidb/pkg/parser，增加 MySQL 8.0 语法支持",
+    "修复上游的 CTE 误报、nil 指针与栈溢出崩溃等问题，并增加对真实 MySQL 8 实例的集成测试"
+   ],
+   "use_cases": [
+    "MySQL 8.0 语法的 SQL 上线前审核与回滚语句生成",
+    "配合 Archry 等通过相同协议接入的上游集成使用",
+    "内部环境的 SQL 变更备份流程"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "goInception is a MySQL operations tool that reviews, executes, backs up, and generates rollback statements for SQL. ／ |Tests|Added an integration test against a real MySQL 8 instance|",
+     "lines": [
+      15,
+      31
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "|SQL parser|Upgraded to `github.com/pingcap/tidb/pkg/parser`, adding MySQL 8.0 syntax support| ／ go build -o goInception tidb-server/main.go",
+     "lines": [
+      24,
+      42
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是一个为 MySQL 提供 SQL 审核与执行服务的运维工具，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0，沿用上游许可并保留原版权声明",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "goInception is a MySQL operations tool that reviews, executes, backs up, and generates rollback statements for SQL. ／ It parses SQL and returns audit results based on configurable rules. ／ |SQL parser|Upgraded to `github.com/pingcap/tidb/pkg/parser`, adding MySQL 8.0 syntax support|",
+   "evidence_lines": [
+    15,
+    16,
+    24
+   ]
+  },
+  "fn": "cutemolly/goInception",
+  "sha": "475cb1d3f2e5",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

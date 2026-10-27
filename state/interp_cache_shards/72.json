@@ -10669,5 +10669,77 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "55c2006b7419": {
+  "identity": {
+   "one_liner": "自托管游戏收藏追踪 Web 应用，含 Steam 同步与浏览器模拟器",
+   "review": "一个自托管的单管理员 Web 应用，用于记录游戏收藏、愿望单、游玩进度与硬件设备，提供 IGDB 目录检索、Steam 库存与愿望单同步、降价提醒及内置模拟器游玩 ROM。后端为 FastAPI + SQLAlchemy（默认 SQLite），通过 Docker 镜像部署，迁移自动执行；不适合多用户或公网注册场景。",
+   "highlights": [
+    "支持 IGDB 目录检索、Steam 库存与愿望单同步及 IsThereAnyDeal/PlatPrices 降价追踪",
+    "支持上传 ROM 在浏览器内游玩 25+ 系统，存档保存在服务器端",
+    "提供 CSV 导出及包含 ROM、存档、BIOS 的 JSON/.zip 备份，Docker 部署且启动时自动运行迁移"
+   ],
+   "use_cases": [
+    "个人自托管管理游戏收藏与愿望单并追踪降价",
+    "通过浏览器模拟器游玩自己拥有的游戏的 ROM",
+    "导出备份或分享只读收藏链接"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "rather than the proxy. `DATABASE_URL` (SQLite by default), `REDIS_URL`, and ／ backend/ FastAPI, SQLAlchemy, Alembic (SQLite by default) — own requirements.txt",
+     "lines": [
+      124,
+      177
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用以 SQLite 为默认数据库存数据（DATABASE_URL, L124；后端 FastAPI/SQLAlchemy/Alembic, L177），属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " A self-hosted web app for tracking your video game collection — what you own, what you want, ／ rather than the proxy. `DATABASE_URL` (SQLite by default), `REDIS_URL`, and ／ backend/    FastAPI, SQLAlchemy, Alembic (SQLite by default) — own requirements.txt",
+   "evidence_lines": [
+    5,
+    124,
+    177
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "wwwescape/VideoGameTrackarr",
+  "sha": "55c2006b7419",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

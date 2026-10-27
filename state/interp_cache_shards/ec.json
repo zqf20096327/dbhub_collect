@@ -10053,5 +10053,140 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ae856a3c3983": {
+  "identity": {
+   "one_liner": "基于 SQLite 服务的本地 LLM 工具调用恢复工作流评估实验场",
+   "review": "ResolveLab 是一个代理工程实验室，围绕合成的 SQLite 同步服务和工单服务构建故障恢复场景，用 Ollama 本地模型做工具调用，并配合 LoRA 后训练（DAgger/BC）与独立状态校验器进行可复现评测。面向研究本地小模型工具使用的工程师与研究者；环境为合成服务，不声称生产可靠性。",
+   "highlights": [
+    "提供带注册训练/开发/测试划分的可复现故障恢复评测（eval CLI 与基准场景）",
+    "支持通过 Ollama 原生工具调用运行本地模型，运行时校验参数并由独立校验器检查数据库状态",
+    "提供脚本重放已发布动作以审计实验，无需 GPU 或模型下载"
+   ],
+   "use_cases": [
+    "评估本地小模型在工具调用故障恢复任务上的表现",
+    "LoRA/BC/DAgger 后训练实验的数据与基准平台",
+    "无需云端 API 的离线代理工作流演示与教学"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "services: a durable SQLite sync system and a ticket service over real HTTP. It combines ／ `Policy → validated tool router → SQLite service → independent state verifier`",
+     "lines": [
+      8,
+      195
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储服务数据与事务记录，是运行在数据库之上的实验/评估应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "services: a durable SQLite sync system and a ticket service over real HTTP. It combines ／ `Policy → validated tool router → SQLite service → independent state verifier`",
+   "evidence_lines": [
+    8,
+    195
+   ]
+  },
+  "fn": "Ta0p1/ResolveLab",
+  "sha": "ae856a3c3983",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8651f0868cd0": {
+  "identity": {
+   "one_liner": "面向 TiDB 升级的 SQL 采集与执行计划离线比较工具",
+   "review": "PCC Core 从 Statement Summary 或 SQL 清单导出 SQL、表结构与统计信息，在两套隔离测试环境获取 EXPLAIN 并生成 HTML/JSONL/CSV 离线报告，用于升级前后执行计划比较。提供 Python CLI 与 SDK，DBA 审核后人工执行 DDL/LOAD STATS，工具不自动导入或执行业务 SQL。当前版本 0.1.2 处于早期迭代阶段，部分 Prepared SQL 场景仍有限制。",
+   "highlights": [
+    "从 Statement Summary 或 SQL 清单导出 SQL、表结构、统计信息，生成 CaptureBundle",
+    "支持普通 EXPLAIN 采集与计划差异比较，输出 HTML/JSONL/CSV 离线报告",
+    "提供 Python CLI 与 SDK，支持持续采集、断点恢复与离线重算 diff"
+   ],
+   "use_cases": [
+    "TiDB 升级前后的 SQL 执行计划回归比较",
+    "DBA 审核升级风险所需的 SQL 与统计材料导出",
+    "离线归档计划的重算与差异复核"
+   ],
+   "db_verdicts_lines_range": "TiDB 在 L7/L9/L13 等行明确出现"
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "**面向 TiDB 升级的 SQL 采集、材料导出和执行计划比较工具。** ／ Offline-first TiDB execution plan capture and comparison, with a shared Python CLI and SDK. ／ 当前版本 **0.1.2，处于早期迭代阶段**。已完成三套集群的实测，但尚未全部通过：分区统计完整回放、TiDB 6.5 的部分 Prepared SQL、二进制参数对照仍有明确限制。请先阅读 验证结果与已知问题。本项目是独立实现，不依赖旧 Go PCC。",
+     "lines": [
+      7,
+      9,
+      13
+     ]
+    }
+   ],
+   "dbs": [
+    "TiDB"
+   ],
+   "eco": "tool",
+   "eco_why": "为 TiDB 升级流程服务的采集与比较工具，自身不存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0，第三方组件保留各自许可证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**面向 TiDB 升级的 SQL 采集、材料导出和执行计划比较工具。** ／ PCC Core 从 Statement Summary 或给定 SQL 清单导出 SQL、表结构、统计信息和上下文，在两套测试环境获取普通 `EXPLAIN`，输出可离线阅读的 HTML、JSONL 和 CSV 报告。CLI `pcc` 与 SDK `pcc_tool.api` 共用核心，可独立使用，也可接入后续平台。 ／ 当前版本 **0.1.2，处于早期迭代阶段**。已完成三套集群的实测，但尚未全部通过：分区统计完整回放、TiDB 6.5 的部分 Prepared SQL、二进制参数对照仍有明确限制。请先阅读 验证结果与已知问题。本项目是独立实现，不依赖旧 Go PCC。",
+   "evidence_lines": [
+    7,
+    11,
+    13
+   ]
+  },
+  "fn": "jielun132/pcc_kernel",
+  "sha": "8651f0868cd0",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

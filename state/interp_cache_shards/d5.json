@@ -10357,5 +10357,142 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8831fe0f540d": {
+  "identity": {
+   "one_liner": "本地优先 MCP 工具 monorepo，含 Windows runtime 控制中心",
+   "review": "包含八个本地 MCP 项目、KGI Broker Bridge 和 Windows 托盘控制中心的 source-only 仓库，各元件独立管理依赖、启动与安全边界，Memory Core 与 personal-asset-os 使用 SQLite 在本机存数据，正式资料不进 Git。面向在 Windows 上自建 MCP 工具链的个人开发者；仓库未附 LICENSE，公开可见不等于授予使用或再散布权利。",
+   "highlights": [
+    "提供八个本机 MCP 项目与一个 Windows runtime orchestration/observability 控制中心",
+    "Memory Core 与 personal-asset-os 使用 Python/FastAPI/SQLite 本地存储，正式资料不进入 Git",
+    "各元件采用 unified-lifecycle-v3 controller，包含 PID/owner 验证与 fail-closed 终止流程"
+   ],
+   "use_cases": [
+    "在 Windows 本机运行与管理多个 MCP server 组件",
+    "本地优先的个人记忆 API 与个人资产账本场景",
+    "为既有 HTTP 服务（学习 Hub、OMI backend 等）构建 bounded MCP adapter"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 這是 source-only repository。個人資料、SQLite、DPAPI 密文、tunnel profile、 ／ |`Memory Core`|local-first 個人記憶 API、MCP 與 candidate review system of record|Python / FastAPI / SQLite|正式資料只存在本機且不進 Git| ／ |`personal-asset-os`|local-first 個人資產帳本、dashboard 與唯讀 MCP|Python / FastAPI / React / SQLite|正式財務資料只存在 `%LOCALAPPDATA%\\PersonalAssetOS`，不進 Git|",
+     "lines": [
+      16,
+      25,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为 Memory Core 与 personal-asset-os 等元件的本机存储使用，仓库本身不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "仓库未加入 LICENSE，公开可见不授予使用或再散布权利",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "runtime 中樞的公開原始碼。它採用 source-only monorepo：各 MCP 元件維持各自的依賴、 ／ |`Memory Core`|local-first 個人記憶 API、MCP 與 candidate review system of record|Python / FastAPI / SQLite|正式資料只存在本機且不進 Git| ／ |`personal-asset-os`|local-first 個人資產帳本、dashboard 與唯讀 MCP|Python / FastAPI / React / SQLite|正式財務資料只存在 `%LOCALAPPDATA%\\PersonalAssetOS`，不進 Git|",
+   "evidence_lines": [
+    10,
+    25,
+    31
+   ]
+  },
+  "fn": "lulu930128/GPT_MCPtool",
+  "sha": "8831fe0f540d",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0ccbe85078d5": {
+  "identity": {
+   "one_liner": "PostgreSQL 监控与故障调查工具，只读采集，含 Web UI",
+   "review": "LockLens 是一个面向 PostgreSQL 的监控与事件调查工具，采集会话、查询、阻塞链、复制等数据，通过 Web UI 与 CLI 呈现，并将历史存入自身的 PostgreSQL/TimescaleDB 存储。它仅以只读角色连接被监控库，不执行任何变更操作。适合管理 PostgreSQL 实例的 DBA 与运维团队。",
+   "highlights": [
+    "采集 sessions、查询、阻塞链、复制拓扑与事件，事件可推送 Slack、webhook、邮件",
+    "以只读角色连接（pg_read_all_stats），不取消查询、不终止会话、不改配置",
+    "提供 Web UI、CLI（doctor/inspect/watch/snapshot）与 Prometheus /metrics 接口"
+   ],
+   "use_cases": [
+    "排查 PostgreSQL 阻塞链与长事务并留存事件证据",
+    "多实例环境的会话、查询与复制延迟监控",
+    "监控数据的事件导出（JSON/HTML）用于事后分析"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Open-source PostgreSQL monitoring and incident investigation.** ／ PostgreSQL 14–18 ／ Monitored servers need PostgreSQL 14 or later and a login role with",
+     "lines": [
+      3,
+      11,
+      118
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为监控 PostgreSQL 的工具，自身存储也依赖 PostgreSQL/TimescaleDB。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Open-source PostgreSQL monitoring and incident investigation.** ／ - **Observe-only by design.** LockLens connects with a read-only role. It ／ Monitored servers need PostgreSQL 14 or later and a login role with",
+   "evidence_lines": [
+    3,
+    29,
+    118
+   ]
+  },
+  "fn": "Huy-8bit/locklens",
+  "sha": "0ccbe85078d5",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

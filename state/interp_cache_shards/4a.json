@@ -10287,5 +10287,118 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "42ded61a0192": {
+  "identity": {
+   "one_liner": "本地照片评分与精选引擎，Web 画廊管理图库",
+   "review": "Facet 是一个本地运行的照片分析与筛选引擎，对每张照片从美学、构图、人脸清晰度等 9 个维度打分，并提供带过滤、语义搜索、人脸识别、相册与分享功能的 Web 画廊。面向摄影师等需要批量筛选和管理照片的用户，基于 FastAPI 与 Angular 构建，全部在本地机器运行，无云端依赖；RAW 解码依赖 LibRaw 与 exiftool，部分 AI 功能需 GPU。",
+   "highlights": [
+    "对照片按 9 个维度评分，支持 JPG、HEIC、10 种 RAW 格式等",
+    "提供连拍检测、眨眼检测、相似分组与自动精选（culling）",
+    "内置人脸识别、语义搜索、MCP 端点与相册分享"
+   ],
+   "use_cases": [
+    "摄影拍后批量筛选与精选照片",
+    "本地照片库的组织、人脸归并与语义检索",
+    "向客户分享校样相册并收集反馈"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是用机器学习管理照片库的应用，README 未提及任何数据库作为适配或服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Facet is a local photo-analysis and culling engine. It scores each image across 9 dimensions — from aesthetic quality to face sharpness — then lets you browse, cull, and organize through a web gallery. Everything runs on your machine; no cloud, accounts, or API keys. ／ 1. **Scan** — Point Facet at a folder of photos. Each image is analyzed for quality, composition, and faces. Supports JPG, HEIF/HEIC/HIF (Canon HDR PQ `.HIF` stills are decoded with the SMPTE ST 2084 PQ transfer function and tone-mapped to SDR sRGB automatically), 10 RAW formats (CR2, CR3, NEF, ARW, RAF, RW2, DNG, ORF, SRW, PEF), and PNG, GIF, WebP, BMP, TIFF, and AVIF stills (AVIF needs a Pillow built with AVIF support, native from 11.3). A RAW LibRaw can't decode — such as a Lightroom \"Merge to HDR/Panorama\" DNG (`-HDR.dng`, `-Pano.dng`) or a camera newer than the installed LibRaw — falls back to its largest embedded preview via `exiftool` (needs a preview at least 1024 px on the long edge; scores then come from that preview, not a full RAW decode). Lightroom Classic 13+ merges (and Enhance) store that preview as JPEG XL; Facet decodes it directly. ／ - **AI agents (MCP)** — an on-by-default Model Context Protocol endpoint (switch it off with `viewer.mcp.enabled`) lets MCP-capable assistants search and inspect the library with the gallery's filters, using revocable personal tokens; depending on the token's level, an assistant can also rate, tag, organise and cull photos (destructive actions preview first and need a confirmation)",
+   "evidence_lines": [
+    5,
+    17,
+    120
+   ]
+  },
+  "fn": "ncoevoet/facet",
+  "sha": "42ded61a0192",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "98fadcd91d27": {
+  "identity": {
+   "one_liner": "M-Pesa 交易实时流处理平台，基于 Kafka/Spark 实现事件摄取与分析",
+   "review": "TELIXO 是一个多语言金融科技流处理项目，用于摄取、校验、处理和分析 M-Pesa 交易事件，仓库分为 Python、Java、Elixir、Go、frontend 和 Infrastructure 六个目录。面向数据工程与金融科技场景的开发者，通过 Docker Compose 启动本地技术栈；README 明确说明其不发起、撤销、退款或结算支付，且不保证所有服务可构建或生产可用。",
+   "highlights": [
+    "支持通过 Docker Compose 一键构建并启动多语言本地技术栈",
+    "包含回调摄取、Kafka 流式传输、数据质量与分析等平台目录",
+    "提供 at-least-once 投递、幂等消费与死信持久化等事件投递语义"
+   ],
+   "use_cases": [
+    "M-Pesa 交易事件的实时摄取与流式处理",
+    "金融科技场景下的事件驱动架构与数据管道学习/演示",
+    "本地多服务平台的开发与部署验证"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是使用 Kafka/Spark 等组件处理交易数据的金融科技应用平台，README 未以服务数据库生态为定位。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "TELIXO is a multi-language fintech streaming and infrastructure platform for ingesting, validating, processing, and analyzing M-Pesa transaction events. It does not treat callback receipt as proof of payment, and this repository does not itself initiate, reverse, refund, or settle payments. ／ Use Docker Compose v2.20.3 or newer for the combined platform configuration, which uses Compose `include`. ／ A repository reorganization is not proof that all services build or are production-ready. Run the relevant CI workflows and Compose validation after structural changes, review failures, and record which integration tests were skipped because dependencies or provider test credentials were unavailable.",
+   "evidence_lines": [
+    3,
+    24,
+    71
+   ]
+  },
+  "fn": "Victor-Kipruto-Rop/TELIXO",
+  "sha": "98fadcd91d27",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9255,5 +9255,339 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "15d851c2d54b": {
+  "identity": {
+   "one_liner": "基于 Wails(Go)+React 的多数据源桌面数据库客户端",
+   "review": "GoNavi 是一个用 Go(Wails)+React 构建的跨平台桌面数据库客户端，内置支持 MySQL、PostgreSQL、Oracle、Redis、向量库与消息队列等数据源，另可通过可选驱动代理接入 SQL Server、MongoDB、ClickHouse 等更多数据源。提供 SQL 编辑、结果网格编辑、执行历史、审计中心和 AI 助手（可挂接 MCP），适合需要在一个桌面工具内管理多种数据库的开发与运维人员。",
+   "highlights": [
+    "内置支持 MySQL、PostgreSQL、Oracle、Redis、Chroma、Qdrant、Milvus、Kafka 等数据源，并可通过可选驱动代理扩展至更多",
+    "提供 schema 感知的 AI 助手与 MCP 连接，密钥保留在本地宿主机",
+    "包含 SQL 执行日志、默认脱敏的审计中心，支持 Docker/K8s/Helm/Podman 打包"
+   ],
+   "use_cases": [
+    "在单一桌面客户端中浏览、查询和编辑多种关系型与非关系型数据源",
+    "通过 AI 助手生成、解释和审查 SQL，并将结构化上下文交给编码代理",
+    "通过审计中心记录和导出脱敏后的 SQL 执行证据"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> **One cockpit for MySQL, Postgres, Redis, Kafka, Milvus, OceanBase, ClickHouse…** ／ |**Built-in**|MySQL · GoldenDB · PostgreSQL · Oracle · Redis · Chroma · Qdrant · Milvus · RocketMQ · MQTT · Kafka · RabbitMQ| ／ |Relational|PostgreSQL|Built-in|Schema browsing, SQL query, data editing, object management|",
+     "lines": [
+      61,
+      173,
+      182
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "> **One cockpit for MySQL, Postgres, Redis, Kafka, Milvus, OceanBase, ClickHouse…** ／ |**Built-in**|MySQL · GoldenDB · PostgreSQL · Oracle · Redis · Chroma · Qdrant · Milvus · RocketMQ · MQTT · Kafka · RabbitMQ| ／ |Relational|MySQL|Built-in|Schema browsing, SQL query, data editing, export/backup|",
+     "lines": [
+      61,
+      173,
+      180
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|**Built-in**|MySQL · GoldenDB · PostgreSQL · Oracle · Redis · Chroma · Qdrant · Milvus · RocketMQ · MQTT · Kafka · RabbitMQ| ／ |Relational|Oracle|Built-in|Query execution, object browsing, data editing|",
+     "lines": [
+      173,
+      183
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Optional**|MariaDB · Doris · StarRocks · Sphinx · SQL Server · SQLite · DuckDB · OceanBase · Dameng · Kingbase · HighGo · Vastbase · OpenGauss · GaussDB · IRIS · Caché · MongoDB · TDengine · IoTDB · ClickHouse · Hive · Trino · Elasticsearch · TiDB · Cockroa ／ |File-based|SQLite|Optional driver agent|Local DB browsing, editing, export|",
+     "lines": [
+      174,
+      197
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|**Optional**|MariaDB · Doris · StarRocks · Sphinx · SQL Server · SQLite · DuckDB · OceanBase · Dameng · Kingbase · HighGo · Vastbase · OpenGauss · GaussDB · IRIS · Caché · MongoDB · TDengine · IoTDB · ClickHouse · Hive · Trino · Elasticsearch · TiDB · Cockroa ／ |Relational|SQL Server|Optional driver agent|Schema browsing, SQL query, object management|",
+     "lines": [
+      174,
+      196
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "> **One cockpit for MySQL, Postgres, Redis, Kafka, Milvus, OceanBase, ClickHouse…** ／ |**Optional**|MariaDB · Doris · StarRocks · Sphinx · SQL Server · SQLite · DuckDB · OceanBase · Dameng · Kingbase · HighGo · Vastbase · OpenGauss · GaussDB · IRIS · Caché · MongoDB · TDengine · IoTDB · ClickHouse · Hive · Trino · Elasticsearch · TiDB · Cockroa",
+     "lines": [
+      61,
+      174
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**Optional**|MariaDB · Doris · StarRocks · Sphinx · SQL Server · SQLite · DuckDB · OceanBase · Dameng · Kingbase · HighGo · Vastbase · OpenGauss · GaussDB · IRIS · Caché · MongoDB · TDengine · IoTDB · ClickHouse · Hive · Trino · Elasticsearch · TiDB · Cockroa ／ |Relational|MariaDB|Optional driver agent|Querying, object management, data editing|",
+     "lines": [
+      174,
+      192
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|**Optional**|MariaDB · Doris · StarRocks · Sphinx · SQL Server · SQLite · DuckDB · OceanBase · Dameng · Kingbase · HighGo · Vastbase · OpenGauss · GaussDB · IRIS · Caché · MongoDB · TDengine · IoTDB · ClickHouse · Hive · Trino · Elasticsearch · TiDB · Cockroa",
+     "lines": [
+      174
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "> **One cockpit for MySQL, Postgres, Redis, Kafka, Milvus, OceanBase, ClickHouse…** ／ |**Optional**|MariaDB · Doris · StarRocks · Sphinx · SQL Server · SQLite · DuckDB · OceanBase · Dameng · Kingbase · HighGo · Vastbase · OpenGauss · GaussDB · IRIS · Caché · MongoDB · TDengine · IoTDB · ClickHouse · Hive · Trino · Elasticsearch · TiDB · Cockroa",
+     "lines": [
+      61,
+      174
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "|**Optional**|MariaDB · Doris · StarRocks · Sphinx · SQL Server · SQLite · DuckDB · OceanBase · Dameng · Kingbase · HighGo · Vastbase · OpenGauss · GaussDB · IRIS · Caché · MongoDB · TDengine · IoTDB · ClickHouse · Hive · Trino · Elasticsearch · TiDB · Cockroa",
+     "lines": [
+      174
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "|**Optional**|MariaDB · Doris · StarRocks · Sphinx · SQL Server · SQLite · DuckDB · OceanBase · Dameng · Kingbase · HighGo · Vastbase · OpenGauss · GaussDB · IRIS · Caché · MongoDB · TDengine · IoTDB · ClickHouse · Hive · Trino · Elasticsearch · TiDB · Cockroa",
+     "lines": [
+      174
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "|**Optional**|MariaDB · Doris · StarRocks · Sphinx · SQL Server · SQLite · DuckDB · OceanBase · Dameng · Kingbase · HighGo · Vastbase · OpenGauss · GaussDB · IRIS · Caché · MongoDB · TDengine · IoTDB · ClickHouse · Hive · Trino · Elasticsearch · TiDB · Cockroa",
+     "lines": [
+      174
+     ]
+    },
+    {
+     "db": "GBase",
+     "rel": "support",
+     "quote": "|**Optional**|MariaDB · Doris · StarRocks · Sphinx · SQL Server · SQLite · DuckDB · OceanBase · Dameng · Kingbase · HighGo · Vastbase · OpenGauss · GaussDB · IRIS · Caché · MongoDB · TDengine · IoTDB · ClickHouse · Hive · Trino · Elasticsearch · TiDB · Cockroa",
+     "lines": [
+      174
+     ]
+    },
+    {
+     "db": "YashanDB",
+     "rel": "support",
+     "quote": "|**Optional**|MariaDB · Doris · StarRocks · Sphinx · SQL Server · SQLite · DuckDB · OceanBase · Dameng · Kingbase · HighGo · Vastbase · OpenGauss · GaussDB · IRIS · Caché · MongoDB · TDengine · IoTDB · ClickHouse · Hive · Trino · Elasticsearch · TiDB · Cockroa",
+     "lines": [
+      174
+     ]
+    },
+    {
+     "db": "GoldenDB",
+     "rel": "support",
+     "quote": "|**Built-in**|MySQL · GoldenDB · PostgreSQL · Oracle · Redis · Chroma · Qdrant · Milvus · RocketMQ · MQTT · Kafka · RabbitMQ| ／ |Domestic DB|GoldenDB|Built-in|MySQL-compatible query workflow and distributed transaction scenarios|",
+     "lines": [
+      173,
+      181
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明为多数据源数据库客户端，为连接和管理各类数据库提供 GUI 工具，本身不是使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB",
+    "OceanBase",
+    "Dameng",
+    "openGauss",
+    "GaussDB",
+    "GBase",
+    "YashanDB",
+    "GoldenDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A high-performance cross-platform database client built with ／ ## 🗄 Supported Data Sources ／ |**Built-in**|MySQL · GoldenDB · PostgreSQL · Oracle · Redis · Chroma · Qdrant · Milvus · RocketMQ · MQTT · Kafka · RabbitMQ|",
+   "evidence_lines": [
+    7,
+    167,
+    173
+   ]
+  },
+  "fn": "Syngnat/GoNavi",
+  "sha": "15d851c2d54b",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "389203d95312": {
+  "identity": {
+   "one_liner": "自托管家庭显示屏仪表盘，拖拽组件+实时同步",
+   "review": "一个将平板、显示器、电子相框等浏览器屏幕变为家庭信息面板的自托管应用，提供家庭看板、智能家居控制、相框模式和数字标牌四类视图，内置 MCP 服务器供 AI 代理操作，可 Docker 部署或作为 Home Assistant 插件安装，采用 Polyform NC 非商业许可。",
+   "highlights": [
+    "提供拖拽编辑器和 20 种内置组件，多显示屏通过 URL 实现实时同步",
+    "内置 MCP 服务器，可由 Claude Code 等 AI 代理操作视图和便签",
+    "支持 Docker 镜像部署及 Home Assistant OS 插件安装，可从 Immich/WebDAV 获取壁纸"
+   ],
+   "use_cases": [
+    "家庭看板：购物清单、待办、日历、天气",
+    "智能家居控制面板：Home Assistant 实体与摄像头画面",
+    "电子相框/数字标牌：轮播壁纸与通知展示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明它是使用数据库存储自身数据的家庭仪表盘应用，而非为某数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Polyform Noncommercial 1.0.0，非商业许可",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Magic Frame turns any browser-capable screen — tablets, kitchen monitors, old TVs, picture frames — into a self-hosted display for your home: ／ One **view** per display, each with its own URL, layout and wallpaper. Change a widget on your laptop and every display follows within a second, no refresh. It runs on a Raspberry Pi 4/5, a NAS, an old laptop, a Mac mini, a VPS, or inside Home Assistant OS as an add-on. ／ > **Running Home Assistant?** Install Magic Frame from the add-on store instead — it brings its own database and needs no access token. One click adds the repository to your own instance:",
+   "evidence_lines": [
+    19,
+    26,
+    43
+   ]
+  },
+  "fn": "jeremiaa/magic-frame",
+  "sha": "389203d95312",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8a52d36c4410": {
+  "identity": {
+   "one_liner": "台股資料爬蟲，統一清理後存入本機 SQLite",
+   "review": "从证交所、柜买中心、公开资讯观测站等来源爬取台湾上市柜股票的行情、财报、营收等数据，经统一资料清理后写入本机 SQLite 数据库，并提供 tkinter 图形界面与命令行两种使用方式。适合想以无编程方式获取台股数据的学习与研究者；README 提醒网站改版可能导致爬虫失效，数据不保证正确性。",
+   "highlights": [
+    "从 TWSE、TPEx、MOPS、MoneyDJ、CMoney 爬取每日行情、法人买卖超、财报、月营收等数据",
+    "提供 tkinter GUI 与独立脚本两种运行方式，数据库自动建立在 db/ 目录",
+    "数据以交易日/月/季/年为粒度组织，主键为 (sid, date)，清理规则有文档说明"
+   ],
+   "use_cases": [
+    "需要本机台股行情与财报数据的研究者",
+    "不写程式也想定期更新股价资料的 GUI 使用者",
+    "以 SQLite 资料库为基础做量化或资料分析的学习场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "經過統一的資料清理（Data Cleaning）後存入本機 SQLite 資料庫。附有 tkinter 圖形介面（GUI），不必寫程式也能操作。",
+     "lines": [
+      4
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储爬取的股票数据，属于以数据库为存储的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "經過統一的資料清理（Data Cleaning）後存入本機 SQLite 資料庫。附有 tkinter 圖形介面（GUI），不必寫程式也能操作。 ／ - 資料庫會自動建立在 `db/`，執行記錄寫入 `log/`，兩者都不納入版本控制。",
+   "evidence_lines": [
+    4,
+    62
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "pooraunt/tw_stock_crawler",
+  "sha": "8a52d36c4410",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

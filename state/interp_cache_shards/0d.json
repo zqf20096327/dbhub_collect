@@ -10634,5 +10634,73 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b07bcbe833a9": {
+  "identity": {
+   "one_liner": "将 Solana 账本数据摄入 ClickHouse 并提供 Solana 兼容 JSON-RPC 服务的 Rust 工作区",
+   "review": "Superbank 是一个 Rust 工作区，把 Solana 账本数据从 Fumarole、gRPC、JSON-RPC 或 Bigtable 等来源摄入 ClickHouse 存储，并基于该数据提供 Solana 兼容的 JSON-RPC 端点，另含 Parquet 归档、PoH 校验和 k6 测试。面向需要自建 Solana 历史数据查询服务的团队，要求自行部署和维护 ClickHouse（单机或集群）。",
+   "highlights": [
+    "支持从 Yellowstone Fumarole、Yellowstone gRPC、Solana JSON-RPC getBlock 或 Solana Bigtable 摄入数据",
+    "将区块和交易存入 ClickHouse，并可归档为 Parquet（支持本地/S3）及恢复回 ClickHouse",
+    "提供可选的 gRPC 区块/交易流、内存 head cache、磁盘 cache 及 Prometheus 指标端点"
+   ],
+   "use_cases": [
+    "自建基于 ClickHouse 的 Solana 历史 JSON-RPC 查询服务",
+    "将 Solana 账本数据归档为 Parquet 并在本地或 S3 上读取/恢复",
+    "对存储的历史数据做 Proof-of-History/Alpenglow 链校验与 k6 负载验证"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Ingest Solana ledger data into ClickHouse and serve Solana-compatible JSON-RPC from that data. ／ Superbank is a Rust workspace for ingesting Solana ledger data into ClickHouse and serving ／ - Store blocks + transactions in ClickHouse (`ddl/`)",
+     "lines": [
+      6,
+      10,
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 ClickHouse 作为自身数据存储来提供 Solana RPC 服务，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Superbank is a Rust workspace for ingesting Solana ledger data into ClickHouse and serving ／ - Store blocks + transactions in ClickHouse (`ddl/`) ／ - Serve Solana-compatible JSON-RPC backed by ClickHouse (`crates/superbank-rpc`)",
+   "evidence_lines": [
+    10,
+    20,
+    21
+   ]
+  },
+  "fn": "solana-rpc/superbank",
+  "sha": "b07bcbe833a9",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

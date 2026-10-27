@@ -11048,5 +11048,301 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "00dd7b5cb4bd": {
+  "identity": {
+   "one_liner": "连接 PostgreSQL 与 DuckDB 的外部数据封装扩展",
+   "review": "duckdb_fdw 是一个 PostgreSQL 扩展（FDW），基于 DuckDB C API 实现，让用户在 PostgreSQL 中通过外部表读取和写入 DuckDB 数据，支持 Parquet、Iceberg、DuckLake、S3 Tables、MotherDuck 及 Quack 客户端-服务器协议。面向需要在 SQL 中访问数据湖文件的 PostgreSQL 使用者。限制：要求 PostgreSQL 13-18，libduckdb 版本须在 1.5.x/2.0.x 范围内，与 pg_duckdb 共存受限。",
+   "highlights": [
+    "基于 DuckDB C API 实现 FDW 扫描与插入，支持批量插入钩子（PG14+）",
+    "支持 Parquet、Iceberg、DuckLake、S3 Tables、MotherDuck 及 Quack 协议的湖仓数据访问",
+    "提供 S3 凭证 USER MAPPING 存储与密钥辅助函数 duckdb_create_s3_secret"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 中直接查询 S3 上的 Parquet/Iceberg 数据湖文件",
+    "将 DuckDB/MotherDuck 数据库以外部表形式挂载进 PostgreSQL SQL 流程",
+    "通过 Quack 协议以多客户端并发写入模式访问远程 DuckDB 服务"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# DuckDB Foreign Data Wrapper for PostgreSQL (v2.0.1+) ／ **`duckdb_fdw`** v2.0+ is a high-performance PostgreSQL extension that bridges PostgreSQL's ecosystem with DuckDB's vectorized analytical power. Built natively on the **DuckDB C API**, it supports modern Lakehouse workflows including Parquet, Iceberg, S3 Table",
+     "lines": [
+      1,
+      7
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|**Kernel Interface**|SQLite Compatibility|**Native DuckDB C API**|",
+     "lines": [
+      298
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展（FDW）为 PostgreSQL 提供访问 DuckDB 及数据湖的能力，是为数据库生态服务的工具组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**`duckdb_fdw`** v2.0+ is a high-performance PostgreSQL extension that bridges PostgreSQL's ecosystem with DuckDB's vectorized analytical power. Built natively on the **DuckDB C API**, it supports modern Lakehouse workflows including Parquet, Iceberg, S3 Tables, DuckLake, MotherDuck, and the Quack client-server protocol. ／ * PostgreSQL 13 - 18 (headers required)",
+   "evidence_lines": [
+    7,
+    66
+   ]
+  },
+  "fn": "alitrack/duckdb_fdw",
+  "sha": "00dd7b5cb4bd",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7617f00f1f21": {
+  "identity": {
+   "one_liner": "基于 Nuxt 4 的校园广播站点歌管理系统",
+   "review": "这是一个用 Nuxt 4 全栈框架开发的校园广播站点歌系统，提供点歌投票、拖拽排期、多级权限、通知推送和数据库备份等功能，使用 Drizzle ORM 操作 PostgreSQL（可配 Neon），Redis 仅作可选的临时状态存储。面向校园广播站的管理员和普通用户，支持 Vercel/Netlify、Docker、一键脚本等多种部署方式。",
+   "highlights": [
+    "提供点歌投票、拖拽排期、学期管理与黑名单管理功能",
+    "支持 OAuth、WebAuthn、TOTP 双因素等多种认证方式",
+    "支持 Vercel/Netlify/EdgeOne 一键部署及 Docker、Podman、Nix 部署"
+   ],
+   "use_cases": [
+    "校园广播站歌曲征集与播出排期管理",
+    "多角色权限下的点歌投票与内容审核",
+    "学期维度的点歌记录管理与排期打印导出"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Neon Database**：Serverless PostgreSQL数据库，支持自动启停和无缝扩展 ／ - **PostgreSQL**：关系型数据库，支持复杂查询和事务处理 ／ - **数据读取**：PostgreSQL 是唯一业务数据源，歌曲、排期和用户状态不使用 Redis 缓存",
+     "lines": [
+      104,
+      105,
+      119
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统使用 PostgreSQL 存储歌曲、排期和用户状态等业务数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **数据库**：使用 Drizzle ORM + Neon Database，提供类型安全和高性能的数据库操作 ／ - **数据读取**：PostgreSQL 是唯一业务数据源，歌曲、排期和用户状态不使用 Redis 缓存 ／ 这是最简单的部署方式，会自动创建应用和数据库容器。",
+   "evidence_lines": [
+    117,
+    119,
+    163
+   ]
+  },
+  "fn": "laoshuikaixue/VoiceHub",
+  "sha": "7617f00f1f21",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "92b7bf3ce5c7": {
+  "identity": {
+   "one_liner": "代码生成器：从 XML 清单生成 DTO/Model/DAO 数据访问层代码",
+   "review": "SQL DAL Maker 是一个数据访问层代码生成工具，读取 XML 描述清单并结合 JDBC 读取的数据库元数据，为 PHP、Java、C++、Python、Go 生成 DTO、Model 和 DAO 类，生成的代码通过 DataStore 接口隔离 PDO/JDBC/QtSql 调用。以 Eclipse 和 IntelliJ 插件形式运行，另有可在 CI 中使用的命令行版本 sdmc。生成时需要数据库可连接。",
+   "highlights": [
+    "从 XML 清单生成 DTO、Model、DAO 类，支持 PHP、Java、C++、Python、Go",
+    "通过 JDBC 读取表、视图和 SQL 结果集元数据以解析清单中的未定项",
+    "提供 Eclipse 与 IntelliJ 插件，以及免 IDE 的命令行工具 sdmc"
+   ],
+   "use_cases": [
+    "在 Eclipse/IntelliJ 项目中批量生成数据访问层代码",
+    "在 CI 流程中用 sdmc 重复生成代码以跟进 schema 变更",
+    "为 PDO、JDBC、QtSql、SQLAlchemy 等数据访问接口生成封装类"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "same `sdm.xml` and `settings.xml`, the same generated code for Go, Python and C++ (Qt) on PostgreSQL, MySQL",
+     "lines": [
+      31
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "same `sdm.xml` and `settings.xml`, the same generated code for Go, Python and C++ (Qt) on PostgreSQL, MySQL",
+     "lines": [
+      31
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "and SQLite. No IDE needed: handy in CI.",
+     "lines": [
+      32
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为数据库应用开发生成数据访问层代码，是服务于数据库生态的代码生成工具而非存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQL DAL Maker generates the data access layer — DTO, Model, and DAO classes — for PHP, Java, C++, Python, and Go. ／ 2. **Translate.** The manifest is translated into complete source code — free of any direct call to PDO, JDBC, or QtSql. ／ translation: the generator reads live metadata over JDBC — tables, views, and the result sets of your own SQL — to",
+   "evidence_lines": [
+    5,
+    11,
+    16
+   ]
+  },
+  "fn": "panedrone/sqldalmaker",
+  "sha": "92b7bf3ce5c7",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3cb06192d094": {
+  "identity": {
+   "one_liner": "全栈 TypeScript 脚手架，按模块生成 Next.js/TanStack/Vite 项目",
+   "review": "这是一个项目脚手架工具，通过 pnpm dlx 命令生成包含前端、Hono/FastAPI API、PostgreSQL 数据层（Drizzle ORM 迁移与种子命令）、可选认证/邮件/缓存/支付/后台任务/可观测性模块的单体仓库，并提供 Docker Compose 与多家平台的部署配置和 CI。面向需要搭建全栈应用的 TypeScript 开发者。数据库仅作为生成项目的数据存储，README 未声明独立于该用途的数据库管理功能。",
+   "highlights": [
+    "通过 create-clubedge-app 生成项目，模块可添加、移除和升级，且保留用户代码修改",
+    "包含 Drizzle ORM 与 PostgreSQL 的 schema、migrations 和 seed 命令",
+    "支持 pg-boss/BullMQ/Inngest 后台任务、Redis 限流缓存及 OpenTelemetry/Sentry 可观测性模块"
+   ],
+   "use_cases": [
+    "生成 Next.js、TanStack Start 或 React + Vite 前端加 Hono/FastAPI API 的全栈项目",
+    "需要可替换认证（Supabase/Better Auth/Firebase/Appwrite）等服务的应用启动模板",
+    "需要内置部署配置（Docker Compose、Fly.io、Railway、Render、Vercel 等）的项目初始化"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Next.js or TanStack Start on PostgreSQL, with optional auth, storage, email, payments, ／ - Drizzle ORM and PostgreSQL schema, migrations, and seed commands. ／ - Better Auth with users and sessions in your own PostgreSQL, secure session cookies, a protected dashboard, and rate-limited sign-in.",
+     "lines": [
+      7,
+      53,
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明项目使用 PostgreSQL 存储用户、会话及后台任务数据，属于使用数据库的应用脚手架",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A production-ready full-stack TypeScript starter that ships only the modules you choose.** ／ - Drizzle ORM and PostgreSQL schema, migrations, and seed commands.",
+   "evidence_lines": [
+    5,
+    53
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "Clubedge/clubedge-starter",
+  "sha": "3cb06192d094",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

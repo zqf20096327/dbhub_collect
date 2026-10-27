@@ -10127,5 +10127,75 @@
   "generated_at": "2026-10-25",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "ae4ab57bda75": {
+  "identity": {
+   "one_liner": "为 Google ADK 提供基于 PostgreSQL RLS 和 pgvector 的多租户语义记忆库",
+   "review": "adk-memshield 是一个 Python 库，实现 Google ADK 的 BaseMemoryService 接口，将多租户语义记忆的归属隔离从应用层 WHERE 条件转移到 PostgreSQL 数据库层，通过 FORCE ROW LEVEL SECURITY、事务级身份绑定（set_config）和最小权限角色来限制记忆读写，并用 pgvector 做向量检索。面向使用 google-adk 构建多租户/多智能体应用、需要防止跨用户语义泄露的开发者。限制包括：不防御已入侵的应用进程，租户与密级来自服务配置而非会话。",
+   "highlights": [
+    "以 PostgreSQL FORCE ROW LEVEL SECURITY 与事务本地身份绑定实现数据库侧的租户/用户/密级隔离，提供 BaseMemoryService 接入",
+    "SELECT/INSERT/UPDATE/DELETE 四类操作均受 RLS 策略约束，支持 tenant_shared 记忆与密级（clearance）控制",
+    "README 提供 pgvector 对照基准（run_memleak_eval.py，5 个场景）并配套 red-team 控制台 adk-leak-arena"
+   ],
+   "use_cases": [
+    "google-adk 多租户/多智能体应用的长期语义记忆存储与隔离",
+    "需要在数据库层防御应用层 SQL 过滤遗漏导致的跨用户记忆泄露",
+    "对子智能体检索租户共享记忆做密级（clearance）限制"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Zero-trust multi-tenant semantic memory for Google ADK (`google-adk`), enforced in the database by PostgreSQL `pgvector` + Row-Level Security (RLS).** ／ `adk-memshield` is a drop-in `BaseMemoryService` that moves ownership gating out of application code and into PostgreSQL itself, using **`FORCE ROW LEVEL SECURITY`** and **transaction-local identity (`set_config(..., true)`)**. A retrieval query with a missing ／ For local development, start the bundled Postgres on port `54329`:",
+     "lines": [
+      3,
+      18,
+      114
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库专门基于 PostgreSQL 的 RLS、set_config 与 pgvector 实现其功能，是为 PostgreSQL 之上的 AI 记忆场景服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Zero-trust multi-tenant semantic memory for Google ADK (`google-adk`), enforced in the database by PostgreSQL `pgvector` + Row-Level Security (RLS).** ／ `adk-memshield` is a drop-in `BaseMemoryService` that moves ownership gating out of application code and into PostgreSQL itself, using **`FORCE ROW LEVEL SECURITY`** and **transaction-local identity (`set_config(..., true)`)**. A retrieval query with a missing or wrong filter returns fewer rows, not someone else's rows. ／ - **No superuser bypass.** Superusers and `BYPASSRLS` roles ignore RLS even under `FORCE ROW LEVEL SECURITY`. `sql/01_schema.sql` creates a least-privilege `memshield_app` role (`NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS`); connect with it.",
+   "evidence_lines": [
+    3,
+    18,
+    35
+   ]
+  },
+  "fn": "aalishan001/adk-memshield",
+  "sha": "ae4ab57bda75",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

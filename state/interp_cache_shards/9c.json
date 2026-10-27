@@ -11348,5 +11348,200 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f6ba68e8a38b": {
+  "identity": {
+   "one_liner": "将 Notion 工作区镜像为本地 SQLite 归档与规范化 Markdown 的爬取工具",
+   "review": "notcrawl 把 Notion 工作区同步到本地 SQLite 归档并导出规范化 Markdown，支持 Desktop 缓存快照、官方 API 和 MCP 三种同步来源，提供 FTS5 全文检索、只读 SQL 查询、TUI 浏览、CSV 导出及基于 git 的归档共享。面向需要在 Notion UI 之外搜索、查询、对比工作区内容的个人和 agents；Desktop 模式只读，不写入 Notion 应用存储。",
+   "highlights": [
+    "支持 desktop、api、notion-mcp 三种同步来源，API 模式具备超时与重试机制",
+    "基于 SQLite FTS5 提供全文检索，支持只读 SQL 查询与 CSV 数据库导出",
+    "提供 git share 模式，可将归档发布为 JSONL 快照供其他机器订阅合并"
+   ],
+   "use_cases": [
+    "离线搜索与查询 Notion 工作区历史内容",
+    "导出 Notion 数据库为 CSV 或 Markdown 归档",
+    "在多台机器间通过 git 快照共享归档"
+   ],
+   "persona": "use"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`notcrawl` mirrors a Notion workspace into local SQLite and normalized Markdown. It is for people and agents that need to search, query, diff, or share workspace history without depending on the Notion UI. ／ SQLite is the canonical archive. Markdown is the durable human-readable export.",
+     "lines": [
+      11,
+      13
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是该工具自身的本地存储归档格式，工具服务于 Notion 内容镜像而非数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`notcrawl` mirrors a Notion workspace into local SQLite and normalized Markdown. It is for people and agents that need to search, query, diff, or share workspace history without depending on the Notion UI. ／ The sync reads a snapshot of Notion's local cache. Search uses the SQLite FTS5 index, and `export-md` writes the normalized archive under `~/.notcrawl/pages`. ／ Desktop mode is read-only. It snapshots Notion's local SQLite database before reading it and never writes to Notion application storage. Cache coverage is opportunistic, so missing rows are not treated as deletions; explicit Notion tombstones still retire records. Markdown marks pages whose bodies were not cached so the API or MCP source can fill them later.",
+   "evidence_lines": [
+    11,
+    35,
+    194
+   ]
+  },
+  "fn": "openclaw/notcrawl",
+  "sha": "f6ba68e8a38b",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c40367f9674a": {
+  "identity": {
+   "one_liner": "Windows 本地 AI 壁纸应用，视觉模型打分加探索/个性化加权排序选图",
+   "review": "一个 Windows 桌面壁纸应用，每天从 Bing、Wallhaven 和本地 Wallpaper Engine 工坊候选中，经本地预筛、视觉模型初筛与可选付费复核三级筛选后选图，按探索/个性化加权排序设为桌面。自带离线可复现评估脚本（成对准确率、NDCG@5）与 640 个测试用例。数据存于本机 SQLite 数据库，面向 Windows 个人桌面用户。",
+   "highlights": [
+    "三级筛选流水线：本地预筛免费，模型初筛与付费复核分级计费，月度预算上限",
+    "排序融合探索分与个性化画像分（评分、来源、天气契合），并支持冷启动种子画像",
+    "附带离线可复现评估脚本，回放本机数据库进行成对比较与 NDCG@5 交叉验证"
+   ],
+   "use_cases": [
+    "Windows 桌面每日自动更换壁纸",
+    "对候选图片按个人偏好进行打分与策展",
+    "离线回放评估排序策略效果"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该项目是使用数据库存储本机评分与状态数据的桌面壁纸应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Windows 本地 AI 自动壁纸应用。每天从 **Bing / Wallhaven / 本地 Wallpaper Engine 工坊** 中挑选一张壁纸， ／ 上面的数字来自 `scripts/evaluate.py`：读 `data/app.db` 只读回放，不联网、不花钱、不动桌面， ／ .venv\\Scripts\\python -m dailywallpaper              # 桌面界面（推荐）",
+   "evidence_lines": [
+    3,
+    175,
+    291
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "2151331730-glitch/DailyWallpaper",
+  "sha": "c40367f9674a",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "77837bd7e1c4": {
+  "identity": {
+   "one_liner": "Node.js 零依赖认证库，用 node:sqlite 存账户与会话",
+   "review": "modest-auth 为 Node.js 应用提供密码与邮件链接登录、会话管理、密码找回、邮箱变更等功能，无运行时依赖，账户数据存于单个 SQLite 文件。面向需要邮箱加密码登录的 Node 应用开发者，需 Node 24+ 与持久磁盘，不支持多机共享，尚处 0.x 早期阶段。",
+   "highlights": [
+    "提供密码与邮件链接两种登录方式及会话管理、密码找回、邮箱变更等路由",
+    "无运行时依赖，仅使用 Node 内置 crypto 与 node:sqlite，数据存于单个 SQLite 文件",
+    "内置限速、防猜测计数、泄露密码检查等机制，每项安全属性配有测试"
+   ],
+   "use_cases": [
+    "为 Node.js 网站添加邮箱密码登录与会话管理",
+    "需要单机部署、单一 SQLite 文件存储账户数据的应用",
+    "需要符合 UK GDPR 数据导出与 NIST 密码规则的认证场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **No runtime dependencies.** Only Node's own `crypto` and `node:sqlite`. Nothing ／ SQLite file. Several processes on one machine can share it; several machines can't (each",
+     "lines": [
+      20,
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用内置 node:sqlite 存账户数据的认证库，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Zero-dependency authentication for Node.js: sign-in by password or emailed link, with sessions. ／ - **No runtime dependencies.** Only Node's own `crypto` and `node:sqlite`. Nothing ／ It needs a long-running Node server with a persistent disk: the accounts live in one",
+   "evidence_lines": [
+    3,
+    20,
+    129
+   ]
+  },
+  "fn": "thisismodest/modest-auth",
+  "sha": "77837bd7e1c4",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

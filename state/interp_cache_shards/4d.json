@@ -10427,5 +10427,218 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9e47cbfe621f": {
+  "identity": {
+   "one_liner": "ClickHouse 数据库备份与恢复工具",
+   "review": "ch-backup 是 Yandex 开源的 ClickHouse 备份管理命令行工具，可将 MergeTree 引擎家族表备份到 S3 兼容存储并在数据损坏时恢复，支持 part 级去重、副本表恢复、备份跨 S3 存桶复制与断点续传。面向 ClickHouse 运维人员。限制：仅覆盖 MergeTree 系列表，副本表 TTL 冲突场景需直接访问 ZooKeeper/Keeper。",
+   "highlights": [
+    "支持将 MergeTree 系列表备份到 S3 兼容存储，并在数据损坏时恢复",
+    "支持 part 级去重（默认开启），可通过配置设置去重起始时间",
+    "提供备份跨存储复制（ch-backup copy），支持服务端复制、断点续传与 JSON 报告"
+   ],
+   "use_cases": [
+    "ClickHouse 数据定期备份与损坏后恢复",
+    "副本表数据恢复与 schema 适配（结合 --schema-only、--parts-from-backup）",
+    "将备份复制到其他 S3 存桶/端点用于异地保存"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Backup tool for ClickHouse DBMS. ／ Tool for managing ClickHouse backups. ／ The location of the source objects is taken from ClickHouse configuration of the disk (so the command",
+     "lines": [
+      7,
+      94,
+      217
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确说明这是为 ClickHouse DBMS 提供备份管理的工具，服务于数据库运维生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Backup tool for ClickHouse DBMS. ／   Tool for managing ClickHouse backups.",
+   "evidence_lines": [
+    7,
+    94
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "yandex/ch-backup",
+  "sha": "9e47cbfe621f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "10af5781b30f": {
+  "identity": {
+   "one_liner": "自托管社媒自动化平台，Facebook/Instagram 发布、自动回复与 CRM",
+   "review": "PostStack 是一个可自托管的社交媒体管理与自动化应用，提供 Facebook、Instagram 等平台的帖子发布排期、收件箱自动回复、drip 消息序列和联系人 CRM。面向希望自持数据与流程的独立从业者、代理机构和开发者。数据以 PostgreSQL 存储，通过 Docker Compose 一键启动，含 REST API 与 token 加密、限流等安全机制；部分功能标记为 PRO。",
+   "highlights": [
+    "支持多平台消息自动化：关键词触发的自动回复、评论转私信、drip 序列",
+    "提供联系人 CRM，包含全文搜索、标签与消息历史记录",
+    "通过 Docker Compose 一键启动，使用 PostgreSQL 存储，OAuth token 采用 AES-256-GCM 加密"
+   ],
+   "use_cases": [
+    "自托管替代 SaaS 社媒自动化工具，管理 Facebook/Instagram 收件箱与自动回复",
+    "为社媒联系人建立带标签和历史的 CRM",
+    "通过 REST API 与 n8n/Zapier 集成自定义自动化流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Rate limiting** on auth endpoints (Postgres-backed) ／ - **JWT session invalidation** on logout (Postgres denylist) ／ Builds and starts everything -- PostgreSQL, the Hono web server, graphile-worker:",
+     "lines": [
+      56,
+      57,
+      110
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述这是一个使用 PostgreSQL 存储数据的社交媒体管理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic 2.0，source-available",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Self-hosted social media management for Facebook, Instagram, YouTube, Telegram & Gmail -- publish & schedule posts, auto-reply to DMs, comments and emails, and run drip sequences, all from one place. ／ - **One-command startup** -- `docker compose up` ／ - **Rate limiting** on auth endpoints (Postgres-backed)",
+   "evidence_lines": [
+    3,
+    50,
+    56
+   ]
+  },
+  "fn": "jurczykpawel/poststack",
+  "sha": "10af5781b30f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ef3615448bb6": {
+  "identity": {
+   "one_liner": "基于 FastAPI+SQLite 的信息素养与生成式 AI 主动澄清实验平台",
+   "review": "面向研究者的实验平台，串联信息判断前测、资料查证对话、最终决策与研究数据导出流程，支持 demo/pilot/live 三种运行模式及分组分配、恢复审计机制。技术栈为 FastAPI、SQLite 与原生前端，数据库通过 university-data/ 目录持久化，支持本地与 Docker 部署。仓库未附加开源许可证，使用需先取得许可。",
+   "highlights": [
+    "提供参与者页面、研究后台与研究者试跑入口，支持 CSV/JSON 研究数据导出",
+    "支持 demo/pilot/live 三种运行模式，demo 模式无需模型 API key",
+    "提供 Docker Compose 部署及隔离的合成展示实例配置"
+   ],
+   "use_cases": [
+    "信息素养与生成式 AI 交互的实验研究数据收集",
+    "本地演示与研究流程试跑",
+    "大学生合成展示数据集的隔离部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "初次启动会创建数据库及候选任务，**不会自动生成参与者样本或填充统计图表**。可通过研究者试跑检查流程，通过参与者入口创建本地演示记录。新安装默认数据库位于 `university-data/lens.sqlite3`。已有 `.env` 不会自动改路径，升级时需改用独立的新库。 ／ 应用绑定到 `127.0.0.1:8000`，数据库通过 `university-data/` 持久化；Compose 内部使用 `/app/data/lens.sqlite3`，覆盖本地 `.env` 的相对数据库路径。HTTPS、反向代理、备份与生产配置见 部署说明。 ／ `compose.showcase.yaml` 用于隔离的大学生合成展示实例，在 `university-showcase-data/showcase.sqlite3` 中创建当前 126 条合成记录。当前批次为 `student-126-20261022-v4`，不调用真实模型；沿用V3的个人数据、对话正文、动作、时点和线索计数，仅新增逐轮回复耗时估计。A组每条2–8次、S组1–5次资料线索，范围重叠，允许间隔复核；A只追问尚未提供的事实0–2次，S不主动追问。每次线索对应实际模板正文，人工过程差异不构成真实干预",
+     "lines": [
+      49,
+      91,
+      93
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用使用 SQLite 存储实验数据（university-data/lens.sqlite3），SQLite 是其数据存储依赖而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "README 声明当前未附加开源许可证，使用需取得权利人许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "应用绑定到 `127.0.0.1:8000`，数据库通过 `university-data/` 持久化；Compose 内部使用 `/app/data/lens.sqlite3`，覆盖本地 `.env` 的相对数据库路径。HTTPS、反向代理、备份与生产配置见 部署说明。 ／ 系统使用 FastAPI、SQLite 和原生 HTML／CSS／JavaScript，没有前端构建步骤。",
+   "evidence_lines": [
+    91,
+    99
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Xiaoshu0553/lens-lab",
+  "sha": "ef3615448bb6",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

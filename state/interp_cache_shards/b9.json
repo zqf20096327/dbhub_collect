@@ -10316,5 +10316,134 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e19fb2c425f9": {
+  "identity": {
+   "one_liner": "本地优先的求职自动化应用，LLM 驱动、人工审批投递",
+   "review": "JobCtrl 是一个运行在本机的求职辅助应用：自动发现职位、基于简历证据做匹配评分、生成定制简历与 PDF，投递前需用户逐份审批，工作流基于 Temporal 引擎可在崩溃后恢复。数据存于本地 ~/.jobctrl/，需自行接入 LLM 提供商账户，目前仅支持 Apple-silicon macOS 15+，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "提供职位发现、证据评分、简历定制生成与人工审批投递的完整流水线",
+    "基于 Temporal 工作流引擎，步骤可在崩溃或重启后恢复",
+    "本地存储数据于 ~/.jobctrl/，默认自动投递关闭并内置每日 LLM 预算限制"
+   ],
+   "use_cases": [
+    "求职者批量筛选职位并生成针对岗位的定制简历",
+    "需要人工把关、不希望自动投递的申请流程管理",
+    "本地保存求职过程记录、薪资参考与人脉联系"
+   ],
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述其为使用本地数据目录与 LLM 服务的求职应用，并非为某数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "JobCtrl finds job postings, scores each one against your profile, writes a ／ Your data lives in `~/.jobctrl/` on your machine; there is no account and no ／ Steps 1–4 run on Temporal, a workflow engine, and resume after a crash or",
+   "evidence_lines": [
+    17,
+    20,
+    65
+   ]
+  },
+  "fn": "ebarti/JobCtrl",
+  "sha": "e19fb2c425f9",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c1d6d934a949": {
+  "identity": {
+   "one_liner": "自托管 GitHub Stars 整理应用，用 Postgres 存储标签、评分与健康分",
+   "review": "一个自托管的 GitHub Stars 管理应用，把用户 star 的仓库导入本地表格，提供标签、1–5 评分、笔记和仓库健康分，并将 Lists 变更同步回 GitHub。技术栈为 React + Hono API + Postgres 16 + ElectricSQL，通过 Docker Compose 部署，四个容器中仅 nginx 暴露端口且应用本身无登录，需外部反代加认证。适合想批量整理个人 stars 并允许 AI agent 通过只读 SQL 连接读取数据的使用者。",
+   "highlights": [
+    "提供标签、1–5 评分、笔记和仓库健康分，Lists 与 unstar 操作可同步回 GitHub",
+    "AI agent 可通过只读 SQL 角色读取数据，写入统一经 Hono API 完成 GitHub 同步与校验",
+    "ElectricSQL 将 Postgres 数据流式同步到浏览器，React UI 随数据变更实时重渲染"
+   ],
+   "use_cases": [
+    "整理大量 GitHub stars：搜索、打标签、评分并归入 GitHub Lists",
+    "识别长期未维护的仓库（健康分基于提交频率、issue 处理、贡献者等）",
+    "让 AI agent 通过只读 SQL 与 API 批量管理 star 集合"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres applies `schema.sql` on first start, so there is no migration step. ／ Four containers: Postgres, ElectricSQL, the Hono API and nginx serving the app. Only nginx publishes a ／ |Data|Postgres 16, drizzle-orm|",
+     "lines": [
+      47,
+      49,
+      112
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用用 Postgres 存储自身的 stars/标签/评分数据，Postgres 是其内嵌数据层而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postgres applies `schema.sql` on first start, so there is no migration step. ／ Four containers: Postgres, ElectricSQL, the Hono API and nginx serving the app. Only nginx publishes a ／ **Reads and writes are separated.** An agent reads the database directly over a read-only SQL connection. All writes go through the Hono API so the GitHub sync and validation run; nothing writes to Postgres as a superuser.",
+   "evidence_lines": [
+    47,
+    49,
+    98
+   ]
+  },
+  "fn": "armanckeser/github-stars-organizer",
+  "sha": "c1d6d934a949",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

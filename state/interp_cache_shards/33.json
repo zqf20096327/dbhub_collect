@@ -9894,5 +9894,297 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b6ec38019e51": {
+  "identity": {
+   "one_liner": "AI 编码代理的本地持久记忆层，基于 SQLite 存储并通过 CLI/MCP/API/Web 访问",
+   "review": "Mind 是一个 Bun + TypeScript 项目，为 AI 编码代理提供本地持久记忆存储，保存决策、修复模式、检查点和会话摘要等上下文。它基于单个 SQLite 库实现，提供 CLI、MCP 服务器、HTTP API 和 Web UI 四种访问接口，内置 FTS5 全文检索和三层记忆模型，可选启用 OpenAI embedding 做语义搜索。适合在多个 AI 代理工具间共享项目上下文的开发者，数据存储于本地的 mind.db 文件。",
+   "highlights": [
+    "基于本地 SQLite 存储（mind.db），使用 FTS5 全文检索和 T1/T2/T3 三层记忆模型",
+    "提供 CLI、MCP 服务器、HTTP API 和 Web UI 四种接口访问同一记忆库",
+    "支持检查点/会话摘要恢复压缩后的上下文，可选 OpenAI 语义搜索与实验性文件同步"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex、Cursor 等 AI 编码代理保留跨会话的项目决策与上下文",
+    "在压缩（compaction）后恢复代理工作状态，或从检查点续接任务",
+    "通过 Web UI 的 Neural Map 图视图可视化和检查记忆间的关联"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Local persistent store.** One SQLite-backed memory system you control. ／ API, and a web UI on top of one local SQLite memory store (`mind.db`). It uses ／ |`MIND_DATA_DIR`|`data/`|Directory for SQLite database and data|",
+     "lines": [
+      15,
+      48,
+      145
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为自身的主存储来保存记忆数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Mind is a Bun + TypeScript project that provides a CLI, an MCP server, an HTTP ／ API, and a web UI on top of one local SQLite memory store (`mind.db`). It uses",
+   "evidence_lines": [
+    47,
+    48
+   ]
+  },
+  "fn": "GabrielMartinMoran/mind",
+  "sha": "b6ec38019e51",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b8e948f3dc78": {
+  "identity": {
+   "one_liner": "Go/Scheme 实现的列式内存 SQL 数据库，兼容 MySQL 线协议",
+   "review": "MemCP 是一个持久化列式内存数据库，采用主/增量（main/delta）存储架构，同时支持事务处理与分析查询。它通过 MySQL 线协议及 HTTP 端点提供 MySQL、PostgreSQL、T-SQL 方言和 SPARQL 访问，并包含管理面板与导入工具。当前为 Beta 状态，采用 GPL-3.0-or-later 许可，适合评估和受控部署，尚不建议直接用于生产切换。",
+   "highlights": [
+    "支持 MySQL 线协议访问及 MySQL/PostgreSQL/T-SQL 方言的 HTTP SQL 端点，内置 RDF/SPARQL 引擎",
+    "列式存储配合基于代价的查询规划器，支持自动复合索引与计划缓存",
+    "提供管理面板、持久化存储、内存预算、导入工具及可选实验性 JIT"
+   ],
+   "use_cases": [
+    "需要同时承担事务写入与分析查询的 ERP 类自托管应用",
+    "希望以现有 MySQL 客户端/连接器接入的评测或受控 Beta 部署",
+    "通过 HTTP 端点提交多种 SQL 方言查询的场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "Applications can connect through the MySQL wire protocol or submit MySQL- and ／ Existing MySQL clients and connectors can use MemCP's wire-protocol server.",
+     "lines": [
+      14,
+      64
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL-style SQL through separate HTTP endpoints. An initial T-SQL mode adds ／ - `/psql/<database>` — PostgreSQL-dialect SQL",
+     "lines": [
+      15,
+      87
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "compat",
+     "quote": "`mysql_import` connects to a running MySQL/MariaDB server over the wire",
+     "lines": [
+      871
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明 MemCP 本身是一个数据库引擎，通过 MySQL 线协议与多种 SQL 方言端点为 SQL 应用提供存储服务，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GPL-3.0-or-later 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MemCP is a persistent, column-oriented SQL database built for applications that ／ Applications can connect through the MySQL wire protocol or submit MySQL- and ／ > **Status: Beta.** MemCP is suitable for evaluation and controlled beta",
+   "evidence_lines": [
+    3,
+    14,
+    19
+   ]
+  },
+  "fn": "launix-de/memcp",
+  "sha": "b8e948f3dc78",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "abf99e02a0ce": {
+  "identity": {
+   "one_liner": "单二进制 AI 联系人守护进程，基于事件日志即时派生线程与缓存",
+   "review": "contactd 是一个 Go 编写的守护进程与终端客户端，用户以发消息给'联系人'的方式与 AI 代理对话：线程、提示缓存布局和 REPL 环境不作为存储对象，每轮从一条 append-only 事件日志即时重建；状态由 SQLite 与联系人文件保存。面向希望在终端或 HTTP API 上持有长期 AI 对话的开发者。注意：早期单节点，API 自身无认证。",
+   "highlights": [
+    "JIT 线程：对话按回合从 append-only 事件日志即时切分为情景，用本地 embedder 与 cross-encoder 重排召回",
+    "五层提示缓存布局，规划器预测并提供商报告核对缓存命中",
+    "支持 DeepSeek、Anthropic、OpenRouter 等多种模型提供商，并经 A2A 1.0 任务运行后台 helper"
+   ],
+   "use_cases": [
+    "在终端或 HTTP API 上与具备连续关系的 AI 代理对话",
+    "经 helper 周期性监视页面等状态变化并被动上报",
+    "在 WASM 沙箱中运行模型生成的 Python/JavaScript 代码"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One Go binary, backed by SQLite and two small local ONNX models, that lets a client talk to an AI contact the way it would talk to a person. There is one continuous relationship per contact. A client sends messages to a contact ID; it never creates, picks or n ／ |`-data-dir`|`/data`|SQLite, the contacts' files and the Unix socket|",
+     "lines": [
+      5,
+      146
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该守护进程以 SQLite 存储事件日志、联系人文件与 Unix socket，属于使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One Go binary, backed by SQLite and two small local ONNX models, that lets a client talk to an AI contact the way it would talk to a person. There is one continuous relationship per contact. A client sends messages to a contact ID; it never creates, picks or names a thread. ／ > **Status:** early and single-node. The API has no authentication of its own; see Security. ／ |`-data-dir`|`/data`|SQLite, the contacts' files and the Unix socket|",
+   "evidence_lines": [
+    5,
+    15,
+    146
+   ]
+  },
+  "fn": "quinnovator/contactd",
+  "sha": "abf99e02a0ce",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0a053b19183e": {
+  "identity": {
+   "one_liner": "面向开发者的免费工具目录清单",
+   "review": "收录并定期检查 55 款免费或提供免费层级的开发工具，覆盖 AI 编码、云托管、数据库与后端、DevOps、安全等类别，以表格列出用途、定价与在线状态，状态由 GitHub Actions 每晚自动检测。适合寻找免费工具与免费层的开发者浏览参考，本身不提供工具功能。",
+   "highlights": [
+    "收录 55 款免费/免费层工具，分 16 个类别以表格形式列出用途与定价",
+    "在线状态由 GitHub Actions 每晚自动检测并更新",
+    "提供 Pull Request/Issue 的社区贡献入口"
+   ],
+   "use_cases": [
+    "查找免费或免费层级的开发/数据库/DevOps 工具",
+    "浏览按类别组织的工具清单并查看定价与状态",
+    "为数据库与后端开发选型提供候选列表参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL and backend services (Auth, Storage, Realtime) ／ Serverless PostgreSQL",
+     "lines": [
+      177,
+      182
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Serverless SQL database built on SQLite with global read replication and native Cloudflare Workers integration ／ Serverless SQLite database with edge replication",
+     "lines": [
+      192,
+      197
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "清单本身不操作数据库，仅在 Database & Backend 等分类下列出使用/提供这些数据库的服务条目。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "仓库声明 MIT 许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### Database & Backend ／  Supabase ／  Cloudflare D1",
+   "evidence_lines": [
+    169,
+    176,
+    191
+   ]
+  },
+  "fn": "pnnnhan99/awesome-free-dev-tools",
+  "sha": "0a053b19183e",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10510,5 +10510,205 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "165ff3a582e7": {
+  "identity": {
+   "one_liner": "1C:Предприятие 信息库自动备份为 DT 文件的跨平台工具",
+   "review": "这是一个面向 1C:Предприятие 服务器管理员和运维人员的备份工具，通过 ibcmd 将信息库导出为 .dt 文件，支持文件库、PostgreSQL 与 MSSQL 三种库型，提供日/周/月调度、过期副本清理、副本校验（含体积比对）和独立的 secrets.yaml 凭据管理；README 声明项目仍在开发中，配置格式可能变化。",
+   "highlights": [
+    "支持将 1C 信息库自动导出为 .dt 文件，并提供每日/每周/每月调度与过期副本自动删除",
+    "导出后可对副本进行校验，包括零体积检查和与上一份副本的体积比对",
+    "凭据存放于独立的 secrets.yaml 文件并要求 0600 权限"
+   ],
+   "use_cases": [
+    "定时自动备份 1C 文件库或基于 PostgreSQL/MSSQL 的信息库",
+    "按保留期限自动清理旧备份副本并校验新副本完整性"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "1С на PostgreSQL или Microsoft SQL Server. ／ - PostgreSQL; ／ В одной конфигурации можно использовать файловые базы и **только одну СУБД**: PostgreSQL или MSSQL.",
+     "lines": [
+      14,
+      36,
+      43
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "1С на PostgreSQL или Microsoft SQL Server. ／ - Microsoft SQL Server (MSSQL); ／ В одной конфигурации можно использовать файловые базы и **только одну СУБД**: PostgreSQL или MSSQL.",
+     "lines": [
+      14,
+      37,
+      43
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为备份 1C 信息库的独立工具，配置中指定 DBMS 参数以连接 PostgreSQL/MSSQL 完成导出。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Кроссплатформенная утилита для резервного копирования информационных баз **1С:Предприятие**. ／ - автоматическое резервное копирование баз 1С в формат `.dt`; ／ - PostgreSQL;",
+   "evidence_lines": [
+    3,
+    32,
+    36
+   ]
+  },
+  "fn": "Dr-Mikegreen/maintenance_1C",
+  "sha": "165ff3a582e7",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1538af620e6a": {
+  "identity": {
+   "one_liner": "桌面数据库 IDE，通过运行时数据源插件连接多种数据库",
+   "review": "TableCraft 是一个基于 Electron 的桌面数据库客户端，提供连接管理、数据库树、带补全的 SQL 控制台、结果网格、表数据编辑、查询历史与 EXPLAIN 计划。它面向需要图形界面操作 PostgreSQL、MySQL、SQLite、Redis 的开发者，采用插件机制加载数据源驱动，SQLite 与 MySQL 内置，PostgreSQL 插件按需下载；安装包未做付费证书签名，首次启动需额外处理。",
+   "highlights": [
+    "通过运行时加载的数据源插件连接数据库，PostgreSQL、MySQL、SQLite 均以插件形式实现",
+    "提供 schema 感知的 SQL 补全、表数据编辑器、查询历史和 EXPLAIN 计划树",
+    "支持 SSH 隧道与 SSL（Disable/Require/Verify CA/Verify full）连接选项"
+   ],
+   "use_cases": [
+    "在图形界面中浏览、查询和编辑 PostgreSQL/MySQL/SQLite 数据",
+    "通过 SSH 隧道或 SSL 连接管理远程数据源",
+    "以插件方式为其他数据库扩展客户端支持"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A desktop database IDE in the spirit of JetBrains DataGrip, for PostgreSQL, MySQL, SQLite and Redis. ／ - Plugins for any database: PostgreSQL, MySQL and SQLite are plugins, loaded the same ／ way yours would be. SQLite and MySQL come in the box; PostgreSQL downloads the first time you",
+     "lines": [
+      5,
+      31,
+      32
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A desktop database IDE in the spirit of JetBrains DataGrip, for PostgreSQL, MySQL, SQLite and Redis. ／ - Plugins for any database: PostgreSQL, MySQL and SQLite are plugins, loaded the same ／ way yours would be. SQLite and MySQL come in the box; PostgreSQL downloads the first time you",
+     "lines": [
+      5,
+      31,
+      32
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A desktop database IDE in the spirit of JetBrains DataGrip, for PostgreSQL, MySQL, SQLite and Redis. ／ - Plugins for any database: PostgreSQL, MySQL and SQLite are plugins, loaded the same ／ way yours would be. SQLite and MySQL come in the box; PostgreSQL downloads the first time you",
+     "lines": [
+      5,
+      31,
+      32
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "comes from. MySQL, MariaDB and TiDB open in the MySQL plugin, PostgreSQL in the PostgreSQL plugin,",
+     "lines": [
+      206
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "comes from. MySQL, MariaDB and TiDB open in the MySQL plugin, PostgreSQL in the PostgreSQL plugin,",
+     "lines": [
+      206
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "The shared SQL kit in `@table-craft/plugin-api/sql` also reads Oracle and SQL Server scripts when a",
+     "lines": [
+      782
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "The shared SQL kit in `@table-craft/plugin-api/sql` also reads Oracle and SQL Server scripts when a",
+     "lines": [
+      782
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为连接和操作数据库提供图形界面的客户端工具，本身不存储业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A desktop database IDE in the spirit of JetBrains DataGrip, for PostgreSQL, MySQL, SQLite and Redis. ／ are reached through datasource plugins loaded at runtime. ／ - Plugins for any database: PostgreSQL, MySQL and SQLite are plugins, loaded the same",
+   "evidence_lines": [
+    5,
+    8,
+    31
+   ]
+  },
+  "fn": "tranphucbol/table-craft",
+  "sha": "1538af620e6a",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

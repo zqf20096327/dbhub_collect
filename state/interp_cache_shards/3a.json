@@ -9768,5 +9768,304 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6f834e5cdb03": {
+  "identity": {
+   "one_liner": "Dify 分支，将存储组件替换为 OceanBase 并增加企业特性",
+   "review": "这是 Dify LLM 应用开发平台的一个分支仓库，将原有存储组件替换为 OceanBase，并提供高可用、可扩展性能提升和多租户等特性。面向需要以 OceanBase 作为后端运行 Dify 的用户。可见 README 主体沿用上游文档，通过 Docker Compose 部署，采用基于 Apache 2.0 附加条件的 Dify 开源许可。",
+   "highlights": [
+    "提供 LLM 应用开发能力，包含 AI 工作流、RAG 管线、Agent、模型管理与可观测性功能",
+    "将存储组件替换为 OceanBase，提供高可用、可扩展性能与多租户支持",
+    "支持通过 Docker Compose 部署运行"
+   ],
+   "use_cases": [
+    "以 OceanBase 作为存储后端自托管 Dify 平台",
+    "构建基于工作流和 RAG 的 LLM 应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是 Dify 分支，将存储组件替换为 OceanBase，属于使用数据库存储数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Dify Open Source License，基于 Apache 2.0 并附加条件",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Dify is an open-source LLM app development platform. Its intuitive interface combines AI workflow, RAG pipeline, agent capabilities, model management, observability features (including Opik, Langfuse, and Arize Phoenix) and more, letting you quickly go from prototype to production. Here's a list of the core features: ／ The easiest way to start the Dify server is through Docker Compose. Before running Dify with the following commands, make sure that Docker and Docker Compose v2.24.0 or later are installed on your machine:",
+   "evidence_lines": [
+    58,
+    67
+   ]
+  },
+  "fn": "oceanbase/dify-on-mysql",
+  "sha": "6f834e5cdb03",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "921ee103719f": {
+  "identity": {
+   "one_liner": "AI 开发记忆与编排 CLI，流程数据持久化到 PostgreSQL",
+   "review": "Lemoria 是一个 Python CLI 工具，为 OpenCode 的 AI 代理提供 SDD（规格驱动开发）流程编排：包含 15 步 flow、8 个子代理、状态机、PRD/任务/决策记录，并把项目、PRD、任务与流程步骤持久化到 PostgreSQL，可选双向同步 Obsidian vault。面向使用 AI 辅助开发的个人开发者；要求 Python 3.11+、uv 与 PostgreSQL ≥14，SQLite 仅用于测试。",
+   "highlights": [
+    "通过 OpenCode 编排 8 个代理（orchestrator 及 7 个子代理），代理配置与模型可按代理管理",
+    "将项目、PRD、任务、决策与 flow step 记录到 PostgreSQL 并提供状态机恢复",
+    "支持导出到 Obsidian vault 并可从 vault 恢复数据库，vault 默认存放在 git 仓库之外"
+   ],
+   "use_cases": [
+    "以规格驱动流程管理 AI 辅助开发会话，断点后恢复上下文",
+    "记录 ADR、PRD 与任务到数据库并在 Obsidian 中浏览",
+    "按代理查看与调整模型及 token 消耗遥测"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Lemoria** es una herramienta CLI en Python que convierte tu flujo de desarrollo en un proceso trazable, orquestado por agentes de IA. Cada idea, cada decisión, cada línea de código queda registrada en PostgreSQL con trazabilidad completa, desde la especifica ／ - 🗃️ **Trazabilidad total** — Cada proyecto, PRD, tarea, decisión y flow step se persiste en PostgreSQL con relaciones y metadatos ／ - 🐘 **PostgreSQL nativo o en Docker** — Usa el servidor que ya tengas andando; Docker es la alternativa, no el requisito ／ **Requisitos:** Python >= 3.11, uv y PostgreSQL >= 14",
+     "lines": [
+      14,
+      24,
+      25,
+      46
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- 🧪 **252 tests automatizados** — pytest con SQLite in-memory, CI en GitHub Actions (Python 3.11/3.12/3.13)",
+     "lines": [
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Lemoria 自身将项目、PRD、任务等数据持久化在 PostgreSQL 中，而非为数据库生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Lemoria** es una herramienta CLI en Python que convierte tu flujo de desarrollo en un proceso trazable, orquestado por agentes de IA. Cada idea, cada decisión, cada línea de código queda registrada en PostgreSQL con trazabilidad completa, desde la especificación inicial hasta el push y la documentación. ／ - 🐘 **PostgreSQL nativo o en Docker** — Usa el servidor que ya tengas andando; Docker es la alternativa, no el requisito ／ **Requisitos:** Python >= 3.11, uv y PostgreSQL >= 14",
+   "evidence_lines": [
+    14,
+    25,
+    46
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "devcristianlopez/lemoria",
+  "sha": "921ee103719f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d7558a37891f": {
+  "identity": {
+   "one_liner": "自托管家庭流媒体服务器，读取本地媒体库并转码串流",
+   "review": "Valence 是一个自托管的媒体流媒体平台，将本地电影、剧集、音乐、书籍组织成库，通过 FFmpeg 转码并以 HLS 方式向网页、桌面、手机、电视等多种客户端播放，内置多用户家庭账户、请求管理和插件系统。面向在家中自建媒体服务器的用户，通过 docker compose 部署，默认使用 Postgres，也可切换 MySQL/MariaDB。",
+   "highlights": [
+    "支持网页、Electron 桌面、iPhone/Android、Apple TV/Android TV/Fire TV 等多客户端播放",
+    "支持按设备协商的直接播放与转码，并预生成低带宽副本",
+    "支持从 Jellyfin、Emby、Plex 导入账户、观看历史与播放列表等数据"
+   ],
+   "use_cases": [
+    "家庭局域网内多终端观看自有影视与音乐收藏",
+    "替换或迁移既有 Jellyfin/Emby/Plex 服务器",
+    "家庭成员各自独立账户与观看历史的媒体服务"
+   ],
+   "use_cases_check": true
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database:** Postgres by default. MySQL 8.0.21+ and MariaDB 10.6+ work too: lay",
+     "lines": [
+      104
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Database:** Postgres by default. MySQL 8.0.21+ and MariaDB 10.6+ work too: lay ／ `compose.mysql.yaml` or `compose.mariadb.yaml`, attached to every release, over `compose.yaml`.",
+     "lines": [
+      104,
+      105
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Database:** Postgres by default. MySQL 8.0.21+ and MariaDB 10.6+ work too: lay ／ `compose.mysql.yaml` or `compose.mariadb.yaml`, attached to every release, over `compose.yaml`.",
+     "lines": [
+      104,
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 Postgres/MySQL/MariaDB 作为存储的媒体服务器应用，README 明确给出数据库配置选项",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "docker compose up -d ／ - **Database:** Postgres by default. MySQL 8.0.21+ and MariaDB 10.6+ work too: lay",
+   "evidence_lines": [
+    95,
+    104
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ValenceOSS/Valence",
+  "sha": "d7558a37891f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d9cfda4aa505": {
+  "identity": {
+   "one_liner": "基于 Go Fiber v3 与 PostgreSQL 的 REST API 脚手架项目模板",
+   "review": "这是一个 Go 语言 REST API 项目模板，提供多租户身份、JWT/OAuth 认证、RBAC、任务队列、审计等功能模块，内置 sqlc、golang-migrate、Prometheus 等组件集成。适合需要快速启动多租户 API 服务的开发者，通过 GitHub 模板克隆后用 Docker Compose 或 make 运行，依赖 PostgreSQL 18 存储数据。",
+   "highlights": [
+    "提供多租户身份与租户级 RBAC，依托 PostgreSQL 行级安全实现数据隔离",
+    "内置 PostgreSQL 任务队列、调度器、版本化领域事件与 Standard Webhooks 收发",
+    "提供 sqlc 类型安全查询、golang-migrate 迁移、Swagger 文档、Prometheus 指标与 Docker/Kubernetes 部署配置"
+   ],
+   "use_cases": [
+    "以 GitHub 模板方式创建带多租户认证的后端 API 项目",
+    "需要租户隔离、MFA、审计与幂等能力的 SaaS 后端起步开发",
+    "本地或容器化环境中快速搭建含迁移、种子与监控的 API 服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ Production-minded REST API boilerplate built with Go Fiber v3, PostgreSQL, and sqlc. ／ administration behind MFA, and PostgreSQL row-level security on every",
+     "lines": [
+      9,
+      15,
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 PostgreSQL 存储数据的 API 应用模板，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Production-minded REST API boilerplate built with Go Fiber v3, PostgreSQL, and sqlc. ／ |Database|PostgreSQL 18 with pgxpool|",
+   "evidence_lines": [
+    15,
+    41
+   ]
+  },
+  "fn": "chuanghiduoc/fiber-golang-boilerplate",
+  "sha": "d9cfda4aa505",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

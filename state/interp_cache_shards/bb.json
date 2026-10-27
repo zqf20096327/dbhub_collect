@@ -10217,5 +10217,246 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0ab8facaaf76": {
+  "identity": {
+   "one_liner": "PHP 无框架依赖的数据库版本控制库，以纯 SQL 文件执行迁移",
+   "review": "该仓库提供不依赖 PHP 框架的数据库迁移能力，迁移从 base.sql 起步，后续变更以编号的 .sql 文件放在 migrations/up、migrations/down 目录中，可经内置 migrate CLI 或 PHP 库调用。迁移失败时数据库标记为 partial 状态并拒绝继续执行。支持 MySQL/MariaDB、PostgreSQL、SQLite 和 SQL Server，适合需要在任意 PHP 项目中做数据库版本控制的开发者。",
+   "highlights": [
+    "以原生 SQL 文件（base.sql + 编号迁移脚本）实现 up/down 双向迁移",
+    "提供 migrate CLI 与 PHP 库两种使用方式，支持事务与 -dev 后缀并行开发版本",
+    "迁移失败时标记 partial up/down，阻止后续迁移运行直至修复或使用 --force"
+   ],
+   "use_cases": [
+    "在任意 PHP 项目或无框架环境中对数据库 schema 做版本控制",
+    "多开发者并行开发时的数据库迁移编号与失败状态管理",
+    "需要迁移脚本可直接回滚（down 脚本）的数据库变更流程"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Multiple Database Support** - Works with MySQL, PostgreSQL, SQLite, and SQL Server ／ - PostgreSQL",
+     "lines": [
+      41,
+      86
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Multiple Database Support** - Works with MySQL, PostgreSQL, SQLite, and SQL Server ／ vendor/bin/migrate version --connection mysql://user:pass@localhost/database ／ - MySQL/MariaDB",
+     "lines": [
+      41,
+      55,
+      85
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Multiple Database Support** - Works with MySQL, PostgreSQL, SQLite, and SQL Server ／ - SQLite",
+     "lines": [
+      41,
+      87
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Multiple Database Support** - Works with MySQL, PostgreSQL, SQLite, and SQL Server ／ - SQL Server (Windows and Linux)",
+     "lines": [
+      41,
+      88
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MySQL/MariaDB",
+     "lines": [
+      85
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供版本控制与迁移执行的工具/库，本身不依赖某数据库存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Here the schema starts from a `base.sql`, and each migration is a numbered `.sql` file in ／ - **Pure SQL Migrations** - Use native SQL commands instead of framework-specific code",
+   "evidence_lines": [
+    23,
+    40
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "byjg/php-migration",
+  "sha": "0ab8facaaf76",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "274f240cda31": {
+  "identity": {
+   "one_liner": "AI 编码代理用的求职自动化技能集，数据存 Postgres",
+   "review": "这是一组 Markdown 格式的 agent skills 与配套脚本，供 Devin、Claude、Cursor 等编码代理读取，实现 LinkedIn 搜索、Easy Apply 表单填写、申请记录跟踪与招聘者回复草拟。数据（档案、偏好、申请历史）存储在用户自有的 Postgres（推荐 Neon 云实例），通过 pg 驱动访问，附带 kanban CLI 与本地 dashboard。面向使用 LinkedIn/Gmail 求职的技术人员，需 Node.js 22+。",
+   "highlights": [
+    "提供 onboarding/profile/apply/daily 等 flows，由任意编码代理消费执行",
+    "使用 Postgres 存储档案、偏好与申请记录，附只读 CLI（scripts/db.js，--write 可写）",
+    "包含终端 kanban 与本地 web dashboard（端口 7531，30 秒自动刷新）"
+   ],
+   "use_cases": [
+    "个人求职流程自动化（LinkedIn 搜索与 Easy Apply 投递）",
+    "申请进度跟踪（kanban/funnel 视图）",
+    "招聘消息整理与回复草拟"
+   ],
+   "cat_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Fills Easy Apply forms from your Postgres DB ／ - **Track** every application, message, and interview in a Postgres pipeline with a kanban view ／ - **DB:** PostgreSQL via Neon (cloud). Portable across machines",
+     "lines": [
+      25,
+      56,
+      150
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明用户数据存放在自有 Postgres 数据库中，工具本身不服务数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Your profile, preferences, writing style and history live in Postgres (Neon). Your browser session persists in a dedicated profile. Nothing sensitive is committed to the repo. The repo is **candidate-agnostic**: clone it, run onboarding, and everything you need is stored in your DB. No file in the repo contains personal data. ／ - **DB:** PostgreSQL via Neon (cloud). Portable across machines ／ Job Seeker is a set of **markdown skills** that any coding agent (Devin, Claude, Cursor, opencode) consumes to automate the entire job search:",
+   "evidence_lines": [
+    78,
+    150,
+    22
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "galiprandi/job-seeker",
+  "sha": "274f240cda31",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "71b3099d5bfc": {
+  "identity": {
+   "one_liner": "跨会话持久化工作上下文的 Agent 记忆与交接工具",
+   "review": "PowerContext 为人与 AI Agent 之间的任务交接提供持久化上下文管理：把决策、约束、进度等存为 Memory 与 Handoff，并支持 CSV/PDF 等证据源接入和向量检索。面向使用 Codex、Claude Code 等 Agent 的开发者，通过 CLI 安装、Server 运行，提供 Python/HTTP/MCP 接口；存储依赖 seekdb，Windows 支持为实验性。",
+   "highlights": [
+    "提供 Memory、Handoff、Experience、Skill 等上下文组织机制，保留来源与历史版本",
+    "支持 CSV、PDF 证据采集、嵌入缓存、HTTP 重排序等推理适配器",
+    "提供 async Python 客户端、HTTP API、MCP 和 Core SDK 四种接入方式"
+   ],
+   "use_cases": [
+    "AI Agent 任务跨会话续接与多人/多 Agent 交接",
+    "团队共享任务上下文并留存决策与证据引用",
+    "为 Agent 集成自动记忆能力（需 Generation/Embedding API）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明其将上下文存入 seekdb（如 L40、L68），是使用数据库存储的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Retrieve seekdb's full-text and vector candidates in one native SQL statement. ／ If seekdb needs installing, it asks once and installs the dependency in the background. Follow the printed ／ Applications can use PowerContext through the async Python client, HTTP API, MCP, or the in-process Core SDK. See the interface reference to choose an entry point.",
+   "evidence_lines": [
+    40,
+    68,
+    122
+   ]
+  },
+  "fn": "solelyer/OceanBase-CowComing",
+  "sha": "71b3099d5bfc",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

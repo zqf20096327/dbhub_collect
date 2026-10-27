@@ -10890,5 +10890,91 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "26764117d5dd": {
+  "identity": {
+   "one_liner": "Primavera P6 计划数据的本地 MCP 服务器，读取 SQLite 库与 XER 文件",
+   "review": "这是一个面向 Primavera P6 Professional 计划数据的本地 MCP 服务器，供 Claude Desktop、Cursor、VS Code 等 MCP 客户端连接，AI 助手可通过其分析进度计划（关键路径、DCMA 检查、基线对比），默认只读，写操作需二次确认并自动备份。数据源为 Windows 上的独立 SQLite P6 数据库或 XER 文件，不支持 SQL Server/Oracle 服务端数据库。提供 Windows 安装包、便携 zip 与 .mcpb。",
+   "highlights": [
+    "提供 51 个工具（Full 配置），含进度分析、DCMA 14 项检查、基线对比与 XER 导入导出；Basic 配置为 11 个只读工具",
+    "写操作默认关闭，写入采用 dry-run 加单次确认令牌两步机制，写前自动备份并记录编辑日志",
+    "支持 stdio 与仅监听 127.0.0.1 的本地 HTTP 传输（Bearer 令牌鉴权），并可一键向多个 MCP 客户端注册配置"
+   ],
+   "use_cases": [
+    "项目控制/进度计划人员在 AI 助手中查询和分析 P6 计划（关键路径、浮时、DCMA 体检）",
+    "在不启动 P6 的情况下只读分析 XER 文件或对比两次更新",
+    "在明确确认后通过 AI 执行受控的计划编辑与 XER 更新导入"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Professional** schedules on your Windows PC: a standalone (SQLite) P6 database, or plain XER files. ／ |P6 Professional standalone (SQLite)|25.12 (schema fingerprint in `p6mcp/schema.py`); other versions are read only until tested or trusted|",
+     "lines": [
+      7,
+      173
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "> P6 MCP is an independent project. It is not affiliated with, endorsed or sponsored by Oracle. ／ > Oracle, Primavera and P6 are trademarks of Oracle and/or its affiliates. ／ SQL Server and Oracle P6 databases (P6 EPPM, or P6 Professional with a server database) are not supported.",
+     "lines": [
+      9,
+      10,
+      178
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "SQL Server and Oracle P6 databases (P6 EPPM, or P6 Professional with a server database) are not supported.",
+     "lines": [
+      178
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明其为 MCP 服务器，读取和编辑 P6 SQLite 数据库与 XER 文件，属为数据库数据服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local MCP server that lets an AI assistant (Claude Desktop, Claude Code, ／ Professional** schedules on your Windows PC: a standalone (SQLite) P6 database, or plain XER files. ／ |P6 Professional standalone (SQLite)|25.12 (schema fingerprint in `p6mcp/schema.py`); other versions are read only until tested or trusted|",
+   "evidence_lines": [
+    5,
+    7,
+    173
+   ]
+  },
+  "fn": "nizarhamza/p6-mcp",
+  "sha": "26764117d5dd",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
