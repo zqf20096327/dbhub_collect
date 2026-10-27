@@ -11575,5 +11575,77 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0e122a3005dd": {
+  "identity": {
+   "one_liner": "基于 Postgres 的 AI 代理审计数据库，哈希链防篡改决策日志",
+   "review": "ZizkaDB 是构建在 Postgres 之上的数据库，为 AI 代理记录带因果链（parent_id）的决策事件，通过校验和与哈希链提供可验证的防篡改审计日志，支持时间回溯调试、漂移检测、会话记忆回放及 MCP 服务，提供 Python/TypeScript SDK 与 LangChain 等集成，面向需要满足 EU AI Act 第12条记录义务的代理开发团队。AGPL-3.0 许可，自托管版限单代理。",
+   "highlights": [
+    "每个事件含校验和并哈希链接，db.verify_chain() 可验证日志未被篡改",
+    "db.why() 追溯事件因果链，db.at() 重建任意历史时刻的代理上下文",
+    "提供 MCP server、Python/TypeScript SDK 及 LangChain/LangGraph/CrewAI/LiveKit 集成包"
+   ],
+   "use_cases": [
+    "AI 代理决策的因果调试与会话回放",
+    "EU AI Act 第12条合规记录留存",
+    "代理行为漂移监控与可审计记忆管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "in one open-source database on Postgres. Built for **EU AI Act Article 12** record-keeping. ／ - **Self-host or cloud.** Run it on your own Postgres with one Docker command, or use ZizkaDB Cloud. AGPL-3.0, no per-trace billing; self-hosted data never leaves your infrastructure. Self-hosted runs **one agent with one API key**; multiple agents, agent flee ／ Self-hosted quickstart: one curl command starts the open-source ZizkaDB database on Postgres and prints an AI agent causal chain",
+     "lines": [
+      8,
+      33,
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "ZizkaDB 本身是在 Postgres 之上运行的应用级数据库服务，使用 Postgres 存储数据而非为现有数据库生态提供工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0；另有商业云服务（ZizkaDB Cloud）",
+   "install": [
+    "docker",
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ZizkaDB, the operational database for AI agents: audit log, causal agent memory and compliance ／ in one open-source database on Postgres. Built for **EU AI Act Article 12** record-keeping. ／ - **Self-host or cloud.** Run it on your own Postgres with one Docker command, or use ZizkaDB Cloud. AGPL-3.0, no per-trace billing; self-hosted data never leaves your infrastructure. Self-hosted runs **one agent with one API key**; multiple agents, agent fleets and agent-to-agent messaging are on Cloud.",
+   "evidence_lines": [
+    1,
+    8,
+    33
+   ]
+  },
+  "fn": "ZIZKA-AI-SL/ZizkaDB",
+  "sha": "0e122a3005dd",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

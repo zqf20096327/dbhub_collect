@@ -10966,5 +10966,80 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "08301f75128a": {
+  "identity": {
+   "one_liner": "本地运行的二次元插画整理工具，用 ONNX 模型识别角色并归类查重",
+   "review": "Emaki 是一个在 Windows 本机运行的动漫插画整理应用：用本机 ONNX 标签模型（PixAI/WD14）识别图片中的角色与作品，按角色/作品分组、分离漫画截图照片、查找重复图，图片默认不上传。面向在个人电脑存大量插画的用户；数据整理结果存在 SQLite 中，需 Node.js 22+，仅测过 Windows。",
+   "highlights": [
+    "本机模型识别角色（8,300+ 角色），支持 DirectML/WebGPU/CPU 回退",
+    "自动分离漫画、截图、照片、表情包，并检测文件相同/画面相同/缩放压缩副本",
+    "归类、移动等操作可撤销，图库可放移动硬盘且断开后保留整理结果"
+   ],
+   "use_cases": [
+    "整理本地数万张二次元插画，按角色/作品归类",
+    "查找重复及缩放压缩变体图片",
+    "离线环境下的本地图片管理与识别"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|数据库（你做的所有整理）|`data/emaki.sqlite`| ／ `data/` 不会被提交到 Git。备份的话复制 `data/emaki.sqlite` 就行，缩略图和模型都能重新生成、重新下载。想换位置可以在 `.env` 里改 `EMAKI_DATA_DIR`，其他配置见 .env.example。 ／ 前端是 React + Vite + Tailwind，后端是 Node.js + Fastify + SQLite，识别用 onnxruntime-node。架构和各页面的设计说明在 docs/ARCHITECTURE.md 和 docs/FRONTEND.md，开发任务清单在 docs/TASKS.md。",
+     "lines": [
+      135,
+      140,
+      173
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它用 SQLite 存储整理数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "前端是 React + Vite + Tailwind，后端是 Node.js + Fastify + SQLite，识别用 onnxruntime-node。架构和各页面的设计说明在 docs/ARCHITECTURE.md 和 docs/FRONTEND.md，开发任务清单在 docs/TASKS.md。 ／ |数据库（你做的所有整理）|`data/emaki.sqlite`|",
+   "evidence_lines": [
+    173,
+    135
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "nickname21kmr/emaki",
+  "sha": "08301f75128a",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

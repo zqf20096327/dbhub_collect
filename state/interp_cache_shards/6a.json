@@ -10782,5 +10782,80 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8a64530cb576": {
+  "identity": {
+   "one_liner": "编码代理持久记忆框架，用 SQLite 存储仓库符号历史",
+   "review": "该仓库提供一个面向 AI 编码代理的持久记忆层：读取仓库完整 git 历史，用 tree-sitter 解析每个符号的各版本并写入仓库内单个 SQLite 数据库，再通过嵌入和判分模型回答关于代码的问题，支持经 MCP 在 Cursor、Claude Code 等宿主中运行。需要 Python 3.11 及 OpenRouter、嵌入、写入三类 API 密钥；模型 Jev 为专有依赖，目前需自备 API key。",
+   "highlights": [
+    "读取仓库 git 历史，使用 tree-sitter 将每个符号版本连同引入提交写入一个 SQLite 数据库",
+    "提供 Ask 与 Timeline/报告两类查询，附带判分证据（diff、调用者、模型追踪链）",
+    "通过 MCP 接入 Cursor、OpenCode、Claude Code 等编码代理宿主"
+   ],
+   "use_cases": [
+    "查询代码符号随历史演变的因果关系（why does X do Y）",
+    "对一段提交范围内的变更生成判断报告，核查改动是否符合提交说明",
+    "为长时间运行的编码代理提供不随会话丢失的持久上下文"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The magic sauce is an intermediary OS (SQLITE) memory layer that facilitates retrieval, filtering and reasoning through a System One model, namely Jev. ／ introduced it, using tree-sitter, in one SQLite ／ |`store.py`|the database: one SQLite file, with the text index for grep and the vector tables|",
+     "lines": [
+      7,
+      70,
+      256
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位其为供编码代理使用的持久记忆/感知层组件，SQLite 是其内部存储机制而非业务数据库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Persistent memory for System One coding agents, by DevLoops.** ／ The agent spawned from unified-brain runs through MCP on Cursor, OpenCode or Claude Code etc. allowing you to use it through your favorite harness. ／ db inside the repository in question (`<repo>/.unified-brain.db`). On top of that it",
+   "evidence_lines": [
+    3,
+    9,
+    71
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "DevLoops-ai/unified-brain",
+  "sha": "8a64530cb576",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10660,5 +10660,72 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4ca9ed916993": {
+  "identity": {
+   "one_liner": ".NET 的持久化有序键值存储与 LSM-tree 存储引擎",
+   "review": "ZoneTree 是面向 .NET 的持久化有序键值存储引擎，基于 LSM-tree 实现，提供写前日志、事务、原子读写、迭代器、后台合并与热备份等能力。它供开发者在 .NET 上构建自定义数据库、索引、搜索、事件存储等数据系统，本身不是分布式数据库。MIT 许可，通过 NuGet 安装。",
+   "highlights": [
+    "提供有序键值存储、写前日志（多种 WAL 模式）、乐观事务与原子 read-modify-write 操作",
+    "支持前向/反向迭代器、可寻址范围扫描、自定义序列化器与比较器",
+    "提供后台维护/合并协调器与在线备份、恢复能力，内存使用可配置"
+   ],
+   "use_cases": [
+    "作为自定义数据库或专用存储系统的底层存储引擎",
+    "构建索引层、全文搜索、事件存储、时间序列或持久化队列",
+    "需要内存可预测、数据集大于 RAM 的本地持久化场景"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "In a live Windows P16 benchmark with 2M profiles, individual writes, secondary indexes, point reads, ordered scans, queries, and updates, ZoneTree completes the measured workload phases substantially faster than RocksDB and SQLite. See the full benchmark expla",
+     "lines": [
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将其定位为供构建数据库与数据系统的 .NET 存储引擎层，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ZoneTree is a high-performance storage engine for ordered, persistent data. It is built for teams creating databases, indexes, search systems, queues, event stores, local-first applications, and custom data platforms in the .NET ecosystem. ／ ZoneTree can be used directly as an ordered key-value database, or as the storage foundation for higher-level systems. ／ ZoneTree is designed from the ground up as a storage-engine foundation for scalable systems. It is not a distributed database by itself; instead, it provides the ordered keyspace, durability controls, iterators, operation indexes, transactions, and maintenance hooks needed to build partitioned, replicated, or domain-specific data platforms above it.",
+   "evidence_lines": [
+    7,
+    52,
+    214
+   ]
+  },
+  "fn": "ZoneTree/ZoneTree",
+  "sha": "4ca9ed916993",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

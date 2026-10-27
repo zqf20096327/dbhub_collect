@@ -10786,5 +10786,137 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b942af5138bf": {
+  "identity": {
+   "one_liner": "面向编码代理的持久语义记忆层，基于 PostgreSQL+pgvector 存储",
+   "review": "Open Brain 为编码代理提供跨会话、跨模型的持久记忆与连续学习能力，将证据、决策、任务和经验以带溯源的语义记忆形式存入 PostgreSQL+pgvector，并提供检索反馈、矛盾调和与上下文组装。面向使用 Hermes、Codex、Claude Code 等代理的开发者，通过 REST、MCP、CLI 或 SDK 接入，需 Python 3.11+ 与 Docker 运行。",
+   "highlights": [
+    "将语义记忆存入 PostgreSQL 与 pgvector，支持混合搜索、溯源标注与精确的代理归因",
+    "提供 FastAPI REST 服务、MCP 工具、CLI、Streamlit 仪表盘和 provider SDK 多种接口",
+    "支持 Hermes、Medusa、Codex、Claude Code 原生集成及 Mem0、Honcho、Hindsight 导入适配器"
+   ],
+   "use_cases": [
+    "为编码代理提供跨会话、跨项目的持久记忆与上下文注入",
+    "对代理积累的知识做审查、调和与生命周期管理",
+    "通过 REST/MCP 为无原生适配的代理主机接入统一记忆服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Open Brain gives coding agents a durable, model-independent brain. It stores semantic memory in PostgreSQL and pgvector, preserves where knowledge came from, follows work across sessions and agents, and assembles compact context for the next task. ／ To use a registry image with the existing PostgreSQL, Ollama, API, and dashboard stack, from a checkout of the matching release:",
+     "lines": [
+      13,
+      108
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其将语义记忆存入 PostgreSQL 和 pgvector，属于使用数据库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Open Brain gives coding agents a durable, model-independent brain. It stores semantic memory in PostgreSQL and pgvector, preserves where knowledge came from, follows work across sessions and agents, and assembles compact context for the next task. ／ Open Brain is the memory and intelligence layer, not the agent runtime. Connected agents remain responsible for reasoning, filesystem and terminal access, browser or computer use, and execution. Native integrations currently exist for Hermes, Medusa, Codex, and Claude Code; other agents connect through REST, MCP, the CLI, or the provider SDK. ／ The installer uses `pipx`, keeping Open Brain isolated from system Python packages. It generates a private OpenBrain API key once in `~/.config/openbrain/.env`; upgrades reuse that key. This path is intended for users who already have a Postgres+pgvector instance elsewhere — the docker stack on this repo is the supported local-stack path.",
+   "evidence_lines": [
+    13,
+    15,
+    127
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "benclawbot/open-brain",
+  "sha": "b942af5138bf",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "39172ef72a35": {
+  "identity": {
+   "one_liner": "Rust 代码知识图谱索引器，MCP 服务器，SQLite 存储语义分析",
+   "review": "Coraline 是一个基于 Rust 的代码智能工具，用 tree-sitter 解析多语言代码并构建语义知识图谱，通过 MCP 协议向 Claude Desktop、Claude Code、OpenCode 等 AI 客户端提供 33 个符号检索与语义搜索工具，索引数据以 SQLite 存储。面向需要在本地为 AI 助手提供代码理解能力的开发者。注意当前仅 19 种语言支持端到端索引，其余 17 种尚未启用。",
+   "highlights": [
+    "通过 MCP 协议对外提供 33 个代码智能工具，支持符号调用关系、影响分析与语义搜索",
+    "支持 36 种 tree-sitter 语言语法，其中 19 种语言当前支持端到端索引",
+    "本地运行处理，工具输出支持 compact 格式以减少 token 消耗"
+   ],
+   "use_cases": [
+    "为 Claude Desktop / Claude Code / OpenCode 等 MCP 客户端提供本地代码库语义检索",
+    "对多语言代码库建立符号级知识图谱并做增量同步",
+    "通过 CLI 初始化、索引与更新项目的代码图"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是为 AI 辅助编码场景服务的代码索引工具，SQLite 仅作为内部索引数据存储，并非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：Apache-2.0 或 MIT，可选其一",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Coraline is a Rust-based code intelligence system that builds semantic knowledge graphs for AI assistants. It combines ideas from CodeGraph and Serena to provide: ／ - 🌐 **MCP integration** - Works with Claude Desktop, Claude Code, and OpenCode ／ Coraline exposes 33 tools for code intelligence:",
+   "evidence_lines": [
+    15,
+    21,
+    81
+   ]
+  },
+  "fn": "greysquirr3l/coraline",
+  "sha": "39172ef72a35",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

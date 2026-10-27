@@ -10207,5 +10207,140 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b816249f918b": {
+  "identity": {
+   "one_liner": "自托管深度链接引擎，存储基于 PostgreSQL",
+   "review": "LinkForty Core 是一个自托管的深度链接服务，提供设备检测、点击分析、延迟深度链接与智能路由，通过 REST API 和多端移动 SDK 供移动应用开发者集成。数据（点击、归因、分析）存储在使用者自己的 PostgreSQL 数据库中，可选 Redis 缓存，通过 npm 或 Docker 部署；README 注明不含鉴权，需自备认证。",
+   "highlights": [
+    "提供设备检测的短链接路由，按 iOS/Android/web 重定向并记录点击数据",
+    "支持延迟深度链接，通过 Google Play install referrer 与概率指纹匹配做安装归因",
+    "点击与分析数据存储在用户自有的 PostgreSQL 数据库，可选 Redis 缓存"
+   ],
+   "use_cases": [
+    "移动应用短链接与 App/Store 跳转路由",
+    "移动安装归因与点击分析",
+    "自托管场景下替代闭源深度链接服务"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Full data ownership** — All click data, analytics, and attribution stored in your PostgreSQL database ／ - **PostgreSQL Storage** - Reliable data persistence with full SQL capabilities",
+     "lines": [
+      20,
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有点击、分析、归因数据存储在使用者自己的 PostgreSQL 数据库中，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "npm",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Self-hosted deep linking engine with device detection, analytics, deferred deep linking, and smart routing. No per-click pricing, no vendor lock-in, full data ownership — runs on your own PostgreSQL. Firebase Dynamic Links shut down in August 2025; LinkForty is a production-ready, open-source replacement you can deploy today. ／ - **Full data ownership** — All click data, analytics, and attribution stored in your PostgreSQL database ／ - **PostgreSQL Storage** - Reliable data persistence with full SQL capabilities",
+   "evidence_lines": [
+    7,
+    20,
+    57
+   ]
+  },
+  "fn": "LinkForty/core",
+  "sha": "b816249f918b",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2668136bba09": {
+  "identity": {
+   "one_liner": "基于 Resend 的无代码邮件收发平台 Web 应用",
+   "review": "一个为 Resend 账户提供 Gmail 风格收件箱与撰写界面的 Web 应用，用于在无代码情况下收发品牌域名邮件。技术栈为 Next.js、Prisma、Supabase (PostgreSQL)，面向使用 Resend 的独立开发者和小团队；邮件出站走 Resend API、入站走 webhook，API key 以 AES-256-GCM 加密存储。",
+   "highlights": [
+    "通过 Resend API 发送邮件、经 Resend webhook 接收入站邮件，带收件箱与已发送历史",
+    "多租户用户账户，Resend API key 以 AES-256-GCM 加密存储，密码用 bcrypt 哈希",
+    "基于 Next.js 16 + Prisma 5 + PostgreSQL (Supabase)，部署于 Vercel"
+   ],
+   "use_cases": [
+    "为基于 Resend 的小项目或业务提供品牌域名邮箱的可视化收发界面",
+    "无需编写 API 调用即可管理多个已验证域名的邮件发送与回复",
+    "在服务器环境下接收并查看域名的入站邮件（含沙箱渲染与限流）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Rate limiting on sending (10 emails / minute per user, enforced in Postgres so it holds on serverless) ／ |Database|PostgreSQL (Supabase) + Prisma 5| ／ - A PostgreSQL database (local or free Supabase project)",
+     "lines": [
+      65,
+      75,
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个用 PostgreSQL (Supabase)+Prisma 存数据的邮件 Web 应用，PostgreSQL 是其自身存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MailDesk is a web app that gives your Resend account a normal email interface. Resend is great for sending transactional email from code, but it has no inbox and no compose screen. MailDesk adds both: ／ |Database|PostgreSQL (Supabase) + Prisma 5| ／ - A PostgreSQL database (local or free Supabase project)",
+   "evidence_lines": [
+    20,
+    75,
+    90
+   ]
+  },
+  "fn": "Danny7d/MailDesk",
+  "sha": "2668136bba09",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

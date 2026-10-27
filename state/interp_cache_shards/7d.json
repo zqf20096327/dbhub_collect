@@ -11264,5 +11264,131 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4f29d14469e9": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的 git 备份式故障记忆库，MCP 检索修复经验",
+   "review": "MisakaNet 是一个以 Markdown 文件存放在 git 仓库中的故障修复知识库，通过 MCP server（8 个工具）、WebMCP 和公开 HTTP 端点供编码代理检索已验证的失败修复经验，条目按 E0–E4 证据分级，检索用纯 Python 标准库实现的 BM25。适合使用 AI 编码助手、希望复用历史调试经验的开发者；无向量库、无嵌入模型，需 Python ≥3.11。",
+   "highlights": [
+    "提供 MCP server、WebMCP、公开 HTTP 端点等多种 agent 接入方式，支持 Claude Code、Codex、DeepSeek Harness 等 10 余个客户端",
+    "课程条目按 E0–E4 证据分级（intake 到多客户端复用观测），每条为 Markdown 文件，可审计",
+    "检索基于 BM25 关键词匹配，仅依赖 Python 标准库，无向量数据库；未命中时返回 no_match 及 intake 表单"
+   ],
+   "use_cases": [
+    "AI 编码代理遇到报错时检索既有修复经验，避免重复调试",
+    "通过 GitHub Action 在 CI workflow 失败时自动检索并评论最接近的课程",
+    "提交新的故障 intake，参与语料贡献并获取出处标注"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 表明它是面向 AI 编码代理的故障知识库，检索示例仅含 'database is locked' 一词，未显示其为数据库生态服务的定位。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> MisakaNet is that place: a git-backed **failure memory**. Every lesson is a Markdown file in this ／ **Git-backed failure memory for AI coding agents.** An error shows up → the agent searches → it ／ |❌ a vector database / RAG stack|✅ BM25 keyword search, stdlib only (Python ≥ 3.11 still required)|",
+   "evidence_lines": [
+    13,
+    83,
+    100
+   ]
+  },
+  "fn": "Ikalus1988/MisakaNet",
+  "sha": "4f29d14469e9",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6e1022206064": {
+  "identity": {
+   "one_liner": "AI 编码代理桌面工作台，统一窗口管理 tmux 会话与审批",
+   "review": "agentglass 是一个 Electron 桌面应用，把 Claude Code、Codex、Gemini CLI、OpenCode 等代理的终端、diff、PR、审批集中在同一窗口，并支持手机远程审批；数据存于本地 SQLite 文件，无账号无云端。面向同时运行多个 AI 编码代理的开发者，依赖 git、Claude Code CLI 和 Python 3。",
+   "highlights": [
+    "支持附加 tmux 会话并管理多个代理的终端、diff 与 PR 审查",
+    "提供审批门控队列与 Android 手机远程审批配对",
+    "所有状态存储在本地 SQLite 文件，无账号与遥测"
+   ],
+   "use_cases": [
+    "在一台机器上并行运行多个 AI 编码代理并统一查看状态与成本",
+    "对代理的危险工具调用设置人工审批门控",
+    "通过手机在局域网内查看终端与响应审批请求"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Your machine holds everything: a SQLite file on your own disk, no account, no ／ No account, no cloud, no telemetry. Everything lives in a SQLite file on your ／ dependency-light on purpose: a Bun/SQLite server, a React/Vite UI, an Electron",
+     "lines": [
+      96,
+      117,
+      177
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该应用将自身状态存储于本地 SQLite 文件，SQLite 仅作为其内部数据存储依赖。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "away. agentglass is one desktop window that holds all of it. Claude Code, Codex, ／ Your machine holds everything: a SQLite file on your own disk, no account, no ／ dependency-light on purpose: a Bun/SQLite server, a React/Vite UI, an Electron",
+   "evidence_lines": [
+    17,
+    96,
+    177
+   ]
+  },
+  "fn": "SirAllap/agentglass",
+  "sha": "6e1022206064",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

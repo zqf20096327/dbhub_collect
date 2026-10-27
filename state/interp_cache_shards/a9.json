@@ -11250,5 +11250,92 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7865ae706a32": {
+  "identity": {
+   "one_liner": "家庭用水量监测与漏水告警 PWA，Node/Express + SQLite/TiDB",
+   "review": "一个面向家庭的水消耗监测 Web 应用（PWA），通过流量传感器（ESP32）接收读数，内置漏水、夜间用水、超均值等告警规则，并提供仪表盘、报表和设备维护页面。数据默认存 SQLite，可切换 TiDB Cloud。目前软件部分使用模拟数据运行，真实硬件、邮件发送与 Web Push 仍未完成，属于 goIT 学生项目。",
+   "highlights": [
+    "提供漏水、夜间用水、超均值、日限额、维护提醒等可配置告警规则",
+    "默认使用 SQLite 存储，可通过 DATABASE_URL 切换到 TiDB Cloud（MySQL 协议兼容），并提供 SQLite 到 TiDB 的迁移命令",
+    "PWA 安装支持，含演示数据生成（npm run seed）与传感器模拟器（npm run simulate）"
+   ],
+   "use_cases": [
+    "家庭用水量监测与漏水检测原型",
+    "IoT 传感器数据接入与告警演示项目",
+    "学生/教学场景的 PWA + Node.js API 实践项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "Para guardar os dados na nuvem, use o **TiDB Cloud Starter** (gratuito, compatível com MySQL):",
+     "lines": [
+      57
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Por padrão o GotAlert usa o **SQLite** (arquivo `data/gotalert.db`), que não precisa de configuração.",
+     "lines": [
+      56
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "Para guardar os dados na nuvem, use o **TiDB Cloud Starter** (gratuito, compatível com MySQL):",
+     "lines": [
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用使用 SQLite/TiDB 存储自身的水量监测数据，数据库是应用的内嵌存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Por padrão o GotAlert usa o **SQLite** (arquivo `data/gotalert.db`), que não precisa de configuração. ／ Para guardar os dados na nuvem, use o **TiDB Cloud Starter** (gratuito, compatível com MySQL): ／ - **Node.js + Express**, com banco **SQLite** (arquivo em `data/gotalert.db`) ou **TiDB Cloud / MySQL** (variável `DATABASE_URL`).",
+   "evidence_lines": [
+    56,
+    57,
+    103
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Gabrielsous-life/goIT---GotAlert",
+  "sha": "7865ae706a32",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11095,5 +11095,98 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "96bd2cd210da": {
+  "identity": {
+   "one_liner": "把 Gemini 网页端反代成 OpenAI 兼容 API 的自托管 Go 代理",
+   "review": "该项目将 gemini.google.com 网页协议逆向为 OpenAI 兼容接口和 Gemini 原生接口，提供单 Go 二进制部署、Chrome TLS 指纹、Cookie 池与代理池、管理面板及 MCP server，用于给 OpenAI 兼容客户端提供 Gemini 网页端能力。数据持久化默认使用 SQLite，可通过 SQL_DSN 换用 MySQL/PostgreSQL；Pro 级模型需提供账号 cookie。",
+   "highlights": [
+    "提供 OpenAI 兼容 /v1/chat/completions 与 Gemini 原生 /v1beta 接口，含 function calling 与流式转发",
+    "内置 Cookie 池（自动续期/轮转）与代理池（独立限流、熔断）及中文管理面板",
+    "同一进程在 /mcp 暴露联网搜索、生图、音乐、视频 MCP 工具",
+    "持久化支持 SQLite，可经 SQL_DSN 切换 MySQL 或 PostgreSQL"
+   ],
+   "use_cases": [
+    "为 OpenAI/Gemini 格式客户端与 LLM 网关提供 Gemini 网页端接入",
+    "多账号/多出口 IP 场景下管理 Cookie 池与代理池",
+    "通过 MCP 客户端调用联网搜索与多媒体生成工具"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可） ／ 想用 MySQL / PostgreSQL，设 `SQL_DSN` 环境变量即可（不设就是 SQLite，无需改动）：",
+     "lines": [
+      63,
+      81
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可） ／ 想用 MySQL / PostgreSQL，设 `SQL_DSN` 环境变量即可（不设就是 SQLite，无需改动）：",
+     "lines": [
+      63,
+      81
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可）",
+     "lines": [
+      63
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite/MySQL/PostgreSQL 仅作为该项目自身请求明细与统计的存储后端，项目定位是 LLM API 代理应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Gemini web → OpenAI-compatible API.** A self-hosted proxy that turns the free gemini.google.com web app into `/v1/chat/completions` — **no Google API key, no paid quota**. Single Go binary, real Chrome TLS fingerprint, cookie pool with automatic renewal, proxy pool, built-in admin dashboard, SQLite / MySQL / PostgreSQL. Image, music, canvas and video generation (`/v1/videos`) included. Models track the web app, **Gemini 4 Argon** included (needs a paid-account cookie). ／ - SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可） ／ 想用 MySQL / PostgreSQL，设 `SQL_DSN` 环境变量即可（不设就是 SQLite，无需改动）：",
+   "evidence_lines": [
+    3,
+    63,
+    81
+   ]
+  },
+  "fn": "zexadev/gemini-web2api-go",
+  "sha": "96bd2cd210da",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

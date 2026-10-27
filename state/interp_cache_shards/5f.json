@@ -10688,5 +10688,116 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "731b2009237d": {
+  "identity": {
+   "one_liner": "面向 Linux 服务器的备份与灾难恢复脚本，支持 Compose 数据库转储与加密备份",
+   "review": "Backfort 是一个以恢复为先的 Linux 备份工具，基于 Bash 与 YAML 配置运行，不驻留守护进程。它为文件、目录及 Docker Compose 项目创建经验证、可加密压缩的完整备份，支持 PostgreSQL/MySQL/MariaDB 逻辑转储和 MS SQL/Oracle 原生导出，并提供分阶段的安全恢复流程。适用于通过 pip/pipx、Docker 或 Helm 管理服务器备份的运维人员。",
+   "highlights": [
+    "提供 engine-aware 的 PostgreSQL、MySQL、MariaDB 逻辑转储及 MS SQL、Oracle 原生导出(L89)",
+    "支持 age/GPG 加密、Minisign 签名、rclone 多目标异地副本与 GFS 保留策略(L94-L106)",
+    "恢复始终要求新目录或空目录，发布过程带校验和与 .complete 标记，实现原子发布(L61-L64)"
+   ],
+   "use_cases": [
+    "通过 cron 或 systemd timer 定时保护 Linux 服务器上的文件与目录",
+    "备份 Docker Compose 堆栈并迁移到新服务器",
+    "将数据库恢复到隔离的 Compose 项目中"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Restore a database to an isolated Compose project|Compose restore assistant|Verified staging and an explicit PostgreSQL/MySQL/MariaDB import boundary.| ／ - Logical PostgreSQL, MySQL and MariaDB dumps; native MS SQL and Oracle export ／ logical database import for PostgreSQL, MySQL and MariaDB",
+     "lines": [
+      48,
+      89,
+      92
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Restore a database to an isolated Compose project|Compose restore assistant|Verified staging and an explicit PostgreSQL/MySQL/MariaDB import boundary.| ／ - Logical PostgreSQL, MySQL and MariaDB dumps; native MS SQL and Oracle export ／ logical database import for PostgreSQL, MySQL and MariaDB",
+     "lines": [
+      48,
+      89,
+      92
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Restore a database to an isolated Compose project|Compose restore assistant|Verified staging and an explicit PostgreSQL/MySQL/MariaDB import boundary.| ／ - Logical PostgreSQL, MySQL and MariaDB dumps; native MS SQL and Oracle export ／ logical database import for PostgreSQL, MySQL and MariaDB",
+     "lines": [
+      48,
+      89,
+      92
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- Logical PostgreSQL, MySQL and MariaDB dumps; native MS SQL and Oracle export",
+     "lines": [
+      89
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|`mssql`|Native `.bak` made with `COPY_ONLY, CHECKSUM`|`databases`, `backup_directory` inside the container|",
+     "lines": [
+      577
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为数据库生态提供服务，通过引擎感知的数据库转储与导入功能来备份和恢复多种数据库，而非使用数据库存储自身数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "Oracle",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "helm",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Backfort is a recovery-first backup tool for Linux servers. It creates an ／ - Logical PostgreSQL, MySQL and MariaDB dumps; native MS SQL and Oracle export ／ - Safe restore into a new or empty directory",
+   "evidence_lines": [
+    8,
+    89,
+    104
+   ]
+  },
+  "fn": "shellharbor/backfort",
+  "sha": "731b2009237d",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

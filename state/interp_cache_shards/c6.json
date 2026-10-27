@@ -11798,5 +11798,125 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cdcf99c079b8": {
+  "identity": {
+   "one_liner": "本地优先的桌面 AI 助手，内置语音、视觉与分层记忆",
+   "review": "ELI 是一个完全运行在用户本机硬件上的 AI 助手与认知运行时，提供语音/文字交互、屏幕读取、桌面控制、代码编写与跨会话记忆，推理依赖用户自行提供的本地 GGUF 模型，并通过 socket 层网络守卫默认离线。适合注重隐私、希望在无云服务环境下使用桌面助手的个人用户。SQLite 用于其分层记忆存储。",
+   "highlights": [
+    "提供语音、视觉、桌面控制、记忆等 231 项能力，通过 12 阶段推理流水线与 DAG 编排的多智能体实现",
+    "支持加载任意本地 GGUF 模型，自动检测聊天模板并按硬件调整上下文",
+    "在网络 socket 层实现 fail-closed 离线守卫，可选在线功能需显式启用"
+   ],
+   "use_cases": [
+    "在本地硬件上运行注重隐私的个人 AI 助手",
+    "通过语音或文字控制桌面应用、媒体播放与文件操作",
+    "离线环境下构建具备跨会话记忆的个人助理系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "layered memory (SQLite + a FAISS vector index + a knowledge graph), local voice and vision, and its",
+     "lines": [
+      40
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其分层记忆使用 SQLite 存储数据，SQLite 是该应用的内部存储组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "layered memory (SQLite + a FAISS vector index + a knowledge graph), local voice and vision, and its ／ Under that simple surface it's a **local cognitive runtime**, not a chatbot bolted onto someone",
+   "evidence_lines": [
+    40,
+    38
+   ]
+  },
+  "fn": "ShadowESC95/ELI_v2.0",
+  "sha": "cdcf99c079b8",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a2bdf972b40d": {
+  "identity": {
+   "one_liner": "用 Go 实现的关系型数据库，B+ 树存储 + Volcano 执行器",
+   "review": "miniSQL 是一个用 Go 从零实现的关系型数据库，包含 BNF 语法解析器、基于代价模型的优化器、分区哈希连接、B+ 树存储引擎、LRU 缓存、S/X 锁两阶段锁并发控制和 WAL 恢复管理器，支持 CREATE/SELECT/DELETE/UPDATE、视图、索引与事务。适合数据库内核学习者与教学场景；README 未给出安装产物与性能数据，实际可用性需自行验证。",
+   "highlights": [
+    "采用 B+ 树存储引擎与 Volcano 模型执行器，支持等值连接、视图、索引和事务",
+    "实现 S/X 锁两阶段锁协议、WAL 撤销/重做日志与崩溃恢复",
+    "基于 BNF 构建 SQL 语法树，使用代数成本模型优化查询并选择 JOIN 顺序"
+   ],
+   "use_cases": [
+    "学习数据库内核组件（解析器、优化器、存储、并发、恢复）的实现",
+    "Go 语言数据库存储引擎的教学与实验项目"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库内核/存储引擎实现，非使用某库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "miniSQL 是一个使用 Golang 实现的高性能关系型数据库。它旨在提供高效的数据查询，采用 B+ 树作为存储引擎，并基于 Volcano 模型构建执行器。它支持各种 SQL 操作，包括等值连接和常见的数据操作语句（CREATE、SELECT、DELETE、UPDATE）。此外，miniSQL 还提供对视图、索引和事务的支持，使用统一的接口设计以提高系统的灵活性和可维护性。 ／ - **存储引擎**：采用 **B+** 树作为存储引擎，提供 CRUD 功能，并使用二分查找加速搜索。设计索引页和数据页，引入聚集索引和反向索引操作，并使用螃蟹算法进行并发控制，通过减小锁粒度并在路径上使用写锁来增强数据安全性。 ／ - **恢复管理器**：利用 **WAL** 技术进行撤消日志和重做日志，通过预写日志确保 ACID 特性。支持数据崩溃恢复所需的各种类型的日志信息。",
+   "evidence_lines": [
+    3,
+    13,
+    18
+   ]
+  },
+  "fn": "zevin02/miniSQL",
+  "sha": "a2bdf972b40d",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

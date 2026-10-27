@@ -10043,5 +10043,93 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "80a719021dec": {
+  "identity": {
+   "one_liner": "MySQL/MariaDB 一致性快照并行导出、导入、复制与流式传输工具",
+   "review": "quiver 是一个命令行数据传输工具，通过自实现 MySQL 协议客户端读取一致性快照，支持并行 dump、load、库间 copy 以及经 agent/relay/collector 的网络流式传输，输出 mydumper 兼容布局，支持 zstd 压缩、CSV、checksum 清单和 InnoDB tablespace 直建。面向需要搬运 MySQL/MariaDB 数据的运维和迁移人员，AGPL-3.0 许可，仅支持这两类源端。",
+   "highlights": [
+    "自实现 MySQL 协议客户端，不依赖客户端库，以列式批处理读取二进制行",
+    "提供 dump/load/copy/agent/collect/relay 六个子命令，支持断点续传与按块并行读取",
+    "支持 --ingest tablespace 在客户端构建 InnoDB 页并由服务器 IMPORT TABLESPACE"
+   ],
+   "use_cases": [
+    "MySQL/MariaDB 全库或单库一致性备份导出",
+    "服务器到服务器的数据复制与迁移",
+    "跨网络环境的流式数据传输与转发"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Postgres and other providers|after MySQL is done|",
+     "lines": [
+      393
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Dump, load, copy and stream MySQL and MariaDB from one consistent snapshot, at the speed of the server.** ／ MySQL 8.0 · 8.4 ／ **No client library.** quiver speaks the MySQL protocol itself and decodes binary rows from the",
+     "lines": [
+      5,
+      12,
+      30
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**Dump, load, copy and stream MySQL and MariaDB from one consistent snapshot, at the speed of the server.** ／ MariaDB 10.11 · 11.4 · 11.8 ／ - **One snapshot.** `FLUSH TABLES WITH READ LOCK` or MariaDB `BACKUP STAGE`; every session opens",
+     "lines": [
+      5,
+      13,
+      73
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其功能是对 MySQL/MariaDB 数据进行 dump、load、copy 和 stream，是服务数据库运维的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Dump, load, copy and stream MySQL and MariaDB from one consistent snapshot, at the speed of the server.** ／ $ quiver dump -h db.example -u backup -B shop --compress zstd -o ./shop ／ quiver dump    # MySQL to files: mydumper-compatible SQL or CSV, optional zstd, checksummed manifest",
+   "evidence_lines": [
+    5,
+    22,
+    161
+   ]
+  },
+  "fn": "jongleb/quiver",
+  "sha": "80a719021dec",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

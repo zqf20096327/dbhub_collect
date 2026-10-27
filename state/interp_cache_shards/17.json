@@ -11731,5 +11731,80 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6b4cde2accd2": {
+  "identity": {
+   "one_liner": "扫描 IPv4 段发现 Minecraft 服务器并存入 SQLite 的研究工具",
+   "review": "该项目通过 masscan 和内置连接扫描器扫描 IPv4 地址段，探测 Java 与 Bedrock 版 Minecraft 服务器并采集其报告的数据，全部存入单个 SQLite 文件（WAL 模式），由 ASP.NET Core 只读 API 和 Angular 网站展示服务器列表、历史、地图与统计。面向研究人员，通过 docker compose 一键运行，也提供各平台二进制包；README 提醒仅扫描获授权的网络。",
+   "highlights": [
+    "使用 masscan 无状态 SYN 扫描并支持 UDP 探测 Bedrock 服务器",
+    "所有数据存入单个 SQLite 文件（WAL 模式），含玩家历史与统计",
+    "提供 Docker Compose 部署及多平台自包含二进制包"
+   ],
+   "use_cases": [
+    "统计互联网上公开 Minecraft 服务器的分布与版本",
+    "追踪特定玩家出现过的服务器及上线历史",
+    "基于地图和统计数据分析服务器软件分布"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything lives in **one SQLite file** on a persistent Docker volume. **One `docker compose up`** starts the",
+     "lines": [
+      47
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "**Is this better than the old version?** The old version needed MySQL, sent every IP to a geolocation API",
+     "lines": [
+      462
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储自身采集的扫描数据，是数据库的使用方而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Minecraft Server Discovery is a **research tool** for finding delicious Minecraft servers (diamonds, mostly) ／ Everything lives in **one SQLite file** on a persistent Docker volume. **One `docker compose up`** starts the ／                   │ connect fallback ─┼─▶ probe workers ─▶ batch writer ──┼─▶ SQLite (WAL)  ◀── API (read-only) ◀── website",
+   "evidence_lines": [
+    19,
+    47,
+    128
+   ]
+  },
+  "fn": "SieBRUM/minecraft-server-discovery",
+  "sha": "6b4cde2accd2",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

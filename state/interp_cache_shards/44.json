@@ -10503,5 +10503,74 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b7f747ea087f": {
+  "identity": {
+   "one_liner": "自托管制品仓库，存储构建产物、包、容器镜像与大文件",
+   "review": "Arkvory 是一个自托管的制品仓库服务，用于存储构建产物、UPack/npm 包、OCI 容器镜像、Git LFS 对象和大文件，并提供 HTTP API、命令行客户端与 TypeScript SDK。面向需要向 CI/CD、部署代理和开发团队分发制品的团队。数据存储依赖 PostgreSQL，支持计划备份、镜像站点和基于 DRBD/Pacemaker 的单站点高可用集群（仅限 Linux）；核心免费，去重与增量传输为付费 Pro 模块。",
+   "highlights": [
+    "支持 OCI 容器镜像、Git LFS、npm/UPack 包等协议，提供 HTTP API 与 TypeScript SDK",
+    "提供分块续传上传、HTTP Range 断点续传下载与 SHA-256 校验",
+    "支持计划备份代理、异地只读镜像及基于 DRBD/Pacemaker 的双/三节点高可用集群"
+   ],
+   "use_cases": [
+    "为 CI/CD 流水线提供构建产物的版本化存储与分发",
+    "作为 Docker/Podman 的容器镜像仓库或 Unity 项目的 npm/Git LFS 服务",
+    "单站点内需要故障接管的服务器部署场景（Linux + DRBD）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Windows 10/11, Windows Server 2019+ (x64)|`Arkvory-Setup-x64.exe` — a wizard with Node.js and PostgreSQL included; works offline|Windows| ／ |Any host with Docker|Docker Compose: API, worker, backup agent and PostgreSQL|Docker| ／ A standalone installation is one server with PostgreSQL and a local content directory: if it stops, clients wait until it is back. On Windows, Node.js cannot flush directory entries to disk, so a power loss shortly after an upload can leave a published file mi",
+     "lines": [
+      47,
+      49,
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 PostgreSQL 存储自身数据的制品管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "核心免费，另含可选付费的 Arkvory Pro 模块（去重/增量传输）",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Arkvory is a self-hosted repository for the files your builds produce. You install it on your own server; it stores builds, packages and large assets and delivers them to the people and systems that need them: deployment agents, CI/CD pipelines, test machines, developers and game teams. ／ |Any host with Docker|Docker Compose: API, worker, backup agent and PostgreSQL|Docker| ／ A standalone installation is one server with PostgreSQL and a local content directory: if it stops, clients wait until it is back. On Windows, Node.js cannot flush directory entries to disk, so a power loss shortly after an upload can leave a published file missing; use a UPS and keep backups. A high-availability cluster needs Linux servers on one site with DRBD 9, Pacemaker and a working fence device for each server, verified on site; two data servers also need a separate witness server. Windows and Docker Compose stay standalone. Neither protects against the loss of a site: use backups and, where needed, a mirror on a second site. A mirror is asynchronous and read-only until you switch to it by hand; it does not copy accounts, keys, attachments, references or audit trails. Content storage and the backup vault are local directories; S3 is not implemented. A new backup vault is encrypted by default, with a recovery kit kept off the server.",
+   "evidence_lines": [
+    15,
+    49,
+    88
+   ]
+  },
+  "fn": "ProAnima/Arkvory",
+  "sha": "b7f747ea087f",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
