@@ -9938,5 +9938,95 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e063d263ed30": {
+  "identity": {
+   "one_liner": "Kafka 协议兼容的无状态消息代理，支持可插拔存储后端",
+   "review": "Nisshi 是一个用 Rust 编写的 Apache Kafka API 兼容消息代理，存储引擎可插拔，支持 PostgreSQL、SQLite(libSQL)、S3、内存等后端，并可将带 schema（Avro/JSON/Protobuf）的主题写入 Apache Iceberg 或 Delta Lake 表。适合需要 Kafka 客户端协议但希望用数据库或对象存储作为持久层的开发者与数据平台团队。注意 S3/Turso 引擎为实验性，OSS 版本仅社区支持。",
+   "highlights": [
+    "提供 Apache Kafka API 兼容的 broker、schema registry、topic/cat CLI 及 Kafka 兼容 proxy",
+    "存储引擎可插拔：PostgreSQL、SQLite(libSQL)、S3/GCS、内存、Turso 等",
+    "schema 校验主题可写入 Apache Iceberg、Delta Lake 或 Parquet 数据湖表"
+   ],
+   "use_cases": [
+    "使用现有 Kafka 客户端但以 PostgreSQL/S3 作为消息持久层",
+    "将消息流落地为 Iceberg/Delta Lake 表供分析查询",
+    "本地开发测试（memory:// 或 sqlite://）"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "stateless Kafka-compatible broker with pluggable storage (PostgreSQL, SQLite, S3, memory) ／ with PostgreSQL, libSQL (SQLite), S3 or memory storage engines. ／ - Available with PostgreSQL, libSQL, S3 or memory storage engines ／ |PostgreSQL|`postgres://`|Suitable for production. Tested, with bugs and security issues fixed. Help comes from the community.|",
+     "lines": [
+      2,
+      21,
+      28,
+      42
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "stateless Kafka-compatible broker with pluggable storage (PostgreSQL, SQLite, S3, memory) ／ with PostgreSQL, libSQL (SQLite), S3 or memory storage engines. ／ |SQLite (libSQL)|`sqlite://`|Suitable for development.|",
+     "lines": [
+      2,
+      21,
+      44
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供数据库（PostgreSQL/SQLite）作为可插拔存储引擎选项，该代理是为消息持久化服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "[Nisshi][github-com-nisshi-io] (née Tansu) is an Apache Kafka-compatible broker ／ with PostgreSQL, libSQL (SQLite), S3 or memory storage engines. ／ |PostgreSQL|`postgres://`|Suitable for production. Tested, with bugs and security issues fixed. Help comes from the community.| ／ |SQLite (libSQL)|`sqlite://`|Suitable for development.|",
+   "evidence_lines": [
+    20,
+    21,
+    42,
+    44
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "nisshi-io/solace-nisshi",
+  "sha": "e063d263ed30",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
