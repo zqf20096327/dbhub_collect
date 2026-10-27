@@ -59,9 +59,9 @@ this is for you.
 - **Emailed links:** single-use, kept only as a hash, and short-lived (60 minutes to
   choose a password, 15 to sign in). The token follows `#` in the link, which browsers
   never send to a server, so it stays out of logs and `Referer` headers. At most 3 of
-  each kind to one address in 15 minutes, and every one sent stays usable for at least
-  that long, so nobody can flood an inbox, or (while the email queue isn't full) stop
-  its owner getting a link.
+  each kind to one address in 15 minutes, and asking for more never ends the ones sent
+  (using one does: then the address's other links end too), so nobody can flood an
+  inbox, or (while the email queue isn't full) stop its owner getting a link.
 - **New passwords** follow NIST SP 800-63B: 15 to 200 characters (counted as
   characters, not bytes), any characters at all, no rules about mixing them, but not
   one of the 5,500 passwords that long in two public lists of common ones (one from
@@ -105,9 +105,11 @@ this is for you.
   each give the same answer, after the same work, whether or not the email has one;
   and an email goes either way (for a sign-in link to an email with no account, one
   saying so). See the threat model for one small exception.
-- **Sign-ins can't take the server down:** password hashing runs two at a time, with a
-  short queue. Under a flood, further sign-ins are refused as "busy" (without counting
-  against anyone) until it passes.
+- **Sign-ins can't take the server down:** password hashing runs only a few at a time,
+  sized to the machine (no more than its cores, half its memory, or Node's thread pool
+  less two, so file reads always keep a thread), with a short queue. Under a flood,
+  further sign-ins are refused as "busy" (without counting against anyone) until it
+  passes.
 - **Only the site's own pages can change anything:** every route that does requires
   the site's own `Origin`, and a small JSON body (which another site's page can't send
   without the browser asking first).
@@ -194,8 +196,9 @@ The routes take and give JSON:
 | `POST /auth/undo-email` | `{ token }` | From the notice to the old address: moves it back, ends every session, and emails a link to choose a new password |
 | `POST /auth/delete-account` | `{ password }` | Deletes the account and its sessions |
 
-The two that send a link answer `202` and `{}` whatever happens, so nobody can tell
-whether an email has an account. Every `POST` must come from the site's own pages, with
+The two that send a link answer `202` and `{}` whether or not the email has an account,
+so nobody can tell which. (An address that has asked for too many links is answered `429`,
+with `Retry-After`, again whether or not the email has one.) Every `POST` must come from the site's own pages, with
 `Content-Type: application/json` (even with no body). A refusal is `{ error: { code, message } }`, with an HTTP status to
 match (and `Retry-After` when paused or busy); the message is fit to show. [`examples/node-http.ts`](examples/node-http.ts) is a whole working app
 in one file: run it with `node examples/node-http.ts`.
@@ -350,6 +353,11 @@ Worth knowing:
   network. They share its allowance of 20 sign-ins and 5 links in 15 minutes, so a busy
   shared address can pause briefly. Likewise everyone in one IPv6 /48 (often one
   organisation) shares 200, and 20 links.
+- **Hashing is sized when modest-auth loads,** from the machine: 2 at once on most
+  small servers, 1 on a single core, and up to 16 on a large one. `HASHING` says how
+  many run at once and how many may wait. Node's thread pool is 4 threads unless
+  `UV_THREADPOOL_SIZE` is set before Node starts, so a machine with more cores hashes
+  more at once only once that's raised (to the cores plus two, say).
 - **With `trustedProxies: ["private"]`,** anyone on your own private network is trusted
   as a proxy would be, so could write their own address into `X-Forwarded-For`: name
   the proxy's address instead if strangers can reach that network.

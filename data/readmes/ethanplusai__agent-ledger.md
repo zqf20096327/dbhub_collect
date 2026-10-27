@@ -1,0 +1,159 @@
+# Agent Ledger
+
+**Understand your agent's work. Recover the context worth keeping.**
+
+A local workspace for Claude Code and Codex history. Recover why decisions were made, understand session usage, and save useful context for your next session. Optionally let your coding agent retrieve that context through a read-only MCP connection.
+
+No website, hosted service, account, model subscription, or build step. Clone the public source and run it on your computer. MIT licensed; Python 3.10+ and its standard library, including SQLite FTS5.
+
+![Recorded walkthrough of the synthetic demo: choosing a project, reviewing measured patterns, comparing Claude Code with Codex, replaying a conversation with what each turn cost, and breaking the work down by tool](docs/screenshots/demo-tour.gif)
+
+*Recorded from `python3 ledger.py --demo`. Everything shown is generated example data.*
+
+## Run locally
+
+In the cloned repository directory:
+
+```sh
+python3 ledger.py
+```
+
+Windows: `py -3 ledger.py`. If `python3` is unavailable, use your Python 3 command. Keep the terminal running; **Ctrl+C** stops the app. It opens a local browser tab. If that fails, paste the full URL printed in the terminal, including its temporary access fragment.
+
+The first run builds its own index; it does not reuse another memory app's cache. Large histories can take several minutes. Progress identifies Codex versus Claude Code and shows checkpoints through large files. Wait for **READY — your real history**, then use that run's printed URL. Later imports skip unchanged files. If interrupted, restart with the same options to reuse checkpoints; do not delete the cache.
+
+To explore without reading any real history:
+
+```sh
+python3 ledger.py --demo
+```
+
+Demo mode uses generated Claude and Codex examples in a temporary directory, removed on normal exit. Saving notes in demo mode is temporary too.
+
+## Ask “why did we decide that?”
+
+1. Select a project and open **Ask a project**. Ask about a specific decision, failed approach, or constraint.
+2. **Find context** retrieves local conversation excerpts and this project’s saved notes. Expand or open sources to check what was found. No model is called yet.
+3. **Ask Claude** sends that evidence, your question, and up to four earlier exchanges through your installed, signed-in Claude Code CLI. The answer includes clickable source references. This uses your configured provider and consumes model usage.
+4. Ask follow-up questions, or choose **Review as a saved decision** to edit the answer before saving. **Review project memory** asks for conflicts, outdated notes, and proposed edits. Open a note’s source to edit it; the model cannot save, merge, or delete anything itself.
+
+Search and source review need no agent connection. In-app answers currently support Claude Code; Codex remains available through the separate read-only MCP connection below. The app does not change model, effort, speed, or account settings. CLI runs use no model override, tools, MCP servers, skills, or persisted chat sessions. They have a two-minute timeout and can be cancelled. One answer runs at a time.
+
+Retrieval is bounded keyword relevance plus nearby messages, with recent excerpts as a fallback—not semantic search or a complete investigation of all history. At most 16 conversation excerpts and eight project notes are included. Global notes are excluded from this flow. A cited source may still be misinterpreted; check the explanation before saving. Conversations remain in tab memory and are lost on reload; saved decisions persist. Demo answers are explicitly synthetic and never call a model.
+
+## Continue a project in one flow
+
+1. On Start, choose a recent project or use the project selector.
+2. Review **Where the last sessions ended** and **Decisions and context you kept**. Open a source to check the surrounding conversation.
+3. Click **Prepare a handoff**, enter what you want to do next, and edit the included context.
+4. **Copy handoff** into your next Claude/Codex session, or **Save handoff** as project context. No MCP setup is required for copy/paste.
+
+The briefing collects excerpts from three recent sessions and up to six saved notes. It is not an AI-generated summary or a claim about the current working tree. Source references and clipping labels remain visible. Edits stay in memory while switching projects; save before reloading or closing the page. Saving again in the same editing session updates that handoff.
+
+Usage review runs only when requested for a selected project. Start no longer performs an all-history findings scan on every visit.
+
+## Understand what used your tokens
+
+Within a session, **Where this session’s usage went** ranks the top recorded tasks by token contribution and links to their requests. **Opportunities to investigate** connects repeated failures, repeated output, large tool results, context growth, and high reasoning share to practical experiments. Inspect evidence before changing how you work: the observations do not establish wasted tokens or predict savings.
+
+Open **Usage** to see how much was input versus generated output, and which component dominates the available credit estimate. Token volume and estimated credits are different measurements; neither reveals your remaining subscription allowance.
+
+The default **Context per response** chart shows the input sent with each recorded model response, split into cached and uncached input where known. Select a bar to see its change from the previous matching response, output, and percentage of the recorded context limit. A dashed line marks a recorded compaction, so a drop in the next bar has a visible cause. Expand **Compare responses in this page** for exact counts, or jump straight to one of the largest responses. **Read conversation near this response** connects the numbers to what you were doing.
+
+**Claude Code and Codex, side by side** compares recorded tokens, sessions, responses and observed tool failures for each agent in the active filter. Token volume is comparable between agents; credits are not, because Claude usage has no verified credit rate. The **All agents** selector narrows every view to one agent.
+
+## Read the conversation with its cost
+
+The **Conversation** tab replays one session as it happened. Each recorded message shows the tokens of the responses attributed to it, a running total for the session, the tool calls that followed, and any failures or context resets. Attribution is positional: a response is attributed to the message it followed in the same source file. That is an ordering fact, not a claim about cause.
+
+The **Tools** tab breaks the same scope down by tool: observed results, how many failed, the text each returned, and the largest single result. Check **All filtered history** to widen it from the selected session to everything in the current filter. Observed bytes are not billed tokens, and a failed result can be a deliberate check.
+
+Context is not cumulative usage: sending the same 50,000-token context ten times records 500,000 input tokens. Deltas compare matching responses within the same source, across page boundaries; filters can skip intervening responses. A decrease does not by itself establish compaction. Unknown and conflicting counts remain unavailable. Largest-response rankings exclude legacy amounts and invalid counts.
+
+## Other useful starting points
+
+**“What should I change next time?”** Open Start and expand a pattern under **Worth a closer look**. Each finding explains the observation, what it might mean, and one next step. Inspect the evidence before acting. Copy a suggested prompt into your next agent session if it fits. Repetition can be deliberate; findings are not proof of waste or promised savings.
+
+**“Why did we build it this way?”** Search a feature, error, or decision. Search matches all entered words in bounded conversation excerpts and saved context. Open a result, read nearby messages, and use Earlier/Later to browse. Save a takeaway in your own words, with the source citation retained.
+
+**“How can my next session remember this?”** Add a project note under Saved context, or load a text/Markdown file into the editor and review it before saving. Notes can be edited and deleted. Connecting an agent is optional; you can read and use the notes yourself.
+
+The project selector scopes all views. Global saved notes remain available within a project. Start shows recent sessions even if token usage is missing. Its daily grid covers the last 366 UTC dates and scrolls horizontally on narrow screens; selecting a day opens Usage with that day's filter. Usage defaults to 30 UTC dates and supports model, session, turn, and descendant inspection.
+
+## Optional agent connection
+
+Open **Connect an agent** in the app for the exact local command and argument list, or print a configuration:
+
+```sh
+python3 ledger.py --mcp-config
+```
+
+Add it to your client's local / stdio MCP server settings. The generated JSON uses the common `mcpServers` wrapper; other clients may use a different configuration format with the same command and arguments. This app never edits your agent settings, installs hooks, or starts an AI model.
+
+Your client starts a small background subprocess and communicates through stdin/stdout. The browser app does not need to remain open. The subprocess exits when the client closes its input or terminates it. Six tools are available:
+
+| Tool | Purpose |
+| --- | --- |
+| `project_briefing` | Gather recent project updates and saved context into a source-backed handoff |
+| `search_history` | Find conversation excerpts and saved context |
+| `read_context` | Expand a citation with nearby messages |
+| `project_notes` | Retrieve project and global notes |
+| `recent_sessions` | Find recent recorded work |
+| `usage_findings` | Get evidence and suggested next steps |
+
+Try: **“Use Agent Ledger to find why we chose this approach. Read the relevant excerpts and cite your sources.”** Or: **“Read this project's saved context before we continue.”**
+
+All MCP tools are read-only. They do not execute transcript instructions, run commands, or modify notes. **Your connected agent may send retrieved context to its model provider.** Local storage does not make that model local. Redaction removes common secret patterns but does not anonymize your work.
+
+The MCP process reads the last completed index. To include new work, click **Refresh**, run `python3 ledger.py --import-only`, or keep the browser app running with `python3 ledger.py --watch 60`. Watching performs local incremental scans; it makes no model calls and stops with the app. Reload a view after a background refresh to see its newest data.
+
+## Import controls
+
+```sh
+python3 ledger.py --help
+python3 ledger.py --no-open
+python3 ledger.py --codex-home /path/to/codex --claude-home /path/to/claude --cache-dir /path/to/private-cache
+python3 ledger.py --no-claude
+python3 ledger.py --import-only
+python3 ledger.py --add /path/to/decisions.md --project /path/to/project
+```
+
+- Codex: `--codex-home`, then `CODEX_HOME`, then `~/.codex`; reads only JSONL under `sessions/` and `archived_sessions/`.
+- Claude Code: `--claude-home`, otherwise `~/.claude`; reads JSONL under `projects/`, including subagent transcripts. Use `--no-claude` to exclude it.
+- No credential, authentication, or agent-configuration files are imported. Symlinked transcript files and nested directories are skipped. Source logs are never edited.
+- Cache: `~/Library/Caches/agent-ledger` on macOS; `$XDG_CACHE_HOME/agent-ledger` or `~/.cache/agent-ledger` on Linux; `%LOCALAPPDATA%\agent-ledger` on Windows. Each combination of history roots gets a separate database. Changing roots also changes which saved notes are visible.
+- The cache includes private excerpts and saved notes. Keep it outside Git and public/synced folders. POSIX files use owner-only permissions; Windows uses normal user-directory ACLs. Back up the private database if your notes matter. Removing the cache removes notes as well as the index.
+- Long JSONL records are skipped above 8 MiB by default (`--line-limit-mib`). Searchable text is bounded to 16,000 characters per message; tool previews default to 4,096 (`--preview-chars`). Coverage notes explain skipped records.
+
+If nothing appears, try All projects / All dates, check the history paths, and Refresh. Cursor, cloud-only sessions, other computers, image content, and encrypted reasoning are not supported in this release.
+
+## What the usage numbers mean
+
+Input includes context read again, not just new text typed by you. Cached input is a subset of input; reasoning output, when recorded, is a subset of output. Claude's ordinary input, cache reads, and cache creation are converted to inclusive input once. A streamed Claude message is counted once; conflicting source appearances are excluded. Older Codex cumulative counters remain session-level evidence instead of invented individual responses.
+
+Codex credit estimates use a dated, bundled [rate reference](lens/rates.json) and Decimal arithmetic. They are **not account charges, subscription remaining balances, or dollar estimates**. Unknown models/providers and Claude usage have no Codex credit conversion. Partial or unavailable amounts remain labeled. Tool-result bytes are not billed tokens, and chronological association does not establish causation.
+
+Session totals can overlap when transcripts contain copied responses; combined totals union known response identities. Unknown missing work remains unknown. See [accounting specification](docs/SPEC.md) for the conservative limits.
+
+## Development and release checks
+
+```sh
+python3 -m unittest discover -s tests -v
+python3 scripts/large_file_smoke.py --mib 64
+python3 scripts/check_public_tree.py
+python3 scripts/build_release.py
+```
+
+Optional browser checks require Playwright, only for development:
+
+```sh
+node scripts/browser_smoke.cjs
+node scripts/workspace_smoke.cjs
+node scripts/briefing_smoke.cjs
+```
+
+The optional `scripts/mcp_smoke.mjs` tests interoperability with the official TypeScript MCP SDK; set `MCP_SDK_ROOT` to that installed package directory. None of these development tools are required to run the app.
+
+See [validation](docs/VALIDATION.md), [architecture](docs/ARCHITECTURE.md), and [security](SECURITY.md). Public fixtures and screenshots are synthetic. Do not attach real transcripts, databases, connection configurations with personal paths, or private screenshots to issues.
+
+Agent Ledger combines the context-recovery ideas from an earlier local memory prototype with the accounting engine originally developed as Codex Usage Lens. `report.py` remains a compatible launcher. The app is independent of agent vendors and does not guarantee that future transcript formats will remain compatible.

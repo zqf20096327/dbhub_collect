@@ -10,7 +10,7 @@ A desktop SQL learning workspace that brings local SQLite, an AI tutor, visual s
 
 <p align="center"><a href="https://github.com/canyrtcn/PractiSQL/releases"><img src="docs/assets/download-windows.en.svg" width="328" height="64" alt="Download PractiSQL for Windows"></a></p>
 
-<p align="center"><strong>Windows x64 · v3.4.269</strong> · <strong>macOS is in preparation.</strong></p>
+<p align="center"><strong>Windows x64 · v3.4.271</strong> · <strong>macOS is in preparation.</strong></p>
 
 The button opens Releases, where the Windows x64 installer is available. No GitHub account is required to download it.
 
@@ -55,6 +55,8 @@ Use the editor for your own SQL, inspect a query plan, revisit query history or 
 ![Schema-based completion in the SQL editor before the suggestion is accepted](docs/showcase/cards/query-completion.en.png)
 
 **Use Tab to accept a suggestion that follows your current schema.** Choose word completion, the next word, the next three words or the rest of a line. Suggestions use local SQL vocabulary, table names and columns. This editor assistance works without an AI account or model call; asking the tutor to generate SQL is a separate feature.
+
+Longer completion modes extend a suggestion only when the continuation is unambiguous. Choosing the next three words does not force three guessed words: the editor may offer a shorter completion when several tables, columns or SQL clauses would be valid. Accepting a suggestion preserves the SQL after the cursor. See the [editor architecture](docs/en/architecture.md) for how local workers handle completion and highlighting.
 
 ## Learn a concept, then try it
 
@@ -184,7 +186,7 @@ Choose an available model entry in your account. Model names and access can vary
 3. Load a supported database or file, or open a built-in learning example. Start writing and running SQL immediately.
 4. Connect AI when you want guided explanations, generated queries or AI-backed learning workflows. You can leave this step for later.
 
-[Release notes](docs/releases/v3.4.269.md) · [Build from source](#development-and-repository-layout)
+[Release notes](docs/releases/v3.4.271.md) · [Build from source](#development-and-repository-layout)
 
 ## More screens and documentation
 

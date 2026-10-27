@@ -56,7 +56,34 @@ Enterprise in GizmoSQL is in every Hardcharger build.
 - 🌐 **Ready to scale out.** Results are already described as partitions with locations,
   so distributed query execution can arrive without a protocol change.
 
-## 🖥️ Built-in web UI
+## 🖥️ Desktop app (v2.1.0+)
+
+Run Hardcharger from a native app for macOS 15+ on Apple silicon or Windows: start and
+stop the server, open its SQL workspace, manage settings, and follow the logs. Closing
+the window leaves the server running in the macOS menu bar or Windows system tray;
+**Quit Hardcharger** stops it.
+
+<p align="center">
+  <img src="docs/assets/desktop-preview-light.png" alt="Hardcharger desktop dashboard design preview, light theme: server controls, database information and the SQL workspace button" width="49%">
+  <img src="docs/assets/desktop-preview-dark.png" alt="Hardcharger desktop dashboard design preview, dark theme" width="49%">
+</p>
+
+The dashboard images show the design preview with sample data. The app runs the same
+`hardcharger-server` executable shipped in the command-line packages and opens its built-in
+web UI in a separate window. It also bundles the `hardcharger` CLI. Pick the desktop app
+for an interactive computer, or the command-line packages for terminals, automation,
+containers and operating-system services. Both remain supported.
+
+For v2.1.0+, desktop release artifacts use the **`Hardcharger-desktop-…`** prefix:
+the macOS `.dmg` is signed and notarized, and the Windows `.msi` is signed. The existing
+Windows `Hardcharger-windows-…msi` installs the command-line tools. Linux users continue
+to use the command-line packages or Docker; a Linux desktop package is follow-up work.
+See the [desktop guide](docs/desktop-app.md) for installation, network sharing, certificates,
+settings import/export, and the difference between closing and quitting.
+
+<a id="built-in-web-ui"></a>
+
+## 🌐 Built-in web UI
 
 <p align="center">
   <img src="docs/assets/web-ui-query-light.png" alt="Hardcharger's web UI, light theme: the schema browser, two editor tabs, a script's result tabs, and an open transaction with Commit and Rollback" width="49%">
@@ -82,6 +109,13 @@ HARDCHARGER_ADMIN_PASSWORD='change-me' hardcharger-server --web-ui --tls-cert se
   filter, resize columns, and select cells, ranges or rows like a spreadsheet, with the full
   keyboard. Ctrl/⌘+C copies so a paste into Excel or Google Sheets lands as cells (in every
   browser, Safari included); double-click or Enter shows a value in full, JSON pretty-printed.
+- 🔭 **SQL Monitor (v2.1.0+)** for unrestricted administrators: live queued, executing and fetching
+  statements, recent outcomes and timeouts, queue status and available concurrency slots
+  (`--enable-instrumentation`), captured query profiles, and separate query-detail windows.
+  **Server Configuration (v2.1.0+)** shows current session/global values, edits and resets
+  settings at supported runtime scopes, and identifies startup settings that need a restart.
+  Both tabs are available in a browser through `--web-ui` and in the desktop SQL workspace.
+  See [SQL Monitor and Server Configuration](docs/sql-monitor.md).
 - 🗂️ **Schema browser and autocomplete** that follow access control: each user sees only the
   catalogs, schemas, tables and columns their roles allow. Tables and Views in their own
   groups, columns with their types; double-click or drag a name into the editor (fully
@@ -127,6 +161,11 @@ HARDCHARGER_ADMIN_PASSWORD='change-me' hardcharger-server --web-ui --tls-cert se
 </p>
 
 The UI's source is in [`ui/`](ui/README.md), built and tested with the server in the same CI run.
+
+<p align="center">
+  <img src="docs/assets/web-ui-monitor-light.png" alt="SQL Monitor: recent query outcomes, time-window and status filters, queue status and available statement slots" width="49%">
+  <img src="docs/assets/web-ui-configuration-light.png" alt="Server Configuration: selected editor session, session and global values, runtime edit controls and setting descriptions" width="49%">
+</p>
 
 ## 📱 iPhone and iPad app
 
@@ -271,11 +310,15 @@ directory, and says so at startup; mount a writable volume for the database (`--
 /data/my.duckdb`) and they go there. Init SQL can set `extension_directory` and
 `secret_directory` to anywhere else.
 
-The server never installs or loads an extension by itself (DuckDB's
-`autoinstall_known_extensions` and `autoload_known_extensions` are off), so an extension
-that needs another one needs that one installed too: `iceberg` needs `avro`. Run `INSTALL
-iceberg; INSTALL avro; LOAD iceberg;` (iceberg loads avro itself once it is installed); a
-`LOAD iceberg` without avro fails with a message that says to run `INSTALL avro;` first.
+In **v2.1.0+**, non-iOS builds statically include DuckDB's standard `core_functions`,
+`parquet`, `json` and `icu` extensions. Optional extensions—including `httpfs`, `postgres`,
+`ducklake`, `tpch` and `autocomplete`—load at runtime and can be replaced independently
+of the server. Automatic installation and loading of known extensions are enabled by
+default, matching GizmoSQL; signature verification stays enabled. A first use may need
+network access and a writable extension cache. For offline use, preinstall the needed
+modules for the server's DuckDB version and platform. Administrators can select a custom
+repository or disable automatic installation/loading through init SQL. See
+[Extensions](docs/extensions.md). iOS keeps its extensions built in and dynamic loading off.
 
 `ghcr.io/gizmodata/hardcharger:main` (and `:sha-<commit>`) is the development build: the
 newest commit on `main` that passed every CI gate, built exactly as a release. Use
@@ -300,6 +343,9 @@ platform on first use and runs it. The **client** is `adbc-driver-hardcharger` (
 connection. See [python/README.md](python/README.md).
 
 ### Binaries
+
+These packages contain the server and command-line client. For the graphical app in
+v2.1.0+, choose a `Hardcharger-desktop-…` artifact instead; see [Desktop app](docs/desktop-app.md).
 
 Linux (x86-64 and arm64), macOS (Apple silicon) and Windows (x64 and arm64) builds are
 attached to every [release](https://github.com/gizmodata/hardcharger/releases/latest):
@@ -740,29 +786,28 @@ trusted_proxies: [10.0.0.0/8, fd00::/8]   # flag: --trusted-proxies 10.0.0.0/8,f
 
 ### DuckDB files and DuckLake metadata
 
-An existing DuckDB file keeps the storage format it has: the `--database` file, a file you
-`ATTACH`, and a DuckLake's DuckDB metadata file (`ATTACH 'ducklake:lake.ducklake'`). So a
-database or DuckLake that DuckDB 1.5 created is still readable by DuckDB 1.5 after
-Hardcharger writes to it. (DuckDB's own DuckLake extension attaches its metadata file with
-the latest storage format, which upgrades the file; Hardcharger's build of it doesn't.) A
-DuckLake also keeps its DuckLake format version unless you attach it with
-`AUTOMATIC_MIGRATION true`.
+An existing plain DuckDB file keeps its storage format: the `--database` file and ordinary
+files you `ATTACH`. `--storage-version` (`storage_version`) selects the format for a new
+server database or a new plain attached database; unset, these use DuckDB 2.0's format.
 
-`--storage-version` (`storage_version`) sets the format of every DuckDB file the server
-creates: the `--database` file, a new file an `ATTACH` creates, and a new DuckLake's
-metadata file. Unset, a new `--database` or `ATTACH` file gets DuckDB 2.0's format and a new
-DuckLake metadata file the latest one, which DuckDB 1.x can't open. To make a new DuckLake
-that DuckDB 1.5 can read, start the server with `--storage-version v1.5.0` and create the
-lake with `DUCKLAKE_VERSION '1.0'` (DuckDB 1.5's DuckLake can't read the newer default,
-1.1-dev1):
+**v2.1.0+ removes Hardcharger's DuckLake metadata storage-version patch.** DuckLake now
+follows upstream behavior: its DuckDB metadata database defaults to the latest storage
+format, including when attaching an existing metadata file. Writes/checkpoints can upgrade
+it so an older DuckDB cannot reopen it. `--storage-version` does not override DuckLake's
+metadata choice. Back up metadata before using it with a newer server.
 
-```sql
-ATTACH 'ducklake:/data/lake.ducklake' AS lake (DATA_PATH '/data/lake/', DUCKLAKE_VERSION '1.0');
-```
+Hardcharger no longer guarantees that older DuckDB clients can reopen DuckLake metadata
+after writes by a newer server. Use the compatibility and migration controls supported by
+your chosen upstream DuckLake version. DuckLake's catalog format and its
+`AUTOMATIC_MIGRATION` option are separate from the metadata database's storage format.
+PostgreSQL metadata has no DuckDB file storage version. See [Extensions](docs/extensions.md).
 
-To upgrade an existing metadata file on purpose, attach it with
-`META_STORAGE_VERSION 'latest'`; DuckDB 1.x can't open it afterwards. A PostgreSQL metadata
-catalog has no DuckDB storage format, so none of this applies to it.
+**Open files.** A query over a DuckLake table holds many of its data files open at once, so
+a table with thousands of partition files needs more than the 1024 open files that
+containers and services usually start with. The server raises its soft limit to the hard
+limit at startup (v2.1.1+) and warns in its log when the hard limit is below 8192. Raise
+that with `ulimit -Hn`, `docker run --ulimit nofile=1048576:1048576`, Compose's
+`ulimits: nofile:`, or systemd's `LimitNOFILE=`.
 
 ### Logs
 
@@ -918,6 +963,15 @@ anyone else, a restricted administrator included, the sessions of their own prin
 same user and tenant), and `hardcharger_sessions()` follows the same rule. Retained
 (resumable) results are kept for `result_retention_seconds` (default 3600) after their
 statement ends; the statement document's `expires_at` says until when.
+
+`max_ingest_message_bytes` defaults to 67108864 (64 MiB). Each Arrow IPC message
+must fit on the wire, including framing and metadata, and its aggregate expanded buffers
+must fit before decompression. This applies to ordinary ingest, partitioned-ingest parts,
+dictionaries and Arrow prepared parameters. Oversized input returns HTTP 413
+`payload_too_large` before the requested allocation. Split larger uploads into smaller
+record batches: the limit is per message, not per upload. Configure this positive startup
+setting with YAML, `--max-ingest-message-bytes` or `HARDCHARGER_MAX_INGEST_MESSAGE_BYTES`;
+it is visible in Server Configuration and takes effect after restarting the server.
 
 A session is evicted within 5 s (the server's sweep interval) after `session_idle_timeout`
 seconds (default 900; 0 never evicts) without a request on it, unless one of its statements
@@ -1385,7 +1439,7 @@ and full licence text. The embedded web UI's JavaScript packages are listed in
 `THIRD_PARTY_NOTICES-web-ui.txt`. Every release archive, the MSI and the container image
 (`/usr/share/doc/hardcharger/`) carry both files, `hardcharger-server --licenses` and
 `hardcharger --licenses` print them, and the web UI links its own from **About** (**Open-source
-licences**). Note that the built-in `tpch` extension's data generator is under the TPC's End User
+licences**). The `tpch` extension's data generator (built in on iOS) is under the TPC's End User
 License Agreement, not an open-source licence.
 
 ---

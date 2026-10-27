@@ -14,9 +14,9 @@
   <img src="https://img.shields.io/badge/Swift-5-orange?style=flat-square" alt="Swift 5">
   <img src="https://img.shields.io/badge/dependencies-0-brightgreen?style=flat-square" alt="No dependencies">
   <img src="https://img.shields.io/badge/data-local-blue?style=flat-square" alt="Local only">
-  <img src="https://img.shields.io/badge/tests-67-brightgreen?style=flat-square" alt="67 tests">
+  <img src="https://img.shields.io/badge/tests-167-brightgreen?style=flat-square" alt="167 tests">
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="MIT License">
-  <img src="https://img.shields.io/badge/status-0.5.3-lightgrey?style=flat-square" alt="Status 0.5.3">
+  <img src="https://img.shields.io/badge/status-0.6.3-lightgrey?style=flat-square" alt="Status 0.6.3">
 </p>
 
 <p align="center">
@@ -25,9 +25,15 @@
 
 > A local-first mind map app for macOS. All data lives in a local SQLite file — no account, no cloud, no telemetry.
 
-Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据全部保存在本机。它没有登录、没有云同步、不会发起网络请求，也不依赖任何第三方库。
+Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据全部保存在本机。它没有登录、没有云同步、不依赖任何第三方库；默认不联网，只有手动检查更新或在设置里开启自动检查时才会访问 GitHub。
 
-当前版本：**0.5.3**（早期版本，功能和数据结构仍可能调整）
+当前版本：**0.6.3**（功能和数据结构仍可能调整）
+
+### 0.6.3 修复
+
+- 空文本提交不再删除节点与子树：中心节点回填「中心主题」，其它节点回填「新主题」
+- 自动检查更新每次启动都会检查一次；关闭横幅后同一版本不再重复提醒
+- 「打开安装包」默认按钮改为「仅打开安装包」，避免回车误退出；打开失败会在窗口内提示
 
 ---
 
@@ -62,12 +68,13 @@ Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据
 ## 为什么是 Mindscape
 
 - **本地优先**：所有导图在一个 SQLite 文件里，断网可用，不登录，不上传。
-- **原生性能**：画布是自绘 `NSView`，不是 Web/Electron；大图缩放、拖拽仍然跟手，整个 app 只有 3.9 MB。
+- **原生性能**：画布是自绘 `NSView`，不是 Web/Electron；大图缩放、拖拽仍然跟手，整个 app 只有 5.1 MB。
 - **中文输入法友好**：用拼音组字时节点随着候选实时变宽，不会「先折行再弹回」，候选框始终贴着光标——这是 Web 画布类思维导图最常翻车的地方。
 - **动效克制**：折叠/展开按层级错峰落位，残影淡出、控件跟随淡入，不做“整屏闪跳”。
 - **开箱好看**：8 套主题、8 种布局、现代留白与陶土色视觉，不需要自己调样式。
 - **真的能整理**：多级目录、大纲视图、全图搜索、专注模式、收藏、回收站。
 - **能带走**：PNG、PDF、Markdown、OPML、JSON 五种导出，也能导入 Markdown / OPML / JSON。
+- **更新不打扰**：默认不自动联网；更新询问只出现一次，下载后校验 SHA-256。
 
 ---
 
@@ -77,6 +84,9 @@ Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据
 
 - 无限画布：双指平移、捏合缩放、⌘ + 滚轮缩放、⌘0 适配
 - 节点：新增、重命名、折叠、多选、拖动、复制剪切粘贴、创建副本
+- 多选：设置里可选择多选修饰键（默认 ⇧，可改为 ⌘）；点击加减选区、拖拽空白处框选；⌘ 点击始终可加选；Delete 一次删除所选，拖动任一选中节点可整组移动（自由布局保持相对位置）
+- 工具栏灯泡集中展示画布操作提示；首次显示导图（打开已有或新建）时全局自动展开一次，开始绘图或手动关闭后收起
+- 自由布局：按住 ⌥ 拖到目标节点可迁移父子关系，节点保持当前位置、不触发自动重排；普通拖动仍只调整位置
 - 支持多个头部节点；双击空白处新建头部节点并进入编辑
 - 拖动改层级：拖到节点上挂到它下面；按住 ⌥ 拖到同级节点可调整顺序
 - 画布快捷键：Space 进入编辑，Enter 新建同级节点（头部节点则新建头部），Tab 新建子节点
@@ -117,7 +127,7 @@ Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据
 
 纸白、深空、莫兰迪、商务蓝、蓝图、霓虹、暖砂、墨线。
 
-主题只影响画布；窗口和侧栏跟随系统外观。当前导图的主题可以在工具栏或属性面板切换。
+主题只影响画布；窗口和侧栏跟随外观设置。每张导图分别记住浅色/深色主题：浅色只显示浅色主题，深色只显示深色主题，默认分别为纸白/深空。当前导图的主题可以在工具栏或属性面板切换。
 
 ### 图标
 
@@ -148,7 +158,7 @@ Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据
 
 - SQLite 自动保存（600ms 防抖）
 - 撤销 / 重做 150 步
-- 手动快照 + 每 10 分钟自动快照
+- 手动快照 + 每 10 分钟自动快照；创建成功有提示，可重命名、删除（二次确认）
 - 历史版本回滚，回滚前自动留档
 - 数据目录可更换，设置里保留「最近目录」，可一键切回
 - 每个目录的导图存在该目录自己的 `mindscape.sqlite` 中
@@ -182,8 +192,16 @@ Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据
 - 最近导图
 - 清空回收站（带确认）
 - 设置
+- 检查更新
 - 在 Finder 中打开数据目录
 - 退出
+
+### 应用内更新
+
+- 设置 → 关于 或菜单栏「检查更新…」手动检查 GitHub Releases
+- 首次启动询问一次是否自动检查，默认关闭；Agent Skill 另有独立询问。之后可在 设置 → 通用 → 更新 修改
+- 更新窗口展示版本说明与包大小，下载 DMG 后校验 SHA-256，再打开安装包
+- API 限流时自动降级到 Releases Atom / 302，网络与校验都在后台执行，不阻塞界面
 
 ---
 
@@ -217,7 +235,7 @@ Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据
 
 ### 下载
 
-从 [Releases](https://github.com/jiuxianzai/Mindscape/releases) 下载 `Mindscape-0.5.3.dmg`，打开后把 Mindscape 拖进 Applications。
+**下载**：[`Mindscape-0.6.3.dmg`](https://github.com/jiuxianzai/Mindscape/releases/download/v0.6.3/Mindscape-0.6.3.dmg)，打开后把 Mindscape 拖进 Applications。
 
 当前构建为 **ad-hoc 签名**，没有 notarization。首次打开如果被 Gatekeeper 拦下：
 
@@ -245,7 +263,8 @@ open Mindscape.xcodeproj
 打包与本地安装：
 
 ```bash
-make package    # 生成 dist/Mindscape-0.5.3.dmg 和 .zip
+make package    # 生成 dist/Mindscape-0.6.3.dmg、.zip 和 .dmg.sha256
+make publish    # 用 gh 创建 GitHub Release（需已 gh auth login）
 make install    # 安装到 /Applications 并启动
 ```
 
@@ -254,6 +273,47 @@ make install    # 安装到 /Applications 并启动
 ```bash
 xcodebuild test -project Mindscape.xcodeproj -scheme Mindscape -derivedDataPath build
 ```
+
+---
+
+## AI Agent
+
+Mindscape 可以把本地能力开放给 AI Agent：App 内置 **OpenAPI 服务 + Skill 说明书**，Agent 通过命令行或 HTTP 创建目录、建导图、编辑节点、导出。
+
+完整图文教程（截图 + 架构图 + 四 Agent 安装路径 + 排错）：[docs/ai-agent.md](docs/ai-agent.md)。
+
+### 一次性设置
+
+1. **设置 → AI Agent**，打开「允许本地 AI Agent 操作」
+2. 在 AI Agent 页安装 Skill：
+   - **Claude Code** → `~/.claude/skills/mindscape`
+   - **Codex** → 写入 `~/.codex/AGENTS.md`（受管段落）
+   - **DSH** → `~/.dsh/skills/mindscape`
+   - **OpenCode** → `~/.config/opencode/skills/mindscape`
+3. 对 Agent 说：「请阅读 `~/.agents/skills/mindscape/SKILL.md`，用 Mindscape 建一张项目规划导图。」
+
+服务默认关闭；启用后也是 **Agent 调用时才启动**，空闲 10 分钟自动关闭。只监听 `127.0.0.1`，每次启动生成新 token，写入 `~/Library/Application Support/Mindscape/agent-gateway.json`（0600）。
+
+### 安装 CLI
+
+```bash
+make install-cli PREFIX=$HOME/.local/bin   # 或 sudo make install-cli
+```
+
+### 常用命令
+
+```bash
+mindscape health
+mindscape folder create "项目 A"
+mindscape map create "Q4 规划" --template project
+mindscape map list
+mindscape node add <map-id> --parent <node-id> --text "目标"
+mindscape map export <map-id> --format md --out ~/Downloads/q4.md
+mindscape openapi > openapi.json
+mindscape guide
+```
+
+Agent 也可以直接访问 `http://127.0.0.1:47821/openapi.json`（实际端口与 token 以 gateway 文件为准）。完整接口和示例见 [`AgentSkill/SKILL.md`](AgentSkill/SKILL.md)。
 
 ---
 
@@ -269,7 +329,7 @@ xcodebuild test -project Mindscape.xcodeproj -scheme Mindscape -derivedDataPath 
 - 可以在「设置 → 通用 → 数据目录」更换位置
 - 「最近目录」会列出用过的目录、导图数量和切换按钮
 - 切换目录不会删除原目录的数据
-- 没有网络请求、没有遥测、没有账号
+- 默认不联网；更新询问只出现一次，可在 设置 → 通用 修改；只有检查更新时访问 GitHub，没有遥测、没有账号
 
 数据库表：
 
@@ -321,7 +381,7 @@ xcodebuild test -project Mindscape.xcodeproj -scheme Mindscape -derivedDataPath 
 | 图标 | SF Symbols |
 | 数据 | 系统 `libsqlite3`，WAL 模式 |
 | 工程 | XcodeGen（`project.yml`） |
-| 测试 | XCTest（67 个用例，含画布交互与渲染回归） |
+| 测试 | XCTest（167 个用例，含画布交互与渲染回归） |
 | 最低系统 | macOS 14 |
 | 架构 | Universal（arm64 + x86_64） |
 | 第三方依赖 | 无 |
@@ -333,7 +393,7 @@ xcodebuild test -project Mindscape.xcodeproj -scheme Mindscape -derivedDataPath 
 - **编辑状态集中**：`MapEditor`（`@Observable`）负责编辑、撤销、自动保存；画布、属性面板、大纲、工具栏都读写它。
 - **屏幕即真相**：动画期间命中测试用当前可见帧（`displayFrames`），而不是过渡终点，避免“看得见点不到”。
 - **一个目录一个库**：文档主体存 JSON，列表/搜索所需的标题、布局、主题、节点数、目录冗余成列。
-- **本地优先**：没有网络层，没有账号系统，没有遥测。
+- **本地优先**：默认不联网，只有检查更新会访问 GitHub；没有账号系统，没有遥测。
 
 ---
 

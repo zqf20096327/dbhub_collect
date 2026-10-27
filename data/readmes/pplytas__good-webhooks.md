@@ -41,13 +41,15 @@ npm install good-webhooks pg zod
 
 Requires Node.js 24 or later. Built-in delivery and standalone management need PostgreSQL 16, 17, or 18. Better Auth management uses your existing Better Auth database adapter. See [installation](https://good-webhooks.dev/docs/installation) for each setup's dependencies and the [compatibility policy](https://good-webhooks.dev/docs/operations/compatibility) for tested versions.
 
-| You want                                     | Start with                                                             |
-| -------------------------------------------- | ---------------------------------------------------------------------- |
-| Everything on PostgreSQL                     | [Quick start](https://good-webhooks.dev/docs/quick-start)              |
-| Signed-in users managing their own endpoints | [Better Auth plugin](https://good-webhooks.dev/docs/better-auth)       |
-| Better Auth endpoints with built-in delivery | [Add delivery](https://good-webhooks.dev/docs/better-auth/delivery)    |
-| Endpoint management for your own sender      | [Custom senders](https://good-webhooks.dev/docs/guides/custom-senders) |
-| Only receiving webhooks                      | [Receive webhooks](https://good-webhooks.dev/docs/guides/receive)      |
+| You want                                          | Start with                                                                     |
+| ------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Everything on PostgreSQL                          | [Quick start](https://good-webhooks.dev/docs/quick-start)                      |
+| To see what a hand-rolled sender gets wrong       | [Tutorial](https://good-webhooks.dev/docs/tutorials/outbound-webhooks)         |
+| Signed-in users managing their own endpoints      | [Better Auth plugin](https://good-webhooks.dev/docs/better-auth)               |
+| Better Auth endpoints with built-in delivery      | [Add delivery](https://good-webhooks.dev/docs/better-auth/delivery)            |
+| Endpoint management for your own sender           | [Custom senders](https://good-webhooks.dev/docs/guides/custom-senders)         |
+| Only receiving webhooks                           | [Receive webhooks](https://good-webhooks.dev/docs/guides/receive)              |
+| To compare with Svix, Outpost, Convoy, or pg-boss | [Compared with alternatives](https://good-webhooks.dev/docs/concepts/compared) |
 
 The [package README](packages/good-webhooks/README.md) walks through publishing, running a worker, and verifying on the receiving side.
 
@@ -62,7 +64,7 @@ Two interactive examples show the full path from a business action to a verified
 - [Order fulfillment](examples/order-fulfillment): place a shop order, send it to a warehouse, simulate an outage, and replay a delivery without creating a second shipment.
 - [Better Auth billing](examples/better-auth-billing): sign in, manage personal endpoints, publish invoice events, and inspect delivery attempts within the signed-in user's scope.
 
-Each example has its own npm lockfile, PostgreSQL setup, browser UI, receiver, and separate worker process. Both install `good-webhooks@0.5.0` from npm and can run together. Follow the [examples guide](examples/README.md) to get started.
+Each example has its own npm lockfile, PostgreSQL setup, browser UI, receiver, and separate worker process. Both install `good-webhooks@0.6.0` from npm and can run together. Follow the [examples guide](examples/README.md) to get started.
 
 ## Work on the repository
 
@@ -122,7 +124,7 @@ pnpm --dir packages/good-webhooks pack
 In your application, install the resulting archive using npm or your preferred package manager:
 
 ```sh
-npm install /absolute/path/to/packages/good-webhooks/good-webhooks-0.5.0.tgz
+npm install /absolute/path/to/packages/good-webhooks/good-webhooks-0.6.0.tgz
 ```
 
 `pnpm test:package` verifies the archive with fresh npm consumers, both with and without Better Auth, including the published declarations and SQL exports. Registry publication is a separate release step.

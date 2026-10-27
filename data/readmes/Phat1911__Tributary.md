@@ -5,7 +5,7 @@
 **Landing page:** <https://phat1911.github.io/Tributary/> — one screen,
 live screenshots, the two-minute quickstart.
 
-**Status: v0.1.0 — self-hostable AI token pools** (gateway, org pools,
+**Status: v0.1.3 — self-hostable AI token pools** (gateway, org pools,
 dashboard). Pre-alpha software, real release: every org gets per-user
 keys over pooled provider capacity, with quotas, audit, and leak
 signals. Roadmap lives in [`SPEC.md`](SPEC.md) §14.
@@ -58,6 +58,17 @@ compile).
 > it, X-Forwarded-For is ignored and the socket address is used. Details:
 > [`deploy/README.md`](deploy/README.md).
 
+> **Provider keys — OpenAI and Gemini:** pools accept keys from **any
+> OpenAI-compatible endpoint**. A Google AI Studio (Gemini) key goes in
+> with provider *Gemini* and base URL
+> `https://generativelanguage.googleapis.com/v1beta/openai`; member
+> traffic is then metered, quota-checked, and leak-watched exactly like
+> OpenAI-routed traffic. Tributary speaks (and meters) the
+> OpenAI-compatible wire format on all pools — it is **not** a format
+> converter, and the native Gemini API shape is not translated. Note the
+> free tier of AI Studio is rate-limited: fine for demos and pilots, but
+> expect upstream 429s under load. Details: [`deploy/README.md`](deploy/README.md).
+
 ## What it is
 
 A tributary is a small stream that feeds a larger river — and that is
@@ -73,7 +84,10 @@ surface as review flags, not silent surprises.
 
 | | |
 |---|---|
-| [`deploy/README.md`](deploy/README.md) | Detailed ops: ports, reverse proxies (the trusted-proxy setting matters), backups, Postgres, healthchecks, quota behavior |
+| [`deploy/README.md`](deploy/README.md) | Detailed ops: ports, reverse proxies (the trusted-proxy setting matters), backups, Postgres, healthchecks, quota behavior, upgrades |
+| [`docs/onboarding-org-admin.md`](docs/onboarding-org-admin.md) | Admin first-day guide (DRAFT v1) — empty box → org → pool → member key → first request |
+| [`docs/pilot-support.md`](docs/pilot-support.md) | "It broke" diagnostics runbook — healthz → logs → audit → review queue, with the known fixes |
+| [Pilot feedback](https://github.com/Phat1911/Tributary/issues/new?template=pilot-feedback.yml) | Running a pilot? Tell us what worked, what broke, what's missing — it drives the M6 rewrite |
 | [`SPEC.md`](SPEC.md) | Architecture, security/economic rules, milestone roadmap |
 | [`SECURITY.md`](SECURITY.md) | Private disclosure by email; finder credit |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Conventions (teaching comments, dual-DB rule) and dev setup |
@@ -106,7 +120,8 @@ pnpm -C apps/dashboard build
 ```
 
 CI (`.github/workflows/ci.yml`) runs all of the above, `cargo-deny`,
-and the OpenAI SDK contract test.
+and the official-SDK contract tests (OpenAI and Gemini-compat upstreams,
+real OpenAI-SDK clients).
 
 ## License
 

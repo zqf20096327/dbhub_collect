@@ -8,11 +8,16 @@ Source-available **NetSuite MCP client** — chat UI for NetSuite’s AI Connect
 
 Bring your own LLM keys (**Google Gemini**, **Anthropic Claude**, **OpenAI**, or an **OpenAI-compatible** endpoint). Self-host for internal use. Commercial rights reserved by [Unstacked Apps, LLC](https://www.unstackedapps.com/).
 
-**Current release:** [v5.12.2](https://github.com/unstackedapps/opensuitemcp/releases/tag/v5.12.2) · [Changelog](CHANGELOG.md)
+**Current release:** [v5.13.0](https://github.com/unstackedapps/opensuitemcp/releases/tag/v5.13.0) · [Changelog](CHANGELOG.md)
 
 <img src="./docs/screenshot-chat.png" alt="OpenSuiteMCP chat UI" width="100%" />
 
 _Main chat UI._
+
+## What’s in 5.13
+
+- **Oracle’s SuiteSkills** — the five business skills Oracle announced on 2026-10-26, holding 48 runbooks, sync with the rest of Oracle’s skills. Switch one on under **Skills → Oracle**
+- **Oracle skills sync whole** — every reference file, and no 32,000-character cut on `SKILL.md`
 
 ## What’s in 5.12
 
@@ -61,7 +66,7 @@ Shared packs are **not** vendored in git. Sync them with:
 pnpm skills:sync
 ```
 
-That downloads Oracle’s [agent-skills](https://github.com/oracle/netsuite-suitecloud-sdk/tree/master/packages/agent-skills) into `.data/oracle-skills` (or `ORACLE_SKILLS_DIR`) and Community skills into `.data/community-skills` (or `COMMUNITY_SKILLS_DIR`). Run after setup, on deploy (production entrypoint), and on a **weekly cron**. New upstream skills appear as Off until you set a mode; removed upstream skills are pruned. Optional: `GITHUB_TOKEN` for higher GitHub API limits.
+That downloads every `netsuite-` skill folder in Oracle’s [SuiteCloud SDK repo](https://github.com/oracle/netsuite-suitecloud-sdk) — [Agent Skills](https://github.com/oracle/netsuite-suitecloud-sdk/tree/master/packages/agent-skills) and [SuiteSkills](https://github.com/oracle/netsuite-suitecloud-sdk/tree/master/packages/ai-plugins/common/skills/suiteskills) — into `.data/oracle-skills` (or `ORACLE_SKILLS_DIR`), and Community skills into `.data/community-skills` (or `COMMUNITY_SKILLS_DIR`). The container runs it on every start. New upstream skills appear as Off until you set a mode; removed upstream skills are pruned. Optional: `GITHUB_TOKEN` for higher GitHub API limits.
 
 **Connected** examples:
 
@@ -264,6 +269,7 @@ Official references:
 - [MCP Standard Tools](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0902023450.html)
 - [Companion SuiteApp](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_9091153093.html)
 - [SuiteCloud Agent Skills](https://github.com/oracle/netsuite-suitecloud-sdk/tree/master/packages/agent-skills)
+- [SuiteSkills](https://github.com/oracle/netsuite-suitecloud-sdk/tree/master/packages/ai-plugins/common/skills/suiteskills)
 
 ## Usage limits (optional)
 

@@ -1,5 +1,13 @@
 # Activout.MemberData
 
+> **Just want to ask your AI about your LinkedIn data? Use [MemberData.eu](https://memberdata.eu/).**
+>
+> This repository is the open-source command-line tool for technical users: you create your own LinkedIn developer
+> app, manage access tokens and run everything in a terminal. [MemberData.eu](https://memberdata.eu/) does all of that
+> for you. Sign in, authorise LinkedIn with a few clicks and your data is synchronised automatically, stored in the EU
+> and ready for the AI assistant you already use through MCP. No developer app, no tokens, no installation, and it
+> stays up to date by itself. [Leave your email at MemberData.eu](https://memberdata.eu/) to be first in line.
+
 `member` downloads your own LinkedIn data (connections, messages, invitations, positions, skills and more) to your
 computer through LinkedIn's official
 [Member Data Portability API](https://learn.microsoft.com/en-us/linkedin/dma/member-data-portability/member-data-portability-member/).
@@ -85,7 +93,7 @@ That's all most people need. The rest of this page is reference.
 | `member data list [--domain D] [--limit N] [--offset N] [--include-deleted]` | Stored snapshot records (offline) |
 | `member data get --domain D --id KEY` | One record (offline) |
 | `member data query "SELECT …" \| --file q.sql [--max-rows N] [--timeout S]` | Read-only SQL (offline) |
-| `member database info` | Path, schema, member binding, counts |
+| `member database info` | Path, size, schema, member binding, counts |
 | `member database purge --yes` | Delete the local database |
 | `member skill install [--target all\|claude\|agents] [--dir D]` / `member skill show` | Install or print the coding-agent skill |
 

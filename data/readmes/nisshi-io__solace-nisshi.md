@@ -1,11 +1,11 @@
 <div align="center">
 
 # Nisshi (née Tansu) 🗃️
-stateless Kafka-compatible broker with pluggable storage (PostgreSQL, SQLite, S3, memory)
+stateless Apache Kafka®-compatible broker with pluggable storage (PostgreSQL, SQLite, S3, memory)
 
 <br>
 
-[![License](https://img.shields.io/badge/License-Apache-165dfc.svg)](https://github.com/nisshi-io/nisshi/blob/main/LICENSE)
+[![License](https://img.shields.io/badge/License-Apache-165dfc.svg)](https://github.com/nisshi-io/solace-nisshi/blob/main/LICENSE)
 &nbsp;
 [![Built with Rust](https://img.shields.io/badge/built_with-Rust-165dfc.svg?logo=rust)](https://www.rust-lang.org/)
 &nbsp;
@@ -14,10 +14,10 @@ stateless Kafka-compatible broker with pluggable storage (PostgreSQL, SQLite, S3
 &nbsp;
 [![Blog](https://img.shields.io/badge/%F0%9F%93%98%20blog-blog.nisshi.io-165dfc.svg)](https://blog.nisshi.io/articles)
 &nbsp;
-<br>
-[![GitHub stars](https://img.shields.io/github/stars/nisshi-io/nisshi?style=social)](https://github.com/nisshi-io/nisshi)
+[![Community](https://img.shields.io/badge/%F0%9F%92%AC%20community-Solace%20forum-165dfc.svg)](https://community.solace.com/c/nisshi-diskless-streaming/19)
 &nbsp;
-[![Bluesky](https://img.shields.io/bluesky/followers/nisshi.io)](https://bsky.app/profile/tansu.io)
+<br>
+[![GitHub stars](https://img.shields.io/github/stars/nisshi-io/solace-nisshi?style=social)](https://github.com/nisshi-io/solace-nisshi)
 
 <br>
 
@@ -25,61 +25,59 @@ stateless Kafka-compatible broker with pluggable storage (PostgreSQL, SQLite, S3
 
 # What is Nisshi?
 
-[Nisshi][github-com-nisshi-io] (née Tansu) is an Apache Kafka-compatible broker
+[Nisshi][github-com-nisshi-io] (née Tansu) is an Apache Kafka®-compatible broker
 with PostgreSQL, libSQL (SQLite), S3 or memory storage engines.
 Schema backed topics (Avro, JSON or Protocol buffers) can
 be written as [Apache Iceberg](https://iceberg.apache.org) or [Delta Lake](https://delta.io) tables.
 
 Features:
 
-- Apache Kafka API compatible
+- Apache Kafka®-compatible
 - Available with [PostgreSQL](https://www.postgresql.org), [libSQL](https://docs.turso.tech/libsql), [S3](https://en.wikipedia.org/wiki/Amazon_S3) or memory storage engines
 - Topics [validated](docs/schema-registry.md) by [JSON Schema][json-schema-org], [Apache Avro](https://avro.apache.org)
   or [Protocol buffers](protocol-buffers) can be written as [Apache Iceberg](https://iceberg.apache.org) or [Delta Lake](https://delta.io) tables
 
-Nisshi settings for a topic are listed in [topic configuration](docs/topic-configuration.md).
-
-See [examples using pyiceberg](https://github.com/nisshi-io/example-pyiceberg), [examples using Apache Spark](https://github.com/nisshi-io/example-spark) or 🆕 [examples using Delta Lake](https://github.com/nisshi-io/example-delta-lake).
-
-Storage engines:
-
-Choose the engine with `--storage-engine` (or `STORAGE_ENGINE`) using the URL scheme below.
-
-| Engine | URL scheme | Status |
-| --- | --- | --- |
-| PostgreSQL | `postgres://` | Suitable for production. Tested, with bugs and security issues fixed. Help comes from the community. |
-| S3 and Google Cloud Storage | `s3://`, `gs://` | Experimental. Available for continuity. Not recommended for production. |
-| SQLite (libSQL) | `sqlite://` | Suitable for development. |
-| In-memory | `memory://` | Suitable for development and testing. Data is lost when the broker stops. |
-| Turso | `turso://` | Experimental. |
-
-PostgreSQL can stream transaction logs to an archive with
-[continuous archiving][continuous-archiving].
-
-Nisshi OSS is provided as-is, with community support only.
-
 ## Get Started
 
-To download a release, start the broker, and send your first message, see [Get Started with Nisshi](docs/quickstart.md).
+> [!NOTE]
+> Want the quickest way to start using Nisshi? Use a prebuilt binary. See [Get Started with Nisshi](docs/quickstart.md).
+
+Other ways to run Nisshi:
+
+- Docker Compose — if you have Docker installed. See [Running with Docker Compose](#running-with-docker-compose).
+- cargo — if you have Rust installed, or there is no prebuilt binary for your platform, such as Windows or an Intel Mac. See [Installing with crates.io](#installing-with-cratesio).
+
+To see Nisshi write topics to a data lake, try the examples for [pyiceberg](https://github.com/nisshi-io/example-pyiceberg), [Apache Spark](https://github.com/nisshi-io/example-spark), or [Delta Lake](https://github.com/nisshi-io/example-delta-lake).
+
+To learn more about Nisshi, see the full documentation at [docs.nisshi.io](https://docs.nisshi.io/).
+
+## Table of contents
+
+- [Which release to use](#which-release-to-use)
+- [Installing with crates.io](#installing-with-cratesio)
+- [Running with Docker Compose](#running-with-docker-compose)
+- [Storage options](#storage-options)
+  - [Running Docker Compose with S3 (MinIO)](#running-docker-compose-with-s3-minio)
+  - [Running Docker Compose with PostgreSQL](#running-docker-compose-with-postgresql)
+- [Commands](#commands)
+  - [broker](#broker)
+  - [topic](#topic)
+  - [cat](#cat)
+  - [proxy](#proxy)
+- [Securing and monitoring](#securing-and-monitoring-a-broker)
+- [Compatibility](#compatibility)
 
 ## Which release to use
 
-[![Latest release](https://img.shields.io/github/v/release/nisshi-io/nisshi?label=latest%20release)][nisshi-latest-release]
+[![Latest release](https://img.shields.io/github/v/release/nisshi-io/solace-nisshi?label=latest%20release)][nisshi-latest-release]
 
 Use the [latest release][nisshi-latest-release], the one marked **Latest** on the Releases page. `cargo install nisshi` and the `latest` container image both skip pre-releases.
 
-Releases marked **Pre-release**, with tags such as `v0.8.0-pre.1`, are builds of `main` published ahead of the next release so you can try changes early. They pass the same CI as a release. Until that release, their behaviour, upgrade notes and storage formats can still change, and a later version may not read the data they wrote: for example, upgrading from 0.7.0-pre.1 or pre.2 to 0.7.0 needs the manual steps in the 0.7.0 upgrade notes. Use them for testing, not for data you want to keep. To install one, name its exact version, for example `ghcr.io/nisshi-io/nisshi:0.8.0-pre.1`.
+Releases marked **Pre-release**, with tags such as `v0.8.0-pre.1`, are builds of `main` published ahead of the next release. Their behaviour and storage formats can still change, and a later version may not read the data they wrote (upgrading from 0.7.0-pre.1 or pre.2 to 0.7.0 needs the manual steps in the 0.7.0 upgrade notes). Use them for testing, not for data you want to keep. To install one, name its exact version, for example `ghcr.io/nisshi-io/nisshi:0.8.0-pre.1`.
 
-This README describes `main`, which can be ahead of the latest release. To read the README of a release, open it at its tag, for example [v0.7.0](https://github.com/nisshi-io/nisshi/blob/v0.7.0/README.md).
+This README describes `main`, which can be ahead of the latest release. To read the README of a release, open it at its tag, for example [v0.7.0](https://github.com/nisshi-io/solace-nisshi/blob/v0.7.0/README.md).
 
-Nisshi is a single statically linked binary containing the following:
-
-- **broker** an Apache Kafka API compatible broker and schema registry
-- **topic** a CLI to create/delete Topics
-- **cat** a CLI to consume or produce Avro, JSON or Protobuf messages to a topic
-- **proxy** an Apache Kafka compatible proxy
-
-## Install
+## Installing with crates.io
 
 To build and install Nisshi from [crates.io](https://crates.io/crates/nisshi), run:
 
@@ -99,19 +97,8 @@ so it needs:
 `--locked` builds with the dependency versions in the release's `Cargo.lock`, instead of
 the newest compatible versions.
 
-A build contains only the storage engines and data lake formats whose features you
-enable:
-
-| Feature | Adds |
-| --- | --- |
-| `dynostore` | `memory://`, `s3://` and `gs://` storage (the broker's default is `memory://`) |
-| `libsql` | `sqlite://` storage |
-| `postgres` | `postgres://` storage |
-| `turso` | `turso://` storage |
-| `slatedb` | `slatedb://` storage |
-| `parquet`, `iceberg`, `delta` | Apache Parquet, Apache Iceberg and Delta Lake output for schema backed topics |
-
-`--all-features` builds the same set as the release binaries and the container image.
+The `--features` list adds the `memory://`, `s3://`, `gs://`, `sqlite://`, and `postgres://` storage engines.
+To add another storage engine or a data lake format, see [Storage options](#storage-options).
 
 To check the install, run `nisshi --help`. Its last lines list the storage engines in
 the build:
@@ -121,154 +108,34 @@ Storage engines: dynostore, libsql, postgres
 Data lakes:
 ```
 
-Then run `nisshi` to start a broker on `memory://`, and continue with [topic](#topic)
-and [cat](#cat) to create a topic and send a message.
-
-## broker
-
-The broker subcommand is default if no other command is supplied.
+By default, the broker accepts connections from other computers on your network, and does not require clients to authenticate.
+To start a broker that only listens to your computer, run:
 
 ```shell
-Usage: nisshi [OPTIONS]
-       nisshi <COMMAND>
-
-Commands:
-  broker  Apache Kafka compatible broker with Avro, JSON, Protobuf schema validation [default if no command supplied]
-  cat     Easily consume or produce Avro, JSON or Protobuf messages to a topic
-  topic   Create or delete topics managed by the broker
-  proxy   Apache Kafka compatible proxy
-  help    Print this message or the help of the given subcommand(s)
-
-Options:
-      --kafka-cluster-id <KAFKA_CLUSTER_ID>
-          All members of the same cluster should use the same id [env: CLUSTER_ID=RvQwrYegSUCkIPkaiAZQlQ] [default: nisshi_cluster]
-      --kafka-listener-url <KAFKA_LISTENER_URL>
-          The broker will listen on this address [env: LISTENER_URL=] [default: tcp://[::]:9092]
-      --kafka-advertised-listener-url <KAFKA_ADVERTISED_LISTENER_URL>
-          This location is advertised to clients in metadata [env: ADVERTISED_LISTENER_URL=tcp://127.0.0.1:9092] [default: tcp://127.0.0.1:9092]
-      --storage-engine <STORAGE_ENGINE>
-          Storage engine examples are: postgres://postgres:postgres@localhost, memory://nisshi/ or s3://nisshi/ [env: STORAGE_ENGINE=s3://nisshi/] [default: memory://nisshi/]
-      --schema-registry <SCHEMA_REGISTRY>
-          Schema registry examples are: file://./etc/schema or s3://nisshi/, containing: topic.json, topic.proto or topic.avsc [env: SCHEMA_REGISTRY=file://./etc/schema]
-  -h, --help
-          Print help
-  -V, --version
-          Print version
+nisshi --listener-url tcp://127.0.0.1:9092
 ```
 
-A broker can be started by simply running `nisshi`, all options have defaults. Nisshi pickup any existing environment,
-loading any found in `.env`. An [example.env](example.env) is provided as part of the distribution
-and can be copied into `.env` for local modification. Sample schemas can be found in [etc/schema](etc/schema), used in the examples.
+To protect a broker that other computers connect to, see [Securing and monitoring a broker](#securing-and-monitoring-a-broker) for TLS and authentication.
 
-If an Apache Avro, Protobuf or JSON schema has been assigned to a topic, the
-broker will reject any messages that are invalid. Schema backed topics are written
-as Apache Parquet when the broker runs with the `parquet` subcommand, for example
-`nisshi broker --schema-registry file://./etc/schema parquet --location file://./lake`
-(`--location` can also come from `DATA_LAKE`). A `file://` location must be an existing directory.
-The `iceberg` and `delta` subcommands write Apache Iceberg and Delta Lake tables;
-run `nisshi broker iceberg --help` or `nisshi broker delta --help` for their options.
+The broker keeps topics and messages in memory, and loses them when it stops. To keep them, see [Storage options](#storage-options).
 
-## topic
-
-The `nisshi topic` command has the following subcommands:
+In a second terminal, create a topic, send a message, and read it:
 
 ```shell
-nisshi topic --help
-Create, list or delete topics managed by the broker
-
-Usage: nisshi topic [OPTIONS] <COMMAND>
-
-Commands:
-  create  Create a topic
-  delete  Delete an existing topic
-  list    List existing topics
-  help    Print this message or the help of the given subcommand(s)
-
-Options:
-      --schema-registry <SCHEMA_REGISTRY>
-          Schema registry examples are: file://./etc/schema or s3://nisshi/, containing: topic.json, topic.proto or topic.avsc [env: SCHEMA_REGISTRY=]
-  -h, --help
-          Print help
+nisshi topic create hello
+echo '{"value": "hello world"}' | nisshi cat produce hello
+nisshi cat consume hello
 ```
 
-To create a topic use:
+The `cat consume` command prints the message:
 
-```shell
-nisshi topic create taxi
+```json
+[{"key":null,"value":"hello world"}]
 ```
 
-The command prints the topic and its number of partitions:
+Releases before 0.8.0 print nothing for `topic create` and `cat produce`, so on those releases only the last command prints anything.
 
-```shell
-Created topic taxi with 3 partitions.
-```
-
-`nisshi topic create` and `nisshi cat produce` exit with status 0 on success,
-and with a non-zero status on failure. A script that only checks the exit
-status can pass `--silent`, so that the command prints no confirmation line.
-Errors still print.
-
-## cat
-
-The `nisshi cat` command, has the following subcommands:
-
-```shell
-nisshi cat --help
-Easily consume or produce Avro, JSON or Protobuf messages to a topic
-
-Usage: nisshi cat <COMMAND>
-
-Commands:
-  produce  Produce Avro/JSON/Protobuf messages to a topic
-  consume  Consume Avro/JSON/Protobuf messages from a topic
-  help     Print this message or the help of the given subcommand(s)
-
-Options:
-  -h, --help  Print help
-```
-
-The `produce` subcommand reads JSON formatted messages encoding them into
-Apache Avro, Protobuf or JSON depending on the schema used by the topic.
-
-For example, the `taxi` topic is backed by [taxi.proto](etc/schema/taxi.proto).
-Using [trips.json](etc/data/trips.json) containing a JSON array of objects,
-`nisshi cat produce` encodes each message into protobuf into the broker:
-
-```
-nisshi cat produce taxi etc/data/trips.json
-```
-
-The command prints the number of messages and the offsets that the broker
-gave them:
-
-```shell
-Produced 4 messages to taxi partition 0, offsets 0 to 3.
-```
-
-Using [duckdb](https://duckdb.org) we can read the
-[Apache Parquet](https://parquet.apache.org) files
-created by the broker:
-
-```shell
-duckdb :memory: "SELECT * FROM 'data/taxi/*/*.parquet'"
-```
-
-Results in the following output:
-
-```shell
-|-----------+---------+---------------+-------------+---------------|
-| vendor_id | trip_id | trip_distance | fare_amount | store_and_fwd |
-|     int64 |   int64 |         float |      double |         int32 |
-|-----------+---------+---------------+-------------+---------------|
-|         1 | 1000371 |           1.8 |       15.32 |             0 |
-|         2 | 1000372 |           2.5 |       22.15 |             0 |
-|         2 | 1000373 |           0.9 |        9.01 |             0 |
-|         1 | 1000374 |           8.4 |       42.13 |             1 |
-|-----------+---------+---------------+-------------+---------------|
-```
-
-
-### Docker Compose
+## Running with Docker Compose
 
 Run the broker with [Docker Compose](https://docs.docker.com/compose/) from a
 clone of this repository. You don't need a `.env`: by default,
@@ -289,7 +156,7 @@ fails with "port is already allocated" or "address already in use". Publish the
 NISSHI_DB_PORTS=127.0.0.1:15432:5432 docker compose up -d nisshi
 ```
 
-Create a topic, produce a message to it, and consume it:
+To create a topic, produce a message to it, and consume it:
 
 ```shell
 docker compose exec nisshi /nisshi topic create hello
@@ -311,11 +178,39 @@ also delete the stored messages.
 
 Next steps:
 
-- Connect any Kafka client to `localhost:9092`, such as the Kafka CLI tools in [s3](#s3).
-- Use another storage engine: set `STORAGE_ENGINE` in a `.env` file, for example `STORAGE_ENGINE=memory://nisshi/`. [example.env](example.env) lists the other settings, and it selects `s3://nisshi/`, which needs the bucket that [s3](#s3) creates.
+- Connect any Kafka client to `localhost:9092`.
+- Use another storage engine: set `STORAGE_ENGINE` in a `.env` file, for example `STORAGE_ENGINE=memory://nisshi/`. [example.env](example.env) lists the other settings, and it selects `s3://nisshi/`, which needs the bucket that [Running Docker Compose with S3 (MinIO)](#running-docker-compose-with-s3-minio) creates.
 - Read the documentation at [docs.nisshi.io](https://docs.nisshi.io/).
 
-### s3
+## Storage options
+
+Choose the engine with `--storage-engine` (or `STORAGE_ENGINE`) using the URL scheme below.
+
+| Engine | URL scheme | Cargo feature | Status |
+| --- | --- | --- | --- |
+| PostgreSQL | `postgres://` | `postgres` | Suitable for production. Tested, with bugs and security issues fixed. Help comes from the community. |
+| S3 and Google Cloud Storage | `s3://`, `gs://` | `dynostore` | Experimental. Available for continuity. Not recommended for production. |
+| SQLite (libSQL) | `sqlite://` | `libsql` | Suitable for development. |
+| In-memory | `memory://` | `dynostore` | Suitable for development and testing. Data is lost when the broker stops. |
+| Turso | `turso://` | `turso` | Experimental. |
+| SlateDB | `slatedb://` | `slatedb` | Deprecated. Not recommended for new deployments, because it allows a single writer. Only security fixes are accepted. The engine may be removed in a future release. Use PostgreSQL for production, or SQLite or in-memory for development. The broker logs a warning at startup. |
+
+A build contains only the storage engines whose features you enable. To add an engine, add its feature to the `--features` list, for example
+`--features dynostore,libsql,postgres,turso`. Apache Parquet, Apache Iceberg, and Delta Lake output for schema backed
+topics needs the `parquet`, `iceberg`, or `delta` feature.
+
+The engines differ in what they support. For example, only PostgreSQL and SQLite apply
+retention and compaction. [Compatibility and feature status](docs/compatibility.md) lists what
+each engine supports, which Kafka APIs the broker answers, and which Kafka clients CI tests.
+
+Switching storage engines does not move data: topics, messages, and consumer group offsets stay in the old engine, and the new one starts empty. The release binary starts on `memory://`, and Docker Compose runs on PostgreSQL unless you set `STORAGE_ENGINE`.
+
+PostgreSQL can stream transaction logs to an archive with
+[continuous archiving][continuous-archiving].
+
+Nisshi OSS is provided as-is, with [community support][nisshi-community] only.
+
+### Running Docker Compose with S3 (MinIO)
 
 The following will configure a S3 storage engine
 using the "nisshi" bucket (full context is in
@@ -425,7 +320,7 @@ kafka-consumer-groups \
   --describe
 ```
 
-### PostgreSQL
+### Running Docker Compose with PostgreSQL
 
 To switch between the minio and PostgreSQL examples, firstly
 shutdown Nisshi:
@@ -523,6 +418,201 @@ Consumer:
   -b localhost:9092
 ```
 
+## Commands
+
+Nisshi is a single statically linked binary containing the following:
+
+- [broker](#broker) — an Apache Kafka®-compatible broker and schema registry
+- [topic](#topic) — a command line interface to create or delete topics
+- [cat](#cat) — a command line interface to consume or produce Avro, JSON, or Protobuf messages to a topic
+- [proxy](#proxy) — an Apache Kafka®-compatible proxy
+
+## broker
+
+The broker subcommand is default if no other command is supplied.
+
+```shell
+Usage: nisshi [OPTIONS]
+       nisshi <COMMAND>
+
+Commands:
+  broker  Apache Kafka®-compatible broker with Avro, JSON, Protobuf schema validation [default if no command supplied]
+  cat     Easily consume or produce Avro, JSON or Protobuf messages to a topic
+  topic   Create or delete topics managed by the broker
+  proxy   Apache Kafka®-compatible proxy
+  help    Print this message or the help of the given subcommand(s)
+
+Options:
+      --kafka-cluster-id <KAFKA_CLUSTER_ID>
+          All members of the same cluster should use the same id [env: CLUSTER_ID=RvQwrYegSUCkIPkaiAZQlQ] [default: nisshi_cluster]
+      --kafka-listener-url <KAFKA_LISTENER_URL>
+          The broker will listen on this address [env: LISTENER_URL=] [default: tcp://[::]:9092]
+      --kafka-advertised-listener-url <KAFKA_ADVERTISED_LISTENER_URL>
+          This location is advertised to clients in metadata [env: ADVERTISED_LISTENER_URL=tcp://127.0.0.1:9092] [default: tcp://127.0.0.1:9092]
+      --storage-engine <STORAGE_ENGINE>
+          Storage engine examples are: postgres://postgres:postgres@localhost, memory://nisshi/ or s3://nisshi/ [env: STORAGE_ENGINE=s3://nisshi/] [default: memory://nisshi/]
+      --schema-registry <SCHEMA_REGISTRY>
+          Schema registry examples are: file://./etc/schema or s3://nisshi/, containing: topic.json, topic.proto or topic.avsc [env: SCHEMA_REGISTRY=file://./etc/schema]
+  -h, --help
+          Print help
+  -V, --version
+          Print version
+```
+
+A broker can be started by simply running `nisshi`, all options have defaults. Nisshi pickup any existing environment,
+loading any found in `.env`. An [example.env](example.env) is provided as part of the distribution
+and can be copied into `.env` for local modification. Sample schemas can be found in [etc/schema](etc/schema), used in the examples.
+
+If an Apache Avro, Protobuf or JSON schema has been assigned to a topic, the
+broker will reject any messages that are invalid. Schema backed topics are written
+as Apache Parquet when the broker runs with the `parquet` subcommand, for example
+`nisshi broker --schema-registry file://./etc/schema parquet --location file://./lake`
+(`--location` can also come from `DATA_LAKE`). A `file://` location must be an existing directory.
+The `iceberg` and `delta` subcommands write Apache Iceberg and Delta Lake tables;
+run `nisshi broker iceberg --help` or `nisshi broker delta --help` for their options.
+
+## topic
+
+Nisshi settings for a topic are listed in [topic configuration](docs/topic-configuration.md).
+
+The `nisshi topic` command has the following subcommands:
+
+```shell
+nisshi topic --help
+Create, list or delete topics managed by the broker
+
+Usage: nisshi topic [OPTIONS] <COMMAND>
+
+Commands:
+  create  Create a topic
+  delete  Delete an existing topic
+  list    List existing topics
+  help    Print this message or the help of the given subcommand(s)
+
+Options:
+      --schema-registry <SCHEMA_REGISTRY>
+          Schema registry examples are: file://./etc/schema or s3://nisshi/, containing: topic.json, topic.proto or topic.avsc [env: SCHEMA_REGISTRY=]
+  -h, --help
+          Print help
+```
+
+To create a topic use:
+
+```shell
+nisshi topic create taxi
+```
+
+The command prints the topic and its number of partitions:
+
+```shell
+Created topic taxi with 3 partitions.
+```
+
+`nisshi topic create` and `nisshi cat produce` exit with status 0 on success,
+and with a non-zero status on failure. A script that only checks the exit
+status can pass `--silent`, so that the command prints no confirmation line.
+Errors still print.
+
+## cat
+
+The `nisshi cat` command, has the following subcommands:
+
+```shell
+nisshi cat --help
+Easily consume or produce Avro, JSON or Protobuf messages to a topic
+
+Usage: nisshi cat <COMMAND>
+
+Commands:
+  produce  Produce Avro/JSON/Protobuf messages to a topic
+  consume  Consume Avro/JSON/Protobuf messages from a topic
+  help     Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help  Print help
+```
+
+The `produce` subcommand reads JSON formatted messages encoding them into
+Apache Avro, Protobuf or JSON depending on the schema used by the topic.
+
+For example, the `taxi` topic is backed by [taxi.proto](etc/schema/taxi.proto).
+Using [trips.json](etc/data/trips.json) containing a JSON array of objects,
+`nisshi cat produce` encodes each message into protobuf into the broker:
+
+```
+nisshi cat produce taxi etc/data/trips.json
+```
+
+The command prints the number of messages and the offsets that the broker
+gave them:
+
+```shell
+Produced 4 messages to taxi partition 0, offsets 0 to 3.
+```
+
+Using [duckdb](https://duckdb.org) we can read the
+[Apache Parquet](https://parquet.apache.org) files
+created by the broker:
+
+```shell
+duckdb :memory: "SELECT * FROM 'data/taxi/*/*.parquet'"
+```
+
+Results in the following output:
+
+```shell
+|-----------+---------+---------------+-------------+---------------|
+| vendor_id | trip_id | trip_distance | fare_amount | store_and_fwd |
+|     int64 |   int64 |         float |      double |         int32 |
+|-----------+---------+---------------+-------------+---------------|
+|         1 | 1000371 |           1.8 |       15.32 |             0 |
+|         2 | 1000372 |           2.5 |       22.15 |             0 |
+|         2 | 1000373 |           0.9 |        9.01 |             0 |
+|         1 | 1000374 |           8.4 |       42.13 |             1 |
+|-----------+---------+---------------+-------------+---------------|
+```
+
+
+## proxy
+
+The `nisshi proxy` command runs a Kafka API proxy in front of an origin broker:
+
+```shell
+nisshi proxy --help
+Apache Kafka®-compatible proxy
+
+Usage: nisshi proxy [OPTIONS]
+
+Options:
+      --listener-url <LISTENER_URL>
+          The proxy will listen on this address [env: LISTENER_URL=] [default: tcp://0.0.0.0:9092]
+      --advertised-listener-url <ADVERTISED_LISTENER_URL>
+          This location is advertised to clients in metadata [env: ADVERTISED_LISTENER_URL=] [default: tcp://127.0.0.1:9092]
+      --origin-url <ORIGIN_URL>
+          The proxy will forward traffic to this origin broker, which must not require authentication [env: ORIGIN_URL=] [default: tcp://127.0.0.1:9092]
+      --otlp-endpoint-url <OTLP_ENDPOINT_URL>
+          OTEL Exporter OTLP endpoint [env: OTEL_EXPORTER_OTLP_ENDPOINT=]
+      --schema-registry <SCHEMA_REGISTRY>
+          Schema registry examples are: file://./etc/schema or s3://nisshi/, containing: topic.json, topic.proto or topic.avsc [env: SCHEMA_REGISTRY=]
+  -h, --help
+          Print help
+```
+
+To proxy a broker that listens on `localhost:19092`:
+
+```shell
+nisshi proxy --origin-url tcp://localhost:19092
+```
+
+The proxy does not authenticate its clients, and it connects to the origin
+over plain TCP without SASL. So the origin listener must not require
+authentication, as with a Kafka `PLAINTEXT` listener. Every client that can
+reach the proxy listener gets the proxy's access to the origin.
+
+The proxy answers SaslHandshake and SaslAuthenticate itself with
+`ILLEGAL_SASL_STATE`, as a Kafka `PLAINTEXT` listener does, and does not
+forward them to the origin. So a client configured for SASL fails to connect.
+
 ## Securing and monitoring a broker
 
 ### TLS
@@ -574,6 +664,57 @@ and `proxy` subcommands connect in plaintext and cannot yet talk to a TLS
 listener. `--key-passphrase-file` is unknown to earlier releases, so rolling
 the binary back means removing that flag from the command line as well.
 
+### Outbound TLS
+
+The broker opens connections to PostgreSQL, S3 and Google Cloud Storage,
+Iceberg catalogs and data files, Delta tables, an OTLP collector, and the
+remote `$ref`s of a JSON Schema. Each connection that uses TLS checks the
+server's certificate chain and host name, and a failed check fails the
+connection: the broker does not retry it in plaintext. A connection to an
+`http://` endpoint, such as an `http://` OTLP or Iceberg catalog URL, or an
+`AWS_ENDPOINT` with `AWS_ALLOW_HTTP=true`, uses no TLS.
+
+- **Linux and the container image.** The certificates are checked against the
+  system's CA certificates (`/etc/ssl/certs/ca-certificates.crt` in the image),
+  and rustls-webpki also rejects a chain through any CA on its built-in
+  distrust list. To trust a private CA, set `SSL_CERT_FILE` to a PEM bundle or
+  `SSL_CERT_DIR` to a directory of PEM files. Either one replaces the system's
+  CA certificates, so the bundle must also hold every public CA the broker
+  needs. If the file or directory doesn't exist or holds no PEM certificate,
+  the broker trusts no CA, and every TLS connection fails its certificate
+  check.
+- **macOS.** The trusted CAs come from the operating system. rustls-webpki
+  checks the PostgreSQL, Iceberg REST catalog and Delta S3 connections against
+  those CAs, with its built-in distrust list. macOS itself checks every other
+  connection, including the S3 and Google Cloud Storage storage engines, and
+  rustls-webpki's distrust list does not apply to them. Those connections
+  rely on the distrust updates that Apple pushes, so keep the Mac online and
+  up to date.
+
+A PostgreSQL connection uses TLS only when the server agrees to it. The
+default `sslmode` is `prefer`, which uses plaintext when the server, or
+anything on the network path, declines TLS. Add `sslmode=require` to the
+storage URL to refuse a plaintext connection:
+
+```shell
+nisshi broker --storage-engine "postgres://nisshi:secret@db.example.com/nisshi?sslmode=require"
+```
+
+`require` checks the server's certificate and host name, as libpq does with
+`verify-full`. The broker refuses to start with `sslmode=verify-ca` or
+`sslmode=verify-full`, so use `require` instead. If the server's certificate
+comes from a CA that the system doesn't trust, such as a cloud provider's
+database CA, set `SSL_CERT_FILE` to a bundle that holds that CA and the public
+CAs.
+
+The object store clients read `AWS_ALLOW_INVALID_CERTIFICATES`,
+`GOOGLE_ALLOW_INVALID_CERTIFICATES`, `AZURE_ALLOW_INVALID_CERTIFICATES` and
+`ALLOW_INVALID_CERTIFICATES` from the environment. When one of them is true,
+that client accepts any certificate, so anyone on the network path can read
+and change the data. These variables are for testing only and are not
+supported. The broker logs a warning at startup for each one that is set to
+true.
+
 ### Metrics
 
 Metrics are exported over OTLP/HTTP when `--otlp-endpoint-url` (or
@@ -610,45 +751,17 @@ inherited variable or set `OTEL_SERVICE_NAME=nisshi-broker`. Rolling back
 reverts to `nisshi-broker` regardless of these variables. On shutdown the
 broker now flushes pending metrics before exiting.
 
-## proxy
+## Compatibility
 
-The `nisshi proxy` command runs a Kafka API proxy in front of an origin broker:
+Nisshi implements the Apache Kafka® wire protocol, generated from the Apache Kafka 3.9.1
+message descriptors in [`nisshi-sans-io/message`](nisshi-sans-io/message). Clients on
+Kafka 4.x negotiate down to those protocol versions. CI tests the broker with the librdkafka and
+franz-go integration test suites and the Apache Kafka command line tools.
+[Kafka clients tested](docs/compatibility.md#kafka-clients-tested) lists the versions and the
+known client gaps. Please [raise an issue][nisshi-issues] if a client or Kafka version you rely on
+behaves differently.
 
-```shell
-nisshi proxy --help
-Apache Kafka compatible proxy
-
-Usage: nisshi proxy [OPTIONS]
-
-Options:
-      --listener-url <LISTENER_URL>
-          The proxy will listen on this address [env: LISTENER_URL=] [default: tcp://0.0.0.0:9092]
-      --advertised-listener-url <ADVERTISED_LISTENER_URL>
-          This location is advertised to clients in metadata [env: ADVERTISED_LISTENER_URL=] [default: tcp://127.0.0.1:9092]
-      --origin-url <ORIGIN_URL>
-          The proxy will forward traffic to this origin broker, which must not require authentication [env: ORIGIN_URL=] [default: tcp://127.0.0.1:9092]
-      --otlp-endpoint-url <OTLP_ENDPOINT_URL>
-          OTEL Exporter OTLP endpoint [env: OTEL_EXPORTER_OTLP_ENDPOINT=]
-      --schema-registry <SCHEMA_REGISTRY>
-          Schema registry examples are: file://./etc/schema or s3://nisshi/, containing: topic.json, topic.proto or topic.avsc [env: SCHEMA_REGISTRY=]
-  -h, --help
-          Print help
-```
-
-To proxy a broker that listens on `localhost:19092`:
-
-```shell
-nisshi proxy --origin-url tcp://localhost:19092
-```
-
-The proxy does not authenticate its clients, and it connects to the origin
-over plain TCP without SASL. So the origin listener must not require
-authentication, as with a Kafka `PLAINTEXT` listener. Every client that can
-reach the proxy listener gets the proxy's access to the origin.
-
-The proxy answers SaslHandshake and SaslAuthenticate itself with
-`ILLEGAL_SASL_STATE`, as a Kafka `PLAINTEXT` listener does, and does not
-forward them to the origin. So a client configured for SASL fails to connect.
+Transactions are not supported: a producer that calls `initTransactions()`, including Kafka Streams with `exactly_once_v2`, fails with `TransactionalIdAuthorizationException`. Idempotent producers work.
 
 ## Feedback
 
@@ -665,6 +778,9 @@ vulnerability, see [SECURITY][nisshi-security].
 
 Nisshi is licensed under [Apache 2.0][apache-license].
 
+Apache, Apache Kafka, Kafka and the other Apache project names in this document are
+trademarks of The Apache Software Foundation.
+
 [apache-license]: https://www.apache.org/licenses/LICENSE-2.0
 [apache-zookeeper]: https://en.wikipedia.org/wiki/Apache_ZooKeeper
 [aws-s3-conditional-requests]: https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-requests.html
@@ -672,7 +788,7 @@ Nisshi is licensed under [Apache 2.0][apache-license].
 [cloudflare-r2]: https://developers.cloudflare.com/r2/
 [continuous-archiving]: https://www.postgresql.org/docs/current/continuous-archiving.html
 [crates-io-object-store]: https://crates.io/crates/object_store
-[github-com-nisshi-io]: https://github.com/nisshi-io/nisshi
+[github-com-nisshi-io]: https://github.com/nisshi-io/solace-nisshi
 [json-schema-org]: https://json-schema.org/
 [librdkafka]: https://github.com/confluentinc/librdkafka
 [min-io]: https://min.io
@@ -682,8 +798,9 @@ Nisshi is licensed under [Apache 2.0][apache-license].
 [protocol-buffers]: https://protobuf.dev
 [raft-consensus]: https://raft.github.io
 [rust-lang-org]: https://www.rust-lang.org
-[nisshi-issues]: https://github.com/nisshi-io/nisshi/issues
-[nisshi-latest-release]: https://github.com/nisshi-io/nisshi/releases/latest
+[nisshi-issues]: https://github.com/nisshi-io/solace-nisshi/issues
+[nisshi-community]: https://community.solace.com/c/nisshi-diskless-streaming/19
+[nisshi-latest-release]: https://github.com/nisshi-io/solace-nisshi/releases/latest
 [nisshi-contributing]: CONTRIBUTING.md
 [nisshi-code-of-conduct]: CODE_OF_CONDUCT.md
 [nisshi-security]: SECURITY.md

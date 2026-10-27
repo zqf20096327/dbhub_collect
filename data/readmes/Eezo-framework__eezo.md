@@ -12,6 +12,7 @@
   <a href="https://central.sonatype.com/artifact/io.eezo/eezo_3"><img src="https://img.shields.io/maven-central/v/io.eezo/eezo_3.svg?label=maven%20central" alt="Maven Central"></a>
   <a href="https://javadoc.io/doc/io.eezo/eezo_3"><img src="https://javadoc.io/badge2/io.eezo/eezo_3/javadoc.svg" alt="javadoc"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
+  <a href="https://x.com/eezoframework"><img src="https://img.shields.io/badge/follow-%40eezoframework-000000?logo=x&logoColor=white" alt="Follow @eezoframework on X"></a>
 </p>
 <p align="center">
   <a href="https://eezo.io">eezo.io</a> ·
@@ -52,7 +53,9 @@ As you change your data model, Eezo detects schema changes. When you're ready, y
 
 A case class also gets 7 CRUD routes: index, new, create, show, edit, update and destroy,
 served in a browser over rows in Postgres, with no need for a controller, repository or template
-written by hand. You can add your own routes as a plain `def` in a file, and the file path becomes the HTTP route path.
+written by hand. Add `Api` to the `derives` clause and the same case class answers a program
+with 5 JSON routes under `/api`, guarded by the same declaration as its pages.
+You can add your own routes as a plain `def` in a file, and the file path becomes the HTTP route path.
 You can also override a derived route on the same path.
 
 Handlers are ordinary functions from a request to a response.
@@ -83,7 +86,7 @@ Deploying is done with `eezo deploy` on Fly.io.
 `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("io.eezo" % "sbt-eezo" % "0.2.0")
+addSbtPlugin("io.eezo" % "sbt-eezo" % "0.3.0")
 ```
 
 `build.sbt`:
@@ -93,7 +96,7 @@ scalaVersion := "3.8.4"
 
 enablePlugins(EezoPlugin)
 
-libraryDependencies += "io.eezo" %% "eezo" % "0.2.0"
+libraryDependencies += "io.eezo" %% "eezo" % "0.3.0"
 
 scalacOptions ++= Seq("-release", "25", "-deprecation", "-feature", "-unchecked", "-no-indent")
 
@@ -110,6 +113,7 @@ Every artifact is published at the same version, under the `io.eezo` group:
 | `eezo-db` | the database layer: the pool, the `sql` interpolator, transactions, `Table`, schema commands and migrations, `DbApp` |
 | `eezo-auth` | sessions, email and password sign in, CSRF, route guards and row ownership                                           |
 | `eezo-live` | server-side rendered UI with the thin browser client: the diff and patch protocol, the client runtime, PubSub        |
+| `eezo-upickle` | the JSON adapter for API routes: `api.Serde` for any model through upickle, not carried by the umbrella                |
 | `eezo-core` | what the others build on: configuration, HTML tree and DSL, derivation, model keys                                   |
 | `sbt-eezo` | the sbt plugin that generates the route table, for sbt 1 and sbt 2                                                   |
 
@@ -310,8 +314,9 @@ sbt +test
 
 The `db` suite starts a real Postgres through testcontainers, so it needs a Docker daemon.
 `sbt check` runs the regression half of that suite, and `sbt backlog` runs the tests that
-describe open work and are expected to fail until it lands. The decisions behind the framework
-are recorded in [`docs/adr`](docs/adr).
+describe open work and are expected to fail until it lands. `bin/gate` runs all of it in CI's
+order and installs the repository's git hooks, which check every commit message. The decisions
+behind the framework are recorded in [`docs/adr`](docs/adr).
 
 Pull requests target `dev`, the trunk. `main` is the latest release: it moves only by fast forward
 when a version is tagged, so the front page, this README and a plain clone always describe what is

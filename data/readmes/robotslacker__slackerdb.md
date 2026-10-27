@@ -5,32 +5,33 @@ image::robotslacker.jpg[RobotSlacker]
 
 === What is SlackerDB?
 
-SlackerDB is a Java‑based service layer that puts DuckDB on the network. It speaks the PostgreSQL wire protocol, so standard PostgreSQL JDBC clients connect without any special driver, and it lets several clients use the same DuckDB database at once — something a plain DuckDB process cannot do. On top of that it adds a bulk COPY path for loading data and a registered‑SQL layer that turns queries into cacheable HTTP endpoints.
+SlackerDB is a Java‑based service layer that puts DuckDB on the network. It speaks the PostgreSQL wire protocol, so standard PostgreSQL JDBC clients connect without any special driver; it also lets multiple clients share the same DuckDB database — **something a single‑process DuckDB cannot do**. On top of that, it provides a bulk COPY channel for importing and exporting data, and a registered‑SQL layer that turns queries into cacheable HTTP endpoints.
 
-It runs either as a standalone server (`dbserver`) or embedded directly in a Java application.
+It runs either as a standalone server (`dbserver`, `dbproxy`) or **embedded directly in a Java application**.
 
 ==== Capabilities
 
 * *PostgreSQL Wire Protocol* – Standard PostgreSQL clients connect as‑is: JDBC, ODBC, libpq, psql, Python.
-* *PostgreSQL Data Dictionary Compatibility* – Emulates the catalog data that database tools need to access, such as DBeaver and postgres_fdw.
+* *PostgreSQL Data Dictionary Compatibility* – Emulates the data dictionary that database tools need to access, such as DBeaver, postgres_fdw, and psql; under these tools SlackerDB looks just like a PostgreSQL database.
 * *Multi‑Session Access* – One DuckDB database served to many concurrent client sessions, with a connection pool, per‑session state, and SQL executed off the network I/O threads.
 * *Query Cancellation* – Client‑side cancellation and `KILL SESSION` reach the statement that is actually running.
-* *High‑Performance Bulk Transfer* – PostgreSQL `COPY … FROM STDIN` and `COPY … TO STDOUT` in CSV and BINARY form, with a streaming decode path benchmarked at roughly 0.6–2.3 million rows/second depending on shape.
+* *High‑Performance Bulk Transfer* – PostgreSQL `COPY … FROM STDIN` and `COPY … TO STDOUT` in CSV and BINARY form, including exporting a subset of columns (something PostgreSQL does not support today).
 * *Registered SQL Services* – Register parameterized SQL as named HTTP endpoints at runtime, with result caching, service versioning, and per‑service search paths.
 * *Server Management APIs* – Status and metrics, database backup, log viewing, and file upload/download on the management port.
 * *Asynchronous SQL over WebSocket* – Execute SQL asynchronously and page through results, for queries too large or too slow for a single request.
 * *Embeddable Design* – Run as a standalone process, or embed in Java code; multiple instances can run side by side on different ports.
 * *Plugin System* – Extensible PF4J‑based plugin framework for custom functionality, HTTP endpoints, and background tasks, with runtime load/start/stop/unload.
 * *Data Encryption* – Leverages DuckDB's native encryption for data‑at‑rest protection.
+* *Command‑Line Access* – A custom psql‑like client that supports batch SQL scripts and interactive SQL, plus complex concurrent job coordination and SQL result comparison.
+* *Job Orchestration* – Uses plugin capabilities to provide HOP‑based job orchestration for scheduled workflow execution.
+* *Console Access* – In progress. Will provide a complete browser‑based graphical workbench.
+* *Database Proxy* – Manages multiple database instances through a proxy and connects to different instances through a unified port.
 
 ==== Use Cases
 
 * *Analytical Application Backends* – Serve as the data engine for BI tools, dashboards, and reporting applications that support PostgreSQL connections.
-* *Shared Internal Datasets* – Load an existing `.duckdb` file once and let several teams and tools query it concurrently without moving or re‑platforming the data.
-* *Local Data Processing* – Run bulk import, transformation, and querying on a single machine without standing up a separate database system.
-* *Embedded Service in Java* – Ship a networked analytical store inside a Java application, with the plugin framework available for application‑specific endpoints.
-
-SlackerDB is aimed at teams that want DuckDB's analytical performance but need it reachable over the network, do not want the analysis process to be a black box, want it usable directly with the PostgreSQL toolchain, and need it shareable between concurrent clients.
+* *Shared Internal Datasets* – Want DuckDB's analytical performance and strong SQL capabilities, but need network access and do not want the analysis process to be a black box. Load an existing `.duckdb` file once and let several teams and tools query it concurrently without moving or re‑platforming the data.
+* *Embedded Service in Java* – Provide a networked analytical store inside a Java application and expose a data access point.
 
 === Usage
 
@@ -40,7 +41,7 @@ SlackerDB is aimed at teams that want DuckDB's analytical performance but need i
     # Before building, make sure the following are installed and directly available on `PATH`:
     # 1: JDK 21
     # 2: Maven 3.9.16
-    # 3: Node v24
+    # 3: Node v24 (web console only; ignore it if you do not need the console)
     # All of them must be directly accessible from `PATH`.
 
     # Download source code
@@ -50,17 +51,17 @@ SlackerDB is aimed at teams that want DuckDB's analytical performance but need i
     mvn clean compile package -Dmaven.test.skip=true
 
     # All compiled results will be placed in the dist directory:
-    #    slackerdb-dist_0.2.2.zip
+    #    sla
+
+[...截断...]
+
+ckerdb-dist_0.2.2.zip
     #        distribution package - standalone jar packages, plugin jar,
     #        default configuration files and start/stop scripts.
     #    slackerdb-src_0.2.2.zip
     #        source package - the complete multi-module Maven project, the same
     #        content a shallow clone would give you (no git history, no build
-    #        output). Unzip it and
-
-[...截断...]
-
- run the very same maven command inside to
+    #        output). Unzip it and run the very same maven command inside to
     #        rebuild everything from source.
 
     # PDF documentation is not built by default. To generate the PDFs and
@@ -90,8 +91,9 @@ On the offline machine, use the packaged Maven repository (first unzip `javarepo
 Run the following commands to complete the build:
 
 ....
-    mvn -o -Dmaven.repo.local.tail=<offline>/javarepo clean package
+    mvn -o -Dmaven.repo.local.tail=<offline>/javarepo clean package -pl !dbdesk -am
 
+    # or
     NPM_CONFIG_CACHE=<offline>/npmrepo NPM_CONFIG_OFFLINE=true mvn -o -Dmaven.repo.local=/tmp/m2 -Dmaven.repo.local.tail=<offline>/javarepo package
 ....
 
@@ -194,13 +196,4 @@ port_x=
 bind=0.0.0.0
 
 # Client connection idle timeout (seconds)
-client_timeout=600
-
-# Multicast service discovery: the group this server announces itself to.
-# Format: <group>:<port> (IPv6 groups must be bracketed: [ff02::1]:46666)
-# IPv4 groups must be inside 224.0.0.0/4; 224.0.0.0/24 is reserved and rejected.
-# Default: service discovery is disabled.
-advertise_address=
-
-# Local network interface used to send the multicast announcement.
-# Accepts an interface name (eth0, Ethernet) or 
+client_timeout=6

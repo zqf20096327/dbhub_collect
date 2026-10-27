@@ -71,7 +71,10 @@ project exists.
   chapters). One work, many recordings. A production released in several
   marketplaces stays *one* recording: an ISBN may be written as
   `{"isbn": ..., "region": ...}` when the region is known, and `publishers[]`
-  records the other regions' imprints beside the publisher of record.
+  records the other regions' imprints beside the publisher of record. A LibriVox
+  recording also carries its project id (`librivox_id`), its archive.org item
+  (`archive_id`), `links` (catalogue page, zip, RSS) and an `audio_url` per
+  chapter (one per LibriVox section).
 - **Person** - a human shared across roles (author on works, narrator on
   recordings; can be both).
 - **Series** - a named series with an ordered list of member works (string
@@ -134,8 +137,9 @@ go run ./cmd/metabuild -o meta.sqlite
 ## Running the API server
 
 `metaserve` is a read-only JSON API over the compiled artifact - FTS search,
-work/person/series detail, chapter lists, and ASIN/ISBN lookup. All data is
-public, so there is no auth; the API sends permissive CORS.
+work/person/series detail, chapter lists, ASIN/ISBN/LibriVox lookup and a
+LibriVox-shaped feed. All data is public, so there is no auth; the API sends
+permissive CORS, is rate limited per client and states a `Cache-Control`.
 
 The query code and the API handler are the public Go package `pkg/query`
 (`query.Open` + `query.NewHandler`), and the release fetcher is `pkg/release`, so
@@ -157,8 +161,25 @@ curl 'localhost:8080/api/v1/lookup?asin=B08G9PRS1K'
 
 Key endpoints (all under `/api/v1`): `stats`, `search?q=&limit=`,
 `works/latest?limit=`, `works/{id}`, `works/{id}/recordings/{rid}/chapters`,
-`people/{id}`, `series/{id}`, `lookup?asin=|isbn=`, `coverage`,
-`coverage/works`, `coverage/series-gaps`, plus `/healthz`.
+`people/{id}`, `series/{id}`, `lookup?asin=|isbn=|librivox_id=`, `coverage`,
+`coverage/works`, `coverage/series-gaps`, `librivox/audiobooks`, plus `/healthz`.
+
+The LibriVox layer (artifact schema version 8). `search`, `works/search` and
+`works/latest` take `?source=librivox` (any source type of the schema), which
+keeps only works with a recording from that source - a typo is a 400, never an
+empty list. A LibriVox recording on `works/{id}` carries `librivox_id`,
+`archive_id`, `links` (`librivox`, `zip`, `rss`, `text`) and `copyright_year`,
+leads its `purchase_links` with a free `librivox` link, and its chapters carry
+`audio_url`. `lookup?librivox_id=52` resolves a project id.
+`librivox/audiobooks` (and `librivox/audiobooks/`) answers LibriVox's own
+audiobooks feed - `id`, `since`, `title`, `author`, `genre` (exact, or a prefix
+with a leading `^`), `extended`, `coverart`, `fields`, `limit` (default 50, at
+most 500), `offset`, `sort_order`, JSON only - in LibriVox's JSON shape, so a
+LibriVox app can switch by changing its base URL. It differs where the mirror
+keeps no fact (empty descriptions, our genre vocabulary, a reader named only for
+a one-narrator recording, `since` meaning "reached the mirror since"); the API
+docs list each difference. Anyone wanting the whole catalogue should download
+`meta.sqlite.gz` from the newest data release rather than page the feed.
 
 Work-detail recordings also carry `purchase_links` - non-affiliate Audible and
 Libro.fm URLs derived at response time from recording ASINs and 13-digit
@@ -209,6 +230,26 @@ is verified against that release's published checksum and adopted as is. With
 and the poller still runs a refresh at startup (not just once per `--interval`).
 Superseded artifacts are pruned from the cache after each hot-swap. Set
 `GITHUB_TOKEN` to raise the API rate limit.
+
+Rate limit and caching: every API route (`/api/v1/*` and `/abs/search`, not
+`/healthz`) wears a per-client token bucket - `--rate-limit` requests a second
+(env `METASERVE_RATE_LIMIT`, default 100, `0` turns it off) with a burst of
+`--rate-burst` (env `METASERVE_RATE_BURST`, default 400; at least 1 while the
+limit is on - a burst of `0`, or a negative rate, is refused at startup rather
+than defaulted). The defaults are sized so an AudioSilo server's bulk match,
+which does not pace itself, never trips them (the arithmetic is in
+`internal/serve/ratelimit.go`). Past it a client gets
+429 with `Retry-After`. The client is the connection's address, or, when that
+address is one of `--trusted-proxy` (env `METASERVE_TRUSTED_PROXIES`, a
+comma-separated list of addresses and CIDR prefixes), the rightmost
+`X-Forwarded-For` entry that is not itself a trusted proxy (an IPv6 client
+counts as its /64). **Behind a reverse
+proxy, name it there**, or every request counts as the proxy and shares one
+bucket; a forwarded header from anywhere else is never read. The shipped
+`docker-compose.yml` already trusts the loopback and private ranges (its port is
+published on loopback only, so only the host's proxy can reach it). A 200 that states
+no `Cache-Control` of its own gets `public, max-age=600`, or `public,
+max-age=60` on the searches and `works/match`.
 
 For immediate production refreshes, set `METASERVE_WEBHOOK_SECRET` to a random
 value of at least 32 bytes while keeping `--poll` enabled. This registers
@@ -306,6 +347,87 @@ filenames alone), and a multi-file folder with no signal either way is counted
 in the summary so you know where to check for collections. The JSON goes to
 stdout by default (or `-o <file>`); a human-readable summary goes to stderr.
 Pass `-ffprobe ""` to skip ffprobe enrichment.
+
+## Importing LibriVox (metaimport librivox)
+
+LibriVox's catalogue is mirrored here under [LICENSING.md's public-domain
+exception](LICENSING.md#the-public-domain-exception-librivox) - facts only, never
+the project descriptions. It is two steps:
+
+```sh
+# 1) Fetch a local snapshot of LibriVox's audiobooks feed. Polite by design:
+#    100 projects a page, 5 s between requests, a User-Agent naming
+#    meta.audiosilo.app, Retry-After honoured on 429/5xx. Resumable: rerun the
+#    same command after an interrupt. The snapshot is never committed.
+go run ./cmd/metaimport librivox fetch --out ~/librivox-snapshot [--max-pages N]
+
+# 2) Import a tranche of it by project-id range (offline; --dry-run first).
+go run ./cmd/metaimport librivox import --from ~/librivox-snapshot --ids 1-2000 --dry-run
+```
+
+A snapshot is a directory: `manifest.json` (the fetch's resume state: feed,
+query, limit, next offset, page and project counts, complete or not) and
+`pages/offset-NNNNNNN.json`, each one feed response body verbatim. The importer
+reads every `pages/*.json` and needs nothing else, so a hand-assembled snapshot
+(the test fixtures are one) works too.
+
+What an import does: a project whose `librivox_id` is already catalogued is
+skipped (identity is the project id, never the title), so a rerun changes
+nothing. Otherwise it becomes a new recording - never merged into another
+recording - under the work these rules find, in order (LibriVox's "(version 2)"
+title marker is stripped first):
+
+1. the importer's ordinary identity walk: same title, same identity authors,
+   same language - except that a hit whose authors agree only through the
+   catch-all person (every name that slugs to nothing, such as two different
+   Cyrillic-named authors, lands on that one record) is `author-unmatched`
+   rather than an attach;
+2. otherwise the ONE work by the same authors, in the same language, whose title
+   differs only by a leading article or punctuation, case and accents ("The
+   Metamorphosis" and "Metamorphosis" by Franz Kafka). The articles set aside
+   are the English the/a/an, French le/la/les/l', German der/die/das, Spanish
+   el/los/las, Italian il/lo and Dutch de/het/een;
+3. otherwise a new work. A work by a different author under the same title is a
+   different book, so it gets a work of its own.
+
+A match the rules cannot settle is never guessed: the project is skipped and
+listed in the import report's **worklist**, one line per project with its id,
+title, authors, a reason code and the catalogued works involved:
+
+```
+librivox worklist: 2 projects skipped for a person to resolve (re-import the ids once settled):
+  99502 "The Metamorphosis" by Franz Kafka [several-works]: metamorphosis "Metamorphosis"; metamorphosis-2 "Metamorphosis"
+  99503 "Metamorphosis: A Novella" by Franz Kafka [differently-spelled-title]: metamorphosis "Metamorphosis"
+```
+
+The reasons: `several-works` (two or more works qualify under rule 2),
+`author-unmatched` (a work carries the title but its authors only partly agree,
+or the agreement rests on the catch-all person a name in an unsluggable script
+falls back to: no real author is shared, and a shared translator does not
+count), `differently-spelled-title` (the duplicate-identity guard holds
+the book under a title rule 2 does not read as the same, such as a subtitle
+apart) and `fallback-slug-taken` (below). Once a person has settled the work,
+re-importing the project's id lands it. `--conflicts` rows for these projects
+carry `librivox_id`, since they have no ASIN.
+
+Readers are the narrators, translators are `translator` credits, sections are
+chapters (`start_ms` cumulative from each playtime, the section's file as
+`audio_url`), the language name maps to a code (an unknown language is a
+reported skip, never a guess) and genres map onto the vocabulary where one fits.
+A **non-Latin title** - one that slugs to nothing, or one where more than half
+of its letters are not Latin script (digits, punctuation and spaces are not
+counted; the leading article is dropped first) - never walks a slug chain,
+which would file it under the shared "untitled" fallback or under its Latin or
+number fragment ("Сборник стихов 001" as "001"). It is matched by rule 2 alone
+(its key keeps its own letters, so a second project of the same title by the
+same author attaches, and "The Война и мир" meets "Война и мир"), and otherwise
+its new work is created at `librivox-<project id>`, titled as LibriVox writes
+it (`fallback-slug-taken` when that slug is already used). A title exactly half
+Latin ("Anna Karenina (Анна Каренина)") stays on the slug rule.
+
+People are keyed by `librivox_reader_id` / `librivox_author_id`: a known id
+resolves to its catalogued person whatever the feed now calls them (a name that
+slugs to nothing lands on the catch-all person, which is never given an id).
 
 ## Audiobookshelf
 

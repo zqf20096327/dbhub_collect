@@ -1,0 +1,239 @@
+<p align="center">
+  <img src="docs/logo.svg" alt="bikesched logo: a bicycle shaped like a B, with a subtle clock hand and motion streaks" width="200" height="200">
+</p>
+
+# bikesched
+
+**A PostgreSQL-backed job scheduler for Java and Kotlin: durable steps, events and retries, with
+minimal dependencies, no extra infrastructure and an optional admin UI**
+
+<p align="center">
+  <img src="docs/bikesched-admin-ui.png" alt="bikesched admin UI: a web interface for managing jobs, events and nodes">
+</p>
+
+> [!NOTE]
+> bikesched is at a super early stage (`0.2.0-SNAPSHOT`) and can break at any time: APIs and the
+> database schema may change without notice and without migrations.
+>
+> It is also a first experiment in building a library heavily with AI coding agents; hence the
+> logo, a nod to Simon Willison's
+> [pelican riding a bicycle](https://simonwillison.net/2024/Oct/25/pelicans-on-a-bicycle/) LLM
+> benchmark.
+
+*[Simon](https://github.com/sbuettner), the creator of the bikesched project*: I was working on a
+project and looking for an open source library that does job scheduling with durable execution,
+has minimal dependencies and is PostgreSQL-focused, but didn't find one that fit. So instead of
+continuing that project, I started ["bikeshedding"](https://en.wiktionary.org/wiki/bikeshed) on a
+library with these properties, with AI doing much of the implementation, around the needs I'd
+actually run into.
+
+bikesched stores jobs in PostgreSQL and lets every connected application instance (*node*) work on
+them. Nodes claim due jobs with `SELECT … FOR UPDATE SKIP LOCKED`, so many nodes can share one
+database without stepping on each other and without any coordinator besides PostgreSQL.
+
+bikesched is inspired by some great job schedulers, like
+[db-scheduler](https://github.com/kagkarlsson/db-scheduler), [JobRunr](https://www.jobrunr.io),
+[Quartz](https://www.quartz-scheduler.org) and [River](https://riverqueue.com), and by durable
+execution engines like [Inngest](https://www.inngest.com) and [Restate](https://restate.dev). The
+goal is to keep it small and easy to drop into your app:
+
+- **Just two runtime dependencies** in the core: the PostgreSQL JDBC driver and the SLF4J API
+  (plus the annotations-only JSpecify jar). No framework, no migration tool, no JSON library, in
+  the spirit of
+  [boring technology](https://boringtechnology.club/).
+- **Extension modules when you want them**: Jackson for typed payloads, Kotlin extensions, Spring
+  Boot auto-configuration, cron expressions, Micrometer metrics and an admin UI. Pull in only what
+  you use.
+- **PostgreSQL is all you need**: jobs, durable steps, events and nodes live in plain tables
+  (`bikesched_*`), and bikesched creates and migrates the schema on first use.
+- **Modern Java**: runs on Java 21 and later, with every job on its own virtual thread.
+
+**One thing bikesched isn't**:
+[a workflow engine](docs/multi-step-jobs/steps.md#working-with-a-workflow-engine). Steps
+and compensation live inside a single job, so there are no process models (BPMN), no visual
+modelling and no orchestration across services. If that's what you're after, have a look at
+[Camunda](https://camunda.com) or similar tools.
+
+| Module | Contents |
+|---|---|
+| [`bikesched-core`](bikesched-core) | the scheduler; depends on the PostgreSQL driver and the SLF4J API only; [optional schema migration spec](docs/specs/optional-schema-migration.md) |
+| [`bikesched-jackson`](bikesched-jackson) | `JacksonJsonMapper`: payloads, step results and events as records, via Jackson 3 |
+| [`bikesched-kotlin`](bikesched-kotlin) | Kotlin extensions: configuration DSL, typed handlers, `kotlin.time` durations |
+| [`bikesched-annotations`](bikesched-annotations) | job handlers declared as `@JobHandler` methods, see [Annotations](docs/integrations/annotations.md) |
+| [`bikesched-cron`](bikesched-cron) | cron expressions as `CronRecurrence` or as strings (`schedule("0 3 * * *")`, `@JobHandler`), via cron-utils, see [Cron expressions](docs/jobs/recurring-jobs.md#cron-expressions) |
+| [`bikesched-micrometer`](bikesched-micrometer) | Micrometer meters for claims, attempts and published events, see [Metrics](docs/operations/metrics.md) |
+| [`bikesched-spring-boot-starter`](bikesched-spring-boot-starter) | Spring Boot auto-configuration: the node from the context, `@JobHandler` beans found automatically, see [Spring Boot](docs/integrations/spring.md) |
+| [`bikesched-admin`](bikesched-admin) | a small admin page and JSON API: jobs, steps, events and nodes, with retry and cancel, served by the JDK's HTTP server or any framework, see [Admin UI](docs/operations/admin.md) |
+| [`bikesched-test`](bikesched-test) | testing support: a test node factory, `JobAwait` wait helpers (Awaitility internally) and time skipping, see [Testing](docs/integrations/testing.md) |
+
+## Features
+
+- Jobs now, at a given time or after a delay, with priority, retries and timeouts; optionally in
+  your own database transaction, with an idempotency key for callers that retry, and with a
+  reference to the order or payment they are about, to find them in the admin UI
+- Jobs start as soon as they are due: nodes notify each other with PostgreSQL `LISTEN/NOTIFY`,
+  polling is only the safety net
+- Durable **steps** whose results survive retries, with optional **compensation** (sagas)
+- **Failure handlers** for permanently failed jobs (e.g. a dead-letter table) and for steps (with a
+  fallback result)
+- **Cancellation** from within a handler or from outside
+- **Postponing**: a handler hit by a rate limit runs again later with `job.postpone(…)`, without
+  using up an attempt
+- **Recurring jobs** with fixed-rate, fixed-delay, daily, weekly or custom schedules
+- **Events**: jobs wait for an event without holding a thread and resume when it is published
+- **Sleeping**: jobs pause for days with `job.sleep(…)` without holding a thread
+- **Polling**: jobs check an external service until a result is ready, as one durable step
+  suspended between checks
+- **Child jobs**: jobs start other jobs exactly once and wait for their outcome and result without
+  holding a thread
+- Optional typed `TypedJob`/`TypedEvent` constants, next to plain string names
+- A null-marked API ([JSpecify](https://jspecify.dev/)): IDEs, NullAway and Kotlin see which
+  values may be `null`
+- Crash recovery: jobs of dead nodes are released and retried by others; a node that lost a job
+  can no longer change its steps
+- Ended jobs are deleted after a retention (7 days by default); optional history and
+  statement timeout
+- Pluggable JSON mapping and node, job and step ids in the SLF4J logging context
+- An optional **admin UI** to find, retry and cancel jobs, with the lookups and actions behind
+  `bikesched.admin()`
+
+## Quick start
+
+```java
+DataSource dataSource = ...; // any PostgreSQL DataSource, e.g. a HikariCP pool
+
+try (Bikesched bikesched = Bikesched.builder(dataSource)
+        .nodeName("worker-1")              // optional, defaults to the host name
+        .build()) {                    // migrates the schema, registers the node, starts polling
+
+    // Register a handler for a job name ...
+    bikesched.registerJobHandler("send-mail", job -> mailer.send(job.payload()));
+
+    // ... and schedule jobs with that name
+    bikesched.newJob("send-mail").payload("{\"to\": \"alice@example.com\"}").schedule();
+}
+```
+
+A handler that throws fails the attempt; the job is retried until its maximum number of attempts is
+used up and then marked `FAILED`.
+
+This is where bikesched stops looking like a regular job scheduler: a handler can run **durable
+steps** and **wait for an event**, without holding a thread or re-doing work on retries or resumes:
+
+```java
+bikesched.registerJobHandler("order", job -> {
+    Order order = job.payload(Order.class);
+
+    // Creates a Stripe PaymentIntent; runs once, a retried or resumed job gets the id back instead
+    String paymentIntentId = job.step("create-payment-intent", String.class,
+            step -> stripe.createPaymentIntent(order).id());
+
+    // Suspends (no thread held) until Stripe's webhook reports on this payment intent
+    PaymentUpdated webhook = job.waitForEvent("await-payment", "payment-intent-updated", paymentIntentId,
+                    PaymentUpdated.class)
+            .receive();
+
+    switch (webhook.status()) {
+        case SUCCEEDED -> job.step("mark-paid", () -> orders.markPaid(order, paymentIntentId));
+        case FAILED -> job.step("mark-failed", () -> orders.markFailed(order, paymentIntentId));
+    }
+});
+
+// in the Stripe webhook endpoint, possibly minutes or days later
+bikesched.newEvent("payment-intent-updated", webhookPayload.paymentIntentId())
+        .payload(webhookPayload)
+        .publish();
+```
+
+A plain job scheduler would need its own tables and glue code to carry `order` and
+`paymentIntentId` across that wait, to not create a second payment intent on a retry, and to
+resume on another node after a crash; here it's `job.step(...)` and `job.waitForEvent(...)`. See
+[Steps and compensation](docs/multi-step-jobs/steps.md) and
+[Events](docs/multi-step-jobs/events.md).
+
+## Documentation
+
+The [documentation](docs/index.md) covers the concepts in detail:
+
+- [Getting started](docs/getting-started/README.md): installation with Gradle or Maven, a first
+  job, and the [configuration](docs/getting-started/configuration.md) (builder options, nodes, JSON
+  mapping, logging)
+- [Jobs](docs/jobs/README.md): scheduling, writing handlers, retries, failure handlers,
+  cancellation, history, retention, timeouts; [recurring jobs](docs/jobs/recurring-jobs.md) and
+  [changing handlers](docs/jobs/changing-handlers.md) safely for jobs in flight
+- [Multi-step jobs](docs/multi-step-jobs/README.md): [steps and
+  compensation](docs/multi-step-jobs/steps.md), [events](docs/multi-step-jobs/events.md) and
+  [child jobs](docs/multi-step-jobs/child-jobs.md)
+- [Patterns](docs/patterns.md): common problems (outbox, deduplication, rate limits, webhooks,
+  approvals, fan-out, periodic work, sagas) and the examples solving them
+- [Integrations](docs/integrations/README.md): Spring Boot, Kotlin, annotations, testing
+- [Operations](docs/operations/README.md): admin UI, metrics, database tables and migrations
+
+## Examples
+
+Runnable examples with tests — a taxi booking saga with event waits and compensation, a cinema
+ticket order with a `StandaloneJobHandler`, a webhook with a polling fallback, a provider's rate
+limit with Bucket4j, chat messages deduplicated by idempotency keys, an approval with a reminder and
+an escalation, a fan-out with child jobs, a recurring job on two nodes, and a Spring Boot
+application whose node and handlers are wired by the starter — live in the
+[`bikesched-examples`](bikesched-examples/README.md) modules.
+
+## Building
+
+Requirements: JDK 26 (or let Gradle provision it via the toolchain) and Docker for the tests,
+which run against PostgreSQL 18 with [Testcontainers](https://testcontainers.com). The build
+compiles for Java 21, the oldest Java version bikesched supports
+([ADR 0049](docs/decisions/0049-java-21-baseline.md)).
+
+```shell
+./gradlew build
+```
+
+The [load and failure tests](bikesched-stress-tests/README.md) (database restarts, cut-off nodes,
+hanging connections, throughput) take a few minutes and run on demand, before a release:
+`./gradlew :bikesched-stress-tests:stressTest`.
+
+To try it out locally, start PostgreSQL with Docker Compose and run the
+[simple example](bikesched-examples/README.md#simple), which registers a handler and runs one job:
+
+```shell
+docker compose up -d                      # POSTGRES_PORT=5433 docker compose up -d if 5432 is taken
+./gradlew :bikesched-examples:java:runSimple   # honors POSTGRES_PORT as well
+```
+
+All dependency and tool versions are managed in `gradle/libs.versions.toml`.
+
+## Releases and snapshots
+
+Releases (see the [GitHub Releases](https://github.com/bikesched/bikesched/releases)) and the snapshots of `main` and the release branches
+are published to GitHub Packages: `org.bikesched:bikesched-core`, `bikesched-jackson`,
+`bikesched-kotlin`, `bikesched-annotations`, `bikesched-cron`, `bikesched-micrometer`,
+`bikesched-spring-boot-starter`, `bikesched-admin`, `bikesched-admin-shaded` and `bikesched-test`,
+all with the same version (`0.2.0-SNAPSHOT` on this branch). Reading from GitHub Packages requires a
+GitHub token with the `read:packages` scope, even for public packages. How releases are cut:
+[RELEASING.md](RELEASING.md).
+
+```kotlin
+repositories {
+    maven {
+        url = uri("https://maven.pkg.github.com/bikesched/bikesched")
+        credentials {
+            username = providers.gradleProperty("gpr.user").get()
+            password = providers.gradleProperty("gpr.token").get()   // token with read:packages
+        }
+    }
+}
+
+dependencies {
+    implementation("org.bikesched:bikesched-core:0.2.0-SNAPSHOT")
+}
+```
+
+## License
+
+bikesched is licensed under the [Apache License 2.0](LICENSE): you may use, modify and embed it,
+also in commercial and closed-source products. *[Simon](https://github.com/sbuettner), the creator
+of the bikesched project*: it's permissive on purpose, so that anyone who runs into the same need I
+did can drop it into their own project, open or closed source, without license-review friction. The
+name and logo are trademarks, see the
+[trademark policy](TRADEMARKS.md) for how to refer to bikesched and how to name forks.

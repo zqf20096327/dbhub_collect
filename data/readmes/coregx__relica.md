@@ -11,6 +11,12 @@
 **Relica** is a lightweight, type-safe database query builder for Go with zero production dependencies.
 
 > **🤖 AI Agents**: Before generating code, read **[AGENTS.md](AGENTS.md)** for correct API patterns. Use `Model()` API for CRUD, `Expression API` for WHERE conditions. Avoid `map[string]interface{}`.
+>
+> **Agent skill**: [`skills/relica/`](skills/relica/SKILL.md) (Agent Skills format) — version-exact docs, an audit
+> script for a project's Relica code, the upgrade procedure. In Claude Code (v2.1.275+):
+> `/plugin install relica --marketplace coregx/relica` (or `/plugin marketplace add coregx/relica`, then
+> `/plugin install relica@relica`; the shell form `claude plugin install` needs v2.1.292+). Other agents: read `<module Dir>/skills/relica/SKILL.md` at your version
+> (`go list -m -f '{{.Dir}}' github.com/coregx/relica`).
 
 ## ✨ Features
 
@@ -216,6 +222,18 @@ db.Insert("users", map[string]interface{}{
 user := User{Name: dynamicData["name"].(string)}
 db.Model(&user).Insert()
 ```
+
+#### UPDATE / DELETE need Where (v0.20.0+)
+
+A builder `Update` or `Delete` without a condition — or with one that renders empty, such as `relica.HashExp{}` —
+is an error instead of a statement that hits every row. Say so when you mean the whole table:
+
+```go
+db.Delete("sessions").Where(relica.LessThan("expires_at", now)).Execute()
+db.Delete("sessions").AllRows().Execute() // the whole table, on purpose
+```
+
+`db.Model(&m).Update()` / `Delete()` always use the primary key and are unaffected.
 
 ### Expression API
 
@@ -552,6 +570,18 @@ err = db.Model(&user).Upsert("name", "email")
 ```
 
 Works with PostgreSQL (`ON CONFLICT DO UPDATE`), MySQL (`ON DUPLICATE KEY UPDATE`), SQLite (`ON CONFLICT DO UPDATE`).
+`Exclude("created_at")` leaves a column out of both the insert and the update.
+
+The builder form needs exactly one conflict action — otherwise `Execute` returns an error and nothing is sent:
+
+```go
+_, err := db.Upsert("users", values).OnConflict("id").DoUpdateAll().Execute()    // every non-target column
+_, err = db.Upsert("users", values).OnConflict("id").DoUpdate("name").Execute()  // listed columns only
+_, err = db.Upsert("users", values).OnConflict("id").DoNothing().Execute()       // keep the existing row
+```
+
+Updated columns take the value of the row proposed for insertion. On MySQL the default is `col = VALUES(col)`;
+`relica.WithMySQLUpsertSyntax(relica.MySQLUpsertRowAlias)` switches to the 8.0.19+ row alias.
 
 #### UpdateChanged (Dirty Field Detection)
 
@@ -839,7 +869,7 @@ sub := db.Select("user_id").From("orders").Where("status = ?", "completed")
 db.Select().From("users").Where(relica.In("id", sub.AsExpression())).All(&users)
 
 // Find users with at least one order (EXISTS is often faster)
-orderCheck := db.Select("1").From("orders").Where("orders.user_id = users.id")
+orderCheck := db.Select().SelectExpr("1").From("orders").Where("orders.user_id = users.id")
 db.Select().From("users").Where(relica.Exists(orderCheck.AsExpression())).All(&users)
 ```
 
@@ -914,12 +944,12 @@ db.Select().
 **Recursive CTEs** (organizational hierarchies, trees):
 ```go
 // Anchor: top-level employees
-anchor := db.Select("id", "name", "manager_id", "1 as level").
+anchor := db.Select("id", "name", "manager_id").SelectExpr("1 AS level").
     From("employees").
     Where("manager_id IS NULL")
 
 // Recursive: children
-recursive := db.Select("e.id", "e.name", "e.manager_id", "h.level + 1").
+recursive := db.Select("e.id", "e.name", "e.manager_id").SelectExpr("h.level + 1").
     From("employees e").
     InnerJoin("hierarchy h", "e.manager_id = h.id")
 
@@ -939,16 +969,14 @@ Relica supports window functions via `SelectExpr()` for advanced analytics:
 
 ```go
 // Rank users by order total within each country
-db.Select().
-    SelectExpr("user_id", "country", "total",
-        "RANK() OVER (PARTITION BY country ORDER BY total DESC) as rank").
+db.Select("user_id", "country", "total").
+    SelectExpr("RANK() OVER (PARTITION BY country ORDER BY total DESC) AS rank_no").
     From("orders").
     All(&rankedOrders)
 
 // Running totals with frame specification
-db.Select().
-    SelectExpr("date", "amount",
-        "SUM(amount) OVER (ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as running_total").
+db.Select("date", "amount").
+    SelectExpr("SUM(amount) OVER (ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total").
     From("transactions").
     OrderBy("date").
     All(&runningTotals)
@@ -1099,7 +1127,19 @@ for _, user := range users {
     batch.Values(user.Name, user.Email)
 }
 result, err := batch.Execute()
+
+// Or straight from the structs, as an upsert (v0.20.1+)
+result, err = db.BatchInsert("users", nil). // nil: columns from the struct
+    ValuesStructs(users).
+    OnConflict("email").
+    DoUpdateAll().
+    Execute()
 ```
+
+One batch is one statement: rows × columns may not exceed 65535 bind parameters on PostgreSQL and
+MySQL, 32766 on SQLite. A larger batch is an error returned before anything is sent — Relica does not
+split it for you; send the rows in slices, inside `Transactional` when they must be atomic
+([AGENTS.md › Batch Operations](AGENTS.md#batch-operations)).
 
 **Batch UPDATE** (updates multiple rows with different values):
 
@@ -1142,7 +1182,7 @@ err = db.Transactional(ctx, func(tx *relica.Tx) error {
 |----------|--------|--------------|-------------|--------|
 | **PostgreSQL** | ✅ Full | `$1, $2, $3` | `"users"` | `ON CONFLICT` |
 | **MySQL** | ✅ Full | `?, ?, ?` | `` `users` `` | `ON DUPLICATE KEY` |
-| **SQLite** | ✅ Full | `?, ?, ?` | `"users"` | `ON CONFLICT` |
+| **SQLite** | ✅ Full | `?, ?, ?` | `` `users` `` | `ON CONFLICT` |
 
 ## ⚡ Performance
 
@@ -1187,6 +1227,25 @@ db, err := relica.Open("postgres", dsn,
     relica.WithStmtCacheCapacity(1000),
 )
 ```
+
+### Table and Column Names, Struct Scanning (v0.20.0+)
+
+An untagged field maps to the snake_case of its name (`CreatedAt` → `created_at`), a type without `TableName()`
+to its snake_case singular name (`UserProfile` → `user_profile`), and embedded structs are flattened — the
+ozzo-dbx rules. An embedded single value (`time.Time`, `sql.NullString`, a type with its own `Scan`/`Value`) is one
+column (`null_string`); read single values with `Row`/`Column`, not `One`/`All`. `db:"col"` and `TableName()` override them; `relica.WithNaming` changes them per DB:
+
+```go
+db, err := relica.Open("postgres", dsn,
+    relica.WithNaming(relica.Snake(relica.Initialisms(relica.GoInitialisms()...)))) // HTTPLog → http_log
+```
+
+Reading into a struct, a field with no column in the result is an error by default (`relica.ScanRequireFields`)
+instead of a silent zero value; so is a column named in `Select("id", "email")` that no field takes, and two result
+columns for one field (`Select()` over a join where both tables have `id`: alias one).
+`relica.WithScanMode(relica.ScanLenient)` restores the ozzo-dbx behaviour per DB,
+`.ScanMode(...)` per query; `relica.ScanStrict` also rejects result columns that have no field. Details: AGENTS.md ›
+Table and Column Names.
 
 ### Connection Management
 

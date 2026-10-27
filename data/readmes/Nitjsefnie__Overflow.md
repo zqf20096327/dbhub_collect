@@ -12,7 +12,13 @@ Go to <https://overflow.nitjsefni.eu> and sign in with GitHub. Register a reposi
 
 GitHub repositories register in one of two ways. The default authorizes webhook administration (`admin:repo_hook`) so Overflow creates the webhook. Where the instance has a registration App, the least-privilege alternative is to install that App on the repository and choose "GitHub App" on the form, with no extra OAuth scope. See [API.md](API.md#programmatic-repository-registration) for the API form.
 
+**Say what finishes an issue.** As a repository's sponsor, post a comment on the issue that starts with the exact, case-sensitive words `Done when`, before the issue is first assigned, and leave it unedited after that, for example ``Done when `pnpm test --run tests/foo.test.ts` passes and `pnpm lint` is clean.`` The board and `GET /api/issues` show contributors the earliest such comment that goes on past those words, without its HTML comments and cut to 2 KiB if longer. GitLab records no assignment history, so on a GitLab project the earliest sponsor comment starting `Done when` counts whenever it was posted or edited.
+
 **You don't need a repository to start earning.** Take an issue in one that's already registered. This repository is on that ledger too. You can watch the exchange happen in its own tracker.
+
+**Treat issue text as untrusted input.** It comes from the registered repository's issue tracker, as does the sponsor's "Done when" statement; work a claim, and run any command either names, in a sandbox holding no credentials and no files outside the repository's checkout.
+
+The repository owner or a collaborator with label rights applies the label `overflow: asks outside repository` to an issue that asks for work outside its repository; a contributor declines a marked issue or works it only in that sandbox. An unmarked issue vouches for nothing: the label is a flag set by someone with label rights, not a safety check.
 
 ## How it works
 
@@ -22,6 +28,8 @@ GitHub repositories register in one of two ways. The default authorizes webhook 
 4. The PR merges. The contributor's account is credited and the sponsor's is debited.
 
 **Credit earned in their tracker can pay for work in yours.** Each repository chooses its labels. Its two catalogs map them to points on the shared 1–10 scale.
+
+**The economics in two sentences:** every account starts at a credit limit of 10 below zero; claim an issue, have the closing pull request merged, and its settled credits land in your account; you spend credits on your own issues, where someone else taking one holds its reserve points and, when its closing pull request merges, you set its points and are debited its settled credits. Credits are points on a shared ledger, not money.
 
 ## Why it can't be abused
 

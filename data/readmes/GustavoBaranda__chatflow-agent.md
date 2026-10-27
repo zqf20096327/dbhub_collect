@@ -148,169 +148,171 @@ print(f"[{response.active_agent_name}]: {response.content}")
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/GustavoBaranda">
           <img src="https://github.com/GustavoBaranda.png?size=64" width="64" height="64" alt="@GustavoBaranda" /><br />
           <sub><b>@GustavoBaranda</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/KeuqS">
           <img src="https://github.com/KeuqS.png?size=64" width="64" height="64" alt="@KeuqS" /><br />
           <sub><b>@KeuqS</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/mehdimirzafaruk">
           <img src="https://github.com/mehdimirzafaruk.png?size=64" width="64" height="64" alt="@mehdimirzafaruk" /><br />
           <sub><b>@mehdimirzafaruk</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/wzd8888">
           <img src="https://github.com/wzd8888.png?size=64" width="64" height="64" alt="@wzd8888" /><br />
           <sub><b>@wzd8888</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/kudala-bharani">
           <img src="https://github.com/kudala-bharani.png?size=64" width="64" height="64" alt="@kudala-bharani" /><br />
           <sub><b>@kudala-bharani</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/mikemikimike">
           <img src="https://github.com/mikemikimike.png?size=64" width="64" height="64" alt="@mikemikimike" /><br />
           <sub><b>@mikemikimike</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/ganeshmshetty">
           <img src="https://github.com/ganeshmshetty.png?size=64" width="64" height="64" alt="@ganeshmshetty" /><br />
           <sub><b>@ganeshmshetty</b></sub>
         </a>
       </td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/krishna2707">
           <img src="https://github.com/krishna2707.png?size=64" width="64" height="64" alt="@krishna2707" /><br />
           <sub><b>@krishna2707</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/jsdhwfmax">
           <img src="https://github.com/jsdhwfmax.png?size=64" width="64" height="64" alt="@jsdhwfmax" /><br />
           <sub><b>@jsdhwfmax</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/aazminu">
           <img src="https://github.com/aazminu.png?size=64" width="64" height="64" alt="@aazminu" /><br />
           <sub><b>@aazminu</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/HarshRajSinghania">
           <img src="https://github.com/HarshRajSinghania.png?size=64" width="64" height="64" alt="@HarshRajSinghania" /><br />
           <sub><b>@HarshRajSinghania</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/ompatil1906">
           <img src="https://github.com/ompatil1906.png?size=64" width="64" height="64" alt="@ompatil1906" /><br />
           <sub><b>@ompatil1906</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/sarantez">
           <img src="https://github.com/sarantez.png?size=64" width="64" height="64" alt="@sarantez" /><br />
           <sub><b>@sarantez</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/hyverysmart">
           <img src="https://github.com/hyverysmart.png?size=64" width="64" height="64" alt="@hyverysmart" /><br />
           <sub><b>@hyverysmart</b></sub>
         </a>
       </td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/Aaqibhafeezkhan">
           <img src="https://github.com/Aaqibhafeezkhan.png?size=64" width="64" height="64" alt="@Aaqibhafeezkhan" /><br />
           <sub><b>@Aaqibhafeezkhan</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/SumiRann1">
           <img src="https://github.com/SumiRann1.png?size=64" width="64" height="64" alt="@SumiRann1" /><br />
           <sub><b>@SumiRann1</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/jay23606">
           <img src="https://github.com/jay23606.png?size=64" width="64" height="64" alt="@jay23606" /><br />
           <sub><b>@jay23606</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/Iqranawaz-debug">
           <img src="https://github.com/Iqranawaz-debug.png?size=64" width="64" height="64" alt="@Iqranawaz-debug" /><br />
           <sub><b>@Iqranawaz-debug</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/dbdefault">
           <img src="https://github.com/dbdefault.png?size=64" width="64" height="64" alt="@dbdefault" /><br />
           <sub><b>@dbdefault</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/Erfouni">
           <img src="https://github.com/Erfouni.png?size=64" width="64" height="64" alt="@Erfouni" /><br />
           <sub><b>@Erfouni</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/bercedev">
           <img src="https://github.com/bercedev.png?size=64" width="64" height="64" alt="@bercedev" /><br />
           <sub><b>@bercedev</b></sub>
         </a>
       </td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/Gokulnaath07">
           <img src="https://github.com/Gokulnaath07.png?size=64" width="64" height="64" alt="@Gokulnaath07" /><br />
           <sub><b>@Gokulnaath07</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/tyza66">
           <img src="https://github.com/tyza66.png?size=64" width="64" height="64" alt="@tyza66" /><br />
           <sub><b>@tyza66</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/rahul05ranjan">
           <img src="https://github.com/rahul05ranjan.png?size=64" width="64" height="64" alt="@rahul05ranjan" /><br />
           <sub><b>@rahul05ranjan</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/bfs2021">
           <img src="https://github.com/bfs2021.png?size=64" width="64" height="64" alt="@bfs2021" /><br />
           <sub><b>@bfs2021</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/MbappeWU">
           <img src="https://github.com/MbappeWU.png?size=64" width="64" height="64" alt="@MbappeWU" /><br />
           <sub><b>@MbappeWU</b></sub>
         </a>
       </td>
-      <td align="center" valign="top" width="14.28%">
+      <td align="center" valign="top" width="16.66%">
         <a href="https://github.com/madhavidayma21">
           <img src="https://github.com/madhavidayma21.png?size=64" width="64" height="64" alt="@madhavidayma21" /><br />
           <sub><b>@madhavidayma21</b></sub>
@@ -640,6 +642,7 @@ finally:
   * **Deleting a session:** `delete()` and `clear()` do not wait for running turns. A turn running when its session is deleted fails with `SessionDeletedError` and leaves nothing behind; a turn waiting for that session starts a new, empty one. Deleting erases a session's data; it does not block its id, so a new message creates the session again.
   * **SQLite and the event loop:** with a file-backed `SQLiteSessionStore`, session reads and writes made by the `Runner`, the WhatsApp webhook and Telegram's `/reset` run in a pool of 4 worker threads owned by the store, so a slow disk or a database locked by another writer does not stop other requests, sessions or timeouts. A SQLite call that has started cannot be interrupted: a cancelled or timed-out turn waits for its running write, rolls back, and only then raises (the timeout is detected on time but reported once the rollback is stored, up to `busy_timeout`, 10 s, per write while the database is locked). The WhatsApp webhook still acknowledges after its deduplication write, and answers HTTP 500 if the lock outlasts `busy_timeout` (Meta then retries). `SessionStore`, `:memory:` SQLite stores, subclasses and custom stores keep running on the event loop. This does not make one SQLite file safe for several workers or processes.
   * **Turn time limit:** `await runner.run_async(session_id, message, turn_timeout=30)` limits the turn itself (keyword-only, seconds). The limit starts once the turn holds the session, so time spent waiting behind earlier turns of the same session does not count. When it expires the turn is cancelled, the session is restored to its state before the turn, and `TimeoutError` is raised. It must be a positive finite number; the default, `None`, sets no limit.
+  * **Synchronous tools after a timeout:** a synchronous (`def`) tool runs in a worker thread, and Python cannot stop a callable that has already started. The timeout and conversational rollback are still reported without waiting for that callable indefinitely, but the session remains fenced until the callable really returns or raises. Later turns of that session do not start while it is running; for channels, this residual-work wait counts toward `queue_timeout_seconds`. Other sessions continue normally. If the callable never finishes, the affected session remains fenced (bounded channel requests receive their configured queue-timeout fallback); use timeouts in the tool's own I/O and design side effects to be idempotent. Async tools remain cancellable normally.
   * **WhatsApp:** each message has two separate limits. `queue_timeout_seconds` (default 120) bounds the wait behind earlier turns of the same session: if it expires, the user receives `fallback_message` and the turn is never run (the message is not added to the history and, as before, a Meta retry of the same `wamid` is discarded). `llm_timeout_seconds` (default 120) bounds the turn itself and starts once the turn holds the session: when it expires the turn is cancelled and rolled back and the user receives `fallback_message`. A reply can therefore take up to `queue_timeout_seconds + llm_timeout_seconds`. The logs tell the cases apart: `Session busy ...` (queue limit), `Turn timed out ...` (turn limit), `Dispatch backstop expired ...` (a `dispatch_async()` override that never reached `Runner.run_async()`), and `TimeoutError raised while dispatching ...` (a `TimeoutError` from the provider or other code, not a channel limit). `llm_timeout_seconds=None` or `inf` sets no turn limit.
 
 * **Meta Anti-500 Error Shield:** Meta's webhook infrastructure retries delivery aggressively if your endpoint returns HTTP 500. `WhatsAppChannel` catches any upstream LLM outages or rate limits, returns **HTTP 200** to Meta to prevent retry storms, dispatches the configured `fallback_message` to the user, and logs clean diagnostic details.
@@ -889,6 +892,7 @@ Ready-to-run reference scripts are available in the [`examples/`](examples/) dir
 ## Technical Documentation
 
 * **[Architecture Guide](docs/ARCHITECTURE.md):** Deep dive into the internal execution loop, message schemas, engine adapters, and session persistence.
+* **[Migration Guide (0.3.4 → 0.4.0)](docs/MIGRATION_0.4.md):** Upgrade instructions, breaking changes, and new features in `0.4.0`.
 * **[Changelog](CHANGELOG.md):** Release history, new features, security advisories, and breaking changes.
 * **[Security Policy](SECURITY.md):** Supported versions and vulnerability reporting instructions.
 * **[Code of Conduct](CODE_OF_CONDUCT.md):** Community standards and expectations.

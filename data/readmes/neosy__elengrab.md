@@ -6,7 +6,7 @@
 ---
 
 <p align="center">
-  <img width="1867" height="915" alt="elengrab_interface" src="https://github.com/user-attachments/assets/4eb2c205-0115-42bc-b40a-3e29e5bdb57f" />
+  <img width="1908" height="911" alt="elengrab_interface" src="https://github.com/user-attachments/assets/b44100d3-a31b-463f-95ec-bb50ea3d3957" />
 </p>
 
 # Elengrab
@@ -86,6 +86,7 @@ For all other downloads, see the <a href="https://github.com/neosy/elengrab/rele
 * Support for downloading video and audio from **1,000+ websites**, powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp) extractors.
 * Configurable format and quality settings.
 * Cookie-based authentication support for YouTube and other supported websites.
+* Manual upload of audio and video files.
 * Task queue for media processing.
 * Concurrent processing of multiple tasks.
 * Instant addition and removal of tasks from the queue.

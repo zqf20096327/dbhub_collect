@@ -2,10 +2,11 @@
 
 **Give your AI agent memory that lasts — and see the cloud tokens it never had to spend.** Persistent sessions, knowledge graphs, offline tool-routing, and an auditable savings meter. Fully local and free.
 
-> **Current release: v20.22.4 — oMLX setup and local model roles**
-> Install a pinned oMLX server/model pack from the dashboard or CLI, or connect
-> an existing server. Discover installed models and choose coder/reviewer roles
-> for oMLX and Ollama. Controlled oMLX coding remains text-only.
+> **Current release: v20.22.5 — local oMLX images and memory accounting**
+> Choose an independent image model from discovered local inventory. Compatible
+> oMLX servers support controlled PNG image requests with local screening and
+> generation. Image accuracy depends on the model; Ollama image execution remains
+> unavailable for the saved image choice. See the [oMLX guide](docs/omlx.md).
 
 [![npm](https://img.shields.io/npm/v/prism-mcp-server?color=cb0000&label=npm)](https://www.npmjs.com/package/prism-mcp-server)
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-00ADD8)](https://github.com/modelcontextprotocol/servers)
@@ -52,13 +53,13 @@ A paid subscription adds cloud sync, higher model tiers, and team features throu
 - **Hook-free startup** — MCP metadata and native instructions request Prism's
   startup context without requiring lifecycle hooks or a Prism-owned launcher.
   Where a host offers hooks (Claude Code, Codex), `prism connect` adds two
-  small ones on top: mid-session prompt routing, and a post-compaction
-  re-injection of the protected-floor digest.
-- **Prompt-tr
+  small ones on top: mid-sessi
 
 [...截断...]
 
-iggered Factory** — enabled by default for suitable bounded
+on prompt routing, and a post-compaction
+  re-injection of the protected-floor digest.
+- **Prompt-triggered Factory** — enabled by default for suitable bounded
   implementation requests with explicit files, an allowed write list, and a
   verification command. The host starts and monitors the recommended pipeline;
   BCBA requests stay with the host. A dashboard toggle or
@@ -152,5 +153,4 @@ codex plugin add prism-coder@prism
 ```
 
 The plugin registers `prism-mcp` via `npx -y prism-mcp-server`. If you already
-configured Prism by hand — `prism connect` writes an `mcp_servers.prism-mcp`
-entry — you have that server twice under one ke
+configured Prism by hand

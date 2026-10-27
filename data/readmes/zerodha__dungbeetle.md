@@ -90,11 +90,48 @@ dungbeetle --config /path/to/config.toml --sql-directory /path/to/your/sql/queri
 
 Starting the server runs a set of workers listening on a default job queue. It also starts an HTTP service on `http://127.0.0.1:6060` which is the control interface. It's possible to run the server without the HTTP interface by passing the `--worker-only` flag.
 
+## Local Testing
+
+Run tests locally using Docker and Docker Compose.
+
+### Quick Start
+
+```bash
+# Run all tests
+make test-local
+
+# Test specific databases
+make test-postgres
+make test-mysql
+```
+
+### Test Commands
+
+| Command | Description |
+|---------|-------------|
+| `make test-local` | Complete test cycle |
+| `make test-setup` | Start test services and build the test server |
+| `make test-run` | Run tests against services started with `make test-setup` |
+| `make test-cleanup` | Stop services |
+| `make test-postgres` | Complete test cycle, PostgreSQL tests only |
+| `make test-mysql` | Complete test cycle, MySQL tests only |
+
+### Prerequisites
+
+- Docker
+- Docker Compose
+- Go version specified in `go.mod` or newer
+- curl
+
+The test services use ports 6379, 5432, and 3306; the test server uses port 6060.
+Complete test cycles remove their containers and data, including when tests fail.
+For manual control, run `make test-setup`, `make test-run`, then `make test-cleanup`.
+
 
 ### Usage
 | Method | URI                    |                                                 |
 |--------|------------------------|-------------------------------------------------|
-| GET    | /tasks                 | Returns the list of registered SQL tasks        |
+| GET    | /tasks                 | Returns the list of registered SQL tasks. Pass `?sql=false` to only get names and not SQL.        |
 | POST   | /tasks/{taskName}/jobs | Schedules a job for a given task                |
 | GET    | /jobs/{jobID}          | Returns the status of a given job               |
 | GET    | /jobs/queue/{queue}    | Returns the list of all pending jobs in a queue |
@@ -102,6 +139,7 @@ Starting the server runs a set of workers listening on a default job queue. It a
 | GET    | /groups/{groupID}      | Get the status of a job group and its jobs      |
 | DELETE | /jobs/{jobID}          | Deletes a pending job from the queue and immediately cancels its execution and frees the thread. Send a query param "purge=true" to delete completed jobs. Only the Go PostgreSQL driver cancels queries mid execution. MySQL server will keep continuing to execute the query. For MySQL, it's important to set `max_execution_time`.   |
 | DELETE | /groups/{groupID}          | Deletes a pending job from the queue and immediately cancels its execution and frees the thread. Send a query param "purge=true" to delete completed jobs. Only the Go PostgreSQL driver cancels queries mid execution. MySQL server will keep continuing to execute the query. For MySQL, it's important to set `max_execution_time`  |
+| GET    | /metrics               | Exposes Prometheus metrics for jobs and queues |
 
 POST requests accept raw JSON bodies. The JSON params are listed below.
 
@@ -172,6 +210,33 @@ $ curl localhost:6060/tasks/get_profit_entries_by_date/jobs -H "Content-Type: ap
 # Send another job to the low priority queue.
 $ curl localhost:6060/tasks/get_profit_entries_by_date/jobs -H "Content-Type: application/json" --data '{"job_id": "myjob", "queue": "low_priority"}'
 ```
+
+## Metrics
+
+Job queue metrics are exposed in the Prometheus exposition format at `/metrics` on the same HTTP interface.
+
+| Metric | Type | Description |
+|--------|------|-------------|
+| `dbtl_jobs_enqueued_total{task_name}` | counter | Jobs enqueued by this instance, including jobs in groups. |
+| `dbtl_jobs_running{task_name}` | gauge | Jobs currently executing on this instance. |
+| `dbtl_job_attempts_total{task_name,outcome}` | counter | Job execution attempts, with `outcome` as `success`, `error` or `canceled`. Every retry is a separate attempt. |
+| `dbtl_job_execution_duration_seconds{task_name}` | histogram | Time taken to run the query, read the rows, and write the results, including failed attempts. |
+| `dbtl_job_queue_wait_duration_seconds{task_name,queue}` | histogram | Time a job waited in the queue before its first attempt. ETA delays are not counted. |
+| `dbtl_queue_pending_jobs{queue}` | gauge | Runnable jobs waiting in the queue. Read from the broker on every scrape. |
+| `dbtl_worker_concurrency{queue}` | gauge | Configured worker concurrency for the queue on this instance. |
+
+```
+$ curl localhost:6060/metrics
+dbtl_jobs_enqueued_total{task_name="get_profit_entries_by_date"} 42
+dbtl_jobs_running{task_name="get_profit_entries_by_date"} 2
+dbtl_job_attempts_total{task_name="get_profit_entries_by_date",outcome="success"} 38
+dbtl_job_attempts_total{task_name="get_profit_entries_by_date",outcome="error"} 2
+dbtl_queue_pending_jobs{queue="default"} 5
+dbtl_worker_concurrency{queue="default"} 10
+...
+```
+
+Metrics are tracked per instance. Instances started with `--worker-only` don't run the HTTP server, so their metrics can't be scraped.
 
 ## Go API client
 `github.com/zerodha/dungbeetle/client` package can be used as a Go HTTP API client for DungBeetle.

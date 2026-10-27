@@ -63,7 +63,8 @@ developer works with an Oracle database day to day:
   address Teams and tickets make clickable, never SQL. A click opens the table in FerretSharp after asking, on the
   connection that fits or one you choose.
 - Names beside foreign keys: mark a display column per table (`KUNDEN.NAME`) and every reference to it reads
-  `4711 · PetersPizza`; a value without a referenced row says "not found". The display columns live in one file you
+  `4711 · PetersPizza`; a name can join several columns (`Müller - Hans`) and follow one more foreign key; a value
+  without a referenced row says "not found". The display columns live in one file you
   can share with your team through your repository.
 - Object details per table: columns, constraints, indexes (with a hint for unindexed foreign keys), dependencies, DDL.
 - PL/SQL to look at: packages, procedures, functions and triggers with their source (read-only, coloured, compile
@@ -207,6 +208,8 @@ changes, and a new build is picked up automatically:
 - **Usage in the code**: per column, the methods of your solution that read or write its property or query the table,
   read from the compiled code – a click opens the line in Visual Studio. Properties no code uses are marked, and the
   designer warns before dropping a column the code still uses. Uses open in your *work clone* of the connection group.
+- **Model file**: can't build the project (packages from a private feed)? A colleague exports the model as a file, and
+  you link that instead – names, enums and relationships without a build and without running the project's code.
 
 ## Getting started
 

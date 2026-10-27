@@ -36,6 +36,8 @@ An MCP memory layer for agents: structured storage, semantic retrieval, graph re
 **Absorb & Lineage**
 - 🧬 **Absorb** - Feed facts in; an LLM classifies each against the store (duplicate / update / contradiction / related / new), skips duplicates, links relations, and consolidates related facts — with `dry_run` preview
 - 🌱 **Supersession Lineage** - Updates supersede old knowledge instead of deleting it; retrieval follows the chain to the current version by default (`follow` modes: `active`, `latest`, `full_history`)
+  - Deleting any version retires the whole lineage (a deleted fact cannot reappear as an older version): `follow=latest`/`active` hide every version, `memory_get` on one answers `not_found` with `retired: true` naming the delete ("retired by deleting #N"), `follow=all` still reads it, and adding a `supersedes` edge to a retired id does not restore it.
+  - `memory_absorb` never supersedes an item record (`metadata.kind = "item-record"` or tag `item-record`): the fact is written and linked `related_to` instead. Todos and issues are protected by the type boundary (a plain fact never supersedes a typed one).
 - 🗞️ **Topic Digest** - `memory_digest(topic)` bundles relevant memories, open TODOs/issues, related edges, and source IDs into one retrieval
 
 **Search & Intelligence**
@@ -59,6 +61,27 @@ An MCP memory layer for agents: structured storage, semantic retrieval, graph re
 - 📊 **Statistics & Analytics** - Tag usage, trends, and connection insights
 - 🧠 **Memory Insights** - Activity summary, stale detection, consolidation suggestions, and LLM-powered pattern analysis
 - 📜 **Action History** - Track all memory operations (create, update, delete, merge, boost, link) with grouped timeline view
+
+## JSON API (`/api/v1`)
+
+The server can expose a plain JSON API at `/api/v1/<store>/{health,search,absorb}`
+(the wire contract is `contracts/memora-api/v1/`). It is **off unless
+`MEMORA_API_TOKENS_FILE`** is set to an absolute path; an unset variable is an
+intentional state and is logged at INFO, not ERROR (issue 1131).
+
+The file holds sha256 digests, never tokens. The server opens it
+`O_RDONLY | O_NOFOLLOW | O_CLOEXEC` and requires a regular file, no group/other
+permission bits and at most 4 KiB, owned by the server's user, under parents
+that are not symlinks and not group/world-writable. On a **read-only mount**
+(for example the deploy's read-only secrets mount, where rootful docker reads
+the operator's file as root and `statvfs` reports `ST_RDONLY`), the owner match
+for the file and for its read-only parents is not required; every other check
+still applies. A failed reload keeps the last good token set.
+
+`scripts/mint_api_token.sh` mints a token into a new 0600 file and adds its
+digest to `api-tokens.json`; `scripts/deploy-memora-all.sh` sets
+`MEMORA_API_TOKENS_FILE` when that file is in its secrets directory. Request
+semantics (401/403/404) and rotation are in the contract.
 
 ## Preview
 
@@ -115,7 +138,7 @@ Default runtime is Apple's [`container`](https://github.com/apple/container) CLI
    cp instances/example.env instances/myinstance.env
    ```
 
-5. Create the credential file and install the proxy the LaunchAgent will run. `cred_args()` requires a `.mcp.json` whose `mcpServers.memora.env` holds `CLOUDFLARE_API_TOKEN` (D1 access) and the embedding/LLM keys — `up` dies if that file is missing. The script looks for `~/.config/memora/credentials.mcp.json` **if that file exists**, otherwise `~/repos/agentic-box/.mcp.json`. Set `CRED_SOURCE` in the instance file to pick a path. Separately, `proxy` renders a plist whose executable is `$MEMORA_PROXY_BIN` (default `~/.local/libexec/memora/memora_proxy.py`) and whose logs live in `$MEMORA_LOG_DIR` (default `~/.local/var/log`) — nothing creates either on a fresh clone.
+5. Create the credential file and install the proxy the LaunchAgent will run. `cred_args()` requires a `.mcp.json` whose `mcpServers.memora.env` holds `CLOUDFLARE_API_TOKEN` (D1 access) and the embedding/LLM keys — `up` dies if that file is missing. The script looks for `~/.config/memora/credentials.mcp.json` unless the instance file sets `CRED_SOURCE` to another path; there is no other fallback. Separately, `proxy` renders a plist whose executable is `$MEMORA_PROXY_BIN` (default `~/.local/libexec/memora/memora_proxy.py`) and whose logs live in `$MEMORA_LOG_DIR` (default `~/.local/var/log`) — nothing creates either on a fresh clone.
 
    ```bash
    mkdir -p ~/.config/memora ~/.local/libexec/memora ~/.local/var/log
@@ -214,6 +237,8 @@ Add to `.mcp.json` in your project root:
 
 With D1, use `--no-graph` to disable the local visualization server. Instead, use the hosted graph at your Cloudflare Pages URL (see [Cloud Graph](#cloud-graph)).
 
+A `d1://` primary refuses to start unless that database's read replication is disabled (session bookmarks are not REST read-your-writes while it is on). `MEMORA_D1_ALLOW_READ_REPLICATION=1` starts anyway and logs a warning.
+
 **Cloud DB (S3/R2) - Sync mode:**
 ```json
 {
@@ -263,6 +288,7 @@ Add to `~/.codex/config.toml`:
 | `MEMORA_DATABASES`     | JSON object `{name: uri}` mapping each store this process serves. Names are one URL path segment (`/mcp/<name>`): letters, digits, `-`, `_`, `.` only. Duplicate keys, empty values, unsafe names, or non-objects refuse to start rather than silently picking a store. Unset = single-store (legacy). See [Multi-database routing](#multi-database-routing). |
 | `MEMORA_DEFAULT_DB`    | Registry name a bare `/mcp` uses. Required when the registry has more than one database; with exactly one name, that name is the default. A value not in the registry refuses to start. |
 | `CLOUDFLARE_API_TOKEN` | API token for D1 (`d1://` URI). `CF_API_TOKEN` is accepted as an alias. |
+| `MEMORA_D1_ALLOW_READ_REPLICATION` | Set to `1` to start a `d1://` primary when read replication is on, or when its mode cannot be read. Any other value still refuses. Logs a warning on every start. |
 | `MEMORA_CLOUD_ENCRYPT` | Encrypt the local file before uploading to S3/R2. Unset/`false` = off; `1`/`true`/`yes` = on. |
 | `MEMORA_CLOUD_COMPRESS`| Compress the local file before uploading to S3/R2. Unset/`false` = off; `1`/`true`/`yes` = on. |
 | `MEMORA_CACHE_DIR`     | Local cache directory for an S3/R2-synced database. Unset: the backend picks a cache path. |
@@ -279,6 +305,8 @@ Add to `~/.codex/config.toml`:
 | `MEMORA_MAX_INIT_BODY_BYTES` | Maximum initialize request body accepted/buffered (default `65536`, minimum `1024`). Larger requests receive `413`. Invalid values refuse to start. Streamable-HTTP only. |
 | `MEMORA_SESSION_IDLE_TIMEOUT` | Seconds before an abandoned valid session is reaped (default `1800`). `0` disables. Invalid values refuse to start. Streamable-HTTP only. |
 | `MEMORA_HEALTH_TOKEN`  | Bearer token for detailed `/health/db` bodies (names, counts, error text). Unset: only a loopback peer sees detail; everyone else gets aggregate status. FastMCP `custom_route()` is unauthenticated even when MCP auth is configured. HTTP transports only (`memora.health` is imported for SSE/streamable-http, not stdio). |
+| `MEMORA_ADMIN_TOKEN`   | Bearer token for the `/admin/*` operator routes (`memora/admin.py`), at least 32 characters and different from `MEMORA_HEALTH_TOKEN`; otherwise the server refuses to start. Unset: every `/admin/*` route answers 403. No loopback exemption. The instance launchers mint and pass it (`~/.config/memora/<instance>.admin-token`). HTTP transports only. |
+| `MEMORA_DATA_VOLUME`   | Name of the volume mounted at `/data`, set by the launchers. A store that keeps state in the data directory (`MEMORA_DATA_DIR`, default `/data`: a local SQLite path under it, and every `d1://` store, whose write gate and intent journal live there) is refused unless this is set and not an anonymous 64-hex volume id, the directory is a mount point, and a probe file can be written, fsynced and removed in it and in its `intent/`. The refusal is per store; `/health/db` names the reason. |
 | `MEMORA_HEALTH_TTL`    | Seconds a readiness snapshot may be served before a refresh is due (default `10`, cap `3600`). Must be `> 0`. Invalid values refuse to start. HTTP transports only — a malformed value does not abort stdio. |
 | `MEMORA_HEALTH_TIMEOUT`| Bound on one refresh pass and on each store probe (default `15`, cap `300`). Must be `> 0`. HTTP transports only. |
 | `MEMORA_HEALTH_REFRESH_INTERVAL` | How often the server refreshes readiness on its own (default `15`, cap `3600`). `0` = poll-only. Without this, a proxy deployment has no loopback caller and the alert surface stays `unknown` while every database is fine. When periodic refresh is enabled, `interval + timeout` must be `< MEMORA_HEALTH_MAX_STALE`. HTTP transports only. |
@@ -379,7 +407,7 @@ an MCP `command` entry (that would spawn a stdio child that never speaks MCP
 on stdio). Credentials live on the server process.
 
 ```bash
-MEMORA_DATABASES='{"memora":"d1://<account-id>/<memora-db-id>","ob1":"d1://<account-id>/<ob1-db-id>"}' \
+MEMORA_DATABASES='{"memora":"d1://<account-id>/<memora-db-id>","alpha":"d1://<account-id>/<alpha-db-id>"}' \
 MEMORA_DEFAULT_DB=memora \
 CLOUDFLARE_API_TOKEN='<token>' \
 MEMORA_VECTOR_SCAN_PAGE_SIZE=100 \
@@ -391,7 +419,7 @@ memora-server --transport streamable-http --host 127.0.0.1 --port 8000 --no-grap
   "mcpServers": {
     "memora": {
       "type": "http",
-      "url": "http://127.0.0.1:8000/mcp/ob1"
+      "url": "http://127.0.0.1:8000/mcp/alpha"
     }
   }
 }
@@ -401,7 +429,7 @@ memora-server --transport streamable-http --host 127.0.0.1 --port 8000 --no-grap
 above): `scripts/memora-instance.sh up myinstance` starts the same HTTP server
 inside a container and puts `scripts/memora_proxy.py` on `127.0.0.1:<PORT>`
 (8910 for the `memora` instance). The workspace URL is then
-`http://127.0.0.1:8910/mcp/ob1`. See [Container Deployment](#container-deployment).
+`http://127.0.0.1:8910/mcp/alpha`. See [Container Deployment](#container-deployment).
 
 A registry may mix `d1://`, `s3://`, and local paths; `parse_backend_uri`
 dispatches on the scheme.
@@ -457,15 +485,15 @@ A registry instance needs the store in the path (`/mcp/<name>`); bare `/mcp` is
 the registry default:
 
 ```json
-{"mcpServers": {"memora": {"type": "http", "url": "http://127.0.0.1:8910/mcp/ob1"}}}
+{"mcpServers": {"memora": {"type": "http", "url": "http://127.0.0.1:8910/mcp/alpha"}}}
 ```
 
 **Credentials never enter the image, the instance file, or the workspace's HTTP
 config.** They are read at run time from a separate credential config
 (`$CRED_SOURCE` — itself a `.mcp.json` holding only the `mcpServers.memora.env`
 block) and injected with `-e`. If the instance file does not set
-`CRED_SOURCE`, the script uses `~/.config/memora/credentials.mcp.json` **when that
-file exists**, otherwise `~/repos/agentic-box/.mcp.json`. Pass through *every*
+`CRED_SOURCE`, the script uses `~/.config/memora/credentials.mcp.json` (and `up`
+refuses when it is missing; there is no other fallback). Pass through *every*
 variable that file defines, not a hand-picked few: a container started with only
 the embedding keys silently loses `memory_absorb`'s LLM consolidation instead of
 failing loudly.
@@ -643,8 +671,9 @@ When using Cloudflare D1 as your database, the graph visualization is hosted on 
 2. **Deploy Pages:**
    ```bash
    cd memora-graph
-   npx wrangler pages deploy ./public --project-name=memora-graph
+   npm run deploy
    ```
+   `npm run deploy` runs `scripts/d1_write_guard.py --scope all` first and refuses on any finding. Do not run `wrangler pages deploy` directly: it bypasses the guard (`docs/local-primary-implementation.md` §0 P6).
 
 3. **Configure bindings** in Cloudflare Dashboard:
    - Pages → memora-graph → Settings → Bindings

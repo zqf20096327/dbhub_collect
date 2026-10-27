@@ -1,12 +1,15 @@
 # anpr-pipeline — Automatic Number Plate Recognition
 
 [![PyPI](https://img.shields.io/pypi/v/anpr-pipeline.svg)](https://pypi.org/project/anpr-pipeline/)
+[![Docs](https://img.shields.io/badge/docs-anpr.mefby.com-38bdf8.svg)](https://anpr.mefby.com)
 [![CI](https://github.com/mftnakrsu/Automatic_Number_Plate_Recognition_YOLO_OCR/actions/workflows/ci.yml/badge.svg)](https://github.com/mftnakrsu/Automatic_Number_Plate_Recognition_YOLO_OCR/actions/workflows/ci.yml)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11%E2%80%933.13-blue.svg)](pyproject.toml)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%E2%80%933.14-blue.svg)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-End-to-end license plate recognition: **plate detection → tracking → OCR → Turkish format parsing → temporal voting → privacy-aware persistence**, served behind a FastAPI HTTP + WebSocket API.
+End-to-end license plate recognition: **plate detection → tracking → OCR → plate format parsing (Türkiye + six EU countries) → temporal voting → privacy-aware persistence**, served behind a FastAPI HTTP + WebSocket API.
+
+**Documentation:** <https://anpr.mefby.com> (English and Turkish).
 
 > Originally written in 2022 with a YOLOv5 fork + EasyOCR + Flask 1.1. Rewritten in 2026 on top of [`fast-alpr`](https://github.com/ankandrew/fast-alpr) + [`fast-plate-ocr`](https://github.com/ankandrew/fast-plate-ocr) + FastAPI + uv. The original code is preserved verbatim under [`legacy/`](legacy/) for reference.
 
@@ -21,6 +24,7 @@ pip install anpr-pipeline
 export ANPR_PLATE_HMAC_PEPPER="$(python -c 'import secrets; print(secrets.token_hex(32))')"
 anpr serve                          # FastAPI on http://localhost:8000
 anpr infer path/to/plate.jpg        # one-shot CLI
+anpr watch rtsp://camera/stream     # video file, RTSP stream or camera index
 ```
 
 ### Docker
@@ -55,11 +59,12 @@ uv run anpr infer tests/fixtures/sample_plate.jpg
 | **Detector** | [`fast-alpr`](https://github.com/ankandrew/fast-alpr)'s bundled YOLOv9-t 384 ONNX license-plate model (MIT, 65+ countries) |
 | **OCR** | [`fast-plate-ocr`](https://github.com/ankandrew/fast-plate-ocr) `cct-s-v2-global-model` (sub-millisecond GPU, per-character confidences) |
 | **Tracker** | Dependency-free greedy IoU tracker (swap to ByteTrack via the `Tracker` Protocol) |
-| **Turkish parser** | All 81 province codes, strict regex on `NN [A]{1-3} [N]{2-4}` |
+| **Plate formats** | Türkiye (all 81 province codes) by default; Germany, France, Italy, Spain, Belgium and Portugal via `ANPR_PLATE_FORMATS` |
 | **Confusion fix** | Position-aware OCR fixups (0/O, 1/I/L, 5/S, 8/B, 2/Z, 6/G, 0/D/Q) |
 | **Temporal voting** | Per-character-position majority vote over top-K confidence-weighted reads per track |
 | **Web** | FastAPI 0.115 + uvicorn, REST + WebSocket, dark-theme HTMX UI |
 | **Storage** | SQLModel + aiosqlite default; HMAC-SHA256 plate hashing (no raw plate text ever stored) |
+| **Watchlist** | Plates to look for, kept as hashes; signed webhook call when one is confirmed |
 | **Observability** | structlog + Prometheus `/metrics` + opt-in OpenTelemetry (`otel` extras) |
 | **Packaging** | `uv` + `pyproject.toml`, `ruff` (lint + format), `pyright`, `pytest` (60+ tests) |
 
@@ -75,6 +80,7 @@ uv run anpr infer tests/fixtures/sample_plate.jpg
 | `/metrics` | GET | Prometheus text-format metrics |
 | `/api/v1/infer` | POST (multipart) | single-image inference |
 | `/api/v1/detections` | GET | recent persisted reads (HMAC-hashed) |
+| `/api/v1/watchlist` | GET / POST / DELETE | plates that trigger the webhook (stored as hashes) |
 | `/ws/stream` | WS | binary JPEG frames in → JSON read events out |
 
 Full OpenAPI at <http://localhost:8000/docs>.
@@ -118,8 +124,11 @@ All settings live under the `ANPR_` env prefix and can be overridden via `.env`.
 | Env | Default | Notes |
 |---|---|---|
 | `ANPR_PLATE_HMAC_PEPPER` | _(generated; warns)_ | **Required in prod.** Generate with `anpr generate-pepper`. Must be ≥ 32 chars. |
+| `ANPR_API_KEY` | _(unset = open API)_ | When set, `/api/v1/*` and `/ws/stream` need it (`X-API-Key`, `Authorization: Bearer`, or WS subprotocol `anpr.key.<key>`). Generate with `anpr generate-api-key`. |
 | `ANPR_DATABASE_URL` | `sqlite+aiosqlite:///data/anpr.db` | Switch to `postgresql+asyncpg://...` for production. |
 | `ANPR_RETENTION_HOURS` | `720` (30d) | Background worker purges rows older than this. |
+| `ANPR_WEBHOOK_URL` | _(unset)_ | Watchlist matches are POSTed here; `ANPR_WEBHOOK_SECRET` signs them (`X-ANPR-Signature`). |
+| `ANPR_PLATE_FORMATS` | `tr` | Country plate layouts to accept, in order: `tr`, `de`, `fr`, `it`, `es`, `be`, `pt`. |
 | `ANPR_DETECT_EVERY_N_FRAMES` | `3` | Detect on every Nth frame; track between. |
 | `ANPR_MIN_TRACK_DWELL` | `5` | Frames a track must persist before the voter emits confirmed. |
 | `ANPR_DETECTOR_MODEL` | `yolo-v9-t-384-license-plate-end2end` | Pass a path to use a fine-tuned ONNX. |
@@ -168,12 +177,14 @@ src/anpr/
 │   ├── app.py
 │   ├── deps.py          lifespan-loaded singletons
 │   ├── middleware.py    request_id + Prometheus middleware
-│   └── routes/          health, infer, stream (WS), detections
+│   └── routes/          health, infer, stream (WS), detections, watchlist
 ├── detector/            Detector Protocol + fast-alpr adapter
 ├── ocr/                 PlateReader Protocol + fast-plate-ocr adapter
 ├── postprocess/         turkish, confusion, temporal, dewarp
 ├── storage/             SQLModel Detection + HMAC + repository + retention
 ├── tracker/             IoU greedy tracker
+├── watchlist.py         in-memory watchlist + match alerts
+├── webhook.py           signed, retried webhook calls
 ├── observability.py     Prometheus metrics + optional OTel
 ├── config.py            pydantic-settings
 ├── logging.py           structlog

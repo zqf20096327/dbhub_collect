@@ -35,14 +35,19 @@ Kondisi eksisting penyimpanan Google Drive:
 | **Pimpinan** | `kadis` / `sekretaris` | Kepala Dinas / Sekretaris | Pencarian cepat dokumen, monitoring volume arsip dinas, rekapitulasi agenda. |
 | **Bidang / Seksi** | `kabid_pora` / `subbag_keuangan` | Kepala Bidang / Kasubbag | Pencarian dan pratinjau arsip surat disposisi sesuai bidang tugasnya. |
 
-### Login Credentials
+### Identitas Akun Pengguna
 
-| Username | Password | Nama Tampilan Web | Role | Jabatan |
-|----------|----------|-------------------|------|---------|
-| `pengarsip` | `Dispora2026!` | Rana Nur Syifa | SUPER_ADMIN | Analis Anggaran - Ahli Pertama (Pemberi Tugas) |
-| `developer` | `Dispora2026!` | Muhammad Rizki Ramadhani | SUPER_ADMIN | Mahasiswa Magang TI UNISKA (Developer) |
+| Username | Hak Akses Kedinasan | Nama Aparatur | Tingkat Peran (RBAC) | Jabatan Struktural / Fungsional |
+|----------|---------------------|---------------|----------------------|---------------------------------|
+| `pengarsip` | Dikelola Staf TU | Rana Nur Syifa | SUPER_ADMIN | Analis Anggaran - Sekretariat (Pengelola Arsip Digital) |
+| `developer` | Khusus Pengembang | Muhammad Rizki Ramadhani | SUPER_ADMIN | Mahasiswa Magang TI UNISKA (Developer) |
+| `admin` | Administrator IT | Administrator IT Dispora | SUPER_ADMIN | Pranata Komputer Ahli Pertama |
+| `kadis` | Pimpinan Dinas | Pebriadin Hapiz, AP, M.Si | PIMPINAN | Kepala Dinas Kepemudaan dan Olahraga |
+| `tu_umum` | Petugas Kearsipan | Staf Agenda TU Dispora | PETUGAS_ARSIP | Pengadministrasi Persuratan |
+| `subbag_keuangan` | Verifikator Keuangan | Norika Fajriana, SH, MH | BIDANG | Kasubbag Perencanaan & Keuangan |
+| `kabid_pora` | Kepala Bidang Teknis | Budiono, S.Pd, M.AP | BIDANG | Kepala Bidang Pembudayaan Olahraga |
 
-Username login memakai identitas generik, sedangkan nama yang tampil di antarmuka web diambil dari kolom `nama_lengkap` (nama pegawai sebenarnya).
+Kata sandi setiap akun kedinasan disimpan dalam bentuk salted hash Bcrypt dan dirahasiakan untuk menjaga integritas data kearsipan daerah.
 
 ---
 

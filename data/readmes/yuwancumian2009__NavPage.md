@@ -23,7 +23,7 @@
 | HTTPS 证书 | ACME DNS-01，自动申请与续期，可签通配符证书 | 设置 → 网关 → 证书 |
 | DNS 凭据 | 阿里云 / DNSPod / Cloudflare / 自定义 webhook，证书和 DDNS 共用 | 设置 → 网关 → DNS 凭据 |
 | WAF | IP 白黑名单、扫描器 UA、敏感路径、请求方法、CC 限速，带拦截记录 | 设置 → 网关 → WAF |
-| DDNS | 多源探测公网 IP，变化时更新 A 记录 | 设置 → DDNS |
+| DDNS | 取 IP 三选一（在线探测 / 指定网卡 / 手动），变化时更新 A 记录 | 设置 → DDNS |
 | FRP 隧道 | 镜像内置 frpc，按卡片自动生成隧道；**可一键部署远端 frps 节点** | 设置 → 网关 → FRP / 远程节点 |
 | 卡片地址 | 自动 / 内网 / 反代 / FRP 四档，可逐条固定；域名按卡片名自动生成 | 首页右上角 / 编辑条目 |
 | 备份与恢复 | 一个 zip 带走卡片、分类、全部设置、图标库、壁纸、证书，新容器一键还原 | 设置 → 备份与恢复 |
@@ -173,6 +173,51 @@ sudo docker compose up -d
 | FRP 域名后缀 | 例如 `frp.example.com`。**卡片地址 = 容器名.这个后缀**，必须是你 DNS 里那个域名的子域 |
 | frps 端口 / Token | 端口保持 `7000`；Token 留空会自动生成（两端同步写） |
 | vhost 端口 | 留空即可（Caddy 形态默认 8080，纯 HTTP 形态默认 80） |
+| frpc 怎么连 | 默认「直连 frps 的 bindPort」；VPS 上已有 nginx / 1Panel 占着 443 时，选「走已有反代的 443（wss）」 |
+| frps 镜像（高级） | 留空用内置 `v0.61.1`；VPS 上已有更老的 frpc 客户端时换成对应的，例如 `fatedier/frps:v0.71.0` |
+
+> **VPS 的 80/443 已经被 nginx / 1Panel 占了？**（很常见，尤其你在这台机器上还跑了别的站）
+>
+> 接入形态选 **纯 HTTP**、vhost 端口填 **8080**、frpc 怎么连选 **走已有反代的 443（wss）**，
+> 让面板只装 frps（`bindAddr = 127.0.0.1`，7000/8080 都只听本机），TLS 仍由你现有的反代终结。
+> 部署完在你的 nginx 里加两条即可（`<后缀>` = FRP 域名后缀，`<你的 frp 域名>` 随意，例如 `frp.example.com`）：
+>
+> ```nginx
+> # 1) frpc 的 wss 控制连接：精确站点 → frps 的 bindPort
+> server {
+>     listen 443 ssl;
+>     http2 on;
+>     server_name frp.example.com;
+>     ssl_certificate     /path/fullchain.pem;
+>     ssl_certificate_key /path/privkey.pem;
+>     location / {
+>         proxy_pass http://127.0.0.1:7000;
+>         proxy_http_version 1.1;
+>         proxy_set_header Upgrade $http_upgrade;
+>         proxy_set_header Connection "upgrade";
+>         proxy_set_header Host $host;
+>         proxy_read_timeout 3600s;
+>     }
+> }
+>
+> # 2) 卡片站点：通配 → frps 的 vhost 端口
+> server {
+>     listen 443 ssl;
+>     http2 on;
+>     server_name ~^(?<sub>.+)\.example\.com$;
+>     ssl_certificate     /path/wildcard.fullchain.pem;
+>     ssl_certificate_key /path/wildcard.privkey.pem;
+>     location / {
+>         proxy_pass http://127.0.0.1:8080;
+>         proxy_set_header Host $host;
+>         proxy_set_header X-Forwarded-Proto $scheme;
+>         proxy_read_timeout 3600s;
+>         client_max_body_size 0;
+>     }
+> }
+> ```
+>
+> 之后「用这个节点」会自动写回 `wss:443` + 卡片端口 443，卡片地址仍是 `https://容器名.后缀`，不带 `:8080`。
 
 先点「测试连接」（验证 SSH、Docker、端口占用），通过后点「**部署 / 更新**」。
 
@@ -288,7 +333,9 @@ DNS 通配记录               ✓ *.frp.example.com → VPS IP
 | 网关 → WAF | 开关、模式（拦截/观察）、IP 黑白名单、UA、路径、方法、CC 限速 |
 | 网关 → FRP | 服务器地址/端口、传输协议、Token、域名后缀、代理名前缀 |
 | 网关 → 远程节点 | VPS SSH、接入形态、frps 端口、Token、vhost 端口 → 「部署 / 更新」「用这个节点」 |
-| DDNS | 域名、探测源、更新间隔（A 记录指向家里当前公网 IP） |
+| DDNS | 域名、IP 获取方式（在线探测 / **指定网卡** / 手动）、更新间隔（A 记录指向家里当前公网 IP） |
+
+> 机器走了代理/加速器时，在线探测拿到的是**代理出口 IP**，写到域名上打不开 —— 选「指定网卡」直接读本机网口地址（Lucky 的接口方式）；也可以在「手动」里写死。网卡下拉会标出默认路由那块，点「试一下」能先看取到什么再保存。
 | 外观 | 站点标题、壁纸（本地/URL）、大卡小卡、每行分组数 |
 | 图标 | 上传 / 在线库 / 图标源管理，卡片图标存本地文件名 |
 | 备份与恢复 | 一键导出/导入全部配置（含图标库、壁纸、证书，不含容器和数据卷） |

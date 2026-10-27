@@ -27,7 +27,7 @@ after you approve them over OAuth.
 - **Bring your pages**: import a Notion *Markdown & CSV* export, an Obsidian vault, a Confluence space, Evernote notebooks,
   OneNote pages and sections, a Trello board, an Asana project, a Monday.com board, Markdown files, TextBundles, Word
   documents, Google documents, PDFs, web pages saved as one file, a folder or CSV, and keep a database of Jira issues,
-  GitHub pull requests, a calendar's events or a PostgreSQL table in sync.
+  GitHub pull requests, a calendar's events, a PostgreSQL table or a Google Sheets sheet in sync.
 - **Ready for a team**: teamspaces, page permissions, guests, single sign-on (OIDC, SAML), SCIM,
   two-step verification, passkeys and an audit log.
 - **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL,
@@ -82,7 +82,7 @@ file named `.env` next to `docker-compose.yml` (see
 first), followed by `docker compose up -d`. A `BETTER_AUTH_SECRET` or `POSTGRES_PASSWORD` set there
 takes precedence over the generated one.
 
-- **Pin a version:** set `LEAFDESK_VERSION=0.6.5` in `.env`. The default is `latest`.
+- **Pin a version:** set `LEAFDESK_VERSION=0.6.6` in `.env`. The default is `latest`.
 - **Upgrade:** run `docker compose pull && docker compose up -d`. Read the *Upgrading* notes of
   each release in [CHANGELOG.md](CHANGELOG.md) first. Some migrations rewrite a large table, and
   pages can't be read or written until they finish; some releases have every page embedded again

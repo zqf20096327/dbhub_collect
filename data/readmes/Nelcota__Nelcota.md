@@ -124,9 +124,9 @@ const { data: notes } = await nelcota.from('notes').select('id,body');
 
 | Platform | Package | Guide |
 | --- | --- | --- |
-| JavaScript / TypeScript | `npm install @nelcota/client` | [TypeScript SDK](sdk/typescript/README.md) |
+| JavaScript / TypeScript | `bun add @nelcota/client` (or `npm install`) | [TypeScript SDK](sdk/typescript/README.md) |
 | Rust / Tokio | `cargo add nelcota-client` | [Rust SDK](sdk/rust/README.md) |
-| Next.js App Router | `npm install @nelcota/nextjs @nelcota/client pg` | [Next.js integration](sdk/nextjs/README.md) |
+| Next.js App Router | `bun add @nelcota/nextjs @nelcota/client pg` (or `npm install`) | [Next.js integration](sdk/nextjs/README.md) |
 
 Generate types from your schema with `nelcota types -o src/database.ts`
 (TypeScript) or `nelcota types --lang rust -o src/database.rs` (Rust). Quickstarts
@@ -139,15 +139,28 @@ You need a Linux server (Debian/Ubuntu or Fedora/RHEL) with root access, ports
 80 and 443 open, and a DNS A record pointing at it. Then run:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/Nelcota/Nelcota/main/scripts/install.sh | sudo NELCOTA_VERSION=0.5.4 sh -s -- api.yourdomain.com
+curl -fsSL https://raw.githubusercontent.com/Nelcota/Nelcota/main/scripts/install.sh | sudo NELCOTA_VERSION=0.5.6 sh -s -- api.yourdomain.com
 ```
 
 The installer sets up cron, Docker and the CLI, creates the host in
 `/opt/nelcota` and starts your project behind Caddy with automatic HTTPS.
-**Save the panel password it prints; it is not shown again.** Add `--firewall`
-to configure ufw. Run `nelcota -C /opt/nelcota doctor` to check DNS, ports, backups and health,
+**Save the panel password it prints; it is not shown again.** It also turns the
+firewall on (SSH, 80 and 443; `--no-firewall` leaves it off), enables automatic
+security updates and adds swap below 2 GB of RAM; `--yes` skips the setup
+questions. Run `nelcota -C /opt/nelcota doctor` to check DNS, ports, backups and health,
 and read the [deployment guide](docs/deploy.md) and [backups](docs/backup.md)
 before going to production.
+
+For an existing host, the installer can update the CLI and projects together,
+with a preview and one confirmation:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/Nelcota/Nelcota/main/scripts/install.sh | sudo sh -s -- --update
+```
+
+CLI releases after 0.5.6 also provide `sudo nelcota update`. See
+[updating an existing host](docs/update.md) for previews, project selection and
+hosts managed by the update controller.
 
 ## The admin panel
 
@@ -177,9 +190,9 @@ and [host management](docs/host-management.md).
 
 ## Status
 
-This source targets server **0.5.4**. Nelcota is still `0.x`: read the
+This source targets server **0.5.6**. Nelcota is still `0.x`: read the
 [upgrade notes](docs/releases/README.md) and test backup and restore before
-upgrading production. See what changed in the [0.5.4 release notes](docs/releases/0.5.4.en.md);
+upgrading production. See what changed in the [0.5.6 release notes](docs/releases/0.5.6.en.md);
 newer changes are listed under [Unreleased](CHANGELOG.md#unreleased) and in the
 [current status](docs/current-status.md).
 

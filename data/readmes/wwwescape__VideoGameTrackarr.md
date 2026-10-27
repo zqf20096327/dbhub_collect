@@ -32,8 +32,9 @@
 - **IGDB-powered catalog** — search IGDB, preview a game before adding it, or bulk-add several
   at once. Genres, companies, platforms, media, release dates, store links, collections, series,
   and addons (DLC, expansions, and packs) all come along.
-- **Personal tracking** — progress and play sessions per platform you own a game on, a 0–10
-  rating with review, notes, and colored tags (with a Tag Manager and bulk tagging).
+- **Personal tracking** — progress, play sessions and a review per platform you own a game on,
+  your own 1–10 star rating per game (shown beside IGDB's member and critic ratings), notes, and
+  colored tags (with a Tag Manager and bulk tagging).
 - **Views, filters & sort** — Covers, Table, or Overview views with an adjustable card size;
   filter by platform, format, storefront, tag, ownership, play status, game type, source,
   steelbook, collection, or series (each with an Exclude option), and sort by name or release
@@ -57,8 +58,9 @@
 - **Share links** — unlisted, read-only links to your Games or Hardware collection.
 - **Jobs** — scheduled catalog resyncs, Steam import, sale refreshes, and event syncs, with live
   progress.
-- **Data portability** — CSV export, and JSON or full `.zip` backups (including ROMs, saves,
-  and BIOS files) with an automatic safety snapshot before every restore.
+- **Backup & restore** — one JSON backup of your library, hardware, target prices and settings,
+  or a `.zip` that also carries your pick of ROMs and saves, BIOS files and uploaded images,
+  with an automatic safety snapshot before every restore.
 - **PWA** — installable, works offline for anything you've already viewed, and syncs offline
   edits when you reconnect.
 - **Design** — light, dark, and high-contrast modes with your choice of accent color (Material 3
