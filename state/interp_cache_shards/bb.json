@@ -10458,5 +10458,74 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "47c6ebf4e9eb": {
+  "identity": {
+   "one_liner": "Go 多租户 SaaS 后端启动模板，基于 PostgreSQL+sqlc",
+   "review": "Vergo 是一个用 Go 编写的多租户 SaaS 后端脚手架，提供 JWT 认证、组织/成员 RBAC、Stripe 计费、webhook 分发、API Key、S3 存储与 OpenTelemetry 可观测性等模块，数据层使用 PostgreSQL 16 加 sqlc 生成类型安全查询，含 11 个迁移。适合开发者 fork 后叠加业务逻辑快速搭建 B2B SaaS；MIT 许可，支持 Docker 与 Dev Container 运行。",
+   "highlights": [
+    "提供多租户组织、成员 RBAC 与租户中间件（X-Org-ID）",
+    "数据层使用 PostgreSQL + sqlc 生成类型安全查询，含 11 个迁移",
+    "集成 Stripe 计费、HMAC 签名 webhook、S3 兼容存储与 OpenTelemetry 观测"
+   ],
+   "use_cases": [
+    "fork 后构建多租户 B2B SaaS 产品",
+    "需要 API Key、计费与 webhook 的开发者平台后端",
+    "学习 Go SaaS 后端架构的参考模板"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**`database/sql`** over pgx pool|Simpler interface, works with sqlc out of the box, compatible with all Postgres tooling| ／ |**Data Layer**|PostgreSQL + sqlc type-safe generated queries across 11 migrations| ／ Includes: Go 1.25, PostgreSQL 16, migrate, golangci-lint, swag, air, sqlfluff.",
+     "lines": [
+      42,
+      58,
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其用 PostgreSQL 存储数据（Data Layer: PostgreSQL + sqlc），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Vergo is a complete SaaS backend that handles the infrastructure every B2B application needs — authentication, organizations, billing, webhooks, storage, and observability — so you can focus on your product's domain logic. ／ |**Data Layer**|PostgreSQL + sqlc type-safe generated queries across 11 migrations| ／ |Database|PostgreSQL 16|",
+   "evidence_lines": [
+    11,
+    58,
+    188
+   ]
+  },
+  "fn": "Ulpio/vergo",
+  "sha": "47c6ebf4e9eb",
+  "source": "readme",
+  "generated_at": "2026-10-27",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
