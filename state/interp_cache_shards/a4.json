@@ -9967,5 +9967,95 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "692fbb03d2ce": {
+  "identity": {
+   "one_liner": "分布式 SQL 读作业队列服务器，异步执行查询并写入结果库",
+   "review": "DungBeetle 是一个单二进制的分布式作业服务器，用于将应用中重型的 SQL 查询作业（如报表）排队异步执行，结果写入独立的结果缓存数据库供后续读取，支持 MySQL、PostgreSQL、ClickHouse 作为源库，结果后端支持 MySQL/Postgres，作业队列基于 Redis、AMQP 等消息后端。适合需要把报表查询与在线应用解耦、避免源库被并发查询压垮的应用开发者。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、ClickHouse 作为源数据库，MySQL/PostgreSQL 作为结果缓存库",
+    "从 .sql 文件读取查询并注册为任务，通过 HTTP API 管理作业（入队、状态查询、取消、分组）",
+    "暴露 Prometheus 指标，支持多进程多线程分布式队列及重试、ETA 调度"
+   ],
+   "use_cases": [
+    "应用中用户侧报表生成，异步排队避免源库过载",
+    "将报表/分析查询层从应用中分离",
+    "对已生成结果做二次查询的场景，读取快速的结果缓存库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Supports MySQL, PostgreSQL, ClickHouse as source databases. ／ - Supports MySQL and PostgreSQL as result / cache databases for job results.",
+     "lines": [
+      9,
+      10
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Supports MySQL, PostgreSQL, ClickHouse as source databases. ／ - Supports MySQL and PostgreSQL as result / cache databases for job results.",
+     "lines": [
+      9,
+      10
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- Supports MySQL, PostgreSQL, ClickHouse as source databases.",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为队列执行 SQL 读作业的服务器，明确适配 MySQL/PostgreSQL/ClickHouse 作为源库与结果库，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "DungBeetle is a lightweight, single binary distributed job server designed for queuing and asynchronously executing large numbers of SQL read jobs (eg: reports) against SQL databases. When the read jobs are executed, the results are written to separate ephemeral results databases (where the results of every job is its own dedicated table), enabling faster retrieval. ／ - Supports MySQL, PostgreSQL, ClickHouse as source databases. ／ - Supports MySQL and PostgreSQL as result / cache databases for job results.",
+   "evidence_lines": [
+    3,
+    9,
+    10
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "zerodha/dungbeetle",
+  "sha": "692fbb03d2ce",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
