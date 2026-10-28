@@ -11542,5 +11542,76 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7b721712cce0": {
+  "identity": {
+   "one_liner": "Claude Code 的 Spring Boot 插件，以技能/代理模板生成应用代码",
+   "review": "这是一个面向 Claude Code 的 Spring Boot 插件，内置多个 agent 和 skill，用于按约定生成 REST API、JPA、Flyway 迁移、测试及 K8s 部署相关代码。面向使用 Claude Code 的 Java/Spring Boot 开发者，通过 claude plugin install 安装；生成的应用在涉及关系型数据库时包含 Flyway 迁移与 Testcontainers 测试，无持久化需求则跳过 Flyway 配置。",
+   "highlights": [
+    "提供 spring-boot-engineer、code-reviewer、kubernetes-specialist 等 6 个 agent 及 conventions、spring-boot、testing-patterns 等 8 个 skill",
+    "生成的应用对支持 Flyway 的关系型数据库默认由 Flyway 管理 schema（ddl-auto: validate），并包含 Testcontainers 迁移验证测试",
+    "支持从 Anthropic marketplace 或直接从仓库安装"
+   ],
+   "use_cases": [
+    "用 Claude Code 生成遵循既定约定的 Spring Boot 4.x / Java 21+ REST API 项目",
+    "为生成的应用配置 Flyway 数据库迁移与 Testcontainers 集成测试",
+    "生成 Docker、Kubernetes 及 CI/CD 相关配置"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "> \"Build a REST API for managing orders with PostgreSQL\" ／ For a relational database like PostgreSQL, the generated app includes Flyway migrations in `src/main/resources/db/migration`, `ddl-auto: validate`, and Testcontainers tests that verify all migrations were applied. APIs without persistence or with NoSQL stores ",
+     "lines": [
+      91,
+      94
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 未表明该插件本身为数据库生态服务或使用数据库存数据，仅生成含 Flyway 迁移的应用代码",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A Claude Code plugin with production-ready skills and agents for building Spring Boot 4.x / Java 21+ applications. Install the plugin and start generating your app — the skills and agents guide Claude to follow best practices for REST APIs, JPA, Flyway database migrations, security, testing, cloud-native deployment, and Kubernetes. ／ - **Flyway** owns the schema (`ddl-auto: validate`) when the API persists to a Flyway-supported relational database; skipped for APIs without persistence, NoSQL-only APIs, or projects already using Liquibase ／ For a relational database like PostgreSQL, the generated app includes Flyway migrations in `src/main/resources/db/migration`, `ddl-auto: validate`, and Testcontainers tests that verify all migrations were applied. APIs without persistence or with NoSQL stores get no Flyway configuration.",
+   "evidence_lines": [
+    3,
+    66,
+    94
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "piomin/claude-ai-spring-boot",
+  "sha": "7b721712cce0",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

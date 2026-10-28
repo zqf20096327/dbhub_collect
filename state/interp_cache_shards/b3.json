@@ -11185,5 +11185,83 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a86fcab6ef99": {
+  "identity": {
+   "one_liner": "单 Go 二进制的自托管支付编排网关，统一 API、账本与 webhook",
+   "review": "Paymux 将 Razorpay、Stripe、Cashfree、PayU、Zoho Payments、Whop 等支付网关整合到一个 Go 二进制中，提供统一 API、账本、webhook 端点、GST 发票与订阅功能，内置智能路由与模拟网关，面向印度市场的小型团队；数据存于 SQLite（默认）或 PostgreSQL，当前为 beta 状态。",
+   "highlights": [
+    "在一个 Go 二进制中聚合多个支付网关，提供统一 API、账本和 webhook 端点，支持自定义 Go 包或 HTTP 服务连接器",
+    "内置 GST 发票、e-invoice JSON、签名 PDF 与 UPI AutoPay 等印度市场合规功能",
+    "使用 SQLite 或 PostgreSQL 存储，提供预编译二进制安装脚本、cosign 签名验证与源码构建方式"
+   ],
+   "use_cases": [
+    "小型团队在多个产品间统一接入多个支付网关并集中管理支付、退款与争议",
+    "需要自动开具印度 GST 发票与电子发票的场景",
+    "通过路由规则按币种、应用或金额选择支付网关的场景"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "SQLite or PostgreSQL ／ - 📦 **One binary, no cluster.** SQLite out of the box, PostgreSQL when you grow. Sized for small teams: the load test holds 20 payment requests a second (docs/performance.md). No Kubernetes fleet required.",
+     "lines": [
+      12,
+      55
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite or PostgreSQL ／ - 📦 **One binary, no cluster.** SQLite out of the box, PostgreSQL when you grow. Sized for small teams: the load test holds 20 payment requests a second (docs/performance.md). No Kubernetes fleet required.",
+     "lines": [
+      12,
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite/PostgreSQL 存储自身账本数据，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLite or PostgreSQL ／ Paymux sits between your apps and your gateways and does that work once. ／ - 📦 **One binary, no cluster.** SQLite out of the box, PostgreSQL when you grow. Sized for small teams: the load test holds 20 payment requests a second (docs/performance.md). No Kubernetes fleet required.",
+   "evidence_lines": [
+    12,
+    27,
+    55
+   ]
+  },
+  "fn": "velixio/paymux",
+  "sha": "a86fcab6ef99",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

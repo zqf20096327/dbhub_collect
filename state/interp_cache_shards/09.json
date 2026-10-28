@@ -11066,5 +11066,238 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "84459d1dca6b": {
+  "identity": {
+   "one_liner": "自托管团队密码管理器，PHP/MySQL 应用，支持文件夹级权限与 AES-256-GCM 加密",
+   "review": "Teampass 是一个自托管的团队凭证保险库应用，用于集中存储密码等敏感凭证。它提供文件夹与角色访问控制、基于 PBKDF2 派生密钥的 AES-256-GCM 加密、LDAP/AD 与 OAuth2 SSO 登录、审计记录、REST API 和浏览器扩展。面向个人、中小团队及有合规需求的组织，要求 PHP 8.2+ 与 MySQL/MariaDB，可经 Docker 或裸机部署，采用 GPL-3.0 许可。",
+   "highlights": [
+    "使用 AES-256-GCM 加密凭证，密钥经 PBKDF2-SHA256（600000 次迭代）从口令派生，每位用户持有 RSA 封装的密钥副本",
+    "提供文件夹级访问控制、角色权限、审计与合规报告、LDAP/AD 与 OAuth2 SSO、TOTP/Duo/YubiKey 多因素认证",
+    "提供 REST API（JWT 认证、OpenAPI 3.1 规范）、浏览器扩展、定时加密数据库备份以及从 Bitwarden/LastPass/1Password/KeePassXC 导入"
+   ],
+   "use_cases": [
+    "团队或中小企业的共享凭证集中管理与按角色授权访问",
+    "有审计与合规需求的环境下提供访问记录与证据导出",
+    "通过浏览器扩展与 REST API 实现日常自动填充及自动化集成"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Teampass is an open-source credential vault you run yourself.** No account to create, no company behind the curtain holding your data — just a PHP/MySQL application on your own server, with folder-level access control, per-user encryption keys and a full aud ／ |**Database**|MySQL 5.7+ or MariaDB 10.7+| ／ |**Required extensions**|`openssl` `mysqli` `mbstring` `bcmath` `iconv` `xml` `gd` `curl` `gmp` — plus `ldap` for LDAP/AD|",
+     "lines": [
+      30,
+      190,
+      192
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**Database**|MySQL 5.7+ or MariaDB 10.7+|",
+     "lines": [
+      190
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明它是运行在用户自有服务器上的 PHP/MySQL 应用，使用 MySQL/MariaDB 存储数据，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0，另有商业 Pro 浏览器扩展与付费服务（L316-L321）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Teampass is an open-source credential vault you run yourself.** No account to create, no company behind the curtain holding your data — just a PHP/MySQL application on your own server, with folder-level access control, per-user encryption keys and a full audit trail. ／ |**Database**|MySQL 5.7+ or MariaDB 10.7+| ／ ### 🐳 Docker",
+   "evidence_lines": [
+    30,
+    190,
+    197
+   ]
+  },
+  "fn": "nilsteampassnet/TeamPass",
+  "sha": "84459d1dca6b",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "87b41dab1759": {
+  "identity": {
+   "one_liner": "代码优先数据栈的反向 ETL 工具，用 YAML 声明仓库到业务工具的数据同步",
+   "review": "drt 是一个反向 ETL 工具，把数据仓库中的数据同步回 Slack、HubSpot、Google Sheets 等业务工具，同步配置以 YAML 形式存放在用户仓库中。提供 dlt 加载、dbt 转换之后的激活环节，核心机制是 drt plan 只读预览变更、drt apply 经确认后写入，并带删除比例守卫。面向熟悉 dbt 工作流的数据工程师，支持 CLI、CI 集成和 MCP 服务器；plan 功能要求目标可读回，目前限于 SQL 数据库和仓库。",
+   "highlights": [
+    "提供 drt plan / drt apply 的先审后写流程，包含 max_delete_pct 等删除守卫",
+    "内置 MCP 服务器与 Claude Code 技能，支持 AI 工具生成和运行同步",
+    "提供多种数据库和数据仓库连接器，通过 pip extras 安装，配置以 YAML 版本化于 Git"
+   ],
+   "use_cases": [
+    "把数仓数据同步回 CRM、Slack、Google Sheets 等业务系统",
+    "在 GitHub Actions、Dagster、Airflow 等 CI/编排环境中以代码方式运行数据激活",
+    "从 dbt manifest 或 Ossie 语义模型脚手架生成同步配置"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|✅ v0.1|`pip install drt-core[postgres]`|Password (env var)|",
+     "lines": [
+      240
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|✅ v0.5|`pip install drt-core[mysql]`|Password (env var)|",
+     "lines": [
+      245
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|✅ v0.4.2|(core)|File path|",
+     "lines": [
+      242
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|✅ v0.6|`pip install drt-core[sqlserver]`|Password (env var)|",
+     "lines": [
+      249
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|✅ v0.4.3|`pip install drt-core[clickhouse]`|Password (env var)|",
+     "lines": [
+      244
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "drt 为数据仓库到业务工具的数据同步提供服务，是数据栈中的工具组件而非使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0，open-core（OPEN_CORE.md 说明开放核心边界）",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dlt loads data in, dbt transforms it, and **drt** activates it back out — reverse ETL from your warehouse to the tools your team works in, as YAML in your own repo. No dashboard to babysit, no audience builder duplicating what dbt already does, no hosted runtime billing you per row. Your data goes straight from your warehouse to the destination — never through a drt-hosted intermediary. ／ |Connector|Status|Install|Auth| ／ **Free and open source.** Every connector, the CLI, the MCP server, and the sync engine — Apache 2.0, self-hosted, no lock-in.",
+   "evidence_lines": [
+    7,
+    236,
+    42
+   ]
+  },
+  "fn": "drt-hub/drt",
+  "sha": "87b41dab1759",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "21d7507c25af": {
+  "identity": {
+   "one_liner": "基于 TI DM8168 DSP 的 HRTF 空间音效实时处理系统",
+   "review": "该仓库实现在 TI DM8168 平台上，通过 FFT 快速卷积（Overlap-Save 方法）把单声道 PCM 音频实时转换为带 HRTF 空间效果的双声道音频，HRIR 数据来自 SOFA 格式并预生成为二进制表。它面向使用 DM8168 EVM 做嵌入式音频信号处理的开发者，需在 TI Code Generation Tools、SysLink SDK 环境下编译，硬件依赖 DM8168 EVM。",
+   "highlights": [
+    "使用 Radix-2 DIT FFT（1024 点）与 Overlap-Save 分块频域卷积处理音频",
+    "读取 SOFA 格式 HRTF 数据并预计算 HRIR 二进制表，根据方位角轨迹动态切换 HRIR",
+    "提供 PC 端 FFT 回归测试，覆盖 FFT/IFFT 往返一致性与卷积校验"
+   ],
+   "use_cases": [
+    "在 DM8168 EVM 上进行嵌入式空间音效处理",
+    "HRTF/HRIR 卷积算法的学习与验证",
+    "单声道音频转双声道空间音频的原型开发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是音频信号处理系统，未涉及数据库相关功能或适配，与数据库生态无关",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "基于 TI DM8168 DSP 的 HRTF（头部相关传递函数）空间音效处理系统。通过 FFT 快速卷积将单声道 PCM 音频实时转换为带有 HRTF 空间效果的双声道音频。 ／ - 读取单声道 16-bit 48kHz PCM 音频（`input_audio.pcm`）",
+   "evidence_lines": [
+    3,
+    7
+   ]
+  },
+  "fn": "abyss-explorer/dm8168-hrtf-dsp",
+  "sha": "21d7507c25af",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

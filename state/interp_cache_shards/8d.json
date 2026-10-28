@@ -10310,5 +10310,60 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "75decf295954": {
+  "identity": {
+   "one_liner": "把个人登录态转成本机 OpenAI 兼容 API 的多账号路由网关",
+   "review": "CLI2API 用 Go 网关将 Qoder、WorkBuddy、Trae 等 CLI 服务的登录账号包装成 OpenAI 兼容接口，提供多账号调度（轮询、加权、FEFO）与 Web 控制台管理账号、密钥和日志。面向想以 API 方式复用自有账号的个人用户；默认仅监听 127.0.0.1，兼容接口为无状态适配，图片等能力取决于上游。",
+   "highlights": [
+    "提供 Chat Completions、Responses、Anthropic Messages 兼容接口，支持流式回复与函数工具调用",
+    "支持轮询、加权轮询、顺序填满及同供应商 FEFO 多账号调度，含会话粘性与故障切换",
+    "通过 Web 控制台管理账号、模型、客户端密钥、代理设置与请求日志，提供 Docker 部署"
+   ],
+   "use_cases": [
+    "在支持 OpenAI 兼容 API 的客户端中复用自有上游账号",
+    "对多个同供应商账号做统一调度与额度管理",
+    "本机自托管运行，不将密钥与账号暴露到公网"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "项目本身不是数据库应用，而是为 API 接入提供代理网关的组件，SQLite 仅作为其持久化存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "用 Docker 部署，在 Web 控制台管理账号，再通过兼容 API 接入客户端。 ／ - **兼容接口**：Chat Completions、Responses、Anthropic Messages 和模型列表，支持流式回复与函数工具调用。 ／ Go 网关统一鉴权、调度和记录请求。Qoder 每个账号使用独立 Node 进程与 HOME；WorkBuddy、Trae、Devin、Command Code 使用 Go 进程内适配器，不为每次请求启动完整 CLI。",
+   "evidence_lines": [
+    7,
+    22,
+    60
+   ]
+  },
+  "fn": "caigee-cmd/cli2api",
+  "sha": "75decf295954",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

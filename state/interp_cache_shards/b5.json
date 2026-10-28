@@ -11212,5 +11212,156 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "092710136e96": {
+  "identity": {
+   "one_liner": "NetSuite ERP 的 MCP 客户端，提供聊天界面连接 AI 与业务数据",
+   "review": "该项目为 NetSuite ERP 提供一个 MCP 客户端和聊天界面，可运行 SuiteQL、记录、报表等 MCP 标准工具，并管理角色、技能与提示词库，也可作为 MCP 服务器供外部 agent 使用。面向使用 NetSuite 并希望接入自有 LLM（Gemini/Claude/OpenAI）的团队，需自托管并依赖 PostgreSQL、Redis 与 NetSuite AI Connector 服务。",
+   "highlights": [
+    "支持连接 Google Gemini、Anthropic Claude、OpenAI 或 OpenAI 兼容端点的自带密钥模式",
+    "可作为 MCP 服务器，通过 OAuth 2.1 或 Bearer 认证供外部 AI agent 访问",
+    "内置技能（Skills）系统，支持 Oracle、社区、GitHub 连接与自定义 SKILL.md 四种来源"
+   ],
+   "use_cases": [
+    "通过聊天界面执行 NetSuite 的 SuiteQL 查询、记录操作与报表",
+    "自托管部署为企业内部的 NetSuite AI 助手",
+    "为外部 AI agent 提供 NetSuite 工作区的 MCP 服务端接入"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Built-in personas ship in `.personas/*.md` in this repo. Custom personas are stored per user in Postgres. ／ - `.env.local` — app / migrate vars (`POSTGRES_URL`, `REDIS_URL`, `AUTH_SECRET`, `OSMCP_INSTALL_MODE`, etc.)",
+     "lines": [
+      38,
+      181
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Oracle’s SuiteSkills** — the five business skills Oracle announced on 2026-10-26, holding 48 runbooks, sync with the rest of Oracle’s skills. Switch one on under **Skills → Oracle** ／ - **Oracle skills sync whole** — every reference file, and no 32,000-character cut on `SKILL.md` ／ |**Oracle**|Disabled|Shared pack; Auto / Slash command / Disabled. Core AI Connector instructions stay Auto.|",
+     "lines": [
+      19,
+      20,
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用 PostgreSQL、Redis 存储数据并连接 NetSuite ERP 的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Source-available，商业权利归 Unstacked Apps, LLC",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Source-available **NetSuite MCP client** — chat UI for NetSuite’s AI Connector Service, MCP Standard Tools, Companion prompt library, and SuiteCloud Agent Skills. ／ Built-in personas ship in `.personas/*.md` in this repo. Custom personas are stored per user in Postgres. ／  - `.env.local` — app / migrate vars (`POSTGRES_URL`, `REDIS_URL`, `AUTH_SECRET`, `OSMCP_INSTALL_MODE`, etc.)",
+   "evidence_lines": [
+    7,
+    38,
+    181
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "unstackedapps/opensuitemcp",
+  "sha": "092710136e96",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cade961ba22b": {
+  "identity": {
+   "one_liner": "本地AI会话归档系统，将多工具对话历史统一为可搜索可审计的档案",
+   "review": "Polylogue 用 Rust 实现，把 Claude Code、Codex、Gemini CLI、ChatGPT 导出等多种 AI 会话记录收集到本地单一档案中，提供 CLI 查询、度量、标注、全文与语义检索，并通过 MCP、HTTP API 和 Web 阅读器对外服务。档案以 SQLite 数据库加 blob 目录存储，由常驻守护进程负责唯一写入。面向需要统一管理、检索和审计自己 AI 会话历史的开发者与代理工具使用者。",
+   "highlights": [
+    "从多个 AI 工具的本地文件和导出 ZIP 收集会话，保留每个输入的每个版本",
+    "支持 CLI 查询语言、只读 SQL 视图、向量语义检索，并提供 MCP、HTTP API 与 Web 阅读器接口",
+    "提供 usage/cost/quota/drift 等度量命令与会话简报、接管等代理协作功能"
+   ],
+   "use_cases": [
+    "将分散在不同 AI 工具中的会话历史统一归档与全文检索",
+    "统计 AI 使用量、令牌与费用、订阅配额等度量分析",
+    "为 AI 代理提供会话简报与历史工作检索的上下文（经 MCP）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- `crates/store`: every SQLite connection and write, and the blob store.",
+     "lines": [
+      227
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明档案由 archive.db、index.db、embeddings.db 等 SQLite 数据库存放，属于使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The archive is `$XDG_DATA_HOME/polylogue` (`~/.local/share/polylogue`). It ／ changes), `embeddings.db` and `blobs/`.",
+   "evidence_lines": [
+    42,
+    46
+   ]
+  },
+  "fn": "Sinity/polylogue",
+  "sha": "cade961ba22b",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

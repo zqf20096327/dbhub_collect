@@ -11167,5 +11167,278 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4904acb479e1": {
+  "identity": {
+   "one_liner": "git 托管的 AI 编码代理故障记忆库，通过 MCP 提供检索",
+   "review": "MisakaNet 是面向 AI 编码代理的故障修复知识库：每条经验是仓库中的 Markdown 文件，按 E0-E4 证据等级分级，本地用 Python 标准库 BM25 检索，托管端点可选语义回退。通过 MCP server、WebMCP、各编辑器插件等方式供代理查询和提交，适合希望在多代理/多机环境复用已验证排障经验的团队。",
+   "highlights": [
+    "提供 MCP server（8 个工具）及 WebMCP、llms.txt、A2A discovery 等 agent 原生接口",
+    "经验条目以 Markdown 文件存储并按 E0-E4 证据等级分级，检索以 BM25 为主，托管端点含可关闭的语义回退",
+    "支持通过 pip 安装库与 stdio server，并提供覆盖 Claude Code、Codex 等多种客户端的安装器"
+   ],
+   "use_cases": [
+    "AI 编码代理遇到故障时检索已验证的修复经验",
+    "提交新的故障报告（intake）充实故障知识库",
+    "复用故障语料做检索基准评测"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未表明其为特定数据库生态服务的工具，也未明确声明以何种数据库存储语料",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> MisakaNet is that place: a git-backed **failure memory**. Every lesson is a Markdown file in this ／ Agent-native interfaces: MCP server (8 tools), WebMCP, `llms.txt`, ／ Every lesson is a Markdown file: reviewed like code, graded by evidence, retrieved with BM25 over the",
+   "evidence_lines": [
+    13,
+    17,
+    88
+   ]
+  },
+  "fn": "Ikalus1988/MisakaNet",
+  "sha": "4904acb479e1",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "89383d473d7e": {
+  "identity": {
+   "one_liner": "基于 Bash 的 LEMP/LNMP 堆栈自动安装与虚拟主机管理工具",
+   "review": "LEMPer 是一套用 Bash 编写的安装脚本与 CLI 工具，用于在 Debian/Ubuntu 的 VPS 或物理机上自动部署 Nginx、PHP、MariaDB/PostgreSQL、MongoDB、Redis 等组件，并提供 lemper-cli 进行虚拟主机创建、SSL、缓存、CORS 配置及堆栈更新。面向需要在服务器上自行搭建 PHP 运行环境的管理员，要求干净系统与 root 权限。",
+   "highlights": [
+    "通过 install.sh 与 lemper-cli 自动安装并管理 Nginx、PHP 多版本、SQL/NoSQL 数据库等堆栈组件",
+    "提供虚拟主机管理：站点创建、Let's Encrypt SSL、FastCGI 缓存、CORS 开关",
+    "包含交互式 TUI、update.sh 原地更新及 PHP EOL 分支迁移功能"
+   ],
+   "use_cases": [
+    "在 Debian/Ubuntu 云服务器或 VPS 上部署 PHP 应用（WordPress、Laravel、Drupal 等）运行环境",
+    "替代付费托管控制面板进行服务器初始化与站点管理",
+    "通过 lemper-cli update 维护 PHP 版本安全更新与堆栈升级"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "LEMPer stands for Linux, Engine-X (Nginx), MariaDB and PHP installer written in Bash script, also known as LEMP / LNMP installer. This is just a small toolset (a bunch collection of scripts) that I use to deploy and manage LEMP stack on Debian and Ubuntu serve ／ * SQL database with MariaDB (MySQL drop-in replacement) or PostgreSQL.",
+     "lines": [
+      12,
+      45
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL/MariaDB, Redis/Valkey, Memcached, Fail2ban, CrowdSec, ModSecurity",
+     "lines": [
+      223
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* SQL database with MariaDB (MySQL drop-in replacement) or PostgreSQL.",
+     "lines": [
+      45
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是安装和配置数据库等堆栈组件的服务器工具，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB",
+    "MySQL",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "LEMPer stands for Linux, Engine-X (Nginx), MariaDB and PHP installer written in Bash script, also known as LEMP / LNMP installer. This is just a small toolset (a bunch collection of scripts) that I use to deploy and manage LEMP stack on Debian and Ubuntu server. LEMPer is crafted to support wide-range PHP framework & CMS. It is available as Free Alternative to the paid control panel such as cPanel, Plesk, CloudWays, Ploi, RunCloud, ServerPilot, etc. ／ * SQL database with MariaDB (MySQL drop-in replacement) or PostgreSQL. ／ LEMPer packed with friendly command line tool which makes your LEMPer stack administration much easier. These command line tool called Lemper CLI (lemper-cli) for creating new virtual host and managing existing LEMPer stack.",
+   "evidence_lines": [
+    12,
+    45,
+    155
+   ]
+  },
+  "fn": "joglomedia/LEMPer",
+  "sha": "89383d473d7e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ef43f04b973f": {
+  "identity": {
+   "one_liner": "单二进制、YAML 定义 schema 的自托管后端即服务，兼容 Supabase 客户端",
+   "review": "instancez 是一个自托管后端平台：用户在一个 YAML 文件中声明表、RLS、存储、RPC，工具将其与数据库比对并应用增量变更，同时提供认证、PostgREST 风格 REST API、存储等服务，可直接使用 supabase-js 等现有客户端。面向希望自建 Supabase 类后端的开发者，运行依赖 Postgres（可内嵌启动）；Realtime/Websockets 尚未支持，存储仅支持 JPEG/PNG。",
+   "highlights": [
+    "单个 YAML 文件声明 schema，工具对在线数据库做 diff 并应用增量迁移",
+    "兼容 @supabase/supabase-js 等客户端，提供 auth、REST、RPC、存储",
+    "单二进制可运行于本地、Docker、Kubernetes、AWS Lambda，并提供内嵌 dashboard 与编码代理技能文件"
+   ],
+   "use_cases": [
+    "自托管替代 Supabase 类后端的 Web/SaaS 应用开发",
+    "由 LLM 编码代理读取/生成 YAML schema 驱动后端搭建",
+    "本地或云端快速创建带认证与 RLS 的 API 原型"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "inz dev --embedded-pg # no Postgres to install; or drop the flag and set INSTANCEZ_DATABASE_URL to use your own ／ `inz dev` provisions the Postgres roles, applies the schema, and serves the API at `http://localhost:8080`. Editing `instancez.yaml` re-applies the schema automatically. ／ |Self-host footprint|One binary + Postgres|Multi-container stack|",
+     "lines": [
+      51,
+      57,
+      136
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 Postgres 提供角色创建、schema 应用与 API 服务等能力，是为数据库生态服务的组件而非仅使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **One YAML file is the schema.** Edit `instancez.yaml` and instancez diffs it against the live database, applying just the delta migration, with no migration files to write or run by hand. Drops need `--allow-destructive` under `inz serve`. ／ `inz dev` provisions the Postgres roles, applies the schema, and serves the API at `http://localhost:8080`. Editing `instancez.yaml` re-applies the schema automatically. ／ |Self-host footprint|One binary + Postgres|Multi-container stack|",
+   "evidence_lines": [
+    17,
+    57,
+    136
+   ]
+  },
+  "fn": "instancez/instancez",
+  "sha": "ef43f04b973f",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "96e7798fb578": {
+  "identity": {
+   "one_liner": "OceanBase 大赛 PowerContext 赛题的参赛代码仓库",
+   "review": "该仓库是第六届 OceanBase 数据库大赛初赛 PowerContext 方向的参赛材料库，包含赛题材料、实现代码和运行说明，供赛事提测与评审使用。README 未说明具体实现内容、依赖或运行方式，仅在提交前要求确认分支、目录和访问权限，具体能力信息不足。",
+   "highlights": [
+    "包含赛题材料、实现代码和运行说明",
+    "面向 OceanBase 大赛 PowerContext 赛题方向"
+   ],
+   "use_cases": [
+    "参赛者按赛事要求提测提交代码",
+    "赛事评审查看赛题实现"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "第六届 OceanBase 数据库大赛初赛 PowerContext 方向。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅说明这是大赛赛题仓库，未表明是服务数据库生态的工具还是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "第六届 OceanBase 数据库大赛初赛 PowerContext 方向。 ／ 赛题材料、实现代码和运行说明放在本仓库中。提交前请根据赛事提测要求确认分支、目录和仓库访问权限。",
+   "evidence_lines": [
+    3,
+    7
+   ]
+  },
+  "fn": "Tomlegend2026/oceanbase2026-powercontext-backup",
+  "sha": "96e7798fb578",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

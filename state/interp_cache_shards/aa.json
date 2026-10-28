@@ -11342,5 +11342,146 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "667bced11447": {
+  "identity": {
+   "one_liner": "本地文件系统与负载监控栈，用 SQLite 存储有界历史数据",
+   "review": "一个 Python 编写的本地运维监控栈，每 10 秒采集文件系统用量与 OS 负载，写入有界的 SQLite 历史，并通过只读 dashboard 和 Prometheus 文本接口展示。内置基于 SQLite online backup API 的备份/恢复命令，恢复时校验 SHA-256、完整性与 schema。适合个人 homelab 单机自监控，不监控其他服务或网络设备。",
+   "highlights": [
+    "提供本地文件系统用量与一分钟负载的周期采集，最多保留 1440 个样本",
+    "备份使用 SQLite online backup API 生成一致快照，恢复时校验 SHA-256、大小、完整性与 schema",
+    "暴露 /metrics（Prometheus 文本）与 /api/history 只读接口，页面无写端点"
+   ],
+   "use_cases": [
+    "个人 homelab 单机的本地资源监控与只读面板查看",
+    "需要对本地监控历史做可验证快照备份与恢复演练",
+    "用 Docker Compose 以受限容器方式运行本地采集服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A small local operations stack: filesystem readings, OS load, bounded SQLite history, a read-only dashboard, Prometheus text, and checked backup/restore. Python 3.12+ is the only application requirement. It needs no account or paid service.",
+     "lines": [
+      7
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个用 SQLite 存储自身采样历史的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small local operations stack: filesystem readings, OS load, bounded SQLite history, a read-only dashboard, Prometheus text, and checked backup/restore. Python 3.12+ is the only application requirement. It needs no account or paid service. ／ Both destination directories must be new. Backup uses SQLite's online backup API for a consistent snapshot. Restore checks SHA-256, byte size, database integrity, schema, and all sample values. It never overwrites an existing data directory. Stop the old service, then start it with `--data .local-restored` when you intend to use the recovered history. Keep backup copies on a separate storage device to protect against device failure; no backup transport or encryption is supplied.",
+   "evidence_lines": [
+    7,
+    46
+   ]
+  },
+  "fn": "ungaaaabungaaa/homelab",
+  "sha": "667bced11447",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b621ff07fcc7": {
+  "identity": {
+   "one_liner": "基于 PHP+MySQL/MariaDB 的自托管看板应用，支持端到端加密",
+   "review": "Royal Tasks 是一个运行在普通虚拟主机（PHP 8.4+ 与 MySQL/MariaDB）上的看板工具，提供列表卡片拖拽、清单、标签、成员协作与日历订阅等功能；每个看板默认静态加密，可按看板启用端到端加密，安装时通过 install.php 建表并生成配置文件。面向个人、团队或小型组织自托管使用，无需 Node 服务或后台进程。",
+   "highlights": [
+    "看板功能包含拖拽列表、清单、标签、评论、附件与成员协作",
+    "看板数据在数据库中默认加密，支持按看板的端到端加密与恢复密钥",
+    "支持 PWA 安装、Trello JSON 格式导入导出及 S3 兼容存储自动备份"
+   ],
+   "use_cases": [
+    "在普通虚拟主机上自托管团队看板",
+    "对看板内容有端到端加密需求的私有协作",
+    "从 Trello 迁移看板数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Runs on ordinary web hosting.** PHP and a MySQL or MariaDB database are all it needs: no Node server, no Docker, no build step on the server, no background workers. Upload one folder, open the installer, done. ／ You need PHP 8.4+ and a MySQL or MariaDB database. Shared hosting is fine.",
+     "lines": [
+      10,
+      57
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Runs on ordinary web hosting.** PHP and a MySQL or MariaDB database are all it needs: no Node server, no Docker, no build step on the server, no background workers. Upload one folder, open the installer, done. ／ You need PHP 8.4+ and a MySQL or MariaDB database. Shared hosting is fine.",
+     "lines": [
+      10,
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 MySQL/MariaDB 存储看板数据的 PHP 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Runs on ordinary web hosting.** PHP and a MySQL or MariaDB database are all it needs: no Node server, no Docker, no build step on the server, no background workers. Upload one folder, open the installer, done. ／ You need PHP 8.4+ and a MySQL or MariaDB database. Shared hosting is fine. ／ 2. Open `https://yoursite/kanban/install.php` and enter the database details. The installer creates the tables, the master account and `config.php`.",
+   "evidence_lines": [
+    10,
+    57,
+    60
+   ]
+  },
+  "fn": "RealRules/royal-tasks",
+  "sha": "b621ff07fcc7",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

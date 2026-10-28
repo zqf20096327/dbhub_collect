@@ -10973,5 +10973,246 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5c67aab6c407": {
+  "identity": {
+   "one_liner": "面向编码代理的仓库分析工程工具，含探索/转换/漂移维护",
+   "review": "Dex 以 Agent Skills 形式为编码代理提供数仓探索、dbt 转换与语义建模、schema 漂移维护三项能力，逻辑集中在 exmergo-dex-core 引擎中，内置 PII 防火墙与成本预算控制，只读源数据、构建仅在 dev 目标执行。面向使用 Claude Code、Codex 或兼容 Agent Skills 的数据工程团队，通过 pip/npx 安装，需 uv 运行时。",
+   "highlights": [
+    "提供 explore/transform/maintain 三类技能，通过 exmergo-dex-core 引擎执行并生成 JSON 输出",
+    "支持 Snowflake、BigQuery、Databricks、Redshift、ClickHouse、Trino、DuckDB、Postgres 等连接器",
+    "内置 PII 标记与查询防火墙、成本预估与预算控制，SQL 仅 SELECT，构建仅限 dev 目标"
+   ],
+   "use_cases": [
+    "让编码代理探索陌生数仓并生成表清单、列画像、已验证 join 与 ER 图",
+    "以可审查 plan 的方式编写和维护 dbt 模型与语义层",
+    "对比快照检测 schema、行量、粒度与指标定义漂移并提出修复"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Postgres**|Operational database|✅|`postgres`|Database-seconds|`pg_service.conf`, `DATABASE_URL`, `PG*` env, or a dbt profile|",
+     "lines": [
+      240
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "`.dex/dex.db` is the SQLite backend's equivalent of `cache.json`, so it gets",
+     "lines": [
+      216
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**ClickHouse**|Analytical database|✅|`clickhouse`|Compute-seconds on Cloud, database-seconds self-hosted|`CLICKHOUSE_URL`, `CLICKHOUSE_*` env, or a dbt profile|",
+     "lines": [
+      237
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Dex 为数据仓库生态提供探索/转换/漂移维护的工具能力，本身不存储业务数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dex lets your agent build your analytics: data warehouse exploration, dbt data transformation and semantic modeling, ／ The skills are thin. All the logic, and every guardrail, lives in one engine ／ ## Connectors",
+   "evidence_lines": [
+    7,
+    159,
+    229
+   ]
+  },
+  "fn": "exmergo/dex",
+  "sha": "5c67aab6c407",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "112e002b823f": {
+  "identity": {
+   "one_liner": "基于 Node.js/Express/React 与 MS SQL Server 的项目管理系统",
+   "review": "一个使用 Node.js、Express、React 和 Redux 构建的项目管理系统，后端以 MS SQL Server 存储数据，包含用户、项目、任务三个模块，用户经 JWT 鉴权可管理个人资料及所属项目与任务。README 给出建库、.env 配置与 npm 安装运行步骤，适合作为全栈学习或内部项目管理用途。",
+   "highlights": [
+    "包含用户、项目、任务三个模块，用户可被分配多个项目，项目包含多个任务",
+    "使用 Bcrypt 哈希密码、JWT 进行登录鉴权与私有路由保护",
+    "通过 .env 配置数据库连接参数，前端与后端可同时运行在 3000 与 8001 端口"
+   ],
+   "use_cases": [
+    "团队或个人进行项目与任务管理",
+    "Node.js + React + SQL Server 全栈开发的参考应用"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- MS SQL server for the database. ／ Create a MS SQL server database and give it your preferred name and add three tables ／ DB_USER= ms sql server username",
+     "lines": [
+      4,
+      24,
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该系统使用 MS SQL Server 作为数据库存数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- MS SQL server for the database. ／ Create a MS SQL server database and give it your preferred name and add three tables",
+   "evidence_lines": [
+    4,
+    24
+   ]
+  },
+  "fn": "NickyGuants/project-management-system",
+  "sha": "112e002b823f",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "edc149521152": {
+  "identity": {
+   "one_liner": "Windows 桌面 AI 编程工具管理器，本地 SQLite 存储用量数据",
+   "review": "Jolu 是一个运行在 Windows 上的桌面应用，用于统一管理 Claude Code、Codex、Gemini 等 AI 编程工具：通过灵动岛常驻显示额度与会话状态，读取本机会话文件并增量写入本地 SQLite 进行用量统计，另提供一键签到、自动化任务和 Skills 管理。数据留在本机，仅面向需要管理这些 AI 工具的 Windows 用户。",
+   "highlights": [
+    "灵动岛常驻桌面显示额度、重置倒计时与运行中会话，支持最多 8 个分身",
+    "增量读取本机会话文件并去重写入本地 SQLite usage.db，用量明细可导出 CSV",
+    "自动化任务在额度耗尽时保留进度，额度恢复后在原会话继续执行"
+   ],
+   "use_cases": [
+    "统一查看多个 AI 编程工具账号的额度与用量",
+    "定时或额度恢复后自动续跑 Claude Code / Codex 任务",
+    "批量领取 WorkBuddy、Qoder、Trae 的每日签到奖励"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "本机会话文件 ──增量读取、去重──→ 本地 SQLite ──→ 主窗口 / 灵动岛 ／ - 统计记录保存在本机 SQLite 数据库 `usage.db`，运行偏好保存在 `settings.json`。Windows 默认应用目录为 `%APPDATA%\\dev.ningz.jolu`，可在设置的数据区域打开。",
+     "lines": [
+      221,
+      226
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用读取本机会话并将统计记录保存在本机 SQLite 数据库 usage.db，SQLite 是其数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "仓库说明标注 MIT，但独立 LICENSE 文件尚未补充",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "本机会话文件 ──增量读取、去重──→ 本地 SQLite ──→ 主窗口 / 灵动岛 ／ - 统计记录保存在本机 SQLite 数据库 `usage.db`，运行偏好保存在 `settings.json`。Windows 默认应用目录为 `%APPDATA%\\dev.ningz.jolu`，可在设置的数据区域打开。 ／ 技术栈：**Tauri 2 · Rust · React 19 · TypeScript · Vite · Tailwind CSS 4 · SQLite**。界面唯一设计依据是 `docs/ui/Jolu.pen`，开发规范见 AGENTS.md。",
+   "evidence_lines": [
+    221,
+    226,
+    260
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "haishishushu/Jolu",
+  "sha": "edc149521152",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

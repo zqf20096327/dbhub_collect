@@ -9444,5 +9444,140 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0239847b1bd2": {
+  "identity": {
+   "one_liner": "自托管跨平台音视频下载与播放应用，用 SQLite 存储数据",
+   "review": "Elengrab 是用 Go 编写的自托管音视频下载与在线观看应用，集成 yt-dlp 和 ffmpeg 支持从 1000+ 网站下载媒体，提供浏览器内播放、任务队列、PWA 等功能，适合搭建个人媒体服务。它使用 SQLite 存储应用数据，并提供 Docker、二进制等多种部署方式。",
+   "highlights": [
+    "集成 yt-dlp 与 ffmpeg，支持从 1000+ 网站下载音视频",
+    "使用 SQLite 存储应用数据，含备份目录配置",
+    "提供 Docker、Docker Compose/Swarm 与单二进制部署方式"
+   ],
+   "use_cases": [
+    "自托管个人媒体下载与观看服务",
+    "批量下载任务队列管理",
+    "移动端从 YouTube/Instagram 分享并下载视频"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`ELENGRAB_SQLITE_DATA_DIR`|`sqlite/data`|Directory where SQLite database files are stored.| ／ |`db:/app_n/sqlite/data`|Stores SQLite database files.|",
+     "lines": [
+      152,
+      169
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用自身使用 SQLite 存储数据库文件，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`ELENGRAB_SQLITE_DATA_DIR`|`sqlite/data`|Directory where SQLite database files are stored.| ／ |`db:/app_n/sqlite/data`|Stores SQLite database files.|",
+   "evidence_lines": [
+    152,
+    169
+   ]
+  },
+  "fn": "neosy/elengrab",
+  "sha": "0239847b1bd2",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0f3e4305d7b2": {
+  "identity": {
+   "one_liner": "基于 Node 内置 SQLite 的实时看板，供 AI 代理与人类协作使用",
+   "review": "agentboard 是一个自托管的实时看板应用，代理通过 API key 调用 REST 接口操作任务，人类以邮箱登录查看，变更经 SSE 实时推送。服务端零外部依赖，使用 Node ≥24 的 node:sqlite，数据存于 DATA_DIR 下的 board.db 与本地文件目录。支持 npm、Docker、NixOS 部署，附带 kb CLI，不提供时间线、优先级、邮件等功能。",
+   "highlights": [
+    "代理以 API key 作为用户，通过 API 以名称定位列与指派人，CLI 可列出和修改任务",
+    "使用 Node 内置 node:sqlite 与 node:http，服务端零外部依赖，前端无构建步骤",
+    "变更通过 SSE 实时推送，支持 Markdown 描述、附件与项目彩色标记"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供任务看板并实时跟踪其状态",
+    "自托管小型项目/任务管理",
+    "通过脚本或 CLI 批量管理看板任务"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything lives in `DATA_DIR` (default `./data`): `board.db` (SQLite) and `files/` (uploads). Back up that directory. ／ - **Tiny.** The server has zero dependencies (Node ≥ 24 with `node:http` and `node:sqlite`). The frontend is vanilla JS with no build step, and its only dependency is `markdown-it`.",
+     "lines": [
+      22,
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明数据存储于 DATA_DIR 下的 board.db（SQLite），项目是使用 SQLite 存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Everything lives in `DATA_DIR` (default `./data`): `board.db` (SQLite) and `files/` (uploads). Back up that directory. ／ - **Agents are users.** Each agent has an API key, and the API addresses everything by name (`\"column\": \"in-review\"`, `\"assignee\": \"me\"`). ／ - **Humans sign in** with email and password to watch the board. Every change streams in live over SSE, and there's an activity feed.",
+   "evidence_lines": [
+    22,
+    6,
+    7
+   ]
+  },
+  "fn": "backmeupplz/agentboard",
+  "sha": "0f3e4305d7b2",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

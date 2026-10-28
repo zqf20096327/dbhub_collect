@@ -8717,5 +8717,139 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "01852df095fd": {
+  "identity": {
+   "one_liner": "守望先锋电竞赛事的多租户运营平台，从报名到赛后分析",
+   "review": "OWT 是一个用于运营守望先锋赛事的多租户单仓平台，覆盖队伍报名、赛程签表、选图禁图、队长选人、比赛日志解析与赛后分析等环节，面向选手和组织者两类用户。后端由 Go 网关加多个 Python FastStream 服务组成，通过 RabbitMQ 通信，数据存于 PostgreSQL 并使用 Redis 提供实时事件。",
+   "highlights": [
+    "提供赛事报名、签表、积分榜、地图禁选与实时事件推送等组织者工具",
+    "通过 Docker Compose 编排多服务架构，含 Alembic 数据库迁移与 pytest 测试套件",
+    "使用 Rust 求解器进行多目标队伍平衡，并支持 LightGBM/XGBoost 分析任务"
+   ],
+   "use_cases": [
+    "电竞组织者在线运营赛事报名、签表与直播流",
+    "选手和观众查询赛事历史与选手统计数据",
+    "需要赛后比赛日志解析与成绩分析的团队"
+   ],
+   "cat_use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Data and messaging|PostgreSQL 16, Redis Stack, RabbitMQ 3.13, S3-compatible object storage|",
+     "lines": [
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明平台以 PostgreSQL 16 作为自身数据存储，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OWT is a multi-tenant platform for running Overwatch tournaments from registration to post-tournament analytics. It combines public tournament history and player statistics with organizer tooling for workspaces, brackets, live drafts, map vetoes, match-log processing, achievements, streams, and access control. ／ |Data and messaging|PostgreSQL 16, Redis Stack, RabbitMQ 3.13, S3-compatible object storage| ／ `COMPOSE_PROFILES=db` enables the local PostgreSQL container. Without it, the Compose file expects the database settings in `backend/env/common.env` to point at an external PostgreSQL instance.",
+   "evidence_lines": [
+    10,
+    79,
+    140
+   ]
+  },
+  "fn": "CraazzzyyFoxx/overwatch-tournaments",
+  "sha": "01852df095fd",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ca983a2f31f3": {
+  "identity": {
+   "one_liner": "面向 AI 代理的无界面工作操作系统，用本地文件与 SQLite 存储工作状态",
+   "review": "Foxrun 是运行在 Claude Code、Codex 等 AI 代理内的无界面工作编排系统，为代理提供任务、目标、审批与记忆的共享工作地图，数据存于本地纯文件和一个 SQLite 数据库，无需服务器或账号。面向希望让代理承担实际业务工作的经营者，当前为 0.1.0 早期版本，在 macOS 上测试。",
+   "highlights": [
+    "在本地以纯文件和一个 SQLite 数据库存储任务、决策、目标、审批与分层记忆",
+    "提供可安装进 Claude Code 与 Codex 的技能、钩子和统一模型配置",
+    "通过 uv 一条命令安装，含启动页打印钩子与夜间记忆整理任务"
+   ],
+   "use_cases": [
+    "为多个 AI 代理提供共享的任务与记忆状态，避免会话间丢失上下文",
+    "个人或小团队用代理团队运行多步骤、可重复的业务流程",
+    "基于本地工作数据搭建小型仪表盘和应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Foxrun is a headless work OS for your AI agents.** It runs inside the agents you already use, like Claude Code and Codex, with no app to open. Everything lives in plain files and one SQLite database on your computer. ／ - **Everything in one place.** All of it lives in plain files and one SQLite database on your computer. ／ Foxrun keeps your work in one SQLite database, `data.db`, on your computer. The database has four levels. Here is the work module, as the model is designed. ／ Your work is plain files and one SQLite database, so any editor can open it. Point Obsidian or VS Code at `~/foxrun` and read every page.",
+     "lines": [
+      11,
+      106,
+      259,
+      340
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库使用 SQLite 存储自身的工作数据，而非为数据库生态提供工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Foxrun is a headless work OS for your AI agents.** It runs inside the agents you already use, like Claude Code and Codex, with no app to open. Everything lives in plain files and one SQLite database on your computer. ／ - **Everything in one place.** All of it lives in plain files and one SQLite database on your computer.",
+   "evidence_lines": [
+    11,
+    106
+   ]
+  },
+  "fn": "foxrun-ai/foxrun",
+  "sha": "ca983a2f31f3",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

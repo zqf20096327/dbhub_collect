@@ -11643,5 +11643,122 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "343696c1e934": {
+  "identity": {
+   "one_liner": "Go 编写的开源业务平台，用 YAML+DSL 在 SQLite/PostgreSQL 上运行记账应用",
+   "review": "OneBase 是一个用 Go 实现的低代码业务/记账平台，类似 1C 模式：元数据用 YAML 描述、业务逻辑用内置 DSL 编写，数据存于 SQLite 或 PostgreSQL。面向做记账类应用的低代码开发者和 AI 代理（提供 AGENTS.md、check 校验与 MCP 服务器）。单二进制运行，支持文件/git 与库内两种配置方式。",
+   "highlights": [
+    "配置以 YAML 元数据 + 内置 DSL 编写，可在 SQLite 和 PostgreSQL 上运行同一配置",
+    "提供 REST API、MCP 服务器与库内 AI 助手，支持基于数据的问答与文档草稿",
+    "支持备份恢复、角色与记录级访问控制、SSO/双因素认证、全文搜索与 16 种语言界面"
+   ],
+   "use_cases": [
+    "用 DSL 快速搭建记账/进销存类业务系统",
+    "以 git 文件方式或在库内可视化维护配置",
+    "让 AI 代理通过 MCP 与 check 命令编写并校验业务配置"
+   ],
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "lines": [
+      5,
+      22,
+      48
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "lines": [
+      5,
+      22,
+      145
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "平台将应用数据存储在 SQLite 或 PostgreSQL 中，数据库为其存储层而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ отчёты) + данные в SQLite или PostgreSQL + пользователи. Метаданные описываются ／ PostgreSQL, запуск, конфигуратор, остановка:",
+     "lines": [
+      5,
+      22,
+      48
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ отчёты) + данные в SQLite или PostgreSQL + пользователи. Метаданные описываются ／ onebase dev --project ./склад --sqlite ./склад.db --open",
+     "lines": [
+      5,
+      22,
+      145
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "平台将应用数据存储在 SQLite 或 PostgreSQL 中，数据库为其存储层而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ |Информационная база|SQLite-файл или PostgreSQL|Прикладные и служебные таблицы; при `config_source: database` — также `_onebase_config`| ／ та же конфигурация работает и на SQLite, и на PostgreSQL. Где физически лежит",
+   "evidence_lines": [
+    5,
+    221,
+    224
+   ]
+  },
+  "fn": "ivanarama/onebase",
+  "sha": "343696c1e934",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10165,5 +10165,138 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "054f09926dd3": {
+  "identity": {
+   "one_liner": "Greenbone 的 PostgreSQL 扩展库，提供 SQL 内主机与 iCal 信息计算函数",
+   "review": "pg-gvm 是 Greenbone AG 维护的 PostgreSQL 扩展（C 实现），在数据库内提供主机信息和 iCalendar 信息计算等工具函数，含 PostgreSQL Upgrade Migrator。面向需要在 SQL 语句中直接使用这些函数的 Greenbone 相关部署。需从源码用 cmake 编译，依赖 PostgreSQL dev >= 9.6、libical、glib 等，通过 CREATE EXTENSION 启用，测试基于 pgTAP。",
+   "highlights": [
+    "提供在 SQL 语句内计算主机信息与 iCal 信息的函数库",
+    "包含 PostgreSQL Upgrade Migrator",
+    "使用 pgTAP 进行单元测试"
+   ],
+   "use_cases": [
+    "在 SQL 查询中直接解析/计算 iCalendar 数据",
+    "Greenbone 相关组件的数据库扩展依赖",
+    "PostgreSQL 版本升级迁移辅助"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# Greenbone Library for PostgreSQL utility functions ／ This library contains PostgreSQL utility functions. For example to compute host ／ - PostgreSQL dev >= 9.6",
+     "lines": [
+      3,
+      5,
+      21
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是 PostgreSQL 的扩展库，为数据库提供函数能力，而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Greenbone Library for PostgreSQL utility functions ／ This extension can be configured, built and installed with the following commands: ／ CREATE EXTENSION \"pg-gvm\";",
+   "evidence_lines": [
+    3,
+    34,
+    46
+   ]
+  },
+  "fn": "greenbone/pg-gvm",
+  "sha": "054f09926dd3",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e01e56e85ff3": {
+  "identity": {
+   "one_liner": "Apple Mail 的 MCP 服务器，提供54个工具并以SQLite实现邮件快速检索",
+   "review": "该项目是一个面向 Claude 等 MCP 客户端的 Apple Mail 服务器，提供54个工具覆盖邮件搜索、邮箱管理、批量导出和撰写回复等操作。搜索路径读取 SQLite 实现毫秒级查询，撰写操作经由 Mail 自身编辑器完成以避免注入正文。以 Swift 编写，提供签名公证的二进制，需 macOS 及完全磁盘访问权限，可通过插件或手动注册 MCP 使用。",
+   "highlights": [
+    "提供54个 MCP 工具，覆盖账户、邮箱、邮件读取、标记、撰写、草稿等操作",
+    "读取路径采用 SQLite-first 实现，读取类工具在出错时可回退到 AppleScript",
+    "提供 Developer ID 签名并公证的二进制，支持 Claude 插件方式安装"
+   ],
+   "use_cases": [
+    "在 MCP 客户端中对 macOS 邮件进行搜索、批量导出与归档",
+    "通过 LLM 工具调用批量管理邮箱、规则、VIP 与签名等邮件设置",
+    "以草稿加人工确认的流程安全地撰写和回复邮件"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**The most comprehensive Apple Mail MCP server** - 54 tools with SQLite-powered millisecond search across 250K+ emails. ／ |Search Speed|Seconds (AppleScript)|**Milliseconds (SQLite)**| ／ > **💡 Full Disk Access** is what makes the fast SQLite read path and",
+     "lines": [
+      8,
+      18,
+      45
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 MCP 服务器为 Claude 客户端提供邮件操作工具，SQLite 仅作为内部快速读取路径而非对外适配的数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**The most comprehensive Apple Mail MCP server** - 54 tools with SQLite-powered millisecond search across 250K+ emails. ／ Install the **plugin**. It brings the signed binary, the `/archive-mail` command ／ > **💡 Full Disk Access** is what makes the fast SQLite read path and",
+   "evidence_lines": [
+    8,
+    30,
+    45
+   ]
+  },
+  "fn": "PsychQuant/che-apple-mail-mcp",
+  "sha": "e01e56e85ff3",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

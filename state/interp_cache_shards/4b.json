@@ -8961,5 +8961,294 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c01448f24858": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的自托管开源 BaaS 后端平台",
+   "review": "Nelcota 是一个可部署在自有 VPS 上的开源后端即服务平台：用户用 SQL 写 schema，它生成 REST API，并内置认证、文件存储、Webhooks、管理面板和主机运维（备份、PITR、告警）。授权依赖 PostgreSQL 的 grants 与 RLS 策略，数据与策略保持纯 SQL 可随时导出。适合希望自托管 Supabase 类后端的开发者；尚未实现 realtime、edge functions、MFA。",
+   "highlights": [
+    "从 SQL schema 生成 REST API，含过滤、关系、RPC 与 OpenAPI",
+    "认证支持 email/password、magic links、OAuth/OIDC 与 Ed25519 JWT，授权由 PostgreSQL RLS 决定",
+    "提供管理面板与主机运维能力：备份、时间点恢复和告警"
+   ],
+   "use_cases": [
+    "为 Web/移动应用快速搭建自托管后端 API",
+    "依赖 PostgreSQL RLS 做行级权限的多租户应用",
+    "在自有 VPS 上管理多个隔离项目及其备份与恢复"
+   ],
+   "classification": {
+    "cat": "平台",
+    "db_verdicts": [
+     {
+      "db": "PostgreSQL",
+      "rel": "support",
+      "lines": [
+       3,
+       6,
+       33
+      ]
+     }
+    ],
+    "eco": "tool",
+    "eco_why": "README 将 PostgreSQL 作为后端基础组件，Nelcota 是围绕其提供 API/认证/存储/运维的平台组件，而非仅使用数据库存数据的终端应用。",
+    "ai": {
+     "flag": false,
+     "kind": []
+    },
+    "persona": "ops",
+    "official": {
+     "flag": false,
+     "of": null
+    }
+   },
+   "signals": {
+    "status": "active",
+    "license_note": "",
+    "install": [
+     "docker",
+     "binary",
+     "source"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     16,
+     19,
+     26
+    ]
+   }
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "### Your PostgreSQL, your server, your backend. ／ in a single Rust binary, secured by PostgreSQL row-level security. ／ your app ──HTTPS──▶ Caddy ──▶ nelcota (one binary) ──▶ PostgreSQL 17",
+     "lines": [
+      3,
+      6,
+      33
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将 PostgreSQL 作为后端基础组件，Nelcota 是围绕其提供 API/认证/存储/运维能力的平台组件，而非仅使用数据库存数据的终端应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Nelcota is an open source backend-as-a-service you run on your own VPS. Write ／ - **REST API**: generated from your schema, with filters, relations, RPC and OpenAPI. ／ There is no authorization layer to learn: **PostgreSQL grants and RLS policies",
+   "evidence_lines": [
+    16,
+    19,
+    26
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Nelcota/Nelcota",
+  "sha": "c01448f24858",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d1c9d0626ea4": {
+  "identity": {
+   "one_liner": "开源确定性数据库逆向分析平台，读取目录元数据重建ER关系与依赖图",
+   "review": "DERA 是面向工程师和数据库架构师的数据库逆向工程与分析平台：通过只读连接提取数据库系统目录元数据，重建外键依赖图（Tarjan SCC/拓扑排序），规划 schema 变更并生成工程文档，明确不使用任何 AI 模型或外部推理 API。目前 SQLite 内省已实现，PostgreSQL 在开发中，MySQL/MariaDB/SQL Server 处于 Planned 阶段，多数高级功能仍在路线图中。",
+   "highlights": [
+    "只读方式提取数据库系统目录元数据（information_schema/pg_catalog/sqlite_master），不提取应用表数据行",
+    "基于 Tarjan SCC 与拓扑排序重建依赖图，检测结果可复现",
+    "静态 AST 拦截破坏性 SQL（DROP/ALTER 等），强制只读连接"
+   ],
+   "use_cases": [
+    "接手无文档的遗留数据库，梳理表结构与外键关系",
+    "schema 变更前评估依赖拓扑与结构风险",
+    "内网环境下做不外泄数据的数据库结构分析"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**PostgreSQL Catalog Inspection**|**In Progress**|Ephemeral PostgreSQL service integration tests|`tests/integration/`| ／ - **Isolated Database Connectors (`packages/connectors`):** Pluggable adapters that query database metadata catalogs (`sqlite_master`, `pg_catalog`). Enforces AST query mutation interception before execution.",
+     "lines": [
+      99,
+      129
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**SQLite Catalog Introspection**|**Implemented**|Table, column, PK, FK, and index discovery|`packages/connectors/src/dera_connectors/sqlite/`| ／ - **Isolated Database Connectors (`packages/connectors`):** Pluggable adapters that query database metadata catalogs (`sqlite_master`, `pg_catalog`). Enforces AST query mutation interception before execution.",
+     "lines": [
+      98,
+      129
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|**MySQL**|8.0+|Planned|`information_schema`, `performance_schema`|Read-only session transaction mode|",
+     "lines": [
+      235
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|**MariaDB**|10.5+|Planned|`information_schema`|Read-only session transaction mode|",
+     "lines": [
+      236
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "|**Microsoft SQL Server**|2019+|Planned|`sys.tables`, `INFORMATION_SCHEMA`|Read-only user permissions|",
+     "lines": [
+      237
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为分析外部数据库结构而服务的工具/平台，自身不以某数据库为存储主体",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "DERA provides an open-source, modular platform that inspects relational database catalogs, reconstructs dependency graphs, evaluates structural risks, and previews migrations through verifiable, reproducible algorithms. ／ - **Isolated Database Connectors (`packages/connectors`):** Pluggable adapters that query database metadata catalogs (`sqlite_master`, `pg_catalog`). Enforces AST query mutation interception before execution. ／ |**PostgreSQL Catalog Inspection**|**In Progress**|Ephemeral PostgreSQL service integration tests|`tests/integration/`|",
+   "evidence_lines": [
+    61,
+    129,
+    99
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "krishanth7/dera",
+  "sha": "d1c9d0626ea4",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1b0c5e14956a": {
+  "identity": {
+   "one_liner": "本地优先的 AI 伴侣长期记忆系统，以 SQLite 为唯一真源，提供 REST 与 MCP 接口",
+   "review": "一个可独立部署的长期记忆服务，将原始事件追加保存并经候选审核生成情景帧，供用户自己的 Agent 通过 REST 或 MCP 读写记忆与情绪状态。面向需要为 AI 伴侣/Agent 添加持久记忆的个人使用者。README 自述暂不推荐使用、bug 较多，且密钥为文件保存而非加密存储。",
+   "highlights": [
+    "以 SQLite 为唯一真源，原始事件追加保存，事实变更经候选审核并归档保留历史",
+    "同一服务提供 MCP JSON-RPC 与 /events、/recall 等 REST 接口，含 memory_ingest、memory_recall 等工具",
+    "支持本机脚本与 Docker Compose 部署，嵌入与重排序为可选能力，未配置时降级为全文检索"
+   ],
+   "use_cases": [
+    "为个人 AI Agent 提供持久化长期记忆与状态存储",
+    "通过 MCP 在自有 Agent 中接入记忆写入与召回",
+    "本地部署单所有者记忆实例并管理记忆审核与归档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite 是唯一真源；原始事件追加保存，事实变更进入候选审核，归档保留历史。REST 与 MCP 可供自己的 Agent 使用。它提供记忆和表达状态，不自带聊天主模型，也不会自行发消息。",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 存储自身数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT License",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLite 是唯一真源；原始事件追加保存，事实变更进入候选审核，归档保留历史。REST 与 MCP 可供自己的 Agent 使用。它提供记忆和表达状态，不自带聊天主模型，也不会自行发消息。 ／ 暂不推荐使用，bug太多 ／ MIT License，Copyright (c) 2026 Ykumi。仓库仅含脱敏架构、通用规则和虚构测试数据。",
+   "evidence_lines": [
+    5,
+    2,
+    85
+   ]
+  },
+  "fn": "meixi223-glitch/xinhuo-memory",
+  "sha": "1b0c5e14956a",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

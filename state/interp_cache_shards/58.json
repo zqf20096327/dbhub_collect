@@ -11375,5 +11375,228 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "beb9c91cb8aa": {
+  "identity": {
+   "one_liner": "受 Django 启发的 Go 语言 ORM 框架，含内置管理面板",
+   "review": "KORM 是一个 Go 语言的 ORM/应用框架，提供基于泛型的结构体模型操作、AutoMigrate 自动迁移、Schema Diff 干跑检查、查询构建器、事务、Hooks 以及缓存机制。它还内置管理面板、认证中间件、交互式 Shell 和基于 WebSocket 的消息总线，可通过驱动包连接 SQLite、MySQL、MariaDB、Postgres、CockroachDB，适合使用 Go 开发后端服务的开发者。",
+   "highlights": [
+    "支持从 Go 结构体 AutoMigrate 及 Schema Diff 干跑式迁移 SQL 生成，区分 SQLite/PostgreSQL/CockroachDB/MySQL/MariaDB 方言",
+    "提供结构体与 map 两种查询构建器、事务、Hooks（OnInsert/OnSet/OnDelete/OnDrop）及多对多关系",
+    "内置 Admin Dashboard、认证中间件、交互式 Shell 与基于 WebSocket PubSub 的多实例消息总线"
+   ],
+   "use_cases": [
+    "Go 后端项目中以结构体模型方式进行数据库 CRUD 与迁移",
+    "需要内置管理后台与认证的场景",
+    "多个 KORM 应用间通过消息总线同步数据"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Postgres ／ - **Dialect-Aware** : Proposes tailored SQL for SQLite, PostgreSQL, CockroachDB, and MySQL / MariaDB (e.g. SQLite-safe `ADD COLUMN` avoiding illegal inline `UNIQUE` constraints).",
+     "lines": [
+      72,
+      147
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Mysql ／ - **Dialect-Aware** : Proposes tailored SQL for SQLite, PostgreSQL, CockroachDB, and MySQL / MariaDB (e.g. SQLite-safe `ADD COLUMN` avoiding illegal inline `UNIQUE` constraints).",
+     "lines": [
+      70,
+      147
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Sqlite ／ err := korm.New(korm.SQLITE, \"dbName\", sqlitedriver.Use()) // Connect",
+     "lines": [
+      69,
+      100
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Dialect-Aware** : Proposes tailored SQL for SQLite, PostgreSQL, CockroachDB, and MySQL / MariaDB (e.g. SQLite-safe `ADD COLUMN` avoiding illegal inline `UNIQUE` constraints).",
+     "lines": [
+      147
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "KORM 是为应用程序访问多种数据库提供 ORM 能力的 Go 库，属于数据库生态的服务工具而非存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "#### Supported databases: ／ go get -u github.com/kamalshkeir/korm@latest ／ ```",
+   "evidence_lines": [
+    68,
+    78,
+    86
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "kamalshkeir/korm",
+  "sha": "beb9c91cb8aa",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8086bcfb2508": {
+  "identity": {
+   "one_liner": "自托管野外数据采集平台，以 Docker Compose 整合 PostgreSQL 与 Elasticsearch 全链路",
+   "review": "NYX 是一个面向野外数据采集组织的自托管数据平台，将移动表单（离线填写与同步）、XLS 导入与 Camel 数据管道、PostgreSQL 事务存储、Elasticsearch 分析搜索、Kibana/Grafana 仪表盘和 Jasper 报表调度打包为一套 Docker Compose 栈。适合需要离线采集、入库、分析与定期出报的团队自行部署；README 提醒其为演示模板而非生产加固配置，需更换凭据与证书。",
+   "highlights": [
+    "通过 Docker Compose 一键启动包含消息中间件、数据库、反向代理和报表组件的完整栈",
+    "包含离线移动表单应用、XLS 导入器和 Apache Camel/Node-RED 数据摄取管道",
+    "集成 Kibana、Grafana、Jupyter 与 Jasper 定时报表生成（PDF/XLS），并提供 ElastAlert 与容器监控"
+   ],
+   "use_cases": [
+    "网络不稳定地区的离线数据采集与回同步",
+    "将原始文件（XLS 等）自动清洗、整形并加载为可查询数据",
+    "定期生成并分发 PDF/XLS 报表"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Structured data|PostgreSQL 11.4| ／ of the panels. The API and the workers talk to PostgreSQL for transactional data, Redis for ／ |`5444`|PostgreSQL (container port 5432)|",
+     "lines": [
+      45,
+      61,
+      124
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明平台使用 PostgreSQL 存储事务数据、Elasticsearch 做分析，数据库是平台的存储组件而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Structured data|PostgreSQL 11.4| ／ of the panels. The API and the workers talk to PostgreSQL for transactional data, Redis for",
+   "evidence_lines": [
+    45,
+    61
+   ]
+  },
+  "fn": "snuids/nyx",
+  "sha": "8086bcfb2508",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::SQL Server Diagnostic Information Queries from Glenn Berry": {
+  "identity": {
+   "one_liner": "Glenn Berry 的 SQL Server 诊断信息查询集合",
+   "review": "该仓库收录 Glenn Berry 维护的 SQL Server 诊断信息查询，用于对 SQL Server 实例进行健康检查与性能诊断，面向使用 SQL Server 的 DBA。仓库本身不提供安装程序或服务，使用方式是在 SQL Server 中运行这些查询脚本；简介未说明版本适配范围与文档细节。",
+   "highlights": [
+    "提供一组 SQL Server 诊断信息查询",
+    "查询可用于读取 SQL Server 实例的运行状态信息",
+    "主题标签包含 dba 与 sql-server"
+   ],
+   "use_cases": [
+    "DBA 对 SQL Server 实例执行诊断检查",
+    "在 SQL Server 上运行查询以获取诊断信息"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "SQL Server Diagnostic Information Queries from Glenn Berry"
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是一组面向 SQL Server 的诊断查询脚本，为管理该数据库提供支持，而非仅使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SQL Server Diagnostic Information Queries from Glenn Berry"
+  },
+  "fn": "Ratithoglys/GlennBerry_DMV_Queries",
+  "sha": "desc::SQL Server Diagnostic Information Queries from Glenn Berry",
+  "source": "desc",
+  "generated_at": "2026-10-28",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

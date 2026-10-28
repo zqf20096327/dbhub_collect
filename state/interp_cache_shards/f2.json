@@ -11170,5 +11170,231 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7c5e882dd1f1": {
+  "identity": {
+   "one_liner": "TypeScript Webhook 投递库，基于 PostgreSQL 的 transactional outbox 实现",
+   "review": "good-webhooks 是一个 npm 包，用于在 TypeScript 应用中实现 Webhook 投递：应用调用 publish() 把事件记录在 PostgreSQL 中，由独立的 worker 进程完成签名发送、失败重试和投递记录，接收方用 parseWebhook() 验证。要求 Node.js 24+ 与 PostgreSQL 16-18，面向需要在自家应用内构建 Webhook 投递能力的开发者。",
+   "highlights": [
+    "支持将类型化事件写入 PostgreSQL，由 worker 完成签名投递、重试与投递记录",
+    "支持 Standard Webhooks 规范的签名与验证，提供 Better Auth 插件接入方式",
+    "通过 npm 安装，附带 SQL 迁移脚本与示例应用"
+   ],
+   "use_cases": [
+    "在业务系统中实现交易后事件（如订单、账单）的 Webhook 通知投递",
+    "让登录用户通过 Better Auth 管理自己的 Webhook 接收端点",
+    "需要签名验证与去重的 Webhook 接收方集成"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "You publish typed events. Good Webhooks stores them in your PostgreSQL database, and a worker you run delivers signed Standard Webhooks requests, retries failures, and records every attempt. Receivers verify a request with one function. Endpoint management wor ／ npm install good-webhooks pg zod ／ Requires Node.js 24 or later. Built-in delivery and standalone management need PostgreSQL 16, 17, or 18. Better Auth management uses your existing Better Auth database adapter. See installation for each setup's dependencies and the compatibility policy for tes",
+     "lines": [
+      15,
+      24,
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该包为 PostgreSQL 之上的 Webhook 投递提供库和 worker 组件，服务于使用数据库的应用开发而非仅消费数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "You publish typed events. Good Webhooks stores them in your PostgreSQL database, and a worker you run delivers signed Standard Webhooks requests, retries failures, and records every attempt. Receivers verify a request with one function. Endpoint management works standalone, through the Better Auth plugin, or with your own sender. ／ npm install good-webhooks pg zod ／ Requires Node.js 24 or later. Built-in delivery and standalone management need PostgreSQL 16, 17, or 18. Better Auth management uses your existing Better Auth database adapter. See installation for each setup's dependencies and the compatibility policy for tested versions.",
+   "evidence_lines": [
+    15,
+    24,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "pplytas/good-webhooks",
+  "sha": "7c5e882dd1f1",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "009c3375b70a": {
+  "identity": {
+   "one_liner": "家庭/小型办公网络安全监控系统，基于 Zeek 镜像流量与规则检测",
+   "review": "tapwatch 通过镜像端口运行 Zeek、结合路由器 syslog 与可选 osquery 端点代理，用纯 Python 检测器发现新设备、C2 心跳、DNS 隧道等异常，并提供无 JavaScript 的案件分诊台；可选本地 AI 模型做告警分诊但不可覆盖代码事实。面向缺乏 SOC 的家庭与小型办公环境，需专用设备运行（Docker 或 systemd），依赖 SQLite 存储。",
+   "highlights": [
+    "47 种检测用例（网络/主机），基于纯 Python 检测器与学习基线",
+    "可选受护栏的 AI 分诊模型（Jev），代码事实设定不可逾越的上下限",
+    "本地优先设计，告警可推送至手机，无 SIEM 依赖"
+   ],
+   "use_cases": [
+    "家庭或小型办公网络的入侵检测与告警",
+    "监控 IoT 设备异常外联与远程控制工具使用",
+    "对 AI 编码代理产生的网络流量进行甄别"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Few dependencies.** Standard-library Python plus PyYAML, SQLite, and Zeek in Docker. Runs",
+     "lines": [
+      108
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其自身使用 SQLite 作为运行依赖，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Few dependencies.** Standard-library Python plus PyYAML, SQLite, and Zeek in Docker. Runs ／ **Network security monitoring for a home or small office: Zeek on a mirror port, the router's",
+   "evidence_lines": [
+    108,
+    8
+   ]
+  },
+  "fn": "barnabys-drew/tapwatch",
+  "sha": "009c3375b70a",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6245eb9e22ec": {
+  "identity": {
+   "one_liner": "本地 MCP 服务器，读写 Primavera P6 的 SQLite 库/XER 进度计划",
+   "review": "该项目是一个运行在 Windows 本地的 MCP 服务器，供 Claude Desktop、Cursor、VS Code 等 MCP 客户端分析 Primavera P6 Professional 进度计划数据，数据来源为独立 SQLite P6 数据库或 XER 文件，提供进度分析、DCMA 检查、对比与 Excel 报表导出等工具，编辑操作默认关闭并采用两步确认与自动备份。面向项目控制与计划工程师，不支持 SQL Server 及 Oracle P6 服务端数据库。",
+   "highlights": [
+    "读取独立 SQLite P6 数据库与 XER 文件，支持导入、导出与只读分析",
+    "提供进度分析、DCMA 14 项检查、基线对比与 Excel 仪表板导出等工具",
+    "写操作默认关闭，采用 dry-run 加确认令牌两步机制并自动备份"
+   ],
+   "use_cases": [
+    "用 MCP 客户端查询和分析 P6 进度计划的关键路径与浮时",
+    "对进度更新做对比、健康检查与 what-if 场景推演",
+    "生成 Excel 项目控制仪表板报表"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Professional** schedules on your Windows PC: a standalone (SQLite) P6 database, or plain XER files. ／ |P6 Professional standalone (SQLite)|25.12 (schema fingerprint in `p6mcp/schema.py`); other versions are read only until tested or trusted|",
+     "lines": [
+      7,
+      196
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "> P6 MCP is an independent project. It is not affiliated with, endorsed or sponsored by Oracle. ／ > Oracle, Primavera and P6 are trademarks of Oracle and/or its affiliates. ／ SQL Server and Oracle P6 databases (P6 EPPM, or P6 Professional with a server database) are not supported.",
+     "lines": [
+      9,
+      10,
+      201
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "SQL Server and Oracle P6 databases (P6 EPPM, or P6 Professional with a server database) are not supported.",
+     "lines": [
+      201
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它直接读取和写入 SQLite P6 数据库并为 AI 客户端提供数据访问工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local MCP server that lets an AI assistant (Claude Desktop, Claude Code, ／ Professional** schedules on your Windows PC: a standalone (SQLite) P6 database, or plain XER files. ／ - **Edits** (off by default): durations, constraints, actual dates, progress, resource assignment",
+   "evidence_lines": [
+    5,
+    7,
+    36
+   ]
+  },
+  "fn": "nizarhamza/p6-mcp",
+  "sha": "6245eb9e22ec",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

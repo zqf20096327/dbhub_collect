@@ -11431,5 +11431,72 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "087a1791a122": {
+  "identity": {
+   "one_liner": "自托管站点可靠性监控工具，单二进制加单 SQLite 文件",
+   "review": "Monita 是一个用 Rust 编写的自托管监控程序，提供网站/TCP/DNS/ping 拨测、cron 心跳、事件告警（邮件、Slack、Telegram 等）、公共状态页和缺陷工单。面向需要对自己项目做可用性监控与事件通知的团队，以单个二进制和一个 SQLite 文件运行，要求 64 位 Linux 服务器或 Docker 环境，MIT 许可。",
+   "highlights": [
+    "支持 URL、TCP 端口、DNS、ping 监控（30 秒至 5 分钟间隔）及 HTTPS 证书到期提醒",
+    "提供 cron 心跳、事件告警（email/Slack/Google Chat/Discord/Telegram/ntfy/PagerDuty）与公共状态页",
+    "内置工单看板、维护窗口、多角色与两步登录、作用域 API 密钥"
+   ],
+   "use_cases": [
+    "自托管监控团队网站与 API 的可用性",
+    "为定时任务（cron）配置心跳并接收失败告警",
+    "对外发布服务状态页并收集缺陷反馈"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Monita checks your team's websites and scheduled jobs, alerts the people you choose when one fails, and shows the outage on a public status page. It runs on your own server as one program with one SQLite file.",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以单个 SQLite 文件存储自身运行数据，属使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Monita checks your team's websites and scheduled jobs, alerts the people you choose when one fails, and shows the outage on a public status page. It runs on your own server as one program with one SQLite file. ／ - **Monitors** check a URL, a TCP port, a DNS name or a host by ping every 30 s to 5 min, and warn before an HTTPS certificate expires. ／ On a 64-bit Linux server with systemd, 512 MB of memory and 5 GB of disk. On Arm, use `monita_linux_arm64.tar.gz`.",
+   "evidence_lines": [
+    5,
+    17,
+    35
+   ]
+  },
+  "fn": "PT-Perkasa-Pilar-Utama/monita",
+  "sha": "087a1791a122",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

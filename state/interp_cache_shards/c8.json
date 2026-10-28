@@ -10380,5 +10380,78 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9de3ffa0494c": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Java/Kotlin 任务调度库，持久化步骤、事件与重试",
+   "review": "bikesched 是一个面向 Java 和 Kotlin 开发者的任务调度库，将任务、步骤、事件与节点信息存储在 PostgreSQL 表中，通过 SELECT FOR UPDATE SKIP LOCKED 和 LISTEN/NOTIFY 实现多节点协作，无需额外基础设施。提供可选的管理界面、Spring Boot starter、Micrometer 指标等模块。项目处于 0.2.0-SNAPSHOT 早期阶段，API 与数据库 schema 可能无迁移直接变更。",
+   "highlights": [
+    "使用 PostgreSQL 表存储任务，节点通过 SELECT FOR UPDATE SKIP LOCKED 认领到期任务，通过 LISTEN/NOTIFY 即时触发",
+    "支持持久化步骤、补偿（saga）、事件等待、子任务、循环任务、取消与崩溃恢复",
+    "提供可选 admin UI、Spring Boot 自动配置、Kotlin 扩展、Jackson 载荷映射与 Micrometer 指标模块"
+   ],
+   "use_cases": [
+    "Java/Kotlin 应用中需要持久化执行、重试与 saga 模式的后台任务调度",
+    "多实例共享一个 PostgreSQL 数据库的分布式任务队列场景",
+    "需要管理界面查看、重试、取消任务的运维场景"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**A PostgreSQL-backed job scheduler for Java and Kotlin: durable steps, events and retries, with ／ bikesched stores jobs in PostgreSQL and lets every connected application instance (*node*) work on ／ - **PostgreSQL is all you need**: jobs, durable steps, events and nodes live in plain tables",
+     "lines": [
+      5,
+      26,
+      43
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是构建在 PostgreSQL 存储之上的任务调度库，为使用 PostgreSQL 的应用提供服务，不是以数据库为存储的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A PostgreSQL-backed job scheduler for Java and Kotlin: durable steps, events and retries, with ／ bikesched stores jobs in PostgreSQL and lets every connected application instance (*node*) work on ／ - **Just two runtime dependencies** in the core: the PostgreSQL JDBC driver and the SLF4J API",
+   "evidence_lines": [
+    5,
+    26,
+    36
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "bikesched/bikesched",
+  "sha": "9de3ffa0494c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

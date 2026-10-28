@@ -11009,5 +11009,71 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "973b3d2a4ae8": {
+  "identity": {
+   "one_liner": "自托管 SolaX 逆变器监控系统，轮询遥测并存储于 SQLite",
+   "review": "用 Rust 编写的自托管监控系统，通过本地网络每五秒轮询 SolaX 逆变器的遥测数据，将原始读数与日汇总存入 SQLite，并经 HTTP API 与 SSE 向浏览器仪表盘提供实时功率、发电量和历史趋势。面向拥有 SolaX 逆变器的个人用户；README 注明仅在 X1 Mini G4 3.3KW 型号上测试过。",
+   "highlights": [
+    "通过本地网络以五秒间隔轮询逆变器遥测数据",
+    "SQLite 存储原始读数与日汇总，支持历史分析",
+    "提供 HTTP API 与 SSE 实时推送，内置 Web 仪表盘及 CSV 导出"
+   ],
+   "use_cases": [
+    "监控 SolaX 逆变器实时功率与发电量",
+    "分析历史发电数据与温度相关行为",
+    "通过遥测数据诊断逆变器降载等硬件问题"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Persistence:** SQLite stores raw readings and daily summaries for historical analysis.",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该项目用 SQLite 存储逆变器遥测数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted SolaX inverter monitor. It polls the inverter over the local network, stores readings in SQLite, and serves a web dashboard for live power, energy generation, and historical trends. ／ - **Persistence:** SQLite stores raw readings and daily summaries for historical analysis. ／ - **HTTP API:** Serves current readings, historical data, and summaries to the dashboard.",
+   "evidence_lines": [
+    3,
+    30,
+    31
+   ]
+  },
+  "fn": "MohanaManikandan/solax-monitor",
+  "sha": "973b3d2a4ae8",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

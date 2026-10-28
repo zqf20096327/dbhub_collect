@@ -9575,5 +9575,193 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c184d209581c": {
+  "identity": {
+   "one_liner": "PostgreSQL 专用任务调度器，数据库驱动的定时作业执行",
+   "review": "pg_timetable 是一个独立运行的任务调度器，为 PostgreSQL 安排定时作业，可执行 SQL 命令、系统程序和内置任务。作业以任务链组织，配置和日志均存储在数据库中，支持 YAML 定义任务链、失败重试、并发保护和 OpenTelemetry 导出。适用于需要用数据库管理定时任务的 PostgreSQL 运维和开发人员，安装可通过发布包、Docker 镜像或源码构建。",
+   "highlights": [
+    "支持任务链编排，每个任务可执行 SQL、内置任务或可执行文件，支持参数传递",
+    "配置与日志完全由数据库驱动，支持 YAML 文件定义任务链",
+    "提供错过任务自动重试、并发保护、OpenTelemetry 追踪与指标导出"
+   ],
+   "use_cases": [
+    "定时执行数据库维护操作（如 VACUUM、ETL 管道）",
+    "需要重试、并发保护等可靠性的生产定时任务调度",
+    "替代 cron，通过数据库集中管理 PostgreSQL 作业配置与日志"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pg_timetable: Advanced scheduling for PostgreSQL ／ **pg_timetable** is an advanced standalone job scheduler for PostgreSQL, offering many advantages over traditional schedulers such as **cron** and others. ／ It is completely database driven and provides a couple of advanced concepts. It allows you to schedule PostgreSQL commands, system programs and built-in operations:",
+     "lines": [
+      9,
+      11,
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供任务调度功能的独立工具，连接数据库执行调度作业",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**pg_timetable** is an advanced standalone job scheduler for PostgreSQL, offering many advantages over traditional schedulers such as **cron** and others. ／ It is completely database driven and provides a couple of advanced concepts. It allows you to schedule PostgreSQL commands, system programs and built-in operations:",
+   "evidence_lines": [
+    11,
+    12
+   ]
+  },
+  "fn": "cybertec-postgresql/pg_timetable",
+  "sha": "c184d209581c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4999753b5c13": {
+  "identity": {
+   "one_liner": "PostgreSQL 冷热数据分层扩展，将旧行写入 Iceberg 对象存储",
+   "review": "ColdFront 是 pgEdge 开发的 PostgreSQL 扩展与配套命令行工具（archiver、partitioner、compactor），在 PostgreSQL 内部重写 SQL 语句，把同一张表的近期行保留在本地分区、旧行写入 S3/Azure/GCS 上的 Apache Iceberg，通过 Lakekeeper 目录和 pg_duckdb 实现冷层读写。适用于 PostgreSQL 16-18，目前为 beta，官方声明不可用于生产。",
+   "highlights": [
+    "在 PostgreSQL 服务端通过 shared_preload 扩展重写语句，应用通过同一表访问冷热两层",
+    "冷层基于 Apache Iceberg，支持 S3 兼容、Azure 和 GCS 存储，配合 Lakekeeper 目录",
+    "提供 archiver、partitioner、compactor 命令行工具及 Docker 部署方式"
+   ],
+   "use_cases": [
+    "需要按生命周期把大表的旧数据迁移到对象存储的场景",
+    "应用不改 SQL 透明读写冷热分层数据的场景",
+    "基于 pgEdge Spock 多节点的分布式分层部署"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "ColdFront runs inside PostgreSQL and rewrites each statement to the correct ／ - `postgresql.conf` holds the server settings: ／ - `shared_preload_libraries` must include `pg_duckdb` and `coldfront`.",
+     "lines": [
+      9,
+      22,
+      25
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展与配套工具，为 PostgreSQL 提供分层存储能力而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ColdFront runs inside PostgreSQL and rewrites each statement to the correct ／ ColdFront runs on PostgreSQL 16, 17, and 18. A single node needs only stock ／     CREATE EXTENSION coldfront;",
+   "evidence_lines": [
+    9,
+    48,
+    166
+   ]
+  },
+  "fn": "pgEdge/coldfront",
+  "sha": "4999753b5c13",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "97443916ce95": {
+  "identity": {
+   "one_liner": "电商商品价格追踪应用，爬取价格并存库并通知",
+   "review": "一个网页应用，用户录入商品与购物网站后，通过网页爬取获取商品价格并存入数据库，当价格下降或有优惠时通过邮件或站内通知提醒用户。使用 React、Flask/Express 等技术栈，适合需要自动盯价的网购用户，README 未详述数据库部署细节。",
+   "highlights": [
+    "提供网页爬取功能，提取指定购物网站的商品详情和价格并存入数据库",
+    "提供通知系统，在价格下降或出现优惠时发送邮件或应用内通知",
+    "提供用户界面，用于录入需追踪的商品与购物网站"
+   ],
+   "use_cases": [
+    "追踪多个购物网站上商品的价格变动",
+    "在商品降价或出现优惠时自动接收提醒"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明该应用将爬取的数据存储于数据库，数据库仅为存储层，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is a web application that allows users to track the prices of products from online shopping sites and receive notifications when there is a price drop or offer on the product. The application includes a user-friendly interface where users can enter product details and shopping sites to track. It also utilizes web scraping to extract the latest product details and prices from the specified sites and stores the data in a database. Additionally, the application has a notification system that sends emails or in-app notifications to the user when a price drop or offer occurs on their tracked products",
+   "evidence_lines": [
+    3
+   ]
+  },
+  "fn": "kanha638/Price-Tracker",
+  "sha": "97443916ce95",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

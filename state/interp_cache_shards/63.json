@@ -11189,5 +11189,83 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "79e646457b9c": {
+  "identity": {
+   "one_liner": "MCP 服务器，将 Excel/CSV/SQL 数据以只读查询生成仪表盘",
+   "review": "Showboard 是一个 MCP 服务器，编码代理发送 SQL 与布局描述，它以只读方式查询 Excel、CSV、SQLite 或 Postgres 数据，在浏览器、应用或终端面板中渲染图表与表格。面向使用 Claude Code、Codex、Cursor 等编码代理的开发者；查询只读，单次查询最多保留 5000 行，仅端到端测试了 Claude Code。",
+   "highlights": [
+    "作为 MCP 服务器运行，代理发送 SQL，Showboard 执行只读查询并显示仪表盘",
+    "支持 Excel、CSV、SQLite、Postgres 数据源，表格文件保存后自动重载",
+    "可嵌入 Node + React 应用，支持保存 recipes 与 boards 快照"
+   ],
+   "use_cases": [
+    "让编码代理用图表而非文本回答数据问题",
+    "在终端旁或应用内探索本地表格与数据库数据",
+    "在自有 Node + React 应用中嵌入数据看板"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For Postgres credentials, use the `SHOWBOARD_DB` environment variable instead of putting a password in settings files. See the setup guide. ／ |A SQLite or Postgres database|“Show monthly revenue and the top five products.” Query your tables read-only.|",
+     "lines": [
+      88,
+      101
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "npx showboard init --db ./shop.sqlite ／ |A SQLite or Postgres database|“Show monthly revenue and the top five products.” Query your tables read-only.|",
+     "lines": [
+      83,
+      101
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "eco": "tool",
+   "eco_why": "为编码代理提供数据库只读查询与仪表盘渲染服务的 MCP 组件，本身不依赖某库存数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（单许可）",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MCP server ／ You need **Node.js 22.13+** and a coding agent. Start with a folder of Excel or CSV files, a SQLite database, or a Postgres connection. ／  Your question goes to a coding agent, which sends SQL to Showboard over MCP. Showboard queries your data read-only and displays a dashboard in your browser, app or terminal.",
+   "evidence_lines": [
+    20,
+    45,
+    122
+   ]
+  },
+  "fn": "rohanbeingsocial/showboard",
+  "sha": "79e646457b9c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

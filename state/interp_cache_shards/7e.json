@@ -11873,5 +11873,252 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "96268c7dc012": {
+  "identity": {
+   "one_liner": "Tauri+Rust 桌面 AI 小说创作系统，集成知识图谱与多代理工作流",
+   "review": "一款本地运行的桌面小说写作软件，用 Rust/Tauri 实现，提供幕前写作与幕后资产管理双界面，包含多代理续写、质量门、伏笔追踪、前文向量检索、分层摘要等机制，数据存于本地 SQLite。面向长篇小说作者，需自配 OpenAI/Anthropic/Ollama 等模型服务，安装方式为下载安装包或源码构建。",
+   "highlights": [
+    "提供多模型适配（OpenAI/Anthropic/Ollama/本地 API）与角色×任务模型路由",
+    "实现续写前前文向量检索、章节/段/全书三层摘要与知识图谱资产回流",
+    "支持从源码构建（Node.js 20 + Rust 1.95.0）及预构建安装包下载"
+   ],
+   "use_cases": [
+    "长篇小说连续续写与伏笔/角色状态一致性管理",
+    "本地离线模型（Ollama）辅助创作",
+    "故事资产（角色/世界观/大纲）结构化管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "v0.30.33 修复后续写内容仍丢失。根因：多次续写时保存操作**并发执行**，`update_scene` 全量覆写在 SQLite 写锁竞争下乱序提交，较早的小内容覆写较晚的大内容（编辑器正常但 DB 回退，重启才发现）。修复：①所有 `update_scene` **串行化**（Promise 链排队，最后一次写总是最新）；②修稿 `setContent`/`insertText` 后补同步 + 立即保存；③关闭等待 3s -> 6s（超过 SQLite busy_timeout）。",
+     "lines": [
+      613
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 显示 SQLite 为其本地存储组件，应用本身是创作工具而非数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "需要安装 Node.js（推荐 20 LTS）和 Rust。 ／ |🔌|**多模型适配**|OpenAI / Anthropic / Ollama / 本地 API，角色 × 任务模型路由|",
+   "evidence_lines": [
+    50,
+    29
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "91zgaoge/StoryMoss",
+  "sha": "96268c7dc012",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c00107509410": {
+  "identity": {
+   "one_liner": "将 DuckDB 2.0 放上网络的 SQL 分析服务器，使用 Warp SQL HTTP 协议传输 Arrow 数据",
+   "review": "Hardcharger 是 GizmoData 开发的分析服务器，内嵌 DuckDB 2.0，客户端通过自研的 Warp SQL HTTP 协议以 Apache Arrow 记录批形式读写数据，提供 TLS/mTLS、基于角色的访问控制、SSO、审计日志及内置 Web UI（SQL 编辑器、结果网格、上传下载），并附带桌面和 iOS/iPadOS 应用。适合需要远程、安全访问 DuckDB 的团队与客户端开发者；不改变 DuckDB 本体，单机服务器形态。",
+   "highlights": [
+    "提供 Warp SQL 协议：一次 HTTP 往返回查询与首批行，大结果以 Arrow IPC 流式传输（支持 LZ4/zstd 压缩与断点续传），支持 Arrow 批量写入表",
+    "内置安全能力：令牌登录、TLS/mTLS、基于角色的访问控制、行策略、列脱敏、OIDC/JWKS SSO 与防篡改审计日志",
+    "二进制内编译 Web UI，包含 SQL 编辑器、结果网格、Schema 浏览、SQL Monitor 与服务器配置界面；提供 macOS/Windows 桌面应用与 iOS/iPadOS 应用"
+   ],
+   "use_cases": [
+    "为 DuckDB 提供远程网络访问，供应用或 BI 客户端通过 HTTP/Arrow 读取查询结果",
+    "需要多用户、角色权限与审计的共享 DuckDB 查询服务",
+    "通过 Web UI 或移动端导入 CSV/Excel/Parquet/JSON 文件并进行交互式 SQL 分析"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🔭 **Observable.** Instrumentation into a DuckDB file or PostgreSQL, catalog logging (also",
+     "lines": [
+      46
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "SQL Server, MySQL, PostgreSQL, Redshift, Snowflake, Trino, GizmoSQL, Oracle, Db2,",
+     "lines": [
+      262
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "SQL Server, MySQL, PostgreSQL, Redshift, Snowflake, Trino, GizmoSQL, Oracle, Db2,",
+     "lines": [
+      262
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "SQL Server, MySQL, PostgreSQL, Redshift, Snowflake, Trino, GizmoSQL, Oracle, Db2,",
+     "lines": [
+      262
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "`sqlite_scanner` is closed separately, at plan time (see the access-control section).",
+     "lines": [
+      800
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 DuckDB 提供网络服务化封装与客户端协议，属于为数据库生态服务的服务器组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0 许可，README 称无版本区分、无许可密钥（此前 GizmoSQL 的企业功能全部包含）",
+   "install": [
+    "pypi",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Hardcharger™** puts DuckDB 2.0 on the network. Clients connect over ／ **Warp SQL**, an open HTTP protocol that moves ／ - 🦆 **DuckDB 2.0 inside.** A standalone server on DuckDB's v2 C API, not an extension.",
+   "evidence_lines": [
+    30,
+    31,
+    39
+   ]
+  },
+  "fn": "gizmodata/hardcharger",
+  "sha": "c00107509410",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e47a385adadb": {
+  "identity": {
+   "one_liner": "CLI Agent 的上下文生命周期管理引擎",
+   "review": "ContextEngine 是面向 CLI Agent 的上下文生命周期管理系统，在 Agent 循环的六个阶段拦截并管理上下文的提取、存储、索引、检索、压缩与归档，提供七类上下文类型、L0/L1/L2 三级检索和 ctx:// 文件系统抽象。开发模式使用 InMemory+PostgreSQL，生产模式使用 pgvector+PostgreSQL，也支持本地 OpenGauss 模式。供构建 CLI Agent 的开发者使用。",
+   "highlights": [
+    "在 Agent 循环的六个边界阶段拦截上下文操作，不侵入模型推理",
+    "提供 L0/L1/L2 三级粒度索引与分层检索，基于 YAML 声明提取 schema",
+    "通过 ContextFS 将上下文操作映射为 ctx:// URI 的文件操作，内置多租户隔离与 Outbox 异步索引"
+   ],
+   "use_cases": [
+    "为 CLI Agent 构建跨会话的上下文持久化与冷启动注入",
+    "在固定 token 预算下实现按需粒度加载以控制上下文成本",
+    "多 Agent 场景下的多租户上下文隔离与共享"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Dev mode**: InMemory vectors + PostgreSQL — install `postgresql` and `pgvector` extension. ／ **Production**: pgvector + PostgreSQL RLS — horizontally scalable with row-level tenant isolation.",
+     "lines": [
+      161,
+      162
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "Option A: Local OpenGauss mode (default)",
+     "lines": [
+      259
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目为 CLI Agent 提供上下文管理，PostgreSQL/openGauss 仅作为其向量存储后端使用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ContextEngine provides the missing infrastructure: a full-stack context lifecycle management system that intercepts the Agent loop at six defined stages, treating the context window as a **managed resource** — not an unbounded buffer. ／ **The solution:** ContextFS maps every context operation to a file operation on `ctx://` URIs. The file metaphor is universally understood — `open`, `read`, `write`, `link`, `unlink`, `gc` map directly to context operations. Multi-tenant isolation is enforced at the filesystem level (via `account_id + owner_space` in every path), making it impossible to bypass even by buggy callers.",
+   "evidence_lines": [
+    25,
+    111
+   ]
+  },
+  "fn": "opengauss-mirror/oGMemory",
+  "sha": "e47a385adadb",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

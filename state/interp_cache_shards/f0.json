@@ -10204,5 +10204,207 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "79f4a3d2fceb": {
+  "identity": {
+   "one_liner": "MyBatis 增强工具包，提供通用 CRUD、分页、代码生成",
+   "review": "MyBatis-Plus 是基于 MyBatis 的增强工具包，为 Java 开发者提供开箱即用的 BaseMapper 接口、Lambda 条件构造器、分页插件和代码生成器等特性，通过 Spring Boot 2/3/4 starter 引入，可减少手写 SQL；3.5.9 起分页等 SQL 解析插件需另行引入对应 JSqlParser 模块。",
+   "highlights": [
+    "提供 BaseMapper 通用接口与 Lambda 风格条件构造器",
+    "包含分页插件与可定制的代码生成器",
+    "兼容 MyBatis，支持 Spring Boot 2/3/4 starter 及可插拔自定义接口"
+   ],
+   "use_cases": [
+    "简化 Java 应用的 MyBatis 数据访问层开发",
+    "批量生成实体与 Mapper 代码",
+    "分页查询与主键多策略生成"
+   ],
+   "eco": "tool",
+   "eco_why": "为 Java 数据库访问层服务的 MyBatis 增强工具，属于 ORM 开发库",
+   "persona": "build"
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为使用数据库的 Java 应用提供 MyBatis 增强开发库，服务数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MyBatis-Plus is a powerful and enhanced toolkit of MyBatis for simplifying development. ／ - Fully compatible with MyBatis ／ - Out-of-the-box interfaces for operate database",
+   "evidence_lines": [
+    40,
+    53,
+    55
+   ]
+  },
+  "fn": "baomidou/mybatis-plus",
+  "sha": "79f4a3d2fceb",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ed5a33ae76ab": {
+  "identity": {
+   "one_liner": "本地优先的多智能体 MCP 协调中心，用 SQLite 存协调记录",
+   "review": "Okto Nexus 是一个 MCP 服务器与运维面板，为同一仓库内协作的多个 AI 智能体提供持久身份、消息收件箱、任务交接、事件日志、治理控制与实时仪表盘。所有协调记录存储在本地 SQLite（WAL 模式）数据库中，通过 HTTP 暴露 MCP、REST API 和 React 仪表盘，无需云端服务。面向需要多智能体协作与人工审批的开发团队。",
+   "highlights": [
+    "提供 MCP over HTTP、运维 REST API 与内置 React 仪表盘，单端口运行",
+    "协调记录持久化于本地 SQLite/WAL 数据库，支持游标读取、长轮询与 SSE 事件流",
+    "包含消息收件箱、任务交接（原子认领/租约/依赖图）、权限与人工审批等治理机制"
+   ],
+   "use_cases": [
+    "多个 AI 智能体在同一代码仓库中协作时的消息传递与任务分发",
+    "需要对智能体通信设置权限、配额与人工审批的团队工作流",
+    "本地环境下多智能体系统的可观测性与事件审计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite database in WAL mode. Optional metrics, referenced workspace files, and ／ |Storage|local SQLite/WAL catalog + adapter-backed artifact payloads|",
+     "lines": [
+      17,
+      29
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL, or cloud broker adapter.",
+     "lines": [
+      1173
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 SQLite 存储协调记录的多智能体协作应用，SQLite 仅作为其内部存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Okto Nexus is an MCP server and operator hub for agents working in the same ／ SQLite database in WAL mode. Optional metrics, referenced workspace files, and ／ |Storage|local SQLite/WAL catalog + adapter-backed artifact payloads|",
+   "evidence_lines": [
+    5,
+    17,
+    29
+   ]
+  },
+  "fn": "OktoLabsAI/okto-nexus",
+  "sha": "ed5a33ae76ab",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "95a9fd435175": {
+  "identity": {
+   "one_liner": "自托管 AI 短剧/短视频创作工作室，七阶段流水线生成脚本到成片",
+   "review": "这是一个基于 Web 的自托管 AI 视频创作工作室，用户输入一句话创意后，经由剧本、角色、场景、道具、分镜、配音、剪辑七个阶段生成短剧或广告视频，各阶段可单独重做。使用方需自备文本/图像/视频模型的 API Key 及 S3 存储。架构为 React + FastAPI + PostgreSQL（存项目数据）+ Redis（任务队列）+ MinIO。",
+   "highlights": [
+    "七阶段制作流水线：剧本、角色、场景、道具、分镜、配音、剪辑，各阶段可编辑和重跑",
+    "支持配置多种文本/图像/视频模型（OpenAI 兼容端点、Seedream/Seedance、ComfyUI 等）",
+    "通过 Docker Compose 一键自托管，内置 PostgreSQL 16 与 Redis 7"
+   ],
+   "use_cases": [
+    "AI 短剧/爽剧内容的批量生产与编辑",
+    "抖音/TikTok 等平台爆款短视频的结构化创作",
+    "电商产品广告视频生成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "FastAPI (studio/server) ──▶ PostgreSQL (projects · studio_kv · meta) ／ |PostgreSQL 16|✅ bundled| ／ # open http://localhost:8787 · health check: GET /api/health (Postgres + object storage)",
+     "lines": [
+      115,
+      133,
+      155
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "PostgreSQL 用于存储项目/studio_kv/meta 数据，仓库是使用数据库的应用而非数据库工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，源自 calesthio/OpenMontage 但已重建为独立项目",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "  FastAPI (studio/server) ──▶ PostgreSQL  (projects · studio_kv · meta) ／ |PostgreSQL 16|✅ bundled| ／ Python · FastAPI · React · PostgreSQL · Redis · MinIO / S3 · Seedream · Seedance · edge-tts · FFmpeg · Docker / Coolify",
+   "evidence_lines": [
+    115,
+    133,
+    171
+   ]
+  },
+  "fn": "charliewwdev/OpenMontage",
+  "sha": "95a9fd435175",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

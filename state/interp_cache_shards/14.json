@@ -11068,5 +11068,130 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e090490104d3": {
+  "identity": {
+   "one_liner": "Rust 异步消息路由库，在 Kafka/NATS/MQTT/AMQP/数据库/HTTP 间搬运数据",
+   "review": "mq-bridge 是一个异步 Rust 数据管道库，通过统一的 receive_batch/send_batch 接口在消息队列、SQL/NoSQL 数据库、对象存储和 HTTP/gRPC 之间路由和转换数据，支持 transform、retry、DLQ、去重等中间件，并提供 Python/Node.js 绑定及命令行工具 mqb。面向需要在服务中嵌入数据管道或做 CDC 同步的开发者；Redpanda Connect 与 faucet 插件扩展了来源和目的地。",
+   "highlights": [
+    "所有端点实现统一的 receive_batch/send_batch trait，任意源可对接任意汇",
+    "支持 Postgres 逻辑复制 CDC（pgoutput）、SQL 读写（PostgreSQL/MySQL/MariaDB/SQLite）及 ClickHouse 批量读写",
+    "同一配置可作为 Rust/Python/Node.js 库、CLI、服务器或 MCP server 运行"
+   ],
+   "use_cases": [
+    "将 Postgres 变更流式同步到向量索引或数据仓库（CDC）",
+    "在 Kafka、NATS、RabbitMQ 等消息系统之间桥接和转换消息",
+    "无代码 ETL：用 mqb CLI 在系统间复制数据"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Change Data Capture (CDC)**: stream Postgres or MongoDB changes to Kafka, files, a warehouse, …|`postgres_cdc` (logical replication, `pgoutput`) · `postgres-cdc`; `mongodb` with `consume: capture_all` / `capture_new` (change streams) · `mongodb`|Postgres CDC tutorial · MongoDB| ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      96,
+      97
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts| ／ |MySQL, SQL Server or Oracle changes into Kafka|`kafka` output, `transform`|`connect_mapping`|`mysql-cdc`, `mssql-cdc`, `oracle-cdc`|",
+     "lines": [
+      97,
+      129
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      97
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      97
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**ClickHouse** bulk insert and resumable reads|`clickhouse` endpoint · `clickhouse`|ClickHouse|",
+     "lines": [
+      99
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|**faucet plugin**|faucet's connectors: MySQL / SQL Server / Oracle CDC, Snowflake, BigQuery, Iceberg, Delta, GraphQL, Singer taps; exactly-once into supporting sinks|41 sources, 34 sinks| ／ |MySQL, SQL Server or Oracle changes into Kafka|`kafka` output, `transform`|`connect_mapping`|`mysql-cdc`, `mssql-cdc`, `oracle-cdc`|",
+     "lines": [
+      122,
+      129
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|**faucet plugin**|faucet's connectors: MySQL / SQL Server / Oracle CDC, Snowflake, BigQuery, Iceberg, Delta, GraphQL, Singer taps; exactly-once into supporting sinks|41 sources, 34 sinks| ／ |MySQL, SQL Server or Oracle changes into Kafka|`kafka` output, `transform`|`connect_mapping`|`mysql-cdc`, `mssql-cdc`, `oracle-cdc`|",
+     "lines": [
+      122,
+      129
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为数据库与消息系统之间搬运/同步数据服务的管道工具，而非使用数据库存储自身数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "ClickHouse",
+    "Oracle",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object storage, files, and in-memory channels. Every endpoint sits behind the same batch-shaped `receive_batch` / `send_batch` traits, so any source can feed any sink. ／ |**Change Data Capture (CDC)**: stream Postgres or MongoDB changes to Kafka, files, a warehouse, …|`postgres_cdc` (logical replication, `pgoutput`) · `postgres-cdc`; `mongodb` with `consume: capture_all` / `capture_new` (change streams) · `mongodb`|Postgres CDC tutorial · MongoDB| ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+   "evidence_lines": [
+    27,
+    96,
+    97
+   ]
+  },
+  "fn": "marcomq/mq-bridge",
+  "sha": "e090490104d3",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

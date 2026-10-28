@@ -11262,5 +11262,142 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e227abef12a2": {
+  "identity": {
+   "one_liner": "自托管简历构建器，本地 SQLite 存储",
+   "review": "Open Resume 是一个可自托管的开源简历编辑器，提供 156 套模板、实时预览、版本历史、PDF/PNG/JSON 导出，可选接入自有 API Key 做 AI 定制。数据存储在本地 SQLite 数据库（Docker 用 named volume，Node 模式用 .data 目录），无需云数据库。面向想自行部署、掌控个人简历数据的求职者。",
+   "highlights": [
+    "数据存储于本地 SQLite，Docker 部署使用 named volume 持久化",
+    "版本历史记录在同一 SQLite 数据库中，含自动检查点与命名快照",
+    "支持导入 PDF、DOCX、TXT、Markdown 并导出 PDF/PNG/JSON"
+   ],
+   "use_cases": [
+    "自托管管理个人简历并导出 PDF",
+    "为不同职位维护多份简历并做版本对比",
+    "离线导入已有简历文档并整理内容"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Your own workspace** — local SQLite storage, server-side sessions, bundled fonts, and no analytics or telemetry. ／ Node mode stores data in `.data/open-resume.sqlite` by default; set `DATA_DIR` to use another directory. To back up, stop the app and copy the entire data directory, including any `-wal` and `-shm` files. In Docker, back up the named volume after stopping the  ／ Version history is stored in the same SQLite database. Each resume keeps its initial version, 20 recent automatic versions, and 30 recent manual snapshots; automatic changes within one minute are grouped. Named snapshots can include current unsaved edits. Comp",
+     "lines": [
+      27,
+      84,
+      86
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用 SQLite 存储简历数据的终端应用，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，第三方字体与依赖另有许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Your own workspace** — local SQLite storage, server-side sessions, bundled fonts, and no analytics or telemetry. ／ Node mode stores data in `.data/open-resume.sqlite` by default; set `DATA_DIR` to use another directory. To back up, stop the app and copy the entire data directory, including any `-wal` and `-shm` files. In Docker, back up the named volume after stopping the service. Keep a backup before deleting data.",
+   "evidence_lines": [
+    27,
+    84
+   ]
+  },
+  "fn": "AniChikage/open-resume",
+  "sha": "e227abef12a2",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2da1b6707642": {
+  "identity": {
+   "one_liner": "本地优先的 AI 写作工作室，Electron+React+SQLite 桌面应用",
+   "review": "OpenPlot AI 是一个本地优先的桌面 AI 聊天与小说写作工作室，将聊天、结构化 Story Bible、三幕大纲、章节管理与写作统计集成在单一窗口中。数据以 SQLite 存储在本地磁盘，API 密钥交由操作系统凭据库加密保存。适合需要管理世界观设定与章节进度的小说作者使用，支持 OpenAI、Anthropic、Ollama 等多种模型提供商。",
+   "highlights": [
+    "支持多提供商多模型聊天（OpenAI、Anthropic、OpenRouter、Groq、Ollama、LM Studio 及 OpenAI 兼容端点）",
+    "提供结构化 Story Bible、三幕大纲板、章节版本历史与 EPUB/Markdown 导出",
+    "数据本地存储于 SQLite，API 密钥使用操作系统凭据库加密，支持 MCP 桥接与 JavaScript 插件扩展"
+   ],
+   "use_cases": [
+    "小说及长篇创作的世界观、角色与章节管理",
+    "接入本地或云端大模型进行辅助写作与审阅",
+    "离线/无云同步环境下的本地写作数据管理"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Local-first by design.** SQLite on your disk, API keys in the OS credential vault, no account, no cloud sync, no telemetry.",
+     "lines": [
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用以本地 SQLite 数据库存放聊天、章节与项目数据，SQLite 仅作为其数据存储层。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A free, open-source, local-first AI writing studio for Windows, macOS and Linux. Chat with any model, keep your canon in a structured story bible, outline in three acts, write chapters, and watch your progress — all in one desktop window. ／ - **Local-first by design.** SQLite on your disk, API keys in the OS credential vault, no account, no cloud sync, no telemetry.",
+   "evidence_lines": [
+    5,
+    45
+   ]
+  },
+  "fn": "mahakammoonlightstudio-beep/OpenPlot-AI",
+  "sha": "2da1b6707642",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

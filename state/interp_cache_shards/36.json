@@ -10845,5 +10845,322 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "82e62e4ab8fe": {
+  "identity": {
+   "one_liner": "自托管观影记录与播放状态同步中心，本地 SQLite 存储",
+   "review": "Plekt 是一个自托管应用，在 Plex、Emby、Jellyfin、Trakt、Simkl 等服务之间双向同步观看状态、进度和评分，并提供历史、统计、日历等功能。数据存储在本地 SQLite，提供 Docker 镜像和 Windows 安装包，面向自建媒体服务器的个人用户。README 提示重写入操作在极端情况下可能损坏 SQLite 库，需自行备份。",
+   "highlights": [
+    "在 Plex、Emby、Jellyfin、Trakt、Simkl 之间双向同步观看状态、播放进度与评分",
+    "将观看记录本地存储于 SQLite，支持备份与恢复",
+    "提供 Docker 与 Windows 安装方式，支持从 Plembfin 旧名升级迁移"
+   ],
+   "use_cases": [
+    "多台媒体服务器间保持已看状态与续播进度一致",
+    "个人观影历史统计与即将播出日历",
+    "将 Plex/Jellyfin 等观看记录同步到 Trakt/Simkl 账户"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ - **Remembers** every watch, once, locally in SQLite ／ - **Self-hosted & private** - Runs entirely on your own hardware with dedicated SQLite storage and full data ownership",
+     "lines": [
+      4,
+      54,
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Plekt 是使用 SQLite 存储自身数据的媒体同步应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Plekt** is the brain in the middle. Your media servers, Trakt, and Seerr don't talk ／ - **Remembers** every watch, once, locally in SQLite",
+   "evidence_lines": [
+    19,
+    54
+   ]
+  },
+  "fn": "Lasikiewicz/plekt",
+  "sha": "82e62e4ab8fe",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e35e0937d8c3": {
+  "identity": {
+   "one_liner": "Go 语言轻量类型安全 SQL 查询构建器，零生产依赖",
+   "review": "Relica 是一个面向 Go 开发者的数据库查询构建库，提供 Model() CRUD、Expression API、命名占位符、JOIN、子查询、CTE、批量操作与事务辅助等能力，通过 LRU 语句缓存与参数化查询实现复用与防注入。支持 PostgreSQL、MySQL 8.0+、SQLite 3.25+，仅依赖 Go 标准库，通过 go get 安装。",
+   "highlights": [
+    "提供 Model() API、Expression API 与命名占位符 {:name} 的类型安全查询构建",
+    "支持 JOIN、子查询、CT、批量 INSERT/UPDATE、Upsert 及全部隔离级别的事务",
+    "仅依赖 Go 标准库，使用 LRU 语句缓存"
+   ],
+   "use_cases": [
+    "Go 项目中以结构体为中心的 CRUD 数据访问层开发",
+    "需要在 PostgreSQL/MySQL/SQLite 间工作的查询构建",
+    "批量写入与事务性多语句操作场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Multi-Database** - PostgreSQL, MySQL 8.0+, SQLite 3.25+ support ／ Works across all databases (PostgreSQL, MySQL, SQLite):",
+     "lines": [
+      44,
+      228
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Multi-Database** - PostgreSQL, MySQL 8.0+, SQLite 3.25+ support ／ Works across all databases (PostgreSQL, MySQL, SQLite):",
+     "lines": [
+      44,
+      228
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Multi-Database** - PostgreSQL, MySQL 8.0+, SQLite 3.25+ support ／ Works across all databases (PostgreSQL, MySQL, SQLite):",
+     "lines": [
+      44,
+      228
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "Error helpers read the driver's **error code** (PostgreSQL SQLSTATE, MySQL/MariaDB error number,",
+     "lines": [
+      428
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为操作数据库服务的 Go 查询构建组件，本身不存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Relica** is a lightweight, type-safe database query builder for Go with zero production dependencies. ／ - **Multi-Database** - PostgreSQL, MySQL 8.0+, SQLite 3.25+ support ／ go get github.com/coregx/relica",
+   "evidence_lines": [
+    11,
+    44,
+    68
+   ]
+  },
+  "fn": "coregx/relica",
+  "sha": "e35e0937d8c3",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "102301fadbec": {
+  "identity": {
+   "one_liner": "自托管无 Cookie 网站分析平台，单 Go 二进制加 PostgreSQL",
+   "review": "Supermetry 是一个开源、自托管的网站与产品分析平台，统计访客、页面浏览、来源、目标与转化，无需 Cookie 且不存原始 IP，数据保存在用户自己的 PostgreSQL 数据库中，包含漏斗、留存、用户路径、热图和会话回放功能。面向需要自托管网站统计的个人和团队，通过安装脚本、Docker Compose 或源码构建运行，要求 PostgreSQL 18。",
+   "highlights": [
+    "以单个 Go 二进制加 PostgreSQL 运行，无需 Redis，提供 Linux/macOS/Windows 安装包",
+    "提供 REST API、MCP 端点、CSV 导出，以及来自 Google Analytics 4、Plausible、Umami、Mixpanel、Amplitude 的导入",
+    "支持匿名/识别两种隐私模式、事件时间分区保留策略和备份恢复命令"
+   ],
+   "use_cases": [
+    "替代 Google Analytics 的自托管网站流量统计",
+    "产品分析：漏斗、留存队列、用户路径、Web Vitals、热图与会话回放",
+    "需要无 Cookie、不存原始 IP 的隐私合规采集场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "One Go binary + PostgreSQL. No cookies. ／ Supermetry is an open-source, self-hosted web analytics platform and a privacy-friendly alternative to Google Analytics. It counts visitors, pageviews, traffic sources, goals and conversions without cookies, and keeps every number in your own PostgreSQL databa ／ - PostgreSQL (18 is what CI runs). Redis is not needed; a single instance runs without it.",
+     "lines": [
+      6,
+      24,
+      118
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "|What you run|One Go binary + PostgreSQL|Elixir app + PostgreSQL + ClickHouse|Node.js app + PostgreSQL|Nothing; Google hosts it| ／ Plausible's self-hosted edition needs ClickHouse next to PostgreSQL, and Umami runs on Node.js. Supermetry is a single Go binary and PostgreSQL only, and it includes funnels, revenue, retention, session replay and heatmaps in the open-source release.",
+     "lines": [
+      127,
+      156
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明所有分析数据保存在自身的 PostgreSQL 数据库中，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " One Go binary + PostgreSQL. No cookies. ／ Supermetry is an open-source, self-hosted web analytics platform and a privacy-friendly alternative to Google Analytics. It counts visitors, pageviews, traffic sources, goals and conversions without cookies, and keeps every number in your own PostgreSQL database. Funnels, retention, user journeys, Web Vitals, heatmaps and session replay are included in the open-source release.",
+   "evidence_lines": [
+    6,
+    24
+   ]
+  },
+  "fn": "velixio/supermetry",
+  "sha": "102301fadbec",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "523a3286737d": {
+  "identity": {
+   "one_liner": "生成 Postgres 专用 Go API 服务的脚手架 CLI",
+   "review": "Bogie 是一个 Go CLI 脚手架工具，用 Gin、sqlc、goose、River、Kamal 组装 API-only 的 Go 服务，并附带可在生成后继续添加模型、控制器、任务等代码并自动完成注册的生成器。面向想在 Rails 旁边运行 Go 服务、希望预置技术选型的团队。限制：仅支持 Postgres，非框架，生成代码不依赖 Bogie 本身。",
+   "highlights": [
+    "提供 new/g/d/doctor 等生成器命令，生成并注册代码",
+    "生成的服务基于 Gin、sqlc、goose、River、Kamal 组合",
+    "生成的应用不导入 Bogie，可独立存在"
+   ],
+   "use_cases": [
+    "在现有 Rails 项目旁搭建 Go API 服务",
+    "快速生成带迁移、查询、后台任务的 Postgres Go 服务",
+    "为团队提供统一技术选型与服务布局"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A CLI that scaffolds an API-only, Postgres-only Go service ／ You need **Docker with Compose v2** (or your own Postgres, see",
+     "lines": [
+      6,
+      40
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite is deliberately out until River's SQLite driver is stable",
+     "lines": [
+      200
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库应用开发服务的脚手架工具，生成使用 Postgres 的服务代码",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT，v0.5.x，单一维护者",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A CLI that scaffolds an API-only, Postgres-only Go service ／ out of Gin, sqlc, goose, River and Kamal, with generators that also wire the code in. ／ - **Not configurable (yet).** Postgres only, Gin only, one choice per concern.",
+   "evidence_lines": [
+    6,
+    7,
+    199
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "bogie-go/bogie",
+  "sha": "523a3286737d",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

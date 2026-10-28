@@ -8810,5 +8810,73 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b77df18b099b": {
+  "identity": {
+   "one_liner": "将 pgAdmin 4 Query Tool API 转换为 PostgreSQL 线协议的代理",
+   "review": "pgadmin-bridge 在本地实现 PostgreSQL 线协议代理，把客户端 SQL 通过 pgAdmin 4 的 Query Tool REST API 转发执行，供只能通过托管 pgAdmin 访问数据库的用户使用 psql、DataGrip、DBeaver 等。支持简单与扩展查询协议，提供 Web UI、只读会话与语句超时；不支持 COPY、LISTEN/NOTIFY、SSL 与复制协议。",
+   "highlights": [
+    "实现 PostgreSQL 线协议（简单与扩展查询协议），向 psql、DataGrip、DBeaver、JDBC、psycopg 等客户端提供本地连接端口",
+    "通过 pgAdmin 4 Query Tool API 执行 SQL，回传列类型、错误码、事务状态，并支持查询取消",
+    "提供 Web UI 用于配置实例、生成连接串、查看连接与 SQL/HTTP 日志，支持只读会话和语句超时"
+   ],
+   "use_cases": [
+    "数据库端口被防火墙限制、仅能通过 pgAdmin Web 界面访问的场景下连接本地 IDE 或 CLI",
+    "需要脚本化、迁移工具或本地应用对接受 pgAdmin 代理的 staging 数据库",
+    "多套 pgAdmin 实例（生产/预发/分析）的统一本地接入点"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A PostgreSQL wire-protocol proxy that runs your SQL through pgAdmin 4's Query Tool API.",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为访问 PostgreSQL 数据库服务的代理组件，本身不使用数据库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A PostgreSQL wire-protocol proxy that runs your SQL through pgAdmin 4's Query Tool API. ／ **pgadmin-bridge** runs next to you (on your laptop, in Docker) and speaks the PostgreSQL protocol ／     C -- \"libpq\" --> D[(\"PostgreSQL\")]",
+   "evidence_lines": [
+    5,
+    24,
+    41
+   ]
+  },
+  "fn": "malinatrash/pgadmin-bridge",
+  "sha": "b77df18b099b",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

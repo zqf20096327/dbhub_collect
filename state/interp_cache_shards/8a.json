@@ -10508,5 +10508,87 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "33259d667573": {
+  "identity": {
+   "one_liner": "面向武理校园的 RAG/Agent 全栈 AI 助手应用",
+   "review": "一个面向武汉理工大学校园场景的全栈 AI 助手，使用 Vue 3 + Express + Qdrant 构建，支持对话、RAG 检索与 Agent 工具调用的自动意图路由，SSE 流式返回。数据持久化采用 SQLite（默认，唯一实现），第三阶段提供 PostgreSQL Repository 与导入工具供灰度切换。适合需要自建知识库问答与评测体系的校园/组织场景。",
+   "highlights": [
+    "自动意图路由：在普通对话、RAG 检索与 Agent 工具调用三种模式间切换，SSE 流式返回内容与来源",
+    "SQLite WAL 持久化存储，第三阶段提供 PostgreSQL Repository 与导入工具进行迁移切换",
+    "内置检索评测体系（Recall/RAGAS 等）与本地 ONNX BGE embedding/reranker"
+   ],
+   "use_cases": [
+    "校园/组织知识库问答系统部署",
+    "带评测与反馈闭环的 RAG 应用开发参考",
+    "对话、百科阅读与 Agent 工具调用一体化应用场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "第三阶段已提供 PostgreSQL Repository 与导入工具。默认仍为 `DATABASE_BACKEND=sqlite`；切换前先执行 PostgreSQL schema migration 和 SQLite 导入，验证用户、会话、任务、附件元数据、反馈数量一致后，再将 `DATABASE_BACKEND=postgres` 灰度启用。",
+     "lines": [
+      237
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite WAL 持久化存储（唯一实现）。",
+     "lines": [
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是用 SQLite/PostgreSQL 存储自身会话与业务数据的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "武理小精灵是面向武汉理工大学校园场景的 AI 助手。当前版本以 **Vue 3 + Pinia + Express + Qdrant** 为核心，通过统一会话编排层自动选择普通对话、RAG 检索或 Agent 工具调用，并以 SSE 向前端流式返回内容、来源和执行轨迹。 ／ - SQLite WAL 持久化存储（唯一实现）。 ／ 第三阶段已提供 PostgreSQL Repository 与导入工具。默认仍为 `DATABASE_BACKEND=sqlite`；切换前先执行 PostgreSQL schema migration 和 SQLite 导入，验证用户、会话、任务、附件元数据、反馈数量一致后，再将 `DATABASE_BACKEND=postgres` 灰度启用。",
+   "evidence_lines": [
+    5,
+    31,
+    237
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "L123121/Vue3_WUT_RAG",
+  "sha": "33259d667573",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

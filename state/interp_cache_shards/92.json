@@ -10306,5 +10306,73 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4d451e5c5906": {
+  "identity": {
+   "one_liner": "自托管家庭气象站展示应用，采集 Ambient 数据经 SQLite 存储渲染仪表盘",
+   "review": "一个基于 Laravel/PHP 的自托管天气仪表盘应用，从 AmbientWeather.net API 采集观测数据、从 Open-Meteo 获取预报，写入本地 SQLite，通过 Blade 和原生 JavaScript 渲染响应式桌面/手机视图，支持雷达地图、PWA 安装和布局编辑。面向拥有 Ambient Weather 站点的家庭用户，需 PHP 8.3+ 与 PDO SQLite 扩展。",
+   "highlights": [
+    "通过 Ambient Weather API 每分钟采集观测，Open-Meteo 每小时采集预报，数据存入本地 SQLite",
+    "提供可编辑的仪表盘布局（瓦片启停/排序/缩放）、季节主题、自定义标语库与移动端 PWA 支持",
+    "带认证管理后台，含数据源新鲜度、采集失败与调度心跳等诊断信息，无默认密码/公开注册"
+   ],
+   "use_cases": [
+    "Ambient Weather 站点用户搭建家庭/厨房常显天气看板",
+    "Raspberry Pi 等设备作为浏览器显示屏驱动的小型气象展示终端"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "├→ SQLite → Blade dashboard + JSON APIs ／ The application uses **Laravel 13, PHP, SQLite, Blade, vanilla JavaScript, CSS, and locally bundled Leaflet**. There is no frontend build step, Redis requirement, or queue worker requirement with the example configuration. Node.js is used for contract validati ／ You need **PHP 8.3+**, **Composer 2**, the PHP extensions required by the locked dependencies, and **PDO SQLite / SQLite3**. The PHP runtime must also support Laravel's usual extensions, including mbstring, DOM/XML, cURL, and OpenSSL. Composer validates depend ／ Start with a separate, empty SQLite database and configure `.env` using your own values:",
+     "lines": [
+      66,
+      73,
+      85,
+      102
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用自身使用 SQLite 存储气象观测与预报数据，SQLite 是其数据存储组件而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Midway Weather is a customizable, self-hosted household weather display built around observations from an Ambient Weather station. It brings your station readings together with Open-Meteo forecasts, a radar map, recent trends, and weather-aware messages in one readable view. ／                                                                       ├→ SQLite → Blade dashboard + JSON APIs ／ The application uses **Laravel 13, PHP, SQLite, Blade, vanilla JavaScript, CSS, and locally bundled Leaflet**. There is no frontend build step, Redis requirement, or queue worker requirement with the example configuration. Node.js is used for contract validation during development and CI.",
+   "evidence_lines": [
+    5,
+    66,
+    73
+   ]
+  },
+  "fn": "thenumber3/midway-weather",
+  "sha": "4d451e5c5906",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10432,5 +10432,148 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "00cfbf353fa6": {
+  "identity": {
+   "one_liner": "Flutter 跨平台本地优先 AI 聊天客户端，SQLite 本地存储",
+   "review": "LumenFlow 是一款基于 Flutter 的 AI 聊天应用，覆盖 Android/iOS/Windows/Linux/macOS，接入 13 类模型平台并支持流式输出与 tool calling/MCP 工具调用；对话、附件与配置全部以 SQLite 存于本地设备，支持多格式导出与设置备份。适合需要在本地管理多平台 AI 会话的个人用户；构建需自备 Flutter 工具链。",
+   "highlights": [
+    "支持 13 类 AI 平台接入，含流式响应与 tool calling 循环",
+    "支持连接 Streamable HTTP MCP 服务器并将其工具暴露给模型",
+    "对话、消息、附件与设置存储于本地 SQLite，支持 TXT/JSON/PDF 导出"
+   ],
+   "use_cases": [
+    "在本地设备管理多平台 AI 对话与凭据",
+    "通过 MCP 与内置工具运行 agent 式任务",
+    "导出与备份对话记录及配置"
+   ],
+   "cat_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite storage** with foreign keys, indexes, transactions, and automatic migration from legacy SharedPreferences. ／ |`sqlite3`|Conversation, message, attachment, and settings storage|",
+     "lines": [
+      43,
+      103
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其使用 sqlite3 包为对话/消息/附件/设置提供本地存储，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，捆绑 Noto Sans SC 字体为 OFL-1.1",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "LumenFlow (Chinese: 流光) is a Flutter-based AI chat application for Android, iOS, Windows, Linux, and macOS. It combines multi-platform model access, a tool-calling agent runtime, local SQLite storage, and a Cupertino-style interface. ／ - **SQLite storage** with foreign keys, indexes, transactions, and automatic migration from legacy SharedPreferences. ／ |`sqlite3`|Conversation, message, attachment, and settings storage|",
+   "evidence_lines": [
+    9,
+    43,
+    103
+   ]
+  },
+  "fn": "HuanMeng-official/LumenFlow",
+  "sha": "00cfbf353fa6",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "93ca841912c2": {
+  "identity": {
+   "one_liner": "A 股每日复盘站点：收盘后采集行情入库 SQLite，供浏览器复盘与形态选股",
+   "review": "这是一个个人自用的 A 股复盘与选股站点，用 FastAPI + SQLite + React 构建，每日收盘后通过 APScheduler 定时采集行情、涨停、板块、资金等数据落库，页面只读本地库，支持形态扫描、涨停复盘、悟道阶段判定，结果可推送飞书。需要自备 iFinD token 与数据源凭据，并受 5000 次/订阅周期的配额限制。",
+   "highlights": [
+    "收盘后自动采集行情/涨停/板块/资金数据到本地 SQLite，页面只读库不实时拉外部接口",
+    "提供全市场日线形态扫描、涨停复盘、资金面、个股异动等页面，形态命中可推送飞书",
+    "内置数据源配额分级让路机制，按用量比例停用部分采集任务",
+    "提供 systemd + nginx + Let's Encrypt 的一键部署脚本"
+   ],
+   "use_cases": [
+    "个人 A 股每日复盘与情绪周期跟踪",
+    "按日线形态（均线多头、平台突破等）做选股筛选与跟踪",
+    "自选股管理与复盘笔记记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "个人自用的 **A 股每日复盘与找票站点**。收盘后自动把当天的行情、涨停、板块、资金等数据采进本地 SQLite，在浏览器里看复盘、按形态找票、记笔记。 ／ - **后端**：Python 3.13、FastAPI、SQLAlchemy 2.0、SQLite（WAL）、APScheduler（交易日 15:05 采集 + 17:30 / 19:30 收盘后补采 + 22:00 / 22:30 成分股预取） ／ ├─(限速/重试/分片/降级)─> sources ─> services(解析&计算) ─> SQLite",
+     "lines": [
+      3,
+      34,
+      42
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明站点用本地 SQLite 存储采集数据，FastAPI 只读库提供页面服务，SQLite 是其存储组件而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "个人自用的 **A 股每日复盘与找票站点**。收盘后自动把当天的行情、涨停、板块、资金等数据采进本地 SQLite，在浏览器里看复盘、按形态找票、记笔记。 ／            ├─(限速/重试/分片/降级)─> sources ─> services(解析&计算) ─> SQLite ／ 1. **页面只读 SQLite，绝不实时拉外部接口。**",
+   "evidence_lines": [
+    3,
+    42,
+    49
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "767313977/zhifujing",
+  "sha": "93ca841912c2",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

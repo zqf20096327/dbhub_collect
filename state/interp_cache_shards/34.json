@@ -10509,5 +10509,129 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "626e2f66a550": {
+  "identity": {
+   "one_liner": "支持 Meshtastic/MeshCore/Reticulum 的 Electron 桌面客户端，本地 SQLite 存历史",
+   "review": "这是一个跨平台 Electron 桌面应用，统一连接 Meshtastic、MeshCore 和 Reticulum 三种 RF mesh 协议栈，通过 BLE、USB 串口、Wi-Fi/TCP 和 MQTT 与设备通信。使用本地 SQLite 数据库持久化消息历史与网格日志，提供路由诊断、地图、信道配置、密钥管理等功能，面向 mesh 网络桌面用户和应急通信（EMCOMM）场景。",
+   "highlights": [
+    "支持三种 mesh 协议栈（Meshtastic/MeshCore/Reticulum），可在同一界面切换且后台保持连接",
+    "使用本地 SQLite 数据库持久化消息历史、传感器数据与网格日志，支持导出/导入",
+    "支持 BLE、USB 串口、Wi-Fi/TCP、MQTT 多种传输方式，含 MQTT 网关上行与 PSK 解密"
+   ],
+   "use_cases": [
+    "mesh 网络桌面端消息收发与长期历史存档",
+    "网络路由诊断与节点状态可视化",
+    "应急通信（EMCOMM）场景下经 MECP 与 TAK 的消息处理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "With a dedicated local SQLite database, Mesh-Client keeps message history and mesh logs durable across restarts and sync failures. It provides one reliable hub for Meshtastic, MeshCore, and Reticulum (via an AGPL Rust sidecar), delivering a unified workflow re ／ - **True message persistence:** Local SQLite storage for reliable long-term history, without lost chats or broken logs.",
+     "lines": [
+      32,
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是使用本地 SQLite 数据库存消息历史的桌面客户端应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Cross-platform **Electron** desktop client for **Meshtastic**, **MeshCore**, and **Reticulum (LXMF)** on **macOS**, **Linux**, and **Windows** — **BLE**, **USB serial**, **Wi-Fi/TCP**, **MQTT**, local **SQLite** history, **routing diagnostics**, **16-language UI**, plus a Ratspeak-compatible Reticulum sidecar (**Games**, **encrypted paper**, **LXST voice**, Nomad, RRC, Remote). EMCOMM support via MECP & TAK. ／ With a dedicated local SQLite database, Mesh-Client keeps message history and mesh logs durable across restarts and sync failures. It provides one reliable hub for Meshtastic, MeshCore, and Reticulum (via an AGPL Rust sidecar), delivering a unified workflow regardless of protocol or hardware. ／ - **True message persistence:** Local SQLite storage for reliable long-term history, without lost chats or broken logs.",
+   "evidence_lines": [
+    3,
+    32,
+    36
+   ]
+  },
+  "fn": "Colorado-Mesh/mesh-client",
+  "sha": "626e2f66a550",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fb784d2e31e3": {
+  "identity": {
+   "one_liner": "将 LinkedIn 个人数据同步到本地 SQLite 并可查询的 CLI",
+   "review": "命令行工具 member 通过 LinkedIn 官方 Member Data Portability API 下载用户自己的数据（联系人、消息、职位等）存入本地 SQLite，支持只读 SQL 查询，并可安装技能文件供 Claude Code、Codex 等编码代理以 MCP/skill 方式访问。需要用户自建 LinkedIn 开发者应用获取令牌，仅适用于 EEA 和瑞士的会员，与 LinkedIn 无官方关联。",
+   "highlights": [
+    "通过官方 Member Data Portability API 下载个人数据并存入本地 SQLite",
+    "提供只读 SQL 查询、JSON 输出和域/记录浏览等离线命令",
+    "可安装技能文件使 Claude Code、Codex 等代理查询数据"
+   ],
+   "use_cases": [
+    "定期备份和查询自己的 LinkedIn 个人数据",
+    "让 AI 编码代理基于本地数据回答关于人脉/消息的问题"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该工具使用本地 SQLite 存储同步的 LinkedIn 数据，SQLite 仅作存储层而非其服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`member` downloads your own LinkedIn data (connections, messages, invitations, positions, skills and more) to your ／ Member Data Portability API. ／ |`member database info`|Path, size, schema, member binding, counts|",
+   "evidence_lines": [
+    11,
+    13,
+    94
+   ]
+  },
+  "fn": "activout/Activout.MemberData",
+  "sha": "fb784d2e31e3",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

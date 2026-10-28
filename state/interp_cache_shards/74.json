@@ -10628,5 +10628,280 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2814293b520b": {
+  "identity": {
+   "one_liner": "面向 AI 代理的代码搜索 MCP 服务器，以 SQLite 存索引",
+   "review": "这是一个 MCP 服务器，用 tree-sitter 解析 14 种语言源码，把符号、函数体、调用关系和元数据写入 SQLite 索引，向 Claude Code、Cursor 等 MCP 客户端提供 25–42 个代码搜索与导航工具，并支持解析 1С:Предприятие 导出配置。通过 npm、预编译二进制或 Rust 源码安装，需运行后台 daemon 构建索引。",
+   "highlights": [
+    "通过 MCP 协议提供代码搜索、符号查找、调用图、文件读取和 Git 历史查询工具",
+    "支持 tree-sitter AST 解析 14 种语言，并以专用构建版本解析 1С:Предприятие（Конфигуратор 与 EDT）导出",
+    "内置 HTTP 服务器（默认仅监听 127.0.0.1），单索引可服务多项目与多会话"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供低开销的代码库检索与调用关系查询",
+    "对大型 1С 配置仓库进行元数据结构、表单处理器与数据链接的查询",
+    "多代码库集中索引，供多客户端会话共享查询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Поиск по коду для ИИ-агентов. Один бинарник, индекс в SQLite, ответ за миллисекунды. ／ складывает символы, тела, вызовы и метаданные в SQLite и отдаёт агенту готовый",
+     "lines": [
+      11,
+      151
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明程序将解析后的符号、函数体与元数据存入 SQLite 作为自身索引存储，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Поиск по коду для ИИ-агентов. Один бинарник, индекс в SQLite, ответ за миллисекунды. ／ Работает с Claude Code, Cursor, VS Code, LibreChat — с любым клиентом MCP. ／ складывает символы, тела, вызовы и метаданные в SQLite и отдаёт агенту готовый",
+   "evidence_lines": [
+    11,
+    121,
+    151
+   ]
+  },
+  "fn": "Regsorm/code-index-mcp",
+  "sha": "2814293b520b",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "788e36001a6a": {
+  "identity": {
+   "one_liner": "AI 代理本地长期记忆库：单 SQLite 文件之上的 MCP 服务与 SDK",
+   "review": "Mnemosyne 把 AI 代理学到的内容连同证据来源存在单个 SQLite 文件里，通过 MCP、TypeScript SDK、CLI 或 HTTP 提供记忆读写；来源被更正时会连带退役依赖它的旧记忆。面向 Claude Code、Cursor 等 MCP 客户端开发者，需要 Node.js ≥22.16，2.0.0 为破坏性升级且不迁移旧库。",
+   "highlights": [
+    "提供 16 个 memory_* MCP 工具，含存储、召回、更正、检查点等；--read-only 可省略全部写入工具",
+    "本地引擎基于单个 SQLite 文件运行，无需模型 API key、数据库服务器或 Docker",
+    "发布 LongMemEval-S（409/500）与 LoCoMo 检索评测数据，并公开未达标指标"
+   ],
+   "use_cases": [
+    "为 MCP 客户端（Claude Code、Cursor）接入持久化代理记忆",
+    "需要证据追溯与更正驱动记忆退役的代理工作流",
+    "离线自托管的本地记忆服务部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Mnemosyne is local-first, long-term memory for AI agents: one SQLite file that keeps what an agent learned together with the evidence it came from, served to any host over TypeScript, MCP, CLI or HTTP.** When a source is corrected, every memory that depended ／ Mnemosyne connects memory to its consequences: a corrected requirement can retire a dependent procedure, a failed trial can withhold a skill, and a new agent can resume from an explicit handoff. Run the local engine in one SQLite file; connect your host throug ／ claude mcp add mnemosyne -- npx -y -p mnemosy-ai@2.0.0 mnemosy mcp --db ./.mnemosyne/memory.sqlite --workspace my-project --agent assistant",
+     "lines": [
+      11,
+      13,
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以单个 SQLite 文件作为记忆存储运行，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Mnemosyne is local-first, long-term memory for AI agents: one SQLite file that keeps what an agent learned together with the evidence it came from, served to any host over TypeScript, MCP, CLI or HTTP.** When a source is corrected, every memory that depended on it is retired, so the next agent starts from what is still true instead of repeating a stale lesson. ／ Give the memory to an MCP client. **Claude Code** reads `.mcp.json` in the project root and **Cursor** reads `.cursor/mcp.json`; both take the same server entry. The database file (mode `0600`) and its parent directory (mode `0700`) are created on first use. Relative paths resolve from the directory the client starts the server in; use absolute paths if your client launches servers elsewhere. ／ The server exposes 16 `memory_*` tools (`memory_store`, `memory_recall`, `memory_context`, `memory_correct`, `memory_checkpoint`, `memory_resume`, `memory_observe`, `memory_skill`, …); `memory_forget` is added only when the server is launched with `--allow-destructive`. Add `--read-only` to omit every mutation tool. A model cannot switch workspace, raise its own trust or report its own skill trials through MCP. Agent-readable summaries of this repository are in `llms.txt` and `AGENTS.md`; the full MCP contract is in Connect through MCP.",
+   "evidence_lines": [
+    11,
+    26,
+    41
+   ]
+  },
+  "fn": "28naem-del/mnemosyne",
+  "sha": "788e36001a6a",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "59b17be0c614": {
+  "identity": {
+   "one_liner": "基于服务器访问日志的自托管网站分析与安全监控工具",
+   "review": "Skald 从 Web 服务器访问日志读取流量，将请求分为真人、AI 助手、搜索引擎、爬虫和自有流量五类，并基于同一日志生成安全分析（扫描、攻击尝试、暴露探测）。数据存储在 SQLite 文件中，支持 Docker 部署，无 Cookie、无第三方脚本。适合自托管网站、想要统计 AI 爬虫流量的站长与管理员。",
+   "highlights": [
+    "从访问日志分析 AI 助手与爬虫流量（GPTBot、ClaudeBot 等），并按用途分类",
+    "内置二次独立审计机制，两次计数不一致时当日数据不予展示",
+    "提供安全监控：扫描器、攻击尝试、伪造浏览器识别、黑名单与邮件/Slack 告警"
+   ],
+   "use_cases": [
+    "统计 JavaScript 分析工具无法覆盖的 AI 助手与爬虫访问",
+    "从访问日志排查针对站点 .env、密钥配置等的扫描与攻击行为",
+    "自托管的 Cookie 免除型网站流量与线索转化分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|**SQLite**: `history.sqlite` (daily totals), `accounts.sqlite`, `conversions.sqlite`. One file each, easy to back up.|",
+     "lines": [
+      537
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其数据以 SQLite 文件存储，属于使用数据库存数据的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0，另提供托管 beta 商业服务",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Skald reads the one record that sees every visit: **your web server's access log.** Every request ／  Licence: Elastic License 2.0",
+   "evidence_lines": [
+    43,
+    12
+   ]
+  },
+  "fn": "spcaeo/skald",
+  "sha": "59b17be0c614",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9796e1f1e855": {
+  "identity": {
+   "one_liner": "OceanBase 2026 大赛的非官方 Python CLI，用于提交与查分",
+   "review": "这是一个面向 OceanBase 2026 数据库大赛的命令行工具，供参赛者提交固定 commit 版本、查询任务分数、抓取和快照榜单、对比实验并执行可恢复的批量提测队列。纯 Python 3.10+ 实现且运行时无第三方依赖，需用户自行提供登录 Cookie 认证；它操作的是比赛平台 API，不直接连接或管理数据库。",
+   "highlights": [
+    "支持提交固定 40 位 commit SHA 并在写入前原子保存回执，含重复保护与不重试的不确定结果处理",
+    "支持榜单全量分页抓取、JSON/CSV 导出、自动快照、变化对比与进程内 watch 监测",
+    "支持带检查点的可恢复批量提测队列，及安装为 Codex Skill 的方式"
+   ],
+   "use_cases": [
+    "参赛者提交代码版本并等待、查询精确任务分数",
+    "定期抓取和导出赛题榜单并跟踪排名与分数变化",
+    "批量管理多次提交任务并在中断后恢复队列"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "面向 OceanBase 2026 数据库大赛的非官方 Python CLI 和可安装 Skill：提交固定版本、按任务回执查分、抓取全部可访问榜单、保存变化、比较实验，并执行有限、可恢复的提测队列。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 OceanBase 大赛平台提供提测、查分、榜单抓取服务的独立 CLI 工具，不是使用数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "面向 OceanBase 2026 数据库大赛的非官方 Python CLI 和可安装 Skill：提交固定版本、按任务回执查分、抓取全部可访问榜单、保存变化、比较实验，并执行有限、可恢复的提测队列。 ／ 作为普通 CLI： ／ obcomp --help",
+   "evidence_lines": [
+    3,
+    35,
+    41
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "SimonAN01/oceanbase-compete",
+  "sha": "9796e1f1e855",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

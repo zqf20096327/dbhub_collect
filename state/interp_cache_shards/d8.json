@@ -10901,5 +10901,167 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0708ae174fcb": {
+  "identity": {
+   "one_liner": "基于 NestJS+TypeORM+MySQL+Vue3 的前后端分离 RBAC 权限管理系统",
+   "review": "一个使用 NestJS、TypeORM、MySQL、Redis 构建的企业中后台管理系统模板，提供 RESTful API、基于角色的权限控制（细粒度到按钮）和单点登录，附带 Swagger 文档。适合作为全栈开发脚手架，需自行配置 MySQL 8.x 与 Redis 连接，并提供 SQL 初始化文件与迁移命令。",
+   "highlights": [
+    "基于 NestJS + TypeORM + MySQL + Redis + Vue3 的前后端分离架构",
+    "提供 RBAC 权限管理（细粒度到按钮）与单点登录实现",
+    "内置 Swagger 接口文档与 TypeORM 数据库迁移命令"
+   ],
+   "use_cases": [
+    "作为企业中后台管理系统的开发起点",
+    "需要 RESTful API + RBAC 权限模型的 NestJS 项目模板",
+    "本地或 Docker Compose 部署的演示/学习环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**基于 NestJs + TypeScript + TypeORM + Redis + MySql + Vue3 + Ant Design Vue 编写的一款简单高效的前后端分离的权限管理系统。希望这个项目在全栈的路上能够帮助到你。** ／ - 项目相关配置，如：配置 mysql 和 redis 连接 ／ - `mysql` `8.x`+",
+     "lines": [
+      5,
+      22,
+      44
+     ]
+    }
+   ],
+   "dbs": [
+    "MySQL"
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 MySQL 和 Redis 存储自身业务数据，是构建在其上的管理应用而非为数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**基于 NestJs + TypeScript + TypeORM + Redis + MySql + Vue3 + Ant Design Vue 编写的一款简单高效的前后端分离的权限管理系统。希望这个项目在全栈的路上能够帮助到你。** ／ - sql 文件：/deploy/sql/nest_admin.sql 用于数据库初始化 ／ - `mysql` `8.x`+",
+   "evidence_lines": [
+    5,
+    21,
+    44
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "buqiyuan/nest-admin",
+  "sha": "0708ae174fcb",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7dd090f981e2": {
+  "identity": {
+   "one_liner": "Hindsight 多源数据摄入工具，提供增量同步与 WebUI",
+   "review": "该工具将 Notion、思源笔记、S3、Google Drive 等多种来源的内容同步到 Hindsight 记忆库，支持增量同步、多模态文件摄入与删除清理，通过 Docker 部署并提供 WebUI 管理任务。自身可用 SQLite、PostgreSQL 或 MySQL 存储配置与状态。适合已运行 Hindsight 并希望聚合笔记与文档的用户。",
+   "highlights": [
+    "支持 Notion、SiYuan、S3、WebDAV、Google Drive、OneDrive、IMAP 等 14 类来源，可多模态内容摄入",
+    "基于 change feed、sync token 与 revision tracking 实现增量同步，含检查点持久化、操作重试与 dry-run 预览",
+    "Docker 部署，WebUI 支持 14 种语言，凭据以 AES-256-GCM 加密存储"
+   ],
+   "use_cases": [
+    "将 Notion/思源/Obsidian 等笔记自动同步到 Hindsight 记忆库",
+    "从 S3、网盘、邮箱等来源定期归档文档并保持增量更新",
+    "通过定时任务调度多来源内容入库并按任务配置保留策略"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🔐 **Self-hosted, secrets encrypted** — Deploy with Docker, encrypt credentials with AES-256-GCM, and choose SQLite, PostgreSQL or MySQL for persistent storage. ／ |`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.| ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      23,
+      126,
+      127
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 🔐 **Self-hosted, secrets encrypted** — Deploy with Docker, encrypt credentials with AES-256-GCM, and choose SQLite, PostgreSQL or MySQL for persistent storage. ／ |`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.| ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      23,
+      126,
+      127
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🔐 **Self-hosted, secrets encrypted** — Deploy with Docker, encrypt credentials with AES-256-GCM, and choose SQLite, PostgreSQL or MySQL for persistent storage. ／ |`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.| ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      23,
+      126,
+      127
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身使用数据库持久化配置与状态（DB_TYPE/DB_DSN 配置项），核心用途是向 Hindsight 同步数据，数据库仅为存储介质",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Sync **Notion, SiYuan, DeepWiki, S3, WebDAV, WebCAL, CalDAV, Email (IMAP), Steam, Google Drive, OneDrive and local files** into Hindsight memory banks. Self-host with Docker and manage everything from the WebUI. ／ - 🔐 **Self-hosted, secrets encrypted** — Deploy with Docker, encrypt credentials with AES-256-GCM, and choose SQLite, PostgreSQL or MySQL for persistent storage. ／ |`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.|",
+   "evidence_lines": [
+    7,
+    23,
+    126
+   ]
+  },
+  "fn": "Nyrest/hindsight-ingestion",
+  "sha": "7dd090f981e2",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

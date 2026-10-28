@@ -10862,5 +10862,80 @@
   "generated_at": "2026-10-27",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "a5660ebe8c8c": {
+  "identity": {
+   "one_liner": "开源企业数据充实引擎，抓取网页并写入 PostgreSQL",
+   "review": "FORGE 对 PostgreSQL 中的企业表做数据充实：网页抓取提取邮箱与技术栈、SMTP 验证邮箱、导入政府开放数据，并可通过 Ollama 本地模型生成摘要与评分。提供 CLI 与 MCP 接口，供需要线索生成/数据补全的用户在本机自托管运行，MIT 许可。",
+   "highlights": [
+    "提供 6 层邮箱提取与 SMTP RCPT TO 验证，无需发送邮件",
+    "支持 FCC ULS、NPI Registry、SAM.gov 等政府数据导入",
+    "提供 MCP 集成，暴露 discover/enrich/stats/search/export 工具"
+   ],
+   "use_cases": [
+    "补充 PostgreSQL 企业表中缺失的邮箱、行业、健康评分等字段",
+    "基于 ZIP 码通过 Overture Maps 发现企业并逐条充实记录",
+    "通过 Claude 等 MCP 客户端查询与导出充实结果"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Point FORGE at a PostgreSQL table of businesses and it fills in the blanks: emails, tech stacks, SSL status, site speed, industry classification, health scores, and pain points. It scrapes websites, imports government records, verifies emails via SMTP, and opt ／ Create a PostgreSQL database and table: ／ |`FORGE_DB_HOST`|Yes|`localhost`|PostgreSQL host|",
+     "lines": [
+      21,
+      71,
+      103
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 要求用户创建 PostgreSQL 库和表，FORGE 将充实结果写入其中，属于以 PostgreSQL 存储数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Point FORGE at a PostgreSQL table of businesses and it fills in the blanks: emails, tech stacks, SSL status, site speed, industry classification, health scores, and pain points. It scrapes websites, imports government records, verifies emails via SMTP, and optionally generates AI summaries with a local model. ／ Two parallel tracks write to the same table: ／ Create a PostgreSQL database and table:",
+   "evidence_lines": [
+    21,
+    55,
+    71
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Nuclear-Marmalade/dataforge",
+  "sha": "a5660ebe8c8c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10703,5 +10703,70 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8c297c29b373": {
+  "identity": {
+   "one_liner": "Zig 编写的 Postgres 协议兼容多租户数据库",
+   "review": "Egres 是用 Zig 从零实现的数据库服务器，非 PostgreSQL 的重写版，面向高负载、多租户场景，通过 pgwire 接受 Postgres 客户端连接（可用 psql 访问，默认端口 3210）。提供单节点零配置运行，内置 WAL 存储；从源码构建需 Zig 0.16.0，README 说明大部分代码由 AI 代理生成并经人工逐行审查。适合需要 Postgres 兼容协议但寻求独立实现的用户。",
+   "highlights": [
+    "监听 pgwire 端口，支持 psql 等 Postgres 客户端连接（L23-L28）",
+    "单节点零配置运行，数据与 WAL 存于本地目录（L22-L23）",
+    "提供源码构建流程与 e2e 测试脚本（L35-L51）"
+   ],
+   "use_cases": [
+    "多租户 OLTP 工作负载的独立数据库选型",
+    "需要 Postgres 线协议但非 PostgreSQL 本体的部署",
+    "对象存储相关主题标签下基于 Zig 的数据库引擎研究"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "Egres is a Postgres-compatible database for heavy, multi-tenant workloads. ／ under `egres-data` in the working directory and listens for Postgres",
+     "lines": [
+      3,
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是数据库服务器实现本身，通过 pgwire 向 Postgres 客户端提供协议兼容服务，而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Egres is a Postgres-compatible database for heavy, multi-tenant workloads. ／ Written in Zig, Egres is not a Postgres rewrite: it is a ground-up, ／ under `egres-data` in the working directory and listens for Postgres",
+   "evidence_lines": [
+    3,
+    4,
+    23
+   ]
+  },
+  "fn": "manishrjain/egres",
+  "sha": "8c297c29b373",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

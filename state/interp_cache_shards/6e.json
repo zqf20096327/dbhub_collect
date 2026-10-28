@@ -9523,5 +9523,157 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bb6ddc2fb295": {
+  "identity": {
+   "one_liner": "Immich 照片管理服务的 Go 单二进制替代实现，数据存于 SQLite",
+   "review": "Korda 用 Go 实现 Immich 核心 API（v3.3.3），数据保存在单个 SQLite 文件加媒体文件夹，配合 Valkey/Redis 作任务队列，官方 Immich 安卓/iOS 应用可直接连接。面向想在低配环境运行照片库的用户；目前无 Web 界面，不支持机器学习、OAuth 等功能。",
+   "highlights": [
+    "单二进制运行，数据保存在一个 SQLite 文件和一个媒体文件夹中",
+    "实现 Immich 核心 API，支持官方 Immich Android/iOS 应用",
+    "内置夜间数据库备份与 -restore 恢复命令"
+   ],
+   "use_cases": [
+    "在树莓派等资源受限设备上运行照片管理服务",
+    "以官方 Immich 客户端访问自托管照片库",
+    "需要简化部署（无容器、无 PostgreSQL）的照片库场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "for people who want to use Immich but without a heavy PostgreSQL, a container",
+     "lines": [
+      12
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Korda is a drop-in replacement for [Immich][immich] built in Go that uses SQLite ／ Korda is a single Go binary that keeps its data in one SQLite file and one media",
+     "lines": [
+      6,
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 存储自身照片库数据，是为终端用户提供照片管理服务的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Korda is a drop-in replacement for [Immich][immich] built in Go that uses SQLite ／ Korda is a single Go binary that keeps its data in one SQLite file and one media ／ Korda implements pretty much all operations of Immich's core API (currently at",
+   "evidence_lines": [
+    6,
+    10,
+    15
+   ]
+  },
+  "fn": "mrusme/korda",
+  "sha": "bb6ddc2fb295",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4967d200d8ab": {
+  "identity": {
+   "one_liner": "为 AI agent 提供分支写入 Postgres 的数据库引擎，含 MCP 服务",
+   "review": "Chronos DB 是一个用 Rust 编写的数据库引擎，通过 copy-on-write 世界（分支）让 AI agent 在隔离副本中读写数据，逐行 diff 并按用户预设的合并规则校验后，以单个事务写回 Postgres。它可附着在现有 Postgres 旁运行，也可独立存储数据（实现 Postgres 16 协议的大部分），并提供 MCP server。适用于让 agent 安全写库的团队；作者提示仍处公开 beta，仅支持 macOS 13+ 与 Linux。",
+   "highlights": [
+    "提供 copy-on-write 世界分支、三方 merge、diff、按时间回溯与 UNDO AGENT 等操作",
+    "实现 Postgres wire protocol，兼容 psql、驱动与 ORM，并提供 MCP server（fork/diff/merge_preview 等工具）",
+    "支持向量、全文、BM25、地理与图遍历搜索，索引在分支间共享"
+   ],
+   "use_cases": [
+    "让 AI agent 在隔离分支中试写数据，人工审批后合并回 Postgres",
+    "并行运行大量模拟/实验世界（SIMULATE、fork）而不影响主数据",
+    "通过 psql/ORM 兼容接口进行带时间回溯与撤销能力的数据库操作"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "### Let AI agents write to your Postgres. Each run works on its own branch; your rules decide what lands. ／ Chronos sits **beside the Postgres you already run** (`chronos attach`) or holds the data itself. Every agent run works in its own copy-on-write **world** (a branch of the whole database). Chronos **diffs** it row by row and checks the merge against **rules yo ／ What keeps to the rules is written back to your Postgres in one checked transaction; the rest waits for review, with the reasons. It speaks **Postgres** and searches filters, text and vectors inside every world.",
+     "lines": [
+      3,
+      6,
+      7
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Postgres and SQLite were built for **a few long-lived databases with one shared truth**. Agents work differently:",
+     "lines": [
+      53
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 Postgres 生态提供 agent 分支写入与合并服务（attach 到现有 Postgres 并写回），而非仅使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "引擎源码采用 BUSL-1.1 许可",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Chronos sits **beside the Postgres you already run** (`chronos attach`) or holds the data itself. Every agent run works in its own copy-on-write **world** (a branch of the whole database). Chronos **diffs** it row by row and checks the merge against **rules you approve once**: no deletes without a person, at most 500 rows, every lead list keeps a lead. ／ > - **On its own,** Chronos speaks the Postgres 16 protocol and much of its SQL, but it is not Postgres: 86.24% of the lines Postgres 16's regression suite expects (60 of its 219 files exactly), 7 real databases moved in with identical row checksums, point reads at about half Postgres's rate and writes at a fraction of it. Read where it stands before moving data in. ／ - **MCP server:** `claude mcp add chronos -- chronos mcp mydb`, with `fork`, `diff`, `merge_preview`, `checkpoint`, `rollback` and more",
+   "evidence_lines": [
+    6,
+    31,
+    141
+   ]
+  },
+  "fn": "Abhishekxdg/chronosdb",
+  "sha": "4967d200d8ab",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

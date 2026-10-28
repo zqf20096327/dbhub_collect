@@ -11639,5 +11639,229 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9a9fbd5cbb42": {
+  "identity": {
+   "one_liner": "中国社保/电子政务后端参考实现，Spring MVC + MyBatis + Oracle 多 schema",
+   "review": "Mestudy 是一个省级社保与网上政务服务平台后端的参考实现，包含 5 个 Spring MVC + MyBatis 模块、约 358 个 HTTP 端点，使用 Oracle 多 schema 存储、Redis 会话与缓存、Axis SOAP 对接遗留政务接口，并附 token 鉴权的客户端 SDK。面向需要构建或维护同类架构的工程师，供阅读与复现；四个模块可从 Maven Central 公开构建，NetPortalManagement 依赖私有 bee 框架无法公开构建。",
+   "highlights": [
+    "包含 5 个 war 打包的 Spring MVC 模块，实现社保查询、社保卡生命周期、医院挂号、电子签章等业务流程",
+    "提供多数据源（c3p0 + MyBatis）接线、Axis SOAP 转 REST 适配、token 心跳续期的客户端 SDK 等集成模式",
+    "公开模块可在 JDK 8 上通过 Maven 运行单元测试，无需 Oracle/Redis 或 servlet 容器"
+   ],
+   "use_cases": [
+    "参考同类社保/政务后端系统的领域建模与集成模式",
+    "需要对接 SOAP 遗留系统（如 HIS）的 Java 后端开发参考",
+    "开源项目申请材料准备时的独立复现指南场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "MyBatis mappers against Oracle, Redis-backed sessions, SOAP bridges to legacy ／ |Database|Oracle 10g/11g|Multiple schemas per module| ／ - Oracle and Redis instances if you want the application to actually start",
+     "lines": [
+      25,
+      94,
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 Oracle 存储数据、Redis 做缓存/会话的业务系统后端，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "provincial social-insurance and online government-service platform. It is not a toy ／ |Database|Oracle 10g/11g|Multiple schemas per module| ／ - Oracle and Redis instances if you want the application to actually start",
+   "evidence_lines": [
+    17,
+    94,
+    111
+   ]
+  },
+  "fn": "zengyunhua/Mestudy",
+  "sha": "9a9fbd5cbb42",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cd985a20b325": {
+  "identity": {
+   "one_liner": "Rust 单二进制 SQL 数据库，兼容 PostgreSQL 协议，内置实时查询与 Raft 集群",
+   "review": "KalamDB 是一个用 Rust 实现的开源数据库，以单二进制提供 PostgreSQL 语法与 wire 协议兼容、WebSocket 实时查询、嵌入式 V8 服务端函数、持久 pub/sub、认证与行级策略，并支持按用户分区的表和 RocksDB/Parquet 分层存储，可通过 Raft 扩展为多节点集群。面向构建聊天、协作应用、实时看板及 AI 代理后端的开发者。",
+   "highlights": [
+    "实现 PostgreSQL 语法与 PGWire 协议兼容，可使用 psql、DBeaver 及 PostgreSQL 驱动连接，基于 DataFusion 和 Arrow 的自有 Rust 引擎",
+    "支持 WebSocket 实时查询订阅、JavaScript/TypeScript 服务端函数（V8 运行时）和带消费组、确认、重试的持久 pub/sub",
+    "支持 USER/SHARED/STREAM 表类型、按用户分区、RocksDB 到 Parquet 的分层存储，以及 Multi-Raft 集群复制"
+   ],
+   "use_cases": [
+    "构建实时聊天、协作应用和 live dashboard 后端",
+    "为 Web、移动端和 AI 应用提供带认证与行级策略的 BaaS 后端",
+    "以单节点起步并按需扩展为多节点 Raft 集群的自托管部署"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "# Postgres-compatible. Realtime built in. One binary. ／ |**PostgreSQL syntax + PGWire**|Use familiar SQL, `psql`, DBeaver, and PostgreSQL drivers, including prepared queries and transactions.| ／ KalamDB supports PostgreSQL syntax and the PostgreSQL wire protocol (PGWire). Connect your SQL tools and drivers directly to the engine.",
+     "lines": [
+      3,
+      20,
+      53
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该仓库本身是数据库引擎实现，PostgreSQL 仅协议兼容而非适配对象，既非生态工具也非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**KalamDB is an open-source backend in a single Rust binary.** It combines a PostgreSQL-compatible SQL engine with live queries, JavaScript/TypeScript server functions, durable pub/sub, authentication, and built-in Raft clustering. ／ KalamDB implements PostgreSQL compatibility on its own Rust engine, powered by DataFusion and Arrow. Migration suitability depends on the SQL features and extensions your application uses; see the SQL reference and release notes. ／ Start with one binary and local disk. Add nodes with **Multi-Raft replication** for availability and more client connections. Clustering is part of the engine.",
+   "evidence_lines": [
+    5,
+    80,
+    105
+   ]
+  },
+  "fn": "kalamdb/KalamDB",
+  "sha": "cd985a20b325",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9769a22ad788": {
+  "identity": {
+   "one_liner": "跨平台多协议客户端，内含数据库客户端功能",
+   "review": "EasyShell 是一个基于 JavaFX 的跨平台多协议客户端，提供 SSH、SFTP、RDP、VNC 等远程连接能力，并内置 MySQL、MariaDB、Dameng（达梦）、MongoDB、Redis、ZooKeeper 等客户端，可对表、视图、函数、过程进行查询、导入、导出与传输操作，还包含连接管理、密钥管理、片段执行等功能。适合需要在一个桌面程序中同时管理服务器与多种数据库的运维和开发人员。",
+   "highlights": [
+    "支持 SSH、SFTP、RDP、VNC、串口、Mosh 等多种连接协议",
+    "内置 Mysql、Dameng、Mongodb、Redis、ZooKeeper 等协议客户端，支持查询、导入、导出、传输操作",
+    "提供连接管理、密钥管理、代码片段执行，支持 Windows、macOS、Linux"
+   ],
+   "use_cases": [
+    "在统一界面中管理服务器远程连接与文件传输",
+    "通过内置客户端查询和导出 MySQL、达梦等数据库数据",
+    "管理密钥并执行常用代码片段"
+   ],
+   "review_note": null
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **多协议支持**：支持 SSH、FTP、SFTP、Redis、ZooKeeper、串口、VNC、Telnet、RLogin、S3、RDP、SMB、Webdav、Mysql、Mongodb、Mariadb、达梦、Mosh、本地终端等多种连接方式。 ／ - **Mysql 客户端**：支持 Mysql 协议的表、视图、函数、过程、事件管理、查询、导入、导出、传输等操作。 ／ ### MySQL",
+     "lines": [
+      9,
+      26,
+      170
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **多协议支持**：支持 SSH、FTP、SFTP、Redis、ZooKeeper、串口、VNC、Telnet、RLogin、S3、RDP、SMB、Webdav、Mysql、Mongodb、Mariadb、达梦、Mosh、本地终端等多种连接方式。 ／ ### Mariadb",
+     "lines": [
+      9,
+      248
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "- **多协议支持**：支持 SSH、FTP、SFTP、Redis、ZooKeeper、串口、VNC、Telnet、RLogin、S3、RDP、SMB、Webdav、Mysql、Mongodb、Mariadb、达梦、Mosh、本地终端等多种连接方式。 ／ - **Dameng 客户端**：支持 Dameng 协议的表、视图、函数、用户管理、查询、导入、导出、传输等操作。 ／ ### Dameng",
+     "lines": [
+      9,
+      27,
+      220
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其内置多种数据库协议的客户端功能，属于为数据库提供连接管理能力的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **多协议支持**：支持 SSH、FTP、SFTP、Redis、ZooKeeper、串口、VNC、Telnet、RLogin、S3、RDP、SMB、Webdav、Mysql、Mongodb、Mariadb、达梦、Mosh、本地终端等多种连接方式。 ／ - **Mysql 客户端**：支持 Mysql 协议的表、视图、函数、过程、事件管理、查询、导入、导出、传输等操作。 ／ - **Dameng 客户端**：支持 Dameng 协议的表、视图、函数、用户管理、查询、导入、导出、传输等操作。",
+   "evidence_lines": [
+    9,
+    26,
+    27
+   ]
+  },
+  "fn": "oyzh1994/easyshell",
+  "sha": "9769a22ad788",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

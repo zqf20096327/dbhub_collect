@@ -11406,5 +11406,233 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "45da8454d46a": {
+  "identity": {
+   "one_liner": "自托管 AI agent 运行时，基于 Claude Agent SDK 构建",
+   "review": "Nerve 是一个自托管的 AI 代理运行时，基于 Claude Agent SDK 构建，提供持久化记忆（双层记忆含语义搜索）、定时任务、任务管理与技能系统，支持个人助理与自主 worker 两种模式，并可通过 Web UI、Telegram、Slack 等 channel 交互；面向需要长期运行 AI 助手的个人用户和团队，依赖 Python/Node.js 环境，以 SQLite 持久化深度记忆。",
+   "highlights": [
+    "提供双层记忆系统：热记忆注入 system prompt，深度记忆基于 SQLite 持久化并支持语义搜索",
+    "支持 Web UI、Telegram bot、Slack bot 与 APScheduler 定时任务等多种 channel",
+    "提供个人助理与 worker 两种模式，计划执行需人工审批",
+    "单进程运行，基于 FastAPI + uvicorn + asyncio，无需 Docker 或消息队列"
+   ],
+   "use_cases": [
+    "部署长期运行的个人助理，同步邮件并维护记忆",
+    "部署自主 worker 监控 CI、审查 PR 并按审批执行修复",
+    "通过 cron 定时任务生成简报、摘要或执行清理任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Semantic search over everything — conversations, facts, preferences, events. SQLite-persisted. Uses vector embeddings when an OpenAI key is configured, or LLM-based ranking with Anthropic models only. ／ Markdown files backed by SQLite FTS5 full-text search.",
+     "lines": [
+      177,
+      190
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "curl -fsSL https://raw.githubusercontent.com/ClickHouse/nerve/main/install.sh | bash ／ git clone https://github.com/ClickHouse/nerve.git && cd nerve",
+     "lines": [
+      20,
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其深度记忆以 SQLite 持久化存储数据，为使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Semantic search over everything — conversations, facts, preferences, events. SQLite-persisted. Uses vector embeddings when an OpenAI key is configured, or LLM-based ranking with Anthropic models only. ／ Nerve is a self-hosted runtime for AI agents, built around the Claude Agent SDK. It gives agents everything they need to be useful long-term: persistent memory, scheduled execution, task management, learnable skills, and channels to reach you through — web UI, Telegram, Slack, or autonomous cron jobs.",
+   "evidence_lines": [
+    177,
+    13
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "ClickHouse/nerve",
+  "sha": "45da8454d46a",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0581c87b58f7": {
+  "identity": {
+   "one_liner": "Rust+GPUI 原生跨平台数据库 GUI 客户端与 SQL 编辑器",
+   "review": "FluxDB 是一个用 Rust 和 GPUI 构建的桌面数据库客户端，不依赖 Electron，支持 Windows、macOS 和 Linux 安装包。它在同一窗口内提供多数据源连接、SQL 编辑与补全、数据编辑回写、表结构管理、ER 图、Redis 工作台、逻辑备份恢复，并内置带权限边界的 AI Agent 和 MCP 支持。备份恢复依赖本机 mysqldump/pg_dump 等客户端工具；MongoDB 和 MariaDB 尚未支持，仅处于规划中。",
+   "highlights": [
+    "使用 Rust + GPUI 构建，不依赖 Electron 或 WebView，提供 macOS/Windows/Linux 安装包",
+    "支持 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8 和 Redis 的连接、查询、数据编辑与逻辑备份恢复",
+    "内置 AI Agent 与 MCP Client/Server，写入类操作需审批，模型 API Key 由用户配置"
+   ],
+   "use_cases": [
+    "在单一桌面应用中管理多种 SQL 数据源与 Redis 的日常查询、数据编辑和结构管理",
+    "使用 mysqldump/pg_dump 等本机客户端工具执行逻辑备份与恢复",
+    "通过 ER 图查看外键关系并导出 JSON/DBML/Mermaid/SVG"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **覆盖所有 SQL 数据源**：MySQL、TiDB、PostgreSQL、SQL Server、Oracle、SQLite 和达梦 DM8 分别按方言处理类型、运算符、标识符和 `LIKE` 通配符转义。 ／ |PostgreSQL|SQL 查询、Schema / 对象浏览、表结构管理、数据编辑、用户与角色管理、psql 工具入口|`pg_dump` plain SQL 备份，`psql` 恢复|TLS、SSH、代理、Schema 作用域、超时|-|",
+     "lines": [
+      5,
+      32,
+      96
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **覆盖所有 SQL 数据源**：MySQL、TiDB、PostgreSQL、SQL Server、Oracle、SQLite 和达梦 DM8 分别按方言处理类型、运算符、标识符和 `LIKE` 通配符转义。 ／ |MySQL|SQL 查询、对象浏览、表结构管理、数据编辑、导入导出、原生客户端工具入口|`mysqldump` 逻辑备份，SQL 恢复|TLS / SSL、SSH 隧道、代理、超时、字符集|-|",
+     "lines": [
+      5,
+      32,
+      94
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **新增 Oracle 数据源**：Service Name / SID 连接、Schema / 对象浏览、SQL 查询、表结构管理与设计、数据编辑、筛选与排序、SQL 补全、用户与权限管理、本机逻辑导出，以及 AI 页面上下文与受控执行。 ／ |Oracle|SQL 查询、Schema / 对象浏览、表结构管理与设计、数据编辑、筛选与排序、SQL 补全、用户与权限（只读当前账号授权明细）、逻辑导出、AI 页面上下文与受控执行|本机逻辑导出（DDL + 逐页数据），恢复按 SQL 重放|Service Name 或 SID、CDB / PDB 目标；未加引号的标识符按大写折叠|服务器端 Data Pump 备份、非当前账号的授权明细（`DBA_*` / `ALL_SYS_PRIVS` 需要额外权限）、跨页一致快照导出。逐页导出不是一致快照，也不是服务器端原生备份。|",
+     "lines": [
+      5,
+      22,
+      100
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **覆盖所有 SQL 数据源**：MySQL、TiDB、PostgreSQL、SQL Server、Oracle、SQLite 和达梦 DM8 分别按方言处理类型、运算符、标识符和 `LIKE` 通配符转义。 ／ |SQLite|本地文件连接、SQL 查询、对象浏览、表结构管理、数据编辑|`VACUUM INTO` 完整一致快照；恢复到新文件并检查完整性与外键|本地文件路径|-|",
+     "lines": [
+      5,
+      32,
+      98
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **覆盖所有 SQL 数据源**：MySQL、TiDB、PostgreSQL、SQL Server、Oracle、SQLite 和达梦 DM8 分别按方言处理类型、运算符、标识符和 `LIKE` 通配符转义。 ／ |SQL Server|T-SQL 查询、数据库 / Schema / 对象浏览、表结构管理与数据编辑、表数据导入导出、登录名 / 数据库用户 / 角色成员 / 显式权限管理、对象级逻辑备份恢复、AI 页面上下文与受控执行|对象级逻辑 SQL 备份与恢复|SQL Server 认证、TLS、显式端口；命名实例需填写实际端口|Windows 集成认证、Azure AD、包含数据库用户、列级权限编辑、用户自定义服务器角色、SQL Browser / 命名实例自动解析、数据库级物理备份（`BACKUP DATABASE`",
+     "lines": [
+      5,
+      32,
+      97
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "MongoDB 和 MariaDB 尚未支持。它们只出现在规划中，不应被视为当前能力。",
+     "lines": [
+      103
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **覆盖所有 SQL 数据源**：MySQL、TiDB、PostgreSQL、SQL Server、Oracle、SQLite 和达梦 DM8 分别按方言处理类型、运算符、标识符和 `LIKE` 通配符转义。 ／ |TiDB|复用 MySQL 协议链路，适配 SQL 方言、补全与表结构管理|复用 MySQL 逻辑备份能力|连接能力与 MySQL 一致|-|",
+     "lines": [
+      5,
+      32,
+      95
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **覆盖所有 SQL 数据源**：MySQL、TiDB、PostgreSQL、SQL Server、Oracle、SQLite 和达梦 DM8 分别按方言处理类型、运算符、标识符和 `LIKE` 通配符转义。 ／ |达梦 DM8|Schema / 对象浏览、SQL 查询、表结构管理与设计、数据编辑、表数据导入|逻辑备份与 SQL 恢复；当前恢复面向单 Schema|实例与 Schema 连接配置|-|",
+     "lines": [
+      5,
+      32,
+      99
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供面向多种数据库的连接、查询、编辑与备份恢复能力，是为数据库生态服务的客户端工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "TiDB",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0 或更新版本",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**原生跨平台数据库客户端与 SQL 编辑器，面向高性能、低开销的桌面体验设计：在一个窗口中完成查询、数据编辑、结构管理和 Redis 调试。** ／ FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ ## 数据库支持",
+   "evidence_lines": [
+    3,
+    5,
+    88
+   ]
+  },
+  "fn": "fluxdb-alt/fluxDB",
+  "sha": "0581c87b58f7",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

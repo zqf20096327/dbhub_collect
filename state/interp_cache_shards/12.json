@@ -9002,5 +9002,74 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "63aebda8ec8d": {
+  "identity": {
+   "one_liner": "Run402 的自托管服务端与运行时核心，为 AI agent 提供 Postgres 后端基础设施",
+   "review": "该仓库是 Run402 的开源核心，提供可自托管的运行时：为 agent 创建 Postgres 数据库、认证、文件存储、serverless 函数与站点托管，通过 PostgREST/RLS 提供数据访问，支持内联 PostgreSQL 迁移与可移植项目归档导入。面向需要在本地运行 Run402 后端的开发者，通过 CLI、TypeScript SDK 或 MCP 操作；目前不含云版控制面、监控、备份与高可用能力。",
+   "highlights": [
+    "支持本地项目创建、ReleaseSpec 计划/提交、内联 PostgreSQL 迁移与 PostgREST/RLS 服务",
+    "提供本地存储对象读写签名、静态内容路由、可信本地函数与单节点定时触发",
+    "提供 npm 包（functions/release/nwc/runtime-kernel）与 docker-compose 本地栈，支持可移植归档的检查/校验/导入"
+   ],
+   "use_cases": [
+    "在本地或自有服务器自托管 Run402 的 agent 后端运行时切片",
+    "对 Run402 Cloud 导出的项目归档做验证与导入，降低锁定",
+    "基于 PostgREST/RLS、函数运行时构建 agent 可自主操作的应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "agent a Postgres database, user auth, file storage, serverless functions and site ／ - `docker-compose.yml` - local Core, Postgres, and PostgREST stack. ／ |Inline PostgreSQL migrations|Yes|",
+     "lines": [
+      5,
+      27,
+      110
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是面向 AI agent 的后端应用运行时，使用 Postgres/PostgREST 作为其数据存储与访问层，而非为数据库生态服务的独立工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0；agent-facing SDK/CLI/MCP 在另一仓库以 MIT 许可发布",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "agent a Postgres database, user auth, file storage, serverless functions and site ／ The current Core runtime-kernel slice is an Apache-2.0 self-hosting runtime. It can create a local project, plan and commit a supported ReleaseSpec, run inline PostgreSQL migrations, serve PostgREST/RLS behavior, serve active-release static content, handle local storage objects and route manifests, execute trusted local functions including durable function runs and single-node schedule triggers, run a narrow Astro SSR target, and import verified portable project archives. ／ - `docker-compose.yml` - local Core, Postgres, and PostgREST stack.",
+   "evidence_lines": [
+    5,
+    10,
+    27
+   ]
+  },
+  "fn": "kychee-com/run402-core",
+  "sha": "63aebda8ec8d",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

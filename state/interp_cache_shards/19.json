@@ -11730,5 +11730,327 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4ea2f3bc99b5": {
+  "identity": {
+   "one_liner": "为 Spring 集成测试创建隔离嵌入式数据库的测试库",
+   "review": "该库用于在 Spring 集成测试中创建和管理隔离的嵌入式数据库，支持 PostgreSQL、MSSQL、MySQL、MariaDB 等，底层基于 Testcontainers 或 Zonky 提供器，并集成 Flyway、Liquibase 迁移工具。通过模板数据库实现迁移缓存与测试间快速数据刷新，开发者只需添加 Maven 依赖并声明 @AutoConfigureEmbeddedDatabase 注解即可使用。",
+   "highlights": [
+    "为每个测试类或方法创建隔离的嵌入式数据库，支持 PostgreSQL、MSSQL、MySQL、MariaDB",
+    "基于模板数据库实现迁移缓存与快速数据刷新，提供数据库预取与后台启动模式",
+    "通过 @AutoConfigureEmbeddedDatabase 注解集成 Spring 测试，支持 Flyway、Liquibase 与 Spring @Sql"
+   ],
+   "use_cases": [
+    "为依赖真实数据库的 Spring 集成测试提供隔离数据库环境",
+    "在含复杂迁移脚本的项目中复用已执行的数据库迁移",
+    "需要测试间快速重置数据库状态的测试套件"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The primary goal of this project is to make it easier to write Spring-powered integration tests that rely on `PostgreSQL`, `MSSQL`, `MySQL` or `MariaDB` databases. This library is responsible for creating and managing isolated embedded databases for each test  ／ * 🗄️ **Databases:** PostgreSQL, MSSQL, MySQL, MariaDB, H2, HSQLDB, Derby ／ ### PostgreSQL",
+     "lines": [
+      5,
+      11,
+      198
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "The primary goal of this project is to make it easier to write Spring-powered integration tests that rely on `PostgreSQL`, `MSSQL`, `MySQL` or `MariaDB` databases. This library is responsible for creating and managing isolated embedded databases for each test  ／ * 🗄️ **Databases:** PostgreSQL, MSSQL, MySQL, MariaDB, H2, HSQLDB, Derby",
+     "lines": [
+      5,
+      11
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "The primary goal of this project is to make it easier to write Spring-powered integration tests that rely on `PostgreSQL`, `MSSQL`, `MySQL` or `MariaDB` databases. This library is responsible for creating and managing isolated embedded databases for each test  ／ * 🗄️ **Databases:** PostgreSQL, MSSQL, MySQL, MariaDB, H2, HSQLDB, Derby ／ ### Microsoft SQL Server",
+     "lines": [
+      5,
+      11,
+      213
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "The primary goal of this project is to make it easier to write Spring-powered integration tests that rely on `PostgreSQL`, `MSSQL`, `MySQL` or `MariaDB` databases. This library is responsible for creating and managing isolated embedded databases for each test  ／ * 🗄️ **Databases:** PostgreSQL, MSSQL, MySQL, MariaDB, H2, HSQLDB, Derby",
+     "lines": [
+      5,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为数据库生态服务的测试工具，为使用各数据库的应用提供测试基础设施，本身不以某数据库为业务数据存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The primary goal of this project is to make it easier to write Spring-powered integration tests that rely on `PostgreSQL`, `MSSQL`, `MySQL` or `MariaDB` databases. This library is responsible for creating and managing isolated embedded databases for each test class or test method, based on a test configuration. ／ * 🗄️ **Databases:** PostgreSQL, MSSQL, MySQL, MariaDB, H2, HSQLDB, Derby ／ Just add a maven dependency to your project and declare the `@AutoConfigureEmbeddedDatabase` annotation on a test class and that's all!",
+   "evidence_lines": [
+    5,
+    11,
+    22
+   ]
+  },
+  "fn": "zonkyio/embedded-database-spring-test",
+  "sha": "4ea2f3bc99b5",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c7be8947eb26": {
+  "identity": {
+   "one_liner": "轻量自托管应用监控工具，单 Go 二进制轮询采集指标并存入 SQLite",
+   "review": "StatLite 通过单个 Go 二进制轮询多个应用的指标端点，将流量、延迟、CPU、内存等数据存入本地 SQLite 并内置历史图表，面向运行 Spring Boot、Quarkus、Micronaut 应用的 VPS 与小型服务器使用者。它不依赖 Prometheus/Grafana 栈，指标留在本地；README 提示其无内置仪表盘认证，远程暴露前需评估访问安全。",
+   "highlights": [
+    "支持 Spring Boot Actuator、Micrometer Prometheus/OpenMetrics 及通用 JSON 指标端点作为采集来源",
+    "以本地 SQLite 存储指标与历史数据，提供内置图表",
+    "提供 Homebrew、安装脚本与 Docker 镜像部署方式"
+   ],
+   "use_cases": [
+    "VPS/小型服务器上应用与主机指标的自托管监控",
+    "为 Spring Boot/Quarkus/Micronaut 应用配置健康与请求指标采集",
+    "不向第三方 SaaS 发送指标、数据保留在本地的监控部署"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "metrics locally in SQLite, and provides built-in historical",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具轮询应用指标并使用 SQLite 作为本地存储引擎，属为监控数据库生态服务的组件而非以数据库为核心的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "on VPSs and small servers. One Go binary polls multiple applications, stores ／ metrics locally in SQLite, and provides built-in historical ／ StatLite supports Spring Boot, Quarkus, and Micronaut integrations, and other",
+   "evidence_lines": [
+    10,
+    11,
+    19
+   ]
+  },
+  "fn": "PVRLabs/statlite",
+  "sha": "c7be8947eb26",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b6b64ac1f013": {
+  "identity": {
+   "one_liner": "从 GraphQL 类型定义生成查询、变更与数据库存储的 Node.js 框架",
+   "review": "一个 Node.js 框架，开发者定义 GraphQL 对象类型后，框架自动生成查询、变更、关系解析及数据库存储，支持 MongoDB/Mongoose 与 PostgreSQL 15+ 两种适配器，内置校验、RBAC/ABAC 授权钩子、状态机和可选 MCP 工具；面向使用 GraphQL 构建后端 API 的 JavaScript 开发者，通过 npm 安装，依赖 mongoose 与 graphql 作为 peer dependencies。",
+   "highlights": [
+    "从 GraphQL 对象类型自动生成查询、变更、关系与数据库存储，支持 MongoDB 与 PostgreSQL 两种适配器",
+    "内置自定义校验、RBAC/ABAC 授权、状态机、生命周期钩子与聚合查询（GROUP BY/SUM/COUNT 等）",
+    "提供可选 MCP 工具支持，相关包以 npm 发布并同步版本发布"
+   ],
+   "use_cases": [
+    "以 GraphQL 为接口快速搭建带 CRUD 与关系管理的后端 API",
+    "需要声明式业务校验、授权与状态机工作流的 Node.js 应用",
+    "同时使用 MongoDB 与 PostgreSQL 后端并共享前端的应用示例开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Simfinity.js — Define once. Build beyond. GraphQL, MongoDB, PostgreSQL, and optional MCP. ／ A Node.js framework that turns GraphQL object types into generated queries, mutations, relationships, and database storage. Use the established MongoDB/Mongoose facade or the PostgreSQL 15+ facade with real tables and foreign keys. ／ ## PostgreSQL support",
+     "lines": [
+      1,
+      5,
+      55
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该框架为应用生成数据库存储层，自身是为 MongoDB/PostgreSQL 数据库生态服务的开发工具组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Node.js framework that turns GraphQL object types into generated queries, mutations, relationships, and database storage. Use the established MongoDB/Mongoose facade or the PostgreSQL 15+ facade with real tables and foreign keys. ／ ## PostgreSQL support",
+   "evidence_lines": [
+    5,
+    55
+   ]
+  },
+  "fn": "simtlix/simfinity.js",
+  "sha": "b6b64ac1f013",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f842c01e9d87": {
+  "identity": {
+   "one_liner": "本地网络目标监控仪表盘，ICMP/TCP/HTTP 拨测并用 SQLite 存历史",
+   "review": "一个本地运行的拨测仪表盘，用于对 ICMP、TCP 端口和 HTTP/HTTPS 目标做在线监测，输出状态、延迟、丢包统计与 24 小时图表，并支持浏览器通知、Telegram 告警和 CSV 导入导出。面向需要在本地机器上自行部署的运维或个人用户；数据持久化到 SQLite（data/ 目录），无身份认证，默认只绑定 127.0.0.1，对外暴露需自行加反向代理。",
+   "highlights": [
+    "支持 ICMP、TCP 端口、HTTP/HTTPS 三类目标的延迟与丢包检测及历史图表",
+    "事件与每分钟统计数据持久化到 SQLite，可配置保留天数与告警阈值",
+    "提供 CSV 导入导出、PingPlotter 文本导入、Telegram 告警和 18 套主题"
+   ],
+   "use_cases": [
+    "对内网或外部服务做本地拨测可用性与延迟监控",
+    "配置丢包/延迟阈值告警与 Telegram 通知",
+    "以 CSV 批量管理监控目标并导出历史报表"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "lines": [
+      41
+     ]
+    }
+   ],
+   "dbs": [],
+   "cat": "应用",
+   "eco": "app",
+   "eco_why": "README 说明该项目用 SQLite 存储事件与统计数据（data/ 目录），数据库是其内部存储而非服务对象"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Persistent up/down events and per-minute stats in SQLite (`data/`), 24h trend chart and 24h CSV report",
+     "lines": [
+      41
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为自身的事件与统计数据存储，数据库仅作内部持久化而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Persistent up/down events and per-minute stats in SQLite (`data/`), 24h trend chart and 24h CSV report ／ - `config\\` and `data\\` are created next to the exe (settings and database)",
+   "evidence_lines": [
+    41,
+    31
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "HabibGoudarz/Network-Monitoring",
+  "sha": "f842c01e9d87",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

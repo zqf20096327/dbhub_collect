@@ -11467,5 +11467,75 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "93f1cdd628d7": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Rust 后台任务与定时任务库",
+   "review": "jalari 是一个 Rust 后台作业与 cron 调度库，将任务、计划与 worker 状态存放在 PostgreSQL 表中，提供重试、去重、优先级队列、崩溃恢复与运行时增删定时任务等机制，并附带 CLI 与监控管理能力。适合需要在 Rust 应用中用单一 PostgreSQL 实现任务队列的开发者；任务为至少一次执行语义，需自行保证幂等。",
+   "highlights": [
+    "用 #[jalari::job] 宏声明任务，支持事务内入队与 enqueue_many 批量入队",
+    "支持 cron 及运行时可变的周期调度，处理时区与夏令时",
+    "提供重试退避、按 key 去重、多 worker 协调与崩溃后自动恢复"
+   ],
+   "use_cases": [
+    "Rust 应用内实现后台任务队列与定时任务",
+    "多进程/多机部署的分布式任务执行",
+    "基于 PostgreSQL 表的任务监控与失败重试管理"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "jalari: background jobs for Rust that need nothing but PostgreSQL ／ jalari keeps jobs, schedules and workers in PostgreSQL tables. Declare a job with",
+     "lines": [
+      1,
+      10
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "该库以 PostgreSQL 表存储任务状态，为 Rust 应用提供基于数据库的任务队列能力，属于为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0（L128 提及，可能为双许可表述，README 可见部分仅显示 Apache 2.0）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "jalari: background jobs for Rust that need nothing but PostgreSQL ／ jalari keeps jobs, schedules and workers in PostgreSQL tables. Declare a job with ／ jalari = \"0.7\"",
+   "evidence_lines": [
+    1,
+    10,
+    15
+   ]
+  },
+  "fn": "MengXi47/jalari",
+  "sha": "93f1cdd628d7",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

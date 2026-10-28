@@ -10851,5 +10851,275 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7496e571f9b6": {
+  "identity": {
+   "one_liner": "AI 代理跨会话记忆层，以 SQLite 存储并经 MCP 提供显式记忆工具",
+   "review": "Cairn Memory 是为 AI 代理提供跨会话记忆的开源工具包，将记忆及其来源凭据（receipt）存入用户本地的 SQLite 文件，通过 MCP 或 JavaScript 暴露保存、检查、更正、遗忘五类显式工具；面向使用 Claude Code/Codex 等客户端的开发者，当前为开发者预览版，语义召回需自备 OpenAI key，默认抽取功能存在已声明的局限。",
+   "highlights": [
+    "提供 remember/recall/inspect/correct/forget 五个 MCP 记忆工具",
+    "记忆与凭据持久化于用户自选的本地 SQLite 数据库",
+    "支持本地模式（无需账号）与 cairn.ink 托管模式两种接入方式"
+   ],
+   "use_cases": [
+    "为 AI 代理在会话间保存、检查和更正偏好与项目决策",
+    "需要带来源凭据、可审计的记忆管理",
+    "通过 MCP 集成到 Claude Code/Codex 等客户端"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Cairn's open-source memory layer stores memories in your own SQLite file and ／ - **Local preview:** your SQLite database, ／ - Memory, receipts and organization persist in your selected SQLite database.",
+     "lines": [
+      74,
+      128,
+      203
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 存储自身记忆数据，服务于 AI 代理记忆场景而非数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0，另注明 npm/PyPI 上同名包为无关项目",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Cairn's open-source memory layer stores memories in your own SQLite file and ／ - **Local preview:** your SQLite database, ／ - MCP does not read transcripts or save whole conversations automatically.",
+   "evidence_lines": [
+    74,
+    128,
+    205
+   ]
+  },
+  "fn": "Cairn-ink/cairn-memory",
+  "sha": "7496e571f9b6",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2c518c26c2cb": {
+  "identity": {
+   "one_liner": "VS Code 多数据库客户端扩展，提供连接、SQL 开发与表设计",
+   "review": "这是一个面向开发者的 VS Code 系编辑器扩展，用于在 IDE 内连接多种数据库，提供对象浏览、可视化表结构设计、SQL 编辑执行、结果集分析与数据导入导出、模拟数据生成、会话监控与执行历史等能力，宣称支持 34 种数据库。适用于需要在编辑器内完成日常数据库开发与运维操作的开发者。",
+   "highlights": [
+    "支持连接多种数据库，提供对象树浏览、SQL 编辑、可视化表结构设计与数据导入导出",
+    "提供会话监控、SQL 执行历史记录，以及危险 SQL 二次确认与只读连接保护",
+    "内置基于 Faker 规则的模拟数据生成器，可配置 OpenAI 协议接口生成测试数据"
+   ],
+   "use_cases": [
+    "开发者在 VS Code/Cursor 等编辑器内进行多数据库 SQL 开发与调试",
+    "可视化设计表结构并生成 DDL，或跨库/跨表抽取导入数据",
+    "为测试表批量生成模拟数据并监控活动会话"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、S",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、S ／ - **SQL 格式化**：`Ctrl+Alt+F` / `Cmd+Alt+F` 一键格式化，智能适应 MySQL / Oracle PL/SQL / PG / SQLite 方言。",
+     "lines": [
+      3,
+      57
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、S ／ - **SQL 格式化**：`Ctrl+Alt+F` / `Cmd+Alt+F` 一键格式化，智能适应 MySQL / Oracle PL/SQL / PG / SQLite 方言。",
+     "lines": [
+      3,
+      57
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、S ／ - **SQL 格式化**：`Ctrl+Alt+F` / `Cmd+Alt+F` 一键格式化，智能适应 MySQL / Oracle PL/SQL / PG / SQLite 方言。",
+     "lines": [
+      3,
+      57
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、S",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、S",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、S",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、S",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、S",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、S",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、S",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、S",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、S",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "TDSQL",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、S",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "GoldenDB",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、S",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为连接多种数据库的客户端扩展，为数据库的使用与管理提供工具能力，本身不以某个数据库为存储主体。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB",
+    "OceanBase",
+    "PolarDB",
+    "Dameng",
+    "openGauss",
+    "GaussDB",
+    "TDSQL",
+    "GoldenDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、TiDB、OceanBase、PolarDB MySQL、TDSQL MySQL、GoldenDB、Oracle、PostgreSQL、CockroachDB、YugabyteDB、Greenplum、PolarDB PostgreSQL、瀚高、海量、优炫、人大金仓、GaussDB、openGauss、SQL Server、Azure SQL、SQLite、DuckDB、ClickHouse、Doris、StarRocks、SelectDB、达梦 (Dameng)、Hive、Impala、Redis、Valkey、KeyDB、Trino** 等 34 种数据库。连接管理、SQL 开发、可视化表设计、结果集分析、数据导入导出、模拟数据生成与性能监控一站式完成。 ／ - **可视化表结构设计器**：支持可视化新建/修改表结构，字段类型、主键、自增、索引、外键约束一站式图形化配置与 DDL 预检。 ／ - **数据库会话监控 (Monitoring View)**：实时查看当前连接的所有活动进程与会话，展示 Client IP、User、Database、Command、运行时间与 SQL 详情，支持一键终止 (Kill) 连接。",
+   "evidence_lines": [
+    3,
+    16,
+    22
+   ]
+  },
+  "fn": "dmsql123/dmsql",
+  "sha": "2c518c26c2cb",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

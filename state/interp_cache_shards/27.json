@@ -10581,5 +10581,71 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a7971f95e628": {
+  "identity": {
+   "one_liner": "AI 编码工具的本地记忆与规则中心，基于 SQLite 单存储，经 MCP/REST/CLI 读取",
+   "review": "Aletheia 是一个本地运行的 AI 编码工具记忆与规则存储，将记忆和规则集中保存在一个 SQLite 库中，供 Claude Code、Cursor、Codex CLI 等工具通过 MCP、REST 或 CLI 读取，并可将规则同步写入各工具的指令文件。项目声明处于 alpha 状态，未在真实安装的工具上测试过，且仅监听本机回环地址。",
+   "highlights": [
+    "提供 MCP（stdio 与 HTTP）、REST API 和 CLI 三种访问接口读取同一 SQLite 存储",
+    "可将规则同步写入 CLAUDE.md、AGENTS.md、.cursor/rules 等多种工具指令文件",
+    "通过工具 hooks 自动捕获会话，存储前进行 secrets 与 <private> 块脱敏"
+   ],
+   "use_cases": [
+    "为多个 AI 编码工具提供统一的本地会话记忆存储",
+    "一次性维护规则并同步到各工具的指令文件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Aletheia is a free, local memory and rules hub for AI coding tools. One SQLite store is read by any tool over MCP,",
+     "lines": [
+      40
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为自身的数据存储，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Aletheia is a free, local memory and rules hub for AI coding tools. One SQLite store is read by any tool over MCP, ／ Aletheia does not depend on any one tool. It speaks MCP (stdio and HTTP), a plain REST API and a CLI, and it writes",
+   "evidence_lines": [
+    40,
+    77
+   ]
+  },
+  "fn": "mohamed-ashraf-elsaed/aletheia-mem",
+  "sha": "a7971f95e628",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

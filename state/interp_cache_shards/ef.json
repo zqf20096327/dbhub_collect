@@ -10631,5 +10631,162 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3e6bd2b91ba8": {
+  "identity": {
+   "one_liner": "开源 AI 模拟面试系统，含数字人提问、Docker 判题与评分报告",
+   "review": "该系统让用户输入岗位 JD 和简历后进行可录制、可评分的模拟面试：数字人面试官逐题提问并追问，报告逐题打分，还提供 Docker 隔离沙箱判题的编程笔试和 AI 简历优化功能。面向准备校招、社招、转岗面试的开发者。技术栈为 Java 21 + Spring AI Alibaba 后端、Vue 3 前端，数据层使用 PostgreSQL 16 + pgvector、Redis，代码判题在禁网限资源的一次性 Docker 容器中执行，未提供集群级生产隔离。",
+   "highlights": [
+    "支持数字人面试官语音提问与追问，逐题录制、转写、评分与前后对比重练",
+    "代码笔试在一次性 Docker 容器中运行，禁网、只读文件系统并限制 CPU/内存/进程与执行时间",
+    "支持 Java、Python、C++、JavaScript、Go 五种语言的沙箱判题，并支持简历解析、优化与 Markdown/Word/PDF 导出"
+   ],
+   "use_cases": [
+    "开发者准备校招、社招、转岗面试的模拟训练与复盘",
+    "学习小组/教学场景布置作业、查看完成看板与匿名互评",
+    "研究 Spring AI、数字人、Docker 沙箱判题等 AI 工程化实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|数据|PostgreSQL 16 + pgvector · Redis 7 · Flyway| ／ - 已完成真实 PostgreSQL、Redis、S3 兼容存储和真实模型供应商的链路验证。",
+     "lines": [
+      204,
+      215
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|执行|Docker 隔离沙箱 · SQLite · 5 种编程语言|",
+     "lines": [
+      206
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是面向求职者的面试训练应用，使用 PostgreSQL 存储业务数据，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Light-Interview 是一个开源 AI 面试训练系统：输入目标岗位、JD 和简历，完成一次可录制、可回放、可评分、可重练的模拟面试。 ／ |数据|PostgreSQL 16 + pgvector · Redis 7 · Flyway| ／ |执行|Docker 隔离沙箱 · SQLite · 5 种编程语言|",
+   "evidence_lines": [
+    7,
+    204,
+    206
+   ]
+  },
+  "fn": "xgwangdl/AI-Interview",
+  "sha": "3e6bd2b91ba8",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1edc108a899c": {
+  "identity": {
+   "one_liner": "面向 AI 助手的 Postgres 治理访问 MCP 网关",
+   "review": "pgwarden 是一个 MCP 网关，让 Claude、ChatGPT、Cursor 等 MCP 客户端以使用者本人身份查询 Postgres：通过 OIDC 登录映射到个人专属数据库角色，读取仅限只读事务，写入需人工审批，并提供哈希链审计日志、PII 掩码视图和红队测试套件。适用于需要对 AI 助手数据库访问做身份治理与审计的团队。",
+   "highlights": [
+    "提供 OAuth 2.1/OIDC 登录并将身份映射为每用户独立 Postgres 角色，由数据库 grants、RLS 和掩码视图执行权限",
+    "查询通过只读事务与扩展协议预编译语句运行，写入需具名审批人批准，全部操作记录到仅追加、哈希链审计日志",
+    "包含 133 项攻击的确定性红队测试套件及 Cloud Run 的 Terraform 配置"
+   ],
+   "use_cases": [
+    "为 MCP 客户端（Claude/ChatGPT/Cursor）提供带身份认证的受控数据库查询通道",
+    "对 AI 助手的数据库访问实施只读强制、PII 掩码和写审批",
+    "生成防篡改审计记录并运行红队验证访问控制"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "pgwarden: governed Postgres access for AI assistants ／ Postgres 16 and 18 ／ Postgres **as the person asking**. People sign in through your OIDC provider; the gateway",
+     "lines": [
+      1,
+      6,
+      17
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|attacks blocked, oracle-verified|leaked rows or unapproved writes, 60 LLM episodes|gateway overhead per key lookup, p50|20 identities, p95 94.8 ms|",
+     "lines": [
+      33
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Postgres 提供代理、身份映射、权限与审计等治理能力的网关组件，而非使用数据库存数据的终端应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pgwarden: governed Postgres access for AI assistants ／ pgwarden is an MCP gateway that lets Claude, ChatGPT, Cursor or any MCP client query ／ Postgres **as the person asking**. People sign in through your OIDC provider; the gateway",
+   "evidence_lines": [
+    1,
+    16,
+    17
+   ]
+  },
+  "fn": "B0yko/pgwarden",
+  "sha": "1edc108a899c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

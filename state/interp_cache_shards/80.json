@@ -10332,5 +10332,199 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1a1818fcb37e": {
+  "identity": {
+   "one_liner": "基于 S3 兼容对象存储的持久化实时流引擎，提供 Kafka 协议与 HTTP 流",
+   "review": "PicoMQ 是一个用 Rust 编写的持久化流服务，在 S3 兼容对象存储之上提供 HTTP（Pico 协议与 Durable Streams）和 Kafka 前端，通过 cargo 安装或 docker compose 运行，元数据可存 SQLite 或 Postgres，认证默认关闭、远程绑定需显式开启。适合需要自建流基础设施的运维与开发人员。",
+   "highlights": [
+    "支持 HTTP（Pico 协议与 Durable Streams）和 Kafka 协议前端",
+    "元数据平面支持 SQLite 与 Postgres 两种后端",
+    "提供 pico CLI 用于创建、追加和读取流"
+   ],
+   "use_cases": [
+    "通过对象存储运行持久化消息流",
+    "为应用提供 Kafka 协议或 HTTP 流接入点",
+    "单机或双节点 compose 部署测试"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "docker compose up --build # Postgres + RustFS, 1 node ／ `harness/byo` is the same against an existing Postgres and object store, configured through `.env`. ／ # Postgres-backed tests, env-gated",
+     "lines": [
+      41,
+      47,
+      63
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# single node: SQLite metadata log, local object storage ／ --meta-url sqlite:./data/meta.db \\ ／ docker compose -f compose.lite.yml up --build # SQLite + file://, no deps",
+     "lines": [
+      25,
+      27,
+      43
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "PicoMQ 是为流数据场景服务的流引擎/消息中间件，Postgres 与 SQLite 仅作为其元数据存储选项。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PicoMQ is durable, real-time streams over HTTP and Kafka, built on S3-compatible object storage. ／ - `s3stream` the stream engine ／ docker compose up --build                          # Postgres + RustFS, 1 node",
+   "evidence_lines": [
+    3,
+    7,
+    41
+   ]
+  },
+  "fn": "PicoMQ/picomq",
+  "sha": "1a1818fcb37e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "16fbe849b684": {
+  "identity": {
+   "one_liner": "SQL 数据库敏感数据发现、脱敏与验证的 Python 工具",
+   "review": "dbmask 提供发现→脱敏→验证的可审计工作流：扫描 SQL 数据库中的敏感列，用确定性假数据改写并逐行校验脱敏结果，输出可作 CI 门槛的验证报告。面向需要在开发、测试、分析等环境中复制生产数据的工程师。默认通过 SQLAlchemy 适配多引擎，但自动化测试目前仅覆盖 SQLite，PostgreSQL/MySQL 集成测试尚在路线图。",
+   "highlights": [
+    "scan/mask/validate 三步工作流，mask 默认不写入，需显式 --apply",
+    "确定性脱敏策略（同一输入映射同一输出），种子映射保证跨表/跨库一致性",
+    "validate 按 PK 对齐逐行核对脱敏完整性，非零退出可接入 CI"
+   ],
+   "use_cases": [
+    "向开发/测试环境提供脱敏后的生产数据副本",
+    "满足 GDPR/PII 合规的数据外发前脱敏与验证",
+    "CI 中将脱敏验证作为质量门禁"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The connector is a single SQLAlchemy code path, so PostgreSQL, MySQL/MariaDB, ／ *wired up* (`pip install \"dbmask[postgres]\"` etc.). ／ CPython 3.9–3.14 (Linux + Windows). PostgreSQL and MySQL integration tests",
+     "lines": [
+      195,
+      197,
+      200
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "The connector is a single SQLAlchemy code path, so PostgreSQL, MySQL/MariaDB, ／ CPython 3.9–3.14 (Linux + Windows). PostgreSQL and MySQL integration tests",
+     "lines": [
+      195,
+      200
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "SQL Server, Oracle, SQLite and anything else with a SQLAlchemy dialect are",
+     "lines": [
+      196
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQL Server, Oracle, SQLite and anything else with a SQLAlchemy dialect are ／ Honesty about testing: the automated suite currently exercises **SQLite** on",
+     "lines": [
+      196,
+      199
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "SQL Server, Oracle, SQLite and anything else with a SQLAlchemy dialect are",
+     "lines": [
+      196
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "The connector is a single SQLAlchemy code path, so PostgreSQL, MySQL/MariaDB,",
+     "lines": [
+      195
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库数据脱敏服务的独立工具，而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Discover which columns hold sensitive data, mask them with realistic ／ The connector is a single SQLAlchemy code path, so PostgreSQL, MySQL/MariaDB,",
+   "evidence_lines": [
+    10,
+    195
+   ]
+  },
+  "fn": "sealandseacat/dbmask",
+  "sha": "16fbe849b684",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

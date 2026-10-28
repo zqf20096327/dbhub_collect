@@ -10978,5 +10978,137 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "37b9356f6425": {
+  "identity": {
+   "one_liner": "NestJS 微服务外卖配送后端平台，事件驱动架构",
+   "review": "Delivery Plus 是一个外卖配送系统的后端平台，由多个独立部署的 NestJS 微服务组成，通过 REST 与 Kafka 事件通信，关系数据存于 PostgreSQL，购物车与实时跟踪使用 Redis。面向客户、骑手、餐厅等角色应用提供 API 网关入口，仅含后端不含前端，支付为模拟实现，生产路线图仍在推进中。",
+   "highlights": [
+    "提供 12 个微服务，覆盖认证、订单、支付、派单、实时跟踪、通知等域，均暴露 /health 路由",
+    "事件经事务性 outbox 写入 Kafka，消费端支持去重、重试与死信主题（dlq）回放",
+    "通过 Docker Compose 运行本地开发栈，提供 Swagger/OpenAPI 文档与种子数据脚本"
+   ],
+   "use_cases": [
+    "外卖/即时配送系统的后端参考实现",
+    "学习 NestJS 微服务与 Kafka 事件驱动架构",
+    "为多端（客户/骑手/餐厅）应用提供统一 API 网关"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Delivery Plus** is a backend food-delivery platform built as independently deployable **microservices** that communicate over REST and **Kafka** events. Domain responsibilities are separated across auth, users, restaurants, menus, carts, orders, payments, dr ／ |Database|PostgreSQL 16|",
+     "lines": [
+      33,
+      122
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确其业务数据由 PostgreSQL 支撑的各服务持有，数据库仅作为存储使用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Delivery Plus** is a backend food-delivery platform built as independently deployable **microservices** that communicate over REST and **Kafka** events. Domain responsibilities are separated across auth, users, restaurants, menus, carts, orders, payments, drivers, deliveries, tracking, and notifications. PostgreSQL-backed services own relational data; cart and tracking use Redis; images live in S3-compatible object storage, uploaded directly by clients through presigned POST policies; the gateway owns no domain data. ／ |Database|PostgreSQL 16|",
+   "evidence_lines": [
+    33,
+    122
+   ]
+  },
+  "fn": "Delivery-Plus0/delivery-plus",
+  "sha": "37b9356f6425",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9582ddb24290": {
+  "identity": {
+   "one_liner": "Home Assistant 附加组件，抓取 EduVulcan 电子日志数据存入 SQLite",
+   "review": "Vultron 是一个 Home Assistant 附加组件（也支持 Docker 运行），通过 Selenium 无头 Chromium 登录 EduVulcan 电子校历系统，提取成绩、消息、课表、考勤、幼儿园等信息，以传感器形式提供给 HA，并用 Lovelace 卡片展示；数据存放在 SQLite 数据库 vultron.db 中。面向使用 EduVulcan 的家长与学生，README 声明使用该项目违反 EduVulcan 条款。",
+   "highlights": [
+    "支持多学生账户自动识别，并为幼儿园账户提供独立数据集",
+    "通过 Selenium 无头浏览器定时抓取数据，内置随机间隔与夜间暂停机制",
+    "提供多张 Lovelace 卡片用于课表、成绩、消息、考勤等展示"
+   ],
+   "use_cases": [
+    "家长在 Home Assistant 中查看子女的成绩、作业与通知",
+    "幼儿园账户的出勤、菜单与缴费信息追踪",
+    "基于 HA 自动化/Node-RED 的成绩与消息提醒"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`vultron.py`|🔑 Logowanie 📝 Oceny 💬 Uwagi ✉️ Wiadomości 📅 Plan lekcji 🎒 Zadania ✔️ Frekwencja 🏆 Osiągnięcia 📊 Monitoring 🎨 UI Setup ⚙️ Orkiestrator 👩‍🏫 Zebrania 🧸 Przedszkole|Główny silnik aplikacji. Obsługuje logowanie **Selenium Headless** (Panel Rodzica + P",
+     "lines": [
+      104
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 数据库 vultron.db 存储抓取的学生数据，SQLite 为其数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Vultron** to **totalnieNIEzaawansowana** integracja Home Assistant z systemem dziennika elektronicznego **EduVulcan.pl**. Dodatek został zaprojektowany, aby dostarczać rodzicom i uczniom kluczowe informacje o edukacji w sposób przejrzysty, zautomatyzowany i bezpieczny. ／ |`vultron.py`|🔑 Logowanie 📝 Oceny 💬 Uwagi ✉️ Wiadomości 📅 Plan lekcji 🎒 Zadania ✔️ Frekwencja 🏆 Osiągnięcia 📊 Monitoring 🎨 UI Setup ⚙️ Orkiestrator 👩‍🏫 Zebrania 🧸 Przedszkole|Główny silnik aplikacji. Obsługuje logowanie **Selenium Headless** (Panel Rodzica + Panel Wiadomości), ekstrakcję kluczy sesji (`key`), pobieranie ocen, uwag, wiadomości, planu lekcji, zadań, frekwencji i osiągnięć. Automatycznie rozpoznaje konta przedszkolne i przetwarza je osobną ścieżką (plan zajęć, ewidencja obecności, jadłospis, zebrania, opłaty, informacje o placówce, nauczyciele). Zarządza bazą **SQLite** (`vultron.db`), monitoringiem zasobów, automatyczną rejestracją kart w Home Assistant oraz pętlą czasową z mechanizmem anty-detekcji.| ／ Vultron jest dostępny jako standardowe repozytorium Home Assistant.",
+   "evidence_lines": [
+    45,
+    104,
+    131
+   ]
+  },
+  "fn": "htomasz/vultron",
+  "sha": "9582ddb24290",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

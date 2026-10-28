@@ -10975,5 +10975,143 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4fad706146f0": {
+  "identity": {
+   "one_liner": "基于 pingap/Pingora 的分布式集中管控型 Web 应用防火墙",
+   "review": "PingWAF 是一个基于 pingap 与 Cloudflare Pingora 构建的 Web 应用防火墙，通过单一控制平面经 gRPC 双向流管理多个边缘 agent，提供语义攻击检测、CC/Bot 防护、限流、自动 TLS 与内嵌仪表盘。配置与日志数据使用 PostgreSQL 14+ 存储，日志可选写入 Elasticsearch，适合自托管流量安全的运维与安全团队。",
+   "highlights": [
+    "提供四阶段 WAF 检测管线：normalize → signatures → expression → anomaly score，覆盖 SQLi/XSS/RCE/路径遍历/命令注入",
+    "支持控制平面与多个数据平面 agent 通过 gRPC 双向流同步规则、日志与指标",
+    "支持 ACME/Let's Encrypt 自动签发、mTLS 客户端证书管理与多维度限流"
+   ],
+   "use_cases": [
+    "自托管基础设施上的站点 WAF 防护",
+    "多节点边缘部署的集中式规则与日志管理",
+    "CC 攻击与 Bot 流量的识别与挑战"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Raw request and response capture** — headers, body prefixes, real sizes and truncation flags in PostgreSQL, so a log entry can be replayed as a `curl` command from the console. Headers are stored verbatim (cookies included) to make an attack reproducible. ／ |Persistence|`SeaORM` · PostgreSQL 14+ (16 recommended)| ／ |`pingwaf-server`|Control plane: Axum REST + tonic gRPC + SeaORM/PostgreSQL + ES logs + embedded frontend + agent health monitoring|",
+     "lines": [
+      91,
+      108,
+      118
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PostgreSQL 仅作为 PingWAF 自身的持久化存储（SeaORM + PostgreSQL），项目是使用数据库的 WAF 应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Persistence|`SeaORM` · PostgreSQL 14+ (16 recommended)| ／ The bundled `docker-compose.yml` starts PingWAF in `all-in-one` mode together with PostgreSQL, pulling the pre-built image from GHCR (`ghcr.io/shuaizend/pingwaf:latest`): ／ |`pingwaf-server`|Control plane: Axum REST + tonic gRPC + SeaORM/PostgreSQL + ES logs + embedded frontend + agent health monitoring|",
+   "evidence_lines": [
+    108,
+    130,
+    118
+   ]
+  },
+  "fn": "shuaiZend/PingWAF",
+  "sha": "4fad706146f0",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9c57e8544170": {
+  "identity": {
+   "one_liner": "从 BaoStock API 下载 A 股市场数据并存入 SQLite 的工具",
+   "review": "该项目通过 BaoStock API 拉取中国 A 股的 K 线、财务、分红、指数与宏观经济数据，写入本地 SQLite 数据库（33 张表），提供断点续传、趟次调度去重、黑名单退避、邮件日报及百度网盘备份。适合需要在本地维护 A 股历史数据集的 Python 用户；仅支持单会话顺序下载，不支持并发。",
+   "highlights": [
+    "覆盖日/周/月/分钟 K 线（3 种复权）、6 类财务指标、分红、指数及宏观经济数据",
+    "提供断点续传、趟次调度去重、会话自动重连等下载管理机制",
+    "支持自动压缩上传百度网盘的定时备份与结果邮件通知"
+   ],
+   "use_cases": [
+    "构建本地 A 股历史行情与财务数据库",
+    "每日增量更新股票数据并接收进度日报",
+    "离线分析 K 线、分红与宏观数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "从 BaoStock API 下载中国A股市场数据（K线、财务数据、宏观经济数据）到 SQLite 数据库。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为数据存储，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "从 BaoStock API 下载中国A股市场数据（K线、财务数据、宏观经济数据）到 SQLite 数据库。 ／ 项目使用 SQLite 数据库，共设计**33 张表**，涵盖：",
+   "evidence_lines": [
+    3,
+    131
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "zxygithub/baostock",
+  "sha": "9c57e8544170",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

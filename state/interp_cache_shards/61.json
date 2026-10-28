@@ -10918,5 +10918,342 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "87e699d5735f": {
+  "identity": {
+   "one_lager": "本地优先的多数据库桌面客户端，支持查询、比较与迁移",
+   "one_liner": "本地优先的多引擎 SQL 桌面客户端，支持查询、比较与迁移",
+   "review": "LakeDB 是一款免费但闭源的桌面 SQL 客户端，为 MySQL、MariaDB、PostgreSQL、SQLite 提供连接工作区、SQL 编辑、结构比较、备份恢复与迁移功能，并内置可选的自然语言生成 SQL 的 QuerIA（结果需人工确认执行）。凭证本地加密、默认 local-first，适合需要跨多引擎管理数据库的开发者与运维人员；仓库仅承载构建分发与文档。",
+   "highlights": [
+    "提供 MySQL、MariaDB、PostgreSQL、SQLite 的多连接工作区、SQL 编辑、表数据编辑与结构比较",
+    "提供数据库备份/恢复、比较与迁移工具，含 PostgreSQL schema 备份与 MySQL/MariaDB 迁移",
+    "内置 QuerIA 自然语言生成 SQL 功能，SQL 需显式确认执行，数据不发送至 AI 服务"
+   ],
+   "use_cases": [
+    "跨多种数据库引擎的日常查询与数据编辑",
+    "数据库结构比较与迁移前的差异检查",
+    "通过自然语言生成 SQL 并人工审阅后执行"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A free, local-first desktop client for MySQL, MariaDB, PostgreSQL and SQLite. ／ - **One workspace across multiple engines** — work with MySQL, MariaDB, PostgreSQL and SQLite without changing tools. ／ MySQL, MariaDB, PostgreSQL and SQLite",
+     "lines": [
+      4,
+      17,
+      32
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A free, local-first desktop client for MySQL, MariaDB, PostgreSQL and SQLite. ／ - **One workspace across multiple engines** — work with MySQL, MariaDB, PostgreSQL and SQLite without changing tools. ／ MySQL, MariaDB, PostgreSQL and SQLite",
+     "lines": [
+      4,
+      17,
+      32
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A free, local-first desktop client for MySQL, MariaDB, PostgreSQL and SQLite. ／ - **One workspace across multiple engines** — work with MySQL, MariaDB, PostgreSQL and SQLite without changing tools. ／ MySQL, MariaDB, PostgreSQL and SQLite",
+     "lines": [
+      4,
+      17,
+      32
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A free, local-first desktop client for MySQL, MariaDB, PostgreSQL and SQLite. ／ - **One workspace across multiple engines** — work with MySQL, MariaDB, PostgreSQL and SQLite without changing tools. ／ MySQL, MariaDB, PostgreSQL and SQLite",
+     "lines": [
+      4,
+      17,
+      32
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为连接和操作多种数据库服务的客户端工具，而非以某数据库为存储的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "专有许可（proprietary），免费使用但非开源",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A free, local-first desktop client for MySQL, MariaDB, PostgreSQL and SQLite. ／  LakeDB is free to use, but it is not open source. This public repository hosts official builds, documentation, issue tracking and community feedback. ／ |**Database tools**|PostgreSQL schema backup/restore, comparison and transactional table copy; MySQL/MariaDB backup, restore, comparison and migration. Capability-aware controls stay disabled when an engine does not support them.|",
+   "evidence_lines": [
+    4,
+    25,
+    96
+   ]
+  },
+  "fn": "DavLagoHern/LakeDB",
+  "sha": "87e699d5735f",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9bc7f6300727": {
+  "identity": {
+   "one_liner": "全栈 TypeScript 脚手架，按模块生成 Next.js/Hono/FastAPI 项目",
+   "review": "这是一个项目脚手架，通过 pnpm dlx 的 create-clubedge-app 生成包含前端、API、认证、存储、支付、任务、可观测性等可选模块的单体仓库。数据层使用 PostgreSQL 与 Drizzle ORM，任务队列可用 pg-boss/BullMQ，缓存用 Redis。适合需要从零搭建全栈 Web/移动应用并自选技术组合的开发者。",
+   "highlights": [
+    "通过 CLI 按需生成仅含所选模块的项目，模块可后续增删升级",
+    "包含 Drizzle ORM 的 PostgreSQL schema、迁移与 seed 命令",
+    "后台任务可由 pg-boss（存 PostgreSQL）或 BullMQ（存 Redis）运行"
+   ],
+   "use_cases": [
+    "快速初始化 Next.js 或 TanStack Start 全栈项目",
+    "需要模块化可替换认证/支付/任务后端的应用开发",
+    "生成含 CI 流水线与 Docker 部署配置的单体仓库项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Next.js or TanStack Start on PostgreSQL, with optional auth, storage, email, payments, ／ - Drizzle ORM and PostgreSQL schema, migrations, and seed commands. ／ - Better Auth with users and sessions in your own PostgreSQL, secure session cookies, a protected dashboard, and rate-limited sign-in.",
+     "lines": [
+      7,
+      53,
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "生成的前端与 API 项目以 PostgreSQL 存储业务数据（schema/迁移/任务队列），属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Next.js or TanStack Start on PostgreSQL, with optional auth, storage, email, payments, ／ - Drizzle ORM and PostgreSQL schema, migrations, and seed commands. ／ - Background jobs with retries and schedules, stored in PostgreSQL by pg-boss and run by a worker inside the app server, behind a provider-neutral jobs interface.",
+   "evidence_lines": [
+    7,
+    53,
+    85
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "Clubedge/clubedge-starter",
+  "sha": "9bc7f6300727",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "611eba48b191": {
+  "identity": {
+   "one_liner": "PHP 开源 CMS/企业网站平台，含页面设计、电商、ERP，使用 MySQL/MariaDB 存储",
+   "review": "一个用 PHP 编写的单体网站平台，集成可视化页面编辑器、电商、ERP、团队工作区和外部 API，安装时创建 MySQL/MariaDB 数据库并由安装向导建表。面向需要一站式建站、商城或内部管理的用户；要求 PHP 7.1–8.5、MySQL 5.7+/MariaDB 10.2+，无 Composer 和构建步骤，上传后运行安装向导即可。",
+   "highlights": [
+    "提供可视化页面编辑器、电商（含支付网关）、ERP 与团队工作区模块",
+    "内置 Web 应用防火墙，含 bot 控制、速率限制与国家限制",
+    "无 Composer、无构建步骤，通过安装向导部署，更新从控制面板完成"
+   ],
+   "use_cases": [
+    "企业官网与多语言内容站点搭建",
+    "在线商店与订单/库存管理",
+    "内部团队协作与 ERP（发票、库存、报表）"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**Database**|MySQL 5.7 or later, or MariaDB 10.2 or later (the installer refuses MySQL 5.6 and MariaDB 10.1)| ／ 1. Create an empty MySQL / MariaDB database and a user with full privileges on it.",
+     "lines": [
+      54,
+      73
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**Database**|MySQL 5.7 or later, or MariaDB 10.2 or later (the installer refuses MySQL 5.6 and MariaDB 10.1)| ／ 1. Create an empty MySQL / MariaDB database and a user with full privileges on it.",
+     "lines": [
+      54,
+      73
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其为使用 MySQL/MariaDB 存储数据的 PHP 网站平台应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pinegrap is an open-source, all-in-one website platform written in PHP. A website with its own design, an online store, accounting (ERP), a team workspace and an external API live in one codebase, and a new site can be up in minutes from a ready-made design template. ／ |**Database**|MySQL 5.7 or later, or MariaDB 10.2 or later (the installer refuses MySQL 5.6 and MariaDB 10.1)| ／ 1. Create an empty MySQL / MariaDB database and a user with full privileges on it.",
+   "evidence_lines": [
+    10,
+    54,
+    73
+   ]
+  },
+  "fn": "kodpen/PinegrapCMS",
+  "sha": "611eba48b191",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "26c0dddba264": {
+  "identity": {
+   "one_liner": "动物社交与电商平台，React 19 + Laravel 12 全栈应用",
+   "review": "YaZoo 是一个面向宠物主人和动物护理专业人士的社交网络与电商平台原型，包含信息流、消息、预约、市场列表等功能。技术栈为 React/Vite 前端、Laravel API 后端和 Expo 移动端，通过 Docker Compose 或手动方式本地运行，数据存于 MySQL 兼容数据库。README 强调项目处于试点验证阶段，未声明公司注册或生产部署批准。",
+   "highlights": [
+    "提供 Web（React/Vite）、Laravel JSON API 后端与 Expo/React Native Android 移动端三种客户端",
+    "支持法语、阿拉伯语和英语界面，含 RTL、深浅色与减弱动效",
+    "提供 Docker Compose 与非 Docker 两种本地运行方式，含迁移、种子数据及测试、审计命令"
+   ],
+   "use_cases": [
+    "动物社群社交与内容发布（Feed、Stories、Reels）",
+    "宠物主人与兽医等专业人士的预约与服务对接",
+    "动保相关商品与服务的市场交易场景验证"
+   ],
+   "dbs": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "├── MySQL-compatible database ／ Prerequisites: Git and Docker Desktop with Compose, or PHP 8.2+, Composer, Node.js 22.22+, npm, and a local MySQL-compatible service. ／ Docker Compose publishes its MySQL-compatible database on port 3308, keeping it separate from workstation MySQL (3306) and XAMPP MariaDB (3307).",
+     "lines": [
+      65,
+      73,
+      82
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "Docker Compose publishes its MySQL-compatible database on port 3308, keeping it separate from workstation MySQL (3306) and XAMPP MariaDB (3307).",
+     "lines": [
+      82
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 MySQL 兼容数据库存储数据的全栈社交与电商应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " ├── MySQL-compatible database ／ Prerequisites: Git and Docker Desktop with Compose, or PHP 8.2+, Composer, Node.js 22.22+, npm, and a local MySQL-compatible service.",
+   "evidence_lines": [
+    65,
+    73
+   ]
+  },
+  "fn": "5eef/YaZoo",
+  "sha": "26c0dddba264",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

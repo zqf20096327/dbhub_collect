@@ -11741,5 +11741,125 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5463759438c8": {
+  "identity": {
+   "one_liner": "公共管理部门协议登记管理的 JavaEE Web 应用",
+   "review": "COL-GeCO 是面向意大利公共管理部门的开源 Web 应用，用于登记和跟踪政府间协议、框架协议及到期提醒，采用 JavaEE 与 Bootstrap5/jQuery 构建，包含 E-R 与物理模型设计。README 自述软件尚未就绪（L59），未提供安装运行说明，数据存储依赖 PostgreSQL（据主题标签）。",
+   "highlights": [
+    "以模块化方式管理协议、框架协议等公共管理部门协议并提供到期日程提醒（L23-L30）",
+    "支持邮件、共享日历、推送通知等多种到期提醒与汇总方式的扩展设计（L43-L49）",
+    "包含 E-R 图与物理模型设计文档（L63-L73）"
+   ],
+   "use_cases": [
+    "公共管理部门建立并维护协议到期登记册",
+    "按月生成到期截止提醒与汇总通知",
+    "希望采用开源日程登记方案的行政机构适配改造"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 自述其为公共管理部门管理协议的 Web 应用，数据库（据标签为 PostgreSQL）仅作为其数据存储使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GPL-3.0 license（L6）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Web application to trace, and manage, the government conventions. ／ The convention management software (COL-GECO) is a modular software that arose from the need, within the public administration, ／ The software is not ready yet: please, let me cook.",
+   "evidence_lines": [
+    11,
+    23,
+    59
+   ]
+  },
+  "fn": "gbetorre/convenzioni",
+  "sha": "5463759438c8",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "17927e9b4915": {
+  "identity": {
+   "one_liner": "个人/家庭数字档案私有化管理系统，以 openGauss 为数据底座",
+   "review": "AMS 是一套面向个人与家庭证件、学历、资产等档案的私有化存储管理平台，支持分类归档、全文检索、版本追溯与授权共享。后端采用仓颉语言，数据存于 openGauss，字段级使用 SM4 加密与 SM3 盲索引实现密文检索。README 显示项目处于设计文档阶段，尚未进入编码实现。",
+   "highlights": [
+    "支持十余类档案的分类归档、全文检索、版本追溯与授权共享",
+    "采用国密 SM3/SM4 实现字段级加密、盲索引与全链路审计",
+    "提供二进制与 Docker 双形态交付，构建矩阵覆盖 x86_64/aarch64 × Linux/Windows"
+   ],
+   "use_cases": [
+    "个人及家庭证件、学历、健康、资产等档案的私有化归档管理",
+    "需密文存储与密态等值检索的敏感信息管理",
+    "国产化/信创环境下的档案系统部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "|D5|高敏字段（证件号/手机/银行卡）**字段级 SM4 加密 + 密文等值查询**|复用 openGauss 密态等值查询的确定性加密能力（CMK/CEK 模型）|全表 TDE / 应用层全字段加密不做检索|安全 §4.3|",
+     "lines": [
+      53
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统以 openGauss 作为档案数据存储底座，是使用数据库的应用而非服务数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **AMS 是一套面向个人/家庭全生命周期数字档案的私有化管理平台**：以国密算法为密码学底座，以开放Gauss 为数据底座，支持证件、学历、职业、资质、资产、健康、关系、影像附件等十余类档案的分类归档、全文检索、版本追溯、授权共享与全链路审计。 ／ |D5|高敏字段（证件号/手机/银行卡）**字段级 SM4 加密 + 密文等值查询**|复用 openGauss 密态等值查询的确定性加密能力（CMK/CEK 模型）|全表 TDE / 应用层全字段加密不做检索|安全 §4.3| ／ |D9|交付**二进制 + Docker 双形态**，构建矩阵 x86_64/aarch64 × Linux/Windows|二进制适合鲲鹏裸机与国产化环境，Docker 适合快速部署与编排|仅二进制 / 仅容器|架构 §7|",
+   "evidence_lines": [
+    41,
+    53,
+    57
+   ]
+  },
+  "fn": "a703201/Personal-Archive-Management-System",
+  "sha": "17927e9b4915",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

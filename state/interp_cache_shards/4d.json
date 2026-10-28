@@ -10640,5 +10640,177 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "06fd76e32249": {
+  "identity": {
+   "one_liner": "关系库现代化评估工具，用真实负载把查询分配到 AWS 目标引擎",
+   "review": "该工具读取关系数据库的 schema 与查询统计，对每类查询按 DynamoDB、Aurora 等用途专用引擎打分并确定放置方案，生成目标 schema 设计、分波迁移路线、工程报告与成本估算。引擎放置为确定性打分，模型仅用于 schema 设计与摘要。面向已决定重构应用、迁向 AWS 专用数据库的团队，需 Python 3.12、uv 和 Claude Code 本地运行。",
+   "highlights": [
+    "提供只读采集脚本，收集 schema、查询形态与计数器，不读取表行数据",
+    "引擎放置由打分决定（确定性），结果可审计；生成 PDF 报告、工程报告与成本估算",
+    "可在 Claude Code 内交互运行，也提供无模型的本地全流水线运行命令"
+   ],
+   "use_cases": [
+    "评估现有关系库工作负载并规划拆分到 AWS 用途专用数据库",
+    "生成目标 schema 设计与分波迁移路线图",
+    "为迁移决策产出管理层报告与成本预估"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Sources:** PostgreSQL, MySQL, MariaDB, SQL Server and Oracle. A SQL Server or Oracle source moves to whichever Aurora engine scores higher on its workload (Aurora PostgreSQL unless Aurora MySQL scores clearly higher), so wave 1 includes a schema and dialec",
+     "lines": [
+      70
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Sources:** PostgreSQL, MySQL, MariaDB, SQL Server and Oracle. A SQL Server or Oracle source moves to whichever Aurora engine scores higher on its workload (Aurora PostgreSQL unless Aurora MySQL scores clearly higher), so wave 1 includes a schema and dialec",
+     "lines": [
+      70
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **Sources:** PostgreSQL, MySQL, MariaDB, SQL Server and Oracle. A SQL Server or Oracle source moves to whichever Aurora engine scores higher on its workload (Aurora PostgreSQL unless Aurora MySQL scores clearly higher), so wave 1 includes a schema and dialec",
+     "lines": [
+      70
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Sources:** PostgreSQL, MySQL, MariaDB, SQL Server and Oracle. A SQL Server or Oracle source moves to whichever Aurora engine scores higher on its workload (Aurora PostgreSQL unless Aurora MySQL scores clearly higher), so wave 1 includes a schema and dialec",
+     "lines": [
+      70
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Sources:** PostgreSQL, MySQL, MariaDB, SQL Server and Oracle. A SQL Server or Oracle source moves to whichever Aurora engine scores higher on its workload (Aurora PostgreSQL unless Aurora MySQL scores clearly higher), so wave 1 includes a schema and dialec",
+     "lines": [
+      70
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为数据库现代化评估与迁移规划提供服务，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT-0 License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Database Modernizer Assessment reads the schema and query statistics of a relational database and tells you which AWS purpose-built database should serve each query. It then designs the target schemas and writes an executive report, an engineering report and a cost projection, all from your real workload. ／ **Database Modernizer Assessment answers these questions using your real workload.** It scores every query against the AWS purpose-built engines, places each query on its best-fit engine, checks that the resulting architecture holds together, and produces schema designs, a migration roadmap in waves and a cost projection you can implement. The engine placement is deterministic: the scores decide it, not a model, so it comes out the same on every run and can be audited. A model writes the schema designs and the executive summary. ／ - **Sources:** PostgreSQL, MySQL, MariaDB, SQL Server and Oracle. A SQL Server or Oracle source moves to whichever Aurora engine scores higher on its workload (Aurora PostgreSQL unless Aurora MySQL scores clearly higher), so wave 1 includes a schema and dialect conversion (the plan says that wave is not yet optimized for heterogeneous migrations).",
+   "evidence_lines": [
+    9,
+    68,
+    70
+   ]
+  },
+  "fn": "aws-samples/sample-aws-genai-db-modernizer",
+  "sha": "06fd76e32249",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "61369e38603b": {
+  "identity": {
+   "one_liner": "自托管的 Obsidian 笔记库 Git 同步服务器",
+   "review": "PKV Sync 是一个运行在自有服务器上的 Obsidian 笔记同步服务端，用 Git 仓库作为存储真源，每个库对应一个 bare repo，元数据存于 SQLite，支持多用户多设备、SSE 实时推送、冲突解决和管理面板，并提供 MCP 接口供 AI 工具读写笔记。面向想自托管 Obsidian 同步的个人或团队；当前版本不含端到端加密，服务器可读取库内容。",
+   "highlights": [
+    "以 bare git 仓库存储每个 vault，提供文件历史、diff 和单文件恢复",
+    "通过 SSE 实现亚秒级实时推送，插件端提供冲突文件与一键解决",
+    "内置 MCP 接口（stdio 或 /mcp 路由），支持 AI 代理按 frontmatter 检索与带 dry-run 的写入"
+   ],
+   "use_cases": [
+    "在个人或团队服务器上自托管 Obsidian 多设备同步",
+    "用 git 历史管理笔记的版本与恢复",
+    "通过 MCP 让 LLM 工具读取和维护笔记库"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Mature technology, on purpose.** Single binary, single SQLite metadata DB, one",
+     "lines": [
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 SQLite 存储自身元数据的自托管同步应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PKV Sync is a self-hosted, Git-native sync server for Obsidian vaults. ／ - **Mature technology, on purpose.** Single binary, single SQLite metadata DB, one ／ ## Quick start with Docker Compose",
+   "evidence_lines": [
+    3,
+    46,
+    49
+   ]
+  },
+  "fn": "CyberKurry/pkv-sync",
+  "sha": "61369e38603b",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

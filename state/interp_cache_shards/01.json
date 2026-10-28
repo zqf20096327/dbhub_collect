@@ -10557,5 +10557,90 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "95cece6ddfc2": {
+  "identity": {
+   "one_liner": "Raku 语言的 ORM 开发库，将模型映射为 SQL 操作",
+   "review": "Red 是 Raku 语言仍在开发中的 ORM 框架，通过 traits 声明列、主键、关系等，将模型对象映射为数据库的建表、查询、插入、更新操作，并提供索引、CHECK 约束、事务与 savepoint 支持。面向使用 Raku（rakudo）开发的程序员，通过 zef 安装。索引与 range 等特性对不同后端支持程度不同，原生 range 列和操作符要求 PostgreSQL。",
+   "highlights": [
+    "通过 traits（is column/is id/is referencing 等）声明模型与关系，生成对应 SQL 的建表、查询与写入",
+    "支持事务与嵌套 savepoint，提供 red-do :transaction 与显式事务 guard",
+    "支持命名索引、CHECK/EXCLUDE 约束声明，可为 PostgreSQL 生成 range 与正则操作符的 AST"
+   ],
+   "use_cases": [
+    "用 Raku 开发需要数据库持久化的应用",
+    "以模型对象方式管理 schema 建表与索引",
+    "需要事务/savepoint 控制的多步写入"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`:using` selects an access method. PostgreSQL supports `btree`, `hash`, `gin`, `gist`, `spgist` and `brin`; the common API supports `btree`. `:opclass` selects a PostgreSQL operator class. For multiple keys, supply a list with one string per key, using an empt ／ `:driver<Pg>` explicitly selects a declaration only for that backend. The names are `Pg`, `SQLite` and `MySQL`, or a custom driver's final class-name component. Without this option an unsupported declaration raises `X::Red::Index`; Red does not substitute anot ／ #### PostgreSQL ranges, regex and exclusion constraints",
+     "lines": [
+      302,
+      304,
+      310
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`:driver<Pg>` explicitly selects a declaration only for that backend. The names are `Pg`, `SQLite` and `MySQL`, or a custom driver's final class-name component. Without this option an unsupported declaration raises `X::Red::Index`; Red does not substitute anot",
+     "lines": [
+      304
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`:driver<Pg>` explicitly selects a declaration only for that backend. The names are `Pg`, `SQLite` and `MySQL`, or a custom driver's final class-name component. Without this option an unsupported declaration raises `X::Red::Index`; Red does not substitute anot",
+     "lines": [
+      304
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为应用程序提供数据库对象关系映射能力的框架，属数据库生态的开发库工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Red - A **WiP** ORM for Raku ／ Red is a *WiP* ORM for Raku. ／ `:driver<Pg>` explicitly selects a declaration only for that backend. The names are `Pg`, `SQLite` and `MySQL`, or a custom driver's final class-name component. Without this option an unsupported declaration raises `X::Red::Index`; Red does not substitute another index method or weaken a constraint. Conditional constraints are intentionally absent on the other backends.",
+   "evidence_lines": [
+    7,
+    225,
+    304
+   ]
+  },
+  "fn": "FCO/Red",
+  "sha": "95cece6ddfc2",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

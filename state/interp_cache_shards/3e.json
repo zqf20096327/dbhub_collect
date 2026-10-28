@@ -10848,5 +10848,168 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "897ebf5ab133": {
+  "identity": {
+   "one_liner": "自托管开源算法交易平台，统一36个券商插件接口",
+   "review": "OpenAlgo 是一个自托管的 Python Flask + React 算法交易平台，供交易者设计、托管和执行交易策略。它通过 36 个券商插件提供统一的 REST API，内置无代码策略构建器、Python 策略托管、期权分析工具与 AI Agent，并使用多个本地数据库（含 SQLite）存储运营数据。",
+   "highlights": [
+    "提供 36 个券商插件的统一 REST API 与 WebSocket 行情流",
+    "内置无代码可视化策略构建器和 Python 策略托管运行环境",
+    "包含 API Analyzer 模拟测试环境与 MCP Server、Telegram 通知等集成"
+   ],
+   "use_cases": [
+    "多券商统一接入的量化交易执行",
+    "无代码/Python 策略托管与回放测试",
+    "AI 辅助的期权分析与交易通知"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite** - 5 databases (main, logs, latency, health, sandbox)",
+     "lines": [
+      283
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "平台将 SQLite 等数据库作为自身运营数据存储使用，而非为数据库生态提供工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OpenAlgo is a free, open source, self-hosted **trading platform**, not just a broker bridge. Built on Python Flask + React 19, it gives traders a full-stack environment to **design, host, and execute strategies** through **36 broker plugins**: 35 securities integrations and Delta Exchange for crypto derivatives. Whether you write Python, prefer drag-and-drop, or trade options, OpenAlgo provides a common interface without tying strategy code to one adapter. ／ Order workflows from the REST API, hosted strategies, and Flow can use Analyzer Mode before live execution. Analytics pages, dashboards, PnL tracking, latency monitoring, notifications, and MCP reuse the same application services where their specific capabilities apply.",
+   "evidence_lines": [
+    11,
+    25
+   ]
+  },
+  "fn": "marketcalls/openalgo",
+  "sha": "897ebf5ab133",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "797f4ffb8510": {
+  "identity": {
+   "one_liner": "基于 Tauri 的开源多数据库 GUI 客户端",
+   "review": "Gridline 是一个用 Tauri 2.0、Rust 和 React 构建的桌面数据库图形客户端，支持连接、浏览、查询和编辑 PostgreSQL、MySQL、SQLite 等数据库，提供可视化 pg_dump/mysqldump 备份恢复、库间同步、ER 图和 Excel 导出等功能，面向需要管理多套数据库环境的开发者和 DBA。提供 macOS/Windows/Linux 安装包及 Homebrew 安装方式。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、SQLite 的连接、浏览、查询和编辑，提供可视化备份、恢复与 DB-to-DB 同步",
+    "提供对象浏览器（函数、触发器、序列、枚举等）和交互式 ER 图",
+    "支持 CSV、JSON、SQL、Markdown、.xlsx 导出与变更暂存提交"
+   ],
+   "use_cases": [
+    "开发者在本地、预发布与生产环境间切换管理数据库",
+    "DBA 在原生界面中执行 pg_dump/pg_restore 备份恢复与同步",
+    "导出查询结果为多种格式用于报表或交接"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A lightweight, open-source database GUI for PostgreSQL, MySQL, SQLite, and Redis. ／ - **Deep PostgreSQL tooling** — visual `pg_dump`, `pg_restore`, and DB-to-DB sync.",
+     "lines": [
+      7,
+      53
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A lightweight, open-source database GUI for PostgreSQL, MySQL, SQLite, and Redis. ／ - **Backup, restore & sync for every database** — PostgreSQL, MySQL (`mysqldump` / bundled MariaDB clients), and SQLite (`.dump`), with direct DB-to-DB sync between live connections.",
+     "lines": [
+      7,
+      54
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A lightweight, open-source database GUI for PostgreSQL, MySQL, SQLite, and Redis. ／ - **Backup, restore & sync for every database** — PostgreSQL, MySQL (`mysqldump` / bundled MariaDB clients), and SQLite (`.dump`), with direct DB-to-DB sync between live connections.",
+     "lines": [
+      7,
+      54
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Backup, restore & sync for every database** — PostgreSQL, MySQL (`mysqldump` / bundled MariaDB clients), and SQLite (`.dump`), with direct DB-to-DB sync between live connections.",
+     "lines": [
+      54
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供 GUI 管理与备份恢复功能的客户端工具，本身不存储业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0 License",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A lightweight, open-source database GUI for PostgreSQL, MySQL, SQLite, and Redis. ／ Gridline is a modern, open-source database GUI client built with Tauri 2.0, Rust, and React. It is lightweight by design (~40 MB baseline), powerful by default, and free from the paywalls that limit commercial alternatives. ／ - **Backup, restore & sync for every database** — PostgreSQL, MySQL (`mysqldump` / bundled MariaDB clients), and SQLite (`.dump`), with direct DB-to-DB sync between live connections.",
+   "evidence_lines": [
+    7,
+    50,
+    54
+   ]
+  },
+  "fn": "AdrianBonpin/gridline",
+  "sha": "797f4ffb8510",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

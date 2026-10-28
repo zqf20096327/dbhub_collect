@@ -10612,5 +10612,215 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "79915cd6f565": {
+  "identity": {
+   "one_liner": "自托管家庭事务组织应用，用 PostgreSQL 存储家庭数据",
+   "review": "OpenFamily 是一个自托管家庭管理应用，提供购物清单、任务、共享日历、食谱、膳食规划和家庭预算功能。它面向希望将家庭数据保存在自己服务器上的家庭用户，后端基于 Node.js 与 PostgreSQL 16（自动迁移），支持 Docker 部署、PWA 离线模式，并与 Mealie、Tandoor、Home Assistant、Grocy、Nextcloud 等自托管服务集成。",
+   "highlights": [
+    "提供购物清单、任务、日历、周计划、食谱、膳食规划和预算功能",
+    "支持 Docker 部署和 Windows 安装包（内置 Node.js 与 PostgreSQL）",
+    "支持与 Mealie、Tandoor、Home Assistant、Grocy、Nextcloud 集成，并提供 PWA 离线模式"
+   ],
+   "use_cases": [
+    "家庭共享管理购物清单、任务与日历",
+    "家庭预算月度跟踪与分类限额提醒",
+    "自托管环境下替代商业家庭管理应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL are bundled — **no Docker, no configuration** required. ／ psql -U postgres -c \"CREATE DATABASE openfamily;\" ／ **Backend** — Node.js 26 · Express · PostgreSQL 16 (auto-migration) · WebSocket · Web Push (VAPID) · JWT + bcrypt 12 · helmet · rate limiting",
+     "lines": [
+      75,
+      136,
+      156
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目使用 PostgreSQL 存储自身数据，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Backend** — Node.js 26 · Express · PostgreSQL 16 (auto-migration) · WebSocket · Web Push (VAPID) · JWT + bcrypt 12 · helmet · rate limiting ／ OpenFamily is a **self-hosted alternative to apps like Cozi or FamilyWall**: shopping lists,",
+   "evidence_lines": [
+    156,
+    21
+   ]
+  },
+  "fn": "NexaFlowFrance/OpenFamily",
+  "sha": "79915cd6f565",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "93e4d325b8fe": {
+  "identity": {
+   "one_liner": "自托管的 Claude Code 应用托管平台，为每个应用供给 Supabase/Postgres 后端",
+   "review": "该仓库实现一个运行在单台 VM 上的自托管托管平台：开发者通过 MCP server 和 Claude Code 插件请求部署应用，控制平面为每个应用供给独立的 Postgres 数据库、GoTrue 认证、PostgREST、Edge Functions 和静态前端，并提供多项目 Supabase Studio 与管理员控制台。状态为 alpha，需要 Docker、Node 24、pnpm 及约 16 GB 内存构建 Studio。",
+   "highlights": [
+    "通过 MCP server 和 Claude Code 插件完成应用部署，部署流程可经 GitHub Actions 执行",
+    "控制平面为每个应用供给独立的 Postgres 数据库、GoTrue、PostgREST 容器，并配置 Caddy 路由",
+    "提供多项目 Supabase Studio 与管理员控制台，包含审计日志、备份恢复和安全检查"
+   ],
+   "use_cases": [
+    "团队内部自托管由 Claude Code 构建的应用",
+    "为多个应用提供隔离的 Supabase 后端（数据库、认证、REST API）",
+    "管理员统一查看所有应用、发布记录与审计日志"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Self-hosted hosting for the apps your team builds with Claude Code. Each app gets its own Supabase backend (Postgres database, Auth, REST API, Edge Functions) and its static frontend, all served from a single VM. Developers (\"app builders\") don't use a UI to d ／ - The **control plane** provisions each app (a Postgres database, its own GoTrue and PostgREST containers, a tenant in the shared services), deploys it, and configures Caddy's routes. Details: docs/ARCHITECTURE.md §3.",
+     "lines": [
+      3,
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "平台自身依赖 Postgres 存储数据并为每个应用供给 Postgres 数据库，属于使用数据库的系统",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Self-hosted hosting for the apps your team builds with Claude Code. Each app gets its own Supabase backend (Postgres database, Auth, REST API, Edge Functions) and its static frontend, all served from a single VM. Developers (\"app builders\") don't use a UI to deploy: they ask Claude Code to \"deploy the app to the platform\", through an MCP server and a Claude Code plugin. They inspect their apps in a multi-project Supabase Studio. Admins see every app, in Studio and in an admin console. ／ - The **control plane** provisions each app (a Postgres database, its own GoTrue and PostgREST containers, a tenant in the shared services), deploys it, and configures Caddy's routes. Details: docs/ARCHITECTURE.md §3. ／   control-plane/      Hono API + MCP server + admin API + provisioning (Docker, Caddy, Postgres)",
+   "evidence_lines": [
+    3,
+    46,
+    52
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "marmelab/platform",
+  "sha": "93e4d325b8fe",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c0dd4762305d": {
+  "identity": {
+   "one_liner": "本地工作区，索引编码代理会话历史并提供检索与用量分析",
+   "review": "一个运行在本地浏览器中的 Python 应用，用于读取 Claude Code 与 Codex 的会话历史，重建决策背景、统计 token 用量并保存项目笔记；数据存储在本地 SQLite（含 FTS5 全文检索），可选择通过只读 MCP 连接让编码代理检索上下文。面向使用 Claude Code/Codex 并需回顾历史决策的开发者。需 Python 3.10+，模型回答依赖已安装并登录的 Claude Code CLI。",
+   "highlights": [
+    "索引 Claude Code 与 Codex 会话历史，提供按会话/工具维度的 token 用量分析与上下文图表",
+    "提供只读 MCP 服务（六个工具），供编码代理检索历史摘录与已保存的项目笔记",
+    "纯本地运行，仅依赖 Python 3.10+ 标准库与 SQLite FTS5，无托管服务与构建步骤"
+   ],
+   "use_cases": [
+    "回顾项目中某个决策或失败方案的产生背景并保存为项目记忆",
+    "分析会话中 token 消耗分布，定位重复失败或大输出等模式",
+    "生成跨会话交接材料（handoff），供下一次代理会话复用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "No website, hosted service, account, model subscription, or build step. Clone the public source and run it on your computer. MIT licensed; Python 3.10+ and its standard library, including SQLite FTS5.",
+     "lines": [
+      7
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该应用以 SQLite 作为本地数据存储（含 FTS5 索引），SQLite 是其内部依赖而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local workspace for Claude Code and Codex history. Recover why decisions were made, understand session usage, and save useful context for your next session. Optionally let your coding agent retrieve that context through a read-only MCP connection. ／ No website, hosted service, account, model subscription, or build step. Clone the public source and run it on your computer. MIT licensed; Python 3.10+ and its standard library, including SQLite FTS5. ／ Add it to your client's local / stdio MCP server settings. The generated JSON uses the common `mcpServers` wrapper; other clients may use a different configuration format with the same command and arguments. This app never edits your agent settings, installs hooks, or starts an AI model.",
+   "evidence_lines": [
+    5,
+    7,
+    91
+   ]
+  },
+  "fn": "ethanplusai/agent-ledger",
+  "sha": "c0dd4762305d",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

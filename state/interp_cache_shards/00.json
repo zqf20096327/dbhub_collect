@@ -9951,5 +9951,352 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e6894212ea4c": {
+  "identity": {
+   "one_liner": "SQL 编译器：将注解 .sql 文件生成为多语言类型安全数据库访问代码",
+   "review": "Scythe 是一个命令行工具，把带注解的 .sql 文件静态编译为 10 种语言的数据库访问代码（行类型、查询函数），生成无需数据库连接、可在 pre-commit 钩子中运行；同时提供 59 条 lint/audit 规则做 SQL 格式化、安全审计和生成代码一致性检查。面向以 SQL 为中心、希望省去手写 ORM 映射层的应用开发者。限制：每个配置块只针对一个数据库引擎，不提供跨方言运行时抽象。",
+   "highlights": [
+    "静态读取 SQL 生成 10 种语言的类型安全访问代码，无需数据库连接",
+    "包含 24 条 lint 规则与 35 条审计规则，支持 SARIF/JSON/人类可读输出",
+    "支持 pre-commit 钩子与 GitHub Actions 安装方式"
+   ],
+   "use_cases": [
+    "从注解 SQL 查询生成带可空类型推断的数据访问层",
+    "在 CI/pre-commit 中对 SQL 做安全审计与生成代码漂移检查",
+    "对运行中的 PostgreSQL/MySQL/MariaDB 实例执行健康检查"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "JavaScript via the four `javascript-*` backends — across PostgreSQL, MySQL, MariaDB, SQLite, DuckDB, ／ |Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake| ／ |**`scythe check`**|Verifies committed code still matches the SQL it was generated from, via 11 provenance rules. Given `--database-url` it adds 7 schema-drift rules against a live PostgreSQL catalog.|CLI reference|",
+     "lines": [
+      287,
+      293,
+      44
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "JavaScript via the four `javascript-*` backends — across PostgreSQL, MySQL, MariaDB, SQLite, DuckDB, ／ |Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake| ／ |**`scythe inspect`**|Live-database health checks: foreign keys without covering indexes, tables with policies but RLS disabled, duplicate indexes. PostgreSQL (13 checks) and MySQL/MariaDB (4 checks).|Inspect|",
+     "lines": [
+      287,
+      293,
+      45
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "JavaScript via the four `javascript-*` backends — across PostgreSQL, MySQL, MariaDB, SQLite, DuckDB, ／ |Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+     "lines": [
+      287,
+      293
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "CockroachDB, MSSQL, Oracle, Redshift and Snowflake. **Coverage is not uniform**: not every language ／ |Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+     "lines": [
+      288,
+      293
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "CockroachDB, MSSQL, Oracle, Redshift and Snowflake. **Coverage is not uniform**: not every language ／ |Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+     "lines": [
+      288,
+      293
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "JavaScript via the four `javascript-*` backends — across PostgreSQL, MySQL, MariaDB, SQLite, DuckDB, ／ |Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake| ／ |**`scythe inspect`**|Live-database health checks: foreign keys without covering indexes, tables with policies but RLS disabled, duplicate indexes. PostgreSQL (13 checks) and MySQL/MariaDB (4 checks).|Inspect|",
+     "lines": [
+      287,
+      293,
+      45
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明支持数据库清单并生成对应各数据库驱动的访问代码，是为数据库开发生态服务的工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "Oracle",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "JavaScript via the four `javascript-*` backends — across PostgreSQL, MySQL, MariaDB, SQLite, DuckDB, ／ |Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake| ／ Scythe compiles annotated `.sql` files into database access code — row types, query functions and",
+   "evidence_lines": [
+    287,
+    293,
+    5
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "Goldziher/scythe",
+  "sha": "e6894212ea4c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5085a6fa268e": {
+  "identity": {
+   "one_liner": "OCI 上的 HPC/GPU 集群 Terraform 部署栈",
+   "review": "",
+   "highlights": [
+    "通过 Terraform 与 OCI Resource Manager 提供可重复的 HPC 集群基础设施部署",
+    "使用 Slurm 调度 CPU 与 GPU 工作负载，支持高可用与联邦配置",
+    "集成 OCI File Storage、Lustre、本地 NVMe 与 Object Storage，并提供管理 CLI、监控与健康检查"
+   ],
+   "use_cases": [
+    "在 OCI 上以 IaC 方式批量创建 HPC/GPU 计算集群",
+    "基于 Slurm 运行需要 RDMA 与 GPU 互连的工作负载",
+    "对集群进行生命周期管理、监控与故障恢复操作"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "computing clusters on Oracle Cloud Infrastructure (OCI). It combines Terraform, ／ Deploy to Oracle Cloud ／ > Oracle Cloud Cost Estimator",
+     "lines": [
+      4,
+      18,
+      52
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该项目是 OCI 云基础设施部署工具，README 未涉及任何数据库的驱动、适配或存储用途。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# OCI HPC/GPU Cluster Stack for Slurm ／ computing clusters on Oracle Cloud Infrastructure (OCI). It combines Terraform, ／ OCI Resource Manager, Ansible, Slurm, and OCI-native services to:",
+   "evidence_lines": [
+    1,
+    4,
+    5
+   ],
+   "softened": [
+    "review:『高性能』置空"
+   ]
+  },
+  "fn": "oracle-quickstart/oci-hpc",
+  "sha": "5085a6fa268e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5cfec21b92e7": {
+  "identity": {
+   "one_liner": "ParadeDB 的官方 Drizzle ORM 集成库",
+   "review": "这是 ParadeDB 官方提供的 Drizzle ORM 集成包，让使用 TypeScript/Node.js 的开发者能在 Drizzle 中使用 ParadeDB 的全文检索、向量检索等能力。要求 Node 22.12+、Drizzle 1.0+、PostgreSQL 15+ 并配合 pg_search 0.26.2+ 扩展使用，通过 npm 发布，MIT 许可。",
+   "highlights": [
+    "提供 ParadeDB 与 Drizzle ORM 的官方集成",
+    "支持全文检索、向量检索与聚合查询能力",
+    "要求 PostgreSQL 15+、pgvector 0.7.0+、pg_search 0.26.2+"
+   ],
+   "use_cases": [
+    "在 Drizzle ORM 项目中使用 ParadeDB 全文检索",
+    "在 TypeScript 应用中通过 Postgres 实现向量检索"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Just use Postgres ／ One Postgres for your application data, full-text search, vector retrieval, and aggregations. ／ |PostgreSQL|15+|",
+     "lines": [
+      7,
+      8,
+      34
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 ParadeDB(PostgreSQL 扩展) 提供官方 ORM 集成的开发库，本身不是存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The official Drizzle integration for ParadeDB. Get started with the setup guide. ／ |PostgreSQL|15+|",
+   "evidence_lines": [
+    26,
+    34
+   ]
+  },
+  "fn": "paradedb/drizzle-paradedb",
+  "sha": "5cfec21b92e7",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7d754afa2644": {
+  "identity": {
+   "one_liner": ".NET 集成测试用一次性容器库，支持 WSLC 与 Docker 双后端",
+   "review": "这是一个面向 .NET（net10.0）的 Testcontainers 风格类库，用于在集成测试中运行一次性 Linux 容器，可在 Windows WSL Containers（无需安装 Docker）或 Docker 两种后端上运行，通过统一 API 切换后端而无需改动测试代码；提供 PostgreSQL、MySQL、SQL Server、Redis、RabbitMQ 等 9 个服务模块。项目标注为实验性/预览状态，无生产支持保证。",
+   "highlights": [
+    "提供统一的容器抽象层，同一套测试代码可在 WSLC 与 Docker 两种后端运行",
+    "内置 9 个服务模块构建器，包括 PostgreSQL、MySQL、SQL Server、Redis、RabbitMQ、Azurite 等",
+    "WSLC 后端默认共享镜像存储，镜像只需拉取一次"
+   ],
+   "use_cases": [
+    ".NET 项目集成测试中启动依赖服务容器",
+    "Windows 开发环境无 Docker 时运行容器化集成测试",
+    "Linux CI 上复用同一套测试代码运行 Docker 后端"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator, Azure Service Bus Emulator). On WSLC, **images are shared ／ PostgreSQL: ／ await using var postgres = new PostgreSqlBuilder()",
+     "lines": [
+      31,
+      91,
+      94
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "> modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator, Azure Service Bus Emulator). On WSLC, **images are shared",
+     "lines": [
+      31
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "> modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator, Azure Service Bus Emulator). On WSLC, **images are shared ／ SQL Server / Redis / RabbitMQ: ／ await using var sqlServer = new MsSqlBuilder().WithPassword(\"SomeStrong!Password1\").AcceptLicense().Build();",
+     "lines": [
+      31,
+      100,
+      103
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为在集成测试中运行数据库等服务容器提供工具，本身不存储业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Testcontainers-style library for .NET that runs throwaway Linux containers for integration testing — on **Microsoft WSL Containers (WSLC)** with no Docker installation, or on **Docker** through Testcontainers. ／ > strategies, the `Image`/`Tag` parser, registry auth, observability, hardening, and **nine service ／ > modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator, Azure Service Bus Emulator). On WSLC, **images are shared",
+   "evidence_lines": [
+    6,
+    30,
+    31
+   ]
+  },
+  "fn": "purview-dev/containers",
+  "sha": "7d754afa2644",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10657,5 +10657,422 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6a460eae0ff8": {
+  "identity": {
+   "one_liner": "巴西技术人群社交网络 Énóis 的后端 API，Spring Boot 六边形架构实现",
+   "review": "这是社交网络 Énóis（enois.ia.br）的后端 API 仓库，承载业务规则、授权、内容审核、钱包（Faísca）与集成。基于 Spring Boot 4 和 Java 25，采用六边形架构按功能分包，使用 Flyway 做迁移，测试用 H2 内存库，生产环境用 MariaDB 11.4 或 MySQL 8+，通过环境变量切换 dev/hml/prd 三个 profile。适合参与该社交网络开发的贡献者部署运行。",
+   "highlights": [
+    "提供社交网络后端 API，包含 identity、feed、media、network 等十个模块",
+    "支持通过 Spring profile 切换 H2、MariaDB、MySQL 数据库，使用 Flyway 管理迁移",
+    "实现 TOTP 两步验证与可配置的媒体存储（ImageKit/S3）"
+   ],
+   "use_cases": [
+    "为 Énóis 社交网络部署和运行后端服务",
+    "基于六边形架构的 Spring Boot 项目开发参考",
+    "本地通过 docker-compose 启动 MariaDB/MySQL 进行开发调试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Docker** (optional — for MariaDB/MySQL or running via docker-compose) ／ |`prd`|MySQL|`SPRING_PROFILES_ACTIVE=prd`| ／ ### prd (MySQL 8+)",
+     "lines": [
+      59,
+      75,
+      89
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "funcionalidade, Flyway para migrações, H2 nos testes e **MariaDB 11.4** em produção. ／ - **Docker** (optional — for MariaDB/MySQL or running via docker-compose) ／ |`hml`|MariaDB|`SPRING_PROFILES_ACTIVE=hml`|",
+     "lines": [
+      8,
+      59,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 MariaDB/MySQL 存储业务数据的社交网络应用后端，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Spring Boot 4** (Java 25), arquitetura hexagonal (portas e adaptadores), um pacote por ／ funcionalidade, Flyway para migrações, H2 nos testes e **MariaDB 11.4** em produção. ／ |Profile|Database|How to activate|",
+   "evidence_lines": [
+    7,
+    8,
+    71
+   ]
+  },
+  "fn": "Rede-ENois/enois-backend",
+  "sha": "6a460eae0ff8",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cc8957acd64c": {
+  "identity": {
+   "one_liner": "开发者免费工具目录清单，自动检查收录工具在线状态",
+   "review": "该项目是一份收录 55 个开发者免费/免费层工具的清单仓库，覆盖 AI 编程、云托管、数据库后端、DevOps、支付、安全等分类，并用 GitHub Actions 每晚自动检测各工具站点是否在线。面向寻找免费开发工具的开发者与独立开发者，本身不提供数据库功能，仅为带状态检测的工具导航列表。",
+   "highlights": [
+    "收录 55 个开发相关工具并按分类组织（AI 编程、云托管、数据库等）",
+    "通过 GitHub Actions 每晚自动检查收录工具的在线状态",
+    "支持通过 Pull Request / Issue 贡献新条目"
+   ],
+   "use_cases": [
+    "查找特定类别下的免费层开发工具",
+    "查询某个收录工具当前是否可访问"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL and backend services (Auth, Storage, Realtime) ／ Serverless PostgreSQL",
+     "lines": [
+      177,
+      182
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Serverless SQL database built on SQLite with global read replication and native Cloudflare Workers integration ／ Serverless SQLite database with edge replication",
+     "lines": [
+      192,
+      197
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库本身是工具清单列表，不是为数据库生态服务的工具，也不是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 🎯 **The best free-tier tools collection** for developers and Vibe Coders. Status is automatically checked every night to keep information accurate. ／ |Total Tools|55| ／ - **Status** is automatically checked every night by GitHub Actions.",
+   "evidence_lines": [
+    11,
+    19,
+    417
+   ]
+  },
+  "fn": "pnnnhan99/awesome-free-dev-tools",
+  "sha": "cc8957acd64c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "491dffd6f5ec": {
+  "identity": {
+   "one_liner": "面向 Python 团队的纯 SQL 版本化数据库迁移工具",
+   "review": "DBLift 是一个类似 Flyway 的 SQL 迁移工具，按 V/U/R 文件约定应用版本化 .sql 脚本，提供预览、撤销、校验和、锁与基线接管，可导入 Flyway 历史表，并通过 pip 作为 CLI 或 Python 库使用，兼容 SQLAlchemy/Django 等框架。面向自己手写 SQL 的 Python 开发团队，无需 JVM。",
+   "highlights": [
+    "按 Flyway 命名约定应用版本化 .sql 迁移文件，提供 --dry-run 预览、undo、checksum 校验与并发锁",
+    "可作为 CLI 或 Python 库使用，含同步/异步 API、pytest fixture 及 Django/FastAPI/Flask 集成",
+    "支持导入 flyway_schema_history 表，从现有 Flyway 项目迁移历史",
+    "提供 validate-sql 静态 SQL 检查，标注 SAFE/REVIEW/UNSAFE"
+   ],
+   "use_cases": [
+    "Python 项目中替代 JVM 版 Flyway 执行 SQL 迁移",
+    "将手写 migrate.sh/migrate.py 脚本替换为带校验和锁的迁移工具",
+    "在 CI/测试中通过 pytest fixture 准备已迁移的数据库"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "pip install \"dblift[cli,postgresql]\" ／ export DBLIFT_DB_URL=\"postgresql+psycopg://user@localhost:5432/mydb\" ／ engine = create_engine(\"postgresql+psycopg://user:pass@localhost/app\") ／ PostgreSQL · MySQL · MariaDB · SQL Server · Oracle · DB2 · SQLite · DuckDB · CockroachDB · Redshift · Snowflake · Neon · Supabase · Aurora PostgreSQL · AlloyDB · YugabyteDB · TimescaleDB · Citus · Azure Cosmos DB · MongoDB",
+     "lines": [
+      36,
+      37,
+      79,
+      122
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL · MySQL · MariaDB · SQL Server · Oracle · DB2 · SQLite · DuckDB · CockroachDB · Redshift · Snowflake · Neon · Supabase · Aurora PostgreSQL · AlloyDB · YugabyteDB · TimescaleDB · Citus · Azure Cosmos DB · MongoDB",
+     "lines": [
+      122
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "PostgreSQL · MySQL · MariaDB · SQL Server · Oracle · DB2 · SQLite · DuckDB · CockroachDB · Redshift · Snowflake · Neon · Supabase · Aurora PostgreSQL · AlloyDB · YugabyteDB · TimescaleDB · Citus · Azure Cosmos DB · MongoDB",
+     "lines": [
+      122
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "PostgreSQL · MySQL · MariaDB · SQL Server · Oracle · DB2 · SQLite · DuckDB · CockroachDB · Redshift · Snowflake · Neon · Supabase · Aurora PostgreSQL · AlloyDB · YugabyteDB · TimescaleDB · Citus · Azure Cosmos DB · MongoDB",
+     "lines": [
+      122
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "PostgreSQL · MySQL · MariaDB · SQL Server · Oracle · DB2 · SQLite · DuckDB · CockroachDB · Redshift · Snowflake · Neon · Supabase · Aurora PostgreSQL · AlloyDB · YugabyteDB · TimescaleDB · Citus · Azure Cosmos DB · MongoDB",
+     "lines": [
+      122
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "No database server needed — this runs against a local SQLite file. ／ 20 engines. SQLite needs no driver extra; every other engine has its own, e.g. `pip install \"dblift[cli,postgresql]\"`. ／ PostgreSQL · MySQL · MariaDB · SQL Server · Oracle · DB2 · SQLite · DuckDB · CockroachDB · Redshift · Snowflake · Neon · Supabase · Aurora PostgreSQL · AlloyDB · YugabyteDB · TimescaleDB · Citus · Azure Cosmos DB · MongoDB",
+     "lines": [
+      24,
+      118,
+      122
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库 schema 迁移服务的工具，非以数据库为存储的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQL Server",
+    "Oracle",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0 开源，另有付费 Pro 功能层（schema diff/export）",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DBLift applies versioned `.sql` files to your database and remembers what ran. Same file convention as Flyway (`V1__create_users.sql`), installed with `pip`, usable as a CLI or as a Python library. Preview, undo, checksums and locking are part of the open-source package. Apache 2.0. ／ ## Databases ／ PostgreSQL · MySQL · MariaDB · SQL Server · Oracle · DB2 · SQLite · DuckDB · CockroachDB · Redshift · Snowflake · Neon · Supabase · Aurora PostgreSQL · AlloyDB · YugabyteDB · TimescaleDB · Citus · Azure Cosmos DB · MongoDB",
+   "evidence_lines": [
+    20,
+    116,
+    122
+   ]
+  },
+  "fn": "dblift/dblift",
+  "sha": "491dffd6f5ec",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "10a8c577fdd5": {
+  "identity": {
+   "one_liner": "NAS 导航页/容器面板，Docker 容器卡片化+内置网关反代，单文件 SQLite 存储",
+   "review": "一个部署在自有 NAS 上的导航页与容器面板，可自动扫描 Docker 容器生成卡片，并内置反向代理、HTTPS 证书、DDNS、FRP 隧道、WAF 等网关功能；数据（含凭据）存于本地 SQLite，后端为 FastAPI。面向自建 NAS/家庭服务器用户，通过 docker compose 部署，README 提示登录无防爆破、暴露公网需自行加固。",
+   "highlights": [
+    "自动发现 Docker 容器并生成卡片，按 compose 项目归类",
+    "内置网关：反向代理、ACME 证书、DDNS、FRP 隧道、WAF",
+    "凭据只存本地 SQLite，接口返回打码"
+   ],
+   "use_cases": [
+    "自建 NAS 服务导航与容器管理",
+    "无公网 IP 场景下通过 VPS+FRP 暴露内网服务",
+    "统一管理 HTTPS 证书、DDNS 与反向代理"
+   ],
+   "personas": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 凭据（SSH 密码、私钥、DNS Token、frp Token）只存在本地 SQLite，接口返回一律打码。",
+     "lines": [
+      306
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明凭据等数据存在本地 SQLite，数据库仅为该面板的内置存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 凭据（SSH 密码、私钥、DNS Token、frp Token）只存在本地 SQLite，接口返回一律打码。 ／ app/            FastAPI 后端（main.py 路由、db.py 存储、gw/ 网关各模块） ／ data/           运行数据：navpage.db、icons/、wallpapers/、gw/（证书、frps/frpc 配置）",
+   "evidence_lines": [
+    306,
+    311,
+    313
+   ]
+  },
+  "fn": "yuwancumian2009/NavPage",
+  "sha": "10a8c577fdd5",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0410e9c09592": {
+  "identity": {
+   "one_liner": "GaussDB/openGauss DBA 智能体的 Kubernetes 容器化交付方案",
+   "review": "把 opencode + gh_skill 的 GaussDB/openGauss DBA 技能集容器化：按工号创建无状态 Agent Pod，状态存放于 NAS，提供诊断、知识库导入、Web 大盘与网关组件，并附带安装、部署、安全等交付文档。面向企业内实施、运维与 DBA 人员，用于向 GaussDB/openGauss 客户环境交付基于模型的数据库诊断能力。",
+   "highlights": [
+    "按工号创建 Agent Pod，状态全部持久化在 NAS（RWX PVC）",
+    "包含 runtime、kb-import、frontend、网关等多个镜像及离线交付包脚本",
+    "支持知识库导入（含 PDF/PPT/照片转录）、Top SQL、WDR、死锁日志解析等诊断 skill"
+   ],
+   "use_cases": [
+    "企业内网以 Kubernetes 交付 GaussDB/openGauss 智能诊断服务",
+    "多用户隔离的 DBA 问答与诊断平台部署",
+    "GaussDB 慢 SQL / 死锁 / 健康检查等场景的分析"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "把 opencode + gh_skill 的 GaussDB/openGauss DBA 技能集放进 Kubernetes：每个用户一个 Agent Pod，Pod 无状态，状态全部在 NAS 上；知识库导入与诊断运行分成两个镜像。",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "把 opencode + gh_skill 的 GaussDB/openGauss DBA 技能集放进 Kubernetes：每个用户一个 Agent Pod，Pod 无状态，状态全部在 NAS 上；知识库导入与诊断运行分成两个镜像。",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|SQLite|在 runtime Pod 内运行，`opencode.db` 直接位于 NAS 挂载路径；NFSv4.1 + `local_lock=all` + 单 Pod 独占 + 优雅停机 + 启动自检 + 退出备份|",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库为数据库诊断服务提供容器化部署、网关与知识库组件，是服务数据库生态的工具而非使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "把 opencode + gh_skill 的 GaussDB/openGauss DBA 技能集放进 Kubernetes：每个用户一个 Agent Pod，Pod 无状态，状态全部在 NAS 上；知识库导入与诊断运行分成两个镜像。 ／ |镜像|`gaussdb-agent-runtime`（诊断 skill + 知识库查询）、`gaussdb-agent-kb-import`（知识库导入）、`gaussdb-agent-frontend`（deepseek-harness 前端改造，无状态）| ／ scripts/     vendor-from-gh-skill.sh、build-images.sh、smoke-image.sh(+tcp-forward.py)、k8s/provision.py(网关建 Pod 的参考实现)、k8s/verify-cluster.sh",
+   "evidence_lines": [
+    3,
+    21,
+    43
+   ]
+  },
+  "fn": "sqlrush/gh_agent_k8s",
+  "sha": "0410e9c09592",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

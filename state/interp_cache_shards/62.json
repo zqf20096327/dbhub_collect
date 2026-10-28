@@ -10655,5 +10655,144 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "07e4d2373e45": {
+  "identity": {
+   "one_liner": "Rust 编写的 OpenAI 兼容 AI 网关，支持前缀路由与回退链",
+   "review": "这是一个用 Rust 实现的 OpenAI 兼容 LLM 路由/网关，把多个上游连接聚合为一个端点，提供别名前缀路由、命名回退组合、令牌压缩与用量计量，并内置 Vue 管理面板。面向需要统一管理多个模型 API 的开发者与团队。数据存储使用内嵌 SQLite 文件，无需外部数据库或运行时。",
+   "highlights": [
+    "支持 OpenAI 与 Anthropic 两种线路格式（/v1/chat/completions、/v1/messages）",
+    "提供回退组合链、每连接轮询 API key、速率限制与预算控制",
+    "内嵌 SQLite 数据库与仪表盘，单一二进制文件部署"
+   ],
+   "use_cases": [
+    "为多个上游模型端点提供统一路由与故障回退",
+    "对 LLM API 用量、预算与密钥进行集中管理",
+    "通过压缩工具输出降低请求 token 消耗"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "own SQLite database and its own HTTP server. ／ - **SQLx + SQLite** — the database is a file, migrations are embedded with ／ dashboard, and its own SQLite migrations. No Node, no Python, no external",
+     "lines": [
+      178,
+      196,
+      209
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该路由器使用自己的 SQLite 数据库存放配置与用量数据，SQLite 是其内嵌存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "own SQLite database and its own HTTP server. ／ - **SQLx + SQLite** — the database is a file, migrations are embedded with",
+   "evidence_lines": [
+    178,
+    196
+   ]
+  },
+  "fn": "xFlawlessDev/alnair-router",
+  "sha": "07e4d2373e45",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5672d37acbb2": {
+  "identity": {
+   "one_liner": "面向 OceanBase 与 seekdb 的智能运维 AI Skill",
+   "review": "一个部署于魔搭社区的智能体 Skill 文件（SKILL.md），用于辅助 OceanBase 及其分支 seekdb 的运维与检索：提供向量+全文+标量的单 SQL 构造、CJK 全文索引调优、记忆工程与破坏性操作防护指南。面向参赛者与 OceanBase 运维/开发者使用，本质是提示词工程产物，需配合支持 Skill 的智能体运行。",
+   "highlights": [
+    "支持向量、全文（BM25）与标量过滤的单 SQL 混合检索构造",
+    "包含 CJK 切词、倒排与内存预算的全文索引调优指南",
+    "内置 YAML Frontmatter 规范与 DDL/DML 破坏性操作防护机制"
+   ],
+   "use_cases": [
+    "OceanBase/seekdb 智能运维问答与性能调优",
+    "中文全文检索与混合检索 SQL 编写",
+    "魔搭社区智能体 Skill 集成"
+   ],
+   "use_cases_ok": true
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "# OceanBase & seekdb 智能运维与混合检索助手（魔搭 Skill） ／ `oceanbase-seekdb-copilot` 是面向 OceanBase 及 AI 原生嵌入式分支 seekdb 的专业智能体 Skill，深度结合大赛主题技术栈：",
+     "lines": [
+      1,
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 OceanBase/seekdb 服务的智能运维 Skill 组件，不是使用数据库存储数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# OceanBase & seekdb 智能运维与混合检索助手（魔搭 Skill） ／ `oceanbase-seekdb-copilot` 是面向 OceanBase 及 AI 原生嵌入式分支 seekdb 的专业智能体 Skill，深度结合大赛主题技术栈：",
+   "evidence_lines": [
+    1,
+    10
+   ]
+  },
+  "fn": "zhang0894/oceanbase-seekdb-copilot",
+  "sha": "5672d37acbb2",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

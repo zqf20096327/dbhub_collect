@@ -10654,5 +10654,236 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c1b9be65686f": {
+  "identity": {
+   "one_liner": "部署在自有 Cloudflare 账户的类型安全实时后端框架",
+   "review": "Lunora 是一个后端框架，将 TypeScript 编写的查询、变更和动作部署为 Cloudflare Workers，用 Durable Objects 保存实时状态、D1 处理 SQL、R2 存储对象、Queues 运行任务。它面向在自有 Cloudflare 账户上构建全栈应用的开发者，通过 Vite 插件提供本地开发循环与自动类型生成，当前处于 Alpha 阶段。",
+   "highlights": [
+    "以 TypeScript 定义类型安全的查询、变更与动作，客户端类型随保存自动生成",
+    "通过 WebSocket 提供实时查询订阅，变更推送至所有订阅者",
+    "支持分片 Durable Object（.shardBy）与地理复制读（.global），核心可通过平台契约运行于 Cloudflare 之外的宿主"
+   ],
+   "use_cases": [
+    "在自有 Cloudflare 账户上构建实时全栈应用",
+    "需要端到端类型安全与免缓存失效订阅的前端/后端协作项目",
+    "多租户或需要分片、离线客户端的应用开发"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|`@lunora/hyperdrive`|npm|Bring-your-own Postgres/MySQL for Lunora via Cloudflare Hyperdrive: a driver-agnostic, action-only ctx.sql|",
+     "lines": [
+      193
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|`@lunora/hyperdrive`|npm|Bring-your-own Postgres/MySQL for Lunora via Cloudflare Hyperdrive: a driver-agnostic, action-only ctx.sql|",
+     "lines": [
+      193
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`@lunora/do`|npm|Lunora Durable Objects: ShardDO (SQLite, OCC, hibernated WebSocket subscriptions) and SessionDO| ／ |`@lunora/agent`|npm|Durable AI agents for Lunora: defineAgent compiles a replay-safe tool-loop onto Cloudflare Workflows, with DO SQLite threads and live message subscriptions| ／ |`@lunora/replica`|npm|Local-first replica runtime + local SQLite mirror for Lunora|",
+     "lines": [
+      123,
+      184,
+      200
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Lunora 是为构建应用提供运行时与数据库接入的后端框架组件，而非使用某个数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "FSL-1.1-Apache-2.0",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lunora gives you Convex-style DX on your own Cloudflare account. You write type-safe queries, mutations, and actions in TypeScript, and Lunora deploys them as Cloudflare Workers. Durable Objects hold real-time state, D1 handles SQL, R2 stores blobs, and Queues run jobs. Nothing runs on servers we operate; everything lives in the Cloudflare account you already pay for. ／ **The core doesn't depend on Cloudflare.** The reactive engine (`@lunora/shard-engine`) talks to a small set of host contracts in `@lunora/platform`, not to Cloudflare APIs. `@lunora/platform-cloudflare` implements those contracts for production and `@lunora/platform-node` for dev and test. A capability matrix marks each feature as native, emulated, or unsupported per host; codegen leaves out what a host can't run and tells you why. ／ |`@lunora/do`|npm|Lunora Durable Objects: ShardDO (SQLite, OCC, hibernated WebSocket subscriptions) and SessionDO|",
+   "evidence_lines": [
+    21,
+    79,
+    123
+   ]
+  },
+  "fn": "anolilab/lunora",
+  "sha": "c1b9be65686f",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f3b979c42efa": {
+  "identity": {
+   "one_liner": "开源产品分析平台，基于 PostgreSQL 与 ClickHouse 构建的事件分析系统",
+   "review": "Pug 是一个开源产品分析平台，提供事件采集、用户画像识别以及漏斗、留存、趋势、分群和用户流分析，并支持可定制仪表盘。后端采用 Go 编写，使用 PostgreSQL 存储关系数据、ClickHouse 存储事件分析数据、NATS 作消息管道，内置演示数据种子命令。适合需要自托管产品行为分析、关注隐私合规（GDPR/DPDP 数据删除）的团队使用。",
+   "highlights": [
+    "提供事件采集管道，带地理、user-agent、机器人识别和归因自动富化",
+    "支持趋势、漏斗、留存、分群、用户流分析及可组合仪表盘",
+    "提供 GDPR/DPDP 数据主体事件与画像删除能力"
+   ],
+   "use_cases": [
+    "自托管的产品行为与 Web 流量分析",
+    "用户画像与行为路径（漏斗/留存/用户流）分析",
+    "需要数据主体删除合规能力的产品分析场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Built in Go on PostgreSQL, ClickHouse, and NATS. ／ - **PostgreSQL**: relational store (orgs, projects, dashboards, auth) ／ > **Local databases only.** By default `seed` migrates Postgres and ClickHouse",
+     "lines": [
+      11,
+      57,
+      84
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Built in Go on PostgreSQL, ClickHouse, and NATS. ／ ClickHouse-backed profile and activity API. ／ - **ClickHouse**: analytical store for events, insights, and profiles",
+     "lines": [
+      11,
+      22,
+      58
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用 PostgreSQL 存关系数据、ClickHouse 存分析数据（L57-58），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU AGPL v3.0，贡献者需签署 CLA",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Built in Go on PostgreSQL, ClickHouse, and NATS. ／ - **PostgreSQL**: relational store (orgs, projects, dashboards, auth) ／ - **ClickHouse**: analytical store for events, insights, and profiles",
+   "evidence_lines": [
+    11,
+    57,
+    58
+   ]
+  },
+  "fn": "pug-sh/pug",
+  "sha": "f3b979c42efa",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "722afec47015": {
+  "identity": {
+   "one_liner": "美国电网级算力建设的数据集网站，含地图、API 与来源引用",
+   "review": "Compute Atlas 是一个开源、逐条标注来源的美国数据中心、加密矿场与配套电站数据集，提供地图、公开 API（CORS 开放、按 IP 限流）和 JSON 快照三种使用方式，数据经人工审核后发布。面向记者、研究者、地方官员及附近居民。技术栈为 Next.js + Neon Postgres + Drizzle，未配置 DATABASE_URL 时可从 JSON 快照运行。",
+   "highlights": [
+    "提供公开 API（/api/facilities、/api/stats 等）、交互地图与完整 JSON 数据快照三种数据访问方式",
+    "每条记录附带来源 URL、标签与检索日期，候选记录须经人工审核后才发布",
+    "数据模型用 Zod schema 校验，测试套件在每次 PR 时验证全部记录"
+   ],
+   "use_cases": [
+    "记者与研究者查询数据中心、矿场、电站的选址与状态数据",
+    "通过公开 API 将数据集集成到可视化或其他分析工具",
+    "按 CC BY 4.0 许可下载批量数据进行引用与再分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Stack:** Next.js 16 (App Router, RSC) · React 19 · TypeScript · Zod · Neon Postgres +",
+     "lines": [
+      214
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 Neon Postgres 存储数据的数据集网站应用，数据库仅作为其存储层而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码 MIT，数据 CC BY 4.0 双许可结构",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Compute Atlas is an open, source-cited dataset of **data centers, crypto-mining sites, and ／ |**API**|`GET /api/facilities`, `/api/facilities/{id}`, `/api/search`, `/api/stats`, `/api/schema` — CORS-open, no auth, rate-limited by IP, served with `X-License: CC-BY-4.0`. Full contract at `/api`| ／ **Stack:** Next.js 16 (App Router, RSC) · React 19 · TypeScript · Zod · Neon Postgres +",
+   "evidence_lines": [
+    20,
+    125,
+    214
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ek33450505/compute-atlas",
+  "sha": "722afec47015",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

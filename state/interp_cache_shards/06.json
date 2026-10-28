@@ -11037,5 +11037,65 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "feb970d7fc28": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的网页搜索插件，整合多引擎搜索与缓存",
+   "review": "这是面向 DeepSeek Harness（DSH）宿主的 bundle 插件，把多引擎网页搜索、平台搜索、持久化缓存和 Playwright 渲染打包为 web_index/web_call 两个模型可调用工具。给使用 DSH 的用户安装，通过 dsh plugin add 装入 profile；版本与 DSH 宿主线精确锁定，仅支持 0.2.0/0.2.1 线宿主，旧 0.1.x 线不再支持。",
+   "highlights": [
+    "将 11 个 web_* 工具合并为 web_index/web_call 两个工具、约 20 个动作",
+    "支持多引擎搜索、平台搜索后端、持久化缓存（SQLite+LRU）与 Playwright 渲染",
+    "提供版本兼容矩阵与 peer 范围检查（pnpm run test:peers）及真实宿主验收"
+   ],
+   "use_cases": [
+    "为 DSH 宿主上的模型提供网页搜索与页面抓取能力",
+    "需要浏览器渲染或平台（小红书/知乎/Reddit/X）登录态搜索的场景",
+    "需要搜索结果持久化缓存与按站增强控制的场景"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是为 DSH 宿主生态服务的插件组件，SQLite 仅用作内部缓存存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "增强型、可持久化的扩展网页搜索插件 for DeepSeek Harness（DSH）。 ／ 一个 DSH **bundle 插件**，把多引擎网页搜索、平台搜索、持久化缓存、受控按站增强和 Playwright 渲染打包成模型可调用的能力。常驻上下文只有 `web_index` / `web_call` 两个工具（原 11 个 `web_*` 工具已并入 20 个动作，见工具面）。路由控制面借鉴 Agent-Reach 的后端探测、顺序选择和失败冷却思路，核心逻辑为本项目原生 TypeScript 实现。 ／ dsh plugin --profile web add @anweat/dsh-browser@0.2.2 dsh-web-search-pro@0.2.3",
+   "evidence_lines": [
+    3,
+    5,
+    45
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ],
+   "status_hint": "deprecated"
+  },
+  "fn": "anweat/dsh-web-search-pro",
+  "sha": "feb970d7fc28",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

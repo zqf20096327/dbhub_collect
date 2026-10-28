@@ -9996,5 +9996,69 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1486598e5868": {
+  "identity": {
+   "one_liner": "SingleStore 数据库开发用 Docker 镜像，单容器启动主聚合器+叶节点",
+   "review": "该仓库提供 SingleStore 数据库的 Docker 开发镜像，可在本地或 CI/CD（含 GitHub Actions）中启动一个由 Master Aggregator 和 leaf 节点组成的单机集群，无需许可证即可在 8 核/64GB 内运行。支持 MySQL 协议客户端、Kai（MongoDB API）、Data API（JSON over HTTP）、Studio 浏览器 UI、Wasm UDF、卷持久化及 init.sql 初始化。明确声明不用于生产负载或基准测试。",
+   "highlights": [
+    "单容器启动含 Master Aggregator 与 leaf 节点的集群，无需许可证即可在 8 核/64GB 内存内运行",
+    "支持 MySQL 协议客户端连接，并提供 Kai（MongoDB 客户端 API）与 JSON over HTTP Data API",
+    "支持 Docker 卷持久化、init.sql 自动初始化、Wasm UDF，并内置 Studio 浏览器 UI"
+   ],
+   "use_cases": [
+    "在本地笔记本运行 SingleStore 进行开发与查询",
+    "在 CI/CD 流水线（如 GitHub Actions）中拉起数据库实例",
+    "通过 MongoDB 客户端或 HTTP Data API 访问 SingleStore 进行集成测试"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "You can also connect to SingleStore using any MySQL compatible client on your own machine using the following connection details: ／ In addition to supporting the MySQL protocol, SingleStore also has a JSON over HTTP protocol called the [Data API][data-api] which you can access at port 9000 in the container. Assuming that you have forwarded port 9000 to your local machine, the following `cu",
+     "lines": [
+      131,
+      167
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库为 SingleStore 数据库本体提供开发/CI 用的容器镜像，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "开发用途免费运行，README 声明不适用于生产负载或基准测试",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The SingleStore Dev Image is the fastest way to develop with [SingleStore][singlestore] on your laptop or in a CI/CD environment (including [GitHub Actions][header-gh-actions]). This Docker image is **not supported for production workloads or benchmarks** so please keep this in mind when using it. ／ This Docker image creates a cluster consisting of one Master Aggregator and one leaf node on a machine (host) that has up to 8 cores and up to 64GB of RAM without the need for a license. ／     ghcr.io/singlestore-labs/singlestoredb-dev:latest",
+   "evidence_lines": [
+    4,
+    12,
+    36
+   ]
+  },
+  "fn": "singlestore-labs/singlestoredb-dev-image",
+  "sha": "1486598e5868",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

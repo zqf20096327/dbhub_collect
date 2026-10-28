@@ -11191,5 +11191,147 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "829d68146150": {
+  "identity": {
+   "one_liner": "用 BNF 文法随机生成 SQL 的数据库模糊测试工具",
+   "review": "go-randgen 是 MySQL randgen 的 Go 实现，通过 zz/yy 文法随机生成 DDL、DML 及测试 SQL，可在未连接数据库的情况下生成 SQL，也支持向两个 DSN 执行同一批 SQL 并对比结果差异，用于数据库测试。面向数据库 QA 与测试人员，纯 Go 实现并可作为库调用。",
+   "highlights": [
+    "支持 yy 文法生成 SQL，且与 mysql randgen 的 yy 语法兼容",
+    "支持在无数据库连接的情况下生成 SQL",
+    "提供 gentest/gendata/gensql/exec 子命令，可在两个 DSN 上执行并对比结果"
+   ],
+   "use_cases": [
+    "数据库 SQL 执行结果一致性测试",
+    "批量生成测试用表结构与数据",
+    "为窗口函数等特性批量生成测试 SQL"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "go version of mysql rangen for db fuzz test ／ 3. yy syntax is mysql randgen compatible, as long as it doesn't contain embedded perl code ／ 4. go-randgen supports embedded lua code blocks, just as mysql randgen supports perl code blocks",
+     "lines": [
+      5,
+      37,
+      38
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明其为通过 DSN 连接数据库生成并执行 SQL 的测试工具，服务于数据库测试流程",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "go version of mysql rangen for db fuzz test ／ generate table structrue and data in user specified dsns ／ User sepecifies two dsns, then exec command will execute",
+   "evidence_lines": [
+    5,
+    74,
+    98
+   ]
+  },
+  "fn": "pingcap/go-randgen",
+  "sha": "829d68146150",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "74828f21c996": {
+  "identity": {
+   "one_liner": "TiDB 的 OpenEverest Provider，经 Kubernetes Operator 管理 TiDB 集群",
+   "review": "这是 OpenEverest 生态中的 TiDB provider，将统一的 Instance 自定义资源转换为 TiDB Operator v2 的原生资源，在 Kubernetes 上部署和管理 TiDB 集群（PD/TiKV/TiDB 及可选 TiFlash、TiProxy），支持扩缩容、版本升级、监控、TLS、备份与恢复。面向在 K8s 上运维 TiDB 的用户；需先安装 OpenEverest 核心，Pre-alpha 阶段，无升级路径保障。",
+   "highlights": [
+    "将统一的 Instance CR 转换为 TiDB Operator v2 资源，管理 PD、TiKV、TiDB 及可选 TiFlash、TiProxy 组件",
+    "支持水平/垂直扩缩容、版本升级、持久存储扩容、Prometheus/VictoriaMetrics 监控、mTLS/TLS 及 S3 兼容存储的备份与恢复",
+    "以 Helm OCI chart 分发，捆绑 TiDB Operator v2 与 CRD 安装钩子"
+   ],
+   "use_cases": [
+    "在 Kubernetes 上以声明式 API 部署和管理 TiDB 集群",
+    "为 TiDB 实例配置定时/按需备份、恢复与存储扩容",
+    "通过 PodMonitor/VMPodScrape 集成 Prometheus 或 VictoriaMetrics 监控 TiDB 组件"
+   ],
+   "multi_line": "这是 OpenEverest 生态中的 TiDB provider，将统一的 Instance 自定义资源转换为 TiDB Operator v2 的原生资源，在 Kubernetes 上部署和管理 TiDB 集群（PD/TiKV/TiDB 及可选 TiFlash、TiProxy），支持扩缩容、版本升级、监控、TLS、备份与恢复。面向在 K8s 上运维 TiDB 的用户；需先安装 OpenEverest 核心，Pre-alpha 阶段，无升级路径保障。"
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "Run **TiDB** — a distributed, MySQL-compatible SQL database — ／ |`tidb`|Stateless SQL layer (MySQL protocol)|`TiDBGroup`|",
+     "lines": [
+      14,
+      32
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "# TiDB Provider ／ Run **TiDB** — a distributed, MySQL-compatible SQL database — ／ **TiDB Operator v2**.",
+     "lines": [
+      1,
+      14,
+      16
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 TiDB 在 Kubernetes 上的部署运维提供 Operator 适配层，是服务数据库生态的工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OpenEverest providers translate a single, technology-agnostic `Instance` custom resource into ／ for TiDB: it owns the technology-specific knowledge — components, topologies, versions and ／ > **This provider is not standalone.** It requires an OpenEverest installation (core CRDs and",
+   "evidence_lines": [
+    20,
+    22,
+    37
+   ]
+  },
+  "fn": "openeverest/provider-tidb",
+  "sha": "74828f21c996",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

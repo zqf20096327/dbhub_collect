@@ -9422,5 +9422,73 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8fbb294580cb": {
+  "identity": {
+   "one_liner": "PostgreSQL 监控与事件调查工具，只读采集器+自有存储",
+   "review": "LockLens 是一个面向 PostgreSQL 的开源监控与事故调查工具，提供 fleet 总览、查询性能、阻塞链和事件记录。它以只读角色连接被监控库，采集 pg_stat_statements 与活动会话采样数据，历史存入自带的 PostgreSQL/TimescaleDB 存储。适用于需要排查锁等待与性能问题的数据库运维人员。项目较新，尚未在生产环境验证。",
+   "highlights": [
+    "支持 PostgreSQL 14–18，以只读角色采集，不执行任何写操作",
+    "提供阻塞树、活动会话采样、查询基线对比与事件记录及证据导出",
+    "自带 PostgreSQL/TimescaleDB 历史存储，提供 CLI、Prometheus /metrics 与 Slack/webhook/email 通知"
+   ],
+   "use_cases": [
+    "排查 PostgreSQL 阻塞链与 idle-in-transaction 事务",
+    "跨实例监控查询吞吐、慢查询与复制延迟",
+    "事后离线分析事故快照（JSON/HTML 导出）"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Open-source PostgreSQL monitoring and incident investigation.** ／ PostgreSQL 14–18 ／ Monitored servers need PostgreSQL 14 or later and a login role with",
+     "lines": [
+      3,
+      11,
+      119
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为监控 PostgreSQL 数据库服务的观测工具，自身虽用 PostgreSQL 存储，但核心功能面向数据库运维。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Open-source PostgreSQL monitoring and incident investigation.** ／ - **Observe-only by design.** LockLens connects with a read-only role. It ／ PostgreSQL targets ──read-only──► collectors ──► write queue ──► monitoring store (PostgreSQL / TimescaleDB)",
+   "evidence_lines": [
+    3,
+    29,
+    172
+   ]
+  },
+  "fn": "Huy-8bit/locklens",
+  "sha": "8fbb294580cb",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

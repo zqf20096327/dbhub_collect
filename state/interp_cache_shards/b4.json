@@ -11030,5 +11030,155 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "042bc797b92e": {
+  "identity": {
+   "one_liner": "MySQL/MariaDB 一致性快照并行导出、加载与流式复制工具",
+   "review": "quiver 是用 OxCaml 编写的 MySQL/MariaDB 数据导出、加载、复制与流式传输命令行工具。它自行实现 MySQL 协议客户端，不依赖客户端库，从单一一致快照并行读取数据，支持 dump/load/copy/agent/collect/relay 子命令，可在目标端直接构建 InnoDB 表空间文件。适用于需要数据库备份导出或跨实例数据迁移的运维人员，许可证为 AGPL-3.0。",
+   "highlights": [
+    "自实现 MySQL 协议客户端，将二进制行直接解码为 Arrow 布局列式批次，无需客户端库",
+    "提供 dump、load、copy、agent、collect、relay 子命令，支持经网络中继链向多目标分发数据",
+    "支持 --ingest tablespace 在客户端并行构建 InnoDB 表空间并由服务器 IMPORT TABLESPACE 导入"
+   ],
+   "use_cases": [
+    "对 MySQL/MariaDB 做一致性快照导出备份",
+    "跨服务器、跨机房的数据迁移与拷贝",
+    "经网络中继向多个目标分发或流式同步数据"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Dump, load, copy and stream MySQL and MariaDB from one consistent snapshot, at the speed of the server.** ／ MySQL 8.0 · 8.4 ／ **No client library.** quiver speaks the MySQL protocol itself and decodes binary rows from the",
+     "lines": [
+      5,
+      12,
+      30
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**Dump, load, copy and stream MySQL and MariaDB from one consistent snapshot, at the speed of the server.** ／ MariaDB 10.11 · 11.4 · 11.8 ／ - **One snapshot.** `FLUSH TABLES WITH READ LOCK` or MariaDB `BACKUP STAGE`; every session opens",
+     "lines": [
+      5,
+      13,
+      73
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为对 MySQL/MariaDB 做 dump/load/copy/stream 的工具，是为数据库生态服务的组件而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Dump, load, copy and stream MySQL and MariaDB from one consistent snapshot, at the speed of the server.** ／ **No client library.** quiver speaks the MySQL protocol itself and decodes binary rows from the ／ quiver dump    # MySQL to files: mydumper-compatible SQL or CSV, optional zstd, checksummed manifest",
+   "evidence_lines": [
+    5,
+    30,
+    161
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "jongleb/quiver",
+  "sha": "042bc797b92e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7508e3abe840": {
+  "identity": {
+   "one_liner": "gxc 工具的 Homebrew tap，用于安装 gaussdb-ro-mcp",
+   "review": "该仓库是 gxc 的 Homebrew tap，本身不含代码，作用是提供 brew install 命令来分发 gaussdb-ro-mcp——一个面向编码代理的华为 GaussDB（集中式与分布式）只读 MCP 服务器。仓库还说明提供 macOS（Apple Silicon）与 Linux（amd64/arm64）的预编译二进制，Windows 需从项目 Releases 页获取。适合使用 Homebrew 且需要让 AI 编码代理只读访问 GaussDB 的用户。",
+   "highlights": [
+    "通过 Homebrew 提供 gaussdb-ro-mcp 的安装渠道",
+    "gaussdb-ro-mcp 为华为 GaussDB（集中式与分布式）的只读 MCP 服务器，面向编码代理",
+    "提供 macOS（Apple Silicon）与 Linux（amd64/arm64）预编译二进制"
+   ],
+   "use_cases": [
+    "用 Homebrew 安装 gaussdb-ro-mcp",
+    "让编码代理以只读方式访问 Huawei GaussDB"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "Read-only MCP server for Huawei GaussDB (centralized & distributed), built for coding agents — see the project README. ／ brew install gxc/tap/gaussdb-ro-mcp",
+     "lines": [
+      7,
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库为访问 GaussDB 的 MCP 服务器提供安装分发渠道，属于为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Read-only MCP server for Huawei GaussDB (centralized & distributed), built for coding agents — see the project README. ／ brew install gxc/tap/gaussdb-ro-mcp",
+   "evidence_lines": [
+    7,
+    10
+   ]
+  },
+  "fn": "gxc/homebrew-tap",
+  "sha": "7508e3abe840",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

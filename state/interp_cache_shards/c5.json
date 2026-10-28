@@ -11362,5 +11362,145 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "83a6d101aaa0": {
+  "identity": {
+   "one_liner": "多上游AI编码渠道封装为OpenAI兼容API的网关应用",
+   "review": "将CodeBuddy、TRAE SOLO、OpenCode Zen、Kilo、Qoder、CodeArts、OfficeAce等上游渠道封装为OpenAI/Anthropic兼容API，提供公共凭证池、健康度调度、会话粘性与按人用量统计，内置带三角色与审计的管理台。面向需要统一接入多个AI编码渠道的个人或团队部署者；账号与配置数据存SQLite，采用逆向接口，README声明仅供学习研究。",
+   "highlights": [
+    "将八个上游渠道封装为 OpenAI / Responses / Anthropic 兼容 API，提供公共凭证池与健康度调度",
+    "内置管理台，支持 admin/operator/viewer 三角色、审计日志与服务端日志，账号存 SQLite",
+    "提供额度探测、每日签到、按人/渠道/模型用量统计，不存对话内容"
+   ],
+   "use_cases": [
+    "需要以 OpenAI 兼容接口统一调用多个 AI 编码渠道的模型",
+    "团队共享凭证池并按人统计用量与额度",
+    "自托管部署并集中管理多渠道凭证、签到与告警"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **三角色**：`admin` / `operator` / `viewer`，存 SQLite；一次性激活链接、首登强制改密、改角色 / 停用即时吊销会话；登录与写操作留审计。 ／ `scripts/create_user.py` 直写 SQLite（`--db` 或 `DATA_DIR`；默认 `data/coding2api.sqlite3`）。老部署 `secrets/users.txt` 启动导入一次，不覆盖已存在。 ／ 账号存 SQLite `users` 表；「用户管理」页（仅管理员）增删改。",
+     "lines": [
+      15,
+      59,
+      76
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明账号与用户数据存 SQLite（users 表），项目本身是使用数据库存储数据的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "八个上游——**CodeBuddy**（国内 + 国际）、**TRAE SOLO**、**OpenCode Zen**、**Kilo**、**Qoder**、**CodeArts**、**OfficeAce**——封装成 OpenAI 兼容 API：公共凭证池、统一模型名与调度、按人用量统计。 ／ - **三角色**：`admin` / `operator` / `viewer`，存 SQLite；一次性激活链接、首登强制改密、改角色 / 停用即时吊销会话；登录与写操作留审计。 ／ 账号存 SQLite `users` 表；「用户管理」页（仅管理员）增删改。",
+   "evidence_lines": [
+    3,
+    15,
+    76
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "RobbsLuo/Coding2API",
+  "sha": "83a6d101aaa0",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "caf9b52c70ba": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL、dbt、Airflow 构建的交通轨迹数据仓库项目",
+   "review": "该项目针对希腊雅典的 pNEUMA 无人机交通轨迹开放数据集构建数据仓库，使用 Airflow 容器化编排数据抽取加载，dbt 运行数据模型并生成文档，Redash 做可视化，并规划 dev/stage/prod 多环境。适合数据分析学习者参考数据仓库分层实践；README 未包含完整安装说明，仅列出实施步骤。",
+   "highlights": [
+    "提供 Airflow DAG 编排的容器化数据抽取与加载流程",
+    "支持以 dbt 运行数据模型、生成 lineage 与 dbt docs",
+    "集成 Redash 进行数据可视化"
+   ],
+   "use_cases": [
+    "交通轨迹类 CSV 开放数据的数仓建模与加载",
+    "学习 Airflow+dbt+Redash 数据仓库流水线搭建",
+    "构建 dev/stage/prod 多环境数据库分区"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# data-warehouse-dbt-airflow-postgres-redash",
+     "lines": [
+      1
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 PostgreSQL 存储数据集并在其上做数仓建模，是为具体数据集构建的应用型仓库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT License（README 徽章显示）",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# data-warehouse-dbt-airflow-postgres-redash ／ A data-warehouse built for the pNEUMA open dataset of naturalistic trajectories of half a million vehicles collected by a swarm of drones in a congested downtown area of Athens, Greece. ／ - Connect dbt to the db and run models",
+   "evidence_lines": [
+    1,
+    5,
+    36
+   ]
+  },
+  "fn": "degagawolde/data-warehouse-dbt-airflow-postgress",
+  "sha": "caf9b52c70ba",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10544,5 +10544,83 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c27a33168448": {
+  "identity": {
+   "one_liner": "Kafka 协议兼容的无状态消息代理，支持 PostgreSQL/SQLite/S3 等可插拔存储",
+   "review": "Nisshi 是一个用 Rust 编写的 Apache Kafka 协议兼容消息代理，通过 URL scheme 选择存储引擎（PostgreSQL 用于生产、SQLite/libSQL 用于开发、S3/GCS 与内存引擎等），并可将带 Schema 校验（Avro/JSON/Protobuf）的主题写入 Apache Iceberg 或 Delta Lake 表。面向需要 Kafka 客户端接入与数据湖落地的用户，通过 cargo 或 Docker Compose 运行。",
+   "highlights": [
+    "提供 Apache Kafka 协议兼容的 broker，可直接连接 Kafka 客户端",
+    "支持 PostgreSQL、libSQL(SQLite)、S3、内存等可插拔存储引擎",
+    "支持将 Schema 校验主题写入 Apache Iceberg 或 Delta Lake 表"
+   ],
+   "use_cases": [
+    "以 Kafka 客户端读写消息并将数据落地到 PostgreSQL 等存储",
+    "将带 Schema 的事件流写入 Iceberg/Delta Lake 数据湖表",
+    "本地开发与测试场景使用 SQLite 或内存存储引擎运行 broker"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "with PostgreSQL, libSQL (SQLite), S3 or memory storage engines. ／ |PostgreSQL|`postgres://`|`postgres`|Suitable for production. Tested, with bugs and security issues fixed. Help comes from the community.|",
+     "lines": [
+      21,
+      169
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "with PostgreSQL, libSQL (SQLite), S3 or memory storage engines. ／ |SQLite (libSQL)|`sqlite://`|`libsql`|Suitable for development.|",
+     "lines": [
+      21,
+      171
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是消息代理本体，将 PostgreSQL/SQLite 作为可插拔存储引擎使用，属于为数据存储生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "[Nisshi][github-com-nisshi-io] (née Tansu) is an Apache Kafka®-compatible broker ／ with PostgreSQL, libSQL (SQLite), S3 or memory storage engines. ／ |Engine|URL scheme|Cargo feature|Status|",
+   "evidence_lines": [
+    20,
+    21,
+    167
+   ]
+  },
+  "fn": "nisshi-io/solace-nisshi",
+  "sha": "c27a33168448",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9811,5 +9811,166 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b87b45b1e3d9": {
+  "identity": {
+   "one_liner": "JavaScript 客户端 SDK，将客户端 SQLite 与后端数据库同步",
+   "review": "PowerSync 的 JavaScript SDK 单体仓库，提供 Web、React、React Native、Vue、Node.js 等多端客户端包，用于在客户端维护 SQLite 数据并与后端数据库（Postgres、MongoDB、MySQL、SQL Server 等）实时同步，支持离线工作。仓库内还包含 ORM 集成（Kysely、Drizzle）、附件辅助包及多框架示例应用。",
+   "highlights": [
+    "提供 React Native、Web、Node.js、React、Vue 等多端 SDK 包",
+    "客户端 SQLite 与后端数据库实时同步，支持离线运行",
+    "包含 Kysely、Drizzle ORM 集成包与多框架示例应用"
+   ],
+   "use_cases": [
+    "构建离线优先（offline-first）的 Web/移动/桌面应用",
+    "需要多设备实时数据一致性的协作类应用",
+    "在客户端使用 SQLite 作为本地数据存储的场景"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "_PowerSync keeps a client-side SQLite database in sync with your backend database. Changes appear across users and devices in real-time, user interactions feel instant and your app continues to work even when offline. Supports Postgres, MongoDB, MySQL, and SQL ／ - demos/react-ai-chat: A React AI chat app whose replies stream to every device through PowerSync, with a Postgres database, a Node.js backend API and the AI SDK.",
+     "lines": [
+      1,
+      68
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "_PowerSync keeps a client-side SQLite database in sync with your backend database. Changes appear across users and devices in real-time, user interactions feel instant and your app continues to work even when offline. Supports Postgres, MongoDB, MySQL, and SQL",
+     "lines": [
+      1
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "_PowerSync keeps a client-side SQLite database in sync with your backend database. Changes appear across users and devices in real-time, user interactions feel instant and your app continues to work even when offline. Supports Postgres, MongoDB, MySQL, and SQL ／ By default, the PowerSync React Native SDK uses a fork of react-native-quick-sqlite",
+     "lines": [
+      1,
+      144
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "_PowerSync keeps a client-side SQLite database in sync with your backend database. Changes appear across users and devices in real-time, user interactions feel instant and your app continues to work even when offline. Supports Postgres, MongoDB, MySQL, and SQL",
+     "lines": [
+      1
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是客户端与后端数据库之间的数据同步 SDK，为数据库使用场景提供同步组件而非自身业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "_PowerSync keeps a client-side SQLite database in sync with your backend database. Changes appear across users and devices in real-time, user interactions feel instant and your app continues to work even when offline. Supports Postgres, MongoDB, MySQL, and SQL Server. Client SDKs are available for a wide range of environments including web, mobile, desktop, headless and embedded._ ／ `powersync-js` is the monorepo for PowerSync JavaScript SDKs.",
+   "evidence_lines": [
+    1,
+    5
+   ]
+  },
+  "fn": "powersync-ja/powersync-js",
+  "sha": "b87b45b1e3d9",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5a306443ec31": {
+  "identity": {
+   "one_liner": "Scala 3 Web 框架，由 case class 推导 Postgres 表与 CRUD 路由",
+   "review": "eezo 是一个 Scala 3 Web 框架，以领域模型（case class）为唯一声明来源，自动生成 Postgres 表、类型安全查询 API、HTML 表单和 7 条 CRUD 路由，并提供 schema 漂移检测与 SQL 迁移命令。面向用 Scala 3 构建服务端渲染全栈应用的开发者，需 JDK 25+、sbt，数据库层默认依赖 Postgres。",
+   "highlights": [
+    "从 case class 自动推导 Postgres 表、类型安全查询 API 和 7 条 CRUD 路由",
+    "提供 schema 漂移检测与迁移命令（eezo db status/sync/freeze/migrate）",
+    "基于虚拟线程的直接风格运行时，服务端渲染 UI 并通过 websocket 下发 DOM 补丁"
+   ],
+   "use_cases": [
+    "以数据模型为中心快速搭建服务端渲染的全栈 Web 应用",
+    "需要模型变更自动生成 SQL 迁移的 Scala 项目",
+    "部署到 Fly.io 的单命令交付场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres, its HTML form, and CRUD routes that serve it. ／ A case class automatically derives its Postgres table and a type-safe query API. ／ - **Postgres**, for an application with a database layer. The default connection is a local",
+     "lines": [
+      29,
+      38,
+      68
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "框架包含 eezo-db 数据库层（连接池、sql 插值器、事务、Table、schema 命令与迁移），为基于 Postgres 的应用开发提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A Scala 3 web framework where your domain model is the source of truth. ／ |`eezo-db`|the database layer: the pool, the `sql` interpolator, transactions, `Table`, schema commands and migrations, `DbApp`| ／ - **Postgres**, for an application with a database layer. The default connection is a local",
+   "evidence_lines": [
+    3,
+    94,
+    68
+   ]
+  },
+  "fn": "Eezo-framework/eezo",
+  "sha": "5a306443ec31",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

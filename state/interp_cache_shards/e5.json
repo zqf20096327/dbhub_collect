@@ -9442,5 +9442,152 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "033976e32828": {
+  "identity": {
+   "one_liner": "Node.js 无领导分布式定时任务调度库，原子声明选一个执行者",
+   "review": "anarchon 是一个 npm 库，为 Node.js 集群提供 cron 与间隔调度：所有实例计算相同的执行槽位，通过 Redis、Valkey、PostgreSQL 或 SQLite 上的原子声明选出一个实例运行，配合租约、心跳、接管与补跑机制处理崩溃和滚动发布。适合需要在多实例 Node.js 应用中运行定时任务且不引入独立调度组件的团队；要求处理器幂等，且不提供 exactly-once 保证。",
+   "highlights": [
+    "通过后端存储上的原子声明实现每次运行只选一个实例，无需领导选举或分布式锁",
+    "支持 Redis、Valkey、PostgreSQL、SQLite、RabbitMQ、NATS JetStream 等后端驱动"
+   ],
+   "use_cases": [
+    "多实例 Node.js 集群中运行同一份定时任务代码且只执行一次",
+    "实例崩溃或滚动发布后自动接管未完成运行的场景",
+    "以 SQLite 单文件运行多进程演示或小规模部署"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Leaderless scheduling for Node.js clusters. Run the same jobs in every instance; an atomic claim in Redis, Valkey, PostgreSQL or SQLite selects one runner for each scheduled slot. The default `lease` strategy retries after a runner stops renewing its lease. Th ／ The example connects to `redis://localhost:6379` unless `REDIS_URL` is set. Watch `sync` run on one instance per slot; then stop the instance running `report` with Ctrl+C to see a graceful handover. The examples section lists PostgreSQL and SQLite variants too ／ pnpm add anarchon pg # PostgreSQL (or bring your own pg / postgres.js client)",
+     "lines": [
+      11,
+      46,
+      61
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Leaderless scheduling for Node.js clusters. Run the same jobs in every instance; an atomic claim in Redis, Valkey, PostgreSQL or SQLite selects one runner for each scheduled slot. The default `lease` strategy retries after a runner stops renewing its lease. Th ／ Three anarchon processes on one SQLite file: one wins each run; after a graceful stop and after kill -9, another process starts the same run again as attempt 2",
+     "lines": [
+      11,
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供针对 Redis、PostgreSQL、SQLite 等存储的 Backend 驱动与安装指引，是为数据库后端服务的调度组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Leaderless scheduling for Node.js clusters. Run the same jobs in every instance; an atomic claim in Redis, Valkey, PostgreSQL or SQLite selects one runner for each scheduled slot. The default `lease` strategy retries after a runner stops renewing its lease. That gives at-least-once execution after failures, not exactly-once side effects: handlers should be idempotent, and a frozen runner can briefly overlap its replacement. ／ pnpm add anarchon pg                    # PostgreSQL (or bring your own pg / postgres.js client)",
+   "evidence_lines": [
+    11,
+    61
+   ],
+   "softened": [
+    "highlights:『优雅』删条x1"
+   ]
+  },
+  "fn": "aristoteliss/anarchon",
+  "sha": "033976e32828",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a520ab4fd87d": {
+  "identity": {
+   "one_liner": "Trickster Online KR 2014 客户端的服务端模拟器",
+   "review": "tPoseidon 是一个用 .NET 编写的 Trickster Online 韩服 2014 客户端服务端模拟器，将登录、频道、游戏等多类服务运行在本机，使用 PostgreSQL 存储账号与角色数据，并通过 tposeidon 命令行完成安装、启动、备份、GM 管理和 NPC 脚本加载；面向想自建游戏服的玩家，当前处于 beta，使用专有 beta 许可，1.0 计划改为 AGPL。",
+   "highlights": [
+    "在单机运行登录、频道、master、system、game 等游戏服务端，依赖 PostgreSQL 14+ 存储账号与角色",
+    "提供 tposeidon 命令行（setup/start/stop/backup/gm/scripts 等）与跨平台控制面板",
+    "支持基于 .tscript 纯文本文件的 NPC/任务/事件脚本，可热重载"
+   ],
+   "use_cases": [
+    "自托管 Trickster Online 私有服务器供自己或朋友游玩",
+    "通过 GM 工具管理玩家、刷怪、发物品与运营活动",
+    "用脚本扩展 NPC、任务与游戏内事件而无需修改 C# 代码"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL 14 or newer**, installed by you. It holds accounts and characters. docs/install/postgresql.md has short steps for Windows, Linux, macOS and Docker. ／ 1. Install PostgreSQL if you don't have it yet. Note the admin login and its password. ／ 4. Setup asks where your client is, who is going to play (this PC, your LAN or the internet), how to reach PostgreSQL, a name and password for your game account, and which account Play logs in with (the one you just made, unless you pick another that already e",
+     "lines": [
+      36,
+      51,
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明项目用 PostgreSQL 存储账号和角色数据，数据库是其存储层而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "beta 期间使用专有 beta 许可，禁止 fork 与再分发；计划 1.0 起改为 AGPL",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **PostgreSQL 14 or newer**, installed by you. It holds accounts and characters. docs/install/postgresql.md has short steps for Windows, Linux, macOS and Docker. ／ tPoseidon runs every server the game needs (login, channel, master, system, game) on your own machine, so you can play again and host for your friends. We aim for the original game: same screens, same flow, same mechanics, 1x rates out of the box. ／ During the beta, tPoseidon uses its own beta license. It's free to download, run and host for yourself and your community. What you can't do yet is publish modified versions, forks or other emulators built from it, or re-upload the source or the packages somewhere else. We plan to move to an open-source license (AGPL) at 1.0.",
+   "evidence_lines": [
+    36,
+    16,
+    113
+   ]
+  },
+  "fn": "DeltaForceT/tPoseidon",
+  "sha": "a520ab4fd87d",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

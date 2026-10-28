@@ -10761,5 +10761,142 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "76c14dc5f323": {
+  "identity": {
+   "one_liner": "基于 Postgres/Supabase 的开源复式记账核心，含 CLI 与 MCP 服务器",
+   "review": "Ekwo OS 是一套以 Postgres schema 形式提供的复式记账核心，通过 Supabase 暴露 REST API 并附 MCP 服务器和命令行工具，用于在自己控制的项目中管理账簿、增值税申报和电子发票，内置多国国家规则包。面向想用 AI 代理或自建系统记账的公司、会计师事务所和需要复式记账核心的开发者；需自备 Supabase 项目和 Node 20+，核心以 AGPL-3.0 许可。",
+   "highlights": [
+    "以数据库迁移形式提供复式记账 schema，借贷平衡与期间锁定由数据库触发器强制执行",
+    "提供命令行工具（npx ekwo-os）与 MCP 服务器，AI 代理可操作账簿",
+    "按国家提供规则数据包（会计科目、税码、申报框），并生成 FEC、XBRL、Peppol UBL、Factur-X 等法定文件"
+   ],
+   "use_cases": [
+    "企业或会计师事务所在自有 Supabase 项目中记账并准备增值税申报",
+    "为 AI 代理提供通过 MCP 操作账簿的记账核心",
+    "开发者将国家税收规则作为数据复用的双分录账务基础"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "open, the data sits in a Postgres database you control, and the interface is ／ A double-entry accounting core for Postgres. There is no server to run: ／ - **Tested on real Postgres.** The test suite runs the migrations, the seeds,",
+     "lines": [
+      25,
+      64,
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明账簿数据存储于用户自控的 Postgres 数据库，记账核心是对该库的应用，而非为数据库生态服务的通用工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "核心 AGPL-3.0，格式库为 MIT",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A double-entry accounting core for Postgres. There is no server to run: ／ designed for machines as much as for people. Supabase gives the schema a REST ／ - **The MCP server**, hosted at `https://mcp.ekwo.ai/mcp` or run locally with",
+   "evidence_lines": [
+    64,
+    26,
+    39
+   ]
+  },
+  "fn": "Ekwo-ai/ekwo-os",
+  "sha": "76c14dc5f323",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a504f7590580": {
+  "identity": {
+   "one_liner": "自托管文档扫描 PWA，手机扫描生成可搜索 PDF 并 OCR",
+   "review": "Waraq 是一个自托管的文档扫描与管理 Web 应用，用手机浏览器扫描纸张并生成带阿拉伯语/英语 OCR 的可搜索 PDF。面向个人/家庭实验室的单用户场景，内置浏览器扫描（OpenCV.js）、后台 OCR 队列、SQLite FTS5 全文检索、分享链接和 Google Drive 备份，通过 Docker Compose 部署，数据存储于本地 SQLite 文件与 PDF 文件夹。",
+   "highlights": [
+    "内置浏览器扫描器：边缘检测、透视校正、批量捕获、页面编辑与导出",
+    "OCRmyPDF + Tesseract 实现阿拉伯语/英语 OCR，SQLite FTS5 全文检索",
+    "支持公开分享链接（有效期/密码）、Google 登录与 Drive 镜像"
+   ],
+   "use_cases": [
+    "个人文档数字化与归档管理",
+    "阿拉伯语/英语双语文本检索的私有文档库",
+    "自托管替代商业扫描 App 的场景（如家庭实验室部署）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Yours.** Documents live as plain PDFs in a folder on your server, next to one SQLite file. ／ - SQLite FTS5 full-text search over titles and OCR text, with Unicode-aware tokenization ／ Next.js 16 (App Router) and React 19, TypeScript, Tailwind CSS 4, SQLite (better-sqlite3, WAL, FTS5), Better Auth, OpenCV.js, pdf-lib, sharp, qpdf, Poppler, OCRmyPDF and Tesseract.",
+     "lines": [
+      21,
+      39,
+      107
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储文档数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Yours.** Documents live as plain PDFs in a folder on your server, next to one SQLite file. ／ - SQLite FTS5 full-text search over titles and OCR text, with Unicode-aware tokenization ／ Next.js 16 (App Router) and React 19, TypeScript, Tailwind CSS 4, SQLite (better-sqlite3, WAL, FTS5), Better Auth, OpenCV.js, pdf-lib, sharp, qpdf, Poppler, OCRmyPDF and Tesseract.",
+   "evidence_lines": [
+    21,
+    39,
+    107
+   ]
+  },
+  "fn": "d7omdev/waraq",
+  "sha": "a504f7590580",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11806,5 +11806,88 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "935d7852f401": {
+  "identity": {
+   "one_liner": "单机构数字证书签发、管理与验证系统，含签名与审计",
+   "review": "一个面向单一机构的数字证书全生命周期应用：管理员签发 HMAC-SHA256 签名的证书，支持撤销、公开验证、QR 分享、PDF 下载、CSV 导出与审计记录。前端 React，后端 Express，本地运行默认 SQLite，部署到 Vercel 时使用 PostgreSQL。README 明确其定位于本地/小型服务器场景，不支持多机构与独立认证。",
+   "highlights": [
+    "证书使用 HMAC-SHA256 签名字段，验证含有效、过期、撤销、无效签名等状态",
+    "本地使用 SQLite，Vercel 生产部署通过 DATABASE_URL 使用带 TLS 验证的 PostgreSQL 连接",
+    "提供管理员认证（bcrypt 哈希会话、可选 MFA）、员工角色分离与事务性签发/撤销"
+   ],
+   "use_cases": [
+    "机构内部签发、管理与撤销数字证书",
+    "通过 ID 或 QR 链接进行公开证书验证",
+    "本地开发演示（含虚构样本数据）与小规模服务器部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A complete single-institution project with a React interface, an Express API, and persistent PostgreSQL storage on Vercel and SQLite for local development. The interface uses Geist typography, a dark workspace, a 3D scroll experience, responsive layouts, keybo ／ ## Vercel with PostgreSQL ／ With `DATABASE_URL`, the API uses TLS-verified PostgreSQL connections. The",
+     "lines": [
+      5,
+      134,
+      137
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A complete single-institution project with a React interface, an Express API, and persistent PostgreSQL storage on Vercel and SQLite for local development. The interface uses Geist typography, a dark workspace, a 3D scroll experience, responsive layouts, keybo ／ - SQLite indexes support primary-key lookup, date ordering, recipient email queries, and certificate activity lookup. ／ writes. The local app still defaults to SQLite with fictional samples.",
+     "lines": [
+      5,
+      64,
+      157
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述这是一个用 SQLite/PostgreSQL 存储证书、审计事件与会话数据的完整应用项目，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A complete single-institution project with a React interface, an Express API, and persistent PostgreSQL storage on Vercel and SQLite for local development. The interface uses Geist typography, a dark workspace, a 3D scroll experience, responsive layouts, keyboard-accessible dialogs, and reduced-motion support. ／ The application is a complete local/small-server project for one institution, not a multi-tenant certification authority. The issuer name is currently **Credence Academy**. Public verification discloses the recipient name and achievement to anyone with the certificate ID; do not issue private data that should not be shared this way. Revocation reasons are public. HMAC integrity is not a public-key digital signature, a blockchain proof, or independent evidence of accreditation. A user who obtains both the database and secret can forge records. The hosted system stores records, audit events, sessions, and rate limits in PostgreSQL. Keep backups of both the database and signing key. The owner remains the sole administrator; staff can be assigned issuer and reviewer roles. Multi-institution accounts and independent accreditation are outside its scope. ／ ## Vercel with PostgreSQL",
+   "evidence_lines": [
+    5,
+    115,
+    134
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ishu7w/digital-certification-system",
+  "sha": "935d7852f401",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

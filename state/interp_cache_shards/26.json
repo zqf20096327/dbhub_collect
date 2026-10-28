@@ -10262,5 +10262,137 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9d830c0c07b4": {
+  "identity": {
+   "one_liner": "QQ 群通知自动转待办与日历的自托管应用",
+   "review": "群务台通过 NapCat/OneBot 读取指定 QQ 群消息，过滤闲聊后提取通知、行动项和截止时间，汇总到本地网页待办台，并支持 .ics 日历订阅与多渠道推送。数据用 SQLite 存储在本机。适合学生等需要集中处理多个 QQ 群通知的用户；仅限个人与非商业使用，NapCat 登录存在风控风险。",
+   "highlights": [
+    "提供网页待办台、月历视图和 .ics 日历订阅，支持 Windows 安装包、安卓 App 与 Linux/macOS 源码部署",
+    "支持 QQ 机器人、WxPusher、Server酱、PushPlus 及自定义 Webhook 推送，可接入钉钉、微信、学习通等来源",
+    "数据默认存储在本机 SQLite，设置页提供一键数据库备份"
+   ],
+   "use_cases": [
+    "集中管理散落在多个 QQ 群的作业、实验、报名和考试通知",
+    "自托管场景下将群通知转成待办并同步到手机日历",
+    "本地部署且数据不出本机的消息提醒与推送"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 设置页可一键备份数据库；ZIP 只包含 SQLite 数据库，不包含配置、令牌或日志。 ／ |`qq_live_digest/store.py`|SQLite 存储、去重和恢复|",
+     "lines": [
+      82,
+      183
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储自身消息与待办数据，是为终端用户服务的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：上游 qq-live-digest 部分为 MIT，新增部分为 PolyForm Noncommercial 1.0.0，商业使用需联系作者授权",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 设置页可一键备份数据库；ZIP 只包含 SQLite 数据库，不包含配置、令牌或日志。 ／ |`qq_live_digest/store.py`|SQLite 存储、去重和恢复|",
+   "evidence_lines": [
+    82,
+    183
+   ]
+  },
+  "fn": "ExpertKT/notice-hub",
+  "sha": "9d830c0c07b4",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "854a733dc24c": {
+  "identity": {
+   "one_liner": "PostgreSQL 日志分析器，解析日志生成性能与运行概览",
+   "review": "quellog 是一个读取 PostgreSQL 日志文件的命令行分析工具，支持 stderr、CSV、JSON、syslog 及多种云厂商日志格式，输出 SQL 查询性能、锁等待、死锁、检查点、连接会话等分析报告，可导出 JSON/YAML/Markdown/HTML，并提供实时跟随模式。面向需要离线或实时分析 PostgreSQL 日志的数据库运维与 DBA。",
+   "highlights": [
+    "支持 stderr/CSV/JSON/syslog 及 AWS RDS、Cloud SQL、Azure、CNPG 日志格式",
+    "提供查询性能、执行计划、锁与死锁、检查点、连接会话等分析项",
+    "支持 gzip/zstd/tar/zip/7z 归档解压与 JSON/YAML/Markdown/HTML 报告导出"
+   ],
+   "use_cases": [
+    "分析 PostgreSQL 慢查询与执行计划",
+    "排查锁等待、死锁与连接会话问题",
+    "生成 HTML 运维报告或实时监控日志"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A high-performance PostgreSQL log analyzer. Processes gigabytes of logs in seconds, producing synthetic overviews, SQL performance analysis, and operational insights.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 日志分析服务的独立工具，本身不使用数据库存储数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PostgreSQL License",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A high-performance PostgreSQL log analyzer. Processes gigabytes of logs in seconds, producing synthetic overviews, SQL performance analysis, and operational insights. ／ - **SQL analysis** -- per-query performance, execution plans (auto_explain), TCL separation ／ - **Follow mode** -- real-time monitoring with periodic refresh",
+   "evidence_lines": [
+    3,
+    24,
+    31
+   ]
+  },
+  "fn": "Alain-L/quellog",
+  "sha": "854a733dc24c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

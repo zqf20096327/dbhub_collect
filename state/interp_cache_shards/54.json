@@ -9670,5 +9670,159 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c4f7c713bab8": {
+  "identity": {
+   "one_liner": "Node.js 零依赖身份认证库，密码/邮件链接登录，会话存 SQLite",
+   "review": "modest-auth 是一个 Node.js 认证库，提供账号创建、密码/邮件链接登录、会话管理、防爆破限速等功能。面向需要邮箱+密码登录的 Node.js 网站开发者。仅依赖 Node 内置 crypto 与 node:sqlite，账户数据存于单个 SQLite 文件，需长驻服务器和持久磁盘，不支持 serverless；处于 0.x 早期阶段，尚未经独立安全审计。",
+   "highlights": [
+    "零运行时依赖，仅使用 Node 内置 crypto 和 node:sqlite，账户数据存于单个 SQLite 文件",
+    "支持密码与一次性邮件链接两种登录方式，链接仅存哈希且短时效（15-60 分钟）",
+    "内置基于数据库共享的按地址/账号速率限制、泄露密码拒绝（如 Have I Been Pwned）及符合 NIST SP 800-63B 的密码规则"
+   ],
+   "use_cases": [
+    "为 Node.js 网站添加邮箱+密码登录与会话管理",
+    "需要账户数据本地存储于 SQLite 文件的长驻服务器应用",
+    "需要防撞库限速、泄露密码检查等内置安全机制的身份认证场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **No runtime dependencies.** Only Node's own `crypto` and `node:sqlite`. Nothing ／ Node 24 or later, and tested on 24 and 26. The first time `node:sqlite` is used, Node ／ 24 prints a warning that SQLite is experimental: that's Node's own notice about its",
+     "lines": [
+      20,
+      126,
+      127
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为应用提供认证能力的库，通过 node:sqlite 存储账户数据，不依赖外部数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Zero-dependency authentication for Node.js: sign-in by password or emailed link, with sessions. ／ - **No runtime dependencies.** Only Node's own `crypto` and `node:sqlite`. Nothing ／ It needs a long-running Node server with a persistent disk: the accounts live in one",
+   "evidence_lines": [
+    3,
+    20,
+    131
+   ]
+  },
+  "fn": "thisismodest/modest-auth",
+  "sha": "c4f7c713bab8",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "01a51bbf7e47": {
+  "identity": {
+   "one_liner": "MySQL 兼容 SQL 静态审查 Skill，供 Agent 逐项审查 SQL",
+   "review": "一个供 Agent 使用的 SQL 审查 Skill：用户把 SQL 贴给支持 Skill 的 Agent，按正确性、性能、安全、可维护性逐项审查，输出分级问题表、语义等价的改写 SQL 和用 EXPLAIN 验证的方法。适用于 MySQL 及其兼容库（OceanBase MySQL 模式、seekdb、TiDB）；仅做静态审查，不连接数据库、不执行 SQL。",
+   "highlights": [
+    "按正确性、性能、安全、可维护性四个维度审查 SQL，输出分级问题表",
+    "提供语义等价的改写 SQL 及用 EXPLAIN 验证的方法",
+    "纯静态审查，不连接数据库、不执行 SQL，缺前提时明确标注"
+   ],
+   "use_cases": [
+    "在 Agent 工作流中对 MySQL 及兼容库的 SQL 做上线前人工审查辅助",
+    "排查易错的 SQL 写法（AND/OR 优先级、NOT IN 遇 NULL、隐式类型转换、深分页等）",
+    "配合 SHOW CREATE TABLE 与 EXPLAIN 输出获取更准确的审查结论"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# mysql-sql-review：MySQL 兼容 SQL 审查助手 ／ 把 SQL 贴给 Agent，按“正确性 → 性能 → 安全 → 可维护性”逐项审查，得到分级问题表、语义等价的改写 SQL 和验证方法。适用于 MySQL 及 MySQL 兼容数据库，如 OceanBase MySQL 模式、seekdb、TiDB。",
+     "lines": [
+      1,
+      3
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "把 SQL 贴给 Agent，按“正确性 → 性能 → 安全 → 可维护性”逐项审查，得到分级问题表、语义等价的改写 SQL 和验证方法。适用于 MySQL 及 MySQL 兼容数据库，如 OceanBase MySQL 模式、seekdb、TiDB。",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "把 SQL 贴给 Agent，按“正确性 → 性能 → 安全 → 可维护性”逐项审查，得到分级问题表、语义等价的改写 SQL 和验证方法。适用于 MySQL 及 MySQL 兼容数据库，如 OceanBase MySQL 模式、seekdb、TiDB。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 MySQL 兼容数据库的 SQL 审查提供能力的 Skill 组件，本身不使用数据库存数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "把 SQL 贴给 Agent，按“正确性 → 性能 → 安全 → 可维护性”逐项审查，得到分级问题表、语义等价的改写 SQL 和验证方法。适用于 MySQL 及 MySQL 兼容数据库，如 OceanBase MySQL 模式、seekdb、TiDB。 ／ 本 Skill 只做静态审查，不连接数据库，也不执行任何 SQL。 ／ 1. 把 `mysql-sql-review` 文件夹（包含 `SKILL.md`）放到你所用 Agent 的 Skills 目录，或在支持 Skill 的平台导入。",
+   "evidence_lines": [
+    3,
+    12,
+    16
+   ]
+  },
+  "fn": "Fengsuid/mysql-sql-review",
+  "sha": "01a51bbf7e47",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9920,5 +9920,167 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "29f326f1967b": {
+  "identity": {
+   "one_liner": "C++11 的 libuv 封装库，提供面向对象事件驱动 I/O 及可选数据库模块",
+   "review": "libuvcpp 将 libuv 的类型和方法封装为 C++11 类，提供 RAII 资源管理与 TCP/UDP/HTTP/WebSocket 客户端和服务端抽象，另含内存池、SSL/TLS、HTTP/2、HTTP/3 等可选模块，并通过可选 db 模块连接 SQLite/MySQL/PostgreSQL/ODBC。适合用 C++ 开发网络应用或需要数据库访问的开发者，通过预编译包或 deb/rpm 安装。",
+   "highlights": [
+    "提供 libuv 的 C++11 面向对象封装，含异步回调与同步 wait() 双模式 API",
+    "支持 HTTP/1.1、HTTP/2、HTTP/3(QUIC)、WebSocket(RFC 6455) 与 SSL/TLS",
+    "提供可选数据库模块，通过 uvcpp_db_client 连接 SQLite/MySQL/PostgreSQL/ODBC"
+   ],
+   "use_cases": [
+    "用 C++ 开发基于事件循环的 TCP/UDP/HTTP/WebSocket 服务端或客户端",
+    "构建需要 TLS、HTTP/2/3 支持的网络应用",
+    "在 libuv 应用中接入 SQLite/MySQL/PostgreSQL 数据库访问"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|db (SQLite / MySQL / PostgreSQL)|doc/db-guide.md|One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parame ／ |`UVCPP_ENABLE_DB`|`OFF`|Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL / ODBC, with table-style access to the result rows. It is the only module that **requires a third-party client library** ",
+     "lines": [
+      269,
+      341
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|db (SQLite / MySQL / PostgreSQL)|doc/db-guide.md|One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parame ／ |`UVCPP_ENABLE_DB`|`OFF`|Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL / ODBC, with table-style access to the result rows. It is the only module that **requires a third-party client library** ",
+     "lines": [
+      269,
+      341
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|db (SQLite / MySQL / PostgreSQL)|doc/db-guide.md|One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parame ／ |`UVCPP_ENABLE_DB`|`OFF`|Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL / ODBC, with table-style access to the result rows. It is the only module that **requires a third-party client library** ",
+     "lines": [
+      269,
+      341
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 C++ 开发服务的通用网络 I/O 库，附带可选的数据库连接模块，属于服务生态的开发库而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "libuvcpp provides a thin, idiomatic C++ layer over libuv's event loop, handles, and requests.",
+   "evidence_lines": [
+    112
+   ]
+  },
+  "fn": "Antruly/libuvcpp",
+  "sha": "29f326f1967b",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9f99f2f3e6bd": {
+  "identity": {
+   "one_liner": "本地隐私优先的个人投资记录桌面应用，用SQLite存储并接Ollama离线AI复盘",
+   "review": "一个基于Tauri 2+Vue 3的桌面投资记录系统，用于管理标的、交易计划、交易记录、仓位快照与月度复盘。数据加密存于本机SQLite（rusqlite内置打包），不联网上传；通过Ollama本地大模型在断网环境生成交易点评与月度报告。面向需要本地隐私存储的个人投资者，支持Windows与macOS，AI功能需自行安装Ollama。",
+   "highlights": [
+    "数据加密存放本地SQLite，声明无联网上传，支持数据备份/恢复",
+    "对接Ollama本地大模型，断网可生成单笔点评与月度投资报告",
+    "内置交易计划执行率量化统计与逐笔交易复盘功能"
+   ],
+   "use_cases": [
+    "个人投资交易记账与持仓管理",
+    "断网环境下使用本地大模型做投资复盘",
+    "记录交易计划并量化核算执行纪律"
+   ],
+   "eco": "app",
+   "cat": "应用"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 所有交易、持仓、复盘数据加密存放本地SQLite，无任何联网上报；依托Ollama实现断网可用的AI投资复盘，一站式完成标的管理、交易记账、仓位统计与月度分析。 ／ - 🔒 **全本地隐私存储**：所有交易记录、持仓快照、AI复盘报告加密存放本机SQLite，**无任何数据联网上传、无云端上报**，从根源规避持仓策略泄露风险 ／ |本地数据库|SQLite(rusqlite 内置打包)|",
+     "lines": [
+      13,
+      17,
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用SQLite存数据的桌面应用，SQLite以内置依赖方式打包，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> 所有交易、持仓、复盘数据加密存放本地SQLite，无任何联网上报；依托Ollama实现断网可用的AI投资复盘，一站式完成标的管理、交易记账、仓位统计与月度分析。 ／ |本地数据库|SQLite(rusqlite 内置打包)| ／ 支持平台：Windows 10/11、macOS",
+   "evidence_lines": [
+    13,
+    38,
+    104
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "brycegao/invest-record-pro",
+  "sha": "9f99f2f3e6bd",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10010,5 +10010,149 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2e152e68f1fe": {
+  "identity": {
+   "one_liner": "自托管家庭事务组织应用，含日历、任务、购物与 MCP AI 建议",
+   "review": "FamilyOS 是一个自托管的家庭组织 Web 应用，整合共享日历、任务、购物清单、食谱和墙屏显示，运行于自己的硬件（支持树莓派）。AI 模型可提出建议但需人工批准，并支持 MCP 接入。通过 Docker Compose 部署，数据存于本地数据卷，当前为 Beta 阶段，无向后兼容保证。",
+   "highlights": [
+    "提供共享日历、任务、购物清单、家务、食谱和墙屏显示等家庭组织功能",
+    "支持通过 MCP 协议接入 Claude 等 AI 应用，AI 建议需人工批准后生效",
+    "提供 Docker 镜像（amd64/arm64），可在树莓派上运行，数据统一存于 /data 数据卷"
+   ],
+   "use_cases": [
+    "家庭共用日程、家务与购物清单的自托管管理",
+    "厨房墙屏/平板展示家庭日程与天气",
+    "通过 MCP 接入 AI 助手辅助管理家庭事务"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是使用数据库存储家庭数据的终端应用，而非为数据库生态服务的工具",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GNU AGPL v3.0 or later",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A self-hosted organizer for families.** One web app for the household's calendar, tasks, shopping, ／ ## Quick start (Docker Compose) ／ Members**. Everything lives in the `famos-data` volume (`/data`): database, files, backups, packs",
+   "evidence_lines": [
+    3,
+    55,
+    71
+   ]
+  },
+  "fn": "onurceri/family-os",
+  "sha": "2e152e68f1fe",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "65b282369ba3": {
+  "identity": {
+   "one_liner": "多智能体共享记忆中枢，以 SQLite 存储、REST/SDK/MCP 读写并带治理审计",
+   "review": "为多智能体系统提供单一共享记忆的本地服务：每个智能体通过 REST、Python/JS SDK 或 MCP 读写同一份记忆，支持作用域、写策略、审计日志、记忆防火墙和实时可视化。使用一个 SQLite 文件存储，无需向量或图数据库，可脱离 LLM 运行。面向运行多智能体的开发团队，用于跨智能体共享事实并控制读写权限。",
+   "highlights": [
+    "提供 per-agent 密钥、读写权限、写策略与 append-only 审计日志的记忆治理",
+    "支持通过 REST API、Python/JS SDK 和 MCP 接入 Claude Code、Cursor、LangGraph 等智能体",
+    "单进程单 SQLite 文件存储，可在无 LLM 条件下以规则和模板运行"
+   ],
+   "use_cases": [
+    "多个智能体（QA、编码、客服等）共享同一份记忆并避免重复学习",
+    "需要按作用域控制智能体读写权限并保留完整审计记录的智能体部署",
+    "本地运行、无向量/图数据库依赖的多智能体记忆方案"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Governed shared memory for multi-agent systems.** Every agent you run (Claude Code, Cursor, LangGraph nodes, your own bots) reads and writes one memory, under rules you can see and audit: which agent may read what, which value wins when agents disagree, what ／ - **Light to run.** One SQLite file, no vector or graph database. It works without an LLM (rules and templates, $0 in tokens); add any LLM (Claude, GPT, Gemini, Ollama, vLLM…) for better extraction and summaries. ／ |Storage to run|**One SQLite file**|A vector store of your choice|The Letta server and its database|A graph database (Neo4j, FalkorDB, Kuzu, Neptune)|",
+     "lines": [
+      11,
+      73,
+      80
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Where they are stronger today: larger communities and production use, managed cloud offerings, storage that scales past one process (this hub is single-process SQLite; Postgres is on the roadmap), and published scores on public benchmarks. With an LLM, Mem0 an",
+     "lines": [
+      83
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 作为自身数据存储，是一个使用数据库的多智能体记忆应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Governed shared memory for multi-agent systems.** Every agent you run (Claude Code, Cursor, LangGraph nodes, your own bots) reads and writes one memory, under rules you can see and audit: which agent may read what, which value wins when agents disagree, what has expired, and what looks planted. It runs locally in one SQLite file, works without an LLM, and shows you live which agent recalled what, and why. ／ docker compose up -d        # → http://localhost:4317 (UI) and http://localhost:4317/v1 (API) ／ No Docker? `npm install && npm start` with Node.js ≥ 22. No configuration is needed; add an LLM later in **Settings**.",
+   "evidence_lines": [
+    11,
+    43,
+    46
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "leluong141996-dev/Agent-Brain-Hub",
+  "sha": "65b282369ba3",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

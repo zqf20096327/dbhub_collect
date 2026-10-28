@@ -9532,5 +9532,79 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d5a66a01f229": {
+  "identity": {
+   "one_liner": "AI辅助Playwright测试框架，含UI/API/数据库三层测试与MCP代理",
+   "review": "一个 JavaScript 测试框架，用 Playwright 对 OrangeHRM 演示系统做 UI、REST API 和 PostgreSQL 数据库三层测试，集成 Jenkins CI，并通过 MCP 服务器和 Claude 代理做失败分类与受护栏的测试修复。面向 QA 工程师和测试自动化团队，使用 pg 驱动和 repository 层参数化查询，写操作需人工审批。",
+   "highlights": [
+    "支持 UI、REST API、数据库三层测试，DB 测试通过 pg 驱动以参数化查询经 repository 层实现",
+    "通过 MCP 服务器与只读 QA 代理实现失败分类，仅修复确认为测试自身缺陷的用例",
+    "内置 Jenkinsfile，每次运行前从 setup.sql 重建专用 CI 数据库"
+   ],
+   "use_cases": [
+    "Web 应用的端到端测试自动化（UI→API→数据库联动校验）",
+    "CI 流水线中的测试失败自动分诊与受控修复",
+    "带权限护栏的 AI 代理辅助 QA 流程实践"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**DB tests**|PostgreSQL via `pg`, parameterised queries through a repository layer, UI → DB end-to-end check| ／ cp .env.example .env # fill in local Postgres credentials",
+     "lines": [
+      12,
+      43
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是用于测试数据库应用质量的 QA 框架，PostgreSQL 是其测试对象与数据校验目标",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# Playwright + PostgreSQL + MCP: AI-assisted QA framework ／ |**DB tests**|PostgreSQL via `pg`, parameterised queries through a repository layer, UI → DB end-to-end check| ／ |**AI agents**|Read-only QA agent, CI triage agent, Playwright planner / generator / healer, and a `jenkins-qa-loop` skill with guardrails and a human approval step|",
+   "evidence_lines": [
+    1,
+    12,
+    15
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Mounicakalinga6/mcp-playwright-project",
+  "sha": "d5a66a01f229",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

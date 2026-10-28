@@ -10418,5 +10418,202 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5f25d96662e8": {
+  "identity": {
+   "one_liner": "JavaScript 的 local-first 响应式 NoSQL 数据库，支持多运行时与后端复制",
+   "review": "RxDB 是一个面向 JavaScript 应用的本地优先 NoSQL 数据库，可订阅查询结果的状态变化，用于构建实时 UI 应用。它通过存储接口可切换底层引擎（LocalStorage、IndexedDB、SQLite 等），并提供复制插件与 CouchDB、GraphQL、Firestore 等后端同步。npm 安装，适合前端、React Native、Electron 等 JS 环境的开发者。",
+   "highlights": [
+    "支持订阅查询结果与文档字段的状态变化（响应式查询）",
+    "存储层可通过存储接口替换：LocalStorage、IndexedDB、OPFS、SQLite、FoundationDB、DenoKV 等",
+    "提供与 GraphQL、CouchDB、Websocket、WebRTC、Supabase、Firestore、NATS、Google Drive 复制的插件"
+   ],
+   "use_cases": [
+    "需要实时 UI 状态同步的多人协作前端应用",
+    "离线优先的 PWA、React Native、Electron 应用本地数据存储",
+    "在浏览器、Node.js、Flutter 等 JS 运行时中使用统一数据库代码"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "You can use RxDB on top of LocalStorage, IndexedDB, OPFS, LokiJS, Dexie.js, in-memory, SQLite, in a WebWorker thread and even on top of FoundationDB and DenoKV.",
+     "lines": [
+      55
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "RxDB 本身是一个数据库，README 未表明它是为其他数据库生态服务的工具或仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " RxDB (short for R eactive D ata b ase) is a local-first, NoSQL-database for JavaScript Applications. ／ RxDB is based on a storage interface that enables you to swap out the underlying storage engine. This increases **code reuse** because the same database code can be used in different JavaScript environments by just switching out the storage settings. ／ You can use RxDB on top of LocalStorage, IndexedDB, OPFS, LokiJS, Dexie.js, in-memory, SQLite, in a WebWorker thread and even on top of FoundationDB and DenoKV.",
+   "evidence_lines": [
+    23,
+    53,
+    55
+   ]
+  },
+  "fn": "pubkey/rxdb",
+  "sha": "5f25d96662e8",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0624040aa8e6": {
+  "identity": {
+   "one_liner": "为 AI Agent 提供可写文件系统工作区的 FUSE 层叠文件系统，历史存于 SQLite",
+   "review": "LayerFS 是一个基于 FUSE 的层叠文件系统，为每个 AI Agent 挂载完整可写的工作区，文件操作以内容寻址、去重的方式提交为 Commit，支持分支、回退与合并，底层用单个 SQLite 文件存储全部对象，无独立数据库服务。面向构建多 Agent 并行工作流的开发者。当前 Store 仅 Disposable 模式，无崩溃/断电持久化保证。",
+   "highlights": [
+    "通过 FUSE 挂载工作区，写入进入 overlay，提交后成为不可变 Commit",
+    "所有 Branch、Commit 与内容对象存于单个 SQLite 文件，进程直接打开，无数据库服务",
+    "内容按 chunk 去重存储，支持 .lww 冲突规则与递归分支 fork"
+   ],
+   "use_cases": [
+    "多 Agent 并行开发：各自 fork 分支工作、测试后合并发布",
+    "Agent 每步工具调用的自动检查点与历史回退",
+    "沙箱环境的即时引导：挂载即含依赖与忽略文件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Store.** One SQLite file holds every Branch, Commit and content object. Each",
+     "lines": [
+      121
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确其 Store 使用单个 SQLite 文件存储所有对象，SQLite 是其内部存储依赖而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Store.** One SQLite file holds every Branch, Commit and content object. Each ／  daemon and SDK process opens it directly; there is no database server. ／  LayerFS is the substrate under your agents. Each one mounts a complete, writable",
+   "evidence_lines": [
+    121,
+    122,
+    7
+   ]
+  },
+  "fn": "Ephemeral-AI-Lab/layerfs",
+  "sha": "0624040aa8e6",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a956190c4355": {
+  "identity": {
+   "one_liner": "MCP 记忆层：为 AI 代理提供持久化、可语义检索的图记忆存储",
+   "review": "Memora 是一个 MCP 服务器，为 AI 代理提供跨会话的持久化记忆：以 SQLite 或 Cloudflare D1 存储事实，支持 LLM 去重吸收、版本谱系、语义搜索和知识图谱可视化。面向 Claude Code 等 MCP 客户端用户，可通过 pip 或容器部署，默认依赖 OpenAI 嵌入。",
+   "highlights": [
+    "支持 SQLite 本地持久化与 Cloudflare D1 云存储（S3/R2 同步）",
+    "提供 LLM 驱动的 absorb 去重、supersession 版本谱系与语义检索（TF-IDF/sentence-transformers/OpenAI）",
+    "内置 MCP 服务器、JSON API 和 Mermaid 知识图谱可视化"
+   ],
+   "use_cases": [
+    "为 Claude Code 等 MCP 客户端的代理提供跨会话记忆",
+    "多代理间的共享知识存储与事件通知",
+    "以图谱形式浏览与检索代理产生的 TODO、issue 和事实"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 💾 **Persistent Storage** - SQLite with optional cloud sync (S3, R2, D1)",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite/D1 作为自身存储数据的后端，而非为数据库生态提供服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An MCP memory layer for agents: structured storage, semantic retrieval, graph relations, and source-backed cross-session context. ／ - 💾 **Persistent Storage** - SQLite with optional cloud sync (S3, R2, D1) ／ pip install memora-mcp",
+   "evidence_lines": [
+    6,
+    21,
+    88
+   ]
+  },
+  "fn": "agentic-box/memora",
+  "sha": "a956190c4355",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

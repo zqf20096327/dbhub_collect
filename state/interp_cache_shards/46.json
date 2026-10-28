@@ -10342,5 +10342,210 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0a879fa18f8a": {
+  "identity": {
+   "one_liner": "Rust 编写的数据库桌面客户端，支持 SQL 查询与本地文件分析",
+   "review": "Kuery 是一个桌面数据库工作台，用于连接 PostgreSQL、MySQL/MariaDB、SQL Server、SQLite、Redis 浏览 schema、执行 SQL、查看执行计划，并用 Polars 对 CSV、JSON、Parquet 本地文件做 SQL 分析。提供 schema 图、读写控制、结果导出等功能，面向需要在一个桌面应用内管理数据库连接和分析本地数据的开发者。项目自述为早期原型，文件 SQL 目前为只读。",
+   "highlights": [
+    "提供 SQL 工作区、数据库浏览器、schema 图与执行计划（EXPLAIN）查看",
+    "支持 Polars SQL 查询 CSV/TSV、JSON/JSONL/NDJSON、Parquet 本地文件",
+    "默认只读模式，写入需显式启用并支持事务提交/回滚与影响预览"
+   ],
+   "use_cases": [
+    "在桌面端连接并浏览多种数据库的表、视图与数据",
+    "对本地数据文件执行 SQL 聚合与分布分析",
+    "通过环境策略控制开发/预发/生产环境的读写操作"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite and Redis, or open CSV, JSON and ／ |**PostgreSQL**|Schemas, tables, views, routines, triggers, enums and definitions|SQL editor, read-only reads, explicit write modes|Streaming results, plan inspection, TLS and SSH.|",
+     "lines": [
+      16,
+      92
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite and Redis, or open CSV, JSON and ／ |**MySQL / MariaDB**|Databases presented as schemas, tables, views and routines|SQL editor, read-only reads, explicit write modes|DDL that commits implicitly is refused wherever rollback is promised.|",
+     "lines": [
+      16,
+      93
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite and Redis, or open CSV, JSON and ／ |**SQLite**|Local database files, tables, views and definitions|SQL editor, query-only reads, explicit write modes|Existing files only; missing paths do not create an empty database.|",
+     "lines": [
+      16,
+      95
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite and Redis, or open CSV, JSON and ／ |**SQL Server**|Databases, schemas, tables, views and routines|SQL editor with `GO` batches, read-only reads, explicit write modes|Query plans and server activity. SQL Server logins only; see the guide for the read-only guarantee.|",
+     "lines": [
+      16,
+      94
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite and Redis, or open CSV, JSON and ／ |**MySQL / MariaDB**|Databases presented as schemas, tables, views and routines|SQL editor, read-only reads, explicit write modes|DDL that commits implicitly is refused wherever rollback is promised.|",
+     "lines": [
+      16,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为连接和管理多种数据库提供客户端界面的工具，数据库为其服务对象而非自身存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Kuery brings database administration and file analytics into one desktop app. ／ Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite and Redis, or open CSV, JSON and ／ > **Project status:** early prototype under active development. The features",
+   "evidence_lines": [
+    15,
+    16,
+    25
+   ]
+  },
+  "fn": "Binaretech/kuery",
+  "sha": "0a879fa18f8a",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0afdc1a288aa": {
+  "identity": {
+   "one_liner": "桌面端数据库 DBA 智能助手，AI Agent 结合数据库控制台",
+   "review": "基于 Electron 的桌面端数据库 AI Agent 与管理控制台，面向 DBA，提供 AI 对话执行 SQL、数据库控制台（查询/网格编辑/导出）、OCP 云管平台、AWR 文件脱敏等模块。支持 Oracle 11g/19c、OceanBase、MySQL；权限分五档管控写操作，SQL 审计日志落盘，数据经 DPAPI 加密留在本机。",
+   "highlights": [
+    "支持 Oracle 11g/19c、OceanBase 4.x（MySQL/Oracle 租户）与 MySQL 连接",
+    "提供权限五档管控（计划/只读/确认执行/会话放开/完全放开）与结构化审计日志",
+    "内置文件脱敏工具，支持 Oracle AWR 报表语义解析与敏感值映射"
+   ],
+   "use_cases": [
+    "DBA 日常巡检与 SQL 性能诊断",
+    "数据库查询、数据编辑与结果导出",
+    "OceanBase OCP 集群/租户/告警管理"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "桌面端数据库 AI Agent，支持 Oracle 11g/19c、OceanBase 4.x（MySQL / Oracle 租户）、MySQL。 ／ - **结果网格编辑（DBeaver 式）**：表数据页**双击单元格**直接改值（Enter/点 ✓ 暂存，Esc 取消，∅ 设 NULL），暂存的修改高亮显示，点\"💾 保存修改\"批量执行 UPDATE——值全部绑定变量、按行标识（Oracle 用 ROWID，MySQL/OB 用主键）定位，改过的行被他人先改/删会报冲突。Oracle 保存后事务不提交，用状态条 ✓ 提交 / ↩ 回滚（与查询窗口一致，关标签页即回滚）；MySQL/OB 整批一个事务、有冲突全部回滚。视图（无行标识）、虚拟列/生成列自动只读，每 ／ - **事务语义按数据库特性**：Oracle 连接**不自动提交**——查询窗口/网格编辑的 DML 执行后事务保持打开，用工具栏 ✓ 提交 / ↩ 回滚（或直接执行 COMMIT/ROLLBACK）；DDL 在 Oracle 内部隐式提交（数据库自身行为）；MySQL/OB 为原生 autocommit，执行即生效",
+     "lines": [
+      3,
+      25,
+      27
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "桌面端数据库 AI Agent，支持 Oracle 11g/19c、OceanBase 4.x（MySQL / Oracle 租户）、MySQL。 ／ - **文件脱敏工具**：左侧「脱敏工具」入口，先选择文件类型（当前开放 Oracle AWR，普通日志预留）再选择/拖入文件；内置规则面向 AWR 表格语义解析，覆盖 HTML 表格列 / `headers` 属性、文本列式报表、RAC 汇总、DB / PDB / DBID / 实例 / 主机 / 服务名 / Schema / OS 用户 / IP / ASM 磁盘组 / JDBC 与 TNS 组件，并避免数据库版本号、说明文字句号、SQL 别名等误报；同一敏感值在同一次处理中稳定映射为 `ip-tuoming1 ／ - **环境事实注入**：连接的数据库版本自动探测（成功缓存 30 分钟/失败 5 分钟，探测超时不阻塞对话）标注在连接行，方言规则按实际版本判断（Oracle 11g 用 ROWNUM、12c+ 可用 FETCH FIRST）；当前日期/时区注入提示词末尾，\"昨天 / 近 7 天 / 本月\"类相对时间有计算锚点（精确时刻仍建议用 SYSDATE/NOW() 核实）",
+     "lines": [
+      3,
+      10,
+      23
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "桌面端数据库 AI Agent，支持 Oracle 11g/19c、OceanBase 4.x（MySQL / Oracle 租户）、MySQL。 ／ ## 云管平台（OceanBase OCP） ／ 左侧「☁ 云管平台」是独立模块：**不嵌 iframe**（OCP 自带 `X-Frame-Options: DENY`），而是由 SQLPilot 直接调用 OCP 的 REST 接口，用自己的界面展示。二级导航按厂商分组（当前只有 OceanBase，MySQL / Oracle 云管理为后续扩展位）。",
+     "lines": [
+      3,
+      108,
+      110
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库管理与运维提供工具能力（连接、查询、脱敏、OCP 管理），数据库是其服务对象而非存储后端",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "Oracle",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "桌面端数据库 AI Agent，支持 Oracle 11g/19c、OceanBase 4.x（MySQL / Oracle 租户）、MySQL。 ／ - **功能模块**：最左侧一级导航切换——「AI 助手」（对话 / SSH 终端 / 会话管理）、「数据库」（数据库控制台，独立模块）、「云管平台」（OceanBase 云平台 OCP 的集群/租户/主机/告警/任务）、「文本编辑」（Notepad++ 式多标签编辑器，大文件秒开；选中文本可就地让 AI 针对这段内容问答）、「脱敏工具」（AWR 本地脱敏）与「巡检报告」（规划中，基于模板生成、与 AI 无关）；导航底部是全局工具（主题切换 / 设置浮窗） ／ ## 云管平台（OceanBase OCP）",
+   "evidence_lines": [
+    3,
+    8,
+    108
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "echodddb/SQLPilot",
+  "sha": "0afdc1a288aa",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

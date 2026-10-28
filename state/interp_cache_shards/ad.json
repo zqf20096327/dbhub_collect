@@ -10805,5 +10805,73 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f462e8cd8411": {
+  "identity": {
+   "one_liner": "Rust 编写的 PostgreSQL REST/GraphQL API 服务器",
+   "review": "Postrust 是一个用 Rust 实现的单二进制服务器，把 PostgreSQL schema 直接暴露为 PostgREST 方言的 REST API 和 Hasura 方言的 GraphQL API，过滤、分页、嵌套、CRUD、JWT 与 RLS 均由 schema 推导，无需按表写代码。面向需要为 PostgreSQL 快速生成数据 API 的后端开发者；要求 PostgreSQL 12+，GraphQL 在 Lambda/Workers 部分场景不可用。",
+   "highlights": [
+    "单个 Rust 二进制同时提供 REST（PostgREST 方言）与 GraphQL（Hasura 方言），含可选 Apollo Federation v2 子图模式",
+    "JWT 认证结合 PostgreSQL RLS 做行级权限，支持 AWS Lambda 与 Cloudflare Workers 部署",
+    "内置 Admin UI、OpenAPI 3.0、Swagger UI 与 GraphQL Playground"
+   ],
+   "use_cases": [
+    "为 PostgreSQL 数据库直接生成 REST/GraphQL 数据 API 而不写每表代码",
+    "Serverless 部署（AWS Lambda、Cloudflare Workers）下的数据 API 服务",
+    "替代或并行运行 PostgREST/Hasura 的场景（提供兼容模式与一致性测试）"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**A PostgREST-inspired REST API for PostgreSQL, written in Rust** ／ Postrust is one Rust binary that serves a PostgreSQL schema as a REST API in PostgREST's dialect and a GraphQL API in Hasura's, with an opt-in Apollo Federation v2 subgraph mode. Filtering, pagination, embedding, full CRUD, JWT and row-level security come from ／ |**JWT Authentication**|✅|Role-based access with PostgreSQL RLS|",
+     "lines": [
+      3,
+      13,
+      37
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL schema 生成 API 服务的中间层工具，本身不用库存业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postrust is one Rust binary that serves a PostgreSQL schema as a REST API in PostgREST's dialect and a GraphQL API in Hasura's, with an opt-in Apollo Federation v2 subgraph mode. Filtering, pagination, embedding, full CRUD, JWT and row-level security come from the schema; nothing is written per table. It runs as a server, in a container, on AWS Lambda, or -- the REST API -- in a Cloudflare Worker. ／ |**HTTP Server**|✅|Standalone Axum-based server| ／ - PostgreSQL 12+ (or use Docker)",
+   "evidence_lines": [
+    13,
+    45,
+    64
+   ]
+  },
+  "fn": "postrust/postrust",
+  "sha": "f462e8cd8411",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

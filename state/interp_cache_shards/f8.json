@@ -10524,5 +10524,183 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6c81ac496e7e": {
+  "identity": {
+   "one_liner": "基于本地 SQLite 的 AI 编码代理持久记忆层（MCP 服务器）",
+   "review": "为 AI 编码代理提供跨会话的本地持久记忆，保存决策、修复记录与项目上下文，通过 MCP 集成、CLI、HTTP API 和 web 应用读写同一份本地 SQLite 存储（mind.db），内置全文检索、可选语义嵌入、三层记忆与链接机制，面向使用 Claude Code、Cursor、Codex 等编码代理的开发者。",
+   "highlights": [
+    "提供 MCP 服务器、CLI、HTTP API 和 web 应用，共用同一本地 SQLite 存储",
+    "内置开箱即用的全文检索，OpenAI/OpenRouter 嵌入仅作可选语义搜索",
+    "支持记忆分三层管理、定向链接、检查点与会话摘要"
+   ],
+   "use_cases": [
+    "为编码代理在会话结束或上下文压缩后保留决策与项目上下文",
+    "多工具间共享项目知识库",
+    "本地检查与编辑代理记忆内容"
+   ],
+   "classification": {
+    "cat": "其他",
+    "db_verdicts": [
+     {
+      "db": "SQLite",
+      "rel": "support",
+      "lines": [
+       34,
+       139
+      ]
+     }
+    ],
+    "eco": "tool",
+    "eco_why": "作为 MCP 服务器/CLI 组件为编码代理提供记忆服务，并以 SQLite 作为其后端存储。",
+    "ai": {
+     "flag": true,
+     "kind": [
+      "mcp"
+     ]
+    },
+    "persona": "use",
+    "official": {
+     "flag": false,
+     "of": null
+    }
+   },
+   "signals": {
+    "status": "active",
+    "license_note": "",
+    "install": [
+     "binary",
+     "source"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     34,
+     139,
+     15
+    ]
+   }
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "work with the same SQLite database. ／ Everything lives in one local SQLite store (`mind.db`). Mind also supports",
+     "lines": [
+      34,
+      139
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 MCP 服务器/CLI 组件为编码代理提供记忆服务，并以 SQLite 作为其后端存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " work with the same SQLite database. ／ Everything lives in one local SQLite store (`mind.db`). Mind also supports ／ MCP",
+   "evidence_lines": [
+    34,
+    139,
+    15
+   ]
+  },
+  "fn": "GabrielMartinMoran/mind",
+  "sha": "6c81ac496e7e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f21a25ad5638": {
+  "identity": {
+   "one_liner": "TypeScript 内嵌 Postgres SQL 的静态类型检查库",
+   "review": "TypeSQL 是一个 TypeScript 开发库，在类型检查器内解析 Postgres SQL，为查询结果和参数推导精确类型，拼错列名等错误在编译期报出。面向用 TypeScript 写 Postgres 应用的开发者；无需 codegen 或数据库连接，通过 @typesql/pg、@typesql/postgres 适配 node-postgres 和 postgres.js 驱动，需 TypeScript 7.1+。",
+   "highlights": [
+    "在类型检查器内解析 SQL，编译期捕获列名/参数类型错误，无需 codegen 或数据库连接",
+    "提供 @typesql/pg、@typesql/postgres 驱动适配及 Kysely/Drizzle/Prisma schema 转换包",
+    "SQL 解析器以 PostgreSQL 官方回归测试（约 5 万条语句）验证，并附带 VS Code 扩展与语言服务器"
+   ],
+   "use_cases": [
+    "在 TypeScript 项目中直接书写 Postgres SQL 并获得行/参数的静态类型",
+    "为已有 Kysely、Drizzle 或 Prisma schema 的项目接入 SQL 类型检查",
+    "编辑器内的 SQL 补全、语法高亮与错误提示（VS Code / Neovim）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Write Postgres SQL in TypeScript and get exact types for rows and parameters. TypeSQL parses your SQL inside the type checker: no codegen, no database connection, no build step. ／ - **Plain SQL.** You write the SQL Postgres runs, not a query builder's version of it. ／ - **Mistakes are compile errors.** A misspelled column, an unknown table or a wrong parameter type is caught in your editor, worded like the error Postgres would give.",
+     "lines": [
+      3,
+      9,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供 TypeScript 类型化 SQL 检查的开发工具，本身不存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Write Postgres SQL in TypeScript and get exact types for rows and parameters. TypeSQL parses your SQL inside the type checker: no codegen, no database connection, no build step. ／ npm install @typesql/core @typesql/pg pg              # node-postgres",
+   "evidence_lines": [
+    3,
+    18
+   ]
+  },
+  "fn": "ismailkarsli/TypeSQL",
+  "sha": "f21a25ad5638",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

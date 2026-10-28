@@ -11109,5 +11109,229 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cab25858f367": {
+  "identity": {
+   "one_liner": "Go 编写的 ATProtocol PDS 个人数据服务器，内置 SQLite 块与 blob 存储",
+   "review": "Cocoon 是一个用 Go 实现的 ATProtocol 个人数据服务器（PDS），为想要自托管 Bluesky/ATProto 数据的开发者或个人提供服务。它默认使用 SQLite 存储数据和 blob，可通过配置切换到 PostgreSQL，支持 Docker Compose 一键部署、自动 HTTPS、邀请码注册、S3 备份与 blob 存储，并提供 2FA（含 YubiKey）。README 列出了已实现的 identity、repo、server、sync 等 ATProto 端点。",
+   "highlights": [
+    "实现 ATProtocol PDS 的 identity/repo/server/sync 等端点（README 附实现清单）",
+    "支持 SQLite（默认）与 PostgreSQL 两种数据库后端，通过 COCOON_DB_TYPE 配置切换",
+    "提供 S3 兼容的 SQLite 备份与 blob 存储、邀请码管理、2FA/YubiKey 登录"
+   ],
+   "use_cases": [
+    "自托管 ATProtocol/Bluesky 个人数据服务器",
+    "需要自定义域名与数据主权的 PDS 部署",
+    "ATProto Spaces 权限化数据的实验部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**For PostgreSQL deployment:** ／ docker-compose -f docker-compose.postgres.yaml up -d ／ COCOON_DB_TYPE=\"postgres\"",
+     "lines": [
+      49,
+      52,
+      102
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- `./data/` - SQLite database and blockstore ／ By default, Cocoon uses SQLite which requires no additional setup. For production deployments with higher traffic, you can use PostgreSQL: ／ COCOON_DB_TYPE=\"sqlite\"",
+     "lines": [
+      91,
+      98,
+      109
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Cocoon 是使用 SQLite/PostgreSQL 存储数据的 PDS 服务器应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Cocoon is a PDS implementation in Go. ／ - `./data/` - SQLite database and blockstore ／ By default, Cocoon uses SQLite which requires no additional setup. For production deployments with higher traffic, you can use PostgreSQL:",
+   "evidence_lines": [
+    3,
+    91,
+    98
+   ]
+  },
+  "fn": "haileyok/cocoon",
+  "sha": "cab25858f367",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "97d234d66625": {
+  "identity": {
+   "one_liner": "闲鱼虚拟商品多租户自动化运营系统，基于 Spring Boot 与 MySQL",
+   "review": "这是一个用于闲鱼虚拟商品销售的开源运营系统，覆盖订单发现、卡密/固定内容自动发货、AI 客服回复、评价跟进等环节，核心任务链路只依赖 MySQL 并通过行级锁实现卡密原子预占与幂等交付，支持 Docker 自部署。适合在闲鱼销售虚拟商品的商家自建部署，不提供 SQLite 数据迁移。",
+   "highlights": [
+    "支持固定内容与卡密两种交付模式，通过 MySQL 行级锁实现整单预占、成功核销、失败释放或转人工复核",
+    "支持多租户数据隔离，账号、商品、订单、库存与 AI 知识库按租户划分",
+    "提供 AI 客服（关键词、商品规则与知识库回复）、自动评价、任务持久化恢复与 Webhook 异常通知"
+   ],
+   "use_cases": [
+    "闲鱼虚拟商品（网盘链接、激活码、卡密等）自动发货与客服值守",
+    "多商家共用平台的多租户虚拟商品运营",
+    "服务重启或接口失败后自动恢复发货任务、集中处理异常订单"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL ／ |原子卡密交付|MySQL 行级锁整单预占，发送成功后核销，失败释放或转人工复核|避免并发订单导致重复发卡、少发和超卖| ／ - MySQL 5.7+",
+     "lines": [
+      12,
+      66,
+      176
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- 全新环境使用 MySQL，不提供 SQLite 历史数据自动迁移。",
+     "lines": [
+      412
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统使用 MySQL 存储自身业务数据并部署运行，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "XianYuSmart 是一个面向多租户场景的闲鱼虚拟商品运营系统。买家下单后，平台可以按商品自动交付固定资源或卡密，通过发货凭证、私聊或两种通道完成触达；成交前后的常见咨询、收货引导和评价跟进也能按规则自动处理。商家只需关注低库存、账号掉线、发送失败和待复核等真正需要介入的事项。 ／ 它不只是在收到订单后发送一段文本，而是把 **订单发现、幂等入队、库存预占、双通道交付、失败重试和人工复核** 串成可恢复的完整链路。固定内容与卡密两种交付模式严格互斥，账号、商品、消息、订单、库存、任务和 AI 知识库按租户隔离。核心任务链路只依赖 MySQL，不强制引入 Redis 或消息队列，兼顾部署成本与后续扩展。 ／ |原子卡密交付|MySQL 行级锁整单预占，发送成功后核销，失败释放或转人工复核|避免并发订单导致重复发卡、少发和超卖|",
+   "evidence_lines": [
+    17,
+    19,
+    66
+   ]
+  },
+  "fn": "Evvvvvvvan/XianYuSmart",
+  "sha": "97d234d66625",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3e4d66e3b18e": {
+  "identity": {
+   "one_liner": "PHP+SQLite 的自托管列表式文件上传器",
+   "review": "受 uploader.jp 服务终止影响而开发的非官方自托管上传器，以编号列表形式管理文件，仅依赖 PHP 运行、内嵌 SQLite 数据库，无需独立数据库服务器。面向想在自己的服务器上运营 MOD/素材分发站的个人或社群，支持 S3 兼容存储、Turnstile 验证、SMTP 通知，并提供从 uploader.jp 备份迁移的工具。",
+   "highlights": [
+    "以编号列表管理文件，含排序、搜索、分页、DL数统计与删除密钥功能",
+    "支持 S3 兼容存储（Backblaze B2、Cloudflare R2 等）与 8MB 分片上传",
+    "内置 uploader.jp 数据备份与导入工具，IP 以哈希形式存储"
+   ],
+   "use_cases": [
+    "为自己的服务器或社群搭建文件/素材分发站",
+    "从 uploader.jp 迁移既有上传器数据",
+    "需要 S3 后端存储与 Cloudflare 防护配合的文件托管场景"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- PHP 8.1 以上（拡張: pdo_sqlite, fileinfo, mbstring, curl, openssl） ／ 5. **`https://あなたのサイト/data/uploader.sqlite` を開いて 403 になることを必ず確認**（中身が見えたらサーバー設定の誤りです）",
+     "lines": [
+      47,
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 SQLite 存数据的上传器应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "「ゲームのMOD・シナリオ置き場」「サークルの素材置き場」のように、**1つの目的のためのファイルを番号付きの一覧で並べる**アップローダーを、自分のサーバーに設置できます。PHP だけで動き、データベースサーバーは要りません。 ／ - PHP 8.1 以上（拡張: pdo_sqlite, fileinfo, mbstring, curl, openssl） ／ 5. **`https://あなたのサイト/data/uploader.sqlite` を開いて 403 になることを必ず確認**（中身が見えたらサーバー設定の誤りです）",
+   "evidence_lines": [
+    7,
+    47,
+    60
+   ]
+  },
+  "fn": "PYU224/likegetuploader",
+  "sha": "3e4d66e3b18e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

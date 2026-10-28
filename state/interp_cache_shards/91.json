@@ -11019,5 +11019,174 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4fc86c4d91be": {
+  "identity": {
+   "one_liner": "桌面 SQL 学习工作台，本地 SQLite 执行配合 AI 导师与可视化 schema",
+   "review": "PractiSQL 是一个 Electron 桌面 SQL 学习应用，提供编辑器、结果表、关系图三栏工作区，内置课程、挑战、考试与 PDF 学习手册，可连接 ChatGPT 或 API 供应商作为 AI 导师，也支持关闭 AI 纯作 SQL 练习场。面向 SQL 学习者；本机基于 SQLite 运行，PostgreSQL、MySQL、SQL Server 仅支持导入为本地 SQLite 学习副本，非在线连接执行。",
+   "highlights": [
+    "加载本地 SQLite 数据库、SQL dump 或 CSV，编辑器与本地补全无需 AI 连接即可运行",
+    "支持连接 ChatGPT 账户或 API 供应商作为导师，生成讲解与练习题并在本地验证答案",
+    "内置课程、挑战、考试、XP 学习档案与 PDF 工作簿生成，可从当前数据库直接构建"
+   ],
+   "use_cases": [
+    "SQL 初学者按课程路径学习并完成练习",
+    "导入自有 SQLite 数据库作无 AI 的 SQL 练习场",
+    "教学场景中生成含示例与答案的 PDF 学习手册"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Does an imported server database remain a live server workspace?** Supported PostgreSQL, MySQL and SQL Server imports create a local SQLite learning copy. Querying that copy is separate from querying the original server.",
+     "lines": [
+      200
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Does an imported server database remain a live server workspace?** Supported PostgreSQL, MySQL and SQL Server imports create a local SQLite learning copy. Querying that copy is separate from querying the original server.",
+     "lines": [
+      200
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A desktop SQL learning workspace that brings local SQLite, an AI tutor, visual schemas, and hands-on practice together through a coordinated **AI harness**. ／ **Use it as a SQL playground without AI.** Load a SQLite database, SQL dump or CSV, write your own queries and inspect the actual results. The editor, schema viewer and local completion do not require an AI connection. Connect the tutor when you want explanati",
+     "lines": [
+      7,
+      21
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**Does an imported server database remain a live server workspace?** Supported PostgreSQL, MySQL and SQL Server imports create a local SQLite learning copy. Querying that copy is separate from querying the original server.",
+     "lines": [
+      200
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述其为面向 SQL 学习者的桌面应用，数据库作为其运行和导入的对象而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A desktop SQL learning workspace that brings local SQLite, an AI tutor, visual schemas, and hands-on practice together through a coordinated **AI harness**. ／ **Use it as a SQL playground without AI.** Load a SQLite database, SQL dump or CSV, write your own queries and inspect the actual results. The editor, schema viewer and local completion do not require an AI connection. Connect the tutor when you want explanations or generated SQL. ／ Local SQLite databases and file imports can become learning workspaces. Supported server imports create a local learning copy; they are separate from ordinary query execution against that copy.",
+   "evidence_lines": [
+    7,
+    21,
+    113
+   ]
+  },
+  "fn": "canyrtcn/PractiSQL",
+  "sha": "4fc86c4d91be",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "19980db030b8": {
+  "identity": {
+   "one_liner": "本地 Markdown 笔记检索工具，供编码代理在会话中调用",
+   "review": "gestalt-core 是一个面向 Claude Code 和 Cursor 的本地笔记检索工具，把 Markdown 笔记索引进单个 SQLite 文件，结合 sqlite-vec 向量检索与 FTS5 BM25 词法检索，并可通过 MCP 服务器和会话钩子向代理注入相关片段。附带可复跑的 BEIR 基准脚本，全部计算在本机进行，不需要 API key；词法检索无需模型和 GPU，向量检索可在 CPU 上运行。",
+   "highlights": [
+    "在单个 SQLite 文件中提供稠密向量检索（sqlite-vec）与 FTS5 BM25 词法检索",
+    "提供 MCP 服务器及 Claude Code/Cursor 的会话钩子、斜杠命令集成",
+    "包含可复现的 BEIR 基准评估流水线与统计检验脚本"
+   ],
+   "use_cases": [
+    "为编码代理会话提供本地笔记知识检索",
+    "Obsidian 等 Markdown 笔记库的本地语义搜索",
+    "复现检索流水线的基准评测结果"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Local search over your Markdown notes for Claude Code and Cursor (re-runnable BEIR benchmarks included).** Notes in, the right section back at the right moment. A stella_en_400M_v5 dense leg in SQLite with sqlite-vec, full-text BM25 as the lexical fallback,  ／ A coding agent forgets what it learned when the session ends. A memory file carries a page of it forward, and a thousand notes do not fit in a page. Gestalt keeps the notes as the source of truth, in Markdown you own and edit, and puts the right section in fro ／ - **Dense search** over your notes: stella_en_400M_v5 vectors in sqlite-vec, with FTS5 BM25 as the lexical leg for a machine without the model, in one SQLite file. No service to run.",
+     "lines": [
+      11,
+      25,
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 作为自身索引存储的组件，而非为数据库生态提供工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Local search over your Markdown notes for Claude Code and Cursor (re-runnable BEIR benchmarks included).** Notes in, the right section back at the right moment. A stella_en_400M_v5 dense leg in SQLite with sqlite-vec, full-text BM25 as the lexical fallback, an optional cross-encoder rerank blended with the dense order, and hooks that put what matters in front of the agent at session start and before each prompt. Nothing leaves your machine and nothing needs an API key. ／ - **Dense search** over your notes: stella_en_400M_v5 vectors in sqlite-vec, with FTS5 BM25 as the lexical leg for a machine without the model, in one SQLite file. No service to run. ／ - **Agent integration**: an MCP server (`gestalt_search`), session-start and per-prompt hooks, slash commands such as `/save` and `/learn`, for Claude Code and Cursor.",
+   "evidence_lines": [
+    11,
+    29,
+    31
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "phbui/gestalt-core",
+  "sha": "19980db030b8",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

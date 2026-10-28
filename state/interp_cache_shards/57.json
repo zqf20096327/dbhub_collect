@@ -9325,5 +9325,141 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "93993fb6f15f": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 AI 记忆系统模板，含服务版与 DSH 插件版",
+   "review": "提供一套可部署的记忆系统模板：版本A为独立 Python 服务（HTTP :8095），用 SQLite 存储记忆、日志、事件与自述；版本B是 DSH 原生插件，只注册工具并经 HTTP 调用A，用于给聊天机器人（如 AstrBot、QQ 机器人）注入和检索记忆。仓库同时含信件与演示导出目录，README 明确列出未实现的功能限制。",
+   "highlights": [
+    "提供独立进程服务版（HTTP :8095，SQLite + 检索 + 日志/事件 + 自述/日记）",
+    "提供 DSH 原生插件版，只注册工具，通过 HTTP 调用服务版，不复制数据",
+    "将自述与被唤醒的记忆注入 system prompt，支持按线索检索记忆"
+   ],
+   "use_cases": [
+    "为 DSH / AstrBot / QQ 机器人等宿主提供跨会话记忆",
+    "自建独立记忆服务供脚本或自写桥接程序调用",
+    "浏览 demo/vault 了解记忆系统的文件组织形态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**A 服务版**|emplate/版本A-服务版/|独立进程（HTTP :8095），SQLite + 检索 + 日志/事件 + 自述/日记|直接跑 Python，任何宿主都能调|用 AstrBot、自己写的桥、脚本的人|",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 仅声明用 SQLite 存储记忆数据，项目本身服务于聊天机器人记忆场景，而非为数据库生态提供工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0；信与说明文字随仓库，模板代码各自带 LICENSE",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**A 服务版**|emplate/版本A-服务版/|独立进程（HTTP :8095），SQLite + 检索 + 日志/事件 + 自述/日记|直接跑 Python，任何宿主都能调|用 AstrBot、自己写的桥、脚本的人| ／ |**B DSH 插件版**|emplate/版本B-DSH插件版/|DSH 原生插件，只注册工具，HTTP 调 A|dsh plugin add link:<目录>|在 DSH 里养鱼、接 QQ 插件的人|",
+   "evidence_lines": [
+    21,
+    22
+   ]
+  },
+  "fn": "zhugeweimu/DSH-a-complete-life-for-every-fish",
+  "sha": "93993fb6f15f",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "210bde79840c": {
+  "identity": {
+   "one_liner": "AI 代理审计黑匣子：哈希链日志+防篡改存证",
+   "review": "为 AI 代理提供防篡改审计记录的工具：将每次决策写入 SHA-256 哈希链+Ed25519 签名的 append-only SQLite 日志，通过 RFC 3161 TSA/OpenTimestamps 做外部时间锚定，并可导出供第三方离线验证的 attestation。面向欧洲 AI 供应商的 GDPR/AI Act 合规场景，提供 FastAPI 服务、MCP 工具与独立验证器，以 pip/Docker 部署。",
+   "highlights": [
+    "提供 SHA-256 哈希链+Ed25519 签名的 append-only 事件日志（每实例一个 SQLite 文件）",
+    "支持 RFC 3161 TSA、OpenTimestamps/Bitcoin 多层外部时间锚定及 Merkle fleet 聚合",
+    "提供独立验证器与 audit-pack 导出，供第三方离线核验"
+   ],
+   "use_cases": [
+    "AI 代理决策记录的合规存证（GDPR/AI Act 日志义务）",
+    "面向审计师/DPO 的第三方可验证导出",
+    "对代理输入转录的运行时防护检测（可插拔 guardrail 事件源）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "aircraft. One instance = one SQLite file, one key pair, one chain. The ／ ├── store.py THE CORE: append-only SQLite, parameterized queries, lock",
+     "lines": [
+      98,
+      356
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其日志数据的内置存储，项目本身为 AI 代理审计应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " aircraft. One instance = one SQLite file, one key pair, one chain. The ／ - **The journal is the product** — chain, signatures, append-only storage, ／ noirebox serve             # API on http://127.0.0.1:8768/docs",
+   "evidence_lines": [
+    98,
+    101,
+    122
+   ]
+  },
+  "fn": "noirebox/noirebox",
+  "sha": "210bde79840c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

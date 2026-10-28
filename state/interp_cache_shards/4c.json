@@ -11304,5 +11304,108 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1cc5d9dc7141": {
+  "identity": {
+   "one_liner": "单 PHP 文件加 SQLite 的自托管无 Cookie 网站分析工具",
+   "review": "Puls 是一个自托管的网站流量分析应用，将整个程序打包为单个 PHP 文件，使用内置 SQLite 存储数据，无需独立数据库服务器。面向自行运营中小型网站的用户，提供页面浏览、访客、事件、目标和机器人识别等统计，并通过脚本标签采集数据。项目自述不适用于超大流量或电商/热图类需求。",
+   "highlights": [
+    "单个 PHP 文件运行于 PHP 8.3 主机，内置 SQLite 存储，数据为一个可复制或备份的文件",
+    "无 Cookie、不存储 IP，访客以随机盐哈希表示并在当日删除盐值",
+    "支持自定义事件、漏斗、CSV/JSON API、多站点多用户及只读分享链接"
+   ],
+   "use_cases": [
+    "自托管网站的流量与访客统计",
+    "需要无 Cookie 方案以免除同意弹窗的场景",
+    "无 SSH 的共享主机或 Docker 环境的轻量部署分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|GoatCounter|One Go binary|SQLite or PostgreSQL|None|Free, donation-supported|EUPL (modified)| ／ |Umami|Node.js app, or Docker|PostgreSQL|None|Free tier and paid plans|MIT| ／ |Plausible CE|Docker Compose, 2 GB RAM recommended|PostgreSQL and ClickHouse|None|Paid|AGPL-3.0|",
+     "lines": [
+      87,
+      88,
+      89
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|Matomo|PHP app|MySQL or MariaDB|Yes by default, can be turned off|Paid|GPL-3.0|",
+     "lines": [
+      90
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Self-hosted web analytics in a single PHP file and SQLite. ／ - **Your data, on your server.** One SQLite file you can copy, back up or delete. MIT licensed, no limits, no account.",
+     "lines": [
+      5,
+      36
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "|Plausible CE|Docker Compose, 2 GB RAM recommended|PostgreSQL and ClickHouse|None|Paid|AGPL-3.0| ／ - Millions of pageviews a month on one site: a database built for analytics, like Plausible's ClickHouse, stays fast at that size. Puls's dashboard slows down there; making it faster is on the roadmap.",
+     "lines": [
+      89,
+      98
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|Matomo|PHP app|MySQL or MariaDB|Yes by default, can be turned off|Paid|GPL-3.0|",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 SQLite 作为自身的数据存储来提供网站分析功能，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted web analytics in a single PHP file and SQLite. ／ - **One file, no infrastructure.** A PHP file, a dashboard page and SQLite. No Node, no Docker, no database server, no build step. It runs on ordinary PHP web hosting. ／ - **Your data, on your server.** One SQLite file you can copy, back up or delete. MIT licensed, no limits, no account.",
+   "evidence_lines": [
+    5,
+    34,
+    36
+   ]
+  },
+  "fn": "webready-se/puls",
+  "sha": "1cc5d9dc7141",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

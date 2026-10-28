@@ -10384,5 +10384,150 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ff919f979410": {
+  "identity": {
+   "one_liner": "本地桌面工作台，集中管理多 AI 编码代理的终端、审批与成本",
+   "review": "agentglass 是一个 Electron 桌面应用，把 Claude Code、Codex、Gemini CLI、OpenCode 等编码代理的 tmux 会话、diff、PR、浏览器和权限审批聚合到一个窗口，支持从手机远程批准操作，数据以 SQLite 文件存在本地磁盘。面向同时运行多个 AI 编码代理的开发者；macOS 构建尚未签名，Windows 未在真机验证。",
+   "highlights": [
+    "将多个 AI 编码代理的终端会话、diff、PR 与审批请求聚合到一个桌面窗口，并提供 Android 配套应用远程批准",
+    "本地运行，数据存于单个 SQLite 文件，无账号、无云端、无遥测，外发通道（webhook、Explain）默认关闭",
+    "内置 MCP 服务器驱动的浏览器面板与插件机制，插件为带限定令牌的独立进程"
+   ],
+   "use_cases": [
+    "同时运行多个 AI 编码代理并集中查看成本、token 与工具调用",
+    "对代理的危险操作设置审批门，在桌面或手机上放行",
+    "在单窗口内完成代理产出的代码审查、提交与 PR 处理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Your machine holds everything: a SQLite file on your own disk, no account, no ／ No account, no cloud, no telemetry. Everything lives in a SQLite file on your ／ dependency-light on purpose: a Bun/SQLite server, a React/Vite UI, an Electron",
+     "lines": [
+      96,
+      117,
+      177
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为应用本地状态存储，项目本身是为 AI 编码代理服务的桌面工作台，不面向数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Run your agents.** It attaches to the sessions already open in tmux, and it ／ Your machine holds everything: a SQLite file on your own disk, no account, no ／ dependency-light on purpose: a Bun/SQLite server, a React/Vite UI, an Electron",
+   "evidence_lines": [
+    28,
+    96,
+    177
+   ]
+  },
+  "fn": "SirAllap/agentglass",
+  "sha": "ff919f979410",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bd1db1592b91": {
+  "identity": {
+   "one_liner": "开放的职位与自由职业订单聚合库，节点共享至中心合并去重",
+   "review": "OpenRadar 是一个聚合招聘 boards、RSS、Telegram 和邮件提醒中职位信息的开放网络项目：任何人可自建节点采集数据并与中心 hub 合并去重，用户通过搜索、过滤和评分浏览线索。面向求职者和自由职业者，支持 HTTP API、RSS 和 MCP server 访问同一数据源。持久化部署需通过 Docker 运行 PostgreSQL 17，无 DATABASE_URL 时数据仅存于内存。",
+   "highlights": [
+    "支持从 boards、RSS、Telegram 频道和邮件提醒采集职位信息，节点与 hub 合并去重",
+    "提供 HTTP API、按查询生成 RSS 及 MCP server 访问同一 feed",
+    "提供 Python SDK 与 TypeScript 客户端，支持 webhook 方式接入自定义 parser"
+   ],
+   "use_cases": [
+    "自托管节点聚合多个来源的职位/订单并设置过滤与通知",
+    "通过 MCP server 或 HTTP API 将职位 feed 接入其他工具",
+    "部署持久化节点需通过 Docker 配置 PostgreSQL 17"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Without `DATABASE_URL` the node keeps everything in memory. For a persistent node, use PostgreSQL 17 through Docker: ／ cp .env.example .env # set RADAR_ADMIN_TOKEN, POSTGRES_PASSWORD, DATABASE_URL",
+     "lines": [
+      54,
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明节点使用 PostgreSQL 17 做持久化存储，项目本身是职位聚合应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Without `DATABASE_URL` the node keeps everything in memory. For a persistent node, use PostgreSQL 17 through Docker: ／ OpenRadar is an open base of job vacancies and freelance orders. Parsers, nodes and people add posts from boards, RSS feeds, Telegram channels and email alerts; the hub merges duplicates and keeps one clean feed. ／ - **RSS for any query**, an HTTP API and an MCP server over the same feed.",
+   "evidence_lines": [
+    54,
+    9,
+    23
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "MikhailSagalaev/openradar",
+  "sha": "bd1db1592b91",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

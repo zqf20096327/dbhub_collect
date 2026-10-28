@@ -10503,5 +10503,187 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "98d1efa53938": {
+  "identity": {
+   "one_liner": "ParadeDB 的官方 Entity Framework Core 集成库",
+   "review": "该项目是 ParadeDB 官方提供的 .NET Entity Framework Core 集成库，供 .NET 开发者在 ORM 中使用 ParadeDB 的全文检索、向量检索等能力，要求 .NET 8+、EF Core 8+、PostgreSQL 15+、pgvector 0.7+ 及 ParadeDB/pg_search 0.26.2+，通过 NuGet 分发，采用 MIT 许可证。",
+   "highlights": [
+    "官方提供 Entity Framework Core 集成",
+    "支持全文检索、向量检索与混合检索",
+    "要求 .NET 8+、EF Core 8+、PostgreSQL 15+、pgvector 0.7+"
+   ],
+   "use_cases": [
+    "在 .NET 应用中通过 EF Core 使用 ParadeDB 全文检索",
+    "在 EF Core 中使用向量/混合检索查询 PostgreSQL 数据"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Just use Postgres ／ One Postgres for your application data, full-text search, vector retrieval, and aggregations. ／ |PostgreSQL|15+|",
+     "lines": [
+      7,
+      8,
+      34
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 ParadeDB/PostgreSQL 提供 EF Core 集成的 ORM 组件，服务于数据库生态而非直接面向最终用户的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## ParadeDB for Entity Framework Core ／ The official Entity Framework Core integration for ParadeDB. Get started with the setup guide. ／ |PostgreSQL|15+|",
+   "evidence_lines": [
+    24,
+    26,
+    34
+   ]
+  },
+  "fn": "paradedb/efcore-paradedb",
+  "sha": "98d1efa53938",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "458c63325d05": {
+  "identity": {
+   "one_liner": "支持达梦及多种数据库的 macOS 桌面连接管理工具",
+   "review": "这是一个基于 React + Electron + Java 17 的 macOS 数据库桌面客户端，通过 JDBC 驱动和原生客户端连接管理 DM、MySQL、PostgreSQL、Oracle、SQL Server、SQLite、MongoDB 与 Redis，提供对象浏览、SQL 工作台、表设计器、CSV/INSERT 导出及本地加密凭据存储，并内置 MCP 入口供 AI 客户端以只读方式使用已保存连接。适用于需要在 macOS 上操作多种数据库（尤其是达梦）的开发与运维人员；仅支持桌面端本地运行，不含权限管理、备份恢复、SSH 隧道等功能。",
+   "highlights": [
+    "通过 JDBC 与原生客户端连接 DM、MySQL、PostgreSQL、Oracle、SQL Server、SQLite、MongoDB、Redis 八种数据库，支持对象浏览、SQL 工作台与数据导出",
+    "提供 DM/MySQL 图形化表设计器与方言提示，危险语句执行前二次确认",
+    "内置 Argon2id + AES-256-GCM 本地加密存储，并提供 stdio MCP 服务供 AI 客户端复用连接"
+   ],
+   "use_cases": [
+    "在 macOS 上集中管理多种数据库连接并浏览/查询对象",
+    "达梦数据库的 SQL 开发与表结构管理",
+    "通过 MCP 让 Claude Code 等 AI 客户端以只读方式查询已配置的数据库"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "数据库连接工具是支持 DM、MySQL、MongoDB、Redis、PostgreSQL、Oracle、SQL Server 与 SQLite 的 macOS 数据库桌面工具。2.0 版使用 **React + Electron + Java 17 后端**：界面使用 React，JDBC、原生客户端、对象元数据、SQL 执行、事务、本地加密存储和数据导出核心由 Java 负责。 ／ |PostgreSQL|`org.postgresql.Driver`（内置）|5432|`jdbc:postgresql://host:5432/database`|",
+     "lines": [
+      3,
+      45
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "数据库连接工具是支持 DM、MySQL、MongoDB、Redis、PostgreSQL、Oracle、SQL Server 与 SQLite 的 macOS 数据库桌面工具。2.0 版使用 **React + Electron + Java 17 后端**：界面使用 React，JDBC、原生客户端、对象元数据、SQL 执行、事务、本地加密存储和数据导出核心由 Java 负责。 ／ MySQL Connector/J 8.3 已随应用后端内置；达梦驱动仍需按服务器版本导入。新建连接时先选择数据库类型，MySQL 默认直接使用内置驱动，也可导入其他版本：",
+     "lines": [
+      3,
+      37
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "数据库连接工具是支持 DM、MySQL、MongoDB、Redis、PostgreSQL、Oracle、SQL Server 与 SQLite 的 macOS 数据库桌面工具。2.0 版使用 **React + Electron + Java 17 后端**：界面使用 React，JDBC、原生客户端、对象元数据、SQL 执行、事务、本地加密存储和数据导出核心由 Java 负责。 ／ |Oracle|`oracle.jdbc.OracleDriver`（导入）|1521|`jdbc:oracle:thin:@//host:1521/service`|",
+     "lines": [
+      3,
+      46
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "数据库连接工具是支持 DM、MySQL、MongoDB、Redis、PostgreSQL、Oracle、SQL Server 与 SQLite 的 macOS 数据库桌面工具。2.0 版使用 **React + Electron + Java 17 后端**：界面使用 React，JDBC、原生客户端、对象元数据、SQL 执行、事务、本地加密存储和数据导出核心由 Java 负责。 ／ |SQLite|`org.sqlite.JDBC`（内置）|—|`jdbc:sqlite:/path/to/database.db`|",
+     "lines": [
+      3,
+      48
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "数据库连接工具是支持 DM、MySQL、MongoDB、Redis、PostgreSQL、Oracle、SQL Server 与 SQLite 的 macOS 数据库桌面工具。2.0 版使用 **React + Electron + Java 17 后端**：界面使用 React，JDBC、原生客户端、对象元数据、SQL 执行、事务、本地加密存储和数据导出核心由 Java 负责。 ／ |SQL Server|`com.microsoft.sqlserver.jdbc.SQLServerDriver`（内置）|1433|`jdbc:sqlserver://host:1433;databaseName=database`|",
+     "lines": [
+      3,
+      47
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "MySQL Connector/J 8.3 已随应用后端内置；达梦驱动仍需按服务器版本导入。新建连接时先选择数据库类型，MySQL 默认直接使用内置驱动，也可导入其他版本： ／ |达梦（DM）|`dm.jdbc.driver.DmDriver`|5236|`jdbc:dm://host:5236`|",
+     "lines": [
+      37,
+      41
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是为连接和管理多种数据库服务的桌面工具，本身不使用某一数据库存储业务数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "数据库连接工具是支持 DM、MySQL、MongoDB、Redis、PostgreSQL、Oracle、SQL Server 与 SQLite 的 macOS 数据库桌面工具。2.0 版使用 **React + Electron + Java 17 后端**：界面使用 React，JDBC、原生客户端、对象元数据、SQL 执行、事务、本地加密存储和数据导出核心由 Java 负责。 ／ Java 后端另带一个 stdio MCP 入口（`com.dmconnect.mcp.McpLauncher`），让 Claude Code 等 AI 客户端直接使用桌面端保存的连接。它和桌面端共用 `profiles.json` 与本地加密存储，不写 SQL 历史。 ／ |达梦（DM）|`dm.jdbc.driver.DmDriver`|5236|`jdbc:dm://host:5236`|",
+   "evidence_lines": [
+    3,
+    77,
+    41
+   ]
+  },
+  "fn": "xia-yj/dm-connect",
+  "sha": "458c63325d05",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

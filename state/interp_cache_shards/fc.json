@@ -10038,5 +10038,322 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ebb1274fa546": {
+  "identity": {
+   "one_liner": "AI 原生应用的 TypeScript 引擎，提供摄取、OCR、RAG 与知识图谱能力",
+   "review": "Launchstack 是一套 TypeScript 包集合与 Next.js 参考应用，实现文档摄取、OCR、RAG 检索、知识图谱和后台任务编排，使用 PostgreSQL（启用 pgvector 扩展）做持久化，经 Drizzle 管理引擎与应用两套迁移。面向要在自有应用中嵌入这些能力的开发者，目前包尚未发布到 npm，需克隆仓库以 Docker 或源码方式运行。",
+   "highlights": [
+    "提供文档摄取、OCR、分块、嵌入索引、混合检索与重排序等流水线能力",
+    "使用 PostgreSQL + pgvector 存储检索数据，并支持 Neo4j 同步",
+    "通过 pnpm workspace 组织为多个可组合包，附后台 worker 与 Docker Compose 部署"
+   ],
+   "use_cases": [
+    "自托管文档上传、组织与对话检索应用",
+    "在 Next.js 应用中嵌入 RAG 与知识图谱摄取流水线",
+    "需要后台任务编排（worker/outbox）的文档处理场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "You need a Postgres with the **pgvector** extension available — the migration ／ > `.env.example` points `DATABASE_URL` at `localhost:5433/pdr_ai_v2`, which is what Compose publishes — so the Docker and non-Docker paths share one database by default. Running your own Postgres instead? Use the commented `localhost:5432/pdr_ai` line in its p ／ |`@launchstack/store`|unpublished|Drizzle/Postgres persistence, engine schema and migrations, credentials, file tokens and credits.|",
+     "lines": [
+      53,
+      78,
+      134
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库构建使用 Postgres 存数据的应用（Drizzle/Postgres 持久化、DATABASE_URL 启动），非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "You need a Postgres with the **pgvector** extension available — the migration ／ |`@launchstack/store`|unpublished|Drizzle/Postgres persistence, engine schema and migrations, credentials, file tokens and credits.|",
+   "evidence_lines": [
+    53,
+    134
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Deodat-Lawson/LaunchStack",
+  "sha": "ebb1274fa546",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "62ca11ae7d78": {
+  "identity": {
+   "one_liner": "单二进制本地 Supabase 兼容后端，内嵌真实 Postgres，免 Docker",
+   "review": "tinbase 是一个用于本地开发与嵌入场景的 Supabase 兼容后端，可在单进程中运行 REST、Auth、Storage、Realtime 与 Edge Functions，并提供三种引擎：内嵌原生 Postgres 17、PGlite（WASM）和纯 JS 内存引擎 pg-mem 的分叉。它读取 supabase 迁移文件，官方 supabase-js 无需改动即可连接。README 明确标注为 Alpha，不适用于生产环境。",
+   "highlights": [
+    "单二进制运行，支持内嵌原生 Postgres 17、PGlite（WASM）和纯 JS 内存引擎三种引擎，supabase-js 官方 SDK 无需改动即可连接",
+    "实现 Supabase 风格的 REST/PostgREST、GoTrue 认证、Storage、Edge Functions、Realtime（Phoenix 协议）等接口",
+    "读取并应用 supabase/migrations/*.sql 与 seed.sql，迁移文件可与托管 Supabase 保持可移植，并附带 Studio 风格管理面板"
+   ],
+   "use_cases": [
+    "无需 Docker 的本地 Supabase 开发与原型验证",
+    "在浏览器或嵌入式环境中以进程内方式运行完整后端",
+    "轻量部署单文件可执行后端用于本地/预览环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Local Supabase dev without Docker — one process, real Postgres, and it even runs in the browser. It speaks the same wire protocols as hosted Supabase, so the **official `@supabase/supabase-js` SDK works unchanged** - REST, Auth, Storage, and Realtime. ／ A pure-JS backend built on PGlite (Postgres compiled to WASM), with an embedded-native-Postgres and an ultralight pure-JS (`@tinbase/pg-mem`) engine too. One command, real Row Level Security, and 1:1 with Supabase's APIs and migration conventions. ／ - **Real Postgres semantics.** RLS policies, `auth.uid()`, triggers, FKs - it is Postgres.",
+     "lines": [
+      5,
+      7,
+      17
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Database|real Postgres 17 + RLS|real Postgres 17 + RLS|in-memory, pure-JS¹|real Postgres (PGlite) + RLS|SQLite|Postgres 17|",
+     "lines": [
+      231
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是用 Postgres/PGlite 存数据并向应用提供 Supabase 风格 API 的后端系统，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A pure-JS backend built on PGlite (Postgres compiled to WASM), with an embedded-native-Postgres and an ultralight pure-JS (`@tinbase/pg-mem`) engine too. One command, real Row Level Security, and 1:1 with Supabase's APIs and migration conventions. ／ > **Alpha — not production-ready yet.** Great for local development, prototypes, and embedded/browser use. ／ - **Three engines, one API.** Default is embedded native Postgres 17 (macOS/Linux): ~59 MB of RAM at boot, PocketBase-class footprint, zero semantic differences; the first run downloads ~12 MB of binaries. `--engine wasm` runs PGlite (Postgres compiled to WASM) instead - portable, browser-ready, and the default on Windows. `--engine pgmem` is an ultralight pure-JS in-memory engine for local dev / previews - see Engines.",
+   "evidence_lines": [
+    7,
+    10,
+    18
+   ]
+  },
+  "fn": "tinbase/tinbase",
+  "sha": "62ca11ae7d78",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "50762d3f1d26": {
+  "identity": {
+   "one_liner": "Litestream 的 Node.js 移植，将 SQLite WAL 流式复制为 LTX 文件",
+   "review": "该库是一个 TypeScript 实现的 SQLite 流式复制与灾难恢复工具，读取 SQLite 的 WAL 文件生成不可变 LTX 文件并上传到远端副本，支持增量同步、全量快照、按事务 ID 或时间点恢复以及只读跟随副本。面向使用 Node.js（>=24，依赖内置 node:sqlite）开发 SQLite 应用的开发者，提供 file、S3、PostgreSQL 三种副本后端。",
+   "highlights": [
+    "读取 SQLite WAL 文件并生成 LZ4 压缩、带事务 ID 的 LTX 文件，上传至 file/S3/PostgreSQL 副本",
+    "支持增量 sync、level-9 全量快照、按 txID/timestamp 恢复、follow 持续恢复只读副本",
+    "提供 PgLeaser 分布式租约与 fenced writes，限制单一写入者，并支持 worker thread 运行复制"
+   ],
+   "use_cases": [
+    "为单机 SQLite 数据库建立远程副本以进行灾难恢复",
+    "维护持续更新的只读副本数据库",
+    "按事务 ID 或时间点恢复数据库到指定状态"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# sqlite-js-stream ／ A **Node.js port of Litestream** — SQLite streaming ／ replication and disaster recovery — written in **TypeScript** and built on the built-in `node:sqlite`.",
+     "lines": [
+      1,
+      3,
+      4
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "and PostgreSQL addons as **`@platformatic/sqlite-js-stream-s3`** and ／ pnpm add @platformatic/sqlite-js-stream-pg # optional addon ／ The `@platformatic/sqlite-js-stream-pg` addon provides a PostgreSQL replica client.",
+     "lines": [
+      31,
+      37,
+      176
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|Multiple app instances sharing one consistent dataset|Don't use SQLite + this replication. Use a client-server DB (Postgres/MySQL) or a real shared-file lock + single writer.|",
+     "lines": [
+      400
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为 SQLite 数据库提供流式复制与恢复能力，是为数据库生态服务的工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A **Node.js port of Litestream** — SQLite streaming ／ (Write-Ahead Log)** file into immutable, chronological **LTX (Log Transaction)** files on a remote ／ replica (S3, a local directory, etc.), and can **restore** a database from those files.",
+   "evidence_lines": [
+    3,
+    8,
+    9
+   ]
+  },
+  "fn": "platformatic/sqlite-js-stream",
+  "sha": "50762d3f1d26",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3fa6dbfed87e": {
+  "identity": {
+   "one_liner": "C++20 业务应用开发平台，含编译器、设计器、应用服务器与多数据库层",
+   "review": "OES 是一个用 C++20 编写的元数据驱动开发平台，开发者用元数据描述业务（目录、单据、登记簿、科目表），平台将其编译为数据库表、表单和报表。它面向构建 ERP/BPM 类业务系统的人员，内置 Firebird/PostgreSQL/ODBC/SQLite 多数据库驱动、脚本语言、远程调试器和 MCP 服务器供 AI 助手操作配置。Web 客户端仍在开发中。",
+   "highlights": [
+    "元数据驱动的编译器与设计器，将业务描述转换为数据库表、表单和报表，并以 diff 方式管理 schema 变更",
+    "提供 MCP 服务器（113 个工具），支持 AI 助手读取和编辑元数据、运行代码、驱动调试器",
+    "内置 Firebird、PostgreSQL、ODBC、SQLite 多数据库驱动层，附应用服务器与按 base 分进程的集群"
+   ],
+   "use_cases": [
+    "构建库存、会计、工资、销售等记账类业务应用",
+    "让 AI 助手通过 MCP 工具协助编写和检查平台配置",
+    "以集群方式为多个业务库提供每库独立进程的应用服务"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Firebird and PostgreSQL side by side, one worker pool for all, and each base with its own ／ - **Databases** — Firebird (embedded, shipped with the distribution) and PostgreSQL for production; ／ The top-level `CMakeLists.txt` (CMake ≥ 3.20) builds every target. DB drivers opt in — `OES_USE_FIREBIRD`, `OES_USE_POSTGRESQL`, `OES_USE_ODBC` (all default OFF); SQLite is always embedded, no flag:",
+     "lines": [
+      71,
+      85,
+      158
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "ODBC; SQLite for tests and logging. ／ The top-level `CMakeLists.txt` (CMake ≥ 3.20) builds every target. DB drivers opt in — `OES_USE_FIREBIRD`, `OES_USE_POSTGRESQL`, `OES_USE_ODBC` (all default OFF); SQLite is always embedded, no flag:",
+     "lines": [
+      86,
+      158
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "提供多数据库驱动层和 schema diff 管理，为业务应用的开发与数据库使用提供服务，而非单一存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "source-available",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It ships with everything that loop needs: a designer, a compiler and bytecode interpreter, a remote ／ - **Databases** — Firebird (embedded, shipped with the distribution) and PostgreSQL for production; ／ The top-level `CMakeLists.txt` (CMake ≥ 3.20) builds every target. DB drivers opt in — `OES_USE_FIREBIRD`, `OES_USE_POSTGRESQL`, `OES_USE_ODBC` (all default OFF); SQLite is always embedded, no flag:",
+   "evidence_lines": [
+    10,
+    85,
+    158
+   ]
+  },
+  "fn": "open-enterprise-solutions/enterprise",
+  "sha": "3fa6dbfed87e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

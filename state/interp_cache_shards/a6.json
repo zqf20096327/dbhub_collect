@@ -10908,5 +10908,182 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5a1e517400d6": {
+  "identity": {
+   "one_liner": "Rust 代码语义索引器，构建知识图谱并提供 MCP 工具",
+   "review": "Coraline 是一个用 Rust 实现的本地代码智能工具，为 AI 助手构建语义知识图谱，提供符号级查询、调用关系分析和基于 ONNX 嵌入模型的语义搜索，并通过 MCP 协议向 Claude Desktop、Claude Code、OpenCode 等客户端暴露 38 个工具。它对源代码只读，数据写入自身 .coraline 目录；索引与图查询无需嵌入模型，语义搜索则需从 HuggingFace 下载模型。",
+   "highlights": [
+    "支持索引 37 种语言，其中 36 种随附 tree-sitter 语法",
+    "提供 38 个 MCP 工具，包含符号搜索、callers/callees 与影响面分析",
+    "嵌入模型经 ONNX Runtime 本地运行，语义搜索之外的功能无需该模型"
+   ],
+   "use_cases": [
+    "为 Claude Desktop / Claude Code / OpenCode 等 MCP 客户端提供代码库语义检索",
+    "对大型代码库做符号定位、调用链与影响范围查询",
+    "本地离线的代码语义搜索"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "项目是服务于代码索引与 AI 助手的开发工具，SQLite 仅作为其内部存储后端被提及。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：MIT OR Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Coraline is a Rust-based code intelligence system that builds semantic knowledge graphs for AI assistants. It combines ideas from CodeGraph and Serena to provide: ／ Coraline exposes 38 tools for code intelligence: ／ - 🌐 **MCP integration** - Works with Claude Desktop, Claude Code, and OpenCode",
+   "evidence_lines": [
+    15,
+    110,
+    24
+   ]
+  },
+  "fn": "greysquirr3l/coraline",
+  "sha": "5a1e517400d6",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "18d6314310f6": {
+  "identity": {
+   "one_liner": "自托管 VPS/Web 主机控制面板，单面板管理站点、SSL 与服务器",
+   "review": "一个面向 Debian/Ubuntu 的自托管虚拟主机控制面板，提供站点截图预览、文件管理、DNS、SSL、WordPress、磁盘流量统计及套餐（域名、存储、邮箱、数据库限额）编辑等功能，可通过一行安装脚本部署。适合自建 VPS 并托管多个网站、需要统一管理面板的用户使用。",
+   "highlights": [
+    "通过 headless Chrome 生成站点首页截图并提供 24 小时缓存的卡片式预览",
+    "支持 Nginx、Apache、OpenLiteSpeed 三种 Web 服务器及站点、SSL、DNS、邮件、Docker、cron 等管理",
+    "提供套餐编辑器，可配置域名、存储、FTP、邮箱、WordPress 与数据库限额"
+   ],
+   "use_cases": [
+    "自托管 VPS 上集中管理多个网站与主机资源",
+    "为客户提供虚拟主机套餐（域名/存储/流量限额）的管理面板",
+    "在单台服务器上并行运行多种 Web 服务器并统一管理 SSL 与 DNS"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为托管服务器环境提供管理面板组件，数据库仅是其被管理的对象之一而非存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- ✅ **Webserver selection** (nginx, apache, openlitespeed) ／ - ✅ **Database limits** ／ - ✅ **Test VPS**: `127.0.0.1:2087` - fully functional",
+   "evidence_lines": [
+    22,
+    28,
+    32
+   ]
+  },
+  "fn": "asifletzshop/letzcontrol",
+  "sha": "18d6314310f6",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fab9fa71853c": {
+  "identity": {
+   "one_liner": "DuckDB 文件系统扩展，通过 HTTP 读写 TiDB Filesystem 数据面",
+   "review": "tidbfs 是一个 C++ 编写的 DuckDB 文件系统扩展，直接调用 TiDB Filesystem 的 HTTP API 读写分析文件，支持 Parquet/CSV/JSON 读写、分区 COPY，并实验性提供在扩展存储上运行 DuckDB 存储引擎的原生数据库模式。面向在 DuckDB 中直接查询远程 TiDB 文件系统数据的用户，需自建与 DuckDB 版本严格匹配的扩展。",
+   "highlights": [
+    "支持读取和写入 Parquet、CSV、JSON，支持 glob/Hive 分区裁剪",
+    "实验性原生数据库模式：通过 tidbfs+db:/// 在扩展存储上运行 DuckDB 存储引擎及 WAL",
+    "免 Python/FUSE，直接调用 HTTP API，无需下载完整 Parquet 文件"
+   ],
+   "use_cases": [
+    "在 DuckDB CLI 中直接查询 TiDB Filesystem 上的远程分析文件",
+    "将 DuckDB 查询结果以 Parquet/CSV/JSON 导出回远端文件系统",
+    "多进程间通过共享存储交接 DuckDB 数据库状态"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "TiDB Filesystem HTTP data plane, with experimental native `.duckdb` storage. It works in the DuckDB CLI and does not require ／ blob bytes from TiDB while size and revision come from the same SQL statement.",
+     "lines": [
+      6,
+      208
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 TiDB Filesystem 数据面提供 DuckDB 扩展，属服务数据库生态的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`tidbfs` is a C++ DuckDB filesystem extension for reading and writing analytics files over the ／ TiDB Filesystem HTTP data plane, with experimental native `.duckdb` storage. It works in the DuckDB CLI and does not require ／ It calls the existing HTTP APIs directly and includes no Go bridge or Go runtime.",
+   "evidence_lines": [
+    5,
+    6,
+    22
+   ]
+  },
+  "fn": "siddontang/duckdb-tidbfs",
+  "sha": "fab9fa71853c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9754,5 +9754,169 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c7f8a48b5b82": {
+  "identity": {
+   "one_liner": "Rust 编写的 PostgreSQL/MySQL/SQLite 桌面 GUI 数据库客户端",
+   "review": "Tabletist 是一个桌面图形界面的数据库客户端，用 Rust 和 egui 编写，连接 PostgreSQL、MySQL 和 SQLite，提供连接管理、数据表格浏览与编辑、SQL 编辑器、SSH 隧道和只读会话等能力，适合开发者和运维人员在 Linux、macOS、Windows 上日常查看和修改数据库数据。安装以各平台发布二进制或源码编译为主。",
+   "highlights": [
+    "支持连接 PostgreSQL、MySQL、SQLite，含 TLS 与 SSH 隧道，密码存于系统钥匙串",
+    "提供数据网格编辑（保存前生成 SQL 并以单事务提交）和带只读事务、超时、取消的 SQL 编辑器",
+    "生产连接默认只读，写保存会检测并发行冲突并逐行询问处理方式"
+   ],
+   "use_cases": [
+    "开发/测试/生产环境的日常数据浏览与小规模编辑",
+    "通过 SSH 隧道安全访问远程数据库并执行 SQL 脚本",
+    "需要键盘优先、跨平台原生界面的数据库操作场景"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Databases: PostgreSQL, MySQL, SQLite ／ A fast, native database client for **PostgreSQL**, **MySQL** and",
+     "lines": [
+      11,
+      13
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Databases: PostgreSQL, MySQL, SQLite ／ A fast, native database client for **PostgreSQL**, **MySQL** and",
+     "lines": [
+      11,
+      13
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Databases: PostgreSQL, MySQL, SQLite ／ **SQLite**. Written in Rust with egui; runs on",
+     "lines": [
+      11,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是直接连接并操作 PostgreSQL/MySQL/SQLite 的数据库客户端工具，为数据库使用服务，而非用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A fast, native database client for **PostgreSQL**, **MySQL** and ／ - Saved connections grouped in a picker, each tagged with its environment ／ - A SQL editor per connection (Cmd/Ctrl+T): run the statement at the cursor",
+   "evidence_lines": [
+    13,
+    26,
+    61
+   ]
+  },
+  "fn": "igor-alexandrov/tabletist",
+  "sha": "c7f8a48b5b82",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f75d884e1b89": {
+  "identity": {
+   "one_liner": "企业 AI 资产治理控制平面，插件化架构，管理 MCP/Skill/Agent 资产",
+   "review": "这是一个自托管的企业 AI 资产治理平台，把 MCP 服务、Skill、Agent、AI 应用统一登记为资产，提供身份、权限（86 个工具的 permission 声明）、计量与审计功能。面向需要治理内部 AI 资产的企业运维与安全团队。它基于 cordis 插件树组织，支持 Docker/npm 部署，存储默认 JSON 集合，可切换 SQLite 后端，多节点 HA 的 Postgres 后端仍在规划中。",
+   "highlights": [
+    "提供 29 个插件包，覆盖身份、MCP、Skill、Agent、计量、审计等业务域，可独立启停",
+    "平台自身可作 MCP Server，86 个注册工具均声明最小权限 permission",
+    "存储支持 JSON 集合与 SQLite（WAL + synchronous=FULL + 事务）双形态，计量数据存于 SQLite"
+   ],
+   "use_cases": [
+    "企业内 MCP 服务、Agent、Skill 资产的注册、审批与生命周期管理",
+    "按部门 / Agent / Skill 维度聚合模型调用成本并出报表",
+    "为 AI 资产操作留存审计日志并配置告警规则"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "企业单节点部署建议开启 SQLite 集合后端(数据完整性 / 内存有界,详见「诚实边界」): ／ PLATFORM_STORAGE=sqlite npm start # 业务集合切换 SQLite 后端(WAL + 事务,首启自动回填既有 JSON 数据) ／  落为引擎级 UNIQUE INDEX,JSON 文件保留为回滚源)。计量与事务数据始终为 SQLite",
+     "lines": [
+      87,
+      90,
+      209
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "(`data/txnstore.db`)。**两种形态都是单进程、无水平扩展**——多节点 HA 需要 Postgres",
+     "lines": [
+      210
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "平台以 SQLite 作为自身业务集合与计量数据的存储后端，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "一套身份 · 一套权限 · 一套计量 · 一套审计。**29 个插件包，按需启用。** ／ |**资产本体**|`plugin-resource-core`|属性 schema + 生命周期状态机 + 依赖图,所有资产类型的共同底座| ／  落为引擎级 UNIQUE INDEX,JSON 文件保留为回滚源)。计量与事务数据始终为 SQLite",
+   "evidence_lines": [
+    14,
+    111,
+    209
+   ]
+  },
+  "fn": "01men/ybkkasi",
+  "sha": "f75d884e1b89",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

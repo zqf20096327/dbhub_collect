@@ -10981,5 +10981,80 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "feaed091e40a": {
+  "identity": {
+   "one_liner": "数据中心全生命周期决策支持系统，只读集成与证据链管理",
+   "review": "这是一个开源的数据中心运营决策支持项目，将设施、能耗、容量、维护、成本、事件与证据数据整合到一个租户隔离的运营模型中，供数据中心运营者做能耗、容量、可靠性与经济性分析。后端为 FastAPI，基于 PostgreSQL 存储（53 张表、RLS 多租户隔离），所有集成为只读适配器，无设施控制路径；预测精度未经生产验证。",
+   "highlights": [
+    "提供 FastAPI 只读 API 与浏览器 UI，覆盖能耗、容量、可靠性、TCO 经济性与审计证据模块",
+    "包含 53 张表的 PostgreSQL 模式，支持强制行级安全（RLS）、哈希链证据事件与数据溯源追踪",
+    "内置九类只读适配器（云定价、EPMS、CMMS、BMS、Modbus/BACnet/SNMP、Redfish、电网、天气、Hypervisor）"
+   ],
+   "use_cases": [
+    "数据中心能耗、PUE 与碳强度的监测与分析",
+    "容量规划、上架权衡与 TCO/单位经济性测算",
+    "运维工作流、审计证据链与 GRC 合规态势查看"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Served by FastAPI on uvicorn (`dcc.api_async:app`), with psycopg3 for PostgreSQL ／ PostgreSQL RLS. See API Reference for full details. ／ - The OSS core uses portable PostgreSQL SQL and can be adapted to Supabase. Supabase Auth/RLS is a deployment adapter, not a dependency of the domain model.",
+     "lines": [
+      91,
+      93,
+      57
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "oracle. `DCC_ALLOW_ANONYMOUS=true` disables enforcement for local development and logs",
+     "lines": [
+      281
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 PostgreSQL 作为自身数据存储（psycopg3 访问、RLS 租户隔离），是为数据中心运营服务的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Served by FastAPI on uvicorn (`dcc.api_async:app`), with psycopg3 for PostgreSQL ／ ### Portable PostgreSQL schema ／ Requires Python 3.11+ and PostgreSQL 14+. Do not point the demo at a production database.",
+   "evidence_lines": [
+    91,
+    95,
+    175
+   ]
+  },
+  "fn": "AAH20/data-center-commander",
+  "sha": "feaed091e40a",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

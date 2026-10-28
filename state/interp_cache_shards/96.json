@@ -12119,5 +12119,133 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3b381aac24c1": {
+  "identity": {
+   "one_liner": "基于 Rust+Tauri 的本地优先笔记应用，含块编辑器、数据库视图与全文搜索",
+   "review": "Thought Desk 是一款面向学生的本地优先笔记与学习应用，提供块编辑器、嵌套页面、日历、间隔重复闪卡和多视图数据库（表格/看板/表单等），支持导入 Canvas、Google Calendar 课表，可邀请好友对单页协同编辑。数据存储在本地单文件、离线可用，支持导出 Markdown 和 CSV。README 未提及底层使用 SQLite 等具体数据库引擎。",
+   "highlights": [
+    "块编辑器支持 / 命令、Markdown 快捷键和 LaTeX 公式",
+    "数据库支持表格、看板、画廊、列表、日历、图表、时间线、表单八种视图，含公式、关联和自动化",
+    "内置间隔重复闪卡，支持按页邀请好友实时协同编辑",
+    "支持导出 Markdown 与 CSV，数据完全保存在本地单个文件中"
+   ],
+   "use_cases": [
+    "学生记录课程笔记、作业截止日期与课表管理",
+    "用间隔重复闪卡辅助记忆与复习",
+    "离线本地保存个人知识库并导出 Markdown/CSV 备份"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是一个面向终端用户的笔记桌面应用，数据存于本地文件，README 未声明为数据库生态提供工具服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A free, local-first notes app for students: pages, assignments, a calendar, ／ Databases you can see as a table, board, gallery, list, calendar, chart, timeline or form, with formulas, relations and automations. ／ - **Your notes stay on your computer.** Everything lives in one file on your disk and works offline. Nothing leaves it unless you write a page together with a friend, and the relay that carries that writing keeps none of it.",
+   "evidence_lines": [
+    5,
+    29,
+    54
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "kusule1351-hue/thought-desk",
+  "sha": "3b381aac24c1",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "88af1eb8385a": {
+  "identity": {
+   "one_liner": "面向 Codex 长程推理/训练循环的持久化编排 Skill，内置 SQLite 状态机",
+   "review": "这是一个供 Codex 使用的 Skill 与 CLI 工具，将长时推理/训练任务中的“判断”与“等待”分离：后台独立 Worker 执行等待与验证，Runner 模型调用次数为零，通过官方 codex queue 或 exec resume 唤醒会话。状态基于 SQLite WAL 持久化，支持 local/tmux/SLURM/systemd 调度后端，适合运行多阶段推理-审查-训练流水线的 Agent 用户；平台覆盖 POSIX 与 Windows。",
+   "highlights": [
+    "基于 SQLite WAL 的持久状态机和租约式防重复机制",
+    "支持 local、tmux、SLURM、systemd 四种调度后端及 Runner 断线恢复",
+    "提供产物验证（JSON 字段、文件大小、退出码）与预算控制，仅通过官方 codex queue/exec resume 唤醒"
+   ],
+   "use_cases": [
+    "Codex Agent 执行多阶段长时推理/训练循环并在检查点等待审查",
+    "SLURM/systemd 集群上的长时任务断线恢复与防重复调度",
+    "需要模型调用次数为零的后台机械等待场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "一个用于“推理 → 审查 → 训练”长程循环的持久化 Codex Skill，内置 SQLite 状态、独立 Worker、有限启动预检和官方会话唤醒。 ／ - 基于 SQLite WAL 的持久状态机和租约式防重复机制",
+     "lines": [
+      9,
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 仅作为该编排工具自身的内置持久化状态存储（L9/L33），非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "一个用于“推理 → 审查 → 训练”长程循环的持久化 Codex Skill，内置 SQLite 状态、独立 Worker、有限启动预检和官方会话唤醒。 ／ - 基于 SQLite WAL 的持久状态机和租约式防重复机制",
+   "evidence_lines": [
+    9,
+    33
+   ]
+  },
+  "fn": "guxiaofengu-ops/long-horizon-orchestrator",
+  "sha": "88af1eb8385a",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

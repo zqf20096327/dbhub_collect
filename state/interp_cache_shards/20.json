@@ -10065,5 +10065,85 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f9e8c6439e94": {
+  "identity": {
+   "one_liner": "基于 go-kratos 的用户行为分析平台，事件经 Kafka 写入可切换的 OLAP 数仓",
+   "review": "GoWind UBA 是一个使用 go-kratos 框架开发的用户行为分析系统，提供事件、漏斗、留存、归因、分群及游戏专项等 25 个分析模型，附带 Web/C# 采集 SDK、多租户与风险规则告警。业务数据存 PostgreSQL（Ent 自动迁移），事件数据经 Kafka 由 ClickHouse 或 Apache Doris 拉取入仓，并对接 Apache Superset 做报表，适合需要自建行为分析的数据团队与运营方。",
+   "highlights": [
+    "提供 25 个分析模型，覆盖事件、漏斗、留存、归因、路径、分群与游戏专项分析",
+    "事件采集链路为 Web/C# SDK 上报至 Kafka，由 ClickHouse（Kafka 表引擎+物化视图）或 Doris（Routine Load）拉取入仓",
+    "支持多租户数据隔离、风险规则引擎与 Superset 报表对接"
+   ],
+   "use_cases": [
+    "网站/App 用户行为的漏斗、留存与归因分析",
+    "游戏运营的关卡、付费分层、LTV 与经济系统分析",
+    "多租户 SaaS 场景下的埋点采集与风险事件告警"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 的表结构由 ent 在 Core 首次启动时自动迁移（`app/core/service/configs/data.yaml` 里 ／ # PostgreSQL（业务库）：只需导入字典/初始数据（表结构已自动迁移）",
+     "lines": [
+      298,
+      304
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **OLAP 数仓二选一**：原生支持 ClickHouse 与 Apache Doris 两种 OLAP 引擎，部署时任选其一（不叠加使用），极致查询性能 ／ > **Routine Load**，ClickHouse 用 **Kafka 表引擎 + 物化视图**。`uba-ingest` 负责把 Doris 这条",
+     "lines": [
+      16,
+      128
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该平台使用 PostgreSQL 存业务数据、ClickHouse/Doris 作 OLAP 数仓、Kafka 作消息队列，属于使用数据库的应用系统而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL 的表结构由 ent 在 Core 首次启动时自动迁移（`app/core/service/configs/data.yaml` 里 ／ - **OLAP 数仓二选一**：原生支持 ClickHouse 与 Apache Doris 两种 OLAP 引擎，部署时任选其一（不叠加使用），极致查询性能 ／ - **ClickHouse 与 Apache Doris 为二选一关系**，但开关 `data.UseClickHouse` 目前是 `internal/data/data.go` 里的**编译期常量 `false`**：ClickHouse 分支被编译掉，实际只有 Doris 在跑。换引擎需改该常量并重新构建。ClickHouse 侧的读数逻辑已与 Doris 对齐（事件去重 / FINAL 读 / 派生表按天回算），切换前先 `uba-ingest ch-apply` 装配、再以 `ch-etl --loop` 按天回算；存量部署迁移与残余口径差异见 `docs/architecture.md` 的「OLAP 引擎二选一」一节",
+   "evidence_lines": [
+    298,
+    16,
+    354
+   ]
+  },
+  "fn": "tx7do/go-wind-uba",
+  "sha": "f9e8c6439e94",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

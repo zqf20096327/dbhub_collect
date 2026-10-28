@@ -10728,5 +10728,210 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d754224a6815": {
+  "identity": {
+   "one_liner": "本地优先漫画库与阅读器，Next.js+FastAPI+SQLite 单机应用",
+   "review": "这是一个在本地运行的个人漫画库管理和阅读应用，用户导入 CBZ、ZIP、图片文件夹或远程画廊后可保存进度阅读，并用收藏和阅读列表整理；后端通过 SQLAlchemy 使用 SQLite 存储元数据，支持便携备份（含 SQLite backup API 快照）与恢复。面向想在自己机器上管理漫画收藏的个人用户。",
+   "highlights": [
+    "支持导入 CBZ、ZIP、图片文件夹及库根目录，含任务进度、重试与取消",
+    "使用 SQLite（backup API）存储画廊元数据、收藏、书签、历史与设置",
+    "提供阅读进度保存、阅读列表、重复检测与便携备份/恢复功能"
+   ],
+   "use_cases": [
+    "个人本地漫画收藏的组织与阅读",
+    "无账户、无云依赖的本地内容管理",
+    "通过便携 zip 备份与恢复个人库数据"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`MITSU_DATA_DIR`|`<repo>/data`|SQLite database, thumbnails, and cache| ／ - `database/mitsu.db` — a consistent SQLite snapshot taken with SQLite's backup API",
+     "lines": [
+      186,
+      258
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该应用用 SQLite 存储画廊元数据、收藏、书签、历史与设置。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Mitsu is a **local-first** manga library and reader. It runs entirely on your own machine — no accounts, no cloud, no telemetry. Import CBZ, ZIP, image folders, or remote galleries, read them in a focused reader, and keep your collection organised in collections and reading lists. The interface is mobile-first, with an iOS-style navigation shell, and works just as well on a desktop browser. ／ - `data/database/mitsu.db` — gallery metadata, collections, bookmarks, history, jobs, and settings ／ - `database/mitsu.db` — a consistent SQLite snapshot taken with SQLite's backup API",
+   "evidence_lines": [
+    14,
+    250,
+    258
+   ]
+  },
+  "fn": "Chandu4143/mitsu",
+  "sha": "d754224a6815",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a1c34a708e67": {
+  "identity": {
+   "one_liner": "AI 每日开发日志应用，用 Claude 将随笔段落转为结构化时间线",
+   "review": "开发者每日写一段口语化日志，Claude 将其拆分为完成项、待办和事件，生成时间线、项目历史与学习路线图进度；数据存于 Neon Postgres，需自备 Anthropic API key，仅支持 Neon serverless 驱动，本地原生 Postgres 需改代码，部署需 Node.js 服务器（Vercel）。适合记录侧项目、开源工作与学习计划的开发者。",
+   "highlights": [
+    "支持用 Claude 将每日段落拆分为可编辑的结构化条目",
+    "支持路线图导入（.md/.txt/.pdf）并自动按日志勾选进度",
+    "提供 Markdown 导出、活动热力图和 PWA 安装清单"
+   ],
+   "use_cases": [
+    "开发者每日开发日志与习惯追踪",
+    "侧项目/开源工作的项目历史记录",
+    "学习路线图进度跟踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Built with Next.js 16, Neon Postgres, Tailwind CSS v4 and the Anthropic API (Claude Opus 5.5). Open source under the MIT License. ／ - A free **Neon** Postgres database. The app uses Neon's serverless HTTP driver, so a plain local Postgres won't work without code changes.",
+     "lines": [
+      13,
+      48
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是用 Neon Postgres 存储数据的 Next.js 日志应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Built with Next.js 16, Neon Postgres, Tailwind CSS v4 and the Anthropic API (Claude Opus 5.5). Open source under the MIT License. ／ - A free **Neon** Postgres database. The app uses Neon's serverless HTTP driver, so a plain local Postgres won't work without code changes.",
+   "evidence_lines": [
+    13,
+    48
+   ]
+  },
+  "fn": "abhinag007/timeline-track",
+  "sha": "a1c34a708e67",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "068280a90daf": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式单文件全文搜索数据库",
+   "review": "Persia DB 是一个用 Rust 实现的嵌入式全文搜索数据库，定位为链接进应用进程、以单个 .persia 文件存储，规划支持 BM25F 排序、默认查询松弛和对象存储上的段格式。当前为 Pre-alpha：仅段读写、分析器、单文件容器和小型 CLI 可用，查询、排序与嵌入式 API 尚未实现，格式在 v1.0 前不稳定。",
+   "highlights": [
+    "嵌入式设计：调用进程即数据库，打开单个 .persia 文件，无需守护进程、配置文件或集群",
+    "段格式为不可变字节，规格支持 S3、GCS、Azure Blob 等对象存储前置无状态查询节点",
+    "自研索引格式、分析器与段编解码，含 CRC32C 校验、zstd 压缩、FST 词典和 cargo-fuzz 测试"
+   ],
+   "use_cases": [
+    "在应用进程内嵌入全文搜索能力，无需独立搜索服务器",
+    "通过 CLI 检查、校验和转储段文件与容器内容",
+    "需要自管搜索索引格式与存储层的 Rust 项目（待 API 完成后）"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Persia DB. Think SQLite for search. ／ The product is a search database you link, the way you link SQLite. The design is SPEC §1. The rows below say what that buys, and how far the tree has gotten. ／ |**Rust, short dependency list**|The index format, analysis, and segment codec are written in this repository. BM25F and query execution are specified for the same crate (ADR-0001, M7).|`cargo deny` rejects Tantivy, SQLite, and RocksDB. `cargo xtask check-deps",
+     "lines": [
+      1,
+      31,
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它本身是数据库/存储引擎实现，而非使用其他数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " An embedded, single-file search database, written in Rust. ／ > **Pre-alpha.** The 2026-10-27 snapshot in `PROGRESS.md` is **210 of 451** MVP leaves (47%). Post-MVP work is 0 of 151 and sits outside that percentage. Format 1.0 is unstable until the v1.0 release (SPEC §15). When this file and `PROGRESS.md` disagree, `PROGRESS.md` wins. ／ `persia` does not export `Db` yet. What you can call today is the segment library, the text analyzers, the single-file container, and a small CLI. Query, ranking, and relaxation are specified and not implemented.",
+   "evidence_lines": [
+    5,
+    23,
+    27
+   ]
+  },
+  "fn": "tomiok/persiaDB",
+  "sha": "068280a90daf",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

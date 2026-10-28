@@ -12059,5 +12059,149 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "95030474f593": {
+  "identity": {
+   "one_liner": "本地AI照片评分与筛选引擎，带Web图库",
+   "review": "Facet 是一个本地运行的照片分析与筛选工具：对每张照片按9个维度打分，支持连拍检测、闭眼识别、相似照片分组与一键筛选，并提供带语义搜索、人脸识别、相册与时间线的Web图库。面向摄影师和大量照片的管理者，全部在本地机器运行，不依赖云端或API密钥，GPU可选。",
+   "highlights": [
+    "对照片按美学质量、构图、人脸清晰度等9个维度评分，支持 JPG/HEIC/RAW 等10余种格式",
+    "提供连拍检测、相似照片分组、闭眼识别与自动筛选，可通过终端命令批量执行",
+    "内置Web图库，支持语义搜索、人脸识别整理、相册分享与 MCP 接口"
+   ],
+   "use_cases": [
+    "摄影师从大量拍摄素材中筛选保留照片",
+    "本地照片库的浏览、整理与人脸归类",
+    "向客户分享样片相册并接收反馈"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是一个管理照片库的应用系统，数据库仅作为其底层存储（topic 归属提示 sqlite，但正文未展开）。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Facet is a local photo-analysis and culling engine. It scores each image across 9 dimensions — from aesthetic quality to face sharpness — then lets you browse, cull, and organize through a web gallery. Everything runs on your machine; no cloud, accounts, or API keys. ／ - **AI agents (MCP)** — an on-by-default Model Context Protocol endpoint (switch it off with `viewer.mcp.enabled`) lets MCP-capable assistants search and inspect the library with the gallery's filters, using revocable personal tokens; depending on the token's level, an assistant can also rate, tag, organise and cull photos (destructive actions preview first and need a confirmation)",
+   "evidence_lines": [
+    5,
+    120
+   ]
+  },
+  "fn": "ncoevoet/facet",
+  "sha": "95030474f593",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fffff03749d8": {
+  "identity": {
+   "one_liner": "一条命令迁移/备份-恢复 Coolify 服务器及应用数据的 DevOps 工具",
+   "review": "coolify-mirror 是面向 Coolify 自托管平台（v4.3–v4.5）的 Go 语言 CLI 工具，用于在服务器间迁移项目或整台服务器，并提供经由 rclone 的每日异地备份与恢复；备份为 age 加密文件，包含 env、卷、镜像等，数据库通过 pg_dumpall/mysqldump 等原生工具转储。安装方式为 curl 脚本或源码。",
+   "highlights": [
+    "支持整服务器或按项目的备份与恢复，恢复时经校验后才写入",
+    "通过 rclone 将备份发送至 Google Drive、S3、SFTP 等 70+ 目的地，支持 systemd 定时任务",
+    "备份使用 age X25519 加密，携带 Coolify 官方 Server Transfer bundle 并由其验证器校验"
+   ],
+   "use_cases": [
+    "将 Coolify 项目或整台服务器迁移到新服务器",
+    "为 Coolify 服务器配置加密的定时异地备份与灾后恢复",
+    "需要保留数据库数据、卷、环境变量等完整运行状态的部署转移"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|🗄️ **Native database dumps**|PostgreSQL, MySQL and MariaDB are saved with `pg_dumpall` / `mysqldump` while they keep running, and loaded with the same image on the target.|",
+     "lines": [
+      160
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|🗄️ **Native database dumps**|PostgreSQL, MySQL and MariaDB are saved with `pg_dumpall` / `mysqldump` while they keep running, and loaded with the same image on the target.|",
+     "lines": [
+      160
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|🗄️ **Native database dumps**|PostgreSQL, MySQL and MariaDB are saved with `pg_dumpall` / `mysqldump` while they keep running, and loaded with the same image on the target.|",
+     "lines": [
+      160
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Coolify 平台提供迁移与备份服务，数据库通过原生 dump 工具集成，属生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Migrate Coolify to a new server: back up one domain, a few, or a whole Coolify server — then restore it on another Coolify by pasting one command. ／ |🗄️ **Native database dumps**|PostgreSQL, MySQL and MariaDB are saved with `pg_dumpall` / `mysqldump` while they keep running, and loaded with the same image on the target.| ／ |🧾 **Coolify's own format inside**|Every backup also carries Coolify's official *Server Transfer* bundle (`schema_version 1`, made by Coolify's exporter) and the target validates it with Coolify's own validator.|",
+   "evidence_lines": [
+    10,
+    160,
+    161
+   ]
+  },
+  "fn": "mtalavi/coolify-mirror",
+  "sha": "fffff03749d8",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

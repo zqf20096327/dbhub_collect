@@ -11337,5 +11337,83 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "126e21d13458": {
+  "identity": {
+   "one_liner": "本地运行的 AI 品牌可见度追踪应用，答案数据落盘单个 SQLite 文件",
+   "review": "在本地通过用户自己的 OpenAI/Anthropic/Google API 密钥（或 Claude Code/Codex 订阅模式）定期向各家 AI 助手发起带联网搜索的提问，统计品牌被提及率、前三率、引用率与 share of voice，结果存入单个 SQLite 文件并在浏览器仪表板展示，无注册与遥测。适合想跟踪 AI 助手中品牌表现的创业者与营销人员。CI 中用嵌入式 Postgres 里的 PL/pgSQL 参考实现对计分代码做测试。",
+   "highlights": [
+    "支持配置多家提供商 API 密钥或 Claude Code/Codex 订阅模式调用 AI 助手并强制联网搜索",
+    "所有测量数据写入单个本地 SQLite 文件，内置演示项目可零成本启动",
+    "提供提及率、前三率、引用率、share of voice 等指标与竞争者对比表"
+   ],
+   "use_cases": [
+    "跟踪品牌在 ChatGPT/Claude/Gemini 回答中的提及与排名变化",
+    "对比自身与竞争者在 AI 回答中的 share of voice",
+    "本地留存 AI 品牌测量历史数据并长期观察趋势"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PL/pgSQL, run inside an embedded Postgres.",
+     "lines": [
+      85
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It runs on your machine with your AI accounts and every answer lands in one SQLite file you ／ sqlite3 ./data/overheard.db \".backup ./backup/overheard.db\"",
+     "lines": [
+      20,
+      202
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有测量答案存入一个本地 SQLite 文件，数据库仅作该应用的存储层。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "It runs on your machine with your AI accounts and every answer lands in one SQLite file you ／ PL/pgSQL, run inside an embedded Postgres.",
+   "evidence_lines": [
+    20,
+    85
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "TrellaceTeam/overheard-ai",
+  "sha": "126e21d13458",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

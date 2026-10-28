@@ -11976,5 +11976,179 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "06b14ac53a4b": {
+  "identity": {
+   "one_liner": "Postgres 扩展，为 PostgreSQL 提供全文、向量检索与分析能力",
+   "review": "ParadeDB 以 Postgres 扩展形式实现，通过自定义索引提供 BM25 全文检索、向量搜索、聚合与 JOIN，使应用数据与搜索引擎同处一个数据库并支持标准 SQL 与 ACID。适合需要在 PostgreSQL 上获得检索与分析能力的开发者，通过 Docker 脚本安装，采用 AGPLv3 许可。",
+   "highlights": [
+    "以 Postgres 扩展形式提供 BM25 全文检索与向量搜索",
+    "支持列式存储、聚合、facets 与 JOIN，基于 Tantivy 和 Apache DataFusion 实现",
+    "与多种 ORM/框架（Django、SQLAlchemy、Rails 等）集成，并提供 MCP 集成"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 内实现应用数据的全文与向量混合检索",
+    "在单一数据库中执行 OLAP 聚合分析",
+    "为 AI Agent 提供基于 Postgres 的检索接口"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Just use Postgres ／ One Postgres for your application data, full-text search, vector retrieval, and aggregations. ／ To run ParadeDB locally with Docker and open a `psql` session:",
+     "lines": [
+      7,
+      8,
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是以扩展形式为 PostgreSQL 增加检索与分析能力的组件，而非仅使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU Affero General Public License v3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ParadeDB upgrades Postgres with a custom index for fast full-text and vector search, BM25 scoring, filters, facets, aggregations, and joins. Built as a Postgres extension, it keeps your application data and search engine in one database with standard SQL and ACID transactions. ／ ParadeDB integrates battle-tested Rust libraries for search and analytics inside Postgres, contributing upstream whenever possible. Our primary dependencies are: ／ ParadeDB Community is licensed under the GNU Affero General Public License v3.0.",
+   "evidence_lines": [
+    33,
+    53,
+    98
+   ]
+  },
+  "fn": "paradedb/paradedb",
+  "sha": "06b14ac53a4b",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f92183b563a4": {
+  "identity": {
+   "one_liner": "跨平台桌面开发者工作台，集成 AI 编码代理、Git、数据库与集群管理",
+   "review": "DevCat 是基于 Tauri 2 + React 的桌面应用，把 AI 编码代理终端、diff 审查、SQL 数据库与 Redis/MongoDB 浏览编辑、Git 提交图、Kubernetes、RabbitMQ、VPN/SSH 隧道放进按项目分组的单一窗口，并提供手机配对与 devcat serve 无窗口模式。面向需要在同一界面操作代理、代码与数据库的开发者；移动端 Android/iPhone 客户端目前需自行构建。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server 及 MongoDB、Redis 的浏览、SQL 编辑与数据网格编辑",
+    "内置 MCP 服务器，可在 Claude Code、Codex、Cursor、Gemini CLI 中同步连接",
+    "支持无窗口的 devcat serve 模式与手机端配对访问，凭据存于系统密钥链"
+   ],
+   "use_cases": [
+    "在单一桌面界面中同时操作 AI 编码代理、Git 仓库与数据库连接",
+    "通过 SQL 编辑器与数据网格浏览和编辑项目数据库",
+    "在服务器上以 devcat serve 提供无窗口远程访问，配合手机查看代理状态与查询数据"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server|",
+     "lines": [
+      32
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server|",
+     "lines": [
+      32
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server|",
+     "lines": [
+      32
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server|",
+     "lines": [
+      32
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server|",
+     "lines": [
+      32
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供数据库浏览、SQL 编辑与对象浏览器等面向数据库的客户端功能，属于服务数据库使用场景的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DevCat is a cross-platform developer workbench. It runs your AI coding agent (Claude Code, Codex, Gemini CLI and ／ |SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server| ／  Data grid Databases : browse and edit tables; filter any column by typing in its header.",
+   "evidence_lines": [
+    19,
+    32,
+    64
+   ]
+  },
+  "fn": "devcathq/DevCat",
+  "sha": "f92183b563a4",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

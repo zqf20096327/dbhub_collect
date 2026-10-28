@@ -11666,5 +11666,140 @@
   "generated_at": "2026-10-27",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "388de3edcaef": {
+  "identity": {
+   "one_liner": "面向AI编程代理的MCP记忆服务器，本地持久化会话记忆",
+   "review": "Prism Coder 是一个 MCP 服务器，为 Claude Code、Cursor、Codex 等AI编程工具提供跨会话的持久记忆，包含交接摘要、TODO、知识图谱和漂移检测。它内置开源权重模型（2B–27B）做本地工具路由，并计量本地推理节省的 token 量；通过 npm 全局安装，也可作为 Claude Code/Codex 插件安装，可选付费订阅获得云同步和团队功能。",
+   "highlights": [
+    "作为 MCP 服务器提供跨会话持久记忆，支持 Claude Code、Cursor、Codex 等主机",
+    "内置开源权重模型（2B–27B）用于本地离线工具路由，本地推理量可审计（prism savings）",
+    "记忆检索应用 ACT-R 排序（相关性、时近性、频率、关联），支持一键配置多个主机（prism connect）"
+   ],
+   "use_cases": [
+    "AI 编程代理跨会话恢复项目状态（交接笔记、TODO、最近工作）",
+    "在不依赖云 API 的本地环境下为AI工具提供推理与工具路由",
+    "统计与审计本地推理替代云端调用所节省的 token 量"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未提及其与数据库生态的关系，定位是为AI编程代理提供会话记忆的 MCP 服务器",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Prism Coder is an MCP server that gives Claude, Cursor, and other AI tools long-term memory that survives across sessions. It ships with the open-weight `prism-coder` model fleet (2B–27B) for fast, offline tool-routing — no cloud required. And it keeps score: every call served locally is metered, so `prism savings` shows the token volume that never reached your cloud model — measured honestly, in tokens. ／ - **One setup for every agent** — `prism connect` configures Claude Code, ／ npm install -g prism-mcp-server",
+   "evidence_lines": [
+    18,
+    43,
+    90
+   ]
+  },
+  "fn": "dcostenco/prism-coder",
+  "sha": "388de3edcaef",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "225da591bf82": {
+  "identity": {
+   "one_liner": "TiDB 升级前后执行计划捕获比较工具，生成 HTML 报告",
+   "review": "PCC 是面向 TiDB 的命令行工具，把同一批 SQL 分别放到升级前、升级后的 TiDB 环境中执行 EXPLAIN，捕获执行计划并比较差异，生成 HTML 报告；只执行 EXPLAIN，不运行业务 DML，并导出表结构与统计信息用于回放。供需要在 TiDB 升级时核对执行计划变化的数据库运维人员使用，当前为早期版本，尚不支持所有 SQL 场景。",
+   "highlights": [
+    "对升级前后两套 TiDB 执行同一批 SQL 的 EXPLAIN 并生成 HTML 比较报告",
+    "导出 SQL、表结构与统计信息打包为 bundle，可导入目标环境回放，不执行业务 DML",
+    "提供 Python CLI 与 SDK，按执行次数、耗时等指标选取前 N 条 SQL 摘要后合并去重"
+   ],
+   "use_cases": [
+    "TiDB 版本升级前后的执行计划变化核对",
+    "对 Statement Summary 中历史 SQL 按时间段批量导出并回放比较",
+    "生成升级验证的 HTML 报告供人工审阅"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "**把同一批 SQL 放到升级前、升级后的 TiDB 中，比较执行计划，并生成 HTML 报告。** ／ 下面按一个完整 Demo 走四步。准备三套相互独立的 TiDB：`prod` 模拟生产环境，`old` 模拟升级前，`new` 模拟升级后。PCC 只对待比较 SQL 执行普通 `EXPLAIN`，不会执行业务 DML。 ／ 在能连接三套 TiDB 的 **Linux x86_64** 机器上执行，使用 Bash。原生包自带 Python；运行机需要 glibc 2.28 或以上，导入步骤另需 MySQL 8 客户端。",
+     "lines": [
+      3,
+      7,
+      11
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "在能连接三套 TiDB 的 **Linux x86_64** 机器上执行，使用 Bash。原生包自带 Python；运行机需要 glibc 2.28 或以上，导入步骤另需 MySQL 8 客户端。 ／ 本例使用**无 TLS、三套环境相同的数据库密码**。下面所有 `mysql` 命令中的示例主机、端口、用户，也要替换成配置中对应的值。不同密码或 TLS 配置见 操作说明。 ／ export MYSQL_PWD=\"$PCC_DB_PASSWORD\"",
+     "lines": [
+      11,
+      30,
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为 TiDB 升级场景提供服务，通过连接 TiDB 捕获和比较执行计划，本身不是使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**把同一批 SQL 放到升级前、升级后的 TiDB 中，比较执行计划，并生成 HTML 报告。** ／ 下面按一个完整 Demo 走四步。准备三套相互独立的 TiDB：`prod` 模拟生产环境，`old` 模拟升级前，`new` 模拟升级后。PCC 只对待比较 SQL 执行普通 `EXPLAIN`，不会执行业务 DML。 ／ 这是早期版本，尚不支持所有 SQL 场景。分区统计回放、TiDB 6.5 的部分 Prepared EXPLAIN 等限制见 验证说明。0.1.3 主要改进报告展示，三集群兼容性结果沿用 0.1.2；本次没有重新做全量在线认证。",
+   "evidence_lines": [
+    3,
+    7,
+    88
+   ]
+  },
+  "fn": "jielun132/pcc_kernel",
+  "sha": "225da591bf82",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

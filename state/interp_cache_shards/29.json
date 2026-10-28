@@ -11041,5 +11041,86 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "da3ae7c2ff79": {
+  "identity": {
+   "one_liner": "本地求职者侧 ATS，双 LLM 流水线抓取筛选职位并存入 SQLite",
+   "review": "一个运行在本机的 Python 应用，抓取 LinkedIn、YC、HN、HeadHunter 的职位，经三段 LLM 流水线按个人档案过滤、调研公司并找出联系人，数据存于单个 SQLite 文件（WAL+FTS5+sqlite-vec 做全文检索与向量 RAG）。面向求职者个人使用，支持 Gemini/Claude/OpenAI 等多种 LLM 后端，README 自述仍在开发中。",
+   "highlights": [
+    "双 LLM 流水线：抓取过滤、公司调研与联系人发现、周期性策略报告，各阶段可配不同后端",
+    "单文件 SQLite 存储，启用 WAL、FTS5 全文检索及 sqlite-vec 向量扩展用于相似申请 RAG",
+    "支持 Gemini、Claude、OpenAI、OpenRouter、LM Studio 等多种 LLM 后端，可混合配置"
+   ],
+   "use_cases": [
+    "求职者本地筛选职位列表并生成联系线索",
+    "对已投递申请做语义相似度回顾",
+    "跟踪申请数据并生成定位与薪资分析报告"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Two AI \"brains\" running locally on your machine, sharing one SQLite database. ／ Both Brains talk to a local SQLite database (WAL mode + FTS5 for full-text search) so the UI can read and write without locking.",
+     "lines": [
+      42,
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用以 SQLite 作为自身存储数据的数据库，不对外提供数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A local Python app that reads job listings so you don't have to. It scrapes them, judges each one against your profile, and for the ones worth your time it researches the company and digs up real people to contact. Everything runs on your machine against your own LLM key, stored in a plain SQLite file. No accounts, no cloud, no SaaS. ／ Two AI \"brains\" running locally on your machine, sharing one SQLite database. ／ Both Brains talk to a local SQLite database (WAL mode + FTS5 for full-text search) so the UI can read and write without locking.",
+   "evidence_lines": [
+    20,
+    42,
+    60
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "mustar22/hunterjobs-ats",
+  "sha": "da3ae7c2ff79",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

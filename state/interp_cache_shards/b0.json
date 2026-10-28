@@ -9072,5 +9072,148 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b64e9d1b19fc": {
+  "identity": {
+   "one_liner": "自托管错误追踪服务，兼容 Sentry SDK，两容器部署",
+   "review": "Epure 是一个用 Rust 编写的自托管错误追踪系统，接收 Sentry SDK 发送的事件，按问题分组并展示堆栈。应用与 PostgreSQL 16 以两个容器运行，数据由用户自行备份升级。README 标注为早期版本，存在 SDK 与协议缺口，且不存储追踪、回放、性能剖析等数据，适合已在测试备份路径的个人与小团队。",
+   "highlights": [
+    "兼容官方 Sentry SDK，仅需更换 DSN 接入",
+    "两容器部署（app + PostgreSQL 16），单 Rust 二进制监听 8080 端口",
+    "支持问题分组、sourcemaps、告警 webhook、多项目组织、RBAC 与 PostgreSQL RLS"
+   ],
+   "use_cases": [
+    "为使用 Sentry SDK 的应用提供自托管错误收集与分组",
+    "在小 VPS 或 Render/Railway/Coolify 等平台部署错误追踪服务",
+    "需要通过 webhook 和键盘分诊流程处理错误的团队"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 16 ／ Self-hosted error tracking: grouped issues and stack traces, one Rust binary and PostgreSQL 16. ／  How an error gets in: your app sends an envelope to ingest (202 ACK), a worker demangles and groups into Postgres 16, and you open the dashboard over a session. One Rust binary on :8080. No Kafka, Redis, or ClickHouse.",
+     "lines": [
+      8,
+      12,
+      90
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "How an error gets in: your app sends an envelope to ingest (202 ACK), a worker demangles and groups into Postgres 16, and you open the dashboard over a session. One Rust binary on :8080. No Kafka, Redis, or ClickHouse.",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明系统使用 PostgreSQL 16 存储错误数据，数据库是应用自身的存储组件而非被服务的对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0，无单独闭源核心",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted error tracking: grouped issues and stack traces, one Rust binary and PostgreSQL 16. ／ Two containers. The SDK talks to ingest; ingest returns 202 and a worker writes Postgres. The dashboard is the same binary. ／  How an error gets in: your app sends an envelope to ingest (202 ACK), a worker demangles and groups into Postgres 16, and you open the dashboard over a session. One Rust binary on :8080. No Kafka, Redis, or ClickHouse.",
+   "evidence_lines": [
+    12,
+    88,
+    90
+   ]
+  },
+  "fn": "epure-sh/epure",
+  "sha": "b64e9d1b19fc",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a5a549cce652": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 微服务的电商购物平台，每服务独立 MySQL 库",
+   "review": "一个包含目录、订单、支付、配送功能的电商项目，由 5 个 Spring Boot 微服务、一个推荐 AI 微服务及一个 Angular 18 前端组成，每个服务拥有独立的 MySQL 数据库，并通过 Eureka 实现服务注册。适用于微服务架构教学场景或电商 CRUD 项目参考；项目注明无分布式事务，部分安全机制（JWT/密码哈希）尚待补充完善。",
+   "highlights": [
+    "5 个自治微服务，每服务使用独立 MySQL 数据库",
+    "通过 Eureka 实现服务注册与发现",
+    "每个服务均提供 REST API 和 Swagger 文档，并配套 Angular 18 前端"
+   ],
+   "use_cases": [
+    "学习或演示微服务架构模式（数据库每服务）",
+    "具备目录、订单、支付及配送流程的电商原型",
+    "带有基于角色权限控制的 Spring Boot + Angular 练习项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "L'application est découpée en **5 microservices autonomes** (user, produit, commande, paiement, livraison). Chacun possède son code, sa configuration, son port et sa **propre base MySQL** (*database per service*). Un serveur **Eureka** assure la découverte des ／ Poste client, serveurs applicatifs avec leurs ports, serveur MySQL et protocoles échangés. ／ |MySQL|Une base par service|Implémenté|",
+     "lines": [
+      24,
+      71,
+      82
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该平台将数据存储于 MySQL 数据库中；这些数据库用于支持该应用自身。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "L'application est découpée en **5 microservices autonomes** (user, produit, commande, paiement, livraison). Chacun possède son code, sa configuration, son port et sa **propre base MySQL** (*database per service*). Un serveur **Eureka** assure la découverte des services et un frontend **Angular 18** consomme les API REST. ／ |MySQL|Une base par service|Implémenté| ／ Projet réalisé à **ESPRIT** dans le cadre du module d'architecture Microservices.",
+   "evidence_lines": [
+    24,
+    82,
+    239
+   ]
+  },
+  "fn": "safa-hmd/VitaGros",
+  "sha": "a5a549cce652",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
