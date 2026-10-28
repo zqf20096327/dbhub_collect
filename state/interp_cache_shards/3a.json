@@ -10134,5 +10134,179 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "74899f2686e5": {
+  "identity": {
+   "one_liner": "定时数据库备份工具，加密后上传云端，面向家庭实验室与小型项目",
+   "review": "Ogion 是一个 Python 编写的定时数据库备份工具，按配置定期备份数据库，经 lzip 压缩后用 age 加密，再上传到 GCS、S3 兼容存储或 Azure Blob。适用于 homelab、爱好项目等场景，可部署于 docker、k8s、虚拟机。支持 PostgreSQL、MariaDB、MySQL 及单文件/目录备份，并提供 Discord/邮件/Slack 通知。",
+   "highlights": [
+    "支持 PostgreSQL、MariaDB、MySQL 及单文件、目录备份目标",
+    "使用 age 加密、lzip 压缩，上传到 GCS/S3 兼容/Azure Blob 存储",
+    "支持 docker、kubernetes 部署，提供 Discord/Email/Slack 通知"
+   ],
+   "use_cases": [
+    "homelab 与个人项目的定时加密备份上云",
+    "k8s/docker 环境中的计划任务式数据库备份",
+    "需要 age 加密备份并上传 GCS/S3/Azure 的场景"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL: `18`, `17`, `16`, `15`, `14`. ／ Everyday 5am backup of PostgreSQL database defined in the same file and running in docker container.",
+     "lines": [
+      28,
+      61
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MariaDB: `13.0`, `12.3`, `11.8`, `11.4`, `10.11`.",
+     "lines": [
+      29
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL: `26.10`, `9.7`, `8.4`.",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确其为执行定时数据库备份并传输加密数据的工具，为数据库生态服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MariaDB",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A tool for performing scheduled database backups and transferring encrypted data to secure public clouds, for home labs, hobby projects, etc., in environments such as k8s, docker, vms. ／ - PostgreSQL: `18`, `17`, `16`, `15`, `14`. ／ Using docker image: `rafsaf/ogion:latest`, see all tags on dockerhub",
+   "evidence_lines": [
+    12,
+    28,
+    49
+   ]
+  },
+  "fn": "rafsaf/ogion",
+  "sha": "74899f2686e5",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7b17ed474701": {
+  "identity": {
+   "one_liner": "seekdb 的多语言客户端绑定库，提供 C API、CLI 及 Python/Node.js 接口",
+   "review": "该项目为 seekdb 嵌入式数据库提供多语言客户端接入：核心是 C11 实现的 libseekdb 共享库，附带交互式 SQL CLI、Python 扩展（经 cibuildwheel 打包 wheel）及 Node.js 绑定，面向需要嵌入或连接 seekdb 的应用开发者。构建需通过 SEEKDB_BIN 指定 seekdb 服务端二进制；其 dump/restore 工具输出 mysql 兼容格式的 SQL。",
+   "highlights": [
+    "提供 C11 实现的 libseekdb 公共 C API，不依赖 libstdc++/libc++",
+    "提供 Python 扩展 wheel（cp311/cp312-abi3，覆盖 linux x86_64/aarch64 与 macOS arm64）及 Node.js 绑定",
+    "包含 seekdb-dump/seekdb-restore 工具，输出 mysql 兼容 SQL 并支持管道压缩"
+   ],
+   "use_cases": [
+    "在 Python 或 Node.js 应用中嵌入/连接 seekdb",
+    "为 seekdb 构建 C SDK 发行包与多平台 wheel",
+    "seekdb 数据库的备份导出与恢复（SQL dump）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "The output is mysql-compatible SQL and supports pipelines such as",
+     "lines": [
+      189
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "The repo uses git submodules (mariadb-connector-c, googletest). Clone with `--recursive`:",
+     "lines": [
+      18
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "- an `oceanbase/seekdb` branch, tag, or commit for the embedded server; ／ --seekdb-git-url https://github.com/oceanbase/seekdb.git \\ ／ SEEKDB_GIT_URL=https://github.com/oceanbase/seekdb.git \\",
+     "lines": [
+      118,
+      224,
+      239
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 seekdb（oceanbase/seekdb）数据库提供客户端驱动/绑定与 CLI 工具，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "OceanBase"
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "C library, CLI, Python, Java, Android, and Node.js bindings for seekdb. ／ The core shared library (`libseekdb`, with a `libseekdb_driver` compatibility symlink) is implemented in **C11** (`lib/src/*.c`) and does not link against `libstdc++` or `libc++` (checked in CI via `readelf`); embedders only need a C toolchain to build and pthreads at runtime. The CLI (`seekdb_cli`) is also implemented in C11 (`lib/src/seekdb_cli.c`). The bundled **seekdb server binary** is a separate C++ product and may depend on `libstdc++`; issue #6 applies only to `libseekdb`. C++ is also used for gtest-based integration tests and the optional nanobind Python extension. ／ - an `oceanbase/seekdb` branch, tag, or commit for the embedded server;",
+   "evidence_lines": [
+    3,
+    5,
+    118
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "pypi"
+   ]
+  },
+  "fn": "oceanbase/seekdb-bindings",
+  "sha": "7b17ed474701",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

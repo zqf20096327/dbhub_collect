@@ -9589,5 +9589,75 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5ec7696fe952": {
+  "identity": {
+   "one_liner": "Rust 编写的通用数据库，兼容 MySQL 协议，面向 AI 代理与 HTAP",
+   "review": "MyDB 是一个用 Rust 实现的通用数据库，1.0.0 为公开预览版，定位 AI 代理、HTAP 与 MySQL 兼容三个方向，提供在线 DDL、自动 zone map、原生 VECTOR 类型与 HNSW/IVF 向量索引，可通过 MySQL 客户端/JDBC 连接。适合需要在单库内同时处理事务、分析与向量检索的开发者；README 明言尚非生产级 MySQL 替代品，磁盘格式不保证向后兼容。",
+   "highlights": [
+    "兼容 MySQL：可复用 MySQL 客户端、JDBC 驱动、核心 SQL 与行 binlog 集成",
+    "支持原生 VECTOR 类型及 HNSW/IVF 索引，向量写入参与事务提交与回滚",
+    "提供在线索引/主键构建、免重写加列等在线 DDL 能力及自动 zone map 索引剪枝"
+   ],
+   "use_cases": [
+    "AI 代理场景下的模式演进、向量写入与相似度检索",
+    "同一库内运行业务事务与实时分析（HTAP）负载",
+    "替代/试验 MySQL 生态客户端接入的评估环境"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "**A high-performance database, compatible with MySQL** ／ MyDB is a general-purpose database built in Rust, designed around three directions: **AI agents, high-performance hybrid transactional/analytical processing (HTAP), and MySQL compatibility**. Through a familiar SQL interface, applications and agents can manage ／ |**MySQL compatible**|Reuse MySQL clients, JDBC drivers, core SQL, and row binlog integration.|",
+     "lines": [
+      5,
+      11,
+      19
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明 MyDB 是一个数据库引擎产品本身，而非使用某个现有数据库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MyDB is a general-purpose database built in Rust, designed around three directions: **AI agents, high-performance hybrid transactional/analytical processing (HTAP), and MySQL compatibility**. Through a familiar SQL interface, applications and agents can manage business data, evolve table schemas, run real-time analytics, and search similar vectors — without copying data across systems or maintaining multiple interfaces. ／ The server listens locally on port `8738` and stores data in `./data`. No Rust ／ MyDB architecture: protocol, SQL engine, unified memory management, storage engine, transactions, backup and recovery, primary-replica HA, sessions, security, and metadata; highlighting the optimizer, executor, heap tables, Zone Map, HNSW, online DDL, unified memory management, and directly queryable backups",
+   "evidence_lines": [
+    11,
+    60,
+    160
+   ]
+  },
+  "fn": "yzsind/mydb",
+  "sha": "5ec7696fe952",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

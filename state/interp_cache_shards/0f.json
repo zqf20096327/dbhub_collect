@@ -10320,5 +10320,75 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5a112b0d676f": {
+  "identity": {
+   "one_liner": "基于 PocketBase 单二进制后端的轻量实时群聊应用",
+   "review": "一个自托管实时群聊应用，后端由单个 PocketBase 二进制承担认证、数据存储、实时推送与静态文件服务，前端为无框架的 TypeScript（esbuild 打包，含体积预算检查）。支持公开/私有房间、私信、附件、Emoji 反应、Telegram 桥接和 PWA，附带 Android 原生客户端。适合想自建小型聊天服务的个人或团队，数据（SQLite 与上传文件）存放在 pb_data 目录，需自行部署维护。",
+   "highlights": [
+    "单个 PocketBase 二进制提供认证、数据、实时连接与静态文件服务",
+    "支持公开/私有/开放房间、私信、附件（每条最多 10 个 20 MB 文件）与 Telegram 双向桥接",
+    "提供 PWA 安装与 Kotlin 原生 Android 客户端，通知不依赖第三方推送服务"
+   ],
+   "use_cases": [
+    "自托管的小型团队或社区群聊",
+    "需要轻量、离线可用的即时通讯部署",
+    "通过 Telegram 桥接联通已有 Telegram 群组"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+     "lines": [
+      129
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据（SQLite + uploads）存放于 /pb_data，属于使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small, fast, real-time group chat. One PocketBase binary is the whole backend ／ Open http://127.0.0.1:8090 and sign up (top right). The dev database lives in `pb_data/` — delete it to start over. ／ # All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+   "evidence_lines": [
+    3,
+    56,
+    129
+   ]
+  },
+  "fn": "border-radius/chirkle",
+  "sha": "5a112b0d676f",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

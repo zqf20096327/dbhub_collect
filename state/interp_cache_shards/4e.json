@@ -10685,5 +10685,69 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2eec0742d086": {
+  "identity": {
+   "one_liner": "PostgreSQL 生物信息学扩展，用 Rust 实现多组学计算函数",
+   "review": "pg_bio 是一个基于 pgrx 用 Rust 编写的 PostgreSQL 原生扩展，提供基因组区间查询、3D 坐标 Morton 编码、单细胞稀疏矩阵、UniProt API 内联抓取、SMILES 分子指纹等 SQL 函数，面向在 SQL 中执行生物信息学与药物发现流程的科研人员；依赖 PostgreSQL 的 Range Types、GiST、pgvector 等能力。",
+   "highlights": [
+    "提供 DNA 序列翻译、PDB 解析、RMSD 结构比对、Tanimoto 相似度等原生 SQL 函数",
+    "支持通过 bio_fetch_uniprot()/bio_search_uniprot() 在 SQL 内直接调用 UniProt REST API",
+    "利用 PostgreSQL Range Types/GiST/B-Tree 索引与并行数组实现基因组与 3D 空间查询"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 内执行基因组重叠、结合口袋筛选等生物信息学查询",
+    "在 SQL 中富化与检索 UniProt 蛋白质元数据",
+    "基于分子指纹的化合物虚拟筛选"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**`pg_bio`** is a native PostgreSQL extension written in highly optimized Rust (`pgrx`).",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 提供扩展功能的原生扩展组件，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**`pg_bio`** is a native PostgreSQL extension written in highly optimized Rust (`pgrx`). ／ It is engineered for a single purpose: to completely eradicate the data bottlenecks in modern biology by pushing complex multiomics mathematics *directly into the database engine*. By unifying Genomics, Proteomics, and Transcriptomics into a shared computational space, `pg_bio` allows scientists to execute entire drug discovery pipelines and synthetic biology designs in milliseconds natively in SQL.",
+   "evidence_lines": [
+    3,
+    5
+   ]
+  },
+  "fn": "jonatas/pg_bio",
+  "sha": "2eec0742d086",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

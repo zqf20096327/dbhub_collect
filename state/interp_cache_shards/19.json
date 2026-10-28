@@ -12052,5 +12052,79 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4b866462a877": {
+  "identity": {
+   "one_liner": "自托管数据库与有状态服务编排控制平面，无需 Kubernetes",
+   "review": "Karakoram 是一个用 Go 实现的自托管控制平面，通过 REST API、CLI 和 Web UI 在 Zerops、Dokploy 或 Nomad 提供的基础设施上编排 PostgreSQL、MySQL、MongoDB 等数据库集群，提供创建、扩容、备份恢复（含 PITR）、监控、审计与 RBAC 等运维能力，面向自行运维数据库安装、凭据与恢复流程的使用者；控制平面为单副本，部分引擎备份能力有限。",
+   "highlights": [
+    "提供目录驱动的数据库集群创建、资源配置、磁盘增长与拓扑操作（副本集、分片、Galera、Patroni HA 等）",
+    "支持 S3 兼容存储的备份调度、恢复、PITR 与备份演练验证",
+    "提供多项目命名空间、OIDC、RBAC、API 令牌、监控日志与操作审计"
+   ],
+   "use_cases": [
+    "在无 Kubernetes 的自有基础设施上部署和管理多引擎数据库集群",
+    "为数据库集群配置备份、时间点恢复与定期恢复演练",
+    "以多命名空间方式集中管理多项目的数据库运维与访问控制"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|Percona PostgreSQL 17.11.1 default; majors 16/17/18; extension profiles|Single; Patroni/etcd HA (3/5); Citus distributed; ProxySQL client service|pgBackRest full/diff/incr and PITR|PostgreSQL|",
+     "lines": [
+      17
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|Percona Server for MySQL 8.4.11-11 default; majors 8.4/8.0|Single; Group Replication single-primary (3/5); ProxySQL|XtraBackup full/incremental and GTID-based PITR|MySQL|",
+     "lines": [
+      22
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为部署与编排数据库集群服务的控制平面工具，本身不存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Karakoram is a multi-platform, self-hosted control plane for database and stateful-service orchestration inside your infrastructure, without Kubernetes or a hosted coordinator. A Go control plane provides a REST API, `karactl` CLI and web UI; providers supply infrastructure, while you operate the installation, credentials, data and recovery procedures. Zerops is the reference provider. Dokploy and Nomad are also available; see Providers for their status. ／ |Engine|Distribution/version|Topologies|Backups|Section| ／ - Catalog-driven creation, resource configuration, disk growth and capability-gated cluster operations.",
+   "evidence_lines": [
+    3,
+    11,
+    40
+   ]
+  },
+  "fn": "KarakoramDev/Karakoram",
+  "sha": "4b866462a877",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

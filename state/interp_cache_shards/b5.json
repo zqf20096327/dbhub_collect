@@ -11363,5 +11363,78 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "29f4fb09ae21": {
+  "identity": {
+   "one_liner": "校园活动并发报名系统，Redis 预扣 + RabbitMQ 异步写 MySQL",
+   "review": "这是一个前后端分离的校园活动报名系统，覆盖发布、检索、限额报名、候补排队与自动递补等流程。报名请求先经 Redis Lua 脚本原子校验并预扣库存，再由 RabbitMQ 异步写入 MySQL，配合分布式锁、死信队列与定时补偿处理失败消息。面向校园活动组织方与开发者，README 还提供容器部署说明与并发测试报告。",
+   "highlights": [
+    "Redis Lua 脚本原子校验报名状态并预扣活动库存，RabbitMQ 异步写入 MySQL",
+    "支持候补队列按加入时间顺序递补，消费失败通过重试、死信队列与定时补偿恢复",
+    "提供 JWT 认证、用户/管理员双角色功能及 Swagger UI 接口文档"
+   ],
+   "use_cases": [
+    "校园或组织内热门活动的限额报名与候补管理",
+    "需要库存一致性与防重复报名的并发报名场景",
+    "异步削峰写入数据库的业务流程参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "项目重点解决热门活动报名中的库存一致性、重复报名、异步处理失败和候补公平性问题。报名请求先通过 Redis Lua 脚本完成原子校验与库存预扣，再交由 RabbitMQ 异步写入 MySQL；消费失败时通过重试、死信处理和定时补偿恢复数据。 ／ API -->|查询与事务写入| MySQL[(MySQL)] ／ |数据访问|MyBatis-Plus 3.5.16、MySQL|",
+     "lines": [
+      5,
+      57,
+      75
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述其为使用 MySQL 存储报名数据的校园活动报名应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "CampusPass 是一个面向校园活动场景的前后端分离报名系统，覆盖活动发布、活动检索、限额报名、候补排队、取消与自动递补、用户管理和异常补偿等流程。 ／ 项目重点解决热门活动报名中的库存一致性、重复报名、异步处理失败和候补公平性问题。报名请求先通过 Redis Lua 脚本完成原子校验与库存预扣，再交由 RabbitMQ 异步写入 MySQL；消费失败时通过重试、死信处理和定时补偿恢复数据。 ／     API -->|查询与事务写入| MySQL[(MySQL)]",
+   "evidence_lines": [
+    3,
+    5,
+    57
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "pingzipingzi/campus-pass",
+  "sha": "29f4fb09ae21",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
