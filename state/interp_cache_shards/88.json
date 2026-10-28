@@ -10060,5 +10060,230 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "715d29a4236e": {
+  "identity": {
+   "one_liner": "开源自托管会议预约排期平台，Elixir/Phoenix LiveView 构建",
+   "review": "Tymeslot 是一个开源的会议预约排期平台，提供面向访客的预约页面、日历双向同步、视频会议房间创建、提醒邮件和 webhook 自动化。面向需要自托管排期工具的个人与团队，通过单条 Docker 命令部署，内部使用 Elixir/Phoenix LiveView 与 PostgreSQL 14+ 存储，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "支持与 Google、Outlook、iCloud 及任意 CalDAV 服务器双向日历同步，任一冲突即封锁时段",
+    "提供嵌入式预约组件（内联/弹窗/浮动按钮）、Stripe Connect 付费预约、HMAC 签名 webhook",
+    "以单个 Docker 容器运行，内置 PostgreSQL 数据卷，支持 Cloudron 与 Railway 部署"
+   ],
+   "use_cases": [
+    "自托管个人/团队会议预约排期",
+    "嵌入企业官网收集客户预约并同步日历",
+    "结合 webhook 与 n8n/Zapier 实现预约自动化流程"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Your server. One container, Postgres included. Or Cloudron, Railway, or our cloud. ／ |**Under the hood**|Elixir/OTP, Phoenix LiveView, PostgreSQL 14+, Oban. Supervised processes restart a failing sync instead of taking your booking page down.| ／ -v tymeslot_data:/app/data -v tymeslot_pg:/var/lib/postgresql/data \\",
+     "lines": [
+      69,
+      89,
+      97
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其技术栈包含 PostgreSQL 14+ 用于存储数据，是使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0 单许可，名称与logo为商标",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Under the hood**|Elixir/OTP, Phoenix LiveView, PostgreSQL 14+, Oban. Supervised processes restart a failing sync instead of taking your booking page down.| ／ docker run --name tymeslot -p 4000:4000 \\ ／ Open <http://localhost:4000>; the first account becomes admin. SMTP, TLS, Compose and external Postgres: **Docker guide →**",
+   "evidence_lines": [
+    89,
+    94,
+    101
+   ]
+  },
+  "fn": "Tymeslot/tymeslot",
+  "sha": "715d29a4236e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "72c75f3309b6": {
+  "identity": {
+   "one_liner": "单二进制 BaaS 后端，YAML 声明 schema，兼容 Supabase 客户端",
+   "review": "instancez 是一个以单个 YAML 文件定义 schema 的后端即服务工具，提供认证、PostgREST 风格 REST API、RPC、存储和 RLS，可作为 Supabase 的自托管替代，运行在 Postgres 之上（含内嵌模式）。面向希望自托管后端或让 LLM/编码代理直接读写 schema 定义的开发者，兼容 supabase-js 客户端。",
+   "highlights": [
+    "单一 YAML 文件声明 schema，自动 diff 并应用增量迁移",
+    "兼容 Supabase 客户端（supabase-js 等），提供 auth、REST、RPC、存储",
+    "自带内嵌 Postgres（--embedded-pg），单二进制可部署于 Docker/Kubernetes/Lambda"
+   ],
+   "use_cases": [
+    "自托管 Supabase 兼容后端服务",
+    "本地开发环境快速启动带认证和 RLS 的 API",
+    "让编码代理通过 YAML 技能文件生成和维护后端 schema"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "inz dev --embedded-pg # no Postgres to install; or drop the flag and set INSTANCEZ_DATABASE_URL to use your own ／ `inz dev` provisions the Postgres roles, applies the schema, and serves the API at `http://localhost:8080`. Editing `instancez.yaml` re-applies the schema automatically. ／ |Self-host footprint|One binary + Postgres|Multi-container stack|",
+     "lines": [
+      51,
+      57,
+      136
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为构建在 Postgres 上的应用提供认证、API、存储等后端基础设施服务，属于数据库生态的服务组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0，贡献需签署 CLA",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**An LLM-friendly, single-binary, drop-in replacement to Supabase.** ／ - **One YAML file is the schema.** Edit `instancez.yaml` and instancez diffs it against the live database, applying just the delta migration, with no migration files to write or run by hand. Drops need `--allow-destructive` under `inz serve`. ／ inz dev --embedded-pg   # no Postgres to install; or drop the flag and set INSTANCEZ_DATABASE_URL to use your own",
+   "evidence_lines": [
+    5,
+    17,
+    51
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "instancez/instancez",
+  "sha": "72c75f3309b6",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5ef49cd7173b": {
+  "identity": {
+   "one_liner": "自托管空投追踪应用，Next.js+SQLite 存储",
+   "review": "一个自托管的空投（airdrop)任务追踪 Web 应用，将项目任务清单、Telegram 群消息归档、项目新闻、TGE 日期和链上检查集中在一处，每 30 分钟运行链上检查。面向个人空投参与者，数据存于单个 SQLite 文件，可选接入 OpenAI 兼容 LLM；依赖 Node 20/22（better-sqlite3 对 Node 24 无预编译二进制）。",
+   "highlights": [
+    "从 Telegram 群消息、RSS、Galxe/Zealy/Layer3 链接生成项目任务与机会分级",
+    "每 30 分钟通过 Etherscan API 执行 EVM 链上任务检查，支持 Solana RPC 余额读取",
+    "每日自动备份 SQLite 数据库并保留七天，LLM 调用支持每日预算上限"
+   ],
+   "use_cases": [
+    "个人空投参与者的任务与截止日期追踪",
+    "Telegram alpha 群消息的机会发现与归档",
+    "VPS 上长期自托管运行并接收 Telegram 推送提醒"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything runs on your own machine or a cheap VPS. Storage is a single SQLite file. There is no account system except one optional PIN, and no data leaves your server except the calls you configure (your LLM endpoint, Telegram, Etherscan). ／ `--ignore-scripts` skips the automatic `node-gyp` step that npm runs for `better-sqlite3`. Version 13 already ships compiled binaries for Windows, macOS, and Linux, so nothing needs to compile here. Drop the flag if you have a C++ toolchain and prefer to build",
+     "lines": [
+      5,
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个用 SQLite 文件存储自身数据的 Web 应用，SQLite 为其内嵌存储而非被服务的对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# Airdrop Tracker ／ A self-hosted web app for keeping airdrop work in one place. You add a project once, and the app builds the task list, watches the project's news, tracks the TGE date, and checks the on-chain tasks every 30 minutes. It also reads the Telegram alpha groups you already follow, archives the messages, and turns anything relevant into a project update or a new opportunity with a tier. ／ Everything runs on your own machine or a cheap VPS. Storage is a single SQLite file. There is no account system except one optional PIN, and no data leaves your server except the calls you configure (your LLM endpoint, Telegram, Etherscan).",
+   "evidence_lines": [
+    1,
+    3,
+    5
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "oxbfnohom/airdrop-tracker",
+  "sha": "5ef49cd7173b",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

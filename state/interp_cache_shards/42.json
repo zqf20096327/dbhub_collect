@@ -9627,5 +9627,79 @@
   "generated_at": "2026-10-28",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "da73c6c47414": {
+  "identity": {
+   "one_liner": "TiDB 变更数据捕获工具，拉取变更日志并推送下游",
+   "review": "TiCDC 从 TiDB 集群拉取变更日志并推送到 MySQL、TiDB、Kafka、Pulsar、对象存储等下游系统。自 v8.5.4 起此仓库（架构重构版）取代旧 tiflow 仓库构建 TiCDC。面向需要将 TiDB 数据变更同步到下游的运维/数据团队，可通过 TiUP 或二进制下载部署，支持从源码编译。",
+   "highlights": [
+    "从 TiDB 集群拉取变更日志并推送到 MySQL、TiDB、Kafka、Pulsar、对象存储等下游系统",
+    "可通过 TiUP 安装，或下载 Linux/MacOS 各平台二进制，支持源码编译",
+    "通过 TiUP 集成 Grafana 监控面板"
+   ],
+   "use_cases": [
+    "TiDB 数据变更实时同步到 MySQL/TiDB 等关系库",
+    "将 TiDB 变更推送至 Kafka/Pulsar 供下游消费",
+    "增量备份到对象存储（如 S3）"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "TiCDC pulls change logs from TiDB clusters and pushes them to downstream systems, such as MySQL, TiDB, Kafka, Pulsar, and Object Storages (e.g., S3). Beginning from v8.5.4, we use this repository to build TiCDC instead of the old repository tiflow. The new TiC",
+     "lines": [
+      5
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "TiCDC pulls change logs from TiDB clusters and pushes them to downstream systems, such as MySQL, TiDB, Kafka, Pulsar, and Object Storages (e.g., S3). Beginning from v8.5.4, we use this repository to build TiCDC instead of the old repository tiflow. The new TiC",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 TiDB 提供变更日志捕获与分发服务的组件，而非使用数据库存储自身数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "TiDB"
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TiCDC pulls change logs from TiDB clusters and pushes them to downstream systems, such as MySQL, TiDB, Kafka, Pulsar, and Object Storages (e.g., S3). Beginning from v8.5.4, we use this repository to build TiCDC instead of the old repository tiflow. The new TiCDC in this repository has undergone a complete architectural redesign while retaining the same user interface. The architectural upgrade primarily aims to address certain drawbacks of TiCDC and propel it forward. ／ tiup install cdc --force",
+   "evidence_lines": [
+    5,
+    37
+   ]
+  },
+  "fn": "pingcap/ticdc",
+  "sha": "da73c6c47414",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

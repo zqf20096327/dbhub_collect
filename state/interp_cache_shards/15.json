@@ -11861,5 +11861,82 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "293c0d72bd3e": {
+  "identity": {
+   "one_liner": "Oracle 数据库 CDC 组件集，基于 Kafka Connect 传输变更数据",
+   "review": "oracdc 是一组面向 Apache Kafka Connect 生态的连接器集合，用于读取 Oracle 数据库（9i 至 26ai）的变更数据：可直接读 redo 日志、通过 LogMiner 或物化视图日志采集，并提供写入 PostgreSQL/Oracle 的 sink 连接器。面向需要将 Oracle 变更流接入 Kafka 做事件驱动处理或异构复制的用户。安装方式含 Docker、Confluent Hub、Maven Central 和源码构建，需 Java 25+，采用商业+AGPL 双许可。",
+   "highlights": [
+    "提供三种 Oracle CDC source 连接器：直接读取 redo 日志、基于 Oracle LogMiner、基于物化视图日志",
+    "提供两个 Kafka sink 连接器，将 Kafka topic 数据写入 PostgreSQL 或 Oracle 数据库",
+    "支持 Oracle RAC、物理备库、ASM 等多种数据库配置，并通过 JMX 暴露监控指标"
+   ],
+   "use_cases": [
+    "将 Oracle 数据库变更实时流入 Kafka 用于事件驱动架构",
+    "从 Oracle 向 PostgreSQL 或 Oracle 等目标库做数据复制/集成",
+    "需要减少对源库负载的 redo 日志采集场景"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* Two Apache Kafka sink connectors *solutions.a2.kafka.sink.JdbcSinkConnector* and *solutions.a2.kafka.sink.WrappedDataJdbcSinkConnector* optimized for delivery of data from Kafka topic to PostgreSQL or Oracle Database",
+     "lines": [
+      26
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "image:https://img.shields.io/maven-central/v/solutions.a2.oracle/oracdc-kafka.svg[link=https://central.sonatype.com/artifact/solutions.a2.oracle/oracdc-kafka] ／ *oracdc* is a set of software solutions for the Apache Kafka Connect ecosystem designed to transfer information about changes in the source Oracle database (versions 9i, 10g, 11c, 12c, 18c, 19c, 21c, 23ai, and 26ai) for further processing. This processing usua ／ *oracdc* supports the following Oracle Database Editions",
+     "lines": [
+      2,
+      7,
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Oracle 数据库变更数据向 Kafka/其他库传输服务的连接器工具集",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：商业许可与 AGPL v3.0+（2026年5月起）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "*oracdc* is a set of software solutions for the Apache Kafka Connect ecosystem designed to transfer information about changes in the source Oracle database (versions 9i, 10g, 11c, 12c, 18c, 19c, 21c, 23ai, and 26ai) for further processing. This processing usually involves reacting to changes in the source system using event-driven architecture principles or performing data integration and replication to heterogeneous systems. ／ * three connectors for Apache Kafka Connect ecosystem that implement CDC ／ * Two Apache Kafka sink connectors *solutions.a2.kafka.sink.JdbcSinkConnector* and *solutions.a2.kafka.sink.WrappedDataJdbcSinkConnector* optimized for delivery of data from Kafka topic to PostgreSQL or Oracle Database",
+   "evidence_lines": [
+    7,
+    19,
+    26
+   ]
+  },
+  "fn": "averemee-si/oracdc",
+  "sha": "293c0d72bd3e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

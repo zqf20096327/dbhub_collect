@@ -10355,5 +10355,219 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5c47b7c43c7f": {
+  "identity": {
+   "one_liner": "YouTube 评论情感分析全栈应用，FastAPI+React+PostgreSQL 存储",
+   "review": "Emotube 通过 YouTube Data API 抓取视频元数据与顶层评论，用 Hugging Face 预训练模型分类情感并存入 PostgreSQL，React 前端提供图表与评论筛选；面向需要本地分析 YouTube 评论的用户。Docker Compose 部署，分析在后端进程内执行，无独立任务队列，API 无鉴权，README 定位为本地开发用途。",
+   "highlights": [
+    "调用 YouTube Data API 抓取视频元数据与顶层评论，用 Hugging Face 预训练模型输出正/中/负/模糊四类标签及分数",
+    "提供按情感、作者、点赞数、关键词的评论筛选及随时间变化的情感图表",
+    "通过 Docker Compose 编排前端、后端与 PostgreSQL 三个服务，支持后台分析与轮询"
+   ],
+   "use_cases": [
+    "对指定 YouTube 视频的评论做情感分布统计与时间线可视化",
+    "按情感标签、作者、点赞数等条件检索已分析的评论",
+    "本地学习全栈（FastAPI+React+SQLModel+Docker Compose）项目结构"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ Emotube fetches YouTube video metadata and top-level comments through the YouTube Data API, classifies comments with a pretrained Hugging Face sentiment model, and stores the results in PostgreSQL. A React interface displays video details, comment filters, and ／ Docker Compose runs a React frontend, a FastAPI backend, and PostgreSQL. Analysis runs inside the backend process; there is no separate worker service or durable job queue.",
+     "lines": [
+      11,
+      15,
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用将抓取的评论分析结果存入 PostgreSQL，数据库是其存储组件而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Emotube fetches YouTube video metadata and top-level comments through the YouTube Data API, classifies comments with a pretrained Hugging Face sentiment model, and stores the results in PostgreSQL. A React interface displays video details, comment filters, and sentiment charts. YouTube is the only implemented platform; replies within comment threads are not fetched. ／ Docker Compose runs a React frontend, a FastAPI backend, and PostgreSQL. Analysis runs inside the backend process; there is no separate worker service or durable job queue. ／ The supplied Compose setup uses Vite's development server, Uvicorn auto-reload, source mounts, and published database/API ports. The API has no authentication and allows all CORS origins. Treat this as a local development setup, not a production deployment template. Initial backend startup may take time to download and load the model.",
+   "evidence_lines": [
+    15,
+    60,
+    148
+   ]
+  },
+  "fn": "00200200/youtube-comment-sentiment-analyzer",
+  "sha": "5c47b7c43c7f",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "66be0b26b20e": {
+  "identity": {
+   "one_liner": "自托管的 Facebook/Instagram 社媒自动化与 CRM 应用",
+   "review": "一个自托管的社交媒体管理与自动化应用，提供发帖排期、私信/评论自动回复、drip 序列和联系人 CRM，面向希望掌控自有数据的个人、代理机构和开发者。数据存储与限流、会话失效等机制依赖 PostgreSQL，通过 Docker Compose 一键启动， 许可为 Elastic 2.0。",
+   "highlights": [
+    "支持 Facebook、Instagram、YouTube、Telegram、Gmail 多渠道收发与自动回复",
+    "包含联系人管理（全文搜索、标签）、drip 序列与 REST API 集成",
+    "使用 AES-256-GCM 加密 OAuth tokens，支持基于 Postgres 的限流与会话失效"
+   ],
+   "use_cases": [
+    "个人或代理机构自托管管理多个社媒账号的私信与评论",
+    "替代 SaaS 聊天机器人平台构建关键词触发的自动回复流程",
+    "通过 REST API 与 n8n/Zapier 集成自动化社媒运营"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Rate limiting** on auth endpoints (Postgres-backed) ／ - **JWT session invalidation** on logout (Postgres denylist) ／ - **Contact search & non-ASCII case-folding** — the dashboard contact search uses `ILIKE`, whose case-insensitivity for non-ASCII letters (e.g. Polish `Ó`/`ó`) depends on the database locale. The bundled `postgres:alpine` initializes with the `C` locale, where",
+     "lines": [
+      56,
+      57,
+      72
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用使用 PostgreSQL 存储数据（限流、denylist、联系人搜索），是使用数据库的应用而非数据库工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0，source-available",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Self-hosted social media management for Facebook, Instagram, YouTube, Telegram & Gmail -- publish & schedule posts, auto-reply to DMs, comments and emails, and run drip sequences, all from one place. ／ - **One-command startup** -- `docker compose up` ／ - **Rate limiting** on auth endpoints (Postgres-backed)",
+   "evidence_lines": [
+    3,
+    50,
+    56
+   ]
+  },
+  "fn": "jurczykpawel/poststack",
+  "sha": "66be0b26b20e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e4e8dc90a18c": {
+  "identity": {
+   "one_liner": "本地多 Agent 协作工作区，插件化扩展，数据存于 PostgreSQL",
+   "review": "Loop Now 是一个在本地运行的多 Agent 协作平台：每个 Agent 拥有独立工作目录与会话，可由 Manager 通过任务工作流协调，支持 CLI/MCP 工具接入和事件订阅，扩展通过插件包实现。它面向想在单机浏览器控制台中管理多个编码 Agent 的个人用户，依赖 Go、Node.js、PostgreSQL 18 和 Redis 8，目前仅支持源码安装，主要验证环境为 macOS Apple Silicon，控制台无登录、面向回环访问。",
+   "highlights": [
+    "提供插件系统，将工具、事件钩子、账户、权限、资源打包为版本化扩展，支持 npm、Git、本地目录等安装来源",
+    "支持任务工作流：任务节点、条件分支、有界评审循环、重试与产物保存，运行时间线可查看模型用量与工具调用",
+    "以 Pi 作为执行引擎，Agent 可配置模型、指令、Skills、仓库与工具访问权限"
+   ],
+   "use_cases": [
+    "在本地组织 Manager/Developer/Reviewer 等多 Agent 协作完成开发-评审循环",
+    "通过插件接入自有 CLI 与 MCP 工具并订阅平台事件",
+    "通过 Inbox 跟进消息、提问与工作流进度的个人多 Agent 工作台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|18| ／ Start PostgreSQL and Redis using your preferred local installation. Create a dedicated PostgreSQL role and database; run these as your local PostgreSQL administrator: ／ export LOOP_NOW_DATABASE_URL='postgres://loopnow:YOUR_URL_ENCODED_PASSWORD@127.0.0.1:5432/loopnow?sslmode=disable'",
+     "lines": [
+      105,
+      120,
+      132
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 要求安装 PostgreSQL 作为平台自身的持久化存储依赖，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Loop Now brings your agents into one browser workspace. An agent keeps its own working directory and conversation; a Manager can coordinate specialists through a task workflow. You can follow the conversation, inspect tool calls, send a message, and see who is working or waiting. ／ |PostgreSQL|18| ／ Start PostgreSQL and Redis using your preferred local installation. Create a dedicated PostgreSQL role and database; run these as your local PostgreSQL administrator:",
+   "evidence_lines": [
+    18,
+    105,
+    120
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "AI-for-anyone/loop-now",
+  "sha": "e4e8dc90a18c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

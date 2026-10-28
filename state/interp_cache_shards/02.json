@@ -10846,5 +10846,69 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "246d26b95d4c": {
+  "identity": {
+   "one_liner": "DuckDB 网络化服务层，以 PostgreSQL 线协议提供访问",
+   "review": "SlackerDB 是一个 Java 编写的服务层，将 DuckDB 暴露到网络上，通过实现 PostgreSQL 线协议使标准 PG 客户端（JDBC/ODBC/libpq/psql）无需专用驱动即可连接，并支持多会话共享同一 DuckDB 文件、COPY 批量导入导出及把 SQL 注册为 HTTP 端点。适合需要在多客户端/多团队间共享分析型 DuckDB 数据的场景；数据引擎为 DuckDB 而非 PostgreSQL 本体。",
+   "highlights": [
+    "实现 PostgreSQL 线协议，标准客户端（JDBC、ODBC、libpq、psql）可直接连接",
+    "支持多客户端会话共享同一 DuckDB 数据库，含连接池与查询取消",
+    "提供 COPY 批量传输、SQL 注册为可缓存 HTTP 端点、PF4J 插件系统"
+   ],
+   "use_cases": [
+    "为支持 PostgreSQL 连接的 BI 工具和报表应用提供分析数据引擎",
+    "多团队/多工具并发查询共享的 .duckdb 文件而无需迁移数据",
+    "在 Java 应用中嵌入网络化分析存储服务"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "SlackerDB is a Java‑based service layer that puts DuckDB on the network. It speaks the PostgreSQL wire protocol, so standard PostgreSQL JDBC clients connect without any special driver; it also lets multiple clients share the same DuckDB database — **something  ／ * *PostgreSQL Wire Protocol* – Standard PostgreSQL clients connect as‑is: JDBC, ODBC, libpq, psql, Python.",
+     "lines": [
+      8,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 DuckDB 提供网络协议代理服务层的数据库生态工具，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "== SlackerDB (DuckDB Postgres proxy) ／ SlackerDB is a Java‑based service layer that puts DuckDB on the network. It speaks the PostgreSQL wire protocol, so standard PostgreSQL JDBC clients connect without any special driver; it also lets multiple clients share the same DuckDB database — **something a single‑process DuckDB cannot do**. On top of that, it provides a bulk COPY channel for importing and exporting data, and a registered‑SQL layer that turns queries into cacheable HTTP endpoints. ／ It runs either as a standalone server (`dbserver`, `dbproxy`) or **embedded directly in a Java application**.",
+   "evidence_lines": [
+    4,
+    8,
+    10
+   ]
+  },
+  "fn": "robotslacker/slackerdb",
+  "sha": "246d26b95d4c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10494,5 +10494,194 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2b3e483af271": {
+  "identity": {
+   "one_liner": "自托管一体化终端工作台，集成SSH、Docker、数据库与AI助手",
+   "review": "NexTerm 是一个可自托管的运维工作台，通过 SSH/WinRM/设备代理连接主机，提供持久终端、文件编辑、Docker 与 MySQL/MariaDB、PostgreSQL、Redis 的管理入口，内置可执行命令的 AI 助手。适合需要集中管理多台服务器的运维人员；服务端默认用 SQLite 存数据，可切换为 PostgreSQL、MySQL 或 MariaDB。",
+   "highlights": [
+    "提供 SSH、WinRM、SFTP、Docker 容器与 MySQL/MariaDB、PostgreSQL、Redis 的统一管理界面",
+    "内置可执行操作的 AI 助手，兼容 OpenAI 接口，支持执行前确认与按主机授权",
+    "支持多设备终端共享、端到端加密同步、TOTP 双因素认证与审计日志"
+   ],
+   "use_cases": [
+    "集中管理多台服务器的远程运维与终端会话",
+    "通过 AI 助手在确认后排查和修复服务器问题",
+    "自托管部署并跨多设备同步终端与运维配置"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **🧰 日常运维**：SFTP/WinRM/设备文件浏览与在线编辑；Docker 容器、日志与镜像；MySQL/MariaDB、PostgreSQL 与 Redis；本地转发与 SOCKS5；从 `~/.ssh/config` 或 Termius（仅 macOS）导入主机，支持单跳 `ProxyJump`，多跳条目需手动添加。",
+     "lines": [
+      32
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **🧰 日常运维**：SFTP/WinRM/设备文件浏览与在线编辑；Docker 容器、日志与镜像；MySQL/MariaDB、PostgreSQL 与 Redis；本地转发与 SOCKS5；从 `~/.ssh/config` 或 Termius（仅 macOS）导入主机，支持单跳 `ProxyJump`，多跳条目需手动添加。",
+     "lines": [
+      32
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- 默认使用 SQLite；用 `NEXTERM_DB=postgres|mysql|mariadb` 和 `NEXTERM_DB_DSN` 切换外部数据库，同一数据库只运行一个实例。",
+     "lines": [
+      77
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **🧰 日常运维**：SFTP/WinRM/设备文件浏览与在线编辑；Docker 容器、日志与镜像；MySQL/MariaDB、PostgreSQL 与 Redis；本地转发与 SOCKS5；从 `~/.ssh/config` 或 Termius（仅 macOS）导入主机，支持单跳 `ProxyJump`，多跳条目需手动添加。",
+     "lines": [
+      32
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为管理服务器与数据库提供终端、Docker 和数据库客户端等运维功能，数据库仅作为其自身存储选项",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "NexTerm 把远程运维放进一个窗口：通过 SSH、WinRM 或设备代理连接主机，让 AI 助手在你确认后排查和修复问题，再处理文件、容器、数据库、设备监控和终端分享。图片使用示例数据，可在官网体验在线演示。 ／ - **🧰 日常运维**：SFTP/WinRM/设备文件浏览与在线编辑；Docker 容器、日志与镜像；MySQL/MariaDB、PostgreSQL 与 Redis；本地转发与 SOCKS5；从 `~/.ssh/config` 或 Termius（仅 macOS）导入主机，支持单跳 `ProxyJump`，多跳条目需手动添加。 ／ - 默认使用 SQLite；用 `NEXTERM_DB=postgres|mysql|mariadb` 和 `NEXTERM_DB_DSN` 切换外部数据库，同一数据库只运行一个实例。",
+   "evidence_lines": [
+    22,
+    32,
+    77
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Hello-CTF/NexTerm",
+  "sha": "2b3e483af271",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1b1817203b7f": {
+  "identity": {
+   "one_liner": "多源数据摄取工具，将多来源内容增量同步到 Hindsight 记忆库",
+   "review": "一个自托管的数据摄取服务，把 Notion、思源笔记、S3、Google Drive、OneDrive、WebDAV、邮件等来源的内容增量同步到 Hindsight 记忆库，提供 WebUI 管理任务、凭据加密、检查点恢复与 Dry-run 预览。面向已部署 Hindsight 的个人或团队用户；自身元数据支持 SQLite/PostgreSQL/MySQL 存储，依赖 Docker Compose 部署。",
+   "highlights": [
+    "支持 Notion、SiYuan、S3、WebDAV、Google Drive、OneDrive、IMAP 等多来源增量同步",
+    "凭据以 AES-256-GCM 加密，支持检查点持久化、操作重试与重叠保护",
+    "提供 Dry-run 预览、全量对账、文档删除与多语言 WebUI（14 种语言）"
+   ],
+   "use_cases": [
+    "将多来源笔记与文档集中同步到 Hindsight 记忆库",
+    "定时增量备份/同步网盘与对象存储中的文档",
+    "从 SQL 查询结果进行数据分析与报表摄取"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🔐 **Self-hosted, secrets encrypted** — Deploy with Docker, encrypt credentials with AES-256-GCM, and choose SQLite, PostgreSQL or MySQL for persistent storage. ／ |`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.| ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      23,
+      128,
+      129
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 🔐 **Self-hosted, secrets encrypted** — Deploy with Docker, encrypt credentials with AES-256-GCM, and choose SQLite, PostgreSQL or MySQL for persistent storage. ／ |`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.| ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      23,
+      128,
+      129
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🔐 **Self-hosted, secrets encrypted** — Deploy with Docker, encrypt credentials with AES-256-GCM, and choose SQLite, PostgreSQL or MySQL for persistent storage. ／ |`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.| ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      23,
+      128,
+      129
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其自身持久化存储可选择 SQLite、PostgreSQL 或 MySQL（L23/L128），数据库仅为该应用存自身数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Sync **Notion, SiYuan, DeepWiki, S3, WebDAV, WebCAL, CalDAV, Email (IMAP), Steam, Google Drive, OneDrive and local files** into Hindsight memory banks. Self-host with Docker and manage everything from the WebUI. ／ - 🔐 **Self-hosted, secrets encrypted** — Deploy with Docker, encrypt credentials with AES-256-GCM, and choose SQLite, PostgreSQL or MySQL for persistent storage. ／ |`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.|",
+   "evidence_lines": [
+    7,
+    23,
+    128
+   ]
+  },
+  "fn": "Nyrest/hindsight-ingestion",
+  "sha": "1b1817203b7f",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

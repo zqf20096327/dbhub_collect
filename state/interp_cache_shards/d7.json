@@ -11297,5 +11297,98 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f59e64a1df5d": {
+  "identity": {
+   "one_liner": "从 SQL Server/PostgreSQL 抽数生成 QVD 并发布到 Qlik Cloud 的 ETL 工具",
+   "review": "LurkQVD 是一个在 Qlik 之外抽取数据并生成 QVD 文件、再发布到 Qlik Cloud 的 ETL 工具，提供 cron 调度、基于 Postgres 的任务队列、分批流式生成、断点续传上传、执行历史与 API 集成。面向使用 Qlik Cloud 且需从 SQL Server 或 PostgreSQL（beta）读取数据的团队，MySQL 与 Oracle 为规划中的数据源。",
+   "highlights": [
+    "支持 SQL Server 与 PostgreSQL（beta）作为源库，分批流式生成 QVD，无需全表载入内存",
+    "提供 cron 调度、多 worker 任务队列、Qlik Cloud 分片可续传上传与执行历史记录",
+    "提供 Web 界面、API token 集成（含 Airflow 示例）、角色权限与敏感信息加密存储"
+   ],
+   "use_cases": [
+    "定时从 SQL Server/PostgreSQL 抽数生成 QVD 并发布到 Qlik Cloud",
+    "通过 API 由 Airflow 等编排器触发 QVD 加载与 app 重载",
+    "监控与管理 QVD 加载任务的执行历史与错误告警"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Fila com vários workers:** as execuções ficam no Postgres; quantos workers você subir dividem o trabalho. ／ Bancos de origem: **SQL Server** e **PostgreSQL** (beta: testado contra um Postgres de teste, ainda com pouco uso",
+     "lines": [
+      22,
+      34
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Bancos de origem: **SQL Server** e **PostgreSQL** (beta: testado contra um Postgres de teste, ainda com pouco uso ／ - Acesso, a partir do servidor, ao **banco de origem** (SQL Server ou PostgreSQL) e à **Qlik Cloud** (`https://<tenant>.qlikcloud.com`).",
+     "lines": [
+      34,
+      67
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Outras fontes de dados**: MySQL e Oracle (a estrutura de drivers em `config/fontes.py` já prevê).",
+     "lines": [
+      342
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Outras fontes de dados**: MySQL e Oracle (a estrutura de drivers em `config/fontes.py` já prevê).",
+     "lines": [
+      342
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库到 Qlik Cloud 的数据抽取与交付流程服务的 ETL 工具，读取源库数据生成 QVD 文件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Bancos de origem: **SQL Server** e **PostgreSQL** (beta: testado contra um Postgres de teste, ainda com pouco uso ／ - O **worker** pega a próxima execução da fila, lê o banco de origem, gera o QVD e publica na Qlik Cloud. ／ - Tudo o que é sensível (API key da Qlik, senhas dos bancos e do SMTP) fica **criptografado no Postgres**.",
+   "evidence_lines": [
+    34,
+    58,
+    59
+   ]
+  },
+  "fn": "Paul0Franca/lurkqvd",
+  "sha": "f59e64a1df5d",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9958,5 +9958,219 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "912b848bb3ce": {
+  "identity": {
+   "one_liner": "Android 本地优先 Markdown 笔记应用，Room/SQLite 存储并支持 FTS 全文检索",
+   "review": "Markleaf 是一个本地优先的 Android Markdown 笔记应用，数据仅存于设备，通过 Room（SQLite + FTS4 虚拟表）实现本地持久化与全文搜索。它面向希望以纯 Markdown 文件拥有笔记数据的用户，采用文件夹镜像同步（经 SAF 委托外部应用），支持标签、wikilinks、GFM 表格等，可通过 F-Droid 或 GitHub Releases 安装。",
+   "highlights": [
+    "使用 Room（SQLite 持久化）与 FTS4 虚拟表实现本地全文搜索",
+    "文件夹镜像同步：每条笔记镜像为 .md/.txt 文件，经 SAF 写入用户所选文件夹",
+    "支持 GFM 表格、复选框、callouts、wikilinks/反链面板与 `#` 标签自动索引"
+   ],
+   "use_cases": [
+    "Android 设备上的离线 Markdown 笔记记录与整理",
+    "基于用户自选文件夹的跨设备/多编辑器笔记文件同步",
+    "已有 Obsidian/Logseq 等 Markdown 文件夹的移动端读写"
+   ],
+   "use_cases_check": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite FTS full-text search** — fast, down to the body text ／ - **Database**: Room — SQLite-backed local persistence, FTS4 virtual tables for full-text search",
+     "lines": [
+      68,
+      106
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用使用 Room（SQLite）作为本地笔记数据存储，SQLite 是其持久化后端",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Database**: Room — SQLite-backed local persistence, FTS4 virtual tables for full-text search ／ - **Folder mirror sync** — mirrors each note as a **title-named** `.md` / `.txt` file to a folder you pick via SAF (Drive/Dropbox/Syncthing/OneDrive/NAS, etc.); rename a note and its file follows, or turn on **Keep file names** to keep names you set yourself. Markleaf never syncs anything itself; it is delegated to *whatever external app syncs that folder*. To work on the same files from a computer, see the folder sync guide",
+   "evidence_lines": [
+    106,
+    72
+   ]
+  },
+  "fn": "jeiel85/markleaf-android",
+  "sha": "912b848bb3ce",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "07a63f3c10c1": {
+  "identity": {
+   "one_liner": "Scala/Slick 的类型安全游标分页库",
+   "review": "Slick Seeker 是一个为 Slick 3.5+ 提供游标式 keyset 分页的 Scala 开发库，通过 SlickSeekerSupport 混入自定义 profile 使用，支持前后向翻页、行值比较、NULL 排序及 Base64/压缩/加密等游标装饰器，适用于任何 Slick JDBC 支持的数据库，面向使用 Scala 与 Slick 的 JVM 后端开发者，经 Maven 依赖引入。",
+   "highlights": [
+    "提供 O(1) keyset 分页，单查询支持前向与后向导航",
+    "支持行值比较、NULL 处理、编译期游标/列校验及 Base64/压缩/加密游标装饰器",
+    "兼容任意 Slick JDBC profile（PostgreSQL、MySQL、H2、SQLite 等）"
+   ],
+   "use_cases": [
+    "Scala/Slick 应用中大结果集的分页查询",
+    "替代 OFFSET 分页以稳定翻页的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Row Value Comparisons** - `(a, b) > (x, y)` on PostgreSQL and H2 when the seek columns allow it ／ - **Profile Agnostic** - Works with any Slick JDBC profile (PostgreSQL, MySQL, H2, SQLite, etc.)",
+     "lines": [
+      12,
+      18
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Profile Agnostic** - Works with any Slick JDBC profile (PostgreSQL, MySQL, H2, SQLite, etc.)",
+     "lines": [
+      18
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Profile Agnostic** - Works with any Slick JDBC profile (PostgreSQL, MySQL, H2, SQLite, etc.)",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 Slick 的分页组件库为数据库访问提供服务，自身不存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Type-safe, high-performance cursor-based pagination for Slick 3.5+. ／ - **Profile Agnostic** - Works with any Slick JDBC profile (PostgreSQL, MySQL, H2, SQLite, etc.) ／ - Any JDBC database supported by Slick",
+   "evidence_lines": [
+    3,
+    18,
+    25
+   ]
+  },
+  "fn": "DevNico/slick-seeker",
+  "sha": "07a63f3c10c1",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2e215858a675": {
+  "identity": {
+   "one_liner": "仿人脑遗忘机制的 agent 记忆层，基于 node:sqlite 单文件存储",
+   "review": "MMTR 是一个为 LLM agent 提供记忆能力的 TypeScript 库，把记忆拆成事实/要点/情绪三条衰减通道，配合联想图、六维关系向量、前瞻记忆和常驻块，通过 ingest/wake/sleep 等接口或 HTTP 服务读写。适合构建陪伴型或长会话 agent 的开发者；用 Node 内置 node:sqlite 存储，单机单文件，不面向多写并发。",
+   "highlights": [
+    "记忆按 fact/gist/affect 三通道以不同半衰期衰减，含压缩层级与地板因子",
+    "提供联想图检索（实体/时间/锚点/主题四类边）与前瞻记忆（约定到期自动浮出与结算）",
+    "内置 HTTP 接口与服务模式，零第三方依赖，llm 留空时使用纯规则启发式"
+   ],
+   "use_cases": [
+    "为 LLM agent 添加会随时间遗忘的记忆层",
+    "长期陪伴型应用中跟踪关系状态与未兑现承诺",
+    "以本地单文件方式嵌入 Node 应用管理上下文预算"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "零依赖，Node ≥ 22.5（用内置 `node:sqlite`），单文件数据库，可以被任意 agent / 应用嵌进去。 ／ - 单机 SQLite，不面向多写并发。",
+     "lines": [
+      13,
+      184
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 agent/应用提供记忆服务组件，SQLite 仅作为其内嵌存储层实现。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "零依赖，Node ≥ 22.5（用内置 `node:sqlite`），单文件数据库，可以被任意 agent / 应用嵌进去。 ／ - **不假装自己是数据库**。它面向一个 agent 的上下文预算：输出永远是「一小段能读的东西」，不是一堆断言。",
+   "evidence_lines": [
+    13,
+    176
+   ]
+  },
+  "fn": "CRTNET8866/MMTR",
+  "sha": "2e215858a675",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

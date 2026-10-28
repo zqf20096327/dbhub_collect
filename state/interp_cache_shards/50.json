@@ -11876,5 +11876,145 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e6abde2d9904": {
+  "identity": {
+   "one_liner": "基于 Preact+Hono+SQLite 的开源任务/issue 跟踪器",
+   "review": "一个开源自托管的 issue 跟踪与项目管理工具，用于构建任务管理类 SaaS 或内部工具。前端 Preact，后端 Hono+Node.js，数据存 SQLite（better-sqlite3），首次运行自动建表，数据保存在 data.db。提供人类界面与面向 AI 浏览器代理的 ?agent 模式两种 UI，附 REST API。",
+   "highlights": [
+    "使用 SQLite 持久化，首次运行自动创建 schema，无需额外配置",
+    "提供人机双模式 UI：人类交互界面与面向 AI 代理的 ?agent 模式",
+    "内置 issue/项目/标签/评论管理及 REST API 端点"
+   ],
+   "use_cases": [
+    "自托管的项目/任务管理系统",
+    "面向 OpenClaw 社区的项目管理工具开发基础",
+    "需要 AI 代理可通过浏览器自动化操作的管理界面"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A Linear-inspired issue tracker for building project management tools, bug trackers, and task management SaaS apps. Part of the OpenClaw ecosystem. Zero cloud dependencies — runs locally with SQLite. ／ Built with **Preact + Hono + SQLite**. Ships with a dual-mode UI: one for humans (click-to-edit, inline forms) and one for AI agents (explicit buttons, large targets). ／ - **SQLite persistence** — auto-creates schema on first run, zero config ／ |**Database**|SQLite (better-sqlite3)|",
+     "lines": [
+      10,
+      12,
+      35,
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是以 SQLite 作为自身数据存储的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A Linear-inspired issue tracker for building project management tools, bug trackers, and task management SaaS apps. Part of the OpenClaw ecosystem. Zero cloud dependencies — runs locally with SQLite. ／ |**Database**|SQLite (better-sqlite3)|",
+   "evidence_lines": [
+    10,
+    70
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "clawnify/OpenTodo",
+  "sha": "e6abde2d9904",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fba1dfdd7bd9": {
+  "identity": {
+   "one_liner": "基于 Flutter 与 SQLite 的离线 Windows 效率应用",
+   "review": "Todorbit 是一款运行于 Windows 的离线效率桌面应用，涵盖任务、日历、习惯、目标、专注计时与原生桌面小组件，使用 Flutter 构建、以 SQLite 本地存储数据，提供备份/恢复与 SQLite 导入导出。适合希望在本地管理个人任务与日程的 Windows 用户；当前为 v1.0.18 预发布，安装包未签名，Google Drive 备份为实验性快照功能。",
+   "highlights": [
+    "本地 SQLite 存储，提供受管备份、经确认的恢复及 SQLite 导入/导出",
+    "包含任务、日历、习惯、目标、专注会话与原生 Windows 桌面小组件",
+    "支持 Google Drive 加密快照备份/恢复（实验性，自 v1.0.13 起）"
+   ],
+   "use_cases": [
+    "在 Windows 桌面离线规划任务、日程与习惯",
+    "通过专注计时与报告回顾实际工作投入",
+    "需本地数据备份、恢复与跨配置迁移的个人数据管理"
+   ],
+   "cat_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Todorbit is an offline Windows productivity app for tasks, calendar events, habits, goals, focus sessions, and a native desktop widget. It is built with Flutter and SQLite. Creator: Hussam Alkhatib. ／ - Keep data local, with managed backups, reviewed restore, and SQLite import/export. ／ The portable ZIP does **not** store data beside the executable. Each extracted portable location uses its own `%APPDATA%\\TodoPilot\\portable-<location-id>` profile; copying or moving the extracted folder selects a new empty profile. An installer fresh profile u",
+     "lines": [
+      9,
+      18,
+      25
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 SQLite 存储本地数据的 Flutter 桌面应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT；安装包未签名，第三方组件条款另见 THIRD_PARTY_NOTICES.md",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Todorbit is an offline Windows productivity app for tasks, calendar events, habits, goals, focus sessions, and a native desktop widget. It is built with Flutter and SQLite. Creator: Hussam Alkhatib. ／ - Keep data local, with managed backups, reviewed restore, and SQLite import/export.",
+   "evidence_lines": [
+    9,
+    18
+   ]
+  },
+  "fn": "2HIK4/Todorbit",
+  "sha": "fba1dfdd7bd9",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

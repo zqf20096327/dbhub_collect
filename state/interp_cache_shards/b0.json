@@ -9215,5 +9215,303 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "460ac38f7179": {
+  "identity": {
+   "one_liner": "自托管 Telegram 个人 AI 助手，用 PostgreSQL 存储记忆",
+   "review": "Syne 是一个自托管的 Telegram 聊天机器人，用户与之对话并让它跨会话记住指定内容。它面向想在本地服务器上运行个人助手的用户，依赖 PostgreSQL+pgvector 做向量检索，配合小型知识图谱、本地 Ollama 嵌入/评估器实现记忆衰减与写入过滤；需要 Docker 且聊天模型依赖外部 LLM 提供商。",
+   "highlights": [
+    "通过 pgvector HNSW 语义检索加知识图谱实体关系遍历实现长期记忆召回",
+    "身份、规则与配置存于 PostgreSQL 表，通过对话修改，无需配置文件",
+    "支持多级权限（owner/family/public 八进制许可）与多 LLM 提供商（Anthropic/Google/OpenAI/Together/Vertex）接入"
+   ],
+   "use_cases": [
+    "在自有服务器上运行带持久记忆的个人 AI 助手",
+    "家庭/私有场景下按权限分级共享助手",
+    "需要本地嵌入与评估器控制成本的 Telegram 机器人部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Self-hosted personal AI on Telegram. Runs on your own server, stores everything in your own PostgreSQL. Explicit facts you ask it to remember are kept forever; casual mentions decay if unused. Zero-cost floor with local Ollama for memory + evaluation; bring a  ／ - **Runtime configuration in PostgreSQL** — no `SOUL.md` or `CONFIG.yaml`. Identity, behavior, rules, and config all live in tables, changeable through conversation. ／ |**Docker**|Required — PostgreSQL 16 + pgvector runs in Docker|",
+     "lines": [
+      5,
+      16,
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确它运行于自有服务器并将所有数据存储在用户的 PostgreSQL 中，属使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted personal AI on Telegram. Runs on your own server, stores everything in your own PostgreSQL. Explicit facts you ask it to remember are kept forever; casual mentions decay if unused. Zero-cost floor with local Ollama for memory + evaluation; bring a paid API key or use your existing Claude / ChatGPT subscription via OAuth for the chat model. ／ A Telegram bot you self-host. You chat with it. It remembers what you tell it to remember, across days, weeks, restarts. Built around: ／ |**Docker**|Required — PostgreSQL 16 + pgvector runs in Docker|",
+   "evidence_lines": [
+    5,
+    11,
+    43
+   ]
+  },
+  "fn": "riyogarta/syne",
+  "sha": "460ac38f7179",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5c1fda889211": {
+  "identity": {
+   "one_liner": "Go 库，以内嵌方式在本地运行真实 ClickHouse 用于测试",
+   "review": "这是一个 Go 库，将 ClickHouse 官方二进制下载、校验并作为子进程运行，供 Go 应用或测试中直接使用，无需 Docker 或预装 ClickHouse。面向需要在 CI（如 GitLab CI）中做真实集成测试的 Go 开发者，支持集群模式（内嵌 Keeper 协调多副本）、自定义二进制源与 SHA256/512 校验，二进制缓存于本地目录以复用。",
+   "highlights": [
+    "下载并运行官方 ClickHouse 二进制，支持 SHA256/SHA512 校验与本地缓存",
+    "支持集群模式，基于内嵌 Keeper 在 localhost 运行多副本以测试 ReplicatedMergeTree",
+    "支持自定义二进制归档路径/URL 与私有镜像，配置采用 builder 模式"
+   ],
+   "use_cases": [
+    "在 Go 单元/集成测试中启动真实 ClickHouse 实例",
+    "在无 Docker 权限的 GitLab CI 环境中运行数据库集成测试",
+    "测试 ReplicatedMergeTree 副本复制与 ON CLUSTER 查询"
+   ],
+   "review_extra": null
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "# embedded-clickhouse ／ Run a real ClickHouse database locally on Linux or macOS as part of another Go application or test.",
+     "lines": [
+      1,
+      8
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Inspired by fergusstrange/embedded-postgres. ClickHouse binaries are fetched directly from official GitHub releases. ／ The insight from fergusstrange/embedded-postgres was that you don't need Docker at all. ClickHouse ships as a single self-contained binary. You can download it, verify its checksum, and run it as a child process — no daemon, no socket, no sidecar, no privilege",
+     "lines": [
+      12,
+      32
+     ]
+    }
+   ],
+   "dbs": [
+    "ClickHouse"
+   ],
+   "eco": "tool",
+   "eco_why": "为测试场景提供运行 ClickHouse 实例的工具库，本身不存业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Run a real ClickHouse database locally on Linux or macOS as part of another Go application or test. ／ go get github.com/franchb/embedded-clickhouse",
+   "evidence_lines": [
+    8,
+    39
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "franchb/embedded-clickhouse",
+  "sha": "5c1fda889211",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f068d36f5449": {
+  "identity": {
+   "one_liner": "验证国际银行账号(IBAN)的 PostgreSQL 扩展",
+   "review": "一个 PostgreSQL 扩展，提供 iban 数据类型与 iban_validate 等函数，在写入时校验并规范化 IBAN，支持 104+ 个国家、比较运算符及 btree/hash 索引，适用于需要在数据库层保证银行账号有效性的应用开发者，需 PostgreSQL 14-18 和 C++17 编译环境。",
+   "highlights": [
+    "提供 iban 数据类型与 iban_validate 函数，在输入时校验 IBAN 并以规范形式存储",
+    "覆盖 SWIFT IBAN 注册表（ISO 13616）全部 104 国及 15 个使用中但未收录的国家",
+    "提供默认 btree 和 hash 运算符类，支持排序、去重、分组、连接、主键与索引"
+   ],
+   "use_cases": [
+    "需要严格校验并规范化 IBAN 存储的金融类应用",
+    "利用数据库内校验替代应用层校验的场景",
+    "需要将 IBAN 作为可排序、可索引数据类型的表设计"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# PostgreSQL IBAN ／ PostgreSQL IBAN extension that can verify International Bank Account Numbers. ／ Supported PostgreSQL versions: 14, 15, 16, 17 and 18.",
+     "lines": [
+      3,
+      4,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "以 PostgreSQL 扩展形式为数据库提供 IBAN 数据类型与校验功能，属于为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL IBAN extension that can verify International Bank Account Numbers. ／ From source: `make && sudo make install`, then `CREATE EXTENSION iban;` (see Building below). ／ |`iban`|Data type, rejects invalid IBANs on input|",
+   "evidence_lines": [
+    4,
+    11,
+    56
+   ]
+  },
+  "fn": "yorickdewid/PostgreSQL-IBAN",
+  "sha": "f068d36f5449",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "042aa6e3a4a2": {
+  "identity": {
+   "one_liner": "生成 Postgres-only Go API 服务的 CLI 脚手架",
+   "review": "Bogie 是一个 Go 命令行工具，用于生成仅支持 Postgres 的 API-only Go 服务，组合 Gin、sqlc、goose、River 和 Kamal 等组件，并通过生成器把新代码注册进项目。面向希望减少初始技术决策的 Go 团队；生成的应用不依赖 Bogie 本身，且目前仅支持 Postgres，SQLite 被明确排除。",
+   "highlights": [
+    "提供 new/g/d/doctor 等生成器命令，生成的代码自动完成注册",
+    "以 Gin+sqlc+goose+River+Kamal 组合生成 API-only 服务，支持迁移、seed、任务队列与部署配置",
+    "生成的应用不导入 Bogie，删除工具后应用可独立运行"
+   ],
+   "use_cases": [
+    "为团队快速生成技术选型已定的 Go API 服务骨架",
+    "生成包含迁移、查询、模型与控制器的脚手架代码",
+    "配合 Kamal 部署配置与本地 bin/ci 流水线使用"
+   ],
+   "status_note": ""
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A CLI that scaffolds an API-only, Postgres-only Go service ／ You need **Docker with Compose v2** (or your own Postgres, see",
+     "lines": [
+      6,
+      40
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite is deliberately out until River's SQLite driver is stable",
+     "lines": [
+      201
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为生成使用 Postgres 的 Go 服务而服务的脚手架工具，自身不作为存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（L12、L210）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A CLI that scaffolds an API-only, Postgres-only Go service ／ out of Gin, sqlc, goose, River and Kamal, with generators that also wire the code in. ／  SQLite is deliberately out until River's SQLite driver is stable",
+   "evidence_lines": [
+    6,
+    7,
+    201
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "bogie-go/bogie",
+  "sha": "042aa6e3a4a2",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

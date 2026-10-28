@@ -11629,5 +11629,75 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "12c1115e675d": {
+  "identity": {
+   "one_liner": "基于语义搜索的 GitHub 开源仓库发现工具",
+   "review": "RepoRadar 是一个 Next.js Web 应用，把用户的自然语言需求转为结构化搜索，经 GitHub API 抓取候选、本地 embedding 筛选与重排，并输出带证据、风险与对比的排序清单，供需要按能力而非名称找开源项目的开发者使用。数据存于 PostgreSQL+pgvector，搜索约需 60-70 秒，可选 LLM 仅用于解释，支持 NO_LLM_MODE 纯确定性运行。",
+   "highlights": [
+    "支持自然语言意图搜索，输出含 Fit/Future/Underrated/Risk 四类评分的排序结果",
+    "使用本地 embedding（Transformers.js/ONNX）与可选 cross-encoder 重排，支持 NO_LLM_MODE 无付费模型运行",
+    "内置带标注 gold set 的评估工具，报告 nDCG@10、Recall@15、MRR 等指标"
+   ],
+   "use_cases": [
+    "按功能需求而非项目名搜索开源仓库",
+    "对比候选仓库的证据、健康度与风险信号",
+    "自托管部署为个人或团队的仓库选型工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres + pgvector ／ |Stack|Next.js, TypeScript, Prisma, PostgreSQL, pgvector, Octokit| ／ |`DATABASE_URL`|PostgreSQL connection string with pgvector| ／ |Status|Database, pgvector, embedding, LLM, and typical search-time health|",
+     "lines": [
+      9,
+      42,
+      139,
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用使用 PostgreSQL+pgvector 存储候选与 embedding 数据，本身是面向 GitHub 仓库搜索的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postgres + pgvector ／ |Stack|Next.js, TypeScript, Prisma, PostgreSQL, pgvector, Octokit| ／ |`DATABASE_URL`|PostgreSQL connection string with pgvector|",
+   "evidence_lines": [
+    9,
+    42,
+    139
+   ]
+  },
+  "fn": "Panther114/RepoRadar",
+  "sha": "12c1115e675d",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

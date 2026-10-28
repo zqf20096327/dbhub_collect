@@ -10082,5 +10082,235 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c2d11cb009f9": {
+  "identity": {
+   "one_liner": "Android/KMP 应用实时调试检查工具，含数据库查看",
+   "review": "Flocon 是一个用 Kotlin Multiplatform 构建的桌面调试检查工具，开发者可将 Android/KMP 应用连接到桌面界面，实时观察和交互应用内的网络、Room/SQLite 数据库、分析事件等。通过 Gradle 引入 SDK 并安装各功能插件，debug 与 release 分模块，支持 iOS 与桌面端，并提供 MCP 供 AI 代理使用。",
+   "highlights": [
+    "提供 Database (Room/SQLite) 插件，在桌面界面检查应用内数据库",
+    "通过 Gradle 依赖引入，提供 -no-op 版本用于 release 构建",
+    "包含 AI Agents (MCP) 功能"
+   ],
+   "use_cases": [
+    "调试 Android/KMP 应用中的 Room/SQLite 数据",
+    "实时检查应用网络请求与分析事件",
+    "真机连接电脑进行远程调试"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Database (Room/SQLite)**|✅|✅|",
+     "lines": [
+      65
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为移动/KMP 应用开发提供调试检查能力的工具，包含数据库查看插件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "    install(FloconDatabase) { room() } ／ |**Database (Room/SQLite)**|✅|✅|",
+   "evidence_lines": [
+    27,
+    65
+   ]
+  },
+  "fn": "openflocon/Flocon",
+  "sha": "c2d11cb009f9",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "63deb6dc1f06": {
+  "identity": {
+   "one_liner": "基于 PDO 的轻量级 PHP 数据库抽象层",
+   "review": "PDO4You 是一个基于 PDO 的 PHP 数据库封装库，不替代 PDO 也不含 ORM。它为 MySQL/MariaDB、PostgreSQL、SQLite、SQL Server 提供平台策略抽象（标识符引用、保存点、last insert ID），提供 select/insert/update/delete/exec、生成器游标、事务闭包与查询监听等 API。面向需要保留原生 SQL 控制权、依赖注入测试的 PHP 8.2+ 开发者，通过 Composer 或内置 autoload 安装。",
+   "highlights": [
+    "通过 DatabasePlatform 策略实现对 MySQL/MariaDB、PostgreSQL、SQLite、SQL Server 的方言抽象",
+    "提供事务闭包、嵌套保存点、批量执行、Generator 游标遍历和查询监听",
+    "支持 Composer PSR-4 安装或无依赖 standalone 方式引入"
+   ],
+   "use_cases": [
+    "PHP 项目中需要轻量数据库访问层且保留原生 SQL 的场景",
+    "需要依赖注入以便单元测试数据库操作的代码",
+    "跨多种数据库引擎的方言差异处理（保存点、标识符引用、lastId）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* 🔌 **Platform Strategies** — Dialect abstraction (identifier quoting, savepoints, and last insert ID retrieval) for **MySQL/MariaDB**, **PostgreSQL**, **SQLite**, and **SQL Server**. ／ * `PDO4You\\Platform\\PgSqlPlatform` — Support for **PostgreSQL** (`\"` identifier quoting, `SAVEPOINT`, `lastval()`, and validated `currval()`). ／ // For PostgreSQL with specific sequences:",
+     "lines": [
+      25,
+      264,
+      220
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* 🔌 **Platform Strategies** — Dialect abstraction (identifier quoting, savepoints, and last insert ID retrieval) for **MySQL/MariaDB**, **PostgreSQL**, **SQLite**, and **SQL Server**. ／ * `PDO4You\\Platform\\MySqlPlatform` — Support for **MySQL** and **MariaDB** (`` ` `` identifier quoting, `SAVEPOINT`, and `LAST_INSERT_ID()`). ／ The static `connect()` method sets secure defaults and automatically resolves the proper platform strategy from the DSN driver (`mysql`, `pgsql`, `sqlite`, or `sqlsrv`):",
+     "lines": [
+      25,
+      263,
+      67
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* 🔌 **Platform Strategies** — Dialect abstraction (identifier quoting, savepoints, and last insert ID retrieval) for **MySQL/MariaDB**, **PostgreSQL**, **SQLite**, and **SQL Server**. ／ * `PDO4You\\Platform\\SqlitePlatform` — Support for **SQLite** (`\"` identifier quoting, `SAVEPOINT`, and `last_insert_rowid()`).",
+     "lines": [
+      25,
+      265
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "* 🔌 **Platform Strategies** — Dialect abstraction (identifier quoting, savepoints, and last insert ID retrieval) for **MySQL/MariaDB**, **PostgreSQL**, **SQLite**, and **SQL Server**. ／ * `PDO4You\\Platform\\SqlSrvPlatform` — Support for **Microsoft SQL Server** (`[ ]` identifier quoting, `SAVE TRANSACTION` / `ROLLBACK TRANSACTION`, and same-batch `SCOPE_IDENTITY()` capture with `OUTPUT` and multi-rowset buffering). ／ On **SQL Server (`sqlsrv`)**, `PDO4You` automatically captures `SCOPE_IDENTITY()` within the same execution batch (including CTE-led `WITH ... INSERT` statements and multi-statement `DECLARE`/`SET` batches), while transparently preserving caller result sets an",
+     "lines": [
+      25,
+      266,
+      213
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* 🔌 **Platform Strategies** — Dialect abstraction (identifier quoting, savepoints, and last insert ID retrieval) for **MySQL/MariaDB**, **PostgreSQL**, **SQLite**, and **SQL Server**. ／ * `PDO4You\\Platform\\MySqlPlatform` — Support for **MySQL** and **MariaDB** (`` ` `` identifier quoting, `SAVEPOINT`, and `LAST_INSERT_ID()`).",
+     "lines": [
+      25,
+      263
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为多数据库引擎提供 PDO 之上的访问抽象与方言适配，属于服务数据库开发的组件而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* 🔌 **Platform Strategies** — Dialect abstraction (identifier quoting, savepoints, and last insert ID retrieval) for **MySQL/MariaDB**, **PostgreSQL**, **SQLite**, and **SQL Server**. ／ ## 🔌 Supported Platforms ／ * `PDO4You\\Platform\\MySqlPlatform` — Support for **MySQL** and **MariaDB** (`` ` `` identifier quoting, `SAVEPOINT`, and `LAST_INSERT_ID()`).",
+   "evidence_lines": [
+    25,
+    259,
+    263
+   ]
+  },
+  "fn": "giovanniramos/PDO4You",
+  "sha": "63deb6dc1f06",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "45470d0c0c6a": {
+  "identity": {
+   "one_liner": "2026 OceanBase 大赛 seekdb 赛题仓库",
+   "review": "该仓库为 2026 OceanBase 大赛 seekdb 赛题的参赛/题目仓库，README 仅含标题与一行赛题说明，未说明具体功能、目标用户或安装运行方式，具体内容与定位证据不足，需以仓库后续提交为准。",
+   "highlights": [
+    "与 2026 OceanBase 大赛 seekdb 赛题相关"
+   ],
+   "use_cases": [
+    "参与 2026 OceanBase 大赛 seekdb 赛题"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "2026 OceanBase 大赛 seekdb 赛题",
+     "lines": [
+      2
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅含赛题标题，无法判断是为 OceanBase 生态服务的工具还是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "2026 OceanBase 大赛 seekdb 赛题",
+   "evidence_lines": [
+    2
+   ]
+  },
+  "fn": "3156477473-wsx/ob-2026-seekdb",
+  "sha": "45470d0c0c6a",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

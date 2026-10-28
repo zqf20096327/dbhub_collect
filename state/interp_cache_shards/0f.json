@@ -10390,5 +10390,239 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ed9905abb8f0": {
+  "identity": {
+   "one_liner": "Linux QQ 群聊 Agent，经 OneBot v11 协议端收发消息并以 SQLite 持久化状态",
+   "review": "一个部署在 Linux 服务器上的 QQ 群聊机器人程序，通过外部 OneBot v11 协议端接入 QQ，调用 OpenAI Chat Completions 兼容的 LLM 生成回复，实现分条发言、表情包、主动发言、长期记忆与语音转写等能力；消息与会话数据存于本机 SQLite（WAL），面向自托管用户，通过 Docker 或 install.sh/deploy.sh 脚本部署。",
+   "highlights": [
+    "通过 OneBot v11 协议端连接 QQ，消息经 SQLite/WAL 状态机入库，处理成功后才确认发送",
+    "提供插件子进程机制、MCP 只读资源服务器、技能包与 FTS5 长期记忆检索",
+    "内置运维命令 src/ops.js，支持加密备份/恢复、JSONL/CSV 导出与 Prometheus 指标输出"
+   ],
+   "use_cases": [
+    "在自有 Linux 服务器上自托管 QQ 群聊机器人",
+    "为群聊提供定时提醒、多人游戏主持与主动话题发言",
+    "基于 OneBot v11 协议端对接自有 LLM 服务构建聊天应用"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "-> SQLite/WAL 消息状态机 ／ |磁盘|10GB 空闲，本机盘；SQLite 不支持 NFS/SMB| ／ - 校验参数、源码与 Node.js 的 `node:sqlite` 能力；",
+     "lines": [
+      115,
+      172,
+      294
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **预期可用**：Debian 12/13、Ubuntu 26.04、Rocky Linux 9、AlmaLinux 9、Fedora、CentOS Stream、RHEL、Oracle Linux、Amazon Linux、Arch/Manjaro、openSUSE Leap/Tumbleweed、SLES、openEuler、Anolis、麒麟/UOS（按 dnf/yum/zypper/pacman 尝试）。Debian 12 官方仓库只有 Compose v1，需先按 Docker 官方文档配置 apt ",
+     "lines": [
+      180
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储消息、租约与身份索引数据的 QQ 聊天应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "QQ Agent Plus 是面向 Linux 服务器的 QQ 群聊 Agent。它连接外部 OneBot v11 协议端，每次触发使用 ／   -> SQLite/WAL 消息状态机",
+   "evidence_lines": [
+    20,
+    115
+   ]
+  },
+  "fn": "sakurawwwxh/qq-agent-plus",
+  "sha": "ed9905abb8f0",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9ce8fca7a3ca": {
+  "identity": {
+   "one_liner": "SurrealDB 官方的嵌入式与网络型数据库 CRUD 性能基准测试工具",
+   "review": "crud-bench 是一个用 Rust 编写的基准测试工具，通过自动启动 Docker 容器或连接远程端点，对嵌入式与网络型 SQL/NoSQL 数据库执行创建、读取、更新、扫描、删除等负载测试，并采集 CPU、内存、磁盘读写等资源指标。其首要用途是持续测试 SurrealDB 的功能性能，供 SurrealDB 开发者评估改动影响，同时也支持对其他数据库进行对比测试。",
+   "highlights": [
+    "支持 CRUD、扫描、过滤、索引、全文搜索、向量搜索（HNSW/DiskANN）等基准工作负载",
+    "可配置样本数、并发客户端数、线程数、键类型及记录内容等测试参数",
+    "每 250ms 采样被测进程的 CPU、内存、读写字节数，结果输出为 JSON 并可在浏览器中比较"
+   ],
+   "use_cases": [
+    "对 SurrealDB 功能改动进行持续性能回归测试",
+    "在相同工作负载与数据模板下对嵌入式与网络型数据库进行基准对比",
+    "通过 TOML 配置自定义文档模板与扫描用例的基准测试"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> For tabular, or column-oriented databases (e.g. Postgres, MySQL, ScyllaDB), the first-level fields of the JSON ／ When a process has children, crud-bench adds their values together. For example, Postgres serves each connection from",
+     "lines": [
+      198,
+      159
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "> For tabular, or column-oriented databases (e.g. Postgres, MySQL, ScyllaDB), the first-level fields of the JSON",
+     "lines": [
+      198
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite is an embedded, relational, ACID-compliant, SQL-based database.",
+     "lines": [
+      843
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是为数据库性能测试服务的基准工具，本身不依赖某个数据库存数据，README 列出多个被测数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The crud-bench benchmarking tool is an open-source benchmarking tool for testing and comparing the performance of a ／ When running simple, automated tests, the crud-bench benchmarking tool will automatically start a Docker container for ／ - Docker - required when running automated tests",
+   "evidence_lines": [
+    5,
+    20,
+    121
+   ]
+  },
+  "fn": "surrealdb/crud-bench",
+  "sha": "9ce8fca7a3ca",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6ccdd54efa02": {
+  "identity": {
+   "one_liner": "PostgreSQL 14–19 中文消息目录翻译项目",
+   "review": "该项目为 PostgreSQL 14–19 六个分支提供完整的 zh_CN 与 zh_TW 消息目录（PO 文件），基于 pgtranslation 上游模板重建，统一术语表并通过 msgfmt 校验，提供发布归档下载、make 工作流及面向 PGWeb 的导入脚本，供需要中文界面的 PostgreSQL 部署者和翻译审校者使用。",
+   "highlights": [
+    "提供 zh_CN/zh_TW 双语言完整 PO 目录，覆盖 PostgreSQL 14–19 六个分支，共 324 个文件",
+    "提供 make check/stats/mo/dist 工作流及 PGWeb 审校语料导入脚本",
+    "提供双语对照在线审校工作台及带 SHA256 校验的发布归档"
+   ],
+   "use_cases": [
+    "为 PostgreSQL 14–19 部署安装简体/繁体中文消息",
+    "参与中文翻译的审校与修正",
+    "基于上游模板重建或定制本地化目录"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# PostgreSQL Chinese Message Catalogs ／ **Complete `zh_CN` and `zh_TW` translations for PostgreSQL 14 – 19** ／ PostgreSQL",
+     "lines": [
+      1,
+      3,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 PostgreSQL 提供本地化消息目录及翻译工作流，是为数据库生态服务的工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# PostgreSQL Chinese Message Catalogs ／ **162 files and 67,524 messages per language; 324 files and 135,048 messages in total.** Both languages are 100% translated, with zero fuzzy and zero untranslated entries — every file clean under `msgfmt --check --check-format`. ／ bin/                              standalone tools; Python 3, GNU gettext, GNU tar, gzip",
+   "evidence_lines": [
+    1,
+    14,
+    117
+   ]
+  },
+  "fn": "pgsty/pgnls",
+  "sha": "6ccdd54efa02",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

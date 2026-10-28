@@ -9824,5 +9824,85 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ed06f579a1cf": {
+  "identity": {
+   "one_liner": "Tauri+Rust 桌面 AI 小说创作应用，集成多模型生成与故事资产管理",
+   "review": "一款基于 Tauri、Rust 与 React 的桌面小说写作软件，提供幕前沉浸式写作与幕后故事资产（角色/世界观/伏笔/知识图谱）管理，支持接入 OpenAI、Anthropic、Ollama 等多模型并按角色路由，内含多代理协作与质量门工作流；数据存储使用 SQLite。面向中文长篇小说作者。",
+   "highlights": [
+    "提供幕前写作与幕后工作室双界面，管理角色、世界观、场景、知识图谱、伏笔等故事资产",
+    "支持接入 OpenAI / Anthropic / Ollama / 本地 API，按角色 × 任务进行模型路由",
+    "续写前基于向量检索前文原文，并提供卷纲/章纲规划、伏笔追踪与分层摘要机制"
+   ],
+   "use_cases": [
+    "长篇小说的辅助创作与续写",
+    "小说角色、世界观与伏笔等资产的结构化管理",
+    "基于本地或云端大语言模型的自动化创作工作流"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "v0.30.33 修复后续写内容仍丢失。根因：多次续写时保存操作**并发执行**，`update_scene` 全量覆写在 SQLite 写锁竞争下乱序提交，较早的小内容覆写较晚的大内容（编辑器正常但 DB 回退，重启才发现）。修复：①所有 `update_scene` **串行化**（Promise 链排队，最后一次写总是最新）；②修稿 `setContent`/`insertText` 后补同步 + 立即保存；③关闭等待 3s -> 6s（超过 SQLite busy_timeout）。 ／ 1. **后端生成链路止血**：本地 / 局域网模型默认单候选 + 全局并发限流，候选总超时硬上限 90s；LLM 连接 / 生成超时拆分；上下文准备 SQLite 高频路径 spawn_blocking 化；全局 Mutex 替换为 OnceLock / RwLock。",
+     "lines": [
+      625,
+      723
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 描述其为桌面写作软件，使用 SQLite 存储故事数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " 🌿 越写越懂的 AI 小说创作桌面应用 ／  Tauri",
+   "evidence_lines": [
+    5,
+    12
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "91zgaoge/StoryMoss",
+  "sha": "ed06f579a1cf",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

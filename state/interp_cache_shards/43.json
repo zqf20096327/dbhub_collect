@@ -10211,5 +10211,221 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d44ffe96f4b4": {
+  "identity": {
+   "one_liner": "C++20 元数据驱动的 ERP 业务应用开发平台，含编译器与多数据库层",
+   "review": "OES 是一个用 C++20 编写的业务应用开发平台：开发者用元数据描述业务对象，平台将其编译为数据库表、表单和报表，并随配置变更同步数据库结构。它面向构建库存、会计、薪资等企业内部系统的开发者，内置设计器、脚本语言、查询语言、应用服务器/集群和 MCP 服务器供 AI 助手操作配置。数据库层支持 Firebird（内置）、PostgreSQL（生产）、ODBC 和 SQLite（测试），当前为 2.0.0-preview，1.x 数据不迁移。",
+   "highlights": [
+    "元数据驱动：将业务描述编译为数据库表、表单与报表，并以 diff 方式应用 schema 变更",
+    "内置 MCP 服务器提供 113 个工具，AI 助手可读写元数据、执行代码、驱动调试器",
+    "支持 Firebird、PostgreSQL、ODBC、SQLite 多数据库层，附远程调试器与集群部署"
+   ],
+   "use_cases": [
+    "构建库存、会计、薪资、销售等企业内部业务应用",
+    "为现有业务配置接入 AI 助手以辅助读写和检查元数据配置",
+    "通过应用服务器/集群以每库一进程方式托管多个业务库"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Firebird and PostgreSQL side by side, one worker pool for all, and each base with its own ／ - **Databases** — Firebird (embedded, shipped with the distribution) and PostgreSQL for production; ／ |Production alternative|PostgreSQL|",
+     "lines": [
+      85,
+      99,
+      208
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "ODBC; SQLite for tests and logging. ／ |Other databases|ODBC; SQLite (tests + logging)|",
+     "lines": [
+      100,
+      209
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为数据库生态服务的多数据库层组件，支持 Firebird/PostgreSQL/SQLite 作为其平台的存储后端。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Databases** — Firebird (embedded, shipped with the distribution) and PostgreSQL for production; ／ The top-level `CMakeLists.txt` (CMake ≥ 3.20) builds every target. DB drivers opt in — `OES_USE_FIREBIRD`, `OES_USE_POSTGRESQL`, `OES_USE_ODBC` (all default OFF); SQLite is always embedded, no flag:",
+   "evidence_lines": [
+    99,
+    172
+   ]
+  },
+  "fn": "open-enterprise-solutions/enterprise",
+  "sha": "d44ffe96f4b4",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3f33f0fe56b0": {
+  "identity": {
+   "one_liner": "Rust 编写的 MCP 记忆服务器，用 SQLite 本地存储为 AI 代理提供持久记忆",
+   "review": "MemoryPilot 是一个 MCP 服务器，为 Cursor、Claude Desktop 等 AI 编码代理提供跨会话的持久化、可检索记忆。实现混合检索（BM25 + jina v5 向量 RRF + cross-encoder 重排）、时序知识图谱、AAAK 压缩与自动分类。纯 Rust 单二进制、全本地运行、无 API 调用，底层存储使用 SQLite，并内置 French 与 LongMemEval 基准命令。",
+   "highlights": [
+    "提供 BM25 + 向量 RRF + cross-encoder 重排的混合检索，支持 100+ 语言",
+    "实现时序知识图谱、GraphRAG、AAAK 压缩与记忆自动分类",
+    "单二进制本地运行，内置 --benchmark-longmemeval 与 --benchmark-fr 基准命令"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供跨会话记忆持久化",
+    "本地 RAG/知识检索场景",
+    "需要离线、零外部 API 的记忆服务部署"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Dependencies**|none at runtime (single binary, ONNX bundled; models fetched from Hugging Face once)|Python + ChromaDB + SQLite|Python + ONNX| ／ |Knowledge Graph|Temporal triples with validity + confidence|Temporal triples (SQLite)|Knowledge graph (no validity window)|Basic graph (no temporal)|Temporal KG (Graphiti, core feature)| ／ |Storage|SQLite WAL + FTS5 + 16-conn read pool|ChromaDB|SQLite + iii-engine|Cloud DB|Neo4j + Postgres|",
+     "lines": [
+      135,
+      146,
+      178
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 是其内置存储依赖，服务器服务于 AI 代理而非数据库生态",
+   "ai_kind_placeholder": null,
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Source Available",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " One-liner install for Cursor, Claude Desktop, VS Code, Windsurf, Claude Code, Codex and ChatGPT. Single Rust binary, zero runtime dependencies.",
+   "evidence_lines": [
+    24
+   ]
+  },
+  "fn": "Soflutionltd/MemoryPilot",
+  "sha": "3f33f0fe56b0",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c3c5642ae216": {
+  "identity": {
+   "one_liner": "多账户 Gemini CLI 配额感知调度器，用 SQLite 做跨进程协调",
+   "review": "gemini-router 是一个 Go 编写的 Linux CLI 工具，用于在多个独立认证的 Linux worker 账户间调度 Gemini/Antigravity CLI 请求，提供令牌桶限速、自适应并发、配额感知路由、有界重试和产物收集。它不暴露 HTTP 代理接口，每次调用为短生命周期进程，各进程通过共享 SQLite WAL 数据库协调租约与状态。适合在同一 Linux 主机上运行多个自动化脚本、CI 任务或 AI 代理的团队。需 Go 1.25.14+ 源码构建，当前尚无打标签的公开版本。",
+   "highlights": [
+    "提供跨进程调度：独立 CLI 进程通过共享 SQLite WAL 数据库协调 worker 选择与租约创建（BEGIN IMMEDIATE）",
+    "实现自适应速率限制与并发控制：token-bucket 限速、基于观测延迟学习并发上限、配额窗口跟踪与有界重试预算",
+    "支持文件附件安全复制、生成产物收集、请求取消进程组终止及队列深度/延迟观测"
+   ],
+   "use_cases": [
+    "多个自治 AI 代理或代理编排器共享 Gemini 配额的场景",
+    "CI/CD、cron 任务与 shell 脚本并行调用 Gemini CLI 的自动化流程",
+    "带附件的长上下文请求及生成图片等产物的批量工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Cross-process coordination**|Independent CLI processes coordinate through one SQLite WAL database.| ／ |**No daemon required**|Each invocation is a normal CLI process; SQLite is the coordination boundary.|",
+     "lines": [
+      36,
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该工具以 SQLite WAL 数据库作为调度状态与跨进程协调的存储边界（L36/L47），属使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Cross-process coordination**|Independent CLI processes coordinate through one SQLite WAL database.| ／ |**No daemon required**|Each invocation is a normal CLI process; SQLite is the coordination boundary.|",
+   "evidence_lines": [
+    36,
+    47
+   ]
+  },
+  "fn": "darttroll/gemini-router",
+  "sha": "c3c5642ae216",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

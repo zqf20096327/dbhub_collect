@@ -11113,5 +11113,59 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "37cb05a97720": {
+  "identity": {
+   "one_liner": ".NET 托管代码实现的嵌入式键值存储，设计遵循 RocksDB",
+   "review": "Solarium 是面向 .NET 的嵌入式键值存储引擎，实现列族、跨列族原子写批次、WAL、memtable、SSTable、压缩与有序迭代器等 LSM 结构。作为 Kommander Raft 库的日志存储与 WAL 后端、Kahuna 的持久化后端使用。项目处于早期，盘上格式可能变更，部分恢复路径尚未完成。",
+   "highlights": [
+    "提供列族、跨列族原子写批次、WAL、SSTable、leveled compaction 与有序迭代器",
+    "提供 Kommander WAL 后端与 Kahuna 持久化扩展包，通过 --extension-assembly 加载",
+    "全部为托管代码，MIT 许可，支持 .NET 10 平台及 Linux io_uring 存储环境"
+   ],
+   "use_cases": [
+    "为 Kommander Raft 库提供持久化日志存储（WAL 后端）",
+    "作为 Kahuna 服务器的存储引擎与 Raft WAL 后端",
+    ".NET 应用内嵌的键值持久化存储"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它本身是存储引擎，为 Kommander、Kahuna 等组件提供持久化后端服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Solarium is an embedded key-value store for .NET, written in managed code. Its design and its API follow RocksDB: a database in one directory, column families, atomic write batches across them, a write-ahead log (WAL), sorted in-memory tables (memtables), sorted files on disk (SSTables), compaction, range deletes, and ordered iterators. ／ It exists to be a durable log store for Kommander, the Raft library: it covers the part of RocksDB that Kommander's Raft log uses, with RocksDB as the reference behavior, and it ships a Kommander WAL backend, `SolariumDb.Kommander`, that a host plugs into Kommander in place of RocksDB, with no native library. ／ |`SolariumDb.Kommander`|`SolariumWAL`, a Kommander `IWAL` on Solarium, with the on-disk layout of Kommander's `RocksDbWAL`.|",
+   "evidence_lines": [
+    3,
+    5,
+    13
+   ]
+  },
+  "fn": "solariumdb/solariumdb",
+  "sha": "37cb05a97720",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

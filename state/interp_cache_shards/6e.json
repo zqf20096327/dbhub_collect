@@ -9675,5 +9675,114 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "498a466691d1": {
+  "identity": {
+   "one_liner": "无 Agent 的 Linux 服务器监控与远程管理单二进制工具",
+   "review": "Pantau 是一个通过 SSH 以无 Agent 方式监控和管理 Linux 服务器的 Go 单二进制工具，内置嵌入式 SQLite 数据库（WAL 模式）存储数据，Web 界面嵌入二进制内。它提供实时指标采集、期望状态漂移检测、Web 终端、SFTP 编辑和加密快照备份，面向管理中小规模服务器集群或隔离内网的运维人员。",
+   "highlights": [
+    "通过 OpenSSH 使用 POSIX 标准命令采集远程主机的 CPU、内存、磁盘、进程和网络指标，目标主机无需安装 Agent",
+    "内置期望状态基线与漂移检测，服务或容器故障时自动提取退出码、OOM 状态和 journalctl/docker logs 尾部日志",
+    "提供浏览器内多标签 PTY 终端、SFTP 文件编辑、跨主机零磁盘流式传输及 Argon2id/AES-256-GCM 加密快照备份"
+   ],
+   "use_cases": [
+    "中小规模 Linux 服务器集群或隔离内网环境的服务器健康监控",
+    "基于期望状态基线的容器、systemd 服务和磁盘阈值漂移检测",
+    "通过浏览器进行远程终端操作、文件编辑和服务器间文件传输"
+   ],
+   "classification": {
+    "cat": "监控",
+    "db_verdicts": [
+     {
+      "db": "SQLite",
+      "rel": "support",
+      "lines": [
+       16,
+       27,
+       129
+      ]
+     }
+    ],
+    "eco": "tool",
+    "eco_why": "它是通过 SSH 采集服务器指标并管理主机的监控/管理工具，SQLite 仅作为其自身嵌入式数据存储。",
+    "ai": {
+     "flag": false,
+     "kind": []
+    },
+    "persona": "ops",
+    "official": {
+     "flag": false,
+     "of": null
+    }
+   },
+   "signals": {
+    "status": "active",
+    "license_note": "MIT License",
+    "install": [
+     "binary",
+     "docker"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     7,
+     26,
+     27
+    ]
+   }
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ - **Single self-contained binary**: Written in Go with an embedded SQLite database and embedded zero-npm web interface. Runs anywhere with zero external dependencies. ／ |`-db`|`PANTAU_DB` (or `DB_PATH`)|`pantau.db`|Path to SQLite database file|",
+     "lines": [
+      16,
+      27,
+      129
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是通过 SSH 采集服务器指标并管理主机的监控/管理工具，SQLite 仅作为其自身嵌入式数据存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Agentless Linux server monitoring and lightweight remote operations in a single binary. ／ - **Zero remote agents**: Operates exclusively over standard OpenSSH (`port 22`) using POSIX standard commands. Target servers require zero daemon installations, zero open telemetry ports, and zero background resource footprint. ／ - **Single self-contained binary**: Written in Go with an embedded SQLite database and embedded zero-npm web interface. Runs anywhere with zero external dependencies.",
+   "evidence_lines": [
+    7,
+    26,
+    27
+   ]
+  },
+  "fn": "herliansyah/pantau",
+  "sha": "498a466691d1",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

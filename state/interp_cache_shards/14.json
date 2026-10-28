@@ -11193,5 +11193,81 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eb303779b5d2": {
+  "identity": {
+   "one_liner": "多租户 Markdown 知识库，提供知识图谱、语义搜索，并通过 MCP 暴露给 Claude",
+   "review": "nanace 是一个自托管的多租户 Markdown 团队知识库，提供团队级 RBAC、知识图谱和基于嵌入模型的语义搜索，并通过内置 MCP 服务器让 Claude Code/Claude Desktop 读取或写入页面。后端使用 PostgreSQL 存储数据、Qdrant 存向量，支持 Docker 部署、Prometheus 指标和 SQL 迁移管理，适合需要与 Claude 集成记录工作日志的团队。",
+   "highlights": [
+    "提供 MCP 服务器（nanace-mcp），供 Claude Code 和 Claude Desktop 连接，默认只读 token，可开启写入工具",
+    "支持团队级 RBAC、Google OAuth 登录、多租户组织和语义搜索（bge-small-en-v1.5 嵌入模型 + Qdrant）",
+    "启动时自动执行 SQL 迁移，提供 reindex 命令从 PostgreSQL 重建向量，暴露 Prometheus 指标和健康探针"
+   ],
+   "use_cases": [
+    "团队用 Markdown 页面管理任务/项目知识，并通过 Claude 记录工作日志",
+    "自托管部署知识库并提供语义搜索与知识图谱",
+    "将 Claude Code 的 memory 文件导入为关联页面"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "make run # starts PostgreSQL + Qdrant, then the API on :8080 ／ `NANACE_PUBLIC_URL`, ...); PostgreSQL must give it a non-superuser role (see ／ To rebuild the vectors from PostgreSQL, for example after moving to a new or",
+     "lines": [
+      10,
+      177,
+      225
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统用 PostgreSQL 存数据、Qdrant 存向量，自身是知识库应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Multi-tenant markdown knowledge base with team-level RBAC and semantic search, ／ make run                      # starts PostgreSQL + Qdrant, then the API on :8080 ／ `NANACE_PUBLIC_URL`, ...); PostgreSQL must give it a non-superuser role (see",
+   "evidence_lines": [
+    3,
+    10,
+    177
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "felichita/nanace",
+  "sha": "eb303779b5d2",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

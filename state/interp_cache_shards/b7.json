@@ -10154,5 +10154,151 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2f6267a02537": {
+  "identity": {
+   "one_liner": "基于 Postgres 扩展的 AI 工作流引擎与 agent 记忆系统",
+   "review": "Percolate 通过一对 Postgres 扩展（纯 SQL 的 percolate 和 Rust/pgrx 编写的 percolate_parser）把 agent、工作流、运行记录、文档及其图关系存为数据库行，提供 MCP 查询服务和 Agent Runtime。面向需要可查询 agent 运行轨迹与记忆的开发者，支持 Docker Compose、Helm 或装入自备的 Postgres 19。",
+   "highlights": [
+    "提供 percolate（纯 SQL，可由非超级用户安装）与 percolate_parser（Rust/pgrx）两个 Postgres 扩展",
+    "支持 Docker Compose、Helm chart 与安装脚本三种部署方式，含 PostgREST、MCP 查询服务器与 Agent Runtime",
+    "workers 内置 CPU 嵌入模型，无需模型密钥即可进行语义查询"
+   ],
+   "use_cases": [
+    "为 LLM agent 提供可用 SQL 查询的运行轨迹与记忆存储",
+    "在自有 Postgres 19 实例上安装扩展构建 agent 基础设施",
+    "通过 MCP 服务器供 agent 查询文档与图数据"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "An AI workflow engine and agent memory inside Postgres. Agents, workflows, runs, documents and the graph over them ／ This brings up Postgres 19 with both extensions, PostgREST, the outbound and ingestion workers, the Content Server, ／ ### Your own Postgres 19",
+     "lines": [
+      3,
+      22,
+      44
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本体是 Postgres 扩展与配套运行时，为 Postgres 提供 agent 记忆与工作流能力",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "An AI workflow engine and agent memory inside Postgres. Agents, workflows, runs, documents and the graph over them ／ |`extension/percolate`|the `percolate` extension: pure SQL, installable by a non-superuser so row-level security is real| ／ |`extension/percolate_parser`|the `percolate_parser` extension: the compiled parsers, in Rust with pgrx|",
+   "evidence_lines": [
+    3,
+    69,
+    70
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Percolation-Labs/percolate",
+  "sha": "2f6267a02537",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "884fdcd919fd": {
+  "identity": {
+   "one_liner": "面向8天轮换制学校的课表 Web 应用，支持服务器与纯浏览器两种模式",
+   "review": "一个为8天轮换课程表设计的学校课表 Web 应用，学生可手动输入或上传 PDF/.ics 导入课程，生成可视化周课表。使用 SQLite 存储账户模式课表，本地模式仅用浏览器 localStorage、不向服务器发送数据。面向该校学生使用，含 Flask 后端、Playwright 测试，非学校官方工具。",
+   "highlights": [
+    "支持账户模式（服务器 SQLite 存储）与本地模式（浏览器 localStorage）双运行方式",
+    "支持 PDF 与 .ics（RFC 5545）文件导入解析",
+    "提供基于 Playwright 浏览器与 HTTP 层的测试套件"
+   ],
+   "use_cases": [
+    "轮换制学校学生查看每周实际课表",
+    "需要隐私保护的本地课表管理",
+    "导入学校发布的 PDF/日历文件自动生成课表"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Where the schedule lives|a row in the server's SQLite database|the browser's `localStorage`|",
+     "lines": [
+      19
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用以 SQLite 存储课表数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A web app for a school that runs an **8 day rotating schedule** rather than a ／ |Where the schedule lives|a row in the server's SQLite database|the browser's `localStorage`| ／ app.py                  Flask app: auth, admin, the API, both modes",
+   "evidence_lines": [
+    3,
+    19,
+    85
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Larryzpl123/smart-schedule",
+  "sha": "884fdcd919fd",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

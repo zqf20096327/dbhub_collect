@@ -10442,5 +10442,75 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e3e471bf2870": {
+  "identity": {
+   "one_liner": "基于个人 Postgres 的本地优先健康记录，通过 MCP 暴露",
+   "review": "health-os 将化验、用药、诊断、可穿戴设备数据和饮食记录存入用户自己的 Postgres（含 pgvector），并以 MCP server 形式向任意 MCP 客户端提供 38 个读写工具；数据写入先进入 pending 状态，需用户批准才成为事实，安全规则（临界值、药物交互）由确定性代码而非模型判断实现。适合希望本地自托管个人健康数据、配合本地或云端 LLM 客户端的用户。",
+   "highlights": [
+    "提供 38 个 MCP 工具，通过 stdio 与任意 MCP 客户端通信",
+    "数据写入经 pending/approve 流程，安全检查（临界值告警、药物交互拒绝）为确定性代码",
+    "支持 Apple Health 与 Garmin 导入、pgvector 嵌入检索及 restic 备份"
+   ],
+   "use_cases": [
+    "个人健康记录的本地自托管存储与查询",
+    "通过本地模型 MCP 客户端管理化验与营养数据",
+    "生成健康趋势报告、筛查日历和就诊简报"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Your labs, diagnoses, medications, wearable data and food log live in your own Postgres; any ／ docker compose up -d db # Postgres 16 + pgvector ／ Architecture: MCP client over stdio to mcp_server; read tools query approved views, write tools go through core/services into pending; safety, analytics, PostgreSQL with pgvector, ingestion",
+     "lines": [
+      7,
+      66,
+      81
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明用户的化验、用药等数据存于个人 Postgres，项目是使用数据库存储的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-or-later",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Local-first personal health record, exposed over MCP.** ／ docker compose up -d db               # Postgres 16 + pgvector ／  Architecture: MCP client over stdio to mcp_server; read tools query approved views, write tools go through core/services into pending; safety, analytics, PostgreSQL with pgvector, ingestion",
+   "evidence_lines": [
+    6,
+    66,
+    81
+   ]
+  },
+  "fn": "andronaft/health-os",
+  "sha": "e3e471bf2870",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

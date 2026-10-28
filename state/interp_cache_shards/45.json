@@ -11743,5 +11743,133 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e11e0794dd51": {
+  "identity": {
+   "one_liner": "数字取证分析工作台，GUI 内检视归档、镜像与 SQLite 等数据格式",
+   "review": "Crush 是一个面向取证审查人员的桌面工作台：打开 ZIP/TAR/7z、iOS/Android 备份、磁盘镜像（E01/EWF、UFDR）等证据源，无需预解包即可用专用查看器检视 SQLite、LevelDB、Realm、ABX、Plist、Protobuf 等格式，并提供 BLOB 解码、哈希校验与完整性测试套件。适用于需要检查单个文件或数据源的 DFIR 人员，不做 carving 等全盘处理流程。",
+   "highlights": [
+    "提供 SQLite（含 WAL、free blocks/pages、SQLCipher 密钥由用户提供）、LevelDB、Realm、MMKV 查看器",
+    "直接在归档、移动备份与磁盘镜像内浏览文件，读取过程不产生副作用文件",
+    "每次发布运行取证测试套件，验证证据源不可变并附带审计结果"
+   ],
+   "use_cases": [
+    "检视 iOS/Android 备份中的数据库与日志证据",
+    "对磁盘镜像或 UFDR 提取物做定点文件分析",
+    "对 BLOB 数据做链式解码并导出含 SHA-256 清单的记录"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Databases|SQLite (incl. WAL, free blocks/pages, SQLCipher¹), LevelDB, Realm (incl. encrypted¹), MMKV| ／ - **Hex provenance** — with the hex view open, selecting an entry in the SQLite, Protobuf, FlatBuffers, MMKV, Realm or Chromium Disk Cache viewer shows exactly where its bytes are. ／ - No side-effect files (e.g. SQLite `-wal`/`-shm`)",
+     "lines": [
+      46,
+      60,
+      72
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目将 SQLite 等数据库文件作为取证证据源读取解析，并非为数据库生态服务的组件，也非依赖数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Crush is a digital forensic analysis workbench.** Open archives, mobile backups, disk images, folders and single files, identify what's inside, and inspect it in dedicated viewers. Sources are opened without extracting them first. Built for examiners who need to look inside a specific file or source, not run a full processing pipeline. Every release runs a forensic test suite that checks whether Crush leaves the evidence untouched. ／ |Databases|SQLite (incl. WAL, free blocks/pages, SQLCipher¹), LevelDB, Realm (incl. encrypted¹), MMKV| ／ **Integrity mode** — file, ZIP and TAR sources hashed on open, exports get a hash manifest.",
+   "evidence_lines": [
+    15,
+    46,
+    67
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "kalink0/crush-forensics",
+  "sha": "e11e0794dd51",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5b279a6f3e4e": {
+  "identity": {
+   "one_liner": "SQL Server 维护自动化工具，以单个 T-SQL 脚本安装",
+   "review": "YourSqlDba 是面向 Microsoft SQL Server 的数据库维护与自动化工具，完全用 T-SQL 编写，以单个脚本安装，创建一个专用数据库，提供备份、完整性检查、索引与统计信息维护、清理、诊断和报表功能，并支持将部分操作委托给非 sysadmin 用户。它依赖 SQL Server Agent 作业和 Database Mail，适合管理 SQL Server 实例的 DBA 使用。",
+   "highlights": [
+    "提供备份、完整性检查、索引与统计信息维护、清理和诊断功能",
+    "通过 SQL Server Agent 作业和存储过程实现计划维护",
+    "支持将备份、恢复、复制等操作委托给非 sysadmin 用户"
+   ],
+   "use_cases": [
+    "SQL Server 实例的例行备份与维护自动化",
+    "限制权限的运维人员执行受控的数据库维护操作",
+    "生成维护报告与日志以核查每次运行涉及的数据库"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是为 SQL Server 数据库维护服务的工具，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "YourSqlDba is an open-source maintenance and automation tool for Microsoft SQL ／ distributed as a single script that installs a dedicated database for backups, ／ YourSqlDba is a large T-SQL script that automates database maintenance tasks for",
+   "evidence_lines": [
+    9,
+    11,
+    56
+   ],
+   "softened": []
+  },
+  "fn": "pelsql/YourSqlDba",
+  "sha": "5b279a6f3e4e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

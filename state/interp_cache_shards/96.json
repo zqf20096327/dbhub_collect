@@ -12247,5 +12247,165 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c6c28d8daacd": {
+  "identity": {
+   "one_liner": "PostgreSQL 多平台预编译二进制分发项目",
+   "review": "为 Linux、macOS、Windows 提供 PostgreSQL 预编译二进制包，按版本和 rustc target 元组命名安装包，覆盖 GNU/musl/MSVC 等目标，并提供本地构建脚本与测试脚本。适合需要在 CI 或部署环境中免编译安装指定版本 PostgreSQL 的用户；版本号沿用 PostgreSQL 版本并附发布号，Windows ARM64 需 PostgreSQL 16 及以上。",
+   "highlights": [
+    "提供 Linux（GNU/musl）、macOS、Windows（MSVC）x86-64 与 ARM64 目标的 PostgreSQL 二进制包",
+    "版本命名兼容 PostgreSQL 版本号，并提供各平台本地构建与测试脚本",
+    "安装包可通过 rustc target 元组匹配平台"
+   ],
+   "use_cases": [
+    "在 CI 流程中安装指定版本 PostgreSQL",
+    "跨平台部署时获取预编译二进制",
+    "本地构建特定 target 的 PostgreSQL 包"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# PostgreSQL Binaries ／ PostgreSQL binaries for Linux, macOS and Windows. Asset target names describe an ABI; ／ Installation packages use the pattern `postgresql-<version>-<target>.<extension>`, where`<version>` is the",
+     "lines": [
+      1,
+      7,
+      13
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "项目为多平台打包分发 PostgreSQL 二进制安装包，服务于 PostgreSQL 的安装与部署",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "分发的 PostgreSQL 本体采用 The PostgreSQL License",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "PostgreSQL binaries for Linux, macOS and Windows. Asset target names describe an ABI; ／ Installation packages use the pattern `postgresql-<version>-<target>.<extension>`, where`<version>` is the",
+   "evidence_lines": [
+    7,
+    13
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "theseus-rs/postgresql-binaries",
+  "sha": "c6c28d8daacd",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a4388975e97e": {
+  "identity": {
+   "one_liner": "MySQL/MariaDB 并行一致性导出、导入、复制与流式传输工具",
+   "review": "quiver 是一个针对 MySQL 和 MariaDB 的数据导出、加载、复制与流式传输工具，不依赖客户端库，自行实现 MySQL 协议解码为列式数据，通过快照读锁、分块并行读取、多 TCP 流传输完成 dump/load/copy/stream。支持 mydumper 目录布局兼容、CSV/SQL/zstd 输出，并提供 --ingest tablespace 在客户端构建 InnoDB 表空间文件的加载方式。面向需要批量搬移 MySQL 系数据库数据的运维与迁移场景，要求 glibc 2.34+ 或 macOS 14+。",
+   "highlights": [
+    "自行实现 MySQL 协议客户端，将二进制行解码为 Arrow 布局列式批次，无需客户端库",
+    "提供 dump/load/copy/agent/collect/relay 子命令，支持一致快照下并行导出与流式复制",
+    "支持 --ingest tablespace 在客户端构建 InnoDB 页文件并由服务器 IMPORT，兼容 mydumper 目录布局"
+   ],
+   "use_cases": [
+    "MySQL/MariaDB 大表并行一致性备份导出",
+    "服务器间数据库整库复制与迁移",
+    "跨网络链路的多跳数据流式传输与转发"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Postgres and other providers|after MySQL is done|",
+     "lines": [
+      396
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Dump, load, copy and stream MySQL and MariaDB from one consistent snapshot, at the speed of the server.** ／ MySQL 8.0 · 8.4 ／ **No client library.** quiver speaks the MySQL protocol itself and decodes binary rows from the",
+     "lines": [
+      5,
+      12,
+      30
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**Dump, load, copy and stream MySQL and MariaDB from one consistent snapshot, at the speed of the server.** ／ MariaDB 10.11 · 11.4 · 11.8 ／ - **One snapshot.** `FLUSH TABLES WITH READ LOCK` or MariaDB `BACKUP STAGE`; every session opens",
+     "lines": [
+      5,
+      13,
+      73
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 MySQL/MariaDB 提供导出、导入、复制与流式传输能力的工具，属于数据库生态服务组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Dump, load, copy and stream MySQL and MariaDB from one consistent snapshot, at the speed of the server.** ／ **No client library.** quiver speaks the MySQL protocol itself and decodes binary rows from the ／ quiver dump    # MySQL to files: mydumper-compatible SQL or CSV, optional zstd, checksummed manifest",
+   "evidence_lines": [
+    5,
+    30,
+    164
+   ]
+  },
+  "fn": "jongleb/quiver",
+  "sha": "a4388975e97e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

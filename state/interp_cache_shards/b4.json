@@ -11180,5 +11180,156 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fe99e181fa1a": {
+  "identity": {
+   "one_liner": "为 AI 编码代理提供本地持久记忆的 MCP 服务器与 CLI，基于 SQLite 存储",
+   "review": "DevMemory 是一个 MCP 服务器加 CLI 工具，为 Claude Code、Cursor 等 AI 编码代理保存项目决策、架构与调试经验，供跨会话检索。数据存于本地单个 SQLite 文件，使用 FTS5 全文搜索（BM25 排序，仅关键词搜索，非语义搜索），内置密钥脱敏与项目隔离，需 Node.js ≥22.12，通过 npm 全局安装。",
+   "highlights": [
+    "提供 9 个 MCP 工具和 15 条 CLI 命令，支持记忆的保存、检索、更新、归档与导入导出",
+    "使用 SQLite FTS5 全文搜索（BM25 排序），检索结果附带评分说明",
+    "存储前对 API 密钥、令牌等秘密信息进行脱敏，项目间记忆相互隔离"
+   ],
+   "use_cases": [
+    "为 Claude Code / Cursor 等 MCP 客户端保存并检索项目决策与约定",
+    "团队通过 .mcp.json 共享项目记忆配置",
+    "通过 CLI 以 JSON 输出和退出码将记忆管理纳入自动化流程"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ |🔒 Privacy|Context pasted into chats|Stored locally in SQLite, never uploaded| ／ - 🏠 **Local-first and private.** A single SQLite file at `~/.devmemory/`. No cloud, no account, no telemetry, no network port.",
+     "lines": [
+      13,
+      29,
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确数据存储于本地 SQLite 文件，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🏠 **Local-first and private.** A single SQLite file at `~/.devmemory/`. No cloud, no account, no telemetry, no network port. ／ - 🔌 **MCP server.** 9 tools over stdio, verified with **Claude Code**. Works with any MCP client. ／ - 🔎 **Fast, explainable search.** SQLite FTS5 full-text search with BM25 ranking, weighted by importance, confidence and recency. Every result explains its score.",
+   "evidence_lines": [
+    33,
+    34,
+    37
+   ]
+  },
+  "fn": "vasikmansuri/devmemory",
+  "sha": "fe99e181fa1a",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f38f6713b1f2": {
+  "identity": {
+   "one_liner": "Kingdom Crew 团契官网，Node/Express 后端连接 TiDB Cloud",
+   "review": "这是为 UNILAK Rwamagana 校区 Kingdom Crew 团契编写的官方网站，前端为 HTML/CSS/原生 JavaScript，可选配 Node/Express 后端，用 TiDB Cloud Serverless 存储联系表单与活动数据，并集成 Groq/OpenAI/Gemini 的 AI 聊天助手。README 提供本地运行、TiDB schema 初始化和 Render/GitHub Pages 部署步骤。适合想低成本上线的社区组织参考。",
+   "highlights": [
+    "提供联系表单与活动数据持久化，后端连接 TiDB Cloud 并附 schema.sql 初始化脚本",
+    "内置 AI 助手接口，支持 Groq/OpenAI/Gemini 提供商及备用模型重试",
+    "支持纯静态模式运行，前端页面与活动/图库内容可通过 config.js 配置"
+   ],
+   "use_cases": [
+    "教会或学生社团官网，需要联系表单和活动发布",
+    "带限流 AI 问答助手的静态网站后端",
+    "Render/GitHub Pages 低成本部署示例"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "## 3. Connect the database (TiDB Cloud) ／ 1. Create a free TiDB Cloud Serverless cluster, click **Connect**, and copy host, port, user and password.",
+     "lines": [
+      36,
+      37
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 TiDB Cloud 存储数据的网站应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "HTML + CSS + vanilla JavaScript frontend, with an optional Node/Express backend (TiDB Cloud database + AI assistant). ／ ## 3. Connect the database (TiDB Cloud) ／ Member accounts, admin dashboard, member directory and community feed from the larger master prompt are not in this version. The current database has only `inquiries` and `events`. Build those in later phases once this foundation is confirmed working.",
+   "evidence_lines": [
+    4,
+    36,
+    104
+   ]
+  },
+  "fn": "ayd-jamesjr/kingdom-crew",
+  "sha": "f38f6713b1f2",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

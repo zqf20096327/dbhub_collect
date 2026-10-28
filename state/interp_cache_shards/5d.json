@@ -10529,5 +10529,360 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "49cbcfb82f31": {
+  "identity": {
+   "one_liner": "DMARC 聚合报告解析器，单 Go 二进制，IMAP 输入、SQLite 存储、内置仪表盘",
+   "review": "解析邮箱中收到的 DMARC RUA 聚合报告（IMAP 或 Maildir 输入），将结果存入单个 SQLite 文件，并提供仪表盘、Prometheus 指标与 MCP 服务器。面向需查看域名 DMARC 报告的运维/管理员，仅支持聚合报告，不支持 RUF 失败报告与多邮箱采集。",
+   "highlights": [
+    "通过 IMAP 或 Maildir 读取 gzip/zip/raw XML 格式的 DMARC 聚合报告并存入单个 SQLite 文件",
+    "提供 28 项 Prometheus 指标、Grafana 仪表盘及五个 GET 路由的 HTTP API",
+    "内置 MCP 服务器，经 stdio 或 HTTP 向 AI 助手暴露九个查询工具"
+   ],
+   "use_cases": [
+    "集中解析并查看域名 DMARC 聚合报告",
+    "将 DMARC 统计数据接入 Prometheus/Grafana 监控",
+    "通过 MCP 让 AI 助手查询 DMARC 报告数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Stores everything in one SQLite file. No database server, no JVM. ／ |Database file|`DATABASE_PATH`|`~/.parse-dmarc/db.sqlite`, `/data/parse-dmarc.db` in Docker|",
+     "lines": [
+      25,
+      123
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储自身解析的 DMARC 报告数据，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Fetches reports over IMAP from any mailbox, or from a local Maildir when the mail server is on the same host (`MAILDIR_PATH`, see Configuration). Reports that Exchange or Outlook forward as `message/rfc822` attachments are unwrapped too. ／ - Stores everything in one SQLite file. No database server, no JVM. ／ - Serves an MCP server, so an AI assistant can query your reports.",
+   "evidence_lines": [
+    23,
+    25,
+    29
+   ]
+  },
+  "fn": "dmarcguardhq/parse-dmarc",
+  "sha": "49cbcfb82f31",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "24b30e6006c1": {
+  "identity": {
+   "one_liner": "AI 编码代理的本地持久化记忆 MCP 服务器",
+   "review": "为 Claude Code、Codex、Gemini CLI 等本地 MCP 宿主提供跨会话持久记忆的 stdio MCP 服务器。记忆默认存储在本地 SQLite，可选 PostgreSQL+pgvector，并可在 macOS/Linux 自动部署受管理的 PostgreSQL 实例；提供 novelty 检查、引用可解析性分级和 supersedes 修正链。面向需要在多会话间保留项目决策与上下文的 AI 编码代理用户。",
+   "highlights": [
+    "提供 57 个记忆工具与 11 个生命周期 hook，支持 Claude Code/Codex 等宿主共享同一记忆",
+    "本地 SQLite 存储为默认，支持 PostgreSQL+pgvector/pg_trgm 后端及自动管理的本地 PG 实例",
+    "写入时执行 novelty 检查与本地引用解析分级，修正以 supersedes 链保留历史"
+   ],
+   "use_cases": [
+    "在 Claude Code 与 Codex 间共享项目决策与修复上下文",
+    "本地离线环境下为 MCP 宿主提供长期记忆存储",
+    "需要记忆可检查来源与可追溯修正记录的代理工作流"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "default, or PostgreSQL + pgvector if you prefer. No LLM in the retrieval loop, and nothing ／ PostgreSQL server with pgvector and pg_trgm: pinned, sha256-checked binaries (about 13 MB on macOS, ／ An existing PostgreSQL setup is kept: a configured `database_url` option (or `DATABASE_URL`),",
+     "lines": [
+      17,
+      102,
+      118
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Sovereign is what it is today.** Everything runs on your machine: a local SQLite file by ／ SQLite store. No PostgreSQL required. ／ uv tool install \"hypermnesia-mcp[sqlite]\"",
+     "lines": [
+      16,
+      65,
+      70
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 MCP 宿主提供记忆服务的 stdio 服务器组件，SQLite/PostgreSQL 仅作为其存储后端。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The same stdio MCP server also supplies memory tools to Claude Desktop, Claude Cowork ／ **Sovereign is what it is today.** Everything runs on your machine: a local SQLite file by ／ PostgreSQL server with pgvector and pg_trgm: pinned, sha256-checked binaries (about 13 MB on macOS,",
+   "evidence_lines": [
+    25,
+    16,
+    102
+   ]
+  },
+  "fn": "cdeust/Cortex",
+  "sha": "24b30e6006c1",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "27587679ef9b": {
+  "identity": {
+   "one_liner": "星露谷物语专用服务器的中文 Web 管理面板，基于 JunimoServer 与 Docker",
+   "review": "Anxi Panel 是面向中文服主的星露谷物语专用服务器 Web 管理面板，封装 JunimoServer 的游戏服务器能力，提供引导式安装、Steam 认证、启停控制、存档备份恢复、Mod 与玩家管理。技术栈为 Go、React 与 SQLite，通过 Docker Compose 部署，需挂载 docker.sock，仅支持 Linux/NAS/WSL2 环境，AGPLv3 许可。",
+   "highlights": [
+    "提供存档的创建、上传、切换、导出、备份与恢复功能",
+    "提供多用户权限隔离，含管理员初始化与会话管理",
+    "通过 stardew_junimo GameDriver 隔离 JunimoServer 游戏逻辑，后端使用 Go 与 SQLite"
+   ],
+   "use_cases": [
+    "在 Linux 云服务器、NAS 或 WSL2 环境中部署星露谷联机专用服务器",
+    "通过网页管理服务器启停、存档、Mod 与玩家，替代 SSH 手工操作",
+    "为长期运行的多人农场服务器安排定期备份与诊断"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Anxi Panel 当前使用 Go、React、TypeScript、Vite、SQLite 与 Docker Compose 构建。项目按 `GameDriver` 隔离游戏逻辑；Stardew 相关能力集中在 `stardew_junimo` driver 中，不在通用 API 层重新实现 JunimoServer 已有能力。 ／ └─ Go API / Jobs / SQLite",
+     "lines": [
+      142,
+      147
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为面板自身的后端存储组件，项目是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0 or later，另附 NOTICE 第三方许可信息",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Anxi Panel 是围绕 JunimoServer 构建的星露谷物语专服管理面板。它把原本需要在终端里完成的 Docker 部署、Steam 登录、服务器控制和文件维护，整理成一套适合服主日常使用的中文 Web 界面。 ／ Anxi Panel 当前使用 Go、React、TypeScript、Vite、SQLite 与 Docker Compose 构建。项目按 `GameDriver` 隔离游戏逻辑；Stardew 相关能力集中在 `stardew_junimo` driver 中，不在通用 API 层重新实现 JunimoServer 已有能力。",
+   "evidence_lines": [
+    19,
+    142
+   ]
+  },
+  "fn": "AnXiYiZhi/stardew-server-anxi-panel",
+  "sha": "27587679ef9b",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "930fa027ff33": {
+  "identity": {
+   "one_liner": "面向新加坡 SkillsFuture 培训生态的自托管 LMS/TMS 应用",
+   "review": "这是一个同时提供学习管理与培训管理功能的全栈 Web 应用，管理课程创建、报名、进度跟踪、评估与证书签发，并集成新加坡 SSG/TPGateway API 与 QuickBooks 财务流程。面向培训机构、培训师与学员三类角色，采用 Next.js/TypeScript/PostgreSQL 构建，通过 Docker 部署在 Coolify 上，支持多租户与 OTP 登录。",
+   "highlights": [
+    "提供 7 种角色的多角色系统与多租户部署（Dockerfile/Docker Compose on Coolify）",
+    "实现 SkillsFuture Singapore API 的课程、报名、评估、补助与申报集成",
+    "包含 AI 聊天机器人（经由 WhatsApp/Telegram 接入外部 OpenClaw/Hermes 代理）与 200+ REST 端点"
+   ],
+   "use_cases": [
+    "培训机构管理课程排期、报名与学员进度跟踪",
+    "对接 SkillsFuture 的补助计算与申报/财务流程（QuickBooks）",
+    "在线评估评分、电子签名与证书签发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ - **Modern Stack**: Next.js 16, TypeScript, Tailwind CSS, PostgreSQL, Docker, deployed on Coolify ／ |**Database**|PostgreSQL 17| ／ |**Database Client**|pg (node-postgres)|",
+     "lines": [
+      8,
+      45,
+      258,
+      267
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL 列为技术栈与 Database（pg 客户端），该系统是使用数据库存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AI-LMS-TMS is a **full-stack, enterprise-grade web application** that manages the complete training lifecycle - from course creation and scheduling to learner enrollment, progress tracking, assessments, and certification. Built with modern technologies and deep integration with Singapore's SkillsFuture ecosystem, it provides a seamless experience for training providers, trainers, and learners. ／ - **Multi-Tenant**: Same codebase deployed for multiple tenants on Coolify — Tertiary builds via **Dockerfile**, other tenants (Chariot, Intellisoft) build via **Docker Compose** ／ - **Modern Stack**: Next.js 16, TypeScript, Tailwind CSS, PostgreSQL, Docker, deployed on Coolify",
+   "evidence_lines": [
+    31,
+    38,
+    45
+   ]
+  },
+  "fn": "alfredang/AI-LMS-TMS",
+  "sha": "930fa027ff33",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a69c3a56a8ac": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 与 MyBatis 的业务后端快速开发框架",
+   "review": "nicefish-backend 是一个基于 Spring Boot、MyBatis、Shiro 等组件搭建的业务后端框架，提供 REST API、登录鉴权和 Swagger 文档，数据存储使用 MySQL，并附带 mybatis-generator 代码生成脚本。面向需要快速搭建 Java 业务后端的开发者，安装需自行启动 MySQL 并导入 docs/sql 下的建库脚本。README 未声明版本兼容范围。",
+   "highlights": [
+    "提供基于 Spring Boot 的 RESTful 后端骨架，内置登录鉴权（Shiro）与 Swagger 接口文档",
+    "使用 mybatis-generator 脚本从 MySQL 生成 model 与 mapper 代码",
+    "提供 Maven 构建与 run.sh/run.bat 一键启动脚本"
+   ],
+   "use_cases": [
+    "快速搭建 Java 业务系统的后端服务骨架",
+    "作为 Spring Boot + MyBatis 项目的起始模板",
+    "生成并管理基于 MySQL 的 MyBatis 数据访问代码"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "2. mysql ／ 5. mysql ／ 1. start your mysql server, and execute docs/sql/nicefish.sql ／ - gen.sh/gen.bat to generate mybatis codes from mysql.",
+     "lines": [
+      12,
+      33,
+      55,
+      92
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为后端开发框架，MySQL 是其数据存储依赖而非框架本身，属于为构建使用数据库的应用服务的开发组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "nicefish-backend is a rapid development framework for business backend system. ／ 1. spring/spring-boot ／ 2. mybatis/generator ／ 1. start your mysql server, and execute docs/sql/nicefish.sql",
+   "evidence_lines": [
+    4,
+    18,
+    19,
+    55
+   ]
+  },
+  "fn": "nicefishcn/nicefish-backend",
+  "sha": "a69c3a56a8ac",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

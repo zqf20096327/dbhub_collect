@@ -8847,5 +8847,304 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5c6bd4ead4a2": {
+  "identity": {
+   "one_liner": "自托管 GitHub Actions 缓存服务器，提供 actions/cache 替代实现",
+   "review": "该仓库用 Rust 实现一个自托管的 GitHub Actions 缓存服务，自建 runner 将其指向后即可让 actions/cache、setup-*、buildx type=gha 等缓存留在本地硬件上，无需修改 workflow。缓存元数据可存储于 SQLite、PostgreSQL 或 MySQL，后端存储支持文件系统、S3、GCS 或 Azure Blob，部署提供 Docker Compose 与 Helm 方式，适用于使用自托管 runner 的 CI 团队。",
+   "highlights": [
+    "兼容 actions/cache、actions/setup-node、BuildKit type=gha 及基于 @actions/cache 的工具",
+    "数据库支持 SQLite、PostgreSQL 或 MySQL，存储支持文件系统、S3、GCS、Azure Blob",
+    "验证 runner 的 OIDC token，按仓库隔离缓存并对上传 URL 签名，提供 Prometheus /metrics、/health 与 OpenAPI 管理接口",
+    "支持多架构镜像（amd64/arm64），可用 Docker Compose 或 Helm 部署"
+   ],
+   "use_cases": [
+    "自托管 GitHub Actions runner 的 CI 缓存本地化",
+    "GitHub Enterprise Server 环境的缓存服务部署",
+    "需要控制缓存存储位置与生命周期的团队"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🐘 **Your database**: SQLite, PostgreSQL or MySQL",
+     "lines": [
+      21
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 🐘 **Your database**: SQLite, PostgreSQL or MySQL",
+     "lines": [
+      21
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🐘 **Your database**: SQLite, PostgreSQL or MySQL",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该服务器是 CI 缓存基础设施组件，数据库仅作为其元数据存储后端之一，属于为开发流程服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted, drop-in replacement for GitHub's cache service, written in Rust. Point your self-hosted runners at it and every `actions/cache` step, `setup-*` cache and `docker buildx` `type=gha` cache stays on your own hardware. No workflow changes. ／ - 🐘 **Your database**: SQLite, PostgreSQL or MySQL ／ - ☸️ **Deploy anywhere**: multi-arch image (amd64/arm64), Docker Compose or Helm, GitHub Enterprise Server",
+   "evidence_lines": [
+    3,
+    21,
+    26
+   ]
+  },
+  "fn": "falcondev-oss/github-actions-cache-server",
+  "sha": "5c6bd4ead4a2",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "47b359ec45f8": {
+  "identity": {
+   "one_liner": "PostgreSQL 中文转拼音扩展，按字/按词罗马化",
+   "review": "这是一个 PostgreSQL 扩展，通过 Rust 后端和可选 SQL 后端提供汉字转拼音函数，支持按字、按词、批量罗马化，并可与 pg_search、pg_trgm 配合生成拼音正则短语查询，支持多查询模式和音调规范化。需以 CREATE EXTENSION 安装，部分查询助手要求先启用 pg_search。适合需要在 PostgreSQL 中做中文拼音检索和索引的场景。",
+   "highlights": [
+    "提供 pinyin_char_romanize / pinyin_word_romanize 等按字、按词及批量罗马化 SQL 函数",
+    "提供与 pg_search 配合的 pinyin_regex_phrase 查询助手，支持 full/initials/autocomplete/auto/compat 等显式查询模式",
+    "包含独立 SQL 后端 sql/word.sql，可仅靠 SQL 正则/最长前缀匹配运行而无需 Rust 依赖"
+   ],
+   "use_cases": [
+    "中文内容的拼音检索与模糊匹配查询",
+    "基于 pg_trgm 或 pg_search 的拼音索引构建",
+    "对已有拼音列生成正则短语查询（首字母、自动补全等模式）"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pg_pinyin ／ `CREATE EXTENSION pg_pinyin` installs the Rust-backed core API:",
+     "lines": [
+      3,
+      14
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "report, not a native-query oracle. Actual query serialization records auto routes.",
+     "lines": [
+      683
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是安装到 PostgreSQL 中的扩展，为该数据库提供拼音转换与查询辅助函数，属于为数据库生态服务的组件。",
+   "persona": "build",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# pg_pinyin ／ `CREATE EXTENSION pg_pinyin` installs the Rust-backed core API:",
+   "evidence_lines": [
+    3,
+    14
+   ]
+  },
+  "fn": "aiyou178/pg_pinyin",
+  "sha": "47b359ec45f8",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3725dac90d76": {
+  "identity": {
+   "one_liner": "纯 Go 实现的嵌入式向量数据库，提供 HNSW 索引与 Qdrant 兼容 API",
+   "review": "GoVector 是一个用纯 Go 编写、无 CGO 依赖的嵌入式向量搜索引擎，基于 BoltDB 与 Protobuf 持久化，内置 HNSW 索引与 SQ8 量化，支持作为 Go 库嵌入应用或以独立服务运行并暴露 Qdrant 兼容的 REST API。适用于 Go 后端、桌面应用与边缘计算场景，通过 Homebrew、源码构建或 go get 安装。",
+   "highlights": [
+    "提供嵌入式 Go 库与独立服务/CLI 两种运行模式",
+    "内置 HNSW 索引与 SQ8 标量量化，支持 payload 过滤",
+    "实现 Qdrant 兼容的 REST API（/collections、/points、/search）"
+   ],
+   "use_cases": [
+    "在 Go 后端或桌面应用中嵌入向量检索能力",
+    "本地 AI 与边缘设备的单节点向量存储",
+    "需要 Qdrant 兼容接口的轻量微服务部署"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "The Lightweight, Embeddable Vector Database in Pure Go. (Think SQLite for Vectors)",
+     "lines": [
+      2
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "GoVector 本身是一个向量数据库引擎/存储组件，为应用提供向量检索与持久化能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " The Lightweight, Embeddable Vector Database in Pure Go. (Think SQLite for Vectors) ／ **GoVector** is a high-performance, embedded vector search engine written entirely in Go. It offers **Qdrant-compatible** API endpoints, **HNSW** indexing for blazing-fast Approximate Nearest Neighbor (ANN) search, and persistent local storage via **BoltDB**. ／  - **Embedded Library**: Import it into your Go backend/desktop app with zero network overhead.",
+   "evidence_lines": [
+    2,
+    15,
+    34
+   ]
+  },
+  "fn": "DotNetAge/govector",
+  "sha": "3725dac90d76",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a4d1d45ffd6c": {
+  "identity": {
+   "one_liner": "自托管冲刺规划看板，读取 Yandex Tracker/Jira 任务做排期",
+   "review": "面向使用 Yandex Tracker 或 Jira 的团队，将冲刺任务按人员和日期铺入泳道，提供 backlog、burndown、季度指标、时间线与回顾板功能，任务数据仍留在原追踪器中。Docker 部署，依赖 PostgreSQL 与可选的 Redis（多实例/定时同步），并内置 MCP 服务器供 AI 客户端读写规划内容，修改需人工确认。",
+   "highlights": [
+    "提供按人员/日期泳道的冲刺排期、backlog、burndown、指标看板与回顾板",
+    "通过 sync 从追踪器读取状态历史生成实际时间线，支持 MCP 代理访问规划图",
+    "支持 Docker Hub 镜像部署，多实例/定时同步需 Redis"
+   ],
+   "use_cases": [
+    "在 Yandex Tracker/Jira 之上做冲刺人力排期与看板协作",
+    "按季度查看 velocity、cycle time 等团队指标并导出 CSV",
+    "通过 MCP 客户端让 AI 代理读取并提出规划修改建议"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# POSTGRES_PASSWORD, AUTH_SESSION_SECRET (≥32), ORG_SECRETS_ENCRYPTION_KEY (64 hex)",
+     "lines": [
+      95
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 提供以 PostgreSQL 为环境变量配置的部署组合，是该规划应用的存储依赖而非为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0（NOTICE 中含署名要求）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Планер спринтов для Яндекс Трекера и Jira ／ # POSTGRES_PASSWORD, AUTH_SESSION_SECRET (≥32), ORG_SECRETS_ENCRYPTION_KEY (64 hex) ／ MCP-сервер работает на вашем же инстансе. Клиент (Cursor, Claude Desktop или Claude Code) открывает браузер, вы входите и подтверждаете доступ, после чего клиент получает Bearer-токен со scope `mcp:tools`. Подробнее в SPRINT_CONTEXT.md.",
+   "evidence_lines": [
+    5,
+    95,
+    105
+   ]
+  },
+  "fn": "Dinkimom/beer-tracker",
+  "sha": "a4d1d45ffd6c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

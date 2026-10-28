@@ -11214,5 +11214,60 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8ad76704bdce": {
+  "identity": {
+   "one_liner": "BYD DiLink 5.0 车辆遥测采集 Android 应用，本地 SQLite 存储",
+   "review": "该应用通过本地 ADB/app_process 只读采集比亚迪 DiLink 5.0 车辆遥测数据，在本地记录车辆状态、行程与 GPS 路线，并支持导出到 MQTT/Home Assistant、InfluxDB v1 及 Telegram 通知。面向中国市场的 BYD 车主（主要在海狮 07 EV 2025 上测试），需 Android 8.0+ 与本地 ADB 授权；MQTT/InfluxDB 连接默认无 TLS 加密。",
+   "highlights": [
+    "通过本地 ADB 读取车辆数据，车辆访问为只读，不发送控制指令",
+    "本地存储遥测、行程与 GPS 路线，支持 OpenStreetMap 路线展示与路线压缩",
+    "提供 MQTT/Home Assistant 自动发现、InfluxDB v1 历史导出与 Telegram 通知通道"
+   ],
+   "use_cases": [
+    "比亚迪 DiLink 5.0 车主本地记录车辆状态与充电数据",
+    "将车辆遥测接入 Home Assistant 或 Grafana 图表",
+    "通过 Telegram 接收充电与行程摘要通知"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述该应用自身采集并本地存储车辆遥测数据，数据库仅为其存储组件而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "BYD Collector shows vehicle status, records telemetry and trips, and can send data to Home Assistant, InfluxDB, and Telegram. Data is stored locally; external integrations are optional. ／ - Status cards show battery charge and health, remaining energy, range, odometer, temperatures, charging, and other available readings. ／ `All data` records a broader set of additional vehicle parameters in a separate database. It is optional and mainly useful for diagnostics or investigating readings not included in Main.",
+   "evidence_lines": [
+    7,
+    44,
+    54
+   ]
+  },
+  "fn": "sunlixWhyNotAvailable/byd-collector",
+  "sha": "8ad76704bdce",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

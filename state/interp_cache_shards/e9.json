@@ -12578,5 +12578,318 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f0ccfcb016a1": {
+  "identity": {
+   "one_liner": "Kotlin 多平台协程 SQL 工具库，提供编译期查询校验",
+   "review": "sqlx4k 是面向 Kotlin Multiplatform 的非 ORM SQL 工具库，提供驱动、连接池、事务与 @Repository 代码生成，并在编译期校验和优化 @Query 语句。适配 PostgreSQL、MySQL、MariaDB、SQLite，支持 JVM/Android/iOS/macOS/Linux/Windows 目标，供 Kotlin 开发者直接操作数据库。通过 Gradle 插件或 Maven 依赖引入。",
+   "highlights": [
+    "提供编译期 SQL 语法与 schema 校验及查询优化（L205-L207）",
+    "支持 PostgreSQL、MySQL、MariaDB、SQLite 及 SQLCipher，含连接池、事务、Savepoints（L177-L192）",
+    "提供 @Table/@Repository 代码生成、RowMapper、批量操作与内存仓库测试支持（L194-L208）"
+   ],
+   "use_cases": [
+    "Kotlin 多平台项目中直接执行 SQL 并获得编译期查询校验",
+    "通过 @Repository 代码生成实现 CRUD 与事务操作",
+    "使用 PostgreSQL LISTEN/NOTIFY 或 PGMQ 等扩展能力"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A coroutine-first SQL toolkit with compile-time query validations for Kotlin Multiplatform. PostgreSQL, MySQL/MariaDB, ／ implementation(\"io.github.smyrgeorge:sqlx4k-postgres:1.17.0\") ／ - Supported databases: PostgreSQL, MySQL, MariaDB, SQLite",
+     "lines": [
+      10,
+      57,
+      177
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A coroutine-first SQL toolkit with compile-time query validations for Kotlin Multiplatform. PostgreSQL, MySQL/MariaDB, ／ implementation(\"io.github.smyrgeorge:sqlx4k-mysql:1.17.0\") ／ - Supported databases: PostgreSQL, MySQL, MariaDB, SQLite",
+     "lines": [
+      10,
+      59,
+      177
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "and SQLite are supported. ／ - Supported databases: PostgreSQL, MySQL, MariaDB, SQLite ／ and SQLCipher (encrypted SQLite)",
+     "lines": [
+      11,
+      177,
+      178
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A coroutine-first SQL toolkit with compile-time query validations for Kotlin Multiplatform. PostgreSQL, MySQL/MariaDB, ／ - Supported databases: PostgreSQL, MySQL, MariaDB, SQLite ／ - MySQL/MariaDB: examples/mysql",
+     "lines": [
+      10,
+      177,
+      221
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为连接和操作多种数据库提供驱动与工具集，属于数据库生态的开发组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（单许可）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A coroutine-first SQL toolkit with compile-time query validations for Kotlin Multiplatform. PostgreSQL, MySQL/MariaDB, ／ **sqlx4k** is not an ORM. Instead, it provides a comprehensive toolkit of primitives and utilities to communicate ／ - Supported databases: PostgreSQL, MySQL, MariaDB, SQLite",
+   "evidence_lines": [
+    10,
+    15,
+    177
+   ]
+  },
+  "fn": "smyrgeorge/sqlx4k",
+  "sha": "f0ccfcb016a1",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "97ed43bdf8ad": {
+  "identity": {
+   "one_liner": "达梦数据库 DM8 的 Prometheus 监控指标采集器",
+   "review": "这是一个面向达梦数据库（DM8+）的 Prometheus exporter，通过 Go 驱动连接达梦实例采集 30+ 种性能指标，暴露 /metrics 端点供 Prometheus 抓取，并附带 Grafana 面板模板和告警规则。支持多数据源、TOML 配置、自定义 SQL 指标、Basic Auth 与密码加密，提供二进制、Docker、源码三种部署方式。适用于需要将达梦纳入 Prometheus 监控体系的运维人员。",
+   "highlights": [
+    "支持同时监控多个达梦数据库实例，暴露 Prometheus 格式指标",
+    "支持通过 SQL 定义自定义监控指标，无需修改源码",
+    "提供 Grafana 面板模板、告警规则及 Basic Auth、配置密码加密等安全特性"
+   ],
+   "use_cases": [
+    "将达梦数据库接入 Prometheus+Grafana 监控体系",
+    "多实例达梦环境的统一指标采集与告警",
+    "基于 SQL 自定义业务或性能监控指标"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "Dameng Exporter - 达梦数据库 Prometheus 监控采集器 ／ Dameng Exporter 是一个专为达梦数据库（DM8）设计的 Prometheus 监控数据采集器，提供全面的数据库性能指标采集和监控能力。",
+     "lines": [
+      1,
+      22
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为达梦数据库提供 Prometheus 指标采集能力的工具组件，本身不存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dameng Exporter 是一个专为达梦数据库（DM8）设计的 Prometheus 监控数据采集器，提供全面的数据库性能指标采集和监控能力。 ／ - 达梦数据库 DM8 或以上版本 ／ - Prometheus 2.0+",
+   "evidence_lines": [
+    22,
+    59,
+    60
+   ]
+  },
+  "fn": "gaoyuan98/dameng_exporter",
+  "sha": "97ed43bdf8ad",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5ee100dc0bcb": {
+  "identity": {
+   "one_liner": "社区维护的有声书元数据数据库，JSON 经 CI 编译为 SQLite",
+   "review": "一个开源的有声书元数据数据库，仓库本身即数据库：贡献者通过 pull request 或 issue 表单编辑 JSON 数据，CI 进行校验后由 Go 工具编译成单个 SQLite 工件，供只读 API 服务器 metaserve 提供检索。面向有声书社区贡献者和 audiobookshelf 等应用的元数据消费者。构建工具需 Go 1.26+，无外部服务依赖。",
+   "highlights": [
+    "以 JSON 打包文件为数据源，经 metacheck/metafmt 校验后由 metabuild 编译为单个 meta.sqlite 发布工件",
+    "提供 metaserve 只读 JSON API，包含 FTS 全文搜索、work/person/series 详情、ASIN/ISBN/LibriVox 查询",
+    "提供 Audiobookshelf 元数据端点及 LibriVox 形状的兼容 feed"
+   ],
+   "use_cases": [
+    "为有声书播放器应用提供社区元数据 API",
+    "社区贡献者以 pull request 方式维护有声书条目",
+    "替代 LibriVox feed 做自托管镜像查询"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "by Go tooling in CI, and compiled into a single SQLite artifact that servers ／ data/*.json ──► CI validation ──► meta.sqlite ──► API server + site ／ 3. On merge to `main`, a release workflow builds `meta.sqlite` and attaches it",
+     "lines": [
+      15,
+      52,
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其编译产物的输出格式使用，项目本体是有声书元数据数据库而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "数据为 CC0，characters/recaps 层为 CC BY-SA",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**The GitHub repository is the database.** Metadata lives as plain JSON pack ／ by Go tooling in CI, and compiled into a single SQLite artifact that servers ／   data/*.json  ──►  CI validation  ──►  meta.sqlite  ──►  API server + site",
+   "evidence_lines": [
+    12,
+    15,
+    52
+   ]
+  },
+  "fn": "KodeStar/audiosilo-meta",
+  "sha": "5ee100dc0bcb",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b94c15a339b5": {
+  "identity": {
+   "one_liner": "将 Apple Health 数据同步到自托管 PostgreSQL 的 iOS 应用与自托管栈",
+   "review": "PulsHealth 提供 iOS 应用与 Docker 自托管栈，把 Apple Health 数据以 CSV/JSON/JSONL 导出或同步到用户自控的 PostgreSQL + TimescaleDB 数据库，附带 Web 仪表盘、Grafana 与 API，并提供只读 MCP 供 AI 连接。适合量化自我用户和想自持健康数据的开发者；后端尚处 0.x 预发布阶段。",
+   "highlights": [
+    "支持将 Apple Health 数据导出为 CSV、JSON 或 JSONL 文件",
+    "Docker 自托管栈包含 PostgreSQL + TimescaleDB、Web 仪表盘、Grafana 和 API",
+    "提供只读 MCP 工具用于连接 AI 助手"
+   ],
+   "use_cases": [
+    "将 Apple Health 历史数据同步到自托管数据库长期保存",
+    "在浏览器仪表盘中查看活动、睡眠、心率等健康指标",
+    "通过同步协议编写自定义接收器接收健康数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Unlock your health data: export CSV, JSON, or JSONL files from PulsHealth, or sync Apple Health to your own PostgreSQL database ／ includes PostgreSQL + TimescaleDB, a web dashboard, Grafana, and APIs.",
+     "lines": [
+      12,
+      26
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Write your own receiver|Sync protocol · Python + SQLite example|",
+     "lines": [
+      56
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将用户健康数据存入自托管的 PostgreSQL 数据库，自身是使用数据库的应用而非服务数据库生态的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Export files from your iPhone or iPad, or keep your health history in a database ／  includes PostgreSQL + TimescaleDB, a web dashboard, Grafana, and APIs. ／ **pre-release (0.x)**; see the setup guide for networking and backups.",
+   "evidence_lines": [
+    5,
+    26,
+    31
+   ]
+  },
+  "fn": "PulsHealth/pulshealth",
+  "sha": "b94c15a339b5",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

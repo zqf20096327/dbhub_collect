@@ -11255,5 +11255,203 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "117c744e9953": {
+  "identity": {
+   "one_liner": "DDIA 第二版中文翻译，基于 Hugo/OINK 在线发布的开源书籍项目",
+   "review": "该项目是《设计数据密集型应用》第二版的中文翻译仓库，提供在线阅读站点与本地构建流程（make dev/build，依赖 Hugo Extended 与 OINK 主题），并支持 EPUB 导出、Markdown/llms.txt 输出。面向 DBA、架构师、后端工程师等中文读者；译者冯若航同时是 Pigsty 作者，但仓库本身是书籍翻译，不提供数据库功能。",
+   "highlights": [
+    "提供 DDIA 第二版十四章中文译文的在线阅读站点（ddia.vonng.com）",
+    "支持 Hugo/OINK 主题本地构建、EPUB 导出与 Markdown/llms.txt 输出",
+    "包含简体与繁体版本，记录 212 位贡献者的翻译校订历史"
+   ],
+   "use_cases": [
+    "中文读者在线学习数据密集型系统设计",
+    "使用 Hugo 本地构建离线阅读版本",
+    "参与翻译校订并提交 Issue/PR"
+   ],
+   "personas": null
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "**译者**：冯若航 / Vonng (rh@vonng.com) Pigsty 创始人，活跃开源贡献者，PostgreSQL Hacker。开源 RDS PG 发行版 Pigsty 与公众号《老冯云数》作者，数据库老司机，云计算泥石流，曾于阿里，苹果，探探担任架构师与DBA。",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库为书籍中文翻译项目，README 未声明其为数据库生态服务的工具或组件，PostgreSQL 仅出现在译者简介中。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "译文仅供学习研究参考，非商业发布；其他权利以原作者和出版社主张为准",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 设计数据密集型应用（第二版） - 中文翻译版 ／ **译者**：冯若航 / Vonng (rh@vonng.com) Pigsty 创始人，活跃开源贡献者，PostgreSQL Hacker。开源 RDS PG 发行版 Pigsty 与公众号《老冯云数》作者，数据库老司机，云计算泥石流，曾于阿里，苹果，探探担任架构师与DBA。 ／ **阅读**：访问 https://ddia.vonng.com 阅读本书在线版本，或使用 Hugo / OINK 1.4.0 主题自行构建。在线版支持稳定图表编号与交叉引用、顺序阅读、整书打印、Markdown / `llms.txt` 输出和 EPUB 导出。",
+   "evidence_lines": [
+    1,
+    9,
+    13
+   ]
+  },
+  "fn": "Vonng/ddia",
+  "sha": "117c744e9953",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d0212c28d39c": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，通过 COPY 读写 Parquet 文件",
+   "review": "pg_parquet 是一个 PostgreSQL 扩展，基于 Apache Arrow 和 pgrx 实现，让用户在数据库内用 COPY TO/FROM 命令直接读写 S3、Azure Blob、GCS、http(s)、本地文件或标准流中的 Parquet 文件，并支持从 Parquet 推断建表和查看 schema/元数据。适合需要在 PostgreSQL 与 Parquet 数据文件之间导入导出数据的开发与运维人员，需从源码用 cargo-pgrx 构建。",
+   "highlights": [
+    "通过 COPY 命令在 PostgreSQL 表与 S3、Azure Blob、GCS、http(s)、本地文件及 stdin/stdout/程序流之间的 Parquet 文件互转",
+    "支持从 Parquet 文件推断列定义创建表（definition_from/load_from）并进行类型转换",
+    "提供 parquet.schema/metadata/file_metadata/kv_metadata 函数查看 Parquet 的 schema 与统计元数据"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 表或查询结果导出为 Parquet 文件存储到对象存储",
+    "从 Parquet 文件加载数据入 PostgreSQL 表",
+    "在 SQL 中检查 Parquet 文件的 schema、列统计与文件元数据"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> Copy from/to Parquet files in PostgreSQL! ／ `pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Ap",
+     "lines": [
+      3,
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 提供数据导入导出能力的扩展组件，而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Apache Arrow project to read and write Parquet files and pgrx project to extend PostgreSQL's `COPY` command. ／ 1. You can export Postgres tables/queries to Parquet files, stdin/stdout or a program's stream, ／ 2. You can ingest data from Parquet files to Postgres tables with type coercion and schema inference,",
+   "evidence_lines": [
+    8,
+    43,
+    44
+   ]
+  },
+  "fn": "CrunchyData/pg_parquet",
+  "sha": "d0212c28d39c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a5319d313d1d": {
+  "identity": {
+   "one_liner": "Trakt 播出订阅提醒应用，按规则定时推送通知",
+   "review": "一个基于 Trakt 官方 API 的播出提醒工具：用户订阅剧集/电影规则，系统按计划检查播出时间并通过 Bark、Telegram、ntfy 等渠道推送通知，支持提醒偏移、完结集识别、静默时段和推送预览。提供 Web 管理界面，可部署到 Cloudflare Workers（D1 存储）或 Docker/VPS（本地 SQLite 存储）。适合 Trakt 用户自部署使用。",
+   "highlights": [
+    "支持部署到 Cloudflare Workers + D1 或 Docker/VPS（本地 SQLite）两种形态",
+    "支持 Bark、Telegram、ntfy 等 11 种推送渠道，通过注册表机制扩展",
+    "提供 Web 管理界面、多用户隔离、推送预览和投递日志"
+   ],
+   "use_cases": [
+    "追剧用户对特定剧集播出前定时提醒",
+    "自部署的多用户播出通知服务",
+    "离线演示与集成测试场景（内置假 Trakt 演示数据）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 一套代码，既能部署到 Cloudflare Workers + D1，也能跑在 Docker / VPS / NAS（本地 SQLite） ／ npm test # 完整测试（含跑真实 SQLite 的集成测试）",
+     "lines": [
+      9,
+      134
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明项目将数据存入 D1/本地 SQLite 数据库，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 一套代码，既能部署到 Cloudflare Workers + D1，也能跑在 Docker / VPS / NAS（本地 SQLite） ／ npm run db:init       # 建表（可重复执行） ／ npx wrangler d1 create trakt-notification   # 把输出的 database_id 填进 wrangler.toml",
+   "evidence_lines": [
+    9,
+    20,
+    49
+   ]
+  },
+  "fn": "DemoJameson/Trakt-Notification",
+  "sha": "a5319d313d1d",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

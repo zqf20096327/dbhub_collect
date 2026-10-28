@@ -10768,5 +10768,199 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2600e8a09ba0": {
+  "identity": {
+   "one_liner": "Rust 代码知识图谱索引器，基于 tree-sitter 与 SQLite 向量存储",
+   "review": "Coraline 用 Rust 实现代码语义索引，通过 tree-sitter 解析 37 种语言构建符号级知识图谱，支持调用方/被调方查询、影响面分析与基于 ONNX 本地嵌入的语义搜索，并以 MCP server 形式接入 Claude Desktop、Claude Code、OpenCode 等 AI 助手，适合本地代码检索场景。数据存储于项目内 .coraline 目录（SQLite 布局可选 BLOB 或 sqlite-vec），只读源码、不修改代码；嵌入模型需另行从 HuggingFace 下载。",
+   "highlights": [
+    "支持 37 种语言的端到端索引，其中 36 种随附 tree-sitter 语法",
+    "提供 38 个 MCP 工具，含符号搜索、callers/callees、影响面分析与本地语义搜索",
+    "嵌入向量支持 v1 BLOB 与 v0 sqlite-vec 两种磁盘布局，可显式迁移转换"
+   ],
+   "use_cases": [
+    "为 AI 编码助手（Claude Desktop/Code、OpenCode）提供本地代码符号与语义查询",
+    "查询函数调用关系与改动影响半径",
+    "对代码库做只读语义索引与增量同步"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**v0 (sqlite-vec)**|`vectors_meta`|`vectors_vec` — a `vec0` virtual table| ／ coraline migrate vec-ext # v1 BLOB -> sqlite-vec (v0) ／ coraline migrate vec1 # sqlite-vec (v0) -> v1 BLOB",
+     "lines": [
+      116,
+      128,
+      129
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其索引数据与向量嵌入存储在 SQLite（含 sqlite-vec 虚拟表）中，SQLite 是其自身存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：Apache-2.0 或 MIT，二选一",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Coraline stores embeddings in one of two on-disk layouts, and the ／ |**v0 (sqlite-vec)**|`vectors_meta`|`vectors_vec` — a `vec0` virtual table| ／ Built upon ideas from CodeGraph by Colby McHenry and Serena by Oraios AI, using tree-sitter for parsing.",
+   "evidence_lines": [
+    110,
+    116,
+    181
+   ]
+  },
+  "fn": "greysquirr3l/coraline",
+  "sha": "2600e8a09ba0",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "75f1bff2d7ca": {
+  "identity": {
+   "one_liner": "自托管的项目管理/文档/CI/部署平台，内置 MCP 服务器供编码代理使用",
+   "review": "Nexul 是一个自托管工作区应用，把文档、看板工单、聊天、CI runner 和服务器部署整合在一个 Go 单体应用中，并通过一个 MCP 服务器以 HTTP 网关暴露同一套用例，代理与人使用相同工具和权限。面向自托管的独立开发者、小团队及使用编码代理的团队；README 标注处于 beta，许可证为 AGPL-3.0 开核模式。",
+   "highlights": [
+    "通过官方 MCP Go SDK 提供 MCP 服务器，含工具、资源和 workflow prompts，工具标注只读/破坏性",
+    "支持以 compose 文件或 Dockerfile 定义的 stack 经 runner 执行 docker compose up 部署，含历史、回滚和分支预览部署",
+    "包含看板工单、实时协作文档、聊天、语音房间、拓扑视图、全文搜索和事件驱动 TypeScript 自动化"
+   ],
+   "use_cases": [
+    "自托管团队需要文档、工单、聊天与部署在同一实例中管理",
+    "使用编码代理的团队希望代理通过 MCP 以用户权限操作工单、文档和部署",
+    "运维人员在无 Kubernetes 的普通服务器上部署并查看服务拓扑"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述其为整合文档、工单、CI 与部署的自托管工作区应用，数据库仅作为其底层存储组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "open-core：AGPL-3.0 社区版 + 订阅制 Enterprise Edition",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Nexul is a self-hosted workspace for teams that ship with coding agents. Docs, ／ |MCP server|✅|Task-shaped tools on the official MCP Go SDK, plus resources and workflow prompts, over stateless Streamable HTTP at `/mcp`. Tools are marked read-only or destructive, lists are paged, and errors say what the agent should fix.| ／ Nexul is open core: one repository, two licenses.",
+   "evidence_lines": [
+    13,
+    94,
+    103
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "otal-labs/nexul",
+  "sha": "75f1bff2d7ca",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f3b1f0cf6492": {
+  "identity": {
+   "one_liner": "2026 OceanBase 大赛 PowerContext 赛题仓库",
+   "review": "该仓库对应 2026 OceanBase 大赛 PowerContext 赛题，README 仅含标题与赛题名称，未说明具体功能、目标用户、安装运行方式或技术实现。判断其为参赛项目占位仓库，实际用途与数据库交互方式证据不足，需待代码补充后重新编目。",
+   "highlights": [
+    "README 声明对应 2026 OceanBase 大赛 PowerContext 赛题"
+   ],
+   "use_cases": [
+    "参加 2026 OceanBase 大赛 PowerContext 赛题的参赛代码承载"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "2026 OceanBase 大赛 PowerContext 赛题",
+     "lines": [
+      2
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅含赛题名称，未说明项目是为 OceanBase 生态服务的工具还是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "2026 OceanBase 大赛 PowerContext 赛题",
+   "evidence_lines": [
+    2
+   ]
+  },
+  "fn": "3156477473-wsx/ob-2026-powercontext",
+  "sha": "f3b1f0cf6492",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

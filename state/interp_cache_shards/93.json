@@ -10764,5 +10764,138 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e9a4909664ba": {
+  "identity": {
+   "one_liner": "dokku 平台的官方 PostgreSQL 服务插件",
+   "review": "这是 dokku PaaS 的官方 postgres 插件，通过 CLI 命令在 dokku 上创建、链接、备份和销毁 PostgreSQL 服务容器，默认安装 postgres 18.6，支持自定义镜像（pgvector、PostGIS、TimescaleDB）、S3 备份与 cron 定时备份。面向使用 dokku 部署应用的运维人员，要求 dokku 0.35.x+ 与 docker 1.8.x。",
+   "highlights": [
+    "提供 postgres:create/destroy/info/link 等 CLI 命令管理 PostgreSQL 服务生命周期",
+    "支持将备份写入 S3 存储桶并可配置定时备份与 GPG 加密",
+    "支持替换镜像以运行 pgvector、PostGIS、TimescaleDB 等变体（L84-L86）"
+   ],
+   "use_cases": [
+    "在 dokku 平台上为应用提供 PostgreSQL 数据库服务",
+    "为数据库服务配置 S3 定时备份",
+    "运行带 PostGIS/pgvector/TimescaleDB 扩展的 PostgreSQL 实例"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# dokku postgres Build Status IRC Network ／ Official postgres plugin for dokku. Currently defaults to installing postgres 18.6. ／ sudo dokku plugin:install https://github.com/dokku/dokku-postgres.git --name postgres",
+     "lines": [
+      1,
+      3,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 标题与描述表明它是为 dokku 平台管理 PostgreSQL 服务的官方插件，属于为数据库生态服务的组件（L3）",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Official postgres plugin for dokku. Currently defaults to installing postgres 18.6. ／ sudo dokku plugin:install https://github.com/dokku/dokku-postgres.git --name postgres ／ postgres:app-links [<app>]                         # list all Postgres service links for a given app",
+   "evidence_lines": [
+    3,
+    14,
+    20
+   ]
+  },
+  "fn": "dokku/dokku-postgres",
+  "sha": "e9a4909664ba",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dd6b3fb0d232": {
+  "identity": {
+   "one_liner": "通过 Telegram 和 WebUI 监控管理 VPS 的 Python 机器人",
+   "review": "这是一个基于 Python/Aiogram 3.x 的 Telegram 机器人项目，通过 Telegram 与 Web 界面对 VPS 或独立服务器进行集中监控与管理，覆盖指标采集、systemd 服务管理、备份、SSH 终端与计费提醒。目标用户为系统管理员、DevOps 工程师与托管服务商。后端使用 SQLite (aiosqlite) 存储节点、用户与指标数据，支持 Docker Compose 或 systemd 脚本部署，要求 Ubuntu 20.04+/Debian 11+。",
+   "highlights": [
+    "通过 Telegram Bot 与 WebUI 提供服务器 CPU/RAM/Disk/Network 指标监控与告警",
+    "提供 systemd 服务管理、SSH Web 终端、自动备份与远程节点管理",
+    "使用 SQLite (aiosqlite) 存储节点、用户和指标，支持 Docker Compose 与 systemd 部署"
+   ],
+   "use_cases": [
+    "从单一 Telegram 界面集中监控和管理多台远程服务器",
+    "通过 Web 推送和 Telegram 接收 CPU/RAM/Disk 阈值告警与宕机通知",
+    "管理 systemd 服务、执行定时备份与节点租用计费跟踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "│ ├── SQLite DB (nodes, users, metrics) │ ／ - **Database:** SQLite (aiosqlite)",
+     "lines": [
+      124,
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite (aiosqlite) 存储节点、用户与指标数据，该机器人本身是一个使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "│  ├── SQLite DB (nodes, users, metrics)          │ ／ - **Database:** SQLite (aiosqlite)",
+   "evidence_lines": [
+    124,
+    130
+   ]
+  },
+  "fn": "jatixs/tgbotvpscp",
+  "sha": "dd6b3fb0d232",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

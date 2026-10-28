@@ -10972,5 +10972,212 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fda366f7a458": {
+  "identity": {
+   "one_liner": "Red 是 Raku 语言的 ORM 库，将模型映射为 SQL 表操作",
+   "review": "Red 是面向 Raku（Rakudo）语言的 ORM 开发库，通过 traits（如 is column、is id）声明模型，生成 CREATE TABLE、SELECT、INSERT 等 SQL，支持关系推断、索引与约束声明、事务与保存点、多后端驱动（Pg、SQLite、MySQL）。供 Raku 开发者在应用中读写数据库使用；README 自述为 WiP（开发中）状态。",
+   "highlights": [
+    "通过 traits 声明模型列、主键、关系，生成对应 SQL 的 CRUD 操作",
+    "支持命名索引、CHECK/排除约束、部分索引等 schema 声明，可按后端（Pg/SQLite/MySQL）区分",
+    "提供事务与保存点机制（red-do :transaction）及显式事务控制"
+   ],
+   "use_cases": [
+    "在 Raku 应用中以模型对象方式读写关系数据库",
+    "用代码声明表结构与索引约束并生成 DDL",
+    "需要事务、嵌套保存点控制的数据写入流程"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`:using` selects an access method. PostgreSQL supports `btree`, `hash`, `gin`, `gist`, `spgist` and `brin`; the common API supports `btree`. `:opclass` selects a PostgreSQL operator class. For multiple keys, supply a list with one string per key, using an empt ／ `:driver<Pg>` explicitly selects a declaration only for that backend. The names are `Pg`, `SQLite` and `MySQL`, or a custom driver's final class-name component. Without this option an unsupported declaration raises `X::Red::Index`; Red does not substitute anot ／ #### PostgreSQL ranges, regex and exclusion constraints",
+     "lines": [
+      304,
+      306,
+      312
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`:using` selects an access method. PostgreSQL supports `btree`, `hash`, `gin`, `gist`, `spgist` and `brin`; the common API supports `btree`. `:opclass` selects a PostgreSQL operator class. For multiple keys, supply a list with one string per key, using an empt ／ `:driver<Pg>` explicitly selects a declaration only for that backend. The names are `Pg`, `SQLite` and `MySQL`, or a custom driver's final class-name component. Without this option an unsupported declaration raises `X::Red::Index`; Red does not substitute anot",
+     "lines": [
+      304,
+      306
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`:using` selects an access method. PostgreSQL supports `btree`, `hash`, `gin`, `gist`, `spgist` and `brin`; the common API supports `btree`. `:opclass` selects a PostgreSQL operator class. For multiple keys, supply a list with one string per key, using an empt ／ `:driver<Pg>` explicitly selects a declaration only for that backend. The names are `Pg`, `SQLite` and `MySQL`, or a custom driver's final class-name component. Without this option an unsupported declaration raises `X::Red::Index`; Red does not substitute anot",
+     "lines": [
+      304,
+      306
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Red 是为 Raku 程序操作数据库提供对象映射能力的开发库，服务于数据库生态而非使用数据库的应用本身",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Red - A **WiP** ORM for Raku ／ Red is a *WiP* ORM for Raku. ／ `:driver<Pg>` explicitly selects a declaration only for that backend. The names are `Pg`, `SQLite` and `MySQL`, or a custom driver's final class-name component. Without this option an unsupported declaration raises `X::Red::Index`; Red does not substitute another index method or weaken a constraint. Conditional constraints are intentionally absent on the other backends.",
+   "evidence_lines": [
+    7,
+    225,
+    306
+   ]
+  },
+  "fn": "FCO/Red",
+  "sha": "fda366f7a458",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "72497e998b2b": {
+  "identity": {
+   "one_liner": "基于 LangGraph 的多智能体 RAG 问答系统，带证据校验",
+   "review": "CiteRight 是一个 RAG 研究问答助手：摄取 PDF/Markdown 文档，通过向量+BM25 混合检索回答并逐句做证据校验，无证据支持时拒答，网络搜索需人工审批。面向需要可溯源问答的个人或团队。以 LangGraph 状态机编排 17 个节点，FastAPI+React 提供 UI，数据持久化于 Docker 卷。README 未提及任何数据库。",
+   "highlights": [
+    "对每条事实性声明做 grounding 校验，无证据支撑或与来源矛盾的声明会被移除或拒答",
+    "支持 PDF/Markdown 摄取，混合检索（向量+BM25 融合重排），引用来源与章节",
+    "提供离线评估门禁：路由基准、grounding、证据质量、记忆隔离等 pytest 测试"
+   ],
+   "use_cases": [
+    "基于自有文档的可溯源问答/研究助手",
+    "需要人工审批联网搜索的辅助场景",
+    "带离线评估与质量门禁的 agent 应用开发参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "dbs": [],
+   "eco": "app",
+   "eco_why": "README 描述的是使用数据库/索引存数据的 agent 应用，未提供为某数据库服务的驱动或工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The flow is a LangGraph state machine with one node per step (17 in total), served by FastAPI ／ docker compose up --build            # UI on http://127.0.0.1:8080 ／ Data (accounts, conversations, document index) persists in the `citeright_data` volume.",
+   "evidence_lines": [
+    36,
+    79,
+    82
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Theepankumargandhi/Multi-Agent-Orchestration",
+  "sha": "72497e998b2b",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "48e7c0377563": {
+  "identity": {
+   "one_liner": "自托管的朋友共享私有内容订阅源，下载并存储社交网络帖子本地播放",
+   "review": "ADHX 是一个自托管应用，把用户和朋友从 X、Instagram、TikTok、YouTube 等 14 个网络保存的帖子下载为本地副本存到自己的服务器，提供全屏播放、搜索、反应和频道功能，并通过 Docker 容器部署。面向想与亲友私下分享收藏内容的用户；下载依赖 yt-dlp，播放访问控制需自行置于私网或 VPN 之后。",
+   "highlights": [
+    "通过 yt-dlp 下载并保存 X、Instagram、TikTok、YouTube 等 14 个网络的帖子到本地服务器，本地播放",
+    "支持按文字、画面内容、视频帧、语音和屏幕文字进行搜索",
+    "提供 Web 应用、iPhone/Android 手机应用、浏览器扩展，以及邀请制用户管理"
+   ],
+   "use_cases": [
+    "家庭/朋友群组私下分享和收藏社交网络帖子",
+    "备份保存可能被删除或失效的网络视频和图片内容",
+    "自托管多媒体库的本地搜索与回放"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述其为一个用 Next.js/Drizzle 构建并使用数据库存储数据的自托管内容订阅应用，数据库仅为内部存储组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ADHX is a private feed of the best posts from X, Instagram, TikTok, YouTube, Reddit and nine more networks, picked by your closest friends and family instead of a recommendation engine with quarterly targets. ／ In words: you save a link from your phone, the web or the extension. Your server downloads the post once, keeps the file, and works out what's in it (words, pictures, speech, text on screen) so search can find it later. Everything you watch is played from your server. A spare Apple Silicon Mac can take the processing off a small NAS. ARCHITECTURE.md has the full picture. ／ ADHX listens on `127.0.0.1:3000` (`ADHX_PORT` changes it). Everything lives in one volume at `/data`: the database, the search models and every kept file. Migrations run on start. To use a published image instead of building one, pin `ADHX_IMAGE=ghcr.io/itsmemeworks/adhx@sha256:<digest>` from a release.",
+   "evidence_lines": [
+    9,
+    85,
+    121
+   ]
+  },
+  "fn": "itsmemeworks/adhx",
+  "sha": "48e7c0377563",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

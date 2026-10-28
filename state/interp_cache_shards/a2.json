@@ -10933,5 +10933,133 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9b93a70bfd8c": {
+  "identity": {
+   "one_liner": "macOS 桌面数据库连接工具，支持达梦等多库 JDBC/原生客户端",
+   "review": "一款基于 React + Electron + Java 17 的 macOS 数据库桌面客户端，支持 DM、MySQL、PostgreSQL、Oracle、SQL Server、SQLite、MongoDB、Redis 的连接管理、对象浏览、SQL 工作台与导出，达梦驱动需按服务器版本手动导入，表设计器仅覆盖 DM/MySQL。另提供 stdio MCP 入口供 Claude Code 等 AI 客户端复用已保存连接。适合需要同时管理多种数据库（含达梦）的 macOS 开发与运维人员。",
+   "highlights": [
+    "支持八种数据库连接，提供对象浏览、SQL 工作台、CSV/INSERT 导出与危险语句二次确认",
+    "使用 Argon2id + AES-256-GCM 本地加密存储密码与 SQL 历史",
+    "内置 stdio MCP 服务，默认只读，可分级开启写入权限，供 AI 客户端复用桌面连接"
+   ],
+   "use_cases": [
+    "macOS 上同时管理达梦、MySQL 等多种关系型数据库的连接与 SQL 执行",
+    "浏览 MongoDB 集合文档与 Redis 键值",
+    "让 Claude Code 等 AI 客户端通过 MCP 只读查询已保存的数据库连接"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "数据库连接工具是支持 DM、MySQL、MongoDB、Redis、PostgreSQL、Oracle、SQL Server 与 SQLite 的 macOS 数据库桌面工具。2.0 版使用 **React + Electron + Java 17 后端**：界面使用 React，JDBC、原生客户端、对象元数据、SQL 执行、事务、本地加密存储和数据导出核心由 Java 负责。 ／ |PostgreSQL|`org.postgresql.Driver`（内置）|5432|`jdbc:postgresql://host:5432/database`| ／ 连接编辑器的高级参数每行填写一个 `key=value`。例如 MySQL 可配置 `sslMode=PREFERRED`，PostgreSQL 可配置 `sslmode=prefer`，SQL Server 可配置 `encrypt=true`。通用 JDBC 驱动的高级参数通过 `Driver.connect` 的 `Properties` 传递，不拼接到 URL；用户名、密码、Token、Secret 等凭据只能使用专用字段，不能明文写入高级参数。",
+     "lines": [
+      3,
+      45,
+      52
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "数据库连接工具是支持 DM、MySQL、MongoDB、Redis、PostgreSQL、Oracle、SQL Server 与 SQLite 的 macOS 数据库桌面工具。2.0 版使用 **React + Electron + Java 17 后端**：界面使用 React，JDBC、原生客户端、对象元数据、SQL 执行、事务、本地加密存储和数据导出核心由 Java 负责。 ／ - 按数据库类型创建和修改表，提供 DM / MySQL 对应的字段类型、DDL 与安全校验。 ／ MySQL Connector/J 8.3 已随应用后端内置；达梦驱动仍需按服务器版本导入。新建连接时先选择数据库类型，MySQL 默认直接使用内置驱动，也可导入其他版本：",
+     "lines": [
+      3,
+      21,
+      37
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "数据库连接工具是支持 DM、MySQL、MongoDB、Redis、PostgreSQL、Oracle、SQL Server 与 SQLite 的 macOS 数据库桌面工具。2.0 版使用 **React + Electron + Java 17 后端**：界面使用 React，JDBC、原生客户端、对象元数据、SQL 执行、事务、本地加密存储和数据导出核心由 Java 负责。 ／ - 与目标数据库版本相匹配的 DM 或 Oracle JDBC JAR；其他内置驱动也可导入替代版本 ／ |Oracle|`oracle.jdbc.OracleDriver`（导入）|1521|`jdbc:oracle:thin:@//host:1521/service`|",
+     "lines": [
+      3,
+      35,
+      46
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "数据库连接工具是支持 DM、MySQL、MongoDB、Redis、PostgreSQL、Oracle、SQL Server 与 SQLite 的 macOS 数据库桌面工具。2.0 版使用 **React + Electron + Java 17 后端**：界面使用 React，JDBC、原生客户端、对象元数据、SQL 执行、事务、本地加密存储和数据导出核心由 Java 负责。 ／ |SQLite|`org.sqlite.JDBC`（内置）|—|`jdbc:sqlite:/path/to/database.db`| ／ - PostgreSQL、Oracle、SQL Server、SQLite 首版支持对象浏览、筛选/分页预览、主外键与索引查看和 SQL 工作台。SQLite 从 `sqlite_schema`、Oracle 从 `DBMS_METADATA` 读取权威 DDL；PostgreSQL/SQL Server 的视图或程序定义是对象定义片段，不等同于完整备份，表 DDL会提示使用官方导出工具。",
+     "lines": [
+      3,
+      48,
+      161
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "数据库连接工具是支持 DM、MySQL、MongoDB、Redis、PostgreSQL、Oracle、SQL Server 与 SQLite 的 macOS 数据库桌面工具。2.0 版使用 **React + Electron + Java 17 后端**：界面使用 React，JDBC、原生客户端、对象元数据、SQL 执行、事务、本地加密存储和数据导出核心由 Java 负责。 ／ |SQL Server|`com.microsoft.sqlserver.jdbc.SQLServerDriver`（内置）|1433|`jdbc:sqlserver://host:1433;databaseName=database`| ／ 连接编辑器的高级参数每行填写一个 `key=value`。例如 MySQL 可配置 `sslMode=PREFERRED`，PostgreSQL 可配置 `sslmode=prefer`，SQL Server 可配置 `encrypt=true`。通用 JDBC 驱动的高级参数通过 `Driver.connect` 的 `Properties` 传递，不拼接到 URL；用户名、密码、Token、Secret 等凭据只能使用专用字段，不能明文写入高级参数。",
+     "lines": [
+      3,
+      47,
+      52
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "MySQL Connector/J 8.3 已随应用后端内置；达梦驱动仍需按服务器版本导入。新建连接时先选择数据库类型，MySQL 默认直接使用内置驱动，也可导入其他版本： ／ |达梦（DM）|`dm.jdbc.driver.DmDriver`|5236|`jdbc:dm://host:5236`| ／ 达梦驱动可从达梦安装目录的 `drivers/jdbc` 获取，应与服务器版本匹配。MySQL 如需替换内置版本，可导入官方 Connector/J 8.x 或 9.x 的 `mysql-connector-j-*.jar`；“默认数据库”可以留空，此时先连接 MySQL 服务器，再从左侧数据库列表选择对象。",
+     "lines": [
+      37,
+      41,
+      50
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为连接和管理多种数据库服务的桌面工具，而非使用某个数据库存储业务数据的应用。",
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "Dameng"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "数据库连接工具是支持 DM、MySQL、MongoDB、Redis、PostgreSQL、Oracle、SQL Server 与 SQLite 的 macOS 数据库桌面工具。2.0 版使用 **React + Electron + Java 17 后端**：界面使用 React，JDBC、原生客户端、对象元数据、SQL 执行、事务、本地加密存储和数据导出核心由 Java 负责。 ／ |达梦（DM）|`dm.jdbc.driver.DmDriver`|5236|`jdbc:dm://host:5236`| ／ Java 后端另带一个 stdio MCP 入口（`com.dmconnect.mcp.McpLauncher`），让 Claude Code 等 AI 客户端直接使用桌面端保存的连接。它和桌面端共用 `profiles.json` 与本地加密存储，不写 SQL 历史。",
+   "evidence_lines": [
+    3,
+    41,
+    77
+   ]
+  },
+  "fn": "xia-yj/dm-connect",
+  "sha": "9b93a70bfd8c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

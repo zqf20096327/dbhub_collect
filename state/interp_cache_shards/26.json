@@ -10394,5 +10394,142 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fcd8a62912e9": {
+  "identity": {
+   "one_liner": "市民上报城市事件的 Spring Boot 管理平台，PostgreSQL/PostGIS 存储",
+   "review": "UrbanPulse 是一个用于登记、分类、跟踪与分析市民上报城市事件的应用平台，面向市政工作人员。后端为 Spring Boot + Spring Data JPA，数据存于 PostgreSQL/PostGIS，schema 由 Flyway 迁移管理，并提供 React Web 与 React Native 移动客户端。仓库尚处早期开发，事件管理工作流未实现。",
+   "highlights": [
+    "使用 PostgreSQL/PostGIS 存储关系与地理空间数据，通过 Spring Data JPA 连接",
+    "数据库 schema 由版本化 Flyway 迁移创建，并以 OpenAPI 3.1 契约提供 API 文档",
+    "通过 Docker Compose 启动本地数据库，集成测试使用 Testcontainers 启动 PostGIS 容器"
+   ],
+   "use_cases": [
+    "市政部门登记、分类与跟踪市民上报的城市事件",
+    "为事件数据附加马拉加市上下文数据进行地理空间分析",
+    "作为 Spring Boot + PostGIS + Flyway 全栈项目结构参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL with PostGIS for relational and geospatial data. ／ - Spring Data JPA and PostgreSQL connectivity.",
+     "lines": [
+      18,
+      19
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该平台使用 PostgreSQL/PostGIS 存储自身的事件业务数据，而非为数据库生态提供工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> **Status:** Early development. The repository currently contains the Spring Boot backend skeleton, its local PostgreSQL/PostGIS infrastructure, the versioned database schema, the API contract and the skeleton of the web and mobile clients. Incident management workflows are not implemented yet. ／ - PostgreSQL with PostGIS for relational and geospatial data. ／ - The database schema of the whole data model, created by versioned Flyway migrations.",
+   "evidence_lines": [
+    5,
+    18,
+    20
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Dalibex/urban-incidence-manager",
+  "sha": "fcd8a62912e9",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "264efeea9c9c": {
+  "identity": {
+   "one_liner": "达梦数据库的社区 .NET ADO.NET 数据提供程序",
+   "review": "W.DamengProvider 是社区维护的达梦数据库 ADO.NET 驱动，支持异步操作、本地事务、存储过程、数组绑定、DbBatch、流式 BLOB/CLOB、默认严格 TLS 及 .NET 诊断接口，针对官方 DM.DmProvider 在参数绑定、返回值和时间精度上的痛点提供替代实现，并通过 DbProviderFactories 集成。适用于在 .NET 6/8/9/10 环境下访问达梦数据库的开发者；不支持原生加密、批量装载、自动重连和分布式事务。",
+   "highlights": [
+    "支持异步 Open/Prepare/Execute/Read、本地事务、存储过程、数组绑定与 DbBatch",
+    "支持流式 BLOB/CLOB 读写，默认要求 TLS 并验证证书",
+    "提供 ActivitySource 与 Meter 标准诊断接口"
+   ],
+   "use_cases": [
+    ".NET 应用访问达梦数据库",
+    "需异步 I/O、流式 LOB 或时间精度控制的达梦数据访问",
+    "从官方 DM.DmProvider 迁移的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "W.DamengProvider 是社区维护的达梦数据库 ADO.NET 驱动，支持异步操作、本地事务、存储过程、数组绑定、`DbBatch`、流式 BLOB/CLOB、TLS 和标准 .NET 诊断接口。 ／ 完整支持边界见实现与兼容性文档。本项目不附带达梦服务端或第三方原生库。",
+     "lines": [
+      3,
+      69
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为达梦数据库的 ADO.NET 驱动，是为数据库生态服务的连接组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "W.DamengProvider 是社区维护的达梦数据库 ADO.NET 驱动，支持异步操作、本地事务、存储过程、数组绑定、`DbBatch`、流式 BLOB/CLOB、TLS 和标准 .NET 诊断接口。 ／ dotnet add package W.DamengProvider --version 0.3.1",
+   "evidence_lines": [
+    3,
+    12
+   ]
+  },
+  "fn": "whynpc9/W.DamengProvider",
+  "sha": "264efeea9c9c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11056,5 +11056,259 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e45b377f1370": {
+  "identity": {
+   "one_liner": "开源桌面算法交易平台，单机运行，连接券商执行交易",
+   "review": "OpenAlgo Desktop 是 OpenAlgo web 的单用户桌面版，基于 Tauri 2 与 Rust 后端构建，提供 REST API、行情 WebSocket、策略模块、图表与剥头皮终端、期权工具及沙盒模式，可连接 37 家券商，并支持 TradingView、Amibroker 等外部平台经统一 API 接入。面向个人交易者；仅支持带图形界面的桌面系统，不支持 Docker 和后台服务运行，安装包尚未签名。",
+   "highlights": [
+    "提供与 OpenAlgo web 相同的 REST API（/api/v1）和行情 WebSocket，外部平台与 SDK 可直接对接",
+    "支持连接 37 家券商，包含策略模块、图表终端、剥头皮终端和 16 个期权工具",
+    "提供沙盒模式（分析模式），订单可先进入沙盒而非真实券商"
+   ],
+   "use_cases": [
+    "个人交易者在本地桌面运行算法交易",
+    "通过统一 API 将 TradingView、Amibroker、Excel 等平台接入券商",
+    "多腿期权策略构建与回测"
+   ],
+   "ai": false,
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite** (WAL, r2d2 pool): 3 databases (main, logs, sandbox)",
+     "lines": [
+      490
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用内置 SQLite 数据库（main、logs、sandbox）存储数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OpenAlgo Desktop is a free, open source, single-user desktop version of ／ Tauri 2 and a Rust backend around the OpenAlgo React interface.",
+   "evidence_lines": [
+    13,
+    26
+   ]
+  },
+  "fn": "marketcalls/openalgo-desktop",
+  "sha": "e45b377f1370",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "160f253c9984": {
+  "identity": {
+   "one_liner": "Rust 嵌入式键值存储，基于 sled，内置 TTL 与数据生命周期管理",
+   "review": "EpochDB 是用 Rust 编写的嵌入式持久化键值数据库，构建在 sled 存储引擎之上，通过原子 TTL、访问频率计数和多树冷热分离机制自动清理过期数据，面向需要缓存、会话管理、实时分析等带生命周期数据的 Rust 开发者。通过 Cargo.toml 引入使用，目前版本 0.3.0，MIT 许可。",
+   "highlights": [
+    "基于 sled，继承其 Write-Ahead Log 的持久化与崩溃安全机制",
+    "自动按可配置的宽限期和频率阈值清理旧数据",
+    "核心操作线程安全，频率计数器使用 compare-and-swap 原子更新"
+   ],
+   "use_cases": [
+    "用户会话存储",
+    "API 响应缓存",
+    "事件流等带生命周期的数据管理"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明它是构建在 sled 之上的键值存储引擎本身，为 Rust 应用提供数据存储能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**EpochDB** is not just another key-value store. It's an opinionated database engine built on the robust foundation of `sled`, designed specifically for workloads where the relevance of data changes over time. ／ * **Performance-First Architecture:** Uses a multi-tree system to separate \"hot,\" frequently-updated metadata from \"cold,\" larger data blobs. This maximizes `sled`'s page cache efficiency. ／ epoch-db = \"0.3.0\"",
+   "evidence_lines": [
+    12,
+    29,
+    40
+   ]
+  },
+  "fn": "FabioCanavarro/EpochDB",
+  "sha": "160f253c9984",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b0562b468cce": {
+  "identity": {
+   "one_liner": "Go 编写的 SQLite 与 Datastar 应用运行时框架",
+   "review": "lith 是一个供 Go 开发者构建基于 SQLite 与 Datastar 的超媒体应用的开发库，提供单写入者线性写、即时模式渲染、tick 驱动的视图更新以及经 SSE 推送的压缩帧。它内含 SQLite 连接池、事件溯源、多租户、备份到 S3、Prometheus 指标等包，并以 CGO_ENABLED=0 纯 Go 构建，通过 go run 拉起项目模板。",
+   "highlights": [
+    "提供单一写入者的命令批处理与事件溯源包，支持 user_version 迁移与 VACUUM INTO 备份",
+    "基于 tick 的视图渲染与 SSE 推送，支持 zstd/brotli/gzip 逐流压缩与内存预算控制",
+    "包含 Litestream 到 S3 的备份、Prometheus 指标及进程内压测等配套模块"
+   ],
+   "use_cases": [
+    "用 Go 和 SQLite 构建超媒体/Web 应用",
+    "需要单写入者事务模型与事件溯源的应用",
+    "需要 SSE 实时视图更新与按租户分库的多账户应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite: one writer, WAL ／ for Go, SQLite and Datastar apps, built by zwei und eins gmbh. ／ |`sqlite`|one write connection and a `query_only` read pool whose connections keep their statements prepared (`Uncached` for SQL built at runtime), pragmas, `user_version` migrations, read-only opens, `VACUUM INTO` backups|",
+     "lines": [
+      6,
+      11,
+      28
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是一个为使用 SQLite 的应用提供运行时机制的 Go 库，而非自身以数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**L**inear writes, **I**mmediate mode, **T**icks, **H**ypermedia: a runtime ／ |`sqlite`|one write connection and a `query_only` read pool whose connections keep their statements prepared (`Uncached` for SQL built at runtime), pragmas, `user_version` migrations, read-only opens, `VACUUM INTO` backups| ／ Everything is pure Go and builds with `CGO_ENABLED=0`.",
+   "evidence_lines": [
+    10,
+    28,
+    42
+   ]
+  },
+  "fn": "zweiundeins/lith",
+  "sha": "b0562b468cce",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e7d0dcf46b51": {
+  "identity": {
+   "one_liner": "自托管的自主 AI 代理只读运营看板，代理经 bearer-token JSON API 发布内容",
+   "review": "这是一个自托管个人运营看板：自主 AI 代理通过 bearer-token JSON API 发布焦点、任务、截止时间和审批请求，人类只能点击白名单动作回应，无法输入文字。技术栈为 FastAPI + SQLite（WAL、单 worker）+ 原生 JS，Docker Compose 打包，无服务端 LLM 和遥测。适合运行自主代理、需要低成本监控并一键答复代理请求的个人用户。",
+   "highlights": [
+    "代理为唯一写入方，人类仅通过白名单点击动作交互",
+    "FastAPI + SQLite（WAL、单 worker），Docker Compose 打包，无服务端 LLM 和遥测",
+    "提供单文件零依赖的 Python 客户端 museboard.py 及可选的前端沙箱部署门禁"
+   ],
+   "use_cases": [
+    "个人私有网络（localhost/Tailscale/LAN）中监控自主 AI 代理的进展并向其回复审批/确认",
+    "代理部署方按照 Part A 流程自动部署并回报验证结果",
+    "通过手机自动化向看板推送地理位置上下文事件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "FastAPI + SQLite (WAL, single worker) + vanilla JS (no build step), packaged with Docker Compose. No server-side LLM, no external services, no telemetry. ／ Data lives in the Docker volume `muse_data` (SQLite at `/data/muse.db`) and survives rebuilds/restarts. `restart: unless-stopped` brings it back after reboot as long as Docker starts on boot (`sudo systemctl enable docker`).",
+     "lines": [
+      6,
+      63
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该看板用 SQLite 存储数据（/data/muse.db），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small, **read-only personal operations dashboard for an autonomous agent** (called \"Muse\" in the docs). ／ FastAPI + SQLite (WAL, single worker) + vanilla JS (no build step), packaged with Docker Compose. No server-side LLM, no external services, no telemetry. ／ Data lives in the Docker volume `muse_data` (SQLite at `/data/muse.db`) and survives rebuilds/restarts. `restart: unless-stopped` brings it back after reboot as long as Docker starts on boot (`sudo systemctl enable docker`).",
+   "evidence_lines": [
+    3,
+    6,
+    63
+   ]
+  },
+  "fn": "ZhengaoLi/MuseDashboard",
+  "sha": "e7d0dcf46b51",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

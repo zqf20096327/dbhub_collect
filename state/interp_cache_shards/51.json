@@ -11613,5 +11613,149 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c5ee98f6f1ba": {
+  "identity": {
+   "one_liner": "SSMS 22 扩展，提供 SQL 补全、格式化与结果导出",
+   "review": "这是一个面向 SQL Server Management Studio 22 的开源扩展插件，为 SSMS 增加上下文感知 SQL 补全、T-SQL 格式化、查询历史、服务器健康监控和结果导出功能，界面支持中英双语。面向在 SSMS 内编写查询的 SQL Server 开发者和 DBA。通过 VSIX 或发布 ZIP 安装，格式化功能因 SSMS 22 原生支持而停止新增开发。",
+   "highlights": [
+    "提供上下文感知 SQL 补全，覆盖表、视图、列、存储过程、函数及别名跟随",
+    "支持结果集统计面板、列搜索，以及导出 Excel/邮件/INSERT/CSV/JSON/XML",
+    "包含查询历史、服务器健康面板、执行统计与 F12 转到定义"
+   ],
+   "use_cases": [
+    "在 SSMS 22 中编写 T-SQL 时获得补全与对象定义导航",
+    "将查询结果导出为 Excel、CSV、JSON 或临时表进行数据传输",
+    "监控服务器健康状态与查询执行统计"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "# MSSQL Tool for SSMS 22 ／ SSMS Gallery (for SQL Server Management Studio) ／ > **MSSQL Tool is a free, open-source SSMS (SQL Server Management Studio) extension for SSMS 22** -",
+     "lines": [
+      1,
+      17,
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 SQL Server Management Studio / SQL Server 服务的扩展工具，非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，fork 自 Axial-SQL/AxialSqlTools",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **MSSQL Tool is a free, open-source SSMS (SQL Server Management Studio) extension for SSMS 22** - ／ > an add-in for SQL Server Management Studio that adds context-aware SQL completion, T-SQL formatting, ／ > query history, server health monitoring, and result export to Excel/Google Sheets/email.",
+   "evidence_lines": [
+    35,
+    36,
+    37
+   ]
+  },
+  "fn": "PuLuShen/MSSQLTOOL",
+  "sha": "c5ee98f6f1ba",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4bd772634b00": {
+  "identity": {
+   "one_liner": "自托管求职雷达：抓取职位并用 LLM 对简历匹配打分",
+   "review": "Wera 是一个自托管的求职监控系统，抓取 Greenhouse、Workday 等公开职位源，用规则过滤、本地嵌入排序，再调用 OpenAI 兼容的 LLM 对每个用户的简历做匹配打分，并通过 REST API 和仪表盘展示。面向个人求职者自部署使用，数据存储在 PostgreSQL，单主机 Docker Compose 运行。",
+   "highlights": [
+    "从 10 个公开职位源（Greenhouse、Lever、Ashby、Workday 等）抓取 5100+ 公司职位",
+    "按规则过滤、本地嵌入与 TF-IDF 排序，仅对头部职位做 LLM 打分以控制成本",
+    "提供 REST API、Chrome 扩展接口、简历/求职信生成与 Prometheus 指标"
+   ],
+   "use_cases": [
+    "个人求职者追踪与筛选目标公司职位",
+    "用 LLM 根据个人简历评估职位匹配度",
+    "自托管部署的求职社区（含职位、面经分享）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Wera system architecture on one Hetzner VM: Caddy routes /api to wera-api and pages to wera-web; wera-api and wera-worker (one Go binary) use wera-embed and PostgreSQL and call the LLM API; the worker polls job boards, the API sends email; wera-admin is reache ／ Everything runs with Docker Compose on one host (see deploy/hetzner). Caddy is the only public service: it terminates TLS and sends `/api/*` to `wera-api` and everything else to `wera-web` (nginx serving the dashboard). `wera-api` and `wera-worker` are the sam",
+     "lines": [
+      16,
+      18
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "**Wera** (Swahili slang for a job or gig) is a self-hosted job radar. It collects postings from public job-board feeds (Greenhouse, Lever, Ashby, Workday, SmartRecruiters, Oracle Recruiting Cloud, Workable, Rippling, Eightfold, and amazon.jobs) for 5,100+ comp",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Wera 使用 PostgreSQL 存储职位、用户与简历数据，是使用数据库的终端应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Wera** (Swahili slang for a job or gig) is a self-hosted job radar. It collects postings from public job-board feeds (Greenhouse, Lever, Ashby, Workday, SmartRecruiters, Oracle Recruiting Cloud, Workable, Rippling, Eightfold, and amazon.jobs) for 5,100+ companies across 30 industries (tech firms, but also hospitals, schools, retailers, restaurants and nonprofits), filters them with configurable rules, scores each one against your resume with an LLM from any OpenAI-compatible provider (presets for Coral Bricks and DeepInfra), and serves the results through a REST API. Wera does not apply on your behalf. You review the matches and apply yourself. ／  Wera system architecture on one Hetzner VM: Caddy routes /api to wera-api and pages to wera-web; wera-api and wera-worker (one Go binary) use wera-embed and PostgreSQL and call the LLM API; the worker polls job boards, the API sends email; wera-admin is reached only through an SSH tunnel ／ Everything runs with Docker Compose on one host (see deploy/hetzner). Caddy is the only public service: it terminates TLS and sends `/api/*` to `wera-api` and everything else to `wera-web` (nginx serving the dashboard). `wera-api` and `wera-worker` are the same Go binary: the API serves requests and sends queued email, the worker runs the matching pipeline on a schedule. Both rank jobs with `wera-embed`, a small local embedding model, and keep everything in PostgreSQL. `wera-admin` listens on 127.0.0.1 only and is reached through an SSH tunnel.",
+   "evidence_lines": [
+    10,
+    16,
+    18
+   ]
+  },
+  "fn": "jessechumo/Wera",
+  "sha": "4bd772634b00",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

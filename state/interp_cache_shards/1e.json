@@ -9763,5 +9763,142 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c1a597c47f15": {
+  "identity": {
+   "one_liner": "计算机使用代理（CUA）研究与资源的可溯源编目库，提供 JSONL/SQLite 数据",
+   "review": "该仓库收集并维护计算机使用代理（computer-use agents）领域的论文、模型、数据集、基准、框架和工具条目，附带评论状态与原始来源链接，每日三次定时发现新资源。面向研究者、RAG 系统和代理程序，可克隆后用自带 Python 脚本（3.11+，无依赖）检索，并用 SQLite/JSONL 形式访问完整目录数据。",
+   "highlights": [
+    "提供 3,303 条资源记录的编目数据，覆盖论文、模型、数据集、基准、框架、代理与工具等类别",
+    "每日三次定时执行发现扫描，并发布覆盖台账与审核状态",
+    "目录数据以 JSONL 提交，并提供 SQLite 查询方式与本地 Python 检索脚本（Python 3.11+，无外部依赖）"
+   ],
+   "use_cases": [
+    "为 CUA 研究者查找按年份与主题组织的论文、基准和数据集",
+    "为 RAG 系统或代理提供可克隆、可检索的结构化目录数据",
+    "按任务类型（选基准、找训练数据、构建代理等）定位入口资源"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Use SQLite to join resources, environment/topic facets, and reviewed relations. See query examples. `data/catalog.jsonl` is committed; SQLite and JSON array exports are reproducible local build products.",
+     "lines": [
+      189
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是计算机使用代理领域的资源目录，README 声明以 SQLite 存储目录数据供查询，属使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A source-backed collection of papers, models, datasets, benchmarks and tools for agents that use computers. ／ **For people, RAG systems, and agents — clone the complete catalog:** ／ python3 scripts/catalog.py search \"grounding\" --kind paper --status curated --limit 0 --json",
+   "evidence_lines": [
+    7,
+    25,
+    54
+   ]
+  },
+  "fn": "reacher-z/Awesome-CUA",
+  "sha": "c1a597c47f15",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fa8063f21c6f": {
+  "identity": {
+   "one_liner": "OceanBase MySQL 模式 SQL 静态审计与索引建议 Skill",
+   "review": "这是一个无外部依赖的 SQL 审查 Skill，静态审计 OceanBase MySQL 模式 SQL，将正确性风险与性能信号分离，并基于 schema、统计信息和 EXPLAIN 证据给出索引建议；附带 Python 脚本 ob_sql_audit.py，从不连接数据库或执行被审 SQL，适合需要离线静态检查 OceanBase SQL 的使用者。",
+   "highlights": [
+    "提供静态 SQL 审计脚本，区分正确性风险与性能信号",
+    "基于 schema、统计信息与 EXPLAIN 证据给出索引建议",
+    "不连接数据库、不执行被审 SQL，无外部依赖"
+   ],
+   "use_cases": [
+    "OceanBase MySQL 模式 SQL 的上线前静态审查",
+    "索引提案的基于证据的评审辅助"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "A dependency-free Skill for evidence-based review of OceanBase MySQL-mode SQL.",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "A dependency-free Skill for evidence-based review of OceanBase MySQL-mode SQL.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该 Skill 是为审查 OceanBase SQL 服务的静态审计工具，本身不使用数据库存数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A dependency-free Skill for evidence-based review of OceanBase MySQL-mode SQL. ／ python3 scripts/ob_sql_audit.py examples/risky.sql ／ static: it never connects to a database or executes the reviewed SQL.",
+   "evidence_lines": [
+    3,
+    11,
+    16
+   ]
+  },
+  "fn": "danzhang-24/oceanbase-sql-review",
+  "sha": "fa8063f21c6f",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

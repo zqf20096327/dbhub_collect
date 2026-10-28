@@ -10372,5 +10372,156 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5241def7e138": {
+  "identity": {
+   "one_liner": "自托管天气仪表盘应用，采集 Ambient Weather 观测存入 SQLite 展示",
+   "review": "这是一个基于 Laravel/PHP 的自托管天气展示应用，读取用户 AmbientWeather.net 账户的 API 观测数据，结合 Open-Meteo 预报，存入本地 SQLite 数据库，以浏览器仪表盘、手机响应式布局和 PWA 形式呈现，并提供管理界面自定义瓷砖布局、主题与文案。数据采集每分钟轮询一次，需 PHP 8.3+ 并以 cron 调度运行，面向拥有 Ambient Weather 站的自托管家庭用户。",
+   "highlights": [
+    "通过 Ambient Weather API 每分钟采集观测数据并存储于本地 SQLite，与浏览器展示解耦",
+    "支持瓷砖布局编辑、季节主题、自定义文案，以及桌面/移动响应式与 PWA 展示",
+    "集成 Open-Meteo 七日预报与 Leaflet 雷达地图，提供带鉴权的管理后台与诊断信息"
+   ],
+   "use_cases": [
+    "在 Raspberry Pi 或其他设备浏览器上常驻显示家庭气象站实时观测与预报",
+    "自托管部署于服务器，通过 cron 调度长期采集并保留本地观测历史",
+    "无需 Ambient 账户时用 demo 命令生成合成数据体验仪表盘功能"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "├→ SQLite → Blade dashboard + JSON APIs ／ The application uses **Laravel 13, PHP, SQLite, Blade, vanilla JavaScript, CSS, and locally bundled Leaflet**. There is no frontend build step, Redis requirement, or queue worker requirement with the example configuration. Node.js is used for contract validati",
+     "lines": [
+      66,
+      73
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 SQLite 存储观测与预报数据的天气展示应用，SQLite 是其数据存储而非其服务的对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Midway Weather is a customizable, self-hosted household weather display built around observations from an Ambient Weather station. It brings your station readings together with Open-Meteo forecasts, a radar map, recent trends, and weather-aware messages in one readable view. ／                                                                       ├→ SQLite → Blade dashboard + JSON APIs ／ The application uses **Laravel 13, PHP, SQLite, Blade, vanilla JavaScript, CSS, and locally bundled Leaflet**. There is no frontend build step, Redis requirement, or queue worker requirement with the example configuration. Node.js is used for contract validation during development and CI.",
+   "evidence_lines": [
+    5,
+    66,
+    73
+   ]
+  },
+  "fn": "thenumber3/midway-weather",
+  "sha": "5241def7e138",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0b34c4a49cab": {
+  "identity": {
+   "one_liner": "本地 MCP 服务器，供 AI 助手读写 Primavera P6 进度计划（SQLite/XER）",
+   "review": "这是一个运行在 Windows 上的本地 MCP 服务器，让 Claude Desktop、Cursor、VS Code 等 MCP 客户端分析乃至（经确认后）编辑 Primavera P6 Professional 的进度计划，数据源为独立 SQLite 数据库或 XER 文件；提供进度分析、DCMA 检查、对比与 CPM 引擎、Excel 报表输出，默认关闭写入、写入前自动备份。面向项目管理/计划控制人员，需 Windows 安装包并自行配置 P6 数据库连接。",
+   "highlights": [
+    "提供 52 个 MCP 工具（Basic 配置 11 个只读），覆盖进度分析、DCMA 14 项检查、基线对比、CPM what-if 与 Excel 报表生成",
+    "支持直接读取 XER 文件的只读模式，无需安装 P6 或数据库",
+    "写入默认关闭，采用两步确认令牌机制，每次写入前自动备份并记录编辑日志"
+   ],
+   "use_cases": [
+    "通过 AI 助手查询和解读 P6 项目进度、关键路径与浮时",
+    "对进度计划执行 DCMA 健康检查与版本间差异对比",
+    "无 P6 环境下只读分析 XER 文件并生成 Excel 仪表板"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Professional** schedules on your Windows PC: a standalone (SQLite) P6 database, or plain XER files. ／ |P6 Professional standalone (SQLite)|25.12 (schema fingerprint in `p6mcp/schema.py`); other versions are read only until tested or trusted|",
+     "lines": [
+      8,
+      224
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "> Oracle, Primavera and P6 are trademarks of Oracle and/or its affiliates. ／ SQL Server and Oracle P6 databases (P6 EPPM, or P6 Professional with a server database) are not supported.",
+     "lines": [
+      11,
+      229
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "SQL Server and Oracle P6 databases (P6 EPPM, or P6 Professional with a server database) are not supported.",
+     "lines": [
+      229
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是读取 P6 独立 SQLite 数据库与 XER 文件为其提供分析服务的工具，而非用数据库存自身数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local MCP server that lets an AI assistant (Claude Desktop, Claude Code, ／ Professional** schedules on your Windows PC: a standalone (SQLite) P6 database, or plain XER files. ／ - **Tool profiles**: Basic (11 read-only tools, suited to small local models) or Full (all 52).",
+   "evidence_lines": [
+    6,
+    8,
+    156
+   ]
+  },
+  "fn": "nizarhamza/p6-mcp",
+  "sha": "0b34c4a49cab",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10547,5 +10547,79 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dc9d21d98285": {
+  "identity": {
+   "one_liner": "AI 对话式内省伴侣，以 Claude Code skill 形式运行，本地 SQLite 存储记忆",
+   "review": "Satori 是一个面向开发者、创始人的对话式内省/心理陪伴 prompt 工程（skill），可安装于 Claude Code、Cursor、Codex 等 CLI/IDE 代理，也可用于 Claude.ai、ChatGPT、Gemini 等 Web 聊天。它采用渐进式披露架构（SKILL.md + 15 个按需引用分片），支持本地 SQLite 记忆 vault 与 AES-256-GCM 加密，并提供 350 例触发基准测试。它不是数据库工具，而是使用 SQLite 存储本地数据的应用。",
+   "highlights": [
+    "提供 SKILL.md + 15 个按需引用分片的渐进式披露架构，Turn-1 加载小于 8 KB",
+    "支持本地 SQLite 记忆 vault（~/.satori/），可选 AES-256-GCM 口令加密",
+    "包含 350 用例触发基准，并适配 Claude Code、Cursor、Windsurf、Codex、Gemini CLI 等多种代理"
+   ],
+   "use_cases": [
+    "在 CLI/IDE 编码代理中提供不干扰技术工作的内省/情绪支持对话",
+    "在 Claude.ai、ChatGPT Custom GPT、Gemini Gems 等 Web 聊天中作为对话伴侣使用",
+    "基于本地 SQLite vault 保存私人反思笔记，支持无遥测的本地优先使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Path 1: One-Command CLI (`npx`)**|**Node.js ≥ 18** (`npx` included with npm) and at least one supported coding agent installed|**Python ≥ 3.9** (stdlib only) for local SQLite memory vault (`~/.satori/`); `pip install cryptography` only if using `AES-256-GCM ／ |**Agent Harnesses (10)** *(Mode 1: Local CLI/IDE with `~/.satori/` SQLite vault)*|Claude Code, Google Antigravity, Gemini CLI, OpenAI Codex CLI, Cursor, Windsurf, OpenCode, NousResearch Hermes Agent, OpenClaw, xAI Grok Build|**Tier A - Verified (5):** Claude  ／ |**Local Memory Spec**|`references/memory-system.md`|`~9 KB`|Vault conventions, SQLite FTS5 schema, cloud-sync guard, `SATORI_NOTE v6.5`|When reading/writing memory|",
+     "lines": [
+      53,
+      182,
+      250
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用本地 SQLite FTS5 vault 存储自身记忆数据，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0 单许可",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Satori v6.5.3 progressive disclosure architecture diagram illustrating the SKILL.md entry file, Precedence Ladder, 15 on-demand reference shards, and local SQLite memory vault ／ |**Path 1: One-Command CLI (`npx`)**|**Node.js ≥ 18** (`npx` included with npm) and at least one supported coding agent installed|**Python ≥ 3.9** (stdlib only) for local SQLite memory vault (`~/.satori/`); `pip install cryptography` only if using `AES-256-GCM` passphrase encryption|",
+   "evidence_lines": [
+    5,
+    53
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "MetcalfSolutions/Satori",
+  "sha": "dc9d21d98285",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10186,5 +10186,220 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d94099d57d80": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core 和 EF Core 的自托管个人博客系统",
+   "review": "Moonglade 是一个面向开发者的自托管博客平台，提供文章、评论、分类、标签、归档等博客功能，通过 EF Core 数据层适配 PostgreSQL 和 SQL Server 两种数据库，默认使用 PostgreSQL，数据库升级需管理员手动执行 SQL 脚本。适合想自建博客的开发者，通过 Docker 或 dotnet 运行部署。",
+   "highlights": [
+    "提供文章发布、评论互动、站点管理与 RSS/Atom/OpenSearch 等互操作功能",
+    "通过 EF Core 数据提供者支持 PostgreSQL 和 SQL Server，默认 PostgreSQL",
+    "支持 Docker Compose 部署、本地账户 TOTP 与 OpenID Connect 认证"
+   ],
+   "use_cases": [
+    "开发者自托管个人博客",
+    "需要 Markdown/Mermaid 写作与定时发布的博客站点",
+    "自托管且可选 PostgreSQL 或 SQL Server 存储的内容站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`src/Moonglade.Data.PostgreSql`, `src/Moonglade.Data.SqlServer`|PostgreSQL and SQL Server provider registration and provider-specific EF Core behavior.| ／ Compose starts PostgreSQL and supplies the database connection string to the web container. For a direct `dotnet run`, the default connection string in `appsettings.json` points to PostgreSQL on `localhost:5432`; override it with `ConnectionStrings__MoongladeD ／ |PostgreSQL|`User ID=***;Password=***;Host=localhost;Port=5432;Database=moonglade;Pooling=true;`| ／ - PostgreSQL: `PostgreSql`",
+     "lines": [
+      25,
+      60,
+      77,
+      82
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|`src/Moonglade.Data.PostgreSql`, `src/Moonglade.Data.SqlServer`|PostgreSQL and SQL Server provider registration and provider-specific EF Core behavior.| ／ |SQL Server|`Server=(local);Database=moonglade;Trusted_Connection=True;`| ／ - SQL Server: `SqlServer`",
+     "lines": [
+      25,
+      78,
+      83
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是以 PostgreSQL/SQL Server 作为存储的博客应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Moonglade** is a personal blogging platform built for developers. It features essential blogging tools: posts, comments, categories, tags, archives, and pages. ／ Moonglade provides a self-hosted blog with a public reading experience and an authenticated admin portal. The core workflow is authoring posts and pages, organizing them with categories and tags, publishing immediately or on a schedule, and exposing the published content through web pages, feeds, sitemap, Webmention, and search-engine notification protocols. ／ Compose starts PostgreSQL and supplies the database connection string to the web container. For a direct `dotnet run`, the default connection string in `appsettings.json` points to PostgreSQL on `localhost:5432`; override it with `ConnectionStrings__MoongladeDatabase` for your environment.",
+   "evidence_lines": [
+    3,
+    7,
+    60
+   ]
+  },
+  "fn": "EdiWang/Moonglade",
+  "sha": "d94099d57d80",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e45190f0c4cf": {
+  "identity": {
+   "one_liner": "基于 Leaflet/GIS 与 SQLite3 的战术军事规划 Web 应用",
+   "review": "PlanMilT 是一个用于战术级军事行动规划的 Web 应用，由巴西陆军军官开发并用于相关课程教学。它基于 Leaflet 与 GIS 工具，提供地图绘制、KMZ 导入导出、距离/面积测量、图层定制与地理搜索；规划数据通过 PHP 服务器端的 SQLite3 文件（bd.db）本地离线存储，需自备支持 PHP 的 Web 服务器运行。",
+   "highlights": [
+    "提供地图绘制、KMZ 文件导入导出、面积与距离测量、图层与图标定制、地理空间搜索功能",
+    "使用 SQLite3 数据库文件 bd.db 在服务器本地离线存储规划数据",
+    "部署仅需支持 PHP 的 Web 服务器与 SQLite3"
+   ],
+   "use_cases": [
+    "军事战术级行动规划的教学与作业",
+    "本地离线环境下的 GIS 标绘与规划数据管理",
+    "基于 Leaflet 的地图要素绘制与 KMZ 文件交换"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "O banco de dados utilizado é um **SQLite3** chamado `bd.db`, que armazena todas as informações de planejamento localmente no servidor, garantindo a segurança da informação por meio de armazenamento offline. ／ - **SQLite3** ／ - Banco de dados SQLite3.",
+     "lines": [
+      16,
+      36,
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用使用 SQLite3 文件 bd.db 存储规划数据，数据库仅为应用自身的数据存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "O banco de dados utilizado é um **SQLite3** chamado `bd.db`, que armazena todas as informações de planejamento localmente no servidor, garantindo a segurança da informação por meio de armazenamento offline. ／ - Banco de dados SQLite3. ／ 2. Acesse a aplicação pelo navegador no endereço configurado (ex.: `http://localhost/PlanMilT`).",
+   "evidence_lines": [
+    16,
+    43,
+    55
+   ]
+  },
+  "fn": "Jonny-Marcos/PlanMilT",
+  "sha": "e45190f0c4cf",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "69e16d4ee08b": {
+  "identity": {
+   "one_liner": "AI 编码工具的本地记忆与规则中枢，以 SQLite 为单一存储，经 MCP/REST/CLI 读取",
+   "review": "Aletheia 在本地维护一个 SQLite 存储，为多种 AI 编码工具（Claude Code、Cursor、Codex CLI 等）提供会话记忆与规则的统一读写：工具可通过 MCP、REST API 或 CLI 访问，规则可同步写入各工具的指令文件（如 CLAUDE.md、AGENTS.md）。面向使用 AI 编码助手的开发者，需 Bun 1.1+，当前为 alpha 状态，仅监听 loopback。",
+   "highlights": [
+    "提供一个本地 SQLite 存储，任何工具可经 MCP（stdio 和 HTTP）、REST 或 CLI 读取",
+    "支持将规则同步写入 CLAUDE.md、AGENTS.md、.cursor/rules 等多种指令文件",
+    "通过 hooks 捕获会话，存储前进行 secrets 脱敏，数据库不可用时 spool 到磁盘"
+   ],
+   "use_cases": [
+    "为多个 AI 编码工具提供跨会话的统一记忆存储",
+    "一次编写规则并同步到多个编码助手的指令文件",
+    "本地捕获并检索编码会话中的事实与目标，无账号无遥测"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Aletheia is a free, local memory and rules hub for AI coding tools. One SQLite store is read by any tool over MCP,",
+     "lines": [
+      41
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 作为自身记忆数据的存储引擎，是一个使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Aletheia is a free, local memory and rules hub for AI coding tools. One SQLite store is read by any tool over MCP, ／ REST or the CLI, and your rules are written into each tool's own instruction file. ／ no telemetry and no network call unless you configure a model provider. It listens on loopback only.",
+   "evidence_lines": [
+    41,
+    42,
+    46
+   ]
+  },
+  "fn": "mohamed-ashraf-elsaed/aletheia-mem",
+  "sha": "69e16d4ee08b",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

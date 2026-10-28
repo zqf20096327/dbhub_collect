@@ -11122,5 +11122,81 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cda3aba8731e": {
+  "identity": {
+   "one_liner": "面向 AI 代理的认知记忆数据库，支持衰减、合并与矛盾检测",
+   "review": "YantrikDB 是一个用 Rust 编写的记忆数据库，提供嵌入式库（Python/Rust）、HTTP 集群服务和 MCP 服务器三种形态，实现记忆时间衰减、重复合并和矛盾检测，含 15 个 MCP 工具和内置管理控制台。面向构建 AI 代理的开发者。注意 README 自述其性能基准数据经过更正，且写负载下读吞吐问题仍开放。",
+   "highlights": [
+    "提供库、HTTP/SSE 服务器和 MCP 服务器三种部署形态，含 15 个 MCP 记忆工具",
+    "实现时间衰减、重复合并、矛盾检测、实体关系图与派生人格等记忆管理机制",
+    "支持 openraft 的 HA 集群（2 投票者 + 1 见证者）、Prometheus 指标与 AES-256-GCM 静态加密"
+   ],
+   "use_cases": [
+    "为 Claude Code/Cursor/Windsurf 等 MCP 客户端提供持久化代理记忆",
+    "通过 HTTP API 多节点集群为多租户代理提供共享记忆层",
+    "在 Python 或 Rust 程序中作为嵌入式记忆库使用"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "db.record(\"decided to use PostgreSQL\") # auto-linked to session",
+     "lines": [
+      329
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "That's it. No env vars. Uses a local SQLite memory file at `~/.yantrikdb/memory.db`. First call auto-initializes the schema. Restart your client — the `yantrikdb` MCP server will show up with 15 memory tools (see below).",
+     "lines": [
+      118
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它本身是一个数据库引擎（本地以 SQLite 文件存储），不是为既有数据库生态服务的工具，也非仅使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，crates.io/PyPI/Docker 多渠道分发",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "YantrikDB is different. It's a **cognitive memory engine** — embed it, run it as a server, or connect via MCP. It thinks about what it stores. ／ Full cognitive architecture lives in the standalone engine repo. This server repo focuses on deployment, HTTP API, and cluster operations. ／ Single Rust binary. HTTP + binary wire protocol. 2-voter + 1-witness HA cluster via Docker Compose or Kubernetes. Per-tenant quotas, Prometheus metrics, AES-256-GCM at-rest encryption, runtime deadlock detection. See docker-compose.cluster.yml and k8s manifests.",
+   "evidence_lines": [
+    15,
+    99,
+    163
+   ]
+  },
+  "fn": "yantrikos/yantrikdb-server",
+  "sha": "cda3aba8731e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

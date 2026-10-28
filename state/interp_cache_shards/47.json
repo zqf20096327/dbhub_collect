@@ -10795,5 +10795,163 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9a7d2f6641ab": {
+  "identity": {
+   "one_liner": "基于 go-kratos 的多租户 Headless 内容管理平台",
+   "review": "一个用 Go（go-kratos 框架 + Ent ORM）实现的全栈 Headless CMS，以 Protobuf 为 API 契约生成 REST/gRPC 接口，提供内容建模、多租户、RBAC 权限、多语言及 Vue/React/Taro/Flutter 多套前端，数据存储支持 PostgreSQL 或 MySQL。适合需要自建内容中台并向网页、小程序、App 多端分发内容的企业团队。",
+   "highlights": [
+    "以 Protobuf 为单一 API 契约，自动生成 Go/TypeScript/OpenAPI 代码，提供 REST + gRPC 双协议接口",
+    "提供多租户数据隔离与菜单/接口/数据三级 RBAC 权限控制，支持原生多语言管理",
+    "配套 Vue3 管理后台与 Vue/React/Taro/Flutter 多套前台，支持内容向 10 个社交平台分发"
+   ],
+   "use_cases": [
+    "企业官网、内容门户、博客等多端内容发布与分发",
+    "需要租户隔离与精细化权限的内容管理中台建设",
+    "内容向微信公众号、微博等社交平台的定时/即时分发"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "text2sql",
+     "dba-agent",
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|数据库|PostgreSQL / MySQL|关系型数据库| ／ |知识库 RAG|文档上传（txt/md/docx/pdf）自动切片向量化入 pgvector，对话检索注入相关片段|",
+     "lines": [
+      49,
+      169
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|数据库|PostgreSQL / MySQL|关系型数据库|",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 技术栈表将 PostgreSQL/MySQL 列为项目自身的数据存储数据库，属于使用数据库的应用。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "GoWind Content Hub（中文名「风行」，无头内容中枢）是一款开箱即用的企业级 Golang 全栈 Headless 内容平台，为企业提供灵活、可扩展的全域内容管理与分发解决方案。 ／ |数据库|PostgreSQL / MySQL|关系型数据库|",
+   "evidence_lines": [
+    14,
+    49
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "tx7do/go-wind-cms",
+  "sha": "9a7d2f6641ab",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2c5c6a9091a0": {
+  "identity": {
+   "one_liner": "基于 Postgres/Supabase 的开源复式记账核心，含 CLI 与 MCP 服务器",
+   "review": "Ekwo OS 是一个部署在自有 Postgres/Supabase 项目上的复式记账核心，提供数据库 schema、各国税务规则数据包、命令行工具和 MCP 服务器，供 AI 代理与会计人员在同一账簿上操作，并生成增值税申报、电子发票等法定文件。适合想自持账簿的企业、会计事务所和需要复式记账内核的开发者；依赖 Supabase 项目，无独立服务器进程。",
+   "highlights": [
+    "复式记账规则由数据库触发器强制执行，锁定期间拒绝写入",
+    "提供 MCP 服务器（托管或 npx 本地运行）供 AI 代理操作账簿",
+    "内置约 160 个国家的税务规则数据包，含会计科目表与申报口径"
+   ],
+   "use_cases": [
+    "企业或创始人在自有数据库中记账并生成 VAT 申报、FEC、Factur-X 等文件",
+    "通过 AI 代理（如 Claude）以 MCP 读取发票、记账、准备申报",
+    "开发者需要一个税则即数据的复式记账核心"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "open, the data sits in a Postgres database you control, and the interface is ／ A double-entry accounting core for Postgres. There is no server to run: ／ - **Tested on real Postgres.** The test suite runs the migrations, the seeds,",
+     "lines": [
+      25,
+      64,
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 Postgres/Supabase 存储账簿数据的记账系统，数据库是其存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0；格式库以 MIT 许可发布",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Ekwo** is open source accounting, ready to use on **Ekwo Cloud**: the web application for your invoices, your bank statements, your VAT returns and the electronic invoices your country uses, in your own instance, with an account opened in a minute. **Ekwo OS** is the free and open source core it runs on, under AGPL-3.0: install it on your own Supabase project and own your accounting data, forever. ／ open, the data sits in a Postgres database you control, and the interface is ／ A double-entry accounting core for Postgres. There is no server to run:",
+   "evidence_lines": [
+    3,
+    25,
+    64
+   ]
+  },
+  "fn": "Ekwo-ai/ekwo-os",
+  "sha": "2c5c6a9091a0",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

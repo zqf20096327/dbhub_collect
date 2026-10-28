@@ -11085,5 +11085,76 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "25a0e537de6d": {
+  "identity": {
+   "one_liner": "Postgres 迁移与 SQL 的静态检查工具",
+   "review": "Squawk 是一个针对 Postgres 数据库迁移文件和 SQL 的 linter，通过内置规则检查可能引发停机的迁移操作，支持通过 --exclude、squawk-ignore 注释和 .squawk.toml 配置文件禁用规则，可作为 CLI 运行，也可通过 GitHub Action 或 pre-commit 集成到工作流。面向使用 Postgres 进行 schema 迁移的开发者。",
+   "highlights": [
+    "基于自研解析器（rust-analyzer 风格）生成 CST 并在其上构建 AST 进行检查",
+    "支持 npm/pypi/Docker/VSCode 插件/WASM Playground 多种运行方式",
+    "提供 GitHub PR 评论集成（upload-to-github 子命令）与 pre-commit hook"
+   ],
+   "use_cases": [
+    "在 CI 中检查 Postgres 迁移 SQL 以规避高风险操作",
+    "作为 pre-commit hook 对迁移文件进行本地检查",
+    "在浏览器 Playground 中快速检查 SQL"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> Linter for Postgres migrations & SQL ／ practices around Postgres schemas and SQL. ／ files: path/to/postgres/migrations/written/in/sql",
+     "lines": [
+      3,
+      10,
+      144
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Postgres 迁移/SQL 提供检查服务的独立工具，本身不存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Linter for Postgres migrations & SQL ／ Prevent unexpected downtime caused by database migrations and encourage best ／ Squawk uses its parser (based on rust-analyzer's parser) to create a CST. The",
+   "evidence_lines": [
+    3,
+    9,
+    240
+   ]
+  },
+  "fn": "sbdchd/squawk",
+  "sha": "25a0e537de6d",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

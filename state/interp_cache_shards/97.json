@@ -10492,5 +10492,194 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "480470353633": {
+  "identity": {
+   "one_liner": "Agent 优先的开源 AEO/GEO 运营平台，基于 SQLite 自托管",
+   "review": "Canonry 是一个自托管的 AI 搜索可见度（AEO/GEO）运营平台，通过 CLI、MCP、API 和 Web UI 追踪品牌在回答引擎中的提及与引用，整合 DataForSEO、Google Analytics 等数据源。数据存储使用 SQLite，需自带各 AI 提供商的 API 密钥，为单租户部署。",
+   "highlights": [
+    "提供 CLI、MCP、REST API 和 Web UI 四种接口，暴露测量、诊断、证据导出与调度",
+    "集成 DataForSEO、Google Search Console、Google Analytics 4 等数据源，支持 Gemini、OpenAI、Claude、Perplexity、OpenRouter 等提供商",
+    "通过 npm 安装，自托管运行，使用 SQLite 存储，支持 Docker 与 systemd 部署"
+   ],
+   "use_cases": [
+    "追踪品牌在回答引擎中的提及与引用份额变化",
+    "结合搜索、爬虫与流量数据调查可见度变化原因",
+    "通过 agent 协调内容改进并复测效果"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Self-hosted, using SQLite, with your own (BYOK) provider keys.** The web UI and your agent see the same evidence. ／ |`npm install` fails on `node-gyp`|Install build tools for `better-sqlite3` (guide).|",
+     "lines": [
+      10,
+      228
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明平台使用 SQLite 自托管存储数据，SQLite 仅为其内部存储依赖",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Self-hosted, using SQLite, with your own (BYOK) provider keys.** The web UI and your agent see the same evidence. ／ Canonry is an **agent-first (CLI, MCP, API), open-source AEO operating platform with a comprehensive web UI.** Track AI visibility over time, investigate changes across search and traffic, and measure progress after you or your agent acts.",
+   "evidence_lines": [
+    10,
+    8
+   ]
+  },
+  "fn": "Canonry/canonry",
+  "sha": "480470353633",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "00d907a87805": {
+  "identity": {
+   "one_liner": "DocForum 医疗平台的后端模块化单体，基于 TypeScript/Express + Prisma + PostgreSQL",
+   "review": "DocForum 平台的后端仓库，实现认证、患者/医生/机构、预约、转诊、问诊、处方、检查单、通知和支付等模块，采用模块化单体架构，使用 Prisma 以 schema.prisma 作为数据模型唯一来源。面向医疗多环节就诊流程的开发与部署场景；需自备或以 Docker Compose 启动 Postgres 实例。",
+   "highlights": [
+    "按模块组织 routes/controllers/services/repositories，各模块仅通过服务接口互访",
+    "预约采用数据库级条件更新事务防止重复预约，集成测试用 embedded-postgres 自起临时 Postgres",
+    "处方/检查单发出后不可变，修正通过 supersedes_*_id 新建行"
+   ],
+   "use_cases": [
+    "医疗平台后端服务部署与二次开发",
+    "作为模块化单体架构与 Prisma 数据建模的参考实现",
+    "预约并发安全、转诊流程等业务模块的复用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL| ／ Needs a Postgres instance — either via Docker Compose (`infra/docker/docker-compose.yml`) or your own instance. ／ docker compose -f infra/docker/docker-compose.yml up -d postgres",
+     "lines": [
+      51,
+      108,
+      122
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 PostgreSQL 存储业务数据的医疗平台后端应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Database|PostgreSQL| ／ Needs a Postgres instance — either via Docker Compose (`infra/docker/docker-compose.yml`) or your own instance.",
+   "evidence_lines": [
+    51,
+    108
+   ]
+  },
+  "fn": "DocForum/docforum-core",
+  "sha": "00d907a87805",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6760cab5f8ef": {
+  "identity": {
+   "one_liner": "自托管 RSS 阅读器，含 Google Reader 兼容同步 API",
+   "review": "Kipple 是一个以单容器运行的自托管 RSS 阅读器，提供 Web 界面和 Google Reader 兼容的同步 API，可与支持该 API 的客户端同步。它支持 OPML 导入导出、按订阅源设置保留策略、本地备份与夜间快照，阅读统计存于用户自有数据库。不包含多用户、通知、Webhook 等功能，适合希望在自有环境运行阅读服务的个人用户。",
+   "highlights": [
+    "提供 Google Reader 兼容同步 API，可与支持该 API 的应用同步",
+    "支持 OPML 导入导出、嵌套文件夹、按订阅源的保留策略和本地备份/夜间快照",
+    "以单个 Docker 容器运行，阅读统计存储在用户自有数据库中"
+   ],
+   "use_cases": [
+    "在自有服务器或 NAS 上托管个人 RSS 阅读服务",
+    "配合支持 Google Reader API 的第三方客户端进行多端阅读同步",
+    "需要 OPML 迁移、文章保留策略和本地备份的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述其为一个自托管 RSS 阅读器应用，阅读统计存于自有数据库，而非为某数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Blue Oak Model License 1.0.0，单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted RSS reader you run yourself: a web app plus a Google Reader compatible sync API, in a single container. ／ - Reading stats and a yearly summary (Your year), stored in your own database. ／ docker run -d --name kipple --restart unless-stopped -p 127.0.0.1:1919:1919 -v kipple_data:/data ghcr.io/wptk/kipple:<version>",
+   "evidence_lines": [
+    7,
+    29,
+    37
+   ]
+  },
+  "fn": "WPTK/Kipple",
+  "sha": "6760cab5f8ef",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -12644,5 +12644,142 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c3f475cb872e": {
+  "identity": {
+   "one_liner": "轻量自托管应用监控工具，Go 单二进制采集指标并存入 SQLite",
+   "review": "StatLite 是一个面向 VPS 和小型服务器的自托管应用监控工具，单个 Go 二进制轮询多个应用的 Actuator/Micrometer 或 JSON 指标端点，采集流量、延迟、CPU、内存等数据，将历史指标存于本地 SQLite 并内置图表展示。适合运维小型服务器的开发者；README 提示其无内置仪表盘或 API 认证。",
+   "highlights": [
+    "单个 Go 二进制轮询多个应用，指标历史存储在本地 SQLite",
+    "支持 Spring Boot、Quarkus、Micronaut 集成及固定 JSON 指标端点",
+    "提供内置历史图表，安装方式包含脚本、Homebrew 与 Docker"
+   ],
+   "use_cases": [
+    "小型服务器或 VPS 上对 Spring Boot/Quarkus/Micronaut 应用做指标采集与历史查看",
+    "不部署 Prometheus/Grafana 的场景下自托管监控指标",
+    "任意语言应用通过固定 JSON 端点接入监控"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "metrics locally in SQLite, and provides built-in historical",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为应用监控提供服务，SQLite 仅作为其本地存储指标历史的内置依赖",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "StatLite provides lightweight, self-hosted application monitoring for apps running ／ on VPSs and small servers. One Go binary polls multiple applications, stores ／ metrics locally in SQLite, and provides built-in historical",
+   "evidence_lines": [
+    9,
+    10,
+    11
+   ]
+  },
+  "fn": "PVRLabs/statlite",
+  "sha": "c3f475cb872e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c15c59ff5643": {
+  "identity": {
+   "one_liner": "基于 PocketBase 单二进制后端的实时群聊应用",
+   "review": "一个使用 PocketBase 作为全部后端（认证、数据、实时通信、静态文件）的群聊应用，前端为原生 TypeScript 加 esbuild 打包，另有 Kotlin 原生 Android 客户端。提供公开/私密房间、私信、消息回复与转发、文件附件、Emoji 反应、可选 Telegram 桥接等功能，数据存于 SQLite。适合需要自托管轻量聊天服务的小型团队或社区。",
+   "highlights": [
+    "后端由单个 PocketBase 二进制承担认证、数据、实时和静态文件服务，数据存储于 SQLite 并通过迁移管理 schema",
+    "支持公开/私密/开放房间、私信、消息回复与转发、附件上传、Emoji 反应及可选的 Telegram 双向桥接",
+    "提供 PWA 与原生 Android 客户端，通知不经第三方推送服务，并配备单元、集成与 Playwright e2e 测试脚本"
+   ],
+   "use_cases": [
+    "自托管的小型团队或社区实时群聊",
+    "需要 Telegram 群组与自建聊天双向互通的场景",
+    "基于 PocketBase 学习或构建实时应用的参考实现"
+   ],
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+     "lines": [
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个群聊应用，通过 PocketBase 使用 SQLite 存储聊天数据，而非为数据库生态提供工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small, fast, real-time group chat. One PocketBase binary is the whole backend ／ Open http://127.0.0.1:8090 and sign up (top right). The dev database lives in `pb_data/` — delete it to start over. ／ # All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+   "evidence_lines": [
+    3,
+    56,
+    130
+   ]
+  },
+  "fn": "border-radius/chirkle",
+  "sha": "c15c59ff5643",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

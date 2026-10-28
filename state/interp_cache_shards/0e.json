@@ -11634,5 +11634,213 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "00219e60dec9": {
+  "identity": {
+   "one_liner": "Go 编写的本地常驻 AI 助手与编码代理运行时",
+   "review": "MatrixClaw 是一个用 Go 实现的本地常驻守护进程，管理 AI 会话的上下文、文件、工具审批、定时任务与记忆，状态存于本地 SQLite，并通过终端 TUI、Telegram 与本地 HTTP API 多客户端共享同一会话。它面向希望在终端和手机上运行编码代理与个人助手的开发者，支持 OpenAI、Anthropic、Gemini 等多种 LLM 提供商和 MCP 工具，通过安装脚本或源码构建部署。",
+   "highlights": [
+    "守护进程将会话状态、记忆、定时任务等存储于本地 SQLite，TUI、Telegram 与 HTTP API 客户端共享同一会话",
+    "提供带审批机制的工具调用、shell 沙箱、git 检查点与 /undo /rewind 回退",
+    "支持 MCP 双向集成：可调用 MCP 服务器作为工具，也可将自身工具暴露给其他 MCP 主机"
+   ],
+   "use_cases": [
+    "在终端中运行可审批、可回退的自主编码代理任务",
+    "通过 Telegram 在移动端继续或审批终端上发起的 AI 会话",
+    "配置定时 AI 任务与提醒的本地自动化"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "scheduled tasks, all stored in local SQLite. The terminal TUI, the Telegram bot ／ client, durable SQLite sessions, approvals, MCP tools, memory, scheduled tasks,",
+     "lines": [
+      13,
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其会话状态、记忆与定时任务存储在本地 SQLite 中，SQLite 是其内部存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small Go daemon, `matrixclawd`, owns your AI sessions: context, files, tool ／ scheduled tasks, all stored in local SQLite. The terminal TUI, the Telegram bot",
+   "evidence_lines": [
+    11,
+    13
+   ]
+  },
+  "fn": "Suren878/matrixclaw",
+  "sha": "00219e60dec9",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "44e2697986a3": {
+  "identity": {
+   "one_liner": "自托管的匿名内部举报（吹哨人）报告系统，支持 Docker 部署",
+   "review": "OpenWhistle 是一个面向德国 HinSchG 与欧盟指令 2019/1937 的自托管举报通道系统：举报者不留 IP、不留账号，凭案件号加 UUID4 PIN 查询案件。面向有举报合规义务的 50 人以上企业和公共机构，提供案件状态流转、时限提醒、PDF 导出、TOTP 管理员登录和信封加密存储，通过 docker compose 部署。",
+   "highlights": [
+    "支持匿名举报：日志不记录 IP，时间仅存日期，案件通过案件号与 UUID4 PIN 打开",
+    "支持案件处理流程：状态流转、HinSchG 时限提醒、双向消息、PDF 导出与仪表盘统计",
+    "提供强制 TOTP、角色授权、静态加密、审计日志、Helm chart 与多架构容器镜像"
+   ],
+   "use_cases": [
+    "企业或公共机构按德国 HinSchG / EU 2019/1937 搭建内部举报通道",
+    "需要匿名举报入口与案件时限跟踪的组织",
+    "需自托管、无外部调用以符合 GDPR 要求的合规场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述它是一个自托管举报通道 Web 应用，属于使用数据库存数据的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted internal reporting channel that meets the German HinSchG and EU Directive 2019/1937: ／ Any company with 50 or more employees, and every public authority, must offer one. Free, open source, no vendor lock-in. ／ docker compose up -d",
+   "evidence_lines": [
+    21,
+    24,
+    33
+   ]
+  },
+  "fn": "openwhistle/OpenWhistle",
+  "sha": "44e2697986a3",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9b1a58176e7f": {
+  "identity": {
+   "one_liner": "小型制造业桌面 ERP，含库存、BOM、批次追溯，数据存 MySQL 或 SQLite",
+   "review": "一款面向小型制造业的桌面库存与批次追溯应用，覆盖产品/零件、BOM、生产批次、出入库、操作日志与备份导出。基于 Go + Wails v2 与 React 前端，数据可选 MySQL 8（多人/多机共享）或本地 SQLite 单文件；提供数据库初始化向导、角色权限、一键安装与自动更新。仅面向 Windows 10/11，仓库源码仅供参考与 issue 跟踪。",
+   "highlights": [
+    "支持 MySQL 8 与本地 SQLite 两种存储后端，首次运行向导可初始化数据库并创建最小权限账户",
+    "提供整库备份/恢复（MySQL SQL dump、SQLite 快照）与按表 CSV 导出",
+    "内置四角色权限体系，操作日志记录实际操作人，支持单机自动更新"
+   ],
+   "use_cases": [
+    "小型制造企业的库存、BOM 与生产批次管理",
+    "需要按批次双向追溯物料来源与使用去向的场景",
+    "多人/多机共享库存数据（MySQL）或单机免安装使用（SQLite）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Built with **Wails v2** (Go backend) and a **React + TypeScript** frontend; data is stored in **MySQL 8** or in a local **SQLite** file; supports one-click install and auto-update. ／ - **Backup & export**: whole-database backup and restore (MySQL SQL dump, SQLite snapshot), per-table CSV export; data directory configurable ／ |**MySQL** (default)|Several people / several machines share one database. Requires MySQL 8 on the machine.|",
+     "lines": [
+      8,
+      23,
+      43
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Built with **Wails v2** (Go backend) and a **React + TypeScript** frontend; data is stored in **MySQL 8** or in a local **SQLite** file; supports one-click install and auto-update. ／ - **Backup & export**: whole-database backup and restore (MySQL SQL dump, SQLite snapshot), per-table CSV export; data directory configurable ／ |**SQLite**|Single machine, no extra install. The whole database is one file: `<data directory>\\rferp.db`.|",
+     "lines": [
+      8,
+      23,
+      44
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 MySQL/SQLite 存储业务数据的桌面 ERP 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "All rights reserved，仓库仅用于参考与 issue 跟踪",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A desktop **inventory & batch-traceability** application for small manufacturing — covering products, parts, BOM, production batches, stock, operation logs and data backup/export. ／ Built with **Wails v2** (Go backend) and a **React + TypeScript** frontend; data is stored in **MySQL 8** or in a local **SQLite** file; supports one-click install and auto-update. ／ |**MySQL** (default)|Several people / several machines share one database. Requires MySQL 8 on the machine.|",
+   "evidence_lines": [
+    6,
+    8,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "LzYita/RFERP",
+  "sha": "9b1a58176e7f",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

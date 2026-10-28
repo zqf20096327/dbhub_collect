@@ -11121,5 +11121,145 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dfa333106d86": {
+  "identity": {
+   "one_liner": "本地文件系统与负载监控栈，带有界 SQLite 历史与备份恢复",
+   "review": "该仓库提供一个 Python 本地运维栈：每 10 秒采集文件系统用量与 OS 负载，存入有界 SQLite 历史（最多约 1440 条），提供只读 dashboard、Prometheus 文本指标接口，并通过 SQLite online backup API 实现备份、校验（SHA-256、integrity、schema）与恢复。面向 homelab 用户本地运行，不支持其他服务/网络设备监控，不配置远程访问与认证。",
+   "highlights": [
+    "提供只读 dashboard 与 /metrics（Prometheus 文本）、/api/history（有界 JSON 历史）接口",
+    "备份基于 SQLite online backup API，verify 执行完整恢复校验并报告行数、字节数与 SHA-256",
+    "支持 docker compose 部署，容器以只读根文件系统、无 capability、128MiB 内存限制运行"
+   ],
+   "use_cases": [
+    "homelab 单机的本地文件系统与 OS 负载采样和只读查看",
+    "需要带校验的本地历史数据快照备份与恢复演练",
+    "以 Prometheus 文本格式对外暴露本机基础指标"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A small local operations stack: filesystem readings, OS load, bounded SQLite history, a read-only dashboard, Prometheus text, and checked backup/restore. Python 3.12+ is the only application requirement. It needs no account or paid service. ／ Both destination directories must be new. Backup uses SQLite's online backup API for a consistent snapshot. Restore checks SHA-256, byte size, database integrity, schema, and all sample values. It never overwrites an existing data directory. Stop the old servi",
+     "lines": [
+      7,
+      49
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身使用 SQLite 存储采集数据并内置运行，是为本地运维服务的应用程序而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（新代码）；原无关 dashboard 保留于 archive 分支",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small local operations stack: filesystem readings, OS load, bounded SQLite history, a read-only dashboard, Prometheus text, and checked backup/restore. Python 3.12+ is the only application requirement. It needs no account or paid service. ／ The disk values describe the filesystem that contains the data directory. Load is the OS-visible one-minute load average, not CPU percentage. Windows reports load as unavailable. Container readings are not guaranteed to describe the whole host. This is not monitoring of other services, network devices, temperature, power, or RAID health. ／ Both destination directories must be new. Backup uses SQLite's online backup API for a consistent snapshot. Restore checks SHA-256, byte size, database integrity, schema, and all sample values. It never overwrites an existing data directory. Stop the old service, then start it with `--data .local-restored` when you intend to use the recovered history. Keep backup copies on a separate storage device to protect against device failure; no backup transport or encryption is supplied.",
+   "evidence_lines": [
+    7,
+    17,
+    49
+   ]
+  },
+  "fn": "ungaaaabungaaa/homelab",
+  "sha": "dfa333106d86",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e56b9e47b251": {
+  "identity": {
+   "one_liner": "每日更新的中国招聘岗位数据集，发布为可查询的 SQLite",
+   "review": "该项目每天从约465个公司官方招聘页采集岗位数据，发布为 SQLite 数据库文件，并提供 CLI、MCP 服务器和 Agent Skill 供本地离线查询，面向求职者和 AI agent 使用场景。数据经 GitHub Actions 定时采集并发布到 Release，代码 MIT 许可，岗位内容权利归原发布方。",
+   "highlights": [
+    "每日从官方招聘页采集岗位数据，发布为 SQLite 数据库（岗位主库、JD 全文、招聘日历三个 .db 文件）",
+    "提供 CLI 搜索/日历命令与 MCP 服务器（9 个工具），并附 Claude Code Skill 供 agent 直接查询",
+    "包含全文检索、城市/类别/截止日过滤等查询能力，数据带历史保留与下架判定机制"
+   ],
+   "use_cases": [
+    "求职者本地查询中国校招/实习/社招岗位与招聘日历",
+    "AI agent 通过 MCP/Skill 集成查询岗位数据",
+    "基于数据集做岗位趋势或覆盖分析"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**每天自动更新的中国岗位数据集**：各公司官方招聘页 → 每天采集 → 发布成可直接查询的 SQLite。 ／ ├─ crawl 465 个源 → 适配器（北森 / 大易 / Workday / 自研站）→ SQLite",
+     "lines": [
+      12,
+      121
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储采集到的岗位数据并向终端用户提供查询，不服务于数据库生态本身。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码 MIT；岗位内容权利归原发布方，数据许可为草案",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**每天自动更新的中国岗位数据集**：各公司官方招聘页 → 每天采集 → 发布成可直接查询的 SQLite。 ／   ├─ crawl        465 个源 → 适配器（北森 / 大易 / Workday / 自研站）→ SQLite",
+   "evidence_lines": [
+    12,
+    121
+   ]
+  },
+  "fn": "lijiaqi-AI-Product-Manager/job_radar",
+  "sha": "e56b9e47b251",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10494,5 +10494,167 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0383145c062b": {
+  "identity": {
+   "one_liner": "基于 NestJS 的事件溯源开发库，提供多存储适配器",
+   "review": "这是一组 NestJS 库，用于构建事件溯源（event sourcing）应用，提供领域事件、聚合根与事件重放原语，通过独立的持久化适配器将事件与快照事务性写入 MongoDB、PostgreSQL 或 Microsoft SQL Server，支持乐观并发与同步/异步快照策略。面向使用 NestJS 与 DDD 的 Node.js 开发者；README 明确其非 ORM、非分布式事件总线，且尚未经大规模生产验证，要求 Node.js 22+。",
+   "highlights": [
+    "提供 PostgreSQL、Microsoft SQL Server、MongoDB 的事件与快照存储适配器包",
+    "实现聚合流版本的乐观并发控制及可选的同步/异步快照策略",
+    "提供聚合清除与持久化后的进程内 NestJS 域订阅"
+   ],
+   "use_cases": [
+    "用 NestJS 构建基于事件溯源与 DDD 的应用",
+    "需要将事件存储事务性写入 PostgreSQL/MSSQL/MongoDB 的系统",
+    "需要聚合版本并发控制与快照策略的事件驱动架构"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Transactional event persistence through MongoDB, PostgreSQL, or Microsoft SQL Server. ／ pnpm add @event-nest/core @event-nest/postgresql pg ／ |`@event-nest/postgresql`|PostgreSQL event and snapshot storage|",
+     "lines": [
+      16,
+      29,
+      40
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- Transactional event persistence through MongoDB, PostgreSQL, or Microsoft SQL Server. ／ |`@event-nest/mssql`|Microsoft SQL Server event and snapshot storage|",
+     "lines": [
+      16,
+      41
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为构建事件溯源应用提供事件持久化能力的库，包含针对 PostgreSQL 与 SQL Server 的专用存储适配器包。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A collection of NestJS libraries for building event-sourced applications. ／ |`@event-nest/postgresql`|PostgreSQL event and snapshot storage| ／ |`@event-nest/mssql`|Microsoft SQL Server event and snapshot storage|",
+   "evidence_lines": [
+    3,
+    40,
+    41
+   ]
+  },
+  "fn": "NickTsitlakidis/event-nest",
+  "sha": "0383145c062b",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7cb93f72ca9a": {
+  "identity": {
+   "one_liner": "自托管功能开关与实验平台，单 Go 二进制，仅依赖 PostgreSQL",
+   "review": "Flagnetic 是一个自托管的功能开关（feature flags）与实验平台，用单个 Go 二进制运行，内嵌 Web 控制台，PostgreSQL 是其唯一必需依赖。它面向需要环境、权限、审计日志等功能的团队，提供多语言 SDK 与 OpenFeature provider，通过规则集流在约 2 秒内向服务端 SDK 推送变更。当前为 0.1 开发者预览版，实验分析、报表、OIDC/SAML 等尚未提供。",
+   "highlights": [
+    "提供四种类型 flag、定向规则、百分比发布、kill switch 与跨环境复制比较",
+    "提供 Go、JavaScript、Dart、Flutter、Ruby、Python SDK 及 OpenFeature provider，SDK 本地求值且断连时继续使用最后可用规则集",
+    "支持单 PostgreSQL 上多副本部署、Prometheus 指标、审计日志与基于角色的访问控制"
+   ],
+   "use_cases": [
+    "在自托管环境中管理多环境功能开关与灰度发布",
+    "为 Go/JS/Flutter 等应用接入 OpenFeature 标准的 flag 求值",
+    "需要审计日志与角色权限的功能开关治理场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Self-hosted, open-source feature flags and experiments. One Go binary with an embedded web console; PostgreSQL is the only thing it needs. ／ - **Operations**: any number of identical replicas on one PostgreSQL, with no sticky sessions; Prometheus metrics; a console in English and Russian; a Docker image for `linux/amd64` and `linux/arm64` with provenance and an SBOM. ／ This runs PostgreSQL, applies the migrations and starts the server on http://localhost:8080. Create the first instance admin, then sign in with the email and the password it prints:",
+     "lines": [
+      3,
+      18,
+      54
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "- **Export** of exposures and evaluation summaries to ClickHouse, object storage or a webhook.",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 是其唯一必需依赖并对其执行迁移，是该平台自身的数据存储而非为数据库服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Self-hosted, open-source feature flags and experiments. One Go binary with an embedded web console; PostgreSQL is the only thing it needs. ／ > **Status: developer preview.** Version 0.1 is the first release: try it, build against its Go SDK, and tell us what breaks, but do not run it where an outage would hurt. The SDK API and the ruleset format only grow from 0.1 on, and upgrades only migrate forward, without data loss; the management API and the console may still change in 0.x, each change marked in the release notes. See what 0.1 promises. ／ This runs PostgreSQL, applies the migrations and starts the server on http://localhost:8080. Create the first instance admin, then sign in with the email and the password it prints:",
+   "evidence_lines": [
+    3,
+    5,
+    54
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "azverinus/flagnetic",
+  "sha": "7cb93f72ca9a",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

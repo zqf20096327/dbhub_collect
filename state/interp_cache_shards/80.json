@@ -10526,5 +10526,203 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "231e1e08673d": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的自托管后端平台，建表即生成 REST API",
+   "review": "SereniBase 是一个自托管后端平台，用户创建表后自动生成带文档的 REST API，并以微服务方式提供 JWT 认证、S3/RustFS 文件存储（含 ClamAV 病毒扫描）、SMTP 邮件等服务，通过 docker-compose 一键部署。面向需要快速搭建后端的开发者与团队；README 标注为 Beta 阶段。",
+   "highlights": [
+    "创建表后自动生成带 OpenAPI/Swagger 文档的 REST API",
+    "以微服务形式提供 JWT 认证、S3/RustFS 存储与 ClamAV 文件扫描",
+    "通过 docker-compose 单命令部署，含多租户工作区与 RBAC"
+   ],
+   "use_cases": [
+    "自托管后端，替代拼装数据库、API、认证、存储等多个独立服务",
+    "无代码方式为表生成 REST API 并配套管理界面",
+    "需要文件上传安全扫描与邮件通知的应用后端"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A production-ready, self-hosted backend platform built on PostgreSQL. Every table you create automatically ／ |**PostgreSQL**|Primary database|5432|",
+     "lines": [
+      5,
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 PostgreSQL 作为主数据库存储数据，属于使用数据库构建的应用平台",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0，模块含 MIT 许可的 base-ui",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A production-ready, self-hosted backend platform built on PostgreSQL. Every table you create automatically ／ |**PostgreSQL**|Primary database|5432|",
+   "evidence_lines": [
+    5,
+    99
+   ]
+  },
+  "fn": "aptlogica/sereni-base",
+  "sha": "231e1e08673d",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a254c88f98b7": {
+  "identity": {
+   "one_liner": "MySQL 表数据快速导入/复制工具",
+   "review": "Swoof 是一个用 Go 编写的 MySQL 表导入工具，可将源库的表结构与数据复制到目标库、文件或剪贴板。支持多目标并行分发、通配符表名、WHERE 行过滤、functions/views/procedures 同步，并通过临时表+改名方式避免导入过程干扰在线表。安装方式为 go install，提供 Docker、deb/rpm/apk 包，仅面向 MySQL。",
+   "highlights": [
+    "支持多目标并行导入，源数据只读取一次并分发到所有目标",
+    "支持通配符表名、WHERE 条件行过滤，以及表结构/触发器/约束/函数/视图/存储过程同步",
+    "写入临时表并在完成后重命名，支持导出到文件目录或系统剪贴板"
+   ],
+   "use_cases": [
+    "将生产库的部分表或按条件过滤的行同步到开发环境",
+    "向多个目标数据库批量复制表",
+    "导出 .sql 文件作为本地备份"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Just swoof it in. Ultra fast MySQL table importer. ／ This still uses MySQL commands to do the importing, so it wont be as quick as, say, the Percona xtra-backup tool, but because it uses queries, this will work across a broad range of MySQL versions. ／ You can read more about DSNs here <https://github.com/go-sql-driver/mysql#dsn-data-source-name>.",
+     "lines": [
+      8,
+      12,
+      226
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 MySQL 生态服务的表导入/复制工具，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Just swoof it in. Ultra fast MySQL table importer. ／ This still uses MySQL commands to do the importing, so it wont be as quick as, say, the Percona xtra-backup tool, but because it uses queries, this will work across a broad range of MySQL versions.",
+   "evidence_lines": [
+    8,
+    12
+   ]
+  },
+  "fn": "StirlingMarketingGroup/swoof",
+  "sha": "a254c88f98b7",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "356ae40fbb9f": {
+  "identity": {
+   "one_liner": "ParadeDB 的官方 SQLAlchemy 集成库，用于 Python ORM 访问其检索能力",
+   "review": "这是 ParadeDB 官方提供的 SQLAlchemy 集成，让 Python 开发者通过 ORM 使用 ParadeDB 的全文检索、向量检索等能力。要求 Python 3.10+、SQLAlchemy 2.0.32+、PostgreSQL 15+、pgvector 0.7.0+ 及 ParadeDB/pg_search 0.26.2+，采用 MIT 许可，通过 PyPI 发布。",
+   "highlights": [
+    "作为 ParadeDB 的官方 SQLAlchemy 集成，支持 SQLAlchemy 2.0.32+",
+    "依赖 pgvector 提供向量类型，用于 ParadeDB 原生向量检索",
+    "通过 PyPI 发布，MIT 许可"
+   ],
+   "use_cases": [
+    "在 Python/SQLAlchemy 应用中使用 ParadeDB 全文检索",
+    "在 SQLAlchemy 模型中使用向量检索功能"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|15+|",
+     "lines": [
+      34
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 ParadeDB 服务的 SQLAlchemy 集成组件，属数据库生态工具而非存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The official SQLAlchemy integration for ParadeDB. Get started with the setup guide. ／ |PostgreSQL|15+|",
+   "evidence_lines": [
+    26,
+    34
+   ]
+  },
+  "fn": "paradedb/sqlalchemy-paradedb",
+  "sha": "356ae40fbb9f",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10200,5 +10200,74 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7a0e65381252": {
+  "identity": {
+   "one_liner": "本地优先的 macOS 开源仓库编目与本地克隆管理应用",
+   "review": "reshelf 是一个无需账号、不依赖云端的 macOS 应用，用于抓取 GitHub 仓库元数据、按分类与书架整理、批量分组，并将仓库克隆到本地规范目录，同时用 git ls-remote 检查克隆是否落后于上游。目录数据存于 SwiftData 与 GRDB 管理的 SQLite 文件。面向需要长期收藏和本地管理开源仓库的开发者。AI 辅助功能仅依赖端侧 Apple Intelligence。",
+   "highlights": [
+    "支持从 GitHub URL 快速抓取仓库元数据并自动分类，克隆按类别存放于 ~/reshelf/repos/<Category>/<repo>",
+    "使用只读 git ls-remote 检测本地克隆的更新并提供一键 Pull",
+    "目录数据以 SwiftData 存储并通过 GRDB 写入 SQLite，附带 JSON 自动备份与导入导出"
+   ],
+   "use_cases": [
+    "将零散收藏的 GitHub 仓库整理为带分类、标签和文件夹的本地目录",
+    "为某个项目批量克隆一组仓库并集中检查与拉取更新",
+    "把本地克隆的源码目录提供给编码代理或脚本作为上下文参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Clone + metadata records|`~/reshelf/database/opensource-shelf.sqlite` (GRDB)| ／ Everything sits under `~/reshelf/` in open formats (SwiftData store, SQLite, plain ／ - **GRDB (SQLite)** — a second store for clone and metadata records",
+     "lines": [
+      135,
+      222,
+      231
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其目录与克隆元数据通过 GRDB 存入本地 SQLite 文件，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Catalog (projects, folders, settings)|`~/reshelf/catalog.store` (SwiftData — isolated, not the shared default store)| ／ |Clone + metadata records|`~/reshelf/database/opensource-shelf.sqlite` (GRDB)|",
+   "evidence_lines": [
+    132,
+    135
+   ]
+  },
+  "fn": "aka-kika/reshelf",
+  "sha": "7a0e65381252",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

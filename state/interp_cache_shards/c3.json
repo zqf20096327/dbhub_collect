@@ -11074,5 +11074,153 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b230fcf62af0": {
+  "identity": {
+   "one_liner": "本地 Web 应用，同步巴西 Open Finance 数据到 SQLite 并生成 LLM 报告",
+   "review": "一个运行在本机的个人财务应用：通过 Banco MCP 的 REST 接口增量同步巴西 Open Finance 的交易、信用卡、投资等数据写入本地 SQLite（node:sqlite，需 Node 26+），提供 localhost Web UI 用于浏览、分类交易和查看 LLM 生成的周/月报告，支持 systemd/launchd 定时备份与同步。适合巴西个人用户管理家庭开支；Web UI 仅本地令牌认证，非生产级鉴权。",
+   "highlights": [
+    "通过 REST 增量同步 Open Finance 数据到本地 SQLite，支持按游标避免重复拉取",
+    "提供 localhost Web UI 浏览交易、信用卡账单、投资持仓及分类复核",
+    "使用 Vercel AI SDK（可选 Ollama）生成周/月财务报告，含 systemd/launchd 定时备份与同步"
+   ],
+   "use_cases": [
+    "家庭开支浏览、分类与周/月报告",
+    "信用卡账单与投资组合的本地查看",
+    "配合 Tailscale 在个人设备间访问同一本地界面"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Banco MCP into SQLite on your machine. You browse ／ JSON configs, Vercel AI SDK reports, optional Ollama, and SQLite via Node's ／ built-in `node:sqlite` (Node 26+). ／ The CLI writes a local SQLite database (default `openfinance.sqlite` beside your config). Sync is incremental: cursors per resource avoid re-fetching unchanged history.",
+     "lines": [
+      4,
+      11,
+      12,
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将数据写入本地 SQLite 作为自身存储，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A personal **localhost web app** for Brazilian Open Finance. It syncs data from ／ The CLI writes a local SQLite database (default `openfinance.sqlite` beside your config). Sync is incremental: cursors per resource avoid re-fetching unchanged history. ／ Personal localhost dashboard, **not** production-grade auth. See",
+   "evidence_lines": [
+    3,
+    66,
+    181
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "barbieri/local-openfinance",
+  "sha": "b230fcf62af0",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2322acd9a353": {
+  "identity": {
+   "one_liner": "本地优先的多模态素材检索工作台，基于 SQLite FTS5 与向量语义检索",
+   "review": "MaterialSeeker 将视频、图片、音频和文本整理进同一素材库，提供 SQLite FTS5 关键词检索、EmbeddingGemma 2 语义检索和文字搜图片/视频帧的跨模态检索，并支持中文 ASR、句级时间戳、场景检测与画面描述。面向视频创作者、课程作者和播客等，采用 Next.js + FastAPI 架构，分轻量/标准两种部署档位，素材与索引保存在本机。",
+   "highlights": [
+    "提供 SQLite FTS5 关键词检索、向量语义检索与文字搜图片/视频帧/音频的跨模态检索",
+    "支持中文语音转写、句级时间戳、场景检测、关键帧抽取与画面描述",
+    "分轻量版（无向量）与标准版（含本地向量与 FunASR 兜底）两种部署档位"
+   ],
+   "use_cases": [
+    "视频创作者按画面描述定位 B-roll 关键帧并复用",
+    "课程/播客作者按概念或原话定位逐字稿与对应画面",
+    "整理长期积累的图片、音频、视频与笔记素材"
+   ],
+   "personas_unused": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ |关键词、语义与跨模态检索|SQLite FTS5 关键词检索；标准版加入 EmbeddingGemma 2，支持文字直接检索图片、视频帧与音频内容| ／ - **关键词检索**：用 SQLite FTS5 检索逐字稿和正文，并为视频与图片匹配标题、标签和画面描述；轻量版与标准版都可使用。",
+     "lines": [
+      13,
+      44,
+      53
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明素材与索引保存在本机，SQLite 作为存储组件被应用使用，项目本体是面向创作者的检索工作台",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "MaterialSeeker 面向视频创作者、课程作者、播客和知识型创作者。它把散落在硬盘里的课程、B-roll、访谈、截图和笔记，整理成一个可以按画面与语言检索的素材库。 ／ |关键词、语义与跨模态检索|SQLite FTS5 关键词检索；标准版加入 EmbeddingGemma 2，支持文字直接检索图片、视频帧与音频内容| ／ 需要 Node.js、Python 和 FFmpeg。先克隆仓库：",
+   "evidence_lines": [
+    17,
+    44,
+    110
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "li-xiu-qi/MaterialSeeker",
+  "sha": "2322acd9a353",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

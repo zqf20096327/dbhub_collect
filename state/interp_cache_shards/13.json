@@ -11603,5 +11603,143 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ae2cceca1341": {
+  "identity": {
+   "one_liner": "Discord 消息归档 CLI，以本地 SQLite 存储",
+   "review": "一个 Go 编写的命令行工具，把 Discord 服务器历史和本地缓存消息归档到本地 SQLite，支持 FTS5 全文搜索、SQL 只读查询、TUI 浏览和 Git 快照分享；供需要长期保存服务器历史或本地恢复私信的用户使用，语义搜索需另配 embedding 提供方。",
+   "highlights": [
+    "提供 bot 同步、本地缓存导入（wiretap）和 Git 快照订阅三种归档来源",
+    "使用 SQLite FTS5 提供离线全文搜索，并可暴露只读 SQL 查询",
+    "支持 publish/subscribe 生成分片 Git 快照供其他机器只读消费"
+   ],
+   "use_cases": [
+    "长期归档并离线检索 Discord 服务器消息",
+    "恢复 Discord 桌面端缓存中的本地私信",
+    "在无 Discord 凭据的机器上通过 Git 快照只读浏览归档"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Discrawl archives Discord guild data and classifiable Discord Desktop cache messages in local SQLite for offline search, SQL, and terminal browsing. It is for people who need durable server history, local recovery of cached direct messages, or read-only access ／ |Remote archive|Run `subscribe-cloud`|Read-only access through a configured Worker without local SQLite|",
+     "lines": [
+      12,
+      63
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目用 SQLite 存储归档的 Discord 数据，数据库为其数据存储层而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Discrawl archives Discord guild data and classifiable Discord Desktop cache messages in local SQLite for offline search, SQL, and terminal browsing. It is for people who need durable server history, local recovery of cached direct messages, or read-only access to a shared archive. ／ |Remote archive|Run `subscribe-cloud`|Read-only access through a configured Worker without local SQLite|",
+   "evidence_lines": [
+    12,
+    63
+   ]
+  },
+  "fn": "openclaw/discrawl",
+  "sha": "ae2cceca1341",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ffdd13c76d73": {
+  "identity": {
+   "one_liner": "多智能体 AI 客服系统，基于 Django 与 Claude API 实现",
+   "review": "ARCHA 是一个用 Python/Django 构建的多智能体客服系统，包含客服、经理、风险评估三个 AI 代理，通过 LangChain 编排工作流，用 ChromaDB 做 RAG 知识检索，PostgreSQL 存储数据，并经 SSE 提供实时管理监控面板。适合作为学习智能体应用开发的参考项目；README 未提供安装部署步骤。",
+   "highlights": [
+    "实现客服、经理、风险评估三个协作的 AI 代理",
+    "使用 ChromaDB 实现检索增强生成（RAG）知识检索",
+    "提供基于 Server-Sent Events 的实时管理监控面板"
+   ],
+   "use_cases": [
+    "构建多智能体 AI 客服/工单自动化系统",
+    "为业务知识文档搭建 RAG 检索问答",
+    "管理员实时监控 AI 代理会话与执行过程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Database| PostgreSQL",
+     "lines": [
+      144
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统本身是使用 PostgreSQL 存储数据、以 ChromaDB 作向量库的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ARCHA (Autonomous Reasoning and Customer Help Assistant) is the primary AI employee in a multi-agent customer support system built with Python, Django, Claude API, Retrieval-Augmented Generation (RAG), and ChromaDB. ／ Database| PostgreSQL ／ The system also provides an admin monitoring dashboard to inspect conversations and observe AI agent activities in real time.",
+   "evidence_lines": [
+    21,
+    144,
+    25
+   ]
+  },
+  "fn": "Aromalsathees/multi-agentic-ai-support-system",
+  "sha": "ffdd13c76d73",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

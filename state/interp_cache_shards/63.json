@@ -11448,5 +11448,131 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "86a97e0ac318": {
+  "identity": {
+   "one_liner": "自托管代理网络控制面板，编译下发 sing-box 节点配置",
+   "review": "apsp 是一个自托管的 VLESS Reality 等代理节点控制平面：在面板中编辑节点、链路、用户与套餐，由各服务器上的 Rust Agent 主动拉取并应用 sing-box 配置，提供逐用户流量记账、订阅分发和服务器监控告警。面向自建 5–50 台 VPS 节点、管理熟人订阅的个人用户，不做公开注册与售卖。安装需 Docker Compose 与 Python 3，运行时固定上游 sing-box 1.14.2。",
+   "highlights": [
+    "面板将期望状态编译为各服务器 sing-box 配置包，Agent 主动连接面板上报指标并应用配置，服务器无需开放入站管理端口",
+    "支持 VLESS+Reality、Hysteria2、Shadowsocks 2022、TUIC v5 等协议，提供逐用户、逐节点的流量账本与订阅自助门户",
+    "提供服务器看板、告警、三网延迟检测、资产与续费记录等运营支撑功能"
+   ],
+   "use_cases": [
+    "管理跨多家厂商的入口/中转/落地服务器组成的自建代理线路",
+    "为亲友提供节点订阅、套餐与用量自助查询，但不运营售卖平台",
+    "记录服务器、域名、订阅等周期费用并按时提醒"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 定位为代理网络控制面板应用，未声明为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**自托管的代理网络控制平面。** ／ apsp 把你分散在各家的 VPS 编成一张可靠的代理网络：入口、中转、落地一处配置，节点和订阅自动下发，流量按用户精确记账；面板离线时，已应用的节点照常工作。你分享给的每个人都可以自己登录，查看订阅、用量、套餐与到期。 ／ |节点与协议|VLESS + Reality、Hysteria2、Shadowsocks 2022、TUIC v5、AnyTLS、Naive、Snell v6；TLS 证书手动上传或自动申请、续期|协议与证书|",
+   "evidence_lines": [
+    3,
+    5,
+    29
+   ]
+  },
+  "fn": "theLucius7/apsp",
+  "sha": "86a97e0ac318",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "01cc44301328": {
+  "identity": {
+   "one_liner": "足球比赛数据分析系统：Airflow 流水线 + PostgreSQL 数据仓 + LLM 分析师",
+   "review": "该仓库实现一条自动化足球数据分析流水线：赛后 Airflow DAG 抓取 Opta 事件流、结合 xG/xGOT、校验数据、渲染 18 面板战术图并将事件写入 PostgreSQL 数据仓（每俱乐部一个 schema，使用 pgvector 存语义文档库），其上的 AI 分析师通过允许列表参数化查询作答并逐数校验证据，模型不直接写 SQL、不做算术。适合想自建足球比赛数据分析与问答的球迷或数据工程师，需自备 OPENROUTER_API_KEY，且数据抓取受反爬限制。",
+   "highlights": [
+    "提供每场比赛的 18 面板战术仪表盘、match.json 与 REPORT.md 报告",
+    "AI 分析师基于查询允许列表作答，每个数字须与工具返回证据匹配，否则计为幻觉",
+    "支持任意俱乐部按需分析及整赛季 38 场比赛的自动回填"
+   ],
+   "use_cases": [
+    "对 Arsenal 或任意俱乐部进行赛季级比赛事件数据的自动采集与分析",
+    "以自然语言提问并获取带证据引用的比赛数据回答",
+    "离线回填已结束赛季的历史比赛数据到数据仓"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "into PostgreSQL. On top of the warehouse sits an AI analyst that answers questions in ／ |**4. Warehouse**|One schema per club, season views, derived possession, pressing and carry tables, and a semantic document corpus|PostgreSQL, pgvector| ／ Postgres, defined in `db/schema.sql`. **One club, one schema:**",
+     "lines": [
+      14,
+      44,
+      154
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明该系统将比赛事件数据装入 PostgreSQL 数据仓并以 pgvector 存语义文档库，PostgreSQL 是其存储数据的核心组件而非被服务的对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**4. Warehouse**|One schema per club, season views, derived possession, pressing and carry tables, and a semantic document corpus|PostgreSQL, pgvector| ／ Postgres, defined in `db/schema.sql`. **One club, one schema:**",
+   "evidence_lines": [
+    44,
+    154
+   ]
+  },
+  "fn": "Muhammadatef/gunners-analysis",
+  "sha": "01cc44301328",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

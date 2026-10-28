@@ -10426,5 +10426,142 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "504f39dd7056": {
+  "identity": {
+   "one_liner": "基于 LangGraph 的客服 AI Agent 控制平面，含确定性策略与 RAG",
+   "review": "该平台用于构建客户支持工作流，提供订单查询、退款、工单创建等受控操作及基于混合检索的知识问答。其机制为 LLM 仅生成语义提案，鉴权、策略、确认、幂等等执行决策由服务端确定性组件完成。使用 PostgreSQL 持久化状态、Qdrant 检索、FastAPI 提供 API，通过 Docker Compose 运行，面向需要可控 Agent 执行的开发与运维人员。",
+   "highlights": [
+    "提供 LangGraph 编排的 Agent 工作流，LLM 仅生成语义提案，执行由服务端确定性策略控制",
+    "使用 PostgreSQL + SQLAlchemy + Alembic 做持久化，支持跨重启的工作流挂起、恢复与幂等写入",
+    "内置基于 Qdrant 的 dense/BM25 混合检索 RAG 问答，并通过 OpenTelemetry 输出链路到 Jaeger 与 Prometheus"
+   ],
+   "use_cases": [
+    "需要人工确认边界与审计的客户支持自动化操作（退款、取消、工单）",
+    "基于企业政策文档的检索问答与证据引用场景",
+    "LLM 应用安全与可控执行的参考实现与评估环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Agent orchestration|LangGraph + PostgreSQL checkpoints| ／ |Persistence|PostgreSQL + SQLAlchemy + Alembic|",
+     "lines": [
+      202,
+      204
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该平台是一个使用 PostgreSQL 存储检查点与持久化状态的客服应用系统，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "dba-agent"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Agent orchestration|LangGraph + PostgreSQL checkpoints| ／ |Persistence|PostgreSQL + SQLAlchemy + Alembic| ／ docker compose up --build --detach",
+   "evidence_lines": [
+    202,
+    204,
+    217
+   ]
+  },
+  "fn": "negativexq/agentic-customer-service-platform",
+  "sha": "504f39dd7056",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "83f5b41660ed": {
+  "identity": {
+   "one_liner": "自托管的 AI 支出归因与对账系统，生成每日账本并按人/密钥分摊",
+   "review": "Costura 通过各 AI 提供商的只读管理 API 导入账单数据，存为每日账本，将支出归因到 API 密钥、工作区或个人，并每月与提供商报告对账。面向需要在自有基础设施上管理多提供商 AI 支出的团队，以 Docker Compose 运行，数据存储使用 PostgreSQL。当前处于 beta，0.x 版本接口可能变化。",
+   "highlights": [
+    "提供对 Anthropic、Claude.ai、OpenAI、Codex、OpenRouter、Cursor 及 GitHub Copilot（实验性）的只读账单导入连接器",
+    "支持按提供商和月份的对账，以及异常检测、预算和 CSV 导出",
+    "密钥静态加密，通过 Docker Compose 部署于自有基础设施，无托管服务"
+   ],
+   "use_cases": [
+    "团队按人/工作区归集多提供商 AI API 与席位支出",
+    "每月将内部账本与提供商报告及发票总额核对",
+    "对组织、工作区或个人设置月/周/日预算并接收告警"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`next dev` from this checkout still running. Then it starts PostgreSQL, runs the migrations, ／ checks the host and that `.env` without printing a secret. `just prod::up` starts PostgreSQL, a",
+     "lines": [
+      86,
+      109
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其启动 PostgreSQL 并运行迁移，将其作为自身数据存储，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "month that the stored total matches what the provider itself reports. It runs on your own ／ `next dev` from this checkout still running. Then it starts PostgreSQL, runs the migrations, ／ The scheduler queues one sync per organization and provider account each day. The worker",
+   "evidence_lines": [
+    18,
+    86,
+    128
+   ]
+  },
+  "fn": "CosturaAI/costura",
+  "sha": "83f5b41660ed",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

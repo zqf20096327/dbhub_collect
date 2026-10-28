@@ -11034,5 +11034,74 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ba222d3823e0": {
+  "identity": {
+   "one_liner": "Telegram 聊天本地归档工具，存为 SQLite 文件并提供 MCP 接口供 AI 读取",
+   "review": "将用户 Telegram 私聊/群组的完整历史同步到本地一个 SQLite 文件，提供浏览器全文检索查看器、Markdown 导出和 MCP server，供 Claude Desktop、Cursor 等助手搜索读取；只读 Telegram，数据全部留在本地。面向想在本地把聊天记录接入 AI 助手的个人用户，支持导入 Telegram Desktop JSON 与 WhatsApp 导出（实验性）。",
+   "highlights": [
+    "提供本地浏览器查看器，支持全文搜索、媒体查看和按聊天/时间范围复制为 Markdown",
+    "内置 MCP server，支持 Claude Desktop、Claude Code、Codex、Cursor 等连接，可选 HTTP 远程模式",
+    "归档为单个本地 SQLite 文件，会话密钥存于系统钥匙串，对 Telegram 只读",
+    "支持 Telegram Desktop JSON 导出与 WhatsApp 聊天导出导入（实验性）"
+   ],
+   "use_cases": [
+    "让 AI 助手检索与摘要 Telegram 历史",
+    "在本地全文搜索浏览聊天记录",
+    "将聊天导出为 Markdown 供其他工具使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Your Telegram session and API keys stay in the system keychain. The archive is a SQLite file in a private folder.",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 文件存储 Telegram 归档数据的应用，SQLite 仅作为其数据存储格式。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "AI assistants can't read your Telegram. Bots only see messages sent after they join, never the history. Cloud CRMs that sync Telegram want your account on their servers. Dotiphant logs in as you, copies your chats into a single file on your own computer, and lets your AI assistant read that file when you ask it to. ／ - Your Telegram session and API keys stay in the system keychain. The archive is a SQLite file in a private folder. ／ - An MCP server, so Claude Desktop, Claude Code, Codex and Cursor can search and read your archive. ChatGPT, claude.ai and other apps that support remote MCP servers can connect through the optional HTTP mode behind a tunnel you run (see docs/remote-access.md).",
+   "evidence_lines": [
+    7,
+    18,
+    15
+   ]
+  },
+  "fn": "Zierold-Ventures/dotiphant",
+  "sha": "ba222d3823e0",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

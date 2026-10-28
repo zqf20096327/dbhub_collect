@@ -10723,5 +10723,214 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8d0e773e3169": {
+  "identity": {
+   "one_liner": "基于Flink实时计算的开源业务风控系统",
+   "review": "一套业务风控系统，通过旁路采集流量或日志还原为标准事件，在Flink事件流上做窗口统计与策略判定，产出风险名单与处置决策。内置17类事件模型、253个变量、170条策略模板，采集端支持敏感字段分级脱敏。元数据存于PostgreSQL，事件明细落ClickHouse。项目处于0.x早期阶段，单节点部署，不适合承接生产流量，适合风控场景的评估与验证。",
+   "highlights": [
+    "内置17类事件模型、253个统计变量、170条策略模板，经审计后从1.x继承",
+    "采集器以Go单二进制实现，支持stdin/文件/HTTP/syslog接入，采集端就地脱敏",
+    "策略与变量元数据以JSONB存储于PostgreSQL，由控制面统一下发",
+    "事件明细落库ClickHouse，含物化视图小时聚合与TTL自动过期"
+   ],
+   "use_cases": [
+    "撞库、盗号、恶意注册、刷单等业务风险的实时识别",
+    "业务流量/日志的旁路采集与敏感字段脱敏",
+    "风控策略的可视化管理与可解释告警运营"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL 元数据(JSONB + 约束 + 审计分区)|✅| ／ **元数据只有一个事实来源。** 策略与变量存在 PostgreSQL,引擎启动时从控制面拉取 —— ／ |元数据|**PostgreSQL 16**|策略/变量以 JSONB 存储|",
+     "lines": [
+      133,
+      167,
+      180
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse 落库(明细、告警、物化视图小时聚合、TTL)|✅| ／ |分析存储|**ClickHouse**|事件明细 + 小时聚合 + TTL 自动过期| ／ I[\"PostgreSQL · ClickHouse<br/>Redis · Redpanda\"] --> S[\"schema-init<br/>建表\"]",
+     "lines": [
+      131,
+      179,
+      286
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README声明以PostgreSQL存储元数据、ClickHouse落库事件明细，属于使用数据库存数据的风控应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **业务风控系统 · 开源版** ／ **元数据只有一个事实来源。** 策略与变量存在 PostgreSQL,引擎启动时从控制面拉取 —— ／ |分析存储|**ClickHouse**|事件明细 + 小时聚合 + TTL 自动过期|",
+   "evidence_lines": [
+    3,
+    167,
+    179
+   ]
+  },
+  "fn": "threathunterX/nebula2",
+  "sha": "8d0e773e3169",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "50d3336b472d": {
+  "identity": {
+   "one_liner": "终端 CLI/TUI 工具，连接多种数据库浏览、查询、编辑并内置只读保护",
+   "review": "tobira 是一个用 Go 编写的终端数据库客户端，通过内置驱动在终端中浏览、查询和编辑 SQL、文档、键值、时序和向量数据库，并提供只读保护、AI 问答和 MCP server 接口。适用于需要在统一终端界面管理多种数据库连接的开发者和运维人员，支持脚本和 CI 使用。",
+   "highlights": [
+    "提供终端 UI 和 CLI 两种方式浏览、查询、编辑多种数据库",
+    "内置只读保护（read-only guard），写入操作可被拒绝并返回退出码",
+    "提供 tobira mcp 作为 MCP server，供 Claude Code 等客户端访问所选连接",
+    "支持 AI 问答（Gemini/OpenAI/Anthropic/Ollama）及 JSON/NDJSON/CSV 输出，适配脚本与 CI"
+   ],
+   "use_cases": [
+    "在单一终端界面中管理多种数据库连接并进行浏览、查询与编辑",
+    "通过 MCP 将指定数据库连接接入 Claude Code、Cursor 等 agent",
+    "在脚本和 CI 流水线中以 JSON/CSV 等格式运行查询并检查配置"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "binary, one set of keys and one connection config, whether the database is PostgreSQL, SQLite, a ／ dsn: postgres://app@localhost:5432/app?sslmode=disable ／ |PostgreSQL|SQL|yes|yes (`ANALYZE` rolled back)|yes (pgvector extension)|no|editing, transactions, completion, export, watch, read-only guard|real server|",
+     "lines": [
+      15,
+      70,
+      117
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|SQL|yes|yes (no `ANALYZE`)|no|no|editing, transactions, completion, read-only guard|real server|",
+     "lines": [
+      118
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle|SQL|yes|yes (estimated plan, never runs)|no|no|editing, transactions, completion, read-only guard|real server|",
+     "lines": [
+      125
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "binary, one set of keys and one connection config, whether the database is PostgreSQL, SQLite, a ／ tobira connect sqlite:./app.db # or on one connection or DSN (no config file needed) ／ tobira connections add --name app --driver sqlite --dsn sqlite:./app.db # or with flags ／ |SQLite|SQL|yes|yes (no `ANALYZE`)|no|no|editing, transactions, completion, read-only guard|real database|",
+     "lines": [
+      15,
+      58,
+      60,
+      116
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|SQL|yes|yes (estimated plan, never runs)|no|no|editing, transactions, completion, read-only guard|real server|",
+     "lines": [
+      124
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|Columnar SQL|yes|yes (no `ANALYZE`)|no|no|completion, export, read-only guard|real server|",
+     "lines": [
+      128
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MariaDB|SQL|yes|yes (no `ANALYZE`)|no|no|editing, transactions, completion, read-only guard|real server|",
+     "lines": [
+      119
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为连接和操作多种数据库提供统一终端界面的客户端工具，而非以某数据库为存储的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`tobira` (扉, Japanese for *door*) is one entry point to every database you work with: one ／ - **Driver plugins.** Add a database as an external `tobira-driver-<name>` program in any language. ／ |Driver|Kind|Browse|Explain|Vector search|Time series|Other capabilities|Tested against|",
+   "evidence_lines": [
+    14,
+    106,
+    114
+   ]
+  },
+  "fn": "xavidop/tobira",
+  "sha": "50d3336b472d",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

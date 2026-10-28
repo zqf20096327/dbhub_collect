@@ -11333,5 +11333,203 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aa53f0051609": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的邮件式协调层，以 MCP server 提供",
+   "review": "该项目为多 AI 编码代理提供类似邮件的协调机制：每个代理有持久身份、收发件箱、线程化消息与文件租约，数据以 Git 仓库存档并用 SQLite 建索引以支持搜索。通过 MCP server 暴露 45 个工具与 25 个资源，附带 TUI、Web UI 和 CLI。面向同时运行多个编码代理的开发团队，用于减少文件编辑冲突与上下文丢失。",
+   "highlights": [
+    "提供 45 个 MCP 工具和 25 个 MCP 资源，支持消息、联系人、文件预留、搜索等功能",
+    "使用 Git 仓库存档全部消息与预留记录，SQLite 用于索引与搜索",
+    "提供 16 屏 TUI、服务端渲染 Web UI 及 19 个机器人模式 CLI 子命令"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理并行开发同一项目时的消息协调",
+    "通过文件租约与 pre-commit 钩子避免代理间编辑冲突",
+    "需要人工审计代理协作记录的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A mail-like coordination layer for AI coding agents, exposed as an MCP server with 45 tools and 25 resources, Git-backed archive, SQLite indexing, an interactive 16-screen TUI, a server-rendered web UI, and an agent-first robot CLI. The Rust rewrite of the ori ／ vations (leases) to signal editing intent. Everything is backed by Git for human-auditable artifacts and SQLite for fast indexing and search.",
+     "lines": [
+      9,
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该协调工具自身的索引存储使用，项目并非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT + Rider 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A mail-like coordination layer for AI coding agents, exposed as an MCP server with 45 tools and 25 resources, Git-backed archive, SQLite indexing, an interactive 16-screen TUI, a server-rendered web UI, and an agent-first robot CLI. The Rust rewrite of the original Python project (1,700+ stars). ／ vations (leases) to signal editing intent. Everything is backed by Git for human-auditable artifacts and SQLite for fast indexing and search. ／ |**Dual-Mode Interface**|MCP server (`mcp-agent-mail`) and operator CLI (`am`) share tools but enforce strict surface separation|",
+   "evidence_lines": [
+    9,
+    34,
+    51
+   ]
+  },
+  "fn": "Dicklesworthstone/mcp_agent_mail_rust",
+  "sha": "aa53f0051609",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bfb98df29d47": {
+  "identity": {
+   "one_liner": "日志存储与检索引擎的可复现基准测试工具",
+   "review": "这是一个日志引擎基准测试工具，用于在相同硬件、负载与配置下对比 VictoriaLogs、Elasticsearch、OpenSearch、Grafana Loki、SigNoz 和 ClickStack 的写入上限与查询表现，帮助用户按日志形态选型。它运行在多节点池的 Kubernetes 集群上，用固定种子的合成数据生成器与官方 chart 部署各引擎；查询测试仍在进行中，结果尚未发布。",
+   "highlights": [
+    "以固定负载步进测各引擎的写入 ceiling（最高持续存储速率），并记录 CPU、内存与磁盘开销",
+    "各引擎使用相同机器、种子与官方默认配置，以官方 ingest 格式写入",
+    "提供 runbook 与固定种子生成器，基准可复现"
+   ],
+   "use_cases": [
+    "为 Kubernetes 结构化日志场景选择日志存储引擎做性能对比",
+    "以相同条件评估多引擎的写入上限、资源占用与磁盘成本",
+    "作为 VictoriaLogs 内部性能改进的测量工具"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "collector, ClickHouse and other services) that shares one node, while the",
+     "lines": [
+      146
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是测试与对比多个日志引擎的基准工具，为数据库生态服务，本身不是业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "logs-benchmark is a harness that compares engines that store and search ／ Supported engines: VictoriaLogs, Elasticsearch, OpenSearch, Grafana Loki, ／  collector, ClickHouse and other services) that shares one node, while the",
+   "evidence_lines": [
+    3,
+    14,
+    146
+   ]
+  },
+  "fn": "VictoriaMetrics/logs-benchmark",
+  "sha": "bfb98df29d47",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d33b265937d9": {
+  "identity": {
+   "one_liner": "基于内核字符设备的 SQL 数据库，含键值存储与分支功能",
+   "review": "AbyssDB 是一个以 SQL 为接口的数据库项目，提供表存储与键值两种数据模型，支持在线 schema 变更、数据分支和双密码算法加密，并实现名为 NullRaft 的复制机制。存储层直接对内核字符设备做 I/O，并声明兼容 PostgreSQL。README 含多项绝对化性能与一致性声明，使用者应以实际测试为准。面向需要 SQL 与键值混合存储的开发场景。",
+   "highlights": [
+    "提供 SQL 与键值两种数据访问方式，支持 JSON/YAML/TOML/XML/CSV 格式自动检测",
+    "支持 copy-on-write 数据分支、在线 schema 变更与 AES-256-GCM/ChaCha20-Poly1305 双层加密",
+    "存储层直接使用内核字符设备，并支持 Linux/macOS/FreeBSD/Windows/WASI 等运行环境"
+   ],
+   "use_cases": [
+    "需要 SQL 表存储与嵌套键值存储并存的应用",
+    "为开发者或 AI agent 提供独立数据分支的场景",
+    "需要静态数据加密的存储场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "`X25519MLKEM768` hybrid key exchange, on both the PostgreSQL and AWP ports. ／ ## PostgreSQL compatible",
+     "lines": [
+      240,
+      326
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目本身是一个数据库内核/引擎，而非使用某数据库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "AbyssDB is kernel-native. Instead of layering a storage engine on top of a ／ - **Instant index builds.** B-tree, hash, GIN, GiST, BRIN and vector indexes ／ - **One database.** Keys share transactions, sharding, NullRaft replication and",
+   "evidence_lines": [
+    50,
+    157,
+    186
+   ]
+  },
+  "fn": "abyssdblabs/abyssdb",
+  "sha": "d33b265937d9",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

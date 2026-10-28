@@ -10572,5 +10572,170 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f5517c7b40fc": {
+  "identity": {
+   "one_liner": "Flask + PostgreSQL 的动漫社社区网站，含论坛、番剧百科、萌战赛事与 AI 聊天",
+   "review": "这是一个 Flask + SQLAlchemy 构建的动漫社团官方网站，提供社员论坛、番剧资源与百科、萌战投票赛程、AI 聊天等功能，仅社员登录使用。数据存储在 Supabase 提供的 PostgreSQL 上，演示模式可用 SQLite 内存库运行，适合其他社团克隆改造部署到 Vercel。",
+   "highlights": [
+    "提供论坛、番剧资源、萌战赛程、AI 虚拟好友、通知中心等社区功能模块",
+    "演示模式使用 SQLite 内存库运行，生产环境通过 DATABASE_URL 连接 Supabase 的 PostgreSQL",
+    "包含 pytest 单元/集成测试与 Playwright 端到端测试，支持部署到 Vercel"
+   ],
+   "use_cases": [
+    "动漫社团搭建内部成员社区网站",
+    "需要萌战投票、赛程管理等赛事功能的社区",
+    "基于 Flask + Supabase 的可改造 Web 应用模板"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|ORM / 数据库|SQLAlchemy 2.0 / PostgreSQL（Supabase；测试用 SQLite 内存库）|",
+     "lines": [
+      135
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "$env:TESTING = \"1\"; $env:DATABASE_URL = \"sqlite:///:memory:\"; python run.py ／ TESTING=1 DATABASE_URL=sqlite:///:memory: python run.py ／ > ⚠️ 演示账号与演示数据只在 **SQLite 库**上生成（v4.31.8 起强制校验：`TESTING=1` + 非 Vercel + SQLite 三条缺一不可）。本地 `.env` 的 `DATABASE_URL` 若指向线上库，起服务时务必显式覆盖成 `DATABASE_URL=sqlite:///:memory:`，否则演示数据会被拒绝写入（保护生产库）。",
+     "lines": [
+      100,
+      102,
+      107
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 PostgreSQL 存数据的社团网站应用，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "需要连真实数据库时：在 Supabase 建库后填好 `.env` 的 `DATABASE_URL`，执行 `python init.py` 再 `python run.py`。 ／ |ORM / 数据库|SQLAlchemy 2.0 / PostgreSQL（Supabase；测试用 SQLite 内存库）| ／ 动漫社网站：社团展示、社员论坛、番剧资源与百科、动漫资讯、线上萌战、AI 看板娘",
+   "evidence_lines": [
+    116,
+    135,
+    17
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "N-zihan/anime-club-website",
+  "sha": "f5517c7b40fc",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bdc170fce194": {
+  "identity": {
+   "one_liner": "基于 Odoo 20 的自托管软件工厂平台，提供环境流水线与可观测性",
+   "review": "Kizuku 将 Odoo 20 作为可复用后端骨架，为项目提供 dev/staging/prod 隔离环境、声明式 BFF、模块生成、定时备份、TLS 和由 Prometheus/Loki/Grafana 组成的可观测性栈，并附带 MCP server 与 agent 技能层。面向在单台 Docker 主机上自托管并管理多环境应用开发的团队；项目数据仅存于主机本地（gitignore），依赖 Docker 24+ 与 6GB 内存。",
+   "highlights": [
+    "提供 dev/staging/prod 隔离环境流水线，支持带 neutralization 的 staging→prod 提升",
+    "包含定时备份（7 天保留、可选异地镜像）、自动回滚与版本化迭代快照",
+    "内置 Prometheus/Loki/Grafana/Alertmanager/Uptime Kuma 可观测性栈及含 21 个工具的 MCP server"
+   ],
+   "use_cases": [
+    "在单台 Docker 主机上自托管管理多环境 Odoo 应用",
+    "通过声明式 backend.yaml 生成受限的 BFF 接口与前端脚手架",
+    "借助 MCP server 和 agent 技能进行 Odoo 模块/前端/部署的 AI 辅助开发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Backend|Odoo 20, PostgreSQL 16, Python 3.12, FastAPI 0.162, SQLModel 0.0.48, Pydantic 2.14| ／ |Data|SQLite (control plane), `pg_dump` backups|",
+     "lines": [
+      68,
+      74
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Data|SQLite (control plane), `pg_dump` backups|",
+     "lines": [
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明技术栈使用 PostgreSQL 16（Odoo 后端）与 SQLite（控制平面）存数据，属于使用数据库的平台应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "多许可：平台 Apache-2.0，Odoo 模块与 vendored skills LGPL-3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Backend|Odoo 20, PostgreSQL 16, Python 3.12, FastAPI 0.162, SQLModel 0.0.48, Pydantic 2.14| ／ |Data|SQLite (control plane), `pg_dump` backups|",
+   "evidence_lines": [
+    68,
+    74
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "devcristianlopez/kizuku",
+  "sha": "bdc170fce194",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

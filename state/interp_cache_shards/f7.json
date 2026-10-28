@@ -11218,5 +11218,74 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a2d56014334e": {
+  "identity": {
+   "one_liner": "自托管 MCP 记忆服务器，用 PostgreSQL/pgvector 存证据与知识图",
+   "review": "Dense-Mem 是一个用 Go 编写的独立 MCP 记忆服务器，通过 HTTP 提供记忆服务：将证据以追加方式持久化到 PostgreSQL/pgvector，提供类型化声明、冲突检测、嵌入向量召回和权限门控的生命周期管理，并配有用户/控制两个 Web 门户。面向需要为 LLM 客户端提供带出处审计的持久记忆的自托管部署者，需额外配置嵌入与校验模型。",
+   "highlights": [
+    "提供基于 Streamable HTTP 的 MCP 接口（/mcp），支持证据追加、生命周期、出处溯源与权限门控召回",
+    "使用 PostgreSQL 与 pgvector 作为唯一持久存储，内置数据库迁移与健康检查",
+    "支持配置外部嵌入/校验/决策模型（OpenAI、Cloudflare Workers AI BGE-M3 等）"
+   ],
+   "use_cases": [
+    "为 LLM 客户端/Agent 提供带证据出处的持久记忆服务",
+    "需要多实例部署与团队/身份权限隔离的记忆场景",
+    "自托管部署并通过 MCP 协议接入 AI 客户端"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL is the durable authority for knowledge, lifecycle, provenance, ／ The base stack uses PostgreSQL with pgvector as the only durable authority.",
+     "lines": [
+      20,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 PostgreSQL/pgvector 作为唯一持久存储，是使用数据库存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dense-Mem is a standalone HTTP MCP memory server using Streamable HTTP. It ／ PostgreSQL is the durable authority for knowledge, lifecycle, provenance, ／ The base stack uses PostgreSQL with pgvector as the only durable authority.",
+   "evidence_lines": [
+    17,
+    20,
+    74
+   ]
+  },
+  "fn": "markhuangai/dense-mem",
+  "sha": "a2d56014334e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

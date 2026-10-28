@@ -11390,5 +11390,81 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "077a05376dc1": {
+  "identity": {
+   "one_liner": "自托管企业内部文档与受控文件管理系统",
+   "review": "SpiderFolio 是一个自托管的内部文档与文档管理系统，包含 wiki 页面、文件库和带审批流程的受控文档，支持二维码访问、权限管理和审计日志，面向中小型企业、工厂和车间。数据存储在 PostgreSQL 数据库及磁盘或 S3 兼容桶中，通过 Docker Compose 部署，包含一个可选的 AI 助手（使用用户自己的 Anthropic API key），核心功能为 AGPLv3 许可。",
+   "highlights": [
+    "提供受控文档管理：版本历史、审批、带水印的受控 PDF 与可导出审计日志",
+    "支持为文档生成二维码，扫码始终打开当前版本",
+    "提供 AI 助手 Bian，基于用户可见的文档内容回答并引用来源，默认关闭"
+   ],
+   "use_cases": [
+    "替换共享文件夹，按部门与角色管理文档权限",
+    "程序文件等程序性文件的文档控制与阅读确认",
+    "车间工人通过二维码与 PIN 登录平板查看操作说明"
+   ],
+   "style_note": "为多公司场景提供数据隔离，支持西班牙语与英语界面。"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "docker compose up -d # postgres, mailpit, rustfs, gotenberg ／ |`npm run test:integration`|Tests against real Postgres and Mailpit (`docker compose up -d`)| ／ On your server: the PostgreSQL database and the files on its disk, or in the S3-compatible bucket you",
+     "lines": [
+      128,
+      140,
+      187
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据存储于用户的 PostgreSQL 数据库及磁盘或 S3 兼容桶，属使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPLv3，含离线授权激活的商业插件",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " SpiderFolio is an open-source, self-hosted internal documentation and document management ／ docker compose up -d          # postgres, mailpit, rustfs, gotenberg ／ On your server: the PostgreSQL database and the files on its disk, or in the S3-compatible bucket you",
+   "evidence_lines": [
+    6,
+    128,
+    187
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "spiderjad/SpiderFolio",
+  "sha": "077a05376dc1",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

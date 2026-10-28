@@ -11371,5 +11371,144 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5e8e7871e855": {
+  "identity": {
+   "one_liner": "SQL Server 官方 Python 驱动，基于 DDBC 实现 DB API 2.0",
+   "review": "微软提供的 Python 驱动 mssql-python，用于连接 SQL Server 与 Azure SQL 系列数据库，遵循 DB API 2.0 规范。通过 DDBC 直接连接、无需外部驱动管理器，内置连接池，支持 Microsoft Entra ID 多种认证方式和批量复制；pip 安装时通过伴随包 mssql-python-odbc 分发 ODBC 二进制。适用于需要在 Python 应用中访问 SQL Server 的开发者。",
+   "highlights": [
+    "符合 DB API 2.0 规范，基于 DDBC 直接连接，无需外部驱动管理器",
+    "支持 Microsoft Entra ID 多种认证方式（密码、托管标识、设备码流等）",
+    "内置连接池，默认启用，支持批量复制"
+   ],
+   "use_cases": [
+    "Python 应用连接 SQL Server / Azure SQL Database / Azure SQL Managed Instance",
+    "需要 Entra ID 托管标识或设备码认证的无密码连接场景",
+    "跨 Windows/macOS/Linux 平台的数据库连接开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "# Microsoft Python Driver for SQL Server ／ **mssql-python** is a Python driver for Microsoft SQL Server and the Azure SQL family of databases. It leverages Direct Database Connectivity (DDBC) that enables direct connections to SQL Server without requiring an external driver manager. Designed to comply ",
+     "lines": [
+      1,
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 SQL Server 数据库提供 Python 连接能力的驱动组件，服务于数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": true,
+    "of": "SQL Server"
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**mssql-python** is a Python driver for Microsoft SQL Server and the Azure SQL family of databases. It leverages Direct Database Connectivity (DDBC) that enables direct connections to SQL Server without requiring an external driver manager. Designed to comply with the DB API 2.0 specification, this driver also introduces Pythonic enhancements for improved usability and functionality. It supports a full range of database operations, including connection management, query execution, and transaction handling. ／ > For **pip/PyPI installations**, the ODBC driver binaries used by `mssql-python` are distributed through a dedicated companion distribution: ／ The Microsoft mssql-python driver enables Python applications to connect to Microsoft SQL Server, Azure SQL Database, or Azure SQL Managed Instance using Microsoft Entra ID identities. It supports a variety of authentication methods, including username and password, Microsoft Entra managed identity (system-assigned and user-assigned), Integrated Windows Authentication in a federated, domain-joined environment, interactive authentication via browser, device code flow for environments without browser access, and the default authentication method based on environment and configuration. This flexibility allows developers to choose the most suitable authentication approach for their deployment scenario.",
+   "evidence_lines": [
+    3,
+    15,
+    97
+   ]
+  },
+  "fn": "microsoft/mssql-python",
+  "sha": "5e8e7871e855",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ba8dd8950e16": {
+  "identity": {
+   "one_liner": "自托管的 AI 短视频创作 Next.js 应用，用 PostgreSQL/Prisma 存项目",
+   "review": "这是一个自托管的 Next.js 应用，用于生成短剧脚本、在浏览器时间线编辑场景并通过 Remotion 预览短视频，项目元数据存入 PostgreSQL（经 Prisma 管理）。面向需要批量制作 TikTok/Reels/Shorts 内容的创作者，需自备 Node.js、PostgreSQL、Google OAuth 及 OpenAI/YouTube/MuAPI 密钥；MP4 导出尚未实现，仓库未声明许可证。",
+   "highlights": [
+    "支持从提示生成含场景、旁白与视觉建议的脚本，并提供浏览器内多轨时间线编辑与 Remotion 预览",
+    "项目元数据保存至 PostgreSQL（通过 Prisma 管理），上传媒体存储于浏览器 IndexedDB",
+    "通过 YouTube Data API 与 MuAPI 搜索视频并生成混剪脚本草稿"
+   ],
+   "use_cases": [
+    "为 TikTok、Instagram Reels、YouTube Shorts 制作短视频项目",
+    "基于已发现视频生成混剪脚本草稿",
+    "自托管环境下的脚本编写与场景预览工作区"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Save and reopen projects with a PostgreSQL database managed through Prisma. ／ The app runs on your own infrastructure. You need Node.js, npm, and PostgreSQL. Google OAuth is used for sign-in. YouTube search and MuAPI integrations need their own API keys; provider usage, hosting, and database costs may apply. ／ - **Database:** PostgreSQL with Prisma 7",
+     "lines": [
+      16,
+      22,
+      35
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 PostgreSQL 存储项目数据的视频创作应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "README 声明仓库当前无 LICENSE 文件，未声明许可证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Revideo is a self-hostable Next.js app for building scene-based videos for TikTok, Instagram Reels, and YouTube Shorts. Write a draft from a prompt, arrange scenes in an editor, preview a Remotion composition, and save projects to PostgreSQL. ／ - Save and reopen projects with a PostgreSQL database managed through Prisma. ／ - **Database:** PostgreSQL with Prisma 7",
+   "evidence_lines": [
+    9,
+    16,
+    35
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "SamurAIGPT/revideo",
+  "sha": "ba8dd8950e16",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

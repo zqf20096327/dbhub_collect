@@ -9820,5 +9820,151 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "96f16718154a": {
+  "identity": {
+   "one_liner": "基于tree-sitter的结构化代码书签工具，供人与AI代理使用",
+   "review": "Codemark是一个用Rust编写的CLI/TUI代码书签系统，将书签锚定到tree-sitter解析出的命名代码结构（函数、类型、块）上，使其在重构后仍可解析。内置SQLite做存储，支持全文与本地语义搜索、集合分组、git集成，并可为Claude Code等AI代理安装技能。面向开发者及AI编码代理的长期会话上下文管理。",
+   "highlights": [
+    "通过tree-sitter将书签锚定到命名代码结构，支持Exact/Relaxed/Hash三级匹配",
+    "内置SQLite全文搜索与本地向量嵌入的语义搜索，无需API key",
+    "提供可安装到AI代理的skill，兼容加载.agents/skills的代理"
+   ],
+   "use_cases": [
+    "跨会话保留AI编码代理积累的代码导航上下文",
+    "代码审计与新人引导时维护可复用的流程讲解集合",
+    "在重构后重新定位此前标记的代码位置"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**FTS** (SQLite full-text) and **Semantic** (local vector embeddings) modes.",
+     "lines": [
+      134
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite仅作为工具内置的本地存储（rusqlite bundled），该项目不是为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " **FTS** (SQLite full-text) and **Semantic** (local vector embeddings) modes. ／ *Requires Rust 1.85+ (edition 2024). SQLite is bundled.* ／ **Codemark** bookmarks code by structure, not by line number. A `file:line`",
+   "evidence_lines": [
+    134,
+    191,
+    14
+   ]
+  },
+  "fn": "DanielCardonaRojas/codemark",
+  "sha": "96f16718154a",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "22122991ded0": {
+  "identity": {
+   "one_liner": "面向 ClickHouse 的 SQL 文件 schema 迁移工具",
+   "review": "clickhouse-migrations 是一个 Python 编写的 ClickHouse schema 迁移工具，用普通 .sql 文件管理 DDL 变更。提供 CLI、Python API、GitHub Action 和 Docker 运行方式，支持多语句文件、集群感知、schema dump/diff、可选 Keeper 锁与离线校验；最低要求 ClickHouse 23.3。",
+   "highlights": [
+    "提供 migrate/status/down/dump/diff/validate 等 CLI 子命令，并可通过 Python API、GitHub Action 或 Docker 运行",
+    "支持原生 clickhouse-driver（TCP）与官方 clickhouse-connect（HTTP）两种驱动",
+    "支持多语句迁移文件、集群感知、schema dump 与基于目标 schema.sql 的 diff 生成"
+   ],
+   "use_cases": [
+    "在 CI/CD 流水线中对 ClickHouse 执行版本化 schema 迁移",
+    "多节点 ClickHouse 集群中保持迁移状态一致并防止并发迁移冲突",
+    "从现有数据库生成 schema 快照并与目标 schema 对比生成迁移"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "# ClickHouse Migrations ／ **Simple, file-based schema migrations for ClickHouse** — the most actively maintained ClickHouse migration tool for Python. Write plain `.sql` files, apply them from the CLI, your code, CI, or Docker. Cluster-aware, with support for both the native `clickhous ／ pip install clickhouse-migrations",
+     "lines": [
+      10,
+      12,
+      17
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "--var CLUSTER_NAME=company_cluster --substitute-env # PG_HOST, PG_PASSWORD from the env ／ * A malformed (`${PG-HOST}`, `${}`) or unterminated (`${PG_HOST` — no `}` on the same line)",
+     "lines": [
+      408,
+      422
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 ClickHouse 提供 schema 迁移功能的工具，服务于数据库生态而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Simple, file-based schema migrations for ClickHouse** — the most actively maintained ClickHouse migration tool for Python. Write plain `.sql` files, apply them from the CLI, your code, CI, or Docker. Cluster-aware, with support for both the native `clickhouse-driver` and the official `clickhouse-connect` driver. ／ * **Run anywhere** — CLI, Python API, GitHub Action, or Docker image ／ **Minimum: ClickHouse 23.3.** CI runs the whole suite (both drivers, a 4-node cluster) against every LTS release from 23.3 to 26.8 (23.3, 23.8, 24.3, 24.8, 25.3, 25.8, 26.3, 26.8), against 26.9 (the newest release) and against 25.7 (the default dev cluster, where coverage is measured). The exact tags are in the `clickhouse` job of `ci.yaml`. Older servers are not supported: on 22.8, `diff` fails (`system.data_skipping_indices` has no `type_full` column) and there is no `KeeperMap` for `--lock`.",
+   "evidence_lines": [
+    12,
+    47,
+    93
+   ]
+  },
+  "fn": "zifter/clickhouse-migrations",
+  "sha": "22122991ded0",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

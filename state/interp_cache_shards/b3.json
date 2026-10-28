@@ -11263,5 +11263,202 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "252b2592c204": {
+  "identity": {
+   "one_liner": "单文件 PHP 无 Cookie 网站分析工具，内置 SQLite",
+   "review": "Puls 是一个自托管网站分析程序，整个应用为一个 PHP 文件加一个 SQLite 文件，无需独立数据库服务器，上传到 PHP 8.3+ 主机即可运行。面向自己运营中小网站的人，提供页面浏览、事件、目标跟踪与机器人统计，通过嵌入一段脚本采集数据，不使用 Cookie 也不存储 IP。",
+   "highlights": [
+    "单 PHP 文件部署，数据存储于一个可复制备份的 SQLite 文件",
+    "无 Cookie、不存 IP，访客标识为当日删除的加盐哈希",
+    "提供 JSON/CSV 读取 API、事件漏斗、目标跟踪与多站点用户管理"
+   ],
+   "use_cases": [
+    "自托管网站的访问量与访客统计",
+    "无 Cookie 横幅的隐私友好型流量分析",
+    "自定义事件追踪与转化目标监控"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|GoatCounter|One Go binary|SQLite or PostgreSQL|None|Free, donation-supported|EUPL (modified)| ／ |Umami|Node.js app, or Docker|PostgreSQL|None|Free tier and paid plans|MIT| ／ |Plausible CE|Docker Compose, 2 GB RAM recommended|PostgreSQL and ClickHouse|None|Paid|AGPL-3.0|",
+     "lines": [
+      87,
+      88,
+      89
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|Matomo|PHP app|MySQL or MariaDB|Yes by default, can be turned off|Paid|GPL-3.0|",
+     "lines": [
+      90
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Self-hosted web analytics in a single PHP file and SQLite. ／ - **One file, no infrastructure.** A PHP file, a dashboard page and SQLite. No Node, no Docker, no database server, no build step. It runs on ordinary PHP web hosting. ／ - **Your data, on your server.** One SQLite file you can copy, back up or delete. MIT licensed, no limits, no account.",
+     "lines": [
+      5,
+      34,
+      36
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "|Plausible CE|Docker Compose, 2 GB RAM recommended|PostgreSQL and ClickHouse|None|Paid|AGPL-3.0| ／ - Millions of pageviews a month on one site: a database built for analytics, like Plausible's ClickHouse, stays fast at that size. Puls's dashboard slows down there; making it faster is on the roadmap.",
+     "lines": [
+      89,
+      98
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|Matomo|PHP app|MySQL or MariaDB|Yes by default, can be turned off|Paid|GPL-3.0|",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 SQLite 存储自身数据的网站分析应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted web analytics in a single PHP file and SQLite. ／ - **One file, no infrastructure.** A PHP file, a dashboard page and SQLite. No Node, no Docker, no database server, no build step. It runs on ordinary PHP web hosting. ／ |**Puls**|One PHP file on any PHP 8.3 host, or Docker|SQLite, built in|None|No|MIT|",
+   "evidence_lines": [
+    5,
+    34,
+    86
+   ]
+  },
+  "fn": "webready-se/puls",
+  "sha": "252b2592c204",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c6b6b2207ee9": {
+  "identity": {
+   "one_liner": "GaussDB/openGauss 数据库诊断智能体的后端，运行在 Kubernetes 上",
+   "review": "该仓库是数据库智能体系统的后端部分，将 opencode 与 17 个诊断技能部署进 Kubernetes，由接入网关认身份、按工号分配隔离的用户环境，状态存于 NAS，附带 126 条白名单诊断脚本、知识库导入与验收题库。面向需要通过对话式智能体排查 GaussDB/openGauss 数据库问题的运维团队，与前端方联合开发。",
+   "highlights": [
+    "提供接入网关、每用户隔离的用户环境（Pod 或固定池化槽位）与知识库导入环境三类组件",
+    "包含 126 条白名单诊断脚本及按版本管理的部署、升级、回滚文档",
+    "内置验收题库（48 道题、三层评分）与契约测试、五组 pytest 测试"
+   ],
+   "use_cases": [
+    "在 Kubernetes 集群中为多用户提供 GaussDB/openGauss 对话式诊断服务",
+    "导入官方文档集与内网网页剪藏构建诊断知识库",
+    "按验收方案对智能体升级进行评分验收"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "GaussDB 数据库智能体的**后端**：把 opencode 与 GaussDB / openGauss 诊断技能放进 Kubernetes。",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "GaussDB 数据库智能体的**后端**：把 opencode 与 GaussDB / openGauss 诊断技能放进 Kubernetes。",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|NAS|—|一个 RWX 卷|唯一的状态所在：`users/<工号>/`（会话、报告）、`kb/`（知识库与索引 `kb/index/store.sqlite`）|",
+     "lines": [
+      31
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 GaussDB/openGauss 诊断服务的智能体后端组件，而非使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "技能代码为 Apache License 2.0（附 NOTICE），仓库整体未见统一许可声明",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "GaussDB 数据库智能体的**后端**：把 opencode 与 GaussDB / openGauss 诊断技能放进 Kubernetes。 ／ 每个用户一个隔离的环境（按需建 Pod，或固定池化的槽位），状态全部在 NAS 上；接入网关负责认身份、分配环境、反向代理。 ／ |用户环境|`gaussdb-agent-runtime`|每人一个 Pod，或固定池化的槽位|opencode 1.18.27 + 17 个诊断技能 + 知识库只读查询；凭据代理（中间件令牌、签名私钥、模型 Key 不进模型所在的容器）|",
+   "evidence_lines": [
+    3,
+    4,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "sqlrush/gh_gs_k8s_agent",
+  "sha": "c6b6b2207ee9",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

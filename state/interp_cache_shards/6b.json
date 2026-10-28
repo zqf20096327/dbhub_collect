@@ -10983,5 +10983,69 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9a443d84b8c8": {
+  "identity": {
+   "one_liner": "Zig 编写的兼容 Postgres 协议的多租户 OLTP 数据库",
+   "review": "Egres 是用 Zig 从零实现、兼容 Postgres 协议（pgwire）的数据库，面向重负载多租户场景，使用 LSM-tree 与对象存储（S3）等机制。可用 psql 等客户端通过 3210 端口连接，提供二进制安装与源码构建（Zig 0.16.0），采用 Apache 2.0 许可。它不是 Postgres 的重写，README 明确文档主体在外部站点。",
+   "highlights": [
+    "通过 pgwire 兼容 Postgres 客户端协议，可使用 psql 连接",
+    "基于 LSM-tree 与对象存储（主题含 aws-s3）实现存储",
+    "支持从源码构建（Zig 0.16.0）并提供 Linux x86_64 与 Apple Silicon 二进制包"
+   ],
+   "use_cases": [
+    "需要多租户 OLTP 负载的自托管数据库部署",
+    "以 psql 等 Postgres 客户端接入的开发与测试环境"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "Egres is a Postgres-compatible database for heavy, multi-tenant workloads. ／ under `egres-data` in the working directory and listens for Postgres",
+     "lines": [
+      3,
+      24
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该仓库本身是数据库内核，不属于服务现有数据库的工具，也不是使用数据库存数据的应用，生态位分类证据不足。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Egres is a Postgres-compatible database for heavy, multi-tenant workloads. ／ Written in Zig, Egres is not a Postgres rewrite: it is a ground-up, ／ under `egres-data` in the working directory and listens for Postgres",
+   "evidence_lines": [
+    3,
+    4,
+    24
+   ]
+  },
+  "fn": "manishrjain/egres",
+  "sha": "9a443d84b8c8",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

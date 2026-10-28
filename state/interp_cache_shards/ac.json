@@ -10733,5 +10733,74 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3e86f84da47b": {
+  "identity": {
+   "one_liner": "MySQL 的 MCP 服务器，为 AI 应用提供受控数据库交互接口",
+   "review": "这是一个实现 Model Context Protocol 的服务器，让 Claude Desktop、Claude Code 等 AI 客户端以受控方式连接 MySQL 数据库，提供列出表、读取数据、执行 SQL、获取 schema 元数据和采样数据等工具，支持 STDIO 与 SSE/HTTP 两种传输模式及 SSH 隧道。通过环境变量配置连接，内含标识符白名单校验等防注入措施，适合需要在 AI 工作流中安全探索和分析 MySQL 数据的用户。仅支持单条 SQL 语句，不支持多语句查询。",
+   "highlights": [
+    "提供 execute_sql、get_schema_info、get_table_sample 等 MCP 工具，并列出/分析数据库的引导式 prompts",
+    "支持 STDIO 与 Streamable HTTP (SSE) 传输模式、多数据库模式与 SSH 隧道、SSL/TLS 加密连接",
+    "对表名/库名做白名单校验以防 SQL 注入，日志中自动掩码密码与 SSH 私钥"
+   ],
+   "use_cases": [
+    "在 Claude Desktop/Code 或 VS Code 等 MCP 客户端中探索和分析 MySQL 数据库",
+    "为 AI 应用提供受控的只读/受限 DML 数据库访问通道",
+    "远程/自托管部署时通过 SSE 模式配合反向代理提供数据库查询服务"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# MySQL MCP Server ／ A Model Context Protocol (MCP) implementation that enables secure interaction with MySQL databases. This server component facilitates communication between AI applications (hosts/clients) and MySQL databases, making database exploration and analysis safer and  ／ > **Note**: MySQL MCP Server supports both standard input/output (STDIO) and Streamable HTTP (SSE) transport modes. The SSE mode is recommended for remote/self-hosted deployments.",
+     "lines": [
+      4,
+      5,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该服务器是为 AI 应用访问 MySQL 数据库提供的 MCP 中间组件，属于为数据库生态服务的工具而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Model Context Protocol (MCP) implementation that enables secure interaction with MySQL databases. This server component facilitates communication between AI applications (hosts/clients) and MySQL databases, making database exploration and analysis safer and more structured through a controlled interface. ／ > **Note**: MySQL MCP Server supports both standard input/output (STDIO) and Streamable HTTP (SSE) transport modes. The SSE mode is recommended for remote/self-hosted deployments. ／ pip install mysql-mcp-server",
+   "evidence_lines": [
+    5,
+    7,
+    28
+   ]
+  },
+  "fn": "designcomputer/mysql_mcp_server",
+  "sha": "3e86f84da47b",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

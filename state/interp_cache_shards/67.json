@@ -10910,5 +10910,137 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ed5223413b6a": {
+  "identity": {
+   "one_liner": "自托管邮件客户端，单容器运行，聚合多个IMAP邮箱",
+   "review": "nexmail 是一个自托管的多邮箱邮件客户端，提供会话聚合、全文搜索、规则、任务、日历与联系人功能，支持多用户和 OpenID Connect 登录，以后端 IMAP 服务器为准。它面向已在家中托管服务的人，数据存储为单个 SQLite 文件，草稿和标签写入 IMAP 服务器本身，可用 Docker 单容器部署，也可选择任意外部 AI 服务改写草稿。",
+   "highlights": [
+    "聚合多个 IMAP 邮箱，提供会话视图与全文搜索，并向服务器发起 IMAP SEARCH",
+    "支持任务、日历、CardDAV/CalDAV 联系人与日历同步、规则、标签（以 IMAP 关键字存储于服务器）",
+    "提供定时发送、撤回、外出自动回复、会议邀请处理，以单容器部署并通过 OpenID Connect 登录"
+   ],
+   "use_cases": [
+    "在家中服务器上自托管替代 Roundcube 的网页邮件客户端",
+    "将多个个人/工作 IMAP 邮箱统一到一个界面管理",
+    "为邮件消息派生任务、日历事件和联系人管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "a single SQLite file, no second database, no cloud account, and no service that",
+     "lines": [
+      13
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是使用 SQLite 存储数据的邮件客户端应用，SQLite 是其内部数据存储而非被服务的数据库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A self-hosted email client. One container, one file, your mailboxes stay with you.** ／ nexmail brings several IMAP mailboxes together in one place and runs on your own ／ a single SQLite file, no second database, no cloud account, and no service that",
+   "evidence_lines": [
+    5,
+    11,
+    13
+   ]
+  },
+  "fn": "DerKezorm/nexmail",
+  "sha": "ed5223413b6a",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e5f1f4e60402": {
+  "identity": {
+   "one_liner": "Kingshot 游戏的礼品码自动兑换与联盟管理 Telegram/Discord 机器人",
+   "review": "这是一个面向 Kingshot 游戏联盟管理员和成员的机器人，运行于 Telegram 与 Discord 双平台，每 5 分钟扫描官方渠道自动发现并兑换礼品码，并提供成员注册、玩家变动监控、迁移日程、活动指南和订阅付费等功能。技术栈为 Python，使用 PostgreSQL 存储数据以实现跨平台同步；仓库目前尚未公开源码，计划达到 100 星后开源。",
+   "highlights": [
+    "每 5 分钟扫描官方游戏渠道，自动发现、验证并批量兑换礼品码（每批 500 并发请求）",
+    "同时运行于 Telegram 与 Discord，通过共享数据库实现跨平台数据同步",
+    "提供成员实时监控（炉子等级、昵称、州迁移变更）及内置 ONNX 模型验证码求解器"
+   ],
+   "use_cases": [
+    "游戏联盟管理者自动化礼品码发放与成员追踪",
+    "跨 Telegram/Discord 群组的联盟成员注册与数据同步",
+    "游戏活动（迁移窗口、Crazy Joe、熊陷阱）信息查询与提醒"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL",
+     "lines": [
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 PostgreSQL 存数据的 Telegram/Discord 游戏管理机器人，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL ／ **Kingshot Bot** is a fully automated, production-grade management bot designed specifically for **Kingshot** alliance leaders and members. It runs **24/7 on a dedicated server**, monitoring official game channels for new gift codes and redeeming them instantly for every registered member in your alliance. ／ The bot operates on both **Telegram** and **Discord** simultaneously, with a shared database ensuring full cross-platform synchronization. Everything from gift code redemption to member tracking is completely automated — no manual intervention required.",
+   "evidence_lines": [
+    22,
+    77,
+    79
+   ]
+  },
+  "fn": "Gercekefsane/kingshot-bot",
+  "sha": "e5f1f4e60402",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

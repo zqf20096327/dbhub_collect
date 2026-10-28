@@ -10769,5 +10769,76 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4962f8e77490": {
+  "identity": {
+   "one_liner": "自托管音乐元数据编辑与播放 Web 应用，Prisma+SQLite 存储",
+   "review": "Tagr 是一个自托管的 Web 音乐库管理应用，用户通过浏览器浏览、播放并直接改写音频文件标签，支持 40+ 元数据字段、变更历史与回滚、多用户角色、ListenBrainz 打点。技术栈为 Next.js + Prisma + SQLite，以 Docker 镜像或 Node.js 22+ 手动部署。它面向需要集中管理本地音乐库标签的个人或家庭场景。",
+   "highlights": [
+    "支持 MP3、FLAC、WAV、AAC 等 10 种音频格式的标签读写，可编辑 40+ 元数据字段",
+    "提供每次元数据变更的完整审计历史，可单条或批量回滚",
+    "内置多用户与角色（admin/tagger/listener），API 层强制权限校验"
+   ],
+   "use_cases": [
+    "通过浏览器集中管理和修改本地音乐库的文件标签",
+    "配合 Jellyfin 等媒体库使用前批量整理元数据与专辑封面",
+    "家庭/小团队多用户共享音乐库浏览与播放，并同步收听记录到 ListenBrainz"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`DATABASE_URL`|Yes|SQLite database path. Use `file:/data/tagr.db` in Docker or `file:./data/tagr.db` locally.|",
+     "lines": [
+      205
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是用 Prisma+SQLite 存自身数据的应用，数据库是应用内部组件而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " A self-hosted music metadata editor with a modern, intuitive web UI. ／ Tagr lets you browse, edit, and manage audio file tags from any browser — desktop or mobile. Just point it at your music folders, and get a clean three-panel interface for organizing your library — no desktop apps, no CLI wizardry. ／ |`DATABASE_URL`|Yes|SQLite database path. Use `file:/data/tagr.db` in Docker or `file:./data/tagr.db` locally.|",
+   "evidence_lines": [
+    5,
+    14,
+    205
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "suitux/Tagr",
+  "sha": "4962f8e77490",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

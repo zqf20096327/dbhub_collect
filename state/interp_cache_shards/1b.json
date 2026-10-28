@@ -12150,5 +12150,212 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f90d209fcec5": {
+  "identity": {
+   "one_liner": ".NET 10 模块化单体 WebAPI 模板，含 DDD 与垂直切片架构",
+   "review": "这是一个基于 .NET 10 的 WebAPI 项目模板，采用模块化单体、领域驱动设计和垂直切片架构，每个功能模块拥有独立的 DbContext 与 PostgreSQL schema，模块间通过 RabbitMQ 上的集成事件和跨模块请求通信，并集成 Keycloak 认证、事务性 Outbox/Inbox 与 Hangfire 后台任务。适合需要以单体形态开发、后续可按模块拆分部署的 .NET 后端团队作为起点。",
+   "highlights": [
+    "通过 modules.json 配置决定模块运行于单进程或拆分为多进程部署",
+    "每个模块拥有独立 DbContext 与 PostgreSQL schema，支持按模块拆分数据库",
+    "内置事务性 Outbox/Inbox、Keycloak 身份认证、Hangfire 后台任务与 OpenTelemetry 可观测性"
+   ],
+   "use_cases": [
+    "作为 .NET 模块化单体项目的脚手架模板",
+    "以单体开发、后续按模块逐步拆分为独立进程部署的场景",
+    "学习 DDD、垂直切片与事务性消息模式的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |Database per module|Each module owns a `DbContext` and a PostgreSQL schema. Point its connection string at another server to split the data.|",
+     "lines": [
+      7,
+      117
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 PostgreSQL 存储自身数据的 WebAPI 应用模板，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL ／ |Database per module|Each module owns a `DbContext` and a PostgreSQL schema. Point its connection string at another server to split the data.|",
+   "evidence_lines": [
+    7,
+    117
+   ]
+  },
+  "fn": "baranacikgoz/modular-monolith-ddd-vsa-webapi",
+  "sha": "f90d209fcec5",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c7239b9be977": {
+  "identity": {
+   "one_liner": "自托管任务与项目协作工作台，单文件 Python + SQLite 存储",
+   "review": "Work Calendar 是一个自托管团队任务与项目协作工作台，覆盖排期、执行、审批、归档的任务闭环，并提供周视图日程、子任务树、通知、日记统计与项目时间轴。面向希望把数据留在本地的小团队，整个服务为单个 server.py，数据保存在本机 SQLite 文件，无第三方 Python 依赖，可选集成 OpenAI 兼容的只读 AI 助手，仅支持 SQLite 不支持外部数据库。",
+   "highlights": [
+    "单进程 Python 服务，仅用标准库，无第三方运行时依赖",
+    "所有数据保存在本机 SQLite 文件，通过 WORK_CALENDAR_DB 环境变量配置路径",
+    "内置三级角色权限（superadmin/Owner/协作者），支持嵌入 OpenAI 兼容 API 的只读 AI 助手"
+   ],
+   "use_cases": [
+    "小团队自托管任务排期与审批协作",
+    "需要数据本地化、不使用第三方云协作服务的场景",
+    "配合 Cloudflare Tunnel 或反向代理对外发布内部工作台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "一个自托管的团队任务与项目协作工作台：单人即可部署，无需外部数据库或前端构建链，所有数据保存在本机 SQLite。 ／ 打开 `http://127.0.0.1:4173/`。首次启动会创建 `data/work-calendar.sqlite3` 和 `data/initial-accounts.txt`，账户文件权限为 600。",
+     "lines": [
+      7,
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 SQLite 保存任务与协作数据的协作应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "一个自托管的团队任务与项目协作工作台：单人即可部署，无需外部数据库或前端构建链，所有数据保存在本机 SQLite。 ／ server.py            单文件服务：HTTP API + SQLite + 调度器 ／ |`WORK_CALENDAR_DB`|`data/work-calendar.sqlite3`|SQLite 数据库路径|",
+   "evidence_lines": [
+    7,
+    92,
+    64
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Ray-hola/work-calendar",
+  "sha": "c7239b9be977",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2aaebc0858a2": {
+  "identity": {
+   "one_liner": "SSH/Git/部署一体化桌面运维工作台，本地 SQLite 记录审计",
+   "review": "一个面向服务器管理与项目发布的 Windows 桌面应用，集成 SSH 连接管理、SFTP 文件传输、内置终端、图形化 Git 操作与五种部署策略（SFTP、服务器 Git、本地构建、脚本、Docker），所有操作记录写入本地 SQLite 供审计查询；依赖系统原生 OpenSSH/Git，使用 Tauri 2 + Rust + React 构建，通过 NSIS/MSI 安装包分发。",
+   "highlights": [
+    "提供 SSH 连接管理、SFTP 文件传输、多会话终端与图形化 Git 操作（含 hunk 级暂存、rebase、冲突解决）",
+    "支持五种部署策略与可视化流水线/依赖图编排，含回滚与操作历史",
+    "本地 SQLite 存储审计记录，可按服务器、项目、类型、级别筛选"
+   ],
+   "use_cases": [
+    "服务器运维与文件部署的统一桌面操作",
+    "需要本地留痕审计的连接/发布记录管理",
+    "不依赖命令行的 Git 图形化操作与发布流程编排"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Stack:** Rust + Tauri 2 · React 19 + TypeScript + Vite · Tailwind CSS 4 · SQLite (rusqlite) · Git nativo · OpenSSH nativo ／ |**Auditoria**|Tudo fica em SQLite local, pesquisável e filtrável por servidor, projeto, tipo, nível e resultado.| ／ **Histórico e auditoria** — o inventário local em SQLite, pesquisável e filtrável por categoria e nível. Cada linha é",
+     "lines": [
+      12,
+      35,
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为应用本地存储审计记录，该项目不服务于数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Aplicativo desktop para quem administra servidores e publica projetos: cadastre e teste acessos SSH, navegue e ／ - **Stack:** Rust + Tauri 2 · React 19 + TypeScript + Vite · Tailwind CSS 4 · SQLite (rusqlite) · Git nativo · OpenSSH nativo ／ |**Auditoria**|Tudo fica em SQLite local, pesquisável e filtrável por servidor, projeto, tipo, nível e resultado.|",
+   "evidence_lines": [
+    3,
+    12,
+    35
+   ]
+  },
+  "fn": "DouglasGDev/devops-desktop",
+  "sha": "2aaebc0858a2",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

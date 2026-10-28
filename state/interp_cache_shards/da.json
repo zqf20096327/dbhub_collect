@@ -9750,5 +9750,300 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9ad99646d9f5": {
+  "identity": {
+   "one_liner": "将 Signal Desktop 聊天记录导出为 Markdown/HTML 文件的命令行工具",
+   "review": "读取 Signal Desktop 本地的消息数据库（含 db.sqlite 文件），把每个会话导出为独立的 .md/.html 文件，附件单独存放并在导出中链接；支持合并旧导出、选择指定会话、关闭 HTML 分页。供需要导出 Signal 聊天记录的个人用户使用，通过 pip/pipx/uvx 或 nixpkgs 安装运行。",
+   "highlights": [
+    "将每个会话导出为单个 Markdown/HTML 文件并保存附件",
+    "支持通过 --chats 选择会话、--list-chats 列出会话、--old 合并先前导出且不覆盖",
+    "提供 pip/pipx/uvx/nixpkgs 多种安装方式"
+   ],
+   "use_cases": [
+    "备份 Signal Desktop 聊天记录为本地文件",
+    "生成可在浏览器中查看的 HTML 聊天视图",
+    "将新增聊天合并进既有导出目录"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "The directory should contain a folder called `sql` with `db.sqlite` inside it.",
+     "lines": [
+      100
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "工具读取 Signal 应用的本地消息数据库文件用于导出，本身不是数据库生态组件，也未针对 SQLite 提供适配层",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Export chats from the Signal Desktop app to Markdown and HTML files with attachments. Each chat is exported as an individual .md/.html file and the attachments for each are stored in a separate folder. Attachments are linked from the Markdown files and displayed in the HTML (pictures, videos, voice notes). ／ The directory should contain a folder called `sql` with `db.sqlite` inside it.",
+   "evidence_lines": [
+    5,
+    100
+   ]
+  },
+  "fn": "carderne/signal-export",
+  "sha": "9ad99646d9f5",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e48ca9987dfa": {
+  "identity": {
+   "one_liner": "Ubuntu 上一键搭建 WordPress LEMP 服务器的自动化脚本",
+   "review": "EngineScript 是一套面向 Ubuntu 24.04 的 LEMP 服务器自动化安装脚本，用于在全新 VPS 上部署 Nginx、PHP、MariaDB、Redis 并安装 WordPress，集成 Cloudflare DNS/SSL 配置、FastCGI 缓存、es.menu 等管理命令及备份功能。面向 WordPress 站长；要求全新 VPS，会移除已有 Apache/Nginx/PHP/MySQL 安装，目前处于 Beta 阶段。",
+   "highlights": [
+    "自动化完成从裸 VPS 到带 Nginx FastCGI 缓存的 WordPress 站点的安装流程",
+    "提供 es.menu/es.backup/es.cache 等命令及 Web 管理面板",
+    "集成 Cloudflare DNS 与 SSL 证书自动配置"
+   ],
+   "use_cases": [
+    "在新 VPS 上快速部署 WordPress 站点",
+    "迁移已有 WordPress 站点到 EngineScript 服务器",
+    "通过命令行和面板集中管理站点、缓存与备份"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "Run EngineScript as the root user on a fresh VPS. Setup removes existing Apache, Nginx, PHP, and MySQL installations. Existing services **will** break if you run this script on a VPS that already has software configured. ／ |**/etc/mysql**|MySQL (MariaDB) config| ／ |**/var/lib/mysql**|MySQL database|",
+     "lines": [
+      26,
+      121,
+      127
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MariaDB ／ |**/etc/mysql**|MySQL (MariaDB) config| ／ |MARIADB|11.8.9|<https://mariadb.org/download/>|",
+     "lines": [
+      8,
+      121,
+      178
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该脚本部署使用 MariaDB 存储数据的 WordPress 服务器，MariaDB 是其组成组件而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GPL",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "EngineScript automates the process of building a high-performance LEMP server. We built EngineScript with WordPress users in mind, so the install process takes you from a bare server to a working WordPress installation with Nginx FastCGI cache enabled in about 30 minutes. ／ |MARIADB|11.8.9|<https://mariadb.org/download/>|",
+   "evidence_lines": [
+    20,
+    178
+   ]
+  },
+  "fn": "EngineScript/EngineScript",
+  "sha": "e48ca9987dfa",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b676f0e91b8a": {
+  "identity": {
+   "one_liner": "单二进制嵌入式 OLTP 数据库引擎，原生编译执行 T-SQL 并兼容 PostgreSQL/SQL Server 协议",
+   "review": "LionSQL 是一个用 Go 编写的单二进制 OLTP 数据库服务器，提供基于寄存器 VDBE 虚拟机的 T-SQL 编译执行、存储过程/触发器、WiredTiger 或内存双存储引擎，并同时开放 PostgreSQL v3 协议（5433）与 SQL Server TDS 协议（1433）。面向需要以现有 psql/sqlcmd 客户端、ORM 及 T-SQL 业务逻辑直接接入的开发与运维人员，内置 Web 管理台、连接池、WAL 流复制与热备份。许可证为 GPL v3。",
+   "highlights": [
+    "同时监听 PostgreSQL v3 协议（端口 5433）与 SQL Server TDS 协议（端口 1433），支持 psql、sqlcmd、pgx、Prisma 等客户端接入",
+    "原生编译执行 T-SQL 存储过程、函数与触发器，查询与存储过程在同一 VDBE 虚拟机上执行并支持字节码缓存",
+    "提供内存 OCC 与 WiredTiger MVCC 双存储引擎、WAL 流复制、在线快照热备份及内置 Web 管理台与自动生成 REST CRUD API"
+   ],
+   "use_cases": [
+    "以单二进制部署 OLTP 数据库服务，复用现有 PostgreSQL 或 SQL Server 客户端与驱动",
+    "运行依赖 T-SQL 存储过程和业务逻辑的应用负载",
+    "需要内置管理台、连接池与流复制的自托管数据库环境"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "- **PostgreSQL v3 Protocol (Port 5433)**: Fully compatible with `psql`, DBeaver, GORM, Prisma, and pgx, supporting SSL/TLS encryption and binary parameter binding. ／ ### Connecting via `psql` (PostgreSQL Client)",
+     "lines": [
+      32,
+      131
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "compat",
+     "quote": "- **Microsoft SQL Server TDS Protocol (Port 1433)**: Instantly compatible with SSMS, Azure Data Studio, `sqlcmd`, and MSSQL drivers, supporting RPC prepared execution. ／ ### Connecting via `sqlcmd` (MSSQL Client)",
+     "lines": [
+      33,
+      144
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Database Migration Guide**: Procedures for migrating from PostgreSQL, MSSQL, SQLite, and MySQL.",
+     "lines": [
+      314
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Database Migration Guide**: Procedures for migrating from PostgreSQL, MSSQL, SQLite, and MySQL.",
+     "lines": [
+      314
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是数据库引擎/服务器本体，为上层应用提供存储与查询服务，自身不是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL v3（L7）",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "LionSQL is a high-performance, embedded OLTP database engine that natively compiles and executes Microsoft SQL Server T-SQL & stored procedures and complex business logic on a sub-microsecond VDBE bytecode virtual machine, while simultaneously offering broad compatibility with PostgreSQL SQL dialects and the standard PGWire v3 protocol. It comes fully equipped with a built-in web management studio for real-time telemetry and schema administration, as well as an integrated goroutine connection pooler capable of handling tens of thousands of concurrent connections—eliminating the need for additional software to achieve a complete operational environment. Packaging this complete enterprise feature set into a single, ultra-compact static binary under 100MB (currently ~50MB) with zero external dependencies, LionSQL delivers blazing-fast transaction throughput of tens of thousands of transactions per second with predictable sub-millisecond latency and non-blocking snapshot isolation. ／  - **In-Memory OCC Engine**: Delivers 186,000+ TPS (and up to 779k tpmC in TPC-C with an ultra-low 3.6% abort rate) based on concurrent SkipList indexes and Optimistic Concurrency Control. ／ |`-tds`|`127.0.0.1:1433`|Microsoft SQL Server TDS protocol listen address|",
+   "evidence_lines": [
+    14,
+    60,
+    212
+   ]
+  },
+  "fn": "MaroShim/LionSQL",
+  "sha": "b676f0e91b8a",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d57a19cff5c4": {
+  "identity": {
+   "one_liner": "用 Rust 编写的 ArchLord 64 位客户端游戏服务器模拟器，数据存于 MariaDB",
+   "review": "ArchCore 是一个游戏服务器模拟器，通过逆向工程 ArchLord 64 位客户端可执行程序和数据表来重建协议，包含登录和世界服务器功能。它以 Rust 编写，依赖 MariaDB 存储数据，并使用 Ghidra/REA 进行逆向分析。适用于希望运行私有 ArchLord 服务器、参与游戏服务器逆向工程或 MMO 服务器开发的用户，需配合 64 位 ArchLord 客户端使用。",
+   "highlights": [
+    "通过逆向工程重建 64 位 ArchLord 客户端网络协议",
+    "使用 Rust 和 Tokio 实现登录服务器与世界服务器",
+    "依赖 MariaDB 存储数据，提供 db-init 初始化命令"
+   ],
+   "use_cases": [
+    "运行 ArchLord 私有服务器",
+    "游戏网络协议逆向工程研究",
+    "学习 MMO 服务器架构实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Rust · MariaDB · client reverse engineering / rétro-ingénierie du client ／ **ArchCore** is a server emulator (login + world) for the **64-bit ArchLord** client. It is written in **Rust** and stores its data in **MariaDB**. The protocol was rebuilt by ／ Requirements: Rust 1.85 or later (rustup), MariaDB, and a 64-bit ArchLord client extracted to",
+     "lines": [
+      6,
+      17,
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确说明项目将数据存储在 MariaDB 中，数据库是应用的数据存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GPL-3.0-or-later",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**ArchCore** is a server emulator (login + world) for the **64-bit ArchLord** client. It is written in **Rust** and stores its data in **MariaDB**. The protocol was rebuilt by ／ Requirements: Rust 1.85 or later (rustup), MariaDB, and a 64-bit ArchLord client extracted to",
+   "evidence_lines": [
+    17,
+    50
+   ]
+  },
+  "fn": "BlaMacfly/ArchCore",
+  "sha": "d57a19cff5c4",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

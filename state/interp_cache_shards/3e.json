@@ -11011,5 +11011,128 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d029402b32b7": {
+  "identity": {
+   "one_liner": "macOS 本地语义搜索启动器，用嵌入模型与 SQLite 索引文件内容",
+   "review": "Lantern 是一款 macOS 上的 Spotlight 替代应用，在 Apple Silicon 上通过 MLX 运行 EmbeddingGemma 2 嵌入模型，对文件、代码、PDF、照片、录音建立本地语义索引，并用 SQLite FTS5/BM25 做混合排序。面向需要离线检索本机内容的 Mac 用户；仅支持 Apple Silicon 和 macOS 26.2+，目前是在单台 M4 Mac 上测试的原型。",
+   "highlights": [
+    "提供语义搜索：文本、代码（tree-sitter，22 种语言）、PDF、照片、录音/视频均可索引检索",
+    "混合排序：嵌入向量与 SQLite FTS5/BM25 关键词通过 Reciprocal Rank Fusion 融合",
+    "默认完全离线运行，无遥测，索引存为单个 SQLite 文件"
+   ],
+   "use_cases": [
+    "在 Mac 上按含义而非文件名查找文件、代码定义和文档内容",
+    "在照片中按画面内容检索、在录音中定位某句话出现的时间点",
+    "替代 Spotlight/Raycast/Alfred 的应用与系统设置快速启动"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Hybrid ranking:** meaning (embeddings) and exact words (SQLite FTS5/BM25) fused with Reciprocal Rank Fusion. ／ - The index is one SQLite file in `~/Library/Application Support/Lantern/` (not synced with iCloud). It contains text",
+     "lines": [
+      63,
+      530
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Lantern 是用 SQLite 存储索引数据的终端用户搜索应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Hybrid ranking:** meaning (embeddings) and exact words (SQLite FTS5/BM25) fused with Reciprocal Rank Fusion.",
+   "evidence_lines": [
+    63
+   ]
+  },
+  "fn": "misterekkk/lantern",
+  "sha": "d029402b32b7",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e64b31b26dc1": {
+  "identity": {
+   "one_liner": "以单个 SQLite 文件为存储的个人日志应用，附 C HTTP 服务器、Web 控制台和可漫游 3D 舰船界面",
+   "review": "一个自托管的个人日志（journal）应用：数据存于一个 SQLite 文件，由 C 编写的静态二进制 HTTP 服务器提供 Web 控制台与 3D 舰桥界面，供个人在自有机器上运行。支持媒体存储、语音转录、CalDAV 提醒、Logseq 导入等可选功能，多数功能需额外配置密钥或依赖。",
+   "highlights": [
+    "单个静态二进制包含服务器、Web 控制台、3D deck 与 CLI，数据存于单个 SQLite 文件",
+    "可选功能包括媒体存储、语音转录与合成、CalDAV 提醒、Strava、Logseq 导入、基于 embeddings 的语义搜索",
+    "通过 /metrics 端点输出 Prometheus 文本格式指标，支持 systemd 用户服务部署"
+   ],
+   "use_cases": [
+    "个人在自有服务器/VPS 上记录日志、媒体与提醒",
+    "通过浏览器体验演示（数据仅存于本地浏览器）",
+    "与 Logseq/Obsidian 等笔记应用桥接导入笔记"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 声明日志数据存于单个 SQLite 文件（lcars.db），该项目是使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Star Trek console for your journal: one SQLite file, a small HTTP server ／ |`--db FILE` / `LCARS_DB_PATH`|the journal itself, if not `<data dir>/lcars.db`|`<data dir>/lcars.db`| ／ ./lcars init ~/lcars-data     # a data directory, a password, lcars.env; prints the URL and login",
+   "evidence_lines": [
+    7,
+    51,
+    28
+   ],
+   "softened": []
+  },
+  "fn": "saftacatalinmihai/lcars",
+  "sha": "e64b31b26dc1",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

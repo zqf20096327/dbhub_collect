@@ -11396,5 +11396,159 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7d344ede9086": {
+  "identity": {
+   "one_liner": "PostgreSQL/Greenplum/Greengage 数据库内任务调度扩展",
+   "review": "pg_task 是一个运行在数据库内部的后台任务调度扩展，通过向 task 表插入行来调度任意 SQL 命令在指定时间异步执行，结果与状态写回同一行。面向需要在 PostgreSQL、Greenplum 或 Greengage 内做定时/延时任务的运维与开发人员，无需外部守护进程，经 shared_preload_libraries 加载，用 PGXS 从源码编译安装。",
+   "highlights": [
+    "以数据库后台 workers 运行，通过 INSERT 到 task 表调度 SQL 任务，结果写回该行",
+    "通过 GUC 配置并发数、执行间隔、行批量等调度参数",
+    "标准 PGXS 扩展，支持针对 PostgreSQL、Greenplum、Greengage 构建"
+   ],
+   "use_cases": [
+    "在数据库内定时或延时执行 SQL 命令",
+    "替代外部调度守护进程，集中管理数据库任务",
+    "在 Greenplum/Greengage 集群中运行后台 SQL 作业"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, Greenplum and Greengage job scheduler `pg_task` allows to execute any sql command at any specific time at background asynchronously. ／ First, enable the extension by adding it to `shared_preload_libraries` and restarting PostgreSQL: ／ `pg_task` is a standard PGXS extension, built against an installed PostgreSQL, Greenplum or Greengage server.",
+     "lines": [
+      3,
+      11,
+      28
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 系数据库提供任务调度能力的扩展组件，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL, Greenplum and Greengage job scheduler `pg_task` allows to execute any sql command at any specific time at background asynchronously. ／ It runs entirely inside the database as a set of background workers — no external daemon, no client library, nothing to babysit outside PostgreSQL itself. You enable it with a single GUC, and from then on scheduling a job is just an `INSERT` into a plain table: `pg_task` polls that table, runs `input`, and writes the result back into the same row (see Task state machine for exactly how). ／ `pg_task` is a standard PGXS extension, built against an installed PostgreSQL, Greenplum or Greengage server.",
+   "evidence_lines": [
+    3,
+    5,
+    28
+   ]
+  },
+  "fn": "RekGRpth/pg_task",
+  "sha": "7d344ede9086",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "159b0ac536a0": {
+  "identity": {
+   "one_liner": "MySQL 迁移到达梦 DM8 的表结构与数据迁移工具",
+   "review": "一个基于 Java 的 MySQL 到达梦 DM8 迁移工具，以单个 jar 发布并内置两端 JDBC 驱动。支持表结构、数据、注释、索引、外键迁移，通过双引号包裹标识符保留大小写，提供 dry-run、坏行诊断与行数校验。需达梦初始化为大小写敏感（CASE_SENSITIVE=Y），适合需要从 MySQL 迁往达梦的 DBA 与开发人员。",
+   "highlights": [
+    "迁移表结构与数据，支持 dry-run 模拟运行与迁移后逐表行数校验",
+    "双引号包裹标识符保留大小写，内置 40+ 类型映射自测断言",
+    "流式读 + 批量写，坏行自动逐行重放并打印字段级诊断"
+   ],
+   "use_cases": [
+    "MySQL 数据库迁移到达梦 DM8",
+    "仅迁移表结构或仅装载数据的定向迁移",
+    "迁移前用 dry-run 评估 DDL 与数据量"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL → 达梦（DM8）表结构与数据迁移工具。单 jar 免安装，内置 MySQL 与达梦 JDBC 驱动，开箱即用。 ／ - MySQL 5.7 / 8.0 / MariaDB（源库账号需可读 `information_schema`）",
+     "lines": [
+      3,
+      18
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MySQL 5.7 / 8.0 / MariaDB（源库账号需可读 `information_schema`）",
+     "lines": [
+      18
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "MySQL → 达梦（DM8）表结构与数据迁移工具。单 jar 免安装，内置 MySQL 与达梦 JDBC 驱动，开箱即用。 ／ - 达梦 DM8，且初始化参数 **`CASE_SENSITIVE=Y`**（大小写敏感，工具会强制检测）",
+     "lines": [
+      3,
+      19
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具专为 MySQL 到达梦的数据库迁移服务，是数据库生态工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MySQL → 达梦（DM8）表结构与数据迁移工具。单 jar 免安装，内置 MySQL 与达梦 JDBC 驱动，开箱即用。 ／ - **结构与数据完整迁移**：三阶段执行——建表 → 数据装载 → 索引/外键（后置创建提速装载并规避依赖顺序），完成后逐表校验源/目标行数。 ／ - 达梦 DM8，且初始化参数 **`CASE_SENSITIVE=Y`**（大小写敏感，工具会强制检测）",
+   "evidence_lines": [
+    3,
+    8,
+    19
+   ]
+  },
+  "fn": "SupYang/MySql2Dm",
+  "sha": "159b0ac536a0",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

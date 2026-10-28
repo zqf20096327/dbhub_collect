@@ -11097,5 +11097,76 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "87d16645df23": {
+  "identity": {
+   "one_liner": "New API 的自托管管理控制台，Flask+PostgreSQL 实现",
+   "review": "该项目为已部署的 New API 实例补充统计与管理后台，提供用量/成本统计、渠道质量对比、用户与令牌批量管理、定时配额规则、余额告警及飞书/钉钉通知，并以 Flask 编写、依赖 PostgreSQL 后端、经 Docker 与 Nginx 与主站同入口部署。适合 New API 站点管理员与普通用户使用；要求已运行 New API，修改类操作经其官方接口执行。",
+   "highlights": [
+    "提供用量统计、渠道质量、用户/令牌管理、定时配额与操作审计等页面，页面挂载于现有站点的 /cockpit/ 路径下",
+    "支持 Docker 部署，依赖 PostgreSQL 后端，与 New API 共用 Docker 网络和登录账号",
+    "提供余额监控与飞书、钉钉、邮件（SMTP/STARTTLS/SMTPS）通知渠道，可独立启停",
+    "提供 /cockpit/api/ 下的脚本调用接口，并在 API 文档页支持在线试调用"
+   ],
+   "use_cases": [
+    "为 New API 站点管理员提供用量、成本与渠道质量的对账分析",
+    "批量管理用户、令牌与额度，设置周期性配额规则并记录操作审计",
+    "配置余额告警并经飞书/钉钉/邮件通知运维人员"
+   ],
+   "cat": "应用"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "本项目需要已部署的 New API，目前支持 PostgreSQL 后端。应用用 Flask 编写，网页与图片请求使用独立容器，",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明本项目需已部署的 New API、以 Flask 编写并使用 PostgreSQL 后端存储，是为该服务配套的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "给 New API 补一套统计和管理页面：查用量、对账、设余额告警， ／ 本项目需要已部署的 New API，目前支持 PostgreSQL 后端。应用用 Flask 编写，网页与图片请求使用独立容器， ／ 用户和 KEY 的修改通过 New API 官方接口执行，每组最多 5 个并发请求。",
+   "evidence_lines": [
+    12,
+    20,
+    52
+   ]
+  },
+  "fn": "ilove323/new-api-cockpit",
+  "sha": "87d16645df23",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11415,5 +11415,155 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "18536064874e": {
+  "identity": {
+   "one_liner": "Rust 编写的进程内 SQL 数据库，兼容 SQLite，并实验性支持 Postgres 前端",
+   "review": "Turso 是用 Rust 编写的进程内 SQL 数据库引擎，采用类似 SQLite 的 VDBE 字节码虚拟机设计，SQL 作为编译到该虚拟机的前端语言。它面向需要在应用内嵌数据库、并使用 SQL 方言/文件格式/C API 层面 SQLite 兼容能力的开发者，Postgres 方言与线路协议为实验性前端。项目尚未发布 1.0，部分功能标记为实验性。",
+   "highlights": [
+    "提供 SQLite 兼容的 SQL 方言、文件格式与 C API，兼容 SQLite 3.50.4",
+    "提供 Go/JavaScript/Java/.NET/Python/Rust/WebAssembly 多语言绑定及 CLI",
+    "实验性支持 Postgres SQL 方言与线路协议，内置 MCP 服务器模式"
+   ],
+   "use_cases": [
+    "以进程内嵌入式数据库替代/衔接 SQLite 文件的应用开发",
+    "通过 MCP 服务器让 AI 助手对本地数据库执行查询与 schema 变更",
+    "使用实验性 Postgres 方言与线路协议访问同一引擎"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "An in-process SQL database, compatible with SQLite, and now with a Postgres frontend too. ／ * **Postgres compatibility** for SQL dialect and wire protocol, see the see compatibility reference for details. ／ It is one engine with more than one SQL frontend. SQLite is the original and primary frontend, with its dialect, its file format, and its C API, and if that is what you use, nothing changes for you. Postgres is a newer and still experimental frontend that spea",
+     "lines": [
+      4,
+      48,
+      335
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "compat",
+     "quote": "An in-process SQL database, compatible with SQLite, and now with a Postgres frontend too. ／ Turso is an in-process SQL database written in Rust, compatible with SQLite. It runs in production today at multiple organizations. ／ * **SQLite compatibility** for SQL dialect, file formats, and the C API, tracking SQLite version 3.50.4 see [document for details] ／ Turso is compatible with SQLite at the SQL dialect, file format, and C API levels, and existing SQLite database files work as-is. We are not at 100% yet, so some differences are still expected — COMPAT.md tracks the details — but the gap is closing quickly, and full compatibility is a requirement for 1.0.",
+     "lines": [
+      4,
+      20,
+      30,
+      331
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明其本身是一个数据库引擎而非使用数据库的应用，属于数据库内核/引擎生态组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source",
+    "npm",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Turso is an in-process SQL database written in Rust, compatible with SQLite. It runs in production today at multiple organizations. ／ Turso is also a virtual machine. Like SQLite, it compiles SQL into bytecode for that machine, the VDBE, and then runs the bytecode. That design is what lets one engine host more than one SQL dialect. SQLite is the first and primary frontend that compiles to it, and Postgres is now a frontend of its own, with its own dialect and wire protocol. More will follow. Our goal is to be for databases what LLVM is to compilers, with one modern and reliable core, and many frontends compiled down onto it. ／ * **SQLite compatibility** for SQL dialect, file formats, and the C API, tracking SQLite version 3.50.4 see [document for details]",
+   "evidence_lines": [
+    20,
+    22,
+    30
+   ]
+  },
+  "fn": "tursodatabase/turso",
+  "sha": "18536064874e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "19c553e55e2c": {
+  "identity": {
+   "one_liner": "终端版 SQL Server 管理工具，TUI 单可执行文件",
+   "review": "goSSMS 是一个基于终端的 SQL Server 管理应用，以单个可执行文件分发，无需安装器、SQL 客户端工具或独立数据库驱动。提供 Object Explorer、连接管理、Activity Monitor、Always On 对等发现等功能，支持 SQL Server 2016 SP1 及以上和 Azure SQL Managed Instance，面向需要跨 Windows/macOS/Linux 管理数据库的用户，需 UTF-8 256 色终端。",
+   "highlights": [
+    "以单个可执行文件分发，无需安装器、SQL 客户端工具或独立数据库驱动",
+    "提供连接对话框、Object Explorer、Activity Monitor、Live Query Statistics、Always On 可用性组操作等管理功能",
+    "支持 SQL Server/Windwows 集成/Entra ID（MFA、Device Code、服务主体、托管标识等）多种认证方式，保存密码以 AES-256-GCM 加密"
+   ],
+   "use_cases": [
+    "在 Linux/macOS/Windows 终端中管理 SQL Server 实例",
+    "管理 Always On 可用性组（发现副本、添加副本/监听器、故障转移等）",
+    "对 Azure SQL Managed Instance 进行连接与运维"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "SQL Server management for Linux, macOS, and Windows ／ goSSMS is a terminal-based SQL Server management application. It is distributed ／ to a SQL Server instance.",
+     "lines": [
+      2,
+      13,
+      105
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQL Server 提供连接与管理功能的客户端工具，而非使用数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "goSSMS is a terminal-based SQL Server management application. It is distributed ／  SQL Server management for Linux, macOS, and Windows ／ goSSMS supports **SQL Server 2016 SP1 (13.0.4001) and later** on Windows and",
+   "evidence_lines": [
+    13,
+    2,
+    178
+   ]
+  },
+  "fn": "radix29/gossms",
+  "sha": "19c553e55e2c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

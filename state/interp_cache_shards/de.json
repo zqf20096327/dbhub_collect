@@ -11751,5 +11751,78 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "607934202a8b": {
+  "identity": {
+   "one_liner": "通过 MCP 在 Claude Code 中读写本地 SQLite 镜像的 WhatsApp 消息",
+   "review": "wsp-mcp 是一个 MCP 服务器，通过 Baileys 桥接 WhatsApp，将聊天记录镜像到本地 SQLite 文件，供 Claude Code 读取、搜索、总结消息并转写语音备注；发送受白名单和确认对话框控制。面向在 macOS 上使用 Claude Code 的个人用户，限制为仅支持 macOS、需 Node 24+，且经非官方客户端连接存在封号风险。",
+   "highlights": [
+    "将 WhatsApp 消息镜像到本地 SQLite 文件，语音备注用 whisper.cpp 在本机转写",
+    "提供 list_chats、search_messages、get_media、send_message 等 MCP 工具",
+    "发送受 allowedRecipients 白名单与确认对话框限制，限制逻辑在桥接层执行"
+   ],
+   "use_cases": [
+    "在 Claude Code 中搜索和总结个人 WhatsApp 聊天记录",
+    "本机转写语音备注并以文本形式纳入搜索",
+    "在白名单与确认机制下由 Claude 代为发送消息"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Your messages stay on your Mac.** They live in a local SQLite file only your user can read, and voice ／ WhatsApp ⇄ bridge (linked device, Baileys) ──writes──▶ ~/.whatsapp-mcp/messages.db (SQLite)",
+     "lines": [
+      29,
+      92
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 存储自身镜像的消息数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "WhatsApp ⇄ bridge (linked device, Baileys) ──writes──▶ ~/.whatsapp-mcp/messages.db (SQLite) ／ - **Your messages stay on your Mac.** They live in a local SQLite file only your user can read, and voice ／  MCP server",
+   "evidence_lines": [
+    92,
+    29,
+    11
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "le-quesne/wsp-mcp",
+  "sha": "607934202a8b",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

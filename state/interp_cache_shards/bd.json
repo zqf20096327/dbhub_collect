@@ -12900,5 +12900,229 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "796514bc55f3": {
+  "identity": {
+   "one_liner": "数据库内倾斜稀疏关系 join-aggregate 加速引擎扩展",
+   "review": "Tessera 以扩展形式嵌入 DuckDB、PostgreSQL、SQLite 和 Spark，把 join-aggregate 查询改写为稀疏矩阵乘法，稀疏部分走专用路径、稠密核心在 AMX 等矩阵加速器上以 8 位分块执行，SQL 无需修改。适用于需要词共现、item-to-item 推荐、共同邻居计数等大规模 join-aggregate 的用户；要求 x86-64 AVX2+ 或 arm64，分组列不能含 NULL。",
+   "highlights": [
+    "以扩展/插件形式接入 DuckDB、PostgreSQL、SQLite、Spark 四个引擎，SQL 无需修改即可执行",
+    "将 join-aggregate 计算为稀疏矩阵乘积，稠密核心在 AMX 上以 8-bit tile 运行，结果保持精确",
+    "提供基于代价模型的 frontier 选择与 HAVING/ORDER BY LIMIT 剪枝，超出内存限制的结果落盘"
+   ],
+   "use_cases": [
+    "词共现、商品关联推荐、共同邻居计数等大规模 join-aggregate 分析",
+    "倾斜稀疏关系上的 COUNT/SUM 自连接聚合查询加速",
+    "在浏览器中通过 DuckDB-WASM 演示或运行 join-aggregate"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Engines: DuckDB, PostgreSQL, SQLite, Spark ／ |**Inside the engine**|Hooks into the planners of DuckDB, PostgreSQL, and Spark, so the SQL runs unchanged, and into SQLite as table functions. Follows each engine's cancellation, thread count, and errors, keeps the output within the memory limit of DuckDB, Po ／ |PostgreSQL|`tessera_pg` on PGXN|`pgxn install tessera_pg`| ／ with its server headers and GCC with OpenMP. Then load it with `LOAD 'tessera_pg';` and run `CREATE EXTENSION tessera_pg;`",
+     "lines": [
+      6,
+      45,
+      88,
+      104
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Engines: DuckDB, PostgreSQL, SQLite, Spark ／ |**Inside the engine**|Hooks into the planners of DuckDB, PostgreSQL, and Spark, so the SQL runs unchanged, and into SQLite as table functions. Follows each engine's cancellation, thread count, and errors, keeps the output within the memory limit of DuckDB, Po ／ |SQLite|`tessera-sqlite-<version>-<platform>.tar.gz` on the releases page|`.load ./tessera` in the shell|",
+     "lines": [
+      6,
+      45,
+      86
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目以扩展和适配器形式挂接数据库引擎的计划器，为数据库执行 join-aggregate 提供加速组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "pypi",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Engines: DuckDB, PostgreSQL, SQLite, Spark ／ |**Inside the engine**|Hooks into the planners of DuckDB, PostgreSQL, and Spark, so the SQL runs unchanged, and into SQLite as table functions. Follows each engine's cancellation, thread count, and errors, keeps the output within the memory limit of DuckDB, PostgreSQL, and SQLite, and spills the rest to the engine's temporary space within its limit.| ／  Tessera runs a join-aggregate as a sparse product with a dense core on AMX",
+   "evidence_lines": [
+    6,
+    45,
+    9
+   ]
+  },
+  "fn": "GyuyeongKim/Tessera-public",
+  "sha": "796514bc55f3",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "658e6e23e9b3": {
+  "identity": {
+   "one_liner": "Rust 多模型向量数据库，融合关系SQL、向量与图检索",
+   "review": "ChironDB 是一个自托管的多模型数据库，将类型化 SQL 表、稠密/稀疏向量检索（BM25）、混合排序与属性图叠加合并在单个 Rust 引擎中，通过 HTTP、gRPC、ChironQL、只读 MCP 工具和 pgvector 兼容的 PostgreSQL 线协议访问。面向 AI/RAG 应用开发者，当前为 0.1.0-beta 评估版，明确声明不适用于生产负载。",
+   "highlights": [
+    "单个引擎提供原生关系 SQL、稠密向量（LS-VEC）、稀疏 BM25 与混合检索，附召回目标与漂移监控",
+    "提供 pgvector 兼容的 PostgreSQL 线协议子集，可配合 psycopg 3、SQLAlchemy 2、SQLx、Diesel 等客户端使用",
+    "内置只读 MCP 接口（默认关闭，需 API-key 与 RBAC），并支持属性图叠加与有界图遍历"
+   ],
+   "use_cases": [
+    "为 RAG/AI 应用自托管存储与检索向量及关联元数据",
+    "在同一存储中结合关系表、向量检索与图遍历的查询场景",
+    "评估 pgvector 兼容线协议下的向量查询工作流"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "preview. Use the documented SQL subset through ChironQL or native PostgreSQL wire. ／ work, read-only MCP tools for AI applications, and a small pgvector-compatible ／ PostgreSQL wire surface for vector queries.",
+     "lines": [
+      48,
+      57,
+      58
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "mention",
+     "quote": "## Coming from GaussDB ／ ChironDB is the public name of the project previously called GaussDB. The beta ／ `gaussdb.v1.GaussDb` gRPC service. `CHIRONDB_*` environment variables take",
+     "lines": [
+      212,
+      214,
+      216
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目实现自有存储引擎与查询协议，是数据库本体而非使用其他数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ChironDB is a self-hosted multi-model database with an implemented native ／  preview. Use the documented SQL subset through ChironQL or native PostgreSQL wire. ／ The current source version is **`0.1.0-beta.2`**. ChironDB is under active beta",
+   "evidence_lines": [
+    17,
+    48,
+    64
+   ]
+  },
+  "fn": "Gaussian-id/ChironDB",
+  "sha": "658e6e23e9b3",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a87d0bc7a4fb": {
+  "identity": {
+   "one_liner": "算法竞赛训练工作台，集成题库、评测与提交，SQLite 本机存储",
+   "review": "TB 是面向算法竞赛选手的 Windows 桌面训练工作台，提供图文题库与题解、C++ 编辑、本地样例评测、四平台后台官方提交、模拟赛和训练记录等功能，使用 SQLite 在本机存储个人数据库，支持账号同步与 JSON 导出。面向参加 ICPC/CCPC、Codeforces 等竞赛的训练者，仅支持 Windows 10/11 x64。",
+   "highlights": [
+    "提供 1.3 万余条题目、题面存档、题解与讲义的本地题库，支持筛选、去重与知识点索引",
+    "支持本地样例评测与通过原站浏览器向四个平台后台提交代码",
+    "使用 SQLite 本机存储个人数据库，自动更新时在线备份并校验 SHA-256"
+   ],
+   "use_cases": [
+    "算法竞赛选手的日常刷题、题解学习与知识掌握度跟踪",
+    "组织或参加模拟赛，按难度与知识点生成计时训练",
+    "多设备间同步训练记录、代码草稿与提交历史"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "保存草稿并退出 TB 后安装到原目录，个人数据库、代码和导入内容保留。自动更新会先保存草稿、在线备份 SQLite、验证 SHA-256，再替换程序。跨电脑使用同一账号时，各电脑应升级到同一版本。原站登录保存在 TB 专用浏览器中，无需扩展。",
+     "lines": [
+      25
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 SQLite 存储本机个人数据库的桌面训练应用，SQLite 仅作为其存储组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "保存草稿并退出 TB 后安装到原目录，个人数据库、代码和导入内容保留。自动更新会先保存草稿、在线备份 SQLite、验证 SHA-256，再替换程序。跨电脑使用同一账号时，各电脑应升级到同一版本。原站登录保存在 TB 专用浏览器中，无需扩展。 ／ 账号同步包括训练、完整提交代码、草稿、目标、经验、收藏和偏好；冲突草稿另存。原站 Cookie 与翻译密钥不进入公共题库，翻译密钥使用 Windows DPAPI 保护。设置中的数据导出为 JSON，不含密码、Cookie 或 API 密钥。",
+   "evidence_lines": [
+    25,
+    110
+   ]
+  },
+  "fn": "3097729287/acm-algo-trainer",
+  "sha": "a87d0bc7a4fb",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

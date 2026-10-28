@@ -9263,5 +9263,72 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7b7d65afedc5": {
+  "identity": {
+   "one_liner": "Go+SvelteKit 的自托管缺陷/项目跟踪系统",
+   "review": "Kuayle 是一个使用 Go 后端和 SvelteKit 前端构建的开源 issue 跟踪与项目管理应用，提供工作区、多负责人 issue、sprint 周期、甘特图、GitHub 集成与 WebSocket 实时事件，单一 Apache 2.0 仓库发布，无付费层。数据存储于 PostgreSQL 17，通过 sqlx/pgx 直接写 SQL，无 ORM；Dev Machines 为可选的多容器代理编码子系统，运维方需自行承担备份、监控与更新。",
+   "highlights": [
+    "提供 issue 跟踪、多负责人、子任务、关联、模板、saved views、通知与 WebSocket 实时事件",
+    "包含带燃尽/速率图与甘特视图的周期与项目管理，以及 GitHub App 集成",
+    "支持自托管 Docker Compose 参考栈（Caddy、PostgreSQL、Redis）与基于 token 的只读公开分享"
+   ],
+   "use_cases": [
+    "团队自托管部署 issue 跟踪与 sprint/项目规划",
+    "通过 GitHub 仓库链接与状态规则自动化 issue 流转",
+    "以 Dev Machines 子系统在隔离容器环境中运行编码代理处理 issue"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Dev Machines**|Available since v0.1.13 as an opt-in self-hosted subsystem: PostgreSQL control plane, multi-container runtime, manager, authenticated gateway, four agent providers, collector, and UI. Disabled by default; see `TECHNICAL.md`.| ／ |**Self-hosting**|Reference Docker Compose stack with Caddy, PostgreSQL, Redis, backend, frontend, an update script, and dedicated config in `selfhosting/`.| ／ |**Database**|PostgreSQL 17|Primary data store, raw SQL via sqlx/pgx, no ORM|",
+     "lines": [
+      28,
+      29,
+      136
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 17 为主要数据存储，Kuayle 是使用该库存数据的应用而非为其服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Kuayle's published releases are runnable MVPs, not a mature enterprise platform. The repository includes the Go API, SvelteKit frontend, database migrations, development tooling, and reference self-hosting configuration. ／ |**Self-hosting**|Reference Docker Compose stack with Caddy, PostgreSQL, Redis, backend, frontend, an update script, and dedicated config in `selfhosting/`.|",
+   "evidence_lines": [
+    20,
+    29
+   ]
+  },
+  "fn": "carbogninalberto/kuayle",
+  "sha": "7b7d65afedc5",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

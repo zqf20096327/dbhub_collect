@@ -10903,5 +10903,139 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "44a3591b8770": {
+  "identity": {
+   "one_liner": "Ubuntu 上 Moodle 一键 Docker Compose 部署工具箱",
+   "review": "Mooship 提供一套 Bash 脚本和 Python CLI，在 Ubuntu 服务器上通过 Docker Compose 部署 Moodle（PHP-FPM、nginx、PostgreSQL 或 MySQL、Redis、certbot），并包含备份/恢复、定时备份、健康检查等脚本。面向在自托管服务器上部署运维 Moodle 的管理员；要求 Ubuntu 20.04+ 和 root 权限，仅针对 Moodle 4.3+。",
+   "highlights": [
+    "单命令部署 Moodle，容器含 PHP-FPM、nginx、PostgreSQL/MySQL、Redis、certbot",
+    "提供全量备份/恢复、systemd 定时备份与健康检查脚本",
+    "支持 Let's Encrypt HTTPS 证书自动签发与每 12 小时续期"
+   ],
+   "use_cases": [
+    "在 Ubuntu 服务器上快速部署 Moodle LMS 站点",
+    "为多个 Moodle 项目集中管理反向代理、证书与日志",
+    "配置数据库与站点数据的定时备份和恢复"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`deploy-moodle.sh` deploys Moodle on an Ubuntu server with a single command. It creates an isolated Docker project (PHP-FPM, nginx, PostgreSQL or MySQL, Redis, cron, certbot), installs Moodle through the CLI, connects the site to the shared `nginxproxy` revers ／ |`db`|`<slug>_db`|`postgres:17-alpine` or `mysql:8.4`|Database, with memory settings from the resource profile. Port 5432/3306 is published on the host as `DB_PORT`. This service is omitted with `--db-native`| ／ - **Native database (`--db-native`):** PostgreSQL or MySQL is installed and running on the host, with access from containers configured (see Database connections).",
+     "lines": [
+      16,
+      62,
+      106
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`deploy-moodle.sh` deploys Moodle on an Ubuntu server with a single command. It creates an isolated Docker project (PHP-FPM, nginx, PostgreSQL or MySQL, Redis, cron, certbot), installs Moodle through the CLI, connects the site to the shared `nginxproxy` revers ／ |`db`|`<slug>_db`|`postgres:17-alpine` or `mysql:8.4`|Database, with memory settings from the resource profile. Port 5432/3306 is published on the host as `DB_PORT`. This service is omitted with `--db-native`| ／ - **Native database (`--db-native`):** PostgreSQL or MySQL is installed and running on the host, with access from containers configured (see Database connections).",
+     "lines": [
+      16,
+      62,
+      106
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为部署和运维 Moodle 应用提供脚本工具集，数据库仅作为可选的后端组件被编排，而非被使用存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`deploy-moodle.sh` deploys Moodle on an Ubuntu server with a single command. It creates an isolated Docker project (PHP-FPM, nginx, PostgreSQL or MySQL, Redis, cron, certbot), installs Moodle through the CLI, connects the site to the shared `nginxproxy` reverse proxy, and obtains a Let's Encrypt certificate. Companion scripts schedule full backups and check the health of every site. ／ The Python CLI provides a dependency-free `mooship` command for verified toolkit installation and the existing deployment, lifecycle, backup/restore and diagnostics scripts. Install the security release with `pipx install mooship==1.2.1`. Upgrade both the Python CLI and native toolkit; 1.2.0 predates the runtime policy. See release publication for Docker Hub and PyPI setup and verification. ／ |`db`|`<slug>_db`|`postgres:17-alpine` or `mysql:8.4`|Database, with memory settings from the resource profile. Port 5432/3306 is published on the host as `DB_PORT`. This service is omitted with `--db-native`|",
+   "evidence_lines": [
+    16,
+    22,
+    62
+   ]
+  },
+  "fn": "shellharbor/mooship",
+  "sha": "44a3591b8770",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d055d6e2adc1": {
+  "identity": {
+   "one_liner": "打字训练器，实时测量 WPM 与准确率并记录历史",
+   "review": "一个基于 Python tkinter 的桌面打字训练应用，支持 30 秒、60 秒或整篇文本练习，实时显示每分钟词数、准确率和错误，并以表格和柱状图展示近三十次会话历史；内置英文与荷兰语普通句文本。历史数据以 JSON 文件存放于本地目录，不依赖任何数据库；适合想量化练习打字速度的个人用户。",
+   "highlights": [
+    "支持 30 秒、60 秒和整篇文本三种练习模式，实时显示 WPM、准确率与错误",
+    "会话历史以表格、最近三十次柱状图和平均值呈现",
+    "测量核心 engine.py 与窗口分离，可用假时钟运行测试；仅需 Python 3.12+ 与 tkinter"
+   ],
+   "use_cases": [
+    "个人打字速度与准确率练习",
+    "英文/荷兰语文本的打字训练",
+    "以 WPM/准确率为指标的长期训练记录跟踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "桌面打字训练应用，历史数据存于本地 history.json 文件，README 未涉及任何数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A typing trainer that just measures. Pick 30 seconds, 60 seconds or a full text, start ／ mistake still counts against you. History lives in `%LOCALAPPDATA%\\Tikvaardig\\history.json`. ／ Needs Python 3.12+ with tkinter (included in the standard Windows installer). No other",
+   "evidence_lines": [
+    3,
+    22,
+    17
+   ]
+  },
+  "fn": "Sadoone-beep/tikvaardig",
+  "sha": "d055d6e2adc1",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

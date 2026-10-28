@@ -10622,5 +10622,243 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f2fecd7a0644": {
+  "identity": {
+   "one_liner": "本地优先的个人 AI 助手，Rust 核心 + JSON-RPC 协议 + 多客户端",
+   "review": "这是一个本地优先运行的 AI 个人助手 Joy：Rust 端实现 agent 循环、记忆（FTS5/SQLite 状态库）、内置工具与评测，TypeScript 提供仪表盘与聊天网关（Telegram/Discord/微信/飞书），Python 仅作薄 SDK；内置 12 家 LLM 供应商适配并支持 MCP 服务器，需自备模型 API Key。适合想在个人机器上运行带记忆与工具调用助手的用户。",
+   "highlights": [
+    "Rust 核心实现 agent 循环、记忆（FTS5、CJK）、工具与评测，状态库 state.db 本地保存",
+    "预适配 12 个 LLM 供应商，可通过 /model 切换，支持 MCP 服务器",
+    "内置 11+ 工具（记忆 CRUD、日历、网页搜索/抓取、文件读取、shell 沙箱执行、子代理委派等）"
+   ],
+   "use_cases": [
+    "在本地终端/仪表盘运行带记忆的个人助手",
+    "通过 Telegram/Discord/微信/飞书网关接入聊天",
+    "以 JSON-RPC 协议扩展客户端或工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目通过 state.db（SQLite/FTS5）保存自身状态，是使用数据库的助手应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> A local-first personal assistant: Rust owns logic and state, TypeScript ／ 1. **Rust owns logic and state.** The agent loop, memory, tools, and ／  SDK are all clients of `joy app-server` (JSON-RPC over stdio); state.db is",
+   "evidence_lines": [
+    5,
+    12,
+    19
+   ]
+  },
+  "fn": "ChrisVip001/joyczl-agent",
+  "sha": "f2fecd7a0644",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9803eadf3708": {
+  "identity": {
+   "one_liner": "本地运行的 AI 编码 token 用量与成本追踪仪表盘",
+   "review": "RepoSpend 读取本机 Codex、Claude Code、GitHub Copilot（以及可选的 Cursor、RTK）的本地会话文件，将 token 用量归一化为会话并按 Git 仓库分组，生成 API 等价成本估算的本地仪表盘。面向希望按仓库而非按账户查看 AI 编码用量的开发者与团队；通过 npx 运行，数据不出本机，成本为估算值而非账单。",
+   "highlights": [
+    "支持读取本地 Codex、Claude Code、GitHub Copilot 数据，Cursor 为实验性可选导入",
+    "按仓库、会话、模型、工具维度拆分 token 用量与 API 等价成本估算",
+    "本地运行，只读访问源文件，不上传提示词、代码或用量数据"
+   ],
+   "use_cases": [
+    "分析哪些仓库或会话消耗了最多 AI 编码 token",
+    "比较不同 AI 编码工具与模型的用量和缓存命中情况",
+    "在不上传代码的前提下审查高成本会话与命令阻塞问题"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "RepoSpend uses `better-sqlite3`, so npm may install a native SQLite package for",
+     "lines": [
+      138
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是面向开发者的成本追踪应用，通过 better-sqlite3 依赖 SQLite 作本地存储，并非为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "RepoSpend is a local-first dashboard for tracking AI coding token usage and API-equivalent spend by repository, session, model, and tool. It supports local Codex, Claude Code, and GitHub Copilot usage data, runs with `npx repospend`, and does not upload prompts, code, transcripts, or usage data. ／ RepoSpend uses `better-sqlite3`, so npm may install a native SQLite package for ／ - npm package: `repospend`",
+   "evidence_lines": [
+    3,
+    138,
+    19
+   ]
+  },
+  "fn": "mehmetdemircs/RepoSpend",
+  "sha": "9803eadf3708",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1b471e67bb66": {
+  "identity": {
+   "one_liner": "美国数据中心/矿场/电厂的开放、逐条注明来源的数据集与地图站点",
+   "review": "Compute Atlas 是一个收集美国数据中心、加密矿场与配套电厂信息的开放数据项目，提供地图、API 和 JSON 快照三种访问方式，每条记录附带来源引用与检索日期。面向记者、研究者、地方官员和周边居民。技术栈为 Next.js + Neon Postgres + Drizzle，无 DATABASE_URL 时可从 JSON 快照渲染运行。",
+   "highlights": [
+    "提供公共 API（/api/facilities、/api/stats 等），CORS 开放、无需认证",
+    "每条记录包含至少一个带 URL、标签与检索日期的公开来源",
+    "所有提交经人工审核后才发布，数据校验由 Zod schema 与测试套件执行"
+   ],
+   "use_cases": [
+    "记者与研究者检索数据中心建设与能耗数据",
+    "地方政府或社区了解周边设施的状态与环排许可",
+    "基于 CC BY 4.0 的数据复用与学术引用"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Stack:** Next.js 16 (App Router, RSC) · React 19 · TypeScript · Zod · Neon Postgres +",
+     "lines": [
+      214
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 Neon Postgres + Drizzle 存储设施记录，是为公众提供数据的站点应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码 MIT，数据 CC BY 4.0（双许可）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Running without `DATABASE_URL` set renders from the `data/facilities.json` snapshot, so you ／ **Stack:** Next.js 16 (App Router, RSC) · React 19 · TypeScript · Zod · Neon Postgres +",
+   "evidence_lines": [
+    205,
+    214
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ek33450505/compute-atlas",
+  "sha": "1b471e67bb66",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::tiktok management de ": {
+  "identity": {
+   "one_liner": "TikTok 管理相关项目，定位信息不足",
+   "review": "简介仅显示与 TikTok 管理相关，无 README 可验证其功能、目标用户与运行方式。基于简介无法判断它与数据库的关系，采集时因关键词命中 tikv 进入通道，但与 TiKV 的实际关联未证实，建议人工核查源码后再定档。",
+   "highlights": [],
+   "use_cases": []
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "简介未提供任何功能描述，无法判断其是数据库生态组件还是普通应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "tiktok management de"
+  },
+  "fn": "voldikiala29-hash/tikvo",
+  "sha": "desc::tiktok management de ",
+  "source": "desc",
+  "generated_at": "2026-10-28",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

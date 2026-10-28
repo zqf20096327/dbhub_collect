@@ -10538,5 +10538,127 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "416d18a1f120": {
+  "identity": {
+   "one_liner": "本地优先的 Claude Code/Codex 智能体编排平台，以 SQLite 队列调度工作",
+   "review": "commandcenter 将任务队列交由常驻 daemon 管理，用 SQLite 做任务队列与原子认领，为每个任务创建独立 git worktree + tmux 会话运行 Claude Code 或 Codex worker，并引入独立对抗式 reviewer 审查产出后经人工合并。提供 CLI、MCP server 和 Web dashboard，单机单用户、无托管服务与遥测，适合个人或小团队在本地编排 AI 编程智能体。",
+   "highlights": [
+    "内置 daemon（agentd）管理 SQLite 任务队列、REST/WebSocket API 与调度器，任务认领通过原子 SQLite UPDATE 防止重复执行",
+    "为仓库任务创建独立 git worktree + tmux 会话运行 Claude Code/Codex worker，并由无编辑权限的独立 reviewer 会话做对抗式审查",
+    "提供 CLI（agp）、MCP server（cc-mcp）与 React dashboard，支持任务优先级、依赖阻塞、恢复与归档"
+   ],
+   "use_cases": [
+    "在本地用多个 Claude Code/Codex 智能体并行处理代码任务并保留人工合并把关",
+    "需要对抗式审查与审计快照流程的 AI 辅助开发团队",
+    "通过 MCP 将任务队列能力接入其他智能体的个人工作流"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Codex workers. A long-running daemon owns a SQLite task queue. Claude main studies ／ |**`agentd`**|The daemon. Owns the SQLite queue, a localhost REST API + WebSocket, the tmux/worktree lifecycle, the scheduler, PR sync, and serves the dashboard.| ／ file task ─▶ queue ─▶ Claude main triages ─▶ claim (atomic SQLite UPDATE)",
+     "lines": [
+      11,
+      57,
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以 SQLite 作为自身任务队列与记忆存储（FTS5），SQLite 是其内部依赖而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Codex workers. A long-running daemon owns a SQLite task queue. Claude main studies ／ |**`agentd`**|The daemon. Owns the SQLite queue, a localhost REST API + WebSocket, the tmux/worktree lifecycle, the scheduler, PR sync, and serves the dashboard.| ／ |**`cc-mcp`**|MCP server exposing the platform to agents (scoped per role).|",
+   "evidence_lines": [
+    11,
+    57,
+    59
+   ]
+  },
+  "fn": "cgeene/commandcenter",
+  "sha": "416d18a1f120",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b391349b05b9": {
+  "identity": {
+   "one_liner": "基于 Talend Studio 8 的 8 个 ETL 作业集合，抽取 REST API 数据并载入 SQL Server",
+   "review": "该仓库包含 8 个 Talend Studio 8 ETL 作业的开发与版本管理，流程为调用 REST API 抽取数据、解析 JSON、执行转换后载入 SQL Server。适用于需要复用或维护这套数据管道的数据工程师，依赖 Talend Studio 8 环境打开和运行这些作业。",
+   "highlights": [
+    "包含 8 个 Talend Studio 8 ETL 作业",
+    "流程覆盖 REST API 抽取、JSON 解析、数据转换与 SQL Server 载入",
+    "作业以源码形式纳入版本管理"
+   ],
+   "use_cases": [
+    "从 REST API 抽取数据并批量载入 SQL Server",
+    "Talend 作业的版本管理与复用",
+    "JSON 数据解析与转换管道搭建"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述表明该项目是将 SQL Server 作为数据加载目标的 ETL 作业集合，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Pipline DATA",
+   "evidence_lines": [
+    3
+   ]
+  },
+  "fn": "datasifaw/world-bank-talend-studio",
+  "sha": "b391349b05b9",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -12056,5 +12056,130 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1b6acda2598a": {
+  "identity": {
+   "one_liner": "加拿大地质调查局野外地质数据采集应用，基于GeoPackage存储",
+   "review": "这是加拿大地质调查局（GSC）面向地质学家的野外现场数据采集应用，提供GIS地图页面和专业化表单，自动记录每个地点的位置数据，支持基岩与地表地质信息录入，数据以GeoPackage格式存储并可在QGIS、ESRI ArcGIS等GIS软件中使用。适用于Windows 10和Android 10，面向区域地质调查与填图场景。",
+   "highlights": [
+    "以 GeoPackage 格式存储所有采集数据，可在 QGIS、ESRI ArcGIS 等GIS软件中使用",
+    "自动记录每个地点的位置数据，提供GIS地图页面与专业地质表单",
+    "数据以笔记本形式在应用/设备间传输并携带项目名、地质学家等活动元数据"
+   ],
+   "use_cases": [
+    "区域地质数据采集与填图",
+    "野外基岩与地表地质信息的标准化录入",
+    "野外数据带回办公室供后续分析使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该仓库是使用 GeoPackage（基于 SQLite）格式存储采集数据的地质调查应用本身，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Creative Commons Attribution-NonCommercial 4.0 International License",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This project is a Geological Survey Canada on-site data collection application for geologists. The application automatically stores locational data for each location created and allows data entry of complex geological information. ／ The current application uses a Geopackage data format to store all information gathered by users. In addition, the data format can be added to it and used in any GIS software like QGIS, ESRI ArcGIS or ESRI Desktop Pro. ／ .net Multi-platform App UI (MAUI), Visual studio 2016-2026",
+   "evidence_lines": [
+    5,
+    41,
+    45
+   ]
+  },
+  "fn": "NRCan/GSC-Field-Application",
+  "sha": "1b6acda2598a",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8bb4a0666d6e": {
+  "identity": {
+   "one_liner": "用自然语言匹配并对比开源项目的决策平台",
+   "review": "GitStarts 是一个开源项目匹配与对比平台：采集 GitHub 热门仓库数据，用户输入自然语言需求后经需求结构化、MySQL 硬过滤、Qdrant 向量召回与 LLM 重排输出候选，并按 8 个维度做逐格证据对比。面向有选型需求的开发者，技术栈为 Java/Spring Boot + Next.js + FastAPI，依赖 MySQL/Redis/Qdrant，通过 Docker Compose 部署。",
+   "highlights": [
+    "支持自然语言需求结构化、混合召回（MySQL 硬过滤 + Qdrant 向量召回 + LLM 重排）与可解释契合度分解",
+    "提供 8 维度逐格证据对比、SSE 流式对话、收藏与对比历史等个性化功能",
+    "提供 Docker Compose 一键部署、每日配额控制与 token/成本可观测看板"
+   ],
+   "use_cases": [
+    "按想法描述寻找可用的开源项目",
+    "对多个候选开源方案做统一维度横向对比",
+    "查看 GitHub 热门仓库榜单与活跃度排行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL ／ - **混合召回**：MySQL 硬过滤 → Qdrant 向量召回 → 关键词补充 → LLM 重排（只允许 ±0.1 调整并给出理由）。 ／ - 部署：Docker Compose 编排 MySQL / Redis / 后端 / 前端 / Nginx",
+     "lines": [
+      11,
+      53,
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 MySQL/Redis/Qdrant 存储与检索数据的应用平台，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GitStarts 起初是一个 GitHub 热门仓库聚合站：定时采集仓库的 star / fork / 语言 / topics，提供榜单、搜索与详情。 ／ - 部署：Docker Compose 编排 MySQL / Redis / 后端 / 前端 / Nginx ／ |存储|MySQL 8 · Redis 7 · Qdrant 1.x|",
+   "evidence_lines": [
+    17,
+    66,
+    119
+   ]
+  },
+  "fn": "xxh11432/GitStarts",
+  "sha": "8bb4a0666d6e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

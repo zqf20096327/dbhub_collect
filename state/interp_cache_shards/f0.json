@@ -10406,5 +10406,114 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "814cfcf684ec": {
+  "identity": {
+   "one_liner": "本地优先路线图桌面应用，供AI代理经MCP提案并需人工批准",
+   "review": "一个 Windows 桌面应用（Rust 编写），把项目组织为 Workspace/Blueprint/Action/Plan/Checkpoint 结构，AI 编码代理（Claude Code、Codex）通过 MCP 工具提交编号提案，用户在 Plan 界面审核后才生效，计划完成需附运行命令或测试结果作为证据。数据存于本机 SQLite 文件，无账号、无遥测；也可用 cargo 从源码构建为本地 web 服务运行。",
+   "highlights": [
+    "提供 MCP 工具集（listar_blueprints、propor_blueprint、registrar_progresso 等）供代理读取与提案",
+    "所有变更需用户在 Plan 界面手动应用，计划完成需附带证据",
+    "支持 `blueprint serve` 以本地 web 服务器模式运行，数据可导出为 JSON"
+   ],
+   "use_cases": [
+    "与 Claude Code/Codex 协作时对代理的规划与完成声明进行人工审核",
+    "需要留存任务完成证据（命令/测试结果）的项目路线图管理",
+    "离线本地保存路线图数据，不依赖云端账号"
+   ],
+   "classification": {
+    "cat": "应用",
+    "db_verdicts": [
+     {
+      "db": "SQLite",
+      "rel": "support",
+      "lines": [
+       22
+      ]
+     }
+    ],
+    "eco": "app",
+    "eco_why": "应用用 SQLite 文件存储本机路线图数据，SQLite 是其存储层而非服务对象",
+    "ai": {
+     "flag": true,
+     "kind": [
+      "mcp"
+     ]
+    },
+    "persona": "use",
+    "official": {
+     "flag": false,
+     "of": null
+    }
+   },
+   "signals": {
+    "status": "active",
+    "license_note": "",
+    "install": [
+     "binary",
+     "source"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     5,
+     22,
+     45
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Small and private.** One ~2.5 MB executable, a SQLite file on your machine, no account, no telemetry.",
+     "lines": [
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用用 SQLite 文件存储本机路线图数据，SQLite 是其存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Local-first roadmap for AI coding agents: they propose, you approve, completion needs evidence. ／ - **Small and private.** One ~2.5 MB executable, a SQLite file on your machine, no account, no telemetry. ／ The agent reads the structure, proposes changes, reports progress and marks plans done through MCP tools (`listar_blueprints`, `ler_blueprint`, `propor_blueprint`, `registrar_progresso`, `marcar_concluido` and more; full list). You start an action yourself, with a confirmed click or the `blueprint claude` command, so the app never sends work to an agent on its own. Plans are sized for AI pace (0.5 to 4 hours) and the app measures how long each one really took. The model in detail.",
+   "evidence_lines": [
+    5,
+    22,
+    45
+   ]
+  },
+  "fn": "hugorolimf/the-blueprint",
+  "sha": "814cfcf684ec",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9262,5 +9262,141 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "70547c566ab8": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 表、函数与视图实现的双式记账账本",
+   "review": "pgledger 将双式记账账本完全实现为 PostgreSQL 内的表、函数和视图，应用通过 SQL 函数记账、通过 SQL 视图查询余额与分录，并与应用其他事务原子提交。适合需要可复用账本的应用开发者，使用前需执行仓库提供的 SQL 文件安装。",
+   "highlights": [
+    "账本完全由 PostgreSQL 表、函数和视图实现，无应用层代码",
+    "支持幂等转账、批量转账顺序约束、余额负值控制与多币种账户",
+    "提供 event_at 时间戳以记录真实业务事件时间"
+   ],
+   "use_cases": [
+    "需要复式记账账本的金融类应用",
+    "与业务数据同事务提交的资金记录场景",
+    "银行对账等需按事件时间查询账目的场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A double entry ledger implementation in PostgreSQL. ／ `pgledger` is a reusable ledger implementation that works across projects and programming languages. There is no application-level code; the entire thing is implemented in PostgreSQL tables, functions, and views. The application just calls SQL functions and qu ／ Furthermore, since `pgledger` lives entirely in PostgreSQL, it allows transactional guarantees with the rest of the application. Do some work, write to the ledger, and it all commits or doesn't atomically.",
+     "lines": [
+      3,
+      9,
+      11
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "项目是构建在 PostgreSQL 之上、通过 SQL 函数/视图提供的账本组件，为使用数据库的应用服务而非仅使用数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pgledger` is a reusable ledger implementation that works across projects and programming languages. There is no application-level code; the entire thing is implemented in PostgreSQL tables, functions, and views. The application just calls SQL functions and queries data via SQL views. ／ The ledger implementation is currently in a single file: pgledger.sql. But it also relies on some helper ULID/UUID functions from scoville/pgsql-ulid (see #IDS for more information). I vendored the helpers in this repository for simplicity and compatibility (in case the pgsql-ulid library changes). ／ To install, run the following SQL files using whatever database migration tool or method you prefer:",
+   "evidence_lines": [
+    9,
+    21,
+    23
+   ]
+  },
+  "fn": "pgr0ss/pgledger",
+  "sha": "70547c566ab8",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "78495fd4e8e4": {
+  "identity": {
+   "one_liner": "个人 GitHub 主页 README，展示技能徽章与项目链接",
+   "review": "这是开发者 cheehwatang 的个人 GitHub profile 仓库，README 包含个人动态、技能清单（Ruby、Java、React、PostgreSQL、SQLite 等徽章）、SoundState 与 Daily Quotes 等项目介绍及社区组件致谢。它不是数据库相关工具或应用，PostgreSQL、SQLite 仅作为个人技能标签出现。适合了解作者本人背景，不适合作为数据库生态项目收录使用。",
+   "highlights": [
+    "README 中以徽章形式列出本人掌握的技术栈，含 PostgreSQL、SQLite 等",
+    "展示个人项目 SoundState（Ruby on Rails、PostgreSQL）与 Github Readme Daily Quotes",
+    "集成多种社区 README 组件（贡献图、streak 统计、3D 贡献图等）"
+   ],
+   "use_cases": [
+    "开发者个人主页展示",
+    "了解社区 README 小组件的来源与致谢链接"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL ／  PostgreSQL",
+     "lines": [
+      169,
+      300
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite",
+     "lines": [
+      176
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该仓库是个人 GitHub profile README，未提供任何数据库工具或服务，PostgreSQL/SQLite 仅作为技能标签出现。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## 👨🏻‍💻 What's Happening? ／ ## 🧰 My Toolbox ／  SoundState is a smart playlist curator that allows you to filter your Spotify library according to your mood, and uses AI to generate a unique image for each playlist, for you to share and discover music that you love.",
+   "evidence_lines": [
+    22,
+    54,
+    327
+   ]
+  },
+  "fn": "cheehwatang/cheehwatang",
+  "sha": "78495fd4e8e4",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

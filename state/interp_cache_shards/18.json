@@ -9606,5 +9606,295 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f4dd6d6c2863": {
+  "identity": {
+   "one_liner": "读取QQ群消息生成待办与日历订阅的自托管工具",
+   "review": "该仓库从指定QQ群读取消息，过滤闲聊后提取通知、行动项和截止时间，生成网页待办台与.ics日历订阅，数据用SQLite存储在本机。面向作业、实验等通知散落在多个QQ群的用户，需配合NapCat运行，提供Windows出货包和安卓App，通过OneBot只读接收消息。",
+   "highlights": [
+    "接收OneBot v11上报的QQ群消息，本地规则或可选大模型提取待办与截止时间",
+    "提供网页待办台、月历及手机日历订阅，支持WxPusher、Server酱等推送通道",
+    "通过NapCat接入QQ，仅读取群消息，数据存储于本机SQLite数据库"
+   ],
+   "use_cases": [
+    "集中管理散落在多个QQ群里的作业、实验、报名和考试通知",
+    "将群通知自动转为待办清单并订阅到手机日历",
+    "自托管场景下本地保存消息与待办记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 设置页可一键备份数据库；ZIP 只包含 SQLite 数据库，不包含配置、令牌或日志。 ／ |`qq_live_digest/store.py`|SQLite 存储、去重和恢复|",
+     "lines": [
+      92,
+      193
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用SQLite作为自身存储数据库，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：上游qq-live-digest部分适用MIT，新增部分适用PolyForm Noncommercial 1.0.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "从指定 QQ 群读取消息，过滤闲聊，提取通知、行动项和截止时间，集中到网页待办台，也可订阅手机日历。 ／ - 设置页可一键备份数据库；ZIP 只包含 SQLite 数据库，不包含配置、令牌或日志。 ／ |`qq_live_digest/store.py`|SQLite 存储、去重和恢复|",
+   "evidence_lines": [
+    5,
+    92,
+    193
+   ]
+  },
+  "fn": "ExpertKT/notice-hub",
+  "sha": "f4dd6d6c2863",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2bdb4e02e25e": {
+  "identity": {
+   "one_liner": "自托管以太坊 P2P 事件索引器，数据存 PostgreSQL 并提供 GraphQL API",
+   "review": "Sieve 是一个自托管的区块链事件索引器，直接从 P2P 网络获取区块（无需 RPC 供应商），解码事件/函数调用/原生转账并存入 PostgreSQL，同时暴露 GraphQL 查询接口。面向需要自建链上数据索引的开发者，通过单个 TOML 文件配置。README 另外说明索引器需要订阅 OP-Stack 链的硬分叉更新才能持续跟进。",
+   "highlights": [
+    "通过 devp2p/discv5 从 P2P 网络获取区块，无需 RPC 密钥",
+    "自动从 ABI 生成 PostgreSQL 表结构并提供 GraphQL API",
+    "写入前执行多节点法定人数校验、链规范验证与负载根哈希验证"
+   ],
+   "use_cases": [
+    "自托管索引以太坊及 OP-Stack 链（Base、OP Mainnet、Unichain、World Chain）的合约事件",
+    "从 Base V2 快照归档批量导入历史区块",
+    "以 GraphQL 查询本地存储的链上事件数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Just Sieve, Postgres, and an internet connection. ／ `sieve init` creates a working USDC Transfer config out of the box, plug and play. Add `--docker` to also generate a `docker-compose.yml` with PostgreSQL. ／ DATABASE_URL=postgres://postgres:sieve@localhost:5432/sieve ／ All of it configured in one TOML file. All of it stored in PostgreSQL. All of it queryable via GraphQL.",
+     "lines": [
+      5,
+      45,
+      61,
+      97
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明所有索引数据存储在 PostgreSQL 中（L97），数据库仅作为其存储层被使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Self-hosted indexer for Ethereum and the OP-Stack. Connects straight to the P2P network, no RPC provider. ／ All of it configured in one TOML file. All of it stored in PostgreSQL. All of it queryable via GraphQL. ／ DATABASE_URL=postgres://postgres:sieve@localhost:5432/sieve",
+   "evidence_lines": [
+    3,
+    97,
+    61
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "slvDev/sieve",
+  "sha": "2bdb4e02e25e",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4181056f108c": {
+  "identity": {
+   "one_liner": "Resgrid 自托管调度系统的 Docker Compose 部署脚本",
+   "review": "该仓库提供 Resgrid（面向应急救援单位的 CAD 调度系统）的开源核心自托管安装脚本，按分支提供单机 Linux、Windows 笔记本离线、Kubernetes 集群和树莓派便携套件四种部署形态。安装脚本生成密码与证书，编排包含 web/api/worker、PostgreSQL、Redis、RabbitMQ、RustFS 等 9 个服务的 Compose 栈，适合需要自行部署 Resgrid 的部门或机构管理员使用。",
+   "highlights": [
+    "提供 setup.sh 一键安装脚本，支持无人值守的环境变量配置（L84-L95）",
+    "编排含 PostgreSQL、Redis、RabbitMQ、RustFS 的完整 Docker Compose 服务栈（L18-L33）",
+    "内置可选功能模块（Records、Unified search、离线地图、GPS 追踪等）通过 Compose profiles 启用（L35-L42, L139-L160）"
+   ],
+   "use_cases": [
+    "为部门或机构在单台 Linux 服务器上自托管 Resgrid 调度系统",
+    "在无外网环境的训练或现场部署（laptop/rick 分支）",
+    "通过 Kubernetes/k3s 多服务器生产部署（multi 分支）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`db`|`dhi.io/postgres:18`|PostgreSQL: databases `resgrid`, `resgridoidc`, `resgridworkers`, `resgriddoc`|127.0.0.1:5432| ／ All data lives in Docker named volumes (`resgrid_postgres-data`, `resgrid_rustfs-data`, …), so `docker compose down` and upgrades never delete it. ／ - PostgreSQL is used for every database (`DatabaseType=1`, `DocDatabaseType=1`); MongoDB and SQL Server are not needed.",
+     "lines": [
+      29,
+      46,
+      217
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "- PostgreSQL is used for every database (`DatabaseType=1`, `DocDatabaseType=1`); MongoDB and SQL Server are not needed. ／ |`Keyword not supported: 'host'`|A PostgreSQL connection string read as SQL Server: set `DatabaseType=1` (and `DocDatabaseType`, `OidcConfig__DatabaseType`, `WorkerConfig__DatabaseType`).|",
+     "lines": [
+      217,
+      342
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库部署 Resgrid 应用系统，PostgreSQL 作为其存储数据库的 Compose 服务运行。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "README 提及 Resgrid 为 open-core 系统，本仓库许可证未在可见内容中说明",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Self-hosted installers for Resgrid, the open-core computer-aided dispatch (CAD), personnel and unit management system for first responders (Resgrid Core source). ／ |`db`|`dhi.io/postgres:18`|PostgreSQL: databases `resgrid`, `resgridoidc`, `resgridworkers`, `resgriddoc`|127.0.0.1:5432| ／ All data lives in Docker named volumes (`resgrid_postgres-data`, `resgrid_rustfs-data`, …), so `docker compose down` and upgrades never delete it.",
+   "evidence_lines": [
+    3,
+    29,
+    46
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "Resgrid/resgrid-setup",
+  "sha": "4181056f108c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "241a7cc070ce": {
+  "identity": {
+   "one_liner": "基于 Express 与 SQLite 的服务端渲染排队系统",
+   "review": "一个为 CSPC CCIT 106 期中项目构建的排队管理系统，基于 Express 4 与 EJS 服务端渲染，通过 better-sqlite3 将数据（用户、工单、会话、审计日志）存入本地 SQLite 文件。首次启动自动建库、迁移并写入演示数据；提供学生取号、员工叫号、管理员管理窗口与账号等功能，含工单过期清理与登录限流。面向课堂演示场景，README 提示演示密码硬编码，正式部署前需修改。",
+   "highlights": [
+    "通过 better-sqlite3 在本地 SQLite 文件中存储工单、用户、会话与审计数据，首次启动自动迁移建库并填充演示数据",
+    "提供学生取号、员工叫号、管理员管理窗口与账号的完整排队流程，页面 10 秒内轮询更新并播放叫号提示音",
+    "内置 CSRF 防护、Helmet 安全头、登录限流、角色服务端校验与状态变更审计写入"
+   ],
+   "use_cases": [
+    "课堂演示或教学项目中的线下服务窗口排队叫号",
+    "需要本地单文件数据库、无外部依赖的 Node.js 排队应用参考实现"
+   ],
+   "use_cases_备注": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Server-rendered queueing system for the CSPC CCIT 106 midterm. Node.js 22.12 or newer, Express 4, EJS, and SQLite through better-sqlite3. ／ On the first start the app creates `data/cspc_queue.sqlite`, applies the schema, and seeds the demo data, because the server seeds whenever the services table is empty. It listens on `http://localhost:3000`, and `/health` returns `{\"status\":\"ok\",\"db\":\"ok\"}`. ／ |`DATABASE_PATH`|`data/cspc_queue.sqlite`|SQLite file, created on first run|",
+     "lines": [
+      3,
+      17,
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统使用 SQLite 存储工单、用户与审计数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Server-rendered queueing system for the CSPC CCIT 106 midterm. Node.js 22.12 or newer, Express 4, EJS, and SQLite through better-sqlite3. ／ On the first start the app creates `data/cspc_queue.sqlite`, applies the schema, and seeds the demo data, because the server seeds whenever the services table is empty. It listens on `http://localhost:3000`, and `/health` returns `{\"status\":\"ok\",\"db\":\"ok\"}`.",
+   "evidence_lines": [
+    3,
+    17
+   ]
+  },
+  "fn": "Mra1k3r0/qampus",
+  "sha": "241a7cc070ce",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11498,5 +11498,229 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9620e71c0943": {
+  "identity": {
+   "one_liner": "PHP 自托管分类信息 CMS，用 MySQL 存列表数据",
+   "review": "ShopClass 是一个 PHP 编写的开源自托管列表类 CMS，用于搭建分类信息、招聘、房产、车辆等基于列表发布的站点，提供分类目自定义字段、付费方案、多语言、插件与主题系统及管理后台。要求 PHP 8.0+ 与 MySQL 5.7.5+/MariaDB 10.2+，通过 release zip 安装，附带 oc-cli.php 维护命令行和 Docker 开发栈。",
+   "highlights": [
+    "支持分类信息、招聘、房产、车辆等多种列表站点形态，含自定义字段与付费方案",
+    "兼容 Osclass 的插件与主题 API，附带 oc-cli.php 维护命令行与数据库迁移/修复命令",
+    "支持多语言、S3 兼容对象存储图片，提供 Docker 开发与生产 compose 配置"
+   ],
+   "use_cases": [
+    "自建分类信息/二手交易站点",
+    "搭建招聘板或房产/车辆列表门户",
+    "运行企业目录或产品目录站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- PHP **8.0+** with `mysqli`, `gd`, `curl`, `mbstring`, `openssl`, `zip`, `json`, ／ - MySQL 5.7.5+ / MariaDB 10.2+",
+     "lines": [
+      64,
+      66
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MySQL 5.7.5+ / MariaDB 10.2+ ／ A full local stack (PHP-FPM, MariaDB, Nginx, Valkey, Mailhog and phpMyAdmin)",
+     "lines": [
+      66,
+      169
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是用 MySQL/MariaDB 存数据的分类信息应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ShopClass is a PHP application for running a listing site on your own hosting: ／ - MySQL 5.7.5+ / MariaDB 10.2+ ／ A full local stack (PHP-FPM, MariaDB, Nginx, Valkey, Mailhog and phpMyAdmin)",
+   "evidence_lines": [
+    18,
+    66,
+    169
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "mindstellar/shopclass",
+  "sha": "9620e71c0943",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2d6320cf9933": {
+  "identity": {
+   "one_liner": "本地 MCP 服务器，用 SQLite FTS5 提供文档搜索与 Ollama 助手",
+   "review": "一个基于 MCP Python SDK 的本地服务器，通过 stdio 或 SSH 传输提供文档列出、FTS5 全文搜索、读取、笔记和审计工具，并内置使用本地 Ollama 模型的问答助手，支持 Docker 部署。面向需要在本地对 Markdown/文本文档做检索与 AI 问答的个人或小团队；限制包括最多千份文档、无向量检索、无多用户管理、不提供 HTTP 端点。",
+   "highlights": [
+    "通过 MCP 协议（stdio/SSH 传输）提供文档搜索、读取、笔记与审计工具",
+    "使用 SQLite FTS5 建立全文索引，无需额外服务",
+    "集成 Ollama 本地模型，工具调用带参数校验、轮次与调用次数上限",
+    "支持 Docker Compose 部署与工具调用审计记录"
+   ],
+   "use_cases": [
+    "为本地 Markdown/文本文档库提供 MCP 检索接口",
+    "用本地 Ollama 模型对文档进行带引用的问答",
+    "通过 SSH 在远程服务器上以受限账户运行文档查询服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Búsqueda|SQLite FTS5, sin servicio adicional| ／ Requisitos mínimos de Python 3.12 y SQLite con FTS5. Las distribuciones utilizadas en las pruebas ya incluyen FTS5.",
+     "lines": [
+      12,
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该服务器自身的嵌入式索引与笔记存储，项目不服务于数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Servidor MCP con documentos, búsqueda local, notas y un asistente con Ollama. ／ |Búsqueda|SQLite FTS5, sin servicio adicional| ／ Requisitos mínimos de Python 3.12 y SQLite con FTS5. Las distribuciones utilizadas en las pruebas ya incluyen FTS5.",
+   "evidence_lines": [
+    3,
+    12,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "em4nu3i69dll/mcp-inicio-ia",
+  "sha": "2d6320cf9933",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "87ee04ced9ee": {
+  "identity": {
+   "one_liner": "Windows 桌面阅读学习工具，整合多源发现、划词翻译与本地 RAG 问答",
+   "review": "这是一款面向 Windows 用户的桌面阅读与知识整理应用，提供 RSS/论文发现、全文阅读、跨应用划词、翻译、导图、笔记与学习计划功能；问答采用关键词加本地向量检索（multilingual-e5-small/ONNX Runtime）再交给用户自配的生成模型；资料含文章、会话、译文、导图与计划存储于 SQLite。适合做课程学习、论文研读与专题探索的用户。",
+   "highlights": [
+    "提供多源内容发现、全文阅读、翻译、图文问答、导图生成与学习计划功能",
+    "本地检索使用 multilingual-e5-small / ONNX Runtime 向量模型，问答回答携带原文引用",
+    "跨应用划词通过 Windows 辅助功能接口获取选区与上下文"
+   ],
+   "use_cases": [
+    "课程与自主学习：导入课件并围绕概念追问、安排复习",
+    "论文与技术研读：获取全文、对照翻译、核对引用",
+    "日常积累：外部应用划词保存线索并回到主界面整理"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "原生主界面采用 **Python / PySide6**，浮窗通过 Windows 辅助功能接口取得选区与上下文。共享业务服务连接文章、会话、译文、导图与计划；**SQLite**、附件和版本信息保存阅读资料及其关联。",
+     "lines": [
+      143
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 SQLite 用于保存阅读资料及关联，应用是数据库的使用方而非为数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "原生主界面采用 **Python / PySide6**，浮窗通过 Windows 辅助功能接口取得选区与上下文。共享业务服务连接文章、会话、译文、导图与计划；**SQLite**、附件和版本信息保存阅读资料及其关联。 ／ 资料问答使用关键词检索与 **multilingual-e5-small / ONNX Runtime** 本地向量检索，融合召回后选择依据，再交给生成模型回答。本地向量编码与联网生成分别承担检索和理解任务。引用、文章版本和结构化结果由业务规则继续核对。",
+   "evidence_lines": [
+    143,
+    145
+   ]
+  },
+  "fn": "bsk865/ExplorerDict",
+  "sha": "87ee04ced9ee",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

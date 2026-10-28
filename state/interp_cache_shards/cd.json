@@ -11309,5 +11309,218 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "83fae975281f": {
+  "identity": {
+   "one_liner": "自托管家庭网络监控面板，Go 后端 + React PWA，实时 SSE 推送",
+   "review": "NetPulse 是一个自托管的家庭网络监控面板，用单个 Go 静态二进制运行，面向拥有 OpenWrt/GL.iNet 路由器的用户。它通过路由器上的 agent/pusher 采集状态，提供设备拓扑图、路由器健康指标、WireGuard 对端和 AdGuard Home 统计，数据存储在 SQLite 中，支持多用户、ES/EN 双语和可安装 PWA，默认只在局域网内工作。",
+   "highlights": [
+    "通过 OpenWrt 原生 .ipk/.apk 包或外部 pusher 采集路由器状态，支持 SNMP 管理型交换机",
+    "内嵌只读 MCP 服务器（HTTP 端点，令牌认证，默认关闭）供 AI 助手查询网络状态",
+    "支持 MQTT + Home Assistant 集成、Web Push/ntfy/Telegram 告警通道及广域网测速调度"
+   ],
+   "use_cases": [
+    "家庭局域网内自托管监控多台 OpenWrt/GL.iNet 路由器健康与设备列表",
+    "记录 WireGuard 隧道与 AdGuard Home 拦截统计并接收告警",
+    "按计划执行 WAN 测速并将状态发布到 Home Assistant"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite with a seven-day chart and recent history. Choose M-Lab NDT (the default),",
+     "lines": [
+      68
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明测速结果等数据存入 SQLite，数据库仅作为其存储后端，项目本身是网络监控应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLite with a seven-day chart and recent history. Choose M-Lab NDT (the default), ／ **What it runs on.** The server is one static Go binary on any Linux box. ／ |OpenWrt (incl. GL.iNet)|Native `netpulse-agent` package (`.ipk`/`.apk`)|procd, UCI config, `luci-app-netpulse`, in-app install and upgrade|",
+   "evidence_lines": [
+    68,
+    72,
+    78
+   ]
+  },
+  "fn": "gnacho/netpulse",
+  "sha": "83fae975281f",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "00e738cdfa7d": {
+  "identity": {
+   "one_liner": "面向印度新闻的事实核查与危机追踪 Flutter 应用，用 Groq LLM 和 Supabase 存储",
+   "review": "TruthLens India 从多个来源抓取印度新闻，通过 Groq 上的 Llama 模型自动提取并核查声明，追踪考试泄题、RTI 等机构性危机时间线，并用 Supabase（Postgres、pgvector、RLS）存储数据。面向学生等读者，提供 Android APK 下载，后端管道以 Python 编写并经 GitHub Actions 定时运行；v2.1.0 起需 Google 账号登录。",
+   "highlights": [
+    "自动提取新闻声明并用 Groq Llama 模型生成核查结论、置信度与来源覆盖统计",
+    "追踪慢发机构性危机（考试泄题、RTI、法院案件）并生成时间线",
+    "后端管道用 Python 编写，通过 GitHub Actions 定时抓取源并支持自行部署（pip + Supabase migrations）"
+   ],
+   "use_cases": [
+    "对印度新闻声明做证据核查与来源覆盖追踪",
+    "追踪考试、RTI、司法等长期制度性危机的进展",
+    "作为 Flutter + Supabase + LLM 管道的可复现部署参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|Supabase (Postgres, pgvector, Row-Level Security, Storage)|",
+     "lines": [
+      94
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 在技术栈中声明使用 Supabase（Postgres、pgvector、RLS、Storage）作为数据库存储应用数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Database|Supabase (Postgres, pgvector, Row-Level Security, Storage)| ／ TruthLens India pulls in Indian news from a dozen different places, runs every claim through an AI fact-checker, and tracks slow-moving institutional crises (paper leaks, RTI stonewalling, court cases) that normal news cycles forget about after 48 hours. No ads, no engagement-bait, no outlet gets called a liar — just claims, evidence, and receipts. ／ |Backend pipeline|Python, asyncio, `aiohttp`, `feedparser`|",
+   "evidence_lines": [
+    94,
+    20,
+    92
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "begoneeraj/Newsup",
+  "sha": "00e738cdfa7d",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3f6de0de6530": {
+  "identity": {
+   "one_liner": "Google Antigravity 会话回滚与撤销工具，基于 SQLite 六层原子回滚",
+   "review": "一个面向 Google Antigravity 用户的桌面工具，用于撤销卡死的思考块、失控的工具循环和安全拦截回复，并可修复会话消失问题。它直接操作 .gemini/antigravity 目录下的 SQLite 会话数据库，通过协调数据库、日志、WAL 检查点和滚动缓冲等多层实现原子回滚，并在回滚前自动创建快照。提供应用内搜索、Markdown 导出与快照时间线；以 Windows 可执行文件发布。",
+   "highlights": [
+    "直接读写 Antigravity 的 SQLite 会话数据库，实现多消息/多回合的精准撤销",
+    "回滚前自动创建非破坏性快照，支持任意时间点恢复",
+    "使用 Python 标准库（sqlite3、http.server）实现，无需外部运行时依赖"
+   ],
+   "use_cases": [
+    "清除 Antigravity 会话中触发安全拦截的回合，避免上下文污染",
+    "从模型失控的思考或工具循环回退到出错前的回合",
+    "恢复因原生撤销按钮导致消失的会话线程"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Effortlessly undo stuck thinking, runaway tool loops, filter blocks (\"I cannot assist with that\"), and corrupted sessions with 100% byte-for-byte SQLite parity. ／ **Antigravity Rewind Solution:** Hover over the offending message or tool turn, click **Undo from here**, and surgically purge it from the SQLite database and transcript streams in 1 second. Your conversation is instantly freed. ／ **Antigravity Rewind Solution:** Uses a **6-Layer Atomic SQLite Rollback Engine** that prunes logs, updates WAL checkpoints, re-slices 100 KB virtual scroll chunks, and creates non-destructive snapshot backups beforehand. Zero code loss. Zero file risk.",
+     "lines": [
+      9,
+      40,
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "以 Antigravity 的 SQLite 会话数据库文件为直接操作对象，提供读取、回滚与快照能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Antigravity Rewind Solution:** Uses a **6-Layer Atomic SQLite Rollback Engine** that prunes logs, updates WAL checkpoints, re-slices 100 KB virtual scroll chunks, and creates non-destructive snapshot backups beforehand. Zero code loss. Zero file risk. ／ |**Disappearing Thread Fixer**|Directly accesses `.gemini/antigravity` storage, recovering sessions hidden by UI glitches.| ／            ├── 1. SQLite Database (conversations/<id>.db)",
+   "evidence_lines": [
+    48,
+    112,
+    126
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "ilyassbourass/antigravity-rewind",
+  "sha": "3f6de0de6530",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

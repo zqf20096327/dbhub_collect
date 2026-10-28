@@ -10507,5 +10507,91 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1ddb025a164f": {
+  "identity": {
+   "one_liner": "Go 编写的开源业务平台，用 DSL+YAML 配置，运行于 SQLite/PostgreSQL",
+   "review": "OneBase 是一个用 Go 编写的开源业务/记账平台：元数据用 YAML 描述、业务逻辑用内置 DSL 编写，单个二进制在 SQLite 或 PostgreSQL 之上执行配置，提供表单、报表、账簿、权限等能力。面向需要做记账类应用的低代码使用者，提供 GUI 安装器和 CLI（init/dev/run/check 等）两种使用方式。",
+   "highlights": [
+    "以 YAML 描述元数据、内置 DSL 编写业务逻辑，同一配置可在 SQLite 与 PostgreSQL 上运行",
+    "提供 REST API、MCP 服务器及库内 AI 助手，onebase check 可编译并执行查询做校验",
+    "包含台账/余额登记、复式记账科目表、FIFO 出库、报表组合配置与多语言界面"
+   ],
+   "use_cases": [
+    "构建贸易/仓储/会计等记账类业务应用",
+    "以文件+git 或库内配置器两种方式开发与维护配置",
+    "通过 MCP 服务器让 AI 代理读取、检查和生成平台配置"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ отчёты) + данные в SQLite или PostgreSQL + пользователи. Метаданные описываются ／ PostgreSQL, запуск, конфигуратор, остановка: ／ |Информационная база|SQLite-файл или PostgreSQL|Прикладные и служебные таблицы; при `config_source: database` — также `_onebase_config`| ／ та же конфигурация работает и на SQLite, и на PostgreSQL. Где физически лежит",
+     "lines": [
+      5,
+      22,
+      48,
+      221,
+      224
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ отчёты) + данные в SQLite или PostgreSQL + пользователи. Метаданные описываются ／ onebase dev --project ./склад --sqlite ./склад.db --open ／ самодостаточна, её можно отдать как один файл SQLite. ／ |Информационная база|SQLite-файл или PostgreSQL|Прикладные и служебные таблицы; при `config_source: database` — также `_onebase_config`| ／ та же конфигурация работает и на SQLite, и на PostgreSQL. Где физически лежит",
+     "lines": [
+      5,
+      22,
+      145,
+      175,
+      221,
+      224
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明平台在 SQLite 或 PostgreSQL 之上存储信息库数据（信息库=配置+SQLite/PostgreSQL 中的数据），数据库是其存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ отчёты) + данные в SQLite или PostgreSQL + пользователи. Метаданные описываются ／ |Информационная база|SQLite-файл или PostgreSQL|Прикладные и служебные таблицы; при `config_source: database` — также `_onebase_config`|",
+   "evidence_lines": [
+    5,
+    22,
+    221
+   ]
+  },
+  "fn": "ivanarama/onebase",
+  "sha": "1ddb025a164f",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10642,5 +10642,158 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "42acce3ab04c": {
+  "identity": {
+   "one_liner": "实现 Apache Kafka 协议的无状态消息代理，支持可插拔存储引擎",
+   "review": "Nisshi 是一个用 Rust 编写的无状态服务器，实现 Apache Kafka API，支持将 PostgreSQL、libSQL (SQLite)、S3、内存等作为存储引擎，并可将 Avro/JSON/Protobuf 格式的主题写入 Apache Iceberg 或 Delta Lake 表。面向需要 Kafka 协议消息系统并使用数据库或对象存储持久化消息的团队；README 说明 PostgreSQL 引擎适合生产，SQLite/内存引擎适合开发测试，社区支持。",
+   "highlights": [
+    "实现 Apache Kafka API，可用常规 Kafka 客户端连接（L27、L169）",
+    "提供 PostgreSQL、SQLite(libSQL)、S3/GCS、内存等存储引擎，经 URL scheme 选择（L177-L184）",
+    "支持 Avro/JSON/Protobuf schema 校验的主题写入 Apache Iceberg 或 Delta Lake 表（L22-L23）"
+   ],
+   "use_cases": [
+    "用 PostgreSQL 作为持久化后端运行 Kafka 协议代理（生产场景，L179）",
+    "开发测试中用 SQLite 或内存引擎运行消息代理（L181-L182）",
+    "将 schema 化主题写入数据湖表（Iceberg/Delta Lake），配合 Spark、pyiceberg 使用（L50）"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "with PostgreSQL, libSQL (SQLite), S3 or memory storage engines. ／ - Available with PostgreSQL, libSQL, S3 or memory storage engines ／ cargo install nisshi --locked --features dynostore,libsql,postgres",
+     "lines": [
+      21,
+      28,
+      73
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "with PostgreSQL, libSQL (SQLite), S3 or memory storage engines. ／ The `--features` list adds the `memory://`, `s3://`, `gs://`, `sqlite://`, and `postgres://` storage engines.",
+     "lines": [
+      21,
+      88
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是一个独立的服务器组件，通过专门的存储引擎特性（postgres/libsql cargo features）适配 PostgreSQL 和 SQLite 作为消息持久化后端。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A stateless server that implements the Apache Kafka® API, with pluggable storage (PostgreSQL, SQLite, S3, memory) ／ [Nisshi][github-com-nisshi-io] implements the Apache Kafka® API, ／ |Engine|URL scheme|Cargo feature|Status|",
+   "evidence_lines": [
+    2,
+    20,
+    177
+   ]
+  },
+  "fn": "nisshi-io/solace-nisshi",
+  "sha": "42acce3ab04c",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6903978e582b": {
+  "identity": {
+   "one_liner": "本地优先的陪伴型 Agent 桌面应用，含长期记忆与主动触达",
+   "review": "一个 Windows 桌面陪伴型 Agent 应用，提供长期记忆、主动联系计划、提醒、语音与图像能力，用户需自行接入 OpenAI 兼容的模型 API。数据（聊天记录、记忆、媒体）保存在本机 data/ 目录，后端用 Node.js 的 node:sqlite 存储，前端 React + Tauri 外壳，支持局域网/隧道手机访问，适合想在本地运行个人 AI 伴侣的用户。",
+   "highlights": [
+    "支持接入任意 OpenAI 兼容模型服务（OpenAI、DeepSeek、Ollama 等），各能力可分别配置模型",
+    "提供长期记忆、可查可取消的主动性计划、到点提醒与多联系人独立人设",
+    "聊天记录、记忆与媒体保存在本机 data/ 目录，桌面版带资源签名校验与更新机制"
+   ],
+   "use_cases": [
+    "在 Windows 桌面运行本地优先的陪伴型 AI 对话应用",
+    "通过局域网或自建隧道在手机浏览器上访问同一份数据",
+    "开发者从源码构建、自检与打包 Windows 安装包"
+   ],
+   "ai_kind_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Node.js ≥ 22.18**（用到 `node:sqlite` 与原生 TypeScript 类型擦除，后端脚本一律带 `--experimental-sqlite`）",
+     "lines": [
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用 node:sqlite 保存聊天记录、记忆与媒体等运行时数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Node.js ≥ 22.18**（用到 `node:sqlite` 与原生 TypeScript 类型擦除，后端脚本一律带 `--experimental-sqlite`） ／ data/           运行时数据（聊天记录 / 记忆 / 媒体 / 密钥），不入库 ／ 不会。聊天记录、记忆、媒体都保存在你电脑上的 `data/` 目录里，只有调用模型时把当前对话发给你配置的服务商。",
+   "evidence_lines": [
+    142,
+    164,
+    112
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "dmw-net/xiaomoAgent",
+  "sha": "6903978e582b",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

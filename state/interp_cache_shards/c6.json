@@ -11975,5 +11975,139 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "049fa79f3a7a": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 逻辑复制的轻量级 CDC 捕获库",
+   "review": "go-pq-cdc 是一个 Golang 编写的 CDC 库，利用 PostgreSQL 内置逻辑复制（pgoutput 协议）捕获变更并流向 Kafka、Elasticsearch 等下游系统。提供快照初始化、TOAST 合并、心跳 WAL 保护、主被动高可用等机制，面向需要在 Go 生态中构建数据同步管道的开发者。",
+   "highlights": [
+    "基于 PostgreSQL 逻辑复制的 pgoutput 协议（proto_version 1/2）捕获变更",
+    "支持快照模式做初始数据同步，含分块处理、分区策略与崩溃恢复",
+    "提供心跳表机制推进 replication slot 以回收 WAL，并自动合并 TOAST 字段"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 变更实时同步到 Kafka/Elasticsearch 等下游系统",
+    "存量表数据的初始导出或一次性快照同步",
+    "低流量库的 WAL 段回收与 slot 维护"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "go-pq-cdc is designed to provide efficient and lightweight Change Data Capture (CDC) for PostgreSQL databases. ／ The architecture leverages PostgreSQL's built-in logical replication capabilities to capture changes in the database and ／ - **Zero Data Loss**: Consistent point-in-time snapshot using PostgreSQL's `pg_export_snapshot()`",
+     "lines": [
+      3,
+      4,
+      15
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为 PostgreSQL 提供变更捕获与向下游系统流式同步的组件能力，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "go-pq-cdc is designed to provide efficient and lightweight Change Data Capture (CDC) for PostgreSQL databases. ／ The architecture leverages PostgreSQL's built-in logical replication capabilities to capture changes in the database and ／ go get github.com/Trendyol/go-pq-cdc",
+   "evidence_lines": [
+    3,
+    4,
+    45
+   ]
+  },
+  "fn": "Trendyol/go-pq-cdc",
+  "sha": "049fa79f3a7a",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a32d62854b18": {
+  "identity": {
+   "one_liner": "基于 PHP+SQLite 的 incident 模拟与管理 Web 应用",
+   "review": "SisGI 是一个 PHP+SQLite 的 Web 应用，用于实时模拟和管理 incident 场景，支持自动 incident 生成器、实时评估面板、Chart.js 报表和大屏展示模式。面向军事组织培训演练，也可供其他组织使用；需 PHP 7.4+ 与 PDO/SQLite3 扩展，SQLite 数据库文件由应用自动创建。",
+   "highlights": [
+    "支持按类别配置间隔自动生成 incident",
+    "包含实时评估面板与 JSON 模板导入导出",
+    "提供 Chart.js 图表与解决时间统计（均值、中位数、最小、最大）"
+   ],
+   "use_cases": [
+    "军队/组织的通信与指挥培训演练",
+    "incident 响应流程模拟与时间评估",
+    "培训现场实时跟踪与事后报表生成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Extensões PHP habilitadas: `PDO` e `SQLite3`. ／ 2. Certifique-se de que a pasta onde o arquivo index.php está localizado possui permissões de escrita para que o SQLite possa criar e atualizar o arquivo do banco de dados automaticamente.",
+     "lines": [
+      23,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统用 SQLite 存储数据，由 index.php 所在目录自动创建和更新数据库文件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "O **SisGI - Sistema de Geração de Incidentes** é uma aplicação web projetada para auxiliar na simulação e gerenciamento de incidentes em tempo real. Esta aplicação foi desenvolvida pelo Capitão de Comunicações Barbosa Oliveira, no 6º Batalhão de Comunicações, com o objetivo de apoiar as instruções práticas do período de qualificação e adestramento em Organizações Militares do Exército Brasileiro, mas pode ser utilizado livremente por outras organizações e empresas. ／ - Extensões PHP habilitadas: `PDO` e `SQLite3`. ／ 2. Certifique-se de que a pasta onde o arquivo index.php está localizado possui permissões de escrita para que o SQLite possa criar e atualizar o arquivo do banco de dados automaticamente.",
+   "evidence_lines": [
+    6,
+    23,
+    31
+   ]
+  },
+  "fn": "Jonny-Marcos/SisGI",
+  "sha": "a32d62854b18",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

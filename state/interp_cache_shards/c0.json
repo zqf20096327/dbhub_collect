@@ -12203,5 +12203,72 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "22bcc071b0a8": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的多模型图数据库，支持 SQL/openCypher/GQL",
+   "review": "AgensGraph 是 PostgreSQL 的一个分支，在其上内置属性图模型，使图数据与关系表共存于同一数据库并在同一事务中提交，支持 SQL、openCypher 与 ISO GQL 混合查询。面向需要图+关系混合建模的开发者，提供 MCP 服务器、LangChain/LlamaIndex 集成及向量检索，通过 Docker 或源码安装，继承 PostgreSQL 的驱动、复制与备份工具。",
+   "highlights": [
+    "在同一数据库中存储图数据与关系表，单事务提交，支持 SQL、openCypher、ISO GQL 混合查询",
+    "提供 MCP 服务器及 langchain-agensgraph、llama-index-agensgraph 等 AI 框架集成包，支持 GraphRAG 与 agent memory",
+    "继承 PostgreSQL 的事务、角色、行级安全、复制、pg_dump/pg_upgrade 及扩展（如 pgvector）"
+   ],
+   "use_cases": [
+    "图与关系表混合建模并同事务写入的场景",
+    "知识图谱与向量检索结合的 GraphRAG 应用",
+    "AI agent 的知识图谱记忆存储"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "A high-performance graph database built on PostgreSQL. ／ - PostgreSQL with the property graph model built in. A fork of PostgreSQL, not an extension. ／ - Everything PostgreSQL has works on graph data: transactions, roles, row-level security, replication, `pg_dump`, `EXPLAIN`, extensions such as `pgvector`.",
+     "lines": [
+      3,
+      19,
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库内核（PostgreSQL 分支），为使用图数据库的应用提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "docker",
+    "source",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- PostgreSQL with the property graph model built in. A fork of PostgreSQL, not an extension. ／ - A graph is a schema, a label is a table, a vertex or an edge is a row. ／ - Query with SQL, openCypher and ISO GQL (ISO/IEC 39075). Mix them in one statement.",
+   "evidence_lines": [
+    19,
+    20,
+    22
+   ]
+  },
+  "fn": "skaiworldwide-oss/agensgraph",
+  "sha": "22bcc071b0a8",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

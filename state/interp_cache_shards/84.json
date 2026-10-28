@@ -10936,5 +10936,179 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3c5e8f14b733": {
+  "identity": {
+   "one_liner": "闲鱼虚拟商品多租户自动化运营系统，基于 Spring Boot + MySQL",
+   "review": "一个面向闲鱼商家的虚拟商品自动化运营应用，覆盖商品发布、订单发现、卡密/固定内容自动交付、AI 客服回复与评价跟进，支持多租户数据隔离与异常人工复核。核心任务链路仅依赖 MySQL（5.7+），通过行级锁实现卡密原子预占，使用 Flyway 做数据库迁移，提供 Docker Compose 自部署。适用于出售卡密、网盘链接等虚拟商品的闲鱼卖家。",
+   "highlights": [
+    "支持固定内容与卡密两种交付模式，基于 MySQL 行级锁实现整单预占与发送成功后核销",
+    "订单与回复任务持久化，提供租约恢复、退避重试与人工复核机制",
+    "按租户隔离账号、商品、订单、库存与 AI 知识库，支持多商家共用平台"
+   ],
+   "use_cases": [
+    "闲鱼虚拟商品（卡密、激活码、固定资源）自动发货",
+    "常见咨询的自动回复与人工接管",
+    "多商家多账号统一运营与异常集中处理"
+   ],
+   "cat_note": "eco=app，cat 固定为应用"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "它不只是在收到订单后发送一段文本，而是把 **订单发现、幂等入队、库存预占、双通道交付、失败重试和人工复核** 串成可恢复的完整链路。固定内容与卡密两种交付模式严格互斥，账号、商品、消息、订单、库存、任务和 AI 知识库按租户隔离。核心任务链路只依赖 MySQL，不强制引入 Redis 或消息队列，兼顾部署成本与后续扩展。 ／ |原子卡密交付|MySQL 行级锁整单预占，发送成功后核销，失败释放或转人工复核|避免并发订单导致重复发卡、少发和超卖| ／ - MySQL 5.7+",
+     "lines": [
+      19,
+      66,
+      176
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- 全新环境使用 MySQL，不提供 SQLite 历史数据自动迁移。",
+     "lines": [
+      412
+     ]
+    }
+   ],
+   "dbs": [
+    "MySQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 明确核心任务链路依赖 MySQL 存储业务数据，系统本身是闲鱼运营应用而非数据库服务工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "它不只是在收到订单后发送一段文本，而是把 **订单发现、幂等入队、库存预占、双通道交付、失败重试和人工复核** 串成可恢复的完整链路。固定内容与卡密两种交付模式严格互斥，账号、商品、消息、订单、库存、任务和 AI 知识库按租户隔离。核心任务链路只依赖 MySQL，不强制引入 Redis 或消息队列，兼顾部署成本与后续扩展。 ／ - MySQL 5.7+ ／ - 全新环境使用 MySQL，不提供 SQLite 历史数据自动迁移。",
+   "evidence_lines": [
+    19,
+    176,
+    412
+   ]
+  },
+  "fn": "Evvvvvvvan/XianYuSmart",
+  "sha": "3c5e8f14b733",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8f7504f4d003": {
+  "identity": {
+   "one_liner": "Python SQL 库，将对象方法映射到 SQL 脚本文件",
+   "review": "quma 是一个 Python 数据库库，把对象方法映射到 SQL 脚本文件，开发者直接编写纯 SQL 文件而非用 ORM。支持 SQLite、PostgreSQL、MySQL、MariaDB，提供简单连接池、动态 SQL 模板（如条件 WHERE）以及面向 asyncio 应用（如 Starlette/FastAPI/Litestar）的异步 API。适合偏好手写 SQL、想利用数据库全部特性的 Python 开发者。",
+   "highlights": [
+    "将对象方法映射到 SQL 脚本文件，支持手写 SQL 文件管理查询",
+    "提供简单连接池和动态 SQL 模板（如条件 WHERE）",
+    "提供异步 API 支持 asyncio 应用（asyncmy 驱动连接 MySQL/MariaDB，psycopg 3 连接 PostgreSQL）"
+   ],
+   "use_cases": [
+    "Python 应用中以 SQL 文件方式组织和管理数据库查询",
+    "需要异步数据库访问的 asyncio Web 应用",
+    "替代 ORM、直接使用 DBMS 全部 SQL 特性的项目"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It maps object methods to SQL script files and supports **SQLite**, **PostgreSQL**, ／ Starlette, FastAPI or Litestar (PostgreSQL with psycopg 3, MySQL and",
+     "lines": [
+      6,
+      11
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**MySQL** and **MariaDB**. ／ Starlette, FastAPI or Litestar (PostgreSQL with psycopg 3, MySQL and",
+     "lines": [
+      7,
+      11
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It maps object methods to SQL script files and supports **SQLite**, **PostgreSQL**,",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**MySQL** and **MariaDB**. ／ MariaDB with asyncmy).",
+     "lines": [
+      7,
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Python 程序访问数据库提供的库，属于数据库生态服务组件而非使用数据库的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "quma is a small SQL database library for **Python** 3.11 and higher. ／ It maps object methods to SQL script files and supports **SQLite**, **PostgreSQL**, ／  pip install quma",
+   "evidence_lines": [
+    5,
+    6,
+    29
+   ]
+  },
+  "fn": "ebenefuenf/quma",
+  "sha": "8f7504f4d003",
+  "source": "readme",
+  "generated_at": "2026-10-28",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
