@@ -50,7 +50,7 @@ composer create-project viames/pair_boilerplate my-project
 To add the framework to an existing project:
 
 ```sh
-composer require "viames/pair:^4.1.3"
+composer require "viames/pair:^4.1.4"
 ```
 
 Configure the application's `.env` and database using the
@@ -172,6 +172,15 @@ Choose a guide by task:
 The wiki follows `main` and may document unreleased changes. Compare examples
 with the source for the Pair version installed in your application.
 
+## Maintainer
+
+Pair is created and maintained by [Viames Marino](https://github.com/viames).
+His professional practice, [VM Ingegneria](https://vmingegneria.it/), covers
+external technical direction, software modernization and governed AI integration.
+
+For a professional project, use the [VM Ingegneria contact form](https://vmingegneria.it/#contatti).
+For framework usage and contributions, use the documentation and repository channels above.
+
 ## Security
 
 Report vulnerabilities privately by following [SECURITY.md](https://github.com/viames/pair/blob/main/SECURITY.md). Do
@@ -186,3 +195,5 @@ change.
 ## License
 
 MIT
+
+Database introspection and optional versioned caching: [metadata cache](docs/DATABASE_METADATA_CACHE.md).

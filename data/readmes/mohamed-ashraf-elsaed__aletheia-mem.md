@@ -8,6 +8,7 @@
 
 [![npm version](https://img.shields.io/npm/v/aletheia-mem)](https://www.npmjs.com/package/aletheia-mem)
 [![Glama score](https://glama.ai/mcp/servers/mohamed-ashraf-elsaed/aletheia-mem/badges/score.svg)](https://glama.ai/mcp/servers/mohamed-ashraf-elsaed/aletheia-mem)
+[![Socket](https://badge.socket.dev/npm/package/aletheia-mem)](https://socket.dev/npm/package/aletheia-mem)
 [![Licence](https://img.shields.io/github/license/mohamed-ashraf-elsaed/aletheia-mem)](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/LICENSE)
 [![Tests](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/actions/workflows/test.yml/badge.svg)](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/actions/workflows/test.yml)
 [![Last commit](https://img.shields.io/github/last-commit/mohamed-ashraf-elsaed/aletheia-mem)](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/commits/main)
@@ -15,7 +16,7 @@
 [![Open issues](https://img.shields.io/github/issues/mohamed-ashraf-elsaed/aletheia-mem)](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/issues)
 ![Status](https://img.shields.io/badge/status-alpha-orange)
 ![Bun](https://img.shields.io/badge/bun-%3E%3D1.1-black)
-![Platform](https://img.shields.io/badge/platform-linux%20%7C%20macOS%20%28CI%20tested%29-lightgrey)
+![Platform](https://img.shields.io/badge/platform-linux%20%7C%20macOS%20%7C%20Windows%20%28CI%20tested%29-lightgrey)
 
 </div>
 
@@ -31,11 +32,11 @@ aletheia-server
 
 <p align="center"><a href="https://mohamed-ashraf-elsaed.github.io/aletheia-mem/">Docs site</a> · <a href="https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/06-frontend.md">Frontend guide</a> · <a href="https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/CHANGELOG.md">Changelog</a> · <a href="https://github.com/mohamed-ashraf-elsaed/aletheia-mem/issues">Issues</a></p>
 
-**Status: alpha.** The memory engine and the installers work in tests. No host has been opened with a generated
-config yet, and answer accuracy is not measured. CI runs on Linux and macOS; Windows is not supported yet and not tested.
+**Status: alpha.** The memory engine and the installers work in tests. The real Claude Code, Command Code, Codex CLI and
+OpenCode listed the generated MCP config. Hooks have run in real sessions of Claude Code (two days of use), Command Code (one short session) and Codex CLI (one interactive session), all on the author's machine and one user, with secrets redacted and no leaks found by the checker. No hook has run inside Cursor, Gemini CLI, Windsurf or OpenCode yet, and answer accuracy is not measured. CI runs the test suite on Linux, macOS and Windows. On Windows, two hook checks (Windsurf and Gemini CLI) are skipped and no real tool was tried there, so Windows is tested in CI only.
 
 <!-- claims:begin -->
-**1,395 tests** — 0 failures (run `bun test`).
+**1,450 tests** — 0 failures (run `bun test`).
 <!-- claims:end -->
 
 [English](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/README.md) · [中文](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.zh.md) · [Español](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.es.md) · [Português (Brasil)](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.pt-br.md) · [日本語](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.ja.md) · [Deutsch](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.de.md) · [Français](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.fr.md) · [한국어](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.ko.md) · [हिन्दी](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.hi.md) · [العربية](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.ar.md) · [Русский](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.ru.md).
@@ -86,24 +87,24 @@ the instruction file each tool already reads. What has and has not been checked:
 | Check | Result |
 |---|---|
 | MCP server against the official MCP SDK client | Passes (protocol versions 2025-11-25 to 2024-11-05) |
-| Config formats for Claude Code, Command Code, Cursor, Codex CLI, Gemini CLI, Windsurf, OpenCode | Written from official docs fetched 2026-10-26 and tested against fixtures. **Not tested on a real install.** |
+| Config formats for Claude Code, Command Code, Cursor, Codex CLI, Gemini CLI, Windsurf, OpenCode | Written from official docs fetched 2026-10-26 and tested against fixtures. The real CLI listed the aletheia MCP server for Claude Code, Command Code, Codex CLI and OpenCode on 2026-10-27; Cursor, Gemini CLI and Windsurf are **Not tested on a real install.** |
 | Claude Desktop MCP config | Documented and merge-tested against a fixture; not opened in the app |
 | Rules files: `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.cursor/rules/*.mdc`, `.windsurf/rules/*.md`, Copilot, Aider | Written and tested in temp folders (`docs/verification/rules-targets.md`) |
-| Any of the above **on a real install of that tool** | **Not tested yet.** Reports welcome. |
-| Automatic capture through a tool's hooks | Built for Claude Code, Command Code, Cursor, Codex CLI, Gemini CLI and Windsurf. Each installed hook command is exercised end to end in a temp HOME with a recorded payload; none has been run inside the tool. OpenCode is MCP+rules. |
+| Any of the above **on a real install of that tool** | MCP config was read back by the real CLI for Claude Code, Command Code, Codex CLI and OpenCode on 2026-10-27. Hooks ran in real sessions of Claude Code (two days of use), Command Code (one short session) and Codex CLI (one interactive session), all on the author's machine and one user (prompts and tool events captured, secrets redacted, no leaks). No hook ran inside Cursor, Gemini CLI, Windsurf or OpenCode. |
+| Automatic capture through a tool's hooks | Built for Claude Code, Command Code, Cursor, Codex CLI, Gemini CLI and Windsurf. Each installed hook command is exercised end to end in a temp HOME with a recorded payload. Hooks ran in real sessions of Claude Code (two days of use), Command Code (one short session) and Codex CLI (one interactive session), one user on one machine; Cursor, Gemini CLI, Windsurf and OpenCode hooks have not run. OpenCode is MCP+rules. |
 
 <!-- gen:tools -->
 | Tool | Level | Verification | Hook events installed |
 |---|---|---|---|
-| claude-code | full | config written from docs, not tested on a real install | SessionStart, UserPromptSubmit, PostToolUse, Stop, SessionEnd |
-| command-code | full | config written from docs, not tested on a real install | SessionStart, PostToolUse, Stop |
+| claude-code | full | MCP connection 2.1.312 on 2026-10-27; hooks ran in real sessions over two days of use; one user on one machine | SessionStart, UserPromptSubmit, PostToolUse, Stop, SessionEnd |
+| command-code | full | MCP connection 1.88.1 on 2026-10-27; hooks ran in one short session; one user on one machine | SessionStart, PostToolUse, Stop |
 | cursor | full | config written from docs, not tested on a real install | sessionStart, beforeSubmitPrompt, postToolUse, afterAgentResponse, stop, sessionEnd |
-| codex | full | config written from docs, not tested on a real install | SessionStart, UserPromptSubmit, PostToolUse, Stop, SessionEnd |
+| codex | full | MCP connection 0.130.0 on 2026-10-27; hooks ran in one interactive session (reviewed once with /hooks); one user on one machine | SessionStart, UserPromptSubmit, PostToolUse, Stop, SessionEnd |
 | gemini-cli | full | config written from docs, not tested on a real install | SessionStart, BeforeAgent, AfterTool, AfterAgent, SessionEnd |
 | windsurf | full | config written from docs, not tested on a real install | pre_user_prompt, post_run_command, post_write_code, post_cascade_response |
-| opencode | mcp+rules | config written from docs, not tested on a real install | none (MCP and rules only) |
+| opencode | mcp+rules | MCP connection 1.18.33 on 2026-10-27; hooks not run | none (MCP and rules only) |
 
-_Generated from src/hub/install.mjs via `aletheia install --list`. A row says tested on a real install only when that column says so; today none do._
+_Generated from src/hub/install.mjs via `aletheia install --list`. A row says MCP connection when the real CLI listed the server. Hooks have run in real sessions of Claude Code (two days of use), Command Code (one short session) and Codex CLI (one interactive session), one user on one machine; Cursor, Gemini CLI, Windsurf and OpenCode hooks have not run._
 <!-- /gen:tools -->
 
 ## Measured numbers
@@ -225,8 +226,8 @@ All settings are environment variables. The defaults are safe for a single-user 
 
 This list is the honest half of the README.
 
-- No config has been run inside its host application. "Config written from docs, not tested on a real install."
-- CI runs on Linux and macOS. The benchmark runs on Linux only. Windows is not supported yet and not tested.
+- MCP config was listed by the real CLI for Claude Code, Command Code, Codex CLI and OpenCode on 2026-10-27. Hooks ran in real sessions of Claude Code (two days of use), Command Code (one short session) and Codex CLI (one interactive session), all on the author's machine and one user; Cursor, Gemini CLI, Windsurf and OpenCode hooks have not run. Cursor, Gemini CLI and Windsurf remain "config written from docs, not tested on a real install."
+- CI runs the test suite on Linux, macOS and Windows (GitHub's windows-latest runner, Bun 1.3.10). On Windows, the hook-execution checks for Windsurf and Gemini CLI and one temp-folder cleanup check are skipped, and no real tool was tried. The install smoke test runs on Linux and macOS, and the benchmark gate on Linux only.
 - Answer accuracy is not measured. Recall@5 is retrieval, not whether an answer was correct.
 - The 1B-model extraction run failed; facts from our own extractor were measured with the rule extractor only.
 - Sync and E2EE are tested with temp data dirs and a loopback hub. No real tunnel or second host was used.

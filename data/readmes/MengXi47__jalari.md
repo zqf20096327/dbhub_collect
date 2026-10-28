@@ -16,7 +16,7 @@ jalari keeps jobs, schedules and workers in PostgreSQL tables. Declare a job wit
 
 ```toml
 [dependencies]
-jalari = "0.7"
+jalari = "0.8"
 ```
 
 ## Features
@@ -30,7 +30,8 @@ jalari = "0.7"
   discarded if they are still waiting past their deadline.
 - **Cron and intervals** — cron schedules declared in code, plus cron or every-N-units
   schedules added, changed and removed at runtime, with time zones, daylight saving and end
-  conditions (`until`, `max_runs`) handled.
+  conditions (`until`, `max_runs`) handled; each schedule chooses whether a run missed during an
+  outage is caught up once or skipped.
 - **Deduplication and exclusion** — `job_key` keeps one job per key; `queue_key` keeps jobs
   with the same key from running at once, or lets up to a set number run.
 - **Retries** — exponential backoff with jitter, per job type or per worker, `retry_after` for
@@ -44,12 +45,21 @@ jalari = "0.7"
   and middleware hears how each attempt ended.
 - **Stop, restart and cancel** — stop a job to free everything it holds, restart it later from
   the progress it saved at its last checkpoint, or cancel it for good; `interrupted()` reaches
-  a job blocked in a long `.await`.
+  a job blocked in a long `.await`, and `is_interrupted()` reaches blocking code in
+  `spawn_blocking`.
+- **Durable progress and steps** — `save_now` stores a job's cursor before it goes on,
+  `save_in` commits it in your own transaction together with the rows it covers, and
+  `jalari::step` records each named effect's result, so a retry or a takeover after a crash
+  does not repeat it.
 - **Graceful shutdown** — running jobs finish, or go back to their queue at their next
   checkpoint, before a worker exits.
 - **Code fingerprints** — opt in per job to stamp it with a hash of the code it reaches, so a
   worker runs it only when the worker was built from the same code.
 - **Renaming** — `aliases` keep the jobs and schedules stored under a job's old name running.
+- **Through your own crate** — a crate that re-exports jalari lets the crates that depend on it
+  define jobs without depending on jalari themselves, through `crate = "..."` in
+  `#[jalari::job(..)]`; see
+  [Using jalari through another crate](docs/guide.md#using-jalari-through-another-crate).
 - **Monitoring and management** — a live list of workers, counts and throughput per queue,
   job listing by state, priority, queue, key, time, tenant context or parent job, each job's
   history, retrying failed jobs, running scheduled ones now and moving waiting ones to another
@@ -121,8 +131,9 @@ Every job moves through the same states:
 - **Run workers where you like** — inside your web server, or as separate binaries that serve
   different queues.
 
-Jobs run at least once: a job interrupted by a crash runs again, so make it idempotent. An
-interrupted run still counts as an attempt, so a job that keeps crashing its worker is marked
+Jobs run at least once: a job interrupted by a crash runs again, so make it idempotent, or let
+it record how far it got with [durable progress and steps](docs/guide.md#progress-and-steps).
+An interrupted run still counts as an attempt, so a job that keeps crashing its worker is marked
 failed once it runs out of attempts.
 
 ## Example
@@ -154,10 +165,12 @@ worker.run(shutdown).await;
 ## Documentation
 
 - [Guide](docs/guide.md) — setup, jobs, enqueueing, schedules, workers, stopping and
-  restarting, middleware, deployment and settings
+  restarting, progress and steps, middleware, deployment and settings
 - [Examples](docs/guide.md#examples) — complete programs: a tour of the basics, every way an
-  attempt ends, priorities, key limits, paused queues and job trees, stopping and restarting
-  with checkpoints, middleware and context, and split web, worker and control binaries
+  attempt ends, priorities, key limits, paused queues and job trees, missed-run policies,
+  stopping and restarting with checkpoints, progress that survives a killed worker, steps
+  with idempotency keys, blocking work, middleware and context, and split web, worker and
+  control binaries
 - [Contributing](CONTRIBUTING.md)
 
 ## License

@@ -79,15 +79,27 @@ macOS 和 Linux 把本机密钥保存在 `vault.key`（权限 600），Windows �
 
 Java 后端另带一个 stdio MCP 入口（`com.dmconnect.mcp.McpLauncher`），让 Claude Code 等 AI 客户端直接使用桌面端保存的连接。它和桌面端共用 `profiles.json` 与本地加密存储，不写 SQL 历史。
 
+2.0.29 起安装包自带 MCP 入口，直接用已安装应用里的 Java Runtime 启动，不依赖源码目录：
+
+```bash
+BACKEND="/Applications/数据库连接工具.app/Contents/Resources/backend"
+claude mcp add --scope user dm-connect -- "$BACKEND/runtime/bin/java" \
+  -Dfile.encoding=UTF-8 -DsocksProxyHost= \
+  -cp "$BACKEND/app/dm-connect.jar:$BACKEND/app/lib/*" com.dmconnect.mcp.McpLauncher
+```
+
+应用自动更新后，在 Claude Code 里执行 `/mcp` 重新连接，才会用上新版后端。开发 MCP 本身时可改用源码构建：
+
 ```bash
 ./scripts/prepare-electron-backend.sh   # 首次或改了 Java 代码后构建
 claude mcp add --scope user dm-connect -- "$PWD/scripts/run-mcp.sh"
 ```
 
-提供的工具：`list_connections`、`list_schemas`、`list_objects`、`describe_object`、`preview_table`、`execute_sql`、`mongo_list_collections`、`mongo_find`、`redis_scan`、`redis_get`。
+提供的工具：`list_connections`、`list_schemas`、`list_objects`、`describe_object`、`preview_table`、`execute_sql`、`mongo_list_collections`、`mongo_find`、`redis_scan`、`redis_get`。允许写入后还会提供 `mongo_insert`、`mongo_replace`、`mongo_delete`、`redis_command`。
 
 - 默认只读：`execute_sql` 只接受 `SELECT`/`WITH`/`SHOW`/`DESC`/`EXPLAIN`，语句里出现 `INSERT`、`UPDATE`、`DELETE`、`INTO`、`CALL` 等关键字（包括子查询里）都会被拒绝，查询在关闭自动提交的事务里执行，结束后回滚。
-- 允许写入：给 `run-mcp.sh` 传 `--allow-write`，或设置 `DMCONNECT_MCP_ALLOW_WRITE=true`。即使开了写入，`DROP`、`TRUNCATE`、`ALTER`、`GRANT`、`REVOKE` 和不带 `WHERE` 的 `DELETE`/`UPDATE` 也会被拒绝。
+- 允许写入：给 `run-mcp.sh` 传 `--allow-write`，或设置 `DMCONNECT_MCP_ALLOW_WRITE=true`。即使开了写入，`DROP`、`TRUNCATE`、`ALTER`、`GRANT`、`REVOKE` 和不带 `WHERE` 的 `DELETE`/`UPDATE` 也会被拒绝，Redis 的 `FLUSHDB`、`FLUSHALL`、`CONFIG`、`EVAL` 等管理命令也不允许。
+- 完全权限：传 `--full-access`，或设置 `DMCONNECT_MCP_FULL_ACCESS=true`。上面这些危险 SQL 和 Redis 管理命令都会直接执行，没有二次确认。阻塞命令、`KEYS` 和改变会话的 Redis 命令（`SELECT`、`MULTI` 等）仍不允许，因为它们会卡住或破坏 MCP 复用的连接。
 - 只能用已在桌面端勾选“记住密码”的连接；MCP 不接收密码参数，避免密码出现在对话记录里。
 
 ## SQL 脚本规则

@@ -1,4 +1,13 @@
+<p align="center"><img src="./docs/readme/hero.svg" width="100%" alt="TruthLens India — Evidence behind the headline." /></p>
+
 # TruthLens India
+
+**Evidence behind the headline.**
+
+[Download](#download) · [Architecture](#how-its-built) · [Setup](#running-it-yourself)
+
+<table><tr><td width="33%" valign="top"><h3>Claims with context</h3><p>Read verdicts alongside sources and coverage.</p></td><td width="33%" valign="top"><h3>Stories that continue</h3><p>Follow institutional crises beyond a news cycle.</p></td><td width="33%" valign="top"><h3>Built for your phone</h3><p>Notifications, onboarding, and shareable cards.</p></td></tr></table>
+
 
 [![Build & Release APK](https://github.com/begoneeraj/Newsup/actions/workflows/release-apk.yml/badge.svg)](https://github.com/begoneeraj/Newsup/actions/workflows/release-apk.yml)
 [![Latest Release](https://img.shields.io/github/v/release/begoneeraj/Newsup?label=release)](https://github.com/begoneeraj/Newsup/releases)
@@ -56,7 +65,7 @@ Each release's notes list what changed since the previous version (auto-generate
 
 ### Option C — build straight off `main`, no tagged release yet
 
-If there's no release under the Releases page yet, every push to `main` still produces a build:
+For a build from the default branch, manually run the Build & Release APK workflow. It also runs on version tags:
 
 1. Go to [**Actions → News Cron / Build & Release APK**](https://github.com/begoneeraj/Newsup/actions/workflows/release-apk.yml) and open the most recent successful run.
 2. Scroll to **Artifacts** and download `TruthLensIndia-apk` (a zip containing the APK — your phone's file manager can open it, or use a "zip extractor" app if it doesn't unzip automatically).
@@ -70,7 +79,7 @@ If there's no release under the Releases page yet, every push to `main` still pr
 | `v2.0.0` | First stable release out of beta. Adds Student Crisis, AI & Tech, Government Promises, and Court Case tracker modules; Slow Crisis tracking (AQI, groundwater, judiciary, healthcare); Underreported Topics; publisher track-record + combined fake-probability scoring on fact-checks v2; hardened backend (API rate limiting, request validation, Supabase RLS audit, automated dependency security scanning). |
 | `v1.0.0` | First tagged release — fact checks, crisis tracker, source/coverage tracking, fact-checks v2, multi-source ingestion (Google News, NewsData.io, Mediastack, RSS, Reddit), push notifications, shareable verdict cards, onboarding. |
 
-Want to trigger a fresh build yourself? Go to **Actions → Build & Release APK → Run workflow** for an unsigned-for-testing artifact build, or push a tag like `v1.1.0` to cut a proper new GitHub Release.
+Want to trigger a fresh build yourself? Go to **Actions → Build & Release APK → Run workflow** for an testing artifact build, or push a tag like `v1.1.0` to cut a proper new GitHub Release.
 
 ## How it's built
 

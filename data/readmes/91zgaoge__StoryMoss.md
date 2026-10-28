@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.73.8-gold"></a>
+  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.73.10-gold"></a>
   <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/license-ISC-blue.svg"></a>
   <a href="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml"><img alt="Build" src="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml/badge.svg"></a>
   <img alt="Platform" src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey.svg">
@@ -106,6 +106,18 @@ npm run build
 ## 🆕 最新动态
 
 > 完整变更日志见 [`CHANGELOG.md`](./CHANGELOG.md)。
+
+### v0.73.10 · 空正文模型一次就降权，不再反复空转
+
+死端点一次调用可能拖 155 秒才返回空正文；旧规则要连续两次才降权，等于先白烧 310 秒。现在一次
+空正文就进入 10 分钟冷却，后续轮次直接跳过。若你配置里还有已下线的「Ds10」模型，请在
+**设置 → 模型 → 管理** 删除它，工具档会自动回退到可用模型。
+
+### v0.73.9 · 多部小说时，点哪部就切到哪部
+
+以前在幕后点另一部小说卡片只改了幕后选中状态，只有卡片上的小「打开」按钮才会通知幕前，
+所以切过去幕前仍停在旧故事。现在卡片点击就会同步到幕前；「开幕前」启动器和侧栏的「打开幕前
+写作」也会带上当前选中的作品。生成过程中切换会提示「正在生成，完成后请再切换」。
 
 ### v0.73.8 · 续写遇到「只思考不写正文」的模型会自动换档
 

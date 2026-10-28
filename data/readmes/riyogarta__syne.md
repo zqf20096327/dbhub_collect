@@ -23,7 +23,7 @@ A Telegram bot you self-host. You chat with it. It remembers what you tell it to
 Beyond the core assistant, Syne ships with optional extensions. They live in `syne/abilities/` and can be enabled/disabled per install:
 
 - **Document I/O** — read & create PDF, Word, Excel, PowerPoint
-- **Image generation & vision OCR** — via Vertex Imagen / Together FLUX / OpenAI DALL-E for generation; Vertex Gemini / Ollama vision for analysis
+- **Image generation & vision OCR** — via Vertex Gemini Image / Together FLUX.2 / OpenAI GPT Image for generation; Vertex Gemini / Ollama vision for analysis
 - **Memory file attachments** — store images, PDFs, voice notes alongside their description; retrieve or re-analyze on demand (up to 50 MB per blob)
 - **Voice in & out** — Groq Whisper STT for inbound voice notes, Edge TTS for outbound voice messages
 - **Remote nodes** — extend Syne across multiple machines via WebSocket gateway
@@ -40,7 +40,7 @@ These are deliberately separate from the core. The headline use case is chat + m
 | Requirement | Details |
 |-------------|---------|
 | **CPU** | 1 vCPU minimum (2+ recommended for Ollama embedding + evaluator) |
-| **OS** | Linux (Ubuntu 22.04+, Debian 12+) — also runs on Windows through WSL2 |
+| **OS** | Linux (Ubuntu 24.04+, Debian 12+ — Python 3.11+ required) — also runs on Windows through WSL2 |
 | **Python** | 3.11+ |
 | **RAM** | 2 GB minimum (Ollama loads one model at a time, ~1.3 GB per model). 4 GB recommended for smooth operation |
 | **Storage** | 1 GB base + ~1 GB for Ollama models (embedding + evaluator). ~2.5 GB total recommended |
@@ -88,12 +88,12 @@ During `syne init`, the installer detects your server's CPU and RAM to recommend
 | Strong | 4+ core | 8-16 GB | qwen3-embedding:4b (2560d) | qwen3:1.7b |
 | Beast | 4+ core | 16+ GB | qwen3-embedding:8b (4096d) | qwen3:4b |
 
-> **Switching embedding models later is supported** — run `syne memory reembed-memory --force` to re-embed every memory row (resumable, HNSW index refreshed automatically) and `syne memory reembed-history` for the messages table. Use both when changing to a model with a different vector dimension. The evaluator model can be changed anytime via `/evaluator` in Telegram.
+> **Switching embedding models later** — to a model with the **same vector dimension**, memories are kept: run `syne memory reembed-memory --force` to re-embed every memory row (resumable, HNSW index refreshed automatically) and `syne memory reembed-history` for the messages table. Switching to a **different dimension** is not supported without loss: `/embedding` warns and deletes all memories. Choose the embedding model with your server's long-term capacity in mind. The evaluator model can be changed anytime via `/evaluator` in Telegram.
 
 ### Verify Installation
 
 ```bash
-syne repair     # Diagnose: DB, OAuth, Telegram, abilities
+syne repair     # Diagnose: DB, chat provider, Telegram, abilities
 syne status     # Quick status check
 ```
 
@@ -218,7 +218,7 @@ Syne:  Stored.
 
 **Ollama** is auto-installed during `syne init` — binary, server, and model are all set up automatically. The installer recommends the best model for your hardware (see [Server Tiers](#server-tiers)).
 
-> **Switching embedding providers is supported without losing data.** Different models produce incompatible vector spaces, so you must re-embed after switching: `syne memory reembed-memory --force` re-embeds every memory row (resumable, HNSW auto-rebuilt), and `syne memory reembed-history` re-embeds the messages table. Use the `/embedding` command in Telegram to change providers. See [Server Tiers](#server-tiers) for the same guidance.
+> **Switching embedding providers.** Different models produce incompatible vector spaces, so you must re-embed after switching. With the **same vector dimension** no data is lost: `syne memory reembed-memory --force` re-embeds every memory row (resumable, HNSW auto-rebuilt), and `syne memory reembed-history` re-embeds the messages table. A **different dimension** cannot be re-embedded in place — `/embedding` deletes all memories after a confirmation. Use the `/embedding` command in Telegram to change providers. See [Server Tiers](#server-tiers) for the same guidance.
 
 Graph extraction uses the main chat LLM by default, switchable to Ollama via `/graph` in Telegram. Manage extractors, toggle on/off, reprocess existing memories, and view stats from the same command.
 
@@ -600,8 +600,8 @@ Since v1.18.18, the LLM sees the **full toolset every turn** (subject to the acc
 
 | Ability | Permission | Description | Requires |
 |---------|-----------|-------------|----------|
-| `image_gen` | 777 | Generate images from text (FLUX.1-schnell via Together AI / Imagen via Vertex / DALL-E via OpenAI) | API key per provider |
-| `image_analysis` | 555 | Analyze and describe images (Gemini 2.5 Flash default; Vertex / Ollama / OpenAI) | Provider-specific (Vertex auto, OpenAI key) |
+| `image_gen` | 777 | Generate images from text (Gemini 3.1 Flash Image via Vertex / FLUX.2 via Together AI / GPT Image 2 via OpenAI) | API key per provider |
+| `image_analysis` | 555 | Analyze and describe images (Gemini 3.8 Flash default; Vertex / Ollama / OpenAI) | Provider-specific (Vertex auto, OpenAI key) |
 | `maps` | 555 | Places, directions, geocoding | Google Maps API key |
 | `pdf` | 770 | **Read** PDFs (text + vision OCR for scanned/CAD pages) and **create** PDFs from text or URL | PyMuPDF, reportlab, beautifulsoup4 (auto-installed) |
 | `office` | 770 | **Create and read** Microsoft Office documents — Word (.docx), Excel (.xlsx), PowerPoint (.pptx) | python-docx, openpyxl, python-pptx (auto-installed) |
@@ -717,7 +717,7 @@ All configuration lives in the `config` table. Change via conversation or `updat
 
 | Key | Default | Description |
 |-----|---------|-------------|
-| `provider.active_model` | `"gemini-pro"` | Active chat model key |
+| `provider.active_model` | *(set during init)* | Active chat model key |
 | `provider.active_embedding` | *(set during init)* | Active embedding model key (auto-detected by hardware tier) |
 
 ### Memory Settings
@@ -820,7 +820,7 @@ syne memory add "info"               # Manually add memory
 syne memory delete <id>              # Delete a memory by id
 syne memory prune '%pattern%'        # Bulk-delete matching ILIKE pattern (with preview + confirm)
 syne memory reembed-history          # Backfill embeddings for user messages that don't have one yet (resumable)
-syne memory reembed-memory [-f]      # Backfill (or --force re-embed) rows in the memory table — use after switching embedding models
+syne memory reembed-memory [-f]      # Backfill (or --force re-embed) rows in the memory table — use after switching to a same-dimension embedding model
 
 # Config
 syne config                          # List all config keys
@@ -1000,13 +1000,12 @@ syne/
 │   │   ├── telegram.py      # Deprecated re-export → syne.communication.telegram
 │   │   └── cli_channel.py   # Interactive CLI (REPL)
 │   ├── auth/
-│   │   ├── google_oauth.py  # Google OAuth2 (for Gemini CCA)
 │   │   ├── codex_oauth.py   # ChatGPT/Codex OAuth
 │   │   └── claude_oauth.py  # Anthropic Claude OAuth
 │   ├── llm/
 │   │   ├── provider.py      # Abstract LLM interface
 │   │   ├── drivers.py       # Driver registry + embedding drivers
-│   │   ├── google.py        # Gemini (OAuth + API key)
+│   │   ├── google.py        # Gemini (API key)
 │   │   ├── codex.py         # ChatGPT/Codex (OAuth)
 │   │   ├── anthropic.py     # Claude (OAuth + API key)
 │   │   ├── openai.py        # OpenAI-compatible

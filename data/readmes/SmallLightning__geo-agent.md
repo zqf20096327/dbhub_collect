@@ -1,0 +1,165 @@
+# geo-agent
+
+> 第六届 OceanBase 数据库大赛 · AI 生态赛道参赛项目 —「空间智能 Agent」
+
+基于高德开放平台的位置服务（POI 搜索 / 路径规划 / 逆地理编码），把「自然语言出行需求」翻译成
+「候选地点 + 通行方案」的可执行行程。项目是 **AI 生态赛道多道题的共用底座**：高德是工具层，
+上层可切换 MiniMax / 阶跃星辰 模型，编排层可导出为 Dify 工作流，部署层可上架魔搭 Space。
+
+- 高德赛题：位置服务的深度使用（POI 检索 + 多模式路径规划 + 地理编码消歧）
+- 现状：纯规则版已跑通端到端（无 LLM 依赖，零第三方库）
+
+## 作为 Agent Skill 使用
+
+仓库根目录的 `SKILL.md` 描述了 Skill 的触发条件、调用方式和输出格式，宿主 Agent 按它加载即可：
+
+```bash
+python3 scripts/nearby.py --query "从杭州东站出发，人均100以内、走路能到的餐厅"
+python3 scripts/nearby.py --query "西湖附近人均60以下的咖啡店" --json
+```
+
+同一条链路还有两个入口，行为完全一致（共用 `src/agent.py`）：
+
+```bash
+./run.sh                      # 命令行，自动判断在线/离线
+python3 src/web.py            # 浏览器 UI → http://127.0.0.1:8000
+```
+
+## 给评审 / 评测机：30 秒跑起来
+
+```bash
+git clone https://github.com/SmallLightning/geo-agent && cd geo-agent
+./run.sh
+```
+
+**不需要任何 API Key，不需要联网。** 脚本会自动检测：没有 `AMAP_KEY` 就使用 `fixtures/` 里录制好的真实高德快照（离线演示），配了 Key 就走实时接口。
+
+自测：
+
+```bash
+python3 -m unittest discover -s tests -v     # 16 个用例，0.6 秒跑完，不碰网络
+```
+
+| 测试覆盖 | 说明 |
+|---|---|
+| `tests/test_core.py` | 意图解析（起点/城市/预算/半径/评分/出行方式）、地标消歧、过滤与排序、出行方式阈值 |
+| `tests/test_llm.py` | 用本地假 OpenAI 服务验证 LLM 客户端：鉴权头、json_mode、解析合并、失败降级 |
+
+## 快速开始
+
+```bash
+# 1. 配置 Key（可复制 .env.example）
+echo 'AMAP_KEY=你的高德Web服务Key' > .env
+
+# 2. 直接跑（Python 3.9+，无第三方依赖）
+python3 src/demo.py --from "杭州东站" --city 杭州 --budget 100 --radius 3000 --top 3
+
+# 3. 输出 JSON（给 Agent / Dify 当工具结果用）
+python3 src/demo.py --from "西湖" --city 杭州 --keyword 咖啡 --budget 60 --json
+
+# 4. 离线模式（无 Key、无网络）
+python3 src/agent.py --offline "从杭州东站出发，人均100以内的餐厅"
+```
+
+示例输出：
+
+```
+起点: 杭州东站  (120.212600,30.290851)
+条件: 关键词=餐厅 预算=100.0 半径=3000m
+候选: 抓取 75 家, 过滤后 74 家
+------------------------------------------------------------------------------
+1. 不伤心理想国(杭州东站万象汇店)  [4.7分 | 人均44元 | 直线536m]
+   地址: 杭州东站万象汇L301(火车东站东广场地铁站J口旁)
+   步行: 0.6 km, 约 8 分钟
+2. 九食二爷·汽锅蹄膀·下饭菜(天城路店)  [4.5分 | 人均41元 | 直线429m]
+   步行: 1.0 km, 约 13 分钟
+```
+
+出行方式会按直线距离自动切换：<1km 步行、1–3km 骑行、>3km 驾车（骑行走 v4 接口，失败自动退回步行）。
+
+## 一句话出行（Agent 版）
+
+```bash
+python3 src/agent.py "从杭州东站出发，找家人均100以内、评分4.5以上、走路能到的餐厅，要前3家"
+```
+
+输出：
+
+```
+从 杭州东站 出发，3000 米内按人均100元以内、评分4.5以上帮你挑了 3 家：
+1. 不伤心理想国(杭州东站万象汇店)｜4.7分｜人均44元｜步行（0.6km，约8分钟）
+   地址：杭州东站万象汇L301(火车东站东广场地铁站J口旁)
+2. 九食二爷·汽锅蹄膀·下饭菜(天城路店)｜4.5分｜人均41元｜步行（1.0km，约13分钟）
+3. 小聚鲜(天城银座3幢店)｜4.5分｜人均94元｜步行（1.3km，约17分钟）
+```
+
+**两种解析模式，自动切换：**
+
+| 模式 | 触发条件 | 说明 |
+|---|---|---|
+| LLM 解析 | `.env` 里配了 `MINIMAX_API_KEY` 或 `STEPFUN_API_KEY` | 模型把自然语言转成严格 JSON 参数，并用自然语言润色结论 |
+| 规则解析 | 没配 Key / 调用失败 | 正则抽取起点、城市、预算、半径、评分、出行方式，**离线也能完整跑通** |
+
+接大模型（二选一）：
+
+```bash
+# MiniMax（参赛可领 1 个月 Token Plan）
+echo 'LLM_PROVIDER=minimax'   >> .env
+echo 'MINIMAX_API_KEY=你的Key' >> .env
+echo 'MINIMAX_GROUP_ID=你的GroupId' >> .env   # 旧版接口需要
+
+# 阶跃星辰 StepFun
+echo 'LLM_PROVIDER=stepfun'   >> .env
+echo 'STEPFUN_API_KEY=你的Key' >> .env
+```
+
+`LLM_BASE_URL` / `LLM_MODEL` 可覆盖默认值，兼容任何 OpenAI 协议端点。
+
+## 目录结构
+
+```
+geo-agent/
+├── run.sh               # 一键入口（自动判断在线 / 离线）
+├── src/
+│   ├── amap_client.py   # 高德 Web 服务封装（地理编码/逆地理/POI/路径规划/距离矩阵）
+│   ├── llm.py           # OpenAI 协议客户端（MiniMax / StepFun / 任意兼容端点）
+│   ├── intent.py        # 自然语言 → 结构化参数（规则解析 + LLM 解析，可降级）
+│   ├── planner.py       # 纯函数：距离、过滤、排序、出行方式（无网络，可单测）
+│   ├── offline.py       # 离线快照回放，无 Key / 无网也能跑
+│   ├── agent.py         # 一句话入口：解析 → 检索 → 行程建议
+│   └── demo.py          # 纯命令行示例
+├── fixtures/            # 录制的高德真实响应（离线演示用）
+├── tests/               # stdlib unittest，16 个用例
+├── .env.example         # 各平台 Key 模板
+└── README.md
+```
+
+## 用到的能力
+
+| 能力 | 高德接口 | 用途 |
+|---|---|---|
+| 地址 → 坐标 | `/v3/geocode/geo` | 起点解析，带 `city` 消歧（"西湖"默认会命中台湾苗栗，必须传城市） |
+| 坐标 → 地址 | `/v3/geocode/regeo` | 结果回显、行政区判断 |
+| 周边 POI | `/v3/place/around` | 按半径抓候选，`extensions=all` 拿到评分与人均消费 |
+| 关键字 POI | `/v3/place/text` | 全城检索 |
+| 路径规划 | `/v3/direction/driving` 等 | 驾车/步行/骑行，距离与耗时 |
+| 距离矩阵 | `/v3/distance` | 批量算直线/驾车距离 |
+
+## 设计要点
+
+1. **零依赖**：只用 `urllib`，评测机不需要联网装包，clone 下来就能跑。
+2. **`.env` 不进仓库**：Key 通过环境变量或 `.env` 注入，`.gitignore` 已排除。
+3. **可组合**：`recommend()` 的返回值就是结构化工具结果，直接喂给 LLM 或 Dify 的「工具节点」。
+4. **消歧**：`city` 参数必传，否则"西湖""鼓楼"这类地名会跨省命中。
+
+## 路线图
+
+- [x] 高德工具层 + 规则版行程规划
+- [ ] LLM 意图解析（MiniMax / 阶跃星辰 可切换）：把"人均 100 以内、别太远、能停车"变成结构化过滤条件
+- [ ] Dify 工作流编排 + DSL 导出（提交 Dify 赛题）
+- [ ] 魔搭 Space 部署与模型/数据集开源（提交 ModelScope 赛题）
+- [ ] 多轮追问与记忆（接 PowerContext 的上下文思路）
+
+## 说明
+
+本项目为比赛作品，高德开放平台服务协议下的个人开发者 Key，仅用于赛题演示。

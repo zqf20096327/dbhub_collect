@@ -7,12 +7,13 @@ GaussDB 数据库智能体的**后端**：把 opencode 与 GaussDB / openGauss �
 
 | 文档 | 给谁 | 内容 |
 |---|---|---|
-| [docs/部署上线方案-v1.4.1.md](docs/部署上线方案-v1.4.1.md)（[在线查看](https://sqlrush.github.io/gh_gs_k8s_agent/deploy/v1.4.1/)） | 项目经理 / 各方团队 | **从拉代码到部署上线的完整方案**（agent-v1.4.1）：系统组成与安全设计、各方分工与检查单、构建、白名单导入、部署、开通、验收、固定池化、知识库、统一认证与前端、内网网页剪藏、从 v1.4.0 / v1.3.x 升级、回滚、运维，附全部 126 条白名单脚本 |
+| [docs/部署上线方案-v1.4.2.md](docs/部署上线方案-v1.4.2.md)（[在线查看](https://sqlrush.github.io/gh_gs_k8s_agent/deploy/v1.4.2/)） | 项目经理 / 各方团队 | **从拉代码到部署上线的完整方案**（agent-v1.4.2）：系统组成与安全设计、各方分工与检查单、构建、白名单导入、部署、开通、验收、固定池化、知识库、统一认证与前端、内网网页剪藏、官方文档集随部署自动装上、从 v1.4.1 / v1.4.0 / v1.3.x 升级、回滚、运维，附全部 126 条白名单脚本 |
+| [docs/部署上线方案-v1.4.1.md](docs/部署上线方案-v1.4.1.md)（[在线查看](https://sqlrush.github.io/gh_gs_k8s_agent/deploy/v1.4.1/)） | 留档 | 上一版（agent-v1.4.1）的部署上线方案 |
 | [docs/部署上线方案-v1.4.0.md](docs/部署上线方案-v1.4.0.md)（[在线查看](https://sqlrush.github.io/gh_gs_k8s_agent/deploy/v1.4.0/)） | 留档 | 上一版（agent-v1.4.0）的部署上线方案 |
 | [docs/delivery/白名单脚本清单.md](docs/delivery/白名单脚本清单.md) | 中间件团队 | 126 条诊断脚本的用途、参数与 SQL 全文；全量 `scripts.sql` 与 4 份升级增量都在 `docs/delivery/` |
 | [docs/从源码构建到K8s运行-完整手册.md](docs/从源码构建到K8s运行-完整手册.md) | 实施 / 运维 / 开发 | 从拉代码、构建 3 个镜像、推仓库，到部署进 K8s、开通工号、对话里跑通健康检查；可选的固定池化。每步带实测输出 |
 | [docs/前端对接接口说明.md](docs/前端对接接口说明.md) | 前端 | 接入后端的全部接口（v1.1）：身份与网关行为、对话接口与事件流、报告接口、大盘链接格式、回答正文的渲染与版式、联调清单 |
-| [docs/智能体验收方案.md](docs/智能体验收方案.md) | 后端 / 项目经理 | **每次升级智能体怎么验收**：11 个方面 48 道题、每题的评分标准（版式、工具、要点、处置、引用、禁止项）、三层评分、失分归因到工具 / 提示词 / 模型、发版门槛；题库在 [acceptance/](acceptance/) |
+| [docs/智能体验收方案.md](docs/智能体验收方案.md)（[在线查看](https://sqlrush.github.io/gh_gs_k8s_agent/acceptance/)） | 后端 / 项目经理 | **每次升级智能体怎么验收**：11 个方面 48 道题、每题的评分标准（版式、工具、要点、处置、引用、禁止项）、三层评分、失分归因到工具 / 提示词 / 模型、发版门槛；题库在 [acceptance/](acceptance/) |
 | [docs/代码结构说明.md](docs/代码结构说明.md) | 后端 / 前端 / 双方的编码智能体 | 逐个目录说明每个文件的作用、一个请求在代码里怎么走、改什么去哪里（有守卫测试，加删文件要同步） |
 | [docs/api/](docs/api/) | 前端 / 后端 | 机器可读的接口定义：`opencode-1.18.27-openapi.json`（对话接口全集）、`reports-contract.json`（报告字段契约，后端单测逐条核对） |
 | [docs/delivery/回答模板化-交付说明.md](docs/delivery/回答模板化-交付说明.md) | 平台 / 中间件 / 前端 | 回答模板化（2026-10-26）要做的事：白名单增量 3 条、镜像升级、前端第二种颜色、装后冒烟 |
@@ -25,6 +26,7 @@ GaussDB 数据库智能体的**后端**：把 opencode 与 GaussDB / openGauss �
 | 接入网关 | `gaussdb-agent-gateway` | Deployment，2 副本 | 认工号（上游 SSO 加的头 + 信任凭据）、按工号分配用户环境、反向代理对话与报告；控制 API `/admin/*` |
 | 用户环境 | `gaussdb-agent-runtime` | 每人一个 Pod，或固定池化的槽位 | opencode 1.18.27 + 17 个诊断技能 + 知识库只读查询；凭据代理（中间件令牌、签名私钥、模型 Key 不进模型所在的容器） |
 | 知识库导入环境 | `gaussdb-agent-kb-import` | 每个知识库管理员一个 | 知识库导入、入库前标准化、官方文档集（CHM）导入；内网网页剪藏（书签 → 剪藏页 → 导入环境）、扫描件 PDF 看图转录、PPT 导入 |
+| 标准知识库 | `gaussdb-agent-kbstd`（我方发布） | 部署时跑一次的 Job | GaussDB 官方文档集，`kubectl apply` 后自动装进知识库（同版本跳过、不碰贵方知识） |
 | 前端 | 前端方自建 | 可部署进本集群（`k8s/base/frontend.example.yaml`），也可在贵方门户 | 按《前端对接接口说明》接入 |
 | NAS | — | 一个 RWX 卷 | 唯一的状态所在：`users/<工号>/`（会话、报告）、`kb/`（知识库与索引 `kb/index/store.sqlite`） |
 
@@ -37,7 +39,7 @@ gateway/     接入网关
 k8s/         base/ 部署清单;templates/ 网关按工号建 Pod 的模板;tools/ 现场工具(runtime-doctor、sso-sim、render-pool);local/ 本地测试集群覆盖
 scripts/     构建、离线打包、大盘样例数据(dash-samples.py)、测试集群与端到端脚本
 docs/        构建部署手册、前端对接接口说明、代码结构说明、智能体验收方案、api/ 机器可读的接口定义
-acceptance/  智能体版本验收题库:bank/v1/ 48 题评分标准、fixtures/ 夹具、check_bank.py 离线校验
+acceptance/  智能体版本验收:bank/v1/ 48 题评分标准、fixtures/ 夹具、run.py 跑题评分出报告、check_bank.py 离线校验
 ```
 
 前端代码约定放在 `frontend/`（由前端方建立与维护）。

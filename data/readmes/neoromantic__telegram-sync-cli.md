@@ -65,6 +65,9 @@ Bun auto-loads `.env`, so you can `cp .env.example .env` and fill it in instead.
 - Chat history with cursor paging (`tg messages list`) and a message in context
   (`tg messages get`), cache-first
 - Full-text search (FTS5) over cached messages
+- Files: send one with `tg send --file`; download a message's file into a per-account media
+  cache with `tg media download` (cached files need no network, partial downloads resume);
+  every message item shows its attachment (kind, name, MIME type, size)
 - Contacts, chats and users (`tg contacts`, `tg chats`, `tg me`, `tg user`)
 - Read-only SQL over the cache (`tg sql`) with an annotated schema
 - Rate-limit tracking, config and status tooling (`tg config`, `tg status`)
@@ -88,7 +91,7 @@ per tool. Compared on 2026-10-21 from its README and tool list:
 | Read chat history | ✅ `tg messages list` (paging) and `tg messages get` (context), cache-first, `--fresh` | ✅ |
 | Send text | ✅ replies, silent | ✅ replies, Markdown/HTML |
 | Edit, delete, forward, pin | partial: via `tg api` ([#23](https://github.com/neoromantic/telegram-sync-cli/issues/23)) | ✅ |
-| Send and download media | ❌ ([#22](https://github.com/neoromantic/telegram-sync-cli/issues/22)) | ✅ files, albums, voice, transcription |
+| Send and download media | ✅ one file per message (`tg send --file`), cached downloads with resume (`tg media download`); sending albums and voice messages later | ✅ files, albums, voice, transcription |
 | Wait for new messages | ❌ ([#24](https://github.com/neoromantic/telegram-sync-cli/issues/24)) | ✅ |
 | Groups, channels, admin rights | partial: via `tg api` | ✅ |
 | Contacts | list, search, get; the rest via `tg api` | ✅ add, import, block, export |
@@ -109,8 +112,10 @@ tg chats list --limit 20
 tg chats sync @examplenews          # also sync a large group or channel
 tg messages list --chat @username --limit 20
 tg messages get --chat @username --id 42 --context 3
-tg messages search --query "hello"
+tg messages search --query "hello world" --since 7d   # both words, any order
 tg send --to @username --message "Hi there"
+tg send --to me --file ./report.pdf --caption "Q3"
+tg media download --chat me --id 42 --out ./   # into the media cache, then copied here
 tg api account.checkUsername --username=myuser
 tg sql --query "SELECT * FROM users_cache LIMIT 10"
 tg daemon start
@@ -130,6 +135,8 @@ with several accounts: see [per-account caches](docs/configuration.md#upgrading-
 | `TELEGRAM_API_HASH` | Your Telegram API hash |
 | `TELEGRAM_PROXY` | Optional proxy URL for CLI and daemon connections |
 | `TELEGRAM_SYNC_CLI_DATA_DIR` | Override the data directory (default `~/.telegram-sync-cli`) |
+| `TELEGRAM_SYNC_CLI_TELEMETRY` | `0` turns [usage stats](#usage-stats) off |
+| `DO_NOT_TRACK` | `1` turns usage stats off |
 | `MTCUTE_LOG_LEVEL` | mtcute log level |
 | `VERBOSE` | Verbose logging (`1`) |
 
@@ -142,7 +149,7 @@ Reference: [CLI commands](docs/cli-commands.md), [authentication](docs/auth.md),
 [configuration](docs/configuration.md), [architecture](docs/architecture.md),
 [daemon](docs/daemon.md), [sync strategy](docs/sync-strategy.md), [caching](docs/caching.md),
 [database schema](docs/database-schema.md), [SQL](docs/sql.md), [search](docs/search.md),
-[rate limiting](docs/rate-limiting.md). Known gaps are tracked in
+[media](docs/media.md), [rate limiting](docs/rate-limiting.md). Known gaps are tracked in
 [issues](https://github.com/neoromantic/telegram-sync-cli/issues).
 
 ## For AI agents
@@ -156,9 +163,30 @@ Reference: [CLI commands](docs/cli-commands.md), [authentication](docs/auth.md),
 - `tg skill manifest` prints a skill manifest, `tg skill validate` checks the environment and
   `tg skill install` writes the manifest to the default location.
 - The daemon never sends or edits anything, so it is safe to leave running.
-- `tg status` reports each account's cache size (`--sizes` adds each table's); `tg db vacuum`
-  prunes old bookkeeping rows and gives free space back to the disk, and works while the
-  daemon runs on a cache this version created.
+- `tg status` reports each account's cache size (`--sizes` adds each table's and the media
+  cache's); `tg db vacuum` prunes old bookkeeping rows and gives free space back to the disk,
+  and works while the daemon runs on a cache this version created.
+
+## Usage stats
+
+tg sends usage stats to its author: how often it runs, which commands run (the command name,
+such as `chats list`, never its arguments), which errors come up, the tg version, how it was
+installed, the OS and CPU, and whether a terminal, a script, an AI agent or the daemon runs it,
+tied to a random install ID. A Telegram error is sent by its name only (`FLOOD_WAIT`); an error
+reading the config file or a cache also carries its message, with your home folder, a data
+directory you set and your user name taken out. tg never sends messages, chat or contact names,
+phone numbers, account, chat or user IDs, search queries or any other argument.
+
+Nothing is sent until tg has shown you a one-line notice (in a terminal, or to an AI agent that
+runs it), and nothing from CI, tests or a source checkout. The daemon sends each event at most
+once a day. Events go through usage.sergeybaus.com to PostHog, which stores them in its US
+Cloud as the author's processor and sees your IP address.
+
+Turn it off with `tg telemetry off` (it also deletes the install ID),
+`TELEGRAM_SYNC_CLI_TELEMETRY=0` or `DO_NOT_TRACK=1`. `tg telemetry status` shows whether it's
+on, why, and the install ID. Everything that is sent:
+[usage.sergeybaus.com](https://usage.sergeybaus.com); details in
+[configuration](docs/configuration.md#usage-stats).
 
 ## Contributing
 

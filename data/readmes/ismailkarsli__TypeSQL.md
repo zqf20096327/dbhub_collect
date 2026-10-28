@@ -129,31 +129,31 @@ The parser is checked against the regression tests PostgreSQL runs on itself, ab
 ## Compile time
 
 <!-- performance-summary:start -->
-The [real-world application workload](packages/bench/src/case1.ts) contains 379 statements and reusable SQL fragments. Average check time per statement, including schema and fragment checking: 17.1 ms with `tsc` and 5.72 ms with [tsrs](https://github.com/oxc-project/tsrs).
+The [real-world application workload](packages/bench/src/case1.ts) contains 379 statements and reusable SQL fragments. Average check time per statement, including schema and fragment checking: 5.05 ms with `tsc` and 1.42 ms with [tsrs](https://github.com/oxc-project/tsrs).
 
 | Application workload | `tsc` | tsrs |
 |---|---|---|
-| 379 statements | 6.482 s | 2.166 s |
-| with the [type cache](https://typesql.karsli.net/guide/performance#type-cache) | 2.31 s | 0.756 s |
+| `case1` | 1.914 s | 0.54 s |
+| [`case1 cached`](https://typesql.karsli.net/guide/performance#type-cache) | 0.638 s | 0.178 s |
 <!-- performance-summary:end -->
 
 See [Performance](https://typesql.karsli.net/guide/performance) for how this is measured.
 
 ### Performance by release
 
-Cached and uncached tsrs check time for the [real-world application](packages/bench/src/case1.ts) by `@typesql/core` version. Lower is faster. Releases append CI measurements of the same fixture.
+Cached and uncached tsrs check time for the [real-world application](packages/bench/src/case1.ts) by `@typesql/core` version. Lower is faster. Every refresh remeasures all releases from 0.7.1 in one CI job with the same compilers, using the median of three checks per variant.
 
 <!-- performance-history:start -->
-Lines: 🔵 Uncached · 🟢 Cached. tsrs check time for the case1 application workload.
+Lines: 🔵 Uncached · 🟢 Cached. tsrs check time for the case1 application workload, remeasured for all versions in one CI job.
 
 ```mermaid
 %%{init: {"themeVariables": {"xyChart": {"plotColorPalette": "#2563eb,#16a34a"}}}}%%
 xychart-beta
     title "tsrs - real-world case1"
-    x-axis "Core version" ["0.7.1"]
-    y-axis "Check time (seconds, lower is faster)" 0 --> 2.4
-    line [2.166]
-    line [0.756]
+    x-axis "Core version" ["0.7.1", "0.7.2", "0.7.3", "0.7.4", "0.7.5"]
+    y-axis "Check time (seconds, lower is faster)" 0 --> 1.9
+    line [1.687, 0.682, 0.669, 0.665, 0.54]
+    line [0.586, 0.233, 0.231, 0.228, 0.178]
 ```
 <!-- performance-history:end -->
 

@@ -138,6 +138,8 @@ func Handler(ctx *replication.ListenerContext) {
 		slog.Info("update message received", "new", msg.NewDecoded, "old", msg.OldDecoded)
 	case *format.Truncate:
 		slog.Info("truncate message received", "relations", msg.RelationOIDs, "cascade", msg.Cascade, "restartIdentity", msg.RestartIdentity)
+	case *format.LogicalDecodingMessage:
+		slog.Info("logical message received", "prefix", msg.Prefix, "content", string(msg.Content), "lsn", msg.LSN)
 	}
 
 	if err := ctx.Ack(); err != nil {
@@ -384,8 +386,10 @@ You can run [Replica Identity Nothing](./example/replica-identity-nothing) for a
 | `slot.createIfNotExists`                |   bool   |    no    |    -    | Create replication slot if not exists. Otherwise, return `replication slot is not exists` error.      |                                                                                                                                                    |
 | `slot.name`                             |  string  |   yes    |    -    | Set the logical replication slot name                                                                 | Should be unique and descriptive. Quoted when sent to PostgreSQL.                                                            |
 | `slot.slotActivityCheckerInterval`      |   int    |    no    |  1000   | Set the slot activity check interval time in milliseconds                                             | Specify as an integer value in milliseconds (e.g., `1000` for 1 second).                                                                           |
-| `slot.protoVersion`                     |   int    |    no    |    2    | `pgoutput` protocol version used in `START_REPLICATION`                                               | `1`: PostgreSQL 10+ compatibility, no streaming transaction protocol messages. `2`: PostgreSQL 14+, enables streaming/messages options.           |
+| `slot.protoVersion`                     |   int    | no       | 2       | `pgoutput` protocol version used in `START_REPLICATION`                                               | `1`: no streaming of in-progress transactions. Works on PostgreSQL 10+. `2`: PostgreSQL 14+, streaming of in-progress transactions. `messages` is requested on PostgreSQL 14+ unless `slot.logicalMessages` is `off`. |
+| `slot.logicalMessages`                  |  string  | no       | auto    | Logical decoding messages (`pg_logical_emit_message`), PostgreSQL 14+                                 | **auto:** request the option when the server supports it. **on:** require it; startup fails on PostgreSQL 10-13. **off:** never request it, so no message is ever delivered. See [Logical Decoding Messages](#logical-decoding-messages). |
 | `slot.failover`                         |   bool   |    no    |  false  | Create the slot with `FAILOVER true` (PostgreSQL 17+) so standbys running `sync_replication_slots` keep a synchronized copy; an existing slot is altered with `ALTER_REPLICATION_SLOT … (FAILOVER true)`. | Rejected with a clear error on older servers. Needs `synchronized_standby_slots` on the primary, see [Failover slots](#failover-slots-postgresql-17). |
+| `statusUpdateInterval`                  | duration |    no    |  10s    | How often the standby acknowledges the primary with a standby status update while WAL is flowing back-to-back. | Must stay well below the server's `wal_sender_timeout` (60s by default); not checked at startup. The 10s default matches `wal_receiver_status_interval`, the cadence Postgres expects from standbys. Set to `0` to disable the periodic update and reply only when PostgreSQL requests it. |
 | `snapshot.enabled`                      |   bool   |    no    |  false  | Enable initial snapshot feature                                                                       | When enabled, captures existing data before starting CDC.                                                                                          |
 | `snapshot.mode`                         |  string  |    no    |  never  | Snapshot mode: `initial`, `never`, or `snapshot_only`                                                 | **initial:** Take snapshot only if no previous snapshot exists, then start CDC. <br> **never:** Skip snapshot, start CDC immediately. <br> **snapshot_only:** Take snapshot and exit (no CDC, no replication slot required). |
 | `snapshot.chunkSize`                    |  int64   |    no    |  8000   | Number of rows per chunk during snapshot                                                              | Adjust based on table size. Larger chunks = fewer chunks but more memory per chunk.                                                               |
@@ -400,7 +404,7 @@ You can run [Replica Identity Nothing](./example/replica-identity-nothing) for a
 | `extensionSupport.enableTimescaleDB`    |   bool   |    no    |  false  | Enable support for TimescaleDB hypertables. Ensures proper handling of compressed chunks during replication. |                                                                                                                                                    |
 | `visibilityGuard.enabled`               |   bool   |    no    |  false  | Hold the first event of every transaction until the transaction is visible to new snapshots on the primary (closes the logical-decoding read-after-write window; see [Visibility Guard](#visibility-guard)). | Opens one extra regular connection to the same host as the replication connection. Heartbeat events bypass the gate.                                |
 | `visibilityGuard.failMode`              |  string  |    no    | closed  | What to do when a transaction is not visible within `timeout`                                          | **closed:** restart the stream; the event is redelivered from the confirmed LSN. **open:** log a warning, count it, dispatch anyway. Guard errors (replica, failover, connection loss) restart the stream in both modes. |
-| `visibilityGuard.timeout`               | duration |    no    |  10s    | Maximum time to wait per transaction                                                                   | Must be less than half of the server's `wal_sender_timeout` (checked at startup, skipped when it is `0`): keepalive replies stop while the gate blocks. |
+| `visibilityGuard.timeout`               | duration |    no    |  10s    | Maximum time to wait per transaction                                                                   | Must be less than half of the server's `wal_sender_timeout` (checked at startup, skipped when it is `0`). That bound matters when `statusUpdateInterval` is `0`: keepalive replies stop while the gate blocks. |
 | `visibilityGuard.pollInterval`          | duration |    no    |  5ms    | First poll interval; doubles up to 250ms with jitter                                                   |                                                                                                                                                    |
 | `visibilityGuard.replicas`              | []string |    no    |   []    | Standbys (`host:port`) that must have applied the transaction before its first event is dispatched (see [Visibility Guard](#visibility-guard)). | Requires `enabled: true`. Credentials and database come from the main config. Direct standby hosts only, never a pooled endpoint. Shares `timeout` and `failMode` with the primary check. |
 
@@ -417,14 +421,13 @@ You can run [Replica Identity Nothing](./example/replica-identity-nothing) for a
 `go-pq-cdc` now supports both `pgoutput` protocol versions:
 
 - **`slot.protoVersion: 1`**
-  - Works with PostgreSQL 10+
   - Starts replication with `proto_version '1'`
-  - Does not request `messages 'true'` or `streaming 'true'`
-  - Best choice for older PostgreSQL versions or simpler CDC setups
+  - Does not request `streaming 'true'`, so in-progress transactions are not streamed
+  - On PostgreSQL 14 and newer, also requests `messages 'true'` unless `slot.logicalMessages` is `off`. PostgreSQL 10–13 do not receive that option, so those servers still start
 
 - **`slot.protoVersion: 2` (default)**
   - Requires PostgreSQL 14+
-  - Starts replication with `proto_version '2'`, `messages 'true'`, and `streaming 'true'`
+  - Starts replication with `proto_version '2'` and `streaming 'true'`, plus `messages 'true'` unless `slot.logicalMessages` is `off`
   - Supports streamed in-progress transactions (`STREAM START/STOP/COMMIT/ABORT`)
 
 Streaming behavior for `proto_version: 2`:
@@ -433,6 +436,22 @@ Streaming behavior for `proto_version: 2`:
 - Events are emitted only on `STREAM COMMIT`.
 - `STREAM ABORT` discards all buffered events for that transaction.
 - This prevents rolled-back streamed transactions from leaking to consumers.
+
+### Logical Decoding Messages
+
+`pg_logical_emit_message` writes a logical decoding message into the WAL, which `pgoutput` forwards as an `M` record. `go-pq-cdc` decodes it into `*format.LogicalDecodingMessage` and delivers it to the handler like any row change:
+
+| Field | Meaning |
+| --- | --- |
+| `Prefix` | the routing key given to `pg_logical_emit_message` |
+| `Content` | the payload bytes, unmodified |
+| `LSN` | the WAL position of the message itself, not a commit LSN |
+
+A message emitted **inside a transaction** arrives with that transaction at COMMIT, in row order, with `ctx.Xid` and `ctx.CommitLSN` set as they are for row changes. A message emitted **outside** a transaction arrives immediately and belongs to no transaction: `ctx.Xid` and `ctx.CommitLSN` are both `0`.
+
+A message that arrives while a streamed transaction is in flight is delivered immediately but cannot be acknowledged until that transaction resolves. Confirming the message's own position would promise the server that the transaction's earlier rows — still held in memory, not yet delivered — had been handled, and the server acts on that promise by refusing to resend them. The transaction's own end-of-transaction acknowledgement covers the message instead, so a message may be delivered twice if the process stops in the meantime. It is never skipped.
+
+Messages require PostgreSQL 14+. `slot.logicalMessages` defaults to `auto`, which requests them whenever the server supports the option; `off` never requests them, which is the only way to guarantee a handler never receives one; `on` requires them, so a PostgreSQL 10–13 server fails startup instead of omitting the option silently.
 
 ### Visibility Guard
 
@@ -450,7 +469,7 @@ events bypass the gate.
 visibilityGuard:
   enabled: true
   failMode: closed   # closed | open
-  timeout: 10s       # must be < wal_sender_timeout / 2; covers the primary and every replica below
+  timeout: 10s       # must be < wal_sender_timeout / 2 unless statusUpdateInterval is set; covers the primary and every replica below
   pollInterval: 5ms  # doubles up to 250ms, with jitter
   replicas:          # optional: standbys that must have applied the transaction before dispatch
     - standby1:5432
@@ -504,7 +523,7 @@ connection lost) restarts the stream with the error class `visibility guard unre
 and is redelivered from the confirmed LSN. `failMode: open`: after `timeout` the event is dispatched with a warning and
 `go_pq_cdc_visibility_fail_open_total` is incremented; guard errors still restart the stream. `timeout` must stay below
 half of the server's `wal_sender_timeout` (checked at startup, skipped when it is `0`) because keepalive replies stop
-while the gate blocks. Waits are recorded in `go_pq_cdc_visibility_wait_duration_seconds`, timeouts in
+while the gate blocks when `statusUpdateInterval` is disabled. Waits are recorded in `go_pq_cdc_visibility_wait_duration_seconds`, timeouts in
 `go_pq_cdc_visibility_timeout_total`.
 
 With `replicas`, a standby that is unreachable or still behind when `timeout` expires counts as a timeout and follows
@@ -608,6 +627,7 @@ the `/metrics` endpoint.
 | go_pq_cdc_update_total                              | The total number of `UPDATE` operations captured on specific tables.                                  | slot_name, host| Counter    |
 | go_pq_cdc_delete_total                              | The total number of `DELETE` operations captured on specific tables.                                  | slot_name, host| Counter    |
 | go_pq_cdc_insert_total                              | The total number of `INSERT` operations captured on specific tables.                                  | slot_name, host| Counter    |
+| go_pq_cdc_logical_message_total                     | The total number of logical decoding messages delivered to the handler.                               | slot_name, host| Counter    |
 | go_pq_cdc_cdc_latency_current                       | The current latency in capturing data changes from PostgreSQL, in nanoseconds.                       | slot_name, host| Gauge      |
 | go_pq_cdc_cdc_latency_current_milliseconds          | The current latency in capturing data changes from PostgreSQL, in milliseconds.                      | slot_name, host| Gauge      |
 | go_pq_cdc_process_latency_current                   | The current latency in processing the captured data changes, in nanoseconds.                         | slot_name, host| Gauge      |

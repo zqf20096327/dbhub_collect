@@ -37,7 +37,7 @@ A small, fast, real-time group chat. One [PocketBase](https://pocketbase.io) bin
   background), so no push service (Google, Mozilla, Apple) is involved
 - Installable as an app (PWA: Add to Home Screen, the browser's Install button); it opens offline to its shell
 - Optimistic sending with safe retries, reconnect gap-fill, light/dark themes, works on phones
-- A native Android app (Kotlin, Jetpack Compose) with the same features, push notifications and a 3 MB download — see
+- A native Android app (Kotlin, Jetpack Compose) with the same features, notifications and a 3 MB download — see
   [Android app](#android-app)
 
 Design: [`docs/DESIGN.md`](docs/DESIGN.md) · Android app: [`docs/ANDROID.md`](docs/ANDROID.md) · QA: [`docs/QA.md`](docs/QA.md) · Refactoring plan: [`docs/REFACTOR.md`](docs/REFACTOR.md) · Archived plans: [MVP build](docs/history/BUILD_PLAN.md), [avatars, DMs, attachments](docs/history/NEXT_FEATURES_PLAN.md)
@@ -69,7 +69,8 @@ The PocketBase admin UI is at http://127.0.0.1:8090/_/ (create a superuser with
 | `npm run typecheck` | `tsc` (strict) for the frontend, tests and scripts, plus `pb_hooks/` + `pb_migrations/` against PocketBase's generated types (`types/pocketbase.d.ts`, written by `scripts/pb-types.sh`) |
 | `npm run lint` | Biome: formatting, lint rules, import order (`npm run format` applies the fixes) |
 | `npm run lint:sinks` | Fails if frontend code uses `innerHTML` & co. (XSS guard) |
-| `npm test` | Unit/view tests (Vitest + happy-dom) against a real, throwaway PocketBase |
+| `npm test` | Unit tests (Vitest + happy-dom, no server) and component tests (views and services against a real, throwaway PocketBase) |
+| `npm run test:unit` | Only the unit tests: no server, ~10 s |
 | `npm run test:int` | Integration tests: schema, API rules, hooks, realtime, pagination |
 | `npm run test:e2e` | Playwright end-to-end tests against the production build |
 | `npm run schema:snapshot` | Rewrite `docs/schema.snapshot.json` (every collection's API rules, fields and indexes, and the rate limits) after a migration changes them; `test:int` fails while it is out of date |

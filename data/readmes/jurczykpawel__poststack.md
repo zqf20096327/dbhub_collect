@@ -70,6 +70,7 @@
 - **Meta `appsecret_proof`** — not sent by default. If you enable *Require app secret* in your Meta App, add it to the Graph API calls (`HMAC-SHA256(page_token, META_APP_SECRET)`).
 - **Channel uniqueness** — each connected account belongs to exactly one workspace: a partial unique index allows at most one active channel per `(platform, platform_id)` instance-wide, so incoming events route to a single owner. Connecting an account already live in another workspace is refused. The migration that adds this index automatically disables any pre-existing cross-workspace duplicate (keeping the earliest-connected), so upgrades never fail.
 - **First-run admin bootstrap** — registration is closed by default (`REGISTRATION_ENABLED` unset/`false`), but the **first** account on an empty instance can always register, to bootstrap the owner. This means whoever reaches `/register` first on a fresh deploy becomes the admin. Register immediately after deploying (or keep the instance network-restricted until you have), then leave `REGISTRATION_ENABLED` off so no further self-signups are possible.
+- **Instance operator** — only operator sessions manage shared integration credentials and the instance license. Set `INSTANCE_ADMIN_EMAILS` to a comma-separated list of account emails (trimmed, case-insensitive); restart to apply. When empty/unset, the earliest existing user (`created_at`, then `id`) is the operator. A nonempty list replaces that default. Workspace API keys retain license status discovery but cannot change the license. Workspace retention remains workspace-scoped.
 - **Single-owner workspaces (no role tiers yet)** — a logged-in workspace member has full access; API keys are limited by their selected permissions. There is intentionally only one membership role (`owner`); richer roles (`admin`/`agent`) and per-role authorization (`requireRole()`) are deferred until member invitations exist. Until then, treat any workspace member as having full access — including destructive actions (deleting channels, erasing contacts, managing API keys).
 - **Contact identity across surfaces (Meta ASID vs PSID)** — Meta gives a public *comment* an app-scoped user id and a *direct message* a page-scoped id (PSID); they are different strings with no local mapping. So the same person commenting and then DMing currently resolves to **two separate contacts**. Consequence: send limits/cooldowns aren't shared across the two, and an `unsubscribe` or GDPR erasure applies only to the identity it was performed on. Merging them requires a Graph API lookup and is planned as a dedicated feature; until then, erase/unsubscribe both identities if a contact reached you on more than one surface.
 - **Contact search & non-ASCII case-folding** — the dashboard contact search uses `ILIKE`, whose case-insensitivity for non-ASCII letters (e.g. Polish `Ó`/`ó`) depends on the database locale. The bundled `postgres:alpine` initializes with the `C` locale, where `ILIKE` only case-folds ASCII — so searching `józek` won't match a stored `JÓZEK`. For correct Polish (or any non-ASCII) case-insensitive search, initialize Postgres with a UTF-8/ICU locale (e.g. set `POSTGRES_INITDB_ARGS` to use `--locale-provider=icu --icu-locale=und` on a **fresh** data volume) or add the `unaccent` extension. Keyword/automation matching is unaffected (it folds + NFC-normalizes in the app). The same `ILIKE '%term%'` search is also non-sargable (a sequential scan per keystroke); fine for small workspaces, but at scale add a `pg_trgm` GIN index on the searched columns.
@@ -248,6 +249,12 @@ re-encrypt every `channels.token_encrypted` under the new key (in a maintenance 
 > **[docs/META_CONNECTIONS.md](docs/META_CONNECTIONS.md)** maps all five connection paths — OAuth,
 > Instagram Business Login, pasted token, and the managed/System-User connection — with what each
 > needs, what it can do, and how its tokens expire and refresh.
+>
+> **DMs on both platforms in one sentence:** Facebook (Messenger) DMs come with **+ Facebook** or a
+> User / System User token (Sources). **Instagram DMs always additionally need + Instagram (messaging)**
+> (Instagram Business Login) for each IG account, with that account added as an **Instagram Tester**.
+> No token, not even a permanent System User token, delivers Instagram DMs on its own at Standard Access.
+> Measured, with step-by-step: [docs/META_CONNECTIONS.md → At a glance](docs/META_CONNECTIONS.md#at-a-glance--what-each-path-gives-you).
 
 > **Want an AI agent to click through this for you?** The repo ships an agent skill,
 > [`skills/meta-app-setup`](skills/meta-app-setup/SKILL.md), that drives the whole setup below in
@@ -518,20 +525,97 @@ The same Google app can also serve **YouTube** (`youtube` platform) — just add
 
 ## TikTok publishing
 
-TikTok is supported as a **publishing** channel, with one important limitation to be aware of today.
+An instance operator with a **Business** license can set the product name, logo, favicon, accent,
+default theme, contact email, public HTTPS origin and footer in **Settings → Integrations → Instance
+branding**. This config belongs to the entire installation, independently of content brands. It is
+stored in `instance_settings`; the optional `INSTANCE_BRANDING` environment variable accepts the same
+JSON object (`name`, `logoUrl`, `faviconUrl`, `accent`, `theme`, `contactEmail`, `publicUrl`, `footer`).
+Resetting clears the stored override and falls back to the environment or defaults.
+An empty favicon generates an icon from the accent. Without `white_label` entitlement the default
+identity is used, including when a license expires. `BRAND_NAME` alone no longer changes the identity.
 
-TikTok only allows **direct, fully-automated publishing** for apps that have passed its
-**content-posting audit**. Until an app is audited, TikTok's Content Posting API is restricted to the
-**inbox / draft** flow: PostStack uploads your video to your TikTok **inbox as a draft**, and you open
-the TikTok app to set the caption, cover and privacy and tap publish. Unaudited apps are also capped
-to **private (`SELF_ONLY`)** visibility. So scheduling a TikTok post lands a ready-to-confirm draft in
-your inbox — it is **not** a hands-off auto-publish, and **full automation isn't possible yet**.
+Changes apply on the next request, with up to 30 seconds for other web/worker processes to refresh.
+The public homepage uses an instance page without built-in marketing images; Privacy and Terms reuse
+the built legal content in the instance shell at serving time, so no image rebuild is needed. The
+white-label public pages load no analytics. Crawler documents (`robots.txt`, sitemaps and `llms.txt`)
+also use the configured identity and origin. Set `APP_URL` and provider callback registrations to the
+actual installation origin as usual; the branding origin supplies public links and does not change
+OAuth destinations or license-domain binding. Cookie names, API prefixes and signed webhook header
+names remain stable. Operational email webhook templates can use `{{brand}}`, `{{contact_email}}`,
+`{{public_url}}` and `{{footer}}`; outbound webhook User-Agent uses the instance identity.
 
-We're working hard to remove this friction — either by offering our own **audited app** you can
-publish through, or by making the approval process dramatically easier. That's the goal of a dedicated
-companion project, **[ShareStack](https://sharestack.techskills.academy/)** — a free, browser-first,
-self-hostable publisher that keeps your OAuth token in your own browser. Until that lands, treat
-TikTok publishing as **draft-only**.
+Public [Privacy Policy](https://poststack.techskills.academy/privacy) and
+[Terms of Service](https://poststack.techskills.academy/terms) are served by the same app at
+`/privacy` and `/terms`, with visible footer links. The policy covers TikTok account data,
+publishing and deletion; self-hosted operators remain responsible for their instance data.
+
+TikTok uses the **inbox / draft** flow by default. The video lands in your TikTok inbox; open the
+TikTok app to choose its caption, cover and privacy and confirm publication. Direct Post requires
+`video.publish` and an app that meets TikTok's audit requirements. Unaudited clients remain restricted
+to private (`SELF_ONLY`) visibility; PostStack never substitutes private visibility for your choice.
+Compose loads the selected brand's creator info and shows the TikTok nickname, a playable preview
+and an editable caption. Choose **Direct Post** to select privacy (no default), allowed interactions
+and commercial-content disclosure. Creator-disabled interactions stay disabled; branded content
+cannot be private. Inbox remains the default delivery mode.
+
+Publishing and scheduling require explicit confirmation of this submission, with links to TikTok's
+Music Usage Confirmation and, for branded content, Branded Content Policy. Scheduling shows the
+exact local date, time and timezone for automatic publication. Changes to the account, media,
+caption, settings or schedule clear confirmation. The app records the confirmed channel, settings
+and submission time in the workspace audit log. Processing may take a few minutes; delivery status
+is available in the content cockpit and Queue. After TikTok accepts the upload, the delivery stays
+`processing` while PostStack polls until TikTok reports publication or a final failure (including
+inbox submissions awaiting completion in TikTok). A failed status read retries without uploading again.
+No watermark or logo is added to the video.
+
+At send time, Direct Post queries fresh creator info. If privacy, interactions, video duration or
+posting eligibility changed, the delivery is **held** with a reason and a `post.held` event plus the
+configured delivery alert. Open the delivery in Queue → **Review TikTok settings**, select current
+choices (privacy has no default), confirm consent and choose **Publish now**. Reconnecting a channel
+or changing a date does not release a delivery awaiting confirmation.
+
+Operators can enable **TikTok: zawsze potwierdzaj przy wysyłce** in Settings → integration credentials,
+or set `TIKTOK_CONFIRM_AT_SEND=true`. The default is off: valid scheduled submissions publish
+automatically. When on, every scheduled TikTok delivery waits for that confirmation. The setting
+also applies to saved schedules; confirmation authorizes one immediate delivery only.
+
+The post API supports the settings below for integrations providing their own creator-facing
+posting and consent flow.
+
+Create or patch an editorial post with these nullable fields:
+
+| Field | Meaning |
+|-------|---------|
+| `tiktokPublishMode` | `inbox` (default when absent) or `direct` |
+| `tiktokPrivacyLevel` | Explicit creator choice from `privacy_level_options`; required for Direct Post, with no default |
+| `tiktokDisableComment`, `tiktokDisableDuet`, `tiktokDisableStitch` | `false` allows the interaction; absent/null disables it. Creator restrictions always force disable. |
+| `tiktokBrandContentToggle` | Paid partnership; defaults off and cannot use `SELF_ONLY` |
+| `tiktokBrandOrganicToggle` | Promotion of the creator's own business; defaults off |
+| `tiktokCoverTimestampMs` | Optional video frame for the cover, in milliseconds |
+
+These choices are captured in the delivery when publishing or scheduling the post. The caption
+becomes TikTok's `post_info.title`; the existing `aiDisclosure` setting supplies `is_aigc`.
+Direct Post checks the registered video duration against the smaller of the current creator limit
+and the 600-second catalog ceiling. An unavailable duration or creator limit stops publication.
+New URL uploads are probed with `ffprobe` (included in Docker; install FFmpeg for local development).
+For older media with no duration, register it again with duration metadata through the media API.
+
+Set `TIKTOK_PULL_URL_PREFIX=https://media.example.com/videos/` **only after verifying that domain or
+URL prefix in the TikTok developer portal**. Matching HTTPS media URLs use `PULL_FROM_URL` unchanged;
+other URLs use `FILE_UPLOAD`, with the original bytes unchanged (single chunk, up to 64 MiB).
+No prefix means `FILE_UPLOAD`. A per-request `ingestion` option cannot override this configuration.
+Neither path adds a watermark or logo.
+
+Creator profile and Direct Post permissions are available at
+`GET /api/v1/channels/{channelId}/tiktok/creator-info` (`channels:read` scope) and the
+session-only dashboard equivalent `/channels/{channelId}/tiktok/creator-info`. The response contains
+`data.status: "available"` with `creator_info` (nickname, privacy options, interaction settings and,
+when supplied by TikTok, the video duration limit), or `data.status: "cannot_post_now"` with a reason
+and a try-again-later message. TikTok must grant `video.publish` for this query. Responses are cached
+in process for 60 seconds per channel and credentials; `?refresh=true` forces a new TikTok query.
+Server callers use `getTikTokCreatorInfo(workspaceId, channelId, { refresh: true })` for fresh
+publish-time permissions. Direct publishing also queries TikTok afresh before initializing each post
+and stops when the creator cannot post now. The inbox/draft flow is unchanged.
 
 The other publishing channels — **X, LinkedIn, Threads, YouTube, Facebook & Instagram** — publish
 directly, subject to each platform's own developer-app setup and API access tier.
@@ -760,6 +844,7 @@ npm run lint              # ESLint
 npm run typecheck         # TypeScript (tsc --noEmit; Bun runs the TS entrypoint directly, no build artifact)
 npm test                  # Vitest unit
 npm run test:integration  # Vitest integration (needs a Postgres; set TEST_DATABASE_URL)
+npx playwright test --config=playwright.tiktok.config.ts --project=chromium # Offline TikTok Compose (dedicated E2E_DATABASE_URL)
 ```
 
 ---

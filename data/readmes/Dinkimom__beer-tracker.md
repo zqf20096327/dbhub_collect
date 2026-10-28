@@ -18,13 +18,14 @@
 <p align="center">
   <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" /></a>
   <a href="https://hub.docker.com/r/dinkimom/beer-tracker"><img alt="Docker Hub" src="https://img.shields.io/badge/docker-dinkimom%2Fbeer--tracker-2496ED?logo=docker&logoColor=white" /></a>
-  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-1.25.1-informational" /></a>
+  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-1.25.2-informational" /></a>
 </p>
 
 <p align="center">
   <a href="#планер">Планер</a> ·
   <a href="#бэклог">Бэклог</a> ·
   <a href="#burndown">Burndown</a> ·
+  <a href="#метрики">Метрики</a> ·
   <a href="#факт">Факт</a> ·
   <a href="#ретро">Ретро</a> ·
   <a href="#совместная-работа">Совместная работа</a> ·
@@ -37,13 +38,35 @@
 
 Сетка строится по рабочим дням спринта из трекера. День делится на 2, 3 или 4 слота, по умолчанию на три. У каждого разработчика и тестировщика своя дорожка.
 
-Карточку можно перетащить мышкой, а длительность поменять, потянув за край. Отпуска и техспринты видны на тех же дорожках. По ходу спринта на доску можно клеить заметки, чтобы ничего не забыть: в них работают ссылки, чеклисты и реакции. Справа список задач спринта.
+Доску можно смотреть по людям, по фичам или канбаном по статусам. Карточки раскладываются по строкам сами. Если выключить автосортировку, задачи и заметки можно расставить вручную, и эту раскладку увидит вся команда.
+
+Карточку можно перетащить мышкой, а длительность поменять, потянув за край. Отпуска и техспринты видны на тех же дорожках. Справа список задач спринта.
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./docs/media/swimlane-dark.png" />
-    <source media="(prefers-color-scheme: light)" srcset="./docs/media/swimlane-light.png" />
-    <img src="./docs/media/swimlane-light.png" alt="Планер спринта: свимлейны" width="900" />
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/media/drag-resize-dark.webp" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/media/drag-resize-light.webp" />
+    <img src="./docs/media/drag-resize-light.webp" alt="Перенос карточки и смена длительности" width="900" />
+  </picture>
+</p>
+
+Связь между задачами рисуется инструментом Link: клик по одной карточке, потом по другой, и связь сохраняется в трекере.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/media/link-dark.webp" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/media/link-light.webp" />
+    <img src="./docs/media/link-light.webp" alt="Связь между задачами" width="900" />
+  </picture>
+</p>
+
+По ходу спринта на доску можно клеить заметки, чтобы ничего не забыть: в них работают ссылки, чеклисты и реакции.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/media/note-dark.webp" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/media/note-light.webp" />
+    <img src="./docs/media/note-light.webp" alt="Заметка с чеклистом на доске" width="900" />
   </picture>
 </p>
 
@@ -53,9 +76,9 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./docs/media/backlog-dark.png" />
-    <source media="(prefers-color-scheme: light)" srcset="./docs/media/backlog-light.png" />
-    <img src="./docs/media/backlog-light.png" alt="Бэклог" width="900" />
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/media/backlog-dark.webp" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/media/backlog-light.webp" />
+    <img src="./docs/media/backlog-light.webp" alt="Бэклог" width="900" />
   </picture>
 </p>
 
@@ -65,9 +88,21 @@ Story Points и Test Points по дням спринта, идеальная л�
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./docs/media/burndown-dark.png" />
-    <source media="(prefers-color-scheme: light)" srcset="./docs/media/burndown-light.png" />
-    <img src="./docs/media/burndown-light.png" alt="Burndown SP/TP" width="900" />
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/media/burndown-dark.webp" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/media/burndown-light.webp" />
+    <img src="./docs/media/burndown-light.webp" alt="Burndown SP/TP" width="900" />
+  </picture>
+</p>
+
+## Метрики
+
+Дашборд доски за 2–8 кварталов: say/do, velocity, cycle time, перенос задач и доля багов, каждая цифра в сравнении с прошлым кварталом. Ниже графики по спринтам: сколько взяли и сколько закрыли, куда ушла работа, где задачи ждут. Данные можно отфильтровать по команде и выгрузить в CSV.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/media/metrics-dark.webp" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/media/metrics-light.webp" />
+    <img src="./docs/media/metrics-light.webp" alt="Метрики спринтов по кварталам" width="900" />
   </picture>
 </p>
 
@@ -79,9 +114,9 @@ Sync забирает из трекера историю статусов, и н
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./docs/media/fact-timeline-dark.png" />
-    <source media="(prefers-color-scheme: light)" srcset="./docs/media/fact-timeline-light.png" />
-    <img src="./docs/media/fact-timeline-light.png" alt="Таймлайн факта на свимлейне" width="900" />
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/media/fact-timeline-dark.webp" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/media/fact-timeline-light.webp" />
+    <img src="./docs/media/fact-timeline-light.webp" alt="Таймлайн факта на свимлейне" width="900" />
   </picture>
 </p>
 
@@ -91,9 +126,9 @@ Sync забирает из трекера историю статусов, и н
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./docs/media/retro-dark.png" />
-    <source media="(prefers-color-scheme: light)" srcset="./docs/media/retro-light.png" />
-    <img src="./docs/media/retro-light.png" alt="Доска ретроспринта" width="900" />
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/media/retro-dark.webp" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/media/retro-light.webp" />
+    <img src="./docs/media/retro-light.webp" alt="Доска ретроспринта" width="900" />
   </picture>
 </p>
 
@@ -105,9 +140,9 @@ Sync забирает из трекера историю статусов, и н
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./docs/media/collaboration-dark.png" />
-    <source media="(prefers-color-scheme: light)" srcset="./docs/media/collaboration-light.png" />
-    <img src="./docs/media/collaboration-light.png" alt="Совместная работа: presence на доске" width="900" />
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/media/collaboration-dark.webp" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/media/collaboration-light.webp" />
+    <img src="./docs/media/collaboration-light.webp" alt="Совместная работа: presence на доске" width="900" />
   </picture>
 </p>
 
@@ -134,7 +169,7 @@ cp env.example .env
 docker compose -f docker-compose.yml -f docker-compose.hub.yml up -d
 ```
 
-Откройте [http://localhost:3000](http://localhost:3000) и подключите трекер. Образы лежат на Docker Hub: [`dinkimom/beer-tracker`](https://hub.docker.com/r/dinkimom/beer-tracker), тег `1.25.1`.
+Откройте [http://localhost:3000](http://localhost:3000) и подключите трекер. Образы лежат на Docker Hub: [`dinkimom/beer-tracker`](https://hub.docker.com/r/dinkimom/beer-tracker), тег `1.25.2`.
 
 Установка, S3, sync и запуск из исходников описаны в [docs/INSTALL.md](./docs/INSTALL.md), выбор трекера для организации — в [docs/ISSUE_TRACKERS.md](./docs/ISSUE_TRACKERS.md).
 
@@ -180,7 +215,7 @@ MCP-сервер работает на вашем же инстансе. Кли�
 
 Коммиты подписываются по [DCO](https://developercertificate.org/) (`git commit -s`), правила в [CONTRIBUTING.md](./CONTRIBUTING.md). Об уязвимостях сообщайте по [SECURITY.md](./SECURITY.md).
 
-В коде и старых документах интерфейс может называться Sprint Manager, это прежнее имя. Стек и слои описаны в [ARCHITECTURE.md](./ARCHITECTURE.md), слоты для скриншотов — в [docs/media/README.md](./docs/media/README.md). Как добавить компанию в «Где используется», написано в [docs/companies.md](./docs/companies.md).
+Стек и слои описаны в [ARCHITECTURE.md](./ARCHITECTURE.md), слоты для скриншотов — в [docs/media/README.md](./docs/media/README.md). Как добавить компанию в «Где используется», написано в [docs/companies.md](./docs/companies.md).
 
 Планировщик эпиков и квартальный план из продукта убраны, причины в [product steering](./docs/steering/product.md).
 

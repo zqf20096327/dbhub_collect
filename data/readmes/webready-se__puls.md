@@ -49,7 +49,7 @@ That's it. Docker, Nginx, Laravel Forge and shared hosting without SSH are cover
 
 ### See who reads your site besides people
 
-Bots are counted apart from your visitors: AI crawlers such as GPTBot, ClaudeBot and PerplexityBot, search engines, SEO tools, social previews and uptime monitors, with the pages they read. Behind Nginx, Puls also logs 404s and redirects as **pages to fix**, with the pages that link to them.
+Bots are counted apart from your visitors: AI crawlers such as GPTBot, ClaudeBot and PerplexityBot, search engines, SEO tools, social previews and uptime monitors, with the pages they read. Behind Nginx, Puls also logs 404s and redirects as **pages to fix**, with the pages that link to them. Both sections stay folded until you open them, and their headers say what is inside ("1,128 visits from 8 bots", "2 not found, 3 redirects"), so you can tell when one is worth a look.
 
 ![Bots and crawlers, grouped as monitor, search engine, AI and social, with the most crawled pages, the latest bot activity and pages to fix](docs/screenshots/bots.png)
 
@@ -72,7 +72,7 @@ A goal is a page or an event. Its tile shows the visitors who converted, their s
 - **Teams and clients:** one dashboard for many sites, users limited to their own sites, read-only share links, a [JSON and CSV API](docs/api.md)
 - **Tracking without code:** phone and email clicks, downloads, form submissions, outbound links
 - **Keeping personal data out:** drop query strings or turn ids and tokens in URLs into `:id` and `:token` before anything leaves the browser
-- **Everyday use:** dark mode, a ⌘K command palette, installable as an app, white-label branding, an interactive CLI
+- **Everyday use:** dark mode, a ⌘K command palette for sites and pages, installable as an app, white-label branding, an interactive CLI
 
 <details>
 <summary>More screenshots</summary>

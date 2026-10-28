@@ -94,7 +94,7 @@ level security decides who sees what.
 
 ## Modules
 
-The core lives in the `public` schema. Beside it, a module is a schema of its
+The core lives in a schema of its own, `ekwo` (`public` until 0.23.0). Beside it, a module is a schema of its
 own, with its own migrations, row level security and tests, enabled per
 company.
 

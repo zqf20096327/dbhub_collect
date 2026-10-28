@@ -48,6 +48,7 @@ PDF-upload UI.
 | Recover paper IDs after restart | Browse bounded document summaries, filter by source/title, and select papers for queries | [Document catalog](docs/guides/DOCUMENT_CATALOG_GUIDE.md) |
 | Find exact wording and read its source in a browser | Search from `/explore`, inspect highlighted Unicode spans, page within an exact paper/collection, and return from source context without generation | [Browser/API/Python passage search](docs/guides/BROWSER_PASSAGE_SEARCH_GUIDE.md) |
 | Reuse a named paper selection after restart | Save a collection, then pass `collection_id` to `/query` or `/retrieve`; revisioned edits preserve old evidence | [Paper collections](docs/guides/PAPER_COLLECTIONS_GUIDE.md) |
+| Create a named selection without curl or manual JSON | Filter a bounded catalog page, explicitly check exact papers, save a name and reopen persisted membership | [Native collection builder: offline/browser/API/Python/portfolio guide](docs/guides/NATIVE_COLLECTION_BUILDER_GUIDE.md) |
 | Browse saved collections and human screening | Discover collections from `/explore`, inspect membership/status/reasons, follow exact readers and download revision-bound screening/duplicate outputs | [Native collection browser and executed demo](docs/guides/COLLECTION_BROWSER_GUIDE.md) |
 | Inspect duplicate candidates before screening | Read a revision-checked selection in one bounded snapshot; review exact IDs, raw metadata, reasons and singletons without hiding or deleting papers | [Collection duplicate inspection and measured demo](docs/guides/COLLECTION_DUPLICATES_GUIDE.md) |
 | Screen papers before choosing evidence | Save human include/exclude/unsure decisions, resume the queue, and explicitly preview current included IDs | [Human paper screening](docs/guides/PAPER_SCREENING_GUIDE.md) |
@@ -68,6 +69,7 @@ PDF-upload UI.
 | Read a completed answer offline | Download one static HTML file with proposed/accepted citation links to frozen passages, recorded provenance and expandable trace; no scripts or network | [Offline evidence reader and measured demo](docs/guides/OFFLINE_EVIDENCE_READER_GUIDE.md) |
 | Import only a saved answer's cited references | Download frozen-source BibTeX plus exact document/chunk provenance and metadata warnings; no generation or DOI lookup | [Saved bibliography and measured demo](docs/guides/SAVED_BIBLIOGRAPHY_GUIDE.md) |
 | Record a human judgment on a saved answer | Append `accepted`, `needs_revision`, or `rejected` opinions with comments and frozen chunk references; recover history after restart | [Saved answer reviews](docs/guides/ANSWER_REVIEWS_GUIDE.md) |
+| Author a saved-answer verdict in a normal browser | Inspect frozen evidence and warnings, choose your verdict/comment/citations, preview without writes, then explicitly save and reopen the precise opinion | [Saved-answer review workbench: user/API/Python/portfolio guide and actual browser GIF](docs/guides/SAVED_ANSWER_REVIEW_WORKBENCH_GUIDE.md) |
 | Attach a human note to an exact saved passage | Validate frozen source IDs, SHA-256, Unicode offsets, and quote; keep immutable retry-safe notes after corpus changes and restart | [Exact frozen-evidence annotations](docs/guides/EVIDENCE_ANNOTATIONS_GUIDE.md) |
 | Author an exact-source note in a normal browser | Choose a frozen span, preview your note without writes, explicitly save, and reopen the exact persisted quote with retry-safe identity | [Frozen annotation workbench: user/API/Python/portfolio guide and actual browser GIF](docs/guides/FROZEN_ANNOTATION_WORKBENCH_GUIDE.md) |
 | Read saved human feedback in a normal browser | Open a completed run's notebook, page independent review/annotation histories, and highlight an annotation's exact occurrence in its frozen source | [Human-review notebook and actual browser GIF](docs/guides/HUMAN_REVIEW_NOTEBOOK_GUIDE.md) |
@@ -79,6 +81,24 @@ PDF-upload UI.
 | Demonstrate your engineering work | Use synthetic notes, review warnings, save artifacts, and explain limitations | [Portfolio walkthrough](docs/guides/RESEARCH_WORKFLOW_GUIDE.md#6-present-a-portfolio-demonstration) |
 | Catch retrieval regressions before a release | Compare real BM25/hybrid rankings on labeled passages and enforce per-retriever quality gates | [Offline benchmarks](docs/guides/RETRIEVAL_BENCHMARK_GUIDE.md) |
 | Extend ingestion or retrieval | Explicitly wire Python connectors, ranking helpers, or screening utilities | [Categorized catalog](docs/README.md) |
+
+## Build a paper collection in your browser
+
+[![Measured native collection creation, atomic failures and restart](docs/assets/collection-builder.png)](docs/assets/collection-builder.gif)
+
+Choose **Create a paper collection** from the corpus explorer or saved collections.
+Filter one bounded page, check the exact papers yourself, name the selection,
+then explicitly create it. Nothing is selected by default or carried silently
+across pages. Atomic storage rejects missing papers and duplicate names; a 303
+opens persisted membership with screening/search/worksheet links.
+
+The [complete guide and reproducible offline demo](docs/guides/NATIVE_COLLECTION_BUILDER_GUIDE.md)
+cover exact control-character IDs, restart, same-origin writes, finite bounds
+and local/trusted privacy. The opt-in GIF is a **measured-output Pillow
+illustration, not browser footage** or scientific findings; a
+[text alternative](docs/assets/collection-builder.txt) records executed outcomes.
+No models, retrieval, network or agent events run during creation, and membership
+does not freeze paper contents.
 
 ## Explicitly screen a paper in your browser
 
@@ -173,6 +193,26 @@ only the recorded occurrence highlighted. Human opinions remain separate from
 model grounding and scientific truth; no browser writes or model calls occur.
 The [user/portfolio guide](docs/guides/HUMAN_REVIEW_NOTEBOOK_GUIDE.md) reproduces
 this actual screenshot sequence, including corpus deletion/restart checks.
+
+### Author your own saved-answer verdict
+
+[![Actual native browser view of the synthetic saved answer](docs/assets/saved-answer-review-workbench.png)](docs/assets/saved-answer-review-workbench.gif)
+
+Choose **Review this saved answer** from its reader or notebook. Inspect both
+warning sets and full frozen passages, explicitly choose accepted/needs_revision/
+rejected, enter your comment and optionally select actual frozen IDs. Preview
+without writes, then **Save review** for a same-origin POST and a 303 to that
+precise persisted UUID. Exact retries preserve sequence/time; different content
+under the same UUID conflicts. The original JSON API and notebook pagination
+are unchanged. No models, retrieval, event changes, automatic acceptance or
+authenticated approval are implied.
+
+The [complete user/API/Python/portfolio guide](docs/guides/SAVED_ANSWER_REVIEW_WORKBENCH_GUIDE.md)
+reproduces the guarded synthetic HTTP workflow and four actual browser renderings
+of those already-executed responses, not recorded/live-click browser footage or a
+scientific result. HTTP persistence is verified separately. A
+[text alternative](docs/assets/saved-answer-review-workbench.txt) is available;
+the still makes animation opt-in.
 
 ### Preview and save an exact frozen-source note
 
@@ -476,20 +516,29 @@ For the exact wiring and storage lifecycle, see [Architecture](ARCHITECTURE.md).
 For current model IDs, per-provider overrides, routing, and dated official
 sources, use the [provider model guide](docs/guides/PROVIDER_MODELS_GUIDE.md).
 
-The **2026-10-25 America/Los_Angeles** catalog recheck leaves all selected
+The **2026-10-28 America/Los_Angeles** catalog recheck leaves all selected
 defaults unchanged:
 
 | Provider | Repository default | Current official guidance |
 | --- | --- | --- |
-| OpenAI | `gpt-6-astra` | [GPT-6 guide](https://developers.openai.com/api/docs/guides/latest-model): Astra for highest intelligence, `gpt-6.1-sol` for balanced near-Astra performance, `gpt-6-luna` for speed and cost-sensitive volume. |
+| OpenAI | `gpt-6-astra` | [GPT-6 guide](https://developers.openai.com/api/docs/guides/latest-model): Astra for highest intelligence, `gpt-6.1-sol` for balanced near-Astra performance, `gpt-6.1-terra` for efficient visual/writing work, and `gpt-6-luna` for speed and cost-sensitive volume. These are provider descriptions, not implemented vision/tools or measured tradeoffs here. |
 | Anthropic | `claude-sonnet-5-5` | [Claude catalog](https://platform.claude.com/docs/en/models/overview): generally recommends `claude-opus-5-5`, with `claude-fable-5-1` for demanding long-horizon reasoning and `claude-haiku-5-5` for latency-sensitive work. Sonnet remains this bounded text adapter's selection. |
 | Google | `gemini-3.8-flash` | [Gemini 4 Argon](https://ai.google.dev/gemini-api/docs/models/gemini-4-argon) is the flagship; Flash remains the repository's SPEED-route default. |
-| Kimi | `kimi-k3.1-pro` | [Kimi quickstart](https://platform.kimi.ai/docs/get-your-api-key.md): K3.1 Pro, with `kimi-k3.1-pro-highspeed` as an optional variant, not an automatic fallback. |
+| Kimi | `kimi-k3.1-pro` | [K3.1 Pro quickstart](https://platform.kimi.ai/docs/guide/kimi-k3-1-pro-quickstart.md): K3.1 Pro, with `kimi-k3.1-pro-highspeed` as an optional variant, not an automatic fallback. |
+
+Use the [selection and migration checklist](docs/guides/PROVIDER_MODELS_GUIDE.md#selection-and-migration-checklist)
+for an explicit Terra text override, bounded evaluation, saved provider/model
+evidence, and rollback. Kimi's [K2 notice](docs/guides/PROVIDER_MODELS_GUIDE.md#kimi-legacy-overrides-and-retirement-notice)
+restricts newly registered users starting **2026-10-31**, not existing users
+under that immediate restriction, and plans all-K2 retirement by the end of
+December 2026 without an exact guaranteed date. Check legacy overrides; the
+repository's K3.1 default already needs no migration.
 
 These remain stateless, single-turn text adapters: OpenAI and Kimi use Chat
 Completions, Anthropic Messages, and Gemini `generateContent`. Selecting another
-ID does not add tool loops, streaming, or a different endpoint. Earlier Kimi
-and Sonnet migration checks are dated separately in the provider guide;
+ID does not add image input, tool loops, streaming, or a different endpoint.
+Terra tool calling requires Responses, which this adapter does not implement.
+Earlier Kimi and Sonnet migration checks are dated separately in the provider guide;
 explicit `kimi-k3` rollback overrides remain available.
 Routing and budgets are unchanged. Catalog guidance is not a repository
 benchmark, account-entitlement check, or live inference verification.
@@ -534,6 +583,9 @@ Existing cue illustrations remain available without interrupting the introductio
 | [MeasurementScaleShiftCueExtractor](docs/guides/MEASUREMENT_SCALE_SHIFT_CUES_EXTRACTOR_GUIDE.md) | [GIF](assets/demo/measurement-scale-shift-cues.gif) |
 | [OveradjustmentBiasCueExtractor](docs/guides/OVERADJUSTMENT_BIAS_CUES_EXTRACTOR_GUIDE.md) | [GIF](assets/demo/overadjustment-bias-cues.gif) |
 | [CompetingRiskInformativeCensoringCueExtractor](docs/guides/COMPETING_RISK_INFORMATIVE_CENSORING_CUES_EXTRACTOR_GUIDE.md) | [GIF](assets/demo/competing-risk-informative-censoring-cues.gif) |
+| [TargetTrialEmulationCueExtractor](docs/guides/TARGET_TRIAL_EMULATION_CUES_EXTRACTOR_GUIDE.md) | [GIF](assets/demo/target-trial-emulation-cues.gif) |
+| [InstrumentStrengthCueExtractor](docs/guides/INSTRUMENT_STRENGTH_CUES_EXTRACTOR_GUIDE.md) | [GIF](assets/demo/instrument-strength-cues.gif) |
+| [HealthyWorkerSurvivorCueExtractor](docs/guides/HEALTHY_WORKER_SURVIVOR_CUES_EXTRACTOR_GUIDE.md) | [GIF](assets/demo/healthy-worker-survivor-cues.gif) |
 | [SurveyModeEffectCueExtractor](docs/guides/SURVEY_MODE_EFFECT_CUES_EXTRACTOR_GUIDE.md) | [GIF](assets/demo/survey-mode-effect-cues.gif) |
 | [ColliderBiasInteractionCueExtractor](docs/guides/COLLIDER_BIAS_INTERACTION_CUES_EXTRACTOR_GUIDE.md) | [GIF](assets/demo/collider-bias-interaction-cues.gif) |
 | [AscertainmentDifferentialResidualCueExtractor](docs/guides/ASCERTAINMENT_DIFFERENTIAL_RESIDUAL_CUES_EXTRACTOR_GUIDE.md) | [GIF](assets/demo/ascertainment-differential-residual-cues.gif) |

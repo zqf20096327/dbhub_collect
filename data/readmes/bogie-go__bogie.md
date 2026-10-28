@@ -145,7 +145,8 @@ One command surface, spelled the same everywhere:
 | --- | --- |
 | `bogie new blog` | an empty API service (`--jobs` adds River, `--id=uuid` swaps the default bigint id scheme for uuid) |
 | `bogie g model post title:string` | migration, queries, model type, store, then sqlc |
-| `bogie g scaffold post …` | the model, JSON views and a wired controller |
+| `bogie g scaffold post …` | the model, JSON views and a wired controller; `--only index,show` writes just those actions; `admin/pages` is a model of its own (`admin_page`, table `admin_pages`) with its controller in the admin namespace |
+| `bogie g scaffold_controller admin/categories` | the HTTP half over a model that already exists, mounted under a namespace; the attributes are read from the model |
 | `bogie g controller posts index show` | a controller, registered as it is written |
 | `bogie g controller admin/reports` | a namespace is a package |
 | `bogie g job send_welcome` | a River worker on the same Postgres |
@@ -228,7 +229,7 @@ without `--jobs`); `g`/`d` for `scaffold`, `model`, `migration`, `controller`,
 `worker` (both live-reload under Air in development), `test`, `lint`, `ci`; and `app:update`.
 Generated apps test with Ginkgo v2 and Gomega: a `test/` tree (`testdb`,
 `testapp`, `factories`, `requests`) for what tests share, a suite file per
-package, and specs from every generator (v0.4.0 and v0.4.1). v0.4.2 words the generated model specs as one Describe per store method; v0.5.0 moves the layers: `app/models` (types), `db/sqlc` (generated), `db/adapter` (the Store). v0.5.1 drops the Rails wording, has `g model` write the model's own spec, and words the generated not-found tables as sentences.
+package, and specs from every generator (v0.4.0 and v0.4.1). v0.4.2 words the generated model specs as one Describe per store method; v0.5.0 moves the layers: `app/models` (types), `db/sqlc` (generated), `db/adapter` (the Store). v0.5.1 drops the Rails wording, has `g model` write the model's own spec, and words the generated not-found tables as sentences. v0.5.2 declares the model spec's variable and BeforeEach at the Describe, so its example Context compiles where it sits. v0.5.3 adds `--only ACTIONS` to `g scaffold` and `g scaffold_controller [NS/]RESOURCE`, the HTTP half of a scaffold for an existing model. v0.5.4 names a namespace package `admin_controllers` (plural, like every other directory) and lets `g scaffold admin/pages` make the model `admin_page`, as Rails does. v0.5.5 makes the generated "is mounted" spec look the route up instead of expecting a non-404, and keeps snake_case model names out of Go identifiers. v0.5.6 names the adapter suite "Adapter", says "model" where generated comments said "domain", camelCases route-group variables, and drops the `exit status 1` that `go run` adds after an app has already said what failed.
 
 Known gaps:
 

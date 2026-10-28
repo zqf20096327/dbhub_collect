@@ -30,10 +30,10 @@
 ---
 
 ```sh
-npm install uql-orm pg   # or mysql2, mariadb, better-sqlite3, mongodb, @tursodatabase/serverless, @libsql/client
+npm install uql-orm pg
 ```
 
-That is the whole install ([setup](https://uql-orm.dev/getting-started)). No compiler flags and no `reflect-metadata`; the decorators are the [TC39 standard spec](https://uql-orm.dev/entities/basic), and an entity can be declared as data instead, its row type derived, via [`defineEntity`](https://uql-orm.dev/entities/imperative).
+That is the whole install, `pg` swapped for your database's driver: `mysql2`, `mariadb`, `better-sqlite3`, `mongodb`, `@tursodatabase/serverless` or `@libsql/client` ([setup](https://uql-orm.dev/getting-started)). No compiler flags and no `reflect-metadata`; the decorators are the [TC39 standard spec](https://uql-orm.dev/entities/basic), and an entity can be declared as data instead, its row type derived, via [`defineEntity`](https://uql-orm.dev/entities/define-entity).
 
 <a href="https://uql-orm.dev">
   <picture>
@@ -86,6 +86,8 @@ export class Post {
 Or declare one as data, its row type derived:
 
 ```ts
+import { defineEntity, f } from 'uql-orm';
+
 export const Post = defineEntity({
   name: 'Post',
   fields: {
@@ -94,7 +96,12 @@ export const Post = defineEntity({
     likes: f.number().nullable(),
     authorId: f.number().nullable(),
   },
-}).relations((rel) => ({ author: () => rel.manyToOne(User, { references: (post) => post.authorId }) }));
+}).relations((rel) => ({
+  author: () => rel.manyToOne(User, { references: (post) => post.authorId }),
+}));
+
+// One name for the entity and its rows, as a class has: a function takes `post: Post`.
+export type Post = InstanceType<typeof Post>;
 ```
 
 ### 2. A pool, and the migrations it drives
@@ -112,7 +119,7 @@ export default { pool, entities: [User, Post] } satisfies Config;
 
 ```sh
 npm i -D tsx                                # Node only: the CLI loads uql.config.ts through it
-npx uql-migrate generate:entities initial   # diffs the entities against the database into a migration you review
+npx uql-migrate generate:entities initial   # writes the diff against the database, to review
 npx uql-migrate up                          # applies it
 ```
 
@@ -142,7 +149,6 @@ The same queries run from the browser too: [serve them over HTTP](https://uql-or
 
 - **One API, everywhere it runs.** PostgreSQL, PGlite, CockroachDB, MySQL, MariaDB, MSSQL, SQLite, Turso, libSQL, Neon, Cloudflare D1, Bun's native SQL, and even MongoDB. The same code on Node 22.18+, Bun, [Cloudflare Workers](https://uql-orm.dev/cloudflare-d1), [AWS Lambda and Vercel](https://uql-orm.dev/serverless), and [the browser](https://uql-orm.dev/browser), with no native binaries on the `fetch`-based drivers.
 - **Type-safe to the leaf, nothing to generate.** Every key is checked against your entity, down into populated relations and [JSON/JSONB](https://uql-orm.dev/querying/json) dot-paths, so `$like` on a numeric column is a compile error. No `.prisma` file, no generated client.
-- **Relations without N+1.** [`$populate`](https://uql-orm.dev/querying/relations) reads a to-many inside the parent's statement, so a read is one round trip. Nothing is lazy, so nothing fires behind your back in a serializer.
 - **Light.** Zero runtime dependencies and every dialect in one package, yet `uql-orm/postgres` is about 27 kB gzipped. See [what we deleted to get there](https://uql-orm.dev/blog/zero-dependencies).
 - **The hard things are built in.** [Semantic and vector search](https://uql-orm.dev/ai-semantic-search), [multi-tenant filters you cannot bypass by accident](https://uql-orm.dev/multi-tenancy), [soft-delete with restore](https://uql-orm.dev/entities/soft-delete), [streaming](https://uql-orm.dev/querying/streaming), and [drift checks](https://uql-orm.dev/migrations) that catch a database that no longer matches.
 - **SQL when you need it.** [`sql()`](https://uql-orm.dev/querying/raw-sql) fits anywhere a value or a field goes, [computed fields](https://uql-orm.dev/entities/computed-fields) are SQL you can filter and sort on, and a migration can be plain SQL.

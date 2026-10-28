@@ -9,7 +9,7 @@
 
 Engram is an open-source, self-hosted spaced repetition flashcard service. Built with a modern Svelte 5 SPA frontend and a Go backend, it pairs the state-of-the-art **FSRS v6** scheduling algorithm with a native **Model Context Protocol (MCP)** server for AI-assisted card creation and workflow automation.
 
-Live demo: <https://engram.nite07.com/> (registration is closed; sign in with the test account `test` / `testdemo`)
+Live demo: <https://engram.nite07.com/> (registration is open; you can also sign in with the test account `test` / `testdemo`)
 
 ---
 
@@ -66,15 +66,17 @@ Create an API key in the **Settings** panel, then add Engram to your MCP client 
 
 ### Available Tools
 
-Engram provides 19 dedicated MCP tools:
+Engram provides 21 dedicated MCP tools:
 
 - `list_decks` / `create_deck` / `update_deck`: Inspect accessible decks, create new ones with custom scheduling presets, or rename and describe them.
 - `delete_deck`: Delete a deck together with its notes, cards and progress. Only the owner can do this, and the deletion cannot be undone.
+- `bulk_decks`: Delete several decks in one call; each row is owner-checked, and `dry_run` counts without writing. Mirrors REST `POST /decks/bulk`.
 - `list_card_types`: List the supported card types with each type's fields and a validated example note, so an agent can write notes without guessing field names or syntax.
 - `search_notes` / `get_note` / `list_deck_tags`: Query notes with tag and keyword filters, read a single note, and list the tags used in a deck.
 - `create_notes` / `update_note` / `delete_note` / `bulk_notes`: Create, update and delete notes across all supported card types, with dry-run validation, bulk insertion and bulk tag or delete actions.
 - `get_due_cards` / `submit_review`: Fetch cards due for review and record reviews. Self-assessed cards take a rating (`Again`, `Hard`, `Good`, `Easy`), and a short-answer card may also carry the answer the learner wrote, stored with the review; answer-type cards (cloze, list, typed, numeric, choice, true/false) take the answer instead, and the server grades it.
 - `add_extra_new_cards`: After the daily new card limit is reached, allow extra new cards in one deck for the current review day only. The deck settings do not change, and the next day returns to the daily limit.
+- `set_deck_paused`: Pause or resume a deck for yourself only. A paused deck leaves the default review queue, the due count and the reminder emails, but keeps its progress and can still be reviewed by name.
 - `get_stats`: Retrieve learning summaries, queue counts, and retention rates.
 - `export_deck` / `import_deck`: Export and import portable deck packages (`.edeck`).
 - `create_import_upload`: Get a single-use upload URL for a deck package. The agent sends the file to it with an HTTP client such as `curl`, so a large package never passes through the model and the API key never leaves the MCP client.

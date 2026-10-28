@@ -1,7 +1,7 @@
 <div align="center">
 
-# Nisshi (née Tansu) 🗃️
-stateless Apache Kafka®-compatible broker with pluggable storage (PostgreSQL, SQLite, S3, memory)
+# Nisshi 🗃️
+A stateless server that implements the Apache Kafka® API, with pluggable storage (PostgreSQL, SQLite, S3, memory)
 
 <br>
 
@@ -25,17 +25,25 @@ stateless Apache Kafka®-compatible broker with pluggable storage (PostgreSQL, S
 
 # What is Nisshi?
 
-[Nisshi][github-com-nisshi-io] (née Tansu) is an Apache Kafka®-compatible broker
+[Nisshi][github-com-nisshi-io] implements the Apache Kafka® API,
 with PostgreSQL, libSQL (SQLite), S3 or memory storage engines.
 Schema backed topics (Avro, JSON or Protocol buffers) can
 be written as [Apache Iceberg](https://iceberg.apache.org) or [Delta Lake](https://delta.io) tables.
 
 Features:
 
-- Apache Kafka®-compatible
+- Implements the Apache Kafka® API
 - Available with [PostgreSQL](https://www.postgresql.org), [libSQL](https://docs.turso.tech/libsql), [S3](https://en.wikipedia.org/wiki/Amazon_S3) or memory storage engines
 - Topics [validated](docs/schema-registry.md) by [JSON Schema][json-schema-org], [Apache Avro](https://avro.apache.org)
   or [Protocol buffers](protocol-buffers) can be written as [Apache Iceberg](https://iceberg.apache.org) or [Delta Lake](https://delta.io) tables
+
+## About
+
+Nisshi is now part of Solace. Its creator, Peter Morgan, is a key member of the Solace team that works on it. [GOVERNANCE][nisshi-governance] says how the project is run.
+
+The license stays Apache 2.0, and what is open stays open.
+
+Nisshi OSS is provided as-is, with no warranty and no Solace Support commitment. Ask questions in the [Solace community][nisshi-community]. Report security issues through [SECURITY][nisshi-security].
 
 ## Get Started
 
@@ -74,6 +82,8 @@ To learn more about Nisshi, see the full documentation at [docs.nisshi.io](https
 Use the [latest release][nisshi-latest-release], the one marked **Latest** on the Releases page. `cargo install nisshi` and the `latest` container image both skip pre-releases.
 
 Releases marked **Pre-release**, with tags such as `v0.8.0-pre.1`, are builds of `main` published ahead of the next release. Their behaviour and storage formats can still change, and a later version may not read the data they wrote (upgrading from 0.7.0-pre.1 or pre.2 to 0.7.0 needs the manual steps in the 0.7.0 upgrade notes). Use them for testing, not for data you want to keep. To install one, name its exact version, for example `ghcr.io/nisshi-io/nisshi:0.8.0-pre.1`.
+
+Upgrading? Read the upgrade notes in [CHANGELOG.md](CHANGELOG.md) for every release after the one you run. The default cluster id and the Iceberg and Delta namespace changed in 0.7.0, and the topic configuration keys changed in 0.8.0.
 
 This README describes `main`, which can be ahead of the latest release. To read the README of a release, open it at its tag, for example [v0.7.0](https://github.com/nisshi-io/solace-nisshi/blob/v0.7.0/README.md).
 
@@ -191,7 +201,7 @@ Choose the engine with `--storage-engine` (or `STORAGE_ENGINE`) using the URL sc
 | PostgreSQL | `postgres://` | `postgres` | Suitable for production. Tested, with bugs and security issues fixed. Help comes from the community. |
 | S3 and Google Cloud Storage | `s3://`, `gs://` | `dynostore` | Experimental. Available for continuity. Not recommended for production. |
 | SQLite (libSQL) | `sqlite://` | `libsql` | Suitable for development. |
-| In-memory | `memory://` | `dynostore` | Suitable for development and testing. Data is lost when the broker stops. |
+| In-memory | `memory://` | `dynostore` | Suitable for development and testing. Data is lost when Nisshi stops. |
 | Turso | `turso://` | `turso` | Experimental. |
 | SlateDB | `slatedb://` | `slatedb` | Deprecated. Not recommended for new deployments, because it allows a single writer. Only security fixes are accepted. The engine may be removed in a future release. Use PostgreSQL for production, or SQLite or in-memory for development. The broker logs a warning at startup. |
 
@@ -714,6 +724,71 @@ that client accepts any certificate, so anyone on the network path can read
 and change the data. These variables are for testing only and are not
 supported. The broker logs a warning at startup for each one that is set to
 true.
+
+### Authentication
+
+With `--authentication`, the broker requires each client to log in with SASL
+SCRAM-SHA-256 or SCRAM-SHA-512. Before a client logs in, the broker answers
+only ApiVersions, SaslHandshake and SaslAuthenticate, and it closes the
+connection on any other request, as a Kafka SASL listener does. SCRAM does not
+encrypt the connection, so use it with [TLS](#tls) when the network is not
+trusted. Nisshi does not have an authorizer, so each user who logs in can use
+every API, including the ones that create and delete topics and users.
+
+The broker keeps its users in the storage engine. `--authentication` therefore
+needs an engine that can store them, such as SQLite (`sqlite://`) or
+PostgreSQL (`postgres://`). On an engine that can't, such as `memory://` or
+`s3://`, the broker refuses to start and names the engines that can.
+
+The `nisshi` commands, such as `user`, `topic` and `cat`, don't log in yet.
+Against a broker with `--authentication` they fail with `error: Connected to
+the broker, but it closed the connection`.
+
+To create the first user, run the broker on the same storage without
+`--authentication`, and then restart it:
+
+1. Start the broker without `--authentication`. Without it, any client that
+   can reach the broker can use it, so listen on `127.0.0.1` only:
+
+   ```shell
+   nisshi broker --storage-engine sqlite://nisshi.db --listener-url tcp://127.0.0.1:9092
+   ```
+
+2. In another shell, create the user. `--mechanism` is `scram256` or
+   `scram512` (the default). The broker stores a credential for each
+   mechanism, so create the user with the mechanism that its clients use, or
+   once for each:
+
+   ```shell
+   nisshi user create alice alice-secret --mechanism scram256
+   ```
+
+   The password is an argument, so it is in your shell history, and other
+   users of the machine can see it while the command runs.
+
+3. Stop the broker, and start it again with `--authentication`:
+
+   ```shell
+   nisshi broker --storage-engine sqlite://nisshi.db --authentication
+   ```
+
+Until the `nisshi` commands support SASL, manage users and topics on a broker
+with `--authentication` with the Apache Kafka® command line tools and a client
+configuration file:
+
+```properties
+security.protocol=SASL_PLAINTEXT
+sasl.mechanism=SCRAM-SHA-256
+sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="alice" password="alice-secret";
+```
+
+```shell
+kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --command-config client.properties --list
+kafka-configs.sh --bootstrap-server 127.0.0.1:9092 --command-config client.properties \
+  --alter --entity-type users --entity-name bob --add-config 'SCRAM-SHA-256=[password=bob-secret]'
+```
+
+With TLS on the listener, set `security.protocol=SASL_SSL` instead.
 
 ### Metrics
 

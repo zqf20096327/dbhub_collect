@@ -483,10 +483,24 @@ uses [class-transformer](https://www.npmjs.com/package/class-transformer).
 
 All request exceptions are caught by [all-exceptions.filter.ts](`src/filters/all-exceptions.filter.ts`).
 
-Exceptions should be thrown using the **custom** [HttpException](src/utils/HttpException.ts) class.
+Throw NestJS's built-in exceptions (`NotFoundException`, `BadRequestException`, etc., or `HttpException` for other
+statuses). Set a stable error code with the `errorCode` option, using a value from
+[ErrorCodes](src/utils/error-codes.ts).
 
 ```typescript
-throw new HttpException(404, `User ${1} was not found`, ErrorCodes.INVALID_USER, { id: 1 });
+import { NotFoundException } from "@nestjs/common";
+import { ErrorCodes } from "@/utils";
+
+throw new NotFoundException("User 1 was not found", { errorCode: ErrorCodes.INVALID_USER });
+```
+
+To include extra details in `meta`, pass an object with `message` and `meta` as the first argument:
+
+```typescript
+throw new NotFoundException(
+  { message: "User 1 was not found", meta: { id: 1 } },
+  { errorCode: ErrorCodes.INVALID_USER },
+);
 ```
 
 ```json
@@ -500,6 +514,10 @@ throw new HttpException(404, `User ${1} was not found`, ErrorCodes.INVALID_USER,
   }
 }
 ```
+
+If `errorCode` is omitted, the code is derived from the status (e.g. `404` → `NotFound`, `401` →
+`InvalidAuthentication`, other `4xx` → `ClientError`). This also applies to exceptions thrown by NestJS itself, such as
+unknown routes or rate limiting.
 
 Regular errors and unhandled exceptions are also caught and returned as a 500 response.
 
@@ -716,7 +734,7 @@ the [OpenTelemetry docs](https://opentelemetry.io/docs/languages/js/instrumentat
 HTTP metrics are automatically collected by `@opentelemetry/instrumentation-http`.
 
 ```
-sum by(http_route) (rate(nb_http_server_duration_milliseconds_count[1m]))
+sum by(http_route) (rate(nb_http_server_request_duration_seconds_count[1m]))
 ```
 
 See [OpenTelemetry docs](https://opentelemetry.io/docs/languages/js/instrumentation/#metrics) for how to create custom
@@ -742,14 +760,15 @@ See [Logging](#logging) for how to log.
 
 Unit tests exercise individual functions, classes, and utilities in isolation. They are co-located alongside their source files as `*.spec.ts`.
 
-Tests use [Jest](https://jestjs.io/) with `ts-jest`.
+Unit tests use [Vitest](https://vitest.dev/), with SWC for decorator metadata (see [vitest.config.mts](./vitest.config.mts)).
+Import test functions explicitly (`import { describe, expect, it, vi } from "vitest";`). E2E tests use Vitest too, with [e2e-test/vitest-e2e.config.mts](./e2e-test/vitest-e2e.config.mts).
 
 CRUD library tests (`src/lib/crud/**/*.spec.ts`) are documented separately in the [CRUD Layer docs](src/lib/crud/README.md#unit--integration-tests).
 
 Running Tests:
 
 ```bash
-npm run test          # Run all unit tests (Jest, verbose output)
+npm run test          # Run all unit tests (Vitest, verbose output)
 npm run test:watch    # Run in watch mode (re-runs on file change)
 npm run test:cov      # Run with coverage report
 ```

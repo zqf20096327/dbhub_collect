@@ -8,12 +8,13 @@
 [![BIRD Mini-Dev EX: SQLite 81.0 · PostgreSQL 72.6 · MySQL 72.4](https://img.shields.io/badge/BIRD%20Mini--Dev%20EX-SQLite%2081.0%20%C2%B7%20PostgreSQL%2072.6%20%C2%B7%20MySQL%2072.4-0F7B6C)](benchmarks/results/bird_minidev/README.md)
 [![UniQL Oracle: 64.5% first try](https://img.shields.io/badge/UniQL%20Oracle-64.5%25%20first%20try-C74634)](benchmarks/results/uniql_oracle/README.md)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/15353/badge)](https://www.bestpractices.dev/projects/15353)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/ashishsinha1602/schemagate/badge)](https://scorecard.dev/viewer/?uri=github.com/ashishsinha1602/schemagate)
 [![REUSE status](https://api.reuse.software/badge/github.com/ashishsinha1602/schemagate)](https://api.reuse.software/info/github.com/ashishsinha1602/schemagate)
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/schemagate?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/schemagate)
 [![MCP Registry](https://img.shields.io/badge/MCP%20Registry-listed-16a34a.svg)](https://registry.modelcontextprotocol.io/v0/servers?search=io.github.ashishsinha1602/schemagate)
 [![Try it in the browser](https://img.shields.io/badge/demo-in%20your%20browser-0F7B6C)](https://ashishsinha1602.github.io/schemagate/)
 
-Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than ranked low. Works with LangChain, MCP, or any SQL agent, on Postgres, Oracle, MySQL, SQL Server and SQLite.
+Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than ranked low. Works with LangChain, LlamaIndex, MCP, or any SQL agent, on Postgres, Oracle, MySQL, SQL Server and SQLite.
 
 ![An analyst asks "salary by employee": hr_compensation is absent from the shortlist. Grant the payroll role and it becomes the top match.](https://raw.githubusercontent.com/ashishsinha1602/schemagate/main/docs/media/schemagate-demo.gif)
 
@@ -123,6 +124,19 @@ The last row is the one that matters: the selection stays around six tables
 no matter how big the schema is, so the saving grows with the schema. Real
 databases are the last row, not the first.
 
+The same count on public schemas nobody here wrote (no model called;
+[BENCHMARKS.md](BENCHMARKS.md#prompt-tokens-on-public-schemas-the-saving-grows-with-the-schema)
+has the script). On Spider 2.0's real BigQuery and Snowflake warehouses, the
+median database with 50 or more tables went from its full schema to a
+selection **91.1% smaller** (24 databases). On BIRD, whose databases have a median of seven
+tables, the median saving was 8.8%: there was little to cut. The price of
+cutting is that a needed table can be left out. On the warehouses, every
+table the gold query reads was in the selection for 86.7% of questions.
+Against the retrievers other tools use, at the same number of tables and no
+model calls, schemagate selected every needed table for 85.3% of warehouse
+questions where BM25 managed 78.7% and embedding search 78.2%, and 98.7% of
+BIRD questions against 81.0% and 89.4%
+([head-to-head](BENCHMARKS.md#head-to-head-schemagate-against-the-retrievers-other-tools-use)).
 Worked example, with a price you should replace with your own: a 260-object
 schema, 5,000 questions a day, an input price of $3 per million tokens. Full
 schema: 16,095 × 5,000 × 30 = 2.4 billion tokens a month, about $7,200. With
@@ -456,12 +470,11 @@ Both re-runs are done and [BENCHMARKS.md](BENCHMARKS.md) keeps the
 corrections rather than deleting them.
 
 **End to end, on the metric those boards actually score:** schemagate plus
-claude-opus-5 gets **68.0% execution accuracy on BIRD dev** (102/150, seeded
-sample), with 97.3% of questions producing SQL that runs. The published GPT-4
-baseline on BIRD dev is around 46%.
-
-None of these is a leaderboard placing — that needs the held-out test set, and
-nothing here has been submitted.
+Claude Opus 5.5 gets **77.12% execution accuracy on all 1,534 BIRD dev
+questions**, one model call per question (table above). The BIRD Mini-Dev
+rows are on BIRD's own leaderboard. A main-board placing needs the held-out
+test set: a submission was sent on 2026-10-22 and is being evaluated by the
+BIRD team.
 
 Everything below is measured on schemas I invented, which is worth less and
 is why the public numbers come first.
@@ -1194,6 +1207,21 @@ chain = retriever | RunnableLambda(prompt_fragment) | your_sql_prompt | llm
 The principal is bound at construction on purpose. Build one retriever per
 caller; a chain can't forget to pass identity if the retriever already has it.
 
+**LlamaIndex.** The same retriever as a LlamaIndex `BaseRetriever`:
+
+```bash
+pip install 'schemagate[llamaindex]'
+```
+
+```python
+from schemagate.integrations.llamaindex import SchemagateRetriever, prompt_fragment
+
+retriever = SchemagateRetriever(cat, top_k=6, principal=Principal("okta:jdoe", roles={"finance"}))
+ddl = prompt_fragment(retriever.retrieve("revenue by month"))
+```
+
+See [docs/llamaindex.md](docs/llamaindex.md).
+
 **jev4pg.** `schemagate.integrations.jev4pg.ScopedCatalog` wraps
 [jev4pg](https://github.com/Sheltercosmo/jev4pg)'s per-tenant catalogue so its
 planner, SQL validator and semantic operators see only what each caller may
@@ -1384,6 +1412,7 @@ may not read is never in it.
 | Studio (`schemagate studio`, and the hosted demo) | done, driven by a real browser in tests |
 | MCP server | done, tested through a real MCP client |
 | LangChain retriever | done, tested against langchain-core |
+| LlamaIndex retriever | done, tested against llama-index-core |
 | `OracleStore` | written and statically verified, needs a live run |
 | pgvector store | not started |
 

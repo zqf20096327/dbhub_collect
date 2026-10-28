@@ -14,9 +14,9 @@
   <img src="https://img.shields.io/badge/Swift-5-orange?style=flat-square" alt="Swift 5">
   <img src="https://img.shields.io/badge/dependencies-0-brightgreen?style=flat-square" alt="No dependencies">
   <img src="https://img.shields.io/badge/data-local-blue?style=flat-square" alt="Local only">
-  <img src="https://img.shields.io/badge/tests-167-brightgreen?style=flat-square" alt="167 tests">
+  <img src="https://img.shields.io/badge/tests-181-brightgreen?style=flat-square" alt="181 tests">
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="MIT License">
-  <img src="https://img.shields.io/badge/status-0.6.3-lightgrey?style=flat-square" alt="Status 0.6.3">
+  <img src="https://img.shields.io/badge/status-0.7.0-lightgrey?style=flat-square" alt="Status 0.7.0">
 </p>
 
 <p align="center">
@@ -27,13 +27,16 @@
 
 Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据全部保存在本机。它没有登录、没有云同步、不依赖任何第三方库；默认不联网，只有手动检查更新或在设置里开启自动检查时才会访问 GitHub。
 
-当前版本：**0.6.3**（功能和数据结构仍可能调整）
+当前版本：**0.7.0**（功能和数据结构仍可能调整）
 
-### 0.6.3 修复
+### 0.7.0 新增
 
-- 空文本提交不再删除节点与子树：中心节点回填「中心主题」，其它节点回填「新主题」
-- 自动检查更新每次启动都会检查一次；关闭横幅后同一版本不再重复提醒
-- 「打开安装包」默认按钮改为「仅打开安装包」，避免回车误退出；打开失败会在窗口内提示
+- 思维导图拖动排序：同级上下换序、一级分支左右换边，整棵子树跟随
+- 分支排列：记住布局（默认）/ 平衡布局
+- 节点外约 45pt 磁吸范围，靠近即锁定最近目标并显示整棵子树的虚线预览
+- 当前目标用细实线 + 光晕标出；同级排序时预览贴在目标当前的上方/下方
+- 居中画布快捷键 `⌃Space`
+- 复制节点同时写入纯文本大纲，剪贴板只有文本时可按缩进生成节点
 
 ---
 
@@ -43,6 +46,14 @@ Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据
 
 <p align="center">
   <img src="docs/screenshots/main.png" width="100%" alt="Mindscape 主界面">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/drag-sort.png" width="100%" alt="拖动排序：整棵子树的虚线预览与磁吸目标">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/layout-memory.png" width="100%" alt="分支排列：记住布局 / 平衡布局">
 </p>
 
 <p align="center">
@@ -68,7 +79,7 @@ Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据
 ## 为什么是 Mindscape
 
 - **本地优先**：所有导图在一个 SQLite 文件里，断网可用，不登录，不上传。
-- **原生性能**：画布是自绘 `NSView`，不是 Web/Electron；大图缩放、拖拽仍然跟手，整个 app 只有 5.1 MB。
+- **原生性能**：画布是自绘 `NSView`，不是 Web/Electron；大图缩放、拖拽仍然跟手，整个 app 只有 5.2 MB。
 - **中文输入法友好**：用拼音组字时节点随着候选实时变宽，不会「先折行再弹回」，候选框始终贴着光标——这是 Web 画布类思维导图最常翻车的地方。
 - **动效克制**：折叠/展开按层级错峰落位，残影淡出、控件跟随淡入，不做“整屏闪跳”。
 - **开箱好看**：8 套主题、8 种布局、现代留白与陶土色视觉，不需要自己调样式。
@@ -82,14 +93,16 @@ Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据
 
 ### 画布
 
-- 无限画布：双指平移、捏合缩放、⌘ + 滚轮缩放、⌘0 适配
-- 节点：新增、重命名、折叠、多选、拖动、复制剪切粘贴、创建副本
+- 无限画布：双指平移、捏合缩放、⌘ + 滚轮缩放、⌘0 适配、⌃Space 居中
+- 节点：新增、重命名、折叠、多选、拖动、复制剪切粘贴、创建副本；复制时同时写入缩进 Markdown 纯文本，剪贴板只有文本时也会按缩进生成节点
 - 多选：设置里可选择多选修饰键（默认 ⇧，可改为 ⌘）；点击加减选区、拖拽空白处框选；⌘ 点击始终可加选；Delete 一次删除所选，拖动任一选中节点可整组移动（自由布局保持相对位置）
 - 工具栏灯泡集中展示画布操作提示；首次显示导图（打开已有或新建）时全局自动展开一次，开始绘图或手动关闭后收起
 - 自由布局：按住 ⌥ 拖到目标节点可迁移父子关系，节点保持当前位置、不触发自动重排；普通拖动仍只调整位置
 - 支持多个头部节点；双击空白处新建头部节点并进入编辑
 - 拖动改层级：拖到节点上挂到它下面；按住 ⌥ 拖到同级节点可调整顺序
-- 画布快捷键：Space 进入编辑，Enter 新建同级节点（头部节点则新建头部），Tab 新建子节点
+- 思维导图拖动排序：普通拖动同级节点即可上下换序；把一级分支拖到另一侧的分支或根节点左右半边即可换边，整棵子分支跟随；拖动时会用虚线轮廓预览整棵子树的插入位置；同级排序时整组贴在目标节点当前的上方 / 下方，主节点和子节点之间用虚线连接（只画虚线，不填充文字）；节点外约 45pt 带磁吸范围（锁定后 60pt 内保持、切换需再近 8pt），靠近即可锁定最近目标，不用精确压在节点上
+- 思维导图分支排列：属性面板 / 布局菜单可切换「记住布局」（默认，保留手动左右侧）与「平衡布局」（自动平衡左右两侧）
+- 画布快捷键：Space 进入编辑，Enter 新建同级节点（头部节点则新建头部），Tab 新建子节点，⌃Space 把整张导图居中
 - 新增 / 编辑节点时按当前缩放自动居中，节点不断变大也不会跑出视口
 - 导图标题默认跟随第一个头部节点的文字；手动改过标题后不再自动覆盖
 - 多行就地编辑：Space / 双击 / 选中后直接打字
@@ -115,7 +128,7 @@ Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据
 
 ### 布局（8 种）
 
-- 思维导图（左右平衡，按完全展开时的高度分侧，折叠不会换边）
+- 思维导图（默认记住手动左右侧；也可切换为平衡布局，按完全展开时的高度自动分侧，折叠不会换边）
 - 逻辑图（右 / 左）
 - 组织架构图
 - 树形图
@@ -235,7 +248,7 @@ Mindscape 是一个纯本地的 macOS 思维导图应用：打开即画，数据
 
 ### 下载
 
-**下载**：[`Mindscape-0.6.3.dmg`](https://github.com/jiuxianzai/Mindscape/releases/download/v0.6.3/Mindscape-0.6.3.dmg)，打开后把 Mindscape 拖进 Applications。
+**下载**：[`Mindscape-0.7.0.dmg`](https://github.com/jiuxianzai/Mindscape/releases/download/v0.7.0/Mindscape-0.7.0.dmg)，打开后把 Mindscape 拖进 Applications。
 
 当前构建为 **ad-hoc 签名**，没有 notarization。首次打开如果被 Gatekeeper 拦下：
 
@@ -263,7 +276,7 @@ open Mindscape.xcodeproj
 打包与本地安装：
 
 ```bash
-make package    # 生成 dist/Mindscape-0.6.3.dmg、.zip 和 .dmg.sha256
+make package    # 生成 dist/Mindscape-0.7.0.dmg、.zip 和 .dmg.sha256
 make publish    # 用 gh 创建 GitHub Release（需已 gh auth login）
 make install    # 安装到 /Applications 并启动
 ```
@@ -358,6 +371,7 @@ Agent 也可以直接访问 `http://127.0.0.1:47821/openapi.json`（实际端口
 | 撤销 / 重做 | ⌘Z / ⇧⌘Z |
 | 查找节点 | ⌘F |
 | 适配画布 | ⌘0 |
+| 居中画布 | ⌃Space |
 | 放大 / 缩小 | ⌘= / ⌘- |
 | 缩放到分支 | ⇧⌘B |
 | 专注当前分支 | ⇧⌘F |
@@ -381,7 +395,7 @@ Agent 也可以直接访问 `http://127.0.0.1:47821/openapi.json`（实际端口
 | 图标 | SF Symbols |
 | 数据 | 系统 `libsqlite3`，WAL 模式 |
 | 工程 | XcodeGen（`project.yml`） |
-| 测试 | XCTest（167 个用例，含画布交互与渲染回归） |
+| 测试 | XCTest（181 个用例，含画布交互与渲染回归） |
 | 最低系统 | macOS 14 |
 | 架构 | Universal（arm64 + x86_64） |
 | 第三方依赖 | 无 |

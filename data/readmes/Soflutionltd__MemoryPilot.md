@@ -6,11 +6,11 @@
 
 <p align="center">
   <strong>The most advanced MCP memory server. Period.</strong><br><br>
-  <sub>Hybrid search (BM25 + jina-embeddings-v5 RRF + cross-encoder rerank) · 100+ languages · Temporal Knowledge Graph · Query-aware ranking · Corpus origin detection · Agent/persona disambiguation · Topic tunnels · AAAK compression (5-10x token savings) · GraphRAG · Chunked RAG · Auto-Compaction · Auto-Classification · Memory Capsules · HTTP API · Single binary · Zero API calls</sub>
+  <sub>Hybrid search (BM25 + jina-embeddings-v5 RRF + cross-encoder rerank) · 100+ languages · Temporal Knowledge Graph · Query-aware ranking · Corpus origin detection · Agent/persona disambiguation · Topic tunnels · AAAK compression (5-10x token savings) · GraphRAG · Chunked RAG · Auto-Compaction · Auto-Classification · Memory Capsules · HTTP API · Signed automatic updates · Single binary · Zero API calls</sub>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/v4.10-latest-green" alt="v4.10"/>
+  <img src="https://img.shields.io/badge/v4.12-latest-green" alt="v4.12"/>
   <img src="https://img.shields.io/badge/language-Rust-orange" alt="Rust"/>
   <img src="https://img.shields.io/badge/search-Hybrid_RRF_+_cross--encoder-blueviolet" alt="Hybrid RRF + cross-encoder"/>
   <img src="https://img.shields.io/badge/embeddings-jina--embeddings--v5--nano_(768--dim,_int8)-blue" alt="jina-embeddings-v5-text-nano-retrieval"/>
@@ -56,34 +56,41 @@ AI coding assistants forget everything between sessions. MemoryPilot gives them 
   <img src="https://raw.githubusercontent.com/Soflutionltd/MemoryPilot/main/static/benchmark_chart.png" alt="MemoryPilot vs Mem0, Zep, MemPalace, mcp-memory-service on LongMemEval-S" width="820"/>
 </p>
 
-Evaluated on 470 questions from the [LongMemEval](https://arxiv.org/abs/2410.10813) benchmark (ICLR 2025), the standard academic dataset for long-term memory retrieval. Turn-level granularity, ~50 sessions per haystack.
+Evaluated on the 470 answerable questions of [LongMemEval-S](https://arxiv.org/abs/2410.10813) (ICLR 2025; the 30 abstention questions are left out, as the official retrieval protocol does). Turn-level index, ~50 sessions per haystack.
 
-#### vs the entire market (LongMemEval-S, public numbers)
+**What the score measures.** `R@5` here is session-level `recall_any@5`: a question counts as a hit when at least one of the top 5 retrieved turns belongs to one of its gold sessions. It is a retrieval metric, not answer accuracy, and a question that needs several sessions counts as a hit as soon as one of them is found (300 of the 470 questions have more than one gold session). For scale: a plain BM25 over turns, with no embeddings, scores about 93% on the same metric and 74% on `recall_all@5`. These figures were measured with v4.2 (multilingual-e5-small); the current default model has only been measured on a 100-question slice (see v4.6 below).
 
-| System | R@5 / Accuracy | Latency | Privacy | Stack | Source |
-|--------|---------------:|---------|---------|-------|--------|
-| **MemoryPilot v4.2 (adaptive)** | **99.1%** | ~900 ms | 100% local | Rust · 35 MB binary · zero API | This repo, `--benchmark-longmemeval` @470 |
-| **MemoryPilot v4.2 (default fast)** | **98.7%** | **~28 ms** | 100% local | Rust · 35 MB binary · zero API | This repo, `--benchmark-longmemeval` @470 |
-| MemPalace v3.3.3 (hybrid) | 98.4% | not published | 100% local | Python + ChromaDB · ~500 MB | MemPalace v3.3.3 release notes |
-| agentmemory v0.9 (11k+ stars) | 95.2% | not published | 100% local | Node + iii-engine + SQLite | [github.com/rohitg00/agentmemory](https://github.com/rohitg00/agentmemory) — `benchmark/LONGMEMEVAL.md` |
-| Mem0 (cloud, OpenAI backend) | 94.4% | ~6 787 tokens/query | Cloud (OpenAI) | SaaS + OpenAI embeddings | [mem0.ai blog](https://mem0.ai/blog/benchmarked-openai-memory-vs-langmem-vs-memgpt-vs-mem0-for-long-term-memory-here-s-how-they-stacked-up) |
-| mcp-memory-service v10.34.0 | 80.4% | not published | 100% local | Python + SQLite-Vec + MiniLM | [v10.34.0 release notes](https://github.com/doobidoo/mcp-memory-service/releases/tag/v10.34.0) |
-| Zep / Graphiti | 63.8% | "90% lower vs baseline" | Cloud or self-host | Python + Neo4j + LLM extraction | [arXiv 2501.13956](https://arxiv.org/abs/2501.13956) |
-| Letta / MemGPT | not measured on LongMemEval | — | Self-host | Python framework | [Letta tracking issue #3115](https://github.com/letta-ai/letta/issues/3115) |
+#### Retrieval scores (same metric family, setups differ)
 
-> MemoryPilot is the **only system in this comparison that is both 100% local *and* tops the leaderboard**. The default fast mode (~28 ms) already beats every published competitor — including agentmemory (95.2%), the current darling of the AI-agent-memory category with 11k+ GitHub stars. The adaptive cross-encoder mode adds +0.4 pp R@5 for the cost of one ONNX rerank pass per query, and a +6.7 pp MRR lead vs agentmemory (94.9% vs 88.2%).
+| System | R@5 (recall_any, session level) | Notes | Source |
+|--------|--------------------------------:|-------|--------|
+| **MemoryPilot v4.2 (adaptive rerank)** | **99.1%** | 470 questions, ~900 ms/query on an M-series Mac | This repo, `--benchmark-longmemeval` |
+| **MemoryPilot v4.2 (rerank off)** | **98.7%** | 470 questions, ~28 ms/query with `MEMORYPILOT_CROSS_RERANK=off` | This repo, `--benchmark-longmemeval` |
+| MemPalace v3.3.3 (hybrid) | 98.4% | 450 held-out questions after tuning on 50; 96.6% raw on 500 | MemPalace v3.3.3 release notes |
+| agentmemory v0.9 | 95.2% | 500 questions (abstention included), all-MiniLM | [github.com/rohitg00/agentmemory](https://github.com/rohitg00/agentmemory) `benchmark/LONGMEMEVAL.md` |
+| mcp-memory-service v10.34.0 | 80.4% | labelled R@5; hit definition not stated | [v10.34.0 release notes](https://github.com/doobidoo/mcp-memory-service/releases/tag/v10.34.0) |
+
+#### Answer accuracy (a different metric: an LLM reads the retrieved context and a judge grades the answer)
+
+| System | QA accuracy | Setup | Source |
+|--------|------------:|-------|--------|
+| Mem0 (cloud) | 94.4% | Mem0's own suite, top-200 retrieval | [mem0.ai blog](https://mem0.ai/blog/benchmarked-openai-memory-vs-langmem-vs-memgpt-vs-mem0-for-long-term-memory-here-s-how-they-stacked-up) |
+| Zep / Graphiti | 63.8% / 71.2% | gpt-4o-mini / gpt-4o as reader, GPT-4o judge | [arXiv 2501.13956](https://arxiv.org/abs/2501.13956), Table 2 |
+| MemoryPilot | not measured | an end-to-end QA run is planned | |
+
+> All figures are published by their own authors, none was reproduced independently, and the two tables cannot be compared with each other. On session-level recall MemoryPilot posts the highest published local score, by a margin smaller than the gap between this metric and a plain BM25 baseline. The protocol to settle a comparison: same 470 questions, same hardware, every system run by the same script, reporting `recall_any@5`, `recall_all@5`, turn-level evidence recall and end-to-end QA accuracy with a fixed reader and judge.
 
 #### Detailed view — MemoryPilot vs MemPalace (closest local competitor)
 
-| Metric | MemoryPilot v4.2 (default fast) | MemoryPilot v4.2 (adaptive rerank) | MemPalace v3.3.3 | Delta vs MemPalace |
+| Metric | MemoryPilot v4.2 (rerank off) | MemoryPilot v4.2 (adaptive rerank) | MemPalace v3.3.3 | Delta vs MemPalace |
 |--------|---------------------------------|------------------------------------|------------------|--------------------|
 | **R@5** | **98.7%** | **99.1%** | 96.6% raw / 98.4% hybrid | +2.5% vs raw / +0.7% vs hybrid |
 | **R@10** | **99.6%** | **99.4%** | ~97%¹ | +2.6% vs raw |
 | **NDCG@10** | **95.1%** | **96.0%** | Not published | MemoryPilot publishes |
 | **MRR** | **93.6%** | **94.9%** | Not published | MemoryPilot publishes |
-| **Avg search latency** | ~28 ms | ~900 ms | N/A | Default mode is 30× faster |
+| **Avg search latency** | ~28 ms (`MEMORYPILOT_CROSS_RERANK=off`) | ~900 ms (the default) | N/A | search call only, models warm |
 
-> ¹ Validated with the full 470-question evaluation set (after dropping the 30 abstention questions) in two modes: default fast local hybrid retrieval (BM25 + cosine RRF, ~28 ms/query, suitable for live MCP traffic) and adaptive cross-encoder rerank (`MEMORYPILOT_CROSS_RERANK=adaptive`, jina-v2-multilingual, fusion weight 0.45, ~900 ms/query, suitable for benchmarks and high-stakes recall). The default mode already beats MemPalace's hybrid held-out result; the adaptive mode trades latency for a further +0.4 pp R@5 and +1.3 pp MRR.
+> ¹ Validated with the full 470-question evaluation set (after dropping the 30 abstention questions) in two modes: hybrid retrieval with the rerank off (BM25 + cosine RRF, `MEMORYPILOT_CROSS_RERANK=off`, ~28 ms/query) and the default adaptive cross-encoder rerank (`MEMORYPILOT_CROSS_RERANK=adaptive`, jina-v2-multilingual, fusion weight 0.45, ~900 ms/query, suitable for benchmarks and high-stakes recall). Latencies cover the search call only, with models loaded; MemPalace's figures come from a different question split.
 
 #### By Category (470 questions, adaptive rerank)
 
@@ -103,7 +110,8 @@ To complement the English-only LongMemEval, MemoryPilot ships its own determinis
 | Mode | R@5 | R@10 | MRR | Avg latency |
 |------|-----|------|-----|-------------|
 | Default fast (BM25 + jina RRF) | 92.7% | 99.1% | 74.4% | ~100 ms |
-| Adaptive cross-encoder rerank (default) | **99.1%** | **99.1%** | **97.4%** | ~210 ms |
+| Adaptive cross-encoder rerank, mmarco (v4.10) | 99.1% | 99.1% | 97.4% | ~210 ms (Apple Silicon) |
+| Adaptive cross-encoder rerank, jina-reranker-v2 (default since v4.11) | **100%** | **100%** | **98.0%** | ~436 ms (2-vCPU Linux VM) |
 
 v4.5 fixed a ranking bug that had capped this benchmark at R@5 ≈ 70% since v4.0: knowledge-graph neighbours were injected at a hard-coded score (0.1) above every genuine RRF hit (max 2/41 ≈ 0.049), so they occupied the cross-encoder window and pushed real matches past `limit`. Neighbours now enter below the weakest genuine candidate and only the cross-encoder can promote them.
 
@@ -143,9 +151,9 @@ v4.6.0 targets the LongMemEval categories a top-k retriever alone cannot win: mu
 | **Cluster Coherence** | **96.7%** | N/A | N/A |
 | **Multilingual** | **100+ languages** (validated FR R@5 99.1%) | English only | English only |
 | **AAAK Compression** | **5-10x** (no recall loss) | 30x (recall drops to 84.2%) | N/A |
-| **Avg Search Latency** | **~28 ms** default / ~410 ms adaptive | N/A | ~80 ms |
-| **Binary Size** | **35 MB** | ~500 MB (Python+ChromaDB) | 1.5 GB |
-| **Dependencies** | 0 (single binary, ONNX bundled) | Python + ChromaDB + SQLite | Python + ONNX |
+| **Avg Search Latency** | **~28 ms** rerank off / ~410 ms adaptive (default) | N/A | ~80 ms |
+| **Install size** | 35 MB binary + ~530 MB of models downloaded on first run | ~500 MB (Python+ChromaDB) | 1.5 GB |
+| **Dependencies** | none at runtime (single binary, ONNX bundled; models fetched from Hugging Face once) | Python + ChromaDB + SQLite | Python + ONNX |
 
 ---
 
@@ -153,9 +161,9 @@ v4.6.0 targets the LongMemEval categories a top-k retriever alone cannot win: mu
 
 | Feature | MemoryPilot v4.7 | MemPalace v3.3.3 | agentmemory v0.9 | Mem0 | Zep / Graphiti |
 |---------|-----------------|----------------|------------------|------|----------------|
-| LongMemEval R@5 | **99.1%** | 98.4% | 95.2% | 94.4% | 63.8% |
+| LongMemEval | **99.1%** R@5 (v4.2, recall_any) | 98.4% R@5 (held-out split) | 95.2% R@5 | 94.4% QA accuracy (not comparable) | 63.8% QA accuracy (not comparable) |
 | LongMemEval MRR | **94.9%** | not published | 88.2% | not published | not published |
-| Search | Hybrid BM25 + jina-embeddings-v5-nano RRF (768-dim, int8) + adaptive mmarco cross-encoder | ChromaDB cosine (all-MiniLM-L6-v2) | BM25 + vector + graph (RRF) | Vector search (cloud API) | Temporal KG traversal + vector |
+| Search | Hybrid BM25 + jina-embeddings-v5-nano RRF (768-dim, int8) + adaptive jina-reranker-v2 cross-encoder | ChromaDB cosine (all-MiniLM-L6-v2) | BM25 + vector + graph (RRF) | Vector search (cloud API) | Temporal KG traversal + vector |
 | Embeddings | jina-embeddings-v5-text-nano-retrieval (100+ languages, 8k context, local ONNX) | all-MiniLM-L6-v2 (English only) | all-MiniLM-L6-v2 (English only) | OpenAI API calls (external) | OpenAI / cloud LLM extraction |
 | Multilingual | **100+ languages native (FR, EN, ES, DE, JA, ZH...)** | English only | English only | Depends on API | Depends on LLM backend |
 | Knowledge Graph | Temporal triples with validity + confidence | Temporal triples (SQLite) | Knowledge graph (no validity window) | Basic graph (no temporal) | Temporal KG (Graphiti, core feature) |
@@ -184,7 +192,7 @@ v4.6.0 targets the LongMemEval categories a top-k retriever alone cannot win: mu
 | Deduplication | Content hash (exact) + Jaccard 85% (fuzzy) | Basic hash | Confidence scoring | Embedding similarity | LLM-based merge |
 | HTTP API | Multi-threaded REST server (optional) | No | REST + MCP + leases + signals | Cloud hosted | REST + GraphQL |
 | Memory types | 13 types, importance 1-5 | Wings/Rooms hierarchy | Tier-based (working / short / long / archival) | 1 type | Episodic / semantic |
-| MCP tools | 41 tools | 29 tools | **51 tools** | N/A | Limited MCP server |
+| MCP tools | 41 tools | 29 tools | **65 tools** | N/A | Limited MCP server |
 | Hooks / event capture | SessionStart auto-recall + Stop auto-ingest for **Cursor, Claude Code and Codex** (incremental, distilled, agent narration filtered, secrets redacted) + file watcher | No | **12 named hooks** (Claude Code, Cursor, Codex, Copilot CLI…) | No | No |
 | Privacy | 100% local, zero API calls | 100% local | 100% local (SQLite) | Cloud dependent | Cloud or self-host (LLM required) |
 | Language | Rust (single binary, zero deps) | Python (pip install) | TypeScript / Node (npm install) | SaaS | Python + Neo4j |
@@ -279,15 +287,38 @@ No LLM needed — pure regex + keyword heuristics. The AI can still override by 
 
 One tool call returns a dense JSON snapshot of a project under 1500 tokens: tech stack, architecture decisions, active bugs, recent changes, key components, and **team members** (auto-detected person entities). Supports `compact: true` for AAAK compression.
 
-## Unreleased
+## What's new in v4.13
 
+- **Conversation finder** (`find_conversation`, `read_conversation`): "the Gina comparison for MemoryPilot sorting" finds the conversation where it happened, whichever tool it was in. The index lives in its own database (`~/.MemoryPilot/conversations.db`, never mixed with memories), is read-only on the sources, and syncs incrementally (a few seconds at most, before a search). It keeps each request and the final answer of each turn, not the agent's progress notes: 703 conversations, 26,000 messages and 110 MB (vectors included) for 120 GB of Cursor history. On 22 real questions asked from memory, the right conversation comes first for 77% of them and in the top 3 for all of them (MRR 0.87, 150 ms median); words alone reach 91% in the top 3 in 26 ms. `--index-conversations`, `--find-conversation "<query>"`, `--benchmark-conversations <file>`.
+
+## What's new in v4.12
+
+- **Automatic updates**: a running server installs new releases by itself and switches to them in place when idle, without restarting the IDE. Signed manifest, checksum, Developer ID check on macOS, database backup and a self-test of the new binary before anything is replaced; a version that fails to start three times is rolled back. Progressive rollout, `MemoryPilot update [--check]`, `MEMORYPILOT_AUTO_UPDATE=0` to turn it off. See [Automatic updates](#automatic-updates).
+- **Rerank fusion weight 0.6** (was 0.45): best R@1 and MRR on a 119-question LongMemEval-S sample (R@1 93.3% to 94.1%, MRR 95.6% to 96.1%), French benchmark R@1 96.3% to 97.2%, average search latency within run-to-run noise (703 ms and 724 ms). A non-numeric or non-finite `MEMORYPILOT_CROSS_RERANK_WEIGHT` now falls back to the default instead of producing NaN scores.
+- **`--benchmark-longmemeval` reports R@1 and recall_all@5** (every gold session in the top 5).
+- **Security updates**: h2 (unbounded empty DATA frames), bundled root certificates (distrusted emSign intermediates), crossbeam-epoch, tokio, cxx, rustls, rustls-webpki and openssl moved to their patched releases.
+
+## What's new in v4.11
+
+- **Jina models only, non-commercial use**: jina-embeddings-v5-text-nano-retrieval and jina-reranker-v2-base-multilingual are the only models (the e5, bge, gte and mmarco options are gone). Both are CC-BY-NC-4.0: see [Models: non-commercial use only](#models-non-commercial-use-only).
+
+- **Fixes from the October 2026 audit** (each one has a regression test in `crates/memorypilot-core/src/db/audit_tests.rs`):
+  - A search with `limit` of 25 or more (31 on temporal queries) panicked and stopped the process; the limit is now capped at 100 for every interface.
+  - Credentials: the password of a connection URI (`postgres://user:password@host`) is masked, and such a URI in a note makes it a credential. SQLite now seals a credential before writing it (no clear text in the table, the FTS index or the WAL) and refuses the write when the vault key is unavailable, unless `MEMORYPILOT_VAULT=off`. Entities come from the masked label, so `get_project_brain` never returns a secret. A one-shot startup migration repairs databases written by older versions.
+  - Deduplication: a near-duplicate that corrects a figure or a date ("30 jours" then "60 jours") now replaces the old text instead of being dropped; the replaced text is kept in `metadata.previous_versions`.
+  - Compaction never touches pinned memories, and every original that `run_gc`, `compact_memories` or consolidation removes is kept whole in an archive: `list_archived` and `restore_memory` bring it back.
+  - An embedding computed for a text edited in the meantime is no longer stored.
+  - Episodes are built per project (they used to mix every project of an hour), are rebuilt when a source memory changes, disappear with a deleted one, and never include credentials.
+  - Filtered searches no longer depend on the global ANN top 200, which could miss a small project's best matches past 5,000 vectors.
+  - The Cursor hook ingests a long transcript backlog in chunks instead of keeping only its last 400 KB.
+  - Exports include every memory (they stopped at 10,000).
 - **Memories checked against Git**: a memory that cites files of its project's repository is compared with the commits made after it. Search, recall and get add a `verification` object when there is something to say: `likely_resolved` (a later fix commit touches the files a bug cites), `possibly_resolved` (a later fix commit reads like the bug's resolution), `changed_since` (the cited files changed), or the recorded `resolved` / `verified`. Mass commits (over 40 files) and docs, tests or chores are ignored. Git is read on demand and cached per HEAD: nothing is copied into the database. `verify_memory` gives the detail, `resolve_memory` records open / resolved / verified with the fixing commit; resolved bugs leave the project brain. `MEMORYPILOT_VERIFY=off` turns it off.
 - **Facts read from the repository**: `project_facts` returns what the project's repository says about itself right now, computed on demand and never stored: package manifests and versions (`package.json`, `Cargo.toml`, `pubspec.yaml`), Cloudflare config (`wrangler.toml` / `.jsonc`, variable names only), cf-orchestrator deploy targets, Supabase migrations, SvelteKit routes, last commit. Recall (`project_facts`) and the project brain (`derived_facts`) carry a few-line summary. A memory that states an older framework version than the repository uses ("Tailwind 3" when `package.json` has `^4.1.0`) is marked `contradicted`; newer versions are read as plans, not stale facts.
 - **Connectors: GitHub, deploys, Supabase production**: `project_facts` adds open and recently merged pull requests and open issues (`gh`, already logged in), the last successful cf-orchestrator deploy of each target with the commits made since in its directory, the latest Git tag with the commits since, and, when a Supabase access token is available, the migrations of `supabase/migrations` not yet applied in production (Management API, scope `database:read`; token from `SUPABASE_ACCESS_TOKEN` or the Keychain, service `MemoryPilot`, account `supabase-access-token`, passed to curl on stdin, never on the command line). Recall reads a cached copy refreshed in the background every 5 minutes, so it never waits on the network. A bug memory that cites a pull request or issue merged or closed after it was written is marked `likely_resolved`. `MEMORYPILOT_CONNECTORS=off` turns them off.
 - **Secrets as pointers**: no tool returns the value of a credential any more, `full` mode and exports included. A credential comes out as its masked label plus a `secret` pointer: where the value lives (the `location` set with `update_memory`, an `op://` reference in the label, or the vault) and how to ask for it. `reveal_secret {id, reason}` is the only way to the value: the user confirms in a macOS dialog an agent cannot click (Reveal / Refuse, 55 s), and every request is logged to `~/.MemoryPilot/logs/reveal-audit.log` without the value. Updates can no longer destroy a secret: writing back the masked text, replacing the metadata, or changing the kind alone is refused or keeps the ciphertext. `MEMORYPILOT_REVEAL_CONFIRM=none` skips the dialog (audit only); `MEMORYPILOT_SECRETS=reveal` restores transparent decryption; over HTTP `reveal_secret` is refused unless `MEMORYPILOT_HTTP_SECRETS=on`.
 - **1Password as the home of secrets**: `MemoryPilot --sync-1password [--apply]` backs up the vault key to 1Password (item "MemoryPilot vault key"), then points every credential to an `op://` reference: an existing item about the same account (title or URL host in the text) that already holds the value is linked, otherwise a Login or Secure Note is created (tag `memorypilot-import`). Nothing is deleted; dry run by default. `reveal_secret` then reads the value from 1Password first (`op-sof` when installed, else `op`; values only on stdin/stdout) and says where it came from.
 - **`memorypilot-core` library**: storage, search, recall, knowledge graph and vault now live in `crates/memorypilot-core` (Cargo workspace); the `MemoryPilot` binary is the MCP server on top of it. `db.rs` is split into one file per domain. Memory rows go through a `MemoryStore` trait and everything search and recall read through a `RecallStore` trait (SQLite today), with contract tests any other store must pass (`store-contract` feature). Same tests, same benchmark results (`scripts/bench-gate.sh`).
-- **Server mode, storage (in progress, not shipped)**: `crates/memorypilot-server` stores memories for many customers in one Postgres database (full text with `tsvector`, vectors with pgvector). Tenant, space and end user are isolated twice: every query filters by them, and row level security rejects any row of another tenant. It passes the same store contracts as SQLite, and the write path (dedup, entity and date extraction, links) and the hybrid search pipeline run unchanged on either store: on the French benchmark, Postgres scores recall@10 100% and MRR 97.9% (SQLite: 100% and 98.1%), missing first place on the same three queries. End users link their memories only to what they can see. Connections to Postgres require TLS with the certificate and host name verified (Mozilla roots plus an optional CA file, such as Supabase's), or are explicitly plain for a local or private database. The `memorypilot-server` binary serves a REST API (`/v1/memories`, `/v1/search`) over pooled sessions, authenticated by per-app API keys (`read`, `write`, `subjects`; only their SHA-256 is stored, revocation takes effect at once); with `X-MemoryPilot-Subject` an app acts for one of its end users, created on first use, who changes only their own memories. The same keys open an MCP endpoint (`POST /mcp`, Streamable HTTP) with six memory tools; it serves both the current stateless protocol revision (2026-07-28, version and headers checked on every request) and clients still on `initialize` (2025-03-26 to 2025-11-25). Each key has a request rate (600 per minute by default, 429 with Retry-After beyond) and each tenant a memory quota (100,000 by default), both adjustable per tenant. Usage (requests, writes, searches) is counted per space and day for billing, and every change is written to an audit log by id only, which the application role can add to but never read. For GDPR, an app exports an end user's own memories and facts (`GET /v1/subject/export`) or erases that end user with everything they own (`DELETE /v1/subject`); both are audited and never create an end user. A leaving customer's data is exported as JSON lines (`export-tenant`) and deleted only with the tenant's exact name (`delete-tenant`). Vectors are computed in the background, one batch per tenant in turn, so a memory is found by keywords at once and by meaning a moment later. Large scopes (5,000 vectors and up) find nearest neighbours through a pgvector HNSW index of the model's dimension (384, 768 or 1024), with an iterative scan so a tenant filter cannot empty the results. Credentials are sealed with a key unique to the tenant, itself wrapped by `MEMORYPILOT_MASTER_KEY` (envelope encryption); reads and exports return the masked label only. The Docker image (`Dockerfile`, `docker compose up --build`) bakes the jina embedding model and serves on port 8080. REST clients live in `sdks/` (TypeScript, Python, Dart; not published). MCP clients (claude.ai, ChatGPT) connect with OAuth 2.1: PKCE S256, dynamic registration, one `mpt_` token per end user after pasting an API key on `/oauth/authorize`. Set `MEMORYPILOT_PUBLIC_URL` to the public origin. The SvelteKit console (`console/`, served at `/console`) signs in with an API key. How to wire Claude, ChatGPT, iPhone, Slate, LightFrame and Docix: `integrations/`. Server benches without an LLM: `scripts/bench-server.sh`. Its admin commands create tenants, spaces and keys (`memorypilot-server help`). `scripts/test-postgres.sh` runs its tests against a local pgvector container.
+- **Server mode, storage (in progress, not part of the release binaries)**: `crates/memorypilot-server` stores memories for many customers in one Postgres database (full text with `tsvector`, vectors with pgvector). Tenant, space and end user are isolated twice: every query filters by them, and row level security rejects any row of another tenant. It passes the same store contracts as SQLite, and the write path (dedup, entity and date extraction, links) and the hybrid search pipeline run unchanged on either store: on the French benchmark, Postgres scores recall@10 100% and MRR 97.9% (SQLite: 100% and 98.1%), missing first place on the same three queries. End users link their memories only to what they can see. Connections to Postgres require TLS with the certificate and host name verified (Mozilla roots plus an optional CA file, such as Supabase's), or are explicitly plain for a local or private database. The `memorypilot-server` binary serves a REST API (`/v1/memories`, `/v1/search`) over pooled sessions, authenticated by per-app API keys (`read`, `write`, `subjects`; only their SHA-256 is stored, revocation takes effect at once); with `X-MemoryPilot-Subject` an app acts for one of its end users, created on first use, who changes only their own memories. The same keys open an MCP endpoint (`POST /mcp`, Streamable HTTP) with six memory tools; it serves both the current stateless protocol revision (2026-07-28, version and headers checked on every request) and clients still on `initialize` (2025-03-26 to 2025-11-25). Each key has a request rate (600 per minute by default, 429 with Retry-After beyond) and each tenant a memory quota (100,000 by default), both adjustable per tenant. Usage (requests, writes, searches) is counted per space and day for billing, and every change is written to an audit log by id only, which the application role can add to but never read. For GDPR, an app exports an end user's own memories and facts (`GET /v1/subject/export`) or erases that end user with everything they own (`DELETE /v1/subject`); both are audited and never create an end user. A leaving customer's data is exported as JSON lines (`export-tenant`) and deleted only with the tenant's exact name (`delete-tenant`). Vectors are computed in the background, one batch per tenant in turn, so a memory is found by keywords at once and by meaning a moment later. Large scopes (5,000 vectors and up) find nearest neighbours through a pgvector HNSW index of the model's dimension (384, 768 or 1024), with an iterative scan so a tenant filter cannot empty the results. Credentials are sealed with a key unique to the tenant, itself wrapped by `MEMORYPILOT_MASTER_KEY` (envelope encryption); reads and exports return the masked label only. The Docker image (`Dockerfile`, `docker compose up --build`) bakes the jina embedding model and serves on port 8080. REST clients live in `sdks/` (TypeScript, Python, Dart; not published). MCP clients (claude.ai, ChatGPT) connect with OAuth 2.1: PKCE S256, dynamic registration, one `mpt_` token per end user after pasting an API key on `/oauth/authorize`. Set `MEMORYPILOT_PUBLIC_URL` to the public origin. The SvelteKit console (`console/`, served at `/console`) signs in with an API key. How to wire Claude, ChatGPT, iPhone, Slate, LightFrame and Docix: `integrations/`. Server benches without an LLM: `scripts/bench-server.sh`. Its admin commands create tenants, spaces and keys (`memorypilot-server help`). `scripts/test-postgres.sh` runs its tests against a local pgvector container.
 - **No Keychain prompts**: the server reads the vault key only when it holds credentials, on a background thread (a prompt no longer freezes every request). The macOS release is signed and notarized, Homebrew installs it on Apple Silicon, and `install.sh` checks the checksum and the signing team.
 - **Vault key safety and recovery**: a refused Keychain read no longer creates a new key (only a missing item does). `--restore-vault-key` puts back a key read on stdin after checking it opens every sealed credential; `--reseal-recovered [--apply]` re-encrypts with the current key credentials recovered in clear (JSON on stdin), each checked against its stored label, all or nothing.
 
@@ -301,7 +332,7 @@ One tool call returns a dense JSON snapshot of a project under 1500 tokens: tech
 
 - **Project isolation in recall**: memories from another project only surface when they name the current one (cross-project leak 55% → 18%, hit rates unchanged).
 - **Lean tool list**: 17 core tools (~13 KB of schema per conversation instead of ~24 KB); everything else through `memory_admin`. `MEMORYPILOT_TOOLS=full` restores the full list.
-- **Credentials encrypted at rest**: XChaCha20-Poly1305, key in the macOS Keychain (key file elsewhere), masked over HTTP (masked everywhere since the secrets-as-pointers change, see Unreleased).
+- **Credentials encrypted at rest**: XChaCha20-Poly1305, key in the macOS Keychain (key file elsewhere), masked over HTTP (masked everywhere since v4.11, see secrets as pointers).
 - **`archive_transcripts`**: old raw transcripts move to `~/.MemoryPilot/archive/*.jsonl` and out of the live index.
 - **`find_conflicts`**: report of same-project memories that contradict each other.
 - **`rate_skill`**: usage feedback on learned skills; reliable ones rank first, failing ones are demoted.
@@ -334,12 +365,25 @@ What this does:
 
 If no pre-built binary is available for your platform, it falls back to `cargo build --release --features http` automatically (requires Rust).
 
+### Automatic updates
+
+A running server (stdio or `--http`) looks for a new release 2 minutes after it starts, then every 6 hours. Apart from the first model download, this is the only network call MemoryPilot makes on its own: two small HTTPS requests to `github.com` for the release manifest and its signature, carrying no identifier, then the archive when there is a new version. When there is one:
+
+1. The manifest must carry a valid minisign signature from the key compiled into the binary, and the archive must match the SHA-256 the manifest lists. On macOS the new binary must also be signed by Developer ID team `TB8CC687M3`, and on every platform it must answer `--version` with the expected version.
+2. The database is copied (`VACUUM INTO`) to `~/.MemoryPilot/backups/memory-before-v<version>.db` (mode 600, the two latest copies kept), and the new binary opens a second copy with its schema upgrades (`--self-test`). Any failure stops the update and nothing is replaced.
+3. The binary is replaced atomically; the previous one stays next to it as `MemoryPilot.old`. Each running server switches to the new version in place as soon as it is idle (a second without a request over stdio, a few seconds over HTTP): the IDE keeps its connection, there is nothing to restart.
+4. If the new version fails to start three times, the previous binary is put back and that version is skipped. The database is not rolled back automatically, because other servers may have it open: the copy from step 2 is there to restore by hand.
+
+Releases roll out progressively: first to a share of installations (chosen from a random id kept in `~/.MemoryPilot/update/install-id`, never sent), then to everyone after a delay, and a rollout can be paused. `MemoryPilot update` installs the latest release now, rollout and skipped versions aside; `MemoryPilot update --check` only reports it.
+
+Not updated automatically: Homebrew installs (`brew upgrade memorypilot`), binaries inside a cargo `target/` directory, debug builds, platforms without a release binary (Intel Macs, Windows), and any server started with `MEMORYPILOT_AUTO_UPDATE=0`. A binary installed with `cargo install` moves to the signed release binary at its first update. Installations of v4.11.0 or older do not have the updater yet: update them once by hand (`install.sh` again, or `brew upgrade`).
+
 ### Alternative paths
 
 ```bash
 # Via Cargo, pinned to a release tag — works anywhere Rust runs
 # (unsigned on macOS: Keychain prompt after each update if you store credentials):
-cargo install --git https://github.com/Soflutionltd/MemoryPilot --tag v4.10.0 --bin MemoryPilot
+cargo install --git https://github.com/Soflutionltd/MemoryPilot --tag v4.13.0 --bin MemoryPilot
 
 # Local clone + auto-config (same installer, run from inside the repo):
 git clone https://github.com/Soflutionltd/MemoryPilot.git && cd MemoryPilot && ./install.sh
@@ -443,6 +487,8 @@ MemoryPilot --backfill-force
 | **`get_project_brain`** | Instant project summary (<1500 tokens): tech stack, architecture, bugs, recent changes, components, team members. Supports `compact = true`. |
 | **`search_memory`** | Hybrid BM25 + jina RRF search, boosted by importance, graph links, and file watcher context. Batched triple scoring. |
 | **`get_file_context`** | Memories related to recently modified files in working directory. |
+| **`find_conversation`** | Finds a past conversation from a vague description, across Cursor (every window, sub-agents folded into their conversation), Claude Code and Claude desktop agent sessions. Exact words and stems, misheard words (one or two letters off, split names glued back), and meaning, fused per conversation. Also finds conversations by a commit or a file they mention. Returns the matching message, commits, files and related memories. |
+| **`read_conversation`** | Reads a found conversation, paginated, optionally centred on the matching message. |
 
 ### Memory CRUD
 
@@ -537,6 +583,8 @@ MemoryPilot --benchmark-concurrency  # Multi-client concurrency bench (--clients
 MemoryPilot --benchmark-latency      # open_at startup + search latency
 MemoryPilot --http 7437              # Start HTTP REST server (requires --features http)
 MemoryPilot --migrate                # Import v1 JSON data
+MemoryPilot update [--check]         # Install the latest release now (--check: only report it)
+MemoryPilot --self-test DB           # Open DB with this version's schema upgrades (used by the updater on a copy)
 MemoryPilot --version                # Show version
 MemoryPilot --help                   # Show help
 ```
@@ -547,18 +595,19 @@ MemoryPilot --help                   # Show help
 |----------|---------|--------|
 | `MEMORYPILOT_CROSS_RERANK` | `adaptive` | `1`/`always` to force rerank on every query, `0`/`off` to disable. Adaptive rerank fires on hard / non-English queries. |
 | `MEMORYPILOT_CROSS_RERANK_TOP_K` | `12` | Number of candidates the cross-encoder rescores. |
-| `MEMORYPILOT_CROSS_RERANK_WEIGHT` | `0.45` | Fusion weight given to the cross-encoder score against the RRF score. Sweep tested 0.20-0.85; 0.45 is the best operating point on `--benchmark-fr` and stays within 0.2 pp R@5 of the optimum on LongMemEval. |
-| `MEMORYPILOT_RERANK_POOL_SIZE` | `1` | Number of cross-encoder ONNX sessions kept hot. `2` helps only under heavy concurrent load; each extra mmarco session costs ~120 MB. |
-| `MEMORYPILOT_EMBED_POOL_SIZE` | `1` | Number of embedding ONNX sessions in the pool (legacy fastembed models keep `4`, or `2` for 1024-dim). A second jina session adds ~250 MB and only pays off under heavy concurrent writes. |
+| `MEMORYPILOT_CROSS_RERANK_WEIGHT` | `0.6` | Fusion weight given to the cross-encoder score against the RRF score, bounded to 0-1. Sweep 0.45 / 0.6 / 0.75 / 0.9 / 1.0 (v4.12, jina-reranker-v2, 119-question LongMemEval-S sample, Apple M2 Max): 0.6 has the best LongMemEval R@1 (94.1%, 93.3% at 0.45) and MRR (96.1%, 95.6% at 0.45), and raises `--benchmark-fr` R@1 from 96.3% to 97.2%. Higher weights help the French benchmark further but lose LongMemEval questions. |
+| `MEMORYPILOT_RERANK_POOL_SIZE` | `1` | Number of cross-encoder ONNX sessions kept hot. `2` helps only under heavy concurrent load; each extra session costs ~140 MB. |
+| `MEMORYPILOT_EMBED_POOL_SIZE` | `1` | Number of embedding ONNX sessions in the pool. A second jina session adds ~250 MB and only pays off under heavy concurrent writes. |
 | `MEMORYPILOT_EMBED_THREADS` | `min(4, cores)` | ONNX intra-op threads for the embedder. `MEMORYPILOT_RERANK_THREADS` (default `min(2, cores)`) does the same for the cross-encoder. |
-| `MEMORYPILOT_RERANKER_MODEL` | `mmarco` | `mmarco-mMiniLMv2-L12-H384-v1` int8 (Apache-2.0, ~120 MB resident). Alternatives served the same way (int8, memory-mapped): `jina-v2` (`jina-reranker-v2-base-multilingual`, 280 MB, CC-BY-NC) and `gte-multilingual` (`gte-multilingual-reranker-base`, 341 MB, Apache-2.0) — both measured *lower* on `--benchmark-fr` (MRR 63.5% / 62.1% vs 65.3% before the v4.5 fix) at 2× the latency, hence not the default. Legacy fp32 fastembed models: `jina-v2-multilingual-fp32` (1.1 GB), `bge-v2-m3`, `bge-base`, `jina-v1`. |
+| `MEMORYPILOT_RERANKER_MODEL` | `jina-v2` | `jina-reranker-v2-base-multilingual` int8 (280 MB, memory-mapped, CC-BY-NC-4.0), the only cross-encoder since v4.11. On `--benchmark-fr` it scores R@1 97.2%, R@5 100%, MRR 98.0% (mmarco, the previous default: 96.3%, 99.1%, 97.6%), for a slower rerank. |
 | `MEMORYPILOT_MODEL_IDLE_SECS` | `600` | Idle time after which the embedder and reranker sessions are dropped to free memory (~250 MB). `0` keeps them resident (benchmarks). |
 | `MEMORYPILOT_CONSOLIDATE` | `on` | Daily embedding-based consolidation of near-duplicate ephemeral memories (cosine ≥ 0.95 and word overlap ≥ 0.6, same project, newest kept), followed by the supersede pass (see v4.6). `off` disables it; `consolidate_memories` runs it on demand. |
 | `MEMORYPILOT_MMR` / `MEMORYPILOT_MMR_LAMBDA` | `on` / `0.4` | MMR diversity over the finalists. `0` disables; λ = 1.0 is pure relevance, 0.0 pure diversity. `MEMORYPILOT_MMR_FLOOR` (`0.55`) is the cosine below which two candidates are not considered redundant. |
 | `MEMORYPILOT_TEMPORAL` | `on` | Query-time date window boost/demotion. `0` disables (date entities are still extracted at ingest). |
 | `MEMORYPILOT_ABSTAIN_COSINE` / `MEMORYPILOT_TRUST_CROSS` | `0.35` / `1.0` | Below the cosine floor a search reports `confidence.abstain = true` unless the cross-encoder logit on the top hit reaches the trust value. |
 | `MEMORYPILOT_READER_NULL_MARGIN` | `0` | Extractive reader: the span logit must beat the model's no-answer logit by this much. Negative values answer more often (`−3` → 92/100 answered, 3/7 abstentions still caught on LongMemEval-S@100). |
-| `MEMORYPILOT_EMBED_MODEL` | `jina` | `jina-embeddings-v5-text-nano-retrieval` int8 (768-dim). `jina-q4` = 4-bit variant (140 MB download, ~5× faster queries, −1 pp R@5 / −3 pp MRR on FR). Apache-2.0 alternatives via fastembed: `e5-small` (384-dim), `e5-base`, `e5-large`, `bge-m3` (1024-dim). The database records which model produced its vectors; changing the model drops them and re-embeds everything in the background at next start (BM25 keeps answering meanwhile). |
+| `MEMORYPILOT_AUTO_UPDATE` | `on` | `0`/`off` stops the server from checking for and installing new releases (see [Automatic updates](#automatic-updates)). `MemoryPilot update` still works by hand. |
+| `MEMORYPILOT_EMBED_MODEL` | `jina` | `jina-embeddings-v5-text-nano-retrieval` int8 (768-dim), the only embedder since v4.11. `jina-q4` = its 4-bit variant (140 MB download, faster queries, about 1 pp lower R@5 and 3 pp lower MRR on FR). The database records which model produced its vectors; a database built with another model is re-embedded once in the background at next start (BM25 keeps answering meanwhile). |
 
 ## HTTP API
 
@@ -621,13 +670,13 @@ config             — key/value store
 | Binary size | 35 MB |
 | Startup (`open_at`) | 1-2 ms (ANN warm-up runs in background) |
 | Startup (`open_at_warm`) | 50-200 ms on 10 k memories (ANN hydrated synchronously, deterministic search from query #1) |
-| Search default fast (BM25 + RRF) | ~28 ms avg on LongMemEval-S |
-| Search adaptive cross-encoder | ~210 ms avg on `--benchmark-fr` (R@5 99.1%, MRR 97.4%; v4.4 was 230 ms / R@5 70.6% / MRR 65%, v4.3 415 ms / R@5 60% / MRR 57%) |
+| Search with rerank off (BM25 + RRF) | ~28 ms avg on LongMemEval-S (v4.2, search call only) |
+| Search adaptive cross-encoder | v4.11 (jina-reranker-v2): ~436 ms avg on `--benchmark-fr` on a 2-vCPU Linux VM, R@5 100%, MRR 98.0%. v4.10 (mmarco): ~210 ms on an Apple Silicon Mac, R@5 99.1%, MRR 97.4% |
 | Concurrency p95 (4 clients × 20 queries, 500 memories, adaptive) | 229 ms |
 | `add_memory` latency | <1 ms (lazy embed) |
 | Embedding quality | Transformer 768-dim (jina-embeddings-v5-text-nano-retrieval int8, 100+ languages, 8k context) |
 | Backfill (1000 memories) | ~2 min in the background (model swap re-embed; `recall` stays interactive, ~1 s, while it runs) |
-| RAM (both models loaded, steady state) | ~370 MB on a fresh database, ~485 MB with 2 000 memories in the ANN index — almost all of it memory-mapped int8 weights (247 MB jina + 118 MB mmarco) the OS can reclaim under pressure (was ~3.5 GB idle / ~7 GB peak in v4.3) |
+| RAM (both models loaded, steady state) | ~370 MB on a fresh database, ~485 MB with 2 000 memories in the ANN index — almost all of it memory-mapped int8 weights (247 MB embedder + 280 MB reranker since v4.11, was 118 MB with mmarco) the OS can reclaim under pressure (was ~3.5 GB idle / ~7 GB peak in v4.3) |
 | RAM (idle) | ~130 MB: both ONNX sessions are released after `MEMORYPILOT_MODEL_IDLE_SECS` (default 600 s) without a query and rebuilt on the next one (~0.8 s once, ~0.3 s for the reranker alone) |
 | RAM (`--benchmark-fr`, peak) | 364 MB (was 7.05 GB) |
 | Read concurrency | 16 pooled connections per Database handle |
@@ -702,10 +751,9 @@ MEMORYPILOT_CROSS_RERANK=off MemoryPilot --benchmark-longmemeval benchmarks/long
 MemoryPilot --benchmark-longmemeval benchmarks/longmemeval_s_cleaned.json                                 # adaptive (default), ~900ms/query, 99.1% R@5
 MEMORYPILOT_CROSS_RERANK=1 MemoryPilot --benchmark-longmemeval benchmarks/longmemeval_s_cleaned.json      # force on every query, max latency
 MEMORYPILOT_CROSS_RERANK_WEIGHT=0.70 MemoryPilot --benchmark-longmemeval benchmarks/longmemeval_s_cleaned.json  # bias more toward the cross-encoder score
-MEMORYPILOT_RERANKER_MODEL=bge-v2-m3 MemoryPilot --benchmark-longmemeval benchmarks/longmemeval_s_cleaned.json  # swap the model
 ```
 
-Supported model shortcuts: `jina-v2-multilingual` (default), `bge-v2-m3`, `bge-base`, and `jina-v1`. Validated full-run results on the 470 evaluable LongMemEval-S questions: default fast mode reaches **98.7% R@5**, **95.1% NDCG@10**, **93.6% MRR**, ~28 ms average search latency; adaptive mode reaches **99.1% R@5**, **96.0% NDCG@10**, **94.9% MRR**, ~900 ms average search latency. The deterministic French benchmark (`--benchmark-fr`) is the canonical regression test for any multilingual change — variance is bounded to ±1 pp R@5 across runs.
+The cross-encoder is `jina-reranker-v2-base-multilingual`. Validated full-run results on the 470 evaluable LongMemEval-S questions (v4.2, session-level recall_any): with the rerank off, **98.7% R@5**, **95.1% NDCG@10**, **93.6% MRR**, ~28 ms average search latency; adaptive mode reaches **99.1% R@5**, **96.0% NDCG@10**, **94.9% MRR**, ~900 ms average search latency. The deterministic French benchmark (`--benchmark-fr`) is the canonical regression test for any multilingual change — variance is bounded to ±1 pp R@5 across runs.
 
 ## Storage
 
@@ -715,6 +763,15 @@ Supported model shortcuts: `jina-v2-multilingual` (default), `bge-v2-m3`, `bge-b
 
 ## License
 
-**Soflution Source Available License** — free to use, not to fork or modify. See [LICENSE](LICENSE) for details.
+**Soflution Source Available License**: free to use, not to fork or modify. See [LICENSE](LICENSE) for details.
+
+### Models: non-commercial use only
+
+MemoryPilot runs two models by Jina AI, downloaded from their Hugging Face repositories on first use and never redistributed by MemoryPilot:
+
+- [jina-embeddings-v5-text-nano-retrieval](https://huggingface.co/jinaai/jina-embeddings-v5-text-nano-retrieval) (embeddings)
+- [jina-reranker-v2-base-multilingual](https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual) (reranking)
+
+Both are licensed by Jina AI under [CC-BY-NC-4.0](https://creativecommons.org/licenses/by-nc/4.0/): **non-commercial use only**. Personal use is fine. Commercial use, including inside a company or a paid product, needs a commercial licence from [Jina AI](https://jina.ai). The opt-in answer reader (`answer: true`) uses [deepset/roberta-base-squad2](https://huggingface.co/deepset/roberta-base-squad2), CC-BY-4.0.
 
 Built by [SOFLUTION LTD](https://soflution.com)

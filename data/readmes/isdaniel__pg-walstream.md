@@ -27,6 +27,7 @@ A high-performance Rust library for PostgreSQL logical and physical replication 
 - **Typed Row Deserialization**: Built-in `serde` deserializer maps WAL rows directly into user-defined Rust structs (numerics, `bool`, `String`, `Option<T>`, enums, bytes)
 - **High-Level Consumption Ergonomics**: `ReplicationStreamConfig::builder()`, an auto-acking `EventStream::for_each_event`, and a typed by-table `WalRouter` with an optional `#[derive(WalTable)]` layer (opt-in `derive` feature)
 - **Managed Initial Snapshot**: `LogicalReplicationStream::snapshot()` copies the published tables through the slot's exported snapshot and hands off to the stream with no gap and no duplicate window. The ordering invariant is enforced by the type system, and snapshot rows arrive as ordinary `ChangeEvent`s, so one set of handlers (or one `WalRouter`) serves both the snapshot and the live stream
+- **Aligned Snapshot**: `LogicalReplicationStream::capture_aligned` copies tables added while the stream runs, exact at a temporary side slot's consistent point `C`, and `next_event_before(C)` stops the running stream where that copy applies
 - **Bounded Replay**: `ReplicationStreamConfig::with_stop_at_lsn` streams to a target LSN, delivers the crossing transaction in full, then ends cleanly with `ReplicationError::StreamStopped`
 - **Raw XLogData Access**: `LogicalReplicationStream::next_raw_event` yields the undecoded pgoutput payload plus WAL positions (`RawXLogData`) for consumers that bring their own decoder — keepalives, feedback, and cancellation still handled, no auto-ack
 - **Replication Slot Management**: Create, alter, read, and drop slots with full option support
@@ -293,6 +294,42 @@ A complete, runnable version of the above — including a row inserted *during* 
 > **A failed snapshot cannot be resumed.** The exported snapshot is `REPEATABLE READ`; continuing against an expired one would silently mix rows from two points in time. You own the retry policy; the library owns the retry *start point*, which is always the beginning. A failed or dropped snapshot handle makes a best-effort attempt to drop its slot — a failure to drop is logged, not returned — so a retry normally gets a fresh export instead of finding the slot present and silently proceeding with no baseline.
 
 > **Holding a snapshot handle blocks `VACUUM`.** The handle keeps a `REPEATABLE READ` transaction open, pinning the database's `xmin` — no dead tuple newer than the snapshot can be reclaimed, across the whole database, for as long as you hold it. Copy promptly.
+
+### Tables added while the stream runs
+
+`capture_aligned` copies extra tables through a temporary side slot's exported snapshot, exact at its consistent point `C`. Commit the `ALTER PUBLICATION ... ADD TABLE` first. A table added while the capture waits can lose a row written before the `ALTER` committed.
+
+The walsender drops a stream that sends no status update for `wal_sender_timeout`, so keep calling `send_feedback()` while the capture waits and while the copy loads. The capture future borrows nothing from the stream. Do not read the stream until the capture returns, because a read can pass `C`, which `next_event_before` cannot undo:
+
+```rust
+let capture = stream.capture_aligned(&[("public", "orders")]);
+tokio::pin!(capture);
+let mut tick = tokio::time::interval(Duration::from_secs(1));
+let mut copy = loop {
+    tokio::select! {
+        copy = &mut capture => break copy?,
+        _ = tick.tick() => stream.send_feedback().await?,
+    }
+};
+let c = copy.consistent_point();
+while let Some(event) = stream.next_event_before(c, &cancel).await? {
+    sink.buffer(event); // per transaction, decided at its commit event
+}
+let mut fed = std::time::Instant::now();
+while let Some(row) = copy.next_row().await? {
+    sink.load(row).await?;
+    if fed.elapsed() >= Duration::from_secs(1) {
+        stream.send_feedback().await?;
+        fed = std::time::Instant::now();
+    }
+}
+copy.finish()?;
+// stream.next_event(&cancel) continues at the first transaction committed at or past c.
+```
+
+`next_event_before(C)` returns `None` once every transaction committed below `C` has been delivered. Decide each transaction at its commit event. Below `C`, apply it without the copied tables' rows, which the copy already holds. At or past `C`, apply it in full, after the copy. A transaction that ends in `RollbackPrepared` or in a `StreamAbort` of the whole transaction is dropped. Streamed chunks, `BeginPrepare` through `Prepare`, and `StreamPrepare` can arrive before the `None` for a transaction that commits at or past `C`, so buffer each transaction until its commit event. `EventStream::next_event_before` does the same with retries.
+
+The capture holds a second replication connection and a temporary slot until slot creation ends. Slot creation waits for the transactions open when it starts and can also wait for ones that start during the wait. Dropping the capture future does not stop it, so abandoned captures behind a long transaction keep their walsenders and can exhaust `max_wal_senders`. `with_cancellation` covers only the copy loop. The copy pins `xmin` until `finish()`.
 
 ## Connection Timeouts
 

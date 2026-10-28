@@ -6,12 +6,13 @@
 
 ![GitHub](https://img.shields.io/github/license/germinateplatform/germinate-vue?style=for-the-badge&logo=apache)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/germinateplatform/germinate-vue?style=for-the-badge)
+![GitHub development](https://img.shields.io/github/package-json/v/germinateplatform/germinate-vue?style=for-the-badge&label=dev)
 ![GitHub last commit](https://img.shields.io/github/last-commit/germinateplatform/germinate-vue?style=for-the-badge&logo=git)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?style=for-the-badge)](CODE_OF_CONDUCT.md)
 
 ![Docker Pulls](https://img.shields.io/docker/pulls/cropgeeks/germinate?style=for-the-badge&logo=docker)
 [![Docker CI Push](https://img.shields.io/github/actions/workflow/status/germinateplatform/germinate-vue/docker-ci-push.yml?label=GitHub%20Push%20Action&logo=github&style=for-the-badge)](https://github.com/germinateplatform/germinate-vue/actions/workflows/docker-ci-push.yml)
-[![Docker CI Tag](https://img.shields.io/github/actions/workflow/status/germinateplatform/germinate-vue/docker-ci-push.yml?label=GitHub%20Tag%20Action&logo=github&style=for-the-badge)](https://github.com/germinateplatform/germinate-vue/actions/workflows/docker-ci-tag.yml)
+[![Docker CI Tag](https://img.shields.io/github/actions/workflow/status/germinateplatform/germinate-vue/docker-ci-tag.yml?label=GitHub%20Tag%20Action&logo=github&style=for-the-badge)](https://github.com/germinateplatform/germinate-vue/actions/workflows/docker-ci-tag.yml)
 
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.14858537-007ec6?style=for-the-badge)](https://doi.org/10.5281/zenodo.14858537)
 

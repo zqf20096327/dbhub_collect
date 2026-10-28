@@ -9,6 +9,10 @@
 
 <h3 align="center">Your finances, one intelligent cockpit.</h3>
 
+**Official public product:** [FinCo-Pilot](https://fincopilot.app/welcome/) · [What it supports](https://fincopilot.app/welcome/features/) · [First-session guide](https://fincopilot.app/welcome/how-it-works/) · [Free illustrative spending calculator](https://fincopilot.app/welcome/tools/safe-to-spend/) · [About and editorial standards](https://fincopilot.app/welcome/about/)
+
+The public guides use synthetic examples and are educational, not bank-connection or personalized financial-advice guarantees. Authenticated finance records remain in the private application.
+
 FinCo-Pilot is a privacy-first personal finance platform for managing accounts, transactions, budgets, goals, assets, invoices, shared expenses, reports, bank connections, and optional AI agents from one workspace. It is designed to keep financial data under the operator's control while providing a fast, modern web experience.
 
 ## Quick Start

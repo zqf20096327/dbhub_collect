@@ -7,13 +7,13 @@
 <p align="center">
   <strong>A native workspace for your databases.</strong><br>
   Explore schemas, write queries and edit data in a focused desktop app built with Rust and egui.<br>
-  macOS · Windows
+  macOS · Windows · Linux
 </p>
 
 <p align="center">
   <a href="LICENSE-MIT"><img alt="License: MIT OR Apache-2.0" src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-22a8b8?style=flat-square"></a>
   <img alt="Built with Rust" src="https://img.shields.io/badge/built%20with-Rust-253b53?style=flat-square&logo=rust">
-  <a href="https://github.com/javy-fernandez/datacraft/releases"><img alt="Download for macOS and Windows" src="https://img.shields.io/badge/download-macOS%20%C2%B7%20Windows-22a8b8?style=flat-square"></a>
+  <a href="https://github.com/javy-fernandez/datacraft/releases"><img alt="Download for macOS, Windows and Linux" src="https://img.shields.io/badge/download-macOS%20%C2%B7%20Windows%20%C2%B7%20Linux-22a8b8?style=flat-square"></a>
 </p>
 
 <p align="center">
@@ -97,12 +97,12 @@ The cell editor supports multiline text and a UTF-8 hex view. The inspector swit
 
 ## Build filters before applying them
 
-Combine enabled conditions in nested **AND/OR** groups, choose comparison or text operators, and add ordered sort columns. Switch to **Text** mode for custom <code>WHERE</code> and <code>ORDER BY</code> expressions. Editing the draft does not run a query; **Apply** reloads the data.
+Choose **AND/OR** on each condition row to mix operators, and use groups with visible parentheses to control precedence. Add comparison or text conditions and ordered sort columns. Switch to **Text** mode for custom <code>WHERE</code> and <code>ORDER BY</code> expressions. Editing the draft does not run a query; **Apply** reloads the data.
 
 <p align="center">
   <img src="docs/screenshots/readme/filter-sort.png" alt="Full DataCraft window with the structured filter and sort builder above the table" width="100%">
   <br>
-  <sub>A filter draft and sort rule, ready to apply.</sub>
+  <sub>Mixed AND/OR conditions and a sort rule, ready to apply.</sub>
 </p>
 
 Ctrl+F, or Command+F on macOS, searches the currently loaded cells. **Find in Schema…** searches the database instead. See [search behavior and scope](docs/navigation-search.md).
@@ -136,15 +136,16 @@ PostgreSQL, MySQL and MariaDB backups require their native dump utilities. SQLit
 | ClickHouse | Native TCP protocol (port 9000, or 9440 with TLS checked against the system's certificates), SQL console and data editor for inserts only (updates and deletes are asynchronous mutations, run them from the console). Copies into ClickHouse run without a transaction |
 | Redis / Valkey | Native commands, keys grouped by prefix, type/TTL information and read-only result grids |
 | MongoDB | <code>mongosh</code>-style commands, collection browsing and read-only result grids |
+| InfluxDB 2 | HTTP API (port 8086, HTTPS with "Use TLS") with an API token and an organization; Flux and InfluxQL consoles, buckets and measurements with their tags and fields, and read-only result grids filtered by a Flux predicate and a time range (the last hour by default). InfluxQL needs InfluxDB 2.4+ or a DBRP mapping |
 
 Support varies by engine, server version and account privileges. [Oracle Instant Client](https://www.oracle.com/database/technologies/instant-client.html) must be installed separately for Oracle connections.
 
 ## Designed for the desktop
 
-- **macOS and Windows:** native macOS menus and window controls; a unified application header on Windows.
+- **macOS, Windows and Linux:** native macOS menus and window controls, a unified application header on Windows, and a native Wayland/X11 window on Linux.
 - **Light and dark themes:** adjustable interface zoom and editor font size.
 - **Eight interface languages:** English, Spanish, French, Brazilian Portuguese, German, Polish, Simplified Chinese and Japanese. Follow the system language or choose one in Settings.
-- **OS credential storage:** saved passwords use macOS Keychain or Windows Credential Manager, rather than the connections file.
+- **OS credential storage:** saved passwords use macOS Keychain, Windows Credential Manager or the Linux Secret Service (GNOME Keyring, KWallet), rather than the connections file.
 
 Built with Rust, egui/wgpu and Tokio. Database work runs through background workers to keep the interface responsive.
 

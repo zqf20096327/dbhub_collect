@@ -291,13 +291,25 @@ from src.config_loader import (
 
 ## 🛡️ 新增功能（2026-04-24）
 
-### 黑名单检测
+### 黑名单检测（2026-10-28 三道闸）
 ```bash
 # 检测当前 IP/账号是否被 BaoStock 列入黑名单
 .venv/bin/python scripts/check_blacklist.py
+# 确认已解封后强制启动(跳过退避闸)
+.venv/bin/python scripts/download_all.py --ignore-blacklist
 ```
 
-monitor 连通性检查探测到黑名单（error_code 10001011）时写 `data/.blacklisted` 标记进入 **120 分钟退避期**（`BLACKLIST_BACKOFF_MINUTES`），期内跳过一切探测/重启，避免探测请求延长封禁；退避期过自动复测，恢复正常后删除标记。
+`src/utils/blacklist.py` 为标记与退避判定的唯一事实源(跨平台,Python 判定不再依赖 GNU bash)。三道闸:
+
+1. **启动退避闸**:`data/.blacklisted` 标记在 `api.blacklist_backoff_minutes`(默认 120)窗口内 → **不发起任何网络请求**,退出码 `2`(`1` = 配额上限,两者不混)。报错自带解法:删除标记,或加 `--ignore-blacklist` / 环境变量 `BAOSTOCK_IGNORE_BLACKLIST=1`。闸判**年龄**不判存在性——窗口一过自动放行;标记缺失/读失败/时钟回拨/JSON 损坏(monitor `touch` 形态)一律 fail-open,绝不把下载永久锁死。
+2. **查询期熔断**:服务端返回 `10001011` → 记标记、保住内存批次、立即终止(`BlacklistedError`,退出码 **3**;不重试、不再发 logout 但关 socket)。被封后 0 次后续请求;登录成功即清标记(解封自愈);**退避期内绝不 touch 标记**——否则窗口会被自己无限续期。退出码约定:`1` 配额上限、`2` 启动闸拒绝启动、`3` 查询期熔断终止。
+3. **请求频率闸**:`api.min_request_interval`(默认 0.30s)为每请求硬下限,与既有批间 `batch_sleep`/`RequestPacer` 取最大值语义(不叠加等待),避免"短时高频请求/循环批量下载未加延时"触发官方封禁规则;分页翻页**逐页计数**,配额统计不失真。
+
+日报在退避期内**零网络探测**(直接用标记出状态,不会替我们把封禁续上);monitor 退避窗口同样从 `config.yaml` 读取(单一事实源,读取失败回落 120 并 WARN)。
+
+> 注意:新增两个配置键(`api.min_request_interval`、`api.blacklist_backoff_minutes`)改动后**需重启进程**才生效(`config_loader` 有模块级缓存;配置读取做成 property 是为测试可注入,不是文件热加载)。
+
+**若已被封(不依赖代码的处置要点)**:① 先停止一切重试——每次启动都真发一发 login,官方规则明确反复登录会刷新/延长封禁;② 查公网出口 IP(`curl ifconfig.me`)对照 baostock.com 黑名单页,注意家庭宽带/公司 NAT 共享出口连坐;③ 动态公网 IP 重启光猫/路由器换 IP;④ 走代理必须 TUN/全局模式(baostock 是 10030 端口裸 TCP,不吃系统 HTTP 代理);⑤ 申诉:baostock@163.com(附公网 IP)或 QQ 群 1128507078。
 
 ### 邮件日报
 - 当日拉取**真正终结**（46000 请求上限 / 日停 23:55）时**立即发送**进度邮件（日报生成约 2~3 分钟，邮件随后送达）
@@ -308,8 +320,8 @@ monitor 连通性检查探测到黑名单（error_code 10001011）时写 `data/.
 
 ### 趟次调度与去重（2026-10-26）
 - `./start.sh full` 为常驻模式：`download_all.py` 挂趟次调度循环，`main()` 每趟返回本趟新增行数（各阶段精确判重计数）
-  - 有新增 → 立即下一趟（数据还在来）
-  - 无新增 → 休眠 90 分钟复检（`download.idle_pass_interval_minutes`；分段 ≤5 分钟、每段写心跳日志，避免 monitor 15 分钟日志静默误判卡死）
+  - 有新增 → 休眠 10 分钟后下一趟（`download.productive_pass_interval_minutes`）
+  - 无新增 → 指数退避复检：10/20/40/80… 分钟封顶 90（`download.idle_pass_interval_minutes` 为退避上限；连续空趟翻倍，有新增即归零重来；分段 ≤5 分钟、每段写心跳日志，避免 monitor 15 分钟日志静默误判卡死）
   - 终结条件：46000 请求上限 或 23:55 日停，届时发送日报
 - 冗余消除：
   - 退市股自愈跳过：`out_date <= end_date` 且库内 `max(date) >= out_date` 才跳过；退市前有缺口则先补到 `out_date` 再永久跳过
@@ -380,6 +392,17 @@ stocks:
 
 ## 🔄 更新日志
 
+- **2026-10-28**：IP 黑名单防护三道闸（按 `docs/superpowers/specs/2026-10-28-blacklist-guard-design.md` 落地）
+  - **问题根因**：GitHub 用户反馈仅运行 `download_all.py` 即被 BaoStock 拉黑（2,804/48,000 请求时被封，配额闸从未起作用）。缺口：无启动前置闸（封禁期内每次重启真发一发 login，官方规则明确反复登录会延长封禁）；黑名单判断仅是 login 的副产物；被封后 `except RuntimeError: continue` 吞掉错误继续砸服务器（约 1.7 万次）；K 线阶段零请求间隔；分页请求漏计配额；退避仅 monitor（GNU bash）有，Windows/macOS 无保护
+  - **修复方案**：(1) 新建 `src/utils/blacklist.py` 为标记/退避判定单一事实源（判年龄不判存在性、fail-open 六条、退避期绝不 touch），启动退避闸挂 `run_main_with_report` 入口/每趟与 `BaseDownloader.__init__`，命中退出码 **2**（与配额上限的 1 区分）；(2) 查询期熔断 `BlacklistedError`（直接继承 `Exception`，防被 `except RuntimeError` 吞掉），首个 `10001011` 即 arm+终止、被封后 0 次后续请求，`close()` 跳过 logout 但关 socket，login 成功即 clear；(3) 请求频率闸 `api.min_request_interval: 0.30`（property 每次现读不冻结，与既有 sleep 取最大值不叠加），并修 K 线空批跳过批间睡眠；(4) 分页逐页计数（单页 1 次、翻 N 页 N+1 次，分页途中触顶同样熔断）；(5) 日报退避期零网络探测，monitor 退避窗口归一 `config.yaml`（读取失败回落 120）；(6) `--ignore-blacklist` / `BAOSTOCK_IGNORE_BLACKLIST=1` 旁路；(7) 顺带修 `_flush_pending_batches` 的 `"unknown"` 兜底（评审问题 E，改为显式报错跳过）
+  - **测试**：新增 6 组约 30 例（marker 10 / startup gate 5 / circuit break 10 / throttle 6 / pagination 3 / daily report 2），`tests/conftest.py` 隔离生产 `data/.blacklisted`；全量 297 例通过
+  - 修改文件：`src/utils/blacklist.py`（新建）、`src/downloaders/`（base/kline/financial）、`src/utils/helpers.py`、`src/config.py`、`src/config_loader.py`、`config.yaml`、`scripts/`（download_all/update_daily/daily_report/monitor_baostock.sh）、`tests/`（6 组新增 + conftest）、`README.md`、`docs/download_flow.md`、`docs/improvement_plan.md`、`docs/claude评价_第二次.md`
+- **2026-10-28**：性能提速——分红/复权/报表批内限速，趟次间隔自适应
+  - **问题根因**：分红/复权/报表循环逐请求 `time.sleep(batch_sleep)`（1 秒/次），Phase 11 每晚 16,022 次请求中约 4.5 小时是纯休眠（整趟 6~7.5 小时，网络实际仅约 1 小时，逐请求间隔 1.2 秒 vs K 线批内 0.16 秒）；趟次调度"无新增固定睡 90 分钟"导致白天长时间无动作、盘中新数据最多延迟 90 分钟才复检
+  - **修复方案**：(a) 新增 `helpers.RequestPacer`，分红/复权/报表四处循环的逐请求休眠改为每 `batch_size`（200）次请求停 `batch_sleep`（1 秒），与 K 线批内限速同款（预期夜间整趟 6~7.5 小时 → 约 2 小时）；(b) 趟次间隔自适应 `compute_pass_interval_minutes`：有新增→隔 `download.productive_pass_interval_minutes`（10 分钟）下一趟并清零空趟计数，连续空趟指数退避 10/20/40/80… 封顶 `download.idle_pass_interval_minutes`（90 分钟），非正值仍钳位 1 分钟防热循环
+  - **上线观察**：分红/复权/报表请求速率升至与 K 线同级（约 5 次/秒，K 线整月该速率无封禁记录）；若出现 error_code 10001011 封禁（monitor 已有 120 分钟退避兜底），可把 `stocks.batch_size` 调小（如 50）降速，无需回滚代码
+  - **测试**：新增 `tests/test_request_pacer.py` 6 例（窗口节奏、窗口为 1、非正窗口钳位、默认走 `time.sleep`、分红循环/报表循环按批限速）；`tests/test_pass_scheduler.py` 新增 5 例（退避序列 10/20/40/80/90、有新增归零、配置默认值）并把"有新增直连下一趟"旧口径改写为"隔基础间隔"；另补 23:55 跨停用例与 `base=0` 钳位用例（评审补口）、`batch_sleep` 缺省值对齐 config.yaml（1 秒）；全量 261 例通过
+  - 修改文件：`src/utils/helpers.py`、`src/downloaders/dividend_downloader.py`、`src/downloaders/report_downloader.py`、`src/config_loader.py`、`config.yaml`、`tests/`（1 组新增、1 组扩展）、`README.md`、`docs/download_flow.md`、`docs/superpowers/plans/2026-10-28-phase11-pacing-and-adaptive-pass-interval.md`
 - **2026-10-27**：修复退市股自愈分支的永久空探（K 线/指数零新增探测每日一探）
   - **问题根因**：退市股最后一根 K 线在 `out_date` 前一交易日（实测 43 只股票 `库内max = out_date - 1`），自愈条件 `last >= out_date` 永不成立，每趟重复探测；叠加指数末日重探（服务端日线发布滞后），空转趟实测 153 次请求（超出 ≤50 验收口径），日耗约 2.4k 请求
   - **修复方案**：K 线/指数查询返回 0 新增行即记 `daily_probe_memo`（scope `zero_new`，key 含表+code+复权），当日同 key 不再请求、次日恢复；时效语义不变（`target_date=昨日` 本就 T+1 拉取）

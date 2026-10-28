@@ -171,6 +171,25 @@ for Linux, Windows and macOS.
   date formats), import into a new or existing table with array DML.
   Per column: trim, date format, SQL expression (`upper(:value)`,
   constants); bad rows can be skipped and logged to `<file>.bad.csv`.
+- **Maintenance** of a table, materialized view or index (right-click →
+  *Maintenance…*), on every database. Its state comes first: when its
+  statistics were gathered and whether they are stale or locked, and
+  unusable indexes and partitions on Oracle; dead rows and the last
+  (auto)vacuum on PostgreSQL; reclaimable space on MySQL; fragmentation on
+  SQL Server. Then the database's tasks, with their options and what they
+  lock: gather, delete, lock or unlock statistics, rebuild unusable indexes,
+  shrink, move (online); `VACUUM`, `ANALYZE`, `REINDEX CONCURRENTLY`;
+  `ANALYZE`, `OPTIMIZE` and `CHECK TABLE`; `UPDATE STATISTICS`, rebuild or
+  reorganize indexes. The statements run one by one on the window's own
+  session, which commits each, with Break; production connections ask
+  first.
+- **Maintenance scan** of a schema or database (*Tools → Maintenance
+  Scan*, or right-click the Tables folder): what the tables need, with the
+  evidence and the fix for each, run as a batch object by object. Stale or
+  missing statistics and unusable indexes (Oracle), dead rows, wraparound
+  and invalid indexes (PostgreSQL), reclaimable space and old statistics
+  (MySQL), fragmented indexes, statistics with many changes and the last
+  CHECKDB (SQL Server). The dashboards' findings open the fix too.
 
 **Reports**
 - Built-in reports (invalid objects, unindexed foreign keys, largest
@@ -227,7 +246,8 @@ for Linux, Windows and macOS.
 - Connect to MySQL (tested with 9.4; MariaDB not yet) with *Type: MySQL* and `host:3306/database`
   (`?tls` for TLS, `?tls=skip-verify` for self-signed certificates); no
   client library needed. The database picked in the object browser is the
-  one SQL windows run in; the toolbar and status bar show it.
+  one SQL windows run in; the toolbar and status bar show it. Without a
+  database in the profile, the connection starts in the one picked last.
 - *Connect through SSH* forwards the connection over an SSH server, like
   `ssh -L` or HeidiSQL's SSH tunnel; the database address is then as the
   SSH server sees it (often `localhost:3306/database`). Log in with a
@@ -248,6 +268,11 @@ for Linux, Windows and macOS.
   and the DDL. *Edit* opens a routine as a script that drops and creates it
   again. Listing every user and role takes `SELECT` on `mysql.user`;
   without it the browser shows your own user and the roles you may use.
+- Users and roles have forms (*New user…*, *Edit user…* in the browser):
+  host, password, expiry, lock, the roles granted (with admin option, and
+  which are enabled at login) and privileges on the server, a database or
+  a table, with the grant option. They show the statements before
+  *Apply*. Reading other accounts takes `SELECT` on the `mysql` database.
 - A monitoring dashboard of its own (Monitor → Dashboard): findings first
   (lock waits and who blocks, metadata locks, connections near the limit,
   buffer pool hit ratio, long transactions, replication), then KPIs and
@@ -257,7 +282,7 @@ for Linux, Windows and macOS.
   statements and lock waits `SELECT` on `performance_schema`.
 - Everything built on Oracle's dictionary or PL/SQL — debugger, profiler,
   the rest of the monitor, reports, scheduler jobs, compare, import/export,
-  the form editors — isn't offered on MySQL connections. As in SQL\*Plus,
+  the other form editors — isn't offered on MySQL connections. As in SQL\*Plus,
   end a routine with `/` on a line of its own (there is no `DELIMITER`).
 
 **PostgreSQL and SQL Server (experimental)**
@@ -272,7 +297,12 @@ for Linux, Windows and macOS.
   the object browser (also materialized views and sequences, synonyms on
   SQL Server, and users and roles: PostgreSQL's roles that can log in are
   its users; SQL Server's are the database's) and object views with the
-  DDL. Transactions work as with
+  DDL. Users and roles have forms as on MySQL: on PostgreSQL the role's
+  options, password, validity, connection limit, memberships and
+  privileges on databases, schemas, tables and sequences; on SQL Server a
+  user for a new or existing login (or without one), its default schema,
+  role memberships and permissions granted, grantable or denied.
+  Transactions work as with
   Oracle; on PostgreSQL a failing statement doesn't abort the transaction,
   and notices (`RAISE NOTICE`) show as messages. Results can't be edited
   in place yet.
@@ -322,6 +352,7 @@ for Linux, Windows and macOS.
 
 ## Installing
 
+Download Pythia from [its website](https://ortic.github.io/pythia/#download).
 Packages for Linux (`.deb`, AppImage), Windows (MSI, setup `.exe`) and
 macOS (`.dmg`) are attached to each [GitHub
 release](https://github.com/ortic/pythia/releases), in two flavors:

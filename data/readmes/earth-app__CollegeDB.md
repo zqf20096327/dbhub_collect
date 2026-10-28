@@ -1,107 +1,37 @@
 # CollegeDB
 
-Universal Database Horizontal Sharding Router
+Horizontal sharding router for SQL databases
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8+-blue.svg)](https://www.typescriptlang.org/)
 [![GitHub Issues](https://img.shields.io/github/issues/earth-app/CollegeDB)](https://github.com/earth-app/CollegeDB/issues)
-[![Cloudflare Workers](https://img.shields.io/badge/cloudflare-workers-orange.svg)](https://workers.cloudflare.com/)
 [![GitHub License](https://img.shields.io/github/license/earth-app/CollegeDB)](LICENSE)
-![NPM Version](https://img.shields.io/npm/v/%40earth-app%2Fcollegedb)
+[![NPM Version](https://img.shields.io/npm/v/%40earth-app%2Fcollegedb)](https://www.npmjs.com/package/@earth-app/collegedb)
 
-A TypeScript library for **horizontal scaling** of SQL databases. CollegeDB splits a single logical table across many database instances by primary key, and routes each query to the instance that owns its key.
+CollegeDB splits one logical table across many databases. It routes each key to the shard that owns it, either through a mapping store or by computing the shard from the key. It works over Cloudflare D1, PostgreSQL, MySQL, MariaDB and SQLite, directly or through Drizzle ORM, and runs on Cloudflare Workers, Node and Bun.
 
-SQL backends: Cloudflare D1, PostgreSQL, MySQL, MariaDB, SQLite, and any Drizzle ORM instance over them. Key mappings live in Cloudflare Workers KV, Redis, Valkey, or NuxtHub KV. Runs on Cloudflare Workers, Node, and Bun.
+## Supported Backends
 
-## Table of Contents
+Any shard database works with any mapping store. A deployment can also mix shard databases from different vendors.
 
-- [Why CollegeDB](#why-collegedb)
-- [Features](#features)
-- [Getting Started](#getting-started)
-- [Benchmark Suite](#benchmark-suite)
-- [Provider Adapters](#provider-adapters)
-- [NuxtHub + Drizzle Recipes](#nuxthub--drizzle-recipes)
-- [Sandbox Benchmarks (Docker Compose)](#sandbox-benchmarks-docker-compose)
-- [In-Memory Providers for Testing & Development](#in-memory-providers-for-testing--development)
-- [Basic Usage](#basic-usage)
-- [Sharding Strategies](#sharding-strategies)
-- [Safe Shard Moves](#safe-shard-moves)
-- [Auto-Generated Primary Keys](#auto-generated-primary-keys)
-- [Utility Helpers](#utility-helpers)
-- [Instance Clients](#instance-clients)
-- [Topology and Epochs](#topology-and-epochs)
-- [Shard Eligibility](#shard-eligibility)
-- [Multi-Key Shard Mappings](#multi-key-shard-mappings)
-- [Drop-in Replacement for Existing Databases](#drop-in-replacement-for-existing-databases)
-- [Troubleshooting](#troubleshooting)
-- [Cross-Shard Pagination Behavior](#cross-shard-pagination-behavior)
-- [Query Guidance](#query-guidance)
-- [API Reference](#api-reference)
-- [Architecture](#architecture)
-- [Cloudflare Setup](#cloudflare-setup)
-- [Monitoring and Maintenance](#monitoring-and-maintenance)
-- [Performance Analysis](#performance-analysis)
-- [Advanced Configuration](#advanced-configuration)
-- [Quick Reference](#quick-reference)
-- [Contributing](#contributing)
-- [License](#license)
+| Role           | Backend                        | Adapter                                                                |
+| -------------- | ------------------------------ | ---------------------------------------------------------------------- |
+| Shard database | Cloudflare D1                  | A D1 binding, or `toProvider`                                          |
+| Shard database | PostgreSQL                     | `createPostgreSQLProvider`                                             |
+| Shard database | MySQL and MariaDB              | `createMySQLProvider`                                                  |
+| Shard database | SQLite                         | `createSQLiteProvider`                                                 |
+| Shard database | Drizzle ORM over the above     | The matching adapter, with the Drizzle `sql` tag                       |
+| Shard database | Hyperdrive (PostgreSQL, MySQL) | `createHyperdrivePostgresProvider` and `createHyperdriveMySQLProvider` |
+| Shard database | In-memory, for tests           | `createInMemorySQLProvider`                                            |
+| Mapping store  | Workers KV                     | `createWorkersKVProvider`                                              |
+| Mapping store  | Redis                          | `createRedisKVProvider`                                                |
+| Mapping store  | Valkey                         | `createValkeyKVProvider`                                               |
+| Mapping store  | NuxtHub KV                     | `createNuxtHubKVProvider`                                              |
+| Mapping store  | In-memory, for tests           | `createInMemoryKVProvider`                                             |
+| Coordinator    | Durable Object                 | `ShardCoordinator`, optional and available on Cloudflare Workers only  |
 
-## Why CollegeDB
+[Providers](docs/providers.md) lists what each adapter takes and which ones support atomic batches and shard moves.
 
-CollegeDB implements **data distribution** where a single logical table is physically stored across multiple D1 databases:
-
-```txt
-env.db-east (Shard 1)
-┌────────────────────────────────────────────┐
-│ table users: [user-1, user-3, user-5, ...] │
-│ table posts: [post-2, post-7, post-9, ...] │
-└────────────────────────────────────────────┘
-
-env.db-west (Shard 2)
-┌────────────────────────────────────────────┐
-│ table users: [user-2, user-4, user-6, ...] │
-│ table posts: [post-1, post-3, post-8, ...] │
-└────────────────────────────────────────────┘
-
-env.db-central (Shard 3)
-┌────────────────────────────────────────────┐
-│ table users: [user-7, user-8, user-9, ...] │
-│ table posts: [post-4, post-5, post-6, ...] │
-└────────────────────────────────────────────┘
-```
-
-This allows you to:
-
-- **Break through D1's single database limits** by spreading data across many databases
-- **Improve query performance** by reducing data per database instance
-- **Scale geographically** by placing shards in different regions
-- **Increase write throughput** by parallelizing across multiple database instances
-
-## Features
-
-- Automatic query routing (primary key to shard mapping)
-- Routing straight from the statement via `query` / `queryFirst` / `queryAll`, with no separate key argument
-- Provider adapters for Redis/Valkey/NuxtHub/Workers KV plus PostgreSQL/MySQL/SQLite SQL
-- Drizzle interop through existing SQL providers (`createPostgreSQLProvider`, `createMySQLProvider`, `createSQLiteProvider`)
-- Auto-allocated generated-id inserts via `insert()` and direct-sh
-
-[...截断...]
-
-ard inserts via `insertShard()` for AUTOINCREMENT / RETURNING workflows
-- Object-shaped CRUD helpers (`insertInto`, `patch`, `updateRow`, `deleteById`, `upsert`) so you never hand-align columns and bindings
-- Cross-shard-safe id generation (`nextId`), one-call setup from a Worker `env` (`initializeFromEnv`), and pagination with totals (`paginate`)
-- Shard-grouped batch writes (`batch`) that cost one round trip per shard instead of one per statement
-- Rendezvous hashing, so adding a shard relocates about `1/N` of keys instead of nearly all of them
-- Optional computed placement that resolves a shard with no KV read and no mapping write
-- Per-phase timing (`onPhase`, `PhaseCollector`) that separates hashing, KV, and SQL costs
-- KV read-through cache (`cached` / `invalidate`) and secondary-index lookups (`setLookup` / `getLookup` / `deleteLookup`)
-- Hyperdrive helpers for PostgreSQL and MySQL
-- Multiple allocation strategies: round-robin, random, hash, location-aware, and mixed read/write strategies
-- Durable Object shard coordination and shard statistics
-- Migration helpers for integrating existing datasets, plus `rebalance` for redistributing them
-
-## Getting Started
-
-### Installation
+## Install
 
 ```bash
 bun add @earth-app/collegedb
@@ -109,102 +39,176 @@ bun add @earth-app/collegedb
 npm install @earth-app/collegedb
 ```
 
-### NuxtHub + Drizzle with CollegeDB Routing
+CollegeDB has no runtime dependencies. Install the client for your backend, such as `pg`, `mysql2`, `redis` or `drizzle-orm`. TypeScript 5.8 or later is the supported compiler. The declaration files import types from `@cloudflare/workers-types`, so add it as a dev dependency in a TypeScript project.
 
-Keep NuxtHub + Drizzle for schema/migrations and add CollegeDB as your routing layer.
+## Quick Start
 
-```typescript
-import { db as hubDb } from '@nuxthub/db';
-import { kv } from '@nuxthub/kv';
-import { sql } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/d1';
-import { createNuxtHubKVProvider, createSQLiteProvider, first, initialize, run } from '@earth-app/collegedb';
+`createClient` takes the mapping store, the shards and a strategy. `run` and `first` take the routing key before the SQL, so the insert and the read for `user-1` reach the same shard. The example uses the in-memory providers so it runs without a database. Each snippet after it swaps in a real backend and leaves the calls unchanged.
 
-let initialized = false;
+```ts
+import { createClient, createInMemoryKVProvider, createInMemorySQLProvider } from '@earth-app/collegedb';
 
-function ensureCollegeDB(env: { DB_SECONDARY: D1Database }) {
-	if (initialized) return;
+const client = createClient({
+	kv: createInMemoryKVProvider(),
+	shards: {
+		'shard-a': createInMemorySQLProvider(),
+		'shard-b': createInMemorySQLProvider()
+	},
+	strategy: 'hash'
+});
 
-	initialize({
-		kv: createNuxtHubKVProvider(kv),
-		shards: {
-			'db-primary': createSQLiteProvider(hubDb, sql),
-			'db-secondary': createSQLiteProvider(drizzle(env.DB_SECONDARY), sql)
-		},
-		strategy: 'hash'
-	});
+await client.ensureSchema('CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, name TEXT NOT NULL)');
 
-	initialized = true;
+await client.run('user-1', 'INSERT INTO users (id, name) VALUES (?, ?)', ['user-1', 'Ada']);
+
+const user = await client.first<{ id: string; name: string }>('user-1', 'SELECT id, name FROM users WHERE id = ?', ['user-1']);
+console.log(user);
+```
+
+Cloudflare Workers with two D1 databases and a Workers KV namespace:
+
+```ts
+import type { D1Database, KVNamespace } from '@cloudflare/workers-types';
+import { createClient, createWorkersKVProvider, type CollegeDBClient } from '@earth-app/collegedb';
+
+interface Env {
+	KV: KVNamespace;
+	DB_EAST: D1Database;
+	DB_WEST: D1Database;
 }
 
-export default defineEventHandler(async (event) => {
-	const env = event.context.cloudflare.env;
-	ensureCollegeDB(env);
+let client: CollegeDBClient | undefined;
 
-	await run('post:123', 'INSERT OR REPLACE INTO blog_posts (id, title) VALUES (?, ?)', ['post:123', 'Hello from CollegeDB']);
+export default {
+	async fetch(request: Request, env: Env): Promise<Response> {
+		client ??= createClient({
+			kv: createWorkersKVProvider(env.KV),
+			shards: { 'db-east': env.DB_EAST, 'db-west': env.DB_WEST },
+			strategy: 'hash'
+		});
 
-	const post = await first<{ id: string; title: string }>('post:123', 'SELECT id, title FROM blog_posts WHERE id = ?', ['post:123']);
+		const id = new URL(request.url).searchParams.get('id') ?? '';
+		const user = await client.first(id, 'SELECT id, name FROM users WHERE id = ?', [id]);
+		return Response.json(user);
+	}
+};
+```
 
-	return { post };
+Node with two PostgreSQL pools and Redis:
+
+```ts
+import { createClient as createRedisClient } from 'redis';
+import { Pool } from 'pg';
+import { createClient, createPostgreSQLProvider, createRedisKVProvider } from '@earth-app/collegedb';
+
+const redis = createRedisClient({ url: process.env.REDIS_URL });
+await redis.connect();
+
+const client = createClient({
+	kv: createRedisKVProvider(redis),
+	shards: {
+		'pg-a': createPostgreSQLProvider(new Pool({ connectionString: process.env.PG_A_URL })),
+		'pg-b': createPostgreSQLProvider(new Pool({ connectionString: process.env.PG_B_URL }))
+	},
+	strategy: 'hash'
 });
 ```
 
-### Drop-in Pattern for Existing `hub:db` + `hub:kv` Code
+[Getting Started](docs/getting-started.md) covers a first setup in full, and [Providers](docs/providers.md) has an example for each backend.
 
-```typescript
-// before
-import { eq } from 'drizzle-orm';
-import { db } from 'hub:db';
-import { kv } from 'hub:kv';
-import { blogPosts } from '~/server/db/schema';
+## How It Works
 
-const cached = await kv.get('nuxtpress:post:slug');
-if (cached) return cached;
-
-const rows = await db.select().from(blogPosts).where(eq(blogPosts.slug, slug)).limit(1);
-await kv.set('nuxtpress:post:slug', rows[0], { ttl: 3600 });
+```text
+ application
+     |  run(key, sql, bindings)
+     v
+ +-----------+   known key?   +-----------------------------+
+ |  router   |--------------->|  mapping store              |
+ |           |<---------------|  Workers KV, Redis, Valkey, |
+ +-----------+   shard name   |  NuxtHub KV or in-memory    |
+   |     |                    +-----------------------------+
+   |     | new key
+   |     +--> strategy: hash, round-robin, random or location
+   |          (optional coordinator allocates instead)
+   v
+ +---------+    +---------+    +---------+
+ | shard a |    | shard b |    | shard c |   D1, PostgreSQL, MySQL, ...
+ +---------+    +---------+    +---------+
 ```
 
-```typescript
-// after (CollegeDB routing + same NuxtHub KV cache)
-import { kv } from '@nuxthub/kv';
-import { sql } from 'drizzle-orm';
-import { db } from 'hub:db';
-import { createNuxtHubKVProvider, createSQLiteProvider, first, initialize } from '@earth-app/collegedb';
+Every keyed call carries a routing key. The router looks the key up in the mapping store, which holds the shard name for each key written so far. A key with no mapping gets a shard from the configured strategy, and a write records the result. With `placement: 'computed'`, the `hash` strategy derives the shard from the key, and the mapping store holds only keys that were moved. The optional coordinator is a Durable Object that allocates new keys for every strategy, which makes round-robin exact across Workers isolates. [Architecture](docs/architecture.md) describes the read and write paths.
 
-let initialized = false;
+## Features
 
-function setup() {
-	if (initialized) return;
-	initialize({
-		kv: createNuxtHubKVProvider(kv),
-		shards: {
-			'db-primary': createSQLiteProvider(db, sql)
-		},
-		strategy: 'hash'
-	});
-	initialized = true;
-}
+- **Sharding strategies:** `hash`, `round-robin`, `random` and `location`, with separate strategies for reads and writes. [Sharding](docs/sharding.md)
+- **Computed placement:** rendezvous hashing finds a key's shard without a mapping lookup, and topology epochs keep existing keys resolvable when shards change. [Sharding](docs/sharding.md)
+- **Crash-safe shard moves:** `reassignShard`, `rebalance` and `recoverMigrations` move rows through a journal, and a recovery lease lets one recovery run at a time. [Shard Moves](docs/shard-moves.md)
+- **Read consistency:** a per-call `consistency` option selects `primary`, `session` or `eventual` reads. [Reads and Writes](docs/reads-and-writes.md)
+- **Shard eligibility:** `shardState` and an `eligible` predicate keep draining, read-only or out-of-jurisdiction shards out of new allocations. [Sharding](docs/sharding.md)
+- **Instance clients:** `createClient` gives each configuration its own state, so tenants and tests do not share caches. [Getting Started](docs/getting-started.md)
+- **Batched and transactional writes:** `batch()` groups statements by shard and sends one round trip per shard, inside one transaction where the adapter supports it. [Reads and Writes](docs/reads-and-writes.md)
+- **Routing without a key argument:** `query`, `queryFirst` and `queryAll` take the routing key from the statement. [Reads and Writes](docs/reads-and-writes.md)
+- **Generated ids:** `insert`, `insertShard` and `nextId` handle keys that the database assigns. [Generated Ids](docs/generated-ids.md)
+- **Drop-in integration:** existing databases join as shards, and integration records a mapping for each existing key. [Drop-in](docs/drop-in.md)
+- **In-memory providers:** emulated shards and a mapping store for unit tests and local development. [Testing](docs/testing.md)
 
-setup();
+## Sharding Strategies
 
-const cacheKey = `nuxtpress:post:${slug}`;
-const cached = await kv.get(cacheKey);
-if (cached) return cached;
+A strategy picks the shard for a new key. After that, reads and writes follow the recorded mapping. `strategy` also takes an object with a `read` and a `write` strategy.
 
-const row = await first<{ id: string; slug: string; title: string }>(
-	cacheKey,
-	'SELECT id, slug, title FROM blog_posts WHERE slug = ? LIMIT 1',
-	[slug]
-);
+| Strategy      | New key goes to                                      |
+| ------------- | ---------------------------------------------------- |
+| `hash`        | The eligible shard with the highest rendezvous score |
+| `round-robin` | The next eligible shard in order                     |
+| `random`      | A random eligible shard                              |
+| `location`    | The eligible shard nearest `targetRegion`            |
 
-await kv.set(cacheKey, row, { ttl: 3600 });
-```
+`hash` is the default and the only strategy that supports computed placement. `round-robin` splits keys exactly only through a coordinator. [Sharding](docs/sharding.md) covers how to choose one.
 
-## Benchmark Suite
+## Documentation
 
-CollegeDB includes a benchmark runner that executes each SQL+KV combination across adapter profiles, then generates a report with profile-specific matrices.
+The API reference is generated from the source at [earth-app.github.io/CollegeDB](https://earth-app.github.io/CollegeDB).
 
-### Adapter Profiles
+| Page                                             | Covers                                                                      |
+| ------------------------------------------------ | --------------------------------------------------------------------------- |
+| [Getting Started](docs/getting-started.md)       | A first setup, instance clients, one-call setup on Workers and CRUD helpers |
+| [Providers](docs/providers.md)                   | Adapters, mapping stores, batch and journal support, Hyperdrive             |
+| [Configuration](docs/configuration.md)           | Every `CollegeDBConfig` field, its default and example configurations       |
+| [Sharding](docs/sharding.md)                     | Strategies, computed placement, eligibility, size limits and lookup keys    |
+| [Reads and Writes](docs/reads-and-writes.md)     | Read helpers, consistency, routing without a key and batched writes         |
+| [Generated Ids](docs/generated-ids.md)           | Database-assigned keys and how rows with them are routed                    |
+| [Shard Moves](docs/shard-moves.md)               | `reassignShard`, `rebalance`, recovery, topology epochs and reconciliation  |
+| [Migration Protocol](docs/migration-protocol.md) | The contract for moving one keyed record between shards                     |
+| [Drop-in](docs/drop-in.md)                       | Adding CollegeDB in front of databases that already hold data               |
+| [Query Guidance](docs/query-guidance.md)         | Cross-shard pagination, indexes, query plans and SQL habits for fanout      |
+| [Architecture](docs/architecture.md)             | Components, the read and write paths and the coordinator                    |
+| [Coordinator](docs/coordinator.md)               | The `ShardCoordinator` Durable Object, its endpoints and its failure modes  |
+| [Cloudflare](docs/cloudflare.md)                 | Bindings, `wrangler.jsonc`, the Worker entry point and operations           |
+| [Testing](docs/testing.md)                       | In-memory providers, unit and integration tests and the memory sandbox      |
+| [Benchmarks](docs/benchmarks.md)                 | The sandbox benchmark runner and measuring your own deployment              |
+| [API Reference](docs/api-reference.md)           | Every exported function, grouped by purpose, and every error code           |
 
-| Profile                  | Lane       | Purpose      
+## Upgrading
+
+A `ShardCoordinator` Durable Object written by 1.3.x copies its state into its SQLite storage on its first requests, and [Coordinator](docs/coordinator.md) describes the dual-write window and `POST /retire-legacy`. Since 1.4.0, `reassignShard`, `recoverMigrations` and a `rebalance` that is not a dry run need `journalShard` on a multi-shard configuration, as [Shard Moves](docs/shard-moves.md) explains.
+
+## Contributing
+
+Fork the repository, create a branch, and open a pull request against `master`. CI runs Prettier, the TypeScript check and the tests. `bun run prettier:check`, `bun run typecheck` and `bun run test` run the same checks locally.
+
+## License
+
+CollegeDB is released under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Links
+
+- [npm package](https://www.npmjs.com/package/@earth-app/collegedb)
+- [API reference](https://earth-app.github.io/CollegeDB)
+- [Cloudflare D1](https://developers.cloudflare.com/d1/), [Workers KV](https://developers.cloudflare.com/kv/), [Durable Objects](https://developers.cloudflare.com/durable-objects/) and [Hyperdrive](https://developers.cloudflare.com/hyperdrive/)
+- [Drizzle ORM](https://orm.drizzle.team/)
+
+## Support
+
+- [Documentation](https://earth-app.github.io/CollegeDB)
+- [Report an issue](https://github.com/earth-app/CollegeDB/issues)
+- [Discussions](https://github.com/earth-app/CollegeDB/discussions)

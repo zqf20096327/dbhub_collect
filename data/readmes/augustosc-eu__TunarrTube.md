@@ -40,7 +40,7 @@ TunarrTube is a self-hosted, local-first companion for Tunarr. It discovers vide
 ## How it works
 
 ```text
-YouTube URL
+Video URL (YouTube, Bilibili, …)
     │
     ▼
 yt-dlp analysis ──► SQLite catalog ──► background job queue
@@ -53,7 +53,7 @@ yt-dlp analysis ──► SQLite catalog ──► background job queue
                   Tunarr Local Media ──► Tunarr channel
 ```
 
-TunarrTube does not upload video metadata directly into Tunarr. Tunarr scans the shared media directory and reads the generated `.nfo` sidecars. It then matches scanned programs back to TunarrTube records using the YouTube ID recovered from each filename (the whole filename under the default naming scheme, or a trailing `[videoId]` under a custom one — see "Naming" below).
+TunarrTube does not upload video metadata directly into Tunarr. Tunarr scans the shared media directory and reads the generated `.nfo` sidecars. It then matches scanned programs back to TunarrTube records using the video ID recovered from each filename (the whole filename under the default naming scheme, or a trailing `[videoId]` under a custom one — see "Naming" below).
 
 ## Quick start with Docker
 
@@ -94,16 +94,16 @@ The commands above build the image from your checkout. Each release is also publ
 
 | Tag | Meaning |
 |---|---|
-| `ghcr.io/augustosc-eu/tunarrtube:0.3.0` | That exact release (recommended, so upgrades happen only when you choose) |
+| `ghcr.io/augustosc-eu/tunarrtube:0.5.0` | That exact release (recommended, so upgrades happen only when you choose) |
 | `ghcr.io/augustosc-eu/tunarrtube:0.3` | The newest patch release of 0.3 |
 | `ghcr.io/augustosc-eu/tunarrtube:latest` | The newest stable release |
 
-Pre-releases (for example `0.3.0-rc.1`) are published only under their exact version. See [Releases](https://github.com/augustosc-eu/TunarrTube/releases) for the available versions and what changed.
+Pre-releases (for example `0.5.0-rc.1`) are published only under their exact version. See [Releases](https://github.com/augustosc-eu/TunarrTube/releases) for the available versions and what changed.
 
 To use one with the supplied `compose.yaml`, add the image to `.env`:
 
 ```dotenv
-TUNARRTUBE_IMAGE=ghcr.io/augustosc-eu/tunarrtube:0.3.0
+TUNARRTUBE_IMAGE=ghcr.io/augustosc-eu/tunarrtube:0.5.0
 ```
 
 Then pull it and start without building:
@@ -147,7 +147,7 @@ TunarrTube needs write access; Tunarr only needs read access. The TunarrTube con
 
 ### Requirements
 
-- Node.js 22 or newer
+- Node.js 22.13 or newer
 - A current `yt-dlp`
 - FFmpeg
 - A reachable [Tunarr installation](https://tunarr.com/getting-started/installation/) for channel publishing
@@ -163,7 +163,7 @@ brew install yt-dlp ffmpeg
 
 On Linux, install FFmpeg using your distribution package manager. Install a current `yt-dlp` using its [official installation instructions](https://github.com/yt-dlp/yt-dlp/wiki/Installation); distribution packages can lag behind YouTube changes.
 
-On Windows, install Node.js 22, [yt-dlp](https://github.com/yt-dlp/yt-dlp/wiki/Installation), and an [FFmpeg Windows build](https://ffmpeg.org/download.html). Add `yt-dlp.exe` and the FFmpeg `bin` directory to `PATH`, open a new PowerShell window, and verify:
+On Windows, install Node.js 22.13 or newer, [yt-dlp](https://github.com/yt-dlp/yt-dlp/wiki/Installation), and an [FFmpeg Windows build](https://ffmpeg.org/download.html). Add `yt-dlp.exe` and the FFmpeg `bin` directory to `PATH`, open a new PowerShell window, and verify:
 
 ```powershell
 node --version
@@ -191,6 +191,8 @@ Open [http://localhost:3000](http://localhost:3000). For a production build:
 npm run build
 npm start
 ```
+
+To skip the build when nothing changed, use `npm run serve` instead (`npm run serve -- --lan` for all interfaces, `-- --rebuild` to force a build). It backs up the database to `prisma/backups/` (keeping the last 10), runs `npm run build` only if the source changed since the last build, then runs `npm start`.
 
 Both development and production startup generate Prisma Client and apply committed SQLite migrations automatically. `npm start` listens on `127.0.0.1`; `npm run start:lan` deliberately listens on all interfaces — set `TUNARRTUBE_AUTH_PASSWORD` before using it (see [Optional password](#optional-password)).
 
@@ -298,6 +300,8 @@ The **AI Programming Director** (shown on a Channel's Tunarr panel when AI Progr
 | Cache on first play | Stores metadata only | Downloads into the shared cache | Materializes permanent local files first |
 | Stream on demand | Stores metadata only | Proxies a short-lived YouTube stream | Materializes permanent local files first |
 
+Stream on demand works for YouTube and Internet Archive only. Sources from other sites can't select it, and such a video added to a stream-mode collection is cached on first play instead.
+
 Cache limits default to 20 GB and 30 idle days and can be changed in Settings. Pinned, actively playing, and Tunarr-linked assets are protected from eviction.
 
 > **A Tunarr channel never plays a live YouTube stream, regardless of playback mode.** Tunarr's local-media scanner only reads real files sitting in a directory it's watching — it has no way to accept a remote URL per program, and the short-lived signed CDN URL TunarrTube resolves for `stream` playback expires far too quickly to serve a channel that might replay that item hours or days later. So publishing a Cache or Stream source still fully downloads (materializes) every video into the source's directory first, exactly like Permanent download — the playback mode only changes *when* and *how long* that copy is retained outside of Tunarr publishing, not whether Tunarr channels stream live. Live, on-demand streaming without ever writing a file only happens in TunarrTube's own in-app preview player, never in a published Tunarr channel.
@@ -370,7 +374,7 @@ Native defaults:
 Settings → Naming controls how downloaded files are named and organized, with a per-source override available on each source's own page:
 
 - **YouTube video ID** (default) — `<mediaDirectory>/<youtubeId>.mp4`, unchanged from every TunarrTube release before this setting existed.
-- **Custom filename template** — a template string using `{title}`, `{channel}`, `{date}` (upload date, `YYYY-MM-DD`), `{year}`, and `{videoId}`, e.g. `{channel} - {title}`. A literal `/` in the template creates a subfolder, e.g. `{channel}/{title}` produces `<mediaDirectory>/<channel>/<title>.mp4`. The YouTube video ID is always appended in brackets (`Title [videoId].mp4`) when the template doesn't already include it, so Tunarr can still match the file and two same-titled videos never collide on disk.
+- **Custom filename template** — a template string using `{title}`, `{channel}`, `{date}` (upload date, `YYYY-MM-DD`), `{year}`, and `{videoId}`, e.g. `{channel} - {title}`. A literal `/` in the template creates a subfolder, e.g. `{channel}/{title}` produces `<mediaDirectory>/<channel>/<title>.mp4`. The YouTube video ID is always appended in brackets (`Title [videoId].mp4`) unless the filename already ends with it — a bracket elsewhere in a title (`Mirror [archive.2024]`) is kept as text — so Tunarr can still match the file and two same-titled videos never collide on disk.
 - **TV show** — an Emby/Plex/Jellyfin- and Tunarr "Shows"-scanner-compatible layout: `<mediaDirectory>/Season <upload year>/<source name> - S<year>E<episode> - <title> [videoId].mp4`, with a matching Kodi `<episodedetails>` NFO (season/episode/plot/aired date, plus a `<uniqueid type="youtube">` carrying the YouTube ID), a `tvshow.nfo` at the source's root, a `<basename>-thumb.<ext>` episode thumbnail, and a `<basename>.info.json` sidecar carrying the same metadata plus the assigned season/episode. Episode numbers are assigned once per video (first-assigned-wins per season) and never renumbered, so they stay stable even if older videos are discovered later. To have Tunarr itself recognize this layout as a TV show (rather than "Other Videos"), configure a Tunarr local media source of type "Shows" pointed at the source's directory — TunarrTube matches the right library automatically but doesn't create it for you.
 
 Changing a naming setting only affects future downloads — already-downloaded files keep their existing names and locations (same rule as changing the media root above).
@@ -396,11 +400,24 @@ Open Settings to inspect the detected paths and versions. Add `TUNARRTUBE_YTDLP_
 
 Current `yt-dlp` needs a JavaScript runtime (plus its `yt-dlp-ejs` solver scripts) to extract YouTube formats; without one, downloads fail with the warning above, and metadata jobs can intermittently fail with `The page needs to be reloaded`. TunarrTube itself always passes `--js-runtimes node --remote-components ejs:github` to every `yt-dlp` invocation (so it uses the Node.js it's already running on, and actually downloads the solver script instead of only warning it was skipped), and caches that download under its own persisted storage (`/config` in Docker, alongside the database; the project directory's `storage/` folder for a host install) rather than `yt-dlp`'s default `~/.cache`, which isn't guaranteed to exist or be writable. The Docker image also ships the dependencies from `yt-dlp[default]` (the extra that includes `yt-dlp-ejs`) — rebuild and redeploy it if you see this on an older image. For a host install, `pip install "yt-dlp[default]"` (or install [Deno](https://deno.com), which `yt-dlp` auto-detects as an alternative runtime). See the [yt-dlp EJS wiki](https://github.com/yt-dlp/yt-dlp/wiki/EJS).
 
-### A YouTube URL cannot be analyzed
+### A URL cannot be analyzed
 
-Only public HTTPS URLs on supported YouTube hosts are accepted, including `youtu.be`. Private/unlisted, account-only, and members-only media are not supported — TunarrTube can't browse a signed-in account's library, only analyze a URL you already have. Age-restricted and bot-checked *public* videos are supported if you configure a cookies file (see "Age-restricted or sign-in-required videos" below); without one they're marked unavailable instead of failing repeatedly.
+Only public HTTPS URLs on supported sites are accepted:
 
-YouTube changes its extraction behavior regularly. In Settings, click **Update** next to `yt-dlp` to self-update it (no restart needed — TunarrTube re-discovers the binary on each use), then use **Sync Now**. An existing empty source does not need to be recreated. If `yt-dlp` was installed with a package manager (Homebrew, apt, pip), self-update refuses and reports the error; update it with that package manager instead. In Docker, the image ships yt-dlp's official self-updating build, so **Update** works there too; an update lasts until the container is recreated, and rebuilding the image picks up the latest release.
+- **YouTube** — videos, playlists, and channels on `youtube.com`, `m.youtube.com`, `music.youtube.com`, and `youtu.be`.
+- **Bilibili** — videos (`www.bilibili.com/video/BV…` or `av…`, `m.bilibili.com`), profiles (`space.bilibili.com/<uid>`, synced like a YouTube channel — Bilibili profiles have a single uploads feed, so there's no Videos/Shorts/Live choice; collections the uploader hides from that feed are fetched and included, up to 25 per profile, and a profile whose collections can't all be read fails to analyze or sync rather than syncing without them), collections and series (`space.bilibili.com/<uid>/lists/<id>`), and favorites (`space.bilibili.com/<uid>/favlist?fid=…`). Analyzing a multi-part video URL without `?p=N` adds every part; with `?p=N` (or pasted into an existing collection) it adds only that part. Bilibili Live, bangumi (licensed anime), and `b23.tv` short links aren't supported (bilibili.tv, the international site, is listed separately below) — open a short link in a browser and paste the full URL instead. Without a cookies file Bilibili usually limits quality to 480p–1080p; the same cookies-file setting below works for a Bilibili account. Bilibili also blocks some regions ("may be deleted or geo-restricted") and blocks bursts of requests from one connection; see "A site is refusing requests" below.
+- **bilibili.tv** (Bilibili's international site, separate from bilibili.com) — uploaded videos (`www.bilibili.tv/<lang>/video/<id>`), show episodes (`/play/<season>/<episode>`), and whole shows (`/play/<season>` or `/media/<id>`, added like a playlist). The legacy `biliintl.com` host works too. yt-dlp can't list an uploader's videos on bilibili.tv, so there are no channel sources, and Stream mode isn't available. Many shows are region-locked, and some videos need a cookies file from a bilibili.tv account.
+- **Internet Archive** — items (`archive.org/details/<identifier>`), e.g. public-domain films and old TV. An item with several video files adds every file; a link to one file (`archive.org/details/<identifier>/<file>`) adds just that file. Collections and searches aren't supported, so these sources don't sync. Stream mode works.
+- **Vimeo** — videos, users (`vimeo.com/<user>`, synced like a channel), channels (`vimeo.com/channels/<name>`), and showcases/albums. **Vimeo now only serves videos to signed-in clients**, so it needs a cookies file from a Vimeo account (see below); without one, analysis works but every video is marked as requiring sign-in. On Demand and private/review links aren't supported.
+- **Dailymotion** — videos (`dailymotion.com/video/x…`, `dai.ly/x…`), users (synced like a channel), and playlists.
+- **Twitch** — past broadcasts/VODs (`twitch.tv/videos/<id>`), clips (`clips.twitch.tv/<slug>` or `twitch.tv/<channel>/clip/<slug>`), channels (`twitch.tv/<channel>`, synced from the channel's video list), and a channel's clips (`twitch.tv/<channel>/clips`, all-time, most-viewed first). Twitch deletes past broadcasts after 7–60 days; TunarrTube keeps anything it already downloaded. Live streams and subscriber-only VODs aren't supported.
+- **Niconico** — videos (`nicovideo.jp/watch/sm…`, `nico.ms/sm…`), users (`nicovideo.jp/user/<id>`, synced like a channel), mylists, and series. Many videos need a cookies file from a Niconico account, and some are only available from Japan. Niconico Live isn't supported.
+
+One cookies file can hold cookies for several of these sites at once, or give each site its own in Settings → Sites.
+
+Other sites `yt-dlp` supports aren't accepted on purpose: letting `yt-dlp` fetch arbitrary URLs would let anyone with access to TunarrTube make the server request internal network addresses. Sites are added one at a time (see `lib/youtube/sites.ts`). Private/unlisted, account-only, and members-only media are not supported — TunarrTube can't browse a signed-in account's library, only analyze a URL you already have. Age-restricted and bot-checked *public* videos are supported if you configure a cookies file (see "Age-restricted or sign-in-required videos" below); without one they're marked unavailable instead of failing repeatedly.
+
+YouTube changes its extraction behavior regularly. In Settings, click **Update** next to `yt-dlp` to self-update it (no restart needed — TunarrTube re-discovers the binary on each use), then use **Sync Now**. An existing empty source does not need to be recreated. If `yt-dlp` was installed with a package manager (Homebrew, apt, pip), it can't update itself, and **Update** says so and tells you how to update it instead. For Homebrew (the usual macOS install), run `brew upgrade yt-dlp`, then click **Test**. To use **Update** outside Docker, point `TUNARRTUBE_YTDLP_PATH` at a standalone `yt-dlp` release binary. In Docker, the image ships yt-dlp's official self-updating build, so **Update** works there too; an update lasts until the container is recreated, and rebuilding the image picks up the latest release.
 
 ### A download failed
 
@@ -425,6 +442,19 @@ To actually download these videos instead of skipping them, configure **yt-dlp c
 3. In Settings, set the cookies file path to the in-container path (`/config/cookies.txt` for the example above), or set `TUNARRTUBE_YTDLP_COOKIES` before first start. Existing "unavailable" videos need a manual **Retry** — they aren't automatically retried once cookies are added.
 
 TunarrTube never uploads, generates, or displays this file's contents — it only passes the path to `yt-dlp` as `--cookies <path>`, and that path is redacted from Logs the same way other `--cookies[-from-browser]` flags already are (see Security below). Treat the file itself like a password: whoever can read it can act as that YouTube account, cookies expire and need periodic re-export, and tripping YouTube's automation detection on a shared/family account risks that account, not just the download.
+
+### Settings → Sites
+
+Settings → Sites lists every supported site with what it needs: whether a cookies file is required (Vimeo), recommended (Bilibili, Niconico), optional, or unnecessary, plus whether it supports Stream mode and channel sources. For each site you can set:
+
+- **Cookies file** — a site's own cookies file, used instead of the global one under External tools. Leave it empty to use the global file. As with the global setting, this is only a path to a file you manage; TunarrTube never reads or shows its contents.
+- **Request delay** — seconds `yt-dlp` waits between its requests to that site while reading pages (it doesn't slow video downloads). Bilibili defaults to 1 second; every other site to 0. Raise it if a site keeps refusing requests.
+
+### A site is refusing requests
+
+When a site rate-limits or blocks this connection, the error reads "<Site> is refusing requests from this connection (rate limit or bot protection)", followed by the line `yt-dlp` printed. YouTube's version is an HTTP 429. Bilibili's is its risk control: HTTP 412, "Request is blocked by server", "exceeded the rate limit", or yt-dlp's "Unable to extract initial state" — the last is how a blocked Bilibili page looks to `yt-dlp`, not a broken video, and updating `yt-dlp` won't fix it.
+
+TunarrTube doesn't count these against a job's retries. It pauses that site's queued downloads, cache fills, and metadata refreshes together (2 minutes, doubling on repeated blocks up to 30 minutes) and retries them automatically; other sites keep going. To stop it recurring, add a cookies file for that site in Settings → Sites (for Bilibili, from a signed-in bilibili.com session), or raise its request delay there.
 
 ### Tunarr cannot find downloaded videos
 

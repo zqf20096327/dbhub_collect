@@ -2,14 +2,16 @@
 quma
 ====
 
-|build| |docs|
+|ci| |pypi| |docs|
 
-quma is a small SQL database library for **Python** and **PyPy** version 3.10 and higher.
+quma is a small SQL database library for **Python** 3.11 and higher.
 It maps object methods to SQL script files and supports **SQLite**, **PostgreSQL**,
 **MySQL** and **MariaDB**.
 
 It also provides a simple connection pool and templating for dynamic SQL like
-conditional WHEREs.
+conditional WHEREs, and an async API for asyncio applications such as
+Starlette, FastAPI or Litestar (PostgreSQL with psycopg 3, MySQL and
+MariaDB with asyncmy).
 
 Motivation
 ----------
@@ -51,7 +53,7 @@ You can access these scripts after connecting to the database:
 
     from quma import Database
 
-    db = Database('sqlite:///:memory:', '/path/to/sql/scripts')
+    db = Database('sqlite3:///:memory:', '/path/to/sql/scripts')
 
     db.execute('CREATE TABLE users ...')
 
@@ -73,9 +75,13 @@ quma is released under the MIT license.
 
 Copyright © 2018-present ebene fünf GmbH. All rights reserved.
 
-.. |build| image:: https://badge.fury.io/py/quma.svg
-    :target: https://badge.fury.io/py/quma
-    :alt: PyPi package version
+.. |ci| image:: https://github.com/ebenefuenf/quma/actions/workflows/ci.yml/badge.svg?branch=main&event=push
+    :target: https://github.com/ebenefuenf/quma/actions/workflows/ci.yml?query=branch%3Amain
+    :alt: CI status
+
+.. |pypi| image:: https://img.shields.io/pypi/v/quma
+    :target: https://pypi.org/project/quma/
+    :alt: PyPI package version
 
 .. |docs| image:: https://readthedocs.org/projects/quma/badge/?version=latest
     :target: https://quma.readthedocs.io/en/latest/?badge=latest

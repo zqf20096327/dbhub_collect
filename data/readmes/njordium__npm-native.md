@@ -1,4 +1,4 @@
-**A native Bash installer for [Nginx Proxy Manager](https://nginxproxymanager.com/) on Debian and Ubuntu -- no Docker required.**
+**A native Bash installer for [Nginx Proxy Manager](https://nginxproxymanager.com/) on Debian, Ubuntu and Alpine -- no Docker required.**
 
 <img width="945" height="767" alt="native-npm-installer" src="https://github.com/user-attachments/assets/a9a28be8-9a37-464f-a889-b8c137efca33" />
 
@@ -11,10 +11,10 @@ This script fills that gap.
 ## What it does
 
 - Installs **Nginx Proxy Manager v2.x** (latest release auto-detected) natively on the host OS
-- Manages everything with **systemd** -- auto-starts on boot, restarts on failure
+- Manages everything with **systemd** (OpenRC on Alpine) -- auto-starts on boot, restarts on failure
 - Uses **SQLite** via `better-sqlite3` -- no external database required
 - Builds the frontend from source with **pnpm** (v10 and v11 supported) -- no Docker, no pre-built image
-- Supports **Debian 12 (Bookworm)**, **Debian 13 (Trixie)**, **Ubuntu 22.04**, **Ubuntu 24.04**, **Ubuntu 25.10**
+- Supports **Debian 12 (Bookworm)**, **Debian 13 (Trixie)**, **Ubuntu 22.04**, **Ubuntu 24.04**, **Ubuntu 25.10**, **Alpine 3.24**
 - Installs and configures **certbot** in a managed virtualenv for Let's Encrypt SSL certificates
 - Provides an interactive **verify mode** with a 30+ check health-check dashboard
 - Takes timestamped backups before every destructive step (database, `/etc/letsencrypt`, `/etc/nginx`, systemd unit, prior install) and auto-prunes older copies
@@ -28,6 +28,14 @@ chmod +x npm-installer.sh
 sudo bash npm-installer.sh
 ```
 
+On Alpine (as root; a default install has no bash or sudo):
+
+```sh
+apk add bash
+wget -O npm-installer.sh https://raw.githubusercontent.com/njordium/npm-native/main/npm-installer.sh
+bash npm-installer.sh
+```
+
 After installation, access the admin panel at **`http://<your-server-ip>:81`**
 
 On first launch you will see the NPM setup wizard; the pre-filled defaults are `admin@example.com` / `changeme` and you will be required to set your own values before reaching the dashboard.
@@ -36,10 +44,10 @@ On first launch you will see the NPM setup wizard; the pre-filled defaults are `
 
 | Requirement | Minimum |
 | ----------- | --------------------------- |
-| OS | Debian 12+ or Ubuntu 22.04+ |
+| OS | Debian 12+, Ubuntu 22.04+ or Alpine 3.24+ |
 | RAM | 2 GB for the frontend build; the installer offers to auto-create a swap file on hosts with less (see table below) |
 | Disk free | ~3 GB on `/` and `/opt` during build; ~500 MB after |
-| `python3` | required from the very first step (parses the GitHub releases API, patches vite/tsconfig, formats verify output). Ships with every modern Debian and Ubuntu; installer aborts early with an actionable message if missing |
+| `python3` | required from the very first step (parses the GitHub releases API, patches vite/tsconfig, formats verify output). Ships with every modern Debian and Ubuntu (on Alpine the installer adds it, plus bash and GNU coreutils/grep/findutils); installer aborts early with an actionable message if missing |
 | Root access | required (systemd unit management, binding ports 80/443, certbot) |
 
 ### Notes on RAM
@@ -55,6 +63,18 @@ The frontend build (TypeScript compiler + Vite + sass + bundle assembly + minify
 
 Override the auto-swap behaviour with `NPM_AUTOSWAP=true|false|auto` (default `auto`), or set `NPM_SWAPFILE=/path` to place the file somewhere other than `/swapfile`. After a successful install, the operator can keep the swap for this boot only (default), persist it via `/etc/fstab`, or remove it.
 
+### nginx source (Debian / Ubuntu)
+
+On Debian, nginx is installed from the official [nginx.org](https://nginx.org/en/linux_packages.html) stable repository (signing key fingerprints are checked). An existing OS nginx is switched only after a prompt; non-interactive runs keep it. If nginx.org has no repository for the release, the OS package is used.
+
+| `NPM_NGINX_SOURCE` | Behaviour |
+| --- | --- |
+| `auto` (default) | Debian: nginx.org on fresh installs, prompt before switching an existing OS nginx. Ubuntu: OS package |
+| `nginx.org` | always use / switch to nginx.org (also on Ubuntu) |
+| `distro` | always use the OS package |
+
+Alpine always uses Alpine's nginx package.
+
 ## Usage
 
 ```
@@ -67,6 +87,7 @@ Options:
   --verbose        Show all output from every step (default: quiet)
   --quiet          Show main steps only
   --version <x.y.z>  Pin a specific NPM release (default: latest from GitHub)
+  --no-self-update Skip the check for a newer installer
   --help, -h       Show this help
 
 Examples:
@@ -83,6 +104,7 @@ The script honours a handful of environment overrides for non-interactive or con
 | Variable | Default | Purpose |
 | --- | --- | --- |
 | `NPM_VERSION` | latest | Pin the NPM release (alternative to `--version`) |
+| `NPM_SELF_UPDATE` | `true` | `false` skips the check for a newer installer on start |
 | `NPM_HOME` | `/opt/nginx-proxy-manager` | Install root |
 | `NPM_DATA` | `/data` | Runtime data (database, proxy configs, logs) |
 | `NPM_USE_UTF8` | `auto` | `true` / `false` / `auto` -- override glyph rendering detection |
@@ -125,7 +147,7 @@ Depending on the chosen mode, the script may also ask:
 | Data & config | `/data/` |
 | SQLite database | `/data/database.sqlite` |
 | nginx config | `/etc/nginx/nginx.conf` |
-| systemd service | `/etc/systemd/system/nginx-proxy-manager.service` |
+| systemd service | `/etc/systemd/system/nginx-proxy-manager.service` (Alpine: `/etc/init.d/nginx-proxy-manager`, log `/var/log/nginx-proxy-manager.log`) |
 | Certbot virtualenv | `/opt/certbot/` |
 | Let's Encrypt config | `/etc/letsencrypt.ini` |
 | Certbot work dir | `/tmp/letsencrypt-lib/` |
@@ -197,7 +219,7 @@ Produces a dashboard similar to (UTF-8 terminal -- ASCII fallback is used automa
 Verify thresholds:
 
 - **Disk free**: `< 100 MB` FAIL, `< 1 GB` WARN, otherwise PASS
-- **Cert expiry**: expired or `< 7 days` FAIL, `< 30 days` WARN, otherwise PASS
+- **Cert expiry**: expired or `< 7 days` FAIL, `< 30 days` WARN, otherwise PASS; `npm-<id>` certs deleted in NPM (leftover certbot files) are skipped
 - **Time sync**: any of chronyd / systemd-timesyncd / ntpd / ntp active → PASS, else WARN
 - **SQLite**: `PRAGMA integrity_check == "ok"` → PASS
 
@@ -301,6 +323,15 @@ sudo rm -rf /opt/nginx-proxy-manager
 # sudo rm -rf /etc/letsencrypt.bak-*
 # sudo rm -f  /var/backups/etc-nginx.bak-*.tar.gz
 # sudo rm -f  /etc/systemd/system/nginx-proxy-manager.service.bak-*
+```
+
+On Alpine:
+
+```sh
+rc-service nginx-proxy-manager stop; rc-service nginx stop
+rc-update del nginx-proxy-manager default
+rm -f /etc/init.d/nginx-proxy-manager
+rm -rf /opt/nginx-proxy-manager
 ```
 
 ---

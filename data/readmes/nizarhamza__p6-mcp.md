@@ -1,4 +1,5 @@
 ![P6 MCP](assets/brand/png/p6mcp-banner.png)
+[![M8ven Score](https://m8ven.ai/badge/mcp/nizarhamza-p6-mcp-151l9d?v=5514a55ce01fb84cdf4699c8d59f0d6b)](https://m8ven.ai/mcp/nizarhamza-p6-mcp-151l9d?s=readme)
 
 # P6 MCP for Primavera P6
 
@@ -85,45 +86,68 @@ From the command line (the installer uses the same commands):
 & "$env:LOCALAPPDATA\Programs\P6 MCP\p6mcp-server.exe" clients register cursor
 ```
 
-### P6 commands
+### P6 skills
 
-Six ready-made workflows chain the tools into one fixed report:
+P6 skills are ready-made workflows that chain the tools into one fixed report (weekly update review,
+schedule quality audit, safe update import, delay what-if, baseline variance, Excel dashboard and more).
+Since 1.9 none is built into the app: they all come from the [skill shop](#skill-shop). At its first start
+the Settings app installs the **core set** from the shop (when GitHub cannot be reached, from the copy of the
+core set shipped with P6 MCP, updated from the shop later); the skills you had turned off in 1.8 stay off,
+and the clients' skill folders keep their names. **Restore core skills** (Skills or Skill shop page)
+installs the core set again: missing skills come back and edited ones get the shop's version. With automatic
+updates on (**Logs and updates**), the tray app also installs newer shop versions of your shop skills,
+except the ones you edited here: those show **Update available** on the Skill shop page, and Update asks
+before replacing your changes.
 
-| Command | Arguments | What it does |
-|---|---|---|
-| `weekly-update-review` | project, weeks (3) | Summary, progress issues, critical path, look-ahead, baseline variance, actions |
-| `schedule-quality-audit` | project | DCMA 14 table, trend since the previous audit, dangling ends, redundant links, float; fixes as dry runs |
-| `update-import-safely` | xer_path, project | Inspects the XER, dry-runs the update import, reviews missing rows, applies it only on your yes |
-| `delay-whatif` | project, task_code, delay_days (10) | Drivers and float origin of an activity, then the finish and milestone impact of a delay (in memory) |
-| `baseline-variance` | project, baseline | Finish variance, slipped activities, logic changes, SPI at the data date |
-| `export-dashboard` | project, path, baseline, prepared_by, revision, company, colors | Checks the last F9, writes the Excel dashboard, then reports its 7 cards, failed DCMA checks and warnings |
+Most skills need the Full tool profile (the import also needs writes). **MCP clients > Install skills**
+writes each one as an [Agent Skills](https://agentskills.io) folder `p6-<name>` (a `SKILL.md` and its
+reference files); the client's AI uses a skill when your request matches its description, and Claude Code
+also runs it as `/p6-<name>`:
 
-They need the Full tool profile (the import also needs writes). The server offers them as MCP prompts:
-Claude Desktop lists them in the **+** menu, VS Code as `/mcp.p6mcp.<name>`, Claude Code as
-`/mcp__p6mcp__<name>`. **MCP clients > Install commands** also writes them as the client's own command
-files, typed as `/p6-<name>`:
-
-| Client | Command folder |
+| Client | Skills folder |
 |---|---|
-| Claude Code | `%USERPROFILE%\.claude\commands` |
-| Cursor | `%USERPROFILE%\.cursor\commands` |
-| VS Code / VS Code Insiders | `%APPDATA%\Code\User\prompts` (prompt files) |
-| Cline | `%USERPROFILE%\Documents\Cline\Workflows` (global workflows) |
+| Claude Code, Cursor, VS Code / VS Code Insiders | `%USERPROFILE%\.claude\skills` (one folder read by all three) |
+| Cline | `%USERPROFILE%\.cline\skills` |
 
-Update commands refreshes them after an update or a change of the tool settings; Remove commands (and
-uninstalling) deletes only the files P6 MCP wrote. From the command line:
+Update skills refreshes them after an update or a change of the tool settings; Remove skills (and
+uninstalling) deletes only the files P6 MCP wrote. P6 MCP 1.8 replaced the P6 commands of earlier versions:
+the command files they wrote are converted to skills when the Settings app starts. From the command line:
 
 ```powershell
-& "$env:LOCALAPPDATA\Programs\P6 MCP\p6mcp-server.exe" clients commands install --detected
+& "$env:LOCALAPPDATA\Programs\P6 MCP\p6mcp-server.exe" clients skills install --detected
 ```
 
-The **Commands** page of P6 MCP Settings lists them with whether the current tool settings offer them.
-Turn a built-in command off, or add your own (**New**, or **Copy to my commands** to start from a
-built-in one): a name, a title, arguments written as `{argument}` in the text, and the P6 tools to use.
-The P6 rules are appended to your text. The **Instructions** page shows the instructions every client
-receives when it connects; turn built-in lines off (the two-step write rule stays on) or add your own,
-such as "When you show an activity, write it as Activity ID - Activity name". Click Save and restart the
-MCP client; for clients with command files, also click Update commands.
+The server also offers them as MCP prompts: Claude Desktop lists them in the **+** menu, VS Code as
+`/mcp.p6mcp.<name>`, Claude Code as `/mcp__p6mcp__<name>`. Claude Desktop has no skills folder: export a
+skill as a zip file (**Skills > Export**) and upload it in Claude Desktop's settings to add it as a skill.
+
+The **Skills** page of P6 MCP Settings lists them with whether the current tool settings offer them and where
+they come from (Shop, Shop edited here, Yours). Turn a skill off, edit it, or add your own (**New**, or **Copy
+to my skills** to start from a shop skill): a name,
+a title, a description that says what it does and when to use it (clients pick a skill by it), inputs
+written as `{input}` in the instructions, the P6 tools to use, and up to 5 text reference files
+(checklists, thresholds, examples; never scripts). The P6 rules are appended to your instructions. The
+**Instructions** page shows the instructions every client receives when it connects; turn built-in lines
+off (the two-step write rule stays on) or add your own, such as "When you show an activity, write it as
+Activity ID - Activity name". Click Save, then Update skills on the MCP clients page, and restart the MCP
+client for the prompts.
+
+### Skill shop
+
+The **Skill shop** page lists the P6 skills of the public catalog
+[nizarhamza/p6-mcp-shop](https://github.com/nizarhamza/p6-mcp-shop): the core set maintained with P6 MCP and
+the skills other users shared. Reading it needs no account; P6 MCP
+reads it only when you open the page or ask your AI client (tools `p6_shop_search`, `p6_shop_get` and
+`p6_shop_install`, Full profile; an install shows the whole skill first and needs your confirmation).
+Read a skill before installing it: it is instructions for the AI, and a skill that uses write tools can
+change your schedule once you confirm the change. Turn the shop off under **Tools and safety**.
+
+To share one of your skills, select it on the Skills page and click **Share on GitHub**: P6 MCP copies the
+skill to the clipboard and your browser opens the GitHub share form; sign in if asked (a free GitHub account
+is needed), paste the skill in the Skill field and click Create (nothing is sent by P6 MCP itself).
+The maintainer reviews it and, once approved, a GitHub Action checks it and publishes it in the catalog
+under the Apache-2.0 license. Without a GitHub account, **Export** the skill to a zip file and send it;
+**Import** adds a zip (or any skill folder with a `SKILL.md` and text files) after you review it.
 
 ## Safety
 
@@ -146,8 +170,12 @@ for the list of what the write tools can change.
 
 ## Privacy
 
-P6 MCP runs **only on your PC**: no cloud component, no telemetry. Its only network requests are the
-updates (GitHub releases), which you can turn off under **Logs and updates**.
+P6 MCP runs **only on your PC**: no cloud component, no telemetry. Its only network requests go to GitHub:
+the updates (releases of this repository), which you can turn off under **Logs and updates**, and the skill
+shop (reads of its public catalog when you open the Skill shop page or ask for it, at the first start of the
+Settings app for the core set, on Restore core skills, and with automatic updates on for newer skill
+versions), which you can turn off under **Tools and safety** (the core set then comes from the copy shipped
+with P6 MCP).
 
 **The data returned by the tools goes to the AI model your MCP client uses**, which may be a cloud
 service. For confidential schedules, use a local model (for example in LM Studio).
@@ -232,6 +260,9 @@ python -m venv .venv
 Tests run on a synthetic P6 database and synthetic XER files built by the tests
 (`tests/fixtures/make_db.py`). Never commit a real schedule, database, XER file or log. Building the
 installer and releasing: [docs/RELEASING.md](docs/RELEASING.md).
+
+To contribute, start with an issue: see [CONTRIBUTING.md](CONTRIBUTING.md) and the
+[code of conduct](CODE_OF_CONDUCT.md). Accessibility: [ACCESSIBILITY.md](ACCESSIBILITY.md).
 
 ## License
 
