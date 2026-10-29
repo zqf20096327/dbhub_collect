@@ -11880,5 +11880,70 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f245b9b36b4e": {
+  "identity": {
+   "one_liner": "本地照片评分与筛选引擎，含人脸识别与语义搜索",
+   "review": "Facet 是一个本地运行的照片分析与筛选应用：对每张照片按 9 个维度打分，支持连拍/闭眼检测、相似分组、自动筛选，并提供网页相册、人脸聚类管理、语义搜索、统计面板和相册分享。面向需要本地管理大量照片的摄影者；可选 GPU 加速，无需云服务或账号。",
+   "highlights": [
+    "照片按美学质量、构图、人脸清晰度等 9 个维度打分，支持 30+ 内容分类与分类加权",
+    "支持连拍检测、闭眼检测、相似照片分组与带干跑预览的自动筛选",
+    "提供人脸识别聚类、语义搜索、地图、时间线浏览及 MCP 端点供助手检索图库"
+   ],
+   "use_cases": [
+    "摄影师拍摄后批量筛选照片、挑选最佳成片",
+    "本地照片库的组织、人脸归档与语义检索",
+    "向客户分享相册进行选片校对"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是使用本地机器学习分析照片并提供网页相册的应用，数据库仅为内部存储依赖",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Facet is a local photo-analysis and culling engine. It scores each image across 9 dimensions — from aesthetic quality to face sharpness — then lets you browse, cull, and organize through a web gallery. Everything runs on your machine; no cloud, accounts, or API keys. ／ 1. **Scan** — Point Facet at a folder of photos. Each image is analyzed for quality, composition, and faces. Supports JPG, HEIF/HEIC/HIF (Canon HDR PQ `.HIF` stills are decoded with the SMPTE ST 2084 PQ transfer function and tone-mapped to SDR sRGB automatically), 10 RAW formats (CR2, CR3, NEF, ARW, RAF, RW2, DNG, ORF, SRW, PEF), and PNG, GIF, WebP, BMP, TIFF, and AVIF stills (AVIF needs a Pillow built with AVIF support, native from 11.3), plus JPEG XL (`.jxl`) through the existing `imagecodecs` dependency, included in standard installs and Docker. A RAW LibRaw can't decode — such as a Lightroom \"Merge to HDR/Panorama\" DNG (`-HDR.dng`, `-Pano.dng`) or a camera newer than the installed LibRaw — falls back to its largest embedded preview via `exiftool` (needs a preview at least 1024 px on the long edge; scores then come from that preview, not a full RAW decode). Lightroom Classic 13+ merges (and Enhance) store that preview as JPEG XL; Facet decodes it directly. ／ - **AI agents (MCP)** — an on-by-default Model Context Protocol endpoint (switch it off with `viewer.mcp.enabled`) lets MCP-capable assistants search and inspect the library with the gallery's filters, using revocable personal tokens; depending on the token's level, an assistant can also rate, tag, organise and cull photos (destructive actions preview first and need a confirmation)",
+   "evidence_lines": [
+    5,
+    17,
+    120
+   ]
+  },
+  "fn": "ncoevoet/facet",
+  "sha": "f245b9b36b4e",
+  "source": "readme",
+  "generated_at": "2026-10-29",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

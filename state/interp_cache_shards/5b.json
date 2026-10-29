@@ -9276,5 +9276,71 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d909e9468f78": {
+  "identity": {
+   "one_liner": "跨平台 Electron 桌面客户端，用于 Meshtastic/MeshCore/Reticulum 网络并本地 SQLite 持久化",
+   "review": "一款 Electron 桌面应用，为 Meshtastic、MeshCore 和 Reticulum 三种 mesh 协议提供统一界面，支持 BLE、USB 串口、Wi-Fi/TCP、MQTT 连接，用本地 SQLite 数据库保存消息历史与 mesh 日志，并提供路由诊断、频道配置、密钥管理与 MECP/TAK 应急功能。面向 RF mesh 网络的桌面用户和应急通信志愿者，需配合真实无线电设备使用。",
+   "highlights": [
+    "在一个桌面应用中支持 Meshtastic、MeshCore、Reticulum 三种协议栈，通过协议切换器切换",
+    "使用本地 SQLite 数据库持久化消息历史和 mesh 日志，支持导出/导入/清除",
+    "支持 BLE、USB 串口、Wi-Fi/TCP、MQTT 多种传输方式，包含路由诊断和 MQTT 网关上行"
+   ],
+   "use_cases": [
+    "桌面端管理 Meshtastic/MeshCore/Reticulum 无线电设备与频道配置",
+    "长期保存 mesh 网络聊天记录与节点遥测数据",
+    "应急通信（EMCOMM）场景下通过 MECP 与 TAK 交换位置和报文"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "With a dedicated local SQLite database, Mesh-Client keeps message history and mesh logs durable across restarts and sync failures. It provides one reliable hub for Meshtastic, MeshCore, and Reticulum (via an AGPL Rust sidecar), delivering a unified workflow re ／ - **True message persistence:** Local SQLite storage for reliable long-term history, without lost chats or broken logs.",
+     "lines": [
+      32,
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储本地消息历史的桌面客户端应用，SQLite 为其内嵌存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "With a dedicated local SQLite database, Mesh-Client keeps message history and mesh logs durable across restarts and sync failures. It provides one reliable hub for Meshtastic, MeshCore, and Reticulum (via an AGPL Rust sidecar), delivering a unified workflow regardless of protocol or hardware. ／ - **True message persistence:** Local SQLite storage for reliable long-term history, without lost chats or broken logs.",
+   "evidence_lines": [
+    32,
+    36
+   ]
+  },
+  "fn": "Colorado-Mesh/mesh-client",
+  "sha": "d909e9468f78",
+  "source": "readme",
+  "generated_at": "2026-10-29",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

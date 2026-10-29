@@ -10563,5 +10563,93 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "94b5e055620e": {
+  "identity": {
+   "one_liner": "自托管开源 CRM，Go+React，支持 SQLite 或 MySQL 存储",
+   "review": "GopherCRM 是一个面向小型销售与支持团队的自托管 CRM，提供线索、客户、公司、五阶段商机管道、工单、任务、报价以及可嵌入网站的线索捕获表单和 AEO 可见性报告。后端为 Go，前端为 React，通过 DB_DRIVER 选择 MySQL（默认，迁移 SQL 仅面向 MySQL）或 SQLite（单文件、启动时自动迁移且不可逆）。适合想在自己服务器上运行、无按席位付费的团队。",
+   "highlights": [
+    "支持 SQLite（无数据库服务器、单文件）与 MySQL 8 两种存储方式，均有 Docker Compose 配置",
+    "内置线索捕获表单，含时间陷阱、蜜罐、速率限制、可选 reCAPTCHA v3 与双重确认等反垃圾层",
+    "提供 JWT/HMAC API Key 认证、四种角色权限及 GDPR 数据删除（覆写后软删除）实现"
+   ],
+   "use_cases": [
+    "小型团队自托管管理线索、商机与支持工单",
+    "在任意网站嵌入表单收集线索并支持双重确认订阅",
+    "检测各 LLM 答案引擎对品牌的提及情况（AEO 报告）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Go backend, React UI, SQLite or MySQL. ／ MySQL 8 and MariaDB 10.11 are tested in CI. Docker Compose files ship for both. ／ ## Running with Docker (MySQL)",
+     "lines": [
+      4,
+      20,
+      73
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Go backend, React UI, SQLite or MySQL. ／ - **Easy to run.** A single Go API binary and a static React UI. SQLite needs no database server; ／ ## Quick start (SQLite, no database server)",
+     "lines": [
+      4,
+      19,
+      26
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MySQL 8 and MariaDB 10.11 are tested in CI. Docker Compose files ship for both.",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "CRM 应用以 SQLite 或 MySQL 作为自身数据存储，README 明确声明使用二者。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted CRM for small teams: sales and support in one app, with lead-capture forms built in. ／ Go backend, React UI, SQLite or MySQL. ／ `DB_DRIVER` selects the backend. It defaults to `mysql`, which is the production",
+   "evidence_lines": [
+    3,
+    4,
+    115
+   ]
+  },
+  "fn": "florinel-chis/GopherCRM",
+  "sha": "94b5e055620e",
+  "source": "readme",
+  "generated_at": "2026-10-29",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

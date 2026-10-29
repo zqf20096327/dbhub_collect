@@ -11767,5 +11767,74 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "27062d98026f": {
+  "identity": {
+   "one_liner": "企业技术支持场景的 RAG 问答与受控工单 Agent 后端",
+   "review": "基于 FastAPI 构建的技术支持后端，提供知识检索、带来源回答/拒答（RAG 证据门控）与预览-确认式工单创建流程，以 TechQA 作为语料与评测基准。面向企业技术支持团队与开发者，通过 JWT 租户隔离、审批草稿冻结等机制控制写操作；使用 SQLite/SQLModel 与 Chroma 存储检索数据，依赖 DashScope embedding/重排/生成模型服务。",
+   "highlights": [
+    "提供 /rag/search 与 /rag/ask 接口，实现 Hybrid 检索（Dense+BM25+RRF+重排）与来源级证据门控拒答",
+    "提供受控工单 Agent：search_kb/classify_ticket/create_ticket 三工具，预览-确认-审批后执行真实建单",
+    "包含 TechQA 语料（28,481 篇文档、910 条问答记录）与冻结的检索/生成/拒答评测框架"
+   ],
+   "use_cases": [
+    "企业技术支持知识库问答与拒答场景",
+    "需要人工审批控制写操作的工单升级流程",
+    "检索、生成与拒答效果的持续评测与失败归因"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "离线集成检查：`pytest tests/test_hybrid_search.py -k ticket_hybrid_document_to_decision`。通过真实 Uvicorn 回环 HTTP、JWT、上传/索引、临时 SQLite 与 Chroma，分别验证 Hybrid 预览后的确认、拒绝和取消，以及 trace/metrics 查询、租户与角色隔离；只有显式确认会在临时库产生测试工单。外部 embedding/rerank 使用替身，不是检索质量或并发审批验收，不外发资料、不修改日常数据。 ／ 真实模式只发送脚本内固定的四篇虚构说明及两个查询，使用独立临时 SQLite、Chroma 与上传目录，经过 ASGI 路由及 Demo JWT 认证，不连接已运行的服务、不改现有数据库和开关。检查显式 Dense 回退、Hybrid 简单排序、租户/分类隔离、删除生效、空语料零调用及检索审计；不是 HTTP 网络部署验收或准确率评测。",
+     "lines": [
+      122,
+      209
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite/SQLModel 与 Chroma 存储检索数据的应用后端，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向**企业技术支持**场景，构建知识检索、回答 / 拒答与工单升级一体化的 **RAG + 受控工单 Agent 后端**。 ／ 离线集成检查：`pytest tests/test_hybrid_search.py -k ticket_hybrid_document_to_decision`。通过真实 Uvicorn 回环 HTTP、JWT、上传/索引、临时 SQLite 与 Chroma，分别验证 Hybrid 预览后的确认、拒绝和取消，以及 trace/metrics 查询、租户与角色隔离；只有显式确认会在临时库产生测试工单。外部 embedding/rerank 使用替身，不是检索质量或并发审批验收，不外发资料、不修改日常数据。 ／ - 只检索 SQL 文档后端标记为 `indexed`、当前版本、当前租户且匹配 category 的 chunk；两个通道共享此范围。仅存在于旧静态 Chroma 索引、未通过文档后端登记的内容不进入 Hybrid；TechQA 离线语料也不会自动导入。",
+   "evidence_lines": [
+    5,
+    122,
+    191
+   ]
+  },
+  "fn": "Air000000/Enterprise-Support-AI-Copilot-API",
+  "sha": "27062d98026f",
+  "source": "readme",
+  "generated_at": "2026-10-29",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

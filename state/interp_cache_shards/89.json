@@ -10494,5 +10494,84 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "12b166f5aed0": {
+  "identity": {
+   "one_liner": "自托管在线状态监控与状态页/on-call 单二进制服务",
+   "review": "uptimepage 提供 HTTP/TCP/ICMP/心跳/DNS/TLS 证书/域名到期/浏览器登录流等多种检查，多区域探测，生成公开状态页，并包含事件、升级策略和 14+ 告警通道，可通过 REST API、Terraform provider 和 MCP server 操作。数据存储在 Postgres 与 ClickHouse，支持托管服务或单二进制自托管（AGPL-3.0），适合需要公开状态页与值班告警的 SaaS 团队、SRE 和自托管用户。",
+   "highlights": [
+    "支持 8 种检查类型，间隔可低至 10 秒，并可运行多区域自有探测代理",
+    "内置公开状态页（HTML+JSON+RSS）、事件管理与 on-call 轮换升级策略",
+    "提供 REST API、Terraform provider 与 MCP server（含 19 个只读和 19 个写工具），自托管为约 23 MB 单二进制加 Postgres 18 与 ClickHouse"
+   ],
+   "use_cases": [
+    "为对外服务搭建公开状态页并订阅维护窗口与事件更新",
+    "多区域可用性探测与基于轮换/升级策略的值班告警",
+    "以 Terraform/API/代码方式管理监控目标与通知渠道的自托管部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up.",
+     "lines": [
+      78,
+      180
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up.",
+     "lines": [
+      78,
+      180
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其建立在 Postgres + ClickHouse 之上并由 docker compose 启动这两个数据库来存取数据，是使用数据库的应用而非为数据库服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，同时提供免费托管服务（双形态发行）",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up. ／ API, or Terraform. Self-host the single binary or use the hosted service.",
+   "evidence_lines": [
+    78,
+    180,
+    12
+   ]
+  },
+  "fn": "uptimepage/uptimepage",
+  "sha": "12b166f5aed0",
+  "source": "readme",
+  "generated_at": "2026-10-29",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

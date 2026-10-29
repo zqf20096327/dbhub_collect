@@ -13643,5 +13643,139 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4e2819e38e74": {
+  "identity": {
+   "one_liner": "单二进制网络延迟监控工具，内嵌 SQLite 存储",
+   "review": "fogping 是一个类 SmokePing 的 Linux 网络延迟监控工具，用单个 Go 二进制打包，内嵌 SQLite 存储数据，并提供 Web UI 管理监控目标。适合自托管用户监控 PING/TCP 目标的延迟与丢包；支持多用户登录、历史数据保留天数配置，只读/编辑两种运行模式，可用二进制或 Docker 部署。",
+   "highlights": [
+    "支持 PING 与 TCP 目标的延迟测量并以图表展示",
+    "通过 Web UI 添加、修改、删除监控目标，支持多用户",
+    "提供二进制与 Docker 两种部署方式，数据保留天数可配置"
+   ],
+   "use_cases": [
+    "自托管环境下监控网络目标延迟与丢包",
+    "以 Web UI 集中管理监控目标并共享只读图表",
+    "替代需配置文件与 Perl/RRDtool 的部署方式，快速启动延迟监控"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **One binary, embedded SQLite, Web UI — just download and run.**",
+     "lines": [
+      2
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "工具使用内嵌 SQLite 存储监控数据，为网络监控提供服务，而非以数据库为核心生态的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> ### A SmokePing-like network latency tool. ／ > **One binary, embedded SQLite, Web UI — just download and run.** ／ |Keep 90 days of history (default 40)|`./fogping --days=90 user=admin passwd=change-me`|",
+   "evidence_lines": [
+    1,
+    2,
+    42
+   ]
+  },
+  "fn": "githubflyideas/fogping",
+  "sha": "4e2819e38e74",
+  "source": "readme",
+  "generated_at": "2026-10-29",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fdf371d86bf2": {
+  "identity": {
+   "one_liner": "基于 SQLite 文件的 MCP 项目任务跟踪服务器",
+   "review": "saga-mcp 是一个 MCP 服务器，在项目目录下用一个 SQLite 文件存储项目、epic、任务、子任务、依赖与备注，并向 AI 代理暴露 41 个工具，提供任务推荐、依赖自动阻塞、描述锁定和单次调用仪表盘。面向使用 Claude Code/Claude Desktop 等 MCP 客户端的开发者，无需账号和外部服务；数据仅存于本地文件。",
+   "highlights": [
+    "提供 41 个 MCP 工具，管理项目、任务、子任务与依赖关系",
+    "数据存储于单个本地 SQLite 文件，通过 DB_PATH 配置，首次使用时创建 schema",
+    "任务依赖在写入时强制执行，含描述锁定、软删除与变更活动日志"
+   ],
+   "use_cases": [
+    "为跨会话的编码代理持久化项目计划与任务状态",
+    "团队或个人用本地文件跟踪多仓库任务与依赖",
+    "通过 saga-web 在浏览器中查看和编辑同一任务库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "saga-mcp gives the agent a real tracker instead: a SQLite file in your project holding projects, ／ |`DB_PATH`|Yes|Path to the `.tracker.db` SQLite file. Created on first use.|",
+     "lines": [
+      12,
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其数据全部存于项目内的 SQLite 文件，SQLite 是其存储介质而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "saga-mcp gives the agent a real tracker instead: a SQLite file in your project holding projects, ／ no network calls — the database is a file you own.",
+   "evidence_lines": [
+    12,
+    15
+   ]
+  },
+  "fn": "spranab/saga-mcp",
+  "sha": "fdf371d86bf2",
+  "source": "readme",
+  "generated_at": "2026-10-29",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

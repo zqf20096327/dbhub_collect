@@ -10962,5 +10962,162 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9de1e2e326ca": {
+  "identity": {
+   "one_liner": "PHP 数据库访问层，基于 PDO 提供查询构建与关系数据读取",
+   "review": "Nette Database 是一个 PHP 数据库访问库，包含 Core 与 Explorer 两层：Core 封装 PDO 提供连接与查询执行，Explorer 通过 ActiveRow 和关系映射自动优化关联数据读取的查询次数。面向 PHP（要求 8.4+）开发者，可通过 Composer 安装，测试支持 SQLite 及经 Docker 容器运行的 MySQL、PostgreSQL 等。",
+   "highlights": [
+    "提供基于 PDO 的 Database Core，支持使用 PDO 参数创建连接并执行查询",
+    "提供 Database Explorer 层，以 ActiveRow 读取数据并通过固定次数查询处理 1:N 关系",
+    "支持查询列缓存，仅查询使用到的列"
+   ],
+   "use_cases": [
+    "PHP 应用中不直接编写 SQL 的数据读取",
+    "涉及多表关联数据的查询优化",
+    "配合 Nette 框架进行数据库访问"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "To test against MySQL, PostgreSQL, etc., start the Docker containers and copy the configuration:",
+     "lines": [
+      46
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "To test against MySQL, PostgreSQL, etc., start the Docker containers and copy the configuration:",
+     "lines": [
+      46
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Run tests against SQLite (no setup needed):",
+     "lines": [
+      40
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是提供数据库访问层与驱动的 PHP 库，为数据库生态服务而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The Nette Database Core is a wrapper around the PDO and provides core functionality. ／ The Nette Database Explorer layer helps you to fetch database data more easily and in a more optimized way. ／ To test against MySQL, PostgreSQL, etc., start the Docker containers and copy the configuration:",
+   "evidence_lines": [
+    16,
+    18,
+    46
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "nette/database",
+  "sha": "9de1e2e326ca",
+  "source": "readme",
+  "generated_at": "2026-10-29",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "99d88e581b42": {
+  "identity": {
+   "one_liner": "AI 代理可操作的 CRM，自填记录并经 MCP/REST 受控访问",
+   "review": "Margince 是一个源码可得（BUSL 1.1，非开源）的 CRM 应用，从邮件、会议和日历自动生成联系人、公司与商机；AI 代理通过 MCP 或 REST 与用户使用同一引擎操作，权限受限于授权用户并带审批与日志。后端为 Go、前端为 React，依赖 Postgres 和 Redis，用 Docker Compose 自托管，适合想自建 CRM 并让 AI 代理在受控规则下工作的销售团队。",
+   "highlights": [
+    "AI 代理通过 MCP 或 REST 连接，使用与用户相同的引擎且权限不高于授权用户",
+    "支持用自有服务器上的模型（Ollama/vLLM）或云模型运行 AI 任务，提供 sovereign 配置",
+    "通过 Docker Compose 自托管，每次 git worktree 使用独立数据库与端口"
+   ],
+   "use_cases": [
+    "团队自托管 CRM，从邮件和会议记录自动建立联系人、公司与商机",
+    "让 AI 代理在受限权限和审批流程下操作 CRM 数据",
+    "要求 AI 数据不出内网的单公司部署场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. Start the stack: `make dev`. It starts Postgres, Redis, the API and the web app, then returns.",
+     "lines": [
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 Postgres 存储数据的 CRM 应用本体，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "source-available，Business Source License 1.1，非开源",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Margince is a CRM that fills its own records from mail, meetings and calendars. AI agents work in it under ／ 2. Start the stack: `make dev`. It starts Postgres, Redis, the API and the web app, then returns. ／ Margince is source-available under the Business Source License 1.1 (LICENSE). The source is",
+   "evidence_lines": [
+    3,
+    29,
+    90
+   ]
+  },
+  "fn": "margince/margince",
+  "sha": "99d88e581b42",
+  "source": "readme",
+  "generated_at": "2026-10-29",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

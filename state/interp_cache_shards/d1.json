@@ -9490,5 +9490,71 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7bbc33eb72ca": {
+  "identity": {
+   "one_liner": "Scala 3 编译期语言集成查询（LINQ）库",
+   "review": "ProtoQuill 是 Quill 的 Scala 3 版本，允许开发者用 Scala 代码编写类型安全的查询，并在编译期生成 SQL，支持 JDBC、ZIO 及 Cassandra 上下文。适合需要数据库访问层的 Scala 3 应用开发者使用；查询需以 inline def 编写才能编译期生成，否则退化为动态查询，且部分 Scala 2 Quill 功能尚未支持。",
+   "highlights": [
+    "支持编译期与运行时（动态）查询、批量增删改及 OnConflict 子句",
+    "提供 ZIO 与同步 JDBC 上下文，以及使用 V4 驱动的 Cassandra 上下文",
+    "支持 lazyLift、自定义解析器、Dependent Contexts 等 Scala 3 新特性"
+   ],
+   "use_cases": [
+    "Scala 3 项目中以编译期 SQL 生成方式访问关系型数据库",
+    "需要与 ZIO 生态集成的高吞吐数据库访问场景",
+    "从 Scala 2 Quill 迁移代码至 Scala 3"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Assuming we are using Postgres, add the following application.conf. ／ testPostgresDB.dataSourceClassName=org.postgresql.ds.PGSimpleDataSource",
+     "lines": [
+      56,
+      58
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为应用提供数据库查询 DSL 与 JDBC/Cassandra 访问上下文，是服务数据库使用的开发库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ProtoQuill is the Scala 3 version of Quill: Free/Libre Compile-time Language Integrated Queries for Scala. For those migrating, or exploring migration from Scala2-Quill, most Queries written in Scala2-Quill should work readily in ProtoQuill but they will become Dynamic. Change them to `inline def` expressions and they should once-again be compile-time (see the Rationale section for some info on why I chose to do this). Also see the Migration Notes section. ／  - ZIO and Synchronous JDBC contexts. ／   \"dev.zio\" %% \"quill-jdbc\" % \"4.9.0\",",
+   "evidence_lines": [
+    3,
+    13,
+    52
+   ]
+  },
+  "fn": "zio/zio-protoquill",
+  "sha": "7bbc33eb72ca",
+  "source": "readme",
+  "generated_at": "2026-10-29",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

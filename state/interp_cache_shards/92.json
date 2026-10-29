@@ -10512,5 +10512,81 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e4087839a679": {
+  "identity": {
+   "one_liner": "Dokku PaaS 的 MariaDB 服务管理插件",
+   "review": "该仓库是 Dokku PaaS 平台的官方 MariaDB 插件，用于在 Dokku 主机上创建、配置、链接、备份和销毁 MariaDB 服务容器。支持自定义镜像版本、环境变量、卷挂载、内存/日志/重启策略等参数，并可通过 S3 进行计划备份。面向使用 Dokku 部署应用并需要托管 MariaDB 数据库的运维人员。",
+   "highlights": [
+    "提供 mariadb:create/destroy/info/backup 等命令管理 MariaDB 服务生命周期",
+    "支持 S3 备份认证、加密、计划调度与 GPG 公钥加密",
+    "支持自定义镜像与版本、卷挂载、网络、内存限制和重启策略等服务配置"
+   ],
+   "use_cases": [
+    "在 Dokku PaaS 上为应用创建和链接 MariaDB 数据库服务",
+    "通过 cron 和 S3 对 MariaDB 服务执行定时备份",
+    "按需定制 MariaDB 容器的镜像版本、资源限制与挂载卷"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "DATABASE_URL=mysql://:SOME_PASSWORD@dokku-mariadb-lollipop:3306 ／ BLUE_DATABASE_URL=mysql://:SOME_PASSWORD@dokku-mariadb-lollipop:3306",
+     "lines": [
+      362,
+      380
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Official mariadb plugin for dokku. Currently defaults to installing mariadb 13.0.2. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mariadb.git --name mariadb",
+     "lines": [
+      3,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该插件为 Dokku 平台提供 MariaDB 服务的部署、配置、备份等管理功能，是为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "MariaDB"
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Official mariadb plugin for dokku. Currently defaults to installing mariadb 13.0.2. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mariadb.git --name mariadb ／ mariadb:backup <service> <bucket-name> [--id <id>] [-u|--use-iam] # create a backup of the MariaDB service to an existing s3 bucket",
+   "evidence_lines": [
+    3,
+    14,
+    21
+   ]
+  },
+  "fn": "dokku/dokku-mariadb",
+  "sha": "e4087839a679",
+  "source": "readme",
+  "generated_at": "2026-10-29",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
