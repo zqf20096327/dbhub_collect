@@ -12,7 +12,7 @@
 One command (Linux x86-64) — downloads, unpacks and starts fogping:
 
 ```bash
-mkdir -p ~/fogping && cd ~/fogping && curl -L https://github.com/githubflyideas/fogping/releases/download/v1.1.3/fogping-v1.1.3-linux-amd64.tar.gz | tar -xz && ./fogping --edit user=admin passwd=change-me
+mkdir -p ~/fogping && cd ~/fogping && curl -L https://github.com/githubflyideas/fogping/releases/download/v1.3.0/fogping-v1.3.0-linux-amd64.tar.gz | tar -xz && ./fogping --edit user=admin passwd=change-me
 ```
 
 Or with Docker (amd64 / arm64 / armv7):
@@ -39,12 +39,16 @@ press Ctrl-C and restart **without** `--edit` — the UI becomes read-only and s
 | Require a login | `./fogping user=admin passwd=change-me` |
 | Several users | `./fogping user=alice,bob passwd=alice-pw,bob-pw` |
 | Edit targets | `./fogping --edit user=admin passwd=change-me` |
-| Keep 90 days of history (default 40) | `./fogping --days=90 user=admin passwd=change-me` |
+| Keep 30 days of history (default and max 93) | `./fogping --days=30 user=admin passwd=change-me` |
 | Listen on 127.0.0.1 only (behind a proxy) | `./fogping --localhost` |
 | Run in the background | `nohup ./fogping user=admin passwd=change-me >> fogping.log 2>&1 &` |
 | Show all commands | `./fogping --help` |
 
 Arguments can come in any order; the port is always 8518.
+
+**Compare:** the **COMPARE** menu under the chart overlays the previous period, yesterday or last week as a dashed median line.
+
+**Export / import targets:** ✎ targets → ⇩ export / ⇧ import… moves a target list as a JSON file, shared with pingping — see [the guide](docs/GUIDE.md#export-and-import) and the [format spec](docs/targets-format.md). Ready-made lists: see presets/ (coming).
 
 > **PING shows 100% loss?** Allow unprivileged ICMP once:
 > `echo 'net.ipv4.ping_group_range = 0 2147483647' | sudo tee /etc/sysctl.d/99-fogping.conf && sudo sysctl --system`

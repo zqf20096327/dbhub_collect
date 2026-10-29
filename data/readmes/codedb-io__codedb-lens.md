@@ -1,8 +1,9 @@
-<p align="center">
-  <img src="assets/icon/icon-512.png" width="128" alt="codeDB Lens">
-</p>
-
-<h1 align="center">codeDB Lens</h1>
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/icon/logo-dark.svg">
+    <img src="assets/icon/logo-light.svg" width="360" alt="codeDB Lens">
+  </picture>
+</h1>
 
 <p align="center">
   <b>See what your database isn't showing you.</b><br>
@@ -19,6 +20,7 @@
   <img src="https://img.shields.io/badge/database%20access-read--only-brightgreen" alt="Read-only">
   <img src="https://img.shields.io/badge/telemetry-none-brightgreen" alt="No telemetry">
   <a href="https://github.com/codedb-io/codedb-lens/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/codedb-io/codedb-lens/ci.yml?label=CI" alt="CI status"></a>
+  <a href="https://mcpservers.org/servers/codedb-io/codedb-lens"><img src="https://mcpservers.org/badge.svg" alt="Listed on mcpservers.org"></a>
 </p>
 
 <p align="center">

@@ -80,6 +80,13 @@ Built in Go on PostgreSQL, ClickHouse, and NATS.
 - **ClickHouse**: analytical store for events, insights, and profiles
 - **NATS**: messaging backbone for the ingestion and worker pipelines
 
+## Self-hosting
+
+See the [self-hosting guide](https://docs.pug.sh/self-hosting/). A Pug
+instance is this repo's backend, published as container images on
+`ghcr.io/pug-sh`, plus the dashboard from
+[`pug-sh/app`](https://github.com/pug-sh/app), served as static files.
+
 ## Quick start
 
 ```bash
@@ -166,6 +173,8 @@ guidance and conventions are in [`CLAUDE.md`](CLAUDE.md).
 
 ## License
 
-Pug is licensed under the [GNU AGPL v3.0](LICENSE). Contributors sign a
-[CLA](CLA.md) before their first pull request is merged; see
-[CONTRIBUTING.md](CONTRIBUTING.md).
+Copyright (C) 2025 pug.sh contributors.
+
+Pug is licensed under the [GNU AGPL v3.0](LICENSE), or (at your option) any
+later version. Contributors sign a [CLA](CLA.md) before their first pull
+request is merged; see [CONTRIBUTING.md](CONTRIBUTING.md).

@@ -129,7 +129,7 @@ cargo build --release   # binary at target/release/palace
 | Windows x86_64 | Supported |
 | macOS Intel | Not supported (no ONNX Runtime build) |
 
-The embedding model (~90 MB) downloads from Hugging Face the first time you
+The embedding model (~23 MB) downloads from Hugging Face the first time you
 mine or search, then stays cached in `~/.cache/huggingface`.
 
 ---
@@ -214,21 +214,21 @@ loses memory.
 
 | Model id | Model | Precision | Notes |
 |---|---|---|---|
-| `minilm-l6-v2` | all-MiniLM-L6-v2 | fp32 | Default |
-| `minilm-l6-v2-q8` | all-MiniLM-L6-v2 | int8 | About 2x faster indexing, same recall in the bake-off |
-| `bge-small` | bge-small-en-v1.5 | fp32 | Experimental, about 2.5x slower indexing |
+| `minilm-l6-v2-q8` | all-MiniLM-L6-v2 | int8 | Default for new palaces: same recall as fp32, faster indexing, 23 MB download |
+| `minilm-l6-v2` | all-MiniLM-L6-v2 | fp32 | Palaces created before 0.19 run on it (90 MB download) |
+| `bge-small` | bge-small-en-v1.5 | fp32 | Experimental, about 2x slower indexing |
 | `bge-small-q8` | bge-small-en-v1.5 | int8 | Experimental |
 | `bge-base-q8` | bge-base-en-v1.5 | int8 | Experimental, 768-dim |
 
-Experimental models scored below MiniLM on the coding-agent eval, though
-higher on probes from a real palace (see the
+Experimental models scored below MiniLM on the coding-agent eval and about
+level on probes from a real palace (see the
 [bake-off](#embedding-model-bake-off)). You can try them on your own palace:
 verification decides whether it switches.
 
 ```bash
 palace embeddings list                       # models, which is active, which are downloaded
 palace embeddings estimate minilm-l6-v2-q8   # time, disk and latency, measured on this machine
-palace embeddings migrate minilm-l6-v2-q8    # build, verify, switch
+palace embeddings migrate minilm-l6-v2-q8    # build, verify, switch (e.g. an older fp32 palace)
 palace embeddings rollback                   # back to the previous model, instantly
 palace embeddings cleanup                    # drop the previous model's vectors
 ```
@@ -649,7 +649,7 @@ Settings load in this order: environment variables, then
 | `PALACE_SOURCE_DIR` | `~/Desktop/transcripts` | Default source for `palace split` |
 | `PALACE_MINE_TRACE` | off | `1` prints per-stage mining timings |
 | `PALACE_MCP_MODE` | `local` | `local` or `remote` |
-| `PALACE_EMBEDDING_MODEL` | `minilm-l6-v2` | Embedding model for new palaces (see [embedding models](#embedding-models)) |
+| `PALACE_EMBEDDING_MODEL` | `minilm-l6-v2-q8` | Embedding model for new palaces (see [embedding models](#embedding-models)) |
 | `PALACE_EMBEDDING_LATENCY_BUDGET_MS` | 2x current p95 | Query-latency budget for `palace embeddings verify` |
 | `PALACE_EMBED_THREADS` | all cores | ONNX threads used for embedding |
 | `PALACE_REMOTE_ENDPOINT` | none | Palace Server URL (host, base URL, or full `/mcp` URL) |
@@ -730,17 +730,20 @@ PALACE_RUN_BAKEOFF=1 PALACE_BAKEOFF_DB=~/.palace/palace/palace.db \
 
 | Model | Coding eval R@1 / R@5 (tuned) | Palace probes R@1 / R@5 | Indexing | Query p95 |
 |---|---:|---:|---:|---:|
-| `minilm-l6-v2` (default) | 0.902 / 1.000 | 0.850 / 0.970 | 112 drawers/s | 2.3 ms |
-| `minilm-l6-v2-q8` | **0.922** / 1.000 | 0.860 / 0.980 | **204 drawers/s** | 2.6 ms |
-| `bge-small` | 0.863 / 1.000 | 0.910 / 0.985 | 55 drawers/s | 7.2 ms |
-| `bge-small-q8` | 0.863 / 1.000 | 0.915 / 0.985 | 103 drawers/s | 5.5 ms |
-| `bge-base-q8` | 0.863 / 1.000 | **0.920 / 0.985** | 39 drawers/s | 11.0 ms |
+| `minilm-l6-v2-q8` (default) | **0.922** / 1.000 | **0.900** / 0.970 | **150 drawers/s** | 2.0 ms |
+| `minilm-l6-v2` | **0.922** / 1.000 | 0.890 / 0.975 | 132 drawers/s | 2.1 ms |
+| `bge-small` | 0.882 / 1.000 | **0.905 / 0.980** | 68 drawers/s | 5.9 ms |
+| `bge-small-q8` | 0.882 / 1.000 | 0.890 / 0.980 | 79 drawers/s | 4.5 ms |
+| `bge-base-q8` | 0.882 / 1.000 | 0.900 / 0.980 | 40 drawers/s | 6.5 ms |
 
-Hybrid recall, 400 drawers sampled from a 10,700-drawer palace, Windows,
-16 threads. BGE ranks best with a 0.5 cosine floor and an even cosine/BM25
+Hybrid recall, 400 drawers sampled from a 10,800-drawer palace, Windows,
+16 threads. int8 models embed one text per call: their activation scales
+cover the whole batch, so batching would make a text's vector depend on its
+neighbours. On longer drawers (the synthetic speed corpus) q8 indexes about
+1.7x faster than fp32. BGE ranks best with a 0.5 cosine floor and an even cosine/BM25
 split, which its registry entry carries. A model ships as non-experimental
 only if it matches MiniLM on the coding-agent eval, so the BGE models stay
-experimental for now even though they win on real-palace probes. `verify`
+experimental for now; on real-palace probes they are about level. `verify`
 measures the same thing on your own palace before it switches.
 
 ### LongMemEval
@@ -752,9 +755,9 @@ questions are excluded, as is standard.
 | Configuration | Model | R@1 | R@5 | R@10 |
 |---|---|---:|---:|---:|
 | `oracle` split (sanity check) | `minilm-l6-v2` | 1.000 | 1.000 | 1.000 |
-| One drawer per session | `minilm-l6-v2` | 0.889 | 0.979 | 0.991 |
-| One drawer per session | `minilm-l6-v2-q8` | 0.891 | 0.979 | 0.991 |
-| **Exchange pairs**, as Palace mines chats | `minilm-l6-v2-q8` | **0.906** | **0.985** | **0.994** |
+| One drawer per session | `minilm-l6-v2` | 0.896 | 0.981 | 0.991 |
+| One drawer per session | `minilm-l6-v2-q8` | 0.898 | 0.981 | 0.991 |
+| **Exchange pairs**, as Palace mines chats | `minilm-l6-v2-q8` | **0.915** | **0.987** | **0.996** |
 
 The exchange-pair row is how Palace actually stores conversations: each
 session goes through the same normaliser and chunker as `palace mine-convos`
@@ -770,29 +773,37 @@ for comparison with other systems.
 - **Embedder:** MiniLM-L6-v2 (384-dim, ONNX, full precision or int8),
   512-token cap, local.
 - **Retrieval:** Palace's normal hybrid search (BM25 fused with cosine plus the
-  ranking boosts), top-K 10.
-- **No LLM at any stage**, no GPU, nothing tuned on LongMemEval.
+  ranking boosts), top-K 10. Each question is asked on its own
+  `question_date`, and each drawer is dated by its session, so relative
+  dates ("two weeks ago") resolve as they would in a live palace.
+- **No LLM at any stage**, no GPU. Nothing was tuned on `s_cleaned`: the one
+  ranking weight chosen on LongMemEval data (how much a session's other
+  matching chunks count) was picked on the `m_cleaned` split together with
+  probes from a real palace, then frozen before this run.
 - **Metric:** `recall_any@K` at session granularity.
 - **Hardware:** Windows, 16 threads.
 
 | Question type | Per session, `minilm-l6-v2` R@1 / R@5 | Exchange pairs, `q8` R@1 / R@5 |
 |---|---:|---:|
 | knowledge-update | 0.944 / 1.000 | 0.958 / 1.000 |
-| multi-session | 0.909 / 0.983 | 0.901 / 0.992 |
+| multi-session | 0.909 / 0.983 | 0.909 / 0.992 |
 | single-session-assistant | 1.000 / 1.000 | 1.000 / 1.000 |
-| single-session-preference | 0.633 / 0.833 | 0.767 / 0.900 |
+| single-session-preference | 0.633 / 0.867 | 0.767 / 0.933 |
 | single-session-user | 0.922 / 1.000 | 0.984 / 1.000 |
-| temporal-reasoning | 0.835 / 0.976 | 0.835 / 0.976 |
+| temporal-reasoning | 0.858 / 0.976 | 0.858 / 0.976 |
 
 The `oracle` split only contains the gold sessions, so it checks the pipeline
 rather than measuring retrieval. Preference questions are the weakest
 category, because "I prefer…" sentences rarely share keywords with the
-question. Most remaining temporal misses ask about relative dates ("a week
-ago"), which ranking does not use yet.
+question. Ranking now favours drawers from the time a question points at
+("10 days ago", "last Tuesday", "in the past month"), but the three
+remaining temporal misses with exchange pairs lose on topic, not on date:
+the gold chunk scores below unrelated ones from the same days.
 
-An earlier run (May 2026, before the coding-agent boosts) scored 0.889 /
-0.981 / 0.991 per session. Later ranker changes cost two questions; one is
-fixed, the other comes from the convention boost firing on "should".
+The previous release scored 0.906 / 0.985 / 0.994 with exchange pairs and
+0.891 / 0.979 / 0.991 per session (`q8`). Date-aware ranking, weighting a
+session by its other matching chunks, and no longer reading "should I" as a
+convention question account for the difference.
 
 </details>
 

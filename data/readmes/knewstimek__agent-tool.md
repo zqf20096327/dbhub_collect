@@ -88,6 +88,118 @@ Local relative paths resolve against an explicit workspace, then the MCP client 
 | **SetConfig** | Change runtime settings (encoding, file size limit, symlinks, workspace, etc.) | ✅ |
 | **Help** | Built-in usage guide for agents (encoding, indentation, troubleshooting) | ✅ |
 
+## Persistent analysis annotations
+
+The existing `analyze` tool can save user comments and labels in SQLite with
+`annotation_set`, search/read them with `annotation_list`, and remove them with
+`annotation_delete`. Disassembly and decompilation load saved notes automatically.
+These are user assessments, visibly separate from automatic symbols and debug types;
+labels and subjects do not rename engine symbols or override inferred types.
+
+```json
+{"operation":"annotation_set","file_path":"sample.exe","rva":"0x1234","subject":"rax","comment":"User pointer returned here","annotation_status":"hypothesis","annotations_path":"project.annotations.sqlite"}
+{"operation":"disassemble","file_path":"sample.exe","va":"0x140001234","annotations_path":"project.annotations.sqlite"}
+{"operation":"annotation_list","file_path":"sample.exe","query":"User","annotations_path":"project.annotations.sqlite"}
+```
+
+Call through `toolbox` (`operation="call", tool="analyze", arguments={...}`); use
+`toolbox describe` or help topic `analyze` for the full schema and examples.
+
+- `annotations_path` manually selects the SQLite file for saving **and loading**;
+  relative paths use the workspace/MCP root. The default is
+  `<user config dir>/agent-tool/analysis-annotations.sqlite` (Windows: under
+  `%APPDATA%`). Reads do not create databases; the first `annotation_set` does.
+  This is separate from the rebuildable codegraph DB and disposable analysis cache.
+- Notes are scoped by the **full binary SHA-256** and static address. Identical
+  copies keep their notes; changed binaries do not inherit them. There is no
+  automatic migration between builds. Use a static `va` (hex or file/debug symbol)
+  or PE `rva` (module-relative offset), not a live ASLR address or file offset.
+- `annotation_kind` is `instruction` (default), `function` (entry address), or
+  `decompile`. Optional `subject` identifies a register, operand, or variable at
+  that location. `annotation_status` is `hypothesis` (default), `confirmed`, or
+  `rejected`; this records the user's assessment.
+- For a C-line comment, first run `decompile` with `line_numbers=true`. Pass the
+  returned `code_hash`, the C-body `line` (L number), the function entry `va`,
+  and `annotation_kind="decompile"` to `annotation_set`. Notes render before the
+  corresponding line. A changed C snapshot keeps the note at the function header
+  as `needs_review` instead of attaching it to another line. Headers, annotations,
+  and trailing type definitions do not count toward L numbers.
+- Function notes appear above the C body. Instruction notes appear inline in
+  disassembly. Decompile also gathers instruction notes inside exact PDB/.pdata
+  or sized ELF-symbol ranges, showing each original VA above the C body. Unknown
+  ranges fall back to entry notes with a notice; at most 16 ranges per function
+  are used. These notes are not guessed onto individual C lines.
+- Set without an ID creates a new anchor; it rejects an occupied anchor instead
+  of overwriting another editor's work. Update by `annotation_id` requires the
+  exact `expected_revision` string from set/list. Omitted fields are preserved;
+  nonempty top-level fields update only those values. Use `annotation_patch` for
+  explicit empty strings or `line=0`; its supplied fields override top-level
+  values. The merged record must still have a label or comment and a valid anchor.
+  Delete requires both ID and expected revision. Stale edits/deletes fail without
+  changing the record; read it again before retrying. Revisions remain strings,
+  including in rendered notes and abbreviated receipts.
+- List supports address, kind, subject, status, ID and literal `query` filters
+  (ASCII case folding). `max_results` defaults to 50 (max 200); `result_offset`
+  is a row index and `next_result_offset` continues the JSON list. Output limits
+  can shorten a page; raise `max_output_chars` when a single listed note cannot
+  fit. Writes require at least 256 output characters, checked before any change.
+  If full write details cannot fit, success still returns a short JSON receipt
+  with `saved`, `annotation_id`, `revision` (or `deleted`) and
+  `details_omitted=true`. Disassembly/decompile page by character instead.
+  Rendered views cap notes at 500; list retrieves the rest.
+- Annotation DB load failures produce a visible warning alongside the original
+  disassembly/decompilation; annotation CRUD still reports DB errors normally.
+  Legacy v1/v2 DBs remain readable without modification. Their first write
+  atomically migrates to v3, adding missing revision/evidence/provenance/anchor
+  fields. Existing revisions are preserved (v1 starts at `"1"`). Older builds
+  that only understand v1/v2 cannot open a v3 DB.
+
+Partial edit example (use the ID and revision returned by your last read):
+
+```json
+{"operation":"annotation_set","file_path":"sample.exe","annotation_id":"<id>","expected_revision":"1","annotation_patch":{"comment":"Confirmed user pointer","annotation_status":"confirmed","label":""},"annotations_path":"project.annotations.sqlite"}
+```
+
+Batch and evidence example:
+
+```json
+{"operation":"annotation_batch","file_path":"sample.exe","annotations_path":"project.annotations.sqlite","batch":[{"operation":"set","rva":"0x1234","subject":"rax","comment":"User pointer","provenance":"manual analysis","evidence":[{"kind":"static","va":"0x140001230","source":"lookup_user call","detail":"Return value is used as a context pointer"}]},{"operation":"set","annotation_id":"<id>","expected_revision":"1","annotation_patch":{"annotation_status":"confirmed"}}]}
+```
+
+- A batch contains 1..32 `set`/`delete` items sharing one binary and DB. It opens
+  and hashes once; each item commits independently and returns an indexed receipt,
+  including conflicts. Successful items remain committed when another fails.
+  Required `max_output_chars` is at least `768 * item_count + 256`, checked before
+  any changes. The default budget supports 32 items. A DB-open error fails the
+  envelope; cancellation leaves completed items committed and marks remaining
+  items failed.
+- Optional `evidence` stores up to 16 user-supplied observations with `kind`
+  (`static`, `runtime`, `user`), optional exact-string `va`, `source`, and
+  required `detail`. `provenance` records the origin of the judgment. Neither
+  sources nor observations are fetched or automatically verified. Both appear
+  in saved/rendered notes and are searchable; sparse edits preserve them.
+  `annotation_patch` with `evidence:[]` or `provenance:""` explicitly clears them.
+- When saving a C-line note, include the exact raw line in `anchor_text`.
+  `annotation_suggest` with its `annotation_id` decompiles that function and
+  returns the current `code_hash`, revision and up to three candidate lines.
+  Unchanged snapshots use the original line; otherwise stored text or token
+  overlap proposes candidates. Equal top scores are marked `ambiguous`.
+  Generic/missing anchors may produce no candidates. Old notes without text need
+  manual selection after a snapshot change. **Suggestions never write the DB.**
+  After review, call `annotation_set` with ID, `expected_revision` and
+  `annotation_patch:{"line":N,"code_hash":"<current hash>","anchor_text":"<raw line>"}`.
+  The revision guard still applies. Source/detail/provenance limits are
+  512/1024/512 UTF-8 bytes; `anchor_text` is one C line, max 2048 bytes.
+
+```json
+{"operation":"annotation_suggest","file_path":"sample.exe","annotation_id":"<id>","annotations_path":"project.annotations.sqlite"}
+```
+
+Keep private annotation databases out of public Git history. This repository ignores
+`*.annotations.sqlite*` and the default DB filename. Custom filenames need their
+own ignore rule. Keep a backup of durable notes; clearing analysis caches does not
+remove them.
+
 ## Key Improvements
 
 ### Smart Indentation

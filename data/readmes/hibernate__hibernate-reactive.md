@@ -30,10 +30,10 @@ Learn more at <http://hibernate.org/reactive>.
 
 Hibernate Reactive has been tested with:
 
-- Java 17, 21, 26
+- Java 17, 21, 25, 26
 - PostgreSQL 18
-- MySQL 9
-- MariaDB 12
+- MySQL 26
+- MariaDB 13
 - Db2 12
 - CockroachDB v26
 - MS SQL Server 2025
@@ -79,13 +79,13 @@ Hibernate Reactive in Vert.x.
 The [Hibernate Reactive with Panache Guide][reactive-panache] introduces
 Panache Reactive, an active record-style API based on Hibernate Reactive.
 
-[introduction]: https://github.com/hibernate/hibernate-reactive/blob/main/documentation/src/main/asciidoc/reference/introduction.adoc
+[introduction]: https://github.com/hibernate/hibernate-reactive/blob/main/documentation/src/main/asciidoc/reference/_introduction.adoc
 
-[build]: https://github.com/hibernate/hibernate-reactive/blob/main/documentation/src/main/asciidoc/reference/introduction.adoc#including-hibernate-reactive-in-your-project-build
-[config]: https://github.com/hibernate/hibernate-reactive/blob/main/documentation/src/main/asciidoc/reference/introduction.adoc#basic-configuration
-[model]: https://github.com/hibernate/hibernate-reactive/blob/main/documentation/src/main/asciidoc/reference/introduction.adoc#mapping-entity-classes
-[session]: https://github.com/hibernate/hibernate-reactive/blob/main/documentation/src/main/asciidoc/reference/introduction.adoc#using-the-reactive-session
-[performance]: https://github.com/hibernate/hibernate-reactive/blob/main/documentation/src/main/asciidoc/reference/introduction.adoc#tuning-and-performance
+[build]: https://github.com/hibernate/hibernate-reactive/blob/main/documentation/src/main/asciidoc/reference/_setting-up.adoc#including-hibernate-reactive-in-your-project-build
+[config]: https://github.com/hibernate/hibernate-reactive/blob/main/documentation/src/main/asciidoc/reference/_setting-up.adoc#basic-configuration
+[model]: https://github.com/hibernate/hibernate-reactive/blob/main/documentation/src/main/asciidoc/reference/_writing-code.adoc#mapping-entity-classes
+[session]: https://github.com/hibernate/hibernate-reactive/blob/main/documentation/src/main/asciidoc/reference/_writing-code.adoc#using-the-reactive-session
+[performance]: https://github.com/hibernate/hibernate-reactive/blob/main/documentation/src/main/asciidoc/reference/_tuning-performance.adoc
 
 [vertx-hr]: https://how-to.vertx.io/hibernate-reactive-howto/
 [reactive-panache]: https://quarkus.io/guides/hibernate-reactive-panache
@@ -223,17 +223,7 @@ databases manually. Just type:
 
 The above command will start an instance of PostgreSQL in a Docker
 container. You may specify a different database using one of the
-commands show in the table below.
-
-| Database   | Command                      | Dedicated task                   |
-|------------|------------------------------|----------------------------------|
-| PostgreSQL | `./gradlew test -Pdb=pg`     | `./gradlew testDbPostgreSQL`     |
-| MySQL      | `./gradlew test -Pdb=mysql`  | `./gradlew testDbMySQL`          |
-| MariaDB    | `./gradlew test -Pdb=maria`  | `./gradlew testDbMariaDB`        |
-| DB2        | `./gradlew test -Pdb=db2`    | `./gradlew testDbDB2`            |
-| SQL Server | `./gradlew test -Pdb=mssql`  | `./gradlew testDbMSSQLServer`    |
-| Oracle     | `./gradlew test -Pdb=oracle` | `./gradlew testDbOracle`         |
-| CockroachDB| `./gradlew test -Pdb=cockroachdb` | `./gradlew testDbCockroachDB` |
+commands shown in the table above.
 
 The tests will run faster if you reuse the same containers across
 multiple test runs. To do this, edit the testcontainers configuration
@@ -283,10 +273,8 @@ database by following the instructions in [podman.md](podman.md).
 We're working hard to support the full feature set of Hibernate ORM. 
 At present several minor limitations remain.
 
-- The annotation `@org.hibernate.annotations.Source` for 
-  database-generated `@Version` properties is not yet supported.
 - The annotation `@org.hibernate.annotations.CollectionId` is not yet 
   supported.
 - With Db2:
-  * [Automatic schema](http://hibernate.org/reactive/documentation/1.1/reference/html_single/#_automatic_schema_export) update and validation is not supported.
+  * [Automatic schema](https://github.com/hibernate/hibernate-reactive/blob/main/documentation/src/main/asciidoc/reference/_setting-up.adoc#automatic-schema-export) update and validation is not supported.
   * `@Lob` annotation is not supported - See [this issue on the vertx-db2-client](https://github.com/eclipse-vertx/vertx-sql-client/issues/496)

@@ -5,11 +5,19 @@ server, written in Rust. It speaks the same HTTP and SSE wire as upstream, so
 the official clients work against it unmodified: the TUI (`opencode attach`),
 the web UI, and anything else that talks to the API.
 
-Two contracts are covered:
+Both contracts are covered, and both are verified against real upstream
+binaries rather than described:
 
-- the **1.18.x server API** (frozen at 1.18.31), used by today's clients
-- the **opencode 2 API** (`/api/*`, pinned at 2.0.28), used by the current TUI
-  and web UI
+- the **1.18.x server API** (frozen at 1.18.31), used by today's clients:
+  **188 of 188** operations implemented
+- the **opencode 2 API** (`/api/*`, pinned at 2.0.28), used by the current 2.x
+  TUI and web UI: **142 of 142** operations implemented, including every route
+  a 2.x TUI calls at boot
+
+The v2-only operations are opt-in, because `/api/*` also carries 58 operations
+that 1.18.31 clients use. Run with `OCSERVE_V2=1` to serve the full 2.x surface;
+without it those 96 v2-only operations answer a clean JSON 404. Details and the
+exact gate are in [v2](#v2-opencode-2) below.
 
 ## When to use this
 
@@ -55,24 +63,40 @@ is this machine's config with a 5.3 MB catalog.
 
 ## Install
 
-Download a release (no toolchain, checksum-verified) from
-<https://github.com/Reliary/ocserve/releases>. Linux x86_64 and aarch64
-tarballs, each with a `.sha256` and a combined `SHA256SUMS`.
+### cargo
 
-From source (this is the supported path for current releases):
+```sh
+cargo install ocserve
+```
+
+That compiles the crate family from crates.io, including the embedded web UI
+packs, so `cargo install ocserve --version 0.6.10` gives you the same feature
+set the GitHub release tarballs carry (compiled on your machine, so the bytes
+differ). `0.6.9` is the first version with all of it; earlier ones predate the
+sharded UI. Building needs a C toolchain because BoringSSL is compiled from
+source: `cmake`, `perl`, a C compiler and `pkg-config` (Debian and Ubuntu:
+`build-essential cmake perl pkg-config`; macOS: `xcode-select --install` plus
+`cmake`). Rust 1.98 or newer.
+
+### Prebuilt binary
+
+Download a checksum-verified tarball (no toolchain, no build) from
+<https://github.com/Reliary/ocserve/releases>: Linux x86_64 and aarch64 (glibc),
+Linux x86_64 (static musl), macOS x86_64 and aarch64, Windows x86_64 and
+aarch64. Each tarball has its own `.sha256`, and the release carries a combined
+`SHA256SUMS`.
+
+```sh
+tar xzf ocserve-v0.6.10-linux-x86_64.tar.gz
+./ocserve-v0.6.10-linux-x86_64/ocserve --version
+```
+
+### From source
 
 ```sh
 git clone https://github.com/Reliary/ocserve && cd ocserve
-cargo build --release          # needs Rust 1.98+
+cargo build --release
 ```
-
-**crates.io is stale on purpose.** `cargo install ocserve` resolves to
-**0.3.1**; the 0.4.x and later crates are not published because `ocserve-http`
-embeds the version-matched web UI and its packed payload exceeds crates.io's
-10 MiB per-crate limit. A size-increase request is with the registry, and
-nothing is shipped that would silently drop the air-gapped web UI just to fit.
-Use a release tarball (above) or build from the tag. This note will be removed
-the release the limit is raised.
 
 From a clone, including an optional systemd user service (never installed
 implicitly):
@@ -83,6 +107,12 @@ implicitly):
 ./scripts/install.sh --dry-run   # show what it would do first
 ./scripts/uninstall.sh           # keeps history by default
 ```
+
+`scripts/fetch-release.sh --platform linux-x86_64-musl` selects the static
+build, and a positional tag (`scripts/fetch-release.sh v0.6.10`) pins a version.
+`install.sh --bin <path>` installs a binary you already have (for example one
+you built) and renders the unit to point at it. `install.sh --bin-only` is the
+different, common case: place the binary and leave systemd untouched.
 
 ## Quick start
 
@@ -109,9 +139,9 @@ read-only, and never writes to them. To bring history across:
 ocserve import --source ~/.local/share/opencode/opencode.db
 ```
 
-That takes the 20 most recent sessions. To adopt named sessions into a data dir
-that already has history (safe while `ocserve serve` is running: the import
-keeps the search trigger and uses short write transactions):
+That takes the 20 most recent sessions (`--limit N` changes it). Adding
+`--session <id>` (repeatable) adopts named sessions instead, which is safe
+while `ocserve serve` is running:
 
 ```sh
 ocserve import --source ~/.local/share/opencode/opencode.db \
@@ -182,13 +212,20 @@ The same suite also passes against 2.0.32, the newest 2.x release at the time
 of writing.
 
 Everything that exists only in the 2.x contract is behind `OCSERVE_V2=1` and
-answers a clean JSON 404 without it. The gate is derived mechanically from the
-two contracts, not by path prefix: `/api/*` is part of the frozen 1.18.31
-contract too (58 operations, and the 1.18.31 TUI calls them), so those keep
-working. What the flag actually gates is the 96 operations present in 2.0.28
-and absent from 1.18.31: the run engine (inbox admission, write-ahead claims,
-`content[]` projection, dual-grammar events, `log?after&follow` replay, form
-service) plus the v2-only administration surface.
+answers a clean JSON 404 without it, so pointing this at an existing 1.x install
+changes nothing until you ask for it:
+
+```sh
+OCSERVE_V2=1 ocserve serve --port 4096
+```
+
+The gate is derived mechanically from the two contracts, not by path prefix:
+`/api/*` is part of the frozen 1.18.31 contract too (58 operations, and the
+1.18.31 TUI calls them), so those keep working. What the flag actually gates is
+the 96 operations present in 2.0.28 and absent from 1.18.31: the run engine
+(inbox admission, write-ahead claims, `content[]` projection, dual-grammar
+events, `log?after&follow` replay, form service) plus the v2-only
+administration surface.
 
 v2 plugins work, in both authoring shapes (promise and Effect). `session.context`,
 `session.compaction`, `tool.execute.before` and `tool.execute.after` are bridged,
@@ -197,11 +234,18 @@ the `<available_skills>` block in the system prompt. The full capability matrix,
 including what is deliberately not bridged, is in
 `crates/ocserve-plugin/src/host/README-v2.md`.
 
-Named divergences are listed in `PLAN.md` section 17. They are documented
-decisions, not gaps: `D-V2-UNION` (single-port union shapes, since no
-discriminator exists), `D-PROV-SECRETS` (settings never carry apiKey values),
-`D-REVERT-NODELETE` (mark-only revert), `D-EVENT-ALWAYSON` (the log is always
-on where upstream defaults it off).
+Every divergence is one row in the single ledger at `PLAN.md` section 18
+(`D-*`), with the reason and the evidence behind it. They are documented
+decisions, not gaps. The ones a client author will notice first:
+
+- `D-V2-UNION`: one port serves both shapes, because no client sends a
+  version discriminator
+- `D-PROV-SECRETS`: settings never carry API-key values
+- `D-REVERT-NODELETE`: revert restores files and marks history; it does not
+  delete rows
+- `D-EVENT-ALWAYSON`: the durable log is on by default where upstream needs
+  `persist: true`
+- `D-TASK-BACKGROUND`: `task` runs in the foreground
 
 ### Not implemented
 
@@ -210,8 +254,14 @@ Named rather than hidden:
 - hosted share links (the record is returned, but there is no remote backend)
 - provider OAuth login
 - `task` background mode (the tool runs foreground)
+- two websearch providers behind `D-WEBSEARCH-PARTIAL` (Tavily and Exa work)
 
 Unmatched paths get the version-matched web app, not a 404, matching upstream.
+
+Web UI assets are embedded, not fetched: the release ships the bundle from the
+same upstream version it targets, so a server with no outbound network still
+serves the UI. `OCSERVE_DISABLE_EMBEDDED_WEB_UI=1` switches to proxying the
+hosted bundle instead.
 
 ### Contract
 

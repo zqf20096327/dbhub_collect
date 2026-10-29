@@ -257,10 +257,10 @@ Useful resources and dependencies that are used in Lingo.
 - [@radix-ui/react-progress](https://www.npmjs.com/package/@radix-ui/react-progress): ^1.1.16
 - [@radix-ui/react-separator](https://www.npmjs.com/package/@radix-ui/react-separator): ^1.2.0
 - [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.5.0
-- [@types/node](https://www.npmjs.com/package/@types/node): ^26.2.0
+- [@types/node](https://www.npmjs.com/package/@types/node): ^26.6.5
 - [@types/react](https://www.npmjs.com/package/@types/react): ^19.3.0
 - [@types/react-dom](https://www.npmjs.com/package/@types/react-dom): ^19.3.0
-- [@vercel/config](https://www.npmjs.com/package/@vercel/config): ^0.12.0
+- [@vercel/config](https://www.npmjs.com/package/@vercel/config): ^0.13.0
 - [autoprefixer](https://www.npmjs.com/package/autoprefixer): ^10.6.1
 - [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.0
@@ -274,7 +274,7 @@ Useful resources and dependencies that are used in Lingo.
 - [next](https://www.npmjs.com/package/next): ^16.4.0
 - [pg](https://www.npmjs.com/package/pg): ^8.23.1
 - [postcss](https://www.npmjs.com/package/postcss): ^8
-- [prettier](https://www.npmjs.com/package/prettier): ^3.9.8
+- [prettier](https://www.npmjs.com/package/prettier): ^3.9.10
 - [prettier-plugin-tailwindcss](https://www.npmjs.com/package/prettier-plugin-tailwindcss): ^0.8.0
 - [ra-data-simple-rest](https://www.npmjs.com/package/ra-data-simple-rest): ^5.15.3
 - [react](https://www.npmjs.com/package/react): ^19.3.0

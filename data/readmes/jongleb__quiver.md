@@ -39,6 +39,9 @@ dumped 48211907 rows in 312 chunks into ./shop
 Global_read_lock held for 41ms
 ```
 
+Documentation of every command and of the masking language: <https://jongleb.github.io/quiver/>
+(`quiver docs DIR` writes the same site from the binary at hand).
+
 ## Why quiver
 
 <table>
@@ -365,6 +368,166 @@ change differently:
 - **CSV dumps.** Such a value fails with an error; a CSV file has no way to keep it.
 - **MariaDB targets.** Their JSON is text, so nothing changes there.
 
+### Masking
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/masking-dark.svg">
+  <img src="assets/masking.svg" alt="MySQL, one snapshot, sql: rules evaluated by the source; readers put real values into batches in memory; the renderers mask them, keyed by --mask-secret; only masked values go to files, the wire or a live server. One row of shop.users copied with examples/shop.scm: id 1 to 283289981 by permute, ivan.petrov1@mail.ru to dvjv.cainmk1@omkz.vx by permute, Mary Johnson to Clara Ctbcmze, +7 (912) 001-01-01 to +7 (974) 438-01-01, 1960-01-02 to 1960-07-02, salary 50037 to 49000, card 4276000000000031 to 4276007180515102 with a valid Luhn digit, payload ip 10.0.1.1 to 0.0.0.0 by the source" width="100%">
+</picture>
+
+Personal data can be masked as it is read, so the real values never leave the reader: not in
+dump files, not on the wire, not in the target. `dump`, `copy` and `agent` take the same rules.
+
+```sh
+quiver copy -h prod.example -B shop --to-host dev.example --to-database shop \
+  --mask 'shop.users.name=shape' \
+  --mask 'shop.*.*email=email' \
+  --mask 'shop.users.phone=shape' \
+  --mask 'shop.users.passport=hash' \
+  --mask 'shop.users.note=null' \
+  --mask 'shop.users.status=text:new' \
+  --mask "shop.users.born=sql:MAKEDATE(YEAR(born), 1)" \
+  --mask-secret "$MASK_SECRET"
+```
+
+A rule is `DATABASE.TABLE.COLUMN=ACTION`. Names take `*` and `?`, or backquotes for a name as
+written; a column takes the first rule naming it.
+
+| Action | What the column gets |
+|---|---|
+| `permute` | a keyed bijection (FF1 of NIST SP 800-38G): two values never give one, so keys stay keys. An integer goes to another from 1 to half its type's largest (`INT` up to 1 073 741 823, so new rows still fit), or to 2^53 − 1 for `BIGINT`; text keeps each character's kind, case and place (every letter and digit of `user.17@Example.com` changes, `@`, `.` and the case stay); binary keeps its length |
+| `permute:LOW..HIGH` | an integer to another from `LOW` to `HIGH`, at least a million of them |
+| `null` | NULL |
+| `text:VALUE` | this value: text, binary, an `ENUM` member or `SET` members |
+| `shape` | each letter and digit replaced by a keyed one of the same kind (Latin, Cyrillic, digit), the rest kept: `+7 (912) 345-67-89` → `+9 (331) 996-11-65`, `John Smith` → `Amdj Yslza` |
+| `email` | `shape` before the last `@`, the domain kept |
+| `hash` | a keyed digest of the same length in hex digits or bytes, or any integer of the column's type |
+| `sql:EXPRESSION` | the expression, evaluated by the source for each row and cast to the column's type |
+| `expr:EXPRESSION` | an expression of quiver's masking language (below), evaluated here |
+| `keep` | the values as read: the column counts as decided for `--mask-strict` |
+
+- **Keyed.** `permute`, `shape`, `email` and `hash` are keyed by `--mask-secret`: the same value
+  masks the same way in every column and every run, so joins between masked columns still hold.
+  Without a secret, a random key of this run is used. Whoever holds the secret can undo
+  `permute`: keep it apart from the copies, one per environment.
+- **Keys and references.** A column of a primary or unique key takes only `permute` (or `keep`,
+  or `null` where it may be NULL): any other action can give two rows one key. quiver reads the
+  source's foreign keys, and a `permute` spreads to every column they tie to the one it masks —
+  children, grandchildren, self-references, parts of composite keys — unless a rule names that
+  column, so every reference still finds its row. Columns tied by foreign keys and masked
+  differently are an error before anything is read. References no foreign key declares go in a
+  mask script: `(references "shop.events.user_ref" "shop.users.id")`. With a masked key, a
+  tablespace copy loads the table through `LOAD DATA` (its rows no longer come in key order),
+  and `quiver.json` leaves out that table's chunk ranges, which would show the source's keys.
+
+```sh
+quiver copy … --mask 'shop.users.id=permute' --mask 'shop.users.email=permute' --mask-secret "$MASK_SECRET"
+# masked in shop.orders: user_id (permute (a reference)), email (permute (a reference))
+```
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/references-dark.svg">
+  <img src="assets/references.svg" alt="permute on users.id spreads to users.manager_id, addresses.user_id, orders.user_id and, through a declared reference, events.user_ref; permute on users.email spreads to orders.email; permute on orders.id spreads to items.order_id and payments.order_id. User 1 becomes 283289981 and keeps its 2 orders; order 20000 becomes 7516915763705941 and keeps its 2 items. A hash of 20 M ids into INT gives about 93 000 pairs of rows one id, permute none. Every join of the copy holds as in prod, and four ways of copying give one CHECKSUM" width="100%">
+</picture>
+
+- **Never longer.** `shape`, `email` and `hash` keep the number of characters and never add
+  bytes, so a value still fits its column. NULL stays NULL but under `null` and `sql:`.
+- **Refused, not guessed.** A rule naming no column of the dump, a key column under an action
+  that is not a bijection, columns a foreign key ties masked differently, a permutation of fewer
+  than a million values, `null` for a `NOT NULL` column, an action that gives no value of the column's type or
+  a `text:` outside an `ENUM` are errors before anything is read. So is a table whose `STORED`
+  generated columns a tablespace copy would take from the source. A `sql:` expression that gives
+  NULL for a `NOT NULL` column, or makes the source warn (a value cast with loss), fails the copy.
+- **Recorded.** The run prints every masked column, and `quiver.json` lists them.
+- **Your own statements.** `copy`, `collect` and `load` take `--after-load 'DB.TABLE=STATEMENT'`:
+  the target runs it once every table's rows and keys are in, before foreign keys, views and
+  triggers, in the table's database, with `{table}` for its name there. Rows pass through the
+  target unmasked before such an `UPDATE`, so it suits what `--mask` cannot express.
+- **As a library.** `Mask.custom` takes any OCaml function of text or binary values.
+
+#### Your own algorithm
+
+When the actions above are not enough, write the masking policy in a small language of
+S-expressions. quiver types it against every column before anything is read, compiles it, and
+runs it on the render threads. It always ends: nothing loops, and a function calls only those
+defined above it.
+
+```lisp
+; policy.scm
+(words names "names.txt")                 ; one fake first name per line, beside the script
+
+(define (phone p)                         ; +7 (912) 345-67-89 → +7 (975) 023-67-89
+  (concat "+7 (" (str (keyed-int p 900 999)) ") " (digits p 3) "-" (right p 5)))
+(define (person n)                        ; John Smith → Boris Camgm
+  (concat (pick-word n names) " " (title (shape (after n " ")))))
+
+(strict "shop.users")                     ; every column of users decided, or nothing is read
+(keep "shop.users.id")
+(keep (where (table "shop.users") (column "created_*")))
+(mask "shop.users.name"  (person value))
+(mask "shop.users.phone" (phone value))
+(mask "shop.users.born"                   ; same year, another day
+  (keyed-date (str (row id)) (make-date (year value) 1 1) (make-date (year value) 12 31)))
+(mask "shop.users.salary" (round-to (keyed-noise value 20) 1000))
+(mask "shop.users.card"   (let ((d (digits value 15))) (concat d (luhn d))))
+(mask "shop.users.note"   (redact value 3 0))
+(mask (where (table "shop.*") (column "*email*") (type text)) (email value))
+(mask (where (table "shop.users") (type binary)) (hash-bytes value))
+
+(after-load "shop.orders" "UPDATE {table} SET comment = NULL")
+```
+
+```sh
+quiver copy … --mask-script policy.scm --mask-secret "$MASK_SECRET"
+quiver mask --mask-script policy.scm '(phone value)' '+7 (912) 345-67-89'   # try it, no server
+```
+
+- **Selectors.** `"DB.TABLE.COLUMN"` with `*` and `?`, or `(where (table …) (column …) (type …))`
+  to take columns by name and by type: `text`, `binary`, `json`, `integer`, `decimal`, `float`,
+  `date`, `datetime`, `timestamp`, `time`, `year`, `enum`, `set`, `geometry`. A column takes the
+  first rule naming it, from `--mask` first, then the scripts in order.
+- **Keys.** `(permute SELECTOR)` or `(permute SELECTOR LOW HIGH)` is `--mask …=permute`;
+  `(references "DB.TABLE.COLUMN" "DB.TABLE.COLUMN")` ties a column to the one it refers to
+  where the schema has no foreign key, so a permutation spreads along it too.
+- **Decisions.** `(keep …)` copies columns as they are. `(strict "DB.TABLE" …)` (or
+  `--mask-strict`) requires every column of those tables to be masked or kept: a column added to
+  the schema later stops the copy with its name, before anything is read, instead of leaking.
+- **Values.** `value` is the column's value; `(row COLUMN)` another column of the row as read,
+  before any masking. Text, binary, JSON, `ENUM`, `SET` and `DECIMAL` columns are text, integer
+  columns are integers, `DATE` a date, `DATETIME` and `TIMESTAMP` a date with a time.
+- **Functions.** Text: `concat`, `length`, `substring`, `left`, `right`, `upper`, `lower`, `title`,
+  `trim`, `reverse`, `replace`, `before`, `after`, `before-last`, `after-last`, `split-part`,
+  `index-of`, `pad-left`, `pad-right`, `repeat`, `format`, `translit`, `only-digits`, `redact`,
+  `str`, `int`, `starts-with`, `ends-with`, `contains`, `like`. Numbers: `+ - * / mod abs min max
+  round-to floor-to clamp`. Dates: `year month day make-date add-days days-between date->text
+  text->date date-of seconds-of-day make-datetime add-seconds datetime->text text->datetime`.
+  Logic: `= <> < <= > >= and or not is-null coalesce`, `if`, `cond`, `let`, `define`.
+- **Keyed** by `--mask-secret`: `shape`, `email`, `hash`, `hash-bytes`, `hash-int`, `keyed-int`,
+  `keyed-date`, `keyed-noise`, `keyed-uuid`, `digits`, `pick`, `pick-word`. The same seed gives the
+  same result in every column and run, so masked keys still join. `luhn` gives a card number's
+  check digit.
+- **Safe.** NULL goes through functions as in SQL. A type error (as `file:line:column`), a NULL for
+  a `NOT NULL` column, or a time finer than its column stops the run. `quiver mask --help` has the
+  whole reference.
+
+The same rules fit a quiverfile: a map under an option gives it once per leaf, keys joined by dots.
+
+```yaml
+copy:
+  mask-script: [policy.scm]
+  mask-strict: [shop.orders]
+  mask:
+    shop.users:
+      inn: "expr:(hash-int value)"
+      comment: "null"
+    shop.orders:
+      user_email: email
+      id: keep
+  after-load:
+    shop.orders:
+      - "UPDATE {table} SET total = ROUND(total, -2)"
+```
+
 ### Connecting
 
 ```sh
@@ -403,7 +566,10 @@ item. quiver reads `--quiverfile FILE`, else the file in `QUIVERFILE`, else `qui
 the current directory, and says which. The command line wins over the environment, and both win
 over the file: each option also reads `QUIVER_<NAME>` (`QUIVER_THREADS`, `QUIVER_TO_HOST`, …).
 An unknown key is an error, as is a key whose meaning differs between commands (`database`) at
-the top. See [quiverfile.example.yaml](quiverfile.example.yaml).
+the top. A list at the top goes only to the commands that take that option. See
+[quiverfile.example.yaml](quiverfile.example.yaml): a production source, test copies by `dump`,
+`copy` and agent → collector, and masking with the policy in [examples/shop.scm](examples/shop.scm),
+keys included.
 
 ## Across the network
 
@@ -485,6 +651,8 @@ Repeat the last two for the agent and every relay.
 - Floats in their shortest exact form, decimals and fractional seconds as stored. A lossy
   conversion is an error. Zero dates are an error unless kept explicitly.
 - JSON doubles the server would read back as their neighbour are written as exact SQL literals.
+- A masking rule that names no column, or cannot mask a column without breaking its key or type,
+  stops the run before it reads anything.
 - `LOAD DATA LOCAL` must store exactly the rows sent and raise no warning. Otherwise the part
   rolls back and the error carries the server's warnings.
 - A built tablespace passes quiver's own check of every page, list and LOB before the server
@@ -511,6 +679,8 @@ quiver is young and moving fast.
 |---|---|
 | Dump, load and copy; separate schema and rows | shipped |
 | Tablespaces built on the client (MySQL 8.4, Percona 8.4) | new in 1.3 |
+| Masking as rows are read; statements after the load | new in 1.4 |
+| Keys and references masked by a keyed permutation along foreign keys | new in 1.5 |
 | Unix sockets, `my.cnf`, every common login | shipped |
 | Agent, collector, relays and chains, mutual TLS 1.3 | shipped |
 | Online tuning of streams, compression, readers; chunks divided while read | shipped |

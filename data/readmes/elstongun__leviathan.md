@@ -80,6 +80,7 @@ Fields are paths (`a.b`, `items[].name`); only `id` is required.
 | `empty_values` / `rank.boost` | Placeholders treated as missing / favor complete records |
 
 ```bash
+leviathan index ./export                      # everything in a folder: files of every format, every SQLite table
 leviathan init ./export                       # infer a commented leviathan.toml
 leviathan index tickets.csv --id "Ticket ID" --group customer_id --date created_at   # or flags
 leviathan index -c tickets.toml               # or a config your agent wrote from the schema
@@ -94,6 +95,13 @@ leviathan index app.db --sql "SELECT * FROM tickets" -c tickets.toml
 duckdb -json -c "SELECT * FROM 'events/*.parquet'" | leviathan index - -c events.toml
 ```
 
+A folder of tickets, customers and orders becomes one index with a kind per
+dataset: `--where _kind=orders` keeps one, ids read `orders:1042`, and a
+customer's group holds their tickets and orders together
+([several kinds](docs/CONFIG.md#several-kinds-of-record)). Messy exports are
+fine: wrapped or pretty-printed JSON, `;` or `|` CSVs, byte-order marks,
+Latin-1, blank headers.
+
 Builds are atomic and skipped when nothing changed; `upsert` and `delete` keep an index fresh. Full reference: [docs/CONFIG.md](docs/CONFIG.md).
 
 ## Plug it into your agent
@@ -104,8 +112,8 @@ paste it into `AGENTS.md` / `.cursor/rules`. Costs 0 tokens until used.
 [`skills/leviathan-memory`](skills/leviathan-memory/SKILL.md) does the same
 for memory.
 
-**MCP (optional):** `leviathan mcp` serves four read-only stdio tools
-(`search`, `resolve_group`, `get`, `describe`) whose descriptions include a
+**MCP (optional):** `leviathan mcp` serves five read-only stdio tools
+(`search`, `resolve_group`, `get`, `describe`, `aggregate`) whose descriptions include a
 summary of your dataset (~640 tokens per session). `leviathan wrap <agent>`
 prints the config for 24 agents (Claude Code, Codex, Cursor, VS Code /
 Copilot, Gemini CLI, Windsurf, Cline, Zed, JetBrains and more) and
@@ -126,7 +134,7 @@ with a short briefing, and `recall` returns only what fits a token budget.
 
 ```bash
 leviathan wrap claude --memory --hooks --rules --apply   # tools, session-start briefing, always-on rule
-leviathan memory remember "Prefers pnpm over npm" --kind preference -s josh -k package_manager
+leviathan memory remember "Prefers pnpm over npm" --kind preference -s sam -k package_manager
 leviathan memory recall package manager
 leviathan memory import ~/.claude/projects/<project>/memory/MEMORY.md   # bring an existing markdown memory
 ```
@@ -151,6 +159,7 @@ benchmark: [docs/MEMORY.md](docs/MEMORY.md).
 |---|---|
 | `init` / `index` / `upsert` / `delete` | Propose a mapping / build / update / remove records |
 | `search [-g G] [words]` | Ranked records (`--scope`, `--where`, `--since`, `--until`, `-n`, `--offset`) |
+| `aggregate [--by B] [--metric M --field F]` | Exact counts or sum/avg/min/max over every matching record, in total or per group, `year`/`month`/`day` or filter value (`-g`, `--group-contains`, `--where`, `--since`, `--until`, `-n`) |
 | `recent [-g G]` · `resolve <g>` · `get <id…>` · `describe` | Newest · group candidates · full records · index summary |
 | `memory remember` / `recall` / `forget` / `briefing` | Write / ranked read / retire / session-start briefing (`--memory=PATH`) |
 | `memory list` / `history` / `stats` / `import` / `export` / `prune` | Browse / slot versions / counts / markdown or JSONL in / backup / clean up |

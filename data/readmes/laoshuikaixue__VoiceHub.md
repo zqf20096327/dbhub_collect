@@ -201,6 +201,8 @@ docker-compose up -d
 
 - 用户名：admin
 - 密码：admin123
+- 默认口令按临时密码处理，首次登录需设置新密码
+- 启动时自动检测仍在使用默认口令的超级管理员，补上强制改密标记
 
 #### 方式二：使用预构建镜像
 
@@ -283,9 +285,4 @@ VoiceHub 提供了一个 Nix flake，用于构建、开发和在 NixOS 上部署
 
 #### 前提条件
 
-- [Nix](https://nixos.org/download)（带 flake 支持）
-- PostgreSQL 数据库
-
-#### NixOS 部署
-
-将 VoiceHub 添加为 fla
+- [Nix](https://nixos.org/download)（带 fla

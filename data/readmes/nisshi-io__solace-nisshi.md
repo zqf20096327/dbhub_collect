@@ -92,7 +92,7 @@ This README describes `main`, which can be ahead of the latest release. To read 
 To build and install Nisshi from [crates.io](https://crates.io/crates/nisshi), run:
 
 ```shell
-cargo install nisshi --locked --features dynostore,libsql,postgres
+cargo install nisshi --locked
 ```
 
 The build takes several minutes. It compiles some C libraries as well as the Rust code,
@@ -107,7 +107,7 @@ so it needs:
 `--locked` builds with the dependency versions in the release's `Cargo.lock`, instead of
 the newest compatible versions.
 
-The `--features` list adds the `memory://`, `s3://`, `gs://`, `sqlite://`, and `postgres://` storage engines.
+The default build includes the `memory://`, `s3://`, `gs://`, `sqlite://`, and `postgres://` storage engines.
 To add another storage engine or a data lake format, see [Storage options](#storage-options).
 
 To check the install, run `nisshi --help`. Its last lines list the storage engines in
@@ -205,13 +205,13 @@ Choose the engine with `--storage-engine` (or `STORAGE_ENGINE`) using the URL sc
 | Turso | `turso://` | `turso` | Experimental. |
 | SlateDB | `slatedb://` | `slatedb` | Deprecated. Not recommended for new deployments, because it allows a single writer. Only security fixes are accepted. The engine may be removed in a future release. Use PostgreSQL for production, or SQLite or in-memory for development. The broker logs a warning at startup. |
 
-A build contains only the storage engines whose features you enable. To add an engine, add its feature to the `--features` list, for example
-`--features dynostore,libsql,postgres,turso`. Apache Parquet, Apache Iceberg, and Delta Lake output for schema backed
+The default build enables the `dynostore`, `libsql`, and `postgres` features. To add an engine, add its feature to the `--features` list, for example
+`--features turso`. Apache Parquet, Apache Iceberg, and Delta Lake output for schema backed
 topics needs the `parquet`, `iceberg`, or `delta` feature.
 
 The engines differ in what they support. For example, only PostgreSQL and SQLite apply
 retention and compaction. [Compatibility and feature status](docs/compatibility.md) lists what
-each engine supports, which Kafka APIs the broker answers, and which Kafka clients CI tests.
+each engine supports.
 
 Switching storage engines does not move data: topics, messages, and consumer group offsets stay in the old engine, and the new one starts empty. The release binary starts on `memory://`, and Docker Compose runs on PostgreSQL unless you set `STORAGE_ENGINE`.
 
@@ -367,6 +367,12 @@ create database nisshi owner nisshi;
 A broker changes the schema only when the database doesn't record the broker's schema version: on the first start, and on the first start of a release that changes the schema. To run brokers with a role that can only read and write rows, start one broker once with the credentials of the role that owns the tables, then start every broker with the read/write role. Do the same before you upgrade to a release that changes the schema. A broker whose role can't change the schema refuses to start until that has happened.
 
 Nisshi is tested on PostgreSQL 16 and later. On PostgreSQL 16 or later, an administrator who isn't a superuser, such as the admin user of a managed service, must first run `grant nisshi to <admin>`. Nisshi supports a database that 0.7.0-pre.3 or a later release set up.
+
+A broker opens at most 16 connections to PostgreSQL. Set `pool_max_size` in the storage URL to change that, to a number from 2 to 262143. ListOffsets and Fetch requests can each use at most half of them, so a larger pool lets more consumers read at once. Together they can hold every connection, and then other requests wait for one, so a pool smaller than 16 makes slow reads more likely to hold up produce and group requests. When the `nisshi_storage_read_deadline_exceeded` metric rises with `stage` set to `queued`, reads are waiting for a connection, and a larger pool can help. The server's `max_connections` must allow `pool_max_size` connections for each broker, plus every other client's. The broker does not check this at startup, so a pool that is too large fails requests under load instead. The broker also reserves memory for every connection the pool may open, so a very large `pool_max_size` costs memory even when the connections are not open:
+
+```shell
+nisshi broker --storage-engine "postgres://nisshi:secret@db.example.com/nisshi?pool_max_size=32"
+```
 
 Bring Nisshi back up:
 
@@ -830,13 +836,13 @@ broker now flushes pending metrics before exiting.
 
 Nisshi implements the Apache Kafka® wire protocol, generated from the Apache Kafka 3.9.1
 message descriptors in [`nisshi-sans-io/message`](nisshi-sans-io/message). Clients on
-Kafka 4.x negotiate down to those protocol versions. CI tests the broker with the librdkafka and
-franz-go integration test suites and the Apache Kafka command line tools.
-[Kafka clients tested](docs/compatibility.md#kafka-clients-tested) lists the versions and the
-known client gaps. Please [raise an issue][nisshi-issues] if a client or Kafka version you rely on
-behaves differently.
+Kafka 4.x negotiate down to those protocol versions. Idempotent producers work. Transactions are
+not supported, so Kafka Streams with `exactly_once_v2` fails.
 
-Transactions are not supported: a producer that calls `initTransactions()`, including Kafka Streams with `exactly_once_v2`, fails with `TransactionalIdAuthorizationException`. Idempotent producers work.
+For the details, see [Compatibility and feature status](docs/compatibility.md). It lists which
+Kafka APIs and topic configurations each storage engine supports, and the client versions CI tests
+along with their known gaps. Please [raise an issue][nisshi-issues] if a client or Kafka version
+you rely on behaves differently.
 
 ## Feedback
 

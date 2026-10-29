@@ -1,119 +1,207 @@
-# OpenMinutes · 录音笔工作台
+English | [简体中文](README.zh-CN.md)
 
-> 把 MemoTalk S1 录音笔里堆着的 MP3，变成可搜索、可分类、可复盘的文本资产。
+# OpenMinutes
 
-`OpenMinutes`（原名 `memotalk-workbench`）是 [Floatboat](https://floatboat.ai) 工作台应用的一份完整开源实现，配套硬件客户端 [`memotalk-sdk`](https://github.com/floatboatai/memotalk-sdk) 使用。
+> Turn MemoTalk S1 voice-recorder MP3s into searchable, categorized text you can review.
 
-**OpenMinutes** is an open-source **Floatboat Workbench** app that turns MemoTalk S1 voice-recorder MP3s into searchable, AI-classified text assets: import → transcribe → classify → review.
+`OpenMinutes` (formerly `memotalk-workbench`) is a complete open-source [Floatboat](https://floatboat.ai) Workbench app, used with the [`memotalk-sdk`](https://github.com/floatboatai/memotalk-sdk) hardware client.
 
 ---
 
-## 它解决什么问题
+## Preview
 
-录音笔的典型困境：素材每天在增长，但你听不回去、也找不回来。
+### MemoTalk S1
 
-这个工作台把「导入 → 转录 → 归类 → 检索」做成一条闭环流水线，每条录音在列表上都有明确阶段标签（待拉取 / 待转录 / 转录中 / 待归类 / 归类中 / 已归档 / 失败），批量操作按当前筛选执行。
+![MemoTalk S1 recorder shown from multiple angles](docs/images/memotalk-s1.png)
 
-## 功能
+### OpenMinutes Workbench
 
-| 能力 | 说明 |
+![OpenMinutes recording overview with device status, recording statistics, categories, and recent recordings](docs/images/openminutes-workbench.png)
+
+## Why OpenMinutes?
+
+Recordings accumulate every day, but finding a particular conversation or listening back to everything becomes difficult.
+
+This workbench connects import, transcription, classification, and search in one workflow. Each recording has a clear stage label: awaiting download, awaiting transcription, transcription queued, transcribing, awaiting classification, classification queued, classifying, archived, or failed. Batch operations use the selected recordings.
+
+## Features
+
+| Capability | Description |
 | --- | --- |
-| 三种接入入口 | 目录扫描导入、设备文件清单登记、BLE 直连拉取（依赖本机 Python + `bleak` + 真实设备） |
-| 流式转录 | `ffmpeg` 解码为 16 kHz 单声道 PCM16，经 Host ASR 流式识别，落库全文与分段时间轴 |
-| AI 归类 | Host LLM 结构化输出标题、摘要、分类、标签、要点、待办、重要度，并支持人工修正 |
-| 检索复盘 | 全文搜索（正文 + 标题 + 摘要）、分类/标签/阶段筛选、时间排序、批量处理 |
-| 详情播放 | HTTP Range 分段播放、按句时标跳转、AI 结论与执行记录三分区 |
-| 分类管理 | 新增、就地改名、改色、删除 |
-| 设备接入页 | 环境自检（python / `bleak` / SDK / ffmpeg）、路径设置、SDK 指令参考库、手动登记 |
+| Three import methods | Scan a directory, register a device file manifest, or download directly over BLE (requires local Python, `bleak`, and a physical device) |
+| Streaming transcription | Decode audio to 16 kHz mono PCM16 with `ffmpeg`, stream it through Host ASR, and store the full text and timestamped segments |
+| AI classification | Use the Host LLM to generate structured titles, summaries, categories, tags, key points, action items, and importance levels, with manual editing |
+| Search and review | Search transcript text, titles, and summaries; filter by category, tag, or stage; sort by time; and process recordings in batches |
+| Recording details and playback | Play audio with HTTP Range support, seek to sentence timestamps, and review separate transcript, AI analysis, and execution-history sections |
+| Category management | Create, rename inline, recolor, and delete custom categories; built-in categories cannot be deleted |
+| Device setup | Check the environment (Python, `bleak`, SDK, and `ffmpeg`), configure the import directory, browse the SDK command reference, and register recordings manually |
+| Live captions | Stream device audio through Host ASR, then save the recording and any transcript when stopped |
 
-## 快速上手
+## Getting started
 
-本应用运行在 **Floatboat 桌面端的工作台运行时**中 —— 它不是独立的 Node 服务，而是一个由 Host 装载的工作台包：
+The app runs in the **Floatboat desktop Workbench runtime**. It is a workbench package loaded by the Host, not a standalone Node service.
 
-- Host 负责依赖准备、strict TypeScript 检查、server 编译与 UI 打包（产物落在 `dist/`，不入库）；
-- SQLite 迁移由 Host 在打开工作台时应用（`migrations/` 只追加，不回改）；
-- ASR 与 LLM 通过 Host 能力调用，本仓库不包含、也不需要任何模型密钥。
+- The Host prepares dependencies, runs strict TypeScript checks, compiles the server, and bundles the UI. Generated files go in `dist/` and are not committed.
+- The Host applies SQLite migrations when opening the workbench. Add new files to `migrations/`; do not rewrite existing migrations.
+- ASR and LLM calls use Host capabilities. This repository neither contains nor requires model API keys.
 
 ```bash
-pnpm install          # 仅安装 UI 依赖（react / react-dom / lucide-react）
+pnpm install          # Install UI dependencies, type definitions, and test tooling
 ```
 
-之后由 Floatboat 执行 `check_workbench_project` 完成类型检查与构建，`workbench_runtime open` 应用更新。
+Then use Floatboat's `check_workbench_project` to run type checks and build the app, and `workbench_runtime open` to apply the update. These are Host operations, not package scripts.
 
-### 运行时依赖
+### Runtime dependencies
 
-| 依赖 | 用途 | 缺失时行为 |
+| Dependency | Purpose | Behavior when missing |
 | --- | --- | --- |
-| `ffmpeg` | 音频探测与解码 | 转录不可用，页面如实提示 |
-| `python` + `bleak` + `memotalk-sdk` | BLE 拉取设备录音 | 设备页报告「未就绪」，目录导入路径仍可用 |
+| `ffmpeg` | Audio probing and decoding | Transcription is unavailable, and the UI reports it |
+| `python` + `bleak` + `memotalk-sdk` | Download device recordings over BLE | The device page reports "not ready"; directory import remains available |
 
-工具路径按「设置值 → Floatboat 内置工具 → `PATH` → 命令名」逐级探测，不依赖进程 `PATH`。
+Tool discovery tries configured paths, Floatboat's bundled tools, `PATH`, and command names in that order, so it does not rely solely on the process `PATH`.
 
-## 目录结构
+Check the device page for the Python interpreter in use, then install the SDK into that same environment:
 
+```bash
+uv pip install --python "/path/to/python" "memotalk-sdk>=0.1.0"
+"/path/to/python" -m memotalk.cli --version
 ```
+
+On Windows, use the absolute path to `python.exe`. In PowerShell, prefix the quoted interpreter path with `&` when running the version check. If you use a virtual environment, select its Python interpreter in settings.
+The SDK installs `bleak` automatically; you do not need to clone its source or configure an SDK directory.
+The app uses `from memotalk import MemoTalkClient` for device APIs and live audio streaming.
+Upgrading removes the old `sdk_dir` setting while preserving other path, recognition, and automation settings.
+
+### SDK regression tests
+
+`pnpm test` runs the server tests. SDK integration tests use the package's simulated device and do not connect to a physical recorder.
+Set the `MEMOTALK_TEST_PYTHON` environment variable to the path of a Python interpreter with `memotalk-sdk` installed before running them.
+Without this variable, SDK integration tests are skipped; settings API and migration tests still run.
+
+## Project structure
+
+```text
 src/
-  contracts/       跨端 DTO（app.ts）与不可信输入校验（input.ts）
-  server/          Node 服务端：装配、路由、领域逻辑
-    routes/        按领域拆分的 HTTP 路由
-    http.ts        统一 { ok, data | error } 信封与错误码映射
-    sql.ts         node:sqlite 薄封装、设置读写、任务记录
-    ingest.ts      目录扫描、清单登记、去重与命名冲突处理
-    media.ts       ffmpeg 探测、时长解析、PCM16 分帧
-    transcribe.ts  Host ASR 会话：参数降级、推流、续传、错误归类
-    organize.ts    Host LLM 结构化归类与文本回退
-    pipeline.ts    转录/归类状态机与重试
-    bridge.ts      memotalk-sdk 命令行桥接（固定参数，不接受拼接命令）
-  ui/              React 界面：概览 / 录音库 / 详情 / 设备 / 分类 / 实时 / 设置
-migrations/        只追加的 SQLite 迁移
-sdk/               @floatboat/workbench-sdk 契约与类型（Host 提供）
-tests/             服务端测试
+  contracts/       Shared DTOs (app.ts), input validation (input.ts), busy states (recording-status.ts)
+  server/          Node server: assembly, routing, and domain logic
+    index.ts       Server assembly and automatic-connection startup
+    routes/        HTTP routes grouped by domain
+    app-route.ts   App metadata, overview, and tag-list routes
+    http.ts        Shared API envelope and top-level error/code mapping
+    sql.ts         Thin node:sqlite wrapper, settings, and job records
+    repo.ts        Queries, transient queued-status projection, and library-wide hasActiveTasks
+    library.ts     Library root, monthly folders, and legacy audio-path resolution
+    ingest.ts      Directory scanning, manifest registration, deduplication, naming conflicts
+    pull.ts        BLE download staging, library attachment, and pending-file pulls
+    auto-connect.ts Background device checks and optional automatic pulls
+    media.ts       ffmpeg probing, duration parsing, and PCM16 framing
+    transcribe.ts  Host ASR sessions: parameter fallback, streaming, resumption, error classification
+    organize.ts    Host LLM structured classification and text fallback
+    pipeline.ts    Transcription/classification state machines and retries
+    jobs.ts        Task scheduling and automatic transcription after import/download
+    queue.ts       Serial task execution, pending/running labels, and task-state queries
+    bridge.ts      memotalk-sdk Python API bridge (fixed arguments, no concatenated commands)
+    sdk-script.ts  Python script for SDK status, listing, and download actions
+    live.ts        Live audio capture, file storage, and session persistence
+    live-audio.ts  Live MP3 decoder arguments and one-second PCM framing
+    live-asr.ts    On-demand live ASR sessions and frame streaming
+    live-script.ts Python script for SDK live audio streaming
+  ui/              React UI: overview / library / details / device / categories / live / settings
+migrations/        Append-only SQLite migrations
+sdk/               Host-provided Workbench runtime, clients, contracts, and types
+tests/             Server tests
+manifest.json      Host entry points, build profile, capabilities, and audio resource
+index.html         UI build entry point
 ```
 
-配套文档：[`REQUIREMENTS.md`](REQUIREMENTS.md) · [`ENGINEERING.md`](ENGINEERING.md) · [`DESIGN.md`](DESIGN.md)
+Related documentation (in Chinese): [requirements](REQUIREMENTS.md), [engineering conventions](ENGINEERING.md), and [design](DESIGN.md).
 
-## 数据模型
+## Data model
 
-`devices`、`recordings`、`transcripts`、`analyses`、`categories`、`tags`、`recording_tags`、`job_runs`、`sdk_commands`、`settings`。
+`devices`, `recordings`, `transcripts`, `analyses`, `categories`, `tags`, `recording_tags`, `job_runs`, `sdk_commands`, and `settings`.
 
-音频文件存放在 `audio` 数据资源目录，业务库只保存相对文件名；删除录音时文件移入 `audio/_trash` 而不是物理销毁。
+### Storage and directories
 
-## API 速览
+- `import_dir` is the scan source and the default audio export destination, defaulting to `~/memo/memotalk/inbox`. Scans create a missing directory, read only its immediate files, and copy supported audio (`.mp3`, `.wav`, `.m4a`, `.aac`, `.ogg`, `.flac`, `.amr`, `.opus`) into the library without removing the originals.
+- `library_dir` defaults to `~/memo/memotalk/raw`. Imports and BLE downloads are copied into `<library_dir>/<yyyy-MM>/`, using the recording month inferred from the filename or a fallback date. Live recordings also go into monthly folders. Use an absolute path or `~/...` for these directory settings; changing the library setting does not relocate existing files.
+- New `recordings.storage_path` values store the full destination path (absolute with the default or an absolute library directory). Historical relative filenames resolve against the Host's `audio` data resource. BLE downloads first use the Host's `audio/_incoming` staging directory, not `import_dir`.
+- Deletion attempts to move audio to `<library_dir>/_trash/<milliseconds>-<basename>` using the **current** library setting, then deletes the recording and its transcript, analysis, tag links, and job history. If the move fails, database deletion still proceeds; `audioMovedToTrash` is then `null`. There is no restore API.
+- Export copies the audio under its original `filename` into `import_dir`, or into the request body's optional `directory`. It creates missing destination directories and can overwrite a same-named file. The detail page uses the default destination. There is no separate export-directory setting.
 
-| 方法 | 路径 | 说明 |
+When resolving `import_dir`, an empty value falls back to the default; a path inside the system temporary directory is replaced with the default and written back to settings. An explicit `directory` in a scan request is used and saved directly, without that temporary-directory fallback.
+
+## Settings
+
+The settings page edits paths, automation, and recognition options. The device page edits only `import_dir`. `PATCH /api/settings` accepts `{ "values": { "key": "value" } }`; all values must be strings.
+
+| Keys | Behavior and defaults |
+| --- | --- |
+| `library_dir`, `import_dir` | Empty by default; resolved as described above; at most 500 characters each |
+| `python_path`, `ffmpeg_path` | Empty by default for automatic discovery; at most 500 characters each |
+| `auto_transcribe`, `auto_analyze` | Automatically transcribe after import/download and classify after transcription; both default to `"1"` |
+| `auto_connect`, `auto_pull` | Background device checks and pending-file downloads after a successful automatic connection; both default to `"1"` |
+| `auto_connect_minutes` | Integer string from `"1"` to `"120"`, default `"3"` |
+| `speaker_diarization` | File-transcription speaker separation, default `"1"` |
+| `asr_hotwords` | File-transcription hotwords, empty by default; at most 300 characters |
+| `asr_language` | At most 20 characters; the UI offers automatic (empty), `zh`, `en`, and `ja`. Currently saved as file-transcription metadata, but not passed to ASR |
+| `device_serial` | At most 64 characters; saved by device operations or via the API, not a field on the settings page |
+
+Flags accept only `"0"` or `"1"`. Background checks run while the workbench server is open; manual status checks do not trigger automatic pulls. Live ASR currently uses fixed PCM parameters rather than the file-transcription hotword, language, or speaker settings. `GET /api/settings` can also return runtime-written `last_auto_connect_at` and `last_auto_pull_at`; these are not writable through PATCH. The removed `sdk_dir` is hidden on reads and ignored on writes; other unknown keys are rejected.
+
+## API overview
+
+| Method | Path | Description |
 | --- | --- | --- |
-| `GET` | `/api/recordings` | 列表：搜索 / 阶段 / 分类 / 标签 / 排序 / 分页 |
-| `GET` | `/api/recordings/:id` | 详情（元数据 + 转录 + AI 结论 + 执行记录） |
-| `PATCH` | `/api/recordings/:id` | 人工修正标题、分类、标签、重要度 |
-| `DELETE` | `/api/recordings/:id` | 删除（文件移入 `audio/_trash`） |
-| `GET` | `/api/recordings/:id/audio` | 音频流，HTTP Range（206 + `content-range`，越界 416） |
-| `POST` | `/api/recordings/:id/export` | 导出到本机目录 |
-| `POST` | `/api/recordings/:id/transcribe` | 单条转录 |
-| `POST` | `/api/recordings/:id/organize` | 单条 AI 归类 |
-| `POST` | `/api/recordings/batch/transcribe` · `/batch/organize` | 批量转录 / 批量归类 |
-| `GET`·`POST` | `/api/ingest/directory` · `/directory/ensure` | 导入目录读取与创建 |
-| `POST` | `/api/ingest/scan` | 扫描导入目录 |
-| `POST` | `/api/ingest/manifest` | 登记设备清单条目 |
-| `GET` | `/api/device` · `/summary` · `/capabilities` | 设备记录、概览、SDK 指令参考库 |
-| `POST` | `/api/device/check` · `/list` · `/download` · `/status` | 环境自检、读清单、BLE 拉取、状态 |
-| `GET`·`POST` | `/api/live` · `/live/start` · `/live/stop` | 实时字幕 |
-| `GET`·`POST` | `/api/categories`；`PATCH`·`DELETE` `/api/categories/:id` | 分类管理 |
-| `GET`·`PATCH` | `/api/settings` | 路径、转录与归类开关、热词与语言 |
+| `GET` | `/api/app` | Application name and version |
+| `GET` | `/api/overview` | Recording statistics, device status, and overview data |
+| `GET` | `/api/tags` | Tag names for filtering |
+| `GET` | `/api/recordings` | List recordings with search, stage/category/tag/favorite/archive filters, sorting, and pagination; data contains `items`, `total`, and library-wide `hasActiveTasks` |
+| `GET` | `/api/recordings/:id` | Details: metadata, transcript, AI analysis, and execution history |
+| `GET` | `/api/recordings/:id/tags` | Tag IDs and names for one recording |
+| `PATCH` | `/api/recordings/:id` | Edit title, summary, category, tags, importance, favorite, and archive flags |
+| `DELETE` | `/api/recordings/:id` | Delete a recording; attempt to move audio to `<library_dir>/_trash/<milliseconds>-<basename>` |
+| `GET` | `/api/recordings/:id/audio` | Audio stream with HTTP Range support (206 and `content-range`; 416 for out-of-range requests) |
+| `POST` | `/api/recordings/:id/export` | Copy audio to `import_dir` by default; optional body field `directory` overrides it |
+| `POST` | `/api/recordings/:id/transcribe` | Queue transcription; after prerequisite checks, reject already queued/running recordings with `BUSY` |
+| `POST` | `/api/recordings/:id/organize` | Queue AI classification; after prerequisite checks, reject already queued/running recordings with `BUSY` |
+| `POST` | `/api/recordings/batch/transcribe`, `/api/recordings/batch/organize` | Queue transcription or classification for body field `ids`; skip already queued/running or otherwise ineligible recordings |
+| `GET` | `/api/ingest/directory` | Read import directory information |
+| `POST` | `/api/ingest/directory/ensure` | Create the import directory |
+| `POST` | `/api/ingest/scan` | Scan the import directory |
+| `POST` | `/api/ingest/manifest` | Register device manifest entries |
+| `GET` | `/api/device` | Environment checks, SDK command reference, Host capability summary, device records, and settings |
+| `GET` | `/api/device/summary` | Device/local recording counts and device/category counts |
+| `GET` | `/api/device/capabilities` | Host ASR/LLM operation availability, not BLE commands |
+| `DELETE` | `/api/device/:id` | Remove a local device record and clear its matching saved serial; does not delete recordings or device files |
+| `POST` | `/api/device/check`, `/api/device/list`, `/api/device/download`, `/api/device/status` | Environment check, file listing, BLE download, and status |
+| `GET` | `/api/live` | Live caption status |
+| `POST` | `/api/live/start`, `/api/live/stop` | Start or stop live captions |
+| `GET`, `POST` | `/api/categories` | List or create categories |
+| `PATCH`, `DELETE` | `/api/categories/:id` | Update or delete a category |
+| `GET`, `PATCH` | `/api/settings` | Read settings or update the writable keys listed above |
 
-响应统一为 `{ ok: true, data }` / `{ ok: false, error: { code, message } }` 信封。
+JSON responses use the `{ ok: true, data }` / `{ ok: false, error: string, code: string }` envelope. The audio endpoint returns an audio stream on success.
 
-## 设计原则（节选）
+### Queued tasks and polling
 
-- **不伪造成功**：BLE 通道未就绪、音频无法播放、ASR 上游失败，页面一律如实报告，并把失败态变成可继续的动作。
-- **状态双编码**：一律「文字 + 颜色」，不只靠颜色区分；动画尊重 `prefers-reduced-motion`。
-- **列表优先**：一条录音一行，正文最大宽度 1220 px，表格数字使用 tabular-nums 保持纵向对齐。
-- **可访问**：仅图标按钮均带 `aria-label` 与 title，分段控件用 `aria-pressed`。
+- `queued_transcribe` ("transcription queued") and `queued_organize` ("classification queued") are temporary statuses projected by the server from its in-memory queue into recording summaries and details, not stored in SQLite. Stored `transcribing` / `analyzing` statuses take precedence. Stage filters still use stored statuses. Code: `src/server/queue.ts:25`, `src/server/repo.ts:30`, `src/server/repo.ts:59`, `src/server/repo.ts:202`.
+- `GET /api/recordings` returns `data.hasActiveTasks`: whether any transcription/classification task is queued or running across the library. It checks queue labels and stored running statuses, independently of search, filters, and pagination. Code: `src/server/repo.ts:150`, `src/contracts/app.ts:115`.
+- Single-recording transcription/classification checks audio/text prerequisites first, then returns `BUSY` for an already queued or running recording. Batch operations skip such recordings and report `accepted`, `skipped`, and accepted `ids`. Code: `src/server/routes/pipeline.ts:25`, `src/server/routes/pipeline.ts:46`, `src/server/routes/pipeline.ts:66`, `src/server/routes/pipeline.ts:84`.
+- The detail page polls every 2.6 seconds while its recording is queued or running and stops when that recording leaves those states. The library polls at the same interval while `hasActiveTasks` is true, even if active recordings are outside the current results; it stops when no queued or running tasks remain across the library. Code: `src/contracts/recording-status.ts:1`, `src/ui/pages/Detail.tsx:51`, `src/ui/pages/Library.tsx:54`, `src/ui/useApi.ts:48`.
+- `queue.ts` retains waiting and running task labels until `finally` removes them, including after failure, and exposes task-state queries. `repo.ts` combines these queries with stored statuses to build response statuses and `hasActiveTasks`. Code: `src/server/queue.ts:8`, `src/server/queue.ts:25`, `src/server/queue.ts:31`, `src/server/repo.ts:59`, `src/server/repo.ts:150`.
 
-更多取舍见 [`DESIGN.md`](DESIGN.md)。
+## Design principles
 
-## 相关仓库
+- Report failures honestly. If BLE is not ready, audio cannot play, or upstream ASR fails, the UI reports the problem and offers a next action.
+- Communicate status with both text and color, never color alone. Animations respect `prefers-reduced-motion`.
+- Prioritize lists. Each recording occupies one row, content is at most 1220 px wide, and table numbers use `tabular-nums` for alignment.
+- Support accessibility. Icon-only buttons have `aria-label` and `title`; segmented controls use `aria-pressed`.
 
-- [`floatboatai/memotalk-sdk`](https://github.com/floatboatai/memotalk-sdk) — MemoTalk S1 的 Python BLE 客户端与命令行工具
+See [DESIGN.md](DESIGN.md) for more design decisions.
+
+## Related repositories
+
+- [`floatboatai/memotalk-sdk`](https://github.com/floatboatai/memotalk-sdk): Python BLE client and CLI for the MemoTalk S1
 
 ## License
 

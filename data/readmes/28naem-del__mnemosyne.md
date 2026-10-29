@@ -3,25 +3,70 @@
 # Mnemosyne
 
 [![CI](https://github.com/28naem-del/mnemosyne/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/28naem-del/mnemosyne/actions/workflows/ci.yml)
-[![npm: 2.0.0](https://img.shields.io/badge/npm-2.0.0-b8f6dd?labelColor=111b2a)](https://www.npmjs.com/package/mnemosy-ai/v/2.0.0)
-[![npm next: 3.0.0-rc.2](https://img.shields.io/badge/next-3.0.0--rc.2-9abfff?labelColor=111b2a)](https://www.npmjs.com/package/mnemosy-ai/v/3.0.0-rc.2)
+[![npm latest](https://img.shields.io/npm/v/mnemosy-ai?label=npm%20latest&color=b8f6dd&labelColor=111b2a)](https://www.npmjs.com/package/mnemosy-ai)
+[![npm next](https://img.shields.io/npm/v/mnemosy-ai/next?label=npm%20next&color=9abfff&labelColor=111b2a)](https://www.npmjs.com/package/mnemosy-ai?activeTab=versions)
+[![npm downloads/month](https://img.shields.io/npm/dm/mnemosy-ai?label=downloads&color=b8f6dd&labelColor=111b2a)](https://www.npmjs.com/package/mnemosy-ai)
+[![Node.js ≥22.16](https://img.shields.io/badge/node-%E2%89%A522.16-b8f6dd?labelColor=111b2a)](https://nodejs.org/)
+[![MCP server](https://img.shields.io/badge/MCP-server-9abfff?labelColor=111b2a)](#install-and-connect-an-agent)
 [![License: MIT](https://img.shields.io/badge/license-MIT-b8f6dd?labelColor=111b2a)](LICENSE)
+
+[![LongMemEval-S: 409/500](https://img.shields.io/badge/LongMemEval--S-409%2F500-b8f6dd?labelColor=111b2a)](#measured-409-of-500-on-longmemeval-s-with-the-misses-printed)
+[![LoCoMo recall@10: 73.57 vs Mem0 OSS 63.72](https://img.shields.io/badge/LoCoMo%20recall%4010-73.57%20vs%20Mem0%20OSS%2063.72-9abfff?labelColor=111b2a)](COMPARISON.md)
+[![GitHub stars](https://img.shields.io/github/stars/28naem-del/mnemosyne?label=stars&color=b8f6dd&labelColor=111b2a)](https://github.com/28naem-del/mnemosyne)
+[![GitHub Discussions](https://img.shields.io/github/discussions/28naem-del/mnemosyne?label=discussions&color=9abfff&labelColor=111b2a)](https://github.com/28naem-del/mnemosyne/discussions)
+[![MCP Registry](https://img.shields.io/badge/MCP-Registry-9abfff?labelColor=111b2a)](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.28naem-del/mnemosyne)
 
 **The next agent starts wiser.**
 
-**Auditable memory for agents that act. Past beliefs replay exactly, corrections cascade through recorded dependencies, and consolidation is outcome-gated and reversible.**
+**Mnemosyne is local-first, long-term memory for AI agents: one SQLite file that keeps what an agent learned together with the evidence it came from, served to any host over TypeScript, MCP, CLI or HTTP.** When a source is corrected, the memories recorded as depending on it are retired, so the next agent starts from what current recorded evidence still supports instead of repeating a stale lesson. The local engine needs no model API key, database server or Docker.
 
-**Mnemosyne is local-first, long-term memory for AI agents: one SQLite file that keeps what an agent learned together with the evidence it came from, served to any host over TypeScript, MCP, CLI or HTTP.** When a source is corrected, every memory that depended on it is retired, so the next agent starts from what is still true instead of repeating a stale lesson.
+- **Evidence on every memory.** Each record keeps its source and trust tier, and the superseded version stays inspectable after a correction.
+- **Corrections that reach dependents.** A corrected requirement retires the procedures and skills recorded as depending on it; 3.0 can also propose dependencies nobody declared, for review.
+- **Auditable over time.** Past beliefs replay exactly. Given the records a failed retrieval should have returned, `bisect` finds the records that pushed them out. In the 3.0 pre-release, consolidation is outcome-gated and reversible.
+- **Any host.** MCP for Claude Code, Cursor and Codex; a TypeScript SDK; a CLI; and authenticated HTTP with a Python client and live inspector.
 
-Mnemosyne connects memory to its consequences: a corrected requirement can retire a dependent procedure, a failed trial can withhold a skill, and a new agent can resume from an explicit handoff. Run the local engine in one SQLite file; connect your host through TypeScript, MCP, CLI, or authenticated HTTP with a Python client and live inspector.
+**Stable: 2.0.0 (`npm install mnemosy-ai`) · Newest pre-release: 3.0.0-rc.4, the breakthrough release (`npm install mnemosy-ai@next`) · MIT · Node.js ≥22.16**
 
-**Stable: 2.0.0 (`npm install mnemosy-ai`) · Newest pre-release: 3.0.0-rc.2 (`npm install mnemosy-ai@next`) · MIT · Node.js ≥22.16**
+[Website](https://mnemosy.ai) · [Quickstart](docs/quickstart.md) · [Documentation](docs/README.md) · [Examples](examples/README.md) · [Migration](docs/BRIDGE.md) · [Measured results](docs/evaluation/BENCHMARKS.md) · [Trust evidence](docs/BENCHMARKS-TRUST.md) · [Claims and evidence](docs/CLAIMS.md) · [Releases](https://github.com/28naem-del/mnemosyne/releases) · [npm](https://www.npmjs.com/package/mnemosy-ai) · [Contributing](CONTRIBUTING.md) · [Issues](https://github.com/28naem-del/mnemosyne/issues)
 
-[Website](https://mnemosy.ai) · [Quickstart](docs/quickstart.md) · [Documentation](docs/README.md) · [Examples](examples/README.md) · [Migration](docs/BRIDGE.md) · [Measured results](docs/evaluation/BENCHMARKS.md) · [Trust evidence](docs/BENCHMARKS-TRUST.md) · [npm](https://www.npmjs.com/package/mnemosy-ai) · [Contributing](CONTRIBUTING.md) · [Issues](https://github.com/28naem-del/mnemosyne/issues)
+> [!NOTE]
+> **Which Mnemosyne is this?** This repository is the TypeScript package published on npm as [`mnemosy-ai`](https://www.npmjs.com/package/mnemosy-ai), with its site at [mnemosy.ai](https://mnemosy.ai). It is a separate project from [mnemosyne-oss/mnemosyne](https://github.com/mnemosyne-oss/mnemosyne), the Python memory library published on PyPI as `mnemosyne-memory`; the two share a name, not code or maintainers. Please file issues for that project in its own repository.
 
-## New in 3.0.0-rc.2 (pre-release on npm `next`)
+## Try it
 
-3.0.0-rc.2 is a release candidate on the npm `next` channel: `npm install mnemosy-ai@next` installs it, while `npm install mnemosy-ai` still installs the stable 2.0.0. Every number below was measured offline, with no API key, no paid model and no LLM judge. Each one reproduces with the commands in [Benchmarks and trust evidence](docs/BENCHMARKS-TRUST.md), which also lists what is not claimed.
+The first `npx` run downloads the package; after that, the 3.0.0-rc.4 demo runs offline on synthetic corpora, with no API key and no model, and measures each claim while it runs:
+
+```sh
+npx -y -p mnemosy-ai@next mnemosy demo
+```
+
+![A real run of mnemosy demo from npm next: five moments scroll past, then the five PROOF lines, each marked PASS, and "5/5 moments proved"](assets/demo.gif)
+
+The recording above is one unedited run ([`assets/demo.tape`](assets/demo.tape) regenerates it with vhs). The last line of each of its five moments, matching the recorded run of 28 October 2026 ([`site/demo-five.json`](site/demo-five.json); timings vary by machine; the pass bars printed after each line are omitted here):
+
+```text
+PROOF  replay determinism: 1000/1000 identical, 24000/24000 as-of answers = ground truth   [PASS]
+PROOF  downstream repair: undeclared invalidated 3/3, accepted edges true 3/3, stale after correction 0 (11 probes)   [PASS]
+PROOF  blame precision / time-to-locate: precision 1.00, 0.40 s, 2000 records   [PASS]
+PROOF  poisoning suite v1, live: 227 cases, 0 escapes, 0 false quarantines   [PASS]
+PROOF  consolidation receipts: kept 1 (delta +2), rolled back 2 (regression, invariant violated), rollback identical hash true, chain verified 4 receipts   [PASS]
+
+5/5 moments proved.
+```
+
+[What each moment proves, and what it does not](docs/DEMO.md). Then give the memory to Claude Code (other clients: [Install and connect an agent](#install-and-connect-an-agent)):
+
+```sh
+claude mcp add mnemosyne -- npx -y -p mnemosy-ai@next mnemosy mcp --db ./.mnemosyne/memory.sqlite --workspace my-project --agent assistant
+```
+
+For the stable release, write `mnemosy-ai@2.0.0` in place of `mnemosy-ai@next`; on 2.0.0, `mnemosy demo` runs the earlier single-scenario demo.
+
+**Contents:** [3.0: the breakthrough release](#new-in-30-the-breakthrough-release-pre-release-on-npm-next) · [Install and connect an agent](#install-and-connect-an-agent) · [Measured results](#measured-409-of-500-on-longmemeval-s-with-the-misses-printed) · [Choose your engine](#choose-your-engine) · [A working demonstration](#start-with-a-working-demonstration) · [Corrections in code](#a-correction-should-change-what-the-next-agent-does) · [Tune the dense index](#tune-the-dense-index) · [What you can build](#what-you-can-build) · [Entry points](#local-engine-several-entry-points) · [Migrate](#migrate-while-your-agent-keeps-working) · [Limits](#measured-with-the-limits-visible) · [Operational boundaries](#operational-boundaries) · [Build with us](#build-with-us)
+
+## New in 3.0: the breakthrough release (pre-release on npm `next`)
+
+3.0 is the breakthrough release. Replay and `bisect` already existed in 2.0.0. 3.0 adds four things: dependencies nobody declared, inferred and proposed for review, so that corrections reach them once accepted; a poisoning gate checked against a reproducible attack suite; outcome-gated, reversible consolidation with signed receipts; and opt-in precision controls. `bisect` also gained the hybrid retrieval path: since 3.0.0-rc.4 the `mnemosy bisect` CLI re-executes the store's own path (`--retrieval auto|lexical|hybrid`, default `auto`, which picks hybrid when the store has stored vectors for the bundled model; an `hnsw` index is refused). `bisect` is not a public package export, so from npm the CLI is the entry point. Each of these is documented and tested below, and each public claim is listed with its evidence in [Claims and evidence](docs/CLAIMS.md). 3.0.0-rc.4 is the current release candidate on the npm `next` channel: `npm install mnemosy-ai@next` installs it, while `npm install mnemosy-ai` still installs the stable 2.0.0. Every number below was measured on 3.0.0-rc.2, offline, with no API key, no paid model and no LLM judge. Each one reproduces with the commands in [Benchmarks and trust evidence](docs/BENCHMARKS-TRUST.md), which also lists what is not claimed.
 
 | Measurement | Result | Protocol |
 |---|---|---|
@@ -29,16 +74,16 @@ Mnemosyne connects memory to its consequences: a corrected requirement can retir
 | Poisoning suite v1, consolidation on | **0/167** escapes, **0/60** false quarantines (85/167 escape without the gate) | 227 synthetic cases, lexical path, 294 gate decisions · [protocol](docs/BENCHMARKS-TRUST.md#22-consolidation-on-rc2) |
 | Dependency suite v1 | recall **96.05 %**, precision **98.06 %**, **0** stale procedures with the premise guard (inference alone: 7/248 stale; guard false-hold rate 92.78 %) | Synthetic corpus, seed 20261028, 120 corrections, accept-all eval reviewer · [protocol](docs/BENCHMARKS-TRUST.md#4-undeclared-dependency-inference-dependency-suite-v1-synthetic-rc2) |
 | Replay determinism | **1000/1000** identical states, **24,000/24,000** as-of answers | Two readers of one store at 1000 seeded cut points; answers against ground truth from the plan · [protocol](docs/BENCHMARKS-TRUST.md#5-the-five-moment-demo-mnemosy-demo-rc2) |
-| Bisect | precision **1.00** in 1.53 s on 2,000 records (re-runs 0.6–1.2 s; bar 60 s) | One seeded false record in a synthetic store, confirmed by re-running recall without it · [protocol](docs/BENCHMARKS-TRUST.md#5-the-five-moment-demo-mnemosy-demo-rc2) |
+| Bisect | precision **1.00** on 2,000 records, 0.40 s in the recorded run of 2026-10-28 ([`site/demo-five.json`](site/demo-five.json); varies by machine; bar 60 s) | One seeded false record in a synthetic store; the expected record is known, and the blame is confirmed by re-running recall without the culprit · [protocol](docs/BENCHMARKS-TRUST.md#5-the-five-moment-demo-mnemosy-demo-rc2) |
 
-The default retrieval path did not move: LoCoMo and LongMemEval-S recall are identical before and after ([regression check](docs/BENCHMARKS-TRUST.md#6-retrieval-regression-check-locomo-and-longmemeval-s-before-and-after)). Recall latency was measured only on a loaded machine; the known limits, including a slowdown of the non-default `overlap` scorer, are in the [changelog](CHANGELOG.md).
+The default retrieval path's recall did not move: LoCoMo and LongMemEval-S recall are identical before and after ([regression check](docs/BENCHMARKS-TRUST.md#6-retrieval-regression-check-locomo-and-longmemeval-s-before-and-after)). Recall latency was measured only on a loaded machine, with a scratch harness that is not committed, so those figures cannot be reproduced from this repository; the known limits, including a slowdown of the non-default `overlap` scorer, are in the [changelog](CHANGELOG.md).
 
 - **Precision you can switch on.** The new opt-in controls are a names gate and guarded single-edit fuzzy matching. Empty answers are native abstentions, and the ledger records why. With the controls on, the kernel scores **70/77 single-turn cases and 11/12 session turns on PrecisionMemBench** (session was 6/12 with the rc.1 filtered configuration). That run was protocol-exact, in retrieval mode, with no LLM judge, no wrapper-side filter and no wrapper `kinds` predicate, and the lexical and hybrid paths score the same. The 12th session turn needs an open-question kind policy that the kernel is not told about.
   - For comparison, the kernel scored 22/77 unfiltered and 48/77 with the fixture-tuned wrapper filters of rc.1.
   - The benchmark fixture is public, and the controls were designed against it, so this is not a held-out estimate.
-  - The 7 remaining cases need lifecycle fields that the single-turn protocol does not send.
+  - The 7 remaining misses are those of our metadata-based configuration; the single-turn protocol does not send explicit lifecycle fields.
   - The default retrieval path is unchanged: LoCoMo and LongMemEval-S recall are identical before and after.
-- **Consolidation that has to earn its keep.** A consolidation pass is a signed diff, replayed against the agent's own recorded outcomes. It is kept only when nothing regresses and no invariant breaks, and one command undoes it, back to the identical state hash. With consolidation on, the poisoning suite v1 run (227 synthetic cases, reproducible) has **zero escapes: 0 of 167 attacks escaped and 0 of 60 benign controls were falsely quarantined**, across 294 gate decisions. An ungated control lets 85 of the 167 attacks through. [Consolidation gate](docs/CONSOLIDATION.md) · [Signing and receipts](docs/CONSOLIDATION-SIGNING.md)
+- **Consolidation that has to earn its keep.** A consolidation pass is a signed diff, replayed against the agent's own recorded outcomes. It is kept only when aggregate lexical coverage on that replay set does not drop and no invariant breaks. One command undoes a kept pass that nothing has changed since; the visible-record state hash comes back identical only when nothing was written after the pass. The gate is **off by default in the standard MCP setup**: the host turns it on from the SDK by recording query text in the ledger and verifier outcomes ([how](docs/CONSOLIDATION.md#turn-the-gate-on)). With consolidation on, the poisoning suite v1 run (227 synthetic cases, reproducible) has **zero escapes: 0 of 167 attacks escaped and 0 of 60 benign controls were falsely quarantined**, across 294 gate decisions. An ungated control lets 85 of the 167 attacks through. [Consolidation gate](docs/CONSOLIDATION.md) · [Signing and receipts](docs/CONSOLIDATION-SIGNING.md)
 - **Corrections that reach what nobody linked.** Dependencies are inferred from successful co-use and proposed for review. Once accepted, they are declared through `correct()`, and runtime skills can be linked to their premises. The measurement is on a synthetic seeded corpus (dependency suite v1, seed 20261028, 120 corrections):
   - invalidation recall is **96.05 %**;
   - precision of accepted edges is **98.06 %**;
@@ -48,7 +93,7 @@ The default retrieval path did not move: LoCoMo and LongMemEval-S recall are ide
 - **A demo that measures itself.** `mnemosy demo` walks through five moments on synthetic corpora, offline, on the zero-model lexical path:
   1. a past belief replayed exactly;
   2. a correction reaching dependents nobody linked;
-  3. `bisect` naming the record that caused a wrong answer;
+  3. `bisect` finding the seeded record that pushes a known right answer out of the results;
   4. a poisoning attempt caught, with the suite run live;
   5. a consolidation kept, another rolled back, and the kept one undone.
 
@@ -65,13 +110,31 @@ From a source checkout, run `npm run build` and then `node dist/cli/index.js dem
 
 ## Install and connect an agent
 
+Choose one channel:
+
 ```sh
 npm install mnemosy-ai                   # stable: latest = 2.0.0; pin mnemosy-ai@2.0.0 to reproduce
-npm install mnemosy-ai@next              # pre-release: next = 3.0.0-rc.2; pin mnemosy-ai@3.0.0-rc.2 to reproduce
-npx --no-install mnemosy demo            # offline: no API key, no server, no Docker
+npm install mnemosy-ai@next              # or the pre-release: next = 3.0.0-rc.4; pin mnemosy-ai@3.0.0-rc.4 to reproduce
 ```
 
-Give the memory to an MCP client. **Claude Code** reads `.mcp.json` in the project root and **Cursor** reads `.cursor/mcp.json`; both take the same server entry. The entries below run the 3.0.0-rc.2 pre-release through `mnemosy-ai@next`; for the stable release write `mnemosy-ai@2.0.0` in its place, and to pin the pre-release write `mnemosy-ai@3.0.0-rc.2`. Both versions expose the same MCP tools. The database file (mode `0600`) and its parent directory (mode `0700`) are created on first use. Relative paths resolve from the directory the client starts the server in; use absolute paths if your client launches servers elsewhere.
+Then, in that project, `npx --no-install mnemosy demo` runs the demo of the installed version offline (no API key, no server, no Docker); `--no-install` makes `npx` fail instead of fetching another package if none is installed. Without installing, `npx -y -p mnemosy-ai@3.0.0-rc.4 mnemosy demo` downloads and runs exactly that version.
+
+Give the memory to an MCP client. The entries below run the 3.0.0-rc.4 pre-release through `mnemosy-ai@next` (the Hermes entries pin `mnemosy-ai@3.0.0-rc.4`); for the stable release write `mnemosy-ai@2.0.0` in its place, and to pin the pre-release write `mnemosy-ai@3.0.0-rc.4`. Both versions expose the same MCP tools. `mnemosy mcp` requires `--db`, `--workspace` and `--agent`. The database file (mode `0600`) and its parent directory (mode `0700`) are created on first use; add `.mnemosyne/` to the project's `.gitignore`. Relative paths resolve from the directory the client starts the server in; use absolute paths if your client launches servers elsewhere. Node.js >= 22.16 and `npx` must be on `PATH`.
+
+Each host is labelled **Tested** (we ran the commands shown, with the versions named) or **Documented** (written from the host's documentation; we did not run it).
+
+### Claude Code
+
+**Plugin.** This repository is a Claude Code plugin marketplace (`mnemosy-ai`, file [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)) with one plugin, `mnemosyne` ([`integrations/claude-code`](integrations/claude-code/README.md)):
+
+```sh
+claude plugin marketplace add 28naem-del/mnemosyne      # in a session: /plugin marketplace add 28naem-del/mnemosyne
+claude plugin install mnemosyne@mnemosy-ai             # add --scope project to share it through .claude/settings.json
+```
+
+**Tested** with Claude Code 2.1.301, from a local checkout of these files and from GitHub with the commands above (run against `main`): `claude plugin validate` passes, `claude mcp list` shows `plugin:mnemosyne:mnemosyne` connected, and a session lists 16 tools. The plugin starts `npx -y -p mnemosy-ai@next mnemosy mcp --db ${CLAUDE_PROJECT_DIR}/.mnemosyne/memory.sqlite --workspace default --agent claude-code`, so each project gets its own database. In Claude Code its tools are named `mcp__plugin_mnemosyne_mnemosyne__memory_*`; permission rules must use that form.
+
+**Without the plugin.** Claude Code reads `.mcp.json` in the project root:
 
 ```json
 {
@@ -88,29 +151,80 @@ Give the memory to an MCP client. **Claude Code** reads `.mcp.json` in the proje
 }
 ```
 
-Claude Code can register the same server from the shell:
+or registers the same server from the shell:
 
 ```sh
 claude mcp add mnemosyne -- npx -y -p mnemosy-ai@next mnemosy mcp --db ./.mnemosyne/memory.sqlite --workspace my-project --agent assistant
 ```
 
-**Codex** keeps MCP servers in `~/.codex/config.toml`. Register the server with an absolute database path:
+**Tested** with Claude Code 2.1.301: `claude mcp list` shows the server connected after `claude mcp add`, and for `.mcp.json` once the project is trusted and its server approved.
+
+### Cursor
+
+**Documented.** Cursor was not available to us, so neither form below has been run.
+
+[![Add Mnemosyne to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en/install-mcp?name=mnemosyne&config=eyJ0eXBlIjoic3RkaW8iLCJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIi1wIiwibW5lbW9zeS1haUBuZXh0IiwibW5lbW9zeSIsIm1jcCIsIi0tZGIiLCIke3VzZXJIb21lfS8ubW5lbW9zeW5lL21lbW9yeS5zcWxpdGUiLCItLXdvcmtzcGFjZSIsImRlZmF1bHQiLCItLWFnZW50IiwiY3Vyc29yIl19)
+
+The button opens Cursor's install page; the direct link is `cursor://anysphere.cursor-deeplink/mcp/install?name=mnemosyne&config=eyJ0eXBlIjoic3RkaW8iLCJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIi1wIiwibW5lbW9zeS1haUBuZXh0IiwibW5lbW9zeSIsIm1jcCIsIi0tZGIiLCIke3VzZXJIb21lfS8ubW5lbW9zeW5lL21lbW9yeS5zcWxpdGUiLCItLXdvcmtzcGFjZSIsImRlZmF1bHQiLCItLWFnZW50IiwiY3Vyc29yIl19`. Either one adds a global server whose database is `${userHome}/.mnemosyne/memory.sqlite`, shared by every Cursor project. For one database per project, put this in the project's `.cursor/mcp.json` instead:
+
+```json
+{
+  "mcpServers": {
+    "mnemosyne": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y", "-p", "mnemosy-ai@next", "mnemosy", "mcp",
+        "--db", "${workspaceFolder}/.mnemosyne/memory.sqlite",
+        "--workspace", "default", "--agent", "cursor"
+      ]
+    }
+  }
+}
+```
+
+### Codex
+
+Codex keeps MCP servers in `~/.codex/config.toml`. Register the server with an absolute database path:
 
 ```sh
 codex mcp add mnemosyne -- npx -y -p mnemosy-ai@next mnemosy mcp --db /absolute/path/project/.mnemosyne/memory.sqlite --workspace my-project --agent assistant
 ```
 
-The command writes this table, which you can also add by hand:
+The command writes the table below without the last line. Codex waits 10 s for a server to start by default, and the first `npx` launch downloads the package, so add `startup_timeout_sec = 60` by hand (or write the whole table yourself):
 
 ```toml
 [mcp_servers.mnemosyne]
 command = "npx"
 args = ["-y", "-p", "mnemosy-ai@next", "mnemosy", "mcp", "--db", "/absolute/path/project/.mnemosyne/memory.sqlite", "--workspace", "my-project", "--agent", "assistant"]
+startup_timeout_sec = 60
 ```
+
+**Tested** as configuration only, with codex-cli 0.153.4: `codex mcp add` wrote the table, and `codex mcp list` and `codex mcp get` read it back enabled, including `startup_timeout_sec`. The server has not been run inside a Codex session.
+
+### Hermes Agent
+
+**Documented, not tested**: Hermes is not available in our CI or development environment. Hermes reads MCP servers from `~/.hermes/config.yaml`:
+
+```yaml
+# ~/.hermes/config.yaml
+mcp_servers:
+  mnemosy:                       # not "mnemosyne": avoids confusion with the mnemosyne-oss provider
+    command: "npx"
+    args: ["-y", "-p", "mnemosy-ai@3.0.0-rc.4", "mnemosy", "mcp",
+           "--db", "/absolute/path/.mnemosyne/memory.sqlite",
+           "--workspace", "hermes", "--agent", "hermes"]
+    connect_timeout: 120         # default 60 s; the first npx run downloads the package
+    # trust: untrusted           # optional: ask before every write tool (read tools carry readOnlyHint)
+```
+
+[`integrations/hermes`](integrations/hermes/README.md) holds the same server as a Hermes portable plugin (`mnemosy-ai`, one MCP server and one skill). It is not listed in the Hermes plugin catalog.
+
+### Every host
 
 The first `npx` launch downloads the package; if a client gives up during that first start, install the package in the project first.
 
-The server exposes 16 `memory_*` tools (`memory_store`, `memory_recall`, `memory_context`, `memory_correct`, `memory_checkpoint`, `memory_resume`, `memory_observe`, `memory_skill`, …); `memory_forget` is added only when the server is launched with `--allow-destructive`. Add `--read-only` to omit every mutation tool. A model cannot switch workspace, raise its own trust or report its own skill trials through MCP. Agent-readable summaries of this repository are in [`llms.txt`](llms.txt) and [`AGENTS.md`](AGENTS.md); the full MCP contract is in [Connect through MCP](#connect-through-mcp).
+The server exposes 16 `memory_*` tools (`memory_store`, `memory_recall`, `memory_context`, `memory_correct`, `memory_checkpoint`, `memory_resume`, `memory_observe`, `memory_skill`, …); `memory_forget` is added only when the server is launched with `--allow-destructive`. Add `--read-only` to omit every mutation tool. A model cannot switch workspace, raise its own trust or report its own skill trials through MCP. The MCP tools do not include consolidation, `bisect` or outcome recording, so the 3.0 outcome gate stays off in this setup ([turn it on from the SDK](docs/CONSOLIDATION.md#turn-the-gate-on)). Agent-readable summaries of this repository are in [`llms.txt`](llms.txt) and [`AGENTS.md`](AGENTS.md); the full MCP contract is in [Connect through MCP](#connect-through-mcp).
 
 ## Measured: 409 of 500 on LongMemEval-S, with the misses printed
 
@@ -118,7 +232,7 @@ The server exposes 16 `memory_*` tools (`memory_store`, `memory_recall`, `memory
 |---|---|---|
 | **Answer accuracy**, LongMemEval-S, all 500 questions | **409 / 500 correct (81.8%)**, Wilson 95% CI 78.2–84.9; exact match 7.6% | Mnemosyne reranked retrieval, top-20 hits packed to 16 KB, read by `claude-sonnet-4.6`, judged by `claude-haiku-4.5`. Prompt and budget were chosen on 100 of the questions; the other 400 score 82.3%. |
 | **Reranker gain**, LoCoMo, 1,531 annotated questions | MRR@10 0.461 → 0.624, **+0.163** (paired bootstrap 95% CI 0.146–0.181; 599 wins, 133 losses) | The same hybrid candidate set with and without the bundled cross-encoder, on the shipped build. |
-| **Against Mem0 OSS**, same corpus, chunks, K, packing budget, scorer, one process | LoCoMo recall@10 **73.57 vs 63.72** with reranking; our *unreranked* path **loses to Mem0 at every K**; on LongMemEval-S the two tie on recall@20 and Mem0 takes MRR | [COMPARISON.md](COMPARISON.md), every loss in the same tables |
+| **Against Mem0 OSS**, same corpus, chunks, K, packing budget, scorer, one process | LoCoMo recall@10 **73.57 vs 63.72** for Mem0 OSS with Mnemosyne's reranker; LongMemEval-S recall@20 **tied** at 96.67. Fast mode without the reranker trails Mem0 on LoCoMo by under 1 point at every K, and Mem0 has the higher LongMemEval-S MRR | [COMPARISON.md](COMPARISON.md), every loss in the same tables |
 
 **What these numbers do not say.** The 81.8% is not a paired gain over the earlier 71.2%: that baseline used a different 250-question sample, prompt and budget, so the improvement belongs to the whole bundle of changes. The reader is nondeterministic; rerunning one configuration moved its score by about a point. Retrieval numbers measure coverage, not answers. Two Tier 1 targets of 2.0.0 are **not met** and ship disclosed: recall latency at one million records is p95 139–223 ms against a 50 ms goal (opt-in `indexMode: 'hnsw'`, see [Tune the dense index](#tune-the-dense-index)), and contextual reranking ships at 71.98% all-evidence hit against a 72.80% gate, 0.82 points (13 of 1,531 questions) short; the best variant tried was still four short and was not merged. Commands and raw outputs are in [`reports/t1-targets/evidence/`](reports/t1-targets/evidence/); the answer-accuracy and gate results are restated with their commits in the [changelog](CHANGELOG.md), and the Mem0 and reranker retrieval tables are in [COMPARISON.md](COMPARISON.md).
 
@@ -140,14 +254,14 @@ Engine choice is separate from version: `mnemosy-ai@latest` is 2.0.0 and contain
 Install the package in your project. Node 24 is recommended; the local memory engine needs no model API key, database server, or Docker.
 
 ```sh
-npm install mnemosy-ai                   # stable 2.0.0; or mnemosy-ai@next for the 3.0.0-rc.2 pre-release
-npx --no-install mnemosy demo
+npm install mnemosy-ai                   # stable 2.0.0; or mnemosy-ai@next for the 3.0.0-rc.4 pre-release
+npx --no-install mnemosy demo            # runs the installed package offline; the install itself needs the network
 npx --no-install mnemosy learning-demo
 ```
 
-Unqualified `npm install mnemosy-ai` follows the `latest` channel, which is 2.0.0 from 27 October 2026; pin `mnemosy-ai@2.0.0` for reproducible deployments. `npm install mnemosy-ai@next` installs the 3.0.0-rc.2 pre-release; pin `mnemosy-ai@3.0.0-rc.2` to reproduce it. If you are upgrading from the 1.x line, read the [migration notes](docs/MIGRATION-v2.md) first: version 2 changes vector retrieval scoring, startup indexing and erasure, and does not migrate an existing database. Evaluate on your own workload before production. Python registry publication is separate; the bundled Python client can be installed from the checkout.
+Unqualified `npm install mnemosy-ai` follows the `latest` channel, which is 2.0.0 from 27 October 2026; pin `mnemosy-ai@2.0.0` for reproducible deployments. `npm install mnemosy-ai@next` installs the 3.0.0-rc.4 pre-release; pin `mnemosy-ai@3.0.0-rc.4` to reproduce it. If you are upgrading from the 1.x line, read the [migration notes](docs/MIGRATION-v2.md) first: version 2 changes vector retrieval scoring, startup indexing and erasure, and does not migrate an existing database. Evaluate on your own workload before production. Python registry publication is separate; the bundled Python client can be installed from the checkout.
 
-To build and run the same release from source (use `--branch v3.0.0-rc.2` for the pre-release):
+To build and run the same release from source (use `--branch v3.0.0-rc.4` for the pre-release):
 
 ```sh
 git clone --branch v2.0.0 --depth 1 https://github.com/28naem-del/mnemosyne.git
@@ -255,8 +369,9 @@ the open, so it lives in the constructor and nowhere else.
 
 **`cacheSize`** — `PRAGMA cache_size`, applied on every open, in SQLite's own units: a **positive**
 value is a page count, a **negative** value is a KiB budget. Defaults to `-65536` (64 MiB), and a
-negative value is the recommended form since page size can vary. Must be a nonzero integer of
-magnitude at most 2,097,152.
+negative value is the recommended form since page size can vary. Must be a nonzero integer: a
+positive value is at most 524,288 pages, and a negative value is at most 2,097,152 in magnitude
+(2 GiB either way at the default page size).
 
 A larger page cache buys fewer trips through the OS page cache for the shortlist rescore and the
 BM25 postings that the hot recall path reads on every query. It matters once the working set stops
@@ -276,7 +391,7 @@ cost, charged per open connection, so it is set rather than guessed.
 | **Source-backed profiles** | Typed fields report supported values, unknowns or conflicts and revalidate their inputs. | [Profiles](docs/PROFILES.md) |
 | **Silent-staleness checks** | Explicit source policies, last-confirmed evidence, bounded probes and action-bound dependency checks. | [Freshness](docs/MAINTENANCE.md) |
 | **A controlled transition** | Read-only access to your previous store, gradual local preference, reconciliation and routing rollback. | [Gradual migration](docs/BRIDGE.md) |
-| **Full import and recovery** | Eleven export profiles, preview, atomic application, replay protection, guarded undo and whole-database backups. | [Import](docs/MIGRATION.md) · [Recovery](docs/OPERATIONS.md) |
+| **Full import and recovery** | Eleven export profiles, preview, atomic application, replay protection, guarded undo and whole-database backups (the consolidation signing key is a separate file to back up). | [Import](docs/MIGRATION.md) · [Recovery](docs/OPERATIONS.md) |
 | **Host-controlled processing** | Durable bounded jobs, source-backed project models, outcome traces, entity relations and staged changes. | [Runtime](docs/RUNTIME.md) |
 
 ## Local Engine, several entry points
@@ -364,13 +479,13 @@ These results measure retrieval coverage against the earlier local scorer. They 
 
 ### Against another memory system
 
-A **matched competitor benchmark** against Mem0 OSS is published in **[COMPARISON.md](COMPARISON.md)** — same corpus, same chunks, same K, same packing budget, all scored inside one process, with the results where Mem0 beats us printed in the same tables as the results where it does not. In short: our reranked path takes the LoCoMo headline at 73.57 recall@10 against Mem0's 63.72, our *unreranked* hybrid loses to Mem0 at every K on both recall and MRR, and on LongMemEval-S the two tie on recall@20 while Mem0 takes MRR. Zep and Graphiti carry a reason rather than a number: neither could be run without paid credentials. These are retrieval-coverage numbers with no reader and no judge, not answer accuracy.
+A **matched competitor benchmark** against Mem0 OSS is published in **[COMPARISON.md](COMPARISON.md)** — same corpus, same chunks, same K, same packing budget, all scored inside one process, with the results where Mem0 beats us printed in the same tables as the results where it does not. In short: with its reranker, Mnemosyne takes the LoCoMo headline at 73.57 recall@10 against Mem0's 63.72, and on LongMemEval-S the two tie on recall@20. Fast mode without the reranker trails Mem0 at every K on LoCoMo, by under 1 point of recall and on MRR, and Mem0 has the higher LongMemEval-S MRR. Zep Cloud was measured in a separate matched run on 29 October 2026 (LoCoMo only, free plan, episode search); its results and the disclosure that goes with them are in [COMPARISON.md](COMPARISON.md#zep-cloud-29-october-2026), and the full report and raw outputs are in [reports/matched-run-2026-10-29-zep.md](reports/matched-run-2026-10-29-zep.md). Graphiti was not run. These are retrieval-coverage numbers with no reader and no judge, not answer accuracy.
 
 A separate [evidence lifecycle diagnostic](docs/evaluation/EVIDENCE-PROTOCOL.md) tests correction, time, conflicts, failure, erasure and scope behavior. It deliberately retains a failing case: changing an unrelated field can retire a still-valid dependent rule. The [engineering review](docs/EXTERNAL-REVIEW.md) and [release status](docs/UPGRADE-STATUS.md) track this and other remaining work.
 
 ## Operational boundaries
 
-Workspace and agent IDs are trusted controller selectors, not tenant authentication. The HTTP service supplies scope-bound bearer authentication; remote TLS and enterprise identity require application deployment work. Databases and backups are plaintext. Forgetting removes covered live content and blocks known source replays, but cannot erase an older backup or a prompt already sent to a model.
+Workspace and agent IDs are trusted controller selectors, not tenant authentication. The HTTP service supplies scope-bound bearer authentication; remote TLS and enterprise identity require application deployment work. Databases and plain backup bundles are plaintext; `--encrypt` bundles are passphrase-encrypted ([Operations](docs/OPERATIONS.md#encrypted-bundles)). Forgetting removes covered live content and blocks known source replays, but cannot erase an older backup or a prompt already sent to a model.
 
 Local semantic search scans the eligible indexed corpus with bounded retained candidates and a deadline. That exact scan is the default; an approximate index is available but opt-in and never selected on your behalf (see [Tune the dense index](#tune-the-dense-index)), and every candidate any index proposes is re-authorized and rescored against the stored vector before it is returned. Generated observations and trial results remain fallible assertions. Action checks validate declared local dependencies before dispatch, not external transactions. Managed synchronization, model training and six validated native framework integrations are not included. [Security](SECURITY.md) · [Deployment](docs/deployment.md) · [Backup and restore](docs/OPERATIONS.md).
 

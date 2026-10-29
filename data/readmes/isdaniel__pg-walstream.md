@@ -17,7 +17,7 @@ A high-performance Rust library for PostgreSQL logical and physical replication 
 - **Pure-Rust Backend (default)**: The default `rustls-tls` backend needs no libpq and no OpenSSL, using `aws-lc-rs` for hardware-accelerated TLS (AES-NI, AVX2, SHA-NI). 
 - **TLS/SSL Support**: All PostgreSQL SSL modes (`disable`, `allow`, `prefer`, `require`, `verify-ca`, `verify-full`)
 - **Authentication**: Cleartext, MD5, and SCRAM-SHA-256 authentication methods
-- **Streaming Transactions**: Support for streaming large transactions (protocol v2+)
+- **Streaming Transactions**: Support for streaming large transactions (protocol v2+). Each streamed change carries the xid of its subtransaction in `ChangeEvent::xid`, so a `StreamAbort` for a rolled-back savepoint names exactly the changes to drop
 - **Two-Phase Commit**: Prepared transaction support (protocol v3+)
 - **Parallel Streaming**: Multi-stream parallel replication (protocol v4+)
 - **Zero-Copy Operations**: Efficient buffer management using the `bytes` crate with drain-loop batch queue optimization. The libpq backend copies each COPY message into a reusable `BytesMut` buffer, then reference-counts it downstream as `Bytes` (no per-message heap allocation after warmup)
@@ -327,7 +327,7 @@ copy.finish()?;
 // stream.next_event(&cancel) continues at the first transaction committed at or past c.
 ```
 
-`next_event_before(C)` returns `None` once every transaction committed below `C` has been delivered. Decide each transaction at its commit event. Below `C`, apply it without the copied tables' rows, which the copy already holds. At or past `C`, apply it in full, after the copy. A transaction that ends in `RollbackPrepared` or in a `StreamAbort` of the whole transaction is dropped. Streamed chunks, `BeginPrepare` through `Prepare`, and `StreamPrepare` can arrive before the `None` for a transaction that commits at or past `C`, so buffer each transaction until its commit event. `EventStream::next_event_before` does the same with retries.
+`next_event_before(C)` returns `None` once every transaction committed below `C` has been delivered. Decide each transaction at its commit event. Below `C`, apply it without the copied tables' rows, which the copy already holds. At or past `C`, apply it in full, after the copy. A transaction that ends in `RollbackPrepared` or in a `StreamAbort` of the whole transaction is dropped. A `StreamAbort` of a subtransaction drops the buffered changes whose `ChangeEvent::xid` equals its `subtransaction_xid`. Streamed chunks, `BeginPrepare` through `Prepare`, and `StreamPrepare` can arrive before the `None` for a transaction that commits at or past `C`, so buffer each transaction until its commit event. `EventStream::next_event_before` does the same with retries.
 
 The capture holds a second replication connection and a temporary slot until slot creation ends. Slot creation waits for the transactions open when it starts and can also wait for ones that start during the wait. Dropping the capture future does not stop it, so abandoned captures behind a long transaction keep their walsenders and can exhaust `max_wal_senders`. `with_cancellation` covers only the copy loop. The copy pins `xmin` until `finish()`.
 

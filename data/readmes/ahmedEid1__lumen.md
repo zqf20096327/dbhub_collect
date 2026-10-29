@@ -146,7 +146,7 @@ flowchart LR
 
     subgraph LLM[Swappable LLM layer]
       provider{LLM_PROVIDER dispatch}
-      groq[Groq · Llama 3.3 70B]
+      groq[Groq · gpt-oss-120b]
       byok[BYOK allowlist<br/>OpenAI · Anthropic · Mistral · Groq]
     end
 
@@ -200,9 +200,9 @@ cp .env.example .env
 make up && make migrate && make seed
 ```
 
-Open <http://localhost:3000> and sign in:
+Open <http://localhost:3000> and sign in with one of the local seed logins. They exist only in the database `make seed` creates on your machine and don't work on the hosted app; to try that, open <https://lumen.ahmedhobeishy.tech/demo>, which signs you in to the public demo account.
 
-| Role | Email | Password |
+| Role | Email | Password (local only) |
 |---|---|---|
 | admin | `admin@lumen.test` | `Admin!2026` |
 | user | `teacher@lumen.test` | `Teach!2026` |
@@ -214,7 +214,7 @@ Without an LLM key the AI features fall back to a deterministic `noop` provider 
 LLM_PROVIDER=openai
 OPENAI_API_BASE=https://api.groq.com/openai/v1
 OPENAI_API_KEY=<your-groq-key>
-LLM_MODEL=llama-3.3-70b-versatile
+LLM_MODEL=openai/gpt-oss-120b
 ```
 
 The same `LLMProvider` abstraction takes native Anthropic or OpenAI by env var — no code changes. Feature flags (`FEATURE_BYOK_ENABLED`, `FEATURE_PRIVATE_PUBLISH_ENABLED`, `CLONE_ENABLED`, `FEATURE_TUTOR_STREAMING`) default **off**; set them in `.env` once their prerequisites (e.g. a real BYOK master key) are in place. `make demo-seed` adds the richer agentic-demo bundle.

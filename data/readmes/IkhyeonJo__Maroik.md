@@ -1,8 +1,145 @@
 # Maroik
 
+## Seed accounts (`Init.sql`)
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | `admin@maroik.com` | `demoO12!!` |
+| User (public demo) | `demo@maroik.com` | `demoO12!!` |
+
 # [https://www.maroik.com]
 
 # Contact: admin@maroik.com
+
+## Screenshots
+
+### Login
+<img width="551" height="574" alt="1" src="https://github.com/user-attachments/assets/54821d51-5fce-46b6-a182-c97bbfa86b76" />
+
+### User Dashboard
+<img width="1902" height="940" alt="0" src="https://github.com/user-attachments/assets/22e98cb6-8f39-402a-9ec5-e73528afa06d" />
+
+### File Manager
+<img width="1918" height="942" alt="1" src="https://github.com/user-attachments/assets/4b4099de-20d8-4fcd-9d68-838a29b5c6c9" />
+
+### Kanban Board
+<img width="1915" height="934" alt="2" src="https://github.com/user-attachments/assets/7537ddfc-6657-48a4-acac-88e1dab44ee2" />
+
+### Calendar
+<img width="1915" height="933" alt="3" src="https://github.com/user-attachments/assets/884d923b-995b-4c98-93b1-5b10841c315c" />
+
+### Forum
+<img width="1914" height="940" alt="4" src="https://github.com/user-attachments/assets/76894805-ac2e-4416-bba6-670b62133fa3" />
+
+### NonfactorGrid
+<img width="1917" height="933" alt="5" src="https://github.com/user-attachments/assets/8271558d-037e-45d6-a6a8-8e1a92958570" />
+<img width="1914" height="942" alt="6" src="https://github.com/user-attachments/assets/c6231b7a-6d87-44fe-aed4-cc1ba9bb6921" />
+
+### Budget
+<img width="1897" height="944" alt="7" src="https://github.com/user-attachments/assets/d1df24a3-e67e-4051-93b0-a9414c62765e" />
+
+### User Profile
+<img width="1899" height="942" alt="8" src="https://github.com/user-attachments/assets/b167e3c8-aa32-40ff-8332-748a8412f96d" />
+
+## How to Deploy
+
+The server runs Ubuntu Server 26.04 and Maroik lives in `/home/ubuntu/Maroik`. Run every command below **as `ubuntu`,
+not with `sudo`**: `Deploy.sh` refuses to run as root, because the folder must belong to `ubuntu` (it calls `sudo` itself
+where it needs it). It asks how to deploy; without a terminal, pass the choice (`bash Maroik.DeployOps/Deploy.sh local`
+or `github`):
+
+| Choice | What it deploys |
+|---|---|
+| `1` / `local` — build here | The source in `/home/ubuntu/Maroik` as it is (a clone on any branch, or source copied by hand). Builds the three app images on the server (release build, as CI does), asks how the site is reached (below) and starts the stack for it. No GitHub, no ghcr.io, no CI check; does not install `AutoDeploy.sh` (and removes it from the cron jobs). |
+| `2` / `github` — GitHub | The newest `main` whose CI `publish` job succeeded: checks it out, pulls its three images from ghcr.io, starts the stack and installs `AutoDeploy.sh`, so merged changes reach production by themselves. |
+| `3` — quit | Nothing. |
+
+Choice 1 then asks whether the site has a domain and, if so, how it is reached. The answers are asked on every deploy
+(never saved); without a terminal pass them as arguments:
+
+| Answer | What runs | Arguments |
+|---|---|---|
+| No domain | The website on a port of this server (default 80) over plain HTTP — for a home network: passwords and sessions travel unencrypted. Also asks the address the mails link to (default `http://<LAN IP>[:port]/`). | `local nodomain [port] [address]` |
+| Domain, Cloudflare Tunnel | cloudflared, no port opened (as choice 2). Needs `TUNNEL_TOKEN`. | `local tunnel <domain>` |
+| Domain, port forwarding | Caddy on 80 / 443 with a Let's Encrypt certificate for `<domain>` and `www.<domain>` (asks the e-mail Let's Encrypt writes to). The router forwards 80 / 443 here and the domain's DNS points at the public IP. | `local portforward <domain> <e-mail>` |
+
+The website follows the answer (`ServerSetting:HostingMode`): HTTPS, HSTS and the www redirect only with a domain, and
+cookies a browser keeps over plain HTTP without one. Choice 2 always runs the Cloudflare Tunnel with `.env.prod`'s domain.
+
+Both need three server-only things the repository does not carry (all git-ignored). It checks for them before it
+does anything and lists whatever is missing:
+
+| Item | What it is |
+|---|---|
+| `.env.prod` | Passwords and settings: copy `.env.prod.example` and fill in the database, RabbitMQ and SMTP credentials, `TUNNEL_TOKEN` (Cloudflare Zero Trust > Networks > Tunnels > connector token; the tunnel only), `EXTERNAL_DRIVE_UUID` (`sudo blkid`) and `BACKUP_BASE_DIR`. |
+| `Maroik.DB/PostgreSQL/SQL_Init_Script/Production/Init.sql` | The database the stack starts from: a backup's `pg_dump`, or `Debugging/Init.sql` (same schema, demo data) on a new server. |
+| `Maroik.FileStorage/upload/` | Uploaded attachments. Empty is allowed only on a new server: `Deploy.sh` asks first (`ALLOW_EMPTY_UPLOAD=1` skips the question). |
+
+Every backup `Maroik.Crontab/Backup.sh` makes (`Maroik-Backup-YYYY-MM-DD-HH-MM-SS.tar.xz`, hourly) holds exactly these
+three, laid out like the clone, so extracting it into the clone puts each one where `Deploy.sh` looks. The archives are
+on the backup drive in `BACKUP_BASE_DIR` (`/home/ubuntu/512GB/Maroik-Backup` by default), and the newest one is also kept
+next to the clone, in `/home/ubuntu`.
+
+Either choice then starts the whole stack, mounts the backup drive, installs the cron jobs (hourly backup, resource
+monitoring, and with choice 2 the auto deploy) and closes every inbound port but the mode's (80 / 443 for port forwarding,
+the chosen port without a domain). In the commands below, answer `1` to build
+on the server or `2` when production should follow GitHub's `main`.
+
+### Restore from a backup (a new server, or after losing the old one)
+
+```bash
+# 1. Mount the backup drive to reach the archives (Deploy.sh mounts it for good later; `sudo blkid` shows the UUID)
+sudo mkdir -p /home/ubuntu/512GB
+sudo mount UUID=<backup drive UUID> /home/ubuntu/512GB
+ls /home/ubuntu/512GB/Maroik-Backup/            # pick the newest Maroik-Backup-YYYY-MM-DD-HH-MM-SS.tar.xz
+
+# 2. Clone, then extract the backup over the clone: .env.prod, the Production Init.sql and the uploads land in place
+git clone https://github.com/IkhyeonJo/Maroik.git /home/ubuntu/Maroik
+tar xJf /home/ubuntu/512GB/Maroik-Backup/Maroik-Backup-YYYY-MM-DD-HH-MM-SS.tar.xz --strip-components=1 -C /home/ubuntu/Maroik
+
+# 3. Deploy
+cd /home/ubuntu/Maroik && bash Maroik.DeployOps/Deploy.sh
+```
+
+On a different machine, check `EXTERNAL_DRIVE_UUID` in the restored `.env.prod` against `sudo blkid` before step 3.
+
+### First deploy (a new server, no backup)
+
+```bash
+git clone https://github.com/IkhyeonJo/Maroik.git /home/ubuntu/Maroik
+cd /home/ubuntu/Maroik
+
+cp .env.prod.example .env.prod                  # then edit it: replace every dummy value (see the table above)
+cp Maroik.DB/PostgreSQL/SQL_Init_Script/Debugging/Init.sql Maroik.DB/PostgreSQL/SQL_Init_Script/Production/Init.sql
+
+ALLOW_EMPTY_UPLOAD=1 bash Maroik.DeployOps/Deploy.sh
+```
+
+### Redeploy after a schema change
+
+A release that changes `Maroik.DB/` is not deployed automatically (`AutoDeploy.sh` logs it and waits; `Deploy.sh` deploys
+whatever source it finds, so the same steps apply before it), because the database
+has to be rebuilt from `Init.sql`. `Undeploy.sh` removes **every** Docker volume, the database's included, so take a fresh
+backup right before it:
+
+```bash
+cd /home/ubuntu/Maroik
+
+# 1. A fresh backup of the running server (the newest archive is also left in /home/ubuntu)
+bash Maroik.Crontab/Backup.sh
+
+# 2. Take the stack down: containers, volumes (the database too), images and cron jobs; unmounts the backup drive
+bash Maroik.DeployOps/Undeploy.sh
+
+# 3. Put the backup back in place
+tar xJf /home/ubuntu/Maroik-Backup-YYYY-MM-DD-HH-MM-SS.tar.xz --strip-components=1 -C /home/ubuntu/Maroik
+
+# 4. Bring Maroik.DB/PostgreSQL/SQL_Init_Script/Production/Init.sql up to the new schema: make the same change the release
+#    made to the tracked Init.sql variants (the backup's dump still has the old schema)
+
+# 5. Deploy the new release
+bash Maroik.DeployOps/Deploy.sh
+```
 
 ## Introduction
 Maroik is a modern web application built with ASP.NET Core MVC, featuring a comprehensive set of tools for personal and business management. It includes features such as expense tracking, spreadsheet-style budgets, calendar management with e-mail reminders, bulletin boards, a personal Kanban board, a personal file drive, and role-based user management.
@@ -395,137 +532,7 @@ source on the server, with no GitHub; **2** deploys what CI published, and keeps
 `Maroik.Crontab/AutoDeploy.sh` (installed by choice 2 only) looks at the newest commit on `main`; once its `publish` job has succeeded it pulls that commit's three images and replaces only the app containers, so
 the database, Valkey (sessions) and RabbitMQ keep running. A deploy whose pull fails leaves the running containers alone
 and is not retried. A release that changes `Maroik.DB/` (the schema) is not deployed automatically: it is logged, and the
-full deploy below is run by hand, because it rebuilds the database from `Init.sql` and restores the backup.
-
-## How to Deploy
-
-The server runs Ubuntu Server 24.04 and Maroik lives in `/home/ubuntu/Maroik`. Run every command below **as `ubuntu`,
-not with `sudo`**: `Deploy.sh` refuses to run as root, because the folder must belong to `ubuntu` (it calls `sudo` itself
-where it needs it). It asks how to deploy; without a terminal, pass the choice (`bash Maroik.DeployOps/Deploy.sh local`
-or `github`):
-
-| Choice | What it deploys |
-|---|---|
-| `1` / `local` — build here | The source in `/home/ubuntu/Maroik` as it is (a clone on any branch, or source copied by hand). Builds the three app images on the server (release build, as CI does), asks how the site is reached (below) and starts the stack for it. No GitHub, no ghcr.io, no CI check; does not install `AutoDeploy.sh` (and removes it from the cron jobs). |
-| `2` / `github` — GitHub | The newest `main` whose CI `publish` job succeeded: checks it out, pulls its three images from ghcr.io, starts the stack and installs `AutoDeploy.sh`, so merged changes reach production by themselves. |
-| `3` — quit | Nothing. |
-
-Choice 1 then asks whether the site has a domain and, if so, how it is reached. The answers are asked on every deploy
-(never saved); without a terminal pass them as arguments:
-
-| Answer | What runs | Arguments |
-|---|---|---|
-| No domain | The website on a port of this server (default 80) over plain HTTP — for a home network: passwords and sessions travel unencrypted. Also asks the address the mails link to (default `http://<LAN IP>[:port]/`). | `local nodomain [port] [address]` |
-| Domain, Cloudflare Tunnel | cloudflared, no port opened (as choice 2). Needs `TUNNEL_TOKEN`. | `local tunnel <domain>` |
-| Domain, port forwarding | Caddy on 80 / 443 with a Let's Encrypt certificate for `<domain>` and `www.<domain>` (asks the e-mail Let's Encrypt writes to). The router forwards 80 / 443 here and the domain's DNS points at the public IP. | `local portforward <domain> <e-mail>` |
-
-The website follows the answer (`ServerSetting:HostingMode`): HTTPS, HSTS and the www redirect only with a domain, and
-cookies a browser keeps over plain HTTP without one. Choice 2 always runs the Cloudflare Tunnel with `.env.prod`'s domain.
-
-Both need three server-only things the repository does not carry (all git-ignored). It checks for them before it
-does anything and lists whatever is missing:
-
-| Item | What it is |
-|---|---|
-| `.env.prod` | Passwords and settings: copy `.env.prod.example` and fill in the database, RabbitMQ and SMTP credentials, `TUNNEL_TOKEN` (Cloudflare Zero Trust > Networks > Tunnels > connector token; the tunnel only), `EXTERNAL_DRIVE_UUID` (`sudo blkid`) and `BACKUP_BASE_DIR`. |
-| `Maroik.DB/PostgreSQL/SQL_Init_Script/Production/Init.sql` | The database the stack starts from: a backup's `pg_dump`, or `Debugging/Init.sql` (same schema, demo data) on a new server. |
-| `Maroik.FileStorage/upload/` | Uploaded attachments. Empty is allowed only on a new server: `Deploy.sh` asks first (`ALLOW_EMPTY_UPLOAD=1` skips the question). |
-
-Every backup `Maroik.Crontab/Backup.sh` makes (`Maroik-Backup-YYYY-MM-DD-HH-MM-SS.tar.xz`, hourly) holds exactly these
-three, laid out like the clone, so extracting it into the clone puts each one where `Deploy.sh` looks. The archives are
-on the backup drive in `BACKUP_BASE_DIR` (`/home/ubuntu/512GB/Maroik-Backup` by default), and the newest one is also kept
-next to the clone, in `/home/ubuntu`.
-
-Either choice then starts the whole stack, mounts the backup drive, installs the cron jobs (hourly backup, resource
-monitoring, and with choice 2 the auto deploy) and closes every inbound port but the mode's (80 / 443 for port forwarding,
-the chosen port without a domain). In the commands below, answer `1` to build
-on the server or `2` when production should follow GitHub's `main`.
-
-### Restore from a backup (a new server, or after losing the old one)
-
-```bash
-# 1. Mount the backup drive to reach the archives (Deploy.sh mounts it for good later; `sudo blkid` shows the UUID)
-sudo mkdir -p /home/ubuntu/512GB
-sudo mount UUID=<backup drive UUID> /home/ubuntu/512GB
-ls /home/ubuntu/512GB/Maroik-Backup/            # pick the newest Maroik-Backup-YYYY-MM-DD-HH-MM-SS.tar.xz
-
-# 2. Clone, then extract the backup over the clone: .env.prod, the Production Init.sql and the uploads land in place
-git clone https://github.com/IkhyeonJo/Maroik.git /home/ubuntu/Maroik
-tar xJf /home/ubuntu/512GB/Maroik-Backup/Maroik-Backup-YYYY-MM-DD-HH-MM-SS.tar.xz --strip-components=1 -C /home/ubuntu/Maroik
-
-# 3. Deploy
-cd /home/ubuntu/Maroik && bash Maroik.DeployOps/Deploy.sh
-```
-
-On a different machine, check `EXTERNAL_DRIVE_UUID` in the restored `.env.prod` against `sudo blkid` before step 3.
-
-### First deploy (a new server, no backup)
-
-```bash
-git clone https://github.com/IkhyeonJo/Maroik.git /home/ubuntu/Maroik
-cd /home/ubuntu/Maroik
-
-cp .env.prod.example .env.prod                  # then edit it: replace every dummy value (see the table above)
-cp Maroik.DB/PostgreSQL/SQL_Init_Script/Debugging/Init.sql Maroik.DB/PostgreSQL/SQL_Init_Script/Production/Init.sql
-
-ALLOW_EMPTY_UPLOAD=1 bash Maroik.DeployOps/Deploy.sh
-```
-
-### Redeploy after a schema change
-
-A release that changes `Maroik.DB/` is not deployed automatically (`AutoDeploy.sh` logs it and waits; `Deploy.sh` deploys
-whatever source it finds, so the same steps apply before it), because the database
-has to be rebuilt from `Init.sql`. `Undeploy.sh` removes **every** Docker volume, the database's included, so take a fresh
-backup right before it:
-
-```bash
-cd /home/ubuntu/Maroik
-
-# 1. A fresh backup of the running server (the newest archive is also left in /home/ubuntu)
-bash Maroik.Crontab/Backup.sh
-
-# 2. Take the stack down: containers, volumes (the database too), images and cron jobs; unmounts the backup drive
-bash Maroik.DeployOps/Undeploy.sh
-
-# 3. Put the backup back in place
-tar xJf /home/ubuntu/Maroik-Backup-YYYY-MM-DD-HH-MM-SS.tar.xz --strip-components=1 -C /home/ubuntu/Maroik
-
-# 4. Bring Maroik.DB/PostgreSQL/SQL_Init_Script/Production/Init.sql up to the new schema: make the same change the release
-#    made to the tracked Init.sql variants (the backup's dump still has the old schema)
-
-# 5. Deploy the new release
-bash Maroik.DeployOps/Deploy.sh
-```
-
-## Screenshots
-
-### Login
-<img width="551" height="574" alt="1" src="https://github.com/user-attachments/assets/54821d51-5fce-46b6-a182-c97bbfa86b76" />
-
-### User Dashboard
-<img width="1902" height="940" alt="0" src="https://github.com/user-attachments/assets/22e98cb6-8f39-402a-9ec5-e73528afa06d" />
-
-### File Manager
-<img width="1918" height="942" alt="1" src="https://github.com/user-attachments/assets/4b4099de-20d8-4fcd-9d68-838a29b5c6c9" />
-
-### Kanban Board
-<img width="1915" height="934" alt="2" src="https://github.com/user-attachments/assets/7537ddfc-6657-48a4-acac-88e1dab44ee2" />
-
-### Calendar
-<img width="1915" height="933" alt="3" src="https://github.com/user-attachments/assets/884d923b-995b-4c98-93b1-5b10841c315c" />
-
-### Forum
-<img width="1914" height="940" alt="4" src="https://github.com/user-attachments/assets/76894805-ac2e-4416-bba6-670b62133fa3" />
-
-### NonfactorGrid
-<img width="1917" height="933" alt="5" src="https://github.com/user-attachments/assets/8271558d-037e-45d6-a6a8-8e1a92958570" />
-<img width="1914" height="942" alt="6" src="https://github.com/user-attachments/assets/c6231b7a-6d87-44fe-aed4-cc1ba9bb6921" />
-
-### Budget
-<img width="1897" height="944" alt="7" src="https://github.com/user-attachments/assets/d1df24a3-e67e-4051-93b0-a9414c62765e" />
-
-### User Profile
-<img width="1899" height="942" alt="8" src="https://github.com/user-attachments/assets/b167e3c8-aa32-40ff-8332-748a8412f96d" />
+full deploy in How to Deploy (above) is run by hand, because it rebuilds the database from `Init.sql` and restores the backup.
 
 ## Contributing
 1. Fork the repository

@@ -71,6 +71,8 @@ Groups and colors are local preferences; they do not change the database. See [o
 
 SQL consoles provide syntax highlighting, completion, formatting, find and replace, query history, execution plans and cancellation. Run the current statement, a selection or the entire script. SQL Server scripts support <code>GO</code> batches.
 
+On PostgreSQL, MySQL and MariaDB, **Explain Plan** (⇧⌘E) shows the plan as a tree with each step's object, estimated rows and cost; **Explain Analyze** in the editor's menu also runs the statement and adds actual rows and time, asking first when the statement writes. The steps that take most of the cost or time are highlighted, and **Show as Text** gives the server's own output. Other engines show their text plans.
+
 <p align="center">
   <img src="docs/screenshots/readme/sql-console.png" alt="Full DataCraft window with a highlighted SQL query and its result grid" width="100%">
   <br>
@@ -78,6 +80,8 @@ SQL consoles provide syntax highlighting, completion, formatting, find and repla
 </p>
 
 Redis/Valkey and MongoDB consoles use their own commands, including <code>HGETALL user:1</code> and <code>db.orders.find({total: {$gte: 100}})</code>. Their result grids are read-only.
+
+The Kusto console takes KQL queries and control commands, such as <code>StormEvents | summarize count() by State</code> and <code>.show tables</code>; requests are separated by blank lines, and the result grids are read-only too.
 
 ## Edit data with clear feedback
 
@@ -92,6 +96,8 @@ Pending edits have a distinct highlight. Updates, inserted rows and deletions ca
 </p>
 
 The cell editor supports multiline text and a UTF-8 hex view. The inspector switches between table information, the selected column and the current record. Read-only connections disable editing and DDL.
+
+To read a whole value, Alt+Click (⌥-click on macOS) any cell, double-click a cell that can't be edited, or choose View Value from its context menu: a popup below the cell shows it, with JSON indented, and Esc or a click outside closes it.
 
 [Table editing and shortcuts →](docs/table-editor.md)
 
@@ -114,6 +120,7 @@ Ctrl+F, or Command+F on macOS, searches the currently loaded cells. **Find in Sc
 - **Mask values:** apply consistent per-column masking during table copies or exports.
 - **Manage objects:** create and modify tables and views, review generated DDL, and manage MySQL/MariaDB users or PostgreSQL roles and privileges.
 - **Back up databases:** open **Back up database…** from the Database Explorer, review engine-specific options and choose a destination. Jobs run in the background with cancellation and local history.
+- **Run SQL scripts:** **Run SQL Script…** on a connection or database runs one or more `.sql` files without opening them. They are read in pieces, so a dump of several GB doesn't fill memory, and each engine's separators are respected (`GO` on SQL Server, `DELIMITER` on MySQL, `/` on Oracle). Progress and Cancel are shown; a failing statement asks Retry, Skip, Skip All or Stop, and the summary lists each failure with its file and line.
 
 <p align="center">
   <img src="docs/screenshots/readme/database-backup.png" alt="Full DataCraft window with the MariaDB backup dialog and its destination, utility and compression settings" width="100%">
@@ -137,6 +144,39 @@ PostgreSQL, MySQL and MariaDB backups require their native dump utilities. SQLit
 | Redis / Valkey | Native commands, keys grouped by prefix, type/TTL information and read-only result grids |
 | MongoDB | <code>mongosh</code>-style commands, collection browsing and read-only result grids |
 | InfluxDB 2 | HTTP API (port 8086, HTTPS with "Use TLS") with an API token and an organization; Flux and InfluxQL consoles, buckets and measurements with their tags and fields, and read-only result grids filtered by a Flux predicate and a time range (the last hour by default). InfluxQL needs InfluxDB 2.4+ or a DBRP mapping |
+| Kusto / Azure Data Explorer | REST API over HTTPS, signed in with the Azure CLI's account (`az login`), an Entra ID application (client ID and secret), or no authentication for the Kusto emulator; KQL console with control commands (requests separated by blank lines, as in Kusto Explorer), databases with their tables and materialized views, and read-only result grids filtered and sorted with KQL. Read-only connections are also enforced by the server |
+
+### SSH tunnels
+
+Every engine reached over TCP (all but SQLite, Snowflake and Kusto) can connect through a bastion host. Tick **Use SSH tunnel** in the data source's **SSH** tab and give the bastion's host, port and user, then sign in with a password, a private key (OpenSSH or PEM, with its passphrase) or the running SSH agent. The host and port in **General** stay the database's address as the bastion reaches it, often `localhost`.
+
+- The first time a bastion is reached, Test Connection shows its key fingerprint and asks before trusting it. Keys already in `~/.ssh/known_hosts` are trusted, others go to DataCraft's own `ssh_known_hosts`, and a bastion whose key changed is refused, naming both fingerprints.
+- The sessions of a data source share one SSH connection, with keepalives every 30 seconds. If it drops, the next query opens it again.
+- With TLS, the certificate is still checked against the database's own host name for PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse and InfluxDB. MongoDB checks the certificate chain but not the name, which can't match the tunnel's local address. A replica set or `mongodb+srv` address can't be used through a tunnel: point it at one server.
+- SSH passwords and passphrases are kept in the system keychain, like database passwords.
+
+### SSL
+
+PostgreSQL, MySQL and MariaDB data sources choose how the connection is encrypted in the **SSL** part of the **SSH/SSL** tab:
+
+| Mode | Encrypted | Certificate |
+| --- | --- | --- |
+| Prefer (default) | When the server offers it | Not checked |
+| Disable | Never | — |
+| Require | Always | Not checked |
+| Verify CA | Always | Signed by the CA file, or by a CA the system trusts |
+| Verify full | Always | Signed as above and issued for the host |
+
+- **Client certificates:** a client certificate and key (PEM; an encrypted PKCS#8 key takes its passphrase, kept in the keychain) sign users in when the server asks for one.
+- **Renewed certificates:** the files are read on every connect, so a renewed certificate needs no edit.
+- **Test Connection** names the TLS version and cipher. A refused certificate says which CA didn't sign it, or which host it wasn't issued for.
+- **Through an SSH tunnel,** the certificate is still checked against the database's own host name.
+
+### Bring your connections
+
+- **Paste a URL:** the URL field also takes `postgresql://`, `mysql://`, `mariadb://`, `sqlserver://`, `mongodb://`, `mongodb+srv://`, `redis://`, `rediss://` and `clickhouse://` URLs, and a SQLite file's path. The engine, user, password and SSL settings are filled in; the password goes to the system keychain.
+- **Copy as URL:** a connection's context menu copies its URL for other tools, without the password.
+- **Import from DataGrip:** **+ → Import from DataGrip…** lists the data sources of DataGrip's projects (or any `dataSources.xml`) with their engine, folder and address. Engines DataCraft doesn't support are shown but can't be ticked, existing ones are left unticked and a name in use is imported as a copy. Passwords aren't imported: DataCraft asks for each one on the first connect. DataGrip's files are only read.
 
 Support varies by engine, server version and account privileges. [Oracle Instant Client](https://www.oracle.com/database/technologies/instant-client.html) must be installed separately for Oracle connections.
 
@@ -161,6 +201,8 @@ Get packaged builds from the official [GitHub Releases](https://github.com/javy-
 | Linux · x64 and ARM64 (glibc 2.35+) | <code>DataCraft-&lt;version&gt;-linux-x64.tar.gz</code> / <code>-linux-arm64.tar.gz</code> | Extract the archive and run <code>DataCraft/datacraft</code>. Needs a Vulkan driver, SQLite, D-Bus and a Secret Service provider (GNOME Keyring or KWallet). |
 
 The macOS app is not notarized and Windows executables are unsigned, so the operating system may show a first-launch warning. Check the release notes for the build you download.
+
+**Updates:** a few seconds after launch DataCraft checks the latest release on GitHub and, when a newer one is out, shows a notice with a link to its page (**Skip This Version** hides it until the next one). **Check for Updates…** checks right away, and the check can be turned off in Settings. Nothing is downloaded or installed automatically.
 
 ## Build from source
 

@@ -2,7 +2,7 @@
 
 Single-binary, high-concurrency OLTP database server supporting T-SQL and stored procedures
 
-[![Version](https://img.shields.io/badge/version-v0.90.0--beta3-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v0.90.0--beta4-blue.svg)](CHANGELOG.md)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](README.md)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green.svg)](LICENSE)
 [![Go Report](https://img.shields.io/badge/go-1.22+-00ADD8.svg)](https://go.dev)
@@ -83,6 +83,10 @@ LionSQL's core capabilities are organized across five foundational architectural
   - **Microsoft SQL Server TDS Protocol (Port 1433)**: Instantly compatible with SSMS, Azure Data Studio, `sqlcmd`, and MSSQL drivers, supporting RPC prepared execution.
 - **Built-in Goroutine Connection Pooler**:
   Handles 10,000+ simultaneous connections over lightweight Go goroutines, eliminating connection bottlenecks without external poolers.
+
+> [!TIP]
+> **Recommended Application Protocol: PostgreSQL Wire (`:5433`)**
+> While LionSQL faithfully serves both protocols, **PGWire (`:5433`) is strongly recommended as the default application protocol**, even when executing T-SQL stored procedures (`EXEC sp_name @p1=$1;`). PGWire's lightweight framing and single-packet pipelining (`Parse` + `Bind` + `Execute` + `Sync`) deliver higher raw network throughput (141,000+ tpmC / 5,170+ TPS) with lower serialization latency than Microsoft TDS RPC streams, while offering universal, zero-quirk driver support across Go (`pgx`, `lib/pq`), Node.js, Python, Java, and Rust. TDS (`:1433`) is primarily intended for legacy Microsoft tooling (SSMS, Azure Data Studio, legacy .NET `SqlClient`).
 
 ### 2. Enterprise T-SQL Procedural Runtime
 - **Stored Procedures, Functions & Triggers**:

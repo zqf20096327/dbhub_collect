@@ -15,7 +15,6 @@ A place to store and share wish lists.
 * ~~integrate with gift registry~~
 * ~~integrate with shopping plans~~
 
-![Build status](https://travis-ci.org/flurdy/wishlist.png)
 
 
 
@@ -42,6 +41,14 @@ to clean the folder, compile all classes and start the web application.
 The `~` will automatically detect and recompile any changes.
 
 
+Test
+-----
+
+`sbt test` on JDK 8. The browser tests run headless Chrome and need a
+[ChromeDriver](https://googlechromelabs.github.io/chrome-for-testing/)
+matching your Chrome version on the `PATH`; without it they are canceled.
+
+
 Configuration
 -------------
 
@@ -57,7 +64,8 @@ Such as
 * Analytics Id
 
 The  application is set up to run on Heroku http://www.heroku.com as an example.
-The **Procfile** is Heroku specific which configures the app via **conf/heroku.conf**.
+Heroku builds and deploys every push to `master` with its Scala buildpack;
+the **Procfile** starts the app with **conf/production.conf**.
 In that file a number of environment properties is configured for the the application.
 
 The application is also configured to be run with Docker and Fig/Compose.

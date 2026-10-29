@@ -6,7 +6,7 @@ Define multi-step workflows as directed acyclic graphs — not linear chains. St
 
 ## Requirements
 
-- Ruby >= 3.2
+- Ruby >= 4.0
 - Rails >= 7.2
 - PostgreSQL
 - GoodJob >= 4.14 with `preserve_job_records = true`
@@ -126,7 +126,7 @@ Set at the pipeline level with `failure_strategy`:
 |---|---|
 | `:halt` (default) | Stop all pending steps when any step fails |
 | `:continue` | Let independent branches continue; skip only blocked downstream steps |
-| `:ignore` | Treat failures as successes for dependency resolution |
+| `:ignore` | Treat failed steps and pipelines as satisfied for dependency resolution |
 
 Per-step overrides via `on_failure:` in `run` apply to that step's outgoing edges only.
 
@@ -201,7 +201,7 @@ GoodPipeline.run(
 ).then(MergeMediaPipeline, with: { video_id: 123, audio_id: 456 })
 ```
 
-If an upstream pipeline fails, halts, is canceled, or is skipped, downstream pipelines are automatically skipped.
+Chained pipelines wait for every upstream to succeed or fail with `failure_strategy :ignore`. Any other terminal outcome skips dependent pipelines. Ignored failures keep their `failed` status and still trigger failure callbacks.
 
 ### Monitoring
 

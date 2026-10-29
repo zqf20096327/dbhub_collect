@@ -148,9 +148,9 @@ For a proxy, set `TELEGRAM_PROXY=socks5://127.0.0.1:1080`. Supports `socks4://`,
 Reference: [CLI commands](docs/cli-commands.md), [authentication](docs/auth.md),
 [configuration](docs/configuration.md), [architecture](docs/architecture.md),
 [daemon](docs/daemon.md), [sync strategy](docs/sync-strategy.md), [caching](docs/caching.md),
-[database schema](docs/database-schema.md), [SQL](docs/sql.md), [search](docs/search.md),
-[media](docs/media.md), [rate limiting](docs/rate-limiting.md). Known gaps are tracked in
-[issues](https://github.com/neoromantic/telegram-sync-cli/issues).
+[database schema](docs/database-schema.md), [storage](docs/storage.md), [SQL](docs/sql.md),
+[search](docs/search.md), [media](docs/media.md), [rate limiting](docs/rate-limiting.md).
+Known gaps are tracked in [issues](https://github.com/neoromantic/telegram-sync-cli/issues).
 
 ## For AI agents
 
@@ -166,6 +166,9 @@ Reference: [CLI commands](docs/cli-commands.md), [authentication](docs/auth.md),
 - `tg status` reports each account's cache size (`--sizes` adds each table's and the media
   cache's); `tg db vacuum` prunes old bookkeeping rows and gives free space back to the disk,
   and works while the daemon runs on a cache this version created.
+- After an upgrade that changes how rows are stored, the daemon rewrites the older rows in the
+  background, a little each second; `tg db migrate` finishes that without it, and `tg status`
+  shows the progress. Reads work the same meanwhile.
 
 ## Usage stats
 
@@ -178,9 +181,9 @@ directory you set and your user name taken out. tg never sends messages, chat or
 phone numbers, account, chat or user IDs, search queries or any other argument.
 
 Nothing is sent until tg has shown you a one-line notice (in a terminal, or to an AI agent that
-runs it), and nothing from CI, tests or a source checkout. The daemon sends each event at most
-once a day. Events go through usage.sergeybaus.com to PostHog, which stores them in its US
-Cloud as the author's processor and sees your IP address.
+runs it), and nothing from CI, tests or a source checkout. The daemon and runs from a script send
+each event at most once a day. Events go through usage.sergeybaus.com to PostHog, which stores
+them in its US Cloud as the author's processor and sees your IP address.
 
 Turn it off with `tg telemetry off` (it also deletes the install ID),
 `TELEGRAM_SYNC_CLI_TELEMETRY=0` or `DO_NOT_TRACK=1`. `tg telemetry status` shows whether it's

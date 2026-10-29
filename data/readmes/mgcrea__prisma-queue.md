@@ -243,7 +243,7 @@ A job that exhausts `maxAttempts` (default **5**) is permanently **dead-lettered
 
 ```ts
 queue.on("dead", (error, job) => {
-  alert(`Job ${job.id} dead-lettered after ${job.maxAttempts} attempts`, error);
+  alert(`Job ${job.id} dead-lettered after ${job.record.attempts} attempts`, error);
 });
 
 // Monitor backlog and dead-letter depth (counts are mutually exclusive)
@@ -305,6 +305,8 @@ await queue.schedule(
   { id: "node-1" },
 );
 ```
+
+The first `schedule()` for a key runs the job right away (or at `runAt`, if given). Calling it again for the same key, typically at every app start, keeps the pending occurrence's `runAt` and only updates its payload and settings, so a deploy doesn't trigger an extra run or reset the cadence.
 
 By default, the next run for an interval job is scheduled as `finishedAt + interval` — drift-tolerant, so a slow run doesn't cause a backlog. Pass `repeatFrom: "runAt"` for a fixed wall-clock cadence (`previousRunAt + interval`) — the same drift-free behavior as cron:
 

@@ -11,7 +11,47 @@
 
 **PDOdb** is a lightweight, framework-agnostic PHP database library providing a **unified API** across MySQL, MariaDB, PostgreSQL, SQLite, Microsoft SQL Server (MSSQL), and Oracle.
 
-Built on top of PDO with **zero external dependencies**, it offers:
+Built on top of PDO with no framework dependency (the package requires three small PSR interfaces), it offers:
+
+To try PDOdb with SQLite, install PHP 8.4+ with `pdo_sqlite`, then run:
+
+```bash
+composer require tommyknocker/pdo-database-class
+```
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use tommyknocker\pdodb\PdoDb;
+
+$db = new PdoDb('sqlite', ['path' => ':memory:']);
+$db->rawQuery('CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT NOT NULL)');
+$id = $db->find()->table('users')->insert(['name' => 'Alice']);
+$user = $db->find()->from('users')->where('id', $id)->getOne();
+if ($user !== false) {
+    echo $user['name'];
+}
+```
+
+By default, rows are associative arrays. Use `asObject()` to fetch rows as
+`stdClass` objects instead:
+
+```php
+// get() returns an array of objects (or an empty array if no rows match)
+$users = $db->find()->from('users')->asObject()->get();
+foreach ($users as $user) {
+    echo $user->name;
+}
+
+// getOne() returns an object, or false if no row matches
+$user = $db->find()->from('users')->where('id', $id)->asObject()->getOne();
+if ($user !== false) {
+    echo $user->name;
+}
+```
+
+See [installation](documentation/01-getting-started/01-installation.md), [database support](documentation/09-reference/05-dialect-differences.md), and [the complete documentation](documentation/README.md).
 
 **Core Features:**
 - **Fluent Query Builder** - Intuitive, chainable API for all database operations
@@ -36,7 +76,7 @@ Built on top of PDO with **zero external dependencies**, it offers:
 - **ActiveRecord Pattern** - Optional lightweight ORM for object-based database operations with relationships (hasOne, hasMany, belongsTo, hasManyThrough), eager/lazy loading, and query scopes
 
 **Developer Experience:**
-- **🤖 AI-Powered Analysis** - Get intelligent database optimization recommendations using OpenAI, Anthropic, Google, Microsoft, DeepSeek, Yandex, or Ollama. Analyze queries, optimize schema, and get AI-powered suggestions through `explainAiAdvice()` method or CLI commands. Includes MCP server for IDE/agent integration.
+- **🤖 AI-Powered Analysis** - Get intelligent database optimization recommendations using OpenAI, OpenRouter, OpenAI-compatible endpoints, Anthropic, Google, Microsoft, DeepSeek, Yandex, or Ollama. Analyze queries, optimize schema, and get AI-powered suggestions through `explainAiAdvice()` method or CLI commands. Includes MCP server for IDE/agent integration.
 - **🖥️ Interactive TUI Dashboard** - Real-time database monitoring with full-screen terminal interface. 8 panes across 2 screens: Active Queries, Connection Pool, Cache Statistics, Server Metrics, Schema Browser, Migration Manager, Server Variables, and SQL Scratchpad. Features include global search filter, query inspection, performance tracking, query management, and keyboard navigation. Launch with `pdodb ui`
 - **CLI Tools** - Database management, user management, dump/restore, migration generator, seed generator, model generator, schema inspector, interactive query tester (REPL), AI analysis commands
 - **Enhanced EXPLAIN** - Automatic detection of full table scans, missing indexes, and optimization recommendations
@@ -89,7 +129,7 @@ Inspired by [ThingEngineer/PHP-MySQLi-Database-Class](https://github.com/ThingEn
 - ✅ Helper functions for common operations
 
 **vs. Eloquent/Doctrine:**
-- ✅ Zero dependencies (no framework required)
+- ✅ No framework dependency
 - ✅ Lightweight (no ORM overhead)
 - ✅ Direct SQL access when needed
 - ✅ Better performance for complex queries
@@ -107,8 +147,8 @@ Inspired by [ThingEngineer/PHP-MySQLi-Database-Class](https://github.com/ThingEn
 - [Quick Example](#quick-example)
 - [5-Minute Tutorial](#5-minute-tutorial)
 - [Configuration](#configuration)
+- [Understand a slow query with AI](#understand-a-slow-query-with-ai)
 - [Quick Start](#quick-start)
-  - [AI-Powered Query Analysis](#-ai-powered-query-analysis)
 - [JSON Operations](#json-operations)
 - [Advanced Usage](#advanced-usage)
 - [CLI Tools](#cli-tools)
@@ -125,6 +165,19 @@ Inspired by [ThingEngineer/PHP-MySQLi-Database-Class](https://github.com/ThingEn
 - [License](#license)
 
 ---
+
+## Database test coverage
+
+The CI workflow runs the database-specific suites against these server versions. This is the regularly tested configuration, not an exhaustive compatibility guarantee; individual features may have dialect restrictions.
+
+| Database | CI version |
+| --- | --- |
+| MySQL | 8.0 |
+| MariaDB | 11.2 |
+| PostgreSQL | 16 |
+| SQLite | Runner's bundled version |
+| SQL Server | 2022 |
+| Oracle | XE 21 |
 
 ## Requirements
 
@@ -185,7 +238,7 @@ The wizard will guide you through:
 - Connection testing
 - Advanced options (caching, table prefix, multiple connections)
 
-See [CLI Tools Documentation](documentation/05-advanced-features/21-cli-tools.md#project-initialization-pdodb-init) for more details.
+See [CLI Tools Documentation](documentation/05-advanced-features/21-cli-tools.md#project-initialization) for more details.
 
 ---
 
@@ -278,7 +331,7 @@ $db->find()
     ->update(['age' => 31]);
 ```
 
-**That's it!** No configuration, no dependencies, just works.
+**That's it!** SQLite requires no database server. Composer installs the required PSR interfaces.
 
 ---
 
@@ -443,66 +496,37 @@ See [Configuration Documentation](documentation/01-getting-started/04-configurat
 
 ---
 
+## Understand a slow query with AI
+
+Get advice grounded in your **actual execution plan, table schemas and existing
+indexes**, directly from the query you are investigating:
+
+```php
+$advice = $db->find()
+    ->from('orders')
+    ->where('status', 'pending')
+    ->orderBy('created_at', 'DESC')
+    ->limit(50)
+    ->explainAiAdvice();
+
+echo $advice->aiAnalysis;
+```
+
+PDOdb collects the plan, table schemas and existing indexes, then makes one
+request to your configured provider. Review the explanation and verify a
+candidate change against the database.
+
+**[Start with the complete walkthrough](documentation/05-advanced-features/23-ai-analysis.md)**:
+what the advice looks like, three-value setup, your first live answer, and
+before/after examples. To explore the included data and real plans without a key:
+
+```bash
+php examples/07-performance/05-ai-query-advice.php
+```
+
 ## Quick Start
 
 **Note**: All query examples start with `$db->find()` which returns a `QueryBuilder` instance.
-
-### 🤖 AI-Powered Query Analysis
-
-Get intelligent optimization recommendations for your queries using AI:
-
-```php
-use tommyknocker\pdodb\PdoDb;
-
-$db = PdoDb::fromEnv();
-
-// Configure AI (or use environment variables: PDODB_AI_OPENAI_KEY, etc.)
-$db = new PdoDb('mysql', [
-    'host' => 'localhost',
-    'dbname' => 'mydb',
-    'username' => 'user',
-    'password' => 'pass',
-    'ai' => [
-        'provider' => 'openai',
-        'openai_key' => 'sk-...',
-    ],
-]);
-
-// Get AI-enhanced analysis
-$result = $db->find()
-    ->from('users')
-    ->where('email', 'user@example.com')
-    ->explainAiAdvice(tableName: 'users', provider: 'openai');
-
-// Access base analysis (traditional EXPLAIN)
-foreach ($result->baseAnalysis->issues as $issue) {
-    echo "Issue: {$issue->message}\n";
-}
-
-// Access AI recommendations
-echo "AI Analysis:\n";
-echo $result->aiAnalysis . "\n";
-```
-
-Or use CLI:
-
-```bash
-# Set API key
-export PDODB_AI_OPENAI_KEY=sk-...
-export PDODB_AI_OPENAI_MODEL=gpt-4o-mini  # Optional: gpt-4, gpt-3.5-turbo
-export PDODB_AI_GOOGLE_MODEL=gemini-2.5-flash  # Optional: gemini-2.5-pro, gemini-2.0-flash-001, gemini-flash-latest
-
-# Analyze query
-pdodb ai query "SELECT * FROM users WHERE email = 'user@example.com'" \
-    --provider=openai \
-    --table=users
-```
-
-**Supported Providers:** OpenAI, Anthropic, Google, Microsoft, DeepSeek, Yandex, Ollama (local, no API key)
-
-**Model Selection:** Configure models via environment variables (`PDODB_AI_<PROVIDER>_MODEL`) or config array (`ai.providers.<provider>.model`)
-
-See [AI Analysis Documentation](documentation/05-advanced-features/23-ai-analysis.md) for complete guide.
 
 ### Basic CRUD Operations
 
@@ -727,7 +751,7 @@ Perfect for debugging, monitoring production databases, understanding query patt
 ### Available Commands
 
 - **`ui`** ⭐ - **Interactive TUI Dashboard** - Real-time database monitoring (full-screen terminal interface)
-- **`ai`** 🤖 - **AI-Powered Analysis** - Get intelligent database optimization recommendations using OpenAI, Anthropic, Google, Microsoft, DeepSeek, Yandex, or Ollama
+- **`ai`** 🤖 - **AI-Powered Analysis** - Get intelligent database optimization recommendations using OpenAI, OpenRouter, OpenAI-compatible endpoints, Anthropic, Google, Microsoft, DeepSeek, Yandex, or Ollama
 - **`db`** - Manage databases (create, drop, list, check existence)
 - **`user`** - Manage database users (create, drop, grant/revoke privileges)
 - **`dump`** - Dump and restore database (with compression, auto-naming, rotation)
@@ -992,6 +1016,8 @@ Yes! Pass your PDO instance:
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 $db = new PdoDb('mysql', ['pdo' => $pdo]);
 ```
+
+For a new SQLite PDO on PHP 8.4+, use `PDO::connect('sqlite::memory:')` to obtain a `Pdo\Sqlite` instance. On PHP 8.5, an existing plain `new PDO('sqlite:...')` instance still works, but registering the SQLite REGEXP functions uses a deprecated PDO method. Pass `enable_regexp => false` if those functions are not needed, or use a `Pdo\Sqlite` connection when creating a new instance.
 
 ### Which database should I use for development?
 **SQLite** is perfect for development - no server setup needed:

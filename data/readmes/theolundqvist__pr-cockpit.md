@@ -33,6 +33,8 @@ The first sync fetches PRs involving you. **All PRs** loads on demand without ex
 
 Press <kbd>r</kbd> to filter repositories. Use arrows to highlight one, <kbd>Enter</kbd> to toggle it, or <kbd>Shift+Enter</kbd> to select only that repository.
 
+Press <kbd>h</kbd> on a PR in the list to **Remind me**. Pick a time or type a date and time, then press Enter. The PR stays in Set Aside until then, or until new PR activity brings it back. Escape cancels; **⌘Z** / **Ctrl+Z** undoes the reminder. Set Aside shows its return time and lets you bring it back early. <kbd>b</kbd> still sets a PR aside indefinitely.
+
 Enable **Date filters and sorting** in **Settings → Workspace** for **Opened** and **Order** controls in the main PR lists, plus **Grouping** in Your queue. Switch grouping between Status, Feature area, PR type, and Manual without leaving the queue. Opened, Order, Grouping, and Repository selections survive refreshes and app updates; only applied custom date bounds are saved. Filter to the last 24 hours, 7 days, 30 days, or a custom local date-and-time range; custom bounds apply when you press **Apply**. Order by newest or oldest opened, or most or least recently updated. **Queue order** keeps the usual priorities. Grouped queues keep their sections, manual pin order, and stacks; the Whiteboard is unchanged. PRs with an unknown opened date appear in All time but not an active date range.
 
 ## From finding the PR to finishing the review
@@ -49,7 +51,9 @@ The search panel uses its own connection pool, so pending main-window requests c
 
 Diffs, threads, checks, and file history live in the same review workspace. The header shows Closed or Merged even if the PR retains its draft flag. The PR check summary uses the latest workflow run and job attempt; earlier runs remain in Actions history. Press <kbd>x</kbd> to fold tests and generated files when you want to see the implementation first; press it again to bring them back. Generated files include `.generated.` names and committed `.gitattributes` rules marked `linguist-generated`; nested rules and overrides follow the reviewed revision. The same group can be hidden by default in Settings.
 
-PR images are prefetched into each machine's persistent cache, including SSH replicas; opening an image reuses that local download.
+PR images are prefetched into each machine's persistent cache. SSH replicas download through their source server, so private images require no separate GitHub login on the replica. The source uses the installed `gh-img` extension when direct GitHub access is unavailable. Sign-in HTML is rejected and old cached sign-in pages are replaced on the next request.
+
+SSH replicas forward the source's PR updates to an open conversation, including comment edits and PRs outside the inbox or already merged. Changed inbox snapshots also refresh the matching detail after import.
 
 ![Folding five regression-test diffs in graphql/graphql-js#4692 to isolate the one-line implementation change](docs/screenshots/landing-hide-tests.gif)
 
@@ -59,7 +63,7 @@ Enable **Full-file finder** in **Settings → Review preferences** to read whole
 
 Reviewer badges show scores explicitly posted in reviews or comments, parsed without launching a scoring agent.
 
-Enable **Pending reviews** in **Settings → Workspace** to save inline comments as a native GitHub draft and submit them together as one review. Drafts survive reloads and remain editable; if the PR head changes, submission stops until the stale draft is discarded. **Comment now** still posts a single comment immediately.
+Enable **Pending reviews** in **Settings → Workspace** to save inline comments as a native GitHub draft and submit them together as one review. Drafts survive reloads and remain editable; if the PR head changes, submission stops until the stale draft is discarded. Published threads stay visible while the draft refreshes, including after a refresh failure; draft comments stay out of the published conversation. **Comment now** still posts a single comment immediately.
 
 Enable **Mark changed descriptions** in **Settings → Workspace** to show a small blue dot to the left of the avatar, vertically centered on it, when the PR description differs from the one you last read. It is off by default. A description counts as read while it is on screen in the Conversation tab of a foreground window; PRs you have never read stay unmarked, and a description reverted to the version you read clears the dot.
 
@@ -103,9 +107,9 @@ Each entry needs exactly one of `comment` or `addLabel`; `key` is optional, and 
 | <kbd>p</kbd> | Open in the configured agent |
 | <kbd>e</kbd> | Edit the open file |
 | <kbd>x</kbd> | Hide / show tests and generated files |
-| <kbd>h</kbd> | File history |
+| <kbd>h</kbd> | Remind me from the list / file history in Files |
 | <kbd>m</kbd> | Merge |
-| <kbd>⌘</kbd><kbd>z</kbd> / <kbd>Ctrl</kbd><kbd>z</kbd> | Undo a group-move rename or Set Aside action |
+| <kbd>⌘</kbd><kbd>z</kbd> / <kbd>Ctrl</kbd><kbd>z</kbd> | Undo a group-move rename, Set Aside or reminder |
 | <kbd>?</kbd> | Full shortcut guide |
 
 </details>

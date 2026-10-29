@@ -1,3 +1,5 @@
+[Português (Brasil) → README.pt-BR.md](README.pt-BR.md)
+
 # Renor
 
 ![Claude Code saves a decision to Renor; a fresh Codex session recalls it](docs/assets/renor-readme-demo.gif)\
@@ -7,7 +9,7 @@
 
 **Renor is memory for coding agents: it keeps what you tell Claude Code, Codex or Cursor in a folder of Markdown files on your machine, and serves it back to any of them over MCP.**
 
-Every new agent session starts from zero: you re-explain the project, last week's decision and why, the thing you corrected twice. With Renor, one agent saves it and the next one finds it. The memory is plain files you own. It runs locally, needs no account or API key, and sends nothing off your machine unless you configure a model or opt in to sharing (off by default; the signals level sends anonymous usage numbers, the data level also sends your searches and memory text with keys and passwords filtered out; `renor-engine telemetry off` stops it). A hosted version with no install is at <https://renor.cloud>.
+Every new agent session starts from zero: you re-explain the project, last week's decision and why, the thing you corrected twice. With Renor, one agent saves it and the next one finds it. The memory is plain files you own. It runs locally, needs no account or API key, and sends nothing off your machine unless you configure a model or send anonymous usage numbers (on by default, with a first-run notice; `renor-engine telemetry off` or `DO_NOT_TRACK=1` turns them off). Your memory text is shared only if you say yes to that separately. A hosted version with no install is at <https://renor.cloud>.
 
 ## Quickstart
 
@@ -87,6 +89,22 @@ Put it in that file, or merge the `renor-local` entry into an existing `mcpServe
 
 Then ask your agent to remember something, and ask about it in a new session. What an agent saves is searchable at once. A Markdown file you add or edit by hand is searchable after you run `node dist/cli.js index` again.
 
+## Run it on a server
+
+One container serves your memory over HTTP to every agent, from any machine, with OAuth sign-in for you alone. It needs no model or key; the memory stays on a volume you own.
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/renorai/renor-engine)
+
+```bash
+docker build -t renor-engine https://github.com/renorai/renor-engine.git
+docker run -d --name renor -p 127.0.0.1:3471:3471 -v renor-data:/data \
+  -e MVP_OWNER_EMAIL=you@example.com -e MVP_OWNER_PASSWORD="$(openssl rand -base64 18)" \
+  -e MVP_ALLOWED_CALLBACK_URIS=http://localhost:39472/callback renor-engine
+claude mcp add --transport http --scope user --callback-port 39472 renor http://localhost:3471/mcp
+```
+
+Sign in from `/mcp` in Claude Code with that email and password (`docker exec renor printenv MVP_OWNER_PASSWORD`). Railway (`railway.toml`) and Fly.io (`fly.toml`) work the same way; [Docker and one-click hosts](docs/self-hosting.md#docker-and-one-click-hosts) has the steps for each.
+
 ## What is stored where
 
 | What | Where |
@@ -109,3 +127,5 @@ Renor is a single-owner engine: one person's notes, one set of agents. It is not
 ## Contributing, license, security
 
 Contributions are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) covers setup and tests and lists good first issues. Renor's own code is **Apache-2.0** ([LICENSE](LICENSE)); 1.0.0 was released under AGPL-3.0; 1.1.0 and later are Apache-2.0; files imported from the upstream project stay ISC ([NOTICE](NOTICE), [UPSTREAM.md](UPSTREAM.md)). Report vulnerabilities privately as described in [SECURITY.md](SECURITY.md), not in a public issue.
+
+If Renor saves you re-explaining, a [⭐](https://github.com/renorai/renor-engine) helps other developers find it.

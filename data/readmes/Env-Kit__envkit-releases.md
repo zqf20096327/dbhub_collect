@@ -24,6 +24,10 @@ A Laragon, XAMPP and Herd alternative.
 [Docs](https://envkit.net/docs) ·
 [Changelog](https://envkit.net/changelog)
 
+<sub>🇮🇩 🇲🇾 Gratis, tanpa akun, tampilan dalam Bahasa Indonesia. Pengganti Laragon dan XAMPP:
+<a href="https://stats.envkit.net/d/win?c=gh-readme-id">unduh untuk Windows</a> ·
+<a href="https://envkit.net/id/alternatif-laragon">baca selengkapnya</a></sub>
+
 <a href="art/envkit-demo.mp4"><img src="art/envkit-demo.webp" alt="EnvKit in action: first-run site, sites, services, databases, the AI (MCP) assistant, cron, logs and tools" width="880" /></a>
 
 </div>
@@ -176,7 +180,7 @@ Run the same command again any time to update.
 curl -fsSL https://raw.githubusercontent.com/Env-Kit/envkit-releases/main/install.sh | bash
 ```
 
-Downloads the latest Mac build, clears the Gatekeeper quarantine and opens it. Run it again
+Downloads the latest Mac build and opens it. Run it again
 to update, or add `-s -- --uninstall` to remove EnvKit. macOS 12 or later on an M-series
 Mac; Intel Macs are not supported.
 
@@ -193,12 +197,8 @@ brew install --cask env-kit/tap/envkit
 <summary>Install from the DMG instead</summary>
 
 [Download the DMG](https://stats.envkit.net/d/mac?c=gh-readme), open it and drag
-**EnvKit** to Applications. The app is Developer ID signed but not notarized yet, so macOS
-may block the first launch. Any one of these gets past it:
-
-- open it once, then click **Open Anyway** in System Settings → Privacy & Security;
-- use the `curl` one-liner above, which clears the quarantine for you;
-- run `xattr -dr com.apple.quarantine /Applications/EnvKit.app`.
+**EnvKit** to Applications. The app is signed and notarized by Apple, so it opens like any
+other Mac app.
 
 Windows and macOS builds are released separately, so the very latest release is sometimes
 Windows-only. The installer script and the in-app updater pick the newest Mac build
@@ -221,10 +221,10 @@ Upgrading? Your sites, databases, certificates and settings carry over automatic
 
 ## What's new
 
-0.33.0-beta.44 ([full notes](https://github.com/Env-Kit/envkit-releases/releases/latest)):
-first-run setup ends with a working site, Bahasa Indonesia, automatic port moves for
-memcached and extra PHP versions, and a MySQL guard that never re-initializes a data folder
-holding your databases.
+Latest release ([full notes](https://github.com/Env-Kit/envkit-releases/releases/latest)):
+a Light, Dark or System theme, `php` and `composer` on PATH in the fish shell too, and a
+round of macOS fixes (apps outside /Applications are found, files open in your default
+app). Every release: [envkit.net/changelog](https://envkit.net/changelog).
 
 ## Screenshots
 
@@ -291,13 +291,15 @@ PHP versions, MCP, `envkit.json`, custom versions and translating the app.
 ## Support EnvKit
 
 EnvKit is free. If it saves you time, you can support it on
-[Ko-fi](https://ko-fi.com/envkit). The current goal is $350 for a real Windows
-code-signing certificate, so installing no longer shows "Windows protected your PC", and an
-Apple Developer membership, so the Mac app opens without a warning. Receipts go up on
+[Ko-fi](https://ko-fi.com/envkit). The current goal is a real Windows code-signing
+certificate, so installing no longer shows "Windows protected your PC". (The Mac app is
+already notarized and opens without a warning.) Receipts go up on
 [Discord](https://discord.gg/2ArBwMX8pV) once they're bought.
 
-Starring this repo and leaving a review on
-[Trustpilot](https://www.trustpilot.com/evaluate/envkit.net) helps too.
+Free ways to help that matter just as much: star this repo, like EnvKit and write a short
+review on [AlternativeTo](https://alternativeto.net/software/envkit/about/) (that's where
+many people searching for a Laragon or XAMPP alternative find us), or leave a review on
+[Trustpilot](https://www.trustpilot.com/evaluate/envkit.net).
 
 ## Team
 

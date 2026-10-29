@@ -75,7 +75,7 @@ Sensitive URLs go in `.env` (auto-loaded at startup):
 DATABASE_URL=postgres://postgres:sieve@localhost:5432/sieve
 ```
 
-Columns are auto-generated from the ABI. Solidity camelCase is converted to snake_case automatically (`_troveId` -> `trove_id`, `amount0Out` -> `amount0_out`). SQL reserved words are handled. You can [override columns](#contracts-and-events) if you want.
+Columns are auto-generated from the ABI. Solidity camelCase is converted to snake_case automatically (`_troveId` -> `trove_id`, `amount0Out` -> `amount0_out`). SQL reserved words are handled. Unnamed ABI parameters are named by position (`param_4`), and arrays and structs are stored as JSONB. You can [override columns](#contracts-and-events) if you want.
 
 ### 3. Run
 
@@ -314,6 +314,98 @@ columns = [                 # optional -- auto-generated from ABI if omitted
 spender = ["0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD"]
 ```
 
+#### Overloaded events: `signature`
+
+Solidity lets one contract declare several events with the same name, for
+example Aerodrome gauges emitting both `Deposit(address,uint256,uint128)` and
+`Deposit(address,address,uint256)`. Each overload has its own topic0, so pick
+one per entry with `signature` and give each its own table:
+
+```toml
+[[contracts.events]]
+name = "Deposit"
+signature = "Deposit(address,uint256,uint128)"   # user, tokenId, liquidityToStake
+table = "gauge_cl_deposits"
+
+[[contracts.events]]
+name = "Deposit"
+signature = "Deposit(address,address,uint256)"   # from, to, amount
+table = "gauge_classic_deposits"
+```
+
+- The signature is canonical: the event name, then the ABI types in order,
+  comma-separated, with no spaces, parameter names, or `indexed`. Tuples are
+  written out as `(type,type)`. Sieve compares it exactly against the ABI;
+  anything else is a config error that lists the valid signatures.
+- An overloaded name without `signature` fails at startup (and in `sieve
+  inspect`, `schema`, and `reset`):
+
+  ```text
+  event 'Deposit' in contract 'Gauge' is overloaded; add `signature` with one of: Deposit(address,address,uint256), Deposit(address,uint256,uint128) (e.g. signature = "Deposit(address,address,uint256)")
+  ```
+
+- Rows are routed by contract and topic0, so each overload lands only in its
+  own table. One selector may still feed several tables; each table is
+  counted and streamed once per log. Stream payloads keep the bare event name
+  (`"event": "Deposit"`).
+- `sieve inspect` prints each entry's `signature` and full `topic0`.
+- Configs for events with a unique name need no change: omitting `signature`
+  keeps the same tables, SQL, and archive resume fingerprint, so upgrading
+  needs no reset. Adding `signature` to an existing entry changes the archive
+  fingerprint. Renaming an event or changing its parameter types in the ABI
+  changes its topic0.
+- `sieve add-contract` writes one entry per overload, with its `signature`
+  and a numbered table (`<contract>_deposit_1`, `<contract>_deposit_2`, in ABI
+  order).
+- Factory creation events take no `signature`; to use an overloaded one,
+  point `factory.abi` at an ABI containing only the intended variant.
+
+#### Column types, arrays and structs
+
+| Solidity type                                   | Default column                       |
+| ----------------------------------------------- | ------------------------------------ |
+| `bool`                                          | `boolean`                            |
+| `address`, `string`                             | `text` (addresses checksummed)       |
+| `uint8`..`uint64`, `int8`..`int64`              | `bigint`                             |
+| larger integers                                 | `numeric`                            |
+| `bytes`, `bytesN`                               | `bytea`                              |
+| any array (`uint128[]`, `bytes32[2]`), `tuple`  | `jsonb`                              |
+
+Arrays become JSON arrays and structs become JSON objects keyed by their ABI
+component names, at every nesting level. Integers are decimal strings, so
+`uint256` values keep full precision; bytes are lowercase `0x` hex (`"0x"`
+when empty); booleans stay booleans. An Aerodrome `GaugesAllocated` row
+stores:
+
+```json
+[{"gauge": "0x1111111111111111111111111111111111111111", "allocated": "1000", "data": "0x"}]
+```
+
+and can be queried with `allocations->0->>'allocated'`. An indexed array or
+struct is only a hash in the log, so it is stored as that `0x` hex string.
+`type = "text"` on such a column stores the same JSON as text.
+
+#### Unnamed parameters
+
+An ABI input with an empty name is named `param_<i>`, where `i` is its
+0-based position among all of the event's or function's inputs (struct
+components count among their siblings). Aerodrome's
+`PoolCreated(address indexed token0, address indexed token1, bool indexed stable, address pool, uint256)`
+gets a `param_4 numeric` column, and `param = "param_4"` selects it in
+`columns`, `filter` keys, and `factory.param`. The older `param = ""` still
+works while exactly one input is unnamed. An ABI whose real name equals a
+generated one at the same level (`param_1` plus an unnamed input 1) is
+rejected at startup.
+
+#### Upgrading from 0.3.4 or earlier
+
+Earlier versions stored arrays and structs in `text` columns as Rust debug
+strings (`Array([Tuple([...])])`). Sieve never alters existing tables: an
+existing `text` column keeps its old rows unchanged and receives JSON text
+for new rows, and the GraphQL API keeps serving it as a String. For uniformly
+JSON history, reindex into a fresh database. `ALTER TABLE ... TYPE jsonb USING
+col::jsonb` fails while any debug-string row remains.
+
 ### Function Call Indexing
 
 ```toml
@@ -492,7 +584,7 @@ Message payload (one per event):
 }
 ```
 
-**Note:** `data` keys use raw ABI parameter names, not your TOML column names. If the Solidity ABI defines `_troveId`, the stream sends `_troveId` -- even though PostgreSQL stores it as `trove_id`. ABI names are immutable; config names can change.
+**Note:** `data` keys use raw ABI parameter names, not your TOML column names. If the Solidity ABI defines `_troveId`, the stream sends `_troveId` -- even though PostgreSQL stores it as `trove_id`. ABI names are immutable; config names can change. Unnamed parameters use their generated `param_<i>` name. Values have the same JSON form as the [JSONB columns](#column-types-arrays-and-structs): arrays and struct objects are nested JSON, integers decimal strings.
 
 Receipt fields (`tx_value`, `tx_gas_price`, `gas_used`, `nonce`, `cumulative_gas_used`, `status`) are included when `include_receipts = true`.
 
@@ -507,6 +599,10 @@ Auto-generated from your TOML config. Every table gets:
 - **Pagination** -- cursor-based (`first`/`after`) and offset-based (`first`/`skip`)
 - **Sorting** -- `orderBy` + `orderDirection`
 
+Numeric columns (`bigint`, `numeric`, `integer`) take filter values as strings (`block_number: "21000000"`, `value_in: ["1", "2"]`) and compare them as numbers.
+
+JSON columns (`jsonb`, `json`) are returned as `String` fields holding the JSON text, and their filters (`field`, `_in`, `_not_in`), `orderBy`, and cursors compare that text (sorting follows the database collation). PostgreSQL normalizes `jsonb` text (key order, spacing), so match against values read from the API.
+
 ## CLI
 
 ```
@@ -516,7 +612,7 @@ sieve init                     Scaffold a new project (sieve.toml, .env, abis/)
 sieve init --docker            Same + docker-compose.yml with PostgreSQL
 sieve schema                   Print generated SQL DDL
 sieve reset                    Drop and recreate all tables
-sieve inspect                  Dry-run: show tables, columns, and filters
+sieve inspect                  Dry-run: show tables, event signatures/topic0, columns, and filters
 sieve add-contract <ADDRESS>   Fetch ABI from Etherscan and add to config
 sieve peers [--chain <NAME>]   Test P2P connectivity (no DB or config needed)
 
@@ -559,7 +655,7 @@ All sensitive URLs live in `.env` (auto-loaded at startup via `dotenvy`). Never 
 
 ### `sieve add-contract`
 
-Fetches a verified ABI from Etherscan, saves it to `abis/`, and appends a `[[contracts]]` block to your config. Auto-detects proxy contracts. Automatically sets `start_block` to the contract's deploy block.
+Fetches a verified ABI from Etherscan, saves it to `abis/`, and appends a `[[contracts]]` block to your config. Auto-detects proxy contracts. Automatically sets `start_block` to the contract's deploy block. Overloaded events get one entry per `signature`, with numbered tables.
 
 ```bash
 sieve add-contract 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
@@ -569,7 +665,7 @@ sieve add-contract 0xA0b8... --start-block 21000000   # override start block
 
 ### `sieve inspect`
 
-Validates your config without a database connection. Shows what tables, columns, context fields, and filters would be created.
+Validates your config without a database connection. Shows what tables, columns, context fields, and filters would be created, and each event's canonical `signature` and `topic0`.
 
 ```bash
 sieve inspect --config sieve.toml

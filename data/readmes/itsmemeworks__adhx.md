@@ -3,10 +3,12 @@
 [![CI](https://github.com/itsmemeworks/adhx/actions/workflows/ci.yml/badge.svg)](https://github.com/itsmemeworks/adhx/actions/workflows/ci.yml)
 [![Release](https://github.com/itsmemeworks/adhx/actions/workflows/release-please.yml/badge.svg)](https://github.com/itsmemeworks/adhx/actions/workflows/release-please.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](https://opensource.org/licenses/MIT)
+[![Latest release](https://img.shields.io/github/v/release/itsmemeworks/adhx?label=release)](https://github.com/itsmemeworks/adhx/releases/latest)
+[![Live demo](https://img.shields.io/badge/demo-demo.adhx.com-ffd23f)](https://demo.adhx.com)
 
 > **Your friends have better taste than the algorithm.**
 
-ADHX is a private feed of the best posts from X, Instagram, TikTok, YouTube, Reddit and nine more networks, picked by your closest friends and family instead of a recommendation engine with quarterly targets.
+ADHX is a private social network for your friends and family. One of you runs it; everyone shares the best posts they find on X, Instagram, TikTok, YouTube, Reddit and nine more networks into one feed, picked by people who know you instead of a recommendation engine with quarterly targets.
 
 Each of you saves the good stuff from whatever app you're in. ADHX downloads a real copy of every post, in the best quality the network offers, onto a server you run, and plays it from there. Deleted on X? Still here. Can't remember the caption? Describe it ("the baby arguing with a hamster") and ADHX finds it. Then send the actual video to the group chat, not a link that dies next month.
 
@@ -14,12 +16,15 @@ No ads. No strangers. No engagement metrics. Nobody in a growth meeting deciding
 
 https://github.com/user-attachments/assets/56130b2a-1e79-4d70-85e9-177de0efdb91
 
+**Look around first:** [demo.adhx.com](https://demo.adhx.com) is a live ADHX where you're Sam and your friends have been busy. Nothing to install, nothing saved.
+
 ## Contents
 
 - [What it does](#what-it-does)
 - [Supported networks](#supported-networks)
 - [How it works](#how-it-works)
 - [Run your own](#run-your-own)
+- [The admin area](#the-admin-area)
 - [Saving posts](#saving-posts)
 - [Phone apps](#phone-apps)
 - [Search from Claude and other agents](#search-from-claude-and-other-agents)
@@ -44,14 +49,14 @@ https://github.com/user-attachments/assets/56130b2a-1e79-4d70-85e9-177de0efdb91
 
 - **Home.** What your people saved that you haven't seen yet, full screen, one after another. Every post says why it's there (saved together, sent to you, a friend you watch a lot). Then it stops: "You're all caught up. Go touch grass."
 - **A real copy of everything.** Every save is downloaded once, at the best quality available (up to 4K), and served by your ADHX. Nothing streams from the networks at watch time, and nothing vanishes when they delete it.
-- **Search by what you remember.** Words, what's in the picture, sampled video frames, what's said in a video, and text on screen (that meme's caption, burned-in subtitles). It runs on your own server.
+- **Search by what you remember.** Words, what's in the picture, sampled video frames, what's said in a video, and text on screen (that meme's caption, burned-in subtitles). Three open models do it on your own server, free: EmbeddingGemma 2, Whisper and Florence-2. No API key, no cloud bill.
 - **Faces and notes.** See which of your people saved what: their notes float up as the post plays, and a tap on the face shows everyone who saved it, reacted or watched. Saves are shared with your people by default; **Just for me** keeps one to yourself.
 - **Reactions everywhere.** 😂 or "who sent this 💀" on any post. Reactions stay on the post, and **Channels → Reactions** plays everything your people reacted to.
 - **Send the file, not the link.** Straight to a friend's Home with a note, or out to WhatsApp, Messages or anywhere else as the actual video.
 - **Channels.** ADHX groups everyone's saves into rabbit holes and names them, and gives every friend a channel of everything they kept.
 - **Right now.** When a few of you save the same kind of thing at once, it goes live. **Tune in** to watch together and see who's watching with you.
 - **The original, when you want it.** The network's logo on every post opens who posted it, when, and everything they wrote, with a link back.
-- **Invites with an optional bouncer.** Make a link, send it, they pick a name, done. Or approve each person yourself.
+- **Invites with a bouncer.** Drop one group link in the chat; each friend picks a name and you let them in. Or send someone their own link and they're straight in. No passwords, no email needed.
 - **Phone apps** for iPhone and Android that do all of this, plus share-menu saving from any app.
 
 <details>
@@ -92,7 +97,7 @@ Screenshots use the sample friends from the [design parity harness](e2e/parity/R
 | Imgur      | Images and albums                        | Imgur blocks the UK; a server there can't keep Imgur posts                      |
 | Bluesky    | Video and pictures                       |                                                                                 |
 
-Downloads run through [yt-dlp](https://github.com/yt-dlp/yt-dlp), plus each network's public link-preview data for picture posts. ADHX never asks for your passwords on any of these networks. Posts that are private, blocked or protected by DRM may not download.
+Downloads run through [yt-dlp](https://github.com/yt-dlp/yt-dlp), plus each network's public link-preview data for picture posts. ADHX never asks for your passwords on any of these networks. Posts that are private, blocked or protected by DRM can't be kept. When a network changes something, saving from it can break until yt-dlp catches up; copies you already kept are safe.
 
 ## How it works
 
@@ -129,39 +134,56 @@ In words: you save a link from your phone, the web or the extension. Your server
 
 ## Run your own
 
-ADHX isn't a hosted service: you run it. You need somewhere to run a container with a persistent folder (a home server, a NAS, a small VPS or [Fly.io](docs/self-hosting.md#flyio)), and some disk space (1,000 mixed saves come to roughly 10–30 GB).
+ADHX isn't a hosted service: you run it. Any machine with Docker will do, amd64 or arm64, no GPU needed. 4 GB of memory is comfortable (about 2 GB with speech and text on screen switched off), and 1,000 mixed saves come to roughly 10–30 GB of disk.
 
-1. Get the code and an environment file:
+### Try it in a minute
 
-   ```bash
-   git clone https://github.com/itsmemeworks/adhx && cd adhx
-   cp .env.example .env
-   openssl rand -base64 32
-   ```
+```bash
+docker run -d --name adhx -p 3000:3000 -v adhx:/data ghcr.io/itsmemeworks/adhx
+docker logs adhx | grep setup
+```
 
-2. Edit `.env`:
-   - `SESSION_SECRET`: the value you just generated. Keep it stable; a new one signs everybody out.
-   - `NEXT_PUBLIC_APP_URL`: your final HTTPS address, e.g. `https://adhx.example.com`.
-   - `ALLOWED_EMAILS`: your own email, so strangers can't sign up.
-   - `EMAIL_LINKS_TO_ADMIN=1`, unless you set up [SMTP or Resend](docs/self-hosting.md#sign-in-links) for sign-in emails.
+Open the link it prints, add your email and pick your name: you're the owner. Then go to **Admin → Invites → Make a group link**, drop it in your group chat, and let people in as they pick their names. There's nothing to configure: ADHX makes its own secret and works out its own address. The first start also downloads the search models (about 800 MB) in the background.
 
-3. Build and start it:
+**Rather have an AI do it?** Every guide here is written by hand, but you don't have to read them. Point your favourite coding agent (Claude Code, Codex, Cursor, Gemini CLI …) at this repository and ask it to set ADHX up on your server. [`AGENTS.md`](AGENTS.md), [`CLAUDE.md`](CLAUDE.md) and the deploy recipes tell it everything it needs, from the installer to the Mac helper.
 
-   ```bash
-   docker build -t adhx:local .
-   echo "ADHX_IMAGE=adhx:local" >> .env
-   docker compose up -d
-   ```
+### One click, wherever you host
 
-4. Find your first sign-in link and open it (that makes you the admin):
+| Where                                                   | How                                                                                                                                                                      |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Any Linux server                                        | `curl -fsSL https://raw.githubusercontent.com/itsmemeworks/adhx/main/deploy/install.sh \| sudo sh` ([what it does](deploy/install.sh))                                   |
+| Any Linux server with a domain, HTTPS included          | `curl -fsSL https://raw.githubusercontent.com/itsmemeworks/adhx/main/deploy/install.sh \| sudo ADHX_DOMAIN=adhx.example.com sh`                                          |
+| A new server at Hetzner, DigitalOcean, Vultr, Linode, … | Paste [`deploy/cloud-init.yaml`](deploy/cloud-init.yaml) into **User data** when you create it                                                                           |
+| Render                                                  | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/itsmemeworks/adhx) (Standard plan + disk) |
+| Railway                                                 | [Two-minute recipe](deploy/railway/README.md)                                                                                                                            |
+| Fly.io                                                  | [`deploy/fly`](deploy/fly/fly.toml): four commands                                                                                                                       |
+| Portainer                                               | **Settings → App Templates**, URL `https://raw.githubusercontent.com/itsmemeworks/adhx/main/deploy/portainer/templates.json`; then **App Templates → ADHX**              |
+| CapRover                                                | **One-Click Apps → >> TEMPLATE <<**, paste [`deploy/caprover/adhx.yml`](deploy/caprover/adhx.yml)                                                                        |
+| Zeabur                                                  | [Template](deploy/zeabur/template.yaml) (button once it's published)                                                                                                     |
+| Dokploy, Coolify, CasaOS, Synology, TrueNAS             | Paste [`deploy/one-click/docker-compose.yml`](deploy/one-click/docker-compose.yml)                                                                                       |
+| Your own Compose, with Caddy for HTTPS                  | [`deploy/vps`](deploy/vps/docker-compose.yml): `ADHX_DOMAIN=adhx.example.com docker compose up -d`                                                                       |
+| Unraid                                                  | [Container template](deploy/unraid/adhx.xml)                                                                                                                             |
+| Umbrel                                                  | [App folder](deploy/umbrel/adhx) (not in the Umbrel store yet)                                                                                                           |
+| UGREEN NAS                                              | [UGOS Pro walkthrough](deploy/nas/ugreen.md)                                                                                                                             |
 
-   ```bash
-   docker compose logs adhx | grep sign-in
-   ```
+The installer sets up Docker if it's missing, keeps ADHX in `/opt/adhx` and prints the link that makes you the owner. Run it again to update; add `ADHX_DOMAIN` later and it moves to HTTPS with everything kept.
 
-5. Put it behind your usual reverse proxy for HTTPS, then invite your people from **Settings → Your people → Make a link**.
+Wherever it runs, the first screen asks for a setup code. It's in the server log, or in the host's dashboard when the template made one (`SETUP_CODE`). That way, reaching a fresh server first isn't enough to take it over.
 
-ADHX listens on `127.0.0.1:3000` (`ADHX_PORT` changes it). Everything lives in one volume at `/data`: the database, the search models and every kept file. Migrations run on start. To use a published image instead of building one, pin `ADHX_IMAGE=ghcr.io/itsmemeworks/adhx@sha256:<digest>` from a [release](https://github.com/itsmemeworks/adhx/releases).
+Sign-in has no passwords. Until you set up [email](docs/self-hosting.md#sign-in-links), sign-in links wait on the admin page for you to pass on; invite links need no email at all.
+
+### From source
+
+```bash
+git clone https://github.com/itsmemeworks/adhx && cd adhx
+cp .env.example .env
+docker build -t adhx:local .
+echo "ADHX_IMAGE=adhx:local" >> .env
+docker compose up -d
+docker compose logs adhx | grep setup
+```
+
+This [`docker-compose.yml`](docker-compose.yml) listens on `127.0.0.1:3000` (`ADHX_PORT` changes it), for your usual reverse proxy to put HTTPS in front. Everything lives in one volume at `/data`: the database, the search models, every kept file and the secret ADHX made for itself. Migrations run on start. To run a published image instead, pin `ADHX_IMAGE=ghcr.io/itsmemeworks/adhx@sha256:<digest>` from a [release](https://github.com/itsmemeworks/adhx/releases).
 
 Where next:
 
@@ -176,6 +198,37 @@ Where next:
 | Know exactly what your server stores and who can see it                                                        | [Privacy](PRIVACY.md)                                                            |
 
 Kept media and shared post previews can be opened by anyone who can reach your server and knows the address. Invites and the email allowlist protect accounts, not playback, so put it on a private network or VPN if that's the boundary you want.
+
+A new ADHX stays out of search engines: robots.txt turns crawlers away, the sitemap is empty and every page says `noindex`. Shared links still open, and still unfold into a card in chats. To be found, the owner turns on **Show up in search engines** in Admin → System → Settings (`PUBLIC_PAGES=on`). A server that already had a public channel before this switch existed keeps being listed after the upgrade, and shows the switch On.
+
+## The admin area
+
+The first person to set ADHX up is its admin, and **Admin** (in Settings, or `/admin`) is where you run the place. Admin is attached to the account, never to a username, and you can make other people admins from **People**.
+
+| Section        | What it's for                                                                                                                                                                                                      |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Overview**   | Saves, people and disk at a glance.                                                                                                                                                                                |
+| **People**     | Who's here, who's waiting to join (let them in or decline), their phones, and who's an admin.                                                                                                                      |
+| **Posts**      | Everything kept on the server, by network and kind.                                                                                                                                                                |
+| **Channels**   | What your people made and watched together.                                                                                                                                                                        |
+| **Live**       | Moments as they form, and how many tuned in.                                                                                                                                                                       |
+| **Analytics**  | How ADHX gets used, as counts only: never what anyone searched or watched.                                                                                                                                         |
+| **Processing** | What's downloading, converting and being understood right now. Pause new work, retry what failed, or keep a post as a link.                                                                                        |
+| **System**     | Whether it's all working, and how it's set up. See below.                                                                                                                                                          |
+| **Moderation** | Hide a post from every public page, clear a note, or keep someone out. Every admin action is logged here.                                                                                                          |
+| **Invites**    | Make and revoke invite links (one per person, or one group link for a whole chat, where you approve each joiner), choose who may invite, and, until email is set up, pass on the sign-in links waiting for people. |
+
+**System** answers "is it actually working?" in one place:
+
+- **A map of your setup.** It shows this server (say, your UGREEN NAS) with the processes running on it, the optional Mac helper, and the outside services ADHX calls. Each one is lit green, amber or red.
+- **Every queue** (keeping copies, converting videos, understanding posts). For each: what's waiting, working and failed, the oldest wait, a backlog line and a per-hour chart of what finished.
+- **The Mac helper.** Whether it's connected, what it says it can do, and how many jobs it holds. If it's being turned away, it says why: a wrong token, a server that isn't set up for a helper, or a helper on a different version.
+- **What's wrong, and the fix.** Anything that needs you sits right under the status line, in plain words.
+- **Services and tools.** Jev, email, FxTwitter, X sync, yt-dlp, Sentry, FFmpeg and the disk: whether each is on, when it last answered, and what kind of failure it last had.
+- **Settings you can change on the spot.** The Jev key, email (Resend or SMTP), who may sign up by email (nobody new, by default: invites need no email), the X app keys and how often X syncs, what gets kept (older saves too? how big? stop at how much free disk?), how closely videos are read, speech and text on screen, whether search engines may list your public pages, and a name for your server. No editing the server's settings, no restart. A value saved here beats the server's environment, and one tap goes back to it. Keys are stored encrypted and never shown again. **Test Jev** and **Send me a test email** check them for real.
+- **The rest, read-only.** Paths, the processing mode and secrets like the session key are read when ADHX starts, so they're shown with where they come from and changed in the environment.
+
+The page refreshes itself every 15 seconds, and the **System** menu entry shows a count when something is broken.
 
 ## Saving posts
 
@@ -254,6 +307,7 @@ pnpm typecheck && pnpm lint && pnpm test && pnpm format:check
 | `pnpm test:e2e`     | Browser tests with Playwright, against their own server on port 3002 (`pnpm test:e2e:install` once) |
 | `pnpm parity:serve` | A server full of sample friends and posts, for screenshots and the phone apps                       |
 | `pnpm site:dev`     | The adhx.com product site, which is a separate app in [`site/`](site/)                              |
+| `pnpm site:og`      | Redraw the site's share picture while `pnpm site:dev` runs                                          |
 | `pnpm email:dev`    | Preview the sign-in emails                                                                          |
 
 ## Documentation map
