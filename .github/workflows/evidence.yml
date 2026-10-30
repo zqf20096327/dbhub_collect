@@ -1,0 +1,60 @@
+name: evidence-collect
+on:
+  schedule:
+    # 北京 06:35/10:35/14:35/18:35/22:35 五班：collect(00:00-06:00) 窗外全天铺满。
+    # 单班 4500 调 ÷ 110 分钟 ≈ 2455 调/小时 < 5000 Core 帽（约五成余量）。
+    # 周一 10:35 班与 unattr_judge 同窗：两者都有配额墙+优雅收尾，撞了自动互让次班续。
+    - cron: '35 22,2,6,10,14 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'auto | sweep | incremental'
+        default: 'auto'
+        type: string
+      max_calls:
+        description: 'Core 调用上限（默认 4500）'
+        default: '4500'
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: evidence-collect
+  cancel-in-progress: false
+
+timeout-minutes: 130
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: 装依赖
+        run: pip install requests
+      - name: 离线自检（夹具测试，不调 API）
+        run: python evidence/selftest_evidence.py
+      - name: 证据采集
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python evidence/evidence_collect.py "${{ github.event.inputs.mode || 'auto' }}" \
+            --max-calls "${{ github.event.inputs.max_calls || '4500' }}" \
+            --max-minutes 110
+      - name: 提交并推送数据
+        run: |
+          git config user.name "zqf20096327"
+          git config user.email "zqf20096327@users.noreply.github.com"
+          git add state/evidence_cache_shards state/evidence_state.json state/evidence_tasks.json
+          git diff --cached --quiet && { echo "无变更"; exit 0; }
+          git commit -m "证据采集 $(date -u +%F\ %H:%M)"
+          # 与其他流的推送可能撞车：重试+变基，最多 5 轮
+          for i in 1 2 3 4 5; do
+            git pull --rebase --autostash >/dev/null 2>&1 || true
+            git push && { echo "已推送"; exit 0; }
+            echo "推送撞车，40s 后重试（$i/5）"; sleep 40
+          done
+          echo "::warning::推送 5 次未成功，本窗数据丢失（断点续采下窗重做）"

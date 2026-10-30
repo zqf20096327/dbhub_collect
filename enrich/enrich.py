@@ -141,6 +141,22 @@ def due_dims(rec: dict, tier: str, pushed_changed: bool) -> list[str]:
     return due
 
 
+def _release_notes(rels: list[dict], n: int = 3, cap: int = 512) -> list[dict] | None:
+    """最近 n 个 release 的正文截断（适配引擎的"适配变更史"素材：add/drop support 线索）。
+
+    body 本就在 releases 响应里，零新增调用；只在有正文时产出。
+    512 字节够容纳"新增/移除数据库支持"级别的条目，控存储体积。
+    """
+    out = []
+    for r in rels[:n]:
+        body = (r.get("body") or "").strip()
+        if body:
+            out.append({"t": r.get("tag_name"),
+                        "d": (r.get("published_at") or "")[:10],
+                        "n": body[:cap]})
+    return out or None
+
+
 def collect_dims(client: GitHubClient, fn: str, cache: dict, dims: tuple,
                  pushed_changed: bool) -> dict:
     """对一个仓库执行到期的维度采集，返回信号字段（异常由调用方处理）。"""
@@ -171,6 +187,9 @@ def collect_dims(client: GitHubClient, fn: str, cache: dict, dims: tuple,
                         "rel_days": days_since(latest.get("published_at") or ""),
                         "rel_n90": n90, "rel_pre": bool(latest.get("prerelease")),
                         "rel_none": False})
+            notes = _release_notes(rels)      # 适配变更史素材（10-30 起），零新增调用
+            if notes:
+                sig["rel_notes"] = notes
         else:
             sig.update({"rel_ver": None, "rel_none": True})
     if "security" in dims:

@@ -204,6 +204,20 @@ class GitHubClient:
             truncated = True
         return 200, text, r.headers.get("ETag"), truncated  # type: ignore[return-value]
 
+    def tree_conditional(self, full_name: str, ref: str, etag: str | None):
+        """ETag 条件请求仓库文件树（recursive 全量）。返回 (status, data, etag)。
+
+        304 不计 GitHub 配额（本地预算仍计，与 readme_conditional 同口径）。
+        data = {sha, truncated, tree: [{path, type, sha, size}]}。
+        供证据层（evidence_collect）使用；ref 传分支名（main/master/default）。
+        409（空仓库）与 404（分支不存在）由调用方按 HTTPError 分类。
+        """
+        r = self._request("GET", f"{self.API}/repos/{full_name}/git/trees/{ref}",
+                          params={"recursive": "1"}, etag=etag)
+        if r.status_code == 304:
+            return 304, None, etag
+        return 200, r.json(), r.headers.get("ETag")
+
     # ---------------- 富集端点（Link header 计数：per_page=1 读 rel="last"） ----------------
     @staticmethod
     def _link_last_count(resp: requests.Response) -> int | None:
