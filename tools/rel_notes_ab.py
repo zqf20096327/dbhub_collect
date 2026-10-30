@@ -85,12 +85,15 @@ def main() -> int:
     client = gh.GitHubClient(gh.Budget(max_calls=len(picks) + 50))
     started = time.time()
     errs = collections.Counter()
+    fails = []
     rows = []
     for i, (grp, fn) in enumerate(picks, 1):
         try:
             rels = client.releases(fn)
         except Exception as e:                      # 单仓失败不影响整体
             errs[type(e).__name__] += 1
+            resp = getattr(e, "response", None)
+            fails.append((fn, getattr(resp, "status_code", None), str(e)[:120]))
             continue
         rows.append((grp, fn, rels[:3]))
         if i % 20 == 0:
