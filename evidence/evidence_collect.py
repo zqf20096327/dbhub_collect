@@ -634,28 +634,43 @@ def run_collect_loop(client: GitHubClient, raw: RawFetcher, store: EvidenceCache
     """todo = [(fn, pool_rec), ...] 按既定优先级。断点=分片里的终态记录。"""
     cnt = {"done": 0, "skip": 0, "fail": 0}
     run = {"date": _iso_now(), "mode": mode, "done": 0, "fail": 0}
+    total = len(todo)
+    # 逐仓日志：CI 日志要能看出"这一窗采了哪些仓"——静默 5 分钟等于黑箱
     try:
-        for fn, pool_rec in todo:
+        for idx, (fn, pool_rec) in enumerate(todo, 1):
             prev = store.get(fn)
             if prev and prev.get("epoch") == EPOCH and prev.get("status") in TERMINAL_OK:
                 cnt["skip"] += 1
+                log.debug("[%d/%d] %s 跳过（已采）", idx, total, fn)
                 continue
             if prev and prev.get("fail_count", 0) >= MAX_FAILS:
                 cnt["skip"] += 1
+                log.debug("[%d/%d] %s 跳过（失败 %d 次已出局）", idx, total, fn,
+                          prev.get("fail_count"))
                 continue
+            t0 = time.time()
             try:
-                store[fn] = collect_repo(client, raw, fn,
-                                         pool_rec or {"full_name": fn}, prev)
+                rec = collect_repo(client, raw, fn, pool_rec or {"full_name": fn}, prev)
+                store[fn] = rec
                 cnt["done"] += 1
+                log.info("[%d/%d] %s → %s · 树 %s 路径 · 指纹文件 %d · %.1fs · Core %d",
+                         idx, total, fn, rec.get("status"),
+                         (rec.get("tree") or {}).get("path_count", "-"),
+                         len(rec.get("files") or []), time.time() - t0,
+                         client.budget.calls)
             except (BudgetOut, QuotaPatienceOut):
                 raise                       # 全局事件：绝不记成单仓失败（09-29 教训）
             except requests.HTTPError as e:
                 code = getattr(e.response, "status_code", None)
                 _mark_fail(store, fn, prev, f"http_{code}")
                 cnt["fail"] += 1
+                log.warning("[%d/%d] %s 失败 http_%s（%.1fs）", idx, total, fn, code,
+                            time.time() - t0)
             except Exception as e:  # noqa: BLE001
                 _mark_fail(store, fn, prev, str(e)[:120])
                 cnt["fail"] += 1
+                log.warning("[%d/%d] %s 失败 %s（%.1fs）", idx, total, fn,
+                            str(e)[:120], time.time() - t0)
             if cnt["done"] and cnt["done"] % FLUSH_EVERY == 0:
                 store.flush()
                 _save_state(state, run | {"done": cnt["done"], "fail": cnt["fail"]})
@@ -754,17 +769,59 @@ def cmd_auto(client, raw, store, pool, cn, state, args) -> None:
 
 
 # ---------------- 离线体检 ----------------
-def cmd_status() -> None:
+def cmd_status(recent: int = 10) -> None:
+    from evidence_store import SHARD_DIR
     store = load_store()
-    hist = Counter(r.get("status") for r in store.values())
-    epoch_hist = Counter(r.get("epoch") for r in store.values())
     n = len(store)
-    with_files = sum(1 for r in store.values() if r.get("files"))
-    print(json.dumps({
-        "records": n, "status": dict(hist), "epoch": dict(epoch_hist),
-        "with_files": with_files,
-        "epoch_current": EPOCH, "epoch_done": epoch_hist.get(EPOCH, 0),
-    }, ensure_ascii=False, indent=1))
+    hist = Counter(r.get("status") for r in store.values())
+    done_now = sum(1 for r in store.values()
+                   if r.get("epoch") == EPOCH and r.get("status") in TERMINAL_OK)
+    tasks: list[dict] = []
+    if TASKS_P.is_file():
+        try:
+            tasks = json.loads(TASKS_P.read_text(encoding="utf-8")).get("tasks") or []
+        except ValueError:
+            log.warning("evidence_tasks 损坏，清单进度不可用")
+
+    print(f"== 证据层 · 纪元 {EPOCH} ==")
+    if tasks:
+        print(f"清单 {len(tasks)} 仓：已采 {done_now}（{done_now / len(tasks) * 100:.1f}%），"
+              f"剩余 {max(0, len(tasks) - done_now)}")
+        for tier in TIER_ORDER:
+            tier_fns = [t["fn"] for t in tasks if t.get("tier") == tier]
+            if not tier_fns:
+                continue
+            d = sum(1 for fn in tier_fns
+                    if (r := store.get(fn)) and r.get("epoch") == EPOCH
+                    and r.get("status") in TERMINAL_OK)
+            print(f"  {tier:<11} {d:>6} / {len(tier_fns):<6} {d / len(tier_fns) * 100:5.1f}%")
+    else:
+        print(f"清单未生成（已采 {done_now} 仓）")
+    print(f"记录 {n} 条 · 状态 {dict(hist)} · 有指纹文件 {sum(1 for r in store.values() if r.get('files'))} 条"
+          f" · 分片 {len(list(SHARD_DIR.glob('*.json'))) if SHARD_DIR.is_dir() else 0} 个")
+
+    seen: set[str] = set()
+    wins: list[dict] = []
+    for r in reversed(_load_state().get("runs") or []):
+        if r.get("date") in seen:
+            continue
+        seen.add(r.get("date"))
+        wins.append(r)
+        if len(wins) >= 3:
+            break
+    for r in wins:
+        print(f"  窗口 {str(r.get('date'))[:16]} {r.get('mode', ''):<11}：采 {r.get('done', 0)}"
+              f" / 跳过 {r.get('skip', 0)} / 失败 {r.get('fail', 0)} · Core {r.get('calls', 0)} 调"
+              f" · raw {r.get('raw', 0)} 次 · {r.get('elapsed_min', '-')} 分钟")
+
+    if recent:
+        rows = sorted((r for r in store.values() if r.get("collected_at")),
+                      key=lambda r: r["collected_at"], reverse=True)[:recent]
+        print(f"最近 {len(rows)} 仓：")
+        for r in rows:
+            print(f"  {r['collected_at'][:16]} {str(r.get('status')):<10} {r.get('fn')}"
+                  f" · 路径 {(r.get('tree') or {}).get('path_count', '-')}"
+                  f" · 指纹文件 {len(r.get('files') or [])}")
 
 
 def cmd_verify() -> None:
@@ -809,6 +866,9 @@ def main() -> None:
         if name == "plan":
             sp.add_argument("--priority-file", default=None,
                             help="fn 列表文件（每行 owner/repo），置顶为 P0 档")
+        if name == "status":
+            sp.add_argument("--recent", type=int, default=10,
+                            help="列出最近 N 个已采仓（0=不列）")
         if name == "auto":      # auto 首跑会转 plan，参数保持一致
             sp.add_argument("--priority-file", default=None)
     ap.add_argument("-v", "--verbose", action="store_true")
@@ -818,7 +878,7 @@ def main() -> None:
                         datefmt="%H:%M:%S")
 
     if args.cmd == "status":
-        cmd_status()
+        cmd_status(args.recent)
         return
     if args.cmd == "verify":
         cmd_verify()

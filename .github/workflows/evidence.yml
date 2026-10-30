@@ -39,10 +39,14 @@ jobs:
       - name: 证据采集
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PYTHONUNBUFFERED: '1'   # 逐仓日志要实时下行，别等进程退出才吐
         run: |
           python evidence/evidence_collect.py "${{ github.event.inputs.mode || 'auto' }}" \
             --max-calls "${{ github.event.inputs.max_calls || '4500' }}" \
             --max-minutes 110
+      - name: 采后总览
+        if: always()
+        run: python evidence/evidence_collect.py status --recent 15
       - name: 提交并推送数据
         run: |
           git config user.name "zqf20096327"
