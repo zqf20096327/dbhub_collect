@@ -15,14 +15,6 @@ on:
         description: 'Core 调用上限（默认 4500）'
         default: '4500'
         type: string
-      ab_n:
-        description: 'rel_notes A/B 测试抽样仓数（0=不跑；>0 则跳过采集，只做只读测试）'
-        default: '0'
-        type: string
-      ab_cn:
-        description: 'A/B 测试其中中文池仓数'
-        default: '60'
-        type: string
 
 permissions:
   contents: write
@@ -32,32 +24,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  ab:
-    # 手动 A/B 测试（只读）：ab_n>0 时跑，采集 job 自动让位
-    if: (github.event.inputs.ab_n || '0') != '0'
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: 装依赖
-        run: pip install requests
-      - name: rel_notes A/B 测试
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PYTHONUNBUFFERED: '1'
-        run: |
-          python tools/rel_notes_ab.py \
-            --n "${{ github.event.inputs.ab_n }}" \
-            --cn "${{ github.event.inputs.ab_cn || '60' }}" \
-            2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
-
   collect:
-    if: (github.event.inputs.ab_n || '0') == '0'
     runs-on: ubuntu-latest
     timeout-minutes: 130
     steps:
