@@ -1,8 +1,11 @@
 name: unattr-judge
 on:
-  schedule:
-    - cron: '30 2 * * 1'      # 每周一 02:30 UTC——夜间解读窗整点起步后 30 分钟，错峰
-                              # （判定器只写自己的台账/报告，与 interpret 不同文件，推送撞车由重试兜底）
+  # 2026-10-30 起定时暂定：E1 树/E3 依赖与证据层（evidence-collect）重复采集，
+  # 等证据层全量铺完（约 2-4 天）后改读 state/evidence_cache_shards 再恢复定时。
+  # 手动入口保留——T3 复核批等急件可随时 dispatch。
+  # schedule:
+  #   - cron: '30 2 * * 1'    # 每周一 02:30 UTC——夜间解读窗整点起步后 30 分钟，错峰
+  #                           # （判定器只写自己的台账/报告，与 interpret 不同文件，推送撞车由重试兜底）
   workflow_dispatch:           # 手动触发（可调批量/补扫/预演）
     inputs:
       limit:

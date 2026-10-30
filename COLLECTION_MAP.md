@@ -22,7 +22,7 @@ collect_intl / collect_cn   →   enrich   →   readme_sweep   →   interpret 
 |---|---|---|---|
 | nightly-collect | `collect.yml` | 每天 00:00 | 发现入池 + 富集 + README + 治理收尾（单窗 6h） |
 | nightly-interpret | `interpret.yml` | 每 2 小时 :23 | db_scan 提名 + AI 解读（每窗 100 分钟 / 1200 条） |
-| unattr-judge | `unattr_judge.yml` | 每周一 10:30 | 未归类仓判定（台账幂等，配额墙自动收尾接力） |
+| unattr-judge | `unattr_judge.yml` | **定时暂定**（10-30 起，手动档保留） | 未归类仓判定（台账幂等，配额墙自动收尾接力）；树/依赖与证据层重复，待改读证据分片后恢复 |
 | evidence-collect | `evidence.yml` | 每天 5 班（06:35/10:35/14:35/18:35/22:35） | 证据指纹采集（树+依赖+镜像；断点续采，collect 窗外全天铺满） |
 
 推送撞车由各流提交步骤的重试+变基（5 轮）兜底；不同工作流分属不同 concurrency 组，互不取消。
@@ -83,7 +83,7 @@ collect_intl / collect_cn   →   enrich   →   readme_sweep   →   interpret 
 
 - **内容**：仓库文件树全量路径（E1）+ 依赖清单原文（E3：requirements / pyproject / package.json / go.mod / pom.xml / Cargo.toml / Gemfile / composer.json / csproj / CMakeLists 等，根级优先取前 6 个）
 - **策略**：只查无 README 行号引证的仓；零网络信号层先筛（范围外词表/教程词表/已裁决）；联网结果台账幂等粘住不重扫；配额墙（连败 8 次）自动收尾下周接力；产出 draft 归属草案（签发权在人，进 `config/overrides.json`）
-- **频率**：每周一 10:30。**全池共用，按 star 从高往低**
+- **频率**：原每周一 10:30，**10-30 起定时暂定**（E1/E3 与 §2.7 证据层重复采树+依赖，待改读证据分片后恢复；手动 dispatch 仍可用）。**全池共用，按 star 从高往低**
 
 ### 2.7 证据指纹 `evidence/evidence_collect.py`（trees API + raw）
 
@@ -138,7 +138,7 @@ collect_intl / collect_cn   →   enrich   →   readme_sweep   →   interpret 
              → absent_since 打戳 → 快照归档
 每 2 小时    db_scan 提名 → AI 解读(100min/1200条)
 每天 5 班    证据指纹（06:35/10:35/14:35/18:35/22:35，4500调/110min每班；全量收敛后头班干完增量）
-每周一 10:30 未归类判定（树+依赖侦查）
+每周一 10:30 未归类判定（**暂定**：与证据层重复，待改读证据分片；手动档保留）
 每月 1 号    README 全量校准 + 清理 dry-run 清单
 每 7/30/90/180 天  富集各维度按层到期轮换
 ```
