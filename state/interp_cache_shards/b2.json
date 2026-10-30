@@ -11496,5 +11496,70 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "79e99c7868d6": {
+  "identity": {
+   "one_liner": "基于VPS的自托管平台，通过MCP让AI代理部署管理多个项目",
+   "review": "PanelAlpha Engine 安装在 VPS 上，用于托管 AI 构建的项目、网站和开源应用；用户把自己的 AI 代理（支持 MCP 协议）接入引擎后，代理可通过 REST API 和约 287 个 MCP 工具执行部署、备份、域名/SSL、数据库创建、防火墙配置等操作，AI 本身不获得 root 权限。面向希望自托管但不以系统管理员为职业的用户，支持 Debian/Ubuntu，项目以 Docker 容器隔离运行。",
+   "highlights": [
+    "提供 REST API 与 MCP 工具接口（约 287 个工具），供 Claude Code、Cursor 等支持 MCP 的 AI 代理连接操作",
+    "支持从 Git 或文件部署任意技术栈，提供预览地址、staging/live 双环境、自动备份恢复",
+    "每个项目在独立 Docker 容器中运行，包含防火墙、ModSecurity OWASP 规则、域名/SSL/cron/FTP/数据库管理"
+   ],
+   "use_cases": [
+    "在自有 VPS 上托管多个 AI 构建或开源项目",
+    "让 AI 代理代为执行服务器部署、备份、监控等运维任务",
+    "需要项目级 Docker 隔离与防火墙规则的自托管环境"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|`Create a MySQL database for this project and a user for it.`|Database, user and privileges, without you touching SQL.|",
+     "lines": [
+      147
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该平台为自托管部署与服务器管理提供服务，数据库是其管理的资源之一，而非以数据库存数据的应用本体。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PanelAlpha Engine is software you install on your VPS to host AI-built and vibe-coded projects, websites and open source apps you found online. Once installed, you can connect your own AI agent directly to PanelAlpha Engine and let it handle deployments, maintenance and server management for you. Your server stays organized and under control. ／ 287 MCP tools ／ - Project isolation with separate Docker containers",
+   "evidence_lines": [
+    38,
+    30,
+    49
+   ]
+  },
+  "fn": "panelalpha/panelalpha-engine",
+  "sha": "79e99c7868d6",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

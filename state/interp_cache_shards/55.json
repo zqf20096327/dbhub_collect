@@ -12103,5 +12103,71 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5a820511981f": {
+  "identity": {
+   "one_liner": "单二进制网络延迟监控工具，内嵌 SQLite 存储，带 Web UI",
+   "review": "fogping 是一个类 SmokePing 的 Linux 网络延迟监控工具，以单个 Go 二进制发布，内嵌 SQLite 存储历史数据并提供 Web UI 管理 ping/TCP 目标。面向自托管运维人员，支持 Docker 部署、多用户登录、周期对比图表与目标列表 JSON 导入导出；Web UI 默认只读，需以 --edit 参数启动才可编辑目标。",
+   "highlights": [
+    "单二进制运行，内嵌 SQLite 存储，无需 Perl/RRDtool/外部 Web 服务器",
+    "提供 Web UI 管理监控目标，支持 ICMP 与 TCP 两类目标",
+    "支持周期对比叠加图表、目标列表 JSON 导出/导入、多用户认证、Docker 与 systemd 部署"
+   ],
+   "use_cases": [
+    "自托管监控服务器或网络设备的 ping/TCP 延迟并绘制时序图",
+    "在 Web UI 中管理监控目标并叠加对比不同时间段的中位延迟",
+    "导出/导入监控目标列表，在不同实例间迁移配置"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **One binary, embedded SQLite, Web UI — just download and run.**",
+     "lines": [
+      2
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明内嵌 SQLite 作为数据存储，工具本身服务于网络监控而非数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **One binary, embedded SQLite, Web UI — just download and run.** ／ mkdir -p ~/fogping && cd ~/fogping && curl -L https://github.com/githubflyideas/fogping/releases/download/v1.3.0/fogping-v1.3.0-linux-amd64.tar.gz | tar -xz && ./fogping --edit user=admin passwd=change-me",
+   "evidence_lines": [
+    2,
+    15
+   ]
+  },
+  "fn": "githubflyideas/fogping",
+  "sha": "5a820511981f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

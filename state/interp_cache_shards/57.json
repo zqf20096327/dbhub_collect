@@ -9461,5 +9461,73 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4f06f4f2f87f": {
+  "identity": {
+   "one_liner": "自架中小学排课与调代课系统，基于 PostgreSQL 存储，OR-Tools CP-SAT 自动排课",
+   "review": "这是一个面向台湾国小/国中/高中职的开源（MIT）排课与调代课系统，以教学组长日常工作流为中心，涵盖学期资料、手动与自动排课（OR-Tools CP-SAT）、请假代课调课、通知与钟点统计。采用 Docker Compose 六容器部署，后端 FastAPI + PostgreSQL 16，前端 Vue 3，资料不出校，无多租户 SaaS 模式。",
+   "highlights": [
+    "使用 Google OR-Tools CP-SAT 引擎进行自动排课，支持 H1–H10 硬约束与 S1–S8 软约束加权，无解时以教务语言定位冲突",
+    "提供请假登记、代课推荐、调课验证、站内与 Email 通知确认、月结钟点 Excel 统计等调代课流程",
+    "支持每日自动备份与手动备份/还原、RBAC 角色权限、稽核纪录，课表可导出 Excel/PDF/PNG 及批次 zip"
+   ],
+   "use_cases": [
+    "中小学校教务排课：学期初配课、手动拖拉排课与自动排课求解",
+    "学期中调代课管理：教师请假、代课指派、通知单打印与钟点统计",
+    "单校自架部署：校内一台主机 Docker Compose 一键安装，支持 x86-64 与 ARM64/NAS"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|資料庫|PostgreSQL 16| ／ |部署|Docker Compose(6 容器:web / api / worker(排課)/ worker-ops(匯出·備份·定時)/ postgres / redis)|",
+     "lines": [
+      117,
+      119
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 技术栈表声明系统使用 PostgreSQL 16 作为数据库存储数据（L117），系统本身是排课应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|資料庫|PostgreSQL 16| ／ |部署|Docker Compose(6 容器:web / api / worker(排課)/ worker-ops(匯出·備份·定時)/ postgres / redis)|",
+   "evidence_lines": [
+    117,
+    119
+   ]
+  },
+  "fn": "begin0808/Course_Scheduling_System",
+  "sha": "4f06f4f2f87f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

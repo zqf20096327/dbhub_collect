@@ -14034,5 +14034,72 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4c3b9dac59cc": {
+  "identity": {
+   "one_liner": "基于 SQLite 构建的分布式关系数据库，用 Raft 复制保证容错",
+   "review": "rqlite 是一个基于 SQLite 存储引擎、通过 Raft 共识实现多节点复制的分布式关系数据库，以单个二进制和 HTTP API 形式提供部署与访问，支持全文检索、JSON、扩展加载、CDC 流式变更、热备份到云存储及 TLS 认证。面向需要在云端或边缘环境可靠存储关键数据的应用开发者与运维人员，通过 docker 一条命令即可启动节点并组建集群。",
+   "highlights": [
+    "通过 SQLite 提供完整 SQL 支持，含全文检索、JSON 与可加载扩展",
+    "基于 Raft 复制实现高可用，节点故障不影响集群，支持 Kubernetes/Docker Compose/Consul/etcd/DNS 自动组簇",
+    "提供 HTTP API、内置控制台、CLI 与客户端库，支持热备份至 S3/MinIO/Google Cloud"
+   ],
+   "use_cases": [
+    "云端或边缘环境下需要容错复制的关键数据存储",
+    "需要单二进制快速部署的小型分布式 SQL 数据库场景",
+    "需要将数据库变更以 CDC 方式流式输出到外部系统"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**rqlite** is a feature-rich, rock-solid, fault-tolerant, distributed relational database built on SQLite. It's **lightweight**, **developer-friendly**, and **exceptionally easy to operate**, offering effortless installation and deployment. ／ - **Relational**: Full SQL support via SQLite, including Full-text search, JSON support, and more.",
+     "lines": [
+      11,
+      45
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "rqlite 本身是数据库引擎/存储系统，基于 SQLite 提供分布式复制能力，属于基础设施组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**rqlite** is a feature-rich, rock-solid, fault-tolerant, distributed relational database built on SQLite. It's **lightweight**, **developer-friendly**, and **exceptionally easy to operate**, offering effortless installation and deployment. ／ - **High Availability**: Fully replicated database provides fault-tolerance. Outage of a node doesn't impact the cluster. ／ - **Dynamic Clustering**: Automatic clustering via Kubernetes, Docker Compose, Consul, etcd, or DNS.",
+   "evidence_lines": [
+    11,
+    52,
+    53
+   ]
+  },
+  "fn": "rqlite/rqlite",
+  "sha": "4c3b9dac59cc",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
