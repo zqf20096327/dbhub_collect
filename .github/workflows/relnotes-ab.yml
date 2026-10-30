@@ -1,0 +1,37 @@
+name: relnotes-ab
+# 手动 A/B 测试：rel_notes 摘要新旧取法（旧 body[:512 字符] vs 新 512 字节+命中行优先）
+# 只读不写：调 releases 端点，结果打日志，不提交任何数据。
+on:
+  workflow_dispatch:
+    inputs:
+      n:
+        description: '抽样仓数'
+        default: '180'
+        type: string
+      cn:
+        description: '其中中文池仓数'
+        default: '60'
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: 装依赖
+        run: pip install requests
+      - name: A/B 测试
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PYTHONUNBUFFERED: '1'   # 进度要实时下行
+        run: |
+          python tools/rel_notes_ab.py \
+            --n "${{ github.event.inputs.n || '180' }}" \
+            --cn "${{ github.event.inputs.cn || '60' }}"
