@@ -11146,5 +11146,72 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "71aa4db1ada1": {
+  "identity": {
+   "one_liner": "面向主机托管商的开源自托管计费与自动化平台",
+   "review": "HostPanel 为网页托管/域名销售商提供客户门户、账单发票、支付、域名注册与自动开通服务等功能，基于 ASP.NET Core 9 与 PostgreSQL 构建，含 Nuxt 4 前台和 Vue 3 管理后台，通过 Docker 一键安装并内置 Caddy 自动 HTTPS，支付网关、注册商等以插件形式扩展并提供 SDK。AGPL-3.0 许可，还提供定时重置的演示模式。",
+   "highlights": [
+    "提供客户门户、发票计费、多币种、域名定价与托管自动开通功能",
+    "支付网关、注册商和开通面板以插件形式接入，附 NuGet SDK",
+    "提供多架构 Docker 镜像和自动配置 HTTPS 的一键安装脚本"
+   ],
+   "use_cases": [
+    "托管/域名销售商的自托管客户门户与计费管理",
+    "通过注册商插件实现域名搜索、注册与续费",
+    "基于插件 SDK 定制支付或开通流程"
+   ],
+   "use_cases_end": true
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Modern stack.** ASP.NET Core 9 and PostgreSQL behind a Nuxt 4 storefront and a Vue 3 admin panel.",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统以 PostgreSQL 作为自身数据存储（L20、L162、L120 的 pg_dump 备份），属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，SDK 部分为 MIT",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Self-hosted billing, domains and provisioning for web hosting companies. ／ - **Modern stack.** ASP.NET Core 9 and PostgreSQL behind a Nuxt 4 storefront and a Vue 3 admin panel. ／ |Back up the database|`docker compose -f docker-compose.hub.yml exec -T hostpanel-db sh -c 'pg_dump -U \"$POSTGRES_USER\" \"$POSTGRES_DB\"' > backup.sql`, or snapshot the `hostpanel_pgdata` volume|",
+   "evidence_lines": [
+    5,
+    20,
+    120
+   ]
+  },
+  "fn": "innovayse/hostpanel",
+  "sha": "71aa4db1ada1",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

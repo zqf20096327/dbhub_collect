@@ -10620,5 +10620,96 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "22a4dc32d7ac": {
+  "identity": {
+   "one_liner": "GaussDB/openGauss 数据库智能体后端，网关+诊断技能运行于 Kubernetes",
+   "review": "这是 GaussDB 数据库智能体的后端系统，包含接入网关、按用户隔离的 Pod 运行环境（内含 opencode 与 17 个诊断技能）和知识库导入组件，状态存于 NAS 卷。面向需要通过对话方式对 GaussDB/openGauss 做诊断的运维与 DBA 场景，提供网关认证、环境分配、白名单诊断脚本与报告接口，前端由合作方另建。",
+   "highlights": [
+    "提供接入网关，基于 SSO 头认工号、分配用户环境并反向代理对话与报告",
+    "每个用户一个隔离 Pod 或固定池化槽位，内置 opencode 1.18.27 与 17 个诊断技能",
+    "附带 128 条白名单诊断脚本与知识库导入环境，支持官方文档集、网页剪藏、PDF、PPT 导入"
+   ],
+   "use_cases": [
+    "企业内网部署 GaussDB/openGauss 对话式诊断智能体",
+    "数据库运维团队按工号开通隔离的智能体使用环境",
+    "构建与维护面向数据库诊断的知识库"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "GaussDB 数据库智能体的**后端**：把 opencode 与 GaussDB / openGauss 诊断技能放进 Kubernetes。 ／ |接入网关|`gaussdb-agent-gateway`|Deployment，2 副本|认工号（上游 SSO 加的头 + 信任凭据）、按工号分配用户环境、反向代理对话与报告；控制 API `/admin/*`| ／ |标准知识库|`gaussdb-agent-kbstd`（我方发布）|部署时跑一次的 Job|GaussDB 官方文档集，`kubectl apply` 后自动装进知识库（同版本跳过、不碰贵方知识）|",
+     "lines": [
+      3,
+      28,
+      31
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "GaussDB 数据库智能体的**后端**：把 opencode 与 GaussDB / openGauss 诊断技能放进 Kubernetes。",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|NAS|—|一个 RWX 卷|唯一的状态所在：`users/<工号>/`（会话、报告）、`kb/`（知识库与索引 `kb/index/store.sqlite`）|",
+     "lines": [
+      33
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是为 GaussDB/openGauss 诊断服务的智能体后端组件，不是使用数据库存储自身业务数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "技能代码为 Apache License 2.0（agent/LICENSE），其余组件许可未在可见 README 中说明",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "GaussDB 数据库智能体的**后端**：把 opencode 与 GaussDB / openGauss 诊断技能放进 Kubernetes。 ／ |接入网关|`gaussdb-agent-gateway`|Deployment，2 副本|认工号（上游 SSO 加的头 + 信任凭据）、按工号分配用户环境、反向代理对话与报告；控制 API `/admin/*`| ／ |用户环境|`gaussdb-agent-runtime`|每人一个 Pod，或固定池化的槽位|opencode 1.18.27 + 17 个诊断技能 + 知识库只读查询；凭据代理（中间件令牌、签名私钥、模型 Key 不进模型所在的容器）|",
+   "evidence_lines": [
+    3,
+    28,
+    29
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "sqlrush/gh_gs_k8s_agent",
+  "sha": "22a4dc32d7ac",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

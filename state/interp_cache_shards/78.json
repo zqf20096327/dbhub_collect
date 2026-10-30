@@ -9323,5 +9323,136 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0dbd2c992c4e": {
+  "identity": {
+   "one_liner": "基于 SQLite 的便携式无服务器图数据库，附 Arturo 查询语言",
+   "review": "Grafito 是一个以 SQLite 作为底层存储的图数据库，可在 Arturo 语言中作为库使用，也可作为独立工具运行，提供 put/link/fetch 等图查询命令和节点关系操作，支持内存或文件持久化，并可通过 Desktop 应用预览节点。面向 Arturo 语言用户及需要轻量嵌入式图存储的开发者；使用前需安装 Arturo 运行时。",
+   "highlights": [
+    "以 SQLite 为存储后端，支持文件持久化与内存模式",
+    "提供节点/关系的创建、删除、查询命令及过滤条件（contains/prefix/over 等）",
+    "可作为 Arturo 库嵌入脚本，也可作为独立工具运行，支持 Docker 运行"
+   ],
+   "use_cases": [
+    "在 Arturo 脚本中嵌入使用图数据存储",
+    "以独立工具方式创建和查询小型图数据库",
+    "通过 Desktop 应用预览图的节点与关系可视化"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Portable, Serverless & Lightweight SQLite-based Graph Database",
+     "lines": [
+      1
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是一个基于 SQLite 存储的图数据库引擎，属于数据库生态组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Portable, Serverless & Lightweight SQLite-based Graph Database ／ ./grafito.art <database> ／ If you pass `null` (or `ø`) then the database will be *in-memory*. If you want to save to a file on disk, then pass a string with the desired database name. If the database already exists, it will be re-opened. If not, it will be created from scratch.",
+   "evidence_lines": [
+    1,
+    55,
+    214
+   ]
+  },
+  "fn": "drkameleon/grafito",
+  "sha": "0dbd2c992c4e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0e518e48b928": {
+  "identity": {
+   "one_liner": "自托管个人基础设施开销记账面板，经主机商 API 自动同步余额与扣费",
+   "review": "一个单用户自托管的基础设施费用记账面板，覆盖 VPS、独服、域名、CDN 等；它调用各托管商 API 定时同步账户余额、资源与扣费日期，生成快照、分析与预测，并支持多币种、Telegram 通知与密码/passkey/Telegram 登录。后端 NestJS + Prisma，以 PostgreSQL 18 存数据，部署为单个 Docker 镜像加独立 Postgres 容器，需 TLS 反向代理。适合管理自有服务器与托管订阅开销的个人用户。",
+   "highlights": [
+    "通过主机商 API 定时自动同步余额、资源、套餐与扣费日期，并保存每日余额快照",
+    "支持多币种记账与汇率折算、按提供商/国家/类型/币种的费用分析及未来扣费预测",
+    "提供 REST API 与 Bearer 令牌访问，敏感凭据以 AES-256-GCM 加密存储"
+   ],
+   "use_cases": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Backend:** NestJS 11 (Node 22) · Prisma 7 · PostgreSQL 18 · zod (`nestjs-zod`) · axios · grammY",
+     "lines": [
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是用 Prisma + PostgreSQL 存储数据的应用面板，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Персональная (**single-user, self-hosted**) панель учёта расходов на инфраструктуру: VPS, ／ - **Backend:** NestJS 11 (Node 22) · Prisma 7 · PostgreSQL 18 · zod (`nestjs-zod`) · axios · grammY ／ - **Деплой:** единый Docker-образ (бэкенд раздаёт API + собранный SPA) + отдельный Postgres",
+   "evidence_lines": [
+    3,
+    43,
+    46
+   ]
+  },
+  "fn": "mishkatik/infra-billing",
+  "sha": "0e518e48b928",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

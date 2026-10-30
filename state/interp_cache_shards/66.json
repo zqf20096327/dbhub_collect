@@ -11542,5 +11542,344 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b2ddbc3becb1": {
+  "identity": {
+   "one_liner": "基于 SQL 查询采集并暴露 Prometheus 指标的 exporter",
+   "review": "query-exporter 是一个 Prometheus exporter，通过 SQLAlchemy 连接多种数据库引擎，按配置的间隔或 cron 计划执行 SQL 查询，将查询结果写入 gauge/summary/histogram/enum 等指标并通过 /metrics 端点暴露。通过 YAML 配置数据库连接、指标与查询，支持 Docker 运行。适合需要对数据库执行自定义查询并将结果纳入 Prometheus 监控的运维与开发人员。",
+   "highlights": [
+    "通过 YAML 配置定义数据库、指标与查询，按 interval 或 cron schedule 定时执行 SQL 并更新指标",
+    "支持 gauge、summary、histogram、enum 等指标类型，每个查询可作用于多个数据库并更新多个指标",
+    "提供查询执行状态、错误计数、延迟等内置指标，支持 SSL、Docker 部署及多配置文件合并"
+   ],
+   "use_cases": [
+    "将自定义 SQL 查询结果作为 Prometheus 指标采集，纳入现有监控体系",
+    "按计划定时执行业务/运维查询并跟踪其成功率与延迟",
+    "对多种数据库引擎（PostgreSQL、MySQL、Oracle 等）统一做指标导出"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL, Oracle and Microsoft SQL Server. ／ - PostgreSQL (``postgresql://``)",
+     "lines": [
+      11,
+      194
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL, Oracle and Microsoft SQL Server. ／ - MySQL (``mysql://``)",
+     "lines": [
+      11,
+      195
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL, Oracle and Microsoft SQL Server. ／ - Oracle (``oracle+oracledb://``)",
+     "lines": [
+      11,
+      199
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite (``sqlite://``)",
+     "lines": [
+      196
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL, Oracle and Microsoft SQL Server. ／ - Microsoft SQL Server (``mssql+pymssql://``)",
+     "lines": [
+      11,
+      197
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- ClickHouse (``clickhouse+native://``)",
+     "lines": [
+      200
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明其为 Prometheus exporter，通过 SQL 查询从数据库采集指标，是为数据库监控生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "``query-exporter`` is a Prometheus_ exporter which allows collecting metrics ／ It uses SQLAlchemy_ to connect to different database engines, including",
+   "evidence_lines": [
+    7,
+    10
+   ]
+  },
+  "fn": "albertodonato/query-exporter",
+  "sha": "b2ddbc3becb1",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cb2597273ed8": {
+  "identity": {
+   "one_liner": "演示 AI agent 工具调用循环并用 SQLite 持久化的 Python 应用",
+   "review": "一个本地运行的 Python 教学/演示应用，展示 agent 如何调用工具、保存结果并在重启后通过 SQLite 回忆数据。提供 Demo 固定规则与 Live 两种模式（后者接 OpenAI 兼容模型），带 Web 界面展示每步工具调用与结果。它只是使用 SQLite 存储事实和运行历史，不是数据库工具；README 自述为学习项目，无多用户支持。",
+   "highlights": [
+    "实现 calculate、remember、recall、get time 四个工具的 agent 循环，工具调用与结果逐步记录并可回放",
+    "将事实和运行历史（含模型来源信息）存入本地 SQLite 数据库，重启后可回忆",
+    "提供确定性完整性检查，对持久化的执行轨迹做结构校验"
+   ],
+   "use_cases": [
+    "本地学习工具调用 agent 的基本循环机制",
+    "以浏览器 demo 回放记录的运行轨迹，观察工具调用与结果",
+    "接入 OpenAI 兼容模型进行带内存的轻量任务演示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "in SQLite, and shows each tool call and result. Restart the app and ask for the value again: ／ and run the recall example. It retrieves `launch score: 391` from SQLite. ／ |Memory|Stores facts and run history, including model provenance, in a local SQLite database|",
+     "lines": [
+      6,
+      70,
+      83
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该应用将事实和运行历史存入本地 SQLite 数据库，SQLite 是其存储组件而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A small Python app that shows how an agent uses tools to finish a task. ／ |Memory|Stores facts and run history, including model provenance, in a local SQLite database| ／ This is a local learning project with four tools. The server binds to localhost and has no",
+   "evidence_lines": [
+    3,
+    83,
+    137
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "LobsterQBA/loop-agent",
+  "sha": "cb2597273ed8",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "61271e6d4704": {
+  "identity": {
+   "one_liner": "单二进制自托管平台：网站、博客、PGP 邮件、加密聊天一体",
+   "review": "VayuPress 是一个用 Go 编写的自托管整合平台，把网站、博客、自有域名的 PGP 邮件服务器、端到端加密聊天、无 cookie 分析、Tor .onion 服务和 Stripe/PayPal/加密货币变现打包进单个二进制，数据存储在用户自己 VPS 上的 SQLite 文件中。适合希望完全掌控自己内容与基础设施的个人站长；内含 MCP server 供 Claude 等 MCP 客户端调用，采用 Apache-2.0 许可。",
+   "highlights": [
+    "单 Go 二进制运行网站、博客、邮件（SMTP/IMAP/POP3、DKIM）、加密聊天与分析，数据存于本地 SQLite",
+    "内置 MCP server（VayuMCP），可对接 Claude 及任意 MCP 客户端",
+    "支持 Tor .onion 服务、多域名单进程托管与 PGP 自动化（密钥生成、WKD 发布、PGP/MIME）"
+   ],
+   "use_cases": [
+    "个人或小团队在一台 VPS 上自托管全部线上存在（网站+博客+邮件+聊天）",
+    "需要匿名/抗审查的 .onion 服务发布",
+    "不想依赖第三方 SaaS、要求数据与邮箱完全自主掌控的部署场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One VPS. One process. One SQLite file. One console. No telemetry, no SaaS, no SDKs.",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "**Fourteen sites on one box.** The same VPS terminates TLS for fourteen hostnames, runs the mail server and serves the blog — from one binary and one database. No managed Postgres, no Redis, no separate mail provider, no CDN origin shield, and no second proces",
+     "lines": [
+      285
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个面向终端用户的自托管平台应用，使用 SQLite 存储自身数据而非为数据库生态提供服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " One VPS. One process. One SQLite file. One console. No telemetry, no SaaS, no SDKs. ／ VayuPress began as a publishing engine. It is now a **complete sovereign platform in one Go binary**:",
+   "evidence_lines": [
+    6,
+    26
+   ]
+  },
+  "fn": "johalputt/VayuPress",
+  "sha": "61271e6d4704",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "eb5deafe9860": {
+  "identity": {
+   "one_liner": "大数据框架与资源的汇编清单，附星标与 fork 数",
+   "review": "该仓库是 awesome 类资源清单，按 RDBMS、Frameworks、Distributed Programming 等章节收录大数据相关框架、数据库和资源的链接，并标注各条目的 GitHub 星标与 fork 数。面向需要检索大数据生态工具的开发者和数据工程师。它本身不含可安装运行的软件，只提供链接汇编。",
+   "highlights": [
+    "提供按 RDBMS、Frameworks、Distributed Programming 等类别组织的资源链接列表",
+    "条目附 GitHub 星标与 fork 数数据",
+    "涵盖数据库、流处理、分布式计算框架等多类条目"
+   ],
+   "use_cases": [
+    "用于查找大数据领域的开源框架与工具线索",
+    "作为了解数据库与分布式计算生态条目的索引参考",
+    "供贡献者按章节补充新的资源条目"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "* 🌎 MySQL The world's most popular open source database.",
+     "lines": [
+      12
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "* 🌎 PostgreSQL The world's most advanced open source database.",
+     "lines": [
+      13
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "* Oracle Database - object-relational database management system.",
+     "lines": [
+      14
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库仅为资源清单，仅罗列含数据库在内的条目链接，不实现为数据库服务的功能。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Awesome Big Data ／ A curated list of awesome big data frameworks, resources and other awesomeness. Inspired by <code>&nbsp;32777⭐</code> <code>&nbsp;&nbsp;5131🍴</code> awesome-php), <code>331267⭐</code> <code>&nbsp;29032🍴</code> awesome-python), <code>&nbsp;&nbsp;1265⭐</code> <code>&nbsp;&nbsp;&nbsp;174🍴</code> awesome-ruby), hadoopecosystemtable & big-data. ／ ## RDBMS",
+   "evidence_lines": [
+    1,
+    5,
+    11
+   ]
+  },
+  "fn": "Correia-jpv/fucking-awesome-bigdata",
+  "sha": "eb5deafe9860",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

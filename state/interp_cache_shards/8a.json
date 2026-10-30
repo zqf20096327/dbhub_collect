@@ -10726,5 +10726,72 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b893ee3de5d3": {
+  "identity": {
+   "one_liner": "面向 Agent 的 Telegram CLI，本地 SQLite 缓存并支持只读 SQL 查询",
+   "review": "一个用 TypeScript/Bun 编写的 Telegram 命令行工具，通过 MTProto API 提供多账号登录、只读同步守护进程、消息全文检索（FTS5）与 `tg sql` 只读 SQL 查询，数据存于本地 SQLite 缓存。面向终端用户和需要在 shell 中操作 Telegram 的 AI Agent（JSON 输出、固定退出码、skill manifest）。守护进程只读，写操作由 CLI 执行。",
+   "highlights": [
+    "提供只读同步守护进程，支持实时同步、历史回填与离线缓存读取（cache-first，`--fresh` 可绕过）",
+    "提供 `tg sql` 对本地 SQLite 缓存执行只读 SQL，含 FTS5 全文检索与带注释的 schema 输出",
+    "面向 Agent 的 JSON 输出、固定退出码、skill manifest 生成与校验命令"
+   ],
+   "use_cases": [
+    "在终端离线搜索和用 SQL 查询 Telegram 消息与联系人",
+    "为脚本或 AI Agent 提供结构化 JSON 输出的 Telegram 命令行访问",
+    "后台持续同步多个 Telegram 账号的消息历史与媒体文件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`tg` keeps your Telegram in a local SQLite cache for offline search and SQL; ／ |Local cache, offline queries|✅ SQLite, cache-first, `--fresh`|❌ live calls only|",
+     "lines": [
+      74,
+      82
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该 Telegram CLI 的本地缓存存储引擎，项目本身服务于 Telegram 使用而非数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`tg` keeps your Telegram in a local SQLite cache for offline search and SQL; ／ - Read-only SQL over the cache (`tg sql`) with an annotated schema",
+   "evidence_lines": [
+    74,
+    68
+   ]
+  },
+  "fn": "neoromantic/telegram-sync-cli",
+  "sha": "b893ee3de5d3",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

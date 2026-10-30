@@ -11693,5 +11693,127 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "074ef95f5a9d": {
+  "identity": {
+   "one_liner": "腾讯云 API 3.0 的 Go 语言 SDK",
+   "review": "这是腾讯云 API 3.0 平台的 Go 开发工具套件，提供各云产品接口的 Request/Response 结构体封装。支持按产品包安装以减小依赖，内置凭证管理（环境变量/配置文件/角色扮演等）、地域容灾、网络与限频重试、Common Client 泛用调用等机制。面向需要在 Go 程序中调用腾讯云 API 的开发者。",
+   "highlights": [
+    "支持按产品安装指定 SDK 包，包含 common 基础包与各产品包",
+    "提供多种凭证管理方式：环境变量、配置文件、角色扮演、实例角色、TKE OIDC 及凭证提供链",
+    "支持地域容灾、网络错误重试、限频重试与 ClientToken 幂等注入"
+   ],
+   "use_cases": [
+    "在 Go 应用中调用腾讯云各产品 API",
+    "需要多地域容灾或自动重试的云 API 调用",
+    "通过凭证提供链在容器/实例环境中管理密钥"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 仅描述腾讯云 API SDK 的功能与配置，未出现任何数据库相关适配或依赖说明。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "欢迎使用腾讯云开发者工具套件（SDK），此 SDK 是云 API 3.0 平台的配套开发工具。 ／ v1.0.170后可以按照产品下载，您只需下载基础包和对应的产品包(如cvm)即可，不需要下载全部的产品，从而加快您构建镜像或者编译的速度： ／     go get -v -u github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common",
+   "evidence_lines": [
+    7,
+    39,
+    44
+   ]
+  },
+  "fn": "TencentCloud/tencentcloud-sdk-go",
+  "sha": "074ef95f5a9d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "105c1029f759": {
+  "identity": {
+   "one_liner": "自托管家庭藏书编目应用，单容器 FastAPI+SQLite",
+   "review": "Shelf 是一个自托管的家庭藏书管理系统，通过扫码、拍摄书架照片（AI 视觉模型识别书脊）或标题搜索添加图书、DVD、CD、游戏等藏品，并自动从 Open Library、TMDb、IGDB 等获取元数据与封面，支持借阅追踪、系列管理和盘点审计。面向个人与家庭用户，后端为 Python/FastAPI，数据存于 SQLite（WAL 模式），以单个 Docker 容器部署，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "支持条码扫描、整架照片 AI 识别批量入库与 Open Library/TMDb/IGDB 标题搜索三种添加方式",
+    "提供 8 种扫描模式（添加、愿望清单、借出、归还、移动、盘点、查询、快速评分）及借阅、查重合并、回收站与审计报告功能",
+    "以单 Docker 容器运行，数据持久化于本地 SQLite 数据库，支持多用户角色与 PWA 离线访问"
+   ],
+   "use_cases": [
+    "在家用手机或 USB/蓝牙扫码枪编目图书、影碟、CD 和游戏收藏",
+    "拍摄整面书架照片批量导入藏书并补全封面与元数据",
+    "家庭成员间共享目录并跟踪图书借还与馆藏盘点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Zero cloud dependency** — runs entirely on your network in a single Docker container with a SQLite database. Your data never leaves your home ／ shelf.db — SQLite database ／ |Backend|Python 3.12, FastAPI, SQLite (WAL mode)|",
+     "lines": [
+      26,
+      101,
+      271
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目以 SQLite 作为自身持久化数据的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Zero cloud dependency** — runs entirely on your network in a single Docker container with a SQLite database. Your data never leaves your home ／   shelf.db        — SQLite database",
+   "evidence_lines": [
+    26,
+    101
+   ]
+  },
+  "fn": "dgahagan/shelf",
+  "sha": "105c1029f759",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

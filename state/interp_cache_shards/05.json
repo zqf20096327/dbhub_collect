@@ -10554,5 +10554,283 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "39d2f6e91cfc": {
+  "identity": {
+   "one_liner": "PostgreSQL plpgsql 存储过程静态分析 linter 扩展",
+   "review": "plpgsql_check 是一个 PostgreSQL 扩展，对 plpgsql 语言编写的函数和存储过程做静态分析，利用 PostgreSQL 内部解析器在运行前发现嵌入 SQL 中的语义错误，支持检查未用变量、死代码、隐式类型转换、SQL 注入风险等，输出 text/json/xml 格式，适用于 PostgreSQL 14-20。面向 plpgsql 开发者和数据库管理员，通过 CREATE EXTENSION 安装后调用检查函数使用。",
+   "highlights": [
+    "基于 PostgreSQL 内部 parser/evaluator 对 plpgsql 函数做静态分析，检查嵌入 SQL 的语义错误",
+    "支持检测未使用变量、死代码、缺失 RETURN、隐式类型转换及 EXECUTE 语句的 SQL 注入风险",
+    "提供 text/json/xml 三种输出格式，支持通过参数和注释内选项控制各类警告级别"
+   ],
+   "use_cases": [
+    "存储过程上线前的静态错误检查",
+    "排查函数中嵌入 SQL 的类型不匹配与列缺失问题",
+    "检测 EXECUTE 动态语句中的 SQL 注入隐患"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This extension is a full linter for plpgsql for PostgreSQL. It leverages only the internal ／ PostgreSQL parser/evaluator so you see exactly the errors would occur at runtime. ／ PostgreSQL 14 - 20 are supported.",
+     "lines": [
+      5,
+      6,
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展为数据库存储过程开发提供静态检查服务的生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This extension is a full linter for plpgsql for PostgreSQL. It leverages only the internal ／ PostgreSQL 14 - 20 are supported. ／  postgres=# CREATE EXTENSION plpgsql_check;",
+   "evidence_lines": [
+    5,
+    35,
+    42
+   ]
+  },
+  "fn": "okbob/plpgsql_check",
+  "sha": "39d2f6e91cfc",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "05e9650e5b63": {
+  "identity": {
+   "one_liner": "Kaia 区块链预言机，含链上合约与链下聚合服务",
+   "review": "Orakl Network 是 Kaia（原 Klaytn）区块链的预言机实现，仓库分为链上合约与链下服务两部分，提供 VRF、Request-Response、链下聚合与 Proof of Reserve 等能力，通过 docker-compose 可本地启动 api、postgres、redis、json-rpc 等容器及 listener/worker/reporter 微服务，供节点运营者通过 CLI 管理 VRF 与 RR 服务；运行时依赖 PostgreSQL 存储链、服务、密钥等配置数据。",
+   "highlights": [
+    "提供 VRF 与 Request-Response 服务的 docker-compose 本地运行方式",
+    "包含 listener、worker、reporter 链下微服务，可整体或单独启动",
+    "提供 CLI 供节点运营者管理 VRF 与 RR 服务"
+   ],
+   "use_cases": [
+    "为 Kaia/EVM 链上合约提供随机数（VRF）与数据请求响应服务",
+    "运行链下聚合预言机节点",
+    "部署 Delegator 代付交易服务"
+   ],
+   "use_cases_2": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- `api`, `postgres`, `redis`, and `json-rpc` services will start as separate docker containers ／ - `postgres` will get populated with necessary data:",
+     "lines": [
+      29,
+      30
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "This repository is split to on-chain and off-chain oracle implementation.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其为区块链预言机系统，使用 postgres 容器存储 chains、services 等数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- `api`, `postgres`, `redis`, and `json-rpc` services will start as separate docker containers ／ - `postgres` will get populated with necessary data:",
+   "evidence_lines": [
+    29,
+    30
+   ]
+  },
+  "fn": "Bisonai/orakl",
+  "sha": "05e9650e5b63",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2f31179aea82": {
+  "identity": {
+   "one_liner": "Rust 库，解析并流式消费 PostgreSQL 逻辑/物理复制 WAL",
+   "review": "这是一个 Rust 开发库，用于通过逻辑和物理复制协议解析并流式读取 PostgreSQL 的 WAL 日志，支持逻辑复制协议 v1-4、物理流、BASE_BACKUP、快照、两阶段提交等。面向需要在 Rust 中构建 CDC 消费者、备份工具或复制组件的开发者。默认使用纯 Rust rustls 后端，无需 libpq 与 OpenSSL。",
+   "highlights": [
+    "实现 PostgreSQL 逻辑复制协议版本 1-4 与物理复制流，含 BASE_BACKUP、两阶段提交、并行流复制",
+    "提供 serde 类型化行反序列化、WalRouter 按表路由及 #[derive(WalTable)] 派生宏",
+    "支持初始快照与对齐快照，快照与流衔接无间隙无重复，并提供原子 LSN 反馈"
+   ],
+   "use_cases": [
+    "基于 WAL 的 CDC 数据变更捕获与下游同步",
+    "为后备服务器/PITR 流式获取物理 WAL 或执行 BASE_BACKUP 备份",
+    "构建需要消费复制流的 Rust 自定义复制或审计组件"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A high-performance Rust library for PostgreSQL logical and physical replication protocol parsing and streaming. Provides a robust, type-safe interface for consuming PostgreSQL Write-Ahead Log (WAL) streams. ／ - **Full Logical Replication Support**: Implements PostgreSQL logical replication protocol versions 1-4",
+     "lines": [
+      10,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为消费 PostgreSQL 复制协议/WAL 服务的 Rust 库，属数据库生态的开发库组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A high-performance Rust library for PostgreSQL logical and physical replication protocol parsing and streaming. Provides a robust, type-safe interface for consuming PostgreSQL Write-Ahead Log (WAL) streams. ／ - **Full Logical Replication Support**: Implements PostgreSQL logical replication protocol versions 1-4",
+   "evidence_lines": [
+    10,
+    14
+   ]
+  },
+  "fn": "isdaniel/pg-walstream",
+  "sha": "2f31179aea82",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3603130d6246": {
+  "identity": {
+   "one_liner": "基于 React+GraphQL+PostgreSQL 的学校成绩单系统",
+   "review": "一个面向学生和教师的在线成绩单（Boletim）系统，采用 pnpm monorepo，包含 GraphQL API 服务、学生端成绩单应用和管理员后台，支持 Docker 启动、PWA 离线访问、暗色模式及节日主题皮肤，数据存储使用 PostgreSQL，通过 pnpm seed 可灌入测试数据。",
+   "highlights": [
+    "提供学生成绩单端（React+Relay+Vite）与管理员后台两个前端应用",
+    "后端为 GraphQL API（Koa + graphql-http + Knex/PostgreSQL），支持 Docker Compose 启动与种子数据",
+    "支持 PWA 离线访问、暗色模式与节日主题装饰"
+   ],
+   "use_cases": [
+    "学校在线发布学生成绩与出勤记录",
+    "教师通过管理后台录入和发布成绩",
+    "学生查询成绩单并上传识别用头像"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`apps/server`|API GraphQL (Koa + graphql-http + Knex/PostgreSQL)|",
+     "lines": [
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是用 PostgreSQL 存数据的成绩单应用（apps/server 的 API 使用 Knex/PostgreSQL）",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Monorepo com pnpm workspaces. As versões compartilhadas ficam no `catalog` do `pnpm-workspace.yaml`. ／ |`apps/server`|API GraphQL (Koa + graphql-http + Knex/PostgreSQL)| ／ |`apps/boletim`|Sistema de Boletim (React + Relay + Vite)|",
+   "evidence_lines": [
+    11,
+    15,
+    16
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "lucasgdb/report-card-system",
+  "sha": "3603130d6246",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

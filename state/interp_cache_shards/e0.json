@@ -10780,5 +10780,72 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "15eb2c550c94": {
+  "identity": {
+   "one_liner": "SQLite 多写者 VFS 扩展，实现多线程/多进程并发写入同一数据库",
+   "review": "sqlite-multiwriter 是一个以 SQLite 可加载扩展（VFS）形式实现的并发写入引擎，让多个线程或多个进程同时写同一个数据库文件，无需修改 SQLite、schema 或 SQL。每个写者持有私有 WAL，提交时校验快照页并合并日志；支持可选 rebase 机制减少页级冲突拒绝。适合需要在单机 SQLite 上支撑多代理/多 worker 并发写入的应用开发者。",
+   "highlights": [
+    "以 VFS 扩展形式加载，数据库文件保持普通 SQLite 格式，无需改 schema 或 SQL",
+    "支持多线程（多连接）与多进程（mw_mp=1）两种并发写入模式",
+    "提供可选 rebase（页级冲突重放）与快照隔离校验，事务失败时返回 SQLITE_BUSY_SNAPSHOT"
+   ],
+   "use_cases": [
+    "多个代理（agents）或 worker 进程并发写入同一个 SQLite 数据库文件",
+    "单进程多连接高并发写入，减少 SQLITE_BUSY 重试",
+    "将现有 SQLite 应用在不改代码的情况下切换到多写者引擎"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# sqlite-multiwriter ／ sqlite-multiwriter removes that limit without touching SQLite. It is a VFS that you load as an extension (or link in): your SQLite, your SQL and your database file stay the same, and many connections",
+     "lines": [
+      1,
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite 提供并发写入能力的 VFS 扩展/引擎组件，属于为数据库本体服务的基础设施。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "sqlite-multiwriter removes that limit without touching SQLite. It is a VFS that you load as an extension (or link in): your SQLite, your SQL and your database file stay the same, and many connections ／ Each writer has its own WAL. Its transactions run there on a snapshot of the database, and at commit they are checked, ordered and published; the log is merged into the database file in the background: ／ Every release has the extension for each platform (releases; `make extension` builds it for the machine you are on). Load it into a SQLite that",
+   "evidence_lines": [
+    9,
+    33,
+    63
+   ]
+  },
+  "fn": "sqliteai/sqlite-multiwriter",
+  "sha": "15eb2c550c94",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

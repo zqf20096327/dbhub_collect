@@ -12479,5 +12479,148 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "044bcc289fed": {
+  "identity": {
+   "one_liner": "AI 语音销售代理，结合 Vapi 通话、Gemini 潜客分析与 WhatsApp 跟进",
+   "review": "一个基于 Spring Boot 的外呼销售代理应用：客户经 WhatsApp 主动请求后，通过 Vapi/Twilio 发起语音通话，用 GPT-4.1 对话、Gemini 做潜客分级与摘要，通话中/后经 Meta WhatsApp Cloud API 发送跟进，结果存入 TiDB Cloud 或 MySQL（本地用 H2）。适用于做外呼潜客筛选与自动跟进的业务系统，含同意管理与成本限制等约束。",
+   "highlights": [
+    "通过 Vapi/Twilio 实现外呼，支持 Telugu、Hindi、英语对话",
+    "Gemini 输出结构化 JSON 完成潜客 HOT/WARM/COLD 分级、摘要与回调提取",
+    "提供 REST API 与 lead 看板，仅存储通话结果不存转录文本"
+   ],
+   "use_cases": [
+    "电商网站开发业务的潜客外呼筛选",
+    "WhatsApp 同意触发的自动回呼与跟进",
+    "粘贴转录文本的公开演示与线索分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Storage|Spring Data JPA: TiDB Cloud (MySQL) in production, H2 for local runs and tests| ／ - Calls are stored in a database: the outcome only (rating, reason, summary, callback request, failed steps), never the transcript. Without `DB_URL` a local H2 file in `./data` is used; for TiDB Cloud or MySQL set `DB_URL`, `DB_USERNAME` and `DB_PASSWORD`. A r",
+     "lines": [
+      54,
+      156
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|Storage|Spring Data JPA: TiDB Cloud (MySQL) in production, H2 for local runs and tests| ／ - Calls are stored in a database: the outcome only (rating, reason, summary, callback request, failed steps), never the transcript. Without `DB_URL` a local H2 file in `./data` is used; for TiDB Cloud or MySQL set `DB_URL`, `DB_USERNAME` and `DB_PASSWORD`. A r",
+     "lines": [
+      54,
+      156
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用通过 Spring Data JPA 将通话结果存入 TiDB Cloud/MySQL，数据库仅为存储组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "    Vapi -->|\"webhook with Bearer secret: events and tool calls\"| API[\"Spring Boot service\"] ／ |Storage|Spring Data JPA: TiDB Cloud (MySQL) in production, H2 for local runs and tests| ／ - Calls are stored in a database: the outcome only (rating, reason, summary, callback request, failed steps), never the transcript. Without `DB_URL` a local H2 file in `./data` is used; for TiDB Cloud or MySQL set `DB_URL`, `DB_USERNAME` and `DB_PASSWORD`. A repeated end-of-call report is ignored even after a restart.",
+   "evidence_lines": [
+    39,
+    54,
+    156
+   ]
+  },
+  "fn": "RojanFrancis/elevatebox-agent",
+  "sha": "044bcc289fed",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5a57b0d5c961": {
+  "identity": {
+   "one_liner": "OceanBase 竞赛仓库：SeekDB 部署与 SQL/向量检索实验",
+   "review": "该仓库为 OceanBase 数据库竞赛项目，内容为 SeekDB 的部署、SQL 验证及向量检索实验，面向参与该竞赛的开发者。README 仅含标题与一句描述，未说明安装方式、依赖环境或具体实现，细节需查阅仓库代码本身。",
+   "highlights": [
+    "包含 SeekDB 部署内容",
+    "包含 SQL 验证实验",
+    "包含向量检索实验"
+   ],
+   "use_cases": [
+    "竞赛环境下的 SeekDB 部署参考",
+    "OceanBase 向量检索实验验证"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "# oceanbase-seekdb-competition ／ OceanBase Database Competition - SeekDB deployment, SQL verification and vector search experiments.",
+     "lines": [
+      1,
+      2
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅说明为竞赛实验仓库，无法确认其为生态工具还是仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "# oceanbase-seekdb-competition ／ OceanBase Database Competition - SeekDB deployment, SQL verification and vector search experiments.",
+   "evidence_lines": [
+    1,
+    2
+   ]
+  },
+  "fn": "lishenghai666/oceanbase-seekdb-competition",
+  "sha": "5a57b0d5c961",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

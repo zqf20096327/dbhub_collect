@@ -10931,5 +10931,70 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0b752ce012e6": {
+  "identity": {
+   "one_liner": "自托管活动二维码照片共享应用，访客扫码拍照即汇入私人相册",
+   "review": "Guestroll 是一个用 Next.js 开发的自托管婚礼/聚会照片收集系统：主人生成二维码，访客扫码后直接打开摄像头拍照上传，照片进入私人相册，支持审核、实时大屏、访客留言、ZIP 导出等。部署为单个 Docker 容器，无需外部数据库，使用 SQLite 加文件夹或 S3 兼容存储，需 HTTPS 反向代理。",
+   "highlights": [
+    "访客扫码即开摄像头上传，无需安装应用或注册账号",
+    "单个 Docker 容器部署，数据用 SQLite 加文件夹或任意 S3 兼容桶存储",
+    "提供审核、实时墙、二维码设计器、ZIP 打包导出与 SMTP/webhook 通知"
+   ],
+   "use_cases": [
+    "婚礼、生日、公司聚会现场收集宾客手机照片",
+    "家庭或活动后通过受密码保护的相册链接分享照片",
+    "homelab/自托管服务器上私有部署照片墙"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🗃️ No external database: SQLite plus a folder of files in one volume, or photos in any **S3-compatible bucket** (AWS, R2, B2, Garage…).",
+     "lines": [
+      73
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该应用以 SQLite 加文件夹作为自身存储（无外部数据库），是一个使用数据库的应用而非数据库工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "You run it yourself, on your own server, with one Docker command. The photos ／ - 🗃️ No external database: SQLite plus a folder of files in one volume, or photos in any **S3-compatible bucket** (AWS, R2, B2, Garage…). ／ docker run -d --name guestroll \\",
+   "evidence_lines": [
+    29,
+    73,
+    82
+   ]
+  },
+  "fn": "achedon12/guestroll",
+  "sha": "0b752ce012e6",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11207,5 +11207,156 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4863ccd1aa23": {
+  "identity": {
+   "one_liner": "自托管多用户多 Agent AI 助手平台",
+   "review": "Octop 是面向家庭和小团队的自托管 AI 助手平台，单进程提供 Web 控制台、CLI、IM 渠道和定时任务，多个专家 Agent 共享一个控制面数据库（默认 SQLite，可选 PostgreSQL），工作区文件支持本地磁盘、Docker 沙箱、PostgreSQL 或 COS/S3 等后端，并内置 RAG 知识库、插件和 MCP 网关扩展能力。",
+   "highlights": [
+    "单进程运行 Web 控制台、CLI、IM 渠道与 cron，状态从控制面数据库重建",
+    "工作区后端可插拔：本地磁盘、Docker 沙箱、PostgreSQL、COS/S3",
+    "支持 RAG 知识库、MCP/OAuth 连接器与 ACP 双向集成"
+   ],
+   "use_cases": [
+    "家庭共享部署：一个管理员账户为多名成员分配专家 Agent",
+    "团队协作：通过飞书/钉钉/企业微信等 IM 渠道路由任务",
+    "个人助理：笔记整理、日程管理与自然语言定时任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|💾|**Pluggable workspace backends**|Local disk, Docker sandbox, PostgreSQL, or COS/S3 for agent files — separate from the control-plane DB| ／ Octop is a self-hosted AI assistant platform for households and small teams. It runs a single process that serves a web dashboard, a CLI, IM channels (Feishu, DingTalk, QQ, WeChat, Telegram, Discord, WeCom, and more), and cron automation — all sharing one cont ／ |**Control plane DB**|SQLite (WAL, default) or PostgreSQL (optional)|",
+     "lines": [
+      42,
+      55,
+      76
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Octop is a self-hosted AI assistant platform for households and small teams. It runs a single process that serves a web dashboard, a CLI, IM channels (Feishu, DingTalk, QQ, WeChat, Telegram, Discord, WeCom, and more), and cron automation — all sharing one cont ／ |**Control plane DB**|SQLite (WAL, default) or PostgreSQL (optional)| ／ Instead of an external queue or message broker, Octop routes every surface — Web UI, IM, and cron — through one in-process `HarnessProcessor`. The result is a single, restart-safe process whose entire state is rebuilt from the control-plane database on boot (l ／ The interactive wizard creates the SQLite database, JWT secret, and first admin account under `~/.octop/`.",
+     "lines": [
+      55,
+      76,
+      89,
+      241
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Octop 使用 SQLite/PostgreSQL 作为控制面数据库存数据，属使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Octop is a self-hosted AI assistant platform for households and small teams. It runs a single process that serves a web dashboard, a CLI, IM channels (Feishu, DingTalk, QQ, WeChat, Telegram, Discord, WeCom, and more), and cron automation — all sharing one control-plane database under `~/.octop/` (SQLite by default; PostgreSQL optional). ／ |**Control plane DB**|SQLite (WAL, default) or PostgreSQL (optional)| ／ - Workspace backends (expert files): local disk, Docker sandbox, PostgreSQL, COS/S3, and other remote stores — distinct from the control-plane database",
+   "evidence_lines": [
+    55,
+    76,
+    103
+   ]
+  },
+  "fn": "TencentCloud/Octop",
+  "sha": "4863ccd1aa23",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "841ae4036cc7": {
+  "identity": {
+   "one_liner": "PostgreSQL 18 扩展，基于增量视图维护实现自动刷新的流表",
+   "review": "pg_trickle 是一个 PostgreSQL 18+ 扩展，用 Rust 编写，为数据库提供 stream table：基于 SQL 查询定义的表随底层数据变更自动增量刷新（IVM），支持触发器/WAL 两种 CDC、DAG 拓扑刷新、Citus 分布式表，并提供 Docker 镜像与 CloudNativePG 清单。面向应用开发者、DBA/SRE 与数据工程师；目前处于 1.0 之前的开发阶段，API 仍可能变动。",
+   "highlights": [
+    "实现增量视图维护（IVM），在行变更时仅计算该行对查询结果的影响，支持四种刷新模式与高变更率下的自动 FULL 回退",
+    "支持 JOIN、聚合、窗口函数、CTE、子查询等 SQL 范围，stream table 可组成 DAG 并按拓扑序刷新",
+    "提供基于触发器的 CDC 与可选 WAL 捕获，支持 Citus 分布式源表、PgBouncer 兼容和健康检查等运维函数"
+   ],
+   "use_cases": [
+    "为 PostgreSQL 分析查询维护自动增量的物化结果，替代手动 REFRESH 物化视图",
+    "在 Citus 分布式表上构建增量刷新的下游派生表",
+    "通过 playground Docker 环境评估流式物化视图在现有 pipeline 中的行为"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pg_trickle ／ PostgreSQL 18 ／ ## Stream Tables for PostgreSQL 18",
+     "lines": [
+      1,
+      10,
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展为该数据库提供 IVM/流表能力，属于服务数据库生态的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache 2.0，README 标注 Pre-1.0，API 与配置在次要版本间可能变化",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL 18 ／ pg_trickle brings declarative, automatically-refreshing materialized views to PostgreSQL, inspired by the DBSP differential dataflow framework (comparison). Define a SQL query and a schedule; the extension handles the rest. ／ - **Trigger-based CDC** — lightweight statement-level `AFTER` triggers by default; no `wal_level = logical` or replication slots required.",
+   "evidence_lines": [
+    10,
+    20,
+    94
+   ]
+  },
+  "fn": "trickle-labs/pg-trickle",
+  "sha": "841ae4036cc7",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

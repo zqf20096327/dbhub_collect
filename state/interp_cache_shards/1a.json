@@ -10298,5 +10298,145 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9b5ffd09e659": {
+  "identity": {
+   "one_liner": "开源职位搜索引擎：爬取公司ATS职位，PostgreSQL+pgvector存储与语义检索",
+   "review": "一个面向求职者的开源职位聚合与搜索引擎，从公司官方ATS（Workday、Greenhouse、Lever等）直接抓取职位，归一化去重后提供分面全文检索、HTTP API、CLI、Telegram摘要及MCP服务器。技术栈为 Go+Fiber、PostgreSQL+pgvector、Meilisearch、Redis，通过 Docker Compose 部署，适合自托管使用或在职位数据上构建应用。",
+   "highlights": [
+    "从 700,000+ 公司的 ATS 与职业页面直接爬取职位，归一化去重",
+    "提供分面全文搜索、无密钥公共 HTTP API、CLI 与 MCP 服务器",
+    "Docker Compose 一键启动完整栈，迁移自动应用于 Postgres 卷"
+   ],
+   "use_cases": [
+    "求职者按地区、远程、资历等分面检索职位",
+    "自托管搭建职位搜索站点",
+    "通过 API/MCP 将职位数据集成到其他应用"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL** + pgvector — storage, filtering, semantic embeddings ／ # api, web, postgres, meilisearch, redis, s3 ／ Migrations are applied automatically on first Postgres volume init",
+     "lines": [
+      97,
+      112,
+      117
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确用 PostgreSQL+pgvector、Meilisearch、Redis 存储职位数据，是使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **PostgreSQL** + pgvector — storage, filtering, semantic embeddings ／ - **Actually open.** MIT-licensed and self-hostable, pipeline and data both in the",
+   "evidence_lines": [
+    97,
+    43
+   ]
+  },
+  "fn": "strelov1/freehire",
+  "sha": "9b5ffd09e659",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "098b24c06a65": {
+  "identity": {
+   "one_liner": "本地优先、人工审核的 AI 代理记忆库，单 SQLite 库经 MCP 共享",
+   "review": "为 AI 代理（DSH、Claude Code、Codex、Cursor 等任意 MCP 客户端）提供持久记忆的工具：新记忆卡先进入待审队列，人工批准后写入本地 SQLite 库，并附带不可变审计日志与 token 用量台账，支持 Web UI 和终端 TUI 审核。数据全部留在本机，不含云端服务。",
+   "highlights": [
+    "新记忆卡默认待审核，人工批准后才写入，且代理无法自行批准自己的卡",
+    "每次状态变更追加到 SQLite 层强制的不可变审计日志",
+    "内置 token 台账，记录召回注入字符数、蒸馏调用次数与有效性反馈"
+   ],
+   "use_cases": [
+    "为多会话 AI 代理保留已审核的项目决策与长期偏好",
+    "团队需要对代理写入的记忆进行人工把关与审计追踪",
+    "在无云服务、数据不出本机的约束下自托管代理记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Local-first, review-gated, measurable — one SQLite vault shared by DSH, Claude Code, Codex, Cursor and any MCP client. ／ - 🏠 **Local-first, no cloud** — SQLite + Markdown on your own disk. No third-party memory framework, no account. Memory data never leaves the machine; only the News page fetches public RSS / Hacker News on demand (titles, excerpts and outbound links only). ／ - every status change is appended to an **immutable audit log** (who / what / when / why) — enforced at the SQLite layer, not by convention;",
+     "lines": [
+      16,
+      20,
+      84
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其以 SQLite 作为自身记忆数据的存储介质（L20），SQLite 是被使用的数据库而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🏠 **Local-first, no cloud** — SQLite + Markdown on your own disk. No third-party memory framework, no account. Memory data never leaves the machine; only the News page fetches public RSS / Hacker News on demand (titles, excerpts and outbound links only). ／ - every status change is appended to an **immutable audit log** (who / what / when / why) — enforced at the SQLite layer, not by convention;",
+   "evidence_lines": [
+    20,
+    84
+   ]
+  },
+  "fn": "EternalNight996/memory-eternal",
+  "sha": "098b24c06a65",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

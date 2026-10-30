@@ -11603,5 +11603,344 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "06a6bf31a0aa": {
+  "identity": {
+   "one_liner": "多模态数据库，表列内置模型调用、索引与服务编排",
+   "review": "Pixeltable 是一个基于 Python 的多模态数据系统：把文件引用、计算列（模型调用、转写、嵌入）、向量索引和 HTTP 服务路由都声明在同一个 app.py 的表结构里，插入行时自动执行并存储结果，表变更带版本可回滚；底层由本地守护进程运行其内置的 Postgres。面向构建视频/图像/文档类 AI 应用（RAG、媒体流水线、Agent）的开发者。要求预先定义 schema，需 Python 3.11+，也提供云托管版本。",
+   "highlights": [
+    "提供计算列与视图机制，插入行时自动运行模型调用并存储、索引结果",
+    "支持表级版本化，提供 history/revert 命令回滚变更",
+    "内置 FastAPI 路由声明与 MCP 服务器，支持本地或云上运行"
+   ],
+   "use_cases": [
+    "对文档构建 RAG，增删文档时无需手工重切块或重嵌入",
+    "视频/图像流水线：抽帧、转写、检测结果的存储与检索",
+    "将 Agent 工具调用作为可查询的行记录"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "# the first pxt command starts a local daemon that runs Pixeltable's Postgres and reads your environment once ／ If you don't want a schema, Pixeltable is the wrong tool. Coming from Pinecone, Postgres, LangGraph or Airflow?",
+     "lines": [
+      45,
+      101
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明其本地守护进程运行内置的 Postgres（L45），自身是数据库系统而非使用外部数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "### Multimodal database, orchestration, and serving in one file ／ # the first pxt command starts a local daemon that runs Pixeltable's Postgres and reads your environment once ／ the work into the database. The engine tracks what depends on what, so recomputing the right rows is its job, not",
+   "evidence_lines": [
+    4,
+    45,
+    84
+   ]
+  },
+  "fn": "pixeltable/pixeltable",
+  "sha": "06a6bf31a0aa",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "800791118c6e": {
+  "identity": {
+   "one_liner": "仙境传说3开源服务端模拟器，单exe一键开服",
+   "review": "RO3Emu 是用 C#/.NET 10 编写的 Ragnarok Online 3 私服服务端模拟器，在 Windows 上一键运行，也可通过脚本部署到 Linux/VPS；提供野怪、副本、公会等功能，玩家用原版客户端连接。适合想自建 RO3 私服与朋友联机的玩家；需自备或下载约 24GB 游戏文件，且尚未实现战争之憶（War of Emperium）等全部功能。",
+   "highlights": [
+    "提供单个 RO3Emu.exe，自动定位/下载游戏文件并启动服务端与客户端",
+    "支持 Windows 与 Linux/VPS 托管，需转发 TCP 5380、20000、33100 端口",
+    "已实现世界探索、战斗与 Boss、剧情副本、角色成长、公会等内容，GPL-3.0 许可"
+   ],
+   "use_cases": [
+    "在本地或 VPS 上搭建与朋友联机的 RO3 私服",
+    "基于原版客户端进行游戏内容的探索与公会活动"
+   ],
+   "other": "spec: 首次登录即创建账号，无需注册流程"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是使用游戏客户端/服务端的 MMORPG 私服应用，未声明为数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "RO3Emu: play Ragnarok Online 3 on your own server ／  One click to play A single <code>RO3Emu.exe</code>, nothing to install. It finds your game, prepares it and starts both the server and the game. ／ Hosting on Linux, a VPS or a home server? One script, nothing to install: see hosting.",
+   "evidence_lines": [
+    1,
+    26,
+    50
+   ]
+  },
+  "fn": "aethai/ro3emu-server",
+  "sha": "800791118c6e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "11a80b610d27": {
+  "identity": {
+   "one_liner": "基于 Rust 内核的 Python/TypeScript 双语言异步 ORM",
+   "review": "MonOrm 是一个异步 ORM，用 Rust 实现核心引擎，用户以 Prisma 语法写一次 schema，即可在 Python 和 TypeScript 中获得相同的查询、迁移和生成的类型化模型，当前支持 PostgreSQL 与 SQLite，并提供窗口函数、CTE、upsert、触发器、分区等能力及内置扩展。面向需要在双语言间共享数据层的团队。项目处于 0.1.1 早期阶段，部分功能仅限 PostgreSQL，作者提示尚不建议他人用于生产。",
+   "highlights": [
+    "单一 Rust 内核为 Python 与 TypeScript 提供一致的 schema、迁移与查询 API",
+    "支持窗口函数、递归 CTE、upsert、批量写入、触发器、声明式分区、只读副本、N+1 检测与 OpenTelemetry",
+    "通过 PyO3 与 napi 桥接发布 PyPI 和 npm 包，并提供 monorm 命令行工具"
+   ],
+   "use_cases": [
+    "团队在 Python 与 TypeScript 服务间共享同一份数据库 schema 与迁移",
+    "需要从 schema 生成类型化模型并执行声明式迁移的项目",
+    "使用 PostgreSQL 特性（分区、行级安全租户、咨询锁）的异步应用数据层"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The Rust core plans the SQL and runs it on PostgreSQL or SQLite. ／ Some features are PostgreSQL only; schema.md lists the SQLite limits. ／ |Databases|PostgreSQL and SQLite|",
+     "lines": [
+      11,
+      87,
+      182
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The Rust core plans the SQL and runs it on PostgreSQL or SQLite. ／ Both examples run as they are: `examples/quickstart` (in-memory SQLite). ／ |Databases|PostgreSQL and SQLite|",
+     "lines": [
+      11,
+      50,
+      182
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "The API is async only. There is no MySQL driver.",
+     "lines": [
+      223
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述它是为 PostgreSQL 与 SQLite 提供查询、迁移与模型生成的 ORM，属为数据库生态服务的开发库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An async ORM for Python and TypeScript with one Rust core. ／ The Rust core plans the SQL and runs it on PostgreSQL or SQLite. ／ Both packages hold PostgreSQL and SQLite. They build for 4 platforms: Linux x86-64, Linux arm64, macOS arm64 and Windows x86-64.",
+   "evidence_lines": [
+    9,
+    11,
+    131
+   ]
+  },
+  "fn": "UniForgeStack/monorm",
+  "sha": "11a80b610d27",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "692672780ca5": {
+  "identity": {
+   "one_liner": "Flutter/Flutter+Rust 流媒体聚合应用，支持电影、动漫与 IPTV 观看",
+   "review": "Nivio 是一个基于 Flutter 开发、内嵌 Rust P2P 引擎（rqbit）与 MPV 播放器的流媒体应用，聚合第三方公开源的影视、动漫与 IPTV 链路，提供观看派对同步、离线下载与 HDR 播放。它不托管内容，需用户自备 Firebase、TMDB API 等配置，面向个人用户自建使用。",
+   "highlights": [
+    "支持电影、剧集、动漫与 IPTV（M3U/Xtream）流媒体播放及磁力链接即时流式播放",
+    "提供实时 Watch Party 同步观看与离线下载",
+    "支持 Android/桌面/Android TV 多平台，Android 上实现 HDR10/HLG 与杜比视界输出"
+   ],
+   "use_cases": [
+    "个人观影聚合与追踪（AniList/Simkl/MAL 双向同步）",
+    "好友间同步观影（Watch Party）",
+    "IPTV/直播体育频道播放"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "应用使用 Firebase Firestore/Supabase/Hive 存自身数据，仅为数据库的使用方，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " **A beautiful, all-in-one streaming application for Movies, TV Shows, Anime, and Live IPTV, featuring real-time Watch Parties and offline downloads.** ／ * **Backend & Authentication**: Firebase (Firebase Auth, Cloud Firestore) ／ * **Realtime Sockets**: Supabase (WebSockets for synchronized Watch Parties)",
+   "evidence_lines": [
+    3,
+    127,
+    128
+   ]
+  },
+  "fn": "nirmaleeswar30/Nivio",
+  "sha": "692672780ca5",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "77db3ff90b9b": {
+  "identity": {
+   "one_liner": "无框架 PHP+MySQL 电商系统，含 storefront 与 RBAC 管理后台",
+   "review": "Commerza 是一个不依赖框架的 PHP 8.1+ 电商应用，提供奢侈手表商店前台和基于角色的管理后台，使用 mysqli 预处理语句和 PDO 辅助层读写 MySQL 8/MariaDB 10.4+ 数据库（43 表+11 视图），内置 COD 与 Stripe 结账、OAuth 登录、管理员邮箱 2FA、CSRF/CAPTCHA/限流及审计日志。适合用作 PHP 电商实现参考或直接部署运行，要求 Apache、PHP 8.1+ 及 MySQL/MariaDB 环境。",
+   "highlights": [
+    "前台含目录/购物车/愿望单/对比、COD 与 Stripe 结账、Google/Facebook OAuth 登录",
+    "管理后台提供订单工作流、优惠券、库存/商品管理和基于角色的子管理员权限与会话撤销",
+    "安全机制包含预处理语句、CSRF 令牌、分层 CAPTCHA、Argon2id 密码哈希、限流与安全事件日志"
+   ],
+   "use_cases": [
+    "需要源码可控、不依赖框架的 PHP 电商站点部署",
+    "学习无框架 PHP 电商架构与安全实践（CI 安全门、安全探测、E2E 测试）",
+    "作为 MySQL/MariaDB 电商数据模型（ERD、报表视图）的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A security-first PHP + MySQL ecommerce platform with a luxury-watch storefront and a role-based admin panel. No framework. ／ |Database|MySQL 8 / MariaDB 10.4+, InnoDB, utf8mb4, 43 tables + 11 views| ／ - MySQL 8 or MariaDB 10.4+ ／ mysql -u root -e \"CREATE DATABASE commerza CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci\"",
+     "lines": [
+      5,
+      74,
+      89,
+      103
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 MySQL/MariaDB 存储数据的电商应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " A security-first PHP + MySQL ecommerce platform with a luxury-watch storefront and a role-based admin panel. No framework. ／ |Database|MySQL 8 / MariaDB 10.4+, InnoDB, utf8mb4, 43 tables + 11 views|",
+   "evidence_lines": [
+    5,
+    74
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ahmershahdev/commerza",
+  "sha": "77db3ff90b9b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

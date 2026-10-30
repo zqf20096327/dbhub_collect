@@ -11081,5 +11081,226 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6094d09fef8a": {
+  "identity": {
+   "one_liner": "开源社区讨论平台，基于 Rails+Ember，以 PostgreSQL 为主数据存储",
+   "review": "Discourse 是一个开源社区讨论平台，提供论坛话题、实时聊天、主题与插件机制，供需要搭建社区站点的用户自托管使用。技术栈为 Rails 后端 API + Ember.js 前端，以 PostgreSQL 作为主数据存储，Redis 用于缓存和瞬态数据；安装提供 Docker 脚本及多种开发环境搭建指南，采用 GPLv2 许可。",
+   "highlights": [
+    "支持自托管，提供 Docker 单命令安装脚本及多平台开发环境搭建指南",
+    "内置实时聊天、主题定制与插件机制（含 Discourse AI、Data Explorer 等）",
+    "后端为 Rails JSON API，前端为 Ember.js，主数据存储使用 PostgreSQL"
+   ],
+   "use_cases": [
+    "搭建社区论坛/讨论区并自托管",
+    "需要实时聊天与话题讨论的在线社区",
+    "使用插件扩展社区功能（如 SQL 分析、聊天机器人）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Before you get started, ensure you have the following minimum versions: Ruby 4.0, PostgreSQL 18+, Redis 7. ／ - PostgreSQL &mdash; Our main data store is in Postgres.",
+     "lines": [
+      46,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 PostgreSQL 是该项目自身的主数据存储，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPLv2 或更高版本",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Discourse is a 100% open-source community platform for those who want complete control over how and where their site is run. ／ Before you get started, ensure you have the following minimum versions: Ruby 4.0, PostgreSQL 18+, Redis 7. ／ - PostgreSQL &mdash; Our main data store is in Postgres.",
+   "evidence_lines": [
+    13,
+    46,
+    79
+   ]
+  },
+  "fn": "discourse/discourse",
+  "sha": "6094d09fef8a",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b581ca12e0f1": {
+  "identity": {
+   "one_liner": "自托管 NL-to-SQL 分析工具，将自然语言转为 SQL 查询",
+   "review": "Savvina 是一个自托管的自然语言转 SQL 分析应用，用户连接数据库后用英语提问即可获得 SQL 与格式化结果。它通过 LLM 自动生成业务语义模型、两级缓存降低重复调用，并提供只读事务执行与凭据加密。数据源当前支持 PostgreSQL 和 MySQL/MariaDB，本地开发免费，生产使用需商业许可。",
+   "highlights": [
+    "支持 PostgreSQL 和 MySQL/MariaDB 数据源，具备完整的 schema 内省、行数和列注释读取",
+    "自动生成业务语言语义模型，并提供精确与语义相似两级查询缓存",
+    "生成的 SQL 以单条 SELECT 校验并在数据库强制的只读事务中执行，凭据和 API 密钥以 Fernet 加密存储"
+   ],
+   "use_cases": [
+    "自托管环境下用自然语言查询自有数据库获取分析结果",
+    "通过 Ollama 本地模型实现不外发数据的离线查询",
+    "将聊天历史中的查询结果汇总为 PDF 报告或导出 CSV/XLSX/PNG"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**PostgreSQL** (asyncpg) and **MySQL / MariaDB** (aiomysql) — both with full schema introspection, row counts, and column comments.",
+     "lines": [
+      124
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**PostgreSQL** (asyncpg) and **MySQL / MariaDB** (aiomysql) — both with full schema introspection, row counts, and column comments.",
+     "lines": [
+      124
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**PostgreSQL** (asyncpg) and **MySQL / MariaDB** (aiomysql) — both with full schema introspection, row counts, and column comments.",
+     "lines": [
+      124
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是连接数据库并用其数据回答自然语言问题的应用，数据库仅作为其数据源使用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "本地开发免费，生产使用需联系获取商业许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Savvina AI lets you connect to a database, ask questions in natural language, and receive generated SQL queries along with formatted results. It auto-generates a business-language semantic model from your schema, caches frequent queries for speed, and gives you full control over what data reaches the LLM and how queries are executed. ／ |**2 data sources**|PostgreSQL and MySQL / MariaDB — additional sources exist in commercial version| ／ **PostgreSQL** (asyncpg) and **MySQL / MariaDB** (aiomysql) — both with full schema introspection, row counts, and column comments.",
+   "evidence_lines": [
+    14,
+    109,
+    124
+   ]
+  },
+  "fn": "savvina-ai/savvina",
+  "sha": "b581ca12e0f1",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "800a1438f818": {
+  "identity": {
+   "one_liner": "自托管的 Obsidian 笔记 Git 同步服务器，用 SQLite 存元数据",
+   "review": "PKV Sync 是一个自托管同步服务器，用于在手机、平板与桌面之间同步 Obsidian vault。它以每个 vault 一个 bare git 仓库为数据源，用 SQLite 存元数据，提供实时 SSE 推送、冲突文件解析、管理面板和 Obsidian 插件；内置 MCP 接口供 AI 工具读写笔记，但 1.0 尚无原生端到端加密。",
+   "highlights": [
+    "以 bare git 仓库为数据源，提供文件历史、diff 与单文件恢复",
+    "通过 SSE 实现亚秒级实时推送，冲突以 .conflict-* 文件形式呈现并支持一键解析",
+    "内置 MCP 接口（stdio 与 /mcp HTTP），支持 AI 代理搜索、lint 与带 dry run 的写入"
+   ],
+   "use_cases": [
+    "自托管 Obsidian 多设备笔记同步",
+    "多用户多 vault 的团队笔记托管",
+    "通过 MCP 让 LLM 工具读写和维护 wiki 笔记"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Mature technology, on purpose.** Single binary, single SQLite metadata DB, one",
+     "lines": [
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用单个 SQLite 数据库存元数据，该服务器是为 Obsidian vault 同步服务的应用而非数据库生态组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only 单许可",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PKV Sync is a self-hosted, Git-native sync server for Obsidian vaults. ／ - **Mature technology, on purpose.** Single binary, single SQLite metadata DB, one ／ - **AI-readable vaults.** MCP exposes read/write tools over stdio or the",
+   "evidence_lines": [
+    3,
+    52,
+    37
+   ]
+  },
+  "fn": "CyberKurry/pkv-sync",
+  "sha": "800a1438f818",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

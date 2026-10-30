@@ -10044,5 +10044,531 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "170394d9f9dc": {
+  "identity": {
+   "one_liner": "可在页面上直接编辑内容的 Svelte 网站构建框架",
+   "review": "Editable 是一个基于 Svelte 的网站构建工具，让编辑者直接在页面上修改内容，而内容模型、组件、布局和样式保留在用户拥有的代码库中。每个站点是独立的 git 仓库，内置 SQLite 存储内容和上传资源，通过 TextProperty、MediaProperty、NodeArrayProperty 等原语使组件可编辑。适合用 Svelte 自建网站并需要页面级内容编辑的开发者。",
+   "highlights": [
+    "提供 TextProperty、MediaProperty、NodeArrayProperty 等原语，通过 schema 定义内容规则并使 Svelte 组件可直接在页面上编辑",
+    "每个站点为独立 git 仓库，可通过 upstream 远程拉取上游更新；数据脚本支持备份与重置",
+    "内置基于 Svedit 的编辑引擎，支持路径寻址、节点引用、选区、插入点、重排序和复制粘贴"
+   ],
+   "use_cases": [
+    "构建可由非开发人员在页面上直接编辑内容的 Svelte 网站",
+    "自定义内容类型、组件与设计系统并保留完整代码所有权",
+    "本地开发并部署富文本/媒体内容站点（含多语言配置）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "That folder is `data/`: an SQLite database (`db.sqlite3`) and uploaded assets (`assets/`). Locally it defaults to `./data`; on Fly.io it's a persistent volume at `/data`; on a VPS it's `/data` on the host, bind-mounted into the container at the same path. The ",
+     "lines": [
+      672
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是网站构建框架，README 说明其 data 目录使用 SQLite 数据库存放内容和上传资源，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Editable lets you build and edit a Svelte website without adding a separate CMS. Editors work directly on the page, while the content model, components, layouts, and styling remain in the codebase you own. Use the included defaults and adapt the colors and fonts to deploy a beautiful site within minutes — or customize the entire layout and model your own content types. This manual explains how to build and run a site with Editable. ／ pnpm data:reset",
+   "evidence_lines": [
+    3,
+    99
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "michael/editable",
+  "sha": "170394d9f9dc",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c18debf291f9": {
+  "identity": {
+   "one_liner": "无 Agent 的 Linux 服务器监控与远程管理工具，经 SSH 采集",
+   "review": "Pantau 是一个面向 Linux 服务器的无 Agent 监控与轻量远程管理工具，通过标准 SSH 与 POSIX 命令采集 CPU、内存、磁盘等指标，提供期望状态漂移检测、Web 终端、SFTP 文件编辑、跨主机文件流传输与加密快照备份。面向管理小型至中型服务器集群、内网隔离环境的运维人员。使用 Go 编写，内嵌 SQLite 存储历史指标，以单二进制发布。",
+   "highlights": [
+    "通过 SSH 无 Agent 采集主机指标，支持漂移检测、Web 终端、SFTP 编辑与 Docker 控制",
+    "内嵌 SQLite（WAL 模式）存储历史时序指标，含保留策略与自动降采样",
+    "提供 Argon2id + AES-256-GCM 加密的配置快照备份与跨主机零磁盘文件流传输"
+   ],
+   "use_cases": [
+    "小型/中型服务器集群或内网隔离环境的健康监控",
+    "不希望在目标机安装 Agent 的运维管理场景",
+    "跨主机文件传输与配置快照容灾备份"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Time-series metrics & application probing**: Embedded SQLite storage for historical metrics with configurable retention (default 7 days) and hourly auto-pruning. Interactive multi-chart visualization powered by lightweight vendored uPlot (1h/6h/24h/7d rang",
+     "lines": [
+      46
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Time-series metrics & application probing**: Embedded SQLite storage for historical metrics with configurable retention (default 7 days) and hourly auto-pruning. Interactive multi-chart visualization powered by lightweight vendored uPlot (1h/6h/24h/7d rang",
+     "lines": [
+      46
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Single self-contained binary**: Written in Go with an embedded SQLite database and embedded zero-npm web interface. Runs anywhere with zero external dependencies. ／ - **Time-series metrics & application probing**: Embedded SQLite storage for historical metrics with configurable retention (default 7 days) and hourly auto-pruning. Interactive multi-chart visualization powered by lightweight vendored uPlot (1h/6h/24h/7d rang",
+     "lines": [
+      27,
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "工具仅将内嵌 SQLite 用作自身指标存储，服务于服务器监控而非数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Agentless Linux server monitoring and lightweight remote operations in a single binary. ／ - **Single self-contained binary**: Written in Go with an embedded SQLite database and embedded zero-npm web interface. Runs anywhere with zero external dependencies. ／ - **Time-series metrics & application probing**: Embedded SQLite storage for historical metrics with configurable retention (default 7 days) and hourly auto-pruning. Interactive multi-chart visualization powered by lightweight vendored uPlot (1h/6h/24h/7d ranges with automatic SQL downsampling), mini-sparklines on host cards, and built-in probe presets for Nginx, MySQL, PHP-FPM, Redis, and PostgreSQL.",
+   "evidence_lines": [
+    7,
+    27,
+    46
+   ]
+  },
+  "fn": "herliansyah/pantau",
+  "sha": "c18debf291f9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0548b4f79724": {
+  "identity": {
+   "one_liner": "从源代码生成项目 ER 图的 Claude Code/Codex 代理插件",
+   "review": "这是一个 AI 代理插件，通过读取项目的模型、迁移和关联代码来生成实体关系图（ERD），即使数据库未声明外键也能推断关系，支持 Rails、Laravel、Django、Prisma、Mongoose 等多种框架。输出交互式 SVG、Excel 和 draw.io 文件，提供 schema 健康检查和 PII 标注。面向需要理解和文档化数据模型的开发者，以 Claude Code 和 Codex 插件形式安装，仅读取文件、不写入仓库。",
+   "highlights": [
+    "读取 models、migrations 和 associations 推断关系，包含多态关联",
+    "生成可交互的 erd.svg，并输出 Excel 和 draw.io 格式副本",
+    "提供 /open-erd:sync 在代码变更后更新 ERD，并用第二代理校验事实"
+   ],
+   "use_cases": [
+    "无外键遗留项目的数据模型文档化",
+    "代码变更后同步更新 ERD 并审查 AI 推断的关系",
+    "向团队展示 schema 并标记 PII 列分布"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为数据模型文档化服务的 ERD 生成工具，自身不依赖某数据库存储业务数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " An ERD of any project, drawn by an agent from its source code. ／ - **Finds the relations the database never declared**: reads models, ／ - **One interactive `erd.svg`** for any browser, plus Excel and draw.io copies.",
+   "evidence_lines": [
+    3,
+    13,
+    17
+   ]
+  },
+  "fn": "TOMOSIA-VIETNAM/open-erd",
+  "sha": "0548b4f79724",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "851098cdf976": {
+  "identity": {
+   "one_liner": "单二进制自托管支付编排服务，统一网关 API、账本与 webhook",
+   "review": "Paymux 是一个用 Go 编写的自托管支付编排应用，将 Razorpay、Stripe、Cashfree 等多个支付网关整合到统一的 API、账本和 webhook 端点之后，并提供 GST 发票、订阅管理和 UPI AutoPay 功能，面向印度市场的小型团队。数据可存储于 SQLite（默认）或 PostgreSQL，目前处于 beta 阶段，通过预编译二进制或源码构建安装。",
+   "highlights": [
+    "单 Go 二进制运行，支持 SQLite 与 PostgreSQL 两种存储",
+    "为支付网关连接器提供 Go SDK 与 HTTP 签名请求扩展方式，并附带一致性测试套件",
+    "提供 GST 发票、e-invoice JSON、签名 PDF 及 UPI AutoPay 等印度本地化功能"
+   ],
+   "use_cases": [
+    "多个应用共享多个支付网关，需要统一账本与 webhook 分发",
+    "面向印度市场需要自动开具 GST 发票与管理订阅",
+    "需要按币种、应用或金额规则在多个网关间路由支付"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "SQLite or PostgreSQL ／ - 📦 **One binary, no cluster.** SQLite out of the box, PostgreSQL when you grow. Sized for small teams: the load test holds 20 payment requests a second (docs/performance.md). No Kubernetes fleet required.",
+     "lines": [
+      12,
+      55
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite or PostgreSQL ／ - 📦 **One binary, no cluster.** SQLite out of the box, PostgreSQL when you grow. Sized for small teams: the load test holds 20 payment requests a second (docs/performance.md). No Kubernetes fleet required.",
+     "lines": [
+      12,
+      55
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它使用 SQLite/PostgreSQL 存储自身的账本与应用数据，是为支付业务服务的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Paymux sits between your apps and your gateways and does that work once. ／ - 📦 **One binary, no cluster.** SQLite out of the box, PostgreSQL when you grow. Sized for small teams: the load test holds 20 payment requests a second (docs/performance.md). No Kubernetes fleet required.",
+   "evidence_lines": [
+    27,
+    55
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "velixio/paymux",
+  "sha": "851098cdf976",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f1846480a882": {
+  "identity": {
+   "one_liner": "基于 Next.js 的装机模拟器，含组件选择、3D 展示与兼容性检查",
+   "review": "这是一个用 Next.js + React Three Fiber 构建的 PC 装机原型应用，提供组件挑选、3D 可视化、兼容性校验和已保存配置管理。数据经内置 API 持久化到本地 SQLite 文件（.data/pc-builder.sqlite），需 Node 22.13+ 且支持 node:sqlite 的持久磁盘环境；另有未默认启用的 Express 后端。适合演示装机流程或作为原型学习参考。",
+   "highlights": [
+    "提供组件选择、3D 可视化（threejs/react-three-fiber）与兼容性检查（插槽、内存、散热器、GPU 长度、功耗）",
+    "账户注册登录与构建（builds）的保存、检索、删除，数据持久化到本地 SQLite 文件",
+    "内置 /api 无需独立后端，另有可选的 Express backend 应用"
+   ],
+   "use_cases": [
+    "本地演示或学习 PC 兼容性组装流程",
+    "Next.js + SQLite 全栈原型开发参考",
+    "搭建自托管装机配置工具（需持久磁盘）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The default `/api` runs inside Next.js; no separate backend is needed. Accounts, signing keys, and builds persist in `.data/pc-builder.sqlite`. Keep this directory private and backed up. `PC_BUILDER_DATA_DIR` can point to another persistent directory. A hosted",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明账户、签名密钥与构建数据持久化在 pc-builder.sqlite 文件中，SQLite 仅作为本应用的数据存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Open http://localhost:3000, register an account, and select components in the builder. Use **My builds** to revisit saved assemblies. ／ The default `/api` runs inside Next.js; no separate backend is needed. Accounts, signing keys, and builds persist in `.data/pc-builder.sqlite`. Keep this directory private and backed up. `PC_BUILDER_DATA_DIR` can point to another persistent directory. A hosted deployment needs a persistent disk and a Node runtime supporting `node:sqlite`; ephemeral/serverless filesystems will not preserve accounts. The separate `backend/` Express application is an alternative API and is not used by default.",
+   "evidence_lines": [
+    10,
+    12
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "adii-madhavi/pc-builder",
+  "sha": "f1846480a882",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dc027ece4a09": {
+  "identity": {
+   "one_liner": "用于 TiDB Cloud 评估的 Agent 技能，按流程完成 PoC 需求评估",
+   "review": "一个纯 Markdown 编写的 Agent 技能，供自行评估 TiDB Cloud 的用户使用，通过对话完成需求收集、产品选型、功能兼容性提示、数据导入计划与账单前提检查，生成评估报告、YAML 配置和 PoC 申请邮件；仅覆盖选型与规划，不包含部署、容量计算与报价。",
+   "highlights": [
+    "纯 Markdown 技能，兼容 Claude Code 及支持 Agent Skills 格式的代理",
+    "按 6 步流程生成七节评估报告、poc-profile.yaml 与 PoC 申请邮件",
+    "基于官方功能对比的 2026-10-30 快照，区分公开/私有预览与 GA 状态"
+   ],
+   "use_cases": [
+    "评估 TiDB Cloud 各产品线是否适配自身工作负载",
+    "在联系 TiDB 团队前整理需求与兼容性问题",
+    "制定 PoC 数据导入与迁移切换计划"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **PostgreSQL-compatible Starter**: identified as a separate public-preview track; the",
+     "lines": [
+      65
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "> We run MySQL 8.0, about 800 GB, peak 30k QPS, and we need continuous sync from production ／ - **MySQL-compatible database plans**: Starter, Essential, Premium, BYOC, Dedicated.",
+     "lines": [
+      44,
+      59
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "# tidb-poc-assistant ／ A portable, agent-agnostic skill for **anyone evaluating TiDB Cloud for their own system**. ／ evaluator: it says plainly when TiDB is a poor fit, leads with the features TiDB will not",
+     "lines": [
+      1,
+      3,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该技能为评估 TiDB Cloud 提供流程化支持，是服务于 TiDB 生态的工具组件。",
+   "persona": "use",
+   "dbs": [
+    "TiDB"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A portable, agent-agnostic skill for **anyone evaluating TiDB Cloud for their own system**. ／ Pure Markdown — no scripts, no agent-specific frontmatter beyond `name` and `description` — ／ - **MySQL-compatible database plans**: Starter, Essential, Premium, BYOC, Dedicated.",
+   "evidence_lines": [
+    3,
+    15,
+    59
+   ]
+  },
+  "fn": "ayenller/tidb-poc-assistant",
+  "sha": "dc027ece4a09",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d83fb57819da": {
+  "identity": {
+   "one_liner": "TiDB 全量数据初始化工具，读 TiKV 快照输出 Canal JSON 到 Kafka",
+   "review": "该工具通过 TiKV TxnKV API 直接读取 TiDB 历史数据快照，解码 rowcodec 格式后以 Canal JSON 写入 Kafka，可与 TiCDC 增量同步配合完成全量+增量数据对齐。面向需要为 TiDB 做数据订阅链路初始化的运维/数据工程师，支持多分区并行扫描、MySQL 全类型解码，提供 kafka-consume 与 tidb-verify 辅助验证工具；需 Go 1.25+ 源码编译。",
+   "highlights": [
+    "通过 TiKV PD/TxnKV API 直接读取快照，不经 TiDB SQL 层扫描",
+    "自动识别并解码 TiDB rowcodec 新旧格式及 JSON 二进制格式",
+    "输出 Canal JSON 格式，支持多分区并行扫描与 Kafka Topic 自动创建"
+   ],
+   "use_cases": [
+    "为 TiCDC 增量同步准备全量基线数据",
+    "向 Kafka 下游 Canal/Debezium/Flink 消费端投递 TiDB 数据"
+   ],
+   "use_cases_placeholder": null
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 支持所有 MySQL 字段类型：整数、浮点、Decimal、字符串、Text、Blob、日期时间、Year、Time、JSON、Bit、Enum、Set ／ |MySQL 类型|Canal JSON 输出格式| ／ - go-sql-driver/mysql — MySQL 驱动（Schema 获取 + 权限验证）",
+     "lines": [
+      10,
+      122,
+      173
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "TiDB 全量数据初始化工具。通过 TiKV TxnKV API 直接读取 TiDB 历史数据快照，解码 TiDB rowcodec 格式，以 Canal JSON 格式发送到 Kafka，用于与 TiCDC 增量同步配合实现全量 + 增量数据对齐。 ／ - 通过 TiKV PD 接口获取快照时间戳，支持指定 `--start-tso` 与 TiCDC 起始 TSO 对齐",
+     "lines": [
+      3,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明这是为 TiDB 数据迁移/订阅链路服务的全量初始化工具，而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TiDB 全量数据初始化工具。通过 TiKV TxnKV API 直接读取 TiDB 历史数据快照，解码 TiDB rowcodec 格式，以 Canal JSON 格式发送到 Kafka，用于与 TiCDC 增量同步配合实现全量 + 增量数据对齐。 ／ 9. 解码 TiDB rowcodec 格式，编码为 Canal JSON 发送到 Kafka ／ - tikv/client-go — TiKV PD/TxnKV 客户端",
+   "evidence_lines": [
+    3,
+    98,
+    171
+   ]
+  },
+  "fn": "lizhenhuan/tidb-full-init",
+  "sha": "d83fb57819da",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

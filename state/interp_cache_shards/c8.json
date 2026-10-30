@@ -10513,5 +10513,206 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4f5f1abe326f": {
+  "identity": {
+   "one_liner": "Socratica SQL 教学视频配套数据集与脚本仓库",
+   "review": "该仓库存放 Socratica 在 YouTube SQL 与 Python 教学视频中使用的数据源（如 earthquake.csv 等 CSV 文件）及配套脚本，供观看免费课程《SQL for Beginners》的学习者下载练习。它本身不是工具或数据库，仅是教学素材集合；README 未提供安装或运行说明。",
+   "highlights": [
+    "包含 SQL 与 Python 教学视频使用的多种数据源",
+    "数据文件与对应的播放列表/视频条目相关联"
+   ],
+   "use_cases": [
+    "跟随 Socratica SQL 课程做 SELECT 等练习",
+    "获取教学用示例数据集（如地震 CSV 数据）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 说明其内容为教学视频所用的数据集，属于使用数据库的教学内容而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This repository contains a variety of datasources used by Socratica in our YouTube videos at https://www.youtube.com/Socratica. The Python and SQL videos make heavy use of these datasets.",
+   "evidence_lines": [
+    1
+   ]
+  },
+  "fn": "socratica/sql",
+  "sha": "4f5f1abe326f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "240ef940b29a": {
+  "identity": {
+   "one_liner": "自托管 Telegram 客服机器人，将每个用户会话映射到论坛独立话题",
+   "review": "基于 aiogram 3 的自托管 Telegram 客服机器人，用户私聊消息被复制到运营者论坛超级群中的专属话题，实现双向文本、媒体、回复与编辑同步。路由与回复映射持久化在 SQLite，另含可选 HTTP 管理桥接和以 PostgreSQL 存储的无头 REST/WebSocket API 模块，用于接入网站组件或运营面板。适合需要自建客服流程的 Telegram 机器人运营者。",
+   "highlights": [
+    "为每位客户创建独立的论坛话题，双向同步文本、媒体、回复与支持的编辑操作",
+    "使用 SQLite 持久化路由与回复映射，支持事务性投递记录与重试",
+    "提供可选的外部管理桥接和无头全渠道 API（REST/OpenAPI/WebSocket），以 PostgreSQL 作为存储"
+   ],
+   "use_cases": [
+    "将 Telegram 私聊作为客户支持渠道，由运营者在论坛群中集中处理",
+    "通过 HTTP 桥接或无头 API 将 Telegram 会话接入自有客服面板或网站组件",
+    "需要消息历史、幂等投递与重复保护的自托管客服部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL for a website widget or operator dashboard ／ - PostgreSQL storage and a transactional delivery outbox ／ docker compose up -d postgres api telegram-worker",
+     "lines": [
+      63,
+      172,
+      185
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite routing and reply mapping ／ DB_PATH=./support_bot.sqlite3 ／ |`DB_PATH`|Yes|SQLite database used for routing and reply links|",
+     "lines": [
+      51,
+      95,
+      113
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 存储路由数据、PostgreSQL 作为 API 模块存储，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A self-hosted Telegram support bot built with **aiogram 3**. Customers write to ／ - SQLite routing and reply mapping ／ - PostgreSQL storage and a transactional delivery outbox",
+   "evidence_lines": [
+    9,
+    51,
+    172
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "pypi"
+   ]
+  },
+  "fn": "apkuzmin/telegram-support-bot",
+  "sha": "240ef940b29a",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0c78b99cc720": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 MCP 语义混合搜索服务器",
+   "review": "一个用 Rust 编写的 MCP 服务器，对 Markdown（可选纯文本、PDF、Office、源码）知识库做语义加全文混合检索：FastEmbed 生成向量存入 SQLite 并用 sqlite-vec 做相似度搜索，配合 FTS5 与可选重排序。面向使用 Claude Code、Cursor 等 MCP 客户端的个人或团队，支持 stdio 与 HTTP 传输、文件监听同步和内嵌运维界面。",
+   "highlights": [
+    "支持语义（sqlite-vec 向量）与全文（FTS5）混合检索，附可选重排序与 RRF、MMR 等检索管线",
+    "提供 MCP 接口：6 个工具、4 个提示词与 kb:// 资源，支持 stdio 和 Streamable HTTP 传输",
+    "ONNX runtime 与 SQLite 静态链接进单一二进制，内置文件监听实时同步索引"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 MCP 客户端提供个人/团队 Markdown 知识库检索",
+    "内网或 NAS 部署的共享知识库搜索服务（含 HTTP 运维界面）",
+    "多语言（日文等）文档库的语义索引，可切换 BGE-M3 模型"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Parses Markdown (and optionally `.txt` / `.pdf` / `.docx` / `.xlsx` / `.pptx`, plus Rust source since v1.2.0, and Python since v1.3.0 and PHP since v1.5.0, whose grammars you download and place) files with YAML frontmatter, splits them into heading-based chunk ／ ONNX runtime and SQLite are statically linked into the binary, so no extra DLLs are required. With the default FastEmbed provider, embedding models (ONNX) are downloaded from HuggingFace on first run — see Working around HuggingFace TLS failures if your networ",
+     "lines": [
+      18,
+      59
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明数据存入 SQLite 并用 sqlite-vec 检索，SQLite 是其内部存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 或 Apache-2.0 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Parses Markdown (and optionally `.txt` / `.pdf` / `.docx` / `.xlsx` / `.pptx`, plus Rust source since v1.2.0, and Python since v1.3.0 and PHP since v1.5.0, whose grammars you download and place) files with YAML frontmatter, splits them into heading-based chunks — or, for source code, one chunk per definition, generates embeddings with FastEmbed by default (BGE-small-en-v1.5, or BGE-M3 for multilingual/Japanese knowledge bases), and stores everything in SQLite with sqlite-vec for vector similarity search. A trusted configuration can instead opt into an OpenAI-compatible embedding endpoint. Connects to Claude Code, Cursor, or any MCP-compatible client via stdio (default, 1 client) or Streamable HTTP (many clients) transport. ／ ONNX runtime and SQLite are statically linked into the binary, so no extra DLLs are required. With the default FastEmbed provider, embedding models (ONNX) are downloaded from HuggingFace on first run — see Working around HuggingFace TLS failures if your network blocks that.",
+   "evidence_lines": [
+    18,
+    59
+   ]
+  },
+  "fn": "alphabet-h/grooveseek",
+  "sha": "0c78b99cc720",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

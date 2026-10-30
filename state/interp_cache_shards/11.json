@@ -11686,5 +11686,138 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f4f6552574d9": {
+  "identity": {
+   "one_liner": "Rust 编写的跨平台桌面数据库客户端，支持查询、编辑与管理多种数据库",
+   "review": "DataCraft 是一个用 Rust 和 egui 构建的桌面数据库客户端，供开发者在 macOS、Windows 和 Linux 上浏览 schema、编写 SQL、编辑数据和管理对象。支持 PostgreSQL、MySQL/MariaDB、SQL Server、Oracle、Snowflake、SQLite、ClickHouse 等引擎，提供执行计划展示、CSV 导入导出、值脱敏、引擎专用备份（部分依赖原生 dump 工具）和 SSH 隧道连接。",
+   "highlights": [
+    "提供 SQL 控制台，含语法补全、格式化、查询历史与执行计划（PostgreSQL/MySQL/MariaDB 以树形展示 Explain Plan）",
+    "支持表格数据编辑、批量提交事务，以及 CSV/TSV 导入与 CSV/TSV/JSON/SQL inserts/Markdown 导出",
+    "支持引擎专用备份、复制表时按列脱敏，以及通过 SSH 隧道连接 TCP 类引擎"
+   ],
+   "use_cases": [
+    "在统一桌面工具中日常查询和编辑多种数据库的数据",
+    "跨连接复制表数据并导出为多种格式、执行备份任务",
+    "通过 SSH 隧道安全连接位于堡垒机后的数据库实例"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|SQL console, data editor, schemas, views, roles and logical backups| ／ On PostgreSQL, MySQL and MariaDB, **Explain Plan** (⇧⌘E) shows the plan as a tree with each step's object, estimated rows and cost; **Explain Analyze** in the editor's menu also runs the statement and adds actual rows and time, asking first when the statement ",
+     "lines": [
+      111,
+      56
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL / MariaDB|SQL console, data editor, views, users and logical backups| ／ On PostgreSQL, MySQL and MariaDB, **Explain Plan** (⇧⌘E) shows the plan as a tree with each step's object, estimated rows and cost; **Explain Analyze** in the editor's menu also runs the statement and adds actual rows and time, asking first when the statement ",
+     "lines": [
+      112,
+      56
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL / MariaDB|SQL console, data editor, views, users and logical backups| ／ Full DataCraft window with the MariaDB backup dialog and its destination, utility and compression settings",
+     "lines": [
+      112,
+      101
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|SQL console with <code>GO</code> batches, data editor, object management and native backups|",
+     "lines": [
+      113
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle|SQL console, data editor, object management and Data Pump exports; requires Oracle Instant Client|",
+     "lines": [
+      114
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|Local database files, SQL console, data editor and online backups| ／ PostgreSQL, MySQL and MariaDB backups require their native dump utilities. SQLite uses its online backup API. SQL Server, Oracle and Snowflake use server-side backup or export facilities with engine-specific privileges and destinations. See backup modes, prere",
+     "lines": [
+      116,
+      105
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|Native TCP protocol (port 9000, or 9440 with TLS checked against the system's certificates), SQL console and data editor for inserts only (updates and deletes are asynchronous mutations, run them from the console). Copies into ClickHouse run withou",
+     "lines": [
+      117
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQL Server",
+    "Oracle",
+    "SQLite",
+    "ClickHouse"
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其支持的数据库连接与工作区矩阵（L109-L121），是面向数据库生态的客户端工具而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：MIT OR Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Explore schemas, write queries and edit data in a focused desktop app built with Rust and egui. ／ ## Supported databases ／ |Database|Connection and workspace|",
+   "evidence_lines": [
+    6,
+    107,
+    109
+   ]
+  },
+  "fn": "javy-fernandez/datacraft",
+  "sha": "f4f6552574d9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

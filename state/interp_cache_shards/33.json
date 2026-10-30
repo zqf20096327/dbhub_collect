@@ -10401,5 +10401,72 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2057b4551ab9": {
+  "identity": {
+   "one_liner": "dokku 官方 MySQL 服务插件，用于在 PaaS 上管理 MySQL 实例",
+   "review": "该仓库是 dokku PaaS 的 MySQL 插件，通过 dokku mysql:create/destroy/info 等命令创建、销毁、链接 MySQL 服务容器，支持自定义镜像版本、环境变量、挂载卷、端口暴露，并提供基于 S3 的备份与定时备份配置。面向使用 dokku 部署应用并需要配套 MySQL 服务的运维人员。要求 dokku 0.35.x+ 与 docker 1.8.x。",
+   "highlights": [
+    "提供 mysql:create/destroy/info/link 等命令管理 dokku 上的 MySQL 服务容器",
+    "支持备份到 S3 兼容端点，可配置定时备份、GPG 加密与 IAM 认证",
+    "支持自定义镜像与版本、环境变量、卷挂载、网络、内存限制等容器配置"
+   ],
+   "use_cases": [
+    "在 dokku PaaS 上为应用提供 MySQL 数据库服务并绑定链接",
+    "对 MySQL 服务配置定时备份并上传到 S3 存储",
+    "以自定义镜像、版本和容器参数运行 MySQL 服务实例"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# dokku mysql Build Status IRC Network ／ Official mysql plugin for dokku. Currently defaults to installing mysql 26.10.0. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mysql.git --name mysql",
+     "lines": [
+      1,
+      3,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该插件为 dokku 平台提供 MySQL 服务的创建、管理与备份功能，服务于数据库运维而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "MySQL"
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Official mysql plugin for dokku. Currently defaults to installing mysql 26.10.0. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mysql.git --name mysql ／ dokku mysql:create <service> [--create-flags...]",
+   "evidence_lines": [
+    3,
+    14,
+    36
+   ]
+  },
+  "fn": "dokku/dokku-mysql",
+  "sha": "2057b4551ab9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

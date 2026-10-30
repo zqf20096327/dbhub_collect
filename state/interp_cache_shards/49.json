@@ -11233,5 +11233,85 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1f5a713290d9": {
+  "identity": {
+   "one_liner": "基于 TiDB 向量检索与 RAG 的患者记录问答聊天机器人",
+   "review": "一个面向医生的原型级聊天机器人，将 100 条模拟患者记录经 Gemini 生成嵌入并存入 TiDB Cloud（MySQL 兼容），提问时通过余弦相似度检索相关病历作答，非患者类问题则转向通用医学知识。含建库脚本与 Streamlit 界面，仅用模拟数据、声明不可用于真实医疗。",
+   "highlights": [
+    "按语义（向量余弦相似度）而非关键词检索患者记录",
+    "依据匹配分数在病历检索与通用医学知识回答之间路由",
+    "每条答案列出匹配记录及匹配分数，temperature 固定为 0.0"
+   ],
+   "use_cases": [
+    "RAG 检索增强生成的学习演示",
+    "对患者记录进行自然语言问答的原型验证",
+    "嵌入向量存入 MySQL 兼容库的检索方案参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "You need Python 3.10+, a Google AI Studio API key, and a MySQL-compatible database.",
+     "lines": [
+      27
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "1. **Setup (once):** patient records are turned into one short \"story\" per patient, converted to embeddings with Gemini, and stored in a MySQL-compatible database (TiDB Cloud). ／ Python, Streamlit, Google Gemini (`text-embedding-004`, Gemini Flash), MySQL / TiDB Cloud, NumPy.",
+     "lines": [
+      19,
+      56
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是将 TiDB 作为病历向量数据存储的聊天机器人应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "1. **Setup (once):** patient records are turned into one short \"story\" per patient, converted to embeddings with Gemini, and stored in a MySQL-compatible database (TiDB Cloud). ／ Python, Streamlit, Google Gemini (`text-embedding-004`, Gemini Flash), MySQL / TiDB Cloud, NumPy.",
+   "evidence_lines": [
+    19,
+    56
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Athulya-cloud/health-chatbot-rag-mcp",
+  "sha": "1f5a713290d9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

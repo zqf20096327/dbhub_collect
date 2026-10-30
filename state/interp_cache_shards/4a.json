@@ -10660,5 +10660,75 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e1f068f13fe6": {
+  "identity": {
+   "one_liner": "AI 编码工具的本地记忆与规则中心，单 SQLite 存储经 MCP/REST/CLI 读取",
+   "review": "为 Claude Code、Codex CLI、Cursor、Gemini CLI 等编码工具提供本地持久记忆与规则同步，数据存于单个 SQLite 库，通过 MCP、REST 和 CLI 读写，规则写入各工具的指令文件，并经 hooks 捕获会话（脱敏后存储）。适合在多 AI 编码工具间共享上下文的开发者。需 Bun 1.1+，README 自述为 alpha，部分工具未经真实安装验证。",
+   "highlights": [
+    "提供 MCP（stdio 和 HTTP）、REST API 和 CLI 三种访问方式，共享一个本地 SQLite 存储",
+    "支持将规则同步写入 CLAUDE.md、AGENTS.md、GEMINI.md 等多个工具指令文件",
+    "hooks 捕获前对 secrets 和 <private> 块脱敏，仅监听 loopback，无账号无遥测"
+   ],
+   "use_cases": [
+    "为多个 AI 编码工具提供统一的会话记忆与上下文",
+    "在团队/个人工作流中集中管理各工具的规则文件",
+    "检索基准测试（内置 LoCoMo Recall@5/MRR 对比数据）"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Aletheia is a free, local memory and rules hub for AI coding tools. One SQLite store is read by any tool over MCP,",
+     "lines": [
+      41
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 作为自身数据存储，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Aletheia is a free, local memory and rules hub for AI coding tools. One SQLite store is read by any tool over MCP, ／ no telemetry and no network call unless you configure a model provider. It listens on loopback only. ／ before storing, spool to disk if the database is unavailable, and always exit 0 so they never block the host.",
+   "evidence_lines": [
+    41,
+    48,
+    76
+   ]
+  },
+  "fn": "mohamed-ashraf-elsaed/aletheia-mem",
+  "sha": "e1f068f13fe6",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

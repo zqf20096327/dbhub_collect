@@ -11176,5 +11176,227 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7a52b83681de": {
+  "identity": {
+   "one_liner": "MySQL 的 .NET ADO.NET 数据提供程序（驱动库）",
+   "review": "这是一个面向 .NET 和 .NET Core 的 ADO.NET 数据提供程序，为 MySQL 及兼容服务器（含 MariaDB）提供 DbConnection、DbCommand 等实现，用于在托管代码中查询和更新数据库。项目是 MySQL Protocol 的 clean-room 重实现，仅含托管代码，采用 MIT 许可。适合需要在 .NET 应用中连接 MySQL/MariaDB 的开发者。",
+   "highlights": [
+    "实现 DbConnection/DbCommand/DbDataReader/DbTransaction 等 ADO.NET 核心类",
+    "兼容 MySQL 5.5+ 与 MariaDB 10.x+，支持 async、DbBatch、DbDataSource 等 API",
+    "纯托管代码实现的 MySQL Protocol，MIT 许可"
+   ],
+   "use_cases": [
+    ".NET 应用连接并查询 MySQL 数据库",
+    "需要异步数据库操作的 .NET Core 跨平台项目",
+    "连接 MariaDB 等 MySQL 兼容服务器的托管代码场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# MySQL Connector for .NET and .NET Core ／ provider for MySQL and other compatible servers including MariaDB. ／ This library outperforms MySQL Connector/NET (`MySql.Data`) on benchmarks:",
+     "lines": [
+      1,
+      6,
+      17
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "* LINQ to DB (GitHub, NuGet) including ClickHouse support",
+     "lines": [
+      45
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "provider for MySQL and other compatible servers including MariaDB. ／ This library is compatible with many MySQL-compatible servers, including MySQL 5.5 and newer and MariaDB 10.x and newer.",
+     "lines": [
+      6,
+      25
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是 ADO.NET 数据提供程序（驱动库），为连接 MySQL/MariaDB 服务，属数据库生态工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# MySQL Connector for .NET and .NET Core ／ This is an ADO.NET data ／ `DbConnection`, `DbCommand`, `DbDataReader`, `DbTransaction`—the classes",
+   "evidence_lines": [
+    1,
+    5,
+    8
+   ]
+  },
+  "fn": "mysql-net/MySqlConnector",
+  "sha": "7a52b83681de",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e80821f9aeb0": {
+  "identity": {
+   "one_liner": "Rails 8 API 应用基础脚手架，内置认证、计费、队列与可观测性",
+   "review": "这是一个面向 Web 与移动产品的 Rails 8 API 项目基础模板，提供 Devise JWT 认证、分层 IAM/RBAC、Stripe 订阅、Solid Queue 后台任务、Action Cable WebSocket 与监控面板，使用 PostgreSQL 存数据、Docker 容器隔离工作负载，通过 ./scripts/dev.sh 启动。适合需要快速搭建产品后端的创始团队与开发者。",
+   "highlights": [
+    "提供认证、IAM/RBAC、Stripe 订阅、通知、媒体管道与后台任务队列等模块化能力",
+    "以 API-First 模块化单体架构运行，后端工作负载按容器隔离（api/waka/media/db/garage）",
+    "包含 OpenAPI 3.0 规范与 Swagger UI 文档，附部署与维护文档"
+   ],
+   "use_cases": [
+    "为 Web 和移动产品搭建具备认证与计费的 API 后端起点",
+    "需要后台任务队列、WebSocket 实时通信与自托管存储的全栈产品开发",
+    "作为团队统一的工程架构基线来启动新项目"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL 存储数据的 Rails API 应用基础模板，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A battle-hardened, production-grade API core for modern web and mobile products. Authentication, hierarchical IAM, Stripe billing, access control, media pipelines, notifications, durable AI queues, real-time Action Cable WebSockets, background job topologies, operational administration, and glass-box observability stand ready—not as scattered trophies, but as one disciplined system. ／ PostgreSQL ／ 2. **The BaaS Trap**: Serverless \"5-minute backends\" lure developers in with toys, then slap them with a $5,000/mo cloud hostage bill when they need relational integrity, background queues, or compliance audits. Real software runs self-hosted PostgreSQL, native queues (Solid Queue), and self-hosted S3 (Garage).",
+   "evidence_lines": [
+    5,
+    11,
+    99
+   ]
+  },
+  "fn": "rex-9/rexone-core",
+  "sha": "e80821f9aeb0",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ca09e45bd456": {
+  "identity": {
+   "one_liner": "Postgres 行级权限授权工具：策略文件编译为行级安全",
+   "review": "rowstile 是一个面向 Postgres 应用的授权工具，用户在单个策略文件中声明谁能访问哪些数据，命令将其编译为 SQL 视图、触发器维护的表、行级安全策略及应用函数，并通过 Alembic、Prisma、Drizzle Kit 等既有迁移工具发布。适用于数据都在一个 Postgres 库、权限依赖行间关系的多租户/共享场景；要求 Postgres 16-18，不支持多数据库或 Supabase Data API 直连。",
+   "highlights": [
+    "将策略文件编译为 Postgres 行级安全策略、视图、触发器维护的表及应用函数",
+    "策略变更以迁移形式输出，适配 Alembic、Prisma、Drizzle Kit 等迁移工具",
+    "提供 Python（FastAPI、SQLAlchemy、psycopg、asyncpg）与 TypeScript（Next.js、Prisma、Drizzle 等）SDK 及 .NET 预览版"
+   ],
+   "use_cases": [
+    "单 Postgres 数据库内的多租户、团队嵌套、文件夹继承等行级授权",
+    "替代手写且难以测试的行级安全策略",
+    "应用内的分享、访问请求、审计等权限功能实现"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# rowstile: access rules in a policy file, enforced by Postgres ／ and nothing has to run next to it: any Postgres 16, 17 or 18 works, managed or not, and the owner of ／ - your app's data is in one Postgres database;",
+     "lines": [
+      1,
+      14,
+      38
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Postgres 数据库提供授权能力，编译 RLS 策略并依赖 Postgres 运行，属数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# rowstile: access rules in a policy file, enforced by Postgres ／ file and compiled to row-level security. There is no authorization service to run beside the database, and no ／ command compiles it into plain SQL: views, trigger-maintained tables for inheritance, row-level",
+   "evidence_lines": [
+    1,
+    4,
+    10
+   ]
+  },
+  "fn": "rowstile/rowstile",
+  "sha": "ca09e45bd456",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

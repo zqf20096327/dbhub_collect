@@ -11087,5 +11087,151 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "89044c2d08eb": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 PHP/Symfony 模糊全文搜索库",
+   "review": "Fuzzphony 是一个面向 PHP 与 Symfony 的 PostgreSQL 原生搜索库，提供容错拼写、忽略重音、相关性排序的全文检索，带过滤与查询语法；索引存于旁路表中，不改动原表，无需额外搜索服务。要求 PHP 8.4+、PostgreSQL 15+（含 pg_trgm/unaccent 扩展），目前为 v0.9.12，1.0 前后 API 仍可能变更，且不支持 PostgreSQL 以外的数据库。",
+   "highlights": [
+    "基于 pg_trgm 与 unaccent 扩展实现拼写容错与重音折叠搜索，支持 28 种语言的词干提取",
+    "索引存放于旁路表，通过 trigger/orm/manual 等同步模式保持与数据同事务更新",
+    "提供查询语法（AND/OR/NOT、短语、前缀、字段限定）、多租户过滤、速率限制与搜索日志分析"
+   ],
+   "use_cases": [
+    "在不能修改表结构的遗留系统或 ERP 中为管理后台、CRM 等替换 LIKE 模糊查询",
+    "多租户 SaaS 中需要强制租户过滤且数据必须留在数据库内的搜索场景",
+    "不希望引入 Elasticsearch/Meilisearch 等额外搜索服务的 PHP/Symfony 项目"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 15 | 16 | 17 | 18 ／ Fuzzphony is a PostgreSQL-native search library for PHP and Symfony: typo-tolerant, ／ - PostgreSQL 15+ with the `pg_trgm` and `unaccent` extensions. Both ship with PostgreSQL, but a",
+     "lines": [
+      12,
+      18,
+      113
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是构建在 PostgreSQL 之上的搜索开发库，为基于该库的应用提供搜索能力，而非一个使用数据库存数据的终端应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Fuzzphony is a PostgreSQL-native search library for PHP and Symfony: typo-tolerant, ／ - PostgreSQL 15+ with the `pg_trgm` and `unaccent` extensions. Both ship with PostgreSQL, but a ／ - Optional: Symfony 7.4+ and Doctrine (DBAL 4.2+, ORM 3.3+) for the bundle. CI tests every Symfony release the",
+   "evidence_lines": [
+    18,
+    113,
+    119
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "er2es/fuzzphony",
+  "sha": "89044c2d08eb",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "066df5950f9b": {
+  "identity": {
+   "one_liner": "开源自托管 Agent 运行时，基于三级上下文模型与 Hook 切面机制",
+   "review": "MioChat 后端是一个自托管的 AI Agent 运行环境，实现 Agent/Session/SubAgent 三级上下文、Hook 拦截、MCP 与 Skills 工具接入、OneBot/微信多渠道接入及定时任务。系统配置与数据持久化至 SQLite，含 9 个内置插件与 16 个生命周期挂载点。适合希望部署多渠道、多 Agent 聊天与自动化任务的开发者。",
+   "highlights": [
+    "实现 Agent/Session/SubAgent 三级上下文模型与 16 个 Hook 生命周期挂载点",
+    "支持 MCP 与 Agent Skills 双标准工具生态，插件可零停机热插拔",
+    "系统配置与数据持久化至 SQLite，支持 OneBot (QQ) 与微信渠道接入"
+   ],
+   "use_cases": [
+    "在 Web/QQ/微信等多渠道部署自托管 AI Agent",
+    "构建多 Agent 协作的群聊与自动化任务编排",
+    "通过插件、Skill 与 Hook 扩展 Agent 工具能力"
+   ],
+   "ai_flag_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **全局系统与存储中心**：支持在本地存储 (Local) 与 S3 兼容对象存储 (AWS S3 / Cloudflare R2 / MinIO) 之间**零重启热切换**；系统配置统一持久化至 SQLite，通过界面与 REST API 即时热生效。 ／ 首次启动会自动完成数据库与 schema 初始化（内置在 `app.js` 初始化链路中）。随后打开 Web UI，在**管理面板**中配置你的 LLM 适配器 / OneBot / 插件即可——所有设置结构化存储于 SQLite，通过界面与 API 管理。",
+     "lines": [
+      50,
+      210
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "系统将配置与会话数据持久化存储于 SQLite，数据库为其存储组件而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **全局系统与存储中心**：支持在本地存储 (Local) 与 S3 兼容对象存储 (AWS S3 / Cloudflare R2 / MinIO) 之间**零重启热切换**；系统配置统一持久化至 SQLite，通过界面与 REST API 即时热生效。 ／ 首次启动会自动完成数据库与 schema 初始化（内置在 `app.js` 初始化链路中）。随后打开 Web UI，在**管理面板**中配置你的 LLM 适配器 / OneBot / 插件即可——所有设置结构化存储于 SQLite，通过界面与 API 管理。",
+   "evidence_lines": [
+    50,
+    210
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Pretend-to/mio-chat-backend",
+  "sha": "066df5950f9b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

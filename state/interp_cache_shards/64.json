@@ -10716,5 +10716,143 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a31cb7ec1a73": {
+  "identity": {
+   "one_liner": "基于 Electron 的本地多媒体资源管理器，管理游戏、漫画、音乐等资源",
+   "review": "一款面向个人大容量资源收藏者（自称'仓鼠症'用户）的桌面应用，用统一界面管理游戏、漫画、视频、音频、小说、网站等资源，内置阅读器/播放器、标签筛选、时长记录及成就系统等游戏化功能。技术上基于 Vue 3 + Electron 29 + TypeScript，通过 better-sqlite3 存储数据；README 提供源码构建步骤，需对原生模块执行 electron-rebuild。",
+   "highlights": [
+    "统一界面管理游戏、漫画、视频、音频、小说、网站等多媒体资源，支持标签、作者、系列等多维度筛选",
+    "内置游戏启动器、漫画阅读器、视频/音频播放器、小说阅读器，并记录游戏时长、阅读次数等数据",
+    "包含成就系统、桌宠、放置养成等游戏化功能，支持自动密码解压压缩包"
+   ],
+   "use_cases": [
+    "个人大容量（10TB 级）多媒体资源收藏的本地编目与检索",
+    "游戏时长、漫画阅读进度等个人使用数据的记录管理",
+    "自托管（self-hosted）本地资源库的统一管理"
+   ],
+   "classification_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "#### 3. 原生模块（better-sqlite3）与 Electron 一致",
+     "lines": [
+      92
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用数据库（better-sqlite3）存数据的桌面应用，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "#### 3. 原生模块（better-sqlite3）与 Electron 一致 ／ - **🎯 一站式多媒体管理**：统一界面管理游戏、漫画、视频、音频、小说、网站等各类资源",
+   "evidence_lines": [
+    92,
+    38
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "klsdf/GreenResourcesManager",
+  "sha": "a31cb7ec1a73",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8b16fd3c3a05": {
+  "identity": {
+   "one_liner": "开源自托管问题跟踪与项目协作系统，Go+SvelteKit+PostgreSQL 实现",
+   "review": "Kuayle 是一个自托管的问题跟踪与项目管理应用，提供 issue、周期、甘特图、看板、WebSocket 实时事件、GitHub 集成和基于多容器的 Dev Machines 智能编码环境，以 Docker Compose 参考栈部署，使用 PostgreSQL 作为主数据存储，面向需要自托管、键盘驱动工作流的团队与运维者。",
+   "highlights": [
+    "提供 issue 跟踪、周期规划（burndown/velocity 图）、项目甘特图、保存视图与工作区级 RBAC",
+    "支持 WebSocket 实时事件、GitHub App 集成、webhook、基于令牌的只读公开分享与工作区导入导出",
+    "包含可选的 Dev Machines 多容器子系统，支持 Claude Code、OpenCode、Codex 等 agent provider"
+   ],
+   "use_cases": [
+    "团队自托管 issue 跟踪与敏捷迭代管理",
+    "通过 GitHub 仓库关联实现开发活动与 issue 状态联动",
+    "在隔离容器环境中运行 agent 编码任务并记录活动"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Dev Machines**|Available since v0.1.13 as an opt-in self-hosted subsystem: PostgreSQL control plane, multi-container runtime, manager, authenticated gateway, four agent providers, collector, and UI. Disabled by default; see `TECHNICAL.md`.| ／ |**Self-hosting**|Reference Docker Compose stack with Caddy, PostgreSQL, Redis, backend, frontend, an update script, and dedicated config in `selfhosting/`.| ／ Dev Machines are an opt-in multi-container subsystem for self-hosted Kuayle, included in releases since v0.1.13. Machines can be created generically, then attach issue worktrees when work starts. Every machine has collector and egress services; it may also inc ／ |**Database**|PostgreSQL 17|Primary data store, raw SQL via sqlx/pgx, no ORM|",
+     "lines": [
+      28,
+      29,
+      88,
+      136
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PostgreSQL 是该应用自身的主数据存储，属使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0 单一公开仓库",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Kuayle's published releases are runnable MVPs, not a mature enterprise platform. The repository includes the Go API, SvelteKit frontend, database migrations, development tooling, and reference self-hosting configuration. ／ |**Self-hosting**|Reference Docker Compose stack with Caddy, PostgreSQL, Redis, backend, frontend, an update script, and dedicated config in `selfhosting/`.|",
+   "evidence_lines": [
+    20,
+    29
+   ]
+  },
+  "fn": "carbogninalberto/kuayle",
+  "sha": "8b16fd3c3a05",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

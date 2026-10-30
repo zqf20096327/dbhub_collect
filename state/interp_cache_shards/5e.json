@@ -11904,5 +11904,65 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "276d0ae8c3a1": {
+  "identity": {
+   "one_liner": "Hyperliquid HIP-3 永续 DEX 部署器，为 pump.fun 毕业代币提供永续合约",
+   "review": "HyperGrad 是一个部署在 Hyperliquid HIP-3 上的永续合约 DEX 项目，面向 Solana 上从 pump.fun 毕业的 memecoin：管理器扫描达标代币、预言机每 3 秒从三个来源取中位价、做市商双面挂单，并提供仪表盘、Telegram 告警与 doctor 预检命令。适用于想在 Hyperliquid 上部署运营此类永续市场的构建者，README 标注当前为 testnet 状态，需自行质押 50 万 HYPE。",
+   "highlights": [
+    "包含 manager、oracle、market maker、dashboard 四个进程，支持 Docker/systemd 部署与主备预言机切换",
+    "提供 doctor 预检、scan、init-dex、list、halt/resume、backtest 等子命令",
+    "支持 Telegram 告警与只读仪表盘，通过 DexScreener、Jupiter、链上 RPC 三个价格源取中位数"
+   ],
+   "use_cases": [
+    "为达到 50 万美元市值的 pump.fun 毕业 Solana 代币上线指数或单体永续市场",
+    "在 VPS 上运行带主备切换的预言机与做市服务"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未显示其依赖任何数据库存储，核心是调用 Hyperliquid API 与 Solana RPC 的交易应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**HyperGrad** is a builder-deployed perpetuals DEX on Hyperliquid for Solana memecoins that graduate from pump.fun. ／ HIP-3 lets anyone who stakes 500,000 HYPE run their own perp DEX on Hyperliquid's matching engine. The deployer brings the markets and the oracle; Hyperliquid handles order books, margin and liquidations. trade.xyz used this to build stock and commodity perps, and on October 29, 2026 ICE, the owner of the NYSE, signed with it to bring those markets to the US. ／ |`docker-compose.yml`|`oracle`, `manager`, `dashboard`, and `mm` behind a profile; restart unless stopped; state on a volume; rotated logs|",
+   "evidence_lines": [
+    11,
+    28,
+    163
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "tapoooooty/hypergrad",
+  "sha": "276d0ae8c3a1",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10905,5 +10905,73 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aefd5325a2ed": {
+  "identity": {
+   "one_liner": "LLM 应用离线与在线评测指标的 notebook 集合，在线部分用 MySQL 缓存响应",
+   "review": "该项目包含两个 notebook：离线部分对固定数据集计算 EM、F1、BLEU、ROUGE、困惑度和语义相似度等指标；在线部分搭建 FastAPI + llama.cpp 聊天服务，用 MySQL 做响应缓存并记录用户反馈，通过 Streamlit 面板展示好评率、延迟等指标。面向需要在 Colab 环境评测 LLM 输出质量的开发者，运行依赖 Google Colab、freedb.tech 免费数据库和 ngrok。",
+   "highlights": [
+    "提供离线评测 notebook，计算 EM、token F1、模糊相似度、BLEU、ROUGE-L、困惑度与语义相似度",
+    "在线部分实现 FastAPI 聊天服务，使用 MySQL 存储 response 缓存并以 RapidFuzz 做模糊缓存匹配",
+    "通过 Streamlit 面板展示反应率、单次响应延迟与每日趋势，负向反馈会使对应缓存条目失效"
+   ],
+   "use_cases": [
+    "在固定数据集上对比不同文本评测指标的行为差异",
+    "为本地 LLM 聊天服务收集真实使用中的反应率与延迟指标",
+    "基于用户 like/dislike 反馈验证缓存失效逻辑"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Online|`Online_Metrics_LLM_with_MySQL.ipynb`|Reaction rate (like/dislike/regenerate), latency, cache hit behavior, daily trend| ／ A local LLM chat service (FastAPI + llama.cpp) with MySQL-backed response ／ Requires: Google Colab, a free freedb.tech MySQL",
+     "lines": [
+      11,
+      57,
+      100
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 MySQL 用作聊天服务的响应缓存存储，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local LLM chat service (FastAPI + llama.cpp) with MySQL-backed response ／ Requires: Google Colab, a free freedb.tech MySQL",
+   "evidence_lines": [
+    57,
+    100
+   ]
+  },
+  "fn": "arielshakaramiro/llm-online-offline-metrics",
+  "sha": "aefd5325a2ed",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

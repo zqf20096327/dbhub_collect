@@ -10655,5 +10655,215 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "72fe343b2e67": {
+  "identity": {
+   "one_liner": "自托管网络犯罪调查案件系统，基于 FastAPI 和 Postgres 实现溯源图谱",
+   "review": "NocTORnal 是面向网络犯罪调查人员的自托管案件管理系统，用于构建人员、身份、组织之间的社交网络图谱。每个节点属性和关系都通过数据库触发器强制关联到一条带来源、Admiralty 评级和时间戳的断言记录，并可追溯至 WORM 锁定、含监管链日志的证据件。运行依赖 Postgres 16、Redis 和 MinIO，提供安装脚本，面向网络犯罪调查组、CTI 团队和金融犯罪调查人员；README 声明在完成五项法律决策前不可用于真实材料。",
+   "highlights": [
+    "所有图谱元素写入均强制携带断言来源、Admiralty 可靠性评级和时间戳，由数据库触发器执行",
+    "证据件存储于对象锁定（WORM）桶，附完整监管链日志，支持法律保留与双人操作控制",
+    "提供 Leiden、Burt 约束、关键玩家等社交网络分析指标，并支持 TLP 分类门控与报告输出"
+   ],
+   "use_cases": [
+    "勒索软件附属结构与初始访问代理的身份归并分析",
+    "商业邮件诈骗与洗钱骡网络的社交层调查",
+    "需要可披露溯源链的威胁情报归因工作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres 16 ／ |**Docker**|with Compose v2|Docker Engine and its Compose plugin on Linux; Docker Desktop on Windows and macOS. Runs four containers: Postgres, Redis, MinIO, Mailpit.|",
+     "lines": [
+      12,
+      208
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Not an attribution oracle.** There is no \"is this the same person?\"",
+     "lines": [
+      149
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统以 Postgres 作为数据存储运行四个容器（Postgres、Redis、MinIO 等），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL v3",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postgres 16 ／ One command installs it, and it is safe to re-run. The installer is a wizard",
+   "evidence_lines": [
+    12,
+    161
+   ]
+  },
+  "fn": "dboudreau00/NocTORnal",
+  "sha": "72fe343b2e67",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cb56e99dc0ba": {
+  "identity": {
+   "one_liner": "Upwork 职位爬虫，用 Selenium 抓取并将数据存入 SQLite",
+   "review": "",
+   "highlights": [
+    "使用 Selenium 与 undetected-chromedriver 自动滚动抓取职位详情并写入 SQLite 数据库",
+    "每次调用执行一次抓取后退出，可用 cron 或 systemd 调度重复运行",
+    "支持持久浏览器配置文件以复用会话，并处理 Cloudflare Turnstile 与拦截页面检测"
+   ],
+   "use_cases": [
+    "需要保存职位标题、描述、提案数等数据的求职场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Python + Selenium + SQLite ／ Upwork Scraper performs a single authenticated scrape of Upwork Best Matches and stores job data in SQLite. The browser remains visible so Upwork verification or two-factor authentication can be completed manually when required. ／ SQLite is the application's only persistence format. The scraper does not create or export CSV files.",
+     "lines": [
+      2,
+      4,
+      6
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该应用以 SQLite 作为唯一持久化格式存储抓取的职位数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Upwork Scraper performs a single authenticated scrape of Upwork Best Matches and stores job data in SQLite. The browser remains visible so Upwork verification or two-factor authentication can be completed manually when required. ／ SQLite is the application's only persistence format. The scraper does not create or export CSV files. ／ Upwork Scraper is designed to automate the process of scraping job postings from **Upwork Best Matches**. It utilizes Selenium for web scraping and interacts with the Upwork website to extract job details, including job titles, descriptions, and proposals. The script then stores the extracted data in a SQLite database for easy access and retrieval.",
+   "evidence_lines": [
+    4,
+    6,
+    8
+   ],
+   "softened": [
+    "review:『Best』置空",
+    "use_cases:『Best』删条x1"
+   ]
+  },
+  "fn": "roperi/UpworkScraper",
+  "sha": "cb56e99dc0ba",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a3b14bb2ebaa": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Go 分布式任务队列库与服务",
+   "review": "Dhara 是一个 Go 任务队列库，用 PostgreSQL 的 SKIP LOCKED 实现任务领取，提供事务性入队、心跳回收、指数退避重试与死信队列，无需 Redis 等外部依赖。可作库嵌入应用，也可用自带的 server/worker 二进制独立运行，内嵌迁移支持程序调用与 CLI 两种方式。适合需要在 Go 项目中实现可靠后台任务的开发者。",
+   "highlights": [
+    "以 PostgreSQL 为唯一事实来源，用事务性 SELECT ... FOR UPDATE SKIP LOCKED 实现任务领取，无需 Redis/RabbitMQ 等外部依赖",
+    "提供 EnqueueTx 事务性入队，任务与业务写入同事务原子提交，支持幂等键去重",
+    "内嵌迁移（go:embed），支持应用内调用 dhara.Migrate、CLI 工具及自定义迁移目录三种方式"
+   ],
+   "use_cases": [
+    "Go 应用内嵌入异步任务处理，与业务事务原子提交",
+    "以独立 server/worker 二进制形式部署任务队列服务",
+    "需要重试、死信队列与心跳故障恢复的后台作业场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Dhara is a distributed task queue library and service for Go, backed by PostgreSQL. It covers the full task lifecycle: enqueue, claim, retry, dead-letter. No external dependencies like Redis or RabbitMQ. ／ Dhara uses PostgreSQL as the single source of truth for task state and execution logs. ／ 1. **Atomic concurrency with PostgreSQL (`SKIP LOCKED`)**",
+     "lines": [
+      8,
+      19,
+      34
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 PostgreSQL 存储能力提供任务队列机制的 Go 库/服务组件，PostgreSQL 是其数据层而非应用目标。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dhara is a distributed task queue library and service for Go, backed by PostgreSQL. It covers the full task lifecycle: enqueue, claim, retry, dead-letter. No external dependencies like Redis or RabbitMQ. ／ - **As an embeddable library:** call `client.Enqueue(...)` from your application (even inside your own DB transaction) and run a `dhara.Worker` to execute tasks. ／ - **As pre-built services:** `cmd/server` (HTTP API) and `cmd/worker` (task processor) are thin binaries assembled entirely from the library, so they can never drift from it.",
+   "evidence_lines": [
+    8,
+    12,
+    13
+   ]
+  },
+  "fn": "Md-Talim/dhara",
+  "sha": "a3b14bb2ebaa",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

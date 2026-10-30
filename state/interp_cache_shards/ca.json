@@ -10245,5 +10245,194 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dd125e9dc894": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，经 COPY 命令读写 Parquet 文件",
+   "review": "pg_parquet 是一个 PostgreSQL 扩展，通过扩展 COPY TO/FROM 命令，在 PostgreSQL 内直接读写位于 S3、Azure Blob Storage、Google Cloud Storage、http(s) 端点、本地文件及标准输入输出流的 Parquet 文件，并支持从 Parquet 文件推断 schema 建表、查询 Parquet 的 schema 与元数据。它基于 Apache Arrow 和 pgrx 构建，供需要在 PostgreSQL 与 Parquet 之间搬运数据的用户使用，需从源码以 cargo-pgrx 编译安装。",
+   "highlights": [
+    "通过 COPY 命令在 PostgreSQL 表/查询与 S3、Azure Blob、GCS、http(s)、本地文件及 stdin/stdout/程序流之间的 Parquet 文件间导入导出",
+    "支持从 Parquet 文件推断列定义并创建/填充 PostgreSQL 表（definition_from / load_from）",
+    "提供 parquet.schema、parquet.metadata、parquet.file_metadata、parquet.kv_metadata 函数查看 Parquet 的 schema 与元数据"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 表或查询结果导出为 Parquet 文件并存入对象存储",
+    "从 Parquet 文件加载数据到 PostgreSQL 表并自动推断 schema",
+    "在 SQL 中检查 Parquet 文件的 schema、列统计等元数据"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Ap",
+     "lines": [
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展为该数据库提供 Parquet 数据导入导出能力，服务于数据库生态而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Apache Arrow project to read and write Parquet files and pgrx project to extend PostgreSQL's `COPY` command. ／ 2. You can ingest data from Parquet files to Postgres tables with type coercion and schema inference, ／ ## Installation From Source",
+   "evidence_lines": [
+    8,
+    44,
+    21
+   ]
+  },
+  "fn": "CrunchyData/pg_parquet",
+  "sha": "dd125e9dc894",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "09fec26945cf": {
+  "identity": {
+   "one_liner": "Rust 编写的原生跨平台多数据库 GUI 管理客户端",
+   "review": "RDB 是一个用 Rust 和 Slint 构建的原生桌面数据库管理器，支持 PostgreSQL、MySQL、Redis、MongoDB、SQLite 等多种引擎的连接、schema 浏览与查询。面向需要跨引擎管理数据库的开发者，提供 CLI、MCP 服务器和内置 AI 助手（写操作需审批），通过 npm、Homebrew、脚本或源码安装。",
+   "highlights": [
+    "单一代码库支持 PostgreSQL、MySQL、MariaDB、Redis、Valkey、MongoDB、SQLite、Cassandra、SQL Server、Oracle、ClickHouse 多引擎连接与查询",
+    "原生 UI，基于 Slint GPU 渲染，无 Electron/Chromium/webview",
+    "提供 rdb-cli mcp 管理的 MCP 服务器与内置 AI 助手，代理访问默认拒绝并可限定只读"
+   ],
+   "use_cases": [
+    "在单一桌面应用中管理多种数据库连接与执行查询",
+    "通过 MCP 服务器向 agent 客户端暴露受限的数据库查询能力",
+    "通过 DSN 导入和连接测试快速配置数据库连接"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|`tokio-postgres`|Tabular|",
+     "lines": [
+      37
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|`mysql_async`|Tabular|",
+     "lines": [
+      38
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MariaDB|`mysql_async` (MySQL-protocol-compatible)|Tabular|",
+     "lines": [
+      39
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|`rusqlite`|Tabular|",
+     "lines": [
+      43
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|`tiberius`|Tabular|",
+     "lines": [
+      45
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle|`oracledb` (Oracle's thin driver)|Tabular|",
+     "lines": [
+      46
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|`clickhouse` (HTTP)|Tabular|",
+     "lines": [
+      47
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明为多引擎数据库管理器，为连接和查询各数据库提供专门驱动支持，属数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "SQL Server",
+    "Oracle",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Native cross-platform database manager. PostgreSQL · MySQL · MariaDB · Redis · Valkey · MongoDB · SQLite · Cassandra · Scylla · SQL Server · Oracle · ClickHouse — one desktop app, no Electron. ／ |PostgreSQL|`tokio-postgres`|Tabular| ／ - **CLI and MCP** — manage scoped agent access with `rdb-cli mcp`; agent clients launch the separate `rdb-mcp` stdio server",
+   "evidence_lines": [
+    5,
+    37,
+    21
+   ]
+  },
+  "fn": "suiflex/rdb",
+  "sha": "09fec26945cf",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

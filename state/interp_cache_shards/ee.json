@@ -10369,5 +10369,157 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8cf4e0c31191": {
+  "identity": {
+   "one_liner": "自托管 booru 风格标签图片库，单 Go 二进制 + SQLite 存储",
+   "review": "一个用 Go 编写的自托管图片/漫画图库应用，按 Danbooru 风格以标签组织本地媒体，支持本地 ONNX 模型自动打标、去重、REST API 与插件，通过 htmx 服务端渲染 UI。适合想本地管理个人图片收藏的用户；每个图库对应一个 SQLite 文件，无需数据库服务器，README 声明仅面向局域网使用。",
+   "highlights": [
+    "支持 JPEG、PNG、WebP、AVIF、GIF、MP4、WebM 及 CBZ/ZIP 漫画档案，提供文件监视、SHA-256 去重与多图库管理",
+    "支持本地 ONNX 自动打标（WD14、JoyTag 等），提供标签合并、别名、含义及基于标签的搜索与批量操作",
+    "提供带作用域令牌的 REST API、插件与主题机制，每个图库为单个 SQLite 文件，无需数据库服务器"
+   ],
+   "use_cases": [
+    "本地个人图片/漫画收藏的标签化管理与检索",
+    "本地运行 ONNX 模型为图片自动打标签",
+    "局域网内通过 REST API 与配套工具（monloader）扩展在线功能"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Monbooru is a single self-contained Go binary, web assets embedded, with seven direct dependencies. Each gallery is one SQLite file: no database server, no cache layer, nothing else to run. Your images stay ordinary files and folders; the database and thumbnai ／ - SQLite, through the pure-Go modernc.org/sqlite driver, stores each gallery.",
+     "lines": [
+      76,
+      113
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明每个图库使用一个 SQLite 文件存储数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Monbooru is a single self-contained Go binary, web assets embedded, with seven direct dependencies. Each gallery is one SQLite file: no database server, no cache layer, nothing else to run. Your images stay ordinary files and folders; the database and thumbnails live in a separate data directory, so backing up means copying that directory, and removing monbooru leaves your images where they were. The UI is server-rendered with htmx, with no JS framework and no frontend build step. ／ - SQLite, through the pure-Go modernc.org/sqlite driver, stores each gallery.",
+   "evidence_lines": [
+    76,
+    113
+   ]
+  },
+  "fn": "monbooru/monbooru",
+  "sha": "8cf4e0c31191",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a121321c275c": {
+  "identity": {
+   "one_liner": "openGauss 配置问答助手，RAG+单Agent 问答服务",
+   "review": "基于个人笔记语料构建的 openGauss 配置问答服务：Markdown 切片嵌入 Chroma，BM25+向量混合检索，代码层拒答与引用校验，叠加 LangGraph 单 Agent 提供检索/配置查询/RAG 回答三个工具。提供 CLI 与 FastAPI 两种入口，附离线评测脚本。面向参与 openGauss 适配的开发者自查配置，语料仅约 120 chunks，未做生产部署。",
+   "highlights": [
+    "提供 BM25+向量+加权 RRF 混合检索，以及基于分数阈值的检索层拒答",
+    "提供单 Agent（LangGraph 状态图 + 3 个工具），用代码门闩保证零证据拒答",
+    "提供 FastAPI 接口（/ask、/agent）、CLI 与离线评测/切片消融脚本"
+   ],
+   "use_cases": [
+    "openGauss 配置项（如 enable_dolphin_proto）的检索式问答",
+    "RAG 与 Agent 拒答、引用等指标的离线评测实验",
+    "局域网/隧道共享的演示部署（Docker compose）"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "语料来自开源实习中的 B 兼容 / Dolphin MySQL 协议 / Peewee 适配笔记，目标是让分散的配置说明变成**可检索、可引用、不足可拒答**的问答服务；在此基础上增加一个**单 Agent**，让模型自己决定用哪个工具，并用代码层门闩保证「没有证据不下结论」。 ／ 参与 openGauss 开源适配时发现：B 库创建、schema 与 PyMySQL `database` 同名、`enable_dolphin_proto` / native 密码等配置点散落在文档与个人笔记中，新手很难一次查准。本项目将个人笔记与任务速查（`personal/peewee-notes.md`、`personal/opengauss-peewee-cheatsheet.md`）切片入库，提供：",
+     "lines": [
+      5,
+      11
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "openGauss **配置问答助手**：固定 RAG 链路 + 单 Agent（工具调用）。 ／ 参与 openGauss 开源适配时发现：B 库创建、schema 与 PyMySQL `database` 同名、`enable_dolphin_proto` / native 密码等配置点散落在文档与个人笔记中，新手很难一次查准。本项目将个人笔记与任务速查（`personal/peewee-notes.md`、`personal/opengauss-peewee-cheatsheet.md`）切片入库，提供：",
+     "lines": [
+      3,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明该项目为 openGauss 配置适配笔记提供检索问答服务，是服务于 openGauss 生态的问答工具，语料存于 Chroma 向量库而非 openGauss。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "个人学习项目，代码可自由查看；无标准开源许可证（README L309）",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "openGauss **配置问答助手**：固定 RAG 链路 + 单 Agent（工具调用）。 ／ 语料来自开源实习中的 B 兼容 / Dolphin MySQL 协议 / Peewee 适配笔记，目标是让分散的配置说明变成**可检索、可引用、不足可拒答**的问答服务；在此基础上增加一个**单 Agent**，让模型自己决定用哪个工具，并用代码层门闩保证「没有证据不下结论」。 ／ 参与 openGauss 开源适配时发现：B 库创建、schema 与 PyMySQL `database` 同名、`enable_dolphin_proto` / native 密码等配置点散落在文档与个人笔记中，新手很难一次查准。本项目将个人笔记与任务速查（`personal/peewee-notes.md`、`personal/opengauss-peewee-cheatsheet.md`）切片入库，提供：",
+   "evidence_lines": [
+    3,
+    5,
+    11
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "xuf56191-sys/opengauss-rag1",
+  "sha": "a121321c275c",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11560,5 +11560,195 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a714a38a01bb": {
+  "identity": {
+   "one_liner": "本地优先的多智能体运行框架，以单个 SQLite 文件存储全部运行记录",
+   "review": "KAOS 是一个在本地运行的 AI 多智能体编排框架，每个智能体运行在隔离沙箱中，其文件系统、检查点、事件日志与跨智能体记忆均写入一个 SQLite 文件，可通过 SQL 查询审计。提供 CLI、Python API 与 MCP 工具（58 个），并内置可证伪评估门控机制。面向使用 Claude Code 等工具运行智能体的开发者。",
+   "highlights": [
+    "每个智能体运行在隔离沙箱中，审计、事件日志与记忆写入单个 SQLite 文件",
+    "提供 CLI、Python API 与 MCP 服务器（58 工具）接入 Claude Code/Cursor",
+    "内置可证伪评估机制：预注册 kill gate、探针与实验日志"
+   ],
+   "use_cases": [
+    "在本地并行运行多个沙箱隔离的 AI 智能体并审计其行为",
+    "为 Claude Code 会话提供记录与团队记忆",
+    "调试与回溯智能体运行历史（检查点/恢复/差异）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Run teams of AI agents on your machine. Each agent works in its own sandbox inside one SQLite file, every action it takes is on the record (auditing an agent is a SQL query), and the lessons that actually worked come back next time. No cloud account, no GPU, n ／ Seeded 2,000 agents × 25 memories = 50,000 entries in a temp SQLite file 1.1 s ／ **A local-first multi-agent harness.** Every agent runs in an isolated, auditable runtime backed by one SQLite file — a flight recorder for your fleet. Its memory self-tunes with use (neuroplasticity — usage-weighted memory and skill ranking). And it is the on",
+     "lines": [
+      3,
+      12,
+      42
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储智能体沙箱、日志与记忆数据的 AI 应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Run teams of AI agents on your machine. Each agent works in its own sandbox inside one SQLite file, every action it takes is on the record (auditing an agent is a SQL query), and the lessons that actually worked come back next time. No cloud account, no GPU, no embeddings. ／ **A local-first multi-agent harness.** Every agent runs in an isolated, auditable runtime backed by one SQLite file — a flight recorder for your fleet. Its memory self-tunes with use (neuroplasticity — usage-weighted memory and skill ranking). And it is the only framework whose own mechanisms must pass **pre-registered, falsifiable kill gates** before they ship. Measured, not claimed. ／ Layered, with a single SQLite file at the bottom. Two layers define the",
+   "evidence_lines": [
+    3,
+    42,
+    75
+   ]
+  },
+  "fn": "canivel/kaos",
+  "sha": "a714a38a01bb",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "10f3f66cdd44": {
+  "identity": {
+   "one_liner": "数洞：Rust+Tauri 跨平台数据库管理工具",
+   "review": "DBLens 是一个跨平台数据库管理工具，后端用 Rust 实现，前端为 Web UI，以 Tauri 桌面应用加可选浏览器模式运行。面向需要管理多种数据库的用户，提供针对 MySQL、MariaDB、PostgreSQL、达梦、Oracle、SQL Server 的驱动与集成测试体系；达梦和 Oracle 驱动运行时需加载本机客户端库。",
+   "highlights": [
+    "后端 Rust，前端 Web UI，提供 Tauri 桌面应用与可选浏览器模式",
+    "支持 MySQL、MariaDB、PostgreSQL、达梦、Oracle、SQL Server 的数据库驱动",
+    "通过环境变量配置连接 URL 运行驱动一致性集成测试，未设置时自动跳过"
+   ],
+   "use_cases": [
+    "在跨平台桌面环境中管理多种数据库",
+    "对达梦、Oracle 等数据库进行连接与操作验证",
+    "开发者搭建集成测试数据库环境"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`DBLENS_TEST_MYSQL_URL`|`mysql://root:dblens@127.0.0.1:3306/dblens_test`| ／ PowerShell 中设置环境变量：`$env:DBLENS_TEST_MYSQL_URL = \"mysql://root:dblens@127.0.0.1:3306/dblens_test\"`",
+     "lines": [
+      21,
+      37
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|`DBLENS_TEST_MARIADB_URL`|`mysql://root:dblens@127.0.0.1:3307/dblens_test`|",
+     "lines": [
+      22
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`DBLENS_TEST_PG_URL`|`postgres://postgres:dblens@127.0.0.1:5432/dblens_test`|",
+     "lines": [
+      23
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|`DBLENS_TEST_ORACLE_URL`|`oracle://dblens:dblens@127.0.0.1:1521/FREEPDB1`| ／ - 达梦和 Oracle 驱动在运行时加载本机的客户端库：达梦需要安装达梦客户端（dmdpi），Oracle 需要 Instant Client。库所在目录可以用 URL 参数 `dpi_lib_dir` / `oracle_client_lib_dir` 指定，不指定时会按 `DM_HOME` / `ORACLE_HOME`、PATH 和常见安装位置自动查找。",
+     "lines": [
+      25,
+      28
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|`DBLENS_TEST_SQLSERVER_URL`|`sqlserver://sa:密码@127.0.0.1:1433/dblens_test`|",
+     "lines": [
+      26
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "- 达梦和 Oracle 驱动在运行时加载本机的客户端库：达梦需要安装达梦客户端（dmdpi），Oracle 需要 Instant Client。库所在目录可以用 URL 参数 `dpi_lib_dir` / `oracle_client_lib_dir` 指定，不指定时会按 `DM_HOME` / `ORACLE_HOME`、PATH 和常见安装位置自动查找。 ／ - 达梦集成测试需要本地的达梦库；达梦 DPI 技术验证：`cargo test -p dblens-driver-dameng spike -- --ignored --nocapture --test-threads=1`。",
+     "lines": [
+      28,
+      29
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为连接和管理多种数据库服务的工具，数据库是其操作对象而非存储后端。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "PostgreSQL",
+    "Oracle",
+    "SQL Server",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "跨平台数据库管理工具，后端 Rust，前端 Web UI，形态是 Tauri 桌面应用加可选的浏览器模式。 ／ 驱动的一致性测试需要真实数据库。连接 URL 从环境变量读取，未设置时对应测试会自动跳过： ／ - 达梦和 Oracle 驱动在运行时加载本机的客户端库：达梦需要安装达梦客户端（dmdpi），Oracle 需要 Instant Client。库所在目录可以用 URL 参数 `dpi_lib_dir` / `oracle_client_lib_dir` 指定，不指定时会按 `DM_HOME` / `ORACLE_HOME`、PATH 和常见安装位置自动查找。",
+   "evidence_lines": [
+    3,
+    17,
+    28
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "byteswalk/dblens",
+  "sha": "10f3f66cdd44",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

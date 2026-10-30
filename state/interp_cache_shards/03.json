@@ -11998,5 +11998,74 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9ce49beb938c": {
+  "identity": {
+   "one_liner": "自托管预约预订系统，用 PostgreSQL 存储并提供每商家 MCP 服务",
+   "review": "OpenTurnly 是面向理发店、诊所等服务型小微商户的开源自托管预约系统，提供公开预订页、日历、客户管理、webhook 工作流，并为每个商家提供 MCP 服务供 AI 代理查询和预约。通过 Docker Compose 一键部署，数据存于内置 PostgreSQL。适合希望自建预订平台、绕开 SaaS 订阅的用户。",
+   "highlights": [
+    "每个业务拥有独立 MCP 服务器，AI 助手可查询空闲时间并完成预订",
+    "提供带 ALTCHA 工作量证明、速率限制的防恶意预订机制",
+    "支持 webhooks 工作流，将预约数据推送至任意第三方系统"
+   ],
+   "use_cases": [
+    "服务型小微商户自托管在线预约系统",
+    "需要通过 MCP/AI 代理接入的预订场景",
+    "将预约数据通过 webhook 对接 CRM/自动化平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **One command to install**: `docker compose up -d` starts OpenTurnly and its PostgreSQL. ／ PostgreSQL, in the `postgres-data` Docker volume. Set `POSTGRES_PASSWORD` in a `.env` file ／ |`POSTGRES_PASSWORD`|`openturnly`|Password of the bundled PostgreSQL. Set it before the first start.|",
+     "lines": [
+      16,
+      59,
+      75
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确将预约数据存储于内置 PostgreSQL 数据卷，数据库仅为其业务数据存储，非服务数据库生态的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **One command to install**: `docker compose up -d` starts OpenTurnly and its PostgreSQL. ／ Vite web app in one Node.js process, PostgreSQL",
+   "evidence_lines": [
+    16,
+    105
+   ]
+  },
+  "fn": "juanpabloortizo/openturnly",
+  "sha": "9ce49beb938c",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

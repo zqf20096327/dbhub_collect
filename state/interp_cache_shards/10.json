@@ -11741,5 +11741,144 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a296643b215e": {
+  "identity": {
+   "one_liner": "Berkeley DB 社区分支，嵌入式事务键值存储引擎库",
+   "review": "该仓库既是 Berkeley DB 历史版本的归档（1.85 至 5.3.28 的发布与补丁均以 tag 和 GitHub Release 保存），也是在 master 分支上活跃开发的社区分支，采用 CalVer 版本号并提供 LTS 线。它是一个链接进应用、无服务进程的嵌入式存储引擎，支持 B-tree、Hash、Queue、Recno 访问方法及 ACID 事务、MVCC 和复制。适合需要在应用内嵌键值存储或维护 Berkeley DB 遗留系统的开发者。",
+   "highlights": [
+    "提供 Berkeley DB 完整历史发布与补丁的归档，支持 git diff 对比",
+    "实现嵌入式事务键值存储，含 B-tree/Hash/Queue/Recno、MVCC 快照隔离与复制",
+    "提供 LTS 发布线：格式与 ABI 冻结、仅回移修复、支持至下一 LTS 后 12 个月"
+   ],
+   "use_cases": [
+    "应用内嵌事务性键值存储（无需独立数据库服务进程）",
+    "查阅 Berkeley DB 历史版本源码与补丁差异",
+    "在 Linux/FreeBSD/Windows 上部署长期稳定的存储引擎版本"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "> **Not affiliated with or endorsed by Oracle Corporation.** \"Berkeley DB\" is ／ > `v5.3.29` and later are community fork releases and are **not** Oracle ／ > artifacts (Oracle's final 5.3 release was 5.3.28).",
+     "lines": [
+      3,
+      5,
+      6
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库本身是存储引擎/数据库本体的分支与归档，不属于为其他数据库服务的工具，也非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Sleepycat 许可；排除 Oracle AGPLv3 授权的 6.0 及以后版本",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "2. **A living fork** under active development on the **`master`** branch, where ／ Berkeley DB is an embedded, transactional key/value storage engine (B-tree, ／ logging, MVCC snapshot isolation, and replication. It is a library you link into",
+   "evidence_lines": [
+    13,
+    16,
+    18
+   ]
+  },
+  "fn": "berkeleydb/libdb",
+  "sha": "a296643b215e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1e5015680162": {
+  "identity": {
+   "one_liner": "tidb-rs 测试清单与进度追踪项目",
+   "review": "该项目为 TiDB SQL 层的 Rust 重写版（tidb-rs）提供测试清单、覆盖映射和集成测试结果的追踪数据。它扫描 TiDB Go 代码中的单元测试与集成测试，建立测试到功能的覆盖图，并记录 tidb-rs 的通过情况；数据以排序 TSV 存入 git，通过 Datasette 提供浏览，适合 TiDB 生态的重写开发者使用。",
+   "highlights": [
+    "提供 TiDB 单元测试与集成测试的清单及每测试到 Go 函数的覆盖映射",
+    "支持运行 TiDB 集成测试并按语句级别记录 tidb-rs 与 Go TiDB 的结果差异",
+    "提供基于 Datasette 的数据浏览与 Markdown 报告生成"
+   ],
+   "use_cases": [
+    "追踪数据库重写项目的测试覆盖与兼容性进度",
+    "以文本 TSV + git diff 方式审查测试数据的变更",
+    "按功能/区域查询测试与覆盖缺口"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "# tidb-rs-tracker ／ Test inventory and progress tracking for tidb-rs, a Rust rewrite of the TiDB SQL layer. ／ 1. **What does TiDB test?** Every Go unit test and integration test file in TiDB.",
+     "lines": [
+      1,
+      3,
+      7
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "A re-extraction must be reviewable. With sorted TSV, `git diff` shows exactly which tests appeared or disappeared and which mappings moved; a SQLite file (even through Git LFS) cannot be diffed or merged. SQLite is a local cache, rebuilt in about a second. ／ Needs a TiDB checkout, Go, `sqlite3` and `zstd`.",
+     "lines": [
+      60,
+      84
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 TiDB 的 Rust 重写提供测试追踪数据，是服务数据库生态的工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Test inventory and progress tracking for tidb-rs, a Rust rewrite of the TiDB SQL layer. ／ 2. **What does each test exercise?** A per-test coverage map from tests to Go functions, grouped into features. ／ python3 scripts/tracker.py build          # data/*.tsv -> tracker.db",
+   "evidence_lines": [
+    3,
+    8,
+    24
+   ]
+  },
+  "fn": "dulao5/tidb-rs-tracker",
+  "sha": "1e5015680162",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11523,5 +11523,152 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cf6d5b1ec17e": {
+  "identity": {
+   "one_liner": "本地优先的 Windows 求职管理桌面应用，数据存于 SQLite",
+   "review": "一款 Electron+Vue 的 Windows 桌面应用，用于集中管理岗位、公司、简历、面试日程与投递进度，并提供本地岗位搜索、AI 智能体助手和本地备份导出导入。数据经 better-sqlite3 存于本机 SQLite，无云同步、无注册账号。面向求职者个人使用，仅支持 Windows 平台，动态网页读取依赖本机安装 Microsoft Edge。",
+   "highlights": [
+    "使用 SQLite 与 better-sqlite3 在本地保存求职记录和应用数据，支持完整备份导出与导入",
+    "集成 LangChain/LangGraph/MCP SDK 的智能体助手，可连接外部 AI 工具与自选模型",
+    "聚合多个招聘平台的岗位搜索，支持扫码登录、筛选与搜索历史"
+   ],
+   "use_cases": [
+    "个人求职者集中跟踪投递进度、简历版本与面试日程",
+    "在本机离线保存与管理求职数据并定期导出备份",
+    "通过 AI 助手分析岗位与简历匹配度并生成笔试练习"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|本地数据|SQLite、better-sqlite3|在本机保存求职记录和应用数据|",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用通过 better-sqlite3 使用 SQLite 在本机保存求职数据，SQLite 是其数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "职迹是一款面向 Windows 的本地求职管理桌面应用，将公司、岗位、简历、求职进度和面试日程集中在一起，帮助你有条理地推进每一次求职。 ／ |本地数据|SQLite、better-sqlite3|在本机保存求职记录和应用数据| ／ 职迹无需注册应用账号，不提供云同步，求职记录、简历和聊天历史保存在本机。使用智能体时，相关对话和选定内容会发送到你配置的模型服务。",
+   "evidence_lines": [
+    5,
+    26,
+    64
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "baozha2023/JobTrail",
+  "sha": "cf6d5b1ec17e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "09715a1dcfb6": {
+  "identity": {
+   "one_liner": "校园空间预订系统，ASP.NET Core 三微服务 + Angular 前端",
+   "review": "这是一个校园空间（教室、实验室、自习室）查找与预订的应用项目，属 ITS Bari 课程作业。采用三个 ASP.NET Core 微服务（Spaces 用 MongoDB，Bookings 和 Users 用 PostgreSQL/EF Core），前端为 Angular，通过 docker compose 运行数据库，提供脚本一键启动与真实数据库的集成测试。",
+   "highlights": [
+    "三微服务架构：Spaces 使用 MongoDB，Bookings 与 Users 使用 PostgreSQL（EF Core）",
+    "提供 dev-up/dev-down 脚本，一条命令启动数据库、服务与前端",
+    "包含集成测试（连接真实数据库）与合成数据生成脚本"
+   ],
+   "use_cases": [
+    "校园空间的查询与冲突检测预订",
+    "微服务 + Angular + PostgreSQL/MongoDB 的项目参考实现",
+    "含 CI、ADR 文档与安全规范的团队协作示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Stack:** tre microservizi ASP.NET Core Web API (Spaces su MongoDB; Bookings e Users su PostgreSQL con EF Core), ／ |`docker-compose.yml`, `infra/`|MongoDB e PostgreSQL, un database per servizio| ／ docker compose up -d --wait # PostgreSQL e MongoDB, attesi \"Healthy\"",
+     "lines": [
+      25,
+      34,
+      104
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个使用 MongoDB 和 PostgreSQL 存数据的校园预订应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Prodotto per trovare e prenotare gli spazi del campus (aule, laboratori, sale studio) senza impegni ／ **Stack:** tre microservizi ASP.NET Core Web API (Spaces su MongoDB; Bookings e Users su PostgreSQL con EF Core), ／ |`docker-compose.yml`, `infra/`|MongoDB e PostgreSQL, un database per servizio|",
+   "evidence_lines": [
+    3,
+    25,
+    34
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "loggione-finale/smartcampus",
+  "sha": "09715a1dcfb6",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

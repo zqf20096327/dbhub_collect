@@ -10832,5 +10832,88 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1b4dd4d9a72f": {
+  "identity": {
+   "one_liner": "Rust 终端数据库客户端，TUI 界面管理连接并执行 SQL",
+   "review": "datarig 是用 Rust 和 Ratatui 编写的终端数据库客户端，支持多连接并排、schema 浏览器、vim 按键的 SQL 编辑器和分页结果网格；面向在终端操作数据库的开发者。PostgreSQL 完整实现（需 12+），MySQL 部分支持，项目处于 pre-1.0 阶段，行为可能变更。",
+   "highlights": [
+    "提供多连接并行的 TUI，含 schema 浏览器、SQL 编辑器与分页结果网格",
+    "包含危险语句确认与只读配置的客户端检查，PostgreSQL 上由服务端强制执行",
+    "提供 SSH 隧道与 TLS 支持，提供 Homebrew 及二进制安装"
+   ],
+   "use_cases": [
+    "在终端中浏览 schema 与编辑执行 SQL",
+    "通过只读配置做安全的查询操作",
+    "通过 SSH 隧道连接远程数据库"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**PostgreSQL** is implemented (a table's structure, its DDL and the key marks need ／ anything is sent and, on PostgreSQL, also enforced by the server. ／ |`crates/drivers/postgres`, `crates/drivers/mysql`|the database drivers|",
+     "lines": [
+      18,
+      11,
+      62
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL 12 or newer), and **MySQL** in part (see ／ |`crates/drivers/postgres`, `crates/drivers/mysql`|the database drivers|",
+     "lines": [
+      19,
+      62
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述它是操作数据库的终端客户端，提供驱动与 UI，为数据库生态服务而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A full-featured database client that lives in your terminal — light, fast, and safe by default. ／ **PostgreSQL** is implemented (a table's structure, its DDL and the key marks need ／ |`crates/drivers/postgres`, `crates/drivers/mysql`|the database drivers|",
+   "evidence_lines": [
+    5,
+    18,
+    62
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "DokaDev/datarig",
+  "sha": "1b4dd4d9a72f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

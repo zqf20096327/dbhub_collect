@@ -10782,5 +10782,79 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f15adc5e1373": {
+  "identity": {
+   "one_liner": "dokku 的 MariaDB 服务插件，管理数据库服务生命周期",
+   "review": "这是 dokku PaaS 的官方 MariaDB 插件，供运维人员在 dokku 主机上创建、配置、备份和销毁 MariaDB 服务实例。支持自定义镜像版本、环境变量、卷挂载、密码管理、S3 备份与定时调度，并可将服务链接到应用并注入连接 DSN。需 dokku 0.35.x+ 与 docker 1.8.x。",
+   "highlights": [
+    "提供 mariadb:create/destroy/info/backup 等命令，管理服务全生命周期",
+    "支持 S3 备份、GPG 加密、cron 定时备份与 IAM 认证",
+    "支持自定义镜像、版本、卷挂载、网络、内存限制与日志选项"
+   ],
+   "use_cases": [
+    "在 dokku 平台上为应用提供 MariaDB 数据库服务",
+    "为 MariaDB 服务配置定时备份到 S3 兼容存储",
+    "通过 link 命令向应用注入数据库连接 URL"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Official mariadb plugin for dokku. Currently defaults to installing mariadb 13.0.2. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mariadb.git --name mariadb",
+     "lines": [
+      3,
+      14
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "DATABASE_URL=mysql://:SOME_PASSWORD@dokku-mariadb-lollipop:3306 ／ BLUE_DATABASE_URL=mysql://:SOME_PASSWORD@dokku-mariadb-lollipop:3306",
+     "lines": [
+      363,
+      385
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该插件为 dokku 平台提供 MariaDB 服务的创建、配置与备份管理，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "MariaDB"
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Official mariadb plugin for dokku. Currently defaults to installing mariadb 13.0.2. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mariadb.git --name mariadb",
+   "evidence_lines": [
+    3,
+    14
+   ]
+  },
+  "fn": "dokku/dokku-mariadb",
+  "sha": "f15adc5e1373",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9560,5 +9560,262 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "80b4aea207a5": {
+  "identity": {
+   "one_liner": "自托管的个人站点系统，含笔记/动态/作品/收藏/日志，用 SQLite 存储",
+   "review": "一个可自托管的个人网站系统，提供笔记（MDX）、动态、作品、收藏、日志、相册、友链等页面，带管理后台和五语言支持。后端为 Rust（axum + sqlx），使用本地 SQLite 数据库（通过 DATABASE_URL 配置），前端 React 19 + TanStack Start，通过 Docker Compose 一键部署，内置 Caddy 自动 HTTPS，每日将数据库备份到 ./backups。适合想搭建个人站点的用户。",
+   "highlights": [
+    "支持 MDX 文章写作、定时发布、RSS、newsletter，以及五语言界面与文章级翻译管理",
+    "提供管理后台（评论审核、站点设置、账号角色）和内置 MCP server（31 个工具，可让 AI 助手通过 admin API 写文章、管理站点）",
+    "通过 Docker Compose 部署，内置 Caddy 自动配置 HTTPS，数据库每日备份到本地目录"
+   ],
+   "use_cases": [
+    "搭建个人博客/个人主页（笔记、动态、作品展示）",
+    "自托管的多语言个人站点，需要 GitHub/Google OAuth 登录的管理后台",
+    "通过 MCP 让 AI 助手代管站点内容发布"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ |**Backend**|Rust 2024 · axum · tokio · sqlx (SQLite) · JWT · image / resvg / thumbhash (images and share images) · ferrous-opencc · utoipa (OpenAPI at `/api/docs`) · Sentry SDK| ／ # set DATABASE_URL to a local path, e.g. sqlite://./dev.sqlite",
+     "lines": [
+      24,
+      205,
+      235
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 SQLite 存储数据的个人网站应用，SQLite 是其内置后端依赖而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A one-person site: notes, moments, works, a collection and a voyage log, all strung together in one night sky. ／ docker compose up -d",
+   "evidence_lines": [
+    7,
+    38
+   ]
+  },
+  "fn": "Koimsurai/sora-to-ki",
+  "sha": "80b4aea207a5",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "449247884a03": {
+  "identity": {
+   "one_liner": "SQL-first 的 Go database/sql 增强包",
+   "review": "SQLE 是一个 Golang SQL 库，在不脱离 database/sql 的前提下提供行到结构体映射、SQLBuilder、命名参数、事务、schema 自动迁移，以及基于 shardid 的表轮转和数据库分片等能力，通过 Go 驱动可对接 MySQL/PostgreSQL/SQLite 等引擎，适合偏好直接写 SQL 而不想用完整 ORM 的 Go 开发者。",
+   "highlights": [
+    "提供 ORM-like 的行映射与 SQLBuilder、命名参数等查询构建能力",
+    "支持基于 shardid 的表自动轮转与数据库分片",
+    "支持从文件系统或 go embed 发现并执行 SQL 文件迁移"
+   ],
+   "use_cases": [
+    "Go 项目中以 SQL-first 方式访问数据库",
+    "需要按时间轮转表或分片数据库的场景",
+    "用版本化 SQL 文件管理 schema 迁移"
+   ],
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "lines": [
+      20
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "lines": [
+      20
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Go 开发者操作数据库提供的 SQL 包/组件，本身不存业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Works with any database engine(eg MySQL, Postgres, SQLite...etc) by Go-MySQL-Driver",
+     "lines": [
+      20
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Works with any database engine(eg MySQL, Postgres, SQLite...etc) by Go-MySQL-Driver",
+     "lines": [
+      20
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Works with any database engine(eg MySQL, Postgres, SQLite...etc) by Go-MySQL-Driver",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Go 开发者操作数据库提供的 SQL 包/组件，本身不存业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The SQLE package provides extensions to Go’s built-in `database/sql` package for more efficient, comprehensive interactions with databases in Go. The SQLE package is backward-compatible and extendable, so you can easily use it with the database/sql package. ／ The SQLE package also provides functionalities for schema auto migration, logging, contexts, prepared statements, advanced database operations like sharding, and much more. ／ - Works with any database engine(eg MySQL, Postgres, SQLite...etc) by Go-MySQL-Driver",
+   "evidence_lines": [
+    11,
+    15,
+    20
+   ]
+  },
+  "fn": "yaitoo/sqle",
+  "sha": "449247884a03",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b195a441d4b9": {
+  "identity": {
+   "one_liner": "基于 Cloudflare Workers 与 Postgres 的多租户 SaaS 脚手架",
+   "review": "一个多租户 SaaS 起始套件，在单个 Cloudflare Worker 上运行 Hono API、React UI、CLI 与共享 zod 契约，内置租户隔离、认证、后台任务、实时推送、AI 层等模块，供需要搭建内部工具或 B2B 产品的开发者复制改造；数据库层使用 Postgres 17 与 pgvector，部署时可选用 Neon 的 serverless 驱动或经 Hyperdrive 连接其他 Postgres。",
+   "highlights": [
+    "内置多租户隔离：每行携带 tenant_id，另提供可启用的行级安全策略",
+    "AI 层支持 Anthropic、OpenAI 兼容与 Workers AI 提供商，embedding 存入 pgvector 并实现混合检索",
+    "提供 CLI 与编码代理命令（/rf-setup、/rf-adapt、/rf-upgrade）用于初始化、改名与升级套件"
+   ],
+   "use_cases": [
+    "快速搭建多租户内部工具或 B2B SaaS 产品",
+    "构建带检索与对话能力的 AI 应用",
+    "需要租户隔离、角色权限与后台任务的 Cloudflare Workers 项目"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "running as a single Cloudflare Worker over Postgres, with a React UI and a shared contract package ／ toolchain, starts Postgres, migrates, seeds the demo workspace and leaves you signed in, showing one ／ |Database|Postgres 17 + pgvector — Docker locally; deployed, Neon over its serverless driver (a fresh copy's default) or any Postgres through Hyperdrive and `postgres.js` (`DATABASE_DRIVER`, D35); Drizzle, one client per request|",
+     "lines": [
+      10,
+      27,
+      68
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 Postgres 存储数据（Database 层为 Postgres 17 + pgvector），项目是使用数据库的 SaaS 应用而非为数据库服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A multi-tenant SaaS starter kit for Cloudflare Workers — copy it, rename it, ship an internal tool or a B2B product. ／ running as a single Cloudflare Worker over Postgres, with a React UI and a shared contract package ／ |Database|Postgres 17 + pgvector — Docker locally; deployed, Neon over its serverless driver (a fresh copy's default) or any Postgres through Hyperdrive and `postgres.js` (`DATABASE_DRIVER`, D35); Drizzle, one client per request|",
+   "evidence_lines": [
+    5,
+    10,
+    68
+   ]
+  },
+  "fn": "rocketflare-dev/rocketflare",
+  "sha": "b195a441d4b9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

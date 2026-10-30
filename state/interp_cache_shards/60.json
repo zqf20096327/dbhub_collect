@@ -11342,5 +11342,81 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b381ceb9f8cd": {
+  "identity": {
+   "one_liner": "离线优先开源财务软件，复式记账+SQLCipher加密单文件SQLite存储",
+   "review": "一套离线优先的开源财务软件，基于 Vue 3 + NestJS + 加密 SQLite 单文件实现复式记账、票据 OCR 识别、工资报销与财务报表，支持插件化扩展与多公司隔离。面向小微企业主、个体工商户和代理记账公司等需要私有化部署的用户；数据全部落在本机加密库中，需妥善保管 vault.key 密钥文件，当前不含期末结转与完整现金流量表。",
+   "highlights": [
+    "复式记账引擎：借贷强校验、多公司隔离、期初设置、多种财务报表导出 Excel",
+    "SQLite 单文件加密存储（SQLCipher 兼容整库加密），附件 AES-256-GCM 加密，支持一键备份/恢复",
+    "插件化架构：14 个官方插件，内置本地 OCR（PP-OCRv4）、本地语音识别与可选本地大模型的 AI 记账链路"
+   ],
+   "use_cases": [
+    "小微企业/个体工商户的日常记账与财务报表编制",
+    "内网或断网环境下的私有化财务部署",
+    "票据发票的离线 OCR 自动生成凭证"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 数据库：SQLCipher 加密 SQLite 单文件，零配置，支持一键备份/恢复 ／ |**全库加密**|SQLite 驱动为 `better-sqlite3-multiple-ciphers`，以 SQLCipher 兼容模式整库加密（`backend/src/config/database.config.ts`）——拿到 `.db` 文件，没有密钥就无法用任何 SQLite 工具直读| ／ |🔒|**离线私有化**|数据 / 语音 / 大模型三层全离线：加密 SQLite 单文件 + 本地 OCR（PP-OCRv4）+ 本地流式语音识别（sherpa-onnx）+ 可选本地大模型（Ollama / llama.cpp / vLLM），内网/断网环境完整可用|",
+     "lines": [
+      43,
+      65,
+      123
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储账务数据的财务应用本体，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3；官方插件为 Apache-2.0 双许可分发",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "BOKI 是一套**离线优先**的开源财务软件：前端 Vue 3 + 后端 NestJS + SQLCipher 加密单文件数据库，单命令启动，开箱即用。 ／ - 数据库：SQLCipher 加密 SQLite 单文件，零配置，支持一键备份/恢复 ／ |数据库|SQLite（better-sqlite3 驱动，开启 WAL，**SQLCipher 兼容整库加密**）|",
+   "evidence_lines": [
+    29,
+    43,
+    288
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "edrin09/boki",
+  "sha": "b381ceb9f8cd",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

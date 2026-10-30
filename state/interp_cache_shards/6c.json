@@ -11360,5 +11360,138 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "81e34683ea89": {
+  "identity": {
+   "one_liner": "Amazon ElastiCache 的代码示例与教程集合，覆盖 Valkey/Memcached/Redis 用法",
+   "review": "这是 AWS 官方提供的 Amazon ElastiCache 示例与文档仓库，包含博客、实操教程（数据库查询缓存、会话存储、ML 特征库、多租户隔离等）以及 CDK 基础设施即代码示例，面向使用 ElastiCache 部署缓存层的开发者与运维人员。仓库只提供示例与部署脚本，不包含独立可安装的工具。",
+   "highlights": [
+    "提供查询缓存、会话存储、特征库、多租户隔离等教程",
+    "包含 AWS CDK（TypeScript）基础设施即代码部署示例",
+    "覆盖 ElastiCache for Valkey、Memcached 与 Redis OSS 兼容模式"
+   ],
+   "use_cases": [
+    "为关系数据库（如 RDS MySQL）构建查询缓存层",
+    "在 Web 应用中实现分布式会话管理",
+    "用 CloudFormation/CDK 部署 ElastiCache 集群"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- Database Caching - Learn how to create a query cache for a relational database using Amazon ElastiCache with Redis OSS compatibility. In this tutorial, we take you through the process of deploying an Amazon Relational Database Service RDS MySQL database and ",
+     "lines": [
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库为 ElastiCache 缓存服务提供示例代码与部署模板，服务于数据库/缓存生态的使用方",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": true,
+    "of": "MySQL"
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT-0 许可证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Code Samples, tools and documentation for using with Amazon ElastiCache for Valkey, Memcached and Redis OSS. ／ - Database Caching - Learn how to create a query cache for a relational database using Amazon ElastiCache with Redis OSS compatibility. In this tutorial, we take you through the process of deploying an Amazon Relational Database Service RDS MySQL database and integrating an Amazon ElastiCache with Redis OSS compatibility cluster in front of the RDS instance in order to reduce query latency for often run MySQL queries. ／ This library is licensed under the MIT-0 License. See the LICENSE file.",
+   "evidence_lines": [
+    3,
+    13,
+    46
+   ]
+  },
+  "fn": "aws-samples/amazon-elasticache-samples",
+  "sha": "81e34683ea89",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ba68600a9759": {
+  "identity": {
+   "one_liner": "基于 Rust+egui+SQLite 的 Windows 本地桌面记账程序",
+   "review": "OnMuhasebe 是一个在 Windows 上本地运行的预记账（小型财务记账）桌面程序，用 Rust 和 egui 编写，数据全部存储于本地 SQLite 文件，无需网络与服务器。面向需要离线保存发票、库存、往来账目的个人或小企业用户。项目声明代码在人工监督下借助 LLM 开发，当前为早期版本，尚未经历大规模用户 beta 测试。",
+   "highlights": [
+    "数据全部存储于本地 SQLite 文件（通过 rusqlite bundled 内嵌），无服务器/云依赖",
+    "包含往来账户、产品与库存、采购/销售发票、收支、报表等九个功能模块",
+    "记录采用只禁用不删除（pasife alma）方式，库存变动以事务写入并可追踪"
+   ],
+   "use_cases": [
+    "小型企业/个人离线管理发票、往来账与库存",
+    "需要数据长期可读、无云依赖的本地财务记录",
+    "作为 BSD-3-Clause 许可下可 fork 的 Rust+SQLite 桌面应用参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Tüm veriler yerel SQLite dosyasında; sunucu/bulut bağımlılığı yok. ／ - Yedekleme: `.onm-backup` dosyası SQLite veritabanının bayt kopyasıdır; herhangi ／ |Veritabanı|SQLite (`rusqlite` 0.40, `bundled`)|",
+     "lines": [
+      67,
+      71,
+      93
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 SQLite 存储业务数据的桌面记账应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "BSD 3-Clause",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Windows üzerinde **yerel (native) masaüstü uygulaması** olarak çalışan ön muhasebe ／ - Tüm veriler yerel SQLite dosyasında; sunucu/bulut bağımlılığı yok. ／ |Veritabanı|SQLite (`rusqlite` 0.40, `bundled`)|",
+   "evidence_lines": [
+    7,
+    67,
+    93
+   ]
+  },
+  "fn": "furcanomer/OnMuhasebe",
+  "sha": "ba68600a9759",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

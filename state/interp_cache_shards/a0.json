@@ -10717,5 +10717,141 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ef80ac45522a": {
+  "identity": {
+   "one_liner": "Claude Code 本地持久记忆 MCP 服务器，会话完整存入 SQLite 并支持检索",
+   "review": "Longhand 是一个 MCP 服务器与 CLI 工具，把 Claude Code 会话中的工具调用、文件编辑、思考块等原始记录逐字捕获并存入本机 SQLite（配合 ChromaDB 做向量存储），提供 recall/search/timeline 等检索命令，面向使用 Claude Code 的开发者。通过 pip 安装，hooks 自动采集，recall 输出有 token 上限；回填大历史需本地跑嵌入模型，耗时较长。",
+   "highlights": [
+    "将 Claude Code 会话记录逐字存入本地 SQLite，不依赖 API 调用",
+    "提供 recall/search/timeline/file history 等 CLI 与 MCP 工具，支持模糊自然语言跨会话检索",
+    "内置 doctor/reconcile/schedule 等维护命令，并支持 backup/restore 到私有 git 仓库"
+   ],
+   "use_cases": [
+    "为 Claude Code 会话提供跨周的持久历史记忆与检索",
+    "在多项目、多会话场景下回溯此前的修复与决策记录",
+    "在源 JSONL 会话文件被轮转或删除后保留本地存档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **Claude Code quietly rotates your session files after a few weeks.** Longhand captures them into SQLite before they're gone. Once ingested, your history stays forever — even after the source JSONL files are deleted. Install early; the past you don't capture ／ |**Where it lives**|Rented from a model provider|A SQLite file + ChromaDB on your laptop|",
+     "lines": [
+      15,
+      110
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明将 Claude Code 会话数据存入本机 SQLite/ChromaDB，属于使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Persistent local memory for Claude Code.** Every tool call, every file edit, every thinking block from every Claude Code session — stored verbatim on your machine. Searchable, replayable, and recallable by fuzzy natural-language questions. Zero API calls. Zero summaries. Zero decisions made by an AI about what's worth remembering. ／ > **Claude Code quietly rotates your session files after a few weeks.** Longhand captures them into SQLite before they're gone. Once ingested, your history stays forever — even after the source JSONL files are deleted. Install early; the past you don't capture is unrecoverable. ／ pip install longhand",
+   "evidence_lines": [
+    13,
+    15,
+    22
+   ]
+  },
+  "fn": "Wynelson94/longhand",
+  "sha": "ef80ac45522a",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6e1a49d65444": {
+  "identity": {
+   "one_liner": "Splunk 自定义搜索命令，用 AbuseIPDB 做 IP 信誉富集",
+   "review": "一个 Splunk 自定义搜索命令（SPL app），为搜索结果中的 IP 字段附加 AbuseIPDB 信誉情报，内置本地 SQLite 缓存、公网 IP 校验、API 限速与密钥轮换处理。面向 SOC 分析师和安全工程师，用于威胁狩猎、告警分诊与调查工作流。核心实现仅依赖 Python 标准库，SQLite 仅作本地缓存存储而非主数据存储。",
+   "highlights": [
+    "提供 abuseipdb SPL 自定义命令，可在搜索管道中直接富集 IP 信誉字段",
+    "使用本地 SQLite 数据库缓存查询结果以减少重复 API 请求",
+    "校验 IP 地址并排除私有/回环/链路本地等非公网地址的外部查询",
+    "支持可配置的 API 密钥轮换与限速响应处理，返回结构化状态元数据"
+   ],
+   "use_cases": [
+    "SOC 告警分诊与事件响应中为可疑 IP 附加信誉上下文",
+    "威胁狩猎与安全仪表盘中批量富集内外网 IP 字段",
+    "需要在 AbuseIPDB API 配额内复用查询结果的重复调查场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The app combines reputation enrichment with local SQLite caching, public-IP validation, request handling, and structured status fields. This makes it useful as a building block for threat hunting, alert triage, investigation workflows, and security dashboards. ／ ### 2. SQLite caching to reduce redundant API requests ／ The app uses a local SQLite database to cache enrichment results.",
+     "lines": [
+      19,
+      33,
+      37
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是运行在 Splunk 内的富集应用，SQLite 仅作为其本地缓存存储使用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Splunk AbuseIPDB Enrichment** is a custom Splunk search command that enriches IP address fields with reputation intelligence from AbuseIPDB. ／ The app uses a local SQLite database to cache enrichment results. ／ - A Splunk installation that supports the configured custom Python search-command runtime.",
+   "evidence_lines": [
+    13,
+    37,
+    159
+   ]
+  },
+  "fn": "navid-alizadeh-v/splunk-abuseipdb-enrichment",
+  "sha": "6e1a49d65444",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

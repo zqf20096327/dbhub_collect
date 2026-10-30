@@ -11330,5 +11330,289 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "368ca3b1f511": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 逻辑复制的轻量 CDC 库",
+   "review": "go-pq-cdc 是一个用 Go 编写的针对 PostgreSQL 的变更数据捕获（CDC）库，利用逻辑复制和 pgoutput 协议捕获变更，可流转到 Kafka、Elasticsearch 等下游，并提供初始快照、心跳 WAL 保护、TOAST 处理等机制，适合需要实时数据同步或事件驱动架构的开发者使用。",
+   "highlights": [
+    "基于 PostgreSQL 内置逻辑复制能力捕获变更并流式输出到 Kafka、Elasticsearch 等下游系统",
+    "提供快照功能，使用 pg_export_snapshot() 实现初始数据同步，支持分块处理与崩溃恢复",
+    "包含心跳机制以推进复制槽 LSN，缓解低流量库的 WAL 膨胀问题"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 变更实时同步到 Kafka、Elasticsearch、RabbitMQ 等下游系统",
+    "新接入 CDC 时对存量表做一次性快照导出",
+    "低写入流量的 PostgreSQL 实例上通过心跳保护 WAL 保留"
+   ],
+   "use_cases2": null
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "go-pq-cdc is designed to provide efficient and lightweight Change Data Capture (CDC) for PostgreSQL databases. ／ The architecture leverages PostgreSQL's built-in logical replication capabilities to capture changes in the database and",
+     "lines": [
+      3,
+      4
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 PostgreSQL 提供变更数据捕获并对接下游系统，属于服务数据库生态的工具/组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "go-pq-cdc is designed to provide efficient and lightweight Change Data Capture (CDC) for PostgreSQL databases. ／ The architecture leverages PostgreSQL's built-in logical replication capabilities to capture changes in the database and ／ go get github.com/Trendyol/go-pq-cdc",
+   "evidence_lines": [
+    3,
+    4,
+    45
+   ]
+  },
+  "fn": "Trendyol/go-pq-cdc",
+  "sha": "368ca3b1f511",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "07a815e38186": {
+  "identity": {
+   "one_liner": "面向开发者的免费工具清单，按类别收录并自动检查可用性",
+   "review": "收录 55 个提供免费档次的开发工具的清单仓库，覆盖 AI 编码、数据库/后端、云托管、DevOps、安全等类别，并通过 GitHub Actions 每晚自动检查各工具链接的在线状态。给寻找免费工具的开发者作参考目录使用，内容为外部工具链接的汇总，不包含安装或部署方式。",
+   "highlights": [
+    "按类别整理 55 个提供免费档次的开发工具链接",
+    "通过 GitHub Actions 每晚自动检查工具在线状态",
+    "MIT 许可，接受社区 PR 贡献"
+   ],
+   "use_cases": [
+    "查找提供免费档次的开发与数据库工具",
+    "按类别浏览 AI 编码、云托管、监控等工具"
+   ],
+   "eco": "tool",
+   "eco_why": "汇总免费开发工具链接的目录清单，不依赖数据库存数据，为开发者生态提供检索。"
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL and backend services (Auth, Storage, Realtime) ／ Serverless PostgreSQL",
+     "lines": [
+      177,
+      182
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Serverless SQL database built on SQLite with global read replication and native Cloudflare Workers integration ／ Serverless SQLite database with edge replication",
+     "lines": [
+      192,
+      197
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "清单汇总外部工具链接并自动检查可用性，本身不使用数据库存储数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（README 标注 License: MIT）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### Database & Backend ／ > 🎯 **The best free-tier tools collection** for developers and Vibe Coders. Status is automatically checked every night to keep information accurate. ／ - **Status** is automatically checked every night by GitHub Actions.",
+   "evidence_lines": [
+    169,
+    11,
+    417
+   ]
+  },
+  "fn": "pnnnhan99/awesome-free-dev-tools",
+  "sha": "07a815e38186",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "62b93ef372ba": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 的前后端分离 Java Web 快速开发脚手架",
+   "review": "Oryx 是一个基于 Spring Boot、MyBatis、Vue 的前后端分离 Java Web 应用开发脚手架，内置 RBAC 权限控制、用户/角色/菜单管理、JWT、操作日志、文件管理等功能模块。适合中小型项目开发者用作项目起点；README 环境要求 Java 1.8、MySQL 5.7，通过源码克隆方式构建运行。",
+   "highlights": [
+    "内置 RBAC 权限控制模块，含角色、用户、菜单、API 管理",
+    "集成 JWT、数据字典、操作日志、文件管理、定时任务等功能",
+    "采用 Spring Boot + MyBatis + Vue 前后端分离架构"
+   ],
+   "use_cases": [
+    "中小型 Java Web 项目快速开发",
+    "需要 RBAC 权限管理的后台系统开发",
+    "Spring Boot 技术栈学习与开发规范参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|5.7|",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 环境要求表中声明使用 MySQL 5.7 作为运行环境数据库，项目本身是使用数据库的应用框架。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Oryx 是一款基于 Spring Boot 封装前后端分离 Java Web 平台快速开发脚手架，所采用的技术栈包括 Spring Boot、Spring、Spring MVC、MyBatis、Vue 等，遵守阿里巴巴 Java 开发规约，帮助养成良好的编码习惯。整体采用 RBAC （ Role-Based Access Control ，基于角色的访问控制），具有严格的权限控制模块，支持系统与模块分离开发。最后希望这个项目能够对你有所帮助。 ／ |MySQL|5.7| ／ |Spring Boot|2.1.7.RELEASE|",
+   "evidence_lines": [
+    19,
+    30,
+    36
+   ]
+  },
+  "fn": "godcheese/oryx",
+  "sha": "62b93ef372ba",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "541ebc7bcb62": {
+  "identity": {
+   "one_liner": "用 Conn3x/OpenTofu 在自有主机上以 Podman 部署 n8n 的配置模块",
+   "review": "这是一个 Conn3x circuit 模块，通过 Podman 和 systemd（Quadlet）在 Debian/Ubuntu/Fedora/Rocky 主机上自托管 n8n 工作流自动化工具。数据可存 SQLite 或 PostgreSQL，自动生成加密密钥并可选预创建 owner 账户。适合想以声明式方式部署 n8n 且数据留在本机的运维人员；不包含备份、TLS 和队列模式。",
+   "highlights": [
+    "以 Podman 按标签加摘要固定镜像运行 n8n 官方镜像，注册为 systemd 服务",
+    "支持 SQLite（默认）或 PostgreSQL 作为 n8n 数据存储，凭据加密密钥在主机本地生成",
+    "支持通过 public_url 配置反向代理相关环境变量，以及预创建 owner 账户"
+   ],
+   "use_cases": [
+    "在自有主机上自托管 n8n 工作流自动化实例",
+    "以基础设施即代码方式声明并升级 n8n 部署",
+    "将已有 n8n 实例迁移到本模块管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "n8n runs from its official image under Podman as a systemd service, pinned by tag and digest, and listens on `127.0.0.1:5678` for a reverse proxy in front. It keeps its data in SQLite under `/var/lib/n8n` unless you point it at PostgreSQL, such as one from cir ／ ### With PostgreSQL ／ SQLite suits one person or a small team. For more, or for workflows that run often, keep n8n's data in PostgreSQL:",
+     "lines": [
+      5,
+      56,
+      58
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "n8n runs from its official image under Podman as a systemd service, pinned by tag and digest, and listens on `127.0.0.1:5678` for a reverse proxy in front. It keeps its data in SQLite under `/var/lib/n8n` unless you point it at PostgreSQL, such as one from cir ／ SQLite suits one person or a small team. For more, or for workflows that run often, keep n8n's data in PostgreSQL: ／ Switching an existing instance from SQLite to PostgreSQL doesn't move its data. n8n starts on the empty database as a new instance. Export your workflows and credentials first with `n8n export:workflow` and `n8n export:credentials`, inside the container.",
+     "lines": [
+      5,
+      58,
+      69
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是部署 n8n 应用的配置模块，n8n 使用 SQLite/PostgreSQL 存自身数据，数据库仅被使用而非被服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Conn3x circuit that runs n8n, the workflow automation tool, on your own hosts. You wire up webhooks, schedules and a few hundred services in its editor, and the workflows, the credentials they use and every execution stay on a machine you run. ／ n8n runs from its official image under Podman as a systemd service, pinned by tag and digest, and listens on `127.0.0.1:5678` for a reverse proxy in front. It keeps its data in SQLite under `/var/lib/n8n` unless you point it at PostgreSQL, such as one from circuit-postgres. If you give it an owner, the first apply creates that account for you, so nobody else can claim the instance before you open it. It runs on Debian, Ubuntu, Fedora and Rocky Linux. ／ 4. Through circuit-podman v0.1.0, installs Podman and runs `ghcr.io/n8n-io/n8n:VERSION@DIGEST` as `n8n.service`: a Quadlet unit on the host network that reads `keys.env`, mounts `/var/lib/n8n` as `/home/node/.n8n`, and carries the settings below. `postgres_password` and `environment` go to `/etc/containers/env/n8n.env`, mode `0600`, written from ephemeral values so they never reach the plan or state.",
+   "evidence_lines": [
+    3,
+    5,
+    100
+   ]
+  },
+  "fn": "conn3xorg/circuit-n8n",
+  "sha": "541ebc7bcb62",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

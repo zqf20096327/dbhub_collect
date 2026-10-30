@@ -11989,5 +11989,76 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e1ab6525abcd": {
+  "identity": {
+   "one_liner": "自托管 Telegram 个人 AI 助手，用 PostgreSQL 存储记忆",
+   "review": "一个自托管的 Telegram 聊天机器人，所有数据存于用户自己的 PostgreSQL（16+pgvector），支持长期记忆（显式记忆永久保留、随口提及按衰减淘汰）、pgvector 语义检索加知识图谱查询、多级权限，运行时配置也放在数据库表中并通过对话修改；聊天模型接 Anthropic/OpenAI/Gemini 等，嵌入与评估器可由本地 Ollama 承担。适合想在私有服务器上运行个人助手的用户，需 Python 3.11+、Docker 与 Telegram bot token。",
+   "highlights": [
+    "基于 pgvector HNSW 的语义检索与知识图谱实体关系遍历实现记忆召回",
+    "运行时身份、规则与配置存于 PostgreSQL 表中，通过对话修改",
+    "三级记忆过滤（规则→本地 LLM 评估器→相似度去重）与衰减机制"
+   ],
+   "use_cases": [
+    "在自有服务器上运行带长期记忆的 Telegram 个人助手",
+    "家庭/多用户场景下的分级权限记忆管理",
+    "本地 Ollama 降低成本的私有化 LLM 助手部署"
+   ],
+   "install": [
+    "source"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Self-hosted personal AI on Telegram. Runs on your own server, stores everything in your own PostgreSQL. Explicit facts you ask it to remember are kept forever; casual mentions decay if unused. Zero-cost floor with local Ollama for memory + evaluation; bring a  ／ - **Runtime configuration in PostgreSQL** — no `SOUL.md` or `CONFIG.yaml`. Identity, behavior, rules, and config all live in tables, changeable through conversation. ／ |**Docker**|Required — PostgreSQL 16 + pgvector runs in Docker|",
+     "lines": [
+      5,
+      16,
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据全部存储在用户自己的 PostgreSQL 中，是使用数据库的应用而非服务数据库生态的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted personal AI on Telegram. Runs on your own server, stores everything in your own PostgreSQL. Explicit facts you ask it to remember are kept forever; casual mentions decay if unused. Zero-cost floor with local Ollama for memory + evaluation; bring a paid API key or use your existing Claude / ChatGPT subscription via OAuth for the chat model. ／ |**Docker**|Required — PostgreSQL 16 + pgvector runs in Docker|",
+   "evidence_lines": [
+    5,
+    43
+   ]
+  },
+  "fn": "riyogarta/syne",
+  "sha": "e1ab6525abcd",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9904,5 +9904,246 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d47f951a360d": {
+  "identity": {
+   "one_liner": "HashiCorp Vault 与 12factor/Django 集成的凭证辅助库",
+   "review": "这是一个 Python 库，提供将 HashiCorp Vault 集成到 Python 项目和 Django 的辅助类：通过环境变量配置 Vault 认证（Token、AppID、AppRole、SSL 客户端），并从 Vault 动态获取和自动续期数据库凭证。面向使用 Django 且通过 Vault 分发数据库凭证的开发者，通过 Django App 打补丁实现数据库连接失败后凭新凭证重连。README 声明 API 仍可能变更。",
+   "highlights": [
+    "支持 Token、AppID、AppRole、SSL 客户端等多种 Vault 认证方式，可全部经由环境变量配置",
+    "提供 VaultCredentialProvider 管理 Vault 数据库凭证的租约与续期",
+    "提供 vault12factor Django App，自动打补丁以在凭证刷新后重试数据库连接"
+   ],
+   "use_cases": [
+    "在 Django 项目中通过 Vault 动态签发并自动轮换数据库凭证",
+    "以 12factor 方式用环境变量向 Python 应用分发 Vault 认证配置",
+    "配合 django-postgresql-setrole 在连接后执行 SET ROLE"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "DATABASE_OWNERROLE The PostgreSQL role to use for ``SET ROLE`` after ／ database credentials. When using PostgreSQL you will also want to look at",
+     "lines": [
+      42,
+      73
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "'ENGINE': 'django.db.backends.sqlite3',",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为应用与 Vault 之间的数据库凭证分发提供集成组件，而非自身使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "BSD 三条款许可证（基于 README 版权与再分发条款）",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This project provides helper classes for integrating ／ as needed (e.g. database credentials managed by one of Vault's *secrets* ／ Integrating with Django requires a small monkeypatch that retries failed",
+   "evidence_lines": [
+    3,
+    51,
+    58
+   ]
+  },
+  "fn": "jdelic/12factor-vault",
+  "sha": "d47f951a360d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "58c77d5549ad": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的 MCP 工具服务器，单二进制捆绑 40 个工具",
+   "review": "agent-tool 是一个 MCP 工具服务器，为 Claude Code、Cursor、Codex 等 AI 编码代理提供编码感知的文件读写、二进制静态分析与反编译、DAP 调试器、SSH/SFTP、进程管理以及 MySQL/Redis 查询等 40 个工具，通过 profile 机制按需暴露 schema 以控制上下文体积。适合需要在代理中集成系统级与数据库操作能力的开发者；二进制分析等功能平台相关，vsdbg 受 VS Code 许可限制。",
+   "highlights": [
+    "提供 40 个工具，含编码感知文件编辑、静态二进制分析/反编译、DAP 调试、SSH/SFTP、MySQL 与 Redis 查询",
+    "通过 profile（core/core-lite/coding/remote/analysis/full）按需暴露工具 schema，并支持按操作粒度加载",
+    "默认启用 ECH 与 DoH，大文本响应默认截断为 32K 字符并提供分页游标"
+   ],
+   "use_cases": [
+    "让 AI 编码代理直接执行 SQL 查询、SSH 命令与文件操作",
+    "对 PE/ELF/Mach-O 二进制做静态分析、反编译与调试的逆向工程场景",
+    "处理 EUC-KR、Shift-JIS、GB18030 等非 UTF-8 编码的遗留代码库编辑"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**MySQL**|Execute SQL queries on MySQL/MariaDB. Table-formatted SELECT results with configurable row/column/cell/total-output limits; affected rows for DML. Use SQL LIMIT/OFFSET for paging|✅| ／ |`allow_mysql_private`|Allow mysql tool to access private IPs|`true`|",
+     "lines": [
+      80,
+      470
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**MySQL**|Execute SQL queries on MySQL/MariaDB. Table-formatted SELECT results with configurable row/column/cell/total-output limits; affected rows for DML. Use SQL LIMIT/OFFSET for paging|✅|",
+     "lines": [
+      80
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "The existing `analyze` tool can save user comments and labels in SQLite with",
+     "lines": [
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI 编码代理提供包含 MySQL/Redis 查询在内的通用工具集，属于服务数据库使用场景的工具组件而非以数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MCP (Model Context Protocol) tool server for AI coding agents. ／ - **Too many separate tools**: Making the agent find, install, and configure Redis CLI, MySQL client, SSH client, etc. is tedious and error-prone. agent-tool bundles 40 tools into one binary and exposes them on demand through compact profiles. ／ |**MySQL**|Execute SQL queries on MySQL/MariaDB. Table-formatted SELECT results with configurable row/column/cell/total-output limits; affected rows for DML. Use SQL LIMIT/OFFSET for paging|✅|",
+   "evidence_lines": [
+    9,
+    17,
+    80
+   ]
+  },
+  "fn": "knewstimek/agent-tool",
+  "sha": "58c77d5549ad",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9f4d186052ae": {
+  "identity": {
+   "one_liner": "PostgreSQL 19 的向量化查询规划器与执行器扩展",
+   "review": "pg_vexec 以 PGXS 扩展形式为 PostgreSQL 19 提供向量化执行器，通过 planner hooks 以列式批处理替代逐行执行，支持 Arrow 批格式、Arrow Flight SQL 端点及 pgvector/PostGIS 内核包，并与 ORCA 优化器协同。面向需要在 PostgreSQL 上运行向量化计划的开发者与数据库工程师；需 PostgreSQL 19，且 GPU 部分不在当前分支。",
+   "highlights": [
+    "提供向量算子（VecScan、VecAgg、VecHashJoin、VecSort 等）与基于代价的向量规划器，未计算的路径回退到 PostgreSQL 原生表达式求值",
+    "支持 PostgreSQL 与 Apache Arrow 两种批存储格式，并通过 Arrow Flight SQL 端点读写 Arrow 数据",
+    "提供 vexec_pgvector、vexec_postgis 内核包扩展，使相应函数可对批数据执行"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 19 上以列式批处理方式执行分析型查询",
+    "通过 Arrow Flight SQL 向客户端返回 Arrow 格式查询结果",
+    "在 pgvector、PostGIS 函数上运行向量化批处理"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "pg_vexec is a vectorized query planner and executor for PostgreSQL 19. It is ／ built as extensions on the hooks PostgreSQL already has, with no fork and no",
+     "lines": [
+      3,
+      4
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "planner (the capability oracle, the vector cost model, the reasons and",
+     "lines": [
+      27
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "its engine library, the core of ClickHouse compiled from its sources in a stage",
+     "lines": [
+      183
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目以扩展形式增强 PostgreSQL 的规划与执行能力，为数据库本体服务的组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pg_vexec is a vectorized query planner and executor for PostgreSQL 19. It is ／ built as extensions on the hooks PostgreSQL already has, with no fork and no ／ |`modules/vexec/`|the module, built by PGXS against vanilla PostgreSQL 19 or the port's server|",
+   "evidence_lines": [
+    3,
+    4,
+    93
+   ]
+  },
+  "fn": "igor-suhorukov/pg_vexec",
+  "sha": "9f4d186052ae",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

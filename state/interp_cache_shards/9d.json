@@ -11592,5 +11592,215 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "89e8b0faed53": {
+  "identity": {
+   "one_liner": "本地 Rust 搜索引擎与 MCP server，索引代码文档日志供 AI agent 检索",
+   "review": "XERJ 是一个面向 AI agent 的本地搜索引擎和 MCP server，单个 Rust 静态二进制可自动索引代码、文档、日志、JSONL/CSV/PDF 及 SQLite 文件，提供 BM25 全文、向量与混合检索、代码搜索和 agent 长期记忆（/_memory 命名空间），并暴露 Elasticsearch 兼容 API。主要用途是参考编码、RAG 问答与安全审计，面向使用 Claude Code、Cursor 等 MCP 客户端的开发者。",
+   "highlights": [
+    "单个 Rust 静态二进制，提供 BM25 全文、向量与混合搜索及代码符号搜索",
+    "提供 Elasticsearch 兼容 API 与 MCP server，可通过任意 ES 客户端或 MCP 客户端查询",
+    "autoindex 可自动识别并索引文件夹中的多种格式（代码、文档、日志、JSONL/CSV/PDF、SQLite）"
+   ],
+   "use_cases": [
+    "AI agent 参考编码：索引相近开源仓库，编码前检索既有实现",
+    "代码库问答与 RAG：带 file:line 引用的段落级检索",
+    "agent 长期记忆：通过 /_memory 命名空间跨会话存取知识"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "know a corpus instead of grepping it. One command indexes code, docs, logs, PDFs, SQLite and ／ instead of as flat text. CSV, JSON, JSONL, XML, YAML, SQLite, PDF, DOCX, PowerPoint",
+     "lines": [
+      129,
+      270
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目是面向 AI agent 的搜索引擎，README 仅提及可索引 SQLite 文件，未表明其为数据库生态服务的工具或依赖某库存数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，附带提交 field report 的社区机制（CLA 豁免）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Local-first search engine and MCP server for AI agents.** One Rust binary indexes code, docs, ／ know a corpus instead of grepping it. One command indexes code, docs, logs, PDFs, SQLite and ／ machine runs the same binary. It speaks the Elasticsearch API, so existing",
+   "evidence_lines": [
+    5,
+    129,
+    224
+   ]
+  },
+  "fn": "xerj-org/xerj",
+  "sha": "89e8b0faed53",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e57cc7298ef3": {
+  "identity": {
+   "one_liner": "AI 编码代理本地消息系统，经 MCP、Unix socket 与 SQLite 代理互联",
+   "review": "pairtask 将 Codex、Claude、Pi 等 AI 编码代理置于同一工作区，通过 MCP 服务器、Unix socket 和 SQLite 消息代理实现代理间直接通信与任务协作，提供统一操作员聊天、仪表盘、容器沙箱与跨机配对。面向同时使用多个 AI 编码代理的开发者，消息需确认送达并支持持久化；运行依赖 macOS/Linux 上的 Incus/Colima 容器环境。",
+   "highlights": [
+    "提供 MCP 服务器与 Unix socket 连接的消息代理，消息待确认、可跨重启存活",
+    "支持在容器沙箱中运行代理，代理间可分组房间通信",
+    "提供终端仪表盘、跨机配对与 /review 拉取请求审查命令"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理协同完成编码与代码审查",
+    "通过统一聊天入口指挥和监控一组代理",
+    "在两台机器的工作区之间配对共享代理消息"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Codex, Claude and the read-only dashboard in workspace connect through a shared Unix socket to the broker and SQLite in secured.",
+     "lines": [
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为消息代理的存储，属于使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 或 Apache 2.0 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🤝 **Agents that pair up**: Codex, Claude and Pi share one workspace and talk to each other directly. Run several of each and group them in rooms. ／ Agents and the dashboard run in **workspace**; the message broker and its ／ Codex, Claude and the read-only dashboard in workspace connect through a shared Unix socket to the broker and SQLite in secured.",
+   "evidence_lines": [
+    14,
+    138,
+    142
+   ]
+  },
+  "fn": "pairtask/pairtask",
+  "sha": "e57cc7298ef3",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0006135b6ec6": {
+  "identity": {
+   "one_liner": "自托管团队协作工作区，用 SQLite 存储全部数据",
+   "review": "DevDash 把一台 Linux 服务器变成团队与其 AI 代理的共享工作区，包含 Claude Code 会话、任务板、文件、终端、服务管理和原生客户端。服务器端用 Node 24 与内置 node:sqlite，将账号、会话、任务、文件等数据存于 SQLite，通过部署脚本安装，仅支持非商业许可。",
+   "highlights": [
+    "服务器端使用 Node 内置 node:sqlite 存储账号、会话、项目、任务、通知等数据",
+    "通过 Claude Agent SDK 与 MCP 工具让代理读写任务和笔记",
+    "以 deploy 脚本在 Ubuntu 24.04 上自托管安装，配置项包括数据目录等环境变量"
+   ],
+   "use_cases": [
+    "小团队在自有服务器上运行 Claude Code 会话协作开发",
+    "通过任务板、笔记和 MCP 工具让人与代理共享工作上下文",
+    "在同一服务器上管理成员服务、构建和夜间备份"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **`devdash-server`** holds accounts, sessions, projects, tasks, notes, files, notifications and deploys in SQLite. It",
+     "lines": [
+      101
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 devdash-server 将账号、会话、任务等数据存储于 SQLite，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial（非商业许可）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **`devdash-server`** holds accounts, sessions, projects, tasks, notes, files, notifications and deploys in SQLite. It ／ |Server|Node 24, Hono, built-in `node:sqlite`, TypeScript run directly by Node|`apps/server`| ／ |`DEVDASH_DATA_DIR`|*(required)*|Where the SQLite database and uploads live.|",
+   "evidence_lines": [
+    101,
+    110,
+    178
+   ]
+  },
+  "fn": "abdvlrqhman/DevDash-AgenticOS",
+  "sha": "0006135b6ec6",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

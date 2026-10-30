@@ -11320,5 +11320,71 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3d9b78c508d3": {
+  "identity": {
+   "one_liner": "基于 Next.js + Prisma + SQLite 的图文教程发布平台",
+   "review": "一个用 Next.js、Prisma 7 和 SQLite 构建的图文教程网站系统，含前台阅读、Tiptap 富文本后台、分类管理与 SEO 功能。面向需要自托管教程/博客站点的个人用户，提供 PM2 部署脚本、一键 Git 更新、TOTP 两步验证、登录限流及 SQLite 在线备份脚本等运维能力。",
+   "highlights": [
+    "使用 Prisma ORM + SQLite 单文件数据库，通过 npm run backup 在线备份并 gzip 压缩保留多份",
+    "提供 deploy.sh 一键部署与基于 Git 分支检测的后台一键更新流程（含数据库迁移与回滚）",
+    "内置会话管理、TOTP 两步验证、登录限流、安全日志与上传文件校验"
+   ],
+   "use_cases": [
+    "自托管个人图文教程或博客站点",
+    "需要富文本编辑与分类树管理的内容发布",
+    "单服务器 Node.js + PM2 环境下部署并需要自动更新与备份的站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "基于 Next.js 16.4（App Router + webpack）、React 19、Tailwind CSS v4、Prisma 7 + SQLite 的图文教程平台。 ／ **2. 定期异地备份。** `npm run backup` 会在线备份 SQLite 到 `backups/`（gzip 压缩，默认保留 14 份，`BACKUP_DIR` / `BACKUP_KEEP` 可调）。建议加入 crontab，并把备份和上传目录同步到另一台机器或对象存储：",
+     "lines": [
+      3,
+      141
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 SQLite 通过 Prisma 存储数据的教程网站应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "基于 Next.js 16.4（App Router + webpack）、React 19、Tailwind CSS v4、Prisma 7 + SQLite 的图文教程平台。 ／ DATABASE_URL=\"file:./prisma/dev.db\" ／ **2. 定期异地备份。** `npm run backup` 会在线备份 SQLite 到 `backups/`（gzip 压缩，默认保留 14 份，`BACKUP_DIR` / `BACKUP_KEEP` 可调）。建议加入 crontab，并把备份和上传目录同步到另一台机器或对象存储：",
+   "evidence_lines": [
+    3,
+    58,
+    141
+   ]
+  },
+  "fn": "vow132/tutorial-site",
+  "sha": "3d9b78c508d3",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

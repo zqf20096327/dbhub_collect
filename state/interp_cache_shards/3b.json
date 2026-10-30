@@ -10712,5 +10712,83 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c9c9d1c5c634": {
+  "identity": {
+   "one_liner": "生成 Postgres-only Go API 服务的 CLI 脚手架，带可注册代码的生成器",
+   "review": "Bogie 是一个 Go CLI，用 rails new 风格的生成器创建仅提供 API、仅支持 Postgres 的 Go 服务，组合 Gin、sqlc、goose、River 和 Kamal 等既有组件，并生成后自动完成代码注册。生成代码不依赖 Bogie 本身。适合希望预置技术选型、围绕 Rails 应用补充 Go API 服务的团队；当前明确不支持 SQLite，仅支持 Postgres。",
+   "highlights": [
+    "提供 new/g/d/doctor 等命令，生成器写入文件并自动完成注册，可整体销毁",
+    "生成应用内含迁移、加密凭据、bin/ci 流水线、Dockerfile 与 Kamal 2 部署配置",
+    "仅适配 Postgres，组合 Gin、sqlc、goose、River 等固定技术栈"
+   ],
+   "use_cases": [
+    "为 Rails 应用旁边补充一个 API-only 的 Go 服务",
+    "需要生成器自动注册代码、避免手工接线的 Go 项目启动",
+    "基于 Postgres 队列（River）的背景任务服务脚手架"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A CLI that scaffolds an API-only, Postgres-only Go service",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite is deliberately out until River's SQLite driver is stable",
+     "lines": [
+      201
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Postgres 服务生成应用代码的脚手架工具，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A CLI that scaffolds an API-only, Postgres-only Go service ／ out of Gin, sqlc, goose, River and Kamal, with generators that also wire the code in. ／ - **Not configurable (yet).** Postgres only, Gin only, one choice per concern.",
+   "evidence_lines": [
+    6,
+    7,
+    200
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "bogie-go/bogie",
+  "sha": "c9c9d1c5c634",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

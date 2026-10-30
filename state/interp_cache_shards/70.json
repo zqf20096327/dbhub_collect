@@ -11201,5 +11201,148 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3c13334f4421": {
+  "identity": {
+   "one_liner": "PostgreSQL 监控与事件调查工具，只读采集",
+   "review": "LockLens 是面向 PostgreSQL 的开源监控与事件调查工具，为 DBA/运维团队提供实例仪表盘、慢查询、阻塞链、事件记录与索引优化建议。通过只读角色采集 pg_stat_statements、pg_blocking_pids 等数据，自身历史存储在独立 PostgreSQL/TimescaleDB 中；支持 PostgreSQL 14–18，提供 Docker 镜像、CLI 与源码构建方式。",
+   "highlights": [
+    "支持会话、事务、复制、WAL、慢查询、阻塞链等采集与仪表盘，监控 PostgreSQL 14–18",
+    "以只读角色连接，不取消查询、不终止会话、不执行 DDL/DML",
+    "提供 CLI（doctor/inspect/watch/snapshot）与 Slack、webhook、邮件事件通知"
+   ],
+   "use_cases": [
+    "PostgreSQL 实例集群的日常监控与性能观测",
+    "锁等待与阻塞事件的调查与证据留存",
+    "索引缺失等优化建议的只读分析"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Open-source PostgreSQL monitoring and incident investigation.** ／ PostgreSQL 14–18 ／ Monitored servers need PostgreSQL 14 or later and a login role with",
+     "lines": [
+      3,
+      11,
+      130
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明其为监控 PostgreSQL 数据库的工具，仅以只读角色连接被监控库，自身历史存于独立 PostgreSQL/TimescaleDB。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（L12）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Open-source PostgreSQL monitoring and incident investigation.** ／ - **Observe-only by design.** LockLens connects with a read-only role. It ／ Monitored servers need PostgreSQL 14 or later and a login role with",
+   "evidence_lines": [
+    3,
+    29,
+    130
+   ]
+  },
+  "fn": "Huy-8bit/locklens",
+  "sha": "3c13334f4421",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8b153a823c45": {
+  "identity": {
+   "one_liner": "基于 Java/Spring Boot 与 AgentScope 的企业 Agent 运行时，含 MCP、A2A 与 RAG",
+   "review": "一个用 Java 17 和 AgentScope 构建的企业级 Agent 运行时平台，提供异步任务执行、MCP 工具管理、A2A 远程委托、自建知识库（OceanBase 向量检索）与 RAGFlow 双引擎、Docker 沙箱及飞书 Wiki 同步，面向需要在企业内运行带租户隔离、OIDC 认证和审计能力的 Agent 应用的团队；仅提供 SSE 与 API，不带管理前端。",
+   "highlights": [
+    "支持 MCP 工具的安装、卸载、服务端授权检查与 A2A 0.3.0 远程委托",
+    "提供自建知识库（OceanBase VECTOR 检索、文档 ACL）与 RAGFlow 双知识引擎",
+    "实现租户隔离、OIDC/JWT、资源权限、审计与 Docker 沙箱执行（无网络、非 root、资源限制）"
+   ],
+   "use_cases": [
+    "在企业内部署带认证授权与租户隔离的 Agent 服务",
+    "结合飞书 Wiki 与知识库实现带来源引用和权限复核的知识问答",
+    "通过 Docker 沙箱安全执行模型生成的命令"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "|自建知识库|切块、批量 Embedding、OceanBase VECTOR 检索、来源引用、文档 ACL| ／ 本机 Docker 建议至少分配 8 GB 内存。RAGFlow 使用独立 Elasticsearch；自建检索链路使用 OceanBase。 ／ 自建引擎使用 OceanBase 原生 cosine_distance 精确搜索；可在验证过滤条件和召回后再扩展 ANN。",
+     "lines": [
+      14,
+      38,
+      206
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该运行时使用 OceanBase 存储向量数据并作为其知识库检索链路的后端，OceanBase 是其依赖的存储组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "基于 **Java 17 / Spring Boot 3.5.7 / AgentScope Java 2.0.4** 的企业 Agent Runtime。 ／ |自建知识库|切块、批量 Embedding、OceanBase VECTOR 检索、来源引用、文档 ACL| ／ 自建引擎使用 OceanBase 原生 cosine_distance 精确搜索；可在验证过滤条件和召回后再扩展 ANN。",
+   "evidence_lines": [
+    3,
+    14,
+    206
+   ]
+  },
+  "fn": "Francistonia/enterprise-agent-runtime-java",
+  "sha": "8b153a823c45",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

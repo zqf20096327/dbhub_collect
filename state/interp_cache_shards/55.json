@@ -12169,5 +12169,71 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7c1fa0858502": {
+  "identity": {
+   "one_liner": "Dokku 的官方 ClickHouse 服务插件",
+   "review": "这是 Dokku PaaS 的 ClickHouse 官方插件，用于在 Dokku 主机上以 Docker/Compose 方式创建、管理和销毁 ClickHouse 服务实例，支持应用链接、端口暴露、备份到 S3（含定时备份、加密、GPG）等。面向使用 Dokku 部署应用并需要 ClickHouse 数据服务的运维人员。要求 dokku 0.35.x+，默认使用 clickhouse/clickhouse-server 26.10.3.7 镜像。",
+   "highlights": [
+    "提供 clickhouse:create/destroy/info/expose/backup 等命令管理 ClickHouse 服务全生命周期",
+    "支持将服务备份到 S3 兼容存储，含定时计划、加密与 IAM 认证选项",
+    "支持 docker 与 compose 两种执行后端，可自定义镜像、版本、网络、卷与资源限制"
+   ],
+   "use_cases": [
+    "在 Dokku PaaS 上为应用提供托管的 ClickHouse 服务实例",
+    "对 ClickHouse 服务执行定时 S3 备份与恢复管理",
+    "为应用链接（link）ClickHouse 服务并注入 DSN 环境变量"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "# dokku clickhouse Build Status IRC Network ／ Official clickhouse plugin for dokku. Currently defaults to installing clickhouse/clickhouse-server 26.10.3.7. ／ sudo dokku plugin:install https://github.com/dokku/dokku-clickhouse.git --name clickhouse",
+     "lines": [
+      1,
+      3,
+      16
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该插件为 Dokku 平台管理 ClickHouse 服务实例，属于为数据库生态服务的工具组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "ClickHouse"
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Official clickhouse plugin for dokku. Currently defaults to installing clickhouse/clickhouse-server 26.10.3.7. ／ sudo dokku plugin:install https://github.com/dokku/dokku-clickhouse.git --name clickhouse",
+   "evidence_lines": [
+    3,
+    16
+   ]
+  },
+  "fn": "dokku/dokku-clickhouse",
+  "sha": "7c1fa0858502",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

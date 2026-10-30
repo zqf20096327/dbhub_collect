@@ -9774,5 +9774,146 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "82b0c81a3d95": {
+  "identity": {
+   "one_liner": "面向 PostgreSQL 的桌面 IDE，可将 SQL 文件转为监控/面板工具",
+   "review": "PlumeSQL 是一款仅支持 PostgreSQL 的桌面 IDE，提供编辑器补全、重构建议、可编辑结果网格、EXPLAIN 可视化等功能，并支持用 SQL 文件加注释声明生成小型工具（如锁监控、图表）。应用本体闭源、免费、无需账号，扩展与规范为 MIT。适合需要深度使用 PostgreSQL 的开发与运维人员，当前仍处 beta 阶段。",
+   "highlights": [
+    "基于 PostgreSQL 自身解析器、目录与会话实现补全和重构，内含三十余项语句重写功能",
+    "SQL 文件可通过 @connection/@readonly/@inputs 等注释声明连接、权限与视图，变成可分发的工具脚本",
+    "提供扩展市场，包含锁、vacuum、复制等 200 多个扩展，以及 PostGIS、pgvector、TimescaleDB 相关扩展"
+   ],
+   "use_cases": [
+    "PostgreSQL 开发与调优：编写查询、分析执行计划、使用索引与重构建议",
+    "生产环境只读巡检：通过 @readonly 与 Production 连接保护写入操作",
+    "为团队制作基于 SQL 的小型监控面板或数据工具"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> Turn SQL into tools: a desktop IDE for PostgreSQL, where a SQL file ／ - It's all in on PostgreSQL and nothing else, so it can use everything ／ them really well. PlumeSQL only does PostgreSQL, and goes deep on it.",
+     "lines": [
+      3,
+      55,
+      83
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "options `postgres_fdw`, `file_fdw` and `mysql_fdw` take.",
+     "lines": [
+      287
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接并管理 PostgreSQL 的桌面 IDE 工具，而非用数据库存自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "应用本体闭源，仓库内扩展与规范为 MIT",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Turn SQL into tools: a desktop IDE for PostgreSQL, where a SQL file ／ **Free, no account, for macOS, Windows and Linux.** The app is closed ／ them really well. PlumeSQL only does PostgreSQL, and goes deep on it.",
+   "evidence_lines": [
+    3,
+    47,
+    83
+   ]
+  },
+  "fn": "hercstack/plumesql",
+  "sha": "82b0c81a3d95",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2a183f3c71f8": {
+  "identity": {
+   "one_liner": "DuckDB 文件系统扩展，经 HTTP 读写 TiDB Filesystem 上的分析文件",
+   "review": "这是一个 C++ 编写的 DuckDB 文件系统扩展，让 DuckDB CLI 直接通过 TiDB Filesystem 的 HTTP 数据面读取和写入 Parquet、CSV、JSON 等分析文件，并实验性支持在原有存储上运行 DuckDB 原生数据库模式（含 WAL 与 checkpoint）。面向需要在 DuckDB 中直接访问该文件系统、无需 Python/FUSE 的开发者；构建需匹配的 DuckDB 版本，目前仓库已归档，开发迁移至 drive9-ai/duckdb。",
+   "highlights": [
+    "支持读取与写入 Parquet、CSV、JSON，含 glob/Hive 分区裁剪与分区 COPY、APPEND、OVERWRITE",
+    "实验性原生数据库模式 tidbfs+db:///，在现有 extent 存储上运行 DuckDB 存储引擎、WAL、checkpoint 与恢复",
+    "以 C++ 扩展形式在 DuckDB CLI 内运行，不依赖 Python、fsspec 或 FUSE"
+   ],
+   "use_cases": [
+    "在 DuckDB 中直接查询 TiDB Filesystem 上的远程分析文件而无需下载整个文件",
+    "通过 EXPORT/IMPORT DATABASE 在本地 DuckDB 与远程文件之间搬运数据",
+    "多客户端经共享存储上的 DuckDB 数据库文件协作（配合 Quack 扩展）"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "TiDB Filesystem HTTP data plane, with experimental native `.duckdb` storage. It works in the DuckDB CLI and does not require ／ blob bytes from TiDB while size and revision come from the same SQL statement.",
+     "lines": [
+      11,
+      213
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 DuckDB 提供文件系统/存储能力的扩展组件，服务于数据库生态而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "discontinued",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`tidbfs` is a C++ DuckDB filesystem extension for reading and writing analytics files over the ／ TiDB Filesystem HTTP data plane, with experimental native `.duckdb` storage. It works in the DuckDB CLI and does not require ／ `tidbfs+db:///warehouse.duckdb` runs DuckDB's storage engine on the existing",
+   "evidence_lines": [
+    10,
+    11,
+    112
+   ]
+  },
+  "fn": "siddontang/duckdb-tidbfs",
+  "sha": "2a183f3c71f8",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

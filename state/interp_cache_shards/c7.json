@@ -9878,5 +9878,148 @@
   "generated_at": "2026-10-30",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "f36b75e380a2": {
+  "identity": {
+   "one_liner": "面向 VC/PE 的投后管理工作台，React 前端 + PostgreSQL 存储",
+   "review": "一个为投资机构提供的开源投后管理平台，包含项目总览、财务看板、合规待办及 Excel 导入与 DOCX 报告导出功能。前端基于 React + Vite + Ant Design，数据存于腾讯云 CloudBase 的 PostgreSQL（10 张业务表 + RLS 行级安全），并依赖 CloudBase 认证与云函数；README 提供了切换到 Supabase 等后端的适配说明。",
+   "highlights": [
+    "支持项目总览看板、项目详情、财务看板与合规待办管理",
+    "支持 Excel 多 Sheet 批量导入和 DOCX 报告导出",
+    "后端使用 CloudBase PostgreSQL，含 10 张业务表与 RLS 行级安全策略，并提供演示模式无需后端运行"
+   ],
+   "use_cases": [
+    "VC/PE 团队的投资项目组合与财务数据管理",
+    "投后合规待办跟踪与团队共享",
+    "财务数据填报与 Word 报告导出"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "1. 开通 腾讯云 CloudBase，创建环境（选择 PostgreSQL 数据库） ／ - **CloudBase PostgreSQL**（10 张业务表 + RLS 行级安全）",
+     "lines": [
+      74,
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统将业务数据存于 CloudBase PostgreSQL，是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "一个面向投资机构的投后管理平台，覆盖项目总览、项目详情、财务看板、合规待办、报告导出等核心场景。 ／ 1. 开通 腾讯云 CloudBase，创建环境（选择 PostgreSQL 数据库） ／ - **CloudBase PostgreSQL**（10 张业务表 + RLS 行级安全）",
+   "evidence_lines": [
+    5,
+    74,
+    130
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Oliveluo666/post-investment-platform",
+  "sha": "f36b75e380a2",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "07cc5d67629b": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的站点检索引擎，按 agentic readiness 评分排序",
+   "review": "一个面向 AI Agent 的搜索引擎，对站点按 llms.txt、OpenAPI、ai-plugin、MCP 等信号打分排序，支持 8000+ 已索引站点，提供 MCP server、REST API 与网页界面。供 AI Agent 开发者发现可被机器调用的站点/工具，也可用于检测自己站点的 agentic 友好度。技术栈为 Go 单二进制加 Postgres，部署在 Fly.io，MIT 许可。",
+   "highlights": [
+    "提供 MCP server 与 REST API 两种检索方式，包含 search、verify_mcp 等工具",
+    "按 7 项 agentic 信号（llms.txt/OpenAPI/MCP 等）对站点评分，满分 100",
+    "通过每日重爬与每周自动发现流水线持续更新索引"
+   ],
+   "use_cases": [
+    "AI Agent 发现可调用的站点与 MCP server",
+    "开发者检测自己站点的 agentic readiness 评分",
+    "通过 HTTP API 集成检索能力到其他工具"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Go 1.25 + Postgres on Fly.io (sjc)",
+     "lines": [
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明技术栈为 Go + Postgres on Fly.io，Postgres 是该搜索应用的存储组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Search engine for AI agents.** Indexes sites ranked by *agentic readiness* — llms.txt, OpenAPI, ai-plugin, MCP servers, and structured APIs. ／ - Go 1.25 + Postgres on Fly.io (sjc)",
+   "evidence_lines": [
+    5,
+    54
+   ]
+  },
+  "fn": "unitedideas/nothumansearch",
+  "sha": "07cc5d67629b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

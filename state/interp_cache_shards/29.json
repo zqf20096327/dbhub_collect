@@ -11274,5 +11274,131 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "17f4282c26c6": {
+  "identity": {
+   "one_liner": "Java/Spring Boot 实现的 Twitter 克隆社交网络后端 API",
+   "review": "这是一个名为 Moo 的 Twitter 克隆社交网络后端服务，基于 Java 25 与 Spring Boot 构建，通过 Spring Data JPA 支持 MySQL/H2 存储数据，提供 REST API、JWT 认证、OpenAPI 文档和 Docker 部署方式。适合希望学习或运行一个社交后端示例的开发者使用，采用 AGPL v3 许可。",
+   "highlights": [
+    "提供社交网络后端 REST API，基于 Spring Boot 与 Spring Data JPA 实现",
+    "支持 MySQL/H2 存储、JWT 认证与 OpenAPI 3 文档",
+    "提供 Docker Compose 一键启动与多架构镜像（amd64/arm64）"
+   ],
+   "use_cases": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Spring Data JPA** with MySQL/H2 support.",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是通过 Spring Data JPA 使用 MySQL/H2 存储数据的社交应用后端，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Spring Data JPA** with MySQL/H2 support. ／ 2. `docker compose up -d`",
+   "evidence_lines": [
+    21,
+    43
+   ]
+  },
+  "fn": "ohbus/twitter-backend-java",
+  "sha": "17f4282c26c6",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ec7d113581e5": {
+  "identity": {
+   "one_liner": "将 Teams/Outlook/OneNote 缓存采集为本地可搜索归档的 CLI 工具",
+   "review": "m365crawl 是一个 Go 编写的命令行工具，读取本机已登录 Teams、Outlook 桌面应用的缓存，将聊天、邮件、日历、OneNote 笔记等同步进本地归档（以 SQLite 存储，支持全文检索和 SQL 查询），供 AI agent 离线检索使用。提供 brew 和 Windows 二进制安装，只读不写源应用，需 macOS 全盘访问权限。",
+   "highlights": [
+    "读取桌面应用缓存生成本地归档，查询走 SQLite 全文检索或 SQL",
+    "提供 agent 可用的机器可读命令契约与 skill 工作流指南",
+    "仅离线读归档，不向源应用写入；会议转录需显式通过自有浏览器获取"
+   ],
+   "use_cases": [
+    "为 AI agent 提供本地化的 M365 会话与邮件检索上下文",
+    "会议准备：汇总议程、参会人、会议聊天与相关邮件",
+    "保留被应用缓存淘汰的历史消息，标记 evicted 状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Query locally.** Search and recall read SQLite, with full-text search or plain SQL, instead of making a service request for each question. Explicit transcript fetch and sign-in use the tool-owned browser; desktop-app and browser access can still be governe",
+     "lines": [
+      93
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明搜索与召回通过读取 SQLite 归档实现，SQLite 是该工具自身存数据的方式",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Query locally.** Search and recall read SQLite, with full-text search or plain SQL, instead of making a service request for each question. Explicit transcript fetch and sign-in use the tool-owned browser; desktop-app and browser access can still be governed by your organization's policies. ／ `m365crawl` gives your agent one local, searchable archive of **Teams chats and channels**, **Outlook mail**, **meetings with their recaps and action items**, and **OneNote indexed notes**, plus inspectable **native Outlook people observations**. It captures what your signed-in desktop apps already cached, preserves history you synced, and returns focused results with IDs, links and coverage notes. Your agent can follow the work without opening every app or loading whole conversations into its context.",
+   "evidence_lines": [
+    93,
+    14
+   ]
+  },
+  "fn": "ourostack/m365crawl",
+  "sha": "ec7d113581e5",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

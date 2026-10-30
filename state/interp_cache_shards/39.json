@@ -10909,5 +10909,73 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d661d059fa8d": {
+  "identity": {
+   "one_liner": "本地优先的周时间线任务管理器，支持离线与自托管同步",
+   "review": "一款离线优先、自托管的个人任务管理应用，核心是可视化周时间线规划，提供项目、循环任务、Stash 焦点列表和 Vim 风格快捷键。客户端含 Web、PWA 与桌面端，通过 Docker 一条命令自托管同步服务器；默认用 SQLite 存数据，可选 Turso Cloud 或 tursod。适合重视数据自有、离线可用的个人用户。",
+   "highlights": [
+    "提供浏览器端本地数据库，支持离线读写与多设备实时同步",
+    "支持一条 Docker 命令自托管，默认使用 SQLite 存储，可选用 Turso Cloud 或 tursod",
+    "提供 HTTP API、Todoist 导入、TickTick CSV 导入与 Vim 键位操作"
+   ],
+   "use_cases": [
+    "个人周计划与任务时间线管理",
+    "无网络环境下的离线任务记录与同步",
+    "自托管替代第三方云任务应用以自行持有数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Own the data.** Self-host the sync server with Docker, store data in SQLite, and avoid handing your task history to a third-party task app. ／ I will also keep the self-hosted infrastructure as simple as I can. The standard setup will use SQLite and a directory for uploaded attachments. It will not require Redis, an external database service, or S3. ／ The Docker server hosts the web app, stores server-side data under `/var/lib/will-be-done`, and syncs browser, PWA, and desktop clients. SQLite is the default; the API can optionally use Turso Cloud or the local Rust tursod service. See the API database config",
+     "lines": [
+      23,
+      40,
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 SQLite 存储自身数据的任务管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**An offline-first, self-hosted task planner built around a visual weekly timeline.** ／ - **Own the data.** Self-host the sync server with Docker, store data in SQLite, and avoid handing your task history to a third-party task app. ／ The Docker server hosts the web app, stores server-side data under `/var/lib/will-be-done`, and syncs browser, PWA, and desktop clients. SQLite is the default; the API can optionally use Turso Cloud or the local Rust tursod service. See the API database configuration for setup instructions.",
+   "evidence_lines": [
+    3,
+    23,
+    85
+   ]
+  },
+  "fn": "will-be-done/will-be-done",
+  "sha": "d661d059fa8d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

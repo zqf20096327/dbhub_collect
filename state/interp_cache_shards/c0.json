@@ -12402,5 +12402,203 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ebd975407d8f": {
+  "identity": {
+   "one_liner": "基于 Postgres 的开源后端即服务平台，内置 AI 网关与 MCP 服务器",
+   "review": "Butterbase 提供一个以 Postgres 为数据平面的后端即服务运行时，包含每应用独立数据库、RLS、自动 REST、函数、存储、实时订阅、LLM 网关、RAG 与内置 MCP 服务器，面向使用 AI 构建应用的开发者。可 Docker Compose 自托管，schema 需手动执行迁移，托管版功能更全。",
+   "highlights": [
+    "每个应用分配独立 Postgres 数据库，支持声明式 schema、迁移、行级安全与自动生成 REST 接口",
+    "内置 AI 网关、RAG、代理工作流与 MCP 服务器，通过 MCP 工具暴露全部平台能力",
+    "支持 Docker Compose 单命令自托管，运行时数据平面完整开源（Apache 2.0）"
+   ],
+   "use_cases": [
+    "为 AI 应用搭建自托管后端（认证、存储、函数、实时）",
+    "通过 MCP 让 AI 代理操作后端数据与功能",
+    "基于 RAG 构建文档问答与客服代理类应用"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres ／ - **Real Postgres underneath.** Every app gets its own Postgres database with declarative schema, migrations, row-level security, and auto-generated REST. No proprietary datastore, no lock-in. ／ - **Postgres data plane** — per-app databases with declarative schema (`/schema`), automatic REST endpoints (`/auto-api`), and migrations.",
+     "lines": [
+      12,
+      28,
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目以 Postgres 为底座为应用开发者提供后端服务运行时，是为数据库生态服务的平台组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag",
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0，运行时数据平面完整开源；托管版相关代码在私有仓库",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Butterbase gives you the building blocks for AI-driven applications without lock-in: a Postgres-backed backend with row-level security, serverless functions, an LLM gateway, realtime subscriptions, key-value store, file storage, RAG, durable per-key actors, and a built-in **Model Context Protocol (MCP) server** so agents can operate your backend with tools instead of glue code. ／ - **Real Postgres underneath.** Every app gets its own Postgres database with declarative schema, migrations, row-level security, and auto-generated REST. No proprietary datastore, no lock-in. ／ - **Postgres data plane** — per-app databases with declarative schema (`/schema`), automatic REST endpoints (`/auto-api`), and migrations.",
+   "evidence_lines": [
+    24,
+    28,
+    36
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "butterbase-ai/butterbase",
+  "sha": "ebd975407d8f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "87e54d039b6f": {
+  "identity": {
+   "one_liner": "3D打印耗材线轴管理Web应用，用Flask+SQLite实现库存称重与标签打印",
+   "review": "这是一个自托管的3D打印线轴/耗材管理Web应用，供个人或团队记录线轴、称重去皮、打印带二维码的60×40mm标签并查看库存报表。技术栈为Flask+SQLite(WAL)+Bootstrap，提供称重API、Home Assistant集成、每日自动备份和TOTP双因素认证，部署面向Proxmox LXC。",
+   "highlights": [
+    "支持浏览器端通过 Web Bluetooth 直连 Niimbot 打印机打印标签，并内置 QR 扫描器",
+    "提供 POST /api/weigh 称重 API 和 Home Assistant 只读库存 API，按集成管理独立 API key",
+    "支持每日自动备份（7天轮换）、按需备份/恢复及多语言界面（PT/EN/ES）"
+   ],
+   "use_cases": [
+    "管理3D打印耗材线轴库存并跟踪余量",
+    "为线轴生成/打印二维码热敏标签",
+    "与自动称重站或 Home Assistant 集成同步库存数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Database|SQLite (WAL mode)|",
+     "lines": [
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其为管理3D打印耗材的Web应用，使用 SQLite 作为自身数据存储（L55），不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Web app for managing 3D-printing filaments. ／ |Database|SQLite (WAL mode)| ／ ### Automatic install (recommended)",
+   "evidence_lines": [
+    3,
+    55,
+    133
+   ]
+  },
+  "fn": "iscarelli/spool-control",
+  "sha": "87e54d039b6f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "06e8e8f49fda": {
+  "identity": {
+   "one_liner": "Rust 库，读写 Pioneer DJ Rekordbox 本地与导出数据",
+   "review": "rbox 是一个用 Rust 编写的库，用于读取和写入 Rekordbox 的多种数据文件，包括 v6/v7 master.db、One Library/Device Library 导出库、ANLZ 分析文件、My-Setting 设置和 XML 数据库，并提供 Python 与 JavaScript 绑定。适合需要编程访问 Rekordbox 曲库数据的开发者；README 说明项目仍处于早期阶段，API 可能变化，且尚未支持音频分析生成与 Pro DJ Link。",
+   "highlights": [
+    "通过类型安全 ORM 查询和更新 Rekordbox v6/v7 master.db",
+    "读写 One Library、DeviceSql (.pdb)、ANLZ、My-Setting 及 XML 数据库文件",
+    "提供 Rust 核心、Python（PyPI/pyo3）和 JavaScript（npm/napi-rs）三种语言绑定"
+   ],
+   "use_cases": [
+    "在不打开 Rekordbox 的情况下创建或更新设备导出库（.pdb / One Library）",
+    "读取或修改波形、beat grid、热歌单点等分析文件数据",
+    "在 Python 或 Node.js/Electron 应用中集成访问 Rekordbox 曲库数据"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "它是操作 Rekordbox（DJ 软件）数据格式的通用库，未声明服务于候选清单中的任何数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**rbox** is a Rust library for seamlessly interacting with Pioneer DJ's Rekordbox local and export data. ／ - **Rekordbox database**: Query and update the Rekordbox v6/v7 master.db database through a type-safe ORM ／ > This project is still being actively developed and is in early stages, so expect some rough edges,",
+   "evidence_lines": [
+    14,
+    18,
+    35
+   ]
+  },
+  "fn": "dylanljones/rbox",
+  "sha": "06e8e8f49fda",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

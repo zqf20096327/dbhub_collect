@@ -8566,5 +8566,72 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4acbb40d4e32": {
+  "identity": {
+   "one_liner": "Claude Code 本地记忆插件，用 SQLite 存储可检索的工作历史",
+   "review": "这是一个 Claude Code 插件，将过去的聊天、提交、PR 和笔记脱敏后写入本地 SQLite 存储，提供 memory_search/why/tried/asof 等七个工具和若干钩子，供 Claude 按日期、链接和全文检索历史；记忆以 Markdown vault 形式导出，可配合 Obsidian 使用，数据全部留在本机。适合使用 Claude Code 进行开发并需要回溯项目决策与死胡同记录的个人或团队。",
+   "highlights": [
+    "提供七个 memory_* 工具与自动钩子，按全文、日期和链接检索本地历史记录",
+    "写入前对 AWS、GitHub、Stripe 等多种密钥格式做掩码处理，搜索与工具调用零网络请求",
+    "记忆导出为纯 Markdown vault，可在任意编辑器或 Obsidian 中查看",
+    "支持团队共享模式，经自托管团队服务器二次掩码后同步"
+   ],
+   "use_cases": [
+    "回溯项目中某个设计决策的原因及其对应提交",
+    "在开启新会话或压缩上下文后恢复之前的工作状态",
+    "将项目历史笔记纳入 Obsidian vault 并建立反向链接"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Three sources settle into one SQLite store on your disk. Search runs on full text, dates and links, with no model in the way, so an answer comes back in milliseconds and costs nothing. Claude drills in with seven tools, and a few quiet hooks bring records up o",
+     "lines": [
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 SQLite 作为其本地数据存储（三个来源汇入一个 SQLite store），属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Thenwise is a Claude Code plugin that gives Claude a local memory of your past chats, commits, pull requests and notes.** Install it in two lines: ／ Three sources settle into one SQLite store on your disk. Search runs on full text, dates and links, with no model in the way, so an answer comes back in milliseconds and costs nothing. Claude drills in with seven tools, and a few quiet hooks bring records up on their own when the moment calls for it.",
+   "evidence_lines": [
+    17,
+    88
+   ]
+  },
+  "fn": "dheerajponnaganti/thenwise",
+  "sha": "4acbb40d4e32",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

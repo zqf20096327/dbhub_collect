@@ -11900,5 +11900,161 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "027075ea561d": {
+  "identity": {
+   "one_liner": "单二进制自托管文档归档系统，SQLite+内容寻址存储",
+   "review": "Suchi 是一个自托管文档管理系统，以单个 Go 二进制运行，用 SQLite 存元数据、SHA-256 内容寻址存储保存原件，提供 OCR、全文搜索、编号分类归档、IMAP/移动端摄入及可选本地模型分类。面向个人、家庭及小型团队的文件归档场景；版本尚早（v0.4.1），README 提醒需备份数据并阅读数据库兼容策略。",
+   "highlights": [
+    "支持 OCR、全文搜索、缩略图、条码、加密 PDF 及多种文档格式摄入",
+    "以 SQLite 元数据加 SHA-256 内容寻址存储实现原件不可变保存，并提供备份与恢复工具",
+    "支持浏览器、监视文件夹、IMAP 邮箱和移动应用多途径采集，自动化规则可结合可选的本地或 OpenAI 兼容模型"
+   ],
+   "use_cases": [
+    "个人或家庭扫描件、账单、邮件附件的自动分类归档",
+    "自由职业者与小型团队的文档索引与全文检索",
+    "通过 IMAP 或移动端持续采集并建立物理档案编号体系"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **One binary.** Go, SQLite and files on disk. No Postgres, Redis, queue or ／ Suchi combines SQLite, content-addressed storage, a Svelte interface, and a ／ immutably by SHA-256; SQLite metadata and the API—not the content store—enforce",
+     "lines": [
+      28,
+      53,
+      55
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **One binary.** Go, SQLite and files on disk. No Postgres, Redis, queue or",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "Suchi 是使用 SQLite 存储自身文档元数据的应用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，README 末尾提及双许可",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A self-hosted document archive that files itself. ／ Suchi combines SQLite, content-addressed storage, a Svelte interface, and a ／ scoped HTTP API in one static Go binary. Original and derived bytes are stored",
+   "evidence_lines": [
+    5,
+    53,
+    54
+   ]
+  },
+  "fn": "johnnybravo-xyz/suchi",
+  "sha": "027075ea561d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9b15bba49a93": {
+  "identity": {
+   "one_liner": "本地优先的 agent 记忆 MCP 服务器，用单个 SQLite 文件跨工具共享",
+   "review": "这是一个 MCP 服务器，为 Claude Code、Cursor、Windsurf、Codex、Gemini CLI 等 AI 编码代理提供跨会话的持久记忆：决策以 anchor 形式声明，编辑前重新注入，并提供漂移检测（drift_status）与产品地图 CLI。所有数据存于一个本地 SQLite 文件，MIT 许可、无需账号或云端，适合需要多代理共享项目决策记录的开发者。",
+   "highlights": [
+    "通过 MCP 协议在多个 AI 编码代理间共享同一份本地 SQLite 记忆文件",
+    "提供决策锚点声明与漂移检测，编辑前警告或阻断与已记录决策冲突的操作",
+    "包含 map CLI，基于 map.yaml 以 file:line 证据检测文档与代码漂移"
+   ],
+   "use_cases": [
+    "在 Claude Code / Cursor / Codex 等工具间跨会话保留项目决策与教训",
+    "检测代码实现是否偏离已记录的设计决策（如弃用 vector search 后误装 pgvector）",
+    "并行管理多个项目时查看哪些项目偏离了目标状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Most teams make decisions, then forget them. The agent from last week decided \"we'll use FTS5 instead of vector search\" — but this week a new session installs `pgvector` without knowing why that was rejected. **That's drift.** Not a bug. Not malice. Just forgo",
+     "lines": [
+      131
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Underneath: **drift detection** across every project you run in parallel — which ones quietly left their goal (🔴), which were checked and hold (🔵), which nobody has looked at yet (⚫). One local SQLite file that **Claude Code, Cursor, Windsurf, OpenAI Codex a ／ One SQLite file. Claude Code, Cursor, Windsurf, OpenAI Codex and Gemini CLI all read and write the same memory — a decision made in one shows up in the others.",
+     "lines": [
+      7,
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该 MCP 记忆工具的本地存储文件使用，并非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（README L48 提及，npm 徽章显示 license）",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Underneath: **drift detection** across every project you run in parallel — which ones quietly left their goal (🔴), which were checked and hold (🔵), which nobody has looked at yet (⚫). One local SQLite file that **Claude Code, Cursor, Windsurf, OpenAI Codex and Gemini CLI** all read. Nothing leaves your machine. ／ One SQLite file. Claude Code, Cursor, Windsurf, OpenAI Codex and Gemini CLI all read and write the same memory — a decision made in one shows up in the others.",
+   "evidence_lines": [
+    7,
+    36
+   ]
+  },
+  "fn": "michielinksee/linksee-memory",
+  "sha": "9b15bba49a93",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

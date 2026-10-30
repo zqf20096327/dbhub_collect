@@ -11610,5 +11610,83 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "58bf4365fd82": {
+  "identity": {
+   "one_liner": "自托管 AI 品牌可见度追踪平台，单二进制+SQLite 存储",
+   "review": "一个用 Go 编写的自托管工具，用于追踪 ChatGPT、Claude、Perplexity、Gemini 等 AI 引擎对品牌的提及与引用，面向品牌方与营销人员。它将提示发送到各引擎，以文本匹配方式统计可见度、声量份额与引用分类，数据存于本地 SQLite 文件，并内置 MCP server 供 AI 助手读取数据。当前为 pre-release，11 个 provider 中 6 个已实现，仅支持 macOS/Linux。",
+   "highlights": [
+    "单二进制运行，首次启动自动创建并迁移 SQLite 数据库，内嵌 dashboard",
+    "内置 MCP server（stdio 与 streamable HTTP），提供 14 个读取工具",
+    "支持 JSON/CSV 全量导出，以及一键升级到 Limelit Cloud"
+   ],
+   "use_cases": [
+    "追踪品牌在各大 AI 引擎回答中的提及率与排名",
+    "分析 AI 回答引用来源的类型构成与竞争对手对比",
+    "通过 MCP 让 AI 助手以自然语言查询可见度数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "own SQLite database on first start and serves the dashboard at",
+     "lines": [
+      55
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **One binary.** No Docker, no Node, no Postgres. It creates and migrates its ／ |**Single binary, SQLite**: no cgo, no Docker requirement, no Postgres|**working**|",
+     "lines": [
+      54,
+      163
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储自身的提示、答案与指标数据，数据库仅为应用的数据存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "open-core：Apache 2.0 开源版，配套 Limelit Cloud 托管产品",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " own SQLite database on first start and serves the dashboard at ／ - **Your infrastructure.** Prompts, competitors and every answer live in a ／ mkdir -p ~/limelit && cd ~/limelit",
+   "evidence_lines": [
+    55,
+    132,
+    173
+   ]
+  },
+  "fn": "limelit-co/open",
+  "sha": "58bf4365fd82",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10438,5 +10438,83 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7db1c4a09127": {
+  "identity": {
+   "one_liner": "自托管的个人 AI agent，对话存储在自己的 Postgres/PGlite",
+   "review": "OpenMuse Standalone 是 CopilotKit OpenMuse 的 fork，把原本存在托管服务 CopilotKit Intelligence 的聊天层改到自建 Postgres 或内嵌 PGlite，由自身服务器以 SSE 流式返回回复。面向想自托管个人 AI agent 的开发者；当前为 v0.1.0 alpha，本地模式不支持跨设备实时线程同步，且云上对话不会自动迁移。",
+   "highlights": [
+    "对话、线程列表与聊天记录存储在自建 Postgres 或默认内嵌的 PGlite",
+    "无 CopilotKit Intelligence key 时可本地运行，回复由自身服务器经 SSE 流式输出",
+    "支持崩溃后的回复恢复（PGlite 启动即恢复；Postgres 锁过期后约 30-45 秒恢复）及按 CHAT_RETENTION_DAYS 过期历史"
+   ],
+   "use_cases": [
+    "自托管个人 AI agent，将对话数据保存在自己的数据库",
+    "需要脱离托管聊天服务、无 key 本地运行的 OpenMuse 场景",
+    "基于自身服务器 SSE 流式回复的 agent 部署"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Self-hosted OpenMuse: a personal AI agent whose conversations live in your own Postgres, not a hosted chat cloud.** ／ *个人 AI agent 的独立版：对话存在你自己的 Postgres 里，不依赖托管聊天云。* ／ - Conversations, thread lists and the main chat are stored in your own Postgres (embedded PGlite by default).",
+     "lines": [
+      3,
+      5,
+      35
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 Postgres/PGlite 存储对话数据的 AI agent 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**In one line:** a fork of CopilotKit's OpenMuse that stores every conversation in your own Postgres (embedded PGlite by default), streams replies over SSE from your own server, and runs without a CopilotKit Intelligence key. ／ - Conversations, thread lists and the main chat are stored in your own Postgres (embedded PGlite by default). ／ |Where conversations are stored|CopilotKit Intelligence (hosted)|Your own Postgres or embedded PGlite (no key). With `CPK_INTELLIGENCE_API_KEY` set: Intelligence, as upstream|",
+   "evidence_lines": [
+    19,
+    35,
+    50
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "caspianchan31/openmuse-standalone",
+  "sha": "7db1c4a09127",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

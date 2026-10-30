@@ -9008,5 +9008,75 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "df4ad9244276": {
+  "identity": {
+   "one_liner": "基于 Next.js、Prisma 与 SQLite 的本地微型电商演示项目",
+   "review": "一个可本地运行的中文微型电商，提供商城、购物车、订单、模拟支付与管理后台，数据存于 SQLite 单实例文件，通过 Prisma 做迁移与访问。面向本地演示与教学场景，使用 Server Actions 读写数据，不提供公共 REST API，首版不含真实支付、部署与售后等功能。",
+   "highlights": [
+    "包含响应式商城、账号、购物车、订单履约和管理后台",
+    "下单在事务内校验并扣减库存，支持幂等与整单回滚",
+    "提供业务集成测试与 Playwright 浏览器测试脚本"
+   ],
+   "use_cases": [
+    "本地演示电商业务流程",
+    "学习 Next.js + Prisma + SQLite 项目结构",
+    "作为订单、库存、事务规则的教学参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Prisma **5.22.0** 与 SQLite（Node.js runtime） ／ `db:setup` 会生成 Prisma Client、应用迁移并初始化演示数据。再次执行不会重置已有账号密码、库存、商品编辑或订单。开发数据库在 `prisma/dev.db`，默认配置为 `DATABASE_URL=\"file:./dev.db\"`，路径相对于 Prisma schema。SQLite 文件和 `.env` 已忽略，不应提交。 ／ 不提供公共 REST API；服务端组件读取数据，Server Actions 提交变更。本地 SQLite 使用单实例文件，不适用于无持久化文件系统的托管环境。",
+     "lines": [
+      8,
+      30,
+      75
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明本项目是使用 SQLite 存储数据的电商应用，SQLite 为其内置数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "一个可以本地运行的中文微型电商，包含响应式商城、用户账号、购物车、地址簿、模拟支付、订单履约和管理后台。商品使用项目内置 SVG 插画，无需图片服务。 ／ - Prisma **5.22.0** 与 SQLite（Node.js runtime） ／ 不提供公共 REST API；服务端组件读取数据，Server Actions 提交变更。本地 SQLite 使用单实例文件，不适用于无持久化文件系统的托管环境。",
+   "evidence_lines": [
+    3,
+    8,
+    75
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "OolongMint/MINI_mall",
+  "sha": "df4ad9244276",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

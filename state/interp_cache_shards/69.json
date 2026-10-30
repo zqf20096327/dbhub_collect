@@ -11319,5 +11319,212 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4ef88952f71b": {
+  "identity": {
+   "one_liner": "自托管 YouTube 播放列表与频道同步下载器",
+   "review": "Yarrtube 是一个基于 yt-dlp 的自托管服务，追踪指定的 YouTube 公开播放列表和频道，发布新视频时自动下载到本地磁盘，提供网页端观看并支持 Plex、Kodi、Jellyfin 集成。面向在 NAS 上运行媒体栈的自托管用户，通过 Docker 部署运行。",
+   "highlights": [
+    "追踪 YouTube 公开播放列表和频道并自动下载新视频",
+    "提供网页端观看界面，支持桌面和移动端",
+    "支持 Plex、Kodi、Jellyfin 集成及分类智能播放列表"
+   ],
+   "use_cases": [
+    "在 NAS 上自动镜像关注的 YouTube 频道到本地媒体库",
+    "为 Plex/Kodi/Jellyfin 生成自动更新的播放列表",
+    "家庭环境中无广告地观看指定频道内容"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该服务下载 YouTube 视频并自带存储，数据库仅作为其内部数据存储使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Yarrtube is a self-hosted service that watches tracked YouTube playlists and channels and automatically downloads new videos as they're published. ／ Yarrtube is designed to run on your NAS via Docker alongside the rest of your media stack (Plex, Jellyfin, etc.), but it runs on any laptop too.",
+   "evidence_lines": [
+    21,
+    23
+   ]
+  },
+  "fn": "sergigp/yarrtube",
+  "sha": "4ef88952f71b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ff33c6c14074": {
+  "identity": {
+   "one_liner": "开发者个人 GitHub 主页 README，展示技术栈与项目",
+   "review": "这是开发者 cheehwatang 的个人 GitHub Profile 仓库，内容为 README 介绍页：列出所学技术栈（Ruby、Java、Rails、React、Node.js 等）、个人项目 SoundState 和 Github Readme Daily Quotes，以及社区徽章组件的致谢来源。其中 PostgreSQL 和 SQLite 仅作为其技术栈图标条目及 SoundState 项目技术标签出现，属于使用层面的提及，与数据库生态工具无关。",
+   "highlights": [
+    "展示个人技术栈、学习动态与项目列表",
+    "集成 Snake 动画、贡献图、streak 统计等社区 README 组件"
+   ],
+   "use_cases": [
+    "个人 GitHub 主页展示",
+    "开发者自我介绍页参考"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "eco": "app",
+   "eco_why": "README 中 PostgreSQL/SQLite 仅作为个人技术栈与项目所用技术的标签出现，属于使用数据库的应用展示页",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL ／  PostgreSQL",
+     "lines": [
+      169,
+      300
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite",
+     "lines": [
+      176
+     ]
+    }
+   ],
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " PostgreSQL ／  SQLite ／  PostgreSQL",
+   "evidence_lines": [
+    169,
+    176,
+    300
+   ]
+  },
+  "fn": "cheehwatang/cheehwatang",
+  "sha": "ff33c6c14074",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6a4fb9103a3d": {
+  "identity": {
+   "one_liner": "基于 SQLite 的按主题单库数据层，供 AI 代理经 MCP 或命令行读写",
+   "review": "BaguetteDB（bdb）把每个主题做成一个独立的加密 SQLite 文件，AI 代理通过 MCP（stdio 或 HTTP）或命令行工具查询、修改数据，支持公式、技能说明、变更日志与撤销重做，并带邀请共享和 Web 界面。适合个人或小团队让代理协作管理结构化数据；需注意服务模式默认明文 HTTP，需自行加 TLS 代理。",
+   "highlights": [
+    "每个 bdb 为一个独立加密 SQLite 文件（SQLCipher），存储于 ~/.baguettedb",
+    "代理可经 MCP（stdio 或 Streamable HTTP）或命令行执行 SQL 查询、schema 变更，全部变更可记录并撤销/重做",
+    "支持公式（带参数的命名 SQL）、技能说明、按 owner/editor/viewer 角色邀请共享，并内置 Web 应用"
+   ],
+   "use_cases": [
+    "为 AI 代理（如 Claude Code、Codex）提供带 guardrails 的结构化数据存储",
+    "按主题管理个人数据，如看板、购物清单、健身记录",
+    "多账户本地使用或经 bdb serve 提供带 token 的多用户访问"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A **bdb** (short for *baguettedb*) is a small SQLite database about one thing: your groceries, your workouts, a kanban ／ SQLite file per bdb, the instance store with the accounts and memberships, and the `kek` file that unlocks every bdb.",
+     "lines": [
+      14,
+      105
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该仓库本身是一个数据库产品（以 SQLite 为存储引擎），既非服务既有数据库生态的工具，也非仅使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "fair source，采用 Functional Source License（FSL-1.1-ALv2）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A **bdb** (short for *baguettedb*) is a small SQLite database about one thing: your groceries, your workouts, a kanban ／ Everything is in `~/.baguettedb` (`--data-dir` or `BAGUETTEDB_DATA_DIR` choose another directory): one encrypted ／ BaguetteDB is fair source under the Functional Source License (`FSL-1.1-ALv2`): use, modify and",
+   "evidence_lines": [
+    14,
+    104,
+    140
+   ]
+  },
+  "fn": "alexandremgo/baguettedb",
+  "sha": "6a4fb9103a3d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

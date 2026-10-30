@@ -9691,5 +9691,75 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bcd34a25567f": {
+  "identity": {
+   "one_liner": "自托管的多智能体软件工厂，用 SQLite 存储目标与裁决状态",
+   "review": "Hivemill 是一个自托管的多智能体开发编排工具，通过 boss/director/coder/reviewer/QA/judge 等固定角色，将用户目标转化为带审查、测试与裁决合并门的 pull request。所有目标、任务、消息与裁决以 SQLite 行存储并附追加式事件日志。面向想在单机上让 Claude Code 智能体按流程协作并强制角色分离的开发者。",
+   "highlights": [
+    "固定角色与权限钩子，写代码的智能体不能审查、测试或合并",
+    "裁决合并门：reviewer 与 QA 通过后 judge 才合并 PR",
+    "目标、任务、消息、裁决以 SQLite 行存储并配追加式事件日志，每分钟导出 markdown"
+   ],
+   "use_cases": [
+    "在单台机器上用 Claude Code 智能体协作生成带审查的 PR",
+    "需要独立审查与测试门禁的自动化代码交付流程",
+    "通过只读 Web UI 观察目标、任务与智能体吞吐"
+   ],
+   "use_cases_pad": true
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One source of truth Goals, tasks, messages and verdicts are rows in SQLite with an append-only log. ／ - **Everything auditable.** Goals, plans, tasks, messages, verdicts and decisions are rows in SQLite with an append-only event log, exported to readable markdown every minute. ／ |State and audit|The chat transcript|Whatever you wrote down|Goals, tasks, messages and verdicts in SQLite with an append-only event log (db-layout)|",
+     "lines": [
+      34,
+      102,
+      151
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库用 SQLite 存储自身的目标、任务、消息与裁决状态，SQLite 是其内部数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " One source of truth Goals, tasks, messages and verdicts are rows in SQLite with an append-only log. ／ You describe what you want built to one boss agent. A director staffs a team, and a chain of coders, QA, reviewers and a judge ships it as pull requests. The agent that writes a change never reviews, tests or merges it. Hivemill's CLI is `factory`. ／ - It is built for a single box, not a cluster. State is one SQLite file.",
+   "evidence_lines": [
+    34,
+    28,
+    206
+   ]
+  },
+  "fn": "volekerb/hivemill",
+  "sha": "bcd34a25567f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

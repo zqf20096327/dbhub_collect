@@ -10873,5 +10873,146 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d5771f6cd74d": {
+  "identity": {
+   "one_liner": "面向 MCP 代理的持久记忆层，基于 SQLite/JSON KV 后端",
+   "review": "Soul 是一个 MCP 服务器（npm 包 n2-soul），为 AI 代理提供检查点、工作记录、共享交接和学习报告的本地持久化与恢复，供使用 MCP 客户端的多代理使用者部署。数据可存于 JSON 或 SQLite（经 sql.js/better-sqlite3）后端，需 Node.js 20.19+，以身份/项目为作用域组织，不负责模型上下文本身。",
+   "highlights": [
+    "提供 MCP 工具集：n2_boot/n2_work_* 工作流、n2_kv_* 检查点、n2_mimir_* 学习与复习工具",
+    "支持 json/sqlite 两种 KV 后端，以及 n2_kv_backup/restore 的检查点备份与恢复",
+    "提供可选 lifecycle 命令处理 SessionStart/Stop/PreCompact 等宿主事件并生成交接摘要"
+   ],
+   "use_cases": [
+    "为 MCP 代理在重启/会话中断后恢复检查点与未完成工作",
+    "多代理协作中共享工作看板、实体记忆与交接记录",
+    "对代理经验进行带证据审查的课程沉淀与召回"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Use Node.js 22 or 24 LTS and an MCP client supporting local stdio servers. The runtime requires Node.js 20.19 or newer. Mimir uses `better-sqlite3`; platforms without a matching prebuilt binary need a native build toolchain. ／ Environment: `N2_DATA_DIR`, `N2_AGENT_NAME`, `N2_KV_BACKEND` (`json`/`sqlite`), `N2_TIMEZONE`, `N2_LANG`, `N2_LOG_LEVEL`. Lifecycle also uses `N2_PROJECT` and optional `N2_TRANSCRIPT_ROOT`. ／ JSON is the default checkpoint backend; SQLite uses `sql.js`. Optional embeddings require a separately configured local endpoint and are off by default. Scoped MCP recall uses deterministic lexical matching, not a semantic-only fallback.",
+     "lines": [
+      13,
+      97,
+      108
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它仅为 MCP 代理自身提供记忆持久化，SQLite 只是可选的内部存储后端，并非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可（Dual license）",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Persistent memory and resumable work for MCP agents. Soul stores checkpoints, work records, shared handoffs and source-linked learning reports locally. It restores saved material when an agent calls its tools; it does not preserve a model's full context or guarantee those calls. ／ Environment: `N2_DATA_DIR`, `N2_AGENT_NAME`, `N2_KV_BACKEND` (`json`/`sqlite`), `N2_TIMEZONE`, `N2_LANG`, `N2_LOG_LEVEL`. Lifecycle also uses `N2_PROJECT` and optional `N2_TRANSCRIPT_ROOT`. ／ JSON is the default checkpoint backend; SQLite uses `sql.js`. Optional embeddings require a separately configured local endpoint and are off by default. Scoped MCP recall uses deterministic lexical matching, not a semantic-only fallback.",
+   "evidence_lines": [
+    5,
+    97,
+    108
+   ]
+  },
+  "fn": "choihyunsus/soul",
+  "sha": "d5771f6cd74d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "97850b2500ee": {
+  "identity": {
+   "one_liner": "本地桌面 AI 聊天应用，Rust+Tauri+SQLite 存储，内置 llama.cpp 引擎",
+   "review": "KathaGPT 是一个开源桌面 AI 聊天应用，内置 llama.cpp 引擎在本地运行 .gguf 模型（提供 18 个精选模型一键下载），也可接入 OpenRouter、OpenAI 等云端 BYOK。技术栈为 React + Rust (Axum) + Tauri v2，用 SQLite 通过 sqlx 存储聊天记录、工作流和 API 密钥，适合希望在本地设备上运行 LLM 聊天的用户。当前版本 0.1.1，macOS 构建未经公证需手动放行。",
+   "highlights": [
+    "内置 llama.cpp 引擎，支持 18 个精选本地模型一键下载，Metal/CUDA GPU 加速",
+    "通过 sqlx 使用 SQLite 存储聊天记录、工作流与设置，数据保留在本机",
+    "提供 REST/SSE 本地 API（绑定 127.0.0.1:17890），支持 BYOK 接入 OpenRouter、OpenAI、Anthropic 等云服务"
+   ],
+   "use_cases": [
+    "在无网络或不愿使用 API key 的环境下进行本地 LLM 对话",
+    "需要聊天记录、工作流和 prompt 库本地持久化的桌面 AI 助手使用",
+    "自带云端 API key 的多提供商模型切换与图像生成、翻译等工具调用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Stack**|React · **Rust (Axum)** · Tauri v2 · SQLite · llama.cpp| ／ |**Efficient storage**|SQLite via `sqlx` — instant chat history, workflows, and settings on disk| ／ |`POST`|`/provider-keys/set`|Save API key (local SQLite)|",
+     "lines": [
+      15,
+      54,
+      193
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为应用内嵌存储保存聊天记录、工作流和设置，该项目是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**Stack**|React · **Rust (Axum)** · Tauri v2 · SQLite · llama.cpp| ／ |**Efficient storage**|SQLite via `sqlx` — instant chat history, workflows, and settings on disk| ／ ├── src-tauri/           # Rust API, LLM routing, SQLite, Tauri shell",
+   "evidence_lines": [
+    15,
+    54,
+    169
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "santoshpremi/KathaGPT",
+  "sha": "97850b2500ee",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

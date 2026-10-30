@@ -11245,5 +11245,184 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "59028dbf96b5": {
+  "identity": {
+   "one_liner": "基于 Next.js 的开源 SaaS 脚手架，使用 Prisma + PostgreSQL",
+   "review": "这是一个 MIT 许可的 Next.js SaaS 起步套件，内置 Better Auth 认证、Stripe 支付、管理面板、交易邮件、i18n、博客和测试 CI 等模块，通过 git clone 与 npm run dev 运行，数据层为 Prisma 7 + PostgreSQL。适合希望快速搭建自有 SaaS 产品并自行托管的开发者。",
+   "highlights": [
+    "提供认证（OAuth/魔法链接/双因素）、Stripe 支付、管理面板、交易邮件、i18n 与博客等 SaaS 模块",
+    "使用 Prisma 7 连接 PostgreSQL，通过 npx prisma migrate deploy 应用迁移",
+    "MIT 许可，支持 Vercel 一键部署与自托管"
+   ],
+   "use_cases": [
+    "快速搭建自有 SaaS 产品的起步代码",
+    "学习 Next.js 全栈 SaaS 应用的参考实现",
+    "自托管的订阅制应用原型开发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ - 🔓 **It is plain Next.js**: no compiler, no config DSL, no proprietary CLI. The App Router, Server Actions and Prisma behave exactly as their own docs say, with plain PostgreSQL underneath: host it anywhere, own your data. ／ - **Database**: Prisma 7 on PostgreSQL. Plain Postgres underneath keeps your data portable, and Neon has a free managed tier if you would rather not run one yourself.",
+     "lines": [
+      16,
+      37,
+      73
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 PostgreSQL 存储数据的 Next.js 应用脚手架，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " PostgreSQL ／ - **Database**: Prisma 7 on PostgreSQL. Plain Postgres underneath keeps your data portable, and Neon has a free managed tier if you would rather not run one yourself. ／ **You need:** Node 24 or newer, git, and a PostgreSQL database (Neon has a free tier).",
+   "evidence_lines": [
+    16,
+    73,
+    98
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "openstarterkit/nextjs-saas-starter-kit",
+  "sha": "59028dbf96b5",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f59c3b982f86": {
+  "identity": {
+   "one_liner": "通用 AI 聊天机器人平台，支持多 LLM、MCP 与 RAG",
+   "review": "KateChat 是一个可自部署的聊天机器人平台，提供多聊天管理、多 LLM 供应商切换、MCP 服务器集成和基于向量嵌入的 RAG 文档检索。数据持久层为 TypeORM 兼容的任意 RDBMS，RAG 向量存储支持 PostgreSQL、SQLite 和 MS SQL。适合需要构建定制化聊天应用并接入自有模型 API 密钥的团队或开发者。",
+   "highlights": [
+    "支持多 LLM 供应商（AWS Bedrock、OpenAI、Yandex AI 及 OpenAI 兼容端点）并可会话内切换模型",
+    "支持外部与内部 MCP 服务器及工具调用审批",
+    "RAG 实现基于 Docling 文档解析，向量嵌入存储于 PostgreSQL/Sqlite/MS SQL server"
+   ],
+   "use_cases": [
+    "作为基础构建定制化企业聊天机器人",
+    "多模型对比与切换的统一聊天入口",
+    "基于自有文档的语义搜索问答（RAG）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- RAG implementation with documents (PDF, DOCX, TXT) parsing by Docling and vector embeddings stored in PostgreSQL/Sqlite/MS SQL server ／ 3. Database - any TypeORM compatible RDBMS (PostgreSQL, MySQL, SQLite, etc.) ／ docker compose up redis localstack postgres mysql mssql -d",
+     "lines": [
+      52,
+      104,
+      169
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "3. Database - any TypeORM compatible RDBMS (PostgreSQL, MySQL, SQLite, etc.) ／ docker compose up redis localstack postgres mysql mssql -d",
+     "lines": [
+      104,
+      169
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- RAG implementation with documents (PDF, DOCX, TXT) parsing by Docling and vector embeddings stored in PostgreSQL/Sqlite/MS SQL server ／ 3. Database - any TypeORM compatible RDBMS (PostgreSQL, MySQL, SQLite, etc.)",
+     "lines": [
+      52,
+      104
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- RAG implementation with documents (PDF, DOCX, TXT) parsing by Docling and vector embeddings stored in PostgreSQL/Sqlite/MS SQL server ／ docker compose up redis localstack postgres mysql mssql -d",
+     "lines": [
+      52,
+      169
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 RDBMS（PostgreSQL/MySQL/SQLite 等）作为自身数据存储，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- RAG implementation with documents (PDF, DOCX, TXT) parsing by Docling and vector embeddings stored in PostgreSQL/Sqlite/MS SQL server ／ 3. Database - any TypeORM compatible RDBMS (PostgreSQL, MySQL, SQLite, etc.) ／ docker compose up redis localstack postgres mysql mssql -d",
+   "evidence_lines": [
+    52,
+    104,
+    169
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "artiz/kate-chat",
+  "sha": "f59c3b982f86",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

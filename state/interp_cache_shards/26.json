@@ -10722,5 +10722,233 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1bec5e7b44ce": {
+  "identity": {
+   "one_liner": "单机自托管的 AI 智能体长期记忆服务，自研 SQLite 单库记忆内核",
+   "review": "aiduMEI 是一个用 Python/FastAPI 实现的长期记忆服务，通过钩子接入 Claude Code、Codex CLI、Hermes 等 AI 宿主，在对话前后读写并提炼记忆。f0.7 起默认使用自研 native 单库内核，把正文、FTS5 全文索引、向量和墓碑写入同一个 memory.db；mem0 降级为可选内核。适用于希望在本地自托管管理智能体记忆的个人用户，支持 MIT 许可和 Docker 部署。",
+   "highlights": [
+    "提供 REST API 与 MCP Server 两类接入面，通过脚本接入 Claude Code / Codex CLI / Hermes 宿主",
+    "native 内核将正文、FTS5 trigram 全文索引、向量、历史、墓碑写在同一 SQLite 库，同一事务写入",
+    "支持 cloud/auto/local 三种运行挡位，local 挡不外呼任何模型服务"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex CLI 等命令行 AI 宿主注入和持久化长期记忆",
+    "本地自托管记忆服务，数据目录可备份、可恢复",
+    "从 mem0 旧内核迁移到自研单库内核的存量部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "f0.7 是一次底座更换：记忆内核从 mem0 换成自研的 **native 单库 SQLite 内核**，mem0 不再是依赖。",
+     "lines": [
+      13
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明记忆数据全部写入本机 SQLite 的 memory.db，SQLite 是其存储底座而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "aiduMEI 是一个**单机自托管**的长期记忆服务（Python / FastAPI，MIT 许可）。它在你自己的机器上运行，通过钩子接到 Claude Code、Codex CLI、Hermes 等 AI 宿主：每轮对话前把相关记忆注入给模型，每轮对话后把这一轮存下来，会话结束时提炼一条「这一程」的精华。宿主管短期对话，aiduMEI 管长期记忆；数据全部落在本机数据目录，可备份、可删除、可恢复。 ／ f0.7 是一次底座更换：记忆内核从 mem0 换成自研的 **native 单库 SQLite 内核**，mem0 不再是依赖。 ／ |**native 单库内核**|正文、FTS5 trigram 全文索引、向量、历史、墓碑、关系边同在 `memory.db`，同一事务写入，不需要单独的向量数据库服务，`/add` 不逐轮调 LLM 改写。检索 = FTS5 trigram（bm25 排序）与向量余弦两路，RRF 融合。向量走 OpenAI 兼容 embedding 接口；没配或在本地档时只走全文检索，正文照样能召回|`ducky/memory_kernel/impl_native.py`|",
+   "evidence_lines": [
+    5,
+    13,
+    29
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "monkey2jack/aiduMEI",
+  "sha": "1bec5e7b44ce",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "31b76b5d8395": {
+  "identity": {
+   "one_liner": "面向南非大学生的二手教材交易市场平台",
+   "review": "UniTrade 是一个面向南非大学生的二手学术资料交易平台，提供学生认证、托管支付、线下交接、实时聊天等功能。技术栈为 .NET 10 单体后端 + React 前端 + Python CLIP AI 服务，数据库使用 Azure Database for PostgreSQL，并通过 Bicep IaC 部署到 Azure Container Apps。它是使用数据库的应用，而非数据库生态工具。",
+   "highlights": [
+    "提供学生邮箱+OTP+人工审核的认证交易流程，PayFast 托管支付与交接 PIN 验证",
+    "内置基于 CLIP 模型与感知哈希的房源/商品欺诈风险自动评分",
+    "采用 .NET 10 模块化单体架构，部署于 Azure Container Apps，蓝绿发布并含 k6 负载测试与 NFR 追溯"
+   ],
+   "use_cases": [
+    "大学生之间安全买卖二手教材与学术资料",
+    "校内面对面交接的托管式二手交易",
+    "需要 AI 风控评分的 C2C 市场场景参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Frontend** React 19 · TypeScript · Vite (PWA) · Tailwind CSS · Leaflet — **Backend** .NET 10 · EF Core · SignalR · PostgreSQL — **AI service** Python · FastAPI · PyTorch CLIP — **Cloud & DevOps** Azure Container Apps · Docker · Bicep · GitHub Actions ／ PostgreSQL ／ |Database|Azure Database for PostgreSQL Flexible Server|",
+     "lines": [
+      87,
+      102,
+      121
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个用 PostgreSQL 存数据的二手教材交易市场应用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "UniTrade is a **modular monolith**: a single .NET 10 API split into isolated domain modules (Identity, Listings, Reservations, Transactions, Chat, Disputes, Reputation, Timetable and more) under `src/backend/Modules`. This gives ACID transactions across domains — reserving a listing, starting its timer and opening a chat in one transaction — without the coordination cost of microservices. A separate Python service runs the CLIP image model on an internal-only network. ／ **Frontend** React 19 · TypeScript · Vite (PWA) · Tailwind CSS · Leaflet — **Backend** .NET 10 · EF Core · SignalR · PostgreSQL — **AI service** Python · FastAPI · PyTorch CLIP — **Cloud & DevOps** Azure Container Apps · Docker · Bicep · GitHub Actions ／ |Database|Azure Database for PostgreSQL Flexible Server|",
+   "evidence_lines": [
+    83,
+    87,
+    121
+   ]
+  },
+  "fn": "COS301-SE-2026/UniTrade",
+  "sha": "31b76b5d8395",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3a0b1581d617": {
+  "identity": {
+   "one_liner": "英国地方议会职位公开看板，Go 采集器+TiDB 历史去重",
+   "review": "一个面向求职者的英国地方议会职位跟踪项目：Go 采集器按各招聘平台适配器抓取职位，经 GitHub Actions 定时运行，可选将去重与历史数据持久化到 TiDB Cloud，并发布只读静态看板与 CSV 导出，支持邮件摘要。数据模型为单行 JSON 快照表，适合小规模个人使用；未配置 TiDB 时仅发布本地快照报告。",
+   "highlights": [
+    "提供 MyJobScotland、Talentsoft、Jobtrain、Hireserve、iTrent、Oracle 等 6 类招聘平台适配器及分页、robots.txt 检查",
+    "支持 TiDB Cloud 持久化去重与历史记录，可选 Resend 邮件新职位摘要",
+    "通过 GitHub Actions 定时调度并发布静态看板，支持 CSV 导出与赞助登记册 CSV 导入审查"
+   ],
+   "use_cases": [
+    "跟踪英国地方议会 IT 与商业类职位空缺并接收新职位邮件提醒",
+    "基于配置 CSV 扩展更多议会招聘链接并复用现有平台适配器",
+    "在 GitHub Pages 上发布公开可搜索的职位快照看板"
+   ],
+   "review_notes": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "1. Create a **MySQL-compatible TiDB Cloud Starter** instance. Keep its monthly spending limit at **0** if you want the free-only setup. Observe quota usage; exceeding limits can stop new connections.",
+     "lines": [
+      55
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- Go connectors for **MyJobScotland, Talentsoft, Jobtrain, Hireserve, iTrent and Oracle**, plus a WMJobs connector subject to runner access. ／ |Birmingham|Direct council Oracle careers site; paginated public search plus full advert details. Replaces the inaccessible WMJobs source.|",
+     "lines": [
+      10,
+      28
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "- TiDB-backed deduplication and history; optional new-job email digest using Resend. ／ 1. Create a **MySQL-compatible TiDB Cloud Starter** instance. Keep its monthly spending limit at **0** if you want the free-only setup. Observe quota usage; exceeding limits can stop new connections.",
+     "lines": [
+      13,
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将职位数据存入 TiDB Cloud，数据库是其存储层而非被服务的对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A public, read-only council vacancy dashboard with a Go checker, scheduled GitHub Actions, and optional TiDB Cloud persistence. Live dashboard: https://naveeth7.github.io/council-job-tracker/. ／ - TiDB-backed deduplication and history; optional new-job email digest using Resend. ／ 1. Create a **MySQL-compatible TiDB Cloud Starter** instance. Keep its monthly spending limit at **0** if you want the free-only setup. Observe quota usage; exceeding limits can stop new connections.",
+   "evidence_lines": [
+    3,
+    13,
+    55
+   ]
+  },
+  "fn": "Naveeth7/council-job-tracker",
+  "sha": "3a0b1581d617",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

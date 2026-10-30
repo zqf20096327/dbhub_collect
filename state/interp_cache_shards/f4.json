@@ -10917,5 +10917,74 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ada5ce54683f": {
+  "identity": {
+   "one_liner": "PostgreSQL 线协议代理，经 pgAdmin 4 Query Tool API 执行 SQL",
+   "review": "pgadmin-bridge 在本地实现 PostgreSQL 线协议服务端，把客户端 SQL 转发到 pgAdmin 4 的 Query Tool REST API 执行，供 psql、DataGrip、DBeaver、JDBC 等任何 PG 客户端访问仅通过 pgAdmin 开放的数据库，提供只读会话、语句超时、Web UI 配置与日志。适用于数据库端口被防火墙封锁、仅授权 pgAdmin 访问的企业开发者。",
+   "highlights": [
+    "实现 PostgreSQL 简单与扩展查询协议，返回真实列类型、错误码和事务状态",
+    "提供 Web UI 管理多个 pgAdmin 实例、连接串生成、SQL/HTTP 日志与只读、语句超时等守卫设置",
+    "纯 Python 标准库实现，无第三方依赖，提供 Docker 镜像与 pip 安装方式"
+   ],
+   "use_cases": [
+    "企业仅通过托管 pgAdmin 4 暴露数据库时，用本地 IDE/psql 访问 staging 或生产库",
+    "运行本地应用、迁移工具或脚本连接无直连端口的 PostgreSQL",
+    "需要保留 pgAdmin 侧审计日志的同时使用常规客户端工具"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Use psql, DataGrip, DBeaver or any PostgreSQL client when your company only gives you pgAdmin.** ／ A PostgreSQL wire-protocol proxy that runs your SQL through pgAdmin 4's Query Tool API. ／ pgadmin-bridge web UI: connect DataGrip or psql to a PostgreSQL server that is only reachable through pgAdmin",
+     "lines": [
+      3,
+      5,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 客户端访问提供协议代理中间件，本身不存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A PostgreSQL wire-protocol proxy that runs your SQL through pgAdmin 4's Query Tool API. ／ **pgadmin-bridge** runs next to you (on your laptop, in Docker) and speaks the PostgreSQL protocol ／     B -- \"HTTPS · your pgAdmin login<br/>Query Tool REST API\" --> C[\"pgAdmin 4\"]",
+   "evidence_lines": [
+    5,
+    24,
+    40
+   ]
+  },
+  "fn": "malinatrash/pgadmin-bridge",
+  "sha": "ada5ce54683f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

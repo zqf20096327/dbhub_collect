@@ -11238,5 +11238,226 @@
   "generated_at": "2026-10-30",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "19ca909717f4": {
+  "identity": {
+   "one_liner": "Rust 编写的 AI 原生数据平台，基于对象存储提供混合检索与 SQL/图/文档能力",
+   "review": "Loams 是一个用 Rust 实现的开源数据平台，把混合检索、响应式文档、图、分析、MySQL/Postgres 线协议和持久化 agent 运行统一在对象存储桶上的单一引擎中，并提供 Studio 等 agent 开发环境。面向以 AI agent 为产品的公司，通过 Docker Compose 在自有账户与存储桶上运行；0.x 阶段 API 与磁盘格式可能在小版本间变化。",
+   "highlights": [
+    "在同一对象存储上提供向量、BM25 与过滤的混合检索，并兼容 Qdrant 与 Elasticsearch 客户端 API",
+    "提供 Arrow Flight SQL、Postgres/MySQL 线协议以及 ClickHouse 兼容的分析（Loams House，实验性）",
+    "数据以开放格式存放在用户自有的 S3/GCS/Azure 等桶中，全部写入经内部日志实现一致性读"
+   ],
+   "use_cases": [
+    "需要将检索、SQL、图等数据能力部署在自有对象存储与账户上的团队",
+    "运行编码 agent 并需要持久化任务执行、成本归集的服务即软件（service-as-software）公司",
+    "希望用兼容 Qdrant/Elasticsearch 客户端接入统一引擎的检索应用"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "- **More than retrieval.** Reactive documents (Live), graphs (Graph), analytics (House), MySQL and Postgres, and durable agent runs (Durable), on the same storage. ／ |**Retrieval engine**|Collections, hybrid search, SQL, streams and links; native REST, Arrow Flight SQL, Qdrant and Elasticsearch APIs; Postgres and MySQL wire| ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket|",
+     "lines": [
+      39,
+      49,
+      53
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "- **More than retrieval.** Reactive documents (Live), graphs (Graph), analytics (House), MySQL and Postgres, and durable agent runs (Durable), on the same storage. ／ |**Retrieval engine**|Collections, hybrid search, SQL, streams and links; native REST, Arrow Flight SQL, Qdrant and Elasticsearch APIs; Postgres and MySQL wire| ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket|",
+     "lines": [
+      39,
+      49,
+      53
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "compat",
+     "quote": "|**Loams House**|Experimental. ClickHouse-compatible analytics with engine-level access control (opt-in profile)|",
+     "lines": [
+      52
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "Loams architecture: clients reach the retrieval engine, Live, Durable and Postgres; a stateless gateway and router tier (planned) and the runtime and jobs (planned) are shown dashed; TiKV holds metadata and transactions; object storage holds all data in open f ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket| ／ Apache License 2.0. Loams builds on DataFusion, Lance, Tantivy, Quickwit, qdrant-edge, SlateDB, openraft, TiKV, TiDB, Neon, Grafeo, chDB and Resonate; attributions are in NOTICE. Loams is free and open source: there is no open core and no paid edition. The met",
+     "lines": [
+      43,
+      53,
+      104
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将其定位为数据平台引擎本体，向上层应用提供检索、SQL、图等数据能力。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0（L104）",
+   "install": [
+    "docker",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Underneath the products is the data platform. A typical AI application runs Elasticsearch, Qdrant, a graph database, Kafka and a workflow engine: five stateful clusters, several copies of the same data, and retrieval glued together in application code. Loams replaces them with one engine on one bucket: ／ - **More than retrieval.** Reactive documents (Live), graphs (Graph), analytics (House), MySQL and Postgres, and durable agent runs (Durable), on the same storage. ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket|",
+   "evidence_lines": [
+    33,
+    39,
+    53
+   ]
+  },
+  "fn": "ostrium-labs/loams",
+  "sha": "19ca909717f4",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::A proposed JSON Schema vocabulary for common database use cases": {
+  "identity": {
+   "one_liner": "面向数据库常见用例的 JSON Schema 词汇表提案",
+   "review": "该项目定义了一套提案中的 JSON Schema 词汇表（vocabulary），用于描述数据库的常见使用场景。它本身不运行数据库、也不提供驱动，而是为开发者在使用 JSON Schema 描述数据库相关数据约束时提供标准化的关键词集合，适合需要在 JSON Schema 中表达数据库语义的开发者使用；因基于简介且无 README，具体包含的词汇项与实现细节无法确认。",
+   "highlights": [
+    "提供一套针对数据库常见用例的 JSON Schema 词汇表",
+    "以提案（proposed）形式发布，属于 JSON Schema 词汇扩展规范"
+   ],
+   "use_cases": [
+    "为数据库相关数据编写带扩展关键词的 JSON Schema",
+    "在 JSON Schema 校验流程中表达数据库用例的约束语义"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "项目为在 JSON Schema 中描述数据库用例提供词汇规范，属于为数据库生态服务的模式定义组件，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A proposed JSON Schema vocabulary for common database use cases"
+  },
+  "fn": "json-schema-org/vocab-database",
+  "sha": "desc::A proposed JSON Schema vocabulary for common database use cases",
+  "source": "desc",
+  "generated_at": "2026-10-30",
+  "ver": 2,
+  "prompt_ver": "3.3"
+ },
+ "2962e9b3b98a": {
+  "identity": {
+   "one_liner": "数据库内核内加速倾斜稀疏关系连接聚合的扩展",
+   "review": "Tessera 是一组面向 DuckDB、PostgreSQL、SQLite 和 Spark 的扩展/插件，将连接聚合查询改写为稀疏矩阵乘法，在 CPU 矩阵加速器（AMX）上运行稠密核心，并提供剪枝与代价模型选择。面向需要在引擎内加速大规模自连接计数/求和场景的开发者和数据工程师，以扩展方式安装，不改变 SQL。",
+   "highlights": [
+    "以扩展形式接入 DuckDB、PostgreSQL、SQLite 与 Spark，SQL 无需改动即可替换引擎的连接聚合计划",
+    "使用稀疏路径加 AMX/AVX 稠密核心计算矩阵乘积，支持 HAVING/ORDER BY LIMIT 剪枝并保证结果精确",
+    "提供 PyPI（sqlite-tessera）、PGXN、Maven Central 包及源码构建等多种安装方式"
+   ],
+   "use_cases": [
+    "词共现、item-to-item 推荐、共同邻居计数等连接聚合查询的加速",
+    "在倾斜稀疏关系上执行 item 相似度（余弦、Jaccard 等）计算",
+    "在支持 AMX 的 CPU 上对大规模数据进行引擎内分析查询优化"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Engines: DuckDB, PostgreSQL, SQLite, Spark ／ |**Inside the engine**|Hooks into the planners of DuckDB, PostgreSQL, and Spark, so the SQL runs unchanged, and into SQLite as table functions. Follows each engine's cancellation, thread count, and errors, keeps the output within the memory limit of DuckDB, Po ／ |PostgreSQL|`tessera_pg` on PGXN|`pgxn install tessera_pg`|",
+     "lines": [
+      7,
+      46,
+      89
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Engines: DuckDB, PostgreSQL, SQLite, Spark ／ |**Inside the engine**|Hooks into the planners of DuckDB, PostgreSQL, and Spark, so the SQL runs unchanged, and into SQLite as table functions. Follows each engine's cancellation, thread count, and errors, keeps the output within the memory limit of DuckDB, Po ／ |SQLite in Python|`sqlite-tessera` on PyPI|`pip install sqlite-tessera`|",
+     "lines": [
+      7,
+      46,
+      86
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它以扩展/插件形式挂入各数据库引擎的查询计划器，为数据库生态提供查询加速能力，而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Inside the engine**|Hooks into the planners of DuckDB, PostgreSQL, and Spark, so the SQL runs unchanged, and into SQLite as table functions. Follows each engine's cancellation, thread count, and errors, keeps the output within the memory limit of DuckDB, PostgreSQL, and SQLite, and spills the rest to the engine's temporary space within its limit.| ／ |PostgreSQL|`tessera_pg` on PGXN|`pgxn install tessera_pg`| ／ With Spark, add `--conf spark.sql.extensions=tessera.spark.TesseraExtensions` to `spark-sql`, `spark-shell`, or",
+   "evidence_lines": [
+    46,
+    89,
+    101
+   ]
+  },
+  "fn": "GyuyeongKim/Tessera-public",
+  "sha": "2962e9b3b98a",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

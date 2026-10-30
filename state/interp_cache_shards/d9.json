@@ -11789,5 +11789,202 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "41dc5862abd9": {
+  "identity": {
+   "one_liner": "DSH 聊天驱动的数据库管理插件，含授权、审计与 SQL 控制台",
+   "review": "这是一个 DSH 聊天环境的数据库管理插件，通过单一 DatabaseManager 工具让模型执行查询、写语句、浏览结构与传输数据，配套项目级 ro/rw 授权、危险操作确认（challengeId 机制）与 audit.jsonl 全量审计，并有右侧栏 SQL 控制台。面向使用 DSH 且需在对话中安全操作多种数据库的开发者；SQL Server 的只读强制依赖应用层拦截，强度弱于 MySQL/PG。",
+   "highlights": [
+    "支持 9 种数据库的连接、元数据浏览、查询、预览与数据传输，各库经适配器统一为 ? 占位符与标准结果集",
+    "提供项目级 ro/rw 授权、语句级风险分级、一次性 challengeId 危险操作确认与追加式全量审计日志",
+    "run_script 在独立子进程 + node:vm 沙箱运行，60 秒超时强杀，仅注入受限 db 句柄"
+   ],
+   "use_cases": [
+    "在 DSH 聊天中带授权与审计地查询和管理数据库",
+    "通过右侧栏 SQL 控制台进行多标签编辑、事务与结果导出",
+    "同类或跨类数据库之间的表数据迁移（含自动建表与多种写入模式）"
+   ],
+   "install": [
+    "npm"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|关系型|MySQL、PostgreSQL、GaussDB、SQLite、Oracle、达梦 DM、SQL Server| ／ - 库筛选 + 跨库表名模糊搜索（MySQL / PostgreSQL / GaussDB 走 `information_schema` 原生查询，其余库回退内存过滤）",
+     "lines": [
+      21,
+      71
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|关系型|MySQL、PostgreSQL、GaussDB、SQLite、Oracle、达梦 DM、SQL Server| ／ - 库筛选 + 跨库表名模糊搜索（MySQL / PostgreSQL / GaussDB 走 `information_schema` 原生查询，其余库回退内存过滤）",
+     "lines": [
+      21,
+      71
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|关系型|MySQL、PostgreSQL、GaussDB、SQLite、Oracle、达梦 DM、SQL Server|",
+     "lines": [
+      21
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|关系型|MySQL、PostgreSQL、GaussDB、SQLite、Oracle、达梦 DM、SQL Server| ／ - **语法高亮与补全**：按方言自动切换（MySQL / PostgreSQL / SQLite / PL/SQL / T-SQL），表列元数据注入补全",
+     "lines": [
+      21,
+      79
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|关系型|MySQL、PostgreSQL、GaussDB、SQLite、Oracle、达梦 DM、SQL Server| ／ |只读强制|MySQL/PG 走会话级 `SET TRANSACTION READ ONLY`；SQL Server 无等价语句，退化为应用层五道闸门（见下）|",
+     "lines": [
+      21,
+      130
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "|关系型|MySQL、PostgreSQL、GaussDB、SQLite、Oracle、达梦 DM、SQL Server|",
+     "lines": [
+      21
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "|关系型|MySQL、PostgreSQL、GaussDB、SQLite、Oracle、达梦 DM、SQL Server| ／ - 库筛选 + 跨库表名模糊搜索（MySQL / PostgreSQL / GaussDB 走 `information_schema` 原生查询，其余库回退内存过滤）",
+     "lines": [
+      21,
+      71
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该插件为多种数据库提供连接、查询、授权与审计等管理能力，是为数据库生态服务的工具而非使用数据库存储的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "Dameng",
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "在 DSH 聊天中安全操作数据库：9 种数据库、项目级细粒度授权、危险操作确认、全量审计，配套右侧栏管理台与 SQL 控制台。 ／ |关系型|MySQL、PostgreSQL、GaussDB、SQLite、Oracle、达梦 DM、SQL Server| ／ 授权以「项目路径 → 连接 → 模式」三级存储（`grants.json`）：",
+   "evidence_lines": [
+    5,
+    21,
+    45
+   ]
+  },
+  "fn": "mengqi1436/dsh-db-tool",
+  "sha": "41dc5862abd9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a958b9e99e3d": {
+  "identity": {
+   "one_liner": "AI 个性化护肤与健康门户网站，用 PHP 和 TiDB Cloud 构建",
+   "review": "SkinSphere 是一个提供皮肤诊断问卷、早晚护理方案、饮食计划、成分安全分析和习惯追踪的 Web 门户，使用 PHP 与 Bootstrap 构建，数据存储于 TiDB Cloud Serverless MySQL。适合关注护肤与健康的个人用户使用；README 仅两行，未说明部署与安装方式。",
+   "highlights": [
+    "提供皮肤诊断问卷、早晚护理方案、临床饮食计划、成分安全分析与日常习惯追踪功能",
+    "使用 PHP 与 Bootstrap 构建，数据存储采用 TiDB Cloud Serverless MySQL"
+   ],
+   "use_cases": [
+    "个人用户获取个性化护肤与饮食建议",
+    "记录并追踪日常健康习惯"
+   ],
+   "use_cases2": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "SkinSphere is an AI-powered personalized skincare and wellness web portal featuring skin diagnostic quizzes, tailored AM/PM routines, clinical diet plans, ingredients safety analysis, and daily habit tracking. Built with PHP, Bootstrap, and TiDB Cloud Serverle",
+     "lines": [
+      2
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "SkinSphere is an AI-powered personalized skincare and wellness web portal featuring skin diagnostic quizzes, tailored AM/PM routines, clinical diet plans, ingredients safety analysis, and daily habit tracking. Built with PHP, Bootstrap, and TiDB Cloud Serverle",
+     "lines": [
+      2
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 TiDB Cloud Serverless MySQL 存储数据的 Web 门户应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SkinSphere is an AI-powered personalized skincare and wellness web portal featuring skin diagnostic quizzes, tailored AM/PM routines, clinical diet plans, ingredients safety analysis, and daily habit tracking. Built with PHP, Bootstrap, and TiDB Cloud Serverless MySQL.",
+   "evidence_lines": [
+    2
+   ]
+  },
+  "fn": "Sanchita-tiwar1/SkinSphere",
+  "sha": "a958b9e99e3d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9456,5 +9456,145 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "010dc54f1f86": {
+  "identity": {
+   "one_liner": "PHP+SQLite 的自托管列表式文件上传器",
+   "review": "受 uploader.jp 停服影响而开发的自托管上传器，提供编号文件列表、下载统计、删除密钥、管理后台等功能，用于搭建类似 uploader.jp 的文件分享站点。由 PHP 单独运行，通过 pdo_sqlite 使用 SQLite 存储数据，无需数据库服务器，支持将文件保存到 S3 兼容存储，并附带从 uploader.jp 迁移数据的备份与导入工具。适合个人或社团自行运营文件分享站点。",
+   "highlights": [
+    "提供编号文件列表、排序、搜索、分页、删除密钥、下载密码等功能",
+    "支持将文件保存到 S3 兼容存储（Backblaze B2、Cloudflare R2 等），并附带从 uploader.jp 迁移的备份与导入工具",
+    "包含管理后台、SMTP 邮件通知、Cloudflare Turnstile 人机验证与 IP 哈希存储"
+   ],
+   "use_cases": [
+    "自托管文件分享/上传站（如游戏 MOD、社团素材存放处）",
+    "uploader.jp 停服后的数据备份与迁移",
+    "需要 S3 兼容存储或无需数据库服务器的轻量 PHP 部署环境"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`pdo_sqlite`、`fileinfo`、`mbstring`、`curl`、`openssl` が必要です。 ／ 5. **`https://あなたのサイト/data/uploader.sqlite` を開いて 403 になることを必ず確認**（中身が見えたらサーバー設定の誤りです）",
+     "lines": [
+      60,
+      81
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目通过 pdo_sqlite 使用 SQLite 数据库存储上传数据，是一个使用数据库的应用而非数据库工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pdo_sqlite`、`fileinfo`、`mbstring`、`curl`、`openssl` が必要です。 ／ 5. **`https://あなたのサイト/data/uploader.sqlite` を開いて 403 になることを必ず確認**（中身が見えたらサーバー設定の誤りです）",
+   "evidence_lines": [
+    60,
+    81
+   ]
+  },
+  "fn": "PYU224/likegetuploader",
+  "sha": "010dc54f1f86",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3c1cc98f02f1": {
+  "identity": {
+   "one_liner": "AI 代理维护的任务看板，单文件 Python + SQLite",
+   "review": "这是一个由 AI 代理自动读写任务状态的自托管看板：会话开始时代理读取摘要，结束时批量更新卡片；提供 HTTP API、网页界面和 CLI 客户端，支持 Telegram 通知。面向与 Claude Code/Codex 等 AI 代理协作的个人或小团队。限制：界面仅俄语，单实例单库。",
+   "highlights": [
+    "单文件 Python 服务器，仅依赖标准库与 SQLite，内存占用约 15 MB",
+    "提供 HTTP API、网页界面和 CLI（pult.py），支持多代理多用户权限与操作日志",
+    "通过 pult_runner.py 可将卡片下发给 Claude Code 执行，并有 Telegram 通知"
+   ],
+   "use_cases": [
+    "AI 代理会话间的任务交接与外部记忆",
+    "个人/小团队自托管任务看板（可手机访问）",
+    "通过卡片将任务委托给 AI 代理执行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite, no dependencies. The interface and the docs are in Russian.*",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明用 SQLite 存储看板数据，Pult 本身是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3 或更新版本；早期版本（2026-10-26 前）曾以 MIT 发布",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLite, no dependencies. The interface and the docs are in Russian.* ／ - **Ничего лишнего.** Один файл Python без зависимостей и SQLite, около 15 МБ памяти; страница без внешних ／ |Сервер: HTTPS, API, страница, SQLite, копия базы раз в сутки — одна программа на стандартной библиотеке|`server/pult_server.py`|",
+   "evidence_lines": [
+    9,
+    31,
+    165
+   ]
+  },
+  "fn": "ArtYudin89/pult",
+  "sha": "3c1cc98f02f1",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

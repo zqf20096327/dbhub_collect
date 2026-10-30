@@ -10712,5 +10712,313 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "101e69817737": {
+  "identity": {
+   "one_liner": "基于 WASM 组件模型的确定性工作流运行时",
+   "review": "Obelisk 是一个用 Rust 编写的持久化工作流引擎，以单个二进制运行确定性 workflow、activity 与 webhook 端点，执行步骤记录到 SQLite 或 PostgreSQL 以支持重放与崩溃恢复，并提供 CLI、REST API 和 Web UI。面向需要后台任务、定时任务、批处理和可审计编排的开发者。注意项目处于 pre-release，CLI/API/WIT 及数据库 schema 可能变动。",
+   "highlights": [
+    "单二进制运行时执行确定性 workflow、activity 和 webhook 端点，执行日志持久化到 SQLite 或 PostgreSQL",
+    "通过 WASM Component Model 与 WIT IDL 实现 schema-first 设计与端到端类型安全",
+    "内置 Web UI 支持查看执行轨迹、重放 workflow、浏览事件与应用日志"
+   ],
+   "use_cases": [
+    "周期性任务与后台作业编排，含自动重试与错误处理",
+    "需要可重放、可审计执行的 AI 辅助代码沙箱场景",
+    "端到端测试自动化，记录每步详细日志"
+   ],
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "and webhook endpoints, persisting steps in execution log using SQLite or PostgreSQL. ／ ### Running with Postgres",
+     "lines": [
+      62,
+      166
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "and webhook endpoints, persisting steps in execution log using SQLite or PostgreSQL.",
+     "lines": [
+      62
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite/PostgreSQL 仅作为其执行日志的持久化后端（L62），项目本身是工作流运行时而非数据库生态服务工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "主体 AGPL-3.0，wit/ 子目录及生成的 WIT 文件采用 MIT 许可",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "and webhook endpoints, persisting steps in execution log using SQLite or PostgreSQL. ／ A deterministic workflow runtime built on the WASM Component Model. ／ > **Pre-release**: Expect changes in CLI, REST API, WIT, and database schema.",
+   "evidence_lines": [
+    62,
+    5,
+    8
+   ]
+  },
+  "fn": "obeli-sk/obelisk",
+  "sha": "101e69817737",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9b05a29cb70f": {
+  "identity": {
+   "one_liner": "AI 宏观经济分析仪表盘，用 PostgreSQL 与 Qdrant 存取数据",
+   "review": "一个基于 Docker Compose 的多页 Streamlit 仪表盘应用，通过 FastAPI 微服务提供 AI 分析、时序预测、聚类、按需数据接入与文档转换，后端使用 PostgreSQL 存表格数据、Qdrant 存新闻/文档向量。适合需要分析 World Bank、Yahoo Finance、Binance、FRED、Eurostat 宏观数据的用户。部署需 NVIDIA GPU，首次启动需下载数据 1–2 小时。",
+   "highlights": [
+    "直接读取 Postgres（只读角色）与 Qdrant 提供页面数据，数据接入覆盖 World Bank、Yahoo Finance、Binance、FRED、Eurostat 五类来源",
+    "微服务架构：LangGraph 多智能体分析、Chronos/ARIMA/Prophet 等预测与聚类推理由 NVIDIA Triton 承载",
+    "内置 Langfuse LLM 追踪、Grafana+Prometheus 监控，以及可选的 Postgres/Qdrant 云备份服务"
+   ],
+   "use_cases": [
+    "浏览与查询宏观经济指标的多页交互仪表盘",
+    "通过 AI 聊天（含多模态输入与 RAG）分析宏观数据与新闻语料",
+    "自托管时间序列预测与聚类分析流水线"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres ／ * `app` — the multi-page Streamlit dashboard (this is what the user opens in the browser). It talks **directly** to the backend: the read-only Postgres role for page reads, Qdrant for the news/RAG pages, and the agent / forecaster / clustering / docling HTTP A ／ * `db` — relational database (`PostgreSQL 18`) for tabular data: World Bank, Yahoo Finance, Binance crypto, FRED US-state, and Eurostat EU-NUTS2. ／ |`POSTGRES_USER`|Postgres superuser created natively by the `postgres:18` image on first boot.|",
+     "lines": [
+      18,
+      42,
+      53,
+      80
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "* Langfuse (`langfuse_web` + `langfuse_worker` + backing ClickHouse / Redis / MinIO) — self-hosted LLM tracing for the AI analyst; UI at `http://localhost:3000`. ／ `.mcp.json` configures read-only MCP access to Postgres, ClickHouse, Grafana, and Langfuse. Run MCP clients from the repository root so the pinned `uvx` commands can find `scripts/mcp-overrides.txt`. ClickHouse's HTTP API is exposed only on loopback (`127.0.0.",
+     "lines": [
+      59,
+      109
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明该仪表盘应用使用 Postgres 与 Qdrant 存取数据、依赖 ClickHouse 作为 Langfuse 追踪后端。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "rag",
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`Ultimate Macroeconomics Dashboard` is an AI-powered macroeconomic analytics tool: a **multi-page Streamlit dashboard** talking directly to Postgres + Qdrant and to FastAPI micro-services for the AI analyst, forecasting, clustering, on-demand data ingestion, document conversion, and a sandboxed Python executor, plus an NVIDIA Triton Inference Server hosting all model inference. It covers World Bank, Yahoo Finance, Binance crypto, FRED US-state and Eurostat EU-regional (NUTS-2) data, plus a **30 000+** article news RAG corpus — **70+** World Bank indicators, **90+** Yahoo Finance tickers, and **150+** prebuilt charts. ／ * `db` — relational database (`PostgreSQL 18`) for tabular data: World Bank, Yahoo Finance, Binance crypto, FRED US-state, and Eurostat EU-NUTS2. ／ * Langfuse (`langfuse_web` + `langfuse_worker` + backing ClickHouse / Redis / MinIO) — self-hosted LLM tracing for the AI analyst; UI at `http://localhost:3000`.",
+   "evidence_lines": [
+    23,
+    53,
+    59
+   ]
+  },
+  "fn": "aleksey-karasev/Ultimate-Macroeconomics-Dashboard",
+  "sha": "9b05a29cb70f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d89d5b89be6f": {
+  "identity": {
+   "one_liner": "MCP 服务器，将 Excel/CSV/SQLite/Postgres 数据以只读 SQL 生成仪表盘",
+   "review": "Showboard 是一个 MCP 服务器，供 Claude Code、Codex、Cursor 等编程代理调用，代理发送 SQL 与布局，它以只读方式查询 Excel、CSV、SQLite 或 Postgres 数据并在浏览器、终端面板或应用内展示仪表盘，每个图表可查看背后 SQL。面向需要用自然语言探索本地数据文件和数据库的开发者，依赖 Node.js 22.13+，查询结果最多保留 5000 行。",
+   "highlights": [
+    "以 MCP 服务器形式运行，代理发送 SQL 与布局，Showboard 执行查询并生成图表与表格",
+    "支持读取 Excel 工作簿、CSV 文件，以及通过只读查询访问 SQLite 与 Postgres 数据库",
+    "图表数值来自查询结果，可保存 recipe 与 board 快照供复用"
+   ],
+   "use_cases": [
+    "对文件夹中的 Excel/CSV 报表用自然语言提问并生成可视化看板",
+    "对 SQLite/Postgres 数据库进行只读的数据探索与仪表盘展示",
+    "在自有 Node + React 应用中嵌入看板并注册数据源与动作"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For Postgres credentials, use the `SHOWBOARD_DB` environment variable instead of putting a password in settings files. See the setup guide. ／ |A SQLite or Postgres database|“Show monthly revenue and the top five products.” Query your tables read-only.|",
+     "lines": [
+      90,
+      103
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "npx showboard init --db ./shop.sqlite ／ |A SQLite or Postgres database|“Show monthly revenue and the top five products.” Query your tables read-only.|",
+     "lines": [
+      85,
+      103
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为编程代理查询与展示数据库/文件数据服务的 MCP 服务器组件，而非使用数据库存自身数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MCP server ／  Your question goes to a coding agent, which sends SQL to Showboard over MCP. Showboard queries your data read-only and displays a dashboard in your browser, app or terminal. ／ Showboard is an **MCP server**. It uses the coding agent and model access you already have.",
+   "evidence_lines": [
+    22,
+    124,
+    151
+   ]
+  },
+  "fn": "rohanbeingsocial/showboard",
+  "sha": "d89d5b89be6f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b160102c06f9": {
+  "identity": {
+   "one_liner": "算法竞赛训练工作台，集题库、编辑评测、提交与训练记录于一体",
+   "review": "ToBe（TB）是一个面向算法竞赛选手的桌面训练工作台，提供图文题库与题解、C++ 编辑与本地样例评测、向四个原站后台提交、模拟赛、知识清单与训练记录等功能，数据经 SQLite 在本机存储并支持账号同步。适用于 Windows 10/11 的个人训练场景；本地开发需 Python 后端与 npm 前端。",
+   "highlights": [
+    "内置 12,271 条题目、题解、讲义与题单的本地题库，支持离线读取预置中文翻译",
+    "提供 C++ 编辑、本地样例评测与四平台原站浏览器提交",
+    "使用 SQLite 本机存储，自动更新前在线备份并校验 SHA-256，账号数据可跨设备同步"
+   ],
+   "use_cases": [
+    "算法竞赛选手的日常刷题、复习与知识掌握度跟踪",
+    "模拟赛与重现赛的计时训练",
+    "离线环境下缓存题目与题解进行学习"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "保存草稿并退出 TB 后安装到原目录，个人数据库、代码和导入内容保留。自动更新会先保存草稿、在线备份 SQLite、验证 SHA-256，再替换程序。跨电脑使用同一账号时，各电脑应升级到同一版本。原站登录保存在 TB 专用浏览器中，无需扩展。",
+     "lines": [
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该软件使用 SQLite 做本机数据存储，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "保存草稿并退出 TB 后安装到原目录，个人数据库、代码和导入内容保留。自动更新会先保存草稿、在线备份 SQLite、验证 SHA-256，再替换程序。跨电脑使用同一账号时，各电脑应升级到同一版本。原站登录保存在 TB 专用浏览器中，无需扩展。 ／ 账号同步包括训练、完整提交代码、草稿、目标、经验、收藏和偏好；冲突草稿另存。原站 Cookie 与翻译密钥不进入公共题库，翻译密钥使用 Windows DPAPI 保护。设置中的数据导出为 JSON，不含密码、Cookie 或 API 密钥。",
+   "evidence_lines": [
+    39,
+    130
+   ]
+  },
+  "fn": "3097729287/acm-algo-trainer",
+  "sha": "b160102c06f9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

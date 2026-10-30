@@ -10219,5 +10219,133 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7d524148c2a6": {
+  "identity": {
+   "one_liner": "基于 Tauri+Rust 的桌面数据库客户端，集 SQL、迁移、监控与 AI 代理于一体",
+   "review": "DataZen 是一个 GPL-3.0 的跨平台桌面数据库工作台，面向开发者和 AI 代理，提供 schema 感知的 SQL 编辑、自然语言生成 SQL、备份/数据同步/Schema Diff、图表与运维仪表盘、YAML 工作流自动化，并内置 MCP 服务端与客户端（支持 headless stdio 模式）。支持 PostgreSQL、MySQL/MariaDB、SQLite、Redis 等 17 种驱动，凭据以 AES-256-GCM 加密。",
+   "highlights": [
+    "提供 17 种数据库驱动，包含 SQL 编辑器、可视化查询构建、ER 图、Redis 工作台与图表/运维仪表盘",
+    "实现备份、Data Sync、Data Transfer、Schema Diff 等数据迁移操作，执行前提供预览与 DDL 计划",
+    "内置 MCP Server 与 MCP Client，支持 headless stdio 运行及 YAML 工作流自动化"
+   ],
+   "use_cases": [
+    "开发者在桌面端连接并查询 PostgreSQL、MySQL、SQLite、Redis 等数据库",
+    "通过 YAML 工作流或 MCP 调度定时备份与跨库自动化任务",
+    "接入 OpenAI/Anthropic/Ollama 等模型进行自然语言 SQL 生成与错误诊断"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. Open a local SQLite file, or create a PostgreSQL, MySQL/MariaDB, or Redis connection. ／ Workflows describe database operations in YAML: queries, driver commands, AI steps, conditions, loops, merges, and migrations. Each step can target its own connection and database, so one workflow can read orders from PostgreSQL, pull logistics from MySQL, and ／ |PostgreSQL|basic|SQL, schema browser, EXPLAIN, AI context, multi-database|",
+     "lines": [
+      44,
+      134,
+      222
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "2. Open a local SQLite file, or create a PostgreSQL, MySQL/MariaDB, or Redis connection. ／ Workflows describe database operations in YAML: queries, driver commands, AI steps, conditions, loops, merges, and migrations. Each step can target its own connection and database, so one workflow can read orders from PostgreSQL, pull logistics from MySQL, and ／ |MySQL / MariaDB|basic|SQL, schema browser, EXPLAIN, multi-database|",
+     "lines": [
+      44,
+      134,
+      223
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "2. Open a local SQLite file, or create a PostgreSQL, MySQL/MariaDB, or Redis connection. ／ |SQLite|basic|Embedded and file-backed workflows|",
+     "lines": [
+      44,
+      224
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|`all`|T-SQL dialect, live-verified|",
+     "lines": [
+      227
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|`all`|HTTP interface, multi-database|",
+     "lines": [
+      228
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "2. Open a local SQLite file, or create a PostgreSQL, MySQL/MariaDB, or Redis connection. ／ |MySQL / MariaDB|basic|SQL, schema browser, EXPLAIN, multi-database|",
+     "lines": [
+      44,
+      223
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "`basic` is the four core drivers and `all` is every registered path driver; Git drivers are selected explicitly, e.g. `--drivers=basic,kiwi,superset`. The exact driver set is a build-time choice, so a distribution never has to ship every engine. Wire-compatibl",
+     "lines": [
+      238
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该应用为多种数据库提供连接、查询、迁移、监控等管理能力，是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0；其中 Driver API 部分以 MIT 许可发布",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 17 database drivers · 10 interface languages · MCP server &amp; client · No account, no cloud · macOS · Windows · Linux ／ Doing real database work usually means stitching together five tools: one to browse the schema, one to write SQL, one to run migrations, one to build dashboards, and one to wire AI into the loop. DataZen is a single desktop app that covers the whole loop — and it speaks MCP, so your own AI agent can drive it too. ／ - **Bring your own agent.** DataZen is an MCP server *and* an MCP client, and can run headless over stdio inside an agent pipeline.",
+   "evidence_lines": [
+    17,
+    21,
+    37
+   ]
+  },
+  "fn": "flyxl/datazen",
+  "sha": "7d524148c2a6",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

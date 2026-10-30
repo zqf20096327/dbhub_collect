@@ -9814,5 +9814,275 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "534c8a7ba296": {
+  "identity": {
+   "one_liner": "基于 Next.js 的语言学习应用，使用 PostgreSQL 与 Drizzle ORM 存储数据",
+   "review": "这是一个复刻 Duolingo 交互式语言学习的 Web 应用，技术栈为 Next.js/React/TypeScript，数据存储在 PostgreSQL（默认配置 Neon），通过 drizzle-orm 做数据访问，并集成 Clerk 认证与 Stripe 支付。README 提供完整的 .env.local 配置、数据库 seed 脚本（db:push/db:prod）与 pnpm 安装步骤，面向想本地部署或学习的开发者。",
+   "highlights": [
+    "提供挑战/课程、商店、任务（Quests）等语言学习功能的 Next.js 应用",
+    "使用 drizzle-orm 与 pg 连接 PostgreSQL，附带 db:push 与 db:prod 种子脚本",
+    "集成 Clerk 认证与 Stripe 支付/ webhook"
+   ],
+   "use_cases": [
+    "部署自定义语言学习平台",
+    "Next.js/Drizzle 全栈参考项目",
+    "学习应用 UI 交互实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "1. **Source**: Database Provider (e.g., Neon, PostgreSQL) ／ React JS Next JS Typescript Tailwind CSS Vercel Postgresql ／ - pg: ^8.23.1",
+     "lines": [
+      52,
+      120,
+      162
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 PostgreSQL 存储数据的语言学习应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "React JS Next JS Typescript Tailwind CSS Vercel Postgresql ／ pnpm run db:push && pnpm run db:prod ／ - @neondatabase/serverless: ^1.2.0",
+   "evidence_lines": [
+    120,
+    89,
+    141
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "sanidhyy/duolingo-clone",
+  "sha": "534c8a7ba296",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "04bb220c1408": {
+  "identity": {
+   "one_liner": "Docker Compose 打包的 FreePBX 17 VoIP 电话系统",
+   "review": "该项目用 Docker Compose 打包 FreePBX 17、Asterisk 21、PHP 8.2 与 MariaDB 10.11，提供 SIP 通话所需的 PBX 环境，并附带数据持久化、Fail2ban、日志轮转与 TLS 证书配置。面向需要在容器中部署 FreePBX 的运维人员；README 注明不支持 DAHDI 通道，RTP 端口需在宿主机配置 iptables。",
+   "highlights": [
+    "通过 Docker Compose 运行 FreePBX 17、Asterisk 21 与 MariaDB 10.11 的多容器应用",
+    "支持数据持久化与 Fail2ban、日志轮转的预配置",
+    "提供 Let's Encrypt DNS challenge 方式的 TLS 支持与 RTP 端口自定义"
+   ],
+   "use_cases": [
+    "在容器环境中部署 FreePBX/Asterisk 电话系统",
+    "需要持久化存储 CDR 与 FreePBX 配置数据的 SIP 通话场景",
+    "需 Let's Encrypt 证书加密 Web 管理界面的 PBX 部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* MariaDB 10.11.14",
+     "lines": [
+      10
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "# for MySQL root user ／ printf \"your-mysql-root-password\" > mysql_root_password.txt",
+     "lines": [
+      57,
+      58
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 MariaDB 存储数据的 FreePBX/Asterisk VoIP 应用打包，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This is MVP Docker Compose application for having FreePBX - A Voice over IP manager for Asterisk, running in containers. ／ * MariaDB 10.11.14",
+   "evidence_lines": [
+    3,
+    10
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "escomputers/freepbx-docker",
+  "sha": "04bb220c1408",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "301adfd056ef": {
+  "identity": {
+   "one_liner": "本地 MCP 策略代理，用 YAML Lens 包装 MCP 服务器实现安全管控",
+   "review": "JanuScope 是一个运行在本地的 MCP 策略代理，通过一份 YAML Lens 配置包装任意 MCP 服务器，提供工具屏蔽、SQL 变更拦截、PII 脱敏、调用审计、schema 预注入等能力，并内置 20 个覆盖数据库与 SaaS API 的 Lens。面向在 Claude Code、Cursor、Copilot 等 MCP 客户端中使用数据库和其他服务的用户。数据路径中无托管网关；AGPL-3.0 许可，另有商业许可。",
+   "highlights": [
+    "提供工具屏蔽、SQL 变更拦截、PII 脱敏、调用结果审计日志与速率限制等策略控制",
+    "内置 20 个 Lens 配置，覆盖 PostgreSQL、MySQL、ClickHouse、SQLite、SQL Server、Oracle 等数据库 MCP 服务器",
+    "预注入数据库 schema 以减少发现调用，并支持 OpenTelemetry 与 vault 密钥"
+   ],
+   "use_cases": [
+    "为通过 MCP 访问数据库的 AI 客户端配置只读或脱敏访问策略",
+    "记录 LLM 对 MCP 工具的调用结果用于审计",
+    "在本地包装现有 MCP 服务器而无需修改上游服务器"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "One YAML (called a **Lens**) wraps any MCP server with **security guardrails, schema injection**, and **full audit logging**. There are **20 bundled Lenses** covering **databases (Postgres, MySQL, MongoDB, ClickHouse, Redis, SQLite, Microsoft SQL Server / Azur ／ > **Original benchmark with `claude-sonnet-4-5` against a real application Postgres database (median of 4 runs per prompt).** Across three questions (prompt caching enabled, conversation history reset between questions), a JanuScope Lens used **84% fewer total ／  PostgreSQL",
+     "lines": [
+      18,
+      30,
+      63
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "One YAML (called a **Lens**) wraps any MCP server with **security guardrails, schema injection**, and **full audit logging**. There are **20 bundled Lenses** covering **databases (Postgres, MySQL, MongoDB, ClickHouse, Redis, SQLite, Microsoft SQL Server / Azur ／ MySQL ／ benborla/mcp-server-mysql",
+     "lines": [
+      18,
+      80,
+      81
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One YAML (called a **Lens**) wraps any MCP server with **security guardrails, schema injection**, and **full audit logging**. There are **20 bundled Lenses** covering **databases (Postgres, MySQL, MongoDB, ClickHouse, Redis, SQLite, Microsoft SQL Server / Azur ／ SQLite",
+     "lines": [
+      18,
+      148
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "One YAML (called a **Lens**) wraps any MCP server with **security guardrails, schema injection**, and **full audit logging**. There are **20 bundled Lenses** covering **databases (Postgres, MySQL, MongoDB, ClickHouse, Redis, SQLite, Microsoft SQL Server / Azur ／ SQL Server / Azure SQL ／ \"args\": [\"-y\", \"januscope\", \"--config\", \"mssql-azure-dab\"],",
+     "lines": [
+      18,
+      165,
+      179
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "One YAML (called a **Lens**) wraps any MCP server with **security guardrails, schema injection**, and **full audit logging**. There are **20 bundled Lenses** covering **databases (Postgres, MySQL, MongoDB, ClickHouse, Redis, SQLite, Microsoft SQL Server / Azur ／ Oracle Database",
+     "lines": [
+      18,
+      184
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "One YAML (called a **Lens**) wraps any MCP server with **security guardrails, schema injection**, and **full audit logging**. There are **20 bundled Lenses** covering **databases (Postgres, MySQL, MongoDB, ClickHouse, Redis, SQLite, Microsoft SQL Server / Azur ／ ClickHouse ／ ClickHouse/mcp-clickhouse",
+     "lines": [
+      18,
+      114,
+      115
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为通过 MCP 访问数据库的场景提供策略代理、审计与脱敏组件，属数据库生态服务工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "Oracle",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，另提供面向组织的商业许可",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**JanuScope is the local MCP policy proxy. One YAML wraps any MCP server with policy, redaction, audit, and database-schema injection. JanuScope runs locally, with no hosted gateway in the data path. Your upstream server and model provider can still receive data.** ／ JanuScope **hides the dangerous tools**, **scrubs matching PII** out of returned values before the model reads them, **records call outcomes**, and **pre-injects your DB schema** to reduce discovery calls. **Runs locally, no hosted gateway in the data path.** ／ One YAML (called a **Lens**) wraps any MCP server with **security guardrails, schema injection**, and **full audit logging**. There are **20 bundled Lenses** covering **databases (Postgres, MySQL, MongoDB, ClickHouse, Redis, SQLite, Microsoft SQL Server / Azure SQL, Oracle, Neon, Snowflake, Aurora DSQL, Redshift, Supabase self-host), SaaS APIs (Stripe, Notion, Atlassian, Linear, Supabase Cloud), source control (GitHub), and the filesystem**. A **community ecosystem of _per-MCP_ Lenses** (YAML config files), and measured **benchmarks** showing **84% fewer tokens** and **~3× faster responses** in the original three-question Postgres test (median of 4 runs; history reset between questions). Newer retained-conversation results and limitations are reported below. **Zero server changes. No hosted gateway in the data path.** Works with **Claude Code, VSCode Copilot, Codex, Cursor,** and any MCP client.",
+   "evidence_lines": [
+    14,
+    16,
+    18
+   ]
+  },
+  "fn": "giancarloerra/JanuScope",
+  "sha": "301adfd056ef",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

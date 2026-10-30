@@ -11181,5 +11181,283 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8531d70bdc8d": {
+  "identity": {
+   "one_liner": "自托管的 agent 构建应用与工作流部署平台",
+   "review": "Widefleet 是一个开源自托管平台，用于将编码 agent 构建的内部工具应用部署到团队共享环境，提供 SSO 登录、数据库/文件存储/键值绑定、网络权限控制、Cron/队列/工作流以及部署历史与回滚。使用者是应用创建者与安装运维人员，通过 CLI 部署，参考安装基于单台 Linux Docker 主机，由使用者自行负责身份配置、DNS、证书、备份与升级。",
+   "highlights": [
+    "支持通过 CLI 构建、预览和部署 SvelteKit 或 TanStack Start 应用",
+    "提供数据库、文件存储、键值绑定声明及 Cron、队列、持久化工作流运行时",
+    "支持公司 SSO、应用访问分组、网络权限控制与应用日志查询"
+   ],
+   "use_cases": [
+    "团队共享部署编码 agent 生成的内部工具应用",
+    "企业内部搭建带 SSO 与权限控制的自托管应用平台",
+    "运行带后台任务（Cron/队列/工作流）的内部应用"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The reference installation runs on one Linux x86-64 Docker host. You operate identity configuration, DNS, certificates, backups and upgrades. Follow the installation guide; use external services for external PostgreSQL, cloud storage and automatic HTTPS.",
+     "lines": [
+      76
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为部署与运行应用的平台组件，提供数据库与存储绑定等基础设施能力，服务于应用开发与部署流程",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Open-source, self-hosted platform for agent-built apps and workflows.** ／ Build internal tools with your coding agent and keep the app code in your own project. Widefleet gives your team a shared place to deploy and use them, with company login, databases, file storage and controlled access to your systems. ／ The reference installation runs on one Linux x86-64 Docker host. You operate identity configuration, DNS, certificates, backups and upgrades. Follow the installation guide; use external services for external PostgreSQL, cloud storage and automatic HTTPS.",
+   "evidence_lines": [
+    5,
+    7,
+    76
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "widefleet/widefleet",
+  "sha": "8531d70bdc8d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2e12ababc1e9": {
+  "identity": {
+   "one_liner": "Rust 嵌入式多模型数据库，融合 SQL、向量、图与文档存取",
+   "review": "TapirusDB 是一个用 Rust 编写的嵌入式数据库，在单个 .tapir 文件内提供关系表、向量、图与 JSON 文档四类模型，支持事务性 AI 记忆检索（BM25+嵌入+时效/重要性评分），并提供 Rust/Node/WASM SDK、HTTP 服务与可选页加密。面向需要本地单进程数据层的 AI 应用开发者；README 明确其 SQL 为子集、非 SQLite 替代品，历史性能数据已撤回。",
+   "highlights": [
+    "单文件内提供 SQL、向量（HNSW）、图与 JSON 文档 API，共享同一事务",
+    "AI 源检索结合 BM25、嵌入、时效与重要性，支持命名空间过滤与来源引用",
+    "主 crate 禁用 explicit unsafe，提供 WASM 工作区与可选页加密"
+   ],
+   "use_cases": [
+    "需要本地进程内 SQL+向量数据层的 LLM/RAG 应用",
+    "离线 IoT/Micro 场景的记忆胶囊导出与导入",
+    "浏览器端 WASM 内嵌数据库（IndexedDB 快照）"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- SQL support is a documented subset; TapirusDB is not a SQLite drop-in or a claim of full SQL conformance. ／ - Indexed memory adds model-specific HNSW, upsert, revision checks, atomic batches, source versions, TTL and configurable budgets. Python tools provide verified SQLite scalar migration, document ingestion and retrieval evaluation. See AI and embedded workflows",
+     "lines": [
+      22,
+      25
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它本身是数据库引擎本体，为上层应用提供存储能力，而非使用某个数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "BUSL-1.1",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TapirusDB is an embedded Rust database for local applications that need SQL, vector search and AI document memory in one runtime. Store text and embeddings, retrieve sources for an LLM, and keep SQL and memory changes in the same transaction. ／ - Local, in-process database with a `.tapir` file and a write-ahead log. ／ - First-party SQL Lite, Document, Graph and Vector entry points can be built separately; the default Quad engine exposes every model in the same native file. See edition builds and limits.",
+   "evidence_lines": [
+    3,
+    21,
+    29
+   ]
+  },
+  "fn": "tapiruslab/TapirusDB",
+  "sha": "2e12ababc1e9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "01dae2037e79": {
+  "identity": {
+   "one_liner": "SQLite 数据库文件的最小硬化 Docker 容器镜像",
+   "review": "一个为 SQLite 数据库文件提供容器的 Docker 镜像：以非特权用户运行于 scratch 基础上，为命名的多个数据库文件创建、健康检查，并内置 sqlite3 shell 用于备份、恢复和维护操作，面向 Coolify 等容器主机用户。当前为 v0 阶段，v1.0.0 前可能存在破坏性变更，需固定版本号使用。",
+   "highlights": [
+    "单个容器可创建并对多个 SQLite 数据库文件执行健康检查，内置 sqlite3 shell 用于备份、恢复和维护",
+    "以非特权用户运行、支持只读根文件系统，内置 FTS3/FTS4/FTS5、R*Tree、Geopoly 等 SQLite 扩展",
+    "提供 linux/amd64、arm64、arm/v7、riscv64 等多架构镜像，发布前逐平台测试"
+   ],
+   "use_cases": [
+    "在容器环境中为应用旁边的 SQLite 数据库文件提供统一托管与维护入口",
+    "通过 COPY --from 方式将静态 sqlite3 二进制复制进无包管理器的 distroless/scratch 镜像执行备份恢复",
+    "配合 Coolify 等容器主机部署 SQLite 数据卷"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# SQLite ／ A central home for one or more SQLite databases. One minimal and hardened container creates every database you name, health checks them and brings the `sqlite3` shell for backups, restores and maintenance. Made for Coolify and any other container host.",
+     "lines": [
+      1,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该镜像为 SQLite 数据库文件的托管、备份与维护提供服务，属数据库生态工具组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A central home for one or more SQLite databases. One minimal and hardened container creates every database you name, health checks them and brings the `sqlite3` shell for backups, restores and maintenance. Made for Coolify and any other container host. ／ SQLite has no server and the database is just a file. Application images rarely ship the `sqlite3` shell to run backup or vacuum commands, so this image gives the database file a minimal and secure home with the shell and the extensions built in. ／ `sqlite3` is a static binary without dependencies. You can copy it into any image with a single line, and it works on `scratch`, distroless, Alpine, Debian and more, for backups, restores and maintenance without a package manager:",
+   "evidence_lines": [
+    11,
+    18,
+    63
+   ]
+  },
+  "fn": "peakimages/sqlite",
+  "sha": "01dae2037e79",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5e8d8ead8a8c": {
+  "identity": {
+   "one_liner": "多平台 AI 搜索问答采集爬虫，基于 Playwright MCP 驱动真实浏览器",
+   "review": "该仓库是一个采集工具：通过 Playwright MCP 扩展接管已登录的 Chrome，从豆包、DeepSeek、Kimi、千问、秘塔、元宝、小红书七个平台网页版批量采集 AI 搜索问答与引用链接，结果存为 JSON/Markdown 并可导出 CSV。数据持久化使用 SQLite（内置 FastAPI 管理后台），分布式模式依赖 Redis 队列与心跳。适合需要批量收集 AI 搜索结果并做多机并行采集的用户。",
+   "highlights": [
+    "通过 Playwright MCP 接管真实浏览器，批量查询 7 个 AI 平台网页版并采集问答与引用链接",
+    "内置 FastAPI + SQLite 管理后台，支持建任务、进度跟踪、重跑失败与 CSV 导出",
+    "支持基于 Redis 队列的分布式多机并行采集，按天去重、心跳保活与崩溃恢复"
+   ],
+   "use_cases": [
+    "批量采集多个 AI 平台对同一关键词的回答用于对比或留存",
+    "多台机器协同执行大规模关键词采集任务",
+    "将采集结果按天汇总导出 CSV 供表格工具使用"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Geo 数据引擎** —— **多平台 AI 搜索爬虫 / AI 搜索结果采集工具**。通过 **网页版** 从 7 个主流 AI 平台（豆包 Doubao / DeepSeek / Kimi / 千问 Qwen / 秘塔 Metaso / 腾讯元宝 Yuanbao / 小红书 Xiaohongshu）**批量采集 AI 搜索问答、答案与引用链接**，支持**关键词批量查询、按天自动去重、CSV 导出**，并内置基于 Redis 的**分布式多机并行采集**与 **FastAPI + SQLite 管理后台** ／ - 🖥️ **内置管理后台** —— FastAPI + SQLite Web 界面：建任务、看进度、重跑失败、导出 CSV。 ／ - 结果推入 Redis 结果队列，由管理后台内置消费者落 **SQLite**。",
+     "lines": [
+      3,
+      25,
+      136
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储任务与采集结果、Redis 做分布式队列，SQLite 是其数据存储组件而非服务对象。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Geo 数据引擎** —— **多平台 AI 搜索爬虫 / AI 搜索结果采集工具**。通过 **网页版** 从 7 个主流 AI 平台（豆包 Doubao / DeepSeek / Kimi / 千问 Qwen / 秘塔 Metaso / 腾讯元宝 Yuanbao / 小红书 Xiaohongshu）**批量采集 AI 搜索问答、答案与引用链接**，支持**关键词批量查询、按天自动去重、CSV 导出**，并内置基于 Redis 的**分布式多机并行采集**与 **FastAPI + SQLite 管理后台**。 ／ - 🖥️ **内置管理后台** —— FastAPI + SQLite Web 界面：建任务、看进度、重跑失败、导出 CSV。 ／ 内置管理后台（`admin/`，FastAPI + SQLite + Redis）提供 Web 界面编排分布式采集，无需外部后台：",
+   "evidence_lines": [
+    3,
+    25,
+    141
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "jerry3747/geo-data-engine",
+  "sha": "5e8d8ead8a8c",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

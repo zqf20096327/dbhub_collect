@@ -11686,5 +11686,161 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d14042187091": {
+  "identity": {
+   "one_liner": "Zig 编写的单二进制 AI Agent CLI",
+   "review": "用 Zig 实现的命令行 AI Agent，编译为无运行时依赖的单个二进制（约 1.6–14 MB），支持 Ollama、Claude、OpenAI 等多后端与流式输出，链接系统 sqlite3 存历史，提供 MCP、浏览器自动化、定时任务等内置能力；面向想在本地或 ARM 设备上运行 Agent 的用户。",
+   "highlights": [
+    "提供自主多步执行的 agentic loop，每轮最多 25 次工具调用",
+    "支持 8 个 AI 后端切换，默认 Ollama 本地运行，全部支持流式输出",
+    "内置 MCP 客户端与服务端、浏览器自动化、定时调度器与 70 个领域 skill 定义"
+   ],
+   "use_cases": [
+    "在 Raspberry Pi、Jetson 等 ARM 设备上本地运行 AI Agent",
+    "无 API Key 的离线场景，通过 Ollama 使用本地模型",
+    "通过 MCP 或聊天桥接将 Agent 接入已有工具与平台"
+   ],
+   "ai_flag_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|macOS arm64|`wintermolt-macos`|6.1 MB|Mach-O arm64, the system libcurl + sqlite3 (nothing to install), stripped. macOS 27.2+ (#5). Baseline arm64: any Apple Silicon Mac.| ／ |Linux arm64|`wintermolt-linux-arm64`|1.6 MB|ELF aarch64, dynamic libcurl + sqlite3, stripped. glibc 2.34+ (Ubuntu 22.04 / JetPack 6, Debian 12 / Raspberry Pi OS Bookworm, RHEL 9 and later). Baseline aarch64: no SVE, so it runs on Raspberry Pi and older Jetson ／ |Linux x86_64|`wintermolt-linux-x86_64`|1.8 MB|ELF x86-64, dynamic libcurl + sqlite3, stripped. glibc 2.34+ (Ubuntu 22.04, Debian 12, RHEL 9 and later). x86-64-v3 CPU (Intel Haswell, AMD Zen or newer).|",
+     "lines": [
+      121,
+      122,
+      123
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用数据库的 AI Agent 应用，README 仅将 sqlite3 作为二进制的系统依赖列出，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " An autonomous AI agent CLI written entirely in Zig. ／ Wintermolt's default backend is Ollama, which ／ |macOS arm64|`wintermolt-macos`|6.1 MB|Mach-O arm64, the system libcurl + sqlite3 (nothing to install), stripped. macOS 27.2+ (#5). Baseline arm64: any Apple Silicon Mac.|",
+   "evidence_lines": [
+    7,
+    92,
+    121
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "lupin4/wintermolt",
+  "sha": "d14042187091",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e44773c5a831": {
+  "identity": {
+   "one_liner": "OceanBase seekdb SQL 审查的 ModelScope Agent Skill",
+   "review": "一个发布在 ModelScope 的 Agent Skill，包含离线 SQL 检查脚本 sql_check.py，用于审查 SQL 安全性与潜在性能问题、给出 EXPLAIN/索引验证步骤，不连接数据库、不执行 SQL、无第三方依赖。面向在 OceanBase seekdb/MySQL 兼容环境中使用 AI 代理做 SQL 审查的开发者，README 主要内容为打包与提交 OceanBase 挑战赛的流程说明。",
+   "highlights": [
+    "提供离线 SQL smell 扫描脚本，支持 Markdown/JSON 输出（--format markdown|json）",
+    "无第三方 Python 依赖、不建立数据库连接、不执行 SQL，仅读取",
+    "提供打包脚本生成 ModelScope 可上传的 ZIP 并做元数据校验"
+   ],
+   "use_cases": [
+    "在 OceanBase seekdb/MySQL 兼容环境中辅助 AI 代理审查 SQL 安全性与性能问题",
+    "生成 EXPLAIN/索引验证步骤供人工核实",
+    "参与 OceanBase 挑战赛的 Skill 打包与发布"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "A ModelScope Agent Skill for reviewing SQL safety, likely query-performance issues, and realistic EXPLAIN/index validation steps for OceanBase seekdb/MySQL-compatible environments.",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "A ModelScope Agent Skill for reviewing SQL safety, likely query-performance issues, and realistic EXPLAIN/index validation steps for OceanBase seekdb/MySQL-compatible environments. ／ ## Publish and submit to the OceanBase challenge",
+     "lines": [
+      3,
+      28
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是用于审查 OceanBase seekdb 环境 SQL 的 Skill 工具，为数据库使用场景服务的组件而非用库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A ModelScope Agent Skill for reviewing SQL safety, likely query-performance issues, and realistic EXPLAIN/index validation steps for OceanBase seekdb/MySQL-compatible environments. ／ - scripts/sql_check.py — offline SQL smell scanner (Markdown or JSON) ／ ## Publish and submit to the OceanBase challenge",
+   "evidence_lines": [
+    3,
+    10,
+    28
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "km-hl/seekdb-sql-sentinel",
+  "sha": "e44773c5a831",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

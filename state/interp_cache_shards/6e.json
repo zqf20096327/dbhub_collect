@@ -9784,5 +9784,276 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2d77a449ed66": {
+  "identity": {
+   "one_liner": "数据库 CDC/全量复制到 Apache Iceberg 的数据摄取引擎",
+   "review": "OLake Go 是一个开源数据摄取引擎，将 PostgreSQL、MySQL、Oracle、MSSQL 等数据库及 Kafka、S3 的数据以全量、CDC 或增量方式复制到 Apache Iceberg 或 Parquet，提供 Web UI 和 CLI 两种操作方式，可通过 Docker Compose、Helm 等部署，面向构建湖仓和实时分析管道的数据工程师。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MongoDB、Oracle、DB2、MSSQL 等来源的 Full Load、CDC 与增量复制",
+    "写入 Apache Iceberg，支持 Glue、Hive、JDBC、REST 目录",
+    "提供 Web UI 与 CLI（spec/check/discover/sync）两种使用方式"
+   ],
+   "use_cases": [
+    "将 OLTP 数据库数据迁移到 Iceberg 湖仓",
+    "基于 CDC 数据支撑 BI 查询引擎",
+    "在对象存储上构建近实时数据湖仓"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**OLake Go** supports replication from **transactional databases** such as **PostgreSQL, MySQL, MongoDB, Oracle, DB2, and MSSQL**, **event-streaming systems like Apache Kafka** and **Object-store like S3**, into open data lakehouse formats such as **Apache Ice ／ |PostgreSQL|✅|✅ `pgoutput`|✅|`wal2json` deprecated|Postgres Docs|",
+     "lines": [
+      34,
+      76
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**OLake Go** supports replication from **transactional databases** such as **PostgreSQL, MySQL, MongoDB, Oracle, DB2, and MSSQL**, **event-streaming systems like Apache Kafka** and **Object-store like S3**, into open data lakehouse formats such as **Apache Ice ／ |MySQL|✅|✅|✅|Binlog-based CDC|MySQL Docs|",
+     "lines": [
+      34,
+      77
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "**OLake Go** supports replication from **transactional databases** such as **PostgreSQL, MySQL, MongoDB, Oracle, DB2, and MSSQL**, **event-streaming systems like Apache Kafka** and **Object-store like S3**, into open data lakehouse formats such as **Apache Ice ／ |Oracle|✅|WIP|✅|JDBC based Full Load & Incremental|Oracle Docs|",
+     "lines": [
+      34,
+      79
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**OLake Go** supports replication from **transactional databases** such as **PostgreSQL, MySQL, MongoDB, Oracle, DB2, and MSSQL**, **event-streaming systems like Apache Kafka** and **Object-store like S3**, into open data lakehouse formats such as **Apache Ice ／ |MSSQL|✅|✅|✅|Full Load, CDC & Incremental|MSSQL Docs|",
+     "lines": [
+      34,
+      81
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明它是将数据库数据复制到 Iceberg 的数据摄取引擎，为数据库生态提供复制/迁移能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " OLake Go is a high-performance, open-source data ingestion engine for replicating databases, S3, and Kafka into ／ **OLake Go** supports replication from **transactional databases** such as **PostgreSQL, MySQL, MongoDB, Oracle, DB2, and MSSQL**, **event-streaming systems like Apache Kafka** and **Object-store like S3**, into open data lakehouse formats such as **Apache Iceberg** or **Plain Parquet** — delivering blazing-fast performance with minimal infrastructure cost. ／ |Source|Full Load|CDC|Incremental|Notes|Documentation|",
+   "evidence_lines": [
+    6,
+    34,
+    74
+   ]
+  },
+  "fn": "datazip-inc/olake",
+  "sha": "2d77a449ed66",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a8326039a8c9": {
+  "identity": {
+   "one_liner": "基于 SQLAlchemy 与数据库锁机制的分布式锁库",
+   "review": "这是一个基于 SQLAlchemy 实现分布式锁的 Python 库，利用数据库自带的锁机制（MySQL/MariaDB 的 GET_LOCK、PostgreSQL 的 Advisory Lock、SQL Server 的 sp_getapplock、Oracle 的 DBMS_LOCK）在已有数据库基础设施上提供分布式互斥能力，无需引入 Redis 或 ZooKeeper 等额外服务。适合已在用上述数据库且需要中低并发同步的应用；要求 Python 3.10+ 和 SQLAlchemy 1.4.3+，Oracle 免费版不支持所需锁接口且未经 CI 测试。",
+   "highlights": [
+    "支持 MySQL、MariaDB、SQL Server、Oracle、PostgreSQL 五种数据库后端的分布式锁，含各数据库的多种锁模式（会话/事务级、共享/排他）",
+    "同时提供同步和异步 API（如 create_sadlock 与 create_async_sadlock），适配 aiomysql、asyncpg、psycopg 等异步驱动",
+    "支持上下文管理器、超时控制和键类型自动转换，可与 SQLAlchemy ORM 会话配合使用"
+   ],
+   "use_cases": [
+    "多进程/多服务器环境下防止重复任务执行",
+    "定时任务跨服务器协调，避免调度重叠",
+    "API 限流与对同一资源的并发操作去重"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|Advisory Lock|`psycopg2`, `psycopg`|`asyncpg`, `psycopg`|Yes| ／ `psycopg` refers to Psycopg 3. CI tests it in both synchronous and asynchronous modes. The integration matrix covers MySQL, PostgreSQL, and Microsoft SQL Server on Python 3.10 through 3.14. ／ - Projects already using MySQL, MariaDB, MSSQL, Oracle, or PostgreSQL",
+     "lines": [
+      21,
+      23,
+      39
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|Named Lock (`GET_LOCK` / `RELEASE_LOCK`)|`mysqlclient`, `PyMySQL`|`aiomysql`, `asyncmy`|Yes| ／ `psycopg` refers to Psycopg 3. CI tests it in both synchronous and asynchronous modes. The integration matrix covers MySQL, PostgreSQL, and Microsoft SQL Server on Python 3.10 through 3.14. ／ - Projects already using MySQL, MariaDB, MSSQL, Oracle, or PostgreSQL",
+     "lines": [
+      17,
+      23,
+      39
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle|User Lock (`DBMS_LOCK`)|`oracledb`|`oracledb`|No| ／ > ⚠️ **Oracle Not Tested:** ／ > Oracle Database Free (23c/23ai) does NOT support `DBMS_LOCK.REQUEST`. We do NOT test Oracle in CI or integration tests. Use with Oracle Enterprise/Standard Edition at your own risk.",
+     "lines": [
+      20,
+      25,
+      26
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**Q: Can I use this with SQLite?** ／ A: No. SQLite does not support the same named/advisory lock mechanisms as MySQL or PostgreSQL.",
+     "lines": [
+      366,
+      368
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|Microsoft SQL Server|Application Lock (`sp_getapplock`)|`pyodbc`|`aioodbc`|Yes| ／ `psycopg` refers to Psycopg 3. CI tests it in both synchronous and asynchronous modes. The integration matrix covers MySQL, PostgreSQL, and Microsoft SQL Server on Python 3.10 through 3.14. ／ - Projects already using MySQL, MariaDB, MSSQL, Oracle, or PostgreSQL",
+     "lines": [
+      19,
+      23,
+      39
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MariaDB|Named Lock (compatible with MySQL)|`mysqlclient`|`aiomysql`, `asyncmy`|No| ／ - Projects already using MySQL, MariaDB, MSSQL, Oracle, or PostgreSQL",
+     "lines": [
+      18,
+      39
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是基于 SQLAlchemy 和数据库锁基础设施提供分布式锁能力的库，为使用这些数据库的应用提供并发协调组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A distributed lock library based on databases and [SQLAlchemy][]. ／ sqlalchemy-dlock provides distributed locking capabilities using your existing database infrastructure—no additional services like Redis or ZooKeeper required. It currently supports: ／ |PostgreSQL|Advisory Lock|`psycopg2`, `psycopg`|`asyncpg`, `psycopg`|Yes|",
+   "evidence_lines": [
+    11,
+    13,
+    21
+   ]
+  },
+  "fn": "tanbro/sqlalchemy-dlock",
+  "sha": "a8326039a8c9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "012ab94d0388": {
+  "identity": {
+   "one_liner": "Tidbyt 设备的自定义 Pixlet 小组件集，由 AWS Lambda 定时渲染并推送",
+   "review": "为 Tidbyt 显示设备编写的一组 Pixlet 小组件，包含日照弧线、头顶航班、Oura 健康数据、股票行情等，通过 AWS Lambda 按 EventBridge 调度渲染并推送到设备，GitHub Actions 实现推送即部署。面向拥有 Tidbyt 设备和 AWS 账户的个人用户，README 未涉及任何数据库相关内容。",
+   "highlights": [
+    "提供 Sun Arc、Flights Overhead、Oura、Stock Watch、Hello World 多个 Pixlet 小组件",
+    "使用 AWS Lambda + EventBridge Scheduler 定时渲染并推送图片到 Tidbyt",
+    "通过 GitHub Actions 在 push 到 main 时自动构建、冒烟测试并部署"
+   ],
+   "use_cases": [
+    "在 Tidbyt 设备上显示自定义信息组件",
+    "以 AWS 无服务器方式定时刷新设备内容",
+    "作为编写 Pixlet 小组件的示例参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是使用 Tidbyt API 和 AWS 服务的展示应用，未提供任何数据库相关的工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Custom Pixlet widgets for a Tidbyt, kept fresh ／ - **Lambda** (`tidbyt-widgets`) runs from a container image with Pixlet inside. On ／ - **EventBridge Scheduler** starts it every minute from 5 AM to midnight and every 10",
+   "evidence_lines": [
+    3,
+    47,
+    49
+   ]
+  },
+  "fn": "shenda73/tidbyt-widgets",
+  "sha": "012ab94d0388",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

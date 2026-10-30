@@ -11149,5 +11149,312 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "92338f8b50d7": {
+  "identity": {
+   "one_liner": "本地 Oracle Cloud Infrastructure 模拟器，提供 OCI 形态服务",
+   "review": "floci-oci 是一个本地运行的 OCI 模拟器，面向开发和 CI 测试场景，让 OCI SDK、CLI、Terraform 等现有工具指向 localhost 端点即可工作。它模拟 Identity、对象存储、Queue、Vault、Functions、OKE 等服务，其中 Functions、OKE 和 PostgreSQL 数据库系统通过 Docker sidecar 运行真实组件；API 签名解析但不验证。MIT 许可，构建需 JDK 25。",
+   "highlights": [
+    "在本地容器中提供 OCI 形状的服务，官方 oci-java-sdk、Python SDK、OCI CLI 和 Terraform provider 可不改代码直接使用",
+    "Database with PostgreSQL 服务通过真实 `postgres:<major>-alpine` 容器运行，含 TLS、CA 证书和数据卷",
+    "支持 in-memory、persistent、hybrid、write-ahead log 多种持久化配置"
+   ],
+   "use_cases": [
+    "无云账号条件下本地开发与调试 OCI 集成",
+    "CI 流水线中替代真实租户运行 OCI 集成测试",
+    "本地验证 Terraform/OpenTofu 的 OCI provider 配置"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|Database with PostgreSQL: DB systems, start/stop/restart, master password reset, connection details with a CA certificate, shapes, default configurations, work requests, real PostgreSQL sidecar| ／ |Database with PostgreSQL|Real Docker (PostgreSQL) / In-process|DB system CRUD (`/20220915`) driven by work requests, with a `DELETED` tombstone clients can poll; one `postgres:<major>-alpine` container per DB system, started in the background; connection deta ／ |Database with PostgreSQL|`postgres:{major}-alpine`|A real PostgreSQL server per DB system, of the major the DB system asks for, with TLS, a host port from `15432..15531` and a named data volume|",
+     "lines": [
+      139,
+      157,
+      172
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Light, fluffy, and always free, now for Oracle Cloud ／ floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI. ／ It gives you OCI-shaped services on your machine without an Oracle Cloud account, uploaded API keys, or paid feature gates. Point the OCI SDKs, the OCI CLI, Terraform, or OpenTofu at `http://localhost:4599` and keep your existing workflows.",
+     "lines": [
+      5,
+      24,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是一个为开发/测试流程模拟 OCI 云服务的工具组件，本身不依赖某数据库存储业务数据（存储可配 in-memory 等）",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI. ／ It gives you OCI-shaped services on your machine without an Oracle Cloud account, uploaded API keys, or paid feature gates. Point the OCI SDKs, the OCI CLI, Terraform, or OpenTofu at `http://localhost:4599` and keep your existing workflows. ／ |Database|Database with PostgreSQL: DB systems, start/stop/restart, master password reset, connection details with a CA certificate, shapes, default configurations, work requests, real PostgreSQL sidecar|",
+   "evidence_lines": [
+    24,
+    26,
+    139
+   ]
+  },
+  "fn": "floci-io/floci-oci",
+  "sha": "92338f8b50d7",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a98ef893f946": {
+  "identity": {
+   "one_liner": "自托管的 Facebook/Instagram 等社交媒体自动化与 CRM 应用",
+   "review": "PostStack 是一个可自托管运行的社交媒体管理应用，提供 Facebook、Instagram、YouTube、Telegram、Gmail 的帖子发布、收件箱自动回复、drip 序列和联系人 CRM 功能，面向希望自主掌控社媒自动化的个人、代理机构与开发者。应用以 PostgreSQL 存储数据（如限流、会话黑名单），通过 docker compose 启动，许可为 Elastic License 2.0。",
+   "highlights": [
+    "支持 Facebook、Instagram、YouTube、Telegram、Gmail 多渠道的消息收发与自动回复",
+    "提供联系人管理、标签、会话历史等 CRM 功能",
+    "提供 REST API 与 docker compose 一键启动"
+   ],
+   "use_cases": [
+    "替自托管环境下的 Facebook/Instagram 主页与私信配置自动回复规则",
+    "个人或代理机构管理多个社媒账号的帖子发布与排期",
+    "在自有服务器上维护联系人 CRM 与 drip 消息序列"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Rate limiting** on auth endpoints (Postgres-backed) ／ - **JWT session invalidation** on logout (Postgres denylist)",
+     "lines": [
+      56,
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PostStack 是使用 PostgreSQL 存储数据的社交媒体自动化应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0（source-available）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Self-hosted social media management for Facebook, Instagram, YouTube, Telegram & Gmail -- publish & schedule posts, auto-reply to DMs, comments and emails, and run drip sequences, all from one place. ／ - **One-command startup** -- `docker compose up` ／ - **Rate limiting** on auth endpoints (Postgres-backed)",
+   "evidence_lines": [
+    3,
+    50,
+    56
+   ]
+  },
+  "fn": "jurczykpawel/poststack",
+  "sha": "a98ef893f946",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0afc2b4ac1e4": {
+  "identity": {
+   "one_liner": "自托管备份软件，去重加密存储，Web 控制台统一管理",
+   "review": "BackupZit 是一个自托管的备份系统，通过 Web 控制台和各机器上的代理，对文件、整盘、虚拟机（Proxmox/ESXi/Hyper-V）、数据库和 Microsoft 365 做去重、压缩、加密备份，并支持裸机恢复与不可变备份。适合需要集中管理备份的中小组织运维人员使用；控制台自身以 PostgreSQL 存储元数据，安装方式包括现成 VM 镜像、ISO、脚本、手动包和 Docker。",
+   "highlights": [
+    "支持备份 Windows/Linux 文件、整盘镜像、Proxmox VE/VMware ESXi/Hyper-V 虚拟机及 SQL Server、PostgreSQL、MySQL/MariaDB 数据库",
+    "备份经去重、压缩和 AES-256 加密存储，支持 S3 Object Lock 或加固仓库实现不可变备份",
+    "提供 Web 控制台、角色管理、LDAP/SAML 登录、REST API 及自动恢复测试"
+   ],
+   "use_cases": [
+    "企业服务器、工作站与虚拟机的集中备份与裸机恢复",
+    "数据库时间点恢复（单库恢复到任意时间点）",
+    "符合 3-2-1 策略的异地备份副本与勒索软件防护"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Databases**|SQL Server, PostgreSQL, MySQL/MariaDB with native tools; log backups|a single database to any point in time, under a new name or in place|",
+     "lines": [
+      34
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**Databases**|SQL Server, PostgreSQL, MySQL/MariaDB with native tools; log backups|a single database to any point in time, under a new name or in place|",
+     "lines": [
+      34
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|**Databases**|SQL Server, PostgreSQL, MySQL/MariaDB with native tools; log backups|a single database to any point in time, under a new name or in place|",
+     "lines": [
+      34
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**Databases**|SQL Server, PostgreSQL, MySQL/MariaDB with native tools; log backups|a single database to any point in time, under a new name or in place|",
+     "lines": [
+      34
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为保护包括数据库在内的数据资产服务的备份工具，而非使用数据库做业务的应用（控制台虽以 PostgreSQL 存元数据，但核心是为数据库生态提供备份服务）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3，另有商业支持",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "BackupZit backs up Windows and Linux machines (files or whole disks), Proxmox VE, Hyper-V and VMware ESXi virtual machines, SQL Server, PostgreSQL and MySQL/MariaDB databases, NAS shares and Microsoft 365. It stores the backups deduplicated, compressed and encrypted on storage you choose, and restores anything from a single file to a whole machine on new hardware. ／ |**Databases**|SQL Server, PostgreSQL, MySQL/MariaDB with native tools; log backups|a single database to any point in time, under a new name or in place| ／ **Storage:** SFTP, S3-compatible storage (AWS, Wasabi, Backblaze B2, MinIO, Google Cloud Storage), SMB shares, Azure Blob Storage, rotating USB disks, local disks, and the **BackupZit hardened repository** (a write-once Linux server). Backup copy jobs keep a second copy elsewhere (3-2-1).",
+   "evidence_lines": [
+    14,
+    34,
+    38
+   ]
+  },
+  "fn": "Max-Zit/backupzit",
+  "sha": "0afc2b4ac1e4",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "09e12c3115b9": {
+  "identity": {
+   "one_liner": "Linux 按应用统计流量的 eBPF 守护进程+Qt6 图形界面",
+   "review": "Bandsight 是一个 Linux 网络用量监控工具，由常驻的 bandsightd 守护进程（通过 rtnetlink 和 eBPF socket 钩子按接口/按应用计数）和 Qt6 桌面界面组成，数据全部写入本地 SQLite 数据库（WAL 模式），支持流量图、按应用排名、月度流量上限与 Unix socket JSON 实时数据流。面向需要在后台长期统计各应用流量、跟踪月度流量额度的 Linux 桌面用户；仅计数不抓包不拦截，schema 在 1.0 前可能变更。",
+   "highlights": [
+    "通过 eBPF socket 钩子在内核态按应用归集下载/上传字节数，不读取包内容",
+    "历史数据持久化于本地 SQLite 数据库（WAL 模式），支持 1 分钟到 30 天的聚合窗口",
+    "提供月度流量上限、计费周期与 Unix socket JSON 实时数据接口"
+   ],
+   "use_cases": [
+    "长期统计 Linux 桌面上各应用的带宽使用并跨重启保留历史",
+    "跟踪月度数据流量上限与周期用量",
+    "通过只读查询 SQLite 数据库或 JSON socket 将流量数据接入自有脚本"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything goes into a local SQLite database. ／ The database is `/var/lib/bandsight/bandsight.db` (SQLite, WAL mode). Per-app totals",
+     "lines": [
+      21,
+      174
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有数据写入本地 SQLite 数据库，SQLite 仅作为其存储组件被使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Bandsight is a network usage monitor for Linux. It has two parts: ／  Everything goes into a local SQLite database. ／ The database is `/var/lib/bandsight/bandsight.db` (SQLite, WAL mode). Per-app totals",
+   "evidence_lines": [
+    17,
+    21,
+    174
+   ]
+  },
+  "fn": "Isuru-rana/bandsight",
+  "sha": "09e12c3115b9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

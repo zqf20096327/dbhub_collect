@@ -10356,5 +10356,192 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4514ab8d248e": {
+  "identity": {
+   "one_liner": "自托管 Steam 账号管理控制台，单用户 Web UI",
+   "review": "SteamBee 是一个自托管的 Steam 账号运维控制台，通过 Docker 部署的单用户 Web 界面管理自己的多个 Steam 账号，提供二维码登录、加密令牌存储、会话调度、库存/卡牌市场和通知等功能；旧版游戏时长挂机功能保留但被标注为高风险。适合希望在自有服务器上集中管理 Steam 账号操作的个人用户。",
+   "highlights": [
+    "在单个容器中管理多个自有 Steam 账号，提供二维码登录与加密 refresh-token 存储",
+    "提供每周日程排期、会话安全限制、自动恢复与 SSE 状态/日志更新",
+    "包含库存徽章卡牌集、市场挂单批量出售等账号中心功能"
+   ],
+   "use_cases": [
+    "在自有 VPS、Unraid 或 Docker 主机上集中管理个人 Steam 账号",
+    "需要日程排期、会话恢复与通知的账号日常运维",
+    "卡牌合成/库存市场批量操作等社区功能使用"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明它通过 Web 界面操作 Steam 账号，自身数据存于 /data 持久化存储，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SteamBee is a self-hosted operations console for managing your own Steam ／ accounts through a Docker-friendly, single-user interface. ／ SteamBee stores its database, encryption secret, encrypted refresh tokens, and",
+   "evidence_lines": [
+    7,
+    8,
+    129
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ill-yes/steam-bee",
+  "sha": "4514ab8d248e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "35788c8cea3c": {
+  "identity": {
+   "one_liner": "Rust 编写的原生 SQL 数据库客户端，单二进制含导航器、SQL 编辑器与结果网格",
+   "review": "DBiji 是一个用 Rust 编写、无 JVM/Electron 依赖的 SQL 数据库客户端 GUI，提供 schema 感知补全、结果网格编辑、SSH 隧道/代理连接、从 DBeaver 导入连接、数据导入导出、ER 图、备份/恢复等功能，面向使用 PostgreSQL、MySQL、SQLite 等多种数据库的开发者与运维人员，支持 macOS/Windows/Linux，密码存于系统钥匙串或加密 vault。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、SQLite、SQL Server、ClickHouse 等多种数据库的统一界面",
+    "SQL 编辑器带 schema 感知自动补全、参数绑定、explain 计划与查询历史",
+    "通过 SSH 隧道、SOCKS5/HTTP 代理、SSL 连接，密码存于系统凭据库或 Argon2id+XChaCha20 加密 vault"
+   ],
+   "use_cases": [
+    "在桌面端浏览、查询和编辑多种 SQL 数据库的数据",
+    "从 DBeaver 迁移连接配置到原生轻量客户端",
+    "数据库间数据导入导出、schema/数据比对、备份与恢复"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Many databases, one interface**: PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, SQL Server, ／ |`dbiji-driver-*`|PostgreSQL, MySQL, SQLite, SQL Server, ClickHouse, DuckDB drivers|",
+     "lines": [
+      16,
+      227
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Many databases, one interface**: PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, SQL Server, ／ |`dbiji-driver-*`|PostgreSQL, MySQL, SQLite, SQL Server, ClickHouse, DuckDB drivers|",
+     "lines": [
+      16,
+      227
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Many databases, one interface**: PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, SQL Server, ／ dbiji [FILE.sql | DATABASE.db ...] open scripts, SQLite / DuckDB files ／ |`dbiji-driver-*`|PostgreSQL, MySQL, SQLite, SQL Server, ClickHouse, DuckDB drivers|",
+     "lines": [
+      16,
+      157,
+      227
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Many databases, one interface**: PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, SQL Server, ／ |`dbiji-driver-*`|PostgreSQL, MySQL, SQLite, SQL Server, ClickHouse, DuckDB drivers|",
+     "lines": [
+      16,
+      227
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse and (optional) DuckDB. ／ |`dbiji-driver-*`|PostgreSQL, MySQL, SQLite, SQL Server, ClickHouse, DuckDB drivers|",
+     "lines": [
+      17,
+      227
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Many databases, one interface**: PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, SQL Server,",
+     "lines": [
+      16
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- Oracle, Db2, Firebird, H2 and Trino are not supported (no pure-Rust network driver yet).",
+     "lines": [
+      237
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明为多种数据库提供客户端界面与驱动，属于为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A lightweight SQL database client, written entirely in Rust.** ／ DBiji is a native alternative to DBeaver for SQL databases on macOS, Windows and Linux: one small",
+   "evidence_lines": [
+    3,
+    5
+   ]
+  },
+  "fn": "ilhamnadhif/dbiji",
+  "sha": "35788c8cea3c",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11708,5 +11708,133 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ca47d1b8aa72": {
+  "identity": {
+   "one_liner": "QQNT 数据库解密转储与消息导出分析工具",
+   "review": "面向 QQNT（Android 版 QQ）的数据库工具集，提供数据库密钥计算与解密、消息导出（TXT/MD/HTML）、好友列表查询统计和本地 WebUI，并包含 Table2D/Trowel 数据库与 protobuf 研究分析套件。仅供学习交流，需访问 QQ 私有目录或指定根目录，在 Linux/Android 终端以 Python 运行。",
+   "highlights": [
+    "支持 gpro_1-6_*.db 等 QQNT 数据库解密，密钥计算与指定文件解密由 CLI 子命令完成",
+    "Legacy 模块支持导出 TXT、MD、HTML 格式，可按好友、时间范围与消息类型筛选",
+    "自带 Protobuf 解析器，含数据库研究分析套件 Table2D/Trowel"
+   ],
+   "use_cases": [
+    "导出与统计 QQNT 聊天记录用于个人存档",
+    "解密 QQNT 数据库文件供后续分析",
+    "逆向研究 QQ 数据库结构与 protobuf 消息格式"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "项目为解析/转储 QQNT 的 SQLite 数据库提供服务，而非以数据库存业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，另有免责声明限制用途",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "⛏ 全方位友好的 QQNT 数据库转储、消息导出与统计、好友查询、WebUI，以及专为逆向与开发设计的数据库与消息研究分析套件。 ／ - 支持 gpro_1-6_\\*.db 数据库解密。 ／ |`db [files...]`|为选定用户解密指定的数据库文件|",
+   "evidence_lines": [
+    3,
+    75,
+    100
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "miniyu157/qq-dump",
+  "sha": "ca47d1b8aa72",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8287490b9c29": {
+  "identity": {
+   "one_liner": "自托管家庭日记应用，数据加密存储于 SQLite",
+   "review": "nexdiary 是部署在自己服务器上的家庭日记系统：白天随手记笔记，晚间整理成页面，支持按人加密、强制第二因素、单日分享、统计与时间胶囊。面向家庭自托管用户，通过 Docker Compose 安装运行，数据以加密形式存入 SQLite，运维者也无法查看他人日记内容。",
+   "highlights": [
+    "所有写入内容在数据库中按人加密，附带强制第二因素与 passkeys 登录",
+    "支持每日笔记、页面编辑、照片与附件、统计、时间胶囊、单日分享等功能",
+    "通过 Docker Compose 部署，内置备份与恢复检查机制"
+   ],
+   "use_cases": [
+    "家庭自托管的共享日记/日志记录",
+    "注重隐私的个人日记与心情/健康数值记录",
+    "将日记整理输出为可打印 PDF 年册"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`nexdiary.db`|The SQLite database: accounts, days, notes, values, shares. What people write is sealed in it.| ／ Mount `/data` from a local disk, never from an SMB or NFS share: SQLite's locking does not work reliably over network",
+     "lines": [
+      181,
+      187
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用将日记数据存入 SQLite 数据库（nexdiary.db），SQLite 是其存储层而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " somebody signs in from a new device, a brake against guessing, and everything you write is encrypted in the database. ／     image: ghcr.io/derkezorm/nexdiary:latest",
+   "evidence_lines": [
+    91,
+    101
+   ]
+  },
+  "fn": "DerKezorm/nexdiary",
+  "sha": "8287490b9c29",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

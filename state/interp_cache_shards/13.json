@@ -11809,5 +11809,244 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1165b3c9f8c3": {
+  "identity": {
+   "one_liner": "Node.js 嵌入式文档数据库，支持 MongoDB 风格查询与 ACID 事务",
+   "review": "AxioDB 是一个纯 JavaScript 实现的嵌入式文档数据库，以 JSON 文件存储数据，提供 MongoDB 风格查询（19 种操作符）、ACID 事务、WAL 崩溃恢复、索引与缓存，并可启用 HTTP/TCP/MCP 服务端形态。面向 Electron 应用、CLI 工具、本地优先软件与原型开发，要求 Node.js ≥20，定位 1 万至 50 万文档规模，不支持 JOIN、复制与分片，尚未发布 1.0。",
+   "highlights": [
+    "提供 MongoDB 风格查询（19 种操作符）、ACID 事务、WAL 与崩溃恢复",
+    "支持嵌入式进程内运行及 HTTP API、TCP、MCP server、Docker 多种服务端形态",
+    "随附 Go CLI、Electron 桌面应用与浏览器 Dashboard",
+    "无原生依赖，可在 Node.js、Bun、Deno 上运行"
+   ],
+   "use_cases": [
+    "Electron 应用与 CLI 工具的嵌入式存储",
+    "本地优先软件与原型开发",
+    "10K–500K 文档规模的本地应用"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "**Not for** datasets beyond ~500K documents, hundreds of concurrent users, JOINs, or replication/sharding — use PostgreSQL or MongoDB there. Measured limits, including per-document disk overhead and scan costs: axiodb.in/limitations.",
+     "lines": [
+      57
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**The problem.** `better-sqlite3` needs compiled binaries and an `electron-rebuild` on every Electron update. Plain JSON files have no query layer, no cache, and no indexes. NeDB has been unmaintained since 2016. ／ * **Storage Footprint:** Measures physical directory size on disk (**With Indexes** vs. **Data Only**) and compares against estimated storage for SQLite, LowDB, and raw JSON files. ／ |Comparison|Against SQLite, JSON files, lowdb, nedb, better-sqlite3|",
+     "lines": [
+      47,
+      137,
+      275
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "AxioDB 本身是嵌入式数据库引擎，不是为既有数据库生态服务的工具，也不只是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " AxioDB: The Embedded Database for Node.js ／ **The solution.** A file-based document database with MongoDB-style queries and real ACID transactions, running on plain JavaScript objects — pure JS, so it installs on any platform Node.js runs on. ／ * **MongoDB-style queries** — `{ age: { $gt: 25 } }`, 19 operators, plus `.hint()` and `.findByIds()`",
+   "evidence_lines": [
+    3,
+    49,
+    63
+   ]
+  },
+  "fn": "nexoral/AxioDB",
+  "sha": "1165b3c9f8c3",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5a808988d65f": {
+  "identity": {
+   "one_liner": "埃及药品数据集，以CSV/JSON/SQLite/SQL多格式分发",
+   "review": "提供包含 27,617+ 种在埃及上市药品的结构化数据，字段涵盖英文名、阿拉伯语名、活性成分、厂商、现行与历史价格、条码及适应症。数据以 CSV、JSON、SQLite 和标准 SQL dump 四种格式发布，SQLite 版内置索引，SQL dump 可导入 PostgreSQL、MySQL 或 SQLite。适合需要药品数据的分析、研究与非商业应用开发者直接加载使用。",
+   "highlights": [
+    "提供 CSV、JSON、SQLite、SQL dump 四种格式，同一 schema，SQLite 文件内置 name/arabic/active/barcode 索引",
+    "SQL dump 为标准 DDL 与 INSERT 语句，可导入 PostgreSQL、MySQL 或 SQLite",
+    "含 GS1 条码校验字段与历史价格字段，可用于条码查询与价格追踪"
+   ],
+   "use_cases": [
+    "用 Pandas/Excel 做药品数据分析或 ETL 流水线",
+    "用 SQLite 命令行或 Python 按药名/条码快速查询药品价格",
+    "为 Web/移动应用提供药品数据的 JSON 数据源"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**`data/eg_drugs.sql`**|SQL Dump|~9.7 MB|Standard SQL DDL & `INSERT` statements compatible with SQLite, PostgreSQL, and MySQL.| ／ Import directly into PostgreSQL, MySQL, or SQLite:",
+     "lines": [
+      14,
+      67
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**`data/eg_drugs.sql`**|SQL Dump|~9.7 MB|Standard SQL DDL & `INSERT` statements compatible with SQLite, PostgreSQL, and MySQL.| ／ Import directly into PostgreSQL, MySQL, or SQLite:",
+     "lines": [
+      14,
+      67
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**`data/eg_drugs.sqlite`**|SQLite DB|~13 MB|Relational SQLite database with built-in indexes on `name`, `arabic`, `active`, and `barcode`.| ／ |**`data/eg_drugs.sql`**|SQL Dump|~9.7 MB|Standard SQL DDL & `INSERT` statements compatible with SQLite, PostgreSQL, and MySQL.| ／ Import directly into PostgreSQL, MySQL, or SQLite:",
+     "lines": [
+      13,
+      14,
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库本体是以 SQLite 等格式分发的药品数据集，SQLite 仅作为其存储/分发载体，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "仅允许非商业用途（README L95：可用于非付费/非商业项目与研究）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "All files are located in the `data/` directory and available in **CSV**, **JSON**, **SQLite**, and **SQL dump** formats. ／ |**`data/eg_drugs.sqlite`**|SQLite DB|~13 MB|Relational SQLite database with built-in indexes on `name`, `arabic`, `active`, and `barcode`.| ／ |**`data/eg_drugs.sql`**|SQL Dump|~9.7 MB|Standard SQL DDL & `INSERT` statements compatible with SQLite, PostgreSQL, and MySQL.|",
+   "evidence_lines": [
+    5,
+    13,
+    14
+   ]
+  },
+  "fn": "mahmoudfalous/eg-drugs",
+  "sha": "5a808988d65f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "27ef0953dd8e": {
+  "identity": {
+   "one_liner": "开发者项目分享与问答社区平台，React+Express+TiDB 全栈应用",
+   "review": "一个面向开发者的社区平台，提供项目分享、AskDev 问答、教程学习和开发者主页等功能。前后端分离：React 18 + Vite 前端，Node.js/Express REST API 后端，通过 mysql2 连接 MySQL 或 TiDB Serverless 存数据。README 提供本地部署步骤和 REST 端点清单，采用 ISC 许可证，未提及数据库迁移或测试相关内容。",
+   "highlights": [
+    "提供项目分享、问答（AskDev）、教程与开发者主页等功能模块",
+    "后端为 Node.js/Express REST API，通过 mysql2 连接 MySQL/TiDB Serverless",
+    "支持图片上传（Multer），README 给出完整本地部署步骤与 API 端点列表"
+   ],
+   "use_cases": [
+    "开发者社区/项目展示类站点的部署与二次开发",
+    "需要 MySQL/TiDB 后端的全栈应用参考实现"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Database:** MySQL / TiDB Serverless Cloud (via `mysql2`) ／ - MySQL or TiDB cloud database instance",
+     "lines": [
+      43,
+      52
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "- **Database:** MySQL / TiDB Serverless Cloud (via `mysql2`) ／ - MySQL or TiDB cloud database instance",
+     "lines": [
+      43,
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该平台使用 MySQL/TiDB 作为自身数据存储，属于使用数据库的应用而非服务数据库生态的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Database:** MySQL / TiDB Serverless Cloud (via `mysql2`) ／ - MySQL or TiDB cloud database instance",
+   "evidence_lines": [
+    43,
+    52
+   ]
+  },
+  "fn": "BigSmokeweb/Built_On_It",
+  "sha": "27ef0953dd8e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

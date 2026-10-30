@@ -11119,5 +11119,150 @@
   "generated_at": "2026-10-29",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aed35ac8af87": {
+  "identity": {
+   "one_liner": "AI 多智能体驱动的私有课程学习平台",
+   "review": "一个电子学习平台：用户输入一句话学习目标，多智能体编排器在约 45–90 秒生成 10 课时的私有课程，配套课程级 RAG 导师带引用作答，并提供 MCP server、LLM 调用日志与 LLM-as-judge 评测集。面向学习者与自部署运维者，技术栈为 FastAPI/Next.js/PostgreSQL(pgvector)，托管演示已下线，需本地 Docker 运行。",
+   "highlights": [
+    "自定义多智能体编排器，导师侧五个子智能体、课程生成侧六阶段流水线",
+    "课程级 RAG 检索，嵌入存于 pgvector 并在 SQL 中执行 ACL 权限检查",
+    "提供 MCP server（stdio+HTTP、OAuth），以及公开的 LLM-as-judge 评测套件与原始结果"
+   ],
+   "use_cases": [
+    "一句话生成私有学习课程并用带引用的 RAG 导师学习",
+    "将课程工具接入 Claude Desktop/Claude Code 等 MCP 客户端",
+    "以评测集复跑/扩展 LLM 学习类应用的评估流程"
+   ],
+   "personas": [
+    "use",
+    "ops"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Retrieval is scoped per course and routed through a single ACL clause (`visibility.py`, ADR-0029) so private and cloned courses never leak chunks. Embeddings come from Cloudflare Workers AI (`@cf/baai/bge-small-en-v1.5`, 384 dims) and are stored in `pgvector`  ／ **Stack:** Python 3.13 · FastAPI · async SQLAlchemy 2 · Alembic · Celery — Next.js 15 · React 19 · TypeScript 5 · Tailwind 4 · TanStack Query — PostgreSQL 17 (`pgvector` + `tsvector`) · Redis 7 · MinIO — Docker Compose · GitHub Actions · Trivy + CodeQL + gitle",
+     "lines": [
+      54,
+      116
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明技术栈使用 PostgreSQL 17（pgvector+tsvector）存储课程与嵌入数据，是使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A **learner-owned, two-role e-learning platform** — every signed-in user runs the whole loop themselves; `admin` only moderates and configures. The product is the loop; the point of the repo is the agentic system underneath it. ／ Retrieval is scoped per course and routed through a single ACL clause (`visibility.py`, ADR-0029) so private and cloned courses never leak chunks. Embeddings come from Cloudflare Workers AI (`@cf/baai/bge-small-en-v1.5`, 384 dims) and are stored in `pgvector` with an HNSW cosine index. Lessons are split into chunks of about 500 tokens with a 50-token overlap. Retrieval is cosine top-k, with the access check in the same SQL query. Answers cite the lessons they draw on (`[L:<lesson_id>]`), and links are built only for lessons that were retrieved. ／ **Stack:** Python 3.13 · FastAPI · async SQLAlchemy 2 · Alembic · Celery — Next.js 15 · React 19 · TypeScript 5 · Tailwind 4 · TanStack Query — PostgreSQL 17 (`pgvector` + `tsvector`) · Redis 7 · MinIO — Docker Compose · GitHub Actions · Trivy + CodeQL + gitleaks · Caddy 2.",
+   "evidence_lines": [
+    23,
+    54,
+    116
+   ]
+  },
+  "fn": "ahmedEid1/lumen",
+  "sha": "aed35ac8af87",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "942612343162": {
+  "identity": {
+   "one_liner": "开源项目匹配与对比平台：自然语言检索+AI 深读对比",
+   "review": "一个从 GitHub 热门仓库聚合演进为「输入想法→匹配开源项目→AI 深读→横向对比」的 Web 平台，适合需要选型的开发者和团队。技术栈为 Java/Spring Boot + Next.js + MySQL/Redis/Qdrant，通过 README 分块 embedding 做向量召回，LLM 重排并按 8 个维度输出带证据的对比结论，Docker Compose 一键部署。",
+   "highlights": [
+    "自然语言需求结构化 + 硬过滤/向量召回/LLM 重排的混合检索管道",
+    "8 维度逐格证据对比，支持对比历史、分享链接与 Markdown 导出",
+    "GitHub 仓库定时采集与 README 语义索引，配额、缓存与全链路可观测"
+   ],
+   "use_cases": [
+    "为项目选型寻找现成开源方案",
+    "对候选开源项目做带证据的逐维度对比",
+    "沉淀和分享选型决策记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL ／ - **混合召回**：MySQL 硬过滤 → Qdrant 向量召回 → 关键词补充 → LLM 重排（只允许 ±0.1 调整并给出理由）。",
+     "lines": [
+      11,
+      53
+     ]
+    }
+   ],
+   "dbs": [
+    "MySQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 MySQL 作为自身数据存储（技术栈存储层 MySQL 8 / Redis 7 / Qdrant），MySQL 仅作为本平台数据库使用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "从「GitHub 热门仓库聚合」升级为「输入想法 → 匹配开源项目 → AI 深读 → 横向对比 → 决策沉淀」的开源方案决策平台 ／ |存储|MySQL 8 · Redis 7 · Qdrant 1.x| ／ - 部署：Docker Compose 编排 MySQL / Redis / 后端 / 前端 / Nginx",
+   "evidence_lines": [
+    5,
+    119,
+    66
+   ]
+  },
+  "fn": "xxh11432/GitStarts",
+  "sha": "942612343162",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

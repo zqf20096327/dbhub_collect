@@ -9674,5 +9674,135 @@
   "generated_at": "2026-10-30",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "cba1110fea14": {
+  "identity": {
+   "one_liner": "基于 Spring Cloud 与 Spark 的 BOSS 直聘招聘数据分析可视化平台",
+   "review": "一个招聘数据分析与可视化系统，通过爬虫采集 BOSS 直聘数据，用 Spark 做大规模计算，MySQL 存账户权限等结构化数据，MongoDB 存简历等文档数据，Redis 做缓存，面向求职者、HR、教育机构与市场分析师提供薪资分布、技能需求等看板与职位推荐。README 未见安装包发布说明，需源码构建，前端正处于用 Nuxt 4 重写阶段。",
+   "highlights": [
+    "基于 Spring Cloud 微服务架构，包含爬虫、Spark 处理、核心业务三个后端模块",
+    "采用 MySQL、MongoDB、Redis、HDFS、MinIO 混合存储",
+    "提供多维度薪资分析、职位分析与可视化看板"
+   ],
+   "use_cases": [
+    "招聘市场数据的多维度分析与可视化展示",
+    "简历管理与薪资、职位趋势分析",
+    "面向求职者与 HR 的数据参考平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**MySQL**|8.0+|关系型数据库|存储用户账户、权限、系统配置等核心结构化数据|",
+     "lines": [
+      69
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明用 MySQL 存储用户账户权限、MongoDB 存简历等，数据库作为系统自身的数据存储使用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "BossAnalyze 是一个基于微服务架构的 BOSS 直聘招聘数据分析与可视化平台，采用 Spring Cloud 生态构建，旨在为求职者、招聘方和数据分析师提供深度的招聘市场洞察。通过分布式爬虫系统爬取、清洗和分析 BOSS 直聘的招聘数据，本系统能够实时展示不同职位、地区、行业的薪资分布、技能需求以及市场趋势。 ／ |**MySQL**|8.0+|关系型数据库|存储用户账户、权限、系统配置等核心结构化数据| ／ |`crawler/`|数据采集服务，负责爬取 BOSS 直聘数据|",
+   "evidence_lines": [
+    33,
+    69,
+    107
+   ]
+  },
+  "fn": "DavidHLP/BossAnalyze",
+  "sha": "cba1110fea14",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "27347ab8f256": {
+  "identity": {
+   "one_liner": "学研台知识库：seekdb 中文全文检索+任务记忆应用",
+   "review": "StudyBench 是 OceanBase 数据库大赛 Qoder 赛道的参赛作品，将本地课程笔记转为可检索知识、将任务进度存为可复用记忆。它基于 seekdb（OceanBase 内核的嵌入式存储，pylibseekdb）做中文全文检索与结构化过滤，用 PowerContext 包管理任务记忆并生成周报，通过 CLI 跑批并由 Qoder Sites 托管在线站点；依赖限 Linux/macOS x86_64。",
+   "highlights": [
+    "使用 seekdb（pylibseekdb）实现文档/块/词项存储、NGRAM 全文索引、BM25 重排与结构化过滤",
+    "通过 PowerContext 以 Source/Artifact revision 模型记录任务进度并生成周报",
+    "提供契约先行的六条 CLI 跑批任务与在线站点托管"
+   ],
+   "use_cases": [
+    "课程笔记等本地文档的中文全文检索",
+    "多线程任务进度记录与周报生成",
+    "教学/演示场景的检索知识库搭建（语料为脱敏演示数据）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "> **OceanBase 数据库大赛（第六届）· Qoder 生态赛道** 作品 ／ |**seekdb**（OceanBase 内核，嵌入式 pylibseekdb）|文档/块/词项存储、NGRAM 全文索引中文召回、BM25 重排、结构化过滤、检索留痕|",
+     "lines": [
+      3,
+      17
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用嵌入式 seekdb（OceanBase 内核）与 PowerContext 存取数据的应用作品，非为数据库生态提供的服务工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 把散落在文件夹里的课程笔记变成**可检索的知识**，把多线程任务的进度变成**可复用的记忆**。 ／ |**seekdb**（OceanBase 内核，嵌入式 pylibseekdb）|文档/块/词项存储、NGRAM 全文索引中文召回、BM25 重排、结构化过滤、检索留痕| ／ |**PowerContext**（PyPI `powercontext[builtin]`）|任务记忆：任务 = `Source`，每次进度更新 = 一个不可变 `Artifact` revision；周报生成|",
+   "evidence_lines": [
+    4,
+    17,
+    18
+   ]
+  },
+  "fn": "wwwyhyhyh/studybench-qoder",
+  "sha": "27347ab8f256",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

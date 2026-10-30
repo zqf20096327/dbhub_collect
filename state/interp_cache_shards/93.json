@@ -11104,5 +11104,521 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f9dd7cf71088": {
+  "identity": {
+   "one_liner": "本地优先的文献RAG工具包，FastAPI服务+SQLite持久化",
+   "review": "这是一个运行在本地的 Python 文献 RAG 工具包和 FastAPI 服务，用于论文语料摄入、检索问答、证据溯源浏览、人工筛选与标注等文献工作流，默认使用无需凭据的 fake 模型适配器。数据持久化使用 SQLite，属于使用数据库存数据的应用，适合需要在本地离线维护可审计文献流程的研究者。",
+   "highlights": [
+    "提供 FastAPI 服务与浏览器界面，支持文献摄入、检索预览、筛选标注与运行历史浏览",
+    "使用 SQLite 持久化文档、图数据与运行记录，支持离线只读导出 JSON/Markdown/CSV",
+    "默认内置 fake 模型适配器，可选接入模型提供商适配器"
+   ],
+   "use_cases": [
+    "本地科研文献语料的检索问答与证据溯源审查",
+    "论文筛选（screening）与人工标注的可审计流程管理",
+    "离线检索质量基准测试与检索回归检查"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "literature workflows, with SQLite persistence and optional model-provider adapters.",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该工具包以 SQLite 持久化文档、图数据与运行记录，SQLite 仅作为其自身存储层使用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**local-first Python toolkit and FastAPI service** for building inspectable ／ literature workflows, with SQLite persistence and optional model-provider adapters. ／ The demo explicitly uses the fake model, ingests a synthetic fixture into a",
+   "evidence_lines": [
+    9,
+    10,
+    30
+   ]
+  },
+  "fn": "Francis1998/scholar-rag-agent",
+  "sha": "f9dd7cf71088",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1abdaf0373c0": {
+  "identity": {
+   "one_liner": "LLM 智能体评测环境：故障注入 HTTP 服务加副作用评分",
+   "review": "ResolveLab 提供注入分页近似错误、ETag 冲突、重试幂等等故障的 HTTP 服务环境，并基于服务器状态、提交日志与读版本对智能体实际行为评分，同时提供经回放验证的教师标注以生成 DAgger 训练数据，附带注册式研究流程与环境 API。面向训练和评测工具调用型 LLM 智能体的研究者；v0.1–v0.2 的原始同步服务基于 SQLite，v0.4 环境为合成本地服务，限单一模型家族。",
+   "highlights": [
+    "提供注入 412/429/502/403 等故障的真实 HTTP 服务环境，并基于服务器状态、提交日志与读版本进行副作用评分",
+    "提供可回放验证的教师标注与 DAgger 数据生成，评测与训练结果可哈希锁定并复现",
+    "提供 CaseDeskEnv RL 环境 API 及支持 Transformers/Ollama/OpenAI 兼容服务器/Claude 的 CLI"
+   ],
+   "use_cases": [
+    "评测工具调用型 LLM 智能体在故障注入场景下的实际副作用行为",
+    "生成经教师验证的训练数据用于智能体后训练（BC/DAgger）",
+    "以可复现协议注册并审计智能体训练研究"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|`src/resolvelab/*.py`|the original SQLite sync service and workbench (v0.1–v0.2)|",
+     "lines": [
+      156
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目是 LLM 智能体评测/后训练环境，SQLite 仅在 v0.1–v0.2 历史服务中被提及，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Fault-injected tool environments that grade what an agent actually did to the system, and ／ that hid a lost acknowledgement. ResolveLab runs agents against a real HTTP service that ／ |`src/resolvelab/*.py`|the original SQLite sync service and workbench (v0.1–v0.2)|",
+   "evidence_lines": [
+    3,
+    17,
+    156
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Ta0p1/ResolveLab",
+  "sha": "1abdaf0373c0",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "79fcf6eecde1": {
+  "identity": {
+   "one_liner": "Rust 编写的将 PostgreSQL schema 暴露为 REST/GraphQL API 的服务器",
+   "review": "Postrust 用单个 Rust 二进制读取 PostgreSQL schema，自动生成 PostgREST 方言的 REST API 和 Hasura 方言的 GraphQL API，支持 CRUD、过滤、分页、资源嵌套、JWT 与行级安全，可部署为独立服务器、AWS Lambda 或 Cloudflare Worker。适合需要为 PostgreSQL 数据库快速提供 HTTP API 的后端开发者。",
+   "highlights": [
+    "从 schema 自动生成 REST（PostgREST 方言）与 GraphQL（Hasura 方言）API，无需按表编写代码",
+    "支持 JWT 认证并结合 PostgreSQL RLS 做行级权限，含参数化查询的 SQL 构建器",
+    "支持多种部署目标：独立服务器、AWS Lambda、Cloudflare Workers、Docker 容器"
+   ],
+   "use_cases": [
+    "为 PostgreSQL 数据库快速暴露 REST/GraphQL 接口",
+    "Serverless 场景下通过 AWS Lambda 或 Cloudflare Workers 访问数据库",
+    "需要 OpenAPI 文档与管理界面的 API 开发与调试"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postrust is one Rust binary that serves a PostgreSQL schema as a REST API in PostgREST's dialect and a GraphQL API in Hasura's, with an opt-in Apollo Federation v2 subgraph mode. Filtering, pagination, embedding, full CRUD, JWT and row-level security come from ／ - PostgreSQL 12+ (or use Docker) ／ DATABASE_URL=postgres://user:pass@localhost:5432/mydb",
+     "lines": [
+      13,
+      64,
+      95
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 PostgreSQL 数据库提供 HTTP API 服务层，是为数据库生态服务的工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postrust is one Rust binary that serves a PostgreSQL schema as a REST API in PostgREST's dialect and a GraphQL API in Hasura's, with an opt-in Apollo Federation v2 subgraph mode. Filtering, pagination, embedding, full CRUD, JWT and row-level security come from the schema; nothing is written per table. It runs as a server, in a container, on AWS Lambda, or -- the REST API -- in a Cloudflare Worker. ／ - PostgreSQL 12+ (or use Docker)",
+   "evidence_lines": [
+    13,
+    64
+   ]
+  },
+  "fn": "postrust/postrust",
+  "sha": "79fcf6eecde1",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6f66d8381577": {
+  "identity": {
+   "one_liner": "Go+React 自托管 CRM，含线索、商机、工单与线索收集表单",
+   "review": "面向小型销售与支持团队的自托管 CRM，提供线索转客户、五阶段商机管道、工单、任务及可嵌入网站的线索收集表单（含反垃圾与双重确认）。Go 后端 + React 前端，数据存储支持 SQLite 单文件或 MySQL 8/MariaDB，迁移 SQL 仅面向 MySQL，SQLite 模式依赖启动时自动迁移。",
+   "highlights": [
+    "提供线索管理、商机管道、工单、任务、报价与角色权限等 CRM 功能",
+    "内置可嵌入表单的线索收集，带蜜罐、时间陷阱、限流与可选 reCAPTCHA v3 反垃圾机制",
+    "支持 DB_DRIVER 切换 SQLite 或 MySQL，附两种 Docker Compose 部署文件"
+   ],
+   "use_cases": [
+    "小型销售与支持团队自托管管理客户与商机",
+    "在自有网站上收集线索并进行双重确认订阅",
+    "无外部数据库服务器的单实例轻量部署（SQLite）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Go backend, React UI, SQLite or MySQL. ／ MySQL 8 and MariaDB 10.11 are tested in CI. Docker Compose files ship for both. ／ ## Running with Docker (MySQL)",
+     "lines": [
+      4,
+      20,
+      73
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Go backend, React UI, SQLite or MySQL. ／ - **Easy to run.** A single Go API binary and a static React UI. SQLite needs no database server; ／ ## Quick start (SQLite, no database server)",
+     "lines": [
+      4,
+      19,
+      26
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MySQL 8 and MariaDB 10.11 are tested in CI. Docker Compose files ship for both.",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是用 SQLite/MySQL 存业务数据的 CRM 应用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted CRM for small teams: sales and support in one app, with lead-capture forms built in. ／ Go backend, React UI, SQLite or MySQL. ／ `DB_DRIVER` selects the backend. It defaults to `mysql`, which is the production",
+   "evidence_lines": [
+    3,
+    4,
+    115
+   ]
+  },
+  "fn": "florinel-chis/GopherCRM",
+  "sha": "6f66d8381577",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "87fe21a1cb66": {
+  "identity": {
+   "one_liner": "自托管 ALTCHA 兼容验证码服务器，含密钥管理与统计",
+   "review": "GateCHA 是一个自托管的 ALTCHA proof-of-work 验证码服务端，为 ALTCHA 协议封装管理层：按站点发放 API key、防重放、统计面板，并提供 MCP 接口用 AI 客户端管理密钥。适合需要自托管验证码服务的网站运营者。默认构建使用 SQLite，仅 mysql 构建变体支持 MySQL；MIT 许可，不隶属于 ALTCHA。",
+   "highlights": [
+    "提供 ALTCHA 兼容的 proof-of-work 验证码服务与官方 widget 配合使用",
+    "支持按站点 API key 管理、域名限制、重放保护与统计面板",
+    "提供 MCP 端点，可由 AI 客户端管理 API key（默认关闭）"
+   ],
+   "use_cases": [
+    "为多站点自托管验证码服务并集中管理密钥与统计",
+    "替代 ALTCHA Sentinel 的商业自托管服务部署",
+    "对表单交互信号（HIS）进行采集与可选拦截"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Multi-Database** - SQLite by default; MySQL available in the `mysql` build variant ／ Every tag has a `-mysql` counterpart (`latest-mysql`, `0.3-mysql`, `main-mysql`, …)",
+     "lines": [
+      22,
+      59
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Multi-Database** - SQLite by default; MySQL available in the `mysql` build variant ／ - **Docker Ready** - One container, zero external dependencies (SQLite mode)",
+     "lines": [
+      22,
+      23
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是使用 SQLite/MySQL 存储数据的验证码服务应用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GateCHA is a free, open-source alternative to ALTCHA Sentinel, ALTCHA's commercial self-hosted server. It wraps the ALTCHA proof-of-work CAPTCHA protocol with a management layer: API key management, per-site configuration, replay protection, and a dashboard with statistics. GateCHA is not affiliated with ALTCHA. ／ - **Multi-Database** - SQLite by default; MySQL available in the `mysql` build variant",
+   "evidence_lines": [
+    12,
+    22
+   ]
+  },
+  "fn": "Upellift99/GateCHA",
+  "sha": "87fe21a1cb66",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "67ca7125a719": {
+  "identity": {
+   "one_liner": "0DTE SPX 期权分析平台，含定价计算与行情数据面板",
+   "review": "这是一个 0DTE SPX 期权分析 Web 应用，提供 Black-Scholes 定价、价差组合 P&L 计算、做市商 gamma 敞口面板、盘中异动提醒及 Claude 辅助图表分析，面向期权个人交易者（单一所有者+访客只读）。技术栈为 React 19 + Vercel Serverless + Neon Postgres + Python 服务，部署在 Vercel/Railway。",
+   "highlights": [
+    "提供 delta 目标行权价表、iron condor/BWB 组合 P&L 与基于历史 VIX-SPX 数据的 delta 上限建议",
+    "实时接入 Schwab、Unusual Whales、GEXBot 等行情数据源，提供 dealer gamma/flow 面板与盘中异动提醒",
+    "包含 Claude 图表分析端点、ML 研究管线，以及约 15,800 个 Vitest 单元测试与 Playwright E2E 测试"
+   ],
+   "use_cases": [
+    "0DTE SPX 期权交易的行权价与组合结构计算",
+    "盘中做市商 gamma 敞口与期权流数据监控",
+    "期权交易策略的 ML 模型研究与回测数据构建"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Data** — Neon Postgres (`@neondatabase/serverless`), Upstash Redis, Vercel Blob",
+     "lines": [
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用以 Neon Postgres（Postgres 服务）作为数据存储（L36），属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Data** — Neon Postgres (`@neondatabase/serverless`), Upstash Redis, Vercel Blob ／ Production-grade 0DTE SPX options analysis platform: Black-Scholes pricing, AI-powered chart analysis (Claude Opus 4.7), live market data (Schwab, Unusual Whales, GEXBot), dealer-positioning dashboards, intraday unusual-options alerts, position tracking, and an ML research pipeline. Single-owner tool with optional guest read access. Live at theta-options.com. ／ GNU Affero General Public License v3.0.",
+   "evidence_lines": [
+    36,
+    3,
+    63
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "cobriensr/Options-Strike-Calculator",
+  "sha": "67ca7125a719",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2c0b914422b2": {
+  "identity": {
+   "one_liner": "知序 ZhiXu：用 PowerContext 组装可追溯带引用的 AI 上下文包",
+   "review": "知序是一个 Web 应用，把散落的 txt/md/pdf 资料写入 PowerContext 长期记忆，通过服务端检索返回 citation，再按 UTF-8 字节预算调用 prepare_context 生成带引用的上下文包，供粘贴给任意 AI 使用。运行时需同时启动 PowerContext Server（18080）与应用本身（18000），检索方式依赖 Embedding 配置，未配置时为 FTS。",
+   "highlights": [
+    "资料写入 PowerContext 记忆，检索返回可回查的 citation 引用",
+    "按 UTF-8 字节预算调用服务端 prepare_context 生成上下文包",
+    "支持导入 txt/md/pdf，PDF 按页写入，含端到端验收脚本 verify.py"
+   ],
+   "use_cases": [
+    "备赛/项目资料分散时的 AI 上下文组装",
+    "需要带出处引用、可回查的资料检索",
+    "OceanBase 大赛示例资料的载入与检索演示"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "> 第六届 OceanBase 数据库大赛 · Qoder 生态题（20 分） ／ 1. 点击左下「一键载入示例知识库」，会创建 `OceanBase 大赛资料库` 并写入 8 篇示例资料。",
+     "lines": [
+      3,
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用通过 PowerContext Server 的 API 存取记忆数据，自身不实现数据库功能",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "知序把资料写进 **PowerContext 长期记忆**，检索时返回可回查的 `citation`，再按 UTF-8 字节预算调用 `prepare_context`，生成一段带引用、可直接粘贴给任意 AI 的上下文包。 ／ - 没有本地 JSON / 内存索引 / 第二套数据库；条目列表、检索、引用回查都来自 PowerContext。 ／ `run.py` 会同时启动 PowerContext Server（18080）和知序（18000），并打开浏览器；按 `Ctrl+C` 一起停止。",
+   "evidence_lines": [
+    24,
+    42,
+    63
+   ]
+  },
+  "fn": "cheng200606/zhixu-qoder",
+  "sha": "2c0b914422b2",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11973,5 +11973,189 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "39671719b7ae": {
+  "identity": {
+   "one_liner": "单二进制自托管 OAuth2/OIDC 身份提供方，内置 SQLite 存储",
+   "review": "Auténtico 是用 Go 编写的自托管身份提供方，实现 OAuth2 授权码+PKCE、刷新令牌、令牌内省/撤销、OIDC 发现等协议流程，并包含登录、MFA、passkey、会话管理与内置管理界面。全部状态存于单个 SQLite 文件，无需外部数据库或缓存。面向需要 OAuth2/OIDC 的小团队、内部工具与自托管场景，README 明确说明不适用于需要水平扩展或多区域部署的组织。",
+   "highlights": [
+    "以单个 Go 二进制运行完整 IdP，状态持久化于嵌入式 SQLite 单文件",
+    "实现 OAuth2/OIDC 标准流程：Authorization Code + PKCE、refresh token、令牌内省与撤销、OIDC Discovery、RS256 JWT 签名",
+    "支持 WebAuthn passkey、TOTP 与邮件 OTP 等 MFA 方式及动态客户端注册"
+   ],
+   "use_cases": [
+    "为小型产品或内部工具提供自托管 OAuth2/OIDC 认证",
+    "作为 CI/测试套件中的真实 OIDC provider 测试夹具",
+    "从 Keycloak 路径迁移的兼容场景（提供 Keycloak 兼容端点路径）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Auténtico is a self-contained OAuth 2.0 / OpenID Connect (OIDC) Identity Provider built with Go. It handles the full authentication lifecycle — login, MFA, passkeys, sessions, token issuance, and admin — in a single binary backed by SQLite. No external datab ／ - **Embedded SQLite** — no separate database server; the entire state lives in one file",
+     "lines": [
+      6,
+      42
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **No external infrastructure** — no Redis, no Postgres, no message queues",
+     "lines": [
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储自身数据的身份认证应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Auténtico is a self-contained OAuth 2.0 / OpenID Connect (OIDC) Identity Provider built with Go. It handles the full authentication lifecycle — login, MFA, passkeys, sessions, token issuance, and admin — in a single binary backed by SQLite. No external database, no infrastructure dependencies, no ceremony.** ／ - **Embedded SQLite** — no separate database server; the entire state lives in one file",
+   "evidence_lines": [
+    6,
+    42
+   ]
+  },
+  "fn": "eugenioenko/autentico",
+  "sha": "39671719b7ae",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a300dfa44894": {
+  "identity": {
+   "one_liner": "类 DataGrip 的桌面数据库 IDE，基于插件机制连接多种数据库",
+   "review": "TableCraft 是一个 Electron 桌面数据库客户端，提供数据库树、schema 感知补全的 SQL 控制台、表格数据编辑器、DDL 生成、查询历史与 EXPLAIN 计划树。各数据库通过运行时加载的 datasource 插件接入，SQLite 与 MySQL 内置，PostgreSQL、Oracle、SQL Server、Redis、etcd 按需下载，适合需要在单一桌面应用中管理多种数据源的开发者。",
+   "highlights": [
+    "各数据库以插件形式在运行时加载，内置与按需下载插件共用同一加载器",
+    "每个数据源运行在独立 Electron utility 进程，查询结果留在引擎进程、网格按窗口读取",
+    "提供 schema 感知补全、EXPLAIN 计划树、查询历史、事务性表格编辑及 MCP 代理支持"
+   ],
+   "use_cases": [
+    "在桌面端连接并浏览多种数据库与 Redis/etcd",
+    "通过 SQL 控制台编写与执行语句、查看执行计划",
+    "编写插件扩展支持其他数据库"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A desktop database IDE in the spirit of JetBrains DataGrip, for PostgreSQL, MySQL, SQLite, Oracle, ／ - Plugins for any database: PostgreSQL, MySQL, SQLite, Oracle and SQL Server are",
+     "lines": [
+      5,
+      36
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A desktop database IDE in the spirit of JetBrains DataGrip, for PostgreSQL, MySQL, SQLite, Oracle, ／ - Plugins for any database: PostgreSQL, MySQL, SQLite, Oracle and SQL Server are",
+     "lines": [
+      5,
+      36
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "A desktop database IDE in the spirit of JetBrains DataGrip, for PostgreSQL, MySQL, SQLite, Oracle, ／ - Oracle without the Instant Client: schemas, packages and their members in the tree,",
+     "lines": [
+      5,
+      34
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A desktop database IDE in the spirit of JetBrains DataGrip, for PostgreSQL, MySQL, SQLite, Oracle, ／ - Plugins for any database: PostgreSQL, MySQL, SQLite, Oracle and SQL Server are",
+     "lines": [
+      5,
+      36
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "SQL Server, Redis and etcd. ／ - Plugins for any database: PostgreSQL, MySQL, SQLite, Oracle and SQL Server are",
+     "lines": [
+      6,
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为连接和管理多种数据库提供桌面客户端工具，而非以数据库为存储的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A desktop database IDE in the spirit of JetBrains DataGrip, for PostgreSQL, MySQL, SQLite, Oracle, ／ are reached through datasource plugins loaded at runtime. ／ - Plugins for any database: PostgreSQL, MySQL, SQLite, Oracle and SQL Server are",
+   "evidence_lines": [
+    5,
+    9,
+    36
+   ]
+  },
+  "fn": "tranphucbol/table-craft",
+  "sha": "a300dfa44894",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

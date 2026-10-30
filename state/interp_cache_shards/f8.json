@@ -11012,5 +11012,82 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "416d6571f8eb": {
+  "identity": {
+   "one_liner": "实现 Apache Kafka API 的无状态服务器，存储引擎可插拔",
+   "review": "Nisshi 是一个实现 Kafka wire protocol 的无状态消息服务器，本身不存数据，将 topic、消息和消费组存放在可插拔的存储引擎（PostgreSQL、SQLite/libSQL、S3、内存）中，并可将带 schema 的 topic 写为 Iceberg 或 Delta Lake 表。适合希望用 Kafka 客户端但不想运维 Kafka broker 集群的团队；README 注明不支持事务，Kafka Streams exactly_once_v2 不可用。",
+   "highlights": [
+    "实现 Apache Kafka® API（基于 Kafka 3.9.1 消息描述符的 wire protocol），可运行 Kafka 客户端",
+    "存储引擎可插拔：PostgreSQL、libSQL、S3、内存，共享引擎的无状态 broker 可互相响应请求",
+    "支持 JSON Schema/Avro/Protobuf 校验的 topic，并可写入 Apache Iceberg 或 Delta Lake 表"
+   ],
+   "use_cases": [
+    "无 Kafka 集群环境下运行 Kafka 客户端应用",
+    "将消息流落地到数据湖（Iceberg/Delta Lake）供 Spark、pyiceberg 读取",
+    "以 PostgreSQL 或 SQLite 作为后端存储的单机/轻量消息服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A stateless server that implements the Apache Kafka® API, with pluggable storage (PostgreSQL, SQLite, S3, memory) ／ - Available with PostgreSQL, libSQL, S3 or memory storage engines",
+     "lines": [
+      2,
+      30
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A stateless server that implements the Apache Kafka® API, with pluggable storage (PostgreSQL, SQLite, S3, memory)",
+     "lines": [
+      2
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Nisshi 使用 PostgreSQL/SQLite/libSQL 作为自身消息数据的存储引擎，而非为这些数据库提供工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0；已并入 Solace，OSS 无 Solace 商业支持承诺",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A stateless server that implements the Apache Kafka® API, with pluggable storage (PostgreSQL, SQLite, S3, memory) ／ without a cluster of Kafka brokers to run. Nisshi brokers are stateless: they keep no data of their own, ／ - Available with PostgreSQL, libSQL, S3 or memory storage engines",
+   "evidence_lines": [
+    2,
+    23,
+    30
+   ]
+  },
+  "fn": "nisshi-io/solace-nisshi",
+  "sha": "416d6571f8eb",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

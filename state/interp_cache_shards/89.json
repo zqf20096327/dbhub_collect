@@ -10628,5 +10628,145 @@
   "generated_at": "2026-10-30",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "eb6b73dadc28": {
+  "identity": {
+   "one_liner": "macOS/Windows 桌面 PostgreSQL 客户端，兼作 MCP 服务器供 AI 代理使用",
+   "review": "Halfnine 是一款面向 macOS 与 Windows 的桌面 PostgreSQL 图形客户端，同时内置 MCP 服务器，可被 Claude Code、Cursor 等 AI 代理调用其连接；每个连接可设置代理权限级别（只读/审批写入/完全），并提供代理操作记录与暂停开关。安装通过 Releases 下载安装包，构建基于 Tauri（React + Rust）。采用 PolyForm Shield 许可，非 OSI 开源。",
+   "highlights": [
+    "提供 macOS/Windows 桌面 GUI 连接管理 PostgreSQL",
+    "内置 MCP 服务器，供 Claude Code、Codex、Cursor、VS Code、Claude Desktop 使用其连接",
+    "按连接配置代理权限（Off/Read/Read with approved writes/Full），提供代理操作日志与全局暂停"
+   ],
+   "use_cases": [
+    "开发者日常浏览和查询 PostgreSQL 数据库",
+    "让 AI 编码代理通过 MCP 以受控权限访问数据库连接",
+    "在无数据库的机器上用 Docker 实例运行测试"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A small, calm PostgreSQL client for macOS and Windows, light enough to leave open all day. ／ |`cargo test --workspace`|Runs the Rust tests. The Postgres tests skip themselves unless `HN_TEST_DATABASE_URL` names a database loaded with `crates/pg/tests/fixture.sql`|",
+     "lines": [
+      3,
+      44
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接管理 PostgreSQL 的客户端工具，为数据库使用提供服务而非用库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "source-available，PolyForm Shield License 1.0.0，禁止用于销售或竞争产品",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A small, calm PostgreSQL client for macOS and Windows, light enough to leave open all day. ／ Halfnine is also an MCP server, so Claude Code, Codex, Cursor, VS Code and Claude Desktop can use your connections through it. Open Agents, at the foot of the sidebar or the connections screen, choose Connect next to your tool, and Halfnine shows what it will change before it adds itself. Or add it by hand; on macOS: ／ Halfnine is source-available under the PolyForm Shield License 1.0.0. You may use it for any purpose, at work included, and change it, but not to sell it or to provide a product that competes with it. Copyright 2026 notInferred.",
+   "evidence_lines": [
+    3,
+    18,
+    63
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "notinferred/halfnine",
+  "sha": "eb6b73dadc28",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4ec1b483f16e": {
+  "identity": {
+   "one_liner": "本地 Agent 聊天工作区，集成 QQ、记忆与知识库",
+   "review": "一款运行于 Windows/macOS/Linux 的桌面 AI 聊天应用，支持网页对话与 QQ 群聊/私聊，提供记忆、知识库、MCP 工具扩展与技能管理，会话数据保存在本机。面向希望本地部署个人 AI 陪伴助手的用户，QQ 接入依赖 NapCat 等 OneBot 11 实现，需自行配置模型服务与授权。",
+   "highlights": [
+    "支持网页对话与 QQ 群聊/私聊接入（经 OneBot 11 WebSocket，如 NapCat）",
+    "内置记忆、知识库与 MCP 客户端（stdio/HTTP/SSE）",
+    "本地保存会话记录、配置与记忆，不提供云同步",
+    "提供基于 QuickJS WASM 沙箱的可选程序化工具调用模式"
+   ],
+   "use_cases": [
+    "个人 AI 陪伴与日常聊天",
+    "QQ 群/私聊中的自动应答助手",
+    "本地知识库问答与工具编排"
+   ],
+   "ai_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用本地存储保存会话与配置数据的桌面聊天应用，而非为某数据库服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本地 Agent 工作区，主要用于日常陪伴与聊天，支持网页对话、QQ 群聊与私聊、记忆、知识库、MCP 工具扩展与技能管理。 ／ Superstring 运行在本地，支持 Windows、macOS 与 Linux。会话记录、配置、长期记忆与密钥保存在本机，不提供云端数据同步服务，也不要求注册云端账号；调用已配置的模型服务商或工具服务时，仅按已授予的权限将必要的上下文与参数发送至对应端点。 ／ - **扩展与 MCP 客户端**：在「扩展 → 工具」中查看已注册的系统工具与外部 MCP 工具；支持通过 stdio、HTTP 与 SSE 连接外部 Model Context Protocol 服务，登记的服务默认未启用，支持配置超时与结果限额；环境变量凭据仅保存变量名。",
+   "evidence_lines": [
+    7,
+    20,
+    124
+   ]
+  },
+  "fn": "Verdspair/superstring",
+  "sha": "4ec1b483f16e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

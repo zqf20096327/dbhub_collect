@@ -9204,5 +9204,145 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "625568b31a53": {
+  "identity": {
+   "one_liner": "Claude Code 的 Spring Boot 应用生成插件",
+   "review": "一个面向 Claude Code 的插件，内置 agents 和 skills，用于生成遵循既定规范的 Spring Boot 4.x / Java 21 应用，涵盖 REST API、JPA、Flyway 迁移、测试与 K8s 部署。对关系型数据库生成的应用包含 Flyway 迁移与 Testcontainers 验证测试；无持久化或 NoSQL 场景则跳过 Flyway 配置。适合使用 Claude Code 的 Spring Boot 开发者。",
+   "highlights": [
+    "提供多个专用 agents（spring-boot-engineer、code-reviewer、kubernetes-specialist 等）和可复用 skills",
+    "生成的关系型数据库应用包含 Flyway 迁移文件（ddl-auto: validate）及验证迁移的 Testcontainers 测试",
+    "覆盖云原生内容：Spring Cloud、OpenTelemetry、Kubernetes 探针、Paketo Buildpacks、Skaffold"
+   ],
+   "use_cases": [
+    "用 Claude Code 生成符合约定规范的 Spring Boot REST API 项目",
+    "为持久化到关系型数据库的应用自动生成 Flyway 迁移与集成测试",
+    "生成包含 Docker、Kubernetes 部署配置的云原生 Spring Boot 应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "> \"Build a REST API for managing orders with PostgreSQL\" ／ For a relational database like PostgreSQL, the generated app includes Flyway migrations in `src/main/resources/db/migration`, `ddl-auto: validate`, and Testcontainers tests that verify all migrations were applied. APIs without persistence or with NoSQL stores ",
+     "lines": [
+      98,
+      101
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该项目是为 Claude Code 生成 Spring Boot 应用的插件模板，本身不直接服务数据库生态，也未用数据库存数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# Spring Boot Plugin for Claude Code (v1.2) ／ A Claude Code plugin with production-ready skills and agents for building Spring Boot 4.x / Java 21+ applications. Install the plugin and start generating your app — the skills and agents guide Claude to follow best practices for REST APIs with Problem Details errors, JPA, Flyway database migrations, security, testing, cloud-native deployment, and Kubernetes. ／ For a relational database like PostgreSQL, the generated app includes Flyway migrations in `src/main/resources/db/migration`, `ddl-auto: validate`, and Testcontainers tests that verify all migrations were applied. APIs without persistence or with NoSQL stores get no Flyway configuration.",
+   "evidence_lines": [
+    1,
+    3,
+    101
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "piomin/claude-ai-spring-boot",
+  "sha": "625568b31a53",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4f1b7021f862": {
+  "identity": {
+   "one_liner": "浏览器端本地向量化+seekdb库内混合检索的端侧迷你知识库",
+   "review": "这是一个 OceanBase 数据库大赛赛题 27 的参赛项目：文档与查询向量化全部在浏览器 Web Worker 内用 Transformers.js 完成，向量与正文写入本机嵌入式 seekdb（OceanBase 出品），全文+向量混合检索由库内单条 SQL 执行。面向需要本地离线知识库检索的演示/参赛场景，也可切换 server 模式连接外部 seekdb/OceanBase；含评测面板与量化对比报告。",
+   "highlights": [
+    "向量推理全部在浏览器 Web Worker 内完成，支持 WebGPU+fp16 到 WASM+q8 的自动降级",
+    "全文+向量混合检索由 seekdb 库内单条 SQL 完成，客户端不做两路结果拼合",
+    "内置可复现评测面板（量化体积/吞吐/Recall@10/nDCG@10 对比）"
+   ],
+   "use_cases": [
+    "浏览器本地离线中文知识库检索",
+    "端侧 embedding 模型量化质量与检索效果评测",
+    "seekdb/OceanBase 混合检索 SQL 的演示与验证"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "|`SEEKDB_MODE`|embedded|`embedded`（本机嵌入式）或 `server`（外部 seekdb/OceanBase）| ／ - 数据库：`seekdb`（OceanBase，Apache-2.0）。",
+     "lines": [
+      45,
+      114
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 seekdb（OceanBase）存储向量与正文并执行检索，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "项目代码用于参赛演示，未在 README 中声明自身许可证；依赖为 MIT/Apache-2.0 开源组件",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 文档向量化与查询向量化**全部在浏览器本地完成**；向量与正文存入本机 **seekdb**；全文 + 向量**混合检索在库内用单条 SQL 完成**。 ／ - **嵌入式 seekdb，零容器依赖**：`npm install` 后一键启动（npm `seekdb` + `@seekdb/js-bindings` 原生插件），也支持 `SEEKDB_MODE=server` 连外部 seekdb。 ／ - 向量/原文/元数据只存 seekdb；无内存检索、无其他数据库兜底。",
+   "evidence_lines": [
+    4,
+    21,
+    98
+   ]
+  },
+  "fn": "yeye878/stepfun-edge-kb",
+  "sha": "4f1b7021f862",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

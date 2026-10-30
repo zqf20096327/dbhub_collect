@@ -10770,5 +10770,289 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ae58b188508e": {
+  "identity": {
+   "one_liner": "AI 驱动的授权安全测试工作区，NestJS + Ink TUI + 桌面端",
+   "review": "Secbot 是一个面向授权渗透测试场景的 AI 代理工作区，提供终端 TUI、Web 和 Tauri 桌面应用三种界面，内置 Web、网络、OSINT 等安全工具模块，支持 HITL 审批、MCP 双向集成和基准测试套件，仅维护 release 分支。适合授权安全测试人员与研究者使用；本地数据（含审计轨迹）存于内嵌 SQLite。",
+   "highlights": [
+    "提供 secbot/secbot-server/secbot-mcp/secbot-acp 四个二进制，支持 TUI、后端 API、stdio MCP 与 ACP 模式",
+    "内置 HITL 敏感工具审批与全流程操作审计轨迹",
+    "包含 15 任务标准安全基准测试套件与 ExecGo 沙箱执行（Linux Namespace 隔离）"
+   ],
+   "use_cases": [
+    "授权渗透测试与安全评估自动化",
+    "作为 MCP 工具服务器接入 Claude Code / Codex / Zed 等客户端",
+    "安全代理能力基准测试与研究"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- End-to-end TypeScript architecture (`NestJS + Ink TUI + Web / Desktop + SQLite`).",
+     "lines": [
+      33
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其 TypeScript 架构中的内嵌存储组件使用，项目本身是安全测试应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Secbot is an AI-powered TypeScript security automation workspace with a NestJS backend, an Ink terminal UI, and a Web / Desktop app. ／ - End-to-end TypeScript architecture (`NestJS + Ink TUI + Web / Desktop + SQLite`). ／ > Security notice: this package is for authorized security testing, research, and education only. Do not run scans or exploitation tasks against targets without explicit permission.",
+   "evidence_lines": [
+    7,
+    33,
+    9
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "iammm0/secbot",
+  "sha": "ae58b188508e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "defa7e703bec": {
+  "identity": {
+   "one_liner": "基于 Node.js+WebSocket+SQLite 的开源自托管聊天应用",
+   "review": "Runa 是一个自托管聊天应用，用 Express 提供 HTTP 服务、WebSocket 实现实时消息，数据存储在本地 SQLite 文件中，支持私聊、群组和频道，并内置 NFT 短语收集玩法（应用内收藏品，非区块链代币）。面向想拥有自己聊天服务器的个人用户，通过 npm install/start 运行，README 标注为 Beta，不建议未经加固直接存关键数据。",
+   "highlights": [
+    "通过 WebSocket 实现实时消息，支持私聊、群组与频道",
+    "消息与用户数据存储在本地 SQLite，路径可经 DATABASE_PATH 配置",
+    "首次启动自动创建空数据库及所需表结构，附带 npm test 自动测试"
+   ],
+   "use_cases": [
+    "个人自托管聊天服务器的搭建",
+    "学习聊天应用架构与 WebSocket 实现",
+    "本地私有消息数据存储场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ - 🔒 **Полная приватность данных** — все сообщения хранятся только в твоей локальной базе данных (SQLite). Ты полностью контролируешь, где и как хранятся данные. ／ |**SQLite**|Лёгкая встраиваемая СУБД для истории и пользователей|",
+     "lines": [
+      10,
+      23,
+      64
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 作为存储消息和用户数据的内嵌数据库，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "自定义许可：允许复制/修改/个人使用，商用需署名并链接原仓库",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**SQLite**|Лёгкая встраиваемая СУБД для истории и пользователей| ／ - 🔒 **Full data privacy** — all messages are stored only in your local SQLite database. You fully control where and how your data lives.",
+   "evidence_lines": [
+    64,
+    107
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "veter6298/Runa",
+  "sha": "defa7e703bec",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2a31c529692c": {
+  "identity": {
+   "one_liner": "WorkBuddy 已删任务孤儿文件清理 CLI，依据 workbuddy.db 的 deleted_at 判定",
+   "review": "这是一个 Python 编写的清理工具，用于清理 WorkBuddy 应用中已删除任务遗留在磁盘上的孤儿工作区与缓存日志。它以只读模式打开 workbuddy.db，依据 sessions.deleted_at 和 automations.cwds 判定与保护，提供四级分级、默认 dry-run、回收站/自建隔离区还原，并附 54 项自检脚本。目标用户是 WorkBuddy 用户，可装成 Skill 或直接跑脚本，跨平台且零第三方依赖。",
+   "highlights": [
+    "只读模式（mode=ro）打开 workbuddy.db，依据 sessions.deleted_at 与 automations.cwds 判定孤儿目录并构建保护集合",
+    "四级分级（A/B1/B2/C）处理，默认 dry-run，支持回收站、自建隔离区及 wb_restore.py 精确还原",
+    "仅使用 Python 3.8+ 标准库（sqlite3/os/shutil/ctypes 等），无第三方依赖，支持 Windows/macOS/Linux"
+   ],
+   "use_cases": [
+    "回收 WorkBuddy 已删除会话遗留的工作区、缓存与 traces/logs 占用的磁盘空间",
+    "安装为 WorkBuddy Skill 后按只读报告流程确认清理，或以 CLI 方式独立运行扫描与清理",
+    "通过 wb_scan.py --check 定期检测残留并输出报告，删除动作保留人工确认"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|第三方依赖|**无**（仅标准库：`sqlite3` / `os` / `shutil` / `ctypes` / `argparse` / `json`）|",
+     "lines": [
+      407
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为 WorkBuddy 应用提供数据清理能力，通过 sqlite3 标准库只读读取 workbuddy.db 完成判定，属于围绕数据库数据服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "数据库以 **只读模式**（`mode=ro`）打开，全程不写入一个字节。 ／ |认识 WorkBuddy 的数据结构|❌|❌|✅ 直读 `workbuddy.db`| ／ |第三方依赖|**无**（仅标准库：`sqlite3` / `os` / `shutil` / `ctypes` / `argparse` / `json`）|",
+   "evidence_lines": [
+    75,
+    298,
+    407
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Lemon177777/workbuddy-task-cleanup",
+  "sha": "2a31c529692c",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5d8816fe2964": {
+  "identity": {
+   "one_liner": "自托管渗透测试报告平台，AI 辅助撰写发现并生成 PDF/Word 报告",
+   "review": "Pental Report 是部署在自己服务器上的渗透测试报告系统，用于管理 engagement、撰写 findings、维护 findings 库，并生成带自有品牌的 PDF/Word 报告。面向安全测试团队/渗透测试公司。通过安装脚本以 Docker 部署，自带 PostgreSQL 存储数据，支持 Tailscale 或自有域名方式共享访问；内置 AI 草稿生成功能需使用用户自己的 API key 和提示词。",
+   "highlights": [
+    "管理 engagements、phases、findings 与 findings 库，支持自定义字段与 CVSS 3.1/4.0 评分",
+    "生成 PDF 报告及基于用户 Word 模板的报告，支持 Excel/PDF/Word 导出与 Excel 回导",
+    "AI 生成需使用用户自己的 API key 或自有硬件，提示词可自定义",
+    "通过 Tailscale、自有域名（Caddy）或本地方式提供 HTTPS 访问"
+   ],
+   "use_cases": [
+    "渗透测试团队协作撰写与管理测试发现",
+    "生成带公司品牌的渗透测试报告（PDF/Word）",
+    "自托管环境下对报告数据的备份与导出管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The installer checks Docker, downloads the latest release, makes your settings with new secrets, and starts Pental Report beside its own PostgreSQL. Then it opens your browser on the first-run page with the setup code already filled in: you name your firm, mak",
+     "lines": [
+      40
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用安装时自带 PostgreSQL 运行，以其存储报告数据，属使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Pental Report is free, open-source penetration test reporting that runs on your own server. ／ The installer checks Docker, downloads the latest release, makes your settings with new secrets, and starts Pental Report beside its own PostgreSQL. Then it opens your browser on the first-run page with the setup code already filled in: you name your firm, make the first administrator account, set up your authenticator app, and you are in. Your logo, colours and theme are in Settings, Branding. It finishes like this:",
+   "evidence_lines": [
+    12,
+    40
+   ]
+  },
+  "fn": "pental-io/report",
+  "sha": "5d8816fe2964",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

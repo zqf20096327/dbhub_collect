@@ -10184,5 +10184,90 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6608a5e35aff": {
+  "identity": {
+   "one_liner": "自托管多用户间隔重复闪卡服务，FSRS v6 调度并内置 MCP 服务器",
+   "review": "Engram 是一个用 Go 编写的自托管间隔重复（SRS）闪卡服务，提供 FSRS v6 调度、多种题型、Markdown/TeX 卡片、REST API、OIDC 多用户与邮件提醒，并内置 MCP 服务器供 LLM/Agent 检索、创建和复习卡片；数据存储支持嵌入式 SQLite（个人/测试）与 PostgreSQL（多用户部署），面向需要自建学习复习系统的个人或团队。",
+   "highlights": [
+    "实现 FSRS v6 调度算法，支持内置 22 个 MCP 工具供 LLM/Agent 操作卡组与复习",
+    "支持多用户与 OIDC/SSO，卡组可共享且各用户复习进度隔离",
+    "数据存储支持 SQLite 与 PostgreSQL，提供 REST API、PWA 与 SMTP 邮件提醒"
+   ],
+   "use_cases": [
+    "自托管个人或团队的间隔重复学习系统",
+    "通过 MCP 客户端（如 Claude Desktop、Cursor）用 AI 代理管理卡片与复习",
+    "跨用户共享卡组并隔离各自的复习进度"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For multi-user deployments, PostgreSQL is recommended. ／ image: postgres:18 ／ |`DB_DRIVER`|Database driver (`sqlite` or `postgres`)|`postgres` (or `sqlite`)|",
+     "lines": [
+      89,
+      96,
+      136
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Uses an embedded SQLite database suitable for personal use or testing: ／ |`DB_DRIVER`|Database driver (`sqlite` or `postgres`)|`postgres` (or `sqlite`)|",
+     "lines": [
+      75,
+      136
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "Engram 是使用 SQLite/PostgreSQL 存储自身数据的应用，数据库仅为后端存储组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Uses an embedded SQLite database suitable for personal use or testing: ／ For multi-user deployments, PostgreSQL is recommended. ／ |`DB_DRIVER`|Database driver (`sqlite` or `postgres`)|`postgres` (or `sqlite`)|",
+   "evidence_lines": [
+    75,
+    89,
+    136
+   ]
+  },
+  "fn": "bestnite/engram",
+  "sha": "6608a5e35aff",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10300,5 +10300,215 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "06c78bbfd676": {
+  "identity": {
+   "one_liner": "基于 OneBot v11 协议与 LLM 的 Linux QQ 群聊 Agent",
+   "review": "这是一个运行在 Linux 服务器上的 QQ 群聊机器人程序，连接 OneBot v11 协议端收发消息，调用 OpenAI 兼容接口的对话模型生成回复，用 SQLite 存储消息、记忆与状态。提供分条发言、表情包、主动发言、语音转写、插件与 Web 控制台等能力，供自建部署 QQ 群机器人的个人或运维人员使用。",
+   "highlights": [
+    "通过 OneBot v11 WebSocket/HTTP 协议端收发 QQ 消息，使用 OpenAI Chat Completions 兼容接口接入对话模型",
+    "以 SQLite/WAL 作为消息状态机与数据存储，提供长期记忆检索（FTS5）、持久化提醒与加密备份",
+    "提供 Web 控制台、插件子进程机制、MCP 只读资源接口与运维命令（src/ops.js）、Prometheus 指标"
+   ],
+   "use_cases": [
+    "在自托管 Linux 服务器上部署 QQ 群聊机器人",
+    "为群聊提供记忆、提醒、小游戏与主动发言等自动化交互",
+    "通过插件与技能包扩展机器人的第三方能力"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "-> SQLite/WAL 消息状态机 ／ |磁盘|10GB 空闲，本机盘；SQLite 不支持 NFS/SMB| ／ - 校验参数、源码与 Node.js 的 `node:sqlite` 能力；",
+     "lines": [
+      115,
+      172,
+      294
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **预期可用**：Debian 12/13、Ubuntu 26.04、Rocky Linux 9、AlmaLinux 9、Fedora、CentOS Stream、RHEL、Oracle Linux、Amazon Linux、Arch/Manjaro、openSUSE Leap/Tumbleweed、SLES、openEuler、Anolis、麒麟/UOS（按 dnf/yum/zypper/pacman 尝试）。Debian 12 官方仓库只有 Compose v1，需先按 Docker 官方文档配置 apt ",
+     "lines": [
+      180
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身是一个使用 SQLite 存储消息与状态的应用程序，SQLite 是其内置数据层而非其服务的对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向 Linux 服务器的 QQ 群聊 Agent，支持分条发言、表情包收发、长期记忆与内置运维命令。 ／ QQ Agent Plus 是面向 Linux 服务器的 QQ 群聊 Agent。它连接外部 OneBot v11 协议端，每次触发使用 ／   -> SQLite/WAL 消息状态机",
+   "evidence_lines": [
+    5,
+    20,
+    115
+   ]
+  },
+  "fn": "sakurawwwxh/qq-agent-plus",
+  "sha": "06c78bbfd676",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "212db18d39c3": {
+  "identity": {
+   "one_liner": "AI 数据库事件响应与修复治理系统，带受控执行臂",
+   "review": "aiHelpDesk 是面向生产数据库事件的 AI 代理运维系统：诊断故障、提出并执行修复，所有破坏性操作需人工审批并记录审计。核心机制包括故障注入测试、playbook 知识库（Vault）、稳定性认证与治理框架。面向 SRE/DBA 团队，可部署于 VM、Docker/Podman 或 Kubernetes。",
+   "highlights": [
+    "提供受治理的执行臂：工具注册、策略引擎、爆炸半径限制，破坏性操作需人工审批并生成防篡改审计记录",
+    "支持故障注入测试与 playbook 稳定性认证（outcome/conclusion/evaluation 三维度）",
+    "从已解决事件自动生成 playbook 草稿，通过 Vault 知识库实现事件到修复方案的积累与路由"
+   ],
+   "use_cases": [
+    "生产数据库事故的 AI 辅助诊断与审批制修复",
+    "多数据库变更的舰队操作（金丝雀分批、审批门、schema 漂移检测）",
+    "对 AI 代理数据库操作行为进行故障注入验证与治理审计"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表述其用于诊断与修复数据库（含 PostgreSQL 类目标），为数据库运维提供治理与审计能力的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "aiHelpDesk is the accountability layer for teams using AI agents on production databases hosted on VM/Bare Metal, inside Docker/Podman containers or running on K8s. It diagnoses incidents, proposes remediation and actually fixes your database problems. All under a strict governance framework that ensures every consequential action is approved, audited and certified as consistent. ／ - **AI Governance** — eight-module framework including tamper-proof audit, blast-radius enforcement, off-hours guards and real-time policy evaluation. Every actuation is governed. ／ aiHelpDesk runs on VMs / bare metal (either directly or inside Docker/Podman containers) or on K8s. Binaries are provided for Linux x86-64 and ARM (Graviton, Ampere) and macOS (Intel and Apple Silicon).",
+   "evidence_lines": [
+    11,
+    47,
+    55
+   ]
+  },
+  "fn": "borisdali/helpdesk",
+  "sha": "212db18d39c3",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "daa7ebd36fec": {
+  "identity": {
+   "one_liner": "自托管个人助理服务器，用 AI 整理多端保存的内容",
+   "review": "Butler 2.0 是一个自托管的个人内容收藏与助理系统：从任意应用保存链接、截图、笔记，由 AI 生成标题、摘要、标签并按主题归档，支持 Android 应用、GNOME 扩展和 Web 端互通，支持 MCP 连接与定时自动化。适合想在自有服务器上管理个人剪藏与设备协同的用户。服务器为 Deno 编写，使用 PostgreSQL 存储，通过 Docker Compose 部署，依赖外部 AI 服务商 API。",
+   "highlights": [
+    "支持从任意应用分享保存，AI 自动生成标题、摘要、标签并按主题归档",
+    "支持 Android、GNOME Shell 扩展与 Web 多端互通及剪贴板同步",
+    "支持 MCP 连接与基于定时、邮件、webhook 的自动化"
+   ],
+   "use_cases": [
+    "在自有服务器上保存和整理链接、截图、笔记等内容",
+    "在手机与电脑之间同步剪贴板、文件与消息",
+    "通过 MCP 服务器配置自动化任务与提醒"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`db/migrations/`|Postgres schema, applied when the server starts| ／ |`deploy/`|Docker Compose for a server: Postgres, Butler, Caddy, backups| ／ PostgreSQL",
+     "lines": [
+      152,
+      156,
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL 存储数据的自托管应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`server/`|The Butler server (Deno): saves, library API, sign-in, AI, recipes, devices, and serving the website| ／ |`db/migrations/`|Postgres schema, applied when the server starts| ／ Butler is self-hosted: you run your own copy on a Linux server with Docker. An Oracle Cloud Always Free VM is enough. You need a domain name you can point at it.",
+   "evidence_lines": [
+    151,
+    152,
+    107
+   ]
+  },
+  "fn": "Anasabubakar/Butler-2.0",
+  "sha": "daa7ebd36fec",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

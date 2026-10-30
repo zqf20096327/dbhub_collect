@@ -11386,5 +11386,144 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3f3d26ecb540": {
+  "identity": {
+   "one_liner": ".NET 的持久化 LSM-tree 有序键值存储引擎",
+   "review": "ZoneTree 是面向 .NET 的持久化有序键值存储引擎，基于 LSM-tree 实现，提供 WAL、事务、原子读写、迭代器、后台 compaction 与维护器等能力，可直接作键值库或作为构建数据库、索引、搜索等系统的存储基础；通过 NuGet 安装，MIT 许可，README 声明其本身不是分布式数据库。",
+   "highlights": [
+    "提供 WAL、可配置持久化模式与实时备份/恢复",
+    "支持 Serializable 与 Snapshot 多版本乐观事务及范围读",
+    "支持原子读改写操作、前后向迭代与可寻址范围扫描"
+   ],
+   "use_cases": [
+    "作为 .NET 应用内嵌的有序键值存储",
+    "作为构建数据库、索引、事件存储等系统的存储引擎基础",
+    "需要大于内存数据集的本地持久化场景"
+   ],
+   "use_cases_ok": true
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "In a live Windows P16 benchmark with 2M profiles, individual writes, secondary indexes, point reads, ordered scans, queries, and updates, ZoneTree completes the measured workload phases substantially faster than RocksDB and SQLite. See the full benchmark expla",
+     "lines": [
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位其为供 .NET 生态构建数据库与索引等系统的存储引擎组件，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（README L50 声明开源 MIT 许可）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ZoneTree is a high-performance storage engine for ordered, persistent data. It is built for teams creating databases, indexes, search systems, queues, event stores, local-first applications, and custom data platforms in the .NET ecosystem. ／ ZoneTree can be used directly as an ordered key-value database, or as the storage foundation for higher-level systems. ／ ZoneTree is designed from the ground up as a storage-engine foundation for scalable systems. It is not a distributed database by itself; instead, it provides the ordered keyspace, durability controls, iterators, operation indexes, transactions, and maintenance hooks needed to build partitioned, replicated, or domain-specific data platforms above it.",
+   "evidence_lines": [
+    7,
+    52,
+    216
+   ]
+  },
+  "fn": "ZoneTree/ZoneTree",
+  "sha": "3f3d26ecb540",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0be2dfb2006b": {
+  "identity": {
+   "one_liner": "AI 编码代理协调看板，基于 Postgres 存储任务/锁/消息/决策",
+   "review": "Stazione 是一个人与 AI 编码代理共享的协调站点：代理通过协议文件接入项目房间，领取任务、加文件锁、收发消息、记录决策并发起投票，人在面板或 Telegram 审批敏感操作。使用 Postgres 存数据，可部署到 Vercel 或自有服务器（Docker/Node）。面向与 Claude Code 等代理协作的团队，采用 PolyForm 非商用许可。",
+   "highlights": [
+    "支持多种编码代理接入，通过 CLAUDE.md / AGENTS.md 等协议文件交互",
+    "提供任务、文件锁、消息、决策、投票的共享协调机制，重大操作需人工审批",
+    "包含管理控制台，覆盖角色权限、令牌、TOTP/通行密钥认证与审计日志"
+   ],
+   "use_cases": [
+    "多代理并行开发同一项目时的任务分配与文件冲突协调",
+    "对删数据、部署等敏感操作需要人工审批流程的团队",
+    "通过面板或 Telegram 跟踪代理工作进展并保持项目上下文"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|Postgres (e.g. Neon), schema applied automatically at start-up (`lib/schema.js`)| ／ - **Docker** (`docker compose up -d`) or plain Node (`npm start`) on your own server, with Postgres. ／ npm test # end-to-end API tests on an in-memory Postgres (PGlite)",
+     "lines": [
+      88,
+      131,
+      139
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该应用以 Postgres 作为数据库存储自身数据（L88），属于使用数据库的应用而非服务数据库生态的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial 1.0.0，source-available，非商用免费",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Database|Postgres (e.g. Neon), schema applied automatically at start-up (`lib/schema.js`)| ／ - **Docker** (`docker compose up -d`) or plain Node (`npm start`) on your own server, with Postgres. ／ **A shared station where a team of AI coding agents and the people they work for coordinate.**",
+   "evidence_lines": [
+    88,
+    131,
+    14
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "sidera-foundry/stazione",
+  "sha": "0be2dfb2006b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10866,5 +10866,223 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2fdc776ec4f8": {
+  "identity": {
+   "one_liner": "SQL Server 与 PostgreSQL 性能监控工具，含采集器与 MCP 服务",
+   "review": "这是 Darling Data 出品的开源数据库性能监控工具，包含 Lite 桌面版（本地 DuckDB/Parquet 存储）与 Darling 常驻服务版（以 PostgreSQL 为中央存储），提供采集器、实时告警、执行计划查看器和内置 MCP 服务器供 AI 分析，支持 SQL Server 2016-2025、Azure SQL、AWS RDS 及 PostgreSQL 14-18，适合 DBA 与运维人员部署。",
+   "highlights": [
+    "提供 Lite 桌面版与 Darling 服务版两种采集方式，数据分别存于本地 DuckDB/Parquet 与中央 PostgreSQL 存储",
+    "内置 MCP 服务器，可将告警交给自运行的 AI 代理执行报告或受限的修复操作",
+    "支持 SQL Server 2016-2025、Azure SQL、AWS RDS 及 PostgreSQL 14-18 等版本与托管平台"
+   ],
+   "use_cases": [
+    "对 SQL Server 与 PostgreSQL 服务器舰队做性能采集、告警与实时监控",
+    "使用执行计划查看器与死锁数据排查慢查询",
+    "通过 MCP/AI 代理对监控数据做自动分析与受限运维操作"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It supports SQL Server 2016 SP2 to 2025. SQL Server 2017 needs CU3 or later. It also supports Azure SQL Managed Instance, AWS RDS for SQL Server, and Azure SQL Database (Lite and Darling). Darling also monitors PostgreSQL. It supports PostgreSQL 14 to 18, plus ／ |PostgreSQL target runbook|Point Darling at a PostgreSQL target, with a proof point at each step|",
+     "lines": [
+      14,
+      67
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "# SQL Server Performance Monitor ／ It supports SQL Server 2016 SP2 to 2025. SQL Server 2017 needs CU3 or later. It also supports Azure SQL Managed Instance, AWS RDS for SQL Server, and Azure SQL Database (Lite and Darling). Darling also monitors PostgreSQL. It supports PostgreSQL 14 to 18, plus",
+     "lines": [
+      1,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供专门的 SQL Server/PostgreSQL 采集器与监控服务，是为数据库生态服务的监控工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（Copyright 2026 Darling Data, LLC）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Free, open-source monitoring that replaces the tools charging you thousands per server per year. It includes specialized collectors, real-time alerts, and a built-in MCP server for AI analysis. Nothing phones home. Your data stays on your server and your machine. ／ It supports SQL Server 2016 SP2 to 2025. SQL Server 2017 needs CU3 or later. It also supports Azure SQL Managed Instance, AWS RDS for SQL Server, and Azure SQL Database (Lite and Darling). Darling also monitors PostgreSQL. It supports PostgreSQL 14 to 18, plus Amazon RDS, Aurora and Azure Database for PostgreSQL, and makes a best effort on PostgreSQL 10 to 13. See Supported PostgreSQL versions. ／ - **Darling** is a service on Windows or Linux that collects 24/7 into a central PostgreSQL store. The Windows viewer and the web dashboard read that store from any seat.",
+   "evidence_lines": [
+    8,
+    14,
+    21
+   ]
+  },
+  "fn": "erikdarlingdata/PerformanceMonitor",
+  "sha": "2fdc776ec4f8",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d8d6bec7b405": {
+  "identity": {
+   "one_liner": "自托管的 AI 编码代理长期记忆存储，基于 Postgres+pgvector 的 RAG 与 MCP 服务",
+   "review": "HyperMnesia 为 AI 编码代理（如 Claude Code 等 MCP 客户端）提供自托管的长期记忆：把仓库文档做混合检索（RRF 融合加可选 cross-encoder 重排）并维护手写的组件-约束映射，通过 MCP 工具与 Claude Code hooks 在编辑前注入规则；另含双时间轴的个人记忆存储。数据存于 Postgres+pgvector，嵌入可经 Ollama/TEI 本地生成，需自备 Postgres 实例。",
+   "highlights": [
+    "通过 MCP 工具向任意 MCP 客户端暴露文档搜索、组件约束映射与记忆查询",
+    "文档检索采用密集与词法检索的 Reciprocal Rank Fusion，可选 cross-encoder 重排",
+    "个人记忆为双时间轴（事件时间与摄取时间）的 supersede-not-overwrite 模型，并有人工审核队列"
+   ],
+   "use_cases": [
+    "为 Claude Code 等 AI 编码代理注入仓库架构约束，避免违反文档规则",
+    "跨会话保存代理的工作偏好与决策记忆，避免每次重复说明",
+    "自托管场景下用本地模型生成嵌入，不依赖云服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres-backed store that gives an agent (Claude Code, or any MCP client) two things: ／ One store (Postgres + pgvector), local-model friendly ／ subgraph store[\"🗄️ One Postgres + pgvector\"]",
+     "lines": [
+      10,
+      18,
+      124
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其数据存储依赖 Postgres+pgvector，属使用数据库存数据的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postgres-backed store that gives an agent (Claude Code, or any MCP client) two things: ／ One store (Postgres + pgvector), local-model friendly ／ **Two interfaces, and they are not the same thing.** Search, the map and memory are exposed as",
+   "evidence_lines": [
+    10,
+    18,
+    22
+   ]
+  },
+  "fn": "Recluse/HyperMnesia",
+  "sha": "d8d6bec7b405",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "abd440c75189": {
+  "identity": {
+   "one_liner": "自托管的 Hugging Face Hub 私有缓存代理，提供访问控制与审计",
+   "review": "hfproxy 是一个自托管的 Hugging Face Hub 缓存代理，将模型与数据集缓存到自有的 S3 兼容存储中，并支持基于策略的访问控制、OIDC/LDAP 登录、审计日志和多语言管理控制台，供需要在组织内部管控模型下载与发布的团队使用。运行时依赖 PostgreSQL 作为目录/用户/策略存储和 S3 兼容存储桶；不支持 Xet、git over HTTP 和推理等 Hub 功能。",
+   "highlights": [
+    "提供模型与数据集的本地缓存：SHA-256 去重、断点续传、五种缓存淘汰策略与完整性校验",
+    "提供按仓库的访问策略、本地用户/组、OIDC/SSO 与 LDAP/LDAPS 支持，以及审计日志",
+    "提供 Prometheus 指标、OpenTelemetry 追踪、Helm Chart 与管理控制台（7 种语言）"
+   ],
+   "use_cases": [
+    "组织内部统一缓存 Hugging Face 模型/数据集下载",
+    "对模型/数据集读取与发布实施访问控制和审计",
+    "在 Hub 不可用时通过本地缓存与断路器继续提供读取服务"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "└──▶ PostgreSQL (catalog, users, policies, audit) ／ - PostgreSQL and an S3-compatible bucket are required. Back both up together. ／ |`HFPROXY_DATABASE_URL`|PostgreSQL connection|",
+     "lines": [
+      90,
+      94,
+      108
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "hfproxy 是为 Hugging Face Hub 资源分发服务的缓存代理组件，PostgreSQL 是其自身运行所需的存储后端。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A private Hugging Face Hub for your organization.** hfproxy sits between your teams and the Hub: it caches models and datasets once in your own S3 bucket, decides who may read what, and lets your users publish models and datasets of their own, all through the Hugging Face tools they already use. Point `HF_ENDPOINT` at it and nothing else changes. ／  client ──HF_ENDPOINT──▶ hfproxy ──▶ policy check ──┬─▶ S3 bucket (blobs, deduplicated by SHA-256) ／ - PostgreSQL and an S3-compatible bucket are required. Back both up together.",
+   "evidence_lines": [
+    10,
+    88,
+    94
+   ]
+  },
+  "fn": "hfproxy/hfproxy",
+  "sha": "abd440c75189",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

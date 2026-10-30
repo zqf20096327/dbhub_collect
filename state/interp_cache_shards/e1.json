@@ -10266,5 +10266,157 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "849261e05406": {
+  "identity": {
+   "one_liner": "自托管 AI 家教应用，将书籍/文档/视频转为课程",
+   "review": "一个自托管的个人学习应用，把 EPUB/PDF、在线文档和 YouTube 视频整理成带概念图、诊断测试和学习队列的课程，由用户自带 LLM API key（Anthropic/OpenAI/OpenRouter/Google）驱动教学与出题。适合想系统性自学材料的学习者；数据经 better-sqlite3 存于本地 SQLite。",
+   "highlights": [
+    "支持导入 EPUB、PDF、在线文档和 YouTube 视频/播放列表生成课程",
+    "提供概念图、诊断测试、学习队列和复习看板等学习流程",
+    "支持 Anthropic、OpenAI、OpenRouter、Google 多家 LLM 提供商并使用本地 SQLite 存储数据"
+   ],
+   "use_cases": [
+    "将书籍或在线文档转化为结构化课程自学",
+    "通过 YouTube 视频课程配合概念测试学习",
+    "自托管本地保存学习进度与数据"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Database|SQLite, with better-sqlite3.|",
+     "lines": [
+      296
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用使用 SQLite 存储自身数据，属使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The tutor runs on your computer. It uses one large language model (LLM) from Anthropic, OpenAI, OpenRouter, or Google, and a Gemini model for YouTube videos. You select the models. ／ For macOS and Windows, a download contains all the parts of the tutor. You do not need Node.js, git, or a terminal. You need an API key for Anthropic, OpenAI, OpenRouter, or Google Gemini. See Which model to use.",
+   "evidence_lines": [
+    13,
+    35
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "demetrius-edelin/tutor",
+  "sha": "849261e05406",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dcef3ef20cea": {
+  "identity": {
+   "one_liner": "自托管页面+数据库协作工作区，内置 MCP 服务器供 AI 访问",
+   "review": "Leafdesk 是一个可自托管的知识工作区应用，提供块编辑器页面和多种视图的数据库，支持实时协同与离线编辑，数据存储在 PostgreSQL 中；内置 MCP 服务器，经 OAuth 授权后 Claude 等 AI 客户端可检索和编辑工作区内容。适合个人笔记、团队知识库与项目管理，通过 docker compose 部署或以桌面应用运行。",
+   "highlights": [
+    "提供块编辑器页面和以表格、看板、日历、图库等多种视图展示的数据库，含关联、公式与汇总",
+    "内置 MCP 服务器，AI 客户端经 OAuth 2.1 授权后可检索、读取和编辑工作区",
+    "支持 Docker 部署或 macOS/Windows/Linux 桌面应用运行，数据存于 PostgreSQL"
+   ],
+   "use_cases": [
+    "团队知识库与协作文档管理",
+    "个人笔记与项目管理（含 Notion/Obsidian 等导入）",
+    "让 AI 助手经 MCP 访问和编辑工作区内容"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "GitHub pull requests, a calendar's events (both ways for Google Calendar), a PostgreSQL table or a Google Sheets ／ - **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL,",
+     "lines": [
+      22,
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是用 PostgreSQL 存储自身数据、面向最终用户的工作区应用，而非为数据库生态服务的工具。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL, ／ - **Pages and databases**: a block editor with slash commands, and databases whose rows are pages, ／ built-in MCP server, so AI assistants such as Claude can search, read and edit your workspace",
+   "evidence_lines": [
+    26,
+    11,
+    4
+   ]
+  },
+  "fn": "esmworks/leafdesk",
+  "sha": "dcef3ef20cea",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

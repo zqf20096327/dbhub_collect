@@ -8784,5 +8784,74 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ee1a02f315f0": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码代理记忆系统，含桌面端、CLI 与 MCP 服务器",
+   "review": "The Vault 为 AI 编码代理提供跨会话的项目记忆层，保存决策、交接、任务结果并支持排序召回，通过 vault-memory MCP 服务器供 Codex、Claude 等客户端读取，附 Electron 桌面控制台管理记忆。存储为本地记忆文件与 SQLite，另有可选 Graphify 图谱与 Vault Collab 多代理协作扩展。适合使用 MCP 工具、需要项目上下文延续的开发者与小团队。",
+   "highlights": [
+    "通过 vault-memory MCP 服务器向多个客户端提供记忆读取与任务工具",
+    "结构化保存项目记忆并返回排序召回包，支持生命周期状态与可审查清理",
+    "可选 Graphify 项目图扩展与 Vault Collab 多代理协作扩展，均使用独立本地 SQLite 存储"
+   ],
+   "use_cases": [
+    "跨会话与跨代理（Codex/Claude）延续项目上下文与交接",
+    "调试前召回相关历史变更与决策",
+    "管理多项目记忆并处理命名漂移与重复记录"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Storage is local-first: memory files and SQLite state live on your machine.",
+     "lines": [
+      148
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其本地记忆存储使用，仓库是面向 AI 代理的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The Vault is a local-first memory operating system for AI-assisted work. It gives coding agents and human operators a durable project memory layer: decisions, handoffs, implementation summaries, task results, project relationships, and recallable context survive across sessions instead of being lost in chat history. ／ - Storage is local-first: memory files and SQLite state live on your machine. ／ |MCP integration|`vault-memory` MCP server for external agents and clients, including memory tools, task tools, and Vault-owned Graphify graph tools.|",
+   "evidence_lines": [
+    12,
+    148,
+    179
+   ]
+  },
+  "fn": "aliihsaad/the-vault",
+  "sha": "ee1a02f315f0",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

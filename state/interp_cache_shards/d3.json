@@ -10782,5 +10782,219 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b049ea1aac6c": {
+  "identity": {
+   "one_liner": "把文档转为含向量与索引的 SQLite 检索档案的工具",
+   "review": "VERA 将 PDF/Markdown 等文档转换为自包含的 .vera 档案文件，内部以 SQLite 保存文本、嵌入向量、全文索引与引用来源，提供关键词、语义与混合三种检索模式，可通过 CLI、MCP、Python 库或 Windows 桌面应用使用，面向需要在本地离线检索文档并供 AI 代理调用的用户。项目为 pre-1.0 的实验阶段，语义检索需安装本地模型或配置外部嵌入服务。",
+   "highlights": [
+    "支持 keyword、semantic、hybrid 三种检索模式，默认 hybrid",
+    "嵌入提供方可选 hashing、sentence-transformers 本地模型或 OpenAI，支持自定义插件",
+    "提供 CLI、MCP 服务、Python 包（vera-doc/vera-ingest）与 Windows 桌面应用多种使用方式"
+   ],
+   "use_cases": [
+    "将 PDF/Markdown 文档库转为可离线检索的档案",
+    "为 AI 代理提供带引用来源的文档检索（CLI/MCP）",
+    "基于元数据过滤的文档库联合搜索"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "embeddings, keyword index, citations, and original source in one SQLite archive. ／ |`keyword`|Words in the text, using SQLite full-text search|Names, identifiers, section numbers|",
+     "lines": [
+      10,
+      54
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目以 SQLite 作为档案存储格式实现文档检索功能，是为检索/文档处理服务的工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "VERA turns documents into searchable `.vera` files. Each file holds the text, ／ embeddings, keyword index, citations, and original source in one SQLite archive. ／ - **MCP:** install `vera[mcp]` and run `vera mcp`. Search with `output: \"compact\"`",
+   "evidence_lines": [
+    9,
+    10,
+    199
+   ]
+  },
+  "fn": "dkylewillis/vera",
+  "sha": "b049ea1aac6c",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f47c0f6b53ed": {
+  "identity": {
+   "one_liner": "能力安全的AI原生应用运行时，打包单二进制并内置SQLite",
+   "review": "Hull 是一个面向 AI 原生应用的加固运行时与工具链：应用通过清单声明可访问的文件、环境变量、外联主机和数据库资源，运行时强制这些边界，hull build 产出小于 10MB 的静态可执行文件。内置 Lua/JS/WASM 解释器和 SQLite 存储，提供脚手架、测试、签名校验、SBOM 等 30+ 子命令，面向需要在不可信代码上建立执行边界的开发者。",
+   "highlights": [
+    "提供基于清单声明的能力沙箱，运行时强制文件、环境变量、外联主机和数据库资源的访问边界",
+    "hull build 生成跨 Linux/macOS/Windows/BSD 的单文件静态可执行文件，内置 SQLite、Lua、JS 与 WASM 支持",
+    "包含 Ed25519 签名校验、SBOM 输出（CycloneDX/SPDX）、进程内测试运行器等 30+ 开发全生命周期子命令"
+   ],
+   "use_cases": [
+    "分发需要可验证能力边界的单文件应用",
+    "约束 AI 生成代码的运行时权限",
+    "脚手架并构建 HTMX/REST/CLI/TUI 类服务端应用"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|`postgres`|pure-C PostgreSQL wire backend (no libpq)|a `postgres://` / `postgresql://` DSN on `hull/db`|",
+     "lines": [
+      224
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|`mysql`|pure-C MySQL / MariaDB wire backend (no libmysql)|a `mysql://` / `mariadb://` DSN on `hull/db`|",
+     "lines": [
+      225
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|`mysql`|pure-C MySQL / MariaDB wire backend (no libmysql)|a `mysql://` / `mariadb://` DSN on `hull/db`|",
+     "lines": [
+      225
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Hardened, capability-secure runtime infrastructure for AI-native systems. Lua, JavaScript, and WASM execute under declared, kernel-enforced capability boundaries. SQLite storage. Single static binary. ／ |<code>hull test &lt;dir&gt;</code>|In-process test runner (no TCP, memory SQLite)|",
+     "lines": [
+      5,
+      118
+     ]
+    }
+   ],
+   "dbs": [],
+   "eco": "unclear",
+   "eco_why": "它是通用应用运行时，内置 SQLite 作为组件并为 postgres/mysql 提供 wire backend，但并非为数据库生态服务的工具或以数据库为主体的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Hardened, capability-secure runtime infrastructure for AI-native systems. Lua, JavaScript, and WASM execute under declared, kernel-enforced capability boundaries. SQLite storage. Single static binary. ／ The app declares its capabilities (files, environment variables, outbound hosts, database resources) in a manifest. The runtime enforces those bounds. `hull build` produces a single static executable (under 10 MB) that runs on Linux, macOS, Windows, FreeBSD, OpenBSD, and NetBSD. Code, schema, static assets, tests, and signatures all packaged together. The resulting binary is the product. ／ Hull ships 30+ subcommands for the full development lifecycle:",
+   "evidence_lines": [
+    5,
+    9,
+    108
+   ]
+  },
+  "fn": "artalis-io/hull",
+  "sha": "f47c0f6b53ed",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5a71281531a9": {
+  "identity": {
+   "one_liner": "ESIGELEC「Kubernetes」课程的实验作业等学习资料仓库",
+   "review": "该仓库为 ESIGELEC 数字服务工程专业「Kubernetes」课程的实验作业集合，包含 2 个部分、5 次实验，学生需在 docs/ 下的文档作答或提交代码片段。安装部分说明了 Docker Desktop、kind/Kubeadm 集群、kubectl 及 javac/git 等工具的准备工作，Java 项目通过 Maven Wrapper 构建。它是课程配套材料而非数据库工具。",
+   "highlights": [
+    "包含 2 个部分、5 次实验课程的作业说明，存放于 docs/ 目录",
+    "提供 Docker Desktop、Kubernetes 集群（kind 或 Kubeadm）和 kubectl 的安装与验证步骤",
+    "Java 项目使用 Maven Wrapper（./mvnw）构建，无需单独安装 Maven"
+   ],
+   "use_cases": [
+    "学生完成并提交该 Kubernetes 课程的实验报告",
+    "教师分发实验内容与答案",
+    "学习者按课程进度搭建 Docker/Kubernetes 实验环境"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 仅介绍课程作业与环境安装，未陈述任何数据库相关功能或适配证据（MySQL 仅出现在主题标签中）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Welcome to the lab sessions! This is a mono-repository for the assignments of the course \"Kubernetes\" for the students of ESIGELEC, majoring in \"Ingénierie des Services du Numérique\" (ISN). It includes 2 sections, 5 lab sessions, and is composed of different key objectives as described below: ／ For students attempting this course, the description of each lab session is available under the `docs/` directory, such as `lab-1.md`. For each report, you need to fill in the answers in the document in place in the answer areas. Or, you need to provide relevant code snippets in your Git repository following the instructions. The answers to each lab session will be distributed at the beginning of the next chapter, so the deadline for submitting your lab report is the beginning of the next session. The deadline for the last lab session will be Sunday, 2 Nov 2025, at midnight. Please complete everything before the deadline. All submissions after the deadline won't be taken into account. ／ Kubernetes has many distributions. For this course, we use the Kubernetes cluster that Docker Desktop runs on your machine. It is needed from lab session 2 on: lab session 1 doesn't use it.",
+   "evidence_lines": [
+    3,
+    14,
+    45
+   ]
+  },
+  "fn": "mincong-classroom/containers",
+  "sha": "5a71281531a9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

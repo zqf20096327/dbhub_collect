@@ -11506,5 +11506,92 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fb0e932837a5": {
+  "identity": {
+   "one_liner": "Hindsight 记忆库的多源数据摄取同步工具",
+   "review": "该项目将 Notion、思源笔记、S3、WebDAV、Google Drive、OneDrive、本地文件等多种来源的数据同步到 Hindsight memory bank，支持增量同步、多模态文件摄取、dry-run 预览与定时调度，提供 WebUI 管理任务。适合已部署 Hindsight 实例、需要把笔记/文档/邮件等汇入个人知识库的自托管用户；持久化存储可用 SQLite、PostgreSQL 或 MySQL，通过 Docker Compose 部署。",
+   "highlights": [
+    "支持 Notion、思源、S3、WebDAV、Google Drive、OneDrive、IMAP 邮件等 14 类数据源的增量同步",
+    "提供 dry-run 预览、检查点恢复、失败重试与任务重叠保护",
+    "通过 DB_TYPE 配置选择 SQLite、PostgreSQL 或 MySQL 作为自身持久化存储"
+   ],
+   "use_cases": [
+    "将个人笔记与文档自动汇入 Hindsight 知识库",
+    "定时增量备份/同步企业 S3、NAS（WebDAV）或网盘文档",
+    "从 SQL 查询结果生成分析报告数据源"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.| ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      128,
+      129
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.| ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      128,
+      129
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.| ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      128,
+      129
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 Hindsight memory bank 提供数据摄取同步服务，数据库仅作为其自身配置/状态存储，属于为知识库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Sync **Notion, SiYuan, DeepWiki, S3, WebDAV, WebCAL, CalDAV, Email (IMAP), Steam, Google People, Google Drive, OneDrive and local files** into Hindsight memory banks. Self-host with Docker and manage everything from the WebUI. ／ - 🔐 **Self-hosted, secrets encrypted** — Deploy with Docker, encrypt credentials with AES-256-GCM, and choose SQLite, PostgreSQL or MySQL for persistent storage. ／ |`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.|",
+   "evidence_lines": [
+    7,
+    23,
+    128
+   ]
+  },
+  "fn": "Nyrest/hindsight-ingestion",
+  "sha": "fb0e932837a5",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11110,5 +11110,288 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b6bd9b3d6253": {
+  "identity": {
+   "one_liner": "Go 全栈 Web 开发脚手架，内置管理面板，默认用 SQLite 存储",
+   "review": "一个 Go 语言的脚手架模板（非框架），提供完整的前后端结构：后端基于 Echo 与 Ent ORM，前端用 HTMX、Alpine.js、DaisyUI 做服务端渲染 HTML，并附带管理面板和后台任务队列。默认使用 SQLite 存储数据和任务队列，可自行替换为其他数据库；需通过 make 命令创建管理员账号并运行。适合想快速启动 Go 全栈 Web 应用的开发者。",
+   "highlights": [
+    "提供脚手架模板与内置管理面板，通过 git clone 加 make 命令安装运行",
+    "后端使用 Echo 与 Ent ORM，Ent 在启动时执行自动迁移",
+    "SQLite 同时承担主数据存储、后台任务队列持久化与测试数据库（支持内存模式）"
+   ],
+   "use_cases": [
+    "快速启动带管理面板的 Go 全栈 Web 应用",
+    "作为模板学习 Go 服务端渲染 HTML（HTMX/Alpine.js）项目结构",
+    "需要内建后台任务队列与测试数据库隔离的应用开发"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Originally, Postgres and Redis were chosen as defaults but since the aim of this project is rapid, simple development, it was changed to SQLite which now provides the primary data storage as well as persistent, background task queues. For caching, a simple in-",
+     "lines": [
+      46
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite: A small, fast, self-contained, high-reliability, full-featured, SQL database engine and the most used database engine in the world. ／ Originally, Postgres and Redis were chosen as defaults but since the aim of this project is rapid, simple development, it was changed to SQLite which now provides the primary data storage as well as persistent, background task queues. For caching, a simple in- ／ The database currently used is SQLite but you are free to use whatever you prefer. If you plan to continue using Ent, the incredible ORM, you can check their supported databases here. The database driver is provided by go-sqlite3. A reference to the database i ／ Since we're already using SQLite for our database, it's available to act as a persistent store for queued tasks so that tasks are never lost, can be retried until successful, and their concurrent execution can be managed. Backlite is the library chosen to inte",
+     "lines": [
+      44,
+      46,
+      176,
+      850
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 SQLite 作为应用的主数据存储与任务队列持久化，项目本身是 Web 应用模板而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- SQLite: A small, fast, self-contained, high-reliability, full-featured, SQL database engine and the most used database engine in the world. ／ Originally, Postgres and Redis were chosen as defaults but since the aim of this project is rapid, simple development, it was changed to SQLite which now provides the primary data storage as well as persistent, background task queues. For caching, a simple in-memory solution is provided. If you need to use something like Postgres or Redis, swapping those in can be done quickly and easily. For reference, this branch contains the code that included those (but is no longer maintained). ／ The database currently used is SQLite but you are free to use whatever you prefer. If you plan to continue using Ent, the incredible ORM, you can check their supported databases here. The database driver is provided by go-sqlite3. A reference to the database is included in the `Container` if direct access is required.",
+   "evidence_lines": [
+    44,
+    46,
+    176
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "mikestefanello/pagoda",
+  "sha": "b6bd9b3d6253",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ff7493ec531b": {
+  "identity": {
+   "one_liner": "基于 React 与 Ant Design 的后台管理系统前端",
+   "review": "这是一个后台管理系统的 React 前端项目，提供认证、RBAC 界面、公告、字典、待办、审计日志、在线用户管理等功能页面，需对接 goadmin 或 go_ai 后端 API 使用，仓库描述提及使用 MySQL 作为数据存储（由后端承担）。适合需要快速搭建管理后台界面的前端开发者，业务功能集中在 feat-ai 分支。",
+   "highlights": [
+    "提供认证（验证码+RSA、JWT）、RBAC、公告、字典、审计日志等管理界面",
+    "通过 API base URL 对接 goadmin 后端（默认 127.0.0.1:8080）",
+    "提供 npm run dev/build/lint 标准开发脚本与演示账号"
+   ],
+   "use_cases": [
+    "搭建后台管理系统的前端界面",
+    "基于 goadmin/goh_ai 后端做二次开发的界面层"
+   ],
+   "personas_unused": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "dbs": [],
+   "eco": "app",
+   "eco_why": "README 表明它是对接 goadmin/goh_ai 后端 API 的管理界面应用，数据库由后端服务使用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "React 管理端，对接后端 go_ai / goadmin。业务能力以 `feat-ai` 分支为准。 ／ Point the API base URL at a running goadmin (default `http://127.0.0.1:8080`). Backend contract: go_ai docs/API.md and FRONTEND.md.",
+   "evidence_lines": [
+    5,
+    38
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "weiqinke/react-admin-nest",
+  "sha": "ff7493ec531b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b6b08f4550c3": {
+  "identity": {
+   "one_liner": "本地运行的 AI 长篇网文写作工坊，数据存于本地 SQLite 单文件",
+   "review": "这是一个在本地运行的长篇网文写作应用，提供 AI 起草、分层记忆上下文装配、角色卡/世界书自动建档与五格式导出；面向中长篇网文作者，AI 功能需自配 LLM API Key。稿件与配置存于本地单一 SQLite 文件（./data/novelforge.db），通过 Prisma 读写，不依赖外部数据库服务。",
+   "highlights": [
+    "分层记忆引擎：近章全文、摘要与远楼层压缩三层装配上下文，配 S/A/B/C 事件衰减",
+    "自动填表管线：每章生成后抽取人物/地点/势力，生成角色卡与世界书词条",
+    "内置 12 条本地规则的去 AI 味自检，零 LLM 调用、零网络请求",
+    "支持 TXT/Markdown/HTML/EPUB/DOCX 五格式本地导出"
+   ],
+   "use_cases": [
+    "中长篇网文创作中维护人设、伏笔与世界观",
+    "未发表稿件需留在本机、不上传云端的写作流程",
+    "对已有文本做本地去 AI 味自检与拆书仿写分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Next.js React TypeScript SQLite LLM Local-First ／ - 🔒 **未发表稿件零上传** —— 全部存在你电脑上的一个本地 SQLite 文件里，正文和 API Key 都不出本机；无账号、无云、无遥测。 ／ **当前版本：v3.1.156** · 本地 SQLite 零配置 · 2163 个测试用例 · 140 个 API 路由 · 17 个内置示范预设 · MIT 开源",
+     "lines": [
+      19,
+      44,
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明生成正文、拆书与档案管理需写本地 SQLite 文件，数据库用于存应用自身数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**生成正文、拆书、角色与世界书管理要写本地 SQLite 文件**，所以要在你自己机器上跑（在线 demo 跑在无状态云环境，写不了本地文件）。**你的文字不出本机。** ／ - **💾 本地单一 SQLite 文件库** —— `./data/novelforge.db`，零配置开箱即用；备份就是复制这个文件。无云服务、无订阅、无账号、无遥测。",
+   "evidence_lines": [
+    151,
+    183
+   ]
+  },
+  "fn": "huanweide/novel-smith",
+  "sha": "b6b08f4550c3",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0b58dce7faa2": {
+  "identity": {
+   "one_liner": "本地 MCP 服务器，将代码库索引为 SQLite 符号图并提供关系查询工具",
+   "review": "code-atlas 是一个本地优先的 MCP 服务器，用各语言的解析器把代码库解析成 SQLite 中的符号图，在索引期解析跨文件关系，向 AI 编码代理提供查找调用者、实现、影响面等 24 个工具。支持 PHP、TypeScript/JavaScript、Python 和 T-SQL，核心不含 LLM，离线运行并通过 git diff 做增量更新。适合维护大型陌生代码库、由 AI 代理执行代码阅读的场景。",
+   "highlights": [
+    "支持 PHP、TypeScript/JavaScript、Python、T-SQL 四种语言的适配器，通过 JSONL 契约接入语言无关核心",
+    "提供 24 个 MCP 工具，返回已解析的调用者、实现、影响面、可达性等行级结果",
+    "离线运行于本地 SQLite，支持基于 git diff 的增量索引更新"
+   ],
+   "use_cases": [
+    "AI 编码代理查询大型代码库中的符号关系（谁调用、谁实现）",
+    "评估修改某文件的影响范围与可达路径",
+    "通过 Claude Code 插件或 .mcp.json 接入 MCP 客户端使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "out. code-atlas parses each language with its **best** parser into a **SQLite symbol graph**, ／ exposes the MCP tools. Everything runs offline against local SQLite, with incremental updates via",
+     "lines": [
+      57,
+      78
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 SQLite 作为内部符号图的存储介质，服务于 AI 编码代理而非数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "out. code-atlas parses each language with its **best** parser into a **SQLite symbol graph**, ／ MCP client talks stdio to the language-agnostic core, which drives per-language adapters over a versioned JSONL contract, stores a symbol graph in SQLite, and feeds a deterministic onboarding layer with an opt-in LLM package behind three seams. ／ exposes the MCP tools. Everything runs offline against local SQLite, with incremental updates via",
+   "evidence_lines": [
+    57,
+    74,
+    78
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "cuongdinhngo/code-atlas",
+  "sha": "0b58dce7faa2",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

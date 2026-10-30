@@ -10766,5 +10766,142 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8b825e7d0763": {
+  "identity": {
+   "one_liner": "Go 组合式电商引擎库，以 PostgreSQL 为唯一生产依赖",
+   "review": "一个以 Go 库形式提供的电商引擎，包含商品、库存、购物车、订单、支付、履约等模块，通过在 main() 中组合普通 Go 包搭建商店，内嵌管理面板，生产架构为一个二进制加一个 PostgreSQL 数据库，事件用 outbox 表保证可靠投递。面向用 Go 自建电商系统的开发者，含 MCP 模块可供 AI agent 调用商店工具。",
+   "highlights": [
+    "以 Go 库形式提供目录、购物车、结账、订单、支付、库存等电商原语，无插件注册表或依赖注入容器",
+    "状态变更与事件写入同一事务的 outbox 表，分发器用 FOR UPDATE SKIP LOCKED 投递，语义为至少一次",
+    "包含支付、通知、履约、B2B、MCP 等模块，每个模块零第三方依赖，通过 REST 与 HMAC 集成"
+   ],
+   "use_cases": [
+    "用 Go 组合式构建自有电商系统（B2C/B2B）",
+    "以嵌入式管理面板运营商店并接入多支付网关与物流商",
+    "通过 MCP 模块将商店能力暴露为 AI agent 可调用的工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "fulfillment and durable events — over a PostgreSQL database. Integrations are ／ **One binary, one PostgreSQL database.** That is the whole production",
+     "lines": [
+      7,
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该引擎基于 PostgreSQL 数据库存储商品、订单等业务数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "fulfillment and durable events — over a PostgreSQL database. Integrations are ／ **One binary, one PostgreSQL database.** That is the whole production",
+   "evidence_lines": [
+    7,
+    39
+   ]
+  },
+  "fn": "itswadesh/gocommerce",
+  "sha": "8b825e7d0763",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "410ac1712a6e": {
+  "identity": {
+   "one_liner": "本地优先的 AI 图像创作工作台，内置 SQLite 存储",
+   "review": "一个本地优先运行的 AI 图像创作 Web 应用，提供多模型并发生图、无限画布分支迭代、图生图与遮罩编辑、创作记忆与费用管理功能。使用 Node.js 内置 node:sqlite 存储数据，无需安装数据库服务，适合希望在本地或可信内网管理图像生成流程的个人创作者。Key 明文存于服务端 SQLite，不适合暴露到公共互联网。",
+   "highlights": [
+    "支持一次提交多模型、多提示词变体的并发生图任务，持久队列 + 租约锁保证任务不丢",
+    "提供无限画布分支迭代、图生图与遮罩修改、本地创作记忆注入",
+    "通过 Node 内置 SQLite 实现单进程零外部依赖部署，支持 Docker Compose 与 worker 拆分"
+   ],
+   "use_cases": [
+    "本地管理多供应商 AI 图像生成任务与费用预算",
+    "基于画布进行图像分支迭代与图生图创作",
+    "内网/可信环境下的私有图像工作台部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **零外部依赖部署** — 单进程 + Node 内置 SQLite（无 Redis、无 Prisma），Docker Compose 一键启动，也可拆分独立 worker。 ／ 需要 Node.js **22.13 或更新版本**；已在 Windows / Node 22.23.1 验证。使用内置 `node:sqlite`，无需安装数据库服务；Node 22 可能提示 SQLite 仍是实验功能。 ／ API --> DB[(SQLite WAL)]",
+     "lines": [
+      29,
+      39,
+      76
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "使用 Node 内置 SQLite 存储任务、项目、费用等应用数据，是使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **零外部依赖部署** — 单进程 + Node 内置 SQLite（无 Redis、无 Prisma），Docker Compose 一键启动，也可拆分独立 worker。 ／   API --> DB[(SQLite WAL)] ／ 浏览器只访问自己的后端；Key、任务、项目、记忆和费用保存在本地 SQLite，图片保存在后端指定目录，不会上传到第三方。本仓库仅包含源码与配置示例，不包含 API Key、用户图片、数据库或日志。",
+   "evidence_lines": [
+    29,
+    76,
+    105
+   ]
+  },
+  "fn": "tianyin231/shiguang",
+  "sha": "410ac1712a6e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

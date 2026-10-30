@@ -10717,5 +10717,250 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e88b25865b52": {
+  "identity": {
+   "one_liner": "可调参、可评测的开源 text-to-SQL 引擎",
+   "review": "mnemiq 是一个在用户自己的数据库上回答自然语言问题的开源 text-to-SQL 引擎，将模型生成与确定性校验分层：查询须经只读、权限、方言编译与 EXPLAIN 检查后才执行，并附带审计 trace。内置评测 harness 按结果数据打分，支持 OpenAI 兼容端点（含本地模型）。适合需要在自己库上量化并调优 NL2SQL 准确率的数据团队。",
+   "highlights": [
+    "将 text-to-SQL 流水线各阶段（检索、生成、决策、执行、验证）暴露为可读改的配置项",
+    "内置评测 harness，按返回数据而非 SQL 字符串匹配打分，区分答对、拒绝、答错三类结果",
+    "查询须经只读、权限、SQL 方言编译和 EXPLAIN 等确定性检查后才可执行，并提供审计 trace"
+   ],
+   "use_cases": [
+    "在自己的数据库上评测与调优 text-to-SQL 准确率",
+    "对数据库进行带行/列权限策略和审计追踪的自然语言查询",
+    "基于 OpenAI 兼容端点（含本地模型）在自有环境内部署 NL2SQL 服务"
+   ],
+   "use_cases_": [],
+   "use_cases2": null
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "the store's `vss` and `fts`, and `postgres` or `sqlite` for each source of that kind. Every command",
+     "lines": [
+      216
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "published numbers came from. MIT's BEAVER runs on its own MySQL; docs/beaver.md",
+     "lines": [
+      121
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Postgres, SQLite, DuckDB, Oracle, Snowflake and Databricks, with DuckDB as the universal executor.",
+     "lines": [
+      274
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "the store's `vss` and `fts`, and `postgres` or `sqlite` for each source of that kind. Every command",
+     "lines": [
+      216
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为数据库提供自然语言查询与评测能力的引擎/工具，而非使用数据库存储业务数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "Oracle",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0（评测组件 beacon 为独立 Apache-2.0 仓库）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An open-source engine that answers natural-language questions over your database, built so that ／ mnemiq is built to make both halves answerable. It is Apache-2.0, runs inside your own environment ／ mnemiq separates writing SQL from deciding to run it. A model proposes a query. A deterministic ／ The evaluation harness is part of the engine, not a separate research project. It runs a question",
+   "evidence_lines": [
+    7,
+    39,
+    46,
+    103
+   ]
+  },
+  "fn": "agenticfabriq/mnemiq",
+  "sha": "e88b25865b52",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "27f018ef52ca": {
+  "identity": {
+   "one_liner": "Telegram Mini App/Web 应用 monorepo 脚手架，含 FastAPI 后端与 Vue/React 模板",
+   "review": "提供 FastAPI + SQLAlchemy + PostgreSQL/Redis 后端、Next.js 或 Vue 前端模板，内置认证、Telegram 支付（Stars/YooKassa）、机器人通知、管理面板与 OpenAPI 生成的 TypeScript hooks，附带 Claude Code 配置与测试体系。适合从零搭建 Telegram Mini App 或普通 Web 应用的开发者。核心模型变更需在各 app 中执行 Alembic 迁移。",
+   "highlights": [
+    "提供 React（Next.js）与 Vue 两套模板，共享 core 代码，含认证、支付、通知引擎",
+    "集成 YooKassa 与 Telegram Stars 支付，含幂等键、退款与订阅状态机",
+    "内置 testcontainers 契约测试与 OpenAPI→TypeScript 类型自动生成"
+   ],
+   "use_cases": [
+    "开发 Telegram Mini App 或 Telegram 机器人应用",
+    "需要支付与订阅功能的 Web 应用起步项目",
+    "基于共享 core 的多应用 monorepo 开发"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL, Redis| ／ |testcontainers|Real PostgreSQL, not SQLite|",
+     "lines": [
+      72,
+      147
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|testcontainers|Real PostgreSQL, not SQLite|",
+     "lines": [
+      147
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 PostgreSQL 与 Redis 存储数据，是使用数据库的应用模板而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Database|PostgreSQL, Redis| ／ Production-ready monorepo for Telegram Mini Apps and web applications.",
+   "evidence_lines": [
+    72,
+    3
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "AHTOOOXA/gramkit",
+  "sha": "27f018ef52ca",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c394a2e4e6c3": {
+  "identity": {
+   "one_liner": "Trickster Online KR 2014 客户端的游戏服务器模拟器，使用 PostgreSQL 存储数据",
+   "review": "tPoseidon 是 Trickster Online KR 2014 客户端的服务器模拟器，在自己机器上运行登录、频道、游戏等多组服务端。它要求用户自备 PostgreSQL 14+ 存储账号与角色数据，setup 时建表，启动后供自己或朋友游玩。目前处于 beta 阶段，限制分叉与再分发，功能尚不完整。",
+   "highlights": [
+    "在同一台机器上运行游戏所需的全部服务器（login、channel、master、system、game）",
+    "使用 PostgreSQL 14+ 存储账号与角色，setup 自动创建数据库表",
+    "支持 Windows、Linux、macOS，自带 .NET 运行时，并提供可定制的玩家启动器生成向导"
+   ],
+   "use_cases": [
+    "本地或局域网内自建 Trickster Online 游戏服务器",
+    "为社区架设服务器并生成专属玩家启动器",
+    "托管好友联机，通过 web 端口完成远程登录校验"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL 14 or newer**, installed by you. It holds accounts and characters. docs/install/postgresql.md has short steps for Windows, Linux, macOS and Docker. ／ 1. Install PostgreSQL if you don't have it yet. Note the admin login and its password. ／ 4. Setup asks where your client is, who is going to play (this PC, your LAN or the internet), how to reach PostgreSQL, a name and password for your game account, and which account Play logs in with (the one you just made, unless you pick another that already e",
+     "lines": [
+      36,
+      51,
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL 存储账号与角色数据的游戏服务器应用，并非为数据库生态服务的工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "beta license，beta 期间禁止分叉与再分发修改版",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "tPoseidon runs every server the game needs (login, channel, master, system, game) on your own machine, so you can play again and host for your friends. We aim for the original game: same screens, same flow, same mechanics, 1x rates out of the box. ／ - **PostgreSQL 14 or newer**, installed by you. It holds accounts and characters. docs/install/postgresql.md has short steps for Windows, Linux, macOS and Docker.",
+   "evidence_lines": [
+    16,
+    36
+   ]
+  },
+  "fn": "DeltaForceT/tPoseidon",
+  "sha": "c394a2e4e6c3",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

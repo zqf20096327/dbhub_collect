@@ -10801,5 +10801,345 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3d67913e98e2": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的开源数据库与工作区，写入经变更请求评审",
+   "review": "Busabase 为 AI Agent 与人共用的工作区：提供类型化记录（Bases）、文档、技能、应用等节点，Agent 的写入以 Change Request 形式提交，可配置合并或人工评审。通过 MCP、OpenAPI、CLI、SDK 连接 Claude Code、Codex、Cursor 等 Agent。自身运行在内嵌 PGlite 或外部 Postgres 上，支持 npm、Docker、桌面端本地部署，MIT 许可。",
+   "highlights": [
+    "提供 Agent 写入的 Change Request 机制，含字段级 diff、作者与历史记录",
+    "支持通过 Agent Skill、MCP、OpenAPI、CLI、SDK 多种方式接入外部 Agent",
+    "提供内嵌 PGlite 本地运行模式，并可切换到外部 Postgres 与 S3 兼容存储"
+   ],
+   "use_cases": [
+    "多 Agent 共享项目记录、约定与技能的团队工作区",
+    "需要人工评审 Agent 数据写入的场景（CRM、内容管理、数据集标注）",
+    "本地优先、可离线运行的自托管 Agent 知识库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Busabase runs on Postgres (or embedded PGlite) itself; it is the workspace on top, not a replacement for your app's database.",
+     "lines": [
+      160
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 Busabase 自身运行在 Postgres（或内嵌 PGlite）之上存数据，是使用数据库的应用而非为某数据库服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可，另有商业托管版 Busabase Cloud",
+   "install": [
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Busabase runs on Postgres (or embedded PGlite) itself; it is the workspace on top, not a replacement for your app's database. ／ > Busabase is an open-source database and workspace for AI agents — agents and people share the same structured data, docs, skills, and apps, and writes that matter become reviewed, trusted records. ／ |**MCP**|Tool-aware agents and IDEs that need typed workspace operations|",
+   "evidence_lines": [
+    160,
+    36,
+    114
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "busabase/busabase",
+  "sha": "3d67913e98e2",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6f92f0241a5f": {
+  "identity": {
+   "one_liner": "KubeBlocks 的附加组件仓库，提供在 Kubernetes 上运行多类数据库的 Helm chart",
+   "review": "该仓库包含 KubeBlocks 的 add-ons 集合，以 Helm chart 形式提供 MySQL、PostgreSQL、Redis、MongoDB、Kafka、ClickHouse 等数据库与中间件在 Kubernetes 上的部署定义，含单机、集群、主备、分片等多种拓扑变体（如 postgresql 带 Patroni HA、redis 带 cluster/sentinel）。面向使用 KubeBlocks 在 K8s 上管理数据基础设施的运维人员，需配合 KubeBlocks 使用。",
+   "highlights": [
+    "以 Helm chart 形式提供 40 余种数据库、消息队列与存储系统在 Kubernetes 上的部署定义",
+    "同一组件提供多种拓扑变体，如 mysql-mgr、mysql-orc、redis-cluster、redis-sentinel、mongodb-shard",
+    "PostgreSQL addon 基于 Patroni 提供高可用集群定义"
+   ],
+   "use_cases": [
+    "在 Kubernetes 集群上通过 KubeBlocks 部署和管理各类开源数据库",
+    "为数据库配置高可用或集群拓扑（如 MySQL MGR、Redis Sentinel/Cluster、PostgreSQL+Patroni）",
+    "在 K8s 环境统一部署消息中间件（Kafka、Pulsar、RabbitMQ）与对象存储（MinIO）"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|neon|neon-broker-1.0.0 neon-compute-1.0.0 neon-pageserver-1.0.0 neon-safekeeper-1.0.0|Neon is a serverless open-source alternative to AWS Aurora Postgres. It separates storage and compute and substitutes the PostgreSQL storage layer by redistributing data acr ／ |orioledb|orioledb-16.4.0|OrioleDB is a new storage engine for PostgreSQL, bringing a modern approach to database capacity, capabilities and performance to the world's most-loved database platform.|ApeCloud| ／ |postgresql|postgresql-12.14.0 postgresql-12.14.1 postgresql-12.15.0 postgresql-12.22.0 postgresql-13.23.0 postgresql-14.18.0 postgresql-14.23.0 postgresql-14.24.0 postgresql-14.7.2 postgresql-14.8.0 postgresql-15.13.0 postgresql-15.18.0 postgresql-15.19.0 pos",
+     "lines": [
+      27,
+      32,
+      34
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|apecloud-mysql|apecloud-mysql-8.0.30 wescale-0.2.7|ApeCloud MySQL is a database that is compatible with MySQL syntax and achieves high availability through the utilization of the RAFT consensus protocol.|xuriwuyun| ／ |mysql|mysql-5.7.44 mysql-8.0.45 mysql-8.0.46 mysql-8.4.10 mysql-8.4.9 mysql-mgr-8.0.45 mysql-mgr-8.0.46 mysql-mgr-8.4.10 mysql-mgr-8.4.9 mysql-orc-5.7.44 mysql-orc-8.0.45 mysql-orc-8.0.46 mysql-proxysql-2.4.4|MySQL is a widely used, open-source relational dat ／ |orchestrator|orchestrator-3.2.6|Orchestrator is a MySQL high availability and replication management tool, runs as a service and provides command line access, HTTP API and Web interface.|ApeCloud|",
+     "lines": [
+      9,
+      24,
+      31
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|clickhouse|clickhouse-22.3.18 clickhouse-22.3.20 clickhouse-22.6.1 clickhouse-22.8.21 clickhouse-22.9.4 clickhouse-24.12.2 clickhouse-24.7.2 clickhouse-24.8.3 clickhouse-25.4.4 clickhouse-25.9.7 clickhouse-26.3.33|ClickHouse is an open-source column-oriented ",
+     "lines": [
+      10
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|mariadb|mariadb-10.6.15 mariadb-11.4.10 mariadb-11.4.5 mariadb-11.4.8 mariadb-11.8.4 mariadb-12.0.2|MariaDB is a high performance open source relational database management system that is widely used for web and application servers|ApeCloud yinmin|",
+     "lines": [
+      19
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|tidb|tidb-6.5.12 tidb-7.1.5 tidb-7.1.6-enterprise tidb-7.5.2 tidb-8.4.0 tidb-pd-6.5.12 tidb-pd-7.1.5 tidb-pd-7.1.6-enterprise tidb-pd-7.5.2 tidb-pd-8.4.0 tikv-6.5.12 tikv-7.1.5 tikv-7.1.6-enterprise tikv-7.5.2 tikv-8.4.0|TiDB is an open-source, cloud-native, ",
+     "lines": [
+      43
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "|oceanbase-ce|oceanbase-ce-4.2.1 oceanbase-ce-4.2.5 oceanbase-ce-4.3.5|OceanBase has served over 400 customers across the globe and has been supporting all mission critical systems in Alipay.|Powerfooi shanshanying|",
+     "lines": [
+      28
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "support",
+     "quote": "|polardbx|polardbx-cdc-2.3.0 polardbx-cn-2.3.0 polardbx-dn-2.3.0 polardbx-gms-2.3.0|PolarDB-X is a cloud native distributed SQL Database designed for high concurrency, massive storage, complex querying scenarios.|ApeCloud Vettal Wu|",
+     "lines": [
+      33
+     ]
+    },
+    {
+     "db": "YashanDB",
+     "rel": "support",
+     "quote": "|yashandb|yashandb-23.1.1-100|YashanDB is a new database system completely independently designed and developed by SICS. Based on classical database theories, it incorporates original Bounded Evaluation theory, Approximation theory, Parallel Scalability theory",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库为各类数据库提供 Kubernetes 上的 Helm 部署组件，是为数据库生态服务的部署工具集",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB",
+    "OceanBase",
+    "PolarDB",
+    "YashanDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# kubeblocks-addons ／ KubeBlocks add-ons. ／ ## Supported Add-ons",
+   "evidence_lines": [
+    1,
+    2,
+    6
+   ]
+  },
+  "fn": "apecloud/kubeblocks-addons",
+  "sha": "6f92f0241a5f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bb6697342516": {
+  "identity": {
+   "one_liner": "PHP 服务端渲染应用框架，内置 ActiveRecord ORM",
+   "review": "Pair 是一个面向 PHP 8.x + MySQL 的 MVC 框架，提供 ActiveRecord ORM、CRUD 与 OpenAPI 代码生成、认证/ACL、渐进增强 PWA 等能力，通过 Composer 安装，适合构建中小型服务端渲染应用；默认数据库驱动要求 MySQL 8.0 及以上。",
+   "highlights": [
+    "提供 ActiveRecord 风格 ORM、CRUD 与 OpenAPI 工具及模块代码生成器",
+    "内置表单验证、CSRF、认证、ACL 与 passkey 等能力",
+    "通过 Composer 安装，支持 make:module/make:api/make:crud 生成命令"
+   ],
+   "use_cases": [
+    "构建中小型 PHP/MySQL 服务端渲染 Web 应用",
+    "生成带 OpenAPI 契约的 API 与 CRUD 模块",
+    "需要渐进增强/PWA 且不依赖前端构建链的项目"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Pair is designed for small and medium PHP/MySQL applications where clear ／ - MySQL 8.0 or later for the default database driver ／ - PHP extensions: `curl`, `intl`, `json`, `mbstring`, `pdo`, `pdo_mysql`",
+     "lines": [
+      17,
+      105,
+      108
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是用于构建应用的 PHP 框架，为基于 MySQL 的应用开发提供服务而非自身作为最终业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A lightweight PHP framework for maintainable, server-rendered applications.** ／ Pair is designed for small and medium PHP/MySQL applications where clear ／ - MySQL 8.0 or later for the default database driver",
+   "evidence_lines": [
+    3,
+    17,
+    105
+   ]
+  },
+  "fn": "viames/pair",
+  "sha": "bb6697342516",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "273359c6a2b2": {
+  "identity": {
+   "one_liner": "自托管 Web 应用，用 git worktree 隔离并行运行 AI 编码代理",
+   "review": "iworkflow 是一个自托管的 Agentic 开发环境：在各自 git worktree 中启动多个 AI 编码代理，用户通过移动端优先的 Web 界面查看 diff 并决定合并或丢弃，支持任务依赖图、GitLab/GitHub MR/PR 与 Jira 集成。后端用 Go、htmx 与 SQLite（modernc.org/sqlite）实现。面向需要并行管理编码代理的个人开发者，仅提供可选访问令牌，无用户账户系统。",
+   "highlights": [
+    "每个任务在独立 git worktree 中运行代理，完成后提供 diff 审查并支持合并或丢弃",
+    "提供任务依赖图看板，前置任务合并后自动启动后继任务",
+    "集成 GitLab/GitHub 的 MR/PR、CI 状态及 Jira Server/Data Center"
+   ],
+   "use_cases": [
+    "在个人机器上并行运行多个 AI 编码代理并统一审查其产出",
+    "通过手机（配合 Tailscale）远程跟进代理进度、答复问题并合并任务",
+    "以任务链方式组织有依赖关系的多步骤开发工作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`IWF_DATABASE_URL`|`~/.iworkflow/workspaces.db` (SQLite, automatic migrations)| ／ iworkflow imposes no workflow: each agent uses the configuration and plugins you already have installed, plus the project's `AGENTS.md`. Under the hood agents are driven over RPC (or ACP / stream-json, depending on the runtime). It is built with Go (`net/http`",
+     "lines": [
+      145,
+      23
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用使用 SQLite（modernc.org/sqlite）存储数据，SQLite 是其内置存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "source-available：PolyForm Shield 1.0.0，非 OSI 开源许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**iworkflow is an ADE (Agentic Development Environment)**: a self-hosted web app to launch, follow and review several AI coding agents in parallel. Instead of editing files yourself, you manage **tasks**: each one runs an agent in its own git worktree, and you review the diff before anything reaches your branch. ／ iworkflow imposes no workflow: each agent uses the configuration and plugins you already have installed, plus the project's `AGENTS.md`. Under the hood agents are driven over RPC (or ACP / stream-json, depending on the runtime). It is built with Go (`net/http` + `chi`), SSR with `templ` and `htmx`, Tailwind CSS, `sqlc` and SQLite (`modernc.org/sqlite`). ／ > **Status:** early and actively developed. It runs on your own machine, has no user accounts (only an optional access token for network access) and is source-available (PolyForm Shield 1.0.0), not OSI open source. See Quick start and License.",
+   "evidence_lines": [
+    5,
+    23,
+    11
+   ]
+  },
+  "fn": "plopezm/iworkflow",
+  "sha": "273359c6a2b2",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

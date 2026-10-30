@@ -9950,5 +9950,86 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0c97a474b71b": {
+  "identity": {
+   "one_liner": "Ubuntu/Debian 服务器上的轻量 PHP 站点管理面板",
+   "review": "FastCP 是一个面向 Ubuntu/Debian 服务器的控制面板，用于托管多个 PHP 站点及反向代理 Node.js/Python/Go/Docker 应用。它集成 Caddy、PHP-FPM 与 MySQL，内置 phpMyAdmin 管理数据库和用户，支持 restic 备份、Let's Encrypt 证书与签名更新，通过面板加 agent 架构生成并加载配置，仅支持单台干净服务器安装。",
+   "highlights": [
+    "提供 MySQL 数据库与用户管理，内置 phpMyAdmin",
+    "支持多版本 PHP 并存、按站点选择，并自动安装补丁版本",
+    "支持基于 restic 的定时备份，可按站点或数据库恢复"
+   ],
+   "use_cases": [
+    "在单台 Ubuntu/Debian 服务器上托管多个 PHP 网站",
+    "为本地端口应用配置 HTTPS 反向代理",
+    "管理服务器上的数据库、cron 任务、SSH 密钥与防火墙"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A lightweight control panel for Ubuntu and Debian servers, built on Caddy, PHP-FPM and MySQL. ／ - **MySQL** databases and users, with phpMyAdmin built in. ／ The installer verifies the release signature, installs MySQL, Caddy, phpMyAdmin and the newest PHP, and prints the control panel address and the password of the `fastcp` administrator account. Open `https://your-server-ip:2050` and sign in. The panel uses a se",
+     "lines": [
+      3,
+      12,
+      29
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "The panel keeps its data in SQLite and pushes the desired configuration to the agent, which renders the Caddyfile and PHP-FPM pools, validates them, and reloads the services without dropping connections.",
+     "lines": [
+      54
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该面板为服务器上的站点与 MySQL 数据库提供安装、配置与管理能力，属于为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A lightweight control panel for Ubuntu and Debian servers, built on Caddy, PHP-FPM and MySQL. ／ - **MySQL** databases and users, with phpMyAdmin built in. ／ The panel keeps its data in SQLite and pushes the desired configuration to the agent, which renders the Caddyfile and PHP-FPM pools, validates them, and reloads the services without dropping connections.",
+   "evidence_lines": [
+    3,
+    12,
+    54
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "rehmatworks/fastcp",
+  "sha": "0c97a474b71b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

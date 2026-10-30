@@ -11938,5 +11938,61 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "996c51469ffd": {
+  "identity": {
+   "one_liner": "Rust 嵌入式有序键值存储库，基于 compio 的 copy-on-write B+tree",
+   "review": "encina 是一个面向 Rust 的嵌入式有序键值库，采用 copy-on-write B+tree 实现，基于 compio（Linux io_uring）异步运行时，支持批量写入、点查、范围扫描与范围删除，不使用 mmap、不做 compaction。目标用户是需要在 Rust 应用中嵌入键值存储的开发者。目前 1.0 之前小版本可能变更 API 与文件格式；README 给出与 RocksDB 的基准数据。",
+   "highlights": [
+    "基于 compio 完成式运行时的全异步 I/O，Linux 上使用 io_uring，不使用 mmap",
+    "提供 CLI 工具 encina-cli 用于手动检查存储内容，并通过 OpenTelemetry 导出指标"
+   ],
+   "use_cases": [
+    "在 Rust 应用中嵌入持久化有序键值存储",
+    "需要大 批量写入、范围扫描和范围删除的工作负载",
+    "对存储内容进行人工检查与指标观测的场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它本身是一个键值存储引擎库，为使用 Rust 的应用提供数据存储能力，而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An embedded, ordered key-value store for Rust, built on the ／ encina is a general-purpose, ordered key-value library, designed for many small ／ key-value pairs. It is a copy-on-write B+tree that favors large batched writes, point",
+   "evidence_lines": [
+    5,
+    8,
+    9
+   ],
+   "softened": [
+    "highlights:『高效』删条x1"
+   ]
+  },
+  "fn": "merlimat/encina",
+  "sha": "996c51469ffd",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10093,5 +10093,126 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6a6d1c9902e4": {
+  "identity": {
+   "one_liner": "把个人账号登录态转为本机 OpenAI 兼容 API 的 Go 网关",
+   "review": "CLI2API 用 Go 实现，将 Qoder、WorkBuddy、Trae 等编码工具的个人登录态封装为 OpenAI 兼容 API，供本机客户端接入。它提供多账号调度（轮询、加权、FEFO）、Web 控制台管理账号与密钥，并用 Docker 部署、以 SQLite 持久化账号数据。适合自托管用户聚合自有账号额度，默认只绑定 127.0.0.1，不对外提供账号或官方 API 服务。",
+   "highlights": [
+    "提供 Chat Completions、Responses、Anthropic Messages 和模型列表接口，支持流式与工具调用",
+    "实现多账号调度：轮询、加权轮询、顺序填满及同供应商最早到期优先（FEFO），含冷却与故障切换",
+    "提供 Web 控制台管理账号、模型、客户端密钥、代理设置与请求日志"
+   ],
+   "use_cases": [
+    "在支持 OpenAI 兼容 API 的本机客户端中接入自有编码工具账号",
+    "多账号聚合场景下的统一调度与额度管理",
+    "自托管部署并通过控制台完成签到、密钥与日志运维"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "SQLite 仅用于自身持久化账号数据，项目核心是为编码工具登录态提供 API 网关，而非为数据库生态服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **兼容接口**：Chat Completions、Responses、Anthropic Messages 和模型列表，支持流式回复与函数工具调用。 ／ - **统一控制台**：管理账号、模型、客户端密钥、代理设置，查看额度和请求日志。 ／ - **Docker 运维**：持久化账号数据；可选安装宿主机更新器，在控制台下载更新、确认升级和回滚。",
+   "evidence_lines": [
+    22,
+    24,
+    26
+   ]
+  },
+  "fn": "caigee-cmd/cli2api",
+  "sha": "6a6d1c9902e4",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "aac5357630aa": {
+  "identity": {
+   "one_liner": "内容寻址对象存储系统，以内容哈希为核心实现去重存储",
+   "review": "OrcaS 是一个基于内容寻址存储（CAS）的对象存储系统，按内容哈希存取数据，提供去重、多版本、AES-256 零知识加密、压缩、S3 兼容 API 与 VFS 挂载，元数据使用 SQLite。面向需要在低功耗设备或多系统上部署对象存储的用户，以单二进制方式部署。",
+   "highlights": [
+    "以内容哈希存储数据，上传时通过 XXH3/SHA-256 校验和检测重复内容并建立引用",
+    "提供 S3 兼容 API 与 VFS 挂载，支持小于 64KB 小对象打包和大对象分块（默认阈值 10MB）",
+    "支持多版本管理、按桶配置的加密与压缩（zstd、gzip），元数据存储于 SQLite"
+   ],
+   "use_cases": [
+    "需要重复文件去重与省带宽的备份存储场景",
+    "通过 S3 兼容 API 接入应用的私有对象存储部署",
+    "多用户共享文件与需要历史版本恢复的存储场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "├── Metadata (SQLite)",
+     "lines": [
+      172
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目自身是对象存储系统，SQLite 仅作为内嵌元数据存储，既非数据库生态服务工具也非以数据库为核心的应用声明",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**OrcaS** (Open Ready-to-Use Content Addressable Storage) is a **lightweight, high-performance object storage system** built with **Content Addressable Storage (CAS)** at its core. It provides enterprise-grade features like instant deduplication, multi-versioning, zero-knowledge encryption, and smart compression - all in a single binary that's ready to deploy. ／ - 🎯 **Content Addressable Storage**: Data is stored by content hash, enabling automatic deduplication and integrity verification ／ ├── Metadata (SQLite)",
+   "evidence_lines": [
+    31,
+    37,
+    172
+   ]
+  },
+  "fn": "orcastor/orcas",
+  "sha": "aac5357630aa",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

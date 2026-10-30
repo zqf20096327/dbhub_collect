@@ -11699,5 +11699,79 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c4c7afa2e995": {
+  "identity": {
+   "one_liner": "用深度学习与传统 ML 预测 NBA 比赛结果的自动化预测系统",
+   "review": "一个预测 NBA 比赛让分与胜负的个人项目，包含自动数据采集管线（写入 SQLite）、多个预测引擎（分层神经网络、Transformer、Ridge、XGBoost、MLP 及集成）和 Flask Web 展示界面。适合对体育数据分析和 ML 建模感兴趣的开发者；提供预训练模型与起步数据库，深度学习模型需自行训练且依赖全量历史数据。",
+   "highlights": [
+    "自动每日管线采集比赛、逐回合、伤病与盘口数据并存入 SQLite 数据库",
+    "包含多个预测引擎：分层神经网络、Transformer、Ridge、XGBoost、MLP 与等权集成",
+    "提供 Flask Web 应用展示预测结果并附带模型表现追踪面板"
+   ],
+   "use_cases": [
+    "预测 NBA 比赛让分与胜负并与 Vegas 盘口对比评估",
+    "通过面板追踪各预测模型的赛前命中率与回测结果",
+    "作为逐回合数据与机器学习建模的学习/研究项目"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* **Data Collection** — Automatically collects game data, box scores, play-by-play, injury reports, and betting lines from the NBA API and ESPN into a SQLite database. ／ Download `NBA_AI_starter.sqlite.gz` from GitHub Releases into the project root, then extract it: ／ python -c \"import gzip, shutil; shutil.copyfileobj(gzip.open('NBA_AI_starter.sqlite.gz','rb'), open('data/NBA_AI_starter.sqlite','wb'))\"",
+     "lines": [
+      19,
+      87,
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确项目将采集的 NBA 数据存入 SQLite 数据库，SQLite 仅作为本项目存储数据使用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* **Data Collection** — Automatically collects game data, box scores, play-by-play, injury reports, and betting lines from the NBA API and ESPN into a SQLite database. ／ The system runs a fully automated daily pipeline that collects game data, updates player ability models, and generates pre-game predictions for all upcoming games using multiple prediction engines. A Flask web app displays predictions alongside Vegas lines, with a dashboard for tracking model performance over time.",
+   "evidence_lines": [
+    19,
+    13
+   ]
+  },
+  "fn": "NBA-Betting/NBA_AI",
+  "sha": "c4c7afa2e995",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

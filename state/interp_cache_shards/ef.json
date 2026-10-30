@@ -10982,5 +10982,80 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "045becedf3db": {
+  "identity": {
+   "one_liner": "Postgres 扩展形态的 AI 工作流引擎与 agent 记忆",
+   "review": "Percolate 以两个 Postgres 扩展（SQL 与 Rust/pgrx）加 Python worker 与 Agent Runtime 的形式，把 agent、工作流、运行记录和文档存为数据库行，用 SQL 和 P8QL 定义、启动、审批、查询全流程，支持模糊查找与全文检索。面向要在 Postgres 内构建持久化 AI 工作流与 agent 记忆的开发者，需 PostgreSQL 19 或 Docker Compose/Helm 部署。",
+   "highlights": [
+    "以 Postgres 扩展实现，agent、工作流与运行状态均为数据库行，由 SQL 驱动",
+    "提供 P8QL 查询语言，支持模糊查找与全文索引检索已注册的表",
+    "工作流支持 YAML 定义、并行步骤、失败重试与人工审批信号"
+   ],
+   "use_cases": [
+    "在 Postgres 内构建需要持久化与断点恢复的 AI agent 工作流",
+    "为 LLM 应用实现可按日期查询的 agent 记忆",
+    "用 SQL 对运行历史做追踪与审计查询"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Percolate is a Postgres extension for AI workflows and agent memory. Agents, workflows, their runs and the documents ／ - Into your own PostgreSQL 19:",
+     "lines": [
+      3,
+      14
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "项目是运行于 Postgres 内的扩展与配套 worker，为数据库提供 AI 工作流与记忆能力，而非使用数据库的业务应用",
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Percolate is a Postgres extension for AI workflows and agent memory. Agents, workflows, their runs and the documents ／  - Into your own PostgreSQL 19: ／ |`extension/percolate`|the `percolate` extension: pure SQL, installable by a non-superuser so row-level security is real|",
+   "evidence_lines": [
+    3,
+    14,
+    229
+   ]
+  },
+  "fn": "Percolation-Labs/percolate",
+  "sha": "045becedf3db",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

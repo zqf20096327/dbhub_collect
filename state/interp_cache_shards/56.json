@@ -9962,5 +9962,81 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1b4aaffc97c8": {
+  "identity": {
+   "one_liner": "自托管AI客服平台，FastAPI+SQLite+Qdrant RAG+可嵌入组件",
+   "review": "Basjoo 是一个自托管的 AI 客服平台：将网站与文档构建为知识库，通过 Qdrant 做 per-KB RAG 检索，接入 13 家 LLM 提供商，以 SSE 流式输出并配可嵌入的聊天组件与管理台。面向需要自建客服机器人的团队；数据仅支持 SQLite 存储，通过 Docker Compose 一键部署。",
+   "highlights": [
+    "支持按知识库独立的文档摄取，含网页爬取与多格式文件上传",
+    "支持 13 家 LLM 提供商，通过 OpenAI 兼容或原生接口接入",
+    "提供可嵌入的聊天组件、人工接管会话与中英双语管理台"
+   ],
+   "use_cases": [
+    "网站自助客服机器人部署",
+    "内部知识库问答检索",
+    "自托管场景下的 LLM 客服接入"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|`DATABASE_URL`|`sqlite:///./data/basjoo.db`|application data (SQLite only — there is no PostgreSQL path)|",
+     "lines": [
+      211
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Retrieval stack** — Qdrant for vectors, SQLite for application data, Redis for rate limiting, and a",
+     "lines": [
+      35
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是使用 SQLite/Qdrant/Redis 存取数据的自托管应用，而非为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Basjoo is a self-hosted AI customer-support platform: it turns a website plus a set of documents into a ／ - **Retrieval stack** — Qdrant for vectors, SQLite for application data, Redis for rate limiting, and a ／ |`DATABASE_URL`|`sqlite:///./data/basjoo.db`|application data (SQLite only — there is no PostgreSQL path)|",
+   "evidence_lines": [
+    15,
+    35,
+    211
+   ]
+  },
+  "fn": "haoyiyin/basjoo",
+  "sha": "1b4aaffc97c8",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

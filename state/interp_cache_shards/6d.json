@@ -11501,5 +11501,159 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "41d61b544831": {
+  "identity": {
+   "one_liner": "AI Agent 记忆层，提供快照/分支/回滚的版本控制",
+   "review": "Memoria 为 AI Agent 提供持久化记忆层，将快照、分支、合并、回滚等 Git 式版本控制机制应用于记忆数据，底层由 MatrixOne 的 Copy-on-Write 存储支撑，可通过 MCP 或 REST 与 Cursor、Claude Code 等多种 Agent 集成。适用于需要跨会话保持上下文、审计记忆变更的场景；自托管模式需运行 MatrixOne 与 Docker。",
+   "highlights": [
+    "提供记忆的快照、分支、合并与时点回滚，基于 MatrixOne 的 Copy-on-Write 引擎",
+    "支持向量与全文混合的语义检索，并可自动检测矛盾、隔离低置信记忆",
+    "通过 MCP 提供记忆工具集，兼容任意 MCP Agent，另提供 REST API 与 CLI"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供跨会话的持久记忆与上下文复用",
+    "对记忆变更做审计与回滚，隔离风险实验性记忆修改",
+    "自托管部署以实现本地化记忆数据管理"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "You: \"Let's try switching from PostgreSQL to SQLite\"",
+     "lines": [
+      209
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "You: \"Let's try switching from PostgreSQL to SQLite\" ／ AI: → memory_branch(name=\"eval_sqlite\")",
+     "lines": [
+      209,
+      211
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明 Memoria 是为 AI Agent 提供记忆管理服务的组件，通过 MCP/REST 提供工具接口，底层由 MatrixOne 存储支撑。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Memoria is a **persistent memory layer** for AI agents with Git-level version control. ／ Every memory change is tracked, auditable, and reversible — snapshots, branches, merges, and time-travel rollback, all powered by MatrixOne's native Copy-on-Write engine. ／ |`memoria mcp`|Start MCP server|",
+   "evidence_lines": [
+    24,
+    25,
+    282
+   ]
+  },
+  "fn": "matrixorigin/memoria",
+  "sha": "41d61b544831",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7958e365befc": {
+  "identity": {
+   "one_liner": "开源 AI 家教应用，支持游客即时问答与账号保存对话",
+   "review": "Klar 是面向学生的免费 AI 辅导应用，支持游客直接聊天，注册后可保存对话记录；提供 Flash/Speed/Smart 等 6 种回答模式，主用 Mistral 并以 Groq 兜底。技术栈为 Next.js + Drizzle ORM + PostgreSQL，需自行配置 Groq/Mistral/Resend/Upstash Redis 的 API 密钥后运行。",
+   "highlights": [
+    "提供 6 种回答模式，路由至 Mistral 并在不可用时回退到 Groq",
+    "通过 Drizzle ORM 将对话与消息保存在 PostgreSQL",
+    "支持邮箱注册、JWT 会话、bcrypt 密码哈希与 Upstash Redis 限流"
+   ],
+   "use_cases": [
+    "学生课后提问与作业辅导",
+    "多语言（英语/罗马乌尔都语/乌尔都语）问答",
+    "自托管部署个人 AI 聊天服务"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ - Conversations and messages are saved in PostgreSQL. ／ - A **PostgreSQL** database (for example Neon)",
+     "lines": [
+      15,
+      45,
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 PostgreSQL 存储对话数据的应用，不是为数据库生态服务的工具。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Conversations and messages are saved in PostgreSQL. ／ |Data|PostgreSQL (Neon) with Drizzle ORM|",
+   "evidence_lines": [
+    45,
+    106
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "abdulrdeveloper/klar-AI",
+  "sha": "7958e365befc",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

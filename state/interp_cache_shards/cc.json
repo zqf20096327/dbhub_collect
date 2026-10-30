@@ -11383,5 +11383,177 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "144476f5ab74": {
+  "identity": {
+   "one_liner": "终端优先的桌面工作台，用于监督 AI 编码代理并集成数据库等工具模块",
+   "review": "LiteEditorAI 是一个面向 AI 编码代理（Claude Code、Codex、Gemini CLI 等）监督者的 Electron 桌面工作台，提供每个项目的代理实时状态、代码查看器与 Git、CLAUDE.md 上下文管理、服务器同步，以及 20 多个工具模块，其中包括支持 Postgres/MySQL/MariaDB/SQLite 的数据库客户端模块（可直连或经 SSH 隧道）。支持 Linux/Windows/macOS，当前为 alpha 阶段，可从 Releases 下载二进制或从源码运行。",
+   "highlights": [
+    "按项目显示 AI 代理实时状态（运行中/等待回复/完成），支持 Claude Code 等代理的状态上报",
+    "内置数据库客户端模块，支持 Postgres / MySQL / MariaDB / SQLite 直连或经 SSH 隧道连接",
+    "提供代码查看器、Git 管理、CLAUDE.md 上下文编辑与内置 MCP 服务器（lite-tasks）"
+   ],
+   "use_cases": [
+    "同时监督多个项目中运行的 AI 编码代理的进度与待处理问题",
+    "在同一工作区内通过数据库客户端查询和管理多个数据库",
+    "通过 rsync/SSH 在本机与自有服务器间同步项目目录"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|🗄 **Databases**|Postgres / MySQL · MariaDB / SQLite client: direct or **over an SSH tunnel**, connection tabs (several databases at once), schema tree, paginated table data with cell-level selection, **SQL console** (`Ctrl+Enter`), CSV / JSON / SQL export, re",
+     "lines": [
+      160
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|🗄 **Databases**|Postgres / MySQL · MariaDB / SQLite client: direct or **over an SSH tunnel**, connection tabs (several databases at once), schema tree, paginated table data with cell-level selection, **SQL console** (`Ctrl+Enter`), CSV / JSON / SQL export, re",
+     "lines": [
+      160
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|🗄 **Databases**|Postgres / MySQL · MariaDB / SQLite client: direct or **over an SSH tunnel**, connection tabs (several databases at once), schema tree, paginated table data with cell-level selection, **SQL console** (`Ctrl+Enter`), CSV / JSON / SQL export, re",
+     "lines": [
+      160
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|🗄 **Databases**|Postgres / MySQL · MariaDB / SQLite client: direct or **over an SSH tunnel**, connection tabs (several databases at once), schema tree, paginated table data with cell-level selection, **SQL console** (`Ctrl+Enter`), CSV / JSON / SQL export, re",
+     "lines": [
+      160
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目内置数据库客户端模块，为连接和操作 Postgres/MySQL/MariaDB/SQLite 提供工具能力",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "A terminal-first desktop workspace for developers who **supervise AI coding agents** ／ ## And 20+ tool modules, so you don't leave the workspace",
+   "evidence_lines": [
+    5,
+    139
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "DanielLetto2020/LiteEditorAI",
+  "sha": "144476f5ab74",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "983e468a4d5a": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的持续学习插件，本地 SQLite 存储学习线程",
+   "review": "dsh-explain 是 DeepSeek Harness（DSH）的学习模式插件，把已完成工作中的概念转为结构化解释并安排间隔复习，用户可检查、纠正或遗忘模型推断。学习数据以 SQLite 存于本地 $DSH_HOME。适用于使用 DSH 的个人用户；学习数据本地存储，但模型推断需调用外部辅助 provider。",
+   "highlights": [
+    "提供捕获、间隔复习、偏好纠正的本地学习循环",
+    "学习数据存储于本地 SQLite 文件（thread.sqlite）",
+    "支持导出版本化备份并过滤常见凭证/路径格式"
+   ],
+   "use_cases": [
+    "在 DSH Web 中将完成的工作转为可编辑的解释草稿",
+    "通过回忆/应用/辨析问题复习到期概念",
+    "检查并纠正模型对个人解释偏好的推断"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The primary agent stays untouched. Explain uses its own model calls, scheduler, context, and local SQLite database. ／ |Learning thread|Stored in `$DSH_HOME/dsh-explain/v1/thread.sqlite`.|",
+     "lines": [
+      18,
+      93
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为插件自身学习数据的本地存储，README 未声明其为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`dsh-explain` is a learning-mode plugin for DeepSeek Harness. It turns useful concepts from completed work into structured explanations, schedules lightweight reviews, and lets you inspect or correct what it learns about you. ／ The primary agent stays untouched. Explain uses its own model calls, scheduler, context, and local SQLite database. ／ |Learning thread|Stored in `$DSH_HOME/dsh-explain/v1/thread.sqlite`.|",
+   "evidence_lines": [
+    16,
+    18,
+    93
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "yuezengwu/dsh-explain",
+  "sha": "983e468a4d5a",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

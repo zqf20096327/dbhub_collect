@@ -10782,5 +10782,154 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6b9d8ef740d3": {
+  "identity": {
+   "one_liner": "本地优先的 AI 代理记忆引擎，单二进制、MCP 接入",
+   "review": "Uteke 是一个为 AI 代理提供持久记忆的本地记忆引擎，用 Rust 实现为单个二进制，通过 MCP server 与 Claude、Cursor 等 MCP 兼容代理集成，支持存储、召回与语义混合检索（向量 + FTS5 融合）。数据保存在本地，不依赖云 API；底层使用 SQLite FTS5 做关键词检索，并内置基准测试工具供复现性能指标。",
+   "highlights": [
+    "提供向量 + FTS5 的 RRF 融合检索，本地 ONNX 嵌入，查询不经 LLM",
+    "实现 MCP server（JSON-RPC + HTTP），供 MCP 兼容 AI 代理读写记忆",
+    "支持 Rooms 多代理共享记忆、时间点回溯查询与关系图链接"
+   ],
+   "use_cases": [
+    "为 AI 代理添加跨会话的本地持久记忆",
+    "团队通过 Rooms 共享可检索的项目知识与会议记录",
+    "隐私敏感场景下完全离线的记忆/知识库存储"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "2. **FTS5** (SQLite): finds by exact terms (\"deploy\" matches \"deploy\")",
+     "lines": [
+      209
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Many memory layers (Python-based or TypeScript-based) require cloud API keys (OpenAI/LLM) and external infrastructure (Docker, Postgres, Qdrant). Your data gets sent to a cloud LLM provider. Uteke is a single binary with zero API keys. All embeddings run local",
+     "lines": [
+      268
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是服务于 AI 代理记忆存储的工具/组件，内部使用 SQLite FTS5 实现关键词检索，而非以数据库为主体的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "{ \"mcpServers\": { \"uteke\": { \"command\": \"uteke-mcp\" } } } ／ |🧠 **Hybrid + Fusion Search**|Vector similarity + FTS5 full-text search, merged by Reciprocal Rank Fusion (RRF). Since v0.16.0, `fusion` (a weighted RRF of the vector and hybrid rankings) is the default recall strategy. Finds by meaning AND exact keywords.|",
+   "evidence_lines": [
+    38,
+    152
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "codecoradev/uteke",
+  "sha": "6b9d8ef740d3",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f22287946861": {
+  "identity": {
+   "one_liner": "自托管家庭网络实时监控 PWA，Go 后端+SQLite 存储",
+   "review": "一个面向 OpenWrt/GL.iNet 家庭网络的监控面板应用：单二进制部署，采集路由器健康、设备、拓扑、WireGuard 与 AdGuard Home 数据，经 SSE 实时推送，数据存于 SQLite。适合自托管家庭网络用户，内置多用户与 ES/EN 国际化，并提供可选的只读 MCP server 供 AI 助手查询网络状态（默认关闭）。",
+   "highlights": [
+    "实时采集路由器健康、设备分类、网络拓扑、WireGuard 对端与 AdGuard Home 统计，经 SSE 每 5 秒更新",
+    "提供 OpenWrt 原生 agent 包（.ipk/.apk）及 luci-app-netpulse，支持 Asuswrt/Merlin、RouterOS 与 SNMP 交换机的外部集成",
+    "内嵌只读 MCP server（默认关闭），支持多用户、PWA 安装与 MQTT+Home Assistant 集成"
+   ],
+   "use_cases": [
+    "自托管监控 OpenWrt/GL.iNet 家庭路由器与整个局域网设备",
+    "管理 WireGuard 隧道与 AdGuard Home 的家庭网络运维",
+    "对接 Home Assistant/MQTT 并通过 AI 助手查询网络状态"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite with a seven-day chart and recent history. Choose M-Lab NDT (the default),",
+     "lines": [
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其以 SQLite 存储测速结果等应用数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLite with a seven-day chart and recent history. Choose M-Lab NDT (the default), ／ **What it runs on.** The server is one static Go binary on any Linux box. ／ **An MCP server for your AI assistant.** NetPulse embeds a read-only",
+   "evidence_lines": [
+    70,
+    74,
+    125
+   ]
+  },
+  "fn": "gnacho/netpulse",
+  "sha": "f22287946861",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

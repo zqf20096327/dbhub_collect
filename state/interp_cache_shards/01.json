@@ -10795,5 +10795,83 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "498257dc93d2": {
+  "identity": {
+   "one_liner": "腾讯云 CloudBase 的 AI 编程工具集成层，经 Plugin/Skills/MCP 操作后端",
+   "review": "该项目为 Cursor、Claude Code 等 AI IDE 提供 CloudBase 后端接入：npm 包 @cloudbase/cloudbase-mcp 作为 MCP Server，通过对话登录、查询和修改数据、管理云函数与托管并部署；Agent Skills 提供数据库、鉴权、函数等场景指引。面向使用腾讯云 CloudBase 的开发者，需自备 CloudBase 环境，删除与破坏性 SQL 等操作会暂停等待确认。",
+   "highlights": [
+    "提供 MCP Server、Agent Skills 与 Plugin 三种接入件，支持数据库 CRUD、数据模型、权限与安全规则操作（L174）",
+    "对删除、破坏性 SQL 等敏感操作实现命名目标确认与凭据指纹校验（L26）",
+    "支持 20 余种 AI IDE 的接入路径，通过 npm 分发（L99-L166, L62）"
+   ],
+   "use_cases": [
+    "在 AI IDE 对话中操作 CloudBase 数据库与云函数并完成部署",
+    "为 Web 与微信小程序开发生成带登录、数据库和权限的后端（L132, L179）",
+    "通过 Skills 约束 AI 生成代码的数据库访问模式（L44）"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Skills / Context: new PostgreSQL access-pattern best-practices skill (batching, indexes, RLS role gating, launch capacity); `searchKnowledgeBase`'s inline skill / OpenAPI catalogs now load on demand, cutting the 43-tool surface by 9.1% on every `tools/list` ／ - **Database**: PostgreSQL and document DB, data models, CRUD, permissions and security rules",
+     "lines": [
+      44,
+      174
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- Environment: the usage panel gains a metrics view (QPS, invocations, errors, timeouts, MySQL and CloudRun load) with human names, and MySQL provisioning is retired from the tool surface ／ - Tools / Skills: MySQL provisioning is retired from the tool surface; every skill package ships a `LICENSE.md` next to `SKILL.md`; a new MCP reference skill documents the remote endpoints, the plugin flags and the tool schemas",
+     "lines": [
+      27,
+      33
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 MCP Server/Skills 组件为 CloudBase 后端（含其数据库、鉴权、函数）提供服务与操作能力，本身不是用库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The CloudBase integration layer for AI coding tools: Plugin installs the stack, Skills steer how code is written, MCP operates databases, functions, storage, and deploys from chat. ／ |**MCP**|Login, query and change data, manage functions and hosting, read logs—from the conversation| ／ This repository ships the npm package `@cloudbase/cloudbase-mcp`, Skills, and AI plugins.",
+   "evidence_lines": [
+    7,
+    60,
+    62
+   ]
+  },
+  "fn": "TencentCloudBase/CloudBase-AI-Toolkit",
+  "sha": "498257dc93d2",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11574,5 +11574,204 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0908f07ca2ee": {
+  "identity": {
+   "one_liner": "跨平台开发者工作台，集成AI编码代理、Git、数据库与K8s管理",
+   "review": "DevCat 是一个基于 Tauri 2 + React 的桌面开发者工作台，把 AI 编码代理（Claude Code、Codex、Gemini CLI 等）、真实终端、Git、SQL/NoSQL 数据库客户端、Kubernetes、Docker、RabbitMQ 和 VPN/SSH 隧道整合在一个窗口中，并可按项目分组。适合需要在同一界面里让 AI 代理直接查询数据库、审查 diff、操作集群的开发者；支持移动端远程控制和 Telegram/Discord 机器人审批。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server、MongoDB、Redis 的连接查询，提供带 schema 自动补全的 SQL 编辑器",
+    "内置 DevCat Agent 及 MCP server，可与 Claude Code、Codex、Cursor、Gemini CLI 同步共享记忆",
+    "支持 DevCat Mobile 远程访问、Telegram/Discord 机器人审批，以及端到端加密的 Rooms 协作"
+   ],
+   "use_cases": [
+    "让 AI 编码代理在审查代码的同时查询和导出数据库数据",
+    "通过手机或聊天工具远程查看代理状态、审批请求并运行查询",
+    "集中管理多项目的 Git 仓库、Kubernetes 集群与 SSH/VPN 隧道"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server| ／ |PostgreSQL|localhost:55432|postgres / devcat|",
+     "lines": [
+      37,
+      364
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server| ／ |MySQL|localhost:53306|root / devcat|",
+     "lines": [
+      37,
+      365
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server|",
+     "lines": [
+      37
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server| ／ |SQL Server|localhost:51433|sa / DevCat_Passw0rd!|",
+     "lines": [
+      37,
+      366
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server|",
+     "lines": [
+      37
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供数据库连接、SQL 编辑器和查询导出功能，是为数据库生态服务的客户端工具。",
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server| ／  SQL editor SQL editor : schema-aware autocomplete, multiple result sets, explain and export.",
+   "evidence_lines": [
+    37,
+    72
+   ]
+  },
+  "fn": "devcathq/DevCat",
+  "sha": "0908f07ca2ee",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6766a7ee6c62": {
+  "identity": {
+   "one_liner": "本地优先的个人 SQL 分析工作台，面向 ClickHouse 与 Trino",
+   "review": "Miracle 是一个运行在本机、通过浏览器访问的个人 SQL 工作台，用于连接 ClickHouse 或 Trino 执行查询，并将结果快照整理为表格、图表和画布笔记，工作区数据存于本地 SQLite。适合需要单机自托管查询与可视化整理的个人分析师；为单用户单机设计，ClickHouse/Trino 需另行部署连接。",
+   "highlights": [
+    "提供多标签 SQL 编辑器，支持自动补全、格式化、按日期范围运行及结果导入导出",
+    "支持将查询结果快照转为表格、多种图表和带关联的画布笔记，本地保存",
+    "支持 ClickHouse 与 Trino 两种数据源，含 HTTPS、自定义 CA 及 ClickHouse 客户端证书"
+   ],
+   "use_cases": [
+    "个人在本地对 ClickHouse/Trino 数据做即席查询与分析",
+    "将查询结果整理成含表格、图表和笔记的分析画布",
+    "无需账号注册的单机自托管 SQL 工作环境"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Miracle работает на вашем компьютере и открывается в браузере. Подключитесь к ClickHouse или Trino, выполните SQL и соберите таблицы, графики и заметки на доске. Запросы, снимки и доски сохраняются локально. Аккаунт, регистрация, PostgreSQL и Docker для запуск ／ 0.2.0 создаёт чистую рабочую область. Перенос из PostgreSQL-версии не выполняется; её данные не удаляются. SQL-черновики браузера сохраняйте в каталог запросов или скачивайте отдельно.",
+     "lines": [
+      7,
+      52
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Личный SQL-редактор и аналитическая доска. ClickHouse · Trino · SQLite · Apache-2.0 ／ **English:** Miracle is a personal local SQL workspace for ClickHouse and Trino. Run queries and turn result snapshots into charts, tables, and notes. It serves a Russian-language browser interface on loopback, stores its workspace in SQLite, and ships with it ／ SQLite и ключ шифрования подключений хранятся отдельно от версий программы. Команда `miracle backup DIRECTORY` сохраняет их вместе; перед копированием остановите сервис.",
+     "lines": [
+      3,
+      9,
+      50
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Личный SQL-редактор и аналитическая доска. ClickHouse · Trino · SQLite · Apache-2.0 ／ Miracle работает на вашем компьютере и открывается в браузере. Подключитесь к ClickHouse или Trino, выполните SQL и соберите таблицы, графики и заметки на доске. Запросы, снимки и доски сохраняются локально. Аккаунт, регистрация, PostgreSQL и Docker для запуск ／ **English:** Miracle is a personal local SQL workspace for ClickHouse and Trino. Run queries and turn result snapshots into charts, tables, and notes. It serves a Russian-language browser interface on loopback, stores its workspace in SQLite, and ships with it",
+     "lines": [
+      3,
+      7,
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是连接 ClickHouse/Trino 进行查询与可视化的工具，本身使用 SQLite 存储工作区数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**English:** Miracle is a personal local SQL workspace for ClickHouse and Trino. Run queries and turn result snapshots into charts, tables, and notes. It serves a Russian-language browser interface on loopback, stores its workspace in SQLite, and ships with its own runtime. ／ |Источники|ClickHouse и Trino; дерево схем с ленивой загрузкой, общий кеш поиска и подсказок; HTTPS и собственный CA для обоих движков, клиентские сертификаты для ClickHouse.| ／ SQLite и ключ шифрования подключений хранятся отдельно от версий программы. Команда `miracle backup DIRECTORY` сохраняет их вместе; перед копированием остановите сервис.",
+   "evidence_lines": [
+    9,
+    19,
+    50
+   ]
+  },
+  "fn": "Manannikov-Nikita/miracle",
+  "sha": "6766a7ee6c62",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

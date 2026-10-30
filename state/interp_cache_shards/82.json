@@ -11488,5 +11488,229 @@
   "generated_at": "2026-10-30",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "8171f3738abc": {
+  "identity": {
+   "one_liner": "基于 deepagents 封装的 Agent 生产运行时库",
+   "review": "octop-harness 是一个 Python 编写的 agent 运行时库，在 deepagents 的 create_deep_agent 之上封装模型路由、分层记忆、多 agent 注册表、可插拔存储后端（本地/S3/COS/PostgreSQL）和终端 CLI，供开发者在生产环境构建和运行 agent。使用 SQLite 作为 LangGraph checkpoint 存储；要求 Python 3.12+，MIT 许可。",
+   "highlights": [
+    "提供 ChatModelFactory 模型路由，支持 OpenAI、Anthropic、AWS Bedrock 及 17 个可编辑 provider 预设",
+    "提供 octop-memory 分层记忆中间件（L0→L3 提炼）与 LangGraph SQLite checkpoint 持久化",
+    "提供多 agent 注册表、ACP stdio 服务端、浏览器/搜索/MCP 工具集与终端 CLI"
+   ],
+   "use_cases": [
+    "在生产环境部署和管理多个隔离的 AI agent",
+    "为 agent 会话添加分层持久化记忆与断点续聊",
+    "通过 ACP 协议让 IDE/终端 AI 驱动 agent"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|💾|**Pluggable backends**|Local disk, S3, COS, or PostgreSQL as the agent workspace| ／ |**Workspaces**|`BackendWorkspace`: local / S3 / COS / PostgreSQL| ／ |`remote-backends`|Postgres workspace backend (`psycopg`). S3 uses the bundled boto3 backend.|",
+     "lines": [
+      32,
+      54,
+      196
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Graph runtime**|LangGraph + SQLite checkpoint| ／ and sqlite under a workspace subdir while persona markdown stays at the root.",
+     "lines": [
+      50,
+      127
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该库是 agent 运行时，仅将 SQLite/PostgreSQL 用作自身 checkpoint 和工作区存储，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**octop-harness** is a production-grade agent runtime built on the harness engineering theory. At its core it is a thin, battle-tested **encapsulation and engineering layer around deepagents** — we take the elegant `create_deep_agent` primitive from deepagents and package it with everything you need to run agents in production: multi-provider model routing, persistent memory, browser/search tools, a multi-agent registry, pluggable storage backends, and a terminal CLI. ／ octop-harness is a library (not an app) that turns deepagents into a deployable runtime. A single `HarnessAgentManager` owns a registry of agents; each agent wires together a model, a set of tools/skills, a memory backend, and a LangGraph checkpoint — all assembled through the `harness` layering discipline (L0 I/O helpers → L1 workspace facade → L2 business logic → L3 assembly). ／ |**Graph runtime**|LangGraph + SQLite checkpoint|",
+   "evidence_lines": [
+    19,
+    40,
+    50
+   ]
+  },
+  "fn": "TencentCloud/octop-harness",
+  "sha": "8171f3738abc",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6bd159c904dc": {
+  "identity": {
+   "one_liner": "嵌入式多模态数据库：单库内提供向量、时序、全文、空间与列式 SQL 引擎",
+   "review": "一个用 Rust 编写的嵌入式数据库引擎，以单个库形式运行（无守护进程），提供列式存储、ACID 事务，以及向量（DiskANN）、全文（倒排索引/BM25）、空间（八叉树）等多模态索引，并支持 MCAP 机器人数据导入与数据集快照。面向具身智能/机器人与边缘场景开发者，提供 Rust/Python/Node/Go 绑定；README 标注项目处于 pre-1.0，SQL 能力面与多语言 FFI 仍在演进。",
+   "highlights": [
+    "单库嵌入运行（无守护进程），提供列式存储、WAL、MVCC 快照隔离与 ACID 事务",
+    "支持向量（DiskANN）、全文（BM25）、空间（3D 八叉树）等多模态索引及混合检索（RRF 融合）",
+    "提供 mcap 导入、CLI 运维自检（doctor）及 Rust/Python/Node.js/Go 多语言绑定"
+   ],
+   "use_cases": [
+    "机器人/具身智能场景的多模态数据（向量、时序、文本、二进制）本地存储与检索",
+    "边缘/IoT 设备上的嵌入式低内存数据管理",
+    "MCAP 录制数据的结构化入库与轨迹检索"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "(SQLite 参照同形状; 详细方法学与历史曲线见 `bindings/python/bench/README.md`). ／ |Operation|MoteDB|SQLite|倍数| ／ |批量导入 `insert_arrays` (GroupCommit 耐久档)|197K rows/s|2.4M rows/s*|*SQLite 无向量列|",
+     "lines": [
+      55,
+      57,
+      59
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- Scalar functions: `UPPER`/`LOWER`/`LENGTH`/`TRIM`/`SUBSTR`/`REPLACE`/`CONCAT` (skips NULL args, SQLite/Postgres semantics; `||` propagates NULL)/`INSTR`/`COALESCE`/`ROUND` (binary-exact decimal rounding)/`ABS`/arithmetic",
+     "lines": [
+      289
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它本身是一个嵌入式数据库引擎，属数据库生态的核心组件，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**AI-native embedded multimodal database for embodied intelligence.** ／ Columnar storage engine with ACID transactions, vector search, full-text search, and spatial indexing — in a single embedded library. ／ - **No daemon**: Single library, embedded directly",
+   "evidence_lines": [
+    3,
+    4,
+    206
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "motedb/motedb",
+  "sha": "6bd159c904dc",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "512778ae2f1e": {
+  "identity": {
+   "one_liner": "Tauri v2 的零配置 SQLite 本地优先复制同步引擎",
+   "review": "tauri-plugin-sync 是面向 Tauri v2 桌面应用的 SQLite 复制与同步插件：通过 shadow 触发器做变更捕获，写入本地 SQLite 后由后台引擎以 LWW 策略同步到远端云端后端。适合需要离线优先、断网续传能力的桌面应用开发者。安装通过 Cargo 依赖与 GitHub 引用的 npm/pnpm SDK，README 提供可复现的基准测试与冲突解决规范。",
+   "highlights": [
+    "通过 shadow 触发器自动捕获 insert/update/delete 变更（CDC），无需改动现有应用 SQL",
+    "支持 LWW 冲突解决、墓碑删除、断网本地排队并在恢复后自动同步",
+    "提供 TypeScript SDK 与反应式状态监听，含基准测试与 15 项集成测试"
+   ],
+   "use_cases": [
+    "离线优先的 Tauri v2 桌面应用本地数据写入与云同步",
+    "需要确定性冲突解决的多端数据复制场景",
+    "对本地写入延迟敏感的桌面应用"
+   ],
+   "reference": "README L13、L18-L22"
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **Zero-Configuration Local-First SQLite Replication & Sync Engine for Tauri v2.** ／ `tauri-plugin-sync` enables developers to build real-time, offline-first desktop applications with Tauri v2. Write to local SQLite with sub-millisecond median latency (0.13ms p50 / 0.34ms mean), and let the background sync engine seamlessly replicate changeset ／ |**Local SQLite Mutation (p50)**|Single-row INSERT / UPDATE|`0.13 ms` (p50)|Typical local execution; 120× faster than 60fps frame|",
+     "lines": [
+      3,
+      13,
+      40
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite 提供复制同步能力的引擎组件，数据库是服务对象而非存储用途",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **Zero-Configuration Local-First SQLite Replication & Sync Engine for Tauri v2.** ／ `tauri-plugin-sync` enables developers to build real-time, offline-first desktop applications with Tauri v2. Write to local SQLite with sub-millisecond median latency (0.13ms p50 / 0.34ms mean), and let the background sync engine seamlessly replicate changesets to your remote cloud backend with deterministic Last-Write-Wins (LWW) conflict resolution.",
+   "evidence_lines": [
+    3,
+    13
+   ]
+  },
+  "fn": "kxrn-gupta/tauri-plugin-sync",
+  "sha": "512778ae2f1e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

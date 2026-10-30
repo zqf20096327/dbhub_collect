@@ -11270,5 +11270,149 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ee7047610c9c": {
+  "identity": {
+   "one_liner": "Rust+egui 编写的 PostgreSQL/MySQL/SQLite 桌面数据库客户端",
+   "review": "Tabletist 是用 Rust 和 egui 编写的桌面数据库客户端，支持 PostgreSQL、MySQL 和 SQLite，运行于 Linux、macOS 和 Windows。提供连接管理、SSH 隧道、TLS、只读会话、数据网格编辑、SQL 编辑器与补全等功能，保存变更以事务写入并提供冲突比对。适合需要在桌面端浏览和编辑多种数据库数据的开发者与运维人员。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、SQLite 三种数据库的直接连接、TLS 与 SSH 隧道",
+    "提供只读/读写会话区分，保存变更以单事务写入并检测并发修改冲突",
+    "包含 SQL 编辑器（语句补全、格式化、超时与回滚事务）和数据网格行内编辑"
+   ],
+   "use_cases": [
+    "在桌面端浏览、查询和编辑多环境数据库表数据",
+    "需要只读保护或变更前 SQL 审查的生产库操作",
+    "通过 SSH 隧道安全管理远程数据库连接"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Databases: PostgreSQL, MySQL, SQLite ／ A fast, native database client for **PostgreSQL**, **MySQL** and",
+     "lines": [
+      11,
+      13
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Databases: PostgreSQL, MySQL, SQLite ／ A fast, native database client for **PostgreSQL**, **MySQL** and",
+     "lines": [
+      11,
+      13
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Databases: PostgreSQL, MySQL, SQLite ／ **SQLite**. Written in Rust with egui; runs on",
+     "lines": [
+      11,
+      14
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL/MySQL/SQLite 提供图形化连接与数据操作的客户端工具，本身不依赖某库存储业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，单一许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A fast, native database client for **PostgreSQL**, **MySQL** and ／ - Saved connections grouped in a picker, each tagged with its environment ／ - A SQL editor per connection (Cmd/Ctrl+T): run the statement at the cursor",
+   "evidence_lines": [
+    13,
+    26,
+    61
+   ]
+  },
+  "fn": "igor-alexandrov/tabletist",
+  "sha": "ee7047610c9c",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "12e8138d7fb6": {
+  "identity": {
+   "one_liner": "自托管好友共享社交帖子存档与私有 feed 应用",
+   "review": "ADHX 是一个自托管应用：用户保存来自 X、Instagram、TikTok、YouTube 等 14 个网络的帖子，服务器通过 yt-dlp 下载原始文件并长期保存，供好友圈子在私有 feed 中浏览、搜索（本地运行 EmbeddingGemma、Whisper、Florence-2 模型实现语义检索）和一起观看。面向想和朋友私下分享好内容的个人与家庭群组，以单个 Docker 容器部署，主题标签显示使用 Drizzle ORM 与 SQLite 存数据，README 未出现具体数据库产品名。",
+   "highlights": [
+    "通过 yt-dlp 从 14 个社交网络下载并保存帖子的原始副本（最高 4K）",
+    "在本地服务器上运行三个开源模型（EmbeddingGemma 2、Whisper、Florence-2）实现按描述搜索",
+    "以单个 Docker 容器部署，无需 GPU，约 4 GB 内存即可运行"
+   ],
+   "use_cases": [
+    "好友/家庭小圈子共建私有内容 feed，替代算法推荐时间线",
+    "将社交平台帖子下载为本地文件，防止原帖删除后丢失",
+    "自托管多媒体存档，支持语义搜索与 reactions、频道等社交功能"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是使用数据库存储帖子与用户数据的终端应用，README 未出现数据库产品名，主题标签显示其使用 Drizzle ORM 与 SQLite。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ADHX is a private social network for your friends and family. One of you runs it; everyone shares the best posts they find on X, Instagram, TikTok, YouTube, Reddit and nine more networks into one feed, picked by people who know you instead of a recommendation engine with quarterly targets. ／ docker run -d --name adhx -p 3000:3000 -v adhx:/data ghcr.io/itsmemeworks/adhx ／ Downloads run through yt-dlp, plus each network's public link-preview data for picture posts. ADHX never asks for your passwords on any of these networks. Posts that are private, blocked or protected by DRM can't be kept. When a network changes something, saving from it can break until yt-dlp catches up; copies you already kept are safe.",
+   "evidence_lines": [
+    11,
+    98,
+    78
+   ]
+  },
+  "fn": "itsmemeworks/adhx",
+  "sha": "12e8138d7fb6",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
