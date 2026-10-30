@@ -300,7 +300,7 @@ def test_plan_incremental() -> None:
 
 
 def test_release_notes() -> None:
-    """enrich._release_notes：适配变更史素材（正文截断，零新增调用）。"""
+    """enrich._release_notes：适配变更史素材（字节截断 + 命中行优先，零新增调用）。"""
     sys.path.insert(0, str(ROOT / "enrich"))
     import enrich  # noqa: E402  顶部只有路径 bootstrap，无副作用
     rels = [
@@ -313,9 +313,24 @@ def test_release_notes() -> None:
     check("rel_notes：取前 3、跳过空正文", notes is not None
           and [n["t"] for n in notes] == ["v3.0", "v2.0"], str(notes))
     check("rel_notes：512 字节截断 + 日期日粒度",
-          len(notes[1]["n"]) == 512 and notes[0]["d"] == "2026-10-20")
+          len(notes[1]["n"].encode()) == 512 and notes[0]["d"] == "2026-10-20")
     check("rel_notes：全空正文返回 None", enrich._release_notes(
         [{"tag_name": "v1", "published_at": "2026-01-01", "body": ""}]) is None)
+
+    # 超长 changelog：DB 变更行在 512 字节之外，命中行优先应把它捞回来
+    boiler = "What's Changed\n" + "\n".join(f"* Fix bug {i} by @user{i}" for i in range(40))
+    body = boiler + "\n* Dropped MySQL 5.7 support\n* Added PostgreSQL 16 support"
+    n = enrich._release_notes([{"tag_name": "v9", "published_at": "2026-10-01", "body": body}])
+    txt = n[0]["n"]
+    check("rel_notes：命中行优先（超长正文末尾的 DB 变更）",
+          "MySQL 5.7" in txt and "PostgreSQL 16" in txt
+          and "What's Changed" in txt and len(txt.encode()) <= 512, txt)
+
+    # 中文按字节截断：字符截会超预算（1 字 3 字节），且不能劈开半个字
+    n = enrich._release_notes([{"tag_name": "v1", "published_at": "2026-10-01",
+                                "body": "新增功能说明" * 200}])
+    check("rel_notes：中文按字节截断不劈字",
+          len(n[0]["n"].encode("utf-8")) <= 512 and "新增" in n[0]["n"])
 
 
 def main() -> int:

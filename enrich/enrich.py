@@ -141,11 +141,47 @@ def due_dims(rec: dict, tier: str, pushed_changed: bool) -> list[str]:
     return due
 
 
+# 适配变更史信号词：正文行同时命中「库名/数据库」与「增删/弃用」才收为命中行
+DB_WORDS = ("mysql", "mariadb", "postgres", "postgre", "sqlite", "mongo", "redis",
+            "oracle", "sql server", "mssql", "clickhouse", "cassandra", "dynamodb",
+            "elasticsearch", "duckdb", "snowflake", "bigquery", "spanner", "tidb",
+            "oceanbase", "hbase", "neo4j", "database", "db")
+CHANGE_WORDS = ("support", "drop", "remove", "add ", "adds", "added", "deprecat",
+                "eol", "end of life", "migrat", "compat", "driver", "connect")
+HEAD_BYTES = 128
+
+
+def _cut_utf8(s: str, cap: int) -> str:
+    """按 UTF-8 字节截断，不劈开多字节字符（中文 1 字 3 字节，字符截会超预算）。"""
+    b = s.encode("utf-8")
+    return s if len(b) <= cap else b[:cap].decode("utf-8", errors="ignore")
+
+
+def _excerpt(body: str, cap: int) -> str:
+    """超长正文摘要：头部定长上下文 + 命中「库名+变更词」的行；无命中退回整段前缀。"""
+    if len(body.encode("utf-8")) <= cap:
+        return body
+    head = _cut_utf8(body, HEAD_BYTES)
+    picked = []
+    for line in body.splitlines():
+        s = line.strip()
+        low = s.lower()
+        if not s or s[:40] in head or s in picked:
+            continue
+        if any(w in low for w in DB_WORDS) and any(w in low for w in CHANGE_WORDS):
+            picked.append(s)
+    if not picked:
+        return _cut_utf8(body, cap)
+    return _cut_utf8("\n".join([head, *picked]), cap)
+
+
 def _release_notes(rels: list[dict], n: int = 3, cap: int = 512) -> list[dict] | None:
-    """最近 n 个 release 的正文截断（适配引擎的"适配变更史"素材：add/drop support 线索）。
+    """最近 n 个 release 的正文摘要（适配引擎的"适配变更史"素材：add/drop support 线索）。
 
     body 本就在 releases 响应里，零新增调用；只在有正文时产出。
-    512 字节够容纳"新增/移除数据库支持"级别的条目，控存储体积。
+    cap=512 字节（UTF-8）够容纳"新增/移除数据库支持"级别的条目，控存储体积；
+    超长正文不再盲取开头——开头常是 "What's Changed" 模板和 PR 列表，
+    DB 线索多在中后段，改为「128 字节头部 + 命中行」。
     """
     out = []
     for r in rels[:n]:
@@ -153,7 +189,7 @@ def _release_notes(rels: list[dict], n: int = 3, cap: int = 512) -> list[dict] |
         if body:
             out.append({"t": r.get("tag_name"),
                         "d": (r.get("published_at") or "")[:10],
-                        "n": body[:cap]})
+                        "n": _excerpt(body, cap)})
     return out or None
 
 
