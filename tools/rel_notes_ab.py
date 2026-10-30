@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""rel_notes 摘要 A/B 手动测试：旧法 body[:512 字符] vs 新法 _excerpt(512 字节)。
+"""rel_notes 摘要 A/B 手动测试：旧法 body[:512 字符] vs 新法 _excerpt(512 字节+强度排序)。
 
 抽样口径：从 enrich 分片里取有 release 的仓，按池归属分层（中文池 / 国际池），
 同一随机种子可复现；每仓取最近 3 个 release（与线上一致）。
@@ -28,6 +28,7 @@ import enrich      # noqa: E402
 
 OLD_CAP = 512      # 旧法：字符
 NEW_CAP = 512      # 新法：UTF-8 字节
+RANK_NAME = ("移除/弃用", "新增支持", "兼容/连接")
 
 
 def eligible() -> set[str]:
@@ -52,17 +53,13 @@ def pool(path: Path) -> set[str]:
 
 
 def signal_lines(body: str) -> list[str]:
-    """正文里同时命中「库名/数据库」与「增删/弃用」的行。"""
-    out = []
+    """正文里的信号行（库名/数据库 + 变更词），与线上 enrich.note_rank 同一判定。"""
+    lines = []
     for line in body.splitlines():
         s = line.strip()
-        low = s.lower()
-        if not s:
-            continue
-        if (any(w in low for w in enrich.DB_WORDS)
-                and any(w in low for w in enrich.CHANGE_WORDS)):
-            out.append(s)
-    return out
+        if s and enrich.note_rank(s) is not None:
+            lines.append(s)
+    return lines
 
 
 def main() -> int:
@@ -105,8 +102,25 @@ def main() -> int:
     old_b, new_b = [], []
     total = old_hit = new_hit = 0
     long_releases = 0
+    rank_total = [0, 0, 0]
+    rank_old = [0, 0, 0]
+    rank_new = [0, 0, 0]
     misses = []
-    grp_stat = collections.defaultdict(lambda: [0, 0])   # grp -> [命中行, 总行]
+    grp_stat = collections.defaultdict(lambda: [0, 0])   # grp -> [保留, 总行]
+    per = collections.defaultdict(lambda: dict(sig=0, sig_old=0, sig_new=0,
+                                               hi=0, hi_old=0, hi_new=0))
+
+    def keep_all(fn: str, lines: list[str]) -> None:
+        """短正文：新旧两法都完整保留。"""
+        for s in lines:
+            per[fn]["sig"] += 1
+            per[fn]["sig_old"] += 1
+            per[fn]["sig_new"] += 1
+            if enrich.note_rank(s) <= 1:            # 强/中强度 = 支持变更
+                per[fn]["hi"] += 1
+                per[fn]["hi_old"] += 1
+                per[fn]["hi_new"] += 1
+
     for grp, fn, rels in rows:
         for r in rels:
             body = (r.get("body") or "").strip()
@@ -116,9 +130,9 @@ def main() -> int:
             for s in lines:
                 grp_stat[grp][1] += 1
             if len(body.encode("utf-8")) <= OLD_CAP:
-                # 短正文两法一致，不计入 A/B，但命中行天然全保留
                 for s in lines:
                     grp_stat[grp][0] += 1
+                keep_all(fn, lines)
                 continue
             long_releases += 1
             old = body[:OLD_CAP]
@@ -127,12 +141,25 @@ def main() -> int:
             new_b.append(len(new.encode("utf-8")))
             for s in lines:
                 total += 1
+                rk = enrich.note_rank(s)
+                rank_total[rk] += 1
+                per[fn]["sig"] += 1
+                if rk <= 1:
+                    per[fn]["hi"] += 1
                 key = s[:30]
                 if key in old:
                     old_hit += 1
+                    rank_old[rk] += 1
+                    per[fn]["sig_old"] += 1
+                    if rk <= 1:
+                        per[fn]["hi_old"] += 1
                 if key in new:
                     new_hit += 1
                     grp_stat[grp][0] += 1
+                    rank_new[rk] += 1
+                    per[fn]["sig_new"] += 1
+                    if rk <= 1:
+                        per[fn]["hi_new"] += 1
                 else:
                     misses.append((fn, r.get("tag_name"), s[:100]))
 
@@ -143,18 +170,31 @@ def main() -> int:
               f" | 新: 中位 {statistics.median(new_b):.0f} 最大 {max(new_b)}")
         over = sum(1 for b in new_b if b > NEW_CAP)
         print(f"新法超预算条数: {over}")
-    print(f"DB 变更行（超长正文内）: {total} 行")
+    print(f"信号行（超长正文内）: {total} 行")
     if total:
         print(f"  旧法保留 {old_hit}/{total} = {100*old_hit/total:.0f}%")
         print(f"  新法保留 {new_hit}/{total} = {100*new_hit/total:.0f}%")
+        for rk in range(3):
+            if rank_total[rk]:
+                print(f"  强度{rk} {RANK_NAME[rk]}: {rank_new[rk]}/{rank_total[rk]} = "
+                      f"{100*rank_new[rk]/rank_total[rk]:.0f}%"
+                      f"（旧法 {100*rank_old[rk]/rank_total[rk]:.0f}%）")
     for grp in ("cn", "intl"):
         keep, tot = grp_stat[grp]
         if tot:
-            print(f"  分组 {grp}: 保留 {keep}/{tot} = {100*keep/tot:.0f}%"
-                  f"（含短正文）")
+            print(f"  分组 {grp}: 保留 {keep}/{tot} = {100*keep/tot:.0f}%（含短正文）")
+
+    # 更有效的指标：以仓为单位，是否至少保住一条「支持变更」（强/中强度）行
+    repos = [v for v in per.values() if v["hi"]]
+    if repos:
+        o = sum(1 for v in repos if v["hi_old"])
+        n = sum(1 for v in repos if v["hi_new"])
+        print(f"\n每仓至少保住一条支持变更行（强度0/1）: "
+              f"旧 {o}/{len(repos)} = {100*o/len(repos):.0f}% | "
+              f"新 {n}/{len(repos)} = {100*n/len(repos):.0f}%")
     if misses:
-        print("\n新法仍漏检的 DB 行:")
-        for fn, tag, s in misses:
+        print(f"\n新法仍漏检的信号行（共 {len(misses)} 行，列前 20）:")
+        for fn, tag, s in misses[:20]:
             print(f"  - {fn} {tag}: {s}")
     return 0
 

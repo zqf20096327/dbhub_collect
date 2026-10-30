@@ -326,6 +326,19 @@ def test_release_notes() -> None:
           "MySQL 5.7" in txt and "PostgreSQL 16" in txt
           and "What's Changed" in txt and len(txt.encode()) <= 512, txt)
 
+    # 弱信号行占满预算时，强信号（移除/弃用）必须优先保住
+    weak = "\n".join(f"* SQLite driver compatibility fix {i}" for i in range(20))
+    n = enrich._release_notes([{"tag_name": "v8", "published_at": "2026-10-01",
+                                "body": "What's Changed\n" + weak + "\n* Removed MySQL 5.7 support"}])
+    txt = n[0]["n"]
+    check("rel_notes：强度排序（弱信号占满预算时强信号优先）",
+          "MySQL 5.7" in txt and "SQLite" in txt and len(txt.encode()) <= 512, txt)
+    check("rel_notes：强度分档（drop>support>compat、非信号行 None）",
+          [enrich.note_rank(x) for x in ("Dropped MySQL 5.7 support",
+                                         "Added PostgreSQL 16 support",
+                                         "SQLite driver compatibility fix",
+                                         "Bumped version to 2.0")] == [0, 1, 2, None])
+
     # 中文按字节截断：字符截会超预算（1 字 3 字节），且不能劈开半个字
     n = enrich._release_notes([{"tag_name": "v1", "published_at": "2026-10-01",
                                 "body": "新增功能说明" * 200}])

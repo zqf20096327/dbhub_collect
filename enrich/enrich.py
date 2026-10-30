@@ -141,14 +141,32 @@ def due_dims(rec: dict, tier: str, pushed_changed: bool) -> list[str]:
     return due
 
 
-# 适配变更史信号词：正文行同时命中「库名/数据库」与「增删/弃用」才收为命中行
+# 适配变更史信号词：正文行同时命中「库名/数据库」与「变更词」才算信号行
 DB_WORDS = ("mysql", "mariadb", "postgres", "postgre", "sqlite", "mongo", "redis",
             "oracle", "sql server", "mssql", "clickhouse", "cassandra", "dynamodb",
             "elasticsearch", "duckdb", "snowflake", "bigquery", "spanner", "tidb",
             "oceanbase", "hbase", "neo4j", "database", "db")
-CHANGE_WORDS = ("support", "drop", "remove", "add ", "adds", "added", "deprecat",
-                "eol", "end of life", "migrat", "compat", "driver", "connect")
+# 强度分档：0=移除/弃用（适配变更的硬信号） 1=新增支持 2=兼容/连接/迁移
+STRONG_WORDS = ("drop", "remove", "no longer", "deprecat", "eol", "end of life",
+                "breaking", "discontinu", "sunset", "retire")
+MEDIUM_WORDS = ("support", "add ", "adds", "added", "introduc", "new ")
+WEAK_WORDS = ("compat", "connect", "driver", "migrat", "integrat")
+CHANGE_WORDS = STRONG_WORDS + MEDIUM_WORDS + WEAK_WORDS
 HEAD_BYTES = 128
+
+
+def note_rank(line: str) -> int | None:
+    """信号行强度：0=移除/弃用 1=新增支持 2=兼容/连接；非信号行 None。
+
+    判档顺序即优先级：同时含 drop 和 support 的行算 0（"Dropped support for …"）。
+    """
+    low = line.lower()
+    if not any(w in low for w in DB_WORDS):
+        return None
+    for rank, words in ((0, STRONG_WORDS), (1, MEDIUM_WORDS), (2, WEAK_WORDS)):
+        if any(w in low for w in words):
+            return rank
+    return None
 
 
 def _cut_utf8(s: str, cap: int) -> str:
@@ -158,20 +176,20 @@ def _cut_utf8(s: str, cap: int) -> str:
 
 
 def _excerpt(body: str, cap: int) -> str:
-    """超长正文摘要：头部定长上下文 + 命中「库名+变更词」的行；无命中退回整段前缀。"""
+    """超长正文摘要：头部定长上下文 + 信号行按强度排序；无信号行退回整段前缀。"""
     if len(body.encode("utf-8")) <= cap:
         return body
     head = _cut_utf8(body, HEAD_BYTES)
     picked = []
     for line in body.splitlines():
         s = line.strip()
-        low = s.lower()
         if not s or s[:40] in head or s in picked:
             continue
-        if any(w in low for w in DB_WORDS) and any(w in low for w in CHANGE_WORDS):
+        if note_rank(s) is not None:
             picked.append(s)
     if not picked:
         return _cut_utf8(body, cap)
+    picked.sort(key=note_rank)      # 稳定排序：同强度保持正文顺序
     return _cut_utf8("\n".join([head, *picked]), cap)
 
 
@@ -181,7 +199,8 @@ def _release_notes(rels: list[dict], n: int = 3, cap: int = 512) -> list[dict] |
     body 本就在 releases 响应里，零新增调用；只在有正文时产出。
     cap=512 字节（UTF-8）够容纳"新增/移除数据库支持"级别的条目，控存储体积；
     超长正文不再盲取开头——开头常是 "What's Changed" 模板和 PR 列表，
-    DB 线索多在中后段，改为「128 字节头部 + 命中行」。
+    DB 线索多在中后段。取法：128 字节头部 + 信号行按强度排序
+    （移除/弃用 > 新增支持 > 兼容/连接），预算内先保高价值行。
     """
     out = []
     for r in rels[:n]:
