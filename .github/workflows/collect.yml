@@ -10,6 +10,10 @@ on:
         description: '强制 README 走月度全量校准（不受 1 号限制；calibrated 按日标记跨窗接力不重烧）'
         type: boolean
         default: false
+      limit:
+        description: '冒烟：富集/README 各最多处理 N 个仓（0=不限；>0 时跳过池采集，看单个仓耗时）'
+        default: '0'
+        type: string
 permissions:
   contents: write
 concurrency:
@@ -32,12 +36,14 @@ jobs:
       - run: pip install requests
 
       - name: 池采集·国际（stars>=10 + 新项目窗口，断点续采）
+        if: ${{ (github.event.inputs.limit || '0') == '0' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python collect/collect_intl.py --max-calls 800
 
       - name: 池采集·国产（无星线，超1000按创建期拆分，断点续采）
+        if: ${{ (github.event.inputs.limit || '0') == '0' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -66,7 +72,8 @@ jobs:
           # 跨小时等待：触保底线按响应头 reset 睡到下一小时窗再续（预算按窗发新，
           # 吃满 220 分钟——旧行为触线即停，49.9 分钟就收工浪费 3/4 预算）。
           # 每窗 6 个，月度校准日 README 靠 REM 公式自动分得剩余时间，无需让路
-          python enrich/enrich.py --tier all --pool data/snapshot_latest/pool.json --max-calls 5000 --max-minutes 220 --wait-windows 8
+          python enrich/enrich.py --tier all --pool data/snapshot_latest/pool.json --max-calls 5000 --max-minutes 220 --wait-windows 8 \
+            --limit "${{ github.event.inputs.limit || '0' }}"
 
       # --wait-windows 10：Core 触保底线按失败响应的 X-RateLimit-Reset 睡到
       # 配额恢复再续，最多 10 次（勿用 /rate_limit 判断——Actions token 上它
@@ -88,7 +95,8 @@ jobs:
           echo "README 本窗总预算 $(( REM / 60 )) 分钟"
           python collect/readme_sweep.py --mode "$MODE" --pool data/snapshot_latest/pool.json \
             --max-calls 4200 --max-minutes 60 \
-            --wait-windows 10 --max-total-minutes $(( REM / 60 ))
+            --wait-windows 10 --max-total-minutes $(( REM / 60 )) \
+            --limit "${{ github.event.inputs.limit || '0' }}"
 
       - name: 出池仓 absent_since 打戳（每晚，零侵入只写台账）
         run: |

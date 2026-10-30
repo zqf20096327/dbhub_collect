@@ -333,6 +333,7 @@ def run(args):
     quarantined = []
     stop_reason = None
     windows = waits = stuck_rounds = 0
+    visited = 0                                    # 冒烟用：本次已处理的目标数
 
     by_fn = {it["full_name"]: it for it in pool}
     targets: list = []                             # deadline 先触发时 summary 不炸
@@ -354,6 +355,9 @@ def run(args):
                  windows, len(targets), len(pool), n_cn)
         try:
             for i, fn in enumerate(targets):
+                visited += 1
+                if args.limit and visited > args.limit:
+                    break
                 it = by_fn.get(fn, {})
                 tier = tier_of(it.get("stars") or 0, cn=is_cn_item(it))
                 rec = items.setdefault(fn, {"dims": {}, "fail_count": 0})
@@ -403,6 +407,8 @@ def run(args):
                     atomic_write_json(STATE, st)
                     cache.flush()
                     log.info("进度 %d/%d · %s", i + 1, len(targets), counts)
+            if args.limit and visited >= args.limit:
+                stop_reason = f"达到 --limit {args.limit}（冒烟）"
             break                                  # 本窗自然扫完且无剩余到期项 → 收尾
         except CoreReserveOut as e:
             # Core 触保底线：按响应头 reset 睡到下一小时窗再续（跨窗推进的关键，
@@ -463,6 +469,8 @@ def main():
     ap.add_argument("--wait-windows", type=int, default=0,
                     help="Core 触保底线后按响应头 reset 睡到下一小时窗续跑的最多次数"
                          "（0=触线即收尾，旧行为）")
+    ap.add_argument("--limit", type=int, default=0,
+                    help="本次最多处理 N 个目标（0=不限，冒烟用）")
     ap.add_argument("-v", action="store_true")
     args = ap.parse_args()
     logging.basicConfig(level=logging.DEBUG if args.v else logging.INFO,

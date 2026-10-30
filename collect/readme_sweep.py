@@ -129,6 +129,7 @@ def run(args):
     quarantined = []
     windows = waits = total_calls = 0
     stuck_rounds = 0
+    visited = 0                                    # 冒烟用：本次已处理的目标数
     targets = pick_targets(args, pool, items)
     targets0 = len(targets)
     log.info("模式 %s · 目标 %d 项（池 %d）· 跨窗等待上限 %d 次 · 总时长 %s 分钟",
@@ -171,6 +172,9 @@ def run(args):
                  rem if rem is not None else "?")
         try:
             for i, fn in enumerate(targets):
+                visited += 1
+                if args.limit and visited > args.limit:
+                    break
                 rec = items.setdefault(fn, {"status": "pending", "fail_count": 0})
                 if rec.get("status") == "failed" and rec.get("fail_count", 0) >= THREE_STRIKES:
                     quarantined.append(fn)
@@ -232,6 +236,9 @@ def run(args):
                 if (i + 1) % 200 == 0:
                     save_state(st)
                     log.info("进度 %d/%d · %s", i + 1, len(targets), counts)
+            if args.limit and visited >= args.limit:
+                stop_reason = f"达到 --limit {args.limit}（冒烟）"
+                break
         except CoreReserveOut as e:
             round_stop, round_exc = str(e), e
         except QuotaPatienceOut as e:
@@ -305,6 +312,8 @@ def main():
                          "等待用 /rate_limit 的 reset 对齐）")
     ap.add_argument("--max-total-minutes", type=float, default=None,
                     help="整次调用（含跨窗等待）的墙钟上限，超时优雅收尾")
+    ap.add_argument("--limit", type=int, default=0,
+                    help="本次最多处理 N 个目标（0=不限，冒烟用）")
     ap.add_argument("-v", action="store_true")
     args = ap.parse_args()
     logging.basicConfig(level=logging.DEBUG if args.v else logging.INFO,
