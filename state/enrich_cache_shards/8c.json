@@ -23,10 +23,10 @@
  },
  "pgpartman/pg_partman": {
   "commit_7d": 1,
-  "commit_90d": 4,
+  "commit_90d": 3,
   "rel_ver": "v5.5.0",
   "rel_pub": "2026-07-22",
-  "rel_days": 93,
+  "rel_days": 100,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -43,7 +43,7 @@
    "GHSA-742w-3j7c-qwvp(CVE-2026-61781,critical)"
   ],
   "contrib_n": 34,
-  "enriched_at": "20261027",
+  "enriched_at": "20261030",
   "lang": {
    "PLpgSQL": 100,
    "Python": 0,
@@ -52,10 +52,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261023",
-   "release": "20261023",
+   "commit": "20261030",
+   "release": "20261030",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v5.5.0",
+    "d": "2026-07-22",
+    "n": "- In order to help mitigate the vulnerabilities around running the background worker (BGW) as a superuser, the default value for the `pg_partman_bgw.role` GUC has been set to an arbitrary value of `partman_maintainer`. If this parameter had not been explicitly set before, this will cause the BGW to no longer run successfully and throw errors if this role doesn't exist with the proper privileges. If you had previously set this to any superuser role value (Ex `postgres`), it is HIGHLY recommended that you cha"
+   },
+   {
+    "t": "v5.4.3",
+    "d": "2026-03-05",
+    "n": "- Version 5.4.2 did not include the proper pg_partman version in the extension control file. If you already had version 5.4.1 installed, then it would not update properly to version 5.4.2. The changes for version 5.4.2 have also been included in the update file for 5.4.3 to ensure they are properly applied in this case. If you installed version 5.4.2 from scratch, PostgreSQL would report that version 5.4.1 was installed even though the extension code for 5.4.2 was properly installed. Installing version 5.4."
+   },
+   {
+    "t": "v5.4.2",
+    "d": "2026-02-17",
+    "n": "5.4.2\r\n=====\r\nBUGFIXES\r\n--------\r\n - Fixed `partition_data_*` functions and procedures not working if pg_partman was not installed in the `partman` schema. (Github #842)"
+   }
+  ]
  },
  "omnilib/aiosqlite": {
   "commit_90d": 0,

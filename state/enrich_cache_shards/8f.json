@@ -2155,9 +2155,9 @@
   }
  },
  "ashishsinha1602/schemagate": {
-  "rel_ver": "v1.0.0",
-  "rel_pub": "2026-09-22",
-  "rel_days": 8,
+  "rel_ver": "v1.15.1",
+  "rel_pub": "2026-10-29",
+  "rel_days": 1,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2173,16 +2173,33 @@
    "Shell": 1,
    "JavaScript": 0
   },
-  "enriched_at": "20261012",
+  "enriched_at": "20261030",
   "dim_ts": {
-   "release": "20260930",
+   "release": "20261030",
    "security": "20260930",
    "contrib": "20260930",
    "lang": "20260930",
    "commit": "20261012"
   },
   "commit_90d": 283,
-  "commit_7d": 46
+  "commit_7d": 46,
+  "rel_notes": [
+   {
+    "t": "v1.15.1",
+    "d": "2026-10-29",
+    "n": "- **A query hidden in a string the database runs is refused** ([GHSA-r77g-5v43-wh54](https://github.com/ashishsinha1602/schemagate/security/advisories/GHSA-r77g-5v43-wh54)). On PostgreSQL `query_to_xml('SELECT * FROM <restricted table>', ...)`, and on Oracle `DBMS_XMLGEN.GETXML('SELECT ...')`, `run_query` read a table the caller may not see, because both checks emptied string literals before reading table names. `check_read_only` now refuses functions that run text as SQL or reach outside the database, and "
+   },
+   {
+    "t": "v1.14.0",
+    "d": "2026-10-27",
+    "n": "the schema: a median of 8.8% on BIRD's seven-table databases, and 92.9% on the Spider 2.0 warehouses with 50+\nreturned instead of nothing. On Oracle (220 BIRD questions, Gemini 2.5 Flash), deep scored 49.1 against 48.6"
+   },
+   {
+    "t": "v1.13.0",
+    "d": "2026-10-27",
+    "n": "in Studio's new *Business rules* box, saved per database. Rules are picked by role, by table and by\n- `run_sql(..., timeout=)` limits how long one statement may run on PostgreSQL, Oracle, MySQL and SQLite."
+   }
+  ]
  },
  "oceanbase/ob-connector-odbc": {
   "commit_90d": 0,
