@@ -354,6 +354,20 @@ def test_release_notes() -> None:
           len(n[0]["n"].encode("utf-8")) <= 512 and "新增" in n[0]["n"])
 
 
+def test_db_word_coverage() -> None:
+    """17 库口径（config/db_profiles.py 单一事实源）每个库都必须能被 DB_WORDS 命中。"""
+    sys.path.insert(0, str(ROOT / "config"))
+    sys.path.insert(0, str(ROOT / "enrich"))
+    import db_profiles  # noqa: E402  纯数据模块
+    import enrich  # noqa: E402
+    miss = [p["name"] for p in db_profiles.PROFILES
+            if not any(w in p["name"].lower() for w in enrich.DB_WORDS)]
+    check("rel_notes：17 库口径全部被 DB_WORDS 覆盖", not miss, str(miss))
+    check("rel_notes：国产库中文/别名可命中",
+          all(enrich.note_rank(s) is not None
+              for s in ("达梦 8 兼容性修复", "dm8 连接池问题", "TDSQL 分片扩容")))
+
+
 def main() -> int:
     test_parsers()
     test_extract()
@@ -362,6 +376,7 @@ def main() -> int:
     test_store()
     test_plan_incremental()
     test_release_notes()
+    test_db_word_coverage()
     print()
     if FAILS:
         print(f"==== 自检失败 {len(FAILS)} 项 ====")

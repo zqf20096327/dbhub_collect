@@ -143,10 +143,17 @@ def due_dims(rec: dict, tier: str, pushed_changed: bool) -> list[str]:
 
 # 采集口径（10-30 定）：行级只要提到某个数据库就收，不要求 support/drop 等变更词；
 # 变更词只用于排序——先把 DB 相关行采下来，判断留到适配引擎。
-DB_WORDS = ("mysql", "mariadb", "postgres", "postgre", "sqlite", "mongo", "redis",
-            "oracle", "sql server", "mssql", "clickhouse", "cassandra", "dynamodb",
-            "elasticsearch", "duckdb", "snowflake", "bigquery", "spanner", "tidb",
-            "oceanbase", "hbase", "neo4j", "database", "db")
+# ① 17 库口径（config/db_profiles.py）精确词；改口径时同步这里，selftest 有覆盖断言
+DB_WORDS_17 = ("postgres", "postgre", "mysql", "oracle", "sqlite", "sql server",
+               "mssql", "clickhouse", "mariadb", "tidb", "tikv", "oceanbase",
+               "polardb", "dameng", "达梦", "dm8", "dm database", "opengauss",
+               "gaussdb", "gbase", "tdsql", "yashandb", "yashan", "goldendb")
+# ② 口径外常见库：同收（适配引擎可能用得上）
+DB_WORDS_EXTRA = ("mongo", "redis", "cassandra", "dynamodb", "elasticsearch",
+                  "duckdb", "snowflake", "bigquery", "spanner", "hbase", "neo4j")
+# ③ 泛词兜底：非口径库（CockroachDB/InfluxDB…）靠它命中，代价是噪声（dbbench/dbms）
+DB_WORDS_GENERIC = ("database", "db")
+DB_WORDS = DB_WORDS_17 + DB_WORDS_EXTRA + DB_WORDS_GENERIC
 # 强度分档：0=移除/弃用 1=新增支持 2=兼容/连接/迁移 3=仅提到库名
 STRONG_WORDS = ("drop", "remove", "no longer", "deprecat", "eol", "end of life",
                 "breaking", "discontinu", "sunset", "retire")
