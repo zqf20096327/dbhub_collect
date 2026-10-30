@@ -15,6 +15,10 @@ on:
         description: 'Core 调用上限（默认 4500）'
         default: '4500'
         type: string
+      limit:
+        description: '冒烟：本次最多新采 N 个仓（0=不限）'
+        default: '0'
+        type: string
 
 permissions:
   contents: write
@@ -43,7 +47,8 @@ jobs:
         run: |
           python evidence/evidence_collect.py "${{ github.event.inputs.mode || 'auto' }}" \
             --max-calls "${{ github.event.inputs.max_calls || '4500' }}" \
-            --max-minutes 110
+            --max-minutes 110 \
+            --limit "${{ github.event.inputs.limit || '0' }}"
       - name: 采后总览
         if: always()
         run: python evidence/evidence_collect.py status --recent 15
