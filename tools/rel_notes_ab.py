@@ -195,6 +195,10 @@ def main() -> int:
         print(f"\n每仓至少保住一条支持变更行（强度0/1）: "
               f"旧 {o}/{len(repos)} = {100*o/len(repos):.0f}% | "
               f"新 {n}/{len(repos)} = {100*n/len(repos):.0f}%")
+    if fails:
+        print("\n拉取失败的仓（明细）:")
+        for fn, code, msg in fails:
+            print(f"  - {fn} status={code} {msg}")
     if misses:
         print(f"\n新法仍漏检的信号行（共 {len(misses)} 行，列前 20）:")
         for fn, tag, s in misses[:20]:
