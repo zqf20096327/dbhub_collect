@@ -277,7 +277,7 @@ SELECT * FROM parquet.column_stats('/tmp/product_example.parquet')
 ### List and read Parquet files from uri pattern
 
 You can call `SELECT * FROM parquet.list(<uri_pattern>)` to see all uris that matches with the uri pattern.
-Uri pattern can resolve `**` for directories and `*` for words in the uri.
+Uri pattern can resolve `**` for directories and `*` for words in the uri. A file that holds no byte is not among the uris a pattern matches, since a Parquet file is its footer at the very least: the marker an object store browser writes for a folder it creates and the `_SUCCESS` of a job that wrote one are reported rather than read, so that a pattern covering one of them reads the files next to it instead of failing over it. No other character is pattern syntax, so a `?` or a `[...]` in a uri is part of the name of the object it is written as rather than a pattern that matches a name next to it.
 
 
 ```sql
@@ -297,6 +297,8 @@ SELECT * FROM parquet.list('/tmp/some/**/*.parquet');
 ```
 
 Uri pattern is also supported by `COPY FROM` for all supported object stores except `http(s)` endpoints. A folder that a `COPY TO` with `file_size_bytes` wrote is read this way too: the folder holds no object of its own name, so `COPY FROM '<folder>/*.parquet'` is what reads the files in it.
+
+A `COPY FROM` reads an object of a store over several requests, and every one of them names the version of the object that the read was opened on, so an object that is replaced while it is being read fails the copy rather than giving the rows of two objects at once.
 ```sql
 COPY (SELECT i FROM generate_series(1, 1000000) i) TO 's3://testbucket/some/test.parquet' with (file_size_bytes '1MB');
 COPY 1000000
@@ -326,11 +328,17 @@ The byte counters mean different things for the two directions:
 - For `COPY FROM`, `bytes_processed` and `bytes_total` count the bytes of the uncompressed binary stream that `pg_parquet` feeds to Postgres, which is unrelated to the size of the Parquet file. `bytes_total` is extrapolated from the rows that are read so far, so it is an estimation until the last row of the file is read. The estimation is corrected after every record batch, hence it can move in both directions when the rows of the file differ in size.
 
 ## Object Store Support
-`pg_parquet` supports reading and writing Parquet files from/to `S3`, `Azure Blob Storage`, `http(s)` and `Google Cloud Storage` object stores.
+`pg_parquet` supports reading and writing Parquet files from/to `S3`, `Azure Blob Storage`, `http(s)` and `Google Cloud Storage` object stores. The host of an `s3://`, `az://` or `gs://` uri is the bucket or the container that holds the object rather than an endpoint, so such a uri is written without a port and the endpoint is configured per store below. Only an `http(s)://` uri names its endpoint, and keeps the port of it.
+
+The uri of an object is parsed as the url standard asks it to be parsed, which removes a tab, a newline and a carriage return in it and trims the whitespace around it, so a uri holding one of those characters is refused rather than copied into an object other than the one it names. A space inside the path is kept, so an object whose name holds one is written and read as it is.
+
+The object of a uri is named by the whole path of that uri, and a `#` or a `?` ends that path rather than belonging to it: `s3://bucket/report#2026.parquet` names the object `report`. A uri holding one of those characters is rejected, since it names an object other than the one it was written for, and an object whose name holds one is named by writing the character as `%23` or `%3F`. A query that is meant for the store rather than for the object, as the version id or the signature of a presigned uri is, is sent to no store. A local path is a path and not a uri, so both characters are part of the name of the file there.
 
 > [!NOTE]
 > To be able to write into a object store location, you need to grant `parquet_object_store_write` role to your current postgres user.
 > Similarly, to read from an object store location, you need to grant `parquet_object_store_read` role to your current postgres user.
+
+The credentials of an object store are read from the environment of the postgres process, as described below for each store, and never from the uri: a uri that carries credentials before its host, e.g. `s3://key:secret@bucket/file.parquet`, is rejected rather than signed with the credentials of the environment while its own are only written into the logs.
 
 #### S3 Storage
 
@@ -416,6 +424,8 @@ Supported authorization methods' priority order is shown below:
 
 Only `https` uris are supported by default. You can set `ALLOW_HTTP` environment variable to allow `http` uris.
 
+An `http(s)` endpoint takes an object in a single request rather than in an upload of several parts, so a `COPY TO` such an endpoint buffers the whole file in memory and writes at most 10 MiB. A larger table is written with a `file_size_bytes` below that size, which writes it as a folder of files, and each file of that folder is then read back by its own name, since a uri pattern does not apply to an `http(s)` endpoint.
+
 You can also use the following environment variables when starting postgres to configure the http(s) client:
 - `HTTP_<HTTP CLIENT OPTION>`: an [http client option](#http-client-options), e.g. `HTTP_TIMEOUT` **(only via environment variables)**
 
@@ -467,7 +477,7 @@ A request that an object store is slow to answer is retried, which takes minutes
 ## Copy Options
 `pg_parquet` supports the following options in the `COPY TO` command:
 - `format parquet`: you need to specify this option to read or write Parquet files which does not end with `.parquet[.<compression>]` extension,
-- `file_size_bytes <string>`: the total file size per Parquet file. When set, the parquet files, with target size, are created under parent directory (named the same as file name). By default, when not specified, a single file is generated without creating a parent folder. You can specify total bytes without unit like `file_size_bytes 2000000` or with unit (KB, MB, or GB) like `file_size_bytes '1MB'`. A file ends at a row group boundary, so it can exceed the target by up to one row group, and `row_group_size_bytes` is capped at the target so that a row group cannot be larger than the file it is written into. A copy into a folder that an earlier copy wrote replaces it: once the copy wrote its own files, the files that the earlier and larger copy left behind are removed, so that reading the folder back does not return the rows of two copies at once. Two copies into the same folder at the same time are not serialized, however: they number their files the same way, so each overwrites the files of the other and removes those it takes for a previous copy's, and the folder is left holding rows of both although both copies report the rows they wrote. A folder destination written by more than one copy at a time needs a lock of the application's own,
+- `file_size_bytes <string>`: the total file size per Parquet file. When set, the parquet files, with target size, are created under parent directory (named the same as file name). By default, when not specified, a single file is generated without creating a parent folder. You can specify total bytes without unit like `file_size_bytes 2000000` or with unit (KB, MB, or GB) like `file_size_bytes '1MB'`. A file ends at a row group boundary, so it can exceed the target by up to one row group, and `row_group_size_bytes` is capped at the target so that a row group cannot be larger than the file it is written into. A copy into a folder that an earlier copy wrote replaces it: once the copy wrote its own files, the files that the earlier and larger copy left behind are removed, so that reading the folder back does not return the rows of two copies at once. A uri that already names an object is no folder destination and such a copy is refused: the files of it would be written under a name that is taken, which an object store is free to accept and then hide, leaving the folder to read as the object it was written over. A copy that finds no row writes one file holding nothing but the schema, the way a copy without `file_size_bytes` writes the single file it was given, so that the folder is one a `COPY FROM` reads no row from rather than one it finds no file in. Two copies into the same folder at the same time are not serialized, however: they number their files the same way, so each overwrites the files of the other and removes those it takes for a previous copy's, and the folder is left holding rows of both although both copies report the rows they wrote. A folder destination written by more than one copy at a time needs a lock of the application's own,
 - `field_ids <string>`: fields ids that are assigned to the fields in Parquet file schema. By default, no field ids are assigned. Pass `auto` to let pg_parquet generate field ids. You can pass a json string to explicitly pass the field ids, like `'{"id": 1}'`. A nested column takes a json object rather than an id, whose `__root_field_id` key is the id of the column itself and whose other keys are its nested fields, the fields of a composite type by name, the element of an array as `element`, and the entries of a map as `key` and `val`, e.g. `'{"friends": {"__root_field_id": 2, "element": {"__root_field_id": 3, "name": 4}}}'`. A field the mapping leaves out is written without a field id. `__root_field_id` is reserved, so a nested field cannot be named after it,
 - `row_group_size <int64>`: the number of rows in each row group while writing Parquet files. The default row group size is `122880`,
 - `row_group_size_bytes <int64>`: the total byte size of rows in each row group while writing Parquet files. The default row group size bytes is `row_group_size * 1024`,

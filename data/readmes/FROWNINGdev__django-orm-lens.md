@@ -164,7 +164,7 @@ pip install django-orm-lens              # CLI only
 pip install "django-orm-lens[mcp]"       # + MCP server for AI agents
 ```
 
-Requires Python 3.9+. Zero runtime dependencies for the CLI.
+Requires Python 3.9+ (the MCP server: 3.10+). Zero runtime dependencies for the CLI.
 
 **Docker (v0.6+):**
 
@@ -402,6 +402,8 @@ django-orm-lens stats-sql                    # read-only SQL for --stats
 
 > `impact`, `blast-radius`, `drift` and `stats-sql` ship in **py-1.7.0** and later.
 
+> **Django 6.1:** `on_delete=models.DB_CASCADE` deletes child rows in the database, so their `post_delete` handlers never run. Since **py-1.13.8**, `cascade` names the handlers each `DB_CASCADE` relation skips — [why that matters and what to do](docs/articles/django-6-1-db-cascade-signals.md).
+
 Every command accepts `--path <dir>` and `--exclude <glob>`. `nplusone` / `migration-risk` / `diff` exit code `1` on findings — drop them into CI to block PRs on regressions.
 
 ### MCP server
@@ -414,7 +416,7 @@ Register it once with your agent and it exposes thirteen read-only tools:
 | `list_models` | Flat `app.Model` list, optional app filter |
 | `describe_model` | Full field / relation / Meta detail for one model |
 | `find_relations` | Inbound + outbound relations for one model |
-| `cascade_preview` | Blast radius of one `delete()`, grouped by `on_delete` |
+| `cascade_preview` | Blast radius of one `delete()`, grouped by `on_delete`, plus the `post_delete` receivers Django 6.1's `DB_CASCADE` skips |
 | `er_diagram` | ER diagram — `mermaid` / `dbml` / `d2` / `plantuml` / `dot` |
 | `describe_migration_dependency` | Per-app migration DAG: roots, leaves, cross-app deps |
 | `suggest_indexes` | `Meta.indexes` proposals from observed QuerySet usage |
@@ -439,6 +441,24 @@ paths return a structured envelope
 (`{"error": "WORKSPACE_NOT_DJANGO", "hint": "…"}`) instead of empty results,
 so the agent can self-correct. Optional sandbox via
 `DJANGO_ORM_LENS_ALLOWED_ROOTS` (`;`-separated on Windows, `:` elsewhere).
+
+### Agent skill
+
+The tools tell an agent what is true; the skill tells it what to do with
+that. [`skills/django-orm-lens`](skills/django-orm-lens) is a SKILL.md
+package with playbooks for migration review, safe renames and removals,
+N+1 fixes and cascade checks, a safe rewrite for each of the 16 migration
+rules, and `audit.py` for a one-command verdict (BLOCK / FIX BEFORE DEPLOY /
+SHIP). It uses the MCP server when connected and falls back to the CLI via
+`uvx`.
+
+- Install from [Agensi](https://www.agensi.io/skills/django-orm-lens-n-1-migration-safety-schema-map) (free), or
+- copy the folder into your agent's skills directory, e.g. for Claude Code:
+
+```bash
+git clone --depth 1 https://github.com/FROWNINGdev/django-orm-lens
+cp -r django-orm-lens/skills/django-orm-lens ~/.claude/skills/
+```
 
 <br/>
 
@@ -480,7 +500,7 @@ The comment goes up **before** the job fails, so a blocked PR still explains why
 # .pre-commit-config.yaml
 repos:
   - repo: https://github.com/FROWNINGdev/django-orm-lens
-    rev: py-v1.13.1
+    rev: py-v1.14.0
     hooks:
       - id: django-orm-lens-nplusone
       - id: django-orm-lens-migration-risk
@@ -597,7 +617,7 @@ Django ORM Lens sits at the intersection of **editor tooling** and **AI-agent to
 | MCP server for AI agents | ✅ | ❌ | ❌ | ❌ | ❌ |
 | Discoverable in the [MCP Registry](https://registry.modelcontextprotocol.io/) | ✅ | ❌ | ❌ | ❌ | ❌ |
 | Free & open-source (MIT) | ✅ | ✅ | ✅ | ✅ | ❌ (paid IDE) |
-| Django version support | **4.0 – 5.2** | latest | 3.2 – 4.1 (stale since 2023) | latest | latest |
+| Django version support | **4.0 – 6.1** | latest | 3.2 – 4.1 (stale since 2023) | latest | latest |
 
 > *`django-schema-graph` has not been updated since 2023-05 and does not test Django 5.x.*
 

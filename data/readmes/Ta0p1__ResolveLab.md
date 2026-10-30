@@ -87,8 +87,27 @@ python scripts/verify_casedesk_v2.py                                  # full, ~2
 python scripts/verify_casedesk_v2.py --dagger-every 20 --replay-every 10   # CI sample, ~4 min
 ```
 
+`python examples/dialect_episode.py` plays the same episode in a generated API dialect the
+study never used: every tool, field and value renamed, integer revisions instead of ETags,
+page numbers, millisecond waits and different status codes, over the same service and
+grader ([docs/dialects.md](docs/dialects.md); environment only, no model results yet).
+
 `resolvelab serve` opens a local workbench with the earlier studies' trajectory inspectors
 (v0.1–v0.3); see [docs/demo.md](docs/demo.md).
+
+## Evaluate your own model
+
+```bash
+resolvelab casedesk run --episode test-test_conflict_rate-07 --model ollama:qwen3:4b
+resolvelab casedesk eval --pool dev --model ollama:qwen3:4b --output runs/qwen3-4b-dev.json
+resolvelab casedesk eval --pool dev --model openai:<model> --option base_url=http://localhost:8000/v1 --output runs/vllm-dev.json
+resolvelab casedesk eval --pool dev --model anthropic:claude-opus-5-5 --output runs/opus-dev.json   # pip install "resolvelab[anthropic]"
+```
+
+Every model sees the study's prompt, demonstration and tool contract; reports and traces use
+the published format and are resumable. Local Transformers (`hf:`), Ollama, any
+OpenAI-compatible server and Claude are supported. [Options and what is comparable to the
+registered study](docs/models.md).
 
 ## How it works
 
@@ -114,6 +133,12 @@ passes the grader.
 | Compositions | single faults in train; disjoint pairs/triples in dev and test |
 | Grader | v0.3 checks + escalation discipline; diagnostics for lookup and fault exposure |
 
+**As an RL environment:** `CaseDeskEnv` exposes the same service step by step
+(`reset` / `step` / `state`, sparse verifiable reward from grader v2, test pool opt-in) and is
+tested to reproduce published model traces exactly. `python examples/casedesk_env_loop.py`
+shows the reward a trainer would see (teacher 1.0, random policy 0.0 on dev).
+[Environment API](docs/environment.md).
+
 ## Reproduce the study (one 8 GB GPU)
 
 ```bash
@@ -131,7 +156,9 @@ protocol lists every arm, budget and decision rule.
 
 | Path | What it holds |
 |---|---|
-| `src/resolvelab/casedesk/` | v0.4 benchmark: record generator, teacher, grader v2, DAgger data, evaluation, statistics |
+| `src/resolvelab/casedesk/` | v0.4 benchmark: record generator, teacher, grader v2, DAgger data, evaluation, statistics; `CaseDeskEnv` and the `resolvelab casedesk` CLI |
+| `src/resolvelab/providers/` | model providers for the CLI: local Transformers, Ollama, OpenAI-compatible servers, Claude |
+| `src/resolvelab/dialects/` | generated API dialects of the CaseDesk contract, and the tooling for the draft transfer study |
 | `src/resolvelab/httpdesk/` | the CaseDesk HTTP contract: service, adapter, schema, v0.3 grader (frozen) |
 | `src/resolvelab/*.py` | the original SQLite sync service and workbench (v0.1–v0.2) |
 | `benchmarks/` | registered manifests and study configurations |

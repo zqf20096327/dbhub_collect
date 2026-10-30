@@ -73,10 +73,7 @@ If you already have the exact source tree the server was built from (e.g. a cust
 | pg_conf.restart | int | 60 | config | Restart pg_conf after it crashed in that many seconds (read once, at server start) |
 | pg_task.count | int | 0 | config, database, user, session | Non-negative maximum count of tasks, are executed by current background worker process before exit |
 | pg_task.fetch | int | 100 | config, database, user | Fetch task rows at once |
-| pg_task.id | bigint | | session | Current task id (for read only), empty out of a task, as a task may have id 0 |
+| pg_task.id | bigint | | session | Current task id, to be read, not set: nothing keeps `input` from changing it with `SET`, which changes the `parent` that the tasks it inserts after that get by default, and nothing else, `pg_task` going by its own id of the task, not by this setting, and setting it anew for the next task; empty out of a task, as a task may have id 0 |
 | pg_task.limit | int | 1000 | config, database, user | Limit task rows at once: the most tasks `pg_work` takes in a pass; `0` takes none, holding every task of the entry back |
 | pg_task.max | int | 0 | config, database, user, session | Maximum count of additional concurrently executing tasks in group (total concurrency = max + 1), negative value means pause between tasks in milliseconds |
-| pg_task.run | int | 2147483647 | config, database, user | Maximum count of concurrently executing tasks in work |
-| pg_task.sleep | int | 1000 | config, database, user | Check tasks every sleep milliseconds |
-| pg_work.fetch | int | 100 | config, database, user | Fetch work rows at once |
-| pg_work.idle | int | 60 | config, database, user | Em
+| pg_task.run | int | 2147483647 | config, database, user | Maximum count of concurrently 

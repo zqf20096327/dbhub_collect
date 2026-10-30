@@ -122,7 +122,7 @@ Real systems operating in production environments with verified business logic, 
       <div align="left">
         <strong>GymVault</strong> • AMOLED Gym Access & QRIS Payment Engine<br>
         • <strong>Features:</strong> Pure AMOLED #000000 + Lime #D4F53C design, DOKU QRIS iframe checkout, timing-safe HMAC-SHA256 webhooks, 65/65 test suite pass.<br>
-        • <strong>Links:</strong> <a href="https://gymvault-app.vercel.app">→ Live Web App</a> • <a href="https://github.com/Dhani078/GYM">→ GitHub Repo</a>
+        • <strong>Links:</strong> <a href="https://gymvault-app.vercel.app">→ Live Web App</a> • <a href="https://github.com/Dhani078/GymVault">→ GitHub Repo</a>
       </div>
     </td>
   </tr>
@@ -162,7 +162,7 @@ Real systems operating in production environments with verified business logic, 
 | :--- | :--- | :--- | :---: |
 | [**KiosAI**](https://tokoai.my.id) | Multi-model digital token shop with HttpOnly session recovery, Compare-And-Swap (CAS) token accounting, and DOKU QRIS billing. | `Next.js 15` `TiDB Cloud` `QRIS` | [**tokoai.my.id →**](https://github.com/Dhani078/KiosAI) |
 | [**anti-slop-stack**](https://github.com/Dhani078/anti-slop-stack) | AST-level code purifier eliminating boilerplate smells, fake typings, and unnecessary abstractions across engineering repos. | `TypeScript` `Node.js 22 LTS` `CLI` | [**Explore Repo →**](https://github.com/Dhani078/anti-slop-stack) |
-| [**AutoClip**](https://github.com/Dhani078/AutoClip) | High-throughput video speech-to-text pipeline, silence detection, word-level subtitle generation, and automated frame parsing. | `FastAPI` `Faster-Whisper` `OpenCV` | [**Explore Repo →**](https://github.com/Dhani078/AutoClip) |
+| [**AutoClip**](https://github.com/Dhani078/danclip-) | High-throughput video speech-to-text pipeline, silence detection, word-level subtitle generation, and automated frame parsing. | `FastAPI` `Faster-Whisper` `OpenCV` | [**Explore Repo →**](https://github.com/Dhani078/danclip-) |
 | [**Embun Laundry**](https://embun-laundry.dhanisepeda.workers.dev) | Serverless laundry order tracking, customer lifecycle ledger, and automated receipt processing deployed on Cloudflare Workers edge. | `Cloudflare Workers` `TiDB` `JS` | [**Live Demo →**](https://embun-laundry.dhanisepeda.workers.dev) |
 
 ---

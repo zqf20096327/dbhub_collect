@@ -132,7 +132,7 @@ with engine.connect() as conn:
 
 ### Key Conversion
 
-Each database backend converts the supplied key to the type required by its locking function. The converted value is available through `lock.actual_key`:
+Each database backend converts the key you pass in to the type its locking function requires — a name for MySQL and SQL Server, a signed 64-bit integer for PostgreSQL, a lock ID for Oracle. Both ends of that conversion are available on the lock object:
 
 ```python
 from sqlalchemy import create_engine
@@ -142,10 +142,11 @@ engine = create_engine("postgresql://user:pass@localhost/db")
 
 with engine.connect() as conn:
     lock = create_sadlock(conn, "42", convert=int)
-    assert lock.actual_key == 42
+    assert lock.key == "42"  # what you passed in
+    assert lock.actual_key == 42  # what the database actually locked
 ```
 
-Use the `convert` argument when the backend's default conversion does not match your key scheme. The former `lock.key` alias was removed in v0.9.0; use `lock.actual_key` instead.
+You only need `convert` when the backend's default conversion does not fit your key scheme. Otherwise the backend picks one for you: MySQL and SQL Server turn the key into a string, PostgreSQL and Oracle hash it into an integer.
 
 ---
 

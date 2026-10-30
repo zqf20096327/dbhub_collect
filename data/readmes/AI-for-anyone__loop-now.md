@@ -17,9 +17,9 @@
   <a href="https://github.com/AI-for-anyone/loop-now/issues">Issues</a>
 </p>
 
-![Loop Now console: an agent conversation with rendered diagrams and a compact message composer](docs/assets/console.png)
+![Loop Now console: an agent conversation with rendered diagrams and a compact message composer](docs/assets/console-en.png)
 
-<p align="center"><sub>Actual console with demonstration data. The interface currently uses Simplified Chinese.</sub></p>
+<p align="center"><sub>Actual console with demonstration data. The interface supports English and Chinese; it follows your browser language, or switch in Global settings.</sub></p>
 
 Loop Now brings your agents into one browser workspace. An agent keeps its own working directory and conversation; a Manager can coordinate specialists through a task workflow. You can follow the conversation, inspect tool calls, send a message, and see who is working or waiting.
 
@@ -39,6 +39,8 @@ The platform runs on your machine, with [Pi](https://github.com/earendil-works/p
 | **Run visible workflows** | Follow task nodes, conditional branches, bounded review loops, retries, and saved artifacts. A task's workflow and captured configuration stay fixed after it starts. |
 | **Extend through plugins** | Bring CLI and MCP tools, event hooks, accounts, permissions, and Skills into one package. Add the integrations your team needs. |
 | **See what happened** | Stream replies, send images, render Markdown and Mermaid, and inspect model usage, tool commands, timing, and failures in each reply's run timeline. |
+
+![Loop Now overview: run status for every agent, and today's token usage](docs/assets/overview-en.png)
 
 ### An example: from implementation to review
 
@@ -71,10 +73,13 @@ Observation events, state, secrets, configuration, and the delivery library are 
 
 Install from the official plugins, a Git repository, an npm package, or a local directory, in the console or with `loopctl plugin install`. Next, enable the plugin in a project and fill in its configuration. Then grant it to the agents that should load its agent half. Installing or enabling a plugin never authorizes an agent by itself. Versions are pinned: updating is an explicit action, and running tasks keep the files they started with.
 
-Two official plugins ship with the platform:
+Three official plugins ship with the platform:
 
 - [**webhook**](plugins/official/webhook/README.md) POSTs `inbox.received` events to your URL with a signature, retries, and a delivery log. External identities use it instead of polling their Inbox.
+- [**playwright**](plugins/official/playwright/README.md) gives agents a dedicated, visible Chromium through the official Playwright MCP: open pages, read them, click, type, and take screenshots, without touching your everyday Chrome.
 - [**hello**](plugins/official/hello/README.md) is the smallest plugin with both halves, and the starting point for writing your own.
+
+![Loop Now plugin market: plugin host status and the official plugins](docs/assets/plugins-en.png)
 
 ### A platform half in a few lines
 
@@ -108,15 +113,57 @@ export default function register(api: PluginAPI) {
 
 The host loads TypeScript directly, as Pi does, and provides `@loop-now/plugin-sdk` itself. Check a directory with `node plugins/host/dist/main.js validate <dir> --load`, which reports manifest errors and any subscriptions the code makes outside `loopNow.events`.
 
-Start with the [SDK reference](plugins/sdk/README.md) and the two official plugins. [`plugins/SPEC.md`](plugins/SPEC.md) is the full contract: package format, event catalog, hook kinds and timeouts, permissions, and installation. [`api/plugin-host-protocol.md`](api/plugin-host-protocol.md) describes the wire protocol between the server and the host. There is no sandbox: plugins execute code, so install sources you trust.
+Start with the [SDK reference](plugins/sdk/README.md) and the official plugins. [`plugins/SPEC.md`](plugins/SPEC.md) is the full contract: package format, event catalog, hook kinds and timeouts, permissions, and installation. [`api/plugin-host-protocol.md`](api/plugin-host-protocol.md) describes the wire protocol between the server and the host. There is no sandbox: plugins execute code, so install sources you trust.
 
 Lark user execution separately requires the pinned platform bundle described in [its build notes](scripts/lark-user-variant/README.md); it is not required for basic chat.
 
 ## Getting started
 
-The current setup is a **source installation**. macOS Apple Silicon is the primary validated environment. Some components target Linux, but equivalent full-system coverage is not yet established; the Lark user CLI runtime is currently macOS arm64 only.
+Run everything with **Docker Compose**, or install from source. macOS Apple Silicon is the primary validated environment. Some components target Linux, but equivalent full-system coverage is not yet established; the Lark user CLI runtime is currently macOS arm64 only.
 
-### 1. Prepare dependencies
+### Docker Compose (local all-in-one)
+
+The first startup builds the server and console images locally, then starts PostgreSQL 18 and Redis 8:
+
+```sh
+docker compose up --build -d
+```
+
+Open **[http://localhost:5173](http://localhost:5173)**. The console has no login, so Compose publishes only Web port `5173` and API port `8780` on `127.0.0.1`; PostgreSQL and Redis are not published to the host. The default database user, password, and database name are all `loopnow`, intended only for the Compose network. Do not expose this default configuration externally.
+
+The `pgdata` named volume stores the database, and `loopdata` stores agent workspaces, sessions, and tools. `docker compose down` preserves them; `docker compose down -v` deletes this data, so back it up first.
+
+Agents running in containers have some boundaries:
+
+- The Lark user CLI supports macOS arm64 only and is unavailable in these Linux containers.
+- Containers do not automatically see host directories. Mount existing repositories or files into the `server` container separately, then configure the container paths in the console; `loopdata` stores only the platform's own workspaces.
+- Containers do not share Pi or CLI login sessions from the host. Configure model API keys and required tool accounts in the project before starting work.
+
+### Native models.json
+
+Go to **Global settings → Model settings** to edit the native `models.json` for the pinned Pi version, add custom providers, or override built-in providers. For example:
+
+```json
+{
+  "providers": {
+    "example": {
+      "baseUrl": "https://models.example.com/v1",
+      "api": "openai-completions",
+      "apiKey": "$EXAMPLE_KEY",
+      "headers": { "X-Client": "$EXAMPLE_CLIENT_HEADER" },
+      "models": [
+        { "id": "my-model", "input": ["text", "image"], "contextWindow": 128000, "maxTokens": 8192 }
+      ]
+    }
+  }
+}
+```
+
+`apiKey` and `headers` values on providers, models, and model overrides accept only `$NAME` environment-variable references. Names start with an ASCII letter or underscore, followed by letters, digits, or underscores. Plaintext secrets and `!commands` are rejected. Configure real credentials in project model accounts; they are not written to `models.json` or returned to the editor.
+
+Persistent agents use the saved catalog from their next message, while running tasks keep the provider configuration frozen at creation. If a saved configuration no longer passes validation after a restart, the server temporarily falls back to the built-in catalog and shows a warning on the settings page so you can repair and save it.
+
+### Source installation: 1. Prepare dependencies
 
 | Dependency | Repository baseline |
 | --- | --- |

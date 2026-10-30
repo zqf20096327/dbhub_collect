@@ -8,7 +8,8 @@ Simple yet powerful SQLite database layer for Android that makes database handli
 * SQL-first [Kotlin](https://kotlinlang.org/) DSL – queries read like SQL while the compiler checks clause order,
   column types and nullability
 * Minimal setup needed
-* Built in RxJava support with reactive stream semantics on queries and operations
+* Kotlin coroutines and RxJava support for observed queries and one-shot operations, through the
+  `sqlitemagic-coroutines`, `sqlitemagic-rxjava3` and `sqlitemagic-rxjava2` adapters
 * Built for Kotlin – data classes, generated extension functions and typed result rows
 * Full support for complex columns – related objects and embedded values
 * Support for SQLite views defined with the same DSL
@@ -71,8 +72,12 @@ plugins {
 
 dependencies {
   implementation("androidx.sqlite:sqlite-framework:<sqlite version>")
-  // needed for the reactive observe() APIs
-  implementation("io.reactivex.rxjava2:rxjava:<rxjava version>")
+  // optional: the RxJava 3 observe() APIs; use the same version as the plugin
+  implementation("com.siimkinks.sqlitemagic:sqlitemagic-rxjava3:<latest version>")
+  // optional: the RxJava 2 observe() APIs; use the same version as the plugin
+  implementation("com.siimkinks.sqlitemagic:sqlitemagic-rxjava2:<latest version>")
+  // optional: the coroutine Flow and suspend APIs; use the same version as the plugin
+  implementation("com.siimkinks.sqlitemagic:sqlitemagic-coroutines:<latest version>")
 }
 ```
 
@@ -120,6 +125,70 @@ class App : Application() {
 initialization, but it must happen before a database is accessed. Initialization only configures the default
 connection. The database is opened on first access, which creates the schema or runs migration scripts as needed - no
 other hidden runtime performance costs.
+
+#### Observe With RxJava:
+
+The reactive APIs come from the `sqlitemagic-rxjava3` adapter for RxJava 3 or the `sqlitemagic-rxjava2` adapter for
+RxJava 2, whose version must be the same as the plugin version. Both adapters have the same API. Import `observe` (and
+`run` for one-shot queries) from `com.siimkinks.sqlitemagic.rxjava3` or `com.siimkinks.sqlitemagic.rxjava2`; the
+examples use RxJava 3. A file that uses both adapters imports one of them with an alias. Observed queries emit on
+`Schedulers.io()` unless the connection is configured with another scheduler:
+
+```kotlin
+import com.siimkinks.sqlitemagic.rxjava3.scheduleRxQueriesOn
+
+SqliteMagic.builder(this)
+  .database(SqliteMagicDatabase())
+  .sqliteFactory(FrameworkSQLiteOpenHelperFactory())
+  .scheduleRxQueriesOn(Schedulers.computation())
+  .openDefaultConnection()
+```
+
+Changes made while an observed query's notification is being processed are combined into one further notification.
+
+#### Observe With Coroutines:
+
+The coroutine APIs come from the `sqlitemagic-coroutines` adapter, whose version must be the same as the plugin version,
+in `com.siimkinks.sqlitemagic.coroutines`. `observe()` returns a cold `Flow` of the query that emits again whenever a
+queried table changes; changes made while an emission is being processed are combined into one further emission. Its
+`runQuery` operators run the query. One-shot work uses suspend functions: `runQueryOnce()` on an observed query,
+`Query.run()`, and `await()` on entity operations, UPDATE and DELETE statements and raw SELECTs that do not declare the
+tables they read.
+
+```kotlin
+import com.siimkinks.sqlitemagic.coroutines.await
+import com.siimkinks.sqlitemagic.coroutines.observe
+import com.siimkinks.sqlitemagic.coroutines.runQuery
+
+val authors: Flow<List<Author>> = (SELECT FROM AUTHOR)
+  .observe()
+  .runQuery()
+
+suspend fun save(author: Author): EntityInsertResult = author
+  .insert()
+  .await()
+```
+
+The database work runs on `Dispatchers.IO` unless the connection is configured with another dispatcher:
+
+```kotlin
+import com.siimkinks.sqlitemagic.coroutines.dispatchCoroutineQueriesOn
+
+SqliteMagic.builder(this)
+  .database(SqliteMagicDatabase())
+  .sqliteFactory(FrameworkSQLiteOpenHelperFactory())
+  .dispatchCoroutineQueriesOn(Dispatchers.Default)
+  .openDefaultConnection()
+```
+
+Applied directly to `observe()`, the `runQuery` operators also wait for changes on that dispatcher, so a change resumes
+the collector only to deliver the result. The first change made while the collector processes a result starts the next
+query at once, and later changes are combined into one further query, so the earlier of the two results may miss them.
+
+A transaction belongs to the thread that started it, so a suspend call that the dispatcher runs on another thread
+does not take part in a transaction of the calling thread. Reading a query on a thread with an active transaction,
+whether by collecting it, `runQueryOnce()`, `Query.run()` or a raw SELECT's `await()`, fails with
+`IllegalStateException`.
 
 #### Define Database:
 
@@ -217,6 +286,7 @@ val bulkSuccess: Boolean = Authors
 ```kotlin
 import com.siimkinks.sqlitemagic.entity.EntityInsertResult
 import com.siimkinks.sqlitemagic.entity.EntityPersistResult
+import com.siimkinks.sqlitemagic.rxjava3.observe
 ...
 
 val author = Author(
@@ -308,6 +378,7 @@ val nrOfDeletedRows: Int = (
 
 ```kotlin
 import com.siimkinks.sqlitemagic.BookTable.Companion.BOOK
+import com.siimkinks.sqlitemagic.rxjava3.observe
 ...
 
 val update: Single<Int> = (
@@ -368,6 +439,8 @@ val authors: List<Author> = (
 
 ```kotlin
 import com.siimkinks.sqlitemagic.AuthorTable.Companion.AUTHOR
+import com.siimkinks.sqlitemagic.rxjava3.ListQueryObservable
+import com.siimkinks.sqlitemagic.rxjava3.observe
 ...
 
 // ListQueryObservable is an Observable of Query
@@ -427,6 +500,8 @@ val books: List<Book> = (
 ```kotlin
 import com.siimkinks.sqlitemagic.AuthorTable.Companion.AUTHOR
 import com.siimkinks.sqlitemagic.BookTable.Companion.BOOK
+import com.siimkinks.sqlitemagic.rxjava3.ListQueryObservable
+import com.siimkinks.sqlitemagic.rxjava3.observe
 ...
 
 // the resulting Book objects also contain

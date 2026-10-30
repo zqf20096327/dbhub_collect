@@ -1,6 +1,6 @@
 # GEOInflow
 
-**English** | [简体中文](README.zh-CN.md)
+**English** | [简体中文](README.zh-CN.md) | [日本語](README.ja.md)
 
 Self-hosted web and AI crawler analytics for Generative Engine Optimization (GEO).
 
@@ -99,7 +99,7 @@ Log processing retains sources, classifications, and verification evidence. Anal
 
 ## Quick deployment
 
-Start Docker Engine / Docker Desktop and Docker Compose V2, and ensure that image and dependency download sources are reachable. After obtaining the source code, run this command from the project root:
+Start Docker Engine / Docker Desktop and Docker Compose V2, and ensure that image and dependency download sources are reachable. Source builds require at least **6 GiB total Docker memory**; **8 GiB or more and at least 2 CPUs** are recommended, with free memory reserved for compilation. Run `sh scripts/liekan-deploy.sh --check` to check the build floor. See [deployment requirements](docs/deployment.en.md#requirements) for runtime capacity. After obtaining the source code, run this command from the project root:
 
 ```sh
 sh scripts/liekan-deploy.sh

@@ -17,7 +17,7 @@ A single-binary [MCP](https://modelcontextprotocol.io/) server for SQL databases
 - **MCP tools** — schema discovery (`listDatabases`, `listTables`, `listViews`, `listTriggers`, `listFunctions`, `listProcedures`, `listMaterializedViews`), data access (`readQuery`, `writeQuery`), DDL (`createDatabase`, `dropDatabase`, `dropTable`), and `explainQuery`. Read-only mode hides the write tools (`writeQuery`, `createDatabase`, `dropDatabase`, `dropTable`). See [MCP Tools](#mcp-tools) for per-backend availability.
 - **Single binary** — ~7 MB, no Python/Node/Docker needed
 - **Multiple transports** — stdio (for Claude Desktop, Cursor) and HTTP (for remote/multi-client)
-- **Two-layer config** — CLI flags > environment variables, with sensible defaults per backend
+- **Layered config** — `DBMCP_*` environment variables, an env file, and an optional YAML config file with `${}` interpolation, with sensible defaults per backend
 - **SSH tunnel** — reach MySQL/MariaDB/PostgreSQL through an SSH bastion with an embedded client: password or key auth, `known_hosts` verification, automatic reconnect
 
 ## Install 📦
@@ -55,14 +55,13 @@ Add a `.mcp.json` file to your project root. MCP clients read this file and conf
   "mcpServers": {
     "dbmcp": {
       "command": "dbmcp",
-      "args": ["stdio"],
       "env": {
-        "DB_BACKEND": "mysql",
-        "DB_HOST": "127.0.0.1",
-        "DB_PORT": "3306",
-        "DB_USER": "root",
-        "DB_PASSWORD": "secret",
-        "DB_NAME": "mydb"
+        "DBMCP_DB_BACKEND": "mysql",
+        "DBMCP_DB_HOST": "127.0.0.1",
+        "DBMCP_DB_PORT": "3306",
+        "DBMCP_DB_USER": "root",
+        "DBMCP_DB_PASSWORD": "secret",
+        "DBMCP_DB_NAME": "mydb"
       }
     }
   }
@@ -73,7 +72,7 @@ Add a `.mcp.json` file to your project root. MCP clients read this file and conf
 
 ```bash
 # Start the server first
-dbmcp http --db-backend mysql --db-user root --db-name mydb --port 9001
+DBMCP_TRANSPORT=http DBMCP_DB_BACKEND=mysql DBMCP_DB_USER=root DBMCP_DB_NAME=mydb dbmcp
 ```
 
 ```json
@@ -89,10 +88,10 @@ dbmcp http --db-backend mysql --db-user root --db-name mydb --port 9001
 
 > **Note:** The `"type": "http"` field is required for HTTP transport. Without it, clients like Claude Code will reject the config.
 
-To require a bearer token, start the server with `HTTP_AUTH_TOKEN` and send it from the client:
+To require a bearer token, start the server with `DBMCP_HTTP_AUTH_TOKEN` and send it from the client:
 
 ```bash
-HTTP_AUTH_TOKEN="$(openssl rand -hex 32)" dbmcp http --db-backend mysql --db-user root --db-name mydb
+DBMCP_HTTP_AUTH_TOKEN="$(openssl rand -hex 32)" DBMCP_TRANSPORT=http DBMCP_DB_BACKEND=mysql DBMCP_DB_USER=root DBMCP_DB_NAME=mydb dbmcp
 ```
 
 ```json
@@ -107,122 +106,71 @@ HTTP_AUTH_TOKEN="$(openssl rand -hex 32)" dbmcp http --db-backend mysql --db-use
 }
 ```
 
-### Using CLI flags
-
-```bash
-# MySQL/MariaDB
-dbmcp stdio --db-backend mysql --db-host localhost --db-user root --db-name mydb
-
-# PostgreSQL
-dbmcp stdio --db-backend postgres --db-host localhost --db-user postgres --db-name mydb
-
-# SQLite
-dbmcp stdio --db-backend sqlite --db-name ./data.db
-
-# PostgreSQL through an SSH bastion (DB host is resolved by the bastion)
-dbmcp stdio --db-backend postgres --db-host db.internal --db-user postgres --db-name mydb \
-  --ssh-host bastion.example.com --ssh-user deploy --ssh-key ~/.ssh/id_ed25519
-
-# HTTP transport (loopback only, no token required)
-dbmcp http --db-backend mysql --db-user root --db-name mydb --port 9001
-
-# HTTP transport on all interfaces — a bearer token is REQUIRED
-HTTP_AUTH_TOKEN=change-me dbmcp http --db-backend mysql --db-user root --db-name mydb --host 0.0.0.0 --port 9001
-```
-
-> **Warning:** Binding a non-loopback address (e.g. `--host 0.0.0.0`) exposes the database to anyone who can reach the port. `dbmcp` refuses to start in that case unless `HTTP_AUTH_TOKEN` is set. The Host/Origin allowlists protect against browser DNS rebinding only — they are **not** authentication.
-
 ### Using environment variables
 
 ```bash
-DB_BACKEND=mysql DB_USER=root DB_NAME=mydb dbmcp stdio
+# MySQL/MariaDB
+DBMCP_DB_BACKEND=mysql DBMCP_DB_HOST=localhost DBMCP_DB_USER=root DBMCP_DB_NAME=mydb dbmcp
+
+# PostgreSQL
+DBMCP_DB_BACKEND=postgres DBMCP_DB_HOST=localhost DBMCP_DB_USER=postgres DBMCP_DB_NAME=mydb dbmcp
+
+# SQLite
+DBMCP_DB_BACKEND=sqlite DBMCP_DB_NAME=./data.db dbmcp
+
+# PostgreSQL through an SSH bastion (DB host is resolved by the bastion)
+DBMCP_DB_BACKEND=postgres DBMCP_DB_HOST=db.internal DBMCP_DB_USER=postgres DBMCP_DB_NAME=mydb \
+DBMCP_SSH_HOST=bastion.example.com DBMCP_SSH_USER=deploy DBMCP_SSH_KEY=~/.ssh/id_ed25519 dbmcp
+
+# HTTP transport (loopback only, no token required)
+DBMCP_TRANSPORT=http DBMCP_DB_BACKEND=mysql DBMCP_DB_USER=root DBMCP_DB_NAME=mydb dbmcp
+
+# HTTP transport on all interfaces — a bearer token is REQUIRED
+DBMCP_HTTP_AUTH_TOKEN=change-me DBMCP_TRANSPORT=http DBMCP_HTTP_HOST=0.0.0.0 \
+DBMCP_DB_BACKEND=mysql DBMCP_DB_USER=root DBMCP_DB_NAME=mydb dbmcp
 ```
+
+> **Warning:** Binding a non-loopback address (e.g. `DBMCP_HTTP_HOST=0.0.0.0`) exposes the database to anyone who can reach the port. `dbmcp` refuses to start in that case unless `DBMCP_HTTP_AUTH_TOKEN` is set. The Host/Origin allowlists protect against browser DNS rebinding only — they are **not** authentication.
+
+### Using a config file
+
+```yaml
+# dbmcp.yaml
+database:
+  backend: postgres
+  host: localhost
+  user: postgres
+  password: ${DB_PASSWORD:?set DB_PASSWORD}
+  name: mydb
+```
+
+```bash
+DB_PASSWORD=secret dbmcp --config /path/to/dbmcp.yaml
+```
+
+From an MCP client, pass `"args": ["--config", "/absolute/path/to/dbmcp.yaml"]`; relative paths resolve against the process working directory, which the client controls. See [Config File](https://dbmcp.haymon.ai/docs/config-file).
 
 ## Configuration ⚙️
 
-Configuration is loaded with clear precedence:
+Every setting has a `DBMCP_*` environment variable and a YAML key. Each setting is resolved with clear precedence:
 
-**CLI flags > environment variables > defaults**
+**process environment > env file (`--env`) > config file (`--config`) > defaults**
 
-Environment variables are typically set by your MCP client (via `env` or `envFile` in the server config).
+Environment variables are typically set by your MCP client (via `env` or `envFile` in the server config). An empty `DBMCP_*` value counts as unset. Nothing is discovered automatically: a file is read only when you name it.
 
-### Subcommands
+| Flag | Env Variable | Description |
+|------|-------------|-------------|
+| `--config <PATH>` | `DBMCP_CONFIG` | YAML config file (`${}` interpolation, strict keys) |
+| `--env <PATH>` | `DBMCP_ENV_FILE` | Env file of `KEY=VALUE` lines |
 
-| Subcommand | Description |
-|------------|-------------|
-| `stdio` | Run in stdio mode |
-| `http` | Run in HTTP/SSE mode |
-| `version` | Print version information and exit |
+There are no per-setting flags. Booleans accept `true`/`false`, `1`/`0`, `t`/`f` (not `yes`/`no`); lists are comma-separated in env vars.
 
-A subcommand is required — running `dbmcp` with no subcommand prints usage help and exits with a non-zero status.
+- **[Configuration reference](https://dbmcp.haymon.ai/docs/configuration)** — every setting with its YAML key, env var, type, and default, plus [Migrating from CLI flags](https://dbmcp.haymon.ai/docs/configuration#migrating-from-cli-flags)
+- **[Config File](https://dbmcp.haymon.ai/docs/config-file)** — file schema, `${}` interpolation, env file format, path resolution, Docker, and error output
 
-### Database Options (shared across subcommands)
+> **Security note**: Read-only mode is on by default (`DBMCP_DB_READ_ONLY=true`). The default HTTP `Origin` allowlist accepts browser pages from **any port** on `localhost`/`127.0.0.1`/`[::1]`; on shared or development machines, set `DBMCP_HTTP_AUTH_TOKEN` or narrow `DBMCP_HTTP_ALLOWED_ORIGINS` to the explicit origins you trust (e.g. `http://localhost:5173`).
 
-| Flag | Env Variable | Default | Description |
-|------|-------------|---------|-------------|
-| `--db-backend` | `DB_BACKEND` | *(required)* | `mysql`, `mariadb`, `postgres`, or `sqlite` |
-| `--db-host` | `DB_HOST` | `localhost` | Database host (as seen from the SSH server when tunnelling) |
-| `--db-port` | `DB_PORT` | backend default | `3306` (MySQL/MariaDB), `5432` (PostgreSQL) |
-| `--db-user` | `DB_USER` | backend default | `root` (MySQL/MariaDB), `postgres` (PostgreSQL) |
-| `--db-password` | `DB_PASSWORD` | *(empty)* | Database password |
-| `--db-name` | `DB_NAME` | *(empty)* | Database name or SQLite file path |
-| `--db-charset` | `DB_CHARSET` | | Character set (MySQL/MariaDB only) |
-
-### SSL/TLS Options
-
-| Flag | Env Variable | Default | Description |
-|------|-------------|---------|-------------|
-| `--db-ssl` | `DB_SSL` | `false` | Enable SSL |
-| `--db-ssl-ca` | `DB_SSL_CA` | | CA certificate path |
-| `--db-ssl-cert` | `DB_SSL_CERT` | | Client certificate path |
-| `--db-ssl-key` | `DB_SSL_KEY` | | Client key path |
-| `--db-ssl-verify-cert` | `DB_SSL_VERIFY_CERT` | `true` | Verify server certificate |
-
-### SSH Tunnel Options
-
-| Flag | Env Variable | Default | Description |
-|------|-------------|---------|-------------|
-| `--ssh-host` | `SSH_HOST` | | SSH server host; enables the tunnel when set |
-| `--ssh-port` | `SSH_PORT` | `22` | SSH server port |
-| `--ssh-user` | `SSH_USER` | | SSH user |
-| `--ssh-password` | `SSH_PASSWORD` | | SSH password |
-| `--ssh-key` | `SSH_KEY` | | Path to SSH private key (OpenSSH, PKCS#1, PKCS#8, SEC1) |
-| `--ssh-key-passphrase` | `SSH_KEY_PASSPHRASE` | | Passphrase for the SSH private key |
-| `--ssh-known-hosts` | `SSH_KNOWN_HOSTS` | `~/.ssh/known_hosts` | Path to known_hosts file (default: ~/.ssh/known_hosts) |
-| `--ssh-strict-host-key-checking` | `SSH_STRICT_HOST_KEY_CHECKING` | `yes` | Host key policy: yes rejects unknown hosts, accept-new trusts on first use, no disables verification (insecure) |
-| `--ssh-keepalive-interval` | `SSH_KEEPALIVE_INTERVAL` | `30` | SSH keepalive interval in seconds (0 disables) |
-| `--ssh-local-port` | `SSH_LOCAL_PORT` | ephemeral | Local tunnel port (default: ephemeral) |
-
-The tunnel is MySQL/MariaDB/PostgreSQL only and uses an embedded SSH client (no `ssh` binary). `--db-host`/`--db-port` are resolved **by the SSH server**. With both a key and a password set, the key is tried first. See [SSH Tunnel](https://dbmcp.haymon.ai/docs/configuration#ssh-tunnel) for host-key policies, limitations, and troubleshooting.
-
-### Server Options
-
-| Flag | Env Variable | Default | Description |
-|------|-------------|---------|-------------|
-| `--db-read-only` | `DB_READ_ONLY` | `true` | Block write queries |
-| `--db-max-pool-size` | `DB_MAX_POOL_SIZE` | `5` | Max connection pool size (min: 1) |
-| `--db-connection-timeout` | `DB_CONNECTION_TIMEOUT` | *(unset)* | Connection timeout in seconds (min: 1) |
-| `--db-query-timeout` | `DB_QUERY_TIMEOUT` | `30` | Query execution timeout in seconds |
-| `--db-page-size` | `DB_PAGE_SIZE` | `100` | Max items per paginated tool response (range 1–500) |
-
-### Logging Options
-
-| Flag | Env Variable | Default | Description |
-|------|-------------|---------|-------------|
-| `--log-level` | `LOG_LEVEL` | `info` | Log level (trace/debug/info/warn/error) |
-
-### HTTP-only Options (only available with `http` subcommand)
-
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--host` | `127.0.0.1` | Bind host |
-| `--port` | `9001` | Bind port |
-| `--allowed-origins` | localhost variants, any port | Allowed browser origins (comma-separated, `:*` matches any port). Drives both CORS preflight and server-side Origin rejection. |
-| `--allowed-hosts` | `localhost,127.0.0.1,::1` | Trusted Host headers (comma-separated). Enforced server-side; HTTP/2 `:authority` is honored. |
-| `--auth-token` | *(unset)* | Bearer token required on every request (`Authorization: Bearer <token>`). Prefer the `HTTP_AUTH_TOKEN` env var — CLI args are visible in `ps`. Required for non-loopback binds. |
-| `--dangerously-allow-unauthenticated` | `false` | Allow a non-loopback bind without a token (`HTTP_DANGEROUSLY_ALLOW_UNAUTHENTICATED`). Only behind a reverse proxy that authenticates callers. |
-
-> **Security note**: The default `--allowed-origins` accept browser pages served from **any port** on `localhost`/`127.0.0.1`/`[::1]`, so any local web app can call the server. On shared or development machines, set `HTTP_AUTH_TOKEN` or narrow `--allowed-origins` to the explicit origins you trust (e.g. `http://localhost:5173`).
+The SSH tunnel is MySQL/MariaDB/PostgreSQL only and uses an embedded SSH client (no `ssh` binary). `DBMCP_DB_HOST`/`DBMCP_DB_PORT` are resolved **by the SSH server**. With both a key and a password set, the key is tried first. See [SSH Tunnel](https://dbmcp.haymon.ai/docs/configuration#ssh-tunnel) for host-key policies, limitations, and troubleshooting.
 
 ## MCP Tools 🧩
 
@@ -330,7 +278,7 @@ Drops a table from a database. If the table has foreign key dependents, the data
 
 ### explainQuery
 
-Returns the execution plan for a SQL query. Supports an optional `analyze` parameter for actual execution statistics (PostgreSQL and MySQL/MariaDB). In read-only mode, EXPLAIN ANALYZE is only allowed for read-only statements since it actually executes the query. SQLite uses EXPLAIN QUERY PLAN (no ANALYZE support). Always available regardless of read-only mode. Parameters: `query`, `database`, `analyze` (PostgreSQL/MySQL only).
+Returns the execution plan for a SQL query. Supports an optional `analyze` parameter for actual execution statistics (PostgreSQL and MySQL/MariaDB). In read-only mode, EXPLAIN ANALYZE is only allowed for read-only statements since it actually executes the query. In read-only mode, every EXPLAIN runs inside a read-only transaction, so on MySQL/MariaDB plain EXPLAIN of write statements is rejected. SQLite uses EXPLAIN QUERY PLAN (no ANALYZE support). Always available regardless of read-only mode. Parameters: `query`, `database`, `analyze` (PostgreSQL/MySQL only).
 
 ## Security 🔒
 
@@ -338,12 +286,12 @@ Returns the execution plan for a SQL query. Supports an optional `analyze` param
 - **Single-statement enforcement** — multi-statement injection blocked at parse level
 - **Dangerous function blocking** — `LOAD_FILE()`, `INTO OUTFILE`, `INTO DUMPFILE` detected in the AST
 - **Identifier validation** — database/table names validated against control characters and empty strings
-- **HTTP bearer authentication** — `HTTP_AUTH_TOKEN` enforces `Authorization: Bearer <token>` (constant-time compare, 401 on failure); non-loopback binds refuse to start without a token
+- **HTTP bearer authentication** — `DBMCP_HTTP_AUTH_TOKEN` enforces `Authorization: Bearer <token>` (constant-time compare, 401 on failure); non-loopback binds refuse to start without a token
 - **Origin + Host allowlists** — server-side rejection (403) plus CORS preflight; configurable for HTTP transport. Defends against browser DNS rebinding — not a substitute for authentication
-- **SSL/TLS** — configured via individual `DB_SSL_*` variables
+- **SSL/TLS** — configured via individual `DBMCP_DB_SSL_*` variables
 - **SSH host-key verification** — the SSH tunnel checks the server key against `known_hosts` (`yes` by default); SSH passwords and passphrases are never logged
-- **PII redaction** *(opt-in, off by default)* — when enabled, query tool output passes through a regex-based redactor that rewrites detected PII spans across **46 built-in entity types** spanning seven categories: personal (email), financial (cards, IBAN, UK bank accounts, sort and US ABA routing codes, CVV), government IDs (SSN, ITIN, EIN, UK/US passports, NHS, NINO, SIN, VAT), contact (phone), network (IP, URL, MAC), digital identity (API keys, JWTs, PEM private keys, password hashes), and crypto wallets. Toggle: `--pii` / `PII_ENABLE`. Operator: `--pii-operator` / `PII_OPERATOR` — one of `replace` (default, entity-aware placeholders like `<EMAIL_ADDRESS>`), `mask` (length-preserving `*`), `redact` (drop), `hash` (SHA-256 hex). Optional subset via `--pii-categories` / `PII_CATEGORIES` (comma-separated, e.g. `financial,government`); unset enables all built-ins. Scope: query tool output payloads only. See [PII configuration](https://dbmcp.haymon.ai/docs/configuration#pii) for the full surface.
-- **ML/NER redaction** *(opt-in at runtime, off by default)* — adds `PERSON`, `LOCATION`, `ORGANIZATION`, `NATIONALITY_RELIGION_POLITICS`, and `FACILITY` detection that regex cannot catch, enabled via the `--pii-ner` / `PII_NER_ENABLE` toggle plus a user-supplied model directory. Which entities are produced depends on the model's labels (CoNLL models give person/location/organization; OntoNotes-class models add NRP and facility). Inference uses **ONNX Runtime** (model directory holds `config.json`, `tokenizer.json`, `model.onnx`; recommended: the MIT-licensed [`dslim/bert-base-NER`](https://huggingface.co/dslim/bert-base-NER) exported to ONNX, int8-quantized for speed). Fail-closed: a model that cannot load aborts startup and an inference error fails the request — never a silent fallback. Respects `--pii-categories`. English for v1.
+- **PII redaction** *(opt-in, off by default)* — when enabled, query tool output passes through a regex-based redactor that rewrites detected PII spans across **46 built-in entity types** spanning seven categories: personal (email), financial (cards, IBAN, UK bank accounts, sort and US ABA routing codes, CVV), government IDs (SSN, ITIN, EIN, UK/US passports, NHS, NINO, SIN, VAT), contact (phone), network (IP, URL, MAC), digital identity (API keys, JWTs, PEM private keys, password hashes), and crypto wallets. Toggle: `DBMCP_PII_ENABLE` (`pii.enabled`). Operator: `DBMCP_PII_OPERATOR` (`pii.operator`) — one of `replace` (default, entity-aware placeholders like `<EMAIL_ADDRESS>`), `mask` (length-preserving `*`), `redact` (drop), `hash` (SHA-256 hex). Optional subset via `DBMCP_PII_CATEGORIES` (`pii.categories`) (comma-separated, e.g. `financial,government`); unset enables all built-ins. Scope: query tool output payloads only. See [PII configuration](https://dbmcp.haymon.ai/docs/configuration#pii) for the full surface.
+- **ML/NER redaction** *(opt-in at runtime, off by default)* — adds `PERSON`, `LOCATION`, `ORGANIZATION`, `NATIONALITY_RELIGION_POLITICS`, and `FACILITY` detection that regex cannot catch, enabled via the `DBMCP_PII_NER_ENABLE` (`pii.ner_enabled`) toggle plus a user-supplied model directory. Which entities are produced depends on the model's labels (CoNLL models give person/location/organization; OntoNotes-class models add NRP and facility). Inference uses **ONNX Runtime** (model directory holds `config.json`, `tokenizer.json`, `model.onnx`; recommended: the MIT-licensed [`dslim/bert-base-NER`](https://huggingface.co/dslim/bert-base-NER) exported to ONNX, int8-quantized for speed). Fail-closed: a model that cannot load aborts startup and an inference error fails the request — never a silent fallback. Respects `pii.categories`. English for v1.
 - **Credential redaction** — database password is never shown in logs or debug output
 
 ## Testing 🧪
@@ -362,7 +310,7 @@ cargo test --workspace --lib --bins
 ./tests/run.sh --filter sqlite
 
 # With MCP Inspector
-npx @modelcontextprotocol/inspector ./target/release/dbmcp stdio
+npx @modelcontextprotocol/inspector ./target/release/dbmcp
 
 # HTTP mode testing
 curl -X POST http://localhost:9001/mcp \

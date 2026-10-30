@@ -1,0 +1,707 @@
+# KAOS — sandboxed AI agents that remember what worked
+
+Run teams of AI agents on your machine. Each agent works in its own sandbox inside one SQLite file, every action it takes is on the record (auditing an agent is a SQL query), and the lessons that actually worked come back next time. No cloud account, no GPU, no embeddings.
+
+```bash
+pip install kaos-harness && kaos demo --print      # ~2 s · no API keys · writes nothing to your directory
+```
+
+```
+  KAOS · local-first agent harness · no keys · no cloud · MIT
+  ──────────────────────────────────────────────────────────────────
+  Seeded 2,000 agents × 25 memories = 50,000 entries in a temp SQLite file   1.1 s
+
+  [1/3] Cross-agent memory search      query: "payment" OR "retry" OR "idempotency"
+    #720    observation agent-0028 Payment duplicate processing in reporting: root cause traced; fix = Idempoten…
+    #954    skill       agent-0038 Payment duplicate processing in checkout: root cause traced; fix = Idempotenc…
+    #1058   insight     agent-0042 Payment duplicate processing in refunds: root cause traced; fix = Idempotency…
+    50,000 entries searched · p95 15.0 ms over 20 runs · measured now, not quoted
+
+  [2/3] The audit trail is a table
+    started_at               agent      tool      status   input
+    2026-09-02T16:30:11.864  fix-agent  fs_read   success  {"path": "/src/payments.py"}
+    2026-09-02T16:30:11.864  fix-agent  fs_write  success  {"path": "/src/payments.py"}
+    2026-09-02T16:30:11.864  fix-agent  fs_write  success  {"path": "/tests/test_payments.py"}
+    SELECT * FROM tool_calls WHERE agent_id = ?   — plain SQL, forever
+
+  [3/3] Plug it into Claude Code
+    claude plugin marketplace add canivel/kaos   →   /plugin install kaos@kaos
+    or:  pip install kaos-harness && kaos connect claude-code
+```
+
+**Use it from Claude Code** — a flight recorder and team memory for every session you already run:
+
+```bash
+claude plugin marketplace add canivel/kaos
+/plugin install kaos@kaos          # sessions journaled into kaos.db; team lessons recalled at session start
+```
+
+**Or run your own swarm** — the live dashboard needs no keys either:
+
+```bash
+pip install 'kaos-harness[all]' && kaos demo      # dashboard with an example fleet
+kaos parallel -t security "find vulnerabilities in auth.py" \
+              -t tests    "write unit tests" \
+              -t docs     "update API docs"      # three isolated agents, one Gantt timeline
+```
+
+![KAOS — parallel agents, Gantt dashboard, live events](docs/demos/kaos_03_parallel_agents.gif)
+
+[![Version](https://img.shields.io/badge/version-2.1.0-blueviolet)]()
+[![Python](https://img.shields.io/badge/python-3.11+-blue)]()
+[![License](https://img.shields.io/badge/license-MIT-blue)]()
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21533588.svg)](https://doi.org/10.5281/zenodo.21533588)
+[![Discipline](https://img.shields.io/badge/mechanisms%20evaluated-15%20·%200%20shipped%20on%20hope-fd79a8)]()
+[![Research](https://img.shields.io/badge/research%20integrations-9-brightgreen)]()
+[![MCP tools](https://img.shields.io/badge/MCP%20tools-58-00DC82)]()
+
+**A local-first multi-agent harness.** Every agent runs in an isolated, auditable runtime backed by one SQLite file — a flight recorder for your fleet. Its memory self-tunes with use (neuroplasticity — usage-weighted memory and skill ranking). And it is the only framework whose own mechanisms must pass **pre-registered, falsifiable kill gates** before they ship. Measured, not claimed.
+
+> The industry spent 2026 agreeing that [the harness matters more than the model](https://addyosmani.com/blog/agent-harness-engineering/). KAOS was built on that premise — it synthesizes the strongest published solution to each hard problem in agentic AI (every capability traces to a paper or OSS project), and it answers the critique the harness-engineering discourse hasn't solved: **verification that a harness change actually helped.** See [how it compares](https://canivel.github.io/kaos/#compare) to Hermes, LangGraph, ADK, Letta, CrewAI, and the rest.
+
+## Install what you need
+
+The base install is deliberately small — the flight recorder (isolated agent filesystems, checkpoints, event journal) and the brain (cross-agent memory, skills) on 5 dependencies:
+
+| Install | You get |
+|---|---|
+| `pip install kaos-harness` | core: isolation, checkpoints, audit, memory, skills, CLI |
+| `kaos-harness[router]` | model providers — Claude Code, Anthropic, OpenAI-compatible, local vLLM |
+| `kaos-harness[mcp]` | the 58-tool MCP server for Claude Code / Cursor |
+| `kaos-harness[agent-sdk]` | in-process Claude Agent SDK provider — no CLI quota contention alongside an active session |
+| `kaos-harness[ui]` | dashboards — web (Gantt timeline, `kaos ui`/`kaos demo`) and terminal TUI |
+| `kaos-harness[all]` | everything above |
+
+Any command that needs a missing extra tells you the exact install line. Third parties extend KAOS through the `kaos.plugins` entry-point group (providers, benchmarks, MCP tool packs — see `kaos plugins`).
+
+**From an MCP assistant instead:** open Claude Code (or Cursor) in your project and say `use github.com/canivel/kaos on this project` — it installs KAOS, runs `kaos setup`, and registers the MCP server (58 tools). Your next prompt can just be *"with kaos, review this module with three agents in parallel."*
+
+<details>
+<summary>Developing KAOS itself?</summary>
+
+```bash
+git clone https://github.com/canivel/kaos.git && cd kaos
+uv sync --extra dev
+uv run python -m pytest tests/ -q
+```
+
+> Need `uv`? → `curl -LsSf https://astral.sh/uv/install.sh | sh`
+
+</details>
+
+## Architecture
+
+Layered, with a single SQLite file at the bottom. Two layers define the
+character of the system: **Neuroplasticity** (v0.8 — telemetry recorded
+inline on every event, Hebbian graph + consolidation built in batch at
+agent completion) and **Falsifiable Eval** (v0.9 — `kaos.eval.harness`
++ the experiments journal, the gate every new mechanism must pass).
+Full internals: [docs/architecture.md](docs/architecture.md).
+
+![KAOS architecture — layered design over a single SQLite file](docs/architecture.svg)
+
+---
+
+## What to ask it — prompts that map to real tools
+
+Once registered, every prompt below drives actual KAOS MCP tools. Steal these:
+
+**Build with a swarm** — isolated agents, parallel, on the dashboard:
+
+```
+with kaos, refactor auth.py — three agents in parallel: implement, test, and document
+with kaos, review my payments module — a security agent and a test-writing agent in parallel
+```
+
+**Debug like a forensics team** — the whole run is on the record:
+
+```
+with kaos, why did the last run fail? show me the agent that errored and its exact tool calls
+with kaos, what recurring failures do my agents hit? diagnose the top fingerprint
+```
+
+**Time-travel** — checkpoint before risk, restore on regret:
+
+```
+with kaos, checkpoint the migration agent before it touches the schema — restore it if tests fail
+with kaos, diff the refactor agent between its last two checkpoints — what changed?
+```
+
+**Compound knowledge** — memory and skills that outlive the session:
+
+```
+with kaos, search memory — what did we learn last month about the payments retry bug?
+with kaos, save this fix as a reusable skill so future agents apply it automatically
+```
+
+**Watch the spend** — tokens and cost live in the journal:
+
+```
+with kaos, how much did today's agents cost? break it down by tool and agent
+```
+
+**Keep yourself honest** — the discipline is a tool surface too:
+
+```
+with kaos, list every mechanism we've evaluated and its verdict
+with kaos, smoke-test all my model providers before I kick off the big run
+```
+
+KAOS handles isolation, checkpointing, audit, and the dashboard automatically — you just talk.
+
+---
+
+## What it does
+
+Each capability in KAOS comes from a proven source. Nothing is invented that doesn't need to be.
+
+| Problem | Best-in-class solution | Source | Since |
+|---|---|---|---|
+| Harness changes ship on vibes | **Falsifiable-eval primitive** — pre-registered, sha256-locked kill gates + falsification self-test + binding ACCEPT/REJECT/VOID verdicts (`kaos eval probe`) | KAOS core | **v0.9.0 🆕** |
+| "What did we already try?" is a grep | **Experiments journal** — every probe/benchmark run recorded with git sha, lock hash, arms, gates, verdict (`kaos experiment`) | KAOS core | **v0.9.0 🆕** |
+| Failures are counted, not understood | Reasoning-class failure taxonomy + **critical-step localizer** (earliest decisive error, 5/5 planted bugs within ±1 step) | [arXiv:2509.25370](https://arxiv.org/abs/2509.25370) + KAOS core | v0.8.3 |
+| Library stays static as it's used | Neuroplasticity: outcome telemetry recorded inline; Hebbian associations + weighted search + consolidation proposals built in batch at agent completion (two-timescale) | KAOS core | v0.8.0 |
+| Agents start on under-specified tasks | Dynamic intake — LLM-analyzed clarifying questions (0 or more, no fixed count) | KAOS core | v0.7.1 |
+| Agents reinvent solutions | Cross-agent skill library — parameterized templates, usage tracking | [arXiv:2604.08224](https://arxiv.org/abs/2604.08224) | v0.7.0 |
+| Agents repeat past mistakes | FTS5 cross-agent memory with BM25 search | [claude-mem](https://github.com/thedotmack/claude-mem) | v0.6.0 |
+| Agents act without consensus | SharedLog: intent → vote → decide | [LogAct arXiv:2604.07988](https://arxiv.org/abs/2604.07988) | v0.6.0 |
+| Agents co-evolve poorly | Stagnation detection + skill sharing | [CORAL arXiv:2604.01658](https://arxiv.org/abs/2604.01658) | v0.6.0 |
+| Failures are opaque | Surrogate Verifier — isolated failure diagnostics | [EvoSkills arXiv:2604.01687](https://arxiv.org/abs/2604.01687) | v0.5.1 |
+| Context explodes, quality drops | AAAK compact notation, 57% savings at default | [MemPalace](https://github.com/milla-jovovich/mempalace) | v0.5.2 |
+| Strategies don't improve | Evolutionary proposer reads execution traces | [Meta-Harness arXiv:2603.28052](https://arxiv.org/abs/2603.28052) | v0.2.0 |
+| Agent isolation is convention | Enforced per-agent VFS + audit trail | KAOS core | v0.1.0 |
+| Agent crashes lose progress | Checkpoint / restore / diff | KAOS core | v0.1.0 |
+
+---
+
+## The discipline — nothing ships without a probe it could fail
+
+Most frameworks add mechanisms and report the demo that worked. Every KAOS mechanism candidate faces a probe whose kill gates are written and **sha256-locked before any feature code exists** — the harness refuses to run on an edited lock, a falsification self-test proves the feature *can lose*, and the verdict (ACCEPT / REJECT / VOID) is binding. No retune-and-rerun. **Fifteen candidates evaluated since v0.7; zero shipped on hope** — every verdict is on disk with its audit trail (see `benchmarks/demo_synthesis_consolidation_bench/`, `benchmarks/demo_action_realization_bench/`).
+
+The apparatus is itself a shipped, tested primitive:
+
+```python
+from kaos.eval.harness import Probe, GateOutcome, bootstrap_diff_ci
+
+class MyProbe(Probe):
+    lock_path    = "ISA.lock.json"        # kill gates, written BEFORE any code
+    known_sha256 = {"5aa9c10d...": "v1"}  # edited lock → harness refuses to run
+
+    def gates(self, arms):
+        md, lo, hi = bootstrap_diff_ci(arms["FULL"].labels({"hard"}),
+                                       arms["B0"].labels({"hard"}))
+        return [GateOutcome("G1", "beats baseline",
+                            passed=md >= 0.10 and lo > 0.0, kill=True,
+                            detail=f"diff={md:+.3f} lo={lo:+.3f}")]
+
+probe = MyProbe()
+_, verdict = probe.falsify()     # FULL := B0 must emit [KILL] — else inadmissible
+result = probe.run(out_dir=".")  # binding ACCEPT / REJECT / VOID. No retune.
+```
+
+```bash
+kaos eval probe falsify --probe my.bench:MyProbe          # prove the harness can kill
+kaos eval probe run     --probe my.bench:MyProbe --out-dir out/   # exits ≠0 on REJECT/VOID → CI-gate it
+kaos eval probe verify  --probe my.bench:MyProbe --results out/results.json
+
+kaos experiment list --verdict-prefix REJECT              # what have we tried? (journaled w/ git sha + lock hash)
+kaos experiment compare 41 42                             # what changed since the last run?
+
+kaos doctor proposer                                      # smoke every provider: ok/stalled/wall-timeout
+```
+
+Runnable end-to-end example: [`examples/falsifiable_probe.py`](examples/falsifiable_probe.py). The story: [the kill-switch primitive →](https://canivel.github.io/kaos/blog/kaos-v0.9.0.html)
+
+---
+
+## Run agents
+
+**CLI:**
+```bash
+kaos run "refactor auth.py" -n auth-agent         # single agent
+kaos run "..." -n engine --ask                    # intake step first: analyze
+                                                  # the task, ask only the
+                                                  # clarifying questions the
+                                                  # builder genuinely needs
+                                                  # (0 or more — dynamic)
+kaos run "..." -n engine --ask --intake-only      # preview questions as JSON
+kaos parallel \
+  -t security "find vulnerabilities" \
+  -t tests    "write unit tests" \
+  -t docs     "update API docs"                   # parallel agents
+```
+
+`--ask` routes the task through the intake agent before any build agent is spawned. A fully-specified task returns `[]` (no questions, agent starts immediately); an under-specified one returns as many clarifying questions as the task actually warrants — there is no fixed count.
+
+**Python:**
+```python
+from kaos import Kaos
+from kaos.ccr import ClaudeCodeRunner
+from kaos.router import GEPARouter
+
+db     = Kaos("project.db")
+ccr    = ClaudeCodeRunner(db, GEPARouter.from_config("kaos.yaml"))
+
+results = asyncio.run(ccr.run_parallel([
+    {"name": "security", "prompt": "Find vulnerabilities in auth.py"},
+    {"name": "tests",    "prompt": "Write unit tests for auth.py"},
+]))
+```
+
+---
+
+## Inspect & debug
+
+```bash
+kaos ls                            # list all agents + status
+kaos status <id>                   # detailed agent status (pid, heartbeat, config)
+kaos logs <id>                     # conversation + event log
+kaos read <id> /path/to/file       # read a file from the agent's VFS
+kaos search "TODO"                 # full-text search across every agent's VFS
+kaos index <id>                    # build /index.md of the agent's VFS
+kaos checkpoint <id> -l "safe"     # snapshot files + KV state
+kaos checkpoints <id>              # list all checkpoints
+kaos restore <id> --checkpoint X   # roll back to that snapshot
+kaos diff <id> --from X --to Y     # what changed between checkpoints?
+kaos kill <id>                     # terminate a running agent
+kaos query "SELECT * FROM events"  # raw SQL on everything
+kaos export <id> --output a.db     # export one agent to a standalone .db
+kaos import a.db --merge           # import agents back from a standalone .db
+kaos ui                            # open the web dashboard
+```
+
+---
+
+## Dashboard
+
+```bash
+kaos ui        # web dashboard — Gantt timeline, live events, agent inspector
+kaos dashboard # terminal TUI
+kaos demo      # demo data + open dashboard
+```
+
+The web dashboard shows each execution wave as a **Gantt timeline**: one horizontal bar per agent, colored by status (green = done, purple = running, red = failed). Click any bar to inspect tool calls, files, checkpoints, and events.
+
+---
+
+## Model providers
+
+KAOS routes every inference call through the GEPA router — **G**eneralized **E**xecution **P**lanning &amp; **A**llocation: a task-complexity classifier plus a routing table, with retry/fallback and wall-clock ceilings. (Naming note: it is *not* the GEPA genetic-Pareto prompt-evolution algorithm — no prompt optimization happens in the router.) It supports **5 providers** (raw `httpx` under the hood — no OpenAI SDK, no LiteLLM, no vendor lock-in):
+
+| Provider | How it's called | API key | Typical use |
+|---|---|---|---|
+| `claude_code` | Claude Code CLI subprocess (uses your existing CLI login) | none | default when you already have Claude Code installed |
+| `agent_sdk` | Claude Agent SDK in-process (no subprocess, no rate-limit contention) | none | recommended when you run alongside an active Claude Code session |
+| `anthropic` | Anthropic `/v1/messages` via httpx | `ANTHROPIC_API_KEY` | production, explicit billing |
+| `openai` | OpenAI / Azure / any OpenAI-compatible endpoint | `OPENAI_API_KEY` | GPT, local vLLM served as OpenAI-compatible |
+| `local` | vLLM / ollama / llama.cpp `/v1/chat/completions` | none | fully local, zero cost per call |
+
+Any mix of providers can coexist in a single `kaos.yaml` — route trivial/moderate work to a local model and send critical/complex tasks to a frontier model. `kaos setup` walks you through configuration.
+
+---
+
+## Cross-agent knowledge — Skills, Memory, Shared Log
+
+Three independent stores that agents use to talk to each other across sessions, projects, and databases. All three are FTS5-indexed and queryable with plain CLI:
+
+```bash
+# Skill Library — reusable parameterized templates
+kaos skills save --name fastapi-gateway \
+  --description "FastAPI + idempotent payments + webhook DLQ" \
+  --template "Build a FastAPI gateway for {project} with ..."
+kaos skills search "payments fastapi"
+kaos skills apply 1 --param project=checkout
+
+# Cross-Agent Memory — searchable results, insights, errors
+kaos memory write <agent_id> "Feast cold-start: inject p50 risk as prior" \
+  --type result --key feast-cold-start-fix
+kaos memory search "cold start"
+
+# Shared Log — LogAct intent / vote / decide coordination
+kaos log tail --n 20             # last 20 entries
+kaos log ls                      # counts by type (intent/vote/decide/commit/…)
+```
+
+All three are exposed as MCP tools too (see below).
+
+---
+
+## Neuroplasticity — the library self-organizes as it's used
+
+Two timescales, deliberately separated (like synapses vs. sleep):
+
+- **Inline (µs-cheap):** every skill application, memory retrieval, and
+  outcome writes its raw telemetry row (`skill_uses`, `memory_hits`) in the
+  caller's own transaction. The inline hooks themselves are intentionally
+  no-ops on the hot path — no graph updates in the request path, ever.
+- **Batch (at completion):** when an agent completes (and every N
+  completions, default 25), the Hebbian association graph is rebuilt
+  set-based and a consolidation pass generates promote/prune/merge
+  **proposals**. Automatic consolidation is proposal-only by design —
+  applying structural changes is always an explicit
+  `kaos dream consolidate --apply`.
+
+No daemon to start. No command to remember. Telemetry just accumulates;
+structure changes only at the batch boundary, and destructive changes only
+when you say so.
+
+```bash
+kaos dream run [--dry-run|--apply]                  # manual full cycle (7 phases)
+kaos dream runs                                      # list past dream runs
+kaos dream show <run_id>                             # re-print a past digest
+kaos dream related <skill|memory> <name>             # Hebbian: what co-fires with this?
+kaos dream consolidate [--dry-run|--apply]           # promote/prune/merge proposals
+kaos dream failures [--min-count N]                  # recurring fingerprints + category
+kaos dream diagnose <fp_id>                          # show diagnosis
+kaos dream diagnose <fp_id> --category infra \
+  --root-cause "..." --action "..."                  # manual override
+kaos dream fix-outcome <fp_id> --succeeded           # record whether a fix worked
+kaos dream systemic [--ack N|--resolve N] [--by X]   # systemic alerts lifecycle
+```
+
+What gets learned automatically:
+
+| Event | What plasticity does |
+|---|---|
+| `SkillStore.record_outcome(...)` | Hebbian association: this skill co-fires with every skill the same agent has already used. Success = weight +1.0, failure = +0.3. |
+| `MemoryStore.search(..., record_hits=True)` | Co-retrieved memories get associated; cross-modal skill↔memory edges form if the agent has used skills. |
+| `Kaos.complete/fail/kill(agent_id)` | Episode signals written inline. On failure: normalised error fingerprint captured automatically. Threshold crossed → consolidation runs in-process. |
+
+What consolidation does (in `--apply` mode):
+
+- **Promote**: memory retrieved 5+ times → becomes a skill template
+- **Prune**: skills with <40% success after 6+ uses → soft-deprecate (recoverable)
+- **Merge**: near-duplicate skills (Jaccard ≥ 0.65 on descriptions) → proposal only; merges are never auto-applied
+- **Policies**: shared-log intents approved ≥ 90% across 3+ cycles → promoted to the `policies` table
+
+What agents see at runtime:
+
+```python
+# Weighted search — bm25 × Wilson(success) × recency decay
+skills.search("payments fastapi", rank="weighted")
+memory.search("retry", rank="weighted", record_hits=True,
+              requesting_agent_id=agent_id)
+
+# Known-failure shortcut — skip the LLM on a recurring error
+from kaos.dream.phases.failures import lookup
+prior = lookup(conn, "http_get", error_msg)
+if prior and prior["fix_summary"]:
+    apply_known_fix(prior)
+```
+
+Escape hatches: `KAOS_DREAM_AUTO=0` disables inline hooks entirely,
+`KAOS_DREAM_THRESHOLD=<N>` tunes consolidation cadence.
+
+### Measured gain — scenario-conditional
+
+Plasticity pays off when your workload has **disambiguation signal** —
+multiple plausible skills per query, and outcome feedback over time
+that distinguishes them. Our
+[`benchmarks/demo_neuroplasticity_bench/`](benchmarks/demo_neuroplasticity_bench/) measures
+this precisely: 10 ambiguous twin-pair queries, 20 skills, 80 training
+episodes, epsilon-greedy pick (ε=0.25, seed=42), zero planted outcomes:
+
+| | bm25 baseline | weighted (plasticity) | gain |
+|---|---:|---:|---:|
+| **Top-1 accuracy on ambiguous retrieval** | 80.0% | 90.0% | **+10.0 pp (+12.5%)** |
+
+**Gains are workload-specific.** On a single-session, no-feedback
+workload (agent spawns, runs once, no `record_outcome` calls) the gain
+is zero — plasticity needs signal to learn from. Multi-session
+engagements with consistent outcome feedback will see compounding gains.
+
+Run it yourself: `uv run python benchmarks/demo_neuroplasticity_bench/run.py`.
+Raw numbers: [`results.json`](benchmarks/demo_neuroplasticity_bench/results.json).
+
+**Small-n honesty:** at 10 queries, +10 pp is literally one flipped query.
+The non-adversarial companion bench
+([`benchmarks/demo_realistic_retrieval_bench/`](benchmarks/demo_realistic_retrieval_bench/):
+15 natural-language queries, 40 skills, 120 episodes) measures
+**73.3% → 86.7% (+13.3 pp)** — two flipped queries. Both are committed,
+reproducible, and small; a larger-n rerun under the v0.10
+cluster-bootstrap protocol is on the backlog. We'd rather disclose n
+than headline a point estimate.
+
+### Measured overhead
+
+Real benchmark in [`benchmarks/demo_plasticity_overhead_bench/`](benchmarks/demo_plasticity_overhead_bench/)
+measures the per-op cost of the inline hooks. The fast-path redesign
+(v0.8.1) moved association building from per-event to batched-at-agent-
+completion, dropping the hot-path cost to near-zero. See the
+[results](benchmarks/demo_plasticity_overhead_bench/results.md) — the measured
+overhead is dominated by SQLite's intrinsic `COMMIT` fsync latency
+(~30 ms on Windows), not the plasticity writes themselves. On Linux
+with faster fsync or on an in-memory DB the absolute numbers are much
+lower.
+
+Set `KAOS_DREAM_AUTO=0` to disable all hooks if the hot path matters
+more than learning.
+
+### Failure intelligence
+
+[`benchmarks/demo_failure_intelligence_bench/`](benchmarks/demo_failure_intelligence_bench/)
+validates that KAOS categorises errors into `transient / config / code /
+infra / unknown` via built-in heuristic diagnosers (no LLM calls), tracks
+fix outcomes and auto-downgrades broken "fixes" after 5+ failed attempts,
+and raises systemic alerts when multiple agents hit the same fingerprint
+in a short window. 60/60 validations passing.
+
+See [`docs/neuroplasticity.md`](docs/neuroplasticity.md) for the full
+mechanism and [`benchmarks/demo_arc_agi3_test/`](benchmarks/demo_arc_agi3_test/) for a 76-check
+validation against a simulated ARC-AGI-3 meta-harness workload.
+
+---
+
+## Attraktor — the shared brain (dev preview)
+
+Your agents learn lessons the hard way — real tasks, real failures, real
+compute. [Attraktor](https://dev.attraktor.dev) is the registry those lessons
+flow into, and back out of: every entry was **proven against real outcomes**
+before admission, every rejection is kept with its reasoning, and every KAOS
+workspace pulls what's proven — matched to the task in front of it.
+
+```yaml
+# kaos.yaml
+bench:
+  enabled: true
+  endpoint: https://dev.attraktor.dev
+  workspace: your-workspace-slug      # created at sign-up
+```
+
+```bash
+export KAOS_BENCH_TOKEN=atk_…   # generated once in the dashboard — env only, never in config
+kaos bench push                 # publish what this workspace proved
+kaos bench pull "task text"     # see what an agent starting this task would receive
+kaos bench status               # the brain, at a glance
+kaos bench probe                # the pre-registered kill-gate probe's progress
+```
+
+How it stays honest, end to end:
+
+- **Push** sends the exact canonical bytes minted locally; the server re-derives
+  every record's content id and refuses mismatches. Individual-tier pushes go
+  through admission to the public registry (R9: nothing writes public directly).
+- **Pull** fetches matched records, **re-verifies each content hash client-side**,
+  caches them into the local bench, and serves them through the same audited
+  pipeline as local learnings — trust level and validated scope disclosed on
+  every injection. `REJECT`/`VOID` records are browsable data, never served.
+- **The loop itself is unproven until its own probe says otherwise**: a
+  hash-locked binding probe (G1 brain-on > brain-off, G2 pull p95 < 150 ms,
+  G3 match-rate ≥ 20%, G4 scrambled-placebo falsification) accumulates organic
+  episodes under `arms_mode: probe`. Production defaults are gated on its ACCEPT.
+
+Real output from a fresh, empty workspace (nothing but a `kaos.yaml` and a token):
+
+```
+$ kaos bench pull "agent episode failed - localize the decisive failure step"
+
+graphdiff-localizer-probe-v1 · T1 · partial
+  Contrastive failed-vs-success trajectory diffing locates decisive failure
+  steps far better than single-trajectory heuristics - but only where
+  trajectories share vocabulary. Before building any trajectory-graph
+  mechanism, measure your workload's node-reuse rate first.
+```
+
+That lesson cost another workspace a full probe run. This one got it in one
+command, cryptographically verified.
+
+---
+
+## Meta-Harness — automated harness optimization
+
+Run an evolutionary search over agent harnesses themselves. The proposer reads execution traces from previous iterations, proposes new harness candidates, and the evaluator scores them on a benchmark. Pareto frontier, stagnation detection (CORAL), skill distillation.
+
+```bash
+kaos mh search --benchmark text_classify --iterations 20 --candidates 4
+kaos mh search --benchmark arc_agi3 --background       # detached worker
+kaos mh frontier <search_agent_id>                     # Pareto frontier
+kaos mh inspect <search_agent_id> <harness_id>         # source + scores + trace
+kaos mh status <search_agent_id>                       # iterations, frontier size
+kaos mh resume <search_agent_id> --benchmark text_classify
+kaos mh knowledge                                      # skills distilled across all searches
+```
+
+Built-in benchmarks: `text_classify` (DBpedia), `math_rag`, `agentic_coding`, `arc_agi3` (ARC-AGI-3), plus an extensible framework for your own.
+
+---
+
+## MCP server
+
+```bash
+kaos serve                         # stdio (default — for Claude Code / Cursor)
+kaos serve --transport sse --port 8788   # SSE over HTTP
+```
+
+Exposes **58 tools** to any MCP client: 18 agent lifecycle/VFS/checkpoint/query/parallel, 5 skill, 3 cross-agent memory, 5 shared-log, 9 meta-harness (including CORAL co-evolution and skill distillation), and **8 neuroplasticity** (`dream_run`, `dream_related`, `failure_lookup`, `failure_list`, `dream_consolidate`, `failure_diagnose`, `failure_fix_outcome`, `systemic_alerts`). See [`docs/mcp-integration.md`](docs/mcp-integration.md).
+
+---
+
+## Python library
+
+```python
+from kaos import Kaos
+from kaos.memory import MemoryStore
+from kaos.skills import SkillStore
+from kaos.shared_log import SharedLog
+
+db = Kaos("project.db")
+
+# Each agent has its own isolated filesystem
+a = db.spawn("refactorer")
+b = db.spawn("test-writer")
+db.write(a, "/src/auth.py", b"# refactored")
+db.write(b, "/src/auth.py", b"# tests")  # no conflict — separate VFS
+
+# Checkpoint / restore
+cp = db.checkpoint(a, label="before-migration")
+db.restore(a, cp)  # roll back just this agent
+
+# Cross-agent memory, skills, coordination — all backed by FTS5
+mem = MemoryStore(db.conn)
+mem.write(a, "Found idempotency bug in retry path", type="insight")
+mem.search("idempotency")
+
+sk = SkillStore(db.conn)
+sk.save("security_review", "Check for injection attacks",
+        template="Review {target} for SQL injection and XSS...")
+sk.search("security")
+
+log = SharedLog(db.conn)
+intent_id = log.intent(a, "refactor auth module")
+log.vote(b, intent_id, approve=True, reason="plan looks safe")
+log.decide(intent_id, a)
+
+# Full SQL over everything
+db.query("SELECT name, status FROM agents")
+db.query("SELECT SUM(token_count) FROM tool_calls WHERE agent_id = ?", [a])
+```
+
+Running agents programmatically (async via the CCR runner):
+
+```python
+import asyncio
+from kaos.ccr.runner import ClaudeCodeRunner
+from kaos.router.gepa import GEPARouter
+
+router = GEPARouter.from_config("kaos.yaml")
+ccr    = ClaudeCodeRunner(db, router)
+
+# Single agent
+result = asyncio.run(ccr.run_agent(a, "Refactor auth.py for testability"))
+
+# N agents in parallel, each with isolated VFS
+results = asyncio.run(ccr.run_parallel([
+    {"name": "security", "prompt": "Find vulnerabilities in auth.py"},
+    {"name": "tests",    "prompt": "Write unit tests for auth.py"},
+    {"name": "docs",     "prompt": "Update API docs"},
+]))
+```
+
+---
+
+## Documentation
+
+| | |
+|---|---|
+| [Philosophy](docs/philosophy.md) | Why KAOS synthesizes research, integration criteria, what's next |
+| [Dashboard](docs/dashboard.md) | Gantt timeline, agent inspector, live events |
+| [Use Cases](docs/use-cases.md) | Code review swarm, parallel refactor, incident response, ML research, and more |
+| [Checkpoints](docs/checkpoints.md) | Snapshot, restore, diff — with examples |
+| [CLI Reference](docs/cli-reference.md) | Every command and flag — including `kaos eval`, `kaos experiment`, `kaos doctor` (v0.9) |
+| [Falsifiable Eval](docs/falsifiable-eval.md) | The kill-switch primitive: probe lifecycle, lock discipline, stats, CI gating, the ledger |
+| [MCP Integration](docs/mcp-integration.md) | Claude Code / Cursor setup, all 58 tools |
+| [Neuroplasticity](docs/neuroplasticity.md) | Inline plasticity, failure intelligence, measured gains + overhead |
+| [Meta-Harness](docs/meta-harness.md) | Automated harness optimization, CORAL co-evolution |
+| [Cross-Agent Memory](docs/memory.md) | FTS5 searchable memory across agents and sessions |
+| [Skill Library](docs/skills.md) | FTS5 cross-agent procedural skill templates with usage tracking |
+| [Shared Log](docs/shared-log.md) | LogAct intent/vote/decide coordination protocol |
+| [Architecture](docs/architecture.md) | Internals, subsystem design |
+| [Schema](docs/schema.md) | All 26 SQLite tables + 2 FTS5 indexes (schema v9) |
+| [Deployment](docs/deployment.md) | vLLM, production config |
+
+Full docs index → [`docs/`](docs/)
+
+---
+
+## Examples
+
+See [`examples/`](examples/) for:
+- `falsifiable_probe.py` — the v0.9 discipline end-to-end: lock → falsify → run → verdict → journal
+- `code_review_swarm.py` — 4 agents review code in parallel
+- `parallel_refactor.py` — implement + test + document simultaneously
+- `self_healing_agent.py` — auto-restore on failure
+- `autonomous_research_lab.py` — N hypothesis agents, SQL result comparison
+- `meta_harness_*.py` — automated prompt/strategy optimization
+- `memory_search.py` — cross-agent FTS5 memory write and search
+- `shared_log_coordination.py` — LogAct 4-stage coordination walkthrough
+- `safety_voting.py` — human-in-the-loop safety gate with voting
+
+---
+
+## How agents are isolated
+
+Each agent's files, state, tool calls, and events are stored in separate rows scoped by `agent_id`. There is no shared filesystem — it's enforced at the query level, not by convention. The entire runtime is one `.db` file you can copy, share, or open in any SQLite client.
+
+---
+
+## Credits
+
+KAOS builds on ideas from several open-source projects and research papers:
+
+**Cross-Agent Memory** (`kaos/memory.py`, `kaos memory` CLI, `agent_memory_*` MCP tools)
+Inspired by [claude-mem](https://github.com/thedotmack/claude-mem) by Alex Newman ([@thedotmack](https://github.com/thedotmack)), AGPL-3.0.
+The core idea — agents writing compact, searchable memories for cross-session retrieval — is taken directly from claude-mem. KAOS adapts it for SQLite FTS5, multi-agent access, and typed entries.
+
+**Shared Log / LogAct Protocol** (`kaos/shared_log.py`, `kaos log` CLI, `shared_log_*` MCP tools)
+Inspired by **LogAct: Enabling Agentic Reliability via Shared Logs**
+Balakrishnan, Shi, Lu, Goel, Baral, Lyu, Dredze (2026), Meta. [arXiv:2604.07988](https://arxiv.org/abs/2604.07988)
+The intent/vote/decision 4-stage loop and append-only log design are taken directly from LogAct. KAOS adapts it for SQLite WAL mode, adds `policy` and `mail` entry types, and integrates agent_id as a first-class citizen.
+
+**CORAL** (stagnation detection, skill distillation, co-evolution)
+Meta-Harness's CORAL features are independently derived from similar ideas in the evolutionary optimization literature.
+
+**Skill Library** (`kaos/skills.py`, `kaos skills` CLI, `skill_*` MCP tools)
+Informed by **Externalization in LLM Agents: A Unified Review of Memory, Skills, Protocols and Harness Engineering**
+Zhou, Chai, Chen, et al. (2026). [arXiv:2604.08224](https://arxiv.org/abs/2604.08224)
+The paper's skills axis — parameterized procedural templates that agents save, search, and apply — is the foundation for KAOS's SkillStore. KAOS adapts it for SQLite FTS5, adds usage/success tracking for reliability ranking, and integrates it alongside memory and shared log as the third externalization layer.
+
+**EvoSkills / MemPalace**
+Earlier KAOS versions integrated ideas from EvoSkills (v0.5.1) and MemPalace (v0.5.2).
+
+---
+
+## Cite
+
+Two companion preprints — **the machine** (architecture + discipline) and **the field report** (what the discipline caught):
+
+> Canivel, D. (2026). *Benchmark Gifts: Four Measurable Workload Properties That Decided Agent-Mechanism Transfer in a Local-First Harness.* Zenodo. [doi:10.5281/zenodo.21688617](https://doi.org/10.5281/zenodo.21688617)
+
+```bibtex
+@misc{canivel2026gifts,
+  author       = {Canivel, Danilo},
+  title        = {Benchmark Gifts: Four Measurable Workload Properties That Decided Agent-Mechanism Transfer in a Local-First Harness},
+  year         = {2026},
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.21688617},
+  url          = {https://doi.org/10.5281/zenodo.21688617}
+}
+```
+
+The preprint on KAOS's plasticity architecture and falsifiable-eval discipline:
+
+> Canivel, D. (2026). *Plasticity Without Parameters: Two-Timescale Usage-Statistics Consolidation in a Local-First Agent Harness.* Zenodo. [doi:10.5281/zenodo.21533588](https://doi.org/10.5281/zenodo.21533588)
+
+```bibtex
+@misc{canivel2026plasticity,
+  author       = {Canivel, Danilo},
+  title        = {Plasticity Without Parameters: Two-Timescale Usage-Statistics Consolidation in a Local-First Agent Harness},
+  year         = {2026},
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.21533588},
+  url          = {https://doi.org/10.5281/zenodo.21533588}
+}
+```
+
+---
+
+KAOS is open source, MIT licensed. Contributions welcome.

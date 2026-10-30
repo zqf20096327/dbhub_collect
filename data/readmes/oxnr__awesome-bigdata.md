@@ -227,7 +227,7 @@ You can read more about this distinction on Prof. Daniel Abadi's blog: [Distingu
 ## Graph Data Model
 
 * [Actionbase](https://github.com/kakao/actionbase) - a database for user interactions (likes, views, follows) with precomputed reads, supports HBase.
-* [AgensGraph](https://github.com/bitnine-oss/agensgraph) - transactional graph database based on PostgreSQL.
+* [AgensGraph](https://github.com/skaiworldwide-oss/agensgraph) - multi-model graph database based on PostgreSQL with SQL, openCypher and ISO GQL.
 * [ArcadeDB](https://arcadedb.com/) - multi-model database with graph, document, key-value, time-series and vector support.
 * [Apache Spark Bagel](http://spark.apache.org/docs/0.7.3/bagel-programming-guide.html) - implementation of Pregel, part of Spark.
 * [ArangoDB](https://www.arangodb.com/) - multi model distributed database.
@@ -433,6 +433,7 @@ You can read more about this distinction on Prof. Daniel Abadi's blog: [Distingu
 
 * [DataKitchen Open Source Data Observability](https://docs.datakitchen.io/observability/get-started/) - open-source data observability for monitoring data journeys, data quality, and pipeline events.
 * [DataOps TestGen](https://github.com/DataKitchen/dataops-testgen) - open-source data quality tool that profiles tables, generates tests from the profiling results, and monitors freshness, volume, and schema, with a web UI.
+* [Dex](https://github.com/exmergo/dex) - open-source agent skills for analytics engineering that profile warehouse tables read-only, flag PII and grain problems, verify joins, and detect schema, volume, and grain drift in dbt projects.
 * [Great Expectations](https://greatexpectations.io/) - open-source framework for validating, documenting, and testing data quality.
 * [OpenLineage](https://openlineage.io/) - open standard and reference implementation for collecting lineage metadata from data pipelines.
 * [Soda Core](https://docs.soda.io/soda-core/overview-main.html) - open-source Python library and CLI for data quality tests.
@@ -669,6 +670,7 @@ You can read more about this distinction on Prof. Daniel Abadi's blog: [Distingu
 ## Business Intelligence
 
 * [Beekeeper Studio](https://www.beekeeperstudio.io/) - cross-platform SQL client for querying and exploring analytical databases and warehouses like ClickHouse, BigQuery, Redshift, and DuckDB.
+* [Better Analyst](https://betteranalyst.com/) - AI data analyst that connects GA4, Sheets, SQL and BigQuery, answers questions in plain English with the SQL/Python shown, and builds dashboards and scheduled reports.
 * [BIME Analytics](https://www.bimeanalytics.com/?lang=en) - business intelligence platform in the cloud.
 * [Blazer](https://github.com/ankane/blazer) - business intelligence made simple.
 * [Chartio](https://chartio.com) - lean business intelligence platform to visualize and explore your data.

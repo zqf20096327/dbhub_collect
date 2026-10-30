@@ -99,17 +99,21 @@ graph):
 |---|---|
 | `payments-stripe` | Card payments, signed webhooks, refunds |
 | `payments-razorpay` | Cards and UPI, hosted or in-page |
+| `payments-cashfree` | UPI, cards and netbanking on Cashfree's checkout, India; rupees only, partial refunds |
 | `payments-paddle` | Merchant of record: hosted checkout, adjustments as refunds |
 | `payments-lemonsqueezy` | Merchant of record for digital goods, refunds |
 | `payments-adyen` | Payment links, HMAC-signed notifications, refunds |
 | `payments-hyperswitch` | One integration in front of many gateways |
 | `payments-creem` | Merchant of record for digital goods; refunds in full only |
 | `payments-helcim` | HelcimPay.js in-page checkout, North America |
+| `payments-clover` | Clover Hosted Checkout, United States and Canada; partial refunds |
 | `payments-revenuecat` | Web Billing purchase links; digital goods, no refund API |
 | `notify-resend` | The store's email through Resend, and the one to reach for first: an API key is the only required setting, and until a domain is verified it sends from Resend's own onboarding address |
 | `notify-sendgrid` | The store's email through SendGrid — the key from the environment or from Notifications › Setup Email, the wording from the panel |
 | `notify-twilio` | The store's SMS through Twilio — plain text, so the wording is the store's own under Notifications › Setup SMS and nothing has to be registered with a carrier first |
 | `notify-msg91` | The store's SMS through MSG91's DLT templates — the key and the template ids from the environment or from Notifications › Setup SMS |
+| `notify-whatsapp` | Order updates, cash-on-delivery confirmations (Confirm / Cancel buttons) and basket reminders on WhatsApp, through Meta's Cloud API from the store's own WhatsApp Business account — only to shoppers who opted in at checkout, in templates Meta approved, chosen under Notifications › Setup WhatsApp |
+| `telegram-alerts` | The owner told on Telegram about every new order, payment, cancellation and return, through a bot of their own — free, set up and worded under Notifications › Setup Telegram, with retries when Telegram is down |
 
 Every gateway and carrier module installs idle: `-gateways` and `-carriers` put all of them in the binary with nothing in Config, and Settings › Payment methods and Settings › Shipping providers switch each one on and take its keys. A store that prefers the environment wires the module itself with a Config.
 | `fulfill-shiprocket` | Booking shipments and waybills, India |
@@ -123,38 +127,49 @@ Every gateway and carrier module installs idle: `-gateways` and `-carriers` put 
 | `fulfill-usps` | USPS labels bought directly, served to print |
 | `fulfill-onfleet` | Dispatching your own drivers, last mile |
 | `fulfill-veeqo` | Telling Veeqo a parcel went out |
-| `invoices` | Numbered, gapless invoices on payment |
+| `invoices` | Numbered, gapless invoices on payment, and GST tax invoices for a store in India with a GSTIN |
 | `cms` | Content pages, per language |
-| `translations` | Catalogue content in the language a shopper asked for |
+| `translations` | Products, categories and collections in each of a store's languages, written on the Translations screen |
 | `identity` | Shopper accounts: sessions, saved addresses, order history, password reset, confirmed email addresses |
 | `b2b` | Companies and their buyers in roles, orders on account against a credit limit and net terms, purchase-order numbers, approval over a limit, and quotes priced for one buyer |
 | `cart-recovery` | Abandoned checkouts: records baskets left idle, sends a sequence of reminders by email with a tracked link back, and credits the order that recovers each one |
-| `import-amazon` | A product, its variations and pictures from an Amazon URL, through a real Chrome; copy rewritten by Claude |
+| `import-amazon` | A product, its variations and pictures from an Amazon URL, through a real Chrome; copy rewritten by a model, through the AI gateway where the store has switched it on |
+| `photo-products` | Draft products from a batch of the shop's own photos: Claude, through the AI gateway, sorts them into products and variants and writes each listing from what is visible; created as unpriced drafts after the shop reviews them |
+| `catalog-ai` | "Improve with AI" on a product's page: a better title, description, highlights, tags, category, SEO copy and alt text, proposed field by field through the AI gateway, with what the shop must check; nothing is saved until the shop saves the product |
+| `ads` | Ads intelligence: orders, sales, profit after product cost and ad spend by source, medium and campaign, from the attribution the storefront records on each order; spend typed in or imported from Google Ads and Meta Ads Manager, with ROAS and profit per unit of spend; a plain-words AI summary written only from the report's figures |
+| `ai-gateway` | Every model call the store makes, recorded and held to a monthly cap in the store's currency, with the owner's own provider key and a switch for each kind of data that may leave the store; idle until a key, a cap and prices are set |
 | `mcp` | The store as tools for an AI agent, with an audit trail |
 | `search-meilisearch` | A Meilisearch index kept in step with the catalogue, and the storefront's search through it |
 | `klaviyo` | Orders and abandoned carts as Klaviyo events, under the metric names its flows know |
 | `feeds` | Google Merchant Center and Meta catalogue feeds, generated from the live catalogue |
+| `google-reviews` | The store's Google rating and latest Google reviews on the storefront, read live with Google's attribution and never stored; Google Customer Reviews' survey after checkout and its store widget; and a product ratings feed of the store's own verified reviews for Merchant Center |
 | `sitemaps` | The storefront's sitemap: products, collections and content pages |
 | `navigation` | The storefront's menus — trees of links to products, collections, categories and pages — edited from the panel |
-| `reviews` | Product ratings and reviews, verified against the store's own orders, moderated from the panel |
-| `contact` | The storefront's contact form and the inbox behind it |
+| `reviews` | Product ratings and reviews, verified against the store's own orders, moderated from the panel; with the AI gateway, a summary of what shoppers praise and complain about in a product's reviews, each theme citing its reviews |
+| `contact` | The storefront's contact form and product enquiries, and the inbox behind both, where an operator replies by email from the panel |
 | `newsletter` | The storefront's signup box, its list, and its unsubscribe link |
 | `faq` | The questions a shop is asked often, grouped and ordered by hand, served at `/x/faq` |
 | `wishlist` | Shoppers save products; the panel ranks what is wanted most and what of it is out of stock |
+| `customizer` | A shopper designs their own print on a product (a phone case with their photo, words, shapes and stickers) and buys it as a line of its own; the order carries the print file and the photos. Off until switched on; see [`docs/customizer.md`](docs/customizer.md) |
+| `showcases` | The store's own YouTube or Facebook videos beside the products they show, with the product being shown now and honest live labels; nothing is uploaded, served at `/x/showcases` |
+| `banners` | Pictures on the storefront's pages: slides across the top and grids of tiles under a heading, each with a phone crop and a link, served at `/x/banners` |
+| `layouts` | The storefront's home page, product page and collection page arranged from sections — hero, product grids, image and text, reviews — in any order, around each page's fixed core, drafted, previewed and published now or at a set time without a deployment, plus the header's announcement and menu and the footer's columns, words and social links, served at `/x/layouts/{home,product,collection,header,footer}` |
 
 A module that ships an admin surface also ships its panel screen: install
 `cms`, `invoices`, `identity` or `mcp` and the screen appears in the
 navigation; leave it out and it does not.
 
 Cash on delivery and manual fulfillment are built in, because they need no
-third party — a store can sell and ship before it has integrated anything.
+third party — a store can sell and ship before it has integrated anything. A
+store that does not take cash at the door switches cash on delivery off under
+Settings › Payment methods.
 
-**Many stores from one install.** `gocommerce platform` serves any number of
-stores from one process and one PostgreSQL database — a supplier's dealers, an
-agency's clients — each an ordinary store in a schema of its own, with its own
-operators and admin panel, reached at `<slug>.<base domain>` or its own domain.
-A platform API, with credentials of its own, creates, suspends and deletes them
-([platform mode](skills/infrastructure.md#running-many-stores-platform-mode)).
+**Many stores from one install.** `gocommerce serve` serves every store the
+database holds — a supplier's dealers, an agency's clients — from one set of
+tables. Every row carries its store, and PostgreSQL row-level security keeps
+one store's rows out of another's even when a query forgets to filter. A
+person signs in once and works in any store they belong to, with a role in
+each ([many stores](skills/infrastructure.md#running-many-stores)).
 
 ## API
 
@@ -207,9 +222,28 @@ storefront's service surface onto these routes and the storefront modules —
 catalogue, bag, checkout, orders, accounts, addresses, wishlists, reviews, pages,
 menus and FAQ — and says plainly where the two do not meet yet.
 
+[`examples/kitcommerce-stack`](examples/kitcommerce-stack) runs the two together
+on one machine, with a smoke test that places a cash-on-delivery order through
+the storefront's routes and finds it in the admin API.
+
+## Deploy the whole platform
+
+One file, one command: [`docker-compose.yml`](docker-compose.yml) runs the
+engine with its admin panel, PostgreSQL, Meilisearch, the Svelte Commerce
+storefront and Caddy with automatic HTTPS.
+
+```sh
+cp .env.example .env   # fill in the passwords, ADMIN_DOMAIN and GOCOMMERCE_BASE_DOMAIN
+docker compose up -d
+```
+
+Point `ADMIN_DOMAIN` and `*.GOCOMMERCE_BASE_DOMAIN` at the server first. DNS
+records, first sign-in, a shop's own domain and running behind Dokploy are in
+[docs/operations.md](docs/operations.md#deploy-the-whole-platform).
+
 ## Quick start
 
-Requires Go 1.23+ and PostgreSQL 16+.
+Requires Go 1.27+ and PostgreSQL 16+.
 
 ```sh
 createdb mystore
@@ -238,6 +272,36 @@ curl -X POST localhost:8080/api/checkout/cod \
   -d '{"cart_id":"'$CART'","email":"buyer@example.com",
        "address":{"line1":"1 High St","city":"Town","postal_code":"12345","country":"US"}}'
 ```
+
+### More than one store
+
+The same process serves every store in the database (D83). Open another with
+
+```sh
+gocommerce store create corner Corner Shop
+gocommerce -store corner superuser create owner@corner.example a-long-password owner
+```
+
+and name it on requests with `x-litekart-store: <id>` (or `X-Store: corner`,
+`?store=corner`, or its host, `corner.<-base-domain>`). A person signs in once
+and works in each store they belong to. In the panel, the account menu at the
+foot of the sidebar lists their stores and switches between them, staying on
+the same screen; somebody in several stores picks one after signing in, and
+can open a new store from there. A store kept to show people can be made a
+demo on its own with `gocommerce store demo <slug> on`: its admin screens mask
+emails and phone numbers and its team, roles and API keys are frozen, while
+the stores beside it stay live (`off` turns it back). A store is on the free plan
+until `gocommerce store plan <slug> pro` moves it; Pro is what lets its
+customers sign in with a phone outside India (D119). `GET /api/stores/my`, `POST
+/api/stores/switch` and `POST /api/stores/create` do the same for a script.
+
+Stores are kept apart by PostgreSQL row-level security, so **the engine must
+not connect as a superuser**: `gocommerce doctor` fails if it does, and
+`serve` refuses to start with more than one store. `docker-compose.yml`
+creates an ordinary login, `gocommerce_app`, on a fresh volume. For an
+existing database, run `scripts/engine-login.sql` once as the superuser and
+point `DATABASE_URL` at `gocommerce_app`. Upgrading a single-store install
+needs nothing else: it becomes store #1 with every id unchanged.
 
 ## The admin panel
 

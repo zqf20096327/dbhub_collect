@@ -206,7 +206,7 @@ go mod download
 make run
 
 # Or directly with Go
-go run cmd/main.go
+go run ./cmd
 ```
 
 The backend server will start on `http://localhost:8080`. Schema auto-migration runs at startup.
@@ -300,10 +300,19 @@ GopherCRM includes a powerful configuration management system that allows admini
 - **Real-Time Updates**: Changes take effect immediately
 
 #### Lead Conversion Settings
-The configuration system includes specific settings for lead conversion:
+The configuration system includes specific settings for lead conversion, enforced by the server on
+every `POST /leads/:id/convert` before anything is written (a refusal is 400 `VALIDATION_ERROR`):
 - `leads.conversion.allowed_statuses`: Which lead statuses allow conversion to customer
-- `leads.conversion.require_notes`: Whether notes are required during conversion
-- `leads.conversion.auto_assign_owner`: Auto-assign lead owner as customer owner
+  (any of `new`, `contacted`, `qualified`, `unqualified`; seeded as `qualified` and `contacted`)
+- `leads.conversion.require_notes`: Whether non-blank conversion notes are required
+- `leads.conversion.auto_assign_owner`: Make the lead's owner the customer's assigned user
+
+If the `leads.conversion.allowed_statuses` row is missing (seeding never ran), conversion falls back
+to `qualified` only, the entry's default value, rather than the seeded `qualified, contacted`; the
+next start re-seeds the row. A lead reaches `converted` only through the convert endpoint: lead
+create/update and the bulk status endpoint refuse it. The lead's company link is carried over to
+the customer as well. `GET /configurations/ui` exposes
+the three settings read-only, so the conversion dialog can follow them.
 
 ### Answer Engine Optimization (AEO)
 
@@ -411,9 +420,16 @@ It spends real credit, so it is never part of CI. Test cases: `docs/testing/11-a
 Deleting a **user, customer or lead** is an erasure under GDPR Art. 17, not a recoverable soft
 delete. Every personal field on the row is overwritten in place — the email address is replaced
 with a random, non-routable placeholder in the reserved `.invalid` domain — and the row is only then
-soft-deleted, all in a single transaction. API keys and refresh tokens belonging to the account are
-purged with it. The row itself is deliberately kept so foreign keys from tickets and tasks still
-resolve: business records survive, the person does not.
+soft-deleted, all in a single transaction. API keys, refresh tokens and password-reset tokens
+belonging to the account are purged with it. The row itself is deliberately kept so foreign keys
+from tickets and tasks still resolve: business records survive, the person does not.
+
+Erasure follows the person, not the table: a lead, the customer it was converted into and that
+customer's own customer-role login are erased together whichever of them you delete. Staff
+accounts are never erased that way, and only an admin may delete a converted lead. Erasures made
+before this rule existed are not repaired automatically: `docs/DEVELOPMENT.md` lists the queries
+that find the ones with a live row left, and the supervised way to finish them; graphs whose rows
+are all soft-deleted have no supported path yet.
 
 Two consequences:
 
@@ -511,7 +527,11 @@ returns the unified envelope `{ success, data, error, meta }`.
   the presented token is revoked, replaying it returns `401`. The revocation is a single-use claim
   inside the transaction that stores the successor and signs the access token, so a presented
   token yields at most one successor even under concurrent requests, and a failed rotation leaves
-  it usable instead of stranding the session.
+  it usable instead of stranding the session. An invalid token is the generic `401`; an
+  operational failure (database, signing) is a retryable `503 SESSION_REFRESH_UNAVAILABLE`, and a
+  failure before the commit leaves the token usable (a failed COMMIT is ambiguous). The web client shares one refresh among all requests that hit a `401`,
+  settles every one of them (success, failure, or a 15 s timeout), replays each request at most
+  once and only under the session it was sent with.
 - `POST /api/v1/auth/password-reset` - Request a password-reset email. Always answers `200`
   whether or not the account exists (anti-enumeration). Delivery goes through SMTP when
   `SMTP_HOST` is configured, otherwise a logging fallback.
@@ -525,8 +545,15 @@ authentication and live on the moderate tier:
 
 - `POST /api/v1/auth/logout` - Revoke the caller's refresh tokens (all of them, or just the one in
   the optional `{refresh_token}` body). The JWT itself stays valid until expiry.
-- `POST /api/v1/auth/change-password` - Verify the current password, set a new one (same
-  complexity policy), and revoke all refresh tokens.
+- `POST /api/v1/auth/change-password` - Verify the current password and set a new one (same
+  complexity policy) in one transaction with the revocation of the user's refresh tokens; a
+  failure before the commit leaves the password and every session unchanged (a failed COMMIT is
+  ambiguous and answered 500). A bearer session that sends its
+  current `refresh_token` is renewed: the response carries a replacement `token`,
+  `refresh_token` and `user`, and every other session loses renewal. A `refresh_token` that is not
+  a live session of the caller is `409 SESSION_STALE` with nothing changed. Without one, and
+  always for API-key requests, every refresh token is revoked and no credentials are returned.
+  Access tokens already issued elsewhere stay valid until they expire.
 
 ### Users
 - `GET /api/v1/users` - List all users *(admin)*
@@ -535,14 +562,14 @@ authentication and live on the moderate tier:
 - `PUT /api/v1/users/me` - Update current user profile
 - `GET /api/v1/users/:id` - Get specific user *(self or admin)*
 - `PUT /api/v1/users/:id` - Update user *(self or admin; only admins may change `role` or `is_active`)*
-- `DELETE /api/v1/users/:id` - **Erase** user *(admin; cannot delete yourself)*
+- `DELETE /api/v1/users/:id` - **Erase** user *(admin; cannot delete yourself; a customer-role user takes its customer records along)*
 
 ### Leads *(entire group requires admin or sales)*
 - `GET /api/v1/leads` - List leads (`page`, `limit`, `search`, `sort_by`, `sort_order`, `classification`)
 - `POST /api/v1/leads` - Create new lead
 - `GET /api/v1/leads/:id` - Get specific lead
 - `PUT /api/v1/leads/:id` - Update lead
-- `DELETE /api/v1/leads/:id` - **Erase** lead (cascades to the customer it was converted into)
+- `DELETE /api/v1/leads/:id` - **Erase** lead (cascades to the customer it was converted into and its login; converted leads admin-only)
 - `POST /api/v1/leads/:id/convert` - Convert lead to customer
 - `POST /api/v1/leads/bulk/status` - Set the status of up to 100 leads at once, all-or-nothing
   *(sales may only touch leads they own)*
@@ -552,7 +579,7 @@ authentication and live on the moderate tier:
 - `POST /api/v1/customers` - Create new customer *(admin, sales)*
 - `GET /api/v1/customers/:id` - Get specific customer *(admin, sales, support)*
 - `PUT /api/v1/customers/:id` - Update customer *(admin, sales)*
-- `DELETE /api/v1/customers/:id` - **Erase** customer *(admin; cascades to the lead it came from)*
+- `DELETE /api/v1/customers/:id` - **Erase** customer *(admin; cascades to the lead it came from and its customer-role login)*
 - `GET /api/v1/customers/:id/tickets` - List that customer's tickets *(a customer-role user may only
   read their own)*
 - `GET /api/v1/customers/export` - Download all matching customers as CSV *(admin only — mass PII
@@ -862,9 +889,14 @@ gophercrm/
 
 ## Known Limitations
 
-- **Access tokens cannot be revoked before expiry.** Logout and the refresh-token rotation revoke
-  the *refresh* tokens, but an already-issued JWT stays valid until `JWT_EXPIRY_HOURS` elapses —
-  there is no token blocklist.
+- **Access tokens cannot be revoked before expiry.** Logout, password change and the
+  refresh-token rotation revoke the *refresh* tokens, but an already-issued JWT stays valid until
+  `JWT_EXPIRY_HOURS` elapses — there is no token blocklist (deactivation and erasure do reject it).
+- **Session handling has two known gaps.** Browser tabs sharing a remembered session
+  (`localStorage`) do not coordinate their refreshes, so two tabs refreshing at the same moment can
+  sign each other out (#184). A login that verified the old password a moment before a password
+  change commits can still be issued a session afterwards, and login is not yet serialised against
+  erasure under the owner lock (#183).
 - **Outbound email needs SMTP configuration.** Without `SMTP_HOST` set, every mail — the
   password-reset link (redacted), the forms mail, the quote email and the `send_email` step of an
   automation rule — goes to the application log instead of a mailbox, and the sending code cannot

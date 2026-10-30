@@ -131,36 +131,33 @@ The parser is checked against the regression tests the database runs on itself. 
 ## Compile time
 
 <span id="performance-summary-start"></span>
-The [real-world application workload](packages/bench/src/case1.ts) contains 379 statements and reusable SQL fragments. Average check time per statement, including schema and fragment checking: 6.93 ms with `tsc` and 1.92 ms with [tsrs](https://github.com/oxc-project/tsrs).
+The [real-world application workload](packages/bench/src/case1.ts) contains 379 statements and reusable SQL fragments. Average check time per statement, including schema and fragment checking: 6.18 ms with `tsc` and 1.74 ms with [tsrs](https://github.com/oxc-project/tsrs).
 
 | Application workload | `tsc` | tsrs |
 |---|---|---|
-| `case1` | 2.626 s | 0.727 s |
-| [`case1 cached`](https://typesql.karsli.net/guide/performance#type-cache) | 0.902 s | 0.238 s |
+| `case1` | 2.341 s | 0.659 s |
 <span id="performance-summary-end"></span>
 
 See [Performance](https://typesql.karsli.net/guide/performance) for how this is measured.
 
 ### Performance by release
 
-Cached and uncached tsrs check time for the [real-world application](packages/bench/src/case1.ts) by `@typesql/core` version. Lower is faster. Every refresh remeasures all releases from 0.7.1 in one CI job with the same compilers, using the median of three checks per variant.
+tsrs check time for the [real-world application](packages/bench/src/case1.ts) by `@typesql/core` version. Lower is faster. Every refresh remeasures all releases from 0.7.1 in one CI job with the same compilers, using the median of three checks per variant.
 
 <span id="performance-history-start"></span>
-Lines: 🔵 Uncached · 🟢 Cached.
 
 ```mermaid
 ---
 config:
   themeVariables:
     xyChart:
-      plotColorPalette: "#2563eb,#16a34a"
+      plotColorPalette: "#2563eb"
 ---
 xychart-beta
     title "tsrs - real-world case1"
-    x-axis "Core version" ["0.7.1", "0.7.2", "0.7.3", "0.7.4", "0.7.5", "0.7.6", "0.8.0", "0.8.1"]
-    y-axis "Check time (seconds, lower is faster)" 0 --> 2.5
-    line [2.211, 0.847, 0.86, 0.861, 0.692, 0.711, 0.702, 0.727]
-    line [0.782, 0.298, 0.3, 0.303, 0.225, 0.233, 0.229, 0.238]
+    x-axis "Core version" ["0.7.1", "0.7.2", "0.7.3", "0.7.4", "0.7.5", "0.7.6", "0.8.0", "0.8.1", "0.9.0", "0.9.1", "0.9.2", "0.10.0"]
+    y-axis "Check time (seconds, lower is faster)" 0 --> 2.4
+    line [2.159, 0.937, 0.934, 0.933, 0.793, 0.737, 0.736, 0.765, 0.747, 0.713, 0.621, 0.659]
 ```
 <span id="performance-history-end"></span>
 
@@ -168,7 +165,7 @@ xychart-beta
 
 ## Documentation
 
-The full guide is at **[typesql.karsli.net](https://typesql.karsli.net)**. It covers the SQL TypeSQL supports, parameters and fragments, writing data, performance and the type cache, and known limits.
+The full guide is at **[typesql.karsli.net](https://typesql.karsli.net)**. It covers the SQL TypeSQL supports, parameters and fragments, writing data, performance, and known limits.
 
 ## License
 

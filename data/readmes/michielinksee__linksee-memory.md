@@ -14,7 +14,7 @@
 [![glama-score](https://glama.ai/mcp/servers/michielinksee/linksee-memory/badges/score.svg)](https://glama.ai/mcp/servers/michielinksee/linksee-memory)
 
 🌐 **Landing page**: [linksee.app](https://linksee.app) (includes non-developer onboarding for Claude Desktop / Cursor / Claude Code / OpenAI Codex / Gemini CLI)
-📖 **Docs**: [docs.linksee.app](https://docs.linksee.app) — full reference: the product map & drift, install, and all 11 tools
+📖 **Docs**: [docs.linksee.app](https://docs.linksee.app) — full reference: the product map & drift, install, and every tool
 
 <!-- releases: tag-driven, published from CI via npm trusted publishing (OIDC).
      See .github/workflows/publish.yml — no token, no OTP, provenance attached automatically. -->
@@ -289,7 +289,7 @@ It's **project-scoped on purpose** — the guard enforces *this* repo's decision
 
 Most "agent memory" services (Mem0, Letta, Zep) save a flat list of facts. Then the agent looks at "edited file X 30 times" and has no idea why. And none of them notice when this week's work contradicts last week's decision. **linksee-memory keeps the WHY — and watches the drift.**
 
-It is a Model Context Protocol (MCP) server with **11 tools** that gives any AI agent structured memory + drift detection:
+It is a Model Context Protocol (MCP) server with **7 tools** (six for memory and drift, plus the optional `share_draft`) that gives any AI agent structured memory + drift detection:
 
 | | Mem0 / Letta / Zep | Claude Code auto-memory | linksee-memory |
 |---|---|---|---|
@@ -512,6 +512,13 @@ rm -rf ~/.linksee-memory   # deletes all stored memory — nothing is kept anywh
 
 Nothing ever leaves your machine, so step 3 fully erases everything Linksee stored.
 
+## What's new in v0.17
+
+| Feature | Detail |
+|---|---|
+| **`share_draft` (optional)** | When you ask to share how a SaaS / MCP / API connection got stuck and what fixed it, the agent fills fixed fields and gets back a link to a reviewed draft on KanseiLINK. **Linksee sends nothing** — you read the draft in your browser and only your click sends it. Anything that looks like a key, token, e-mail, tenant URL, IP or local path stops the link. See [Share a fix with other agents](#share-a-fix-with-other-agents-optional). |
+| **MCP SDK 1.32.2** | `@modelcontextprotocol/sdk` raised to `^1.32.2`; `pnpm audit` 46 → 0. |
+
 ## What's new in v0.9
 
 | Feature | Detail |
@@ -553,7 +560,7 @@ Nothing ever leaves your machine, so step 3 fully erases everything Linksee stor
 
 </details>
 
-## 6 Tools
+## 7 Tools: six for memory and drift, one you ask for
 
 Two pillars, one surface. **Memory** and **drift** each get the minimum; nothing else is exposed.
 Eleven tools bled model-dependent behaviour across Claude / GPT / Cursor / Codex / Gemini — six
@@ -573,6 +580,10 @@ The five earlier names — `where_am_i`, `check_decision`, `flag_proposals`, `dr
 answer if called**, so a skill or agent written against an older version keeps working.
 `LINKSEE_LEGACY_TOOLS=1` lists them.
 
+One more tool sits outside the memory/drift surface and does nothing unless the user asks:
+`share_draft` — builds a link to a reviewed draft of a fix for other agents. See
+[Share a fix with other agents](#share-a-fix-with-other-agents-optional).
+
 ### CLI utilities
 
 | Command | Purpose |
@@ -584,6 +595,7 @@ answer if called**, so a skill or agent written against an older version keeps w
 | `npx -y linksee-memory import` | Batch-import Claude Code session JSONL history |
 | `npx -y linksee-memory install-skill` | Install the Claude Code Skill that teaches the agent when to call recall/remember/read_smart |
 | `npx -y linksee-memory stats` | Summary of the local DB (entity count / layer breakdown / top entities / top edited files). Add `--json` for machine-readable output. |
+| `npx -y linksee-memory share-draft --help` | Print a link to a reviewed draft of a fix (same checks as the `share_draft` tool). Sends nothing. |
 
 ## The 6 memory layers
 
@@ -640,6 +652,7 @@ The conversation↔file linkage is the key. Every file edit captured by the Stop
 - ✅ Drift detection engine + 4 MCP drift tools — v0.8.0
 - ✅ 4-species truth map (hypothesis/constraint/commitment/source_of_truth) — v0.8.0
 - ✅ Dashboard with Decision Register visualization
+- ✅ `share_draft`: share a fix as a reviewed link, never a send — v0.17.0
 - 🔮 Obsidian plugin (read truth map in your vault)
 - 🔮 Vector search via `sqlite-vec` (already in deps, embedding backend pending)
 - 🔮 Cross-device cloud sync (Pro tier)
@@ -653,6 +666,37 @@ Claude Code ships a built-in memory feature at `~/.claude/projects/<path>/memory
 
 Use both.
 
+## Share a fix with other agents (optional)
+
+When an agent gets stuck connecting to a SaaS / MCP / API and gets it working (or doesn't), the
+user can choose to share what happened so the next agent does not repeat it.
+
+- **What happens:** the agent calls `share_draft` with fixed fields — `service`, `task`, `symptom`,
+  `tried`, `result`, optional `conditions`, `kind` (`execution` / `documentation` / `hypothesis`),
+  `runtime`. Linksee checks them and returns **a link** to KanseiLINK's draft page
+  (`https://kansei-link.com/agents/note/new.html`). The page opens with the fields filled; the user
+  reads them, and only their click on that page sends anything.
+- **What never goes in:** free text outside those fields, or anything that looks like a key, token,
+  JWT, `Bearer` value, e-mail, tenant URL (`acme.slack.com`), IP address, local path
+  (`C:\`, `/Users/`, `/home/`) or a long hex / base64 run. Any of these stops the build and names the
+  field — no link is made. The whole URL must fit in 2,000 characters; Linksee asks you to shorten
+  rather than cut. The URL passes through KanseiLINK's request logs (Cloudflare), so keep secrets out.
+- **What Linksee keeps:** one row saying a draft was made, with the time — no field text.
+- **How to turn it off:** don't use it. The tool is only called when the user asks to share;
+  nothing is sent, suggested or filled from your memory automatically.
+
+<details>
+<summary>日本語</summary>
+
+SaaS・MCP・API の接続で詰まって直った（または直らなかった）とき、利用者が望めば、次のエージェントが同じ所で詰まらないよう共有できます。
+
+- **起きること:** エージェントが決まった欄（`service`・`task`・`symptom`・`tried`・`result`・任意の `conditions`・`kind`・`runtime`）で `share_draft` を呼ぶと、Linksee は欄を検査して、KanseiLINK の下書きページへの **リンクを返すだけ** です。開くと欄が埋まった画面が出て、人が確かめてから、そのページで押した時だけ送られます。
+- **入らない物:** 決まった欄の外の自由文。キー・トークン・JWT・`Bearer` の値・メールアドレス・テナントの URL（`acme.slack.com`）・IP アドレス・PC の中の道（`C:\`・`/Users/`・`/home/`）・長い 16 進や base64 の塊。どれかがあれば、リンクは作らず、どの欄かを返します。URL 全体は 2,000 字まで。超えたら削らずに「短くしてください」と返します。URL の中身は KanseiLINK の通信の記録（Cloudflare）を通るので、秘密は入れないでください。
+- **Linksee に残る物:** 「下書きを作った」ことと時刻だけ。欄の中身は残しません。
+- **止め方:** 使わなければ何も起きません。利用者が共有したいと言った時だけ使う道具で、自動の送信・提案・記憶からの書き込みはありません。
+
+</details>
+
 ## Security & privacy
 
 linksee-memory runs locally and is built to read — and send — as little as possible.
@@ -660,6 +704,7 @@ linksee-memory runs locally and is built to read — and send — as little as p
 - **Local-first.** Memory is one SQLite file at `~/.linksee-memory/memory.db`. No account, no cloud, no API key.
 - **Telemetry is opt-in and OFF by default.** `setup` asks once; nothing is sent unless you agree there (or set `LINKSEE_TELEMETRY=basic`). Even then it never sends your source code, file contents, prompts, conversation, entity/project names, or the memory DB — only anonymous counters ([details](#telemetry-opt-in-off-by-default)).
 - **No automatic repo crawling.** linksee reads: memory you explicitly save, your `map.yaml`, the specific files a map reality-check points at, the local SQLite DB, and — when the Stop hook fires — your Claude Code session transcript (locally, to capture what happened). It does **not** crawl your repo, read `.env`/secrets/`node_modules`, or touch your home directory on its own.
+- **`share_draft` makes a link only; Linksee itself never sends it.** The user opens it and decides ([details](#share-a-fix-with-other-agents-optional)).
 - **Clean MCP transport.** The server writes only JSON-RPC to stdout; all logs go to stderr.
 - **Hooks are documented and removable.** `setup` adds a Stop hook (session capture) and an optional guard hook. They make no network calls by default, are time-bounded, fail-open (a hook error never breaks your session), and are listed under [Uninstall](#uninstall).
 - **No shell-injection surface.** Subcommands run via `spawn` with array args and `shell: false`, from a fixed allowlist; `map.yaml` is parsed with the safe `yaml` parser (no arbitrary tag execution).

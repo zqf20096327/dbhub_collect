@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.73.13-gold"></a>
+  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.74.2-gold"></a>
   <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/license-ISC-blue.svg"></a>
   <a href="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml"><img alt="Build" src="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml/badge.svg"></a>
   <img alt="Platform" src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey.svg">
@@ -27,6 +27,8 @@
 | :---: | --- | --- |
 | 🎬 | **双界面创作** | 幕前「墨纸」沉浸写作 + 幕后「机械」工作室管理，两套设计语言各得其所 |
 | 🤖 | **Agency 多代理创作** | 主创 / 管理 / 编辑审计三代理黑板并行协作，每章经 Gate v2 加权质量门（代码 0.2 / 规则 0.3 / 编辑 0.5，阈值 0.75）才交付；你的修改率作为独立信号回流 |
+| 🗂️ | **语料资产** | 新闻 / 故事 / 概念 / 灵感 / 图片 / 链接 / 笔记按故事隔离；支持导入、AI 提炼、转为角色/世界观/伏笔草稿、交给导演调度 |
+| 🎬 | **导演 Agent 与剧组对话** | 代理工作室三栏：导演统筹管理 / 编审 / 主创；子 agent 异步派发、心跳、租约、重试与审批；幕后可直接 @ 三个 agent |
 | ⚡ | **分时介入架构** | 幕前续写走三角色主创、编辑审计后台化；划词改写仍可走完整质检——解开「质量与速度不可兼得」的根本矛盾 |
 | 🧠 | **越写越懂你** | 持续学习：从创作事件观察模式 → 提炼 instinct → 确认后晋升为可复用技能；Tab 接受 / Esc 放弃还会回灌到每拍写作手法的选择（章法偏好） |
 | 🧭 | **长篇记性与计划** | 续写前按需检索前文原文（【前文相关原文】只读块）；卷/弧中层计划（卷目标 / 卷末高潮 / 须兑现伏笔）；改稿后下游章纲标记待重规划、逐条勾选才落库——长篇不崩的四件套 |
@@ -106,6 +108,14 @@ npm run build
 ## 🆕 最新动态
 
 > 完整变更日志见 [`CHANGELOG.md`](./CHANGELOG.md)。
+
+### v0.73.14 · 改名不再多出一个角色，风格弹窗有了确定按钮
+
+编辑角色（尤其是改名）后，角色列表会冒出同名角色卡，续写提示词里也可能出现两个同名人。
+原因是编辑后的知识回写每次都重新分配实体 ID，而自动识别的角色在两个表里的 ID 本来就不一致。
+本版改为按已对齐的 ID 覆盖写入，改名时同步旧称呼与场景出场名单，并在启动时自动合并历史遗留的
+同名重复角色。写作风格弹窗也重做了操作区：弹窗限高可滚动，保存/取消固定在底部，单一风格改为
+先勾选再点「确定」，右上角随时可关闭。
 
 ### v0.73.13 · 场景页的「叙事阶段」终于会动了
 

@@ -14,7 +14,7 @@
 [![Go Version](https://img.shields.io/github/go-mod/go-version/lin-snow/Ech0?logo=go&logoColor=white&labelColor=%20%235FD4EC&color=%20%2300ADD8)](./go.mod)
 [![Release Build](https://img.shields.io/github/actions/workflow/status/lin-snow/Ech0/release.yml?logo=github&logoColor=white&label=build&labelColor=%20%2332B583&color=%20%2312B76A)](https://github.com/lin-snow/Ech0/actions/workflows/release.yml)
 [![i18n](https://img.shields.io/badge/i18n-4_locales-7A5AF8?logo=googletranslate&logoColor=white&labelColor=%20%239B8AFB)](./web/src/locales/messages)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/lin-snow/Ech0)
+[![Ask DeepWiki](https://img.shields.io/badge/Ask-DeepWiki-6E56CF)](https://deepwiki.com/lin-snow/Ech0)
 [![Docker Pulls](https://img.shields.io/docker/pulls/sn0wl1n/ech0?logo=docker&logoColor=white&labelColor=%20%235CADF6&color=%20%232496ED)](https://hub.docker.com/r/sn0wl1n/ech0)
 [![Docker Image Size](https://img.shields.io/docker/image-size/sn0wl1n/ech0/latest?logo=docker&logoColor=white&labelColor=%20%235CADF6&color=%20%231570EF)](https://hub.docker.com/r/sn0wl1n/ech0)
 [![Stars](https://img.shields.io/github/stars/lin-snow/Ech0?logo=github&logoColor=white&labelColor=%20%23FDB022&color=%20%23DC6803)](https://github.com/lin-snow/Ech0/stargazers)
@@ -86,6 +86,16 @@ Then open `http://ip:6277`:
 3. By default, publishing is restricted to privileged accounts.
 
 See [Quick Deployment](./DEPLOYMENT.md#quick-deployment) for Docker Compose and Helm options.
+
+### CLI
+
+Install the `ech0` command-line client (macOS / Linux; separate from the server binary):
+
+```shell
+npm install -g @useech0/cli
+```
+
+Or download `ech0-cli-<os>-<arch>.tar.gz` from [Releases](https://github.com/lin-snow/Ech0/releases). Usage and commands live in [`apps/cli`](./apps/cli).
 
 ## Full Feature List
 

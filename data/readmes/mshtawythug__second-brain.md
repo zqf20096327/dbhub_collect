@@ -139,7 +139,7 @@ Full flags and examples for these and `brain audio` are in the [CLI reference](d
 
 ## Local web UI
 
-`brain ui` is the primary reading surface: a single-user web app over the same corpus. You can browse the tree, search with facets, read a document, and create, edit, move, or delete vault notes:
+`brain ui` is the primary reading surface: a single-user web app over the same corpus. You can browse the tree, search with facets, read a document, and create, edit, move, or delete vault notes. Its **Ingest** tab pastes text or markdown, or uploads one `.md`, `.txt`, `.pdf` or `.docx` file, into the brain as an ingested document, with live progress, cancel, and a link to the result. Its **Agent** tab asks a question as `brain ask` does, shows each step as it runs, and answers in plain text whose `[n]` citations open the cited notes. Both tabs work on a loopback, writable server only:
 
 ```bash
 brain ui                                  # binds 127.0.0.1:8765 and opens a browser
@@ -211,6 +211,7 @@ brain list --sensitivity confidential
 brain backup --label pre-upgrade    # checksummed DB + vault archive, with a manifest
 brain restore <archive> --db-only   # y/N confirmed; the pre-flight checks are not skippable
 brain usage --days 30               # searches, opens, ingests, and search latency p50/p95
+brain usage --engagement            # opens and ratings, and whether the ranking gate is met
 brain doctor                        # environment, database, embedder, daemons, mirror drift
 ```
 

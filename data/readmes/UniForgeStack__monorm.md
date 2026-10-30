@@ -2,7 +2,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/monorm)](https://pypi.org/project/monorm/)
 [![Python](https://img.shields.io/pypi/pyversions/monorm)](https://pypi.org/project/monorm/)
-[![npm](https://img.shields.io/npm/v/monorm)](https://www.npmjs.com/package/monorm)
+[![npm](https://img.shields.io/npm/v/@ufstack/monorm)](https://www.npmjs.com/package/@ufstack/monorm)
 [![Checks](https://github.com/UniForgeStack/monorm/actions/workflows/checks.yml/badge.svg)](https://github.com/UniForgeStack/monorm/actions/workflows/checks.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
@@ -13,7 +13,8 @@ Both languages get the same queries, the same migrations and generated, typed mo
 
 > **Under active development.**
 > It works today, and the author runs it in production.
-> It is version 0.1.0: install it with `pip install monorm` or `npm install monorm`.
+> It is version 0.1.1: install it with `pip install monorm` or `npm install monorm@npm:@ufstack/monorm`.
+> The npm package is `@ufstack/monorm` for now; always install it under the alias `monorm`, because the code imports `monorm`.
 > Other people should not use it in production yet, or do so at their own risk.
 > Evaluate it against your own app before you rely on it.
 
@@ -58,10 +59,62 @@ Both examples run as they are: [`examples/quickstart`](examples/quickstart) (in-
 
 ## Why
 
+### One ORM for every language
+
+You want to move your web server to another language, but you do not want to learn a new data stack.
+Many libraries already work this way: one Rust core with a package for each language, for example [OpenDAL](https://opendal.apache.org/) for file storage.
+MonOrm does the same for the database layer.
+The schema, the migrations, the query API and the behavior are the same in Python and TypeScript, because one Rust engine does the work for both.
+A team can keep one schema when it adds a second service in another language, or when it moves from one language to the other.
+
+The Rust core is not tied to Python and TypeScript.
+Any language that can call native code can get a MonOrm package with the same schema, migrations and query API.
+Contributors can add a language: see [language-bindings.md](docs/contracts/language-bindings.md).
+
+| Language | Status | Bridge |
+|---|---|---|
+| Python | Shipped (PyPI `monorm`) | PyO3 (`languages/python/native`) |
+| TypeScript (Node, Bun) | Shipped (npm `@ufstack/monorm`) | napi (`languages/js/native`) |
+| Rust | In the repo, not published (`monorm-client` has `publish = false`) | Direct use of `monorm-engine`, no bridge |
+| Go | Open for contributors | A C ABI library |
+| PHP | Open for contributors | A PHP extension (for example with the `ext-php-rs` crate) |
+| Java | Open for contributors | JNI (for example with the `jni` crate) |
+
+### All of SQL, in the ORM
+
+An ORM should not stop you from doing what SQL can do.
+With MonOrm you write less raw SQL and install fewer separate packages.
+These come with the ORM:
+
+- Queries: window functions, CTEs (also recursive), subqueries and `EXISTS`, aggregates over relations, full-text search, JSON and array columns, cursor pagination.
+- Writes: upsert (`ON CONFLICT`), bulk insert, bulk update, update and delete with `RETURNING`.
+- Schema: check and exclusion constraints, partial and non-btree indexes, triggers and SQL functions, declarative partitions, all with migrations.
+- Operations: row and advisory locks, read replicas, tenants with row-level security, N+1 detection, query hooks and OpenTelemetry.
+- [Raw SQL](docs/api/python-api.md#raw-sql-and-query-plans) is still there when you need it.
+
+Some features are PostgreSQL only; [schema.md](docs/schema/schema.md) lists the SQLite limits.
+
+### Django packages, built in
+
+In Django, many of these features come from separate packages.
+In MonOrm they are part of the ORM or a built-in extension:
+
+| In Django | In MonOrm |
+|---|---|
+| django-pgtrigger | `@@trigger` and `function` blocks in the schema ([docs](docs/schema/schema.md)) |
+| django-safedelete | the soft-delete extension ([docs](docs/extensions/schema-extensions.md#soft-delete)) |
+| django-cte | `WITH` and recursive CTEs ([docs](docs/api/python-api.md#ctes-with)) |
+| django-postgres-extra (partitions, upsert) | `@@partition` and `on_conflict` ([partitions](docs/schema/schema.md#declarative-partitions-postgresql)) |
+| django-concurrency | the optimistic-locking extension ([docs](docs/extensions/schema-extensions.md#optimistic-locking)) |
+| django-model-utils (`TimeStampedModel`) | the `updated_at` extension ([docs](docs/extensions/schema-extensions.md#updated_at)) |
+| django-storages | the file-storage extension, on OpenDAL ([docs](docs/extensions/file-storage.md)) |
+| nplusone | `monorm.debug` ([docs](docs/api/python-api.md#finding-n1-queries-monormdebug)) |
+
+### Familiar design
+
 - **The schema language is Prisma's.** One `schema.prisma` file, with the editor tooling that already exists ([docs](docs/schema/prisma-syntax.md)).
 - **The model API is Django-style.** `Model.objects`, `filter()`, `load()` and migrations that come from the schema.
-- **Typed expressions** in the style of SQLAlchemy, and generated typed models.
-- **One Rust engine** behind both languages: the schema compiler, the SQL planner and the database drivers are shared.
+- **Typed expressions** in the style of SQLAlchemy, and generated typed models ([docs](docs/type-safety.md)).
 
 ### Inspired by
 
@@ -79,11 +132,11 @@ There is one package for each registry:
 
 ```bash
 pip install monorm      # the engine, every built-in extension and the auth app; `python -m monorm generate`
-npm install monorm      # the same for Node and Bun; `npx monorm generate`
+npm install monorm@npm:@ufstack/monorm      # the same for Node and Bun (the alias is required); `npx monorm generate`
 ```
 
 The `monorm` command line comes with the Python and npm packages.
-Both packages hold PostgreSQL and SQLite. They build for 3 platforms: Linux x86-64, macOS arm64 and Windows x86-64.
+Both packages hold PostgreSQL and SQLite. They build for 4 platforms: Linux x86-64, Linux arm64, macOS arm64 and Windows x86-64.
 An extension that is not built in is a separate package that you install next to `monorm` ([optional-packaging.md](docs/contracts/optional-packaging.md)).
 
 To build from source:
@@ -112,7 +165,7 @@ pip install monorm
 npm uninstall @ufstack/monorm @ufstack/monorm-native-postgres @ufstack/monorm-native-sqlite @ufstack/monorm-native-combined @ufstack/monorm-native-tooling @ufstack/monorm-auth \
   @ufstack/monorm-timestamps @ufstack/monorm-soft-delete @ufstack/monorm-locking @ufstack/monorm-inherit @ufstack/monorm-query-defaults \
   @ufstack/monorm-generic @ufstack/monorm-proxy @ufstack/monorm-composition @ufstack/monorm-file-storage
-npm install monorm
+npm install monorm@npm:@ufstack/monorm
 ```
 
 The `monorm[postgres]` and `monorm[sqlite]` extras are gone: the wheel has both drivers.

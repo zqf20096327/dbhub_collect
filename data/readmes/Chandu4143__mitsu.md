@@ -18,15 +18,28 @@
   <img alt="License" src="https://img.shields.io/badge/license-MIT-B9698D?style=flat-square" />
 </p>
 
+<p align="center">
+  <a href="https://github.com/Chandu4143/mitsu/releases/latest/download/Mitsu-Setup.exe">
+    <img alt="Download Mitsu for Windows" src="https://img.shields.io/badge/Download_for_Windows-Mitsu_Setup-B9698D?style=for-the-badge&logo=windows&logoColor=white" />
+  </a>
+</p>
+
+<p align="center">
+  <sub>Download, run the installer, open <strong>Mitsu</strong>. No Python, Node.js, or pnpm needed.</sub>
+</p>
+
 ---
 
 Mitsu is a **local-first** manga library and reader. It runs entirely on your own machine — no accounts, no cloud, no telemetry. Import CBZ, ZIP, image folders, or remote galleries, read them in a focused reader, and keep your collection organised in collections and reading lists. The interface is mobile-first, with an iOS-style navigation shell, and works just as well on a desktop browser.
 
+> **Windows:** [Download **Mitsu-Setup.exe**](https://github.com/Chandu4143/mitsu/releases/latest/download/Mitsu-Setup.exe), run it, and launch Mitsu from the Start menu. The installer bundles everything it needs.
+
 ## Download
 
-Every tagged release ships two ways to install:
+Every tagged release ships three ways to install:
 
 - **Source archive** — `mitsu-<version>.zip` from the [releases page](https://github.com/Chandu4143/mitsu/releases), with a `.sha256` checksum next to it.
+- **Windows desktop app** — `Mitsu_<version>_x64-setup.exe` from the same releases page. Download it, run it, and launch Mitsu from the Start menu. The installer is self-contained: the API is bundled as a sidecar and WebView2 is installed if needed, so users do not need Python, Node.js, or pnpm. It installs per user and updates itself from GitHub Releases.
 - **Container image** — `ghcr.io/chandu4143/mitsu:<version>` for `linux/amd64` and `linux/arm64` (also tagged `latest`).
 
 ### Run the archive
@@ -60,21 +73,52 @@ Open <http://127.0.0.1:3000>. The named volume holds your database, covers, and 
 To verify a download before running it:
 
 ```bash
-sha256sum -c mitsu-1.1.0.zip.sha256
+sha256sum -c mitsu-1.2.0.zip.sha256
 ```
 
-On Windows: `Get-FileHash mitsu-1.1.0.zip -Algorithm SHA256`.
+On Windows: `Get-FileHash mitsu-1.2.0.zip -Algorithm SHA256`.
+
+### Build the desktop app
+
+Mitsu ships a Tauri v2 shell (`src-tauri/`) that serves the static Next.js export from `out/` and starts the FastAPI backend as a bundled sidecar. Windows is the first target.
+
+Requirements: Node.js 20+, pnpm, Python 3.11+, and Rust 1.77+ with a Windows target. Tauri officially supports the MSVC toolchain; this repository also builds with the MinGW (`x86_64-pc-windows-gnu`) toolchain, which is what the sidecar script names its output after.
+
+```bash
+pnpm install
+python -m pip install -r backend/requirements-dev.txt pyinstaller
+
+pnpm desktop:dev      # Next dev server + Rust shell + Python backend
+pnpm desktop:build    # sidecar + release build + NSIS installer
+```
+
+`pnpm desktop:dev` starts Next.js on port 3000; the Rust shell then starts `uvicorn` on a free loopback port and injects that URL into the webview. `pnpm desktop:build` packages the backend with PyInstaller into `src-tauri/binaries/` and writes the installer to `src-tauri/target/release/bundle/nsis/`.
+
+Bump the version in `package.json`, `src-tauri/tauri.conf.json`, and `src-tauri/Cargo.toml` together before tagging a release. The updater compares the installed version against the release it downloads.
+
+Desktop data lives outside the repository, in the OS app data directory (`%APPDATA%\app.mitsu.desktop` on Windows). Set `MITSU_DATA_DIR` to override it, or `MITSU_BACKEND_BIN` to point at a different backend executable.
+
+Auto-updates use the Tauri updater with signed artifacts. Producing updater artifacts needs the private key:
+
+```powershell
+$env:TAURI_SIGNING_PRIVATE_KEY = "$env:USERPROFILE\.tauri\mitsu.key"
+$env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD = ""
+pnpm desktop:build
+```
+
+Releases are built by `.github/workflows/release.yml`, which reads `TAURI_SIGNING_PRIVATE_KEY` and `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` from repository secrets. Keep the private key out of the repository; if it is lost, existing installs can no longer receive updates. The public key lives in `src-tauri/tauri.conf.json`.
 
 ## What's inside
 
 - **Mobile-first shell** — fixed translucent top bar, five-item bottom tab bar, “More” bottom sheet, and a desktop rail from the same component tree.
 - **Reader** — single-page, double-page spread, and continuous scroll; RTL and LTR; fit-to-width or fit-to-screen; zoom and pan (wheel, pinch, or keys); adjustable backgrounds; fullscreen; keyboard shortcuts; bookmarks with notes; and progress that is saved automatically.
-- **Library** — search, filters, sorting, grid and list views, favorites, reading status, and a history view grouped by day.
+- **Library** — instant search, filters, sorting, grid and list views, favorites, reading status, and a history view grouped by day.
 - **Collections** — group galleries, reorder items, and jump back into reading.
 - **Imports** — CBZ, ZIP, image folders, and library roots with live job progress, retry, and cancellation.
-- **Discover** — local metadata sources, filename cleanup, and one-click apply on any gallery.
+- **Discover** — paged nhentai search with sort and language filters, favorite counts, one-click import, and local metadata sources.
 - **Settings** — grouped preferences, appearance (light/dark/system), cover rebuilds, duplicate detection, and portable backup and restore.
 - **Installable** — a web app manifest and service worker cache the shell and the pages you have already read. Dark mode follows your device or your choice.
+- **Desktop app** — a Tauri v2 shell for Windows with a per-user NSIS installer and signed auto-updates. It runs the same UI, bundles the API, and keeps your library in the OS app data directory.
 - **Local-first** — no accounts, no cloud, no telemetry; the server binds to `127.0.0.1` by default.
 
 ## Screenshots
@@ -105,6 +149,22 @@ On Windows: `Get-FileHash mitsu-1.1.0.zip -Algorithm SHA256`.
 <p align="center">
   <img src="public/screenshots/desktop/05-imports.png" alt="Imports on desktop" width="480" />
   <img src="public/screenshots/desktop/06-discover.png" alt="Discover on desktop" width="480" />
+</p>
+
+### Desktop app
+
+Captured from the packaged Windows build rather than a browser.
+
+<p align="center">
+  <img src="public/screenshots/desktop-app/01-home.png" alt="Mitsu desktop app: home" width="480" />
+  <img src="public/screenshots/desktop-app/02-library.png" alt="Mitsu desktop app: library" width="480" />
+</p>
+<p align="center">
+  <img src="public/screenshots/desktop-app/03-gallery.png" alt="Mitsu desktop app: gallery detail" width="480" />
+  <img src="public/screenshots/desktop-app/04-reader.png" alt="Mitsu desktop app: reader" width="480" />
+</p>
+<p align="center">
+  <img src="public/screenshots/desktop-app/05-settings.png" alt="Mitsu desktop app: settings" width="480" />
 </p>
 
 > Cover art is blurred in these screenshots because the library contains adult content. Personal filesystem paths are redacted to `~/library`.
@@ -241,6 +301,7 @@ pnpm typecheck    # TypeScript without emitting
 pnpm build        # Production build
 pnpm package      # dist/mitsu-<version>.zip + SHA-256 checksum
 pnpm screenshots  # Regenerate README screenshots
+pnpm screenshots:desktop  # Regenerate README screenshots from the running desktop app
 ```
 
 Run the backend separately if you prefer:
@@ -252,20 +313,31 @@ python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 
 Screenshot capture expects Chrome at `C:/Program Files/Google/Chrome/Application/chrome.exe` and a running app. Override either with `CHROME_PATH` or `MITSU_SCREENSHOT_URL`. Screenshots are written to `public/screenshots/`.
 
+For the desktop-app screenshots, run the built shell with WebView2 remote debugging enabled and then run the capture script:
+
+```powershell
+$env:WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS = "--remote-debugging-port=9333"
+.\src-tauri\target\debug\mitsu.exe
+pnpm screenshots:desktop   # in a second terminal
+```
+
+Set `MITSU_CDP_URL` if you use a different debugging port.
+
 ## Releasing
 
-1. Set the same version in `package.json`, `backend/app/main.py`, and `backend/app/services/maintenance.py`, and add a `CHANGELOG.md` entry.
+1. Set the same version in `package.json`, `backend/app/main.py`, `backend/app/services/maintenance.py`, `src-tauri/tauri.conf.json`, and `src-tauri/Cargo.toml`, and add a `CHANGELOG.md` entry.
 2. Run `pnpm package` and check `dist/mitsu-<version>.zip` plus its `.sha256`.
 3. Tag and push:
 
    ```bash
-   git tag v1.1.0
-   git push origin v1.1.0
+   git tag v1.2.0
+   git push origin v1.2.0
    ```
 
 The release workflow verifies that the tag matches `package.json`, pushes a
-multi-arch image to `ghcr.io/chandu4143/mitsu`, and attaches the archive and
-checksum to the GitHub release.
+multi-arch image to `ghcr.io/chandu4143/mitsu`, builds the Windows installer and
+updater manifest, and attaches the archive, checksum, and installer to the
+GitHub release.
 
 ## Data and backups
 
@@ -291,6 +363,7 @@ thumbnails and cache are disposable.
 ## Troubleshooting
 
 - **The frontend loads but no galleries appear.** Make sure the backend is running on port `8000` and that you have imported at least one gallery.
+- **Windows warns about the desktop installer.** The installer is built from source and is not signed with a commercial Authenticode certificate, so SmartScreen may ask for confirmation. Choose **More info → Run anyway**, or verify the SHA-256 from the release page first.
 - **Imports fail.** Check that the path is absolute and that the files are readable. Library roots must point at existing directories.
 - **Port already in use.** Stop the other process, or change `MITSU_PORT` and the frontend origin accordingly.
 - **Screenshot capture fails.** Ensure the app is running, Chrome is installed, and `CHROME_PATH` points at it if it is not in the default location.

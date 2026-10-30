@@ -1,70 +1,65 @@
-﻿🏥 EMR Patient Summary Chatbot
+<h1 align="center">EMR Patient Summary Chatbot</h1>
+<p align="center"><b>Ask your patient records anything.</b></p>
 
-A simple health chatbot demo that summarizes patient records using Retrieval-Augmented Generation (RAG) and answers general medical questions using external agents.
+<p align="center"><img src="assets/architecture.png" alt="How the chatbot works" width="760"></p>
 
-Built as an educational prototype using Azure AI Foundry.
+Skip the scrolling through spreadsheets. Type a question like "which patients have diabetes?" and get a plain-English answer built from the matching records. Ask something general instead and it answers from medical knowledge. A hands-on demo of retrieval-augmented generation (RAG) from start to finish.
 
-✨ What this does
+> **Prototype for learning only.** Uses mock data (100 sample patients). Not for real medical use and not medical advice.
 
-🧾 Summarizes patient records from a database
+## Why it's interesting
 
-🔍 Uses semantic search with vector embeddings
+- **Finds records by meaning,** not exact keywords
+- **Knows when to look it up:** patient questions use your records, general ones use medical knowledge
+- **Shows its sources:** every matching record is listed with a match score
+- **Consistent answers:** temperature 0.0, so replies stay strict and repeatable
 
-🤖 Answers generic medical questions via external agents
+## How it works
 
-🎛️ Lets you control AI response behavior (temperature, top-p, top-k)
+1. **Setup (once):** patient records are turned into one short "story" per patient, converted to embeddings with Gemini, and stored in a MySQL-compatible database (TiDB Cloud).
+2. **Each question:** your question is embedded, compared with every stored patient (cosine similarity), and routed:
+   - match score above 0.45, or you ask to "list" / "show" / "all" → answer from the top 5 patient records
+   - otherwise → answer from general medical knowledge
+3. Gemini Flash writes the answer and the Streamlit UI shows it.
 
-🖥️ Simple web UI for demo
+## Run it
 
-🧠 How it works (very short)
+You need Python 3.10+, a [Google AI Studio](https://aistudio.google.com/) API key, and a MySQL-compatible database.
 
-Patient data is stored in MySQL
+```bash
+git clone https://github.com/Athulya-cloud/health-chatbot-rag-mcp.git
+cd health-chatbot-rag-mcp
+pip install streamlit mysql-connector-python numpy pandas google-genai
+```
 
-Data is converted into vector embeddings
+Create `my_secrets.py` next to `app.py` with your own keys (never commit this file):
 
-User asks a question
+```python
+GOOGLE_KEY = "your-google-api-key"
+DB_CONFIG = {
+    "host": "your-db-host",
+    "port": 4000,
+    "user": "your-user",
+    "password": "your-password",
+    "database": "your-database",
+    "ssl_disabled": False,
+}
+```
 
-System:
+Create a `patient_vectors` table with columns `patient_id`, `story_text` and `vector_json`, then load the data and start the app:
 
-uses RAG for patient-specific queries
+```bash
+python step1_vectorize.py   # builds embeddings -> patient_vectors_dump.json
+python step2_upload.py      # uploads them to the database
+streamlit run app.py
+```
 
-routes generic questions to an external agent
+Open the URL Streamlit prints (usually http://localhost:8501). Stop it with `Ctrl+C`.
 
-AI generates a response and shows it in the UI
+## Tech stack
 
-🛠️ Tech Stack
+Python, Streamlit, Google Gemini (`text-embedding-004`, Gemini Flash), MySQL / TiDB Cloud, NumPy.
 
-Platform: Azure AI Foundry
+## Dataset
 
-Backend: Python
-
-Frontend: Streamlit
-
-Database: MySQL
-
-Models: Configurable (Azure / open-source / free-tier)
-
-📊 Dataset
-
-Mock EMR data (100-patient sample)
-
-Used only for demonstration
-
-🚧 Project Status
-
-Core logic implemented
-
-Demo is not fully materialized yet
-
-Actively integrating and validating model components
-
-⚠️ Disclaimer
-
-This is a prototype for learning purposes.
-Not for real medical use. Not medical advice.
-
-⭐ Notes
-
-Designed to run on free tiers
-
-Focused on architecture and flow, not production scale
+A 100-patient sample of mock EMR data, used for demonstration only.

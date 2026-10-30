@@ -54,6 +54,7 @@ visitors will see when they first arrive at your website.
 * MathJax: a JavaScript display engine for mathematics.
 * Inject: use triggers and filters for content injection.
 * Notify: send notifications after events.
+* Password Protection: Impedes password attacks on user accounts.
 
 ## Requirements
 
@@ -105,6 +106,19 @@ There's no need to run [upgrade.php](upgrade.php) if you're using Docker.
 ### HTML in posts and pages
 
 By design Chyrp Lite allows authors to create posts and pages containing valid HTML, meaning that authored content may also contain JavaScript and CSS styles. This allows maximum freedom to authors, but it comes with a security risk if the blog administrator allows untrusted users to create posts and pages. If you want to allow untrusted users to create posts and pages, you should enable the __Content Security Policy__ module to apply a strong [Content Security Policy](https://w3c.github.io/webappsec-csp/) that disallows unsafe inline JavaScript and CSS.
+
+### Server-side request forgery (SSRF)
+
+Chyrp Lite uses [`filter_var`](https://www.php.net/manual/en/function.filter-var.php) to categorize IP addresses as "safe" or "unsafe" using `FILTER_VALIDATE_IP` and the following flags:
+
+- `FILTER_FLAG_NO_RES_RANGE`
+- `FILTER_FLAG_NO_PRIV_RANGE`
+- `FILTER_FLAG_GLOBAL_RANGE`
+
+Remote connections to "unsafe" IP addresses are denied or terminated before any data is sent, providing incomplete protection against [server-side request forgery](https://owasp.org/www-community/attacks/Server_Side_Request_Forgery) attacks. Complete SSRF protection in an environment such as Chyrp Lite, that must allow remote connections to user-defined endpoints, cannot reasonably be achieved at the application layer. **Providing complete SSRF protection is considered out of scope for this project.** If exposure to SSRF is a concern in your deployment environment, you should configure firewall rules that prevent outbound connections to IP ranges in the IANA [IPv4] and [IPv6] special registries.
+
+[IPv4]: https://www.iana.org/assignments/iana-ipv4-special-registry
+[IPv6]: https://www.iana.org/assignments/iana-ipv6-special-registry
 
 ### Files accessible to visitors
 

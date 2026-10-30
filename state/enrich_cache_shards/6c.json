@@ -2750,5 +2750,48 @@
    "contrib": "20261022",
    "lang": "20261022"
   }
+ },
+ "aliihsaad/the-vault": {
+  "rel_ver": "v0.6.7",
+  "rel_pub": "2026-10-10",
+  "rel_days": 20,
+  "rel_n90": 3,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_notes": [
+   {
+    "t": "v0.6.7",
+    "d": "2026-10-10",
+    "n": "The Vault v0.6.7 stops Graphify from rebuilding project graphs over and over when nothing has changed.\r\n\r\n## Graphify no longer rebuilds on file reads\r\n\r\n- **Root cause.** On Windows, reading a file whose last-access time is more than about an hour old updates that time, and the file watcher reports it as a change. The desktop app treated every such read as a source edit, so agent sessions, editors, `git`, Vault reading its own memory files, and the builds themselves (which read every source file) kept queu"
+   },
+   {
+    "t": "v0.6.6",
+    "d": "2026-10-09",
+    "n": "The Vault v0.6.6 fixes two gaps found while checking v0.6.5 against a live install.\r\n\r\n## Fixes\r\n\r\n- **Graphify multiple-checkouts warning.** v0.6.5 warned when a source folder held several separate projects, but only looked for a `.git` or `package.json` directly inside each subfolder. Zip extracts usually add a wrapper folder (`repo-main/repo-main/package.json`), so a git clone next to an extracted archive went unnoticed and every graph node was duplicated. The check now also looks one level deeper.\r\n- **"
+   },
+   {
+    "t": "v0.6.5",
+    "d": "2026-10-09",
+    "n": "- Builds now skip more credential files: `*recovery-codes*`, `credentials.json`, `secrets.*`, `*.pem`, `*.key`, `*.p12`, `*.pfx`, `*.jks`, `*.keystore`, `*.kdbx`, `*.ppk`, SSH keys (`id_rsa`, `id_ed25519`, …), `.npmrc`, `.pypirc`, `.netrc`, `.git-credentials`, `.htpasswd`, and `.ssh/`, `.aws/`, `.gnupg/` folders. Rebuild existing graphs to drop files that were indexed before."
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "TypeScript": 92,
+   "CSS": 7,
+   "JavaScript": 1,
+   "HTML": 0
+  },
+  "enriched_at": "20261030",
+  "dim_ts": {
+   "release": "20261030",
+   "security": "20261030",
+   "contrib": "20261030",
+   "lang": "20261030"
+  }
  }
 }

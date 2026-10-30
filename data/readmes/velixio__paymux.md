@@ -142,10 +142,89 @@ curl -s localhost:8080/v1/payments \
   -H "Authorization: Bearer pmx_test_sk_..." \
   -H "Idempotency-Key: order-123" \
   -d '{"amount":49900,"currency":"INR","order_ref":"order-123","description":"Pro plan"}'
-# → { "id": "pay_…", "status": "created", "checkout_url": "https://…/pay/pay_…?t=…" }
+# → { "id": "pay_…", "status": "created", "checkout_mode": "hosted", "checkout_url": "https://…/pay/pay_…?t=…" }
 ```
 
 Send your customer to `checkout_url`. Your app learns the result from a **signed webhook** or from `GET /v1/payments/{id}`. Never trust the browser redirect on its own.
+
+### JavaScript and TypeScript SDK
+
+Install the published SDK in your application:
+
+```bash
+npm install @paymux-js/sdk
+```
+
+Create payments only on your backend, where the API key stays private:
+
+```ts
+import { Paymux } from "@paymux-js/sdk";
+
+const paymux = new Paymux({
+  apiKey: process.env.PAYMUX_API_KEY!,
+  baseURL: "https://payments.example.com",
+});
+
+const payment = await paymux.payments.create(
+  {
+    amount: 49900,
+    currency: "INR",
+    order_ref: "order-123",
+    return_url: "https://shop.example.com/orders/order-123",
+  },
+  { idempotencyKey: "order-123-payment-v1" },
+);
+```
+
+For the default `hosted` App mode, either redirect the customer to
+`payment.checkout_url`, or return that URL to
+the authenticated order page and let the browser entry point open the selected
+provider:
+
+```ts
+import { checkout } from "@paymux-js/sdk/checkout";
+
+const { checkout_url } = await fetch("/api/orders/order-123/payment", {
+  method: "POST",
+}).then((response) => response.json());
+
+await checkout({ checkoutUrl: checkout_url });
+```
+
+To keep the Paymux URL out of the browser entirely, select
+`provider_action` under **Apps → your app → Settings → checkout_mode**. Payment
+creation immediately creates the provider order and returns its executable
+action, so the merchant backend returns only `payment.checkout`:
+
+```ts
+const payment = await paymux.payments.create(
+  {
+    amount: 49900,
+    currency: "INR",
+    order_ref: "order-123",
+    customer: { name: "Asha Rao", billing: { country: "IN", state_code: "27" } },
+  },
+  { idempotencyKey: "order-123-payment-v1" },
+);
+
+return payment.checkout;
+```
+
+```ts
+import { executeCheckout } from "@paymux-js/sdk/checkout";
+
+await executeCheckout(await merchantBackend.startCheckout("order-123"));
+```
+
+Use `payments.checkoutAction` only to recover a failed provider launch or to
+request an intentionally fresh attempt.
+
+The browser entry point never receives the Paymux API key. Fulfill the order
+only after a verified webhook or authenticated backend lookup. See the complete
+[JavaScript SDK guide](docs/javascript-sdk.md) for refunds, subscriptions,
+invoices, payouts, webhook verification, CSP, and provider checkout behavior.
+Coding agents can use [llms.txt](llms.txt) for discovery and
+[llms-full.txt](llms-full.txt) as the complete merchant integration contract.
 
 No code on your side? Create a shareable payment link instead:
 
@@ -183,7 +262,8 @@ Tip: `make dev` builds everything and runs the hub and the public website togeth
 - **Add a gateway.** A connector is a Go package against a small public SDK, with a conformance kit that tells you when it is right. Or write it in any language and run it as a signed HTTP service. See [docs/connectors.md](docs/connectors.md).
 - **React to events.** Go hooks and sandboxed JavaScript hooks run after commit and cannot move money. See [docs/extending.md](docs/extending.md).
 - **Themes and translations.** Drop your own themes or a language catalog into your data folder. No restart, no fork.
-- **Examples.** Small, tested programs in [`examples/`](examples): an API client, a framework-mode binary, a remote connector, and signed-webhook receivers in [Go](examples/webhook-receiver-go), [JavaScript](examples/webhook-receiver-js) and [Python](examples/webhook-receiver).
+- **Merchant SDKs.** The independent [Go SDK](sdk/go/README.md) and [JavaScript SDK](docs/javascript-sdk.md) cover backend payments, refunds, links, subscriptions, invoices, payouts, and verified app webhooks. The JavaScript package also has an API-key-free browser entry point for provider checkout.
+- **Examples.** Small, tested programs in [`examples/`](examples): a raw HTTP API client, a framework-mode binary, a remote connector, and signed-webhook receivers in [Go](examples/webhook-receiver-go), [JavaScript](examples/webhook-receiver-js) and [Python](examples/webhook-receiver).
 
 ## 📦 Run it for real
 

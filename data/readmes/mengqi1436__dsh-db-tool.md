@@ -2,65 +2,215 @@
 
 [English](README_EN.md) | 简体中文
 
-DSH 社区插件：在聊天中安全操作数据库，配套侧边栏管理台与 `db-admin` skill。架构与交互模式对齐 [dsh-ssh-tunnel](https://github.com/thirsty5034/dsh-ssh-tunnel)。
+在 DSH 聊天中安全操作数据库：9 种数据库、项目级细粒度授权、危险操作确认、全量审计，配套右侧栏管理台与 SQL 控制台。
 
-## 功能
+## 功能流程
 
-- **9 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM）、SQL Server
-- **DatabaseManager 单工具多 action**：`list_connections / query / execute / schema / preview / run_script`（`run_script` 在 node:vm 沙箱中执行，60s 超时，仅注入受限 `db.{query,execute}` 句柄）
-- **分级权限**：连接级只读（ro）/读写（rw）+ 项目级授权（`grants.json`：projectPathKey → 连接 → 模式）；未授权项目一律拒绝
-- **危险操作确认**：DDL / FLUSHALL / dropDatabase 等先返回 `NEEDS_CONFIRMATION`，对话内（模型经 ask）或 SQL 控制台（弹窗）确认后携一次性 `challengeId`（绑定语句 SHA256、5 分钟过期）重试
-- **审计**：全部执行落 `audit.jsonl`（语句、危险级、是否确认、结果）
-- **侧边栏 4 面板**（dsh-better-sidebar，zh/en）：连接管理、项目授权、数据浏览、SQL 控制台
-- **db-admin skill**：随插件分发，覆盖 9 库方言速查、安全规范、确认流程
+一次数据库操作从入口到落库审计的完整路径——两个入口共用一套语义，中间必须穿过项目级授权与语句级风险分级两道闸门：
+
+![dsh-db-tool 功能流程](assets/feature-flow.png)
+
+[**打开交互式版本**](assets/feature-flow.html) —— 支持缩放、拖动、路径高亮，可点节点查看源码证据。
+
+> 有问题或建议？[提 Issue](https://github.com/mengqi1436/dsh-db-tool/issues/new/choose)（已有 Bug 模板与功能请求模板）。
+
+---
+
+## 支持的数据库
+
+| 类别 | 数据库 |
+|---|---|
+| 关系型 | MySQL、PostgreSQL、GaussDB、SQLite、Oracle、达梦 DM、SQL Server |
+| NoSQL | Redis、MongoDB |
+
+每种数据库都实现了完整的连接、元数据浏览、查询、预览与数据传输能力，方言差异在适配器内部处理——对上层统一暴露 `?` 占位符与标准结果集。
+
+---
+
+## 核心能力
+
+### 模型工具 `DatabaseManager`
+
+单一工具、多 action，减少模型选工具的歧义：
+
+| action | 作用 |
+|---|---|
+| `list_connections` | 列出可选连接（不含凭据） |
+| `query` | 执行只读查询，返回列与行 |
+| `execute` | 执行写语句，危险操作需确认 |
+| `schema` | 查看库/表/列结构 |
+| `preview` | 预览表数据（分页，≤50 行/页） |
+| `run_script` | 在沙箱中跑脚本，可多次调用 `db.query` / `db.execute` |
+
+`run_script` 的隔离边界：独立子进程 + `node:vm` 沙箱，60 秒超时后进程级强杀，只注入受限的 `db.{query,execute}` 句柄——不给文件系统、网络与 `require`。
+
+### 项目级授权（ro / rw）
+
+授权以「项目路径 → 连接 → 模式」三级存储（`grants.json`）：
+
+- **ro（只读）**：允许查询与浏览，拒绝一切写操作
+- **rw（读写）**：允许执行语句、脚本与事务
+
+未授权的项目对任何连接一律拒绝。授权模式变更（含 rw→ro 降级）会立即作废旧会话，不需要重连。
+
+Windows 下路径按 NTFS 语义归一（大小写不敏感），`E:\GitHub\MyApp` 与 `e:\github\myapp` 视为同一项目。
+
+### 危险操作确认
+
+DDL、`FLUSHALL`、`dropDatabase` 等语句先返回 `NEEDS_CONFIRMATION`，不会直接执行：
+
+1. 首次调用返回待确认状态与一次性 `challengeId`
+2. `challengeId` 绑定语句的 SHA256，5 分钟内有效、用后即废
+3. 用户确认后携同一 `challengeId` 重试才真正执行
+
+模型侧经对话确认，SQL 控制台侧经弹窗确认——两条路径共用同一套语义，任一处都无法绕过。
+
+### 全量审计
+
+每次执行（包括被拒绝的请求）都追加一行到 `audit.jsonl`：语句、危险级别、是否经过确认、结果与耗时。右侧栏可实时查看。
+
+### 数据浏览
+
+- 连接 → 库 → schema → 表四级树形展开
+- 库筛选 + 跨库表名模糊搜索（MySQL / PostgreSQL / GaussDB 走 `information_schema` 原生查询，其余库回退内存过滤）
+- 表结构查看与数据预览，结果网格支持排序、分页、单元格复制
 
 ### SQL 控制台
 
-侧边栏 SQL 控制台面板已升级为 Navicat 式多标签编辑器（CodeMirror 6）：
+Navicat 风格的右侧栏多标签编辑器（CodeMirror 6）：
 
-- **多标签**：新建/关闭/切换查询标签，每个标签独立保存 SQL、结果与历史（历史上限 50 条，可展开点击回填）
-- **语法高亮与补全**：按方言切换——mysql→MySQL、postgresql/gaussdb→PostgreSQL、sqlite→SQLite、oracle/dmdb→PL/SQL、sqlserver→T-SQL（`@codemirror/lang-sql` 的 MSSQL 方言）；Redis/Mongo 为关键字/方法补全的纯文本编辑；表列元数据自动拉取注入补全（上限 50 表）。编辑器 bundle（`vendor/codemirror-sql.cjs`，`npm run build:codemirror` 生成，`npm run build` 自动串接）加载失败时静默降级 textarea
+- **多标签**：每标签独立保存 SQL、结果与历史（50 条上限，点击回填）
+- **语法高亮与补全**：按方言自动切换（MySQL / PostgreSQL / SQLite / PL/SQL / T-SQL），表列元数据注入补全
 - **快捷键**：`Ctrl/Cmd+Enter` 执行全部，`Ctrl/Cmd+Shift+Enter` 执行选中
-- **格式化**：sql-formatter 按方言格式化（sqlserver→`transactsql`），解析失败回退原文
-- **逐条执行**：客户端预分类读/写语句分别路由 `/api/query` 与 `/api/execute`，只读授权下写语句自动跳过并标注；出错可一键定位到对应语句起始处
-- **批分隔符 GO**：支持 `GO` 与 `GO n`——按 sqlcmd 语义把上一批重复执行 n 次（`GO 0` / `GO 1` 均等同 1 次），`GO` 行本身不产生语句；重复计数上限 **1000**，超出按 1000 截断，防止一次执行被放大成天量请求
-- **事务**：rw 授权下可开始/提交/回滚（服务端粘性连接会话；空闲 5 分钟超时自动回滚并审计，授权回收/降级即时生效）
-- **结果网格**：表头三态排序、50 行/页分页、单元格点击复制、CSV/JSON 导出
+- **格式化**：按方言调用 sql-formatter，解析失败回退原文
+- **逐条执行**：客户端预分类读写语句，分别路由到查询与执行通道；ro 授权下写语句自动跳过并标注
+- **批分隔符 `GO`**：支持 `GO` 与 `GO n`（sqlcmd 语义，`GO 0`/`GO 1` 均等同 1 次），重复上限 1000 次防放大
+- **事务**：rw 授权下可开始/提交/回滚，服务端粘性连接；空闲 5 分钟自动回滚并审计
+- **结果网格**：三态排序、50 行/页、CSV/JSON 导出
 
-## SQL Server 支持范围与边界
+### 数据传输（transfer）
 
-覆盖 SQL Server 2008/2008R2 → 2022 与 Azure SQL Database；方言与元数据只使用 SQL Server 2005+ 的通用写法。
+同类或跨类数据库之间的表数据搬运：
 
-- **连接形态**：唯一形态为 `sqlserver://user:password@host:port/db`，支持 query 参数 `encrypt` / `trustServerCertificate` / `tdsVersion` / `instanceName` / `useUTC`（参数名大小写不敏感）。`tdsVersion` 默认 `7_4`，可配 `7_3_A` / `7_3_B` / `7_2` / `7_1`；端口默认 1433，指定 `instanceName` 时按 tedious 语义忽略端口、走 SQL Browser（UDP 1434）；最低 TLS 版本经 `cryptoCredentialsDetails.minVersion` 配置，`ssl=true` 等价于 `encrypt=true`。**不接受** ADO.NET 键值连接串（`Server=...;Database=...`）。
-  默认 `encrypt=true` + `trustServerCertificate=false`（与 mssql 官方默认一致）。**连 SQL Server 2008/2008R2 时通常要在 URL 追加 `?trustServerCertificate=true`**：旧实例多为自签名证书且可能只支持 TLS 1.0，而 Node 默认最低 TLSv1.2，直接按默认值会握手失败；服务器未强制加密时也可用 `?encrypt=false`，并建议显式写 `?tdsVersion=7_3_A`（2008）/ `7_3_B`（2008R2）。
-- **认证边界**：仅 SQL 认证（`user` / `password`）。**不支持 Windows 集成认证**，**不支持 Azure AD 认证**。
-- **方言**：参数占位符对外只写 `?`，适配器内部按顺序重写为 `@p1..@pN`；标识符用 `[x]`，名字中的 `]` 双写为 `]]`；库/表/列元数据只走 `sys.*` catalog views（`sys.databases` / `sys.schemas` / `sys.objects` / `sys.columns` / `sys.types` / `sys.indexes` / `sys.extended_properties`），只用 2005+ 通用写法。
-- **分页按版本分流**：连接后查 `SERVERPROPERTY('ProductMajorVersion')`（取不到时回退解析 `ProductVersion` 前缀）并缓存；major ≥ 11（2012+，含 Azure SQL 的 12）用 `ORDER BY (SELECT NULL) OFFSET n ROWS FETCH NEXT m ROWS ONLY`，< 11（2008/2008R2）降级 `ROW_NUMBER() OVER (ORDER BY (SELECT NULL))` 子查询；探测失败同样走降级分支。
-- **decimal 精度分侧口径**：浏览侧（`query` / `preview` / 数据浏览网格）**不保证 decimal/numeric 逐位保真**——tedious 在解析阶段已把 decimal 转成 JS number（>15 有效位即丢精度），适配器转字符串只能防后续数值化，且 >1e21 会出现科学计数法；需要逐位保真时请在 SQL 里显式 `CONVERT(nvarchar(...), col)`。数据传输（transfer）读端已内建该转换（`CONVERT(nvarchar(64), col)`），写入时按字符串绑定，精度不经过 JS 浮点。
-- **类型搬运口径（传输侧）**：`hierarchyid` / `geometry` / `geography` 按二进制（bytes）保真搬运，目标端建 `VARBINARY(MAX)`——**UDT 类型语义不保留**（目标端没有 `ST_*` / `hierarchyid` 方法）；`sql_variant` 读端 `CONVERT(nvarchar(max), col)` 转文本，**原类型信息丢失**（驱动按值的实际类型返回标量，无法统一搬运）；`text` / `ntext` / `xml` → `NVARCHAR(MAX)`，源 `varchar` / `char` 长度 4001–8000 也映射为 `NVARCHAR(MAX)` 类（保容量，不做隐式收窄），`varbinary` / `image` / `rowversion` → `VARBINARY(MAX)`，`decimal` / `numeric` / `money` → `DECIMAL`；`datetime2` 读端 `CONVERT(nvarchar(33), col, 126)`、`time` 用 `CONVERT(nvarchar(16), col, 126)` 保真。
-- **ro 只读强度弱于 MySQL/PG**：SQL Server 没有等价的会话级只读语句。ro 授权下适配器 query 闸门共五道：① 首词白名单（`select / with / show / describe / desc / explain / use / set / help / table`）；② 拒绝多语句（词法级：顶层分号之后出现任何内容即拒）；③ 拒绝 `SELECT ... INTO`（词法 token 级判定，字符串、方括号标识符与注释内的 `into` 不误伤）；④ 拒绝 `WITH ... (INSERT|UPDATE|DELETE|MERGE)`；⑤ 拒绝 `OPENQUERY` / `OPENROWSET` / `OPENDATASOURCE`（其字符串参数会在远端/外部数据源执行任意语句、不可审计，连合法的只读远端查询也一律拒）。服务层另拦 `execute`，guard 层对同样两类「读头写体」还会要求确认。**这仍是应用层拦截，不等同于数据库侧的只读会话**；需要强隔离时请给连接配数据库侧只读账号。
-- **数据传输**：写入走参数化多行 `VALUES` INSERT（TDS 单语句参数上限 2100、`VALUES` 表值构造器单语句最多 1000 行，每语句行数取两者最小值；replace/ignore 走 `MERGE`）。传输分页同样按目标库版本分流：2012+ 用 `OFFSET/FETCH`，2008/2008R2 降级——有序游标（keyset/range）用 `SELECT TOP (n) ... ORDER BY key`，无分片键的 offset 全序与 `keyAt` 切块用 `ROW_NUMBER() OVER (...)` 子查询；版本探测失败时按 0 走保守降级，因此**传输在 SQL Server 2008/2008R2 同样可用**。已知限制：目标表已存在且该列为 IDENTITY 时，写入显式值会报错 544（当前不自动 `SET IDENTITY_INSERT ON`）；传输自动建表不生成 IDENTITY 列。建表 DDL 在显式事务中可回滚，不需要 Oracle/DM 那样的隐式提交处理。
-- **验证状态**：本轮只交付离线单测（Fake 驱动），SQL Server 路径**未经真机验证**；真机冒烟开关 `DBT_TEST_SQLSERVER_URL`（形如 `sqlserver://sa:pw@host:1433/db`）。
-- **驱动形态**：`mssql@12` 仅在 devDependencies，运行时加载 `npm run build:sqlserver` 生成的 `vendor/sqlserver-driver.cjs`；原因是 mssql → tedious → bl → readable-stream 会把 buffer/events/process/string_decoder 带进生产依赖树，触发宿主 `dsh-app-boot` 的 `require.resolve.paths` bug，导致插件整体加载失败。
-- **错误消息脱敏**：连接 URL 解析失败时，错误文案里的 userinfo 已脱敏，不回显明文密码（错误会进 `audit.jsonl` 与模型上下文，故必须脱敏）。
-- **不支持**：SQL Server 2005（9.x）及更早版本，未支持也未验证；`tdsVersion=8_0`（TDS 8.0）与 `encrypt='strict'`（严格加密）亦未支持——SQL Server 2022 用默认 `7_4` 即可正常连接，TDS 8.0 强加密属后续增强。
+- **写入模式**：`insert`（追加）、`ignore`（跳过冲突）、`replace`（覆盖）、`truncate`（先清空）
+- **自动建表**：目标表不存在时按源表结构生成 DDL
+- **分页读取**：有序游标（keyset）/ 范围 / 偏移三种策略，按目标库版本自动选择
+- **进度与历史**：实时进度推送 + 按项目隔离的传输历史
 
-## 数据布局
+### 连接导出 / 导入
 
-`$DSH_HOME/db-tool/`（0700）：
+一键把所有连接（含密码）导出为口令加密文件，用于跨机器迁移：
 
-| 文件 | 内容 |
+- scrypt 派生密钥 + AES-256-GCM 整体加密，文件打开无明文
+- 口令最短 8 位，由服务端强制校验
+- 导入时已存在的连接 id 一律跳过不覆盖，返回「已导入 / 跳过 / 失败」摘要
+
+---
+
+## 右侧栏
+
+通过 DSH **官方右侧栏**（`@deepseek-ai/dsh-client-ui-sidebar-right`）注册一个页签，不依赖任何第三方侧边栏。右侧栏展开时，「数据库」随侧边栏空态页（入口页）的卡片出现，可与其他官方页签并排、拆分或浮出为浮窗；页签内含五个面板（中英双语）：
+
+| 面板 | 用途 |
 |---|---|
-| `connections.json` | 连接定义（`urlSafe` 中密码脱敏为 `***`） |
-| `secrets.json` | 0600，密码/URL 凭据，永不返回给模型 |
-| `grants.json` | 项目授权（归一化路径 → connId → ro/rw） |
-| `audit.jsonl` | 追加式审计日志 |
+| 连接管理 | 新增/编辑/删除连接，测试连通性，导出导入 |
+| 项目授权 | 为当前项目勾选各连接的 ro/rw |
+| 数据浏览 | 树形浏览库表、搜索、预览数据 |
+| SQL 控制台 | 多标签编辑器、事务、历史、结果网格 |
+| 数据传输 | 库表级数据迁移，批量/并行与写入模式可选，附传输日志 |
+
+### 使用须知
+
+两条都是官方右侧栏的契约行为，容易误判为插件缺陷：
+
+- **未选择会话时，右侧栏不显示数据库面板。** 官方右侧栏的布局状态按会话 id 键控，没有会话就没有停靠面，也就没有入口卡片与页签——先选一个会话再展开右侧栏。
+- **若当前 DSH 就绪的入口卡片只有一个，「+」新建格会直接打开数据库页签而不是引导页。** 这是官方默认页规则（入口恰为一个时直接打开该页；没有入口或多个入口时打开引导页），不是跳过引导页的异常。
+
+---
+
+## 安全模型
+
+| 层次 | 机制 |
+|---|---|
+| 存储 | 密码与完整 URL 存 `secrets.json`（0600），永不返回给模型，返回给界面的连接信息密码一律脱敏为 `***` |
+| 授权 | 项目级 ro/rw 白名单，未授权即拒绝 |
+| 语句级 | 风险分级（danger / warning / none）+ 一次性确认 |
+| 只读强制 | MySQL/PG 走会话级 `SET TRANSACTION READ ONLY`；SQL Server 无等价语句，退化为应用层五道闸门（见下） |
+| 错误脱敏 | 连接串解析失败时，错误文案中的 userinfo 已脱敏，不回显明文密码 |
+| 脚本隔离 | 独立子进程 + vm 沙箱 + 60s 强杀 + 仅注入 db 句柄 |
+
+**SQL Server 的 ro 强度弱于 MySQL/PG**：SQL Server 没有等价的会话级只读语句，ro 授权下由应用层五道拦截兜底——首词白名单、拒绝多语句、拒绝 `SELECT ... INTO`、拒绝 `WITH ... (INSERT|UPDATE|DELETE|MERGE)`、拒绝 `OPENQUERY`/`OPENROWSET`/`OPENDATASOURCE`。这仍是应用层拦截，需要数据库侧强隔离时请为连接配置只读账号。
+
+---
+
+## SQL Server 连接说明
+
+覆盖 SQL Server 2005（9.0）→ 2025（17.0）与 Azure SQL Database。
+
+**常规使用只需要填主机、端口、账号、密码**（外加库名）就能连上，加密与证书参数一律不用管。表单默认只显示这四个必填项，其余参数收在「高级选项」折叠区里，需要排障时再展开。
+
+### 默认加密策略：不加密优先，被拒后自动升级
+
+新建连接默认 `encrypt=auto`（表单加密一栏的默认档）：
+
+1. 先**不带加密**建连——服务器没强制加密的实例（内网自建居多）直接连上，不再因为自签证书或多一层 TLS 卡住。
+2. 若服务器**强制加密**（报 `EENCRYPT` / 提示「服务器要求加密连接」，如开启 `Force Encryption=Yes` 或 Azure SQL），自动改用 `encrypt=true` + `trustServerCertificate=true` **重试一次**，用户无感。
+
+**自动重试的边界（有意收窄，不要理解成「无限自动兜底」）**：
+
+- **只重试一次**，不会连环重试，失败就把原始错误报给用户。
+- **只针对「服务器强制加密」这一种原因**。证书校验失败、TLS 版本协商失败、账号密码错误等其他失败**不会**触发重试——盲目重试只会把这些错误的真实原因盖掉，把排障引向错误方向。
+- **显式写 `encrypt=true` / `false` / `strict` 时不做任何重试**。你指定的策略就是最终策略，工具不替你改主意。
+
+**`auto` 在未强制加密的服务器上等同于 `encrypt=false`，也就是明文传输**——这是默认策略的代价，风险说明见下文「`encrypt=false` 的真实语义」，别跳过。
+
+**连接 URL 参数**（高级用户与排障时用，日常连接**无需**填这些；分字段表单同样支持）：
+
+| 参数 | 取值 | 默认 |
+|---|---|---|
+| `encrypt` | `auto` / `true` / `false` / `strict` | `auto`（先不加密，服务器强制加密时自动升级并信任其证书，仅重试一次） |
+| `trustServerCertificate` | `true` / `false` | `false` |
+| `tdsVersion` | `7_4` / `7_3_A` / `7_3_B` / `7_2` / `7_1` | `7_4`（服务器自动降级，通常无需设置） |
+| `tlsMinVersion` | `TLSv1` / `TLSv1.1` / `TLSv1.2` | 不设置（Node 默认 TLSv1.2） |
+| `serverName` | 证书校验用的服务器名 | 不设置（用连接主机名校验） |
+| `caCert` | PEM 文件路径或证书文本 | 不设置（用系统信任库） |
+| `instanceName` | 命名实例名（与 port 互斥） | — |
+| `useUTC` | `true` / `false` | `true` |
+
+`caCert` / `serverName` / `trustServerCertificate` / `tlsMinVersion` / `tdsVersion` 都在表单的**「高级选项」**折叠区里（默认收起），专供证书与老版本实例排障；正常连接不需要展开它。
+
+**TDS 版本不需要手动选**：客户端固定声明 `7.4`，服务器会按自身能力自动降级（2005→7.2、2008→7.3.A、2008 R2→7.3.B）。这是 [MS-TDS](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-tds/773a62b6-ee89-4c02-9e5e-344882630aac) 规定的行为（客户端声明高于服务器时，服务器**必须**使用自己最高的版本）。`tdsVersion` 仅作排障覆盖项保留。
+
+**连老实例时先分清两类 TLS 失败，解法正交、不可互相替代**：
+
+- **证书类**（`self signed certificate` / `unable to verify` / `CERT_`）→ 证书校验阶段失败。① 推荐用 `?caCert=` 安装受信 CA（校验照常生效）；证书签发给域名而你在用 IP 连接时，再加 `?serverName=域名`。② 不得已才用 `?trustServerCertificate=true` 跳过校验，或 `?encrypt=false`（前提是服务器未强制加密）。
+- **协议版本类**（`UNSUPPORTED_PROTOCOL` / `no protocols available` / `alert protocol version`）→ 客户端与服务端没有共同的 TLS 版本，握手在协商阶段就失败，**证书校验根本没执行**，`trustServerCertificate` 对它无效。根治靠服务端启用 TLS 1.2（2008 R2 SP3 装 KB4057113、2008 SP4 装 KB4057114、2012/2014 装对应 CU/GDR 与 KB3052404）；暂时动不了服务端时用 `?tlsMinVersion=TLSv1` 让客户端下探。
+
+各版本对 TLS 1.2 的支持：2016+ 原生支持；2012 SP4 / 2014 SP2 及以后原生支持，更早的 SP 需打补丁；2008 / 2008 R2 需上述补丁；**SQL Server 2005 无任何补丁可支持 TLS 1.2**（官方明确「TLS 1.2 只支持 SQL Server 2008 及以后」），只能下探客户端 TLS 下限。详见 [KB3135244](https://learn.microsoft.com/en-us/troubleshoot/sql/database-engine/connect/tls-1-2-support-microsoft-sql-server)。
+
+**`encrypt=false` 的真实语义（实测确认，勿误解为「只是不加密」）**：
+
+- 服务器**未**强制加密（PRELOGIN 回 `OFF`/`NOT_SUP`）时，`encrypt=false` 会**完全跳过 TLS 握手，直接明文发送 LOGIN7（含账号密码）**。已用假 TDS 服务器抓包实测：客户端下一个包就是 `0x10`（LOGIN7），没有 TLS 握手。**这是明文传输，切勿在内网之外使用。**
+- 服务器**强制**加密（`Force Encryption=Yes` 或 Azure SQL）时，`encrypt=false` 会被拒绝（提示「服务器要求加密连接」）——此时仍必须开加密。
+- 微软文档中「登录包始终加密」指的是**服务器强制加密或客户端 `encrypt=true` 时**的语义，不能推广成「`encrypt=false` 也总有 TLS 握手」。
+
+**这段也是默认 `encrypt=auto` 的安全含义**：`auto` 的第一步就是「不加密建连」，落到未强制加密的服务器上时，行为与 `encrypt=false` **完全相同**——明文传账号密码。`auto` 只在服务器拒绝明文时才升级到 TLS，它不是「自动帮你加密」，而是「先按不加密试，被拒才加密」。因此：
+
+- 在**可信内网**用默认值没问题；跨公网、跨不可信网段连 SQL Server 时，请显式设 `encrypt=true`（并在需要时用 `caCert` / `serverName` 解决证书问题），不要依赖 `auto`。
+- 需要强制安全档时显式写 `encrypt=true`：显式值不做任何自动重试，行为完全可预期。
+- `encrypt=false` 与 `encrypt=auto` 都应视为**明确的降级选择**，不是「只是没开高级选项」。
+
+**`encrypt=strict`（TDS 8.0）**：仅 SQL Server 2022+ 且开启 Force Strict Encryption 的实例支持。该模式下 TLS 在登录包之前就完成握手，因此 **`trustServerCertificate` 完全不生效**（驱动不传 `rejectUnauthorized`，证书强制校验），只能靠 `caCert` 或 `serverName`。
+
+`tlsMinVersion` 不含 `TLSv1.3`：底层 tedious 会把 TLS 上限封顶在 1.2，设 1.3 会让最小版本大于最大版本，握手必然失败。
+
+**系统信任库**：插件会把操作系统信任库并入证书校验（`tls.getCACertificates('system')`，需 Node ≥ 22.15；DSH 桌面端内置 Node 24.21 满足）。因此按官方推荐把自签证书导入 Windows「受信任的根证书颁发机构」后，**无需填 `caCert` 即可连接**。注入的是「内置 bundle + 系统信任库」合并列表（实测 118 + 72 = 190 张），合并而非替换，避免只给系统库导致连公网证书反而失败。老环境没有该 API 时不注入，保持 Node 原生默认校验（公网证书照常可用）。
+
+**其他边界**：仅 SQL 认证（不支持 Windows 集成认证与 Azure AD 认证）；不支持 SQL Server 2000 及更早；不支持 `tdsVersion=8_0`（TDS 8.0 通过 `encrypt=strict` 启用）。
+
+---
 
 ## 安装
-
-9 种数据库驱动随 npm 包分发（SQLite 优先用 Node 内置 `node:sqlite`，可选 `better-sqlite3`；GaussDB 驱动为华为云官方 npm 包 `gaussdb-node`），无需任何构建步骤。其中 SQL Server 驱动（`mssql@12`）只在 devDependencies，运行时加载发布包内置的 `vendor/sqlserver-driver.cjs`（`npm run build:sqlserver` 生成）——mssql 的生产依赖树会带入 buffer/events/process/string_decoder，触发宿主 resolve.paths bug。GaussDB 认证支持 sha256 与 md5，md5-sha256 混合与 SM3 暂不支持。
-
-唯一的一次性交互来自 oracledb：其 install 脚本会被 pnpm 默认拦截并使首次安装报告失败——在 DSH 插件安装界面点 **"Allow these scripts and retry"** 即可完成安装（该脚本仅做 Node 版本检查与横幅打印，批准无风险；批准持久化到 profile，后续升级不再提示）。
 
 ```bash
 # npm（推荐）
@@ -70,48 +220,84 @@ dsh plugin --profile web add dsh-db-tool
 dsh plugin --profile web add "dsh-db-tool@github:mengqi1436/dsh-db-tool"
 
 # 本地开发
-dsh plugin --profile web add "link:E:\path\to\dsh-db-tool"
+dsh plugin --profile web add "link:/path/to/dsh-db-tool"
 ```
 
-### 桌面端安装
+### 桌面端
 
-DSH 桌面端 0.2.0-rc.2+ 捆绑了 `dsh` 命令，全程无需另装 Node 或 pnpm：
+DSH 桌面端 0.2.0-rc.2+ 已捆绑 `dsh` 命令：
 
-1. **首次使用**：打开桌面端菜单栏，点 **"Manage dsh command"（管理 dsh 命令）**，安装捆绑的 CLI——该操作把 `dsh` 命令注册到系统 PATH。
-2. **安装插件**（必须钉精确版本：`@latest` 会因 release-age 校验回落到旧版）：
+1. 打开桌面端菜单栏，点 **"Manage dsh command"** 把 `dsh` 注册到 PATH
+2. 安装插件（npm 安装须钉精确版本，`@latest` 会因 release-age 校验回落）：
 
    ```bash
-   dsh plugin --profile desktop add dsh-db-tool@1.4.0 --registry=https://registry.npmjs.org/
+   dsh plugin --profile desktop add dsh-db-tool@1.9.5 --registry=https://registry.npmjs.org/
    ```
 
-   已有 npm 镜像源偏好的用户，可把 `--registry` 替换为自己的镜像地址。
-3. **重启桌面端**生效。
+3. **重启桌面端**生效
 
-mongodb 驱动已 bundle 进发布包（`vendor/mongodb-driver.cjs`），依赖树不含 mongodb/punycode——桌面端宿主打包在 `app.asar` 内、无法应用宿主补丁，本插件免补丁可直接安装加载。
+**关于 oracledb**：其安装脚本会被 pnpm 默认拦截，首次安装会报告失败。在 DSH 插件安装界面点 **"Allow these scripts and retry"** 即可完成——该脚本仅做 Node 版本检查与横幅打印，批准无风险，且批准会持久化到 profile，后续升级不再提示。
 
-## 测试
+**运行环境要求**：Node.js ≥ 22。部分数据库驱动（tedious 及其 Azure 依赖）要求 Node 22 起，Node 20 会在建连时报 `Promise.withResolvers is not a function`。
+
+**前端挂载位置**：数据库面板挂在 DSH 自带的右侧栏上，不需要额外安装任何侧边栏插件；`dsh.client.inject` 已声明 `@deepseek-ai/dsh-client-ui-sidebar-right` 作为加载前置。
+
+---
+
+## 数据存放
+
+`$DSH_HOME/db-tool/`（目录权限 0700）：
+
+| 文件 | 内容 |
+|---|---|
+| `connections.json` | 连接定义（`urlSafe` 中密码脱敏为 `***`） |
+| `secrets.json` | 0600，密码与完整 URL，永不返回给模型 |
+| `grants.json` | 项目授权（归一化路径 → connId → ro/rw） |
+| `audit.jsonl` | 追加式审计日志，每行一条 JSON |
+
+---
+
+## 开发
 
 ```bash
-npm test        # 离线 mock 全量（含 e2e-mock 全链路与对抗用例）
-npx tsc --noEmit
-npx stryker run # 变异测试（范围 lib/guard + lib/manager + lib/store，报告 reports/mutation/）
+npm install
+npm run build        # 编译 + 生成 vendor bundle（mongodb / sqlserver / codemirror）
+npm test             # vitest 全量
+npm run typecheck    # tsc --noEmit
 ```
 
-真机冒烟（设了才跑）：`DBT_TEST_MYSQL_URL / DBT_TEST_PG_URL / DBT_TEST_REDIS_URL / DBT_TEST_DM_CONNECT / DBT_TEST_MONGO_URL / DBT_TEST_ORACLE_CONNECT / DBT_TEST_SQLSERVER_URL`（SQL Server 形如 `sqlserver://sa:pw@host:1433/db`）。GaussDB、Oracle/Mongo 与 SQL Server 的要求均按官方文档实现，未真机验证处以代码内标注为准；**本轮 SQL Server 只有离线单测（Fake 驱动），未经真机验证**。
-
-## 目录结构
+真机冒烟测试由环境变量门控，设置了才运行：
 
 ```
-lib/        host 插件（store / adapters×9 / guard / manager / http / index）
-client/     侧边栏单文件产物（client.js，即源码）
-skills/     db-admin skill
-scripts/    构建与工具脚本（mongodb / sqlserver 驱动、CodeMirror 编辑器 bundle、DSH 宿主热修复 patch:dsh 等）
-patches/    DSH 宿主 dsh-app-boot 热修复补丁（patch:dsh 按宿主版本选用）
-docs/       预留（当前为空）
-tests/      vitest（离线 mock + DBT_TEST_* 门控真机）
-vendor/     mongodb-driver.cjs、sqlserver-driver.cjs 与 codemirror-sql.cjs bundle（gitignore，发布经 files 白名单收录）
+DBT_TEST_MYSQL_URL / DBT_TEST_PG_URL / DBT_TEST_REDIS_URL / DBT_TEST_DM_CONNECT
+DBT_TEST_MONGO_URL / DBT_TEST_ORACLE_CONNECT / DBT_TEST_SQLSERVER_URL
 ```
+
+同步执行器与测试的 CI 见 [`.github/workflows/ci.yml`](.github/workflows/ci.yml)：Node 22 与 24 两档，跑 `npm ci → build → typecheck → test`。
+
+### 目录结构
+
+```
+lib/          插件主体
+  adapters/   9 种数据库适配器 + 传输实现
+  store/      连接/授权/审计/密钥存储
+  guard/      语句风险分级
+  manager.ts  业务编排（授权、分派、确认、审计）
+  http/       右侧栏 HTTP 路由
+  script/     run_script 沙箱与子进程
+client/       右侧栏单文件产物
+skills/       db-admin skill
+scripts/      构建与工具脚本
+patches/      DSH 宿主热修复补丁
+tests/        vitest（离线 mock + 真机门控）
+assets/       功能流程图
+vendor/       驱动与编辑器 bundle（构建产物，发布时收录）
+```
+
+---
 
 ## 许可证
 
-MIT
+[Apache License 2.0](LICENSE) © 2026 mengqi1436
+
+可自由商用、修改、分发与再许可，需保留版权与许可声明，修改过的文件需标注改动；附带的专利授权不可撤回，但对本作品发起专利诉讼时终止。

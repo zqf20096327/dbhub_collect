@@ -8,7 +8,9 @@ PR Cockpit is a desktop app for GitHub pull requests on **macOS and Linux**. A l
 
 ![PR Cockpit showing the review queue for microsoft/vscode, grouped into ready to merge and waiting](docs/screenshots/landing-inbox.png)
 
-The queue separates **ready to merge**, **your move**, and **waiting**. Failed merge attempts appear under **FAILED TO MERGE** above pinned PRs in every grouping mode, until retried, dismissed, merged, or closed. With **Separate PRs that are cooking** on, open PRs labelled `kitchen: burnt` lead the queue under **Burnt**. Checks, conflicts, unresolved threads, and review state give you the context to decide what to open next. Stacked pull requests stay together.
+The queue separates **ready to merge**, **your move**, and **waiting**. Failed merge attempts appear under **FAILED TO MERGE** above pinned PRs in every grouping mode, until retried, dismissed, merged, or closed. With **Separate PRs that are cooking** on, open PRs labelled `kitchen: burnt` lead the queue under **Burnt**, and a PR labelled `order` cooks before Kitchen labels it; a stacked one shows **Waiting for lower layers**. Checks, conflicts, unresolved threads, and review state give you the context to decide what to open next. Stacked pull requests stay together.
+
+Cooking rows show **since ordered** in the inbox and compact PR overlays, measured from the latest cached `order` label-addition event (REST `created_at` or timeline `LabeledEvent.createdAt`), not a Kitchen stage change. The clock is omitted when the label is no longer present or its addition time is unknown.
 
 ## Install
 
@@ -159,6 +161,8 @@ Arming auto-merge approves the feature and delegates safely landing it to the me
 
 Safe-merge approval is also visible in CLI output and as `approvedForSafeMerge` in `--json`; `listen` wakes when it changes. Agents must re-read approval immediately before merging and still satisfy the safety checks above. Approval is granted or revoked in the app, never by an agent approving itself.
 
+`pr-cockpit mark-ready owner/repo#123` lists the PR's current head under **Marked ready**, directly below Burnt, unless a Kitchen label places it in a Kitchen stage first; a push, close, merge, `unmark-ready`, or <kbd>n</kbd> in the app clears it. `--json` shows `readyForReview` and `listen` wakes when it changes.
+
 The PR detail’s Agents tab renders Markdown answers and expandable tool activity, shows an identical final-answer echo only once, and keeps available tool inputs, errors, and log tails inspectable.
 
 Enable **Agent conversations** in **Settings → Agents & merging** for a conversation-first **Agents** workspace beside the inbox tabs. Search sessions grouped into **Working**, **Needs attention**, and **Recent**, including closed PRs. Read **Conversation**, expand longer tasks in place, inspect **Log tail**, or open an older attempt from run history. Run links support Back/Forward; each run and view remembers its reading position. New output follows only when you’re at the end; otherwise **Jump to latest** signals unread output. Transcripts and logs contain the recent output available from the cache, not complete logs. PR filters and grouping sit below the inbox tabs.
@@ -178,7 +182,7 @@ The App requests read-only Actions, checks, contents, issues, metadata, pull req
 Cockpit is a client for your existing GitHub workflow, not a second place to maintain pull requests.
 
 - **On your machine:** a Bun server caches PR state in SQLite and serves the desktop UI and CLI. In replica mode, cached lists stay local; GitHub searches, keyed PR titles, and embedded PR rows use the connected source.
-- **Embeds:** `/#/embed?keys=owner%2Frepo%23123&overlay=1` opts into compact Kitchen rows with an E hide control. The embedding host owns hiding, persistence, and Undo; GitHub and the review queue stay unchanged.
+- **Embeds:** `/#/embed?keys=owner%2Frepo%23123&overlay=1` opts into compact Kitchen rows with an E hide control, in the review queue's sections under your grouping settings. The embedding host owns hiding, persistence, and Undo; GitHub and the review queue stay unchanged.
 - **Mirror storage:** Git mirrors compact automatically and evict the oldest unprotected caches toward a 20 GiB target. Active reads, recent use, and linked worktrees are protected, so the target is not a hard limit.
 - **Back to GitHub:** comments, reviews, file edits, thread resolution, and merges use your GitHub CLI authentication. GitHub remains authoritative.
 - **Keeping it current:** the hosted relay is enabled by default. It receives GitHub webhooks and delivers compact change markers and Actions run/job state, including runner assignment—not full PR contents or job logs—to Cockpit. Cockpit never sends the relay your GitHub token; it proves read access to each repository with commit data only readers can look up, and that proof rotates daily. Branch pushes refresh open PRs whose head or base matches, including recently viewed PRs outside the inbox. A direct GitHub poller repairs missed events.

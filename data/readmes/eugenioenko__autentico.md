@@ -1,8 +1,5 @@
-# Autentico — OAuth 2.0 / OIDC Identity Provider
+# Autentico OAuth 2.0 / OIDC Identity Provider
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/eugenioenko/autentico)](https://goreportcard.com/report/github.com/eugenioenko/autentico)
-[![Test Coverage](https://img.shields.io/badge/coverage-70.4%25-green.svg)](https://github.com/eugenioenko/autentico)
-[![Tests](https://img.shields.io/badge/tests-1856-blue.svg)](https://github.com/eugenioenko/autentico)
 [![Go Version](https://img.shields.io/badge/go-1.23+-blue.svg)](https://golang.org/dl/)
 [![License](https://img.shields.io/badge/license-AGPL--v3-blue.svg)](LICENSE)
 
@@ -115,6 +112,7 @@ It is not designed for organizations that require horizontal scaling of the auth
 - **Authorization Code Flow + PKCE** (RFC 7636, S256 enforced by default) — the right default for web and native apps; federation validates registered clients, redirect URIs, scopes, and PKCE before issuing codes
 - **Authorization request validation** — signed continuation parameters are checked against the current client, callback URI, scopes, and PKCE before signup, email verification, magic-link login, and passkey authentication.
 - **Code-only authorization responses** — authorization and client registration support only `response_type=code`; implicit and hybrid response types are rejected.
+- **Federation claim requirements** — optional per-provider string/boolean equality and Go regex rules, enforced on verified ID tokens before account linking or login. Admin rule builder and read-only draft tester share the login matcher.
 - **Federation login CSRF protection** — short-lived browser bindings and atomic single-use state survive restarts; independent upstream nonces prevent response injection.
 - **Authorization response modes** — discovery advertises query encoding; unsupported modes are rejected before login or SSO.
 - **Authorization request objects** — discovery explicitly disables `request_uri`; unsupported request objects are rejected before login or SSO.
@@ -149,7 +147,7 @@ It is not designed for organizations that require horizontal scaling of the auth
 - **Per-client configuration overrides** — token TTLs, allowed audiences, self-signup, session idle timeout, and trusted device settings can be tuned per client without touching global defaults
 - **Self-signup** — optionally allow end users to register accounts on the login page, globally or per client
 - **User CRUD** — full user lifecycle management with role support (`user`, `admin`)
-- **Custom claims** — assign arbitrary key/value claims to a user; emitted into the ID token, access token, and UserInfo response when the `custom_claims` scope is granted
+- **Custom claims** — assign custom string claims to users and groups; group claims are inherited as `group.claim`, with individual claims taking precedence; emitted into the ID token, access token, and UserInfo response when the `custom_claims` scope is granted
 - **User groups** — organize users into groups; group names are emitted as a `groups` claim when the `groups` scope is granted
 - **Soft deletes** — users and clients are deactivated, not destroyed, preserving audit history
 - **Account self-service** — users can manage their own profile, security settings, sessions, passkeys, MFA, and connected providers via the built-in Account UI
@@ -199,6 +197,7 @@ Each package in `pkg/` owns a vertical slice of IdP functionality. The conventio
 | `pkg/idpsession`    | IdP-level SSO sessions — cross-request browser sessions                          |
 | `pkg/client`        | OAuth2 client registration, CRUD, and authentication                             |
 | `pkg/user`          | User identity management — CRUD, authentication, lockout                         |
+| `pkg/groupclaim`    | Group custom claims — admin CRUD, inherited through membership                    |
 | `pkg/userclaim`     | Custom per-user claims — CRUD and token/UserInfo embedding                        |
 | `pkg/signup`        | Self-service user registration flow                                              |
 | `pkg/onboarding`    | First-run admin account creation                                                 |
