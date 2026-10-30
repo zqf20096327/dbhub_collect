@@ -10988,5 +10988,163 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c59811dfd8e7": {
+  "identity": {
+   "one_liner": "Spring Boot 事务性 Outbox 模式示例，用 PostgreSQL 存事件、Kafka 发布",
+   "review": "一个演示 Transactional Outbox 模式的 Java/Spring Boot 示例项目，将事件持久化到 PostgreSQL，经内存队列与 Kafka 批量发布器发布，并提供崩溃恢复与幂等请求处理。面向已使用 Spring Boot、PostgreSQL 和 Kafka 的团队，附带 Prometheus/Grafana、OpenSearch 日志与分布式追踪等可观测性配置。",
+   "highlights": [
+    "实现事务性 Outbox 流程：事务提交后将事件 ID 放入内存队列，批量加载 payload 发布到 Kafka",
+    "提供 Recovery Worker，仅扫描 ACTIVE 分区中未发布事件，经同一发布管道恢复",
+    "内置幂等请求处理与可观测性组件（指标、结构化日志、分布式追踪）"
+   ],
+   "use_cases": [
+    "微服务中需要可靠事件投递且避免持续数据库轮询的场景",
+    "需要崩溃后恢复未发布 outbox 事件的事件驱动架构",
+    "需要幂等去重与请求重放防护的订单/写入服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ This project targets teams already using **Spring Boot, PostgreSQL, and Kafka** that want low-latency event delivery without continuous database polling or an additional CDC platform. ／ - **PostgreSQL** provides durable event storage.",
+     "lines": [
+      10,
+      24,
+      39
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 PostgreSQL 存储 outbox 事件、Kafka 发布消息，是使用数据库的应用/示例系统",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Spring Boot Transactional Outbox with Kafka & PostgreSQL ／ Production-ready Spring Boot example of the **Transactional Outbox Pattern** with idempotency, crash recovery, batch publishing, load testing, and observability. ／ - **PostgreSQL** provides durable event storage.",
+   "evidence_lines": [
+    1,
+    14,
+    39
+   ]
+  },
+  "fn": "KHolodilin/spring-transactional-outbox-kafka",
+  "sha": "c59811dfd8e7",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c8721e2a611e": {
+  "identity": {
+   "one_liner": "PHP 自托管的隐私友好网站访问统计分析应用",
+   "review": "一个用 PHP 编写的自托管网站访问分析应用，默认以 SQLite 存储数据，可通过后台设置切换到 MySQL 或 MariaDB 托管数据库；支持从 Umami、Matomo 导入历史数据，并内置 GeoLite2 地理位置库用于地理位置分析。适合希望在普通 Apache 虚拟主机上部署、不依赖 Node.js 或独立数据库服务器的网站站长。",
+   "highlights": [
+    "支持 SQLite（默认）、MySQL、MariaDB 三种存储后端，可在后台切换",
+    "提供从 Umami 和 Matomo 导入历史数据的仪表盘及命令行导入器",
+    "数据存储在 web 根目录之外，并内置 MaxMind GeoLite2 地理位置库"
+   ],
+   "use_cases": [
+    "在普通共享 Apache 主机上部署自托管网站访问统计",
+    "从 Umami、Matomo 等其他分析工具迁移历史数据",
+    "需要记录跟踪事件与自定义事件的网站流量分析"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Runs on a cheap Apache hosting plan, no VPS needed.** It stores data in SQLite by default, and MySQL and MariaDB are also supported. Installation takes three steps. Just upload the archive and you are done. ／ - For MySQL or MariaDB: the `pdo_mysql` PHP extension and a database/user with `CREATE`, `ALTER`, `INDEX`, `SELECT`, `INSERT`, `UPDATE` and `DELETE` permissions ／ To use a managed database, open **Settings → Database**, select MySQL or MariaDB, enter the host, port, database name, username and password, then use **Test connection** before saving. The test can create the named database when it is missing if the database ",
+     "lines": [
+      14,
+      27,
+      49
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Runs on a cheap Apache hosting plan, no VPS needed.** It stores data in SQLite by default, and MySQL and MariaDB are also supported. Installation takes three steps. Just upload the archive and you are done. ／ - PHP 8.1 or later with the `sqlite3` and `pdo_sqlite` extensions enabled ／ SQLite is the default (because it's lightweight and doesn't require a separated server), but you can change it any time !",
+     "lines": [
+      14,
+      25,
+      48
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Runs on a cheap Apache hosting plan, no VPS needed.** It stores data in SQLite by default, and MySQL and MariaDB are also supported. Installation takes three steps. Just upload the archive and you are done. ／ - For MySQL or MariaDB: the `pdo_mysql` PHP extension and a database/user with `CREATE`, `ALTER`, `INDEX`, `SELECT`, `INSERT`, `UPDATE` and `DELETE` permissions ／ To use a managed database, open **Settings → Database**, select MySQL or MariaDB, enter the host, port, database name, username and password, then use **Test connection** before saving. The test can create the named database when it is missing if the database ",
+     "lines": [
+      14,
+      27,
+      49
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用以 SQLite/MySQL/MariaDB 存储自身分析数据（L14、L48、L49），数据库是其存储层而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Runs on a cheap Apache hosting plan, no VPS needed.** It stores data in SQLite by default, and MySQL and MariaDB are also supported. Installation takes three steps. Just upload the archive and you are done. ／ SQLite is the default (because it's lightweight and doesn't require a separated server), but you can change it any time !",
+   "evidence_lines": [
+    14,
+    48
+   ]
+  },
+  "fn": "axthauvin/petitstats",
+  "sha": "c8721e2a611e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11047,5 +11047,90 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fee2143cff02": {
+  "identity": {
+   "one_liner": "Red 是 Raku 语言的 ORM，将模型声明映射为 SQL 查询",
+   "review": "Red 是面向 Raku 语言的 ORM 库（标注为 WiP），开发者通过声明式 trait 定义模型与关系，库负责生成并执行 SQL，支持 PostgreSQL、SQLite、MySQL 后端，提供索引、CHECK/EXCLUDE 约束、嵌套事务保存点及正则编译为 SQL 等能力，通过 zef 安装，PostgreSQL 驱动需单独安装。",
+   "highlights": [
+    "支持通过 trait 声明列、主键、关系等模型定义并生成 SQL",
+    "支持 PostgreSQL、SQLite、MySQL 多后端及命名/部分索引、CHECK 约束",
+    "提供嵌套 savepoint 事务和正则编译为 SQL 的能力"
+   ],
+   "use_cases": [
+    "Raku 应用中替代手写 SQL 进行数据持久化",
+    "需要声明式 schema 定义与跨后端查询的项目"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**PostgreSQL users: the Pg driver is no longer bundled with Red.** Install the separate `Red::Driver::Pg` distribution when installing or upgrading: ／ PostgreSQL support is provided by a separate distribution. Install it only if you use PostgreSQL:",
+     "lines": [
+      11,
+      37
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`:using` selects an access method. PostgreSQL supports `btree`, `hash`, `gin`, `gist`, `spgist` and `brin`; the common API supports `btree`. `:opclass` selects a PostgreSQL operator class. For multiple keys, supply a list with one string per key, using an empt ／ Regex literals in `grep` and `first` are compiled to SQL, including single `.match(/.../)` predicates and regex callables on scalar projections. PostgreSQL uses its ARE engine and MySQL 8 uses `REGEXP_LIKE`. SQLite rejects regex by default; opt in with `databa",
+     "lines": [
+      330,
+      352
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`:using` selects an access method. PostgreSQL supports `btree`, `hash`, `gin`, `gist`, `spgist` and `brin`; the common API supports `btree`. `:opclass` selects a PostgreSQL operator class. For multiple keys, supply a list with one string per key, using an empt ／ Regex literals in `grep` and `first` are compiled to SQL, including single `.match(/.../)` predicates and regex callables on scalar projections. PostgreSQL uses its ARE engine and MySQL 8 uses `REGEXP_LIKE`. SQLite rejects regex by default; opt in with `databa",
+     "lines": [
+      330,
+      352
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定义 Red 为 Raku 的 ORM，为应用程序操作数据库提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Red - A **WiP** ORM for Raku ／ **PostgreSQL users: the Pg driver is no longer bundled with Red.** Install the separate `Red::Driver::Pg` distribution when installing or upgrading: ／ Red is a *WiP* ORM for Raku.",
+   "evidence_lines": [
+    7,
+    11,
+    251
+   ]
+  },
+  "fn": "FCO/Red",
+  "sha": "fee2143cff02",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

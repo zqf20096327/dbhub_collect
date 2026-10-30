@@ -12891,5 +12891,218 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c8dbf6c4a9e6": {
+  "identity": {
+   "one_liner": "单二进制工具，将各类记录构建为 SQLite FTS5 全文索引供 Agent 检索",
+   "review": "Leviathan 是一个 Rust 编写的命令行工具，把 JSONL、JSON、CSV/TSV、SQLite 或任意数据库 CLI 导出的记录索引为一个 SQLite FTS5 文件，供 Agent 以自然语言检索并返回带引用的结果卡片。支持 MCP stdio/HTTP 服务与可选的记忆读写功能，面向为 AI Agent（如 Claude Code、Cursor 等）提供数据检索能力的开发者。",
+   "highlights": [
+    "提供 `leviathan index/search` 等命令，将多格式记录构建为 SQLite FTS5 索引并支持 BM25 排序检索",
+    "提供 `leviathan mcp` 五个只读 stdio 工具及 `serve --http` 的 HTTP MCP/REST/OpenAPI 接入",
+    "提供可选的 Agent 记忆功能（remember/recall），数据写入独立 SQLite 文件"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供大规模日志/工单/表格数据的全文检索与引用式问答",
+    "通过数据库 CLI 管道（psql、duckdb 等）将数据库查询结果索引后供 Agent 查询",
+    "为 Agent 会话提供低 token 消耗的持久记忆存储与召回"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "psql \"$DATABASE_URL\" -At -c \"SELECT row_to_json(t) FROM tickets t\" | leviathan index - -c tickets.toml",
+     "lines": [
+      80
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite, or any database CLI's output) into a ranked full-text index. Agents ／ Prebuilt binaries are on Releases. No runtime dependencies; the index is one SQLite file. ／ leviathan index ./export # everything in a folder: files of every format, every SQLite table",
+     "lines": [
+      12,
+      54,
+      70
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它读取 SQLite 文件及数据库 CLI 导出，并将索引存储于 SQLite FTS5 文件，是围绕数据检索为 Agent 服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Leviathan is a single binary that turns records (JSONL, JSON, CSV/TSV, ／ Records stream into one SQLite file with an FTS5 index. A search resolves the ／ **MCP (optional):** `leviathan mcp` serves five read-only stdio tools",
+   "evidence_lines": [
+    11,
+    158,
+    102
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "elstongun/leviathan",
+  "sha": "c8dbf6c4a9e6",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9bd79ac1f8ef": {
+  "identity": {
+   "one_liner": "Claude Code 技能与内省对话伴侣，本地 SQLite 存储记忆",
+   "review": "一个面向开发者、创始人和普通用户的心理内省对话技能包，可安装到 Claude Code、Cursor、Windsurf 等 CLI/IDE 代理及网页聊天平台。采用 SKILL.md 加 15 个按需加载的参考分片实现渐进式披露，本地记忆 vault 使用 SQLite（FTS5 schema）存于 ~/.satori/，支持 AES-256-GCM 加密，附 350 案例触发基准。",
+   "highlights": [
+    "支持安装到 Claude Code、Cursor、Windsurf、Codex CLI 等多种代理及 Claude.ai/ChatGPT/Gemini 网页端",
+    "本地 SQLite vault 存储记忆，支持 FTS5 全文检索 schema 与可选 AES-256-GCM 加密",
+    "包含 350 案例触发基准与 SKILL.md 校验脚本"
+   ],
+   "use_cases": [
+    "在 CLI/IDE 编码代理中加入内省对话能力",
+    "在网页聊天（Claude.ai、ChatGPT Custom GPT、Gemini Gems）中部署对话技能",
+    "本地开源权重模型（Ollama、LM Studio）加载紧凑版提示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Path 1: One-Command CLI (`npx`)**|**Node.js ≥ 18** (`npx` included with npm) and at least one supported coding agent installed|**Python ≥ 3.9** (stdlib only) for local SQLite memory vault (`~/.satori/`); `pip install cryptography` only if using `AES-256-GCM ／ |**Agent Harnesses (10)** *(Mode 1: Local CLI/IDE with `~/.satori/` SQLite vault)*|Claude Code, Google Antigravity, Gemini CLI, OpenAI Codex CLI, Cursor, Windsurf, OpenCode, NousResearch Hermes Agent, OpenClaw, xAI Grok Build|**Tier A - Verified (5):** Claude  ／ |**Local Memory Spec**|`references/memory-system.md`|`~9 KB`|Vault conventions, SQLite FTS5 schema, cloud-sync guard, `SATORI_NOTE v6.5`|When reading/writing memory|",
+     "lines": [
+      54,
+      183,
+      256
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明本地记忆 vault 使用 SQLite 存储数据，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Satori v6.5.5 progressive disclosure architecture diagram illustrating the SKILL.md entry file, Precedence Ladder, 15 on-demand reference shards, and local SQLite memory vault ／ |**Path 1: One-Command CLI (`npx`)**|**Node.js ≥ 18** (`npx` included with npm) and at least one supported coding agent installed|**Python ≥ 3.9** (stdlib only) for local SQLite memory vault (`~/.satori/`); `pip install cryptography` only if using `AES-256-GCM` passphrase encryption|",
+   "evidence_lines": [
+    5,
+    54
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "MetcalfSolutions/Satori",
+  "sha": "9bd79ac1f8ef",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f428a785c924": {
+  "identity": {
+   "one_liner": "Loco+Leptos+htmx+Alpine 多端 Web 应用启动模板",
+   "review": "这是一个 Rust 全栈 Web 应用启动模板，后端基于 Loco 框架，前端用 Leptos islands、htmx 和 Alpine，页面由服务端渲染并可通过 Tauri 2 打包为 iOS、Android、Windows、macOS 和 Linux 应用。数据库查询使用 SQLx query! 宏在编译期校验。适合想用纯 Rust 技术栈构建多页 Web 应用的开发者，尤其面向配合 AI 编码代理（附 CLAUDE.md 规则）的工作流。",
+   "highlights": [
+    "服务端渲染页面加 WASM islands，htmx 交换页面，每页只加载所用 islands",
+    "SQLx query! 宏在编译期校验 SQL 查询，覆盖数据库、服务端、页面到浏览器",
+    "通过 Tauri 2 输出 Web 及 iOS、Android、Windows、macOS、Linux 六平台应用"
+   ],
+   "use_cases": [
+    "以 Rust 技术栈起步构建多页（类单页体验）Web 应用",
+    "需要同一代码库打包为桌面与移动端应用的项目",
+    "配合 AI 编码代理进行编译期强校验开发的团队"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是一个使用 Loco 框架和 SQLx 操作数据库的 Web 应用模板，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 或 Apache-2.0 双许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A multi-page web app that feels like a single-page app, also as an app for ／ |Server, database, accounts, e-mail, jobs|Loco's Rest API starter| ／ |The app's own queries|SQLx `query!`, checked at compile time|",
+   "evidence_lines": [
+    17,
+    70,
+    75
+   ]
+  },
+  "fn": "wdceng/loco-leptos-htmx-alpine-starter",
+  "sha": "f428a785c924",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

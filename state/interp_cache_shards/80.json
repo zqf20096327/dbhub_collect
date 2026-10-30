@@ -10724,5 +10724,77 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "95a79c093eff": {
+  "identity": {
+   "one_liner": "基于 P2P 网络的以太坊事件索引器，无需 RPC",
+   "review": "Sieve 是一个自托管的以太坊及 OP-Stack 链事件索引器，直接从 P2P 网络获取区块（含多节点 quorum 验证），将解析后的事件、函数调用与原生转账写入 PostgreSQL，并提供 GraphQL API 查询。适合需要自建链上数据索引、避免依赖 RPC 服务商的开发者；仅支持 Ethereum 与 4 条 OP-Stack 链。",
+   "highlights": [
+    "通过 P2P 网络（devp2p/discv4/discv5）直接同步区块，不依赖 RPC 提供商",
+    "自动从 ABI 生成表结构，并提供内置 GraphiQL 的 GraphQL API",
+    "内置数据完整性校验：多节点 header quorum、payload 重算验证与 quorum 授权的 reorg 回滚"
+   ],
+   "use_cases": [
+    "自托管索引以太坊及 OP-Stack 链上的合约事件",
+    "无需 RPC 密钥与速率限制的链上数据采集与历史回填",
+    "为链上数据提供 GraphQL 查询接口"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Just Sieve, Postgres, and an internet connection. ／ All of it configured in one TOML file. All of it stored in PostgreSQL. All of it queryable via GraphQL.",
+     "lines": [
+      5,
+      97
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明索引数据存储在 PostgreSQL 中（L97），PostgreSQL 为其数据存储依赖。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Self-hosted indexer for Ethereum and the OP-Stack. Connects straight to the P2P network, no RPC provider. ／ All of it configured in one TOML file. All of it stored in PostgreSQL. All of it queryable via GraphQL. ／ Sieve fetches the ABI, creates your tables, syncs the chain over P2P, and serves a GraphQL API. Zero code.",
+   "evidence_lines": [
+    3,
+    97,
+    14
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "slvDev/sieve",
+  "sha": "95a79c093eff",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

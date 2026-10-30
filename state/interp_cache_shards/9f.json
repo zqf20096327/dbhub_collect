@@ -12463,5 +12463,258 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "24d3e759f86f": {
+  "identity": {
+   "one_liner": "日语 Markdown 笔记本地全文检索 CLI，基于 SQLite FTS5 BM25",
+   "review": "一个面向日语 Markdown 笔记的本地搜索 CLI，通过 SQLite FTS5（trigram 分词）实现 BM25 全文检索，可选启用本地 embedding 的语义/混合搜索，输出 JSON Lines 供脚本解析。主要设计目标是让 Claude Code、Codex CLI、Cursor 等 AI 编码代理检索用户笔记资产，也可供人直接使用；单二进制、不需外部 API，构建需 C 编译器。",
+   "highlights": [
+    "支持日语 BM25 全文检索，基于 SQLite FTS5 trigram 分词器，无需形态素解析",
+    "可选语义/混合检索（本地 embedding + RRF 融合），不使用外部 API",
+    "搜索命令支持 --json 输出 JSON Lines，并以 grep 惯例的 exit code 区分命中/未命中/错误"
+   ],
+   "use_cases": [
+    "AI 编码代理需要检索用户 Markdown 笔记资产的场景",
+    "日语/英语混合笔记的本地全文与语义搜索",
+    "无需外部服务的单机笔记检索工具构建"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **日本語対応の BM25 全文検索** — SQLite FTS5 (trigram tokenizer)。形態素解析なしで日本語・英語混在ノートを検索できる ／ システムに C コンパイラ (`cc`) が必要 (rusqlite の bundled SQLite ビルド用)。",
+     "lines": [
+      7,
+      108
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为内置索引存储（rusqlite bundled）被使用，项目本身是面向笔记检索的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Markdown ノートの入ったフォルダ (YAML frontmatter + wikilink、Obsidian 互換) を対象に、BM25 全文検索・タグ/タイトル検索・semantic 検索を単一バイナリで提供する。Claude Code / Codex CLI / Cursor 等の **AI コーディングエージェントに、人のノート資産を検索させる**ことを主眼に設計している (人間が直接叩いてもよい)。 ／ - **日本語対応の BM25 全文検索** — SQLite FTS5 (trigram tokenizer)。形態素解析なしで日本語・英語混在ノートを検索できる ／ システムに C コンパイラ (`cc`) が必要 (rusqlite の bundled SQLite ビルド用)。",
+   "evidence_lines": [
+    5,
+    7,
+    108
+   ]
+  },
+  "fn": "kimushun1101/mikke",
+  "sha": "24d3e759f86f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3ca7c80bb292": {
+  "identity": {
+   "one_liner": "Kotlin 多平台 ORM 库，跨 JVM/Android/iOS/原生平台直连多种数据库",
+   "review": "Stormify 是一个面向 Kotlin Multiplatform 的 ORM 库，支持 JVM、Android、iOS 及 Linux/Windows/macOS 原生平台，通过字段名与列名匹配的约定方式映射普通 Kotlin 类，无需大量注解或 XML 配置；原生模式下不经 JDBC 直接连接 PostgreSQL、MariaDB/MySQL、Oracle、MSSQL、SQLite，附带 schema-sync CLI 用于生成迁移与实体文件。适合使用 Kotlin/KMP 的应用开发者。Apache 2.0 许可，通过 Gradle 插件或 Maven 依赖安装。",
+   "highlights": [
+    "提供 Kotlin Multiplatform 支持，覆盖 JVM、Android、Linux、Windows、macOS 与 iOS，同一 API 跨平台",
+    "支持原生数据库直连（无 JDBC），以及 CRUD、嵌套事务、协程事务 API、懒加载委托、分页查询与存储过程调用",
+    "包含 schema-sync CLI，比对数据库与 Kotlin 实体生成 SQL 迁移及实体文件补丁，支持 TUI 与 CI headless 模式"
+   ],
+   "use_cases": [
+    "Kotlin/KMP 跨平台应用中的数据库访问层",
+    "Android/iOS 应用基于 SQLite 的 ORM 数据持久化",
+    "配合 CI 钩子做实体与数据库 schema 的同步与迁移生成"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Native Database Access**: Direct access to PostgreSQL, MariaDB/MySQL, Oracle, MSSQL, and SQLite on Linux, Windows, and macOS without JVM or JDBC. ／ Supported native databases: **PostgreSQL, MariaDB/MySQL, Oracle, MSSQL, SQLite**. On iOS, only SQLite is available.",
+     "lines": [
+      23,
+      68
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Native Database Access**: Direct access to PostgreSQL, MariaDB/MySQL, Oracle, MSSQL, and SQLite on Linux, Windows, and macOS without JVM or JDBC. ／ Supported native databases: **PostgreSQL, MariaDB/MySQL, Oracle, MSSQL, SQLite**. On iOS, only SQLite is available.",
+     "lines": [
+      23,
+      68
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **Native Database Access**: Direct access to PostgreSQL, MariaDB/MySQL, Oracle, MSSQL, and SQLite on Linux, Windows, and macOS without JVM or JDBC. ／ Supported native databases: **PostgreSQL, MariaDB/MySQL, Oracle, MSSQL, SQLite**. On iOS, only SQLite is available.",
+     "lines": [
+      23,
+      68
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Native Database Access**: Direct access to PostgreSQL, MariaDB/MySQL, Oracle, MSSQL, and SQLite on Linux, Windows, and macOS without JVM or JDBC. ／ - **Android Support**: Full ORM on Android's built-in SQLite, with compile-time entity metadata via annotation processing. ／ - **iOS Support**: SQLite-based ORM on iOS devices and simulators.",
+     "lines": [
+      23,
+      24,
+      25
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Native Database Access**: Direct access to PostgreSQL, MariaDB/MySQL, Oracle, MSSQL, and SQLite on Linux, Windows, and macOS without JVM or JDBC. ／ Supported native databases: **PostgreSQL, MariaDB/MySQL, Oracle, MSSQL, SQLite**. On iOS, only SQLite is available.",
+     "lines": [
+      23,
+      68
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Native Database Access**: Direct access to PostgreSQL, MariaDB/MySQL, Oracle, MSSQL, and SQLite on Linux, Windows, and macOS without JVM or JDBC. ／ Supported native databases: **PostgreSQL, MariaDB/MySQL, Oracle, MSSQL, SQLite**. On iOS, only SQLite is available.",
+     "lines": [
+      23,
+      68
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为 Kotlin Multiplatform 的 ORM 库，为应用提供数据库访问能力，属于数据库生态的开发库组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Stormify is a **free and open source** ORM library for Kotlin Multiplatform, released under the Apache 2.0 License. It simplifies database interactions with minimal configuration, operating on plain Kotlin classes without requiring extensive annotations or XML setups, as long as field names match database columns. ／ - **Native Database Access**: Direct access to PostgreSQL, MariaDB/MySQL, Oracle, MSSQL, and SQLite on Linux, Windows, and macOS without JVM or JDBC. ／ Supported native databases: **PostgreSQL, MariaDB/MySQL, Oracle, MSSQL, SQLite**. On iOS, only SQLite is available.",
+   "evidence_lines": [
+    10,
+    23,
+    68
+   ]
+  },
+  "fn": "teras/stormify",
+  "sha": "3ca7c80bb292",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "15c7b8769a58": {
+  "identity": {
+   "one_liner": "AstrBot 聊天机器人插件，提供拟人化表达、分级长期记忆与睡眠/做梦机制",
+   "review": "这是运行在 AstrBot 框架上的插件（插件 ID astrbot_plugin_congling），为 QQ 机器人（OneBot v11/aiocqhttp）提供拟人化回复节奏、分级淡忘的长期记忆、睡眠阶段与做梦模拟、日记、主动找人、QQ 空间读写等能力，并带可视化配置面板。数据使用 Python 标准库 sqlite3 存储，向量检索需手动配置 embedding provider，默认走 BM25。",
+   "highlights": [
+    "实现分级长期记忆：采集、去重、打分、BM25+可选向量召回、每日衰减与归档",
+    "实现睡眠阶段模拟（浅睡/深睡/REM）与仅在 REM 段生成的梦境记录",
+    "内置纯静态可视化配置面板，包含 120 个配置项、12 个 schema 分区"
+   ],
+   "use_cases": [
+    "在 AstrBot + OneBot v11 协议端上搭建有长期记忆的 QQ 聊天机器人",
+    "为已有 AstrBot 人格/记忆插件补充拟人化分句、节奏与特殊消息解析",
+    "需要机器人睡眠作息、日记、主动发起会话等陪伴类行为的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 依赖：零强制依赖（标准库 sqlite3；可选 `jieba` 提升中文召回）",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "插件自身使用 Python 标准库 sqlite3 作为存储层来保存记忆、梦境等数据，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 插件 ID：`astrbot_plugin_congling` ／ - 依赖：零强制依赖（标准库 sqlite3；可选 `jieba` 提升中文召回） ／      → 召回（BM25 + 可选向量，RRF 融合）→ 注入 → 每日衰减 → 归档/遗忘 → 反思",
+   "evidence_lines": [
+    14,
+    18,
+    69
+   ]
+  },
+  "fn": "LUOSHUI319/astrbot_plugin_congling",
+  "sha": "15c7b8769a58",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

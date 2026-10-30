@@ -11110,5 +11110,140 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b748de350a6b": {
+  "identity": {
+   "one_liner": "AI 编码工具的本地记忆与规则中心，以单一 SQLite 库经 MCP/REST/CLI 读取",
+   "review": "Aletheia 是面向 AI 编码工具的本地记忆与规则管理工具：把会话记忆和规则存入本机一个 SQLite 库，通过 MCP、REST API 和 CLI 供 Claude Code、Codex CLI、Cursor、Gemini CLI 等工具读取，并把规则同步写入各工具的指令文件。适合需要跨会话持久记忆的 AI 编码工具用户。项目处于 alpha 阶段，部分工具的 hooks 仅在作者机器上验证过，Windows 仅通过 CI 测试。",
+   "highlights": [
+    "单一 SQLite 本地存储，通过 MCP（stdio 和 HTTP）、REST API 和 CLI 三种接口读取",
+    "支持将规则同步写入 CLAUDE.md、AGENTS.md、GEMINI.md、.cursor/rules 等多工具指令文件",
+    "存储前对 secrets 和 <private> 块做脱敏处理，仅监听 loopback"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex CLI、Cursor 等 AI 编码工具提供跨会话的持久记忆",
+    "统一管理多工具的规则文件，一次编写同步到多个指令文件",
+    "本地检索和编辑 AI 工具捕获的会话事实与目标"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Aletheia is a free, local memory and rules hub for AI coding tools. One SQLite store is read by any tool over MCP,",
+     "lines": [
+      41
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它以 SQLite 作为自身存储，是使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Aletheia is a free, local memory and rules hub for AI coding tools. One SQLite store is read by any tool over MCP, ／ no telemetry and no network call unless you configure a model provider. It listens on loopback only. ／ before storing, spool to disk if the database is unavailable, and always exit 0 so they never block the host.",
+   "evidence_lines": [
+    41,
+    48,
+    76
+   ]
+  },
+  "fn": "mohamed-ashraf-elsaed/aletheia-mem",
+  "sha": "b748de350a6b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c5b3aebc9487": {
+  "identity": {
+   "one_liner": "面向 OceanBase 2026 大赛的非官方 Python CLI 与可安装 Skill",
+   "review": "该工具为 OceanBase 2026 数据库大赛参赛者提供命令行工作流：提交固定 commit 版本、按回执查分、抓取榜单快照并做实验对比与批量提测队列。面向参赛选手使用；要求 Python 3.10+，运行时无第三方依赖，认证由使用者自行提供 Cookie，提交写入不自动重试。",
+   "highlights": [
+    "支持固定版本提交、重复保护、提交前原子保存回执与中断恢复",
+    "提供榜单全量分页抓取、JSON/CSV 导出与自动快照",
+    "支持批量队列的次数上限、失败停止与检查点续跑"
+   ],
+   "use_cases": [
+    "参赛提交代码版本并查询任务评分",
+    "定期监测与抓取赛题榜单并对比分数变化",
+    "批量执行受限的提测计划并在中断后恢复"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "面向 OceanBase 2026 数据库大赛的非官方 Python CLI 和可安装 Skill：提交固定版本、按任务回执查分、抓取全部可访问榜单、保存变化、比较实验，并执行有限、可恢复的提测队列。 ／ OceanBase 的官方 GitHub 使用说明要求私有答题仓库在报名地址中配置 `username:PAT`，评测系统才具有拉取权限。请自行在官方参赛信息中配置，并使用仅授权该仓库读取的 PAT。工具不会获取现有 GitHub CLI 或浏览器凭证，也不创建或更改报名授权。 ／ HTTP 查询仅有限重试；遇 429/临时错误退避。提交写入不重试。凭证只发送到工具允许的 OceanBase HTTPS API 主机，拒绝重定向转发。`--http-timeout` 和 `--retries` 可调读取边界。",
+     "lines": [
+      3,
+      95,
+      190
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 OceanBase 大赛平台提供提交、查分、榜单抓取等周边 CLI 工具，不是用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，独立实现，参考 SimonAN01/aicomp-results 的设计",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "面向 OceanBase 2026 数据库大赛的非官方 Python CLI 和可安装 Skill：提交固定版本、按任务回执查分、抓取全部可访问榜单、保存变化、比较实验，并执行有限、可恢复的提测队列。 ／ **Python 3.10+，运行时无第三方 Python 依赖。** 代码提交的远端版本检查另需 Git。认证由使用者提供，参赛仓库保持原有访问权限。",
+   "evidence_lines": [
+    3,
+    5
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "SimonAN01/oceanbase-compete",
+  "sha": "c5b3aebc9487",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

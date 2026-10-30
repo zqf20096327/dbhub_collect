@@ -10897,5 +10897,212 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "82d5e327273f": {
+  "identity": {
+   "one_liner": "Stellar 测试网跨链索引器与 Fastify API，持久化 PostgreSQL 历史",
+   "review": "该项目索引 Hyperion 合约事件，通过 Fastify 提供转账、索赔与路由健康查询 API，并支持定时补采与可选的 Stellar keeper 维护交易。依赖 Node 22.13+ 与 PostgreSQL，Redis 仅在启用 keeper 时需要。面向 Stellar 跨链桥测试网的部署者与前端开发者，状态记录以链上回执验证为准。",
+   "highlights": [
+    "索引 Stellar 与 EVM 路由事件，记录转账、索赔、路由健康与指标",
+    "ITS 与 CCTP 目标支付经独立回执验证后才记录交付",
+    "提供 /health、/ready、/v1/transfers、/v1/claims 等公开 GET API，支持跨域读取"
+   ],
+   "use_cases": [
+    "为 Hyperion 前端提供转账与索赔历史查询后端",
+    "以定时 GitHub Actions 工作流运行测试网索引",
+    "运行 signer-backed keeper 提交 keep_alive 与 settle_claim 交易"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Published the API with persistent managed PostgreSQL and a scheduled catch-up indexer, and added signer-backed Stellar maintenance for optional keeper deployments. Compatible dependency patches resolved the reported HTTP redirect and test-tooling advisories. ／ Use Node 22.13 or newer. PostgreSQL is required. Redis is used only when the keeper is enabled.",
+     "lines": [
+      11,
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 PostgreSQL 为持久状态存储，API 与索引器读写该库存取转账与索赔数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Indexes Hyperion contract events, serves public transfer/claim history, polls rail status and optionally submits Stellar maintenance transactions. The checked-in deployment is the Stellar Testnet router. Active routes deliver Stellar USDC through Axelar ITS to Ethereum Sepolia, or through Circle CCTP to native USDC on Ethereum Sepolia, Base Sepolia and Arc Testnet. The frontend can first convert other liquid classic Stellar assets into USDC. The wallet-owned deployment is active; signed deployment and successful transfer evidence are described in the contracts repository's `docs/TESTNET_ACTIVATION.md`. ／ Use Node 22.13 or newer. PostgreSQL is required. Redis is used only when the keeper is enabled.",
+   "evidence_lines": [
+    5,
+    15
+   ]
+  },
+  "fn": "StellarHyperion/stellarhyperion-backend",
+  "sha": "82d5e327273f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "911ae84bf134": {
+  "identity": {
+   "one_liner": "为 AI 编程代理提供持久化项目记忆的本地 MCP 服务器",
+   "review": "这是一个本地运行的 MCP 服务器，为 AI 编程代理（Cursor、Claude Code、Windsurf 等）提供跨会话的项目记忆存储。提供 5 个工具动词用于存取决策、规则等记忆，支持近重复检测与时间谱系管理。默认使用 SQLite 存储，可选切换 PostgreSQL（pgvector）用于多代理集中持久化场景。",
+   "highlights": [
+    "提供 5 个 MCP 工具动词（retrieve/remember/revise/nudge/health）管理项目决策与不变式规则",
+    "默认通过 node:sqlite 存储，支持 Float32Array 向量与 FTS5 全文索引，可选 STORAGE_MODE=postgres 启用 pgvector",
+    "支持近重复检测（余弦相似度 ≥0.85）、时间谱系追踪及对 diff 的预提交不变式审计"
+   ],
+   "use_cases": [
+    "为 AI 编程代理在不同会话间保留架构决策、经验教训等项目记忆",
+    "在提交前对代码变更进行项目规则（不变式）审计",
+    "多机器多代理场景下使用 PostgreSQL 集中存储共享项目上下文"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* **Use PostgreSQL (`STORAGE_MODE=postgres`)**: Required only when scaling to multi-agent swarms across different machines needing centralized persistence and server-side pgvector HNSW indexing.",
+     "lines": [
+      87
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Local MCP server: five tools to store, retrieve, and retire project decisions. SQLite by default.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为服务 AI 编程代理的 MCP 服务器，SQLite/PostgreSQL 仅作为其存储后端。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Local MCP server: five tools to store, retrieve, and retire project decisions. SQLite by default. ／ **Krusch Context MCP** gives AI coding agents (Cursor, Claude Code, Windsurf, Antigravity) persistent working memory across sessions. It captures architectural decisions, invariants, lessons, and bug diagnoses, warns on near-duplicate memories, maintains temporal lineage when facts are superseded or invalidated, and audits diffs against active constraints. ／ * **Use PostgreSQL (`STORAGE_MODE=postgres`)**: Required only when scaling to multi-agent swarms across different machines needing centralized persistence and server-side pgvector HNSW indexing.",
+   "evidence_lines": [
+    3,
+    16,
+    87
+   ]
+  },
+  "fn": "kruschdev/krusch-context-mcp",
+  "sha": "911ae84bf134",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dbf1d294aaa1": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式单文件全文检索数据库",
+   "review": "Persia DB 是一个用 Rust 编写的嵌入式全文检索数据库，定位为可链接进应用的搜索库，打开单个 .persia 文件即可索引文档并返回排序结果，默认开启查询松弛。当前处于 pre-alpha 阶段，仅实现了 segment 库、文本分析器、单文件容器和 CLI，查询、排序等 API 尚未导出，格式 1.0 在 v1.0 前不稳定。",
+   "highlights": [
+    "嵌入式设计：调用进程即数据库，Db::open 打开单个文件，无守护进程和集群",
+    "段格式不可变，同一 segment 字节规范支持 S3/GCS/Azure Blob 对象存储",
+    "内置 BM25F、UAX #29 分词、多语言词干化和 zstd 压缩，cargo-fuzz 覆盖全部 fuzz 目标"
+   ],
+   "use_cases": [
+    "在应用进程内嵌全文搜索能力，无需部署搜索服务器",
+    "基于单文件容器与不可变 segment 做本地或对象存储上的检索",
+    "对 Rust 索引格式、分析器与存储编解码做二次开发或集成"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Persia DB. Think SQLite for search. ／ The product is a search database you link, the way you link SQLite. The design is SPEC §1. The rows below say what that buys, and how far the tree has gotten. ／ |**Rust, short dependency list**|The index format, analysis, and segment codec are written in this repository. BM25F and query execution are specified for the same crate (ADR-0001, M7).|`cargo deny` rejects Tantivy, SQLite, and RocksDB. `cargo xtask check-deps",
+     "lines": [
+      1,
+      31,
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是嵌入式检索数据库引擎，为应用提供存储与检索能力，而非使用其他数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " An embedded, single-file search database, written in Rust. ／ > **Pre-alpha.** The 2026-10-27 snapshot in `PROGRESS.md` is **210 of 451** MVP leaves (47%). Post-MVP work is 0 of 164 and sits outside that percentage. Format 1.0 is unstable until the v1.0 release (SPEC §15). When this file and `PROGRESS.md` disagree, `PROGRESS.md` wins. ／ |**Rust, short dependency list**|The index format, analysis, and segment codec are written in this repository. BM25F and query execution are specified for the same crate (ADR-0001, M7).|`cargo deny` rejects Tantivy, SQLite, and RocksDB. `cargo xtask check-deps` rejects any direct dependency outside the workspace allow-list. There is no `build.rs`.|",
+   "evidence_lines": [
+    5,
+    23,
+    36
+   ]
+  },
+  "fn": "tomiok/persiaDB",
+  "sha": "dbf1d294aaa1",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

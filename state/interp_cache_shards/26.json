@@ -10531,5 +10531,196 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e0b26abc907d": {
+  "identity": {
+   "one_liner": "Claude Code 插件模板，用技能/代理生成 Spring Boot 应用",
+   "review": "这是一个 Claude Code 插件，通过内置的 agents 与 skills 指导 Claude 按 Spring Boot 4.x/Java 21 最佳实践生成 REST API 应用，包含 Flyway 迁移、JPA、安全、测试与 Kubernetes 部署等规则。面向使用 Claude Code 的 Spring Boot 开发者；数据库仅作为生成应用中的持久化部分（示例使用 PostgreSQL），并非数据库专用工具。",
+   "highlights": [
+    "提供 6 个专用 agents 与多个 skills，覆盖 REST API、JPA、Flyway 迁移、测试与云原生部署",
+    "强制约定：Flyway 管理 schema（ddl-auto: validate）、Testcontainers 集成测试、Problem Details 错误格式",
+    "通过 claude plugin install 从 marketplace 或仓库安装"
+   ],
+   "use_cases": [
+    "用 Claude Code 生成带持久化和 Flyway 迁移的 Spring Boot REST API",
+    "为生成应用补充 Kubernetes/Docker 云原生配置与测试规范"
+   ],
+   "note": "术语『插件』指 Claude Code 插件，与数据库插件无关"
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "> \"Build a REST API for managing orders with PostgreSQL\" ／ For a relational database like PostgreSQL, the generated app includes Flyway migrations in `src/main/resources/db/migration`, `ddl-auto: validate`, and Testcontainers tests that verify all migrations were applied. APIs without persistence or with NoSQL stores ",
+     "lines": [
+      93,
+      96
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它是生成 Spring Boot 应用的代码模板插件，数据库仅作为生成内容的一部分出现，非为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# Spring Boot Plugin for Claude Code (v1.2) ／ A Claude Code plugin with production-ready skills and agents for building Spring Boot 4.x / Java 21+ applications. Install the plugin and start generating your app — the skills and agents guide Claude to follow best practices for REST APIs with Problem Details errors, JPA, Flyway database migrations, security, testing, cloud-native deployment, and Kubernetes. ／ > \"Build a REST API for managing orders with PostgreSQL\"",
+   "evidence_lines": [
+    1,
+    3,
+    93
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "piomin/claude-ai-spring-boot",
+  "sha": "e0b26abc907d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "625dd2333ce8": {
+  "identity": {
+   "one_liner": "愿望清单共享 Web 应用，基于 Play Framework 与 Scala",
+   "review": "这是一个用于存储和分享愿望清单的 Web 应用，支持多个交叉引用的清单、公开/私有可见性及礼物预订功能。面向希望记录和共享心愿单的普通用户，开发者可按 README 安装 Scala、SBT 与 Play 框架后以 sbt/activator 运行，部署示例面向 Heroku 并支持 Docker Compose。README 未详细说明数据库细节，仅提示部署时需配置数据库信息。",
+   "highlights": [
+    "支持多个交叉引用的清单及清单项的公开/私有/对接收者屏蔽的可见性设置",
+    "提供愿望项预订功能",
+    "支持以 Play/activator/sbt 运行，提供 Heroku 部署配置与 Docker/Fig/Compose 运行方式"
+   ],
+   "use_cases": [
+    "个人或家庭间共享愿望清单并标记礼物已预订",
+    "在 Heroku 或 Docker 环境中自托管清单服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 将其描述为存储和分享愿望清单的 Web 应用，配置数据库仅为部署参数之一",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A place to store and share wish lists. ／ Simple start Play with `play`, `activator` or `sbt`. ／ The application is set up to run on Heroku http://www.heroku.com as an example.",
+   "evidence_lines": [
+    8,
+    29,
+    53
+   ]
+  },
+  "fn": "flurdy/wishlist",
+  "sha": "625dd2333ce8",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "52a4bf163f87": {
+  "identity": {
+   "one_liner": "本地AI会话归档系统，统一采集并索引多来源AI对话历史",
+   "review": "Polylogue 用于采集 ChatGPT、Claude、Codex、Gemini CLI 等 AI 工具的会话记录，保留原始字节并解析为可查询的会话模型，支持全文检索、标注、测量，可通过 CLI、MCP 或 Web 工作台访问，面向开发者及其 AI 代理。可独立运行在 SQLite 上，或以 Sinex 为主存储模式。",
+   "highlights": [
+    "通过各工具自身的文件、导出和浏览器扩展采集多来源 AI 会话并保留原始字节",
+    "提供命令行查询语言，同一命令集可通过 CLI、MCP 和 HTTP 访问",
+    "支持 standalone（SQLite）与 Sinex 两种运行模式，Nix/Cargo 安装并提供 NixOS 与 Home Manager 模块"
+   ],
+   "use_cases": [
+    "将分散的 AI 编码会话历史集中为可搜索的本地归档",
+    "为 AI 代理提供 MCP 接口以读取和检索历史会话上下文",
+    "对 AI 工作记录做审计与标注"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Polylogue runs alone (standalone, on SQLite) or on",
+     "lines": [
+      13
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其 standalone 模式运行在 SQLite 上，使用数据库存储自身数据而非为数据库生态提供服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Polylogue runs alone (standalone, on SQLite) or on ／ Sinex (primary mode), where Sinex stores the ／ MCP and HTTP too.",
+   "evidence_lines": [
+    13,
+    14,
+    65
+   ]
+  },
+  "fn": "Sinity/polylogue",
+  "sha": "52a4bf163f87",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

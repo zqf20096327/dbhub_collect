@@ -10515,5 +10515,71 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2608d23ac219": {
+  "identity": {
+   "one_liner": "PostgreSQL 迁移静态分析工具，在合并前检测锁表与破坏性操作",
+   "review": "migsafe 是一个针对 PostgreSQL 数据库迁移脚本的静态分析命令行工具，用于在合并前检测可能造成表锁、数据重写、破坏性操作或缺失超时设置的问题。支持检查单个 SQL 文件或整个目录，可设置失败阈值并输出 JSON 供 CI 或机器人使用。通过 pipx 安装，无运行时依赖，适合在 CI 流程中管理数据库迁移的开发团队使用。",
+   "highlights": [
+    "静态分析 PostgreSQL 迁移脚本，检测锁表、重写、破坏性步骤和缺失超时",
+    "支持单文件检查、整目录检查并按严重级别使构建失败（--fail-on）",
+    "提供 --json 机器可读输出，退出码可用于管道安全判断"
+   ],
+   "use_cases": [
+    "在 CI 流水线中拦截高风险的数据库迁移脚本",
+    "合并前审查可能锁表的 ALTER 操作",
+    "为自动化机器人或 agent 提供迁移检查结果"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**This migration would have locked your `users` table. migsafe tells you before you merge it.** Static analysis for PostgreSQL migrations: locks, rewrites, destructive steps, missing timeouts. ／ postgres",
+     "lines": [
+      3,
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具专为 PostgreSQL 迁移脚本提供静态分析检查，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**This migration would have locked your `users` table. migsafe tells you before you merge it.** Static analysis for PostgreSQL migrations: locks, rewrites, destructive steps, missing timeouts. ／ pipx install git+https://github.com/mgkvibez/migsafe.git   # works today",
+   "evidence_lines": [
+    3,
+    16
+   ]
+  },
+  "fn": "mgkvibez/migsafe",
+  "sha": "2608d23ac219",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

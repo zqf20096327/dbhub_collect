@@ -12943,5 +12943,220 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3a73feb40253": {
+  "identity": {
+   "one_liner": "自托管笔记应用，Express + SQLite 后端，支持 Tauri 客户端与 PWA",
+   "review": "Glass Keep 是一个类 Google Keep 的自托管笔记系统，提供 Markdown 笔记、清单、手绘、图片附件、标签、多用户认证、管理员面板和实时协作，后端为 Express API + better-sqlite3 内嵌存储，无需外部数据库。面向自托管用户，通过 Docker 部署服务器，Windows/macOS/Android 客户端及 PWA 均为纯客户端，需连接服务器使用，另内置基于 llama.cpp 的本地 AI 问答。",
+   "highlights": [
+    "支持 Markdown 笔记、清单、手绘、图片附件、标签与搜索",
+    "提供多用户认证、管理员面板与实时协作编辑",
+    "后端使用 Express + better-sqlite3，SQLite 内嵌无需外部数据库"
+   ],
+   "use_cases": [
+    "自托管部署个人/多用户笔记服务",
+    "从 Google Keep 导入迁移笔记数据",
+    "离线环境下的本地 AI 辅助笔记问答"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* Backend: **Express API + SQLite** (`better-sqlite3`) ／ * SQLite is embedded (no external DB needed)",
+     "lines": [
+      102,
+      129
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储笔记数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " * Backend: **Express API + SQLite** (`better-sqlite3`) ／ * SQLite is embedded (no external DB needed)",
+   "evidence_lines": [
+    102,
+    129
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "nikunjsingh93/react-glass-keep",
+  "sha": "3a73feb40253",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "63d691379b9f": {
+  "identity": {
+   "one_liner": "本地智能体长期记忆核心，以 SQLite 为事实权威并配可重建向量索引",
+   "review": "Scope Recall v3 为 Hermes、Codex、Claude Code、WorkBuddy、dsh 等智能体提供共享本地长期记忆，以 SQLite 存储事实、LanceDB 作向量伴随索引，提供 hooks 与 MCP server 接入、自动/显式召回、记忆浏览与修正删除命令，以及本地管理页面和隐私模式。面向在本机运行这些智能体的使用者，要求 Python 环境并按宿主逐个安装配置。",
+   "highlights": [
+    "多个宿主智能体通过共享 store 共用一份记忆，SQLite 为唯一事实权威，向量索引可重建",
+    "提供 CLI（memory/export/private）与浏览器管理页，用于检索、修正、删除记忆及导出可携带包",
+    "通过 hooks 与 MCP server 接入宿主，支持私有模式阻止采集并支持隐私规则与时长控制"
+   ],
+   "use_cases": [
+    "为多个本地 AI 编码智能体建立统一的持久记忆库",
+    "检查、修正或删除智能体记住的内容，管理隐私与敏感凭据留存",
+    "将记忆库导出为含原始来源的可携带备份包"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "is captured. SQLite is the only fact authority; host adapters share the same",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Hermes/Codex 等智能体宿主提供记忆功能的组件，自身以 SQLite 为存储引擎并提供 MCP 服务，而非使用数据库的业务应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, and for Codex, Claude Code, WorkBuddy and DeepSeek Harness (dsh), which share one adapter of hooks and an MCP server (the MCP tools need the optional `codex` extra; dsh runs the hooks through a plugin). The public package is `hermes-scope-recall`; the Python import is `scope_recall`; the host wrapper identity remains `scope-recall`. ／ is captured. SQLite is the only fact authority; host adapters share the same ／ the same isolated Python environment the host uses. The default vector store is LanceDB: without",
+   "evidence_lines": [
+    3,
+    21,
+    88
+   ]
+  },
+  "fn": "410979729/scope-recall-hermes",
+  "sha": "63d691379b9f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b944996581ee": {
+  "identity": {
+   "one_liner": "自托管新标签页管理 Chrome 扩展，含 SQLite 同步服务器",
+   "review": "TabCabin 是一个 Chrome 扩展，将新标签页变为管理标签、链接、笔记和待办的看板，支持搜索、提醒、导入导出。数据存于浏览器 IndexedDB，可选通过基于 Hono/SQLite/Drizzle 的自托管同步服务器（提供 Docker 镜像）在多台电脑间同步。适合个人用户整理浏览器标签，也可供想自托管同步服务器的用户使用。",
+   "highlights": [
+    "提供看板视图、集合视图、笔记、待办、提醒、搜索和工作区功能",
+    "支持从 Chrome/Firefox/Safari/Raindrop 书签及 OneTab 列表导入，导出为 JSON/书签/CSV",
+    "附带可自托管的同步服务器（Hono、SQLite、Drizzle），提供 Docker 镜像与 Caddy 自动 HTTPS"
+   ],
+   "use_cases": [
+    "在浏览器新标签页整理和保存标签、链接、笔记与待办",
+    "通过自托管服务器在多台电脑间同步标签数据",
+    "从其他标签管理工具（Toby、tabExtend、OneTab 等）迁移数据"
+   ],
+   "official_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Your own server** — run the small sync server on your machine or a VPS (Docker, SQLite, automatic ／ apps/server self-hosted sync server (Hono, SQLite, Drizzle) and its Docker image ／ WXT (Manifest V3) · Hono · SQLite (better-sqlite3) · Drizzle ORM · Docker · Caddy · Vitest · Playwright ·",
+     "lines": [
+      73,
+      189,
+      201
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是使用 SQLite 作为同步服务器存储的 Chrome 扩展应用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A calm cabin for your tabs.** TabCabin is a **Chrome extension** that turns every new tab into ／ **Your own server** — run the small sync server on your machine or a VPS (Docker, SQLite, automatic ／ apps/server         self-hosted sync server (Hono, SQLite, Drizzle) and its Docker image",
+   "evidence_lines": [
+    3,
+    73,
+    189
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "DontAskForAnything/tabcabin",
+  "sha": "b944996581ee",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

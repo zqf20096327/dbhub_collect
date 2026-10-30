@@ -10515,5 +10515,260 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f55d7d4d8894": {
+  "identity": {
+   "one_liner": "Rust 单二进制 AI 搜索引擎与 MCP 服务器，支持 BM25/向量/混合检索",
+   "review": "XERJ 是面向 AI 代理的本地搜索引擎和 MCP 服务器，用单个 Rust 二进制索引代码、文档、日志、JSONL/CSV/PDF 和 SQLite，提供 BM25 全文、向量与混合检索、代码搜索和代理记忆，并通过 Elasticsearch 兼容 API 供现有客户端查询。面向使用 Claude Code、Cursor 等 MCP 客户端的开发者和代理场景；默认 --insecure 模式关闭 TLS 与鉴权，仅适用于单人开发机。",
+   "highlights": [
+    "提供 autoindex 命令自动识别并索引文件夹内代码、文档、日志、PDF、CSV、JSONL、SQLite 等数据集",
+    "通过 Elasticsearch 兼容 API 对外服务，现有 ES 客户端与仪表盘可直接对接",
+    "提供 /_memory/{namespace} 接口用于代理长期记忆存储与语义召回"
+   ],
+   "use_cases": [
+    "参考编码：索引相似开源仓库供编码代理检索解决方案片段",
+    "代码库问答与 RAG，返回带 file:line 引用的检索结果",
+    "代理长期记忆与日志/事件分析"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "know a corpus instead of grepping it. One command indexes code, docs, logs, PDFs, SQLite and",
+     "lines": [
+      129
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 AI 代理和开发流程提供索引与检索服务的独立引擎组件，MCP 服务器供代理调用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Local-first search engine and MCP server for AI agents.** One Rust binary indexes code, docs, ／ memory, behind an Elasticsearch-compatible API. Works with Claude Code, Cursor and any MCP client. ／ know a corpus instead of grepping it. One command indexes code, docs, logs, PDFs, SQLite and",
+   "evidence_lines": [
+    5,
+    7,
+    129
+   ]
+  },
+  "fn": "xerj-org/xerj",
+  "sha": "f55d7d4d8894",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::AI notetaker that joins Microsoft Teams and Google Meet calls, understands Hindi, Telugu, English an": {
+  "identity": {
+   "one_liner": "多语言 AI 会议记录机器人，入会生成英文会议纪要",
+   "review": "该项目是一个 AI notetaker 机器人，可加入 Microsoft Teams 与 Google Meet 通话，理解印地语、泰卢固语、英语及混合语音，并将决议、行动项、MOM、参与度、提及和出勤整理为英文报告邮件发送。通过 Telegram check-in 控制机器人是否入会。面向需要自动会议记录的团队或学术用户。基于简介，无法确认部署方式与数据库依赖。",
+   "highlights": [
+    "加入 Microsoft Teams 和 Google Meet 通话",
+    "理解 Hindi、Telugu、English 及混合语音",
+    "邮件输出含 decisions、action items、MOM、participation、mentions、attendance 的英文报告",
+    "Telegram check-in 决定机器人是否入会"
+   ],
+   "use_cases": [
+    "自动生成会议纪要与行动项跟踪",
+    "多语言会议的出勤与参与度记录",
+    "会议后续跟进提醒"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "简介与主题均未出现 PostgreSQL 等任何数据库原文证据，仅采集通道提示，不足以判定生态角色。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "AI notetaker that joins Microsoft Teams and Google Meet calls, understands Hindi, Telugu, English and mixed speech, and emails an English report card"
+  },
+  "fn": "GrimOrbita/rpocket-team-meeting-agent",
+  "sha": "desc::AI notetaker that joins Microsoft Teams and Google Meet calls, understands Hindi, Telugu, English an",
+  "source": "desc",
+  "generated_at": "2026-10-30",
+  "ver": 2,
+  "prompt_ver": "3.3"
+ },
+ "5eeb098b0b73": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Go 分布式任务队列库与服务",
+   "review": "Dhara 是一个用 Go 编写的分布式任务队列，既可作为嵌入式库也可作为独立服务运行，用 PostgreSQL 的 SKIP LOCKED 实现任务认领，支持事务性入队、心跳重收、重试与死信队列。适合需要在 Go 应用中实现异步任务处理且不引入额外消息中间件依赖的开发者。",
+   "highlights": [
+    "使用 PostgreSQL 的 SKIP LOCKED 实现事务性任务认领，无需 Redis 或 RabbitMQ 等外部依赖",
+    "支持事务性入队（EnqueueTx），任务与业务写入在同一事务中原子提交",
+    "提供心跳与后台 reaper 机制，实现失败任务自动重排与死信状态迁移"
+   ],
+   "use_cases": [
+    "Go 应用中的异步任务处理（如发送邮件、延时执行）",
+    "需要在业务事务内原子提交任务的场景",
+    "不希望引入独立消息队列中间件的后端服务"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Dhara is a distributed task queue library and service for Go, backed by PostgreSQL. It covers the full task lifecycle: enqueue, claim, retry, dead-letter. No external dependencies like Redis or RabbitMQ. ／ Dhara uses PostgreSQL as the single source of truth for task state and execution logs. ／ 1. **Atomic concurrency with PostgreSQL (`SKIP LOCKED`)**",
+     "lines": [
+      3,
+      14,
+      29
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Dhara 是基于 PostgreSQL 构建的任务队列库/服务，为应用程序提供任务队列能力，PostgreSQL 是其存储依赖而非被使用的应用对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Dhara is a distributed task queue library and service for Go, backed by PostgreSQL. It covers the full task lifecycle: enqueue, claim, retry, dead-letter. No external dependencies like Redis or RabbitMQ. ／ - **As an embeddable library:** call `client.Enqueue(...)` from your application (even inside your own DB transaction) and run a `dhara.Worker` to execute tasks. ／ - **As pre-built services:** `cmd/server` (HTTP API) and `cmd/worker` (task processor) are thin binaries assembled entirely from the library, so they can never drift from it.",
+   "evidence_lines": [
+    3,
+    7,
+    8
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "Md-Talim/dhara",
+  "sha": "5eeb098b0b73",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a6421c6d4552": {
+  "identity": {
+   "one_liner": "CS2 竞技对战自托管平台，使用 PostgreSQL 存储数据",
+   "review": "FLICKED 是一个开源可自托管的 CS2 竞技平台，提供匹配、组队、评分、比赛历史和 demo 存档功能，通过 RCON 调度用户自己的 CS2 服务器运行比赛，不自带服务器托管和反作弊。面向 CS2 社区服务器运营者，后端为 C#/.NET，数据存储于 PostgreSQL，需 Docker、.NET 10 SDK 与 Node.js 本地运行。",
+   "highlights": [
+    "提供匹配、地图投票、服务器池调度与评分/比赛历史功能",
+    "通过 docker compose 一键启动后端与 PostgreSQL 数据库",
+    "通过 CounterStrikeSharp 插件（MatchZy）与 CS2 服务器交互"
+   ],
+   "use_cases": [
+    "自建 CS2 社区匹配平台",
+    "服务器所有者加入服务器池供匹配调度使用",
+    "社区组织有评分的比赛历史与 demo 归档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL| ／ |`./docker-compose.yml`|PostgreSQL for local development|",
+     "lines": [
+      44,
+      58
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其为一个使用 PostgreSQL 存储数据的 CS2 竞技平台应用，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**FLICKED** is a free open-source self-hostable competitive platform for CS2: matchmaking, ／ |Database|PostgreSQL| ／ - **Self-hosting.** One `docker compose up` for the backend and database.",
+   "evidence_lines": [
+    9,
+    44,
+    25
+   ]
+  },
+  "fn": "flickedgg/FLICKED",
+  "sha": "a6421c6d4552",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

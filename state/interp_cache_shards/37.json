@@ -11228,5 +11228,222 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6406f1dff9bb": {
+  "identity": {
+   "one_liner": "面向网络犯罪调查的自托管案件系统，基于 FastAPI 与 Postgres",
+   "review": "NocTORnal 是一个自托管的 HUMINT 与社会网络分析案件系统，用于网络犯罪调查，将 actors、handles、groups 及其信任关系建为图，且每个节点与关系都锚定到带来源与 Admiralty 分级的断言账本，追溯至 WORM 锁定的证据件。技术栈为 Python 3.12、FastAPI 与 Postgres 16，含行级安全、TLP 分级与双人控制；README 明确声明当前不可用于真实案件材料。",
+   "highlights": [
+    "每条图元素写入均由数据库触发器强制关联带来源与分级的断言记录",
+    "提供 WORM 锁定证据保管链、TLP 分级门控与双人审批控制",
+    "采集适配器支持 RSS、XenForo、MyBB 论坛与 Telegram 数据接入"
+   ],
+   "use_cases": [
+    "勒索软件附属结构与初始访问经纪人的社会关系梳理",
+    "商业电子邮件欺诈与骡子账户网络的关联分析",
+    "需要可披露溯源的威胁情报归因案件管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres 16",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统以 Postgres 存储案件数据并随安装部署 Postgres 容器，数据库是其组成部分而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL v3",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postgres 16 ／ Every node attribute and every relationship is anchored to a row in an ／ - **Not deployable against real material today.** Five legal decisions",
+   "evidence_lines": [
+    12,
+    59,
+    156
+   ]
+  },
+  "fn": "dboudreau00/NocTORnal",
+  "sha": "6406f1dff9bb",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2e10d264e2ed": {
+  "identity": {
+   "one_liner": "基于 Quarkus 的 Java 项目脚手架，内置 REST API 与 PostgreSQL 持久化",
+   "review": "这是一个 Quarkus 项目起点模板，预置 RESTful API、JWT 认证、Flyway 数据库迁移、OpenAPI 文档及 Gradle 构建/测试/部署脚本，并使用 PostgreSQL 存储数据。适合需要快速启动结构规范（entity/dto/service/resource 分层）的 Java 后端团队开发者，需自行提供 PostgreSQL 实例连接。",
+   "highlights": [
+    "提供包含构建、测试、部署脚本的完整 RESTful API 项目结构，按 entity/dto/repository/service/resource 分层",
+    "支持通过 Flyway 进行数据库迁移，并提供 generateEntities 任务生成 JPA 实体代码",
+    "内置代码检查（Checkstyle/PMD/SpotBugs）、单元测试（JUnit 5/Mockito）、功能测试与 JaCoCo 覆盖率检查"
+   ],
+   "use_cases": [
+    "作为新 Quarkus Java 后端项目的起始模板",
+    "团队统一项目代码结构与工程规范的参考基线",
+    "包含迁移、测试、CI/CD 脚本的应用开发示例"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This project uses a PostgreSQL database. ／ In local development, you need to provide a connection to a PostgreSQL instance. You can use the next example: ／ docker run -d -p 5432:5432 -e POSTGRES_DB=quarkus -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret postgres",
+     "lines": [
+      91,
+      92,
+      95
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明项目使用 PostgreSQL 数据库存数据，属于使用数据库的应用脚手架而非为数据库服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This project uses a PostgreSQL database. ／ The project supports database migrations via Flyway.",
+   "evidence_lines": [
+    91,
+    98
+   ]
+  },
+  "fn": "andredesousa/advanced-quarkus-scaffold",
+  "sha": "2e10d264e2ed",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9e70e4385bd4": {
+  "identity": {
+   "one_liner": "Rust 异步 Microsoft SQL Server 客户端库，基于 tds-driver",
+   "review": "tdsql 是一个 Rust 语言的异步 Microsoft SQL Server 客户端库，构建在 tds-driver 之上，提供连接管理、位置与命名参数、存储过程 RPC 调用、事务与保存点、流式读取大结果集、语句取消及阻塞版客户端。适合需要在 Rust 程序中直接访问 SQL Server 的开发者。单个 Client 为单连接、一次执行一条语句，并发需配合 bb8 或 deadpool 等连接池。",
+   "highlights": [
+    "支持异步与 blocking 两种客户端模式，事务、保存点与 Executor trait 行为一致",
+    "支持命名参数与存储过程 RPC 调用，query_stream 可流式读取大结果集",
+    "支持通过 SQL Server Browser 发现命名实例，错误以结构化 Error 字段返回"
+   ],
+   "use_cases": [
+    "Rust 应用中执行 SQL Server 查询、事务与存储过程",
+    "需要流式处理大数据量结果集且内存占用平稳的场景",
+    "非 async 程序通过 blocking feature 同步访问 SQL Server"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "`tdsql` is an async Microsoft SQL Server client for Rust, built on the ／ without a port, such as `Server=host\\SQLEXPRESS`, is found through SQL Server ／ SQL Server types read as and bind from the Rust types you would expect: the",
+     "lines": [
+      3,
+      36,
+      270
+     ]
+    },
+    {
+     "db": "TDSQL",
+     "rel": "mention",
+     "quote": "# tdsql ／ `tdsql` is an async Microsoft SQL Server client for Rust, built on the ／ use tdsql::{Client, Config};",
+     "lines": [
+      1,
+      3,
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定义其为面向 Rust 开发者的 SQL Server 客户端库，属数据库生态的开发组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`tdsql` is an async Microsoft SQL Server client for Rust, built on the ／ tdsql = \"0.8.0\"",
+   "evidence_lines": [
+    3,
+    20
+   ]
+  },
+  "fn": "CommonwealthPasta/tdsql",
+  "sha": "9e70e4385bd4",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

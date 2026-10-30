@@ -10070,5 +10070,132 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4062f9cb8bc7": {
+  "identity": {
+   "one_liner": "企业 AI 资产治理平台，以插件树与生命周期状态机管理 MCP/Skill/Agent 资产",
+   "review": "元冰可 AIOS 是一个自托管的企业 AI 运行与治理平台，将 MCP 服务、Skill、模型渠道、知识库和数字员工登记为组织资产，提供权限矩阵、审批流、调用计量与审计记录。采用 cordis 插件树架构，各业务域为独立插件包；存储基于 Node 22 内置 node:sqlite，仅支持单进程运行。适合需要对企业内 AI 能力做确权、派单与成本归集的团队自部署使用。",
+   "highlights": [
+    "提供资产登记、权限矩阵、L4 审批与全程审计的 AI 资产治理功能",
+    "基于 cordis 插件树架构，仓库包含 25 个插件清单与 9 份运维 Skill，各插件可独立启停",
+    "提供 MCP 运维接口、OpenAPI 描述与 CLI，工具按调用方权限过滤；零运行时依赖（Node 22 + node:sqlite）"
+   ],
+   "use_cases": [
+    "企业对 MCP 服务、Skill、Agent 等 AI 资产进行登记确权与生命周期管理",
+    "按部门、Agent、Skill 归集能力调用用量与内部成本",
+    "通过 dsh 插件方式挂载控制台与 API 到现有 dsh Web 服务"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "平台自身使用 Node 22 内置 node:sqlite 做持久化存储，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **数据与可用性**：当前存储形态面向单进程运行，不应让多个进程同时使用同一数据目录；部署前请规划备份和恢复。 ／ 实例本身是一棵 cordis 插件树，与 dsh 使用同一个插件框架。每个业务域是一个独立插件包，自行声明依赖、权限点和事件，可以单独启停；跨插件协作只经由事件总线和扩展点，插件之间不直接读写彼此的数据。仓库包含 25 个插件清单与 9 份领域运维 Skill。 ／ |`POST /mcp`|平台运维工具的 MCP 接口；工具列表按调用方权限过滤|",
+   "evidence_lines": [
+    108,
+    77,
+    98
+   ]
+  },
+  "fn": "01men/ybkkasi",
+  "sha": "4062f9cb8bc7",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "efa40dddb6e7": {
+  "identity": {
+   "one_liner": "基于 Next.js/Turborepo 的全栈应用启动模板",
+   "review": "Vazen 是一个 monorepo 形式的全栈 Web 应用启动套件，集成 Next.js、TypeScript、Tailwind、Drizzle ORM，以 PostgreSQL 作为主数据库，并预置认证、测试、lint、环境变量管理等开发工具链，供开发者快速搭建生产级 Web 应用。安装运行依赖 pnpm、mise 与 Docker Compose，MIT 许可。",
+   "highlights": [
+    "提供 monorepo 技术栈模板，包含 Next.js、React、TypeScript、Tailwind CSS、Drizzle ORM 等组件",
+    "集成 pnpm、lefthook、Playwright、oxlint 等开发与测试工具链",
+    "通过 Infisical 与 Varlock 实现分环境的密钥与环境变量管理"
+   ],
+   "use_cases": [
+    "新全栈 Web 项目脚手架搭建",
+    "需要统一环境变量与密钥管理的团队开发",
+    "基于 PostgreSQL + Drizzle ORM 的应用开发起点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL** :: Primary database",
+     "lines": [
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL 声明为主数据库，该项目是使用数据库的应用模板而非服务数据库的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **PostgreSQL** :: Primary database ／ - **Next.js v16** :: React framework with app router",
+   "evidence_lines": [
+    33,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "Hashversion/vazen",
+  "sha": "efa40dddb6e7",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10710,5 +10710,163 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fd12ea6ef327": {
+  "identity": {
+   "one_liner": "将八个上游编码渠道封装为 OpenAI/Anthropic 兼容 API 的网关应用",
+   "review": "该项目把 CodeBuddy、TRAE SOLO、Kilo、Qoder 等八个上游渠道的凭证封装为 OpenAI / Responses / Anthropic 兼容 API，提供公共凭证池、健康度调度、会话粘性和按人用量统计。面向需要统一访问多个上游渠道的团队，内置管理台与三角色权限；账号与用户数据存 SQLite，README 声明其为逆向接口、仅供学习研究。",
+   "highlights": [
+    "提供 /v1/chat/completions、/v1/responses、/v1/messages 等 OpenAI/Anthropic 兼容端点",
+    "支持公共凭证池、健康度调度、会话粘性与按渠道凭证加载模型列表",
+    "内置管理台，包含三角色权限、审计日志、用量统计与月度账单导出"
+   ],
+   "use_cases": [
+    "为多个上游编码渠道提供统一 API 接入点",
+    "团队共享凭证池并按人统计用量与成本",
+    "需要 OpenAI/Anthropic 兼容出口对接 Claude Code、Codex CLI 等客户端"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **三角色**：`admin` / `operator` / `viewer`，存 SQLite；一次性激活链接、首登强制改密、改角色 / 停用即时吊销会话；登录与写操作留审计。 ／ `scripts/create_user.py` 直写 SQLite（`--db` 或 `DATA_DIR`；默认 `data/coding2api.sqlite3`）。老部署 `secrets/users.txt` 启动导入一次，不覆盖已存在。 ／ 账号存 SQLite `users` 表；「用户管理」页（仅管理员）增删改。",
+     "lines": [
+      15,
+      63,
+      80
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明账号与用户数据存 SQLite（users 表、create_user.py 直写 SQLite），SQLite 仅作本应用存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "八个上游——**CodeBuddy**（国内 + 国际）、**TRAE SOLO**、**OpenCode Zen**、**Kilo**、**Qoder**、**CodeArts**、**OfficeAce**——封装成 OpenAI 兼容 API：公共凭证池、统一模型名与调度、按人用量统计。 ／ - **三角色**：`admin` / `operator` / `viewer`，存 SQLite；一次性激活链接、首登强制改密、改角色 / 停用即时吊销会话；登录与写操作留审计。 ／ 账号存 SQLite `users` 表；「用户管理」页（仅管理员）增删改。",
+   "evidence_lines": [
+    3,
+    15,
+    80
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "RobbsLuo/Coding2API",
+  "sha": "fd12ea6ef327",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "594a2fc4979b": {
+  "identity": {
+   "one_liner": "redb 生态的 OAuth 2.1 / OIDC 认证服务器，基于 OpenIddict",
+   "review": "一个与传输层解耦的 OAuth 2.1 / OpenID Connect 服务器，构建在 OpenIddict 与 redb.Route 之上，端点可通过 HTTP、gRPC、RabbitMQ、SignalR 或进程内直调访问，用户/客户端/会话等数据经 redb.Core 存储引擎写入 PostgreSQL、MSSQL 或 SQLite。面向需要在 .NET 服务中自建身份认证能力的开发者，提供 MFA、WebAuthn、SCIM、DPoP 等能力。",
+   "highlights": [
+    "实现 OAuth 2.1 / OIDC 端点，支持 PAR、JAR、DCR、Device Code、DPoP、Token Exchange 等 RFC",
+    "支持 TOTP、SMS/Email OTP、WebAuthn(FIDO2)、恢复码等 MFA 方式",
+    "提供 PostgreSQL、MSSQL、SQLite 三种存储 provider 包，以 NuGet 与 Docker 镜像分发"
+   ],
+   "use_cases": [
+    "为 .NET 微服务/Worker 提供进程内或跨传输的令牌签发与校验",
+    "需要 MFA、WebAuthn、外部联邦登录的身份认证部署",
+    "通过 SCIM 2.0 做用户/组供给的 IAM 集成场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "dotnet add package redb.Postgres.Pro # or redb.MSSql.Pro / redb.SQLite.Pro",
+     "lines": [
+      51
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "dotnet add package redb.Postgres.Pro # or redb.MSSql.Pro / redb.SQLite.Pro ／ The image runs on SQLite with a bundled self-signed certificate for `localhost`, so call it with `curl -k`. For a",
+     "lines": [
+      51,
+      101
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "dotnet add package redb.Postgres.Pro # or redb.MSSql.Pro / redb.SQLite.Pro",
+     "lines": [
+      51
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目通过 redb.Postgres.Pro / redb.MSSql.Pro / redb.SQLite.Pro provider 将身份数据存储于这些数据库，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dotnet add package redb.Postgres.Pro      # or redb.MSSql.Pro / redb.SQLite.Pro ／ The image runs on SQLite with a bundled self-signed certificate for `localhost`, so call it with `curl -k`. For a",
+   "evidence_lines": [
+    51,
+    101
+   ]
+  },
+  "fn": "redbase-app/redb-identity",
+  "sha": "594a2fc4979b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

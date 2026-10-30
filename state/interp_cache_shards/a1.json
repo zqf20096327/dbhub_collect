@@ -10907,5 +10907,141 @@
   "generated_at": "2026-10-29",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "55d581dc548d": {
+  "identity": {
+   "one_liner": "AI Agent 运行时审计与预执行护栏平台，基于独立审计模型",
+   "review": "Panopti（原 AgentWatch）是一个面向 AI Agent 的可观测性与运行时防护平台，在 Agent 执行动作前拦截并审计推理链，用独立的第二模型打分、拦截危险命令（如 DROP TABLE、rm -rf），并提供回滚、REST API、实时仪表盘与 Slack/PagerDuty 告警。适配 LangChain、CrewAI、AutoGPT 等框架，后端使用 PostgreSQL、Redis、FastAPI。适合运行生产环境 AI Agent 的开发与运维团队。",
+   "highlights": [
+    "提供预执行的推理审计与安全拦截，内置 40+ 危险模式识别",
+    "支持 LangChain、LangGraph、CrewAI、AutoGen、AutoGPT、smolagents、Claude Code 等框架适配器",
+    "提供 git 快照回滚、跨会话记忆、REST API 与 OpenTelemetry 兼容遥测"
+   ],
+   "use_cases": [
+    "AI Agent 生产运行的实时监控与故障拦截",
+    "Agent 危险操作的预执行阻断与回滚",
+    "Agent 推理链的重建、对比与回放分析"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "That's it. Set `AGENTWATCH_API_KEY` in `.env` (compose refuses to start without it); everything else has working defaults, customizable via .env.example. The v3 evidence store lives on the Postgres service, so it survives container restarts. ／ |**Backend**|FastAPI · PostgreSQL · Redis · Celery|",
+     "lines": [
+      156,
+      261
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 AI Agent 生态提供审计/护栏服务，PostgreSQL 仅作为其证据存储后端。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "*Panopti acts as an active, pre-execution guardrail — auditing reasoning and blocking risky actions before they hit your production stack.* ／ That's it. Set `AGENTWATCH_API_KEY` in `.env` (compose refuses to start without it); everything else has working defaults, customizable via .env.example. The v3 evidence store lives on the Postgres service, so it survives container restarts. ／ |**Backend**|FastAPI · PostgreSQL · Redis · Celery|",
+   "evidence_lines": [
+    11,
+    156,
+    261
+   ]
+  },
+  "fn": "Shinraya-Tech-Labs/AgentWatch",
+  "sha": "55d581dc548d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "940802980e66": {
+  "identity": {
+   "one_liner": "黑马点评魔改学习项目，实现秒杀异步链路与多级缓存",
+   "review": "基于黑马点评课程项目的深度魔改学习仓库，实现秒杀全链路异步化、Redis 预扣 + RocketMQ 建单 + 四级兜底的一致性方案、三级缓存与状态机/任务链引擎，并附 JVM 故障注入与 JMeter 压测闭环。面向学习高并发架构演进的开发者，需自行搭建 JDK 21、MySQL 8、Redis、RocketMQ 环境运行。",
+   "highlights": [
+    "实现 Redis Lua 原子预扣 + RocketMQ 异步建单 + 本地消息表/校验/恢复/对账四级一致性兜底",
+    "提供 Caffeine→Redis→MySQL 三级读取路径与广播失效写路径",
+    "包含 7 类 JVM 故障注入开关、JMeter 压测脚本与 Prometheus 指标端点"
+   ],
+   "use_cases": [
+    "学习秒杀系统的高并发与数据一致性架构演进",
+    "练习 JVM 故障排查与压测演练流程",
+    "参考单模块 MVC 向 DDD 多模块迁移的实践案例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL ／ |数据访问|MyBatis-Plus 3.5（spring-boot3-starter）、MySQL 8（mysql-connector-j）| ／ - MySQL 8.x（库名 `dingping`，建表 SQL 见课程资料 `hmdp.sql`；闪赔审计表补丁见 `db/patch_payout_audit_log.sql`）",
+     "lines": [
+      13,
+      120,
+      140
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 MySQL/Redis/RocketMQ 存储数据的大众点评类应用系统，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "一个基于**黑马点评**（大众点评类本地生活平台）的**深度魔改学习项目** ／ |数据访问|MyBatis-Plus 3.5（spring-boot3-starter）、MySQL 8（mysql-connector-j）| ／ - MySQL 8.x（库名 `dingping`，建表 SQL 见课程资料 `hmdp.sql`；闪赔审计表补丁见 `db/patch_payout_audit_log.sql`）",
+   "evidence_lines": [
+    5,
+    120,
+    140
+   ]
+  },
+  "fn": "Nina-noSchool/hmdp-ultra",
+  "sha": "940802980e66",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

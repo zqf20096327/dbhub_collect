@@ -10630,5 +10630,284 @@
   "generated_at": "2026-10-29",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8508cd1a669f": {
+  "identity": {
+   "one_liner": "开源桌面 SQL 工作台，内置 3 个驱动加 26 个驱动插件",
+   "review": "Tabularis 是一个开源桌面 SQL 工作台，内置 PostgreSQL/MySQL/MariaDB/SQLite 驱动，并通过插件扩展到 ClickHouse、DuckDB、SQL Server、Oracle 等数据库。提供 SQL 编辑器、notebook、ER 图、可视化 EXPLAIN、数据表格编辑，以及供 Claude/Cursor 等 AI 代理读取 schema 并执行查询的内置 MCP 服务器和基于本地模型（Ollama）的 text-to-SQL。适合需要在单一桌面应用中连接多种数据库并配合 AI 代理工作的开发与运维人员。",
+   "highlights": [
+    "内置 PostgreSQL、MySQL/MariaDB、SQLite 驱动，其余数据库通过 JSON-RPC over stdio 插件接入（26 个已发布插件）",
+    "内置 MCP 服务器供 Claude、Cursor、Devin 等 AI 代理读取 schema 并执行查询，支持基于 Ollama 本地模型的 text-to-SQL",
+    "提供 SQL notebook、交互式 ER 图、可视化 EXPLAIN 计划图、SQL Dump 导出/导入与数据表格内联编辑"
+   ],
+   "use_cases": [
+    "多数据库桌面客户端场景，如开发人员使用 SQL 编辑器和 notebook 查询/编辑多种数据库",
+    "ER 图查看与可视化 EXPLAIN 执行计划分析",
+    "配合 Claude/Cursor 等 AI 代理通过 MCP 访问数据库 schema 并执行查询"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ |PostgreSQL|tabularis-postgresql-plugin|Trino|tabularis-trino-plugin| ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection.",
+     "lines": [
+      81,
+      99,
+      203
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection. ／ - **Cross-Database Support:** Works with PostgreSQL, MySQL/MariaDB, and SQLite using the best available `EXPLAIN` format per driver.",
+     "lines": [
+      81,
+      203,
+      260
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection. ／ - **Cross-Database Support:** Works with PostgreSQL, MySQL/MariaDB, and SQLite using the best available `EXPLAIN` format per driver.",
+     "lines": [
+      81,
+      203,
+      260
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection. ／ - **Cross-Database Support:** Works with PostgreSQL, MySQL/MariaDB, and SQLite using the best available `EXPLAIN` format per driver.",
+     "lines": [
+      81,
+      203,
+      260
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|DM / Dameng|tabularis-dameng-plugin|Oracle|tabularis-oracle-plugin|",
+     "lines": [
+      91
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|Elasticsearch|tabularis-elasticsearch-plugin|SQL Server|tabularis-sqlserver-plugin|",
+     "lines": [
+      94
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|tabularis-clickhouse-plugin|LibSQL / Turso|tabularis-libsql-plugin|",
+     "lines": [
+      88
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "|Scoped|TiDB|",
+     "lines": [
+      106
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "|DM / Dameng|tabularis-dameng-plugin|Oracle|tabularis-oracle-plugin|",
+     "lines": [
+      91
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为多种数据库提供连接、查询、管理等能力的桌面工具，而非使用数据库存储自身业务数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB",
+    "Oracle",
+    "SQL Server",
+    "ClickHouse",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tabularis is an open-source desktop SQL workspace with 3 built-in database drivers and 26 shipped driver plugins, including DuckDB, ClickHouse, Redis and Firestore. Its built-in MCP server lets Claude, Cursor and Devin (formerly Windsurf) read your schema and run queries in the same app you already use. ／ PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage on the website: ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection.",
+   "evidence_lines": [
+    6,
+    81,
+    203
+   ]
+  },
+  "fn": "TabularisDB/tabularis",
+  "sha": "8508cd1a669f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "eb657233f3ab": {
+  "identity": {
+   "one_liner": "基于 Next.js 和 KeystoneJS 的开源电商建店平台",
+   "review": "Openfront 是一个自托管的电商平台应用，提供管理后台、客户店面、支付处理、库存管理和多币种等能力，使用 PostgreSQL 存储数据（经 Prisma ORM，由 KeystoneJS 提供 GraphQL API），内置基于 MCP 协议的 AI 助手。面向需要搭建在线商店的开发者和商家，通过源码克隆方式部署。",
+   "highlights": [
+    "内置管理后台、店面、支付处理（Stripe/PayPal 适配器）与库存管理",
+    "内置基于 Model Context Protocol (MCP) 的 AI 助手，可用自然语言管理商品与价格",
+    "包含 78+ 数据模型，支持多币种、多位置库存、礼品卡、退款与折扣系统"
+   ],
+   "use_cases": [
+    "自托管搭建 B2C/B2B 在线商店",
+    "需要 GraphQL API 与支付/物流适配器定制的电商开发",
+    "通过聊天界面用自然语言管理店铺运营"
+   ],
+   "use_cases_2": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database**: PostgreSQL with Prisma ORM ／ - PostgreSQL database ／ DATABASE_URL=\"postgresql://username:password@localhost:5432/openfront\"",
+     "lines": [
+      94,
+      121,
+      141
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL 作为数据库存业务数据，是使用数据库的电商应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Openfront is a comprehensive e-commerce platform that provides everything you need to build and manage online stores. It includes a powerful admin dashboard, customer storefront, payment processing, inventory management, and advanced e-commerce features. ／ - **Database**: PostgreSQL with Prisma ORM ／    DATABASE_URL=\"postgresql://username:password@localhost:5432/openfront\"",
+   "evidence_lines": [
+    7,
+    94,
+    141
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "openshiporg/openfront",
+  "sha": "eb657233f3ab",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a6aace9db831": {
+  "identity": {
+   "one_liner": "以 Markdown 文档为数据的嵌入式数据库，支持 SQL/mq 查询",
+   "review": "mq-db 是一个用 Rust 编写的嵌入式数据库，将 Markdown 文档解析为带区间索引的扁平块列表，可用 SQL 或 mq 语言查询，支持全文检索、向量搜索及写回到源 Markdown。适合需要把文档当作结构化数据查询的开发者；README 注明处于活跃开发中，API 可能变化。",
+   "highlights": [
+    "将 Markdown 解析为带区间索引（pre/post 序）的扁平块列表，层级查询可用整数比较完成",
+    "支持 SQL 与 mq 查询、全文搜索（match/bm25）、向量搜索及 read_csv/read_json 外部文件查询",
+    "提供 CLI、REPL、TUI、HTTP 服务器和 Rust 库多种使用形态，INSERT/UPDATE/DELETE 可写回源 Markdown"
+   ],
+   "use_cases": [
+    "将 Markdown 文档库作为可 SQL 查询的结构化数据源",
+    "对文档内容做全文检索与层级（章节范围）查询",
+    "在 Rust 程序中通过库 API 嵌入文档存储与查询能力"
+   ],
+   "cat": "内核/引擎",
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 表明它是数据库本体/存储引擎，而非为其他数据库生态服务的工具或使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`mq-db` is an embedded database that treats Markdown documents as structured, hierarchical data. ／ It parses Markdown into a flat block list with an interval index (pre/post order), so section hierarchy queries are a single integer comparison. Documents can be queried with **SQL** or **mq** and persisted to a compact page-file format. ／ - CLI, REPL, TUI, HTTP server and Rust library",
+   "evidence_lines": [
+    13,
+    14,
+    29
+   ]
+  },
+  "fn": "harehare/mq-db",
+  "sha": "a6aace9db831",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11102,5 +11102,270 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8fb92ca51c50": {
+  "identity": {
+   "one_liner": "单 SQLite 文件的 AI 代理长期记忆，经 MCP 提供服务",
+   "review": "Mnemosyne 是一个面向 AI 代理的本地优先长期记忆系统，把代理学到的记录连同来源与信任层级存进一个 SQLite 文件，并在源头被更正时退休依赖它的旧记忆。它通过 MCP、TypeScript SDK、CLI 和带认证的 HTTP 提供服务，面向 Claude Code、Cursor、Codex 等宿主；本地引擎无需模型 API 密钥、数据库服务器或 Docker，要求 Node.js ≥22.16。注意它与 mnemosyne-oss/mnemosyne（Python 库）同名但无关联。",
+   "highlights": [
+    "以单个 SQLite 文件本地存储记忆，每条记录携带来源与信任层级",
+    "支持通过 MCP 接入 Claude Code、Cursor、Codex，另提供 TypeScript SDK、CLI 与 HTTP 入口",
+    "更正源记录时会退休声明依赖它的过程与技能，并支持 bisect 定位影响记录与可回滚的整合"
+   ],
+   "use_cases": [
+    "为 Claude Code/Cursor/Codex 等 MCP 宿主提供可审计的长期记忆",
+    "需要本地离线运行、不依赖数据库服务器的代理记忆场景",
+    "需要重放历史信念、追踪更正影响范围的记忆审计场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Mnemosyne is local-first, long-term memory for AI agents: one SQLite file that keeps what an agent learned together with the evidence it came from, served to any host over TypeScript, MCP, CLI or HTTP.** When a source is corrected, the memories recorded as d ／ claude mcp add mnemosyne -- npx -y -p mnemosy-ai@next mnemosy mcp --db ./.mnemosyne/memory.sqlite --workspace my-project --agent assistant",
+     "lines": [
+      21,
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 文件作为自身记忆数据的存储，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Mnemosyne is local-first, long-term memory for AI agents: one SQLite file that keeps what an agent learned together with the evidence it came from, served to any host over TypeScript, MCP, CLI or HTTP.** When a source is corrected, the memories recorded as depending on it are retired, so the next agent starts from what current recorded evidence still supports instead of repeating a stale lesson. The local engine needs no model API key, database server or Docker. ／ - **Any host.** MCP for Claude Code, Cursor and Codex; a TypeScript SDK; a CLI; and authenticated HTTP with a Python client and live inspector. ／ > **Which Mnemosyne is this?** This repository is the TypeScript package published on npm as `mnemosy-ai`, with its site at mnemosy.ai. It is a separate project from mnemosyne-oss/mnemosyne, the Python memory library published on PyPI as `mnemosyne-memory`; the two share a name, not code or maintainers. Please file issues for that project in its own repository.",
+   "evidence_lines": [
+    21,
+    26,
+    33
+   ]
+  },
+  "fn": "28naem-del/mnemosyne",
+  "sha": "8fb92ca51c50",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "96a47821738d": {
+  "identity": {
+   "one_liner": "基于 Flask 与 TiDB Cloud 的学生宿舍生活门户应用",
+   "review": "GreenCampus 是一个面向住宿学生的单页 Flask 应用，提供选房平面图、室友组队、投票踢人/退宿、申请、食堂菜单、洗衣状态、罚款通知等功能。数据存于 TiDB Cloud 的 MySQL 兼容规范化 schema，经 PyMySQL+SSL 连接，并内置基于个人 Gemini API key 的 AI 助手。适合需要统一宿舍服务入口的校园场景，需自备 TiDB/MySQL 兼容服务器与 Gemini key。",
+   "highlights": [
+    "提供选房、室友组、申请、食堂、洗衣、罚款、通知等宿舍服务，共 31 条 Flask 路由",
+    "使用 TiDB Cloud 的 MySQL 兼容规范化 schema（PyMySQL + SSL），凭据全部经环境变量读取",
+    "支持基于投票的邀请/踢出/退宿机制，以及基于个人 Gemini API key 的 AI 聊天与室友匹配分数"
+   ],
+   "use_cases": [
+    "学生宿舍选房与室友组队管理",
+    "校园申请、公告、罚款与通知的统一查询",
+    "部署于 Render 等平台的校园生活门户"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "The whole app is a single-page Flask application backed by a **normalized, MySQL-compatible schema on TiDB Cloud** (SSL, PyMySQL), with self-healing room slots and a **vote-based system** for inviting, kicking or leaving homes. ／ |`DB_HOST`|MySQL / TiDB host|",
+     "lines": [
+      26,
+      74
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "The whole app is a single-page Flask application backed by a **normalized, MySQL-compatible schema on TiDB Cloud** (SSL, PyMySQL), with self-healing room slots and a **vote-based system** for inviting, kicking or leaving homes. ／ |Database|MySQL-compatible **TiDB Cloud** — SSL, `PyMySQL`, normalized schema, indexed search|",
+     "lines": [
+      26,
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明整个应用由 TiDB Cloud 上的 MySQL 兼容 schema 提供数据，是一个使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "个人/教育项目许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GreenCampus is a **student portal for dormitory life**. Instead of ten notice boards, five group chats and one lost paper list, everything a student needs lives behind a single login: ／ The whole app is a single-page Flask application backed by a **normalized, MySQL-compatible schema on TiDB Cloud** (SSL, PyMySQL), with self-healing room slots and a **vote-based system** for inviting, kicking or leaving homes. ／ |Database|MySQL-compatible **TiDB Cloud** — SSL, `PyMySQL`, normalized schema, indexed search|",
+   "evidence_lines": [
+    17,
+    26,
+    55
+   ]
+  },
+  "fn": "Abdullayews/greencampus",
+  "sha": "96a47821738d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bac78abeab4a": {
+  "identity": {
+   "one_liner": "Cosmos 入门流程的说明与演示代码仓库",
+   "review": "该仓库包含 Cosmos 的入门演练说明和演示代码，用于引导新用户完成上手流程。README 仅有一行描述，未说明具体涵盖哪些数据库组件、依赖或安装方式，归集通道按 tidb 关键词采集，但可见文本中无相关证据。",
+   "highlights": [
+    "提供入门演练的说明文档",
+    "包含配套的演示代码"
+   ],
+   "use_cases": [
+    "新成员按步骤完成 Cosmos 入门演练"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 仅描述入门演练代码，无证据表明其为数据库生态工具或使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Instructions and demo code for Cosmos's onboarding walkthrough.",
+   "evidence_lines": [
+    2
+   ]
+  },
+  "fn": "harness-community/cosmos-onboard-tidbit",
+  "sha": "bac78abeab4a",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5bb2d5e5b675": {
+  "identity": {
+   "one_liner": "赛题项目：SDD上下文管理助手，用本地JSON模拟OceanBase存储",
+   "review": "面向规格驱动开发的AI助手上下文模块，实现导入代码与规格、调用MiniMax模型改代码、运行测试、持久化任务状态的全流程。存储层用本地JSON文件模拟seekdb/OceanBase，未直接使用数据库本体，适合作为赛题提交示例阅读。",
+   "highlights": [
+    "使用MiniMax abab6.5s模型完成代码生成与修改",
+    "以本地JSON文件模拟seekdb/OceanBase存储业务代码与规格资料",
+    "持久化保存任务状态，支持重启后恢复开发进度"
+   ],
+   "use_cases": [
+    "规格驱动开发流程中AI代码修改的演示",
+    "赛题提交材料的参考实现",
+    "带断点续跑的AI编码任务流程实验"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "# MiniMax × OceanBase 赛题：SDD上下文管理助手 ／ - **代码上下文存储**：本地JSON文件模拟seekdb/OceanBase存储业务代码与规格资料",
+     "lines": [
+      1,
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README说明以本地JSON文件模拟OceanBase存储，并未实际使用或适配OceanBase，仅提及。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **代码上下文存储**：本地JSON文件模拟seekdb/OceanBase存储业务代码与规格资料 ／ 2. 基于上下文调用MiniMax模型完成实际代码修改",
+   "evidence_lines": [
+    12,
+    6
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Zengeng-lab/oceanbase-competition",
+  "sha": "5bb2d5e5b675",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

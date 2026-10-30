@@ -10627,5 +10627,144 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d55d30bbfe4c": {
+  "identity": {
+   "one_liner": "ASP.NET Core 自托管 Web 应用，含财务、日历、看板等模块",
+   "review": "Maroik 是一个基于 ASP.NET Core MVC 的自托管 Web 应用，提供个人/企业财务记录、电子表格式预算、日历、公告板、看板、文件管理和用户管理等模块，采用 DDD + Clean Architecture 并以测试约束架构。数据存于 PostgreSQL，配合 RabbitMQ、ClamAV，通过 Docker Compose 与部署脚本运行，面向希望自托管的个人或小团队。",
+   "highlights": [
+    "提供费用追踪、预算表格（支持 Excel 公式）、日历、公告板、看板、文件管理与管理后台等功能模块",
+    "基于 PostgreSQL 存储数据，定时脚本每小时生成备份归档，支持从备份在新服务器恢复部署",
+    "提供 Deploy.sh 部署脚本，支持本地构建或跟随 GitHub main 自动部署，可选 Cloudflare Tunnel 或端口转发等托管方式"
+   ],
+   "use_cases": [
+    "自托管的个人/小团队财务与日程管理",
+    "文件管理与看板等日常事务的一站式站点",
+    "需要从备份快速迁移/恢复的自托管站点运维"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`Maroik.DB/PostgreSQL/SQL_Init_Script/Production/Init.sql`|The database the stack starts from: a backup's `pg_dump`, or `Debugging/Init.sql` (same schema, demo data) on a new server.|",
+     "lines": [
+      75
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|2025-04|MariaDB → PostgreSQL|",
+     "lines": [
+      241
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个使用 PostgreSQL 存数据的 Web 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`Maroik.DB/PostgreSQL/SQL_Init_Script/Production/Init.sql`|The database the stack starts from: a backup's `pg_dump`, or `Debugging/Init.sql` (same schema, demo data) on a new server.| ／ Maroik is a modern web application built with ASP.NET Core MVC, featuring a comprehensive set of tools for personal and business management. It includes features such as expense tracking, spreadsheet-style budgets, calendar management with e-mail reminders, bulletin boards, a personal Kanban board, a personal file drive, and role-based user management.",
+   "evidence_lines": [
+    75,
+    123
+   ]
+  },
+  "fn": "IkhyeonJo/Maroik",
+  "sha": "d55d30bbfe4c",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4f34deac4694": {
+  "identity": {
+   "one_liner": "基于 GoodJob 的 Rails DAG 任务流水线编排库",
+   "review": "GoodPipeline 是一个 Ruby gem，用于在 Rails 应用中以有向无环图形式定义多步骤任务流水线，提供依赖解析、并行执行、失败策略、条件分支、流水线串联与生命周期回调，并内置 Web 仪表盘查看执行历史。它要求 Ruby >= 4.0、Rails >= 7.2、PostgreSQL 及 GoodJob >= 4.14（preserve_job_records = true），面向需要编排后台作业的 Rails 开发者。",
+   "highlights": [
+    "以 DAG 声明多步骤流水线，支持依赖解析、并行执行与三种失败策略",
+    "提供条件分支、流水线串联、生命周期回调及 Phase barrier 同步",
+    "内置可挂载的 Web 仪表盘，展示执行历史、KPI 与交互式 DAG 视图"
+   ],
+   "use_cases": [
+    "Rails 后台任务需要多步骤依赖编排的场景",
+    "需要可视化监控、取消与重跑任务流水线的运维场景",
+    "替代线性任务链、需要分支与失败隔离的批处理流程"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL ／ mise docker:start # PostgreSQL",
+     "lines": [
+      11,
+      247
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该 gem 为 Rails 应用的作业编排提供服务，属数据库生态之上的工具/组件，并将 PostgreSQL 列为硬性依赖。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DAG-based job pipeline orchestration for Rails, built on GoodJob. ／ - PostgreSQL ／ - GoodJob >= 4.14 with `preserve_job_records = true`",
+   "evidence_lines": [
+    3,
+    11,
+    12
+   ]
+  },
+  "fn": "milkstrawai/good_pipeline",
+  "sha": "4f34deac4694",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

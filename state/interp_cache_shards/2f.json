@@ -11467,5 +11467,61 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "58f575fb3386": {
+  "identity": {
+   "one_liner": "带版本控制的 MongoDB 协议文档数据库",
+   "review": "DumboDB 是一个文档数据库，基于 Dolt 存储引擎（prolly trees）实现，实现 MongoDB 8.0 线协议，可通过 mongosh 或标准 MongoDB 驱动连接。核心机制是通过 dumboCommit/dumboBranch/dumboMerge 等自定义命令提供提交、分支、合并、diff 等数据版本控制能力。目前为 pre-1.0 软件，单节点运行，副本集/分片等能力不在范围内。",
+   "highlights": [
+    "实现 MongoDB 8.0 线协议，标准驱动与 mongosh 可直接连接",
+    "通过自定义命令提供 commit、branch、merge、cherry-pick、rebase、conflict 处理等版本控制操作",
+    "支持多文档事务、二级索引、聚合管道、SCRAM/X.509 认证与 TLS"
+   ],
+   "use_cases": [
+    "需要对文档数据做分支、合并与历史追溯的场景",
+    "以 MongoDB 驱动接入的单节点文档存储",
+    "实验性评估版本化文档数据库的测试环境"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "基于 Dolt 存储引擎构建、实现 MongoDB 线协议的数据库服务器，属于数据库生态中的引擎组件而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MongoDB and Git had a baby, and it's named **Dumbo**. It's a document database with built-in version control, so you can track changes, branch, and merge just like you would with code -- but for your data. ／ DumboDB leverages the power of the Dolt storage engine. Dolt's prolly trees enable efficient storage of data over time thanks to structural sharing between commits. This means you can have a rich history of changes without worrying about storage bloat. ／ DumboDB implements the MongoDB 8.0 wire protocol and is designed for high parity with core MongoDB operations. It functions as a drop-in replacement for standard drivers and `mongosh` in single-node environments.",
+   "evidence_lines": [
+    5,
+    7,
+    50
+   ]
+  },
+  "fn": "dolthub/dumbodb",
+  "sha": "58f575fb3386",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

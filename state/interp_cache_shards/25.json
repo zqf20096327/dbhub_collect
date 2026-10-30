@@ -10932,5 +10932,160 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "627e1577a27e": {
+  "identity": {
+   "one_liner": "本地优先 AI 知识与 Agent 工作台，Markdown 笔记+编码会话共享单一本地数据库",
+   "review": "一个桌面应用（Tauri 2 + ASP.NET Core + React），在同一本地数据库上整合 Markdown 笔记、Agent 对话、编码会话、语义检索、知识图谱、记忆、看板与工作流，支持 MCP、技能扩展与多模型接入。面向希望在本地管理知识并运行编码 Agent 的个人用户；默认使用 SQLite，可切换 PostgreSQL 16+（需 pgvector），无需账号、不上传数据。",
+   "highlights": [
+    "所有笔记、会话、代码改动与记忆读写同一 SQLite 数据库（默认），可切换 PostgreSQL 16+ 与 pgvector",
+    "支持 MCP 服务器、技能（/skill-name）、Agent 预设、工作流与看板任务扩展",
+    "Code 会话提供隔离 worktree、PTY 终端、逐行 diff、checkpoint 回滚及通过 gh/glab 的 PR 流程"
+   ],
+   "use_cases": [
+    "本地知识管理与语义检索/知识图谱构建",
+    "通过 Agent 会话编辑真实代码仓库并管理 Git/PR",
+    "用看板与工作流自动化执行 Agent 任务"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag",
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Storage|SQLite + `sqlite-vec` (default) · PostgreSQL 16+ + `pgvector`| ／ PostgreSQL and desktop packaging ／ export DatabaseProvider=Postgresql",
+     "lines": [
+      116,
+      146,
+      150
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Hetu is a desktop app with a local backend: write Markdown notes, ask an agent to work through a problem, and let Code sessions edit a real repository. All of it reads and writes the same SQLite database (or PostgreSQL), so retrieval, the knowledge graph, Wiki ／ |Storage|SQLite + `sqlite-vec` (default) · PostgreSQL 16+ + `pgvector`|",
+     "lines": [
+      19,
+      116
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个使用 SQLite/PostgreSQL 存储自身笔记与会话数据的桌面应用，并非为数据库生态服务的工具。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Hetu is a desktop app with a local backend: write Markdown notes, ask an agent to work through a problem, and let Code sessions edit a real repository. All of it reads and writes the same SQLite database (or PostgreSQL), so retrieval, the knowledge graph, Wiki and long-term memory grow from the same material. No account, no telemetry, no uploads — model calls only go to the providers you configure. ／ |Storage|SQLite + `sqlite-vec` (default) · PostgreSQL 16+ + `pgvector`| ／  PostgreSQL and desktop packaging",
+   "evidence_lines": [
+    19,
+    116,
+    146
+   ]
+  },
+  "fn": "wosledon/Hetu",
+  "sha": "627e1577a27e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "12d7771e435f": {
+  "identity": {
+   "one_liner": "OpenCode 会话共享分层记忆插件，基于 Bun 与 SQLite 实现快照隔离。",
+   "review": "这是一个 OpenCode 插件，用于在多个独立 OpenCode 会话之间共享分层记忆：各会话保留原始记录，通过适配器在配置范围内共享已完成、失败或中断轮次的摘要。它使用 SQLite 存储数据，支持 WAL、租约、fencing 与快照隔离，通过 npm 或 Git 安装，支持 OpenCode 2.0.x–2.2.x。适合使用 OpenCode 进行多会话协作的开发者；摘要生成会调用压缩模型并产生模型费用，且测试声明不构成生产可用性认证。",
+   "highlights": [
+    "为独立 OpenCode 会话提供共享的分层记忆，各会话保留自身原始记录并按范围共享轮次摘要",
+    "使用 SQLite 事务、WAL、租约与 fencing 管理后台摘要作业，默认每数据库一个准备 worker",
+    "支持后台作业重试、失败重排队、状态栏实时监控与快照隔离下的发布管理"
+   ],
+   "use_cases": [
+    "多个 OpenCode 会话需要共享已完成轮次的摘要记忆",
+    "需要对会话记忆的生成、发布与撤销进行细粒度状态监控与失败恢复",
+    "以插件形式为 OpenCode 2.0.x–2.2.x 增加持久化记忆能力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite transactions, write-ahead logging (WAL), durable jobs, leases, and fencing. ／ SQLite stores all retained original records locally.",
+     "lines": [
+      325,
+      459
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是面向 OpenCode 会话的记忆插件，SQLite 仅作为其本地数据存储，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OptChat uses Bun to manage memory across OpenCode sessions. ／ opencode plugin add @ahlner/opencode-optchat ／ The server creates a private database path and scope for the current user and stable project.",
+   "evidence_lines": [
+    3,
+    19,
+    44
+   ]
+  },
+  "fn": "ahlner/opencode-optchat",
+  "sha": "12d7771e435f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

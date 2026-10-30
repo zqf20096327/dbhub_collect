@@ -10084,5 +10084,140 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0b0b8dfdb9ad": {
+  "identity": {
+   "one_liner": "SQL Server 实例迁移与管理的 PowerShell 自动化模块",
+   "review": "dbatools 是一个包含约 700 条命令的 PowerShell 模块，用于 SQL Server 实例迁移、备份与还原验证、实例发现、健康检查及 HTML/Excel 报告生成，面向数据库管理员（DBA）和运维人员。它支持 SQL Server 2008 至 2022 及 Azure SQL 系列，2.8.3 起基于 SMO 181 不再支持 SQL Server 2000/2005，需 PowerShell v3+（Windows）或 Core 7.4+（Linux/macOS）。",
+   "highlights": [
+    "提供近 700 条 PowerShell 命令，覆盖实例迁移、备份/还原、健康检查与文档报告生成",
+    "支持 SQL Server 2008-2022 及 Azure SQL VM/Database/Managed Instance，跨 Windows/Linux/macOS 运行",
+    "支持批量操作多实例，可自动验证备份还原（Test-DbaLastBackup 等）"
+   ],
+   "use_cases": [
+    "SQL Server 实例间的批量迁移（登录、数据库、作业等）",
+    "自动化备份与备份有效性验证",
+    "跨多台服务器的数据库查找、健康监控与最佳实践检查"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**Migrate SQL Server instances in minutes instead of days.** Test hundreds of backups automatically. Find that one database across 50 servers. dbatools is a PowerShell module with nearly 700 commands that replace manual SQL Server administration with powerful  ／ ### SQL Server Support ／ |SQL Server 2000|Not supported since 2.8.3, see below|",
+     "lines": [
+      10,
+      37,
+      40
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQL Server 提供迁移、备份、管理等自动化能力，是数据库生态的服务工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Migrate SQL Server instances in minutes instead of days.** Test hundreds of backups automatically. Find that one database across 50 servers. dbatools is a PowerShell module with nearly 700 commands that replace manual SQL Server administration with powerful and fun automation. ／ ### SQL Server Support",
+   "evidence_lines": [
+    10,
+    37
+   ]
+  },
+  "fn": "dataplat/dbatools",
+  "sha": "0b0b8dfdb9ad",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f8feb64357a0": {
+  "identity": {
+   "one_liner": "社区维护的有声书元数据开放数据库，JSON 经 CI 校验编译为 SQLite 产物",
+   "review": "一个以 GitHub 仓库即数据库形式运作的有声书元数据项目：贡献者通过 PR 或 issue 表单编辑 JSON 数据，CI 做校验，合并后构建 meta.sqlite 发布产物，metaserve 提供只读 JSON API 与网站。数据采用 CC0 许可，面向有声书应用（如 Audiobookshelf）的开发者和元数据贡献者，写入完全依赖 GitHub 流程。",
+   "highlights": [
+    "数据以 JSON pack 形式存储，经 Go 工具链（metacheck/metafmt）做 schema、引用完整性与唯一性校验",
+    "提供 metabuild 将数据编译为 SQLite 产物，metaserve 基于产物提供只读 API（含 FTS 搜索、ASIN/ISBN/LibriVox 查询）",
+    "提供 Audiobookshelf 元数据 provider 端点及兼容 LibriVox JSON 形状的 feed"
+   ],
+   "use_cases": [
+    "为有声书播放器/服务器（如 Audiobookshelf）提供元数据源",
+    "通过只读 API 查询有声书作品、朗读者、系列与章节信息",
+    "以 PR/issue 表单方式参与社区元数据贡献"
+   ],
+   "persona": "use"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "by Go tooling in CI, and compiled into a single SQLite artifact that servers ／ data/*.json ──► CI validation ──► meta.sqlite ──► API server + site ／ 3. On merge to `main`, a release workflow builds `meta.sqlite` and attaches it",
+     "lines": [
+      15,
+      52,
+      61
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 作为编译产物的存储格式并通过 metaserve 对外提供 API，SQLite 是其依赖的存数组件而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "数据为 CC0；characters/recaps 层为 CC BY-SA",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "by Go tooling in CI, and compiled into a single SQLite artifact that servers ／   data/*.json  ──►  CI validation  ──►  meta.sqlite  ──►  API server + site ／ - `metabuild -o meta.sqlite` - compile the database into a SQLite file",
+   "evidence_lines": [
+    15,
+    52,
+    117
+   ]
+  },
+  "fn": "KodeStar/audiosilo-meta",
+  "sha": "f8feb64357a0",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

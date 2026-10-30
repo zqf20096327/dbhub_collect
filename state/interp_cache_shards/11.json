@@ -11619,5 +11619,72 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0dc2bd7a3f92": {
+  "identity": {
+   "one_liner": "基于 Prisma 和 PostgreSQL SKIP LOCKED 的任务队列库",
+   "review": "一个以 PostgreSQL 表为存储的任务队列 TypeScript 库，基于 SKIP LOCKED 实现并发出队，供使用 Prisma ORM 的 Node.js 开发者集成。支持 cron/间隔调度、重试与死信队列、租约回收、事务内运行（exactly-once）等模式。要求 Prisma 7.4+ 并通过 driver adapter（如 @prisma/adapter-pg）连接，仅面向 PostgreSQL。",
+   "highlights": [
+    "基于 PostgreSQL SKIP LOCKED 可靠出队，支持 crontab 语法与固定间隔的定时任务",
+    "提供指数退避重试、死信队列、租约回收崩溃任务、每任务超时与 AbortSignal 协作取消",
+    "提供 enqueueMany() 批量入队、purge() 清理、stats() 统计及类型化事件，支持 at-least-once 与 exactly-once 两种执行模式"
+   ],
+   "use_cases": [
+    "在 Prisma + PostgreSQL 技术栈的 Node.js 应用中实现异步任务处理",
+    "需要定时/周期任务调度（cron 或间隔）并要求投递语义可控的场景",
+    "需要死信排查、崩溃任务自动回收的作业队列运维场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Simple, reliable and efficient concurrent work queue for Prisma + PostgreSQL ／ - Leverages PostgreSQL SKIP LOCKED feature to reliably dequeue jobs ／ The peer dependency changed from `@prisma/client >=3 <7` to `@prisma/client >=7` plus `@prisma/adapter-pg >=7`. You need a Prisma driver adapter:",
+     "lines": [
+      25,
+      27,
+      350
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是构建在 PostgreSQL 之上的任务队列库，为使用该数据库的应用提供作业队列能力，而非以数据库为存储的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Simple, reliable and efficient concurrent work queue for Prisma + PostgreSQL ／ - Leverages PostgreSQL SKIP LOCKED feature to reliably dequeue jobs ／ - Compatible with **Prisma 7.4+** and any Prisma driver adapter (e.g. `@prisma/adapter-pg`)",
+   "evidence_lines": [
+    25,
+    27,
+    34
+   ]
+  },
+  "fn": "mgcrea/prisma-queue",
+  "sha": "0dc2bd7a3f92",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

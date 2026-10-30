@@ -11135,5 +11135,71 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8095bd5b2e1a": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 local-first 平台与 TypeScript 库",
+   "review": "Evolu 提供 local-first 平台和 TypeScript 库，底层通过 sqlite-wasm 在浏览器、Node.js 和 React Native 环境读写 SQLite，并自带 SQLite core 与 React Native 绑定，配合 relay 服务器实现数据同步。面向使用 React/Svelte/Vue 等前端框架构建离线优先应用的开发者。README 主要是开发与测试说明，面向贡献者而非终端用户。",
+   "highlights": [
+    "提供 @evolu/sqlite-wasm，经 sha256 校验加载固定的 SQLite wasm 构建",
+    "包含自有 SQLite core 及 React Native（Node-API/JSI）绑定与一致性测试套件",
+    "支持浏览器、Node.js 与 React Native 多端测试，覆盖 AddressSanitizer/ThreadSanitizer 等检查"
+   ],
+   "use_cases": [
+    "构建离线优先（local-first）的 Web 与移动应用",
+    "在浏览器中通过 wasm 运行 SQLite 存储的应用数据",
+    "为 React Native 应用提供本地 SQLite 数据层"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "E2E tests load `packages/sqlite-wasm/wasm/sqlite3.wasm`. It is never committed,",
+     "lines": [
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是围绕 SQLite 构建本地数据层的 TypeScript 库与平台组件，为应用开发者提供数据库能力而非仅消费数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Evolu is a local-first platform and TypeScript library. ／ E2E tests load `packages/sqlite-wasm/wasm/sqlite3.wasm`. It is never committed, ／ - `pnpm test:sqlite-core` - Run the tests of Evolu's own SQLite core, with its C tests under AddressSanitizer and UndefinedBehaviorSanitizer, once with hardware and once with software crypto, failing below 100% line, branch or function coverage of its TypeScript and of the C its host compiles",
+   "evidence_lines": [
+    3,
+    36,
+    127
+   ]
+  },
+  "fn": "evoluhq/evolu",
+  "sha": "8095bd5b2e1a",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

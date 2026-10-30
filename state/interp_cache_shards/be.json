@@ -10327,5 +10327,169 @@
   "generated_at": "2026-10-28",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "07fd46f27148": {
+  "identity": {
+   "one_liner": "自托管媒体追踪应用，用 Django 构建，支持 SQLite/PostgreSQL 存储",
+   "review": "Yamtrack 是一个自托管的媒体追踪 Web 应用，用于记录电影、剧集、动漫、游戏、书籍等媒体的观看/阅读进度、评分与历史，面向个人及多用户自托管场景。它基于 Django 开发，通过 docker-compose 部署，默认使用 SQLite，也可配置 PostgreSQL；支持与 Jellyfin/Plex/Emby 集成及从 Trakt 等平台导入数据。",
+   "highlights": [
+    "支持追踪电影、剧集、动漫、漫画、游戏、书籍、漫画、桌游等多类媒体，并保存评分、进度、历史等记录",
+    "提供 Docker Compose 部署方式，支持 SQLite 与 PostgreSQL 两种数据库",
+    "集成 Jellyfin、Plex、Emby 自动追踪，支持从 Trakt、Simkl、MyAnimeList、AniList、Kitsu 导入并导出 CSV"
+   ],
+   "use_cases": [
+    "个人自托管管理影视、动漫、游戏、书籍等媒体的观看与阅读记录",
+    "多用户场景下为每个成员提供独立的追踪账户",
+    "通过 Jellyfin/Plex/Emby 集成或 Trakt 等平台定期同步已有追踪数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🐳 Easy deployment with Docker via docker-compose with SQLite or PostgreSQL. ／ The default Compose file uses SQLite, which is enough for most personal installs. For full SQLite, PostgreSQL, and reverse proxy setup instructions, see the Setup documentation.",
+     "lines": [
+      29,
+      70
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🐳 Easy deployment with Docker via docker-compose with SQLite or PostgreSQL. ／ The default Compose file uses SQLite, which is enough for most personal installs. For full SQLite, PostgreSQL, and reverse proxy setup instructions, see the Setup documentation.",
+     "lines": [
+      29,
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Yamtrack 是使用 SQLite/PostgreSQL 存储媒体追踪数据的自托管应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Yamtrack is a self hosted media tracker for movies, tv shows, anime, manga, video games, books, comics, and board games. ／ - 🐳 Easy deployment with Docker via docker-compose with SQLite or PostgreSQL. ／ The default Compose file uses SQLite, which is enough for most personal installs. For full SQLite, PostgreSQL, and reverse proxy setup instructions, see the Setup documentation.",
+   "evidence_lines": [
+    9,
+    29,
+    70
+   ]
+  },
+  "fn": "FuzzyGrim/Yamtrack",
+  "sha": "07fd46f27148",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5a2ab9c8b6c0": {
+  "identity": {
+   "one_liner": "TypeSQL：在 TypeScript 中写 SQL 并获得精确类型，无需代码生成",
+   "review": "TypeSQL 是一个 TypeScript 库，在类型检查器内直接解析 SQL 字符串，为查询结果和参数推导类型，无需代码生成、数据库连接或构建步骤。面向在 TypeScript 项目中手写 SQL 的开发者。支持 PostgreSQL 与 SQLite，需 TypeScript 7.1+，MySQL 尚在计划中，另提供 VS Code 扩展与 schema 自省 CLI。",
+   "highlights": [
+    "在 TypeScript 类型检查器内解析 SQL，编辑时即时推导行类型与参数类型，无需代码生成或数据库连接",
+    "提供 PostgreSQL（pg、postgres.js）与 SQLite（node:sqlite、better-sqlite3、bun:sqlite）适配包及 schema 自省 CLI",
+    "SQL 解析器对照数据库官方回归测试验证，并提供 VS Code 扩展补全与语法高亮"
+   ],
+   "use_cases": [
+    "在 TypeScript 项目中手写 SQL 并要求编译期捕获列名、表名或参数类型错误",
+    "从 Kysely、Drizzle 或 Prisma 既有 schema 迁移到直接书写 SQL 的开发方式",
+    "对 SQL 字符串需要编辑器补全、高亮与行类型悬停提示的开发流程"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "TypeSQL supports PostgreSQL and SQLite. MySQL is planned. ／ npm install @typesql/core @typesql/pg pg ／ npm install @typesql/core @typesql/postgres postgres",
+     "lines": [
+      5,
+      20,
+      21
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "TypeSQL supports PostgreSQL and SQLite. MySQL is planned. ／ npm install @typesql/core @typesql/sqlite ／ `@typesql/postgres` works the same way with postgres.js, and `@typesql/sqlite` with node:sqlite, better-sqlite3 and bun:sqlite. For SQLite, describe tables with SQLite's type names and the `sqlite` dialect from `@typesql/core/sqlite`; see SQLite.",
+     "lines": [
+      5,
+      22,
+      73
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "TypeSQL supports PostgreSQL and SQLite. MySQL is planned.",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "TypeSQL 是为 PostgreSQL/SQLite 等 SQL 数据库提供类型检查与开发体验的 TypeScript 工具库，属于数据库生态工具而非存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Write SQL in TypeScript and get exact types for rows and parameters. TypeSQL parses your SQL inside the type checker: no codegen, no database connection, no build step. ／ TypeSQL supports PostgreSQL and SQLite. MySQL is planned. ／ npm install @typesql/core @typesql/pg pg",
+   "evidence_lines": [
+    3,
+    5,
+    20
+   ]
+  },
+  "fn": "ismailkarsli/TypeSQL",
+  "sha": "5a2ab9c8b6c0",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

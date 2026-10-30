@@ -11491,5 +11491,75 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5ff7809bce4e": {
+  "identity": {
+   "one_liner": "基于 SQLite(sqlite-vec+FTS5) 的 Markdown 知识库语义混合搜索 MCP 服务器",
+   "review": "一个 Rust 编写的 MCP 服务器，将 Markdown（可选纯文本、PDF、Office、源码）分块后生成嵌入向量，存入 SQLite 并结合 sqlite-vec 向量检索与 FTS5 全文检索，支持重排序和文件监听实时同步。面向使用 Claude Code、Cursor 等 MCP 客户端的知识库检索场景。嵌入模型默认 BGE-small-en-v1.5，多语言需指定 bge-m3，ONNX 与 SQLite 静态链接进二进制。",
+   "highlights": [
+    "提供语义（sqlite-vec 向量）与全文（FTS5）混合搜索，含 RRF、重排序、MMR 检索管线",
+    "提供 MCP 接口：6 个工具、4 个 prompts 及 kb:// 资源，支持 stdio 与 Streamable HTTP 传输",
+    "内置文件监听器保持索引实时同步，支持 YAML frontmatter 校验与字段过滤"
+   ],
+   "use_cases": [
+    "为 Claude Code / Cursor 等 MCP 客户端提供本地知识库检索",
+    "对日文或多语言 Markdown 知识库做语义搜索",
+    "通过 HTTP /ui 操作视图在浏览器中查询知识库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Parses Markdown (and optionally `.txt` / `.pdf` / `.docx` / `.xlsx` / `.pptx`, plus Rust source since v1.2.0, and Python since v1.3.0 and PHP since v1.5.0, whose grammars you download and place) files with YAML frontmatter, splits them into heading-based chunk ／ ONNX runtime and SQLite are statically linked into the binary, so no extra DLLs are required. With the default FastEmbed provider, embedding models (ONNX) are downloaded from HuggingFace on first run — see Working around HuggingFace TLS failures if your networ",
+     "lines": [
+      18,
+      59
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其内部嵌入存储引擎，项目本身是知识库搜索 MCP 服务器，不服务于数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 与 Apache-2.0 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Parses Markdown (and optionally `.txt` / `.pdf` / `.docx` / `.xlsx` / `.pptx`, plus Rust source since v1.2.0, and Python since v1.3.0 and PHP since v1.5.0, whose grammars you download and place) files with YAML frontmatter, splits them into heading-based chunks — or, for source code, one chunk per definition, generates embeddings with FastEmbed by default (BGE-small-en-v1.5, or BGE-M3 for multilingual/Japanese knowledge bases), and stores everything in SQLite with sqlite-vec for vector similarity search. A trusted configuration can instead opt into an OpenAI-compatible embedding endpoint. Connects to Claude Code, Cursor, or any MCP-compatible client via stdio (default, 1 client) or Streamable HTTP (many clients) transport. ／ ONNX runtime and SQLite are statically linked into the binary, so no extra DLLs are required. With the default FastEmbed provider, embedding models (ONNX) are downloaded from HuggingFace on first run — see Working around HuggingFace TLS failures if your network blocks that. ／ Six tools — `search`, `get_document`, `list_topics`, `get_connection_graph`,",
+   "evidence_lines": [
+    18,
+    59,
+    134
+   ]
+  },
+  "fn": "alphabet-h/grooveseek",
+  "sha": "5ff7809bce4e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11143,5 +11143,153 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "26a71e0f5f92": {
+  "identity": {
+   "one_liner": "单二进制 Go 自托管预约排期应用，内嵌 SQLite 存储",
+   "review": "Calnode 是一个 Calendly 风格的自托管预约排期系统，以单个 Go 静态二进制发布，数据存于内嵌 SQLite 文件并通过 Litestream 做时间点备份；提供 REST API、HMAC webhook 和内置 MCP 服务器供代理调用，含视频会议与 AI 记录等可选功能。适合需要自托管排期、并让 AI 代理执行预约操作的用户；视频功能依赖外部 LiveKit 服务。",
+   "highlights": [
+    "单个静态 Go 二进制内嵌 SQLite（纯 Go 实现，无 CGO），通过 Litestream 做时间点备份",
+    "提供 88 个端点的 REST API 和内置于二进制的 MCP 服务器（stdio + Streamable HTTP，OAuth 2.1）",
+    "支持内置视频房间/录制、对话式预约（BYO-LLM，默认关闭）及 Google/Microsoft/CalDAV 日历集成"
+   ],
+   "use_cases": [
+    "自托管个人或团队的预约页面与排期管理",
+    "让 AI 代理通过 MCP/API 执行查询空闲时段、创建/改期预约等操作",
+    "通过 webhook 将预约生命周期事件接入 n8n/Make 等自动化流程"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "embedded **SQLite** database: no Redis, no Postgres, no separate API server, no ／ > a SQLite file, so there's almost nothing to pay for. ／ `Apache-2.0` · `Go 1.26` · `single static binary` · `SQLite + Litestream` ／ The whole app — booking pages, admin UI, SQLite — in one container, with data in ／ |**Database**|Postgres (+ Redis)|SQLite (WAL) + Litestream point-in-time backup|",
+     "lines": [
+      7,
+      12,
+      14,
+      27,
+      68
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "embedded **SQLite** database: no Redis, no Postgres, no separate API server, no ／ |**Runtime deps**|4 GB+ image; needs Redis **+** Postgres **+** API server|One static binary + a SQLite file| ／ |**Database**|Postgres (+ Redis)|SQLite (WAL) + Litestream point-in-time backup|",
+     "lines": [
+      7,
+      67,
+      68
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用内嵌 SQLite 存数据的预约排期应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "embedded **SQLite** database: no Redis, no Postgres, no separate API server, no ／ The whole app — booking pages, admin UI, SQLite — in one container, with data in ／ **Native MCP server.** A Model Context Protocol server is compiled *into* the binary",
+   "evidence_lines": [
+    7,
+    27,
+    96
+   ]
+  },
+  "fn": "Calnode/calnode",
+  "sha": "26a71e0f5f92",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ddbb159236d5": {
+  "identity": {
+   "one_liner": "本地运行的单一用户算法交易桌面应用，基于 Tauri 2 + Rust 后端",
+   "review": "OpenAlgo Desktop 是 OpenAlgo web 的桌面版，在本地运行仪表盘、REST API、行情 feed、策略模块、图表/剥头皮终端与期权工具，连接 38 家券商；用 SQLite（WAL、r2d2 连接池）维护 main/logs/sandbox 三个数据库，密钥本地加密。适合想在个人电脑上运行算法交易、支持 TradingView/Amibroker 等外部平台接入的交易者；不支持无头服务器与 Docker 运行。",
+   "highlights": [
+    "在本地以单一应用提供仪表盘、REST API、行情 WebSocket、策略模块、图表与剥头皮终端及 17 个期权工具",
+    "通过统一的 /api/v1 接口连接 38 家券商，兼容 OpenAlgo web 的地址、API 协议与 SDK",
+    "支持 sandbox（analyzer）模式，将订单导向沙箱而非券商，并提供 MCP 接入与 AI Agent 面板"
+   ],
+   "use_cases": [
+    "在 Windows/macOS/Linux 桌面上本地运行算法交易并通过统一 API 接入多家券商",
+    "将 TradingView、Amibroker、Chartink、Excel 或自有代码通过 REST API/WebSocket 接入交易",
+    "先在沙箱模式下测试策略信号，再连接实际券商下单"
+   ],
+   "use_cases_placeholder": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite** (WAL, r2d2 pool): 3 databases (main, logs, sandbox)",
+     "lines": [
+      510
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用以 SQLite 维护 main/logs/sandbox 三个数据库（L510），属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OpenAlgo Desktop is a free, open source, single-user desktop version of ／ mode), and the Telegram, WhatsApp and MCP connections. It is built with",
+   "evidence_lines": [
+    13,
+    25
+   ]
+  },
+  "fn": "marketcalls/openalgo-desktop",
+  "sha": "ddbb159236d5",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

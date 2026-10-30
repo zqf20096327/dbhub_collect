@@ -9812,5 +9812,145 @@
   "generated_at": "2026-10-28",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "677905498dfa": {
+  "identity": {
+   "one_liner": "自托管家庭事务管理应用，含日历、清单、家务与审批式 AI 建议",
+   "review": "FamilyOS 是一个基于 SvelteKit 与 SQLite 的自托管家庭组织应用，提供共享日历、任务、购物清单、家务、食谱和家庭信息展示功能，并可通过 MCP 让 AI 模型提出建议、由家庭成员审批。面向希望在自有硬件（如树莓派）上运行家庭管理工具的用户，通过 Docker Compose 部署，数据存于本地数据卷。",
+   "highlights": [
+    "支持共享日历、清单、家务、食谱等家庭协作功能",
+    "通过 MCP 集成 AI 建议，所有变更需人工审批",
+    "提供 Docker Compose 部署，支持 amd64 和 arm64（含树莓派）"
+   ],
+   "use_cases": [
+    "家庭共享日程与家务管理",
+    "厨房墙面显示屏展示日程与待办",
+    "通过 MCP 客户端以对话方式管理家庭事务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储自身数据的终端应用，不服务于数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GNU AGPL v3.0 或更高版本",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A self-hosted organizer for families.** One web app for the household's calendar, tasks, shopping, ／ chores, recipes and paperwork, on your own hardware (a Raspberry Pi is enough). An AI model of your ／ add the family under **Settings → Family → Members**. Everything lives in the `famos-data` volume",
+   "evidence_lines": [
+    3,
+    4,
+    74
+   ]
+  },
+  "fn": "onurceri/family-os",
+  "sha": "677905498dfa",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3e9a30409cb8": {
+  "identity": {
+   "one_liner": "SQL Server 与 PostgreSQL 的只读健康检查工具",
+   "review": "codeDB Lens 是一个开源的数据库健康检查工具，用只读登录连接 SQL Server 或 PostgreSQL 实例，按 YAML+SQL 规则目录运行检查，生成带 A–F 评级和覆盖率标记的自包含 HTML+JSON 报告，并支持通过 MCP 协议供 Claude 等 AI 客户端调用。面向 DBA 和运维人员，可在 Windows/Linux 上通过安装包、Scoop、deb/rpm 或 Docker 运行，另有持续监控的商业产品 codeDB。",
+   "highlights": [
+    "以只读方式运行 26 条检查规则及 8 条录制规则，生成含 A–F 评级与覆盖率标记的 HTML+JSON 报告",
+    "提供 read-only MCP 服务器，供 Claude、GitHub Copilot、Cursor 等 AI 客户端执行诊断与受限数据查询",
+    "支持 record/report 对实例持续观察最长 24 小时，并通过 compare 对比结果"
+   ],
+   "use_cases": [
+    "对 SQL Server 或 PostgreSQL 实例做单次健康体检并产出可分享的报告",
+    "在 AI 客户端中通过 MCP 让助手运行诊断并解释发现",
+    "录制实例最长 24 小时以观察阻塞、等待等动态问题"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Free, read-only health check for SQL Server and PostgreSQL . ／ |**Docker**|`docker run --rm -e PG_DSN -v \"$PWD:/out\" ghcr.io/codedb-io/codedb-lens check --engine pg --dsn-env PG_DSN --out /out`| ／ |SQL Server|PostgreSQL| ／ -- PostgreSQL (repeat GRANT CONNECT for each database)",
+     "lines": [
+      4,
+      31,
+      47,
+      107
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Free, read-only health check for SQL Server and PostgreSQL . ／ Real run against a test SQL Server (host renamed). Open a demo report. ／ |SQL Server|PostgreSQL| ／ codedb-lens check --engine mssql --server prod01 --auth windows ／ -- SQL Server",
+     "lines": [
+      4,
+      16,
+      47,
+      72,
+      100
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQL Server 与 PostgreSQL 提供健康检查/诊断功能的独立工具，不是使用数据库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0；codeDB SaaS 及其 API 为独立闭源产品",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Free, read-only health check for SQL Server and PostgreSQL . ／ codeDB Lens connects to your instance with a **read-only** login, runs a catalog of evidence-based ／ Ask Claude, GitHub Copilot or Cursor about your database. `codedb-lens mcp` is a read-only MCP server that your AI",
+   "evidence_lines": [
+    4,
+    20,
+    83
+   ]
+  },
+  "fn": "codedb-io/codedb-lens",
+  "sha": "3e9a30409cb8",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

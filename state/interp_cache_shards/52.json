@@ -11500,5 +11500,88 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "af9b0c92bf0f": {
+  "identity": {
+   "one_liner": "本地优先的 AI 代理记忆引擎，提供语义存储检索与 MCP 服务",
+   "review": "Uteke 是一个用 Rust 实现的本地记忆引擎，供 AI 代理（Claude、Cursor 等支持 MCP 的客户端）持久化存储、召回和搜索记忆。它以单个二进制运行，使用本地 ONNX 嵌入模型，检索路径融合向量相似度与 FTS5 全文搜索（RRF 合并），提供 Rooms 多代理共享记忆和时间点回溯查询；无需 API key、完全离线运行。",
+   "highlights": [
+    "通过 MCP server（JSON-RPC + HTTP/stdio）接入 Claude、Cursor 等 MCP 兼容代理",
+    "支持向量 + FTS5 全文的混合搜索，以加权 RRF 融合排序，并支持时间点回溯查询",
+    "提供 Rooms 多代理共享记忆、关系图、记忆衰减与引用来源等元数据能力"
+   ],
+   "use_cases": [
+    "为 AI 代理添加跨会话的持久化本地记忆",
+    "团队在隐私敏感场景下共享可检索的项目知识",
+    "在终端用语义方式管理个人知识条目"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Search**|**Fusion** (weighted RRF of vector + hybrid; hybrid = HNSW + FTS5 RRF)|sqlite-vec + FTS5|Vector + Graph|Vector + Graph|Vector|Hybrid (semantic + keyword + graph)|Vector + rerank|**FTS5 only**| ／ 2. **FTS5** (SQLite): finds by exact terms (\"deploy\" matches \"deploy\")",
+     "lines": [
+      126,
+      209
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Many memory layers (Python-based or TypeScript-based) require cloud API keys (OpenAI/LLM) and external infrastructure (Docker, Postgres, Qdrant). Your data gets sent to a cloud LLM provider. Uteke is a single binary with zero API keys. All embeddings run local",
+     "lines": [
+      268
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 AI 代理生态提供记忆存储/检索能力的组件，以内嵌 SQLite FTS5 作为检索存储层。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Give your AI a memory that never leaves your machine. Works with Claude, Cursor, Copilot, and any MCP-compatible agent. ／ { \"mcpServers\": { \"uteke\": { \"command\": \"uteke-mcp\" } } } ／ |**Search**|**Fusion** (weighted RRF of vector + hybrid; hybrid = HNSW + FTS5 RRF)|sqlite-vec + FTS5|Vector + Graph|Vector + Graph|Vector|Hybrid (semantic + keyword + graph)|Vector + rerank|**FTS5 only**|",
+   "evidence_lines": [
+    8,
+    38,
+    126
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "codecoradev/uteke",
+  "sha": "af9b0c92bf0f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

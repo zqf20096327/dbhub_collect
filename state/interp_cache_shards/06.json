@@ -11168,5 +11168,167 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "af07eef3c445": {
+  "identity": {
+   "one_liner": "面向 1C (BSL) 代码库分析的 MCP 服务器，使用 SQLite 索引",
+   "review": "这是一个面向 1C:Enterprise (BSL) 代码库的 MCP 服务器，提供 67 个辅助函数，使 AI 智能体能够通过沙箱脚本查询代码，并仅返回压缩结果，从而减少上下文消耗。它支持 CF/EDT/MDO 源码格式，并可选择性地在 SQLite 中构建方法和调用图索引以提升速度。目标用户是使用 Claude Code 或 Cursor 等 AI 客户端的 1C 开发人员、团队负责人、分析师和架构师；它不提供基于嵌入的语义搜索，且 LLM 密钥是可选的。",
+   "highlights": [
+    "提供 67 个辅助函数，用于 1C (BSL) 代码分析，支持 CF/EDT/CFE 源码格式",
+    "支持选择性地在 SQLite 中构建方法和调用图索引，以加速对大型配置的处理",
+    "可作为 MCP 服务器通过 HTTP 或 stdio 运行，并提供适用于 Windows/Linux/Docker 的安装脚本"
+   ],
+   "use_cases": [
+    "AI 智能体对新 1C 配置或扩展的探索",
+    "直接从源码评估 1C 实施方案",
+    "在无需向量索引的情况下，针对当前代码库生成文档并回答问题"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Для ускорения работы на больших конфигурациях можно предварительно построить SQLite-индекс методов и графа вызовов — см. **docs/INDEXING.md**. На ПК с медленными дисками (HDD, сетевые ресурсы) индексирование фактически обязательно: без индекса файловые операци",
+     "lines": [
+      185
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 被用作 MCP 服务器的内部索引存储，而非它为 SQLite 生态提供工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MCP-сервер для токен-эффективного анализа кодовых баз 1С (BSL). ／ Адаптация open-source проекта rlm-tools под специфику платформы 1С:Предприятие — большие кодовые базы, форматы исходников (CF/EDT), структура метаданных, кириллический код, XML-описания объектов.",
+   "evidence_lines": [
+    11,
+    13
+   ]
+  },
+  "fn": "Dach-Coin/rlm-tools-bsl",
+  "sha": "af07eef3c445",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3326330fd940": {
+  "identity": {
+   "one_liner": "自托管 VPN 面板，Go 双二进制+SQLite+systemd 运行",
+   "review": "一个自托管面板，用于为家人、朋友或小团队运营小型 VPN，支持 Hysteria2、VLESS REALITY 和 AmneziaWG 三种协议，通过浏览器 SSH 添加节点，每 5 分钟做健康检查并发 Telegram 告警，内置 MCP 供 AI agent 读取。面向自托管管理员，数据存于 SQLite，无需 Docker 或独立数据库服务器。",
+   "highlights": [
+    "提供 Hysteria2、VLESS REALITY、AmneziaWG 三种协议及每用户一条订阅链接",
+    "每 5 分钟对节点执行 client-eye 检查，节点 doctor 运行 17 项主机检查并支持 Telegram 告警",
+    "内置 MCP 服务器，AI agent 可读取节点状态并计划变更，高风险操作需管理员确认"
+   ],
+   "use_cases": [
+    "为家庭、朋友或小团队共享自有服务器上的 VPN",
+    "多节点中转与按国家/网络的可达性探测",
+    "通过 MCP 让 AI agent 辅助管理节点配置"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Hysteria2, VLESS and AmneziaWG. Two Go binaries, SQLite and systemd.",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Database|SQLite|SQLite or PostgreSQL|PostgreSQL + Redis|MySQL + Redis|SQLite, MySQL, MariaDB or PostgreSQL|SQLite|",
+     "lines": [
+      105
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|Database|SQLite|SQLite or PostgreSQL|PostgreSQL + Redis|MySQL + Redis|SQLite, MySQL, MariaDB or PostgreSQL|SQLite|",
+     "lines": [
+      105
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|Database|SQLite|SQLite or PostgreSQL|PostgreSQL + Redis|MySQL + Redis|SQLite, MySQL, MariaDB or PostgreSQL|SQLite|",
+     "lines": [
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "面板自身以 SQLite 存储数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0 only，修改后对外提供服务需展示源码链接",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Hysteria2, VLESS and AmneziaWG. Two Go binaries, SQLite and systemd. ／ You put the panel on one server and add your VPN servers to it as nodes. Each person gets one subscription link, and their app picks up every server they may use. The panel keeps the nodes configured and checks them. ／ |Database|SQLite|SQLite or PostgreSQL|PostgreSQL + Redis|MySQL + Redis|SQLite, MySQL, MariaDB or PostgreSQL|SQLite|",
+   "evidence_lines": [
+    6,
+    22,
+    105
+   ]
+  },
+  "fn": "Mistgate/mistgate",
+  "sha": "3326330fd940",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11331,5 +11331,132 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e453154940bc": {
+  "identity": {
+   "one_liner": "自托管团队任务与项目协作工作台，单 Python 文件+SQLite 存储",
+   "review": "一个用单个 server.py 和 SQLite 文件运行的任务与项目协作系统，提供周视图任务管理、项目审批、收件箱、日记汇总与团队日报等功能，数据保留在本机。适合不想把协作数据放到第三方云的小团队；需 Python 3.11+，对外发布需自行配置反向代理或 Tunnel。",
+   "highlights": [
+    "单 Python 文件与 SQLite 数据库运行，无第三方 Python 依赖",
+    "提供任务递延、固定安排、项目审批、日记汇总与每日自动团队日报",
+    "支持 Docker Compose 部署与 superadmin/管理员/Owner/协作者分级授权"
+   ],
+   "use_cases": [
+    "小团队本地化任务与项目管理",
+    "需数据不出本机的协作环境",
+    "替代第三方云协作工具的自托管部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**战略小组台账**：自托管的团队任务与项目协作工作台。一个 Python 文件、一个 SQLite 数据库，零运行时依赖，数据只在你自己的机器上。 ／ 打开 `http://127.0.0.1:4173/`。首次启动会创建 `data/work-calendar.sqlite3` 和 `data/initial-accounts.txt`，后者记录预置账户 `superadmin`、`test001`（项目 Owner）、`test002` / `test003`（协作者）的随机密码，首次登录后请修改。 ／ server.py            HTTP 接口、权限、SQLite 存储、每日调度（递延、日记汇总）",
+     "lines": [
+      3,
+      69,
+      108
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明系统使用 SQLite 数据库存储任务与协作数据，是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**战略小组台账**：自托管的团队任务与项目协作工作台。一个 Python 文件、一个 SQLite 数据库，零运行时依赖，数据只在你自己的机器上。 ／ 打开 `http://127.0.0.1:4173/`。首次启动会创建 `data/work-calendar.sqlite3` 和 `data/initial-accounts.txt`，后者记录预置账户 `superadmin`、`test001`（项目 Owner）、`test002` / `test003`（协作者）的随机密码，首次登录后请修改。 ／ server.py            HTTP 接口、权限、SQLite 存储、每日调度（递延、日记汇总）",
+   "evidence_lines": [
+    3,
+    69,
+    108
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Ray-hola/work-calendar",
+  "sha": "e453154940bc",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a4e3918bc4ea": {
+  "identity": {
+   "one_liner": "Omarchy 桌面的 Rust/GPUI 应用开发套件，内嵌 Luau 插件机",
+   "review": "ODK 面向 Omarchy（Arch Linux + Hyprland + Wayland）环境，提供 Rust crate 用于构建遵循系统主题的 GPUI 界面应用，并通过内嵌 Luau 机器支持插件；配套 OMA 提供应用打包格式与校验、安装、沙箱、启动工具。目前为预发布阶段（crate 均为 0.0.0），安装依赖 GitHub 上的未签名脚本，仅支持 Linux x86_64。适合在 Omarchy 桌面上开发与分发原生应用的开发者。",
+   "highlights": [
+    "提供单一 odk crate，包含 GPUI 界面组件与内嵌 Luau 插件机",
+    "附 oma 程序，用于校验、安装、沙箱化并启动 .oma 打包格式的应用",
+    "提供 gallery、headless 截图、idle-cpu 等开发与测试工具链"
+   ],
+   "use_cases": [
+    "在 Omarchy/Hyprland 桌面用 Rust 构建原生 GUI 应用",
+    "为应用添加 Luau 插件扩展机制",
+    "以 .oma 包格式分发并沙箱运行桌面应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 正文未提及数据库相关功能，SQLite 仅出现在仓库主题标签中，证据不足。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **ODK**, the Omarchy Development Kit: Rust applications with a GPUI interface that follows the user's Omarchy theme, and an embedded Luau machine for plugins. Applications depend on one `odk` crate. ／ - **OMA**, Omarchy Managed Application: a bundle format and `oma`, the program that verifies, installs, sandboxes and starts one. A Bundle is one `.oma` file (ADR 0052). The code still installs a directory (`<App>.oma/`) until it catches up. `oma` does not depend on ODK. ／ Pre-release: every crate is 0.0.0. Stable Rust (edition 2024), Linux x86_64.",
+   "evidence_lines": [
+    5,
+    6,
+    8
+   ]
+  },
+  "fn": "csfh/odk",
+  "sha": "a4e3918bc4ea",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

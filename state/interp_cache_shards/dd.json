@@ -10309,5 +10309,149 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c91640f61414": {
+  "identity": {
+   "one_liner": "从数据模型生成可测试的合成数据并附带 dbt 项目的 CLI",
+   "review": "model2data 读取 YAML 或 DBML 数据模型，生成外键一致、确定性可复现的合成数据，并输出可运行的 dbt 项目（seeds、staging 模型、测试），支持 DuckDB 或 Postgres profile。面向需要在无生产数据时做演示、CI 固定测试数据和培训的分析工程师与顾问。CLI 为 MIT 开源，配套的 studio 为商业订阅服务。",
+   "highlights": [
+    "生成外键可解析、日期有序且度量值预先可知的合成数据，支持 Faker 提供者、locale、分布/偏斜/季节性等参数",
+    "输出含 seeds、staging 模型与 dbt 测试的完整 dbt 项目，支持确定性种子（--seed/--as-of）、增量日批次（--days）、SCD2 历史表和故意注入缺陷（--defects）",
+    "支持 DuckDB 或 Postgres profile，可通过 pip 的 model2data[postgres] 额外依赖适配 Postgres"
+   ],
+   "use_cases": [
+    "无生产数据访问权限时为客户演示构建可运行的 dbt 项目与仪表盘",
+    "在 CI 中提交模型并以固定种子生成字节级一致的测试夹具",
+    "生成带预知缺陷的数据用于 dbt 测试培训与验证"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "optional unit test fixtures (`--unit-tests`), and a DuckDB or Postgres profile. ／ pip install \"model2data[postgres]\" # to target Postgres with --adapter postgres",
+     "lines": [
+      183,
+      244
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为数据工程流程提供生成测试数据与 dbt 项目的工具，通过 profile 适配 Postgres/DuckDB 而非以某数据库为存储的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "CLI 为 MIT 许可，studio 为商业订阅（Pro EUR 99/月、Team EUR 399/月）双模式",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pip install model2data ／ |A project, not a pile of files|Seeds, staging models, `not_null`/`unique`/`relationships`/`accepted_values` tests and a DuckDB or Postgres profile. `dbt build` goes green.| ／ optional unit test fixtures (`--unit-tests`), and a DuckDB or Postgres profile.",
+   "evidence_lines": [
+    18,
+    55,
+    183
+   ]
+  },
+  "fn": "JB-Analytica/model2data",
+  "sha": "c91640f61414",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f705617d373b": {
+  "identity": {
+   "one_liner": "键盘驱动的终端数据库客户端，基于 Rust 与 Ratatui",
+   "review": "datarig 是一个在终端中运行的数据库客户端，提供多连接并排工作区，包含 schema 树、支持 vim 键位的 SQL 编辑器、分页读取大结果的结果网格，并支持 SSH 隧道与只读规则。当前完整实现 PostgreSQL，MySQL 部分支持，处于 pre-1.0 早期阶段，发布 macOS、Linux、Windows 二进制及 Homebrew formula。",
+   "highlights": [
+    "支持多连接并排工作区，每个连接有独立的 schema 树、元数据会话与补全目录",
+    "SQL 编辑器支持 vim 键位，结果网格以显式分页方式读取大结果集",
+    "危险语句执行前需确认，只读配置由服务端强制执行"
+   ],
+   "use_cases": [
+    "在终端中浏览和查询数据库表结构与数据",
+    "需要通过 SSH 隧道连接并限制只读权限的日常运维操作",
+    "习惯键盘操作和 vim 键位的开发者工作流"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "formula (Install); the latest is 0.35.0. **PostgreSQL** is implemented, and ／ Everything below works today with PostgreSQL; MySQL says which parts work with MySQL.",
+     "lines": [
+      16,
+      27
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**MySQL** in part (see MySQL for what it does and does not do yet). The configuration ／ Everything below works today with PostgreSQL; MySQL says which parts work with MySQL. ／ - Show DDL (PostgreSQL; MySQL shows the server's own text, see MySQL): `D` on a",
+     "lines": [
+      17,
+      27,
+      105
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为数据库客户端工具直接连接并操作数据库，属于为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A terminal database client: a DataGrip-style workspace for your databases, in the terminal. ／ formula (Install); the latest is 0.35.0. **PostgreSQL** is implemented, and ／ Everything below works today with PostgreSQL; MySQL says which parts work with MySQL.",
+   "evidence_lines": [
+    5,
+    16,
+    27
+   ]
+  },
+  "fn": "DokaDev/datarig",
+  "sha": "f705617d373b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

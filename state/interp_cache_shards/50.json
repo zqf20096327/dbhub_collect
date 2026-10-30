@@ -12016,5 +12016,217 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6bca9d7646c2": {
+  "identity": {
+   "one_liner": "Nuxt 4 全栈校园广播站点歌系统，点歌投票与排期管理",
+   "review": "一个基于 Nuxt 4 + Drizzle ORM + PostgreSQL 的校园广播站点歌管理系统，提供点歌投票、排期拖拽管理、多角色权限、通知推送和数据库备份等功能，面向校园广播站的学生和管理员使用。业务数据以 PostgreSQL 为唯一数据源，Redis 仅作可选的临时状态服务；部署支持 Vercel/Netlify 等 Serverless 平台及 Docker。",
+   "highlights": [
+    "提供点歌、投票、排期拖拽管理、打印导出与学期管理功能",
+    "内置多级权限控制，支持 OAuth、WebAuthn 和双因素认证",
+    "支持数据库备份/恢复/重置，可部署到 Vercel、Netlify 等平台及 Docker 环境"
+   ],
+   "use_cases": [
+    "校园广播站的日常点歌与播出排期管理",
+    "需要多角色权限和投稿限额控制的点歌平台",
+    "移动端可访问的歌曲投稿与投票场景"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Neon Database**：Serverless PostgreSQL数据库，支持自动启停和无缝扩展 ／ - **PostgreSQL**：关系型数据库，支持复杂查询和事务处理 ／ - **数据读取**：PostgreSQL 是唯一业务数据源，歌曲、排期和用户状态不使用 Redis 缓存",
+     "lines": [
+      104,
+      105,
+      119
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 PostgreSQL 为唯一业务数据源存储歌曲、排期和用户状态，属于使用数据库的应用系统",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **数据库**：使用 Drizzle ORM + Neon Database，提供类型安全和高性能的数据库操作 ／ - **数据读取**：PostgreSQL 是唯一业务数据源，歌曲、排期和用户状态不使用 Redis 缓存",
+   "evidence_lines": [
+    117,
+    119
+   ]
+  },
+  "fn": "laoshuikaixue/VoiceHub",
+  "sha": "6bca9d7646c2",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a500d4b55e50": {
+  "identity": {
+   "one_liner": "Rust+GPUI 编写的跨平台 SSH 终端，集成数据库与 Docker 管理",
+   "review": "ShellAX 是一个用 Rust 和 GPUI 编写的跨平台终端/SSH 客户端，除终端与主机管理外，还集成 SFTP、数据库连接（支持 MySQL、PostgreSQL、达梦等多种数据库）、Redis、Docker 与端口转发，并为 AI Agent 提供权限引擎、审计日志与 MCP 数据库服务。适用于需要在单一界面管理主机与多种数据库的开发和运维人员。",
+   "highlights": [
+    "支持连接 MySQL、PostgreSQL、达梦等多种数据库，提供表浏览、SQL 编辑器与数据导入导出",
+    "提供数据库 MCP 服务，可按库表授权，写操作需确认并记入审计",
+    "内置权限引擎与带 SHA-256 哈希链的追加式审计日志"
+   ],
+   "use_cases": [
+    "通过统一客户端管理 SSH 主机、SFTP 传输与多种数据库连接",
+    "为 AI Agent 提供受权限管控的命令执行与数据库 MCP 接入",
+    "本地或经 SSH 隧道管理 Redis 与 Docker 容器"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 连接：MySQL、MariaDB、StarRocks、OceanBase、PostgreSQL、openGauss、Kingbase、达梦、SQLite、SQL Server、ClickHouse，以及 MongoDB（独立的文档标签）。可直连，也可经 SSH 隧道；连接可标记为只读或生产。左侧树可按连接名和已打开的表名搜索，匹配文字会高亮。",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 连接：MySQL、MariaDB、StarRocks、OceanBase、PostgreSQL、openGauss、Kingbase、达梦、SQLite、SQL Server、ClickHouse，以及 MongoDB（独立的文档标签）。可直连，也可经 SSH 隧道；连接可标记为只读或生产。左侧树可按连接名和已打开的表名搜索，匹配文字会高亮。 ／ - **数据库 MCP**：在本机 `127.0.0.1` 提供 MCP 服务，目前支持 MySQL 与达梦。可按库、表授权，写操作需要确认并记入审计。端口默认自动分配并记住，只有手动刷新才会更换；也可以指定固定端口。令牌和接入配置可从右侧卡片复制到 Cursor、Claude Code 或 Codex。",
+     "lines": [
+      36,
+      42
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 连接：MySQL、MariaDB、StarRocks、OceanBase、PostgreSQL、openGauss、Kingbase、达梦、SQLite、SQL Server、ClickHouse，以及 MongoDB（独立的文档标签）。可直连，也可经 SSH 隧道；连接可标记为只读或生产。左侧树可按连接名和已打开的表名搜索，匹配文字会高亮。",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- 连接：MySQL、MariaDB、StarRocks、OceanBase、PostgreSQL、openGauss、Kingbase、达梦、SQLite、SQL Server、ClickHouse，以及 MongoDB（独立的文档标签）。可直连，也可经 SSH 隧道；连接可标记为只读或生产。左侧树可按连接名和已打开的表名搜索，匹配文字会高亮。",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- 连接：MySQL、MariaDB、StarRocks、OceanBase、PostgreSQL、openGauss、Kingbase、达梦、SQLite、SQL Server、ClickHouse，以及 MongoDB（独立的文档标签）。可直连，也可经 SSH 隧道；连接可标记为只读或生产。左侧树可按连接名和已打开的表名搜索，匹配文字会高亮。",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- 连接：MySQL、MariaDB、StarRocks、OceanBase、PostgreSQL、openGauss、Kingbase、达梦、SQLite、SQL Server、ClickHouse，以及 MongoDB（独立的文档标签）。可直连，也可经 SSH 隧道；连接可标记为只读或生产。左侧树可按连接名和已打开的表名搜索，匹配文字会高亮。",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "- 连接：MySQL、MariaDB、StarRocks、OceanBase、PostgreSQL、openGauss、Kingbase、达梦、SQLite、SQL Server、ClickHouse，以及 MongoDB（独立的文档标签）。可直连，也可经 SSH 隧道；连接可标记为只读或生产。左侧树可按连接名和已打开的表名搜索，匹配文字会高亮。",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "ShellAX 是用 Rust + GPUI 编写的跨平台终端 / SSH 客户端。除终端和主机管理外，还把 SFTP、数据库（含达梦）、Redis、Docker、端口转发和一组日常小工具放进同一个窗口，并为 AI Agent 提供权限管控与审计。 ／ - 连接：MySQL、MariaDB、StarRocks、OceanBase、PostgreSQL、openGauss、Kingbase、达梦、SQLite、SQL Server、ClickHouse，以及 MongoDB（独立的文档标签）。可直连，也可经 SSH 隧道；连接可标记为只读或生产。左侧树可按连接名和已打开的表名搜索，匹配文字会高亮。 ／ - **数据库 MCP**：在本机 `127.0.0.1` 提供 MCP 服务，目前支持 MySQL 与达梦。可按库、表授权，写操作需要确认并记入审计。端口默认自动分配并记住，只有手动刷新才会更换；也可以指定固定端口。令牌和接入配置可从右侧卡片复制到 Cursor、Claude Code 或 Codex。",
+     "lines": [
+      5,
+      36,
+      42
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "- 连接：MySQL、MariaDB、StarRocks、OceanBase、PostgreSQL、openGauss、Kingbase、达梦、SQLite、SQL Server、ClickHouse，以及 MongoDB（独立的文档标签）。可直连，也可经 SSH 隧道；连接可标记为只读或生产。左侧树可按连接名和已打开的表名搜索，匹配文字会高亮。",
+     "lines": [
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "提供数据库连接管理、表浏览与 SQL 编辑器等数据库管理功能，属于服务数据库生态的工具组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "OceanBase",
+    "Dameng",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ShellAX 是用 Rust + GPUI 编写的跨平台终端 / SSH 客户端。除终端和主机管理外，还把 SFTP、数据库（含达梦）、Redis、Docker、端口转发和一组日常小工具放进同一个窗口，并为 AI Agent 提供权限管控与审计。 ／ - 连接：MySQL、MariaDB、StarRocks、OceanBase、PostgreSQL、openGauss、Kingbase、达梦、SQLite、SQL Server、ClickHouse，以及 MongoDB（独立的文档标签）。可直连，也可经 SSH 隧道；连接可标记为只读或生产。左侧树可按连接名和已打开的表名搜索，匹配文字会高亮。 ／ - **数据库 MCP**：在本机 `127.0.0.1` 提供 MCP 服务，目前支持 MySQL 与达梦。可按库、表授权，写操作需要确认并记入审计。端口默认自动分配并记住，只有手动刷新才会更换；也可以指定固定端口。令牌和接入配置可从右侧卡片复制到 Cursor、Claude Code 或 Codex。",
+   "evidence_lines": [
+    5,
+    36,
+    42
+   ]
+  },
+  "fn": "daxiangme/ShellAX",
+  "sha": "a500d4b55e50",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

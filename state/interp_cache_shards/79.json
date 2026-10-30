@@ -12147,5 +12147,159 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9ab2bf57c635": {
+  "identity": {
+   "one_liner": "自托管流媒体与文件分享服务器，PHP+SQLite+ffmpeg 转码",
+   "review": "ShareBox 是一个自托管的媒体流媒体与文件分享服务器，用 PHP 实现，通过链接（可设密码和有效期）分享视频、PDF 和音频，ffmpeg 按需转码并用 TMDB 生成海报网格。它面向想在 NAS、树莓派或小 VPS 上轻量分享个人媒体的用户，不预扫媒体库、不需要独立数据库服务，仅依赖 PHP 8.1+（pdo_sqlite）、ffmpeg 和 SQLite 做缓存。",
+   "highlights": [
+    "支持三种流式模式：H.264/MP4 原生播放、H.264/MKV remux、HEVC/AV1 实时转码，并自动检测 Intel VAAPI/NVIDIA NVENC/树莓派 V4L2M2M 硬件加速",
+    "支持链接分享（密码、过期时间、ZIP 下载、二维码、邮件），以及 PDF 阅读器和音频/有声书播放器",
+    "使用 SQLite 做探测/字幕缓存，flock 实现 ffmpeg 进程并发控制，含 441 个测试与 PHPStan 级别 5 静态分析"
+   ],
+   "use_cases": [
+    "在树莓派、NAS 或小型 VPS 上自托管媒体，通过链接分享给他人观看",
+    "无需账号和媒体库扫描的轻量视频点播/分享部署",
+    "配合 nginx/Apache 或 Docker 部署的家用流媒体服务"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ |**Dependencies**|PHP + ffmpeg + SQLite|Java, database, plugins|.NET, database|.NET, database| ／ **Under the hood** -- `flock`-based concurrency control for ffmpeg processes, SQLite probe/subtitle caching, stall watchdog with exponential backoff, keyframe-accurate seek correction, vmtouch page-cache warming.",
+     "lines": [
+      10,
+      37,
+      83
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 ShareBox 是一个使用 SQLite 存储的自托管流媒体/文件分享应用，SQLite 是其内置依赖而非其服务的目标数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Stream your media library instantly -- no library scan, no database server, no plugins. Just point at your files and share. ／ |**Dependencies**|PHP + ffmpeg + SQLite|Java, database, plugins|.NET, database|.NET, database| ／ **Under the hood** -- `flock`-based concurrency control for ffmpeg processes, SQLite probe/subtitle caching, stall watchdog with exponential backoff, keyframe-accurate seek correction, vmtouch page-cache warming.",
+   "evidence_lines": [
+    5,
+    37,
+    83
+   ]
+  },
+  "fn": "ohugonnot/sharebox",
+  "sha": "9ab2bf57c635",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "738b034705ae": {
+  "identity": {
+   "one_liner": "AI 辅助的时间线项目工作区，以知识图谱组织项目信息",
+   "review": "Camelot-Workspace 是一个基于知识图谱的项目管理工作区，将项目、想法、决策、任务、文档等对象用语义关系连接并保留历史事件。技术栈为 React/TypeScript 前端加 FastAPI/SQLAlchemy 后端，默认用 SQLite 做本地持久化，并通过 Google GenAI SDK 集成 Gemma 提供辅助建议（AI 输出需后端校验、用户确认）。适合个人或团队本地部署管理项目上下文；README 标注 PostgreSQL 生产后端为待办项，当前面向本地开发环境。",
+   "highlights": [
+    "以对象+语义关系构建项目知识图谱，并用 React Flow 可视化",
+    "记录对象创建/更新等事件，保留项目演化历史",
+    "通过 Google GenAI SDK 集成 Gemma 提供上下文建议，AI 输出不直接写入项目状态"
+   ],
+   "use_cases": [
+    "管理项目中的想法、决策、任务及其关联关系",
+    "追溯项目状态变更的原因与演化过程",
+    "本地部署的团队知识/项目管理环境"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite Persistence Lightweight local development database ／ SQLite Database Local project data persistence ／ DATABASE_URL=sqlite:///./camelot.db",
+     "lines": [
+      125,
+      140,
+      317
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "[ ] PostgreSQL production backend",
+     "lines": [
+      573
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储自身数据的项目管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SQLite Persistence Lightweight local development database ／ SQLite Database Local project data persistence ／ DATABASE_URL=sqlite:///./camelot.db",
+   "evidence_lines": [
+    125,
+    140,
+    317
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "animespharikal-system/Camelot-Workspace",
+  "sha": "738b034705ae",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

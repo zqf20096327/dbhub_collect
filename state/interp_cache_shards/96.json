@@ -12407,5 +12407,127 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8feccd0caddd": {
+  "identity": {
+   "one_liner": "把 QQ 群通知提取为待办和日历的自托管工具",
+   "review": "该工具从指定 QQ 群读取消息，过滤闲聊后提取通知、行动项和截止时间，汇入网页待办台并支持 .ics 日历订阅与多通道推送。面向需要集中管理多个 QQ 群通知的个人用户。数据存储采用 SQLite，支持通过 NapCat/OneBot 接入，另可读取本机微信、钉钉数据库及学习通 Cookie，仅 Windows 提供安装包，Linux/macOS 需源码运行。",
+   "highlights": [
+    "读取 QQ 群消息并提取通知、行动项和截止时间，支持 .ics 日历订阅",
+    "使用 SQLite 存储数据，提供数据库备份、完整性检查和每日自动快照",
+    "支持 WxPusher、Server酱、PushPlus 及自配 Webhook 推送"
+   ],
+   "use_cases": [
+    "集中管理分散在多个 QQ 群的作业、考试、报名等通知",
+    "将群通知同步到手机日历并接收截止提醒",
+    "个人本机部署的消息待办管理"
+   ],
+   "classification_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 设置页可一键备份数据库；ZIP 只包含 SQLite 数据库，不包含配置、令牌或日志。 ／ |`qq_live_digest/store.py`|SQLite 存储、去重和恢复|",
+     "lines": [
+      103,
+      204
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是使用 SQLite 存储消息和待办数据的通知聚合应用，SQLite 仅为其内部存储组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "note": "",
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：上游部分 MIT，新增部分 PolyForm Noncommercial 1.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 设置页可一键备份数据库；ZIP 只包含 SQLite 数据库，不包含配置、令牌或日志。 ／ |`qq_live_digest/store.py`|SQLite 存储、去重和恢复|",
+   "evidence_lines": [
+    103,
+    204
+   ]
+  },
+  "fn": "ExpertKT/notice-hub",
+  "sha": "8feccd0caddd",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "34f2768a240d": {
+  "identity": {
+   "one_liner": "免费云服务资源目录，含数据库/托管等分类",
+   "review": "这是一个汇总免费额度云服务（托管、数据库、存储、API 等）的静态站点目录，数据存于 services.json，经 GitHub Actions 校验并部署到 GitHub Pages。面向需要零成本选型的开发者，提供分类浏览、搜索过滤及官方文档链接，并标注 last_checked 日期；README 明确提醒免费方案可能含隐性费用限制。",
+   "highlights": [
+    "提供托管、数据库、存储、AI 等多类免费层服务的分类目录",
+    "目录数据由 services.json 驱动，含 last_checked 源审核日期并提供机器可读目录",
+    "提供 npm run catalog:sync / verify / build 本地校验与构建命令"
+   ],
+   "use_cases": [
+    "为项目选型免费层托管或数据库服务",
+    "在注册前比较各服务的额度、限制与商业使用条款",
+    "提交修正或补充新的免费层服务条目"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未显示其为数据库生态服务的工具，仅将数据库服务作为目录条目之一。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Discover and compare free-tier services for hosting, databases, cloud infrastructure, AI, security, and developer tools. Explore published free allowances, important restrictions, and direct links to official provider documentation—all in one independent directory. ／ |Databases & caching|Count|Browse| ／ `data/services.json` is the source of truth for listings. The website provides a machine-readable catalog and dedicated category and service pages. Each entry's `last_checked` date records a source review, **not** a guarantee of current prices or live availability.",
+   "evidence_lines": [
+    5,
+    37,
+    59
+   ]
+  },
+  "fn": "ePlus-DEV/free-tier-hub",
+  "sha": "34f2768a240d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

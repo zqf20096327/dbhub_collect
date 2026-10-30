@@ -9896,5 +9896,226 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e98f74ac878f": {
+  "identity": {
+   "one_liner": "Rust 库，通过逻辑复制协议流式读取 PostgreSQL WAL",
+   "review": "一个用于解析和消费 PostgreSQL WAL 的 Rust 库，实现逻辑复制协议 v1-4 与物理复制、BASE_BACKUP，提供类型安全的消息解析、serde 行反序列化、初始快照与 LSN 反馈等 API，供需要在 Rust 中构建 CDC 消费、备份或复制工具的开发者使用；默认使用纯 Rust rustls 后端，可选 libpq。",
+   "highlights": [
+    "实现 PostgreSQL 逻辑复制协议 v1-4，支持两阶段提交与并行流式传输",
+    "提供 serde 类型化行反序列化、托管初始快照与线程安全 LSN 反馈",
+    "默认纯 Rust rustls-tls 后端，无需 libpq 和 OpenSSL，支持 no_std/wasm 解析器构建"
+   ],
+   "use_cases": [
+    "构建基于 WAL 的 CDC 数据同步程序",
+    "物理备份/standby 流式复制场景",
+    "将变更行反序列化为 Rust 结构体的事件处理管道"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pg-walstream ／ A high-performance Rust library for PostgreSQL logical and physical replication protocol parsing and streaming. Provides a robust, type-safe interface for consuming PostgreSQL Write-Ahead Log (WAL) streams. ／ - **Full Logical Replication Support**: Implements PostgreSQL logical replication protocol versions 1-4",
+     "lines": [
+      8,
+      10,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 复制协议提供解析与流式消费的库，服务于数据库生态而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A high-performance Rust library for PostgreSQL logical and physical replication protocol parsing and streaming. Provides a robust, type-safe interface for consuming PostgreSQL Write-Ahead Log (WAL) streams. ／ - **Full Logical Replication Support**: Implements PostgreSQL logical replication protocol versions 1-4 ／ pg_walstream = \"0.8\"",
+   "evidence_lines": [
+    10,
+    14,
+    42
+   ]
+  },
+  "fn": "isdaniel/pg-walstream",
+  "sha": "e98f74ac878f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "55e360ac21ee": {
+  "identity": {
+   "one_liner": "基于 Next.js+Prisma+PostgreSQL 的社会企业名录社区应用",
+   "review": "一个用 Next.js、React 和 Prisma 构建的社会型企业名录网站，用户可搜索、推荐企业并留言，企业主认领档案并讲述故事，配有 moderation 审核面板、Instagram 认领验证与每日照片同步脚本。数据存于 PostgreSQL，通过 Docker Compose 启动，适合作为社区名录类全栈项目的参考实现或直接部署使用。",
+   "highlights": [
+    "提供企业搜索（忽略重音符号）、按城市/事业/类型过滤的目录页面",
+    "包含企业主认领流程，支持 Instagram 登录、DM 验证码与 webhook 自动确认等可选验证方式",
+    "内置 moderation 面板，包含审计日志、投诉队列与数据统计"
+   ],
+   "use_cases": [
+    "巴西本地社会型企业目录展示与社区推荐",
+    "需要企业主资料认领与内容审核机制的社区平台",
+    "作为 Next.js + Prisma + PostgreSQL 全栈项目示例"
+   ],
+   "ai": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Next.js 16 (App Router, Cache Components), React 19, Tailwind CSS 4, Prisma 7 + PostgreSQL, Zod e Vitest. A autenticação é por e-mail e senha (scrypt), com sessão em cookie `httpOnly`. O cookie guarda o token e o banco guarda só o hash dele. ／ Requisitos: Node 22.12+ e Docker (ou um PostgreSQL seu). ／ docker compose up -d # sobe o Postgres em localhost:5433 ／ npm test # testes unitários e de banco (precisa do Postgres rodando)",
+     "lines": [
+      36,
+      40,
+      43,
+      145
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是一个使用 PostgreSQL 存储数据的 Next.js 目录类网站应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Um diretório de negócios com consciência social e conexão com a comunidade. As pessoas encontram negócios que compartilham dos seus valores, indicam quem admiram e deixam depoimentos. Os donos assumem o perfil do negócio e contam a própria história. ／ Next.js 16 (App Router, Cache Components), React 19, Tailwind CSS 4, Prisma 7 + PostgreSQL, Zod e Vitest. A autenticação é por e-mail e senha (scrypt), com sessão em cookie `httpOnly`. O cookie guarda o token e o banco guarda só o hash dele. ／ docker compose up -d          # sobe o Postgres em localhost:5433",
+   "evidence_lines": [
+    3,
+    36,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "fabsreis/Negocio-do-bem",
+  "sha": "55e360ac21ee",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ae976b74b640": {
+  "identity": {
+   "one_liner": "生成 Postgres-only Go API 服务的脚手架 CLI",
+   "review": "Bogie 是一个 Go 命令行脚手架，用 rails new 风格的生成器创建仅支持 Postgres 的 API 服务，组合 Gin、sqlc、goose、River、Kamal 等组件并自动注册生成的代码；生成物不依赖 Bogie 本身。适合希望在 Go 服务开发中复用既定技术选型的团队，目前明确只支持 Postgres，SQLite 被排除。",
+   "highlights": [
+    "提供 new/g/d/doctor 等生成器命令，生成的代码自动完成注册接线",
+    "生成物组合 Gin、sqlc、goose、River、Kamal，含迁移、后台任务、加密凭据与本地 CI 管道",
+    "生成的应用不导入 Bogie，删除工具后应用不受影响"
+   ],
+   "use_cases": [
+    "快速创建带迁移、查询与后台任务的 Go API 服务",
+    "为 Rails 团队提供相邻 Go 服务的统一脚手架流程",
+    "本地一键运行含数据库重建、lint 与测试的 CI 管道"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A CLI that scaffolds an API-only, Postgres-only Go service ／ You need **Docker with Compose v2** (or your own Postgres, see",
+     "lines": [
+      6,
+      40
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite is deliberately out until River's SQLite driver is stable",
+     "lines": [
+      201
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该 CLI 专为生成 Postgres-only 服务而设计，生成物将迁移、查询与后台任务固定接在 Postgres 上运行。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A CLI that scaffolds an API-only, Postgres-only Go service ／ out of Gin, sqlc, goose, River and Kamal, with generators that also wire the code in. ／ |Background jobs|River, opt-in with `--jobs`: Postgres-backed, no Redis, enqueue in the same transaction|",
+   "evidence_lines": [
+    6,
+    7,
+    172
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "bogie-go/bogie",
+  "sha": "ae976b74b640",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

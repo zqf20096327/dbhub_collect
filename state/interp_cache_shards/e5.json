@@ -9773,5 +9773,325 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ab17865416c7": {
+  "identity": {
+   "one_liner": "AI 编码代理控制平面：并行运行多个 CLI 代理并共享任务板",
+   "review": "amux 是一个运行 AI 编码代理（Claude Code、Codex、Gemini CLI 等）的编排控制平面，提供共享任务板、代理间消息、用量限制等待恢复、定时调度，以及 Web 仪表盘和 iPhone/iPad/Mac 客户端。面向希望并行管理多个编码代理的开发者。基于 Rust 单二进制与 SQLite 本地存储，支持 Tailscale 远程访问和云托管版。",
+   "highlights": [
+    "并行运行 Claude Code、Codex、Gemini CLI 等代理，共享原子认领的任务板",
+    "提供定时调度、用量限制恢复与代理间消息传递",
+    "支持 Web 仪表盘及 iPhone/iPad/Mac 原生应用，本地为 Rust 单二进制加 SQLite 存储"
+   ],
+   "use_cases": [
+    "并行编排多个 AI 编码代理执行开发任务",
+    "通过手机或桌面客户端远程查看与审批代理工作",
+    "自托管或使用云托管服务保持代理持续运行"
+   ],
+   "cat": "应用",
+   "eco": "app",
+   "eco_why": "README 表明该项目在本机使用 SQLite 存储自身数据（L64），属于使用数据库的应用而非为数据库生态服务的工具",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "lines": [
+      64
+     ]
+    }
+   ],
+   "dbs": [],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为自身本地存储，是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Local-first: one Rust binary and SQLite on your own machine.",
+     "lines": [
+      64
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT + Commons Clause（允许使用、修改和自托管，禁止出售 amux 本身）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Local-first: one Rust binary and SQLite on your own machine. ／ **Run an AI engineering team.** amux runs Claude Code, Codex and Gemini CLI agents in parallel from one dashboard or your phone. They share a task board, message each other, wait out usage limits, and keep shipping while you sleep. ／ - FAQ · Remote access with Tailscale · License: MIT + Commons Clause (free to use, modify and self-host; selling amux itself is not allowed)",
+   "evidence_lines": [
+    64,
+    7,
+    71
+   ]
+  },
+  "fn": "mixpeek/amux",
+  "sha": "ab17865416c7",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "748700374142": {
+  "identity": {
+   "one_liner": "数字取证分析工作台，GUI 查看归档、镜像、移动备份及 SQLite 等数据",
+   "review": "Crush 是一个面向取证人员的桌面工具，可在不解包的情况下浏览 ZIP/TAR/7z 归档、iOS/Android 备份、磁盘镜像等数据源，并提供 SQLite（含 WAL、SQLCipher）、LevelDB、Realm、MMKV 等数据库查看器及十六进制、BLOB 解码等分析功能。限制包括：不做 carving、日志分析和 RAID；密钥需用户自备。",
+   "highlights": [
+    "提供 SQLite（含 WAL、free blocks/pages、SQLCipher）、LevelDB、Realm、MMKV 数据库查看器",
+    "支持直接浏览归档、移动备份和磁盘镜像，无需先解包或挂载",
+    "内置完整性模式与取证测试套件，校验证据源不可变并生成哈希清单"
+   ],
+   "use_cases": [
+    "检查 iOS/Android 备份或 Cellebrite UFDR 提取物中的数据库与文件",
+    "对单个文件或文件夹进行十六进制、BLOB、格式识别等取证分析",
+    "运行 iLEAPP/ALEAPP 移植模块生成可排序的构件分析结果表"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Databases|SQLite (incl. WAL, free blocks/pages, SQLCipher¹), LevelDB, Realm (incl. encrypted¹), MMKV| ／ - **Hex provenance** — with the hex view open, selecting an entry in the SQLite, Protobuf, FlatBuffers, MMKV, Realm or Chromium Disk Cache viewer shows exactly where its bytes are. ／ - No side-effect files (e.g. SQLite `-wal`/`-shm`)",
+     "lines": [
+      46,
+      60,
+      72
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目将 SQLite 等数据库文件作为取证证据对象只读解析查看，既非数据库生态服务组件，也非以数据库为存储后端的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Crush is a digital forensic analysis workbench.** Open archives, mobile backups, disk images, folders and single files, identify what's inside, and inspect it in dedicated viewers. Sources are opened without extracting them first. Built for examiners who need to look inside a specific file or source, not run a full processing pipeline. Every release runs a forensic test suite that checks whether Crush leaves the evidence untouched. ／ |Databases|SQLite (incl. WAL, free blocks/pages, SQLCipher¹), LevelDB, Realm (incl. encrypted¹), MMKV|",
+   "evidence_lines": [
+    15,
+    46
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "kalink0/crush-forensics",
+  "sha": "748700374142",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "60dda1d4136b": {
+  "identity": {
+   "one_liner": "自托管笔记应用，每条笔记为磁盘上的纯 Markdown 文件",
+   "review": "Papyra 是一个 Google Keep 风格的自托管笔记应用，把每条笔记存为带 YAML frontmatter 的 .md 文件，文件系统为唯一数据源，SQLite 与 Lucene 索引仅作可重建缓存。支持实时协作、全文搜索、锁定加密笔记、版本历史、导入 Obsidian/Google Keep/Day One，通过单容器 Docker 部署，面向希望在自有服务器上保管笔记的个人与 homelab 用户。",
+   "highlights": [
+    "笔记以 .md 文件加 YAML frontmatter 存储，文件系统为数据源，SQLite 与 Lucene 索引可从文件重建",
+    "提供实时协作编辑、全文搜索、PIN/指纹锁定的磁盘加密笔记与版本历史",
+    "单容器 Docker 部署，支持 passkeys、OIDC SSO 及从 Obsidian、Google Keep、Day One 导入"
+   ],
+   "use_cases": [
+    "在自有服务器或 NAS 上自托管个人笔记库",
+    "用 Obsidian、VS Code、Syncthing、git 等工具直接读写同一笔记文件夹",
+    "多人实时协作编辑同一笔记并保留版本历史"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "frontmatter, sitting in a folder you own. SQLite and the Lucene index are ／ |**Cache / metadata**|EF Core 10 + SQLite — rebuildable from the `.md` files, never the authority|",
+     "lines": [
+      126,
+      143
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 SQLite 仅作为可重建的元数据缓存，笔记数据存于文件系统，属于使用 SQLite 的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL v3",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Google Keep–style notes on your own server, where every note is a plain Markdown file. ／ The filesystem is the source of truth. Every note is a `.md` file with YAML ／ |**Cache / metadata**|EF Core 10 + SQLite — rebuildable from the `.md` files, never the authority|",
+   "evidence_lines": [
+    4,
+    125,
+    143
+   ]
+  },
+  "fn": "lyfie-org/papyra",
+  "sha": "60dda1d4136b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d31d4e5ec562": {
+  "identity": {
+   "one_liner": "单二进制 OLTP 数据库服务器，原生执行 T-SQL 并兼容 PG/TDS 协议",
+   "review": "LionSQL 是一个用 Go 编写的嵌入式 OLTP 数据库引擎，将 T-SQL 与存储过程编译为 VDBE 字节码执行，同时监听 PostgreSQL wire（5433）与 SQL Server TDS（1433）双协议，内置 Web 管理界面、连接池、热备份与流复制。适合需要运行 T-SQL 业务逻辑或用 PostgreSQL 客户端接入的团队；官方支持 macOS 与 Linux，Windows 仅有内存引擎的独立构建。",
+   "highlights": [
+    "同时提供 PostgreSQL v3 协议（5433 端口）与 Microsoft SQL Server TDS 协议（1433 端口），支持 psql、sqlcmd、pgx、sqlcmd 等客户端接入",
+    "原生编译并执行 T-SQL 存储过程、函数与触发器，在寄存器式 VDBE 虚拟机上运行，支持字节码缓存与 EXPLAIN BYTECODE",
+    "提供内存 OCC 与 WiredTiger MVCC 双存储后端、在线快照热备份以及主从 WAL 流复制"
+   ],
+   "use_cases": [
+    "需要单二进制部署、零外部依赖的 OLTP 数据库服务",
+    "运行 T-SQL 存储过程与业务逻辑，同时用 PostgreSQL 生态驱动（pgx、Prisma、psycopg2）接入",
+    "通过 Web Studio 进行 schema 管理、查询控制台操作与一键备份/恢复"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "- **PostgreSQL v3 Protocol (Port 5433)**: Fully compatible with `psql`, DBeaver, GORM, Prisma, and pgx, supporting SSL/TLS encryption and binary parameter binding. ／ > **Recommended Application Protocol: PostgreSQL Wire (`:5433`)**",
+     "lines": [
+      32,
+      38
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "compat",
+     "quote": "LionSQL is a high-performance, embedded OLTP database engine that natively compiles and executes Microsoft SQL Server T-SQL & stored procedures and complex business logic on a sub-microsecond VDBE bytecode virtual machine, while simultaneously offering broad c ／ - **Microsoft SQL Server TDS Protocol (Port 1433)**: Instantly compatible with SSMS, Azure Data Studio, `sqlcmd`, and MSSQL drivers, supporting RPC prepared execution.",
+     "lines": [
+      14,
+      33
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Database Migration Guide**: Procedures for migrating from PostgreSQL, MSSQL, SQLite, and MySQL.",
+     "lines": [
+      318
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Database Migration Guide**: Procedures for migrating from PostgreSQL, MSSQL, SQLite, and MySQL.",
+     "lines": [
+      318
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目自身是数据库服务器/引擎，对外提供协议服务，而非使用某个外部数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL v3",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "LionSQL is a high-performance, embedded OLTP database engine that natively compiles and executes Microsoft SQL Server T-SQL & stored procedures and complex business logic on a sub-microsecond VDBE bytecode virtual machine, while simultaneously offering broad compatibility with PostgreSQL SQL dialects and the standard PGWire v3 protocol. It comes fully equipped with a built-in web management studio for real-time telemetry and schema administration, as well as an integrated goroutine connection pooler capable of handling tens of thousands of concurrent connections—eliminating the need for additional software to achieve a complete operational environment. Packaging this complete enterprise feature set into a single, ultra-compact static binary under 100MB (currently ~50MB) with zero external dependencies, LionSQL delivers blazing-fast transaction throughput of tens of thousands of transactions per second with predictable sub-millisecond latency and non-blocking snapshot isolation. ／  - **PostgreSQL v3 Protocol (Port 5433)**: Fully compatible with `psql`, DBeaver, GORM, Prisma, and pgx, supporting SSL/TLS encryption and binary parameter binding. ／  - **Microsoft SQL Server TDS Protocol (Port 1433)**: Instantly compatible with SSMS, Azure Data Studio, `sqlcmd`, and MSSQL drivers, supporting RPC prepared execution.",
+   "evidence_lines": [
+    14,
+    32,
+    33
+   ]
+  },
+  "fn": "MaroShim/LionSQL",
+  "sha": "d31d4e5ec562",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

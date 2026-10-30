@@ -9921,5 +9921,130 @@
   "generated_at": "2026-10-26",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c4c0dc8de36b": {
+  "identity": {
+   "one_liner": "基于 Python holidays 库的股票交易所交易日历与结算日期查询服务",
+   "review": "MarketClock 提供 REST API、Web 应用和公开日历页，回答交易所当天是否开市、是否提前收盘、交易何时结算等问题，覆盖 holidays 库中的 30 个交易所。后端为 Flask + SQLAlchemy + MySQL 8.4 + Redis 缓存，前端为 Next.js/TypeScript；数据只读、无账号，M6 部署里程碑尚未完成。适合交易台、后台运营和需要交易日/结算日期的开发者使用。",
+   "highlights": [
+    "提供只读 REST API，包含市场状态、交易日判断、T+0 至 T+10 结算日期、交易日区间重叠等端点",
+    "将库中的日历数据与交易所官方公布日历逐日比对并展示数据质量页面",
+    "每个市场提供 iCalendar 订阅源，可接入 Google Calendar、Apple Calendar、Outlook"
+   ],
+   "use_cases": [
+    "查询交易所当天是否开市、是否提前收盘及下一个交易日",
+    "计算跨多市场在某交易日历下的 T+N 结算日期与共同交易日",
+    "通过 iCalendar 订阅将交易所休市日导入日历应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Pure date logic in `backend/app/core` with 100% branch coverage, tests against real MySQL. ／ |`GET /health`||MySQL and Redis status (503 when either is down)| ／ The web app only talks to the API, and the API is the only part that talks to MySQL and Redis.",
+     "lines": [
+      74,
+      102,
+      153
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 MySQL 是该应用自身的存储组件，API 是唯一访问 MySQL 的部分，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The web app only talks to the API, and the API is the only part that talks to MySQL and Redis. ／ |Data|`holidays` 0.107 (exact pin), MySQL 8.4 LTS (utf8mb4), Redis 8.2| ／ docker compose up -d                              # MySQL, Redis and the API on :5000",
+   "evidence_lines": [
+    153,
+    184,
+    196
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "ahmershahdev/marketclock",
+  "sha": "c4c0dc8de36b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5975d2b05f51": {
+  "identity": {
+   "one_liner": "Harness CI 教程：用流水线构建并推送容器镜像到 Docker Hub",
+   "review": "这是 Harness University 的入门教程仓库，演示如何配置一条 CI 流水线：克隆 podinfo 仓库、构建其 Dockerfile，并通过 Harness 原生 BuildAndPushDockerRegistry 步骤将镜像以 sequenceId 和 latest 两个标签推送到 Docker Hub。面向初次使用 Harness CI 的开发者，包含连接器与密钥配置、YAML 参考和常见问题排查；仅覆盖发布，不涉及部署。",
+   "highlights": [
+    "使用 BuildAndPushDockerRegistry 原生步骤完成镜像构建与推送，无需在 Run 步骤中手动执行 docker CLI",
+    "同时推送 sequenceId 与 latest 两个镜像标签，并启用 Docker layer 缓存",
+    "凭据通过 Harness 连接器与 Secret 管理，不写入 Git"
+   ],
+   "use_cases": [
+    "学习在 Harness Cloud 上配置首个 CI 发布流水线",
+    "为容器镜像配置自动化构建与推送到 Docker Hub 或其他 Docker 兼容镜像仓库"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "内容为 CI 流水线教程，README 中未涉及任何数据库的使用或服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The pipeline clones **podinfo**, builds its Dockerfile, and **pushes** the image to **Docker Hub**. Nobody runs `docker build` or `docker push` in a shell. The native **Build and Push to Docker Registry** step is the publish. ／ |Registry|Native Harness step|",
+   "evidence_lines": [
+    14,
+    22
+   ]
+  },
+  "fn": "harness-community/ci-tidbits-publish-artifact",
+  "sha": "5975d2b05f51",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11844,5 +11844,150 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "943fa1943eb8": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的网页搜索插件，多引擎检索并用 SQLite 缓存",
+   "review": "这是 DeepSeek Harness（DSH）宿主的一个网页搜索插件，提供多引擎与多平台搜索、证据包式结果和查询历史，通过 web_index/web_call 两个常驻工具暴露 27 个动作。数据层面使用 SQLite 加内存 LRU 做双层持久化缓存。适用于在 DSH CLI 或 Desktop 中需要网页检索能力的用户，安装依赖 dsh plugin 命令，宿主版本须满足声明的 peer 范围。",
+   "highlights": [
+    "提供多引擎与多平台搜索（ddg/bing/Exa/Jina 及 GitHub、知乎、YouTube 等平台来源）",
+    "使用 SQLite + 内存 LRU 双层缓存实现查询历史与站点提取规则持久化",
+    "通过 web_index/web_call 两个工具按需披露 27 个动作"
+   ],
+   "use_cases": [
+    "为 DSH 宿主中的 AI 对话提供网页搜索与证据包生成",
+    "需要登录态的平台搜索（经 opencli 使用本机 Chrome 登录态）",
+    "搜索结果的持久化缓存与历史回放导出"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **持久化**：SQLite + 内存 LRU 双层缓存、查询历史、可再导入的站点提取规则。",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为插件自身缓存与历史的存储依赖，项目本身是为 DSH 提供网页搜索能力的应用插件，而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **持久化**：SQLite + 内存 LRU 双层缓存、查询历史、可再导入的站点提取规则。 ／ DeepSeek Harness（DSH）的增强型网页搜索插件：多引擎搜索、平台搜索、持久化缓存和证据包，常驻上下文只有两个工具。",
+   "evidence_lines": [
+    11,
+    5
+   ]
+  },
+  "fn": "anweat/dsh-web-search-pro",
+  "sha": "943fa1943eb8",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f3df4b799f22": {
+  "identity": {
+   "one_liner": "基于 SQLite 的对话记忆内核，三层分级加遗忘曲线管理记忆",
+   "review": "dsmem 是一个为对话模型提供记忆管理的 Python 库，将记忆分为 buffer/fragments/anchors 三层并按遗忘曲线衰减，重要记忆沉入长期层，人格由长期对话证据积分而成。纯标准库实现、零第三方依赖，每组对话对应独立 SQLite 文件，附带 WebUI 与每日备份命令。适合需要本地离线运行、为聊天机器人提供长期记忆与人格演化的个人或开发者。",
+   "highlights": [
+    "三层记忆结构：L0 原始对话、L1 摘要片段、L2 压缩原话，按可召回度阈值自动降级或删除",
+    "人格由长期对话证据积分推动，核心层属性变化受天数、跨度和预算限制",
+    "纯 Python 标准库实现，一个分组一个 SQLite 文件，支持完整/当前两种备份并带内容指纹去重"
+   ],
+   "use_cases": [
+    "为聊天机器人或对话模型提供本地长期记忆与遗忘机制",
+    "多群组/多会话场景下隔离管理各自的记忆库",
+    "需要记录人格演变证据流水与月度章节归档的陪伴型对话应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "纯 Python 标准库，一个分组一个 SQLite 文件，离线可跑。 ／ │ ├── store.py # SQLite 存取、空间统计、旧库迁移",
+     "lines": [
+      7,
+      218
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "即使细节全没了，也能答出\"那次在比 SQLite 和 Postgres 的运维成本\"。缺口会如实显示，不编造。",
+     "lines": [
+      141
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它使用 SQLite 存储自身记忆数据（一个分组一个 SQLite 文件），SQLite 是其存储依赖而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "纯 Python 标准库，一个分组一个 SQLite 文件，离线可跑。 ／ dsmem 不把聊天记录整段塞回上下文，也不依赖向量库。它让记忆按曲线衰减：重要的沉进长期层， ／ │   ├── store.py               # SQLite 存取、空间统计、旧库迁移",
+   "evidence_lines": [
+    7,
+    5,
+    218
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Sandy114514/ds-memory",
+  "sha": "f3df4b799f22",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

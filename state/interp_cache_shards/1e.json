@@ -9900,5 +9900,142 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4a6706c1ca8f": {
+  "identity": {
+   "one_liner": "本地 Oracle Cloud Infrastructure 模拟器，模拟 OCI 服务协议",
+   "review": "floci-oci 是一个开源的本地 OCI（Oracle Cloud Infrastructure）模拟器，面向开发和测试/CI 场景：无需云账号或 API 密钥，即可在本地通过 docker compose 运行 Identity、Object Storage、Queue、Vault/KMS、OKE、Database with PostgreSQL 等 OCI 服务，兼容官方 OCI SDK、CLI 和 Terraform provider。基于 Quarkus 构建，部分服务（Functions、OKE、PostgreSQL）通过真实 Docker sidecar 实现。",
+   "highlights": [
+    "模拟 OCI 线协议：opc-request-id、opc-next-page 分页、etag/if-match 条件请求及 OCI 错误体",
+    "官方 oci-java-sdk、Python SDK、OCI CLI 及 oracle/oci Terraform provider 可不改代码直接使用",
+    "提供内存/持久化/混合/WAL 多种存储模式，并支持 GraalVM native-image 构建"
+   ],
+   "use_cases": [
+    "在没有云账号和真实凭证的环境下开发 OCI 集成",
+    "CI 流水线中替代真实 OCI 租户进行集成测试",
+    "本地验证 Terraform/IaC 配置与 OCI SDK 客户端代码"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|Database with PostgreSQL: DB systems, start/stop/restart, master password reset, connection details with a CA certificate, shapes, default configurations, work requests, real PostgreSQL sidecar| ／ |Database with PostgreSQL|Real Docker (PostgreSQL) / In-process|DB system CRUD (`/20220915`) driven by work requests, with a `DELETED` tombstone clients can poll; one `postgres:<major>-alpine` container per DB system, started in the background; connection deta ／ |Database with PostgreSQL|`postgres:{major}-alpine`|A real PostgreSQL server per DB system, of the major the DB system asks for, with TLS, a host port from `15432..15531` and a named data volume|",
+     "lines": [
+      139,
+      157,
+      172
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Light, fluffy, and always free, now for Oracle Cloud ／ floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI. ／ It gives you OCI-shaped services on your machine without an Oracle Cloud account, uploaded API keys, or paid feature gates. Point the OCI SDKs, the OCI CLI, Terraform, or OpenTofu at `http://localhost:4599` and keep your existing workflows.",
+     "lines": [
+      5,
+      24,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 OCI 开发/测试/CI 服务的本地模拟器（L24），属于为云数据库与云服务生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI. ／ It gives you OCI-shaped services on your machine without an Oracle Cloud account, uploaded API keys, or paid feature gates. Point the OCI SDKs, the OCI CLI, Terraform, or OpenTofu at `http://localhost:4599` and keep your existing workflows. ／ The official oci-java-sdk, Python SDK, OCI CLI, and the `oracle/oci` Terraform provider work unchanged, validated continuously by the compatibility suite.",
+   "evidence_lines": [
+    24,
+    26,
+    104
+   ]
+  },
+  "fn": "floci-io/floci-oci",
+  "sha": "4a6706c1ca8f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "29e0281643ea": {
+  "identity": {
+   "one_liner": "基于 Astro + Cloudflare D1/R2 的校友目录与 CMS 应用",
+   "review": "面向学校、大学或伊斯兰寄宿学校的校友目录及内容管理系统，包含校友档案、招聘信息、新闻、活动、捐赠以及带有二维码验证的数字会员卡。前端采用 Astro SSR，部署于 Cloudflare Workers，数据通过 Drizzle ORM 存储在 D1，媒体文件存储于 R2。提供本地运行及部署文档，采用 MIT 许可证授权。",
+   "highlights": [
+    "提供校友目录、CMS 后台、数字会员卡二维码验证、招聘信息、活动报名（RSVP）及捐赠活动模块",
+    "使用 Drizzle ORM 和 Cloudflare D1 存储数据，R2 存储媒体文件",
+    "包含 RBAC、审计日志、限流和每周 D1 备份脚本"
+   ],
+   "use_cases": [
+    "学校或大学建立校友目录及会员管理系统",
+    "需要内容审核和捐赠确认的机构网站",
+    "基于 Cloudflare Workers 的部署场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是一个使用 D1/R2 存储数据的校友目录应用系统，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Direktori alumni + CMS untuk sekolah, kampus, atau pesantren: profil alumni, loker, berita, agenda, donasi, dan kartu anggota digital dengan verifikasi QR. Dibangun dengan Astro 7 di Cloudflare Workers, D1, dan R2. ／ |Database|Cloudflare D1 + Drizzle ORM| ／ |Framework|Astro 7 (SSR) + React islands|",
+   "evidence_lines": [
+    3,
+    111,
+    109
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "rizalahmaddd/haloalumni",
+  "sha": "29e0281643ea",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9765,5 +9765,73 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a6fbd35f1eba": {
+  "identity": {
+   "one_liner": "本地优先的 MCP 记忆 CLI，只读取多来源并建 SQLite 索引",
+   "review": "Mora 是一个实验性的本地优先命令行工具，以只读方式接入 Gmail、日历、iMessage、文件和 GitHub Issues，将副本保存为本地 Markdown 并构建 SQLite 索引，供用户检索或通过 MCP 提供给 AI 代理查询。默认不调用模型，支持 Ollama 改进搜索；目前为 alpha 阶段，仅覆盖 macOS 为主的平台。",
+   "highlights": [
+    "提供 MCP 服务器（mora mcp serve），供 Claude Code、Codex 等 MCP 客户端调用搜索、读取、写入工具",
+    "在本地构建 SQLite 索引以加速搜索，来源连接器为只读，不修改原始数据",
+    "支持 Homebrew Cask、安装脚本和 go install 多种安装方式"
+   ],
+   "use_cases": [
+    "让 AI 代理通过 MCP 检索本地邮件、消息、日历和文件上下文",
+    "个人跨来源统一搜索与每日简报（mora brief / search / think）",
+    "本地隐私敏感的记忆写入、纠正与遗忘管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "issues. Mora builds a SQLite index on your computer so searches are fast.",
+     "lines": [
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其本地数据索引的内部存储，不面向数据库生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "issues. Mora builds a SQLite index on your computer so searches are fast. ／ MCP (a way for an agent to call local tools). Mora supports: ／ > Mora is alpha software. We use it every day, and its main paths have tests.",
+   "evidence_lines": [
+    32,
+    21,
+    15
+   ]
+  },
+  "fn": "pyranthus-hq/mora",
+  "sha": "a6fbd35f1eba",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

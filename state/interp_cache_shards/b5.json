@@ -11436,5 +11436,74 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "099460d34f0d": {
+  "identity": {
+   "one_liner": "Postgres 应用授权工具：策略文件编译为行级安全",
+   "review": "rowstile 是一个面向 Postgres 应用的授权层：将单个策略文件编译为视图、RLS 策略、触发器维护的表及 SDK 函数，实现共享、分组、嵌套文件夹与多租户控制，无需独立的授权服务。策略变更以迁移形式经 Alembic/Prisma/Drizzle 等工具下发。要求全部数据在单一 Postgres 库中，目前为 beta（0.1.0），尚未经外部安全审计。",
+   "highlights": [
+    "提供策略语言与编译器，把策略文件编译为 SQL 视图、RLS 策略、触发器维护表和 authz.* 函数",
+    "支持以 Alembic、Prisma、Drizzle Kit 或纯 SQL 迁移形式发布策略变更，无需在数据库预装组件",
+    "提供 Python（FastAPI、SQLAlchemy、psycopg、asyncpg）与 TypeScript（Next.js、Prisma、Drizzle 等）SDK 及编辑器扩展、CI 审查集成"
+   ],
+   "use_cases": [
+    "单 Postgres 数据库应用中基于行归属、团队、文件夹或租户控制读写权限",
+    "替代手写难维护的行级安全策略，以策略文件加测试的方式管理授权",
+    "为多租户或共享（sharing）场景生成审计、访问请求与审查功能"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# rowstile: access rules in a policy file, enforced by Postgres ／ and nothing has to run next to it: any Postgres 16, 17 or 18 works, managed or not, and the owner of",
+     "lines": [
+      1,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "rowstile 是为 Postgres 数据库生成 RLS 策略与迁移的工具，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "file and compiled to row-level security. There is no authorization service to run beside the database, and no ／ command compiles it into plain SQL: views, trigger-maintained tables for inheritance, row-level ／ and nothing has to run next to it: any Postgres 16, 17 or 18 works, managed or not, and the owner of",
+   "evidence_lines": [
+    4,
+    10,
+    14
+   ]
+  },
+  "fn": "rowstile/rowstile",
+  "sha": "099460d34f0d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

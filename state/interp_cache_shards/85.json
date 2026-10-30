@@ -11518,5 +11518,158 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "02b2e8ef2962": {
+  "identity": {
+   "one_liner": "PostgreSQL plpgsql 存储过程的静态分析 linter 扩展",
+   "review": "plpgsql_check 是一个 PostgreSQL 扩展，对 plpgsql 存储过程与触发器函数做静态检查，可发现嵌入 SQL 的语义错误、未用变量、死代码、隐式转换及 SQL 注入风险，输出 text/json/xml 格式报告，支持通过函数参数和注释内 PRAGMA 控制检查级别，声明支持 PostgreSQL 14-20。",
+   "highlights": [
+    "基于 PostgreSQL 内部 parser/evaluator 对 plpgsql 例程及内嵌 SQL 做语义检查",
+    "提供性能、安全（SQL 注入检测）、兼容性等多类可配置警告级别",
+    "输出 text/json/xml 三种格式，支持触发器函数与过渡表检查"
+   ],
+   "use_cases": [
+    "部署前静态检查 plpgsql 存储过程与触发器中的错误",
+    "检测 EXECUTE 语句中的 SQL 注入隐患",
+    "识别未用变量、死代码与可能导致索引失效的隐式转换"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This extension is a full linter for plpgsql for PostgreSQL. It leverages only the internal",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展为 plpgsql 代码提供静态检查服务，属数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This extension is a full linter for plpgsql for PostgreSQL. It leverages only the internal ／ PostgreSQL 14 - 20 are supported. ／  postgres=# CREATE EXTENSION plpgsql_check;",
+   "evidence_lines": [
+    5,
+    35,
+    42
+   ]
+  },
+  "fn": "okbob/plpgsql_check",
+  "sha": "02b2e8ef2962",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5e90c37f2250": {
+  "identity": {
+   "one_liner": "多源数据摄入工具，将笔记与文件同步到 Hindsight 记忆库",
+   "review": "Hindsight Ingestion 是一个自托管的数据摄入服务，把 Notion、思源笔记、S3、Google Drive、OneDrive 等多种来源的内容同步到 Hindsight 记忆库，提供增量同步、多模态文件支持、WebUI 管理与定时任务。面向使用 Hindsight 做知识管理的个人或团队；依赖已有的 Hindsight 实例，通过 Docker Compose 部署，自身状态数据可选 SQLite、PostgreSQL 或 MySQL 存储。",
+   "highlights": [
+    "支持从 Notion、SiYuan、S3、WebDAV、Google Drive、OneDrive 等多种来源增量同步内容到 Hindsight",
+    "提供 Dry-run 预览、检查点持久化、重试与重叠保护等任务管理能力",
+    "通过 DB_TYPE 配置使用 SQLite、PostgreSQL 或 MySQL 作为持久化存储"
+   ],
+   "use_cases": [
+    "将个人笔记（Notion/思源/Obsidian 等）定期同步到 Hindsight 知识库",
+    "从 S3、网盘等来源批量摄入文档与多模态文件",
+    "基于定时任务维护多来源数据的自动同步与删除清理"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🔐 **Self-hosted, secrets encrypted** — Deploy with Docker, encrypt credentials with AES-256-GCM, and choose SQLite, PostgreSQL or MySQL for persistent storage. ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      23,
+      128
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 🔐 **Self-hosted, secrets encrypted** — Deploy with Docker, encrypt credentials with AES-256-GCM, and choose SQLite, PostgreSQL or MySQL for persistent storage. ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      23,
+      128
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🔐 **Self-hosted, secrets encrypted** — Deploy with Docker, encrypt credentials with AES-256-GCM, and choose SQLite, PostgreSQL or MySQL for persistent storage. ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      23,
+      128
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明项目将同步内容写入 Hindsight，并使用 SQLite/PostgreSQL/MySQL 存储自身数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Sync **Notion, SiYuan, DeepWiki, S3, WebDAV, WebCAL, CalDAV, Email (IMAP), Steam, Google People, Google Drive, OneDrive and local files** into Hindsight memory banks. Self-host with Docker and manage everything from the WebUI. ／ - 🔐 **Self-hosted, secrets encrypted** — Deploy with Docker, encrypt credentials with AES-256-GCM, and choose SQLite, PostgreSQL or MySQL for persistent storage. ／ |`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.|",
+   "evidence_lines": [
+    7,
+    23,
+    127
+   ]
+  },
+  "fn": "Nyrest/hindsight-ingestion",
+  "sha": "5e90c37f2250",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

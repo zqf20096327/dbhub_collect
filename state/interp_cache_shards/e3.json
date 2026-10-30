@@ -10761,5 +10761,149 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "46971e66c102": {
+  "identity": {
+   "one_liner": "AI代理认知记忆系统，单SQLite文件存储，含MCP服务器",
+   "review": "brainctl 用单个 brain.db SQLite 文件为 AI 代理提供跨会话持久记忆，包含多种记忆类型、FTS5/向量检索、知识图谱和信念修正机制，并通过内置 MCP 服务器暴露 100 个工具供 Claude Desktop、Cursor、VS Code 等使用。面向 AI 代理开发者，提供 Python 库与 CLI，支持签名导出、Solana 铸造与记忆交易市场。",
+   "highlights": [
+    "提供 FTS5 全文检索、sqlite-vec 向量检索及混合排序多种检索模式",
+    "内置 MCP 服务器，公开 100 个工具，适配 Claude Desktop、Cursor、VS Code",
+    "支持 Ed25519 签名导出、Solana 链上锚定与代理间记忆交易市场"
+   ],
+   "use_cases": [
+    "为 LLM 代理添加跨会话持久记忆与知识图谱",
+    "通过 MCP 在桌面 IDE/客户端中为代理提供记忆工具",
+    "对记忆束进行签名导出、上链铸造与代理间交易"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Requires Python 3.11+. SQLite is built-in. No other mandatory dependencies.",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将内置 SQLite 作为自身存储层来保存代理记忆数据，而非为数据库生态提供服务组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "One `brain.db` gives your agent durable memory across sessions — facts learned, decisions made, entities tracked, and state handed off. No server. No API keys. No LLM calls required. ／ Requires Python 3.11+. SQLite is built-in. No other mandatory dependencies. ／ ## MCP server (100 visible tools, v2 surface)",
+   "evidence_lines": [
+    5,
+    26,
+    168
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "TSchonleber/brainctl",
+  "sha": "46971e66c102",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5ea4fbc2e7d6": {
+  "identity": {
+   "one_liner": "基于 FastAPI+React 的 AI 智慧教学平台，数据存于本地 SQLite",
+   "review": "一个面向小学、初中、高中的学科通用 AI 教学平台，包含题库组卷、在线考试、作业批改、课堂互动、学情分析与积分激励等功能，供学校、教研组或任课教师直接部署使用。技术上基于 FastAPI+React，接入 DashScope/DeepSeek，AI 链路支持 RAG、智能体与直连大模型三级降级；数据落在双 SQLite 库与本地目录，可完全离线部署，许可证为 AGPL-3.0。",
+   "highlights": [
+    "覆盖教学、学习、练习、评价、管理五条主线，共 50+ 功能点，学科/年级/班级由配置驱动",
+    "AI 链路支持 RAG 知识库检索、智能体应用与直接调用大模型三种模式，按优先级自动降级",
+    "数据存于本地双 SQLite 库与本地目录，提供 Windows 桌面版一键安装、源码包与 Git 克隆三种部署方式"
+   ],
+   "use_cases": [
+    "学校或教师搭建含题库、考试与课堂互动的教学平台",
+    "需要离线部署、数据本地化的教学场景",
+    "AI 辅助备课、出题组卷与学情分析"
+   ],
+   "ai使用场景": [
+    "基于本地题库与课程大纲的检索增强问答与出题"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|🔒 本地化优先|双 SQLite 库 + 本地目录存数据，可完全离线部署；AI 走国内可达通道，pip 有镜像方案，学生数据不出校| ／ |用户/积分/点名/任务/通知等核心业务数据|`backend/smartkb.db`（SQLite）| ／ |试题库与考试数据|`backend/questions.db`（SQLite）|",
+     "lines": [
+      60,
+      1220,
+      1221
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明系统数据全部存于本地 SQLite 库与本地目录，SQLite 是其存储层，平台本身是使用数据库的教学应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 基于 **FastAPI + React** 构建，接入阿里云 DashScope（通义千问 / 通义万相）与 DeepSeek；SSE 流式输出与 WebSocket 实时链路支撑课堂并发，数据全部落在本地 SQLite 与本地目录，可完全离线部署。 ／ |🔒 本地化优先|双 SQLite 库 + 本地目录存数据，可完全离线部署；AI 走国内可达通道，pip 有镜像方案，学生数据不出校|",
+   "evidence_lines": [
+    16,
+    60
+   ]
+  },
+  "fn": "youufis/SmartKBS",
+  "sha": "5ea4fbc2e7d6",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

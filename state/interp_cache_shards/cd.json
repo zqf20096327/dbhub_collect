@@ -11522,5 +11522,144 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6e45aefa3d2a": {
+  "identity": {
+   "one_liner": "自托管求职应用，用个人档案生成定制简历与求职信并追踪申请",
+   "review": "Dossier 是一个单用户自托管的求职管理系统，将个人职业档案转换为简历，读取职位描述后生成定制简历和求职信，并支持申请状态追踪、职位搜索和每日职位代理。数据存储在用户自己的 PostgreSQL 数据库中，支持本地 LLM（Ollama、LM Studio）或托管 API。单实例、单用户，仅桌面端浏览器使用。适合希望自主掌控求职数据的个人求职者。",
+   "highlights": [
+    "从单一职业档案生成定制简历与求职信，草稿仅使用档案中的既有事实",
+    "支持 JSearch、Adzuna 等职位来源聚合职位，以及可选的每日职位代理",
+    "支持本地模型（Ollama、LM Studio）或 OpenAI 兼容/Anthropic/Mistral 托管 API，并内置 Claude 连接器",
+    "提供申请看板与表格追踪、Gmail/Google Calendar 集成、导出导入与每夜备份"
+   ],
+   "use_cases": [
+    "个人求职者集中管理简历定制与申请进度",
+    "在自托管服务器上本地化保存求职数据与文档",
+    "结合本地 LLM 在离线或隐私敏感环境下生成求职材料"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 18 ／ It's for one person on a small server: one password, your data in your own PostgreSQL database, and an AI model of your choice. That can be a local model through Ollama or LM Studio, so your profile and documents stay on your own hardware, or a hosted one (any ／ echo \"POSTGRES_PASSWORD=$(openssl rand -hex 24)\" > .env",
+     "lines": [
+      10,
+      14,
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Dossier 将用户数据存储在自己的 PostgreSQL 数据库中（L14），属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It's for one person on a small server: one password, your data in your own PostgreSQL database, and an AI model of your choice. That can be a local model through Ollama or LM Studio, so your profile and documents stay on your own hardware, or a hosted one (any OpenAI-compatible API, Anthropic or Mistral), which then receives what it writes from. Privacy says what goes where. ／ Dossier keeps your career history in one profile and turns it into a clean resume. For every job you apply to, it reads the posting, shows how you match, and drafts a tailored resume and cover letter that only use facts from your profile. You refine them in a chat, download them as PDFs and track each application from draft to offer. ／  Your job search, on your own server: one profile, a tailored resume and cover letter for every job, and every application tracked from draft to offer.",
+   "evidence_lines": [
+    14,
+    12,
+    3
+   ]
+  },
+  "fn": "AienTech/dossier",
+  "sha": "6e45aefa3d2a",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bca1b0a11266": {
+  "identity": {
+   "one_liner": "基于 Airflow 与 Docker 的天气数据 ETL 管线，存入 PostgreSQL 并用 Metabase 可视化",
+   "review": "这是一个数据工程项目：通过 Airflow DAG 每日从 OpenWeatherMap API 抓取英国多个城市的天气数据，写入 PostgreSQL 的 weather 表，并用 pgAdmin 和 Metabase 进行查询与可视化，整套环境通过 Docker Compose 启动，包含端口调整与 .env 密钥管理。适合作为数据工程 ETL 流程的学习或参考案例，依赖 Docker 与 OpenWeatherMap API 密钥。",
+   "highlights": [
+    "通过 Airflow DAG 每日定时抓取 OpenWeatherMap 天气数据并写入 PostgreSQL weather 表",
+    "使用 Docker Compose 编排 Airflow、PostgreSQL 13、pgAdmin、Metabase 全套环境",
+    "提供 Metabase 仪表盘展示各城市温度/湿度均值等可视化"
+   ],
+   "use_cases": [
+    "气象数据的自动化 ETL 采集与入库",
+    "基于 Metabase 的天气数据可视化分析",
+    "Airflow DAG 编排的学习与复用参考"
+   ],
+   "official_notes": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Projet de Data Engineering réalisé avec Apache Airflow, Docker, PostgreSQL, pgAdmin, Metabase et l’API OpenWeatherMap ／ Construire un pipeline ETL automatisé qui récupère des données météorologiques depuis l’API OpenWeatherMap, les stocke dans PostgreSQL et les visualise dans Metabase. ／ * PostgreSQL 13",
+     "lines": [
+      3,
+      7,
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是用 Airflow 抓取天气数据并存入 PostgreSQL 的数据管线项目，PostgreSQL 为其存储数据的数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Construire un pipeline ETL automatisé qui récupère des données météorologiques depuis l’API OpenWeatherMap, les stocke dans PostgreSQL et les visualise dans Metabase. ／ Les données sont ensuite insérées dans la table PostgreSQL `weather`.",
+   "evidence_lines": [
+    7,
+    58
+   ]
+  },
+  "fn": "datasifaw/airflow-weather-pipeline",
+  "sha": "bca1b0a11266",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

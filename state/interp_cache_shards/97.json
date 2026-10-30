@@ -10681,5 +10681,212 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "706b005fd1e6": {
+  "identity": {
+   "one_liner": "PostgreSQL 云原生存储引擎扩展",
+   "review": "OrioleDB 是一个以 PostgreSQL 扩展形式实现的存储引擎，基于表访问方法框架提供替代存储模型，实现 UNDO 日志、行级 WAL、无锁页面读取等机制，并声明面向 raft 复制的分布式设计。需构建打过补丁的 PostgreSQL 并修改 shared_preload_libraries，目前为公开 beta，官方不建议用于生产。适合测试评估 PostgreSQL 存储方案的开发者与数据库内核研究者。",
+   "highlights": [
+    "以 PostgreSQL 扩展形式实现，基于 table access method 框架",
+    "实现 UNDO 日志 MVCC、64 位事务标识符与行级 WAL",
+    "提供 amd64/arm64v8 Docker 镜像，需配合打过补丁的 PostgreSQL 构建"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 上测试替代存储引擎与表访问方法",
+    "面向云与现代硬件（多核、SSD/NVRAM）的存储实验",
+    "raft 复制与多主架构的研究与原型验证"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# OrioleDB – a cloud-native storage engine for PostgreSQL ／ OrioleDB is a new storage engine for PostgreSQL, bringing a modern approach to",
+     "lines": [
+      1,
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供存储引擎扩展，属于数据库内核层组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "双许可：Apache License 2.0 与 PostgreSQL License",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OrioleDB is a new storage engine for PostgreSQL, bringing a modern approach to ／ OrioleDB consists of an extension, building on the innovative table access ／ OrioleDB is dual-licensed under the Apache License 2.0 and the PostgreSQL License.",
+   "evidence_lines": [
+    12,
+    16,
+    66
+   ]
+  },
+  "fn": "orioledb/orioledb",
+  "sha": "706b005fd1e6",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9fae4ec5eec1": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展目录工具，收集 APT/RPM 元数据构建包矩阵并提供 Web/JSON API 查询",
+   "review": "PGEXT 是一个 PostgreSQL 扩展目录工具集，包含 Go 编写的 CLI 与 pgext.cloud 网站：CLI 采集 APT/RPM 仓库元数据生成包可用性矩阵，serve 命令提供 Web 界面与 JSON 查询 API，数据存于 PostgreSQL。面向需要查找、安装 PG 扩展的数据库用户，覆盖 PG 14-18 与多种 Linux 目标。",
+   "highlights": [
+    "采集 APT/RPM 仓库元数据，构建按 PG 版本/OS/架构划分的包可用性矩阵",
+    "提供 Web 应用与 JSON 查询 API，覆盖 2,703 条扩展目录与 620 条打包记录",
+    "提供 init/serve/status/reload 等子命令，支持二进制、deb/rpm 与源码安装"
+   ],
+   "use_cases": [
+    "按类别、许可、语言或 PostgreSQL 版本查找扩展",
+    "查询扩展在特定 PG 版本与 Linux 系统下的包可用性",
+    "以中英文阅读扩展使用指南并获取上游链接"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**PGEXT** helps you discover PostgreSQL extensions, read their usage guides, ／ data stored in PostgreSQL. ／ |PostgreSQL targets|**14, 15, 16, 17, 18**|",
+     "lines": [
+      7,
+      15,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 生态提供扩展目录发现与包元数据查询的工具，本身以 PostgreSQL 存储目录数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，版权 Ruohang Feng",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**PGEXT** helps you discover PostgreSQL extensions, read their usage guides, ／ PGEXT.CLOUD. The `pgext` CLI collects APT/RPM repository metadata and builds ／ data stored in PostgreSQL.",
+   "evidence_lines": [
+    7,
+    12,
+    15
+   ]
+  },
+  "fn": "pgsty/pgext",
+  "sha": "9fae4ec5eec1",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "29c69dc01435": {
+  "identity": {
+   "one_liner": "AI 代理本地持久记忆系统，基于 SQLite 存储并经 MCP/CLI 读写",
+   "review": "为 AI 代理提供本地优先的共享记忆：将事件、断言和检查点存入 SQLite，代理通过 MCP 或 CLI 检索、记录观察并交换任务检查点，使新会话可接续既有任务。可选本地向量搜索，核心功能不依赖 Ollama 或付费 API；适合需要在多代理/多会话间保留决策与证据的开发者。",
+   "highlights": [
+    "提供 6 个 MCP 工具用于查询、记录事件、读取任务检查点与历史状态",
+    "记录的断言保留作者、证据与类型（observed/decision/assumption），存储前对疑似机密做脱敏",
+    "内置 Web 视图、Atlas 记忆图谱、CLI 及定时任务与备份调度"
+   ],
+   "use_cases": [
+    "跨会话/跨代理交接任务时保留决策依据与检查点",
+    "本地记录代理工作过程的事实与假设并支持语义检索",
+    "团队本地化托管代理记忆并定期审计与备份"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Chronicle stores attributed events and current assertions in SQLite. Agents use",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该系统将数据存入 SQLite 并供代理使用，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Local-first shared memory for AI agents.** Preserve decisions, evidence, and ／ Chronicle stores attributed events and current assertions in SQLite. Agents use ／ Agents talk to Chronicle over MCP (or the CLI). The default profile has six tools:",
+   "evidence_lines": [
+    7,
+    10,
+    32
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Beiev/max-chronicle",
+  "sha": "29c69dc01435",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

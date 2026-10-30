@@ -11221,5 +11221,144 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fd4284eea934": {
+  "identity": {
+   "one_liner": "以 PostgreSQL 扩展形式提供的数据库内持久化执行运行时",
+   "review": "pg_durable 是微软发布的 PostgreSQL 扩展，允许用 SQL 定义由多个步骤组成的持久化函数，运行时对每步做检查点，在崩溃、重启或步骤失败后从上一个检查点恢复执行。面向需要把后台任务、数据管道、调度逻辑放在数据库内完成的开发者、DBA 和 SRE，支持 PostgreSQL 17/18，需预加载共享库并以后台进程运行。",
+   "highlights": [
+    "作为 PostgreSQL 扩展运行，无需 Redis、Temporal 等外部服务",
+    "支持用 SQL 组合算子定义工作流，逐步检查点并在故障后恢复",
+    "提供调度、条件、并行执行原语，状态存于 Postgres 表可查询"
+   ],
+   "use_cases": [
+    "向量嵌入管道等分批调用 API 并写入 pgvector 的长任务",
+    "摄取管道的分阶段、去重、转换与发布",
+    "需在重启后可续跑且可 SQL 审计的计划维护与 runbook 自动化"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 17 & 18 ／ ## Durable Execution inside PostgreSQL ／ Tagged releases publish Debian packages for PostgreSQL 17 and 18 on amd64 from the GitHub release assets. Packages are named `pg-durable-postgresql-<PG major>_<pg_durable version>-1_<arch>.deb` and install the extension library, control file, and SQL upgrade files into the matching PostgreSQL installation directories.",
+     "lines": [
+      6,
+      8,
+      98
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "以 PostgreSQL 扩展与后台进程形式为该数据库提供持久化执行能力，服务于数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "## Durable Execution inside PostgreSQL ／ - **Zero infrastructure** — Runs as a PostgreSQL extension. No Redis, no Temporal, no external services. ／ Tagged releases publish Debian packages for PostgreSQL 17 and 18 on amd64 from the GitHub release assets. Packages are named `pg-durable-postgresql-<PG major>_<pg_durable version>-1_<arch>.deb` and install the extension library, control file, and SQL upgrade files into the matching PostgreSQL installation directories.",
+   "evidence_lines": [
+    8,
+    84,
+    98
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "microsoft/pg_durable",
+  "sha": "fd4284eea934",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1ceb154241ff": {
+  "identity": {
+   "one_liner": "2026年巴西总统第二轮选举终端实时计票面板，数据源自TSE公开文件，历史存SQLite",
+   "review": "这是一个在终端中跟踪巴西2026年总统第二轮选举计票的个人项目：读取TSE发布的公开JSON文件，提供计分板、时间线、各州/地区视图、图表和自有预测，历史数据以SQLite和原始JSON形式保存，供事后分析或供代理程序通过CLI/JSON读取。面向想自行查看选举数据的用户，仅覆盖总统第二轮，不追踪州长选举。",
+   "highlights": [
+    "读取TSE公开JSON文件，支持ETag/HTTP 304与自限请求频率",
+    "将计票演进记录至本地SQLite与原始JSON，供后续分析",
+    "提供snapshot命令输出JSON，供其他终端或代理单次查询"
+   ],
+   "use_cases": [
+    "选举当晚在终端自行跟踪计票进展",
+    "离线分析计票历史演进",
+    "供脚本或AI代理以JSON方式读取计票快照"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite + JSON originais:** a evolução permanece gravada para analisar depois.",
+     "lines": [
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用SQLite存储自身采集的选举历史数据，是为用户提供终端面板的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **SQLite + JSON originais:** a evolução permanece gravada para analisar depois. ／ O acompanhamento é por arquivos JSON publicados pelo TSE, não por WebSocket: o programa consulta o arquivo de acompanhamento e baixa os resultados necessários quando identifica novas versões. Usa ETag/HTTP 304 quando disponível, limita sua própria cadência de requisições e espera em caso de bloqueio. ／ apuracao snapshot --cached --json",
+   "evidence_lines": [
+    33,
+    82,
+    150
+   ]
+  },
+  "fn": "alexandrevl/apuracao2026",
+  "sha": "1ceb154241ff",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

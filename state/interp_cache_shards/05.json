@@ -10471,5 +10471,88 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "22f7e5a3a6f5": {
+  "identity": {
+   "one_liner": "议会职位空缺看板，Go 采集器+GitHub Actions 定时+TiDB 持久化",
+   "review": "一个面向英国地方议会职位空缺的公开只读看板项目：Go 采集器通过各招聘平台连接器抓取职位，GitHub Actions 定时运行并发布静态站点，TiDB 用于去重与历史存储，可选 Resend 邮件摘要。适合需要公开追踪议会招聘信息的个人或组织部署使用；需注意仅覆盖 11 个议会，未配置 TiDB 密钥时只发布内置报告且跳过定时检查。",
+   "highlights": [
+    "提供可搜索的公开看板，支持议会/状态过滤、排序与 CSV 导出",
+    "实现 MyJobScotland、Talentsoft、Jobtrain、Hireserve、iTrent、WMJobs 等平台的采集连接器",
+    "基于 TiDB 的去重与历史存储，并支持可选的 Resend 邮件新职位摘要"
+   ],
+   "use_cases": [
+    "公开追踪英国议会 IT/商业类职位空缺",
+    "通过 GitHub Actions 定时采集并自动发布职位报告",
+    "对招聘平台职位进行去重与历史记录管理"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "A public, read-only council vacancy dashboard with a Go checker, scheduled GitHub Actions, and optional TiDB Cloud persistence. Live dashboard: https://naveeth7.github.io/council-job-tracker/. ／ - TiDB-backed deduplication and history; optional new-job email digest using Resend. ／ 4. **Actions → Check council vacancies and publish → Run workflow**. Without TiDB secrets this only publishes the bundled report; scheduled checks are skipped with a warning. Add TiDB next to enable persistent checks.",
+     "lines": [
+      3,
+      13,
+      49
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "1. Create a **MySQL-compatible TiDB Cloud Starter** instance. Keep its monthly spending limit at **0** if you want the free-only setup. Observe quota usage; exceeding limits can stop new connections.",
+     "lines": [
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 TiDB 存储采集到的职位数据，看板本身是使用数据库的应用",
+   "persona": "use",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A public, read-only council vacancy dashboard with a Go checker, scheduled GitHub Actions, and optional TiDB Cloud persistence. Live dashboard: https://naveeth7.github.io/council-job-tracker/. ／ - TiDB-backed deduplication and history; optional new-job email digest using Resend. ／ - The site is a snapshot, not a live connection to TiDB; changes appear after a successful workflow and Pages deployment.",
+   "evidence_lines": [
+    3,
+    13,
+    95
+   ]
+  },
+  "fn": "Naveeth7/council-job-tracker",
+  "sha": "22f7e5a3a6f5",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

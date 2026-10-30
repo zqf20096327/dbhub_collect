@@ -12181,5 +12181,64 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d656c28e85b0": {
+  "identity": {
+   "one_liner": "浏览器端向量化 + seekdb 混合检索的迷你知识库",
+   "review": "这是一个按 OceanBase 大赛赛题实现的迷你知识库应用：文本嵌入全部在浏览器内通过 transformers.js / ONNX Runtime Web 计算（WebGPU 优先、WASM 降级），向量与原文写入嵌入式 seekdb，检索支持语义、关键词及 RRF 混合模式，由服务端 express 提供 API。面向参赛评审与本地演示，仅监听 127.0.0.1 且无鉴权，refresh 接口在当前引擎下会超时。",
+   "highlights": [
+    "embedding 在浏览器端运行，支持 WebGPU/fp16 到 WASM/int8 的自动降级",
+    "使用 seekdb-js 存储向量与原文，混合检索由单条 SQL 内 RRF 融合完成",
+    "提供集合管理、文档写入/删除、语义/关键词/混合检索等 HTTP API"
+   ],
+   "use_cases": [
+    "本地部署的小型中文知识库检索演示",
+    "端侧向量化与 INT8/FP16 量化的实测样例",
+    "大赛赛题 2.1–2.5 的对应实现参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明它是使用嵌入式 seekdb 存储向量与原文的知识库应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "按赛题 2.1–2.5 实现的迷你知识库：**embedding 全部在浏览器里算**（transformers.js / ONNX Runtime Web， ／ WebGPU 优先、WASM 自动降级），向量与原文写入 **seekdb（seekdb-js，嵌入式）**， ／ |2.3.1 seekdb-js 建集合存向量/原文/ID|`server.mjs` 里 `getOrCreateCollection` + `VECTOR(512)`|",
+   "evidence_lines": [
+    3,
+    4,
+    67
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "2652201498w-wq/minikb",
+  "sha": "d656c28e85b0",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

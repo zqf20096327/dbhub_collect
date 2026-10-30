@@ -11945,5 +11945,163 @@
   "generated_at": "2026-10-29",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c07c90b3f732": {
+  "identity": {
+   "one_liner": "跨数据库同步关系数据库对象的 CLI 迁移工具",
+   "review": "sync-db 是一个 CLI 与可编程 API 两种用法的数据库对象同步与迁移工具，基于 Knex 实现，通过 sync-db.yml 定义 SQL 文件顺序与迁移配置，可将数据库对象同步到 connections.sync-db.json 中配置的多个数据库连接，提供 migrate-latest、rollback、prune 等子命令。适合需要在多个数据库间保持 schema 对象一致的 Node.js 开发团队使用；连接凭据文件不建议提交到版本库。",
+   "highlights": [
+    "提供 make、migrate-latest、migrate-rollback、synchronize、prune 等 CLI 子命令",
+    "支持 CLI 与编程 API 两种使用方式，底层使用 Knex",
+    "支持通过 connections.sync-db.json 或 connection-resolver 配置多个数据库连接并同步对象"
+   ],
+   "use_cases": [
+    "在多个数据库间同步函数、存储过程等数据库对象",
+    "对 SQL 与 TS 迁移文件做版本控制并执行/回滚迁移",
+    "清理迁移之外的数据库对象（prune）"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "2. Node PostgreSQL TypeScript Sample - includes programmatic usage",
+     "lines": [
+      248
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "For instance - if your project uses MSSQL, you will need to do: ／ 1. Node MSSQL TypeScript Sample - includes programmatic usage",
+     "lines": [
+      17,
+      247
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为同步数据库对象的命令行工具，为数据库运维/开发流程服务，而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License（单许可）",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Command line utility to synchronize and version control relational database objects across databases. ／ This utility uses Knex under the hood so these are the supported drivers. ／ Note: The `connections` key expects an array, so you can also provide multiple databases and `sync-db` ensures your configured db objects are synced across all these databases.",
+   "evidence_lines": [
+    3,
+    23,
+    228
+   ]
+  },
+  "fn": "leapfrogtechnology/sync-db",
+  "sha": "c07c90b3f732",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9e9101cdc5d5": {
+  "identity": {
+   "one_liner": "面向 AI 编程代理的 MCP 工具服务器，整合 40 个文件/SSH/调试/分析工具",
+   "review": "一个以单一二进制向 AI 编程代理提供 MCP 工具的服务器，包含编码感知的文件编辑、SSH/SFTP、进程与内存操作、DAP 调试、二进制逆向分析及 MySQL/Redis 查询等 40 个工具，通过 profile 机制按需暴露 schema 以控制上下文体积。适用于使用 Claude Code、Cursor、Codex 等 MCP 兼容代理并需要系统级操作能力的开发者。",
+   "highlights": [
+    "提供 40 个工具，涵盖编码感知文件编辑、SSH/SFTP、进程管理、DAP 调试、静态二进制分析与 MySQL/Redis 查询",
+    "默认 core profile 仅暴露 11 个 schema，并支持 describe/call 按需加载单个操作",
+    "大文本响应默认 32K 字符截断，分页工具返回 next_offset/next_cursor"
+   ],
+   "use_cases": [
+    "让 AI 编程代理安全执行文件编辑、远程 SSH 操作与进程管理等系统任务",
+    "对 PE/ELF 二进制进行反编译、反汇编与交叉引用分析",
+    "通过 MySQL 工具执行 SQL 查询并获取表格化结果"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Too many separate tools**: Making the agent find, install, and configure Redis CLI, MySQL client, SSH client, etc. is tedious and error-prone. agent-tool bundles 40 tools into one binary and exposes them on demand through compact profiles. ／ Common compact operations include SSH execution, MySQL queries, file copy, Windows ／ |**MySQL**|Execute SQL queries on MySQL/MariaDB. Table-formatted SELECT results with configurable row/column/cell/total-output limits; affected rows for DML. Use SQL LIMIT/OFFSET for paging|✅|",
+     "lines": [
+      17,
+      40,
+      80
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**MySQL**|Execute SQL queries on MySQL/MariaDB. Table-formatted SELECT results with configurable row/column/cell/total-output limits; affected rows for DML. Use SQL LIMIT/OFFSET for paging|✅|",
+     "lines": [
+      80
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "The existing `analyze` tool can save user comments and labels in SQLite with",
+     "lines": [
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 MCP 工具服务器为 AI 代理提供包括 MySQL 查询在内的数据库访问工具，本身非使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MCP (Model Context Protocol) tool server for AI coding agents. ／ - **Too many separate tools**: Making the agent find, install, and configure Redis CLI, MySQL client, SSH client, etc. is tedious and error-prone. agent-tool bundles 40 tools into one binary and exposes them on demand through compact profiles. ／ |**MySQL**|Execute SQL queries on MySQL/MariaDB. Table-formatted SELECT results with configurable row/column/cell/total-output limits; affected rows for DML. Use SQL LIMIT/OFFSET for paging|✅|",
+   "evidence_lines": [
+    9,
+    17,
+    80
+   ]
+  },
+  "fn": "knewstimek/agent-tool",
+  "sha": "9e9101cdc5d5",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

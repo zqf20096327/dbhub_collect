@@ -11543,5 +11543,72 @@
   "generated_at": "2026-10-29",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "39e8d5f0e543": {
+  "identity": {
+   "one_liner": "面向主机托管商的自托管计费与自动化系统，含门户、发票与开通",
+   "review": "为销售主机与域名的托管公司提供客户端门户、发票支付、域名注册和服务器账号自动开通，用 ASP.NET Core 9 + Vue/Nuxt 构建，数据存 PostgreSQL，通过 Docker 一键安装并内置 Caddy 自动 HTTPS；支付网关、注册商与开通面板以插件形式接入并提供 SDK。",
+   "highlights": [
+    "提供计费发票、多币种、域名/TLD 定价、主机自动开通、工单与知识库",
+    "支付网关、注册商与开通面板为插件，附 Innovayse.SDK 供自定义",
+    "提供多架构 Docker 镜像与一键安装脚本，支持演示模式与数据导入"
+   ],
+   "use_cases": [
+    "托管/域名销售商的客户管理与计费",
+    "自动化服务器账号开通与暂停/终止",
+    "自托管替代商业托管计费面板"
+   ],
+   "last": "x"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Modern stack.** ASP.NET Core 9 and PostgreSQL behind a Nuxt 4 storefront and a Vue 3 admin panel.",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其用 PostgreSQL 存储自身业务数据，是使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Modern stack.** ASP.NET Core 9 and PostgreSQL behind a Nuxt 4 storefront and a Vue 3 admin panel. ／ |Back up the database|`docker compose -f docker-compose.hub.yml exec -T hostpanel-db sh -c 'pg_dump -U \"$POSTGRES_USER\" \"$POSTGRES_DB\"' > backup.sql`, or snapshot the `hostpanel_pgdata` volume|",
+   "evidence_lines": [
+    20,
+    120
+   ]
+  },
+  "fn": "innovayse/hostpanel",
+  "sha": "39e8d5f0e543",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

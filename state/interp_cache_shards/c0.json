@@ -12270,5 +12270,137 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "352b2d386f11": {
+  "identity": {
+   "one_liner": "自托管的机房/家庭实验室基础设施资产与运维管理应用，内置 SQLite 存储",
+   "review": "Rackpad 是一个面向家庭实验室和小型机房的自托管基础设施管理应用，提供机架、设备、端口、线缆、IPAM/VLAN、Wi-Fi、存储、发现扫描、健康监控、报表和拓扑可视化等工作区。前端 React、后端 Fastify，数据持久化到 SQLite，以单个 Docker 容器部署，适合需要集中记录和管理实验环境的运维者。",
+   "highlights": [
+    "提供机架/设备/端口/线缆盘存、VLAN 与 IPAM、Wi-Fi 与存储拓扑清单功能",
+    "支持基于 ICMP、TCP、HTTP/HTTPS、SNMP 的逐设备健康检查及邮件/Discord/Telegram 告警",
+    "以单 Docker 容器部署，通过 better-sqlite3 进行 SQLite 持久化，含基于会话的角色认证"
+   ],
+   "use_cases": [
+    "家庭实验室或小型机房中记录机架、设备、布线与网络拓扑",
+    "对实验环境设备执行定期健康监控与告警",
+    "通过子网扫描发现设备并以审核优先方式导入 Hyper-V/Proxmox 主机与虚拟机清单"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite persistence through `better-sqlite3` ／ - **Self-hosted** — single Docker container, SQLite persistence, session auth with admin/editor/viewer roles, optional OIDC",
+     "lines": [
+      44,
+      62
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其通过 better-sqlite3 将数据持久化到 SQLite，SQLite 是该应用自身的存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT license（L92）",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Rackpad is a self-hosted infrastructure inventory and operations workspace for ／ - Fastify API ／ - SQLite persistence through `better-sqlite3`",
+   "evidence_lines": [
+    27,
+    43,
+    44
+   ]
+  },
+  "fn": "Kobii-git/rackpad",
+  "sha": "352b2d386f11",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "91f55bb96efa": {
+  "identity": {
+   "one_liner": "本地优先个人知识库，聚合外部数据入 PostgreSQL 关系库",
+   "review": "这是一个本地优先的个人知识管理应用，将 GitHub、Raindrop、Readwise、Lightroom 等外部来源的数据聚合进可搜索的 PostgreSQL 关系库。前端 React + TanStack，后端 tRPC + Drizzle ORM，经 Rocicorp Zero 同步实体图到客户端，并提供面向 agent 的 rcr CLI。README 明言为作者个人工具集定制、属实验性软件且无鉴权，不适合直接公开部署。",
+   "highlights": [
+    "聚合多外部来源数据（GitHub、Raindrop.io、Readwise、Lightroom 等）入 PostgreSQL 关系库",
+    "通过 Rocicorp Zero 将实体图复制到客户端，读写走本地 ZQL 查询与乐观 mutator",
+    "内置面向 agent 的 rcr CLI，stdout 输出可解析的 JSON"
+   ],
+   "use_cases": [
+    "个人书签、高亮、仓库 star 等数据的统一知识库管理",
+    "在 Tailscale 私有网络中自托管本地优先的个人数据仓库",
+    "为 AI agent 提供 JSON 输出的本地知识库查询接口"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A personal knowledge repository that aggregates data from multiple external sources into a searchable, relational database. Built with React 19, TanStack Router, tRPC, Drizzle ORM, and PostgreSQL, deployed on Bun server. ／ - **Backend**: tRPC + Drizzle ORM + PostgreSQL (search, list/opponent selection, and heavy mutations like create/delete/merge; also the full CLI surface) ／ - **Deployment/Hosting**: Bun server + local PostgreSQL on a Tailscale network",
+     "lines": [
+      3,
+      11,
+      13
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个用 PostgreSQL 存储数据的个人知识管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A personal knowledge repository that aggregates data from multiple external sources into a searchable, relational database. Built with React 19, TanStack Router, tRPC, Drizzle ORM, and PostgreSQL, deployed on Bun server. ／ - **Backend**: tRPC + Drizzle ORM + PostgreSQL (search, list/opponent selection, and heavy mutations like create/delete/merge; also the full CLI surface)",
+   "evidence_lines": [
+    3,
+    11
+   ]
+  },
+  "fn": "Aias/red-cliff-record",
+  "sha": "91f55bb96efa",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

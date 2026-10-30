@@ -12382,5 +12382,223 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c32790ea6787": {
+  "identity": {
+   "one_liner": "基于 LLM 的对话式 BI 工具，通过 text2sql 实现自然语言数据分析",
+   "review": "OpenChatBI 是基于 LangGraph/LangChain 构建的对话式 BI 应用，将自然语言转换为 SQL 查询数据仓库，并提供 plotly 可视化、数据目录管理、时序预测与异常检测代理。面向需要以自然语言查询和分析数据的数据分析人员，需配置 LLM 与数据库凭证；目录持久化支持文件系统或经 SQLAlchemy 使用 SQLite/MySQL/PostgreSQL。",
+   "highlights": [
+    "提供 text2sql 工作流，包含 schema linking 与提示工程",
+    "内置数据分析子代理，编排时序预测、异常检测、多维下钻与 Python 执行",
+    "目录存储支持文件系统或数据库后端，检索支持向量或 BM25"
+   ],
+   "use_cases": [
+    "自然语言对话查询和分析数据仓库数据并生成可视化",
+    "维护表/列的业务解释与数据目录检索",
+    "趋势预测、异常检测与根因下钻分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`postgresql+psycopg://user:pass@host/db`, `mysql+pymysql://user:pass@host/db`). ／ for PostgreSQL, install the `psycopg` driver (`pip install openchatbi[postgresql]`).",
+     "lines": [
+      222,
+      224
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`postgresql+psycopg://user:pass@host/db`, `mysql+pymysql://user:pass@host/db`). ／ For MySQL, install the `pymysql` driver (`pip install openchatbi[mysql]`);",
+     "lines": [
+      222,
+      223
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": " database** (e.g., `sqlite:///catalog.db`, ／   connection_string: sqlite:///./catalog.db",
+     "lines": [
+      221,
+      238
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是连接数据仓库执行生成 SQL 的 BI 应用，数据库仅作为其数据源与目录持久化后端使用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "query, analyze, and visualize data through natural language conversations. Built on LangGraph and LangChain ecosystem, ／  - `connection_string`: SQLAlchemy database URI for the **catalog persistence ／ > `data_warehouse_config` is only used to build the data warehouse execution engine",
+   "evidence_lines": [
+    4,
+    220,
+    230
+   ]
+  },
+  "fn": "zhongyu09/openchatbi",
+  "sha": "c32790ea6787",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5a03357de056": {
+  "identity": {
+   "one_liner": "本地照片评分与筛选引擎，含网页画廊与人脸识别",
+   "review": "Facet 是一个完全本地运行的 AI 照片分析与筛选（culling）工具：对每张照片按 9 个维度评分，提供突发连拍检测、闭眼识别、相似分组、自动筛选，以及支持语义搜索、人脸聚类、时间线、地图和统计的网页画廊。技术栈为 Python + FastAPI 后端与 Angular 前端，面向需要在本地管理大量照片库的摄影师用户，支持 GPU 或纯 CPU 运行。",
+   "highlights": [
+    "提供 9 维度照片评分、突发/闭眼/相似照片检测与一键自动筛选（支持 dry-run 预览）",
+    "网页画廊支持语义搜索、人脸识别聚类、时间线、地图、相册管理，并提供 MCP 端点供 AI 助手检索图库",
+    "扫描支持 JPEG、HEIC、10 种 RAW、JPEG XL、AVIF 等格式，可在 CPU 或最高 24 GB VRAM 的 GPU 上运行"
+   ],
+   "use_cases": [
+    "摄影师拍摄后批量评分、筛选最佳照片（体育/婚礼/演唱会等题材预设）",
+    "本地照片库的组织与浏览：人脸分组、智能相册、语义搜索与幻灯片",
+    "通过共享链接进行客户校样选片，或向手机/相框自动上传与推送照片"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是一个使用 Python/FastAPI 构建的端用户照片管理应用，数据库仅作内部存储，README 未面向数据库生态提供服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Facet is a local photo-analysis and culling engine. It scores each image across 9 dimensions — from aesthetic quality to face sharpness — then lets you browse, cull, and organize through a web gallery. Everything runs on your machine; no cloud, accounts, or API keys. ／ FastAPI ／ - **AI agents (MCP)** — a Model Context Protocol endpoint (on by default, `viewer.mcp.enabled`) lets assistants search the library with revocable personal tokens. Higher token levels can rate, tag, organise and cull; destructive actions preview first and need confirmation",
+   "evidence_lines": [
+    5,
+    9,
+    120
+   ]
+  },
+  "fn": "ncoevoet/facet",
+  "sha": "5a03357de056",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "279a4e9d42fc": {
+  "identity": {
+   "one_liner": "基于 SQLite 持久记忆层的编码代理感知/检索框架",
+   "review": "unified-brain 读取仓库的 git 历史，用 tree-sitter 把每个符号的各版本存入单个 SQLite 文件，配合嵌入检索和专用判断模型 Jev 回答代码问题、生成变更报告，通过 MCP 接入 Cursor、Claude Code 等工具。面向需要在大型代码库上做低成本代码问答与审计的开发者；判断模型 Jev 为专有服务，需配置多个 API 密钥。",
+   "highlights": [
+    "读取仓库全部 git 历史，用 tree-sitter 将符号级索引写入单个 SQLite 文件（.unified-brain.db）",
+    "提供 Ask 与 Timeline/reports 两类查询，附证据链（diff、调用者、判断路径）",
+    "通过 MCP 运行于 Cursor、OpenCode、Claude Code 等宿主，支持 --resume 断点续传"
+   ],
+   "use_cases": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The magic sauce is an intermediary OS (SQLITE) memory layer that facilitates retrieval, filtering and judging through a System One model, namely Jev. ／ introduced it, using tree-sitter, in one SQLite ／ |`store.py`|the database: one SQLite file, with the text index for grep and the vector tables|",
+     "lines": [
+      7,
+      72,
+      263
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明数据（符号索引、文本与向量表）存于一个 SQLite 文件中，SQLite 是其存储层而非被服务的数据库对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "introduced it, using tree-sitter, in one SQLite ／ - Python 3.11 or newer (SQLite comes with it; nothing else to install or run) ／ The ingester reads the git history and writes one file,",
+   "evidence_lines": [
+    72,
+    88,
+    132
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "DevLoops-ai/unified-brain",
+  "sha": "279a4e9d42fc",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

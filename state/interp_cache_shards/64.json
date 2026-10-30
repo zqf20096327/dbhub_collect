@@ -10641,5 +10641,80 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0c989f811a26": {
+  "identity": {
+   "one_liner": "自托管求职搜索应用，数据存于本地 Postgres",
+   "review": "ApplyPack 是一个 MIT 许可的自托管求职工具，聚合 33 类招聘源，用 AI 分类职位、核验真实性、评分简历、生成求职信并追踪申请进度，面向软件工程师。它支持 7 种可切换的 AI 后端（Claude/Gemini/Codex CLI 及本地模型等），数据存储在用户自己的 Postgres 中，默认不带 Docker，需 Node 22+，也可用 docker compose 部署。",
+   "highlights": [
+    "支持 33 类职位源（12 家 ATS 厂商、聚合站、国家板块、RSS），每小时抓取并按匹配阈值经 Telegram/Discord 提醒",
+    "提供 7 种可切换 AI 后端并带自动故障转移，包括本地 Ollama 模型",
+    "数据存储在用户本地 Postgres，README 说明备份与 worker 调度文档位于 docs/operations.md"
+   ],
+   "use_cases": [
+    "求职者自动化职位抓取、筛选与真实职位核验",
+    "针对具体职位描述进行简历关键词评分与 .docx 改写",
+    "看板式追踪申请进度并按周提醒静默停滞的申请"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The database comes with ApplyPack: no Docker, no PostgreSQL, no AI key ／ docker compose up -d # postgres + worker + dashboard → http://localhost:4747 ／ Postgres, development and hosting for other people:",
+     "lines": [
+      130,
+      164,
+      168
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用以用户自己的 Postgres 存储求职数据，Postgres 为其内嵌依赖而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可，README 声明无账号、无遥测、无托管版",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The database comes with ApplyPack: no Docker, no PostgreSQL, no AI key ／ docker compose up -d    # postgres + worker + dashboard → http://localhost:4747 ／ Postgres, development and hosting for other people:",
+   "evidence_lines": [
+    130,
+    164,
+    168
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "applypack/applypack",
+  "sha": "0c989f811a26",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

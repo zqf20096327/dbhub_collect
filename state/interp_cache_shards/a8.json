@@ -11745,5 +11745,70 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f51da7b07231": {
+  "identity": {
+   "one_liner": "Rust 库，读取 ChessBase .cbh/.cbv/.cbz 棋局数据库并转换导出",
+   "review": "cbvault 是一个 MIT 许可的 Rust 库，用于读取 ChessBase 的 .cbh 系列文件与 .cbv/.cbz 归档，提供基于 GameSink 的转换接口、有序并行转换和流式 PGN 导出，底层棋规由 gigachess 实现。面向需要在 Rust 中处理 ChessBase 格式棋局数据库的开发者；当前为 alpha 状态，2CBH 格式的着法编解码器尚未实现，且只读不写。",
+   "highlights": [
+    "读取 .cbh 系列文件的棋头、着法记录、注释、名称库与 .cbj 宽索引，并支持 PGN 导出",
+    "实现 .cbv 四种块模式解码与 .cbz 密码归档（三种密钥规则）解包",
+    "提供 GameSink 转换接口与按局号有序的 Rayon 并行转换，另有 28 MB 低内存导出模式"
+   ],
+   "use_cases": [
+    "从 ChessBase 格式棋局库批量导出 PGN",
+    "将 .cbv 归档成员无损解包到磁盘",
+    "在 Rust 程序中以流式 sink 逐局消费棋局数据"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "> these modes was GPL-3.0, so it could be *run* as an oracle but not linked or ／ ||`uncbv` (GPL, oracle)|`cbvault`| ／ `uncbv` (GPL-3.0) is used only as a test oracle, never linked, vendored or",
+     "lines": [
+      75,
+      85,
+      897
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明该库为读取 ChessBase 格式棋局数据库文件提供解析与转换能力，属于服务数据库文件生态的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT（README 声明 100% MIT），部分读者代码移植自 oschess-cb-bridge（MIT）并保留上游声明",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Read ChessBase databases from Rust — 100% MIT. ／  chess core, a conversion sink for BlindBase and a streaming PGN exporter. ／  Status: alpha / in progress",
+   "evidence_lines": [
+    3,
+    6,
+    10
+   ]
+  },
+  "fn": "itshak/cbvault",
+  "sha": "f51da7b07231",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11836,5 +11836,73 @@
   "generated_at": "2026-10-29",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2a938984cffb": {
+  "identity": {
+   "one_liner": "Go 编写的电子书/有声书自动化下载管理工具，内嵌 SQLite 存储",
+   "review": "Bindery 是一个用于 Usenet 与种子渠道的电子书和有声书自动下载管理器，支持监控作者、搜索 Newznab/Torznab 索引器、通过 SABnzbd 等客户端下载并整理入库。面向家庭媒体库用户，提供从 Readarr 数据库迁移的命令，数据存储使用内嵌 SQLite，无需外部数据库。",
+   "highlights": [
+    "支持 Newznab + Torznab 索引器并行搜索，以及 SABnzbd、NZBGet、qBittorrent、Transmission、Deluge、rTorrent 下载客户端",
+    "内置 readarr.db 迁移命令，可导入作者、索引器、下载客户端与黑名单",
+    "单个 Go 二进制内嵌 UI 与 SQLite，提供 Distroless 镜像、Helm chart 和 ARM 构建"
+   ],
+   "use_cases": [
+    "自动化追踪作者新作并下载电子书/有声书入库",
+    "从 Readarr 迁移现有库和配置",
+    "在 NAS/树莓派等环境以单二进制或 Kubernetes 部署媒体管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Boring to run, by design.** A single Go binary with the UI embedded, SQLite, no external database, no sidecars, no nginx. Distroless image, Helm chart, and ARM builds down to a Pi Zero.",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该应用内嵌 SQLite 作为自身数据存储，属于使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可",
+   "install": [
+    "docker",
+    "helm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Automated ebook &amp; audiobook management for Usenet &amp; torrents — monitor authors, search indexers, download, organize. ／ - **Boring to run, by design.** A single Go binary with the UI embedded, SQLite, no external database, no sidecars, no nginx. Distroless image, Helm chart, and ARM builds down to a Pi Zero. ／ > bindery migrate readarr /path/to/readarr.db",
+   "evidence_lines": [
+    6,
+    50,
+    58
+   ]
+  },
+  "fn": "vavallee/bindery",
+  "sha": "2a938984cffb",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

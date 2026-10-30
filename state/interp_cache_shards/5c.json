@@ -8851,5 +8851,234 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "474aa3eb451c": {
+  "identity": {
+   "one_liner": "ClickHouse 数据库备份工具，支持 S3 存储与恢复",
+   "review": "ch-backup 是面向 ClickHouse 的命令行备份与恢复工具，可将 MergeTree 系列表备份到 S3 兼容存储，支持 part 级去重、损坏后恢复、跨存储复制备份、副本与 Keeper 元数据处理。仅备份 MergeTree 引擎族表。适合运维 ClickHouse 集群的人员使用。",
+   "highlights": [
+    "将 MergeTree 表备份到 S3 兼容存储并从备份恢复",
+    "支持 part 级去重（默认启用）与备份跨 S3 存储复制",
+    "支持副本场景恢复，含 --schema-only、--parts-from-backup 与 Keeper/ZooKeeper 元数据处理"
+   ],
+   "use_cases": [
+    "ClickHouse 数据损坏后从备份恢复",
+    "将备份复制到另一 S3 bucket/端点用于容灾",
+    "副本分片的 schema 与数据恢复流程"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Backup tool for ClickHouse DBMS. ／ Tool for managing ClickHouse backups.",
+     "lines": [
+      7,
+      110
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 ClickHouse 数据库提供备份与恢复功能的专用工具，README 明确定位为 Backup tool for ClickHouse DBMS。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Backup tool for ClickHouse DBMS. ／ Backup is performed for tables of MergeTree engine family only as these are ／   Tool for managing ClickHouse backups.",
+   "evidence_lines": [
+    7,
+    12,
+    110
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "yandex/ch-backup",
+  "sha": "474aa3eb451c",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b402a74b4770": {
+  "identity": {
+   "one_liner": "自托管开源 CRM，Go+React，支持 SQLite 或 MySQL 存储",
+   "review": "这是一个面向小型销售与支持团队的自托管 CRM 应用，提供线索、商机、工单、任务管理和可嵌入的线索捕获表单。Go 后端配 React UI，默认走 MySQL，也可用单文件 SQLite 免数据库服务器运行，通过 Docker Compose 部署；SQLite 模式下单连接串行写入且迁移不可逆，需注意备份方式。",
+   "highlights": [
+    "提供线索、商机（五阶段管道）、工单、任务管理及四种角色权限",
+    "内置可嵌入网站的线索捕获表单，含多层反垃圾与可选双重确认",
+    "支持 SQLite 单文件运行与 MySQL 8 部署，均提供 Docker Compose 配置"
+   ],
+   "use_cases": [
+    "小团队自托管管理销售线索与客户支持工单",
+    "网站嵌入式表单收集线索并支持双重确认",
+    "无外部数据库服务器的轻量单实例部署（SQLite）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Go backend, React UI, SQLite or MySQL.",
+     "lines": [
+      4
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Go backend, React UI, SQLite or MySQL.",
+     "lines": [
+      4
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MySQL 8 and MariaDB 10.11 are tested in CI. Docker Compose files ship for both.",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "CRM 应用以 MySQL/SQLite 作为自身数据存储，README 声明使用而非为数据库生态服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted CRM for small teams: sales and support in one app, with lead-capture forms built in. ／ Go backend, React UI, SQLite or MySQL. ／  MySQL 8 and MariaDB 10.11 are tested in CI. Docker Compose files ship for both.",
+   "evidence_lines": [
+    3,
+    4,
+    20
+   ]
+  },
+  "fn": "florinel-chis/GopherCRM",
+  "sha": "b402a74b4770",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "070cf541eb5f": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core 与 SQL Server 的交易订单管理系统",
+   "review": "SAZOTECH-TRADING 是用 C#/.NET 10 构建的交易订单管理系统后端，模拟金融品种管理、下单与持仓，使用 SQL Server 2022 存储数据，通过 EF Core 做数据访问与迁移，以 Docker Compose 运行数据库容器。适合学习 ASP.NET Core Web API 与数据库集成的开发者，当前处于 MVP 阶段，仅部分功能完成。",
+   "highlights": [
+    "提供 ASP.NET Core REST API 与 Swagger/OpenAPI 文档",
+    "使用 EF Core Code First 迁移管理 SQL Server 数据库",
+    "通过 Docker Compose 容器化运行 SQL Server 2022"
+   ],
+   "use_cases": [
+    "金融品种与交易订单管理的模拟数据后端",
+    "学习 ASP.NET Core 与 SQL Server 集成的示例项目"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Database:** Microsoft SQL Server 2022 ／ |2|SQL Server, Docker & EF Core Integration|Completed|",
+     "lines": [
+      25,
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQL Server 存储交易业务数据，本身不是为数据库生态服务的工具",
+   "persona": "build",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SAZOTECH-TRADING is a backend-focused trading order management system designed to simulate financial instrument management, stock trading orders, trade execution, and portfolio positions. ／ - **Database:** Microsoft SQL Server 2022 ／ - SQL Server 2022 containerization",
+   "evidence_lines": [
+    15,
+    25,
+    51
+   ]
+  },
+  "fn": "datasifaw/SAZOTECH-TRADING",
+  "sha": "070cf541eb5f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

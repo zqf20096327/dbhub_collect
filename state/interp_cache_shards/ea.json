@@ -9972,5 +9972,77 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "829bc87e2145": {
+  "identity": {
+   "one_liner": "学习者自有型 AI 教育平台，多智能体编排生成私人课程并 RAG 辅导",
+   "review": "一个双角色电子学习平台，用户输入学习目标后由多智能体编排器生成私人课程，并配有带引用的课程级 RAG 辅导、课程分享/克隆与 BYOK 模型密钥管理。技术栈为 FastAPI + SQLAlchemy/Alembic/Celery，数据存于 PostgreSQL 17（pgvector + tsvector）与 Redis/MinIO，通过 Docker Compose 运行，并内置评测、审计追踪和 MCP server。适合自部署学习的开发者。",
+   "highlights": [
+    "自定义多智能体编排器（五子代理辅导 + 六阶段课程生成流水线），不依赖 LangChain",
+    "课程级 RAG 检索带引用与 ACL 权限隔离，嵌入存入 pgvector",
+    "提供 MCP server（stdio + HTTP，OAuth client-credentials）及 LLM-as-judge 评测体系"
+   ],
+   "use_cases": [
+    "个人自部署 AI 学习/课程生成平台",
+    "将课程目录与辅导能力接入支持 MCP 的客户端（如 Claude Desktop）",
+    "多智能体 + RAG + 评测的参考实现项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Retrieval is scoped per course and routed through a single ACL clause (`visibility.py`, ADR-0029) so private and cloned courses never leak chunks. Embeddings via Cloudflare Workers AI (`bge-small-en-v1.5`, 384-dim) into `pgvector`; answers cite specific lesson ／ **Stack:** Python 3.13 · FastAPI · async SQLAlchemy 2 · Alembic · Celery — Next.js 15 · React 19 · TypeScript 5 · Tailwind 4 · TanStack Query — PostgreSQL 17 (`pgvector` + `tsvector`) · Redis 7 · MinIO — Docker Compose · GitHub Actions · Trivy + CodeQL + gitle",
+     "lines": [
+      49,
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是用 PostgreSQL 17 存储课程/检索/日志数据的完整应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp",
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A **learner-owned, two-role e-learning platform** — every signed-in user runs the whole loop themselves; `admin` only moderates and configures. The product is the loop; the point of the repo is the agentic system underneath it. ／ Retrieval is scoped per course and routed through a single ACL clause (`visibility.py`, ADR-0029) so private and cloned courses never leak chunks. Embeddings via Cloudflare Workers AI (`bge-small-en-v1.5`, 384-dim) into `pgvector`; answers cite specific lesson chunks. ／ **Stack:** Python 3.13 · FastAPI · async SQLAlchemy 2 · Alembic · Celery — Next.js 15 · React 19 · TypeScript 5 · Tailwind 4 · TanStack Query — PostgreSQL 17 (`pgvector` + `tsvector`) · Redis 7 · MinIO — Docker Compose · GitHub Actions · Trivy + CodeQL + gitleaks · Caddy 2.",
+   "evidence_lines": [
+    22,
+    49,
+    111
+   ]
+  },
+  "fn": "ahmedEid1/lumen",
+  "sha": "829bc87e2145",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

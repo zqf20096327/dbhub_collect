@@ -10840,5 +10840,82 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fe1139e02b46": {
+  "identity": {
+   "one_liner": "GreenCampus 学生门户的 Flask 管理后台",
+   "review": "这是 GreenCampus 学生门户的管理端面板，基于 Flask 实现 63 个 API 接口，用于管理学生、宿舍房间与物品槽位、小组、申请、公告、罚金、食堂菜单和洗衣状态，并通过仪表盘展示 6 项 KPI。它与学生端站点共享同一数据库，通过 PyMySQL 以 SSL 连接 MySQL 兼容的 TiDB Cloud，需与学生端成对部署。适合该校园系统的管理人员使用。",
+   "highlights": [
+    "提供 63 个 /api/admin/* 接口，覆盖学生、房间、小组、申请、罚金、食堂、洗衣等实体的 CRUD 与批量操作",
+    "所有接口由 admin_required 会话守卫保护，破坏性操作附带日志记录",
+    "支持全部实体的 CSV 一键导出及操作日志查看与清理"
+   ],
+   "use_cases": [
+    "校园宿舍管理：房间槽位、室友请求强制裁决、罚金管理",
+    "与学生端 greencampus 成对部署，作为同库管理后台",
+    "按实体导出 CSV 数据做线下统计"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Database|MySQL-compatible **TiDB Cloud** (SSL, `PyMySQL`) — **shared schema with the student site `greencampus`**| ／ |`DB_HOST`|MySQL / TiDB host|—|",
+     "lines": [
+      55,
+      74
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|Database|MySQL-compatible **TiDB Cloud** (SSL, `PyMySQL`) — **shared schema with the student site `greencampus`**| ／ |`DB_HOST`|MySQL / TiDB host|—|",
+     "lines": [
+      55,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 TiDB Cloud/MySQL 存数据的 Flask 应用，与 greencampus 学生站共享同一数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "个人/教育项目许可说明，无标准开源许可证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**GreenCampus Admin** is the administrative panel of the ／ |Database|MySQL-compatible **TiDB Cloud** (SSL, `PyMySQL`) — **shared schema with the student site `greencampus`**| ／ ├── app.py               # Flask app + all /api/admin/<action> handlers (~1.9k lines)",
+   "evidence_lines": [
+    17,
+    55,
+    63
+   ]
+  },
+  "fn": "Abdullayews/greencampusadmin",
+  "sha": "fe1139e02b46",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

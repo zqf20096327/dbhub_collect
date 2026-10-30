@@ -11167,5 +11167,71 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3ccca9dbb0f2": {
+  "identity": {
+   "one_liner": "Apple Mail 的 MCP server，用 SQLite 实现毫秒级邮件搜索",
+   "review": "一个用 Swift 编写的 Apple Mail MCP server，提供 59 个工具，包括基于 SQLite 的毫秒级邮件搜索、.emlx 解析、批量导出 markdown 和邮件撰写。面向使用 Claude 等 MCP 客户端的 macOS 用户，通过插件安装并需授予完全磁盘访问权限；撰写功能不经 AppleScript 注入正文以避免引用块包裹。仅支持 macOS 平台。",
+   "highlights": [
+    "提供 59 个 MCP 工具，覆盖搜索、邮箱管理、VIP、规则、签名、原始头读取等操作",
+    "通过 SQLite 读取路径实现毫秒级搜索，SQLite 读取失败时回退到 AppleScript",
+    "提供 Developer ID 签名并公证的二进制，附带归档命令族与 staleness hook"
+   ],
+   "use_cases": [
+    "在 MCP 客户端中对 25 万封以上邮件进行本地快速搜索与分类",
+    "批量导出邮件为 markdown 及备份归档",
+    "通过 MCP 接口撰写、回复、转发邮件并管理签名与规则"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**The most comprehensive Apple Mail MCP server** - 59 tools with SQLite-powered millisecond search across 250K+ emails.",
+     "lines": [
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 MCP server 为客户端与 Mail 之间的自动化提供接口，SQLite 仅为内部索引实现，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**The most comprehensive Apple Mail MCP server** - 59 tools with SQLite-powered millisecond search across 250K+ emails. ／ Registering the MCP server by itself is a supported advanced path, but it is a ／ swift build -c release",
+   "evidence_lines": [
+    8,
+    86,
+    105
+   ]
+  },
+  "fn": "PsychQuant/che-apple-mail-mcp",
+  "sha": "3ccca9dbb0f2",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

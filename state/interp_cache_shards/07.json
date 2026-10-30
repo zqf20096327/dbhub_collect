@@ -11071,5 +11071,83 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "76fe428a1ef2": {
+  "identity": {
+   "one_liner": "基于 Zig 与 QuickJS 的后端 JavaScript 运行时",
+   "review": "Fairyfly 是用 Zig 编写、以 QuickJS 为引擎的后端 JavaScript 运行时，提供 HTTP 服务器、fetch、WebSocket、SQLite 存储和 Postgres 客户端（sql/SQL 标签模板）等内置能力，面向冷启动敏感、内存受限的后端任务。不支持 CommonJS、TypeScript 和 DOM，ESM 专用，适合需要小型可审计运行时的开发者。",
+   "highlights": [
+    "内置 http.serve、fetch、WebSocket、SQLite Database 与 Postgres sql 模块",
+    "提供 prebuilt binary、Docker 镜像与源码构建三种安装方式",
+    "Linux 默认使用 io_uring 后端，可通过构建选项切换 epoll"
+   ],
+   "use_cases": [
+    "部署对冷启动和内存限制敏感的后端服务或边缘函数",
+    "运行短生命周期任务和 CLI 工具",
+    "以同步 SQLite/Postgres API 编写小型数据存取脚本"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Guides|HTTP server, fetch, WebSocket, TLS, HTTP/2, Postgres packages, modules, workers, timers, testing, bytecode, environment, deploy| ／ |`sql` / `SQL`|Postgres tagged templates; failures reject with real `Error`s (`code` / `severity` / `message`)|",
+     "lines": [
+      29,
+      154
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Store** (SQLite guide): ／ Vendors (`quickjs-ng` 0.16.2, BearSSL 0.6, SQLite 3.53.4, nghttp2 1.70.0)",
+     "lines": [
+      130,
+      227
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是通用 JavaScript 运行时，内置 Postgres 客户端与 SQLite 引擎为其能力之一，并非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MPL-2.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A lightweight, backend-focused JavaScript runtime built with Zig and powered by ／ |`sql` / `SQL`|Postgres tagged templates; failures reject with real `Error`s (`code` / `severity` / `message`)| ／ Vendors (`quickjs-ng` 0.16.2, BearSSL 0.6, SQLite 3.53.4, nghttp2 1.70.0)",
+   "evidence_lines": [
+    9,
+    154,
+    227
+   ]
+  },
+  "fn": "AbdElMajidOuhamane/ff",
+  "sha": "76fe428a1ef2",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

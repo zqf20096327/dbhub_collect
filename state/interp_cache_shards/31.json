@@ -9617,5 +9617,156 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6d0f2fa46806": {
+  "identity": {
+   "one_liner": "面向 AI 编程代理的本地持久记忆 MCP 服务器",
+   "review": "为 Claude Code、Codex CLI、Cursor 等 MCP 客户端提供跨会话持久记忆：以 SQLite 为本地存储，结合 BM25、本地向量嵌入与知识图并做排序融合，提供 79 个 MCP 工具；可选团队服务器使用 PostgreSQL 后端。适合日常使用编程代理的开发者与需要可本地运行记忆基线的研究者，默认档案在读写时不调用 LLM。",
+   "highlights": [
+    "本地存储（每存储目录围绕 SQLite 数据库），支持 BM25、本地稠密嵌入、模糊匹配与知识图融合检索",
+    "通过 MCP 协议提供服务，含 79 个 MCP 工具，支持 Claude Code、Codex CLI、Cursor 等 9 类客户端",
+    "提供团队服务器模式，个人/部门/公司分区隔离，带角色与审计；基准测试脚本可离线复现"
+   ],
+   "use_cases": [
+    "为编程代理跨会话保存与召回项目决策、修复方案与代码约定",
+    "本地可复现的代理记忆检索基线实验",
+    "团队共享记忆：多层级存储分区、权限与审计"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`pip install \"total-agent-memory[rerank]\"`. The PostgreSQL backend of the team ／ - **PostgreSQL** (team server backend): install the extra with",
+     "lines": [
+      50,
+      136
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Each store is one directory built around a SQLite database. Recall combines",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 AI 编程代理提供记忆服务的 MCP 服务器组件，本地默认以 SQLite 存储、团队服务器可选 PostgreSQL 后端，而非使用数据库构建的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "pypi",
+    "docker",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "total-agent-memory (TAM) is an open-source memory server for AI coding agents. ／ Each store is one directory built around a SQLite database. Recall combines ／ `pip install \"total-agent-memory[rerank]\"`. The PostgreSQL backend of the team",
+   "evidence_lines": [
+    14,
+    21,
+    50
+   ]
+  },
+  "fn": "vbcherepanov/total-agent-memory",
+  "sha": "6d0f2fa46806",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e33fdc9964e9": {
+  "identity": {
+   "one_liner": "AI 小说分析工具，用 LLM 把小说拆解为可交互知识图谱",
+   "review": "上传小说文本后通过 LLM 抽取人物、关系、地点、事件等结构化事实，生成关系图谱、世界地图、时间线与百科，并提供 RAG 问答与设定集导出。面向网文整理、文学研究、创作辅助等场景的用户。数据以 SQLite 与 ChromaDB 存于本机，支持 Ollama 本地模型或 OpenAI 兼容云端 API，当前安装包为 ad-hoc 未签名。",
+   "highlights": [
+    "将小说按章抽取为结构化 ChapterFact（人物、关系、地点、物品、组织、事件），聚合成实体档案",
+    "支持本地 Ollama 与 10 家 OpenAI 兼容云端供应商，数据默认存于本机 SQLite + ChromaDB",
+    "提供关系图谱、多层级地图、多泳道时间线、百科全书与可溯源 RAG 问答"
+   ],
+   "use_cases": [
+    "网文/小说世界观整理与人物关系梳理",
+    "文学研究中角色网络与叙事结构的可视化探索",
+    "创作辅助与设定集导出、同人二创参考"
+   ],
+   "cat_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **本地优先**：SQLite + ChromaDB 落在本机；可接本地 Ollama，也可接云端 OpenAI 兼容 API。 ／ |数据|SQLite（结构化）+ ChromaDB（向量检索）|",
+     "lines": [
+      46,
+      157
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 存储结构化分析数据、ChromaDB 做向量检索，数据库仅作为其应用的存储层",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，另有商业许可条款",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **本地优先**：SQLite + ChromaDB 落在本机；可接本地 Ollama，也可接云端 OpenAI 兼容 API。 ／ |数据|SQLite（结构化）+ ChromaDB（向量检索）| ／ **上传一本小说，自动生成人物关系图、世界地图、时间线、百科和可溯源问答。**",
+   "evidence_lines": [
+    46,
+    157,
+    13
+   ]
+  },
+  "fn": "mouseart2025/AI-Reader-V2",
+  "sha": "e33fdc9964e9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

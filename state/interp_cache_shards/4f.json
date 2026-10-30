@@ -11853,5 +11853,278 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3d75141b3102": {
+  "identity": {
+   "one_liner": "单人多公司运营指挥中心，集成AI代理与知识图谱仪表盘",
+   "review": "FounderOS 是一个面向单人运营公司的开源工作台，将客户、沟通、社媒增长、财务、知识与 AI 代理集中在同一仪表盘。基于 Node.js/npm 运行于本地，首次启动进入演示模式，数据存于本地 data/ 目录，可选接入 G-Brain CLI 做本地 markdown 知识库检索。适合独立创始人在本地管理业务流程。",
+   "highlights": [
+    "提供命令中心、客户漏斗、收件箱、财务与部门工作区等运营视图",
+    "提供 AI 代理名册、任务通道与运行历史看板",
+    "支持通过 Integrations 配置 email、Slack、Notion、Stripe 等外部服务，密钥保存在本地 .env.local"
+   ],
+   "use_cases": [
+    "单人公司在单一仪表盘中管理客户、财务与社媒运营",
+    "在本地维护可搜索的知识库与公司上下文",
+    "配置并审查 AI 代理任务与运行历史"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是一个使用本地数据目录运行的业务应用本身，未提供为某数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "## Your AI-powered command center for a one-person company ／ FounderOS brings the moving parts of a small business into one place: clients, ／ - **Run your business:** use the command center, client funnel, inbox, finances,",
+   "evidence_lines": [
+    3,
+    5,
+    45
+   ]
+  },
+  "fn": "Bennettxai/FounderOS",
+  "sha": "3d75141b3102",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "12a6bc81d78d": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的自托管 AI 知识库，混合语义检索",
+   "review": "Fortémi 是一个自托管的 AI 知识库服务，用 Rust 编写，将笔记、文件、音视频等多模态内容摄取后存入 PostgreSQL（pgvector 向量 + PostGIS 空间 + FTS 全文），通过 BM25 与向量检索的 RRF 融合实现混合搜索，并提供知识图谱、44 个 MCP 工具和多 LLM 推理后端。面向需要 RAG、agent 记忆、团队文档管理的个人或团队，通过 Docker bundle 或桌面应用 HotM 部署。",
+   "highlights": [
+    "混合检索：BM25 全文 + 向量相似度经 RRF 融合，辅以 MMR 多样性重排",
+    "13 种内容抽取适配器，处理图像、音频转写、视频、3D 模型、邮件、表格、压缩包",
+    "提供 MCP server，包含 44 个 agent 工具；支持 Ollama/OpenAI/OpenRouter/llama.cpp 多推理后端"
+   ],
+   "use_cases": [
+    "构建 RAG 与 agent 记忆的自托管后端",
+    "团队文档与知识图谱管理",
+    "本地/边缘环境的多模态内容检索与归档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ 5. **Store** — PostgreSQL with pgvector (vectors), PostGIS (spatial), FTS (text), and per-memory schema isolation",
+     "lines": [
+      15,
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 PostgreSQL 作为自身存储层（pgvector/PostGIS/FTS），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "5. **Store** — PostgreSQL with pgvector (vectors), PostGIS (spatial), FTS (text), and per-memory schema isolation ／ Fortémi is an intelligent database for AI-ready applications: a normalized data schema plus data-science and processing tooling that turns messy organizational data into searchable, linkable, provenance-aware structures. The same schema runs across the server, browser edition, and HotM sidecar, giving teams a common substrate for complex, data-rich, compute-heavy applications while keeping deployment affordable on local, edge, or hosted infrastructure.",
+   "evidence_lines": [
+    111,
+    34
+   ]
+  },
+  "fn": "Fortemi/fortemi",
+  "sha": "12a6bc81d78d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3f1394927ad9": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Keystone.js 的餐厅管理开源应用",
+   "review": "面向餐饮行业的餐厅管理系统，提供 POS、厨房显示、桌台、菜单与等位预约等功能。技术栈为 Next.js 15 + KeystoneJS 6（GraphQL）+ Prisma ORM，数据存于 PostgreSQL，可通过 Vercel/Railway 部署或本地源码运行，采用 MIT 许可。适合自托管的餐厅运营场景。",
+   "highlights": [
+    "提供 POS、厨房显示系统（KDS）、桌台与座位管理、菜单工程、等位与预约功能",
+    "后端为 KeystoneJS 6 GraphQL API，数据存储使用 PostgreSQL 与 Prisma ORM",
+    "内置 MCP 驱动的 AI 助手，可通过自然语言管理菜单、库存与桌台状态，并遵循角色权限"
+   ],
+   "use_cases": [
+    "餐厅线上点餐与前厅 POS 运营",
+    "后厨订单显示与出品协调",
+    "顾客等位叫号与预订管理"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database**: PostgreSQL with Prisma ORM ／ - PostgreSQL database ／ DATABASE_URL=\"postgresql://username:password@localhost:5432/openfront_restaurant\"",
+     "lines": [
+      90,
+      106,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "eco_why": "该项目是使用 PostgreSQL 存储数据的餐厅管理应用，而非为数据库生态服务的工具。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Openfront Restaurant is a specialized version of the Openfront platform designed specifically for the food and beverage industry. It provides a complete suite of tools for restaurant management, including Point of Sale (POS), Kitchen Display Systems (KDS), table management, menu engineering, and waitlist handling. ／ - **Frontend**: Next.js 15 with App Router ／ - **Database**: PostgreSQL with Prisma ORM ／ - PostgreSQL database",
+   "evidence_lines": [
+    7,
+    88,
+    90,
+    106
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "openshiporg/openfront-restaurant",
+  "sha": "3f1394927ad9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "46442774650b": {
+  "identity": {
+   "one_liner": "个人开发者作品集主页，展示多个已部署的全栈应用",
+   "review": "这是 Muhammad Rizki Ramadhani 的 GitHub 个人资料 README，展示其全栈/边缘计算项目组合，包括设备租赁 ERP、档案系统、记账 PWA、购票引擎及工具集，并附成就矩阵与实习经历。面向潜在雇主与合作方；其中 KiosAI 与 Embun Laundry 两个项目声明使用 TiDB/ TiDB Cloud 作为数据层。",
+   "highlights": [
+    "展示多个已部署的生产应用及其技术栈（Next.js、FastAPI、Cloudflare Workers 等）",
+    "包含成就清单、贡献可视化与联系方式等个人资料信息",
+    "工具表中列出 KiosAI（TiDB Cloud）与 Embun Laundry（TiDB）两个使用 TiDB 的项目"
+   ],
+   "use_cases": [
+    "展示开发者个人项目组合与工程能力",
+    "了解各应用采用的数据库与边缘部署架构",
+    "联系作者进行招聘或合作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|**KiosAI**|Multi-model digital token shop with HttpOnly session recovery, Compare-And-Swap (CAS) token accounting, and DOKU QRIS billing.|`Next.js 15` `TiDB Cloud` `QRIS`|**tokoai.my.id →**| ／ |**Embun Laundry**|Serverless laundry order tracking, customer lifecycle ledger, and automated receipt processing deployed on Cloudflare Workers edge.|`Cloudflare Workers` `TiDB` `JS`|**Live Demo →**|",
+     "lines": [
+      87,
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 是个人作品集主页，其中项目声明使用 TiDB 存储数据，属于使用数据库的应用集合。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**KiosAI**|Multi-model digital token shop with HttpOnly session recovery, Compare-And-Swap (CAS) token accounting, and DOKU QRIS billing.|`Next.js 15` `TiDB Cloud` `QRIS`|**tokoai.my.id →**| ／ |**Embun Laundry**|Serverless laundry order tracking, customer lifecycle ledger, and automated receipt processing deployed on Cloudflare Workers edge.|`Cloudflare Workers` `TiDB` `JS`|**Live Demo →**| ／ Real systems operating in production environments with verified business logic, multi-tenant RBAC, and cloud backends.",
+   "evidence_lines": [
+    87,
+    90,
+    31
+   ]
+  },
+  "fn": "Dhani078/Dhani078",
+  "sha": "46442774650b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

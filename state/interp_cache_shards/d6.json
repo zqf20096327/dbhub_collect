@@ -10768,5 +10768,164 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6c8743ade430": {
+  "identity": {
+   "one_liner": "Windows/macOS 本地开发环境管理工具，一键安装运行 nginx/PHP/MySQL 等服务",
+   "review": "EnvKit 是面向 Windows 和 macOS 的本地开发环境工具，以托盘应用管理 nginx/Apache、多版本 PHP、Node.js 以及 MySQL、PostgreSQL、Redis 等数据库服务，提供 .test 域名 HTTPS、数据库备份和内置 MCP 服务器供 AI 助手控制本地栈。面向 PHP/Node 开发者；该仓库为发布仓库，软件免费但闭源。",
+   "highlights": [
+    "一键安装并管理 MySQL/MariaDB、PostgreSQL、Redis、MongoDB 等服务，支持自定义版本",
+    "内置 phpMyAdmin、Adminer、pgAdmin 等数据库管理界面，并支持站点数据库备份与恢复",
+    "提供 MCP 服务器，允许 AI 客户端在本地诊断和修复服务"
+   ],
+   "use_cases": [
+    "本地搭建 PHP/Node 开发栈并连接 MySQL、PostgreSQL 等数据库",
+    "从 Laragon/XAMPP 迁移项目与数据库到新环境",
+    "通过 AI 助手（MCP）运维本地服务"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "version, MySQL, PostgreSQL, Redis and trusted `.test` HTTPS, from one desktop app. ／ Redis, PostgreSQL or Python by typing its number. ／ - 🗄️ **One-click services.** MySQL/MariaDB (including MySQL 8), PostgreSQL, Redis, MongoDB,",
+     "lines": [
+      8,
+      67,
+      73
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "version, MySQL, PostgreSQL, Redis and trusted `.test` HTTPS, from one desktop app. ／ - 🧷 **Custom versions.** Install any version of MySQL/MariaDB, nginx, Node.js, MongoDB, ／ - 🗄️ **One-click services.** MySQL/MariaDB (including MySQL 8), PostgreSQL, Redis, MongoDB,",
+     "lines": [
+      8,
+      66,
+      73
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- 🧷 **Custom versions.** Install any version of MySQL/MariaDB, nginx, Node.js, MongoDB, ／ - 🗄️ **One-click services.** MySQL/MariaDB (including MySQL 8), PostgreSQL, Redis, MongoDB,",
+     "lines": [
+      66,
+      73
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ],
+   "eco": "tool",
+   "eco_why": "该工具负责安装、运行和管理 MySQL/PostgreSQL 等数据库服务及配套管理界面，为开发环境提供服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "免费使用但非开源，保留所有权利",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🗄️ **One-click services.** MySQL/MariaDB (including MySQL 8), PostgreSQL, Redis, MongoDB, ／ EnvKit ships a built-in Model Context Protocol server, ／ EnvKit is **free to use** but **not open source**. All rights reserved. This repository",
+   "evidence_lines": [
+    73,
+    108,
+    270
+   ]
+  },
+  "fn": "Env-Kit/envkit-releases",
+  "sha": "6c8743ade430",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0f3d81e89757": {
+  "identity": {
+   "one_liner": "面向 AI 代理的数据层：每主题一个 SQLite 数据库，经 MCP 操作",
+   "review": "BaguetteDB 是一个单二进制工具，为每个主题创建独立的 SQLite 数据库文件（bdb），AI 代理通过 MCP（stdio 或 HTTP）或命令行用 SQL 读写，内置 schema 描述、公式、技能说明及可撤销的变更日志，数据经 SQLCipher 加密并支持邀请共享。适合让个人 AI 代理与用户协作管理主题化结构化数据；Windows 尚不支持，serve 模式为明文 HTTP。",
+   "highlights": [
+    "代理通过 MCP（stdio/Streamable HTTP）或 bdb 命令行以 SQL 读写 bdb，schema 与规则内建描述",
+    "每次变更记录日志并支持 undo/redo 与单条或批量回滚",
+    "每个 bdb 使用 SQLCipher 独立加密，支持邀请共享与 owner/editor/viewer 角色"
+   ],
+   "use_cases": [
+    "让 AI 代理管理个人主题数据（看板、购物、健身、助手记忆等）",
+    "通过 Claude Desktop 等 MCP 客户端操作本地结构化数据库",
+    "在本机或局域网内通过 web 应用与 REST 式界面共享 bdb"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A **bdb** (short for *baguettedb*) is a small SQLite database about one thing: your groceries, your workouts, a kanban ／ SQLite file per bdb, the instance store with the accounts and memberships, and the `kek` file that unlocks every bdb.",
+     "lines": [
+      14,
+      103
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为 AI 代理提供数据层组件（MCP 服务端 + CLI + web 应用），每个 bdb 基于一个 SQLite 文件实现",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Functional Source License (FSL-1.1-ALv2)，fair source",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**The data layer for your AI agents: one structured database per topic, each shared with exactly the people you ／ A **bdb** (short for *baguettedb*) is a small SQLite database about one thing: your groceries, your workouts, a kanban ／ SQLite file per bdb, the instance store with the accounts and memberships, and the `kek` file that unlocks every bdb.",
+   "evidence_lines": [
+    3,
+    14,
+    103
+   ]
+  },
+  "fn": "alexandremgo/baguettedb",
+  "sha": "0f3d81e89757",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

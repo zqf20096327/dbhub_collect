@@ -11457,5 +11457,90 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4ec4ca761696": {
+  "identity": {
+   "one_liner": "面向编码 Agent 的分析工程工具，提供数仓探索、dbt 转换与漂移维护",
+   "review": "Dex 是一组供编码 Agent（Claude Code、Codex 等）调用的技能与配套引擎 exmergo-dex-core，用于数仓探索、dbt 模型与语义层构建、schema 漂移检测。对数据工程师/分析工程师设计，内置只读保护、PII 防火墙、费用预估与 dev-only 构建等约束。需本机安装 uv 与具有本地 shell 的 Agent。",
+   "highlights": [
+    "提供 Explore/Transform/Maintain 三类技能：仓库盘点、列画像、连接推断与验证、ER 图生成、dbt 与语义层编辑、漂移检测",
+    "通过连接器支持 Snowflake、BigQuery、Databricks、Redshift、ClickHouse、Trino、DuckDB、Postgres",
+    "内置护栏：源数据只读、PII 查询防火墙、计费前报价、仅在 dev target 构建"
+   ],
+   "use_cases": [
+    "在不熟悉的数仓中做探索盘点与血缘/连接梳理",
+    "由 Agent 辅助编写和重构 dbt 模型并以 diff 计划人工审核",
+    "检测仓库、dbt 项目与语义层间的 schema/体量/指标定义漂移"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Postgres**|Operational database|✅|`postgres`|Database-seconds|`pg_service.conf`, `DATABASE_URL`, `PG*` env, or a dbt profile|",
+     "lines": [
+      240
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**ClickHouse**|Analytical database|✅|`clickhouse`|Compute-seconds on Cloud, database-seconds self-hosted|`CLICKHOUSE_URL`, `CLICKHOUSE_*` env, or a dbt profile|",
+     "lines": [
+      237
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "`.dex/dex.db` is the SQLite backend's equivalent of `cache.json`, so it gets",
+     "lines": [
+      216
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它连接并操作各类数仓/数据库，为分析工程流程提供服务，是数据库生态的周边工具而非存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dex lets your agent build your analytics: data warehouse exploration, dbt data transformation and semantic modeling, ／ ## Connectors ／ |**Postgres**|Operational database|✅|`postgres`|Database-seconds|`pg_service.conf`, `DATABASE_URL`, `PG*` env, or a dbt profile|",
+   "evidence_lines": [
+    7,
+    229,
+    240
+   ]
+  },
+  "fn": "exmergo/dex",
+  "sha": "4ec4ca761696",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

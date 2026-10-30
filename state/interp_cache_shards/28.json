@@ -11440,5 +11440,168 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7964f919c08e": {
+  "identity": {
+   "one_liner": "Python 异步 ORM，声明 Pydantic 模型，Rust 引擎生成并执行 SQL",
+   "review": "Ferro 是一个 Python 异步 ORM：用户声明 Pydantic v2 模型，内置 Rust 引擎在 GIL 外生成 SQL、执行并解析行。通过 pip 安装预编译 wheel，附带迁移 CLI 和 Alembic 桥接；支持 SQLite 与 PostgreSQL 且驱动编译进引擎。适合 Python 异步开发者；尚处早期阶段。",
+   "highlights": [
+    "模型声明使用 Pydantic v2，验证与 IDE 支持沿用 Pydantic",
+    "Rust 引擎在 GIL 外生成 SQL 并解析行，基于 pyo3-async-runtimes 与 SQLx",
+    "提供迁移 CLI（ferro migrate）及 Alembic 桥接，支持命名多连接"
+   ],
+   "use_cases": [
+    "Python asyncio 项目的数据访问层",
+    "需要类型验证与 ORM 一体化的 Pydantic 应用",
+    "开发测试中自动建表、生产中审查式迁移的 schema 管理"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- It supports SQLite and PostgreSQL. Both are compiled into the engine, so no driver packages are needed.",
+     "lines": [
+      40
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- It supports SQLite and PostgreSQL. Both are compiled into the engine, so no driver packages are needed.",
+     "lines": [
+      40
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库访问提供 ORM/驱动组件，而非以数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Ferro is an async ORM for Python: you declare Pydantic models, and a Rust engine builds the SQL, runs it and turns rows into model instances. Its runtime dependencies are Pydantic and pydantic-settings. ／ - It supports SQLite and PostgreSQL. Both are compiled into the engine, so no driver packages are needed. ／ pip install ferro-orm",
+   "evidence_lines": [
+    15,
+    40,
+    47
+   ]
+  },
+  "fn": "syn54x/ferro-orm",
+  "sha": "7964f919c08e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4b34ccb1407b": {
+  "identity": {
+   "one_liner": "Node.js 与浏览器的对象关系映射（ORM）应用数据框架",
+   "review": "Nymph.js 是面向 Node.js 与浏览器的数据对象框架，包含 ORM、查询语言、用户/组管理与访问控制、REST 服务、PubSub 实时协作服务及客户端。通过专用驱动适配 MySQL、PostgreSQL、SQLite3 三种数据库后端，以 npm 包安装。适用于需在前后端共享数据模型并使用关系型数据库存储的 JavaScript 开发者。",
+   "highlights": [
+    "提供 ORM，支持嵌套原子事务与查询语言",
+    "提供 MySQL、PostgreSQL、SQLite3 三种数据库驱动",
+    "内置 REST 服务器、PubSub 服务器和用户/组访问控制系统（Tilmeld）"
+   ],
+   "use_cases": [
+    "Node.js/Web 应用中的数据对象持久化与查询",
+    "需要实时协作更新的前后端应用",
+    "需要用户注册、登录与细粒度访问控制的系统"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Nymph can use SQLite3, MySQL, or PostgreSQL as its database backend. You can use SQLite in development, and MySQL or Postgres in production. You can even use Nymph with SQLite in an Electron app. ／ ## PostgreSQL Driver ／ The PostgreSQL driver lets you configure Nymph to query and save data to a Postgres database.",
+     "lines": [
+      9,
+      31,
+      33
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Nymph can use SQLite3, MySQL, or PostgreSQL as its database backend. You can use SQLite in development, and MySQL or Postgres in production. You can even use Nymph with SQLite in an Electron app. ／ ## MySQL Driver ／ The MySQL driver lets you configure Nymph to query and save data to a MySQL database.",
+     "lines": [
+      9,
+      27,
+      29
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Nymph can use SQLite3, MySQL, or PostgreSQL as its database backend. You can use SQLite in development, and MySQL or Postgres in production. You can even use Nymph with SQLite in an Electron app. ／ ## SQLite3 Driver ／ The SQLite3 driver lets you configure Nymph to query and save data to a SQLite3 database. This includes an in memory SQLite3 database.",
+     "lines": [
+      9,
+      35,
+      37
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 ORM 框架通过专用驱动适配多种数据库，为数据库生态服务而非以某库为存储的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Nymph.js includes an object relational mapper with nested, atomic transactions, a powerful query language, a user and group manager with granular access controls, a REST server, a publish/subscribe server for real time collaboration, and a client for Node.js and the browser. It allows rapid prototyping and production ready speed and features. ／ All you need to start using Nymph is the `@nymphjs/nymph` package and one of the drivers, `@nymphjs/driver-mysql`, `@nymphjs/driver-postgresql`, or `@nymphjs/driver-sqlite3`. Check out the readme for the Nymph package. ／ ## MySQL Driver",
+   "evidence_lines": [
+    7,
+    15,
+    27
+   ]
+  },
+  "fn": "sciactive/nymphjs",
+  "sha": "4b34ccb1407b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

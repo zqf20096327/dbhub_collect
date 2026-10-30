@@ -9768,5 +9768,187 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "97a4dfd6d23e": {
+  "identity": {
+   "one_liner": "企业技术支持场景的 RAG 问答与受控工单 Agent 后端",
+   "review": "面向企业技术支持场景的后端 API，提供知识库检索、带来源回答/拒答和预览-确认式工单创建，基于 FastAPI 构建，使用 SQLite 作为文档后端存储、Chroma 做向量检索、DashScope 提供 embedding/重排/生成，并以 AgentOps 记录运行与审批链路。适合技术支持团队搭建可控的知识问答与工单升级流程；README 明确标注多项语义质量仍未验证、依赖配置凭据和人工审批。",
+   "highlights": [
+    "提供 /rag/search、/rag/ask 接口，支持 Hybrid 检索（Dense+BM25+RRF+qwen3-rerank）与来源级证据门控",
+    "提供受控工单 Agent（search_kb/classify_ticket/create_ticket），预览与真实建单分离，需人工确认",
+    "包含 AgentOps 运行记录、审批轨迹、检索审计与基于 TechQA 语料的评测框架"
+   ],
+   "use_cases": [
+    "企业技术支持知识库问答与拒答场景",
+    "需人工审批的技术支持工单升级流程",
+    "检索/生成/拒答策略的离线评测与失败归因分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "离线集成检查：`pytest tests/test_hybrid_search.py -k ticket_hybrid_document_to_decision`。通过真实 Uvicorn 回环 HTTP、JWT、上传/索引、临时 SQLite 与 Chroma，分别验证 Hybrid 预览后的确认、拒绝和取消，以及 trace/metrics 查询、租户与角色隔离；只有显式确认会在临时库产生测试工单。外部 embedding/rerank 使用替身，不是检索质量或并发审批验收，不外发资料、不修改日常数据。 ／ 真实模式只发送脚本内固定的四篇虚构说明及两个查询，使用独立临时 SQLite、Chroma 与上传目录，经过 ASGI 路由及 Demo JWT 认证，不连接已运行的服务、不改现有数据库和开关。检查显式 Dense 回退、Hybrid 简单排序、租户/分类隔离、删除生效、空语料零调用及检索审计；不是 HTTP 网络部署验收或准确率评测。",
+     "lines": [
+      122,
+      209
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统使用 SQL 文档后端与临时 SQLite 存储数据、经 Chroma 检索，是使用数据库的业务应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向**企业技术支持**场景，构建知识检索、回答 / 拒答与工单升级一体化的 **RAG + 受控工单 Agent 后端**。 ／ - 只检索 SQL 文档后端标记为 `indexed`、当前版本、当前租户且匹配 category 的 chunk；两个通道共享此范围。仅存在于旧静态 Chroma 索引、未通过文档后端登记的内容不进入 Hybrid；TechQA 离线语料也不会自动导入。 ／ → 充分：基于完整有序来源生成，校验 [Source N] 属于 gate 支持的来源",
+   "evidence_lines": [
+    5,
+    191,
+    244
+   ]
+  },
+  "fn": "Air000000/Enterprise-Support-AI-Copilot-API",
+  "sha": "97a4dfd6d23e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dd09b4c80c99": {
+  "identity": {
+   "one_liner": "语音优先、本地 SQLite 存储的个人语音记账应用",
+   "review": "一款面向中国内地年轻个人用户的记账应用，按住说话后经火山流式 ASR 与 DeepSeek 结构化提取金额、分类等字段，账单写入本地 SQLite，支持手动记账、月度统计与 8 秒撤销。技术栈为 Expo/React Native 加 Fastify 语音网关，需自配 ASR 与 LLM 密钥，当前处于内测阶段、未正式上架。",
+   "highlights": [
+    "按住说话一句话生成多笔账单，写入本地 SQLite 并支持 8 秒内整批撤销",
+    "本地优先架构，账单先写入 SQLite，不要求登录，网络失败不阻塞记账",
+    "基于 Expo/React Native 双端应用，含 71 项自动化测试与 EAS OTA 更新"
+   ],
+   "use_cases": [
+    "日常个人消费快速记账（午餐、打车、工资到账等一句话场景）",
+    "无网络或不登录时的本地账本记录",
+    "月度统计与分类下钻查看支出结构"
+   ],
+   "classification": {
+    "cat": "应用",
+    "db_verdicts": [
+     {
+      "db": "SQLite",
+      "rel": "support",
+      "lines": [
+       49,
+       64,
+       78
+      ]
+     }
+    ],
+    "eco": "app",
+    "eco_why": "应用使用 SQLite 存储本地账单数据，SQLite 是其数据存储层而非服务对象。",
+    "ai": {
+     "flag": false,
+     "kind": []
+    },
+    "persona": "use",
+    "official": {
+     "flag": false,
+     "of": null
+    }
+   },
+   "signals": {
+    "status": "experimental",
+    "license_note": "MIT，但名称、Logo 与视觉资产不随代码授权",
+    "install": [
+     "source"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     10,
+     49,
+     80
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "4. 多笔账单自动写入本地 SQLite，并展示合并结果。 ／ |本地 SQLite 与删除撤销|✅ 已完成| ／ - **本地优先**：账单首先写入 SQLite，网络、登录和云备份不是记账前置条件。",
+     "lines": [
+      49,
+      64,
+      78
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用使用 SQLite 存储本地账单数据，SQLite 是其数据存储层而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT，但名称、Logo 与视觉资产不随代码授权",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " 一款面向中国内地年轻个人用户的语音优先记账应用。 ／ 4. 多笔账单自动写入本地 SQLite，并展示合并结果。 ／ - **流式语音链路**：手机 PCM → Fastify WebSocket → 火山双向流式 ASR → DeepSeek 结构化。",
+   "evidence_lines": [
+    10,
+    49,
+    80
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "zhixiang-luo/shengzhang",
+  "sha": "dd09b4c80c99",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

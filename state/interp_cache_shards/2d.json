@@ -9599,5 +9599,220 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "94fb60be448e": {
+  "identity": {
+   "one_liner": "MemoTalk S1 录音导入、转录、AI 分类与检索的工作台应用",
+   "review": "这是一个运行在 Floatboat 桌面 Workbench 运行时的开源应用，将 MemoTalk S1 录音笔的 MP3 通过目录扫描、清单注册或 BLE 下载导入，经 ffmpeg 解码后由 Host 的 ASR 转录、LLM 生成标题/摘要/分类/标签，存入 SQLite 并支持检索复盘。适合 MemoTalk S1 设备持有者；依赖 Host 提供模型能力与运行时，不能独立部署为 Node 服务。",
+   "highlights": [
+    "支持三种录音导入方式：目录扫描、设备清单注册、BLE 直接下载",
+    "提供流式转录与 AI 分类，生成标题、摘要、分类、标签与行动项",
+    "提供转录检索、按分类/标签/阶段过滤及 HTTP Range 音频回放"
+   ],
+   "use_cases": [
+    "MemoTalk S1 录音的集中管理与检索复盘",
+    "语音录音的批量转录与自动归类",
+    "录音内容的标题/摘要/标签人工复核编辑"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- The Host applies SQLite migrations when opening the workbench. Add new files to `migrations/`; do not rewrite existing migrations.",
+     "lines": [
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用使用 SQLite 作为自身存储，README 声明 Host 打开工作台时应用其 SQLite 迁移",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The app runs in the **Floatboat desktop Workbench runtime**. It is a workbench package loaded by the Host, not a standalone Node service. ／ - The Host applies SQLite migrations when opening the workbench. Add new files to `migrations/`; do not rewrite existing migrations.",
+   "evidence_lines": [
+    40,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "floatboatai/OpenMinutes",
+  "sha": "94fb60be448e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "14a3e1138eda": {
+  "identity": {
+   "one_liner": "为 PostgreSQL 数据库自动生成 RESTful API 的中间件",
+   "review": "SmoothDB 是一个用 Go 编写的中间件，为 PostgreSQL 数据库自动生成 REST JSON 接口，支持单实例管理多个数据库，并提供 DDL 操作和 Admin UI 管理面板。它大部分兼容 PostgREST，可复用现有客户端库，也可作为 Go 库使用；项目自述尚在完善中，TODO 列表列出多项待完成内容。",
+   "highlights": [
+    "为 PostgreSQL 数据库提供 RESTful JSON API，支持查询、插入、分页、过滤等操作",
+    "大部分兼容 PostgREST（目标版本 16.4），并可独立运行或作为 Go 库使用",
+    "支持 DDL 操作（建库/建表/约束/角色管理）、单实例多数据库和 Admin UI"
+   ],
+   "use_cases": [
+    "为 PostgreSQL 数据库快速暴露 REST API 供应用访问",
+    "通过 Admin UI 与 API 进行数据库和表的创建、变更管理",
+    "作为 Go 库嵌入数据驱动的应用程序"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "SmoothDB provides a RESTful API to PostgreSQL databases. ／ 1. **Internal Authentication** (`LoginMode: \"db\"`), suitable for local development but not recommended for production. Credentials are verified against PostgreSQL database users. ／ SmoothDB walks self-referential tables (and separate edge tables) with the `start`/`recurse` operators, generating PostgreSQL recursive CTEs with automatic cycle detection.",
+     "lines": [
+      3,
+      126,
+      401
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 数据库提供 REST API 服务的中间件/工具，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SmoothDB provides a RESTful API to PostgreSQL databases. ／ Configured databases and schemas can be accessed and modified easily with a REST JSON-based interface. ／ * Can be used both stand-alone and as a library (the main motivation for writing this)",
+   "evidence_lines": [
+    3,
+    5,
+    14
+   ]
+  },
+  "fn": "sted/smoothdb",
+  "sha": "14a3e1138eda",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0a3928a6b3f7": {
+  "identity": {
+   "one_liner": "将数据密集项目编译为单个 AI 可读提示文件的 CLI 工具",
+   "review": "data2prompt 是一个 Python CLI 工具，把 CSV、Excel、Parquet、Jupyter notebook、SQLite 数据库等项目数据汇总（列统计、示例行、schema）并压缩进适配 token 预算的单个 PROMPT.md 文件，供 ChatGPT、Claude、Gemini 等模型读取；面向需要把本地数据项目喂给 LLM 的数据科学/分析用户，支持通过 uv/pip/pipx 安装，数据库以只读方式打开。",
+   "highlights": [
+    "原生解析 .csv/.xlsx/.sqlite/.parquet/.ipynb 等格式，生成列统计与示例行摘要",
+    "支持 --budget 按 token 预算裁剪输出，并标记省略内容",
+    "--schema-only 模式、XML/Markdown 输出格式、.env 值隐藏与只读数据库访问"
+   ],
+   "use_cases": [
+    "把数据项目整理为 LLM 上下文用于对话分析",
+    "在限定上下文窗口或 API 成本下生成适配的提示文件",
+    "分享数据结构（schema-only）而不暴露数据行"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Native parsers: .csv, .xlsx, .xls, .xlsm, .db, .sqlite, .sqlite3, .parquet, .feather, .arrow, .sql, .ipynb, .env ／ |SQLite databases|Each table's structure, including keys and links to other tables, plus statistics and example rows.|",
+     "lines": [
+      10,
+      114
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目读取 SQLite 数据库文件并生成摘要，是为 AI/数据工作流服务的独立 CLI 工具而非使用数据库存储的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Native parsers: .csv, .xlsx, .xls, .xlsm, .db, .sqlite, .sqlite3, .parquet, .feather, .arrow, .sql, .ipynb, .env ／ - Databases are opened read-only, and none of your files are changed. ／ data2prompt is a small, fully typed Python package. A thin `main.py` hands each",
+   "evidence_lines": [
+    10,
+    124,
+    223
+   ]
+  },
+  "fn": "arianmokhtariha/data2prompt",
+  "sha": "0a3928a6b3f7",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

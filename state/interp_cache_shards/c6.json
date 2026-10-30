@@ -12109,5 +12109,94 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "094fd24d65f3": {
+  "identity": {
+   "one_liner": "Nginx Proxy Manager 的原生 Bash 安装器，无需 Docker/LXC",
+   "review": "该项目提供一套 Bash 脚本，在 Debian、Ubuntu 和 Alpine 上以原生方式安装 Nginx Proxy Manager，用 systemd 管理服务，数据存储于 SQLite，并通过 certbot 配置 Let's Encrypt 证书。脚本支持交互式安装、更新、健康检查验证模式，并在破坏性操作前自动备份。适用于希望在无容器环境下自托管 NPM 的运维人员。",
+   "highlights": [
+    "以 systemd（Alpine 上为 OpenRC）管理 NPM 服务，支持开机自启与故障重启",
+    "提供 verify 模式，执行 30+ 项健康检查（含磁盘、证书有效期、时间同步、SQLite 完整性）",
+    "每次安装/更新前自动生成带时间戳的数据库、nginx 配置、证书等快照并自动清理旧备份"
+   ],
+   "use_cases": [
+    "在无 Docker 环境的裸机 Debian/Ubuntu 上安装反向代理管理器",
+    "小内存主机的自动化安装（自动创建 swap 文件完成前端构建）",
+    "现有 NPM 原生安装的更新与备份恢复"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Uses **SQLite** via `better-sqlite3` -- no external database required ／ |SQLite database|`/data/database.sqlite`|",
+     "lines": [
+      15,
+      133
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **MySQL / PostgreSQL support** -- detects and dumps external databases via `mysqldump` or `pg_dump` (auto-reads credentials from container env vars or `production.json`)",
+     "lines": [
+      234
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **MySQL / PostgreSQL support** -- detects and dumps external databases via `mysqldump` or `pg_dump` (auto-reads credentials from container env vars or `production.json`)",
+     "lines": [
+      234
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "脚本为部署和管理 Nginx Proxy Manager 提供安装、备份与验证能力，属服务其运行的工具组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "MySQL",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "**A native Bash installer for Nginx Proxy Manager on Debian, Ubuntu and Alpine -- no Docker required.** ／ - Installs **Nginx Proxy Manager v2.x** (latest release auto-detected) natively on the host OS ／ - Takes timestamped backups before every destructive step (database, `/etc/letsencrypt`, `/etc/nginx`, systemd unit, prior install) and auto-prunes older copies",
+   "evidence_lines": [
+    1,
+    13,
+    20
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "njordium/npm-native",
+  "sha": "094fd24d65f3",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

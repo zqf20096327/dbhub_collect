@@ -10651,5 +10651,162 @@
   "generated_at": "2026-10-29",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "060dcf904e63": {
+  "identity": {
+   "one_liner": "自托管的 AI 支出归因系统，按提供方与人员汇总账单数据",
+   "review": "Costura 是一个自托管的 AI 支出归因应用：从 Anthropic、OpenAI、OpenRouter、Cursor 等提供方以只读方式导入账单数据，生成按 API key、工作区或人员归属的每日账本，并按月与提供方报表对账。数据存储在 PostgreSQL，面向需要在自有基础设施上管理团队 AI 花销的团队，目前处于 beta 阶段，接口在 1.0 前可能变更。",
+   "highlights": [
+    "为 Anthropic、Claude.ai、OpenAI、Codex、OpenRouter、Cursor 及 GitHub Copilot 提供只读账单数据连接器",
+    "按人员/工作区/团队归因支出，支持按提供方和月份对账，并提供异常检测与预算告警",
+    "通过 Docker Compose 在自有基础设施运行，支持 CSV 导出与 Slack 兼容 webhook"
+   ],
+   "use_cases": [
+    "团队按人员统计多家 AI 提供方的 API 与席位支出",
+    "每月将内部账本与提供方报表及发票总额进行核对",
+    "在自有基础设施上保存提供方管理密钥并监控预算异常"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`next dev` from this checkout still running. Then it starts PostgreSQL, runs the migrations, ／ checks the host and that `.env` without printing a secret. `just prod::up` starts PostgreSQL, a ／ |Install, including an external PostgreSQL|docs/operations/install.md|",
+     "lines": [
+      92,
+      115,
+      121
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其将账单数据存入 PostgreSQL 并运行迁移，属于使用数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`next dev` from this checkout still running. Then it starts PostgreSQL, runs the migrations, ／ checks the host and that `.env` without printing a secret. `just prod::up` starts PostgreSQL, a",
+   "evidence_lines": [
+    92,
+    115
+   ]
+  },
+  "fn": "CosturaAI/costura",
+  "sha": "060dcf904e63",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "254eb8de1b24": {
+  "identity": {
+   "one_liner": "桌面端数据库 DBA AI 助手，含数据库控制台与 AI Agent",
+   "review": "这是一个 Electron 桌面端数据库 AI Agent 与 DBA 工作台，面向数据库管理员：内置对话式 AI 助手、数据库控制台、SSH 终端、AWR 文件脱敏与 OCP 云管平台模块，支持 Oracle 11g/19c、OceanBase 4.x 和 MySQL。写操作分五档权限管控并记录结构化审计日志，大模型 API Key 与数据库密码经 Windows DPAPI 本机加密存储。",
+   "highlights": [
+    "提供数据库控制台（对象树、查询窗口、结果网格编辑、导出 CSV）与 SSH/SFTP 服务器模块",
+    "AI 助手支持多厂商大模型切换、五档写操作权限管控与 JSONL 审计日志",
+    "支持 Oracle 11g/19c、OceanBase 4.x（MySQL/Oracle 租户）、MySQL 连接，以及 OceanBase OCP REST 接口接入"
+   ],
+   "use_cases": [
+    "DBA 日常管理 Oracle、OceanBase、MySQL 实例的查询、巡检与写操作",
+    "通过 AI 助手执行 SQL 性能诊断、变更评审、数据库巡检等任务",
+    "接 OceanBase OCP 云管平台查看集群、租户、告警与任务"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "桌面端数据库 AI Agent，支持 Oracle 11g/19c、OceanBase 4.x（MySQL / Oracle 租户）、MySQL。",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "桌面端数据库 AI Agent，支持 Oracle 11g/19c、OceanBase 4.x（MySQL / Oracle 租户）、MySQL。",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "桌面端数据库 AI Agent，支持 Oracle 11g/19c、OceanBase 4.x（MySQL / Oracle 租户）、MySQL。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述它是为管理 Oracle/OceanBase/MySQL 数据库服务的 DBA 工具，而非使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "Oracle",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "桌面端数据库 AI Agent，支持 Oracle 11g/19c、OceanBase 4.x（MySQL / Oracle 租户）、MySQL。 ／ - **功能模块**：最左侧一级导航切换——「AI 助手」（对话 / SSH 终端 / 会话管理）、「数据库」（数据库控制台，独立模块）、「服务器」（SSH 多标签终端 / SFTP 双栏传输 / 跳板机与编码适配，独立模块、终端保活）、「云管平台」（OceanBase 走 OCP 接口、Oracle 直连查 `v$` 视图）、「文本编辑」（Notepad++ 式多标签编辑器，大文件秒开；选中文本可就地让 AI 针对这段内容问答）、「脱敏工具」（AWR 本地脱敏）与「巡检报告」（规划中，基于模板生成、与 AI 无关）；导航底部是全局工具（主题切换 / 设置浮窗） ／ - **权限五档**：计划（agent 也会对复杂任务自动进入）→ 只读 → 确认执行 → 会话放开 → 完全放开",
+   "evidence_lines": [
+    3,
+    8,
+    15
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "echodddb/SQLPilot",
+  "sha": "254eb8de1b24",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

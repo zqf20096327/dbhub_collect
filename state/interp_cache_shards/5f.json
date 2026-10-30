@@ -10926,5 +10926,304 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1ce66f801c32": {
+  "identity": {
+   "one_liner": "Python/TypeScript 双语言异步 ORM，以 Rust 内核共享 schema、迁移与驱动",
+   "review": "一个面向 Python 和 TypeScript 的异步 ORM，用户用 Prisma 语法写一份 schema，由 Rust 内核编译生成带类型的模型、迁移和 SQL 计划，目前支持 PostgreSQL 与 SQLite。提供 Django 风格的模型 API 与内置扩展（软删除、锁、认证等）。版本 0.1.0，仅异步 API，无 MySQL 驱动，作者建议生产使用需自行评估。",
+   "highlights": [
+    "一份 Prisma 语法 schema 同时生成 Python 与 TypeScript 的类型化模型和迁移",
+    "Rust 内核统一实现 schema 编译、SQL 计划与数据库驱动",
+    "内置 timestamps、soft delete、locking、auth 等扩展，支持分页、事务、CTE、窗口查询"
+   ],
+   "use_cases": [
+    "同一数据模型需要 Python 与 TypeScript 两端共享访问的项目",
+    "需要从 schema 生成迁移与类型化模型的异步应用开发",
+    "基于 PostgreSQL 或 SQLite 的新项目数据层搭建"
+   ],
+   "note": "README 含与 Django/SQLAlchemy/Prisma 的基准对比数据（单机单次运行），此处仅编目能力事实，不转录对比结论。"
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The Rust core plans the SQL and runs it on PostgreSQL or SQLite. ／ Both packages hold PostgreSQL and SQLite. They build for 3 platforms: Linux x86-64, macOS arm64 and Windows x86-64. ／ |Databases|PostgreSQL and SQLite|",
+     "lines": [
+      11,
+      78,
+      129
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The Rust core plans the SQL and runs it on PostgreSQL or SQLite. ／ Both examples run as they are: `examples/quickstart` (in-memory SQLite). ／ Both packages hold PostgreSQL and SQLite. They build for 3 platforms: Linux x86-64, macOS arm64 and Windows x86-64.",
+     "lines": [
+      11,
+      49,
+      78
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "The API is async only. There is no MySQL driver.",
+     "lines": [
+      170
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供针对 PostgreSQL 与 SQLite 的数据库驱动和迁移工具，属于服务数据库访问的 ORM 组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An async ORM for Python and TypeScript with one Rust core. ／ The Rust core plans the SQL and runs it on PostgreSQL or SQLite. ／ |Schema language, SQLite and PostgreSQL types, client defaults, code generation|schema.md|",
+   "evidence_lines": [
+    9,
+    11,
+    113
+   ]
+  },
+  "fn": "UniForgeStack/monorm",
+  "sha": "1ce66f801c32",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "32d4708bb65b": {
+  "identity": {
+   "one_liner": "Rust+GPUI 原生跨平台数据库 GUI 客户端与 SQL 编辑器",
+   "review": "FluxDB 是一个用 Rust 与 GPUI 构建的桌面数据库客户端，不依赖 Electron 或 WebView，在单一窗口内提供 SQL 编辑、数据浏览与编辑回写、表结构管理与 ER 图、导入导出、备份恢复，以及 MongoDB 和 Redis 工作台。支持 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8 等，并提供有权限边界的 AI Agent 与 MCP。适合需要多数据源统一管理界面的开发者与 DBA 使用；MariaDB 尚未支持，部分数据库的备份依赖本机客户端工具。",
+   "highlights": [
+    "原生 Rust + GPUI 桌面应用，覆盖 macOS、Windows、Linux",
+    "同一界面支持关系型数据库、MongoDB 与 Redis 的查询、结构管理、数据编辑与导入导出",
+    "内置有权限边界的 AI Agent，支持 MCP Client/Server 与受控 SQL 执行"
+   ],
+   "use_cases": [
+    "多数据库开发与运维人员在统一客户端完成查询、编辑与结构管理",
+    "通过 ER 图查看外键关系并导出 DBML/Mermaid 等格式",
+    "借助 AI Agent 进行结构发现、SQL 编写与报表生成"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |PostgreSQL|SQL 查询、Schema / 对象浏览、表结构管理、数据编辑、用户与角色管理、psql 工具入口|`pg_dump` plain SQL 备份，`psql` 恢复|TLS、SSH、代理、Schema 作用域、超时|-|",
+     "lines": [
+      5,
+      102
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |MySQL|SQL 查询、对象浏览、表结构管理、数据编辑、导入导出、原生客户端工具入口|`mysqldump` 逻辑备份，SQL 恢复|TLS / SSL、SSH 隧道、代理、超时、字符集|-|",
+     "lines": [
+      5,
+      100
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |Oracle|SQL 查询、Schema / 对象浏览、表结构管理与设计、数据编辑、筛选与排序、SQL 补全、用户与权限（只读当前账号授权明细）、逻辑导出、AI 页面上下文与受控执行|本机逻辑导出（DDL + 逐页数据），恢复按 SQL 重放|Service Name 或 SID、CDB / PDB 目标；未加引号的标识符按大写折叠|服务器端 Data Pump 备份、非当前账号的授权明细（`DBA_*` / `ALL_SYS_PRIVS` 需要额外权限）、跨页一致快照导出。逐页导出不是一致快照，也不是服务器端原生备份。|",
+     "lines": [
+      5,
+      106
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |SQLite|本地文件连接、SQL 查询、对象浏览、表结构管理、数据编辑|`VACUUM INTO` 完整一致快照；恢复到新文件并检查完整性与外键|本地文件路径|-|",
+     "lines": [
+      5,
+      104
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |SQL Server|T-SQL 查询、数据库 / Schema / 对象浏览、表结构管理与数据编辑、表数据导入导出、登录名 / 数据库用户 / 角色成员 / 显式权限管理、对象级逻辑备份恢复、AI 页面上下文与受控执行|对象级逻辑 SQL 备份与恢复|SQL Server 认证、TLS、显式端口；命名实例需填写实际端口|Windows 集成认证、Azure AD、包含数据库用户、列级权限编辑、用户自定义服务器角色、SQL Browser / 命名实例自动解析、数据库级物理备份（`BACKUP DATABASE`",
+     "lines": [
+      5,
+      103
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "MariaDB 尚未支持。它只出现在规划中，不应被视为当前能力。",
+     "lines": [
+      110
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |TiDB|复用 MySQL 协议链路，适配 SQL 方言、补全与表结构管理|复用 MySQL 逻辑备份能力|连接能力与 MySQL 一致|-|",
+     "lines": [
+      5,
+      101
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |达梦 DM8|Schema / 对象浏览、SQL 查询、表结构管理与设计、数据编辑、表数据导入|逻辑备份与 SQL 恢复；当前恢复面向单 Schema|实例与 Schema 连接配置|-|",
+     "lines": [
+      5,
+      105
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "TiDB",
+    "Dameng"
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为连接和管理多种数据库服务的桌面客户端工具，非使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0 或更新版本",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**原生跨平台数据库客户端与 SQL 编辑器，面向高性能、低开销的桌面体验设计：在一个窗口中完成查询、数据编辑、结构管理和 Redis 调试。** ／ |数据库|当前能力|备份 / 恢复|连接与限制|尚未支持| ／ |MySQL|SQL 查询、对象浏览、表结构管理、数据编辑、导入导出、原生客户端工具入口|`mysqldump` 逻辑备份，SQL 恢复|TLS / SSL、SSH 隧道、代理、超时、字符集|-|",
+   "evidence_lines": [
+    3,
+    98,
+    100
+   ]
+  },
+  "fn": "fluxdb-alt/fluxDB",
+  "sha": "32d4708bb65b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "41732a3282aa": {
+  "identity": {
+   "one_liner": "一键 Compose 编排的电商演示平台（API+后台+店面）",
+   "review": "该仓库本身只含 Docker Compose 配置，通过 GHCR 预构建镜像拉起电商 API、管理后台与店面三套应用，并含 migrate/seed 一次性任务、演示账号、Grafana/Prometheus 可观测 profile。供想在本地运行完整电商演示的用户使用；不托管应用源码，降级需重置数据。",
+   "highlights": [
+    "单个 Compose 文件编排 API、管理后台、店面及 postgres/redis 依赖",
+    "提供 migrate、seed、jwt-keygen 一次性任务与演示账号",
+    "支持 observability profile 启用 Grafana 与 Prometheus"
+   ],
+   "use_cases": [
+    "本地一键运行完整电商演示栈",
+    "测试或演示 NestJS+Next.js 电商系统",
+    "基于 compose override 定制端口与部署形态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Startup: postgres + redis + jwt-keygen → migrate → seed → api (healthy) → admin + web. Browsers use `http://localhost:3000`; storefront SSR uses `http://api:3000` inside Compose.",
+     "lines": [
+      95
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库用 Compose 运行电商 API/后台/店面应用，postgres 仅作为栈内数据存储组件出现",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This repo is **configuration only** (a compose platform). The API, admin dashboard, and storefront ship as versioned GHCR images. Design notes: docs/DESIGN.md. Hosted demo operator guide (not deployed yet): docs/HOSTED-DEMO.md. ／ Startup: postgres + redis + jwt-keygen → migrate → seed → api (healthy) → admin + web. Browsers use `http://localhost:3000`; storefront SSR uses `http://api:3000` inside Compose. ／ |API|`ECOM_API_VERSION`|0.13.0|ecommerce-store-api|v0.13.0|",
+   "evidence_lines": [
+    8,
+    95,
+    111
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "raouf-b-dev/ecommerce-platform",
+  "sha": "41732a3282aa",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10172,5 +10172,70 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8ed15abedddd": {
+  "identity": {
+   "one_liner": "Android 本地优先 Markdown 笔记应用，用 Room/SQLite FTS 做全文检索",
+   "review": "Markleaf 是一款 Android 端 Markdown 笔记应用，数据仅存于设备，笔记以 .md/.txt 文件形式通过 SAF 文件夹镜像同步，自身不做云同步。技术上采用 Jetpack Compose、Room（SQLite-backed）与 FTS4 虚拟表实现全文搜索。适合希望以纯 Markdown 文件持有数据、配合 Obsidian 等已有文件夹使用的 Android 用户；限制包括不支持子文件夹、保存时会按标题重命名文件。",
+   "highlights": [
+    "使用 Room + SQLite FTS4 虚拟表实现正文全文搜索（L106）",
+    "文件夹镜像同步：笔记与所选文件夹中的 .md/.txt 文件一一对应，同步委托给外部应用（L72）",
+    "支持 Obsidian/Logseq 等已有 Markdown 文件夹，frontmatter 之外内容按字节原样保留（L86, L89）"
+   ],
+   "use_cases": [
+    "在 Android 设备上离线记录和整理 Markdown 笔记",
+    "与 Obsidian/Logseq 共享同一 Markdown 文件夹进行移动端读写",
+    "通过 Syncthing/Drive/NAS 等外部工具在多设备间同步笔记文件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite FTS full-text search** — fast, down to the body text ／ - **Database**: Room — SQLite-backed local persistence, FTS4 virtual tables for full-text search",
+     "lines": [
+      68,
+      106
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 Room/SQLite 存储笔记数据的 Android 应用，SQLite 是其本地持久化手段而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Database**: Room — SQLite-backed local persistence, FTS4 virtual tables for full-text search ／ ├── data          # Room DB, entities, repository implementations (data source)",
+   "evidence_lines": [
+    106,
+    123
+   ]
+  },
+  "fn": "jeiel85/markleaf-android",
+  "sha": "8ed15abedddd",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

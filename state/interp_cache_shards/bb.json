@@ -10638,5 +10638,149 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cdf27174513a": {
+  "identity": {
+   "one_liner": "Supabase 的 Kotlin 多平台客户端 SDK",
+   "review": "supabase-kt 是面向 Supabase 平台的 Kotlin Multiplatform 客户端库，提供 Auth、Postgrest、Storage、Realtime、Functions 等模块，通过 Gradle 依赖引入并需配置 Ktor 客户端引擎，支持 Android/JVM/JS/iOS 等目标。README 列出了与各 Supabase 服务的版本兼容矩阵。适合在 Kotlin 多平台项目中接入 Supabase 后端服务的开发者使用。",
+   "highlights": [
+    "提供 Auth、Postgrest、Storage、Realtime、Functions 等多平台客户端模块",
+    "支持 Android、JVM、JS、iOS 等 Kotlin 多平台目标",
+    "提供插件机制，包含 Apollo GraphQL、Compose Auth、Coil3 等集成"
+   ],
+   "use_cases": [
+    "在 Android/iOS/桌面应用中访问 Supabase 后端服务",
+    "在 Kotlin 多平台项目中实现认证、数据库查询与文件存储",
+    "结合 Jetpack Compose 构建带认证 UI 的应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- Postgres Syntax inspired by https://github.com/supabase-community/postgrest-kt",
+     "lines": [
+      179
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定义其为 Supabase 平台的客户端 SDK，为通过 Supabase/PostgREST 接口访问服务提供客户端能力。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Kotlin Multiplatform Client for Supabase. ／ **Available modules**: `auth-kt`*, `postgrest-kt`, `functions-kt`, ／ |PostgREST|`postgrest-kt`|PostgREST/postgrest|Latest release|",
+   "evidence_lines": [
+    8,
+    40,
+    127
+   ]
+  },
+  "fn": "supabase/supabase-kt",
+  "sha": "cdf27174513a",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "08c7afbe42cb": {
+  "identity": {
+   "one_liner": "Tauri v2 的零配置 local-first SQLite 复制同步引擎插件",
+   "review": "一个 Tauri v2 插件，通过 shadow 触发器捕获本地 SQLite 的增删改，将变更集后台复制到 Supabase、Postgres 或自定义 REST/WebSocket 后端，采用 LWW 加 Lamport 时间戳做冲突解决，支持离线排队与自动恢复同步。面向使用 Tauri 构建离线优先桌面应用的开发者，通过 Cargo 和 npm 安装，目前仍处于 v0.1.0 发布前的测试阶段。",
+   "highlights": [
+    "通过 shadow 触发器实现变更数据捕获（CDC），无需修改现有应用 SQL",
+    "使用 Lamport 时间戳的 LWW 确定性冲突解决，支持墓碑删除",
+    "提供 TypeScript SDK 与响应式状态监听，后端适配器为协议无关的变更集格式"
+   ],
+   "use_cases": [
+    "需要离线优先、本地零延迟写入的 Tauri 桌面应用",
+    "本地 SQLite 与 Supabase/Postgres 云端之间双向同步的场景",
+    "弱网或断网环境下需本地排队变更、恢复后自动同步的应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **Zero-Configuration Local-First SQLite Replication & Sync Engine for Tauri v2.** ／ `tauri-plugin-sync` enables developers to build real-time, offline-first desktop applications with Tauri v2. Write to local SQLite with 0ms latency, and let the background sync engine seamlessly replicate changesets to your remote cloud backend (Supabase, Post ／ - ⚡ **Zero-Latency Local Writes:** Query local SQLite directly at native speeds.",
+     "lines": [
+      3,
+      9,
+      13
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "`tauri-plugin-sync` enables developers to build real-time, offline-first desktop applications with Tauri v2. Write to local SQLite with 0ms latency, and let the background sync engine seamlessly replicate changesets to your remote cloud backend (Supabase, Post ／ - 🟣 **Supabase & PostgreSQL Cloud Adapter:** Pre-built SQL migrations, Edge Functions, and Row Level Security (RLS) integration.",
+     "lines": [
+      9,
+      76
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为使用 SQLite 的 Tauri 应用提供复制与同步能力的插件组件，服务于数据同步而非本身是业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可；另提及在开发商业托管同步引擎与企业功能（L74、L77-L78）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> **Zero-Configuration Local-First SQLite Replication & Sync Engine for Tauri v2.** ／ `tauri-plugin-sync` enables developers to build real-time, offline-first desktop applications with Tauri v2. Write to local SQLite with 0ms latency, and let the background sync engine seamlessly replicate changesets to your remote cloud backend (Supabase, Postgres, or custom REST/WebSocket APIs) with automatic conflict resolution. ／ - 🟣 **Supabase & PostgreSQL Cloud Adapter:** Pre-built SQL migrations, Edge Functions, and Row Level Security (RLS) integration.",
+   "evidence_lines": [
+    3,
+    9,
+    76
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "kxrn-gupta/tauri-plugin-sync",
+  "sha": "08c7afbe42cb",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

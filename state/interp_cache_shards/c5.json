@@ -11569,5 +11569,199 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e3f8f896d1d4": {
+  "identity": {
+   "one_liner": "桌面开发者工作台，集成 AI 编码代理、Git、数据库、K8s 与隧道",
+   "review": "DevCat 是一款跨平台（macOS/Windows/Linux）桌面开发者工作台，基于 Tauri 2 + React 构建，将 AI 编码代理终端、Git 提交图、SQL/NoSQL 数据库客户端、SQL 编辑器、Kubernetes/Docker 管理、RabbitMQ 及 VPN/SSH 隧道整合在按项目分组的同一窗口中，无需账号。面向需要同时操作代码代理与多类基础设施的开发者，另有 Android/浏览器移动端可远程查看与控制。",
+   "highlights": [
+    "提供数据库浏览编辑与带 schema 自动补全的 SQL 编辑器（L64-L65、L162-L165）",
+    "支持运行 Claude Code、Codex、Gemini CLI 等编码代理，并内置 MCP 服务器（L28-L29）",
+    "支持 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server、MongoDB、Redis 等数据库连接（L32-L33）"
+   ],
+   "use_cases": [
+    "开发者在同一界面运行 AI 编码代理并审查 diff 与提交",
+    "浏览与编辑多种 SQL/NoSQL 数据库中的表并执行查询",
+    "通过手机远程监控代理任务、查看数据库与 Kubernetes 状态"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server| ／ |PostgreSQL|localhost:55432|postgres / devcat|",
+     "lines": [
+      32,
+      319
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server| ／ |MySQL|localhost:53306|root / devcat|",
+     "lines": [
+      32,
+      320
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server|",
+     "lines": [
+      32
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server| ／ |SQL Server|localhost:51433|sa / DevCat_Passw0rd!|",
+     "lines": [
+      32,
+      321
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server|",
+     "lines": [
+      32
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将 DevCat 描述为连接并操作数据库、Kubernetes、Git 等基础设施的开发者工作台，而非以某数据库存储自身数据的应用（L5、L20-L21）。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Your coding agents, Git, databases, clusters and VPNs in one desktop app. ／ |SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server| ／ |Infrastructure|Kubernetes (any kubeconfig context), Docker (any context, or a host over SSH / TCP), RabbitMQ (management API)|",
+   "evidence_lines": [
+    5,
+    32,
+    34
+   ]
+  },
+  "fn": "devcathq/DevCat",
+  "sha": "e3f8f896d1d4",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f6c221e3017b": {
+  "identity": {
+   "one_liner": "纯浏览器端 SQLite 数据库查看、编辑与再导出工具",
+   "review": "editsqlite 是一个在浏览器中打开、编辑并重新导出 SQLite 数据库的静态站点，也可读取 MySQL/Postgres 的 SQL dump 与 CSV 并转换为 SQLite。数据不上传服务器，全部在本地内存副本上编辑，导出文件由自带的 SQLite 读写器逐字节生成，并通过官方 PRAGMA integrity_check 验证。适合需要在离线、无上传前提下快速修改小型 SQLite 数据文件的用户。限制：索引、视图和触发器不会被重建。",
+   "highlights": [
+    "提供手写的 SQLite 文件格式读写器，导出文件通过官方引擎 integrity_check，且 sqlite.js/sqlwrite.js 可在 Node 中无依赖运行",
+    "支持打开 .sqlite/.db、mysqldump/pg_dump/sqlite3 的 .sql dump（含 Postgres COPY 块）和 CSV，并以表格或 SQL 方式编辑",
+    "纯静态站点加 service worker 缓存，断网可用，数据不上传；另含本地运行的简明英语转 SQL 助手"
+   ],
+   "use_cases": [
+    "在不上传文件的前提下离线编辑 SQLite 数据库文件",
+    "将 CSV 或 MySQL/Postgres dump 转换为 SQLite 格式",
+    "Node 环境中读取和写出 SQLite 文件"
+   ],
+   "use_cases_dummy": null
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "file, a `.sql` dump (MySQL / Postgres / SQLite) or a CSV, edit the data in a ／ pg_dump / sqlite3 (including Postgres `COPY` blocks), and plain CSV. Or start ／ MySQL→SQLite, Postgres→SQLite, SQLite→CSV, SQLite→SQL dump.",
+     "lines": [
+      6,
+      27,
+      44
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "file, a `.sql` dump (MySQL / Postgres / SQLite) or a CSV, edit the data in a ／ MySQL→SQLite, Postgres→SQLite, SQLite→CSV, SQLite→SQL dump.",
+     "lines": [
+      6,
+      44
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Powers **editsqlite.com**: open, edit and re-export SQLite databases, SQL dumps and CSV files in the browser, nothing uploaded. ／ **Open, edit and re-export a database — entirely in your browser.** Open a SQLite ／ file, a `.sql` dump (MySQL / Postgres / SQLite) or a CSV, edit the data in a",
+     "lines": [
+      1,
+      5,
+      6
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供面向 SQLite 文件的打开、编辑、导出与格式转换能力，是为数据库生态服务的工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Powers **editsqlite.com**: open, edit and re-export SQLite databases, SQL dumps and CSV files in the browser, nothing uploaded. ／ editsqlite is a static site with no server behind it. Your database is read into a ／  MySQL→SQLite, Postgres→SQLite, SQLite→CSV, SQLite→SQL dump.",
+   "evidence_lines": [
+    1,
+    12,
+    44
+   ]
+  },
+  "fn": "sharma3361/editsqlite",
+  "sha": "f6c221e3017b",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

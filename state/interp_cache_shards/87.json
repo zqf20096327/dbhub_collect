@@ -9654,5 +9654,210 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8eb3bb4cef0c": {
+  "identity": {
+   "one_liner": "为 AI agent 提供跨会话语义记忆的自托管 MCP 服务器",
+   "review": "OmniMem 是一个用 Rust 编写的自托管 AI agent 记忆服务，通过 MCP 协议向 Claude Code、Cursor 等 agent 提供持久记忆，包含情景记忆、项目上下文、RSS 知识、偏好和技能五类存储，支持经验评分、矛盾检测、语义去重与死路记录。单二进制内嵌记忆引擎、本地 embedding 模型与 SQLite 存储，可作桌面托盘应用或无头服务器运行。适合希望 agent 跨会话、跨机器共享记忆的个人用户。",
+   "highlights": [
+    "单二进制集成 MCP 服务器、记忆引擎、本地 embedding（all-MiniLM-L6-v2 on ONNX Runtime）与 SQLite 存储",
+    "提供五种记忆类型统一检索，支持经验评分、矛盾检测、语义去重与技能编译",
+    "支持桌面托盘应用、systemd 服务与 Docker 容器三种部署方式，兼容任意 MCP agent"
+   ],
+   "use_cases": [
+    "为 AI 编码 agent 提供跨会话项目记忆与死路记录",
+    "聚合 RSS 订阅内容作为 agent 可检索知识库",
+    "通过反向代理让多台机器上的多个 agent 共享同一份记忆"
+   ],
+   "classification": {
+    "cat": "应用",
+    "db_verdicts": [
+     {
+      "db": "SQLite",
+      "rel": "support",
+      "lines": [
+       31
+      ]
+     }
+    ],
+    "eco": "app",
+    "eco_why": "项目以 SQLite 作为自身存储记忆的数据库，是使用数据库的应用而非为数据库生态服务的工具。",
+    "ai": {
+     "flag": true,
+     "kind": [
+      "mcp"
+     ]
+    },
+    "persona": "use",
+    "official": {
+     "flag": false,
+     "of": null
+    }
+   },
+   "signals": {
+    "status": "active",
+    "license_note": "MIT",
+    "install": [
+     "binary",
+     "docker"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     31,
+     13,
+     34
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "OmniMem 7 is a single binary. The MCP server, the memory engine, the embedding model, RSS ingestion and the database all live in one process, with your memories in one SQLite file. No containers to wrangle, no database server to babysit.",
+     "lines": [
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 作为自身存储记忆的数据库，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OmniMem 7 is a single binary. The MCP server, the memory engine, the embedding model, RSS ingestion and the database all live in one process, with your memories in one SQLite file. No containers to wrangle, no database server to babysit. ／ OmniMem fixes that. It gives your AI agent a memory that lasts across sessions, projects and machines, over MCP, so it works with whichever agent you like. It runs on your own kit and it's free. ／ - **On a server** it's `omnimem serve`: a systemd service from the `.deb` or `.rpm`, or a container, configured with environment variables (one `.env` file for the service), with nothing graphical anywhere near it.",
+   "evidence_lines": [
+    31,
+    13,
+    34
+   ]
+  },
+  "fn": "richarvey/OmniMem",
+  "sha": "8eb3bb4cef0c",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4bed92e1c3f5": {
+  "identity": {
+   "one_liner": "基于 Dapper 的分库方言扩展层，生成类型安全 CRUD/过滤/分页 SQL",
+   "review": "Forget 是 .NET 数据访问库，在 Dapper 之上按数据库方言（MySQL、Oracle、PostgreSQL、SQL Server）生成针对单表的 CRUD、多行批量写入、upsert、过滤、排序与分页 SQL，支持 LINQ 表达式或运行时 FilterDescriptor 构建过滤条件。适合使用 Dapper 但想减少手写单表样板 SQL 的开发者；不支持多表 join、变更跟踪和迁移。",
+   "highlights": [
+    "按四个数据库方言分别生成 SQL，而非最低公共分母翻译",
+    "提供单行/多行 CRUD、批量 upsert、动态过滤器（FilterDescriptor/FilterGroup）与分页排序",
+    "每个包自动引入 Forget.Core 及对应 ADO.NET 驱动"
+   ],
+   "use_cases": [
+    "在 Dapper 项目中减少单表 SELECT/INSERT/UPDATE/DELETE/MERGE 样板代码",
+    "从查询字符串等运行时输入构建类型化过滤条件",
+    "需要跨四种数据库方言的一致批量写入/upsert 的 .NET 应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Supports **MySQL**, **Oracle**, **PostgreSQL**, and **SQL Server**. ／ |MySQL|`Forget.MySql`|`MySqlConnection`|",
+     "lines": [
+      10,
+      38
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Supports **MySQL**, **Oracle**, **PostgreSQL**, and **SQL Server**. ／ |Oracle|`Forget.Oracle`|`OracleConnection`|",
+     "lines": [
+      10,
+      39
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Supports **MySQL**, **Oracle**, **PostgreSQL**, and **SQL Server**. ／ |PostgreSQL|`Forget.PostgreSql`|`NpgsqlConnection`|",
+     "lines": [
+      10,
+      40
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Supports **MySQL**, **Oracle**, **PostgreSQL**, and **SQL Server**. ／ |SQL Server|`Forget.SqlServer`|`SqlConnection`|",
+     "lines": [
+      10,
+      41
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为这些数据库提供数据访问能力的开发库，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "Oracle",
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A thin, provider-aware extension layer on top of Dapper: type-safe CRUD ／ Supports **MySQL**, **Oracle**, **PostgreSQL**, and **SQL Server**. ／ Pick the package for your database; each one pulls in `Forget.Core` and the underlying ADO.NET driver",
+   "evidence_lines": [
+    7,
+    10,
+    33
+   ]
+  },
+  "fn": "davidedalcortivo/Forget",
+  "sha": "4bed92e1c3f5",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

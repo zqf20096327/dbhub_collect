@@ -9398,5 +9398,141 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f359c740617d": {
+  "identity": {
+   "one_liner": "NYCMesh 成员与节点信息追踪数据库应用（Django+PostgreSQL）",
+   "review": "MeshDB 是 NYCMesh 社区网络的项目，用于记录 Buildings、Members、Installs、Nodes、Devices、Links 等信息，供自动化脚本与人工通过 REST API 使用。基于 Django 与 Django Rest Framework 构建，依赖 PostgreSQL、Pelias、Redis 等外部服务，通过 docker compose 启动，并提供权限分组、Token 认证与集成测试。",
+   "highlights": [
+    "提供 REST API 供机器人程序与人工访问成员与节点数据",
+    "依赖 PostgreSQL、Pelias、Redis，提供 docker compose 一键启动外部服务",
+    "实现 Unauthenticated/Installer/Admin 三级权限与 DRF Token 认证"
+   ],
+   "use_cases": [
+    "社区网络的成员安装与设备链路信息登记",
+    "为自动化工具提供节点与安装数据的 API 接口"
+   ],
+   "use_cases_tail": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL ／ docker compose up -d postgres pelias redis ／ Postgres URLs according to the comments in the file newly created",
+     "lines": [
+      30,
+      112,
+      166
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 MeshDB 是使用 PostgreSQL 存储成员与节点数据的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "We use `MeshDB` to track information about Buildings, Members, Installs, Nodes, ／ - PostgreSQL ／ docker compose up -d postgres pelias redis",
+   "evidence_lines": [
+    11,
+    30,
+    112
+   ]
+  },
+  "fn": "nycmeshnet/meshdb",
+  "sha": "f359c740617d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "56f3b37b46b2": {
+  "identity": {
+   "one_liner": "AI 编码代理本地消息系统，经 MCP 与 Unix socket 连接代理协作",
+   "review": "pairtask 将 Codex、Claude 等编码代理放入同一工作区，通过 MCP 服务器、Unix socket 和 SQLite 支撑的消息代理实现代理间直接通信与任务协作，操作者用单一聊天界面指挥。代理默认运行在容器沙箱中，代理所在容器与消息代理容器隔离，支持跨机器配对。面向使用多个 AI 编码代理的开发者。",
+   "highlights": [
+    "提供 MCP 服务器与 Unix socket 消息代理，支持多个代理分组房间通信",
+    "消息确认与持久化：未确认消息等待送达，重启后保留",
+    "代理默认在容器中运行，消息代理位于无网络的独立容器"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理协作完成编码与代码评审",
+    "单人通过统一聊天界面指挥一组代理",
+    "两台机器通过 LAN 或 tailnet 组成同一工作区"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Codex, Claude and the read-only dashboard in workspace connect through a shared Unix socket to the broker and SQLite in secured.",
+     "lines": [
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 作为消息代理自身的存储数据库使用，项目是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 或 Apache 2.0 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Agents and the dashboard run in **workspace**; the message broker and its ／ Codex, Claude and the read-only dashboard in workspace connect through a shared Unix socket to the broker and SQLite in secured. ／ - 🔒 **Sandboxed by default**: Agents run in containers, apart from your machine; the message broker sits in its own offline container. Your projects survive upgrades.",
+   "evidence_lines": [
+    138,
+    142,
+    19
+   ]
+  },
+  "fn": "pairtask/pairtask",
+  "sha": "56f3b37b46b2",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

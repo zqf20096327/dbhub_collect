@@ -11380,5 +11380,142 @@
   "generated_at": "2026-10-29",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "489cde2a42a6": {
+  "identity": {
+   "one_liner": "Postgres 迁移与 SQL 的静态 linter 工具",
+   "review": "Squawk 是一个针对 Postgres 数据库迁移文件和 SQL 的 linter，通过内置规则检查 SQL 中的潜在问题（如不安全的 ALTER 操作），用于避免迁移导致的意外停机。可通过 npm、pip、Docker、VSCode 插件、pre-commit 钩子等多种方式安装集成，还支持在 GitHub PR 上自动评论。面向使用 Postgres 并需要执行 schema 迁移的开发团队。",
+   "highlights": [
+    "提供 CLI、GitHub Action、pre-commit 钩子、VSCode 插件、Docker 多种使用方式",
+    "支持通过 --exclude、squawk-ignore 注释及 .squawk.toml 配置文件禁用或定制规则",
+    "基于自研解析器（借鉴 rust-analyzer）生成 CST/AST 进行 SQL 检查"
+   ],
+   "use_cases": [
+    "CI 流程中检查 Postgres 迁移 SQL 的风险操作",
+    "GitHub PR 上自动评论 lint 结果",
+    "本地开发时 lint SQL 迁移文件"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> Linter for Postgres migrations & SQL ／ practices around Postgres schemas and SQL. ／ files: path/to/postgres/migrations/written/in/sql",
+     "lines": [
+      3,
+      10,
+      144
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Postgres 生态提供 SQL/迁移 lint 检查的工具，不使用数据库存储数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Linter for Postgres migrations & SQL ／ Prevent unexpected downtime caused by database migrations and encourage best ／ ❯ squawk example.sql",
+   "evidence_lines": [
+    3,
+    9,
+    43
+   ]
+  },
+  "fn": "sbdchd/squawk",
+  "sha": "489cde2a42a6",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ed94bd3427bf": {
+  "identity": {
+   "one_liner": "面向 Agent 的 Telegram CLI，用本地 SQLite 缓存支持离线搜索与 SQL",
+   "review": "一个基于 Bun/TypeScript 的 Telegram 命令行工具，通过 MTProto 提供多账号登录、只读同步守护进程、消息收发、媒体下载与全文搜索（FTS5），并将数据缓存在本地 SQLite 中供离线查询和只读 SQL（tg sql）访问，输出 JSON 并定义退出码，便于脚本和 AI Agent 调用。适合需要在终端管理 Telegram 账号或让程序化代理读取 Telegram 数据的用户；注意默认启用匿名使用统计，可用开关关闭。",
+   "highlights": [
+    "将 Telegram 数据缓存在本地 SQLite，支持 FTS5 全文搜索和只读 SQL 查询（tg sql）",
+    "只读守护进程提供实时同步、重启后追赶与历史回填，守护进程不发送任何消息",
+    "JSON 输出、固定退出码与 skill manifest 命令，面向脚本与 AI Agent 集成"
+   ],
+   "use_cases": [
+    "在终端离线搜索和用 SQL 查询 Telegram 消息与联系人",
+    "让 AI Agent 或脚本通过 JSON CLI 安全读取 Telegram 数据",
+    "多账号管理与聊天历史/媒体的本地缓存下载"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`tg` keeps your Telegram in a local SQLite cache for offline search and SQL; ／ |Local cache, offline queries|✅ SQLite, cache-first, `--fresh`|❌ live calls only|",
+     "lines": [
+      74,
+      82
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该 CLI 自身 Telegram 数据的本地缓存存储，项目是为 Telegram 生态服务的应用而非数据库工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`tg` keeps your Telegram in a local SQLite cache for offline search and SQL; ／ - Read-only SQL over the cache (`tg sql`) with an annotated schema",
+   "evidence_lines": [
+    74,
+    68
+   ]
+  },
+  "fn": "neoromantic/telegram-sync-cli",
+  "sha": "ed94bd3427bf",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

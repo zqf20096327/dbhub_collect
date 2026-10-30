@@ -10548,5 +10548,77 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "686197f3674e": {
+  "identity": {
+   "one_liner": "基于 Postgres/Supabase 的开源复式记账核心，含 CLI 与 MCP server",
+   "review": "Ekwo OS 是一个部署在自有 Supabase 项目上的复式记账核心，由数据库 schema、以数据形式表达的各国税务规则包、命令行工具和 MCP server 组成，支持 AI agent 通过 MCP 操作账簿；面向希望自持账目数据的企业、会计事务所和需要复式记账核心的开发者，数据存于用户控制的 Postgres 中，靠行级安全控制访问。",
+   "highlights": [
+    "以 schema 迁移形式提供记账核心，复式平衡与期间锁定由数据库触发器强制",
+    "按国家提供规则包（含科目表、税码、申报框），规则以数据而非代码表达",
+    "提供 CLI（npx ekwo-os）与 MCP server，供人或 AI agent 操作账簿",
+    "内置固定资产、预算、企业所得税、电子发票等模块及财务分析函数"
+   ],
+   "use_cases": [
+    "企业或创始人在自有 Supabase 项目中自管账簿并出具增值税申报",
+    "会计事务所在单一安装内管理多家公司账目",
+    "开发者需要一个税务规则以数据形式表达的复式记账核心"
+   ],
+   "ai_flag_note": "README 明确包含 MCP server 供 AI agent 使用"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "open, the data sits in a Postgres database you control, and the interface is ／ A double-entry accounting core for Postgres. There is no server to run: ／ - **Tested on real Postgres.** The test suite runs the migrations, the seeds,",
+     "lines": [
+      25,
+      64,
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据存于用户控制的 Postgres/Supabase 数据库，该项目是使用该库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0；格式库为 MIT",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A double-entry accounting core for Postgres. There is no server to run: ／ designed for machines as much as for people. Supabase gives the schema a REST ／ - **The MCP server**, hosted at `https://mcp.ekwo.ai/mcp` or run locally with",
+   "evidence_lines": [
+    64,
+    26,
+    39
+   ]
+  },
+  "fn": "Ekwo-ai/ekwo-os",
+  "sha": "686197f3674e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

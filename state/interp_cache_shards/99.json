@@ -9697,5 +9697,147 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a9cabc9e0292": {
+  "identity": {
+   "one_liner": "单机自托管的智能体长期记忆服务，自研 SQLite 单库内核",
+   "review": "aiduMEI 是用 Python/FastAPI 实现的长期记忆服务，通过钩子接入 Claude Code、Codex CLI、Hermes 等宿主，对话前注入记忆、对话后写入并提炼会话精华。f0.7 起默认使用自研 native 单库 SQLite 内核（正文、FTS5 全文索引、向量、历史、墓碑写在同一 memory.db），mem0 降为可选。数据全落本机，支持 HTTP API 与 MCP，单主人设计不支持多用户隔离。",
+   "highlights": [
+    "提供 native 单库 SQLite 记忆内核，正文、FTS5 trigram 全文索引、向量与墓碑同库同事务写入",
+    "提供 connect_host.py 一条命令接入宿主，并支持 REST API 与 6 个 MCP 工具",
+    "提供备份/恢复脚本、墓碑恢复、心图体检与 cloud/auto/local 三种运行挡位"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex CLI、Hermes 等 AI 宿主提供长期记忆读写与召回",
+    "单机自托管场景下对智能体会话记忆做备份、体检与恢复",
+    "从旧 mem0 部署迁移到自研 SQLite 内核"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "f0.7 是一次底座更换：记忆内核从 mem0 换成自研的 **native 单库 SQLite 内核**，mem0 不再是依赖。",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明服务把记忆数据存储在本机 SQLite 的 memory.db 中，SQLite 是其存储依赖而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "aiduMEI 是一个**单机自托管**的长期记忆服务（Python / FastAPI，MIT 许可）。它在你自己的机器上运行，通过钩子接到 Claude Code、Codex CLI、Hermes 等 AI 宿主：每轮对话前把相关记忆注入给模型，每轮对话后把这一轮存下来，会话结束时提炼一条「这一程」的精华。宿主管短期对话，aiduMEI 管长期记忆；数据全部落在本机数据目录，可备份、可删除、可恢复。 ／ f0.7 是一次底座更换：记忆内核从 mem0 换成自研的 **native 单库 SQLite 内核**，mem0 不再是依赖。 ／ |备份|`bash scripts/backup_gate.sh create <名字>` → `bash scripts/backup_gate.sh verify <备份目录>`（整个数据目录，含 `memory.db`，SQLite 在线快照 + 校验和）|",
+   "evidence_lines": [
+    5,
+    11,
+    98
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "monkey2jack/aiduMEI",
+  "sha": "a9cabc9e0292",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "24047750fcb1": {
+  "identity": {
+   "one_liner": "本地 AI 路由网关，提供统一 OpenAI 兼容端点并转发至多家上游提供商",
+   "review": "KhatamRouter 是一个运行于 Bun 的 AI 路由网关，将客户端请求通过单一 OpenAI 兼容 /v1 端点转发到 40+ 上游提供商，并做协议翻译、故障切换、账号轮换与用量记录；持久化使用 bun:sqlite（WAL），可选 Redis 做跨进程事件与限流，配套 Web 仪表盘。面向需要本地聚合多个模型提供商的 AI 开发工具用户，不支持 Node.js 运行时。",
+   "highlights": [
+    "通过单一 OpenAI 兼容 /v1 端点连接 40+ 上游提供商，翻译 OpenAI、Anthropic Claude、Google Gemini 请求格式",
+    "基于 bun:sqlite WAL 模式持久化，使用 node:cluster 多进程横向利用 CPU 核心，可选 Redis 发布/订阅协调",
+    "提供 Web 仪表盘管理 API 密钥、模型组合、提供商节点、OAuth 认证与用量指标"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等开发工具聚合多个模型提供商并自动故障切换",
+    "对多账号/多密钥做轮换、配额与花费记录的本地网关部署",
+    "需要协议翻译（OpenAI/Claude/Gemini 格式互转）的本地代理场景"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Database: bun:sqlite WAL ／ - **Bun-Only Execution**: Built strictly around `bun:sqlite` with WAL mode and zero Node database fallback dependencies. ／ |**Persistence Driver**|`bun:sqlite` exclusively with WAL journal mode|Multi-driver Node fallback chain|`better-sqlite3` / `node:sqlite`|`src/lib/db/adapters/bunSqliteAdapter.js:1-16`|",
+     "lines": [
+      12,
+      24,
+      51
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目使用 SQLite 作为自身网关状态与用量数据的持久化存储，并非以数据库为核心对外服务的生态工具或终端应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT；Psiphon 代理池部分依赖操作员自备的 GPL-3.0 组件",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Connect any AI developer tool or client to 40+ AI providers through one unified, high-concurrency OpenAI-compatible endpoint. ／  Database: bun:sqlite WAL ／ KhatamRouter exposes one OpenAI-compatible `/v1/*` endpoint and translates requests to any supported upstream format (OpenAI, Anthropic Claude Messages, Google Gemini) via a direct or intermediate routing engine.",
+   "evidence_lines": [
+    7,
+    12,
+    33
+   ]
+  },
+  "fn": "rqzbeh/KhatamRouter",
+  "sha": "24047750fcb1",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11681,5 +11681,223 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "45c0cfb11753": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码代理持久记忆 MCP 服务器",
+   "review": "为 Claude Code、Codex、Gemini CLI 等本地 MCP 主机提供跨会话持久记忆的 MCP 服务器。默认使用本地 SQLite 存储，可选 PostgreSQL+pgvector，包含检索工具与生命周期钩子，全部本地运行，无需账号或服务器。MIT 许可，通过 Claude 插件市场或 uv 安装。",
+   "highlights": [
+    "以 stdio MCP 服务器形式为 Claude Code、Codex、Claude Desktop、Gemini CLI 等主机提供 57 个记忆工具和 11 个生命周期钩子",
+    "默认使用本地 SQLite 存储，支持 PostgreSQL + pgvector/pd_trgm 后端，并提供托管的 sha256 校验二进制 PostgreSQL",
+    "本地运行，无 LLM 参与检索循环，记忆数据以本地文件形式保存"
+   ],
+   "use_cases": [
+    "在 AI 编码代理会话之间保留决策、修复记录和项目上下文",
+    "Claude Code 与 Codex 共享同一份项目记忆并支持切换代理",
+    "本地化、离线可用的代理记忆管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "default, or PostgreSQL + pgvector if you prefer. No LLM in the retrieval loop, and nothing ／ PostgreSQL server with pgvector and pg_trgm: pinned, sha256-checked binaries (about 13 MB on macOS,",
+     "lines": [
+      17,
+      106
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Sovereign is what it is today.** Everything runs on your machine: a local SQLite file by ／ SQLite store. No PostgreSQL required. ／ uv tool install \"hypermnesia-mcp[sqlite]\"",
+     "lines": [
+      16,
+      69,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 与 PostgreSQL 仅作为该 MCP 记忆服务的存储后端被使用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Sovereign is what it is today.** Everything runs on your machine: a local SQLite file by ／ SQLite store. No PostgreSQL required. ／ uv tool install \"hypermnesia-mcp[sqlite]\"",
+   "evidence_lines": [
+    16,
+    69,
+    74
+   ]
+  },
+  "fn": "cdeust/Cortex",
+  "sha": "45c0cfb11753",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f364e03cb38f": {
+  "identity": {
+   "one_liner": "Go 编写的原生跨平台数据库 GUI 客户端，支持多种 SQL 库与 Redis",
+   "review": "DGopher 是一个用 Go 编写、无 Electron 的原生数据库 GUI 客户端，运行于 Linux/macOS/Windows，支持 PostgreSQL、MySQL、SQL Server、Oracle、SQLite、DuckDB、Redis 等多种数据库。提供 SQL 编辑、结果网格、执行计划、仪表盘、ER 图、备份恢复与审计日志等功能，连接与查询文件可存入 Git 仓库。定位为开发者与 DBA 的日常数据库操作工具，目前版本尚未达到 1.0。",
+   "highlights": [
+    "单 Go 二进制实现，不依赖 webview/JVM/Electron，提供 Linux、macOS、Windows 构建",
+    "提供查询编辑、执行计划可视化、仪表盘、ER 图、数据导入导出、备份恢复与防误写安全机制（生产连接确认、审计日志）",
+    "支持 SQL 数据库与 Redis（含集群/Sentinel），可用 DuckDB 查询 CSV/Parquet/JSON 文件"
+   ],
+   "use_cases": [
+    "开发者在多引擎环境下编写、审查和执行 SQL 查询",
+    "DBA 查看服务器活动、管理连接权限并记录操作审计日志",
+    "团队通过 Git 仓库共享连接配置、查询文件与仪表盘"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "database client for Linux, macOS and Windows. One app for **PostgreSQL, ／ follow each engine's own tools, from PostgreSQL's `EXPLAIN ANALYZE` to ／  Entra ID, or Kerberos on PostgreSQL and SQL Server.",
+     "lines": [
+      4,
+      42,
+      137
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL, SQL Server, Oracle, ClickHouse, SQLite, DuckDB and Redis**, and for",
+     "lines": [
+      5
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "MySQL, SQL Server, Oracle, ClickHouse, SQLite, DuckDB and Redis**, and for ／ Oracle's PL/SQL and Data Pump, SQL Server's T-SQL batches and",
+     "lines": [
+      5,
+      43
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "MySQL, SQL Server, Oracle, ClickHouse, SQLite, DuckDB and Redis**, and for ／ a small shop database in SQLite, so you need no server.",
+     "lines": [
+      5,
+      85
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "MySQL, SQL Server, Oracle, ClickHouse, SQLite, DuckDB and Redis**, and for ／ Oracle's PL/SQL and Data Pump, SQL Server's T-SQL batches and ／ Entra ID, or Kerberos on PostgreSQL and SQL Server.",
+     "lines": [
+      5,
+      43,
+      137
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "MySQL, SQL Server, Oracle, ClickHouse, SQLite, DuckDB and Redis**, and for",
+     "lines": [
+      5
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "CockroachDB, YugabyteDB, TimescaleDB, MariaDB and TiDB as engines of their",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "CockroachDB, YugabyteDB, TimescaleDB, MariaDB and TiDB as engines of their ／ TiDB, which refuses the server's setting, by the app alone).",
+     "lines": [
+      6,
+      141
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是连接和管理多种数据库的 GUI 客户端工具，本身不存储业务数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "database client for Linux, macOS and Windows. One app for **PostgreSQL, ／ - **Native and light.** One Go binary, drawn by ／ - **Admin:** server activity with running queries to cancel, locks and the",
+   "evidence_lines": [
+    4,
+    19,
+    124
+   ]
+  },
+  "fn": "saanuregh/dgopher",
+  "sha": "f364e03cb38f",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -13777,5 +13777,262 @@
   "generated_at": "2026-10-29",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "097fb1014901": {
+  "identity": {
+   "one_liner": "Ubuntu/Debian 服务器上的 PHP 网站托管控制面板",
+   "review": "FastCP 是一个基于 Caddy、PHP-FPM 和 MySQL 构建的服务器控制面板，用于在单台 Ubuntu/Debian 服务器上托管多个 PHP 网站，提供站点管理、自动 HTTPS、MySQL 数据库与 phpMyAdmin、restic 备份、防火墙和签名更新等功能。面板数据存于 SQLite，通过 agent 生成并校验 Caddyfile 与 PHP-FPM 池配置。适合在 VPS 上自行部署 PHP 应用的运维人员。",
+   "highlights": [
+    "支持多 PHP 8.x 版本并存、按站点选择，每站点独立 PHP-FPM 池与 Linux 用户隔离",
+    "内置 MySQL 数据库与用户管理及 phpMyAdmin，支持 restic 定时备份与按站点/数据库恢复",
+    "提供自动 HTTPS（Let's Encrypt）、反向代理站点（Node.js/Python/Go/Docker）与自定义 Caddy 配置"
+   ],
+   "use_cases": [
+    "在单台 Ubuntu/Debian 服务器上托管多个 PHP 网站（含 WordPress）",
+    "为本地端口上的 Node.js/Python/Go/Docker 应用配置 HTTPS 反向代理",
+    "管理服务器上的 MySQL 数据库、定时备份、Cron 任务与 SSH/SFTP 访问"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A lightweight control panel for Ubuntu and Debian servers, built on Caddy, PHP-FPM and MySQL. ／ - **MySQL** databases and users, with phpMyAdmin built in. ／ The installer verifies the release signature, installs MySQL, Caddy, phpMyAdmin and the newest PHP, and prints the control panel address and the password of the `fastcp` administrator account. Open `https://your-server-ip:2050` and sign in. The panel uses a se",
+     "lines": [
+      3,
+      12,
+      29
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The panel keeps its data in SQLite and pushes the desired configuration to the agent, which renders the Caddyfile and PHP-FPM pools, validates them, and reloads the services without dropping connections.",
+     "lines": [
+      54
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库与网站托管提供管理面板，是服务于服务器/数据库运维的工具组件而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A lightweight control panel for Ubuntu and Debian servers, built on Caddy, PHP-FPM and MySQL. ／ - **MySQL** databases and users, with phpMyAdmin built in. ／ The panel keeps its data in SQLite and pushes the desired configuration to the agent, which renders the Caddyfile and PHP-FPM pools, validates them, and reloads the services without dropping connections.",
+   "evidence_lines": [
+    3,
+    12,
+    54
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "rehmatworks/fastcp",
+  "sha": "097fb1014901",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::Riverse — A personal AI agent designed for your own devices. Persistent memory, offline cognition, g": {
+  "identity": {
+   "one_liner": "面向个人设备的本地优先 AI 代理，具备持久记忆与离线推理能力",
+   "review": "该仓库提供名为 Riverse 的个人 AI 代理，运行在用户自己的设备上，具备持久记忆（persistent memory）和离线认知（offline cognition）能力，声称每次对话都会累积增长，并采用 River Algorithm 和 local-first 架构。目标用户是希望在个人设备上运行私有 AI 助手的人。基于简介推断其使用 MySQL/PostgreSQL 等组件（来自主题标签），并包含价格监控（price-monitoring/price-tracker）相关功能，但简介本身未展开说明，具体实现细节无法确认。",
+   "highlights": [
+    "持久记忆（persistent memory），随每次对话累积",
+    "本地优先（Local-first），支持离线认知（offline cognition）",
+    "主题标签显示使用 PyTorch、HuggingFace Transformers 及 aiogram/FastAPI 等技术栈"
+   ],
+   "use_cases": [
+    "在个人设备上运行离线可用的 AI 助手",
+    "需要跨会话保留记忆的个人 AI 交互",
+    "价格监控与追踪（依据主题标签 price-monitoring/price-tracker）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是使用数据库作为后端存储的个人 AI 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Riverse — A personal AI agent designed for your own devices. Persistent memory, offline cognition, grows with every conversation."
+  },
+  "fn": "Bansheeelf/rpocket-team-JKRiver",
+  "sha": "desc::Riverse — A personal AI agent designed for your own devices. Persistent memory, offline cognition, g",
+  "source": "desc",
+  "generated_at": "2026-10-30",
+  "ver": 2,
+  "prompt_ver": "3.3"
+ },
+ "fb8f3a66c056": {
+  "identity": {
+   "one_liner": "自托管亲友私密内容流，聚合各社交网络帖子到单一信息流",
+   "review": "ADHX 是一个自托管的私密社交信息流应用，用于把 X、Instagram、TikTok、YouTube 等网络上的帖子下载为本地副本并在自建服务器上播放，支持搜索、反应和频道分组。面向朋友与家庭小圈子，通过 Docker 单容器运行，下载依赖 yt-dlp，私有或 DRM 保护的帖子无法保存。",
+   "highlights": [
+    "支持从 X、Instagram、TikTok、YouTube、Reddit 等 14 个网络保存帖子并下载为本地副本",
+    "提供基于本地开放模型（EmbeddingGemma 2、Whisper、Florence-2）的多模态搜索",
+    "通过单个 Docker 容器部署，提供 iPhone/Android 应用与网页端"
+   ],
+   "use_cases": [
+    "朋友/家庭小圈子私密分享社交网络帖子",
+    "长期保存可能被删除的社交媒体内容",
+    "在本地服务器上按内容语义检索已保存的帖子"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述其为自托管社交信息流应用，保存/播放帖子内容本身而非为数据库生态服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ADHX is a private social network for your friends and family. One of you runs it; everyone shares the best posts they find on X, Instagram, TikTok, YouTube, Reddit and nine more networks into one feed, picked by people who know you instead of a recommendation engine with quarterly targets. ／ No ads. No strangers. No engagement metrics. Nobody in a growth meeting deciding what you see. One Docker container, one folder of data, and an invite list for the people you'd actually let in your house. ／ docker run -d --name adhx -p 3000:3000 -v adhx:/data ghcr.io/itsmemeworks/adhx",
+   "evidence_lines": [
+    11,
+    15,
+    98
+   ]
+  },
+  "fn": "itsmemeworks/adhx",
+  "sha": "fb8f3a66c056",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "028f1cfe043a": {
+  "identity": {
+   "one_liner": "自托管个人与家庭财务应用，Flask + SQLite 本地存储",
+   "review": "FinanCerto 是一个自托管的个人/家庭财务管理系统，提供收支记录、信用卡账单、预算、储蓄目标、投资组合与股息导入等功能，数据以 SQLite 文件存于本地 data/ 目录，通过 Docker 部署，支持多用户/多家庭隔离、PWA 与 Android 应用，面向希望数据留在自己服务器上的个人和家庭用户。",
+   "highlights": [
+    "以本地 SQLite 文件存储数据，数据不出服务器",
+    "支持多用户按家庭隔离，提供只读用户与账户间转账",
+    "提供 OCR 发票扫描、合同 PDF 导入、投资报价每小时自动更新与股息自动导入",
+    "提供备份/恢复（zip 与定时备份）、CSV 导出和演示模式，可安装为 PWA 并提供 Android 应用"
+   ],
+   "use_cases": [
+    "个人或家庭在自有服务器上记账并管理预算与信用卡账单",
+    "管理股票、ETF、固定收益等投资组合并跟踪股息与收益",
+    "家庭内多成员分别记账并共享转移资金"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite local ／ o banco é um arquivo SQLite dentro da pasta <code>data/</code>, na sua máquina,",
+     "lines": [
+      12,
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该应用以本地 SQLite 文件存储其自身业务数据，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " SQLite local ／ o banco é um arquivo SQLite dentro da pasta <code>data/</code>, na sua máquina,",
+   "evidence_lines": [
+    12,
+    28
+   ]
+  },
+  "fn": "financerto/financerto-app",
+  "sha": "028f1cfe043a",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

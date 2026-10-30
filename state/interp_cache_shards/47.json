@@ -11032,5 +11032,149 @@
   "generated_at": "2026-10-29",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "57d0e3f76fe9": {
+  "identity": {
+   "one_liner": "opencode 服务器的 Rust 兼容重实现，提供 v1/v2 API 与 SSE",
+   "review": "ocserve 用 Rust 重新实现 opencode 服务器的 HTTP/SSE 接口，覆盖 1.18.x 的 188 个操作与 2.x 的 142 个操作，官方 TUI 和 Web UI 可直接连接。面向在小型 VPS 或老设备上长期运行、需要更小内存占用与增量回收历史数据的用户；数据存储在本地，支持从上游 opencode.db 导入会话历史。2.x 专属操作需设置 OCSERVE_V2=1 才启用。",
+   "highlights": [
+    "实现 v1 (1.18.31) 全部 188 个操作与 v2 (2.0.28) 全部 142 个操作，v2 操作通过 OCSERVE_V2=1 选择性启用",
+    "通过 cargo 安装、预构建二进制或源码构建运行，支持 Linux/macOS/Windows 多架构",
+    "提供从上游 opencode.db 导入会话的子命令，支持 --session、--bulk、--force 等选项"
+   ],
+   "use_cases": [
+    "在资源受限的 VPS 或旧笔记本上长期运行 opencode 服务器",
+    "需要从上游迁移既有会话历史并继续使用官方客户端的场景",
+    "需要离线本地服务 opencode Web 应用的环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "and re-runs every oracle before claiming compatibility.",
+     "lines": [
+      271
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是 opencode 服务器的替代实现，数据存于本地数据库文件，SQLite 为其内部存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A compatible reimplementation of the opencode ／ Data lives in `~/.local/share/ocserve` (`OCSERVE_DATA_DIR` overrides). It reads ／ ocserve import --source ~/.local/share/opencode/opencode.db",
+   "evidence_lines": [
+    3,
+    134,
+    139
+   ]
+  },
+  "fn": "Reliary/ocserve",
+  "sha": "57d0e3f76fe9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ea7b61a27496": {
+  "identity": {
+   "one_liner": "在 Go 应用或测试中本地运行真实 ClickHouse 二进制的嵌入式测试库",
+   "review": "这是一个 Go 库，用于在 Linux/macOS 上以子进程方式启动真实的 ClickHouse 二进制，供集成测试使用，无需 Docker 或预装数据库。二进制从官方 GitHub releases 下载并缓存，支持自动分配端口、TestMain/t.Cleanup 生命周期管理，还提供基于内嵌 Keeper 的多副本集群模式以测试 ReplicatedMergeTree。面向在 CI（尤其 GitLab CI）中需要真实 ClickHouse 集成测试的 Go 开发者，要求 Go 1.25+，仅支持 Linux/macOS。",
+   "highlights": [
+    "无需 Docker 或外部依赖，直接下载并运行 ClickHouse 官方二进制，支持 SHA256/SHA512 校验与缓存复用",
+    "提供集群模式，在 localhost 运行多副本并使用内嵌 Keeper（Raft 协调），支持 ReplicatedMergeTree 与 ON CLUSTER 查询测试",
+    "支持自定义二进制来源（本地归档、私有 registry URL、自定义 Header 认证）及端口、数据目录、超时等配置"
+   ],
+   "use_cases": [
+    "GitLab CI 等无法使用 privileged Docker 的环境中运行真实 ClickHouse 集成测试",
+    "对 ReplicatedMergeTree 表和 ON CLUSTER 语句做本地多副本复制测试",
+    "在 Go 单元/集成测试中替代 mock，直接执行 SQL 验证服务行为"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Inspired by fergusstrange/embedded-postgres. ClickHouse binaries are fetched directly from official GitHub releases. ／ The insight from fergusstrange/embedded-postgres was that you don't need Docker at all. ClickHouse ships as a single self-contained binary. You can download it, verify its checksum, and run it as a child process — no daemon, no socket, no sidecar, no privilege",
+     "lines": [
+      12,
+      32
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Run a real ClickHouse database locally on Linux or macOS as part of another Go application or test. ／ `embedded-clickhouse` applies that same idea to ClickHouse. The binary is fetched once, cached in `~/.cache/embedded-clickhouse/`, and reused across test runs. In CI, you cache that directory and the download never happens again. No Docker. No privileged runners. No Ryuk.",
+     "lines": [
+      8,
+      34
+     ]
+    }
+   ],
+   "dbs": [
+    "ClickHouse"
+   ],
+   "eco": "tool",
+   "eco_why": "该库本身不使用 ClickHouse 存数据，而是为测试场景下载、启动和管理 ClickHouse 二进制，属于为其服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Run a real ClickHouse database locally on Linux or macOS as part of another Go application or test. ／ `embedded-clickhouse` applies that same idea to ClickHouse. The binary is fetched once, cached in `~/.cache/embedded-clickhouse/`, and reused across test runs. In CI, you cache that directory and the download never happens again. No Docker. No privileged runners. No Ryuk. ／ go get github.com/franchb/embedded-clickhouse",
+   "evidence_lines": [
+    8,
+    34,
+    39
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "franchb/embedded-clickhouse",
+  "sha": "ea7b61a27496",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

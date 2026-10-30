@@ -10731,5 +10731,75 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4e4d32deb89d": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 跨会话记忆插件，基于 SQLite 与 Markdown 双存储",
+   "review": "dsh-mneme 是 DeepSeek Harness (DSH) 的插件，为 LLM 代理提供跨会话持久记忆：数据落在本机 SQLite，并同步为可手工编辑的 Markdown 文件；提供关键词/向量/BM25/实体四路检索、autoDream 后台巩固、冲突挂起裁决与决策审计凭证。面向使用 DSH 或 MCP 客户端的 AI 代理用户，通过 dsh plugin 或 npm 安装，另附独立 stdio MCP server 与常驻 daemon。",
+   "highlights": [
+    "提供 10 个模型工具与零依赖 stdio MCP server，供 Claude Code、Cursor 等客户端挂载记忆读写",
+    "记忆存储为本机 SQLite 并镜像为 Markdown 文件，支持双向同步与人工编辑优先",
+    "实现 autoDream 后台巩固、四路检索（关键词/向量/BM25/实体）、冲突冻结裁决与可回放审计"
+   ],
+   "use_cases": [
+    "为 DSH 会话提供跨会话的长期记忆与偏好留存",
+    "通过 MCP 在 Claude Code、Cursor、Codex 等客户端共享同一记忆库",
+    "以 dsh-mneme-serve 常驻 daemon 供脚本或第三方集成读写记忆"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 记忆只落在本机：SQLite 存储 + 可手工编辑的 Markdown 镜像，不经过任何 mneme 服务器 ／ - Memories stay on your machine: a local SQLite store plus editable Markdown mirrors, with no mneme server in the path",
+     "lines": [
+      161,
+      421
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 AI 代理宿主提供记忆存储与检索服务的组件，SQLite 仅作为其本机存储底座。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**dsh-mneme** 是 DeepSeek Harness (DSH) 的跨会话记忆插件。它不只「存得下」，更「管得好」：后台自动去重合并、矛盾先冻结等你裁决、全程可回放审计、记忆只落在本机，还支持导出成人可读的 Markdown。 ／ - 记忆只落在本机：SQLite 存储 + 可手工编辑的 Markdown 镜像，不经过任何 mneme 服务器 ／ 插件自带零依赖 stdio MCP server（独立 npm 包 **`mneme-memory`**，bin 名 `mneme-mcp`），任何 MCP 客户端都能挂载记忆六件套（`memory_save` / `memory_search` / `memory_list` / `memory_get` / `memory_update` / `memory_delete`）。",
+   "evidence_lines": [
+    18,
+    161,
+    169
+   ]
+  },
+  "fn": "slow-stack/mneme",
+  "sha": "4e4d32deb89d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

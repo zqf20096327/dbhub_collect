@@ -11133,5 +11133,142 @@
   "generated_at": "2026-10-27",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6059c68b4a32": {
+  "identity": {
+   "one_liner": "自托管项目与任务跟踪系统，NestJS+Nuxt 3+PostgreSQL 单体应用",
+   "review": "一个面向团队与代理商的开源项目和任务跟踪系统，支持自托管或云端部署，集成看板、时间跟踪、负载计划、聊天与音视频通话（WebRTC/mediasoup）、知识库、内置邮件和自托管 git。后端 NestJS/TypeORM，数据存储于 PostgreSQL，通过 Docker Compose 一键启动全套组件。适合需要在自有服务器保存数据的项目团队。",
+   "highlights": [
+    "提供看板任务管理、时间跟踪、团队负载计划与 XLSX 报表导出",
+    "集成实时聊天、WebRTC 音视频房间、知识库、内置邮件与自托管 git",
+    "提供 OpenAPI/Swagger 文档的 API，支持 Docker Compose 部署 PostgreSQL+API+前端全套组件"
+   ],
+   "use_cases": [
+    "工作室与代理商管理客户项目、工时与团队负载",
+    "产品团队使用看板、冲刺与知识库协作",
+    "需要数据留在自有服务器环境的团队自托管部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ - **Backend:** NestJS, TypeORM, PostgreSQL, WebRTC (mediasoup), WebSockets.",
+     "lines": [
+      13,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明后端使用 NestJS/TypeORM 并以 PostgreSQL 存储应用数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Backend:** NestJS, TypeORM, PostgreSQL, WebRTC (mediasoup), WebSockets. ／ Полный комплект (PostgreSQL + API + веб-приложение) одной командой: ／ docker compose up --build",
+   "evidence_lines": [
+    126,
+    132,
+    136
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ar-webcetera/nervion",
+  "sha": "6059c68b4a32",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d74393cfc882": {
+  "identity": {
+   "one_liner": "逐模块构建 ETF 投研 Agent 的学习项目，含可运行 CLI 与验证证据",
+   "review": "该项目以模块化方式实现一个 ETF 投研 Agent，每模块对应一篇架构文章和可运行代码，运行结果落盘为 report.md、manifest.json 与 run.jsonl 供追溯验证。面向学习 Agent 工程的开发者，默认示例离线运行、无需模型密钥，明确声明不构成投资建议，live 运行需另行授权。",
+   "highlights": [
+    "提供逐模块的可运行实现，每次运行在 runs/ 目录生成 report.md、manifest.json 和 run.jsonl",
+    "支持离线运行默认示例，无需模型密钥，并有独立的受限 live runner",
+    "保留版本演进记录与文章到代码的映射，运行产物含哈希与来源引用"
+   ],
+   "use_cases": [
+    "开发者对照架构文章学习 Agent 工程的可运行实现",
+    "本地复现合成文档对比与来源核查流程",
+    "研究 Agent 运行的检查点与可追溯执行机制"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Respect original identity and effects:** unknown dispatched requests are not automatically retried; host stop is not user cancellation. SQLite fencing does not provide general external exactly-once effects. Finish or isolate incompatible active Runs before",
+     "lines": [
+      86
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用数据库（SQLite 用于运行状态/围栏）的 Agent 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码与文档为 MIT，第三方依赖、Evidence Kit 与 NOTICE 保留各自许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A learning-by-building research Agent: each module explains one engineering decision and keeps a runnable implementation. Start with the offline synthetic-document comparison—no model key required. This is not a live fund-research or trading service. ／ For developers learning Agent engineering, and readers who want to check an architecture article against runnable code—not investors looking for fund recommendations. ／ - **Respect original identity and effects:** unknown dispatched requests are not automatically retried; host stop is not user cancellation. SQLite fencing does not provide general external exactly-once effects. Finish or isolate incompatible active Runs before upgrade.",
+   "evidence_lines": [
+    7,
+    9,
+    86
+   ]
+  },
+  "fn": "hpoenixf/open-etf-agent",
+  "sha": "d74393cfc882",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

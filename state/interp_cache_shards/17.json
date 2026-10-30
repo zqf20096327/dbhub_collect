@@ -11954,5 +11954,253 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "68ed05d7c9bd": {
+  "identity": {
+   "one_liner": "S3 存储编排层，将多个 S3 后端聚合为单一 S3 端点",
+   "review": "s3-orchestrator 是一个 S3 存储编排服务：在任意数量的 S3 兼容后端（AWS S3、MinIO、Backblaze B2 等）前提供统一 S3 端点，支持 N 副本复制、读故障转移、按后端配额、加密与压缩。面向 homelab、自托管 MinIO 用户与多云小团队。元数据存储于嵌入式 SQLite，多实例部署需 PostgreSQL。",
+   "highlights": [
+    "提供单一 S3 端点聚合多个 S3 兼容后端，支持副本复制与读故障转移",
+    "支持信封加密（AES-256-GCM、Vault Transit）与 zstd 分块压缩",
+    "提供 Docker、deb、二进制、Helm、Nomad pack 与 Terraform provider 分发"
+   ],
+   "use_cases": [
+    "将多个云厂商免费额度聚合为单个可用存储桶",
+    "为本地 MinIO 实例添加自动云端备份副本",
+    "多副本与加密场景下的多云冗余存储"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database.** Embedded SQLite with no external dependencies, single-node PostgreSQL, or many instances with Redis-backed shared counters so quotas hold across the fleet. ／ **Database:** SQLite is embedded - no external dependencies for single-instance use. PostgreSQL 14+ is also an option and is required for multi-instance deployments (`database.driver: postgres`); the schema migrates on boot. ／ Metadata (object locations, quota counters, multipart state, cleanup queue) lives in PostgreSQL or SQLite. Backends only ever see plain S3 calls - no orchestrator-specific protocol, no schema requirements. Any provider that speaks the AWS SDK works.",
+     "lines": [
+      39,
+      92,
+      116
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Database.** Embedded SQLite with no external dependencies, single-node PostgreSQL, or many instances with Redis-backed shared counters so quotas hold across the fleet. ／ Starts three MinIO backends via Docker Compose, embedded SQLite as the metadata store, and the orchestrator on `localhost:9000`. ／ **Database:** SQLite is embedded - no external dependencies for single-instance use. PostgreSQL 14+ is also an option and is required for multi-instance deployments (`database.driver: postgres`); the schema migrates on boot.",
+     "lines": [
+      39,
+      67,
+      92
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该服务面向 S3 对象存储编排，PostgreSQL/SQLite 仅作为其自身元数据存储被使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "binary",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Most applications talk to one S3 backend, which ties them to that provider's uptime, pricing, and limits. s3-orchestrator puts a single S3 endpoint in front of any number of S3-compatible backends - OCI Object Storage, Backblaze B2, AWS S3, MinIO, Wasabi, Cloudflare R2, anything that speaks S3 - and presents them as one or more virtual buckets. It tracks where every object lives in its own database, which is what lets it enforce per-backend byte quotas, keep N copies across providers, fail reads over when one goes dark, and take a backend out of the fleet without downtime. ／ - **Database.** Embedded SQLite with no external dependencies, single-node PostgreSQL, or many instances with Redis-backed shared counters so quotas hold across the fleet. ／ **Database:** SQLite is embedded - no external dependencies for single-instance use. PostgreSQL 14+ is also an option and is required for multi-instance deployments (`database.driver: postgres`); the schema migrates on boot.",
+   "evidence_lines": [
+    12,
+    39,
+    92
+   ]
+  },
+  "fn": "afreidah/s3-orchestrator",
+  "sha": "68ed05d7c9bd",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "90ab15f68da5": {
+  "identity": {
+   "one_liner": ".NET 测试用一次性容器库，支持 WSLC/Docker 双后端",
+   "review": "Purview.Containers 是面向 .NET (net10.0) 集成测试的容器库，提供 Testcontainers 风格的 API，在 Windows 上通过 WSL Containers 运行一次性 Linux 容器（无需安装 Docker），在 Linux CI 上走 Docker 后端，同一套测试代码可在两种后端间切换。内置九个服务模块（PostgreSQL、MySQL、SQL Server、Redis 等），状态为实验性预览，API 可能在 prerelease 间变动。",
+   "highlights": [
+    "提供后端中立抽象，同一测试代码可在 WSLC 与 Docker 后端运行",
+    "内置九个服务模块，含 PostgreSQL、MySQL、SQL Server、Redis、RabbitMQ 等 builder",
+    "通过环境变量 PURVIEW_CONTAINERS_BACKEND 选择后端，WSLC 模式无需 Docker 安装"
+   ],
+   "use_cases": [
+    ".NET 项目集成测试中启动数据库等服务的临时容器",
+    "Windows 开发环境无 Docker 时运行 Linux 容器测试",
+    "Linux CI 流水线复用同一套测试代码"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator, Azure Service Bus Emulator). On WSLC, **images are shared ／ PostgreSQL: ／ await using var postgres = new PostgreSqlBuilder()",
+     "lines": [
+      40,
+      116,
+      119
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "> modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator, Azure Service Bus Emulator). On WSLC, **images are shared",
+     "lines": [
+      40
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "> modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator, Azure Service Bus Emulator). On WSLC, **images are shared ／ SQL Server / Redis / RabbitMQ: ／ await using var sqlServer = new MsSqlBuilder().WithPassword(\"SomeStrong!Password1\").AcceptLicense().Build();",
+     "lines": [
+      40,
+      125,
+      128
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server"
+   ],
+   "eco": "tool",
+   "eco_why": "为集成测试提供数据库等服务的临时容器运行能力，属于服务数据库生态的测试工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Testcontainers-style library for .NET that runs throwaway Linux containers for integration testing — on **Microsoft WSL Containers (WSLC)** with no Docker installation, or on **Docker** through Testcontainers. ／ > modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator, Azure Service Bus Emulator). On WSLC, **images are shared ／ > **Experimental.** This project is an experiment in running throwaway containers through Microsoft",
+   "evidence_lines": [
+    6,
+    40,
+    33
+   ]
+  },
+  "fn": "purview-dev/containers",
+  "sha": "90ab15f68da5",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fff35f358101": {
+  "identity": {
+   "one_liner": "基于 Spring Boot + TiDB Cloud 的图书馆管理系统，内置 LangChain4j AI 助手",
+   "review": "这是一个图书馆管理系统应用，用 Java 21 和 Spring Boot 实现，数据存于 TiDB Cloud 上的 MySQL 8.0 数据库，包含 12 张规范化的表，支持图书、会员、员工、订阅、付款等管理。其特色是通过 LangChain4j 接入 Mistral AI 构建自然语言对话助手（Lumina Concierge），助手通过 12 个工具契约读取或写入数据库，并以 SSE 流式返回。适合图书馆业务场景或需要将 LLM 助手接入现有 Web 应用的开发者参考。",
+   "highlights": [
+    "提供 12 张规范化表的数据库 CRUD，含软删除过滤与事务一致性",
+    "内置 LangChain4j AI 助手，含 9 个读工具与 3 个写工具，业务校验保留在服务层",
+    "通过 SSE 实现逐 token 的流式响应，前后端使用统一的 delta/done/error 事件契约"
+   ],
+   "use_cases": [
+    "图书馆日常图书与会员管理",
+    "通过自然语言对话查询图书、逾期与罚款信息",
+    "需要 AI 助手与关系数据库集成的场景参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL ／ A full-featured **enterprise-grade library management system**: built with **Java 21** and **Spring Boot 4.1**, backed by a real **MySQL** relational database (hosted on **TiDB Cloud** with TLS), and integrated with a natural-language **LangChain4j AI Concierg ／ |**Database**|TiDB Cloud (MySQL 8.0)|Hosted on AWS Southeast Asia, TLS required, Port `4000`|",
+     "lines": [
+      25,
+      30,
+      62
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "TiDB Cloud ／ This repository is the Java counterpart to `library-management-system-dbms` (Python + Flask + LangGraph), sharing the exact same TiDB Cloud schema, Suttling Desk design system, and real-time SSE chat streaming contract. ／ |**Database**|TiDB Cloud (MySQL 8.0)|Hosted on AWS Southeast Asia, TLS required, Port `4000`|",
+     "lines": [
+      26,
+      32,
+      62
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 TiDB Cloud (MySQL) 存储数据的图书馆管理系统应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A full-featured **enterprise-grade library management system**: built with **Java 21** and **Spring Boot 4.1**, backed by a real **MySQL** relational database (hosted on **TiDB Cloud** with TLS), and integrated with a natural-language **LangChain4j AI Concierge** powered by **Mistral AI**. Manage books, members, employees, subscriptions, payments, sales, and issues — or simply ask **Lumina Concierge** at the Reference Desk in plain conversational English. ／ This repository is the Java counterpart to `library-management-system-dbms` (Python + Flask + LangGraph), sharing the exact same TiDB Cloud schema, Suttling Desk design system, and real-time SSE chat streaming contract. ／ |**Database**|TiDB Cloud (MySQL 8.0)|Hosted on AWS Southeast Asia, TLS required, Port `4000`|",
+   "evidence_lines": [
+    30,
+    32,
+    62
+   ]
+  },
+  "fn": "kairav7220/library-management-system-java",
+  "sha": "fff35f358101",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

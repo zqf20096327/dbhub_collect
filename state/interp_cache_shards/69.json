@@ -11179,5 +11179,145 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "96915c9f9a69": {
+  "identity": {
+   "one_liner": "单文件嵌入式双时态图数据库，用 Datalog 查询",
+   "review": "Minigraf 是一个以 Rust 编写的单文件嵌入式图数据库，通过 Datalog 语言查询事实（EAV 边），每个事实携带事务时间与有效时间实现双时态查询，支持窗口函数与预编译语句。以库、REPL 二进制、WASM 形式运行，提供 Python/Node/Java/Android/iOS/C 等绑定。适合 AI 代理记忆、移动端离线存储等场景；设计上不做分布式、无客户端-服务器协议，针对小于 100 万节点的规模。",
+   "highlights": [
+    "单文件嵌入式存储，支持 Datalog 递归查询与窗口函数",
+    "双时态模型（事务时间+有效时间），可回放任意历史时刻的知识状态",
+    "提供 Rust/Python/Node/WASM/Java/Android/iOS/C 多语言绑定"
+   ],
+   "use_cases": [
+    "AI 代理的事实记忆与决策审计（可配合向量库做 GraphRAG）",
+    "移动端离线优先存储，支持事后修正并保留原始记录",
+    "浏览器内 WASM 图数据存储与可视化（IndexedDB 后端）"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "> **Embedded graph memory for AI agents, mobile apps, and the browser** — the SQLite of bi-temporal graph databases ／ A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ |Feature|Minigraf|XTDB|Cozo|Neo4j|SQLite|",
+     "lines": [
+      12,
+      14,
+      95
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将自身定位为嵌入式图数据库引擎，供应用/代理嵌入使用，而非使用某个数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：MIT OR Apache-2.0",
+   "install": [
+    "pypi",
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ Minigraf is a **single-file embedded graph database** that lets you: ／ - **Distributed** — no clustering, no sharding, no replication; each agent instance owns its own `.graph` file",
+   "evidence_lines": [
+    14,
+    22,
+    184
+   ]
+  },
+  "fn": "project-minigraf/minigraf",
+  "sha": "96915c9f9a69",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a3bae61e8437": {
+  "identity": {
+   "one_liner": "面向 Codex 的本地任务与专注工作台，SQLite 存储",
+   "review": "一个 Codex 插件形态的任务管理工作台，用于管理任务、项目、OKR、日常计划，并通过 8 个生命周期 hooks 观察多个 Codex 会话状态；数据以 SQLite 存于本地，服务仅监听 127.0.0.1，通过 codex plugin marketplace 安装，也可从源码运行。适合使用 Codex CLI 并需要统一查看任务与聊天进度的用户。",
+   "highlights": [
+    "通过 8 个 hooks 记录 Codex 会话活动状态（不含提示词与工具输入输出内容）到本地 SQLite",
+    "提供任务看板、时间线、项目/OKR、专注计时与交付评审等功能模块",
+    "提供 MCP 工具与本地 HTTP 服务（默认 127.0.0.1:16943）"
+   ],
+   "use_cases": [
+    "并行运行多个 Codex 任务时统一查看会话与任务状态",
+    "以任务/项目/OKR 方式组织日常工作与 AI 交付评审",
+    "本地记录专注时间并生成每日计划"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A task and focus workspace for Codex. Manage tasks, projects, OKRs, and daily plans, track focus time, and review AI deliveries in one place. Data is stored locally in SQLite. ／ All 8 run the same local `hooks/observe.js` script with a 3-second timeout. It records session identity, working directory, event, turn ID, activity time and observed state in local SQLite; it does not save prompt text or tool input/output content. Hooks obser ／ The database is stored at `~/.ai-todos/ai-todos.sqlite`. The service listens only on `127.0.0.1`. Uninstalling the plugin does not delete your data or stop the service.",
+     "lines": [
+      5,
+      55,
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其本地任务数据的存储介质，项目是使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A task and focus workspace for Codex. Manage tasks, projects, OKRs, and daily plans, track focus time, and review AI deliveries in one place. Data is stored locally in SQLite. ／ The database is stored at `~/.ai-todos/ai-todos.sqlite`. The service listens only on `127.0.0.1`. Uninstalling the plugin does not delete your data or stop the service.",
+   "evidence_lines": [
+    5,
+    105
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "denvey/ai-todos",
+  "sha": "a3bae61e8437",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

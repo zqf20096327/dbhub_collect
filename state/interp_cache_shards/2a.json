@@ -10860,5 +10860,229 @@
   "generated_at": "2026-10-28",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "34865029074a": {
+  "identity": {
+   "one_linger": null,
+   "one_liner": "基于 Next.js 和 Drizzle 的多邻国风格语言学习应用",
+   "review": "Lingo 是一个复刻多邻国交互式语言学习体验的 Web 应用，采用 Next.js、React、TypeScript、Tailwind 构建，使用 Neon 提供的 PostgreSQL 数据库存储挑战数据，通过 Drizzle ORM 进行数据推送与种子脚本写入。面向希望本地部署或学习该项目的开发者，需自行配置 Clerk 认证、Neon 数据库、Stripe 等 API 密钥。",
+   "highlights": [
+    "使用 Next.js/React/TypeScript/Tailwind 构建，支持通过 Vercel 部署",
+    "通过 Drizzle ORM 与 Neon PostgreSQL 存取挑战数据，提供 db:push 与种子脚本",
+    "集成 Clerk 认证和 Stripe 支付 API 配置"
+   ],
+   "use_cases": [
+    "学习和参考语言学习类应用的前后端实现",
+    "本地部署交互式闯关式学习应用",
+    "基于该项目二次开发定制化学习平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "1. **Source**: Database Provider (e.g., Neon, PostgreSQL) ／ React JS Next JS Typescript Tailwind CSS Vercel Postgresql",
+     "lines": [
+      52,
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 Neon PostgreSQL 存储数据的语言学习应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " 1. **Source**: Database Provider (e.g., Neon, PostgreSQL) ／ React JS Next JS Typescript Tailwind CSS Vercel Postgresql",
+   "evidence_lines": [
+    52,
+    120
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "sanidhyy/duolingo-clone",
+  "sha": "34865029074a",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ed33076b1683": {
+  "identity": {
+   "one_liner": "面向编码 Agent 的本地长期记忆库，以 SQLite 存储并通过 MCP 提供",
+   "review": "Hippo 为 Cursor、Claude Code、Codex 等编码 Agent 提供本地长期记忆：以 SQLite 加 markdown 镜像存储记忆，内置 BM25 检索，支持记忆衰减、supersede 替换与错误标记降权，并可通过 MCP 或 HTTP 从多工具查询同一存储。面向 AI Agent 开发者与使用者，嵌入与远程重排为可选安装。",
+   "highlights": [
+    "以 SQLite 本地存储记忆并生成可 git 提交的 markdown 镜像，BM25 检索无网络调用",
+    "支持 MCP 客户端接入，可从 ChatGPT、Cursor 规则、Slack、markdown 导入记忆",
+    "提供记忆衰减、错误标记降级、supersede 替换与每日 sleep 整理任务"
+   ],
+   "use_cases": [
+    "为编码 Agent 提供跨工具共享的长期记忆存储",
+    "将 ChatGPT、Cursor 等来源的记忆统一到本地单一存储",
+    "基于 git 提交历史学习项目经验教训"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Hippo keeps your coding agents' memories in a SQLite store on your machine, with markdown mirrors you can read and commit. Search is BM25 out of the box, with no model and no network call; embeddings are an optional install. `hippo init` installs hooks for Cla ／ Storage: SQLite backbone with markdown mirrors. Git-trackable, human-readable.",
+     "lines": [
+      15,
+      32
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Zero runtime deps|Yes|No (ChromaDB)|No|No|No (PGLite or PG+pgvector)|No (managed service)|No (npm deps)|No (Python deps)|Yes (single Rust binary)|No (managed + OSS)|",
+     "lines": [
+      835
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **LongMemEval oracle split, all 500 questions in one pooled store, BM25 only, no embeddings, v0.11: R@5 = 74.0%** (benchmarks/README.md, scripts in benchmarks/longmemeval/). A different setup from the per-haystack results under Benchmarks, so the two are not",
+     "lines": [
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目用 SQLite 存储自身的记忆数据，是使用数据库的应用而非为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Hippo keeps your coding agents' memories in a SQLite store on your machine, with markdown mirrors you can read and commit. Search is BM25 out of the box, with no model and no network call; embeddings are an optional install. `hippo init` installs hooks for Claude Code and OpenCode, adds 2 hooks to Codex's `hooks.json` when Codex is installed (Codex runs them once you trust them in `/hooks`), and adds instructions to an existing `AGENTS.md` for Codex, Cursor, OpenClaw and Pi. Any MCP client can connect. Mark a memory wrong and it ranks lower; run `hippo supersede` and the old fact leaves recall. Zero runtime deps. ／ Storage:       SQLite backbone with markdown mirrors. Git-trackable, human-readable. ／ Works with:    Claude Code, Codex, Cursor, OpenClaw, OpenCode, Pi, any MCP client",
+   "evidence_lines": [
+    15,
+    32,
+    30
+   ]
+  },
+  "fn": "kitfunso/hippo-memory",
+  "sha": "ed33076b1683",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ec70a58b663e": {
+  "identity": {
+   "one_liner": "Antigravity IDE 会话历史重建与数据库修复工具",
+   "review": "针对 Google Antigravity IDE 中会话历史从侧边栏消失的 bug，该工具从磁盘上保留的 .pb 和 .db 会话文件重建 state.vscdb 内部的 JSON 与 Protobuf 索引，提供 TUI 浏览、合并、诊断等命令，写入前自动备份并支持失败回滚。面向遇到该 bug 的 Antigravity 用户，需 Python 3.10+ 且运行前必须完全关闭 IDE。",
+   "highlights": [
+    "从完整的会话文件重建 IDE 内部索引，恢复侧边栏会话历史",
+    "写入前自动生成带时间戳的数据库备份，出错时自动回滚",
+    "零外部依赖，仅用 Python 标准库，提供源码运行和 pyz 便携两种方式"
+   ],
+   "use_cases": [
+    "IDE 更新或异常关机后会话历史消失时重建索引",
+    "浏览与诊断 Antigravity IDE 的 SQLite 数据库与会话文件",
+    "G1/G2/G3 多代 Antigravity 安装环境的数据库修复"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The underlying conversation data files (`.pb` in older IDE versions, SQLite `.db` in the newest) remain **intact** on disk under `~/.gemini/antigravity-ide/conversations/` (or `~/.gemini/antigravity/conversations/` on older installations), but the IDE's intern ／ The Antigravity IDE stores conversation history in two parallel indices inside its SQLite database (`state.vscdb`): ／ |Index|Format|SQLite Key|",
+     "lines": [
+      35,
+      117,
+      119
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具读取、备份并写入 SQLite 数据库（state.vscdb）以重建索引，是为数据库维护服务的工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " An unofficial, open-source community database manager and recovery tool for the Google Antigravity IDE. ／ The Antigravity IDE stores conversation history in two parallel indices inside its SQLite database (`state.vscdb`): ／ 6. **Backs up** the database before any writes (automatic, timestamped copy)",
+   "evidence_lines": [
+    9,
+    117,
+    133
+   ]
+  },
+  "fn": "ag-donald/Antigravity-Database-Manager",
+  "sha": "ec70a58b663e",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

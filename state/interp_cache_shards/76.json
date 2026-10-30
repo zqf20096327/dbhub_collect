@@ -10668,5 +10668,268 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6956637a53a9": {
+  "identity": {
+   "one_liner": "PHP 服务端渲染应用的轻量 MVC 框架，内置 ActiveRecord ORM 与 CRUD/OpenAPI 工具",
+   "review": "Pair 是一个面向中小型 PHP/MySQL 应用的框架，提供 MVC 响应契约、ActiveRecord 式 ORM、CRUD 与 OpenAPI 生成、认证 ACL、渐进增强等能力，通过 Composer 安装，默认数据库驱动要求 MySQL 8.0+，适合构建可长期维护的服务端渲染 Web 应用与 API。",
+   "highlights": [
+    "提供 ActiveRecord 风格 ORM、CRUD 与 OpenAPI 工具、代码生成命令",
+    "内置认证、ACL、CSRF、会话与渐进增强（PWA、passkey）支持",
+    "要求 PHP 8.4.1+ 与 MySQL 8.0+（默认数据库驱动），经 Composer 分发"
+   ],
+   "use_cases": [
+    "构建 PHP/MySQL 服务端渲染 Web 应用",
+    "生成带 OpenAPI 契约的 API 与 CRUD 模块",
+    "为已有项目引入带认证与迁移能力的框架"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Pair is designed for small and medium PHP/MySQL applications where clear ／ - MySQL 8.0 or later for the default database driver ／ - PHP extensions: `curl`, `intl`, `json`, `mbstring`, `pdo`, `pdo_mysql`",
+     "lines": [
+      17,
+      105,
+      108
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "框架为使用 MySQL 存数据的应用提供 ORM、CRUD 等开发能力，本身不依赖 MySQL 存自身数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It combines explicit MVC responses, an ActiveRecord-style ORM, CRUD and OpenAPI ／ - MySQL 8.0 or later for the default database driver",
+   "evidence_lines": [
+    21,
+    105
+   ]
+  },
+  "fn": "viames/pair",
+  "sha": "6956637a53a9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0ce051de66fa": {
+  "identity": {
+   "one_liner": "Rust 编写的 macOS/Windows 原生数据库 GUI 客户端",
+   "review": "DbCat 是用 Rust 实现的桌面数据库客户端，支持浏览编辑表数据、查询编辑器、可视化结构编辑、ER 图以及导入导出与备份恢复，覆盖 MySQL、PostgreSQL、SQLite、SQL Server、ClickHouse、Redis、MongoDB 等多种数据库。面向需要图形界面管理数据库的开发者与运维人员，内置 MCP 服务器供 AI 工具调用。该仓库仅托管发行版与 issue，不含源代码。",
+   "highlights": [
+    "支持浏览编辑表数据、查询编辑器、可视化结构编辑器与 ER 图展示",
+    "提供 CSV/JSON/SQL 导入导出及 MySQL、PostgreSQL 等多种数据库的备份与恢复",
+    "内置 MCP 服务器，可接入 Claude Code、Cursor 等 AI 工具，默认关闭且按连接授权"
+   ],
+   "use_cases": [
+    "在 macOS/Windows 桌面图形界面下管理多种关系型与非关系型数据库",
+    "对生产库使用只读连接与写前确认流程执行数据编辑",
+    "通过 MCP 协议让 AI 工具在受控授权下操作数据库"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Relational|**PostgreSQL**|Multiple schemas, materialized views, extensions; full and multi-schema backup & restore| ／ - **📦 Import, export and backup**: export to CSV / JSON / SQL and import from CSV. Full and multi-schema backup & restore for MySQL, MariaDB, TiDB, PostgreSQL, CockroachDB, SQL Server, SQLite and ClickHouse, plus backup & restore for MongoDB, Redis and Valkey.",
+     "lines": [
+      33,
+      51
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 🚀 **Smooth on large tables**: rows load page by page (300 per page), so the first page of a million-row MySQL table opens in about 1.3 ms. Every database call runs on a background thread, and the UI stays responsive during slow queries. ／ |Relational|**MySQL**|5.7 / 8.x; foreign keys, triggers, stored procedures; full and multi-schema backup & restore| ／ - **📦 Import, export and backup**: export to CSV / JSON / SQL and import from CSV. Full and multi-schema backup & restore for MySQL, MariaDB, TiDB, PostgreSQL, CockroachDB, SQL Server, SQLite and ClickHouse, plus backup & restore for MongoDB, Redis and Valkey.",
+     "lines": [
+      22,
+      30,
+      51
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Embedded|**SQLite**|Local files, zero configuration| ／ - **📦 Import, export and backup**: export to CSV / JSON / SQL and import from CSV. Full and multi-schema backup & restore for MySQL, MariaDB, TiDB, PostgreSQL, CockroachDB, SQL Server, SQLite and ClickHouse, plus backup & restore for MongoDB, Redis and Valkey.",
+     "lines": [
+      36,
+      51
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|Relational|**SQL Server**|T-SQL, schemas, Windows / Kerberos / Entra ID authentication| ／ - **📦 Import, export and backup**: export to CSV / JSON / SQL and import from CSV. Full and multi-schema backup & restore for MySQL, MariaDB, TiDB, PostgreSQL, CockroachDB, SQL Server, SQLite and ClickHouse, plus backup & restore for MongoDB, Redis and Valkey.",
+     "lines": [
+      35,
+      51
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|Analytical|**ClickHouse**|MergeTree table options, partition and sorting keys| ／ - **📦 Import, export and backup**: export to CSV / JSON / SQL and import from CSV. Full and multi-schema backup & restore for MySQL, MariaDB, TiDB, PostgreSQL, CockroachDB, SQL Server, SQLite and ClickHouse, plus backup & restore for MongoDB, Redis and Valkey.",
+     "lines": [
+      38,
+      51
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Relational|**MariaDB**|10.x / 11.x; sequences, CHECK constraints, account locking and roles| ／ - **📦 Import, export and backup**: export to CSV / JSON / SQL and import from CSV. Full and multi-schema backup & restore for MySQL, MariaDB, TiDB, PostgreSQL, CockroachDB, SQL Server, SQLite and ClickHouse, plus backup & restore for MongoDB, Redis and Valkey.",
+     "lines": [
+      31,
+      51
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|Relational|**TiDB**|MySQL-compatible distributed database · query plans, backup & restore| ／ - **📦 Import, export and backup**: export to CSV / JSON / SQL and import from CSV. Full and multi-schema backup & restore for MySQL, MariaDB, TiDB, PostgreSQL, CockroachDB, SQL Server, SQLite and ClickHouse, plus backup & restore for MongoDB, Redis and Valkey.",
+     "lines": [
+      32,
+      51
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供多数据库连接、查询与备份等数据库管理功能，属于数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "仓库仅托管发行版与 issue 跟踪，不包含源代码",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A fast, native database client for macOS and Windows, built with Rust.** ／ ## 🗄️ Supported Databases ／ - **📦 Import, export and backup**: export to CSV / JSON / SQL and import from CSV. Full and multi-schema backup & restore for MySQL, MariaDB, TiDB, PostgreSQL, CockroachDB, SQL Server, SQLite and ClickHouse, plus backup & restore for MongoDB, Redis and Valkey.",
+   "evidence_lines": [
+    3,
+    26,
+    51
+   ]
+  },
+  "fn": "dbcat-app/dbcat",
+  "sha": "0ce051de66fa",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "84043f4c49b2": {
+  "identity": {
+   "one_liner": "TiDB 人群圈选方案对比基准：单 SQL、分片 Scatter-Gather 与 Roaring Bitmap",
+   "review": "这是一个针对 TiDB 上按 tag 取交集做用户检索（人群圈选）的基准实验项目，实现了 baseline SQL、应用层分片并发查询、内存 Roaring Bitmap 三种方案，附带数据生成器、分片数扫描脚本与耗时结果数据，供需要在 TiDB 上做人群圈选的开发者参考选型。实验基于 tiup playground 单机环境，作者注明绝对数值不代表生产环境表现。",
+   "highlights": [
+    "提供 baseline、sharded、bitmap 三种查询方案的实现与基准测试脚本",
+    "支持分片数扫描（-sweep）输出 CSV，并可用 -verify 核对各方案结果一致",
+    "包含数据生成器（cmd/gen）与 EXPLAIN ANALYZE 执行计划分析",
+    "提供结果数据（results/）与耗时对比表"
+   ],
+   "use_cases": [
+    "在 TiDB 上做用户人群圈选（多 tag 交集检索）的方案选型评估",
+    "评估分片并发查询与内存位图方案在 tag 检索场景的耗时与内存代价",
+    "学习 TiDB 执行计划（Join 不下推、IndexLookUp 回表等）的瓶颈分析"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "在 TiDB 上按 tag 检索用户（\"人群圈选\"）的几种方案对比。 ／ 起源于一个真实的业务问题：300 万用户、2400 万条 user-tag 关联，按多个 tag 取交集检索，TiDB 上单条 SQL 要十几秒。 ／ |`baseline`|一条 `JOIN + GROUP BY + HAVING` SQL，全部交给 TiDB|✅|",
+     "lines": [
+      3,
+      5,
+      11
+     ]
+    }
+   ],
+   "dbs": [
+    "TiDB"
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 TiDB 场景提供基准测试工具与数据生成器，服务于数据库使用方的方案评估",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "在 TiDB 上按 tag 检索用户（\"人群圈选\"）的几种方案对比。 ／ go run ./cmd/bench -strategy baseline -tags 3,17,120 ／ go run ./cmd/bench -sweep 4,8,16,32,64,128,256,512,1024 -workers 16 -out results/sweep.csv",
+   "evidence_lines": [
+    3,
+    96,
+    100
+   ]
+  },
+  "fn": "FiverMaki/tag-search-bench",
+  "sha": "84043f4c49b2",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

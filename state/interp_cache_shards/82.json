@@ -11360,5 +11360,133 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fd0eb0df66d2": {
+  "identity": {
+   "one_liner": "通过 Proton Bridge 本地 IMAP/SMTP 访问 Proton Mail 的 MCP 服务器与 CLI",
+   "review": "该项目提供 MCP 服务器和完整 CLI，通过 Proton 官方 Bridge 的本地 IMAP/SMTP 连接读取、搜索、起草和发送 Proton Mail，共 127 个工具，支持只读、草稿等安全模式。面向使用 Claude Desktop 等 MCP 客户端或脚本自动化管理邮箱的个人用户。前提是 Proton Bridge 已安装运行，不涉及任何数据库。",
+   "highlights": [
+    "提供 127 个 MCP 工具及对应的完整 CLI 命令",
+    "支持 read-only、drafts、assisted、full 等安全模式预设",
+    "本地全文本索引搜索，邮件数据不经第三方中转"
+   ],
+   "use_cases": [
+    "在 Claude Desktop 等 MCP 客户端中收发、整理 Proton 邮件",
+    "用 CLI 和 cron 脚本自动化邮箱分诊、过滤与清理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目本身是访问 Proton 邮箱的邮件客户端层，不数据库生态服务的工具，仅本地索引用于自身功能",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mail inbox: read, search, send, draft, triage threads, manage folders, save attachments, and more — 127 MCP tools in total. Most of the same capabilities are also available as a full CLI for scripting, cron, and piped automation — no Claude required. ／ **How this relates to Proton Bridge.** This is a layer on top of Proton Mail Bridge, not a replacement for it. Bridge is Proton's official, local IMAP/SMTP gateway and the only supported way to reach a Proton mailbox from other software; this project talks to it. Bridge's own `--cli` mode manages Bridge itself (signing in, account details and the Bridge password, ports and other settings), it is not a mail client. Proton does not publish a terminal mail client, so reading, searching, drafting and sending from Claude or a script is what this adds on top, together with the safety controls above. Bridge has to be running and signed in. ／ Nothing goes through a third-party email relay. Proton Bridge decrypts your mail locally; this server reads it over a local IMAP connection on `127.0.0.1`. The AI model (Claude Desktop, Cline, etc.) sees the em",
+   "evidence_lines": [
+    21,
+    60,
+    66
+   ]
+  },
+  "fn": "googlarz/proton-mail-bridge-client",
+  "sha": "fd0eb0df66d2",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::Универсальный Telegram-бот-оркестратор для общения с базами данных (MySQL, PostgreSQL, SQLite) на ес": {
+  "identity": {
+   "one_liner": "通过 Telegram 自然语言对话数据库的本地 LLM 编排机器人",
+   "review": "基于简介：该项目实现一个 Telegram 机器人，用户以自然语言与 MySQL、PostgreSQL、SQLite 数据库交互，由本地 LLM（LM Studio/Ollama）通过 Tool Calling 生成并执行 SQL，内置 SQL 审计功能并以 Docker 部署。适合希望在聊天界面管理或查询数据库、且依赖本地模型运行的运维或开发人员；未提供 README，安装与运行细节无法进一步验证。",
+   "highlights": [
+    "支持通过 Telegram 以自然语言与 MySQL、PostgreSQL、SQLite 交互",
+    "使用本地 LLM（LM Studio/Ollama）并支持 Tool Calling",
+    "包含 SQL 审计功能，提供 Docker 部署"
+   ],
+   "use_cases": [
+    "通过 Telegram 聊天界面查询和管理数据库",
+    "在本地运行 LLM 的环境中以自然语言生成 SQL",
+    "需要对机器人执行的 SQL 进行审计的场景"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Универсальный Telegram-бот-оркестратор для общения с базами данных (MySQL, PostgreSQL, SQLite) на естественном языке."
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Универсальный Telegram-бот-оркестратор для общения с базами данных (MySQL, PostgreSQL, SQLite) на естественном языке."
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Универсальный Telegram-бот-оркестратор для общения с базами данных (MySQL, PostgreSQL, SQLite) на естественном языке."
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为与数据库交互提供服务（自然语言查询、SQL 审计），属于服务数据库使用的工具组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Универсальный Telegram-бот-оркестратор для общения с базами данных (MySQL, PostgreSQL, SQLite) на естественном языке. Использует локальные LLM (LM Studio/Ollama) с поддержкой Tool Calling, аудитом SQL и Docker."
+  },
+  "fn": "Stormtop-alt/repdix-rpocket-team",
+  "sha": "desc::Универсальный Telegram-бот-оркестратор для общения с базами данных (MySQL, PostgreSQL, SQLite) на ес",
+  "source": "desc",
+  "generated_at": "2026-10-30",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

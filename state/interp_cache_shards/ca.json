@@ -10134,5 +10134,116 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c2a11031546a": {
+  "identity": {
+   "one_liner": "基于 GitHub issue/PR 的 LLM 算力互助记账系统",
+   "review": "Overflow 是一个互助记账平台：开源维护者用空闲的 LLM 订阅额度为他人仓库解决问题以赚取信用积分，再用积分支付他人处理自己的积压 issue。流程通过 GitHub webhook、标签目录和 'Done when' 完成判定评论驱动，仅限单一共享实例。面向开源贡献者与小团队，支持 GitHub 与 GitLab 注册。",
+   "highlights": [
+    "提供基于 GitHub webhook 与标签目录的 issue 定价、认领与结算流程",
+    "记录标签事件、结算评论、merge commit 与 diff 指纹用于账户审计",
+    "提供 API 与 MCP 端点，支持 GitLab 项目注册与对账"
+   ],
+   "use_cases": [
+    "开源维护者用空闲 LLM 订阅额度换取他人处理自己仓库的 issue",
+    "小团队在容量波动时通过共享账本跨项目协作",
+    "通过 MCP 端点让 agent harness 参与记账与结算"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是一个使用数据库的自建互助记账 Web 服务（Next.js），不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Let your spare weeks pay for the dry ones.** Overflow is a shared ledger for open-source work, for people and small teams whose capacity comes and goes. When you have leftover LLM subscription usage that you won't burn on your own projects, work on others' issues and earn credit. Spend it on your own backlog when you're depleted. No money changes hands. There is no token. ／ Go to <https://overflow.nitjsefni.eu> and sign in with GitHub. Register a repository you administer on one form: the repository and its two label catalogs. The catalog labels must already exist. Overflow installs the webhook for you. ／ MIT — see LICENSE.",
+   "evidence_lines": [
+    7,
+    11,
+    65
+   ]
+  },
+  "fn": "Nitjsefnie/Overflow",
+  "sha": "c2a11031546a",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5e2324e799b2": {
+  "identity": {
+   "one_liner": "本地模型网关，让 AI 编码客户端使用自配模型 API",
+   "review": "这是一个 Windows 桌面应用，充当本机模型网关，让 Cursor、Devin、Codex（ChatGPT 客户端）、Claude Code CLI 与 Claude Desktop 接入用户自配的 OpenAI 或 Anthropic 协议模型服务，并本机记录调用成败、耗时与 Token 用量。适用于想保留原有客户端工作流、仅替换模型推理来源的个人用户；支持 OpenAI Chat/Responses 与 Anthropic 协议，仅支持 Windows x64。",
+   "highlights": [
+    "提供本机网关接管 Cursor、Devin、Codex、Claude Code CLI 与 Claude Desktop 的模型请求，支持 OpenAI Chat/Responses 与 Anthropic 协议",
+    "内置模型库管理与连接测试，本机记录调用成败、耗时与 Token 用量",
+    "网关默认只监听 127.0.0.1，Key、设置与调用记录保存在本机数据库"
+   ],
+   "use_cases": [
+    "让 AI 编码客户端使用自配或本地部署的模型服务",
+    "追踪各客户端模型调用的 Token 用量与估算成本",
+    "在保留 Cursor 官方模型的同时混用自配模型（混合模式）"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "项目是面向 AI 编码客户端的本地模型网关，README 未表明其为数据库生态服务的定位，也未指明所依赖的具体数据库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可证（基于 leookun/cursor-byok，沿用 MIT）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**在 Cursor、Devin、ChatGPT 客户端里的 Codex，以及 Claude Code CLI 与 Claude Desktop 中使用你自己配置的模型：本地模型网关，自带模型库、接管状态和调用记录。** ／ |Claude 接入|本机 Anthropic 网关（`/v1/messages`），适配 Claude Code CLI 与 Claude Desktop；Desktop 受组织策略托管时只给手工配置引导| ／ **系统要求**：Windows x64；一个可用的模型服务（OpenAI Chat Completions / Responses 或 Anthropic 兼容接口）。",
+   "evidence_lines": [
+    3,
+    30,
+    61
+   ]
+  },
+  "fn": "haxsd/haxsd-byok",
+  "sha": "5e2324e799b2",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

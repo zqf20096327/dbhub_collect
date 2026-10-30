@@ -10212,5 +10212,149 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d565fcb8abd1": {
+  "identity": {
+   "one_liner": "故障注入的智能体评测环境，按服务端状态给 LLM 智能体副作用评分",
+   "review": "ResolveLab 提供故障注入的 HTTP 工具环境，通过服务端状态、提交日志和读取版本来评估 LLM 智能体的实际操作效果，并可用经重放验证的教师标注生成 DAgger 训练数据，用于智能体评测与后训练研究。面向研究智能体评测与训练的团队；限制包括仅覆盖合成服务、单一模型家族与手写教师。",
+   "highlights": [
+    "提供注入 412/429/502/403 等故障的真实 HTTP 服务环境，用于评测智能体行为",
+    "从服务端状态、提交日志和读取版本进行副作用评分，不依赖智能体的自我声明",
+    "提供经重放验证的教师标注，可生成 DAgger 训练数据，测试输入与权重使用哈希锁定"
+   ],
+   "use_cases": [
+    "评估工具调用型 LLM 智能体在故障场景下的实际操作正确性",
+    "生成经状态验证的训练数据用于智能体后训练（行为克隆/DAgger）",
+    "复现已发布的评测研究并审计其证据链"
+   ],
+   "cat": "测试/质量"
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|`src/resolvelab/*.py`|the original SQLite sync service and workbench (v0.1–v0.2)|",
+     "lines": [
+      129
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是用于评测和训练 LLM 智能体的工具环境，仅在仓库布局中提及旧版使用 SQLite 同步服务，并非数据库生态组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "that hid a lost acknowledgement. ResolveLab runs agents against a real HTTP service that ／ |`src/resolvelab/*.py`|the original SQLite sync service and workbench (v0.1–v0.2)| ／ Inspired by executable agent evaluation in τ²-bench",
+   "evidence_lines": [
+    17,
+    129,
+    148
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Ta0p1/ResolveLab",
+  "sha": "d565fcb8abd1",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c908128e8b07": {
+  "identity": {
+   "one_liner": "自托管音乐与博客平台，基于 Node + SQLite + htmx 并支持 ActivityPub 联邦",
+   "review": "Klonkt 是一个自托管的个人网站应用，提供博客、相册、音频播放、Newsletter、付费帖等功能，并通过 ActivityPub 与 Mastodon 等 fediverse 服务器互通。面向音乐人和创作者，部署方式包括 VPS 一键脚本、Docker 或手动 Node 安装；数据存于 SQLite（better-sqlite3, WAL），首次启动自动建库并自迁移，需 Node 20+，不支持传统 PHP 共享主机。",
+   "highlights": [
+    "通过 ActivityPub 实现 fediverse 联邦，可作为 fediverse 客户端关注、回复、转发",
+    "支持音频托管（曲目/专辑/播放列表），可通过 KLONKT_AUDIO=off 切换为无音频的 lite 模式",
+    "SQLite 数据库首次启动自动创建并在启动时自迁移（better-sqlite3, WAL）"
+   ],
+   "use_cases": [
+    "音乐人或创作者自托管个人站点，发布博客、照片和音乐",
+    "接入 fediverse，与 Mastodon/PeerTube 等服务器互相关注与互动",
+    "通过 Patreon passkey 实现付费解锁帖子"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "your sound. Built on **Node + SQLite + htmx**: lightweight, server-rendered, and ／ platform (PaaS)**. **Not** on classic shared PHP hosting. The database (SQLite) ／ **3. Start it** — the SQLite database is created automatically on first start:",
+     "lines": [
+      4,
+      45,
+      114
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是用 SQLite 存数据的自托管 Web 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "your sound. Built on **Node + SQLite + htmx**: lightweight, server-rendered, and ／ Klonkt is a **Node app** — run it on a **VPS, in Docker, or on a Node hosting ／ - **DB:** better-sqlite3 (WAL), self-migrating on boot",
+   "evidence_lines": [
+    4,
+    44,
+    206
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "roboburr/klonkt",
+  "sha": "c908128e8b07",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

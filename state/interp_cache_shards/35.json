@@ -10800,5 +10800,71 @@
   "generated_at": "2026-10-29",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cc7b240d3352": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，经 COPY 命令读写 Parquet 文件",
+   "review": "pg_parquet 是一个 PostgreSQL 扩展，通过扩展 COPY 命令实现表数据与 Parquet 文件互转，支持 S3、Azure Blob、GCS、http(s) 与本地文件等存储位置，并提供 schema 推断建表与 Parquet 元数据查询功能。适用于需要在 PostgreSQL 与 Parquet 生态间导入导出数据的开发者与数据工程师。构建依赖 rustup 与 cargo-pgrx，需从源码安装。",
+   "highlights": [
+    "通过 COPY TO/FROM 在 PostgreSQL 表与 S3、Azure Blob Storage、Google Cloud Storage、http(s)、本地文件及标准流之间读写 Parquet",
+    "支持从 Parquet 文件推断 schema 创建表并加载数据",
+    "提供 parquet.schema、parquet.metadata、parquet.file_metadata、parquet.kv_metadata 函数查看 Parquet schema 与元数据"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 查询结果导出为 Parquet 文件用于数据管道",
+    "从 Parquet 文件批量摄入数据到 PostgreSQL 表",
+    "在 SQL 中检查 Parquet 文件的 schema、列统计与自定义元数据"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> Copy from/to Parquet files in PostgreSQL! ／ `pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Ap",
+     "lines": [
+      3,
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 提供数据导入导出能力的扩展组件，为数据库生态服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Apache Arrow project to read and write Parquet files and pgrx project to extend PostgreSQL's `COPY` command. ／ 1. You can export Postgres tables/queries to Parquet files, stdin/stdout or a program's stream, ／ 2. You can ingest data from Parquet files to Postgres tables with type coercion and schema inference,",
+   "evidence_lines": [
+    8,
+    43,
+    44
+   ]
+  },
+  "fn": "CrunchyData/pg_parquet",
+  "sha": "cc7b240d3352",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

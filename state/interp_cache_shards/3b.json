@@ -10488,5 +10488,229 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "80a529244232": {
+  "identity": {
+   "one_liner": "外贸业务员本地 AI 助手，基于 Hermes Agent 生成开发信与背调",
+   "review": "面向外贸业务员的本地 AI 助手应用，提供开发信生成、客户背调、客户管理、每日简报等约 39 项 B2B 能力；后端为 FastAPI + SQLite + uvicorn，以 Hermes Agent 为 AI 驱动，需 LLM API Key（推荐 DeepSeek），数据存储于本地并绑定 127.0.0.1 访问，支持脚本或 pip 安装。",
+   "highlights": [
+    "基于 Hermes Agent 调用 web_search/read_file/database 等工具完成客户背调与开发信生成",
+    "提供客户分级管理、销售管线、定时任务与每日简报等业务功能",
+    "业务数据默认存于本地 ~/.trade/，绑定 127.0.0.1，支持多公司数据隔离与升级前自动备份数据库"
+   ],
+   "use_cases": [
+    "外贸业务员的客户开发与冷邮件外联",
+    "客户背景调查与制裁名单筛查",
+    "B2B 平台询盘跟进与内容营销日历生成"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **后端**: FastAPI + SQLite + uvicorn",
+     "lines": [
+      305
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 技术栈声明后端使用 SQLite 存储业务数据，属使用数据库的应用。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **后端**: FastAPI + SQLite + uvicorn ／  外贸业务员的 AI 助手 ／ - **业务数据默认存储在本地**（`~/.trade/`），不上传任何服务器",
+   "evidence_lines": [
+    305,
+    23,
+    283
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "chefroger/smart-trade-ai",
+  "sha": "80a529244232",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "580b78bdd3ac": {
+  "identity": {
+   "one_liner": "AI 编码代理的本地记忆插件，MCP 协议+Markdown 存储+SQLite 索引检索",
+   "review": "为 Cursor、Claude Code 等 AI 编码代理提供跨会话持久记忆的工具，将决策、偏好等记忆以 Markdown 存储在本机 .awareness/ 目录，用 SQLite FTS5 与 embeddings 做混合检索，通过 MCP 协议供任意兼容 IDE 调用，支持离线运行，云端同步为可选项。",
+   "highlights": [
+    "以本地 Markdown 文件存储记忆，支持离线运行，无需账号",
+    "通过 MCP 协议支持 13+ IDE/代理客户端",
+    "提供 awareness_recall/record 等 MCP 工具与两阶段渐进式召回"
+   ],
+   "use_cases": [
+    "跨多会话的长期代码库迁移",
+    "团队交接中保留历史实现上下文",
+    "多代理共享决策与任务记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "**After:** Your agent says *\"I remember you were migrating from MySQL to PostgreSQL. Last session you completed the schema changes and had 2 TODOs remaining...\"*",
+     "lines": [
+      117
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "**After:** Your agent says *\"I remember you were migrating from MySQL to PostgreSQL. Last session you completed the schema changes and had 2 TODOs remaining...\"*",
+     "lines": [
+      117
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It runs a lightweight daemon on your machine, stores memory as Markdown, indexes recall with SQLite FTS5 + embeddings, and keeps your AI workflow fast, explainable, and offline-ready. ／ Memory is stored as Markdown in `.awareness/`, with a local SQLite index for retrieval.",
+     "lines": [
+      26,
+      72
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是面向 AI 编码代理的记忆插件，仅使用 SQLite 作为本地检索索引，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Awareness is a memory plugin for AI coding agents — Cursor, Claude Code, Copilot, Cline, OpenCode, and any MCP client. It stores what you decided and what you learned as plain Markdown on your machine, then recalls it in the next session: hybrid keyword + semantic retrieval, 96% R@5 on LongMemEval, zero LLM calls at retrieval. Works offline, no account required. ／ It runs a lightweight daemon on your machine, stores memory as Markdown, indexes recall with SQLite FTS5 + embeddings, and keeps your AI workflow fast, explainable, and offline-ready. ／ Memory is stored as Markdown in `.awareness/`, with a local SQLite index for retrieval.",
+   "evidence_lines": [
+    18,
+    26,
+    72
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "everest-an/Awareness-Market",
+  "sha": "580b78bdd3ac",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a91c68807ad9": {
+  "identity": {
+   "one_liner": "自托管团队工作台，集成文档、工单、CI 与部署，内建 MCP 服务",
+   "review": "Nexul 是一个面向自托管团队的应用平台，把文档、工单看板、聊天、CI runner 和向自有服务器的部署放进单一实例，并通过内建的 MCP 服务器让编码代理以与人类相同的工具完成全流程。当前处于 beta 阶段，版本间可能存在破坏性变更，许可证为 AGPL-3.0 并采用 open-core 双许可模式。",
+   "highlights": [
+    "通过单一 MCP 服务器（基于官方 MCP Go SDK，Streamable HTTP）将文档、工单、部署等能力暴露给编码代理，与 Web 应用走同一套代码",
+    "包含看板工单、实时协作文档、聊天与语音、CI runner、Docker Compose 部署与回滚、拓扑视图、自动化脚本等功能域",
+    "支持个人访问令牌携带用户权限、全文本搜索、OpenObserve 日志收集与一键实例升级"
+   ],
+   "use_cases": [
+    "自托管的小团队或独立开发者需要一个集成工单、文档与部署的工作台",
+    "团队运行编码代理，需要机器可查询和操作的任务、文档与部署接口",
+    "不使用 Kubernetes、希望在被部署的普通服务器上查看服务拓扑的运维场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是一个使用数据库存储自身数据的项目管理/DevOps 应用，不提供面向数据库生态的工具或组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "open-core 双许可：AGPL-3.0 社区版，另有企业版（EE）订阅计划",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Nexul is a self-hosted workspace for teams that ship with coding agents. Docs, ／ one MCP server exposes all of it, so an agent uses the same tools people do. ／ |MCP server|✅|Task-shaped tools on the official MCP Go SDK, plus resources and workflow prompts, over stateless Streamable HTTP at `/mcp`. Tools are marked read-only or destructive, lists are paged, and errors say what the agent should fix.|",
+   "evidence_lines": [
+    13,
+    15,
+    94
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "otal-labs/nexul",
+  "sha": "a91c68807ad9",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

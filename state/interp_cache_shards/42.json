@@ -9701,5 +9701,78 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e27126ad7c0d": {
+  "identity": {
+   "one_liner": "Spring 框架的多租户事务切换插件，基于 AspectJ 动态切换租户",
+   "review": "TTXN 是一个面向 Spring 框架的轻量级多租户插件，通过 AspectJ 实现 @TenantTransaction 注解，在事务/查询执行时动态切换租户，同时保留 @Transactional 原有特性。内置针对 PostgreSQL 多 schema 切换和 MySQL 多数据库切换的策略处理器。适合使用 Spring Boot/Spring Data JPA 且需要多租户隔离的 Java 开发者。",
+   "highlights": [
+    "提供 @TenantTransaction 注解，保留 Spring @Transactional 的全部特性",
+    "基于 AspectJ 实现几乎零配置的租户动态切换",
+    "提供 PostgreSQL 多 schema 与 MySQL 多 database 两种租户切换策略"
+   ],
+   "use_cases": [
+    "Spring Boot 多租户应用中按请求动态切换租户数据源",
+    "使用 PostgreSQL schema 级或 MySQL database 级租户隔离的项目"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* `PostgresqlChangeSchemaTtxnHandler` the Postgresql supports multiple schemas in the same database, and this strategy take advantage of this feature and switch between schemas to execut the commands in database",
+     "lines": [
+      33
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* `MysqlChangeDatabaseTtxnHandler` the Mysql treats the database and schema as one, so, in this strategy the handler make a switch between databases to execut the commands",
+     "lines": [
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供针对 PostgreSQL 与 MySQL 的租户切换策略处理器，为数据库多租户使用场景服务的开发组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Tenant Transaction is an almost zero-configuration and lightweight plugin for spring framework that allows to change the tenant that will be used in any transaction/queries dynamically. It still keep all the features of spring's `@Transactional` annotation ／ * `PostgresqlChangeSchemaTtxnHandler` the Postgresql supports multiple schemas in the same database, and this strategy take advantage of this feature and switch between schemas to execut the commands in database ／ * `MysqlChangeDatabaseTtxnHandler` the Mysql treats the database and schema as one, so, in this strategy the handler make a switch between databases to execut the commands",
+   "evidence_lines": [
+    5,
+    33,
+    35
+   ]
+  },
+  "fn": "victorhsr/TTXN",
+  "sha": "e27126ad7c0d",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

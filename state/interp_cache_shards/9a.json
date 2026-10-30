@@ -11530,5 +11530,219 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a39391996b4c": {
+  "identity": {
+   "one_liner": "开源自托管的算法交易平台，基于 Python Flask + React，经 36 个券商插件统一接入",
+   "review": "OpenAlgo 是一个自托管的算法交易平台，提供统一券商 REST API、Python 策略托管、可视化无代码策略构建、期权分析工具和内置 LLM 代理（含 MCP Server）。面向个人交易者与量化开发者，通过 36 个券商插件执行交易，内置分析器模式支持模拟盘测试。README 提到使用 SQLite 等 6 个数据存储。",
+   "highlights": [
+    "提供 36 个券商插件的统一 REST API（/api/v1，57 个方法）与统一 WebSocket 行情代理",
+    "内置 Python 策略托管、无代码可视化策略构建器 Flow 和 12 个期权分析工具",
+    "包含 AI 代理与 MCP Server，可连接 Claude Desktop、Cursor、ChatGPT 等以自然语言下单，所有下单需逐笔人工批准",
+    "提供 Analyzer Mode 模拟环境，使用独立数据库和 ₹1 Crore 模拟资金进行实盘前测试"
+   ],
+   "use_cases": [
+    "个人交易者通过统一接口对接多家券商执行算法交易策略",
+    "无编程背景用户以拖拽节点方式构建和回测策略",
+    "通过 AI 助手/Telegram 机器人以自然语言查询行情与下单"
+   ],
+   "ai_kind_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite** - 5 databases (main, logs, latency, health, sandbox)",
+     "lines": [
+      284
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个自托管交易平台应用，使用 SQLite 等多个数据存储自身数据，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OpenAlgo is a free, open source, self-hosted **trading platform**, not just a broker bridge. Built on Python Flask + React 19, it gives traders a full-stack environment to **design, host, and execute strategies** through **36 broker plugins**: 35 securities integrations and Delta Exchange for crypto derivatives. Whether you write Python, prefer drag-and-drop, or trade options, OpenAlgo provides a common interface without tying strategy code to one adapter. ／ Order workflows from the REST API, hosted strategies, and Flow can use Analyzer Mode before live execution. Analytics pages, dashboards, PnL tracking, latency monitoring, notifications, and MCP reuse the same application services where their specific capabilities apply.",
+   "evidence_lines": [
+    11,
+    25
+   ]
+  },
+  "fn": "marketcalls/openalgo",
+  "sha": "a39391996b4c",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "372097b722fb": {
+  "identity": {
+   "one_liner": "自托管AI客服平台，基于RAG+可嵌入聊天组件",
+   "review": "Basjoo 是一个自托管的 AI 客服系统，将网站与文档构建为知识库（Qdrant 向量检索 + SQLite 应用数据），生成可嵌入网页的聊天组件，并附带管理控制台支持人工接管会话。面向需要自建客服机器人的团队；限制为单节点设计，应用数据仅支持 SQLite，无 PostgreSQL 路径。",
+   "highlights": [
+    "支持知识库独立管理，可从 URL 爬取或上传文件（txt/md/html/pdf/docx/xlsx）摄入",
+    "支持 13 家 LLM 提供商及多种嵌入方式（本地 TEI 容器、jina、siliconflow、自定义 OpenAI 兼容端点）",
+    "提供 SSE 流式聊天、来源引用、访客限流与人工接管机制"
+   ],
+   "use_cases": [
+    "为网站部署自托管的知识库客服机器人",
+    "需要人工接管 AI 会话的客服场景",
+    "基于自有文档构建可嵌入的 RAG 问答组件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Retrieval stack** — Qdrant for vectors, SQLite for application data, Redis for rate limiting, and a ／ |`DATABASE_URL`|`sqlite:///./data/basjoo.db`|application data (SQLite only — there is no PostgreSQL path)|",
+     "lines": [
+      35,
+      203
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|`DATABASE_URL`|`sqlite:///./data/basjoo.db`|application data (SQLite only — there is no PostgreSQL path)| ／ - Single-node by design: SQLite, one backend process, in-process schedulers. There is no Postgres or",
+     "lines": [
+      203,
+      290
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用数据存储于 SQLite，向量数据存于 Qdrant，数据库仅作为应用存储使用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Basjoo is a self-hosted AI customer-support platform: it turns a website plus a set of documents into a ／ - **Retrieval stack** — Qdrant for vectors, SQLite for application data, Redis for rate limiting, and a ／ |`DATABASE_URL`|`sqlite:///./data/basjoo.db`|application data (SQLite only — there is no PostgreSQL path)|",
+   "evidence_lines": [
+    15,
+    35,
+    203
+   ]
+  },
+  "fn": "haoyiyin/basjoo",
+  "sha": "372097b722fb",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "122b708fc82a": {
+  "identity": {
+   "one_liner": "本地优先的科学文献 RAG 工具包与 FastAPI 服务，SQLite 持久化",
+   "review": "一个 Python 工具包与 FastAPI 服务，用于构建可审查的文献工作流：摄入论文语料后进行比较或假设检索，支持冻结证据、人工筛选决策、精确标注、运行历史与 BibTeX 导出。默认使用 fake 模型适配器，无需凭据即可离线运行，数据存储于 SQLite，服务建议仅用于本机回环地址。",
+   "highlights": [
+    "提供 /query、/retrieve 等 API 与浏览器界面，返回带来源 ID、快照与运行历史的证据引用",
+    "支持人工论文筛选、精确证据标注与筛查结果导出（JSON/CSV/Markdown/BibTeX）",
+    "默认内置 fake 模型适配器，可在无模型凭据条件下离线演示完整流程"
+   ],
+   "use_cases": [
+    "对自有的小型论文语料进行可溯源的比较或假设检索",
+    "文献筛选（screening）的人工判定、复审与进度报告",
+    "离线保存与重放已完成回答及其冻结证据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "literature workflows, with SQLite persistence and optional model-provider adapters.",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库以 SQLite 作为自身持久化存储，是使用数据库的应用而非为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**local-first Python toolkit and FastAPI service** for building inspectable ／ literature workflows, with SQLite persistence and optional model-provider adapters. ／ The demo explicitly uses the fake model, ingests a synthetic fixture into a",
+   "evidence_lines": [
+    9,
+    10,
+    30
+   ]
+  },
+  "fn": "Francis1998/scholar-rag-agent",
+  "sha": "122b708fc82a",
+  "source": "readme",
+  "generated_at": "2026-10-30",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
