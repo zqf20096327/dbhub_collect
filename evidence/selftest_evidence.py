@@ -322,9 +322,9 @@ def test_release_notes() -> None:
     body = boiler + "\n* Dropped MySQL 5.7 support\n* Added PostgreSQL 16 support"
     n = enrich._release_notes([{"tag_name": "v9", "published_at": "2026-10-01", "body": body}])
     txt = n[0]["n"]
-    check("rel_notes：命中行优先（超长正文末尾的 DB 变更）",
+    check("rel_notes：命中行优先（超长正文末尾的 DB 变更、模板头部不占预算）",
           "MySQL 5.7" in txt and "PostgreSQL 16" in txt
-          and "What's Changed" in txt and len(txt.encode()) <= 512, txt)
+          and "What's Changed" not in txt and len(txt.encode()) <= 512, txt)
 
     # 弱信号行占满预算时，强信号（移除/弃用）必须优先保住
     weak = "\n".join(f"* SQLite driver compatibility fix {i}" for i in range(20))

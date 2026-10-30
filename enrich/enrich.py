@@ -153,7 +153,6 @@ STRONG_WORDS = ("drop", "remove", "no longer", "deprecat", "eol", "end of life",
 MEDIUM_WORDS = ("support", "add ", "adds", "added", "introduc", "new ")
 WEAK_WORDS = ("compat", "connect", "driver", "migrat", "integrat")
 CHANGE_WORDS = STRONG_WORDS + MEDIUM_WORDS + WEAK_WORDS
-HEAD_BYTES = 128
 
 
 def note_rank(line: str) -> int | None:
@@ -177,21 +176,24 @@ def _cut_utf8(s: str, cap: int) -> str:
 
 
 def _excerpt(body: str, cap: int) -> str:
-    """超长正文摘要：头部定长上下文 + 信号行按强度排序；无信号行退回整段前缀。"""
+    """超长正文摘要：只取提到库名的行，按强度排序；无库名行退回整段前缀。
+
+    模板头部（What's Changed / PR 列表）不占预算——版本和日期在 t/d 字段里，
+    库名信息才是要采的数据。
+    """
     if len(body.encode("utf-8")) <= cap:
         return body
-    head = _cut_utf8(body, HEAD_BYTES)
     picked = []
     for line in body.splitlines():
         s = line.strip()
-        if not s or s[:40] in head or s in picked:
+        if not s or s in picked:
             continue
         if note_rank(s) is not None:
             picked.append(s)
     if not picked:
         return _cut_utf8(body, cap)
     picked.sort(key=note_rank)      # 稳定排序：同强度保持正文顺序
-    return _cut_utf8("\n".join([head, *picked]), cap)
+    return _cut_utf8("\n".join(picked), cap)
 
 
 def _release_notes(rels: list[dict], n: int = 3, cap: int = 512) -> list[dict] | None:
@@ -200,8 +202,8 @@ def _release_notes(rels: list[dict], n: int = 3, cap: int = 512) -> list[dict] |
     body 本就在 releases 响应里，零新增调用；只在有正文时产出。
     cap=512 字节（UTF-8）够容纳"新增/移除数据库支持"级别的条目，控存储体积；
     超长正文不再盲取开头——开头常是 "What's Changed" 模板和 PR 列表，
-    DB 线索多在中后段。取法：128 字节头部 + 信号行按强度排序
-    （移除/弃用 > 新增支持 > 兼容/连接），预算内先保高价值行。
+    改为只收提到库名的行（模板头部不占预算，版本/日期在 t/d 字段），
+    按强度排序：移除/弃用 > 新增支持 > 兼容/连接 > 仅提到库名。
     """
     out = []
     for r in rels[:n]:

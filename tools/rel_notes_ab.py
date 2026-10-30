@@ -86,21 +86,26 @@ def main() -> int:
     started = time.time()
     errs = collections.Counter()
     fails = []
+    gone = []
     rows = []
     for i, (grp, fn) in enumerate(picks, 1):
         try:
             rels = client.releases(fn)
         except Exception as e:                      # 单仓失败不影响整体
-            errs[type(e).__name__] += 1
             resp = getattr(e, "response", None)
-            fails.append((fn, getattr(resp, "status_code", None), str(e)[:120]))
+            code = getattr(resp, "status_code", None)
+            if code == 404:                         # 仓已消失：生产同样按无 release 处理
+                gone.append(fn)
+                continue
+            errs[type(e).__name__] += 1
+            fails.append((fn, code, str(e)[:120]))
             continue
         rows.append((grp, fn, rels[:3]))
         if i % 20 == 0:
             print(f"  [{i}/{len(picks)}] ok={len(rows)} err={dict(errs)} "
-                  f"{time.time()-started:.0f}s", flush=True)
-    print(f"拉取完成：ok={len(rows)} err={dict(errs)} "
-          f"耗时 {time.time()-started:.0f}s\n", flush=True)
+                  f"gone={len(gone)} {time.time()-started:.0f}s", flush=True)
+    print(f"拉取完成：ok={len(rows)} err={dict(errs)} gone={len(gone)}"
+          f"（404 已消失） 耗时 {time.time()-started:.0f}s\n", flush=True)
 
     old_b, new_b = [], []
     total = old_hit = new_hit = 0
@@ -195,6 +200,10 @@ def main() -> int:
         print(f"\n每仓至少保住一条支持变更行（强度0/1）: "
               f"旧 {o}/{len(repos)} = {100*o/len(repos):.0f}% | "
               f"新 {n}/{len(repos)} = {100*n/len(repos):.0f}%")
+    if gone:
+        print(f"\n仓已消失（404，按无 release 跳过，共 {len(gone)} 个）:")
+        for fn in gone:
+            print(f"  - {fn}")
     if fails:
         print("\n拉取失败的仓（明细）:")
         for fn, code, msg in fails:
