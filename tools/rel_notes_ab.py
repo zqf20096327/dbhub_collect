@@ -28,7 +28,7 @@ import enrich      # noqa: E402
 
 OLD_CAP = 512      # 旧法：字符
 NEW_CAP = 512      # 新法：UTF-8 字节
-RANK_NAME = ("移除/弃用", "新增支持", "兼容/连接")
+RANK_NAME = ("移除/弃用", "新增支持", "兼容/连接", "仅提到库名")
 
 
 def eligible() -> set[str]:
@@ -53,7 +53,7 @@ def pool(path: Path) -> set[str]:
 
 
 def signal_lines(body: str) -> list[str]:
-    """正文里的信号行（库名/数据库 + 变更词），与线上 enrich.note_rank 同一判定。"""
+    """正文里的库名行（只要求提到数据库），与线上 enrich.note_rank 同一判定。"""
     lines = []
     for line in body.splitlines():
         s = line.strip()
@@ -105,9 +105,9 @@ def main() -> int:
     old_b, new_b = [], []
     total = old_hit = new_hit = 0
     long_releases = 0
-    rank_total = [0, 0, 0]
-    rank_old = [0, 0, 0]
-    rank_new = [0, 0, 0]
+    rank_total = [0, 0, 0, 0]
+    rank_old = [0, 0, 0, 0]
+    rank_new = [0, 0, 0, 0]
     misses = []
     grp_stat = collections.defaultdict(lambda: [0, 0])   # grp -> [保留, 总行]
     per = collections.defaultdict(lambda: dict(sig=0, sig_old=0, sig_new=0,
@@ -173,11 +173,11 @@ def main() -> int:
               f" | 新: 中位 {statistics.median(new_b):.0f} 最大 {max(new_b)}")
         over = sum(1 for b in new_b if b > NEW_CAP)
         print(f"新法超预算条数: {over}")
-    print(f"信号行（超长正文内）: {total} 行")
+    print(f"库名行（超长正文内）: {total} 行")
     if total:
         print(f"  旧法保留 {old_hit}/{total} = {100*old_hit/total:.0f}%")
         print(f"  新法保留 {new_hit}/{total} = {100*new_hit/total:.0f}%")
-        for rk in range(3):
+        for rk in range(4):
             if rank_total[rk]:
                 print(f"  强度{rk} {RANK_NAME[rk]}: {rank_new[rk]}/{rank_total[rk]} = "
                       f"{100*rank_new[rk]/rank_total[rk]:.0f}%"

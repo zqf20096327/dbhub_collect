@@ -333,11 +333,19 @@ def test_release_notes() -> None:
     txt = n[0]["n"]
     check("rel_notes：强度排序（弱信号占满预算时强信号优先）",
           "MySQL 5.7" in txt and "SQLite" in txt and len(txt.encode()) <= 512, txt)
-    check("rel_notes：强度分档（drop>support>compat、非信号行 None）",
+    check("rel_notes：强度分档（drop>support>compat、无库名 None）",
           [enrich.note_rank(x) for x in ("Dropped MySQL 5.7 support",
                                          "Added PostgreSQL 16 support",
                                          "SQLite driver compatibility fix",
-                                         "Bumped version to 2.0")] == [0, 1, 2, None])
+                                         "MySQL 8.0 is the minimum version",
+                                         "Bumped version to 2.0")] == [0, 1, 2, 3, None])
+    # 采集口径：只要提到库名就收，不要求变更词
+    filler = "\n".join(f"* Fix bug {i} by @user{i}" for i in range(30))
+    n = enrich._release_notes([{"tag_name": "v7", "published_at": "2026-10-01",
+                                "body": "What's Changed\n" + filler
+                                + "\nMySQL 8.0 is the minimum version"}])
+    check("rel_notes：超长正文里的纯库名行也收进摘要",
+          "MySQL 8.0" in n[0]["n"] and len(n[0]["n"].encode()) <= 512)
 
     # 中文按字节截断：字符截会超预算（1 字 3 字节），且不能劈开半个字
     n = enrich._release_notes([{"tag_name": "v1", "published_at": "2026-10-01",

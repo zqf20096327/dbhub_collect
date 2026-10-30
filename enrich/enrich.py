@@ -141,12 +141,13 @@ def due_dims(rec: dict, tier: str, pushed_changed: bool) -> list[str]:
     return due
 
 
-# 适配变更史信号词：正文行同时命中「库名/数据库」与「变更词」才算信号行
+# 采集口径（10-30 定）：行级只要提到某个数据库就收，不要求 support/drop 等变更词；
+# 变更词只用于排序——先把 DB 相关行采下来，判断留到适配引擎。
 DB_WORDS = ("mysql", "mariadb", "postgres", "postgre", "sqlite", "mongo", "redis",
             "oracle", "sql server", "mssql", "clickhouse", "cassandra", "dynamodb",
             "elasticsearch", "duckdb", "snowflake", "bigquery", "spanner", "tidb",
             "oceanbase", "hbase", "neo4j", "database", "db")
-# 强度分档：0=移除/弃用（适配变更的硬信号） 1=新增支持 2=兼容/连接/迁移
+# 强度分档：0=移除/弃用 1=新增支持 2=兼容/连接/迁移 3=仅提到库名
 STRONG_WORDS = ("drop", "remove", "no longer", "deprecat", "eol", "end of life",
                 "breaking", "discontinu", "sunset", "retire")
 MEDIUM_WORDS = ("support", "add ", "adds", "added", "introduc", "new ")
@@ -156,7 +157,7 @@ HEAD_BYTES = 128
 
 
 def note_rank(line: str) -> int | None:
-    """信号行强度：0=移除/弃用 1=新增支持 2=兼容/连接；非信号行 None。
+    """库名行强度：0=移除/弃用 1=新增支持 2=兼容/连接 3=仅提到库名；不含库名 None。
 
     判档顺序即优先级：同时含 drop 和 support 的行算 0（"Dropped support for …"）。
     """
@@ -166,7 +167,7 @@ def note_rank(line: str) -> int | None:
     for rank, words in ((0, STRONG_WORDS), (1, MEDIUM_WORDS), (2, WEAK_WORDS)):
         if any(w in low for w in words):
             return rank
-    return None
+    return 3
 
 
 def _cut_utf8(s: str, cap: int) -> str:

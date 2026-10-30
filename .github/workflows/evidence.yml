@@ -81,6 +81,8 @@ jobs:
         if: always()
         run: python evidence/evidence_collect.py status --recent 15
       - name: 提交并推送数据
+        # always：采集步骤异常/被强杀时也要把已 flush 的分片推上去（否则本窗白采）
+        if: always()
         run: |
           git config user.name "zqf20096327"
           git config user.email "zqf20096327@users.noreply.github.com"
