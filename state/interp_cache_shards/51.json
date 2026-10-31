@@ -11951,5 +11951,128 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dde5fcb94a37": {
+  "identity": {
+   "one_liner": "基于 Hono 与 Drizzle 的 Cloudflare Workers 起步模板",
+   "review": "这是一个用于 Cloudflare Workers 的 API 起步模板，包含 Hono 框架、Drizzle ORM 与 Cloudflare D1 的组合配置。README 提供安装、开发、部署命令及 cf-typegen 类型生成步骤，面向想在 Workers 上快速启动 API 项目的开发者。README 未包含数据库配置细节或完整功能说明。",
+   "highlights": [
+    "提供 npm install/dev/deploy 脚本流程",
+    "提供 cf-typegen 命令生成 Worker 配置类型",
+    "支持通过泛型传入 CloudflareBindings 实例化 Hono"
+   ],
+   "use_cases": [
+    "基于 Cloudflare Workers 开发新 API 项目的起点模板",
+    "学习 Hono 与 Cloudflare Bindings 的集成方式"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "仓库是使用 Cloudflare D1 存储的 API 起步模板，而非为数据库生态服务的独立工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Pass the `CloudflareBindings` as generics when instantiating `Hono`: ／ const app = new Hono<{ Bindings: CloudflareBindings }>();",
+   "evidence_lines": [
+    16,
+    20
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "yogyy/hono-api-starter",
+  "sha": "dde5fcb94a37",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "65a35b3423c8": {
+  "identity": {
+   "one_liner": "浏览器挂机文字修仙游戏，React 单页 + Node/TS 后端 + SQLite 持久化",
+   "review": "一款在浏览器中运行的文字放置修仙游戏，仓库提供完整可复现源码包：React 19 前端（冻结基座 + 补丁管线装配）和 Express 单文件 TypeScript 服务端（200+ 接口），数据用 SQLite 持久化，支持 Docker Compose 一键部署。面向想在浏览器挂机游玩或自部署、二次开发的用户。",
+   "highlights": [
+    "服务端为 Node.js + Express 单文件 TypeScript，包含 200+ 接口，SQLite 持久化",
+    "提供 Docker Compose 一键部署，数据库存于 Docker 卷，密钥经 .env 注入",
+    "采用冻结基座 + 补丁管线的装配模型，可重建与参考产物逐字节一致的构建产物"
+   ],
+   "use_cases": [
+    "浏览器挂机文字修仙游戏的自托管部署",
+    "基于上游开源项目做二次开发与补丁式改造",
+    "前端补丁管线/装配器构建流程的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|服务端|Node.js + Express + TypeScript 单文件（`srv/index_v28.ts`），SQLite 持久化|",
+     "lines": [
+      97
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储游戏数据的游戏应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（保留上游版权声明，上游同为 MIT）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|服务端|Node.js + Express + TypeScript 单文件（`srv/index_v28.ts`），SQLite 持久化| ／ 本仓库是这个游戏的**完整可复现源码包**——包含前端补丁管线、服务端（单文件 TypeScript，含 200+ 接口）、 ／ docker compose up -d --build  # ② 构建镜像并启动",
+   "evidence_lines": [
+    97,
+    67,
+    50
+   ]
+  },
+  "fn": "ztkedou/moyuwang-xiuxian",
+  "sha": "65a35b3423c8",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

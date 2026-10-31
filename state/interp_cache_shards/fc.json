@@ -11020,5 +11020,429 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c2484c32f01a": {
+  "identity": {
+   "one_liner": "基于 Supabase/Postgres 的 Flutter 聊天后端包",
+   "review": "一个 Flutter 包（pub.dev 发布），为 flutter_chat_core/flutter_chat_ui 2.x 提供 Supabase 后端实现，包含房间、消息、附件、已读回执、在线状态等能力，数据存于 Postgres 并依赖 RLS、Realtime、pg_partman/pg_cron。面向需要在 Flutter 应用中集成聊天功能的开发者，需自备 Supabase 项目并执行 SQL 脚本完成初始化。",
+   "highlights": [
+    "实现单聊/群聊房间、消息、回复、编辑、反应、置顶与搜索等聊天功能",
+    "默认通过 Postgres Row Level Security 保护表、存储桶与 Realtime 通道",
+    "chats.messages 表按周分区（pg_partman），ID 使用时间有序 UUIDv7"
+   ],
+   "use_cases": [
+    "为 Flutter 应用添加实时聊天功能",
+    "基于 Supabase（云或自托管）构建带已读回执和在线状态的聊天系统"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A Supabase backend for flutter_chat_core and flutter_chat_ui 2.x: rooms, members, messages, attachments, read receipts, reactions, typing indicators and online status, over Postgres + RLS and Supabase Realtime. ／ * **Secure by default**. Every table, storage bucket and Realtime channel is protected by Postgres Row Level Security. Check our documentation for the details. ／ - **Scales with history**: `chats.messages` is partitioned by week with `pg_partman`, ids are time-ordered UUIDv7.",
+     "lines": [
+      31,
+      53,
+      69
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明聊天数据存于 Postgres + RLS 与 Supabase Realtime（L31、L53），属使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A Supabase backend for flutter_chat_core and flutter_chat_ui 2.x: rooms, members, messages, attachments, read receipts, reactions, typing indicators and online status, over Postgres + RLS and Supabase Realtime. ／ * **Secure by default**. Every table, storage bucket and Realtime channel is protected by Postgres Row Level Security. Check our documentation for the details. ／  Actively maintained, community-driven Supabase BaaS for chat applications with an optional chat UI.",
+   "evidence_lines": [
+    31,
+    53,
+    35
+   ]
+  },
+  "fn": "insideapp-srl/flutter_supabase_chat_core",
+  "sha": "c2484c32f01a",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "752f6a369bc9": {
+  "identity": {
+   "one_liner": "封装 Borg/Borgmatic 的 Docker 备份容器",
+   "review": "该仓库提供将 Borgmatic 和 Borg 打包为 Docker 镜像的方案，用于自动化 Borg 备份，适合用 Docker 管理服务的运维人员。镜像内置 Apprise 通知、可选 Docker CLI 用于容器启停钩子，支持 cron 定时、环境变量与秘密文件配置，并可对 PostgreSQL、MySQL/MariaDB、MongoDB、SQLite 等数据库进行内置转储备份。",
+   "highlights": [
+    "内置 Borg、Borgmatic、Apprise，可选安装 Docker CLI 用于备份期间停启容器",
+    "支持 cron 定时调度、Healthchecks.io 健康检查与多渠道通知钩子",
+    "内置对 PostgreSQL、MySQL/MariaDB、MongoDB、SQLite 数据库的转储备份"
+   ],
+   "use_cases": [
+    "在 Docker 环境中定时备份主机目录到本地或远程 Borg 仓库",
+    "备份前自动暂停数据库/应用容器并在结束后恢复",
+    "需要 Telegram/Slack/邮件等渠道的备份失败通知"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For PostgreSQL, MariaDB/MySQL, MongoDB, and SQLite, borgmatic has built-in support that dumps the database and includes the dump in the archive — no separate script needed. Example for PostgreSQL:",
+     "lines": [
+      563
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "For PostgreSQL, MariaDB/MySQL, MongoDB, and SQLite, borgmatic has built-in support that dumps the database and includes the dump in the archive — no separate script needed. Example for PostgreSQL:",
+     "lines": [
+      563
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "For PostgreSQL, MariaDB/MySQL, MongoDB, and SQLite, borgmatic has built-in support that dumps the database and includes the dump in the archive — no separate script needed. Example for PostgreSQL:",
+     "lines": [
+      563
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "For PostgreSQL, MariaDB/MySQL, MongoDB, and SQLite, borgmatic has built-in support that dumps the database and includes the dump in the archive — no separate script needed. Example for PostgreSQL:",
+     "lines": [
+      563
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该镜像为备份工具 Borg/Borgmatic 的容器化封装，内置数据库转储功能，为数据库生态提供备份服务而非使用数据库存储应用数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Includes Borg, Borgmatic, Apprise, and optional Docker CLI for container stop/start hooks. ／ docker exec -it borgmatic borgmatic repo-create --encryption repokey-blake2",
+   "evidence_lines": [
+    13,
+    42
+   ]
+  },
+  "fn": "modem7/docker-borgmatic",
+  "sha": "752f6a369bc9",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ca400350fe2a": {
+  "identity": {
+   "one_liner": "企业 AI 资产治理控制平面，基于插件树与 SQLite 存储",
+   "review": "这是一个面向企业的 AI 运行与治理平台，用于对 MCP 服务、Skill、模型渠道、数字员工等 AI 资产进行登记确权、权限授权、任务派发、用量计量与审计审批。适合需要治理 AI 能力调用的企业团队自部署使用；采用 cordis 插件树架构，各业务域为独立插件包，存储层使用 Node 22 内置 node:sqlite，当前面向单进程运行。",
+   "highlights": [
+    "提供 AI 资产的生命周期管理（发布、审批、下线）与权限矩阵、审计记录",
+    "支持 MCP 接口（/mcp）与 REST 接口（/api/openapi.json），工具列表按调用方权限过滤",
+    "以 cordis/dsh 插件体系构建，各业务域插件可独立启停，经事件总线协作"
+   ],
+   "use_cases": [
+    "企业对 MCP 服务、Skill、模型渠道等 AI 资产进行登记、授权与审计",
+    "对 AI 能力调用进行计量与内部成本归集",
+    "作为 dsh 的 web profile 插件挂载，或以独立实例自部署运行"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是使用数据库（node:sqlite）存储自身数据的 AI 治理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单一许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " 面向企业的 AI 运行与治理平台 · 支持自主部署 · 基于 dsh / cordis 插件体系 ／ 实例本身是一棵 cordis 插件树，与 dsh 使用同一个插件框架。每个业务域是一个独立插件包，自行声明依赖、权限点和事件，可以单独启停；跨插件协作只经由事件总线和扩展点，插件之间不直接读写彼此的数据。仓库包含 25 个插件清单与 9 份领域运维 Skill。 ／ - **数据与可用性**：当前存储形态面向单进程运行，不应让多个进程同时使用同一数据目录；部署前请规划备份和恢复。",
+   "evidence_lines": [
+    6,
+    77,
+    108
+   ]
+  },
+  "fn": "01men/ybkkasi",
+  "sha": "ca400350fe2a",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "87a187afb28e": {
+  "identity": {
+   "one_liner": "基于 Django+SQLite 的自托管个人订阅与愿望清单跟踪应用",
+   "review": "MyKeep 是一个用 Django 和 SQLite（WAL 模式）构建的单容器自托管应用，用于记录个人订阅费用与购物愿望清单，含多币种汇率更新、付款历史、JSON/CSV 导入导出及 .ics 日历订阅。适合想在自己服务器上管理订阅支出的个人用户；数据存储于本地 SQLite 文件，无外部数据库依赖。",
+   "highlights": [
+    "单容器部署，内嵌 SQLite（WAL 模式）存储数据于 ./data/mykeep.db",
+    "通过 Frankfurter 和 Fixer 自动更新汇率并保存付款历史",
+    "支持 JSON/CSV 导入导出及 RFC 5545 .ics 日历订阅同步"
+   ],
+   "use_cases": [
+    "个人订阅费用与续期提醒跟踪",
+    "购物愿望清单与储蓄进度管理",
+    "多币种周期性支出记录与日历同步"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "MyKeep is an ultra-lightweight, self-hosted personal subscription and wishlist tracker built with Django and SQLite (WAL mode) designed to run as a single, self-contained container. ／ - **Single-Container Lightweight Architecture:** Zero external database, object storage, or Redis/cache server dependencies. Uses SQLite in WAL (`Write-Ahead Logging`) mode (`./data/mykeep.db`), local media volume storage (`./media`) for photos and logos, and ",
+     "lines": [
+      3,
+      7
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其用 SQLite 存储应用自身数据，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "MyKeep is an ultra-lightweight, self-hosted personal subscription and wishlist tracker built with Django and SQLite (WAL mode) designed to run as a single, self-contained container. ／ - **Single-Container Lightweight Architecture:** Zero external database, object storage, or Redis/cache server dependencies. Uses SQLite in WAL (`Write-Ahead Logging`) mode (`./data/mykeep.db`), local media volume storage (`./media`) for photos and logos, and fast in-memory caching.",
+   "evidence_lines": [
+    3,
+    7
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "BossEmmanuel-lab/MyKeep",
+  "sha": "87a187afb28e",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "642226e63797": {
+  "identity": {
+   "one_liner": "单容器自托管邮件客户端，聚合多个 IMAP 邮箱并以 SQLite 存储",
+   "review": "nexmail 是一个自托管邮件客户端，把多个 IMAP 邮箱聚合到一个 Web 界面，提供会话、全文搜索、规则、联系人、任务、日历、多用户与 OpenID Connect 登录，全部跑在一个容器里，数据落在单个 SQLite 文件。面向在家自托管服务的 homelab 用户。作者说明版本尚早，README 建议先用不重要的邮箱试用。",
+   "highlights": [
+    "将多个 IMAP 邮箱聚合于一个 Web 界面，支持会话视图、全文搜索（含 IMAP SEARCH）、规则与标签（标签以 IMAP keyword 存于服务器）",
+    "内置任务、联系人（vCard/CardDAV）、日历（CalDAV/iCloud/Google）、定时发送与外出自动回复",
+    "支持多用户与 OpenID Connect 登录，单容器部署，数据存于单个 SQLite 文件"
+   ],
+   "use_cases": [
+    "个人或家庭服务器上自托管 Web 邮件客户端，替代 Roundcube",
+    "在同一界面统一管理多个 IMAP/iCloud 邮箱",
+    "需要任务、日历、联系人与邮件联动的 homelab 环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "a single SQLite file, no second database, no cloud account, and no service that ／ FastAPI · SQLAlchemy · SQLite · React · Vite · Tailwind CSS · Tiptap · IMAPClient",
+     "lines": [
+      13,
+      244
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "One container. SQLite instead of Postgres is not a shortcut here, it is a",
+     "lines": [
+      246
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 nexmail 是使用 SQLite 存储自身数据的邮件客户端应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "nexmail brings several IMAP mailboxes together in one place and runs on your own ／ a single SQLite file, no second database, no cloud account, and no service that",
+   "evidence_lines": [
+    11,
+    13
+   ]
+  },
+  "fn": "DerKezorm/nexmail",
+  "sha": "642226e63797",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e5800362ef99": {
+  "identity": {
+   "one_liner": "Trickster Online KR 2014 客户端的游戏服务器模拟器，数据存于 PostgreSQL",
+   "review": "该项目实现 Trickster Online KR 2014 客户端所需的登录、频道、master、system、game 等服务器组件，用户可在自己的 Windows 机器上搭建并托管游戏，账号和角色数据存放在自装的 PostgreSQL 14+ 中，setup 流程会创建数据库表并从客户端读取游戏数据。适合想自建该游戏服务器的玩家，当前为 beta 阶段，仅提供 Windows 发行包且暂不接受代码贡献。",
+   "highlights": [
+    "在同一台机器上运行游戏所需的全部服务器组件（login、channel、master、system、game）",
+    "使用 PostgreSQL 14 及以上版本存储账号和角色，更新时通过迁移保留数据",
+    "提供 setup、start、play、account 等命令行工具及可分发的自定义启动器构建流程"
+   ],
+   "use_cases": [
+    "在自己电脑或局域网/公网上托管 Trickster Online KR 2014 私人服务器",
+    "为朋友或社区玩家生成带自定义品牌信息的启动器安装包",
+    "管理玩家账号、密码重置和每账号角色槽位配置"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**PostgreSQL 14 or newer**|Installed by you, or run in Docker. It holds the accounts and characters. Steps: Installing.| ／ 1. Install PostgreSQL if you don't have it yet. Note the admin login and its password. ／ 4. Setup asks where your client is, who is going to play (this PC, your LAN or the internet), how to reach PostgreSQL, a name and password for your game account, and which account Play logs in with (the one you just made, unless you pick another that already e",
+     "lines": [
+      43,
+      59,
+      62
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确 PostgreSQL 用于存放该游戏服务器的账号和角色数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "beta license，beta 期间不允许 fork 和修改版再分发",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "tPoseidon runs every server the game needs (login, channel, master, system, game) on your own machine, so you can play again and host for your friends. I aim for the original game: same screens, same flow, same mechanics, 1x rates out of the box. ／ |**PostgreSQL 14 or newer**|Installed by you, or run in Docker. It holds the accounts and characters. Steps: Installing.| ／ 4. Setup asks where your client is, who is going to play (this PC, your LAN or the internet), how to reach PostgreSQL, a name and password for your game account, and which account Play logs in with (the one you just made, unless you pick another that already exists). It then reads the game data it needs from your client and creates the database tables. The PostgreSQL admin password is only used for that and isn't saved.",
+   "evidence_lines": [
+    18,
+    43,
+    62
+   ]
+  },
+  "fn": "DeltaForceT/tPoseidon",
+  "sha": "e5800362ef99",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

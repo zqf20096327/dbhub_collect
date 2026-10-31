@@ -11287,5 +11287,199 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0a8920bd2749": {
+  "identity": {
+   "one_liner": "Talend Studio 8 的 8 个 ETL 作业项目，提取 API 数据并加载至 SQL Server",
+   "review": "该仓库包含并版本化 8 个 Talend Studio 8 ETL 作业，流程为调用 REST API 提取数据、解析 JSON、做转换后写入 SQL Server，主题标签还包含 mysql。面向需要以代码方式管理 Talend 作业的开发或数据工程团队；README 内容极简，未见部署与运行说明。",
+   "highlights": [
+    "包含 8 个 Talend Studio 8 ETL 作业并进行版本管理",
+    "作业流程涵盖 REST API 提取、JSON 解析与转换",
+    "数据加载目标为 SQL Server"
+   ],
+   "use_cases": [
+    "通过版本控制管理 Talend ETL 作业代码",
+    "从 REST API 抽取数据并加载到 SQL Server",
+    "参考 Talend 作业的数据管道实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "仓库是使用 Talend 开发并加载数据到 SQL Server 的 ETL 作业集合，不是为数据库生态服务的工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "TALEND Studio 8 ／ Pipline DATA",
+   "evidence_lines": [
+    1,
+    3
+   ]
+  },
+  "fn": "datasifaw/world-bank-talend-studio",
+  "sha": "0a8920bd2749",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c487740fea74": {
+  "identity": {
+   "one_liner": "基于结构化记忆与向量检索的个人数字化 agent CLI",
+   "review": "Digital Immortality 是一个提供 `immortality` 命令行工具的个人数字化 agent 项目，使用 PostgreSQL（含 pgvector）作为存储，配合火山方舟模型与飞书机器人实现对话与服务。README 覆盖安装（uv/pip）、doctor 健康检查、setup 配置、飞书机器人与卡片配置、服务启动与日志查看等完整流程，面向希望在服务器上长时运行个人记忆 agent 的用户。",
+   "highlights": [
+    "提供 CLI 工具（doctor/setup/auth/lark-service/logs 等子命令），支持 uv 或 pip 安装",
+    "支持 Docker 自动拉起 pgvector/pgvector:pg16 镜像并初始化 vector 扩展，也支持手动配置 PostgreSQL >=16 + pgvector",
+    "仅支持火山方舟平台配置的模型（Lite/Mini/Embedding 三类），并通过飞书机器人提供交互服务"
+   ],
+   "use_cases": [
+    "在服务器/沙箱环境长时运行个人数字化 agent 并通过飞书机器人对话",
+    "基于结构化记忆与向量检索构建个人上下文问答服务",
+    "需要本地一键编排 PostgreSQL+pgvector 环境的 agent 应用部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "如果你计划使用 `Docker` 自动配置 `PostgreSQL` 数据库（推荐；若不使用 `Docker`，需要手动配置数据库，较繁琐），请提前配置 `Docker` 环境： ／ ## PostgreSQL 手动配置（不推荐） ／ - `PostgreSQL` 版本：`>= 16`",
+     "lines": [
+      26,
+      91,
+      97
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 PostgreSQL+pgvector 作为自身存储并依赖方舟模型与飞书提供服务，是使用数据库的应用而非服务数据库生态的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "如果你计划使用 `Docker` 自动配置 `PostgreSQL` 数据库（推荐；若不使用 `Docker`，需要手动配置数据库，较繁琐），请提前配置 `Docker` 环境： ／ - `Docker setup (recommended)`：推荐。自动拉起 `PostgreSQL` 并填充本地数据库连接参数 ／ - 启动 `PostgreSQL`（镜像为 `pgvector/pgvector:pg16`）",
+   "evidence_lines": [
+    26,
+    253,
+    260
+   ]
+  },
+  "fn": "Charlie-BU/Digital-Immortality",
+  "sha": "c487740fea74",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5f30d86925bd": {
+  "identity": {
+   "one_liner": "马达加斯加开发者产品目录网站，Next.js+Postgres/Drizzle",
+   "review": "这是一个收录马达加斯加开发者所构建产品的目录平台（Mada-Made），开发者可发布应用、参与每日排行榜并可选验证真实收入。技术栈为 Next.js/React/TypeScript，数据存于 Postgres（经 Drizzle ORM 与 Supabase），定时任务用 pg_cron 和 GitHub Actions。目标用户是讲法语的马岛 maker 社区，当前为 v1 预部署状态，MRR 收入验证尚未交付。",
+   "highlights": [
+    "产品目录、每日排行榜、APK 二进制托管、评论与评价功能已交付",
+    "使用 Drizzle ORM 操作 Postgres，pg_cron 执行评分、每日精选、草稿清理等定时任务",
+    "提供 npm run db:setup/db:migrate 等迁移脚本与 check 校验脚本"
+   ],
+   "use_cases": [
+    "发布和发现马达加斯加本地开发的产品",
+    "开发者通过排行榜与已验证收入展示获得曝光",
+    "作为 Next.js+Supabase+Drizzle 全栈项目的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres (Drizzle) ／ Jobs : `pg_cron` (SQL — score 15 min, produit du jour, purge brouillons, recomptage téléchargements quotidien) · GitHub Actions (CI — digest hebdo, sync revenus horaire, maintenance hebdo : sweep R2/purges/dead man switch). Déploiement Vercel, opéré avec `docs",
+     "lines": [
+      21,
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是用 Postgres/Drizzle 与 Supabase 存储数据的产品目录应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（品牌不受 MIT 覆盖）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Ce que tu construis ici, on le voit ici.** L'annuaire des produits construits par les développeurs malgaches : publie ton produit, gagne ta place au leaderboard quotidien, et prouve optionnellement tes revenus réels (vérifiés en lecture seule, jamais auto-déclarés). ／  Postgres (Drizzle) ／ Jobs : `pg_cron` (SQL — score 15 min, produit du jour, purge brouillons, recomptage téléchargements quotidien) · GitHub Actions (CI — digest hebdo, sync revenus horaire, maintenance hebdo : sweep R2/purges/dead man switch). Déploiement Vercel, opéré avec `docs/` + `STACK.md`.",
+   "evidence_lines": [
+    10,
+    21,
+    29
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Hawks124/Mada-Builder",
+  "sha": "5f30d86925bd",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

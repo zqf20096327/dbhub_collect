@@ -14298,5 +14298,68 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7f7c1ef6d81e": {
+  "identity": {
+   "one_liner": "将 HTML 依次编译通过 20 种语言/运行时的实验性管道",
+   "review": "xhtml5x 是一个讽刺性质的编译实验项目：把 HTML5 输入经 20 个互相不兼容的编译器/运行时阶段（如 Jinja2、PHP、Go templ、Emscripten、Postgres 存储过程、Pandoc 等）转换，最终输出 DOM 等价的 HTML5，并通过 Makefile 和 Docker 保证可复现。面向对编译器管道和极端抽象感兴趣的读者；Postgres 仅作为其中一个转换阶段被使用。",
+   "highlights": [
+    "提供由 20 个编译器/解析器/运行时阶段组成的 HTML 转换管道",
+    "支持通过 Makefile 运行 fixture 测试套件与递归幂等性循环",
+    "提供 GHCR 预构建容器镜像，经 Dockerfile 实现可复现执行"
+   ],
+   "use_cases": [
+    "演示多语言编译器级联与 AST 转换",
+    "以 fixture 套件验证 HTML DOM 树的幂等转换"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "1. **Zero Cheating / String Hacking**: Every transformation must use an actual, legitimate parser, AST converter, compiler, or runtime (e.g., Python Jinja2, PHP CLI Zend engine, Go `templ`, Emscripten, Wasmtime in Rust, Postgres stored procedures, Pandoc Org-m",
+     "lines": [
+      19
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "Postgres 存储过程仅作为 20 个转换阶段之一被列举使用，README 未表明该项目为数据库生态服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The fundamental theorem of software engineering has been described as: \"Any problem in computer science can be solved with another level of indirection.\" (attributed to David Wheeler). **xhtml5x** attempts to prove this theorem by compiling HTML through 20 incompatible programming languages and historical runtimes, terminating in functionally identical HTML5 output, or something. ／ 1. **Zero Cheating / String Hacking**: Every transformation must use an actual, legitimate parser, AST converter, compiler, or runtime (e.g., Python Jinja2, PHP CLI Zend engine, Go `templ`, Emscripten, Wasmtime in Rust, Postgres stored procedures, Pandoc Org-mode, Babel, Svelte compiler, Handlebars, Brainfuck interpreters, etc.). No bash regex (`sed`/`awk`) to fake output. ／ 3. **Reproducibility**: Everything executes via a top-level `Makefile` inside a reproducible, self-contained `Dockerfile`.",
+   "evidence_lines": [
+    9,
+    19,
+    21
+   ]
+  },
+  "fn": "spcbeck/xhtml5x",
+  "sha": "7f7c1ef6d81e",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

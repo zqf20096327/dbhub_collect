@@ -11828,5 +11828,143 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1061c162d96c": {
+  "identity": {
+   "one_liner": "ClickHouse 的 PromQL/LogQL/TraceQL 只读查询网关",
+   "review": "Cerberus 是一个只读 HTTP 网关，将 PromQL、LogQL 和 TraceQL 查询翻译为 ClickHouse SQL 并以 Prometheus/Loki/Tempo 的响应格式返回，使 Grafana 无需插件即可把 ClickHouse 作为三种数据源使用。适用于已用 OTel Collector 将遥测写入 ClickHouse 的团队。它不做写入采集，无规则引擎，要求 ClickHouse 24.8+ 且遵循标准 OTel 表结构。",
+   "highlights": [
+    "提供 Prometheus、Loki、Tempo 三种 HTTP API 的协议实现，Grafana 可作为普通数据源接入",
+    "将 PromQL/LogQL/TraceQL 解析并降低为统一查询计划，生成 ClickHouse SQL",
+    "提供 migrate 子命令，可将既有规则与仪表盘查询在参考后端与 ClickHouse 之间做差分回放比对"
+   ],
+   "use_cases": [
+    "已通过 OpenTelemetry Collector 将指标、日志、追踪写入 ClickHouse 的环境，用 Grafana 查询这些数据",
+    "以单一 ClickHouse 存储三类遥测信号并保留现有 Grafana 仪表盘与告警",
+    "从 Prometheus 存储迁移到 ClickHouse 前逐条验证查询结果一致性"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "### Drop-in Prometheus / Loki / Tempo HTTP gateway for ClickHouse ／ Cerberus lets you keep your metrics, logs, and traces in **ClickHouse** ／ cerberus translates it into ClickHouse SQL, runs it, and hands back the",
+     "lines": [
+      3,
+      23,
+      29
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 ClickHouse 提供查询网关能力、服务可观测性生态的组件，本身不存储业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0；README 提示项目处于 1.0 稳定 wire API 但仍在快速演进",
+   "install": [
+    "docker",
+    "binary",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### Drop-in Prometheus / Loki / Tempo HTTP gateway for ClickHouse ／ It is a **read-only query gateway**. You add it to Grafana as three ／ cerberus translates it into ClickHouse SQL, runs it, and hands back the",
+   "evidence_lines": [
+    3,
+    27,
+    29
+   ]
+  },
+  "fn": "tsouza/cerberus",
+  "sha": "1061c162d96c",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1e1629a3a239": {
+  "identity": {
+   "one_liner": "Spring Boot 事务性 Outbox 模式示例，用 PostgreSQL 存事件、Kafka 发布",
+   "review": "这是一个演示 Transactional Outbox 模式的 Spring Boot 示例项目：业务事务将订单、outbox 事件和幂等记录写入 PostgreSQL，事务提交后经内存队列和 Kafka 批量发布器发布事件，并提供崩溃恢复与幂等请求流程。面向已使用 Spring Boot、PostgreSQL 和 Kafka 的团队，附带 Prometheus/Grafana 监控与 OpenSearch 日志等可观测性配置。",
+   "highlights": [
+    "提供 Normal Flow、Recovery Flow 与幂等请求流程三条核心工作流，恢复扫描限定 ACTIVE 分区",
+    "通过 Active/Archive 分区机制将恢复扫描成本限制在未发布事件范围内",
+    "内置可观测性配置，包含 outbox 管道自定义指标、结构化日志与分布式追踪"
+   ],
+   "use_cases": [
+    "微服务中需要在同一事务中可靠地将业务事件发布到 Kafka 的场景",
+    "需要事件发布崩溃恢复机制的 Spring Boot 事件驱动系统",
+    "需要请求幂等去重（基于 Idempotency-Key）的订单类服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# Spring Boot Transactional Outbox with Kafka & PostgreSQL ／ PostgreSQL ／ This project targets teams already using **Spring Boot, PostgreSQL, and Kafka** that want low-latency event delivery without continuous database polling or an additional CDC platform.",
+     "lines": [
+      1,
+      10,
+      24
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL 存储业务与 outbox 事件数据、经 Kafka 发布的示例应用，而非为数据库生态服务的独立工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Production-ready Spring Boot example of the **Transactional Outbox Pattern** with idempotency, crash recovery, batch publishing, load testing, and observability. ／ This project targets teams already using **Spring Boot, PostgreSQL, and Kafka** that want low-latency event delivery without continuous database polling or an additional CDC platform. ／ - **PostgreSQL** provides durable event storage.",
+   "evidence_lines": [
+    14,
+    24,
+    39
+   ]
+  },
+  "fn": "KHolodilin/spring-transactional-outbox-kafka",
+  "sha": "1e1629a3a239",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

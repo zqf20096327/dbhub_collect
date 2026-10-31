@@ -10865,5 +10865,259 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a2631af61487": {
+  "identity": {
+   "one_liner": "基于 Falcon+Django+PostgreSQL 的迷你社交网络应用",
+   "review": "Subreply 是一个用 Python 编写的社交网络应用，技术栈为 Falcon + Gunicorn + Django ORM + PgBouncer，通过单查询组合与连接池减少数据库往返。README 提供安装步骤、本地部署方式和风格指南，适合想搭建或将其用作组织内部社交网络的开发者。",
+   "highlights": [
+    "使用 Falcon+Gunicorn+Django ORM+PgBouncer 架构实现单查询组合",
+    "README 包含完整的本地安装与运行步骤",
+    "README 声明可用作组织内部社交网络"
+   ],
+   "use_cases": [
+    "部署个人或组织内部社交网络",
+    "学习 Falcon+Django+PgBouncer 架构实践"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Install PostgreSQL server at 6432 port and `createdb subreply` then:",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 指示安装 PostgreSQL 并建立 subreply 数据库，该社交网络以 PostgreSQL 存储数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Install PostgreSQL server at 6432 port and `createdb subreply` then: ／ Why Falcon + Gunicorn + Django ORM + PgBouncer over FastAPI + Tortoise ORM:",
+   "evidence_lines": [
+    9,
+    39
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "lucianmarin/subreply",
+  "sha": "a2631af61487",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c5922f7c836a": {
+  "identity": {
+   "one_liner": "自托管 Splitwise 替代品，内置 PostgreSQL 的单容器账单分摊应用",
+   "review": "ShareTab 是一个用于室友、朋友、旅行团组共享开销分摊的自托管 Web 应用，支持拍照后由 AI 提取收据明细并分摊税费小费、多币种换算、链接认领、Venmo 支付等。以 Docker Compose 或 Unraid 模板部署，镜像内捆绑 PostgreSQL，也可接外部 PostgreSQL；技术栈为 Next.js/Prisma，支持 OIDC、Google 登录、魔法链接认证。",
+   "highlights": [
+    "提供 AI 收据扫描、多币种换算、债务简化与多种分摊模式（均分/精确/百分比/份额）",
+    "以单个 Docker 容器发布，内捆绑 PostgreSQL，也可配置使用外部 PostgreSQL",
+    "支持 OIDC/Google/魔法链接多种登录方式与 PWA、9 种界面语言"
+   ],
+   "use_cases": [
+    "室友或朋友群体记录和分摊共同开销并结算欠款",
+    "无账户访客通过分享链接参与收据分摊",
+    "自托管于 Unraid 或 Docker Compose 环境的私人账单管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "ShareTab ships as an all-in-one Docker container with PostgreSQL bundled inside. No external database needed, though you can use your own (see Using an external PostgreSQL). The bundled Compose file builds the image from your checkout of this repo: ／ docker exec sharetab su-exec postgres pg_dump -U sharetab sharetab > backup.sql ／ docker compose exec sharetab su-exec postgres pg_dump -U sharetab sharetab > backup.sql",
+     "lines": [
+      104,
+      157,
+      160
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用捆绑 PostgreSQL 作为自身数据存储（L104），仅为数据库的使用方而非生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ShareTab ships as an all-in-one Docker container with PostgreSQL bundled inside. No external database needed, though you can use your own (see Using an external PostgreSQL). The bundled Compose file builds the image from your checkout of this repo: ／ ShareTab is a free, self-hosted alternative to Splitwise for tracking shared expenses with roommates, friends, and travel groups. Snap a photo of a receipt, let AI extract the line items, and assign them to group members. Taxes and tips split proportionally. Deploy on your own server with Docker Compose.",
+   "evidence_lines": [
+    104,
+    17
+   ]
+  },
+  "fn": "sw-carlos-cristobal/sharetab",
+  "sha": "c5922f7c836a",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "320210246a75": {
+  "identity": {
+   "one_liner": "键盘驱动的终端 SQL 客户端，经 SSH 连接多种数据库",
+   "review": "squi 是一个基于 TUI 的 SQL 客户端，用于在终端浏览 schema、编写和执行 SQL、内联编辑数据并查看执行计划，支持 PostgreSQL、MySQL、MariaDB、ClickHouse、SQL Server 与 SQLite，可经 SSH 隧道连接并提供只读模式、破坏性语句确认等保护机制。面向在终端操作数据库的开发者与运维人员，通过 Homebrew/Scoop/go install 安装。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、ClickHouse、SQL Server、SQLite 连接，可通过 SSH 隧道访问",
+    "提供语法高亮、自动补全、结果网格浏览、内联编辑、EXPLAIN 计划树与 schema diff 等功能",
+    "单二进制分发，支持 URL 连接、DataGrip 数据源导入与 CSV/JSON/SQL 导入导出"
+   ],
+   "use_cases": [
+    "在终端或经 SSH 连接服务器浏览与查询数据库",
+    "在生产环境执行带确认与超时保护的 SQL 查询",
+    "比较环境间 schema 差异并生成对齐的 ALTER 脚本"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL · MySQL · MariaDB · ClickHouse · SQL Server · SQLite — over SSH, safe on production, one small binary. ／ - **Connect from a URL** (`squi --connect 'postgres://app@db/api?ssh=bastion'`),",
+     "lines": [
+      4,
+      40
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL · MySQL · MariaDB · ClickHouse · SQL Server · SQLite — over SSH, safe on production, one small binary. ／ squi --connect 'mysql://root@127.0.0.1/shop' # or a URL, never saved",
+     "lines": [
+      4,
+      68
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "PostgreSQL · MySQL · MariaDB · ClickHouse · SQL Server · SQLite — over SSH, safe on production, one small binary. ／ **SQLite** files — all in pure Go, so the binary stays static. ／ squi --connect ./app.db # or a SQLite file",
+     "lines": [
+      4,
+      39,
+      69
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "PostgreSQL · MySQL · MariaDB · ClickHouse · SQL Server · SQLite — over SSH, safe on production, one small binary. ／ - **SQL Server and Azure SQL** with `GO` batches and graphical-plan details, and",
+     "lines": [
+      4,
+      38
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "PostgreSQL · MySQL · MariaDB · ClickHouse · SQL Server · SQLite — over SSH, safe on production, one small binary. ／ - **ClickHouse** over its HTTP interface — engines, sorting and partition keys,",
+     "lines": [
+      4,
+      36
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "PostgreSQL · MySQL · MariaDB · ClickHouse · SQL Server · SQLite — over SSH, safe on production, one small binary.",
+     "lines": [
+      4
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供连接、查询与编辑能力的客户端工具，数据库仅为其服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A fast, keyboard-driven SQL client for your terminal. ／  PostgreSQL · MySQL · MariaDB · ClickHouse · SQL Server · SQLite — over SSH, safe on production, one small binary.",
+   "evidence_lines": [
+    3,
+    4
+   ]
+  },
+  "fn": "farvisun/squi",
+  "sha": "320210246a75",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11593,5 +11593,160 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4c2190574b11": {
+  "identity": {
+   "one_liner": "面向编码代理的分析工程技能集，含引擎护栏",
+   "review": "Dex 是 Exmergo 发布的一套供编码代理（Claude Code、Codex 等）调用的分析工程技能与 Python 引擎，提供数仓探索（画像、连接推断、ER 图）、dbt 转换与语义建模、schema 漂移维护三类能力，内置查询防火墙与成本预估，数据源只读、构建仅在 dev 目标执行。适用于使用 dbt 与数据仓库的数据团队。需依赖 uv 与本地 shell。",
+   "highlights": [
+    "提供 explore/transform/maintain 三个技能，覆盖仓库探索、dbt 建模与漂移维护",
+    "支持 Snowflake、BigQuery、Databricks、Redshift、ClickHouse、Trino、DuckDB、Postgres 连接器",
+    "内置 PII 查询防火墙、成本预估与本地花费账本，源数据只读"
+   ],
+   "use_cases": [
+    "让编码代理探索陌生数据仓库并生成画像与 ER 图",
+    "在代理辅助下编写与重构 dbt 模型和语义层",
+    "监控数仓 schema、体量与指标定义漂移并生成修复建议"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Postgres**|Operational database|✅|`postgres`|Database-seconds|`pg_service.conf`, `DATABASE_URL`, `PG*` env, or a dbt profile|",
+     "lines": [
+      211
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "`.dex/dex.db` is the SQLite backend's equivalent of `cache.json`, so it gets",
+     "lines": [
+      327
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**ClickHouse**|Analytical database|✅|`clickhouse`|Compute-seconds on Cloud, database-seconds self-hosted|`CLICKHOUSE_URL`, `CLICKHOUSE_*` env, or a dbt profile|",
+     "lines": [
+      208
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定义它为分析工程技能与引擎，通过连接器为多种数据仓库/数据库提供服务，而非以某库作存储的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dex lets your agent build your analytics: data warehouse exploration, dbt data transformation and semantic modeling, ／ |**Snowflake**|Cloud warehouse|❌|`snowflake`|Warehouse-seconds, with credits|`connections.toml`, `SNOWFLAKE_*` env, or a dbt profile| ／ |**Postgres**|Operational database|✅|`postgres`|Database-seconds|`pg_service.conf`, `DATABASE_URL`, `PG*` env, or a dbt profile|",
+   "evidence_lines": [
+    11,
+    204,
+    211
+   ]
+  },
+  "fn": "exmergo/dex",
+  "sha": "4c2190574b11",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "db431ff343f7": {
+  "identity": {
+   "one_liner": "嵌入式向量数据库引擎，以 SQLite 持久化加 FAISS 索引实现本地向量检索",
+   "review": "ToucanDB 是一个嵌入式向量数据库引擎，将向量以 SQLite 记录持久化，并用 FAISS 提供精确检索与 HNSW/IVF 近似索引，内置 RAG 流水线、多种相似度度量与可选加密。面向 Python 开发者，适合本地桌面工具与私有 RAG；无后台服务，仅支持单进程拥有一个数据目录，目前为 beta 状态。",
+   "highlights": [
+    "支持 cosine、dot-product、Euclidean 相似度及 flat、HNSW、IVF 三种索引",
+    "使用 SQLite WAL 存储做原子批量写入，FAISS 快照可在崩溃后确定性重建",
+    "提供无额外依赖的 RAG 流水线，支持分块、命名空间隔离、来源归因与可选加密"
+   ],
+   "use_cases": [
+    "桌面工具与本地 agent 的应用记忆存储",
+    "私有 RAG 与语义检索场景",
+    "单进程内嵌的向量检索组件"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "application memory. ToucanDB combines atomic SQLite persistence with FAISS ／ - SQLite WAL storage with atomic batch writes and safe arbitrary vector IDs. ／ unbounded cache, and eager model loading. SQLite records are authoritative;",
+     "lines": [
+      10,
+      22,
+      98
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为应用提供向量存储与检索的数据库引擎组件，SQLite 是其内置持久化存储而非外部被服务的库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An embedded, local-first vector database for semantic search, RAG, and ／ ToucanDB 2 is a beta embedded engine. It is not a distributed vector database, ／ - SQLite WAL storage with atomic batch writes and safe arbitrary vector IDs.",
+   "evidence_lines": [
+    9,
+    173,
+    22
+   ]
+  },
+  "fn": "ToucanDB/ToucanDB",
+  "sha": "db431ff343f7",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

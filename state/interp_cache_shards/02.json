@@ -11027,5 +11027,75 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b237462e20d4": {
+  "identity": {
+   "one_liner": "本地 Markdown 知识库 CLI，基于 SQLite FTS5 实现混合检索",
+   "review": "sovereign-kb（skb）是一个本地运行的 Markdown 笔记知识库及 CLI，为工程师和 AI 编码代理提供项目记忆。它将笔记存为纯 Markdown，用 Python 3.10+ 标准库和 SQLite FTS5 建立索引，支持 BM25 搜索、wikilink 图传播、可选的本地 Ollama 向量嵌入和 Rust WAND 加速，零运行时依赖；附带 dashboard 网页、vault 校验、项目脚手架等子系统。",
+   "highlights": [
+    "基于 SQLite FTS5 的 BM25 检索，结合 [[wikilink]] 图传播与 RRF 融合，可选 Ollama 本地向量嵌入和 Rust Block-Max WAND 二进制",
+    "零运行时依赖，全部本地运行，删除 .kb/ 目录后 Markdown 原文件不受影响",
+    "提供 CLI 命令集（init/capture/search/ask/sync/verify/push/dashboard）及 --json 输出供编码代理调用"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 AI 编码代理提供跨会话的项目决策记忆",
+    "管理已有的 Obsidian vault 或 docs/ 目录等 Markdown 笔记集合",
+    "离线环境下进行带图结构加权的本地知识检索"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything runs locally on **Python 3.10+ standard library + SQLite FTS5** with **zero runtime dependencies**. Delete `.kb/` at any time and your plain Markdown files remain untouched. ／ === Search Results for: 'SQLite offline' (1 match) === ／ - We chose SQLite FTS5 because the app must work offline.",
+     "lines": [
+      11,
+      48,
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite FTS5 仅作为该项目自身的检索索引用途，项目本身是面向个人笔记与编码代理的知识库应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Everything runs locally on **Python 3.10+ standard library + SQLite FTS5** with **zero runtime dependencies**. Delete `.kb/` at any time and your plain Markdown files remain untouched. ／ Point `skb` at any folder of `.md` files—or initialize a fresh vault in one command. Capture architectural decisions from your terminal, search across your notes by keyword + `[[wikilinks]]` + optional local embeddings, and give your AI coding agents (`Claude Code`, `Cursor`, `OpenCode`, `Codex`) persistent project memory. ／  - How SQLite FTS5 BM25, optional `hips` Rust Block-Max WAND (`skb hips`), 768-d local Ollama embeddings, Reciprocal Rank Fusion (RRF), and 1-hop `[[Wikilink]]` graph propagation work together.",
+   "evidence_lines": [
+    11,
+    9,
+    118
+   ]
+  },
+  "fn": "iliachry/sovereign-kb",
+  "sha": "b237462e20d4",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

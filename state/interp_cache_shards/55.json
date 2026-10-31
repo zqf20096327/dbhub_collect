@@ -12235,5 +12235,71 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "821bfd84b2cc": {
+  "identity": {
+   "one_liner": "本地优先、自托管的周时间线任务管理器",
+   "review": "Will Be Done 是一个围绕可视化周时间线组织的任务管理器，支持离线读写、多设备同步和一条 Docker 命令自托管。面向需要周规划和私有数据存储的个人用户，默认使用 SQLite 存储服务端数据，也可选配 Turso Cloud 或 tursod，无需 Redis 或外部数据库服务，并提供 HTTP API 与 Todoist、TickTick 导入。",
+   "highlights": [
+    "本地优先架构：浏览器端全量数据库，支持离线读写和多设备实时同步",
+    "一条 Docker 命令自托管，默认 SQLite 存储，无需 Redis、外部数据库或 S3",
+    "提供 HTTP API（Bearer token 鉴权），支持 Todoist API 导入与 TickTick CSV 导入"
+   ],
+   "use_cases": [
+    "个人周计划与任务管理（时间线、看板、循环任务）",
+    "自托管私有任务数据存储，避免第三方托管",
+    "跨浏览器、PWA、桌面端的离线任务同步"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Own the data.** Self-host the sync server with Docker, store data in SQLite, and avoid handing your task history to a third-party task app. ／ The Docker server hosts the web app, stores server-side data under `/var/lib/will-be-done`, and syncs browser, PWA, and desktop clients. SQLite is the default; the API can optionally use Turso Cloud or the local Rust tursod service. See the API database config",
+     "lines": [
+      25,
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明默认用 SQLite 存任务数据（L25、L87），是使用数据库的应用而非数据库服务工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Own the data.** Self-host the sync server with Docker, store data in SQLite, and avoid handing your task history to a third-party task app. ／ The Docker server hosts the web app, stores server-side data under `/var/lib/will-be-done`, and syncs browser, PWA, and desktop clients. SQLite is the default; the API can optionally use Turso Cloud or the local Rust tursod service. See the API database configuration for setup instructions.",
+   "evidence_lines": [
+    25,
+    87
+   ]
+  },
+  "fn": "will-be-done/will-be-done",
+  "sha": "821bfd84b2cc",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

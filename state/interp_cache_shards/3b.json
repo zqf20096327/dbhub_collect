@@ -10790,5 +10790,141 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "69edca0c4a1e": {
+  "identity": {
+   "one_liner": "Omarchy 下的 Rust GUI 应用开发套件",
+   "review": "ODK 是面向 Omarchy 环境（Arch Linux/Hyprland/Wayland）的 Rust 应用开发套件，基于 GPUI 界面并内嵌 Luau 插件机，配套 OMA 打包格式与安装/沙箱工具。仅支持 Linux x86_64 且所有 crate 处于 0.0.0 预发布状态，官方签名安装尚未发布，当前依赖 GitHub 上的未签名脚本安装。",
+   "highlights": [
+    "提供基于 GPUI 并跟随 Omarchy 主题的 Rust 应用开发框架，依赖单个 odk crate",
+    "内嵌 Luau 机器以支持插件",
+    "提供 oma 程序用于校验、安装、沙箱化并启动 .oma 打包应用"
+   ],
+   "use_cases": [
+    "为 Omarchy 桌面环境开发 Rust GUI 应用",
+    "将应用打包为 .oma 格式并沙箱化分发",
+    "通过 stories 与 headless 工具进行组件开发与测试"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未表明该套件服务于任何数据库生态，sqlite 仅出现在主题标签中，正文未提及。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **ODK**, the Omarchy Development Kit: Rust applications with a GPUI interface that follows the user's Omarchy theme, and an embedded Luau machine for plugins. Applications depend on one `odk` crate. ／ - **OMA**, Omarchy Managed Application: a bundle format and `oma`, the program that verifies, installs, sandboxes and starts one. A Bundle is one `.oma` file (ADR 0052). The code still installs a directory (`<App>.oma/`) until it catches up. `oma` does not depend on ODK. ／ Pre-release: every crate is 0.0.0. Stable Rust (edition 2024), Linux x86_64.",
+   "evidence_lines": [
+    5,
+    6,
+    8
+   ]
+  },
+  "fn": "csfh/odk",
+  "sha": "69edca0c4a1e",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "430a7a652751": {
+  "identity": {
+   "one_liner": "单二进制自托管支付编排网关，统一API、账本与webhook",
+   "review": "Paymux 是一个用 Go 编写的自托管支付编排系统，将 Razorpay、Stripe、Cashfree 等多个支付网关接入统一的 API、账本和 webhook 端点，内置 GST 发票、订阅管理和 UPI AutoPay，适合印度市场的小团队使用。数据存储默认使用 SQLite，可切换到 PostgreSQL，通过 web 仪表盘管理支付、退款、争议与对账。",
+   "highlights": [
+    "通过规则引擎按应用、币种、国家、金额等条件路由支付请求，含熔断机制",
+    "以单一账本记录支付、退款、争议、订阅与打款，webhook 仅作提示、变更前重新拉取真实状态",
+    "支持自定义网关连接器（Go 包或签名 HTTP 服务），并提供一致性测试套件"
+   ],
+   "use_cases": [
+    "多个产品线共享多个支付网关的统一接入与 webhook 分发",
+    "印度市场的 GST 发票自动开具与 e-invoice 合规",
+    "小团队自托管部署，单二进制配 SQLite 快速启动"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "SQLite or PostgreSQL ／ - 📦 **One binary, no cluster.** SQLite out of the box, PostgreSQL when you grow. Sized for small teams: the load test holds 20 payment requests a second (docs/performance.md). No Kubernetes fleet required.",
+     "lines": [
+      12,
+      55
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite or PostgreSQL ／ - 📦 **One binary, no cluster.** SQLite out of the box, PostgreSQL when you grow. Sized for small teams: the load test holds 20 payment requests a second (docs/performance.md). No Kubernetes fleet required.",
+     "lines": [
+      12,
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Paymux 使用 SQLite 或 PostgreSQL 作为存储（L12/L55），是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SQLite or PostgreSQL ／ - 📦 **One binary, no cluster.** SQLite out of the box, PostgreSQL when you grow. Sized for small teams: the load test holds 20 payment requests a second (docs/performance.md). No Kubernetes fleet required.",
+   "evidence_lines": [
+    12,
+    55
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "velixio/paymux",
+  "sha": "430a7a652751",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10555,5 +10555,67 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "648befe45a56": {
+  "identity": {
+   "one_liner": "自托管的本地编码代理，Python 程序直接提供网页界面",
+   "review": "Tacit 是一个在本地运行的 AI 编码代理，通过浏览器交互，能读写文件、执行命令、编辑代码、联网搜索并连接 MCP 等外部工具，模型请求发往用户自行配置的 provider。它不安装数据库、无构建步骤、无账号和遥测，状态以纯文件存放于 ~/.tacit。面向希望在本地自托管、关注提示词开销与可审计性的开发者；要求 Python 3.10+，无版本化发布。",
+   "highlights": [
+    "提供浏览器界面，读取文件、运行命令、编辑代码、搜索网络并连接外部工具（含 MCP 服务器）",
+    "每轮请求的固定 token 开销从当前配置实时计算并在界面中展示",
+    "每轮在独立子进程中运行，支持两阶段停止；默认关闭沙箱、记忆与学习等可选能力"
+   ],
+   "use_cases": [
+    "在本地机器上通过浏览器使用 AI 编码代理修改项目代码",
+    "需要明确每轮提示词固定开销并按配置文件调整的场景",
+    "不希望引入数据库、账号或遥测的自托管开发环境"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 声明不使用数据库、也不以数据库为服务对象，不属于为数据库生态服务的工具，也非使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The application is one Python program serving plain web pages: no build step, no frontend toolchain, no ／ - **What it is:** a self-hosted coding agent with a browser interface ／ - **What it stores:** plain files under `~/.tacit`, with no database",
+   "evidence_lines": [
+    15,
+    31,
+    33
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "SebSilent/Tacit",
+  "sha": "648befe45a56",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10309,5 +10309,237 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d95853713643": {
+  "identity": {
+   "one_liner": "React + Ant Design 前端后台管理系统，对接 goadmin 后端",
+   "review": "这是一个后台管理系统的 React 前端仓库，提供登录认证、RBAC 权限、部门组织、审计日志、工单、系统配置等管理页面，通过 /api 代理对接 goadmin 后端服务。面向需要后台管理界面的开发团队，作为前端模板/管理端使用；它本身不含数据库逻辑，数据库访问在后端实现。",
+   "highlights": [
+    "提供用户、角色、权限码、菜单的 RBAC 管理页面及部门数据权限",
+    "包含审计日志、在线用户、定时任务、API key、feature flag 等运维管理模块",
+    "开发环境通过 Vite 代理将 /api 和 /health 转发到 goadmin 后端"
+   ],
+   "use_cases": [
+    "为 goadmin/golang 后端搭建后台管理界面",
+    "需要 RBAC、审计、工单等后台功能模块的前端参考实现",
+    "基于 React + Ant Design + TypeScript 的管理端模板项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明它是后台管理系统的前端 UI，通过 HTTP/WebSocket 接口调用 goadmin 后端，自身不实现数据库服务功能",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "React 管理端，对接后端 go_ai / goadmin。版本 `3.0.0`。 ／ Menus come from `GET /api/me/menus`. A route exists in this repo only if the signed-in user is granted the matching menu. ／ Start goadmin first. The dev server proxies `/api` and `/health` to `http://127.0.0.1:8080`. WebSocket in development connects to that origin directly (`/gows` is not proxied).",
+   "evidence_lines": [
+    5,
+    31,
+    42
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "weiqinke/react-admin-nest",
+  "sha": "d95853713643",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "67391724315e": {
+  "identity": {
+   "one_liner": "代码库架构分析工具，生成单文件 SQLite 快照",
+   "review": "Archstats 读取代码库，提取组件、模块、单元及其依赖关系，并结合 git 历史计算复杂度等指标，全部写入一个 SQLite 快照文件，供桌面应用、assert 规则检查或自写 SQL 查询使用。面向需要度量和约束代码架构的开发团队，支持以 Go 库方式嵌入。语言分析依赖 tree-sitter，Scala 用正则；架构规则以 YAML 中的 SQL 断言表达。",
+   "highlights": [
+    "将架构、依赖、git 共变历史与复杂度指标写入单个 SQLite 快照文件",
+    "支持用 YAML 编写 SQL 断言对代码库做规则检查（archstats assert）",
+    "提供 Go API（engine.Analyze）供作为库嵌入使用"
+   ],
+   "use_cases": [
+    "对代码库生成架构快照并用 SQL 自行查询分析",
+    "以规则文件约束分层依赖（如 domain 不依赖 web 层）",
+    "在终端查看组件耦合度、不稳定度等指标视图"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It writes all of it to one SQLite file, the **snapshot**. Everything else reads that file: the Archstats desktop app, `archstats assert`, reports, and any SQL you write yourself. The tables are documented in DESCRIPTION.md. ／ archstats -f path/to/project export sqlite snapshot.db",
+     "lines": [
+      7,
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "工具将分析结果写入 SQLite 文件作为存储，README 明确依赖该库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Archstats reads a codebase and writes down its architecture: the components and modules it is made of, the units (types, functions) inside them, every dependency between them, how they changed together in git, how complex and how healthy they are, and how the workspace is built and shipped. ／ It writes all of it to one SQLite file, the **snapshot**. Everything else reads that file: the Archstats desktop app, `archstats assert`, reports, and any SQL you write yourself. The tables are documented in DESCRIPTION.md.",
+   "evidence_lines": [
+    5,
+    7
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "archstats/archstats",
+  "sha": "67391724315e",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e72412b13703": {
+  "identity": {
+   "one_liner": "Delphi 12+ 的流式类型安全 SQL 查询构建器，多方言参数化输出",
+   "review": "QueryBuilder4Delphi 是面向 Delphi 12 及以上版本的开源 SQL 查询构建库，通过流式链式 API 生成参数化 SQL 与绑定参数，内置 MSSql、MySQL、PostgreSQL、SQLite、Oracle、Firebird 六种方言编译器，可通过 FireDAC 提供者或自定义提供者执行查询。核心只依赖 Delphi RTL，不含连接与事务管理，适用于需要在 Delphi 应用中以数据库无关方式构建 SQL 的开发者。",
+   "highlights": [
+    "提供六种 SQL 方言编译器（MSSql/MySQL/PostgreSQL/SQLite/Oracle/Firebird），输出带有序绑定参数的参数化 SQL",
+    "提供流式对象映射，支持可空 DTO 与三种 SQL NULL 处理策略，包含 FireDAC 可选执行提供者",
+    "附带 DUnitX 测试套件与 SQLite 内存集成测试，通过 PowerShell 脚本支持命令行构建"
+   ],
+   "use_cases": [
+    "在 Delphi 应用中以类型安全、无字符串拼接方式构建 SELECT/INSERT/UPDATE 等查询",
+    "同一查询逻辑需编译为多种数据库方言 SQL 的场景",
+    "通过 FireDAC 或自定义提供者执行参数化 SQL 并映射结果到 Delphi 对象"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`TSqlDialect.PostgreSql`|`TPostgresCompiler`|`@p0`, `@p1`, …|",
+     "lines": [
+      168
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`TSqlDialect.MySql`|`TMySqlCompiler`|`@p0`, `@p1`, …|",
+     "lines": [
+      167
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|`TSqlDialect.Oracle`|`TOracleCompiler`|`:p0`, `:p1`, …|",
+     "lines": [
+      170
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`TSqlDialect.Sqlite`|`TSqliteCompiler`|`@p0`, `@p1`, …| ／ `test/QueryBuilder.FireDAC.Tests.dproj` for SQLite in-memory integration tests.",
+     "lines": [
+      169,
+      201
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**Generated parameterized MSSQL SQL (compiler default `@p` prefix):**",
+     "lines": [
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为数据库生态服务的 SQL 构建工具库，自身不存储数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "QueryBuilder4Delphi is a fluent SQL query builder for Delphi 12 and later. It supports multiple SQL dialects, parameterized queries, and database-independent query execution through extensible providers. ／ ## SQL dialects ／ `TQueryCompilerFactory.CreateCompiler(Dialect)` creates an `ICompiler`",
+   "evidence_lines": [
+    3,
+    162,
+    173
+   ]
+  },
+  "fn": "auchri/QueryBuilder4Delphi",
+  "sha": "e72412b13703",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

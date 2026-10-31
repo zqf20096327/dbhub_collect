@@ -11696,5 +11696,160 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "84a0ffc83af5": {
+  "identity": {
+   "one_liner": "开源 F1 赛车数据集，提供 CSV/JSON/SQL 多格式发布",
+   "review": "F1DB 是收录 1950 年至今 Formula 1 车手、车队、引擎、赛道、赛季与比赛全量数据的开源数据库项目，按每场比赛后发布新版本。提供 CSV、JSON、Smile 及 MySQL/PostgreSQL/SQLite 的 .sql 导入文件与 SQLite 数据库文件，并附带 JSON Schema 供校验，适合需要查询或展示 F1 历史数据的开发者、网站与移动应用。",
+   "highlights": [
+    "提供 CSV、JSON、 splitted JSON、Smile 等格式的发布工件",
+    "提供 MySQL、PostgreSQL、SQLite 的 .sql dump 文件及可直接查询的 SQLite 数据库",
+    "附带 JSON Schema 文件，JSON 与 Smile 工件可依据其校验"
+   ],
+   "use_cases": [
+    "为 F1 相关网站或移动应用提供历史数据源",
+    "直接使用 SQLite 数据库工件查询比赛数据",
+    "将 .sql dump 导入 MySQL/PostgreSQL 建立自定义数据库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite",
+     "lines": [
+      74
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite",
+     "lines": [
+      74
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite",
+     "lines": [
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是提供 F1 数据的数据集，发布面向 MySQL/PostgreSQL/SQLite 的导入工件供其存取数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "CC BY（知识共享许可）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- SQL (MySQL, PostgreSQL or SQLite .sql dump files to create and populate a custom database) ／ Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite",
+   "evidence_lines": [
+    39,
+    74
+   ]
+  },
+  "fn": "f1db/f1db",
+  "sha": "84a0ffc83af5",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e131e91c1d70": {
+  "identity": {
+   "one_liner": "自托管 Excalidraw 白板应用，绘稿存于自带 Postgres",
+   "review": "这是一个自托管的团队白板应用，集成 Excalidraw 编辑器，提供实时协作、团队空间、文件夹、全文搜索和团队图库等功能，绘稿数据存储在自带的 Postgres 中。面向需要私有化部署协作白板的团队，通过 Docker Compose 或 Coolify 部署，并内置 MCP server 供 AI 客户端读写绘稿。",
+   "highlights": [
+    "支持实时协作编辑，含实时光标、follow mode 和无账户访客链接",
+    "内置 MCP server，支持 Claude Code/Claude Desktop 等 AI 客户端查找、读取和创建绘稿",
+    "提供 Docker Compose 与 Coolify 两种部署方式，启动时自动应用数据库迁移"
+   ],
+   "use_cases": [
+    "团队私有化部署共享白板，管理成员与权限",
+    "通过 MCP 让 AI 客户端检索和生成流程图/白板内容",
+    "从 Excalidraw+ 导入已有场景迁移到自托管实例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "a shared team space, folders, and search, with every drawing stored in your own Postgres. ／ Both paths run the app and its Postgres database together from one compose file. ／ |`POSTGRES_USER`, `POSTGRES_DB`|No|Bundled Postgres user and database (default `excaliself`)|",
+     "lines": [
+      5,
+      31,
+      84
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明绘稿等数据存储于自带的 Postgres 数据库，应用本身使用数据库而非为数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " a shared team space, folders, and search, with every drawing stored in your own Postgres. ／ Both paths run the app and its Postgres database together from one compose file.",
+   "evidence_lines": [
+    5,
+    31
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "maciekzygmunt/excaliself",
+  "sha": "e131e91c1d70",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

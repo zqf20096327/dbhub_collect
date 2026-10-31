@@ -10647,5 +10647,186 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8b7eb5632a92": {
+  "identity": {
+   "one_liner": "从自然语言生成全栈应用与AI代理的低代码平台",
+   "review": "Magic 是一个运行在自有硬件上的低代码平台，基于 .NET 与 Hyperlambda 语言，从数据库 schema 或英文描述生成带 RBAC 的 REST API、前端与 AI 代理，并内置 MCP 服务器把端点暴露给 MCP 客户端。面向需要快速搭建业务系统或数据库驱动 AI 应用的开发者。开箱默认支持 SQLite，并可通过配置连接 MySQL、PostgreSQL、MariaDB、SQL Server。",
+   "highlights": [
+    "从数据库 schema 生成带安全控制的 CRUD REST 端点",
+    "内置 MCP 服务器，可将 HTTP 端点作为工具暴露给 MCP 客户端",
+    "Hyperlambda 在沙箱中运行并通过 RBAC 白名单控制可调用函数"
+   ],
+   "use_cases": [
+    "基于现有数据库生成安全的 CRUD API",
+    "构建查询自有数据库的 AI 代理与聊天机器人",
+    "为第三方 OpenAPI/Swagger 服务生成包装端点"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* **Secure APIs over legacy databases** — point it at an existing MySQL, PostgreSQL, SQL Server or MariaDB schema and get a CRUD API in seconds ／ SQLite out of the box, with full support for MySQL, PostgreSQL, MariaDB and SQL Server. No connectors required.",
+     "lines": [
+      38,
+      294
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* **Secure APIs over legacy databases** — point it at an existing MySQL, PostgreSQL, SQL Server or MariaDB schema and get a CRUD API in seconds ／ SQLite out of the box, with full support for MySQL, PostgreSQL, MariaDB and SQL Server. No connectors required.",
+     "lines": [
+      38,
+      294
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "On a Chinook read endpoint (10 rows per request, pooled SQLite connections, 128 concurrent connections, measured with wrk), Hyperlambda served **64,664 requests per second**, **3.7× the throughput of FastAPI with 4 workers** (17,686) and **14× that of FastAPI ",
+     "lines": [
+      76
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "* **Secure APIs over legacy databases** — point it at an existing MySQL, PostgreSQL, SQL Server or MariaDB schema and get a CRUD API in seconds ／ SQLite out of the box, with full support for MySQL, PostgreSQL, MariaDB and SQL Server. No connectors required.",
+     "lines": [
+      38,
+      294
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* **Secure APIs over legacy databases** — point it at an existing MySQL, PostgreSQL, SQL Server or MariaDB schema and get a CRUD API in seconds ／ SQLite out of the box, with full support for MySQL, PostgreSQL, MariaDB and SQL Server. No connectors required.",
+     "lines": [
+      38,
+      294
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "平台以数据库为输入生成 API 和应用，为数据库生态提供生成与代理服务能力",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Turn plain English into a working full-stack app — database, secure API, business logic, and frontend — running on **your own hardware**, with **zero lock-in**. An open-source alternative to Lovable, Bolt44, and Replit that gives you the whole backend, plus an MCP server that turns every endpoint into a tool for Claude, Cursor, or Codex. Read more about Hyperlambda. ／ * **Secure APIs over legacy databases** — point it at an existing MySQL, PostgreSQL, SQL Server or MariaDB schema and get a CRUD API in seconds ／ The sidebar is the whole platform: **Hyper IDE** for editing, running and *replaying* any file on the server, **Playground** for executing Hyperlambda without saving it first, **SQL Studio** for querying and designing databases, **Endpoint Generator** for turning tables into secured CRUD endpoints, wrapping caller-supplied code in a role-scoped sandbox, and importing third-party APIs from their OpenAPI specifications, plus users and roles, scheduled tasks, machine learning, and the plugin store.",
+   "evidence_lines": [
+    3,
+    38,
+    86
+   ]
+  },
+  "fn": "polterguy/magic",
+  "sha": "8b7eb5632a92",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "42927c034715": {
+  "identity": {
+   "one_liner": "本地运行的 MCP 服务器，为多个 AI 应用提供共享项目记忆，数据存于本机 SQLite 文件",
+   "review": "FlowState 是一个本地优先的 MCP 服务器，用单个 SQLite 文件在用户机器上存储 AI 项目的待办、变更、决策与经验，供 Claude、ChatGPT、Cursor、Grok 等多个 MCP 客户端同时读写同一份记忆。支持多代理并发认领待办、决策冲突标记与人工审核队列，可选 GitHub 备份、Cloudflare Tunnel 或 relay 实现远程访问；默认仅每日检查一次更新。",
+   "highlights": [
+    "提供 MCP 服务器，供多个 AI 应用（Claude、ChatGPT、Cursor、Grok 等）共享同一份项目记忆",
+    "支持多代理并发场景：待办认领（claim）机制、决策冲突自动标记与人工审核队列",
+    "本地优先：数据存于本机单个 SQLite 文件，变更记录来源者、模型与机器信息"
+   ],
+   "use_cases": [
+    "在多个 AI 应用间保持项目上下文连续（跨聊天、跨设备的任务交接）",
+    "多个 AI 代理并行工作时的任务协调与冲突发现",
+    "需要数据保留在本机、不外发记忆的个人开发者工作流"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- \"Save a decision: we're using Postgres, not SQLite, because of multiple users.\"",
+     "lines": [
+      208
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Everything lives in one SQLite file on your computer. Your memory is not sent anywhere unless you",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为本地 MCP 服务器工具，SQLite 仅是其内部存储方式，并非为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "FlowState is a local MCP server. It gives every AI app you ／ Everything lives in one SQLite file on your computer. Your memory is not sent anywhere unless you ／ Claude, ChatGPT, Cursor and Grok can all use FlowState at once, on your computer, across your network, or from your phone (through the optional relay or your own tunnel). When one AI logs a decision or a change, the others see it the next time they check. Hard rules and handoff notes reach every AI, and every change records which AI made it, so you always know who did what. Work across projects is linked too, so a change to something shared shows up in every project that uses it.",
+   "evidence_lines": [
+    5,
+    10,
+    20
+   ]
+  },
+  "fn": "dialectforge/FlowState",
+  "sha": "42927c034715",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

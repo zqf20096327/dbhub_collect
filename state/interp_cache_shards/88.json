@@ -10339,5 +10339,143 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "67626a52e6c6": {
+  "identity": {
+   "one_liner": "为 AI 代理提供持久记忆与语义检索的 MCP 服务器",
+   "review": "这是一个用 Go 编写的 MCP 服务器，为 Claude、Cursor 等 AI 代理提供类型化持久记忆、RAG 文档索引和仓库文件工具，面向 DevOps/平台工程师的运维知识管理场景。数据存储在内置 SQLite 中（含向量索引），无需外部数据库，支持 stdio 与 HTTP/JSON-RPC 双传输，需自行配置嵌入提供方（Jina/OpenAI/Ollama）。",
+   "highlights": [
+    "提供四种类型的持久记忆（情景、语义、程序、工作记忆）与混合检索（向量+BM25 式关键词排序）",
+    "使用内置 SQLite 存储记忆与向量索引，支持 stdio 和 HTTP/JSON-RPC 双传输模式",
+    "包含知识维护机制：去重、冲突解决、过期检测、时间线查询与漂移扫描"
+   ],
+   "use_cases": [
+    "DevOps/平台团队的运维知识沉淀：决策、事故、runbook、postmortem 的存储与召回",
+    "AI 编码代理在代码仓库中跨会话复用项目上下文与文档（RAG 索引）",
+    "本地优先的单机记忆服务，后续可通过 HTTP/JSON-RPC 转为共享部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- local SQLite storage with stdio today and HTTP/JSON-RPC when you need to share it ／ - **SQLite storage** for both memory and vector index -- no external databases needed ／ - **Lower memory usage**: memory store now reads from SQLite directly instead of loading everything into RAM — large memory banks no longer risk OOM",
+     "lines": [
+      31,
+      51,
+      56
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目将 SQLite 作为内置数据存储使用，本身不是为数据库生态服务的工具，而是面向 AI 代理的 MCP 应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- local SQLite storage with stdio today and HTTP/JSON-RPC when you need to share it ／ - **SQLite storage** for both memory and vector index -- no external databases needed",
+   "evidence_lines": [
+    31,
+    51
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "ipiton/agent-memory-mcp",
+  "sha": "67626a52e6c6",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3055fab92cde": {
+  "identity": {
+   "one_liner": "GraalPy 嵌入式 Python 运行时的扩展工具与库集合",
+   "review": "该仓库提供一组扩展 GraalPy（可嵌入的 Python 3 运行时）的工具与库，包含 Java 嵌入工具类、Maven archetype、Maven/Gradle 插件、JBang 集成，以及沙箱化 MCP Server 和 CLI。面向需要在 Java 应用中嵌入 Python 或沙箱执行 Python 代码的开发者。README 未涉及任何数据库相关功能。",
+   "highlights": [
+    "提供 Java 工具类（VirtualFileSystem、GraalPyResources 等）用于在 Java 中嵌入 GraalPy",
+    "包含 Maven archetype、Maven 插件与 Gradle 插件，用于生成和管理嵌入 GraalPy 的项目及 Python 包",
+    "提供沙箱化 MCP Server 与沙箱 CLI，用于在可配置沙箱中执行 Python 代码"
+   ],
+   "use_cases": [
+    "在 Java 应用中嵌入并调用 Python 代码",
+    "通过 Maven/Gradle/JBang 管理嵌入 GraalPy 的 Python 依赖",
+    "在隔离沙箱中安全执行不受信任的 Python 代码"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Copyright (c) 2025, 2026 Oracle and/or its affiliates.",
+     "lines": [
+      60
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅描述 GraalPy 运行时的嵌入与构建工具，未提及任何数据库或数据库生态服务功能",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "版权声明归 Oracle and/or its affiliates，未在 README 中列出具体许可证名称",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Collection of tools and libraries that extend GraalPy, a high-performance embeddable Python 3 runtime. ／ Java library with utility classes useful when embedding GraalPy. ／ Maven plugin to install and manage Python packages for embedded GraalPy.",
+   "evidence_lines": [
+    3,
+    7,
+    27
+   ]
+  },
+  "fn": "oracle/graalpy-extensions",
+  "sha": "3055fab92cde",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

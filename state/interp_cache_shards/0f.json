@@ -10624,5 +10624,226 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3c2b9e040444": {
+  "identity": {
+   "one_liner": "DSH 跨会话记忆插件，七层 SQLite 存储加 BM25 检索",
+   "review": "为 DeepSeek Harness（DSH）宿主提供的跨会话长期记忆插件，将记忆分为 soul/user/project/fact/lesson/topic/rules 七层 SQLite 表，支持首轮注入、关键词命中检索、按窗口空闲触发的 dream 记忆整理及信任门机制，适用于使用 DSH 并需 AI 跨会话保留记忆的用户。SQLite 通过 node:sqlite 内置模块使用，无原生依赖。",
+   "highlights": [
+    "七层记忆分层存储，每层一张 SQLite 表，写入自动去重合并",
+    "基于条目关键词与 BM25 结合近期权重的记忆检索",
+    "空闲窗口 dream 记忆整理与压缩后自动重注入"
+   ],
+   "use_cases": [
+    "为 DSH 会话提供跨会话长期记忆",
+    "项目上下文与教训经验的持续积累与检索",
+    "会话压缩后恢复关键记忆"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **七层记忆**：`soul`（AI 自身）/ `user`（用户信息与偏好）/ `project`（项目信息，含 `subcategory`）/ `fact`（原子事实）/ `lesson`（教训与纠正）/ `topic`（进行中的话题，带目标句）/ `rules`（设计原则与行为准则）。每层一张 SQLite 表，UUID 带时间前缀，id 顺序即创建顺序。 ／ - **无需另装运行时依赖**：`node:sqlite` + esbuild 产物（`lib/index.js`）；`schemastery` 和 `dsh-llm` 由 DSH 宿主解析提供。**无原生模块。**",
+     "lines": [
+      12,
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "插件为 DSH 宿主提供记忆功能，SQLite 是其内置的数据存储层而非存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "为 DeepSeek Harness（DSH）打造的跨会话记忆插件。 ／ - **七层记忆**：`soul`（AI 自身）/ `user`（用户信息与偏好）/ `project`（项目信息，含 `subcategory`）/ `fact`（原子事实）/ `lesson`（教训与纠正）/ `topic`（进行中的话题，带目标句）/ `rules`（设计原则与行为准则）。每层一张 SQLite 表，UUID 带时间前缀，id 顺序即创建顺序。",
+   "evidence_lines": [
+    6,
+    12
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Phant0Meow/dsh-meow-memory",
+  "sha": "3c2b9e040444",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "39c872ff5130": {
+  "identity": {
+   "one_liner": "社保/政务后端参考实现：Spring MVC+MyBatis 五模块对接 Oracle",
+   "review": "这是一个中国省级社保与网上政务平台后端的参考架构，包含五个 Spring MVC + MyBatis 模块，约 358 个 HTTP 端点，使用 Oracle 多 schema、Redis 会话缓存与 Axis SOAP 对接遗留政务系统。面向需要构建或维护同类架构（servlet 容器 + XML 配置 Spring）的工程师，运行需 JDK 8、Tomcat/WebLogic 及 Oracle 与 Redis 实例。",
+   "highlights": [
+    "五个 Maven 模块打包为 war，可独立部署，含社保查询、卡务、就业、医院挂号等业务流",
+    "多数据源配置（c3p0 + MyBatis mapper XML），NetPortalManagement 模块使用标准 JDBC/Jersey",
+    "Axis SOAP 生成桩对接省级网关与 HIS，并提供带心跳的令牌认证客户端 SDK"
+   ],
+   "use_cases": [
+    "参考多模块 Maven + Spring MVC + MyBatis 的政务后端架构设计",
+    "了解 SOAP(Axis) 转 REST、令牌认证客户端 SDK 等遗留系统集成模式"
+   ],
+   "use_cases_dup_note": "removed"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "MyBatis mappers against Oracle, Redis-backed sessions, SOAP bridges to legacy ／ |Database|Oracle 10g/11g|Multiple schemas per module| ／ - Oracle and Redis instances if you want the application to actually start",
+     "lines": [
+      25,
+      97,
+      114
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 Oracle 存储数据、Redis 做会话缓存的社会保险/政务业务应用系统，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Database|Oracle 10g/11g|Multiple schemas per module| ／ |Cache / session|Redis via Jedis|Dictionary cache, interface token, channel state| ／ Mestudy is a multi-module Maven workspace that collects the backend services behind a",
+   "evidence_lines": [
+    97,
+    98,
+    16
+   ]
+  },
+  "fn": "zengyunhua/Mestudy",
+  "sha": "39c872ff5130",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b17a72c24f44": {
+  "identity": {
+   "one_liner": "基于仓颉与openGauss的个人/家庭数字档案私有化管理系统",
+   "review": "AMS 是一个面向个人与家庭的私有化档案管理系统，将证件、学历、资产、健康等档案分类归档，提供全文检索、盲索引、版本追溯、条目级共享链接与家庭组协作。后端采用仓颉语言，数据底座为 openGauss，敏感字段以国密 SM4 字段级加密并保留审计哈希链；适合需要本地化、加密存储个人敏感档案的家庭或个人用户。",
+   "highlights": [
+    "支持 11 类档案分类模板、全文检索、标签、版本追溯与条目级共享链接",
+    "提供国密 SM3/SM4 加密、字段级加密与盲索引、审计哈希链校验",
+    "包含 19 个数据库迁移文件、152 条 HTTP 路由与 272 个单元测试用例"
+   ],
+   "use_cases": [
+    "个人/家庭证件、资产、健康等敏感档案的私有化集中管理",
+    "家庭成员间按授权粒度共享特定档案条目",
+    "需要国密加密与审计追溯的本地档案存储场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "> 后端 **仓颉（Cangjie）**，前端 **Vue 3 + TypeScript**，数据底座 **openGauss**，密码学底座 **国密 SM3 / SM4**。 ／ |数据库|**openGauss**|通过自编译的 `tpc` 驱动接入（`tools/vendor/opengauss-driver`）| ／ |openGauss|一个可连实例（本地开发常用容器，默认端口 `15432`）|",
+     "lines": [
+      4,
+      100,
+      150
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "若使用外部数据库，直接用 `gsql -f` 或任何 PG 兼容客户端执行同样文件即可。",
+     "lines": [
+      173
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统以 openGauss 作为自身数据底座存取档案数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> Personal Archive Management System —— 面向个人与家庭的私密数字档案管理平台。 ／ |数据库|**openGauss**|通过自编译的 `tpc` 驱动接入（`tools/vendor/opengauss-driver`）| ／ |openGauss|一个可连实例（本地开发常用容器，默认端口 `15432`）|",
+   "evidence_lines": [
+    3,
+    100,
+    150
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ],
+   "status_hint": "deprecated"
+  },
+  "fn": "a703201/Personal-Archive-Management-System",
+  "sha": "b17a72c24f44",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

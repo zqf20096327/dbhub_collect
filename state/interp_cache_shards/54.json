@@ -10145,5 +10145,128 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e21276ebf5a0": {
+  "identity": {
+   "one_liner": "仿 Tally.ERP 9 界面的 React 记账应用，本地处理数据",
+   "review": "一个仿 Tally.ERP 9 界面的记账应用程序，基于 React.js 构建，提供公司管理、总账与凭据录入、损益表/资产负债表/比率分析等报表，支持键盘快捷键导航和 PDF 打印导出。README 标题及主题标签使用 SQLite，定位为本地运行的个人/学习用途记账软件，通过 npm install/npm start 启动，README 未展示后端服务说明。",
+   "highlights": [
+    "提供公司、总账、库存凭据等会计主数据与交易管理",
+    "支持损益表、资产负债表、比率分析等报表及 PDF 打印导出",
+    "支持键盘快捷键与鼠标结合的界面导航"
+   ],
+   "use_cases": [
+    "本地记账与凭据管理",
+    "生成损益/资产负债等会计报表并导出 PDF",
+    "作为 React 实现记账界面的参考示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# 📘 Tally Clone – Accounting Software (React + SQLite Local Setup)",
+     "lines": [
+      1
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 SQLite 本地处理数据的记账应用程序，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "# 📘 Tally Clone – Accounting Software (React + SQLite Local Setup) ／ This is a **Tally-inspired accounting application** built using **React.js**, featuring a UI similar to Tally.ERP 9, with **keyboard + mouse navigation**, local data handling, and printable reports.",
+   "evidence_lines": [
+    1,
+    3
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ahmadrzaa/Tally-clone",
+  "sha": "e21276ebf5a0",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "879957f62018": {
+  "identity": {
+   "one_liner": "GitHub Action，在两个 git 引用间生成合并的增量 SQL 脚本",
+   "review": "一个 GitHub Action，通过 git diff 与 git show 检测两个 git 引用之间 SQL 脚本文件的变更，并将其合并为单个增量 SQL 文件，供 CI/CD 流水线在部署时使用。适用于以 git 仓库管理 SQL 迁移脚本的团队，需要 checkout 时设置 fetch-depth: 0 以获取完整历史，且仅支持基于 git 的仓库。",
+   "highlights": [
+    "通过 git diff 与 git show 检测并捕获脚本文件的完整内容",
+    "将多个变更文件合并为单个增量 SQL 文件输出",
+    "提供 base_ref、head_ref、scripts_path 等输入参数供配置"
+   ],
+   "use_cases": [
+    "CI/CD 流水线中自动生成数据库迁移增量脚本",
+    "版本发布之间的数据库变更追踪",
+    "维护合并的变更历史记录"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为数据库迁移脚本发布流程提供 git 差异脚本生成能力，自身不使用数据库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A GitHub Action that generates consolidated delta SQL scripts containing only the changes made between two git references. Perfect for automated database migration releases and change tracking. ／ - **Database Migrations**: Generate delta scripts for UAT/production deployments ／ 1. **Detects Changes**: Runs `git diff --name-only` between base and head references to identify modified files",
+   "evidence_lines": [
+    3,
+    15,
+    47
+   ]
+  },
+  "fn": "PunteriaCero/db-script-versioning",
+  "sha": "879957f62018",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

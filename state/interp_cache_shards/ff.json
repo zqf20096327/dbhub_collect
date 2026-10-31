@@ -11414,5 +11414,80 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "40a3d9b10c6d": {
+  "identity": {
+   "one_liner": "基于单文件 SQLite 的 LLM Agent 长期记忆引擎",
+   "review": "RecallWeaver 是一个为 LLM Agent 提供长期记忆的 Python 引擎，以单文件 SQLite 为持久化核心，实现双时间戳事实版本、指数衰减遗忘评分和 FTS5+图谱混合检索，并提供 uvicorn 启动的 API 服务；适合需要本地轻量部署、区分事实历史与当前状态的 Agent 开发者，示例依赖 DeepSeek API 密钥。",
+   "highlights": [
+    "以单文件 SQLite 持久化，事实更新时保留历史版本并支持基于递归 CTE 的多跳图谱查询",
+    "结合 SQLite FTS5 全文检索与图谱召回，由衰减引擎统一重排并按分数阈值过滤",
+    "提供结构化日志、Trace ID 与运行指标，召回结果包含来源、分数及有效时间信息"
+   ],
+   "use_cases": [
+    "为 LLM Agent 构建可检索、会遗忘的本地长期记忆",
+    "需要区分事实当前状态与历史版本的对话系统",
+    "无 Docker/向量库依赖的轻量本地部署场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**赋予 LLM Agent 穿越时间的记忆能力。零 Docker、零向量库、纯单文件 SQLite 构筑的工业级 AI 海马体。** ／ 以**单文件 SQLite** 为持久化核心，结合**双时间戳事实版本**与**动态遗忘评分**：事实更新时保留历史并关闭旧版本；检索时综合相关性、时效与权重，并通过分数阈值过滤低价值噪音。轻量部署，也能明确回答“现在是什么”以及“以前是什么”。 ／ 结合 SQLite FTS5 全文检索与图谱召回，再由衰减引擎统一重排。FTS5 的 `trigram` 分词支持中文连续子串匹配；结构化事实则可通过图谱关系查找，互补关键词召回与事实关联。",
+     "lines": [
+      3,
+      31,
+      73
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 作为自身记忆数据的存储后端，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单一许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "以**单文件 SQLite** 为持久化核心，结合**双时间戳事实版本**与**动态遗忘评分**：事实更新时保留历史并关闭旧版本；检索时综合相关性、时效与权重，并通过分数阈值过滤低价值噪音。轻量部署，也能明确回答“现在是什么”以及“以前是什么”。 ／ 结合 SQLite FTS5 全文检索与图谱召回，再由衰减引擎统一重排。FTS5 的 `trigram` 分词支持中文连续子串匹配；结构化事实则可通过图谱关系查找，互补关键词召回与事实关联。 ／ python -m pip install -e .",
+   "evidence_lines": [
+    31,
+    73,
+    88
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "gaoweimax/recallweaver",
+  "sha": "40a3d9b10c6d",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

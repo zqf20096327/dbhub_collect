@@ -9817,5 +9817,257 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "706ad7779221": {
+  "identity": {
+   "one_liner": "本地优先的 AI 简历工作台，FastAPI+React+SQLite 单机运行",
+   "review": "ResumeForge 是一个本地运行的 AI 求职工作台，提供岗位管理、AI 简历生成与事实台账防虚构比对、多格式导出、模拟面试、自动投递台和求职进度统计。面向求职者，数据存于本机 SQLite，不注册登录；AI 生成需自行配置模型服务商，投递台访问外部招聘网站需显式确认。",
+   "highlights": [
+    "生成结果与本地事实台账逐条比对，不一致时给出防虚构警告，待补标记未处理时拦截导出",
+    "支持 PDF/Word/Markdown/纯文本/JSON/HTML 六种格式导出，并提供一键脱敏",
+    "包含模拟面试逐轮追问、面试深挖记录与求职进度统计模块"
+   ],
+   "use_cases": [
+    "求职期间集中管理岗位信息、简历版本与投递进度",
+    "针对特定岗位 JD 生成并核对定制简历",
+    "面试前用事实台账做逐条压力测试与模拟问答"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**简历和资料存在哪**|你自己电脑上的本地数据目录（SQLite + 附件），可随时整份拷走|对方的服务器，导出要走会员| ／ 简历通架构图：React 前端 → 同源 /api → FastAPI 后端 → 本地 SQLite / 你配置的模型服务商 / 本机浏览器",
+     "lines": [
+      50,
+      379
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用 SQLite 存储本地数据的求职应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**简历和资料存在哪**|你自己电脑上的本地数据目录（SQLite + 附件），可随时整份拷走|对方的服务器，导出要走会员| ／ **本地优先的 AI 简历工作台：不注册、不登录，数据只存在你自己的电脑上。**",
+   "evidence_lines": [
+    50,
+    13
+   ]
+  },
+  "fn": "magicapple123/ResumeForge",
+  "sha": "706ad7779221",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "17727e79c375": {
+  "identity": {
+   "one_liner": "Text-to-SQL 访问控制库，按调用者权限在 schema 选择阶段过滤表",
+   "review": "schemagate 是一个 Python 库/服务，在 LLM 生成 SQL 前按调用者身份与角色过滤数据库 schema，使无权限的表不进入提示词，并裁剪 prompt 中表数量以减少 token 用量。通过 SQLAlchemy extras 提供 Postgres、Oracle、MySQL、SQL Server 等驱动，支持 LangChain、LlamaIndex、MCP 等智能体接入，提供 CLI、本地 Web 页面与浏览器演示，pip 或 docker 安装。",
+   "highlights": [
+    "提供基于调用者 Principal/角色授权的 schema 表过滤，无权限表不出现在提示词中",
+    "内置离线表选择器（BM25 加哈希嵌入，不调用模型），可选 OpenAI/Anthropic/Gemini/本地模型",
+    "提供 CLI、studio 本地页面与 MCP 服务器形态，driver 以 pip extras 方式分发"
+   ],
+   "use_cases": [
+    "为 text-to-SQL 智能体按用户身份限制可读取的表",
+    "在行级安全之前控制 schema 暴露，避免『无记录』误答",
+    "缩减大 schema 下每次提问的 prompt token 用量"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "pip install 'schemagate[postgres]'     'schemagate[oracle]'",
+     "lines": [
+      185
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "pip install 'schemagate[postgres]' 'schemagate[oracle]'",
+     "lines": [
+      185
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "pip install 'schemagate[mssql]' 'schemagate[mysql]'",
+     "lines": [
+      186
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "pip install 'schemagate[mssql]' 'schemagate[mysql]'",
+     "lines": [
+      186
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "BIRD Mini-Dev: #1 on SQLite, PostgreSQL and MySQL",
+     "lines": [
+      8
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|MySQL / MariaDB|certified live on MySQL 8.4.11, 10/10, **in CI on every push** against a service container, plus the GRANT reader suite: all three privilege levels, the role graph, and the role-only blind spot MySQL cannot report. MariaDB has not been run|",
+     "lines": [
+      973
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 text-to-SQL 智能体提供 schema 级访问控制中间层，通过 SQLAlchemy 连接各数据库而非依赖某个库存数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "Oracle",
+    "MySQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than ranked low. Works with LangChain, LlamaIndex, MCP, or any SQL agent, on Postgres, Oracle, MySQL, SQL Server and SQLite. ／ pip install 'schemagate[postgres]'     'schemagate[oracle]' ／ pip install 'schemagate[mssql]'        'schemagate[mysql]'",
+   "evidence_lines": [
+    17,
+    185,
+    186
+   ]
+  },
+  "fn": "ashishsinha1602/schemagate",
+  "sha": "17727e79c375",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f9ee13b467dd": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Go 分布式任务队列库与服务",
+   "review": "Dhara 是一个 Go 任务队列，可嵌入应用或以 HTTP API server 加 worker 两个二进制方式部署，依赖 PostgreSQL 作为唯一任务状态存储，用 SKIP LOCKED 实现原子认领，支持事务性入队、心跳回收、重试与死信、嵌入式迁移。面向需要在 Go 服务中做异步任务处理的开发者。不依赖 Redis/RabbitMQ 等外部中间件。",
+   "highlights": [
+    "支持嵌入式库与独立 server/worker 二进制两种使用方式",
+    "支持事务性入队（EnqueueTx）与基于 SKIP LOCKED 的原子任务认领",
+    "迁移以 go:embed 内置于库中，支持库调用、CLI、自定义目录三种方式"
+   ],
+   "use_cases": [
+    "Go 应用内的异步任务与后台作业处理",
+    "需要入队与业务写入同事务原子提交的场景",
+    "基于 PostgreSQL 替代外部消息队列的部署环境"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Dhara is a distributed task queue library and service for Go, backed by PostgreSQL. It covers the full task lifecycle: enqueue, claim, retry, dead-letter. No external dependencies like Redis or RabbitMQ. ／ Dhara uses PostgreSQL as the single source of truth for task state and execution logs. ／ 1. **Atomic concurrency with PostgreSQL (`SKIP LOCKED`)**",
+     "lines": [
+      8,
+      19,
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Dhara 是使用 PostgreSQL 存储任务状态的任务队列库与服务，数据库为其数据存储而非被服务的工具对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Dhara is a distributed task queue library and service for Go, backed by PostgreSQL. It covers the full task lifecycle: enqueue, claim, retry, dead-letter. No external dependencies like Redis or RabbitMQ. ／ - **As an embeddable library:** call `client.Enqueue(...)` from your application (even inside your own DB transaction) and run a `dhara.Worker` to execute tasks. ／ Dhara uses PostgreSQL as the single source of truth for task state and execution logs.",
+   "evidence_lines": [
+    8,
+    12,
+    19
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "Md-Talim/dhara",
+  "sha": "f9ee13b467dd",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

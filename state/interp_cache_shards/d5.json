@@ -10732,5 +10732,172 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2805d6059722": {
+  "identity": {
+   "one_liner": "AI agent 本地可审计记忆控制平面，管理治理式上下文注入",
+   "review": "AtMem 是为 AI agent 提供本地长期记忆的控制平面：在策略允许时向 agent 返回治理后的上下文，记录模型与工具事件形成 Agent Black Box，并支持 shadow 模式审核后再激活注入。面向使用 OpenClaw、Pydantic AI、LangChain/LangGraph 的 agent 开发者，通过 pip 安装，记忆数据本地存储于 SQLite（可选 SQLCipher 加密），当前 2.3.11b1 为实验性预发布版本。",
+   "highlights": [
+    "提供 shadow 模式集成：先学习展示检索结果，经审核后显式启用治理式上下文注入",
+    "为 OpenClaw、Pydantic AI、LangChain/LangGraph 提供适配器/中间件安装",
+    "内置本地离线 benchmark 命令，运行提取、矛盾、召回、注入等用例的发布门禁"
+   ],
+   "use_cases": [
+    "为本地运行的 AI agent 添加可审计的长期记忆",
+    "跨编码 agent 共享项目记忆（AtMem Code）",
+    "治理 agent 正在进行的任务状态与上下文交付"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Stop every writer before migration. AtMem validates SQLite integrity, ／ - Canonical memory, provenance, lifecycle state, and audit evidence use SQLite.",
+     "lines": [
+      61,
+      581
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确使用 SQLite 作为规范记忆、审计证据等数据的本地存储（记忆库文件 memories.db），属使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Stop every writer before migration. AtMem validates SQLite integrity, ／ atmem control shadow --host generic --memory-db ~/.atmem/memories.db",
+   "evidence_lines": [
+    61,
+    118
+   ]
+  },
+  "fn": "aetna000/atmem",
+  "sha": "2805d6059722",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a07a3ed7e333": {
+  "identity": {
+   "one_liner": "基于 FineReport 11.5/FineVis 的电商销售数据大屏，含 SQLite 与达梦双数据源适配",
+   "review": "这是一个用 FineReport FineVis 制作的电商销售看板项目，提供按城市下拉联动的销售分析，并附 SQLite 迁移到达梦 DM8 的完整改造记录，包括驱动配置、建表脚本、SQL 空串语义实证与双库对数验收。适合需要学习 FineReport 看板制作或进行国产库信创迁移演示的开发/实施人员参考。",
+   "highlights": [
+    "提供 SQLite 与达梦 DM8 两套数据源的看板模板与建表/灌数 SQL 脚本",
+    "通过诊断 SQL 实证该达梦实例中空串不等于 NULL，并给出双分支兼容写法",
+    "记录双库逐项对数验收结果与主键防重约束实践"
+   ],
+   "use_cases": [
+    "学习 FineReport/FineVis 参数联动看板制作",
+    "参考 SQLite/MySQL 报表系统向达梦等国产库平移的最小可行案例",
+    "排查跨数据库 SQL 中空串与 IS NULL 语义差异问题"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 技术栈：FineReport 11.5 · FineVis 可视化看板 · SQLite · 达梦 DM8 · SQL ／ |数据源|SQLite 数据库 `ecommerce_practice.db`（JDBC 连接，org.sqlite.JDBC）|",
+     "lines": [
+      3,
+      14
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "> 技术栈：FineReport 11.5 · FineVis 可视化看板 · SQLite · 达梦 DM8 · SQL ／ # 国产数据库适配：同一张大屏，SQLite → 达梦 DM8",
+     "lines": [
+      3,
+      49
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "温州本地政企项目正在推进信创替代，数据库层的常见任务是：把跑在 MySQL/SQLite 上的报表系统平移到达梦/人大金仓等国产库上。这个项目用最小可行案例把这件事完整走了一遍：**一张带参数联动、图表和指标卡的决策大屏，两种数据库，同一套验收数字。**",
+     "lines": [
+      55
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "社区资料都说\"达梦兼容 Oracle，`''` 当 NULL\"，于是第一版数据集写了 `('${p_city}' IS NULL or ...)`，结果**参数为空时 0 行**。用两条诊断 SQL 审问数据库（DM8 2026-07 开发版实测）：",
+     "lines": [
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 和达梦 DM8 存数据的报表看板应用，本身不提供数据库相关工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 技术栈：FineReport 11.5 · FineVis 可视化看板 · SQLite · 达梦 DM8 · SQL ／ |数据源|SQLite 数据库 `ecommerce_practice.db`（JDBC 连接，org.sqlite.JDBC）| ／ # 国产数据库适配：同一张大屏，SQLite → 达梦 DM8",
+   "evidence_lines": [
+    3,
+    14,
+    49
+   ]
+  },
+  "fn": "mszy212/finereport-dashboard",
+  "sha": "a07a3ed7e333",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10962,5 +10962,119 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "46b28f8cb366": {
+  "identity": {
+   "one_liner": "SQL 优先的代码生成与审计工具，编译 .sql 为类型安全的多语言数据访问代码",
+   "review": "Scythe 将带注解的 .sql 文件静态编译为多种语言的数据库访问代码（行类型、查询函数、类型映射），并提供 lint、安全/迁移审计、漂移检查与 pre-commit 钩子。面向以 SQL 为核心、希望省去手写 ORM 映射层的开发团队；生成无需连接数据库，但每个配置块只针对单一数据库引擎，且各语言对各引擎的驱动覆盖不完全一致。",
+   "highlights": [
+    "支持将注解 SQL 静态编译为 10 种语言的类型安全访问代码，无需数据库连接",
+    "提供 59 条内置规则，含 24 条 lint 规则与 35 条安全/迁移审计规则，可输出 SARIF/JSON",
+    "支持 pre-commit 钩子、provenance 校验（scythe check）与在线数据库健康检查（scythe inspect）"
+   ],
+   "use_cases": [
+    "在 CI/pre-commit 中对 .sql 文件做 lint 与安全审计",
+    "从带注解的 SQL 生成多语言类型安全的数据访问层代码",
+    "从 sqlc 项目迁移配置（scythe migrate）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**`scythe check`**|Verifies committed code still matches the SQL it was generated from, via 11 provenance rules. Given `--database-url` it adds 7 schema-drift rules against a live PostgreSQL catalog.|CLI reference| ／ |Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+     "lines": [
+      44,
+      293
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+     "lines": [
+      293
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+     "lines": [
+      293
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+     "lines": [
+      293
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+     "lines": [
+      293
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+     "lines": [
+      293
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库开发流程服务的 SQL 编译/审计工具，本身不存储数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（单许可）",
+   "install": [
+    "binary",
+    "source",
+    "npm",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Scythe compiles annotated `.sql` files into database access code — row types, query functions and ／ JavaScript via the four `javascript-*` backends — across PostgreSQL, MySQL, MariaDB, SQLite, DuckDB, ／ |Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+   "evidence_lines": [
+    5,
+    287,
+    293
+   ]
+  },
+  "fn": "Goldziher/scythe",
+  "sha": "46b28f8cb366",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

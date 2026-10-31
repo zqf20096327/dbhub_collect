@@ -9761,5 +9761,72 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0a807777284b": {
+  "identity": {
+   "one_liner": "自托管旧网页个人主页托管平台，基于 Node 与 SQLite",
+   "review": "PuppyPad 是一个可自托管的静态个人主页托管平台，为每位成员提供子域名站点、文件管理器、浏览器内编辑器、留言板、访问计数器和 webring，并附带同步 CLI 与 GitHub Action。数据全部存放在 ./data 目录（SQLite 数据库加站点文件），通过 Docker Compose 与 Caddy 在 VPS 上部署，含夜间备份脚本。",
+   "highlights": [
+    "提供文件管理器、浏览器内代码/样式编辑器、git 版本历史与内置组件（计数器、留言板、webring）",
+    "提供 HTTP API 与 CLI（@puppypad/cli push/pull），可作 GitHub Action 部署",
+    "数据集中于 ./data（SQLite 数据库加 sites/），附带 rsync/rclone 夜间备份与恢复脚本"
+   ],
+   "use_cases": [
+    "自托管为社区成员提供子域名静态主页托管服务",
+    "个人部署 old-web 风格主页（计数器、留言板、webring 等）",
+    "通过 CLI 或 GitHub Action 从本地/仓库推送部署静态站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything lives in `./data` (SQLite database plus `sites/`). Back that folder up.",
+     "lines": [
+      102
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 SQLite 存储自身数据（用户、站点、留言等）的完整托管应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL（描述中声明），README 内未展开",
+   "install": [
+    "docker",
+    "binary",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Everything lives in `./data` (SQLite database plus `sites/`). Back that folder up. ／  container reads), then `docker compose up -d`.",
+   "evidence_lines": [
+    102,
+    97
+   ]
+  },
+  "fn": "DeRusto/puppypad",
+  "sha": "0a807777284b",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11942,5 +11942,158 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9a81ea8c0f94": {
+  "identity": {
+   "one_liner": "多源数据采集同步工具，将多来源内容增量同步至 Hindsight 记忆库",
+   "review": "该项目是一个自托管的数据采集服务，把 Notion、思源笔记、S3、WebDAV、Google Drive、OneDrive、本地文件等十余种来源的内容同步进 Hindsight 记忆库，支持增量同步、删除清理、干跑预览和多语言 WebUI。适合需要向 Hindsight 持续导入笔记与文件的个人或团队，自身元数据可存于 SQLite、PostgreSQL 或 MySQL。",
+   "highlights": [
+    "支持 Notion、SiYuan、S3、WebDAV、CalDAV、IMAP、Google Drive、OneDrive、本地文件等多种来源的采集",
+    "通过变更订阅与检查点实现增量同步，并支持干跑预览、重试与重叠保护",
+    "自身持久化存储支持 SQLite、PostgreSQL 和 MySQL，凭据以 AES-256-GCM 加密"
+   ],
+   "use_cases": [
+    "将多平台笔记与文档集中同步到 Hindsight 记忆库",
+    "定时或按需执行多来源增量采集任务并通过 WebUI 管理",
+    "将 SQL 查询结果、邮件、日历等数据导入知识库用于分析检索"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.| ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      129,
+      130
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.| ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      129,
+      130
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.| ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      129,
+      130
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身不依赖候选数据库作业务数据，而是为 Hindsight 提供数据采集同步服务，SQLite/PostgreSQL/MySQL 仅作为其自身配置存储选项。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Sync **Notion, SiYuan, DeepWiki, S3, WebDAV, WebCAL, CalDAV, Email (IMAP), Steam, Google People, Google Drive, OneDrive and local files** into Hindsight memory banks. Self-host with Docker and manage everything from the WebUI. ／ |`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.|",
+   "evidence_lines": [
+    7,
+    129
+   ]
+  },
+  "fn": "Nyrest/hindsight-ingestion",
+  "sha": "9a81ea8c0f94",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0fc26cdde1f4": {
+  "identity": {
+   "one_liner": "内嵌 sing-box 的自托管代理面板，单 Go 二进制加 SQLite",
+   "review": "m-ui 是一个自托管代理管理面板，将 sing-box 内嵌于 Go 二进制中运行，通过『线路』抽象代替入站/出站/路由配置，提供用户、套餐、订阅、证书、备份与多服务器（一主多副）管理。面向自用、小团队或需要多机统一管理用户的运维者。配置保存前经 sing-box 干跑校验，失败自动回滚；数据库为 SQLite。",
+   "highlights": [
+    "单 Go 二进制内嵌 sing-box 数据面、面板、订阅服务与后台任务，共用同一 SQLite 文件",
+    "支持多服务器主副架构：主机推快照、回收流量、集中判定配额，每 5 秒同步",
+    "提供干跑校验与失败回滚、三级热重载、证书自动续期、定时备份与 Telegram 通知"
+   ],
+   "use_cases": [
+    "自托管代理服务器的面板化管理（线路、用户、订阅分发）",
+    "一台主机统一管理多台副机的用户配额与流量",
+    "需要订阅、证书签发续期、备份还原等运维功能集中处理"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "一个二进制里跑着四件事:**面板**(管理界面与 API)、**订阅服务**(客户端来拉配置)、**数据面**(内嵌 sing-box,真正过流量)、**后台**(统计、配额与限速规则判定、上游巡检、公网 IP 探测、大陆连通检测、日志清理、主副同步)。它们共用同一个 SQLite 文件,所以面板里点一下保存,订阅和数据面立刻看到同一份数据。 ／ |`database/`|模型、SQLite 打开与迁移|",
+     "lines": [
+      67,
+      134
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明面板数据存于自身内嵌的 SQLite 文件（L26、L67、L134），属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "m-ui 是一个自托管的代理面板:**一个二进制 + 一个数据库文件**,sing-box 直接内嵌其中。线路、用户、订阅、证书、备份、多台服务器,全在网页里管。 ／ 一个二进制里跑着四件事:**面板**(管理界面与 API)、**订阅服务**(客户端来拉配置)、**数据面**(内嵌 sing-box,真正过流量)、**后台**(统计、配额与限速规则判定、上游巡检、公网 IP 探测、大陆连通检测、日志清理、主副同步)。它们共用同一个 SQLite 文件,所以面板里点一下保存,订阅和数据面立刻看到同一份数据。 ／ |`database/`|模型、SQLite 打开与迁移|",
+   "evidence_lines": [
+    26,
+    67,
+    134
+   ]
+  },
+  "fn": "Maoyangui/m-ui",
+  "sha": "0fc26cdde1f4",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

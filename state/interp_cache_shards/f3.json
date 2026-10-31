@@ -11439,5 +11439,75 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "606af60bb9b6": {
+  "identity": {
+   "one_liner": "Solana/Robinhood Chain 链上市场情报采集与归档系统",
+   "review": "一个链上市场情报应用，采集 Solana 与 Robinhood Chain 的代币发布、钱包与交易数据，打分钱包、生成每日 Telegram 简报并提供仪表盘，数据归档到 Postgres（无配置时用内嵌 PGlite），可通过 git 仓库导出 JSONL 长期存档，并内置 MCP 服务器供 AI 代理读取。适合链上交易者与交易机器人开发者。",
+   "highlights": [
+    "采集链上代币生命周期、交易与钱包数据并存入 Postgres 或内嵌 PGlite",
+    "每日生成简报并发送到 Telegram，数据可导出 JSON 并归档到 git 仓库",
+    "提供 MCP 服务器与 pulse_runners 工具供 AI 代理调用"
+   ],
+   "use_cases": [
+    "跟踪 memecoin/新代币发布与生命周期",
+    "为交易机器人积累历史链上数据",
+    "每日向 Telegram 频道推送市场简报"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Personal market intelligence for the Solana and Robinhood Chain trenches. Pulse watches every launch, runner and death, scores wallets, labels KOLs, classifies tokens by tech versus meme, writes a daily newsletter to Telegram, and archives everything in Postgr ／ npm run db:up # Postgres on host port 5544 ／ echo 'DATABASE_URL=postgres://pulse:pulse@localhost:5544/pulse' >> .env",
+     "lines": [
+      14,
+      46,
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其将采集的链上数据存档于 Postgres/PGlite，属于使用数据库存储数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Personal market intelligence for the Solana and Robinhood Chain trenches. Pulse watches every launch, runner and death, scores wallets, labels KOLs, classifies tokens by tech versus meme, writes a daily newsletter to Telegram, and archives everything in Postgres so the history can later train a trading bot. ／ npm run db:up              # Postgres on host port 5544 ／ npx -y -p pulse-trenches pulse-mcp   # MCP server for agents (set PULSE_URL)",
+   "evidence_lines": [
+    14,
+    46,
+    11
+   ]
+  },
+  "fn": "nirholas/pulse",
+  "sha": "606af60bb9b6",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

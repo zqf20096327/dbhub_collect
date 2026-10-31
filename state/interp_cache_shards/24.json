@@ -9544,5 +9544,169 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "74659c7631ef": {
+  "identity": {
+   "one_liner": "面向 Homelab 的自托管导航起始页与服务监控面板，Go+React 实现",
+   "review": "Clean Nav 是一个 Homelab 导航起始页兼服务监控面板，提供书签管理、HTTP/Ping 服务监控、Docker 容器管理、告警通知与多端云同步。面向自托管用户，可部署为纯静态起始页，或以单个 Docker 容器运行全功能形态；全合一模式使用 Go 内嵌的 SQLite 存储数据，镜像基于 FROM scratch 构建。许可证为 AGPL v3。",
+   "highlights": [
+    "提供 HTTP 健康巡检、ICMP Ping、证书检查与在线率统计的服务监控，以及 Docker 容器列表、日志流与启停控制",
+    "支持 GitHub/Gist/S3·R2/WebDAV/Dropbox/Google Drive 等多种云同步后端，纯静态形态无需后端即可运行",
+    "Docker 全合一模式数据落 SQLite（modernc.org/sqlite 纯 Go 实现），凭证可配置 AES-256-GCM 加密存储"
+   ],
+   "use_cases": [
+    "作为浏览器起始页集中管理 Homelab 服务书签并跨设备同步",
+    "监控自托管服务的在线状态并通过 Apprise 推送离线告警",
+    "通过网页面板查看和管理本机 Docker 容器与 SSH 终端"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🐳 **Docker 全合一**——一个容器跑起 Go 后端 + 前端，解锁服务监控、Docker 管理、告警、SSH 等全部增强能力，数据落 SQLite。 ／ |Docker 全合一|`docker run …`|容器内 SQLite|全部功能| ／ |数据库|**SQLite**（纯 Go 实现 modernc.org/sqlite）|",
+     "lines": [
+      33,
+      113,
+      133
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 作为自身数据存储，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " 面向 Homelab 的轻量自托管导航页 & 服务监控面板 ／ - 🐳 **Docker 全合一**——一个容器跑起 Go 后端 + 前端，解锁服务监控、Docker 管理、告警、SSH 等全部增强能力，数据落 SQLite。 ／ |数据库|**SQLite**（纯 Go 实现 modernc.org/sqlite）|",
+   "evidence_lines": [
+    3,
+    33,
+    133
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "yingxiaomo/nav",
+  "sha": "74659c7631ef",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e560362713ba": {
+  "identity": {
+   "one_liner": "自托管 WhatsApp REST API 网关，带 Web 管理面板与 MySQL 存储",
+   "review": "WhatsGateway 是用 PHP 8.2+、Node.js（Baileys）构建的自托管 WhatsApp REST API 网关，通过扫码连接已有号码收发消息、媒体并提供 Webhook 与聊天机器人自动回复，内置 LLM 客服代理和实时人工接管聊天。供需要在自己基础设施上收发 WhatsApp 消息的开发者和团队使用；支持 Docker Compose 部署，数据存储需 MySQL 8.0+、MariaDB 10.4+ 或 TiDB Cloud Serverless。",
+   "highlights": [
+    "提供发送文本、富媒体、语音便签的 REST API，并兼容 Meta WhatsApp Cloud API 请求格式",
+    "内置异步 FIFO 消息队列、重试退避与死信跟踪，消息在 MySQL/TiDB 中排队等待投递",
+    "内置多模型 LLM 自动回复代理，含双层记忆与 Top-K 事实注入，以及 Web 实时聊天人工接管"
+   ],
+   "use_cases": [
+    "用自有服务器发送交易提醒、OTP、客户通知等 WhatsApp 消息",
+    "搭建带聊天机器人自动回复和人工接管的客服消息平台",
+    "以 REST API/Webhook 方式将 WhatsApp 消息能力集成进现有业务系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**WhatsGateway** is a production-ready, self-hosted WhatsApp REST API Gateway and Web Management Dashboard built with **PHP 8.2+**, **Node.js (@whiskeysockets/baileys)**, and **MySQL / MariaDB / TiDB**. ／ The fastest way to deploy WhatsGateway with PHP 8.2 Apache, Node.js 20, and MySQL 8.0: ／ - **MySQL 8.0+**, **MariaDB 10.4+**, or **TiDB Cloud Serverless**",
+     "lines": [
+      35,
+      121,
+      137
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**WhatsGateway** is a production-ready, self-hosted WhatsApp REST API Gateway and Web Management Dashboard built with **PHP 8.2+**, **Node.js (@whiskeysockets/baileys)**, and **MySQL / MariaDB / TiDB**. ／ - **MySQL 8.0+**, **MariaDB 10.4+**, or **TiDB Cloud Serverless**",
+     "lines": [
+      35,
+      137
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "**WhatsGateway** is a production-ready, self-hosted WhatsApp REST API Gateway and Web Management Dashboard built with **PHP 8.2+**, **Node.js (@whiskeysockets/baileys)**, and **MySQL / MariaDB / TiDB**. ／ - **MySQL 8.0+**, **MariaDB 10.4+**, or **TiDB Cloud Serverless** ／ 2. **Resilience to Network Drops:** Messages are safely held in MySQL/TiDB. If the WhatsApp socket temporarily disconnects, messages remain safely queued and resume dispatch upon reconnection.",
+     "lines": [
+      35,
+      137,
+      189
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 MySQL/MariaDB/TiDB 存储消息队列与业务数据，是使用数据库的应用而非为数据库服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**WhatsGateway** is a production-ready, self-hosted WhatsApp REST API Gateway and Web Management Dashboard built with **PHP 8.2+**, **Node.js (@whiskeysockets/baileys)**, and **MySQL / MariaDB / TiDB**. ／ - **MySQL 8.0+**, **MariaDB 10.4+**, or **TiDB Cloud Serverless** ／ 2. **Resilience to Network Drops:** Messages are safely held in MySQL/TiDB. If the WhatsApp socket temporarily disconnects, messages remain safely queued and resume dispatch upon reconnection.",
+   "evidence_lines": [
+    35,
+    137,
+    189
+   ]
+  },
+  "fn": "navneetyadav-code/whatsapp-api",
+  "sha": "e560362713ba",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

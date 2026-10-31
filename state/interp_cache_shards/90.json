@@ -11000,5 +11000,97 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5b1c65a14f13": {
+  "identity": {
+   "one_liner": "PostgreSQL 的 MCP 服务器，默认只读，提供查询、内省与诊断工具",
+   "review": "这是一个面向 PostgreSQL 的 MCP 服务器，供 Claude Code、Cursor 等 MCP 客户端的 AI 代理调用。提供 SQL 查询（默认只读、扩展协议防堆叠注入）、schema 内省、EXPLAIN、索引建议、慢查询与锁诊断、健康检查等工具，并支持基于数据库角色的权限控制和可选审计日志。适合让代理安全地巡检和诊断 PostgreSQL 数据库的 DBA/运维人员使用。",
+   "highlights": [
+    "提供 pg_query、pg_explain、pg_index_advisor、pg_top_queries、pg_health 等 MCP 工具，默认只读，写入需 ALLOW_WRITES 环境变量开启",
+    "用户 SQL 经扩展查询协议发送并参数化，pg_query 在 BEGIN READ ONLY 事务中执行",
+    "支持 schema 内省、角色/权限查看、可选的逐语句审计日志（JSON 行）"
+   ],
+   "use_cases": [
+    "让 AI 编码代理连接并只读查询 PostgreSQL 数据库",
+    "数据库性能诊断：慢查询、顺序扫描、膨胀、锁与复制状态检查",
+    "为工作负载生成基于 HypoPG 假设索引的索引建议"
+   ],
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "cat": "管理",
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 生态服务的 MCP 工具服务器，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Query a PostgreSQL database from Claude Code, Cursor, and any MCP client.** Read-only by default - writes opt in via a single env var - so an agent can't silently drop your tables.",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 生态服务的 MCP 工具服务器，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Query a PostgreSQL database from Claude Code, Cursor, and any MCP client.** Read-only by default - writes opt in via a single env var - so an agent can't silently drop your tables. ／ - **Read-only by default, with an unconditional read-only tool too** - `pg_query` runs user SQL in a `BEGIN READ ONLY` transaction, so postgres itself (not string parsing) blocks writes; opt in to writes with `ALLOW_WRITES=1`. `pg_readonly` is a separate tool that stays read-only regardless of `ALLOW_WRITES`, so hosts that gate tools individually (Claude Code permissions, mcp.hosting) can auto-allow it -- paired with a least-privileged role, since `READ ONLY` bounds writes to the database rather than every side effect (details). ／ - **Perf diagnostics the deprecated server never had** - `pg_top_queries` (from `pg_stat_statements`), `pg_seq_scan_tables`, `pg_unused_indexes`, `pg_table_bloat`, `pg_inspect_locks`, `pg_replication_status`. Answer \"why is this slow?\" in one tool call.",
+   "evidence_lines": [
+    10,
+    43,
+    50
+   ]
+  },
+  "fn": "YawLabs/postgres-mcp",
+  "sha": "5b1c65a14f13",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

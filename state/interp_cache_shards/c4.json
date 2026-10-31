@@ -11815,5 +11815,72 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3e1738837bdf": {
+  "identity": {
+   "one_liner": "自托管的 Obsidian 仓库 Git 同步服务器",
+   "review": "PKV Sync 是一个运行在自建服务器上的 Obsidian 笔记仓库同步服务，用单个二进制和 SQLite 元数据数据库管理多用户多仓库，每个仓库对应一个裸 git 存储，支持实时推送、文件历史与冲突解决，并提供面向 AI 工具的 MCP 读写接口。适合想自行托管笔记同步的 Obsidian 用户；当前版本尚无原生端到端加密，服务器可读取仓库内容。",
+   "highlights": [
+    "多用户多仓库同步，每个仓库对应一个裸 git repo，提供文件历史、diff 与单文件恢复",
+    "通过 Server-Sent Events 实现实时推送，内置多语言管理面板",
+    "内嵌 MCP 接口（stdio 或 HTTP /mcp 路由），支持 AI 代理读写与搜索仓库"
+   ],
+   "use_cases": [
+    "在自有服务器上跨手机、平板与桌面同步 Obsidian 仓库",
+    "利用 git 历史进行文件版本管理与冲突恢复",
+    "让 LLM 代理通过 MCP 维护和检索 wiki 笔记"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Mature technology, on purpose.** Single binary, single SQLite metadata DB, one",
+     "lines": [
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是 Obsidian 同步服务应用，SQLite 仅作为其内置元数据存储，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PKV Sync is a self-hosted, Git-native sync server for Obsidian vaults. ／ - **Mature technology, on purpose.** Single binary, single SQLite metadata DB, one",
+   "evidence_lines": [
+    3,
+    54
+   ]
+  },
+  "fn": "CyberKurry/pkv-sync",
+  "sha": "3e1738837bdf",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

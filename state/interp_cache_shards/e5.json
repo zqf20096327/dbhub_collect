@@ -10214,5 +10214,143 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ca5b9649543d": {
+  "identity": {
+   "one_liner": "Windows 11 原生白板应用，用于教学 DAX、SQL 与数据建模",
+   "review": "该项目是 SQLBI 出品的 Windows 11 白板应用，用 C#/WPF 实现，提供笔迹墨水、低延迟压感笔绘画、应用窗口实时采集（LiveView），以及十七类带实时语法高亮的文本容器（含 DAX、SQL Server、KQL 等），用于课堂或演示中讲解 DAX、SQL 和数据建模。项目按 released/dev 双通道分发，提供 MSI、MSIX 和便携版安装包；仅支持 Windows 11 与 .NET 10 构建。",
+   "highlights": [
+    "支持压感笔迹、触控缩放、掌部防误触与整套教学/设计模式偏好设置",
+    "提供十七种文本容器类型，其中十五种语言带实时语法高亮，含 DAX、SQL Server、KQL 的本地 F6 格式化",
+    "支持导入 PowerPoint 幻灯片、Microsoft Whiteboard 导出文件，以及导出为 PowerPoint/PDF"
+   ],
+   "use_cases": [
+    "教师或讲师在触控设备上白板讲解 DAX、SQL 或数据建模",
+    "课堂中实时采集 Power BI 或其他应用窗口进行演示",
+    "将教学白板内容导出为 PowerPoint 或 PDF 讲义"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "- Seventeen text-container types: fifteen languages with live syntax highlighting, plus Prompt and Markdown with Mermaid diagrams, and local F6 formatting for DAX, SQL Server, and KQL ／ - `SQLBI.Whiteboard.SqlServer` contains the framework-neutral SQL Server 2025 adapter over Microsoft's ScriptDOM parser and script generator.",
+     "lines": [
+      27,
+      290
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个白板应用，SQL Server 仅作为文本容器语法高亮的语言出现，不连接或管理数据库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A native Windows 11 whiteboard built with C# and WPF. A retained viewport renders an unbounded world-coordinate document and draws the live pen stroke, which is read directly from the pen's packets. Finger ink uses WPF's dynamic ink renderer. ／ - Seventeen text-container types: fifteen languages with live syntax highlighting, plus Prompt and Markdown with Mermaid diagrams, and local F6 formatting for DAX, SQL Server, and KQL",
+   "evidence_lines": [
+    3,
+    27
+   ]
+  },
+  "fn": "sql-bi/SQLBI-Whiteboard",
+  "sha": "ca5b9649543d",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b0dca125abed": {
+  "identity": {
+   "one_liner": "本地知识搜索工具，默认以 SQLite FTS5/BM25 实现无向量检索",
+   "review": "Jev RAG 是一个本地优先的知识库搜索/RAG 工具，索引本地文件夹，默认使用 SQLite FTS5/BM25 提供免向量数据库的检索，提供七种可选检索管线并流式输出带文件引用的答案；需 Python 3.9+，回答环节依赖外部模型 API（非完全离线）。适合想在本地文档上做带引用问答和可复现基准实验的开发者。",
+   "highlights": [
+    "提供七种可选检索管线（BM25、agentic、hybrid、taxonomy 等），UI 与 CLI 均可调用",
+    "默认路径无需 embeddings 或向量数据库，索引存储使用 SQLite FTS5/BM25",
+    "发布包含质量、延迟、成本及阴性结果的 323-query BEIR NFCorpus 可复现基准"
+   ],
+   "use_cases": [
+    "本地文档文件夹的知识检索与带引用的问答",
+    "不依赖向量数据库的 RAG 原型与实验",
+    "检索管线质量/延迟/成本的可复现基准评测"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "only Python 3.9+ with SQLite FTS5: no package install, API key, embeddings, or ／ default: local files -> SQLite BM25 ----------------------> Jev -> MiniMax ／ Jev RAG indexes a local folder and defaults to vector-free SQLite FTS5/BM25.",
+     "lines": [
+      34,
+      186,
+      192
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明项目使用 SQLite 作为默认索引存储来构建面向本地文档的搜索应用，而非为数据库生态提供工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Jev RAG is an open-source local knowledge search engine with seven selectable pipelines: BM25 + Jev by default, agentic lexical search, embedding hybrid retrieval, multi-round Agentic Hybrid, taxonomy-routed hybrid retrieval, a unified Jev Passage Gate, and hierarchical Jev Line Search.** ／ only Python 3.9+ with SQLite FTS5: no package install, API key, embeddings, or ／ default: local files -> SQLite BM25 ----------------------> Jev -> MiniMax",
+   "evidence_lines": [
+    3,
+    34,
+    186
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "aifabrice/jev-rag",
+  "sha": "b0dca125abed",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9034,5 +9034,74 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f02779177fa4": {
+  "identity": {
+   "one_liner": "面向 AI 代理的本地搜索引擎与 MCP 服务器，单 Rust 二进制索引多种数据",
+   "review": "XERJ 是一个本地优先的搜索服务器，把代码、文档、日志、CSV/PDF/SQLite 文件索引进 BM25 全文、向量与混合检索的索引，并通过 Elasticsearch 兼容 API 和 MCP 对外提供服务，可接入 Claude Code、Cursor 等客户端；面向需要代码检索、RAG 和代理长期记忆的开发者，安装为单个静态二进制，默认 --insecure 模式关闭 TLS 与鉴权，仅建议单机单用户使用。",
+   "highlights": [
+    "单 Rust 静态二进制，提供 BM25 全文、向量与混合检索及代码搜索，通过 tree-sitter 保留符号与行号",
+    "提供 MCP server 与 Elasticsearch 兼容 API，供 Claude Code、Cursor 等 MCP 客户端查询",
+    "autoindex 命令自动识别文件类型建索引，并支持 /_memory 命名空间实现代理长期记忆"
+   ],
+   "use_cases": [
+    "为编码代理做 reference coding：索引相近开源仓库供写代码前检索",
+    "代码库问答与 RAG，返回带 file:line 引用的片段",
+    "日志/事件分析与安全审计：对混合格式文件建立类型化索引后查询"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "know a corpus instead of grepping it. One command indexes code, docs, logs, PDFs, SQLite and",
+     "lines": [
+      129
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 AI 代理检索数据提供索引与查询服务的搜索服务器/组件，而非以数据库存业务数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**XERJ: the search engine for AI agents.** A new way for AI to search for data: one local Rust binary that indexes your code, docs, specs and logs, plus Corpus Hub packs, and returns cited answers. ／ **Local-first search engine and MCP server for AI agents.** One Rust binary indexes code, docs, ／ machine runs the same binary. It speaks the Elasticsearch API, so existing",
+   "evidence_lines": [
+    3,
+    5,
+    224
+   ]
+  },
+  "fn": "xerj-org/xerj",
+  "sha": "f02779177fa4",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

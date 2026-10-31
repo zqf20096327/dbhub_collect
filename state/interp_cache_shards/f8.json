@@ -11089,5 +11089,221 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a3c09fe8cf61": {
+  "identity": {
+   "one_liner": "自托管个人财务与交易后台，.NET+Angular，SQLite/MySQL 存储",
+   "review": "FinCore 的 legacy 版本仓库，提供自托管的个人财务与交易后台：钱包记账、汇率、交易统计、MetaTrader 5 桥接和 KuCoin 集成。后端为 .NET 10 (ASP.NET Core) + NHibernate，前端 Angular 14，通过 WebSocket 推送实时数据，默认用 SQLite，可在配置中切换 MySQL。面向个人投资者/交易者演示用途，仅做依赖与安全更新。",
+   "highlights": [
+    "持久化层用 NHibernate/FluentNHibernate，单一领域模型覆盖 SQLite（默认）或 MySQL",
+    "通过 MQL5 EA + .NET 连接器与 MetaTrader 5 终端同步账户、持仓与交易",
+    "支持 Windows Service、控制台、Docker 三种运行方式，WebSockets 实时推送"
+   ],
+   "use_cases": [
+    "个人钱包记账与多币种汇率跟踪",
+    "交易统计与风险管理展示",
+    "MetaTrader 5 多终端/多经纪商集中管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Persistence with NHibernate / FluentNHibernate**: one domain model over SQLite (default) or MySQL, Autofac for dependency injection. ／ - Optional: Metatrader 5 terminal, MySQL Server 5+, .NET Framework 4.8 (for the dlls used inside Metatrader 5) ／ SQLite database located in `/DB` folder. By default SQLite DB file used, but MySQL also supported, you can switch to MySQL in `/FinCore/appSettings.json` file.",
+     "lines": [
+      32,
+      72,
+      136
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Persistence with NHibernate / FluentNHibernate**: one domain model over SQLite (default) or MySQL, Autofac for dependency injection. ／ SQLite database located in `/DB` folder. By default SQLite DB file used, but MySQL also supported, you can switch to MySQL in `/FinCore/appSettings.json` file.",
+     "lines": [
+      32,
+      136
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个用 SQLite/MySQL 存数据的个人财务与交易应用，而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "免费按原样提供（Free, as is），无开源许可证细节",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A complete, self-hosted trading and personal-finance back office, built from my experience as a developer and team lead at banks and FOREX brokers and working with individual traders: ／ - **Persistence with NHibernate / FluentNHibernate**: one domain model over SQLite (default) or MySQL, Autofac for dependency injection. ／ SQLite database located in `/DB` folder. By default SQLite DB file used, but MySQL also supported, you can switch to MySQL in `/FinCore/appSettings.json` file.",
+   "evidence_lines": [
+    27,
+    32,
+    136
+   ]
+  },
+  "fn": "sergiovision/FinCore",
+  "sha": "a3c09fe8cf61",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2b67fc39f47d": {
+  "identity": {
+   "one_liner": "多钱包财务控制系统的核心财务引擎",
+   "review": "BFlow Financial Engine 是 BFlow 平台的核心财务引擎，实现多钱包记账、预算规则、幂等层与支付集成（Wompi），基于 Spring Boot、PostgreSQL、AWS 与 Docker 构建，面向个人与小团体的财务管理场景。项目处于 MVP 开发阶段，不含银行集成，通过 Swagger UI 提供 API 文档。",
+   "highlights": [
+    "提供多钱包支持、支出登记与预算规则引擎",
+    "包含幂等层、限流器与 Wompi 支付集成",
+    "用户认证基于 AWS Cognito，收据 OCR 流程使用 S3、SQS 与 Textract"
+   ],
+   "use_cases": [
+    "个人与小团体的多钱包记账与预算管理",
+    "共享储蓄（如团体旅行）的资金组织",
+    "支出模式追踪与月度财务汇总（路线图）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL",
+     "lines": [
+      68
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL 列为当前技术栈，项目是使用该库存数据的财务应用而非为其服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "BFlow is an open-source financial engine intended to explore modern cloud-native architecture and financial domain modeling. ／ - Spring Boot ／ - PostgreSQL",
+   "evidence_lines": [
+    43,
+    67,
+    68
+   ]
+  },
+  "fn": "DiazzzDev/BFlow-Financial-Engine",
+  "sha": "2b67fc39f47d",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bedc6d05da72": {
+  "identity": {
+   "one_liner": "股票交易所交易日历与结算日期服务，基于 Python holidays 库提供 REST API",
+   "review": "MarketClock 覆盖 30 个股票交易所的休市日、半日市、开盘状态和 T+N 结算日期，通过 Flask 只读 REST API 与 Next.js Web 应用对外提供，数据源为 Python holidays 库并与交易所官方日历核对。使用 MySQL 存储官方休市核对数据、Redis 做缓存，适合交易台、后台结算和需要交易日历的开发者使用。",
+   "highlights": [
+    "提供 30 个市场的休市、半日市、交易状态、T+0 至 T+10 结算日期与交易日计算 API",
+    "每个市场提供 iCalendar 订阅源与嵌入状态卡片",
+    "官方日历核对数据存于 MySQL，节假日按版本/市场/年份缓存在 Redis"
+   ],
+   "use_cases": [
+    "查询某交易所当日是否开市及下次收盘/开盘时间",
+    "按市场组合计算结算日期、交易日区间与共同交易日",
+    "通过 iCalendar 将交易日历订阅到 Google/Apple/Outlook 日历"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Pure date logic in `backend/app/core` with 100% branch coverage, tests against real MySQL. ／ |`GET /health`||MySQL and Redis status (503 when either is down)| ／ The web app only talks to the API, and the API is the only part that talks to MySQL and Redis.",
+     "lines": [
+      74,
+      102,
+      153
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 API 是唯一与 MySQL 和 Redis 交互的部分，用 MySQL 存官方休市核对表，属使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The web app only talks to the API, and the API is the only part that talks to MySQL and Redis. ／ |Data|`holidays` 0.107 (exact pin), MySQL 8.4 LTS (utf8mb4), Redis 8.2|",
+   "evidence_lines": [
+    153,
+    184
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "ahmershahdev/marketclock",
+  "sha": "bedc6d05da72",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

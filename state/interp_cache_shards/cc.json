@@ -11555,5 +11555,217 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "08ceeff0fc24": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 和 PGMQ 的 Elixir 工作流引擎库",
+   "review": "一个用 Elixir 实现的 pgflow 工作流引擎，提供多步 DAG 流程、后台任务和定时任务，全部状态与队列存于 PostgreSQL（依赖 pgmq 与可选 pg_cron），无需 Redis 等外部组件。面向使用 Elixir/Ecto 的后端开发者，要求 PostgreSQL 17+，并与 TypeScript/Deno 版 pgflow 共享 schema。",
+   "highlights": [
+    "在 PostgreSQL 内实现 DAG 工作流、后台任务与 cron 调度，依赖 pgmq 作为队列",
+    "支持自动重试、步骤并行、条件步骤及 LISTEN/NOTIFY 低延迟派发",
+    "与 TypeScript/Deno 版 pgflow 共享数据库 schema，可跨语言处理同一流程"
+   ],
+   "use_cases": [
+    "Elixir 应用内的后台任务与多步工作流编排",
+    "复用现有 PostgreSQL、不引入 Redis 等外部队列的场景",
+    "与 Supabase/Deno worker 共用同一流程定义的混合部署"
+   ],
+   "use_cases_backup": null
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> Workflows, background jobs and cron in Elixir and Postgres powered by PGMQ. ／ A native Elixir implementation of pgflow — a PostgreSQL-based workflow engine built on pgmq. Define multi-step DAG workflows (\"flows\"), one-off background jobs (\"jobs\"), and scheduled cron jobs and flows — all backed by the same PostgreSQL queuing infrastructu ／ - **No extra infrastructure** — Runs entirely in PostgreSQL using pgmq. No Redis, no external queue service.",
+     "lines": [
+      7,
+      9,
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是构建在 PostgreSQL/pgmq 之上、为应用提供工作流能力的 Elixir 组件库，非独立应用程序。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A native Elixir implementation of pgflow — a PostgreSQL-based workflow engine built on pgmq. Define multi-step DAG workflows (\"flows\"), one-off background jobs (\"jobs\"), and scheduled cron jobs and flows — all backed by the same PostgreSQL queuing infrastructure with retries, visibility timeouts, and delivery guarantees. Built on OTP with supervised workers, adaptive backoff polling, and an optional LISTEN/NOTIFY strategy for low-latency task dispatch. Compatible with the TypeScript/Deno pgflow project, sharing the same database schema and SQL functions. ／ - **No extra infrastructure** — Runs entirely in PostgreSQL using pgmq. No Redis, no external queue service. ／ - PostgreSQL 17+ with:",
+   "evidence_lines": [
+    9,
+    13,
+    33
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "agoodway/pgflow",
+  "sha": "08ceeff0fc24",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dd1b480d30de": {
+  "identity": {
+   "one_liner": "基于 Node.js 与 Express 的用户 CRUD REST API，数据存于 Supabase",
+   "review": "一个使用 Node.js 和 Express 构建的用户管理 REST API，数据存储在 Supabase（PostgreSQL）表中，提供用户增删改查、按名称模糊搜索、按 ID/邮箱查询，并通过 JSDoc 注释生成 Swagger 文档。需自备 Supabase 项目并配置环境变量，适合学习 Node.js + Supabase 集成的开发者参考。",
+   "highlights": [
+    "提供用户 CRUD 及按名称（大小写不敏感）、ID、邮箱的查询接口",
+    "通过 swagger-jsdoc 与 swagger-ui-express 在 /api-docs 生成交互式文档",
+    "支持环境变量配置与 CORS，anon key 场景提示配置行级安全策略"
+   ],
+   "use_cases": [
+    "学习 Node.js/Express 与 Supabase 集成的示例项目",
+    "需要简单用户管理 REST API 的应用后端",
+    "基于 Swagger UI 的 API 文档演示"
+   ],
+   "use_cases_end": 0
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A REST API built with Node.js and Express that stores users in a Supabase (PostgreSQL) table, with Swagger docs.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该项目是将用户数据存入 Supabase (PostgreSQL) 表的 REST API 应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A REST API built with Node.js and Express that stores users in a Supabase (PostgreSQL) table, with Swagger docs. ／ - Supabase JavaScript client (`@supabase/supabase-js`) ／ Requirements: Node.js 22 or newer and a Supabase project.",
+   "evidence_lines": [
+    3,
+    19,
+    25
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "manthanank/nodejs-supabase",
+  "sha": "dd1b480d30de",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cb7329219f8b": {
+  "identity": {
+   "one_liner": "Linux 每应用网络用量监控器，eBPF 守护进程+Qt6 GUI",
+   "review": "Bandsight 是一个 Linux 网络流量用量监控工具，由常驻 systemd 守护进程（基于 eBPF socket 钩子按应用统计字节）和 Qt6 桌面 GUI 组成，数据写入本地 SQLite 数据库，支持流量图、按应用排行、流量上限跟踪和 Unix socket JSON 输出。适合需要在 Linux 上做长期按应用流量统计的用户。仅监控，不拦截也不抓包。",
+   "highlights": [
+    "常驻守护进程通过 eBPF socket 钩子在内核态按应用统计流量，GUI 可选",
+    "数据持久化到本地 SQLite（WAL 模式），支持 1 分钟到 30 天的历史窗口",
+    "提供数据上限（月度计费周期）跟踪、托盘图标及 Unix socket JSON 实时数据源"
+   ],
+   "use_cases": [
+    "Linux 桌面上按应用统计下载/上传用量并查看历史趋势",
+    "跟踪月度流量配额并预测周期末用量",
+    "通过只读查询 SQLite 或 socket JSON 将用量数据接入自有脚本"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> The SQLite schema and the socket protocol may change between releases. ／ Everything goes into a local SQLite database. ／ The database is `/var/lib/bandsight/bandsight.db` (SQLite, WAL mode). Per-app totals",
+     "lines": [
+      9,
+      21,
+      186
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是其自身的本地数据存储，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Bandsight is a network usage monitor for Linux. It has two parts: ／  Everything goes into a local SQLite database. ／ The database is `/var/lib/bandsight/bandsight.db` (SQLite, WAL mode). Per-app totals",
+   "evidence_lines": [
+    17,
+    21,
+    186
+   ]
+  },
+  "fn": "Isuru-rana/bandsight",
+  "sha": "cb7329219f8b",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -13151,5 +13151,72 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0cce2f7cdc8f": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Java/Kotlin 消息与任务队列库",
+   "review": "kolbasa 是一个纯 Kotlin 编写的 JVM 队列库，用 PostgreSQL 作为存储实现消息队列和任务队列，提供事务性发送、去重、延迟投递、重试、死信与归档队列、批量发送及多服务器分片等机制，无需单独部署 Kafka 或 RabbitMQ。面向 Java/Kotlin 开发者，要求 PostgreSQL 10+ 和 JVM 17+。",
+   "highlights": [
+    "提供事务性发送、消息去重、可见性超时、延迟投递与可配置重试次数",
+    "支持死信队列、归档队列、批量发送/接收以及跨多个 PostgreSQL 服务器分摊负载",
+    "提供 OpenTelemetry 集成和外部事务上下文支持，可从 SQL（触发器/存储函数）直接入队"
+   ],
+   "use_cases": [
+    "在已有 PostgreSQL 的 Java/Kotlin 项目中实现消息队列与后台任务处理",
+    "需要与业务事务绑定的消息发送（如注册成功才入队后续任务）",
+    "需要消息过滤、排序、死信处理和归档审计的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**kolbasa** — a reliable message & job queue for Java & Kotlin, built on PostgreSQL. Use the database you already have — no Kafka, no RabbitMQ. Supports transactional sends, deduplication, delays, retries, dead-letter & archive queues, and batching. ／ * PostgreSQL as a persistent storage ／ * Share load between different PostgreSQL servers",
+     "lines": [
+      6,
+      9,
+      22
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是专门构建于 PostgreSQL 之上、为其生态提供队列能力的 JVM 组件，而非仅把数据库当存储的独立应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**kolbasa** — a reliable message & job queue for Java & Kotlin, built on PostgreSQL. Use the database you already have — no Kafka, no RabbitMQ. Supports transactional sends, deduplication, delays, retries, dead-letter & archive queues, and batching. ／ Kolbasa uses PostgreSQL as a storage to manage all queues, store all messages, ensure ACID and allow filtering and sorting. ／ implementation \"io.github.vgv:kolbasa:0.224.0\"",
+   "evidence_lines": [
+    6,
+    30,
+    40
+   ]
+  },
+  "fn": "vgv/kolbasa",
+  "sha": "0cce2f7cdc8f",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

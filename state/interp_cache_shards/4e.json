@@ -10924,5 +10924,82 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cbfe29b6ba48": {
+  "identity": {
+   "one_liner": "面向 AI 代理的 Postgres 协议分支数据库，写回需合并审查",
+   "review": "Chronos DB 是一个以 Postgres wire 协议对外服务的分支数据库：每个代理运行在私有的 copy-on-write world 中执行，按预设 merge policy 决定是否自动合并，否则等待人工审查；也可 attach 到已有 Postgres，把通过的合并以单事务写回。面向让 AI 代理写真实数据的团队，含 MCP server；作者声明为公共 beta，运行 Postgres 16 的部分 SQL 而非全部。",
+   "highlights": [
+    "实现 copy-on-write 数据库分支（world），fork 约 2µs，并提供 diff、三方合并与 UNDO 回滚",
+    "支持 merge policy、merge check、agent 账号与人工 review 流程控制自动合并",
+    "提供 MCP server 接入 MCP 客户端，并支持 pgvector 语法的向量过滤"
+   ],
+   "use_cases": [
+    "让 AI 代理在隔离分支中写真实数据，超出规则的变更等待人工审批",
+    "attach 到现有 Postgres，代理改动经审查后以单事务写回"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It speaks the Postgres wire protocol, so `psql`, drivers and ORMs connect to it. It can hold your data itself, or sit **beside the Postgres you already run** and write each approved merge back to it in one checked transaction. ／ **Attach** means: Chronos copies the tables an agent will work on into a local folder, agents work in worlds of that copy, and each merge into `main` is written to your Postgres first. Your application keeps using Postgres as before. ／ At `merge world`, Chronos runs its own checks, then opens one Postgres transaction. It locks each row the world changed and compares it with what Chronos last saw. If any row changed in Postgres meanwhile, nothing is written and the merge returns those rows as conflicts. Otherwise it applies the changes, runs your checks on the result, and commits. Values your Postgres triggers or defaults set come back into Chronos.",
+     "lines": [
+      21,
+      76,
+      95
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|SQLite's sqllogictest, 5.68M records over the Postgres protocol|**99.912%** pass; no wrong answer that Postgres gets right|Postgres 17: 99.796%|§13|",
+     "lines": [
+      238
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为带 MCP 接口的数据库引擎，为 AI 代理写入 Postgres 提供分支与受控合并服务，而非仅使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "引擎源码采用 BUSL-1.1 许可",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Chronos DB is a database for teams that want AI agents to change real data without a person reading every change. Each agent run gets its own **world**: a private, copy-on-write copy of the whole database, made in about 2 microseconds at any size. When the run is done, Chronos shows exactly which rows it changed, and merges it only if the change keeps to rules you set once; anything else waits for a person. ／ It speaks the Postgres wire protocol, so `psql`, drivers and ORMs connect to it. It can hold your data itself, or sit **beside the Postgres you already run** and write each approved merge back to it in one checked transaction. ／ > **Public beta, version 0.4.5.** Try it on a staging copy first, not production. It is built by one person and has no outside production use yet. Chronos is not Postgres: it runs much of Postgres 16's SQL, not all of it. Read Where it stands before you move data in.",
+   "evidence_lines": [
+    19,
+    21,
+    26
+   ]
+  },
+  "fn": "Abhishekxdg/Chronos-DB",
+  "sha": "cbfe29b6ba48",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

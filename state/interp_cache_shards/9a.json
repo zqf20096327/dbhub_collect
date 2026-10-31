@@ -11928,5 +11928,214 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5075b7688d72": {
+  "identity": {
+   "one_liner": "社区维护的开源有声书元数据数据库，JSON 经 CI 编译为 SQLite 制品",
+   "review": "这是一个社区共建的有声书元数据开放数据项目，数据以 JSON 文件形式存于仓库，通过 pull request 或 issue 表单提交，经 Go 工具在 CI 中校验后编译为单个 SQLite 制品，并由 metaserve 提供只读 JSON API（含 FTS 搜索、ASIN/ISBN 查询、LibriVox 兼容 feed）。面向有声书播放器（如 Audiobookshelf）及贡献者使用，写入需通过 GitHub，无服务端账号。",
+   "highlights": [
+    "以 GitHub 仓库为数据库，JSON 数据经 CI 校验后编译为带校验和的 SQLite 发布制品",
+    "提供只读 JSON API（metaserve），支持全文搜索、work/person/series 详情与 LibriVox 格式 feed",
+    "包含 Audiobookshelf 元数据提供端点及 OpenAudible/Libation 导入器"
+   ],
+   "use_cases": [
+    "为有声书播放器提供社区维护的作品、录音、朗读者与章节元数据",
+    "以 LibriVox 兼容 JSON feed 替换原有数据源",
+    "通过 pull request 或 issue 表单贡献和修正有声书元数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "by Go tooling in CI, and compiled into a single SQLite artifact that servers ／ data/*.json ──► CI validation ──► meta.sqlite ──► API server + site ／ 3. On merge to `main`, a release workflow builds `meta.sqlite` and attaches it",
+     "lines": [
+      15,
+      52,
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将数据编译进 SQLite 制品并由 metaserve 读取该文件提供 API，属于使用 SQLite 存取数据的项目而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "数据为 CC0；characters/recaps 层为 CC BY-SA",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "by Go tooling in CI, and compiled into a single SQLite artifact that servers ／   data/*.json  ──►  CI validation  ──►  meta.sqlite  ──►  API server + site ／ `metaserve` is a read-only JSON API over the compiled artifact - FTS search,",
+   "evidence_lines": [
+    15,
+    52,
+    127
+   ]
+  },
+  "fn": "KodeStar/audiosilo-meta",
+  "sha": "5075b7688d72",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "deda401e27aa": {
+  "identity": {
+   "one_liner": "基于 Next.js 和 Prisma 的社会导向企业目录应用",
+   "review": "一个巴西社会型企业目录网站：用户可搜索、推荐企业并留言，企业主可认领并编辑自己的资料，包含审核后台。技术栈为 Next.js + Prisma + PostgreSQL，本地通过 docker compose 启动 Postgres（端口 5433）后运行迁移即可使用，面向社区运营者部署。",
+   "highlights": [
+    "提供企业目录搜索（支持重音无关匹配）、按城市/事业/类型的页面以及企业资料和推荐功能",
+    "包含审核后台，含认领争议队列、举报处理和审计记录",
+    "技术栈为 Next.js 16 + React 19 + Prisma 7 + PostgreSQL，认证采用邮箱/密码（scrypt）或邮件链接方式"
+   ],
+   "use_cases": [
+    "部署区域社会型企业目录网站",
+    "需要企业资料认领、审核和审计功能的社区平台",
+    "参考 Next.js + Prisma + PostgreSQL 全栈项目结构的源码"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Next.js 16 (App Router, Cache Components), React 19, Tailwind CSS 4, Prisma 7 + PostgreSQL, Zod e Vitest. A autenticação é por e-mail e senha (scrypt) ou por link mandado ao e-mail, com sessão em cookie `httpOnly`. O cookie guarda o token e o banco guarda só o ／ Requisitos: Node 22.12+ e Docker (ou um PostgreSQL seu). ／ docker compose up -d # sobe o Postgres em localhost:5433",
+     "lines": [
+      36,
+      40,
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述了一个使用 PostgreSQL 存储数据的目录网站应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Next.js 16 (App Router, Cache Components), React 19, Tailwind CSS 4, Prisma 7 + PostgreSQL, Zod e Vitest. A autenticação é por e-mail e senha (scrypt) ou por link mandado ao e-mail, com sessão em cookie `httpOnly`. O cookie guarda o token e o banco guarda só o hash dele. ／ Requisitos: Node 22.12+ e Docker (ou um PostgreSQL seu). ／ docker compose up -d          # sobe o Postgres em localhost:5433",
+   "evidence_lines": [
+    36,
+    40,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "fabs-reis/Negocio-do-bem",
+  "sha": "deda401e27aa",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c8c9929cfd93": {
+  "identity": {
+   "one_liner": "本地运行的工作记录代理，用 SQLite 存储工作历史与决策记忆",
+   "review": "MAMA 是一个在本地 Mac 上运行的工作代理，通过 Telegram/Discord/Slack 与用户交互，跟踪连接来源（Slack、Notion、Google 系列等）的消息与文件变化，把原始记录、工作修订、纠正经验存入本机 SQLite，并支持 Claude Code 的会话记忆与 MCP server 接入。适合个人或小团队让 AI 代理保持跨会话的工作上下文；目前仅支持 macOS。",
+   "highlights": [
+    "将原始消息、文件通知与日历变更以不可覆盖的原始形式存入本地 SQLite，保留每次变更的依据与历史",
+    "可作为 Claude Code 插件和 MCP server（@jungjaehoon/mama-server）提供开发记忆",
+    "通过 Telegram/Discord/Slack 交互，内置 127.0.0.1:3847 的本地查看器展示看板、记忆图与日志"
+   ],
+   "use_cases": [
+    "为 Claude Code/Codex 等 AI 编码代理提供跨会话的决策与检查点记忆",
+    "以消息驱动方式跟踪多来源（Slack、Notion、Google Drive 等）的工作进展并定时生成报告",
+    "在本地保存纠正经验（lessons/workflows）并自动应用到后续任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The record SQLite on your machine: originals · work history · guidance · reports · run logs · local search index",
+     "lines": [
+      117
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其本地记录的内置存储，仓库本身是面向 AI 代理的工作记录应用，不服务于数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The record         SQLite on your machine: originals · work history · guidance · reports · run logs · local search index ／ MCP server `{\"mcpServers\":{\"mama\":{\"command\":\"npx\",\"args\":[\"@jungjaehoon/mama-server\"]}}}`. ／ If you keep your own Node.js 22.13 or newer, `npm install -g @jungjaehoon/mama-os` installs MAMA OS",
+   "evidence_lines": [
+    117,
+    109,
+    98
+   ]
+  },
+  "fn": "jungjaehoon-lifegamez/MAMA",
+  "sha": "c8c9929cfd93",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

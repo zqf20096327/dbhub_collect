@@ -11313,5 +11313,208 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "12679e3fc9e6": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 跨会话记忆插件，本地 SQLite+Markdown 存储",
+   "review": "这是给 DeepSeek Harness (DSH) 宿主使用的跨会话记忆插件，将 AI 对话中的偏好、项目信息等持久化到本地 SQLite 并镜像为可编辑的 Markdown 文件，支持关键词/向量/BM25/实体四路检索与后台自动巩固。供 DSH 用户安装使用，也可通过独立 daemon 或 stdio MCP server 供 Claude Code、Cursor 等任意 MCP 客户端挂载读写同一记忆库。",
+   "highlights": [
+    "提供 memory_save/search/list/get/update/delete 六件套工具及零依赖 stdio MCP server，可挂载到任意 MCP 客户端",
+    "记忆落盘为本机 SQLite 加可手工编辑的 Markdown 镜像，人工改动优先于机器写入",
+    "支持 autoDream 后台自动巩固、矛盾记忆冻结待裁决、按 agent 与工作区作用域隔离及全程审计回放"
+   ],
+   "use_cases": [
+    "为 AI 编码助手补充跨会话长期记忆，避免每次对话重复交代偏好与项目背景",
+    "多 Agent/多项目场景下隔离各自记忆作用域",
+    "通过 MCP 将记忆库接入 Claude Code、Cursor、Codex 等外部客户端或独立服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 记忆只落在本机：SQLite 存储 + 可手工编辑的 Markdown 镜像，不经过任何 mneme 服务器",
+     "lines": [
+      161
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该记忆插件的本地存储底座使用，插件服务对象是 AI agent 宿主而非数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 记忆只落在本机：SQLite 存储 + 可手工编辑的 Markdown 镜像，不经过任何 mneme 服务器 ／ 插件自带零依赖 stdio MCP server（独立 npm 包 **`mneme-memory`**，bin 名 `mneme-mcp`），任何 MCP 客户端都能挂载记忆六件套（`memory_save` / `memory_search` / `memory_list` / `memory_get` / `memory_update` / `memory_delete`）。 ／ **dsh-mneme** 是 DeepSeek Harness (DSH) 的跨会话记忆插件。它不只「存得下」，更「管得好」：后台自动去重合并、矛盾先冻结等你裁决、全程可回放审计、记忆只落在本机，还支持导出成人可读的 Markdown。",
+   "evidence_lines": [
+    161,
+    169,
+    18
+   ]
+  },
+  "fn": "slow-stack/mneme",
+  "sha": "12679e3fc9e6",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fefc42af2e99": {
+  "identity": {
+   "one_liner": "基于 tree-sitter 的语义代码书签系统，按代码结构锚定书签",
+   "review": "Codemark 是一个 Rust 编写的 CLI/TUI 工具，用 tree-sitter 将书签锚定到函数、类型等命名代码结构上，重构后仍能重新定位；提供全文与本地语义搜索、集合组织、Git 集成，并可安装 agent skill 供 Claude Code、GitHub Copilot、Gemini CLI 等编码代理使用。数据存储在捆绑的 SQLite 中，面向开发者个人与团队共享代码导航场景。",
+   "highlights": [
+    "书签锚定到 tree-sitter 命名结构，通过 Exact→Relaxed→Hash 分级匹配在重构后重新解析",
+    "提供 FTS（SQLite 全文）与本地向量嵌入语义搜索两种模式，无需 API key",
+    "内置 8 种语言语法，其他语言可运行时从 WASM 语法注册表加载"
+   ],
+   "use_cases": [
+    "AI 编码代理跨会话保留代码导航上下文",
+    "团队共享代码流程讲解与新人上手导览",
+    "代码审计与已知流程的 bug 定位"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**FTS** (SQLite full-text) and **Semantic** (local vector embeddings) modes. ／ *Requires Rust 1.85+ (edition 2024). SQLite is bundled.*",
+     "lines": [
+      134,
+      191
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 作为捆绑的嵌入式存储保存书签数据，工具本身为代码导航服务而非数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " **FTS** (SQLite full-text) and **Semantic** (local vector embeddings) modes.",
+   "evidence_lines": [
+    134
+   ]
+  },
+  "fn": "DanielCardonaRojas/codemark",
+  "sha": "fefc42af2e99",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f0bee34a4615": {
+  "identity": {
+   "one_liner": "自托管的 AI 编码代理长期记忆存储，基于 Postgres+pgvector",
+   "review": "为 Claude Code 等 MCP 客户端提供长期记忆的 Postgres+pgvector 存储，包含文档 RAG（组件约束映射+RRF 混合检索+重排）与双时间线个人记忆，通过 MCP 工具和 Claude Code hooks 两种接口交付；使用 Ollama/TEI 嵌入可本地运行，无云依赖，适合自托管场景的 AI 代理使用者。",
+   "highlights": [
+    "提供文档 RAG 与个人记忆两类记忆，支持混合检索（RRF 融合稠密与词法）及可选 cross-encoder 重排",
+    "个人记忆为双时间线（事件时间/摄取时间）结构，采用 supersede-not-overwrite 与证据溯源图",
+    "通过 MCP 工具与 Claude Code hooks（约束注入、记忆召回、会话捕获）两种方式交付内容"
+   ],
+   "use_cases": [
+    "为编码代理注入仓库架构约束与规则，避免其违反文档中已有的规范",
+    "跨会话保存代理的工作偏好、决策与事实记忆",
+    "本地/自托管环境下的 MCP 记忆后端部署"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres + pgvector ／ Postgres-backed store that gives an agent (Claude Code, or any MCP client) two things: ／ One store (Postgres + pgvector), local-model friendly",
+     "lines": [
+      9,
+      14,
+      22
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确其为基于 Postgres+pgvector 的存储组件，为 MCP 客户端/编码代理提供记忆服务，而非最终业务应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postgres-backed store that gives an agent (Claude Code, or any MCP client) two things: ／ One store (Postgres + pgvector), local-model friendly ／ an edit, memory recalled per prompt, sessions captured — is a set of **Claude Code hooks**.",
+   "evidence_lines": [
+    14,
+    22,
+    28
+   ]
+  },
+  "fn": "Recluse/HyperMnesia",
+  "sha": "f0bee34a4615",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

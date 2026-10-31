@@ -10438,5 +10438,70 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5dda8ed46b17": {
+  "identity": {
+   "one_liner": "自托管网站分析工具，读取服务器访问日志统计流量",
+   "review": "Skald 是一个自托管的网站访问分析系统，通过解析服务器访问日志统计访客、AI 助手、爬虫、扫描器等五类流量，并提供销售线索与安全扫描视图，无需 cookie 与浏览器脚本。数据存储在 SQLite 文件中，可用 Docker 部署，也提供托管 beta 服务。适合需要观察 AI 爬虫流量与安全探测的站长与运维人员。",
+   "highlights": [
+    "读取服务器访问日志并将每个请求归入五个互斥分组，由独立审计程序二次计数，不一致时隐藏当天数据",
+    "识别并区分 AI 爬虫（GPTBot、ClaudeBot 等）并验证其真实性，提供来自日志的安全分析（扫描、攻击尝试、暴露探测）",
+    "支持 Vercel/Netlify 日志、Cloudflare Worker、CloudFront/Fastly 等多种日志来源，提供实时地图与 Slack/邮件告警"
+   ],
+   "use_cases": [
+    "统计不含 JavaScript 追踪的访问来源，包括 AI 助手与爬虫流量",
+    "从访问日志发现针对站点的扫描器与攻击尝试",
+    "自托管、无 cookie 的网站流量与线索转化分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|**SQLite**: `history.sqlite` (daily totals), `accounts.sqlite`, `conversions.sqlite`. One file each, easy to back up.|",
+     "lines": [
+      551
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Skald 是使用 SQLite 文件存储自身分析数据的自托管分析应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Web analytics from your server's own access log: the people, the AI assistants and the crawlers ／ Skald reads the one record that sees every visit: **your web server's access log.** Every request",
+   "evidence_lines": [
+    8,
+    43
+   ]
+  },
+  "fn": "spcaeo/skald",
+  "sha": "5dda8ed46b17",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

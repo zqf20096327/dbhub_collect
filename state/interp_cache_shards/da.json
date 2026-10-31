@@ -10099,5 +10099,145 @@
   "generated_at": "2026-10-29",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "11792f6eda0b": {
+  "identity": {
+   "one_liner": "多数据库通用 SQL 命令行客户端，仿 psql 交互模式",
+   "review": "usql 是一个用 Go 编写的通用命令行 SQL 客户端，支持 PostgreSQL、MySQL、Oracle、SQLite 等数十种 SQL 与 NoSQL 数据库，交互模式仿照 psql，提供变量、反斜杠命令、跨库复制、上下文补全等能力。面向需要用统一工具操作多种数据库的管理员和开发者，可通过 brew、go install、Docker 等方式安装，驱动可经 build tag 裁剪。",
+   "highlights": [
+    "支持通过 Go 驱动连接多种 SQL 与 NoSQL 数据库，内置 base/most/all 等 build tag 控制驱动编译范围",
+    "实现 psql 风格的变量、反引号、反斜杠命令等交互特性",
+    "支持多数据库连接、库间数据复制与基于上下文的补全"
+   ],
+   "use_cases": [
+    "在不使用 PostgreSQL 的数据库上获得 psql 风格的命令行操作体验",
+    "用单一客户端在多种数据库之间查询与复制数据",
+    "通过 Docker 容器快速运行数据库命令行会话"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`usql` is a universal command-line interface for PostgreSQL, MySQL, Oracle ／ modelled on PostgreSQL's `psql`. `usql` supports most of the ／ |PostgreSQL|`pgx`|`postgres`, `pg`, `pgsql`, `postgresql`, `px`|[github.com/jackc/pgx/v5/stdlib][d-pgx]|",
+     "lines": [
+      9,
+      14,
+      185
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`usql` is a universal command-line interface for PostgreSQL, MySQL, Oracle ／ [`base` drivers][databases] for PostgreSQL, MySQL, SQLite3, Microsoft SQL ／ |MySQL|`mysql`|`my`, `maria`, `aurora`, `mariadb`, `percona`|[github.com/go-sql-driver/mysql][d-mysql]|",
+     "lines": [
+      9,
+      122,
+      186
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "`usql` is a universal command-line interface for PostgreSQL, MySQL, Oracle ／ Server, Oracle, CSVQ will be included in the build: ／ |Oracle Database|`oracle`|`or`, `ora`, `oci`, `oci8`, `odpi`, `odpi-c`|[github.com/sijms/go-ora/v3][d-oracle]|",
+     "lines": [
+      9,
+      123,
+      188
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Database, SQLite3, Microsoft SQL Server, [and many other databases][databases] ／ $ docker run --rm -it --volume $(pwd)/data:/data docker.io/usql/usql:latest sqlite3://data/test.db ／ [`base` drivers][databases] for PostgreSQL, MySQL, SQLite3, Microsoft SQL",
+     "lines": [
+      10,
+      115,
+      122
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Database, SQLite3, Microsoft SQL Server, [and many other databases][databases] ／ # build/install with base drivers (PostgreSQL, MySQL, SQLite3, Microsoft SQL Server, ／ |Microsoft SQL Server|`sqlserver`|`ms`, `mssql`, `azuresql`|[github.com/microsoft/go-mssqldb][d-sqlserver]|",
+     "lines": [
+      10,
+      126,
+      187
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|`clickhouse`|`ch`|[github.com/xo/dbimp/clickhouse][d-clickhouse]|",
+     "lines": [
+      191
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL|`mysql`|`my`, `maria`, `aurora`, `mariadb`, `percona`|[github.com/go-sql-driver/mysql][d-mysql]|",
+     "lines": [
+      186
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|TiDB|`tidb`|`ti`|[github.com/go-sql-driver/mysql][d-tidb]|",
+     "lines": [
+      197
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "usql 是为连接和操作多种数据库提供命令行界面的工具组件，本身不用某数据库存业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`usql` is a universal command-line interface for PostgreSQL, MySQL, Oracle ／ The following are the [Go SQL drivers][go-sql] that `usql` supports, the ／ |Database|Scheme / Tag|Scheme Aliases|Driver Package / Notes|",
+   "evidence_lines": [
+    9,
+    180,
+    183
+   ]
+  },
+  "fn": "xo/usql",
+  "sha": "11792f6eda0b",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

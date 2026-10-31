@@ -9859,5 +9859,91 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bb1604217e02": {
+  "identity": {
+   "one_liner": "Python/TypeScript 双语言异步 ORM，单一 Rust 核心驱动",
+   "review": "MonOrm 是一个面向 Python 和 TypeScript 的异步 ORM，用 Prisma 语法写一次 schema，由 Rust 核心生成类型化模型、迁移并在 PostgreSQL 或 SQLite 上执行 SQL。提供 CTE、窗口函数、upsert、触发器、分区、软删除等扩展，API 风格接近 Django。README 明确标注处于活跃开发阶段，建议他人暂不用于生产。",
+   "highlights": [
+    "一个 Prisma 语法的 schema 同时生成 Python 与 TypeScript 的类型化模型和迁移",
+    "内置窗口函数、CTE、upsert、触发器、声明式分区、读写副本、N+1 检测等能力",
+    "提供 Django 常用第三方包（pgtrigger、safedelete、cte 等）对应的内置扩展"
+   ],
+   "use_cases": [
+    "同一数据层需要在 Python 与 TypeScript 服务间共享 schema 与迁移的团队",
+    "需要从 Django ORM 的包生态迁移到统一 schema 驱动工作流的项目",
+    "以 SQLite 或 PostgreSQL 为存储、希望异步类型安全查询 API 的应用开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The Rust core plans the SQL and runs it on PostgreSQL or SQLite. ／ |Databases|PostgreSQL and SQLite|",
+     "lines": [
+      11,
+      185
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The Rust core plans the SQL and runs it on PostgreSQL or SQLite. ／ |Databases|PostgreSQL and SQLite|",
+     "lines": [
+      11,
+      185
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "The API is async only. There is no MySQL driver.",
+     "lines": [
+      226
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL/SQLite 提供数据访问层的 ORM 开发库，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An async ORM for Python and TypeScript with one Rust core. ／ The Rust core plans the SQL and runs it on PostgreSQL or SQLite. ／ |Databases|PostgreSQL and SQLite|",
+   "evidence_lines": [
+    9,
+    11,
+    185
+   ]
+  },
+  "fn": "UniForgeStack/monorm",
+  "sha": "bb1604217e02",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10711,5 +10711,197 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a7f803cad631": {
+  "identity": {
+   "one_liner": "SQLite 扩展集合，按领域模块打包加载",
+   "review": "Sqlean 是一组 SQLite 扩展，将分散的第三方扩展整理为 crypto、stats、regexp、uuid 等领域模块，提供文档、测试和多平台预编译二进制，可通过 .load 在 SQLite 命令行或 Python、JavaScript 等环境中加载。面向需要在 SQLite 中补充数学、文本、时间等函数的开发者，使用时要求 64 位 SQLite 版本。",
+   "highlights": [
+    "提供 crypto、fileio、regexp、stats、text、uuid 等 12 个领域模块扩展",
+    "提供 Windows、Linux、macOS 的预编译二进制及源码构建",
+    "提供包含全部扩展的单文件 sqlean 捆绑包"
+   ],
+   "use_cases": [
+    "为 SQLite 补充正则、统计、加密等函数",
+    "在 SQLite 中以虚拟表方式读取 CSV 文件",
+    "统一管理多个 SQLite 扩展的加载与升级"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# All the missing SQLite functions ／ SQLite has few functions compared to other database management systems. SQLite authors see this as a feature rather than a problem, because SQLite has an extension mechanism in place. ／ There are a lot of SQLite extensions out there, but they are incomplete, inconsistent and scattered across the internet. Sqlean brings them together, neatly packaged into domain modules, documented, tested, and built for Linux, Windows and macOS.",
+     "lines": [
+      1,
+      3,
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是 SQLite 的扩展集合，通过 SQLite 扩展机制加载运行，为该数据库提供函数能力。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "There are a lot of SQLite extensions out there, but they are incomplete, inconsistent and scattered across the internet. Sqlean brings them together, neatly packaged into domain modules, documented, tested, and built for Linux, Windows and macOS. ／ The functions are organized into the domain modules with clear API. Think of them as the extended standard library for SQLite: ／ Binaries are 64-bit and require a 64-bit SQLite version.",
+   "evidence_lines": [
+    5,
+    18,
+    45
+   ]
+  },
+  "fn": "nalgeon/sqlean",
+  "sha": "a7f803cad631",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f4748e164b01": {
+  "identity": {
+   "one_liner": "pi 扩展：通过隔离浏览器调用 ChatGPT/Grok 网页账号并本地存档",
+   "review": "pi-oracle 是一个 pi 的 npm 扩展，将项目文件打包后通过隔离浏览器配置发送到 ChatGPT 或 Grok 网页账号，异步执行任务并保存答案、日志到本地。面向使用 pi 代理的开发者。需 Chromium 浏览器、登录导入 cookie，任务可排队，完成后按 14/30 天保留期清理；README 标注为实验性公开测试版。",
+   "highlights": [
+    "通过隔离浏览器配置文件复用用户登录，向 ChatGPT/Grok 网页提交任务",
+    "任务支持排队、异步通知、/oracle-status 与 /oracle-read 查询",
+    "答案、日志与工件保存到本地目录，并按 14/30 天策略自动清理"
+   ],
+   "use_cases": [
+    "在 pi 会话中让 ChatGPT/Grok 读取项目文件并回答问题",
+    "延续已有 ChatGPT 会话进行多轮追问",
+    "批量排队 LLM 任务并在完成后本地查阅结果"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "# pi-oracle ／ pi-oracle sends project files and questions from Pi to ChatGPT or Grok through your web account. Each job uses an isolated browser and saves its answer locally. ／ Oracle workflow: Pi packages project files, an isolated browser sends them to ChatGPT or Grok, and Oracle saves the answer locally.",
+     "lines": [
+      1,
+      3,
+      5
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 未声明使用或适配任何数据库，Oracle 仅是项目名中指代 ChatGPT/Grok 网页预言机的自造词，与 Oracle 数据库无关。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# pi-oracle ／ pi-oracle sends project files and questions from Pi to ChatGPT or Grok through your web account. Each job uses an isolated browser and saves its answer locally. ／ **Experimental public beta.** Provider pages can change and cause jobs to fail. Check troubleshooting if authentication or a job fails.",
+   "evidence_lines": [
+    1,
+    3,
+    95
+   ]
+  },
+  "fn": "fitchmultz/pi-oracle",
+  "sha": "f4748e164b01",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::A full-stack e-commerce web application built using React, Node.js, Express.js, and TiDB Cloud, feat": {
+  "identity": {
+   "one_liner": "基于 React/Node.js/Express 与 TiDB Cloud 的全栈电商应用",
+   "review": "该项目是一个使用 React、Node.js、Express.js 构建并部署在 TiDB Cloud 上的全栈电商 Web 应用，实现商品管理、购物车、用户认证和订单处理等功能，面向需要搭建电商平台的开发者或学习者使用，可直接作为 TiDB Cloud 的应用示例。本条目基于仓库简介编写，无 README，安装与运行细节未验证。",
+   "highlights": [
+    "使用 React、Node.js、Express.js 构建全栈应用",
+    "数据存储使用 TiDB Cloud",
+    "包含商品管理、购物车、用户认证、订单处理功能"
+   ],
+   "use_cases": [
+    "电商平台的商品与订单管理",
+    "带用户认证的购物车应用开发参考",
+    "TiDB Cloud 的应用使用示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "A full-stack e-commerce web application built using React, Node.js, Express.js, and TiDB Cloud"
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 TiDB Cloud 作为存储的电商应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A full-stack e-commerce web application built using React, Node.js, Express.js, and TiDB Cloud, featuring product management, shopping cart, user authentication, and order processing."
+  },
+  "fn": "ahamedmahfuz/nexora-ecommerce",
+  "sha": "desc::A full-stack e-commerce web application built using React, Node.js, Express.js, and TiDB Cloud, feat",
+  "source": "desc",
+  "generated_at": "2026-10-31",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

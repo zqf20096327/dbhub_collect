@@ -10084,5 +10084,245 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "36f1b8ad5855": {
+  "identity": {
+   "one_liner": "本地 Windows 取证调查 CLI，证据规范化入 SQLite 并结合本地 llama.cpp 模型分析",
+   "review": "Locard 是一个本地运行的 Windows 数字取证调查 CLI，将证据事件规范化存入 SQLite，以确定性检索为核心，可选调用本地 llama.cpp 服务的 MiniCPM5-2B 模型分析记录，不向外部 AI 服务发送数据。面向需要本地化 AI 辅助取证的调查分析师。README 自述项目仍在重度开发中，V6 阶段尚未在真实环境验证，属于高级原型。",
+   "highlights": [
+    "将 Windows 证据事件规范化写入 SQLite，保留原始证据 ID 与来源",
+    "通过本地 llama.cpp 服务运行 MiniCPM5-2B 模型，数据不出本地",
+    "内置引用校验、上下文限制、禁止模型执行命令或直接查询数据库等防护机制"
+   ],
+   "use_cases": [
+    "Windows 主机取证调查中的本地化证据分析",
+    "不希望证据外发到云端 AI 服务的敏感场景",
+    "基于 SQLite 证据库的确定性证据检索与关联"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|image &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该 CLI 将证据规范化存入 SQLite，SQLite 为其数据存储层",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|image &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Locard is a local Windows forensic investigation CLI, named after Edmond Locard and the principle that **every contact leaves a trace**. Locard was designed around a foundational principle: **A forensic investigation should never require sending sensitive evidence to an external AI service.** To ensure trust and accuracy in the investigative process, Locard improves reliability through strict systemic safeguards rather than relying on LLM scale. It preserves source provenance, normalizes events into SQLite, retrieves evidence deterministically, and optionally asks MiniCPM5 through a local llama.cpp server to analyze retrieved records. Watch Locard's introduction video| ／ |Deterministic Extraction|Keeps the core evidence extraction process strictly deterministic.|",
+   "evidence_lines": [
+    18,
+    22
+   ]
+  },
+  "fn": "jeanlucdupont/locard",
+  "sha": "36f1b8ad5855",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a8235a808884": {
+  "identity": {
+   "one_liner": "Rust 编写的桌面数据库工作台，支持 SQL 查询与本地文件分析",
+   "review": "Kuery 是一个用 Rust 和 GPUI 构建的桌面应用，把数据库管理（浏览、SQL 编辑、查询计划、schema 图、受控写入）与本地文件分析（CSV/JSON/Parquet 上跑 Polars SQL、Profile 图表）放在同一工作区。适用于需要同时连接多种数据库并探索本地数据的开发者和数据使用者。目前为早期原型，功能仍在开发中。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQL Server、SQLite、Redis、MongoDB 连接浏览与 SQL 查询，含查询计划、schema 图与显式写入模式",
+    "支持对 CSV/TSV、JSON/JSONL/NDJSON、Parquet 文件运行 Polars SQL，并提供数据分布 Profile 与图表",
+    "连接密码存于操作系统凭据库，支持 TLS 与 OpenSSH 隧道，默认只读、写入需显式开启"
+   ],
+   "use_cases": [
+    "在单一桌面工作区中跨多种数据库浏览 schema、执行查询并查看执行计划",
+    "无数据库连接时对本地 CSV/JSON/Parquet 文件用 SQL 做聚合与统计分析",
+    "以受控写入模式在开发/预发/生产环境中执行带事务与影响预览的表编辑"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite, Redis and MongoDB, or open CSV, ／ |**PostgreSQL**|Schemas, tables, views, routines, triggers, enums and definitions|SQL editor, read-only reads, explicit write modes|Streaming results, plan inspection, TLS and SSH.|",
+     "lines": [
+      16,
+      93
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite, Redis and MongoDB, or open CSV, ／ |**MySQL / MariaDB**|Databases presented as schemas, tables, views and routines|SQL editor, read-only reads, explicit write modes|DDL that commits implicitly is refused wherever rollback is promised.|",
+     "lines": [
+      16,
+      94
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite, Redis and MongoDB, or open CSV, ／ |**MySQL / MariaDB**|Databases presented as schemas, tables, views and routines|SQL editor, read-only reads, explicit write modes|DDL that commits implicitly is refused wherever rollback is promised.|",
+     "lines": [
+      16,
+      94
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite, Redis and MongoDB, or open CSV, ／ |**SQL Server**|Databases, schemas, tables, views and routines|SQL editor with `GO` batches, read-only reads, explicit write modes|Query plans and server activity. SQL Server logins only; see the guide for the read-only guarantee.|",
+     "lines": [
+      16,
+      95
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite, Redis and MongoDB, or open CSV, ／ |**SQLite**|Local database files, tables, views and definitions|SQL editor, query-only reads, explicit write modes|Existing files only; missing paths do not create an empty database.|",
+     "lines": [
+      16,
+      96
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQL Server",
+    "SQLite"
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为连接多种数据库进行浏览、查询与管理的桌面客户端工具，为数据库生态服务而非使用数据库存储自身数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Kuery brings database administration and file analytics into one desktop app. ／ Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite, Redis and MongoDB, or open CSV, ／ ## Supported sources",
+   "evidence_lines": [
+    15,
+    16,
+    89
+   ]
+  },
+  "fn": "Binaretech/kuery",
+  "sha": "a8235a808884",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3ed02736803d": {
+  "identity": {
+   "one_liner": "音频库索引编目工具，通过 MCP 服务器供 Claude Code 检索音效",
+   "review": "Foley 对本地音效/音乐库做一次性离线分析，将元数据、响度、频谱图像与 CLAP 嵌入存入两个 SQLite 文件，并提供本地 Web 浏览器和 MCP 服务器供 Claude Code 按描述搜索、比较频谱图并导入游戏项目。面向游戏开发工作室的内部工具，非受支持产品；也可直接读取其 SQLite 文件对接其他工具。",
+   "highlights": [
+    "提供 MCP 服务器（七个工具），支持按描述搜索、频谱对比和导入项目",
+    "生成并维护两个 SQLite 文件作为公开契约，可被非 Python 工具直接读取",
+    "混合检索：关键词匹配结合 CLAP 音频嵌入相似度，支持 find-similar"
+   ],
+   "use_cases": [
+    "为无法听音的 AI 编码代理编目和检索音效库",
+    "本地/局域网音效试听浏览与响度匹配试听",
+    "游戏项目音效导入并按槽位响度归一化"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Point Foley at a folder or network share of sound effects and music. It analyzes every file once, offline, keeps that analysis in sync as the library changes, and stores it in two SQLite files. Claude Code reaches the catalog through an MCP server: it searches ／ - docs/schema.md: the SQLite contract",
+     "lines": [
+      7,
+      149
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是其存储分析数据的内嵌数据库，Foley 本身是音频库管理应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Point Foley at a folder or network share of sound effects and music. It analyzes every file once, offline, keeps that analysis in sync as the library changes, and stores it in two SQLite files. Claude Code reaches the catalog through an MCP server: it searches by description, looks at spectrograms to compare candidates, and imports the winner into your game project at the right loudness. People get a fast local browser for auditioning the same library, and anything else (an in-editor sound board, a script) can read the SQLite files directly. ／ > Foley is an internal Soverance Studios tool shared as-is. It is not a supported product: there is no support commitment and no release cadence.",
+   "evidence_lines": [
+    7,
+    9
+   ]
+  },
+  "fn": "Soverance/Foley",
+  "sha": "3ed02736803d",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

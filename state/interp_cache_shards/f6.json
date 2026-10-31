@@ -12094,5 +12094,91 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7ebb966e821d": {
+  "identity": {
+   "one_liner": "Go 语义搜索库，将文件分块嵌入向量数据库实现按含义检索",
+   "review": "这是一个用 Go 编写的语义搜索库，递归索引目录中的 PDF、Markdown、代码等多种文件，分块后经 OpenAI 兼容的嵌入服务生成向量，存入 SQLite（客户端内嵌，需 C 编译器）或 PostgreSQL+pgvector（服务端），支持 kNN 精确检索和 HNSW 近似检索。适合需要在应用内构建本地或服务端知识库、实现基于含义检索的开发者。",
+   "highlights": [
+    "支持索引 PDF、Markdown、代码、DOCX、HTML、EPUB 等多种文件格式并分块",
+    "提供 SQLite 内嵌存储与 PostgreSQL+pgvector 服务端存储两种方案",
+    "支持精确 kNN 与 HNSW 近似最近邻检索，内置多种预定义嵌入模型"
+   ],
+   "use_cases": [
+    "桌面/移动应用的本地个人知识库与 NotebookLM 式检索",
+    "Web 系统的服务端语义知识库（如商品目录、网店集成）",
+    "对本地文件和笔记做终端语义搜索的 CLI 工具"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "on disk or in memory) and as a server-side knowledge base (using PostgreSQL and pgvector). ／ - **For server-side apps**: pure Go, so no C compiler is needed. You need a **PostgreSQL server ／ - **postgres**: the server-side setup on PostgreSQL with pgvector.",
+     "lines": [
+      33,
+      95,
+      124
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Semantic Search works both as an embedded engine inside client apps (using the SQLite store, ／ |Desktop apps|Client-side RAG over a personal knowledge base: Google NotebookLM-like search built into the app, backed by the embedded SQLite database.| ／ |Mobile apps|The same personal knowledge base and meaning-based search running on-device, with no server, on the embedded SQLite database.|",
+     "lines": [
+      32,
+      37,
+      38
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为应用提供语义检索能力、并以 SQLite/PostgreSQL 作为向量存储后端的库，而非使用数据库存业务数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " It recursively indexes PDF, Markdown, code, and many other file types in a directory, then chunks them and stores them in a vector database using an embedding AI model . ／ on disk or in memory) and as a server-side knowledge base (using PostgreSQL and pgvector). ／ Semantic Search is a library. Copy the following into a Go file (for example `main.go`) to get",
+   "evidence_lines": [
+    12,
+    33,
+    144
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "DavidBelicza/semantic-search",
+  "sha": "7ebb966e821d",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

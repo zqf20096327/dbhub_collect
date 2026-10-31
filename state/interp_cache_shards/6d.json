@@ -11655,5 +11655,137 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "68b7353fef8a": {
+  "identity": {
+   "one_liner": "构建在 Postgres 上的 AI 代理防篡改审计日志数据库",
+   "review": "ZizkaDB 是面向 AI 代理的开源数据库，记录每个代理步骤及其因果父事件，提供带校验和与哈希链的防篡改审计日志、时间回溯调试、因果记忆和漂移检测，面向 EU AI Act 第 12 条记录留存场景；支持 MCP、Python/TypeScript SDK 及 LangChain/LangGraph 等集成，可基于自有 Postgres 用 Docker 自托管（自托管限单代理）或用其云服务。",
+   "highlights": [
+    "每个事件携带 parent_id 与校验和并哈希链接，提供 db.verify_chain() 验证历史未被修改",
+    "提供因果记忆 db.context_for()、时间回溯 db.at() 与漂移检测",
+    "包含 Prometheus 指标、备份/恢复脚本、导出/导入、只读与过期密钥，并提供 Python/TypeScript SDK 与 MCP server"
+   ],
+   "use_cases": [
+    "为 AI 代理决策留存 EU AI Act Article 12 要求的可验证记录",
+    "调试代理行为：通过 db.why() 追溯工具调用至用户消息等根因",
+    "在 CI 中解释代理测试失败并证明记录历史完整"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "in one open-source database on Postgres. Built for **EU AI Act Article 12** record-keeping. ／ - **Self-host or cloud.** Run it on your own Postgres with one Docker command, or use ZizkaDB Cloud. AGPL-3.0, no per-trace billing; self-hosted data never leaves your infrastructure. Self-hosted runs **one agent with one API key**; multiple agents, agent flee ／ Self-hosted quickstart: one curl command starts the open-source ZizkaDB database on Postgres and prints an AI agent causal chain",
+     "lines": [
+      8,
+      34,
+      55
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 AI 代理生态提供审计与记忆存储的专用数据库组件，而非仅消费数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0 单许可；自托管限单代理，多代理等能力保留给云服务",
+   "install": [
+    "docker",
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Every agent decision linked to its cause. **Causal agent memory**, a **tamper-evident audit log** and **time-travel debugging**, ／ - **Provable history.** Every event has a checksum and is hash-chained to the one before it, so `db.verify_chain(agent)` proves nothing was edited, removed or reordered. GDPR deletions leave a content-free tombstone. A verifiable record for EU AI Act Article 12. ／ - **Self-host or cloud.** Run it on your own Postgres with one Docker command, or use ZizkaDB Cloud. AGPL-3.0, no per-trace billing; self-hosted data never leaves your infrastructure. Self-hosted runs **one agent with one API key**; multiple agents, agent fleets and agent-to-agent messaging are on Cloud.",
+   "evidence_lines": [
+    7,
+    30,
+    34
+   ]
+  },
+  "fn": "ZIZKA-AI-SL/ZizkaDB",
+  "sha": "68b7353fef8a",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::CogniStream — A full-stack AI conversation platform built with Node.js, Express, Groq API, and TiDB ": {
+  "identity": {
+   "one_liner": "基于 Node.js 与 TiDB Cloud 的全栈 AI 对话平台",
+   "review": "CogniStream 是一个使用 Node.js、Express、Groq API 和 TiDB Cloud 构建的全栈 AI 对话应用，通过 SSE 实现实时 token 流式输出，提供多层 persona 提示词、速率限制和会话持久化功能。它属于使用数据库的应用而非数据库生态工具，适合需要流式对话与会话存储的场景。",
+   "highlights": [
+    "通过 Server-Sent Events (SSE) 实现 real-time token streaming",
+    "支持 multi-tier persona prompting",
+    "提供 rate limiting 与 session persistence"
+   ],
+   "use_cases": [
+    "构建实时流式输出的 AI 对话服务",
+    "需要会话持久化的多角色对话应用",
+    "需要对 API 调用做速率限制的对话平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "A full-stack AI conversation platform built with Node.js, Express, Groq API, and TiDB Cloud"
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 TiDB Cloud 作为会话持久化的存储后端，本身是对话应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "CogniStream — A full-stack AI conversation platform built with Node.js, Express, Groq API, and TiDB Cloud."
+  },
+  "fn": "Nikitha9n/CogniStream",
+  "sha": "desc::CogniStream — A full-stack AI conversation platform built with Node.js, Express, Groq API, and TiDB ",
+  "source": "desc",
+  "generated_at": "2026-10-31",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

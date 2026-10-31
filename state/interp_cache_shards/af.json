@@ -11899,5 +11899,82 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6c472f9470b9": {
+  "identity": {
+   "one_liner": "基于 LLM 工具调用的主动式个人 AI 聊天机器人，任务数据存 SQLite",
+   "review": "Papai 是一个自托管聊天机器人，接入 Telegram、Mattermost、Discord、Kontur Talk，通过 OpenAI 兼容 LLM 的工具调用实现自然语言任务管理，对接 Kaneo 和 YouTrack 工作项系统；平台实例、任务实例与凭证存于 SQLite，支持 cron 计划任务、MCP 外部工具和插件机制，适合想在群聊中用对话管理工作项的用户。",
+   "highlights": [
+    "通过 LLM tool-calling 提供任务的创建、搜索、评论、依赖关系等全生命周期操作",
+    "平台与任务实例数据存储在 SQLite，支持多实例部署",
+    "支持 MCP 协议接入外部工具及本地受信插件系统"
+   ],
+   "use_cases": [
+    "在 Telegram/Discord 等群聊中用自然语言管理 YouTrack/Kaneo 工作项",
+    "通过 cron 与延迟提示实现定时主动提醒与周期性任务",
+    "自托管部署的个人/团队 AI 助手，附带 Web 管理界面"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "services, not papai), `KANEO_POSTGRES_PASSWORD`, and `KANEO_AUTH_SECRET`.",
+     "lines": [
+      222
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Papai (**P**ersonal **A**droit **P**roactive **AI**) is a chat bot that enables natural language task management through any OpenAI-compatible LLM. Deploy it on Telegram, Mattermost, Discord, or Kontur Talk, connect it to Kaneo or YouTrack, and manage work thr ／ > LLM credentials are admin-owned and live in the `llm_providers` + `llm_admin_roles` SQLite tables. They are seeded from env vars on the first start that finds no provider configured, and can be managed later via the settings admin Providers + LLM Roles secti ／ > `CHAT_PROVIDER` seeds the first platform instance only when the platform instance table is empty. Task instances are never env-bootstrapped — create them via `/admin#instances` and approve the relevant task-provider plugin. After bootstrap, platform instance",
+     "lines": [
+      22,
+      114,
+      116
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储自身实例与配置数据的聊天机器人应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BSL 1.1",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Papai (**P**ersonal **A**droit **P**roactive **AI**) is a chat bot that enables natural language task management through any OpenAI-compatible LLM. Deploy it on Telegram, Mattermost, Discord, or Kontur Talk, connect it to Kaneo or YouTrack, and manage work through conversational task operations. Platform and task-provider instances are stored in SQLite after first bootstrap, so one deployment can manage multiple configured chat and task-provider instances. ／ > `CHAT_PROVIDER` seeds the first platform instance only when the platform instance table is empty. Task instances are never env-bootstrapped — create them via `/admin#instances` and approve the relevant task-provider plugin. After bootstrap, platform instances, task instances, and admins are managed from SQLite and the admin Instances surface (`/admin#instances`).",
+   "evidence_lines": [
+    22,
+    116
+   ]
+  },
+  "fn": "yourpapai/papai",
+  "sha": "6c472f9470b9",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

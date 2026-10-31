@@ -11819,5 +11819,130 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f5e980a8690b": {
+  "identity": {
+   "one_liner": "自托管地理空间数据目录，含语义搜索、OGC/STAC API 与地图构建器",
+   "review": "GeoLens 是一个自托管的空间数据目录与地图构建平台，将散落在文件、PostGIS 库、服务与 STAC 目录中的数据汇入统一可搜索目录，记录来源并检查更新状态，通过 OGC API 与 STAC 对外提供数据，供团队在浏览器中构建共享地图。以 Docker Compose 部署，数据由 PostgreSQL/PostGIS 存储，AI 功能默认关闭需管理员配置。",
+   "highlights": [
+    "支持上传多种矢量/栅格格式并可转换为 Cloud-Optimized GeoTIFF，导入 WFS、ArcGIS、OGC API Features 服务层",
+    "提供 OGC API Features/Records、STAC API、DCAT 端点及矢量瓦片/COG 瓦片 URL，附 CLI、Python/TypeScript SDK 与只读 MCP server",
+    "地图构建器支持点、热力图、聚类、3D 挤出、地形等图层类型及缓冲、裁剪、 dissolve 等空间运算"
+   ],
+   "use_cases": [
+    "团队集中管理分散在文件共享、数据库与网络服务中的空间数据",
+    "通过 OGC API/STAC 向 QGIS、ArcGIS 及脚本、AI agent 提供目录与数据访问",
+    "在浏览器中构建并共享带权限控制的专题地图与故事地图"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL and PostGIS hold the catalog and every vector dataset, and ／ replicas of the API, worker, frontend and Titiler against a managed PostgreSQL with automatic",
+     "lines": [
+      267,
+      248
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "GeoLens 是使用 PostgreSQL/PostGIS 与 pgvector 存储目录和矢量数据的应用程序，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Serve tables already in GeoLens's PostGIS database in place, import WFS, ArcGIS and OGC API ／ on your own servers with Docker Compose, sends no telemetry and is licensed under Apache 2.0. ／ curl -fsSL https://getgeolens.com/install.sh | sh    # clone, generate secrets, start the stack",
+   "evidence_lines": [
+    94,
+    33,
+    189
+   ]
+  },
+  "fn": "geolens-io/geolens",
+  "sha": "f5e980a8690b",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2381fb213402": {
+  "identity": {
+   "one_liner": "为 Agent 提供长期记忆与上下文换页的 RAG Skill 包",
+   "review": "这是一个面向 AI Agent 的 Skill 包，提供 RAG 长期记忆筛选注入、上下文工作集分区换页，以及带衰减、压缩、遗忘的生命周期管理机制。宿主需自行实现 RAGAdapter 接入 embedding、索引与模型接口，纯 Python 标准库实现。适合给 LLM Agent 项目加装记忆与上下文管理能力的开发者。",
+   "highlights": [
+    "RAG 按当前话题筛选、重排并主动注入记忆；上下文工作集分区换页",
+    "记忆生命周期管理：权重衰减、有损压缩、受控遗忘，状态层永不压缩",
+    "纯 Python 标准库实现（零第三方依赖），含 286 项离线单测"
+   ],
+   "use_cases": [
+    "为 LLM Agent 增加长期记忆与情绪关联管理",
+    "长对话场景下的上下文预算控制与换页",
+    "作为 Agent skills 目录中的记忆模块接入宿主框架"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是为 Agent 生态服务的记忆/上下文管理组件，宿主自行接入持久化与索引，README 未声明依赖某数据库存储数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**主打能力：RAG 长期记忆 + 上下文异构换页。** RAG 根据当前话题筛选、重排并主动注入记忆；上下文工作集将近期对话、状态、摘要、记忆和工具结果分区管理，按需换页，避免把整段历史一直累加到模型请求。 ／ > **给 Agent 用：** 这是一个 Skill 包。把 `es-memory-rag/` 整个目录放进你的 Agent 的 skills 目录即可。 ／  真实接通需要你自己实现 `RAGAdapter`（`upsert` / `delete` / `search` / `rerank` / `count`），",
+   "evidence_lines": [
+    13,
+    26,
+    76
+   ]
+  },
+  "fn": "unhuman1146/es-memory-rag",
+  "sha": "2381fb213402",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

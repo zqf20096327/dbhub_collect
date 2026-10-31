@@ -11043,5 +11043,78 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2bf7398f2202": {
+  "identity": {
+   "one_liner": "将八个 AI 编码渠道封装为 OpenAI 兼容 API 的凭证池网关",
+   "review": "该项目把 CodeBuddy、TRAE SOLO、Kilo 等八个上游渠道的凭证封装为 OpenAI / Responses / Anthropic 兼容 API，提供公共凭证池、健康度调度、会话粘性与用量统计。面向需要统一管理多个编码渠道凭证的团队或个人，内置管理台与三角色权限，账号与用户数据存 SQLite，README 声明其为逆向接口仅供学习研究。",
+   "highlights": [
+    "提供 OpenAI / Responses / Anthropic 兼容端点及统一模型名调度，支持模型级冷却与多轮会话粘同一凭证",
+    "提供管理台，包含三角色权限、审计日志、用量统计、月度账单与服务端日志查看",
+    "支持 Docker 与源码两种部署方式，账号与配置数据存 SQLite，凭证加密入库"
+   ],
+   "use_cases": [
+    "为团队统一管理多个 AI 编码渠道凭证并提供兼容 API 出口",
+    "按人统计用量、成本并导出月度账单",
+    "本地部署学习研究各上游渠道接口行为"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **三角色**：`admin` / `operator` / `viewer`，存 SQLite；一次性激活链接、首登强制改密、改角色 / 停用即时吊销会话；登录与写操作留审计。 ／ `scripts/create_user.py` 直写 SQLite（`--db` 或 `DATA_DIR`；默认 `data/coding2api.sqlite3`）。老部署 `secrets/users.txt` 启动导入一次，不覆盖已存在。",
+     "lines": [
+      15,
+      64
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明账号与用户数据存 SQLite，SQLite 仅作为该网关自身的存储依赖",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "八个上游——**CodeBuddy**（国内 + 国际）、**TRAE SOLO**、**OpenCode Zen**、**Kilo**、**Qoder**、**CodeArts**、**OfficeAce**——封装成 OpenAI 兼容 API：公共凭证池、统一模型名与调度、按人用量统计。 ／ - **三角色**：`admin` / `operator` / `viewer`，存 SQLite；一次性激活链接、首登强制改密、改角色 / 停用即时吊销会话；登录与写操作留审计。 ／ `scripts/create_user.py` 直写 SQLite（`--db` 或 `DATA_DIR`；默认 `data/coding2api.sqlite3`）。老部署 `secrets/users.txt` 启动导入一次，不覆盖已存在。",
+   "evidence_lines": [
+    3,
+    15,
+    64
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "RobbsLuo/Coding2API",
+  "sha": "2bf7398f2202",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

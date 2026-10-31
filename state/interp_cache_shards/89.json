@@ -10768,5 +10768,75 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c932ed4b5e82": {
+  "identity": {
+   "one_liner": "基于标签的文件整理与搜索系统，用 Flask 和 SQLite 构建",
+   "review": "Etiquette 是一个标签式文件整理系统，用层级标签替代文件夹归类文件并支持搜索，磁盘文件不被修改。后端为 Python 包，前端含 Flask 网页、CLI 和 REPL，数据存于本地 SQLite 数据库，添加文件时会计算 SHA256 哈希以检测重命名或移动。适合想在本地管理照片等个人文件集合的用户；项目自称尚未有版本号，破坏性变更常见。",
+   "highlights": [
+    "支持层级标签，父标签搜索可自动包含子标签命中的文件",
+    "提供 CLI、Flask 网页和 REPL 多种前端接口，共享同一后端包",
+    "通过 SHA256 哈希检测文件重命名或移动，文件本体不被修改"
+   ],
+   "use_cases": [
+    "对照片等本地媒体文件做标签化管理与搜索",
+    "需要一个文件可同时属于多个分类的场景",
+    "通过 CLI 脚本批量同步数据库与磁盘文件状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Etiquette is a tag-based file organization system with a web interface, built with Flask and SQLite3. Tag-based systems solve problems that a traditional folder hierarchy can't: *which folder should a file go in if it equally belongs in both?* and *how do I ma",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统用 SQLite3 存储自身数据库，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Etiquette is a tag-based file organization system with a web interface, built with Flask and SQLite3. Tag-based systems solve problems that a traditional folder hierarchy can't: *which folder should a file go in if it equally belongs in both?* and *how do I make my files searchable without littering the filenames themselves with keywords?* ／ In order to prevent the accidental creation of Etiquette databases, you must first use `etiquette_cli.py init` to create your database. ／ You may notice that Etiquette doesn't have a version number anywhere. That's because I don't think it's ready for one. I am using this project to learn and practice, and breaking changes are very common.",
+   "evidence_lines": [
+    5,
+    31,
+    151
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "voussoir/etiquette",
+  "sha": "c932ed4b5e82",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

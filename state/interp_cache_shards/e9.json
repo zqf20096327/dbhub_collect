@@ -13104,5 +13104,170 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a1f4c978d05a": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的跨会话记忆插件，用本地 SQLite 存储",
+   "review": "dsh-memento 是面向 DeepSeek Harness 开发者的跨会话记忆插件，提供类型化 ctx.memory 接口、memory 工具和注入系统提示的冻结快照。所有写入须经审批门控并生成可重建的审计记录，数据以只读方式打开的本地 SQLite 数据库存放（0600 权限、无网络），内置字符预算与分层隔离机制，通过 dsh plugin 命令安装。",
+   "highlights": [
+    "提供写入审批门控与可重建的审计轨迹，支持 add/replace/remove/seed 写路径",
+    "使用本地 SQLite（node:sqlite，WAL，0600 权限）存储，零网络、零凭据",
+    "按 user/agent 两条轨道、全局/工作区两层及 per-agent 键隔离，快照每会话冻结一次"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness 会话添加跨会话记忆能力",
+    "需要审批门控与审计记录的 AI 代理记忆管理",
+    "本地离线环境下管理用户/代理环境事实的分层数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected int ／ **Read-only.** The database is opened with `node:sqlite` `readOnly: true` (no migrations, no WAL writes, no recall-count bump); a missing database returns empty results instead of crashing. ／ - **Data**: local SQLite database (`0600`), zero network, zero credentials.",
+     "lines": [
+      72,
+      207,
+      275
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该插件将 SQLite 用作自身记忆数据的本地存储层，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0（DSH 插件家族 95 个插件均为 Apache-2.0）",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected into the system prompt.",
+   "evidence_lines": [
+    72
+   ]
+  },
+  "fn": "PerryLink/dsh-memento",
+  "sha": "a1f4c978d05a",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "afc50b69b0a6": {
+  "identity": {
+   "one_liner": "自托管 OTLP 接收器与可观测性面板，存储遥测数据",
+   "review": "这是一个接收 traces、logs、metrics 的自托管 OTLP 面板，通过 gRPC(:4317) 和 HTTP(:4318) 摄取遥测数据，用 .NET 10 + EF Core 后端和 Vue 3 / Nuxt 4 前端实现，数据存入 SQLite（默认）、PostgreSQL 或 SQL Server。面向需要轻量级自托管可观测性方案的开发者与运维人员，内置令牌鉴权、数据保留策略、widget 仪表盘组装，并可选启用 MCP 只读服务器供 LLM 客户端查询。",
+   "highlights": [
+    "通过 OTLP gRPC :4317 和 OTLP HTTP/Protobuf :4318 端点接收 traces、logs、metrics",
+    "存储提供者可配置为 SQLite（默认）、PostgreSQL 或 SQL Server",
+    "内置可选的只读 MCP 服务器（/mcp），供 Claude Code 等 LLM 客户端查询面板数据"
+   ],
+   "use_cases": [
+    "自托管环境中接收并查看应用的 traces/logs/metrics 遥测数据",
+    "通过 OpenTelemetry Collector 推送遥测并用仪表盘可视化",
+    "让 LLM 客户端（Claude Code 等）通过 MCP 只读查询遥测数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, or SQL Server. Speaks OTLP gRPC on `:4317` and OTLP ／ The bundled `docker-compose.yml` starts the dashboard against Postgres plus a ／ (`demo/packs/default-dashboard/`), and the Collector config. To run only the dashboard against an external Postgres / SQL Server,",
+     "lines": [
+      11,
+      30,
+      46
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": ".NET 10 + EF Core backend, Vue 3 / Nuxt 4 SPA. Stores telemetry in SQLite, ／ The backend runs migrations on every boot, so the SQLite file appears at ／ Dashboard__Storage__Provider=Sqlite # default",
+     "lines": [
+      10,
+      60,
+      129
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "PostgreSQL, or SQL Server. Speaks OTLP gRPC on `:4317` and OTLP ／ (`demo/packs/default-dashboard/`), and the Collector config. To run only the dashboard against an external Postgres / SQL Server,",
+     "lines": [
+      11,
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确说明该应用将遥测数据存储于 SQLite、PostgreSQL 或 SQL Server，数据库是其数据存储层而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A self-hosted OTLP receiver and viewer for traces, logs, and metrics. ／ .NET 10 + EF Core backend, Vue 3 / Nuxt 4 SPA. Stores telemetry in SQLite, ／ Dashboard__Storage__Provider=Sqlite        # default",
+   "evidence_lines": [
+    9,
+    10,
+    129
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Adiakys/OtlpDashboard",
+  "sha": "afc50b69b0a6",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10714,5 +10714,132 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0a0d099ccd4f": {
+  "identity": {
+   "one_liner": "JVM 上的 SQL 语句解析器，将 SQL 转为可遍历的 Java AST",
+   "review": "JSqlParser 用一份语法解析 SQL 语句并生成 Java 类层级（AST），支持 Visitor 遍历、反向构建与回写 SQL 文本，并提供语句特征分类 API。面向需要在 JVM 上解析、重写或校验 SQL 的开发者，涵盖标准 SQL 及多方言扩展。运行需 JDK 11+，4.9 为最后的 JDK 8 版本，采用 LGPL 2.1 / Apache 2.0 双许可。",
+   "highlights": [
+    "将 SQL 解析为可遍历的 Java 对象树，支持 Visitor 模式与 fluent API 反向生成 SQL",
+    "单语法覆盖多方言，含 MySQL 账户/表维护、PostgreSQL RLS/所有权、Oracle VECTOR 等 SQL 方言扩展",
+    "提供语句特征分类 API，以三值逻辑（proven/may/ruled out）判定语句是否返回行或修改数据"
+   ],
+   "use_cases": [
+    "在 Java 应用中解析、遍历或重写 SQL 语句",
+    "在语句到达数据库前做只读校验或语句分派",
+    "方言级 SQL 语法扩展解析（如 Oracle 提示、T-SQL 方括号歧义、PostgreSQL dollar-quoted 字符串）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`PostgreSQL` · `MySQL` · `MariaDB` · `DB2` · `H2` · `HSQLDB` · `Derby` · `SQLite` ／ |**PostgreSQL ownership**|`DROP OWNED` · `REASSIGN OWNED`| ／ |**Tablespaces**|MySQL and PostgreSQL `CREATE TABLESPACE` · `ALTER TABLESPACE`|",
+     "lines": [
+      103,
+      114,
+      117
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`PostgreSQL` · `MySQL` · `MariaDB` · `DB2` · `H2` · `HSQLDB` · `Derby` · `SQLite` ／ |**MySQL table maintenance**|`ANALYZE` · `CHECK` · `CHECKSUM` · `OPTIMIZE` · `REPAIR TABLE`| ／ |**MySQL account management**|`CREATE`/`ALTER`/`RENAME USER` · `CREATE ROLE` · `SET ROLE` · `SET DEFAULT ROLE` · `SET PASSWORD`|",
+     "lines": [
+      103,
+      115,
+      116
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "`BigQuery` · `Snowflake` · `DuckDB` · `Redshift` · `Oracle` · `MS SQL Server` · `Sybase` ／ |**Oracle RETURNING**|Named output binds (`INTO :name`), JDBC output parameters (`INTO ?`), and `BULK COLLECT INTO`| ／ |**Oracle vector types**|`VECTOR(*, *)` · `VECTOR(*, FLOAT32)` · `VECTOR(3, *)`, including dense and sparse storage formats|",
+     "lines": [
+      102,
+      111,
+      113
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`PostgreSQL` · `MySQL` · `MariaDB` · `DB2` · `H2` · `HSQLDB` · `Derby` · `SQLite`",
+     "lines": [
+      103
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "`BigQuery` · `Snowflake` · `DuckDB` · `Redshift` · `Oracle` · `MS SQL Server` · `Sybase`",
+     "lines": [
+      102
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**ClickHouse column selection**|`COLUMNS('regexp')` select items with chained `APPLY`, `EXCEPT`, and `REPLACE` transformers|",
+     "lines": [
+      109
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "`PostgreSQL` · `MySQL` · `MariaDB` · `DB2` · `H2` · `HSQLDB` · `Derby` · `SQLite`",
+     "lines": [
+      103
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQL/数据库生态提供解析与语法分析能力的库，本身不存储数据也不依赖具体数据库实例运行",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "LGPL 2.1 或 Apache License 2.0 双许可",
+   "install": [
+    "pypi",
+    "source"
+   ],
+   "install_note": ""
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Turn any SQL statement into a traversable tree of Java objects -- and back again. ／  An RDBMS-agnostic SQL parser for the JVM: one grammar, twelve dialects, no native extensions. ／ `PostgreSQL` · `MySQL` · `MariaDB` · `DB2` · `H2` · `HSQLDB` · `Derby` · `SQLite`",
+   "evidence_lines": [
+    2,
+    3,
+    103
+   ]
+  },
+  "fn": "JSQLParser/JSqlParser",
+  "sha": "0a0d099ccd4f",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

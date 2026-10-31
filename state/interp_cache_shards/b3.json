@@ -11836,5 +11836,77 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "246982817ff8": {
+  "identity": {
+   "one_liner": "基于 Airflow/Docker/PostgreSQL 的天气数据 ETL 管线项目",
+   "review": "这是一个数据工程实践项目：用 Apache Airflow 定时调度 DAG，从 OpenWeatherMap API 抓取英国多城市的天气数据，经 psycopg2 写入 PostgreSQL 的 weather 表，并通过 pgAdmin 与 Metabase 查看与可视化。适合学习 ETL 流程或复用同构管道的人；部署依赖 Docker Compose，敏感配置放 .env 且不入库。",
+   "highlights": [
+    "每日调度（@daily）从 OpenWeatherMap API 抓取英国 10 个城市的温度、湿度、天气描述并写入 PostgreSQL weather 表",
+    "通过 Docker Compose 一键启动 Airflow、PostgreSQL、pgAdmin、Metabase 全套环境并分配本地端口",
+    "提供 psql 验证命令与 Metabase 仪表盘（城市平均温度/湿度、温度趋势、天气分布）"
+   ],
+   "use_cases": [
+    "学习或复用 Airflow 定时 ETL 管线的搭建方式",
+    "天气数据的定时采集与入库",
+    "配合 pgAdmin/Metabase 做数据查看与可视化分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Projet de Data Engineering réalisé avec Apache Airflow, Docker, PostgreSQL, pgAdmin, Metabase et l’API OpenWeatherMap ／ Construire un pipeline ETL automatisé qui récupère des données météorologiques depuis l’API OpenWeatherMap, les stocke dans PostgreSQL et les visualise dans Metabase. ／ * PostgreSQL 13",
+     "lines": [
+      3,
+      7,
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目本身是以 PostgreSQL 为存储的数据分析管线/应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Construire un pipeline ETL automatisé qui récupère des données météorologiques depuis l’API OpenWeatherMap, les stocke dans PostgreSQL et les visualise dans Metabase. ／ Les données sont ensuite insérées dans la table PostgreSQL `weather`. ／ docker compose up -d",
+   "evidence_lines": [
+    7,
+    58,
+    121
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "datasifaw/airflow-weather-pipeline",
+  "sha": "246982817ff8",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

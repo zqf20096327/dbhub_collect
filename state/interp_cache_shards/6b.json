@@ -11132,5 +11132,95 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b117f01a4273": {
+  "identity": {
+   "one_liner": "基于 .NET 10 与 Vue 3 的前后端分离后台管理系统",
+   "review": "一套前后端分离的后台管理系统，内置用户、角色、菜单、部门、岗位等权限组织模块，并集成任务调度、邮件、日志等功能。面向中后台与内部业务系统开发者，可复用其 CRUD 组件扩展业务。数据层经 SqlSugar 支持 SQLite、MySQL、SQL Server，通用配置默认 SQLite，开发配置使用 MySQL 主库。",
+   "highlights": [
+    "通过 SqlSugar 支持 SQLite / MySQL / SQL Server 存储，首次启动自动建表并写入种子数据",
+    "内置 RBAC 权限控制，含角色、菜单、按钮权限与五种数据范围",
+    "集成 JWT 会话认证、密码 RSA 加密传输与登录失败锁定"
+   ],
+   "use_cases": [
+    "快速搭建需要 RBAC 与组织管理的后台系统",
+    "基于内置模块与组件扩展内部业务系统",
+    "作为前后端分离架构的开发参考示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|数据与缓存|SqlSugar、SQLite / MySQL / SQL Server、进程内缓存 / Redis| ／ 通用配置使用 SQLite 和进程内缓存；启动默认采用 `Development` 环境，环境文件会覆盖通用配置，当前开发配置使用 MySQL 主库和 SQLite 日志库。启动前核对 通用配置 与 开发配置，确认目标数据库可用；需要使用 SQLite 主库时，同步调整主库 ID 与启用的连接项。数据库初始化默认开启，首次启动后端会创建表结构并写入种子数据，配置加载与初始化规则见 后端开发。",
+     "lines": [
+      62,
+      85
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|数据与缓存|SqlSugar、SQLite / MySQL / SQL Server、进程内缓存 / Redis| ／ 通用配置使用 SQLite 和进程内缓存；启动默认采用 `Development` 环境，环境文件会覆盖通用配置，当前开发配置使用 MySQL 主库和 SQLite 日志库。启动前核对 通用配置 与 开发配置，确认目标数据库可用；需要使用 SQLite 主库时，同步调整主库 ID 与启用的连接项。数据库初始化默认开启，首次启动后端会创建表结构并写入种子数据，配置加载与初始化规则见 后端开发。",
+     "lines": [
+      62,
+      85
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|数据与缓存|SqlSugar、SQLite / MySQL / SQL Server、进程内缓存 / Redis|",
+     "lines": [
+      62
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用数据库存储自身数据的后台管理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0，移除版权标识需购买商用授权",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Ape-Volo-Admin 是一套基于 .NET 10、Vue 3 和 TypeScript 的前后端分离后台管理系统，面向管理后台与内部业务系统开发。项目内置用户、角色、菜单、部门和岗位管理，集成认证授权、数据权限、文件管理、任务调度、邮件与日志等常用功能。开发者可以复用现有业务模块及 CRUD、表格、表单组件，扩展自己的业务功能。 ／ |数据与缓存|SqlSugar、SQLite / MySQL / SQL Server、进程内缓存 / Redis| ／ 通用配置使用 SQLite 和进程内缓存；启动默认采用 `Development` 环境，环境文件会覆盖通用配置，当前开发配置使用 MySQL 主库和 SQLite 日志库。启动前核对 通用配置 与 开发配置，确认目标数据库可用；需要使用 SQLite 主库时，同步调整主库 ID 与启用的连接项。数据库初始化默认开启，首次启动后端会创建表结构并写入种子数据，配置加载与初始化规则见 后端开发。",
+   "evidence_lines": [
+    35,
+    62,
+    85
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "xianhc/ape-volo-admin",
+  "sha": "b117f01a4273",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

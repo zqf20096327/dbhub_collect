@@ -10498,5 +10498,91 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "94993e351fd7": {
+  "identity": {
+   "one_liner": "Rails 审计追踪 gem，记录模型变更并默认脱敏",
+   "review": "SealedTrail 是一个 Ruby gem，为 Rails/Active Record 模型提供审计追踪：记录 create/update/destroy 的前后值、操作者、请求 id 和 IP，支持 update_all 等批量操作的摘要记录，并默认对密码、token、邮箱等敏感字段脱敏。审计条目与业务变更写入同一数据库事务。适用于需要产出 SOC 2、HIPAA、GDPR 审计证据的 Rails 团队；要求 Ruby 3.2+、Rails 7.1+。",
+   "highlights": [
+    "通过 has_sealed_trail 记录模型 create/update/destroy 及批量操作，条目与业务变更同事务写入",
+    "默认按属性名匹配脱敏密码、token、密钥、邮箱、电话等字段，支持 fingerprint/mask 等策略",
+    "自动捕获操作者（current_user、后台任务、rake、console），Active Job 任务继承请求中的 actor"
+   ],
+   "use_cases": [
+    "为 SOC 2、HIPAA、GDPR 等审计准备数据变更证据",
+    "对含敏感个人信息（邮箱、电话、密码）的 Rails 应用做默认脱敏的变更日志",
+    "追踪批量操作（update_all/delete_all/insert_all）及后台任务中的数据变更"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL, MySQL 8+ (`mysql2` or `trilogy` adapter) or SQLite ／ - Supported databases are PostgreSQL, MySQL 8+ and SQLite.",
+     "lines": [
+      30,
+      341
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- PostgreSQL, MySQL 8+ (`mysql2` or `trilogy` adapter) or SQLite ／ - Supported databases are PostgreSQL, MySQL 8+ and SQLite.",
+     "lines": [
+      30,
+      341
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- PostgreSQL, MySQL 8+ (`mysql2` or `trilogy` adapter) or SQLite ／ - Supported databases are PostgreSQL, MySQL 8+ and SQLite.",
+     "lines": [
+      30,
+      341
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是一个为 Rails 应用提供数据库审计功能的 gem，通过 Active Record 适配多种数据库，属于服务于数据库生态的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**An audit trail for Rails: who changed what, when, and from where.** ／ SealedTrail records every create, update and destroy on the Active Record models ／ - PostgreSQL, MySQL 8+ (`mysql2` or `trilogy` adapter) or SQLite",
+   "evidence_lines": [
+    5,
+    7,
+    30
+   ]
+  },
+  "fn": "steadybytehq/sealed_trail",
+  "sha": "94993e351fd7",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11679,5 +11679,72 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "34ae44b24322": {
+  "identity": {
+   "one_liner": "树莓派单二进制监控工具，采集系统指标存入 SQLite 并提供仪表盘与告警",
+   "review": "Vigil 是一个面向 Raspberry Pi 的单二进制系统监控工具，用 Go 编写，采集 CPU、内存、磁盘、网络、温度、节流等指标，以 WAL 模式写入本地 SQLite，并通过 TUI 仪表盘展示，支持阈值与变化率告警，可经 Discord/webhook/ntfy.sh 通知，也可 Docker 部署并以 --once --json 输出供脚本集成。适合自托管 homelab 用户，不依赖第三方云服务。",
+   "highlights": [
+    "采集 CPU、内存、磁盘、网络、温度、节流、容器等指标，以 WAL 模式持久化到 SQLite，支持保留期配置与批量写入",
+    "支持阈值与变化率告警规则，可通过 Discord、webhook、ntfy.sh 通知，含静默时段设置",
+    "提供 TUI 仪表盘与 headless 模式，支持 --once --json 单次输出用于脚本与集成"
+   ],
+   "use_cases": [
+    "树莓派/homelab 的长期系统指标监控与告警",
+    "Docker 容器、挂载点、HTTP/TCP 服务的健康检查",
+    "通过 cron 或脚本定时采集 JSON 格式指标快照"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Persistent storage** — SQLite (WAL mode), configurable retention, batched writes ／ This mode does not start the TUI, write SQLite data, evaluate alerts, send notifications, or run background collection loops. The output is a single JSON object with stable snake_case fields such as `cpu.percent_total`, `memory.percent`, `disks[].percent`, `lo ／ |`db_path`|`/data/vigil.db`|SQLite database path|",
+     "lines": [
+      19,
+      63,
+      113
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该监控工具自身的本地持久化存储，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Persistent storage** — SQLite (WAL mode), configurable retention, batched writes ／ |`db_path`|`/data/vigil.db`|SQLite database path|",
+   "evidence_lines": [
+    19,
+    113
+   ]
+  },
+  "fn": "baudsmithstudios/vigil",
+  "sha": "34ae44b24322",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

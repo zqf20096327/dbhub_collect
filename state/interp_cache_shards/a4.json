@@ -10215,5 +10215,128 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3b36da27f728": {
+  "identity": {
+   "one_liner": "Django/SQLAlchemy ORM 静态分析工具，提供 ER 图、N+1 检测与迁移风险检查",
+   "review": "orm-lens 通过静态解析 Django 与 SQLAlchemy（含 Alembic）模型代码，生成 ER 图、检测 N+1 循环、schema drift 和迁移风险，并提供 18 条 lint 规则、factory_boy 脚手架与 13 个只读 MCP 工具。面向 Django/SQLAlchemy 开发者，支持 VS Code 扩展、CLI 与 AI 代理三种使用形态，无需数据库或启动应用，要求 Python 3.9+。",
+   "highlights": [
+    "纯静态分析：解析 models.py 与迁移文件，无需数据库连接或应用启动",
+    "提供 CLI（17 个子命令）、VS Code 扩展与 MCP server 三种形态，支持 SARIF 与 PR 注解",
+    "生成 Mermaid ER 图、N+1 检测、schema drift 检测与迁移 blast-radius 分析"
+   ],
+   "use_cases": [
+    "在编辑器或 CI 中审查 Django/SQLAlchemy 项目的模型结构与 schema 变更风险",
+    "检测代码中的 N+1 查询模式并获取 select_related/selectinload 修改建议",
+    "通过 MCP 让 AI 编码代理读取项目的 schema 信息"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为使用 Django/SQLAlchemy ORM 的开发流程提供分析与 lint 工具，本身不存储数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### ER diagrams, N+1 detection and migration-risk checks for Django and SQLAlchemy — without booting either. ／ Your entire model graph — live in your editor sidebar, gating your CI, and answering your AI agent over MCP. All from static parsing: no database, no `runserver`, no working venv. Django models and migrations, SQLAlchemy models and Alembic revisions. ／ |**AI-agent user** — Cursor / Claude Code / Aider / Zed / Continue|`pip install \"orm-lens[mcp]\"`|13 read-only MCP tools answering schema questions from ground truth|",
+   "evidence_lines": [
+    7,
+    9,
+    44
+   ]
+  },
+  "fn": "FROWNINGdev/orm-lens",
+  "sha": "3b36da27f728",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dea983bc013d": {
+  "identity": {
+   "one_liner": "PHP+SQLite 的自托管列表式文件上传站",
+   "review": "一个自托管的列表式文件上传器，用于替代已宣布停止服务的 uploader.jp，以编号列表形式展示和管理文件，仅需 PHP 和 SQLite，无需独立数据库服务器。面向个人或社团，适合为游戏 MOD、素材等提供文件分发。内置管理界面、S3 兼容存储支持以及从 uploader.jp 迁移数据的工具。",
+   "highlights": [
+    "仅依赖 PHP 与 pdo_sqlite 运行，不需要数据库服务器",
+    "支持将文件保存到 S3 兼容存储（Backblaze B2、Cloudflare R2、Wasabi 等）",
+    "附带从 uploader.jp 备份并导入数据的迁移工具"
+   ],
+   "use_cases": [
+    "为游戏 MOD、社团素材等提供编号列表式文件分发站点",
+    "uploader.jp 关停后自托管迁移原有文件列表",
+    "需要删除密钥、下载密码、上传审核等基础运营功能的文件分享"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`pdo_sqlite`、`fileinfo`、`mbstring`、`curl`、`openssl` が必要です。 ／ 5. **`https://あなたのサイト/data/uploader.sqlite` を開いて 403 になることを必ず確認**（中身が見えたらサーバー設定の誤りです）",
+     "lines": [
+      60,
+      81
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其是用 SQLite 保存数据的上传站点应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "「ゲームのMOD・シナリオ置き場」「サークルの素材置き場」のように、**1つの目的のためのファイルを番号付きの一覧で並べる**アップローダーを、自分のサーバーに設置できます。PHP だけで動き、データベースサーバーは要りません。 ／ `pdo_sqlite`、`fileinfo`、`mbstring`、`curl`、`openssl` が必要です。 ／ `data/` フォルダを丸ごとコピーすればすべてです（DB・ファイル・設定テキスト）。S3保存の場合は、ファイル本体があるバケットも合わせてバックアップしてください。",
+   "evidence_lines": [
+    7,
+    60,
+    171
+   ]
+  },
+  "fn": "PYU224/likegetuploader",
+  "sha": "dea983bc013d",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

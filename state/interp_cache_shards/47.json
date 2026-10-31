@@ -11304,5 +11304,77 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a75d07d8e386": {
+  "identity": {
+   "one_liner": "自托管多 Agent PR 审查工作台，汇集审查发现并由维护者受控合并",
+   "review": "MergePilot 通过 GitHub App/Gitee 连接接入仓库，将 PR 审查发现、修复建议与验证证据汇集到自托管 Console，维护者逐次确认后执行评论、修复提交或合并。面向需要审查留痕的维护者团队。部署依赖 Docker Compose 与 PostgreSQL（含 pgvector），Beta 版无 RLS/SSO/HA，当前处于事件响应维护状态。",
+   "highlights": [
+    "四类 Agent 角色（Reviewer/Fixer/Verifier/Leader）协作产出审查发现与验证证据",
+    "合并需统一资格门：审查完成、CI 通过、mergeable 已知，且不绕过平台分支保护",
+    "支持可选本地 RAG 知识库与 LLM 出站脱敏配置，LLM 未配置时默认不发网络请求"
+   ],
+   "use_cases": [
+    "需要审查留痕与人工最终裁决的开源/私有仓库 PR 审查",
+    "团队规范知识库辅助代码审查（本地 RAG 检索）",
+    "自托管场景下对接 GitHub/Gitee 的受控修复与合并流程"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "rc.35.6-rc8.4.1 官方 index digest（pgvector 与 bge-sidecar digest 亦已钉死）——升级时按 ／ - **Beta 不含企业能力**：无 PostgreSQL RLS、SSO/SCIM、HA 或配额限流；当前多租户隔离在应用层实施。",
+     "lines": [
+      66,
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "部署包 pin pgvector 镜像且提及 PostgreSQL RLS 能力边界，说明其自身以 PostgreSQL 存储数据。",
+   "persona": "ops",
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "rc.35.6-rc8.4.1 官方 index digest（pgvector 与 bge-sidecar digest 亦已钉死）——升级时按 ／ - **Beta 不含企业能力**：无 PostgreSQL RLS、SSO/SCIM、HA 或配额限流；当前多租户隔离在应用层实施。",
+   "evidence_lines": [
+    66,
+    88
+   ]
+  },
+  "fn": "nghqqa/MergePilot",
+  "sha": "a75d07d8e386",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11459,5 +11459,75 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f5167772671a": {
+  "identity": {
+   "one_liner": "将 Apple Health 数据同步到本地并通过 MCP 提供给 AI 助手的桥接工具",
+   "review": "由 iPhone 应用与自托管 Receiver/CLI 组成，把 HealthKit 授权的记录自动同步到用户自己的 macOS/Linux 电脑，本地存储并以 MCP 服务器形式供 Claude Desktop、Cursor 等 AI 客户端只读查询睡眠、运动等健康数据。数据保留在本机、查询只读，需 iOS 18+ 与常开接收端，README 明确使用 SQLite 存储记录。",
+   "highlights": [
+    "提供 iOS App 与 Receiver/CLI，自动同步 Apple Health 记录到用户本地计算机",
+    "以 MCP 服务器形式向多种 AI 客户端提供健康历史查询",
+    "健康访问与 MCP 查询为只读，记录存储在用户本地",
+    "提供批量协议与 SQLite schema 等架构文档"
+   ],
+   "use_cases": [
+    "向 AI 助手询问睡眠、运动、活动等个人健康数据",
+    "构建自定义 agent 工作流读取本地健康历史",
+    "自托管场景下本地化保存健康记录"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Understand and build:** Architecture · Compatibility · Batch protocol · SQLite schema · Brand guide",
+     "lines": [
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目为存取健康数据的应用，README 在文档中声明其本地存储采用 SQLite schema（L74），SQLite 是其存储依赖而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Apple Health AI Bridge connects Apple Health to MCP-compatible assistants. The iPhone app syncs the records you allow to your own computer, where your AI can query sleep, workouts, activity, and more. ／ 2. **Set up the receiver.** Install the published Receiver/CLI 1.1.5 using its tagged setup guide, including a private HTTPS route for sync away from home. ／ - **Understand and build:** Architecture · Compatibility · Batch protocol · SQLite schema · Brand guide",
+   "evidence_lines": [
+    17,
+    28,
+    74
+   ]
+  },
+  "fn": "roian6/apple-health-ai-bridge",
+  "sha": "f5167772671a",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

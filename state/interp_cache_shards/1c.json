@@ -12214,5 +12214,129 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dfd15f27d62c": {
+  "identity": {
+   "one_liner": "Moqui Java 框架的 Rust 重写版，含内嵌 Postgres 的 Web 服务器",
+   "review": "该仓库是 Moqui 企业应用框架的 Rust 重建版本，提供 Web 服务器、实体/服务 facade、屏幕渲染及 QuickJS 脚本引擎，默认使用内嵌 Postgres（postgresql_embedded），也可配置外部 Postgres，OpenSearch 为可选组件。适用于构建 Mantle、Marble ERP 等企业应用的 Java Moqui 用户迁移或新项目开发；项目处于持续建设中，部分 Java 功能尚未移植完成。",
+   "highlights": [
+    "默认使用内嵌 Postgres（postgresql_embedded），支持配置外部 Postgres（L47）",
+    "通过 `./moq` 脚本完成 build/load/run 三个阶段，构建 Dev/Release 二进制并运行（L6-L8）",
+    "搜索后端默认采用 Postgres 全文检索和 JSON 操作符，OpenSearch 为可选（L48、L56）"
+   ],
+   "use_cases": [
+    "在 Linux/macOS 上从源码构建并运行 Moqui 框架的 Rust 实现（L11）",
+    "将 Moqui Java 部署或组件迁移到 Rust 运行时（L76）",
+    "以 XML 为规格语言、JavaScript 为脚本/模板语言开发企业应用（L44-L46）"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It needs Rust 1.98 or newer and bash, on Linux or macOS (Build). This builds the Dev binary (target/develop/moqui: the web server on embedded Postgres, PDF, SMTP, git hosting, SSH and the dev tools) and uses it to load data and run. Add `--release` to each of  ／ - Default to an embedded Postgres (`postgresql_embedded`, theseus) when no external database is configured, and use an external Postgres when one is. The same engine backs the sim-mode overlay. ／ - Make OpenSearch optional from day one by planning a search interface that can be satisfied by Postgres full-text search and JSON operators.",
+     "lines": [
+      11,
+      47,
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述其为重建的企业应用框架（含 Web 服务器、entity/service facade、内嵌 Postgres 运行），是构建其他应用的平台而非某一数据库的专用生态工具，也非仅使用数据库的单一应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "It needs Rust 1.98 or newer and bash, on Linux or macOS (Build). This builds the Dev binary (target/develop/moqui: the web server on embedded Postgres, PDF, SMTP, git hosting, SSH and the dev tools) and uses it to load data and run. Add `--release` to each of the 3 commands to build and use the release binary with the full toolset included: SSH/SFTP, OAuth2/OIDC, SMTP/IMAP/POP, Git, XLSX, and image processing. To deploy to a server, a container or a cluster, see Run and Deploy. ／ |mr-moqui|The framework, the `moq` script, the base components (`runtime/base-component`: framework, tools, webroot), and the dev components (`runtime/dev-component`: dev-aide, example, the demo lock-down, and the component template)|A Rust rebuild of Moqui Java (moqui-framework and moqui-runtime), started 2026-10-09| ／ - Default to an embedded Postgres (`postgresql_embedded`, theseus) when no external database is configured, and use an external Postgres when one is. The same engine backs the sim-mode overlay.",
+   "evidence_lines": [
+    11,
+    34,
+    47
+   ]
+  },
+  "fn": "moqui/mr-moqui",
+  "sha": "dfd15f27d62c",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "be64679b296a": {
+  "identity": {
+   "one_liner": "慕尼黑交通数据 AI 分析教程，Exasol+代理+Dash Server",
+   "review": "这是一个动手教程仓库，教你把慕尼黑开放交通与人口数据加载到本地 Exasol 数据库，再通过 MCP 连接 Codex 或 Claude Code 等 AI 编码代理生成 SQL 和一系列实时仪表盘，回答公共交通服务水平类规划问题。面向想学习 AI 辅助数据分析的用户，前提是安装 Exasol Personal Local Starter Kit，v5 助手需 OpenAI API key。",
+   "highlights": [
+    "以教程形式提供从数据加载到仪表盘的 10 个步骤",
+    "通过 MCP 将 AI 编码代理连接到 Exasol 数据库与 Dash Server",
+    "数据集为 18 MB zip，可从仓库 Releases 页下载，并提供脚本从开放数据门户重建"
+   ],
+   "use_cases": [
+    "学习 AI 辅助数据分析工作流",
+    "基于慕尼黑开放数据做公共交通可达性分析",
+    "实践 Exasol Personal 本地环境与 MCP 集成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 说明将慕尼黑开放数据加载进 Exasol 数据库存数据并据此构建仪表盘，属于使用数据库的应用/教程。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "You load open data from the City of Munich into a local Exasol database on your laptop. Then you work with an AI coding agent, Codex or Claude Code, to build a series of live dashboards that answer one planning question, step by step: ／ 1. Set up the Exasol Personal Local Starter Kit: database, Dash Server, your agent connected over MCP ／ 2. Load the Munich data: download the zip, load it with `exakit data-load`",
+   "evidence_lines": [
+    7,
+    15,
+    16
+   ]
+  },
+  "fn": "exasol-labs/munich-mobility-planning-agents",
+  "sha": "be64679b296a",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

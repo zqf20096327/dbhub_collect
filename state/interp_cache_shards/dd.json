@@ -10453,5 +10453,98 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0844e10e9b47": {
+  "identity": {
+   "one_liner": "基于 DuckDB 的本地优先跨源 SQL 数据工作台",
+   "review": "DuckQuery 是一个基于 DuckDB 引擎的桌面/Web 数据工作台，用于将本地 CSV/Excel/Parquet/JSON 文件导入为可查询表，并与 MySQL、PostgreSQL、SQLite、DuckDB 等外部库做跨源关联查询，支持可视化查询、图表、异步任务与导出；面向需要临时对账、跨源核查和数据探索的分析人员。可选启用 text-to-SQL 智能体，并通过 MCP 服务接入 Claude Code 等工具；应用无多用户鉴权。",
+   "highlights": [
+    "支持 CSV/Excel/Parquet/JSON 导入并与 MySQL、PostgreSQL、SQLite、DuckDB 跨源关联查询，含 MySQL 条件下推优化",
+    "提供多标签 SQL 编辑器、可视化关联/透视表、图表、异步任务与多格式导出",
+    "提供 AI 问数（text-to-SQL）与 MCP 服务，含只读/普通/完全三种权限模式"
+   ],
+   "use_cases": [
+    "用 Excel 等本地文件与业务数据库做临时对账与跨源核查",
+    "不搭数仓的本地数据探索与可视化分析",
+    "通过 MCP 让 Claude Code、Cursor 等 AI 工具查询数据"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|核对文件与业务库|本地表与 MySQL / PostgreSQL / SQLite / DuckDB 跨源关联，支持符合条件的远端筛选优化| ／ 1. **接入数据。** 拖入 CSV、Excel、Parquet 或 JSON，粘贴表格，或连接 MySQL、PostgreSQL、SQLite、DuckDB。",
+     "lines": [
+      66,
+      79
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|核对文件与业务库|本地表与 MySQL / PostgreSQL / SQLite / DuckDB 跨源关联，支持符合条件的远端筛选优化| ／ 1. **接入数据。** 拖入 CSV、Excel、Parquet 或 JSON，粘贴表格，或连接 MySQL、PostgreSQL、SQLite、DuckDB。 ／ 示例：用一条 SQL 关联本地文件与 MySQL",
+     "lines": [
+      66,
+      79,
+      83
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|核对文件与业务库|本地表与 MySQL / PostgreSQL / SQLite / DuckDB 跨源关联，支持符合条件的远端筛选优化| ／ 1. **接入数据。** 拖入 CSV、Excel、Parquet 或 JSON，粘贴表格，或连接 MySQL、PostgreSQL、SQLite、DuckDB。",
+     "lines": [
+      66,
+      79
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为连接和查询 MySQL/PostgreSQL/SQLite/DuckDB 等数据库提供跨源分析能力的工具，而非以某数据库为存储的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DuckQuery 是独立开发、基于 DuckDB 的本地优先数据工作台，适合临时对账、跨源核查和数据探索。文件导入、数据库连接、SQL、可视化查询、图表和导出都在一个界面里完成，不需要为一次分析搭建数仓。 ／ |核对文件与业务库|本地表与 MySQL / PostgreSQL / SQLite / DuckDB 跨源关联，支持符合条件的远端筛选优化| ／ 1. **接入数据。** 拖入 CSV、Excel、Parquet 或 JSON，粘贴表格，或连接 MySQL、PostgreSQL、SQLite、DuckDB。",
+   "evidence_lines": [
+    19,
+    66,
+    79
+   ]
+  },
+  "fn": "Chenkeliang/duckdb-query",
+  "sha": "0844e10e9b47",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

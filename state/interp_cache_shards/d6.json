@@ -10927,5 +10927,77 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "baf2f9ae2460": {
+  "identity": {
+   "one_liner": "Go 库：将数据库查询结果集流式编码为多种文本表格格式",
+   "review": "tblfmt 是一个 Go 语言包，读取 database/sql 类型的结果集并逐行流式写出表格，输出 psql 所支持的 aligned、csv、html 等格式及 JSON、mysql 客户端 \\G 纵向格式。供 usql 等 Go 程序使用，通过 go get 安装，README 未含许可证声明。",
+   "highlights": [
+    "逐行流式读取结果集，不将整个结果保留在内存中",
+    "支持 psql 的全部输出格式（aligned、wrapped、unaligned、csv、html、asciidoc、latex、troff-ms）及 JSON、纵向格式和纯表格",
+    "接受任何实现 ResultSet 接口的类型，面向 Go 的 database/sql 使用"
+   ],
+   "use_cases": [
+    "在 Go 程序或数据库客户端（如 usql）中以表格形式渲染查询结果",
+    "需要输出 csv、json、html、latex 等多种结果集格式的工具",
+    "对大结果集做流式分批输出"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "`tblfmt` writes each format that `psql` has: aligned, wrapped, unaligned, csv, ／ `TestPsql` in the `test` module compares the output with `psql` 18, query by",
+     "lines": [
+      15,
+      193
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "vertical format that the `mysql` client writes for `\\G`, and a plain table",
+     "lines": [
+      17
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为数据库客户端（usql）和 database/sql 结果集渲染服务的 Go 库，不依赖特定数据库存自身数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Package `tblfmt` writes result sets as text tables. A result set is the rows ／ `tblfmt` is for [`usql`][usql] and for the `database/sql` types of Go. It ／ |Feature|`tblfmt`|[`text/tabwriter`][tabwriter]|[`tablewriter`][tablewriter] v1.1.5|[`go-pretty`][go-pretty] v6.8.3|[`lipgloss`][lipgloss] v1.1.0|[`simpletable`][simpletable] v1.0.0|[`rodaine/table`][rodaine] v1.4.1|[`aquasecurity/table`][aquasecurity] v1.11.0|",
+   "evidence_lines": [
+    3,
+    35,
+    129
+   ]
+  },
+  "fn": "xo/tblfmt",
+  "sha": "baf2f9ae2460",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

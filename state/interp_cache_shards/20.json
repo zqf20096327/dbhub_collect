@@ -10543,5 +10543,141 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b7db66a16175": {
+  "identity": {
+   "one_liner": "供多个 AI 编码代理共享消息的 SQLite 留言板",
+   "review": "基于本地 SQLite 的多代理共享留言板，代理通过 CLI 发帖、订阅、@提及、确认决策并接收 hook 推送，内置只读 Web UI 供人查看；README 提示条目为数据而非指令，数据库目录默认私有。面向使用 Claude Code、Codex 等编码代理协作的开发者，要求 Python 3.10+ 与共享本地文件系统，可选 Docker/Node 运行 Web 端。",
+   "highlights": [
+    "提供线程、标签、@提及、群组、订阅与决策确认（ack）等消息机制，hook JSON 可推送到运行中的代理",
+    "数据存储在本地 SQLite，CLI 仅依赖 Python 标准库，Web UI 为只读并要求 HTTP Basic 认证",
+    "提供 --since 增量读取、digest --json 摘要、artifact ID 提取与本地文件引用"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理在同一项目上共享进展、发现与交接信息",
+    "人类通过只读 Web UI 或 digest 查看代理间的决策与未确认事项",
+    "本地 Job 目录间通过 BOARD-INBOX.md 指针传递定向消息"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`init` / `whoami`|Create the private SQLite database; show your identity, aliases, and groups.|",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是该留言板的内置存储引擎，项目本身是使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Requires Python 3.10+ and a local filesystem shared by the participating agents. The CLI uses only the Python standard library. ／ |`init` / `whoami`|Create the private SQLite database; show your identity, aliases, and groups.| ／ - `agent-board web --port 8766` serves it on 127.0.0.1 straight from the database (read-only SQLite connection). It looks for the assets in `$AGENT_BOARD_WEB_ROOT`, `../web/public` next to the CLI, or `~/.local/share/agent-board/web/public`.",
+   "evidence_lines": [
+    15,
+    28,
+    71
+   ]
+  },
+  "fn": "fstandhartinger/agent-message-board",
+  "sha": "b7db66a16175",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c9b898649640": {
+  "identity": {
+   "one_liner": "本地优先的跨平台桌面 AI 编程 Agent 工作台",
+   "review": "ReinAgent 是一个基于 Tauri 2 的桌面 AI 编程客户端，把多家大模型接入本地工作区，用自然语言驱动读写代码、执行命令、操作浏览器，并提供远程访问、子代理协作、本地知识库与 MCP 服务端等能力。面向开发者使用；数据（含会话历史与配置）以 SQLite WAL 与本地 JSON 形式留存在本地，README 未提及云端存储。",
+   "highlights": [
+    "支持多协议接入大模型（Chat Completions、Anthropic Messages、Responses、Google Generative AI）并管理模型配置",
+    "提供子代理派发、四档审批模式、代码改动检查点与本地长期记忆系统",
+    "内置 MCP 客户端与服务端，本地数据以 SQLite WAL 持久化，支持局域网与 Cloudflare 隧道远程访问"
+   ],
+   "use_cases": [
+    "开发者用自然语言在本地进行代码编写、重构与命令执行",
+    "通过手机或 MCP 客户端远程查看与控制桌面上的 Agent 任务",
+    "构建本地知识库、笔记与知识图谱并用检索增强辅助编程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Local-First 数据自治**：所有会话历史、任务时间线、代码改动快照、模型密钥与配置均 100% 留存在本地（SQLite WAL + 本地 JSON），绝不上传云端，无任何中心化云服务依赖。",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该桌面应用的本地数据存储，项目本身是面向开发者的 AI 编程应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Tauri 2 ／ - **Local-First 数据自治**：所有会话历史、任务时间线、代码改动快照、模型密钥与配置均 100% 留存在本地（SQLite WAL + 本地 JSON），绝不上传云端，无任何中心化云服务依赖。 ／  - **原生内置 MCP 服务端**：遵循 MCP 2024-11-05 协议标准，通过 HTTP/SSE 原生暴露 15 个标准 Tools，外部大模型（Claude Desktop、Cursor 等）可像操作本地软件一样反向控制 ReinAgent（新建任务、查阅状态、文件读写、工具审批等）；",
+   "evidence_lines": [
+    7,
+    20,
+    203
+   ]
+  },
+  "fn": "web3claw/ReinAgent",
+  "sha": "c9b898649640",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

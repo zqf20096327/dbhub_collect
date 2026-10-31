@@ -10915,5 +10915,81 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a3be1bed6ef5": {
+  "identity": {
+   "one_liner": "Zig 编写的单二进制 AI Agent 命令行工具，支持多后端",
+   "review": "wintermolt 是用 Zig 实现的 AI Agent CLI，将 OpenClaw 以纯 Zig 重写为约 1.6–14 MB 的单个可执行文件，包含代理循环、流式输出、工具调度、MCP 客户端/服务端、定时调度等功能，会话历史存储使用 SQLite。面向希望在本地或边缘设备（Jetson、树莓派等）运行 AI 代理的用户；默认使用 Ollama 本地推理，也可配置 Claude、OpenAI 等 API 后端。",
+   "highlights": [
+    "编译为单个原生二进制文件，无 Node.js/Electron 运行时依赖",
+    "提供 8 种 AI 后端切换，默认 Ollama 本地推理，全部支持流式输出",
+    "内置 MCP 客户端与服务端、定时调度、浏览器自动化等能力"
+   ],
+   "use_cases": [
+    "在资源受限设备（树莓派、Jetson）上运行本地 AI 代理",
+    "通过 CLI 执行多步骤自动化任务（文件操作、代码分析等）",
+    "以 MCP 协议接入或对外提供工具服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|macOS arm64|`wintermolt-macos`|6.1 MB|Mach-O arm64, the system libcurl + sqlite3 (nothing to install), stripped. macOS 27.2+ (#5). Baseline arm64: any Apple Silicon Mac.| ／ |Linux arm64|`wintermolt-linux-arm64`|1.6 MB|ELF aarch64, dynamic libcurl + sqlite3, stripped. glibc 2.34+ (Ubuntu 22.04 / JetPack 6, Debian 12 / Raspberry Pi OS Bookworm, RHEL 9 and later). Baseline aarch64: no SVE, so it runs on Raspberry Pi and older Jetson ／ |Linux x86_64|`wintermolt-linux-x86_64`|1.8 MB|ELF x86-64, dynamic libcurl + sqlite3, stripped. glibc 2.34+ (Ubuntu 22.04, Debian 12, RHEL 9 and later). x86-64-v3 CPU (Intel Haswell, AMD Zen or newer).|",
+     "lines": [
+      121,
+      122,
+      123
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储会话历史的 AI Agent CLI 应用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": " An autonomous AI agent CLI written entirely in Zig. ／ Most AI coding tools ship hundreds of megabytes of Electron or Node.js runtime just to send API calls and edit files. Wintermolt compiles to a **single native binary** — about 6 MB on macOS Apple Silicon, 1.6 MB on Linux arm64 and 1.8 MB on Linux x86_64 (stripped), 14 MB on Windows (statically-linked HTTP/3 stack) — and builds natively on macOS, Linux and Windows, including ARM boards like Jetson and Raspberry Pi. ／ |macOS arm64|`wintermolt-macos`|6.1 MB|Mach-O arm64, the system libcurl + sqlite3 (nothing to install), stripped. macOS 27.2+ (#5). Baseline arm64: any Apple Silicon Mac.|",
+   "evidence_lines": [
+    7,
+    32,
+    121
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "lupin4/wintermolt",
+  "sha": "a3be1bed6ef5",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

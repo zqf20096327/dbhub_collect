@@ -11054,5 +11054,180 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "08c9bde49ffe": {
+  "identity": {
+   "one_liner": "Neovim 插件，将数据库表转为可编辑 Vim buffer，支持 schema 浏览与跨库联邦查询",
+   "review": "一个 Neovim 0.10+ 插件，把数据库表变成可编辑 buffer：用户可在编辑器内浏览 schema、用 Vim 按键改行、跟随外键跳转、运行 SQL，修改以暂存方式保存，确认生成的 SQL 后单事务应用。连接 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server 需各自命令行客户端，DuckDB 用于文件访问与跨库联邦，另有 :GripAsk 从自然语言生成 SQL。",
+   "highlights": [
+    "提供 schema 侧边栏、查询面板与可编辑表格，编辑以暂存变更存在，确认生成的 SQL 后在一个事务中应用",
+    "支持通过 DuckDB 附加其他数据库实现跨源联邦查询，并可打开 Parquet、CSV、JSON、XLSX 等文件",
+    "提供 :GripAsk 自然语言生成 SQL、CSV/TSV/JSON 导入暂存与结果导出命令"
+   ],
+   "use_cases": [
+    "在 Neovim 内直接浏览和编辑数据库表数据",
+    "通过 DuckDB 从单一查询面板跨多个数据库/文件执行查询",
+    "以只读模式（mode: ro）安全查看生产数据"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|`psql`| ／ :GripConnect postgresql://user:password@localhost:5432/app",
+     "lines": [
+      31,
+      82
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL or MariaDB|`mysql`| ／ :GripConnect mysql://user:password@localhost:3306/app",
+     "lines": [
+      32,
+      83
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|`sqlite3`| ／ :GripConnect sqlite:/absolute/path/to/app.db",
+     "lines": [
+      33,
+      85
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|`sqlcmd`| ／ :GripConnect sqlserver://user:password@localhost:1433/app",
+     "lines": [
+      35,
+      87
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL or MariaDB|`mysql`| ／ :GripConnect mariadb://user:password@localhost:3306/app",
+     "lines": [
+      32,
+      84
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供连接多数据库的客户端工具与工作流集成，为数据库生态服务而非依赖某库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Dadbod Grip turns database tables into editable Vim buffers, with schema browsing, staged mutations, generated SQL, relationship navigation, and cross-database federation inside Neovim. ／ Dadbod Grip requires Neovim 0.10 or newer and the command-line client for each database you use. ／ DuckDB supplies file access and cross-database federation. CSV, TSV, JSON, NDJSON, JSONL, Parquet, Arrow, and IPC files can opt into write mode. XLSX and ORC remain read-only because Dadbod Grip does not have an explicit safe write format for them.",
+   "evidence_lines": [
+    10,
+    27,
+    158
+   ]
+  },
+  "fn": "joryeugene/dadbod-grip.nvim",
+  "sha": "08c9bde49ffe",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b0af837d285a": {
+  "identity": {
+   "one_liner": "哈萨克语全文检索 PostgreSQL 扩展（Rust 词干分析器）",
+   "review": "pg_kazsearch 为哈萨克语这一黏着语提供全文检索词干分析，包含 Rust 核心库、基于 pgrx 的 PostgreSQL 扩展（安装文本搜索模板、词典与 kazakh_cfg 配置）、Elasticsearch 插件及 CLI。适用于对哈萨克语文本做检索和索引的 PostgreSQL/ES 用户；需 PostgreSQL 16–18，镜像与 .deb 仅支持 amd64。",
+   "highlights": [
+    "提供 PostgreSQL 文本搜索词典/配置，通过 CREATE EXTENSION 安装并配合 to_tsvector 使用",
+    "同时提供 Elasticsearch 分析插件、无数据库依赖的 Rust 核心库与命令行工具",
+    "支持拉丁字母自动检测转写和俄语键盘输入恢复选项"
+   ],
+   "use_cases": [
+    "哈萨克语新闻/文档网站的全文检索索引",
+    "PostgreSQL 中混合 BM25 与向量检索（pg_textsearch + pgvector）场景",
+    "哈萨克语文本形态学分析与基准评测"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Kazakh full-text search for PostgreSQL and Elasticsearch . ／ - `pg_ext/`, the PostgreSQL extension built with pgrx. It installs a text search template, the `pg_kazsearch_dict` dictionary, a stopword list, and the `kazakh_cfg` configuration.",
+     "lines": [
+      5,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 和 Elasticsearch 提供哈萨克语文本检索扩展/插件，属数据库生态服务组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "LGPL-3.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- `pg_ext/`, the PostgreSQL extension built with pgrx. It installs a text search template, the `pg_kazsearch_dict` dictionary, a stopword list, and the `kazakh_cfg` configuration. ／ docker run -d --name kaz -e POSTGRES_PASSWORD=postgres -p 5432:5432 ghcr.io/darkhanakh/pg-kazsearch:18",
+   "evidence_lines": [
+    26,
+    40
+   ]
+  },
+  "fn": "darkhanakh/pg-kazsearch",
+  "sha": "b0af837d285a",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

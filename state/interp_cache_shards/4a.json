@@ -10730,5 +10730,150 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e469433c8594": {
+  "identity": {
+   "one_liner": "Rust 流处理引擎，集成多源输入输出与 AI 能力",
+   "review": "ArkFlow 是一个用 Rust 编写的流处理引擎，提供 Kafka、MQTT、HTTP、文件、SQL 数据库等输入输出组件，支持 SQL 查询、Python UDF、VRL 等处理器，并集成 LLM、embedding 与向量检索组件。面向需要构建实时数据处理管道并叠加 AI 推理的开发者，通过 YAML 配置文件定义流，源码编译安装，采用 Apache 2.0 许可。",
+   "highlights": [
+    "支持 Kafka、MQTT、HTTP、文件、SQL 数据库、NATS、Redis 等多种输入/输出源",
+    "内置 SQL 查询、Python UDF、JSON/Protobuf 编解码、Debezium CDC、VRL 等处理器",
+    "集成 LLM、embedding 及 pgvector/Milvus/Qdrant 向量检索组件",
+    "提供内存、会话窗口、滚动窗口等缓冲组件及可选 WAL 持久化"
+   ],
+   "use_cases": [
+    "实时流数据管道构建与转换",
+    "流式数据上的 LLM 推理与异常检测",
+    "CDC 变更事件解码与向量检索增强"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **SQL** (`sql`): Query data from SQL databases (MySQL, PostgreSQL, SQLite) ／ - **pgvector Search** (`pgvector_search`): Search a PostgreSQL table with the pgvector extension for top-k nearest neighbors of each row's vector ／ - **SQL** (`sql`): Write to SQL databases (MySQL, PostgreSQL) with batch inserts and UPSERT",
+     "lines": [
+      83,
+      115,
+      141
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **SQL** (`sql`): Query data from SQL databases (MySQL, PostgreSQL, SQLite) ／ - **SQL** (`sql`): Write to SQL databases (MySQL, PostgreSQL) with batch inserts and UPSERT",
+     "lines": [
+      83,
+      141
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQL** (`sql`): Query data from SQL databases (MySQL, PostgreSQL, SQLite)",
+     "lines": [
+      83
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为流处理引擎连接多种数据库和消息系统作为输入/输出源，为数据生态服务而非仅使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ArkFlow - High&#0045;performance&#0032;rust&#0032;stream&#0032;processing&#0032;engine | Product Hunt ／ - **SQL** (`sql`): Query data from SQL databases (MySQL, PostgreSQL, SQLite) ／ - **SQL** (`sql`): Write to SQL databases (MySQL, PostgreSQL) with batch inserts and UPSERT",
+   "evidence_lines": [
+    10,
+    83,
+    141
+   ]
+  },
+  "fn": "arkflow-rs/arkflow",
+  "sha": "e469433c8594",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "13966fa0fc1a": {
+  "identity": {
+   "one_liner": "自托管多用户成绩追踪与考试规划应用，Docker 部署，使用 SQLite 存储",
+   "review": "GradeShelf 是一个自托管的多用户成绩追踪与考试规划应用，支持科目加权平均、成绩单管理、考试计划、笔记附件及 PDF/ZIP 导出，并通过 Docker Compose 一键安装运行，数据存于本地 SQLite。面向需要私有化部署成绩记录的个人或小组，提供多账户、2FA、OIDC SSO 等功能，不依赖云服务或遥测。",
+   "highlights": [
+    "支持多账户、角色管理、2FA 与 OpenID Connect SSO 登录",
+    "提供成绩列表、加权平均、九种评分制与考试规划功能",
+    "数据可导出为 ZIP 或 PDF，附备份与恢复脚本"
+   ],
+   "use_cases": [
+    "学生或个人私有化记录课程成绩与加权平均分",
+    "规划考试并跟踪缺失成绩",
+    "需要离线/无云服务的教育机构内部成绩管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明 GradeShelf 是一个用 SQLite 存储自身数据、通过 Docker 运行的成绩管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Requires **Docker with Compose v2**, **curl** and **OpenSSL**. Docker images are ／ ports on the same hostname. Run one app instance per database on local disk. ／ Use **Node.js 24.11+ within the Node 24 release line**. The app uses Next.js,",
+   "evidence_lines": [
+    46,
+    181,
+    199
+   ]
+  },
+  "fn": "14flavius/GradeShelf",
+  "sha": "13966fa0fc1a",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

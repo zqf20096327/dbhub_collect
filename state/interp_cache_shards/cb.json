@@ -11258,5 +11258,89 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e652c74abc37": {
+  "identity": {
+   "one_liner": "Claude Code 钩子集，基于向量库实现会话记忆的确定性召回与回写",
+   "review": "该项目为 Claude Code 提供跨平台 hooks，在每次用户提示时自动从 Qdrant、Memory KG、pgvector 或 sqlite_vec 等记忆后端召回内容，并在回合结束时回写，包含 HyDE 查询扩展、注意力衰减、去重与观察分类等机制。面向使用 Claude Code 的开发者，通过 install.py 以用户级安装，核心仅用标准库，可选功能以 extras 安装依赖。",
+   "highlights": [
+    "提供插件式记忆后端（qdrant、memory_kg、pgvector、sqlite_vec），每个后端为一个文件",
+    "支持 HyDE 查询扩展、注意力衰减、记忆去重与观察分类",
+    "安装器自动检测 MCP 服务器并写入 ~/.claude/settings.json，核心组件仅依赖 Python 标准库"
+   ],
+   "use_cases": [
+    "为 Claude Code 会话提供跨项目、用户级的确定性记忆召回",
+    "通过 /consultants 多智能体议会对答案进行研究者-批评者验证",
+    "将 llamafile 等本地模型接入嵌入与对话补全链路"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "pgvector backup + validity canary stack ／ embedding engine for the `pgvector` + `sqlite_vec` providers,",
+     "lines": [
+      17,
+      64
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "embedding engine for the `pgvector` + `sqlite_vec` providers, ／ Installer learns embedder dialogs for sqlite_vec and validate-only ／ - **v1.7** — brings the `sqlite_vec` provider to **full pgvector",
+     "lines": [
+      64,
+      66,
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目将 Qdrant/pgvector/sqlite_vec 作为存储后端使用，本身是为 Claude Code 提供记忆功能的 AI 工具，不服务于数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "- **Stdlib only** for the core (Qdrant + Memory KG providers, hooks, dispatcher) — no `pip install` needed. Optional features (pgvector, sqlite-vec, code-graph, MCP server, clustering) pull in their own deps via the `[code-graph]` / `[clustering]` / `[mcp-server]` extras. ／ - **Plugin model**: each memory backend is one file (qdrant, memory_kg, pgvector, sqlite_vec)",
+   "evidence_lines": [
+    179,
+    182
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "mann1x/claude-hooks",
+  "sha": "e652c74abc37",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

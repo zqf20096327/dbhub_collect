@@ -12157,5 +12157,78 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c172a6be9009": {
+  "identity": {
+   "one_liner": "浏览器原生超轻量关系数据库引擎，TypeScript 编译为 WASM",
+   "review": "WebDB 是一个从零开始为浏览器构建的关系数据库引擎，通过 TypeScript 到 C 的转译器生成约 13 KB 的 WASM 二进制，支持 ACID 事务、连接聚合等 SQL 能力，存储层可插拔（OPFS、IndexedDB、HTTP Range）。面向构建离线优先 Web 应用的前端开发者。README 注明目前处于早期原型（walking skeleton）阶段，npm 包为 alpha 版本。",
+   "highlights": [
+    "WASM 体积约 13 KB，查询经 TypeScript Query Builder 编译为二进制字节码执行",
+    "支持 OPFS、IndexedDB 及基于 HTTP Range 的可插拔存储适配器",
+    "采用 TypeScript 转 C99 的转译管线，跨标签页协调使用 Web Locks API"
+   ],
+   "use_cases": [
+    "离线优先的 Web 应用本地数据存储",
+    "在浏览器中运行 SQL 查询与基准测试（Studio Playground / Benchmark Suite）"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**WebDB** is an ultra-lightweight, relational database built from scratch specifically for the web. Think of it as **SQLite reimagined for modern browsers**—bringing true SQL capabilities, ACID transactions, and persistent storage to offline-first apps without ／ - 🪶 **Tiny Footprint (&lt;50 KB Wasm):** Up to 90%+ smaller than ported desktop SQLite or Postgres (PGlite) builds. ／ |**In-Browser Benchmark Suite**|Live comparative benchmarking engine measuring throughput (ops/sec), latency, and memory allocations against Raw JS Arrays, Native IndexedDB, and official SQLite WASM on your hardware.|**Run Benchmarks →**|",
+     "lines": [
+      21,
+      23,
+      37
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- 🪶 **Tiny Footprint (&lt;50 KB Wasm):** Up to 90%+ smaller than ported desktop SQLite or Postgres (PGlite) builds. ／ Web developers building offline apps have long been stuck between two extremes: **IndexedDB** is an awkward key-value cursor store lacking relational queries, joins, and aggregations; while **ported desktop engines (like SQLite or Postgres/PGlite)** drag 1 MB ",
+     "lines": [
+      23,
+      41
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它本身是一个数据库引擎/开发库，而非使用某个数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**WebDB** is an ultra-lightweight, relational database built from scratch specifically for the web. Think of it as **SQLite reimagined for modern browsers**—bringing true SQL capabilities, ACID transactions, and persistent storage to offline-first apps without multi-megabyte bundles or complex server headers. ／ WebDB is currently in an **early prototype (\"walking skeleton\") stage**: ／ TypeScript code is written in a strict, zero-allocation, C-compatible style. The transpiler translates this code into freestanding C99 (`src/core/c/`), which is then compiled via Clang (`wasm32-unknown-unknown -nostdlib -O3`) and optimized with `wasm-opt` into an **ultra-lean ~13 KB WASM binary**.",
+   "evidence_lines": [
+    21,
+    64,
+    103
+   ]
+  },
+  "fn": "ahmad-moussawi/webdb",
+  "sha": "c172a6be9009",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

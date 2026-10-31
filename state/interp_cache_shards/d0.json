@@ -11141,5 +11141,149 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "68c9952964aa": {
+  "identity": {
+   "one_liner": "自托管求职应用：一份档案生成定制简历与求职信，追踪申请流程",
+   "review": "Dossier 是一个自托管的单用户求职管理应用：用户维护一份职业档案，应用读取职位描述后基于档案事实生成定制简历与求职信，并支持看板追踪申请流程、邮件发送、Gmail/日历集成及 MCP 连接 Claude。技术栈为 Next.js + PostgreSQL，数据存于用户自有数据库，支持 Docker Compose、CapRover、Coolify 等部署方式；限制包括仅桌面端、单用户、单实例。",
+   "highlights": [
+    "基于用户档案事实生成定制简历与求职信，仅使用档案中已有信息，不虚构经历",
+    "支持 Docker Compose、Node.js、CapRover、Coolify、Dokploy 多种部署方式",
+    "可选 MCP 连接器供 Claude 等外部应用操作职位搜索与文档草稿"
+   ],
+   "use_cases": [
+    "个人求职者集中管理职位搜索、简历定制与申请追踪",
+    "本地部署配合 Ollama/LM Studio 本地模型以保持数据留在自有硬件",
+    "通过 MCP 从 Claude 或 n8n 调用求职与文档生成功能"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 18 ／ It's for one person on a small server: one password, your data in your own PostgreSQL database, and an AI model of your choice. That can be a local model through Ollama or LM Studio, so your profile and documents stay on your own hardware, or a hosted one (any ／ echo \"POSTGRES_PASSWORD=$(openssl rand -hex 24)\" > .env",
+     "lines": [
+      10,
+      14,
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用将用户职业数据存于自有 PostgreSQL 数据库，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dossier keeps your career history in one profile and turns it into a clean resume. For every job you apply to, it reads the posting, shows how you match, and drafts a tailored resume and cover letter that only use facts from your profile. You refine them in a chat, download them as PDFs and track each application from draft to offer. ／ It's for one person on a small server: one password, your data in your own PostgreSQL database, and an AI model of your choice. That can be a local model through Ollama or LM Studio, so your profile and documents stay on your own hardware, or a hosted one (any OpenAI-compatible API, Anthropic or Mistral), which then receives what it writes from. Privacy says what goes where. ／ - **Single user:** one password and one profile; there are no accounts.",
+   "evidence_lines": [
+    12,
+    14,
+    112
+   ]
+  },
+  "fn": "AienTech/dossier",
+  "sha": "68c9952964aa",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "638dbaa5239a": {
+  "identity": {
+   "one_liner": "开源单机算法交易桌面应用，Tauri+Rust 封装 OpenAlgo Web",
+   "review": "OpenAlgo Desktop 是 OpenAlgo Web 的桌面版，在本地运行仪表盘、REST API、行情 WebSocket、策略模块、图表/剥头皮终端、期权工具、沙箱模式及 MCP 连接，可接入 38 家券商。面向希望在自有电脑上运行程序化交易的个人交易者；需图形桌面会话，不支持服务器/Docker/后台服务运行。",
+   "highlights": [
+    "提供与 OpenAlgo Web 相同的 REST API（/api/v1）与 WebSocket 行情协议，兼容 Python SDK、TradingView、Amibroker 等外部工具",
+    "支持 38 家券商接入，内置策略模块、风控引擎、期权工具套件与图表/剥头皮终端",
+    "提供沙箱（分析器）模式与 MCP/AI 代理入口，订单需经用户批准后执行"
+   ],
+   "use_cases": [
+    "在本地电脑上运行个人算法交易并接入券商",
+    "通过统一 REST API 对接 TradingView/Amibroker/Python SDK 等外部平台",
+    "多腿期权策略与图表交易、剥头皮日内交易"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite** (WAL, r2d2 pool): 3 databases (main, logs, sandbox) ／ - **rusqlite** - MIT License - SQLite for Rust, with **r2d2** (MIT or Apache-2.0) connection pools",
+     "lines": [
+      528,
+      1011
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 列出 rusqlite 与 r2d2 连接池等依赖，应用自身使用 SQLite 存储（main/logs/sandbox 数据库）",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OpenAlgo Desktop is a desktop app: it needs a signed-in user with a graphical",
+   "evidence_lines": [
+    124
+   ]
+  },
+  "fn": "marketcalls/openalgo-desktop",
+  "sha": "638dbaa5239a",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11223,5 +11223,146 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7410de9b21b5": {
+  "identity": {
+   "one_liner": "跨平台 VB6 克隆 IDE，含窗体设计器、VB6 语言与 AI 助手",
+   "review": "VibeBasic 是一个用 Tauri 实现的 Visual Basic 6 克隆 IDE，提供窗体设计器、VB6 语言解释、调试器、59 种控件和 .vbp 项目导入，支持 macOS、Windows 和 Linux。它内置 AI 助手，可连接 OpenAI 兼容服务器（如 Ollama）生成代码和布局；数据类控件改用 SQLite 文件而非 Jet .mdb。适合怀旧开发者或需要在现代系统上运行 VB6 风格程序的用户。",
+   "highlights": [
+    "提供窗体设计器、59 种控件、VB6 语言运行时和断点调试",
+    "支持导入 .vbp 项目并生成 macOS/Windows/Linux 独立程序",
+    "内置 AI 助手，连接 OpenAI 兼容服务器，生成代码并做语法检查"
+   ],
+   "use_cases": [
+    "在现代操作系统上编写和运行 VB6 风格桌面程序",
+    "迁移既有 VB6 项目并重新构建为独立应用",
+    "借助本地或远程 LLM 辅助生成窗体代码"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Databases: the Data control, the ADO Data Control, DataGrid, DataList and DataCombo, with data binding. They use SQLite files (`.db`) instead of Jet `.mdb` files.",
+     "lines": [
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个 IDE 应用，其数据控件以 SQLite 文件作为数据存储格式，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " - Databases: the Data control, the ADO Data Control, DataGrid, DataList and DataCombo, with data binding. They use SQLite files (`.db`) instead of Jet `.mdb` files. ／ A Visual Basic 6 clone for macOS, Windows and Linux, with the authentic Windows 98 look and a built-in AI assistant that connects to OpenAI-compatible servers, including your own local model. ／ - **Make app:** File > Make builds a standalone program from your project, with its icon and the version information from Project Properties > Make. On macOS it is an `.app` that also opens the file types you list. On Windows, Make writes a single `<Name>.exe` (the project's icon and version information in its resources; it runs on Windows 10 and 11, which have the WebView2 runtime). File types are not registered there: Open With passes the file to `Command$`. On Linux it writes the `<Name>` executable with a `<Name>.desktop` launcher and `<Name>.png` icon next to it (it needs WebKitGTK 4.1, as VibeBasic does). Make only replaces a program it made itself.",
+   "evidence_lines": [
+    29,
+    5,
+    23
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Stigern/VibeBasic",
+  "sha": "7410de9b21b5",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d4b60618fbaf": {
+  "identity": {
+   "one_liner": "自托管 Web 应用，用 git worktree 隔离并行运行多个 AI 编码代理并审查其改动",
+   "review": "iworkflow 是一个自托管的 ADE（Agentic Development Environment）Web 应用，用于并行启动、跟踪和审查多个 AI 编码代理：每个任务在独立 git worktree 中运行，用户审查 diff 后合并或丢弃，支持任务依赖图、GitLab/GitHub MR/PR 集成和移动端操作。适合需要同时调度 claude、cursor 等代理 CLI 的开发者。注意：使用 PolyForm Shield 1.0.0 许可而非 OSI 开源，且无用户账户，仅靠可选访问令牌保护。",
+   "highlights": [
+    "每个任务在独立 git worktree 中运行代理，支持任务依赖图自动触发后续任务",
+    "集成 GitLab/GitHub 的 MR/PR 创建、CI 状态查看与合并流程",
+    "移动优先的 Web UI，通过 Tailscale 可从手机查看进度、回复代理提问并执行合并"
+   ],
+   "use_cases": [
+    "并行管理多个 AI 编码代理的任务并人工审查其 diff 后再合入分支",
+    "在手机上远程跟进代理运行状态并处理代理提问",
+    "通过任务链实现多步骤编码任务的自动接力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "iworkflow imposes no workflow: each agent uses the configuration and plugins you already have installed, plus the project's `AGENTS.md`. Under the hood agents are driven over RPC (or ACP / stream-json, depending on the runtime). It is built with Go (`net/http` ／ |`IWF_DATABASE_URL`|`~/.iworkflow/workspaces.db` (SQLite, automatic migrations)|",
+     "lines": [
+      23,
+      145
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用使用 SQLite（modernc.org/sqlite）作为内部存储，属于使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "PolyForm Shield 1.0.0（source-available，非 OSI 开源）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**iworkflow is an ADE (Agentic Development Environment)**: a self-hosted web app to launch, follow and review several AI coding agents in parallel. Instead of editing files yourself, you manage **tasks**: each one runs an agent in its own git worktree, and you review the diff before anything reaches your branch. ／ > **Status:** early and actively developed. It runs on your own machine, has no user accounts (only an optional access token for network access) and is source-available (PolyForm Shield 1.0.0), not OSI open source. See Quick start and License. ／ iworkflow imposes no workflow: each agent uses the configuration and plugins you already have installed, plus the project's `AGENTS.md`. Under the hood agents are driven over RPC (or ACP / stream-json, depending on the runtime). It is built with Go (`net/http` + `chi`), SSR with `templ` and `htmx`, Tailwind CSS, `sqlc` and SQLite (`modernc.org/sqlite`).",
+   "evidence_lines": [
+    5,
+    11,
+    23
+   ]
+  },
+  "fn": "plopezm/iworkflow",
+  "sha": "d4b60618fbaf",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

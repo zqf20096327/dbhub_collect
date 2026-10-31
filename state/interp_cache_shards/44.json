@@ -10877,5 +10877,72 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a2deccec6343": {
+  "identity": {
+   "one_liner": "Python 多进程 Selenium 爬虫，抓取媒体目录元数据并存入 MySQL",
+   "review": "一个基于 Selenium 与多进程工作池的爬虫与链接校验流水线，用于抓取动态媒体目录中的影视元数据，经规范化后写入 MySQL，提供交互式终端搜索和 Docker Compose 部署，并可通过 Telegram 发送任务通知。适用于个人媒体资源索引场景；需要 MySQL 8.0+、Chrome 和 Telegram 凭据，存储链接被定位为会过期的临时快照而非永久镜像。",
+   "highlights": [
+    "多进程无头 Chrome 爬取分页范围，运行时解析活动目录镜像域名",
+    "规范化存储标题、元数据、季与媒体链接到 MySQL，并在服务前校验链接存活、清理失效记录",
+    "提供交互式终端菜单与批量 CLI 两种模式，支持 Docker Compose 部署与 Telegram 通知"
+   ],
+   "use_cases": [
+    "批量抓取并索引动态媒体目录的标题与链接元数据",
+    "按标题/季/分辨率交互式检索单部影片并获取有效链接",
+    "定时批量抓取配合链接健康检查清理失效记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Relational storage: Normalizes titles, metadata, seasons, and parsed media links in MySQL. ／ - MySQL Server 8.0+ or Docker",
+     "lines": [
+      16,
+      42
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明项目将抓取的结构化元数据存储到 MySQL 中，MySQL 是其数据存储依赖而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Python crawler and metadata extraction pipeline for dynamic media catalogs. It pairs Selenium with a multiprocessing worker pool, verifies ephemeral link liveness before caching, and writes structured records into MySQL with optional Telegram job alerts. ／ - Relational storage: Normalizes titles, metadata, seasons, and parsed media links in MySQL. ／ - `db` runs MySQL 8.0 with `init.sql` applied on first initialization; credentials match `.env`.",
+   "evidence_lines": [
+    3,
+    16,
+    120
+   ]
+  },
+  "fn": "barryallen16/moviemod-scraper",
+  "sha": "a2deccec6343",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

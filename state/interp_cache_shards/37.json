@@ -11445,5 +11445,150 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f7c885dbbc51": {
+  "identity": {
+   "one_liner": "自托管 markdown 团队 wiki，内置 MCP 服务器供 AI agent 读写文档",
+   "review": "tela 是一个自托管的 markdown 原生团队 wiki，后端为 Go + PostgreSQL，前端为 React 19/Milkdown 编辑器并支持 Yjs 实时协作。它面向需要团队知识库且让 AI agent 作为文档作者与读者的团队，内置 MCP 服务器使 agent 可直接检索、读取和写入页面；语义检索需额外配置 embedder（如 Ollama）并启用 pgvector 扩展。",
+   "highlights": [
+    "内置 MCP 服务器（/api/mcp），agent 可按工具级权限搜索、读取和编写页面",
+    "基于 PostgreSQL FTS 的全文检索，可选 pgvector 支持的语义检索",
+    "页面正文为规范 markdown 存储，支持 WebDAV 同步及 zip/PDF 导出"
+   ],
+   "use_cases": [
+    "团队知识库与文档协作（含实时多人编辑）",
+    "让 Claude、Cursor 等 AI agent 直接检索和编写团队文档",
+    "基于已有源码产物自动生成并维护文档页（Atlas）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "tela is a self-hostable, markdown-native team wiki built for a world where agents are first-class authors and readers. It pairs a Go + PostgreSQL backend with a React 19 / Milkdown editor, live Yjs collaboration, ranked full-text and semantic search, and a bui ／ - **Semantic + full-text search** — ranked PostgreSQL FTS works out of the box; add an embedder for `pgvector`-backed semantic retrieval and grounded \"ask your docs\" answers. ／ > After the first deploy, enable pgvector on the managed database once — `CREATE EXTENSION IF NOT EXISTS vector;` — then point the backend's `TELA_PUBLIC_BASE_URL` at your app's public URL. Or skip ops entirely with the free cloud tier.",
+     "lines": [
+      19,
+      29,
+      53
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "tela 使用 PostgreSQL 存储自身的 wiki 数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "tela is a self-hostable, markdown-native team wiki built for a world where agents are first-class authors and readers. It pairs a Go + PostgreSQL backend with a React 19 / Milkdown editor, live Yjs collaboration, ranked full-text and semantic search, and a built-in Model Context Protocol (MCP) server — so the same knowledge base your team edits in the browser is one your agents can search, read, and write directly. Atlas, its documentation engine, turns the artifacts you already produce into maintained wiki pages. Your content stays canonical markdown forever — `pages.body` is markdown, there is no proprietary block store. ／ - **Semantic + full-text search** — ranked PostgreSQL FTS works out of the box; add an embedder for `pgvector`-backed semantic retrieval and grounded \"ask your docs\" answers.",
+   "evidence_lines": [
+    19,
+    29
+   ]
+  },
+  "fn": "zcag/tela",
+  "sha": "f7c885dbbc51",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a2b559611577": {
+  "identity": {
+   "one_liner": "基于TiDB向量搜索的AI SEO策略生成工具",
+   "review": "一个SEO策略生成器：抓取竞品SERP与页面内容，用sentence-transformers生成向量嵌入存入TiDB，通过TiDB向量相似度检索相关内容，再调用Groq的Kimi模型生成内容蓝图与SEO策略。以FastAPI提供分析、搜索、全流程生成三个API端点，面向需要关键词竞品分析的内容运营者。依赖Bright Data API密钥与Groq密钥。",
+   "highlights": [
+    "使用TiDB向量相似度（L2距离）检索竞品内容",
+    "提供 /analyze、/search、/generate-full-strategy 三个API端点",
+    "生成384维嵌入（paraphrase-MiniLM-L3-v2）并存储于TiDB"
+   ],
+   "use_cases": [
+    "按关键词生成SEO内容策略与文章蓝图",
+    "基于向量相似度检索相似文章",
+    "对URL进行内容分析并存储嵌入"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "- **Vector Embeddings**: Generates 384-dim embeddings with paraphrase-MiniLM-L3-v2 and stores in TiDB. ／ - **Semantic Search**: Uses TiDB vector similarity (L2 distance) to find relevant competitor content. ／ - DATABASE_URL: TiDB connection string.",
+     "lines": [
+      9,
+      10,
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目将数据存入TiDB数据库并以其向量搜索为核心功能，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Vector Embeddings**: Generates 384-dim embeddings with paraphrase-MiniLM-L3-v2 and stores in TiDB. ／ - **Database**: TiDB with SQLAlchemy for vector storage.",
+   "evidence_lines": [
+    9,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "tanDivina/atlas-seo-agent",
+  "sha": "a2b559611577",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

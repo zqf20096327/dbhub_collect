@@ -12067,5 +12067,161 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "768c5e51b82e": {
+  "identity": {
+   "one_liner": "单 SQLite 文件的 AI 智能体记忆库，含知识图谱与向量/全文检索",
+   "review": "CortexDB 是一个纯 Go 实现的嵌入式 AI 记忆与知识图谱库，将向量、FTS5 全文、RDF 图谱和本体约束存入单个 SQLite 文件，无需运行独立服务。面向 AI 智能体开发者，提供 Go 库、MCP 工具及 Claude Code/Codex/Obsidian 插件，可通过 cortexdb-grpc 实现多智能体共享记忆；也支持以 postgres:// DSN 改用 PostgreSQL + pgvector 作为后端。",
+   "highlights": [
+    "提供向量（HNSW/IVF/flat/二值码）、FTS5 全文、混合与图检索，以及通过 W3C 测试套件的 RDF/SPARQL/SHACL 知识图谱能力",
+    "提供进程内或经 MCP 的 100+ 工具、变更 feed、请求级 trace 与可观测端点（/metrics、/healthz）",
+    "默认以 SQLite 文件存储，支持 PostgreSQL + pgvector 后端与 gRPC 共享服务器"
+   ],
+   "use_cases": [
+    "为 AI 编码智能体（Claude Code、Codex 等）提供持久记忆与自动召回",
+    "多智能体/多机器共享同一记忆与知识图谱的部署",
+    "在单文件嵌入式环境中构建带来源溯源的 RAG 知识应用"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "AI memory and a knowledge graph in one SQLite file. Pure Go, no service to run, works without an embedding model. ／ - `EmbeddedConfig` for small devices: an SQ8 index, bounded SQLite caches, snapshots that survive a power cut — 100k 768-d vectors open in 0.28 s with a 193 MB heap ／ - SQLite by default, PostgreSQL + pgvector with a `postgres://` DSN",
+     "lines": [
+      5,
+      67,
+      76
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- SQLite by default, PostgreSQL + pgvector with a `postgres://` DSN",
+     "lines": [
+      76
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为嵌入式存储引擎为 AI 智能体提供向量/图/全文数据库能力，以 SQLite 为默认存储、PostgreSQL 为可选后端。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "npm",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AI memory and a knowledge graph in one SQLite file. Pure Go, no service to run, works without an embedding model. ／ - Vectors (HNSW, IVF, flat, binary codes), FTS5 full-text search, hybrid and graph retrieval ／ - SQLite by default, PostgreSQL + pgvector with a `postgres://` DSN",
+   "evidence_lines": [
+    5,
+    66,
+    76
+   ]
+  },
+  "fn": "liliang-cn/cortexdb",
+  "sha": "768c5e51b82e",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1856bc685153": {
+  "identity": {
+   "one_liner": "基于 seekdb 混合检索与 PowerContext 记忆的课程资料复习助手",
+   "review": "一个课程资料复习应用：将 Markdown、TXT、PDF 文件切块存入 seekdb，通过全文与本地 BGE 向量检索的 RRF 融合返回原文段落；用 PowerContext 记录查询和反复出现的知识点，自动生成薄弱点复习清单。面向学习复习场景，通过 Docker Compose 部署 seekdb 与 PowerContext，后端为 FastAPI，全部组件默认仅绑定本机地址且无身份认证。",
+   "highlights": [
+    "支持 .md/.txt/.pdf 文件导入，含 SHA-256 去重与变化文件重新导入",
+    "实现全文检索与 512 维向量检索经 RRF 融合的混合检索，返回原文段落定位",
+    "使用 PowerContext Scope/Source/Atomic Memory 记录查询与知识点，生成复习清单"
+   ],
+   "use_cases": [
+    "将本地课程资料导入后按问题检索原文与上下文",
+    "追踪反复查询的知识点并生成薄弱点复习清单",
+    "本地部署演示混合检索与记忆读写流程"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "- `course-review-seekdb`：MySQL 协议 `127.0.0.1:2881`",
+     "lines": [
+      70
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "- seekdb 镜像 `oceanbase/seekdb:1.4.0-100000172026082615`",
+     "lines": [
+      41
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 seekdb 存储数据并提供复习功能的应用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "把散落在文件夹中的 Markdown、TXT、PDF 课程资料切块存入 seekdb，用关键词与向量混合检索回到原文；再用 PowerContext 记录查询和反复出现的薄弱知识点，自动生成复习清单。 ／ |seekdb|`course_chunks` Collection 保存原文、向量和出处元数据；执行全文 + 向量混合检索；保存文档、检索和记忆审计表。| ／ |FastAPI|文件上传、切块、检索、记忆、复习清单和审计 API，同时托管前端。|",
+   "evidence_lines": [
+    3,
+    18,
+    20
+   ]
+  },
+  "fn": "Jianyuanxi/shike-course-review",
+  "sha": "1856bc685153",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

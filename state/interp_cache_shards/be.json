@@ -10491,5 +10491,223 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "61431039fc38": {
+  "identity": {
+   "one_liner": "Claude Code 技能形式的 AI 内省对话伴侣，使用本地 SQLite 存储记忆",
+   "review": "Satori 是一个面向 CLI、IDE 与网页聊天的开源 AI 陪伴技能，定位为哲学/心理学导向的内省对话助手，运行于 Claude Code、Cursor 等多种智能体环境。它将模式摘要以 <=500 字符的形式写入本地 ~/.satori 目录下的 SQLite 库，并通过 350 个用例的基准测试验证触发边界。适用于希望在编码工作流中避免AI打扰、进行自我反思的开发者与用户。",
+   "highlights": [
+    "使用本地 SQLite 库（~/.satori/memory/）存储对话模式摘要，数据不出本地",
+    "提供 350 用例基准测试，包含纯编码提示的非激活率评估",
+    "支持 CLI、IDE 与 Web Chat 多种运行环境，含紧凑版 SKILL.md"
+   ],
+   "use_cases": [
+    "在编码智能体中运行内省/反思对话伴侣而不干扰编码工作流",
+    "通过本地 SQLite 记忆保持跨会话的对话连续性",
+    "在 ChatGPT/Gemini 等网页聊天中加载紧凑版技能文件使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "18 Philosophical &amp; Contemplative Traditions · 6-Step Reflective Model · 8 Immovables · Local SQLite Memory Vault ／ |**4. Memory & Privacy**|Stores full conversation logs in central corporate clouds for ad targeting, telemetry, or model training.|**100% local SQLite vault** (`~/.satori/memory/`) with standard library Python, `<150 ms` latency, zero cloud telemetry, and POSI ／ 8. **Dual-Mode Memory Discipline**: Local-first SQLite pattern summaries (`<=500` chars) on your filesystem in CLI/IDE, and optional data-only Continuity Notes (`<=600` chars) in web chat.",
+     "lines": [
+      13,
+      78,
+      105
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用 SQLite 存储本地记忆的 AI 对话应用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**4. Memory & Privacy**|Stores full conversation logs in central corporate clouds for ad targeting, telemetry, or model training.|**100% local SQLite vault** (`~/.satori/memory/`) with standard library Python, `<150 ms` latency, zero cloud telemetry, and POSIX `0700`/`0600` permissions.| ／ 8. **Dual-Mode Memory Discipline**: Local-first SQLite pattern summaries (`<=500` chars) on your filesystem in CLI/IDE, and optional data-only Continuity Notes (`<=600` chars) in web chat. ／ |**AI Coding Agents (CLI & IDE)**|Claude Code, Cursor, Windsurf, Google Antigravity, Gemini CLI, OpenAI Codex CLI, OpenCode, Hermes Agent, OpenClaw, Grok Build|Full Repository / `npx skills`|Jump to Agent Matrix & Install|",
+   "evidence_lines": [
+    78,
+    105,
+    44
+   ]
+  },
+  "fn": "MetcalfSolutions/Satori",
+  "sha": "61431039fc38",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "95227c5a7745": {
+  "identity": {
+   "one_liner": "数据库大赛训练营的实时排行榜看板网页应用",
+   "review": "一个面向数据库大赛与 seekdb AI 训练营参赛者的实时榜单网页，展示总榜、11 个赛道成绩、省份筛选、出分耗时预测和 CSV 导出。数据来自官方公开接口，通过 HTTP/WebSocket 推送更新，可用 Bun 本地运行，也支持部署到 Cloudflare Worker 或 GitHub Pages。",
+   "highlights": [
+    "提供总榜与 11 个赛道的全量名单展示，支持省份筛选、队伍关注与搜索",
+    "提供出分耗时预测，输出预计出分时刻与 80% 区间及近 24 小时实际预测误差",
+    "提供实时版（自动推送）与静态快照备用版两种数据源，并支持 CSV 导出当前榜单"
+   ],
+   "use_cases": [
+    "参赛队伍实时跟踪自己与对手在总榜及各赛道的名次变化",
+    "按省份/学校筛选查看参赛分布与省内名次",
+    "根据历史出分耗时估算新提交的出分时间"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "## ⚡ 由 OceanBase 强力驱动 ／ OceanBase",
+     "lines": [
+      12,
+      14
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "OceanBase · 分布式 · AI 数据库。完全自研，高度兼容 MySQL / Oracle，一套系统承载交易、实时分析与 AI 负载。官网 · GitHub · 社区",
+     "lines": [
+      15
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "OceanBase · 分布式 · AI 数据库。完全自研，高度兼容 MySQL / Oracle，一套系统承载交易、实时分析与 AI 负载。官网 · GitHub · 社区",
+     "lines": [
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明看板由 OceanBase 驱动，属使用数据库存数据的应用而非为其生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## ⚡ 由 OceanBase 强力驱动 ／ # OceanBase 榜单实时看板 ／ **数据库大赛总榜 · seekdb AI 训练营 11 个赛道 —— 全量名单、按省份筛选、出分预测，一页看清**",
+   "evidence_lines": [
+    12,
+    3,
+    5
+   ]
+  },
+  "fn": "zzstar101/oceanbase-live-board",
+  "sha": "95227c5a7745",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b5c103af505a": {
+  "identity": {
+   "one_liner": "基于 Spring Boot + React + PostgreSQL 的工单/服务管理帮助台应用",
+   "review": "Issunexa 是一个帮助台应用：请求者提交并跟踪工单，坐席认领并按生命周期推进工单。采用 Spring Boot 模块化单体后端、React/TypeScript 前端和 PostgreSQL 存储，使用 Flyway 版本化迁移、会话认证与角色授权。定位为个人作品集项目，README 明确说明不支持生产部署、无公开注册接口，缺少用户管理、附件、通知等功能。",
+   "highlights": [
+    "工单生命周期管理与追加式评论/历史记录，变更与历史事务性提交",
+    "数据库角色权限分离，运行时账户不能执行 schema 管理或删除数据",
+    "含后端/前端/真实栈 Playwright 测试及三个独立 GitHub Actions CI 流水线"
+   ],
+   "use_cases": [
+    "学习 Spring Boot + PostgreSQL 全栈实现的参考项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The repository contains a working React interface, a Spring Boot REST API and PostgreSQL persistence. It demonstrates ownership-aware queries, transactional workflow history, session authentication and tests against the real application stack. It is a local de ／ |PostgreSQL 18.6 / Flyway|Relational constraints and persistent data; versioned SQL migrations and explicit runtime grants| ／ Backend --> Database[\"PostgreSQL; Flyway migrations\"]",
+     "lines": [
+      7,
+      35,
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 PostgreSQL 作为该应用的持久化存储（L7、L35），应用本身使用数据库而非为数据库生态服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Issunexa is a single-maintainer portfolio help-desk application: requesters submit and track support tickets, while agents claim work, move tickets through a defined lifecycle and discuss progress with requesters. ／ The repository contains a working React interface, a Spring Boot REST API and PostgreSQL persistence. It demonstrates ownership-aware queries, transactional workflow history, session authentication and tests against the real application stack. It is a local development project; no production deployment or adoption is claimed. ／ |PostgreSQL 18.6 / Flyway|Relational constraints and persistent data; versioned SQL migrations and explicit runtime grants|",
+   "evidence_lines": [
+    5,
+    7,
+    35
+   ]
+  },
+  "fn": "PantelisZara/Issunexa",
+  "sha": "b5c103af505a",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

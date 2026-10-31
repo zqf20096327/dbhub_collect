@@ -11881,5 +11881,144 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "14286d7f9349": {
+  "identity": {
+   "one_liner": "本地优先的 AI 文档阅读器，支持问答引用与离线 OCR",
+   "review": "Knowwise 是一个跨平台桌面应用，用于阅读 PDF/Markdown/DOCX 文档，提供按范围问答、可回跳引用、离线 OCR、笔记标注、知识图谱与导出功能。数据（文档、索引、笔记）经 rusqlite 存入本机 SQLite 并用 FTS5 做检索，模型请求经统一外发网关，API key 存于操作系统凭据库。适合希望在本地处理文档并接入 OpenAI 兼容接口或 Ollama 的个人用户；本地翻译模型需单独下载。",
+   "highlights": [
+    "提供页/节/选区范围问答，引用可回跳至 PDF 页、Markdown 偏移或 DOCX 块，无法定位的引文被标记为未验证",
+    "内置离线 OCR（Tesseract.js，英/简中）与可选的本地 OPUS-MT ONNX 中英翻译引擎",
+    "文档、索引、笔记经 rusqlite 存储于本机 SQLite，检索使用 FTS5"
+   ],
+   "use_cases": [
+    "需要引用溯源的文档问答与研读（论文、技术文档、报告）",
+    "无文本层 PDF 的离线扫描件识别与校正",
+    "在本地构建带笔记、标注与知识图谱的个人文档库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Backend:** Rust, Tauri 2, SQLite (rusqlite), FTS5. ／ |Data|SQLite, FTS5, rusqlite|",
+     "lines": [
+      62,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明文档、索引、笔记、产物等数据保存在本机 SQLite 中，SQLite 是该应用的本地存储而非其服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT；可选 OPUS-MT 模型权重为 CC-BY-4.0，ONNX Runtime 为 MIT，均不随仓库分发",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Local-first AI document reader for PDF, Markdown and DOCX. ／ - **Backend:** Rust, Tauri 2, SQLite (rusqlite), FTS5. ／ |Data|SQLite, FTS5, rusqlite|",
+   "evidence_lines": [
+    3,
+    62,
+    74
+   ]
+  },
+  "fn": "baozi0821/knowwise",
+  "sha": "14286d7f9349",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "79ca38624d71": {
+  "identity": {
+   "one_liner": "本地优先的桌面动态图知识库，用 SQLite FTS5 实现焦点导航与全文检索",
+   "review": "这是一个 Electron 桌面知识库应用，复现 TheBrain 的焦点驱动四区布局导航；供本地管理想法、链接与附件的个人用户使用。数据以单个 SQLite 文件存储，提供 HTTP API 和 MCP server 供程序化访问，需 Node/pnpm 和 C/C++ 工具链从源码构建。",
+   "highlights": [
+    "提供 Parent/Child/Jump 类型关系与焦点驱动四区动态布局的 Canvas 渲染",
+    "使用 SQLite FTS5 建立全文索引，支持检索思考与附件文本内容",
+    "提供 MCP server 与 HTTP API，并支持 JSON/OPML 导出导入及历史回放日志"
+   ],
+   "use_cases": [
+    "本地离线管理个人知识图谱与想法关联",
+    "通过 API/MCP 让代理读写知识库",
+    "以 OPML/JSON 迁移或备份知识库数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Full-text search palette (SQLite FTS5) to find and focus any thought — it ／ - Strictly local-first: a single SQLite file, works fully offline. ／ - **better-sqlite3** for persistence, **FTS5** for search (v12 for Node-side",
+     "lines": [
+      76,
+      83,
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它用 SQLite 作为自身持久化存储（better-sqlite3，单个 brain.db 文件），属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Strictly local-first: a single SQLite file, works fully offline. ／ - **better-sqlite3** for persistence, **FTS5** for search (v12 for Node-side ／ portable file. Every consumer (desktop, MCP, API) opens the **same file** —",
+   "evidence_lines": [
+    83,
+    90,
+    174
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "maryasov/the-brain",
+  "sha": "79ca38624d71",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

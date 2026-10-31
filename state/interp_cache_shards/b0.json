@@ -9881,5 +9881,216 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "46b95195b162": {
+  "identity": {
+   "one_liner": "基于 Deno 与 Postgres 的开源 SaaS 起步模板",
+   "review": "这是一个 MIT 许可的 SaaS 应用起步模板（starter），提供登录二次验证、群组与角色、按成员的 Stripe 计费、实时更新、离线 SPA、管理后台和公开网站等预置功能，数据存于 Postgres，Valkey 作缓存，用 Docker Compose 一键拉起含 Traefik 与监控组件的整套栈。适合要启动多用户 Web 产品的开发者，需要自行运行服务器，不适用 serverless 部署。",
+   "highlights": [
+    "提供账户、二次验证、群组多租户、Stripe 计费、实时与离线 SPA 等预置模块",
+    "通过 Docker Compose 编排 Postgres、Valkey、Traefik、VictoriaMetrics、VictoriaLogs 与 Grafana",
+    "实现 CQRS 与 outbox 模式，事件写入 outbox_events 表由 worker 消费"
+   ],
+   "use_cases": [
+    "快速启动多用户 SaaS 产品的 MVP 开发",
+    "需要多租户、角色与计费 groundwork 的 Web 产品",
+    "在自有 Linux 服务器上单节点部署并运维整套应用栈"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Deno, Postgres, Docker Compose. Usable today, built in public.** ／ Postgres, Valkey, VictoriaMetrics, VictoriaLogs and Grafana. ／ Postgres, Valkey, the API, the worker, the SPA and the monitoring. Then open http://app.localhost. ／ Architecture diagram. Clients: apps/spa, a Preact and Vite PWA with sign-up, sign-in, TOTP and profile, talks to apps/api over REST and WebSocket; an IndexedDB offline store keeps the last notes and groups and queues writes made offline. apps/mpa is the public",
+     "lines": [
+      5,
+      74,
+      95,
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 Postgres 为权威数据存储、该模板本身是使用数据库的 SaaS 应用而非数据库工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Deno, Postgres, Docker Compose. Usable today, built in public.** ／  Postgres, Valkey, VictoriaMetrics, VictoriaLogs and Grafana. ／ Architecture diagram. Clients: apps/spa, a Preact and Vite PWA with sign-up, sign-in, TOTP and profile, talks to apps/api over REST and WebSocket; an IndexedDB offline store keeps the last notes and groups and queues writes made offline. apps/mpa is the public website on Fresh, server-rendered, calling the API only for the newsletter. Servers: apps/api on Hono (auth, groups, CQRS dispatch, web push) and apps/worker, which drains outbox_events. Data: Postgres is authoritative and Valkey is the API cache; Docker Compose also runs Traefik, VictoriaMetrics, VictoriaLogs and Grafana. Shared code: libs/domain, libs/server, libs/ui and the @spy4x packages on JSR.",
+   "evidence_lines": [
+    5,
+    74,
+    130
+   ]
+  },
+  "fn": "spy4x/seed",
+  "sha": "46b95195b162",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "92f788e2083a": {
+  "identity": {
+   "one_liner": "自托管联盟营销追踪软件，内置 SQLite 存储并支持 PostgreSQL",
+   "review": "单二进制 Go 程序，用于在自己服务器上运行联盟推广计划：追踪伙伴点击、从 Stripe/Paddle 等计费工具记入销售、按 13 条欺诈规则暂扣可疑佣金并计算应付对象。内置 SQLite，超出规模可换 PostgreSQL，提供 JSON API、MCP server 及 CSV 导入迁移。适合需要自托管联盟追踪的 SaaS 团队。",
+   "highlights": [
+    "追踪联盟链接点击、优惠券码与终身客户，自动处理经常性佣金、退款与拒付",
+    "内置 13 条欺诈规则，可疑佣金进入人工审核队列；佣金以复式记账台账记录",
+    "单文件程序内置 SQLite，另支持 PostgreSQL；提供 JSON API 与 MCP server"
+   ],
+   "use_cases": [
+    "在自有服务器上运行联盟/推荐计划并自行掌握数据",
+    "从 Rewardful、FirstPromoter 等工具通过 CSV 导入迁移",
+    "对接 Stripe、Paddle、Chargebee 等计费系统的销售归因与批量付款"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Small and fast.** One program file with SQLite built in. In our load test it handled about 10,000 affiliate link redirects a second. Postgres is supported when you outgrow SQLite.",
+     "lines": [
+      20
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Small and fast.** One program file with SQLite built in. In our load test it handled about 10,000 affiliate link redirects a second. Postgres is supported when you outgrow SQLite. ／ ./affiliate-engine -listen :8080 -db sqlite:affiliate.db",
+     "lines": [
+      20,
+      49
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 SQLite/PostgreSQL 存储业务数据的联盟追踪应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0 单许可",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Run your own affiliate program on your own server. AffiliateTracking tracks partner clicks, credits sales from Stripe, Paddle and other billing tools, holds suspicious commissions before you pay them, and works out who to pay. It is a free, self-hosted alternative to Rewardful, FirstPromoter, Tapfiliate and Tolt, and it never takes a cut of your affiliate revenue. ／ - **Small and fast.** One program file with SQLite built in. In our load test it handled about 10,000 affiliate link redirects a second. Postgres is supported when you outgrow SQLite. ／ ./affiliate-engine -listen :8080 -db sqlite:affiliate.db",
+   "evidence_lines": [
+    8,
+    20,
+    49
+   ]
+  },
+  "fn": "thebigasif/affiliate-tracking",
+  "sha": "92f788e2083a",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "aa941e703bf4": {
+  "identity": {
+   "one_liner": "Microsoft 365 本地归档 CLI，供 AI 代理离线检索 Teams/Outlook/OneNote 数据",
+   "review": "m365crawl 是一个用 Go 编写的命令行工具，把 Teams 聊天、Outlook 邮件、日历会议和 OneNote 笔记捕获为本地可检索归档，供 AI 代理（CLI 方式）离线查询并返回带 ID、链接和覆盖说明的结果。面向需要让代理访问 M365 工作内容的用户；仅读取桌面应用缓存，不写入应用，会议转录需显式拉取，数据覆盖范围受限于本地缓存。",
+   "highlights": [
+    "提供 doctor/sync/search 等命令，将 Teams、Outlook 邮件、日历与 OneNote 笔记同步为本地归档并支持离线全文检索",
+    "查询结果带来源标识、ID、链接与覆盖状态说明，支持 --no-sync 离线只读与显式转录拉取",
+    "支持 macOS（Homebrew，需 Full Disk Access）与 Windows，1.x 版本承诺命令与机器可读契约稳定"
+   ],
+   "use_cases": [
+    "让 AI 代理离线检索 Teams 聊天与 Outlook 邮件并引用具体条目",
+    "会议前汇总议程、与会者、会议聊天与相关邮件",
+    "按日期检查归档覆盖情况，区分真实零数据与未缓存"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Query locally.** Search and recall read SQLite, with full-text search or plain SQL, instead of making a service request for each question. Explicit transcript fetch and sign-in use the tool-owned browser; desktop-app and browser access can still be governe ／ - `docs/how-it-works.md`: from the app caches to a SQLite row.",
+     "lines": [
+      112,
+      150
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目将捕获的 M365 数据存入本地归档，检索读取 SQLite 存储，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`m365crawl` gives your agent one local, searchable archive of **Teams chats and channels**, **Outlook mail**, **meetings with their recaps and action items**, and **OneNote indexed notes**, plus inspectable **native Outlook people observations**. It captures what your signed-in desktop apps already cached, preserves history you synced, and returns focused results with IDs, links and coverage notes. Your agent can follow the work without opening every app or loading whole conversations into its context.",
+   "evidence_lines": [
+    14
+   ]
+  },
+  "fn": "ourostack/m365crawl",
+  "sha": "aa941e703bf4",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

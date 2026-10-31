@@ -10973,5 +10973,73 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b8f179cab740": {
+  "identity": {
+   "one_liner": "AI 编码代理协作工具，提供共享任务图与浏览器实时视图",
+   "review": "a-stack 是一个用 Go 编写的单二进制工具，为多个 AI 编码代理提供共享的任务图和任务邮件机制，用户可在浏览器中实时查看代理的进度并回答代理提出的问题。数据存储在本地的单个 SQLite 数据库中，仅监听 127.0.0.1。它面向使用 Claude Code、Codex 等编码代理的开发者，通过 hooks、skill 和 MCP 与代理集成。SQLite 在此仅作为本地存储介质，不构成对数据库生态的服务。",
+   "highlights": [
+    "为多个 AI 编码代理提供共享任务图、任务依赖与任务邮件协作机制",
+    "提供只读浏览器视图，展示任务状态、依赖图与代理卡片，并支持回答代理提问",
+    "以单个二进制和单个 SQLite 数据库在本地保存全部数据，仅监听 127.0.0.1，无需账号"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理协作完成同一项目时跟踪任务分配与阻塞情况",
+    "代理因压缩、崩溃或达到限额中断后，让新代理依据留存的报告与邮件接续工作",
+    "通过浏览器实时查看代理任务进度，并对需要人工决策的问题作答"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The Agents use the `a-stack` command line for all of this. a-stack is one binary with one SQLite database. It keeps all data on your computer, listens only on `127.0.0.1` and needs no account. You can opt into HTTPS access over Tailscale. View links work once,",
+     "lines": [
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该工具本地存储数据的方式，README 未称其为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The Agents use the `a-stack` command line for all of this. a-stack is one binary with one SQLite database. It keeps all data on your computer, listens only on `127.0.0.1` and needs no account. You can opt into HTTPS access over Tailscale. View links work once, and releases are signed. Windows support is new and not yet tested on a real Windows machine. ／ When several Agents work on one project, you soon lose track of who is doing what, what is blocked and who is waiting for you. a-stack gives your Agents a shared Task graph and a message thread for each Task. You watch it all live in your browser, and an Agent that needs a decision asks you there.",
+   "evidence_lines": [
+    29,
+    12
+   ]
+  },
+  "fn": "mzmzeee/a-stack",
+  "sha": "b8f179cab740",
+  "source": "readme",
+  "generated_at": "2026-10-31",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
