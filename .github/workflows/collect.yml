@@ -25,6 +25,9 @@ jobs:
     timeout-minutes: 360       # 平台单 job 上限即 6h，窗内预算按此自计时
     steps:
       - uses: actions/checkout@v4
+        with:
+          # 同 evidence.yml：排队期间 main 前进，锁触发时刻 sha 会拿旧数据白做
+          ref: refs/heads/main
 
       - name: 记录 job 起点（供 README 步骤算剩余时间预算）
         run: echo "JOB_T0=$(date +%s)" >> "$GITHUB_ENV"

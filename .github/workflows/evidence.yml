@@ -33,6 +33,11 @@ jobs:
     timeout-minutes: 130
     steps:
       - uses: actions/checkout@v4
+        with:
+          # concurrency 组排队期间 main 会前进；checkout 锁触发时刻的 sha 会让排队班
+          # 拿旧数据重采（10-31 41186019623 实测：排 47 分钟醒来重采 3,000 仓白做）。
+          # 显式 ref 让 job 启动时取最新 main。
+          ref: refs/heads/main
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
