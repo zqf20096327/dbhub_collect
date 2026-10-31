@@ -37,17 +37,20 @@ def _http_error(code: int) -> requests.HTTPError:
 
 
 class FakeClient:
-    def __init__(self, tree_by_ref: dict, repo_info: dict | None = None):
+    def __init__(self, tree_by_ref: dict, repo_info: dict | None = None,
+                 nonrec_by_ref: dict | None = None):
         self.tree_by_ref = tree_by_ref
         self.repo_info = repo_info or {}
+        self.nonrec_by_ref = nonrec_by_ref or {}
         self.calls: list[tuple] = []
 
-    def tree_conditional(self, fn, ref, etag=None):
-        self.calls.append(("tree", ref, etag))
-        if etag and ref in self.tree_by_ref:
+    def tree_conditional(self, fn, ref, etag=None, recursive="1"):
+        self.calls.append(("tree", ref, etag, recursive))
+        src = self.tree_by_ref if recursive == "1" else self.nonrec_by_ref
+        if etag and ref in src:
             return 304, None, etag
-        if ref in self.tree_by_ref:
-            return 200, self.tree_by_ref[ref], f'etag-{ref}'
+        if ref in src:
+            return 200, src[ref], f'etag-{ref}'
         raise _http_error(404)
 
     def repo(self, fn):
@@ -225,7 +228,8 @@ def test_collect_repo() -> None:
     # 空仓 409 → 终态
     c3 = FakeClient({})
     orig = c3.tree_conditional
-    c3.tree_conditional = lambda fn, ref, etag=None: (_ for _ in ()).throw(_http_error(409))
+    c3.tree_conditional = lambda fn, ref, etag=None, recursive="1": \
+        (_ for _ in ()).throw(_http_error(409))
     rec3 = ec.collect_repo(c3, FakeRaw({}), "o/r", {"pushed_at": "2026-10-28"}, None)
     check("空仓 409 → empty_repo", rec3["status"] == "empty_repo")
 
@@ -234,6 +238,35 @@ def test_collect_repo() -> None:
     rec4 = ec.collect_repo(c4, FakeRaw({}), "o/r", {"pushed_at": "2026-10-28"}, None)
     check("全 404 → gone", rec4["status"] == "gone")
     check("gone 只花 3 调（main+master+repos）", len(c4.calls) == 3, str(c4.calls))
+
+    # 空壳仓：repo 在、报了 default_branch，但树递归/非递归全 404 → empty_repo 终态
+    c7 = FakeClient({}, repo_info={"o/r": {"default_branch": "main",
+                                            "pushed_at": "2026-10-28T00:00:00Z"}})
+    rec7 = ec.collect_repo(c7, FakeRaw({}), "o/r", {"pushed_at": "2026-10-28"}, None)
+    check("空壳仓 → empty_repo 终态", rec7["status"] == "empty_repo")
+    check("空壳仓 5 调（main+master+repo+db递归+db非递归）",
+          len(c7.calls) == 5, str(c7.calls))
+
+    # 超大树：递归 404、非递归 200 → 根级降级 partial + fallback 标记 + 根级指纹
+    root_tree = {"sha": "rt-sha", "truncated": False, "tree": [
+        {"path": "go.mod", "type": "blob", "sha": ec.git_blob_sha(GO_MOD.encode())},
+        {"path": "Dockerfile", "type": "blob", "sha": "d1"},
+        {"path": "src", "type": "tree", "sha": "s1"},
+    ]}
+    c8 = FakeClient({}, repo_info={"o/r": {"default_branch": "main"}},
+                    nonrec_by_ref={"main": root_tree})
+    rec8 = ec.collect_repo(
+        c8, FakeRaw({"go.mod": GO_MOD.encode(), "Dockerfile": b"FROM mysql:8\n"}),
+        "o/r", {"pushed_at": "2026-10-28"}, None)
+    check("超大树 → partial + root_only 标记",
+          rec8["status"] == "partial"
+          and rec8["tree"].get("fallback") == "root_only"
+          and rec8["tree"]["truncated"] is True, str(rec8.get("tree")))
+    check("超大树根级指纹仍采到（go.mod）",
+          any(f["path"] == "go.mod" and f.get("names") for f in rec8["files"]),
+          str(rec8.get("files")))
+    check("超大树根级计数只算 blob（不含 src 目录）",
+          rec8["tree"]["path_count"] == 2, str(rec8["tree"]))
 
     # raw 404 → partial
     c5, _ = _fake_env()

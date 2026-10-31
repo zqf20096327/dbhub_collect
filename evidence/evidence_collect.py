@@ -473,7 +473,29 @@ def collect_repo(client: GitHubClient, raw: RawFetcher, fn: str,
         if not db:
             rec["status"] = "empty_repo"
             return rec
-        status, data, new_etag = client.tree_conditional(fn, db, None)
+        root_only = False
+        try:
+            status, data, new_etag = client.tree_conditional(fn, db, None)
+        except requests.HTTPError as e:
+            code = getattr(e.response, "status_code", None)
+            if code == 409:            # 报了 default_branch 的空仓（409 变体）
+                rec["status"] = "empty_repo"
+                return rec
+            if code == 404:
+                # 消歧（1 调）：非递归根树在 → 超大树 recursive 拿不动 → 根级降级；
+                # 也 404 → 空壳仓（报了 default_branch 但无任何提交）→ 终态
+                try:
+                    status, data, new_etag = client.tree_conditional(
+                        fn, db, None, recursive="0")
+                except requests.HTTPError as e2:
+                    code2 = getattr(e2.response, "status_code", None)
+                    if code2 in (404, 409):
+                        rec["status"] = "empty_repo"
+                        return rec
+                    raise
+                root_only = True
+            else:
+                raise                  # 403(DMCA)/5xx 等由外层记振
         if status == 304:              # 理论上到不了（无 etag），防御性处理
             rec["default_branch"] = db
             return rec
@@ -481,6 +503,8 @@ def collect_repo(client: GitHubClient, raw: RawFetcher, fn: str,
         api_pushed = (info.get("pushed_at") or "")[:10]
         if api_pushed > rec["pushed_at"]:
             rec["pushed_at"] = api_pushed
+    else:
+        root_only = False
     rec["default_branch"] = branch
 
     # --- 树 → 路径/指纹/线索 ---
@@ -489,9 +513,12 @@ def collect_repo(client: GitHubClient, raw: RawFetcher, fn: str,
     sel = select_targets(list(blobs))
     rec["tree"] = {
         "sha": data.get("sha"), "etag": new_etag,
-        "truncated": bool(data.get("truncated")), "path_count": len(blobs),
+        "truncated": bool(data.get("truncated")) or root_only,
+        "path_count": len(blobs),
         "matched": [p for p, _, _ in sel["fetch"]],
     }
+    if root_only:                       # 超大树降级：仅根级条目，无深层路径
+        rec["tree"]["fallback"] = "root_only"
     rec["clues"] = sel["clues"]
 
     # --- raw 抓取 + 解析 + blob sha 完整性校验 ---
