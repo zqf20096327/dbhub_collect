@@ -71,6 +71,8 @@ Groups and colors are local preferences; they do not change the database. See [o
 
 SQL consoles provide syntax highlighting, completion, formatting, find and replace, query history, execution plans and cancellation. Run the current statement, a selection or the entire script. SQL Server scripts support <code>GO</code> batches.
 
+Schedule SQL or full database backups at a fixed interval, including after closing the window, with the per-user [task scheduler](docs/sql-scheduler.md).
+
 On PostgreSQL, MySQL and MariaDB, **Explain Plan** (⇧⌘E) shows the plan as a tree with each step's object, estimated rows and cost; **Explain Analyze** in the editor's menu also runs the statement and adds actual rows and time, asking first when the statement writes. The steps that take most of the cost or time are highlighted, and **Show as Text** gives the server's own output. Other engines show their text plans.
 
 <p align="center">
@@ -119,6 +121,7 @@ Ctrl+F, or Command+F on macOS, searches the currently loaded cells. **Find in Sc
 - **Copy tables:** transfer selected data between connections, databases or schemas, translate column types between engines and optionally include related rows through foreign keys.
 - **Mask values:** apply consistent per-column masking during table copies or exports.
 - **Manage objects:** create and modify tables and views, review generated DDL, and manage MySQL/MariaDB users or PostgreSQL roles and privileges.
+- **Procedures and functions:** browse, create and edit them with a parameter table, the engine's options and a live DDL preview, then execute them with typed arguments and see output parameters. See [procedures and functions](docs/routines.md).
 - **Back up databases:** open **Back up database…** from the Database Explorer, review engine-specific options and choose a destination. Jobs run in the background with cancellation and local history.
 - **Run SQL scripts:** **Run SQL Script…** on a connection or database runs one or more `.sql` files without opening them. They are read in pieces, so a dump of several GB doesn't fill memory, and each engine's separators are respected (`GO` on SQL Server, `DELIMITER` on MySQL, `/` on Oracle). Progress and Cancel are shown; a failing statement asks Retry, Skip, Skip All or Stop, and the summary lists each failure with its file and line.
 
@@ -273,6 +276,7 @@ cargo-xwin downloads the Windows SDK and requires acceptance of Microsoft's lice
 | [Table editor](docs/table-editor.md) | Keyboard navigation, selections, bulk edits and optional automatic saving |
 | [Navigation and search](docs/navigation-search.md) | Table search, schema search, local groups/colors and tab management |
 | [Database backups](docs/database-backups.md) | Engine support, native utilities, destinations and cancellation |
+| [Procedures and functions](docs/routines.md) | Browsing, the routine dialog, editing per engine and executing with parameters |
 | [Application icon](docs/application-icon.md) | Shared artwork and native Windows/macOS icon assets |
 | [Window header](docs/window-chrome.md) | Platform-specific window controls and validation notes |
 | [Low-power rendering](docs/low-power-rendering.md) | Software adapters, Remote Desktop and frame statistics |

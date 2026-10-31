@@ -43,12 +43,14 @@ PDF-upload UI.
 | What you can do | Integrated path | Next guide |
 | --- | --- | --- |
 | Explore a corpus you own or may process | Ingest text, ask a question, inspect source IDs and snippets | [Quickstart](QUICKSTART.md) |
+| Ingest a permitted local PDF safely | Inspect extracted text before persistence, wire OCR explicitly, and recover saved IDs after restart | [Executable local PDF guide](docs/guides/PDF_OCR_HOOK_GUIDE.md) |
 | Browse stored papers in a normal browser | Filter the current catalog, copy exact IDs, and follow bounded passage pages without models or writes | [Local corpus explorer](docs/guides/CORPUS_EXPLORER_GUIDE.md) |
 | Read around an exact stored passage | Follow a displayed chunk into a bounded, validated source-order window in the same paper; recenter without generation | [Source-context API/Python/browser reader](docs/guides/SOURCE_CONTEXT_GUIDE.md) |
 | Recover paper IDs after restart | Browse bounded document summaries, filter by source/title, and select papers for queries | [Document catalog](docs/guides/DOCUMENT_CATALOG_GUIDE.md) |
 | Find exact wording and read its source in a browser | Search from `/explore`, inspect highlighted Unicode spans, page within an exact paper/collection, and return from source context without generation | [Browser/API/Python passage search](docs/guides/BROWSER_PASSAGE_SEARCH_GUIDE.md) |
 | Reuse a named paper selection after restart | Save a collection, then pass `collection_id` to `/query` or `/retrieve`; revisioned edits preserve old evidence | [Paper collections](docs/guides/PAPER_COLLECTIONS_GUIDE.md) |
 | Create a named selection without curl or manual JSON | Filter a bounded catalog page, explicitly check exact papers, save a name and reopen persisted membership | [Native collection builder: offline/browser/API/Python/portfolio guide](docs/guides/NATIVE_COLLECTION_BUILDER_GUIDE.md) |
+| Edit a collection without dropping hidden members | Rename, explicitly select additions/removals, preview the complete result and save against the current revision | [Native editor: browser/API/Python/portfolio guide and measured demo](docs/guides/NATIVE_COLLECTION_EDITOR_GUIDE.md) |
 | Browse saved collections and human screening | Discover collections from `/explore`, inspect membership/status/reasons, follow exact readers and download revision-bound screening/duplicate outputs | [Native collection browser and executed demo](docs/guides/COLLECTION_BROWSER_GUIDE.md) |
 | Inspect duplicate candidates before screening | Read a revision-checked selection in one bounded snapshot; review exact IDs, raw metadata, reasons and singletons without hiding or deleting papers | [Collection duplicate inspection and measured demo](docs/guides/COLLECTION_DUPLICATES_GUIDE.md) |
 | Screen papers before choosing evidence | Save human include/exclude/unsure decisions, resume the queue, and explicitly preview current included IDs | [Human paper screening](docs/guides/PAPER_SCREENING_GUIDE.md) |
@@ -59,6 +61,7 @@ PDF-upload UI.
 | Save an auditable human screening progress report | Download complete JSON/literal Markdown with resolved/pending totals and exact exclusion-reason membership, derived from one export without models or writes | [Human progress report: browser/API/Python/portfolio guide and executed illustration](docs/guides/SCREENING_REPORT_GUIDE.md) |
 | Restrict a query to selected ingested papers | Pass `document_ids` through hybrid and graph retrieval; preserve scope in the saved evidence | [Document scope](docs/guides/DOCUMENT_SCOPE_GUIDE.md) |
 | Inspect evidence before generating | `POST /retrieve` returns the actual prepared chunks and plan without any live/fake LLM call or agent-event writes | [Retrieval preview](docs/guides/RETRIEVAL_PREVIEW_GUIDE.md) |
+| Preview a question's prepared context in the browser | Explicitly submit corpus scope and evidence policies; inspect complete ordered passages, provenance and minimum-document diagnostics without a saved run | [Native retrieval workbench: browser/API/Python guide and measured GIF](docs/guides/NATIVE_RETRIEVAL_WORKBENCH_GUIDE.md) |
 | Compare evidence policies before generating | Two real previews share one query/scope and report exact source, provenance, and context-byte changes without saved runs | [Retrieval policy comparison and measured demo](docs/guides/RETRIEVAL_COMPARISON_GUIDE.md) |
 | Collapse overlapping evidence before generating | Opt in to `near_duplicate_threshold` on `/query` or `/retrieve`; preserve exact survivors and reviewable transformation paths | [Near-duplicate evidence collapse](docs/guides/NEAR_DUPLICATE_COLLAPSE_GUIDE.md) |
 | Limit how many passages one paper contributes | Opt in to `max_chunks_per_document` on `/query` or `/retrieve`; retain the quota and gate provenance in saved evidence | [Per-paper evidence limits](docs/guides/PER_PAPER_EVIDENCE_LIMITS_GUIDE.md) |
@@ -75,6 +78,7 @@ PDF-upload UI.
 | Read saved human feedback in a normal browser | Open a completed run's notebook, page independent review/annotation histories, and highlight an annotation's exact occurrence in its frozen source | [Human-review notebook and actual browser GIF](docs/guides/HUMAN_REVIEW_NOTEBOOK_GUIDE.md) |
 | Take the complete human-review notebook offline | Download JSON/literal Markdown with frozen evidence and both entire opinion histories in one bounded read-only snapshot, not just visible pages | [Portable notebook: API/Python/browser/portfolio guide and executed illustration](docs/guides/PORTABLE_REVIEW_NOTEBOOK_GUIDE.md) |
 | Find a previous run after restart | Page through saved query previews and recorded states, then follow events/export links | [Run history](docs/guides/RUN_HISTORY_GUIDE.md) |
+| Remember a fragment of an earlier original question | Search full saved questions literally before state/cursor pagination, even beyond the preview; keep the selection through native review navigation | [Original-question search: browser/API/Python/portfolio and measured GIF/still/text](docs/guides/SAVED_QUESTION_SEARCH_GUIDE.md) |
 | Find a saved answer in a normal browser | Preserve state/cursor selection, validate a complete capture, follow frozen sources and download existing artifacts without rerunning | [Saved-run browser, API/Python guide and actual browser GIF](docs/guides/SAVED_RUN_BROWSER_GUIDE.md) |
 | Review changes between two completed runs | Choose an explicit baseline in the native browser, compare recorded outputs side by side, swap direction and open exact frozen sources | [Saved-run comparison workbench: browser/API/Python/portfolio](docs/guides/SAVED_RUN_COMPARISON_WORKBENCH_GUIDE.md) |
 | Check whether saved source chunks still match the local corpus | Read unchanged/changed/missing findings in frozen rank order, without regenerating or rewriting evidence | [Corpus drift and measured demo](docs/guides/CORPUS_DRIFT_GUIDE.md) |
@@ -99,6 +103,23 @@ illustration, not browser footage** or scientific findings; a
 [text alternative](docs/assets/collection-builder.txt) records executed outcomes.
 No models, retrieval, network or agent events run during creation, and membership
 does not freeze paper contents.
+
+## Edit a collection without deleting papers
+
+[![Measured native editing, stale-save rejection and preserved history](docs/assets/collection-editor.png)](docs/assets/collection-editor.gif)
+
+Choose **Edit collection name and membership** from a saved collection or list
+card. Check explicit additions/removals, rename, preview the complete result,
+then save. Filtering candidates never removes unchecked or off-page members.
+Revision-checked atomic saves reject stale replays. Removing membership leaves
+documents, frozen evidence, events and human opinion history intact; even a
+rename makes earlier screening decisions stale.
+
+The [complete browser/API/Python and portfolio guide](docs/guides/NATIVE_COLLECTION_EDITOR_GUIDE.md)
+includes an executed credential-free demo, restart checks and finite limits.
+The opt-in GIF is a **measured-output Pillow illustration, not browser footage**;
+its [text alternative](docs/assets/collection-editor.txt) records actual results.
+No models, retrieval, network or agent events run while editing.
 
 ## Explicitly screen a paper in your browser
 
@@ -163,6 +184,22 @@ frozen evidence. The [complete browser/API/Python and portfolio guide](docs/guid
 reproduces the measured offline workflow and the [four actual browser frames](docs/assets/saved-run-browser.gif).
 The still preview makes animation opt-in; the GIF is a screenshot sequence,
 not a continuous recording, benchmark or scientific result.
+
+### Search the complete saved original question
+
+[![Measured synthetic original-question matching beyond the preview, pagination and restart](docs/assets/saved-question-search.png)](docs/assets/saved-question-search.gif)
+
+Use **Original question contains (literal)** in saved history, or
+`GET /runs?question=GraphRAG`. Search is case-sensitive, accepts 1-200 Unicode
+code points and checks the complete first PLANNING question, not just its
+300-character preview. State filtering and stable pagination still apply;
+reader, comparison, notebook and authoring return links keep the selection.
+There is no answer-body search, relevance scoring, model call or event write.
+
+The [complete guide](docs/guides/SAVED_QUESTION_SEARCH_GUIDE.md) documents exact
+Unicode/legacy/error behavior, limits and URL privacy. The opt-in GIF is an
+**executed synthetic-output illustration, not browser footage**; its
+[text alternative](docs/assets/saved-question-search.txt) records the measurements.
 
 ### Compare two saved answers without rerunning
 
@@ -664,6 +701,24 @@ uv run pytest tests/ -v --cov=src --cov-fail-under=70
 [CI](.github/workflows/ci.yml) runs on Python 3.11 and 3.12.
 [Security Scan](.github/workflows/security.yml) also audits dependencies and runs
 Bandit. Passing these checks is not a scientific-accuracy benchmark.
+
+### CompetingRisksResidualCueExtractor
+
+![CompetingRisksResidualCueExtractor](assets/demo/competing-risks-residual-cues.gif)
+
+Gap vs Elicit/Consensus/Connected Papers competing-risks residual cue extractors. Distinct from `CompetingRiskCueExtractor` / `CompetingRiskInformativeCensoringCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/COMPETING_RISKS_RESIDUAL_CUES_EXTRACTOR_GUIDE.md`.
+
+### MediationBiasCueExtractor
+
+![MediationBiasCueExtractor](assets/demo/mediation-bias-cues.gif)
+
+Gap vs Elicit/Consensus/Connected Papers mediation-bias cue extractors. Distinct from `MediationAnalysisCueExtractor` / `SelectionIntoTreatmentCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/MEDIATION_BIAS_CUES_EXTRACTOR_GUIDE.md`.
+
+### ProtocolAmendmentCueExtractor
+
+![ProtocolAmendmentCueExtractor](assets/demo/protocol-amendment-cues.gif)
+
+Gap vs Elicit/Consensus/Connected Papers protocol-amendment cue extractors. Distinct from `OutcomeSwitchingCueExtractor` / `WinnerCurseCueExtractor`. Stack: GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2. See `docs/guides/PROTOCOL_AMENDMENT_CUES_EXTRACTOR_GUIDE.md`.
 
 ## License
 

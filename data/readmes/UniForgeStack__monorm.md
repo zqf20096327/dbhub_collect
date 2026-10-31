@@ -13,13 +13,13 @@ Both languages get the same queries, the same migrations and generated, typed mo
 
 > **Under active development.**
 > It works today, and the author runs it in production.
-> It is version 0.1.1: install it with `pip install monorm` or `npm install monorm@npm:@ufstack/monorm`.
+> Install it with `pip install monorm` or `npm install monorm@npm:@ufstack/monorm`.
 > The npm package is `@ufstack/monorm` for now; always install it under the alias `monorm`, because the code imports `monorm`.
 > Other people should not use it in production yet, or do so at their own risk.
 > Evaluate it against your own app before you rely on it.
 
 **About 1.97× faster end to end than Django (async), up to 3.55×.**
-Source: the geometric mean of 20 cases in one run on one machine, with the database round trip included ([results](bench/RESULTS.md#speed-up-summary)).
+Source: the geometric mean of 20 cases in one run on one machine, with the database round trip included ([results](bench/README.md#speed-up-summary)).
 Method, limits and the cases where it is not faster: [Benchmarks](#benchmarks).
 
 The name is MonOrm.
@@ -136,6 +136,9 @@ npm install monorm@npm:@ufstack/monorm      # the same for Node and Bun (the ali
 ```
 
 The `monorm` command line comes with the Python and npm packages.
+To start a project, run `uvx monorm init my-app`, `npm create monorm my-app` or `bun create monorm my-app`.
+`monorm init` asks for the language (Python or TypeScript), the tool, the database (SQLite or PostgreSQL) and the built-in extensions.
+Flags answer each question: `--lang`, `--tool`, `--db`, `--url`, `--ext a,b` and `--yes`.
 Both packages hold PostgreSQL and SQLite. They build for 4 platforms: Linux x86-64, Linux arm64, macOS arm64 and Windows x86-64.
 An extension that is not built in is a separate package that you install next to `monorm` ([optional-packaging.md](docs/contracts/optional-packaging.md)).
 
@@ -230,7 +233,7 @@ Every number is measured and end to end: it includes the database round trip.
 - Against Django sync the Python geometric mean is 1.59× faster, against SQLAlchemy sync 2.25×.
 - It is one run on a shared VM. Treat a difference whose interval overlaps 1.00 as no difference. Django async has no async `atomic()`, which affects `tx-5`.
 
-Full tables, the method and the raw data: [`bench/RESULTS.md`](bench/RESULTS.md#speed-up-summary) and [`bench/compare/README.md`](bench/compare/README.md).
+Full tables, the method and the raw data: [`bench/README.md`](bench/README.md#speed-up-summary) and [`bench/compare/README.md`](bench/compare/README.md).
 Run the comparison yourself before you decide.
 
 ## Status and limits

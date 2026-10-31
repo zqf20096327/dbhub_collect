@@ -160,8 +160,15 @@ npm run data:load -- --remote
 npm run deploy
 ```
 
-The Worker is bound to `doctor.wordtk.com` through a `routes` entry with `custom_domain: true`, and
-the `workers.dev` subdomain is disabled so there is only one public entry point.
+The custom domain is **not** declared in `wrangler.jsonc`: a live origin must not sit in the
+repository. Bind it once in Cloudflare Dashboard → Workers & Pages → `doctor` → Settings →
+Domains & Routes; `wrangler deploy` leaves that binding untouched. The `workers.dev` subdomain
+is disabled so there is only one public entry point.
+
+The commercial-licence mailbox is deployment configuration too. Add it as a Worker variable —
+Cloudflare Dashboard → Workers & Pages → `doctor` → Settings → Variables → `CONTACT_EMAIL`
+(plain text; `.dev.vars` for local runs). `GET /api/site` serves it to the page; while it is
+unset the contact blocks stay hidden instead of rendering an empty mail link.
 
 ## Project layout
 

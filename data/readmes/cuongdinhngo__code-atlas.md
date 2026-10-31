@@ -137,20 +137,24 @@ and T-SQL via npm, Python needs nothing), and writes `<your-project>/.mcp.json` 
 interpreter, each `CA_<LANG>_CMD` and the working directory filled in — the three things that are easy
 to get wrong by hand. Run it with no path to print the snippet instead of writing it.
 
-To run the server without a checkout: `uvx --from git+https://github.com/cuongdinhngo/code-atlas.git
-code-atlas`, or `pipx run --spec git+https://github.com/cuongdinhngo/code-atlas.git code-atlas` —
+To run the server without a checkout: `uvx --from git+https://github.com/cuongdinhngo/code-atlas.git@v0.9.1
+code-atlas`, or `pipx run --spec git+https://github.com/cuongdinhngo/code-atlas.git@v0.9.1 code-atlas` —
 the adapters still need their own runtimes on `PATH`, and a checkout to launch them from.
 
 **In Claude Code, install it as a plugin** — the server, the hooks and the skill in one step, for every
 project. The plugin launches the console scripts by name, so put them on `PATH` with a tool install:
 
 ```bash
-uv tool install git+https://github.com/cuongdinhngo/code-atlas.git   # or: pipx install git+…
-claude plugin marketplace add cuongdinhngo/code-atlas
+uv tool install git+https://github.com/cuongdinhngo/code-atlas.git@v0.9.1   # or: pipx install git+…@v0.9.1
+claude plugin marketplace add cuongdinhngo/code-atlas#v0.9.1
 claude plugin install code-atlas@code-atlas
 ```
 
-Its hooks stay silent in a repo with no `.code-atlas/`; without the console scripts on `PATH`,
+**Install from this repository only.** code-atlas is not published on PyPI: the packages
+`code-atlas-mcp` and `codeatlas` there are other projects, so never install code-atlas by a
+package name.
+
+Its hooks stay silent in a repo with no `.code-atlas/graph.db` (an index moved by `CA_DB_PATH` gets no hooks), or one git tracks; without the console scripts on `PATH`,
 the `SessionStart` hook prints the install line once and every hook exits 0 (376). Adapter `CA_<LANG>_CMD` variables stay per
 machine, as below. Already wired `.mcp.json` or the hook snippet by hand? Remove those, or each event
 fires twice ([`contrib/claude-code/`](contrib/claude-code/)).
@@ -176,7 +180,7 @@ there is an index, how stale it is, and what to call next. Then `build_or_update
 <details>
 <summary>Wiring it by hand, or running the server from a container</summary>
 
-**By hand:** `pip install -e .`, then `composer install --working-dir=adapters/php`, then point an
+**By hand:** `uv sync --frozen` (or `pip install -e .`), then `composer install --working-dir=adapters/php`, then point an
 `.mcp.json` at your repo — `command` = `code-atlas` (or `python3 -m code_atlas.main`), `cwd` = the
 repo to index, `env.CA_PHP_CMD` = `php /abs/path/to/code-atlas/adapters/php/index.php --server`. The
 adapter lives in this checkout, so `CA_PHP_CMD` must be an **absolute** path. Details in
@@ -242,26 +246,21 @@ installed with:
 
 | Installed with | Upgrade |
 |---|---|
-| `uv tool install git+…` / `pipx install git+…` | `uv tool upgrade code-atlas` / `pipx upgrade code-atlas` |
-| `uv tool install git+…@<rev>` (the receipt says `?rev=`) | `uv tool install --force git+…` — `upgrade` never moves a pin, and the `SessionStart` hook names one (381) |
+| `uv tool install git+…@vX.Y.Z` / `pipx install git+…@vX.Y.Z` | `uv tool install --force git+https://github.com/cuongdinhngo/code-atlas.git@vX.Y.Z` / `pipx install --force git+https://github.com/cuongdinhngo/code-atlas.git@vX.Y.Z` — `upgrade` never moves a pin, and the `SessionStart` hook names this command |
 | a checkout and `scripts/setup.py` | `git pull`, then re-run `python3 scripts/setup.py /abs/path/to/your-project` |
-| the Claude Code plugin | `claude plugin marketplace update code-atlas`, then `claude plugin update code-atlas@code-atlas`, then restart. Also upgrade the tool install that puts the scripts on `PATH` |
+| the Claude Code plugin | `claude plugin marketplace remove code-atlas`, then `claude plugin marketplace add cuongdinhngo/code-atlas#vX.Y.Z`, then `claude plugin install code-atlas@code-atlas`, then restart. Also upgrade the tool install that puts the scripts on `PATH` |
+
+A server started by a plugin of another release refuses to serve and prints the command above that
+fixes it (427).
 
 **The plugin updates only when its `version` moves.** Measured on Claude Code 2.1.284:
 - A content change under an unchanged version answers `already at the latest version`.
 - `marketplace update` alone leaves the installed version where it was.
 - `plugin update` moves it.
 
-**Turn on auto-update for this marketplace.** Claude Code's docs (`plugins/loading.md`,
-`install.md`, read 2026-10-09) say auto-update is **off by default** for a third-party marketplace.
-Once on, it runs after the first message of an interactive session, after a random delay of up to
-ten minutes, and applies on `/reload-plugins` or the next launch. Turn it on per user with `/plugin`
-→ Marketplaces → *Enable auto-update*. **Do not put it in a project's committed settings:** Claude
-Code registers and clones every `extraKnownMarketplaces` entry in the background for anyone who trusts
-the folder (`settings-reference.md`, `plugins/loading.md`, read 2026-10-10) — a network call on every
-teammate's machine, code-atlas or not (381; documented, not yet measured live).
+Auto-update moves nothing on a marketplace added at a tag, so do not enable it on one added without a tag.
 
-**With auto-update off, the plugin still tells you a newer release is out** (405). Once a day, a
+**The plugin tells you a newer release is out** (405). Once a day, a
 background `SessionStart` hook lists the repository's `vX.Y.Z` tags into
 `~/.cache/code-atlas/release.json`. The next session start shows `release X.Y.Z is out` when that tag
 is newer than the plugin. It is silent offline. `CA_RELEASE_CHECK=0` turns it off.
@@ -386,13 +385,14 @@ never a silent fallback.
 | `CA_PAGE_LIMIT` | `page_limit` | `50` | query-time row ceiling for search/nav tools (no rebuild). Pre-259 `CA_MAX_RESULTS` does **not** set this |
 | `CA_MAX_CANDIDATES` | `max_candidates` | `50` | build-time resolver fan-out (**rebuild** to apply). `CA_MAX_RESULTS` / project-file `max_results` still alias here |
 | `CA_IMPACT_DEPTH` / `CA_IMPACT_MAX_NODES` | `impact_depth` / `impact_max_nodes` | `2` / `500` | hops and node budget for one impact query |
+| `CA_MAX_FILE_BYTES` | `max_file_bytes` | `4194304` (4 MiB) | a source file above this is skipped, never truncated and never sent to an adapter; `get_index_status` and the build summary count it as `skipped.oversize`. The project file cannot raise it past 64 MiB |
 | `CA_ENTRY_POINTS` | `entry_points` | unset | file globs that seed reachability. **`reachable_from` and `find_orphans` need this** — unset, they report *no roots configured* rather than guessing, and `get_index_status` nominates candidate globs with a file count for you to choose from |
 | `CA_STUB_ROOTS` | `stub_roots` | unset | dependency roots (e.g. `vendor`) to index declarations-only, so third-party signatures resolve |
 | `CA_INDIRECTION_RULES` | `indirection_rules` | unset | JSON rule files mapping framework indirection to edges. **`find_view_data` needs this** |
 | `CA_ARCHITECTURE_RULES` | `architecture_rules` | unset | JSON rule files of path-set dependency constraints. **`check_architecture_rules` needs this** |
 | `CA_TOOLS` | `tools` | all 24 | comma-separated tool allow-list — see the six-tool preset below |
 | `CA_<LANG>_CMD` | `[adapter_cmd].<lang>` | — | the **complete argv** that launches one adapter in server mode. The file table is honoured only with `CA_TRUST_PROJECT_FILE=1` |
-| `CA_TRUST_PROJECT_FILE` | — (env only) | unset | `1` lets the repo's own `[adapter_cmd]` choose the argv. Unset, a table there is a loud error: a repo you index must not pick the command code-atlas runs |
+| `CA_TRUST_PROJECT_FILE` | — (env only) | unset | `1` lets the repo's own `[adapter_cmd]`, `host_root` and `container_root` choose the argv and the path mapping. Unset, any of them there is a loud error: a repo you index must not pick the command code-atlas runs |
 
 ```toml
 # .code-atlas.toml — [adapter_cmd] is honoured only with CA_TRUST_PROJECT_FILE=1

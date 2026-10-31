@@ -32,6 +32,10 @@ See [bounded investigation diagnostics](docs/v4.md#budgets-and-termination).
 
 ## Reminders
 
+Analyst incident narratives can now be reviewed with `briefing --file PATH`.
+See [briefing review, explicit discovery approval, and manual acceptance](docs/LOCARD_6_73_BRIEFING.md).
+Default briefing analysis is model-free; narrative claims are never forensic findings.
+
 The bounded `investigate-ai` engine is assessed in [the investigation architecture
 and safety review](V4.md), including its tool inventory, limits, privacy boundaries
 and requirements for future reuse. The normal `!` interface supports advisory guidance and bounded investigation with per-tool approval.
@@ -40,15 +44,15 @@ For pre-model startup failures, enable the standard Python DEBUG logger
 `forensic_assistant.investigation_ai`. It reports content-free phase timings,
 remaining overall time and child-watchdog time. See the [startup diagnosis and
 PowerShell acceptance commands](V4.md#664-startup-correction--pending-manual-acceptance).
-Startup uses the remaining overall budget; it is not capped by the 45-second
-tool-operation watchdog. Fingerprints still cover all authoritative case content.
-
-`investigate-ai --max-seconds` uses one deadline, including local model calls,
-worker startup, tools, transcript finalization and analyst approval 
+Startup uses the remaining overall bu
 
 [...截断...]
 
-waiting.
+dget; it is not capped by the 45-second
+tool-operation watchdog. Fingerprints still cover all authoritative case content.
+
+`investigate-ai --max-seconds` uses one deadline, including local model calls,
+worker startup, tools, transcript finalization and analyst approval waiting.
 Cancellation/timeout has an additional maximum five-second cleanup allowance.
 Inspect the returned `termination`; command completion does not mean a supported
 forensic conclusion. Interrupted runs explicitly mark their transcript incomplete.
@@ -94,7 +98,4 @@ Locard does not need a massive general-purpose LLM because the AI is not respons
 
 #### The Role of the AI Assistant
 
-Locard does not ask the model to reconstruct an investigation from millions of raw events. Instead, deterministic retrieval and correlation reduce the case down to a small, bounded evidence bundle first.  The model serves as an analysis assistant layered on top of the forensic engine. **It is not the forensic engine itself.** 
-
-| What MiniCPM DOES Do | What MiniCPM DOES NOT Do |
-|---|---|
+Locard does not ask the model to reconstruct an investigation from millions of raw events. Instead, deterministic retrieva

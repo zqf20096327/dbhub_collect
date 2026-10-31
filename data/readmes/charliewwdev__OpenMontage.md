@@ -155,12 +155,17 @@ Model settings
 | Image + video generation | ❌ **you provide**: a Volcengine Ark key for **Seedream** (images) and **Seedance** (video). These are **paid third-party APIs**. Images can instead go to your own ComfyUI server. |
 | TTS | edge-tts by default (no key); optional OpenAI-compatible speech endpoint |
 
-Other things to know:
+**Fully self-hosted (no DTok account):** `studio/.env.example` still ships sample values for the public demo
+(`openmontage.dtok.io`, its MinIO host, and `API_BASE_URL` → DTok auth). For a private deployment, use **local
+demo auth** (`STUDIO_DEMO_ENABLED=true`, sign in with the Demo button — `POST /api/auth/demo`, no call to DTok),
+point `MINIO_*` / `OSS_*` at storage you control, and put your own LLM / Seedream / Seedance (or ComfyUI) keys in
+env or *Model settings*. Password / Google login still proxy to whatever `API_BASE_URL` is set; leave that path
+unused, or point it at an account API you own.
 
-- `studio/.env.example` ships with defaults for the hosted instance (`openmontage.dtok.io`, its MinIO host and the
-  DTok account API in `API_BASE_URL`). Replace them with your own values. By default sign-in is proxied to the
-  account API in `API_BASE_URL`; see `STUDIO_AUTH_REQUIRED` and the demo-user settings in the same file.
-- The hosted instance has a credits / top-up page. Self-hosted, you pay your model providers directly.
+Step-by-step standalone guide (auth modes, MinIO example, which stages need paid APIs):
+**[docs/SELF_HOSTING.md](docs/SELF_HOSTING.md)** · [中文](docs/SELF_HOSTING_zh-CN.md).
+
+The hosted instance has a credits / top-up page. Self-hosted, you pay your model providers directly.
 
 ## Quick start
 
@@ -168,9 +173,10 @@ Docker (Compose reads `.env` from the repo root):
 
 ```bash
 cp studio/.env.example .env
-# fill in DATABASE_URL (or keep the bundled drama-db default), your S3/MinIO settings, and model API keys
+# Standalone: set STUDIO_PUBLIC_URL, STUDIO_DEMO_ENABLED=true, your MINIO_*/OSS_*, and model keys.
+# See docs/SELF_HOSTING.md — do not keep the DTok sample API_BASE_URL/MinIO hosts if you want zero DTok dependency.
 docker compose -f docker-compose.studio.yml up --build
-# open http://localhost:8787 · health check: GET /api/health (Postgres + object storage)
+# open http://localhost:8787 · sign in with Demo · health: GET /api/health
 ```
 
 Local development:
@@ -191,17 +197,12 @@ Agent / CLI pipeline notes: [`AGENT_GUIDE.md`](AGENT_GUIDE.md).
 
 Python · FastAPI · React · PostgreSQL · Redis · MinIO / S3 · Seedream · Seedance · edge-tts · FFmpeg · Docker / Coolify
 
-## About the name
+## About
 
 OpenMontage Drama Studio is an independent product by [@charliewwdev](https://github.com/charliewwdev).
-It started from the AGPL-3.0 [calesthio/OpenMontage](https://github.com/calesthio/OpenMontage) codebase and has
-since been rebuilt into a separate short-drama studio. It is **not affiliated with or endorsed by** the upstream
-project. The repository keeps the upstream git history, so upstream authors appear in the contributor list.
 
-## License and attribution
+## License
 
 Licensed under the **GNU AGPL-3.0**; see [`LICENSE`](LICENSE).
 
-This is a modified version of [calesthio/OpenMontage](https://github.com/calesthio/OpenMontage). Original code is
-copyright its respective authors; modifications are by @charliewwdev (see the git history for what changed and when).
 If you run a modified version as a network service, AGPL-3.0 §13 requires you to offer its source to your users.

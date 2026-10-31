@@ -5,7 +5,7 @@
 [![CI](https://github.com/ashishsinha1602/schemagate/actions/workflows/ci.yml/badge.svg)](https://github.com/ashishsinha1602/schemagate/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Patent pending: US 64/183,987](https://img.shields.io/badge/patent-pending%20(US%2064%2F183%2C987)-555555)](#status)
-[![BIRD Mini-Dev EX: SQLite 81.0 · PostgreSQL 72.6 · MySQL 72.4](https://img.shields.io/badge/BIRD%20Mini--Dev%20EX-SQLite%2081.0%20%C2%B7%20PostgreSQL%2072.6%20%C2%B7%20MySQL%2072.4-0F7B6C)](benchmarks/results/bird_minidev/README.md)
+[![BIRD Mini-Dev: #1 on SQLite, PostgreSQL and MySQL](https://img.shields.io/badge/BIRD%20Mini--Dev-%231%20on%20SQLite%20%C2%B7%20PostgreSQL%20%C2%B7%20MySQL-0F7B6C)](https://bird-bench.github.io/)
 [![UniQL Oracle: 64.5% first try](https://img.shields.io/badge/UniQL%20Oracle-64.5%25%20first%20try-C74634)](benchmarks/results/uniql_oracle/README.md)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/15353/badge)](https://www.bestpractices.dev/projects/15353)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/ashishsinha1602/schemagate/badge)](https://scorecard.dev/viewer/?uri=github.com/ashishsinha1602/schemagate)
@@ -15,6 +15,8 @@
 [![Try it in the browser](https://img.shields.io/badge/demo-in%20your%20browser-0F7B6C)](https://ashishsinha1602.github.io/schemagate/)
 
 Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than ranked low. Works with LangChain, LlamaIndex, MCP, or any SQL agent, on Postgres, Oracle, MySQL, SQL Server and SQLite.
+
+**#1 on BIRD's Mini-Dev leaderboard in all three dialects**: SQLite 81.0, PostgreSQL 72.6, MySQL 72.4 execution accuracy, with Claude Opus 5.5 and one model call per question ([leaderboard](https://bird-bench.github.io/), [run files](benchmarks/results/bird_minidev/README.md)).
 
 ![An analyst asks "salary by employee": hr_compensation is absent from the shortlist. Grant the payroll role and it becomes the top match.](https://raw.githubusercontent.com/ashishsinha1602/schemagate/main/docs/media/schemagate-demo.gif)
 
@@ -431,14 +433,14 @@ call per question, about 2,100 prompt tokens, no candidates, no voting, no agent
 
 | | Model | EX | Best published, 2026-10-19 |
 |---|---|---|---|
-| BIRD dev, all 1,534 questions | Claude Opus 5.5 | **77.12** | test-set submission sent 2026-10-22 |
-| BIRD Mini-Dev, SQLite / PostgreSQL / MySQL | Claude Opus 5.5 | **81.0 / 72.6 / 72.4** | 75.6 / 65.8 / 49.2 |
+| BIRD dev, all 1,534 questions | Claude Opus 5.5 | **77.12** | hidden test set, scored by BIRD: 72.11 for this setup; 74.34 with 4 training examples per prompt (dev 84.03) |
+| BIRD Mini-Dev, SQLite / PostgreSQL / MySQL | Claude Opus 5.5 | **81.0 / 72.6 / 72.4**, #1 on all three | next best on BIRD's board, 2026-10-31: 75.6 / 69.0 / 49.2 |
 | UniQL, Oracle dialect, first try | Gemini 2.5 Flash | **64.47** | 49.61 (Claude Sonnet 4.5) |
 | Spider 2.0-lite, the 135 SQLite questions only | Claude Sonnet 5.5 | **71.9** | 57.78 Pass@1 (FlexSQL agent, gpt-oss-120b) |
 | Spider 2.0-lite, the 205 BigQuery questions | Claude Sonnet 5.5 | **45.9** | no BigQuery-only row published |
 
-Opus varies about ±1 run to run; the Mini-Dev rows are self-reported until BIRD merges
-[PR #251](https://github.com/bird-bench/bird-bench.github.io/pull/251). Files and commands:
+Opus varies about ±1 run to run. The Mini-Dev rows are on BIRD's own leaderboard
+([PR #251](https://github.com/bird-bench/bird-bench.github.io/pull/251), merged 2026-10-25). Files and commands:
 [`benchmarks/results/`](benchmarks/results/); the context is in
 [BENCHMARKS.md](BENCHMARKS.md#execution-accuracy-scored-by-each-benchmarks-own-evaluator).
 
@@ -473,8 +475,9 @@ corrections rather than deleting them.
 Claude Opus 5.5 gets **77.12% execution accuracy on all 1,534 BIRD dev
 questions**, one model call per question (table above). The BIRD Mini-Dev
 rows are on BIRD's own leaderboard. A main-board placing needs the held-out
-test set: a submission was sent on 2026-10-22 and is being evaluated by the
-BIRD team.
+test set, which only the BIRD team runs: 72.11 execution accuracy for this
+setup, and 74.34 for the second configuration, which adds the four closest
+BIRD training questions to each prompt.
 
 Everything below is measured on schemas I invented, which is worth less and
 is why the public numbers come first.
@@ -1006,10 +1009,13 @@ failed. Point it at a scratch schema.
 | Oracle | certified live on Oracle AI Database 26ai (Autonomous Database), Sep 2026: certify script 10/10, the native `VECTOR(512, FLOAT32)` store conformance suite, and the dialect suite. Also stress-tested against a 127-object, 3-domain schema with ~7M rows |
 | SQL Server | certified live on SQL Server 2022 (16.0.4295.3), 10/10, **in CI on every push** against a service container, plus 13 live dialect tests covering alias types, `hierarchyid`/`sql_variant`, and `max_length` being bytes |
 | MySQL / MariaDB | certified live on MySQL 8.4.11, 10/10, **in CI on every push** against a service container, plus the GRANT reader suite: all three privilege levels, the role graph, and the role-only blind spot MySQL cannot report. MariaDB has not been run |
+| DuckDB | 9/10 locally, Oct 2026, on DuckDB 2.0.0 through `duckdb-engine` 0.17.0 (`pip install duckdb-engine`, URL `duckdb:///path/to/file.duckdb`). Tables, columns, foreign keys, selection and identity scoping pass; primary keys are not reported by the driver. Needs SQLAlchemy 2.0.44 or older: from 2.0.45, `duckdb-engine` cannot reflect columns at all ([duckdb_engine#1379](https://github.com/Mause/duckdb_engine/issues/1379)). Not in CI |
 
 Every row above has a real database behind it. The one thing still worth
 saying plainly: MariaDB is inferred from MySQL rather than run. Point the
-script at one and tell me what happens.
+script at one and tell me what happens. DuckDB has no `SERIAL` type, so its
+run created the three test tables with `autoincrement=False` on their keys
+(the suite inserts no rows).
 
 The same checks run under pytest if you export a URL, which is how CI certifies
 a dialect for good:

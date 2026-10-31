@@ -8,18 +8,22 @@
   <a href="https://github.com/DeltaForceT/tPoseidon/actions/workflows/ci.yml"><img alt="Build" src="https://github.com/DeltaForceT/tPoseidon/actions/workflows/ci.yml/badge.svg"></a>
   <a href="https://github.com/DeltaForceT/tPoseidon/releases"><img alt="Latest release" src="https://img.shields.io/github/v/release/DeltaForceT/tPoseidon?include_prereleases&label=release"></a>
   <a href="LICENSE"><img alt="License: beta license" src="https://img.shields.io/badge/license-beta%20license-blue"></a>
-  <img alt="Platforms: Windows, Linux, macOS" src="https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey">
+  <img alt="Platform: Windows" src="https://img.shields.io/badge/platform-Windows-lightgrey">
+  <a href="https://discord.gg/RAfSMmBm7"><img alt="Discord" src="https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/DeltaForceT/tPoseidon/releases">Download</a> &middot;
+  <a href="https://github.com/DeltaForceT/tPoseidon/releases"><strong>Download</strong></a> &middot;
+  <a href="https://github.com/DeltaForceT/tPoseidon/wiki"><strong>Wiki (guides)</strong></a> &middot;
+  <a href="https://discord.gg/RAfSMmBm7"><strong>Discord</strong></a> &middot;
   <a href="#getting-started">Getting started</a> &middot;
   <a href="docs/beta/SYSTEMS.md">Systems status</a> &middot;
-  <a href="https://github.com/DeltaForceT/tPoseidon/issues/new?template=bug_report.yml">Report a bug</a> &middot;
-  <a href="https://github.com/DeltaForceT/tPoseidon/discussions">Discussions</a>
+  <a href="https://github.com/DeltaForceT/tPoseidon/issues/new?template=bug_report.yml">Report a bug</a>
 </p>
 
-tPoseidon runs every server the game needs (login, channel, master, system, game) on your own machine, so you can play again and host for your friends. We aim for the original game: same screens, same flow, same mechanics, 1x rates out of the box.
+tPoseidon runs every server the game needs (login, channel, master, system, game) on your own machine, so you can play again and host for your friends. I aim for the original game: same screens, same flow, same mechanics, 1x rates out of the box.
+
+**New here?** The [wiki](https://github.com/DeltaForceT/tPoseidon/wiki) has step-by-step guides: installing, hosting for friends, accounts, the launcher, GM tools, backups and troubleshooting. Questions: the [Discord](https://discord.gg/RAfSMmBm7).
 
 ## Beta rules
 
@@ -28,35 +32,39 @@ tPoseidon is in beta. These are the rules that matter. The full text is in [BETA
 - **Downloads, bug reports and suggestions only.** During the beta the project offers the release packages to download and takes bug reports and suggestions. Code contributions and forks open at 1.0.
 - **No forks and no redistribution of modified copies during the beta.** Download it, run it, host it for yourself and your community. Don't publish modified builds, forks or other emulators based on it, and don't re-upload the packages.
 - **No wipes.** Your accounts and characters live in your own database. Updates migrate it. Back up before every update.
-- **Bring your own KR 2014 client.** We don't ship it. Never share client or game files in this project's spaces.
-- **Put your version in every bug report**, for example `0.60.0-beta`. `tposeidon status` prints it.
+- **Bring your own KR 2014 client.** I don't ship it. Never share client or game files in this project's spaces.
+- **Put your version in every bug report**, for example `0.75.3-beta`. `tposeidon status` prints it.
 - **Report security problems privately.** See [SECURITY.md](SECURITY.md). Don't post them in issues or on the forum.
 - **Be respectful.** Everyone follows the [Code of Conduct](CODE_OF_CONDUCT.md).
 
-## Where we are
+## Where it stands
 
-You can make a character and play through a good part of the game, but you will hit bugs and missing systems. [docs/beta/SYSTEMS.md](docs/beta/SYSTEMS.md) lists what works, what is built but needs testing, and what isn't built yet. Read it before you start. When something breaks, [How to report a bug](docs/beta/how-to-report-a-bug.md) explains what we need from you.
+You can make a character and play through a good part of the game, but you will hit bugs and missing systems. [docs/beta/SYSTEMS.md](docs/beta/SYSTEMS.md) lists what works, what is built but needs testing, and what isn't built yet. Read it before you start. When something breaks, [How to report a bug](docs/beta/how-to-report-a-bug.md) explains what I need from you.
 
 ## Requirements
 
-- **PostgreSQL 14 or newer**, installed by you. It holds accounts and characters. [docs/install/postgresql.md](docs/install/postgresql.md) has short steps for Windows, Linux, macOS and Docker.
-- **The KR 2014 game client**, your own copy. tPoseidon reads the game data it needs from your client folder while it runs. Play starts the client in Korean mode when its game data is Korean (the original client) and in English mode when the data is translated; the panel's settings menu has a **Client language** choice to set it yourself. English mode needs `data/libconfig_eng.dat`, `data/libconfig_eng.idx` and `data/tahoma12.fnt`; when a client lacks them, Play adds them as copies of the client's own `libconfig.dat`, `libconfig.idx` and `gulim12.fnt`. Nothing is downloaded, and files the client already has are never replaced. The client also has an old Korean server address built in, which it always connects to; Play writes your server's address into both of the client's built-in addresses in your own `Trickster.bin` before starting it and keeps the original next to it as `Trickster.bin.tposeidon-original`. The client always uses lobby port 9980.
-- Nothing else. The release packages carry their own .NET runtime.
+| You need | Notes |
+|---|---|
+| **Windows 10 or 11, 64-bit** | Linux and macOS packages come with version 1.0, once I have tested them. |
+| **PostgreSQL 14 or newer** | Installed by you, or run in Docker. It holds the accounts and characters. Steps: [Installing](https://github.com/DeltaForceT/tPoseidon/wiki/Installing). |
+| **Your own KR 2014 client (2014.01.28)** | Not included, and never shared here. Every player uses their own copy. |
 
-| | Windows | Linux | macOS |
-|---|---|---|---|
-| Servers | x64 | x64, arm64 | Intel, Apple silicon |
-| `tposeidon` command line | yes | yes | yes |
-| Control panel | yes | packaged, untested | packaged, untested |
-| Game client | yes | Wine | Wine or CrossOver |
+Nothing else: the release packages carry their own .NET runtime.
 
-Most of our testing happens on Windows. The Linux and macOS builds come from the same code, but fewer people have run them, so reports from those systems help a lot.
+**What tPoseidon does with your client folder**
+
+- Reads the game data it needs from it. Nothing is downloaded.
+- Points the client at your server when you press Play, and keeps the original file next to it (`.tposeidon-original`).
+- Picks Korean or English mode from the client's own data. You can change it with **Client language** in the panel.
+- Checks the folder during setup and offers a **Fix** for what the server needs (with backups and **Restore originals**).
+
+The details are in the wiki: [Client check](https://github.com/DeltaForceT/tPoseidon/wiki/Client-check) and [Playing and the launcher](https://github.com/DeltaForceT/tPoseidon/wiki/Playing-and-the-launcher).
 
 ## Getting started
 
 1. Install PostgreSQL if you don't have it yet. Note the admin login and its password.
-2. Download the package for your system from the [Releases](https://github.com/DeltaForceT/tPoseidon/releases) page and unpack it somewhere you can write to, like your home folder.
-3. Run setup in a terminal in that folder: `tposeidon setup` (`./tposeidon setup` on Linux and macOS).
+2. Download the Windows package from the [Releases](https://github.com/DeltaForceT/tPoseidon/releases) page and unpack it somewhere you can write to, like your home folder.
+3. Run setup in a terminal in that folder: `tposeidon setup`.
 4. Setup asks where your client is, who is going to play (this PC, your LAN or the internet), how to reach PostgreSQL, a name and password for your game account, and which account Play logs in with (the one you just made, unless you pick another that already exists). It then reads the game data it needs from your client and creates the database tables. The PostgreSQL admin password is only used for that and isn't saved.
 5. Start the servers:
 
@@ -69,9 +77,17 @@ Most of our testing happens on Windows. The Linux and macOS builds come from the
 
 ### How Play logs in
 
-The original game logged you in through the publisher's website, and the client never knew your password. tPoseidon does the same job itself. When you press Play (or run `tposeidon play`) on the server's computer, it leaves a one-time pass for your Play account in the database and then starts the client. The client logs in with a built-in placeholder password, and the lobby accepts that only if a pass is waiting for that account from that address. A pass works once and runs out after about a minute. Everyone else still needs the real password.
+The original game logged you in through the publisher's website, and the client never knew your password. tPoseidon does the same job itself. When you press Play (or run `tposeidon play`) on the server's computer, it leaves a one-time pass for your Play account in the database and then starts the client. The client logs in with a built-in placeholder password, and the lobby accepts that only if a pass is waiting for that account from that address. A pass must be used within five minutes; after that it only lets the same account back in from the same address (for example after "Move to starting screen"), for 12 hours after the last login. Everyone else still needs the real password.
 
 Friends who play from other computers can use the launcher below, or run `tposeidon play --server <your address> --account <their account> --client <their client folder>`. It asks for their password, checks it with your server's web port (the same one as the item shop, 9990 by default), and starts their client pointed at your server. The server must run the item shop for this. Their password travels to your server, so put the web port behind HTTPS (see [Hosting securely](docs/install/hosting-securely.md)) when your server is public and pass the secure address with `--web-url https://play.example.org:9990`.
+
+### Accounts for your players
+
+Setup makes one account, the one you play with. Make one for every other player, so that each has their own login. On the server computer, run `tposeidon account add <name>` (it asks for the password twice, or pass `--password <text>` in a script), `tposeidon account password <name>` to set a new password for a player who forgot theirs, and `tposeidon account list` to see the accounts. In the panel, open the GM window, then **Players**, then the **Accounts** page: type the account and the password twice, then **Create account**, **Set password** or **Show accounts**. Names and passwords can be at most 19 bytes, the most the game client sends at login. Players make their characters in the game after their first login.
+
+### Character slots per account
+
+The original servers let an account hold 3 characters. You can allow more, up to 8 (the game client shows 8 character cards): the **Character slots** page of the setup wizard, the panel's "..." menu (Character slots per account...), `tposeidon setup --character-slots <1-8>`, or `characterSlots` in `tposeidon.json`. The servers read it when they start, so restart them after changing it. Lowering it never removes or hides characters: an account that already has more keeps them all and can play them, and cannot make another until it is under the new limit. The character list shows every card up to the highest slot in use, even above the limit.
 
 ### Joining a friend's server
 
@@ -104,6 +120,11 @@ What your players get:
 - **Options** are the settings the original client's setup tool offered: resolution (800 x 600 or 1024 x 768), full screen, effects and map effects, sound off, sample rate, bits, channels, screen shot format (BMP or JPG) and JPG quality. They are saved in the registry under the client's own profile (`Trickster_gsp` for the English mode, `Trickster_NT` for the Korean mode), the same place the original tool writes; the launcher reads where that is from the client itself, and apply the next time the game starts. They cannot be saved while the game is running.
 - After login the launcher downloads any update you published before Play unlocks. Updates are required.
 
+- The launcher and the setup program show your icon in Explorer and carry your server's name in their file details.
+- Every publish is signed with a key kept in your install folder and copied into your backups. Launchers you build carry the public key, so a hijacked web address cannot push files to your players. The Publish page can change the key without breaking the launchers you handed out.
+- After you rebuild the launcher, **Hand it out as an update** (finished page) and **Publish** make your players' launchers update themselves: they download the new files, check them and restart into them, keeping the earlier launcher for one step back. See [Updating your players' clients](docs/install/launcher-updates.md).
+- A test launcher (built for this computer only) is marked, and the panel warns if you try to hand it out.
+
 The wizard needs the launcher pieces that come with a released tPoseidon package (the `launcher-kit` folder next to the panel). A launcher without a `branding` folder next to it stays the open launcher described above, for testing.
 
 To make the server file, open the panel's menu (the three dots) and choose **Share a server file for friends...**, or run:
@@ -122,17 +143,17 @@ Opening your server to the internet? Read [Hosting securely](docs/install/hostin
 
 ## The control panel
 
-`tposeidon-panel` (`tposeidon-panel.cmd` on Windows) opens a control panel. It is packaged for Windows, Linux and macOS, but so far it has only been tried on Windows; the `tposeidon` command works everywhere. It does what the commands do (setup, start, stop, backup), shows every server's log, and has a security window for the connection guard.
+`tposeidon-panel` (`tposeidon-panel.cmd`) opens a control panel. It does what the commands do (setup, start, stop, backup), shows every server's log, and has a security window for the connection guard.
 
 ### The quick-access bubble
 
-Minimising the panel shrinks it into a soap bubble at the centre of the screen. The bubble's ring shows the servers at a glance (green all running, amber some running, grey stopped, red a server failed). Drag it anywhere; it remembers its place. Click it to unfold four groups of round buttons: **Servers** (start all, stop all, restart all, logs), **Game** (game master tools, client language, launch the client), **Players** (share a server file, make a launcher, edit launcher news and updates, publish launcher update) and **Panel** (open the panel, security, back up the database, open the data folder, exit). Each tool opens in its own window, and pressing the button again brings that window to the front. **Open the panel**, or the panel's taskbar button, brings the panel back and the bubble goes away. When a server stops unexpectedly or fails to start, the bubble pulses and shows a short note; click the note to open the logs. The bubble never appears during first-time setup, and closing the panel closes it as usual.
+Minimising the panel shrinks it into a soap bubble at the centre of the screen. The bubble's ring shows the servers at a glance (green all running, amber some running, grey stopped, red a server failed). Drag it anywhere; it remembers its place. Click it to unfold four groups of round buttons: **Servers** (start all, stop all, restart all, logs), **Game** (game master tools, client language, launch the client), **Players** (share a server file, make a launcher, edit launcher news and updates, publish launcher update) and **Panel** (open the panel, security, back up the database, open the data folder, exit). The panel's "..." menu keeps **Client language** while the bubble is on; it is the same list as the bubble's, with the same current choice ticked. Each tool opens in its own window, and pressing the button again brings that window to the front. **Open the panel**, or the panel's taskbar button, brings the panel back and the bubble goes away. When a server stops unexpectedly or fails to start, the bubble pulses and shows a short note; click the note to open the logs. The bubble never appears during first-time setup, and closing the panel closes it as usual.
 
 The **Bubble** toggle in the panel's top bar turns the bubble on or off (on by default). While it is on, the panel keeps start, stop and restart all, the game master tools and the client launcher, and leaves the other tools to the bubble. Turn it off and they come back to the panel. The launcher tools (make a launcher, edit launcher news and updates, publish launcher update) are always in the **Launcher** entry of the panel's menu (the three dots), whether the bubble is on or off.
 
 ## Game master tools
 
-Make a character your GM character with `tposeidon gm --character <name>`. After that you can run the GM commands from the command line (`tposeidon gm <command>`), from the panel's **GM** button, or by typing the GM chat commands in game. The KR 2014 client has no GM chat of its own, so the server reads them from normal chat lines that start with `@` (`@login <password>`, `@kick`, `@speed`, and so on; the panel's Help tab lists them). `tposeidon gm game-flag on` (or the panel's GM accounts tab) turns the GM flag and the GM eagle on without typing anything.
+Make a character your GM character with `tposeidon gm --character <name>`. After that you can run the GM commands from the command line (`tposeidon gm <command>`), from the panel's **GM** button, or by typing the GM chat commands in game. The KR 2014 client has no GM chat of its own, so the server reads them from normal chat lines that start with `@` (`@login <password>`, `@kick`, `@speed`, and so on; the panel's Help tab lists them). `tposeidon gm game-flag on` (or the panel's GM accounts tab) turns the GM flag and the GM eagle on without typing anything, `tposeidon gm fly on` gives the eagle its flying form, and `tposeidon gm learn-skill` teaches a character a skill.
 
 The GM window finds a player and lets you kick, block, sanction, move, penalize or give items. It spawns monsters, NPCs and items by name from pickers, sends notices, runs OX quizzes, plans EXP and ability events, looks after guilds and registers GM characters. Every action shows what the server answered, and the ones you can't take back ask first. Its Help tab lists the `@` chat commands.
 
@@ -142,11 +163,22 @@ You can add NPCs, quests and events without touching C#. Scripts are plain text 
 
 The [scripting reference](docs/scripting/README.md) has the language, and [four examples](docs/scripting/examples) show a greeter, a daily login reward, a fetch quest and a GM event.
 
+## Community
+
+Join the tPoseidon Discord: **https://discord.gg/RAfSMmBm7**
+
+- `#announcements`: every new release, posted automatically.
+- `#help-setup`: questions about installing and hosting.
+- `#bug-reports`: report a problem with the template in the channel. Complete reports are copied to the GitHub issue tracker, and the bot tells you in your thread when the fix is out.
+- `#suggestions`, `#general` and `#screenshots`.
+
+Game and server files are not allowed there, or anywhere else in this project's spaces: posts that share or ask for them are removed.
+
 ## Reporting bugs and ideas
 
-- **Bug:** use the [Bug report form](https://github.com/DeltaForceT/tPoseidon/issues/new?template=bug_report.yml), or post on the forum with [our template](docs/beta/forum-bug-report-template.md). Include your version, your system, the steps and the server logs.
+- **Bug:** use the [Bug report form](https://github.com/DeltaForceT/tPoseidon/issues/new?template=bug_report.yml), or post on the forum with [the forum template](docs/beta/forum-bug-report-template.md). Include your version, your system, the steps and the server logs.
 - **Idea:** use the [Feature request form](https://github.com/DeltaForceT/tPoseidon/issues/new?template=feature_request.yml).
-- **Stuck on setup?** Ask on the forum or in [Discussions](https://github.com/DeltaForceT/tPoseidon/discussions). The issue tracker is for bugs.
+- **Stuck on setup?** Ask in the `#help-setup` channel on [Discord](https://discord.gg/RAfSMmBm7), on the forum or in [Discussions](https://github.com/DeltaForceT/tPoseidon/discussions). The issue tracker is for bugs.
 - **Security problem?** See [SECURITY.md](SECURITY.md).
 
 ## Building from source
@@ -161,10 +193,10 @@ During the beta the source is here to read and build, and to prepare bug reports
 
 ## How it was made
 
-tPoseidon was built through reverse engineering and our own packet captures. No original code, binaries or game files are included in this repository or in the release packages.
+tPoseidon was built through reverse engineering and my own packet captures. No original code, binaries or game files are included in this repository or in the release packages.
 
 ## License
 
-During the beta, tPoseidon uses its own [beta license](LICENSE). It's free to download, run and host for yourself and your community. What you can't do yet is publish modified versions, forks or other emulators built from it, or re-upload the source or the packages somewhere else. We plan to move to an open-source license (AGPL) at 1.0.
+During the beta, tPoseidon uses its own [beta license](LICENSE). It's free to download, run and host for yourself and your community. What you can't do yet is publish modified versions, forks or other emulators built from it, or re-upload the source or the packages somewhere else. I plan to move to an open-source license (AGPL) at 1.0.
 
 Trickster Online, its client, art, music, data and trademarks belong to their owners. They aren't part of this project and the license doesn't cover them; see [NOTICE](NOTICE). tPoseidon is a fan project and has nothing to do with the game's owners.

@@ -40,7 +40,10 @@ English summary: **BaZi Master is an open-source full-stack divination web app s
 - **塔罗 Tarot**：支持单张牌、三张牌、凯尔特十字牌阵，提供公开抽牌接口和登录后的 AI 解读/历史记录。
 - **周易 I Ching**：支持数字起卦与时间起卦，包含 64 卦数据、变爻和 AI 解读入口。
 - **星座 Zodiac / Astrology**：提供星座基础信息、每日运势、上升星座计算和星座配对。
-- **紫微斗数 Zi Wei Dou Shu**：登录后可排盘、保存历史，并展示十二宫、主星、辅星和四化信息。
+- **紫微斗数 Zi Wei Dou Shu**：登录后可排盘、保存历史。内核为 iztro + 主流排盘口径校订层，输出五行局、十四主星与亮度（四派可切）、生年四化、十二宫、大限与童限、空宫借对宫、岁前/将前/博士三组十二神。支持真太阳时校正（含海外时区）、中国夏令时判定、闰月四口径与晚子时换日。细节见 [backend/lib/ziwei/README.md](backend/lib/ziwei/README.md)。
+- **紫微格局 Zi Wei patterns**：34 个经典格局（紫府同宫、君臣庆会、日月并明、七杀朝斗…），每个带「必须 / 加分 / 破格」三层条件与古籍出处，随排盘结果一并返回。
+- **紫微合盘 Zi Wei synastry**：双盘比对 —— 夫妻宫互映对方命宫、福德宫联参、太阳太阴、四化飞化互参、大限同步，输出结构化事实 + 夫妻宫断语 + 启发式评级（逐条列出命中原因，不是黑箱打分）。
+- **古籍文本 Classics**：收录《骨髓赋》《紫微斗数全集》《紫微斗数全书》的整理文本，支持检索与段落定位。**注意**：只有《骨髓赋》主体是原典，另两本实为现代白话摘编（每本约 1000–1700 字，不是原书全文），接口按 `kind` 标注，不会把摘编当原文引用。
 - **合盘 Synastry**：提供两组出生信息的基础合盘分析。
 - **用户系统 User flows**：邮箱注册/登录、会话 token、cookie、Google / WeChat OAuth、密码重置、自助删除账号。
 - **记录与收藏 History / Favorites**：八字、塔罗、周易、紫微历史记录，客户端搜索过滤、批量操作、收藏与快照。
@@ -294,6 +297,24 @@ npm -C frontend run analyze
 ## GitHub Topics 建议
 
 `bazi`, `bazi-chart`, `ziwei`, `ziwei-doushu`, `tarot`, `iching`, `astrology`, `synastry`, `divination`, `fortune-telling`, `metaphysics`, `react`, `vite`, `tailwindcss`, `express`, `prisma`, `postgresql`, `redis`, `openapi`, `ai-app`, `self-hosted`
+
+## 算法来源与致谢 / Algorithm Sources
+
+紫微斗数排盘内核与时间口径建立在两个开源项目之上：
+
+- **[iztro](https://github.com/SylarLong/iztro)**（MIT）—— 排盘内核（安命宫、定五行局、安十四主星、排大限流年）。
+- **[ziwei-doushu](https://github.com/Renhuai123/ziwei-doushu)**（作者 王多鱼AI，代码 MIT）—— 校订数据层与知识库：
+  四派星曜亮度表、十天干四化变体、截空/副截与大耗的落宫修正、三组十二神、童限、全国城市经度表、
+  中国夏令时表、真太阳时与均时差算法、34 个格局判定、古籍整理文本（公有领域）、紫微合盘知识库。
+
+这些表是上游用主流排盘软件的真实盘面（金标准盘）逐宫反推、反复订正后的结果，包含若干与 iztro
+原生值不同的修正。本项目只移植了**代码与算法**，没有引入上游的断语库、AI 解读 prompt 和 13 维数据集。
+
+⚠️ **授权提醒**：上游的倪海厦《天纪》原话单独采用 CC BY-NC-SA 4.0，**禁止商用**。
+本项目在 `backend/lib/ziwei/heming-knowledge.js` 里保留了该字段（`ni_quote`）供研究与学习，
+合盘服务默认不返回它；**若要商用，必须先把这些原话剔除**。
+
+本项目对内核的改动与已知待核实项记录在 [backend/lib/ziwei/README.md](backend/lib/ziwei/README.md)。
 
 ## License
 

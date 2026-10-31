@@ -42,10 +42,33 @@ command and open http://localhost:3001 instead.
 
 **Docs:** [Docker](docs/DOCKER.md) · [Setup](docs/SETUP.md) · [Features](docs/FEATURES.md) ·
 [Developer guide](docs/DEVELOPMENT.md) · [Data model](docs/datamodel.md) ·
-[Screenshots](docs/SCREENSHOTS.md) · [API spec](api/swagger.yaml) · [Roadmap](docs/ROADMAP.md) ·
+[Screenshots](docs/SCREENSHOTS.md) · [API reference](api/index.html) ([spec](api/swagger.yaml)) · [Roadmap](docs/ROADMAP.md) ·
 [Changelog](CHANGELOG.md) · [Releases](https://github.com/florinel-chis/GopherCRM/releases) · [Validation and release workflow](docs/VALIDATION_RELEASE.md) · [Documentation maintenance](docs/DOCUMENTATION_WORKFLOW.md)
 
 If it's useful, a star helps others find it.
+
+## Fork it
+
+GopherCRM is meant to be forked and adapted. A fork starts with the modules listed under Features,
+four roles (admin, sales, support, customer), and the machinery that keeps them working: 990
+top-level Go test functions, 22 Playwright specs, 12 MySQL migration pairs checked against
+MySQL 8 and MariaDB 10.11, and 5 CI workflows (measured on `4dfe404`; commands in
+[FORKING.md](docs/FORKING.md#9-why-fork-instead-of-rebuild)).
+
+- [docs/FORKING.md](docs/FORKING.md) — first run, rebranding, configuration, deployment, CI and
+  staying in sync with upstream.
+- [docs/USE_CASES.md](docs/USE_CASES.md) — worked recipes for concrete deployments, with their gaps.
+- [docs/EXTENDING.md](docs/EXTENDING.md) — adding or removing entities, routes, migrations and modules.
+
+Three things catch most first runs from source (`cp .env.example .env`, then `go run ./cmd` or
+`make run`):
+
+- **Replace the example `JWT_SECRET`.** The placeholder is long enough to start the app, so a copied
+  `.env.example` runs with a public secret (`internal/config/config.go:230-240`, #210).
+- **Set `CORS_ALLOWED_ORIGINS`** for any cross-origin UI other than localhost on 5173, 3000 or 8080
+  (`internal/middleware/cors.go:14-20`). An unlisted origin looks like a failed login.
+- **Public registration ships off** (`internal/models/configuration.go:323-330`). Create the first
+  admin with `make build-tools && make create-admin`.
 
 ## Features
 
@@ -312,7 +335,9 @@ to `qualified` only, the entry's default value, rather than the seeded `qualifie
 next start re-seeds the row. A lead reaches `converted` only through the convert endpoint: lead
 create/update and the bulk status endpoint refuse it. The lead's company link is carried over to
 the customer as well. `GET /configurations/ui` exposes
-the three settings read-only, so the conversion dialog can follow them.
+the three settings read-only, and the web UI follows them: Convert to Customer is offered on the
+allowed statuses, the conversion dialog requires notes when they are required and says when the
+lead's owner becomes the customer's assigned user.
 
 ### Answer Engine Optimization (AEO)
 
@@ -511,6 +536,11 @@ npm run lint
 All application routes are mounted under `/api/v1` (configurable via `API_PREFIX`). Every endpoint
 returns the unified envelope `{ success, data, error, meta }`.
 
+The complete reference, with every operation's roles, parameters, error codes and schemas, is
+generated into `api/`: open `api/index.html` in a browser (a static page that works offline,
+straight from the checkout), or feed `api/swagger.json` / `api/swagger.yaml` (Swagger 2.0) to a
+client generator. The list below is the overview.
+
 `GET /health` is served outside the API prefix and needs no authentication.
 
 ### Authentication (public)
@@ -565,7 +595,9 @@ authentication and live on the moderate tier:
 - `DELETE /api/v1/users/:id` - **Erase** user *(admin; cannot delete yourself; a customer-role user takes its customer records along)*
 
 ### Leads *(entire group requires admin or sales)*
-- `GET /api/v1/leads` - List leads (`page`, `limit`, `search`, `sort_by`, `sort_order`, `classification`)
+- `GET /api/v1/leads` - List leads (`page`, `limit`, `search`, `sort_by`, `sort_order`, `classification`;
+  `external_id` returns the leads with that exact external id the caller may see, overriding the
+  others; hidden leads are left out rather than refused)
 - `POST /api/v1/leads` - Create new lead
 - `GET /api/v1/leads/:id` - Get specific lead
 - `PUT /api/v1/leads/:id` - Update lead
@@ -802,10 +834,14 @@ expired, or if its owner has been deactivated or erased.
 The only bulk endpoints are the entity-specific `bulk/status` routes listed above. There is no
 generic bulk create, update, delete or action API.
 
-A generated Swagger 2.0 spec is checked in at `api/swagger.json` / `api/swagger.yaml`. It is built
-from swag annotations on the handlers — regenerate it with `make swagger` after changing a handler
-or route. The spec is **not** served by the application; `internal/handler/routes.go` remains the
-routing source of truth.
+The reference in `api/` (`swagger.json`, `swagger.yaml` and the HTML page `index.html`) is built
+from the swag annotations on the handlers, their request/response types and the general block in
+`cmd/main.go`. Regenerate it with `make swagger` after changing a handler, a documented type or a
+route; `make verify-api-docs` (part of `make verify` and CI) fails when the committed files are
+stale, a route has no operation, a parameter or body the registered handler reads is undocumented
+(or documented with the wrong type), a status its route middleware can return (401, 403, 429) is
+missing, an operation's security alternatives are wrong, or a description is missing. Nothing is **served** by the
+application; `internal/handler/routes.go` remains the routing source of truth.
 
 ## Project Structure
 
@@ -829,7 +865,7 @@ gophercrm/
 ├── tests/                       # Further integration tests
 ├── scripts/                     # create_database.sql, anonymize_legacy_deleted_pii.sql
 ├── migrations/                  # SQL migrations
-├── api/                         # Generated OpenAPI (Swagger 2.0) spec — make swagger
+├── api/                         # Generated Swagger 2.0 spec + static HTML reference — make swagger
 ├── docs/                        # Project documentation (developer guide, setup, features, roadmap)
 ├── gocrm-ui/                    # React TypeScript frontend
 │   ├── src/
@@ -935,9 +971,6 @@ gophercrm/
   code. Other raw diagnostics, request IDs, client IPs, Origin/User-Agent headers and mailer
   recipient metadata can still carry personal data. Older logs and issued JWTs that embed email
   also remain outside database erasure, so log and token retention need their own policy.
-- **The frontend still carries ESLint warnings.** Errors are at zero and `npm run lint` is a
-  blocking CI step, but about 230 warnings remain, mostly `no-explicit-any` and
-  `no-non-null-assertion`. `tsc` is clean.
 
 ## Contributing
 

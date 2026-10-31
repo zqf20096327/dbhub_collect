@@ -58,11 +58,11 @@
   }
  },
  "pgbouncer/pgbouncer": {
-  "commit_7d": 1,
-  "commit_90d": 78,
+  "commit_7d": 14,
+  "commit_90d": 92,
   "rel_ver": "pgbouncer_1_26_1",
   "rel_pub": "2026-10-14",
-  "rel_days": 10,
+  "rel_days": 17,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -71,7 +71,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 113,
-  "enriched_at": "20261027",
+  "enriched_at": "20261031",
   "lang": {
    "C": 82,
    "Python": 12,
@@ -81,10 +81,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261024",
-   "release": "20261024",
+   "commit": "20261031",
+   "release": "20261031",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "pgbouncer_1_26_1",
+    "d": "2026-10-14",
+    "n": "* Fix CVE-2026-107350: PgBouncer 1.17.0 through 1.26.0 processed a second StartupMessage sent during SCRAM authentication when the client connected to a non-existent database. An attacker knowing the password of a user listed in `auth_file` could use this to log in as any other user that authenticates using SCRAM, including admins and backend superusers. This requires SCRAM authentication to be used for both users. The impersonated user can come from either `auth_file` or `auth_query`."
+   },
+   {
+    "t": "pgbouncer_1_26_0",
+    "d": "2026-09-23",
+    "n": "* Add `login_notify_message` setting. When set, its value is sent to clients as a NOTICE message after they log in. This can be used to make it clear to clients that they are connected through PgBouncer instead of directly to PostgreSQL. ([#1488])\n* Track all parameters that PostgreSQL reports by default. Most notably this means that `search_path` (on PostgreSQL 18 and above) and `default_transaction_read_only` (on PostgreSQL 14 and above) are now tracked by default. Previously a client running `SET search_"
+   },
+   {
+    "t": "pgbouncer_1_25_2",
+    "d": "2026-05-08",
+    "n": "**2026-05-08  -  PgBouncer 1.25.2  -  \"Human touch with fresh twist in title race full of uncertainties\"**\r\n\r\n- Security\r\n  * Fix CVE-2026-6664: An integer overflow in network packet parsing code in PgBouncer before 1.25.2 bypasses a boundary check and can lead to a crash. An unauthenticated remote attacker can crash PgBouncer with a malformed SCRAM authentication packet.\r\n  * Fix CVE-2026-6665: The SCRAM code in PgBouncer before 1.25.2 did not check the return value of strlcat() correctly when building the"
+   }
+  ]
  },
  "bolt/bolt": {
   "commit_7d": 0,
@@ -2630,7 +2647,7 @@
   }
  },
  "JUST11206/flask-tidb": {
-  "commit_90d": 18,
+  "commit_90d": 5,
   "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
@@ -2645,10 +2662,10 @@
    "JavaScript": 5,
    "Procfile": 0
   },
-  "enriched_at": "20261001",
+  "enriched_at": "20261031",
   "dim_ts": {
-   "commit": "20261001",
-   "release": "20261001",
+   "commit": "20261031",
+   "release": "20261031",
    "security": "20261001",
    "contrib": "20261001",
    "lang": "20261001"

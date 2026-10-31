@@ -415,7 +415,7 @@ When executing a turn for an `Agent`, the `Runner` resolves the LLM engine in th
 3. **Custom Agent endpoint (`agent.base_url`):** If `agent.base_url` is set without an explicit `provider`, routes to `OpenAIEngine` (matching the official provider preset if the URL matches an official endpoint, or requiring an explicit `api_key` unless targeting `localhost`).
 4. **Explicit Runner engine (`Runner(engine=...)`):** If a custom `engine` was explicitly passed to `Runner`, it takes precedence over model-name prefix heuristics.
 5. **Agent model prefix heuristics (`agent.model`):** Auto-detects `claude-*`, `gpt-*`/`o1*`/`o3*`/`chatgpt-*`, `grok*`, `deepseek-*`, and `gemma*`/`llama*`/`mistral*`/`qwen*`/`phi*`.
-6. **Default Runner engine / Gemini fallback:** Uses the runner's default `GeminiEngine` (configured with `Runner(api_key=...)`) or falls back to `GeminiEngine(api_key=agent.api_key)`.
+6. **Default Runner engine / Gemini fallback:** Uses the runner's default `GeminiEngine` (configured with `Runner(api_key=...)`) or falls back to `GeminiEngine(api_key=agent.api_key)`. If the agent sets its own `api_key`, the runner's default `GeminiEngine` is used with that key instead of the runner's key; the provider stays Gemini. An engine passed explicitly to `Agent(engine=...)` or `Runner(engine=...)` is never changed.
 
 > [!IMPORTANT]
 > **Host-Scoped Environment Credentials:** For security, environment variables (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `XAI_API_KEY`, `DEEPSEEK_API_KEY`, `GROQ_API_KEY`) are only sent when connecting to their official HTTPS provider endpoints (`api.openai.com`, `api.anthropic.com`, `api.x.ai`, `api.deepseek.com`, `api.groq.com`). They are never forwarded to custom `base_url` endpoints or local Ollama/vLLM servers. To authenticate against a custom OpenAI-compatible proxy, pass `api_key="..."` explicitly on the `Agent` or `OpenAIEngine` (or `api_key=""` if no authentication is required).
@@ -583,6 +583,7 @@ if __name__ == "__main__":
 | `ProviderError` | `ChatFlowError` | Raised on LLM API errors, blocked responses, or malformed payloads (error excerpts capped at 1,000 chars). |
 | `ToolSchemaError` | `ChatFlowError`, `TypeError` | Raised at tool definition time when a union member cannot be mapped to a JSON schema type. |
 | `ToolExecutionError` | `ChatFlowError` | Raised when a tool call fails directly via `Tool.execute_async()`. |
+| `ToolArgumentValidationError` | `ToolExecutionError` | Raised when LLM-provided arguments fail schema validation prior to tool execution. |
 | `AgentHandoffError` | `ChatFlowError` | Raised when a handoff targets an unknown or unauthorized agent (not declared in `current_agent.handoffs`). |
 | `ReentrantTurnError` | `ChatFlowError`, `RuntimeError` | Raised when a turn attempts to start another turn for the same session inline. |
 | `SessionDeletedError` | `ChatFlowError`, `RuntimeError` | Raised when a running turn's session is deleted concurrently. |

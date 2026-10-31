@@ -51,7 +51,9 @@ developer works with an Oracle database day to day:
   own per connection. A connection the VPN dropped can come back by itself (a setting, off by default): only when no
   uncommitted work would be lost, with pauses between the attempts and never after a refused login.
 - Explorer with letter index and search; tables, views, materialized views and objects reachable through synonyms –
-  views on request in a section of their own.
+  views on request in a section of their own. **Right-click an object** (or the head of its tab) to open it in a view,
+  as `SELECT *` in the SQL editor, as its DbSet in the LINQ console, in the designer or on another connection, and to
+  copy its name, `OWNER.NAME`, entity or link. A tab can be duplicated with its filters or shown in the explorer.
 - **Quick open and command palette**: one box at the top of the window – type a name to open a table, view or PL/SQL
   (also by its C# entity name), or ">" to find an action with its shortcut.
 - Fast grid for large tables (blocks of 500 rows, server-side sorting, deterministic paging), `NULL` shown as such,
@@ -69,7 +71,11 @@ developer works with an Oracle database day to day:
   `4711 · PetersPizza`; a name can join several columns (`Müller - Hans`) and follow one more foreign key; a value
   without a referenced row says "not found". The display columns live in one file you
   can share with your team through your repository.
-- Object details per table: columns, constraints, indexes (with a hint for unindexed foreign keys), dependencies, DDL.
+- Object details per table: columns, constraints, indexes (with a hint for unindexed foreign keys), dependencies,
+  synonyms, DDL.
+- **Synonyms**: every table, view and PL/SQL unit lists the private and public synonyms on it – create one (private in
+  the schema or public) or drop one, after the confirmation every schema change gets. "Synonyms of the schema" in the
+  command palette lists the schema's private synonyms with their targets and marks those leading nowhere, to clean up.
 - PL/SQL to look at: packages, procedures, functions and triggers with their source (read-only, coloured, compile
   errors marked), parameters per subprogram and overload, compile errors and dependencies – and a search through all
   PL/SQL of the schema. Nothing is run or compiled.
@@ -146,7 +152,9 @@ developer works with an Oracle database day to day:
     </td>
     <td width="50%">
       <b>Table designer</b><br><br>
-      Change the columns, keys, checks and foreign keys of a table in tabs, add indexes or create a new table. Rename
+      Change the columns, keys, checks and foreign keys of a table in tabs, add indexes (each column ascending or
+      descending) or create a new table. Choose the tablespace of a new table, of a new index and of the indexes new keys
+      and foreign keys bring along – suggested from where the table's or schema's others lie. Rename
       existing constraints (a key takes its index along), give a check a new condition – added before the old one goes –
       or a foreign key another delete rule. You see the DDL before it runs – and the property and configuration lines
       for your entity – and what Oracle would refuse with the data at hand is reported up front. Run, Save and Close stay

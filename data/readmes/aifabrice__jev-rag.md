@@ -14,6 +14,8 @@ passages are sent to the configured Jev and answer-model providers.
 [![License: MIT](https://img.shields.io/badge/license-MIT-17624f)](LICENSE)
 [Listed in Awesome Jev](https://github.com/yibie/awesome-jev)
 
+**New here?** [Try the no-key demo](#try-local-search-without-an-api-key) · [Star on GitHub](https://github.com/aifabrice/jev-rag/stargazers) · [Fork the project](https://github.com/aifabrice/jev-rag/fork) · [Contribute](CONTRIBUTING.md)
+
 [简体中文](README.zh-CN.md) · [Seven-pipeline field report](docs/JEV_RAG_SEVEN_PIPELINES.md) · [Architecture](docs/ARCHITECTURE.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
 **[Project website and interactive benchmark →](https://aifabrice.github.io/jev-rag/)**
@@ -69,6 +71,25 @@ If the reproducible results or local-first approach are useful to you, [star
 Jev RAG on GitHub](https://github.com/aifabrice/jev-rag/stargazers) so other
 developers can find the project.
 
+## Install the v0.4.0 release
+
+For a reproducible checkout of the current release, pin the tag before creating
+the environment:
+
+```bash
+git clone --branch v0.4.0 --depth 1 https://github.com/aifabrice/jev-rag.git
+cd jev-rag
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e '.[documents]'
+```
+
+Add `.[documents,embeddings]` only when you want the optional hybrid and
+taxonomy paths. The default BM25 + Jev path does not require embeddings or a
+vector database. Configure `OPENROUTER_API_KEY` in `.env` for the full
+answering flow, and add `TYPESAFE_API_KEY` only when using direct Jev access.
+
 ## Public benchmark
 
 Complete BEIR NFCorpus test split: 3,633 documents and 323 queries. All rows
@@ -77,24 +98,28 @@ sizes and remote stages are shown explicitly.
 
 | Pipeline | nDCG@10 | MRR@10 | Recall@10 | Median latency | p95 latency |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| BM25 top 30 | 0.305654 | 0.512697 | 0.147309 | 1.92 ms | 6.60 ms |
-| BM25 top 30 + Jev | 0.353235 | 0.585817 | 0.158667 | 1.08 s | 16.95 s |
-| BM25 top 50 + Jev | 0.362468 | 0.593023 | 0.164474 | 1.92 s | 17.84 s |
-| Two-level Jev Line Search (60 finalists) | 0.366280 | **0.657660** | 0.169397 | 11.74 s | 35.75 s |
-| Hybrid top 50 + Unified Passage Gate | 0.376298 | 0.618043 | 0.166977 | 1.56 s | 17.47 s |
-| Agentic lexical top 50 | 0.380168 | 0.597940 | 0.185464 | 6.99 s | 24.39 s |
-| BM25 top 50 + Embedding top 50 + RRF | 0.396712 | 0.632089 | 0.193977 | 1.38 s | 1.49 s |
-| Multi-round Agentic Hybrid top 50 | 0.424145 | 0.637722 | 0.206303 | 6.99 s | 24.39 s |
-| **Agentic lexical top 50 + Jev** | **0.430969** | **0.644041** | **0.204138** | 7.52 s | 26.35 s |
-| Hybrid top 50 + Jev | 0.444327 | **0.654583** | 0.214907 | 3.17 s | 17.99 s |
-| **Agentic Hybrid + Jev/retrieval rank fusion** | **0.450750** | **0.652606** | **0.220885** | 9.24 s | 38.72 s |
+| BM25 top 30 | 0.305654 | 0.512697 | 0.147309 | 1.27 ms | 6.08 ms |
+| BM25 top 30 + Jev | 0.353235 | 0.585817 | 0.158667 | 1.37 s | 4.34 s |
+| BM25 top 50 + Jev | 0.362468 | 0.593023 | 0.164474 | 1.39 s | 2.35 s |
+| Two-level Jev Line Search (60 finalists) | 0.366280 | **0.657660** | 0.169397 | 11.74 s* | 35.75 s* |
+| Hybrid top 50 + Unified Passage Gate | 0.376298 | 0.618043 | 0.166977 | 1.56 s* | 17.47 s* |
+| Agentic lexical top 50 | 0.380168 | 0.597940 | 0.185464 | 3.85 s | 5.45 s |
+| BM25 top 50 + Embedding top 50 + RRF | 0.396712 | 0.632089 | 0.193977 | 2.33 s | 2.58 s |
+| Multi-round Agentic Hybrid top 50 | 0.424145 | 0.637722 | 0.206303 | 6.99 s* | 24.39 s* |
+| **Agentic lexical top 50 + Jev** | **0.430969** | **0.644041** | **0.204138** | 6.01 s | 8.69 s |
+| Hybrid top 50 + Jev | 0.444327 | **0.654583** | 0.214907 | 3.89 s | 5.67 s |
+| **Agentic Hybrid + Jev/retrieval rank fusion** | **0.450750** | **0.652606** | **0.220885** | 6.14 s | 9.35 s |
+| **Agentic Hybrid high-recall top 200 + Jev (batch 100)** | **0.466171** | **0.669516** | **0.228912** | 6.52 s | 7.90 s |
 
 Latency covers retrieval and reranking, not one-time corpus indexing or final
-answer generation. Some rows are full-run observations while the expensive
-remote pipelines use cold pilots or serial estimates composed from recorded
-per-query stages; see
-[`nfcorpus-pipeline-latency.json`](benchmarks/nfcorpus-pipeline-latency.json)
-for the basis of every row. Provider latency can change substantially over time.
+answer generation. The ordinary shortlist rows now use one unified 10-query cold
+audit: result, planner, and query-embedding caches were disabled, while the corpus
+index and corpus embeddings were preloaded. The asterisked Line Search, Passage
+Gate, and multi-round Agentic Hybrid rows are historical measurements on a
+different protocol and are retained for context, not direct comparison. See
+[`nfcorpus-pipeline-latency.json`](benchmarks/nfcorpus-pipeline-latency.json) and the
+[`latency audit summary`](benchmarks/nfcorpus-pipeline-latency-audit10-summary.json)
+for provenance. Provider latency can change substantially over time.
 
 Line Search achieved the strongest first-hit behavior (`nDCG@1=0.554180`),
 but lower multi-document ranking quality and recall than Agentic or Hybrid.
@@ -113,17 +138,27 @@ report, but are omitted from this headline table because they sit in the same
 `0.44-0.45` band without a useful new operating point. The table keeps ordinary
 Hybrid as the representative reference and the best measured pipeline.
 
-The best pipeline uses a dev-selected local RRF after Jev (Jev rank weight
-`1.0`, retrieval rank weight `0.25`). It adds no provider call and reached
-`0.450750` test nDCG@10. Its cold retrieval-only median was `6.99 s` and p95
-was `24.39 s` because two planning rounds run per query.
+The highest measured operating point is the high-recall Agentic Hybrid variant:
+BM25 and embedding retrieval both reach 200 candidates, then Jev reranks them
+in batches of 100 and applies the same dev-selected local RRF after Jev (Jev
+rank weight `1.0`, retrieval rank weight `0.25`). It reached `0.466171` test
+nDCG@10, `0.669516` MRR@10, and `0.228912` Recall@10. The earlier full run recorded 3.05 s median and 4.24 s p95, but that run
+was cache-dominated and is retained as a quality-run observation. Under the
+comparable cold audit, the same top-200 configuration measured 6.52 s median
+and 7.90 s p95, with `$1.421625` provider cost for the quality run.
+
+This is a benchmark operating point rather than a new UI pipeline. The former
+best run used 50 candidates and Jev batches of 10; the high-recall run uses
+200 candidates and batches of 100 to keep the full test practical. The complete
+quality delta should therefore be attributed to this configuration, not to
+candidate depth alone.
 
 On the [MTEB NFCorpus page](https://mteb-leaderboard.hf.space/tasks/NFCorpus)
-observed on 2026-09-26, inserting `0.450750`
-numerically would place this run at approximately **#4 of 251 results (top
-1.6%)**. This is an **unofficial comparison**, not an MTEB leaderboard rank:
-the multi-stage pipeline has not been submitted to MTEB, and its top-50
-configuration was evaluated on the same test set.
+observed on 2026-09-26, inserting `0.466171` numerically would move this run
+above the previous `0.450750` project result in that snapshot. This is an
+**unofficial comparison**, not an MTEB leaderboard rank: the multi-stage
+pipeline has not been submitted to MTEB, and the result is a project-run
+evaluation on the same test set.
 
 [Full results, exact configuration, cost, caveats, and reproduction commands](benchmarks/NFCORPUS_RESULTS.md)
 · [Machine-readable Agentic summary](benchmarks/nfcorpus-agentic-summary.json)
@@ -131,12 +166,31 @@ configuration was evaluated on the same test set.
 · [Machine-readable Passage Gate summary](benchmarks/nfcorpus-passage-gate-summary.json)
 · [Machine-readable Taxonomy summary](benchmarks/nfcorpus-taxonomy-summary.json)
 · [Machine-readable Agentic Hybrid summary](benchmarks/nfcorpus-agentic-hybrid-summary.json)
+· [Machine-readable high-recall Agentic Hybrid summary](benchmarks/nfcorpus-agentic-hybrid-top200-summary.json)
+
+The repository also includes a reproducible, cached **development-set
+learning-to-rank experiment**. It learns a transparent pairwise linear
+combination of existing BM25, embedding, Agentic, and Jev rank signals without
+new provider calls. On NFCorpus it reached `0.449055` nDCG@10 versus the
+current `0.450750` baseline, so it is documented as an experimental negative
+result rather than advertised as a quality improvement. See
+[`docs/LEARNING_TO_RANK.md`](docs/LEARNING_TO_RANK.md) and
+[`scripts/benchmark_ltr.py`](scripts/benchmark_ltr.py).
+
+A second no-cost experiment tests pseudo-relevance feedback: extract terms
+from the first-pass candidates, run a focused BM25 query, and fuse the result.
+It improved retrieval-only nDCG@10 by `+0.004816`, but a 10-query Jev pilot
+fell from `0.476183` to `0.463357`; it is therefore not enabled by default.
+See [`docs/PSEUDO_RELEVANCE.md`](docs/PSEUDO_RELEVANCE.md),
+[`scripts/benchmark_prf.py`](scripts/benchmark_prf.py), and
+[`scripts/pilot_prf_jev.py`](scripts/pilot_prf_jev.py).
 
 ```text
 default: local files -> SQLite BM25 ----------------------> Jev -> MiniMax
 agentic: local files -> MiniMax plans -> multi-BM25/RRF --> Jev -> MiniMax
 hybrid:  local files -> BM25 + OpenRouter embeddings/RRF -> Jev -> MiniMax
 agentic-hybrid: multi-round plans -> multi-BM25 + embedding/RRF -> Jev + retrieval prior -> MiniMax
+high-recall benchmark: same Agentic Hybrid path -> top 200 -> Jev batches of 100
 taxonomy: local files -> corpus taxonomy -> Hybrid top 50 + routed extras -> Jev -> MiniMax
 gate:    local files -> BM25 + embeddings/RRF -> unified Jev Gate -> MiniMax
 line:    local files -> parallel Jev Choice windows -> global Choice -> MiniMax

@@ -1,0 +1,786 @@
+# PAPAI — Personal Adroit Proactive AI
+
+<p align="center">
+  <img src="docs/assets/logo.png" alt="PAPAI logo" width="600">
+</p>
+
+<p align="center">Natural language task management for Telegram, Mattermost, Discord, and Kontur Talk</p>
+
+<p align="center">
+  <a href="https://github.com/yourpapai/papai/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/yourpapai/papai/ci.yml?branch=master&label=CI&style=flat-square" alt="CI Status"></a>
+  <a href="https://github.com/yourpapai/papai/security"><img src="https://img.shields.io/github/actions/workflow/status/yourpapai/papai/ci.yml?branch=master&label=CodeQL&style=flat-square&logo=github" alt="CodeQL"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-BSL%201.1-0f766e?style=flat-square" alt="License: BSL 1.1"></a>
+  <a href="https://bun.sh"><img src="https://img.shields.io/badge/bun-1.4%2B-black?style=flat-square&logo=bun" alt="Bun Runtime"></a>
+</p>
+
+<p align="center">
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#features">Features</a> ·
+  <a href="#architecture">Architecture</a> ·
+  <a href="#configuration">Configuration</a> ·
+  <a href="#deployment">Deployment</a>
+</p>
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Architecture](#architecture)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Development](#development)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [License](#license)
+
+## Overview
+
+Papai (**P**ersonal **A**droit **P**roactive **AI**) is a chat bot that enables natural language task management through any OpenAI-compatible LLM. Deploy it on Telegram, Mattermost, Discord, or Kontur Talk, connect it to Kaneo or YouTrack, and manage work through conversational task operations. Platform and task-provider instances are stored in SQLite after first bootstrap, so one deployment can manage multiple configured chat and task-provider instances.
+
+The bot interprets natural-language requests, invokes capability-gated tools through LLM tool-calling, and replies with task details, updates, summaries, and search results. Personal and group settings are managed in the settings web UI launched via `/config` (requires `SETTINGS_PUBLIC_BASE_URL`). Conversation history, memory, and memo storage are isolated by storage context. Telegram forum topics and Mattermost threads get separate thread-scoped context; Discord currently does not.
+
+---
+
+## Features
+
+| Category             | Capability                                                 | Description                                                          |
+| -------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------- |
+| **Tasks**            | Create, Update, Search, List, Get, Delete                  | Full task lifecycle through natural language                         |
+| **Comments**         | Add, Read, Update, Delete, Reactions                       | Task discussions with provider-specific reactions                    |
+| **Relations**        | Blocks, Duplicates, Related, Subtask                       | Cross-task dependencies and associations                             |
+| **Projects**         | List, Create, Update, Delete, Team                         | Workspace organization and team management                           |
+| **Statuses**         | CRUD, Reorder                                              | Board/status column management                                       |
+| **Labels**           | List, Create, Update, Delete, Assign                       | Categorization and filtering                                         |
+| **Attachments**      | List, Upload, Remove                                       | Attach task files directly from chat messages where supported        |
+| **Collaboration**    | Watchers, Votes, Visibility                                | Provider-dependent coordination surfaces                             |
+| **Work Tracking**    | Count tasks, log work, update work, remove work            | Task counts and time tracking where supported                        |
+| **Identity**         | Link chat identity to tracker identity                     | Enables reliable “assign to me” and similar flows in groups          |
+| **History**          | Thread-aware chat history lookup                           | Search the main group chat from a thread when more context is needed |
+| **Web Fetch**        | Public URL fetch, summary, excerpt                         | Fetch and summarize public web pages and PDFs                        |
+| **Memory**           | Conversation history, summary, facts                       | Context-aware multi-turn interactions                                |
+| **Memos**            | Save, search, list, promote                                | Quick notes with keyword or semantic lookup                          |
+| **Recurring Tasks**  | Template schedules                                         | Reusable recurring task automation                                   |
+| **Deferred Prompts** | One-shot, delayed, cron                                    | Scheduled proactive assistance                                       |
+| **Instructions**     | Context-specific guidance                                  | Per-chat custom instructions                                         |
+| **AI Output**        | Show tool calls / reasoning; live status; sanitized or raw | Per-context control of the execution detail the bot posts to chat    |
+| **Plugins**          | Trusted local extensions                                   | Discover, approve, and enable first-party plugins per context        |
+| **MCP Servers**      | External tools via Model Context Protocol                  | Merge tools from per-context or plugin-declared MCP servers          |
+
+### Platform Support
+
+| Platform        | Group Message Model                                                   | Threads                                                                  | Command Menu | Buttons      | File Receive | File Replies | Notes                                                                                      |
+| --------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------------------------------------------------------------------------------------ |
+| **Telegram**    | Sees group messages directly                                          | Forum topics supported and can create a topic on mention in forum groups | Yes          | Yes          | Yes          | Yes          | Best support for bot command menus and forum-topic flows                                   |
+| **Mattermost**  | Sees group messages directly                                          | Thread/root-post aware                                                   | No           | No callbacks | Yes          | Yes          | Username resolution supported                                                              |
+| **Discord**     | DMs, guild-channel `@mentions`, and replies to the bot's own messages | No separate thread-scoped support today                                  | No           | Yes          | No           | No           | Uses embeds for rich `/context` output; requires Message Content intent for content access |
+| **Kontur Talk** | Sees group messages directly                                          | Message-scoped threads supported                                         | No           | No           | No           | No           | JWT-authenticated; reply-context aware; minimal interaction surface                        |
+
+### Task Provider Support
+
+| Provider     | Auto-Provisioning | Relations | Statuses | Labels | Comments | Reactions | Team | Watchers / Votes / Visibility | Attachments | Work Items | Count |
+| ------------ | ----------------- | --------- | -------- | ------ | -------- | --------- | ---- | ----------------------------- | ----------- | ---------- | ----- |
+| **Kaneo**    | Yes               | Yes       | Yes      | Yes    | Yes      | No        | No   | No                            | No          | No         | No    |
+| **YouTrack** | No                | Yes       | Yes      | Yes    | Yes      | Yes       | Yes  | Yes                           | Yes         | Yes        | Yes   |
+
+YouTrack task creation can require workflow-specific custom fields. Papai exposes a `customFields` input on task creation for those project-specific requirements.
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- [Bun](https://bun.sh) 1.4+
+- One supported chat platform: Telegram, Mattermost, Discord, or Kontur Talk
+- One supported task provider: Kaneo or YouTrack
+- OpenAI-compatible API credentials for your chosen model provider
+
+### 30-Second Setup
+
+```bash
+git clone https://github.com/yourpapai/papai.git
+cd papai
+bun install
+cp .env.example .env
+```
+
+Edit `.env`:
+
+```bash
+# Required for all setups
+ADMIN_USER_ID=123456789         # Your platform user ID
+
+# First-run platform-instance bootstrap. Used only when the platform instance table is empty.
+CHAT_PROVIDER=telegram          # or: mattermost, discord, kontur-talk
+# INSTANCE_CONFIG_KEY=64_hex_chars_for_production_config_encryption
+
+# Central LLM credentials (seeded once into the provider registry on first start)
+LLM_API_KEY=sk-...
+LLM_BASE_URL=https://api.openai.com/v1
+MAIN_MODEL=gpt-4o-mini
+# SMALL_MODEL=gpt-4o-mini       # optional, falls back to MAIN_MODEL
+# EMBEDDING_MODEL=text-embedding-3-small  # optional, disables memo semantic search if unset
+
+# Platform-specific
+TELEGRAM_BOT_TOKEN=your_token_here
+```
+
+> Task providers are no longer env-bootstrapped. After the bot starts, create a task
+> instance via `/admin#instances`, then approve its plugin (`task-provider-kaneo` or
+> `task-provider-youtrack`) in the settings web UI admin area (Plugins approval, super admin). The provider base URL is an
+> instance config field set in `/admin#instances`, not an env var.
+
+Start the bot:
+
+```bash
+bun start
+```
+
+Then configure runtime settings:
+
+1. Ensure `SETTINGS_PUBLIC_BASE_URL` is set to the bot's public base URL (e.g. `https://bot.example.com`)
+2. DM the bot and run `/config` to receive a single-use link to the settings web UI
+3. In the web UI Task provider section, bind the context to an active task instance, then enter its credentials (the credential fields appear only after a task instance is bound) and set your timezone
+4. For group settings, open `/config` in DM and select the group context in the web UI
+
+> LLM credentials are admin-owned and live in the `llm_providers` + `llm_admin_roles` SQLite tables. They are seeded from env vars on the first start that finds no provider configured, and can be managed later via the settings admin Providers + LLM Roles sections without restarting the bot.
+
+> `CHAT_PROVIDER` seeds the first platform instance only when the platform instance table is empty. Task instances are never env-bootstrapped — create them via `/admin#instances` and approve the relevant task-provider plugin. After bootstrap, platform instances, task instances, and admins are managed from SQLite and the admin Instances surface (`/admin#instances`).
+
+---
+
+## Architecture
+
+```mermaid
+flowchart TD
+    Runtime[src/index.ts] --> Router[ChatRouter]
+    Runtime --> Debug[Optional Debug Server + Debug/Admin UIs]
+    Router --> CP1[Telegram Instance]
+    Router --> CP2[Mattermost Instance]
+    Router --> CP3[Discord Instance]
+    Router --> CP4[Kontur Talk Instance]
+    User[User<br>Telegram / Mattermost / Discord / Kontur Talk] -->|Message or interaction| Router
+    Router -->|IncomingMessage / IncomingInteraction + platformInstanceId| Bot[bot.ts]
+    Bot -->|queued prompt + reply context + attachment ids| Queue[Message Queue + Attachment Workspace]
+    Queue --> LLM[LLM Orchestrator]
+    LLM --> Tools[Capability-gated Tool Registry]
+    Tools --> Providers[Task Providers]
+    Providers --> APIs[Task Tracker APIs]
+    Tools --> Web[Web Fetch / Extraction]
+    LLM --> Router
+    Router --> User
+```
+
+### Component Overview
+
+| Path                                               | Responsibility                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/index.ts`                                     | Entry point, env validation, startup, scheduler and optional debug server wiring                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `src/bot.ts`                                       | Bot setup: message ingress + auth, interaction routing, command wiring entry                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `src/bot-command-wiring.ts`                        | Command registration and the observed command wrapper (post-auth analytics facts, reply tracking)                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `src/bot-message-handler.ts`                       | Authorized message handling, mid-run steering, queueing, and the queued-turn lifecycle                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `src/chat/`                                        | Telegram, Mattermost, Discord, and Kontur Talk adapters plus capability metadata and the `ChatRouter`                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `src/llm-orchestrator.ts`                          | LLM tool-calling orchestration                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `src/tools/`                                       | Context-aware, capability-gated tool assembly                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `src/providers/`                                   | Shared normalized provider types/utilities; Kaneo and YouTrack ship as first-party plugins                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `src/instances/`                                   | DB-backed platform/task/admin stores, encrypted instance config, and env bootstrap                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `src/identity/`                                    | Chat-to-provider identity mapping and “me” resolution                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `src/attachments/`                                 | Durable attachment workspace: ingest, S3 blob store, metadata, manifest building, resolver                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `src/message-queue/`                               | Message coalescing and orderly LLM dispatch                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `src/group-settings/`                              | Admin group-context listing, scope filtering, and group observations for the settings web UI                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `src/web/`                                         | Safe fetch, extraction, distillation, caching, and rate limiting for `web_fetch`                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `src/plugins/`                                     | Trusted local plugin system: discovery, manifest validation, approval, lifecycle, KV                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `src/mcp/`                                         | External MCP server adapter: connection pooling, tool namespacing, user + plugin endpoints                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `src/analytics/`                                   | Privacy-gated analytics: fact contracts, normalizer/runtime, instrumentation, session/outcome/friction materialization, governed usage backfill/reconciliation, retention/expiry enforcement, authenticated subject export/withdraw/delete, key rekey workflow, curated Metabase snapshot publisher/consumer coordinator (`analytics/metabase/`), thresholded aggregate delivery outbox (suppression lattice, DNS-pinned egress worker), bounded lifecycle jobs registered on the shared scheduler with cutover-fence admission (`analytics/jobs/register.ts`) |
+| `src/debug/`, `client/debug/`, and `client/admin/` | Optional local debug server plus split `/debug` and `/admin` UIs                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+
+---
+
+## Configuration
+
+### Environment Variables
+
+<details>
+<summary><b>Startup And Bootstrap Variables</b> (click to expand)</summary>
+
+| Variable                   | When required                    | Description                                                                                                                                                      | Example                                               |
+| -------------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `ADMIN_USER_ID`            | Always                           | Initial authorized admin identity                                                                                                                                | Platform user ID string seen by the active adapter    |
+| `CHAT_PROVIDER`            | First run with empty platform DB | Platform bootstrap source (task providers are not env-bootstrapped)                                                                                              | `telegram`, `mattermost`, `discord`, or `kontur-talk` |
+| `SETTINGS_PUBLIC_BASE_URL` | For the settings web UI          | External base URL used to build single-use `/config` settings links; `/config` errors without it (the settings cookie is marked `Secure` only on HTTPS requests) | `https://bot.example.com`                             |
+| `INSTANCE_CONFIG_KEY`      | Production deployments           | AES-256-GCM encryption key for platform/task instance config; fallback is host-local when unset                                                                  | 64 hex chars                                          |
+
+</details>
+
+<details>
+<summary><b>Central LLM Credentials</b></summary>
+
+LLM credentials are admin-owned and live in the `llm_providers` + `llm_admin_roles` SQLite tables. On the first start that finds no provider configured, a default provider is created from the env vars below and bound to the `main` role (and `small`/`embedding` if their env vars are present). After seeding, the bot reads them from the database on every startup; management happens in the settings admin Providers + LLM Roles sections (no restart needed for changes made there).
+
+| Variable          | Required | Description                                                                               |
+| ----------------- | -------- | ----------------------------------------------------------------------------------------- |
+| `LLM_API_KEY`     | Yes      | API key for the OpenAI-compatible provider                                                |
+| `LLM_BASE_URL`    | Yes      | OpenAI-compatible base URL                                                                |
+| `MAIN_MODEL`      | Yes      | Main model used for orchestration                                                         |
+| `SMALL_MODEL`     | No       | Smaller helper model; callsites fall back to `main_model` when unset                      |
+| `EMBEDDING_MODEL` | No       | Embedding model for semantic memo search; when unset memo search degrades to keyword-only |
+
+If no admin role binding exists after startup, the bot logs a startup warning and replies "the bot is not fully configured" to incoming messages until an admin configures a provider in the settings web UI.
+
+</details>
+
+<details>
+<summary><b>Telegram Configuration</b></summary>
+
+| Variable             | Description                                         |
+| -------------------- | --------------------------------------------------- |
+| `TELEGRAM_BOT_TOKEN` | Bot token from [@BotFather](https://t.me/BotFather) |
+
+To find your Telegram numeric user ID, message [@userinfobot](https://t.me/userinfobot) and copy the returned value into `ADMIN_USER_ID`.
+
+For Mattermost and Discord, use the platform user ID string the bot receives, not a display name or `@username`.
+
+Authorized users added later through the settings UI admin area can be entered as `@username`: if the platform cannot resolve it to an ID (the Telegram Bot API cannot look up user accounts by username), the bot stores a pending entry and authorizes the user automatically the first time they message it.
+
+</details>
+
+<details>
+<summary><b>Mattermost Configuration</b></summary>
+
+| Variable               | Description         |
+| ---------------------- | ------------------- |
+| `MATTERMOST_URL`       | Mattermost base URL |
+| `MATTERMOST_BOT_TOKEN` | Bot account token   |
+
+</details>
+
+<details>
+<summary><b>Discord Configuration</b></summary>
+
+| Variable            | Description                                 |
+| ------------------- | ------------------------------------------- |
+| `DISCORD_BOT_TOKEN` | Bot token from the Discord developer portal |
+
+Discord support uses gateway intents including `MessageContent`. Enable the **Message Content Intent** for the bot in the Discord developer portal if you expect the bot to read message content beyond explicit interaction payloads. Verified applications must also enable the privileged Message Content intent in the portal for non-empty content, attachments, embeds, and similar fields.
+
+</details>
+
+<details>
+<summary><b>Kontur Talk Configuration</b></summary>
+
+| Variable                | Description                                          |
+| ----------------------- | ---------------------------------------------------- |
+| `KONTUR_TALK_JWT_TOKEN` | JWT used to authenticate the bot against Kontur Talk |
+
+Kontur Talk observes group messages directly and supports message-scoped threads. Its interaction surface is minimal: no command menu, buttons, or file transfer — only reply-context-aware messaging. `ADMIN_USER_ID` must match the Kontur Talk platform user ID string the bot receives.
+
+</details>
+
+<details>
+<summary><b>Kaneo Configuration</b></summary>
+
+Papai no longer reads Kaneo URLs from the environment. The Kaneo client URL is now a task-instance
+config field: create the task instance in `/admin#instances`, then approve `task-provider-kaneo` in the
+settings web UI admin area (Plugins approval).
+Per-user credentials (`plugin:task-provider-kaneo:provider:credential`, `plugin:task-provider-kaneo:provider:workspaceId`)
+are set in the settings web UI, opened via `/config`.
+
+Kaneo can auto-provision user accounts for the bot workflow. In self-hosted deployments, `docker-compose.yml`
+still expects Kaneo-service variables such as `KANEO_CLIENT_URL` (consumed by the bundled Kaneo and Caddy
+services, not papai), `KANEO_POSTGRES_PASSWORD`, and `KANEO_AUTH_SECRET`.
+
+</details>
+
+<details>
+<summary><b>YouTrack Configuration</b></summary>
+
+Papai no longer reads `YOUTRACK_URL` from the environment. The YouTrack instance URL is a task-instance
+config field: create the task instance in `/admin#instances`, then approve `task-provider-youtrack` in the
+settings web UI admin area (Plugins approval).
+Runtime setup still requires a per-user token (`plugin:task-provider-youtrack:provider:token`), set in the
+settings web UI, opened via `/config`.
+
+</details>
+
+<details>
+<summary><b>Optional Debug Server</b></summary>
+
+| Variable                        | Description                                                                                                                 |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `DEBUG_SERVER`                  | Set to `true` to start the local debug server                                                                               |
+| `DEBUG_HOSTNAME`                | Debug server bind host (default `127.0.0.1`)                                                                                |
+| `DEBUG_PORT`                    | Debug server bind port (default `9100`)                                                                                     |
+| `DASHBOARD_BASE_URL`            | Origin embedded in the sign-in link (falls back to `SETTINGS_PUBLIC_BASE_URL`, then `http://{DEBUG_HOSTNAME}:{DEBUG_PORT}`) |
+| `DASHBOARD_SESSION_TTL_SECONDS` | Session lifetime (default `28800`, i.e. 8h)                                                                                 |
+| `DASHBOARD_CLAIM_TTL_SECONDS`   | Sign-in link lifetime (default `300`, i.e. 5 min)                                                                           |
+
+`DEBUG_TOKEN` is no longer used; if set it is ignored and the bot logs a one-shot startup warning. Dashboard auth is now chat-issued.
+
+When the debug server is enabled, the local surfaces are split by audience:
+
+- `/debug` — engineer/live observability surface
+- `/admin` — operator/configuration and durable records surface
+- `/dashboard` — compatibility redirect to `/debug`
+
+Admin sections include:
+
+- **Billing** at `/admin#billing` — per-subject LLM usage from `llm_usage_events` (24h / 7d / 30d / all windows) and drill-down by request.
+- **Stats** at `/admin#stats` — bot-wide anonymous structural counts and per-subject sub-panel backed by `GET /stats/global` and `GET /stats/subject/:id`. Both routes return counts, byte sizes, timestamps, enum distributions, and keyed-hashed identifiers only - never message text, memo bodies, observation text, attachment filenames, usernames, or other free-form content.
+- **Instances** at `/admin#instances` — platform instances, task instances, and admin assignments backed by `/api/platform-instances`, `/api/task-instances`, and `/api/admins`. Instance config values are masked on read and encrypted at rest. If a persisted instance row cannot be decrypted or decoded, list routes return readable rows plus an `unreadable` diagnostics array instead of failing the whole response. LLM providers and role bindings are managed in the settings admin Providers + LLM Roles sections.
+
+The dashboard is gated by a chat-issued session cookie rather than a static token. DM `/dashboard` to the bot to receive a single-use sign-in link (valid 5 min). Opening the link renders a confirmation page; pressing **Sign in** there consumes the link and sets an `HttpOnly; Secure; SameSite=Strict` session cookie (8h default). The two-step page (consume on `POST`, not `GET`) keeps messaging-platform link-preview crawlers from burning the single-use link before you open it. `ADMIN_USER_ID` must match the chat user who runs `/dashboard`, and for HTTPS the reverse proxy must forward `X-Forwarded-Proto: https`. Never expose the dashboard on a public interface without upstream access control (e.g. a reverse-proxy auth layer or IP allowlist).
+
+</details>
+
+<details>
+<summary><b>File Attachments (S3-compatible Object Storage)</b></summary>
+
+Required when the bot needs to receive, persist, or attach files to tasks.
+
+| Variable               | Required | Description                                                           |
+| ---------------------- | -------- | --------------------------------------------------------------------- |
+| `S3_BUCKET`            | Yes      | S3 bucket name where attachment objects are stored                    |
+| `S3_ACCESS_KEY_ID`     | Yes      | Access key for the S3-compatible service                              |
+| `S3_SECRET_ACCESS_KEY` | Yes      | Secret key for the S3-compatible service                              |
+| `S3_ENDPOINT`          | No\*     | Endpoint URL. Required for non-AWS providers such as MinIO, R2, or B2 |
+| `S3_REGION`            | No       | AWS region (e.g. `us-east-1`)                                         |
+| `S3_PREFIX`            | No       | Optional key prefix inside the bucket                                 |
+| `S3_FORCE_PATH_STYLE`  | No       | Set to `true` for MinIO                                               |
+
+</details>
+
+<details>
+<summary><b>Analytics (Privacy-Gated, Off By Default)</b></summary>
+
+papai ships a four-lane, privacy-gated analytics pipeline (`src/analytics/`). The shipping default is `local_aggregate` (closed daily counters only — no actor continuity); pseudonymous lanes require complete governance fields, both HMAC keyrings, and an explicit rollout stage. Operators:
+
+| Variable                            | When required                        | Description                                                                           |
+| ----------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------- |
+| `ANALYTICS_KILL_SWITCH`             | Stage A; incident response           | `1`/`true`/`on` forces every analytics lane off regardless of stored policy           |
+| `ANALYTICS_HMAC_KEYRING`            | Pseudonymous longitudinal lane       | Pseudonym keyring, `v1:<64-hex>[;v2:<64-hex>...]`                                     |
+| `ANALYTICS_GOVERNANCE_HMAC_KEYRING` | Pseudonymous longitudinal lane       | Separate keyring for eligibility refs, consent fences, and deletion-bundle encryption |
+| `ANALYTICS_SNAPSHOT_DIR`            | Rekey BI coordination                | Absolute dir holding published Metabase snapshot files; fail-closed without it        |
+| `ANALYTICS_BACKFILL_APPROVED_AT_MS` | Backfill under `legitimate_interest` | Operator approval timestamp used as the backfill policy cutoff                        |
+
+Full operator flows, rollout stages A–E, and incident response: [`docs/operations/analytics-runbook.md`](docs/operations/analytics-runbook.md) and [`docs/operations/analytics-incident-runbook.md`](docs/operations/analytics-incident-runbook.md).
+
+</details>
+
+### Runtime Configuration
+
+Use the settings web UI to configure the bot. Launch it via `/config` in DM:
+
+| Command      | Description                                                                                     |
+| ------------ | ----------------------------------------------------------------------------------------------- |
+| `/config`    | Issues a single-use link to the settings web UI (requires `SETTINGS_PUBLIC_BASE_URL` to be set) |
+| `/clear`     | Clear conversation history, summary, and facts for the current context                          |
+| `/context`   | View the current LLM context window for this conversation                                       |
+| `/dashboard` | DM, bot-admin only: receive a sign-in link to the operator debug/admin UI                       |
+
+Settings managed in the web UI include:
+
+| Key                                               | Description                                                                                      |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `plugin:task-provider-kaneo:provider:credential`  | Kaneo API key or session token (plugin-namespaced)                                               |
+| `plugin:task-provider-kaneo:provider:workspaceId` | Kaneo workspace ID (plugin-namespaced)                                                           |
+| `plugin:task-provider-youtrack:provider:token`    | YouTrack permanent token (plugin-namespaced)                                                     |
+| `timezone`                                        | User timezone for local date/time interpretation                                                 |
+| `mcp_endpoints`                                   | JSON array of external MCP server endpoints whose tools are merged into the context (HTTPS only) |
+
+LLM providers and role bindings are admin-owned and managed via env vars (first-start seed) or the settings admin Providers + LLM Roles sections - not through the user settings web UI.
+
+Platform and task-provider base configuration is instance-owned. First-run env bootstrap creates a single `<provider>-default` platform instance row from `CHAT_PROVIDER` and the platform-specific env vars only when the platform instance table is empty. Task instances are never env-bootstrapped: create them through `/admin#instances` (or the admin section of the settings web UI) and approve the matching task-provider plugin. After that, manage instance lifecycle and admin assignment through `/admin#instances`; per-context credentials and preferences are managed in the settings web UI (reached via `/config`).
+
+---
+
+## Usage
+
+Send natural-language requests to the bot.
+
+**Task Management**
+
+- "Create a high-priority bug: login crashes on Safari"
+- "Move task 42 to In Progress"
+- "Show me task PROJ-55"
+- "Delete task 42"
+
+**Comments and Relations**
+
+- "Add a comment to task 42: waiting for API changes"
+- "Show all comments on task 55"
+- "Create a blocks relation: task 42 blocks task 55"
+
+**Identity and Assignment**
+
+- "I'm jsmith"
+- "Assign this to me"
+- "Add me as a watcher"
+
+**Attachments and Web Fetch**
+
+- Send a file with: "Attach this screenshot to task 42"
+- "Fetch https://example.com/release-notes and summarize the breaking changes"
+
+**Memos and History**
+
+- "Save a memo: renew the SSL certificate before Friday"
+- "Search my memos for certificate"
+- "Look up what we decided about alert thresholds in the main chat"
+
+### Group Chat
+
+Add the bot to a Telegram group, Mattermost channel, Discord server/channel, or Kontur Talk room.
+
+Typical flow:
+
+1. Add the bot to the group or channel
+2. A group admin opens the settings web UI via `/config` in DM and authorizes members and configures group settings there
+3. Members interact in-group, usually by mention where the platform requires it
+
+Important behavior:
+
+- Telegram and Mattermost can observe regular group messages; Discord group use is mention-driven. On Telegram and Discord, a user's reply to one of the bot's own messages in a group is treated like an `@mention` and processed without an explicit mention.
+- Group configuration is done in the settings web UI (launched via `/config` in DM).
+- Thread contexts are isolated. In Telegram forum topics and Mattermost threads, the bot stores thread-scoped history separately from the main group chat.
+- In thread-scoped group contexts, the bot can use `lookup_group_history` to search the main group discussion when needed.
+
+---
+
+## Plugins
+
+Papai supports trusted, repository-local first-party plugins that can contribute LLM tools, prompt fragments, bot commands, and scheduled jobs. The MVP is intentionally narrow: no sandbox, no marketplace, no npm install, no hot reload, no plugin secret store, and no raw chat/task/DB/env access.
+
+### Layout
+
+```text
+plugins/
+└── <plugin-id>/
+    ├── plugin.json   # Zod-validated manifest
+    └── index.ts      # default-exports a factory: () => ({ activate(ctx), deactivate?(ctx) })
+```
+
+### Lifecycle
+
+1. **Discover** — startup scans `plugins/` and records each package in `plugin_admin_state` as `discovered`. The manifest + entry source are hashed for integrity. If the `plugins/` directory is missing and `DEBUG_SERVER=true`, startup fails fast (the settings web UI cannot dispatch task-provider provisioning without plugins); otherwise a `WARN` is logged and the bot starts in degraded mode.
+2. **Approve** — bot admin approves the plugin in the settings web UI admin area. Any subsequent change to the manifest or entry source clears approval and requires re-approval.
+3. **Activate** — on the next startup, approved plugins are imported with a per-plugin activation timeout. Failures are isolated and recorded to `plugin_runtime_events`.
+4. **Enable per context** — once active, a plugin must be enabled for a personal or managed-group context via the settings web UI admin area or `defaultEnabled: true` in the manifest.
+
+### Contribution Surface
+
+| Surface             | Exposed as                                    | Notes                                                                              |
+| ------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------- |
+| LLM tools           | `plugin_<plugin_id>__<tool_name>`             | Sandwiched through the same execution wrapper as core tools.                       |
+| Prompt fragments    | Appended to system prompt (8,000-char budget) | Synchronous only; 2,000 chars per fragment.                                        |
+| Commands            | `plugin_<plugin_id>_<command_name>`           | Registered through the normal chat command path.                                   |
+| Scheduled jobs      | Owner `plugin:<pluginId>:<jobName>`           | Runs only for contexts where the plugin is enabled & eligible.                     |
+| External MCP server | `plugin_<server>__<tool>`                     | Optional manifest `mcp` block; tools fetched from a Model Context Protocol server. |
+
+### Context API
+
+Plugins activate against a frozen `PluginContext` exposing a scoped pino logger, a permission-gated KV store (`storage` permission required), and a `registration` facade. Tool executions also receive a `PluginToolRuntimeContext` with a permission-gated task-provider facade (`tasks.read` / `tasks.write` for read/write methods on `getTask`, `listTasks`, `searchTasks`, `createTask`, `updateTask`). Plugins never see raw chat or task providers, the DB, `process.env`, or arbitrary network access.
+
+See [`docs/plugins/developer-guide.md`](docs/plugins/developer-guide.md) for the full manifest schema, factory contract, and permission semantics, plus the runnable example at [`docs/plugins/examples/hello-world/`](docs/plugins/examples/hello-world/).
+
+### Built-in Plugins
+
+Papai ships with four first-party plugins under [`plugins/`](plugins/). All are `defaultEnabled: false` — approve each in the settings UI admin Plugins area (super admin) and enable it per context. Each plugin has its own README with manifest details, configuration, and behavior notes.
+
+| Plugin                                                         | ID                       | Purpose                                                                                                    | Permissions                           |
+| -------------------------------------------------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| [Audio Transcribe](plugins/audio-transcribe/README.md)         | `audio-transcribe`       | Auto-transcribes voice notes before the LLM turn and audio files on demand via an OpenAI-compatible API    | `http`, `attachments.read`, `storage` |
+| [Synthetic Web Search](plugins/synthetic-web-search/README.md) | `synthetic-web-search`   | Web search via the Synthetic Search API; returns title/url/markdown text                                   | `http`                                |
+| [Kaneo](plugins/task-provider-kaneo/README.md)                 | `task-provider-kaneo`    | Kaneo task-tracker integration (contributes the `kaneo` provider type; supports auto-provisioning)         | `provider.task`, `identity`, `http`   |
+| [YouTrack](plugins/task-provider-youtrack/README.md)           | `task-provider-youtrack` | YouTrack task-tracker integration (contributes the `youtrack` provider type; most fully-featured provider) | `provider.task`, `identity`           |
+
+---
+
+## Development
+
+All commands can be run as `bun <script>` or `bun run <script>`.
+
+```bash
+# App and debug UI
+bun start
+bun start:debug
+bun build:client
+
+# Code quality
+bun lint
+bun lint:fix
+bun format
+bun format:check
+bun typecheck
+bun knip
+bun duplicates
+
+# Security
+bun security
+bun security:ci
+
+# Testing
+bun build:client   # `bun run test` now does this for you when the bundles are missing
+bun run test       # wrapper: builds bundles, runs the suite, persists reports/test/
+bun run test:failures  # read the last run's failures — does not re-run anything
+bun run test:show 3    # one failure's full diagnostic
+bun run test:log expect  # filter the last run's log
+bun run test:affected  # only the tests a change can reach
+bun run test:audit  # read-only test-fragmentation report -> reports/test-audit/fragmentation.json
+bun run test:benchmark  # paired-arm consolidation speed benchmark -> reports/test-audit/benchmark.json
+bun run test:benchmark -- --project  # join benchmark + audit into a savings projection
+bun run test:raw   # unwrapped `bun test --parallel`, writes no report
+bun test:serial    # serial run, for debugging isolation-sensitive failures
+bun test:client
+bun test:watch
+bun test:coverage
+bun test:e2e
+bun test:e2e:watch
+bun test:mutate
+bun test:mutate:changed
+
+# Composite checks
+bun check
+bun check:full
+bun check:verbose
+bun fix
+
+# Release helpers
+bun changelog:preview
+bun changelog:generate
+```
+
+Notes:
+
+- `bun start` builds the debug/admin clients first, then starts the bot.
+- `bun start:debug` also enables the local debug server.
+- `bun run test` excludes client and E2E suites (configured in `bunfig.toml`); run `bun test:client` and `bun test:e2e` separately. It is a wrapper (`scripts/test/run-cli.ts`) that builds the client bundles when missing, chooses parallel or serial from the core count (parallel needs 8+; it is measurably slower on 4), and writes `reports/test/last-run.{log,junit.xml,json}`. **Query that report instead of re-running the suite to filter its output** — `bun run test:failures`, `test:show <id>`, `test:log <pattern>`, `test:status`, `test:slowest`. Bare `bun test` remains Bun's built-in runner and leaves no report.
+- `bun check` runs staged-file checks, while `bun check:full` runs the wider repo checks.
+
+### codeindex MCP (structural code search)
+
+Agents (and humans) query this repo structurally — symbol lookup, keyword search,
+caller/impact analysis — through the `codeindex` MCP server (`code_symbol`,
+`code_search`, `code_impact`, `code_index`), registered project-wide in `.mcp.json`
+and pre-approved for Claude Code via `.claude/settings.json`. It indexes the product
+roots `src/`, `client/`, and `plugins/` (`.codeindex.json`); freshness is owned by the
+server itself (boot probe plus in-session `fs.watch` watcher) — no client-side reindex
+component ships in this repo.
+
+**Setup.** codeindex lives in a separate repository and is distributed by clone, not npm:
+
+```bash
+# from the papai checkout (or any of its worktrees)
+git clone <codeindex-remote-url> ../codeindex
+cd ../codeindex && bun install
+```
+
+The committed shim (`scripts/codeindex-cli.ts`) resolves the sibling clone relative to
+the primary checkout from any worktree. If the clone lives elsewhere, point `CODEINDEX_DIR`
+at it. When resolution fails the shim refuses with `codeindex repo not found at <dir>` /
+`Set CODEINDEX_DIR or clone the sibling repo at ../codeindex` — the two remedies are
+exactly the two setup options above.
+
+**Scripts.**
+
+```bash
+bun run codeindex:index    # full index build
+bun run codeindex:reindex  # incremental refresh (manual escape hatch)
+bun run codeindex:stats    # index statistics
+```
+
+**Per-worktree index.** Each checkout/worktree keeps its own index database under the
+git-ignored `.codeindex/` directory — delete a worktree and its index goes with it. The
+index is built lazily: a tree with no database gets one on the first tool call (or first
+`codeindex:index` run). An existing pre-v5 database is rebuilt once automatically on the
+v5 schema — that one-time rebuild is expected and needs no action.
+
+The agent CI pipeline can also run codeindex — as a gated experiment with its own
+provisioning (sibling checkout, index prebuild, canary, per-job usage report) in the
+`agent` job, enabled by declaring a `codeindex` server in the `AGENT_MCP_SERVERS` knob
+(secret or variable — this repository uses the secret spelling); see
+[`docs/operations/codeindex-ci-experiment.md`](docs/operations/codeindex-ci-experiment.md)
+for the enable/revert/read/decide procedures.
+
+**Verified against.** The integration was last verified against codeindex commit `d6eb4e8`
+(2026-09-10): all four MCP tools answering from a worktree, including `plugins/` symbols,
+with no client-side reindex process on edits.
+
+---
+
+## Testing
+
+### Unit and Integration Tests
+
+```bash
+bun run test
+```
+
+Runs all server-side Bun test suites (excludes client and E2E via `bunfig.toml`).
+Defaults to `bun test --parallel` (one isolated worker process per file) locally;
+in CI, `scripts/check.sh` runs the suite serially to keep the 4-vCPU runner stable.
+Use `bun test:serial` to debug isolation-sensitive failures.
+
+### Client Tests
+
+```bash
+bun test:client
+```
+
+Runs debug/admin UI tests under `tests/client/` with happy-dom.
+
+### E2E Tests
+
+```bash
+bun test:e2e
+```
+
+Runs the Docker-backed Kaneo end-to-end suite.
+
+### Hermetic Story Tests
+
+```bash
+bun test:stories
+```
+
+Runs deterministic full-stack user stories against the real in-process runtime with fake
+transports. Every run executes inside the pinned `oven/bun:1.4.0` Docker image (digest
+single-sourced in `scripts/story/sandbox-image.txt`) — on Linux,
+and on macOS via Docker Desktop — with no network, a read-only app snapshot, and a read-only
+bind-mounted dependency cache, so a working Docker daemon is required. Windows hosts are not
+supported yet: the launcher fails closed with an actionable error before any test spawns.
+There is no unsandboxed fallback: missing Docker or an image mismatch fails before any test
+spawns. The shared dependency cache (`~/.cache/papai-story-dependencies`, overridable via
+`PAPAI_STORY_DEPENDENCY_CACHE_ROOT`) is pruned after every successful acquire — the newest
+three entries by directory mtime are kept, plus the just-acquired key; set
+`PAPAI_STORY_DEPENDENCY_CACHE_KEEP` (positive integer) to change the keep count. Pruning is
+best-effort and never fails a run. See
+`docs/architecture/commands.md` for the story tiers, contracts, stress lane, and refactor
+compatibility mode.
+
+### Mutation Testing
+
+```bash
+bun test:mutate:changed          # PR gate: changed files vs base branch
+bun test:mutate:changed --no-score-cache  # ...re-measuring everything, ignoring carried-over scores
+bun test:mutate                  # full paired run over the configured scope
+bun test:mutate --update-baseline  # full run; ratchet scripts/mutation/baseline.json up
+bun test:mutate:seed --scores=reports/paired/scores.json  # re-apply persisted scores (CI commit step; lost-seed recovery)
+```
+
+Runs paired, per-file mutation testing with Stryker (`ignoreStatic: false`,
+`disableTypeChecks: false` so the sandbox leaves non-target file bytes
+untouched — pinned by `tests/scripts/mutation/stryker-config.test.ts`; each
+source file paired with the test set that actually covers it — coverage-derived
+via `scripts/mutation/coverage-map.ts`, with the companion as fallback). The CI
+`mutation-testing` job is a
+**blocking per-file ratchet** on PRs judged against
+`scripts/mutation/baseline.json`, whose entries are records — the score plus the
+counts behind it, `{score, killed, timeout, scored}` (bare legacy score numbers
+still coexist during the lazy migration, judged by score alone). A baselined
+file fails only when its measurement both scores below the recorded score **and**
+kills fewer mutants than the record — a true regression, meaning killing power
+dropped; a below-floor score with kills held (the mutant population grew) is
+new-code dilution and prints a `WARN` instead of failing. Files with no recorded
+entry (new or never-baselined) are not regressions. The
+`mutation-testing` job **gates the whole branch diff on every push** but only
+**measures** the files whose content changed since the previous run — the rest
+carry over scores recorded earlier on the branch, guarded by a content
+fingerprint over the source, its candidate tests and the toolchain. So a drop
+introduced in one commit keeps failing later pushes that touch nothing near it.
+Pass `--no-score-cache` to re-measure everything. The
+`mutation-baseline` job seeds the baseline from files changed since the previous
+master commit (`test:mutate:changed --base=HEAD~1 --update-baseline`; broad
+scope, `seedMerge` preserves existing entries — not a full run) on push to
+`master`; its commit step replays the persisted per-file scores onto the latest
+master (`test:mutate:seed`), so a master update landing mid-run cannot lose the
+seed. See `scripts/mutation/README.md` for flags (`--no-ratchet`), the
+override/companion resolution, the record validation rules, the lazy
+record-shape migration, and the one-time migration catch-up note.
+Toolchain: Stryker 10 — the CLI host is Node (≥ 22; only test children run on
+Bun), and `@hughescr/stryker-bun-runner` installs via a Bun patch until
+upstream accepts core 10 (details and deletion condition in
+`scripts/mutation/README.md`).
+
+---
+
+## Deployment
+
+### Docker Compose (Recommended for self-hosted Kaneo deployments)
+
+The repository includes a production-oriented `docker-compose.yml` that runs:
+
+- `papai`
+- Kaneo API and web
+- PostgreSQL
+- a one-shot Kaneo DB fix container
+- Caddy for TLS and reverse proxying
+
+Minimal example:
+
+```yaml
+services:
+  papai:
+    image: ghcr.io/yourpapai/papai:latest
+    environment:
+      CHAT_PROVIDER: telegram
+      ADMIN_USER_ID: '123456789'
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      INSTANCE_CONFIG_KEY: ${INSTANCE_CONFIG_KEY}
+```
+
+After the stack is up, create the Kaneo task instance via `/admin#instances` and approve `task-provider-kaneo` in the settings web UI admin area (Plugins approval); the Kaneo client URL is an instance config field, not a papai env var.
+
+For a real deployment, prefer the checked-in `docker-compose.yml` and `.env.example` together, because the full stack is Kaneo-specific and also needs Kaneo service settings (`KANEO_CLIENT_URL`, `KANEO_POSTGRES_PASSWORD`, `KANEO_AUTH_SECRET`) consumed by the bundled Kaneo and Caddy services. For YouTrack deployments, you typically run `papai` against an external YouTrack instance instead of this full bundled stack.
+
+### GitHub Actions Deployment
+
+The repo currently uses:
+
+- `release.yml` to bump version, update `package.json`, generate `CHANGELOG.md`, and create a GitHub release
+- `deploy.yml` to build/push the container and deploy over SSH on version tags or successful release workflow completion
+
+Before each deploy, `deploy.yml` takes a verified SQLite backup of the running bot's database (`scripts/deploy-backup.ts`, run inside the container via `VACUUM INTO` so the WAL is captured consistently; `cp` of the live `papai.db` alone would lose unflushed WAL data). Backups are written to `~/<repo>/backups/papai-<timestamp>.db` on the deploy host (last 5 kept). A failed or empty backup aborts the deploy.
+
+Current deployment automation is opinionated for the Telegram + Kaneo production path. If you deploy Mattermost, Discord, or YouTrack in production, adapt the workflow and `.env` generation accordingly.
+
+### Manual (Bare Metal)
+
+```bash
+git clone https://github.com/yourpapai/papai.git
+cd papai
+bun install
+cp .env.example .env
+# Edit .env
+bun start
+```
+
+If you want the local debug/admin UI too:
+
+```bash
+bun start:debug
+```
+
+---
+
+## Tech Stack
+
+- **Runtime:** [Bun](https://bun.sh) 1.4+
+- **Language:** TypeScript (strict mode)
+- **Validation:** [Zod](https://zod.dev) v4
+- **LLM Integration:** [Vercel AI SDK](https://sdk.vercel.ai)
+- **Chat Platforms:** [Grammy](https://grammy.dev), Mattermost REST/WebSocket, [discord.js](https://discord.js.org)
+- **Task Trackers:** Kaneo REST API, YouTrack REST API
+- **Database:** SQLite with Drizzle ORM
+- **Web Extraction:** defuddle, linkedom, unpdf
+- **Linting / Formatting:** oxlint, oxfmt
+- **Security:** Semgrep
+- **Testing:** Bun Test, happy-dom, Stryker, Docker-backed E2E
+
+---
+
+## License
+
+[Business Source License](LICENSE) © 2026 Dmitriy Lazarev

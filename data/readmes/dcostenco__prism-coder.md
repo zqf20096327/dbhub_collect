@@ -13,9 +13,11 @@
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
 [![Models on HuggingFace](https://img.shields.io/badge/🤗-prism--coder-yellow)](https://huggingface.co/dcostenco)
 
-<p align="center">
-  <img src="docs/mind-palace-dashboard-v20.8.png" alt="Prism Mind Palace dashboard v20.8.0 — project state with handoff summary, pending TODOs, intent health, neural graph, and time-travel history" width="700" />
-</p>
+![Prism dashboard Local AI connection panel with Preview connection, Use this server, and optional managed-server setup](docs/screenshots/local-ai-connection.png)
+
+*Local AI dashboard development preview. Screenshots below use an isolated demo
+with illustrative inventory and responses; they do not show a live account or
+prove model accuracy. The npm release may show an earlier interface.*
 
 Prism Coder is an [MCP server](https://modelcontextprotocol.io) that gives Claude, Cursor, and other AI tools long-term memory that survives across sessions. It ships with the open-weight `prism-coder` model fleet (2B–27B) for fast, offline tool-routing — no cloud required. And it keeps score: every call served locally is metered, so `prism savings` shows the token volume that never reached your cloud model — [measured honestly, in tokens](#local_savings--what-local-serving-actually-displaced).
 
@@ -51,13 +53,13 @@ A paid subscription adds cloud sync, higher model tiers, and team features throu
   host launches, with safe upgrades, downgrades, conflict preservation, and
   offline last-good recovery.
 - **Hook-free startup** — MCP metadata and native instructions request Prism's
-  startup context without requiring lifecycle hooks or a Prism-owned launcher.
-  Where a host offers hooks (Claude Code, Codex), `prism connect` adds two
-  small ones on top: mid-sessi
+  startup context without req
 
 [...截断...]
 
-on prompt routing, and a post-compaction
+uiring lifecycle hooks or a Prism-owned launcher.
+  Where a host offers hooks (Claude Code, Codex), `prism connect` adds two
+  small ones on top: mid-session prompt routing, and a post-compaction
   re-injection of the protected-floor digest.
 - **Prompt-triggered Factory** — enabled by default for suitable bounded
   implementation requests with explicit files, an allowed write list, and a
@@ -70,87 +72,47 @@ on prompt routing, and a post-compaction
   never sent to the cloud), and local/cloud usage is recorded for
   review.
 
-### On-device oMLX coding
+### Local AI in the dashboard
 
-On Apple Silicon, choose **Settings → Local Coding** in `prism dashboard` to
-install oMLX and its model pack or use an existing server. Auto prefers configured
-oMLX for eligible coding; a saved preference or explicit task choice can select
-Ollama instead. This path requires
-Prism's oMLX integration and its separate classifier; stock oMLX is insufficient.
-See [oMLX setup, tested models, results, and failure handling](docs/omlx.md), or
-start with the [quickstart beside Ollama](#optional-omlx-for-local-coding).
-Explicit oMLX never falls back to Ollama or cloud inference; drafts still need
-host review and tests.
+Run `prism dashboard`, open **Account & Settings → Local AI**, then work through
+**Connection → Models → Test**. These controls configure local inference;
+session memory continues to work without installing a model.
 
-## Get started
+| Step | What you do | What to expect |
+| --- | --- | --- |
+| **1. Connection** | Choose an existing oMLX server or a Prism-managed installation, then **Preview connection**. | Review the effect on coder, reviewer and image assignments before **Use this server** switches the shared oMLX connection. Saved model IDs are preserved. |
+| **2. Models** | Choose coder and reviewer models for each backend and **Save coding preference**. Save the separate **Image model** form independently. | Saving records a choice; it does not download or load weights. Missing saved IDs stay visible instead of being silently replaced. |
+| **3. Test** | Select backend and purpose, then **Test saved model**. | A small request may load the saved model. The result reports execution or a blocking reason, with no cloud inference fallback. |
 
-Memory search automatically applies ACT-R ranking: relevance plus recency,
-frequency and memory associations. No upvote or prompt instruction is required.
-To opt out, use **Account & Settings → Preferences → Automatic Memory Ranking
-(ACT-R)**, then restart your AI client. `PRISM_ACTR_ENABLED=false` also disables
-it. This ranking is separate from the neural graph's stored importance filter.
+**Coding and review.** Auto prefers configured oMLX for eligible coding. You can
+choose Ollama instead; explicit task choices take precedence. oMLX coding and
+review need the integration's separate text safety classifier. Local drafts and
+reviews still need host inspection and tests.
 
-```bash
-npm install -g prism-mcp-server
-prism connect
-prism dashboard
-```
+![Local AI coding model selectors with separate coder and reviewer assignments](docs/screenshots/local-ai-coding-models.png)
 
-Use `prism connect --dry-run` to preview changes, `prism connect --all` to
-configure every detected host, or `prism connect --refresh` to reconcile
-Prism-managed entries after an upgrade. Restart the host after connecting.
+**Images have their own choice.** Select an oMLX vision model under **Image
+model**, then **Save image preference**. It may be the same model used for
+coding, but the setting is independent. **Refresh image models** reads
+metadata without loading a model. Vision metadata and RAM estimates are
+advisory; each request repeats compatibility and resource checks. The saved
+Ollama image option currently refuses execution; leave the image backend
+**Not selected** to retain existing image routing.
 
-`prism dashboard` opens the current local Mind Palace without a Synalux login.
-Prism works locally without an account, API key, or cloud subscription. Add a
-Synalux subscription when you want cloud memory, paid-tier skills, or team
-features.
+![Independent image-model preference and selected-model server compatibility status](docs/screenshots/local-ai-image-model.png)
 
-To check your plan, open **⚙ Account & Settings → Account** in the dashboard.
-Free users see **Start 14-day trial**; paid users see **Manage subscription**.
-During a trial, the same panel shows the paid tier and exact end date. No card
-is required to start. Add payment details before the end date to continue; if
-you do not, the subscription cancels and local Prism Free remains available.
-You can also compare plans directly at [synalux.ai/pricing#prism-plans](https://synalux.ai/pricing#prism-plans).
+**Read image-test results in two parts.** The built-in diagnostic sends a red
+square. **Reference facts** describe that known PNG; **AI observations** contain
+the model's answer. A wrong answer cannot change the reference. A passing test
+proves execution, not visual accuracy. User images do not receive catalog facts
+from this diagnostic. Starting another test or changing backend or purpose
+clears the previous image result.
 
-After a few sessions, ask what it's been worth:
+![Image diagnostic with execution status, separate Reference facts and AI observations, and an accuracy warning](docs/screenshots/local-ai-image-results.png)
 
-```bash
-prism savings --period month
-```
-
-```
-💾 Local serving — LAST 30 DAYS
-  ~510K tokens kept off your cloud model
-  53 call(s) served locally of 58 routed (91%)
-```
-
-Your numbers will differ — that's the point: it reports what *your* machine
-actually served, not a projection. Full report anatomy and the honesty rules
-behind it are in the
-[`local_savings` section](#local_savings--what-local-serving-actually-displaced).
-
-### Install as a plugin
-
-Prism also ships as a plugin, which registers the MCP server and the startup
-skill for you.
-
-Both hosts install straight from this repository. There is nothing to host and
-no server to run: the catalogue is the `.claude-plugin/marketplace.json` file
-committed here, and your client clones it from GitHub.
-
-**Claude Code:**
-
-```bash
-claude plugin marketplace add dcostenco/prism-coder
-claude plugin install prism-coder@prism
-```
-
-**Codex:**
-
-```bash
-codex plugin marketplace add dcostenco/prism-coder
-codex plugin add prism-coder@prism
-```
-
-The plugin registers `prism-mcp` via `npx -y prism-mcp-server`. If you already
-configured Prism by hand
+**Server setup is optional and separate from npm.** On supported Apple Silicon
+Macs, expand **Install or update a Prism-managed server** to install the server
+without downloading the optional coding starter pack. Add models through
+**Open oMLX model manager**. Installing a server update does not restart it or
+switch your connection. **Restart managed server** interrupts local inference
+and is

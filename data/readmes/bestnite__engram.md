@@ -28,7 +28,8 @@ Live demo: <https://engram.nite07.com/> (registration is open; you can also sign
 ## Features
 
 - **FSRS v6 Scheduling**: Adaptive scheduling based on the open-source FSRS v6 algorithm, optimizing review intervals and reducing workload compared to legacy SM-2 algorithms. Supports custom parameter optimization.
-- **Rich Card Types**: Multiple question types built in — cloze, typed answer, numeric with tolerance, single-choice, multiple-choice, and true/false. Card bodies support Markdown, MathJax formulas, and media uploads.
+- **Anki-Compatible Note Types**: Note types are data — fields, templates, CSS and Anki's note type options — with eight registered answer controls (text, numeric, single choice, multiple choice, true/false, list, cloze blanks and short answer). Field values are HTML, formulas render with MathJax, and audio/TTS use Anki syntax (`[sound:<name>]`, `[anki:tts …]…[/anki:tts]`).
+- **Anki `.apkg` Deck Import**: Import decks straight from Anki packages. Engram reads all three `.apkg` layouts (legacy `collection.anki2` and `collection.anki21`, and the zstd-compressed `collection.anki21b`), and the package's deck tree, note types, notes, tags, cards and media arrive as Anki has them. Re-importing a package matches notes by Anki's GUID, so it updates the deck in place and keeps the progress already recorded against it.
 - **Multi-user & Deck Sharing**: Multi-tenant architecture with OIDC / Single Sign-On (SSO) support. Decks can be shared across users while keeping each user's review scheduling and progress strictly isolated.
 - **AI & MCP Native**: Built-in Model Context Protocol server exposing dedicated tools for LLMs and agents to search, create, update, review, and export flashcards.
 - **Modern Interface & PWA**: Clean single-page application built with Svelte 5 and Tailwind CSS, featuring dark/light themes, keyboard navigation shortcuts, internationalization (`zh-CN` and `en`), and PWA support.
@@ -37,9 +38,31 @@ Live demo: <https://engram.nite07.com/> (registration is open; you can also sign
 
 ---
 
-## Deck Library
+## Importing Decks
 
-Ready-to-import `.edeck` packages live in [`decks/`](./decks/). Pick one, then import it from the **Import** page (upload the file, or paste the file's public direct link), the CLI (`engram import`), or the MCP `import_deck` tool. See [`decks/README.md`](./decks/README.md) for the deck list and the step-by-step instructions.
+Import a deck from the **Import** page (upload the file, or paste the file's public direct link), the CLI (`engram import`), or the MCP `import_deck` tool. Two package formats are accepted: Engram's own `.edeck`, which carries deck content and, when the export included it, the exporter's review progress; and Anki's `.apkg`.
+
+Choose the target: `new_deck` creates a deck, and `into_deck:<id>` merges into a deck you can edit. The CLI and the MCP tool also take `replace_deck:<id>` to replace an existing deck, which only the deck's owner may do.
+
+### Anki `.apkg` packages
+
+The package brings these across:
+
+- **Deck tree**: the longest `::` name prefix shared by the package's decks that hold cards becomes the Engram deck name; when they share none, the branch holding the most cards names the deck. Each deeper deck name stays on its cards as a subdeck path, so `A::B::C` becomes deck `A::B` with path `C`.
+- **Note types**: fields, templates (all four sides, including browser variants), CSS, the LaTeX preamble and suffix, and Anki's note type options arrive unchanged.
+- **Notes, tags and cards**: every note is created as the package holds it, with its tags, and the package's cards are created as they exist.
+- **Media**: images, audio and video are registered under their Anki file names and resolved by the package's fields, templates and CSS.
+
+These parts of the package are not imported:
+
+- **Scheduling state and review history.** Anki's due dates, intervals and review log stay behind: imported cards start as new cards, and FSRS schedules them from your own reviews.
+- **Anki's deck options and FSRS parameters.** A new deck starts from the default preset, and Engram optimises its parameters from the reviews you record.
+
+An imported note type carries no answer control, so its cards are self-rated until you add one in the note type editor.
+
+Re-importing the same package, or a newer export of it, matches notes by Anki's GUID and note types by the package's origin id. A note and note type that still have the same field and template structure are updated in place and keep their cards and progress; a changed structure creates a new note type and moves the notes to it.
+
+The import report lists what the package refers to but does not carry: missing media files, video a browser cannot play, external scripts or stylesheets, and LaTeX images the package does not embed. A package with missing media fails by default; tick "Continue when media files are missing" to import it anyway.
 
 ---
 
@@ -66,20 +89,20 @@ Create an API key in the **Settings** panel, then add Engram to your MCP client 
 
 ### Available Tools
 
-Engram provides 22 dedicated MCP tools:
+Engram provides 23 dedicated MCP tools:
 
 - `list_decks` / `create_deck` / `update_deck`: Inspect accessible decks, create new ones with custom scheduling presets, or rename and describe them.
 - `delete_deck`: Delete a deck together with its notes, cards and progress. Only the owner can do this, and the deletion cannot be undone.
 - `bulk_decks`: Delete several decks in one call; each row is owner-checked, and `dry_run` counts without writing. Mirrors REST `POST /decks/bulk`.
-- `list_card_types`: List the supported card types with each type's fields and a validated example note, so an agent can write notes without guessing field names or syntax.
+- `list_note_types` / `get_note_type`: List a deck's note types or read one, with each type's field ids and names, templates and CSS. Note field values are HTML strings keyed by field name, so an agent can write a note without guessing the payload shape.
 - `search_notes` / `get_note` / `list_deck_tags`: Query notes with tag and keyword filters, read a single note, and list the tags used in a deck.
-- `create_notes` / `update_note` / `delete_note` / `bulk_notes`: Create, update and delete notes across all supported card types, with dry-run validation, bulk insertion and bulk tag or delete actions.
+- `create_notes` / `update_note` / `delete_note` / `bulk_notes`: Create, update and delete notes across all note types, with dry-run validation, bulk insertion and bulk tag or delete actions. A note names its `note_type` and sends `fields` as HTML strings keyed by field name.
 - `get_due_cards` / `submit_review`: Fetch cards due for review and record reviews. Self-assessed cards take a rating (`Again`, `Hard`, `Good`, `Easy`), and a short-answer card may also carry the answer the learner wrote, stored with the review; answer-type cards (cloze, list, typed, numeric, choice, true/false) take the answer instead, and the server grades it.
 - `add_extra_new_cards`: After the daily new card limit is reached, allow extra new cards in one deck for the current review day only. The deck settings do not change, and the next day returns to the daily limit.
 - `bury_card`: Postpone one card to the start of your next review day without touching its progress. Mirrors REST `POST /cards/{id}/bury`.
 - `set_deck_paused`: Pause or resume a deck for yourself only. A paused deck leaves the default review queue, the due count and the reminder emails, but keeps its progress and can still be reviewed by name.
 - `get_stats`: Retrieve learning summaries, queue counts, and retention rates.
-- `export_deck` / `import_deck`: Export and import portable deck packages (`.edeck`).
+- `export_deck` / `import_deck`: Export and import portable deck packages (`.edeck`). `import_deck` also accepts an Anki `.apkg` package and targets a new deck, an existing deck, or a full deck replacement.
 - `create_import_upload`: Get a single-use upload URL for a deck package. The agent sends the file to it with an HTTP client such as `curl`, so a large package never passes through the model and the API key never leaves the MCP client.
 
 ---
@@ -208,7 +231,7 @@ Engram builds on these projects:
 - [fsrs-rs](https://github.com/open-spaced-repetition/fsrs-rs) — the training implementation behind the optimiser adapter.
 - [Gin](https://github.com/gin-gonic/gin) and [GORM](https://gorm.io) — HTTP and database layers.
 - [Svelte](https://svelte.dev/) — the single-page front end.
-- [goldmark](https://github.com/yuin/goldmark) and [bluemonday](https://github.com/microcosm-cc/bluemonday) — Markdown rendering and HTML allowlisting.
+- [goldmark](https://github.com/yuin/goldmark) — Markdown rendering for the one-time note migration and the mail-template conversion. Card content is HTML and is shown only inside the sandboxed frame.
 - [modelcontextprotocol/go-sdk](https://github.com/modelcontextprotocol/go-sdk) — the MCP server.
 - [zitadel/oidc](https://github.com/zitadel/oidc) and [go-i18n](https://github.com/nicksnyder/go-i18n) — OIDC sign-in and translation catalogs.
 - [MathJax](https://www.mathjax.org/) — formula rendering.

@@ -57,7 +57,23 @@ Then hand it to your agent. `m365crawl skill` prints a compact, version-matched 
 
 > Find the discussion about the launch checklist, then open the relevant thread. Keep the first pass short and expand only the matches.
 
-For an offline-only read, use `--max-age 0`: ordinary reads can otherwise refresh the local desktop caches when the archive is stale. An explicit transcript fetch is a separate action, never a side effect of search. To try every command on synthetic data first, follow the [usage guide](docs/guide.md#try-it-on-synthetic-data).
+For an offline-only read, use `--no-sync`: ordinary reads can otherwise refresh the local desktop caches when the archive is stale. (`--max-age 0` still turns the sync off, but it does not mean fresh; `--no-sync` says what it does.) An explicit transcript fetch is a separate action, never a side effect of search. To try every command on synthetic data first, follow the [usage guide](docs/guide.md#try-it-on-synthetic-data).
+
+## Optional WorkIQ source
+
+The [optional-source contract](SPEC.md#planned-optional-workiq-source) adds explicit server reads through your separately installed and signed-in [WorkIQ CLI](https://github.com/microsoft/work-iq). It is disabled by default; ordinary reads, plain `sync` and `watch` never launch it. When a mail read asks for a range older than the Outlook cache, its JSON `workiq_routes` lists the commands below, so an agent can enable WorkIQ and sync on its own. Only installing WorkIQ, signing in and accepting its EULA need a person, once; m365crawl never does them.
+
+```sh
+m365crawl workiq enable
+m365crawl --account outlook/Main workiq sync --source mail
+m365crawl workiq coverage --source chats --since 365d --max-chats 200
+m365crawl workiq status
+m365crawl workiq disable
+```
+
+Replace `outlook/Main` with an existing profile from your archive. Stored address mismatches and several content mailboxes per profile are refused, without an override. Mail sync traverses all visible folders and needs room for the whole mailbox (about 35 GB per 100,000 items), refusing with `workiq_disk_space` when the archive's disk is too small. To fetch only a date range, add `--since` and optionally `--until` to mail sync (`m365crawl --account outlook/Main workiq sync --source mail --since 2026-09-01 --until 2026-09-08`): it fetches mail received in that range and, when it can follow every folder's changes, proves the range complete, which ends a read's route for it. Its result's `window` says whether the range was proven. Coverage prints folder totals, not a time-windowed mailbox count. Chat selection uses archived activity, and unqualified message-ID classes are counted with gaps rather than inserted as duplicate messages. Synthetic tests do not establish native WorkIQ/Windows or service qualification. See [command output and limits](docs/commands.md#workiq).
+
+Archived messages, conversations and mail name their `provenance`: `desktop_cache`, `workiq_server` or `both`. Disabling WorkIQ preserves those rows and their stable IDs. Server success does not claim that a failing Outlook reader recovered. The new download-URL/temporary-authentication scrub rules also apply to desktop records, causing one full reread under the new signature.
 
 ## What your agent can do with it
 
@@ -70,12 +86,14 @@ For an offline-only read, use `--max-age 0`: ordinary reads can otherwise refres
 | Inspect the native evidence behind a meeting roster | Explicit `calendar attendees sync`, then offline `calendar attendees list <event>` and `show attendee-observation:N`; [keep source evidence separate from the displayed roster](docs/local-sources.md#native-meeting-attendee-evidence) |
 | Which mails had the deck attached? | `m365crawl mail list --has-attachments` · `m365crawl mail show <id>` for each file's name, size and type |
 | What's in the archive and how fresh is it? | `m365crawl` |
+| Did I really send no mail yesterday, or is the day not in the archive? | `m365crawl coverage --day yesterday` — per source, `covered` (a zero is a real zero), `partial` or `not_covered`, with the fix |
 | Find my notes about that discussion | `m365crawl notes sync` once, then `m365crawl search "budget review"` or `m365crawl notes search "budget review"` |
 | Read the note and check its coverage | `m365crawl notes show note:ID` · `m365crawl notes sources` |
 | Find the document mentioned in that work | `m365crawl docs sync` once, then shared `search` or `docs search "words"` |
 | Inspect the document claim, not a guessed file | `m365crawl docs show document-observation:ID` · `m365crawl docs sources` |
 | Find text from a Loop component Teams cached | `m365crawl loop sync` once, then `m365crawl loop search "words"` or shared `search` |
 | Inspect one cached Loop channel and its snapshot version | `m365crawl loop show loop-channel:ID` · `m365crawl loop sources` |
+| What did my Scout agent do today? | Opt in with `m365crawl scout sync`, then `m365crawl scout list --since 24h`, `scout search "words"` and `scout show scout-session:ID`; [private, never downloads cloud-only files](docs/scout.md) |
 | Inspect the people evidence behind a name | `m365crawl people sync` once · `m365crawl people --query "name or address"` · `m365crawl people show person-observation:ID` |
 | Review a retained own Teams compose body | `m365crawl drafts list`, then its guarded `full_inspection` in the declared `full_inspection_shell` (Windows: PowerShell7.3+, not CMD), or `drafts show teams-draft:HASH`; [cached projection, not current-unsent/editor truth](docs/commands.md#drafts) |
 
@@ -89,13 +107,14 @@ For an offline-only read, use `--max-age 0`: ordinary reads can otherwise refres
 | Calendar, recaps and action items | `sync`, from Teams and the new Outlook for Mac | [Usage guide: Calendar](docs/guide.md#calendar) |
 | Native meeting attendee evidence | Explicit Mac HxStore discovery or supported copied profiles; registered lanes reuse an ordinary Outlook copy. Offline archive reads are portable, not native Windows/OWA qualification. | [Scope and workflow](docs/local-sources.md#native-meeting-attendee-evidence) |
 | OneNote indexed notes, Office document metadata, cached Loop channels, native people observations | Their own explicit `notes`, `docs`, `loop` and `people sync` | [Notes, documents, people and Loop](docs/local-sources.md) |
+| Microsoft Scout session history (opt-in) | Explicit `scout sync`, from session files already in your local OneDrive folder on macOS and Windows (Linux: `--root`); never downloads a cloud-only file. | [Scout session history](docs/scout.md) |
 | Meeting transcript text | Explicit `transcripts fetch`, through the tool-owned browser | [Commands: transcripts](docs/commands.md#transcripts) |
-| Resident Office text, SharePoint pages, Stream transcripts, Engage Home sessions and selected threads | Explicit `content capture` or `content fetch` only. Acquisition is not yet qualified on native Windows and is not supported on Linux; offline archive reads are portable. | [Explicit content capture](docs/content.md) · [Engage Home](docs/engage-home.md) · [Selected thread](docs/commands.md#content-fetch-engage-thread) |
+| Resident Office text, SharePoint pages, Stream transcripts, Engage Home sessions and selected threads | Explicit `content capture` or `content fetch` only. `content fetch doc LINK` keeps WorkIQ excerpts of a linked OneDrive/SharePoint Office file, including an encrypted one, only when your rights allow extraction. Acquisition is not yet qualified on native Windows and is not supported on Linux; offline archive reads are portable. | [Explicit content capture](docs/content.md) · [Engage Home](docs/engage-home.md) · [Selected thread](docs/commands.md#content-fetch-engage-thread) |
 
 - **Start with the apps you already use.** Desktop capture needs no API token or app registration. It reads the signed-in apps' caches, with Full Disk Access on macOS.
 - **Built for agent context budgets.** Every item carries a stable id, and every Teams item a deep link. `--fields` and `--max-text` return only what you need.
 - **Query locally.** Search and recall read SQLite, with full-text search or plain SQL, instead of making a service request for each question. Explicit transcript fetch and sign-in use the tool-owned browser; desktop-app and browser access can still be governed by your organization's policies.
-- **No message actions.** It cannot send, reply, react, move or mark messages read. Sync writes its own archive and private working files, not the source apps.
+- **Read-only unless you turn writes on.** By default it cannot send, reply, react, move or mark messages read. If you run `m365crawl writes on` yourself, agents you direct can send Teams chat messages and reactions, send, reply to and reply-all to mail, and save, update or discard drafts as you through WorkIQ, each recorded with the agent and its reason; see [docs/commands.md](docs/commands.md#writes). Sync writes its own archive and private working files, never the source apps.
 - **Keeps what the apps evict.** Teams and Outlook trim their caches as they run. The archive keeps history as long as you sync regularly, and marks mail that aged out of Outlook's cache as `evicted` instead of pretending it was deleted.
 
 ## Scope and requesting support
@@ -106,16 +125,17 @@ m365crawl is a complement to Graph and MCP tools, not a replacement: use those t
 
 ## Privacy
 
-The archive holds your real chats, mail, meetings and explicitly retained cloud content. It stays in a private directory (`~/.m365crawl/` on macOS, `%LOCALAPPDATA%\m365crawl\` on Windows). Only explicit `transcripts fetch`, `transcripts signin`, `content fetch page/stream` and `content signin URL` reach SharePoint through the tool-owned browser; m365crawl never sees a password or token. Ordinary content reads are archive-only regardless of max-age and never fetch or sign in. Other reads use the local archive or desktop caches. Treat the database like the mailbox it contains: do not commit it, sync it to shared storage or paste it into tools you would not show the original messages to. Tests and examples use synthetic data; the doctor screenshot above is a real, scrubbed run that shows only checks and counts. [`docs/privacy.md`](docs/privacy.md) lists what is read, what is stored and what is never touched.
+The archive holds your real chats, mail, meetings and explicitly retained cloud content. It stays in a private directory (`~/.m365crawl/` on macOS, `%LOCALAPPDATA%\m365crawl\` on Windows). Only explicit `transcripts fetch`, `transcripts signin`, `content fetch page/stream` and `content signin URL` reach SharePoint through the tool-owned browser; m365crawl never sees a password or token. `content fetch doc` uses the optional WorkIQ subprocess instead of a browser. Ordinary content reads are archive-only regardless of max-age and never fetch or sign in. Other reads use the local archive or desktop caches. Treat the database like the mailbox it contains: do not commit it, sync it to shared storage or paste it into tools you would not show the original messages to. Tests and examples use synthetic data; the doctor screenshot above is a real, scrubbed run that shows only checks and counts. [`docs/privacy.md`](docs/privacy.md) lists what is read, what is stored and what is never touched.
 
 ## Limits
 
 - It sees only what the desktop apps cached, so sync regularly.
-- Supported: macOS and Windows with the new Teams app, plus new Outlook's cached mail and calendar on Mac and Windows. OWA calendar retains source uncertainty and does not infer deletions; several populated content mailboxes per Windows profile remain unsupported. Classic Teams and classic Outlook are not supported. Linux can read archives and explicit copied supported sources, but desktop-cache discovery is not supported.
-- Read-only: no sending, replying, reacting, moving or marking read.
+- Supported: macOS and Windows with the new Teams app, plus new Outlook's cached mail and calendar on Mac and Windows. OWA calendar retains source uncertainty and does not infer deletions; several content mailboxes in one Windows profile are each read into their own account. Classic Teams and classic Outlook are not supported. Linux can read archives and explicit copied supported sources, but desktop-cache discovery is not supported.
+- Read-only by default. With writes on, only the directed writes in [docs/commands.md](docs/commands.md#writes), through WorkIQ; no channel posts, moving or marking read.
 - Attachments are recorded as metadata; their bytes are not copied into the archive.
 - Mac Outlook's local store does not separate To from Cc; Windows preserves To/Cc/Bcc roles and cached conversation identities. Importance is read but not yet verified against Outlook's own display.
 - The calendar holds only the days Teams cached plus what Outlook's store holds, and attendees, body and rooms only for meetings someone opened.
+- Private Microsoft 365 Copilot chat history is not included: Microsoft's export of Copilot interactions needs an organization-wide permission an administrator must approve, so no route reads it for one signed-in user. Scout session history is read only from files already on this computer.
 - Contact stores, call history and pinned-message lists have no typed commands yet; they are mirrored as raw records, readable with `stores` and `records`.
 - The apps can change their storage layout. When they do, `sync` fails with a named error or reports counted omissions instead of guessing.
 
@@ -124,6 +144,7 @@ The archive holds your real chats, mail, meetings and explicitly retained cloud 
 - [`docs/guide.md`](docs/guide.md): a synthetic-data walkthrough, then Teams, mail, the calendar and the output contract for agents.
 - [`docs/commands.md`](docs/commands.md): every command and flag.
 - [`docs/local-sources.md`](docs/local-sources.md): OneNote notes, document metadata, people observations and cached Loop channels.
+- [`docs/scout.md`](docs/scout.md): opt-in Microsoft Scout session history from your OneDrive folder.
 - [`docs/content.md`](docs/content.md) and [`docs/engage-home.md`](docs/engage-home.md): explicit Office, SharePoint, Stream and Engage capture.
 - [`docs/install.md`](docs/install.md): install, upgrade, verify and remove.
 - [`docs/full-disk-access.md`](docs/full-disk-access.md): why macOS asks and how to grant it.

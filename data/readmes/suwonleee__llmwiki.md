@@ -68,9 +68,9 @@ llmwiki --version
 
 `llmwiki <command> --help`
 
-Per-prompt retrieval includes wiki excerpts and related commit messages, and can report when a named subject is absent from the checked records. Disable these channels with `LLMWIKI_TURN_COMMITS=off` or `LLMWIKI_TURN_ABSENT=off`. Parsed wiki pages use a private temporary cache (`LLMWIKI_PAGE_CACHE=off` disables it).
+`/wiki-save` preserves this session's decisions and refreshes the handoff. Use `/wiki-deep` for backlog, topic consolidation and semantic review. Wiki knowledge is created, changed or deleted only at your explicit request; a save hint does not authorize a write.
 
-`/wiki-save` files this session's durable decisions and refreshes the handoff; topic consolidation, overview updates and semantic review belong to `/wiki-deep`. A session with decision signals may receive one model-facing save hint after eight turns (`LLMWIKI_SAVE_NUDGE=off` disables it). Saving remains your choice; unfiled sessions may expire. At explicit close-out, optional version-bound page feedback steers future ranking; unknown feedback is neutral and wrong claims await a separate recheck. If no review provider is configured, the current session can review `review-input` and submit `review-import`.
+Automatic hooks retrieve context and maintain local state. Related commit messages can supplement wiki excerpts; retired, cold, stale or disputed rules are withheld from automatic rule injection. [Read the workflow and controls](readmes/GUIDE.md#saving-and-retrieval).
 
 ## Portable wiki: OKF v0.2
 

@@ -4,7 +4,7 @@
 
 DBiji is a native alternative to DBeaver for SQL databases on macOS, Windows and Linux: one small
 binary, no JVM, no Electron.
-It opens in about 0.1 s, idles at 0 % CPU and uses around 70 MB of memory — and result sets of
+It opens in about 0.1 s, idles at 0 % CPU and uses around 90 MB of memory — and result sets of
 millions of rows never have to fit in memory.
 
 [Bahasa Indonesia](README.id.md)
@@ -13,8 +13,17 @@ millions of rows never have to fit in memory.
 
 ## Highlights
 
-- **Many databases, one interface**: PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, SQL Server,
-  ClickHouse and (optional) DuckDB.
+- **Many databases, one interface**: PostgreSQL, MySQL, MariaDB, SQLite, SQL Server, Oracle,
+  CockroachDB, ClickHouse, Cassandra / ScyllaDB, Redis, MongoDB and Elasticsearch / OpenSearch, all
+  with drivers written in Rust (no Java, no Oracle Client). Compatible products have their own entry
+  with the right defaults: YugabyteDB, TimescaleDB, Supabase, Neon, Redshift, AlloyDB, Greenplum,
+  QuestDB, CrateDB, TiDB, OceanBase, Doris, StarRocks, SingleStore, PlanetScale, Azure SQL Database,
+  Amazon Keyspaces, Valkey, Dragonfly, KeyDB, MongoDB Atlas, FerretDB, Amazon DocumentDB, Azure
+  Cosmos DB for MongoDB and Amazon OpenSearch Service.
+- **Redis, MongoDB and Elasticsearch** in the same editor and grid: Redis commands (keys by type in
+  the navigator, big hashes and lists read page by page), `mongosh` statements
+  (`db.users.find({age: {$gt: 30}})`, aggregations, the data tab's filter takes a query document),
+  and Elasticsearch SQL or Kibana-style requests (`GET /logs/_search` + JSON) with hits as rows.
 - **SQL editor** with schema-aware autocomplete (tables, columns, joins, aliases, CTEs), templates,
   `:name` / `${name}` parameters, `@set` / `@include` / `@export`, formatter, outline, error markers,
   explain plans (text, tree, diagram) and a searchable query history.
@@ -25,15 +34,24 @@ millions of rows never have to fit in memory.
   `DELETE`/`UPDATE` without `WHERE` and `DROP`, read-only connections, a separate session per editor.
 - **Connections** through SSH tunnels, SOCKS5 / HTTP proxies and SSL. Passwords live in the system's
   keychain (macOS Keychain, Windows Credential Manager, GNOME Keyring / KWallet) or an encrypted vault
-  with a master password — never in a file.
+  with a master password — never in a file. A connection dropped while the computer slept or the
+  network was away connects again by itself.
 - **Import** connections from DBeaver, `~/.pgpass` and URLs.
 - **Everything else DBeaver users expect**: export / import (CSV, JSON, SQL, XLSX, XML, Parquet …),
   migration between databases, mock data, ER diagrams, visual query builder, schema and data compare
   (with Liquibase output), table designer, tasks and scheduler, backup / restore, session and lock
-  manager, server dashboard, PostgreSQL debugger and an optional AI assistant with your own API key.
+  manager, server dashboard and PostgreSQL debugger.
+- **AI assistant** (optional, with your own API key: Anthropic, OpenAI or any compatible service) in a
+  side panel: it knows the schema, writes and explains SQL, keeps its conversations and, if you
+  allow it, runs read-only queries itself.
 - English and Indonesian UI, light and dark themes (View → Theme or the sun / moon button in the status
   bar), customisable shortcuts and toolbar, no telemetry.
 - **Automatic updates** from GitHub releases (optional), with one click to install, and release notes after every update.
+
+<p>
+  <img src="docs/screenshots/data.png" width="49%" alt="A table's data: grid with server-side filter and ORDER BY">
+  <img src="docs/screenshots/er-diagram.png" width="49%" alt="ER diagram of the sample database">
+</p>
 
 ## Install
 
@@ -72,6 +90,8 @@ it again to update. To install a specific version, pass it as an argument: `… 
 > - **In Terminal**: `xattr -dr com.apple.quarantine /Applications/DBiji.app`
 
 ### Homebrew
+
+From a clone of this repository (the cask follows every release):
 
 ```sh
 brew install --cask ./packaging/homebrew/dbiji.rb
@@ -118,7 +138,6 @@ its vault with a master password. To update, install the package of the new vers
 
 ```sh
 cargo build --release -p dbiji-app                     # target/release/dbiji (dbiji.exe)
-cargo build --release -p dbiji-app --features duckdb   # with the embedded DuckDB engine
 scripts/bundle-macos.sh                                # macOS: dist/DBiji.app, DBiji-<version>.dmg and .zip
 scripts/bundle-linux.sh                                # Linux: .deb, .rpm, Arch package, AppImage and .tar.gz
 pwsh scripts/bundle-windows.ps1                        # Windows: installer and .zip (needs Inno Setup 6)
@@ -158,7 +177,7 @@ Installing in place needs DBiji in `/Applications` (or another folder it can wri
 ## Command line
 
 ```text
-dbiji [FILE.sql | DATABASE.db ...]   open scripts, SQLite / DuckDB files
+dbiji [FILE.sql | DATABASE.db ...]   open scripts and SQLite files
 dbiji --execute FILE.db FILE.sql     open and run the script on the database
 dbiji --run-task <id|name>           run a saved task without a window (exit code 0/1/2/3)
 dbiji --portable <DIR>               keep all settings and data in DIR
@@ -190,18 +209,18 @@ Measured on the release build (Apple M1 Pro) with `dbiji --bench all`:
 
 | | Target | Measured |
 | --- | --- | --- |
-| Binary size | < 40 MB | 37 MB |
-| Cold start to first frame | < 1 s | ≈ 0.1 s |
-| Idle memory | < 120 MB | ≈ 69 MB |
-| 3 connections + 5 result tabs | < 250 MB | ≈ 83 MB |
+| Binary size (macOS) | < 50 MB | 49.8 MB |
+| Cold start to first frame | < 1 s | ≈ 0.12 s |
+| Idle memory | < 120 MB | ≈ 88 MB |
+| 3 connections + 5 result tabs | < 250 MB | ≈ 94 MB |
 | 1 M rows scroll | < 16 ms / frame | p95 0.5 ms |
-| Typing in a 50 000-line script | < 16 ms / frame | p95 0.4 ms |
+| Typing in a 50 000-line script | < 16 ms / frame | p95 0.5 ms |
 
 ## Security and data
 
 - No telemetry. DBiji only connects to the servers you configure and, if you enable them, to your AI
-  provider and to GitHub for the update check (one anonymous request a day for the latest release;
-  asked once, changeable in Settings → General).
+  provider and to GitHub for the update check (one anonymous request for the latest release when
+  DBiji starts and every 6 hours; asked once, changeable in Settings → General).
 - Passwords and API keys are stored in the system's credential store (macOS Keychain, Windows
   Credential Manager, the Secret Service on Linux) or in `vault.bin` (Argon2id +
   XChaCha20-Poly1305); configuration files are written with mode 0600.
@@ -212,13 +231,19 @@ Measured on the release build (Apple M1 Pro) with `dbiji --bench all`:
 ## Building and testing
 
 ```sh
-cargo test --workspace --exclude dbiji-driver-duckdb
+cargo test --workspace
 # integration tests against real servers (Docker):
 export DBIJI_TEST_PG=postgres://dbiji:dbiji@127.0.0.1:55432/dbiji
 export DBIJI_TEST_MYSQL=mysql://root:dbiji@127.0.0.1:53306/dbiji
 export DBIJI_TEST_MARIADB=mariadb://root:dbiji@127.0.0.1:53307/dbiji
 export DBIJI_TEST_COCKROACH='cockroachdb://root@127.0.0.1:26257/defaultdb?sslmode=disable'
-cargo test -p dbiji-app
+export DBIJI_TEST_ORACLE=oracle://dbiji:dbiji@127.0.0.1:51521/FREEPDB1   # gvenzl/oracle-free
+export DBIJI_TEST_CASSANDRA=cassandra://127.0.0.1:59042                  # scylladb/scylla
+export DBIJI_TEST_REDIS=redis://127.0.0.1:56379
+export DBIJI_TEST_MONGO=mongodb://127.0.0.1:57017
+export DBIJI_TEST_ELASTIC=http://127.0.0.1:59200                          # security disabled
+cargo test -p dbiji-app -p dbiji-driver-oracle -p dbiji-driver-cassandra -p dbiji-driver-redis \
+  -p dbiji-driver-mongodb -p dbiji-driver-elasticsearch
 ```
 
 Signing and notarization: set `DBIJI_SIGN_IDENTITY` (Developer ID) and `DBIJI_NOTARY_PROFILE`
@@ -231,7 +256,7 @@ before running `scripts/bundle-macos.sh`.
 | `dbiji-app` | The application: window, tabs, navigator, execution engine, CLI |
 | `dbiji-core` | Shared contract: values, driver/session traits, metadata, DDL, dialects, row store, i18n |
 | `dbiji-sql` | Tokenizer, splitter, formatter, autocomplete, analysis, parameters |
-| `dbiji-driver-*` | PostgreSQL, MySQL, SQLite, SQL Server, ClickHouse, DuckDB drivers |
+| `dbiji-driver-*` | PostgreSQL, MySQL, SQLite, SQL Server, Oracle, ClickHouse, Cassandra, Redis, MongoDB, Elasticsearch drivers |
 | `dbiji-editor` / `dbiji-grid` / `dbiji-visual` | Editor widget, data grid, diagrams and charts |
 | `dbiji-config` / `dbiji-net` | Settings, secrets, importers / SSH tunnels and proxies |
 | `dbiji-transfer` / `dbiji-compare` / `dbiji-tasks` / `dbiji-ai` | Data transfer, compare, tasks, AI |
@@ -241,7 +266,10 @@ More in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and the DBeaver parity matr
 
 ## Known limitations
 
-- Oracle, Db2, Firebird, H2 and Trino are not supported (no pure-Rust network driver yet).
+- Only databases with a driver written in Rust are supported: Db2, Teradata, Informix, Snowflake,
+  BigQuery and DuckDB are not, nor Neo4j (its Rust driver brings a second TLS crypto library).
+  Oracle uses Oracle's own Rust driver, still a beta.
+- Redis, MongoDB and Elasticsearch results are read-only in the grid: change data with commands.
 - Kerberos and MySQL multi-factor authentication are not supported.
 - Release builds are not notarized (macOS) or code-signed (Windows) yet.
 

@@ -20,7 +20,9 @@
 * Archive queue for retaining successfully processed messages (auditing, compliance, replay)
 * Enqueue messages straight from SQL — database triggers, stored functions, batch jobs (opt-in per-queue `q_<name>_put(...)` function)
 * Share load between different PostgreSQL servers
-* OpenTelemetry tracing: a span for every send and receive, and the receive span links to the send span (optional `kolbasa-opentelemetry` artifact)
+* OpenTelemetry integration for monitoring and visibility of how messages flow
+* Background processing: give your business code to a worker, it receives, deletes, waits and retries for you
+* Move messages to another queue, on another server too: in batches, as they are or changed on the way
 
 ## Concepts
 Kolbasa is a pure Kotlin library, so it can be used with any JVM language (Java, Kotlin, Clojure, Scala etc.).
@@ -35,23 +37,14 @@ version 10 and above.
 
 
 ## How to add Kolbasa into your project
-### Gradle
 ```groovy
-implementation "io.github.vgv:kolbasa:0.222.0"
-```
-### Maven
-```xml
-<dependency>
-    <groupId>io.github.vgv</groupId>
-    <artifactId>kolbasa</artifactId>
-    <version>0.222.0</version>
-</dependency>
+implementation "io.github.vgv:kolbasa:0.224.0"
 ```
 
 ### OpenTelemetry (optional)
 To trace sends and receives with OpenTelemetry, add one more artifact, with the same version as `kolbasa`:
 ```groovy
-implementation "io.github.vgv:kolbasa-opentelemetry:<version>"
+implementation "io.github.vgv:kolbasa-opentelemetry:0.224.0"
 ```
 Then turn it on once, at startup:
 ```kotlin
@@ -314,13 +307,55 @@ Example: [SqlPutFunctionExample](examples/src/main/kotlin/kolbasa/example/SqlPut
 `./gradlew example -Pname=SqlPutFunctionExample`
 
 ### OpenTelemetry tracing
-Turn tracing on once, and every send and receive becomes a span. The receive span links to the send span,
-because the sender's trace context is stored together with the message. Needs the optional
+Turn tracing on once, and you can follow every message in your traces: how it was sent, received and handled,
+together with what your handler did, its SQL and HTTP calls for example. Needs the optional
 `kolbasa-opentelemetry` artifact, see [above](#opentelemetry-optional).
 
 Example: [OpenTelemetryExample](examples/src/main/kotlin/kolbasa/example/OpenTelemetryExample.kt)
 
 `./gradlew example -Pname=OpenTelemetryExample`
+
+### Processing a queue in the background
+Instead of writing your own receive/delete loop, give your business code to a `QueueProcessor` and let a
+`QueueWorker` call it in background threads. Return `HandleResult.DONE`, and the message is deleted; throw, and it
+comes back after the visibility timeout for another attempt. The worker waits when the queue is empty, backs off on
+database errors and stops cleanly.
+
+Example: [QueueWorkerExample](examples/src/main/kotlin/kolbasa/example/QueueWorkerExample.kt)
+
+`./gradlew example -Pname=QueueWorkerExample`
+
+### Moving messages to another server
+Sometimes a message has to reach a queue far away: in another data center, or even on another continent. Sending it
+there directly is slow: every send waits for the network to the far server, and fails when that server can't be
+reached. So a common pattern is to send the message to a queue nearby first, on your own server, and move it to the
+far queue later, in the background.
+
+A `QueuePipe` does that move. It takes a batch from the source queue, sends the whole batch to the target queue in one
+call, and deletes it from the source queue. Run it next to the source queue: then only one call per batch, the send,
+goes to the far server.
+
+`QueuePipe.asIs` moves messages as they are, without even reading the data. `map`, `flatMap` and `mapBatch` change
+them on the way: one message into another one, into several or none, or a whole batch into one send. Like a
+`QueueProcessor`, a pipe handles one batch per `process()` call, so give it to a `QueueWorker` to run it in the
+background. Delivery is at least once: if the pipe stops between the send and the delete, the batch is sent again.
+
+```kotlin
+val pipe = QueuePipe.map(
+    from = sourceQueue,
+    consumer = DatabaseConsumer(sourceDataSource),
+    to = targetQueue,
+    producer = DatabaseProducer(targetDataSource)
+) { message ->
+    SendMessage(message.data.uppercase())
+}
+
+QueueWorker(pipe).start()
+```
+
+Example: [PipeExample](examples/src/main/kotlin/kolbasa/example/PipeExample.kt)
+
+`./gradlew example -Pname=PipeExample`
 
 
 ## Documentation
@@ -330,7 +365,8 @@ Beyond the examples above, these documents explain how Kolbasa works under the h
 - [Architecture.md](docs/Architecture.md) — how Kolbasa works on a single node: the queue model, meta-fields,
   the anatomy of a queue table, the message lifecycle, deduplication, DLQ and archive, sweep, and schema generation.
 - [Patterns.md](docs/Patterns.md) — recipes for the queue patterns people reach for most: a priority queue,
-  time-to-live (TTL), and at-most-once delivery — each built from Kolbasa's primitives.
+  time-to-live (TTL), at-most-once delivery, transactions, routing, and compressing or encrypting the payload — each
+  built from Kolbasa's primitives.
 - [Cluster architecture.md](docs/Cluster%20architecture.md) — what changes when you run Kolbasa across multiple
   PostgreSQL nodes: shards, routing, the shard-ownership map, and shard migration.
 - [Butcher.md](docs/Butcher.md) — operator guide for `butcher`, the CLI for running cluster health checks and

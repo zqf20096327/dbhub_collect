@@ -1,20 +1,32 @@
-# TNT Run
+<p align="center">
+  <img src="assets/tnt-run-icon.svg" width="128" height="128" alt="TNT Run icon">
+</p>
 
-[![CI](https://github.com/Despical/TNTRun/actions/workflows/build.yml/badge.svg)](https://github.com/Despical/TNTRun/actions/workflows/build.yml)
-![Java 25](https://img.shields.io/badge/Java-25-007396.svg)
-![Gradle](https://img.shields.io/badge/Gradle-9.7.1-079ec0?logo=gradle&logoColor=white)
-![Minecraft](https://img.shields.io/badge/Minecraft-26.2-62b47a)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+<h1 align="center">TNT Run</h1>
 
-TNT Run is a fast-paced jump 'n run TNT game where players survive as long as possible by parkouring across a floor of disappearing blocks.
+<p align="center"><a href="https://github.com/Despical/TNTRun">TNT Run</a> is a fast-paced jump 'n run game where players survive as long as possible while the floor disappears beneath their feet.</p>
 
-Players (up to 12 or 24, mostly, depending on the map) are placed on sand/gravel floors. Blocks you run or stand on will disappear or "fall" after a brief delay. Once you fall, you will end up on the next floor below. Each map multiple floors to run on, the lowest floor being above the void which eliminates you. The goal is to be the last player alive which gets progressively more difficult as the space available diminishes.
+<p align="center">
+  <a href="https://github.com/Despical/TNTRun/actions/workflows/build.yml"><img src="https://github.com/Despical/TNTRun/actions/workflows/build.yml/badge.svg" alt="CI"></a>
+  <img src="https://img.shields.io/badge/Java-25-007396.svg" alt="Java 25">
+  <img src="https://img.shields.io/badge/Gradle-9.8.2-079ec0?logo=gradle&amp;logoColor=white" alt="Gradle 9.8.2">
+  <img src="https://img.shields.io/badge/Paper-1.21.11--26.3-62b47a" alt="Paper 1.21.11-26.3">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GPL v3"></a>
+</p>
+
+<p align="center"><a href="https://hub.despical.dev/plugins/tnt-run">Hub</a> · <a href="https://discord.gg/uXVU8jmtpU">Discord</a> · <a href="https://www.spigotmc.org/resources/tnt-run.83196/">SpigotMC</a> · <a href="https://builtbybit.com/resources/tnt-run.116706/">BuiltByBit</a> · <a href="https://modrinth.com/plugin/tnt-run-minigame">Modrinth</a></p>
+
+<p align="center">Read the <a href="https://docs.despical.dev/tnt-run/">documentation</a> for setup instructions, configuration guides and the public API.</p>
+
+Players (up to 12 or 24, mostly, depending on the map) are placed on sand/gravel floors. Blocks you run or stand on will disappear or "fall" after a brief delay. Once you fall, you will end up on the next floor below. Each map has multiple floors to run on, the lowest floor being above the void which eliminates you. The goal is to be the last player alive, which gets progressively more difficult as the space available diminishes.
 
 ---
 
 ## Features
 
-- Configurable arenas with setup, editing, signs, and runtime state handling.
+- Configurable arenas with an in-game setup menu, signs, and runtime state handling.
+- Double jumps, spectator tools, potion effects, and crash-safe block recovery.
+- Arena music with separate lobby, in-game, and end-game songs through NoteBlockAPI.
 - Customizable messages, scoreboards, boss bars, sounds, items, and menus.
 - Player statistics, records, spectator tools, and leaderboard support.
 - Configurable command rewards for podium placements, survival time, PvP kills, records, and milestones.
@@ -24,10 +36,33 @@ Players (up to 12 or 24, mostly, depending on the map) are placed on sand/gravel
 
 ---
 
+## Installation
+
+TNT Run supports [Paper](https://papermc.io/downloads/paper) and compatible forks for Minecraft **1.21.11 through 26.3**. Use **Java 25** to run your server and build the project.
+
+1. Download the plugin JAR from [Hub](https://hub.despical.dev/plugins/tnt-run), [SpigotMC](https://www.spigotmc.org/resources/tnt-run.83196/), [Modrinth](https://modrinth.com/plugin/tnt-run-minigame) or [BuiltByBit](https://builtbybit.com/resources/tnt-run.116706/).
+2. Stop the server and place `tnt-run-<version>.jar` in its `plugins/` directory.
+3. Install any optional integrations you want to use, such as PlaceholderAPI or NoteBlockAPI.
+4. Start the server and check the console for a successful TNT Run startup.
+
+Missing settings and bundled songs are installed under `plugins/TNTRun/`; existing files are preserved.
+
+## Getting started
+
+```text
+/tntrun create <arena_id>
+/tntrun edit <arena_id>
+/tntrun join <arena_id>
+```
+
+Create an arena, set its lobby, start and end locations in the editor, then register it. The editor also configures player amounts, signs, potion effects and the arena music. See the [arena setup guide](https://docs.despical.dev/tnt-run/arena-setup) for a step-by-step walkthrough.
+
+---
+
 ## Requirements
 
 - Java 25
-- A Paper-compatible Minecraft server
+- A Paper-compatible Minecraft server (1.21.11 - 26.3)
 
 ---
 
@@ -89,6 +124,7 @@ Common files:
 - `messages.yml`, `scoreboard.yml`, `bossbar.yml`, `sounds.yml`, and `items.yml` control presentation.
 - `mysql.yml` configures MySQL when database storage is enabled.
 - `rewards.yml` configures reward commands, survival payments, and milestone thresholds. Examples are disabled by default; reload changes with `/tr reload`.
+- `musics/` holds the `.nbs` songs used by the arena music system. It requires the optional NoteBlockAPI plugin; pick lobby, in-game and end-game songs (and whether an identical song continues or restarts between phases) in the arena editor.
 - `menu/` contains menu layouts used by setup, statistics, and spectator screens.
 
 ---
@@ -136,6 +172,7 @@ dependencies {
 Optional integrations declared by the plugin include:
 
 - PlaceholderAPI
+- NoteBlockAPI
 - WorldGuard
 - Multiverse-Core
 - SlimeWorldManager

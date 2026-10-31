@@ -28,7 +28,7 @@ To verify the authenticity of your downloaded APK against tampering:
 ```powershell
 Get-FileHash -Algorithm SHA256 tidbit-app-release.apk
 ```
-*Expected SHA-256 for v2.0.7:* `db2908474c07986884a26a1eec61d1de4f45a33b23c0ef07c5b56fedf9adc1be`
+*Expected SHA-256 for v2.0.9:* `326ae1c226a03914e254e10347b5afd2e8fb0adc415dcf30ac284283b7309531`
 
 **Linux / macOS:**
 ```bash
@@ -80,4 +80,4 @@ Every push to the `main` branch automatically triggers the `.github/workflows/de
 - **Hardware-Backed Encryption**: High-security keystore credential handling.
 - **Open Integrity**: Every release binary is cryptographically signed and checksummed in public releases.
 
-© 2026 TidBit Ecosystem · Built with Focus
+© 2026 Tidbit · Built with Focus

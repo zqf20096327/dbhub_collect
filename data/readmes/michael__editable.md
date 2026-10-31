@@ -112,7 +112,7 @@ Adjust the colors and fonts directly in `src/app.css`. Colors come in color sets
 
 /* Color set 2: a light grey surface. Color set 3 turns the accent into a surface. */
 .ew-colorset-2 {
-	--background: oklch(98% 0 0);
+	--background: oklch(97% 0 0);
 	--muted: oklch(100% 0 0);
 	/* … and the other color tokens, as in color set 1 */
 }
@@ -121,12 +121,12 @@ Adjust the colors and fonts directly in `src/app.css`. Colors come in color sets
 	/* Rounded corners for buttons and navigation items. */
 	--button-border-radius: 3rem;
 	/* Rounded corners for images. */
-	--image-border-radius: 0rem;
+	--image-border-radius: 2.2rem;
 }
 
 /* Type scale — adjust any of these utilities to match your style. */
 @utility display-1 {
-	@apply font-sans text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl;
+	@apply font-serif text-6xl leading-tight tracking-tight text-balance lg:text-7xl;
 }
 ```
 

@@ -165,7 +165,7 @@ Full WordPress lifecycle management — install, manage, secure, stage, back up 
 - **Cron Jobs** — visual scheduler, 10 task types, run-now, logs
 - **AI Assistant** — configurable OpenAI-compatible API (NeonCodex, OpenAI, etc.)
 - **Global search** (Ctrl+K) — pages, websites, apps and projects
-- **Hosting Module** (paid add-on) — cPanel-style shared hosting: customer accounts with packages and limits, a separate customer portal, per-account PHP-FPM pools and private nameservers. Buy it on the panel's Hosting Module page; the licence is activated and the module installed by itself
+- **Hosting Module** (paid add-on) — cPanel-style shared hosting: customer accounts with packages and limits, a separate customer portal, per-account PHP-FPM pools and private nameservers. Buy it on the panel's Hosting Module page with PayPal (1, 6 or 12 months, as many servers as you need); each licence is linked to a server IP, activates by itself on that server and the module installs by itself
 - **Plugins** — add-ons such as the Hosting Module live in `/opt/vortexpanel/plugins`, never replace panel files and are skipped (not fatal) when they fail to load; `vortexpanel plugins` and a safe mode for recovery
 
 ---
@@ -296,7 +296,11 @@ python3 app.py   # development server on :8888
 - [x] Live App Store version data and distribution-package fallbacks
 - [x] Language packs
 
-**v3.9.0 (current):**
+**v3.9.1 (current):**
+- [x] Hosting Module: buy and renew with PayPal from the panel, licences for several servers in one order, each linked to a server IP and activated by itself
+- [x] Licence account with email confirmation and password: change a licence's server IP (once every 30 days), renew, receipts
+
+**v3.9.0:**
 - [x] Mail: Rspamd spam filter with Junk folder, autoresponders, daily sending limits, SPF/DKIM/DMARC records for new mail domains
 - [x] One-click Deploy installs WordPress, Drupal, Joomla, OpenCart and Laravel completely
 - [x] ionCube Loader; API key role for WHMCS provisioning (Hosting Module 3.2)

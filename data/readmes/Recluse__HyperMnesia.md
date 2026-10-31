@@ -6,6 +6,10 @@
 
 [![CI](https://github.com/Recluse/HyperMnesia/actions/workflows/ci.yml/badge.svg)](https://github.com/Recluse/HyperMnesia/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.14](https://img.shields.io/badge/python-3.14-blue.svg)](.github/workflows/ci.yml)
+[![MCP](https://img.shields.io/badge/MCP-compatible-8A2BE2.svg)](https://modelcontextprotocol.io)
+[![Postgres + pgvector](https://img.shields.io/badge/Postgres-pgvector-336791.svg)](https://github.com/pgvector/pgvector)
+[![XERJ Corpus Hub contributor](https://hub.xerj.org/contributors/Recluse/badge.svg)](https://hub.xerj.org/contributors/Recluse)
 
 *The opposite of amnesia* (Greek *hypermnesia* — abnormally complete recall). Self-hosted long-term
 memory for AI coding agents — a
@@ -276,7 +280,8 @@ files keep their chunks and their embeddings. `./hm refresh` does every scope at
 thing to put on a timer; `ci/freshness.py` reports when the index has fallen behind.
 
 If something in that folder must stay OUT of the corpus, list it in a `.hmignore` beside
-it — one pattern per line, a trailing `/` for a whole subtree. Two kinds of thing belong there:
+it — one pattern per line, a trailing `/` for a whole subtree (`scratch-*/` works too, and
+indexing and status checks never enter such a folder). Two kinds of thing belong there:
 a file of credentials, and a superseded set of documents that near-duplicates the current one.
 The second matters more than it looks. An obviously old document is harmless; one that says
 almost the same thing with a different answer ranks right beside the correct one and gives no

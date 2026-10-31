@@ -42,6 +42,7 @@ próprio no [`SECURITY.md`](SECURITY.md) — não vira issue pública.
 | Segurança, risco e antifraude | [`docs/SECURITY.md`](docs/SECURITY.md) |
 | Identidade e contas | [`docs/IDENTITY.md`](docs/IDENTITY.md) |
 | Jogos indie | [`docs/GAMES.md`](docs/GAMES.md) |
+| Notificações: push por categoria e resumo semanal | [`docs/DIGEST.md`](docs/DIGEST.md) |
 | Portal do desenvolvedor (API pública) | [`docs/DEVELOPERS_PORTAL.md`](docs/DEVELOPERS_PORTAL.md) |
 
 ## Licença
@@ -258,8 +259,10 @@ Giphy/Tenor, e isso continua valendo); o que precisa de chave é a **busca**.
 | `REDE_GIFS_TENOR_KEY` | chave da **Tenor API v2**: Google Cloud → ativar a "Tenor API" → criar uma chave de API. É o provedor preferido. |
 | `REDE_GIFS_GIPHY_KEY` | chave da **GIPHY API**: developers.giphy.com → *Create an App*. Entra quando só ele está configurado. |
 
-Uma chave basta — com as duas, o Tenor responde primeiro. **A chave do GIPHY já está no default
-do `application.properties`** (e no Secret `REDE_GIFS_GIPHY_KEY` do GitHub) — para ROTAR sem
+Uma chave basta: com as duas, o Tenor responde primeiro, e se o provedor com chave falhar (chave
+revogada, cota, fora do ar) o próximo assume. **Não há chave padrão no código**: a antiga do GIPHY
+foi exposta no repositório e saiu do `application.properties` (E-06); configure
+`REDE_GIFS_GIPHY_KEY` (chave nova) ou `REDE_GIFS_TENOR_KEY` no ambiente. Para trocar sem
 redeploy, aplique o Secret `enois-gifs` no cluster com a chave nova (o manifesto já referencia
 com `optional: true`). **Sem chave nenhuma nada quebra**: o
 provedor da Comunidade responde — busca nos GIFs que a própria rede já compartilhou nos comentários
@@ -287,7 +290,7 @@ e o endpoint exige sessão — anônimo não gasta a cota.
 > **Pronto na main, esperando só os itens 0 e 0b (19 commits):** projetos no perfil (stack, repo,
 > status, diário ou HTML), vulgo (aka), aplicações para empresas com marketplace, blogs, selos de
 > post, reações novas (EYES/NOTE/FIRE/CLAP + remoção), o e-mail da denúncia com ações rápidas, a
-> busca de GIF (chave do GIPHY embutida + fallback da comunidade), os controles de tema do front
+> busca de GIF (com a chave do ambiente + fallback da comunidade), os controles de tema do front
 > (a store faltara num commit), transparências, fixes de segurança e o 409 de páginas. No FRONT:
 > a mesma lista + responsividade. Reexecutar os dois workflows depois de 0/0b — sem commit novo.
 
