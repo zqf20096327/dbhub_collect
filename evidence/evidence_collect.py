@@ -539,10 +539,14 @@ def collect_repo(client: GitHubClient, raw: RawFetcher, fn: str,
         if blobs.get(path) and git_blob_sha(content) != blobs[path]:
             frec["sha_mismatch"] = True      # 采树与采文件之间分支漂移
         if kind == "dep" and eco in PARSERS:
-            parsed = PARSERS[eco](content.decode("utf-8", "replace"))
-            if parsed["names"]:
+            try:
+                parsed = PARSERS[eco](content.decode("utf-8", "replace"))
+            except Exception:  # noqa: BLE001  畸形清单不炸仓：如顶层是数组的 package.json（10-31 pdxjie 实测）
+                parsed = {}
+                frec["parse_error"] = True
+            if parsed.get("names"):
                 frec["names"] = parsed["names"][:80]
-            if parsed["dev"]:
+            if parsed.get("dev"):
                 frec["dev"] = parsed["dev"][:80]
         elif kind in ("image", "ci"):
             imgs = extract_images(content.decode("utf-8", "replace"))

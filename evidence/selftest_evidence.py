@@ -268,6 +268,19 @@ def test_collect_repo() -> None:
     check("超大树根级计数只算 blob（不含 src 目录）",
           rec8["tree"]["path_count"] == 2, str(rec8["tree"]))
 
+    # 畸形清单（顶层是数组的 package.json）不炸仓：记 parse_error、无 names、状态仍 ok
+    bad_npm = {"sha": "bn-sha", "truncated": False, "tree": [
+        {"path": "package.json", "type": "blob", "sha": "b1"},
+        {"path": "README.md", "type": "blob", "sha": "b2"},
+    ]}
+    c9 = FakeClient({"main": bad_npm})
+    rec9 = ec.collect_repo(c9, FakeRaw({"package.json": b'["not", "a", "manifest"]'}),
+                           "o/r", {"pushed_at": "2026-10-28"}, None)
+    f9 = {f["path"]: f for f in rec9["files"]}["package.json"]
+    check("畸形 package.json 不炸仓（ok + parse_error + 无 names）",
+          rec9["status"] == "ok" and f9.get("parse_error") is True
+          and "names" not in f9, str(rec9.get("errors", f9)))
+
     # raw 404 → partial
     c5, _ = _fake_env()
     rec5 = ec.collect_repo(c5, FakeRaw({}), "o/r", {"pushed_at": "2026-10-28"}, None)
