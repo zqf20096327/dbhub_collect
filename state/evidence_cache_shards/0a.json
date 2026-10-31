@@ -3820,5 +3820,941 @@
    "paths": []
   },
   "fail_count": 0
+ },
+ "tidb-incubator/Serverlessdb-for-HTAP": {
+  "fn": "tidb-incubator/Serverlessdb-for-HTAP",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "collected_at": "2026-10-31T02:10:28Z",
+  "default_branch": "main",
+  "pushed_at": "2021-10-25",
+  "stars": 28,
+  "tree": {
+   "sha": "9e299b509706d60a109558049317844273f476e2",
+   "etag": "W/\"c7b4eeed8342cae37e7226d59e3f0769371875b155b55a07ffadcb5264d8ce5d\"",
+   "truncated": false,
+   "path_count": 1703,
+   "matched": [
+    "go.mod",
+    "pkg/tidb/go.mod",
+    "pkg/webhook/go.mod",
+    "pkg/tidb/tests/globalkilltest/go.mod",
+    "pkg/tidb/tests/graceshutdown/go.mod",
+    "pkg/tidb/tests/readonlytest/go.mod",
+    "pkg/tidb/tools/check/go.mod",
+    "deploy/csi-hostpath/values.yaml",
+    "deploy/tidb-operator/values.yaml",
+    "images/admission-webhook/Dockerfile",
+    "images/scale-operator/Dockerfile",
+    "images/sldb-operator/Dockerfile",
+    "pkg/tidb/Dockerfile",
+    "images/he3local/lvmplugin/Dockerfile",
+    "images/he3local/scheduler/Dockerfile"
+   ]
+  },
+  "files": [
+   {
+    "path": "go.mod",
+    "kind": "dep",
+    "blob_sha": "9d2df6def303394f53fa5c029682995dd4670408",
+    "ecosystem": "go",
+    "bytes": 4408,
+    "names": [
+     "github.com/BurntSushi/toml",
+     "github.com/container-storage-interface/spec",
+     "github.com/golang/glog",
+     "github.com/golang/protobuf",
+     "github.com/kirinlabs/HttpRequest",
+     "github.com/kubernetes-csi/csi-lib-utils",
+     "github.com/kubernetes-csi/external-snapshotter/v2",
+     "github.com/onsi/gomega",
+     "github.com/openshift/generic-admission-server",
+     "github.com/pborman/uuid",
+     "github.com/pingcap/advanced-statefulset/client",
+     "github.com/pingcap/errors",
+     "github.com/pingcap/kvproto",
+     "github.com/pingcap/tidb-operator",
+     "github.com/prometheus/client_golang",
+     "github.com/robfig/cron",
+     "github.com/sirupsen/logrus",
+     "github.com/spf13/cobra",
+     "golang.org/x/net",
+     "gomodules.xyz/jsonpatch/v2",
+     "google.golang.org/grpc",
+     "gopkg.in/yaml.v2",
+     "k8s.io/api",
+     "k8s.io/apimachinery",
+     "k8s.io/client-go",
+     "k8s.io/component-base",
+     "k8s.io/klog",
+     "k8s.io/kubernetes",
+     "k8s.io/utils",
+     "modernc.org/mathutil",
+     "sigs.k8s.io/controller-runtime"
+    ],
+    "dev": [
+     "github.com/emicklei/go-restful",
+     "github.com/gorilla/mux",
+     "github.com/opencontainers/go-digest",
+     "github.com/pingcap/fn",
+     "github.com/pingcap/parser",
+     "github.com/shurcooL/httpfs",
+     "github.com/shurcooL/vfsgen",
+     "github.com/tiancaiamao/appdash",
+     "golang.org/x/sys",
+     "golang.org/x/xerrors",
+     "google.golang.org/protobuf",
+     "gopkg.in/square/go-jose.v2",
+     "k8s.io/apiextensions-apiserver",
+     "k8s.io/cloud-provider",
+     "k8s.io/csi-translation-lib",
+     "sourcegraph.com/sourcegraph/appdash-data"
+    ]
+   },
+   {
+    "path": "pkg/tidb/go.mod",
+    "kind": "dep",
+    "blob_sha": "852c3546148b019b5233ce7652cc928b782d43d3",
+    "ecosystem": "go",
+    "bytes": 4352,
+    "names": [
+     "github.com/BurntSushi/toml",
+     "github.com/Jeffail/gabs/v2",
+     "github.com/blacktear23/go-proxyprotocol",
+     "github.com/coocood/freecache",
+     "github.com/cznic/mathutil",
+     "github.com/cznic/sortutil",
+     "github.com/danjacques/gofslock",
+     "github.com/dgraph-io/ristretto",
+     "github.com/dgryski/go-farm",
+     "github.com/go-sql-driver/mysql",
+     "github.com/gogo/protobuf",
+     "github.com/golang/protobuf",
+     "github.com/golang/snappy",
+     "github.com/google/btree",
+     "github.com/google/pprof",
+     "github.com/google/uuid",
+     "github.com/gorilla/mux",
+     "github.com/grpc-ecosystem/go-grpc-middleware",
+     "github.com/iancoleman/strcase",
+     "github.com/ngaut/pools",
+     "github.com/ngaut/sync2",
+     "github.com/opentracing/basictracer-go",
+     "github.com/opentracing/opentracing-go",
+     "github.com/phayes/freeport",
+     "github.com/pingcap/badger",
+     "github.com/pingcap/br",
+     "github.com/pingcap/check",
+     "github.com/pingcap/errors",
+     "github.com/pingcap/failpoint",
+     "github.com/pingcap/fn",
+     "github.com/pingcap/kvproto",
+     "github.com/pingcap/log",
+     "github.com/pingcap/parser",
+     "github.com/pingcap/sysutil",
+     "github.com/pingcap/tidb-tools",
+     "github.com/pingcap/tipb",
+     "github.com/prometheus/client_golang",
+     "github.com/prometheus/client_model",
+     "github.com/prometheus/common",
+     "github.com/shirou/gopsutil",
+     "github.com/soheilhy/cmux",
+     "github.com/stretchr/testify",
+     "github.com/tiancaiamao/appdash",
+     "github.com/tikv/client-go/v2",
+     "github.com/tikv/pd",
+     "github.com/twmb/murmur3",
+     "github.com/uber-go/atomic",
+     "github.com/uber/jaeger-client-go",
+     "github.com/wangjohn/quickselect",
+     "go.etcd.io/etcd",
+     "go.uber.org/atomic",
+     "go.uber.org/automaxprocs",
+     "go.uber.org/goleak",
+     "go.uber.org/zap",
+     "golang.org/x/net",
+     "golang.org/x/sync",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "golang.org/x/tools",
+     "google.golang.org/grpc",
+     "gopkg.in/yaml.v2",
+     "k8s.io/api",
+     "k8s.io/apimachinery",
+     "k8s.io/client-go",
+     "sigs.k8s.io/controller-runtime",
+     "sourcegraph.com/sourcegraph/appdash",
+     "sourcegraph.com/sourcegraph/appdash-data"
+    ],
+    "dev": [
+     "github.com/DATA-DOG/go-sqlmock",
+     "github.com/HdrHistogram/hdrhistogram-go",
+     "github.com/carlmjohnson/flagext",
+     "github.com/cheggaaa/pb/v3",
+     "github.com/fatih/color",
+     "github.com/fsouza/fake-gcs-server",
+     "github.com/joho/sqltocsv",
+     "github.com/mattn/go-runewidth",
+     "github.com/rivo/uniseg",
+     "github.com/uber/jaeger-lib",
+     "github.com/xitongsys/parquet-go",
+     "go.etcd.io/bbolt",
+     "gopkg.in/check.v1",
+     "modernc.org/mathutil"
+    ]
+   },
+   {
+    "path": "pkg/webhook/go.mod",
+    "kind": "dep",
+    "blob_sha": "4b8899c0d58c976766f64c29b0bc8c7c2cb2b680",
+    "ecosystem": "go",
+    "bytes": 3157,
+    "names": [
+     "github.com/BurntSushi/toml",
+     "github.com/kirinlabs/HttpRequest",
+     "github.com/onsi/gomega",
+     "github.com/openshift/generic-admission-server",
+     "github.com/pingcap/advanced-statefulset/client",
+     "github.com/pingcap/kvproto",
+     "github.com/pingcap/tidb-operator",
+     "gomodules.xyz/jsonpatch/v2",
+     "k8s.io/api",
+     "k8s.io/apimachinery",
+     "k8s.io/client-go",
+     "k8s.io/component-base",
+     "k8s.io/klog",
+     "k8s.io/utils"
+    ]
+   },
+   {
+    "path": "pkg/tidb/tests/globalkilltest/go.mod",
+    "kind": "dep",
+    "blob_sha": "7bf485c4887d0c8363891e048770afaeee2b6ffb",
+    "ecosystem": "go",
+    "bytes": 551,
+    "names": [
+     "github.com/go-sql-driver/mysql",
+     "github.com/pingcap/check",
+     "github.com/pingcap/errors",
+     "github.com/pingcap/log",
+     "github.com/pingcap/tidb",
+     "go.etcd.io/etcd",
+     "go.uber.org/zap",
+     "google.golang.org/grpc"
+    ],
+    "dev": [
+     "github.com/pingcap/tipb"
+    ]
+   },
+   {
+    "path": "pkg/tidb/tests/graceshutdown/go.mod",
+    "kind": "dep",
+    "blob_sha": "93d6969f58a752bdc2173a92b11a954881482646",
+    "ecosystem": "go",
+    "bytes": 358,
+    "names": [
+     "github.com/go-sql-driver/mysql",
+     "github.com/juju/errors",
+     "github.com/pingcap/check",
+     "github.com/pingcap/log",
+     "go.uber.org/zap"
+    ],
+    "dev": [
+     "github.com/juju/testing"
+    ]
+   },
+   {
+    "path": "pkg/tidb/tests/readonlytest/go.mod",
+    "kind": "dep",
+    "blob_sha": "663259b20250bf1f0cc15c81029c1050ea2d8c5d",
+    "ecosystem": "go",
+    "bytes": 172,
+    "names": [
+     "github.com/go-sql-driver/mysql",
+     "github.com/pingcap/check"
+    ]
+   },
+   {
+    "path": "pkg/tidb/tools/check/go.mod",
+    "kind": "dep",
+    "blob_sha": "90b34e7a296c4b40afd5e743e23b5f4808dc45ba",
+    "ecosystem": "go",
+    "bytes": 1211,
+    "names": [
+     "github.com/chzchzchz/goword",
+     "github.com/dnephin/govet",
+     "github.com/kisielk/errcheck",
+     "github.com/mgechev/revive",
+     "github.com/securego/gosec",
+     "honnef.co/go/tools"
+    ],
+    "dev": [
+     "github.com/alecthomas/template",
+     "github.com/alecthomas/units",
+     "github.com/google/shlex",
+     "github.com/mdempsky/unconvert",
+     "github.com/nicksnyder/go-i18n",
+     "github.com/pelletier/go-toml",
+     "github.com/pingcap/errors",
+     "github.com/pingcap/failpoint",
+     "gopkg.in/alecthomas/gometalinter.v2",
+     "gopkg.in/alecthomas/gometalinter.v3",
+     "gopkg.in/alecthomas/kingpin.v2",
+     "gopkg.in/alecthomas/kingpin.v3-unstable"
+    ]
+   },
+   {
+    "path": "deploy/csi-hostpath/values.yaml",
+    "kind": "image",
+    "blob_sha": "94fd214adf99133ab6be4a8bef40e177975665e3",
+    "bytes": 1361
+   },
+   {
+    "path": "deploy/tidb-operator/values.yaml",
+    "kind": "image",
+    "blob_sha": "1015df884443c0a41e295c341d4096d174dfa059",
+    "bytes": 10852,
+    "images": [
+     "pingcap/advanced-statefulset:v0.4.0"
+    ]
+   },
+   {
+    "path": "images/admission-webhook/Dockerfile",
+    "kind": "image",
+    "blob_sha": "d7efa9a6005b087085384ef7c397f6778d680382",
+    "bytes": 117,
+    "images": [
+     "alpine:3.10"
+    ]
+   },
+   {
+    "path": "images/scale-operator/Dockerfile",
+    "kind": "image",
+    "blob_sha": "323772372b0f435fd2b3437bd94765f08b909cf5",
+    "bytes": 398,
+    "images": [
+     "centos:7.3.1611"
+    ]
+   },
+   {
+    "path": "images/sldb-operator/Dockerfile",
+    "kind": "image",
+    "blob_sha": "07297f7e2799f3efe258032480b294f88ac0cfc1",
+    "bytes": 534,
+    "images": [
+     "alpine:3.10"
+    ]
+   },
+   {
+    "path": "pkg/tidb/Dockerfile",
+    "kind": "image",
+    "blob_sha": "6005d9b48e91c6296fe9b273b6c94798577455be",
+    "bytes": 1609,
+    "images": [
+     "golang:1.16-alpine",
+     "alpine:3.11.2"
+    ]
+   },
+   {
+    "path": "images/he3local/lvmplugin/Dockerfile",
+    "kind": "image",
+    "blob_sha": "76849aad96b0b18a30f2b32d58c1d352b71e6173",
+    "bytes": 376,
+    "images": [
+     "centos:7.3.1611"
+    ]
+   },
+   {
+    "path": "images/he3local/scheduler/Dockerfile",
+    "kind": "image",
+    "blob_sha": "df4433cb5e423b35df6e13716e94004bcdf3b0f8",
+    "bytes": 86,
+    "images": [
+     "debian:stretch-slim"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "pkg/tidb/CHANGELOG.md"
+   ],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": [
+    "cmd/he3local/lvmplugin/main.go",
+    "deploy/csi-hostpath/templates/csi-hostpath-driverinfo.yaml",
+    "deploy/csi-hostpath/templates/csi-hostpath-pluginDS.yaml",
+    "images/he3local/lvmplugin/Dockerfile",
+    "images/he3local/lvmplugin/mc",
+    "pkg/tidb/executor/adapter.go",
+    "pkg/tidb/executor/adapter_test.go",
+    "pkg/tidb/executor/admin_plugins.go",
+    "pkg/tidb/plugin/README.md",
+    "pkg/tidb/plugin/audit.go",
+    "pkg/tidb/plugin/const.go",
+    "pkg/tidb/plugin/const_test.go",
+    "pkg/tidb/plugin/errors.go",
+    "pkg/tidb/plugin/helper.go",
+    "pkg/tidb/plugin/helper_test.go",
+    "pkg/tidb/plugin/plugin.go",
+    "pkg/tidb/plugin/plugin_test.go",
+    "pkg/tidb/plugin/spi.go",
+    "pkg/tidb/plugin/spi_test.go",
+    "pkg/tidb/server/driver.go",
+    "pkg/tidb/server/driver_tidb.go",
+    "pkg/tidb/server/driver_tidb_test.go",
+    "pkg/tidb/cmd/pluginpkg/pluginpkg.go",
+    "pkg/tidb/docs/design/2018-12-10-plugin-framework.md",
+    "pkg/tidb/plugin/conn_ip_example/conn_ip_example.go",
+    "pkg/tidb/plugin/conn_ip_example/conn_ip_example_test.go",
+    "pkg/tidb/plugin/conn_ip_example/manifest.toml",
+    "pkg/tidb/store/driver/kv_test.go",
+    "pkg/tidb/store/driver/sql_fail_test.go",
+    "pkg/tidb/store/driver/tikv_driver.go",
+    "pkg/tidb/store/driver/util_test.go",
+    "pkg/tidb/types/parser_driver/main_test.go",
+    "pkg/tidb/types/parser_driver/special_cmt_ctrl.go",
+    "pkg/tidb/types/parser_driver/value_expr.go",
+    "pkg/tidb/types/parser_driver/value_expr_test.go",
+    "pkg/tidb/store/driver/backoff/backoff.go",
+    "pkg/tidb/store/driver/error/error.go",
+    "pkg/tidb/store/driver/options/options.go",
+    "pkg/tidb/store/driver/txn/batch_getter.go",
+    "pkg/tidb/store/driver/txn/batch_getter_test.go"
+   ]
+  },
+  "fail_count": 0
+ },
+ "oForevero/liquibase-4.25.2-dm-kingbase": {
+  "fn": "oForevero/liquibase-4.25.2-dm-kingbase",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "collected_at": "2026-10-31T02:11:54Z",
+  "default_branch": "main",
+  "pushed_at": "2026-04-08",
+  "stars": 16,
+  "tree": {
+   "sha": "1b21661e059b35bd967e34fffd73b7d8259182f7",
+   "etag": "W/\"422b7b39d980763a6a6e053a36ffd4336c5d4849560bbab5553db645d29cd3c9\"",
+   "truncated": false,
+   "path_count": 3188,
+   "matched": [
+    "pom.xml",
+    "liquibase-cdi-jakarta/pom.xml",
+    "liquibase-cdi/pom.xml",
+    "liquibase-cli/pom.xml",
+    "liquibase-core/pom.xml",
+    "liquibase-dist/pom.xml",
+    "liquibase-extension-testing/pom.xml",
+    "liquibase-integration-tests/pom.xml",
+    "liquibase-maven-plugin/pom.xml",
+    "liquibase-snowflake/pom.xml",
+    "liquibase-standard/pom.xml",
+    "liquibase-integration-tests/src/test/filtered-resources/maven/pom.xml"
+   ]
+  },
+  "files": [
+   {
+    "path": "pom.xml",
+    "kind": "dep",
+    "blob_sha": "2db36fbccfc6933015a0fb53a6be7fe1d000f926",
+    "ecosystem": "maven",
+    "bytes": 24142,
+    "names": [
+     "org.codehaus.groovy:groovy-bom",
+     "org.junit:junit-bom",
+     "junit:junit",
+     "org.apache.ant:ant",
+     "org.apache.ant:ant-antlr",
+     "org.apache.ant:ant-junit",
+     "org.apache.ant:ant-launcher",
+     "org.codehaus.groovy:groovy-all",
+     "org.spockframework:spock-core",
+     "org.hamcrest:hamcrest",
+     "org.assertj:assertj-core",
+     "org.mockito:mockito-core",
+     "cglib:cglib-nodep",
+     "org.objenesis:objenesis",
+     "com.h2database:h2",
+     "org.hsqldb:hsqldb",
+     "mysql:mysql-connector-java",
+     "com.microsoft.sqlserver:mssql-jdbc",
+     "org.postgresql:postgresql",
+     "org.mariadb.jdbc:mariadb-java-client",
+     "com.ibm.db2:jcc",
+     "com.oracle.database.jdbc:ojdbc8",
+     "org.xerial:sqlite-jdbc",
+     "net.snowflake:snowflake-jdbc",
+     "org.firebirdsql.jdbc:jaybird",
+     "org.glassfish.jaxb:jaxb-core",
+     "org.glassfish.jaxb:jaxb-runtime",
+     "org.apache.maven.surefire:surefire-junit4"
+    ]
+   },
+   {
+    "path": "liquibase-cdi-jakarta/pom.xml",
+    "kind": "dep",
+    "blob_sha": "e1a9c7a517f221e7c4a6e98ff7631b8a46f87b2e",
+    "ecosystem": "maven",
+    "bytes": 5118,
+    "names": [
+     "org.liquibase:liquibase-core",
+     "org.liquibase:liquibase-standard",
+     "org.jboss.weld.se:weld-se-core",
+     "jakarta.enterprise:jakarta.enterprise.cdi-api"
+    ]
+   },
+   {
+    "path": "liquibase-cdi/pom.xml",
+    "kind": "dep",
+    "blob_sha": "9c1482428d52b447e1761aaf135a91cf91d703f4",
+    "ecosystem": "maven",
+    "bytes": 4211,
+    "names": [
+     "org.liquibase:liquibase-core",
+     "org.liquibase:liquibase-standard",
+     "org.jboss.weld.se:weld-se",
+     "javax.enterprise:cdi-api"
+    ]
+   },
+   {
+    "path": "liquibase-cli/pom.xml",
+    "kind": "dep",
+    "blob_sha": "fe2f4966c16513966cf691095dba763a1f22b57f",
+    "ecosystem": "maven",
+    "bytes": 1617,
+    "names": [
+     "org.liquibase:liquibase-standard",
+     "info.picocli:picocli"
+    ]
+   },
+   {
+    "path": "liquibase-core/pom.xml",
+    "kind": "dep",
+    "blob_sha": "475639dbd78aa39659f2c63efbc2ad06879ef7f3",
+    "ecosystem": "maven",
+    "bytes": 8690,
+    "names": [
+     "${project.groupId}:liquibase-standard",
+     "info.picocli:picocli",
+     "${project.groupId}:liquibase-cli",
+     "${project.groupId}:liquibase-snowflake",
+     "com.github.marcosemiao.maven.plugins.shade.resource:maven-shade-merge-manifest-transformer"
+    ]
+   },
+   {
+    "path": "liquibase-dist/pom.xml",
+    "kind": "dep",
+    "blob_sha": "334d3f08bd6a7487523c5fe37ce4e3d7ab7da32f",
+    "ecosystem": "maven",
+    "bytes": 10123,
+    "names": [
+     "${project.groupId}:liquibase-core",
+     "info.picocli:picocli",
+     "com.opencsv:opencsv",
+     "com.h2database:h2",
+     "org.hsqldb:hsqldb",
+     "org.postgresql:postgresql",
+     "com.microsoft.sqlserver:mssql-jdbc",
+     "net.snowflake:snowflake-jdbc",
+     "mysql:mysql-connector-java",
+     "org.mariadb.jdbc:mariadb-java-client",
+     "com.oracle.database.jdbc:ojdbc8",
+     "org.xerial:sqlite-jdbc",
+     "com.ibm.db2:jcc",
+     "org.firebirdsql.jdbc:jaybird",
+     "org.yaml:snakeyaml",
+     "javax.xml.bind:jaxb-api",
+     "org.glassfish.jaxb:jaxb-core",
+     "org.glassfish.jaxb:jaxb-runtime",
+     "org.liquibase:liquibase-commercial"
+    ]
+   },
+   {
+    "path": "liquibase-extension-testing/pom.xml",
+    "kind": "dep",
+    "blob_sha": "5db4d9556570e0912111eaf2da9b39b0b59fc39d",
+    "ecosystem": "maven",
+    "bytes": 5055,
+    "names": [
+     "org.testcontainers:testcontainers-bom",
+     "org.liquibase:liquibase-core",
+     "org.testcontainers:mariadb",
+     "org.testcontainers:mssqlserver",
+     "org.testcontainers:mysql",
+     "org.testcontainers:oracle-xe",
+     "org.testcontainers:postgresql",
+     "org.testcontainers:cockroachdb",
+     "org.testcontainers:db2",
+     "org.firebirdsql:firebird-testcontainers-java",
+     "org.slf4j:slf4j-jdk14",
+     "org.codehaus.groovy:groovy-all",
+     "org.spockframework:spock-core",
+     "junit:junit",
+     "org.springframework:spring-test"
+    ]
+   },
+   {
+    "path": "liquibase-integration-tests/pom.xml",
+    "kind": "dep",
+    "blob_sha": "bb76bdecad19031732e7bcfa98a123ca8b7d6db2",
+    "ecosystem": "maven",
+    "bytes": 2716,
+    "names": [
+     "org.liquibase:liquibase-core",
+     "org.liquibase:liquibase-standard",
+     "info.picocli:picocli",
+     "org.liquibase:liquibase-extension-testing"
+    ]
+   },
+   {
+    "path": "liquibase-maven-plugin/pom.xml",
+    "kind": "dep",
+    "blob_sha": "8c39581a64b56712c2fde5851e0ae86146a6a387",
+    "ecosystem": "maven",
+    "bytes": 7225,
+    "names": [
+     "org.liquibase:liquibase-core",
+     "javax.xml.bind:jaxb-api",
+     "org.apache.maven:maven-plugin-api",
+     "org.apache.maven:maven-core",
+     "org.apache.maven:maven-artifact",
+     "org.apache.maven:maven-compat",
+     "org.apache.maven.plugin-testing:maven-plugin-testing-harness",
+     "org.apache.maven.shared:maven-verifier"
+    ]
+   },
+   {
+    "path": "liquibase-snowflake/pom.xml",
+    "kind": "dep",
+    "blob_sha": "5e7cb60d00fb53318271180fc23d2c47e1b927d1",
+    "ecosystem": "maven",
+    "bytes": 884,
+    "names": [
+     "org.liquibase:liquibase-standard"
+    ]
+   },
+   {
+    "path": "liquibase-standard/pom.xml",
+    "kind": "dep",
+    "blob_sha": "8ed58e8e168468224436db71c42f7643f78eca5f",
+    "ecosystem": "maven",
+    "bytes": 19296,
+    "names": [
+     "org.apache.ant:ant",
+     "javax.servlet:javax.servlet-api",
+     "jakarta.servlet:jakarta.servlet-api",
+     "org.apache.ant:ant-antunit",
+     "org.osgi:osgi.core",
+     "org.springframework:spring-test",
+     "org.springframework:spring-jdbc",
+     "org.springframework:spring-beans",
+     "org.springframework:spring-context",
+     "org.springframework:spring-orm",
+     "org.springframework:spring-core",
+     "org.springframework:spring-web",
+     "com.github.stefanbirkner:system-rules",
+     "org.junit.jupiter:junit-jupiter",
+     "com.opencsv:opencsv",
+     "org.yaml:snakeyaml",
+     "javax.xml.bind:jaxb-api",
+     "org.projectlombok:lombok",
+     "net.java.dev.javacc:javacc"
+    ]
+   },
+   {
+    "path": "liquibase-integration-tests/src/test/filtered-resources/maven/pom.xml",
+    "kind": "dep",
+    "blob_sha": "eace71a0f267781ba10b7015240987052f7d43da",
+    "ecosystem": "maven",
+    "bytes": 1796,
+    "names": [
+     "org.liquibase:liquibase-core",
+     "org.hsqldb:hsqldb"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "changelog.txt",
+    "liquibase-integration-tests/src/test/resources/maven/src/main/resources/liquibase/maven/integration/changelog.xml"
+   ],
+   "readme_i18n": [
+    "README_EN.md"
+   ],
+   "docs_matrix": [],
+   "paths": [
+    "liquibase-maven-plugin/pom.xml",
+    "liquibase-maven-plugin/src/site/liquibase-site.vm",
+    "liquibase-maven-plugin/src/main/maven/release.pom.xml",
+    "liquibase-maven-plugin/src/test/groovy/README.txt",
+    "liquibase-maven-plugin/src/test/resources/dbDoc/plugin_config.xml",
+    "liquibase-maven-plugin/src/test/resources/dropAll/plugin_config.xml",
+    "liquibase-maven-plugin/src/test/resources/rollback/plugin_config_count.xml",
+    "liquibase-maven-plugin/src/test/resources/rollback/plugin_config_date.xml",
+    "liquibase-maven-plugin/src/test/resources/rollback/plugin_config_tag.xml",
+    "liquibase-maven-plugin/src/test/resources/update/plugin_config.xml",
+    "liquibase-maven-plugin/src/test/resources/update/plugin_config_directory.xml",
+    "liquibase-maven-plugin/src/test/resources/validate/plugin_config.xml",
+    "liquibase-standard/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker",
+    "liquibase-maven-plugin/src/test/resources/update/parameters/parameters.properties",
+    "liquibase-maven-plugin/src/test/resources/update/parameters/parametersChangeLog.xml",
+    "liquibase-maven-plugin/src/test/resources/update/parameters/plugin_config.xml",
+    "liquibase-maven-plugin/src/test/resources/update/relativeClobFiles/plugin_config.xml",
+    "liquibase-maven-plugin/src/test/resources/update/relativeClobFiles/relativeClobFileChangeLog.xml",
+    "liquibase-standard/src/main/java/liquibase/database/LiquibaseExtDriver.java",
+    "liquibase-standard/src/main/java/liquibase/plugin/AbstractPlugin.java",
+    "liquibase-standard/src/main/java/liquibase/plugin/AbstractPluginFactory.java",
+    "liquibase-standard/src/main/java/liquibase/plugin/Plugin.java",
+    "liquibase-standard/src/main/java/liquibase/plugin/PluginFactory.java",
+    "liquibase-maven-plugin/src/test/java/org/liquibase/maven/MavenIntegrationTest.java",
+    "liquibase-maven-plugin/src/test/resources/update/relativeClobFiles/clob/table.xml",
+    "liquibase-maven-plugin/src/test/resources/update/relativeClobFiles/clob/val.txt",
+    "liquibase-maven-plugin/src/main/java/org/liquibase/maven/plugins/AbstractLiquibaseChangeLogMojo.java",
+    "liquibase-maven-plugin/src/main/java/org/liquibase/maven/plugins/AbstractLiquibaseChecksMojo.java",
+    "liquibase-maven-plugin/src/main/java/org/liquibase/maven/plugins/AbstractLiquibaseFlowMojo.java",
+    "liquibase-maven-plugin/src/main/java/org/liquibase/maven/plugins/AbstractLiquibaseMojo.java",
+    "liquibase-maven-plugin/src/main/java/org/liquibase/maven/plugins/AbstractLiquibaseUpdateMojo.java",
+    "liquibase-maven-plugin/src/main/java/org/liquibase/maven/plugins/LiquibaseChangeLogSyncMojo.java",
+    "liquibase-maven-plugin/src/main/java/org/liquibase/maven/plugins/LiquibaseChangeLogSyncSQLMojo.java",
+    "liquibase-maven-plugin/src/main/java/org/liquibase/maven/plugins/LiquibaseChangeLogSyncToTagMojo.java",
+    "liquibase-maven-plugin/src/main/java/org/liquibase/maven/plugins/LiquibaseChangeLogSyncToTagSQLMojo.java",
+    "liquibase-maven-plugin/src/main/java/org/liquibase/maven/plugins/LiquibaseChecksRunMojo.java",
+    "liquibase-maven-plugin/src/main/java/org/liquibase/maven/plugins/LiquibaseChecksShowMojo.java",
+    "liquibase-maven-plugin/src/main/java/org/liquibase/maven/plugins/LiquibaseClearChecksumsMojo.java",
+    "liquibase-maven-plugin/src/main/java/org/liquibase/maven/plugins/LiquibaseDBDocMojo.java",
+    "liquibase-maven-plugin/src/main/java/org/liquibase/maven/plugins/LiquibaseDatabaseDiff.java"
+   ],
+   "matrix_urls": [
+    "https://github.com/oForevero/Activiti-support-kingbase-dm"
+   ]
+  },
+  "fail_count": 0
+ },
+ "Ice2Faith/xxl-job-multiply": {
+  "fn": "Ice2Faith/xxl-job-multiply",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "collected_at": "2026-10-31T02:14:24Z",
+  "default_branch": "main",
+  "pushed_at": "2025-10-12",
+  "stars": 7,
+  "tree": {
+   "sha": "7da8d9584981553e366629377652859e82e30099",
+   "etag": "W/\"a5c1339519a5d7e1df960ab6b32fb96c81e47c16b52b3cbb808a2f31c089e26a\"",
+   "truncated": false,
+   "path_count": 47,
+   "matched": []
+  },
+  "files": [],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [
+    "README.multiply.md"
+   ],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "MUTHUSELVAM25/harvard-art-project-multiclass-streamlit": {
+  "fn": "MUTHUSELVAM25/harvard-art-project-multiclass-streamlit",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "collected_at": "2026-10-31T02:36:06Z",
+  "default_branch": "main",
+  "pushed_at": "2025-10-17",
+  "stars": 0,
+  "tree": {
+   "sha": "319e8749f517a76e90bcb7a4f74d673a022698cb",
+   "etag": "W/\"f15bae15806e6c2bf0e20dc0000a027a3dcb5e0e48fa0ba52bec7c69d2055607\"",
+   "truncated": false,
+   "path_count": 7,
+   "matched": []
+  },
+  "files": [],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "ShiCheng0104/openGauss": {
+  "fn": "ShiCheng0104/openGauss",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "collected_at": "2026-10-31T02:38:11Z",
+  "default_branch": "master",
+  "pushed_at": "2026-07-09",
+  "stars": 0,
+  "tree": {
+   "sha": "0495a2328db5f409b6e29eda1d671964f35168d4",
+   "etag": "W/\"e2160671eac01146d74485daa664fe0414d79da62f1fc11d2a3ec33a37d77bdb\"",
+   "truncated": false,
+   "path_count": 14828,
+   "matched": [
+    "docker/dockerfiles/requirements.txt"
+   ]
+  },
+  "files": [
+   {
+    "path": "docker/dockerfiles/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "2aff2a429f3bbbc937a4a8b8db1730c43a98367d",
+    "ecosystem": "pypi",
+    "bytes": 178,
+    "names": [
+     "beautifulsoup4",
+     "certifi",
+     "charset-normalizer",
+     "docker",
+     "idna",
+     "requests",
+     "soupsieve",
+     "tqdm",
+     "typing_extensions",
+     "urllib3"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "contrib/jieba_tokenizer/CHANGELOG.md"
+   ],
+   "readme_i18n": [
+    "README.en.md",
+    "contrib/gs_filedump/README.gs_filedump.md",
+    "contrib/gs_filedump/README.help.md"
+   ],
+   "docs_matrix": [],
+   "paths": [
+    "contrib/gauss_connector/deparse.cpp",
+    "contrib/gauss_connector/gc_fdw.cpp",
+    "contrib/ndpplugin/CMakeLists.txt",
+    "contrib/ndpplugin/Makefile",
+    "contrib/ndpplugin/common.h",
+    "contrib/ndpplugin/dynloader.cpp",
+    "contrib/ndpplugin/ndp_check.cpp",
+    "contrib/ndpplugin/ndp_check.h",
+    "contrib/ndpplugin/ndpam.cpp",
+    "contrib/ndpplugin/ndpam.h",
+    "contrib/ndpplugin/ndpnodes.h",
+    "contrib/ndpplugin/ndpoutfuncs.cpp",
+    "contrib/ndpplugin/ndpplugin--1.0.sql",
+    "contrib/ndpplugin/ndpplugin.control",
+    "contrib/ndpplugin/ndpplugin.cpp",
+    "contrib/ndpplugin/ndpplugin.h",
+    "contrib/ndpplugin/rpc.cpp",
+    "contrib/security_plugin/CMakeLists.txt",
+    "contrib/security_plugin/Makefile",
+    "contrib/security_plugin/access_audit.cpp",
+    "contrib/security_plugin/access_audit.h",
+    "contrib/security_plugin/gs_audit_policy.cpp",
+    "contrib/security_plugin/gs_audit_policy.h",
+    "contrib/security_plugin/gs_mask_policy.cpp",
+    "contrib/security_plugin/gs_mask_policy.h",
+    "contrib/security_plugin/gs_policy_filter.cpp",
+    "contrib/security_plugin/gs_policy_filter.h",
+    "contrib/security_plugin/gs_policy_labels.cpp",
+    "contrib/security_plugin/gs_policy_labels.h",
+    "contrib/security_plugin/gs_policy_logical_tree.cpp",
+    "contrib/security_plugin/gs_policy_logical_tree.h",
+    "contrib/security_plugin/gs_policy_object_types.cpp",
+    "contrib/security_plugin/gs_policy_object_types.h",
+    "contrib/security_plugin/gs_policy_plugin.cpp",
+    "contrib/security_plugin/gs_policy_plugin.h",
+    "contrib/security_plugin/masking.cpp",
+    "contrib/security_plugin/masking.h",
+    "contrib/security_plugin/privileges_audit.cpp",
+    "contrib/security_plugin/privileges_audit.h",
+    "contrib/security_plugin/security_plugin--1.0.sql"
+   ]
+  },
+  "fail_count": 0
+ },
+ "innerr/ssh-based.tidb.ticat": {
+  "fn": "innerr/ssh-based.tidb.ticat",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "collected_at": "2026-10-31T02:47:46Z",
+  "default_branch": "main",
+  "pushed_at": "2021-08-23",
+  "stars": 0,
+  "tree": {
+   "sha": "b661dc1746b472531e259840e6aa85ce40bd8d29",
+   "etag": "W/\"67e131a023fc0946d9534e19fa42d0958e99d8548432f1d527fef22e3cbd4e40\"",
+   "truncated": false,
+   "path_count": 14,
+   "matched": []
+  },
+  "files": [],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "mickrathod/go-chat-backend": {
+  "fn": "mickrathod/go-chat-backend",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "collected_at": "2026-10-31T02:51:00Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-19",
+  "stars": 0,
+  "tree": {
+   "sha": "ed96bda7825e7f4ed70ba95f6223187061861554",
+   "etag": "W/\"302246b6fd7bff909e3916c64647f95fbad140bce941fbb70894f51d91f2c952\"",
+   "truncated": false,
+   "path_count": 59,
+   "matched": [
+    "go.mod",
+    "Dockerfile"
+   ]
+  },
+  "files": [
+   {
+    "path": "go.mod",
+    "kind": "dep",
+    "blob_sha": "5dd2e4f549f3a59951e86986df991074e0164a7a",
+    "ecosystem": "go",
+    "bytes": 176,
+    "names": [
+     "github.com/go-sql-driver/mysql",
+     "github.com/gorilla/websocket"
+    ],
+    "dev": [
+     "filippo.io/edwards25519"
+    ]
+   },
+   {
+    "path": "Dockerfile",
+    "kind": "image",
+    "blob_sha": "2af0507c226b5f00b325abd48430ef471cee36c6",
+    "bytes": 873,
+    "images": [
+     "golang:1.24-alpine",
+     "alpine:3.19"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
  }
 }
