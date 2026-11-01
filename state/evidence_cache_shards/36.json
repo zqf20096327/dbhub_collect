@@ -9276,13 +9276,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:37:26Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:58:29Z",
   "default_branch": "master",
   "pushed_at": "2021-05-05",
   "stars": 41,
   "tree": {
    "sha": "aca20b68178a896ff65c7c36c2e86c23b9257936",
-   "etag": "W/\"ca2557979baf2215e684245dbaf6160e212c7ad971e3551c4ee3bc5ca7766292\"",
+   "etag": "W/\"3a23856feed02e8f7148f0c5782056eecc530f509a676d0fee1cd5ef11a2c131\"",
    "truncated": false,
    "path_count": 5295,
    "matched": [
@@ -9293,7 +9294,10 @@
     "vendor/github.com/docker/distribution/contrib/docker-integration/Dockerfile",
     "vendor/github.com/docker/distribution/project/dev-image/Dockerfile",
     "vendor/golang.org/x/sys/unix/linux/Dockerfile",
-    "vendor/github.com/docker/distribution/contrib/compose/nginx/Dockerfile"
+    "vendor/github.com/docker/distribution/contrib/compose/nginx/Dockerfile",
+    "vendor/github.com/docker/distribution/contrib/docker-integration/nginx/Dockerfile",
+    "vendor/github.com/docker/distribution/contrib/docker-integration/tokenserver-oauth/Dockerfile",
+    "vendor/github.com/docker/distribution/contrib/docker-integration/tokenserver/Dockerfile"
    ]
   },
   "files": [
@@ -9368,6 +9372,33 @@
     "images": [
      "nginx:1.7"
     ]
+   },
+   {
+    "path": "vendor/github.com/docker/distribution/contrib/docker-integration/nginx/Dockerfile",
+    "kind": "image",
+    "blob_sha": "17f999d24070927f198a80813b6529cd748ad095",
+    "bytes": 372,
+    "images": [
+     "nginx:1.9"
+    ]
+   },
+   {
+    "path": "vendor/github.com/docker/distribution/contrib/docker-integration/tokenserver-oauth/Dockerfile",
+    "kind": "image",
+    "blob_sha": "d8c7b5cc0133f700596801f56bec5f97135a9e7b",
+    "bytes": 200,
+    "images": [
+     "dmcgowan/token-server:oauth"
+    ]
+   },
+   {
+    "path": "vendor/github.com/docker/distribution/contrib/docker-integration/tokenserver/Dockerfile",
+    "kind": "image",
+    "blob_sha": "3452468747f0e2e48c70f1122dce0b8624f567d4",
+    "bytes": 201,
+    "images": [
+     "dmcgowan/token-server:simple"
+    ]
    }
   ],
   "clues": {
@@ -9407,17 +9438,84 @@
     "vendor/github.com/go-sql-driver/mysql/transaction.go",
     "vendor/github.com/go-sql-driver/mysql/utils.go",
     "vendor/github.com/go-sql-driver/mysql/utils_test.go",
-    "vendor/k8s.io/client-go/rest/plugin.go",
-    "vendor/k8s.io/client-go/rest/plugin_test.go",
     "vendor/github.com/go-sql-driver/mysql/.github/ISSUE_TEMPLATE.md",
     "vendor/github.com/go-sql-driver/mysql/.github/PULL_REQUEST_TEMPLATE.md",
+    "vendor/k8s.io/client-go/rest/plugin.go",
+    "vendor/k8s.io/client-go/rest/plugin_test.go",
     "vendor/github.com/gogo/protobuf/plugin/compare/compare.go",
     "vendor/github.com/gogo/protobuf/plugin/compare/comparetest.go",
     "vendor/github.com/gogo/protobuf/plugin/defaultcheck/defaultcheck.go",
     "vendor/github.com/gogo/protobuf/plugin/description/description.go",
     "vendor/github.com/gogo/protobuf/plugin/description/descriptiontest.go",
     "vendor/github.com/gogo/protobuf/plugin/embedcheck/embedcheck.go",
-    "vendor/github.com/gogo/protobuf/plugin/enumstringer/enumstringer.go"
+    "vendor/github.com/gogo/protobuf/plugin/enumstringer/enumstringer.go",
+    "vendor/github.com/gogo/protobuf/plugin/equal/equal.go",
+    "vendor/github.com/gogo/protobuf/plugin/equal/equaltest.go",
+    "vendor/github.com/gogo/protobuf/plugin/face/face.go",
+    "vendor/github.com/gogo/protobuf/plugin/face/facetest.go",
+    "vendor/github.com/gogo/protobuf/plugin/gostring/gostring.go",
+    "vendor/github.com/gogo/protobuf/plugin/gostring/gostringtest.go",
+    "vendor/github.com/gogo/protobuf/plugin/marshalto/marshalto.go",
+    "vendor/github.com/gogo/protobuf/plugin/oneofcheck/oneofcheck.go",
+    "vendor/github.com/gogo/protobuf/plugin/populate/populate.go",
+    "vendor/github.com/gogo/protobuf/plugin/size/size.go",
+    "vendor/github.com/gogo/protobuf/plugin/size/sizetest.go",
+    "vendor/github.com/gogo/protobuf/plugin/stringer/stringer.go",
+    "vendor/github.com/gogo/protobuf/plugin/stringer/stringertest.go",
+    "vendor/github.com/gogo/protobuf/plugin/testgen/testgen.go",
+    "vendor/github.com/gogo/protobuf/plugin/union/union.go",
+    "vendor/github.com/gogo/protobuf/plugin/union/uniontest.go",
+    "vendor/github.com/gogo/protobuf/plugin/unmarshal/unmarshal.go",
+    "vendor/github.com/gogo/protobuf/protoc-gen-gogo/plugin/Makefile",
+    "vendor/github.com/gogo/protobuf/protoc-gen-gogo/plugin/plugin.pb.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/fileinfo.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/storagedriver.go",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/BUILD",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/plugins.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/azure/azure.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/azure/azure_test.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/base/base.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/base/regulator.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/factory/factory.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/filesystem/driver.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/filesystem/driver_test.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/gcs/doc.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/gcs/gcs.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/gcs/gcs_test.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/inmemory/driver.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/inmemory/driver_test.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/inmemory/mfs.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/middleware/storagemiddleware.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/oss/doc.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/oss/oss.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/oss/oss_test.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/s3-aws/s3.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/s3-aws/s3_test.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/s3-aws/s3_v2_signer.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/s3-goamz/s3.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/s3-goamz/s3_test.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/swift/swift.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/swift/swift_test.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/testdriver/testdriver.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/testsuites/testsuites.go",
+    "vendor/github.com/gogo/protobuf/protobuf/google/protobuf/compiler/plugin.proto",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/azure/BUILD",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/azure/README.md",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/azure/azure.go",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/azure/azure_test.go",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/gcp/BUILD",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/gcp/OWNERS",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/gcp/gcp.go",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/gcp/gcp_test.go",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/oidc/BUILD",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/oidc/OWNERS",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/oidc/oidc.go",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/oidc/oidc_test.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/middleware/cloudfront/middleware.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/middleware/redirect/middleware.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/middleware/redirect/middleware_test.go",
+    "vendor/k8s.io/client-go/plugin/pkg/auth/authenticator/token/oidc/testing/BUILD",
+    "vendor/k8s.io/client-go/plugin/pkg/auth/authenticator/token/oidc/testing/provider.go"
    ]
   },
   "fail_count": 0
@@ -10768,13 +10866,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T09:15:39Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:22:35Z",
   "default_branch": "main",
   "pushed_at": "2026-10-30",
   "stars": 17,
   "tree": {
    "sha": "ca291f0b86b79722bde9fa73475d28ae7b1b8894",
-   "etag": "W/\"28f2269c92b93374d0351913bc5484492eae3b57a1ac4a53a444670936389098\"",
+   "etag": "W/\"57140006c38d254c71ec2f1019fdc958e0e48f5018d702604dd2459d7c98636f\"",
    "truncated": false,
    "path_count": 701,
    "matched": [
@@ -10790,6 +10889,9 @@
     "crates/hyperion-rpc-client/Cargo.toml",
     "crates/hyperion-rpc-server/Cargo.toml",
     "crates/hyperion-rpc/Cargo.toml",
+    "crates/hyperion-state/Cargo.toml",
+    "crates/hyperion-types/Cargo.toml",
+    "crates/hyperion-validate/Cargo.toml",
     ".github/workflows/ci.yml",
     ".github/workflows/release.yml"
    ]
@@ -11143,6 +11245,68 @@
     ]
    },
    {
+    "path": "crates/hyperion-state/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "caa0be70d4bed44357689c73510de76e67ebda51",
+    "ecosystem": "cargo",
+    "bytes": 627,
+    "names": [
+     "hyperion-types",
+     "hyperion-validate",
+     "serde.workspace",
+     "serde_json.workspace",
+     "thiserror.workspace",
+     "sqlx",
+     "chrono.workspace",
+     "blake3.workspace",
+     "hex.workspace",
+     "rand.workspace",
+     "sha2.workspace",
+     "tokio",
+     "tracing.workspace"
+    ],
+    "dev": [
+     "tokio",
+     "tempfile.workspace"
+    ]
+   },
+   {
+    "path": "crates/hyperion-types/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "07ac76f8b14673171a9468a6b7b50913681eb27b",
+    "ecosystem": "cargo",
+    "bytes": 488,
+    "names": [
+     "serde.workspace",
+     "hmac",
+     "sha2",
+     "serde_json.workspace",
+     "uuid.workspace",
+     "ulid.workspace",
+     "chrono.workspace",
+     "chrono-tz.workspace"
+    ]
+   },
+   {
+    "path": "crates/hyperion-validate/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "e05e587a86e731d4bf47c0dfa9b16c778130d291",
+    "ecosystem": "cargo",
+    "bytes": 528,
+    "names": [
+     "serde.workspace",
+     "once_cell.workspace",
+     "regex.workspace",
+     "thiserror.workspace",
+     "blake3.workspace",
+     "hex.workspace"
+    ],
+    "dev": [
+     "proptest.workspace",
+     "serde_json.workspace"
+    ]
+   },
+   {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
     "blob_sha": "57724d93720c62d793cf4f1ed9074e83bcfc03c6",
@@ -11160,6 +11324,8 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "crates/hyperion-adapters/src/mariadb.rs",
+    "crates/hyperion-adapters/src/postgres.rs",
     "crates/hyperion-adapters/Cargo.toml",
     "crates/hyperion-adapters/assets/node-update.sh",
     "crates/hyperion-adapters/assets/panel-maintenance.html",
@@ -11180,7 +11346,6 @@
     "crates/hyperion-adapters/src/integrity.rs",
     "crates/hyperion-adapters/src/lib.rs",
     "crates/hyperion-adapters/src/logscan.rs",
-    "crates/hyperion-adapters/src/mariadb.rs",
     "crates/hyperion-adapters/src/modsec.rs",
     "crates/hyperion-adapters/src/nginx.rs",
     "crates/hyperion-adapters/src/node_update.rs",
@@ -11189,7 +11354,6 @@
     "crates/hyperion-adapters/src/perf.rs",
     "crates/hyperion-adapters/src/phpfpm.rs",
     "crates/hyperion-adapters/src/postfix.rs",
-    "crates/hyperion-adapters/src/postgres.rs",
     "crates/hyperion-adapters/src/redis.rs",
     "crates/hyperion-adapters/src/regguard.rs",
     "crates/hyperion-adapters/src/restic.rs",
@@ -11199,7 +11363,22 @@
     "crates/hyperion-adapters/src/ssh.rs",
     "crates/hyperion-adapters/src/system_identity.rs",
     "crates/hyperion-adapters/src/users.rs",
-    "crates/hyperion-adapters/src/waflog.rs"
+    "crates/hyperion-adapters/src/waflog.rs",
+    "crates/hyperion-adapters/src/wpcli.rs",
+    "crates/hyperion-adapters/src/wpmail.rs",
+    "crates/hyperion-adapters/src/wpplugin.rs",
+    "crates/hyperion-adapters/templates/nginx-panel.conf.j2",
+    "crates/hyperion-adapters/templates/nginx-vhost-proxy.conf.j2",
+    "crates/hyperion-adapters/templates/nginx-vhost-redirect.conf.j2",
+    "crates/hyperion-adapters/templates/nginx-vhost-suspended.conf.j2",
+    "crates/hyperion-adapters/templates/nginx-vhost.conf.j2",
+    "crates/hyperion-adapters/templates/phpfpm-pool.conf.j2",
+    "crates/hyperion-adapters/templates/systemd-node-app.service.j2",
+    "crates/hyperion-adapters/testdata/modsec_audit.jsonl",
+    "crates/hyperion-adapters/tests/gitsync_live.rs",
+    "crates/hyperion-adapters/tests/subj_probe.rs",
+    "crates/hyperion-core/src/real_adapter.rs",
+    "crates/hyperion-import/src/adapter.rs"
    ]
   },
   "fail_count": 0
@@ -11922,13 +12101,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T10:51:43Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:33:46Z",
   "default_branch": "master",
   "pushed_at": "2020-11-17",
   "stars": 12,
   "tree": {
    "sha": "d0afd159f3ca02f682aeaac43c99da1ad12e4f89",
-   "etag": "W/\"330ae35ac54c6afa33246cd62a18e25eb3046f4d4747bf562345b7b4c338328b\"",
+   "etag": "W/\"71c01b400bdaf9e98f926b00df486ca4444b2fd3b8c7da0c7545e485f65261f4\"",
    "truncated": false,
    "path_count": 1287,
    "matched": [
@@ -12667,6 +12847,214 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": []
+  },
+  "fail_count": 0
+ },
+ "flickedgg/FLICKED": {
+  "fn": "flickedgg/FLICKED",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:47:09Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-31",
+  "stars": 3,
+  "tree": {
+   "sha": "db1bec15eeb1d256a72ec4300b6a99dff024c445",
+   "etag": "W/\"eb9e20d077dfc7a6003ec5cbcdf2935e9fe01f5dcfda97b26e9a36e5f4841f24\"",
+   "truncated": false,
+   "path_count": 286,
+   "matched": [
+    "dashboard/package.json",
+    "launcher/package.json",
+    "website/package.json",
+    "backend/Flicked.Api.Tests/Flicked.Api.Tests.csproj",
+    "backend/Flicked.Api/Flicked.Api.csproj",
+    "launcher/src-tauri/Cargo.toml",
+    "docker-compose.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "dashboard/package.json",
+    "kind": "dep",
+    "blob_sha": "ccd694c234f2a1d3ec005089fee212a8c9c59190",
+    "ecosystem": "npm",
+    "bytes": 591,
+    "names": [
+     "gsap",
+     "next",
+     "react",
+     "react-dom",
+     "react-icons"
+    ],
+    "dev": [
+     "@tailwindcss/postcss",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "eslint",
+     "eslint-config-next",
+     "tailwindcss",
+     "typescript"
+    ]
+   },
+   {
+    "path": "launcher/package.json",
+    "kind": "dep",
+    "blob_sha": "bfe5c7bfc56300941a9b27c873e9fc8bfd88a5fa",
+    "ecosystem": "npm",
+    "bytes": 699,
+    "names": [
+     "@fontsource-variable/inter",
+     "@fontsource/barlow-condensed",
+     "@fontsource/jetbrains-mono",
+     "@tauri-apps/api",
+     "@tauri-apps/plugin-opener",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@tauri-apps/cli",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "typescript",
+     "vite"
+    ]
+   },
+   {
+    "path": "website/package.json",
+    "kind": "dep",
+    "blob_sha": "2829d47739eb2f3c6112db81a8e5b8de0f8d2669",
+    "ecosystem": "npm",
+    "bytes": 590,
+    "names": [
+     "gsap",
+     "next",
+     "react",
+     "react-dom",
+     "react-icons"
+    ],
+    "dev": [
+     "@tailwindcss/postcss",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "eslint",
+     "eslint-config-next",
+     "tailwindcss",
+     "typescript"
+    ]
+   },
+   {
+    "path": "backend/Flicked.Api.Tests/Flicked.Api.Tests.csproj",
+    "kind": "dep",
+    "blob_sha": "e237ce56d4f6c365cbe3f63bbad5634c14739762",
+    "ecosystem": "csproj",
+    "bytes": 974,
+    "names": [
+     "coverlet.collector",
+     "Microsoft.AspNetCore.DataProtection",
+     "Microsoft.EntityFrameworkCore",
+     "Microsoft.NET.Test.Sdk",
+     "Npgsql.EntityFrameworkCore.PostgreSQL",
+     "xunit",
+     "xunit.runner.visualstudio"
+    ]
+   },
+   {
+    "path": "backend/Flicked.Api/Flicked.Api.csproj",
+    "kind": "dep",
+    "blob_sha": "acaaae0f85a5852383d01474ad2549493ac1afb7",
+    "ecosystem": "csproj",
+    "bytes": 671,
+    "names": [
+     "Microsoft.AspNetCore.OpenApi",
+     "Microsoft.EntityFrameworkCore.Design",
+     "Npgsql.EntityFrameworkCore.PostgreSQL"
+    ]
+   },
+   {
+    "path": "launcher/src-tauri/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "f4ba1de96290d6552661590f8fe25b0562baf177",
+    "ecosystem": "cargo",
+    "bytes": 1248,
+    "names": [
+     "tauri",
+     "tauri-plugin-opener",
+     "serde",
+     "serde_json",
+     "discord-rich-presence",
+     "reqwest",
+     "keyring",
+     "tokio"
+    ],
+    "dev": [
+     "tauri-build"
+    ]
+   },
+   {
+    "path": "docker-compose.yml",
+    "kind": "image",
+    "blob_sha": "83717cb11155910b62970c07f00945b127668b26",
+    "bytes": 603,
+    "images": [
+     "postgres:18-alpine"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "iliachry/sovereign-kb": {
+  "fn": "iliachry/sovereign-kb",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:47:17Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-31",
+  "stars": 3,
+  "tree": {
+   "sha": "e570db440b075c17cfc8d9c56b3f837e368ec515",
+   "etag": "W/\"bacb6ea087c4276e31d9bd5ee2e26718345ccd401270266b40914bd719c95cff\"",
+   "truncated": false,
+   "path_count": 68,
+   "matched": [
+    "pyproject.toml"
+   ]
+  },
+  "files": [
+   {
+    "path": "pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "5ffc115a60a24ca4f29f08f0845b7c9161d7e9c6",
+    "ecosystem": "pyproject",
+    "bytes": 1854
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [
+    "src/sovereign_kb/starter_vault/00-identity/README-me.md",
+    "src/sovereign_kb/starter_vault/02-operating-system/archetypes/README-archetypes.md",
+    "src/sovereign_kb/starter_vault/02-operating-system/lenses/README-lenses.md"
+   ],
+   "docs_matrix": [],
+   "paths": [],
+   "matrix_urls": [
+    "https://ollama.com/",
+    "http://127.0.0.1:8000/v1/chat/completions`"
+   ]
   },
   "fail_count": 0
  }

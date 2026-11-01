@@ -8030,15 +8030,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:26:41Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:33:42Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 177,
   "tree": {
-   "sha": "bef406344c1307c8ab2be6ebf51327c9bbdc9a2e",
-   "etag": "W/\"32222f10df2904bcde37cfdfd1cdd33eb53ba50b954c16b6e6825157d2f71a70\"",
+   "sha": "f712329ee87bedcf9fc441362a7a1c798e445668",
+   "etag": "W/\"9abfac0ed56d25b2abf5e8188e0fc40f7bb82dd64639a61bb418d986f43d626d\"",
    "truncated": false,
-   "path_count": 960,
+   "path_count": 993,
    "matched": [
     "package.json",
     "scripts/package.json",
@@ -8258,6 +8259,7 @@
     "server/plugins/00.sentry.ts",
     "server/plugins/01.pre-warm-ssr.ts",
     "server/plugins/astrbot-group-flush.ts",
+    "server/plugins/custom-css.ts",
     "server/plugins/error-handler.ts",
     "server/plugins/redis-lifecycle.ts",
     "server/plugins/statistics-code.ts",
@@ -8284,7 +8286,13 @@
     "server/utils/music-source-plugins/tickets.ts",
     "server/utils/music-source-plugins/types.ts",
     "server/api/admin/music-source-plugins/[id].delete.ts",
-    "server/api/admin/music-source-plugins/[id].put.ts"
+    "server/api/admin/music-source-plugins/[id].put.ts",
+    "server/api/admin/music-source-plugins/index.get.ts",
+    "server/api/admin/music-source-plugins/index.post.ts",
+    "server/api/admin/music-source-plugins/order.put.ts",
+    "server/api/admin/music-source-plugins/[id]/enabled.patch.ts",
+    "server/api/admin/music-source-plugins/[id]/refresh.post.ts",
+    "server/api/admin/music-source-plugins/[id]/test.post.ts"
    ]
   },
   "fail_count": 0
@@ -8366,13 +8374,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T05:13:06Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:45:13Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 85,
   "tree": {
    "sha": "bc26f2a9f066d1f75bdde8ebcf93b08283915b6c",
-   "etag": "W/\"022b19213396f905c91d433f2b5a130644660e997aaf92e15e0171474bf2a0dd\"",
+   "etag": "W/\"93dce34d365220b2f75c1fa077b7c2a29a5fb819a4c2e0c0db110adef98251cc\"",
    "truncated": false,
    "path_count": 114,
    "matched": [
@@ -8487,13 +8496,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T05:18:27Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:46:02Z",
   "default_branch": "main",
   "pushed_at": "2024-06-14",
   "stars": 79,
   "tree": {
    "sha": "ee3842df529c109438c63a39c4e350ee4013d7ec",
-   "etag": "W/\"983fcf0bcb149f7917c5df67770e68526420d92c01d283ade6e9b44d3fcaa31c\"",
+   "etag": "W/\"4106e13644d19868da1dc2a61c994c803e4031d53dd66b05fa3d8e7484f0897b\"",
    "truncated": false,
    "path_count": 90,
    "matched": [
@@ -8546,6 +8556,8 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "driver/collector/mysql_collector.py",
+    "driver/collector/postgres_collector.py",
     "driver/__init__.py",
     "driver/agent_health_heartbeat.py",
     "driver/compute_server_client.py",
@@ -8563,9 +8575,7 @@
     "driver/aws/wrapper.py",
     "driver/collector/base_collector.py",
     "driver/collector/collector_factory.py",
-    "driver/collector/mysql_collector.py",
     "driver/collector/pg_table_level_stats_sqls.py",
-    "driver/collector/postgres_collector.py",
     "driver/config/driver_config.yaml",
     "driver/config/cloudwatch_metrics/rds_aurora_mysql-5_6.json",
     "driver/config/cloudwatch_metrics/rds_aurora_mysql-5_7.json",
@@ -8585,7 +8595,30 @@
     "driver/config/cloudwatch_metrics/rds_postgres-12.json",
     "driver/config/cloudwatch_metrics/rds_postgres-13.json",
     "driver/config/cloudwatch_metrics/rds_postgres-14.json",
-    "driver/config/cloudwatch_metrics/rds_postgres-15.json"
+    "driver/config/cloudwatch_metrics/rds_postgres-15.json",
+    "driver/config/cloudwatch_metrics/rds_postgres-16.json",
+    "driver/config/cloudwatch_metrics/rds_postgres-9_6.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_aurora_mysql-5_6.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_aurora_mysql-5_7.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_aurora_mysql-8_0.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_aurora_postgresql-10.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_aurora_postgresql-11.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_aurora_postgresql-12.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_aurora_postgresql-13.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_aurora_postgresql-14.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_aurora_postgresql-15.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_aurora_postgresql-16.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_mysql-5_6.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_mysql-5_7.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_mysql-8_0.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_postgres-10.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_postgres-11.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_postgres-12.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_postgres-13.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_postgres-14.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_postgres-15.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_postgres-16.json",
+    "driver/config/cloudwatch_metrics_cluster/rds_postgres-9_6.json"
    ],
    "matrix_urls": [
     "https://docs.ottertune.com/support/kb/categories/amRZXxmJ/getting-started",
@@ -11781,13 +11814,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:11:09Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:36:41Z",
   "default_branch": "main",
   "pushed_at": "2025-06-03",
   "stars": 11,
   "tree": {
    "sha": "1e13fa26d6d083eb35b6c91b085696a8d3c8ad2a",
-   "etag": "W/\"b27cbfcc2c585eef5af531dcbad24c8f7285f821195f58bda771586ff6f72d6d\"",
+   "etag": "W/\"e52bd46881679e99960651ef3bbf8eaf3b56e10abc7fe460f79affff49f02da8\"",
    "truncated": false,
    "path_count": 429,
    "matched": []
@@ -11840,7 +11874,33 @@
     "Static-Template/css/tinymce/js/tinymce/plugins/codesample/plugin.min.js",
     "Static-Template/css/tinymce/js/tinymce/plugins/directionality/plugin.min.js",
     "Static-Template/css/tinymce/js/tinymce/plugins/emoticons/plugin.min.js",
-    "Static-Template/css/tinymce/js/tinymce/plugins/fullscreen/plugin.min.js"
+    "Static-Template/css/tinymce/js/tinymce/plugins/fullscreen/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/help/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/image/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/importcss/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/insertdatetime/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/link/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/lists/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/media/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/nonbreaking/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/pagebreak/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/preview/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/quickbars/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/save/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/searchreplace/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/table/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/template/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/visualblocks/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/visualchars/plugin.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/wordcount/plugin.min.js",
+    "Dynamic-Site/css/tinymce/js/tinymce/plugins/emoticons/js/emojiimages.js",
+    "Dynamic-Site/css/tinymce/js/tinymce/plugins/emoticons/js/emojiimages.min.js",
+    "Dynamic-Site/css/tinymce/js/tinymce/plugins/emoticons/js/emojis.js",
+    "Dynamic-Site/css/tinymce/js/tinymce/plugins/emoticons/js/emojis.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/emoticons/js/emojiimages.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/emoticons/js/emojiimages.min.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/emoticons/js/emojis.js",
+    "Static-Template/css/tinymce/js/tinymce/plugins/emoticons/js/emojis.min.js"
    ]
   },
   "fail_count": 0
@@ -12130,13 +12190,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:31:01Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:40:17Z",
   "default_branch": "main",
   "pushed_at": "2023-05-27",
   "stars": 10,
   "tree": {
    "sha": "df486c6f85bb7cacffa9a4387f37a108365bff81",
-   "etag": "W/\"ed4d04c54f5e4f6d0d1c8ea26c56e90f60675ac5df7eb3983d54a25ea79eb49f\"",
+   "etag": "W/\"6880ddeffba3887a42bcdf5b999400e06957e239f69ad8316347180d267f64f9\"",
    "truncated": false,
    "path_count": 237,
    "matched": [
@@ -12308,6 +12369,25 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "auth/internal/adapters/db/postgres/db.go",
+    "auth/internal/adapters/db/postgres/main_test.go",
+    "auth/internal/adapters/db/postgres/session.go",
+    "auth/internal/adapters/db/postgres/session_test.go",
+    "auth/internal/adapters/db/postgres/user.go",
+    "auth/internal/adapters/db/postgres/user_test.go",
+    "auth/internal/adapters/db/postgres/migrations/000001_init.down.sql",
+    "auth/internal/adapters/db/postgres/migrations/000001_init.up.sql",
+    "auth/internal/adapters/db/postgres/migrations/000002_user.down.sql",
+    "auth/internal/adapters/db/postgres/migrations/000002_user.up.sql",
+    "auth/internal/adapters/db/postgres/migrations/000003_user_session.down.sql",
+    "auth/internal/adapters/db/postgres/migrations/000003_user_session.up.sql",
+    "auth/internal/adapters/db/postgres/query/session.sql",
+    "auth/internal/adapters/db/postgres/query/user.sql",
+    "auth/internal/adapters/db/postgres/sqlc/db.go",
+    "auth/internal/adapters/db/postgres/sqlc/models.go",
+    "auth/internal/adapters/db/postgres/sqlc/querier.go",
+    "auth/internal/adapters/db/postgres/sqlc/session.sql.go",
+    "auth/internal/adapters/db/postgres/sqlc/user.sql.go",
     "auth/internal/adapters/grpc/handler.go",
     "auth/internal/adapters/grpc/interceptor.go",
     "auth/internal/adapters/hasher/bcrypt.go",
@@ -12339,15 +12419,40 @@
     "wallet/internal/adapters/locker/locker_test.go",
     "wallet/internal/adapters/numgen/numgen.go",
     "wallet/internal/adapters/numgen/numgen_test.go",
-    "auth/internal/adapters/db/postgres/db.go",
-    "auth/internal/adapters/db/postgres/main_test.go",
-    "auth/internal/adapters/db/postgres/session.go",
-    "auth/internal/adapters/db/postgres/session_test.go",
-    "auth/internal/adapters/db/postgres/user.go",
-    "auth/internal/adapters/db/postgres/user_test.go",
     "auth/internal/adapters/db/redis/main_test.go",
     "auth/internal/adapters/db/redis/redis.go",
-    "auth/internal/adapters/db/redis/token.go"
+    "auth/internal/adapters/db/redis/token.go",
+    "auth/internal/adapters/db/redis/token_test.go",
+    "auth/internal/adapters/queue/rabbitmq/main_test.go",
+    "auth/internal/adapters/queue/rabbitmq/rabbit.go",
+    "auth/internal/adapters/queue/rabbitmq/rabbit_test.go",
+    "contact/internal/adapters/email/mycourier/courier.go",
+    "contact/internal/adapters/queue/rabbitmq/main_test.go",
+    "contact/internal/adapters/queue/rabbitmq/rabbit.go",
+    "contact/internal/adapters/queue/rabbitmq/rabbit_test.go",
+    "wallet/internal/adapters/db/sql/migrations/000001_user.down.sql",
+    "wallet/internal/adapters/db/sql/migrations/000001_user.up.sql",
+    "wallet/internal/adapters/db/sql/migrations/000002_account.down.sql",
+    "wallet/internal/adapters/db/sql/migrations/000002_account.up.sql",
+    "wallet/internal/adapters/db/sql/migrations/000003_card.down.sql",
+    "wallet/internal/adapters/db/sql/migrations/000003_card.up.sql",
+    "wallet/internal/adapters/db/sql/migrations/000004_transaction.down.sql",
+    "wallet/internal/adapters/db/sql/migrations/000004_transaction.up.sql",
+    "wallet/internal/adapters/db/sql/migrations/000005_currency.down.sql",
+    "wallet/internal/adapters/db/sql/migrations/000005_currency.up.sql",
+    "wallet/internal/adapters/db/sql/query/account.sql",
+    "wallet/internal/adapters/db/sql/query/card.sql",
+    "wallet/internal/adapters/db/sql/query/currency.sql",
+    "wallet/internal/adapters/db/sql/query/transaction.sql",
+    "wallet/internal/adapters/db/sql/query/user.sql",
+    "wallet/internal/adapters/db/sql/sqlc/account.sql.go",
+    "wallet/internal/adapters/db/sql/sqlc/card.sql.go",
+    "wallet/internal/adapters/db/sql/sqlc/currency.sql.go",
+    "wallet/internal/adapters/db/sql/sqlc/db.go",
+    "wallet/internal/adapters/db/sql/sqlc/models.go",
+    "wallet/internal/adapters/db/sql/sqlc/querier.go",
+    "wallet/internal/adapters/db/sql/sqlc/transaction.sql.go",
+    "wallet/internal/adapters/db/sql/sqlc/user.sql.go"
    ]
   },
   "fail_count": 0
@@ -12743,13 +12848,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:50:31Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:44:16Z",
   "default_branch": "main",
   "pushed_at": "2026-10-29",
   "stars": 5,
   "tree": {
    "sha": "9a458eb1a3e271c0727016a957fd7dd7cea8f68c",
-   "etag": "W/\"b103b2f888dcceec7bfb21aa0deda0b2f07eaa9e27854f27a4d8de1555a04bf3\"",
+   "etag": "W/\"718c0f6ade3c77ba76330636b6cff7b980bdbdd45b481ec81fb806e8c465c0ec\"",
    "truncated": false,
    "path_count": 2350,
    "matched": [
@@ -12765,6 +12871,37 @@
     "sdk/web/aruma-web/package.json",
     "test/e2e/admin-node/package.json",
     "test/e2e/android-auth/build.gradle.kts",
+    "test/e2e/android-firestore/build.gradle.kts",
+    "test/e2e/android-rtdb/build.gradle.kts",
+    "test/e2e/android-storage/build.gradle.kts",
+    "test/e2e/browser-matrix/package.json",
+    "test/e2e/idp-browser/package.json",
+    "test/e2e/rtdb-lp-browser/package.json",
+    "test/e2e/rtdb-rules/package.json",
+    "test/e2e/web-auth/package.json",
+    "test/e2e/web-documents/package.json",
+    "test/e2e/web-rtdb/package.json",
+    "test/e2e/web-storage/package.json",
+    "test/smoke/admin-go/go.mod",
+    "test/smoke/admin-node/package.json",
+    "test/smoke/android/build.gradle.kts",
+    "test/smoke/web/package.json",
+    "sdk/android/aruma-redirect/aruma-redirect/build.gradle.kts",
+    "test/acceptance/testdata/firebase-cli/package.json",
+    "test/compat/firebase-js/rtdb/package.json",
+    "test/compat/storage/ct/package.json",
+    "test/compat/storage/js/package.json",
+    "test/e2e/android-auth/app/build.gradle.kts",
+    "test/e2e/android-firestore/app/build.gradle.kts",
+    "test/e2e/android-rtdb/app/build.gradle.kts",
+    "test/e2e/android-storage/app/build.gradle.kts",
+    "test/oracle/storage/capture/package.json",
+    "test/smoke/android/app/build.gradle.kts",
+    "test/acceptance/testdata/gcs-sdk/go/go.mod",
+    "test/acceptance/testdata/gcs-sdk/node/package.json",
+    "test/e2e/flutter-storage/e2e_native/android/build.gradle.kts",
+    "test/e2e/web-storage/apps/sveltekit/package.json",
+    "test/oracle/storage/capture/go-admin/go.mod",
     "Dockerfile",
     "compose.yaml",
     ".github/workflows/ci.yml",
@@ -13062,6 +13199,554 @@
     "blob_sha": "e7cab2b2cb06675f3893993451dbda92ab57df54",
     "ecosystem": "gradle",
     "bytes": 284
+   },
+   {
+    "path": "test/e2e/android-firestore/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "e7cab2b2cb06675f3893993451dbda92ab57df54",
+    "ecosystem": "gradle",
+    "bytes": 284
+   },
+   {
+    "path": "test/e2e/android-rtdb/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "e7cab2b2cb06675f3893993451dbda92ab57df54",
+    "ecosystem": "gradle",
+    "bytes": 284
+   },
+   {
+    "path": "test/e2e/android-storage/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "343b89e37ff32d212c5ded319d0302eb1caeff4a",
+    "ecosystem": "gradle",
+    "bytes": 324
+   },
+   {
+    "path": "test/e2e/browser-matrix/package.json",
+    "kind": "dep",
+    "blob_sha": "baaa666d0aa156034d846cdd0ba24c02b71e025e",
+    "ecosystem": "npm",
+    "bytes": 453,
+    "names": [
+     "firebase"
+    ],
+    "dev": [
+     "@playwright/test"
+    ]
+   },
+   {
+    "path": "test/e2e/idp-browser/package.json",
+    "kind": "dep",
+    "blob_sha": "22778166196c4b6a4b2eba9a78b94f899678cd7b",
+    "ecosystem": "npm",
+    "bytes": 392,
+    "names": [
+     "esbuild",
+     "firebase",
+     "playwright-core"
+    ]
+   },
+   {
+    "path": "test/e2e/rtdb-lp-browser/package.json",
+    "kind": "dep",
+    "blob_sha": "d239dc5e36818fdc5a674fc6580862e52348616b",
+    "ecosystem": "npm",
+    "bytes": 379,
+    "names": [
+     "esbuild",
+     "firebase",
+     "playwright-core"
+    ]
+   },
+   {
+    "path": "test/e2e/rtdb-rules/package.json",
+    "kind": "dep",
+    "blob_sha": "d5176951dc38584b458c7ef662f575547c71d23f",
+    "ecosystem": "npm",
+    "bytes": 330,
+    "names": [
+     "firebase"
+    ]
+   },
+   {
+    "path": "test/e2e/web-auth/package.json",
+    "kind": "dep",
+    "blob_sha": "b312b5ceb45dba56a5c05ef38464e1e7ee4d62f9",
+    "ecosystem": "npm",
+    "bytes": 567,
+    "names": [
+     "firebase-11",
+     "firebase-12",
+     "firebase-13"
+    ],
+    "dev": [
+     "@aruma/web",
+     "@playwright/test",
+     "firebase-admin",
+     "vite"
+    ]
+   },
+   {
+    "path": "test/e2e/web-documents/package.json",
+    "kind": "dep",
+    "blob_sha": "f160c55252e42356b3bd28970dbb062a7812e364",
+    "ecosystem": "npm",
+    "bytes": 503,
+    "names": [
+     "firebase"
+    ],
+    "dev": [
+     "@aruma/web",
+     "@playwright/test",
+     "vite"
+    ]
+   },
+   {
+    "path": "test/e2e/web-rtdb/package.json",
+    "kind": "dep",
+    "blob_sha": "481affa496190be84d07538e5fc0e82886d97ab7",
+    "ecosystem": "npm",
+    "bytes": 584,
+    "names": [
+     "firebase-11",
+     "firebase-12",
+     "firebase-13"
+    ],
+    "dev": [
+     "@aruma/web",
+     "@playwright/test",
+     "vite"
+    ]
+   },
+   {
+    "path": "test/e2e/web-storage/package.json",
+    "kind": "dep",
+    "blob_sha": "5ab694f7a03fe8eea558dfcb4babf9c9eeb1507a",
+    "ecosystem": "npm",
+    "bytes": 711,
+    "names": [
+     "firebase"
+    ],
+    "dev": [
+     "@aruma/web",
+     "@playwright/test",
+     "@rollup/plugin-node-resolve",
+     "@rspack/core",
+     "esbuild",
+     "rollup",
+     "vite",
+     "webpack"
+    ]
+   },
+   {
+    "path": "test/smoke/admin-go/go.mod",
+    "kind": "dep",
+    "blob_sha": "375a1709bdc0fc50781a4e86d02ab42c76233773",
+    "ecosystem": "go",
+    "bytes": 3203,
+    "names": [
+     "firebase.google.com/go/v4",
+     "google.golang.org/api",
+     "cloud.google.com/go/firestore",
+     "cloud.google.com/go/storage",
+     "github.com/arumadev/aruma/sdk/go/adminstorage",
+     "google.golang.org/genproto",
+     "google.golang.org/grpc",
+     "google.golang.org/protobuf"
+    ],
+    "dev": [
+     "cel.dev/expr",
+     "cloud.google.com/go",
+     "cloud.google.com/go/auth",
+     "cloud.google.com/go/auth/oauth2adapt",
+     "cloud.google.com/go/compute/metadata",
+     "cloud.google.com/go/iam",
+     "cloud.google.com/go/longrunning",
+     "cloud.google.com/go/monitoring",
+     "github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp",
+     "github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/metric",
+     "github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping",
+     "github.com/MicahParks/keyfunc",
+     "github.com/cespare/xxhash/v2",
+     "github.com/cncf/xds/go",
+     "github.com/envoyproxy/go-control-plane/envoy",
+     "github.com/envoyproxy/protoc-gen-validate",
+     "github.com/felixge/httpsnoop",
+     "github.com/go-jose/go-jose/v4",
+     "github.com/go-logr/logr",
+     "github.com/go-logr/stdr",
+     "github.com/golang-jwt/jwt/v4",
+     "github.com/golang/protobuf",
+     "github.com/google/s2a-go",
+     "github.com/google/uuid",
+     "github.com/googleapis/enterprise-certificate-proxy",
+     "github.com/googleapis/gax-go/v2",
+     "github.com/planetscale/vtprotobuf",
+     "github.com/spiffe/go-spiffe/v2",
+     "go.opentelemetry.io/auto/sdk",
+     "go.opentelemetry.io/contrib/detectors/gcp",
+     "go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc",
+     "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp",
+     "go.opentelemetry.io/otel",
+     "go.opentelemetry.io/otel/metric",
+     "go.opentelemetry.io/otel/sdk",
+     "go.opentelemetry.io/otel/sdk/metric",
+     "go.opentelemetry.io/otel/trace",
+     "golang.org/x/crypto",
+     "golang.org/x/net",
+     "golang.org/x/oauth2",
+     "golang.org/x/sync",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "golang.org/x/time",
+     "google.golang.org/appengine/v2",
+     "google.golang.org/genproto/googleapis/api",
+     "google.golang.org/genproto/googleapis/rpc"
+    ]
+   },
+   {
+    "path": "test/smoke/admin-node/package.json",
+    "kind": "dep",
+    "blob_sha": "11138d54de68d763991257de565ffe7ac047577f",
+    "ecosystem": "npm",
+    "bytes": 590,
+    "names": [
+     "@aruma/admin-storage",
+     "firebase-admin"
+    ]
+   },
+   {
+    "path": "test/smoke/android/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "d288a2d86bfeee874181bb08da01358b3c1962af",
+    "ecosystem": "gradle",
+    "bytes": 143
+   },
+   {
+    "path": "test/smoke/web/package.json",
+    "kind": "dep",
+    "blob_sha": "7bf9f7bab5dea23a6a3ab28223af05f2e13a4aa7",
+    "ecosystem": "npm",
+    "bytes": 484,
+    "names": [
+     "firebase-11",
+     "firebase-12",
+     "firebase-13"
+    ]
+   },
+   {
+    "path": "sdk/android/aruma-redirect/aruma-redirect/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "fb9ac71e46d8ac8a11a14e4395628ab8cdf87d55",
+    "ecosystem": "gradle",
+    "bytes": 961
+   },
+   {
+    "path": "test/acceptance/testdata/firebase-cli/package.json",
+    "kind": "dep",
+    "blob_sha": "3137044dc0e6370e6a0e0dc5c1fad4d55455599b",
+    "ecosystem": "npm",
+    "bytes": 261,
+    "names": [
+     "firebase-tools"
+    ]
+   },
+   {
+    "path": "test/compat/firebase-js/rtdb/package.json",
+    "kind": "dep",
+    "blob_sha": "6b910ed0301f963057f6ed66846c0f435ede69ed",
+    "ecosystem": "npm",
+    "bytes": 1257,
+    "names": [
+     "@firebase/app",
+     "@firebase/app-check-interop-types",
+     "@firebase/app-compat",
+     "@firebase/app-types",
+     "@firebase/auth-interop-types",
+     "@firebase/component",
+     "@firebase/database",
+     "@firebase/database-types",
+     "@firebase/logger",
+     "@firebase/util",
+     "faye-websocket",
+     "tslib"
+    ],
+    "dev": [
+     "@types/chai",
+     "@types/chai-as-promised",
+     "@types/mocha",
+     "@types/node",
+     "@types/sinon",
+     "@types/sinon-chai",
+     "@types/trusted-types",
+     "chai",
+     "chai-as-promised",
+     "lodash",
+     "mocha",
+     "sinon",
+     "sinon-chai",
+     "ts-node",
+     "typescript"
+    ]
+   },
+   {
+    "path": "test/compat/storage/ct/package.json",
+    "kind": "dep",
+    "blob_sha": "1a09ef913a1c646f26c92796220e99728d45f72b",
+    "ecosystem": "npm",
+    "bytes": 768,
+    "dev": [
+     "@google-cloud/storage",
+     "chai",
+     "chai-as-promised",
+     "firebase",
+     "firebase-admin",
+     "mocha",
+     "puppeteer",
+     "source-map-support",
+     "supertest",
+     "ts-node",
+     "typescript"
+    ]
+   },
+   {
+    "path": "test/compat/storage/js/package.json",
+    "kind": "dep",
+    "blob_sha": "f68bec1b6c52e5bf8b76ea51d8c2e64b51bf00df",
+    "ecosystem": "npm",
+    "bytes": 1220,
+    "names": [
+     "@firebase/app",
+     "@firebase/app-compat",
+     "@firebase/app-types",
+     "@firebase/auth",
+     "@firebase/auth-compat",
+     "@firebase/component",
+     "@firebase/logger",
+     "@firebase/storage",
+     "@firebase/storage-types",
+     "@firebase/util",
+     "tslib"
+    ],
+    "dev": [
+     "@types/chai",
+     "@types/mocha",
+     "@types/node",
+     "@vitest/browser-playwright",
+     "chai",
+     "mocha",
+     "playwright",
+     "ts-node",
+     "typescript",
+     "vite",
+     "vitest"
+    ]
+   },
+   {
+    "path": "test/e2e/android-auth/app/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "361dc9aa52b21087fe97dcd2b7621bb428f23348",
+    "ecosystem": "gradle",
+    "bytes": 1388
+   },
+   {
+    "path": "test/e2e/android-firestore/app/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "cfcc6e032ea34f11904b0394f73eb239d8cd43f2",
+    "ecosystem": "gradle",
+    "bytes": 1560
+   },
+   {
+    "path": "test/e2e/android-rtdb/app/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "7b0b5f487b392e1256d0ef2b223bbd2106a64ddf",
+    "ecosystem": "gradle",
+    "bytes": 1568
+   },
+   {
+    "path": "test/e2e/android-storage/app/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "c6e58f41c6544e8ee74dc6da1accda5f84e06875",
+    "ecosystem": "gradle",
+    "bytes": 4344
+   },
+   {
+    "path": "test/oracle/storage/capture/package.json",
+    "kind": "dep",
+    "blob_sha": "93b75e6ea82d799f4b029c9a9ffd1307cfb53eaf",
+    "ecosystem": "npm",
+    "bytes": 366,
+    "names": [
+     "@google-cloud/storage",
+     "firebase",
+     "firebase-admin"
+    ]
+   },
+   {
+    "path": "test/smoke/android/app/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "45f08c6f79b1720a233c75f0ffe2270b3039026e",
+    "ecosystem": "gradle",
+    "bytes": 1430
+   },
+   {
+    "path": "test/acceptance/testdata/gcs-sdk/go/go.mod",
+    "kind": "dep",
+    "blob_sha": "37807d3d1e64d1b712ae8dc84388f9a2eec224c6",
+    "ecosystem": "go",
+    "bytes": 2758,
+    "names": [
+     "cloud.google.com/go/storage",
+     "google.golang.org/api"
+    ],
+    "dev": [
+     "cel.dev/expr",
+     "cloud.google.com/go",
+     "cloud.google.com/go/auth",
+     "cloud.google.com/go/auth/oauth2adapt",
+     "cloud.google.com/go/compute/metadata",
+     "cloud.google.com/go/iam",
+     "cloud.google.com/go/monitoring",
+     "github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp",
+     "github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/metric",
+     "github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping",
+     "github.com/cespare/xxhash/v2",
+     "github.com/cncf/xds/go",
+     "github.com/envoyproxy/go-control-plane/envoy",
+     "github.com/envoyproxy/protoc-gen-validate",
+     "github.com/felixge/httpsnoop",
+     "github.com/go-jose/go-jose/v4",
+     "github.com/go-logr/logr",
+     "github.com/go-logr/stdr",
+     "github.com/google/s2a-go",
+     "github.com/google/uuid",
+     "github.com/googleapis/enterprise-certificate-proxy",
+     "github.com/googleapis/gax-go/v2",
+     "github.com/planetscale/vtprotobuf",
+     "github.com/spiffe/go-spiffe/v2",
+     "go.opentelemetry.io/auto/sdk",
+     "go.opentelemetry.io/contrib/detectors/gcp",
+     "go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc",
+     "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp",
+     "go.opentelemetry.io/otel",
+     "go.opentelemetry.io/otel/metric",
+     "go.opentelemetry.io/otel/sdk",
+     "go.opentelemetry.io/otel/sdk/metric",
+     "go.opentelemetry.io/otel/trace",
+     "golang.org/x/crypto",
+     "golang.org/x/net",
+     "golang.org/x/oauth2",
+     "golang.org/x/sync",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "golang.org/x/time",
+     "google.golang.org/genproto",
+     "google.golang.org/genproto/googleapis/api",
+     "google.golang.org/genproto/googleapis/rpc",
+     "google.golang.org/grpc",
+     "google.golang.org/protobuf"
+    ]
+   },
+   {
+    "path": "test/acceptance/testdata/gcs-sdk/node/package.json",
+    "kind": "dep",
+    "blob_sha": "01e5322ed68a17b86f8bc50dab69b0f99e976555",
+    "ecosystem": "npm",
+    "bytes": 316,
+    "names": [
+     "@google-cloud/storage",
+     "google-auth-library"
+    ]
+   },
+   {
+    "path": "test/e2e/flutter-storage/e2e_native/android/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "2b3838c504a31e5986595cc894e3f00e884603c0",
+    "ecosystem": "gradle",
+    "bytes": 583
+   },
+   {
+    "path": "test/e2e/web-storage/apps/sveltekit/package.json",
+    "kind": "dep",
+    "blob_sha": "3ebe51c16f8b10b6863714534d0f4971a221e656",
+    "ecosystem": "npm",
+    "bytes": 606,
+    "names": [
+     "firebase"
+    ],
+    "dev": [
+     "@aruma/web",
+     "@sveltejs/adapter-node",
+     "@sveltejs/kit",
+     "@sveltejs/vite-plugin-svelte",
+     "svelte",
+     "vite"
+    ]
+   },
+   {
+    "path": "test/oracle/storage/capture/go-admin/go.mod",
+    "kind": "dep",
+    "blob_sha": "1818322f0a8a8c7303fa689120853b8d8fa7feee",
+    "ecosystem": "go",
+    "bytes": 3095,
+    "names": [
+     "cloud.google.com/go/storage",
+     "firebase.google.com/go/v4",
+     "google.golang.org/api"
+    ],
+    "dev": [
+     "cel.dev/expr",
+     "cloud.google.com/go",
+     "cloud.google.com/go/auth",
+     "cloud.google.com/go/auth/oauth2adapt",
+     "cloud.google.com/go/compute/metadata",
+     "cloud.google.com/go/firestore",
+     "cloud.google.com/go/iam",
+     "cloud.google.com/go/longrunning",
+     "cloud.google.com/go/monitoring",
+     "github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp",
+     "github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/metric",
+     "github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping",
+     "github.com/MicahParks/keyfunc",
+     "github.com/cespare/xxhash/v2",
+     "github.com/cncf/xds/go",
+     "github.com/envoyproxy/go-control-plane/envoy",
+     "github.com/envoyproxy/protoc-gen-validate",
+     "github.com/felixge/httpsnoop",
+     "github.com/go-jose/go-jose/v4",
+     "github.com/go-logr/logr",
+     "github.com/go-logr/stdr",
+     "github.com/golang-jwt/jwt/v4",
+     "github.com/golang/protobuf",
+     "github.com/google/s2a-go",
+     "github.com/google/uuid",
+     "github.com/googleapis/enterprise-certificate-proxy",
+     "github.com/googleapis/gax-go/v2",
+     "github.com/planetscale/vtprotobuf",
+     "github.com/spiffe/go-spiffe/v2",
+     "go.opentelemetry.io/auto/sdk",
+     "go.opentelemetry.io/contrib/detectors/gcp",
+     "go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc",
+     "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp",
+     "go.opentelemetry.io/otel",
+     "go.opentelemetry.io/otel/metric",
+     "go.opentelemetry.io/otel/sdk",
+     "go.opentelemetry.io/otel/sdk/metric",
+     "go.opentelemetry.io/otel/trace",
+     "golang.org/x/crypto",
+     "golang.org/x/net",
+     "golang.org/x/oauth2",
+     "golang.org/x/sync",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "golang.org/x/time",
+     "google.golang.org/appengine/v2",
+     "google.golang.org/genproto",
+     "google.golang.org/genproto/googleapis/api",
+     "google.golang.org/genproto/googleapis/rpc",
+     "google.golang.org/grpc",
+     "google.golang.org/protobuf"
+    ]
    },
    {
     "path": "Dockerfile",
@@ -13432,6 +14117,92 @@
     "docs/adr/0001-adapter-pattern.md",
     "tests/unit/test_greenhouse_adapter.py"
    ]
+  },
+  "fail_count": 0
+ },
+ "tianyin231/shiguang": {
+  "fn": "tianyin231/shiguang",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:48:01Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-11",
+  "stars": 3,
+  "tree": {
+   "sha": "8ba4dff33883eb4e9b4f2c7f68412b68a1e91777",
+   "etag": "W/\"613c763056c99db545a1a39193cc614013e42f184426444089649a8249b6452d\"",
+   "truncated": false,
+   "path_count": 69,
+   "matched": [
+    "package.json",
+    "Dockerfile",
+    "compose.yaml"
+   ]
+  },
+  "files": [
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "a95114afdd3f51c988b06894740646c9c0a37eff",
+    "ecosystem": "npm",
+    "bytes": 1497,
+    "names": [
+     "@xyflow/react",
+     "cropperjs",
+     "dotenv",
+     "express",
+     "ffmpeg-static",
+     "ffprobe-static",
+     "gifenc",
+     "gifuct-js",
+     "jszip",
+     "lucide-react",
+     "multer",
+     "react",
+     "react-dom",
+     "sharp",
+     "tsx",
+     "undici",
+     "zod",
+     "zustand"
+    ],
+    "dev": [
+     "@types/express",
+     "@types/multer",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@types/supertest",
+     "@vitejs/plugin-react",
+     "prettier",
+     "supertest",
+     "typescript",
+     "vite"
+    ]
+   },
+   {
+    "path": "Dockerfile",
+    "kind": "image",
+    "blob_sha": "e7b2c175a61b874e97e1128b213cc6b31e687a0c",
+    "bytes": 845,
+    "images": [
+     "node:22-bookworm-slim"
+    ]
+   },
+   {
+    "path": "compose.yaml",
+    "kind": "image",
+    "blob_sha": "f9548e689cc9607f56a923671aa5f81556a81644",
+    "bytes": 465
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
   },
   "fail_count": 0
  }

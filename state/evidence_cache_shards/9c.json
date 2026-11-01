@@ -7552,13 +7552,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:49:06Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:39:48Z",
   "default_branch": "otter",
   "pushed_at": "2025-12-02",
   "stars": 119,
   "tree": {
    "sha": "7e6112597371c3d885093ff1c78337ad097444fb",
-   "etag": "W/\"8e53423dc06465e59a3a1803b9d59db93470518bbc1fe6cbb905f69e4e1d805f\"",
+   "etag": "W/\"294400aeb847f64553e4d2e982ceb540120d2ed6efa2dd98a155d5c05553e69d\"",
    "truncated": false,
    "path_count": 2463,
    "matched": [
@@ -7574,6 +7575,12 @@
     "packages/server/customer-os-common-module/go.mod",
     "packages/server/customer-os-neo4j-repository/go.mod",
     "packages/server/customer-os-postgres-repository/go.mod",
+    "packages/server/customer-os-webhooks/go.mod",
+    "packages/server/enums/go.mod",
+    "packages/server/events-subscribers/go.mod",
+    "packages/server/inbox/go.mod",
+    "packages/server/mailsherpa-api/go.mod",
+    "packages/server/core/scripts/package.json",
     "deployment/neo4j-sidecar/Dockerfile",
     "packages/server/browser-automation-api/Dockerfile",
     "packages/server/mailsherpa-api/Dockerfile",
@@ -7591,7 +7598,18 @@
     ".github/workflows/customer-os-api-build.yml",
     ".github/workflows/customer-os-api-deploy.yml",
     ".github/workflows/customer-os-webhooks-build.yml",
-    ".github/workflows/customer-os-webhooks-deploy.yml"
+    ".github/workflows/customer-os-webhooks-deploy.yml",
+    ".github/workflows/enums-module.yml",
+    ".github/workflows/events-subscribers-build.yml",
+    ".github/workflows/events-subscribers-deploy.yml",
+    ".github/workflows/integrity-checker-build.yml",
+    ".github/workflows/integrity-checker-deploy.yml",
+    ".github/workflows/mailsherpa-build.yml",
+    ".github/workflows/pr-notification.yml",
+    ".github/workflows/release.yml",
+    ".github/workflows/test-common-module.yml",
+    ".github/workflows/upkeeper-build.yml",
+    ".github/workflows/upkeeper-deploy.yml"
    ]
   },
   "files": [
@@ -8724,6 +8742,398 @@
     ]
    },
    {
+    "path": "packages/server/customer-os-webhooks/go.mod",
+    "kind": "dep",
+    "blob_sha": "6ae169920724380c9f67cd05c8a2340b8d6a1071",
+    "ecosystem": "go",
+    "bytes": 8636,
+    "names": [
+     "github.com/caarlos0/env/v6",
+     "github.com/cenkalti/backoff/v4",
+     "github.com/coocood/freecache",
+     "github.com/customeros/customeros/packages/server/customer-os-common-module",
+     "github.com/customeros/customeros/packages/server/customer-os-neo4j-repository",
+     "github.com/customeros/customeros/packages/server/customer-os-postgres-repository",
+     "github.com/gin-contrib/cors",
+     "github.com/gin-contrib/zap",
+     "github.com/gin-gonic/gin",
+     "github.com/google/uuid",
+     "github.com/joho/godotenv",
+     "github.com/neo4j/neo4j-go-driver/v5",
+     "github.com/opentracing/opentracing-go",
+     "github.com/pkg/errors",
+     "github.com/prometheus/client_golang",
+     "github.com/sirupsen/logrus",
+     "github.com/stretchr/testify",
+     "google.golang.org/grpc",
+     "gorm.io/gorm"
+    ],
+    "dev": [
+     "cloud.google.com/go",
+     "cloud.google.com/go/ai",
+     "cloud.google.com/go/auth",
+     "cloud.google.com/go/auth/oauth2adapt",
+     "cloud.google.com/go/compute/metadata",
+     "cloud.google.com/go/longrunning",
+     "filippo.io/edwards25519",
+     "github.com/99designs/gqlgen",
+     "github.com/Boostport/mjml-go",
+     "github.com/BurntSushi/toml",
+     "github.com/PuerkitoBio/goquery",
+     "github.com/andybalholm/brotli",
+     "github.com/andybalholm/cascadia",
+     "github.com/araddon/dateparse",
+     "github.com/aws/aws-sdk-go",
+     "github.com/beorn7/perks",
+     "github.com/biter777/countries",
+     "github.com/bytedance/sonic",
+     "github.com/bytedance/sonic/loader",
+     "github.com/cespare/xxhash/v2",
+     "github.com/cloudflare/cloudflare-go",
+     "github.com/cloudwego/base64x",
+     "github.com/customeros/customeros/packages/server/enums",
+     "github.com/customeros/mailsherpa",
+     "github.com/davecgh/go-spew",
+     "github.com/dgrijalva/jwt-go",
+     "github.com/dustin/go-humanize",
+     "github.com/emersion/go-message",
+     "github.com/facebookgo/clock",
+     "github.com/felixge/httpsnoop",
+     "github.com/forPelevin/gomoji",
+     "github.com/gabriel-vasile/mimetype",
+     "github.com/gin-contrib/sse",
+     "github.com/go-logr/logr",
+     "github.com/go-logr/stdr",
+     "github.com/go-playground/locales",
+     "github.com/go-playground/universal-translator",
+     "github.com/go-playground/validator/v10",
+     "github.com/go-sql-driver/mysql",
+     "github.com/goccy/go-json",
+     "github.com/gogo/protobuf",
+     "github.com/golang/groupcache",
+     "github.com/golang/mock",
+     "github.com/google/generative-ai-go",
+     "github.com/google/go-querystring",
+     "github.com/google/s2a-go",
+     "github.com/googleapis/enterprise-certificate-proxy",
+     "github.com/googleapis/gax-go/v2",
+     "github.com/grpc-ecosystem/go-grpc-middleware",
+     "github.com/grpc-ecosystem/grpc-gateway/v2",
+     "github.com/h2non/filetype",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgx/v5",
+     "github.com/jackc/puddle/v2",
+     "github.com/jinzhu/inflection",
+     "github.com/jinzhu/now",
+     "github.com/jmespath/go-jmespath",
+     "github.com/jpillora/backoff",
+     "github.com/json-iterator/go",
+     "github.com/klauspost/compress",
+     "github.com/klauspost/cpuid/v2",
+     "github.com/leodido/go-urn",
+     "github.com/lib/pq",
+     "github.com/lucasepe/codename",
+     "github.com/matoous/go-nanoid/v2",
+     "github.com/mattn/go-isatty",
+     "github.com/miekg/dns",
+     "github.com/mitchellh/mapstructure",
+     "github.com/modern-go/concurrent",
+     "github.com/modern-go/reflect2",
+     "github.com/mrz1836/postmark",
+     "github.com/munnerz/goautoneg",
+     "github.com/nats-io/nats.go",
+     "github.com/nats-io/nkeys",
+     "github.com/nats-io/nuid",
+     "github.com/nexus-rpc/sdk-go",
+     "github.com/novuhq/go-novu",
+     "github.com/nyaruka/phonenumbers",
+     "github.com/opensearch-project/opensearch-go/v2"
+    ]
+   },
+   {
+    "path": "packages/server/enums/go.mod",
+    "kind": "dep",
+    "blob_sha": "90c0e3c932b013887b038bc1f0e029b018503ed4",
+    "ecosystem": "go",
+    "bytes": 73
+   },
+   {
+    "path": "packages/server/events-subscribers/go.mod",
+    "kind": "dep",
+    "blob_sha": "5cf6fcf848e91f5b986b973139caf4a3d97c25ea",
+    "ecosystem": "go",
+    "bytes": 8326,
+    "names": [
+     "github.com/caarlos0/env/v6",
+     "github.com/customeros/customeros/packages/server/customer-os-common-module",
+     "github.com/customeros/customeros/packages/server/customer-os-neo4j-repository",
+     "github.com/customeros/customeros/packages/server/customer-os-postgres-repository",
+     "github.com/joho/godotenv",
+     "github.com/mitchellh/mapstructure",
+     "github.com/neo4j/neo4j-go-driver/v5",
+     "github.com/opentracing/opentracing-go",
+     "github.com/pkg/errors"
+    ],
+    "dev": [
+     "cloud.google.com/go",
+     "cloud.google.com/go/ai",
+     "cloud.google.com/go/auth",
+     "cloud.google.com/go/auth/oauth2adapt",
+     "cloud.google.com/go/compute/metadata",
+     "cloud.google.com/go/longrunning",
+     "filippo.io/edwards25519",
+     "github.com/99designs/gqlgen",
+     "github.com/Boostport/mjml-go",
+     "github.com/BurntSushi/toml",
+     "github.com/PuerkitoBio/goquery",
+     "github.com/andybalholm/brotli",
+     "github.com/andybalholm/cascadia",
+     "github.com/araddon/dateparse",
+     "github.com/aws/aws-sdk-go",
+     "github.com/biter777/countries",
+     "github.com/bytedance/sonic",
+     "github.com/bytedance/sonic/loader",
+     "github.com/cenkalti/backoff/v4",
+     "github.com/cespare/xxhash/v2",
+     "github.com/cloudflare/cloudflare-go",
+     "github.com/cloudwego/base64x",
+     "github.com/coocood/freecache",
+     "github.com/customeros/customeros/packages/server/enums",
+     "github.com/customeros/mailsherpa",
+     "github.com/davecgh/go-spew",
+     "github.com/dgrijalva/jwt-go",
+     "github.com/dustin/go-humanize",
+     "github.com/emersion/go-message",
+     "github.com/facebookgo/clock",
+     "github.com/felixge/httpsnoop",
+     "github.com/forPelevin/gomoji",
+     "github.com/gabriel-vasile/mimetype",
+     "github.com/gin-contrib/sse",
+     "github.com/gin-gonic/gin",
+     "github.com/go-logr/logr",
+     "github.com/go-logr/stdr",
+     "github.com/go-playground/locales",
+     "github.com/go-playground/universal-translator",
+     "github.com/go-playground/validator/v10",
+     "github.com/go-sql-driver/mysql",
+     "github.com/goccy/go-json",
+     "github.com/gogo/protobuf",
+     "github.com/golang/groupcache",
+     "github.com/golang/mock",
+     "github.com/google/generative-ai-go",
+     "github.com/google/go-querystring",
+     "github.com/google/s2a-go",
+     "github.com/google/uuid",
+     "github.com/googleapis/enterprise-certificate-proxy",
+     "github.com/googleapis/gax-go/v2",
+     "github.com/grpc-ecosystem/go-grpc-middleware",
+     "github.com/grpc-ecosystem/grpc-gateway/v2",
+     "github.com/h2non/filetype",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgx/v5",
+     "github.com/jackc/puddle/v2",
+     "github.com/jinzhu/inflection",
+     "github.com/jinzhu/now",
+     "github.com/jmespath/go-jmespath",
+     "github.com/jpillora/backoff",
+     "github.com/json-iterator/go",
+     "github.com/klauspost/compress",
+     "github.com/klauspost/cpuid/v2",
+     "github.com/leodido/go-urn",
+     "github.com/lib/pq",
+     "github.com/lucasepe/codename",
+     "github.com/matoous/go-nanoid/v2",
+     "github.com/mattn/go-isatty",
+     "github.com/miekg/dns",
+     "github.com/modern-go/concurrent",
+     "github.com/modern-go/reflect2",
+     "github.com/mrz1836/postmark",
+     "github.com/nats-io/nats.go",
+     "github.com/nats-io/nkeys",
+     "github.com/nats-io/nuid",
+     "github.com/nexus-rpc/sdk-go",
+     "github.com/novuhq/go-novu",
+     "github.com/nyaruka/phonenumbers"
+    ]
+   },
+   {
+    "path": "packages/server/inbox/go.mod",
+    "kind": "dep",
+    "blob_sha": "381cfce7173a6aa334ff367992185ab51423f49c",
+    "ecosystem": "go",
+    "bytes": 1943,
+    "names": [
+     "github.com/caarlos0/env/v6",
+     "github.com/joho/godotenv",
+     "github.com/nats-io/nats.go",
+     "github.com/opentracing/opentracing-go",
+     "go.opentelemetry.io/otel",
+     "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc",
+     "go.opentelemetry.io/otel/sdk",
+     "go.opentelemetry.io/otel/trace",
+     "go.uber.org/zap",
+     "gorm.io/driver/postgres",
+     "gorm.io/gorm"
+    ],
+    "dev": [
+     "github.com/cenkalti/backoff/v4",
+     "github.com/go-logr/logr",
+     "github.com/go-logr/stdr",
+     "github.com/google/uuid",
+     "github.com/grpc-ecosystem/grpc-gateway/v2",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgx/v5",
+     "github.com/jackc/puddle/v2",
+     "github.com/jinzhu/inflection",
+     "github.com/jinzhu/now",
+     "github.com/klauspost/compress",
+     "github.com/nats-io/nkeys",
+     "github.com/nats-io/nuid",
+     "go.opentelemetry.io/auto/sdk",
+     "go.opentelemetry.io/otel/exporters/otlp/otlptrace",
+     "go.opentelemetry.io/otel/metric",
+     "go.opentelemetry.io/proto/otlp",
+     "go.uber.org/multierr",
+     "golang.org/x/crypto",
+     "golang.org/x/net",
+     "golang.org/x/sync",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "google.golang.org/genproto/googleapis/api",
+     "google.golang.org/genproto/googleapis/rpc",
+     "google.golang.org/grpc",
+     "google.golang.org/protobuf"
+    ]
+   },
+   {
+    "path": "packages/server/mailsherpa-api/go.mod",
+    "kind": "dep",
+    "blob_sha": "0d75684e240c08c53e3c5f0fcbaaeca2907d75d9",
+    "ecosystem": "go",
+    "bytes": 6177,
+    "names": [
+     "github.com/caarlos0/env/v6",
+     "github.com/customeros/customeros/packages/server/customer-os-common-module",
+     "github.com/customeros/customeros/packages/server/customer-os-postgres-repository",
+     "github.com/customeros/mailsherpa",
+     "github.com/gin-contrib/cors",
+     "github.com/gin-gonic/gin",
+     "github.com/joho/godotenv",
+     "github.com/opentracing/opentracing-go",
+     "github.com/pkg/errors",
+     "github.com/sirupsen/logrus",
+     "github.com/smartystreets/smartystreets-go-sdk",
+     "golang.org/x/net"
+    ],
+    "dev": [
+     "cloud.google.com/go/auth",
+     "cloud.google.com/go/auth/oauth2adapt",
+     "cloud.google.com/go/compute/metadata",
+     "filippo.io/edwards25519",
+     "github.com/99designs/gqlgen",
+     "github.com/BurntSushi/toml",
+     "github.com/bytedance/sonic",
+     "github.com/bytedance/sonic/loader",
+     "github.com/cenkalti/backoff/v4",
+     "github.com/cespare/xxhash/v2",
+     "github.com/cloudwego/base64x",
+     "github.com/coocood/freecache",
+     "github.com/customeros/customeros/packages/server/customer-os-neo4j-repository",
+     "github.com/customeros/customeros/packages/server/enums",
+     "github.com/felixge/httpsnoop",
+     "github.com/forPelevin/gomoji",
+     "github.com/gabriel-vasile/mimetype",
+     "github.com/gin-contrib/sse",
+     "github.com/go-logr/logr",
+     "github.com/go-logr/stdr",
+     "github.com/go-playground/locales",
+     "github.com/go-playground/universal-translator",
+     "github.com/go-playground/validator/v10",
+     "github.com/go-sql-driver/mysql",
+     "github.com/goccy/go-json",
+     "github.com/golang/groupcache",
+     "github.com/google/s2a-go",
+     "github.com/google/uuid",
+     "github.com/googleapis/enterprise-certificate-proxy",
+     "github.com/googleapis/gax-go/v2",
+     "github.com/grpc-ecosystem/grpc-gateway/v2",
+     "github.com/h2non/filetype",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgx/v5",
+     "github.com/jackc/puddle/v2",
+     "github.com/jinzhu/inflection",
+     "github.com/jinzhu/now",
+     "github.com/jpillora/backoff",
+     "github.com/json-iterator/go",
+     "github.com/klauspost/compress",
+     "github.com/klauspost/cpuid/v2",
+     "github.com/leodido/go-urn",
+     "github.com/lib/pq",
+     "github.com/lucasepe/codename",
+     "github.com/matoous/go-nanoid/v2",
+     "github.com/mattn/go-isatty",
+     "github.com/miekg/dns",
+     "github.com/mitchellh/mapstructure",
+     "github.com/modern-go/concurrent",
+     "github.com/modern-go/reflect2",
+     "github.com/nats-io/nats.go",
+     "github.com/nats-io/nkeys",
+     "github.com/nats-io/nuid",
+     "github.com/neo4j/neo4j-go-driver/v5",
+     "github.com/nyaruka/phonenumbers",
+     "github.com/pelletier/go-toml/v2",
+     "github.com/rdegges/go-ipify",
+     "github.com/rivo/uniseg",
+     "github.com/sosodev/duration",
+     "github.com/twitchyliquid64/golang-asm",
+     "github.com/uber/jaeger-client-go",
+     "github.com/uber/jaeger-lib",
+     "github.com/ugorji/go/codec",
+     "github.com/vektah/gqlparser/v2",
+     "go.opencensus.io",
+     "go.opentelemetry.io/auto/sdk",
+     "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp",
+     "go.opentelemetry.io/otel",
+     "go.opentelemetry.io/otel/exporters/otlp/otlptrace",
+     "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp",
+     "go.opentelemetry.io/otel/metric",
+     "go.opentelemetry.io/otel/sdk",
+     "go.opentelemetry.io/otel/trace",
+     "go.opentelemetry.io/proto/otlp",
+     "go.uber.org/atomic",
+     "go.uber.org/multierr",
+     "go.uber.org/zap",
+     "golang.org/x/arch",
+     "golang.org/x/crypto"
+    ]
+   },
+   {
+    "path": "packages/server/core/scripts/package.json",
+    "kind": "dep",
+    "blob_sha": "b7455921a4eff6aaabf4e7e883c5efaa1d3f7d12",
+    "ecosystem": "npm",
+    "bytes": 635,
+    "names": [
+     "@lexical/headless",
+     "@lexical/html",
+     "@lexical/link",
+     "@lexical/react",
+     "@lexical/rich-text",
+     "@lexical/yjs",
+     "lexical",
+     "y-protocols",
+     "yjs",
+     "typescript"
+    ],
+    "dev": [
+     "@types/bun"
+    ]
+   },
+   {
     "path": "deployment/neo4j-sidecar/Dockerfile",
     "kind": "image",
     "blob_sha": "2e247958fc6da8eec45761adaef56fbe5f4a83ae",
@@ -8840,6 +9250,72 @@
     "kind": "ci",
     "blob_sha": "ae804cd0f740e13b67c2c8ef41c5f64b8be23f22",
     "bytes": 2075
+   },
+   {
+    "path": ".github/workflows/enums-module.yml",
+    "kind": "ci",
+    "blob_sha": "4912064bb03f599df6a31895b5d5fe64f552fa15",
+    "bytes": 1352
+   },
+   {
+    "path": ".github/workflows/events-subscribers-build.yml",
+    "kind": "ci",
+    "blob_sha": "bc5629d331d0b23bd86cf183db1c40ae74f792f8",
+    "bytes": 828
+   },
+   {
+    "path": ".github/workflows/events-subscribers-deploy.yml",
+    "kind": "ci",
+    "blob_sha": "3a5879ce66edee069ab593f378e29b15a571fe0d",
+    "bytes": 2068
+   },
+   {
+    "path": ".github/workflows/integrity-checker-build.yml",
+    "kind": "ci",
+    "blob_sha": "1c298ec216287056c153df364c21992fd4eff6f2",
+    "bytes": 825
+   },
+   {
+    "path": ".github/workflows/integrity-checker-deploy.yml",
+    "kind": "ci",
+    "blob_sha": "24acfacc1b41d83a541eba69cab33056caacfa54",
+    "bytes": 2064
+   },
+   {
+    "path": ".github/workflows/mailsherpa-build.yml",
+    "kind": "ci",
+    "blob_sha": "2d4c7ee962dc06e1668753ce579ec31e6d457263",
+    "bytes": 758
+   },
+   {
+    "path": ".github/workflows/pr-notification.yml",
+    "kind": "ci",
+    "blob_sha": "7fb49e6951454841eaaf960f20217b6d1eeb1413",
+    "bytes": 887
+   },
+   {
+    "path": ".github/workflows/release.yml",
+    "kind": "ci",
+    "blob_sha": "a8c01b552a9caf6908f89fdf8e252dab1a1e6480",
+    "bytes": 1082
+   },
+   {
+    "path": ".github/workflows/test-common-module.yml",
+    "kind": "ci",
+    "blob_sha": "b1f37adfe7eb3775eb6f4c6e5a2d68f12c1a1d8f",
+    "bytes": 3319
+   },
+   {
+    "path": ".github/workflows/upkeeper-build.yml",
+    "kind": "ci",
+    "blob_sha": "c11c20a9f037441dd96545251352e3c4dcc42311",
+    "bytes": 938
+   },
+   {
+    "path": ".github/workflows/upkeeper-deploy.yml",
+    "kind": "ci",
+    "blob_sha": "a74ba32d9af8c29dd3475ef516f68754f10ddd56",
+    "bytes": 2062
    }
   ],
   "clues": {
@@ -9619,13 +10095,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:15:37Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:55:07Z",
   "default_branch": "master",
   "pushed_at": "2023-09-21",
   "stars": 50,
   "tree": {
    "sha": "80b748597df3f723337e6b8b7d9dbb2ec0e5960d",
-   "etag": "W/\"2a73e6a8016b44fcccf34eda972b7f90d1b370691336c45636642b9f4fe1f0a5\"",
+   "etag": "W/\"5c067f20aaf8c3bc4e07a024a84591ae101339ea55c92708938c4c01eacc3aa5\"",
    "truncated": false,
    "path_count": 7013,
    "matched": [
@@ -9641,6 +10118,54 @@
     "web/src/vendor/egulias/email-validator/composer.json",
     "web/src/vendor/erusev/parsedown/composer.json",
     "web/src/vendor/fideloper/proxy/composer.json",
+    "web/src/vendor/filp/whoops/composer.json",
+    "web/src/vendor/fzaninotto/faker/composer.json",
+    "web/src/vendor/hamcrest/hamcrest-php/composer.json",
+    "web/src/vendor/jakub-onderka/php-console-color/composer.json",
+    "web/src/vendor/jakub-onderka/php-console-highlighter/composer.json",
+    "web/src/vendor/laravel/framework/composer.json",
+    "web/src/vendor/laravel/tinker/composer.json",
+    "web/src/vendor/league/flysystem/composer.json",
+    "web/src/vendor/maximebf/debugbar/composer.json",
+    "web/src/vendor/mockery/mockery/composer.json",
+    "web/src/vendor/monolog/monolog/composer.json",
+    "web/src/vendor/myclabs/deep-copy/composer.json",
+    "web/src/vendor/nesbot/carbon/composer.json",
+    "web/src/vendor/nikic/php-parser/composer.json",
+    "web/src/vendor/nunomaduro/collision/composer.json",
+    "web/src/vendor/paragonie/random_compat/composer.json",
+    "web/src/vendor/phar-io/manifest/composer.json",
+    "web/src/vendor/phar-io/version/composer.json",
+    "web/src/vendor/phpdocumentor/reflection-common/composer.json",
+    "web/src/vendor/phpdocumentor/reflection-docblock/composer.json",
+    "web/src/vendor/phpdocumentor/type-resolver/composer.json",
+    "web/src/vendor/phpspec/prophecy/composer.json",
+    "web/src/vendor/phpunit/php-code-coverage/composer.json",
+    "web/src/vendor/phpunit/php-file-iterator/composer.json",
+    "web/src/vendor/phpunit/php-text-template/composer.json",
+    "web/src/vendor/phpunit/php-timer/composer.json",
+    "web/src/vendor/phpunit/php-token-stream/composer.json",
+    "web/src/vendor/phpunit/phpunit-mock-objects/composer.json",
+    "web/src/vendor/phpunit/phpunit/composer.json",
+    "web/src/vendor/psr/container/composer.json",
+    "web/src/vendor/psr/log/composer.json",
+    "web/src/vendor/psr/simple-cache/composer.json",
+    "web/src/vendor/psy/psysh/composer.json",
+    "web/src/vendor/ramsey/uuid/composer.json",
+    "web/src/vendor/sebastian/code-unit-reverse-lookup/composer.json",
+    "web/src/vendor/sebastian/comparator/composer.json",
+    "web/src/vendor/sebastian/diff/composer.json",
+    "web/src/vendor/sebastian/environment/composer.json",
+    "web/src/vendor/sebastian/exporter/composer.json",
+    "web/src/vendor/sebastian/global-state/composer.json",
+    "web/src/vendor/sebastian/object-enumerator/composer.json",
+    "web/src/vendor/sebastian/object-reflector/composer.json",
+    "web/src/vendor/sebastian/recursion-context/composer.json",
+    "web/src/vendor/sebastian/resource-operations/composer.json",
+    "web/src/vendor/sebastian/version/composer.json",
+    "web/src/vendor/swiftmailer/swiftmailer/composer.json",
+    "web/src/vendor/symfony/console/composer.json",
+    "web/src/vendor/symfony/css-selector/composer.json",
     "docker-compose.yml",
     "freeradius/Dockerfile",
     "php/Dockerfile",
@@ -9832,6 +10357,763 @@
     ]
    },
    {
+    "path": "web/src/vendor/filp/whoops/composer.json",
+    "kind": "dep",
+    "blob_sha": "0a4dca4be17ef1dcc455e8458156f09c98d59224",
+    "ecosystem": "composer",
+    "bytes": 1117,
+    "names": [
+     "php",
+     "psr/log"
+    ],
+    "dev": [
+     "phpunit/phpunit",
+     "mockery/mockery",
+     "symfony/var-dumper"
+    ]
+   },
+   {
+    "path": "web/src/vendor/fzaninotto/faker/composer.json",
+    "kind": "dep",
+    "blob_sha": "d3bfd6c698ef16b414da48d790eeb577a232e0cf",
+    "ecosystem": "composer",
+    "bytes": 773,
+    "names": [
+     "php"
+    ],
+    "dev": [
+     "phpunit/phpunit",
+     "squizlabs/php_codesniffer",
+     "ext-intl"
+    ]
+   },
+   {
+    "path": "web/src/vendor/hamcrest/hamcrest-php/composer.json",
+    "kind": "dep",
+    "blob_sha": "5349f5fda9f28eec6ef3d2ed4cf0afe81a1e6590",
+    "ecosystem": "composer",
+    "bytes": 666,
+    "names": [
+     "php"
+    ],
+    "dev": [
+     "satooshi/php-coveralls",
+     "phpunit/php-file-iterator",
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/jakub-onderka/php-console-color/composer.json",
+    "kind": "dep",
+    "blob_sha": "0721abca1823b81df270babbf72a1417f7a7ba52",
+    "ecosystem": "composer",
+    "bytes": 618,
+    "names": [
+     "php"
+    ],
+    "dev": [
+     "phpunit/phpunit",
+     "jakub-onderka/php-parallel-lint",
+     "jakub-onderka/php-var-dump-check",
+     "squizlabs/php_codesniffer",
+     "jakub-onderka/php-code-style"
+    ]
+   },
+   {
+    "path": "web/src/vendor/jakub-onderka/php-console-highlighter/composer.json",
+    "kind": "dep",
+    "blob_sha": "bd2f47a28b058dbe0534b99acd79f103ffe56a12",
+    "ecosystem": "composer",
+    "bytes": 713,
+    "names": [
+     "php",
+     "jakub-onderka/php-console-color"
+    ],
+    "dev": [
+     "phpunit/phpunit",
+     "jakub-onderka/php-parallel-lint",
+     "jakub-onderka/php-var-dump-check",
+     "squizlabs/php_codesniffer",
+     "jakub-onderka/php-code-style"
+    ]
+   },
+   {
+    "path": "web/src/vendor/laravel/framework/composer.json",
+    "kind": "dep",
+    "blob_sha": "2942e7a4eb391d461895bfe460246b001399b619",
+    "ecosystem": "composer",
+    "bytes": 5442,
+    "names": [
+     "php",
+     "ext-mbstring",
+     "ext-openssl",
+     "doctrine/inflector",
+     "dragonmantank/cron-expression",
+     "erusev/parsedown",
+     "league/flysystem",
+     "monolog/monolog",
+     "nesbot/carbon",
+     "psr/container",
+     "psr/simple-cache",
+     "ramsey/uuid",
+     "swiftmailer/swiftmailer",
+     "symfony/console",
+     "symfony/debug",
+     "symfony/finder",
+     "symfony/http-foundation",
+     "symfony/http-kernel",
+     "symfony/process",
+     "symfony/routing",
+     "symfony/var-dumper",
+     "tijsverkoyen/css-to-inline-styles",
+     "vlucas/phpdotenv"
+    ],
+    "dev": [
+     "aws/aws-sdk-php",
+     "doctrine/dbal",
+     "filp/whoops",
+     "league/flysystem-cached-adapter",
+     "mockery/mockery",
+     "moontoast/math",
+     "orchestra/testbench-core",
+     "pda/pheanstalk",
+     "phpunit/phpunit",
+     "predis/predis",
+     "symfony/css-selector",
+     "symfony/dom-crawler"
+    ]
+   },
+   {
+    "path": "web/src/vendor/laravel/tinker/composer.json",
+    "kind": "dep",
+    "blob_sha": "23f6b154fa09fc5dd4a848c63633e407ff410e4f",
+    "ecosystem": "composer",
+    "bytes": 1172,
+    "names": [
+     "php",
+     "illuminate/console",
+     "illuminate/contracts",
+     "illuminate/support",
+     "psy/psysh",
+     "symfony/var-dumper"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/league/flysystem/composer.json",
+    "kind": "dep",
+    "blob_sha": "6fc135c901da47af65d4751ed63c68011251e7e3",
+    "ecosystem": "composer",
+    "bytes": 2266,
+    "names": [
+     "php"
+    ],
+    "dev": [
+     "ext-fileinfo",
+     "phpspec/phpspec",
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/maximebf/debugbar/composer.json",
+    "kind": "dep",
+    "blob_sha": "74bc13c415a6d386c8e580cc6372ceb22f5983f8",
+    "ecosystem": "composer",
+    "bytes": 1102,
+    "names": [
+     "php",
+     "psr/log",
+     "symfony/var-dumper"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/mockery/mockery/composer.json",
+    "kind": "dep",
+    "blob_sha": "12f23f6d0127ac9f0ade669ddb541f39537fa892",
+    "ecosystem": "composer",
+    "bytes": 1343,
+    "names": [
+     "php",
+     "lib-pcre",
+     "hamcrest/hamcrest-php"
+    ],
+    "dev": [
+     "phpunit/phpunit",
+     "phpdocumentor/phpdocumentor"
+    ]
+   },
+   {
+    "path": "web/src/vendor/monolog/monolog/composer.json",
+    "kind": "dep",
+    "blob_sha": "3b0c8805570f84b4e9e5f8db7d7b32a31708b84c",
+    "ecosystem": "composer",
+    "bytes": 2535,
+    "names": [
+     "php",
+     "psr/log"
+    ],
+    "dev": [
+     "phpunit/phpunit",
+     "graylog2/gelf-php",
+     "sentry/sentry",
+     "ruflin/elastica",
+     "doctrine/couchdb",
+     "aws/aws-sdk-php",
+     "php-amqplib/php-amqplib",
+     "swiftmailer/swiftmailer",
+     "php-console/php-console",
+     "phpunit/phpunit-mock-objects",
+     "jakub-onderka/php-parallel-lint"
+    ]
+   },
+   {
+    "path": "web/src/vendor/myclabs/deep-copy/composer.json",
+    "kind": "dep",
+    "blob_sha": "d5d3a779851a7c35784e4c2d41edc740c17d47fb",
+    "ecosystem": "composer",
+    "bytes": 784,
+    "names": [
+     "php"
+    ],
+    "dev": [
+     "doctrine/collections",
+     "doctrine/common",
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/nesbot/carbon/composer.json",
+    "kind": "dep",
+    "blob_sha": "7aa5db0c6c97dadedb6dd40cadcda476119fba97",
+    "ecosystem": "composer",
+    "bytes": 1434,
+    "names": [
+     "php",
+     "symfony/translation"
+    ],
+    "dev": [
+     "friendsofphp/php-cs-fixer",
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/nikic/php-parser/composer.json",
+    "kind": "dep",
+    "blob_sha": "7ae425ff76a3f3fad8684d52bfad5be054d145d3",
+    "ecosystem": "composer",
+    "bytes": 621,
+    "names": [
+     "php",
+     "ext-tokenizer"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/nunomaduro/collision/composer.json",
+    "kind": "dep",
+    "blob_sha": "97cff0c3fe11e4e3d94515446d484a5f4a6aa566",
+    "ecosystem": "composer",
+    "bytes": 1350,
+    "names": [
+     "php",
+     "filp/whoops",
+     "symfony/console",
+     "jakub-onderka/php-console-highlighter"
+    ],
+    "dev": [
+     "phpunit/phpunit",
+     "laravel/framework"
+    ]
+   },
+   {
+    "path": "web/src/vendor/paragonie/random_compat/composer.json",
+    "kind": "dep",
+    "blob_sha": "1c5978c6fbce9c3466a223748b85bc05a9682221",
+    "ecosystem": "composer",
+    "bytes": 897,
+    "names": [
+     "php"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/phar-io/manifest/composer.json",
+    "kind": "dep",
+    "blob_sha": "832134d646479b0959478ad457394f94c095fb3d",
+    "ecosystem": "composer",
+    "bytes": 849,
+    "names": [
+     "php",
+     "ext-dom",
+     "ext-phar",
+     "phar-io/version"
+    ]
+   },
+   {
+    "path": "web/src/vendor/phar-io/version/composer.json",
+    "kind": "dep",
+    "blob_sha": "891e8b174d9577b072018299db23ad26bd57ed34",
+    "ecosystem": "composer",
+    "bytes": 673,
+    "names": [
+     "php"
+    ]
+   },
+   {
+    "path": "web/src/vendor/phpdocumentor/reflection-common/composer.json",
+    "kind": "dep",
+    "blob_sha": "90eee0f083e1e9251d79e105deb1194f6e479c8a",
+    "ecosystem": "composer",
+    "bytes": 731,
+    "names": [
+     "php"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/phpdocumentor/reflection-docblock/composer.json",
+    "kind": "dep",
+    "blob_sha": "e3dc38a9e2e393e68a3775d76dd5ba8d5bc8c1fb",
+    "ecosystem": "composer",
+    "bytes": 991,
+    "names": [
+     "php",
+     "phpdocumentor/reflection-common",
+     "phpdocumentor/type-resolver",
+     "webmozart/assert"
+    ],
+    "dev": [
+     "mockery/mockery",
+     "phpunit/phpunit",
+     "doctrine/instantiator"
+    ]
+   },
+   {
+    "path": "web/src/vendor/phpdocumentor/type-resolver/composer.json",
+    "kind": "dep",
+    "blob_sha": "82ead1564ce2c7cac1333ec0f6837370cd3b3fbf",
+    "ecosystem": "composer",
+    "bytes": 673,
+    "names": [
+     "php",
+     "phpdocumentor/reflection-common"
+    ],
+    "dev": [
+     "phpunit/phpunit",
+     "mockery/mockery"
+    ]
+   },
+   {
+    "path": "web/src/vendor/phpspec/prophecy/composer.json",
+    "kind": "dep",
+    "blob_sha": "bb3d3726aa8cdd84901decd029141a1add1a5ab5",
+    "ecosystem": "composer",
+    "bytes": 1356,
+    "names": [
+     "php",
+     "phpdocumentor/reflection-docblock",
+     "sebastian/comparator",
+     "doctrine/instantiator",
+     "sebastian/recursion-context"
+    ],
+    "dev": [
+     "phpspec/phpspec",
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/phpunit/php-code-coverage/composer.json",
+    "kind": "dep",
+    "blob_sha": "e94f788437b947d6889b0d3a3dcceffe10bb185a",
+    "ecosystem": "composer",
+    "bytes": 1462,
+    "names": [
+     "php",
+     "ext-dom",
+     "ext-xmlwriter",
+     "phpunit/php-file-iterator",
+     "phpunit/php-token-stream",
+     "phpunit/php-text-template",
+     "sebastian/code-unit-reverse-lookup",
+     "sebastian/environment",
+     "sebastian/version",
+     "theseer/tokenizer"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/phpunit/php-file-iterator/composer.json",
+    "kind": "dep",
+    "blob_sha": "c6527943f10ecfe524bd40eda5c54ad7fb2c235c",
+    "ecosystem": "composer",
+    "bytes": 878,
+    "names": [
+     "php"
+    ]
+   },
+   {
+    "path": "web/src/vendor/phpunit/php-text-template/composer.json",
+    "kind": "dep",
+    "blob_sha": "a5779c8357e6c091bfc8f258bc27b4416c425e7e",
+    "ecosystem": "composer",
+    "bytes": 653,
+    "names": [
+     "php"
+    ]
+   },
+   {
+    "path": "web/src/vendor/phpunit/php-timer/composer.json",
+    "kind": "dep",
+    "blob_sha": "f2ed136b36f31b8e3f5918c2ee22b4917be559d2",
+    "ecosystem": "composer",
+    "bytes": 897,
+    "names": [
+     "php"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/phpunit/php-token-stream/composer.json",
+    "kind": "dep",
+    "blob_sha": "66cd03cf11f6273d532876cd0da0d2d45ddd880e",
+    "ecosystem": "composer",
+    "bytes": 926,
+    "names": [
+     "php",
+     "ext-tokenizer"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/phpunit/phpunit-mock-objects/composer.json",
+    "kind": "dep",
+    "blob_sha": "dce29c584908608c341bee656a1d322a3e045ea7",
+    "ecosystem": "composer",
+    "bytes": 1220,
+    "names": [
+     "php",
+     "phpunit/php-text-template",
+     "doctrine/instantiator",
+     "sebastian/exporter"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/phpunit/phpunit/composer.json",
+    "kind": "dep",
+    "blob_sha": "48b15a6f1ee6e2b4a8b353cba84d37231280f470",
+    "ecosystem": "composer",
+    "bytes": 2251,
+    "names": [
+     "php",
+     "ext-dom",
+     "ext-json",
+     "ext-libxml",
+     "ext-mbstring",
+     "ext-xml",
+     "myclabs/deep-copy",
+     "phar-io/manifest",
+     "phar-io/version",
+     "phpspec/prophecy",
+     "phpunit/php-code-coverage",
+     "phpunit/php-file-iterator",
+     "phpunit/php-text-template",
+     "phpunit/php-timer",
+     "phpunit/phpunit-mock-objects",
+     "sebastian/comparator",
+     "sebastian/diff",
+     "sebastian/environment",
+     "sebastian/exporter",
+     "sebastian/global-state",
+     "sebastian/object-enumerator",
+     "sebastian/resource-operations",
+     "sebastian/version"
+    ],
+    "dev": [
+     "ext-PDO"
+    ]
+   },
+   {
+    "path": "web/src/vendor/psr/container/composer.json",
+    "kind": "dep",
+    "blob_sha": "b8ee01265dee64bc8b911a6eece972353b7db2f3",
+    "ecosystem": "composer",
+    "bytes": 654,
+    "names": [
+     "php"
+    ]
+   },
+   {
+    "path": "web/src/vendor/psr/log/composer.json",
+    "kind": "dep",
+    "blob_sha": "87934d707e7a37325a0ec6afe4b63aaa4ca6337c",
+    "ecosystem": "composer",
+    "bytes": 561,
+    "names": [
+     "php"
+    ]
+   },
+   {
+    "path": "web/src/vendor/psr/simple-cache/composer.json",
+    "kind": "dep",
+    "blob_sha": "2978fa559a7e3863ab6f511e67e6c0b29cb34fb6",
+    "ecosystem": "composer",
+    "bytes": 552,
+    "names": [
+     "php"
+    ]
+   },
+   {
+    "path": "web/src/vendor/psy/psysh/composer.json",
+    "kind": "dep",
+    "blob_sha": "3e169be91fc31d5658766850829fc3e2d909ccb7",
+    "ecosystem": "composer",
+    "bytes": 1745,
+    "names": [
+     "php",
+     "symfony/console",
+     "symfony/var-dumper",
+     "nikic/php-parser",
+     "dnoegel/php-xdg-base-dir",
+     "jakub-onderka/php-console-highlighter"
+    ],
+    "dev": [
+     "phpunit/phpunit",
+     "hoa/console",
+     "bamarni/composer-bin-plugin"
+    ]
+   },
+   {
+    "path": "web/src/vendor/ramsey/uuid/composer.json",
+    "kind": "dep",
+    "blob_sha": "ac842c8da7261bf9e1c6330b822027ebe1203b49",
+    "ecosystem": "composer",
+    "bytes": 2640,
+    "names": [
+     "php",
+     "paragonie/random_compat"
+    ],
+    "dev": [
+     "moontoast/math",
+     "ircmaxell/random-lib",
+     "phpunit/phpunit",
+     "squizlabs/php_codesniffer",
+     "jakub-onderka/php-parallel-lint",
+     "mockery/mockery",
+     "goaop/framework",
+     "doctrine/annotations",
+     "codeception/aspect-mock",
+     "php-mock/php-mock-phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/sebastian/code-unit-reverse-lookup/composer.json",
+    "kind": "dep",
+    "blob_sha": "b9a241923bdbdec33966dba76c7e777f8000f084",
+    "ecosystem": "composer",
+    "bytes": 674,
+    "names": [
+     "php"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/sebastian/comparator/composer.json",
+    "kind": "dep",
+    "blob_sha": "e0658bc268a81d9b36028ff7cd8775be35ff95a3",
+    "ecosystem": "composer",
+    "bytes": 1273,
+    "names": [
+     "php",
+     "sebastian/diff",
+     "sebastian/exporter"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/sebastian/diff/composer.json",
+    "kind": "dep",
+    "blob_sha": "51b0083e3042c6fc3df33f6e9c83c53385fba6c9",
+    "ecosystem": "composer",
+    "bytes": 901,
+    "names": [
+     "php"
+    ],
+    "dev": [
+     "phpunit/phpunit",
+     "symfony/process"
+    ]
+   },
+   {
+    "path": "web/src/vendor/sebastian/environment/composer.json",
+    "kind": "dep",
+    "blob_sha": "3086774cd14bd170cc734b901302211ec5579ffb",
+    "ecosystem": "composer",
+    "bytes": 705,
+    "names": [
+     "php"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/sebastian/exporter/composer.json",
+    "kind": "dep",
+    "blob_sha": "33fc5bd0aeaa1a52867c7a64e8355b3c090578c8",
+    "ecosystem": "composer",
+    "bytes": 1159,
+    "names": [
+     "php",
+     "sebastian/recursion-context"
+    ],
+    "dev": [
+     "phpunit/phpunit",
+     "ext-mbstring"
+    ]
+   },
+   {
+    "path": "web/src/vendor/sebastian/global-state/composer.json",
+    "kind": "dep",
+    "blob_sha": "8f7edb3ff19f67bd4e3d103a4cdee0829be66687",
+    "ecosystem": "composer",
+    "bytes": 857,
+    "names": [
+     "php"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/sebastian/object-enumerator/composer.json",
+    "kind": "dep",
+    "blob_sha": "7b7d1585e1c6771be31b4bc4edbec75b97396646",
+    "ecosystem": "composer",
+    "bytes": 851,
+    "names": [
+     "php",
+     "sebastian/object-reflector",
+     "sebastian/recursion-context"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/sebastian/object-reflector/composer.json",
+    "kind": "dep",
+    "blob_sha": "88caead3e09950b195e0b0be7fee8234ff5ee8d8",
+    "ecosystem": "composer",
+    "bytes": 751,
+    "names": [
+     "php"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/sebastian/recursion-context/composer.json",
+    "kind": "dep",
+    "blob_sha": "e6456a9df93cf5db098c4efe92f65c8edca58874",
+    "ecosystem": "composer",
+    "bytes": 841,
+    "names": [
+     "php"
+    ],
+    "dev": [
+     "phpunit/phpunit"
+    ]
+   },
+   {
+    "path": "web/src/vendor/sebastian/resource-operations/composer.json",
+    "kind": "dep",
+    "blob_sha": "da495d62e93dc5fb716b1b7aa84a0ea6e26987a4",
+    "ecosystem": "composer",
+    "bytes": 601,
+    "names": [
+     "php"
+    ]
+   },
+   {
+    "path": "web/src/vendor/sebastian/version/composer.json",
+    "kind": "dep",
+    "blob_sha": "3b87814c13176e802e8fd4dcce6aac4b6f7f1b99",
+    "ecosystem": "composer",
+    "bytes": 705,
+    "names": [
+     "php"
+    ]
+   },
+   {
+    "path": "web/src/vendor/swiftmailer/swiftmailer/composer.json",
+    "kind": "dep",
+    "blob_sha": "404398300675739862cfb831246bb790b437bb54",
+    "ecosystem": "composer",
+    "bytes": 864,
+    "names": [
+     "php",
+     "egulias/email-validator"
+    ],
+    "dev": [
+     "mockery/mockery",
+     "symfony/phpunit-bridge"
+    ]
+   },
+   {
+    "path": "web/src/vendor/symfony/console/composer.json",
+    "kind": "dep",
+    "blob_sha": "371818fc5fd17cf5aaefe6f10cc3a651478c0abf",
+    "ecosystem": "composer",
+    "bytes": 1369,
+    "names": [
+     "php",
+     "symfony/polyfill-mbstring"
+    ],
+    "dev": [
+     "symfony/config",
+     "symfony/event-dispatcher",
+     "symfony/dependency-injection",
+     "symfony/lock",
+     "symfony/process",
+     "psr/log"
+    ]
+   },
+   {
+    "path": "web/src/vendor/symfony/css-selector/composer.json",
+    "kind": "dep",
+    "blob_sha": "f0b165170e6594976d40d25895d8c3c3db07cf8c",
+    "ecosystem": "composer",
+    "bytes": 892,
+    "names": [
+     "php"
+    ]
+   },
+   {
     "path": "docker-compose.yml",
     "kind": "image",
     "blob_sha": "199d6c5924f09239f83ab888edd736fdcb19b094",
@@ -9936,7 +11218,62 @@
     "web/src/vendor/nunomaduro/collision/src/Adapters/Laravel/ExceptionHandler.php",
     "web/src/vendor/nunomaduro/collision/src/Adapters/Laravel/Inspector.php",
     "web/src/vendor/nunomaduro/collision/src/Adapters/Phpunit/Listener.php",
-    "web/src/vendor/phpunit/phpunit/src/Runner/Hook/TestListenerAdapter.php"
+    "web/src/vendor/phpunit/phpunit/src/Runner/Hook/TestListenerAdapter.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Database/Connectors/ConnectionFactory.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Database/Connectors/ConnectorInterface.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlConnector.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Database/Connectors/PostgresConnector.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Database/Connectors/SQLiteConnector.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Database/Connectors/SqlServerConnector.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Queue/Connectors/BeanstalkdConnector.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Queue/Connectors/ConnectorInterface.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Queue/Connectors/DatabaseConnector.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Queue/Connectors/NullConnector.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Queue/Connectors/RedisConnector.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Queue/Connectors/SqsConnector.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Queue/Connectors/SyncConnector.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Redis/Connectors/PhpRedisConnector.php",
+    "web/src/vendor/laravel/framework/src/Illuminate/Redis/Connectors/PredisConnector.php",
+    "web/src/vendor/mockery/mockery/library/Mockery/Adapter/Phpunit/MockeryPHPUnitIntegration.php",
+    "web/src/vendor/mockery/mockery/library/Mockery/Adapter/Phpunit/MockeryTestCase.php",
+    "web/src/vendor/mockery/mockery/library/Mockery/Adapter/Phpunit/TestListener.php",
+    "web/src/vendor/mockery/mockery/tests/Mockery/Adapter/Phpunit/MockeryPHPUnitIntegrationTest.php",
+    "web/src/vendor/mockery/mockery/tests/Mockery/Adapter/Phpunit/TestListenerTest.php",
+    "web/src/vendor/nunomaduro/collision/src/Contracts/Adapters/Phpunit/Listener.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/AntiFloodPlugin.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/BandwidthMonitorPlugin.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/DecoratorPlugin.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/ImpersonatePlugin.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/Logger.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/LoggerPlugin.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/MessageLogger.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/PopBeforeSmtpPlugin.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/RedirectingPlugin.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/Reporter.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/ReporterPlugin.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/Sleeper.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/ThrottlerPlugin.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/Timer.php",
+    "web/src/vendor/swiftmailer/swiftmailer/tests/unit/Swift/Plugins/AntiFloodPluginTest.php",
+    "web/src/vendor/swiftmailer/swiftmailer/tests/unit/Swift/Plugins/BandwidthMonitorPluginTest.php",
+    "web/src/vendor/swiftmailer/swiftmailer/tests/unit/Swift/Plugins/DecoratorPluginTest.php",
+    "web/src/vendor/swiftmailer/swiftmailer/tests/unit/Swift/Plugins/LoggerPluginTest.php",
+    "web/src/vendor/swiftmailer/swiftmailer/tests/unit/Swift/Plugins/PopBeforeSmtpPluginTest.php",
+    "web/src/vendor/swiftmailer/swiftmailer/tests/unit/Swift/Plugins/RedirectingPluginTest.php",
+    "web/src/vendor/swiftmailer/swiftmailer/tests/unit/Swift/Plugins/ReporterPluginTest.php",
+    "web/src/vendor/swiftmailer/swiftmailer/tests/unit/Swift/Plugins/ThrottlerPluginTest.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/Decorator/Replacements.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/Loggers/ArrayLogger.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/Loggers/EchoLogger.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/Pop/Pop3Connection.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/Pop/Pop3Exception.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/Reporters/HitReporter.php",
+    "web/src/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Plugins/Reporters/HtmlReporter.php",
+    "web/src/vendor/swiftmailer/swiftmailer/tests/unit/Swift/Plugins/Loggers/ArrayLoggerTest.php",
+    "web/src/vendor/swiftmailer/swiftmailer/tests/unit/Swift/Plugins/Loggers/EchoLoggerTest.php",
+    "web/src/vendor/swiftmailer/swiftmailer/tests/unit/Swift/Plugins/Reporters/HitReporterTest.php",
+    "web/src/vendor/swiftmailer/swiftmailer/tests/unit/Swift/Plugins/Reporters/HtmlReporterTest.php"
    ]
   },
   "fail_count": 0
@@ -10299,13 +11636,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T07:00:20Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:02:18Z",
   "default_branch": "master",
   "pushed_at": "2019-06-11",
   "stars": 34,
   "tree": {
    "sha": "9c32474b2dac7f0cd49ff1ba0c04b24ce59f1f41",
-   "etag": "W/\"d6a46df3fb1c4e7f24fb802595f3a104099c1830cabee65aeae1c60fdcb90597\"",
+   "etag": "W/\"c95e150dbddeb0288d7c20e94ccffadd5707b9a5a2d7db49ccedd1a04b44c2d5\"",
    "truncated": false,
    "path_count": 3076,
    "matched": []
@@ -10360,7 +11698,167 @@
     "app/Plugin/Extensions/Config/bootstrap.php",
     "app/Plugin/Extensions/Controller/ExtensionsAppController.php",
     "app/Plugin/Extensions/Controller/ExtensionsPluginsController.php",
-    "app/Plugin/Extensions/Controller/ExtensionsThemesController.php"
+    "app/Plugin/Extensions/Controller/ExtensionsThemesController.php",
+    "app/Plugin/Extensions/Lib/CmsPlugin.php",
+    "app/Plugin/Extensions/Lib/CmsTheme.php",
+    "app/Plugin/Extensions/Lib/ExtensionsInstaller.php",
+    "app/Plugin/Extensions/Model/ExtensionsAppModel.php",
+    "app/Plugin/HighPerformance/Config/bootstrap.php",
+    "app/Plugin/HighPerformance/Config/email.php",
+    "app/Plugin/HighPerformance/Config/events.php",
+    "app/Plugin/HighPerformance/Config/plugin.json",
+    "app/Plugin/HighPerformance/Controller/HighPerformancesController.php",
+    "app/Plugin/HighPerformance/Event/HighPerformanceEventHandler.php",
+    "app/Plugin/HighPerformance/Vendor/s3.php",
+    "app/Plugin/Insights/Config/bootstrap.php",
+    "app/Plugin/Insights/Config/events.php",
+    "app/Plugin/Insights/Config/plugin.json",
+    "app/Plugin/Insights/Controller/InsightsController.php",
+    "app/Plugin/Insights/Event/InsightsEventHandler.php",
+    "app/Plugin/Install/Config/bootstrap.php",
+    "app/Plugin/Install/Config/routes.php",
+    "app/Plugin/Install/Controller/InstallAppController.php",
+    "app/Plugin/Install/Controller/InstallController.php",
+    "app/Plugin/Install/Model/Install.php",
+    "app/Plugin/Install/Model/InstallAppModel.php",
+    "app/Plugin/IntegratedGoogleAnalytics/Config/bootstrap.php",
+    "app/Plugin/IntegratedGoogleAnalytics/Config/constants.php",
+    "app/Plugin/IntegratedGoogleAnalytics/Config/events.php",
+    "app/Plugin/IntegratedGoogleAnalytics/Config/plugin.json",
+    "app/Plugin/IntegratedGoogleAnalytics/Controller/GoogleAnalyticsController.php",
+    "app/Plugin/IntegratedGoogleAnalytics/Event/IntegratedGoogleAnalyticsEventHandler.php",
+    "app/Plugin/IntegratedGoogleAnalytics/Model/GoogleAnalytic.php",
+    "app/Plugin/JobFavorites/Config/bootstrap.php",
+    "app/Plugin/JobFavorites/Config/plugin.json",
+    "app/Plugin/JobFavorites/Controller/JobFavoritesController.php",
+    "app/Plugin/JobFavorites/Model/JobFavorite.php",
+    "app/Plugin/JobFlags/Config/bootstrap.php",
+    "app/Plugin/JobFlags/Config/plugin.json",
+    "app/Plugin/JobFlags/Controller/JobFlagCategoriesController.php",
+    "app/Plugin/JobFlags/Controller/JobFlagsController.php",
+    "app/Plugin/JobFlags/Model/JobFlag.php",
+    "app/Plugin/JobFlags/Model/JobFlagCategory.php",
+    "app/Plugin/Jobs/Config/bootstrap.php",
+    "app/Plugin/Jobs/Config/plugin.json",
+    "app/Plugin/Jobs/Config/routes.php",
+    "app/Plugin/Jobs/Controller/JobCategoriesController.php",
+    "app/Plugin/Jobs/Controller/JobFeedbacksController.php",
+    "app/Plugin/Jobs/Controller/JobOrdersController.php",
+    "app/Plugin/Jobs/Controller/JobServiceLocationsController.php",
+    "app/Plugin/Jobs/Controller/JobTypesController.php",
+    "app/Plugin/Jobs/Controller/JobUserTypesController.php",
+    "app/Plugin/Jobs/Controller/JobViewsController.php",
+    "app/Plugin/Jobs/Controller/JobsController.php",
+    "app/Plugin/Jobs/Controller/LabelsController.php",
+    "app/Plugin/Jobs/Controller/LabelsUsersController.php",
+    "app/Plugin/Jobs/Controller/MessagesController.php",
+    "app/Plugin/Jobs/Model/Job.php",
+    "app/Plugin/Jobs/Model/JobCategory.php",
+    "app/Plugin/Jobs/Model/JobCoverageRadiusUnit.php",
+    "app/Plugin/Jobs/Model/JobFeedback.php",
+    "app/Plugin/Jobs/Model/JobOrder.php",
+    "app/Plugin/Jobs/Model/JobOrderStatus.php",
+    "app/Plugin/Jobs/Model/JobServiceLocation.php",
+    "app/Plugin/Jobs/Model/JobTag.php",
+    "app/Plugin/Jobs/Model/JobType.php",
+    "app/Plugin/Jobs/Model/JobUserType.php",
+    "app/Plugin/Jobs/Model/JobView.php",
+    "app/Plugin/Jobs/Model/JobsJobTag.php",
+    "app/Plugin/Jobs/Model/JobsRequest.php",
+    "app/Plugin/Jobs/Model/Label.php",
+    "app/Plugin/Jobs/Model/LabelsMessage.php",
+    "app/Plugin/Jobs/Model/LabelsUser.php",
+    "app/Plugin/Jobs/Model/Message.php",
+    "app/Plugin/Jobs/Model/MessageContent.php",
+    "app/Plugin/Jobs/Model/MessageFilter.php",
+    "app/Plugin/Jobs/Model/MessageFolder.php",
+    "app/Plugin/LaunchModes/Config/bootstrap.php",
+    "app/Plugin/LaunchModes/Config/events.php",
+    "app/Plugin/LaunchModes/Config/plugin.json",
+    "app/Plugin/LaunchModes/Controller/SubscriptionsController.php",
+    "app/Plugin/LaunchModes/Event/LaunchModesEventHandler.php",
+    "app/Plugin/LaunchModes/Model/Subscription.php",
+    "app/Plugin/RequestFavorites/Config/bootstrap.php",
+    "app/Plugin/RequestFavorites/Config/plugin.json",
+    "app/Plugin/RequestFavorites/Controller/RequestFavoritesController.php",
+    "app/Plugin/RequestFavorites/Model/RequestFavorite.php",
+    "app/Plugin/RequestFlags/Config/bootstrap.php",
+    "app/Plugin/RequestFlags/Config/plugin.json",
+    "app/Plugin/RequestFlags/Controller/RequestFlagCategoriesController.php",
+    "app/Plugin/RequestFlags/Controller/RequestFlagsController.php",
+    "app/Plugin/RequestFlags/Model/RequestFlag.php",
+    "app/Plugin/RequestFlags/Model/RequestFlagCategory.php",
+    "app/Plugin/Requests/Config/bootstrap.php",
+    "app/Plugin/Requests/Config/plugin.json",
+    "app/Plugin/Requests/Config/routes.php",
+    "app/Plugin/Requests/Controller/RequestViewsController.php",
+    "app/Plugin/Requests/Controller/RequestsController.php",
+    "app/Plugin/Requests/Model/Request.php",
+    "app/Plugin/Requests/Model/RequestView.php",
+    "app/Plugin/SecurityQuestions/Config/bootstrap.php",
+    "app/Plugin/SecurityQuestions/Config/plugin.json",
+    "app/Plugin/SecurityQuestions/Controller/SecurityQuestionsController.php",
+    "app/Plugin/SecurityQuestions/Model/SecurityQuestion.php",
+    "app/Plugin/SocialMarketing/Config/bootstrap.php",
+    "app/Plugin/SocialMarketing/Config/constants.php",
+    "app/Plugin/SocialMarketing/Config/events.php",
+    "app/Plugin/SocialMarketing/Config/plugin.json",
+    "app/Plugin/SocialMarketing/Config/routes.php",
+    "app/Plugin/SocialMarketing/Controller/SocialContactsController.php",
+    "app/Plugin/SocialMarketing/Controller/SocialMarketingsController.php",
+    "app/Plugin/SocialMarketing/Event/SocialMarketingEventHandler.php",
+    "app/Plugin/SocialMarketing/Model/SocialContact.php",
+    "app/Plugin/SocialMarketing/Model/SocialContactDetail.php",
+    "app/Plugin/SocialMarketing/Model/SocialMarketing.php",
+    "app/Plugin/Sudopay/Config/bootstrap.php",
+    "app/Plugin/Sudopay/Config/constants.php",
+    "app/Plugin/Sudopay/Config/events.php",
+    "app/Plugin/Sudopay/Config/plugin.json",
+    "app/Plugin/Sudopay/Controller/SudopayIpnLogsController.php",
+    "app/Plugin/Sudopay/Controller/SudopayTransactionLogsController.php",
+    "app/Plugin/Sudopay/Controller/SudopaysController.php",
+    "app/Plugin/Sudopay/Event/SudopayEventHandler.php",
+    "app/Plugin/Sudopay/Model/Sudopay.php",
+    "app/Plugin/Sudopay/Model/SudopayIpnLog.php",
+    "app/Plugin/Sudopay/Model/SudopayPaymentGateway.php",
+    "app/Plugin/Sudopay/Model/SudopayPaymentGatewayGroup.php",
+    "app/Plugin/Sudopay/Model/SudopayPaymentGatewaysUser.php",
+    "app/Plugin/Sudopay/Model/SudopayTransactionLog.php",
+    "app/Plugin/Sudopay/Vendor/sudopay.php",
+    "app/Plugin/Translation/Config/bootstrap.php",
+    "app/Plugin/Translation/Config/plugin.json",
+    "app/Plugin/Translation/Controller/TranslationsController.php",
+    "app/Plugin/Translation/Model/Translation.php",
+    "app/Plugin/Translation/Model/TranslationAppModel.php",
+    "app/Plugin/Wallets/Config/bootstrap.php",
+    "app/Plugin/Wallets/Config/plugin.json",
+    "app/Plugin/Wallets/Controller/UserAddWalletAmountsController.php",
+    "app/Plugin/Wallets/Controller/WalletsController.php",
+    "app/Plugin/Wallets/Model/UserAddWalletAmount.php",
+    "app/Plugin/Wallets/Model/Wallet.php",
+    "app/Plugin/Withdrawals/Config/bootstrap.php",
+    "app/Plugin/Withdrawals/Config/constants.php",
+    "app/Plugin/Withdrawals/Config/events.php",
+    "app/Plugin/Withdrawals/Config/plugin.json",
+    "app/Plugin/Withdrawals/Controller/MoneyTransferAccountsController.php",
+    "app/Plugin/Withdrawals/Controller/UserCashWithdrawalsController.php",
+    "app/Plugin/Withdrawals/Event/WithdrawalEventHandler.php",
+    "app/Plugin/Withdrawals/Model/MoneyTransferAccount.php",
+    "app/Plugin/Withdrawals/Model/UserCashWithdrawal.php",
+    "app/Plugin/Withdrawals/Model/WithdrawalStatus.php",
+    "app/webroot/socialauth/Hybrid/Provider_Adapter.php",
+    "core/lib/Cake/Core/CakePlugin.php",
+    "core/plugins/DebugKit/Controller/DebugKitAppController.php",
+    "core/plugins/DebugKit/Controller/ToolbarAccessController.php",
+    "core/plugins/DebugKit/Lib/DebugKitDebugger.php",
+    "core/plugins/DebugKit/Lib/DebugMemory.php",
+    "core/plugins/DebugKit/Lib/DebugTimer.php",
+    "core/plugins/DebugKit/Lib/FireCake.php",
+    "core/plugins/DebugKit/Locale/debug_kit.pot",
+    "core/plugins/DebugKit/Model/DebugKitAppModel.php",
+    "core/plugins/DebugKit/Model/ToolbarAccess.php",
+    "core/plugins/DebugKit/View/DebugView.php",
+    "sample/media/MessageContent/17/360contest-admin-plugin.png"
    ],
    "matrix_urls": [
     "https://www.agriya.com/products/fiverr-clone"
@@ -11220,13 +12718,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T08:34:55Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:17:09Z",
   "default_branch": "main",
   "pushed_at": "2026-10-20",
   "stars": 20,
   "tree": {
    "sha": "c7d8060036010762512c292b84f1d23b86ba2787",
-   "etag": "W/\"e62a74b7a34f0b6f4420e2e2e6bfb404b90a442b39a2c451227bdc45648b46fc\"",
+   "etag": "W/\"ceb5e7712a910e5ad28f50732649c8fb487b4a4d462e7ca95738444f05a65d99\"",
    "truncated": false,
    "path_count": 4510,
    "matched": [
@@ -11242,6 +12741,10 @@
     "fixtures/codex-coding-effect/level2-controlled-mutation/repositories/jpvanhal-inflection/pyproject.toml",
     "fixtures/codex-coding-effect/level2-controlled-mutation/repositories/jpvanhal-inflection/setup.py",
     "fixtures/codex-coding-effect/level2-controlled-mutation/repositories/more-itertools-more-itertools/pyproject.toml",
+    "fixtures/codex-coding-effect/level2-controlled-mutation/repositories/python-humanize-humanize/pyproject.toml",
+    "fixtures/codex-coding-effect/level2-controlled-mutation/repositories/radashi-org-radashi/package.json",
+    "fixtures/codex-coding-effect/level2-controlled-mutation/repositories/unjs-scule/package.json",
+    "fixtures/codex-coding-effect/level2-controlled-mutation/repositories/unjs-ufo/package.json",
     "Dockerfile",
     "docker-compose.yml",
     "fixtures/codex-coding-effect/c6-package-runtime/Dockerfile",
@@ -11382,6 +12885,73 @@
     "blob_sha": "db7351b7158b2a4840a1bf9b933647e2bbc7aa68",
     "ecosystem": "pyproject",
     "bytes": 1539
+   },
+   {
+    "path": "fixtures/codex-coding-effect/level2-controlled-mutation/repositories/python-humanize-humanize/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "d33276478f21ba64d6bd2f4b6f038cc05efb72bb",
+    "ecosystem": "pyproject",
+    "bytes": 3528
+   },
+   {
+    "path": "fixtures/codex-coding-effect/level2-controlled-mutation/repositories/radashi-org-radashi/package.json",
+    "kind": "dep",
+    "blob_sha": "178240ff8ab68cef2f742db4d628d2d2817bdf54",
+    "ecosystem": "npm",
+    "bytes": 2507,
+    "dev": [
+     "@biomejs/biome",
+     "@radashi-org/biome-config",
+     "@types/node",
+     "@vitest/coverage-v8",
+     "cspell",
+     "prettier",
+     "prettier-plugin-pkg",
+     "prettier-plugin-sh",
+     "radashi-helper",
+     "tsup",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "fixtures/codex-coding-effect/level2-controlled-mutation/repositories/unjs-scule/package.json",
+    "kind": "dep",
+    "blob_sha": "ba16194d6f4cd12a8e1be629ae43fca46aff0175",
+    "ecosystem": "npm",
+    "bytes": 1186,
+    "dev": [
+     "@types/node",
+     "@vitest/coverage-v8",
+     "changelogen",
+     "eslint",
+     "eslint-config-unjs",
+     "prettier",
+     "typescript",
+     "unbuild",
+     "vitest"
+    ]
+   },
+   {
+    "path": "fixtures/codex-coding-effect/level2-controlled-mutation/repositories/unjs-ufo/package.json",
+    "kind": "dep",
+    "blob_sha": "cf84ff3719b36654b852ca72ad1f718761ffc2a9",
+    "ecosystem": "npm",
+    "bytes": 1250,
+    "dev": [
+     "@types/node",
+     "@vitest/coverage-v8",
+     "automd",
+     "changelogen",
+     "eslint",
+     "eslint-config-unjs",
+     "jiti",
+     "prettier",
+     "typescript",
+     "unbuild",
+     "untyped",
+     "vitest"
+    ]
    },
    {
     "path": "Dockerfile",
@@ -11621,13 +13191,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T09:14:37Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:24:06Z",
   "default_branch": "master",
   "pushed_at": "2022-05-24",
   "stars": 16,
   "tree": {
    "sha": "84db238e87204122605f265e1484d129860b1f98",
-   "etag": "W/\"9620560a5b1cd3bc85dbcb568e126fb15830a9634817fd0639dc505d2dcf586f\"",
+   "etag": "W/\"f067d3cacbcf561316d495c95822ad0f1b4061968c9ba6252fa0f403590169d2\"",
    "truncated": false,
    "path_count": 913,
    "matched": [
@@ -11690,6 +13261,12 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "ide-helper/phalcon/src/Phalcon/db/dialect/Mysql.php",
+    "ide-helper/phalcon/src/Phalcon/db/dialect/Postgresql.php",
+    "ide-helper/phalcon/src/Phalcon/db/dialect/Sqlite.php",
+    "ide-helper/phalcon/src/Phalcon/db/adapter/pdo/Mysql.php",
+    "ide-helper/phalcon/src/Phalcon/db/adapter/pdo/Postgresql.php",
+    "ide-helper/phalcon/src/Phalcon/db/adapter/pdo/Sqlite.php",
     "src/components/database/Connector.php",
     "src/components/filewatcher/DriverFactory.php",
     "src/components/log/DriverFactory.php",
@@ -11724,12 +13301,25 @@
     "ide-helper/phalcon/src/Phalcon/config/adapter/Php.php",
     "ide-helper/phalcon/src/Phalcon/config/adapter/Yaml.php",
     "ide-helper/phalcon/src/Phalcon/db/adapter/Pdo.php",
-    "ide-helper/phalcon/src/Phalcon/db/dialect/Mysql.php",
-    "ide-helper/phalcon/src/Phalcon/db/dialect/Postgresql.php",
-    "ide-helper/phalcon/src/Phalcon/db/dialect/Sqlite.php",
     "ide-helper/phalcon/src/Phalcon/image/adapter/Gd.php",
     "ide-helper/phalcon/src/Phalcon/image/adapter/Imagick.php",
-    "ide-helper/phalcon/src/Phalcon/logger/adapter/Blackhole.php"
+    "ide-helper/phalcon/src/Phalcon/logger/adapter/Blackhole.php",
+    "ide-helper/phalcon/src/Phalcon/logger/adapter/File.php",
+    "ide-helper/phalcon/src/Phalcon/logger/adapter/Firephp.php",
+    "ide-helper/phalcon/src/Phalcon/logger/adapter/Stream.php",
+    "ide-helper/phalcon/src/Phalcon/logger/adapter/Syslog.php",
+    "ide-helper/phalcon/src/Phalcon/mvc/user/Plugin.php",
+    "ide-helper/phalcon/src/Phalcon/paginator/adapter/Model.php",
+    "ide-helper/phalcon/src/Phalcon/paginator/adapter/NativeArray.php",
+    "ide-helper/phalcon/src/Phalcon/paginator/adapter/QueryBuilder.php",
+    "ide-helper/phalcon/src/Phalcon/session/adapter/Files.php",
+    "ide-helper/phalcon/src/Phalcon/session/adapter/Libmemcached.php",
+    "ide-helper/phalcon/src/Phalcon/session/adapter/Memcache.php",
+    "ide-helper/phalcon/src/Phalcon/session/adapter/Redis.php",
+    "ide-helper/phalcon/src/Phalcon/translate/adapter/Csv.php",
+    "ide-helper/phalcon/src/Phalcon/translate/adapter/Gettext.php",
+    "ide-helper/phalcon/src/Phalcon/translate/adapter/NativeArray.php",
+    "ide-helper/phalcon/src/Phalcon/db/adapter/pdo/Factory.php"
    ]
   },
   "fail_count": 0
@@ -12436,13 +14026,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T10:28:20Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:30:45Z",
   "default_branch": "master",
   "pushed_at": "2019-06-19",
   "stars": 13,
   "tree": {
    "sha": "b7cd69bb96f66a913223708ab0248377b9f16210",
-   "etag": "W/\"97268728bd44488e9ffcbd668eadbf0ba9bdc06cf10a4f2db1b12a4fcf53c3b2\"",
+   "etag": "W/\"9259bb585954fe25c4251a1108be7e16f9c466af39690b1c986e53625173594b\"",
    "truncated": false,
    "path_count": 299,
    "matched": []
@@ -12492,7 +14083,34 @@
     "D_logreader/plugins/fullSync/lr_fullSync.res",
     "D_logreader/plugins/fullSync/lr_fullSync.stat",
     "D_logreader/plugins/heteroSync/heteroSync.identcache",
-    "D_logreader/plugins/heteroSync/heteroSync.stat"
+    "D_logreader/plugins/heteroSync/heteroSync.stat",
+    "D_logreader/plugins/heteroSync/lr_heteroSync.dpr",
+    "D_logreader/plugins/heteroSync/lr_heteroSync.dproj",
+    "D_logreader/plugins/heteroSync/lr_heteroSync.dproj.local",
+    "D_logreader/plugins/heteroSync/lr_heteroSync.identcache",
+    "D_logreader/plugins/heteroSync/lr_heteroSync.res",
+    "D_logreader/plugins/heteroSync/p_impl.dfm",
+    "D_logreader/plugins/heteroSync/p_impl.pas",
+    "D_logreader/plugins/heteroSync/p_mainCfg.dfm",
+    "D_logreader/plugins/heteroSync/p_mainCfg.pas",
+    "D_logreader/plugins/heteroSync/p_paramStyleHelp.dfm",
+    "D_logreader/plugins/heteroSync/p_paramStyleHelp.pas",
+    "D_logreader/plugins/heteroSync/p_tblfieldsDisp.dfm",
+    "D_logreader/plugins/heteroSync/p_tblfieldsDisp.pas",
+    "D_logreader/plugins/heteroSync/pppppp.pas",
+    "SqlPlugin/12.0.2000.8/Win32Project1/ReadMe.txt",
+    "SqlPlugin/12.0.2000.8/Win32Project1/Win32Project1.cpp",
+    "SqlPlugin/12.0.2000.8/Win32Project1/Win32Project1.h",
+    "SqlPlugin/12.0.2000.8/Win32Project1/Win32Project1.vcxproj",
+    "SqlPlugin/12.0.2000.8/Win32Project1/Win32Project1.vcxproj.filters",
+    "SqlPlugin/12.0.2000.8/Win32Project1/Win32Project1.vcxproj.user",
+    "SqlPlugin/12.0.2000.8/Win32Project1/aax64.asm",
+    "SqlPlugin/12.0.2000.8/Win32Project1/aax64.h",
+    "SqlPlugin/12.0.2000.8/Win32Project1/aax64.obj",
+    "SqlPlugin/12.0.2000.8/Win32Project1/dllmain.cpp",
+    "SqlPlugin/12.0.2000.8/Win32Project1/stdafx.cpp",
+    "SqlPlugin/12.0.2000.8/Win32Project1/stdafx.h",
+    "SqlPlugin/12.0.2000.8/Win32Project1/targetver.h"
    ]
   },
   "fail_count": 0
@@ -12679,15 +14297,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T10:49:45Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:33:31Z",
   "default_branch": "main",
-  "pushed_at": "2026-07-15",
-  "stars": 12,
+  "pushed_at": "2026-10-31",
+  "stars": 13,
   "tree": {
-   "sha": "d085d202560dc5abefb8b97f58e9d78ee00599a9",
-   "etag": "W/\"1ebc14148bf86331013f61acc82e843bb5945e82a9b6d9b6f390602cf4c4dda2\"",
+   "sha": "81753689d9b43211e1b8dce4502e4e87acb76987",
+   "etag": "W/\"424a9d9bc173a38997159a3455e5cbf0d7b9f6726d94d393c7affadcf16bca89\"",
    "truncated": false,
-   "path_count": 141,
+   "path_count": 147,
    "matched": [
     "playtask/build.gradle.kts",
     "playtask/app/build.gradle.kts"
@@ -12704,9 +14323,9 @@
    {
     "path": "playtask/app/build.gradle.kts",
     "kind": "dep",
-    "blob_sha": "599002d942468a43bc50faed69a95de32021676f",
+    "blob_sha": "202836986ce5ffff569400f5f0c8c36be64ab4b4",
     "ecosystem": "gradle",
-    "bytes": 1723
+    "bytes": 1722
    }
   ],
   "clues": {
@@ -12817,13 +14436,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:25:14Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:39:12Z",
   "default_branch": "master",
   "pushed_at": "2026-10-29",
   "stars": 10,
   "tree": {
-   "sha": "bf3a7154716cc9c220d248492fe39ac6023b32af",
-   "etag": "W/\"e569c3e15c97db81da05bde5a5d630586f54d2ad5537fd0bdf0b35a4c08f0eb7\"",
+   "sha": "ecc161a94151fccd47499fb3096405b665f4aa99",
+   "etag": "W/\"0b9b032e8b9244d32212d41933a56f542e059383bb2b76b064ca1117070c1c97\"",
    "truncated": false,
    "path_count": 1030,
    "matched": [
@@ -12838,7 +14458,8 @@
     "crates/render/Cargo.toml",
     "crates/sinex/Cargo.toml",
     "crates/sources/Cargo.toml",
-    "crates/store/Cargo.toml"
+    "crates/store/Cargo.toml",
+    "crates/testkit/Cargo.toml"
    ]
   },
   "files": [
@@ -13077,6 +14698,21 @@
     "dev": [
      "serde_json",
      "rusqlite"
+    ]
+   },
+   {
+    "path": "crates/testkit/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "5b5417f624da85d6a4ba7efce1cb5ec4ec3e10be",
+    "ecosystem": "cargo",
+    "bytes": 528,
+    "names": [
+     "polylogue-engine.workspace",
+     "polylogue-model.workspace",
+     "polylogue-store.workspace",
+     "hashed-blobs.workspace",
+     "serde_json.workspace",
+     "tempfile.workspace"
     ]
    }
   ],
@@ -13453,13 +15089,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:37:28Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:41:35Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-28",
+  "pushed_at": "2026-10-31",
   "stars": 10,
   "tree": {
    "sha": "e1fd43f3d08126c0f94f6dcb371690ead413b52e",
-   "etag": "W/\"96c96fb8cac546c7516208d96096537ee5fa97ead99f303390c1acaebe14ef7a\"",
+   "etag": "W/\"cf9a618da3352fb4124e58687c2ec60d53ca170511308726826aa5a4d4cfb3d5\"",
    "truncated": false,
    "path_count": 103,
    "matched": [
@@ -13682,15 +15319,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:48:39Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:44:29Z",
   "default_branch": "master",
   "pushed_at": "2026-10-30",
   "stars": 5,
   "tree": {
-   "sha": "cd098a2a9eab033aded66ce1dd9ebda05a1a654d",
-   "etag": "W/\"03c4c76bae8c7548a1333b877b892329a4d25dcdee3b5e87cc89d176545beca3\"",
+   "sha": "91ad968ac90086c110ca54034a6e82e3eab759bc",
+   "etag": "W/\"2b71d4a9614b766a815aa7dfc7dd7186c121b662e64f6c3269b778a6d378ba9b\"",
    "truncated": false,
-   "path_count": 306,
+   "path_count": 311,
    "matched": [
     "Cargo.toml",
     "crates/pythia-ai/Cargo.toml",
@@ -13717,9 +15355,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "ee44ec49f9a9d46d8a6b47adba5cea6449152f82",
+    "blob_sha": "ea1e9f77aaea8648389919e0c8c1780aaa21b846",
     "ecosystem": "cargo",
-    "bytes": 3738
+    "bytes": 4135
    },
    {
     "path": "crates/pythia-ai/Cargo.toml",
@@ -13737,9 +15375,9 @@
    {
     "path": "crates/pythia-app/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "aba7c94c299bcf8bb41b3de2e01bd681d440fe88",
+    "blob_sha": "1eb0bc8bacf216cedfbcd06a18a054e31d3e8d45",
     "ecosystem": "cargo",
-    "bytes": 4049,
+    "bytes": 4248,
     "names": [
      "chrono",
      "csv",
@@ -13763,14 +15401,16 @@
      "pythia-plsql.workspace",
      "pythia-ui.workspace",
      "serde.workspace",
+     "sha2",
      "serde_json.workspace",
+     "toml.workspace",
      "tracing.workspace",
      "tracing-subscriber.workspace"
     ],
     "dev": [
      "embed-resource",
-     "toml.workspace",
      "egui_kittest",
+     "rusqlite.workspace",
      "skrifa"
     ]
    },
@@ -13828,17 +15468,19 @@
    {
     "path": "crates/pythia-db/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "099748a2e4295e0c7cd5ff835abbe28a1db56619",
+    "blob_sha": "238d88e5fa8925e18acee6d422b289017d9532c2",
     "ecosystem": "cargo",
-    "bytes": 1050,
+    "bytes": 1106,
     "names": [
      "futures-util.workspace",
      "mysql.workspace",
+     "mysql_common.workspace",
      "oracle",
      "oracledb.workspace",
      "pythia-config.workspace",
      "pythia-plsql.workspace",
      "russh.workspace",
+     "rusqlite.workspace",
      "rustls.workspace",
      "rustls-native-certs.workspace",
      "serde.workspace",
@@ -13925,12 +15567,13 @@
    {
     "path": "crates/pythia-ui/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "36ad8847aa2d1f46fec782647fa1283329e9cc81",
+    "blob_sha": "911a9191b1f89b36003d6d47a13dbd7ef65e94cf",
     "ecosystem": "cargo",
-    "bytes": 693,
+    "bytes": 882,
     "names": [
      "egui.workspace",
      "egui_extras",
+     "image",
      "jiff",
      "pythia-data.workspace",
      "pythia-db.workspace",

@@ -7940,13 +7940,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:17:04Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:55:32Z",
   "default_branch": "main",
   "pushed_at": "2026-09-28",
   "stars": 49,
   "tree": {
    "sha": "d8de899ff8eb1293fd992e8d889e6735b0a16ef8",
-   "etag": "W/\"0387838d376906c94e17eafd92d143017ef76b309ee7cf0a61f334ac1f156806\"",
+   "etag": "W/\"68c5702a54f142c315305b6b164cda1470435a56ad9e79e3f3d9a0b7483debfc\"",
    "truncated": false,
    "path_count": 170,
    "matched": [
@@ -7962,6 +7963,7 @@
     "crates/plugins/chat4n6-ios-whatsapp/Cargo.toml",
     "crates/plugins/chat4n6-signal/Cargo.toml",
     "crates/plugins/chat4n6-telegram/Cargo.toml",
+    "crates/plugins/chat4n6-whatsapp/Cargo.toml",
     ".github/workflows/ci.yml",
     ".github/workflows/release-plz.yml"
    ]
@@ -8175,6 +8177,38 @@
     ]
    },
    {
+    "path": "crates/plugins/chat4n6-whatsapp/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "f595c2dfd1a5f0cf4ab9a2b013630f01905a123e",
+    "ecosystem": "cargo",
+    "bytes": 1047,
+    "names": [
+     "anyhow",
+     "thiserror",
+     "chat4n6-plugin-api",
+     "chat4n6-sqlite-forensics",
+     "chrono",
+     "chrono-tz",
+     "aes",
+     "aes-gcm",
+     "cbc",
+     "log",
+     "serde",
+     "serde_json",
+     "sha2",
+     "hex",
+     "hmac",
+     "rayon",
+     "regex",
+     "base64"
+    ],
+    "dev": [
+     "tempfile",
+     "rusqlite",
+     "proptest"
+    ]
+   },
+   {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
     "blob_sha": "6a972c56fa74329f6220b4c735092958974d2b48",
@@ -8231,7 +8265,13 @@
     "crates/plugins/chat4n6-whatsapp/src/poll.rs",
     "crates/plugins/chat4n6-whatsapp/src/schema.rs",
     "crates/plugins/chat4n6-whatsapp/src/status.rs",
-    "crates/plugins/chat4n6-whatsapp/src/system_event.rs"
+    "crates/plugins/chat4n6-whatsapp/src/system_event.rs",
+    "crates/plugins/chat4n6-whatsapp/src/timezone.rs",
+    "crates/plugins/chat4n6-ios-whatsapp/tests/fixtures/chatstorage_schema.sql",
+    "crates/plugins/chat4n6-signal/tests/fixtures/signal_schema.sql",
+    "crates/plugins/chat4n6-telegram/tests/fixtures/telegram_schema.sql",
+    "crates/plugins/chat4n6-whatsapp/tests/fixtures/fts5_schema.sql",
+    "crates/plugins/chat4n6-whatsapp/tests/fixtures/modern_schema.sql"
    ]
   },
   "fail_count": 0
@@ -8481,13 +8521,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T07:15:13Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:03:27Z",
   "default_branch": "main",
   "pushed_at": "2023-07-13",
   "stars": 33,
   "tree": {
    "sha": "567b96415e4343cd0c339f43428b2c868fa721c0",
-   "etag": "W/\"97ca5957df4262c88d7427c74e0a9339304f0426e2dbeb64aa5fe7267d9b03d0\"",
+   "etag": "W/\"9d527c21e028bb472f273d0b6bd69c2a80ff5a2e768dee25f3d5faf70d523ac1\"",
    "truncated": false,
    "path_count": 217,
    "matched": []
@@ -8537,7 +8578,129 @@
     ".metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.cdt.dsf.ui.prefs",
     ".metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.cdt.managedbuilder.core.prefs",
     ".metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.cdt.ui.prefs",
-    ".metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.core.resources.prefs"
+    ".metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.core.resources.prefs",
+    ".metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.debug.core.prefs",
+    ".metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.debug.ui.prefs",
+    ".metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.launchbar.core.prefs",
+    ".metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.ui.ide.prefs",
+    ".metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.ui.navigator.prefs",
+    ".metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.ui.prefs",
+    ".metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.ui.workbench.prefs",
+    ".metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.urischeme.prefs",
+    "MRAM-sqlite-STM32IDE/Core/Src/Drivers/MRAM_driver.c",
+    "MRAM-sqlite-STM32IDE/Core/Src/Drivers/flash_driver.c",
+    "MRAM-sqlite-STM32IDE/Core/Src/Drivers/littlefs_driver.c",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/cmsis_armcc.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/cmsis_armclang.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/cmsis_armclang_ltm.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/cmsis_compiler.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/cmsis_gcc.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/cmsis_iccarm.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/cmsis_version.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/core_armv81mml.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/core_armv8mbl.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/core_armv8mml.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/core_cm0.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/core_cm0plus.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/core_cm1.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/core_cm23.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/core_cm3.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/core_cm33.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/core_cm35p.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/core_cm4.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/core_cm7.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/core_sc000.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/core_sc300.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/mpu_armv7.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/mpu_armv8.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Include/tz_context.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_cortex.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_crc.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_crc_ex.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma_ex.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_eth.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_eth_ex.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_exti.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_flash.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_flash_ex.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_gpio.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_gpio_ex.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_hsem.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_i2c.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_i2c_ex.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_mdma.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr_ex.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc_ex.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_bus.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_cortex.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_crc.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_crs.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dma.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dmamux.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_exti.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_gpio.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_hsem.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_pwr.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_rcc.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_system.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_utils.h",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_crc.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_crc_ex.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_eth.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_eth_ex.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_hsem.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_mdma.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c",
+    ".metadata/.plugins/org.eclipse.core.resources/.history/0/4018c7129516001e1284eef0c792be4c",
+    ".metadata/.plugins/org.eclipse.core.resources/.history/34/30c93b445217001e159bb2feb051d37b",
+    ".metadata/.plugins/org.eclipse.core.resources/.history/53/c066c9989816001e159bb2feb051d37b",
+    ".metadata/.plugins/org.eclipse.core.resources/.history/7f/809b3e2a5117001e159bb2feb051d37b",
+    ".metadata/.plugins/org.eclipse.core.resources/.history/dd/f0aab3e85217001e159bb2feb051d37b",
+    ".metadata/.plugins/org.eclipse.core.resources/.projects/MRAM-sqlite-STM32IDE/.markers",
+    ".metadata/.plugins/org.eclipse.core.resources/.projects/MRAM-sqlite-STM32IDE/.markers.snap",
+    ".metadata/.plugins/org.eclipse.core.resources/.projects/MRAM-sqlite-STM32IDE/.syncinfo.snap",
+    ".metadata/.plugins/org.eclipse.core.resources/.root/.indexes/history.version",
+    ".metadata/.plugins/org.eclipse.core.resources/.root/.indexes/properties.index",
+    ".metadata/.plugins/org.eclipse.core.resources/.root/.indexes/properties.version",
+    "MRAM-sqlite-STM32IDE/Debug/Core/Src/Drivers/subdir.mk",
+    "MRAM-sqlite-STM32IDE/Debug/Drivers/STM32H7xx_HAL_Driver/Src/subdir.mk",
+    "MRAM-sqlite-STM32IDE/Drivers/STM32H7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h",
+    ".metadata/.plugins/org.eclipse.core.resources/.projects/MRAM-sqlite-STM32IDE/.indexes/properties.index",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Device/ST/STM32H7xx/LICENSE.txt",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h743xx.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h",
+    "MRAM-sqlite-STM32IDE/Drivers/CMSIS/Device/ST/STM32H7xx/Include/system_stm32h7xx.h",
+    ".metadata/.plugins/org.eclipse.core.resources/.projects/MRAM-sqlite-STM32IDE/.indexes/bf/be/history.index",
+    ".metadata/.plugins/org.eclipse.core.resources/.projects/MRAM-sqlite-STM32IDE/.indexes/bf/be/properties.index",
+    ".metadata/.plugins/org.eclipse.core.resources/.projects/MRAM-sqlite-STM32IDE/.indexes/bf/c4/history.index",
+    ".metadata/.plugins/org.eclipse.core.resources/.projects/MRAM-sqlite-STM32IDE/.indexes/bf/c4/properties.index",
+    ".metadata/.plugins/org.eclipse.ltk.core.refactoring/.refactorings/MRAM-sqlite-STM32IDE/2023/6/26/refactorings.history",
+    ".metadata/.plugins/org.eclipse.ltk.core.refactoring/.refactorings/MRAM-sqlite-STM32IDE/2023/6/26/refactorings.index",
+    ".metadata/.plugins/org.eclipse.core.resources/.projects/MRAM-sqlite-STM32IDE/.indexes/bf/c4/23/history.index",
+    ".metadata/.plugins/org.eclipse.core.resources/.projects/MRAM-sqlite-STM32IDE/.indexes/bf/c4/23/properties.index",
+    ".metadata/.plugins/org.eclipse.core.resources/.projects/MRAM-sqlite-STM32IDE/.indexes/bf/c4/d5/properties.index"
    ]
   },
   "fail_count": 0
@@ -9575,13 +9738,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T08:54:53Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:17:28Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
-  "stars": 20,
+  "pushed_at": "2026-10-31",
+  "stars": 24,
   "tree": {
-   "sha": "f81376f611c81ca6de8adc8202a808318db09301",
-   "etag": "W/\"3e2d80ea9100c28a742535edd1332bd73cc73eeb315de72bc23d9d6c0b22f8e4\"",
+   "sha": "27106ffffa23f662514913dc5f65e1b0456c3eda",
+   "etag": "W/\"bfaac2b7d30e9166ea2bbbdbe2bfa61222a4b91222a457505b43dd694f40f701\"",
    "truncated": false,
    "path_count": 1157,
    "matched": [
@@ -9597,6 +9761,7 @@
     "satellites/recipes/go.mod",
     "satellites/sparrow-sinks/go.mod",
     "satellites/sparrow-sources/go.mod",
+    "satellites/sparrow/go.mod",
     "Dockerfile",
     "docker-compose.dev.yml",
     ".github/workflows/ci.yml",
@@ -9751,7 +9916,7 @@
    {
     "path": "docs/package.json",
     "kind": "dep",
-    "blob_sha": "e9c7c5e354e8fc7e72fc3dea7b5d51d7b283a7e5",
+    "blob_sha": "ea9fc3ef86332a0d2a50a63cf9dfd79fd0d264ab",
     "ecosystem": "npm",
     "bytes": 852,
     "names": [
@@ -9795,7 +9960,7 @@
    {
     "path": "web/package.json",
     "kind": "dep",
-    "blob_sha": "57c631f0ee353c9b31e3ee0f7924a923e32f05c5",
+    "blob_sha": "de1f9642d65d8e1b09b93a8467baee2e91c1f818",
     "ecosystem": "npm",
     "bytes": 1416,
     "names": [
@@ -9925,6 +10090,36 @@
      "github.com/kr/pretty",
      "github.com/rogpeppe/go-internal",
      "gopkg.in/check.v1"
+    ]
+   },
+   {
+    "path": "satellites/sparrow/go.mod",
+    "kind": "dep",
+    "blob_sha": "fd79926808cea72e9f658404456147a513a1905f",
+    "ecosystem": "go",
+    "bytes": 1257,
+    "names": [
+     "github.com/modelcontextprotocol/go-sdk",
+     "github.com/sarathsp06/sparrow/pkg/signature",
+     "github.com/sarathsp06/sparrow/pkg/template",
+     "github.com/sarathsp06/sparrow/satellites/recipes",
+     "github.com/spf13/cobra",
+     "gopkg.in/yaml.v3"
+    ],
+    "dev": [
+     "github.com/google/jsonschema-go",
+     "github.com/hashicorp/golang-lru/v2",
+     "github.com/inconshreveable/mousetrap",
+     "github.com/kr/text",
+     "github.com/segmentio/asm",
+     "github.com/segmentio/encoding",
+     "github.com/spf13/pflag",
+     "github.com/yosida95/uritemplate/v3",
+     "golang.org/x/oauth2",
+     "golang.org/x/sync",
+     "golang.org/x/sys",
+     "golang.org/x/time",
+     "golang.org/x/tools"
     ]
    },
    {
@@ -10457,13 +10652,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T10:21:21Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:29:31Z",
   "default_branch": "master",
   "pushed_at": "2022-07-26",
   "stars": 13,
   "tree": {
    "sha": "5cbf29ee46d128fa2451813021d8b7f304cc5e71",
-   "etag": "W/\"6d378de078253031db306ad3b365c17a8ca3a1b6430d6c401995611658c6f08f\"",
+   "etag": "W/\"6e4745ab0e51004e8ddf87fee39399d223d988c6595e104f6eabd8c588ef697a\"",
    "truncated": false,
    "path_count": 507,
    "matched": [
@@ -10479,6 +10675,12 @@
     "SteamMarketplace.Hubs/SteamMarketplace.Hubs.csproj",
     "SteamMarketplace.ImporterConsoleApp/SteamMarketplace.ImporterConsoleApp.csproj",
     "SteamMarketplace.Model.Common/SteamMarketplace.Model.Common.csproj",
+    "SteamMarketplace.Model/SteamMarketplace.Model.csproj",
+    "SteamMarketplace.OnlineConsoleApp/SteamMarketplace.OnlineConsoleApp.csproj",
+    "SteamMarketplace.RandomizerConsoleApp/SteamMarketplace.RandomizerConsoleApp.csproj",
+    "SteamMarketplace.ResourceWebApplication/SteamMarketplace.ResourceWebApplication.csproj",
+    "SteamMarketplace.Services/SteamMarketplace.Services.csproj",
+    "steam-marketplace-vue-js-app/package.json",
     "docker-compose.override.yml",
     "docker-compose.yml",
     "SteamMarketplace.AuthorizationWebApplication/Dockerfile",
@@ -10618,6 +10820,114 @@
     "blob_sha": "132c02c59c23649c0b1ecd3906af6a82a3852d7a",
     "ecosystem": "csproj",
     "bytes": 206
+   },
+   {
+    "path": "SteamMarketplace.Model/SteamMarketplace.Model.csproj",
+    "kind": "dep",
+    "blob_sha": "bf0ee4cfc8dd4b109b872b80cde960ae8e376597",
+    "ecosystem": "csproj",
+    "bytes": 1300,
+    "names": [
+     "Microsoft.AspNetCore.Identity.EntityFrameworkCore",
+     "Microsoft.EntityFrameworkCore",
+     "Microsoft.EntityFrameworkCore.Design",
+     "Microsoft.EntityFrameworkCore.SqlServer",
+     "Microsoft.EntityFrameworkCore.Tools",
+     "Newtonsoft.Json",
+     "Npgsql.EntityFrameworkCore.PostgreSQL"
+    ]
+   },
+   {
+    "path": "SteamMarketplace.OnlineConsoleApp/SteamMarketplace.OnlineConsoleApp.csproj",
+    "kind": "dep",
+    "blob_sha": "b19eb1a250656d1fe34a1fae3963249fd231d112",
+    "ecosystem": "csproj",
+    "bytes": 480,
+    "names": [
+     "Microsoft.Extensions.DependencyInjection"
+    ]
+   },
+   {
+    "path": "SteamMarketplace.RandomizerConsoleApp/SteamMarketplace.RandomizerConsoleApp.csproj",
+    "kind": "dep",
+    "blob_sha": "ceb67474ab3b5bd5312e77245d5d959ad469aec3",
+    "ecosystem": "csproj",
+    "bytes": 463
+   },
+   {
+    "path": "SteamMarketplace.ResourceWebApplication/SteamMarketplace.ResourceWebApplication.csproj",
+    "kind": "dep",
+    "blob_sha": "02977cb296056c83489412d4fe12f8d3c1fe0f1c",
+    "ecosystem": "csproj",
+    "bytes": 3108,
+    "names": [
+     "Microsoft.AspNetCore.Authentication.JwtBearer",
+     "Microsoft.AspNetCore.Mvc.NewtonsoftJson",
+     "Microsoft.EntityFrameworkCore",
+     "Microsoft.EntityFrameworkCore.Design",
+     "Microsoft.VisualStudio.Azure.Containers.Tools.Targets",
+     "Npgsql.EntityFrameworkCore.PostgreSQL",
+     "Swashbuckle.AspNetCore",
+     "Serilog.AspNetCore",
+     "Serilog.Enrichers.AspNetCore",
+     "Serilog.Enrichers.AssemblyName",
+     "Serilog.Enrichers.ClientInfo",
+     "Serilog.Enrichers.Context",
+     "Serilog.Enrichers.Environment",
+     "Serilog.Enrichers.Memory",
+     "Serilog.Enrichers.Process",
+     "Serilog.Enrichers.Span",
+     "Serilog.Enrichers.Thread",
+     "Serilog.Settings.Configuration",
+     "Serilog.Sinks.Seq",
+     "System.IdentityModel.Tokens.Jwt"
+    ]
+   },
+   {
+    "path": "SteamMarketplace.Services/SteamMarketplace.Services.csproj",
+    "kind": "dep",
+    "blob_sha": "1dc240d06e5949cd5f0db3d61189f8bf384fb12f",
+    "ecosystem": "csproj",
+    "bytes": 430
+   },
+   {
+    "path": "steam-marketplace-vue-js-app/package.json",
+    "kind": "dep",
+    "blob_sha": "f854491323d2b5a34eb8da518019a698a5ee4676",
+    "ecosystem": "npm",
+    "bytes": 1432,
+    "names": [
+     "@microsoft/signalr",
+     "ant-design-vue",
+     "apexcharts",
+     "autoprefixer",
+     "axios",
+     "core-js",
+     "js-guid",
+     "jwt-decode",
+     "lodash",
+     "moment",
+     "node-sass",
+     "postcss",
+     "postcss-loader",
+     "sass-loader",
+     "vue",
+     "vue-apexcharts",
+     "vue-router",
+     "vue-tiny-slider",
+     "vuex"
+    ],
+    "dev": [
+     "@vue/cli-plugin-babel",
+     "@vue/cli-plugin-eslint",
+     "@vue/cli-plugin-router",
+     "@vue/cli-service",
+     "babel-eslint",
+     "eslint",
+     "eslint-plugin-vue",
+     "tailwindcss",
+     "vue-template-compiler"
+    ]
    },
    {
     "path": "docker-compose.override.yml",
@@ -10949,13 +11259,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T10:49:09Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:33:28Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-27",
+  "pushed_at": "2026-10-31",
   "stars": 12,
   "tree": {
-   "sha": "41e5f63cfac9a278d398d1fe48ff8e3ba61381a6",
-   "etag": "W/\"61827f29d49c86976cdbb6404d1549b13b44da4f7471142cca5376abd0c411c0\"",
+   "sha": "97649e53c483a4af38f9936afa7db881cf30b7c9",
+   "etag": "W/\"0f8f0bd796cb381e0a08a551e75b30c04c131987e168f1a412dff79019bfda2e\"",
    "truncated": false,
    "path_count": 82,
    "matched": [
@@ -10986,20 +11297,20 @@
    {
     "path": ".github/workflows/assign-github-issue.yml",
     "kind": "ci",
-    "blob_sha": "78afc77fe14435d345b1b738faba8b1f0997ddbc",
-    "bytes": 2618
+    "blob_sha": "f3caa6095d11670f7f22580036a096c7c05a0eee",
+    "bytes": 2661
    },
    {
     "path": ".github/workflows/check-typo.yml",
     "kind": "ci",
-    "blob_sha": "663a46d300ee09cb2b6cfbe1878d7f84281139e5",
-    "bytes": 608
+    "blob_sha": "124e703edae91314ca9a9eae2aff3df5bf729cde",
+    "bytes": 694
    },
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "91571cd8eefc76d76f69bc9fdc7367b966de5b23",
-    "bytes": 4025,
+    "blob_sha": "63f163baedb513751e524ab42acf72ce701c0743",
+    "bytes": 4336,
     "images": [
      "paradedb/paradedb:0.26.2-pg${{"
     ]
@@ -11007,44 +11318,44 @@
    {
     "path": ".github/workflows/lint-bash.yml",
     "kind": "ci",
-    "blob_sha": "b834349b6803ab9d2567f86d7066ee4938ffa8eb",
-    "bytes": 640
+    "blob_sha": "889199cf0ec926811e1cbc06c6ccdcddc558d80f",
+    "bytes": 726
    },
    {
     "path": ".github/workflows/lint-format.yml",
     "kind": "ci",
-    "blob_sha": "0585e38b24e06cdf5866ea17c755280d7075391b",
-    "bytes": 623
+    "blob_sha": "9a7e457d15d473882de0017262da83551e255e15",
+    "bytes": 709
    },
    {
     "path": ".github/workflows/lint-markdown.yml",
     "kind": "ci",
-    "blob_sha": "1c51ef8825eada686af687b604e52b2966c11949",
-    "bytes": 773
+    "blob_sha": "4c5a24699a814c8c81136d93a0892aea637cd85a",
+    "bytes": 859
    },
    {
     "path": ".github/workflows/lint-pr-title.yml",
     "kind": "ci",
-    "blob_sha": "94d8b90ee5079d006c11ae94f0325929a8ce03d4",
-    "bytes": 517
+    "blob_sha": "e64605d42f335e14f539fd659838788ec1b242d4",
+    "bytes": 560
    },
    {
     "path": ".github/workflows/lint-yaml.yml",
     "kind": "ci",
-    "blob_sha": "05194b186e3f7b27ea126686d7b119cfb27950f5",
-    "bytes": 689
+    "blob_sha": "fbb4e32b4943a6e93327c1f2bf30038e0f77fa02",
+    "bytes": 775
    },
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "747e5fd23d78a70d745ecd75f99f1ba6e63c9835",
-    "bytes": 4739
+    "blob_sha": "c04578ed93b602465efe515df807f4a6e96d4a9d",
+    "bytes": 4916
    },
    {
     "path": ".github/workflows/schema-compat.yml",
     "kind": "ci",
-    "blob_sha": "23b10433c44a1bb989828b1b7e9b416e3d1d26d3",
-    "bytes": 3808,
+    "blob_sha": "14639a510d9b7f2e0200825cfa31704cc398732a",
+    "bytes": 4076,
     "images": [
      "paradedb/paradedb:${{"
     ]
@@ -11923,6 +12234,113 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": []
+  },
+  "fail_count": 0
+ },
+ "Stigern/VibeBasic": {
+  "fn": "Stigern/VibeBasic",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:49:11Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-31",
+  "stars": 9,
+  "tree": {
+   "sha": "14cb2b64400db541a47d11c82ab4023f4d545a2e",
+   "etag": "W/\"1a77af27ed9d470172a420bf1a3b8306db50ba5cc426f9c1a366f16761bffcbd\"",
+   "truncated": false,
+   "path_count": 560,
+   "matched": [
+    "package.json",
+    "src-tauri/Cargo.toml",
+    ".github/workflows/ci.yml",
+    ".github/workflows/release.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "987009770e7dadd5e4a27ca522def442dfa1507d",
+    "ecosystem": "npm",
+    "bytes": 935,
+    "names": [
+     "@codemirror/autocomplete",
+     "@codemirror/commands",
+     "@codemirror/language",
+     "@codemirror/search",
+     "@codemirror/state",
+     "@codemirror/view",
+     "@tauri-apps/api",
+     "@tauri-apps/plugin-dialog"
+    ],
+    "dev": [
+     "@tauri-apps/cli",
+     "jsdom",
+     "typescript",
+     "vite",
+     "vitest"
+    ]
+   },
+   {
+    "path": "src-tauri/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "590a36d480cafe50de5433aeab8f7a6d91f0afbe",
+    "ecosystem": "cargo",
+    "bytes": 2140,
+    "names": [
+     "serde_json",
+     "serde",
+     "log",
+     "tauri",
+     "tauri-plugin-log",
+     "tauri-plugin-dialog",
+     "plist",
+     "base64",
+     "tokio",
+     "rusqlite",
+     "reqwest",
+     "serialport",
+     "libc",
+     "editpe",
+     "png",
+     "if-addrs"
+    ],
+    "dev": [
+     "tauri-build",
+     "tempfile",
+     "httpmock",
+     "tokio"
+    ]
+   },
+   {
+    "path": ".github/workflows/ci.yml",
+    "kind": "ci",
+    "blob_sha": "a765f11982d7a6bdac915d2b9382ef2315b63031",
+    "bytes": 1973
+   },
+   {
+    "path": ".github/workflows/release.yml",
+    "kind": "ci",
+    "blob_sha": "ca83d733ad759a72fd000037283a7a4a187edc0d",
+    "bytes": 6289
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "CHANGELOG.md"
+   ],
+   "readme_i18n": [
+    "src/ui98/vendor/README-font-ms-sans-serif-bold.txt",
+    "src/ui98/vendor/README-font-ms-sans-serif.txt"
+   ],
+   "docs_matrix": [],
+   "paths": [
+    "tests-live/driver.ts",
+    "src/lang/interp/driver.ts"
+   ]
   },
   "fail_count": 0
  }

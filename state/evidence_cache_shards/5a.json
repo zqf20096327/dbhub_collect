@@ -3923,15 +3923,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:39:03Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:36:59Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 140,
   "tree": {
-   "sha": "e23f7831290c3fa34015a1e09ab2141d648502dc",
-   "etag": "W/\"df7d16572add28419e1287d1ffce4e0f717563ec58038a0ffc9acf57149cd24e\"",
+   "sha": "78344b79a8f3682ae1d00696290954e2e71a2618",
+   "etag": "W/\"fab8c5ec3e59ddd6db23eb0936fe6aba6bead105984d6dad0e4e34fabe211044\"",
    "truncated": false,
-   "path_count": 641,
+   "path_count": 643,
    "matched": [
     "cli/package.json",
     "instance-jobs/go.mod",
@@ -3950,6 +3951,9 @@
     "monitoring_flask_backend/Dockerfile",
     "pgwatch/Dockerfile",
     "postgres_ai_helm/values.yaml",
+    "rds-host-stats/Dockerfile",
+    "reporter/Dockerfile",
+    "telemetry/Dockerfile",
     ".github/workflows/codeql-analysis.yml",
     ".github/workflows/mirror-to-gitlab.yml"
    ]
@@ -4178,6 +4182,33 @@
     ]
    },
    {
+    "path": "rds-host-stats/Dockerfile",
+    "kind": "image",
+    "blob_sha": "db7dcd22f5a58c67fa7a59dc4bc050510e3fd1f9",
+    "bytes": 1338,
+    "images": [
+     "oven/bun:1"
+    ]
+   },
+   {
+    "path": "reporter/Dockerfile",
+    "kind": "image",
+    "blob_sha": "74b9d6856a2c0519ece38d10ead6370a0213df8d",
+    "bytes": 1230,
+    "images": [
+     "python:3.11-slim"
+    ]
+   },
+   {
+    "path": "telemetry/Dockerfile",
+    "kind": "image",
+    "blob_sha": "c08dcbc1cc8109c159bf65bd6d50247383a39ead",
+    "bytes": 893,
+    "images": [
+     "oven/bun:1"
+    ]
+   },
+   {
     "path": ".github/workflows/codeql-analysis.yml",
     "kind": "ci",
     "blob_sha": "329a5d302551010981add6c8429b656c2dc906f8",
@@ -4366,13 +4397,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T05:01:04Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:42:39Z",
   "default_branch": "master",
   "pushed_at": "2017-10-05",
   "stars": 101,
   "tree": {
    "sha": "daa20fc103969ac9fe2f0ff479f968615f0e5ee1",
-   "etag": "W/\"53709488ea7a17752787f0ca2781a0edc90dddfc710b0b4a4d3b263230c6c8e6\"",
+   "etag": "W/\"2765378134edd7fd7f81e9e9ab43c32224111959618ce48bf4f576c7dbac3302\"",
    "truncated": false,
    "path_count": 7361,
    "matched": [
@@ -4387,7 +4419,16 @@
     "www/static/bower_components/chart.js/package.json",
     "www/static/bower_components/ckeditor/composer.json",
     "www/static/bower_components/ckeditor/package.json",
-    "www/static/bower_components/eve-raphael/package.json"
+    "www/static/bower_components/eve-raphael/package.json",
+    "www/static/bower_components/ion.rangeSlider/package.json",
+    "www/static/bower_components/jquery-knob/package.json",
+    "www/static/bower_components/jquery-slimscroll/package.json",
+    "www/static/bower_components/jquery-ui/composer.json",
+    "www/static/bower_components/jquery-ui/package.json",
+    "www/static/bower_components/morris.js/package.json",
+    "www/static/bower_components/select2/composer.json",
+    "www/static/bower_components/select2/package.json",
+    "www/static/bower_components/bootstrap-datepicker/docs/requirements.txt"
    ]
   },
   "files": [
@@ -4580,6 +4621,128 @@
     "blob_sha": "46d15e3671f38d0579ea3fcf74708f611b6d1072",
     "ecosystem": "npm",
     "bytes": 390
+   },
+   {
+    "path": "www/static/bower_components/ion.rangeSlider/package.json",
+    "kind": "dep",
+    "blob_sha": "757ee784c78fa36d8c171a2031ecccf875c0f691",
+    "ecosystem": "npm",
+    "bytes": 1461,
+    "names": [
+     "jquery"
+    ]
+   },
+   {
+    "path": "www/static/bower_components/jquery-knob/package.json",
+    "kind": "dep",
+    "blob_sha": "fbb4245938bdcde69169219dc22660118532b74c",
+    "ecosystem": "npm",
+    "bytes": 589
+   },
+   {
+    "path": "www/static/bower_components/jquery-slimscroll/package.json",
+    "kind": "dep",
+    "blob_sha": "147e92deff582645b66ab7131ffa58921a3708d3",
+    "ecosystem": "npm",
+    "bytes": 1013,
+    "names": [
+     "jquery"
+    ]
+   },
+   {
+    "path": "www/static/bower_components/jquery-ui/composer.json",
+    "kind": "dep",
+    "blob_sha": "cea9ab65822e8a6941f76c1f0cca4dcb14e8d290",
+    "ecosystem": "composer",
+    "bytes": 2083,
+    "names": [
+     "components/jquery"
+    ]
+   },
+   {
+    "path": "www/static/bower_components/jquery-ui/package.json",
+    "kind": "dep",
+    "blob_sha": "dac539fed091d5f23785830f193a7d64fc4b4352",
+    "ecosystem": "npm",
+    "bytes": 1689,
+    "dev": [
+     "grunt",
+     "grunt-css",
+     "grunt-compare-size",
+     "grunt-html",
+     "grunt-junit",
+     "grunt-git-authors",
+     "rimraf",
+     "testswarm"
+    ]
+   },
+   {
+    "path": "www/static/bower_components/morris.js/package.json",
+    "kind": "dep",
+    "blob_sha": "529c2b129af2cea6a0f10f586c8637b5e921a75b",
+    "ecosystem": "npm",
+    "bytes": 871,
+    "dev": [
+     "matchdep",
+     "grunt",
+     "grunt-mocha",
+     "grunt-contrib-concat",
+     "grunt-contrib-coffee",
+     "grunt-contrib-uglify",
+     "grunt-contrib-less",
+     "grunt-contrib-watch",
+     "grunt-shell",
+     "bower"
+    ]
+   },
+   {
+    "path": "www/static/bower_components/select2/composer.json",
+    "kind": "dep",
+    "blob_sha": "e03d5df4e455b502dcb75ae02297f4540e147d96",
+    "ecosystem": "composer",
+    "bytes": 528,
+    "names": [
+     "robloach/component-installer"
+    ]
+   },
+   {
+    "path": "www/static/bower_components/select2/package.json",
+    "kind": "dep",
+    "blob_sha": "3eda0e8a73b8d04126e166a49fcc4c86c07f28cf",
+    "ecosystem": "npm",
+    "bytes": 1591,
+    "names": [
+     "almond",
+     "jquery-mousewheel"
+    ],
+    "dev": [
+     "grunt",
+     "grunt-cli",
+     "grunt-contrib-clean",
+     "grunt-contrib-concat",
+     "grunt-contrib-connect",
+     "grunt-contrib-jshint",
+     "grunt-contrib-nodeunit",
+     "grunt-contrib-qunit",
+     "grunt-contrib-requirejs",
+     "grunt-contrib-symlink",
+     "grunt-contrib-uglify",
+     "grunt-contrib-watch",
+     "grunt-gh-pages",
+     "grunt-jekyll",
+     "grunt-sass",
+     "grunt-saucelabs"
+    ]
+   },
+   {
+    "path": "www/static/bower_components/bootstrap-datepicker/docs/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "483a4e9600bd7a794750dd52ca24503fdf220133",
+    "ecosystem": "pypi",
+    "bytes": 17,
+    "names": [
+     "sphinx_rtd_theme"
+    ]
    }
   ],
   "clues": {
@@ -4632,7 +4795,167 @@
     "www/static/plugins/iCheck/flat/_all.css",
     "www/static/plugins/iCheck/flat/aero.css",
     "www/static/plugins/iCheck/flat/aero.png",
-    "www/static/plugins/iCheck/flat/aero@2x.png"
+    "www/static/plugins/iCheck/flat/aero@2x.png",
+    "www/static/plugins/iCheck/flat/blue.css",
+    "www/static/plugins/iCheck/flat/blue.png",
+    "www/static/plugins/iCheck/flat/blue@2x.png",
+    "www/static/plugins/iCheck/flat/flat.css",
+    "www/static/plugins/iCheck/flat/flat.png",
+    "www/static/plugins/iCheck/flat/flat@2x.png",
+    "www/static/plugins/iCheck/flat/green.css",
+    "www/static/plugins/iCheck/flat/green.png",
+    "www/static/plugins/iCheck/flat/green@2x.png",
+    "www/static/plugins/iCheck/flat/grey.css",
+    "www/static/plugins/iCheck/flat/grey.png",
+    "www/static/plugins/iCheck/flat/grey@2x.png",
+    "www/static/plugins/iCheck/flat/orange.css",
+    "www/static/plugins/iCheck/flat/orange.png",
+    "www/static/plugins/iCheck/flat/orange@2x.png",
+    "www/static/plugins/iCheck/flat/pink.css",
+    "www/static/plugins/iCheck/flat/pink.png",
+    "www/static/plugins/iCheck/flat/pink@2x.png",
+    "www/static/plugins/iCheck/flat/purple.css",
+    "www/static/plugins/iCheck/flat/purple.png",
+    "www/static/plugins/iCheck/flat/purple@2x.png",
+    "www/static/plugins/iCheck/flat/red.css",
+    "www/static/plugins/iCheck/flat/red.png",
+    "www/static/plugins/iCheck/flat/red@2x.png",
+    "www/static/plugins/iCheck/flat/yellow.css",
+    "www/static/plugins/iCheck/flat/yellow.png",
+    "www/static/plugins/iCheck/flat/yellow@2x.png",
+    "www/static/plugins/iCheck/futurico/futurico.css",
+    "www/static/plugins/iCheck/futurico/futurico.png",
+    "www/static/plugins/iCheck/futurico/futurico@2x.png",
+    "www/static/plugins/iCheck/line/_all.css",
+    "www/static/plugins/iCheck/line/aero.css",
+    "www/static/plugins/iCheck/line/blue.css",
+    "www/static/plugins/iCheck/line/green.css",
+    "www/static/plugins/iCheck/line/grey.css",
+    "www/static/plugins/iCheck/line/line.css",
+    "www/static/plugins/iCheck/line/line.png",
+    "www/static/plugins/iCheck/line/line@2x.png",
+    "www/static/plugins/iCheck/line/orange.css",
+    "www/static/plugins/iCheck/line/pink.css",
+    "www/static/plugins/iCheck/line/purple.css",
+    "www/static/plugins/iCheck/line/red.css",
+    "www/static/plugins/iCheck/line/yellow.css",
+    "www/static/plugins/iCheck/minimal/_all.css",
+    "www/static/plugins/iCheck/minimal/aero.css",
+    "www/static/plugins/iCheck/minimal/aero.png",
+    "www/static/plugins/iCheck/minimal/aero@2x.png",
+    "www/static/plugins/iCheck/minimal/blue.css",
+    "www/static/plugins/iCheck/minimal/blue.png",
+    "www/static/plugins/iCheck/minimal/blue@2x.png",
+    "www/static/plugins/iCheck/minimal/green.css",
+    "www/static/plugins/iCheck/minimal/green.png",
+    "www/static/plugins/iCheck/minimal/green@2x.png",
+    "www/static/plugins/iCheck/minimal/grey.css",
+    "www/static/plugins/iCheck/minimal/grey.png",
+    "www/static/plugins/iCheck/minimal/grey@2x.png",
+    "www/static/plugins/iCheck/minimal/minimal.css",
+    "www/static/plugins/iCheck/minimal/minimal.png",
+    "www/static/plugins/iCheck/minimal/minimal@2x.png",
+    "www/static/plugins/iCheck/minimal/orange.css",
+    "www/static/plugins/iCheck/minimal/orange.png",
+    "www/static/plugins/iCheck/minimal/orange@2x.png",
+    "www/static/plugins/iCheck/minimal/pink.css",
+    "www/static/plugins/iCheck/minimal/pink.png",
+    "www/static/plugins/iCheck/minimal/pink@2x.png",
+    "www/static/plugins/iCheck/minimal/purple.css",
+    "www/static/plugins/iCheck/minimal/purple.png",
+    "www/static/plugins/iCheck/minimal/purple@2x.png",
+    "www/static/plugins/iCheck/minimal/red.css",
+    "www/static/plugins/iCheck/minimal/red.png",
+    "www/static/plugins/iCheck/minimal/red@2x.png",
+    "www/static/plugins/iCheck/minimal/yellow.css",
+    "www/static/plugins/iCheck/minimal/yellow.png",
+    "www/static/plugins/iCheck/minimal/yellow@2x.png",
+    "www/static/plugins/iCheck/polaris/polaris.css",
+    "www/static/plugins/iCheck/polaris/polaris.png",
+    "www/static/plugins/iCheck/polaris/polaris@2x.png",
+    "www/static/plugins/iCheck/square/_all.css",
+    "www/static/plugins/iCheck/square/aero.css",
+    "www/static/plugins/iCheck/square/aero.png",
+    "www/static/plugins/iCheck/square/aero@2x.png",
+    "www/static/plugins/iCheck/square/blue.css",
+    "www/static/plugins/iCheck/square/blue.png",
+    "www/static/plugins/iCheck/square/blue@2x.png",
+    "www/static/plugins/iCheck/square/green.css",
+    "www/static/plugins/iCheck/square/green.png",
+    "www/static/plugins/iCheck/square/green@2x.png",
+    "www/static/plugins/iCheck/square/grey.css",
+    "www/static/plugins/iCheck/square/grey.png",
+    "www/static/plugins/iCheck/square/grey@2x.png",
+    "www/static/plugins/iCheck/square/orange.css",
+    "www/static/plugins/iCheck/square/orange.png",
+    "www/static/plugins/iCheck/square/orange@2x.png",
+    "www/static/plugins/iCheck/square/pink.css",
+    "www/static/plugins/iCheck/square/pink.png",
+    "www/static/plugins/iCheck/square/pink@2x.png",
+    "www/static/plugins/iCheck/square/purple.css",
+    "www/static/plugins/iCheck/square/purple.png",
+    "www/static/plugins/iCheck/square/purple@2x.png",
+    "www/static/plugins/iCheck/square/red.css",
+    "www/static/plugins/iCheck/square/red.png",
+    "www/static/plugins/iCheck/square/red@2x.png",
+    "www/static/plugins/iCheck/square/square.css",
+    "www/static/plugins/iCheck/square/square.png",
+    "www/static/plugins/iCheck/square/square@2x.png",
+    "www/static/plugins/iCheck/square/yellow.css",
+    "www/static/plugins/iCheck/square/yellow.png",
+    "www/static/plugins/iCheck/square/yellow@2x.png",
+    "www/static/plugins/input-mask/phone-codes/phone-be.json",
+    "www/static/plugins/input-mask/phone-codes/phone-codes.json",
+    "www/static/plugins/input-mask/phone-codes/readme.txt",
+    "www/static/bower_components/bootstrap-colorpicker/src/js/colorpicker-plugin-wrapper.js",
+    "www/static/bower_components/ckeditor/plugins/adobeair/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/ajax/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/autoembed/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/autogrow/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/autolink/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/balloonpanel/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/bbcode/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/bidi/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/codesnippet/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/codesnippetgeshi/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/colorbutton/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/colordialog/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/copyformatting/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/devtools/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/dialog/dialogDefinition.js",
+    "www/static/bower_components/ckeditor/plugins/dialogadvtab/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/div/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/divarea/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/docprops/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/embed/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/embedbase/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/embedsemantic/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/filetools/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/find/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/flash/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/font/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/forms/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/iframe/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/iframedialog/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/image2/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/indentblock/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/justify/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/language/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/lineutils/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/liststyle/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/mathjax/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/newpage/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/notificationaggregator/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/pagebreak/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/panelbutton/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/placeholder/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/preview/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/preview/preview.html",
+    "www/static/bower_components/ckeditor/plugins/print/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/save/plugin.js",
+    "www/static/bower_components/ckeditor/plugins/scayt/CHANGELOG.md",
+    "www/static/bower_components/ckeditor/plugins/scayt/LICENSE.md",
+    "www/static/bower_components/ckeditor/plugins/selectall/plugin.js"
    ]
   },
   "fail_count": 0
@@ -4728,13 +5051,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T05:06:58Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:43:57Z",
   "default_branch": "main",
   "pushed_at": "2022-11-08",
   "stars": 92,
   "tree": {
    "sha": "f818e3c2e89aec252883c28342dff9d5d86f1ea2",
-   "etag": "W/\"c0243857f97702b3e83f0a2751d2ba50d6e0cea10a5157c8dfc25895deead035\"",
+   "etag": "W/\"83ccf62d25c5c47edbc0814581f7634b990cf4c94973b70d09e77e5430772b53\"",
    "truncated": false,
    "path_count": 2555,
    "matched": [
@@ -4749,7 +5073,43 @@
     "Chapter08/onlineStore/composer.json",
     "Chapter08/onlineStore/package.json",
     "Chapter09/onlineStore/composer.json",
-    "Chapter09/onlineStore/package.json"
+    "Chapter09/onlineStore/package.json",
+    "Chapter11/onlineStore/composer.json",
+    "Chapter11/onlineStore/package.json",
+    "Chapter12/onlineStore/composer.json",
+    "Chapter12/onlineStore/package.json",
+    "Chapter13/onlineStore/composer.json",
+    "Chapter13/onlineStore/package.json",
+    "Chapter14/onlineStore/composer.json",
+    "Chapter14/onlineStore/package.json",
+    "Chapter15/onlineStore/composer.json",
+    "Chapter15/onlineStore/package.json",
+    "Chapter16/onlineStore/composer.json",
+    "Chapter16/onlineStore/package.json",
+    "Chapter17-Advanced/onlineStore/composer.json",
+    "Chapter17-Advanced/onlineStore/package.json",
+    "Chapter17/onlineStore/composer.json",
+    "Chapter17/onlineStore/package.json",
+    "Chapter18/onlineStore/composer.json",
+    "Chapter18/onlineStore/package.json",
+    "Chapter19/onlineStore/composer.json",
+    "Chapter19/onlineStore/package.json",
+    "Chapter20/onlineStore/composer.json",
+    "Chapter20/onlineStore/package.json",
+    "Chapter21/onlineStore/composer.json",
+    "Chapter21/onlineStore/package.json",
+    "Chapter22/onlineStore/composer.json",
+    "Chapter22/onlineStore/package.json",
+    "Chapter23/onlineStore/composer.json",
+    "Chapter23/onlineStore/package.json",
+    "Chapter25/onlineStore/composer.json",
+    "Chapter25/onlineStore/package.json",
+    "Chapter26/onlineStore/composer.json",
+    "Chapter26/onlineStore/package.json",
+    "Chapter27/onlineStore/composer.json",
+    "Chapter27/onlineStore/package.json",
+    "Chapter28/onlineStore/composer.json",
+    "Chapter28/onlineStore/package.json"
    ]
   },
   "files": [
@@ -4970,6 +5330,707 @@
      "lodash",
      "postcss"
     ]
+   },
+   {
+    "path": "Chapter11/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "f0f2eda044565007fb5e807a512e164ff6fbfa73",
+    "ecosystem": "composer",
+    "bytes": 1791,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter11/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7a9aecdf303df17e84c167d05c5d6cdd66981d23",
+    "ecosystem": "npm",
+    "bytes": 473,
+    "dev": [
+     "axios",
+     "laravel-mix",
+     "lodash",
+     "postcss"
+    ]
+   },
+   {
+    "path": "Chapter12/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "f0f2eda044565007fb5e807a512e164ff6fbfa73",
+    "ecosystem": "composer",
+    "bytes": 1791,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter12/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7a9aecdf303df17e84c167d05c5d6cdd66981d23",
+    "ecosystem": "npm",
+    "bytes": 473,
+    "dev": [
+     "axios",
+     "laravel-mix",
+     "lodash",
+     "postcss"
+    ]
+   },
+   {
+    "path": "Chapter13/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "f0f2eda044565007fb5e807a512e164ff6fbfa73",
+    "ecosystem": "composer",
+    "bytes": 1791,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter13/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7a9aecdf303df17e84c167d05c5d6cdd66981d23",
+    "ecosystem": "npm",
+    "bytes": 473,
+    "dev": [
+     "axios",
+     "laravel-mix",
+     "lodash",
+     "postcss"
+    ]
+   },
+   {
+    "path": "Chapter14/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "f0f2eda044565007fb5e807a512e164ff6fbfa73",
+    "ecosystem": "composer",
+    "bytes": 1791,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter14/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7a9aecdf303df17e84c167d05c5d6cdd66981d23",
+    "ecosystem": "npm",
+    "bytes": 473,
+    "dev": [
+     "axios",
+     "laravel-mix",
+     "lodash",
+     "postcss"
+    ]
+   },
+   {
+    "path": "Chapter15/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "f0f2eda044565007fb5e807a512e164ff6fbfa73",
+    "ecosystem": "composer",
+    "bytes": 1791,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter15/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7a9aecdf303df17e84c167d05c5d6cdd66981d23",
+    "ecosystem": "npm",
+    "bytes": 473,
+    "dev": [
+     "axios",
+     "laravel-mix",
+     "lodash",
+     "postcss"
+    ]
+   },
+   {
+    "path": "Chapter16/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "f0f2eda044565007fb5e807a512e164ff6fbfa73",
+    "ecosystem": "composer",
+    "bytes": 1791,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter16/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7a9aecdf303df17e84c167d05c5d6cdd66981d23",
+    "ecosystem": "npm",
+    "bytes": 473,
+    "dev": [
+     "axios",
+     "laravel-mix",
+     "lodash",
+     "postcss"
+    ]
+   },
+   {
+    "path": "Chapter17-Advanced/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "f0f2eda044565007fb5e807a512e164ff6fbfa73",
+    "ecosystem": "composer",
+    "bytes": 1791,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter17-Advanced/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7a9aecdf303df17e84c167d05c5d6cdd66981d23",
+    "ecosystem": "npm",
+    "bytes": 473,
+    "dev": [
+     "axios",
+     "laravel-mix",
+     "lodash",
+     "postcss"
+    ]
+   },
+   {
+    "path": "Chapter17/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "f0f2eda044565007fb5e807a512e164ff6fbfa73",
+    "ecosystem": "composer",
+    "bytes": 1791,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter17/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7a9aecdf303df17e84c167d05c5d6cdd66981d23",
+    "ecosystem": "npm",
+    "bytes": 473,
+    "dev": [
+     "axios",
+     "laravel-mix",
+     "lodash",
+     "postcss"
+    ]
+   },
+   {
+    "path": "Chapter18/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "f0f2eda044565007fb5e807a512e164ff6fbfa73",
+    "ecosystem": "composer",
+    "bytes": 1791,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter18/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7a9aecdf303df17e84c167d05c5d6cdd66981d23",
+    "ecosystem": "npm",
+    "bytes": 473,
+    "dev": [
+     "axios",
+     "laravel-mix",
+     "lodash",
+     "postcss"
+    ]
+   },
+   {
+    "path": "Chapter19/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "f0f2eda044565007fb5e807a512e164ff6fbfa73",
+    "ecosystem": "composer",
+    "bytes": 1791,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter19/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7a9aecdf303df17e84c167d05c5d6cdd66981d23",
+    "ecosystem": "npm",
+    "bytes": 473,
+    "dev": [
+     "axios",
+     "laravel-mix",
+     "lodash",
+     "postcss"
+    ]
+   },
+   {
+    "path": "Chapter20/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "f0f2eda044565007fb5e807a512e164ff6fbfa73",
+    "ecosystem": "composer",
+    "bytes": 1791,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter20/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7a9aecdf303df17e84c167d05c5d6cdd66981d23",
+    "ecosystem": "npm",
+    "bytes": 473,
+    "dev": [
+     "axios",
+     "laravel-mix",
+     "lodash",
+     "postcss"
+    ]
+   },
+   {
+    "path": "Chapter21/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "a9459b536d6522823e9ce5d1cfafaeab3857b5a9",
+    "ecosystem": "composer",
+    "bytes": 1821,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker",
+     "laravel/ui"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter21/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7b716819abc1687474d9c4967f259aa78526cc25",
+    "ecosystem": "npm",
+    "bytes": 603,
+    "dev": [
+     "@popperjs/core",
+     "axios",
+     "bootstrap",
+     "laravel-mix",
+     "lodash",
+     "postcss",
+     "sass",
+     "sass-loader"
+    ]
+   },
+   {
+    "path": "Chapter22/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "a9459b536d6522823e9ce5d1cfafaeab3857b5a9",
+    "ecosystem": "composer",
+    "bytes": 1821,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker",
+     "laravel/ui"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter22/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7b716819abc1687474d9c4967f259aa78526cc25",
+    "ecosystem": "npm",
+    "bytes": 603,
+    "dev": [
+     "@popperjs/core",
+     "axios",
+     "bootstrap",
+     "laravel-mix",
+     "lodash",
+     "postcss",
+     "sass",
+     "sass-loader"
+    ]
+   },
+   {
+    "path": "Chapter23/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "a9459b536d6522823e9ce5d1cfafaeab3857b5a9",
+    "ecosystem": "composer",
+    "bytes": 1821,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker",
+     "laravel/ui"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter23/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7b716819abc1687474d9c4967f259aa78526cc25",
+    "ecosystem": "npm",
+    "bytes": 603,
+    "dev": [
+     "@popperjs/core",
+     "axios",
+     "bootstrap",
+     "laravel-mix",
+     "lodash",
+     "postcss",
+     "sass",
+     "sass-loader"
+    ]
+   },
+   {
+    "path": "Chapter25/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "a9459b536d6522823e9ce5d1cfafaeab3857b5a9",
+    "ecosystem": "composer",
+    "bytes": 1821,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker",
+     "laravel/ui"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter25/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7b716819abc1687474d9c4967f259aa78526cc25",
+    "ecosystem": "npm",
+    "bytes": 603,
+    "dev": [
+     "@popperjs/core",
+     "axios",
+     "bootstrap",
+     "laravel-mix",
+     "lodash",
+     "postcss",
+     "sass",
+     "sass-loader"
+    ]
+   },
+   {
+    "path": "Chapter26/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "a9459b536d6522823e9ce5d1cfafaeab3857b5a9",
+    "ecosystem": "composer",
+    "bytes": 1821,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker",
+     "laravel/ui"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter26/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7b716819abc1687474d9c4967f259aa78526cc25",
+    "ecosystem": "npm",
+    "bytes": 603,
+    "dev": [
+     "@popperjs/core",
+     "axios",
+     "bootstrap",
+     "laravel-mix",
+     "lodash",
+     "postcss",
+     "sass",
+     "sass-loader"
+    ]
+   },
+   {
+    "path": "Chapter27/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "a9459b536d6522823e9ce5d1cfafaeab3857b5a9",
+    "ecosystem": "composer",
+    "bytes": 1821,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker",
+     "laravel/ui"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter27/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7b716819abc1687474d9c4967f259aa78526cc25",
+    "ecosystem": "npm",
+    "bytes": 603,
+    "dev": [
+     "@popperjs/core",
+     "axios",
+     "bootstrap",
+     "laravel-mix",
+     "lodash",
+     "postcss",
+     "sass",
+     "sass-loader"
+    ]
+   },
+   {
+    "path": "Chapter28/onlineStore/composer.json",
+    "kind": "dep",
+    "blob_sha": "a9459b536d6522823e9ce5d1cfafaeab3857b5a9",
+    "ecosystem": "composer",
+    "bytes": 1821,
+    "names": [
+     "php",
+     "fruitcake/laravel-cors",
+     "guzzlehttp/guzzle",
+     "laravel/framework",
+     "laravel/sanctum",
+     "laravel/tinker",
+     "laravel/ui"
+    ],
+    "dev": [
+     "fakerphp/faker",
+     "laravel/sail",
+     "mockery/mockery",
+     "nunomaduro/collision",
+     "phpunit/phpunit",
+     "spatie/laravel-ignition",
+     "squizlabs/php_codesniffer"
+    ]
+   },
+   {
+    "path": "Chapter28/onlineStore/package.json",
+    "kind": "dep",
+    "blob_sha": "7b716819abc1687474d9c4967f259aa78526cc25",
+    "ecosystem": "npm",
+    "bytes": 603,
+    "dev": [
+     "@popperjs/core",
+     "axios",
+     "bootstrap",
+     "laravel-mix",
+     "lodash",
+     "postcss",
+     "sass",
+     "sass-loader"
+    ]
    }
   ],
   "clues": {
@@ -5013,15 +6074,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T05:48:49Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:49:33Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 65,
   "tree": {
-   "sha": "5a1f46609344007750a6e980f2305f540dc0b372",
-   "etag": "W/\"d31b6300fa9c3dc72d7eeef5933a82c59b1a85c0ba6c50995c8e5c90bb9ed93e\"",
+   "sha": "cda1ef954a55360f6ab8dc10e49c3dc4802c2309",
+   "etag": "W/\"4c3be2c6c4f4a20041b118de7d0a2701e020b871b15d11c4dbab1ed06da1ded9\"",
    "truncated": false,
-   "path_count": 11212,
+   "path_count": 11510,
    "matched": [
     "package.json",
     "e2e/package.json",
@@ -5035,6 +6097,26 @@
     "packages/blocks-engine/package.json",
     "packages/blocks-react/package.json",
     "packages/builder/package.json",
+    "packages/create-nextly-app/package.json",
+    "packages/eslint-config/package.json",
+    "packages/eslint-plugin/package.json",
+    "packages/module-specifiers/package.json",
+    "packages/nextly/package.json",
+    "packages/plugin-accounts/package.json",
+    "packages/plugin-commerce/package.json",
+    "packages/plugin-form-builder/package.json",
+    "packages/plugin-mcp/package.json",
+    "packages/plugin-page-builder/package.json",
+    "packages/plugin-sdk/package.json",
+    "packages/plugin-seo/package.json",
+    "packages/prettier-config/package.json",
+    "packages/storage-s3/package.json",
+    "packages/storage-uploadthing/package.json",
+    "packages/storage-vercel-blob/package.json",
+    "packages/telemetry/package.json",
+    "packages/tsconfig/package.json",
+    "packages/ui/package.json",
+    "packages/admin/__fixtures__/consumer-app/package.json",
     "docker-compose.test.yml",
     "docker-compose.yml",
     ".github/workflows/cancel-closed-pull-request-runs.yml",
@@ -5048,19 +6130,29 @@
     ".github/workflows/labels-sync.yml",
     ".github/workflows/lighthouse.yml",
     ".github/workflows/main-catch-up.yml",
+    ".github/workflows/multi-instance-cache.yml",
     ".github/workflows/newest-minor.yml",
     ".github/workflows/nextly-review-bot.yml",
     ".github/workflows/package-smoke.yml",
-    ".github/workflows/preview.yml"
+    ".github/workflows/preview.yml",
+    ".github/workflows/release-health.yml",
+    ".github/workflows/release.yml",
+    ".github/workflows/repo-metadata.yml",
+    ".github/workflows/scaffold-build.yml",
+    ".github/workflows/skills-installer.yml",
+    ".github/workflows/small-checks.yml",
+    ".github/workflows/sweep-pull-request-caches.yml",
+    ".github/workflows/trigger-docs-deploy.yml",
+    ".github/workflows/unit-order.yml"
    ]
   },
   "files": [
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "cc0196cac293a4d7b63dde7a29ff033865922baf",
+    "blob_sha": "e15a8c2b70aaaa1679660206144add0097d86fe2",
     "ecosystem": "npm",
-    "bytes": 9478,
+    "bytes": 9594,
     "names": [
      "@mdx-js/mdx",
      "js-yaml",
@@ -5111,12 +6203,13 @@
    {
     "path": "e2e/package.json",
     "kind": "dep",
-    "blob_sha": "9c39ad4fc085c1a2d2ce90c3c9455928bd3a1050",
+    "blob_sha": "1bafb2813da033e39fcd47764d99535dfe14ab68",
     "ecosystem": "npm",
-    "bytes": 1148,
+    "bytes": 1478,
     "dev": [
      "@axe-core/playwright",
      "@nextlyhq/adapter-drizzle",
+     "@nextlyhq/adapter-postgres",
      "@nextlyhq/adapter-sqlite",
      "@nextlyhq/admin",
      "@nextlyhq/builder",
@@ -5126,14 +6219,21 @@
      "@nextlyhq/tsconfig",
      "@playwright/test",
      "@types/node",
+     "@types/pg",
+     "@types/react",
+     "@types/react-dom",
+     "next",
      "nextly",
+     "pg",
+     "react",
+     "react-dom",
      "typescript"
     ]
    },
    {
     "path": "apps/playground/package.json",
     "kind": "dep",
-    "blob_sha": "c449efbc310f89966931dff6b86f14e56534362c",
+    "blob_sha": "d360373d099964ba59dc5d35a5525c96098087df",
     "ecosystem": "npm",
     "bytes": 2166,
     "names": [
@@ -5183,7 +6283,7 @@
    {
     "path": "packages/adapter-drizzle/package.json",
     "kind": "dep",
-    "blob_sha": "72761e760efd7a9f387a613a22f63b038670448a",
+    "blob_sha": "a95be55301bc3e5d5dc933b4978416a7fff96923",
     "ecosystem": "npm",
     "bytes": 2641,
     "names": [
@@ -5203,7 +6303,7 @@
    {
     "path": "packages/adapter-mysql/package.json",
     "kind": "dep",
-    "blob_sha": "9e105c6c55c78bf0fdda5d3c877af67bfa066432",
+    "blob_sha": "da380d6557abe078c69b7ebe8a7d979cef7196ca",
     "ecosystem": "npm",
     "bytes": 1887,
     "names": [
@@ -5225,7 +6325,7 @@
    {
     "path": "packages/adapter-postgres/package.json",
     "kind": "dep",
-    "blob_sha": "535c0e451380c4801ee240c53295bfd4b8d8a063",
+    "blob_sha": "e3b3d67c5f8e804fbbf9009cbaf79ef09b690c9c",
     "ecosystem": "npm",
     "bytes": 1939,
     "names": [
@@ -5248,7 +6348,7 @@
    {
     "path": "packages/adapter-sqlite/package.json",
     "kind": "dep",
-    "blob_sha": "7306fa18650b3c83ab3074296a790c4c261c9e4e",
+    "blob_sha": "4ab86099d4b8c3b6f4b24465396143c893ec1db2",
     "ecosystem": "npm",
     "bytes": 1971,
     "names": [
@@ -5271,7 +6371,7 @@
    {
     "path": "packages/admin-css/package.json",
     "kind": "dep",
-    "blob_sha": "bc3cf209b8cda3b902d388e4ddef61f55a28db4a",
+    "blob_sha": "a940be26b5368222789d3c0f982066a62e17cfa0",
     "ecosystem": "npm",
     "bytes": 1083,
     "names": [
@@ -5285,9 +6385,9 @@
    {
     "path": "packages/admin/package.json",
     "kind": "dep",
-    "blob_sha": "b3f868099982e68fc1be189739c76f19f500755c",
+    "blob_sha": "b8a34ad5dadd76c0689f77d5e3ba3c238ee6d9b6",
     "ecosystem": "npm",
-    "bytes": 6244,
+    "bytes": 6315,
     "names": [
      "@codemirror/autocomplete",
      "@codemirror/lang-css",
@@ -5398,7 +6498,7 @@
    {
     "path": "packages/blocks-engine/package.json",
     "kind": "dep",
-    "blob_sha": "76a77d84d5ccf8c445ce9695f156f37e740764ac",
+    "blob_sha": "d7b380a2612263ab7768d3dba36c8ede9a9edb8c",
     "ecosystem": "npm",
     "bytes": 1911,
     "names": [
@@ -5419,7 +6519,7 @@
    {
     "path": "packages/blocks-react/package.json",
     "kind": "dep",
-    "blob_sha": "ac2b140b07ba6cf833152dba7a19be9fba968477",
+    "blob_sha": "dde95a6364705253dd13dec9f7480e791556c910",
     "ecosystem": "npm",
     "bytes": 2473,
     "names": [
@@ -5447,7 +6547,7 @@
    {
     "path": "packages/builder/package.json",
     "kind": "dep",
-    "blob_sha": "29d4ba6279abd9baf0deacf7fdd5455566204ea7",
+    "blob_sha": "f0776913dbf2d759eb6aeb109f2697d5b3d34335",
     "ecosystem": "npm",
     "bytes": 3054,
     "names": [
@@ -5480,6 +6580,548 @@
      "typescript",
      "vitest"
     ]
+   },
+   {
+    "path": "packages/create-nextly-app/package.json",
+    "kind": "dep",
+    "blob_sha": "c37e9e0cf00b5452d1babfcc1f144274bd80627d",
+    "ecosystem": "npm",
+    "bytes": 2488,
+    "names": [
+     "@babel/parser",
+     "@clack/prompts",
+     "commander",
+     "dotenv-expand",
+     "execa",
+     "fs-extra",
+     "picocolors",
+     "picomatch",
+     "tar",
+     "yaml"
+    ],
+    "dev": [
+     "@babel/types",
+     "@nextlyhq/eslint-plugin",
+     "@nextlyhq/module-specifiers",
+     "@nextlyhq/telemetry",
+     "@nextlyhq/tsconfig",
+     "@testing-library/react",
+     "@types/fs-extra",
+     "@types/node",
+     "@types/picomatch",
+     "@types/tar",
+     "@vitest/coverage-v8",
+     "@vitest/ui",
+     "jsdom",
+     "oxc-parser",
+     "react",
+     "react-dom",
+     "tsdown",
+     "typescript",
+     "vite-tsconfig-paths",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/eslint-config/package.json",
+    "kind": "dep",
+    "blob_sha": "04efdf04ec6e697d298d92ec5377586f7e722c6c",
+    "ecosystem": "npm",
+    "bytes": 267
+   },
+   {
+    "path": "packages/eslint-plugin/package.json",
+    "kind": "dep",
+    "blob_sha": "88bd4574d37955f13a2ecaef7208175ace38b59d",
+    "ecosystem": "npm",
+    "bytes": 1194,
+    "names": [
+     "eslint"
+    ],
+    "dev": [
+     "eslint",
+     "oxlint",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/module-specifiers/package.json",
+    "kind": "dep",
+    "blob_sha": "352106260d13d4a0756d09f033db809e419e2316",
+    "ecosystem": "npm",
+    "bytes": 1023,
+    "names": [
+     "oxc-parser"
+    ],
+    "dev": [
+     "@nextlyhq/tsconfig",
+     "@types/node",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/nextly/package.json",
+    "kind": "dep",
+    "blob_sha": "fccb5679db4e44125dfdf159232a1552488fbc2f",
+    "ecosystem": "npm",
+    "bytes": 13348,
+    "names": [
+     "@babel/parser",
+     "@clack/prompts",
+     "@inquirer/prompts",
+     "@nextlyhq/adapter-drizzle",
+     "@nextlyhq/blocks-engine",
+     "@sanity/diff-match-patch",
+     "bcryptjs",
+     "commander",
+     "dequal",
+     "dotenv",
+     "drizzle-kit",
+     "drizzle-orm",
+     "file-type",
+     "isomorphic-dompurify",
+     "jose",
+     "liquidjs",
+     "parse5",
+     "picocolors",
+     "safe-regex2",
+     "semver",
+     "server-only",
+     "zod",
+     "better-sqlite3",
+     "@nextlyhq/adapter-mysql",
+     "@nextlyhq/adapter-postgres",
+     "@nextlyhq/adapter-sqlite",
+     "esbuild",
+     "next",
+     "nodemailer",
+     "react",
+     "react-dom",
+     "sharp"
+    ],
+    "dev": [
+     "@nextlyhq/adapter-mysql",
+     "@nextlyhq/adapter-postgres",
+     "@nextlyhq/adapter-sqlite",
+     "@nextlyhq/module-specifiers",
+     "@nextlyhq/telemetry",
+     "@nextlyhq/tsconfig",
+     "@types/bcryptjs",
+     "@types/better-sqlite3",
+     "@types/node",
+     "@types/pg",
+     "@types/react",
+     "@types/semver",
+     "@vitest/coverage-v8",
+     "@vitest/ui",
+     "better-sqlite3",
+     "esbuild",
+     "mysql2",
+     "nodemailer",
+     "oxc-parser",
+     "pg",
+     "react",
+     "react-dom",
+     "rimraf",
+     "sharp",
+     "tsdown",
+     "tsx",
+     "typescript",
+     "vite-tsconfig-paths",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/plugin-accounts/package.json",
+    "kind": "dep",
+    "blob_sha": "51d6a02e00d1d4efb411bbb30c41a0f16005911d",
+    "ecosystem": "npm",
+    "bytes": 2691,
+    "names": [
+     "zod",
+     "@nextlyhq/admin",
+     "@nextlyhq/plugin-sdk",
+     "next",
+     "nextly",
+     "react"
+    ],
+    "dev": [
+     "@nextlyhq/admin",
+     "@nextlyhq/module-specifiers",
+     "@nextlyhq/plugin-sdk",
+     "@nextlyhq/tsconfig",
+     "@testing-library/react",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "jsdom",
+     "nextly",
+     "react",
+     "react-dom",
+     "tsdown",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/plugin-commerce/package.json",
+    "kind": "dep",
+    "blob_sha": "5ec0861bd0ea48edf4006cfd2d6251c9727251cf",
+    "ecosystem": "npm",
+    "bytes": 1966,
+    "names": [
+     "zod",
+     "@nextlyhq/plugin-sdk",
+     "nextly"
+    ],
+    "dev": [
+     "@nextlyhq/plugin-sdk",
+     "@nextlyhq/tsconfig",
+     "@types/node",
+     "fast-check",
+     "nextly",
+     "tsdown",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/plugin-form-builder/package.json",
+    "kind": "dep",
+    "blob_sha": "45e6017e4944001c89cc8b6181e586e803cfc5d4",
+    "ecosystem": "npm",
+    "bytes": 2612,
+    "names": [
+     "@dnd-kit/core",
+     "@dnd-kit/sortable",
+     "@dnd-kit/utilities",
+     "zod",
+     "@nextlyhq/admin",
+     "@nextlyhq/plugin-sdk",
+     "@nextlyhq/ui",
+     "@tanstack/react-query",
+     "lucide-react",
+     "next",
+     "nextly",
+     "react"
+    ],
+    "dev": [
+     "@nextlyhq/admin",
+     "@nextlyhq/plugin-sdk",
+     "@nextlyhq/tsconfig",
+     "@nextlyhq/ui",
+     "@tanstack/react-query",
+     "@testing-library/jest-dom",
+     "@testing-library/react",
+     "@testing-library/user-event",
+     "@types/node",
+     "@types/react",
+     "jsdom",
+     "lucide-react",
+     "nextly",
+     "react",
+     "react-dom",
+     "tsdown",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/plugin-mcp/package.json",
+    "kind": "dep",
+    "blob_sha": "930e507cf91495e6d3c553b901ca0ff55cc6d7db",
+    "ecosystem": "npm",
+    "bytes": 1985,
+    "names": [
+     "@modelcontextprotocol/server",
+     "zod",
+     "@nextlyhq/plugin-sdk",
+     "nextly"
+    ],
+    "dev": [
+     "@nextlyhq/plugin-sdk",
+     "@nextlyhq/tsconfig",
+     "@types/node",
+     "nextly",
+     "tsdown",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/plugin-page-builder/package.json",
+    "kind": "dep",
+    "blob_sha": "c9fac1ae70dd16b71ac99d671841d58360f357a1",
+    "ecosystem": "npm",
+    "bytes": 3394,
+    "names": [
+     "@nextlyhq/blocks-engine",
+     "@nextlyhq/blocks-react",
+     "css-tree",
+     "isomorphic-dompurify",
+     "@nextlyhq/admin",
+     "@nextlyhq/builder",
+     "@nextlyhq/plugin-sdk",
+     "@nextlyhq/ui",
+     "@tanstack/react-query",
+     "lucide-react",
+     "next",
+     "nextly",
+     "react",
+     "react-dom",
+     "react-hook-form"
+    ],
+    "dev": [
+     "@nextlyhq/admin",
+     "@nextlyhq/builder",
+     "@nextlyhq/plugin-sdk",
+     "@nextlyhq/tsconfig",
+     "@nextlyhq/ui",
+     "@playwright/test",
+     "@tanstack/react-query",
+     "@testing-library/react",
+     "@types/css-tree",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@types/semver",
+     "jsdom",
+     "lucide-react",
+     "nextly",
+     "react",
+     "react-dom",
+     "react-hook-form",
+     "semver",
+     "tsdown",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/plugin-sdk/package.json",
+    "kind": "dep",
+    "blob_sha": "d038f4fef0ba35896b67ca1a8b9b07191b4e478c",
+    "ecosystem": "npm",
+    "bytes": 3381,
+    "names": [
+     "@nextlyhq/blocks-engine",
+     "@nextlyhq/ui",
+     "@nextlyhq/admin",
+     "nextly",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@nextlyhq/admin",
+     "@nextlyhq/tsconfig",
+     "@types/node",
+     "@types/react",
+     "jsdom",
+     "nextly",
+     "react",
+     "react-dom",
+     "tsdown",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/plugin-seo/package.json",
+    "kind": "dep",
+    "blob_sha": "ef1882417f106e2d08647c7680559e42b95530f4",
+    "ecosystem": "npm",
+    "bytes": 1738,
+    "names": [
+     "@nextlyhq/plugin-sdk",
+     "nextly"
+    ],
+    "dev": [
+     "@nextlyhq/plugin-sdk",
+     "@nextlyhq/tsconfig",
+     "@types/node",
+     "nextly",
+     "tsdown",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/prettier-config/package.json",
+    "kind": "dep",
+    "blob_sha": "d4c0a6e98ba762a60a5fc3eb3ad9944e25af7c46",
+    "ecosystem": "npm",
+    "bytes": 380,
+    "names": [
+     "prettier"
+    ]
+   },
+   {
+    "path": "packages/storage-s3/package.json",
+    "kind": "dep",
+    "blob_sha": "edecc9e562dae941a56d81e76627998f42bd6180",
+    "ecosystem": "npm",
+    "bytes": 1874,
+    "names": [
+     "@aws-sdk/client-s3",
+     "@aws-sdk/lib-storage",
+     "@aws-sdk/s3-request-presigner"
+    ],
+    "dev": [
+     "@nextlyhq/tsconfig",
+     "@types/node",
+     "@vitest/coverage-v8",
+     "@vitest/ui",
+     "nextly",
+     "tsdown",
+     "typescript",
+     "vite-tsconfig-paths",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/storage-uploadthing/package.json",
+    "kind": "dep",
+    "blob_sha": "94a791e3aa0a05c838ae2f4ba8dd817e7a31f2cc",
+    "ecosystem": "npm",
+    "bytes": 1697,
+    "names": [
+     "uploadthing"
+    ],
+    "dev": [
+     "@nextlyhq/tsconfig",
+     "@types/node",
+     "@vitest/coverage-v8",
+     "@vitest/ui",
+     "nextly",
+     "tsdown",
+     "typescript",
+     "vite-tsconfig-paths",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/storage-vercel-blob/package.json",
+    "kind": "dep",
+    "blob_sha": "d8faa46be428bfcd57bef296cfe19c61af32e809",
+    "ecosystem": "npm",
+    "bytes": 1742,
+    "names": [
+     "@vercel/blob"
+    ],
+    "dev": [
+     "@nextlyhq/tsconfig",
+     "@types/node",
+     "@vitest/coverage-v8",
+     "@vitest/ui",
+     "nextly",
+     "tsdown",
+     "typescript",
+     "vite-tsconfig-paths",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/telemetry/package.json",
+    "kind": "dep",
+    "blob_sha": "75d0880c049766edf762c2cff644af8ef18d0384",
+    "ecosystem": "npm",
+    "bytes": 1161,
+    "names": [
+     "conf",
+     "env-paths",
+     "picocolors",
+     "posthog-node"
+    ],
+    "dev": [
+     "@nextlyhq/tsconfig",
+     "@types/node",
+     "@vitest/coverage-v8",
+     "rimraf",
+     "tsdown",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/tsconfig/package.json",
+    "kind": "dep",
+    "blob_sha": "d3e682fb50bc48ef0daf032a209f36e4ba612c06",
+    "ecosystem": "npm",
+    "bytes": 310
+   },
+   {
+    "path": "packages/ui/package.json",
+    "kind": "dep",
+    "blob_sha": "ba679b9b7ce0478dba269f974871ffc4976060ed",
+    "ecosystem": "npm",
+    "bytes": 5086,
+    "names": [
+     "@radix-ui/react-accordion",
+     "@radix-ui/react-alert-dialog",
+     "@radix-ui/react-avatar",
+     "@radix-ui/react-checkbox",
+     "@radix-ui/react-collapsible",
+     "@radix-ui/react-context-menu",
+     "@radix-ui/react-dialog",
+     "@radix-ui/react-dropdown-menu",
+     "@radix-ui/react-label",
+     "@radix-ui/react-popover",
+     "@radix-ui/react-radio-group",
+     "@radix-ui/react-select",
+     "@radix-ui/react-separator",
+     "@radix-ui/react-slider",
+     "@radix-ui/react-slot",
+     "@radix-ui/react-switch",
+     "@radix-ui/react-tabs",
+     "@radix-ui/react-tooltip",
+     "@tanstack/react-virtual",
+     "class-variance-authority",
+     "clsx",
+     "cmdk",
+     "react-resizable-panels",
+     "sonner",
+     "tailwind-merge",
+     "lucide-react",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@nextlyhq/admin-css",
+     "@nextlyhq/module-specifiers",
+     "@nextlyhq/tsconfig",
+     "@tailwindcss/cli",
+     "@testing-library/react",
+     "@types/culori",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "@vitest/coverage-v8",
+     "@vitest/ui",
+     "culori",
+     "jsdom",
+     "lucide-react",
+     "oxc-parser",
+     "oxlint",
+     "postcss",
+     "react",
+     "react-dom",
+     "rimraf",
+     "tailwindcss",
+     "tsdown",
+     "tsx",
+     "typescript",
+     "vite-tsconfig-paths",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/admin/__fixtures__/consumer-app/package.json",
+    "kind": "dep",
+    "blob_sha": "207a481272a682c8d1919911757be88f26fdf71d",
+    "ecosystem": "npm",
+    "bytes": 78
    },
    {
     "path": "docker-compose.test.yml",
@@ -5517,8 +7159,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "ccbd3405bbbf9f939bef307bb0af08512159533e",
-    "bytes": 137738
+    "blob_sha": "20869c243868e683be2ed8e8aae3afc54da337e2",
+    "bytes": 147321
    },
    {
     "path": ".github/workflows/code-hygiene.yml",
@@ -5579,6 +7221,15 @@
     "bytes": 1811
    },
    {
+    "path": ".github/workflows/multi-instance-cache.yml",
+    "kind": "ci",
+    "blob_sha": "a0bfcb1d39223ee99c68f617a987aa984b144a89",
+    "bytes": 7123,
+    "images": [
+     "postgres:17"
+    ]
+   },
+   {
     "path": ".github/workflows/newest-minor.yml",
     "kind": "ci",
     "blob_sha": "1a051bc9348cc9c40497ec6f1be6902e3b9ccff1",
@@ -5601,6 +7252,60 @@
     "kind": "ci",
     "blob_sha": "aaae70f41f7e19fb2f32666cd4acc49e3d98798d",
     "bytes": 4625
+   },
+   {
+    "path": ".github/workflows/release-health.yml",
+    "kind": "ci",
+    "blob_sha": "8046b33121db3fdfa6677442aa419ce6a57002e6",
+    "bytes": 10889
+   },
+   {
+    "path": ".github/workflows/release.yml",
+    "kind": "ci",
+    "blob_sha": "b0fa5b61b308006bfce6514e93cce408c0ad9c70",
+    "bytes": 17972
+   },
+   {
+    "path": ".github/workflows/repo-metadata.yml",
+    "kind": "ci",
+    "blob_sha": "cb1d226587dbcdce943a7ac1dfbaa190b6387a95",
+    "bytes": 4289
+   },
+   {
+    "path": ".github/workflows/scaffold-build.yml",
+    "kind": "ci",
+    "blob_sha": "8ce7f5056f1fa1069853058594479d20eac1edee",
+    "bytes": 67342
+   },
+   {
+    "path": ".github/workflows/skills-installer.yml",
+    "kind": "ci",
+    "blob_sha": "4dd7c99a2241ba3e1760fed695db527835eb8b28",
+    "bytes": 4926
+   },
+   {
+    "path": ".github/workflows/small-checks.yml",
+    "kind": "ci",
+    "blob_sha": "12dc2e8c2d95a648e0e706640337c82de1e32e88",
+    "bytes": 11387
+   },
+   {
+    "path": ".github/workflows/sweep-pull-request-caches.yml",
+    "kind": "ci",
+    "blob_sha": "d93a0253147c6017c8e6f2e7cadab7a9db42c207",
+    "bytes": 1842
+   },
+   {
+    "path": ".github/workflows/trigger-docs-deploy.yml",
+    "kind": "ci",
+    "blob_sha": "329b8475e202239251f7ff12dc6fd5fac996b528",
+    "bytes": 1367
+   },
+   {
+    "path": ".github/workflows/unit-order.yml",
+    "kind": "ci",
+    "blob_sha": "911d7dc5ab4db418598f7cc903bb3554641c43e2",
+    "bytes": 3477
    }
   ],
   "clues": {
@@ -5611,6 +7316,16 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "packages/nextly/src/plugins/schema/sqlite-table-creation.integration.test.ts",
+    "packages/nextly/src/schemas/_dialect-bundles/mysql.relations.ts",
+    "packages/nextly/src/schemas/_dialect-bundles/mysql.ts",
+    "packages/nextly/src/schemas/_dialect-bundles/postgres.relations.ts",
+    "packages/nextly/src/schemas/_dialect-bundles/postgres.ts",
+    "packages/nextly/src/schemas/_dialect-bundles/sqlite.relations.ts",
+    "packages/nextly/src/schemas/_dialect-bundles/sqlite.ts",
+    "packages/nextly/src/schemas/plugin-settings/mysql.ts",
+    "packages/nextly/src/schemas/plugin-settings/postgres.ts",
+    "packages/nextly/src/schemas/plugin-settings/sqlite.ts",
     ".changeset/a-cleared-plugin-reaches-every-service-in-teardown.md",
     ".changeset/a-cleared-plugin-tears-down-with-its-own-services.md",
     ".changeset/a-contained-write-waits-for-a-quiet-plugin.md",
@@ -5639,6 +7354,7 @@
     ".changeset/a-plugin-signs-in-people-who-are-not-staff.md",
     ".changeset/a-plugin-transaction-reads-its-callers-roles.md",
     ".changeset/a-plugin-update-carrying-unchanged-identity-is-taken.md",
+    ".changeset/a-plugin-write-leaves-no-stale-pages.md",
     ".changeset/a-query-error-names-its-operation-on-every-dialect.md",
     ".changeset/a-scaffold-build-installs-its-configured-plugins.md",
     ".changeset/accounts-plugin-runs-on-core-helpers.md",
@@ -5650,7 +7366,156 @@
     ".changeset/core-auth-hardening-and-the-plugin-runtime.md",
     ".changeset/disabled-plugin-permissions.md",
     ".changeset/email-plugin-settings-and-delivery-tabs-name-themselves.md",
-    ".changeset/eslint-plugin-design-tokens.md"
+    ".changeset/eslint-plugin-design-tokens.md",
+    ".changeset/every-module-reads-the-loaded-dialect.md",
+    ".changeset/every-storage-adapter-can-read-back.md",
+    ".changeset/f1-next-adapter-read-helpers.md",
+    ".changeset/getcachednextly-reaches-plugins-through-the-sdk.md",
+    ".changeset/ink-scan-reaches-the-plugins.md",
+    ".changeset/mark-html-through-the-plugin-sdk.md",
+    ".changeset/migrate-create-and-check-load-their-dialect.md",
+    ".changeset/only-the-running-dialect-loads-its-tables.md",
+    ".changeset/permission-cache-on-every-dialect.md",
+    ".changeset/plugin-admin-slug-uniqueness.md",
+    ".changeset/plugin-admin-styling.md",
+    ".changeset/plugin-auth-route-per-identity.md",
+    ".changeset/plugin-authors-get-the-real-controls.md",
+    ".changeset/plugin-blocks-reach-the-editor.md",
+    ".changeset/plugin-client-config.md",
+    ".changeset/plugin-db-reflection-and-reloaded-dependencies.md",
+    ".changeset/plugin-declarations-channel.md",
+    ".changeset/plugin-default-gaps.md",
+    ".changeset/plugin-description-check.md",
+    ".changeset/plugin-detail-metadata-rail.md",
+    ".changeset/plugin-directory-browse.md",
+    ".changeset/plugin-dormant-disclosure.md",
+    ".changeset/plugin-field-type-capabilities.md",
+    ".changeset/plugin-field-type-pending.md",
+    ".changeset/plugin-field-type-validate-options.md",
+    ".changeset/plugin-field-type-validate.md",
+    ".changeset/plugin-field-types-in-pickers.md",
+    ".changeset/plugin-fields-survive-a-failed-plugin-list.md",
+    ".changeset/plugin-form-builder-declarations-built-with-oxc.md",
+    ".changeset/plugin-foundation-helpers-and-catalogue.md",
+    ".changeset/plugin-group-labels-and-badge.md",
+    ".changeset/plugin-history-writes-are-checked-when-asked.md",
+    ".changeset/plugin-install-state-is-recorded.md",
+    ".changeset/plugin-lifecycle-and-transforms-keep-what-they-promise.md",
+    ".changeset/plugin-lifecycle-boot-is-scoped.md",
+    ".changeset/plugin-list-singles.md",
+    ".changeset/plugin-metadata-single-source.md",
+    ".changeset/plugin-migration-history-is-checked-before-anything-runs.md",
+    ".changeset/plugin-nav-section-reaches-consumers.md",
+    ".changeset/plugin-one-purpose-secrets.md",
+    ".changeset/plugin-page-builder-declarations-built-with-oxc.md",
+    ".changeset/plugin-page-deep-link.md",
+    ".changeset/plugin-page-direct-load-holds.md",
+    ".changeset/plugin-password-helper.md",
+    ".changeset/plugin-permissions-from-rows.md",
+    ".changeset/plugin-scaffold-gets-vitest-5.md",
+    ".changeset/plugin-sdk-declarations-built-with-oxc.md",
+    ".changeset/plugin-secrets-sealed-at-boot-and-own-settings-permission.md",
+    ".changeset/plugin-seo-sitemap.md",
+    ".changeset/plugin-settings-permission-held-everywhere.md",
+    ".changeset/plugin-surface-and-schema-batch.md",
+    ".changeset/plugin-template-ui-peer.md",
+    ".changeset/plugin-transaction-link.md",
+    ".changeset/plugin-transaction-reads-dependencies-through.md",
+    ".changeset/plugin-uninstall-judges-tables-by-identity.md",
+    ".changeset/plugin-uninstall-reads-its-downs-first.md",
+    ".changeset/plugin-write-mutation-envelope.md",
+    ".changeset/plugins-are-torn-down-before-services-register-again.md",
+    ".changeset/plugins-can-install-transform-and-reach-contributed-columns.md",
+    ".changeset/plugins-install-all.md",
+    ".changeset/plugins-sidebar-item-navigates.md",
+    ".changeset/plugins-that-ship-no-longer-say-otherwise.md",
+    ".changeset/proxy-warning-plugin-wording.md",
+    ".changeset/retired-manage-asked-by-plugins.md",
+    ".changeset/roles-screen-plugin-groups.md",
+    ".changeset/scaffolded-plugin-suite-is-sized-for-its-boot.md",
+    ".changeset/single-table-ddl-dialect.md",
+    ".changeset/split-plugin-detail-header-and-general-settings-form.md",
+    ".changeset/the-forms-plugin-owns-its-own-endpoint.md",
+    ".changeset/the-plugin-template-scaffolds-and-runs.md",
+    ".changeset/the-schema-engine-carries-plugin-tables.md",
+    ".changeset/the-seo-plugin-publishes-a-widget-source.md",
+    ".changeset/tier0-seo-plugin.md",
+    ".changeset/transform-ownership-every-plugin-name-and-equivalent-table-settings.md",
+    ".changeset/widget-kit-for-plugins.md",
+    ".changeset/widgets-keep-their-types-through-define-plugin.md",
+    "docs/plugins/admin-ui.mdx",
+    "docs/plugins/api-reference.mdx",
+    "docs/plugins/auth.mdx",
+    "docs/plugins/author-guide.mdx",
+    "docs/plugins/contributing.mdx",
+    "docs/plugins/distribution.mdx",
+    "docs/plugins/error-reference.mdx",
+    "docs/plugins/form-builder.mdx",
+    "docs/plugins/index.mdx",
+    "docs/plugins/lifecycle.mdx",
+    "docs/plugins/meta.json",
+    "docs/plugins/permissions.mdx",
+    "docs/plugins/routes.mdx",
+    "docs/plugins/schema.mdx",
+    "docs/plugins/security-helpers.mdx",
+    "docs/plugins/security.mdx",
+    "docs/plugins/seo.mdx",
+    "docs/plugins/services.mdx",
+    "docs/plugins/signed-in-people.mdx",
+    "docs/plugins/stability.mdx",
+    "docs/plugins/testing.mdx",
+    "e2e/tests/plugin-admin-styling.spec.ts",
+    "e2e/tests/plugin-blocks.spec.ts",
+    "e2e/tests/plugin-page-routing.spec.ts",
+    "e2e/tests/plugin-widget-kit.spec.ts",
+    "packages/adapter-drizzle/CHANGELOG.md",
+    "packages/adapter-drizzle/LICENSE",
+    "packages/adapter-drizzle/README.md",
+    "packages/adapter-drizzle/package.json",
+    "packages/adapter-drizzle/tsconfig.json",
+    "packages/adapter-drizzle/tsdown.config.ts",
+    "packages/adapter-drizzle/vitest.config.ts",
+    "packages/adapter-mysql/CHANGELOG.md",
+    "packages/adapter-mysql/LICENSE",
+    "packages/adapter-mysql/README.md",
+    "packages/adapter-mysql/package.json",
+    "packages/adapter-mysql/tsconfig.json",
+    "packages/adapter-mysql/tsdown.config.ts",
+    "packages/adapter-mysql/vitest.config.ts",
+    "packages/adapter-mysql/vitest.integration.config.ts",
+    "packages/adapter-postgres/CHANGELOG.md",
+    "packages/adapter-postgres/LICENSE",
+    "packages/adapter-postgres/README.md",
+    "packages/adapter-postgres/package.json",
+    "packages/adapter-postgres/tsconfig.json",
+    "packages/adapter-postgres/tsdown.config.ts",
+    "packages/adapter-postgres/vitest.config.ts",
+    "packages/adapter-postgres/vitest.integration.config.ts",
+    "packages/adapter-sqlite/CHANGELOG.md",
+    "packages/adapter-sqlite/LICENSE",
+    "packages/adapter-sqlite/README.md",
+    "packages/adapter-sqlite/package.json",
+    "packages/adapter-sqlite/tsconfig.json",
+    "packages/adapter-sqlite/tsdown.config.ts",
+    "packages/adapter-sqlite/vitest.config.ts",
+    "packages/adapter-sqlite/vitest.integration.config.ts",
+    "packages/eslint-plugin/CHANGELOG.md",
+    "packages/eslint-plugin/README.md",
+    "packages/eslint-plugin/package.json",
+    "packages/eslint-plugin/vitest.config.mjs",
+    "packages/plugin-accounts/CHANGELOG.md",
+    "packages/plugin-accounts/LICENSE",
+    "packages/plugin-accounts/README.md",
+    "packages/plugin-accounts/package.json",
+    "packages/plugin-accounts/tsconfig.json",
+    "packages/plugin-accounts/tsdown.config.ts",
+    "packages/plugin-accounts/vitest.config.ts",
+    "packages/plugin-accounts/vitest.integration.config.ts",
+    "packages/plugin-commerce/CHANGELOG.md",
+    "packages/plugin-commerce/LICENSE",
+    "packages/plugin-commerce/README.md",
+    "packages/plugin-commerce/package.json",
+    "packages/plugin-commerce/tsconfig.json"
    ],
    "matrix_urls": [
     "https://nextlyhq.com/docs/getting-started/installation#requirements",
@@ -8401,13 +10266,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T10:45:28Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:33:09Z",
   "default_branch": "master",
   "pushed_at": "2014-12-17",
   "stars": 12,
   "tree": {
    "sha": "8d2e5027723654e97d2ad208b9a076da496eee79",
-   "etag": "W/\"5110a748fe2f187ce90f6347da6de2e1d5c0cb109ef4a808f723c4af8c490c6f\"",
+   "etag": "W/\"a9319b457b245392afe1bedad142c552570acca13152b9d75ef0487e261a7e60\"",
    "truncated": false,
    "path_count": 758,
    "matched": [
@@ -8422,7 +10288,46 @@
     "System.Data.SQLite.Linq/System.Data.SQLite.EF6.2010.csproj",
     "System.Data.SQLite.Linq/System.Data.SQLite.EF6.2012.csproj",
     "System.Data.SQLite.Linq/System.Data.SQLite.EF6.2013.csproj",
-    "System.Data.SQLite.Linq/System.Data.SQLite.Linq.2008.csproj"
+    "System.Data.SQLite.Linq/System.Data.SQLite.Linq.2008.csproj",
+    "System.Data.SQLite.Linq/System.Data.SQLite.Linq.2010.csproj",
+    "System.Data.SQLite.Linq/System.Data.SQLite.Linq.2012.csproj",
+    "System.Data.SQLite.Linq/System.Data.SQLite.Linq.2013.csproj",
+    "System.Data.SQLite/System.Data.SQLite.2005.csproj",
+    "System.Data.SQLite/System.Data.SQLite.2008.csproj",
+    "System.Data.SQLite/System.Data.SQLite.2010.csproj",
+    "System.Data.SQLite/System.Data.SQLite.2012.csproj",
+    "System.Data.SQLite/System.Data.SQLite.2013.csproj",
+    "System.Data.SQLite/System.Data.SQLite.Compact.2005.csproj",
+    "System.Data.SQLite/System.Data.SQLite.Compact.2008.csproj",
+    "System.Data.SQLite/System.Data.SQLite.Compact.2012.csproj",
+    "System.Data.SQLite/System.Data.SQLite.Module.2005.csproj",
+    "System.Data.SQLite/System.Data.SQLite.Module.2008.csproj",
+    "System.Data.SQLite/System.Data.SQLite.Module.2010.csproj",
+    "System.Data.SQLite/System.Data.SQLite.Module.2012.csproj",
+    "System.Data.SQLite/System.Data.SQLite.Module.2013.csproj",
+    "test/test.2005.csproj",
+    "test/test.2008.csproj",
+    "test/test.2010.csproj",
+    "test/test.2012.csproj",
+    "test/test.2013.csproj",
+    "testce/testce.2005.csproj",
+    "testce/testce.2008.csproj",
+    "testce/testce.2012.csproj",
+    "testlinq/test.2010.csproj",
+    "testlinq/test.2012.csproj",
+    "testlinq/test.2013.csproj",
+    "testlinq/testef6.2010.csproj",
+    "testlinq/testef6.2012.csproj",
+    "testlinq/testef6.2013.csproj",
+    "testlinq/testlinq.2008.csproj",
+    "testlinq/testlinq.2010.csproj",
+    "testlinq/testlinq.2012.csproj",
+    "testlinq/testlinq.2013.csproj",
+    "tools/install/Installer.2005.csproj",
+    "tools/install/Installer.2008.csproj",
+    "tools/install/Installer.2010.csproj",
+    "tools/install/Installer.2012.csproj",
+    "tools/install/Installer.2013.csproj"
    ]
   },
   "files": [
@@ -8509,6 +10414,279 @@
     "blob_sha": "ade7f6cc8a0e6c46d9c75d0ff5408ffd622aa140",
     "ecosystem": "csproj",
     "bytes": 5425
+   },
+   {
+    "path": "System.Data.SQLite.Linq/System.Data.SQLite.Linq.2010.csproj",
+    "kind": "dep",
+    "blob_sha": "cef3c7783debf1d0b73343893a5c65ce1cc73b57",
+    "ecosystem": "csproj",
+    "bytes": 496
+   },
+   {
+    "path": "System.Data.SQLite.Linq/System.Data.SQLite.Linq.2012.csproj",
+    "kind": "dep",
+    "blob_sha": "7fbf44e4c818981e443e56e3c630b042571435de",
+    "ecosystem": "csproj",
+    "bytes": 498
+   },
+   {
+    "path": "System.Data.SQLite.Linq/System.Data.SQLite.Linq.2013.csproj",
+    "kind": "dep",
+    "blob_sha": "c6815e51541380739c7b4151e545f820e690164b",
+    "ecosystem": "csproj",
+    "bytes": 499
+   },
+   {
+    "path": "System.Data.SQLite/System.Data.SQLite.2005.csproj",
+    "kind": "dep",
+    "blob_sha": "0f477785d15e8591c39f526321e3b8ce4f483cec",
+    "ecosystem": "csproj",
+    "bytes": 2755
+   },
+   {
+    "path": "System.Data.SQLite/System.Data.SQLite.2008.csproj",
+    "kind": "dep",
+    "blob_sha": "28c5c790b2aad7c815e57ad43556414ae6371539",
+    "ecosystem": "csproj",
+    "bytes": 2818
+   },
+   {
+    "path": "System.Data.SQLite/System.Data.SQLite.2010.csproj",
+    "kind": "dep",
+    "blob_sha": "5d3d7f3bdb19051c2636f434b8fcc5f242c88065",
+    "ecosystem": "csproj",
+    "bytes": 2878
+   },
+   {
+    "path": "System.Data.SQLite/System.Data.SQLite.2012.csproj",
+    "kind": "dep",
+    "blob_sha": "95e052c2134e294286b568febaf83b96349fbdca",
+    "ecosystem": "csproj",
+    "bytes": 2931
+   },
+   {
+    "path": "System.Data.SQLite/System.Data.SQLite.2013.csproj",
+    "kind": "dep",
+    "blob_sha": "92c6912f89118ca88d2930c633aebbd905cac6f2",
+    "ecosystem": "csproj",
+    "bytes": 2936
+   },
+   {
+    "path": "System.Data.SQLite/System.Data.SQLite.Compact.2005.csproj",
+    "kind": "dep",
+    "blob_sha": "59744f408a5d5e4dfe24ecb3f635b611685dc134",
+    "ecosystem": "csproj",
+    "bytes": 3999
+   },
+   {
+    "path": "System.Data.SQLite/System.Data.SQLite.Compact.2008.csproj",
+    "kind": "dep",
+    "blob_sha": "fe57b8fb773175e339becd5bad38825a1e747944",
+    "ecosystem": "csproj",
+    "bytes": 4062
+   },
+   {
+    "path": "System.Data.SQLite/System.Data.SQLite.Compact.2012.csproj",
+    "kind": "dep",
+    "blob_sha": "ff57ce95d5d9e458161124637e47f63e89e0ecc6",
+    "ecosystem": "csproj",
+    "bytes": 4204
+   },
+   {
+    "path": "System.Data.SQLite/System.Data.SQLite.Module.2005.csproj",
+    "kind": "dep",
+    "blob_sha": "209329011178bf410799cf8db3639d5738eb7b39",
+    "ecosystem": "csproj",
+    "bytes": 2948
+   },
+   {
+    "path": "System.Data.SQLite/System.Data.SQLite.Module.2008.csproj",
+    "kind": "dep",
+    "blob_sha": "7f0d4849ab00aca81aac2bee37a4498d30f0fd8f",
+    "ecosystem": "csproj",
+    "bytes": 3011
+   },
+   {
+    "path": "System.Data.SQLite/System.Data.SQLite.Module.2010.csproj",
+    "kind": "dep",
+    "blob_sha": "d85108220fdc3c8ca3a5cf27e1288f414f598b9b",
+    "ecosystem": "csproj",
+    "bytes": 3073
+   },
+   {
+    "path": "System.Data.SQLite/System.Data.SQLite.Module.2012.csproj",
+    "kind": "dep",
+    "blob_sha": "0d8a7c4b8db3ef3ae68fff2cc1e7c0aa9c82e098",
+    "ecosystem": "csproj",
+    "bytes": 3126
+   },
+   {
+    "path": "System.Data.SQLite/System.Data.SQLite.Module.2013.csproj",
+    "kind": "dep",
+    "blob_sha": "aafca0e71fc2fcea466123d8505bdab309e15177",
+    "ecosystem": "csproj",
+    "bytes": 3131
+   },
+   {
+    "path": "test/test.2005.csproj",
+    "kind": "dep",
+    "blob_sha": "b11c5a3b094db98289ea72e85293536f5eae1460",
+    "ecosystem": "csproj",
+    "bytes": 3935
+   },
+   {
+    "path": "test/test.2008.csproj",
+    "kind": "dep",
+    "blob_sha": "787939e3ff1e1a568df307e5b9b415af74edd6bd",
+    "ecosystem": "csproj",
+    "bytes": 3998
+   },
+   {
+    "path": "test/test.2010.csproj",
+    "kind": "dep",
+    "blob_sha": "dc01ba432d150a01727550762896a005c8c0cabd",
+    "ecosystem": "csproj",
+    "bytes": 4110
+   },
+   {
+    "path": "test/test.2012.csproj",
+    "kind": "dep",
+    "blob_sha": "f48b42bfdb9fe3e38c131dc33e3e249d01f2a97e",
+    "ecosystem": "csproj",
+    "bytes": 4201
+   },
+   {
+    "path": "test/test.2013.csproj",
+    "kind": "dep",
+    "blob_sha": "5c3ab72825d291671539f761e94373aa56d1c490",
+    "ecosystem": "csproj",
+    "bytes": 4206
+   },
+   {
+    "path": "testce/testce.2005.csproj",
+    "kind": "dep",
+    "blob_sha": "1f8fb4c89382ff75630949be255149af47e5b21b",
+    "ecosystem": "csproj",
+    "bytes": 4824
+   },
+   {
+    "path": "testce/testce.2008.csproj",
+    "kind": "dep",
+    "blob_sha": "6bdf201c0a3f0bd923c23fbad91d1ff94678b9bb",
+    "ecosystem": "csproj",
+    "bytes": 4887
+   },
+   {
+    "path": "testce/testce.2012.csproj",
+    "kind": "dep",
+    "blob_sha": "226ae32128fafbd2616fbf62f5d4d98557c99ece",
+    "ecosystem": "csproj",
+    "bytes": 4620
+   },
+   {
+    "path": "testlinq/test.2010.csproj",
+    "kind": "dep",
+    "blob_sha": "a1f161490aee9eb3c5d8a4e7e4839ba0f0194804",
+    "ecosystem": "csproj",
+    "bytes": 6358
+   },
+   {
+    "path": "testlinq/test.2012.csproj",
+    "kind": "dep",
+    "blob_sha": "66dfb6d4d679eab34ce59bc1f2e5ef4aa83140fe",
+    "ecosystem": "csproj",
+    "bytes": 6679
+   },
+   {
+    "path": "testlinq/test.2013.csproj",
+    "kind": "dep",
+    "blob_sha": "217e844d50295e9b045a4c01334694ee18c67d46",
+    "ecosystem": "csproj",
+    "bytes": 7102
+   },
+   {
+    "path": "testlinq/testef6.2010.csproj",
+    "kind": "dep",
+    "blob_sha": "b3f9a1f364fb1876d4d5d9ced72dd848214d317a",
+    "ecosystem": "csproj",
+    "bytes": 462
+   },
+   {
+    "path": "testlinq/testef6.2012.csproj",
+    "kind": "dep",
+    "blob_sha": "e97fcf72c9c780bdf73cf907c04ae427d9a8f40f",
+    "ecosystem": "csproj",
+    "bytes": 462
+   },
+   {
+    "path": "testlinq/testef6.2013.csproj",
+    "kind": "dep",
+    "blob_sha": "b560ad40f6fd6c014c17ad6c4af7281036148997",
+    "ecosystem": "csproj",
+    "bytes": 463
+   },
+   {
+    "path": "testlinq/testlinq.2008.csproj",
+    "kind": "dep",
+    "blob_sha": "f2c7cf5431ec7efada9bc2225579abedf749759a",
+    "ecosystem": "csproj",
+    "bytes": 3675
+   },
+   {
+    "path": "testlinq/testlinq.2010.csproj",
+    "kind": "dep",
+    "blob_sha": "67acfff71e7b8bd5180cff23a06fac16b46ea966",
+    "ecosystem": "csproj",
+    "bytes": 464
+   },
+   {
+    "path": "testlinq/testlinq.2012.csproj",
+    "kind": "dep",
+    "blob_sha": "e8b27d2f1b83250e39adc71610b063f66648e929",
+    "ecosystem": "csproj",
+    "bytes": 464
+   },
+   {
+    "path": "testlinq/testlinq.2013.csproj",
+    "kind": "dep",
+    "blob_sha": "79d7745351dbb95eadcffb15918af2d5f90ecc10",
+    "ecosystem": "csproj",
+    "bytes": 465
+   },
+   {
+    "path": "tools/install/Installer.2005.csproj",
+    "kind": "dep",
+    "blob_sha": "b47d79f2a6d71901bfaee75cd625eb122479b6fe",
+    "ecosystem": "csproj",
+    "bytes": 2900
+   },
+   {
+    "path": "tools/install/Installer.2008.csproj",
+    "kind": "dep",
+    "blob_sha": "21737812228bb56228d5c8e69332ef9d0d2fae43",
+    "ecosystem": "csproj",
+    "bytes": 2963
+   },
+   {
+    "path": "tools/install/Installer.2010.csproj",
+    "kind": "dep",
+    "blob_sha": "6d335153d12424138f8c29008d0292d8cbbaa8c0",
+    "ecosystem": "csproj",
+    "bytes": 3116
+   },
+   {
+    "path": "tools/install/Installer.2012.csproj",
+    "kind": "dep",
+    "blob_sha": "621229d4e75f9c8352d1489e0d805a6eac9b62f9",
+    "ecosystem": "csproj",
+    "bytes": 3019
+   },
+   {
+    "path": "tools/install/Installer.2013.csproj",
+    "kind": "dep",
+    "blob_sha": "6987acfd5a88afa99c1a7be2d1d7315b5cf9b4d5",
+    "ecosystem": "csproj",
+    "bytes": 3024
    }
   ],
   "clues": {
@@ -8603,13 +10781,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:04:32Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:35:49Z",
   "default_branch": "main",
   "pushed_at": "2022-07-07",
   "stars": 11,
   "tree": {
    "sha": "a62cae331507979f918e71f54aabde9ccd4665a7",
-   "etag": "W/\"6ae31d75cd0c2b39e63ad07550b1c3c809bfe3e1692ebbed3b868f9a1d78eee8\"",
+   "etag": "W/\"92e2150e0e4ecc5908ba4edfc25427c664c61b1da006e373086026a2470f6650\"",
    "truncated": false,
    "path_count": 7675,
    "matched": [
@@ -8624,7 +10803,55 @@
     "api_backend/node_modules/ansi-bggreen/package.json",
     "api_backend/node_modules/ansi-bgmagenta/package.json",
     "api_backend/node_modules/ansi-bgred/package.json",
-    "api_backend/node_modules/ansi-bgwhite/package.json"
+    "api_backend/node_modules/ansi-bgwhite/package.json",
+    "api_backend/node_modules/ansi-bgyellow/package.json",
+    "api_backend/node_modules/ansi-black/package.json",
+    "api_backend/node_modules/ansi-blue/package.json",
+    "api_backend/node_modules/ansi-bold/package.json",
+    "api_backend/node_modules/ansi-colors/package.json",
+    "api_backend/node_modules/ansi-cyan/package.json",
+    "api_backend/node_modules/ansi-dim/package.json",
+    "api_backend/node_modules/ansi-escapes/package.json",
+    "api_backend/node_modules/ansi-gray/package.json",
+    "api_backend/node_modules/ansi-green/package.json",
+    "api_backend/node_modules/ansi-grey/package.json",
+    "api_backend/node_modules/ansi-hidden/package.json",
+    "api_backend/node_modules/ansi-inverse/package.json",
+    "api_backend/node_modules/ansi-italic/package.json",
+    "api_backend/node_modules/ansi-magenta/package.json",
+    "api_backend/node_modules/ansi-red/package.json",
+    "api_backend/node_modules/ansi-regex/package.json",
+    "api_backend/node_modules/ansi-reset/package.json",
+    "api_backend/node_modules/ansi-strikethrough/package.json",
+    "api_backend/node_modules/ansi-styles/package.json",
+    "api_backend/node_modules/ansi-underline/package.json",
+    "api_backend/node_modules/ansi-white/package.json",
+    "api_backend/node_modules/ansi-wrap/package.json",
+    "api_backend/node_modules/ansi-yellow/package.json",
+    "api_backend/node_modules/anymatch/package.json",
+    "api_backend/node_modules/argparse/package.json",
+    "api_backend/node_modules/arr-diff/package.json",
+    "api_backend/node_modules/arr-flatten/package.json",
+    "api_backend/node_modules/arr-map/package.json",
+    "api_backend/node_modules/arr-pluck/package.json",
+    "api_backend/node_modules/arr-union/package.json",
+    "api_backend/node_modules/array-flatten/package.json",
+    "api_backend/node_modules/array-sort/package.json",
+    "api_backend/node_modules/array-unique/package.json",
+    "api_backend/node_modules/arrayify-compact/package.json",
+    "api_backend/node_modules/assemble-core/package.json",
+    "api_backend/node_modules/assemble-fs/package.json",
+    "api_backend/node_modules/assemble-handle/package.json",
+    "api_backend/node_modules/assemble-loader/package.json",
+    "api_backend/node_modules/assemble-render-file/package.json",
+    "api_backend/node_modules/assemble-streams/package.json",
+    "api_backend/node_modules/assign-deep/package.json",
+    "api_backend/node_modules/assign-symbols/package.json",
+    "api_backend/node_modules/async-array-reduce/package.json",
+    "api_backend/node_modules/async-done/package.json",
+    "api_backend/node_modules/async-each-series/package.json",
+    "api_backend/node_modules/async-each/package.json",
+    "api_backend/node_modules/async-helpers/package.json"
    ]
   },
   "files": [
@@ -8804,6 +11031,773 @@
     "dev": [
      "mocha"
     ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-bgyellow/package.json",
+    "kind": "dep",
+    "blob_sha": "949f6f4485eb992edcbbc0b463e3d6dfb1733dfc",
+    "ecosystem": "npm",
+    "bytes": 978,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-black/package.json",
+    "kind": "dep",
+    "blob_sha": "da47bb92b2efc33498414661756b5f87a742f1e7",
+    "ecosystem": "npm",
+    "bytes": 960,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-blue/package.json",
+    "kind": "dep",
+    "blob_sha": "baa95bc0b103532d0a37057b7d95e642582703e2",
+    "ecosystem": "npm",
+    "bytes": 954,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-bold/package.json",
+    "kind": "dep",
+    "blob_sha": "5a9ace9dd7881a992977f1158e38b3551fce29c1",
+    "ecosystem": "npm",
+    "bytes": 954,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-colors/package.json",
+    "kind": "dep",
+    "blob_sha": "919be6cb2c7bebfc91c3c3bf6b363ceb3b4e49a4",
+    "ecosystem": "npm",
+    "bytes": 2507,
+    "names": [
+     "ansi-bgblack",
+     "ansi-bgblue",
+     "ansi-bgcyan",
+     "ansi-bggreen",
+     "ansi-bgmagenta",
+     "ansi-bgred",
+     "ansi-bgwhite",
+     "ansi-bgyellow",
+     "ansi-black",
+     "ansi-blue",
+     "ansi-bold",
+     "ansi-cyan",
+     "ansi-dim",
+     "ansi-gray",
+     "ansi-green",
+     "ansi-grey",
+     "ansi-hidden",
+     "ansi-inverse",
+     "ansi-italic",
+     "ansi-magenta",
+     "ansi-red",
+     "ansi-reset",
+     "ansi-strikethrough",
+     "ansi-underline",
+     "ansi-white",
+     "ansi-yellow",
+     "lazy-cache"
+    ],
+    "dev": [
+     "gulp-format-md",
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-cyan/package.json",
+    "kind": "dep",
+    "blob_sha": "9ab8c241622f571eb2e1880a9eb0dcc6920d3897",
+    "ecosystem": "npm",
+    "bytes": 954,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-dim/package.json",
+    "kind": "dep",
+    "blob_sha": "e8d99a4cc572729a14a873f9c46d93b50e4068c9",
+    "ecosystem": "npm",
+    "bytes": 948,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-escapes/package.json",
+    "kind": "dep",
+    "blob_sha": "ed1a4ea482c325d76ca878e064804ad890dab76c",
+    "ecosystem": "npm",
+    "bytes": 819,
+    "dev": [
+     "ava",
+     "xo"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-gray/package.json",
+    "kind": "dep",
+    "blob_sha": "a35e962b46e821d8828a1ff24b7795501acd27d1",
+    "ecosystem": "npm",
+    "bytes": 954,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-green/package.json",
+    "kind": "dep",
+    "blob_sha": "661c314e0833b607990274ebbe32be9c09a38bee",
+    "ecosystem": "npm",
+    "bytes": 960,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-grey/package.json",
+    "kind": "dep",
+    "blob_sha": "e5b5b64d5e2ff8f4f219af032fd6349d930ab8dd",
+    "ecosystem": "npm",
+    "bytes": 954,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-hidden/package.json",
+    "kind": "dep",
+    "blob_sha": "ba5d761b743b3b8bf750ad954657c252bdd42775",
+    "ecosystem": "npm",
+    "bytes": 966,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-inverse/package.json",
+    "kind": "dep",
+    "blob_sha": "2ecbcb6891d263e009cdafab736069e41bf1fc13",
+    "ecosystem": "npm",
+    "bytes": 972,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-italic/package.json",
+    "kind": "dep",
+    "blob_sha": "b14473040bb39021b90d9608a349cbb5de151a5d",
+    "ecosystem": "npm",
+    "bytes": 966,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-magenta/package.json",
+    "kind": "dep",
+    "blob_sha": "543168dca5158cf85f2199cbf1d296178df4f6f4",
+    "ecosystem": "npm",
+    "bytes": 972,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-red/package.json",
+    "kind": "dep",
+    "blob_sha": "0199f2ce01b44c2ba99d1468842e089e75214d39",
+    "ecosystem": "npm",
+    "bytes": 948,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-regex/package.json",
+    "kind": "dep",
+    "blob_sha": "eb44fb5c1fe8bde8db5e45e5e8e83c00f54c0aa6",
+    "ecosystem": "npm",
+    "bytes": 1189,
+    "dev": [
+     "ava",
+     "xo"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-reset/package.json",
+    "kind": "dep",
+    "blob_sha": "c33c98e55382c1f01f892cda17e1c4869e32cb47",
+    "ecosystem": "npm",
+    "bytes": 960,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-strikethrough/package.json",
+    "kind": "dep",
+    "blob_sha": "704b48774926f70b65238cd4dcc30bc529ac121f",
+    "ecosystem": "npm",
+    "bytes": 1008,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-styles/package.json",
+    "kind": "dep",
+    "blob_sha": "78c535f7450c52ea2ea96fff96943c23b61a7e50",
+    "ecosystem": "npm",
+    "bytes": 900,
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-underline/package.json",
+    "kind": "dep",
+    "blob_sha": "50ecf1f48d285236e05fae2cb722ee1e6f36357b",
+    "ecosystem": "npm",
+    "bytes": 984,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-white/package.json",
+    "kind": "dep",
+    "blob_sha": "df57ed5c4166001c2106015dfafe5ffc8eac2bc8",
+    "ecosystem": "npm",
+    "bytes": 960,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/ansi-wrap/package.json",
+    "kind": "dep",
+    "blob_sha": "f3c291645b9a46f332030eb89434906bee654b01",
+    "ecosystem": "npm",
+    "bytes": 778
+   },
+   {
+    "path": "api_backend/node_modules/ansi-yellow/package.json",
+    "kind": "dep",
+    "blob_sha": "cca9506108acf0842961a01ce846cecdcc15b247",
+    "ecosystem": "npm",
+    "bytes": 966,
+    "names": [
+     "ansi-wrap"
+    ],
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/anymatch/package.json",
+    "kind": "dep",
+    "blob_sha": "f9b528479efa6b18dc318dc880badf2b9b4880c8",
+    "ecosystem": "npm",
+    "bytes": 904,
+    "names": [
+     "normalize-path",
+     "picomatch"
+    ],
+    "dev": [
+     "mocha",
+     "nyc"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/argparse/package.json",
+    "kind": "dep",
+    "blob_sha": "647d2aff18d2ac0bc73c4618e09a2a220bf7b36a",
+    "ecosystem": "npm",
+    "bytes": 682,
+    "dev": [
+     "@babel/eslint-parser",
+     "@babel/plugin-syntax-class-properties",
+     "eslint",
+     "mocha",
+     "nyc"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/arr-diff/package.json",
+    "kind": "dep",
+    "blob_sha": "d40c21030edc0d49ec8d9199cd357ac0e94fe936",
+    "ecosystem": "npm",
+    "bytes": 1078,
+    "names": [
+     "arr-flatten"
+    ],
+    "dev": [
+     "array-differ",
+     "array-slice",
+     "benchmarked",
+     "chalk",
+     "mocha",
+     "should"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/arr-flatten/package.json",
+    "kind": "dep",
+    "blob_sha": "d2d33e9bc324ce0034d6e7681650e7f308ccc389",
+    "ecosystem": "npm",
+    "bytes": 1606,
+    "dev": [
+     "ansi-bold",
+     "array-flatten",
+     "array-slice",
+     "benchmarked",
+     "compute-flatten",
+     "flatit",
+     "flatten",
+     "flatten-array",
+     "glob",
+     "gulp-format-md",
+     "just-flatten-it",
+     "lodash.flattendeep",
+     "m_flattened",
+     "mocha",
+     "utils-flatten",
+     "write"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/arr-map/package.json",
+    "kind": "dep",
+    "blob_sha": "34dcab6a608d3a875bb3b7eff7ab1f8feebdd208",
+    "ecosystem": "npm",
+    "bytes": 1239,
+    "names": [
+     "make-iterator"
+    ],
+    "dev": [
+     "array-map",
+     "benchmarked",
+     "braces",
+     "chalk",
+     "glob",
+     "gulp-format-md",
+     "micromatch",
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/arr-pluck/package.json",
+    "kind": "dep",
+    "blob_sha": "e208a2c476ca673e4ea608bda8ff30462660c6e8",
+    "ecosystem": "npm",
+    "bytes": 991,
+    "names": [
+     "arr-map"
+    ],
+    "dev": [
+     "mocha",
+     "should"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/arr-union/package.json",
+    "kind": "dep",
+    "blob_sha": "5ee87fd7da3bcb3ddfd3cadd10f1b9c269966c6a",
+    "ecosystem": "npm",
+    "bytes": 1477,
+    "dev": [
+     "ansi-bold",
+     "array-union",
+     "array-unique",
+     "benchmarked",
+     "gulp-format-md",
+     "minimist",
+     "mocha",
+     "should"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/array-flatten/package.json",
+    "kind": "dep",
+    "blob_sha": "1a24e2a1a1d3fbd694b77bf6673ab1e1c2fd5043",
+    "ecosystem": "npm",
+    "bytes": 879,
+    "dev": [
+     "istanbul",
+     "mocha",
+     "pre-commit",
+     "standard"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/array-sort/package.json",
+    "kind": "dep",
+    "blob_sha": "1d9a53bec9277ec850180f143b4a75dbb8161662",
+    "ecosystem": "npm",
+    "bytes": 1840,
+    "names": [
+     "default-compare",
+     "get-value",
+     "kind-of"
+    ],
+    "dev": [
+     "ansi-bold",
+     "benchmarked",
+     "glob",
+     "gulp-format-md",
+     "lodash.sortbyorder",
+     "mocha",
+     "should"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/array-unique/package.json",
+    "kind": "dep",
+    "blob_sha": "a493f69bf733d0d68b7f9c75a6dc3e69bbe5b888",
+    "ecosystem": "npm",
+    "bytes": 862,
+    "dev": [
+     "array-uniq",
+     "benchmarked",
+     "mocha",
+     "should"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/arrayify-compact/package.json",
+    "kind": "dep",
+    "blob_sha": "1748e9bbd1d032e4e27fae33368157f1f6975eec",
+    "ecosystem": "npm",
+    "bytes": 1227,
+    "names": [
+     "arr-flatten"
+    ],
+    "dev": [
+     "mocha",
+     "verb"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/assemble-core/package.json",
+    "kind": "dep",
+    "blob_sha": "6b54bb2022297f41cdac11599ee7d311ba04e1b3",
+    "ecosystem": "npm",
+    "bytes": 3778,
+    "names": [
+     "assemble-fs",
+     "assemble-render-file",
+     "assemble-streams",
+     "base-task",
+     "define-property",
+     "lazy-cache",
+     "templates"
+    ],
+    "dev": [
+     "base-test-runner",
+     "base-test-suite",
+     "gulp",
+     "gulp-eslint",
+     "gulp-format-md",
+     "gulp-istanbul",
+     "gulp-mocha",
+     "verb-readme-generator"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/assemble-fs/package.json",
+    "kind": "dep",
+    "blob_sha": "5d0dcda35c4181b7d7f8af0c07ef51a8ca370488",
+    "ecosystem": "npm",
+    "bytes": 1731,
+    "names": [
+     "assemble-handle",
+     "extend-shallow",
+     "is-valid-app",
+     "lazy-cache",
+     "stream-combiner",
+     "through2",
+     "vinyl-fs"
+    ],
+    "dev": [
+     "buffer-equal",
+     "expect",
+     "graceful-fs",
+     "gulp-format-md",
+     "mocha",
+     "rimraf",
+     "should",
+     "sinon",
+     "templates",
+     "vinyl"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/assemble-handle/package.json",
+    "kind": "dep",
+    "blob_sha": "97953e6f8281f1fd3bbead7b7b4ecd55379a5f84",
+    "ecosystem": "npm",
+    "bytes": 1666,
+    "names": [
+     "through2"
+    ],
+    "dev": [
+     "assemble-core",
+     "delete",
+     "gulp-format-md",
+     "mocha",
+     "vinyl"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/assemble-loader/package.json",
+    "kind": "dep",
+    "blob_sha": "9149475b702cc916c3fc356a94a1d6e612bd8621",
+    "ecosystem": "npm",
+    "bytes": 1846,
+    "names": [
+     "extend-shallow",
+     "file-contents",
+     "fs-exists-sync",
+     "has-glob",
+     "is-registered",
+     "is-valid-glob",
+     "is-valid-instance",
+     "isobject",
+     "lazy-cache",
+     "load-templates"
+    ],
+    "dev": [
+     "engine-base",
+     "engine-handlebars",
+     "gulp",
+     "gulp-eslint",
+     "gulp-format-md",
+     "gulp-istanbul",
+     "gulp-mocha",
+     "mocha",
+     "parser-front-matter",
+     "should",
+     "templates"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/assemble-render-file/package.json",
+    "kind": "dep",
+    "blob_sha": "d0588e5ab13c0ea8559eb305cfc94df120739d16",
+    "ecosystem": "npm",
+    "bytes": 1713,
+    "names": [
+     "debug",
+     "is-valid-app",
+     "lazy-cache",
+     "mixin-deep",
+     "through2"
+    ],
+    "dev": [
+     "assemble-fs",
+     "assemble-streams",
+     "engine-base",
+     "engine-handlebars",
+     "gulp",
+     "gulp-eslint",
+     "gulp-format-md",
+     "gulp-istanbul",
+     "gulp-mocha",
+     "mocha",
+     "should",
+     "templates"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/assemble-streams/package.json",
+    "kind": "dep",
+    "blob_sha": "2696c5f044917ab405905f2f06fec4b023c93e6d",
+    "ecosystem": "npm",
+    "bytes": 1532,
+    "names": [
+     "assemble-handle",
+     "is-registered",
+     "is-valid-instance",
+     "lazy-cache",
+     "match-file",
+     "src-stream",
+     "through2"
+    ],
+    "dev": [
+     "assemble-fs",
+     "gulp-format-md",
+     "mocha",
+     "templates"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/assign-deep/package.json",
+    "kind": "dep",
+    "blob_sha": "e67e77d5a7bb689da951720b5a49cd0d1ce36295",
+    "ecosystem": "npm",
+    "bytes": 1558,
+    "names": [
+     "assign-symbols",
+     "is-primitive",
+     "kind-of"
+    ],
+    "dev": [
+     "gulp-format-md",
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/assign-symbols/package.json",
+    "kind": "dep",
+    "blob_sha": "41ad26609891cb5925b82a0afdd24a8a1a4a74ef",
+    "ecosystem": "npm",
+    "bytes": 1020,
+    "dev": [
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/async-array-reduce/package.json",
+    "kind": "dep",
+    "blob_sha": "6df5002ba7fca6ce806c1e4e04575d4975ad4d56",
+    "ecosystem": "npm",
+    "bytes": 1074,
+    "dev": [
+     "gulp-format-md",
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/async-done/package.json",
+    "kind": "dep",
+    "blob_sha": "774c73303a3855fa7a5d7822333d1fe30e92b382",
+    "ecosystem": "npm",
+    "bytes": 1762,
+    "names": [
+     "end-of-stream",
+     "once",
+     "process-nextick-args",
+     "stream-exhaust"
+    ],
+    "dev": [
+     "@types/node",
+     "coveralls",
+     "eslint",
+     "eslint-config-gulp",
+     "expect",
+     "mocha",
+     "nyc",
+     "pumpify",
+     "rxjs",
+     "through2",
+     "typescript",
+     "when"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/async-each-series/package.json",
+    "kind": "dep",
+    "blob_sha": "11d2d2fefd8dca412976df35de1bc3d801968694",
+    "ecosystem": "npm",
+    "bytes": 856,
+    "dev": [
+     "expect.js",
+     "mocha"
+    ]
+   },
+   {
+    "path": "api_backend/node_modules/async-each/package.json",
+    "kind": "dep",
+    "blob_sha": "6184f0135f220e6e1022f3a01930f6af220df22d",
+    "ecosystem": "npm",
+    "bytes": 613
+   },
+   {
+    "path": "api_backend/node_modules/async-helpers/package.json",
+    "kind": "dep",
+    "blob_sha": "4b4d8b502693bbefbeb4618e31f03c7f03b188e7",
+    "ecosystem": "npm",
+    "bytes": 1620,
+    "names": [
+     "co",
+     "kind-of"
+    ],
+    "dev": [
+     "async",
+     "gulp",
+     "gulp-eslint",
+     "gulp-format-md",
+     "gulp-istanbul",
+     "gulp-mocha",
+     "handlebars",
+     "lodash",
+     "mocha"
+    ]
    }
   ],
   "clues": {
@@ -8814,6 +11808,79 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "api_backend/node_modules/mysql2/lib/auth_plugins/caching_sha2_password.js",
+    "api_backend/node_modules/mysql2/lib/auth_plugins/caching_sha2_password.md",
+    "api_backend/node_modules/mysql2/lib/auth_plugins/index.js",
+    "api_backend/node_modules/mysql2/lib/auth_plugins/mysql_native_password.js",
+    "api_backend/node_modules/mysql2/lib/auth_plugins/sha256_password.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mariadb/connection-manager.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mariadb/connection-manager.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mariadb/data-types.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mariadb/data-types.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mariadb/index.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mariadb/index.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mariadb/query-generator.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mariadb/query-generator.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mariadb/query.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mariadb/query.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mssql/async-queue.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mssql/async-queue.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mssql/connection-manager.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mssql/connection-manager.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mssql/data-types.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mssql/data-types.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mssql/index.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mssql/index.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mssql/query-generator.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mssql/query-generator.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mssql/query-interface.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mssql/query-interface.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mssql/query.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mssql/query.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mysql/connection-manager.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mysql/connection-manager.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mysql/data-types.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mysql/data-types.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mysql/index.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mysql/index.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mysql/query-generator.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mysql/query-generator.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mysql/query-interface.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mysql/query-interface.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/mysql/query.js",
+    "api_backend/node_modules/sequelize/lib/dialects/mysql/query.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/connection-manager.js",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/connection-manager.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/data-types.js",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/data-types.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/hstore.js",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/hstore.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/index.js",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/index.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/query-generator.js",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/query-generator.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/query-interface.js",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/query-interface.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/query.js",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/query.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/range.js",
+    "api_backend/node_modules/sequelize/lib/dialects/postgres/range.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/sqlite/connection-manager.js",
+    "api_backend/node_modules/sequelize/lib/dialects/sqlite/connection-manager.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/sqlite/data-types.js",
+    "api_backend/node_modules/sequelize/lib/dialects/sqlite/data-types.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/sqlite/index.js",
+    "api_backend/node_modules/sequelize/lib/dialects/sqlite/index.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/sqlite/query-generator.js",
+    "api_backend/node_modules/sequelize/lib/dialects/sqlite/query-generator.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/sqlite/query-interface.js",
+    "api_backend/node_modules/sequelize/lib/dialects/sqlite/query-interface.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/sqlite/query.js",
+    "api_backend/node_modules/sequelize/lib/dialects/sqlite/query.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/sqlite/sqlite-utils.js",
+    "api_backend/node_modules/sequelize/lib/dialects/sqlite/sqlite-utils.js.map",
+    "api_backend/node_modules/sequelize/types/dialects/mssql/async-queue.d.ts",
+    "api_backend/node_modules/sequelize/types/dialects/sqlite/sqlite-utils.d.ts",
     "api_backend/node_modules/base-plugins/LICENSE",
     "api_backend/node_modules/base-plugins/index.js",
     "api_backend/node_modules/base-plugins/package.json",
@@ -8823,11 +11890,6 @@
     "api_backend/node_modules/base-cli-schema/lib/fields/plugins.js",
     "api_backend/node_modules/base-config-process/lib/fields/plugins.js",
     "api_backend/node_modules/base-config-schema/lib/fields/plugins.js",
-    "api_backend/node_modules/mysql2/lib/auth_plugins/caching_sha2_password.js",
-    "api_backend/node_modules/mysql2/lib/auth_plugins/caching_sha2_password.md",
-    "api_backend/node_modules/mysql2/lib/auth_plugins/index.js",
-    "api_backend/node_modules/mysql2/lib/auth_plugins/mysql_native_password.js",
-    "api_backend/node_modules/mysql2/lib/auth_plugins/sha256_password.js",
     "api_backend/node_modules/sequelize/lib/dialects/parserStore.js",
     "api_backend/node_modules/sequelize/lib/dialects/parserStore.js.map",
     "api_backend/node_modules/templates/lib/plugins/context.js",
@@ -8853,7 +11915,39 @@
     "api_backend/node_modules/sequelize/lib/dialects/abstract/query-interface.js",
     "api_backend/node_modules/sequelize/lib/dialects/abstract/query-interface.js.map",
     "api_backend/node_modules/sequelize/lib/dialects/abstract/query.js",
-    "api_backend/node_modules/sequelize/lib/dialects/abstract/query.js.map"
+    "api_backend/node_modules/sequelize/lib/dialects/abstract/query.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/db2/connection-manager.js",
+    "api_backend/node_modules/sequelize/lib/dialects/db2/connection-manager.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/db2/data-types.js",
+    "api_backend/node_modules/sequelize/lib/dialects/db2/data-types.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/db2/index.js",
+    "api_backend/node_modules/sequelize/lib/dialects/db2/index.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/db2/query-generator.js",
+    "api_backend/node_modules/sequelize/lib/dialects/db2/query-generator.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/db2/query-interface.js",
+    "api_backend/node_modules/sequelize/lib/dialects/db2/query-interface.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/db2/query.js",
+    "api_backend/node_modules/sequelize/lib/dialects/db2/query.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/snowflake/connection-manager.js",
+    "api_backend/node_modules/sequelize/lib/dialects/snowflake/connection-manager.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/snowflake/data-types.js",
+    "api_backend/node_modules/sequelize/lib/dialects/snowflake/data-types.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/snowflake/index.js",
+    "api_backend/node_modules/sequelize/lib/dialects/snowflake/index.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/snowflake/query-generator.js",
+    "api_backend/node_modules/sequelize/lib/dialects/snowflake/query-generator.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/snowflake/query-interface.js",
+    "api_backend/node_modules/sequelize/lib/dialects/snowflake/query-interface.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/snowflake/query.js",
+    "api_backend/node_modules/sequelize/lib/dialects/snowflake/query.js.map",
+    "api_backend/node_modules/sequelize/types/dialects/abstract/connection-manager.d.ts",
+    "api_backend/node_modules/sequelize/types/dialects/abstract/index.d.ts",
+    "api_backend/node_modules/sequelize/types/dialects/abstract/query-interface.d.ts",
+    "api_backend/node_modules/sequelize/types/dialects/abstract/query.d.ts",
+    "api_backend/node_modules/sequelize/lib/dialects/abstract/query-generator/operators.js",
+    "api_backend/node_modules/sequelize/lib/dialects/abstract/query-generator/operators.js.map",
+    "api_backend/node_modules/sequelize/lib/dialects/abstract/query-generator/transaction.js",
+    "api_backend/node_modules/sequelize/lib/dialects/abstract/query-generator/transaction.js.map"
    ]
   },
   "fail_count": 0
@@ -9340,13 +12434,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:34:39Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:41:06Z",
   "default_branch": "master",
   "pushed_at": "2020-03-25",
   "stars": 10,
   "tree": {
    "sha": "677aa34b48971ee367fc9140fa04f9825a458871",
-   "etag": "W/\"580e8fab69b0aaf6188459520cd396d5c7aff83ec92dd8147bb778a96f92e219\"",
+   "etag": "W/\"95e81b07eba117e56ac0d40fb093ba77601802ed7fec8b5ebb475a576fa18899\"",
    "truncated": false,
    "path_count": 3026,
    "matched": [
@@ -9361,7 +12456,9 @@
     "vendor/github.com/nsqio/go-nsq/go.mod",
     "vendor/github.com/pierrec/lz4/go.mod",
     "vendor/github.com/spf13/afero/go.mod",
-    "vendor/github.com/spf13/cast/go.mod"
+    "vendor/github.com/spf13/cast/go.mod",
+    "vendor/github.com/spf13/jwalterweatherman/go.mod",
+    "vendor/github.com/spf13/viper/go.mod"
    ]
   },
   "files": [
@@ -9532,6 +12629,51 @@
      "github.com/davecgh/go-spew",
      "github.com/pmezard/go-difflib"
     ]
+   },
+   {
+    "path": "vendor/github.com/spf13/jwalterweatherman/go.mod",
+    "kind": "dep",
+    "blob_sha": "1dbcfd3e8894fea5083d6e297781848ff793c13e",
+    "ecosystem": "go",
+    "bytes": 188,
+    "names": [
+     "github.com/stretchr/testify"
+    ],
+    "dev": [
+     "github.com/davecgh/go-spew",
+     "github.com/pmezard/go-difflib"
+    ]
+   },
+   {
+    "path": "vendor/github.com/spf13/viper/go.mod",
+    "kind": "dep",
+    "blob_sha": "86e801c150b9dfe8a5e6de3c0e8f899a3e5ebbf2",
+    "ecosystem": "go",
+    "bytes": 986,
+    "names": [
+     "github.com/fsnotify/fsnotify",
+     "github.com/hashicorp/hcl",
+     "github.com/magiconair/properties",
+     "github.com/mitchellh/mapstructure",
+     "github.com/pelletier/go-toml",
+     "github.com/spf13/afero",
+     "github.com/spf13/cast",
+     "github.com/spf13/jwalterweatherman",
+     "github.com/spf13/pflag",
+     "github.com/stretchr/testify",
+     "github.com/xordataexchange/crypt",
+     "gopkg.in/yaml.v2"
+    ],
+    "dev": [
+     "github.com/armon/consul-api",
+     "github.com/coreos/etcd",
+     "github.com/coreos/go-etcd",
+     "github.com/coreos/go-semver",
+     "github.com/ugorji/go/codec",
+     "golang.org/x/crypto",
+     "golang.org/x/sys",
+     "golang.org/x/text"
+    ]
    }
   ],
   "clues": {
@@ -9657,13 +12799,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:51:55Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:45:35Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 4,
   "tree": {
-   "sha": "bb5958fbcbee796bd9e6830e6c76c4173962ef7b",
-   "etag": "W/\"364b7924310d033368fab30f912b2a9b63dc3e27b36e23d79d9312519f38a071\"",
+   "sha": "c39bb00e7ce53051bc2374db5293708bd353b451",
+   "etag": "W/\"d5dff100d9222516bac1b7401318efb1878b84cba75871b12f609604ac19c8cb\"",
    "truncated": false,
    "path_count": 10,
    "matched": [
@@ -9691,13 +12834,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:55:24Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:46:59Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 3,
   "tree": {
    "sha": "475bd3b6f7819e1d203c1c20511bdbf1d6b1c1fa",
-   "etag": "W/\"1005c66eb95d102372208d9482758df3eb7a47344d6cbb772fc65f59945ef2f3\"",
+   "etag": "W/\"7a66843a9f83eaa2e6a44413ad6048de3a977f78af74b0bb6d7f1a0adaf5c805\"",
    "truncated": false,
    "path_count": 9,
    "matched": []

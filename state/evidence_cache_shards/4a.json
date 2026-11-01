@@ -8783,13 +8783,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:24:20Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:33:06Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
-  "stars": 188,
+  "pushed_at": "2026-10-31",
+  "stars": 190,
   "tree": {
-   "sha": "e45f48d2ad7682b485f1637bd0249d8af5184372",
-   "etag": "W/\"b804920c2717d8c5cf15e41f47f584490a0062a76d6cbd21a81e9d8fd99fd008\"",
+   "sha": "6afc11d3e0ae030a640f2939c67a8f43f328c9ab",
+   "etag": "W/\"93a5fbaf69edb791bbd6813dc3ca55249087f4c73d36b82a3eb92b45c9f0d48c\"",
    "truncated": false,
    "path_count": 168,
    "matched": [
@@ -8903,15 +8904,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:35:39Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:36:00Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
-  "stars": 149,
+  "pushed_at": "2026-10-31",
+  "stars": 150,
   "tree": {
-   "sha": "011e4d43c1f12ced3261e0ba17829fcb2b988e10",
-   "etag": "W/\"f856441554d75f6fd01a0f4120e5c07e92cd0c1ac4a424e8c9d07890e2e6ecc1\"",
+   "sha": "37d2a7e2d395120f8f707af4db9dd18c4157080b",
+   "etag": "W/\"89821712065b9ae5b5250ef07398bf40dfdc37168bd370dc15875840c4e69f0b\"",
    "truncated": false,
-   "path_count": 1811,
+   "path_count": 1812,
    "matched": [
     "Cargo.toml",
     "fuzz/Cargo.toml",
@@ -8925,6 +8927,22 @@
     "tests/Dockerfile.builder",
     "tests/Dockerfile.e2e",
     "tests/Dockerfile.e2e-asan",
+    "tests/Dockerfile.e2e-base-lite",
+    "tests/Dockerfile.e2e-coverage",
+    "tests/Dockerfile.e2e-upgrade",
+    "tests/Dockerfile.release-e2e",
+    "benchmarks/s1/Dockerfile",
+    "benchmarks/s1/Dockerfile.arm64-sdk",
+    "benchmarks/s1/Dockerfile.dockerignore",
+    "demo/dashboard/Dockerfile",
+    "demo/generator/Dockerfile",
+    "demos/ducklake-funnel/generator/Dockerfile",
+    "demos/ducklake-oltp-lake/jupyter/Dockerfile",
+    "demos/ducklake-time-travel/generator/Dockerfile",
+    "tests/repro/react11-using/Dockerfile",
+    "benchmarks/s1/qualification/local-arm64-1191-5877838/build-evidence/Dockerfile",
+    "benchmarks/s1/qualification/local-arm64-1191-5877838/build-evidence/Dockerfile.arm64-sdk",
+    "benchmarks/s1/qualification/local-arm64-1191-5877838/build-evidence/Dockerfile.dockerignore",
     ".github/workflows/benchmarks.yml",
     ".github/workflows/build.yml",
     ".github/workflows/builder-image.yml",
@@ -8939,7 +8957,20 @@
     ".github/workflows/dvm-tiers.yml",
     ".github/workflows/e2e-benchmarks.yml",
     ".github/workflows/fuzz-nightly.yml",
-    ".github/workflows/fuzz-smoke.yml"
+    ".github/workflows/fuzz-smoke.yml",
+    ".github/workflows/ghcr.yml",
+    ".github/workflows/lint.yml",
+    ".github/workflows/pgxn.yml",
+    ".github/workflows/release.yml",
+    ".github/workflows/s1-qualification.yml",
+    ".github/workflows/secret-scan.yml",
+    ".github/workflows/security.yml",
+    ".github/workflows/semgrep.yml",
+    ".github/workflows/sqlancer.yml",
+    ".github/workflows/stability-tests.yml",
+    ".github/workflows/tpch-explain-artifacts.yml",
+    ".github/workflows/tpch-nightly.yml",
+    ".github/workflows/unsafe-inventory.yml"
    ]
   },
   "files": [
@@ -9081,6 +9112,149 @@
     ]
    },
    {
+    "path": "tests/Dockerfile.e2e-base-lite",
+    "kind": "image",
+    "blob_sha": "45356c6f6406822680fa0c32852380a5f042a5fc",
+    "bytes": 2533,
+    "images": [
+     "postgres:18.6"
+    ]
+   },
+   {
+    "path": "tests/Dockerfile.e2e-coverage",
+    "kind": "image",
+    "blob_sha": "33cd6fb8f330ccb48cb8c236d921b5f556a6a0b3",
+    "bytes": 6517,
+    "images": [
+     "postgres:18.6"
+    ]
+   },
+   {
+    "path": "tests/Dockerfile.e2e-upgrade",
+    "kind": "image",
+    "blob_sha": "08a98cc0291fbd91336fb33de8cf7fe34a397507",
+    "bytes": 4085,
+    "images": [
+     "${BASE_IMAGE}"
+    ]
+   },
+   {
+    "path": "tests/Dockerfile.release-e2e",
+    "kind": "image",
+    "blob_sha": "fcce00439e0422537f56bd191c323e1d4b92016d",
+    "bytes": 535,
+    "images": [
+     "postgres:18.6"
+    ]
+   },
+   {
+    "path": "benchmarks/s1/Dockerfile",
+    "kind": "image",
+    "blob_sha": "70c7eeb004aeb6edf1e8493c1b2a5488096d5d06",
+    "bytes": 3727,
+    "images": [
+     "${S1_BUILDER}",
+     "compiler",
+     "postgres:18.4-bookworm@sha256:efef99e1558f86089bc84bece29208c0777a185ff717ec7fa288a652ce2d0adf"
+    ]
+   },
+   {
+    "path": "benchmarks/s1/Dockerfile.arm64-sdk",
+    "kind": "image",
+    "blob_sha": "69a9aaa7d29f90189d15db6625db6563cd07690a",
+    "bytes": 877,
+    "images": [
+     "postgres:18.4-bookworm@sha256:efef99e1558f86089bc84bece29208c0777a185ff717ec7fa288a652ce2d0adf"
+    ]
+   },
+   {
+    "path": "benchmarks/s1/Dockerfile.dockerignore",
+    "kind": "image",
+    "blob_sha": "a04c36fc1218503012c70e0d3337fb60309b8425",
+    "bytes": 341
+   },
+   {
+    "path": "demo/dashboard/Dockerfile",
+    "kind": "image",
+    "blob_sha": "41b08952c0d1fd2def236cad065ccf7f95f8fbff",
+    "bytes": 197,
+    "images": [
+     "python:3.12-slim"
+    ]
+   },
+   {
+    "path": "demo/generator/Dockerfile",
+    "kind": "image",
+    "blob_sha": "fc810241fbe3e6932d64d5f66005d0b96ff5d0b1",
+    "bytes": 186,
+    "images": [
+     "python:3.12-slim"
+    ]
+   },
+   {
+    "path": "demos/ducklake-funnel/generator/Dockerfile",
+    "kind": "image",
+    "blob_sha": "035d6e11048a46c0126db262747b86bb6788edfb",
+    "bytes": 139,
+    "images": [
+     "python:3.12-alpine"
+    ]
+   },
+   {
+    "path": "demos/ducklake-oltp-lake/jupyter/Dockerfile",
+    "kind": "image",
+    "blob_sha": "0ab788a7f3ebf5fb3ea8cc22ae4d156f790f081a",
+    "bytes": 202,
+    "images": [
+     "jupyter/scipy-notebook:latest"
+    ]
+   },
+   {
+    "path": "demos/ducklake-time-travel/generator/Dockerfile",
+    "kind": "image",
+    "blob_sha": "30463a003f012e8d7c1540e9a2cdeb9001220ee7",
+    "bytes": 132,
+    "images": [
+     "python:3.12-slim"
+    ]
+   },
+   {
+    "path": "tests/repro/react11-using/Dockerfile",
+    "kind": "image",
+    "blob_sha": "42d2f3c7060c036714326eb6b01327e4eab03483",
+    "bytes": 1174,
+    "images": [
+     "pg-trickle-1168:arm64-sdk@sha256:de453c245823bdb68c341e5b648a08f008e7cf67a336615a753baadd8c1f9150",
+     "pgreact:issue11-compatibility@sha256:3cdd0ae0ac2b15f42cabdfc08c41b758360807148f6a5399f05b9bff4066453a"
+    ]
+   },
+   {
+    "path": "benchmarks/s1/qualification/local-arm64-1191-5877838/build-evidence/Dockerfile",
+    "kind": "image",
+    "blob_sha": "2221336312de3d5d9225cd0f1ef508ee7ebcabbd",
+    "bytes": 3671,
+    "images": [
+     "${S1_BUILDER}",
+     "compiler",
+     "postgres:18.4-bookworm@sha256:efef99e1558f86089bc84bece29208c0777a185ff717ec7fa288a652ce2d0adf"
+    ]
+   },
+   {
+    "path": "benchmarks/s1/qualification/local-arm64-1191-5877838/build-evidence/Dockerfile.arm64-sdk",
+    "kind": "image",
+    "blob_sha": "69a9aaa7d29f90189d15db6625db6563cd07690a",
+    "bytes": 877,
+    "images": [
+     "postgres:18.4-bookworm@sha256:efef99e1558f86089bc84bece29208c0777a185ff717ec7fa288a652ce2d0adf"
+    ]
+   },
+   {
+    "path": "benchmarks/s1/qualification/local-arm64-1191-5877838/build-evidence/Dockerfile.dockerignore",
+    "kind": "image",
+    "blob_sha": "a04c36fc1218503012c70e0d3337fb60309b8425",
+    "bytes": 341
+   },
+   {
     "path": ".github/workflows/benchmarks.yml",
     "kind": "ci",
     "blob_sha": "ae31d16ba59bc245fb4865a48d6bc800542365ae",
@@ -9107,8 +9281,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "395b3a00ae1b4d6dcce8413292190bac008b5f7a",
-    "bytes": 94295
+    "blob_sha": "8ced24eaf34276242918d0f721a583d1b7825bd7",
+    "bytes": 96169
    },
    {
     "path": ".github/workflows/codeql.yml",
@@ -9169,6 +9343,84 @@
     "kind": "ci",
     "blob_sha": "f5a4ca24ffeeee1504fa8f44d885ff8a04069324",
     "bytes": 4250
+   },
+   {
+    "path": ".github/workflows/ghcr.yml",
+    "kind": "ci",
+    "blob_sha": "413b2cb3227efc4687a292b923329eeb5e23b196",
+    "bytes": 13461
+   },
+   {
+    "path": ".github/workflows/lint.yml",
+    "kind": "ci",
+    "blob_sha": "8a395b4b309fff5aff3f3b50114dd95e0fe366d4",
+    "bytes": 1998
+   },
+   {
+    "path": ".github/workflows/pgxn.yml",
+    "kind": "ci",
+    "blob_sha": "b565ebf12612f892dd4abe6ab05d73e9023df500",
+    "bytes": 2702
+   },
+   {
+    "path": ".github/workflows/release.yml",
+    "kind": "ci",
+    "blob_sha": "a2757a70a0c8b98a53959db11505c09fd16a899e",
+    "bytes": 32645
+   },
+   {
+    "path": ".github/workflows/s1-qualification.yml",
+    "kind": "ci",
+    "blob_sha": "2c0b36a41948151c5d47d1c1b1042a8b28b9b686",
+    "bytes": 16050
+   },
+   {
+    "path": ".github/workflows/secret-scan.yml",
+    "kind": "ci",
+    "blob_sha": "0436915ffbb82f55ce1928caf82a2e4a767c7ef4",
+    "bytes": 2243
+   },
+   {
+    "path": ".github/workflows/security.yml",
+    "kind": "ci",
+    "blob_sha": "dfc3999be6fc839e7936a9913a00c0e8b37dc2b8",
+    "bytes": 2627
+   },
+   {
+    "path": ".github/workflows/semgrep.yml",
+    "kind": "ci",
+    "blob_sha": "c08f898e5028cae5a0518065a3343d0e779ef263",
+    "bytes": 2685
+   },
+   {
+    "path": ".github/workflows/sqlancer.yml",
+    "kind": "ci",
+    "blob_sha": "bf5f48bd75abfab9ad716b0b8c49d077d3284079",
+    "bytes": 4225
+   },
+   {
+    "path": ".github/workflows/stability-tests.yml",
+    "kind": "ci",
+    "blob_sha": "f10986050a1cc827609a15a8379e4e606ffc1f03",
+    "bytes": 4306
+   },
+   {
+    "path": ".github/workflows/tpch-explain-artifacts.yml",
+    "kind": "ci",
+    "blob_sha": "60a0a8a8039da2cac16b584a98ec560f59399425",
+    "bytes": 5835
+   },
+   {
+    "path": ".github/workflows/tpch-nightly.yml",
+    "kind": "ci",
+    "blob_sha": "b16a1d779dc9dfdfa6ee8b46ffe84c6e1c3f6b80",
+    "bytes": 3377
+   },
+   {
+    "path": ".github/workflows/unsafe-inventory.yml",
+    "kind": "ci",
+    "blob_sha": "d0dd315f2402680305b55a29ce0e6e4d4ab9e96d",
+    "bytes": 1759
    }
   ],
   "clues": {
@@ -9306,13 +9558,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:49:37Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:40:00Z",
   "default_branch": "master",
   "pushed_at": "2020-09-05",
   "stars": 118,
   "tree": {
    "sha": "c87be9c1ffefaa5549f152c5d2dd7c65f273eac1",
-   "etag": "W/\"5f4e128d5ec486fcba88b5a5a41e20d60f09f11c0dcbbd881fa4895971e76dfb\"",
+   "etag": "W/\"e446c05d2fffc3afbc2167a58a7a58bdab0886ef8a5ead481f0c5c43d394589f\"",
    "truncated": false,
    "path_count": 1610,
    "matched": [
@@ -9450,7 +9703,167 @@
     "app/public/static/plugin/jquery-plugin/jquery.serializejson.min.js",
     "app/public/static/plugin/jquery-plugin/jquery.ui.position.min.js",
     "app/public/static/plugin/jquery-plugin/liMarquee.css",
-    "app/public/static/plugin/jquery.form/jquery.form.js"
+    "app/public/static/plugin/jquery.form/jquery.form.js",
+    "app/public/static/plugin/js-menu/contabs.js",
+    "app/public/static/plugin/js-menu/menuTab-blue.css",
+    "app/public/static/plugin/js-menu/menuTab-green.css",
+    "app/public/static/plugin/js-menu/menuTab-lynch.css",
+    "app/public/static/plugin/js-menu/menuTab-midnight-blue.css",
+    "app/public/static/plugin/js-menu/menuTab-purple.css",
+    "app/public/static/plugin/js-menu/menuTab-red.css",
+    "app/public/static/plugin/jstree/32px.png",
+    "app/public/static/plugin/jstree/40px.png",
+    "app/public/static/plugin/jstree/jstree.js",
+    "app/public/static/plugin/jstree/jstree.min.css",
+    "app/public/static/plugin/jstree/jstree.min.js",
+    "app/public/static/plugin/jstree/style.css",
+    "app/public/static/plugin/jstree/style.less",
+    "app/public/static/plugin/jstree/style.min.css",
+    "app/public/static/plugin/jstree/throbber.gif",
+    "app/public/static/plugin/layui/sockjs.js",
+    "app/public/static/plugin/summernote/summernote.css",
+    "app/public/static/plugin/summernote/summernote.js",
+    "app/public/static/plugin/swagger/favicon-16x16.png",
+    "app/public/static/plugin/swagger/favicon-32x32.png",
+    "app/public/static/plugin/swagger/index.html",
+    "app/public/static/plugin/swagger/oauth2-redirect.html",
+    "app/public/static/plugin/swagger/swagger-ui-bundle.js",
+    "app/public/static/plugin/swagger/swagger-ui-bundle.js.map",
+    "app/public/static/plugin/swagger/swagger-ui-standalone-preset.js",
+    "app/public/static/plugin/swagger/swagger-ui-standalone-preset.js.map",
+    "app/public/static/plugin/swagger/swagger-ui.css",
+    "app/public/static/plugin/swagger/swagger-ui.css.map",
+    "app/public/static/plugin/swagger/swagger-ui.js",
+    "app/public/static/plugin/swagger/swagger-ui.js.map",
+    "app/public/static/plugin/toastr/toastr.css",
+    "app/public/static/plugin/toastr/toastr.js.map",
+    "app/public/static/plugin/toastr/toastr.min.css",
+    "app/public/static/plugin/toastr/toastr.min.js",
+    "app/public/static/plugin/tpl/mustache.min.js",
+    "app/public/static/plugin/webuploader/README.md",
+    "app/public/static/plugin/webuploader/demo.css",
+    "app/public/static/plugin/webuploader/demo.js",
+    "app/public/static/plugin/webuploader/fileupload.css",
+    "app/public/static/plugin/webuploader/fileupload.js",
+    "app/public/static/plugin/webuploader/icons.png",
+    "app/public/static/plugin/webuploader/webuploader.css",
+    "app/public/static/plugin/webuploader/webuploader.custom.js",
+    "app/public/static/plugin/webuploader/webuploader.custom.min.js",
+    "app/public/static/plugin/webuploader/webuploader.fis.js",
+    "app/public/static/plugin/webuploader/webuploader.flashonly.js",
+    "app/public/static/plugin/webuploader/webuploader.flashonly.min.js",
+    "app/public/static/plugin/webuploader/webuploader.html5only.js",
+    "app/public/static/plugin/webuploader/webuploader.html5only.min.js",
+    "app/public/static/plugin/webuploader/webuploader.js",
+    "app/public/static/plugin/webuploader/webuploader.min.js",
+    "app/public/static/plugin/webuploader/webuploader.noimage.js",
+    "app/public/static/plugin/webuploader/webuploader.noimage.min.js",
+    "app/public/static/plugin/webuploader/webuploader.nolog.js",
+    "app/public/static/plugin/webuploader/webuploader.nolog.min.js",
+    "app/public/static/plugin/webuploader/webuploader.withoutimage.js",
+    "app/public/static/plugin/webuploader/webuploader.withoutimage.min.js",
+    "app/public/static/plugin/awesome/4.4/.gitignore",
+    "app/public/static/plugin/awesome/4.4/.npmignore",
+    "app/public/static/plugin/awesome/4.4/CONTRIBUTING.md",
+    "app/public/static/plugin/awesome/4.4/Gemfile",
+    "app/public/static/plugin/awesome/4.4/Gemfile.lock",
+    "app/public/static/plugin/awesome/4.4/HELP-US-OUT.txt",
+    "app/public/static/plugin/awesome/4.4/README.md",
+    "app/public/static/plugin/awesome/4.4/_config.yml",
+    "app/public/static/plugin/awesome/4.4/bower.json",
+    "app/public/static/plugin/awesome/4.4/component.json",
+    "app/public/static/plugin/awesome/4.4/composer.json",
+    "app/public/static/plugin/awesome/4.4/font-awesome.css",
+    "app/public/static/plugin/awesome/4.4/font-awesome.css.map",
+    "app/public/static/plugin/awesome/4.4/font-awesome.min.css",
+    "app/public/static/plugin/awesome/4.4/package.json",
+    "app/public/static/plugin/city-picker/css/city-picker.css",
+    "app/public/static/plugin/city-picker/images/drop-arrow.png",
+    "app/public/static/plugin/city-picker/js/city-picker.data.js",
+    "app/public/static/plugin/city-picker/js/city-picker.data.min.js",
+    "app/public/static/plugin/city-picker/js/city-picker.js",
+    "app/public/static/plugin/city-picker/js/city-picker.min.js",
+    "app/public/static/plugin/ckfinder/_samples/ckeditor.html",
+    "app/public/static/plugin/ckfinder/_samples/fckeditor.html",
+    "app/public/static/plugin/ckfinder/_samples/index.html",
+    "app/public/static/plugin/ckfinder/_samples/popup.html",
+    "app/public/static/plugin/ckfinder/_samples/popups.html",
+    "app/public/static/plugin/ckfinder/_samples/public_api.html",
+    "app/public/static/plugin/ckfinder/_samples/sample.css",
+    "app/public/static/plugin/ckfinder/_samples/standalone.html",
+    "app/public/static/plugin/ckfinder/_samples/standalone_v1.html",
+    "app/public/static/plugin/ckfinder/_samples/tagusage.jsp",
+    "app/public/static/plugin/ckfinder/lang/_translationstatus.txt",
+    "app/public/static/plugin/ckfinder/lang/bg.js",
+    "app/public/static/plugin/ckfinder/lang/ca.js",
+    "app/public/static/plugin/ckfinder/lang/cs.js",
+    "app/public/static/plugin/ckfinder/lang/cy.js",
+    "app/public/static/plugin/ckfinder/lang/da.js",
+    "app/public/static/plugin/ckfinder/lang/de.js",
+    "app/public/static/plugin/ckfinder/lang/el.js",
+    "app/public/static/plugin/ckfinder/lang/en.js",
+    "app/public/static/plugin/ckfinder/lang/eo.js",
+    "app/public/static/plugin/ckfinder/lang/es-mx.js",
+    "app/public/static/plugin/ckfinder/lang/es.js",
+    "app/public/static/plugin/ckfinder/lang/et.js",
+    "app/public/static/plugin/ckfinder/lang/fa.js",
+    "app/public/static/plugin/ckfinder/lang/fi.js",
+    "app/public/static/plugin/ckfinder/lang/fr.js",
+    "app/public/static/plugin/ckfinder/lang/gu.js",
+    "app/public/static/plugin/ckfinder/lang/he.js",
+    "app/public/static/plugin/ckfinder/lang/hi.js",
+    "app/public/static/plugin/ckfinder/lang/hr.js",
+    "app/public/static/plugin/ckfinder/lang/hu.js",
+    "app/public/static/plugin/ckfinder/lang/it.js",
+    "app/public/static/plugin/ckfinder/lang/ja.js",
+    "app/public/static/plugin/ckfinder/lang/lt.js",
+    "app/public/static/plugin/ckfinder/lang/lv.js",
+    "app/public/static/plugin/ckfinder/lang/nb.js",
+    "app/public/static/plugin/ckfinder/lang/nl.js",
+    "app/public/static/plugin/ckfinder/lang/nn.js",
+    "app/public/static/plugin/ckfinder/lang/no.js",
+    "app/public/static/plugin/ckfinder/lang/pl.js",
+    "app/public/static/plugin/ckfinder/lang/pt-br.js",
+    "app/public/static/plugin/ckfinder/lang/ro.js",
+    "app/public/static/plugin/ckfinder/lang/ru.js",
+    "app/public/static/plugin/ckfinder/lang/sk.js",
+    "app/public/static/plugin/ckfinder/lang/sl.js",
+    "app/public/static/plugin/ckfinder/lang/sv.js",
+    "app/public/static/plugin/ckfinder/lang/tr.js",
+    "app/public/static/plugin/ckfinder/lang/vi.js",
+    "app/public/static/plugin/ckfinder/lang/zh-cn.js",
+    "app/public/static/plugin/ckfinder/lang/zh-tw.js",
+    "app/public/static/plugin/icheck-1.x/demo/index.html",
+    "app/public/static/plugin/icheck-1.x/skins/all.css",
+    "app/public/static/plugin/jquery-combox/styles/style.css",
+    "app/public/static/plugin/jquery-validation/1.14.0/additional-methods.js",
+    "app/public/static/plugin/jquery-validation/1.14.0/additional-methods.min.js",
+    "app/public/static/plugin/jquery-validation/1.14.0/jquery.validate.js",
+    "app/public/static/plugin/jquery-validation/1.14.0/jquery.validate.min.js",
+    "app/public/static/plugin/jquery-validation/1.14.0/validation-methods.js",
+    "app/public/static/plugin/layui/dist/layui.all.js",
+    "app/public/static/plugin/layui/dist/layui.js",
+    "app/public/static/plugin/layui/layer/layer.js",
+    "app/public/static/plugin/layui/laytpl/laytpl.js",
+    "app/public/static/plugin/summernote/font/summernote.eot",
+    "app/public/static/plugin/summernote/font/summernote.ttf",
+    "app/public/static/plugin/summernote/font/summernote.woff",
+    "app/public/static/plugin/summernote/lang/summernote-ar-AR.js",
+    "app/public/static/plugin/summernote/lang/summernote-ar-AR.min.js",
+    "app/public/static/plugin/summernote/lang/summernote-bg-BG.js",
+    "app/public/static/plugin/summernote/lang/summernote-bg-BG.min.js",
+    "app/public/static/plugin/summernote/lang/summernote-ca-ES.js",
+    "app/public/static/plugin/summernote/lang/summernote-ca-ES.min.js",
+    "app/public/static/plugin/summernote/lang/summernote-cs-CZ.js",
+    "app/public/static/plugin/summernote/lang/summernote-cs-CZ.min.js",
+    "app/public/static/plugin/summernote/lang/summernote-da-DK.js",
+    "app/public/static/plugin/summernote/lang/summernote-da-DK.min.js",
+    "app/public/static/plugin/summernote/lang/summernote-de-DE.js",
+    "app/public/static/plugin/summernote/lang/summernote-de-DE.min.js",
+    "app/public/static/plugin/summernote/lang/summernote-es-ES.js",
+    "app/public/static/plugin/summernote/lang/summernote-es-ES.min.js",
+    "app/public/static/plugin/summernote/lang/summernote-es-EU.js",
+    "app/public/static/plugin/summernote/lang/summernote-es-EU.min.js"
    ]
   },
   "fail_count": 0
@@ -9704,15 +10117,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T05:57:40Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:52:10Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 59,
   "tree": {
-   "sha": "f95d553670f00b04f18bc5fd5c2c3e4c424235fd",
-   "etag": "W/\"799ab7ec77d3324728724fc81f016f79143fcb0141628a73d01f755240b0ec34\"",
+   "sha": "936d88a81515f7ed5dc0cae37e3c54aa7edbc87d",
+   "etag": "W/\"38ed2c4731f6f9fddbffbaf073cb2f6f22d030696cc0cf77aa6df274f1d4a76d\"",
    "truncated": false,
-   "path_count": 64,
+   "path_count": 65,
    "matched": [
     "composer.json"
    ]
@@ -9746,13 +10160,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:17:23Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:55:39Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 49,
   "tree": {
    "sha": "91a9bf5f880f1283cfbf7f3db63372f2a5f2573b",
-   "etag": "W/\"e8d3b6df2ad846aed6407e68073f589654f790f000268a2e4a464cc7a6288dc3\"",
+   "etag": "W/\"fe8db7167c7780db2b6f96634ea2c3d0e4c3fab08648dd1c77d2f6df16ec1828\"",
    "truncated": false,
    "path_count": 461,
    "matched": [
@@ -12067,13 +12482,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T10:14:35Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:28:00Z",
   "default_branch": "main",
   "pushed_at": "2025-05-20",
-  "stars": 14,
+  "stars": 13,
   "tree": {
    "sha": "d80f60ced3f8ed01eb4e631ab625ddd6b4356587",
-   "etag": "W/\"0274132d6883b29ec4f7773a52fa62e65d4d3e567543814851f47482ff3db389\"",
+   "etag": "W/\"6257f3a99618381c15776557f0b2af22d54b76ab3fa2a1858ecef5b3c54df0a1\"",
    "truncated": false,
    "path_count": 4086,
    "matched": [
@@ -12088,7 +12504,55 @@
     "node_modules/axios/package.json",
     "node_modules/balanced-match/package.json",
     "node_modules/base64id/package.json",
-    "node_modules/basic-auth/package.json"
+    "node_modules/basic-auth/package.json",
+    "node_modules/bignumber.js/package.json",
+    "node_modules/binary-extensions/package.json",
+    "node_modules/bluebird/package.json",
+    "node_modules/body-parser/package.json",
+    "node_modules/brace-expansion/package.json",
+    "node_modules/braces/package.json",
+    "node_modules/buffer-from/package.json",
+    "node_modules/busboy/package.json",
+    "node_modules/bytes/package.json",
+    "node_modules/cacheable-request/package.json",
+    "node_modules/camelcase-keys/package.json",
+    "node_modules/camelcase/package.json",
+    "node_modules/chalk/package.json",
+    "node_modules/chokidar/package.json",
+    "node_modules/client-sessions/package.json",
+    "node_modules/clone-response/package.json",
+    "node_modules/color-convert/package.json",
+    "node_modules/color-name/package.json",
+    "node_modules/concat-map/package.json",
+    "node_modules/concat-stream/package.json",
+    "node_modules/concurrently/package.json",
+    "node_modules/content-disposition/package.json",
+    "node_modules/content-type/package.json",
+    "node_modules/cookie-parser/package.json",
+    "node_modules/cookie-signature/package.json",
+    "node_modules/cookie/package.json",
+    "node_modules/cookies/package.json",
+    "node_modules/core-util-is/package.json",
+    "node_modules/cross-spawn/package.json",
+    "node_modules/debug/package.json",
+    "node_modules/decamelize-keys/package.json",
+    "node_modules/decamelize/package.json",
+    "node_modules/decompress-response/package.json",
+    "node_modules/deep-diff/package.json",
+    "node_modules/defer-to-connect/package.json",
+    "node_modules/depd/package.json",
+    "node_modules/destroy/package.json",
+    "node_modules/dotenv/package.json",
+    "node_modules/ee-first/package.json",
+    "node_modules/ejs/package.json",
+    "node_modules/emoji-regex/package.json",
+    "node_modules/encodeurl/package.json",
+    "node_modules/end-of-stream/package.json",
+    "node_modules/engine.io-parser/package.json",
+    "node_modules/engine.io/package.json",
+    "node_modules/error-ex/package.json",
+    "node_modules/escape-html/package.json",
+    "node_modules/etag/package.json"
    ]
   },
   "files": [
@@ -12391,6 +12855,868 @@
      "eslint-plugin-standard",
      "istanbul",
      "mocha"
+    ]
+   },
+   {
+    "path": "node_modules/bignumber.js/package.json",
+    "kind": "dep",
+    "blob_sha": "475a8130605887eca6c81c1cbf176625794a00dd",
+    "ecosystem": "npm",
+    "bytes": 845
+   },
+   {
+    "path": "node_modules/binary-extensions/package.json",
+    "kind": "dep",
+    "blob_sha": "4710c339aeb2d5885d2df14567c614d83e820cc7",
+    "ecosystem": "npm",
+    "bytes": 739,
+    "dev": [
+     "ava",
+     "tsd",
+     "xo"
+    ]
+   },
+   {
+    "path": "node_modules/bluebird/package.json",
+    "kind": "dep",
+    "blob_sha": "33f696cb246847d9db89b30fefd99e2759b3da37",
+    "ecosystem": "npm",
+    "bytes": 2216,
+    "dev": [
+     "acorn",
+     "acorn-walk",
+     "baconjs",
+     "bluebird",
+     "body-parser",
+     "browserify",
+     "cli-table",
+     "co",
+     "cross-spawn",
+     "glob",
+     "grunt-saucelabs",
+     "highland",
+     "istanbul",
+     "jshint",
+     "jshint-stylish",
+     "kefir",
+     "mkdirp",
+     "mocha",
+     "open",
+     "optimist",
+     "rimraf",
+     "rx",
+     "serve-static",
+     "sinon",
+     "uglify-js"
+    ]
+   },
+   {
+    "path": "node_modules/body-parser/package.json",
+    "kind": "dep",
+    "blob_sha": "3c9926fc58c48384546542d899382ff7042c92c3",
+    "ecosystem": "npm",
+    "bytes": 1472,
+    "names": [
+     "bytes",
+     "content-type",
+     "debug",
+     "depd",
+     "destroy",
+     "http-errors",
+     "iconv-lite",
+     "on-finished",
+     "qs",
+     "raw-body",
+     "type-is",
+     "unpipe"
+    ],
+    "dev": [
+     "eslint",
+     "eslint-config-standard",
+     "eslint-plugin-import",
+     "eslint-plugin-markdown",
+     "eslint-plugin-node",
+     "eslint-plugin-promise",
+     "eslint-plugin-standard",
+     "methods",
+     "mocha",
+     "nyc",
+     "safe-buffer",
+     "supertest"
+    ]
+   },
+   {
+    "path": "node_modules/brace-expansion/package.json",
+    "kind": "dep",
+    "blob_sha": "7097d41e39de5df4544966717dc8c9de0871a5de",
+    "ecosystem": "npm",
+    "bytes": 1092,
+    "names": [
+     "balanced-match"
+    ],
+    "dev": [
+     "@c4312/matcha",
+     "tape"
+    ]
+   },
+   {
+    "path": "node_modules/braces/package.json",
+    "kind": "dep",
+    "blob_sha": "c3c056e469726cdb0d0cb6cec73b3f79abf0eb23",
+    "ecosystem": "npm",
+    "bytes": 1647,
+    "names": [
+     "fill-range"
+    ],
+    "dev": [
+     "ansi-colors",
+     "bash-path",
+     "gulp-format-md",
+     "mocha"
+    ]
+   },
+   {
+    "path": "node_modules/buffer-from/package.json",
+    "kind": "dep",
+    "blob_sha": "6ac5327bf8621ef03a3df8039518a98ba3d1648a",
+    "ecosystem": "npm",
+    "bytes": 304,
+    "dev": [
+     "standard"
+    ]
+   },
+   {
+    "path": "node_modules/busboy/package.json",
+    "kind": "dep",
+    "blob_sha": "ac2577fe2c5873d1f171955eecce4caa5578fdbd",
+    "ecosystem": "npm",
+    "bytes": 810,
+    "names": [
+     "streamsearch"
+    ],
+    "dev": [
+     "@mscdex/eslint-config",
+     "eslint"
+    ]
+   },
+   {
+    "path": "node_modules/bytes/package.json",
+    "kind": "dep",
+    "blob_sha": "f2b6a8b0e3c9020746409617bcd562c9368be451",
+    "ecosystem": "npm",
+    "bytes": 959,
+    "dev": [
+     "eslint",
+     "eslint-plugin-markdown",
+     "mocha",
+     "nyc"
+    ]
+   },
+   {
+    "path": "node_modules/cacheable-request/package.json",
+    "kind": "dep",
+    "blob_sha": "ef1c2ae2f91269a08ef4d2660d3da4848f24c455",
+    "ecosystem": "npm",
+    "bytes": 1160,
+    "names": [
+     "clone-response",
+     "get-stream",
+     "http-cache-semantics",
+     "keyv",
+     "lowercase-keys",
+     "normalize-url",
+     "responselike"
+    ],
+    "dev": [
+     "@keyv/sqlite",
+     "ava",
+     "coveralls",
+     "create-test-server",
+     "delay",
+     "eslint-config-xo-lukechilds",
+     "nyc",
+     "pify",
+     "sqlite3",
+     "this",
+     "xo"
+    ]
+   },
+   {
+    "path": "node_modules/camelcase-keys/package.json",
+    "kind": "dep",
+    "blob_sha": "1b7ce64e1e637d999603f17c93c721f5156f3bb6",
+    "ecosystem": "npm",
+    "bytes": 1159,
+    "names": [
+     "camelcase",
+     "map-obj",
+     "quick-lru"
+    ],
+    "dev": [
+     "ava",
+     "matcha",
+     "tsd",
+     "xo"
+    ]
+   },
+   {
+    "path": "node_modules/camelcase/package.json",
+    "kind": "dep",
+    "blob_sha": "fbdbaaa75651d6ca23908caa68a9c75e8a60952c",
+    "ecosystem": "npm",
+    "bytes": 746,
+    "dev": [
+     "ava",
+     "tsd",
+     "xo"
+    ]
+   },
+   {
+    "path": "node_modules/chalk/package.json",
+    "kind": "dep",
+    "blob_sha": "47c23f29068caa951b6f9d2a748fbfc291b6b492",
+    "ecosystem": "npm",
+    "bytes": 1197,
+    "names": [
+     "ansi-styles",
+     "supports-color"
+    ],
+    "dev": [
+     "ava",
+     "coveralls",
+     "execa",
+     "import-fresh",
+     "matcha",
+     "nyc",
+     "resolve-from",
+     "tsd",
+     "xo"
+    ]
+   },
+   {
+    "path": "node_modules/chokidar/package.json",
+    "kind": "dep",
+    "blob_sha": "e8f8b3d995e8ffbff13e0a5b8728c9dc769786a5",
+    "ecosystem": "npm",
+    "bytes": 1648,
+    "names": [
+     "anymatch",
+     "braces",
+     "glob-parent",
+     "is-binary-path",
+     "is-glob",
+     "normalize-path",
+     "readdirp",
+     "fsevents"
+    ],
+    "dev": [
+     "@types/node",
+     "chai",
+     "dtslint",
+     "eslint",
+     "mocha",
+     "rimraf",
+     "sinon",
+     "sinon-chai",
+     "typescript",
+     "upath"
+    ]
+   },
+   {
+    "path": "node_modules/client-sessions/package.json",
+    "kind": "dep",
+    "blob_sha": "2061f0851044c18682052cbc313293786042226b",
+    "ecosystem": "npm",
+    "bytes": 682,
+    "names": [
+     "cookies"
+    ],
+    "dev": [
+     "vows",
+     "express",
+     "request"
+    ]
+   },
+   {
+    "path": "node_modules/clone-response/package.json",
+    "kind": "dep",
+    "blob_sha": "a4a08104366ac9b77f0329773903b9d1c14b169c",
+    "ecosystem": "npm",
+    "bytes": 970,
+    "names": [
+     "mimic-response"
+    ],
+    "dev": [
+     "ava",
+     "coveralls",
+     "create-test-server",
+     "eslint-config-xo-lukechilds",
+     "get-stream",
+     "nyc",
+     "pify",
+     "xo"
+    ]
+   },
+   {
+    "path": "node_modules/color-convert/package.json",
+    "kind": "dep",
+    "blob_sha": "6e48000c7c98fd844af784fb2fdf7060f13ed0b1",
+    "ecosystem": "npm",
+    "bytes": 827,
+    "names": [
+     "color-name"
+    ],
+    "dev": [
+     "chalk",
+     "xo"
+    ]
+   },
+   {
+    "path": "node_modules/color-name/package.json",
+    "kind": "dep",
+    "blob_sha": "7acc90285c96fbbe8b6f12ef32cd2384a72e6f62",
+    "ecosystem": "npm",
+    "bytes": 579
+   },
+   {
+    "path": "node_modules/concat-map/package.json",
+    "kind": "dep",
+    "blob_sha": "d3640e6b027b9ea87afbfd361ca12fc05cca0e9c",
+    "ecosystem": "npm",
+    "bytes": 989,
+    "dev": [
+     "tape"
+    ]
+   },
+   {
+    "path": "node_modules/concat-stream/package.json",
+    "kind": "dep",
+    "blob_sha": "f7090223487280d770e9b67b603e60aed789ecf5",
+    "ecosystem": "npm",
+    "bytes": 1187,
+    "names": [
+     "buffer-from",
+     "inherits",
+     "readable-stream",
+     "typedarray"
+    ],
+    "dev": [
+     "tape"
+    ]
+   },
+   {
+    "path": "node_modules/concurrently/package.json",
+    "kind": "dep",
+    "blob_sha": "9e093cb2edba03debc870788527bcb233a2fa47b",
+    "ecosystem": "npm",
+    "bytes": 3018,
+    "names": [
+     "chalk",
+     "lodash",
+     "rxjs",
+     "shell-quote",
+     "supports-color",
+     "tree-kill",
+     "yargs"
+    ],
+    "dev": [
+     "@hirez_io/observer-spy",
+     "@jest/types",
+     "@swc/core",
+     "@swc/jest",
+     "@types/jest",
+     "@types/lodash",
+     "@types/node",
+     "@types/shell-quote",
+     "@types/supports-color",
+     "@types/yargs",
+     "@typescript-eslint/eslint-plugin",
+     "@typescript-eslint/parser",
+     "coveralls-next",
+     "ctrlc-wrapper",
+     "esbuild",
+     "eslint",
+     "eslint-config-prettier",
+     "eslint-plugin-import",
+     "eslint-plugin-jest",
+     "eslint-plugin-prettier",
+     "eslint-plugin-simple-import-sort",
+     "husky",
+     "jest",
+     "jest-create-mock-instance",
+     "lint-staged",
+     "prettier",
+     "safe-publish-latest",
+     "string-argv",
+     "typescript"
+    ]
+   },
+   {
+    "path": "node_modules/content-disposition/package.json",
+    "kind": "dep",
+    "blob_sha": "5cea50ba00024fd3272ed83643ca6219d5873223",
+    "ecosystem": "npm",
+    "bytes": 1106,
+    "names": [
+     "safe-buffer"
+    ],
+    "dev": [
+     "deep-equal",
+     "eslint",
+     "eslint-config-standard",
+     "eslint-plugin-import",
+     "eslint-plugin-markdown",
+     "eslint-plugin-node",
+     "eslint-plugin-promise",
+     "eslint-plugin-standard",
+     "mocha",
+     "nyc"
+    ]
+   },
+   {
+    "path": "node_modules/content-type/package.json",
+    "kind": "dep",
+    "blob_sha": "9db19f63fb96592d8d3bced654a72d47c12cef97",
+    "ecosystem": "npm",
+    "bytes": 1075,
+    "dev": [
+     "deep-equal",
+     "eslint",
+     "eslint-config-standard",
+     "eslint-plugin-import",
+     "eslint-plugin-node",
+     "eslint-plugin-promise",
+     "eslint-plugin-standard",
+     "mocha",
+     "nyc"
+    ]
+   },
+   {
+    "path": "node_modules/cookie-parser/package.json",
+    "kind": "dep",
+    "blob_sha": "b1e86f08e5aba8c42d46fd657a7c40b9d6daec9d",
+    "ecosystem": "npm",
+    "bytes": 1148,
+    "names": [
+     "cookie",
+     "cookie-signature"
+    ],
+    "dev": [
+     "eslint",
+     "eslint-config-standard",
+     "eslint-plugin-import",
+     "eslint-plugin-markdown",
+     "eslint-plugin-node",
+     "eslint-plugin-promise",
+     "eslint-plugin-standard",
+     "mocha",
+     "nyc",
+     "supertest"
+    ]
+   },
+   {
+    "path": "node_modules/cookie-signature/package.json",
+    "kind": "dep",
+    "blob_sha": "29c4498e07ab1ae43692d7a27f959771a459815c",
+    "ecosystem": "npm",
+    "bytes": 492,
+    "dev": [
+     "mocha",
+     "should"
+    ]
+   },
+   {
+    "path": "node_modules/cookie/package.json",
+    "kind": "dep",
+    "blob_sha": "22e3f922ba048e5cd1a20ac6a5b77fbc3b155095",
+    "ecosystem": "npm",
+    "bytes": 1092,
+    "dev": [
+     "beautify-benchmark",
+     "benchmark",
+     "eslint",
+     "eslint-plugin-markdown",
+     "mocha",
+     "nyc",
+     "safe-buffer",
+     "top-sites"
+    ]
+   },
+   {
+    "path": "node_modules/cookies/package.json",
+    "kind": "dep",
+    "blob_sha": "6a7dda440cd9175709715360b8516ebfa018e923",
+    "ecosystem": "npm",
+    "bytes": 1084,
+    "names": [
+     "depd",
+     "keygrip"
+    ],
+    "dev": [
+     "eslint",
+     "express",
+     "istanbul",
+     "mocha",
+     "restify",
+     "supertest"
+    ]
+   },
+   {
+    "path": "node_modules/core-util-is/package.json",
+    "kind": "dep",
+    "blob_sha": "b0c51f580be4cff40105d5b52a8a513bc0330e94",
+    "ecosystem": "npm",
+    "bytes": 799,
+    "dev": [
+     "tap"
+    ]
+   },
+   {
+    "path": "node_modules/cross-spawn/package.json",
+    "kind": "dep",
+    "blob_sha": "24b2eb4c9900cfe2a7d04a7f6b49bf2092f4a81a",
+    "ecosystem": "npm",
+    "bytes": 1655,
+    "names": [
+     "path-key",
+     "shebang-command",
+     "which"
+    ],
+    "dev": [
+     "@commitlint/cli",
+     "@commitlint/config-conventional",
+     "babel-core",
+     "babel-jest",
+     "babel-preset-moxy",
+     "eslint",
+     "eslint-config-moxy",
+     "husky",
+     "jest",
+     "lint-staged",
+     "mkdirp",
+     "rimraf",
+     "standard-version"
+    ]
+   },
+   {
+    "path": "node_modules/debug/package.json",
+    "kind": "dep",
+    "blob_sha": "dc787ba76781de4c1d4721b69aa881a548365a90",
+    "ecosystem": "npm",
+    "bytes": 1138,
+    "names": [
+     "ms"
+    ],
+    "dev": [
+     "browserify",
+     "chai",
+     "concurrently",
+     "coveralls",
+     "eslint",
+     "istanbul",
+     "karma",
+     "karma-chai",
+     "karma-mocha",
+     "karma-phantomjs-launcher",
+     "karma-sinon",
+     "mocha",
+     "mocha-lcov-reporter",
+     "rimraf",
+     "sinon",
+     "sinon-chai"
+    ]
+   },
+   {
+    "path": "node_modules/decamelize-keys/package.json",
+    "kind": "dep",
+    "blob_sha": "f863f9d413717ea2f7bf91172c37679970393b56",
+    "ecosystem": "npm",
+    "bytes": 1157,
+    "names": [
+     "decamelize",
+     "map-obj"
+    ],
+    "dev": [
+     "ava",
+     "xo"
+    ]
+   },
+   {
+    "path": "node_modules/decamelize/package.json",
+    "kind": "dep",
+    "blob_sha": "ca3579031890a8757a6f837a6641688872feddbb",
+    "ecosystem": "npm",
+    "bytes": 717,
+    "dev": [
+     "ava",
+     "xo"
+    ]
+   },
+   {
+    "path": "node_modules/decompress-response/package.json",
+    "kind": "dep",
+    "blob_sha": "57df8896d7c5fe520added304310d76c5673473d",
+    "ecosystem": "npm",
+    "bytes": 985,
+    "names": [
+     "mimic-response"
+    ],
+    "dev": [
+     "@types/node",
+     "ava",
+     "get-stream",
+     "pify",
+     "tsd",
+     "xo"
+    ]
+   },
+   {
+    "path": "node_modules/deep-diff/package.json",
+    "kind": "dep",
+    "blob_sha": "7287744174d88b8210e30c218201a3f5825ccb05",
+    "ecosystem": "npm",
+    "bytes": 2544,
+    "dev": [
+     "deep-equal",
+     "expect.js",
+     "jscs",
+     "jshint",
+     "mocha",
+     "rollup",
+     "uglifyjs"
+    ]
+   },
+   {
+    "path": "node_modules/defer-to-connect/package.json",
+    "kind": "dep",
+    "blob_sha": "4dbd1c61dff72403359e720020d675c2390b2a66",
+    "ecosystem": "npm",
+    "bytes": 1588,
+    "dev": [
+     "@ava/typescript",
+     "@sindresorhus/tsconfig",
+     "@types/node",
+     "@typescript-eslint/eslint-plugin",
+     "@typescript-eslint/parser",
+     "ava",
+     "coveralls",
+     "create-cert",
+     "del-cli",
+     "eslint-config-xo-typescript",
+     "nyc",
+     "p-event",
+     "typescript",
+     "xo"
+    ]
+   },
+   {
+    "path": "node_modules/depd/package.json",
+    "kind": "dep",
+    "blob_sha": "3857e199184a0a3f0d921e740525278af0f86ff3",
+    "ecosystem": "npm",
+    "bytes": 1335,
+    "dev": [
+     "benchmark",
+     "beautify-benchmark",
+     "eslint",
+     "eslint-config-standard",
+     "eslint-plugin-import",
+     "eslint-plugin-markdown",
+     "eslint-plugin-node",
+     "eslint-plugin-promise",
+     "eslint-plugin-standard",
+     "istanbul",
+     "mocha",
+     "safe-buffer",
+     "uid-safe"
+    ]
+   },
+   {
+    "path": "node_modules/destroy/package.json",
+    "kind": "dep",
+    "blob_sha": "c85e438378a65c39b3ccd4e0316d1855cf5b7887",
+    "ecosystem": "npm",
+    "bytes": 1128,
+    "dev": [
+     "eslint",
+     "eslint-config-standard",
+     "eslint-plugin-import",
+     "eslint-plugin-node",
+     "eslint-plugin-promise",
+     "eslint-plugin-standard",
+     "mocha",
+     "nyc"
+    ]
+   },
+   {
+    "path": "node_modules/dotenv/package.json",
+    "kind": "dep",
+    "blob_sha": "157c1e36f483de1d5b87cffa9e7680fff31d8f87",
+    "ecosystem": "npm",
+    "bytes": 1665,
+    "dev": [
+     "@types/node",
+     "decache",
+     "sinon",
+     "standard",
+     "standard-version",
+     "tap",
+     "typescript"
+    ]
+   },
+   {
+    "path": "node_modules/ee-first/package.json",
+    "kind": "dep",
+    "blob_sha": "b6d0b7d6757512f58dbf65a8e92f953a483069ad",
+    "ecosystem": "npm",
+    "bytes": 859,
+    "dev": [
+     "istanbul",
+     "mocha"
+    ]
+   },
+   {
+    "path": "node_modules/ejs/package.json",
+    "kind": "dep",
+    "blob_sha": "a229989b5f5fa5b4fa915f4bae0d1f044c4bd894",
+    "ecosystem": "npm",
+    "bytes": 906,
+    "names": [
+     "jake"
+    ],
+    "dev": [
+     "browserify",
+     "eslint",
+     "git-directory-deploy",
+     "jsdoc",
+     "lru-cache",
+     "mocha",
+     "uglify-js"
+    ]
+   },
+   {
+    "path": "node_modules/emoji-regex/package.json",
+    "kind": "dep",
+    "blob_sha": "eac892a16a253be133fbfe7c176840e8e75e9bb4",
+    "ecosystem": "npm",
+    "bytes": 1331,
+    "dev": [
+     "@babel/cli",
+     "@babel/core",
+     "@babel/plugin-proposal-unicode-property-regex",
+     "@babel/preset-env",
+     "@unicode/unicode-13.0.0",
+     "mocha",
+     "regexgen"
+    ]
+   },
+   {
+    "path": "node_modules/encodeurl/package.json",
+    "kind": "dep",
+    "blob_sha": "313382214599a9b52a408282b40c3f907407a30a",
+    "ecosystem": "npm",
+    "bytes": 1092,
+    "dev": [
+     "eslint",
+     "eslint-config-standard",
+     "eslint-plugin-import",
+     "eslint-plugin-node",
+     "eslint-plugin-promise",
+     "eslint-plugin-standard",
+     "istanbul",
+     "mocha"
+    ]
+   },
+   {
+    "path": "node_modules/end-of-stream/package.json",
+    "kind": "dep",
+    "blob_sha": "b75bbf0fd3e3c0f2d87be02143e811862ad8b766",
+    "ecosystem": "npm",
+    "bytes": 777,
+    "names": [
+     "once"
+    ],
+    "dev": [
+     "tape"
+    ]
+   },
+   {
+    "path": "node_modules/engine.io-parser/package.json",
+    "kind": "dep",
+    "blob_sha": "8a631ebb31c4fd6514b4846a0201a2bb011cb110",
+    "ecosystem": "npm",
+    "bytes": 1632,
+    "dev": [
+     "prettier"
+    ]
+   },
+   {
+    "path": "node_modules/engine.io/package.json",
+    "kind": "dep",
+    "blob_sha": "ed8386ea3b72a2e3ca2bfe1a156ed83c44425eb7",
+    "ecosystem": "npm",
+    "bytes": 2094,
+    "names": [
+     "@types/cors",
+     "@types/node",
+     "accepts",
+     "base64id",
+     "cookie",
+     "cors",
+     "debug",
+     "engine.io-parser",
+     "ws"
+    ]
+   },
+   {
+    "path": "node_modules/error-ex/package.json",
+    "kind": "dep",
+    "blob_sha": "f3d9ae0e3b921d13f230585231b68d8c472c9b06",
+    "ecosystem": "npm",
+    "bytes": 908,
+    "names": [
+     "is-arrayish"
+    ],
+    "dev": [
+     "coffee-script",
+     "coveralls",
+     "istanbul",
+     "mocha",
+     "should",
+     "xo"
+    ]
+   },
+   {
+    "path": "node_modules/escape-html/package.json",
+    "kind": "dep",
+    "blob_sha": "57ec7bd0754d50af9c5e96a208aed6d85c1e6d5e",
+    "ecosystem": "npm",
+    "bytes": 434,
+    "dev": [
+     "benchmark",
+     "beautify-benchmark"
+    ]
+   },
+   {
+    "path": "node_modules/etag/package.json",
+    "kind": "dep",
+    "blob_sha": "b06ab803c0f80f56c5c88b8dc394468aee3485f4",
+    "ecosystem": "npm",
+    "bytes": 1306,
+    "dev": [
+     "beautify-benchmark",
+     "benchmark",
+     "eslint",
+     "eslint-config-standard",
+     "eslint-plugin-import",
+     "eslint-plugin-markdown",
+     "eslint-plugin-node",
+     "eslint-plugin-promise",
+     "eslint-plugin-standard",
+     "istanbul",
+     "mocha",
+     "safe-buffer",
+     "seedrandom"
     ]
    }
   ],
@@ -13347,13 +14673,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:36:45Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:41:32Z",
   "default_branch": "main",
   "pushed_at": "2026-10-30",
   "stars": 10,
   "tree": {
    "sha": "0c88e41db59e495412ab7074f72b92d4225c89b8",
-   "etag": "W/\"b5e9d663e66cfed16ff8aff4635590de59a0c3cddfcd5b1d29fd729dc8d31c1a\"",
+   "etag": "W/\"97eb48af3f9bc1fecb25567d7877666e05f0b768c1d0f4ea9b5d0d4eb393e90d\"",
    "truncated": false,
    "path_count": 8507,
    "matched": [
@@ -13431,6 +14758,9 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "includes/external/Phpfastcache/Drivers/Sqlite/Config.php",
+    "includes/external/Phpfastcache/Drivers/Sqlite/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Sqlite/Item.php",
     "templates/tpl_modified/css/tpl_plugins.min.css",
     "templates/tpl_modified/javascript/tpl_plugins.min.js",
     "templates/tpl_modified/smarty/register_php_plugins.php",
@@ -13470,7 +14800,164 @@
     "includes/external/Phpfastcache/Core/Pool/DriverPoolAbstractTrait.php",
     "includes/external/Phpfastcache/Drivers/Apcu/Config.php",
     "includes/external/Phpfastcache/Drivers/Apcu/Driver.php",
-    "includes/external/Phpfastcache/Drivers/Apcu/Item.php"
+    "includes/external/Phpfastcache/Drivers/Apcu/Item.php",
+    "includes/external/Phpfastcache/Drivers/Cassandra/Config.php",
+    "includes/external/Phpfastcache/Drivers/Cassandra/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Cassandra/Item.php",
+    "includes/external/Phpfastcache/Drivers/Couchbasev3/Config.php",
+    "includes/external/Phpfastcache/Drivers/Couchbasev3/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Couchbasev3/Item.php",
+    "includes/external/Phpfastcache/Drivers/Devnull/Config.php",
+    "includes/external/Phpfastcache/Drivers/Devnull/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Devnull/Item.php",
+    "includes/external/Phpfastcache/Drivers/Devrandom/Config.php",
+    "includes/external/Phpfastcache/Drivers/Devrandom/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Devrandom/Item.php",
+    "includes/external/Phpfastcache/Drivers/Files/Config.php",
+    "includes/external/Phpfastcache/Drivers/Files/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Files/Item.php",
+    "includes/external/Phpfastcache/Drivers/Leveldb/Config.php",
+    "includes/external/Phpfastcache/Drivers/Leveldb/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Leveldb/Item.php",
+    "includes/external/Phpfastcache/Drivers/Memcache/Config.php",
+    "includes/external/Phpfastcache/Drivers/Memcache/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Memcache/Item.php",
+    "includes/external/Phpfastcache/Drivers/Memcached/Config.php",
+    "includes/external/Phpfastcache/Drivers/Memcached/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Memcached/Item.php",
+    "includes/external/Phpfastcache/Drivers/Memory/Config.php",
+    "includes/external/Phpfastcache/Drivers/Memory/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Memory/Item.php",
+    "includes/external/Phpfastcache/Drivers/Memstatic/Config.php",
+    "includes/external/Phpfastcache/Drivers/Memstatic/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Memstatic/Item.php",
+    "includes/external/Phpfastcache/Drivers/Predis/Config.php",
+    "includes/external/Phpfastcache/Drivers/Predis/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Predis/Item.php",
+    "includes/external/Phpfastcache/Drivers/Redis/Config.php",
+    "includes/external/Phpfastcache/Drivers/Redis/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Redis/Item.php",
+    "includes/external/Phpfastcache/Drivers/Redis/RedisDriverTrait.php",
+    "includes/external/Phpfastcache/Drivers/Rediscluster/Config.php",
+    "includes/external/Phpfastcache/Drivers/Rediscluster/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Rediscluster/Item.php",
+    "includes/external/Phpfastcache/Drivers/Ssdb/Config.php",
+    "includes/external/Phpfastcache/Drivers/Ssdb/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Ssdb/Item.php",
+    "includes/external/Phpfastcache/Drivers/Wincache/Config.php",
+    "includes/external/Phpfastcache/Drivers/Wincache/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Wincache/Item.php",
+    "includes/external/Phpfastcache/Drivers/Zenddisk/Config.php",
+    "includes/external/Phpfastcache/Drivers/Zenddisk/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Zenddisk/Item.php",
+    "includes/external/Phpfastcache/Drivers/Zendshm/Config.php",
+    "includes/external/Phpfastcache/Drivers/Zendshm/Driver.php",
+    "includes/external/Phpfastcache/Drivers/Zendshm/Item.php",
+    "includes/external/magnalister/php/lib/MagnaConnector.php",
+    "includes/external/smarty/smarty_2/internals/core.assemble_plugin_filepath.php",
+    "includes/external/smarty/smarty_2/internals/core.load_plugins.php",
+    "includes/external/smarty/smarty_2/internals/core.load_resource_plugin.php",
+    "includes/external/smarty/smarty_2/plugins/block.textformat.php",
+    "includes/external/smarty/smarty_2/plugins/compiler.assign.php",
+    "includes/external/smarty/smarty_2/plugins/function.assign_debug_info.php",
+    "includes/external/smarty/smarty_2/plugins/function.config_load.php",
+    "includes/external/smarty/smarty_2/plugins/function.counter.php",
+    "includes/external/smarty/smarty_2/plugins/function.cycle.php",
+    "includes/external/smarty/smarty_2/plugins/function.debug.php",
+    "includes/external/smarty/smarty_2/plugins/function.eval.php",
+    "includes/external/smarty/smarty_2/plugins/function.fetch.php",
+    "includes/external/smarty/smarty_2/plugins/function.html_checkboxes.php",
+    "includes/external/smarty/smarty_2/plugins/function.html_image.php",
+    "includes/external/smarty/smarty_2/plugins/function.html_options.php",
+    "includes/external/smarty/smarty_2/plugins/function.html_radios.php",
+    "includes/external/smarty/smarty_2/plugins/function.html_select_date.php",
+    "includes/external/smarty/smarty_2/plugins/function.html_select_time.php",
+    "includes/external/smarty/smarty_2/plugins/function.html_table.php",
+    "includes/external/smarty/smarty_2/plugins/function.mailto.php",
+    "includes/external/smarty/smarty_2/plugins/function.math.php",
+    "includes/external/smarty/smarty_2/plugins/function.popup.php",
+    "includes/external/smarty/smarty_2/plugins/function.popup_init.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.capitalize.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.cat.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.count_characters.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.count_paragraphs.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.count_sentences.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.count_words.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.date_format.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.debug_print_var.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.default.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.escape.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.indent.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.lower.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.nl2br.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.regex_replace.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.replace.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.spacify.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.string_format.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.strip.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.strip_tags.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.truncate.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.upper.php",
+    "includes/external/smarty/smarty_2/plugins/modifier.wordwrap.php",
+    "includes/external/smarty/smarty_2/plugins/outputfilter.trimwhitespace.php",
+    "includes/external/smarty/smarty_2/plugins/shared.escape_special_chars.php",
+    "includes/external/smarty/smarty_2/plugins/shared.make_timestamp.php",
+    "includes/external/smarty/smarty_3/plugins/block.textformat.php",
+    "includes/external/smarty/smarty_3/plugins/function.counter.php",
+    "includes/external/smarty/smarty_3/plugins/function.cycle.php",
+    "includes/external/smarty/smarty_3/plugins/function.fetch.php",
+    "includes/external/smarty/smarty_3/plugins/function.html_checkboxes.php",
+    "includes/external/smarty/smarty_3/plugins/function.html_image.php",
+    "includes/external/smarty/smarty_3/plugins/function.html_options.php",
+    "includes/external/smarty/smarty_3/plugins/function.html_radios.php",
+    "includes/external/smarty/smarty_3/plugins/function.html_select_date.php",
+    "includes/external/smarty/smarty_3/plugins/function.html_select_time.php",
+    "includes/external/smarty/smarty_3/plugins/function.html_table.php",
+    "includes/external/smarty/smarty_3/plugins/function.mailto.php",
+    "includes/external/smarty/smarty_3/plugins/function.math.php",
+    "includes/external/smarty/smarty_3/plugins/modifier.capitalize.php",
+    "includes/external/smarty/smarty_3/plugins/modifier.date_format.php",
+    "includes/external/smarty/smarty_3/plugins/modifier.debug_print_var.php",
+    "includes/external/smarty/smarty_3/plugins/modifier.escape.php",
+    "includes/external/smarty/smarty_3/plugins/modifier.mb_wordwrap.php",
+    "includes/external/smarty/smarty_3/plugins/modifier.regex_replace.php",
+    "includes/external/smarty/smarty_3/plugins/modifier.replace.php",
+    "includes/external/smarty/smarty_3/plugins/modifier.spacify.php",
+    "includes/external/smarty/smarty_3/plugins/modifier.truncate.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.cat.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.count_characters.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.count_paragraphs.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.count_sentences.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.count_words.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.default.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.escape.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.from_charset.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.indent.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.lower.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.noprint.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.string_format.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.strip.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.strip_tags.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.to_charset.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.unescape.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.upper.php",
+    "includes/external/smarty/smarty_3/plugins/modifiercompiler.wordwrap.php",
+    "includes/external/smarty/smarty_3/plugins/outputfilter.trimwhitespace.php",
+    "includes/external/smarty/smarty_3/plugins/shared.escape_special_chars.php",
+    "includes/external/smarty/smarty_3/plugins/shared.literal_compiler_param.php",
+    "includes/external/smarty/smarty_3/plugins/shared.make_timestamp.php",
+    "includes/external/smarty/smarty_3/plugins/shared.mb_str_replace.php",
+    "includes/external/smarty/smarty_3/plugins/shared.mb_unicode.php",
+    "includes/external/smarty/smarty_3/plugins/variablefilter.htmlspecialchars.php",
+    "includes/external/smarty/smarty_3/sysplugins/smarty_cacheresource.php",
+    "includes/external/smarty/smarty_3/sysplugins/smarty_cacheresource_custom.php",
+    "includes/external/smarty/smarty_3/sysplugins/smarty_cacheresource_keyvaluestore.php",
+    "includes/external/smarty/smarty_3/sysplugins/smarty_cacheresource_phpfastcache.php",
+    "includes/external/smarty/smarty_3/sysplugins/smarty_compatibility.php",
+    "includes/external/smarty/smarty_3/sysplugins/smarty_data.php",
+    "includes/external/smarty/smarty_3/sysplugins/smarty_internal_block.php",
+    "includes/external/smarty/smarty_3/sysplugins/smarty_internal_cacheresource_file.php",
+    "includes/external/smarty/smarty_3/sysplugins/smarty_internal_compile_append.php"
    ]
   },
   "fail_count": 0

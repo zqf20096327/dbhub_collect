@@ -7429,13 +7429,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T07:14:45Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:04:19Z",
   "default_branch": "master",
   "pushed_at": "2020-07-07",
   "stars": 32,
   "tree": {
    "sha": "fb64d38bc154acb19bed7dc5b29292192c4511f2",
-   "etag": "W/\"ae2808d28f9223ce752d65da2211fda1e05f2cb09a260bc6963abb00018e3567\"",
+   "etag": "W/\"36c765d1eb6eff5e58e9294b2fc72659d81d6ec215d0680035ea990c3ffcb233\"",
    "truncated": false,
    "path_count": 377,
    "matched": [
@@ -7456,7 +7457,8 @@
     "src/OrderSvc/Dockerfile",
     "src/PaymentSvc/Dockerfile",
     "src/RecommendationSvc/Dockerfile",
-    "src/ShippingSvc/Dockerfile"
+    "src/ShippingSvc/Dockerfile",
+    "src/Web/Dockerfile"
    ]
   },
   "files": [
@@ -7673,6 +7675,16 @@
      "mcr.microsoft.com/dotnet/core/sdk:3.1",
      "mcr.microsoft.com/dotnet/core/aspnet:3.1"
     ]
+   },
+   {
+    "path": "src/Web/Dockerfile",
+    "kind": "image",
+    "blob_sha": "b93eb07fa6d6a9043736cd969b6b864377d62f03",
+    "bytes": 421,
+    "images": [
+     "mcr.microsoft.com/dotnet/core/sdk:3.1",
+     "mcr.microsoft.com/dotnet/core/aspnet:3.1"
+    ]
    }
   ],
   "clues": {
@@ -7688,13 +7700,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T07:30:11Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:07:26Z",
   "default_branch": "main",
   "pushed_at": "2024-06-28",
   "stars": 28,
   "tree": {
    "sha": "d7b64bde82572cd8b7b332b923f455b5c6470c20",
-   "etag": "W/\"9406c90c84fb3c0e1af3d95a63283d1d55e99f0b3c60d4b0b1e627c9b0c8c935\"",
+   "etag": "W/\"c1b244f097e92052d6c4bfdab07f0d6eea564081cc1e33c77472ce95f9f80f57\"",
    "truncated": false,
    "path_count": 936,
    "matched": [
@@ -7710,6 +7723,12 @@
     "runtime/pom.xml",
     "testsuite/pom.xml",
     "vocab/pom.xml",
+    "resultio-spatial/api/pom.xml",
+    "resultio-spatial/sparqlgeojson/pom.xml",
+    "resultio-spatial/sparqlhtml/pom.xml",
+    "resultio-spatial/sparqlkml/pom.xml",
+    "resultio-spatial/sparqlxml/pom.xml",
+    "resultio-spatial/text/pom.xml",
     "scripts/docker/Dockerfile"
    ]
   },
@@ -8056,6 +8075,114 @@
     "blob_sha": "3ff49a2901768b24322ad0f33b6f86a81f08ebf8",
     "ecosystem": "maven",
     "bytes": 2698
+   },
+   {
+    "path": "resultio-spatial/api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "527bb23c930d74241fa2a92d60326909840ba9d8",
+    "ecosystem": "maven",
+    "bytes": 740,
+    "names": [
+     "org.openrdf.sesame:sesame-queryresultio-api"
+    ]
+   },
+   {
+    "path": "resultio-spatial/sparqlgeojson/pom.xml",
+    "kind": "dep",
+    "blob_sha": "b5af882f4d7569e09357b9a4c070faa5be9ae76e",
+    "ecosystem": "maven",
+    "bytes": 3079,
+    "names": [
+     "org.openrdf.sesame:sesame-queryalgebra-evaluation-spatial",
+     "org.openrdf.sesame:sesame-sail-generaldb",
+     "org.openrdf.sesame:sesame-queryresultio-spatial-api",
+     "org.slf4j:slf4j-log4j12",
+     "junit:junit",
+     "org.geotools:gt-geojson",
+     "org.geotools:gt-xml",
+     "org.geotools:gt-epsg-hsql",
+     "org.geotools:gt-shapefile",
+     "org.geotools:gt-opengis",
+     "org.geotools:gt-process-feature",
+     "com.vividsolutions:jts",
+     "com.vividsolutions.jts:jts-core"
+    ]
+   },
+   {
+    "path": "resultio-spatial/sparqlhtml/pom.xml",
+    "kind": "dep",
+    "blob_sha": "79f4830aa43b4c6ba8d6486dc483e8106ec10c97",
+    "ecosystem": "maven",
+    "bytes": 1786,
+    "names": [
+     "org.openrdf.sesame:sesame-queryresultio-spatial-api",
+     "org.openrdf.sesame:sesame-queryresultio-spatial-sparqlxml",
+     "org.openrdf.sesame:sesame-queryalgebra-evaluation-spatial",
+     "org.slf4j:slf4j-log4j12",
+     "junit:junit",
+     "org.openrdf.sesame:sesame-model",
+     "org.openrdf.sesame:sesame-query",
+     "org.openrdf.sesame:sesame-rio-api",
+     "org.openrdf.sesame:sesame-util"
+    ]
+   },
+   {
+    "path": "resultio-spatial/sparqlkml/pom.xml",
+    "kind": "dep",
+    "blob_sha": "a3cb8f41c47be69efc7de71fd8fba93a19e9c370",
+    "ecosystem": "maven",
+    "bytes": 2010,
+    "names": [
+     "org.openrdf.sesame:sesame-queryresultio-spatial-api",
+     "org.openrdf.sesame:sesame-queryresultio-spatial-sparqlxml",
+     "org.slf4j:slf4j-log4j12",
+     "junit:junit",
+     "org.geotools.xsd:gt-xsd-kml",
+     "org.openrdf.sesame:sesame-queryalgebra-evaluation-spatial",
+     "org.openrdf.sesame:sesame-sail-generaldb",
+     "org.openrdf.sesame:sesame-model",
+     "org.openrdf.sesame:sesame-query",
+     "org.openrdf.sesame:sesame-rio-api",
+     "org.openrdf.sesame:sesame-util"
+    ]
+   },
+   {
+    "path": "resultio-spatial/sparqlxml/pom.xml",
+    "kind": "dep",
+    "blob_sha": "8eabbe600ee9f4c5770b3a8a6b7bc1b8d2b1c977",
+    "ecosystem": "maven",
+    "bytes": 1930,
+    "names": [
+     "org.openrdf.sesame:sesame-queryresultio-spatial-api",
+     "org.openrdf.sesame:sesame-sail-generaldb",
+     "org.openrdf.sesame:sesame-queryresultio-sparqlxml",
+     "org.openrdf.sesame:sesame-queryalgebra-evaluation-spatial",
+     "org.slf4j:slf4j-log4j12",
+     "junit:junit",
+     "org.openrdf.sesame:sesame-model",
+     "org.openrdf.sesame:sesame-query",
+     "org.openrdf.sesame:sesame-rio-api",
+     "org.openrdf.sesame:sesame-util"
+    ]
+   },
+   {
+    "path": "resultio-spatial/text/pom.xml",
+    "kind": "dep",
+    "blob_sha": "813337d276d235b112a7a7ca1b4617d4ae4bbc03",
+    "ecosystem": "maven",
+    "bytes": 1954,
+    "names": [
+     "org.openrdf.sesame:sesame-queryresultio-spatial-api",
+     "org.openrdf.sesame:sesame-queryalgebra-evaluation-spatial",
+     "org.openrdf.sesame:sesame-sail-generaldb",
+     "org.openrdf.sesame:sesame-queryresultio-text",
+     "org.slf4j:slf4j-log4j12",
+     "junit:junit",
+     "org.openrdf.sesame:sesame-model",
+     "org.openrdf.sesame:sesame-query",
+     "org.openrdf.sesame:sesame-rio-api",
+     "org.openrdf.sesame:sesame-util"
+    ]
    },
    {
     "path": "scripts/docker/Dockerfile",
@@ -9061,13 +9188,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T08:57:00Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:21:12Z",
   "default_branch": "master",
   "pushed_at": "2020-08-23",
   "stars": 17,
   "tree": {
    "sha": "a977fa18a4ee923bcf4a72c4ae5e223e99e8e20f",
-   "etag": "W/\"a884fc53cd2b4c372e044d338dbf212280ebe69e49c9b4512eb25f2267342116\"",
+   "etag": "W/\"7fdabf7a330627149bfb801fa702aaa5ee1d713b30373624dae6bdd4aa10a79d\"",
    "truncated": false,
    "path_count": 313,
    "matched": []
@@ -9117,7 +9245,51 @@
     "admin/js/tinymce/plugins/fullscreen/plugin.min.js",
     "admin/js/tinymce/plugins/help/plugin.min.js",
     "admin/js/tinymce/plugins/hr/plugin.min.js",
-    "admin/js/tinymce/plugins/image/plugin.min.js"
+    "admin/js/tinymce/plugins/image/plugin.min.js",
+    "admin/js/tinymce/plugins/imagetools/plugin.min.js",
+    "admin/js/tinymce/plugins/importcss/plugin.min.js",
+    "admin/js/tinymce/plugins/insertdatetime/plugin.min.js",
+    "admin/js/tinymce/plugins/legacyoutput/plugin.min.js",
+    "admin/js/tinymce/plugins/link/plugin.min.js",
+    "admin/js/tinymce/plugins/lists/plugin.min.js",
+    "admin/js/tinymce/plugins/media/plugin.min.js",
+    "admin/js/tinymce/plugins/nonbreaking/plugin.min.js",
+    "admin/js/tinymce/plugins/noneditable/plugin.min.js",
+    "admin/js/tinymce/plugins/pagebreak/plugin.min.js",
+    "admin/js/tinymce/plugins/paste/plugin.min.js",
+    "admin/js/tinymce/plugins/preview/plugin.min.js",
+    "admin/js/tinymce/plugins/print/plugin.min.js",
+    "admin/js/tinymce/plugins/save/plugin.min.js",
+    "admin/js/tinymce/plugins/searchreplace/plugin.min.js",
+    "admin/js/tinymce/plugins/spellchecker/plugin.min.js",
+    "admin/js/tinymce/plugins/tabfocus/plugin.min.js",
+    "admin/js/tinymce/plugins/table/plugin.min.js",
+    "admin/js/tinymce/plugins/template/plugin.min.js",
+    "admin/js/tinymce/plugins/textcolor/plugin.min.js",
+    "admin/js/tinymce/plugins/textpattern/plugin.min.js",
+    "admin/js/tinymce/plugins/toc/plugin.min.js",
+    "admin/js/tinymce/plugins/visualblocks/plugin.min.js",
+    "admin/js/tinymce/plugins/visualchars/plugin.min.js",
+    "admin/js/tinymce/plugins/wordcount/plugin.min.js",
+    "admin/js/tinymce/plugins/codesample/css/prism.css",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-cool.gif",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-cry.gif",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-embarassed.gif",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-foot-in-mouth.gif",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-frown.gif",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-innocent.gif",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-kiss.gif",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-laughing.gif",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-money-mouth.gif",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-sealed.gif",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-smile.gif",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-surprised.gif",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-tongue-out.gif",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-undecided.gif",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-wink.gif",
+    "admin/js/tinymce/plugins/emoticons/img/smiley-yell.gif",
+    "admin/js/tinymce/plugins/help/img/logo.png",
+    "admin/js/tinymce/plugins/visualblocks/css/visualblocks.css"
    ],
    "matrix_urls": [
     "https://facebook.com/asliabir"
@@ -10409,13 +10581,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T10:59:32Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:35:03Z",
   "default_branch": "main",
   "pushed_at": "2026-10-27",
   "stars": 11,
   "tree": {
    "sha": "8d4b9ad64ced425b929531b77b9e2a22b737025b",
-   "etag": "W/\"ec96c98d29e216a65032f8d71530548f2f25fa5a42784594de254c9f0bdfcd81\"",
+   "etag": "W/\"577e689d658cfd147f826d206aeb3a2097e469c7f16c18442e926bf3e27d2773\"",
    "truncated": false,
    "path_count": 4082,
    "matched": [
@@ -10438,6 +10611,12 @@
     "asana-graph-service/Dockerfile",
     "asana-network-service/Dockerfile",
     "asana-ontology-merge-api/Dockerfile",
+    "asana-server-module/Dockerfile",
+    "backup-runner/Dockerfile",
+    "asana-dict-service/backend/Dockerfile",
+    "asana-dict-service/frontend/Dockerfile",
+    "asana-dict-service/import-service/Dockerfile",
+    "monitoring/telegram-proxy/Dockerfile",
     ".github/workflows/deploy-dict-service.yml"
    ]
   },
@@ -10780,6 +10959,61 @@
     "bytes": 1556,
     "images": [
      "python:3.12-slim"
+    ]
+   },
+   {
+    "path": "asana-server-module/Dockerfile",
+    "kind": "image",
+    "blob_sha": "fa738705ea0b828dcb44e269efcf1d26e5c2da4e",
+    "bytes": 265,
+    "images": [
+     "python:3.12"
+    ]
+   },
+   {
+    "path": "backup-runner/Dockerfile",
+    "kind": "image",
+    "blob_sha": "84575016dbf3a2aef957d0ae5057beee7ddd26bd",
+    "bytes": 384,
+    "images": [
+     "alpine:3.20"
+    ]
+   },
+   {
+    "path": "asana-dict-service/backend/Dockerfile",
+    "kind": "image",
+    "blob_sha": "ee3c928b821e2daaed77a0f03303524c6eeaf531",
+    "bytes": 861,
+    "images": [
+     "python:3.11-slim"
+    ]
+   },
+   {
+    "path": "asana-dict-service/frontend/Dockerfile",
+    "kind": "image",
+    "blob_sha": "38f8b7c03f617236d6d44b4820dd4081e2a4c625",
+    "bytes": 345,
+    "images": [
+     "node:18-alpine",
+     "nginx:alpine"
+    ]
+   },
+   {
+    "path": "asana-dict-service/import-service/Dockerfile",
+    "kind": "image",
+    "blob_sha": "0cbf82dc5c1022af3f171c418ed78b3e7573c423",
+    "bytes": 1004,
+    "images": [
+     "python:3.11-slim"
+    ]
+   },
+   {
+    "path": "monitoring/telegram-proxy/Dockerfile",
+    "kind": "image",
+    "blob_sha": "e91dd5582c8345bc6f15b3163d1f41b2ab78a4fc",
+    "bytes": 270,
+    "images": [
+     "ghcr.io/sagernet/sing-box:v1.11.5"
     ]
    },
    {
@@ -11638,19 +11872,21 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:56:29Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:47:29Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 3,
   "tree": {
-   "sha": "1e4be11c16a740c176784652d5cbcb47bafcbf30",
-   "etag": "W/\"73abe6ce7b9bf4e87ad12b085e2fa9e55cc02291eaca56e5d8ccc78efc37ebb8\"",
+   "sha": "dd083a5b94d83b8b4b2b29a7311b07212d67235e",
+   "etag": "W/\"ec74df1ec3eeed9c8c3a31a001aa0f75e4a2655ab46a672cec3128e700e0efc2\"",
    "truncated": false,
-   "path_count": 5139,
+   "path_count": 5164,
    "matched": [
     "pyproject.toml",
     ".github/workflows/calendar-check.yml",
     ".github/workflows/calendar-enrich.yml",
+    ".github/workflows/calendar-repair.yml",
     ".github/workflows/ci.yml",
     ".github/workflows/crawl-check.yml",
     ".github/workflows/daily.yml",
@@ -11660,6 +11896,7 @@
     ".github/workflows/publish.yml",
     ".github/workflows/recon-probe.yml",
     ".github/workflows/record-fixtures.yml",
+    ".github/workflows/reviewed-data-repair.yml",
     ".github/workflows/tenant-verify.yml"
    ]
   },
@@ -11667,9 +11904,9 @@
    {
     "path": "pyproject.toml",
     "kind": "dep",
-    "blob_sha": "ff4fc9c9c47e4e4a2ff217ec2abace629a685818",
+    "blob_sha": "8ee734bd1e14d33bac639b3019fd98c58f1fa6fb",
     "ecosystem": "pyproject",
-    "bytes": 2608,
+    "bytes": 2684,
     "names": [
      "httpx",
      "pydantic",
@@ -11689,10 +11926,16 @@
     "bytes": 1292
    },
    {
+    "path": ".github/workflows/calendar-repair.yml",
+    "kind": "ci",
+    "blob_sha": "05ed5619538e4938acd45dad81aa0e65c8a35b88",
+    "bytes": 1217
+   },
+   {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "bd81c785c138448915731e219035b84ff9e00ecc",
-    "bytes": 2341
+    "blob_sha": "5fac2b3857589b90df9dd099162ecef8724a7e98",
+    "bytes": 2678
    },
    {
     "path": ".github/workflows/crawl-check.yml",
@@ -11703,8 +11946,8 @@
    {
     "path": ".github/workflows/daily.yml",
     "kind": "ci",
-    "blob_sha": "e27a5d216f0cc8057602c0d97029ce63c353c3b1",
-    "bytes": 7230
+    "blob_sha": "dbd7852310f98a61480b9f2ebd1427428a50cd3c",
+    "bytes": 7106
    },
    {
     "path": ".github/workflows/diag.yml",
@@ -11721,14 +11964,14 @@
    {
     "path": ".github/workflows/mirror.yml",
     "kind": "ci",
-    "blob_sha": "7c2dd0ccda23ba150cebe7948fcd5d4ad3ef9d60",
-    "bytes": 1466
+    "blob_sha": "0d95f3bdf58780d544bdcca69fb537066ccab263",
+    "bytes": 1902
    },
    {
     "path": ".github/workflows/publish.yml",
     "kind": "ci",
-    "blob_sha": "658417a0c0a21c75e30617d96d820c154a7c889d",
-    "bytes": 2193
+    "blob_sha": "177266a6ffb55f98c3e0a5cb4bbfbfd32f6f7870",
+    "bytes": 2669
    },
    {
     "path": ".github/workflows/recon-probe.yml",
@@ -11741,6 +11984,12 @@
     "kind": "ci",
     "blob_sha": "42a683573568ec213f5c655ba57cbac5ae395aeb",
     "bytes": 1337
+   },
+   {
+    "path": ".github/workflows/reviewed-data-repair.yml",
+    "kind": "ci",
+    "blob_sha": "a65ee9d52c14633506fa28f2ea6ada673ece845e",
+    "bytes": 1615
    },
    {
     "path": ".github/workflows/tenant-verify.yml",
@@ -11801,7 +12050,30 @@
     "src/jobradar/adapters/base.py",
     "src/jobradar/adapters/beisen.py",
     "src/jobradar/adapters/beisen_legacy.py",
-    "src/jobradar/adapters/bytedance.py"
+    "src/jobradar/adapters/bytedance.py",
+    "src/jobradar/adapters/campus.py",
+    "src/jobradar/adapters/example.py",
+    "src/jobradar/adapters/fanruan.py",
+    "src/jobradar/adapters/feishu_atsx.py",
+    "src/jobradar/adapters/hotjob.py",
+    "src/jobradar/adapters/hotjob_legacy.py",
+    "src/jobradar/adapters/hr360.py",
+    "src/jobradar/adapters/jd.py",
+    "src/jobradar/adapters/jsonportal.py",
+    "src/jobradar/adapters/jysd.py",
+    "src/jobradar/adapters/meituan.py",
+    "src/jobradar/adapters/netease.py",
+    "src/jobradar/adapters/nextdata.py",
+    "src/jobradar/adapters/radancy.py",
+    "src/jobradar/adapters/recording.py",
+    "src/jobradar/adapters/sangfor.py",
+    "src/jobradar/adapters/self_hosted.py",
+    "src/jobradar/adapters/shixiseng.py",
+    "src/jobradar/adapters/tencent.py",
+    "src/jobradar/adapters/tencent_campus.py",
+    "src/jobradar/adapters/tupu360.py",
+    "src/jobradar/adapters/workday.py",
+    "src/jobradar/adapters/yunjiuye.py"
    ]
   },
   "fail_count": 0
@@ -11989,6 +12261,954 @@
    "matrix_urls": [
     "https://t.me/LUBASKIN_CODE"
    ]
+  },
+  "fail_count": 0
+ },
+ "COS301-SE-2026/UniTrade": {
+  "fn": "COS301-SE-2026/UniTrade",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:31:37Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-27",
+  "stars": 12,
+  "tree": {
+   "sha": "eaaec5828e5181eaa32cbb707b3bdbd40a51251b",
+   "etag": "W/\"2a70042d20c7ec7d23aee10b6e106286d39bd5b239e1110d3c319d096f40d1e0\"",
+   "truncated": false,
+   "path_count": 944,
+   "matched": [
+    "package.json",
+    "src/clip-service/requirements.txt",
+    "src/web/package.json",
+    "tests/nfr/requirements.txt",
+    "src/backend/Api/Api.csproj",
+    "src/backend/Infrastructure/Infrastructure.csproj",
+    "src/backend/Modules/Modules.csproj",
+    "src/backend/Tests/UniTrade.Tests.csproj",
+    "src/backend/Workers/Workers.csproj",
+    "src/clip-service/Dockerfile",
+    "src/web/Dockerfile",
+    "src/backend/Api/Dockerfile",
+    ".github/workflows/backend-ci.yml",
+    ".github/workflows/cd.yml",
+    ".github/workflows/e2e.yml",
+    ".github/workflows/evidence-report.yml",
+    ".github/workflows/lighthouse.yml",
+    ".github/workflows/nfr.yml",
+    ".github/workflows/pipeline.yml",
+    ".github/workflows/web-ci.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "84e1efe5b1e361f245c0e2be6b8e1d7e996bf449",
+    "ecosystem": "npm",
+    "bytes": 432,
+    "names": [
+     "@axe-core/playwright",
+     "@tanstack/react-query",
+     "leaflet",
+     "lucide-react",
+     "react-leaflet",
+     "zustand"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@testing-library/user-event",
+     "@types/leaflet",
+     "msw",
+     "vite-plugin-pwa"
+    ]
+   },
+   {
+    "path": "src/clip-service/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "7c51a940b9dddfbf11cb19d51e9b78ec4230e864",
+    "ecosystem": "pypi",
+    "bytes": 63646,
+    "names": [
+     "annotated-doc",
+     "annotated-types",
+     "anyio",
+     "certifi",
+     "click",
+     "fastapi",
+     "filelock",
+     "fsspec",
+     "h11",
+     "hf-xet",
+     "httpcore",
+     "httpx",
+     "huggingface-hub",
+     "idna",
+     "jinja2",
+     "markdown-it-py",
+     "markupsafe",
+     "mdurl",
+     "mpmath",
+     "networkx",
+     "numpy",
+     "packaging",
+     "pillow",
+     "pydantic",
+     "pydantic-core",
+     "pygments",
+     "pyyaml",
+     "regex",
+     "rich",
+     "safetensors",
+     "shellingham",
+     "starlette",
+     "sympy",
+     "tokenizers",
+     "torch",
+     "tqdm",
+     "transformers",
+     "typer",
+     "typing-extensions",
+     "typing-inspection",
+     "uvicorn",
+     "setuptools"
+    ]
+   },
+   {
+    "path": "src/web/package.json",
+    "kind": "dep",
+    "blob_sha": "517e6362b8ab33e0d1eddeb8def3632e92d2bcfb",
+    "ecosystem": "npm",
+    "bytes": 2975,
+    "names": [
+     "@microsoft/signalr",
+     "@tabler/icons-react",
+     "@tanstack/react-query",
+     "clsx",
+     "firebase",
+     "leaflet",
+     "lucide-react",
+     "react",
+     "react-dom",
+     "react-leaflet",
+     "react-router",
+     "react-router-dom",
+     "zustand"
+    ],
+    "dev": [
+     "@axe-core/playwright",
+     "@eslint/js",
+     "@playwright/test",
+     "@tailwindcss/postcss",
+     "@testing-library/jest-dom",
+     "@testing-library/react",
+     "@testing-library/user-event",
+     "@types/leaflet",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "@vitest/coverage-v8",
+     "eslint",
+     "eslint-plugin-react-hooks",
+     "eslint-plugin-react-refresh",
+     "globals",
+     "jsdom",
+     "lighthouse",
+     "msw",
+     "playwright-lighthouse",
+     "postcss",
+     "sharp",
+     "tailwindcss",
+     "typescript",
+     "typescript-eslint",
+     "vite",
+     "vite-plugin-pwa",
+     "vitest"
+    ]
+   },
+   {
+    "path": "tests/nfr/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "5be410e9bec36807d5d35be1210574921d4deed6",
+    "ecosystem": "pypi",
+    "bytes": 72,
+    "names": [
+     "pyyaml",
+     "reportlab",
+     "pillow",
+     "charset-normalizer"
+    ]
+   },
+   {
+    "path": "src/backend/Api/Api.csproj",
+    "kind": "dep",
+    "blob_sha": "f074b8dd9ff297bb898120d8cec2576558a655f8",
+    "ecosystem": "csproj",
+    "bytes": 2033,
+    "names": [
+     "Azure.Communication.Email",
+     "BCrypt.Net-Next",
+     "dotenv.net",
+     "Microsoft.AspNetCore.Authentication.JwtBearer",
+     "Microsoft.AspNetCore.OpenApi",
+     "Microsoft.Azure.SignalR",
+     "Microsoft.EntityFrameworkCore.Design",
+     "Microsoft.EntityFrameworkCore.Tools",
+     "Microsoft.VisualStudio.Azure.Containers.Tools.Targets",
+     "Swashbuckle.AspNetCore",
+     "Swashbuckle.AspNetCore.SwaggerUI",
+     "System.Security.Cryptography.Pkcs",
+     "System.Security.Cryptography.ProtectedData"
+    ]
+   },
+   {
+    "path": "src/backend/Infrastructure/Infrastructure.csproj",
+    "kind": "dep",
+    "blob_sha": "9dd621cd37e7eed3acfc01aac6902427eda495ed",
+    "ecosystem": "csproj",
+    "bytes": 1807,
+    "names": [
+     "Azure.Communication.Email",
+     "Azure.Identity",
+     "Azure.Storage.Blobs",
+     "EFCore.NamingConventions",
+     "FirebaseAdmin",
+     "Microsoft.EntityFrameworkCore",
+     "Microsoft.EntityFrameworkCore.Design",
+     "Microsoft.EntityFrameworkCore.Tools",
+     "Microsoft.Extensions.Caching.Memory",
+     "Microsoft.Extensions.Configuration",
+     "Microsoft.Extensions.Configuration.EnvironmentVariables",
+     "Npgsql.EntityFrameworkCore.PostgreSQL",
+     "System.Security.Cryptography.Xml",
+     "SixLabors.ImageSharp"
+    ]
+   },
+   {
+    "path": "src/backend/Modules/Modules.csproj",
+    "kind": "dep",
+    "blob_sha": "cc764c6ddcdb53328e0593ca3b92d9056090aac5",
+    "ecosystem": "csproj",
+    "bytes": 858,
+    "names": [
+     "BCrypt.Net-Next",
+     "Microsoft.Extensions.Configuration.Abstractions",
+     "Microsoft.EntityFrameworkCore",
+     "Microsoft.IdentityModel.Tokens",
+     "Npgsql",
+     "System.ComponentModel.Annotations",
+     "System.IdentityModel.Tokens.Jwt",
+     "Ical.Net"
+    ]
+   },
+   {
+    "path": "src/backend/Tests/UniTrade.Tests.csproj",
+    "kind": "dep",
+    "blob_sha": "a0f9b16cb5782fbc376c3f2c92efd50209c333e5",
+    "ecosystem": "csproj",
+    "bytes": 1623,
+    "names": [
+     "BCrypt.Net-Next",
+     "coverlet.collector",
+     "Microsoft.AspNetCore.Mvc.Testing",
+     "Microsoft.Data.SqlClient",
+     "Microsoft.NET.Test.Sdk",
+     "Microsoft.OpenApi",
+     "Moq",
+     "Testcontainers.MsSql",
+     "Testcontainers.PostgreSql",
+     "xunit",
+     "xunit.runner.visualstudio",
+     "SSH.NET"
+    ]
+   },
+   {
+    "path": "src/backend/Workers/Workers.csproj",
+    "kind": "dep",
+    "blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+    "ecosystem": "csproj",
+    "bytes": 0
+   },
+   {
+    "path": "src/clip-service/Dockerfile",
+    "kind": "image",
+    "blob_sha": "2de5ed0bcf0c87fcf6324969ee378f4cd4bdddd2",
+    "bytes": 601,
+    "images": [
+     "python:3.11-slim"
+    ]
+   },
+   {
+    "path": "src/web/Dockerfile",
+    "kind": "image",
+    "blob_sha": "8175d9d8c352c7aba8aa5b89d22c1989f3b4f799",
+    "bytes": 463,
+    "images": [
+     "node:20-alpine",
+     "nginxinc/nginx-unprivileged:alpine"
+    ]
+   },
+   {
+    "path": "src/backend/Api/Dockerfile",
+    "kind": "image",
+    "blob_sha": "b05fb93a7f4dcfddee08b5944f598415eb20d33f",
+    "bytes": 883,
+    "images": [
+     "mcr.microsoft.com/dotnet/sdk:10.0",
+     "mcr.microsoft.com/dotnet/aspnet:10.0"
+    ]
+   },
+   {
+    "path": ".github/workflows/backend-ci.yml",
+    "kind": "ci",
+    "blob_sha": "b07d0fb78d62b73afbae3bfae0eea516e2115d29",
+    "bytes": 10139,
+    "images": [
+     "postgres:18"
+    ]
+   },
+   {
+    "path": ".github/workflows/cd.yml",
+    "kind": "ci",
+    "blob_sha": "f9ee5e72392296bfd8c576bb82bab65e0ee0463c",
+    "bytes": 32685
+   },
+   {
+    "path": ".github/workflows/e2e.yml",
+    "kind": "ci",
+    "blob_sha": "02d57b00f7c8a022477ec02bb9d641420f7c9d68",
+    "bytes": 6323
+   },
+   {
+    "path": ".github/workflows/evidence-report.yml",
+    "kind": "ci",
+    "blob_sha": "22179e39d6986d73e9365fb87e0bcaaa5456f18d",
+    "bytes": 1816
+   },
+   {
+    "path": ".github/workflows/lighthouse.yml",
+    "kind": "ci",
+    "blob_sha": "a331e8a3025a1934edaf420e7234b2e2d6a689cc",
+    "bytes": 7456
+   },
+   {
+    "path": ".github/workflows/nfr.yml",
+    "kind": "ci",
+    "blob_sha": "8448d84d0b3a37cdbecc65d10a55169f4cb1d482",
+    "bytes": 3639
+   },
+   {
+    "path": ".github/workflows/pipeline.yml",
+    "kind": "ci",
+    "blob_sha": "257f8e46936da50e973f11a5f64c3155df292759",
+    "bytes": 710
+   },
+   {
+    "path": ".github/workflows/web-ci.yml",
+    "kind": "ci",
+    "blob_sha": "df31b7549cef80e925aa9b996326102586743524",
+    "bytes": 7178
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "AHTOOOXA/gramkit": {
+  "fn": "AHTOOOXA/gramkit",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:37:52Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-31",
+  "stars": 10,
+  "tree": {
+   "sha": "6d3ac5bf107124a425d638908cd3780e2233469b",
+   "etag": "W/\"72f49406a8a9b3a6c39283c219301d945e1824428fd6ad2d00da8dd45db99385\"",
+   "truncated": false,
+   "path_count": 2027,
+   "matched": [
+    "package.json",
+    "pyproject.toml",
+    "core/backend/pyproject.toml",
+    "core/frontend-react/package.json",
+    "core/frontend/package.json",
+    "nginx/gateway-api/requirements.txt",
+    "apps/template-react/backend/pyproject.toml",
+    "apps/template-react/frontend/package.json",
+    "apps/template-vue/backend/pyproject.toml",
+    "apps/template-vue/frontend/package.json",
+    "core/backend/src/core/infrastructure/database/setup.py",
+    "core/backend/src/core/testing/contracts/setup.py",
+    "apps/template-react/backend/src/app/infrastructure/database/setup.py",
+    "apps/template-vue/backend/src/app/infrastructure/database/setup.py",
+    "docker-compose.demo.yml",
+    "docker-compose.shared.yml",
+    "nginx/gateway-api/Dockerfile",
+    "apps/template-react/backend/Dockerfile",
+    "apps/template-react/frontend/Dockerfile.local",
+    "apps/template-react/frontend/Dockerfile.prod",
+    "apps/template-vue/backend/Dockerfile",
+    "apps/template-vue/frontend/Dockerfile.local",
+    "apps/template-vue/frontend/Dockerfile.prod",
+    ".github/workflows/test-backend.yml",
+    ".github/workflows/test-frontend.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "78e91b915754c077258bf14bbc73d7906244c7ac",
+    "ecosystem": "npm",
+    "bytes": 899,
+    "dev": [
+     "@playwright/test"
+    ]
+   },
+   {
+    "path": "pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "76c407ccd677c9cd4bbb98088ec9e8060823d73b",
+    "ecosystem": "pyproject",
+    "bytes": 4347
+   },
+   {
+    "path": "core/backend/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "c65edaec6d6569567fb518243b2082ddfcc4b33d",
+    "ecosystem": "pyproject",
+    "bytes": 3891,
+    "names": [
+     "sqlalchemy",
+     "aiogram",
+     "asyncpg",
+     "alembic",
+     "environs",
+     "betterlogging",
+     "redis",
+     "aio-pika",
+     "yookassa",
+     "arq",
+     "Pillow",
+     "posthog",
+     "pytz",
+     "pydantic-ai-slim",
+     "pydantic",
+     "pydantic-settings",
+     "httptools",
+     "uvloop",
+     "watchfiles",
+     "passlib",
+     "resend",
+     "uuid6",
+     "python-socketio"
+    ]
+   },
+   {
+    "path": "core/frontend-react/package.json",
+    "kind": "dep",
+    "blob_sha": "b086c7b218d43176d06e6c177719b24b187e2287",
+    "ecosystem": "npm",
+    "bytes": 1097,
+    "names": [
+     "@tma.js/sdk",
+     "@tma.js/sdk-react",
+     "posthog-js",
+     "sonner",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "eslint",
+     "next",
+     "typescript"
+    ]
+   },
+   {
+    "path": "core/frontend/package.json",
+    "kind": "dep",
+    "blob_sha": "df8ed6a097256ffc4d75fe5851dc0201b93a59c2",
+    "ecosystem": "npm",
+    "bytes": 675,
+    "names": [
+     "@twa-dev/sdk",
+     "@vueuse/core",
+     "axios",
+     "openapi-fetch",
+     "posthog-js",
+     "vue",
+     "vue-i18n",
+     "vue-router",
+     "vue-sonner"
+    ],
+    "dev": [
+     "@types/node",
+     "@vitejs/plugin-vue",
+     "typescript",
+     "vite",
+     "vue-tsc"
+    ]
+   },
+   {
+    "path": "nginx/gateway-api/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "2bf74ed85de4c3de02b91dc50002008564177fb0",
+    "ecosystem": "pypi",
+    "bytes": 73,
+    "names": [
+     "fastapi",
+     "uvicorn",
+     "docker",
+     "pydantic"
+    ]
+   },
+   {
+    "path": "apps/template-react/backend/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "7a7933d441d79952a3570007dc1dffe76836a522",
+    "ecosystem": "pyproject",
+    "bytes": 5193,
+    "names": [
+     "tma-platform-core-backend",
+     "g4f",
+     "curl_cffi",
+     "pytest",
+     "aiogram",
+     "sentry-sdk",
+     "slowapi",
+     "aiogram-dialog",
+     "watchdog",
+     "resend"
+    ]
+   },
+   {
+    "path": "apps/template-react/frontend/package.json",
+    "kind": "dep",
+    "blob_sha": "e8083cfce483bb501553e38c176e0b8737347d2f",
+    "ecosystem": "npm",
+    "bytes": 4052,
+    "names": [
+     "@hookform/resolvers",
+     "@number-flow/react",
+     "@radix-ui/react-accordion",
+     "@radix-ui/react-alert-dialog",
+     "@radix-ui/react-aspect-ratio",
+     "@radix-ui/react-avatar",
+     "@radix-ui/react-checkbox",
+     "@radix-ui/react-collapsible",
+     "@radix-ui/react-context-menu",
+     "@radix-ui/react-dialog",
+     "@radix-ui/react-dropdown-menu",
+     "@radix-ui/react-hover-card",
+     "@radix-ui/react-icons",
+     "@radix-ui/react-label",
+     "@radix-ui/react-menubar",
+     "@radix-ui/react-navigation-menu",
+     "@radix-ui/react-popover",
+     "@radix-ui/react-progress",
+     "@radix-ui/react-radio-group",
+     "@radix-ui/react-scroll-area",
+     "@radix-ui/react-select",
+     "@radix-ui/react-separator",
+     "@radix-ui/react-slider",
+     "@radix-ui/react-slot",
+     "@radix-ui/react-switch",
+     "@radix-ui/react-tabs",
+     "@radix-ui/react-toggle",
+     "@radix-ui/react-toggle-group",
+     "@radix-ui/react-tooltip",
+     "@sentry/react",
+     "@tanstack/react-query",
+     "@tma-platform/core-react",
+     "@tma.js/sdk-react",
+     "class-variance-authority",
+     "clsx",
+     "cmdk",
+     "date-fns",
+     "embla-carousel-react",
+     "framer-motion",
+     "input-otp",
+     "lucide-react",
+     "next",
+     "next-intl",
+     "next-themes",
+     "next-view-transitions",
+     "nuqs",
+     "openapi-typescript",
+     "react",
+     "react-day-picker",
+     "react-dom",
+     "react-error-boundary",
+     "react-hook-form",
+     "react-intersection-observer",
+     "react-resizable-panels",
+     "recharts",
+     "socket.io-client",
+     "sonner",
+     "tailwind-merge",
+     "vaul",
+     "zod",
+     "zustand"
+    ],
+    "dev": [
+     "@eslint/eslintrc",
+     "@eslint/js",
+     "@ianvs/prettier-plugin-sort-imports",
+     "@kubb/cli",
+     "@kubb/core",
+     "@kubb/plugin-client",
+     "@kubb/plugin-oas",
+     "@kubb/plugin-react-query",
+     "@kubb/plugin-ts",
+     "@next/eslint-plugin-next",
+     "@playwright/test",
+     "@tailwindcss/postcss",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "eslint",
+     "eslint-config-next",
+     "eslint-plugin-better-tailwindcss",
+     "eslint-plugin-react",
+     "eslint-plugin-react-hooks",
+     "postcss",
+     "prettier",
+     "prettier-plugin-organize-imports",
+     "prettier-plugin-tailwindcss",
+     "react-icons",
+     "tailwindcss",
+     "tailwindcss-motion",
+     "tw-animate-css",
+     "typescript",
+     "typescript-eslint"
+    ]
+   },
+   {
+    "path": "apps/template-vue/backend/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "41995332d88c0c0c21ebb06e7f7911491dce8558",
+    "ecosystem": "pyproject",
+    "bytes": 5343,
+    "names": [
+     "tma-platform-core-backend",
+     "g4f",
+     "curl_cffi",
+     "pytest",
+     "aiogram",
+     "sentry-sdk",
+     "slowapi",
+     "aiogram-dialog",
+     "watchdog",
+     "resend"
+    ]
+   },
+   {
+    "path": "apps/template-vue/frontend/package.json",
+    "kind": "dep",
+    "blob_sha": "20d6ff48b6a4f74342235a36cc0b56b7738a3bf3",
+    "ecosystem": "npm",
+    "bytes": 1921,
+    "names": [
+     "@lucide/vue",
+     "@sentry/vite-plugin",
+     "@sentry/vue",
+     "@tanstack/vue-query",
+     "@tma-platform/core",
+     "@twa-dev/sdk",
+     "@vueuse/core",
+     "axios",
+     "normalize.css",
+     "pinia",
+     "posthog-js",
+     "socket.io-client",
+     "tw-animate-css",
+     "vue",
+     "vue-i18n",
+     "vue-router",
+     "vue-sonner",
+     "vue3-lottie"
+    ],
+    "dev": [
+     "@kubb/cli",
+     "@kubb/core",
+     "@kubb/plugin-client",
+     "@kubb/plugin-oas",
+     "@kubb/plugin-ts",
+     "@kubb/plugin-vue-query",
+     "@tailwindcss/vite",
+     "@types/node",
+     "@vitejs/plugin-vue",
+     "@vue/eslint-config-typescript",
+     "class-variance-authority",
+     "clsx",
+     "eslint",
+     "eslint-config-prettier",
+     "eslint-plugin-unused-imports",
+     "eslint-plugin-vue",
+     "openapi-typescript",
+     "reka-ui",
+     "sharp",
+     "tailwind-merge",
+     "tailwindcss",
+     "tailwindcss-motion",
+     "typescript",
+     "typescript-eslint",
+     "vite",
+     "vue-tsc"
+    ]
+   },
+   {
+    "path": "core/backend/src/core/infrastructure/database/setup.py",
+    "kind": "dep",
+    "blob_sha": "f533c92de788a40e76a06a7d3a02244cc56654a2",
+    "ecosystem": "setup_py",
+    "bytes": 649
+   },
+   {
+    "path": "core/backend/src/core/testing/contracts/setup.py",
+    "kind": "dep",
+    "blob_sha": "274d9ff318958b90374f54a75caa6db121183a7e",
+    "ecosystem": "setup_py",
+    "bytes": 4084
+   },
+   {
+    "path": "apps/template-react/backend/src/app/infrastructure/database/setup.py",
+    "kind": "dep",
+    "blob_sha": "7fbe14b9764900fb22a398569bb85a0fb8fb719c",
+    "ecosystem": "setup_py",
+    "bytes": 724
+   },
+   {
+    "path": "apps/template-vue/backend/src/app/infrastructure/database/setup.py",
+    "kind": "dep",
+    "blob_sha": "7fbe14b9764900fb22a398569bb85a0fb8fb719c",
+    "ecosystem": "setup_py",
+    "bytes": 724
+   },
+   {
+    "path": "docker-compose.demo.yml",
+    "kind": "image",
+    "blob_sha": "ced070dbbf0e06300a1ebe95ea53d73b0c4a5eeb",
+    "bytes": 5483,
+    "images": [
+     "postgres:17-alpine",
+     "redis:7-alpine"
+    ]
+   },
+   {
+    "path": "docker-compose.shared.yml",
+    "kind": "image",
+    "blob_sha": "a351a0cfac793fcad790d31bc4827e45b31388a6",
+    "bytes": 2029,
+    "images": [
+     "nginx:latest",
+     "cloudflare/cloudflared:latest"
+    ]
+   },
+   {
+    "path": "nginx/gateway-api/Dockerfile",
+    "kind": "image",
+    "blob_sha": "391685ff3486f3be116d5eab55b728cb3652eb2b",
+    "bytes": 473,
+    "images": [
+     "python:3.14-slim"
+    ]
+   },
+   {
+    "path": "apps/template-react/backend/Dockerfile",
+    "kind": "image",
+    "blob_sha": "d95cdf9c967ee961c16c7b75900a420541f1dab9",
+    "bytes": 3017,
+    "images": [
+     "python:3.14-slim"
+    ]
+   },
+   {
+    "path": "apps/template-react/frontend/Dockerfile.local",
+    "kind": "image",
+    "blob_sha": "aff93a4341d47486b41d25ccc5ca7487759c0d02",
+    "bytes": 883,
+    "images": [
+     "node:22-alpine"
+    ]
+   },
+   {
+    "path": "apps/template-react/frontend/Dockerfile.prod",
+    "kind": "image",
+    "blob_sha": "2c3f645597a746b1f33013bf9a6e1978afba8c23",
+    "bytes": 3818,
+    "images": [
+     "node:22-alpine",
+     "deps"
+    ]
+   },
+   {
+    "path": "apps/template-vue/backend/Dockerfile",
+    "kind": "image",
+    "blob_sha": "3a853d26f31ac216a6df3597d985ca9b24a4697a",
+    "bytes": 2126,
+    "images": [
+     "python:3.14-slim"
+    ]
+   },
+   {
+    "path": "apps/template-vue/frontend/Dockerfile.local",
+    "kind": "image",
+    "blob_sha": "d76ab1da147fee80161ea5ff91e2cf5f9c0a8b72",
+    "bytes": 854,
+    "images": [
+     "node:22-alpine"
+    ]
+   },
+   {
+    "path": "apps/template-vue/frontend/Dockerfile.prod",
+    "kind": "image",
+    "blob_sha": "5bc9c5616dcdc400d8c4cdb6e6e0a0d7328773b9",
+    "bytes": 2333,
+    "images": [
+     "node:22-alpine",
+     "deps",
+     "nginx:alpine"
+    ]
+   },
+   {
+    "path": ".github/workflows/test-backend.yml",
+    "kind": "ci",
+    "blob_sha": "a1a9ae9235bb2ef6b83d02d13d220eeb70313223",
+    "bytes": 4217
+   },
+   {
+    "path": ".github/workflows/test-frontend.yml",
+    "kind": "ci",
+    "blob_sha": "529c98e20bfef1e90cdf39593308c03ee38c5c36",
+    "bytes": 1635
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "CHANGELOG.md"
+   ],
+   "readme_i18n": [],
+   "docs_matrix": [
+    "docs/guides/DATABASE_BACKUP.md",
+    "docs/prd/test-matrix.md"
+   ],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "Anasabubakar/Butler-2.0": {
+  "fn": "Anasabubakar/Butler-2.0",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:45:55Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-30",
+  "stars": 3,
+  "tree": {
+   "sha": "8207c7d0aa04b7fbeaf578a5562ed433a284715e",
+   "etag": "W/\"08084f48c7a321004ff85ae11cd9847de61e726a615c9b380e6a8fed85e9a1a0\"",
+   "truncated": false,
+   "path_count": 451,
+   "matched": [
+    "android/build.gradle.kts",
+    "web/package.json",
+    "android/app/build.gradle.kts",
+    "design/little-butler/package.json",
+    "Dockerfile",
+    ".github/workflows/ci.yml",
+    ".github/workflows/deploy.yml",
+    ".github/workflows/release.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "android/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "1b4481acf060315324230e9286ded1ced3deaaf4",
+    "ecosystem": "gradle",
+    "bytes": 217
+   },
+   {
+    "path": "web/package.json",
+    "kind": "dep",
+    "blob_sha": "a6b020e9e63ff636153187a0f78231a6a8704eae",
+    "ecosystem": "npm",
+    "bytes": 390,
+    "names": [
+     "@fontsource/instrument-serif",
+     "@fontsource/inter"
+    ],
+    "dev": [
+     "typescript",
+     "vite"
+    ]
+   },
+   {
+    "path": "android/app/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "96e57bbaf14630e54dfbfd51baa71373e47f6e20",
+    "ecosystem": "gradle",
+    "bytes": 2397
+   },
+   {
+    "path": "design/little-butler/package.json",
+    "kind": "dep",
+    "blob_sha": "7ab42e9b817ee97a4d786880d6eeb23bccf75ba4",
+    "ecosystem": "npm",
+    "bytes": 604
+   },
+   {
+    "path": "Dockerfile",
+    "kind": "image",
+    "blob_sha": "d5f6d373b49a8d48854929fe0f2f25667540fd89",
+    "bytes": 606,
+    "images": [
+     "node:22-slim",
+     "denoland/deno:2.5.6"
+    ]
+   },
+   {
+    "path": ".github/workflows/ci.yml",
+    "kind": "ci",
+    "blob_sha": "0d9473be7b8e129dacb0c855ed59189230cd6e4c",
+    "bytes": 1958
+   },
+   {
+    "path": ".github/workflows/deploy.yml",
+    "kind": "ci",
+    "blob_sha": "a2abc351008987f6aeea5d2e56fe6326d14d5e3f",
+    "bytes": 1298
+   },
+   {
+    "path": ".github/workflows/release.yml",
+    "kind": "ci",
+    "blob_sha": "5080d3ec32c98ee095cf05b6334d625388f4be5e",
+    "bytes": 2267
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "CHANGELOG.md"
+   ],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
   },
   "fail_count": 0
  }

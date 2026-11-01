@@ -6617,13 +6617,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T05:12:55Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:44:59Z",
   "default_branch": "main",
   "pushed_at": "2026-10-19",
   "stars": 86,
   "tree": {
    "sha": "24dce8457ffa81d5697f9d8c9c8fe6f39d029db1",
-   "etag": "W/\"3a315e838da06dbb45f186acc61378d75611737cffd9f40ea3eb0ca30ca23188\"",
+   "etag": "W/\"5f1a28e5cb42931ddc68fe0c55d7f46305fa77f914bdd4074f5f7037db35d0d8\"",
    "truncated": false,
    "path_count": 726,
    "matched": [
@@ -6639,6 +6640,9 @@
     "docker-compose.yml",
     "apps/api/Dockerfile",
     "apps/frontend/Dockerfile",
+    "apps/worker/Dockerfile",
+    "apps/worker/Dockerfile.ml",
+    "infra/caddy/Dockerfile",
     ".github/workflows/minio-mirror.yml",
     ".github/workflows/release.yml",
     ".github/workflows/smoke-test.yml"
@@ -6829,6 +6833,34 @@
     ]
    },
    {
+    "path": "apps/worker/Dockerfile",
+    "kind": "image",
+    "blob_sha": "1db105a7070ecf0be191506de98d11e4a362925f",
+    "bytes": 2302,
+    "images": [
+     "python:3.12-slim-bookworm"
+    ]
+   },
+   {
+    "path": "apps/worker/Dockerfile.ml",
+    "kind": "image",
+    "blob_sha": "ebdd1f8da5d4bbd80127b4efaa152aebe98c102e",
+    "bytes": 3281,
+    "images": [
+     "python:3.12-slim-bookworm"
+    ]
+   },
+   {
+    "path": "infra/caddy/Dockerfile",
+    "kind": "image",
+    "blob_sha": "65f23e830fdf6e635c1bd6892dc9bbdc29e9397f",
+    "bytes": 965,
+    "images": [
+     "caddy:2-builder",
+     "caddy:2-alpine"
+    ]
+   },
+   {
     "path": ".github/workflows/minio-mirror.yml",
     "kind": "ci",
     "blob_sha": "8aabb1c02f0541713b61dc91ec595b50677ba738",
@@ -6896,13 +6928,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T05:28:15Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:48:02Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 70,
   "tree": {
-   "sha": "76e711113eeaa4266a84d6453e0daa2cdaf1c9a5",
-   "etag": "W/\"6110e3c88c814775f2b00a9960766c1a420ba69fb0289343a5c4e0631e24b50d\"",
+   "sha": "870365e54d610d215a99a62fe8ad5c4009384c51",
+   "etag": "W/\"5468ad8ae3614382da4908a409aee4c77943a200b92c99e939d5a40759b944ad\"",
    "truncated": false,
    "path_count": 274,
    "matched": [
@@ -7203,13 +7236,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T05:50:01Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:49:49Z",
   "default_branch": "master",
   "pushed_at": "2018-08-07",
   "stars": 64,
   "tree": {
    "sha": "e134d8da9f2c3658623a20a9a2e5b0e0e0d75737",
-   "etag": "W/\"3f63c624d6870edfb584c5efdd67d099512e279a77d2595158fffab6119dc63b\"",
+   "etag": "W/\"dab41877d67afea60aea3b09b80a5c686f6c4fb22b275c5852178a1ae653e4f5\"",
    "truncated": false,
    "path_count": 819,
    "matched": [
@@ -7225,6 +7259,12 @@
     "vm-eureka/pom.xml",
     "vm-gateway/pom.xml",
     "vm-global-remote-config/pom.xml",
+    "vm-mq/pom.xml",
+    "vm-provider-admin/pom.xml",
+    "vm-provider-movie/pom.xml",
+    "vm-provider-src/pom.xml",
+    "vm-provider-user/pom.xml",
+    "vm-provider-ws/pom.xml",
     "vm-config-server/src/main/docker/Dockerfile",
     "vm-eureka/src/main/docker/Dockerfile",
     "vm-gateway/src/main/docker/Dockerfile",
@@ -7420,6 +7460,139 @@
     ]
    },
    {
+    "path": "vm-mq/pom.xml",
+    "kind": "dep",
+    "blob_sha": "6db1d3cfa26523f1cc578e3239ceaff559352bc4",
+    "ecosystem": "maven",
+    "bytes": 892,
+    "names": [
+     "com.vm:vm-base",
+     "org.springframework.cloud:spring-cloud-starter-stream-rabbit"
+    ]
+   },
+   {
+    "path": "vm-provider-admin/pom.xml",
+    "kind": "dep",
+    "blob_sha": "c31ec01bee8b3f473e3fec8c81d3431b8ab76fd6",
+    "ecosystem": "maven",
+    "bytes": 7749,
+    "names": [
+     "com.vm:vm-config",
+     "com.vm:vm-base",
+     "com.vm:vm-dao",
+     "com.vm:vm-controller-helper",
+     "com.vm:vm-global-remote-config",
+     "com.vm:vm-auth-user",
+     "com.vm:vm-auth-admin",
+     "com.vm:vm-mq",
+     "org.springframework.cloud:spring-cloud-starter-stream-rabbit",
+     "org.springframework.cloud:spring-cloud-starter-bus-amqp",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "org.springframework.cloud:spring-cloud-starter-config",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-eureka",
+     "org.springframework.boot:spring-boot-starter-websocket",
+     "org.springframework.boot:spring-boot-devtools"
+    ]
+   },
+   {
+    "path": "vm-provider-movie/pom.xml",
+    "kind": "dep",
+    "blob_sha": "91cacdf6fb6ce427b6202cf309211ace6517ccf7",
+    "ecosystem": "maven",
+    "bytes": 7812,
+    "names": [
+     "com.vm:vm-config",
+     "com.vm:vm-base",
+     "com.vm:vm-dao",
+     "com.vm:vm-controller-helper",
+     "com.vm:vm-global-remote-config",
+     "com.vm:vm-auth-user",
+     "com.vm:vm-auth-admin",
+     "io.github.openfeign.form:feign-form",
+     "io.github.openfeign.form:feign-form-spring",
+     "org.springframework.cloud:spring-cloud-starter-bus-amqp",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "org.springframework.cloud:spring-cloud-starter-config",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-eureka",
+     "org.springframework.cloud:spring-cloud-starter-feign",
+     "org.springframework.boot:spring-boot-devtools"
+    ]
+   },
+   {
+    "path": "vm-provider-src/pom.xml",
+    "kind": "dep",
+    "blob_sha": "03e5497d8fc071f31986c713f0db7c930b48b7e5",
+    "ecosystem": "maven",
+    "bytes": 6675,
+    "names": [
+     "com.vm:vm-base",
+     "com.vm:vm-dao",
+     "com.vm:vm-controller-helper",
+     "com.vm:vm-global-remote-config",
+     "org.openimaj:xuggle-video",
+     "org.springframework.cloud:spring-cloud-starter-bus-amqp",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "org.springframework.cloud:spring-cloud-starter-config",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-eureka",
+     "org.springframework.boot:spring-boot-devtools"
+    ]
+   },
+   {
+    "path": "vm-provider-user/pom.xml",
+    "kind": "dep",
+    "blob_sha": "841a5f5d1d67b40485627ba058bc95d6baa655d5",
+    "ecosystem": "maven",
+    "bytes": 7934,
+    "names": [
+     "com.vm:vm-config",
+     "com.vm:vm-controller-helper",
+     "com.vm:vm-global-remote-config",
+     "com.vm:vm-base",
+     "com.vm:vm-auth-user",
+     "com.vm:vm-auth-admin",
+     "com.vm:vm-dao",
+     "com.vm:vm-mq",
+     "org.springframework.cloud:spring-cloud-starter-stream-rabbit",
+     "org.springframework.cloud:spring-cloud-starter-bus-amqp",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "org.springframework.cloud:spring-cloud-starter-config",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-eureka",
+     "org.springframework.boot:spring-boot-starter-websocket",
+     "org.springframework.cloud:spring-cloud-starter-feign",
+     "org.springframework.boot:spring-boot-devtools"
+    ]
+   },
+   {
+    "path": "vm-provider-ws/pom.xml",
+    "kind": "dep",
+    "blob_sha": "21f45dad8238b835368e67006f255b619db9360f",
+    "ecosystem": "maven",
+    "bytes": 8032,
+    "names": [
+     "com.vm:vm-config",
+     "com.vm:vm-controller-helper",
+     "com.vm:vm-global-remote-config",
+     "com.vm:vm-base",
+     "com.vm:vm-mq",
+     "org.springframework.cloud:spring-cloud-starter-stream-rabbit",
+     "com.vm:vm-auth-user",
+     "com.vm:vm-auth-admin",
+     "com.vm:vm-dao",
+     "org.springframework.cloud:spring-cloud-starter-bus-amqp",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "org.springframework.cloud:spring-cloud-starter-config",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-eureka",
+     "org.springframework.boot:spring-boot-starter-websocket",
+     "org.springframework.cloud:spring-cloud-starter-feign",
+     "org.springframework.boot:spring-boot-devtools"
+    ]
+   },
+   {
     "path": "vm-config-server/src/main/docker/Dockerfile",
     "kind": "image",
     "blob_sha": "bba77766ef166b4161b7f876d06220548c25cccc",
@@ -7507,13 +7680,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T05:51:22Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:50:26Z",
   "default_branch": "master",
   "pushed_at": "2024-01-21",
   "stars": 63,
   "tree": {
    "sha": "b70cc7906a98a66bfd3677dc83b3aa6eef13f35f",
-   "etag": "W/\"dcada8eb892b326123883e7a5583fe6d0640df5f96602ba24ed8a85a569d74f4\"",
+   "etag": "W/\"a241f1df95eddd17087bb31b746e4f3953acd669ccd423352f1219f1b7a73f75\"",
    "truncated": false,
    "path_count": 776,
    "matched": [
@@ -8585,15 +8759,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T07:23:54Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:06:16Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 30,
   "tree": {
-   "sha": "50f4f89cd5f0a3d865af73b69bae4e1c8e24d81d",
-   "etag": "W/\"519326871071156067945040241dc5a1f64c5adab8e2a3b68ee589fde1639244\"",
+   "sha": "d09d5b6ef1a94a519812431da3f08618a489825c",
+   "etag": "W/\"405595eb4b2b6d07997e0b7a2ba0eb68d93f80b8c5e19f2ca697b8c17f2a3bf5\"",
    "truncated": false,
-   "path_count": 2477,
+   "path_count": 2479,
    "matched": [
     "package.json",
     "apps/admin/package.json",
@@ -8607,6 +8782,25 @@
     "tests/TextStack.IntegrationTests/TextStack.IntegrationTests.csproj",
     "tests/TextStack.Persistence.Tests/TextStack.Persistence.Tests.csproj",
     "tests/TextStack.Search.Tests/TextStack.Search.Tests.csproj",
+    "tests/TextStack.UnitTests/TextStack.UnitTests.csproj",
+    "backend/src/Api/Api.csproj",
+    "backend/src/Application/Application.csproj",
+    "backend/src/Contracts/Contracts.csproj",
+    "backend/src/Domain/Domain.csproj",
+    "backend/src/Infrastructure/Infrastructure.csproj",
+    "backend/src/Worker/Worker.csproj",
+    "backend/src/Ai/TextStack.Ai.Agents/TextStack.Ai.Agents.csproj",
+    "backend/src/Ai/TextStack.Ai.Core/TextStack.Ai.Core.csproj",
+    "backend/src/Ai/TextStack.Ai.EvalSuite/TextStack.Ai.EvalSuite.csproj",
+    "backend/src/Ai/TextStack.Ai.Evals/TextStack.Ai.Evals.csproj",
+    "backend/src/Ai/TextStack.Ai.Llm/TextStack.Ai.Llm.csproj",
+    "backend/src/Ai/TextStack.Ai.Mcp/TextStack.Ai.Mcp.csproj",
+    "backend/src/Ai/TextStack.Ai.Tools/TextStack.Ai.Tools.csproj",
+    "backend/src/Extraction/TextStack.Extraction/TextStack.Extraction.csproj",
+    "backend/src/Observability/TextStack.Observability/TextStack.Observability.csproj",
+    "backend/src/Search/TextStack.Search/TextStack.Search.csproj",
+    "backend/src/Tts/TextStack.Tts/TextStack.Tts.csproj",
+    "backend/src/Vocabulary/TextStack.Vocabulary/TextStack.Vocabulary.csproj",
     "docker-compose.gpu.yml",
     "docker-compose.yml",
     "apps/admin/Dockerfile",
@@ -8860,6 +9054,254 @@
     ]
    },
    {
+    "path": "tests/TextStack.UnitTests/TextStack.UnitTests.csproj",
+    "kind": "dep",
+    "blob_sha": "89764d6ea0e07cf14506bf35f84a908d297736df",
+    "ecosystem": "csproj",
+    "bytes": 1923,
+    "names": [
+     "Microsoft.NET.Test.Sdk",
+     "Microsoft.EntityFrameworkCore.Sqlite",
+     "Moq",
+     "xunit.v3",
+     "xunit.runner.visualstudio",
+     "Microsoft.AspNetCore.Mvc.Testing"
+    ]
+   },
+   {
+    "path": "backend/src/Api/Api.csproj",
+    "kind": "dep",
+    "blob_sha": "5860048c342ece20afaee5ac1e03fc5aefaf78f2",
+    "ecosystem": "csproj",
+    "bytes": 2023,
+    "names": [
+     "Microsoft.AspNetCore.OpenApi",
+     "Scalar.AspNetCore",
+     "OpenTelemetry.Extensions.Hosting",
+     "OpenTelemetry.Instrumentation.AspNetCore",
+     "OpenTelemetry.Instrumentation.Http",
+     "OpenTelemetry.Instrumentation.Runtime",
+     "OpenTelemetry.Exporter.OpenTelemetryProtocol",
+     "Sentry.AspNetCore"
+    ]
+   },
+   {
+    "path": "backend/src/Application/Application.csproj",
+    "kind": "dep",
+    "blob_sha": "81cf944cd12d70d565c99440a057a8ddceab19d4",
+    "ecosystem": "csproj",
+    "bytes": 1775,
+    "names": [
+     "BCrypt.Net-Next",
+     "Google.Apis.Auth",
+     "HtmlAgilityPack",
+     "Microsoft.EntityFrameworkCore",
+     "Microsoft.Extensions.DependencyInjection.Abstractions",
+     "Microsoft.Extensions.Http",
+     "Microsoft.Extensions.Options",
+     "Microsoft.Extensions.Options.ConfigurationExtensions",
+     "Microsoft.IdentityModel.Tokens",
+     "Npgsql.EntityFrameworkCore.PostgreSQL",
+     "System.IdentityModel.Tokens.Jwt"
+    ]
+   },
+   {
+    "path": "backend/src/Contracts/Contracts.csproj",
+    "kind": "dep",
+    "blob_sha": "35e3d8428b7cfcc172d63391c605ca228f0e4703",
+    "ecosystem": "csproj",
+    "bytes": 45
+   },
+   {
+    "path": "backend/src/Domain/Domain.csproj",
+    "kind": "dep",
+    "blob_sha": "125f052007ecdd737daa3782d6388d682d077e0f",
+    "ecosystem": "csproj",
+    "bytes": 116,
+    "names": [
+     "Npgsql"
+    ]
+   },
+   {
+    "path": "backend/src/Infrastructure/Infrastructure.csproj",
+    "kind": "dep",
+    "blob_sha": "b0586f68b21c5d713ca86b05be393d03cbdda7b4",
+    "ecosystem": "csproj",
+    "bytes": 1156,
+    "names": [
+     "Dapper",
+     "Microsoft.EntityFrameworkCore",
+     "Npgsql.EntityFrameworkCore.PostgreSQL",
+     "Pgvector",
+     "Pgvector.EntityFrameworkCore",
+     "EFCore.NamingConventions",
+     "OpenTelemetry.Extensions.Hosting",
+     "OpenTelemetry.Instrumentation.Runtime",
+     "OpenTelemetry.Instrumentation.AspNetCore",
+     "OpenTelemetry.Instrumentation.Http",
+     "OpenTelemetry.Instrumentation.EntityFrameworkCore",
+     "OpenTelemetry.Exporter.OpenTelemetryProtocol",
+     "SkiaSharp",
+     "SkiaSharp.NativeAssets.Linux.NoDependencies"
+    ]
+   },
+   {
+    "path": "backend/src/Worker/Worker.csproj",
+    "kind": "dep",
+    "blob_sha": "3632377ab744d5864ccbead35c6cda2cd805940f",
+    "ecosystem": "csproj",
+    "bytes": 1025,
+    "names": [
+     "Microsoft.Extensions.Hosting",
+     "Microsoft.Extensions.Http",
+     "OpenTelemetry.Api",
+     "OpenTelemetry.Extensions.Hosting",
+     "OpenTelemetry.Instrumentation.Runtime",
+     "OpenTelemetry.Exporter.OpenTelemetryProtocol",
+     "Sentry"
+    ]
+   },
+   {
+    "path": "backend/src/Ai/TextStack.Ai.Agents/TextStack.Ai.Agents.csproj",
+    "kind": "dep",
+    "blob_sha": "b6e19530f8d99c074b68578e647d7e9e1ebd2c72",
+    "ecosystem": "csproj",
+    "bytes": 450,
+    "names": [
+     "Microsoft.Extensions.DependencyInjection.Abstractions"
+    ]
+   },
+   {
+    "path": "backend/src/Ai/TextStack.Ai.Core/TextStack.Ai.Core.csproj",
+    "kind": "dep",
+    "blob_sha": "2beb36a1dadeee698108dc1797c6eb31c22b1db1",
+    "ecosystem": "csproj",
+    "bytes": 293,
+    "names": [
+     "Sentry"
+    ]
+   },
+   {
+    "path": "backend/src/Ai/TextStack.Ai.EvalSuite/TextStack.Ai.EvalSuite.csproj",
+    "kind": "dep",
+    "blob_sha": "9d0e22c5a2b5995d0a63d0e6f4897d8e05667bd9",
+    "ecosystem": "csproj",
+    "bytes": 652
+   },
+   {
+    "path": "backend/src/Ai/TextStack.Ai.Evals/TextStack.Ai.Evals.csproj",
+    "kind": "dep",
+    "blob_sha": "ac792ac5191e80ad38f75b7102b8240810157c5d",
+    "ecosystem": "csproj",
+    "bytes": 507,
+    "names": [
+     "Microsoft.Extensions.Logging.Abstractions",
+     "Microsoft.Extensions.AI.Evaluation"
+    ]
+   },
+   {
+    "path": "backend/src/Ai/TextStack.Ai.Llm/TextStack.Ai.Llm.csproj",
+    "kind": "dep",
+    "blob_sha": "39f1b1a17cef579d579c16f6fb1cad728ed55e80",
+    "ecosystem": "csproj",
+    "bytes": 1097,
+    "names": [
+     "OpenAI",
+     "Microsoft.Extensions.AI",
+     "Microsoft.Extensions.Http",
+     "Microsoft.Extensions.Configuration.Abstractions",
+     "Microsoft.Extensions.Logging.Abstractions",
+     "Microsoft.Extensions.DependencyInjection.Abstractions",
+     "Sentry"
+    ]
+   },
+   {
+    "path": "backend/src/Ai/TextStack.Ai.Mcp/TextStack.Ai.Mcp.csproj",
+    "kind": "dep",
+    "blob_sha": "797cf11bf9bf299cb5bba8fa327d99d9ecb39087",
+    "ecosystem": "csproj",
+    "bytes": 4635,
+    "names": [
+     "ModelContextProtocol",
+     "ModelContextProtocol.AspNetCore",
+     "Microsoft.Extensions.Hosting",
+     "Microsoft.Extensions.Http"
+    ]
+   },
+   {
+    "path": "backend/src/Ai/TextStack.Ai.Tools/TextStack.Ai.Tools.csproj",
+    "kind": "dep",
+    "blob_sha": "0041c0b216466af22a93391c090d62ae7217ad13",
+    "ecosystem": "csproj",
+    "bytes": 512,
+    "names": [
+     "Microsoft.Extensions.DependencyInjection.Abstractions",
+     "JsonSchema.Net"
+    ]
+   },
+   {
+    "path": "backend/src/Extraction/TextStack.Extraction/TextStack.Extraction.csproj",
+    "kind": "dep",
+    "blob_sha": "3090329ed56b894e87c7ad35f6fb3524d1068694",
+    "ecosystem": "csproj",
+    "bytes": 733,
+    "names": [
+     "VersOne.Epub",
+     "HtmlAgilityPack",
+     "PdfPig",
+     "PDFtoImage",
+     "SkiaSharp"
+    ]
+   },
+   {
+    "path": "backend/src/Observability/TextStack.Observability/TextStack.Observability.csproj",
+    "kind": "dep",
+    "blob_sha": "79e01f22c81289f601953cd97ae4a7a4b8b3d82d",
+    "ecosystem": "csproj",
+    "bytes": 709,
+    "names": [
+     "Sentry",
+     "Sentry.Extensions.Logging"
+    ]
+   },
+   {
+    "path": "backend/src/Search/TextStack.Search/TextStack.Search.csproj",
+    "kind": "dep",
+    "blob_sha": "657d419618e4aae744f9c7836fa63f2d4713b822",
+    "ecosystem": "csproj",
+    "bytes": 405,
+    "names": [
+     "Dapper",
+     "Npgsql",
+     "Microsoft.Extensions.DependencyInjection.Abstractions",
+     "Microsoft.Extensions.Options"
+    ]
+   },
+   {
+    "path": "backend/src/Tts/TextStack.Tts/TextStack.Tts.csproj",
+    "kind": "dep",
+    "blob_sha": "30425deae43f577b2a497d0a1db76b2e8e61895f",
+    "ecosystem": "csproj",
+    "bytes": 301,
+    "names": [
+     "Microsoft.Extensions.Options",
+     "Microsoft.Extensions.Hosting.Abstractions"
+    ]
+   },
+   {
+    "path": "backend/src/Vocabulary/TextStack.Vocabulary/TextStack.Vocabulary.csproj",
+    "kind": "dep",
+    "blob_sha": "dbeff9de061da456a33ce0c17e753ca6b95bcf2a",
+    "ecosystem": "csproj",
+    "bytes": 427,
+    "names": [
+     "Microsoft.Extensions.Options",
+     "Microsoft.Extensions.DependencyInjection.Abstractions",
+     "Microsoft.Extensions.Http",
+     "HdbscanSharp"
+    ]
+   },
+   {
     "path": "docker-compose.gpu.yml",
     "kind": "image",
     "blob_sha": "26962ffc992909fc3e37b33111cac94c3b000b15",
@@ -9000,13 +9442,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T07:25:53Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:06:43Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 29,
   "tree": {
    "sha": "d1eb29380e44f7124e0c667a3ac9f8475ec96a52",
-   "etag": "W/\"d53ed8bfa06f59c4bbfb5fe5ec28007f9bf8379009451ac50e43e60008b7c174\"",
+   "etag": "W/\"c12088d6bf31a930d68cc722efa89abd50b5469fa060378d84f578f3ec4bd01e\"",
    "truncated": false,
    "path_count": 746,
    "matched": [
@@ -9427,13 +9870,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T08:10:58Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:14:32Z",
   "default_branch": "master",
   "pushed_at": "2022-06-24",
   "stars": 22,
   "tree": {
    "sha": "5c4c33f390a397c84c2c7540ec87a80390bbea03",
-   "etag": "W/\"b69f2726fdf69a79364b0d105fb66a4d1ee26c74e250aeb48035a042274bdca1\"",
+   "etag": "W/\"1bf543df4bf2545ceefcae840dc5ccbba2c26dc2ff01758ec410038e3eb6de01\"",
    "truncated": false,
    "path_count": 1890,
    "matched": [
@@ -9459,7 +9903,6 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
-    ".idea/sqldialects.xml",
     "mysql-connector-java-8.0.25/CHANGES",
     "mysql-connector-java-8.0.25/INFO_BIN",
     "mysql-connector-java-8.0.25/INFO_SRC",
@@ -9467,7 +9910,6 @@
     "mysql-connector-java-8.0.25/README",
     "mysql-connector-java-8.0.25/build.xml",
     "mysql-connector-java-8.0.25/mysql-connector-java-8.0.25.jar",
-    "javafx-sdk-11.0.2/lib/libfxplugins.dylib",
     "mysql-connector-java-8.0.25/src/build/misc/Product.wxs",
     "mysql-connector-java-8.0.25/src/build/misc/pom.xml",
     "mysql-connector-java-8.0.25/src/build/misc/rpm.spec.in",
@@ -9498,7 +9940,169 @@
     "mysql-connector-java-8.0.25/src/test/config/ssl-test-certs/client-key.pem",
     "mysql-connector-java-8.0.25/src/test/config/ssl-test-certs/client-keystore",
     "mysql-connector-java-8.0.25/src/test/config/ssl-test-certs/client-keystore-ext",
-    "mysql-connector-java-8.0.25/src/test/config/ssl-test-certs/mykey.pem"
+    "mysql-connector-java-8.0.25/src/test/config/ssl-test-certs/mykey.pem",
+    "mysql-connector-java-8.0.25/src/test/config/ssl-test-certs/mykey.pub",
+    "mysql-connector-java-8.0.25/src/test/config/ssl-test-certs/server-cert-ext.pem",
+    "mysql-connector-java-8.0.25/src/test/config/ssl-test-certs/server-cert.pem",
+    "mysql-connector-java-8.0.25/src/test/config/ssl-test-certs/server-key-ext.pem",
+    "mysql-connector-java-8.0.25/src/test/config/ssl-test-certs/server-key.pem",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/BaseQueryInterceptor.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/BaseTestCase.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/BufferingLogger.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/InjectedSocketFactory.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/JUnitSummary.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/MockJndiContextFactory.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/TestUtils.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/UnreliableSocketFactory.java",
+    "mysql-connector-java-8.0.25/src/build/misc/debian.in/source/format",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/perf/BasePerfTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/perf/LoadStorePerfTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/perf/RetrievalPerfTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/BlobRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/CachedRowsetTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/CallableStatementRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/CharsetRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/ConnectionRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/DataSourceRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/DateTimeRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/EscapeProcessorRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/ExceptionSubclassesTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/MetaDataRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/MicroPerformanceRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/NonLocalSocketFactory.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/NumbersRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/PooledConnectionRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/ResultSetRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/StatementRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/StressRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/StringRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/SubqueriesRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/SyntaxRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/regression/UtilsRegressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/AuthenticationTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/BlobTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/CallableStatementTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/CharsetTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/ConnectionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/DataSourceTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/DateTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/DateTimeTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/EscapeProcessingTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/ExceptionsTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/MetadataTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/MiniAdminTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/MultiHostConnectionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/NumbersTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/ReadOnlyCallableStatementTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/ResultSetTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/SSLTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/SaslPrepTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/SequentialIdLeaseTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/ServerControllerTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/SimpleTransformer.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/SplitDBdotNameTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/StatementsTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/StringUtilsTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/TestLifecycleInterceptor.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/TransactionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/TraversalTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/UpdatabilityTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/UtilsTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/simple/XATest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/AsyncTests.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/BaseXDevAPITestCase.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/TestXDevAPIRequirements.java",
+    "mysql-connector-java-8.0.25/src/demo/java/demo/x/devapi/DevApiSample.java",
+    "mysql-connector-java-8.0.25/src/legacy/java/com/mysql/jdbc/Driver.java",
+    "mysql-connector-java-8.0.25/src/legacy/java/com/mysql/jdbc/SocketFactory.java",
+    "mysql-connector-java-8.0.25/src/legacy/java/com/mysql/jdbc/SocketFactoryWrapper.java",
+    "mysql-connector-java-8.0.25/src/main/resources/com/mysql/cj/LocalizedErrorMessages.properties",
+    "mysql-connector-java-8.0.25/src/main/resources/com/mysql/cj/TlsSettings.properties",
+    "mysql-connector-java-8.0.25/src/test/java/com/mysql/cj/ConnectionUrlTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/com/mysql/cj/MessagesTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/com/mysql/cj/ServerVersionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/AsyncQueryTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/BaseCollectionTestCase.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/BaseTableTestCase.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/BindTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/CollectionAddTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/CollectionFindTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/CollectionModifyTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/CollectionRemoveTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/CollectionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/CompressionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/DevApiBaseTestCase.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/Ipv6SupportTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/MetadataTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/ResultTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/SchemaTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/SecureSessionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/SessionFailoverTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/SessionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/TableDeleteTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/TableInsertTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/TableSelectTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/TableTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/TableUpdateTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/TransactionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/devapi/package-info.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/internal/InternalXBaseTestCase.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/internal/MysqlxSessionTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/internal/XProtocolAsyncTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/internal/XProtocolAuthTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/internal/XProtocolTest.java",
+    "mysql-connector-java-8.0.25/src/test/java/testsuite/x/internal/package-info.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/AppendingBatchVisitor.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/BatchVisitor.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/BindValue.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/CacheAdapter.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/CacheAdapterFactory.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/CancelQueryTask.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/CharsetMapping.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/Constants.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/DataStoreMetadata.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/MessageBuilder.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/Messages.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/MysqlConnection.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/MysqlType.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/ParseInfo.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/PerConnectionLRUFactory.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/PingTarget.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/PreparedQuery.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/Query.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/QueryBindings.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/QueryResult.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/ServerVersion.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/Session.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/TransactionEventHandler.java",
+    "mysql-connector-java-8.0.25/src/main/core-api/java/com/mysql/cj/WarningListener.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/AbstractPreparedQuery.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/AbstractQuery.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/AbstractQueryBindings.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/CancelQueryTaskImpl.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/ClientPreparedQuery.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/ClientPreparedQueryBindValue.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/ClientPreparedQueryBindings.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/CoreSession.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/DataStoreMetadataImpl.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/LicenseConfiguration.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/MysqlxSession.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/NativeSession.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/NoSubInterceptorWrapper.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/ServerPreparedQuery.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/ServerPreparedQueryBindValue.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/ServerPreparedQueryBindings.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/ServerPreparedQueryTestcaseGenerator.java",
+    "mysql-connector-java-8.0.25/src/main/core-impl/java/com/mysql/cj/SimpleQuery.java",
+    "mysql-connector-java-8.0.25/src/main/resources/com/mysql/cj/configurations/3-0-Compat.properties",
+    "mysql-connector-java-8.0.25/src/main/resources/com/mysql/cj/configurations/clusterBase.properties",
+    "mysql-connector-java-8.0.25/src/main/resources/com/mysql/cj/configurations/coldFusion.properties",
+    "mysql-connector-java-8.0.25/src/main/resources/com/mysql/cj/configurations/fullDebug.properties",
+    "mysql-connector-java-8.0.25/src/main/resources/com/mysql/cj/configurations/maxPerformance-8-0.properties",
+    "mysql-connector-java-8.0.25/src/main/resources/com/mysql/cj/configurations/maxPerformance.properties",
+    "mysql-connector-java-8.0.25/src/main/resources/com/mysql/cj/configurations/solarisMaxPerformance.properties",
+    "mysql-connector-java-8.0.25/src/main/resources/com/mysql/cj/util/TimeZoneMapping.properties",
+    "mysql-connector-java-8.0.25/src/test/java/com/mysql/cj/result/BigDecimalValueFactoryTest.java"
    ]
   },
   "fail_count": 0
@@ -9682,13 +10286,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T08:27:27Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:15:52Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-28",
+  "pushed_at": "2026-10-31",
   "stars": 21,
   "tree": {
-   "sha": "924322ef919ffe3b47ad21f481812256b4224510",
-   "etag": "W/\"62bcfbf2ab0f0e64ba30b908cbbd102dad2221c2e9e8fe9e7bfcae76b20ac567\"",
+   "sha": "77d5039bfbe8c73d2e75f74361eb9884dc4c8fe2",
+   "etag": "W/\"c549edc5372fcb721e317ec947505a65c36d2736e24ec47b1bf04b262c7f4cd1\"",
    "truncated": false,
    "path_count": 40,
    "matched": [
@@ -11018,13 +11623,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T09:29:22Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:26:36Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-23",
+  "pushed_at": "2026-10-31",
   "stars": 15,
   "tree": {
-   "sha": "e52cd714f376348e3d1914e92d929272f95280f1",
-   "etag": "W/\"072cfe1643b105c2964f61c30cc8bc79859c207fe341388124891d546113d140\"",
+   "sha": "47527c6f31b30320653f00d1b59d8d70022215ad",
+   "etag": "W/\"63b9a99bfc614ee6845318b972a5c7c6b9f6f896625cca1436a80dbb5334de94\"",
    "truncated": false,
    "path_count": 44,
    "matched": [
@@ -11035,9 +11641,9 @@
    {
     "path": "requirements.txt",
     "kind": "dep",
-    "blob_sha": "a8180b3a1a9fee5d126a0bc24ea9802b124d84a6",
+    "blob_sha": "70d05a76e336ba2ee4f17897dca8e06e80b689bc",
     "ecosystem": "pypi",
-    "bytes": 701,
+    "bytes": 699,
     "names": [
      "apscheduler",
      "argh",
@@ -11378,13 +11984,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:10:39Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:36:38Z",
   "default_branch": "master",
   "pushed_at": "2019-08-19",
   "stars": 11,
   "tree": {
    "sha": "fec86223ab38888537c458f62cd62ddea534037b",
-   "etag": "W/\"c243e0cb7e67de408304f12b59152aee199b3d59e77a2b77aa5783522d918d4d\"",
+   "etag": "W/\"f991ae9f34e7d287c8919913df77ffd233719a3f35768c1fae1e28fc4d335d6f\"",
    "truncated": false,
    "path_count": 9049,
    "matched": []
@@ -11434,7 +12041,12 @@
     "resources/icons/papirus/16x16/mimetypes/video-x-google-vlc-plugin.svg",
     "resources/icons/papirus/16x16/panel/ac-adapter.svg",
     "resources/icons/papirus/16x16/panel/gpm-ac-adapter.svg",
-    "resources/icons/papirus/16x16/panel/pithos-tray-plugin.svg"
+    "resources/icons/papirus/16x16/panel/pithos-tray-plugin.svg",
+    "resources/icons/papirus/16x16/panel/xfce4-fsguard-plugin-urgent.svg",
+    "resources/icons/papirus/16x16/panel/xfce4-fsguard-plugin-warning.svg",
+    "resources/icons/papirus/16x16/panel/xfce4-fsguard-plugin.svg",
+    "resources/icons/papirus/16x16/panel/xfce4-notes-plugin.svg",
+    "resources/icons/papirus/16x16/panel/xfpm-ac-adapter.svg"
    ]
   },
   "fail_count": 0
@@ -11541,13 +12153,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:29:34Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:39:53Z",
   "default_branch": "main",
   "pushed_at": "2026-10-29",
   "stars": 10,
   "tree": {
    "sha": "61092fd6c3e890fda1e732900ab95a445db5e6b1",
-   "etag": "W/\"ed9abe2bf96ab857ae666b872247c49c7ac61fb0bbb05db4930b19d5a606d439\"",
+   "etag": "W/\"3ee4f40fcb92be62188480204ec48fa7d0a7e5e9a8913723b98dbc246e321e00\"",
    "truncated": false,
    "path_count": 253,
    "matched": [
@@ -11563,6 +12176,15 @@
     "plugins/gemini/package.json",
     "plugins/llama-cpp/package.json",
     "plugins/loader-code/package.json",
+    "plugins/loader-docx/package.json",
+    "plugins/loader-markdown/package.json",
+    "plugins/loader-ocr/package.json",
+    "plugins/loader-pdf/package.json",
+    "plugins/loader-plaintext/package.json",
+    "plugins/loader-web/package.json",
+    "plugins/loader-xlsx/package.json",
+    "plugins/ollama/package.json",
+    "plugins/openai/package.json",
     "Dockerfile",
     "docker-compose.yml"
    ]
@@ -11773,6 +12395,136 @@
     ]
    },
    {
+    "path": "plugins/loader-docx/package.json",
+    "kind": "dep",
+    "blob_sha": "6498c6966fc122718c4553b4100217627ce3143b",
+    "ecosystem": "npm",
+    "bytes": 414,
+    "names": [
+     "mammoth",
+     "@mnemos/plugin-sdk"
+    ],
+    "dev": [
+     "@types/node",
+     "typescript"
+    ]
+   },
+   {
+    "path": "plugins/loader-markdown/package.json",
+    "kind": "dep",
+    "blob_sha": "d5ce86dc647fe849278e6590623e76d357e130e1",
+    "ecosystem": "npm",
+    "bytes": 389,
+    "names": [
+     "@mnemos/plugin-sdk"
+    ],
+    "dev": [
+     "@types/node",
+     "typescript"
+    ]
+   },
+   {
+    "path": "plugins/loader-ocr/package.json",
+    "kind": "dep",
+    "blob_sha": "78273735cf3cf921f8e3faeab498b0ba5227ae50",
+    "ecosystem": "npm",
+    "bytes": 430,
+    "names": [
+     "tesseract.js",
+     "@mnemos/plugin-sdk"
+    ],
+    "dev": [
+     "@types/node",
+     "typescript"
+    ]
+   },
+   {
+    "path": "plugins/loader-pdf/package.json",
+    "kind": "dep",
+    "blob_sha": "b6aad06992204c6cda84d001c43751fdf0f37595",
+    "ecosystem": "npm",
+    "bytes": 480,
+    "names": [
+     "pdf-parse",
+     "tesseract.js",
+     "@mnemos/plugin-sdk"
+    ],
+    "dev": [
+     "@types/node",
+     "typescript"
+    ]
+   },
+   {
+    "path": "plugins/loader-plaintext/package.json",
+    "kind": "dep",
+    "blob_sha": "d28bb318908605d743147688f15f8dd93b29377e",
+    "ecosystem": "npm",
+    "bytes": 402,
+    "names": [
+     "@mnemos/plugin-sdk"
+    ],
+    "dev": [
+     "@types/node",
+     "typescript"
+    ]
+   },
+   {
+    "path": "plugins/loader-web/package.json",
+    "kind": "dep",
+    "blob_sha": "f54b6f6ce54004aa67304c3e33bb7db9a0f884e5",
+    "ecosystem": "npm",
+    "bytes": 390,
+    "names": [
+     "@mnemos/plugin-sdk"
+    ],
+    "dev": [
+     "@types/node",
+     "typescript"
+    ]
+   },
+   {
+    "path": "plugins/loader-xlsx/package.json",
+    "kind": "dep",
+    "blob_sha": "d82745b7d442e8f999e8a018f92224135487b54c",
+    "ecosystem": "npm",
+    "bytes": 415,
+    "names": [
+     "exceljs",
+     "@mnemos/plugin-sdk"
+    ],
+    "dev": [
+     "@types/node",
+     "typescript"
+    ]
+   },
+   {
+    "path": "plugins/ollama/package.json",
+    "kind": "dep",
+    "blob_sha": "d964e701dc9305d458ab78d778abd12deb803d65",
+    "ecosystem": "npm",
+    "bytes": 336,
+    "names": [
+     "@mnemos/plugin-sdk"
+    ],
+    "dev": [
+     "typescript"
+    ]
+   },
+   {
+    "path": "plugins/openai/package.json",
+    "kind": "dep",
+    "blob_sha": "46cf0f9d6ba039e8f09afdc283d3c6657a113c22",
+    "ecosystem": "npm",
+    "bytes": 385,
+    "names": [
+     "openai",
+     "@mnemos/plugin-sdk"
+    ],
+    "dev": [
+     "typescript"
+    ]
+   },
+   {
     "path": "Dockerfile",
     "kind": "image",
     "blob_sha": "9c18fe45bc1d434892f9be1fa7dab97877a408ca",
@@ -11839,7 +12591,18 @@
     "plugins/codex/src/index.ts",
     "plugins/embed-local/src/index.ts",
     "plugins/gemini/src/index.ts",
-    "plugins/llama-cpp/src/index.ts"
+    "plugins/llama-cpp/src/index.ts",
+    "plugins/loader-code/src/index.ts",
+    "plugins/loader-docx/__fixtures__/sample.docx",
+    "plugins/loader-docx/src/index.ts",
+    "plugins/loader-markdown/src/index.ts",
+    "plugins/loader-ocr/src/index.ts",
+    "plugins/loader-pdf/src/index.ts",
+    "plugins/loader-plaintext/src/index.ts",
+    "plugins/loader-web/src/index.ts",
+    "plugins/loader-xlsx/src/index.ts",
+    "plugins/ollama/src/index.ts",
+    "plugins/openai/src/index.ts"
    ]
   },
   "fail_count": 0
@@ -12009,15 +12772,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:49:02Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:34:08Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 11,
   "tree": {
-   "sha": "b527d4f23200827cc86683fc81964f1750496bec",
-   "etag": "W/\"12ef6eb902762074cbc0f92265abbf8428681c5db874c17c689ecd5427a0a2e2\"",
+   "sha": "647fe003791921df39b557fcbc69823b461da847",
+   "etag": "W/\"910bf2eee2dd069852c13fab6881119515dd7849e5d4e32a18baf166d6e7fe8b\"",
    "truncated": false,
-   "path_count": 1649,
+   "path_count": 1657,
    "matched": [
     "go.mod",
     "auth-helper/package.json",
@@ -12273,7 +13037,10 @@
   "clues": {
    "changelog": [],
    "readme_i18n": [
-    "README.zh-CN.md"
+    "README.zh-CN.md",
+    "plugins/official/hello/README.zh-CN.md",
+    "plugins/official/playwright/README.zh-CN.md",
+    "plugins/official/webhook/README.zh-CN.md"
    ],
    "docs_matrix": [],
    "paths": [
@@ -12308,6 +13075,7 @@
     "internal/server/httpapi/plugin_hooks_test.go",
     "internal/server/httpapi/plugin_identity_test.go",
     "internal/server/httpapi/plugin_inbox_test.go",
+    "internal/server/httpapi/plugin_readme_test.go",
     "internal/server/httpapi/plugin_requests_test.go",
     "internal/server/httpapi/plugin_text_test.go",
     "internal/server/httpapi/plugins_test.go",
@@ -12316,7 +13084,105 @@
     "internal/server/pluginhost/dispatch.go",
     "internal/server/pluginhost/fakehost_test.go",
     "internal/server/pluginhost/host_test.go",
-    "internal/server/pluginhost/protocol.go"
+    "internal/server/pluginhost/protocol.go",
+    "internal/server/pluginhost/realhost_test.go",
+    "internal/server/pluginhost/supervisor.go",
+    "internal/server/plugins/assets.go",
+    "internal/server/plugins/manifest.go",
+    "internal/server/plugins/market.go",
+    "internal/server/plugins/readme.go",
+    "internal/server/plugins/readme_test.go",
+    "internal/server/plugins/requests.go",
+    "internal/server/plugins/schema.go",
+    "internal/server/plugins/service.go",
+    "internal/server/plugins/service_test.go",
+    "internal/server/plugins/source.go",
+    "internal/server/store/plugin_events_test.go",
+    "internal/server/store/plugin_host.go",
+    "internal/server/store/plugin_host_test.go",
+    "internal/server/store/plugins.go",
+    "internal/server/store/plugins_v2_migration_test.go",
+    "internal/server/tasks/plugin_hooks_test.go",
+    "plugins/host/src/host.ts",
+    "plugins/host/src/loader.ts",
+    "plugins/host/src/main.ts",
+    "plugins/host/src/output.ts",
+    "plugins/host/src/protocol.ts",
+    "plugins/host/src/runtime.ts",
+    "plugins/host/src/validate.ts",
+    "plugins/host/test/harness.ts",
+    "plugins/host/test/pi-agent.test.ts",
+    "plugins/host/test/protocol.test.ts",
+    "plugins/host/test/smoke.test.ts",
+    "plugins/official/hello/README.md",
+    "plugins/official/hello/README.zh-CN.md",
+    "plugins/official/hello/package.json",
+    "plugins/official/playwright/README.md",
+    "plugins/official/playwright/README.zh-CN.md",
+    "plugins/official/playwright/package-lock.json",
+    "plugins/official/playwright/package.json",
+    "plugins/official/playwright/setup.mjs",
+    "plugins/official/webhook/README.md",
+    "plugins/official/webhook/README.zh-CN.md",
+    "plugins/official/webhook/package.json",
+    "plugins/sdk/src/cli.ts",
+    "plugins/sdk/src/delivery.ts",
+    "plugins/sdk/src/events.ts",
+    "plugins/sdk/src/index.ts",
+    "plugins/sdk/src/signature.ts",
+    "plugins/sdk/src/types.ts",
+    "plugins/sdk/src/ulid.ts",
+    "plugins/sdk/src/validate.ts",
+    "plugins/sdk/test/delivery.test.ts",
+    "plugins/sdk/test/validate.test.ts",
+    "web/src/api/plugins.ts",
+    "web/src/test/plugins.ts",
+    "internal/server/executor/local/plugin_assets_test.go",
+    "internal/server/pluginhost/pluginhosttest/fakehost.go",
+    "internal/server/store/migrations/00005_plugins.sql",
+    "internal/server/store/migrations/00022_platform_plugins.sql",
+    "internal/server/store/migrations/00031_plugins_v2.sql",
+    "plugins/host/test/fixtures/pi-offline-provider.ts",
+    "plugins/official/hello/agent/index.ts",
+    "plugins/official/hello/platform/index.ts",
+    "plugins/official/playwright/agent/index.ts",
+    "plugins/official/playwright/mcp/launch.mjs",
+    "plugins/official/webhook/platform/index.ts",
+    "web/src/features/plugins/Accounts.tsx",
+    "web/src/features/plugins/Activity.tsx",
+    "web/src/features/plugins/AgentPlugins.test.tsx",
+    "web/src/features/plugins/AgentPlugins.tsx",
+    "web/src/features/plugins/ChatLines.test.tsx",
+    "web/src/features/plugins/ChatLines.tsx",
+    "web/src/features/plugins/IdentityManager.test.tsx",
+    "web/src/features/plugins/IdentityManager.tsx",
+    "web/src/features/plugins/InstallFlow.test.tsx",
+    "web/src/features/plugins/InstallFlow.tsx",
+    "web/src/features/plugins/ManifestSummary.tsx",
+    "web/src/features/plugins/Markets.test.tsx",
+    "web/src/features/plugins/Markets.tsx",
+    "web/src/features/plugins/PluginActions.test.tsx",
+    "web/src/features/plugins/PluginActions.tsx",
+    "web/src/features/plugins/PluginDetailPage.test.tsx",
+    "web/src/features/plugins/PluginDetailPage.tsx",
+    "web/src/features/plugins/PluginsPage.test.tsx",
+    "web/src/features/plugins/PluginsPage.tsx",
+    "web/src/features/plugins/ProjectEnable.tsx",
+    "web/src/features/plugins/ProjectPluginsPage.test.tsx",
+    "web/src/features/plugins/ProjectPluginsPage.tsx",
+    "web/src/features/plugins/Readme.tsx",
+    "web/src/features/plugins/SchemaForm.test.tsx",
+    "web/src/features/plugins/SchemaForm.tsx",
+    "web/src/features/plugins/manifest.ts",
+    "web/src/features/plugins/parts.tsx",
+    "web/src/features/plugins/paths.ts",
+    "web/src/features/plugins/records.ts",
+    "web/src/features/plugins/repository.ts",
+    "web/src/features/plugins/schema-form.test.ts",
+    "web/src/features/plugins/schema-form.ts",
+    "web/src/features/plugins/usePluginInstaller.tsx",
+    "web/src/i18n/en-US/plugins.ts",
+    "web/src/i18n/zh-CN/plugins.ts"
    ]
   },
   "fail_count": 0

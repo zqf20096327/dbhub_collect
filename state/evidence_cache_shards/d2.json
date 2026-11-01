@@ -6469,13 +6469,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:22:58Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:32:44Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 193,
   "tree": {
-   "sha": "7a64ff27ee4d3d6030b2b2e19b5098f955138d16",
-   "etag": "W/\"c62d1284a2423e108dbd3f0e6bb6b3597309f71fd364461771c37bd2e9790526\"",
+   "sha": "32b691ad909a5b2aa911ee2d70db49e37a6df504",
+   "etag": "W/\"af27f6548fddc0d9a1d3fe9ff1c81cba2d90228117d3ff05ba7d90fb520c03d4\"",
    "truncated": false,
    "path_count": 573,
    "matched": [
@@ -6494,14 +6495,18 @@
     ".github/workflows/licenses.yml",
     ".github/workflows/release-smoke.yml",
     ".github/workflows/release.yml",
-    ".github/workflows/reviewdog.yml"
+    ".github/workflows/reviewdog.yml",
+    ".github/workflows/scorecard.yml",
+    ".github/workflows/smoke.yml",
+    ".github/workflows/unit_test.yml",
+    ".github/workflows/website.yml"
    ]
   },
   "files": [
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "0d4474f930285df7f8bbf7998883484e3bc73aed",
+    "blob_sha": "8f98e2034706f9196841f5223f6291b5d718d5a3",
     "ecosystem": "go",
     "bytes": 2682,
     "names": [
@@ -6595,7 +6600,7 @@
    {
     "path": ".github/workflows/codeql.yml",
     "kind": "ci",
-    "blob_sha": "425ec1ec5f892eb0fe6c674f4a23b7cbd5a45b92",
+    "blob_sha": "1e4bda345305d8108caf023b027600aacd773b34",
     "bytes": 1122
    },
    {
@@ -6655,8 +6660,32 @@
    {
     "path": ".github/workflows/reviewdog.yml",
     "kind": "ci",
-    "blob_sha": "c0cfcabaf4f8c2974c97669b21c87861ccbf6439",
+    "blob_sha": "adca914de0162e2091c8c903b69b28c520589756",
     "bytes": 1857
+   },
+   {
+    "path": ".github/workflows/scorecard.yml",
+    "kind": "ci",
+    "blob_sha": "b249b6c97f440ab88a61b4fe604384508925014d",
+    "bytes": 1575
+   },
+   {
+    "path": ".github/workflows/smoke.yml",
+    "kind": "ci",
+    "blob_sha": "8de510b07019155ef20a6d8d340f87af6e9649f7",
+    "bytes": 1202
+   },
+   {
+    "path": ".github/workflows/unit_test.yml",
+    "kind": "ci",
+    "blob_sha": "45467a726092dbd4662c646e409fec0251de402f",
+    "bytes": 2019
+   },
+   {
+    "path": ".github/workflows/website.yml",
+    "kind": "ci",
+    "blob_sha": "246510fc7ff47e66138ae2f08e3c048097c3f247",
+    "bytes": 11280
    }
   ],
   "clues": {
@@ -6700,13 +6729,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:25:12Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:33:20Z",
   "default_branch": "master",
   "pushed_at": "2026-10-29",
-  "stars": 183,
+  "stars": 184,
   "tree": {
    "sha": "b7b9087ebca9aa2c0d177d8382819e8066118316",
-   "etag": "W/\"d46ce167ae7007fd606a5e777cc6ed816bd8cdccce4bb09faf0c32eaa29da089\"",
+   "etag": "W/\"664a75d172e8243fe17cb0f45af094c5af2527fc4ab63889f5ec12317ad8a8f5\"",
    "truncated": false,
    "path_count": 389,
    "matched": [
@@ -6719,6 +6749,10 @@
     "test/integration/storage/environ/Dockerfile",
     "test/integration/environ/dockerfiles/minio/Dockerfile",
     "test/integration/environ/dockerfiles/minio_mc/Dockerfile",
+    "test/integration/environ/dockerfiles/pg-primary/Dockerfile",
+    "test/integration/environ/dockerfiles/pg-standby/Dockerfile",
+    "test/integration/environ/dockerfiles/sshd/Dockerfile",
+    "test/integration/environ/dockerfiles/toxiproxy/Dockerfile",
     ".github/workflows/ci.yml",
     ".github/workflows/dependabot.yml",
     ".github/workflows/integration-k8s.yml",
@@ -6871,6 +6905,42 @@
     ]
    },
    {
+    "path": "test/integration/environ/dockerfiles/pg-primary/Dockerfile",
+    "kind": "image",
+    "blob_sha": "aba5601e8f51f7175bb14fc6b690f93e43f519db",
+    "bytes": 3568,
+    "images": [
+     "debian:bookworm-20251117-slim"
+    ]
+   },
+   {
+    "path": "test/integration/environ/dockerfiles/pg-standby/Dockerfile",
+    "kind": "image",
+    "blob_sha": "0e03d53fbd01faa829a8c7452e2f5d5470cf3f30",
+    "bytes": 129,
+    "images": [
+     "postgres:${PG_MAJOR}-alpine3.22"
+    ]
+   },
+   {
+    "path": "test/integration/environ/dockerfiles/sshd/Dockerfile",
+    "kind": "image",
+    "blob_sha": "42cdd260f2058b5d667982a02f42c3fb1f847680",
+    "bytes": 1210,
+    "images": [
+     "alpine:3.22.2"
+    ]
+   },
+   {
+    "path": "test/integration/environ/dockerfiles/toxiproxy/Dockerfile",
+    "kind": "image",
+    "blob_sha": "d96fab16269a5a92fe1bd17459e76b8fd2ee8172",
+    "bytes": 39,
+    "images": [
+     "ghcr.io/shopify/toxiproxy:2.12.0"
+    ]
+   },
+   {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
     "blob_sha": "9090a8ba8716a69b04b1a7580b8ec8e161b1dd86",
@@ -6977,13 +7047,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:29:35Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:34:29Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 167,
   "tree": {
-   "sha": "81bc8e0881ce05464812f3ca1405a2a916375c11",
-   "etag": "W/\"a656eb15caa4c68cfd0f30d49d0317a3ac20c49f48eeddd5e847042cb07b4501\"",
+   "sha": "03a1f5b4e7b19b5fa9dd9288808dabfa4c8d912a",
+   "etag": "W/\"e547427c382f434f66f50a7e6bf483032d22e18aabb5484c60fc5b03c78a6037\"",
    "truncated": false,
    "path_count": 824,
    "matched": [
@@ -8249,13 +8320,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:01:43Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:52:40Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 58,
   "tree": {
    "sha": "08e921a58e15c666de593bba5c4922ff19a0ddf3",
-   "etag": "W/\"3dae6a3f73851af58bfe93df1f680b85ea792bf6a743df8e7500d464dcc710f5\"",
+   "etag": "W/\"cb1812c58d5163a1fc73b012135f6df2534bec3d0e4b3e022f887c75df6c16c7\"",
    "truncated": false,
    "path_count": 1383,
    "matched": [
@@ -8427,6 +8499,60 @@
     "docs/decision-guides/WHEN-TO-ADD-DATABASE-INDEXES.md"
    ],
    "paths": [
+    "src/modules/analytics/secondary-adapters/query/postgres-analytics-query.adapter.integration.spec.ts",
+    "src/modules/analytics/secondary-adapters/query/postgres-analytics-query.adapter.ts",
+    "src/modules/carts/secondary-adapters/query/postgres-cart-query.adapter.integration.spec.ts",
+    "src/modules/carts/secondary-adapters/query/postgres-cart-query.adapter.ts",
+    "src/modules/identity/secondary-adapters/query/postgres-user-query.adapter.integration.spec.ts",
+    "src/modules/identity/secondary-adapters/query/postgres-user-query.adapter.ts",
+    "src/modules/inventory/secondary-adapters/query/postgres-inventory-query.adapter.integration.spec.ts",
+    "src/modules/inventory/secondary-adapters/query/postgres-inventory-query.adapter.ts",
+    "src/modules/notifications/secondary-adapters/query/postgres-notification-query.adapter.integration.spec.ts",
+    "src/modules/notifications/secondary-adapters/query/postgres-notification-query.adapter.ts",
+    "src/modules/notifications/secondary-adapters/repositories/postgres.notification.repository.integration.spec.ts",
+    "src/modules/notifications/secondary-adapters/repositories/postgres.notification.repository.ts",
+    "src/modules/orders/secondary-adapters/query/postgres-order-query.adapter.integration.spec.ts",
+    "src/modules/orders/secondary-adapters/query/postgres-order-query.adapter.ts",
+    "src/modules/payments/secondary-adapters/query/postgres-payment-query.adapter.integration.spec.ts",
+    "src/modules/payments/secondary-adapters/query/postgres-payment-query.adapter.ts",
+    "src/modules/products/secondary-adapters/query/postgres-category-query.adapter.integration.spec.ts",
+    "src/modules/products/secondary-adapters/query/postgres-category-query.adapter.ts",
+    "src/modules/products/secondary-adapters/query/postgres-product-query.adapter.integration.spec.ts",
+    "src/modules/products/secondary-adapters/query/postgres-product-query.adapter.ts",
+    "src/modules/authentication/secondary-adapters/repositories/postgres-credential.repository/postgres-credential.repository.integration.spec.ts",
+    "src/modules/authentication/secondary-adapters/repositories/postgres-credential.repository/postgres-credential.repository.ts",
+    "src/modules/authentication/secondary-adapters/repositories/postgres-session-token-repository/postgres-session-token.repository.integration.spec.ts",
+    "src/modules/authentication/secondary-adapters/repositories/postgres-session-token-repository/postgres-session-token.repository.spec.ts",
+    "src/modules/authentication/secondary-adapters/repositories/postgres-session-token-repository/postgres-session-token.repository.ts",
+    "src/modules/authorization/secondary-adapter/repositories/postgres-permission-repository/postgres-permission.repository.integration.spec.ts",
+    "src/modules/authorization/secondary-adapter/repositories/postgres-permission-repository/postgres-permission.repository.ts",
+    "src/modules/authorization/secondary-adapter/repositories/postgres-role-repository/postgres-role.repository.integration.spec.ts",
+    "src/modules/authorization/secondary-adapter/repositories/postgres-role-repository/postgres-role.repository.ts",
+    "src/modules/authorization/secondary-adapter/repositories/postgres-user-role-assignment-repository/postgres-user-role-assignment.repository.integration.spec.ts",
+    "src/modules/authorization/secondary-adapter/repositories/postgres-user-role-assignment-repository/postgres-user-role-assignment.repository.ts",
+    "src/modules/carts/secondary-adapters/repositories/postgres-cart-repository/postgres.cart-repository.integration.spec.ts",
+    "src/modules/carts/secondary-adapters/repositories/postgres-cart-repository/postgres.cart-repository.spec.ts",
+    "src/modules/carts/secondary-adapters/repositories/postgres-cart-repository/postgres.cart-repository.ts",
+    "src/modules/identity/secondary-adapters/repositories/postgres-user-repository/postgres-user.repository.integration.spec.ts",
+    "src/modules/identity/secondary-adapters/repositories/postgres-user-repository/postgres-user.repository.spec.ts",
+    "src/modules/identity/secondary-adapters/repositories/postgres-user-repository/postgres-user.repository.ts",
+    "src/modules/inventory/secondary-adapters/repositories/postgres-inventory-repository/postgres-inventory-repository.integration.spec.ts",
+    "src/modules/inventory/secondary-adapters/repositories/postgres-inventory-repository/postgres-inventory-repository.spec.ts",
+    "src/modules/inventory/secondary-adapters/repositories/postgres-inventory-repository/postgres-inventory-repository.ts",
+    "src/modules/inventory/secondary-adapters/repositories/postgres-reservation-repository/postgres.reservation-repository.integration.spec.ts",
+    "src/modules/inventory/secondary-adapters/repositories/postgres-reservation-repository/postgres.reservation-repository.spec.ts",
+    "src/modules/inventory/secondary-adapters/repositories/postgres-reservation-repository/postgres.reservation-repository.ts",
+    "src/modules/orders/secondary-adapters/repositories/postgres-order-repository/postgres.order-repository.integration.spec.ts",
+    "src/modules/orders/secondary-adapters/repositories/postgres-order-repository/postgres.order-repository.spec.ts",
+    "src/modules/orders/secondary-adapters/repositories/postgres-order-repository/postgres.order-repository.ts",
+    "src/modules/payments/secondary-adapters/repositories/postgres-payment-repository/postgres.payment-repository.integration.spec.ts",
+    "src/modules/payments/secondary-adapters/repositories/postgres-payment-repository/postgres.payment-repository.spec.ts",
+    "src/modules/payments/secondary-adapters/repositories/postgres-payment-repository/postgres.payment-repository.ts",
+    "src/modules/products/secondary-adapters/repositories/postgres-category-repository/postgres.category-repository.spec.ts",
+    "src/modules/products/secondary-adapters/repositories/postgres-category-repository/postgres.category-repository.ts",
+    "src/modules/products/secondary-adapters/repositories/postgres-product-repository/postgres.product-repository.integration.spec.ts",
+    "src/modules/products/secondary-adapters/repositories/postgres-product-repository/postgres.product-repository.spec.ts",
+    "src/modules/products/secondary-adapters/repositories/postgres-product-repository/postgres.product-repository.ts",
     "src/infrastructure/websocket/adapters/redis-io.adapter.ts",
     "src/infrastructure/demo/primary-adapters/guards/demo-reset-auth.guard.spec.ts",
     "src/infrastructure/demo/primary-adapters/guards/demo-reset-auth.guard.ts",
@@ -8445,8 +8571,6 @@
     "src/modules/analytics/secondary-adapters/query/analytics-query.filters.ts",
     "src/modules/analytics/secondary-adapters/query/analytics-utc-buckets.spec.ts",
     "src/modules/analytics/secondary-adapters/query/analytics-utc-buckets.ts",
-    "src/modules/analytics/secondary-adapters/query/postgres-analytics-query.adapter.integration.spec.ts",
-    "src/modules/analytics/secondary-adapters/query/postgres-analytics-query.adapter.ts",
     "src/modules/authentication/primary-adapters/decorators/index.ts",
     "src/modules/authentication/primary-adapters/decorators/refresh-token.decorator.ts",
     "src/modules/authentication/primary-adapters/dto/auth-tokens-response.dto.ts",
@@ -8466,7 +8590,115 @@
     "src/modules/authentication/secondary-adapters/services/bcrypt.service.ts",
     "src/modules/authentication/secondary-adapters/services/jwt-signer.service.spec.ts",
     "src/modules/authentication/secondary-adapters/services/jwt-signer.service.ts",
-    "src/modules/authorization/primary-adapter/decorators/require-permissions.decorator.ts"
+    "src/modules/authorization/primary-adapter/decorators/require-permissions.decorator.ts",
+    "src/modules/authorization/primary-adapter/dto/create-role.dto.ts",
+    "src/modules/authorization/primary-adapter/dto/permission-response.dto.ts",
+    "src/modules/authorization/primary-adapter/dto/role-response.dto.ts",
+    "src/modules/authorization/primary-adapter/dto/update-role.dto.ts",
+    "src/modules/authorization/primary-adapter/guards/permissions.guard.spec.ts",
+    "src/modules/authorization/primary-adapter/guards/permissions.guard.ts",
+    "src/modules/authorization/secondary-adapter/orm/permission.schema.ts",
+    "src/modules/authorization/secondary-adapter/orm/role-permission.schema.ts",
+    "src/modules/authorization/secondary-adapter/orm/role.schema.ts",
+    "src/modules/authorization/secondary-adapter/orm/user-role-assignment.schema.ts",
+    "src/modules/carts/primary-adapters/dto/add-cart-item.dto.ts",
+    "src/modules/carts/primary-adapters/dto/cart-item-response.dto.ts",
+    "src/modules/carts/primary-adapters/dto/cart-response.dto.ts",
+    "src/modules/carts/primary-adapters/dto/update-cart-item.dto.ts",
+    "src/modules/carts/secondary-adapters/adapters/module-inventory.gateway.ts",
+    "src/modules/carts/secondary-adapters/adapters/module-product.gateway.ts",
+    "src/modules/carts/secondary-adapters/dto/raw-cart-query-row.interface.ts",
+    "src/modules/carts/secondary-adapters/orm/cart-item.schema.ts",
+    "src/modules/carts/secondary-adapters/orm/cart.schema.ts",
+    "src/modules/identity/primary-adapters/decorators/caller-context.decorator.ts",
+    "src/modules/identity/primary-adapters/decorators/current-user.decorator.spec.ts",
+    "src/modules/identity/primary-adapters/decorators/current-user.decorator.ts",
+    "src/modules/identity/primary-adapters/decorators/index.ts",
+    "src/modules/identity/primary-adapters/dto/add-address.dto.ts",
+    "src/modules/identity/primary-adapters/dto/address-response.dto.ts",
+    "src/modules/identity/primary-adapters/dto/assign-role.dto.ts",
+    "src/modules/identity/primary-adapters/dto/list-users-query.dto.ts",
+    "src/modules/identity/primary-adapters/dto/update-address.dto.ts",
+    "src/modules/identity/primary-adapters/dto/update-user.dto.ts",
+    "src/modules/identity/primary-adapters/dto/user-response.dto.ts",
+    "src/modules/identity/secondary-adapters/adapters/module-authorization.gateway.ts",
+    "src/modules/identity/secondary-adapters/dto/raw-user-list-query-row.interface.ts",
+    "src/modules/identity/secondary-adapters/orm/address.schema.ts",
+    "src/modules/identity/secondary-adapters/orm/user.schema.ts",
+    "src/modules/inventory/primary-adapters/dto/adjust-stock.dto.ts",
+    "src/modules/inventory/primary-adapters/dto/bulk-check-stock.dto.ts",
+    "src/modules/inventory/primary-adapters/dto/check-stock-query.dto.spec.ts",
+    "src/modules/inventory/primary-adapters/dto/check-stock-query.dto.ts",
+    "src/modules/inventory/primary-adapters/dto/check-stock-response.dto.ts",
+    "src/modules/inventory/primary-adapters/dto/inventory-response.dto.ts",
+    "src/modules/inventory/primary-adapters/dto/list-inventory-query.dto.ts",
+    "src/modules/inventory/primary-adapters/dto/low-stock-query.dto.ts",
+    "src/modules/inventory/primary-adapters/dto/reservation-response.dto.ts",
+    "src/modules/inventory/primary-adapters/dto/reserve-stock-item.dto.ts",
+    "src/modules/inventory/primary-adapters/dto/reserve-stock.dto.ts",
+    "src/modules/inventory/primary-adapters/dto/stock-reservation-response.dto.ts",
+    "src/modules/inventory/primary-adapters/jobs/inventory-reconciliation.job.spec.ts",
+    "src/modules/inventory/primary-adapters/jobs/inventory-reconciliation.job.ts",
+    "src/modules/inventory/primary-adapters/jobs/sweep-expired-reservations.job.spec.ts",
+    "src/modules/inventory/primary-adapters/jobs/sweep-expired-reservations.job.ts",
+    "src/modules/inventory/secondary-adapters/dto/raw-inventory-list-query-row.interface.ts",
+    "src/modules/inventory/secondary-adapters/orm/inventory.schema.ts",
+    "src/modules/inventory/secondary-adapters/orm/reservation-item.schema.ts",
+    "src/modules/inventory/secondary-adapters/orm/reservation.schema.ts",
+    "src/modules/inventory/secondary-adapters/schedulers/bullmq-inventory.scheduler.spec.ts",
+    "src/modules/inventory/secondary-adapters/schedulers/bullmq-inventory.scheduler.ts",
+    "src/modules/notifications/primary-adapters/dto/get-user-notifications.dto.ts",
+    "src/modules/notifications/primary-adapters/dto/notification-response.dto.ts",
+    "src/modules/notifications/primary-adapters/jobs/cleanup-expired-notifications.process.ts",
+    "src/modules/notifications/primary-adapters/jobs/deliver-notification.process.ts",
+    "src/modules/notifications/primary-adapters/jobs/save-notification-history.process.ts",
+    "src/modules/notifications/primary-adapters/jobs/update-notification-status.process.ts",
+    "src/modules/notifications/secondary-adapters/dto/raw-notification-list-query-row.interface.ts",
+    "src/modules/notifications/secondary-adapters/gateways/websocket.notification.gateway.ts",
+    "src/modules/notifications/secondary-adapters/orm/notification.schema.ts",
+    "src/modules/notifications/secondary-adapters/schedulers/bullmq.notification-scheduler.spec.ts",
+    "src/modules/notifications/secondary-adapters/schedulers/bullmq.notification-scheduler.ts",
+    "src/modules/orders/primary-adapters/dto/checkout-response.dto.ts",
+    "src/modules/orders/primary-adapters/dto/checkout.dto.ts",
+    "src/modules/orders/primary-adapters/dto/create-order-item.dto.ts",
+    "src/modules/orders/primary-adapters/dto/create-order-payment.dto.ts",
+    "src/modules/orders/primary-adapters/dto/create-order.dto.ts",
+    "src/modules/orders/primary-adapters/dto/deliver-order.dto.ts",
+    "src/modules/orders/primary-adapters/dto/list-orders-query.dto.ts",
+    "src/modules/orders/primary-adapters/dto/order-detail-response.dto.ts",
+    "src/modules/orders/primary-adapters/dto/order-item-response.dto.ts",
+    "src/modules/orders/primary-adapters/dto/order-list-response.dto.ts",
+    "src/modules/orders/primary-adapters/dto/order-payment-response.dto.ts",
+    "src/modules/orders/primary-adapters/dto/order-response.dto.ts",
+    "src/modules/orders/primary-adapters/dto/payment-info.dto.ts",
+    "src/modules/orders/primary-adapters/dto/shipping-address.dto.ts",
+    "src/modules/orders/primary-adapters/dto/update-order.dto.ts",
+    "src/modules/orders/primary-adapters/jobs/cancel-order.job.ts",
+    "src/modules/orders/primary-adapters/jobs/clear-cart.job.ts",
+    "src/modules/orders/primary-adapters/jobs/confirm-reservation.job.ts",
+    "src/modules/orders/primary-adapters/jobs/create-order.job.ts",
+    "src/modules/orders/primary-adapters/jobs/expire-pending-orders.job.spec.ts",
+    "src/modules/orders/primary-adapters/jobs/expire-pending-orders.job.ts",
+    "src/modules/orders/primary-adapters/jobs/finalize-checkout.job.ts",
+    "src/modules/orders/primary-adapters/jobs/payment-completed.job.ts",
+    "src/modules/orders/primary-adapters/jobs/payment-failed.job.ts",
+    "src/modules/orders/primary-adapters/jobs/post-payment-job.data.ts",
+    "src/modules/orders/primary-adapters/jobs/process-payment.job.spec.ts",
+    "src/modules/orders/primary-adapters/jobs/process-payment.job.ts",
+    "src/modules/orders/primary-adapters/jobs/refund-payment.job.spec.ts",
+    "src/modules/orders/primary-adapters/jobs/refund-payment.job.ts",
+    "src/modules/orders/primary-adapters/jobs/release-order-stock.job.ts",
+    "src/modules/orders/primary-adapters/jobs/release-stock.job.ts",
+    "src/modules/orders/primary-adapters/jobs/validate-cart.job.ts",
+    "src/modules/orders/primary-adapters/listeners/checkout-compensation-job-data.ts",
+    "src/modules/orders/primary-adapters/listeners/checkout-failure.listener.spec.ts",
+    "src/modules/orders/primary-adapters/listeners/checkout-failure.listener.ts",
+    "src/modules/orders/primary-adapters/mappers/order-payment-dto.mapper.spec.ts",
+    "src/modules/orders/primary-adapters/mappers/order-payment-dto.mapper.ts",
+    "src/modules/orders/secondary-adapters/adapters/module-cart.gateway.spec.ts",
+    "src/modules/orders/secondary-adapters/adapters/module-cart.gateway.ts",
+    "src/modules/orders/secondary-adapters/adapters/module-inventory-reservation.gateway.ts",
+    "src/modules/orders/secondary-adapters/adapters/module-payment.gateway.spec.ts"
    ]
   },
   "fail_count": 0
@@ -8684,13 +8916,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:27:05Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:56:58Z",
   "default_branch": "master",
   "pushed_at": "2026-10-21",
   "stars": 45,
   "tree": {
    "sha": "5b41398a3b1be854f8b56914eb6190cf42c5b372",
-   "etag": "W/\"7db6746aea2f855b57c26134e9b11cb8e85a26bf0242ee9ada4dd6507592f921\"",
+   "etag": "W/\"9d06dc56346604cac1cc2371bc5e64d2f0dbce615ba9a8b70a5720d78ca2f55a\"",
    "truncated": false,
    "path_count": 923,
    "matched": [
@@ -8705,7 +8938,14 @@
     "brief-speedier/pom.xml",
     "brief-sqlstatement/pom.xml",
     "brief-support/pom.xml",
-    "brief-samples/brief-commom-sample/pom.xml"
+    "brief-samples/brief-commom-sample/pom.xml",
+    "brief-samples/brief-mybatis-sample/pom.xml",
+    "brief-samples/brief-orms-sample/pom.xml",
+    "brief-samples/brief-speedier-sample/pom.xml",
+    "brief-support/brief-mybatis/pom.xml",
+    "brief-support/brief-oracle/pom.xml",
+    "brief-support/brief-spring-jdbc/pom.xml",
+    "brief-support/brief-sqlserver/pom.xml"
    ]
   },
   "files": [
@@ -8835,6 +9075,120 @@
      "junit:junit",
      "org.projectlombok:lombok",
      "org.springframework:spring-tx"
+    ]
+   },
+   {
+    "path": "brief-samples/brief-mybatis-sample/pom.xml",
+    "kind": "dep",
+    "blob_sha": "861447a454c27c674c85ac10e2d8eb223b7f2500",
+    "ecosystem": "maven",
+    "bytes": 3745,
+    "names": [
+     "com.javaoffers:brief-commom-sample",
+     "com.javaoffers:brief-encipher",
+     "com.javaoffers:brief-mybatis",
+     "junit:junit",
+     "com.fasterxml.jackson.core:jackson-databind",
+     "org.mybatis.spring.boot:mybatis-spring-boot-starter",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.slf4j:slf4j-api",
+     "mysql:mysql-connector-java",
+     "com.mchange:c3p0",
+     "com.fasterxml.jackson.core:jackson-annotations",
+     "com.fasterxml.jackson.core:jackson-core",
+     "com.h2database:h2"
+    ]
+   },
+   {
+    "path": "brief-samples/brief-orms-sample/pom.xml",
+    "kind": "dep",
+    "blob_sha": "41e62f5f7b803312cc2df8349ba0c52451a06677",
+    "ecosystem": "maven",
+    "bytes": 3258,
+    "names": [
+     "com.javaoffers:brief-speedier",
+     "com.mybatis-flex:mybatis-flex-core",
+     "com.baomidou:mybatis-plus",
+     "com.alibaba:fastjson",
+     "org.springframework:spring-context-support",
+     "org.springframework:spring-jdbc",
+     "com.h2database:h2",
+     "p6spy:p6spy",
+     "org.slf4j:slf4j-api",
+     "junit:junit"
+    ]
+   },
+   {
+    "path": "brief-samples/brief-speedier-sample/pom.xml",
+    "kind": "dep",
+    "blob_sha": "7d80753c52cae74eab4b3bd6351018530b88e0c6",
+    "ecosystem": "maven",
+    "bytes": 4584,
+    "names": [
+     "com.javaoffers:brief-oracle",
+     "com.javaoffers:brief-sqlserver",
+     "com.javaoffers:brief-commom-sample",
+     "com.javaoffers:brief-encipher",
+     "com.javaoffers:brief-speedier",
+     "junit:junit",
+     "com.fasterxml.jackson.core:jackson-databind",
+     "org.mybatis.spring.boot:mybatis-spring-boot-starter",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.slf4j:slf4j-api",
+     "mysql:mysql-connector-java",
+     "com.mchange:c3p0",
+     "com.fasterxml.jackson.core:jackson-annotations",
+     "com.fasterxml.jackson.core:jackson-core",
+     "org.mockito:mockito-core",
+     "org.mockito:mockito-inline",
+     "org.mockito:mockito-junit-jupiter",
+     "org.projectlombok:lombok"
+    ]
+   },
+   {
+    "path": "brief-support/brief-mybatis/pom.xml",
+    "kind": "dep",
+    "blob_sha": "a9f960e1327824c26ac470e77af4534c5274c1a7",
+    "ecosystem": "maven",
+    "bytes": 8390,
+    "names": [
+     "com.javaoffers:brief-core",
+     "org.springframework.boot:spring-boot-autoconfigure",
+     "org.mybatis:mybatis",
+     "com.javaoffers:brief-spring-jdbc"
+    ]
+   },
+   {
+    "path": "brief-support/brief-oracle/pom.xml",
+    "kind": "dep",
+    "blob_sha": "000772539161ae283f5968caddbe9d61504f6b17",
+    "ecosystem": "maven",
+    "bytes": 876,
+    "names": [
+     "com.javaoffers:brief-common",
+     "com.javaoffers:brief-core"
+    ]
+   },
+   {
+    "path": "brief-support/brief-spring-jdbc/pom.xml",
+    "kind": "dep",
+    "blob_sha": "872181324abba6d3bf402aad25a0177f1d549a1a",
+    "ecosystem": "maven",
+    "bytes": 1176,
+    "names": [
+     "com.javaoffers:brief-common",
+     "com.javaoffers:brief-core",
+     "org.springframework:spring-jdbc"
+    ]
+   },
+   {
+    "path": "brief-support/brief-sqlserver/pom.xml",
+    "kind": "dep",
+    "blob_sha": "004c93136371983d78be6b97733792653e5a8984",
+    "ecosystem": "maven",
+    "bytes": 963,
+    "names": [
+     "com.javaoffers:brief-core"
     ]
    }
   ],
@@ -9234,13 +9588,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:44:40Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:59:44Z",
   "default_branch": "main",
   "pushed_at": "2026-10-11",
   "stars": 38,
   "tree": {
    "sha": "348f7e94783dcbd87ddf645b9f6aa76026245e15",
-   "etag": "W/\"f1eec9cd11d52c562ed717d18995d93452777cff93f6811fb0f248ecd0e29afe\"",
+   "etag": "W/\"bedeedcd6d709c5d218c735bccad24e0b4069d8429b5e083480d03b3e9e9e8f3\"",
    "truncated": false,
    "path_count": 1632,
    "matched": [
@@ -9256,6 +9611,23 @@
     "Simlect-backend/Simlect-product/pom.xml",
     "Simlect-backend/Simlect-search/pom.xml",
     "Simlect-backend/Simlect-stock/pom.xml",
+    "Simlect-backend/Simlect-user/pom.xml",
+    "Simlect-front/Simlect-admin/package.json",
+    "Simlect-front/Simlect-web/package.json",
+    "Simlect-backend/Simlect-cart/api/pom.xml",
+    "Simlect-backend/Simlect-cart/app/pom.xml",
+    "Simlect-backend/Simlect-coupon/api/pom.xml",
+    "Simlect-backend/Simlect-coupon/app/pom.xml",
+    "Simlect-backend/Simlect-order/api/pom.xml",
+    "Simlect-backend/Simlect-order/app/pom.xml",
+    "Simlect-backend/Simlect-pay/api/pom.xml",
+    "Simlect-backend/Simlect-pay/app/pom.xml",
+    "Simlect-backend/Simlect-product/api/pom.xml",
+    "Simlect-backend/Simlect-product/app/pom.xml",
+    "Simlect-backend/Simlect-stock/api/pom.xml",
+    "Simlect-backend/Simlect-stock/app/pom.xml",
+    "Simlect-backend/Simlect-user/api/pom.xml",
+    "Simlect-backend/Simlect-user/app/pom.xml",
     "deploy/elasticsearch/Dockerfile",
     "deploy/seata/Dockerfile"
    ]
@@ -9486,6 +9858,325 @@
     "blob_sha": "53e49cbebea02defd44ea3239a15b5908c6197bc",
     "ecosystem": "maven",
     "bytes": 761
+   },
+   {
+    "path": "Simlect-backend/Simlect-user/pom.xml",
+    "kind": "dep",
+    "blob_sha": "3df249e7a283d80218f269962ff1203c0ea51539",
+    "ecosystem": "maven",
+    "bytes": 759
+   },
+   {
+    "path": "Simlect-front/Simlect-admin/package.json",
+    "kind": "dep",
+    "blob_sha": "55c766281047657156ed9c4c51f330cf8242413c",
+    "ecosystem": "npm",
+    "bytes": 895,
+    "names": [
+     "axios",
+     "cropperjs",
+     "echarts",
+     "element-plus",
+     "highlight.js",
+     "js-md5",
+     "katex",
+     "markdown-it-link-attributes",
+     "md-editor-v3",
+     "moment",
+     "pinia",
+     "prettier",
+     "screenfull",
+     "vue",
+     "vue-cropper",
+     "vue-router",
+     "vue3-image-magnifier"
+    ],
+    "dev": [
+     "@vitejs/plugin-vue",
+     "sass-embedded",
+     "vite"
+    ]
+   },
+   {
+    "path": "Simlect-front/Simlect-web/package.json",
+    "kind": "dep",
+    "blob_sha": "68f8b56e6f8fe7ec4acece32034dc11c26ef4b15",
+    "ecosystem": "npm",
+    "bytes": 1276,
+    "names": [
+     "@element-plus/icons-vue",
+     "@types/crypto-js",
+     "axios",
+     "cropperjs",
+     "crypto-js",
+     "dayjs",
+     "element-china-area-data",
+     "element-plus",
+     "js-md5",
+     "markdown-it",
+     "nprogress",
+     "pinia",
+     "qrcode",
+     "vue",
+     "vue-advanced-cropper",
+     "vue-router"
+    ],
+    "dev": [
+     "@types/js-md5",
+     "@types/markdown-it",
+     "@types/node",
+     "@types/nprogress",
+     "@types/qrcode",
+     "@vitejs/plugin-vue",
+     "@vue/tsconfig",
+     "postcss-px-to-viewport",
+     "sass",
+     "sharp",
+     "typescript",
+     "vite",
+     "vite-plugin-pwa",
+     "vue-tsc"
+    ]
+   },
+   {
+    "path": "Simlect-backend/Simlect-cart/api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "5d23347089228dceb7628d2b1c5abfcf99c4699a",
+    "ecosystem": "maven",
+    "bytes": 1351,
+    "names": [
+     "com.simlect:simlect-common",
+     "com.simlect:simlect-product-api",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.projectlombok:lombok"
+    ]
+   },
+   {
+    "path": "Simlect-backend/Simlect-cart/app/pom.xml",
+    "kind": "dep",
+    "blob_sha": "d85465cc32228a67e6aa667f1f366460f6a3359a",
+    "ecosystem": "maven",
+    "bytes": 3167,
+    "names": [
+     "com.simlect:simlect-common",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-seata",
+     "com.simlect:simlect-stock-api",
+     "com.simlect:simlect-product-api",
+     "com.simlect:simlect-cart-api",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-loadbalancer",
+     "org.springframework.boot:spring-boot-starter-test",
+     "org.testcontainers:junit-jupiter"
+    ]
+   },
+   {
+    "path": "Simlect-backend/Simlect-coupon/api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "4d7283d7faa07f548d1fa47768f8a18c62f38886",
+    "ecosystem": "maven",
+    "bytes": 1355,
+    "names": [
+     "com.simlect:simlect-common",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "com.simlect:simlect-stock-api",
+     "org.projectlombok:lombok"
+    ]
+   },
+   {
+    "path": "Simlect-backend/Simlect-coupon/app/pom.xml",
+    "kind": "dep",
+    "blob_sha": "6713f395d61048596cca16c97fdcf8b27e6e5083",
+    "ecosystem": "maven",
+    "bytes": 3291,
+    "names": [
+     "com.simlect:simlect-common",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-seata",
+     "com.simlect:simlect-user-api",
+     "com.simlect:simlect-order-api",
+     "com.simlect:simlect-coupon-api",
+     "com.simlect:simlect-pay-api",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-loadbalancer",
+     "org.springframework.boot:spring-boot-starter-test",
+     "org.testcontainers:junit-jupiter"
+    ]
+   },
+   {
+    "path": "Simlect-backend/Simlect-order/api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "e68e8f5dabbbda2950e62e8e43a03431cbd0d4fd",
+    "ecosystem": "maven",
+    "bytes": 1592,
+    "names": [
+     "com.simlect:simlect-common",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "com.simlect:simlect-user-api",
+     "com.simlect:simlect-pay-api",
+     "com.simlect:simlect-coupon-api",
+     "org.projectlombok:lombok"
+    ]
+   },
+   {
+    "path": "Simlect-backend/Simlect-order/app/pom.xml",
+    "kind": "dep",
+    "blob_sha": "5eb5a87e467c77ddeb1c33efb468b6f8c9d99906",
+    "ecosystem": "maven",
+    "bytes": 3719,
+    "names": [
+     "com.simlect:simlect-common",
+     "com.simlect:simlect-user-api",
+     "com.simlect:simlect-stock-api",
+     "com.simlect:simlect-product-api",
+     "com.simlect:simlect-pay-api",
+     "com.simlect:simlect-coupon-api",
+     "com.simlect:simlect-cart-api",
+     "com.simlect:simlect-order-api",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-loadbalancer",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-seata",
+     "org.springframework.boot:spring-boot-starter-test",
+     "org.testcontainers:junit-jupiter"
+    ]
+   },
+   {
+    "path": "Simlect-backend/Simlect-pay/api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "ea70443cf19530ca3804de330e2e69e0ed4c1253",
+    "ecosystem": "maven",
+    "bytes": 1225,
+    "names": [
+     "com.simlect:simlect-common",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.projectlombok:lombok"
+    ]
+   },
+   {
+    "path": "Simlect-backend/Simlect-pay/app/pom.xml",
+    "kind": "dep",
+    "blob_sha": "1e84a77308293ee4cfd89a7a7958937b43c12e13",
+    "ecosystem": "maven",
+    "bytes": 3040,
+    "names": [
+     "com.simlect:simlect-common",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-seata",
+     "com.simlect:simlect-order-api",
+     "com.simlect:simlect-pay-api",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-loadbalancer",
+     "org.springframework.boot:spring-boot-starter-test",
+     "org.testcontainers:junit-jupiter"
+    ]
+   },
+   {
+    "path": "Simlect-backend/Simlect-product/api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "32153189cd7b20eba6466cdbc4f031110042dddd",
+    "ecosystem": "maven",
+    "bytes": 1379,
+    "names": [
+     "com.simlect:simlect-common",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.data:spring-data-elasticsearch",
+     "org.projectlombok:lombok"
+    ]
+   },
+   {
+    "path": "Simlect-backend/Simlect-product/app/pom.xml",
+    "kind": "dep",
+    "blob_sha": "ce4fd511408bea7ae8fedaae6079df00c2eb32bf",
+    "ecosystem": "maven",
+    "bytes": 3032,
+    "names": [
+     "com.simlect:simlect-common",
+     "com.simlect:simlect-stock-api",
+     "com.simlect:simlect-product-api",
+     "com.simlect:simlect-user-api",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-loadbalancer",
+     "org.springframework.boot:spring-boot-starter-test",
+     "org.testcontainers:junit-jupiter"
+    ]
+   },
+   {
+    "path": "Simlect-backend/Simlect-stock/api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "b431dd362fae4f8a940cf9b0459f62ce5e2cb227",
+    "ecosystem": "maven",
+    "bytes": 1354,
+    "names": [
+     "com.simlect:simlect-common",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "com.simlect:simlect-product-api",
+     "org.projectlombok:lombok"
+    ]
+   },
+   {
+    "path": "Simlect-backend/Simlect-stock/app/pom.xml",
+    "kind": "dep",
+    "blob_sha": "8870147e93a7da7bb2de1cc4b2c0b40aa3defc11",
+    "ecosystem": "maven",
+    "bytes": 3050,
+    "names": [
+     "com.simlect:simlect-common",
+     "com.simlect:simlect-product-api",
+     "com.simlect:simlect-stock-api",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-loadbalancer",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-seata",
+     "org.springframework.boot:spring-boot-starter-test",
+     "org.testcontainers:junit-jupiter"
+    ]
+   },
+   {
+    "path": "Simlect-backend/Simlect-user/api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "3c5cc693b4832849b63d8cef074e42d43f4a4657",
+    "ecosystem": "maven",
+    "bytes": 1228,
+    "names": [
+     "com.simlect:simlect-common",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.projectlombok:lombok"
+    ]
+   },
+   {
+    "path": "Simlect-backend/Simlect-user/app/pom.xml",
+    "kind": "dep",
+    "blob_sha": "42e62c3f68f47a347746c2e8a6788337050249ac",
+    "ecosystem": "maven",
+    "bytes": 3145,
+    "names": [
+     "com.simlect:simlect-common",
+     "com.simlect:simlect-order-api",
+     "com.simlect:simlect-coupon-api",
+     "com.simlect:simlect-product-api",
+     "com.simlect:simlect-user-api",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-loadbalancer",
+     "org.springframework.boot:spring-boot-starter-test",
+     "org.testcontainers:junit-jupiter"
+    ]
    },
    {
     "path": "deploy/elasticsearch/Dockerfile",
@@ -12657,28 +13348,40 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T10:56:35Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:34:34Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-28",
+  "pushed_at": "2026-10-31",
   "stars": 11,
   "tree": {
-   "sha": "f35961cf61b728c882ff7705693ffabdb8afee90",
-   "etag": "W/\"a49520769b3c9b913203b8469f5499497f25f135aa43f7f92b79708eeb49e5ee\"",
+   "sha": "3057d35c6e9351d48d2fd25b31fc0d115dcbcc27",
+   "etag": "W/\"cc9654a5ad1e1296ea135e868a678d89b746dd824213885b87d113e2895ec76e\"",
    "truncated": false,
-   "path_count": 844,
+   "path_count": 1346,
    "matched": [
     "Cargo.toml",
     "package.json",
+    "liva-ai-tests/requirements.txt",
     "liva-desktop/package.json",
     "liva-native-core/Cargo.toml",
     "liva-ui/package.json",
     "liva-voice/requirements.txt",
     "mobile_client/package.json",
+    "crates/liva-core-types/Cargo.toml",
+    "crates/liva-cua/Cargo.toml",
+    "crates/liva-llm/Cargo.toml",
+    "crates/liva-storage/Cargo.toml",
+    "crates/liva-tools/Cargo.toml",
     "liva-desktop/src-tauri/Cargo.toml",
     "mobile_client/android/build.gradle",
+    "packages/gh-pages-noop/package.json",
     "packages/liva-common/package.json",
     "teamwork_projects/obsidian_llm_wiki/package.json",
+    "vendor/proc-macro-error2/Cargo.toml",
     "mobile_client/android/app/build.gradle",
+    "teamwork_projects/omnivoice_poc/rust_cli/Cargo.toml",
+    "tools/wakeword/rustpotter-probe/Cargo.toml",
+    "tools/wakeword/sherpa-kws-probe/Cargo.toml",
     ".github/workflows/release.yml",
     ".github/workflows/test.yml"
    ]
@@ -12687,18 +13390,17 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "d146f1547b6d0af1f6d1288b1a52d32dcfbe5820",
+    "blob_sha": "1749d8917d8d7042b702ce8d1768e5b0369011eb",
     "ecosystem": "cargo",
-    "bytes": 1884
+    "bytes": 6608
    },
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "a0854787e5b955f618ac236694b4d11205893d35",
+    "blob_sha": "ab0714c5d1c18a909142a07e95d0ad526d28e8a4",
     "ecosystem": "npm",
-    "bytes": 4017,
+    "bytes": 4271,
     "names": [
-     "sqlite-vec",
      "lightningcss-win32-x64-msvc"
     ],
     "dev": [
@@ -12706,6 +13408,7 @@
      "ai-devkit",
      "eslint",
      "eslint-plugin-vue",
+     "gh-pages",
      "gitnexus",
      "husky",
      "lint-staged",
@@ -12713,6 +13416,18 @@
      "tsx",
      "typescript-eslint",
      "vue-eslint-parser"
+    ]
+   },
+   {
+    "path": "liva-ai-tests/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "d25d0489b1ab43de80b6e945ba208183110f92be",
+    "ecosystem": "pypi",
+    "bytes": 62,
+    "names": [
+     "google-antigravity",
+     "pytest",
+     "python-dotenv"
     ]
    },
    {
@@ -12735,11 +13450,17 @@
    {
     "path": "liva-native-core/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "7b6406e314bdd421174dffe28acd481113ea70a9",
+    "blob_sha": "f6d5e340d6612ba62b66c104829b3d81ffc20dc9",
     "ecosystem": "cargo",
-    "bytes": 7184,
+    "bytes": 5991,
     "names": [
+     "anyhow",
+     "liva-core-types",
+     "liva-llm",
+     "liva-storage",
+     "liva-cua",
      "tokio",
+     "arc-swap",
      "tokio-tungstenite",
      "hyper",
      "futures-util",
@@ -12766,7 +13487,10 @@
      "rustfft",
      "tokenizers",
      "rodio",
+     "cpal",
      "regex",
+     "unicode-normalization",
+     "flate2",
      "base64",
      "llama-cpp-2",
      "encoding_rs",
@@ -12775,7 +13499,8 @@
      "sonora",
      "nvml-wrapper",
      "hkdf",
-     "sha2"
+     "sha2",
+     "blake3"
     ]
    },
    {
@@ -12859,11 +13584,105 @@
     ]
    },
    {
+    "path": "crates/liva-core-types/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "6c1d374de3a1e9cbf82324a04cb97ee3e196cddd",
+    "ecosystem": "cargo",
+    "bytes": 277,
+    "names": [
+     "serde",
+     "serde_json",
+     "schemars",
+     "tokio",
+     "async-trait"
+    ]
+   },
+   {
+    "path": "crates/liva-cua/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "d914d9af1f507f3e953036a5c2227ab769afe250",
+    "ecosystem": "cargo",
+    "bytes": 1485,
+    "names": [
+     "windows-sys",
+     "serde",
+     "serde_json",
+     "thiserror",
+     "tracing",
+     "tokio",
+     "async-trait",
+     "liva-storage",
+     "rusqlite",
+     "uuid",
+     "parking_lot"
+    ],
+    "dev": [
+     "tokio",
+     "r2d2",
+     "r2d2_sqlite"
+    ]
+   },
+   {
+    "path": "crates/liva-llm/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "fee86d1a49d73afa9959f9897cbf09f5c758fb3d",
+    "ecosystem": "cargo",
+    "bytes": 291,
+    "names": [
+     "tokio",
+     "anyhow",
+     "tracing"
+    ]
+   },
+   {
+    "path": "crates/liva-storage/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "d852ef015ae76c05ad8b36f809e40250924f766f",
+    "ecosystem": "cargo",
+    "bytes": 501,
+    "names": [
+     "rusqlite",
+     "libsqlite3-sys",
+     "r2d2",
+     "r2d2_sqlite",
+     "tokio",
+     "tracing",
+     "thiserror",
+     "serde"
+    ],
+    "dev": [
+     "cc",
+     "bytemuck"
+    ]
+   },
+   {
+    "path": "crates/liva-tools/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "04b697b16e42725d7600504940af6ba9e1f44ba1",
+    "ecosystem": "cargo",
+    "bytes": 687,
+    "names": [
+     "clap",
+     "anyhow",
+     "tokio",
+     "tracing",
+     "tracing-subscriber",
+     "serde",
+     "serde_json",
+     "rusqlite",
+     "ort",
+     "liva-core-types",
+     "liva-storage",
+     "liva-llm",
+     "liva-native-core"
+    ]
+   },
+   {
     "path": "liva-desktop/src-tauri/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "3e27de26ca119ae31bbbc1ce2c49bd63f4887695",
+    "blob_sha": "f66dfddecc42832335516be4fe71fdf25fe428e0",
     "ecosystem": "cargo",
-    "bytes": 2396,
+    "bytes": 2426,
     "names": [
      "tauri",
      "tauri-plugin-opener",
@@ -12891,11 +13710,18 @@
     "bytes": 969
    },
    {
+    "path": "packages/gh-pages-noop/package.json",
+    "kind": "dep",
+    "blob_sha": "b34a6ada3737084283dee5f84228555e62443ecf",
+    "ecosystem": "npm",
+    "bytes": 466
+   },
+   {
     "path": "packages/liva-common/package.json",
     "kind": "dep",
-    "blob_sha": "8076c52fa5b0e45106e8e8b991025c2b7e7c8413",
+    "blob_sha": "e0e1f76f8626799aff9c81b9017049a284e36c15",
     "ecosystem": "npm",
-    "bytes": 337,
+    "bytes": 400,
     "names": [
      "zod"
     ]
@@ -12903,7 +13729,7 @@
    {
     "path": "teamwork_projects/obsidian_llm_wiki/package.json",
     "kind": "dep",
-    "blob_sha": "c9f4fba7cac0f0a5445a47107783cc8d3c27dc0d",
+    "blob_sha": "491beff1c506194f3f92deb7807a90e59b8b42d1",
     "ecosystem": "npm",
     "bytes": 906,
     "names": [
@@ -12921,6 +13747,13 @@
     ]
    },
    {
+    "path": "vendor/proc-macro-error2/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "f623e6c1198f3f3591b2d80d2acae463102fc011",
+    "ecosystem": "cargo",
+    "bytes": 1915
+   },
+   {
     "path": "mobile_client/android/app/build.gradle",
     "kind": "dep",
     "blob_sha": "efa5c4c5c770f9c2bfe374fdc6197aac79829804",
@@ -12936,31 +13769,73 @@
     ]
    },
    {
+    "path": "teamwork_projects/omnivoice_poc/rust_cli/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "6c009782f52b0adf8449df5b3e68023dbd1efcb9",
+    "ecosystem": "cargo",
+    "bytes": 214,
+    "names": [
+     "ort",
+     "ndarray",
+     "bytemuck",
+     "regex"
+    ]
+   },
+   {
+    "path": "tools/wakeword/rustpotter-probe/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "76340c4feea3b24d5b1aaa8b578b782452b68c30",
+    "ecosystem": "cargo",
+    "bytes": 435,
+    "names": [
+     "hound",
+     "half",
+     "rustpotter",
+     "serde",
+     "serde_json"
+    ]
+   },
+   {
+    "path": "tools/wakeword/sherpa-kws-probe/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "f603d307579f645fd52386330d92d8ee2fccb83a",
+    "ecosystem": "cargo",
+    "bytes": 421,
+    "names": [
+     "serde",
+     "serde_json",
+     "sherpa-onnx"
+    ]
+   },
+   {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "7effeffd170841935c725f16bba3b9df84df0a48",
-    "bytes": 5767
+    "blob_sha": "0d530910f1bd617500266eccb4b3648ee40c3210",
+    "bytes": 3829
    },
    {
     "path": ".github/workflows/test.yml",
     "kind": "ci",
-    "blob_sha": "af7df041ea7c66051e927f486e9ede130ed73c3d",
-    "bytes": 12117
+    "blob_sha": "4ffe6810e2df174a2a389dc86a7c4990599e6519",
+    "bytes": 5138
    }
   ],
   "clues": {
    "changelog": [
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "vendor/proc-macro-error2/CHANGELOG.md"
    ],
    "readme_i18n": [
-    "docs/04-quy-trinh/prompts/readme-generation-prompt.md"
+    "docs/99-luu-tru/prompts-cu/readme-generation-prompt.md"
    ],
    "docs_matrix": [],
    "paths": [
+    "crates/liva-cua/tests/adb_driver_tests.rs",
     "liva-ui/src/platform/IPlatformAdapter.ts",
     "liva-ui/src/platform/MockWebAdapter.ts",
     "liva-ui/src/platform/TauriAdapter.ts",
-    "liva-ui/tests/platform/PlatformAdapter.test.ts"
+    "liva-ui/tests/platform/PlatformAdapter.test.ts",
+    "crates/liva-cua/src/adb/driver.rs"
    ]
   },
   "fail_count": 0
@@ -13086,13 +13961,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:16:54Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:37:47Z",
   "default_branch": "master",
   "pushed_at": "2025-10-22",
   "stars": 11,
   "tree": {
    "sha": "0921beacc1dfbef584278d051b72c55f083e43a6",
-   "etag": "W/\"b6ceecbb804e9fd297b9d5b44d04f2318d8c3645fb412a233e123e503ebffda6\"",
+   "etag": "W/\"58cbc93f34afa5c9eb3003a2e2f59f46ecaddb6ddf0660ac80d08f8ee2fa9838\"",
    "truncated": false,
    "path_count": 698,
    "matched": [
@@ -13107,7 +13983,8 @@
     "WEF.Standard.Postgre/WEF.Standard.Postgre.csproj",
     "WEF.Standard.SQLite/WEF.Standard.SQLite.csproj",
     "WEF.Standard.Test/WEF.Standard.Test.csproj",
-    "WEF.Standard.Test31/WEF.Standard.Test31.csproj"
+    "WEF.Standard.Test31/WEF.Standard.Test31.csproj",
+    "WEF.Standard/WEF.Standard.csproj"
    ]
   },
   "files": [
@@ -13216,6 +14093,20 @@
     "blob_sha": "61e3471b5c9cbebb9886658409e1703e2ca8b225",
     "ecosystem": "csproj",
     "bytes": 777
+   },
+   {
+    "path": "WEF.Standard/WEF.Standard.csproj",
+    "kind": "dep",
+    "blob_sha": "43e188b150c2272214ab1fdac005911d9dfa35f7",
+    "ecosystem": "csproj",
+    "bytes": 3803,
+    "names": [
+     "Microsoft.CSharp",
+     "System.Configuration.ConfigurationManager",
+     "System.Reflection.Emit.ILGeneration",
+     "System.Reflection.Emit.Lightweight",
+     "System.Security.Permissions"
+    ]
    }
   ],
   "clues": {

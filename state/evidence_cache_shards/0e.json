@@ -9369,13 +9369,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:40:52Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:59:09Z",
   "default_branch": "main",
   "pushed_at": "2026-07-13",
   "stars": 40,
   "tree": {
    "sha": "4b8c742c792571505391484c403f4a4ce02490ea",
-   "etag": "W/\"16f5a5a0cf2328bb21932c944f2a8bf5244d472860f925e70f95d16f8860841e\"",
+   "etag": "W/\"c106164cd96db66085ad3b034278e8844301bbd213bf6e54f8bdb99bf17fdd4f\"",
    "truncated": false,
    "path_count": 341,
    "matched": [
@@ -9391,6 +9392,13 @@
     "packages/fts/package.json",
     "packages/kv/package.json",
     "packages/monlite/package.json",
+    "packages/postgres/package.json",
+    "packages/queue/package.json",
+    "packages/realtime/package.json",
+    "packages/studio/package.json",
+    "packages/sync/package.json",
+    "packages/vector/package.json",
+    "packages/wasm/package.json",
     "docker/postgres/Dockerfile",
     ".github/workflows/ci.yml",
     ".github/workflows/deploy-docs.yml",
@@ -9631,6 +9639,148 @@
     ]
    },
    {
+    "path": "packages/postgres/package.json",
+    "kind": "dep",
+    "blob_sha": "7d0131c8c7c459ffccbb42a85c1ad69db6236bdc",
+    "ecosystem": "npm",
+    "bytes": 1850,
+    "names": [
+     "@monlite/core",
+     "pg"
+    ],
+    "dev": [
+     "@types/node",
+     "@types/pg",
+     "tsup",
+     "typescript",
+     "vitest",
+     "@monlite/kv",
+     "@monlite/queue",
+     "@monlite/fts",
+     "@monlite/vector",
+     "@monlite/cron",
+     "better-sqlite3"
+    ]
+   },
+   {
+    "path": "packages/queue/package.json",
+    "kind": "dep",
+    "blob_sha": "e360e4fec08f78d4871c4c2d647f6d7331942936",
+    "ecosystem": "npm",
+    "bytes": 1667,
+    "names": [
+     "@monlite/core"
+    ],
+    "dev": [
+     "@monlite/postgres",
+     "@types/node",
+     "@types/pg",
+     "better-sqlite3",
+     "pg",
+     "tsup",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/realtime/package.json",
+    "kind": "dep",
+    "blob_sha": "66a8efe48a88057758becf5bac7edb85fa28c97c",
+    "ecosystem": "npm",
+    "bytes": 1815,
+    "names": [
+     "@monlite/core"
+    ],
+    "dev": [
+     "@types/node",
+     "better-sqlite3",
+     "tsup",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/studio/package.json",
+    "kind": "dep",
+    "blob_sha": "8262c4f79c99f9a59d80c3de239d60730a6c2604",
+    "ecosystem": "npm",
+    "bytes": 1410,
+    "names": [
+     "@monlite/core"
+    ],
+    "dev": [
+     "@types/node",
+     "tsup",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/sync/package.json",
+    "kind": "dep",
+    "blob_sha": "4f74ae468b4db997655a331bf8bb372f52bcc0d9",
+    "ecosystem": "npm",
+    "bytes": 1914,
+    "names": [
+     "@monlite/core",
+     "mongodb",
+     "pg",
+     "mysql2"
+    ],
+    "dev": [
+     "@types/node",
+     "@types/pg",
+     "better-sqlite3",
+     "mongodb",
+     "mysql2",
+     "pg",
+     "tsup",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/vector/package.json",
+    "kind": "dep",
+    "blob_sha": "5a729a09b83469203a0bfac3408c1d19d2a72c5a",
+    "ecosystem": "npm",
+    "bytes": 1742,
+    "names": [
+     "@monlite/core",
+     "sqlite-vec"
+    ],
+    "dev": [
+     "@types/node",
+     "@types/pg",
+     "@monlite/fts",
+     "@monlite/postgres",
+     "better-sqlite3",
+     "pg",
+     "tsup",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/wasm/package.json",
+    "kind": "dep",
+    "blob_sha": "1900a19daea910811361f37a2d9ebed0e18d757d",
+    "ecosystem": "npm",
+    "bytes": 1682,
+    "names": [
+     "@monlite/core",
+     "sql.js"
+    ],
+    "dev": [
+     "@types/node",
+     "@types/sql.js",
+     "sql.js",
+     "tsup",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
     "path": "docker/postgres/Dockerfile",
     "kind": "image",
     "blob_sha": "5eec3d299530ab62c9c7ad62ed146402adba629f",
@@ -9672,6 +9822,8 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "packages/sync/src/adapters/mysql.ts",
+    "packages/sync/src/adapters/postgres.ts",
     "PLAN-vector-lean-plugin-storage.md",
     "docs/docs/guides/custom-adapter.md",
     "packages/core/src/plugin.ts",
@@ -9685,9 +9837,7 @@
     "packages/core/src/driver/types.ts",
     "packages/sync/src/adapters/memory.ts",
     "packages/sync/src/adapters/mongo.ts",
-    "packages/sync/src/adapters/monlite.ts",
-    "packages/sync/src/adapters/mysql.ts",
-    "packages/sync/src/adapters/postgres.ts"
+    "packages/sync/src/adapters/monlite.ts"
    ]
   },
   "fail_count": 0
@@ -9781,13 +9931,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T07:15:58Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:04:38Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 32,
   "tree": {
    "sha": "5660aacd4ee7a0e5292e876288e08f78022160b6",
-   "etag": "W/\"0399b1cda18fd75596330ef70490382b5e0bca2ca15cfe94f041f30f4c087c72\"",
+   "etag": "W/\"0767b871530a5f4f0cee39cb5c6a4258b107e997d55b91c11ae17315ce46d734\"",
    "truncated": false,
    "path_count": 45,
    "matched": [
@@ -11518,13 +11669,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:32:14Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:40:38Z",
   "default_branch": "main",
   "pushed_at": "2023-06-06",
   "stars": 10,
   "tree": {
    "sha": "cda59635cb73bce15680c0438753b00daaaa3a03",
-   "etag": "W/\"1cc9bb19af5027c89a4420a62b1c5ecae97daa6adf123cf527cc0a8f911f468e\"",
+   "etag": "W/\"c6c9c367940715e37074bac41e3ed9015a085582b4b7c9484f20458a61223486\"",
    "truncated": false,
    "path_count": 57,
    "matched": [
@@ -11545,6 +11697,8 @@
     "src/monitor/Dockerfile",
     "src/result_feedback/Dockerfile",
     "src/services_ready/Dockerfile",
+    "src/similarity/Dockerfile",
+    "test/integration_test/Dockerfile",
     ".github/workflows/dockerhub_ci.yml",
     ".github/workflows/main_branch_ci.yml"
    ]
@@ -11782,6 +11936,24 @@
     "bytes": 108,
     "images": [
      "bash"
+    ]
+   },
+   {
+    "path": "src/similarity/Dockerfile",
+    "kind": "image",
+    "blob_sha": "38c0708ce90a0a7f685df26e5ef8d7236b83ad27",
+    "bytes": 965,
+    "images": [
+     "python:3.8-slim"
+    ]
+   },
+   {
+    "path": "test/integration_test/Dockerfile",
+    "kind": "image",
+    "blob_sha": "f78386ad09ba7c86a34c019f6d1329fd97c890ab",
+    "bytes": 189,
+    "images": [
+     "python:3.8-slim"
     ]
    },
    {

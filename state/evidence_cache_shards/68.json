@@ -7456,19 +7456,21 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:23:34Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:32:55Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 191,
   "tree": {
-   "sha": "be8ea7dcdaff84f53235aa1e43e503905eb6d5f0",
-   "etag": "W/\"ada969a0b277407b35b68713b0f1a7426e611865addec90052ae725e8c88d680\"",
+   "sha": "8e3094e6f8e0710448436444efa50b70b8eb380d",
+   "etag": "W/\"e13a13a96d3afefe96f66202566a93ea4c4aba165da0e8c04169467693a6bf4d\"",
    "truncated": false,
-   "path_count": 1095,
+   "path_count": 1098,
    "matched": [
     "backend/requirements.txt",
     "frontend/package.json",
     "backend/antirudechat/requirements.txt",
+    "backend/clipnsfw/requirements.txt",
     "backend/kvmatching/requirements.txt",
     "backend/minorconfession/requirements.txt",
     "backend/test/chatjsontest/package.json",
@@ -7493,9 +7495,9 @@
    {
     "path": "backend/requirements.txt",
     "kind": "dep",
-    "blob_sha": "8782888c42abbd1d830e52fb71577ba71ba21317",
+    "blob_sha": "031b64b52458990b78d0729ad9731123fd9d76af",
     "ecosystem": "pypi",
-    "bytes": 349,
+    "bytes": 354,
     "names": [
      "blurhash",
      "boto3",
@@ -7507,6 +7509,7 @@
      "limits",
      "nltk",
      "numpy",
+     "onnx",
      "onnxruntime",
      "openai",
      "pgvector",
@@ -7622,6 +7625,21 @@
      "psycopg",
      "torch",
      "transformers"
+    ]
+   },
+   {
+    "path": "backend/clipnsfw/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "fa14e043cee5aa40fa2f8d8d1b5ca7afe68f5abd",
+    "ecosystem": "pypi",
+    "bytes": 61,
+    "names": [
+     "numpy",
+     "onnx",
+     "onnxruntime",
+     "pillow",
+     "pillow-jxl-plugin",
+     "scikit-learn"
     ]
    },
    {
@@ -7822,13 +7840,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:30:50Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:34:42Z",
   "default_branch": "main",
   "pushed_at": "2026-10-26",
   "stars": 164,
   "tree": {
    "sha": "d5a0e8369d838d4d5961a98fca35c882a45e200a",
-   "etag": "W/\"4a2dcc75f2e8eb5f5ad883ee0c2553ce65f1a3b1ac4bbad69a869b7e85789650\"",
+   "etag": "W/\"18a304d4a714d74e72b72f9623a8648334cf3c858e43adb4a67eae38cdb2eba8\"",
    "truncated": false,
    "path_count": 555,
    "matched": [
@@ -7844,6 +7863,15 @@
     "crates/adapters/storage-btrfs/Cargo.toml",
     "crates/adapters/storage-file/Cargo.toml",
     "crates/adapters/storage-kubernetes/Cargo.toml",
+    "crates/applications/cli/Cargo.toml",
+    "crates/applications/console/Cargo.toml",
+    "crates/applications/mcp/Cargo.toml",
+    "crates/applications/proxy/Cargo.toml",
+    "crates/applications/website/Cargo.toml",
+    "crates/extensions/gfs/Cargo.toml",
+    "examples/benchmark-explorer/server/package.json",
+    "examples/benchmark-explorer/web/package.json",
+    "crates/applications/console/web/package.json",
     "crates/applications/proxy/Dockerfile",
     "crates/extensions/gfs/Dockerfile",
     "crates/extensions/gfs/Dockerfile.runtime",
@@ -8062,6 +8090,216 @@
     ]
    },
    {
+    "path": "crates/applications/cli/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "c5747cd12426a82185cf5d95538ebd7e7e992ad1",
+    "ecosystem": "cargo",
+    "bytes": 2142,
+    "names": [
+     "gfs-domain",
+     "gfs-telemetry",
+     "gfs-compute-docker",
+     "gfs-db-providers",
+     "gfs-compute-kubernetes",
+     "gfs-storage-file",
+     "gfs-storage-kubernetes",
+     "gfs-mcp",
+     "chrono",
+     "clap",
+     "tokio",
+     "anyhow",
+     "async-trait",
+     "tracing",
+     "tracing-subscriber",
+     "serde_json",
+     "uuid",
+     "rmcp",
+     "axum",
+     "tokio-util",
+     "owo-colors",
+     "rustls"
+    ],
+    "dev": [
+     "rusqlite",
+     "serde_json",
+     "gfs-domain",
+     "tempfile",
+     "once_cell",
+     "serial_test",
+     "gag",
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/applications/console/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "538878e1fd191c6e9889b03576686b3afbff5172",
+    "ecosystem": "cargo",
+    "bytes": 1265,
+    "names": [
+     "axum",
+     "tower-http",
+     "bollard",
+     "reqwest",
+     "rust-embed",
+     "gfs-domain",
+     "gfs-compute-docker",
+     "gfs-db-providers",
+     "gfs-cli",
+     "tokio",
+     "serde",
+     "serde_json",
+     "anyhow",
+     "clap",
+     "tracing",
+     "tracing-subscriber"
+    ]
+   },
+   {
+    "path": "crates/applications/mcp/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "427488876f4a91a5e6916f79d3710cdf3dd54af7",
+    "ecosystem": "cargo",
+    "bytes": 1325,
+    "names": [
+     "rmcp",
+     "gfs-domain",
+     "gfs-telemetry",
+     "gfs-compute-docker",
+     "gfs-db-providers",
+     "gfs-compute-kubernetes",
+     "gfs-storage-file",
+     "tokio",
+     "serde",
+     "serde_json",
+     "uuid",
+     "anyhow",
+     "chrono",
+     "tracing",
+     "tracing-subscriber",
+     "axum",
+     "tokio-util",
+     "atty",
+     "getrandom"
+    ],
+    "dev": [
+     "tempfile",
+     "tower"
+    ]
+   },
+   {
+    "path": "crates/applications/proxy/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "a5c9a04055c60fc02ba9477637a59423a5556f50",
+    "ecosystem": "cargo",
+    "bytes": 1357,
+    "names": [
+     "anyhow",
+     "bytes",
+     "clap",
+     "metrics",
+     "metrics-exporter-prometheus",
+     "rustls",
+     "rustls-native-certs",
+     "rustls-pemfile",
+     "thiserror",
+     "tokio",
+     "tokio-postgres",
+     "tokio-postgres-rustls",
+     "tokio-rustls",
+     "tracing",
+     "tracing-subscriber",
+     "bollard",
+     "hyper",
+     "hyper-util",
+     "http-body-util",
+     "serde_json"
+    ]
+   },
+   {
+    "path": "crates/applications/website/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "7fd7dcb60e110e6afe839b0a2aaf555a42219cee",
+    "ecosystem": "cargo",
+    "bytes": 677,
+    "names": [
+     "leptos",
+     "leptos_meta",
+     "leptos_router",
+     "console_error_panic_hook",
+     "wasm-bindgen",
+     "serde",
+     "serde_json"
+    ]
+   },
+   {
+    "path": "crates/extensions/gfs/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "9fac24f26b94cd8222c6da3a61594280afb75ee6",
+    "ecosystem": "cargo",
+    "bytes": 913,
+    "names": [
+     "pgrx"
+    ]
+   },
+   {
+    "path": "examples/benchmark-explorer/server/package.json",
+    "kind": "dep",
+    "blob_sha": "47983dd3d83793f0ecca6fb1de4da564c7ec1a41",
+    "ecosystem": "npm",
+    "bytes": 399,
+    "names": [
+     "@fastify/static",
+     "fastify",
+     "postgres"
+    ],
+    "dev": [
+     "@types/node",
+     "tsx",
+     "typescript"
+    ]
+   },
+   {
+    "path": "examples/benchmark-explorer/web/package.json",
+    "kind": "dep",
+    "blob_sha": "5ccaff4130a5f71ea3ca8d958592024dc58a498c",
+    "ecosystem": "npm",
+    "bytes": 473,
+    "names": [
+     "@tanstack/react-query",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "typescript",
+     "vite"
+    ]
+   },
+   {
+    "path": "crates/applications/console/web/package.json",
+    "kind": "dep",
+    "blob_sha": "d3bfeae1be01a373de7793ff820c61f048f5efc1",
+    "ecosystem": "npm",
+    "bytes": 642,
+    "names": [
+     "@tanstack/react-router",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@tailwindcss/vite",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "tailwindcss",
+     "typescript",
+     "vite"
+    ]
+   },
+   {
     "path": "crates/applications/proxy/Dockerfile",
     "kind": "image",
     "blob_sha": "6a5b7d45c66a5d9482db521adc39c3c8b2a9e563",
@@ -8130,6 +8368,10 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "crates/adapters/db-providers/src/clickhouse.rs",
+    "crates/adapters/db-providers/src/mysql.rs",
+    "crates/adapters/db-providers/src/postgresql.rs",
+    "crates/adapters/db-providers/src/sqlite.rs",
     "crates/adapters/compute-docker/Cargo.toml",
     "crates/adapters/compute-kubernetes/Cargo.toml",
     "crates/adapters/db-providers/Cargo.toml",
@@ -8143,13 +8385,9 @@
     "crates/adapters/compute-docker/tests/query_in_instance_it.rs",
     "crates/adapters/compute-kubernetes/src/checkout.rs",
     "crates/adapters/compute-kubernetes/src/lib.rs",
-    "crates/adapters/db-providers/src/clickhouse.rs",
     "crates/adapters/db-providers/src/clone_bootstrap.sql",
     "crates/adapters/db-providers/src/detach_remote.sql",
     "crates/adapters/db-providers/src/lib.rs",
-    "crates/adapters/db-providers/src/mysql.rs",
-    "crates/adapters/db-providers/src/postgresql.rs",
-    "crates/adapters/db-providers/src/sqlite.rs",
     "crates/adapters/storage-apfs/src/error.rs",
     "crates/adapters/storage-apfs/src/lib.rs",
     "crates/adapters/storage-btrfs/src/lib.rs",
@@ -8544,13 +8782,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:45:27Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:38:47Z",
   "default_branch": "main",
   "pushed_at": "2023-03-14",
   "stars": 126,
   "tree": {
    "sha": "966fd63fea6df5913aba340f5d6c580691e87dae",
-   "etag": "W/\"877e09160c512223b82dca17bf7684a72898101b8143c86aa50e38ab3a6b171d\"",
+   "etag": "W/\"faf93ff2e9c0eea291a5f8533bfde5cd7bb424c68e20b4b47dd8105d0aaa283b\"",
    "truncated": false,
    "path_count": 202,
    "matched": [
@@ -9502,13 +9741,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:17:45Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:55:41Z",
   "default_branch": "master",
   "pushed_at": "2023-11-15",
   "stars": 49,
   "tree": {
    "sha": "4da62cfa6c7c9a05fb61d60355c0e1d0b5ff9ef0",
-   "etag": "W/\"812adcff1972deb380559e7dbfcadcfae56a782d5e600429bebd6e2d50c8cf6f\"",
+   "etag": "W/\"27867a01f2adcb20b2220877b5d449ef6786913c011be8456118e4dc48693dd8\"",
    "truncated": false,
    "path_count": 245,
    "matched": []
@@ -9558,7 +9798,90 @@
     "source/hunt/database/driver/postgresql/impl/PostgreSQLConnectionUriParser.d",
     "source/hunt/database/driver/postgresql/impl/PostgreSQLPoolImpl.d",
     "source/hunt/database/driver/postgresql/impl/PostgreSQLRowImpl.d",
-    "source/hunt/database/driver/postgresql/impl/PostgreSQLSocketConnection.d"
+    "source/hunt/database/driver/postgresql/impl/PostgreSQLSocketConnection.d",
+    "source/hunt/database/driver/postgresql/impl/package.d",
+    "source/hunt/database/driver/postgresql/pubsub/PostgreSQLChannel.d",
+    "source/hunt/database/driver/postgresql/pubsub/PostgreSQLSubscriber.d",
+    "source/hunt/database/driver/mysql/impl/codec/CapabilitiesFlag.d",
+    "source/hunt/database/driver/mysql/impl/codec/ChangeUserCommandCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/CloseConnectionCommandCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/CloseStatementCommandCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/ColumnDefinition.d",
+    "source/hunt/database/driver/mysql/impl/codec/CommandCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/CommandType.d",
+    "source/hunt/database/driver/mysql/impl/codec/DataFormat.d",
+    "source/hunt/database/driver/mysql/impl/codec/DataType.d",
+    "source/hunt/database/driver/mysql/impl/codec/DataTypeCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/DataTypeDesc.d",
+    "source/hunt/database/driver/mysql/impl/codec/DebugCommandCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/ExtendedBatchQueryCommandCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/ExtendedQueryCommandBaseCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/ExtendedQueryCommandCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/HandshakeResponse.d",
+    "source/hunt/database/driver/mysql/impl/codec/InitCommandCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/InitDbCommandCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/InitialHandshakePacket.d",
+    "source/hunt/database/driver/mysql/impl/codec/MySQLCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/MySQLDecoder.d",
+    "source/hunt/database/driver/mysql/impl/codec/MySQLEncoder.d",
+    "source/hunt/database/driver/mysql/impl/codec/MySQLParamDesc.d",
+    "source/hunt/database/driver/mysql/impl/codec/MySQLPreparedStatement.d",
+    "source/hunt/database/driver/mysql/impl/codec/MySQLRowDesc.d",
+    "source/hunt/database/driver/mysql/impl/codec/Packets.d",
+    "source/hunt/database/driver/mysql/impl/codec/PingCommandCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/PrepareStatementCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/QueryCommandBaseCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/ResetConnectionCommandCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/ResetStatementCommandCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/RowResultDecoder.d",
+    "source/hunt/database/driver/mysql/impl/codec/SetOptionCommandCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/SimpleQueryCommandCodec.d",
+    "source/hunt/database/driver/mysql/impl/codec/StatisticsCommandCodec.d",
+    "source/hunt/database/driver/mysql/impl/command/ChangeUserCommand.d",
+    "source/hunt/database/driver/mysql/impl/command/DebugCommand.d",
+    "source/hunt/database/driver/mysql/impl/command/InitDbCommand.d",
+    "source/hunt/database/driver/mysql/impl/command/PingCommand.d",
+    "source/hunt/database/driver/mysql/impl/command/ResetConnectionCommand.d",
+    "source/hunt/database/driver/mysql/impl/command/SetOptionCommand.d",
+    "source/hunt/database/driver/mysql/impl/command/StatisticsCommand.d",
+    "source/hunt/database/driver/mysql/impl/util/BufferUtils.d",
+    "source/hunt/database/driver/mysql/impl/util/Native41Authenticator.d",
+    "source/hunt/database/driver/postgresql/impl/codec/Bind.d",
+    "source/hunt/database/driver/postgresql/impl/codec/CloseConnectionCommandCodec.d",
+    "source/hunt/database/driver/postgresql/impl/codec/ClosePortalCommandCodec.d",
+    "source/hunt/database/driver/postgresql/impl/codec/CloseStatementCommandCodec.d",
+    "source/hunt/database/driver/postgresql/impl/codec/CommandCodec.d",
+    "source/hunt/database/driver/postgresql/impl/codec/DataFormat.d",
+    "source/hunt/database/driver/postgresql/impl/codec/DataType.d",
+    "source/hunt/database/driver/postgresql/impl/codec/DataTypeCodec.d",
+    "source/hunt/database/driver/postgresql/impl/codec/DataTypeDesc.d",
+    "source/hunt/database/driver/postgresql/impl/codec/Describe.d",
+    "source/hunt/database/driver/postgresql/impl/codec/ErrorResponse.d",
+    "source/hunt/database/driver/postgresql/impl/codec/ExtendedBatchQueryCommandCodec.d",
+    "source/hunt/database/driver/postgresql/impl/codec/ExtendedQueryCommandBaseCodec.d",
+    "source/hunt/database/driver/postgresql/impl/codec/ExtendedQueryCommandCodec.d",
+    "source/hunt/database/driver/postgresql/impl/codec/InitCommandCodec.d",
+    "source/hunt/database/driver/postgresql/impl/codec/NoticeResponse.d",
+    "source/hunt/database/driver/postgresql/impl/codec/Parse.d",
+    "source/hunt/database/driver/postgresql/impl/codec/PasswordMessage.d",
+    "source/hunt/database/driver/postgresql/impl/codec/PgCodec.d",
+    "source/hunt/database/driver/postgresql/impl/codec/PgColumnDesc.d",
+    "source/hunt/database/driver/postgresql/impl/codec/PgDecoder.d",
+    "source/hunt/database/driver/postgresql/impl/codec/PgEncoder.d",
+    "source/hunt/database/driver/postgresql/impl/codec/PgParamDesc.d",
+    "source/hunt/database/driver/postgresql/impl/codec/PgPreparedStatement.d",
+    "source/hunt/database/driver/postgresql/impl/codec/PgProtocolConstants.d",
+    "source/hunt/database/driver/postgresql/impl/codec/PgRowDesc.d",
+    "source/hunt/database/driver/postgresql/impl/codec/PrepareStatementCommandCodec.d",
+    "source/hunt/database/driver/postgresql/impl/codec/Query.d",
+    "source/hunt/database/driver/postgresql/impl/codec/QueryCommandBaseCodec.d",
+    "source/hunt/database/driver/postgresql/impl/codec/Response.d",
+    "source/hunt/database/driver/postgresql/impl/codec/RowResultDecoder.d",
+    "source/hunt/database/driver/postgresql/impl/codec/SimpleQueryCommandCodec.d",
+    "source/hunt/database/driver/postgresql/impl/codec/StartupMessage.d",
+    "source/hunt/database/driver/postgresql/impl/pubsub/PostgreSQLSubscriberImpl.d",
+    "source/hunt/database/driver/postgresql/impl/util/MD5Authentication.d",
+    "source/hunt/database/driver/postgresql/impl/util/UTF8StringEndDetector.d"
    ]
   },
   "fail_count": 0
@@ -9730,14 +10053,15 @@
   "fn": "yippeesoft/NotifyTools",
   "v": 1,
   "epoch": "sweep-1",
-  "status": "ok",
-  "collected_at": "2026-10-31T06:41:33Z",
+  "status": "partial",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:58:51Z",
   "default_branch": "master",
   "pushed_at": "2023-08-11",
   "stars": 41,
   "tree": {
    "sha": "57b52ced667797267690264751084cc575b426e6",
-   "etag": "W/\"2b5f5fa2e3de1b925c6588d8284d8b5379bc83948a811bc78377b9a85a3e27a3\"",
+   "etag": "W/\"d885d9cf23d6bf9614ce5bcf96cab35911448359a981ce718daa80094a6e7c46\"",
    "truncated": false,
    "path_count": 2510,
    "matched": [
@@ -9752,7 +10076,38 @@
     "chinesecalendar/build.gradle",
     "face-detection/build.gradle",
     "fridaHookTest/build.gradle",
-    "java_js_2screen/build.gradle"
+    "java_js_2screen/build.gradle",
+    "javatest/build.gradle",
+    "3guoheros/3gyjz-android/build.gradle",
+    "PeterCxy-Shelter/app/build.gradle",
+    "WifiAdb1/app/build.gradle",
+    "face-detection/OpenCVLibrary340/build.gradle",
+    "face-detection/OpenCVSamplefacedetection/build.gradle",
+    "face-detection/opencvjni/build.gradle",
+    "fridaHookTest/app/build.gradle",
+    "javatest/c10test/build.gradle",
+    "javatest/mongodbTest/build.gradle",
+    "javatest/sm34/pom.xml",
+    "nodejs/TsDev/package.json",
+    "nodejs/iptools/package.json",
+    "nodejs/mpvue-screen/package.json",
+    "3guoheros/3gyjz-android/app/build.gradle",
+    "cplussharp/callback/CsharpDll4Mfc/CsharpDll4Mfc.csproj",
+    "cplussharp/callback/callback/CsharpCallMfcDll.csproj",
+    "cplussharp/fluttertest/android/build.gradle",
+    "ideaJava/flutter_app1/android/build.gradle",
+    "nodejs/node-n-api/hello/package.json",
+    "third/ChineseCalendar-c#/ConsoleApplication1/ConsoleApplication1.csproj",
+    "cplussharp/fluttertest/android/app/build.gradle",
+    "cplussharp/vscode/gotest/godemo/go.mod",
+    "cplussharp/vscode/rusttest/autocxxtest/Cargo.toml",
+    "cplussharp/vscode/rusttest/bindgentest/Cargo.toml",
+    "cplussharp/vscode/rusttest/greeting/Cargo.toml",
+    "cplussharp/vscode/rusttest/ncnntengine2rs/Cargo.toml",
+    "ideaJava/flutter_app1/android/app/build.gradle",
+    "nodejs/iptools/src/httsrv/package.json",
+    "imguieditor/imgui-1.89.5/examples/example_android_opengl3/android/build.gradle",
+    "imguieditor/imgui-1.89.5/examples/example_android_opengl3/android/app/build.gradle"
    ]
   },
   "files": [
@@ -9839,6 +10194,362 @@
     "blob_sha": "c83e79670a4ddb3f82a4ece57abeacc96a1ff84d",
     "ecosystem": "gradle",
     "bytes": 1323
+   },
+   {
+    "path": "javatest/build.gradle",
+    "kind": "dep",
+    "blob_sha": "0edd56d2fb258e5d7eaa9f5e20d345877c5e9808",
+    "ecosystem": "gradle",
+    "bytes": 1333
+   },
+   {
+    "path": "3guoheros/3gyjz-android/build.gradle",
+    "kind": "dep",
+    "blob_sha": "b905d0fa3fc452f75876284db8c17d0c96e5ea19",
+    "ecosystem": "gradle",
+    "bytes": 695
+   },
+   {
+    "path": "PeterCxy-Shelter/app/build.gradle",
+    "kind": "dep",
+    "blob_sha": "a8b01616cfb956a09f40943ff7b4ece97be94be2",
+    "ecosystem": "gradle",
+    "bytes": 1830,
+    "names": [
+     "androidx.legacy:legacy-support-core-ui",
+     "androidx.fragment:fragment",
+     "androidx.appcompat:appcompat",
+     "androidx.preference:preference",
+     "androidx.constraintlayout:constraintlayout",
+     "com.google.android.material:material",
+     "androidx.localbroadcastmanager:localbroadcastmanager",
+     "mobi.upod:time-duration-picker",
+     "com.google.code.gson:gson"
+    ],
+    "dev": [
+     "junit:junit"
+    ]
+   },
+   {
+    "path": "WifiAdb1/app/build.gradle",
+    "kind": "dep",
+    "blob_sha": "0327373a6ae8cb378dbed3141b947ba93b7231a2",
+    "ecosystem": "gradle",
+    "bytes": 481
+   },
+   {
+    "path": "face-detection/OpenCVLibrary340/build.gradle",
+    "kind": "dep",
+    "blob_sha": "3faffaba3dbae4fa6b414a3610114eb7eb63d7c5",
+    "ecosystem": "gradle",
+    "bytes": 381
+   },
+   {
+    "path": "face-detection/OpenCVSamplefacedetection/build.gradle",
+    "kind": "dep",
+    "blob_sha": "5f03e4bffca614f8dc1f511c655ddfbd621964d0",
+    "ecosystem": "gradle",
+    "bytes": 1829
+   },
+   {
+    "path": "face-detection/opencvjni/build.gradle",
+    "kind": "dep",
+    "blob_sha": "6318fa5195731daf1e618efcee56df82bba724ec",
+    "ecosystem": "gradle",
+    "bytes": 851
+   },
+   {
+    "path": "fridaHookTest/app/build.gradle",
+    "kind": "dep",
+    "blob_sha": "7e3db38bd9ab334a977a72179dda952bd3a27157",
+    "ecosystem": "gradle",
+    "bytes": 1971,
+    "names": [
+     "com.android.support:appcompat-v7",
+     "com.android.support:design",
+     "com.android.support.constraint:constraint-layout",
+     "android.arch.navigation:navigation-fragment",
+     "android.arch.navigation:navigation-ui",
+     "de.robv.android.xposed:api"
+    ],
+    "dev": [
+     "junit:junit"
+    ]
+   },
+   {
+    "path": "javatest/c10test/build.gradle",
+    "kind": "dep",
+    "blob_sha": "0af38c17f938531c15a7d7c10e7616c80d214b2b",
+    "ecosystem": "gradle",
+    "bytes": 520,
+    "names": [
+     "io.netty:netty-all"
+    ]
+   },
+   {
+    "path": "javatest/mongodbTest/build.gradle",
+    "kind": "dep",
+    "blob_sha": "e6dff413287fc192b08a8b6dc352c300973d8914",
+    "ecosystem": "gradle",
+    "bytes": 552,
+    "names": [
+     "com.google.code.gson:gson",
+     "org.mongodb:mongodb-driver-sync",
+     "org.mongodb:mongodb-driver-reactivestreams"
+    ]
+   },
+   {
+    "path": "javatest/sm34/pom.xml",
+    "kind": "dep",
+    "blob_sha": "9c59ff4e7c029e82fec32c7e7f3a7683864d02c3",
+    "ecosystem": "maven",
+    "bytes": 1342,
+    "names": [
+     "com.google.code.gson:gson",
+     "junit:junit",
+     "org.bouncycastle:bcpkix-jdk15on",
+     "commons-codec:commons-codec"
+    ]
+   },
+   {
+    "path": "nodejs/TsDev/package.json",
+    "kind": "dep",
+    "blob_sha": "0cf079c4725c38285f669e6c81cbdd867107ebd3",
+    "ecosystem": "npm",
+    "bytes": 302,
+    "names": [
+     "flyio",
+     "ts-node",
+     "typescript"
+    ]
+   },
+   {
+    "path": "nodejs/iptools/package.json",
+    "kind": "dep",
+    "blob_sha": "3951653f142da200faa9f2159b41f8ab42029bf5",
+    "ecosystem": "npm",
+    "bytes": 3644
+   },
+   {
+    "path": "nodejs/mpvue-screen/package.json",
+    "kind": "dep",
+    "blob_sha": "704c39bc13d01ce1dd8cf83af4e24df44f7f02c2",
+    "ecosystem": "npm",
+    "bytes": 2402,
+    "names": [
+     "flyio",
+     "log4js",
+     "mpvue",
+     "multer",
+     "router",
+     "vue-swiper-component",
+     "vuex"
+    ],
+    "dev": [
+     "mpvue-loader",
+     "mpvue-webpack-target",
+     "mpvue-template-compiler",
+     "portfinder",
+     "postcss-mpvue-wxss",
+     "prettier",
+     "px2rpx-loader",
+     "babel-core",
+     "glob",
+     "webpack-mpvue-asset-plugin",
+     "relative",
+     "babel-loader",
+     "babel-plugin-transform-runtime",
+     "babel-preset-env",
+     "babel-preset-stage-2",
+     "babel-register",
+     "chalk",
+     "connect-history-api-fallback",
+     "copy-webpack-plugin",
+     "css-loader",
+     "cssnano",
+     "eventsource-polyfill",
+     "express",
+     "extract-text-webpack-plugin",
+     "file-loader",
+     "friendly-errors-webpack-plugin",
+     "html-webpack-plugin",
+     "http-proxy-middleware",
+     "webpack-bundle-analyzer",
+     "semver",
+     "shelljs",
+     "uglifyjs-webpack-plugin",
+     "optimize-css-assets-webpack-plugin",
+     "ora",
+     "rimraf",
+     "url-loader",
+     "vue-style-loader",
+     "webpack",
+     "webpack-dev-middleware-hard-disk",
+     "webpack-merge",
+     "postcss-loader",
+     "node-sass",
+     "sass-bem",
+     "sass-resources-loader",
+     "sass-loader"
+    ]
+   },
+   {
+    "path": "3guoheros/3gyjz-android/app/build.gradle",
+    "kind": "dep",
+    "blob_sha": "aabed196c7e814688526b7644183d6a000dc6bb6",
+    "ecosystem": "gradle",
+    "bytes": 1571,
+    "names": [
+     "com.android.support:appcompat-v7",
+     "com.android.support.constraint:constraint-layout"
+    ],
+    "dev": [
+     "junit:junit"
+    ]
+   },
+   {
+    "path": "cplussharp/callback/CsharpDll4Mfc/CsharpDll4Mfc.csproj",
+    "kind": "dep",
+    "blob_sha": "e2eac1462ae55c9221337d6ef2182bc95432e0ca",
+    "ecosystem": "csproj",
+    "bytes": 2851
+   },
+   {
+    "path": "cplussharp/callback/callback/CsharpCallMfcDll.csproj",
+    "kind": "dep",
+    "blob_sha": "3d37d31dfb1c933009e71ebb459fa01aab0230ef",
+    "ecosystem": "csproj",
+    "bytes": 3914
+   },
+   {
+    "path": "cplussharp/fluttertest/android/build.gradle",
+    "kind": "dep",
+    "blob_sha": "0bd4dfd08cbc2f8acbfbe8ae6a85781de8a6096d",
+    "ecosystem": "gradle",
+    "bytes": 630
+   },
+   {
+    "path": "ideaJava/flutter_app1/android/build.gradle",
+    "kind": "dep",
+    "blob_sha": "f4962decadc4a36f180641574a0c97b797906de4",
+    "ecosystem": "gradle",
+    "bytes": 482
+   },
+   {
+    "path": "nodejs/node-n-api/hello/package.json",
+    "kind": "dep",
+    "blob_sha": "29d123ef9785dd099121382b130e7c66eedcd0cc",
+    "ecosystem": "npm",
+    "bytes": 269,
+    "names": [
+     "bindings"
+    ]
+   },
+   {
+    "path": "third/ChineseCalendar-c#/ConsoleApplication1/ConsoleApplication1.csproj",
+    "kind": "dep",
+    "blob_sha": "d228d7747928302113ef5e9ff0325b1f93f66e68",
+    "ecosystem": "csproj",
+    "error": "404"
+   },
+   {
+    "path": "cplussharp/fluttertest/android/app/build.gradle",
+    "kind": "dep",
+    "blob_sha": "008aa1515957a8ee8002d66e06a2f465bfb33609",
+    "ecosystem": "gradle",
+    "bytes": 1836
+   },
+   {
+    "path": "cplussharp/vscode/gotest/godemo/go.mod",
+    "kind": "dep",
+    "blob_sha": "b921d06259d25a2754475e2240875aa9890cfdc3",
+    "ecosystem": "go",
+    "bytes": 33
+   },
+   {
+    "path": "cplussharp/vscode/rusttest/autocxxtest/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "db3d3debf4a4735a91bc714cf4fa7fa4ad641169",
+    "ecosystem": "cargo",
+    "bytes": 450,
+    "names": [
+     "cxx",
+     "autocxx",
+     "libc"
+    ],
+    "dev": [
+     "bindgen",
+     "autocxx-build"
+    ]
+   },
+   {
+    "path": "cplussharp/vscode/rusttest/bindgentest/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "fb1b47c17b3fd3a6d1a3a2bb5cff5eb30341189b",
+    "ecosystem": "cargo",
+    "bytes": 669,
+    "names": [
+     "json",
+     "pretty_env_logger",
+     "libc"
+    ],
+    "dev": [
+     "bindgen"
+    ]
+   },
+   {
+    "path": "cplussharp/vscode/rusttest/greeting/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "d02a1af075bd1d1f6bc0d010671bed1bd99e793c",
+    "ecosystem": "cargo",
+    "bytes": 757,
+    "names": [
+     "json",
+     "pretty_env_logger",
+     "libc",
+     "opencv"
+    ]
+   },
+   {
+    "path": "cplussharp/vscode/rusttest/ncnntengine2rs/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "1e16b7da9fd2b50bad867f4bbfc4ebe1b32ff9a4",
+    "ecosystem": "cargo",
+    "bytes": 291,
+    "dev": [
+     "bindgen"
+    ]
+   },
+   {
+    "path": "ideaJava/flutter_app1/android/app/build.gradle",
+    "kind": "dep",
+    "blob_sha": "acd8d1aa50ec00ec9807ede599e0422853f45c69",
+    "ecosystem": "gradle",
+    "bytes": 1619
+   },
+   {
+    "path": "nodejs/iptools/src/httsrv/package.json",
+    "kind": "dep",
+    "blob_sha": "b41243c6aa333d79317bbcff431c6034550364a0",
+    "ecosystem": "npm",
+    "bytes": 202
+   },
+   {
+    "path": "imguieditor/imgui-1.89.5/examples/example_android_opengl3/android/build.gradle",
+    "kind": "dep",
+    "blob_sha": "ccd218524cb4b9779d885a0052c13c675992c9c9",
+    "ecosystem": "gradle",
+    "bytes": 420
+   },
+   {
+    "path": "imguieditor/imgui-1.89.5/examples/example_android_opengl3/android/app/build.gradle",
+    "kind": "dep",
+    "blob_sha": "53181baa215763963efe32a0c3d3cad8e465eb67",
+    "ecosystem": "gradle",
+    "bytes": 990,
+    "names": [
+     "org.jetbrains.kotlin:kotlin-stdlib-jdk7"
+    ]
    }
   ],
   "clues": {
@@ -9856,7 +10567,12 @@
     "china-poem/src/main/java/org/github/yippee/china_poem/view/PoemDetailAdapter.java"
    ]
   },
-  "fail_count": 0
+  "fail_count": 0,
+  "errors": {
+   "files": [
+    "third/ChineseCalendar-c#/ConsoleApplication1/ConsoleApplication1.csproj:404"
+   ]
+  }
  },
  "vincent-queimado/express-prisma-ts-boilerplate": {
   "fn": "vincent-queimado/express-prisma-ts-boilerplate",
@@ -11699,15 +12415,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T09:04:56Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:22:38Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 17,
   "tree": {
-   "sha": "4c4e81fba1ac897a5aeb84b8583523aaded4d6ed",
-   "etag": "W/\"2dd7209964be203589d8d095cf4122fde6dd6255c406f424e11e130614fba1df\"",
+   "sha": "f1280ae5c0c1815f38687e6b601be174e4d3b55f",
+   "etag": "W/\"65dd718ca8d314596afc6303ad11d1791849903efe5992bc5bb76149ee7f3f85\"",
    "truncated": false,
-   "path_count": 3606,
+   "path_count": 3625,
    "matched": [
     "package.json",
     "tests/package.json",
@@ -11850,7 +12567,24 @@
     "erp/tests/witness_plugin_sqlfn.js",
     "erp/tests/witness_ws_plugin.js",
     "modeller/tests/witness_gridmove_adapter_fakes.js",
-    "prompts/mfg/HOST_PLUGIN_LIFECYCLE_SPEC.md"
+    "prompts/mfg/HOST_PLUGIN_LIFECYCLE_SPEC.md",
+    "prompts/mfg/PLUGIN_ARCHITECTURE.md",
+    "teams/tests/poc_teams_connectors_live.js",
+    "erp/plugins/libero_2pack/2Pack_1.0.0.zip",
+    "erp/plugins/libero_2pack/2Pack_1.0.1.zip",
+    "erp/plugins/libero_2pack/2Pack_1.0.2.zip",
+    "erp/plugins/libero_2pack/2Pack_1.0.3.zip",
+    "prompts/mfg/logs/final_poc_plugin_hydrate_live.log",
+    "prompts/mfg/logs/final_poc_plugin_lazy_live.log",
+    "prompts/mfg/logs/final_poc_plugin_release_live.log",
+    "prompts/mfg/logs/h1_plugin_release_live.log",
+    "prompts/mfg/logs/h1_plugin_release_live_BASELINE.log",
+    "prompts/mfg/logs/h2_plugin_release_live_updated.log",
+    "prompts/mfg/logs/w_plugin_lifecycle_eagerlazy.log",
+    "prompts/mfg/logs/w_plugin_lifecycle_green.log",
+    "prompts/mfg/logs/w_plugin_lifecycle_green2.log",
+    "prompts/mfg/logs/w_plugin_lifecycle_merge.log",
+    "prompts/mfg/logs/w_plugin_lifecycle_noundo.log"
    ]
   },
   "fail_count": 0
@@ -12078,15 +12812,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T09:10:58Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:23:28Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-28",
+  "pushed_at": "2026-10-31",
   "stars": 16,
   "tree": {
-   "sha": "d7c33ce361174230f4a47a1f1c295ed5d9001ed6",
-   "etag": "W/\"d1a2ea31e4d539c7d32a1152af870b28867c82d2981cf15406b04b5f3fa82b81\"",
+   "sha": "a823ba7d22becff19c920e39f1911900deeb32e1",
+   "etag": "W/\"e7fb2b25792c4acd34bfabf55ecf41888fff3d6e740cfb069bd1239d7264937a\"",
    "truncated": false,
-   "path_count": 2932,
+   "path_count": 3082,
    "matched": [
     "composer.json",
     "package.json",
@@ -12148,9 +12883,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "f7a7a565bc15be5091d62a5fb56fdd37405eea49",
+    "blob_sha": "b0f366ab26a826ed3241d965b90fd3fb5d0a2254",
     "ecosystem": "npm",
-    "bytes": 3360,
+    "bytes": 3393,
     "names": [
      "@atlaskit/pragmatic-drag-and-drop",
      "@iconify-json/lucide",
@@ -12186,6 +12921,7 @@
      "dayjs",
      "diff",
      "dompurify",
+     "html-to-image",
      "laravel-echo",
      "leaflet",
      "marked",
@@ -12317,7 +13053,50 @@
     "app/Http/Controllers/Mgmt/FieldPluginController.php",
     "app/Http/Controllers/Mgmt/FieldPluginSandboxController.php",
     "app/Http/Filters/Mgmt/FieldPluginFilter.php",
-    "app/Http/Requests/Space/CreateFieldPluginRequest.php"
+    "app/Http/Requests/Space/CreateFieldPluginRequest.php",
+    "app/Http/Requests/Space/UpdateFieldPluginRequest.php",
+    "app/Http/Resources/Management/FieldPluginResource.php",
+    "app/Services/Ai/Concerns/InteractsWithAiDriver.php",
+    "app/Services/Ai/Contracts/AiDriverInterface.php",
+    "app/Services/Ai/Drivers/BaseAiDriver.php",
+    "app/Services/Ai/Drivers/BedrockDriver.php",
+    "app/Services/Ai/Drivers/OpenAiDriver.php",
+    "app/Services/Ai/Drivers/OpenRouterDriver.php",
+    "app/Services/Ai/Drivers/StreamsOpenAiTurns.php",
+    "app/Services/AssetData/Drivers/BaseAssetDataDriver.php",
+    "app/Services/AssetData/Drivers/CsvAssetDataDriver.php",
+    "app/Services/AssetData/Drivers/ExcelAssetDataDriver.php",
+    "app/Services/AssetData/Drivers/JsonAssetDataDriver.php",
+    "app/Services/AssetData/Drivers/XliffAssetDataDriver.php",
+    "app/Services/AssetData/Drivers/YamlAssetDataDriver.php",
+    "app/Services/ContentData/Drivers/BaseContentDataDriver.php",
+    "app/Services/ContentData/Drivers/CsvContentDataDriver.php",
+    "app/Services/ContentData/Drivers/ExcelContentDataDriver.php",
+    "app/Services/ContentData/Drivers/JsonContentDataDriver.php",
+    "app/Services/ContentData/Drivers/XliffContentDataDriver.php",
+    "app/Services/ContentData/Drivers/YamlContentDataDriver.php",
+    "app/Services/DataEntryData/Drivers/BaseDataEntryDataDriver.php",
+    "app/Services/DataEntryData/Drivers/CsvDataEntryDataDriver.php",
+    "app/Services/DataEntryData/Drivers/ExcelDataEntryDataDriver.php",
+    "app/Services/DataEntryData/Drivers/JsonDataEntryDataDriver.php",
+    "app/Services/DataEntryData/Drivers/YamlDataEntryDataDriver.php",
+    "app/Services/Image/Drivers/ImagickDriver.php",
+    "app/Services/Image/Drivers/VipsDriver.php",
+    "app/Services/RedirectData/Drivers/BaseRedirectDataDriver.php",
+    "app/Services/RedirectData/Drivers/CsvRedirectDataDriver.php",
+    "app/Services/RedirectData/Drivers/ExcelRedirectDataDriver.php",
+    "app/Services/RedirectData/Drivers/JsonRedirectDataDriver.php",
+    "app/Services/RedirectData/Drivers/YamlRedirectDataDriver.php",
+    "resources/js/api/resources/field-plugins.ts",
+    "resources/js/components/blocks/PluginBlock.vue",
+    "resources/js/components/content-wizard/ContentWizardConnectorLayer.vue",
+    "resources/js/components/editor/PluginBlock.vue",
+    "tests/Feature/Mgmt/Content/PluginFieldValidationTest.php",
+    "tests/Feature/Services/ImportExport/RecordImportDriverTest.php",
+    "tests/Unit/Services/Ai/DriverMessageNormalizationTest.php",
+    "tests/Unit/Services/ContentData/CsvContentDataDriverTest.php",
+    "tests/Unit/Services/Search/OpenSearchDriverTest.php",
+    "resources/js/pages/[space]/settings/plugins.vue"
    ]
   },
   "fail_count": 0
@@ -14391,6 +15170,162 @@
    "changelog": [
     "CHANGELOG.md"
    ],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "maryasov/the-brain": {
+  "fn": "maryasov/the-brain",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:49:38Z",
+  "default_branch": "main",
+  "pushed_at": "2026-09-26",
+  "stars": 3,
+  "tree": {
+   "sha": "fc094b518a7607aeef182b1e6ca37b7d3eff9e5a",
+   "etag": "W/\"85b0a41d42d677f771f44ae7a5ed4d70512d7001ea7847f3d12e48d4bb1a11c4\"",
+   "truncated": false,
+   "path_count": 78,
+   "matched": [
+    "package.json",
+    "apps/desktop/package.json",
+    "packages/api/package.json",
+    "packages/core/package.json",
+    "packages/db/package.json",
+    "packages/mcp/package.json",
+    "packages/shared/package.json"
+   ]
+  },
+  "files": [
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "3e89de9ea23e229f0fcce8253c010fa50d691120",
+    "ecosystem": "npm",
+    "bytes": 1009,
+    "dev": [
+     "@types/node",
+     "eslint",
+     "prettier",
+     "typescript",
+     "typescript-eslint",
+     "vitest"
+    ]
+   },
+   {
+    "path": "apps/desktop/package.json",
+    "kind": "dep",
+    "blob_sha": "ac23717120f808a09db525b76596ba437651b571",
+    "ecosystem": "npm",
+    "bytes": 1278,
+    "names": [
+     "@the-brain/core",
+     "@the-brain/db",
+     "@the-brain/shared",
+     "better-sqlite3",
+     "zustand"
+    ],
+    "dev": [
+     "@electron/rebuild",
+     "@types/better-sqlite3",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "electron",
+     "electron-builder",
+     "electron-vite",
+     "react",
+     "react-dom",
+     "typescript",
+     "vitest",
+     "vite"
+    ]
+   },
+   {
+    "path": "packages/api/package.json",
+    "kind": "dep",
+    "blob_sha": "12e72f0c10a023a870357d82ffb72d360a75ca82",
+    "ecosystem": "npm",
+    "bytes": 551,
+    "names": [
+     "@the-brain/core",
+     "@the-brain/db",
+     "@the-brain/shared"
+    ],
+    "dev": [
+     "@types/node",
+     "tsx",
+     "typescript"
+    ]
+   },
+   {
+    "path": "packages/core/package.json",
+    "kind": "dep",
+    "blob_sha": "a0a9c525416122edec7d45bed5048d68d2f19ec7",
+    "ecosystem": "npm",
+    "bytes": 417,
+    "names": [
+     "@the-brain/shared"
+    ],
+    "dev": [
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/db/package.json",
+    "kind": "dep",
+    "blob_sha": "db8671e2cb3ecefeb57beeab4e7d6dfa69aeae1f",
+    "ecosystem": "npm",
+    "bytes": 652,
+    "names": [
+     "@the-brain/core",
+     "@the-brain/shared",
+     "better-sqlite3"
+    ],
+    "dev": [
+     "@types/better-sqlite3",
+     "@types/node",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/mcp/package.json",
+    "kind": "dep",
+    "blob_sha": "ceca0db68d282bd2759481a0f9ac0e81cf007b80",
+    "ecosystem": "npm",
+    "bytes": 595,
+    "names": [
+     "@modelcontextprotocol/sdk",
+     "@the-brain/core",
+     "@the-brain/db",
+     "@the-brain/shared"
+    ],
+    "dev": [
+     "@types/node",
+     "tsx",
+     "typescript"
+    ]
+   },
+   {
+    "path": "packages/shared/package.json",
+    "kind": "dep",
+    "blob_sha": "a67eb0d1d0e89401e53f0703cee9b55c31b380a8",
+    "ecosystem": "npm",
+    "bytes": 305,
+    "dev": [
+     "typescript"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": []

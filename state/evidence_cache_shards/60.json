@@ -13045,13 +13045,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:36:15Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:36:08Z",
   "default_branch": "master",
   "pushed_at": "2022-01-13",
   "stars": 147,
   "tree": {
    "sha": "88bcb1f635f0c36df7d2f89f1b6adb282c13d3b9",
-   "etag": "W/\"7cc9364b9673c9fdb5f042da581b1285d1574983b8254da4a3657d5edc22bcf9\"",
+   "etag": "W/\"b90462ba1011cb04b48a80c6bd4bb8208e0413c75d38bd16292d9f6f8a5bd5b7\"",
    "truncated": false,
    "path_count": 176,
    "matched": [
@@ -13066,7 +13067,9 @@
     "bin-log-distributor-frontend/package.json",
     "bin-log-distributor-param/pom.xml",
     "bin-log-distributor-pub-kafka/pom.xml",
-    "bin-log-distributor-pub-rabbitmq/pom.xml"
+    "bin-log-distributor-pub-rabbitmq/pom.xml",
+    "bin-log-distributor-pub-redis/pom.xml",
+    "bin-log-distributor-pub/pom.xml"
    ]
   },
   "files": [
@@ -13262,6 +13265,30 @@
      "org.springframework.boot:spring-boot-starter-amqp",
      "cn.keking.project:bin-log-distributor-param"
     ]
+   },
+   {
+    "path": "bin-log-distributor-pub-redis/pom.xml",
+    "kind": "dep",
+    "blob_sha": "30467e95ec20c7f01f9dcdd65a1fd096f7ba6dc0",
+    "ecosystem": "maven",
+    "bytes": 1105,
+    "names": [
+     "org.redisson:redisson",
+     "cn.keking.project:bin-log-distributor-param"
+    ]
+   },
+   {
+    "path": "bin-log-distributor-pub/pom.xml",
+    "kind": "dep",
+    "blob_sha": "1b72ed99650854bd0ea03e31791db246fac8e730",
+    "ecosystem": "maven",
+    "bytes": 1525,
+    "names": [
+     "cn.keking.project:bin-log-distributor-param",
+     "cn.keking.project:bin-log-distributor-pub-redis",
+     "cn.keking.project:bin-log-distributor-pub-rabbitmq",
+     "cn.keking.project:bin-log-distributor-pub-kafka"
+    ]
    }
   ],
   "clues": {
@@ -13326,15 +13353,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:40:00Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:37:12Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 137,
   "tree": {
-   "sha": "fba253a2b8a1274f2131ec8f9f04c721cf1a740b",
-   "etag": "W/\"268f32a7456b456d36b5fa3e37f7c6e9de954d880b8ea13b490d0457cad7cc52\"",
+   "sha": "acb2e61e6ae7727326eccf9264667600e43ecf0a",
+   "etag": "W/\"797c321cf7b1f88a471301985f65e8a0ac522d25767fe81c46aa1ca1bfa8a5f7\"",
    "truncated": false,
-   "path_count": 1439,
+   "path_count": 1441,
    "matched": [
     "nodyx-authenticator/package.json",
     "nodyx-core/package.json",
@@ -13348,6 +13376,9 @@
     "nodyx-p2p/crates/nexus-turn/Cargo.toml",
     "nodyx-p2p/crates/nodyx-gossip/Cargo.toml",
     "nodyx-p2p/crates/nodyx-server/Cargo.toml",
+    "nodyx-p2p/crates/nodyx-sfu-mediasoup/Cargo.toml",
+    "nodyx-p2p/crates/nodyx-sfu-str0m/Cargo.toml",
+    "nodyx-p2p/crates/nodyx-sfu/Cargo.toml",
     "docker-compose.yml",
     "nodyx-core/Dockerfile",
     "nodyx-frontend/Dockerfile",
@@ -13457,9 +13488,9 @@
    {
     "path": "nodyx-frontend/package.json",
     "kind": "dep",
-    "blob_sha": "f39f68f9f12ed82b46713ad3fecdee6a64736199",
+    "blob_sha": "8d5166be31b7a591762e5fa8e2abbde4a0e180d3",
     "ecosystem": "npm",
-    "bytes": 3004,
+    "bytes": 2983,
     "names": [
      "@iconify/svelte",
      "@jitsi/rnnoise-wasm",
@@ -13681,6 +13712,46 @@
     ]
    },
    {
+    "path": "nodyx-p2p/crates/nodyx-sfu-mediasoup/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "a7a0bb937449922bbe2a0e08071a5f1d163eb820",
+    "ecosystem": "cargo",
+    "bytes": 846,
+    "names": [
+     "nodyx-sfu",
+     "mediasoup",
+     "tokio",
+     "serde",
+     "serde_json"
+    ]
+   },
+   {
+    "path": "nodyx-p2p/crates/nodyx-sfu-str0m/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "38ab261536cc874e7b7cec823f29b3e7159188fb",
+    "ecosystem": "cargo",
+    "bytes": 832,
+    "names": [
+     "nodyx-sfu",
+     "str0m",
+     "tokio",
+     "serde",
+     "serde_json",
+     "tracing",
+     "tracing-subscriber",
+     "clap",
+     "anyhow",
+     "rand"
+    ]
+   },
+   {
+    "path": "nodyx-p2p/crates/nodyx-sfu/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "aa8938350f2abc59d373e9224fe3e6c598141199",
+    "ecosystem": "cargo",
+    "bytes": 628
+   },
+   {
     "path": "docker-compose.yml",
     "kind": "image",
     "blob_sha": "12c0fa2603b47b2ee8529b8a1052479992026e31",
@@ -13838,13 +13909,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:43:49Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:38:22Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 129,
   "tree": {
    "sha": "bb38caa47697711f6807ffdfb9e2ca733be5d2a2",
-   "etag": "W/\"96adb2e42e8cd43ecaea1c70cee00547b526bc34c40afb06f2be881c1c1357be\"",
+   "etag": "W/\"32343384aef2d07ca90fb49917baad43f900302a8282974379429fe2bb6bd542\"",
    "truncated": false,
    "path_count": 1378,
    "matched": [
@@ -14157,15 +14229,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:45:11Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:38:09Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 130,
   "tree": {
-   "sha": "731719d3cb7bad4515f2209447dc4cf13143dc37",
-   "etag": "W/\"3f428bc4e7f0b651a35cc56336e023eb4387340e3af4894635e3d1eef372c422\"",
+   "sha": "3fd9d3e7c43d5081e95d4921bcd4cb5a0489299a",
+   "etag": "W/\"fa9be3b1dabe45abdcd6e368c475f7db1d9dfc6a189778effb8d1c26efb880fb\"",
    "truncated": false,
-   "path_count": 1569,
+   "path_count": 1593,
    "matched": [
     "package.json",
     ".mcp/package.json",
@@ -14191,7 +14264,9 @@
     ".github/workflows/stale.yml",
     ".github/workflows/test-install.yml",
     ".github/workflows/theme-submission.yml",
-    ".github/workflows/traffic.yml"
+    ".github/workflows/traffic.yml",
+    ".github/workflows/ui-audit.yml",
+    ".github/workflows/validate-layouts.yml"
    ]
   },
   "files": [
@@ -14467,6 +14542,23 @@
     "kind": "ci",
     "blob_sha": "01313ceef0e4a70d1fb6cc244225096045b9f353",
     "bytes": 6000
+   },
+   {
+    "path": ".github/workflows/ui-audit.yml",
+    "kind": "ci",
+    "blob_sha": "d183205ed97cb24cbb1bc256cea1959963d456ad",
+    "bytes": 4524,
+    "images": [
+     "mcr.microsoft.com/playwright:${{",
+     "postgres:15-alpine",
+     "redis:7-alpine"
+    ]
+   },
+   {
+    "path": ".github/workflows/validate-layouts.yml",
+    "kind": "ci",
+    "blob_sha": "b5165601100631b2e8289cbc9d5d3f8300004d90",
+    "bytes": 726
    }
   ],
   "clues": {
@@ -14641,13 +14733,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T05:03:07Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:42:46Z",
   "default_branch": "main",
   "pushed_at": "2026-10-14",
   "stars": 100,
   "tree": {
    "sha": "623a8e3455df7fb9f543685faaf7106c1089cec7",
-   "etag": "W/\"54c2819577efe6ac2faf79b5a2cf8eff610aaeac4b0d939123d426b1a5676b1d\"",
+   "etag": "W/\"942357e5fb705597a8f02f82855fc9ce10d9c762e39db2017c134d03faa33d82\"",
    "truncated": false,
    "path_count": 291,
    "matched": [
@@ -14853,7 +14946,20 @@
     "tests/plugin/test_structure.py",
     "packages/opencode-plugin/commands/sugar-add.md",
     "packages/opencode-plugin/commands/sugar-context.md",
-    "packages/opencode-plugin/commands/sugar-list.md"
+    "packages/opencode-plugin/commands/sugar-list.md",
+    "packages/opencode-plugin/commands/sugar-priority.md",
+    "packages/opencode-plugin/commands/sugar-recall.md",
+    "packages/opencode-plugin/commands/sugar-remember.md",
+    "packages/opencode-plugin/commands/sugar-remove.md",
+    "packages/opencode-plugin/commands/sugar-run.md",
+    "packages/opencode-plugin/commands/sugar-status.md",
+    "packages/opencode-plugin/src/index.ts",
+    "packages/opencode-plugin/src/hooks/index.ts",
+    "packages/opencode-plugin/src/tools/index.ts",
+    "packages/opencode-plugin/src/types/index.ts",
+    "packages/opencode-plugin/src/utils/cli.ts",
+    "packages/opencode-plugin/src/utils/index.ts",
+    "packages/opencode-plugin/src/utils/logger.ts"
    ],
    "matrix_urls": [
     "https://docs.anthropic.com/en/docs/claude-code"
@@ -14900,13 +15006,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T05:18:17Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:45:55Z",
   "default_branch": "master",
   "pushed_at": "2023-12-19",
   "stars": 79,
   "tree": {
    "sha": "ff6794544cf9162d33cfce7719cfbc31ff8b4bd7",
-   "etag": "W/\"91554b6b668f899e6a8b810c67bd3c374d783f4966e5bde810b10c7e5272e290\"",
+   "etag": "W/\"3e8cf0dbf9f0095df0e1c212b304dca720c459e65a9257dc4cc4bad362577f76\"",
    "truncated": false,
    "path_count": 763,
    "matched": [
@@ -14921,7 +15028,29 @@
     "mall-security-oauth2/pom.xml",
     "mall-services-api/pom.xml",
     "mall-xxl-job/pom.xml",
-    "mall-business-modules/mall-admin/pom.xml"
+    "mall-business-modules/mall-admin/pom.xml",
+    "mall-business-modules/mall-cart/pom.xml",
+    "mall-business-modules/mall-coupon/pom.xml",
+    "mall-business-modules/mall-goods/pom.xml",
+    "mall-business-modules/mall-member/pom.xml",
+    "mall-business-modules/mall-order/pom.xml",
+    "mall-business-modules/mall-seckill/pom.xml",
+    "mall-common/mall-common-base/pom.xml",
+    "mall-common/mall-common-captcha/pom.xml",
+    "mall-common/mall-common-kafka/pom.xml",
+    "mall-common/mall-common-mysql/pom.xml",
+    "mall-common/mall-common-rabbitmq/pom.xml",
+    "mall-common/mall-common-redis/pom.xml",
+    "mall-common/mall-common-seata/pom.xml",
+    "mall-services-api/mall-admin-api/pom.xml",
+    "mall-services-api/mall-cart-api/pom.xml",
+    "mall-services-api/mall-coupon-api/pom.xml",
+    "mall-services-api/mall-goods-api/pom.xml",
+    "mall-services-api/mall-log-api/pom.xml",
+    "mall-services-api/mall-member-api/pom.xml",
+    "mall-services-api/mall-order-api/pom.xml",
+    "mall-services-api/mall-seckill-api/pom.xml",
+    "mall-services-api/mall-security-oauth2-api/pom.xml"
    ]
   },
   "files": [
@@ -15132,6 +15261,307 @@
      "com.mall.service.api:mall-order-api",
      "com.mall.service.api:mall-member-api"
     ]
+   },
+   {
+    "path": "mall-business-modules/mall-cart/pom.xml",
+    "kind": "dep",
+    "blob_sha": "caf38a79ba6785accc44cc90a58412f15d279faa",
+    "ecosystem": "maven",
+    "bytes": 4696,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "com.mall.common:mall-common-base",
+     "com.mall.service.api:mall-admin-api",
+     "com.mall.service.api:mall-goods-api",
+     "com.mall.service.api:mall-member-api",
+     "com.mall.service.api:mall-coupon-api",
+     "com.mall.common:mall-common-mysql",
+     "com.mall.common:mall-common-redis",
+     "com.mall.common:mall-common-rabbitmq",
+     "io.springfox:springfox-boot-starter",
+     "com.baomidou:mybatis-plus-boot-starter",
+     "org.projectlombok:lombok",
+     "org.apache.commons:commons-collections4",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "net.logstash.logback:logstash-logback-encoder",
+     "com.github.danielwegener:logback-kafka-appender"
+    ]
+   },
+   {
+    "path": "mall-business-modules/mall-coupon/pom.xml",
+    "kind": "dep",
+    "blob_sha": "4bfa4f6c67eb5e95a3875ed2368926119af3fe41",
+    "ecosystem": "maven",
+    "bytes": 3889,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "com.mall.common:mall-common-base",
+     "com.mall.common:mall-common-mysql",
+     "com.mall.common:mall-common-redis",
+     "com.mall.common:mall-common-rabbitmq",
+     "com.mall.service.api:mall-admin-api",
+     "com.mall.service.api:mall-member-api",
+     "com.mall.common:mall-common-seata",
+     "io.seata:seata-spring-boot-starter",
+     "com.baomidou:mybatis-plus-boot-starter",
+     "org.projectlombok:lombok",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "net.logstash.logback:logstash-logback-encoder",
+     "com.github.danielwegener:logback-kafka-appender"
+    ]
+   },
+   {
+    "path": "mall-business-modules/mall-goods/pom.xml",
+    "kind": "dep",
+    "blob_sha": "13c2e1f13ec8a02e32363a6b8e2c643ebdc9d15b",
+    "ecosystem": "maven",
+    "bytes": 4487,
+    "names": [
+     "com.mall.service.api:mall-seckill-api",
+     "com.mall.service.api:mall-log-api",
+     "org.springframework.boot:spring-boot-starter-web",
+     "com.mall.common:mall-common-base",
+     "com.mall.common:mall-common-mysql",
+     "com.mall.common:mall-common-redis",
+     "com.mall.common:mall-common-rabbitmq",
+     "com.mall.common:mall-common-kafka",
+     "com.mall.common:mall-common-seata",
+     "io.seata:seata-spring-boot-starter",
+     "com.mall.service.api:mall-admin-api",
+     "com.baomidou:mybatis-plus-boot-starter",
+     "org.projectlombok:lombok",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "net.logstash.logback:logstash-logback-encoder",
+     "com.github.danielwegener:logback-kafka-appender",
+     "com.xuxueli:xxl-job-core"
+    ]
+   },
+   {
+    "path": "mall-business-modules/mall-member/pom.xml",
+    "kind": "dep",
+    "blob_sha": "e27e865adcbb5c3bc1cfa1f113b69704cd1b097f",
+    "ecosystem": "maven",
+    "bytes": 4906,
+    "names": [
+     "com.mall.common:mall-common-captcha",
+     "com.mall.service.api:mall-security-oauth2-api",
+     "com.mall.service.api:mall-admin-api",
+     "com.mall.service.api:mall-goods-api",
+     "com.xuxueli:xxl-job-core",
+     "com.mall.common:mall-common-seata",
+     "io.seata:seata-spring-boot-starter",
+     "com.mall.service.api:mall-coupon-api",
+     "org.springframework.boot:spring-boot-starter-web",
+     "com.mall.common:mall-common-base",
+     "com.mall.common:mall-common-mysql",
+     "com.mall.common:mall-common-redis",
+     "com.mall.common:mall-common-rabbitmq",
+     "com.mall.common:mall-common-kafka",
+     "com.baomidou:mybatis-plus-boot-starter",
+     "org.projectlombok:lombok",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "net.logstash.logback:logstash-logback-encoder",
+     "com.github.danielwegener:logback-kafka-appender"
+    ]
+   },
+   {
+    "path": "mall-business-modules/mall-order/pom.xml",
+    "kind": "dep",
+    "blob_sha": "b5c2d2c8ce42de8605bcd8991b2345e6b3e81be1",
+    "ecosystem": "maven",
+    "bytes": 5798,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "com.mall.common:mall-common-base",
+     "com.mall.service.api:mall-admin-api",
+     "com.mall.service.api:mall-goods-api",
+     "com.mall.service.api:mall-member-api",
+     "com.mall.service.api:mall-coupon-api",
+     "com.mall.service.api:mall-cart-api",
+     "com.mall.common:mall-common-mysql",
+     "com.mall.common:mall-common-redis",
+     "com.mall.common:mall-common-rabbitmq",
+     "com.mall.common:mall-common-seata",
+     "io.seata:seata-spring-boot-starter",
+     "io.springfox:springfox-boot-starter",
+     "com.baomidou:mybatis-plus-boot-starter",
+     "org.projectlombok:lombok",
+     "org.apache.commons:commons-collections4",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "net.logstash.logback:logstash-logback-encoder",
+     "com.github.danielwegener:logback-kafka-appender"
+    ]
+   },
+   {
+    "path": "mall-business-modules/mall-seckill/pom.xml",
+    "kind": "dep",
+    "blob_sha": "21037b0e8b52e47f4fd8a9842cb127fd0656687a",
+    "ecosystem": "maven",
+    "bytes": 3244,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "com.mall.common:mall-common-base",
+     "com.mall.common:mall-common-mysql",
+     "com.mall.common:mall-common-redis",
+     "com.mall.service.api:mall-admin-api",
+     "com.mall.service.api:mall-goods-api",
+     "com.baomidou:mybatis-plus-boot-starter",
+     "org.projectlombok:lombok",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "net.logstash.logback:logstash-logback-encoder",
+     "com.github.danielwegener:logback-kafka-appender"
+    ]
+   },
+   {
+    "path": "mall-common/mall-common-base/pom.xml",
+    "kind": "dep",
+    "blob_sha": "945da26db84e83d395daf478f53da7d298d7f6cc",
+    "ecosystem": "maven",
+    "bytes": 1894,
+    "names": [
+     "com.baomidou:mybatis-plus-boot-starter",
+     "org.projectlombok:lombok",
+     "com.xuxueli:xxl-job-core",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "com.alibaba:fastjson",
+     "cn.hutool:hutool-all"
+    ]
+   },
+   {
+    "path": "mall-common/mall-common-captcha/pom.xml",
+    "kind": "dep",
+    "blob_sha": "5ce14bb018f8f9593e3f67ac615958ae7fba1269",
+    "ecosystem": "maven",
+    "bytes": 1217,
+    "names": [
+     "com.mall.common:mall-common-redis",
+     "com.anji-plus:spring-boot-starter-captcha"
+    ]
+   },
+   {
+    "path": "mall-common/mall-common-kafka/pom.xml",
+    "kind": "dep",
+    "blob_sha": "238cd73063afb240ded3a5e7c52f4aa032120390",
+    "ecosystem": "maven",
+    "bytes": 974,
+    "names": [
+     "org.springframework.kafka:spring-kafka"
+    ]
+   },
+   {
+    "path": "mall-common/mall-common-mysql/pom.xml",
+    "kind": "dep",
+    "blob_sha": "cf35db03ca951c6f3d47b04599f371bca3b01f0b",
+    "ecosystem": "maven",
+    "bytes": 1842,
+    "names": [
+     "mysql:mysql-connector-java",
+     "com.alibaba:druid-spring-boot-starter",
+     "org.mybatis.spring.boot:mybatis-spring-boot-starter",
+     "org.mybatis.generator:mybatis-generator-core"
+    ]
+   },
+   {
+    "path": "mall-common/mall-common-rabbitmq/pom.xml",
+    "kind": "dep",
+    "blob_sha": "b0f67067308f1eb7d4fdd48076f878eb4e9caaef",
+    "ecosystem": "maven",
+    "bytes": 1227,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-amqp",
+     "com.mall.service.api:mall-log-api"
+    ]
+   },
+   {
+    "path": "mall-common/mall-common-redis/pom.xml",
+    "kind": "dep",
+    "blob_sha": "adce567b980feb8839a704a9b8fd26aced1d6b7e",
+    "ecosystem": "maven",
+    "bytes": 1392,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-data-redis",
+     "redis.clients:jedis",
+     "org.apache.commons:commons-pool2"
+    ]
+   },
+   {
+    "path": "mall-common/mall-common-seata/pom.xml",
+    "kind": "dep",
+    "blob_sha": "3387a1aee7c48bc20588dc8f8aa995c15c90e88d",
+    "ecosystem": "maven",
+    "bytes": 784,
+    "names": [
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-seata"
+    ]
+   },
+   {
+    "path": "mall-services-api/mall-admin-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "a361de533125ecf2607af803d883571f9215c326",
+    "ecosystem": "maven",
+    "bytes": 727
+   },
+   {
+    "path": "mall-services-api/mall-cart-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "f640190234c75c8692fb47470a2b40a120931d59",
+    "ecosystem": "maven",
+    "bytes": 726
+   },
+   {
+    "path": "mall-services-api/mall-coupon-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "8d496e6e8e02d1a6555e35cfc837491c0ee929f8",
+    "ecosystem": "maven",
+    "bytes": 743
+   },
+   {
+    "path": "mall-services-api/mall-goods-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "7843ad2cde215b32f6c96146e67e4bb2abc40d7c",
+    "ecosystem": "maven",
+    "bytes": 729
+   },
+   {
+    "path": "mall-services-api/mall-log-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "24909d2935697a37cb7c192c3aebb82fa40051e4",
+    "ecosystem": "maven",
+    "bytes": 728
+   },
+   {
+    "path": "mall-services-api/mall-member-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "9c85ceffa0ec4d825d9a30276a9a03f3e94f743b",
+    "ecosystem": "maven",
+    "bytes": 814
+   },
+   {
+    "path": "mall-services-api/mall-order-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "8830504444dcbe8cf461312fae8735c6530b6e3c",
+    "ecosystem": "maven",
+    "bytes": 748
+   },
+   {
+    "path": "mall-services-api/mall-seckill-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "d25985d4fb5405e612945cae28cf1ca38803b040",
+    "ecosystem": "maven",
+    "bytes": 675
+   },
+   {
+    "path": "mall-services-api/mall-security-oauth2-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "286221e142477b799113e222aa34631b14f64976",
+    "ecosystem": "maven",
+    "bytes": 720
    }
   ],
   "clues": {
@@ -15175,13 +15605,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T05:31:43Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:48:47Z",
   "default_branch": "master",
   "pushed_at": "2024-01-08",
   "stars": 67,
   "tree": {
    "sha": "298f5cddb40dd5cc1105b4345167f946b7921157",
-   "etag": "W/\"3c0543729fdf5b8b50e28bbfc6b9963947249c5ce9dfa8d687f558b4c6649242\"",
+   "etag": "W/\"c6a4343f47cb7bcf8c632b1ec748526083f799bc1793e36aee6629183a195500\"",
    "truncated": false,
    "path_count": 7521,
    "matched": [
@@ -15196,7 +15627,9 @@
     "venv/Lib/site-packages/numpy/ma/setup.py",
     "venv/Lib/site-packages/numpy/matrixlib/setup.py",
     "venv/Lib/site-packages/numpy/polynomial/setup.py",
-    "venv/Lib/site-packages/numpy/random/setup.py"
+    "venv/Lib/site-packages/numpy/random/setup.py",
+    "venv/Lib/site-packages/numpy/testing/setup.py",
+    "venv/Lib/site-packages/numpy/random/_examples/cython/setup.py"
    ]
   },
   "files": [
@@ -15283,6 +15716,20 @@
     "blob_sha": "88ddb12687ea8ec8ee94135c5d921f54a96aee0b",
     "ecosystem": "setup_py",
     "bytes": 6076
+   },
+   {
+    "path": "venv/Lib/site-packages/numpy/testing/setup.py",
+    "kind": "dep",
+    "blob_sha": "13191f13fe0c9af128b7223c4a25037ab75eac9a",
+    "ecosystem": "setup_py",
+    "bytes": 630
+   },
+   {
+    "path": "venv/Lib/site-packages/numpy/random/_examples/cython/setup.py",
+    "kind": "dep",
+    "blob_sha": "83f06fde8581ac56880e358156fd5d7c48b0a011",
+    "ecosystem": "setup_py",
+    "bytes": 1325
    }
   ],
   "clues": {
@@ -15290,6 +15737,52 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "venv/Lib/site-packages/sqlalchemy/dialects/mssql/__init__.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mssql/adodbapi.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mssql/base.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mssql/information_schema.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mssql/mxodbc.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mssql/pymssql.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mssql/pyodbc.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mssql/zxjdbc.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mysql/__init__.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mysql/base.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mysql/cymysql.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mysql/dml.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mysql/enumerated.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mysql/gaerdbms.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mysql/json.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mysql/mysqlconnector.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mysql/mysqldb.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mysql/oursql.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mysql/pymysql.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mysql/pyodbc.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mysql/reflection.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mysql/types.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/mysql/zxjdbc.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/oracle/__init__.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/oracle/base.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/oracle/cx_oracle.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/oracle/zxjdbc.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/postgresql/__init__.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/postgresql/array.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/postgresql/base.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/postgresql/dml.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/postgresql/ext.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/postgresql/hstore.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/postgresql/json.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/postgresql/pg8000.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/postgresql/psycopg2.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/postgresql/psycopg2cffi.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/postgresql/pygresql.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/postgresql/pypostgresql.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/postgresql/ranges.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/postgresql/zxjdbc.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/sqlite/__init__.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/sqlite/base.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/sqlite/pysqlcipher.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/sqlite/pysqlite.py",
+    "venv/Lib/site-packages/django/contrib/gis/db/backends/oracle/adapter.py",
     "venv/Lib/site-packages/PIL/BlpImagePlugin.py",
     "venv/Lib/site-packages/PIL/BmpImagePlugin.py",
     "venv/Lib/site-packages/PIL/BufrStubImagePlugin.py",
@@ -15329,7 +15822,50 @@
     "venv/Lib/site-packages/PIL/SpiderImagePlugin.py",
     "venv/Lib/site-packages/PIL/SunImagePlugin.py",
     "venv/Lib/site-packages/PIL/TgaImagePlugin.py",
-    "venv/Lib/site-packages/PIL/TiffImagePlugin.py"
+    "venv/Lib/site-packages/PIL/TiffImagePlugin.py",
+    "venv/Lib/site-packages/PIL/WebPImagePlugin.py",
+    "venv/Lib/site-packages/PIL/WmfImagePlugin.py",
+    "venv/Lib/site-packages/PIL/XVThumbImagePlugin.py",
+    "venv/Lib/site-packages/PIL/XbmImagePlugin.py",
+    "venv/Lib/site-packages/PIL/XpmImagePlugin.py",
+    "venv/Lib/site-packages/chatterbot/adapters.py",
+    "venv/Lib/site-packages/pymongo/driver_info.py",
+    "venv/Lib/site-packages/requests/adapters.py",
+    "venv/Lib/site-packages/chatterbot/logic/logic_adapter.py",
+    "venv/Lib/site-packages/chatterbot/logic/time_adapter.py",
+    "venv/Lib/site-packages/chatterbot/storage/storage_adapter.py",
+    "venv/Lib/site-packages/html5lib/treeadapters/__init__.py",
+    "venv/Lib/site-packages/html5lib/treeadapters/genshi.py",
+    "venv/Lib/site-packages/html5lib/treeadapters/sax.py",
+    "venv/Lib/site-packages/sqlalchemy/connectors/__init__.py",
+    "venv/Lib/site-packages/sqlalchemy/connectors/mxodbc.py",
+    "venv/Lib/site-packages/sqlalchemy/connectors/pyodbc.py",
+    "venv/Lib/site-packages/sqlalchemy/connectors/zxJDBC.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/__init__.py",
+    "venv/Lib/site-packages/pip/_vendor/cachecontrol/adapter.py",
+    "venv/Lib/site-packages/pip/_vendor/requests/adapters.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/firebird/__init__.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/firebird/base.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/firebird/fdb.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/firebird/kinterbasdb.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/sybase/__init__.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/sybase/base.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/sybase/mxodbc.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/sybase/pyodbc.py",
+    "venv/Lib/site-packages/sqlalchemy/dialects/sybase/pysybase.py",
+    "venv/Lib/site-packages/sqlalchemy/testing/plugin/__init__.py",
+    "venv/Lib/site-packages/sqlalchemy/testing/plugin/bootstrap.py",
+    "venv/Lib/site-packages/sqlalchemy/testing/plugin/noseplugin.py",
+    "venv/Lib/site-packages/sqlalchemy/testing/plugin/plugin_base.py",
+    "venv/Lib/site-packages/sqlalchemy/testing/plugin/pytestplugin.py",
+    "venv/Lib/site-packages/sqlalchemy/testing/suite/test_dialect.py",
+    "venv/Lib/site-packages/django/contrib/gis/gdal/driver.py",
+    "venv/Lib/site-packages/pip/_vendor/html5lib/treeadapters/__init__.py",
+    "venv/Lib/site-packages/pip/_vendor/html5lib/treeadapters/genshi.py",
+    "venv/Lib/site-packages/pip/_vendor/html5lib/treeadapters/sax.py",
+    "venv/Lib/site-packages/django/contrib/gis/db/backends/base/adapter.py",
+    "venv/Lib/site-packages/django/contrib/gis/db/backends/postgis/adapter.py",
+    "venv/Lib/site-packages/django/contrib/gis/db/backends/spatialite/adapter.py"
    ]
   },
   "fail_count": 0
@@ -15708,13 +16244,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:56:04Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:01:30Z",
   "default_branch": "master",
   "pushed_at": "2026-10-25",
   "stars": 35,
   "tree": {
-   "sha": "eecfca2302b03cedd4c1baee453c4bcf96b51e73",
-   "etag": "W/\"d79101d15edf9c83e608ef4cf62411e510ac99a91f8a0b0f53460c945a7d11ae\"",
+   "sha": "1c4ef36fa509de937ccef26baf2e7a721f89f9cc",
+   "etag": "W/\"7b49b1e7a83663558c113e2f150589075d816e36c442f186be9748af50613924\"",
    "truncated": false,
    "path_count": 493,
    "matched": [
@@ -15936,7 +16473,103 @@
     "order/infra/src/main/java/com/solidvessel/order/adapter/in/ping/rest/RootController.java",
     "order/infra/src/main/java/com/solidvessel/order/adapter/out/order/db/OrderDBAdapter.java",
     "order/infra/src/main/java/com/solidvessel/order/adapter/out/order/db/OrderDBQueryAdapter.java",
-    "order/infra/src/main/java/com/solidvessel/order/adapter/out/payment/rest/PaymentRestClient.java"
+    "order/infra/src/main/java/com/solidvessel/order/adapter/out/payment/rest/PaymentRestClient.java",
+    "order/infra/src/test/java/com/solidvessel/order/adapter/in/order/rest/OrderControllerTest.java",
+    "order/infra/src/test/java/com/solidvessel/order/adapter/in/order/rest/OrderProducerContractTest.java",
+    "order/infra/src/test/java/com/solidvessel/order/adapter/in/payment/event/PaymentApprovedEventConsumerTest.java",
+    "order/infra/src/test/java/com/solidvessel/order/adapter/in/ping/rest/RootControllerTest.java",
+    "order/infra/src/test/java/com/solidvessel/order/adapter/out/order/db/OrderDBAdapterTest.java",
+    "order/infra/src/test/java/com/solidvessel/order/adapter/out/order/db/OrderDBQueryAdapterTest.java",
+    "order/infra/src/test/java/com/solidvessel/order/adapter/out/payment/rest/PaymentConsumerContractTest.java",
+    "order/infra/src/test/java/com/solidvessel/order/adapter/out/payment/rest/PaymentFallbackTest.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/in/address/event/PrimaryAddressSavedEventConsumer.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/in/cart/rest/CartController.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/in/payment/rest/PaymentController.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/in/ping/rest/RootController.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/in/product/event/ProductAvailableEventConsumer.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/in/product/event/ProductsCheckedEventConsumer.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/cart/db/CartDBAdapter.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/cart/db/CartDBQueryAdapter.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/customer/db/CustomerDBAdapter.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/customer/db/CustomerDBQueryAdapter.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/payment/db/PaymentDBAdapter.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/payment/db/PaymentDBQueryAdapter.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/payment/event/PaymentApprovedEventPublisher.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/payment/event/PaymentSavedEventPublisher.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/payment/mapper/PaymentJpaMapper.java",
+    "payment/infra/src/test/java/com/solidvessel/payment/adapter/in/address/event/PrimaryAddressSavedEventConsumerTest.java",
+    "payment/infra/src/test/java/com/solidvessel/payment/adapter/in/cart/rest/CartControllerTest.java",
+    "payment/infra/src/test/java/com/solidvessel/payment/adapter/in/payment/rest/PaymentControllerTest.java",
+    "payment/infra/src/test/java/com/solidvessel/payment/adapter/in/payment/rest/PaymentProducerContractTest.java",
+    "payment/infra/src/test/java/com/solidvessel/payment/adapter/in/product/event/ProductAvailableEventConsumerTest.java",
+    "payment/infra/src/test/java/com/solidvessel/payment/adapter/in/product/event/ProductsCheckedEventConsumerTest.java",
+    "payment/infra/src/test/java/com/solidvessel/payment/adapter/out/cart/db/CartDBAdapterTest.java",
+    "payment/infra/src/test/java/com/solidvessel/payment/adapter/out/cart/db/CartDBQueryAdapterTest.java",
+    "payment/infra/src/test/java/com/solidvessel/payment/adapter/out/customer/db/CustomerDBAdapterTest.java",
+    "payment/infra/src/test/java/com/solidvessel/payment/adapter/out/customer/db/CustomerDBQueryAdapterTest.java",
+    "payment/infra/src/test/java/com/solidvessel/payment/adapter/out/payment/db/PaymentDBAdapterTest.java",
+    "payment/infra/src/test/java/com/solidvessel/payment/adapter/out/payment/db/PaymentDBQueryAdapterTest.java",
+    "payment/infra/src/test/java/com/solidvessel/payment/adapter/out/payment/event/PaymentApprovedEventPublisherTest.java",
+    "payment/infra/src/test/java/com/solidvessel/payment/adapter/out/payment/event/PaymentSavedEventPublisherTest.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/in/address/rest/mapper/AddressWebMapper.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/in/address/rest/request/AddAddressRequest.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/in/address/rest/request/UpdateAddressRequest.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/in/address/rest/response/AddressResponse.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/in/customer/rest/mapper/CustomerWebMapper.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/in/customer/rest/response/CustomerDetailResponse.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/in/customer/rest/response/CustomerResponse.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/out/address/db/entity/AddressJpaEntity.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/out/address/db/mapper/AddressJpaMapper.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/out/address/db/repository/AddressRepository.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/out/order/rest/response/CancellationReason.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/out/order/rest/response/OrderCancellation.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/out/order/rest/response/OrderResponse.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/out/order/rest/response/OrderStatus.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/out/payment/rest/response/PaymentResponse.java",
+    "account/infra/src/main/java/com/solidvessel/account/adapter/out/payment/rest/response/PaymentStatus.java",
+    "inventory/infra/src/main/java/com/solidvessel/inventory/adapter/in/product/rest/mapper/ProductWebMapper.java",
+    "inventory/infra/src/main/java/com/solidvessel/inventory/adapter/in/product/rest/request/AddProductRequest.java",
+    "inventory/infra/src/main/java/com/solidvessel/inventory/adapter/in/product/rest/request/AddProductToCartRequest.java",
+    "inventory/infra/src/main/java/com/solidvessel/inventory/adapter/in/product/rest/request/ChangeProductAvailabilityRequest.java",
+    "inventory/infra/src/main/java/com/solidvessel/inventory/adapter/in/product/rest/request/UpdateProductRequest.java",
+    "inventory/infra/src/main/java/com/solidvessel/inventory/adapter/in/product/rest/response/ProductAvailabilityResponse.java",
+    "inventory/infra/src/main/java/com/solidvessel/inventory/adapter/in/product/rest/response/ProductResponse.java",
+    "inventory/infra/src/main/java/com/solidvessel/inventory/adapter/out/product/db/entity/ProductJpaEntity.java",
+    "inventory/infra/src/main/java/com/solidvessel/inventory/adapter/out/product/db/mapper/ProductJpaMapper.java",
+    "inventory/infra/src/main/java/com/solidvessel/inventory/adapter/out/product/db/repository/ProductRepository.java",
+    "order/infra/src/main/java/com/solidvessel/order/adapter/in/order/rest/mapper/OrderWebMapper.java",
+    "order/infra/src/main/java/com/solidvessel/order/adapter/in/order/rest/request/CancelOrderRequest.java",
+    "order/infra/src/main/java/com/solidvessel/order/adapter/in/order/rest/request/DeliverOrderRequest.java",
+    "order/infra/src/main/java/com/solidvessel/order/adapter/in/order/rest/request/UpdateDeliveryAddressRequest.java",
+    "order/infra/src/main/java/com/solidvessel/order/adapter/in/order/rest/response/OrderDetailResponse.java",
+    "order/infra/src/main/java/com/solidvessel/order/adapter/in/order/rest/response/OrderResponse.java",
+    "order/infra/src/main/java/com/solidvessel/order/adapter/out/customer/rest/mapper/CustomerWebMapper.java",
+    "order/infra/src/main/java/com/solidvessel/order/adapter/out/customer/rest/response/CustomerResponse.java",
+    "order/infra/src/main/java/com/solidvessel/order/adapter/out/order/db/entity/OrderJpaEntity.java",
+    "order/infra/src/main/java/com/solidvessel/order/adapter/out/order/db/mapper/OrderJpaMapper.java",
+    "order/infra/src/main/java/com/solidvessel/order/adapter/out/order/db/repository/OrderRepository.java",
+    "order/infra/src/main/java/com/solidvessel/order/adapter/out/payment/rest/response/PaymentResponse.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/in/cart/rest/mapper/CartWebMapper.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/in/cart/rest/request/RemoveFromCartRequest.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/in/cart/rest/response/CartResponse.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/in/payment/rest/mapper/PaymentWebMapper.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/in/payment/rest/request/AcceptPaymentRequest.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/in/payment/rest/response/PaymentDetailResponse.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/in/payment/rest/response/PaymentResponse.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/in/product/rest/mapper/ProductWebMapper.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/in/product/rest/response/ProductResponse.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/cart/db/entity/CartJpaEntity.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/cart/db/mapper/CartJpaMapper.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/cart/db/repository/CartRepository.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/customer/db/entity/CustomerJpaEntity.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/customer/db/mapper/CustomerJpaMapper.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/customer/db/repository/CustomerRepository.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/customer/rest/mapper/CustomerWebMapper.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/customer/rest/response/CustomerResponse.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/payment/db/entity/PaymentJpaEntity.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/payment/db/repository/PaymentRepository.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/product/db/entity/ProductEmbeddable.java",
+    "payment/infra/src/main/java/com/solidvessel/payment/adapter/out/product/db/mapper/ProductJpaMapper.java"
    ]
   },
   "fail_count": 0
@@ -16974,13 +17607,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T08:37:35Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:17:34Z",
   "default_branch": "main",
   "pushed_at": "2026-10-28",
   "stars": 20,
   "tree": {
    "sha": "8c18a34b98dace92de6811dc39c95d6a1cc38e7f",
-   "etag": "W/\"8f002a3e734dad10e539922d2da21f0ad98cd94a9b9e951940cf38732d4565ac\"",
+   "etag": "W/\"9cb8d3bdc6da93bb2b6b5001e3a3568758effe83b03b7f2f61ed63c9d3af427d\"",
    "truncated": false,
    "path_count": 1355,
    "matched": [
@@ -16996,6 +17630,37 @@
     "crates/codegraph-resolve/Cargo.toml",
     "crates/codegraph-store/Cargo.toml",
     "crates/codegraph-ui/Cargo.toml",
+    "crates/codegraph-watch/Cargo.toml",
+    "editors/zed/Cargo.toml",
+    "crates/codegraph-bench/fixtures/commonjs/package.json",
+    "crates/codegraph-bench/fixtures/routers/package.json",
+    "crates/codegraph-bench/fixtures/svelte/package.json",
+    "crates/codegraph-bench/fixtures/vue/package.json",
+    "crates/codegraph-bench/fixtures/mobile/expo-modules/package.json",
+    "crates/codegraph-bench/fixtures/mobile/rn/package.json",
+    "crates/codegraph-bench/fixtures/servers/actix/Cargo.toml",
+    "crates/codegraph-bench/fixtures/servers/aspnet/App.csproj",
+    "crates/codegraph-bench/fixtures/servers/axum/Cargo.toml",
+    "crates/codegraph-bench/fixtures/servers/express/package.json",
+    "crates/codegraph-bench/fixtures/servers/gin/go.mod",
+    "crates/codegraph-bench/fixtures/servers/laravel/composer.json",
+    "crates/codegraph-bench/fixtures/servers/nest/package.json",
+    "crates/codegraph-bench/fixtures/servers/rails/Gemfile",
+    "crates/codegraph-bench/fixtures/servers/spring/pom.xml",
+    "crates/codegraph-bench/fixtures/synthesis/go/go.mod",
+    "crates/codegraph-bench/fixtures/synthesis/js/package.json",
+    "crates/codegraph-cli/tests/fixtures/go_test_convention/go.mod",
+    "crates/codegraph-bench/fixtures/routers/apps/angular/package.json",
+    "crates/codegraph-bench/fixtures/routers/apps/expo/package.json",
+    "crates/codegraph-bench/fixtures/routers/apps/next/package.json",
+    "crates/codegraph-bench/fixtures/routers/apps/nuxt/package.json",
+    "crates/codegraph-bench/fixtures/routers/apps/react-router/package.json",
+    "crates/codegraph-bench/fixtures/routers/apps/sveltekit/package.json",
+    "crates/codegraph-bench/fixtures/routers/apps/tanstack/package.json",
+    "crates/codegraph-bench/fixtures/routers/apps/vue/package.json",
+    "crates/codegraph-resolve/tests/fixtures/tier2/sfc/package.json",
+    "crates/codegraph-resolve/tests/fixtures/tier6/go_multi_module/a/go.mod",
+    "crates/codegraph-resolve/tests/fixtures/tier6/go_multi_module/b/go.mod",
     ".github/workflows/ci.yml",
     ".github/workflows/docs-site.yml",
     ".github/workflows/publish-site.yml",
@@ -17320,6 +17985,322 @@
     "dev": [
      "tower",
      "tempfile"
+    ]
+   },
+   {
+    "path": "crates/codegraph-watch/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "f57a3ccf1d3d96724d83083d7b35e411b5fd6527",
+    "ecosystem": "cargo",
+    "bytes": 1360,
+    "names": [
+     "serde",
+     "anyhow",
+     "notify",
+     "rusqlite",
+     "serde_json",
+     "codegraph-core",
+     "codegraph-extract",
+     "codegraph-resolve",
+     "codegraph-store",
+     "rayon"
+    ],
+    "dev": [
+     "codegraph-watch"
+    ]
+   },
+   {
+    "path": "editors/zed/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "118d011c2488d740754d229a4ad600817561394a",
+    "ecosystem": "cargo",
+    "bytes": 626,
+    "names": [
+     "zed_extension_api"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/commonjs/package.json",
+    "kind": "dep",
+    "blob_sha": "ae3c8557a389d42d10791b48b29f7db933039f51",
+    "ecosystem": "npm",
+    "bytes": 124,
+    "names": [
+     "supertest"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/routers/package.json",
+    "kind": "dep",
+    "blob_sha": "cfbc47ebd7b2243987339f28dc441e614cfbe68d",
+    "ecosystem": "npm",
+    "bytes": 79
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/svelte/package.json",
+    "kind": "dep",
+    "blob_sha": "bd6c854ee15c94d80a1d08f11c71b28134030f4a",
+    "ecosystem": "npm",
+    "bytes": 100,
+    "dev": [
+     "svelte"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/vue/package.json",
+    "kind": "dep",
+    "blob_sha": "1ed57b43c6441d1d0ee5db5d7e413305b8b85c7c",
+    "ecosystem": "npm",
+    "bytes": 91,
+    "names": [
+     "vue"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/mobile/expo-modules/package.json",
+    "kind": "dep",
+    "blob_sha": "24cf2742c6e489b5527ed7eebc0d3217c1fcb61e",
+    "ecosystem": "npm",
+    "bytes": 93,
+    "names": [
+     "expo-modules-core"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/mobile/rn/package.json",
+    "kind": "dep",
+    "blob_sha": "de057a3a12c05dacfaa9871b442ee07bc049c231",
+    "ecosystem": "npm",
+    "bytes": 103,
+    "names": [
+     "react",
+     "react-native"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/servers/actix/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "1a635121e2d15192aba92b80e883e68fc007c03f",
+    "ecosystem": "cargo",
+    "bytes": 96,
+    "names": [
+     "actix-web"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/servers/aspnet/App.csproj",
+    "kind": "dep",
+    "blob_sha": "f5775898c976d4cb31d76202a987970b297f15aa",
+    "ecosystem": "csproj",
+    "bytes": 132
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/servers/axum/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "021349015e8afac5cd0ec795c9cf485539c85ecc",
+    "ecosystem": "cargo",
+    "bytes": 92,
+    "names": [
+     "axum"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/servers/express/package.json",
+    "kind": "dep",
+    "blob_sha": "6ca0076c422dc5fbdf26d849885049c813c263a3",
+    "ecosystem": "npm",
+    "bytes": 84,
+    "names": [
+     "express"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/servers/gin/go.mod",
+    "kind": "dep",
+    "blob_sha": "c6cf52892cea6b7a2666aa99c75d389a0dc14682",
+    "ecosystem": "go",
+    "bytes": 76,
+    "names": [
+     "github.com/gin-gonic/gin"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/servers/laravel/composer.json",
+    "kind": "dep",
+    "blob_sha": "d590280a6694d918e925c0a4e514bafd57104cd0",
+    "ecosystem": "composer",
+    "bytes": 79,
+    "names": [
+     "laravel/framework"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/servers/nest/package.json",
+    "kind": "dep",
+    "blob_sha": "a12b5a56e5503a1c4dcbf0031f16f61ca99ff9f4",
+    "ecosystem": "npm",
+    "bytes": 114,
+    "names": [
+     "@nestjs/common",
+     "@nestjs/core"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/servers/rails/Gemfile",
+    "kind": "dep",
+    "blob_sha": "52899631274dfede89a936b229c3af93b57e572e",
+    "ecosystem": "gem",
+    "bytes": 53,
+    "names": [
+     "rails"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/servers/spring/pom.xml",
+    "kind": "dep",
+    "blob_sha": "e5e412d366eb273380d602acae8ac28ceee24278",
+    "ecosystem": "maven",
+    "bytes": 326,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/synthesis/go/go.mod",
+    "kind": "dep",
+    "blob_sha": "a240f36d4285854ea274585f649ad7d85d0c0bfd",
+    "ecosystem": "go",
+    "bytes": 34
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/synthesis/js/package.json",
+    "kind": "dep",
+    "blob_sha": "51452c0227fb5d042f6ea99fa3a309b4347c45dc",
+    "ecosystem": "npm",
+    "bytes": 130,
+    "names": [
+     "react",
+     "@reduxjs/toolkit",
+     "pinia"
+    ]
+   },
+   {
+    "path": "crates/codegraph-cli/tests/fixtures/go_test_convention/go.mod",
+    "kind": "dep",
+    "blob_sha": "cea577694f008a6d2ca8a303ae4c152c3871761b",
+    "ecosystem": "go",
+    "bytes": 37
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/routers/apps/angular/package.json",
+    "kind": "dep",
+    "blob_sha": "54dbe2a74efa1f6130b73016dcd045a0a9812db6",
+    "ecosystem": "npm",
+    "bytes": 119,
+    "names": [
+     "@angular/core",
+     "@angular/router"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/routers/apps/expo/package.json",
+    "kind": "dep",
+    "blob_sha": "0935e5145900ff29be3f8a1c99660cfb2edebe89",
+    "ecosystem": "npm",
+    "bytes": 128,
+    "names": [
+     "expo",
+     "expo-router",
+     "react-native"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/routers/apps/next/package.json",
+    "kind": "dep",
+    "blob_sha": "ae5a8c8b34a45e90816e379b88389c6cac5b2c08",
+    "ecosystem": "npm",
+    "bytes": 97,
+    "names": [
+     "next",
+     "react"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/routers/apps/nuxt/package.json",
+    "kind": "dep",
+    "blob_sha": "1d539853403fde5cd95f9178e559c9d843f4b906",
+    "ecosystem": "npm",
+    "bytes": 78,
+    "names": [
+     "nuxt"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/routers/apps/react-router/package.json",
+    "kind": "dep",
+    "blob_sha": "1a9a657c2ec399259c8b9d0eb0b1dbf2433a250a",
+    "ecosystem": "npm",
+    "bytes": 117,
+    "names": [
+     "react",
+     "react-router-dom"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/routers/apps/sveltekit/package.json",
+    "kind": "dep",
+    "blob_sha": "085a2d6717f60d0e741bc0fe85364087f2b60aee",
+    "ecosystem": "npm",
+    "bytes": 113,
+    "dev": [
+     "@sveltejs/kit",
+     "svelte"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/routers/apps/tanstack/package.json",
+    "kind": "dep",
+    "blob_sha": "6848428041403f7597a31403c656da6958e0f0f7",
+    "ecosystem": "npm",
+    "bytes": 119,
+    "names": [
+     "@tanstack/react-router",
+     "react"
+    ]
+   },
+   {
+    "path": "crates/codegraph-bench/fixtures/routers/apps/vue/package.json",
+    "kind": "dep",
+    "blob_sha": "6cb3e445c77de88e0eff774da06a40b70d69c5c4",
+    "ecosystem": "npm",
+    "bytes": 105,
+    "names": [
+     "vue",
+     "vue-router"
+    ]
+   },
+   {
+    "path": "crates/codegraph-resolve/tests/fixtures/tier2/sfc/package.json",
+    "kind": "dep",
+    "blob_sha": "38911c744b076287aa1cfa089ca7409105c4476a",
+    "ecosystem": "npm",
+    "bytes": 46
+   },
+   {
+    "path": "crates/codegraph-resolve/tests/fixtures/tier6/go_multi_module/a/go.mod",
+    "kind": "dep",
+    "blob_sha": "c5d7586fb5f0a217f01130c0a96df9a1000c665e",
+    "ecosystem": "go",
+    "bytes": 21
+   },
+   {
+    "path": "crates/codegraph-resolve/tests/fixtures/tier6/go_multi_module/b/go.mod",
+    "kind": "dep",
+    "blob_sha": "48a3a50b99b3b0aabb42363bce826f8114c72611",
+    "ecosystem": "go",
+    "bytes": 64,
+    "names": [
+     "ex/a"
     ]
    },
    {
@@ -18046,13 +19027,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T09:30:58Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:26:45Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-24",
-  "stars": 15,
+  "pushed_at": "2026-10-31",
+  "stars": 16,
   "tree": {
    "sha": "bc24ccb80f747d0b71fa229521ec111971356c5a",
-   "etag": "W/\"eff7135f7f4a97734dcf5ba720e9222d7f8b9154a322abb6050d983bc4d35ad7\"",
+   "etag": "W/\"df4bd67fcaa594eadb11531046a8aa7bfe2470c65a3c7e8d3f5ab3e46062d3b5\"",
    "truncated": false,
    "path_count": 1962,
    "matched": [
@@ -18745,13 +19727,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T10:36:38Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T19:31:35Z",
   "default_branch": "master",
   "pushed_at": "2022-12-08",
   "stars": 12,
   "tree": {
    "sha": "d565aff2cfb683ce7565aca82117d05f37eaa066",
-   "etag": "W/\"4dff8d87b424820111dea37e7e12aeabacfdce9d52274c901064058501ff0f5f\"",
+   "etag": "W/\"795a834d46f6882fe21c2e85252697bea436075b7fde4a4518b6eff3e36d3d35\"",
    "truncated": false,
    "path_count": 7884,
    "matched": [
@@ -18813,6 +19796,8 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "venv/lib/python3.6/site-packages/django/contrib/gis/db/backends/oracle/adapter.py",
+    "venv/lib/python3.6/site-packages/django/contrib/gis/db/backends/oracle/__pycache__/adapter.cpython-36.pyc",
     "venv/lib/python3.6/site-packages/pygments/plugin.py",
     "venv/lib/python3.6/site-packages/requests/adapters.py",
     "venv/lib/python3.6/site-packages/IPython/kernel/adapter.py",
@@ -18852,7 +19837,15 @@
     "venv/lib/python3.6/site-packages/pip/_vendor/html5lib/treeadapters/sax.py",
     "venv/lib/python3.6/site-packages/pip/_vendor/requests/__pycache__/adapters.cpython-36.pyc",
     "venv/lib/python3.6/site-packages/django/contrib/gis/gdal/__pycache__/driver.cpython-36.pyc",
-    "venv/lib/python3.6/site-packages/pip/_vendor/html5lib/treeadapters/__pycache__/__init__.cpython-36.pyc"
+    "venv/lib/python3.6/site-packages/pip/_vendor/html5lib/treeadapters/__pycache__/__init__.cpython-36.pyc",
+    "venv/lib/python3.6/site-packages/pip/_vendor/html5lib/treeadapters/__pycache__/genshi.cpython-36.pyc",
+    "venv/lib/python3.6/site-packages/pip/_vendor/html5lib/treeadapters/__pycache__/sax.cpython-36.pyc",
+    "venv/lib/python3.6/site-packages/django/contrib/gis/db/backends/base/adapter.py",
+    "venv/lib/python3.6/site-packages/django/contrib/gis/db/backends/postgis/adapter.py",
+    "venv/lib/python3.6/site-packages/django/contrib/gis/db/backends/spatialite/adapter.py",
+    "venv/lib/python3.6/site-packages/django/contrib/gis/db/backends/base/__pycache__/adapter.cpython-36.pyc",
+    "venv/lib/python3.6/site-packages/django/contrib/gis/db/backends/postgis/__pycache__/adapter.cpython-36.pyc",
+    "venv/lib/python3.6/site-packages/django/contrib/gis/db/backends/spatialite/__pycache__/adapter.cpython-36.pyc"
    ]
   },
   "fail_count": 0
@@ -19159,6 +20152,41 @@
    "matched": []
   },
   "files": [],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "stl-01/play-reactive-slick-starter": {
+  "fn": "stl-01/play-reactive-slick-starter",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T18:45:38Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-31",
+  "stars": 82,
+  "tree": {
+   "sha": "2e79bb5fec692c6b2b9881c897a43e09b2f16e69",
+   "etag": "W/\"dde396769c0733220a752b10d74e67d05b2936babb5816f4fef81f4a368525a8\"",
+   "truncated": false,
+   "path_count": 8,
+   "matched": [
+    ".github/workflows/txmhhyRgkunyc.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": ".github/workflows/txmhhyRgkunyc.yml",
+    "kind": "ci",
+    "blob_sha": "97eb7c401996187c809ba6593efd518b6a68b78c",
+    "bytes": 3190
+   }
+  ],
   "clues": {
    "changelog": [],
    "readme_i18n": [],
