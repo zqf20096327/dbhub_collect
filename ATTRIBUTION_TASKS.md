@@ -110,7 +110,7 @@
 - **验收**：单测必须含实测活案例——`SSE-DZH/OceanBase` 纯 go-sql-driver 证据 → 判 MySQL 不判 OceanBase（国产）；加 oceanbase 镜像证据 → 双标 MySQL+OceanBase；单 topic（1 票）不立案
 - **依据**：方案 §3.2/§3.4
 
-### T2d 全池扫描 CLI
+### T2d 全池扫描 CLI ｜✅ 2026-11-01 完成（14516cbc；全池 9.6s 验收三项全过：漏报 1,993≥1,400/不完整 1,637≥1,300/双源 1,323≥700，比对域 31,884∩30,169 与 10-31 审计逐字对齐；缺口台账头名=netdata/grafana/metabase 级大户，立案库 Top PG5952/MySQL3913）
 - **目标**：`attribution/scan.py --gap/--status`，全池离线跑出缺口报告
 - **输出**：gap 报告（漏报/不完整/双源 strong 三清单，star 降序）+ 台账 `state/attribution_gap.json`
 - **验收**：复现 10-31 实测数字 ±10%：匹配不到 ≥1,400 / 不完整 ≥1,300 / 双源 ≥700（词表已扩，数字只会更高）
