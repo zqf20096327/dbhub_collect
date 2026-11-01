@@ -97,7 +97,7 @@
 - **验收**：schema 单测；空证据包 → 全空结论（不炸）
 - **依据**：方案 §3.2 + 10-30 解耦五原则
 
-### T2b 匹配器
+### T2b 匹配器 ｜✅ 2026-11-01 完成（33fcd43c；43 案例重构票档对齐+nopCommerce 真实快照互证 4.0 票+互补标记+selftest 绿。**实况呈报**：43 案例 42 个已历史出池无证据分片（=T0b 回流素材）；唯一在池 pivotlake/pivot 指纹含 tokio-postgres 但词表未收——**词表缺口待 T1a 补词流程过目**（rust 生态 postgres 系 crate））
 - **目标**：指纹×词表×topic 三规则匹配，输出证据包
 - **输入**：`state/evidence_cache_shards/`（31,884 仓，status=ok only）、pool.json topics、T1c 词表；topic 三规则（专有名才算/泛词排除 4,982/矛盾=互补进 recheck）
 - **输出**：`attribution/matcher.py` + 单测
