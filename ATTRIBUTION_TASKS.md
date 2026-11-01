@@ -91,7 +91,7 @@
 
 ## 第 2 批 · 引擎核心（链式：a→b→c→d）
 
-### T2a attribution/ 包骨架
+### T2a attribution/ 包骨架 ｜✅ 2026-11-01 完成（f75e42b9；selftest_api 绿=空包 4 变体不炸+schema 反例 17 条+rel_notes 占位不砍+rich 票数 5.0/1.0/0.5+确定性；judge 聚合证据链，quorum 前 dbs 恒空不抢 T2c 政策）
 - **目标**：独立包，纯函数接口 `judge(evidence_pack) → verdict(+证据链+引擎版本)`，不碰网络不碰存储
 - **输出**：`attribution/__init__.py`、`evidence_model.py`（六型证据统一 schema：`{型,库,票,出处,采集时间}`）、`api.py`（注意：六型中 rel_notes 在 T5b 前无数据源——schema 留空位是设计意图，勿因无源砍型）
 - **验收**：schema 单测；空证据包 → 全空结论（不炸）
