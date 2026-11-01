@@ -104,7 +104,7 @@
 - **验收**：43 个 recheck 活案例（dep_only 清单）行为符合预期；nopCommerce 案例 topic(SQL Server) 与指纹不矛盾时输出"互补标记"而非冲突
 - **防坑**：interp 分片键是 fn 哈希（值里带 fn）、evidence 键是 owner/repo——按 `rec["fn"]` 对齐；sha_mismatch 记录跳过
 
-### T2c quorum 投票+E-CI 消歧
+### T2c quorum 投票+E-CI 消歧 ｜✅ 2026-11-01 完成（83d59faf；引擎 0.2.0：≥2 票立案/单证 strong 须复核/topic 互补进 recheck/E-CI 基座联动双标。活案例四断言全绿——SSE 真实快照（MySQL 单证 1 票）below_quorum 且不猜 OceanBase；双证版判 MySQL；镜像版双标 MySQL+OceanBase；单 topic 不立案。真实冒烟 505 仓 17% 立案。注：GBase/TDSQL/GoldenDB 兼容基座暂不联动待实测案例。补词同步完成：tokio-postgres/postgres→PostgreSQL drivers，用户 11-01 过目）
 - **目标**：2/1/0.5 票制、≥2 票立案、E-CI 三规则（国产专属信号优先/纯国际不猜国产/双信号双标）
 - **输出**：`attribution/quorum.py` + `rules_ci.py` + 单测
 - **验收**：单测必须含实测活案例——`SSE-DZH/OceanBase` 纯 go-sql-driver 证据 → 判 MySQL 不判 OceanBase（国产）；加 oceanbase 镜像证据 → 双标 MySQL+OceanBase；单 topic（1 票）不立案
