@@ -155,6 +155,28 @@ def validate(gen) -> list[str]:
                 problems.append(f"⑥国产 org 必须 dict+class：{p['name']}/{o}")
     if clash := set(gen["WHITELIST_REPOS"]) & set(gen["BLACKLIST_REPOS"]):
         problems.append(f"⑦黑白冲突：{clash} 同时在 watch 白名单与黑名单")
+    # ⑧ 适配词表一致性（ATTRIBUTION T1a）：字段齐全、同库双档不重叠、
+    #    跨库不撞词、不与范围外库打架
+    vocab_owner: dict[str, str] = {}
+    for p in dp.PROFILES:
+        if not p.get("enabled", True):
+            continue
+        name = p["name"]
+        drivers = [w.lower() for w in (p.get("drivers") or [])]
+        exact = [w.lower() for w in (p.get("drivers_exact") or [])]
+        images = [w.lower() for w in (p.get("images") or [])]
+        if not drivers + exact:
+            problems.append(f"⑧词表缺失：{name} drivers∪drivers_exact 为空")
+        if not images:
+            problems.append(f"⑧词表缺失：{name} images 为空")
+        if both := set(drivers) & set(exact):
+            problems.append(f"⑧双档重叠：{name} {both} 同在 drivers 与 drivers_exact")
+        for w in drivers + exact + images:
+            if w in vocab_owner and vocab_owner[w] != name:
+                problems.append(f"⑧词表撞词：'{w}' 同属 {vocab_owner[w]}/{name}")
+            vocab_owner[w] = name
+        if bad := {w for w in drivers + exact + images if w in oos}:
+            problems.append(f"⑧与范围外打架：{name} {bad}")
     return problems
 
 
@@ -165,7 +187,7 @@ def main() -> None:
     for p in problems:
         print("  ", p)
     if not [p for p in problems if not p.startswith("⑤")]:
-        print("   ①-⑥ 通过")
+        print("   ①-⑧ 通过（⑤ 遗留白名单提示不阻断）")
     for sec_name, s in gen["SECTIONS"].items():
         orgs = " ".join(f"{norm(o)}"
                         + (f"({o['class']})" if isinstance(o, dict) and o.get("class") else "")

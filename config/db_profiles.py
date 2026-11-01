@@ -15,6 +15,13 @@
   collisions    撞名词 → 排除规则（tdsql 撞 Teradata）
   known_empty   声明性空列（GitHub 无公开生态，不算采集故障）
   enabled=False 整库移出口径（矩阵列/canon/通道全撤）
+
+适配引擎词表字段（ATTRIBUTION T1a，2026-11-01）：
+  drivers         deps 语境子串安全词（驱动/连接器名，跨生态通用）
+  drivers_exact   == 精确词（如 pg：npm/ruby 官方驱动名恰为 pg，子串会撞 pg-electron）
+  images          docker 镜像识别词（镜像语境下的安全子串词）
+  ports           标准端口（quorum 仅 0.5 票辅助信号；空列表=声明性无端口/口径未定）
+  铁律：只收驱动/连接器性质依赖；sqlalchemy/react 等通用库与 ORM 永不进门
 """
 
 GLOBAL = {
@@ -76,6 +83,11 @@ PROFILES = [
      "search": None,
      "brand_infer": {"percona": ["MySQL", "PostgreSQL"]},
      "watch": ["postgres/postgres", "darold/ora2pg"],
+     "drivers": ["psycopg", "asyncpg", "pg8000", "lib/pq", "jackc/pgx",
+                 "postgresql", "npgsql", "libpq"],
+     "drivers_exact": ["pg"],
+     "images": ["postgres"],
+     "ports": [5432],
      "notes": "postgres topic 为变体补扫；percona org+品牌词双修；"
               "ora2pg 无 topic，四通道唯一入口是 watch"},
     {"name": "MySQL", "section": "intl", "enabled": True,
@@ -84,6 +96,12 @@ PROFILES = [
      "orgs": ["mysql", "percona"],
      "search": None,
      "watch": ["mysql/mysql-server"],
+     "drivers": ["pymysql", "mysqlclient", "mysql-connector", "go-sql-driver/mysql",
+                 "mysql2", "mysql-connector-java", "com.mysql", "mysql.data",
+                 "libmysql", "mysqlconnector"],
+     "drivers_exact": [],
+     "images": ["mysql"],
+     "ports": [3306],
      "notes": ""},
     {"name": "Oracle", "section": "intl", "enabled": True,
      "aliases": ["oracle"],
@@ -91,6 +109,11 @@ PROFILES = [
      "orgs": ["oracle"],
      "search": None,
      "watch": [],
+     "drivers": ["oracledb", "cx-oracle", "cx_oracle", "go-oci8", "godror", "ojdbc",
+                 "oracle.manageddataaccess", "oracle-enhanced"],
+     "drivers_exact": [],
+     "images": ["oracle-xe", "oracle-free"],   # 避裸 oracle：会撞 oraclelinux 镜像
+     "ports": [1521],
      "notes": "oracle org 噪音（graal/oci）由范围层过滤"},
     {"name": "SQLite", "section": "intl", "enabled": True,
      "aliases": ["sqlite"],
@@ -98,6 +121,11 @@ PROFILES = [
      "orgs": [],
      "search": "auto",
      "watch": ["sqlite/sqlite"],
+     "drivers": ["better-sqlite3", "sqlite-jdbc", "go-sqlite3", "rusqlite",
+                 "system.data.sqlite", "sqlite3"],
+     "drivers_exact": [],
+     "images": ["sqlite3"],
+     "ports": [],                              # 嵌入式无端口
      "notes": "★口径修复：移出范围外清单；topic 变体 sqlite/sqlite3 补齐"},
     {"name": "SQL Server", "section": "intl", "enabled": True,
      "aliases": [r"sql\s*server", "sqlserver", "mssql"],
@@ -105,6 +133,11 @@ PROFILES = [
      "orgs": [],
      "search": None,
      "watch": ["microsoft/go-mssqldb", "microsoft/mssql-jdbc"],
+     "drivers": ["pymssql", "mssql-jdbc", "go-mssqldb", "sqljdbc",
+                 "microsoft.data.sqlclient", "sqlclient", "mssql"],
+     "drivers_exact": [],
+     "images": ["mssql"],
+     "ports": [1433],
      "notes": "官方驱动不打 topic，白名单兜底"},
     {"name": "ClickHouse", "section": "intl", "enabled": True,
      "aliases": ["clickhouse"],
@@ -112,6 +145,11 @@ PROFILES = [
      "orgs": ["ClickHouse"],
      "search": None,
      "watch": [],
+     "drivers": ["clickhouse-driver", "clickhouse-connect", "clickhouse-jdbc",
+                 "clickhouse-go", "clickhouse-rs", "clickhouse"],
+     "drivers_exact": [],
+     "images": ["clickhouse"],
+     "ports": [8123, 9000],
      "notes": ""},
     {"name": "MariaDB", "section": "intl", "enabled": True,
      "aliases": ["mariadb"],
@@ -119,6 +157,10 @@ PROFILES = [
      "orgs": ["MariaDB"],
      "search": None,
      "watch": ["MariaDB/server"],
+     "drivers": ["mariadb"],                   # 子串盖 mariadb-connector-* 全族
+     "drivers_exact": [],
+     "images": ["mariadb"],
+     "ports": [3306],
      "notes": ""},
     # ============ 国产 10 库 ============
     {"name": "TiDB", "section": "cn", "enabled": True,
@@ -130,6 +172,10 @@ PROFILES = [
               {"name": "tidb-incubator", "class": "dedicated"}],
      "search": "auto",
      "watch": ["pingcap/tidb", "tikv/tikv"],
+     "drivers": ["go-tidb", "pytidb", "tidb-lite"],
+     "drivers_exact": [],
+     "images": ["pingcap/tidb"],
+     "ports": [4000, 10080],
      "notes": "tikv 并入 TiDB；tidb-samples/incubator 为官方低星子 org（org 审计首轮补录）"},
     {"name": "OceanBase", "section": "cn", "enabled": True,
      "aliases": ["oceanbase"],
@@ -138,6 +184,10 @@ PROFILES = [
               {"name": "ApsaraDB", "class": "cloud"}],
      "search": "auto",
      "watch": ["oceanbase/oceanbase"],
+     "drivers": ["pyobclient", "oceanbase", "obclient"],
+     "drivers_exact": [],
+     "images": ["oceanbase/oceanbase"],
+     "ports": [2881],
      "notes": ""},
     {"name": "PolarDB", "section": "cn", "enabled": True,
      "aliases": ["polardb"],
@@ -146,6 +196,10 @@ PROFILES = [
               {"name": "ApsaraDB", "class": "cloud"}],
      "search": "auto",
      "watch": ["polardb/PolarDB-for-PostgreSQL", "polardb/polardbx-engine"],
+     "drivers": ["polardb"],                   # 子串盖 polardb-*/alibabacloud polardb20xx
+     "drivers_exact": [],
+     "images": ["polardb"],
+     "ports": [],                              # 兼容 3306/5432 无独立识别度
      "notes": "polardb 子串覆盖 polardb-x/polardbx"},
     {"name": "Dameng", "section": "cn", "enabled": True,
      "aliases": ["dm8", "dameng", "达梦", r"dm[- ]database"],
@@ -154,6 +208,10 @@ PROFILES = [
      "search": "auto",                              # auto 展开纯词别名：dm8/dameng/达梦
      "watch": ["gaoyuan98/dameng_exporter", "Jackfinal/laravel-dm8",
                "nfjBill/gorm-driver-dm", "sjm1327605995/dm-xorm"],
+     "drivers": ["dmPython", "dm8", "DmJdbcDriver", "DmProvider"],
+     "drivers_exact": [],
+     "images": ["dm8"],
+     "ports": [5236],
      "notes": "中文词『达梦』进检索；裸 dm 歧义由词边界规则处理"},
     {"name": "openGauss", "section": "cn", "enabled": True,
      "aliases": ["opengauss"],
@@ -162,6 +220,10 @@ PROFILES = [
      "search": "auto",
      "exclude_repos": ["math-inc/OpenGauss"],
      "watch": ["opengauss-mirror/openGauss-server"],
+     "drivers": ["psycopg2-opengauss", "opengauss"],
+     "drivers_exact": [],
+     "images": ["opengauss"],
+     "ports": [5432],
      "notes": "GitHub 为 mirror，org 是主通道"},
     {"name": "GaussDB", "section": "cn", "enabled": True,
      "aliases": ["gaussdb"],
@@ -169,6 +231,10 @@ PROFILES = [
      "orgs": [{"name": "huaweicloud", "class": "cloud", "cadence": "weekly"}],
      "search": "auto",
      "watch": [],
+     "drivers": ["gaussdb", "huaweicloud-gaussdb"],   # gaussdb 子串盖 gaussdb-python 族
+     "drivers_exact": [],
+     "images": ["gaussdb"],
+     "ports": [],                              # 云服务无自托管标准端口
      "notes": "云 SDK 噪音大，org 降频每周"},
     {"name": "GBase", "section": "cn", "enabled": True,
      "aliases": ["gbase"],
@@ -176,6 +242,10 @@ PROFILES = [
      "orgs": [],
      "search": ['"gbase 8s"', '"gbase 8a"', '"gbase 8c"'],
      "watch": [],
+     "drivers": ["gbase"],
+     "drivers_exact": [],
+     "images": ["gbase"],
+     "ports": [],                              # 8s 端口口径未定，宁缺勿错
      "notes": "三产品线短语检索防撞名"},
     {"name": "TDSQL", "section": "cn", "enabled": True,
      "aliases": ["tdsql"],
@@ -184,6 +254,10 @@ PROFILES = [
      "search": "auto",
      "collisions": {"teradata": "tdsql=Teradata SQL 缩写，命中 teradata 即排除"},
      "watch": [],
+     "drivers": ["tdsql"],
+     "drivers_exact": [],
+     "images": ["tdsql"],
+     "ports": [],
      "notes": ""},
     {"name": "YashanDB", "section": "cn", "enabled": True,
      "aliases": ["yashandb"],
@@ -191,6 +265,10 @@ PROFILES = [
      "orgs": [{"name": "yashan-technologies", "class": "dedicated"}],
      "search": "auto",
      "watch": [],
+     "drivers": ["yashandb"],
+     "drivers_exact": [],
+     "images": ["yashandb"],
+     "ports": [1678],
      "notes": "topic 实测 0，org 唯一路径"},
     {"name": "GoldenDB", "section": "cn", "enabled": True,
      "aliases": ["goldendb"],
@@ -199,6 +277,10 @@ PROFILES = [
      "search": "auto",
      "watch": [],
      "known_empty": True,
+     "drivers": ["goldendb"],                  # known_empty：GitHub 侧预期零命中
+     "drivers_exact": [],
+     "images": ["goldendb"],
+     "ports": [],
      "notes": "GitHub 无公开生态（Gitee/内部），空列如实声明"},
 ]
 
