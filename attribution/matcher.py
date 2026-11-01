@@ -136,6 +136,52 @@ def is_weak_path(path: str) -> bool:
     return bool(WEAK_PATH_RE.search(path or ""))
 
 
+# v0.3.0：文件名模式（旧 E1 侦查层 FILE_PAT 移植）——conn_/driver_/dialect_/
+# adapter_/connector_ 前缀 + 库 token 的源码文件是连接器实现的强信号
+# （pkg/server/driver_tidb.go、conn_mysql.py）。段级目录匹配抓不到
+# driver_tidb.go 这种「token 在文件名中段」的形态，pingcap/tidb 活案例。
+FILE_NAME_RE = re.compile(
+    r"^(?:conn|driver|dialect|adapter|connector)_([a-z0-9_]+)"
+    r"\.(?:py|go|java|ts|js|rs|cs|rb|php|cpp|scala|kt)$", re.I)
+
+
+def match_filename(path: str) -> list[dict]:
+    """路径 → [{db, token}]：文件名前缀模式（v0.3.0）。提取段用与 match_path
+    同款边界匹配（driver_tidb_test.go 命中 tidb、conn_oraclelinux 不命中 oracle）。"""
+    base = (path or "").replace("\\", "/").rsplit("/", 1)[-1].lower()
+    m = FILE_NAME_RE.match(base)
+    if not m:
+        return []
+    seg = m.group(1).strip("_")
+    hits: list[dict] = []
+    for db, tokens in dir_vocab().items():
+        for tok in tokens:
+            t = tok.lower()
+            if seg == t or (seg.startswith(t) and len(seg) > len(t)
+                            and seg[len(t)] in "0123456789-_"):
+                hits.append({"db": db, "token": tok})
+    return hits
+
+
+def _org_view() -> dict[str, str]:
+    """官方 org（lower）→ 库名（db_profiles orgs 档案）。方案 §3.4 规则 1：
+    官方 org 命中 → 直接判对应国产库（也含 postgres/mysql/oracle 等国际官方 org）。
+    percona 双挂 PostgreSQL+MySQL 是真实双生态，双标合理。"""
+    from config.db_profiles import PROFILES
+    view: dict[str, list[str]] = {}
+    for p in PROFILES:
+        if not p.get("enabled", True):
+            continue
+        for o in p.get("orgs") or []:
+            name = (o["name"] if isinstance(o, dict) else o).strip().lower()
+            if name:
+                view.setdefault(name, []).append(p["name"])
+    return view
+
+
+_ORG_VIEW = _org_view()
+
+
 def _floor_weak(votes: float, path: str) -> float:
     return 0.5 if is_weak_path(path) else votes
 
@@ -203,7 +249,7 @@ def build_pack(fn: str, evidence_rec: dict | None = None,
                     _add(kind, db, votes, path, det)
         for p in (evidence_rec.get("clues") or {}).get("paths") or []:
             per_db = {}
-            for h in match_path(p):
+            for h in match_path(p) + match_filename(p):
                 if h["token"] not in per_db.setdefault(h["db"], []):
                     per_db[h["db"]].append(h["token"])
             for db, tokens in sorted(per_db.items()):
@@ -212,6 +258,16 @@ def build_pack(fn: str, evidence_rec: dict | None = None,
                 if weak:
                     det["weak_path"] = True
                 _add("tree", db, 0.5 if weak else DEFAULT_VOTES["tree"], p, det)
+
+    # 官方 org 通道（v0.3.0，方案 §3.4 规则 1）：owner 精确命中官方 org 档案
+    # → tree 型 **1 票**（普通档，须互证才立案）。实测校准：2 票会把全家桶
+    # SDK（TencentCloud/tencentcloud-sdk-* → TDSQL）和官方 org 下的通用基础库
+    # （tikv/grpc-rs、tikv/pprof-rs → TiDB）误判成生态仓；降 1 票后 org-only
+    # 仓 below_quorum 进 recheck 留痕，pingcap/tidb 靠 topic+文件名仍立案。
+    # 与 SSE-DZH/OceanBase「仓名子串不推断」不冲突：owner 精确匹配，非子串。
+    owner = fn.split("/", 1)[0].strip().lower()
+    for db in _ORG_VIEW.get(owner) or []:
+        _add("tree", db, 1.0, f"org:{owner}", {"words": [owner]})
 
     complement: list[str] = []
     for t in ((pool_rec or {}).get("topics") or []):

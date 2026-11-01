@@ -21,8 +21,8 @@ if str(ROOT) not in sys.path:
 from attribution.api import judge
 from attribution.evidence_model import normalize_pack
 from attribution.matcher import (
-    GENERIC_TOPICS, _TOPIC_VIEW, build_pack, is_weak_path, match_image,
-    match_path, match_topic,
+    GENERIC_TOPICS, _TOPIC_VIEW, build_pack, is_weak_path, match_filename,
+    match_image, match_path, match_topic,
 )
 
 FIX = json.loads((ROOT / "attribution" / "fixtures" / "recheck_cases.json")
@@ -106,7 +106,7 @@ def main() -> int:
     pack = build_pack(snap["fn"], snap, {"topics": FIX["topics"]["nopsolutions/nopcommerce"]})
     v = judge(pack)
     ss = v["per_db"].get("SQL Server", {})
-    ck(ss.get("votes") == 4.0, f"SQL Server 应 4.0 票(dep1+image2+topic1)：{ss.get('votes')}")
+    ck(ss.get("votes") == 5.0, f"SQL Server 应 5.0 票(dep1+image2+topic2)：{ss.get('votes')}")
     ck(ss.get("kinds") == {"dep": 1, "image": 1, "topic": 1}, f"SQL Server kinds：{ss.get('kinds')}")
     ck(v["per_db"].get("MySQL", {}).get("votes") == 1.0, "MySQL dep 1 票")
     ck(v["per_db"].get("PostgreSQL", {}).get("votes") == 1.0, "PostgreSQL dep 1 票")
@@ -165,9 +165,55 @@ def main() -> int:
     except Exception as e:                                       # noqa: BLE001
         fails.append(f"[FAIL] pivotlake 构包炸：{e}")
 
+    # 9) v0.3.0 新信号①文件名模式：前缀+库 token；弱路径降 0.5；误伤反例
+    ck(any(h["db"] == "TiDB" for h in match_filename("pkg/server/driver_tidb.go")),
+       "driver_tidb.go 应命中 TiDB（旧 E1 FILE_PAT 移植）")
+    ck(any(h["db"] == "MySQL" for h in match_filename("src/conn_mysql.py")),
+       "conn_mysql.py 应命中 MySQL")
+    ck(not match_filename("conn_oraclelinux.py"), "conn_oraclelinux 不得撞 oracle")
+    ck(not match_filename("driver_tidb.go.bak"), "扩展名不符不命中")
+    fn_ev = build_pack("acme/x", {"fn": "acme/x", "status": "ok",
+                                  "collected_at": TS,
+                                  "clues": {"paths": ["pkg/server/driver_tidb.go"]}})
+    te = [e for e in fn_ev["evidences"] if e["kind"] == "tree"]
+    ck(len(te) == 1 and te[0]["db"] == "TiDB" and te[0]["votes"] == 2.0,
+       "driver_tidb.go 强路径 2 票 tree")
+    wk = build_pack("acme/x", {"fn": "acme/x", "status": "ok", "collected_at": TS,
+                               "clues": {"paths": ["tests/driver_mysql.go"]}})
+    ck(any(e["votes"] == 0.5 for e in wk["evidences"]), "tests/ 下文件名证据降 0.5")
+
+    # 10) v0.3.0 新信号②官方 org：owner 精确命中 1 票（全家桶误伤校准：
+    #     TencentCloud SDK/tikv 通用库 org-only 不立案进 recheck）
+    ob = build_pack("pingcap/whatever", {"fn": "pingcap/whatever", "status": "ok",
+                                         "collected_at": TS})
+    org = [e for e in ob["evidences"] if e["kind"] == "tree"]
+    ck(len(org) == 1 and org[0]["db"] == "TiDB" and org[0]["votes"] == 1.0
+       and org[0]["source"] == "org:pingcap", "官方 org pingcap → TiDB 1 票")
+    v = judge(ob)
+    ck(v["status"] == "below_quorum" and v["dbs"] == [],
+       "org-only（无指纹无 topic）不立案——tikv/grpc-rs 全家桶防线")
+    pe = build_pack("percona/x", {"fn": "percona/x", "status": "ok", "collected_at": TS})
+    ck({e["db"] for e in pe["evidences"]} == {"PostgreSQL", "MySQL"},
+       "percona 双挂 PG+MySQL（真实双生态双标）")
+    sse = build_pack("SSE-DZH/OceanBase", {"fn": "SSE-DZH/OceanBase", "status": "ok",
+                                           "collected_at": TS})
+    ck(not sse["evidences"], "SSE-DZH 非官方 org：仓名子串不推断（规则 2 保持）")
+    # 用户裁定回放：pingcap/tidb 形态（org+文件名+topic）→ TiDB+MySQL 双标
+    pt = build_pack("pingcap/tidb", {"fn": "pingcap/tidb", "status": "ok",
+                                     "collected_at": TS,
+                                     "files": [{"path": "go.mod", "kind": "dep",
+                                                "names": ["go-sql-driver/mysql"]}],
+                                     "clues": {"paths": ["pkg/server/driver_tidb.go"]}},
+                    {"topics": ["tidb", "mysql"]})
+    v = judge(pt)
+    ck(v["dbs"] == ["TiDB", "MySQL"], f"pingcap/tidb 应双标：{v['dbs']}")
+    ck(v["per_db"]["TiDB"]["votes"] == 5.0, "TiDB org1+文件名2+topic2=5.0")
+
     verdict = "PASS" if not fails else "FAIL"
     print(f"[{verdict}] topic 三规则 + 镜像/路径段匹配 + 弱路径 + 43 案例重构"
-          f"（票档对齐 weak/dep_only）+ nopCommerce 互证 4.0 票 + 互补标记 + 防御 8 组")
+          f"（票档对齐 weak/dep_only）+ nopCommerce 互证 5.0 票 + 互补标记 + 防御 8 组"
+          f"+ v0.3.0 文件名模式 2 票/官方 org 1 票（pingcap 双标 5.0 回放、"
+          f"org-only 不立案、SSE-DZH 不推断）")
     for f in fails:
         print(f)
     return 1 if fails else 0

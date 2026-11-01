@@ -52,9 +52,12 @@ KIND_LABELS = {
     "topic": "作者自声明",
 }
 
-# 方案 §3.2 票档参考（镜像/官方驱动目录/连接器路径 2 票；普通依赖与 topic 1 票；
+# 方案 §3.2 票档参考（镜像/官方驱动目录/连接器路径 2 票；普通依赖 1 票；
 # tests/端口/服务名 0.5 票）。rel_notes 故意无默认票：无数据源即不定档，T5b 再补。
-DEFAULT_VOTES = {"image": 2.0, "tree": 2.0, "dep": 1.0, "topic": 1.0, "ci": 0.5}
+# v0.3.0（11-01 用户裁定）：topic 1→2 票——作者自声明明确标注的库须能判出
+# （96.7% 一致率实测）；单证立案打 single_strong 注记，纯 topic 立案在
+# unattr_judge 薄壳仍降 recheck 人工把关（防 10-03 标签抢注 615 仓回归）。
+DEFAULT_VOTES = {"image": 2.0, "tree": 2.0, "dep": 1.0, "topic": 2.0, "ci": 0.5}
 
 VOTE_TIERS = (0.5, 1.0, 2.0)
 

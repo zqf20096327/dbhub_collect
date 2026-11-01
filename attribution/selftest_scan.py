@@ -163,12 +163,14 @@ def main() -> int:
         ck(u["skip_bad_pack"] == 1, "缺 collected_at → skip_bad_pack 不炸")
         ck(u["interp_linked"] == 13 and u["interp_missing"] == 1, "交集/未解读另册")
         ck(u["interp_empty"] == 9 and u["fp_hit"] == 12, f"interp_empty/fp_hit：{u.get('interp_empty')}/{u.get('fp_hit')}")
-        ck(u["verdict_case_opened"] == 7 and u["verdict_below_quorum"] == 6
-           and u["verdict_no_evidence"] == 1, "判定分布 7/6/1")
+        ck(u["verdict_case_opened"] == 8 and u["verdict_below_quorum"] == 5
+           and u["verdict_no_evidence"] == 1,
+           "判定分布 8/5/1（v0.3.0：dual 单证+topic 3 票、topiconly 2 票立案）")
         ck(rep["counts"] == {"missed": 7, "incomplete": 3, "dual": 1}, rep["counts"])
         ck(rep["per_db_add"] == {"PostgreSQL": 3}, "可补库位直方图")
-        ck(rep["engine"] == ENGINE_VERSION and rep["case_opened_db"]["MySQL"] == 6,
-           "引擎版本/立案直方图（MySQL 6 仓，inc_case/highstar 只立 PG）")
+        ck(rep["engine"] == ENGINE_VERSION and rep["case_opened_db"]["MySQL"] == 6
+           and rep["case_opened_db"]["PostgreSQL"] == 3,
+           "引擎版本/立案直方图（MySQL 6、PG 3 含 topiconly 单证）")
 
         # 4) 流式 --limit：只处理第一个分片（highstar 在 01.json）
         lim = S.scan(evidence_dir=ev, interp_dir=ip, pool_path=pool_path, limit_shards=1)

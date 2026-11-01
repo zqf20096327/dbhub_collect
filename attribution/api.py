@@ -31,7 +31,7 @@ if str(ROOT) not in sys.path:
 from attribution import quorum
 from attribution.evidence_model import EVIDENCE_KINDS, normalize_pack
 
-ENGINE_VERSION = "0.2.0"   # 0.1.0=T2a 骨架；0.2.0=T2c quorum+E-CI 接线
+ENGINE_VERSION = "0.3.0"   # 0.1.0=T2a 骨架；0.2.0=T2c quorum+E-CI；0.3.0=topic 升 2 票+文件名/官方 org 信号
 
 _KIND_ORDER = {k: i for i, k in enumerate(EVIDENCE_KINDS)}
 

@@ -2,11 +2,13 @@
 """quorum 投票立案（ATTRIBUTION T2c，方案 §3.2/§3.4）。
 
 误配比漏配贵一个量级 → 精度优先于召回：
-  票制（T2b 赋票）  镜像/官方驱动目录/连接器路径 2 票；普通依赖与 topic 1 票；
-                    dev/弱路径/矩阵 0.5 票
-  立案              合计 ≥2.0 票；单弱信号不立案只记录（per_db 留痕）
-  单证 strong       恰 1 条证据凑满 2 票（纯镜像/官方目录）→ 立案但打
-                    single_strong 注记——须复核，不放直通
+  票制（T2b 赋票）  镜像/官方驱动目录/连接器路径/文件名模式 2 票；普通依赖与
+                    官方 org 1 票（org 全家桶误伤校准）；topic 自声明 2 票
+                    （v0.3.0 用户裁定：明确标注须判出）；dev/弱路径/矩阵 0.5 票
+  立案              合计 ≥2.0 票；单弱信号（0.5/1 档凑不满）不立案只记录
+  单证 strong       恰 1 条证据凑满 2 票（镜像/官方目录/文件名/topic 自声明）
+                    → 立案但打 single_strong 注记——须复核，不放直通；
+                    纯 topic 立案在 unattr_judge 薄壳降 recheck（防标签抢注）
   复核              topic 有而指纹无的库 → recheck 列表（矛盾=互补，不二选一）
   E-CI              国产立案 → 兼容基座有任意证据则联动双标（rules_ci 规则 3）
 
@@ -39,7 +41,8 @@ def vote(verdict: dict) -> dict:
         dbs.append(db)
         if len(e["chain"]) == 1:
             notes.append(f"single_strong: {db} 仅 1 条 {e['votes']:g} 票证据"
-                         f"（{e['chain'][0]['kind']}）——须复核，不放直通")
+                         f"（{e['chain'][0]['kind']} 单证——镜像/官方目录/文件名/"
+                         f"topic 自声明均须复核，不放直通）")
 
     # E-CI 规则 3：国产立案 → 兼容基座有任意证据 → 联动双标
     for db in list(dbs):

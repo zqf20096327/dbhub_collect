@@ -5,7 +5,8 @@
 活案例（卡文验收钦定，素材 fixtures/ci_cases.json 冻结快照）：
   SSE-DZH/OceanBase 纯国际依赖 → 不猜 OceanBase（真实快照单证 below_quorum；
   双证合成 → 只判 MySQL）；加 oceanbase 镜像 → 双标 MySQL+OceanBase；
-  单 topic（1 票）→ 不立案进 recheck。
+  单 topic → 立案但打 single_strong 注记（v0.3.0 用户裁定：明确标注须判出，
+  纯 topic 立案的降级防线在 unattr_judge 薄壳）。
 """
 from __future__ import annotations
 
@@ -64,12 +65,15 @@ def main() -> int:
     ck(any("ci_linkage" in n and "MySQL" in n for n in v["notes"]),
        "OceanBase 立案应 ci_linkage 联动 MySQL（规则 3）")
 
-    # 4) 活案例④：单 topic（1 票）不立案 → recheck
+    # 4) 活案例④（v0.3.0 用户裁定改写）：topic 自声明 2 票单证立案 + single_strong
+    #    注记 + recheck 留互补；纯 topic 立案的降级防线在 unattr_judge 薄壳（T2e）。
     v = judge({"fn": "a/b", "evidences": [
-        {"kind": "topic", "db": "TiDB", "votes": 1.0, "source": "topic:tidb",
+        {"kind": "topic", "db": "TiDB", "votes": 2.0, "source": "topic:tidb",
          "collected_at": TS}]})
-    ck(v["status"] == "below_quorum" and v["dbs"] == [], "单 topic 1 票不立案")
-    ck("TiDB" in v["per_db"], "单弱信号 per_db 留痕（只记录）")
+    ck(v["status"] == "case_opened" and v["dbs"] == ["TiDB"],
+       f"单 topic 2 票应立案（明确标注须判出）：{v['dbs']}")
+    ck(any("single_strong" in n and "topic" in n for n in v["notes"]),
+       "topic 单证立案应打 single_strong 注记（须复核不放直通）")
 
     # 5) topic 互补进 recheck；与指纹双源同库则不进
     pack = build_pack("a/b", {"fn": "a/b", "status": "ok", "collected_at": TS,
@@ -86,7 +90,7 @@ def main() -> int:
                           {"topics": ["tidb"]}))
     ck(v2["recheck"] == [], f"topic 与指纹同库互证不进 recheck：{v2['recheck']}")
     ck(v2["dbs"] == ["TiDB", "MySQL"], f"TiDB 镜像立案联动 MySQL：{v2['dbs']}")
-    ck(v2["per_db"]["TiDB"]["votes"] == 3.0, "TiDB 镜像2+topic1=3.0")
+    ck(v2["per_db"]["TiDB"]["votes"] == 4.0, "TiDB 镜像2+topic2=4.0")
     ck(v2["per_db"]["MySQL"]["votes"] == 1.0, "MySQL 仅 dep 1 票，靠联动立案")
 
     # 6) 票制边界：三弱信号 0.5×4=2.0 立案；1.5 不立案；阈值恰 2.0 立案
@@ -134,7 +138,7 @@ def main() -> int:
     ck(normalize_pack(build_pack("a/b")) is not None, "空包 schema 合法")
 
     verdict = "PASS" if not fails else "FAIL"
-    print(f"[{verdict}] 活案例四断言（真实快照不猜国产/双证判 MySQL/镜像双标/单 topic 不立案）"
+    print(f"[{verdict}] 活案例四断言（真实快照不猜国产/双证判 MySQL/镜像双标/单 topic 立案须复核）"
           f"+ recheck 互补 + 票制边界 4 组 + rules_ci 映射 + 确定性 + 空包不炸")
     for f in fails:
         print(f)

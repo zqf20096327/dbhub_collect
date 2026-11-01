@@ -138,6 +138,8 @@ dbs 本来就是数组。判定规则改为：**证据命中的每一个库都�
 
 1. **专有名才算**：topic 归一（`-`/`_`/空格同一化）后命中 17 库别名（postgresql/tidb/oceanbase…）
    → medium 证据；泛词（database/sql/rdbms/dbms）一律不算——4,982 仓被此排除。
+   （**v0.3.0 修订，11-01 用户裁定**：topic 自声明 1→2 票——明确标注的库须能判出；
+   单证立案打 single_strong 注记，纯 topic 立案在 unattr_judge 薄壳降 recheck 人工把关。）
 2. **双源互证升 strong**：topic 与依赖指纹同库命中 → 互证升级（778 仓现成候选）。
 3. **矛盾=并集复核，不二选一**：topic 有而 dbs 没有的库**不直接归**，进 recheck——
    实测矛盾 154 仓多数是互补（nopCommerce/sqle 模式：topic 打默认库或引流库，
@@ -222,7 +224,7 @@ topic 进池的仓 README 也提 postgresql）。对策：双源互证档不受�
 
 ## 附：方法与定义速查
 
-- **quorum 票制**：镜像/官方驱动目录/连接器路径 2 票 · 普通依赖与 topic 1 票 · 示例/测试依赖、端口、服务名 0.5 票——≥2 票立案，单弱信号不立案
+- **quorum 票制**（v0.3.0，11-01 实测校准）：镜像/官方驱动目录/连接器路径/conn-driver 文件名模式 2 票 · topic 自声明 2 票（用户裁定）· 普通依赖与官方 org 1 票（org 全家桶误伤校准：TencentCloud SDK/tikv 通用库 org-only 不立案）· 示例/测试依赖、端口、服务名 0.5 票——≥2 票立案，单弱信号不立案，单证凑满打 single_strong 须复核
 - **六型证据**：dep（依赖清单）/ tree（文件树路径）/ image（docker 镜像）/ ci（测试矩阵）/ rel_notes（发行说明）/ topic（作者自声明）
 - **定点裁决**：只问"是否支持库 X"+ 附证据包，不重新全文解读——比全量解读省 90% AI 费
 - **点名缺口 vs 探索缺口**：前者已知谁漏了什么（README 提名差/topics 差，确定性高先做）；后者只知道没适配（要探索）

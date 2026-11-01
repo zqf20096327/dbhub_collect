@@ -81,17 +81,17 @@ def main() -> int:
     if set(EVIDENCE_KINDS) - set(DEFAULT_VOTES) != {"rel_notes"}:
         fails.append(f"[FAIL] 无默认票的型应恰为 {{rel_notes}}：{set(EVIDENCE_KINDS) - set(DEFAULT_VOTES)}")
 
-    # 4) rich 样本：聚合票数精确 + T2c 接线后立案（OceanBase 5 票 + MySQL 联动双标）
+    # 4) rich 样本：聚合票数精确 + T2c 接线后立案（OceanBase 6 票 + MySQL 联动双标）
     got = judge(FIX["rich"])
     if got["status"] != "case_opened":
         fails.append(f"[FAIL] rich status 应 case_opened：{got['status']}")
     if got["dbs"] != ["OceanBase", "MySQL"]:
-        fails.append(f"[FAIL] rich 应立案 OceanBase(5.0 票)+MySQL(E-CI 联动)：{got['dbs']}")
+        fails.append(f"[FAIL] rich 应立案 OceanBase(6.0 票)+MySQL(E-CI 联动)：{got['dbs']}")
     if not any("ci_linkage" in n and "MySQL" in n for n in got["notes"]):
         fails.append(f"[FAIL] MySQL 应带 ci_linkage 联动注记：{got['notes']}")
     votes = {db: e["votes"] for db, e in got["per_db"].items()}
-    if votes != {"OceanBase": 5.0, "MySQL": 1.0, "SQLite": 0.5}:
-        fails.append(f"[FAIL] rich 票数错：{votes}")
+    if votes != {"OceanBase": 6.0, "MySQL": 1.0, "SQLite": 0.5}:
+        fails.append(f"[FAIL] rich 票数错（v0.3.0 topic 升 2 票）：{votes}")
     if list(got["per_db"]) != ["OceanBase", "MySQL", "SQLite"]:
         fails.append(f"[FAIL] per_db 未按票降序：{list(got['per_db'])}")
     ob = got["per_db"]["OceanBase"]
@@ -114,7 +114,7 @@ def main() -> int:
 
     verdict = "PASS" if not fails else "FAIL"
     print(f"[{verdict}] 空包 4 变体不炸 + schema 反例 17 条 + rel_notes 占位"
-          f" + rich 聚合 5.0/1.0/0.5 立案双标 + 确定性 + 6 型×{len(DB_NAMES)} 库对账")
+          f" + rich 聚合 6.0/1.0/0.5 立案双标 + 确定性 + 6 型×{len(DB_NAMES)} 库对账")
     for f in fails:
         print(f)
     return 1 if fails else 0
