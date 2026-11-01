@@ -161,6 +161,19 @@ def _hit_old_caps(rec: dict) -> bool:
             or paths >= OLD_PATH_CLUE_CAP)
 
 
+def _is_fresh(prev: dict | None, pool_rec: dict | None) -> bool:
+    """已采且不必重采 = 终态 + 当前纪元 + 未打满旧上限 + 池 pushed_at 不比记录新。
+    sweep/incremental 共用这一个判定：新仓（无记录）/变化仓（池更新）/打满仓都返回
+    False 进采集——变化仓树没变时走 ETag 304 只花 1 调。用"池更新才算变"而非"不等"：
+    默认分支回退路径会把 repos API 更新的 pushed_at 写进记录（比池新），不能因此反复采。"""
+    if not (prev and prev.get("epoch") == EPOCH and prev.get("status") in TERMINAL_OK):
+        return False
+    if _hit_old_caps(prev):
+        return False
+    pool_pushed = ((pool_rec or {}).get("pushed_at") or "")[:10]
+    return pool_pushed <= (prev.get("pushed_at") or "")
+
+
 def _dedupe(items) -> list[str]:
     seen, out = set(), []
     for x in items:
@@ -721,8 +734,7 @@ def run_collect_loop(client: GitHubClient, raw: RawFetcher, store: EvidenceCache
     try:
         for idx, (fn, pool_rec) in enumerate(todo, 1):
             prev = store.get(fn)
-            if prev and prev.get("epoch") == EPOCH and prev.get("status") in TERMINAL_OK \
-                    and not _hit_old_caps(prev):     # 11-01：打满旧上限 → 不跳过，重采自愈
+            if _is_fresh(prev, pool_rec):    # 终态+未打满+池无更新 → 跳过；变化仓/打满仓不跳
                 cnt["skip"] += 1
                 log.debug("[%d/%d] %s 跳过（已采）", idx, total, fn)
                 continue
@@ -817,12 +829,23 @@ def _tasks_remaining(tasks: list[dict], store: dict) -> int:
     return n
 
 
-def cmd_sweep(client, raw, store, pool, state, args) -> None:
+def _sweep_todo(tasks: list[dict], pool: dict[str, dict], cn: set[str]) -> list[tuple]:
+    """纯函数：清单全量 + 池内清单外新仓（国产优先、高星优先）。sweep 期间（全量铺底或
+    打满自愈）新入池的仓不在清单里——不并进来它们要等 sweep 结束转 incremental 才被采。
+    清单内的变化仓不用并：run_collect_loop 的 _is_fresh 看到池 pushed_at 更新就不跳过。"""
+    task_fns = {t["fn"] for t in tasks}
+    news = sorted(((fn, r) for fn, r in pool.items() if fn not in task_fns),
+                  key=lambda kv: (0 if kv[0] in cn else 1, -(kv[1].get("stars") or 0), kv[0]))
+    return [(t["fn"], pool.get(t["fn"])) for t in tasks] + news
+
+
+def cmd_sweep(client, raw, store, pool, cn, state, args) -> None:
     if not TASKS_P.is_file():
         raise SystemExit("任务清单不存在：先跑 plan（auto 会自动先 plan）")
     tasks = json.loads(TASKS_P.read_text(encoding="utf-8"))["tasks"]
-    todo = [(t["fn"], pool.get(t["fn"])) for t in tasks]
-    log.info("sweep：清单 %d 仓，剩余 %d", len(todo), _tasks_remaining(tasks, store))
+    todo = _sweep_todo(tasks, pool, cn)
+    log.info("sweep：清单 %d 仓，剩余 %d；池内清单外新仓 %d",
+             len(tasks), _tasks_remaining(tasks, store), len(todo) - len(tasks))
     run_collect_loop(client, raw, store, pool, todo, "sweep", state, args.limit)
 
 
@@ -851,7 +874,7 @@ def cmd_auto(client, raw, store, pool, cn, state, args) -> None:
         cmd_plan(args)
     tasks = json.loads(TASKS_P.read_text(encoding="utf-8"))["tasks"]
     if _tasks_remaining(tasks, store) > 0:
-        cmd_sweep(client, raw, store, pool, state, args)
+        cmd_sweep(client, raw, store, pool, cn, state, args)
     else:
         log.info("auto：全量清单已扫完，转 incremental")
         cmd_incremental(client, raw, store, pool, cn, state, args)
@@ -982,7 +1005,7 @@ def main() -> None:
     state = _load_state()
     if args.cmd == "sweep":
         pool, cn = load_pool()
-        cmd_sweep(client, raw, store, pool, state, args)
+        cmd_sweep(client, raw, store, pool, cn, state, args)
     elif args.cmd == "incremental":
         pool, cn = load_pool()
         cmd_incremental(client, raw, store, pool, cn, state, args)

@@ -216,6 +216,30 @@ def test_extract() -> None:
     n = ec._tasks_remaining(tasks, {"a/x": ok_rec, "a/y": capped_rec})
     check("清单余量：打满旧上限算没扫完（auto 继续走 sweep）", n == 2, str(n))
 
+    # 11-01 全覆盖：sweep/incremental 共用的跳过判定——变化仓/新仓/打满仓都不跳
+    done_rec = dict(ok_rec, pushed_at="2026-10-30")
+    same = {"pushed_at": "2026-10-30T08:00:00Z"}
+    newer = {"pushed_at": "2026-10-31T08:00:00Z"}
+    older = {"pushed_at": "2026-10-29T08:00:00Z"}
+    check("跳过判定：终态+池未更新 → 跳过", ec._is_fresh(done_rec, same))
+    check("跳过判定：池 pushed_at 更新 → 不跳（变化仓重采，树没变走 304）",
+          not ec._is_fresh(done_rec, newer))
+    check("跳过判定：记录比池新（回退路径写入 API 值）→ 跳过不反复采",
+          ec._is_fresh(done_rec, older))
+    check("跳过判定：打满旧上限 → 不跳", not ec._is_fresh(dict(capped_rec, pushed_at="2026-10-30"), same))
+    check("跳过判定：无记录（新仓）/error 记录 → 不跳",
+          not ec._is_fresh(None, same)
+          and not ec._is_fresh(dict(done_rec, status="error"), same))
+    check("跳过判定：仓已出池（pool_rec None）终态 → 跳过", ec._is_fresh(done_rec, None))
+
+    # 11-01 全覆盖：sweep 清单 + 池内清单外新仓（国产优先、星降序）
+    pool = {"a/x": {"stars": 1}, "a/y": {"stars": 1},
+            "b/new": {"stars": 5}, "c/new": {"stars": 100}, "d/new": {"stars": 50}}
+    todo = ec._sweep_todo([{"fn": "a/x"}, {"fn": "a/y"}], pool, cn={"b/new", "d/new"})
+    check("sweep 清单：清单在前 + 新仓并入（国产优先再星降序）",
+          [fn for fn, _ in todo] == ["a/x", "a/y", "d/new", "b/new", "c/new"],
+          str([fn for fn, _ in todo]))
+
 
 # ---------------- 3. 端到端（FakeClient） ----------------
 GO_MOD = "module example.com/app\n\nrequire github.com/go-sql-driver/mysql v1.7.1\n"
