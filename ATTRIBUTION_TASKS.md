@@ -46,7 +46,7 @@
 
 ## 第 0 批 · 止血（先于一切）
 
-### T0 出池闸门+审计日志 ｜✅ 2026-11-01 完成（提交号待填；10 用例绿+真实数据预演：9,269 圈定→920 准出/8,349 拦下）
+### T0 出池闸门+审计日志 ｜✅ 2026-11-01 完成（c8c220e2；10 用例绿+真实跑：9,269 圈定→920 准出/8,349 拦下，audit 已落盘）
 - **目标**：pool_core 出池前先查"已侦查且无证据"，误杀仓（sqlc 式）不准踢出池
 - **输入**：`pool_core` 现行 `_unlinked_fns` 逻辑（读通）；`state/unattr_verdicts.json` 台账
 - **输出**：闸门函数 + `state/pool_exit_audit.json`（每次出池记录 fn/原因/当时证据状态）
@@ -66,7 +66,7 @@
 
 ## 第 1 批 · 词表地基（三卡可并行）
 
-### T1a db_profiles 词表字段扩展 ｜✅ 2026-11-01 完成（提交号待填；新增词清单已呈用户）
+### T1a db_profiles 词表字段扩展 ｜✅ 2026-11-01 完成（544e8be7；新增词清单已呈用户）
 - **目标**：每库档案加 `drivers`（依赖名）/`images`（镜像名）/`ports`，国产 4 库一次建全
 - **输入**：`config/db_profiles.py` 现结构；10-30 文档的包名清单（GaussDB=huaweicloud-gaussdb 族、PolarDB=polardb-*/aliyun polardb20xx、YashanDB=yashandb、Dameng 补 DmJdbcDriver/DmProvider）；镜像名 pingcap/tidb、oceanbase/oceanbase、opengauss/opengauss
 - **输出**：17 库档案三字段全量 + `validate` 增加词表一致性检查项
@@ -74,14 +74,14 @@
 - **验收**：`python -c "from config import db_profiles"` 通过；validate 全绿；17/17 库 `drivers∪drivers_exact` 与 `images` 非空（`ports` 允许声明性空：SQLite 嵌入式/云服务库无标准端口，notes 注明）；**新增词 diff 清单呈用户过目后才算过**（国产 4 库词无实测校准，10 分钟人工把关，防 T3b 才发现返工）
 - **防坑**：精确词（pg）与子串词（psycopg）必须分字段标 `exact: true`，混在一起 T1b 会误伤
 
-### T1b 精确词档位机制 ｜✅ 2026-11-01 完成（提交号待填；selftest 25/25 绿）
+### T1b 精确词档位机制 ｜✅ 2026-11-01 完成（be9c0d38；selftest 28/28 绿，含真实流量 mysqlclient 误判修复）
 - **目标**：词表匹配支持两级——子串安全词与精确词（`==` 匹配）
 - **输入**：T1a 字段结构；误伤反例集：`jsonwebtoken`/`pg-electron` 不得命中裸 pg、`@types/pg` 排除、`sqlite3` 在 package.json deps 与 devDeps 区分
 - **输出**：`attribution/dep_match.py`（匹配函数：`@types/` 前缀排除、exact/子串两档、dev 降档标志）+ `attribution/fixtures/false_positives.json`（**误伤样本先落盘再写单测——契约先行**，正例+反例都带 expect 字段）+ `attribution/selftest_dep_match.py`（仿 selftest_evidence.py 手写断言风格，零网络）
 - **验收**：反例用例全绿（含至少 10 条我从审计里挖的真实误伤样本）
 - **依赖**：T1a 定字段结构
 
-### T1c 三套词表归一 ｜✅ 2026-11-01 完成（提交号待填；readme 视图零 diff+db_scan 重跑 31,947 仓产物逐字节一致）
+### T1c 三套词表归一 ｜✅ 2026-11-01 完成（574d9bda；readme 视图零 diff+db_scan 重跑 31,947 仓产物逐字节一致）
 - **目标**：DEP_ALIAS/DIR_ALIAS 从 db_profiles 派生，消灭三套硬编码漂移
 - **输入**：`interpret/unattr_judge.py` 的 E1/E3 表、db_scan 的 DB_VOCAB
 - **输出**：`attribution/vocab.py` 派生层 + db_scan 改为 import（**unattr_judge 不碰**——由 T2e 整体重写，旧代码不再投入维护）
