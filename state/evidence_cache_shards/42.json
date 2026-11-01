@@ -211,13 +211,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T15:15:44Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:03:19Z",
   "default_branch": "main",
   "pushed_at": "2026-10-29",
   "stars": 1,
   "tree": {
    "sha": "f1db9556b8de2d2c094c63659504403155382e99",
-   "etag": "W/\"27477e83e1418f6292b8fc300315c2af3728df30f14bba39275df4536b9baf20\"",
+   "etag": "W/\"de0930cc8fb60ec227fedfb2016d6f0f6be78c49e5f1efb55316608cdb6c1410\"",
    "truncated": false,
    "path_count": 497,
    "matched": [
@@ -237,7 +238,8 @@
     "auth-service/Dockerfile",
     "client-frontend/Dockerfile",
     "client-service/Dockerfile",
-    "data/Dockerfile"
+    "data/Dockerfile",
+    "gateway/Dockerfile"
    ]
   },
   "files": [
@@ -512,6 +514,16 @@
     "bytes": 220,
     "images": [
      "python:3.12-slim"
+    ]
+   },
+   {
+    "path": "gateway/Dockerfile",
+    "kind": "image",
+    "blob_sha": "ab0baa233b46502b1f1e32a2890acfe525d066b8",
+    "bytes": 594,
+    "images": [
+     "node:22-alpine",
+     "deps"
     ]
    }
   ],
@@ -1497,13 +1509,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:43:19Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:35:57Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-28",
+  "pushed_at": "2026-10-31",
   "stars": 102,
   "tree": {
-   "sha": "17858a293a9df70a67b700fff0be4d11a7403aaa",
-   "etag": "W/\"1d04f16a21b2762357fb2284fd0c1dbda79d1cd524731c6e5cd74e704c4540f5\"",
+   "sha": "113a9e5cbc41850c22814e8a474341335a9d391f",
+   "etag": "W/\"5b6f59353e5bdcfca438266c746df04eccff16e3a6bc52baf64b5fc918b1fa8e\"",
    "truncated": false,
    "path_count": 391,
    "matched": [
@@ -1519,6 +1532,15 @@
     "joy-rs/joyczl-memory/Cargo.toml",
     "joy-rs/joyczl-ops/Cargo.toml",
     "joy-rs/joyczl-protocol-noop-macros/Cargo.toml",
+    "joy-rs/joyczl-protocol/Cargo.toml",
+    "joy-rs/joyczl-provider/Cargo.toml",
+    "joy-rs/joyczl-state/Cargo.toml",
+    "joy-rs/joyczl-tools/Cargo.toml",
+    "sdk/python-bin/pyproject.toml",
+    "sdk/python/pyproject.toml",
+    "joy-ts/packages/client/package.json",
+    "joy-ts/packages/dashboard/package.json",
+    "joy-ts/packages/gateway/package.json",
     "Dockerfile",
     ".github/workflows/ci.yml"
    ]
@@ -1741,6 +1763,125 @@
     "blob_sha": "246502834495bba48dc9a31b34abe018996a48fa",
     "ecosystem": "cargo",
     "bytes": 262
+   },
+   {
+    "path": "joy-rs/joyczl-protocol/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "4b58c6ac6b478877a5fec595202e8fcc77bcbaab",
+    "ecosystem": "cargo",
+    "bytes": 577,
+    "names": [
+     "serde",
+     "serde_json",
+     "joyczl-protocol-noop-macros"
+    ],
+    "dev": [
+     "ts-rs",
+     "schemars"
+    ]
+   },
+   {
+    "path": "joy-rs/joyczl-provider/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "9f44bce0b3a85bc3e9879fc98888ed9ad0407705",
+    "ecosystem": "cargo",
+    "bytes": 642,
+    "names": [
+     "tiktoken-rs",
+     "bytes",
+     "futures-util",
+     "joyczl-config",
+     "reqwest",
+     "serde",
+     "serde_json",
+     "thiserror",
+     "tokio"
+    ],
+    "dev": [
+     "tempfile"
+    ]
+   },
+   {
+    "path": "joy-rs/joyczl-state/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "c12f1bba9f8d38061eb666cb3722bebea0b27e52",
+    "ecosystem": "cargo",
+    "bytes": 555,
+    "names": [
+     "serde_json",
+     "anyhow",
+     "sqlx"
+    ],
+    "dev": [
+     "tempfile",
+     "tokio"
+    ]
+   },
+   {
+    "path": "joy-rs/joyczl-tools/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "6187de5f781362c4d280733109a7ec40782df011",
+    "ecosystem": "cargo",
+    "bytes": 907,
+    "names": [
+     "anyhow",
+     "chrono",
+     "joyczl-config",
+     "joyczl-memory",
+     "jsonschema",
+     "joyczl-provider",
+     "joyczl-state",
+     "serde_json",
+     "reqwest",
+     "tokio"
+    ],
+    "dev": [
+     "tempfile"
+    ]
+   },
+   {
+    "path": "sdk/python-bin/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "4559a901446ed5ecfc55a2c24a08a8756475ce32",
+    "ecosystem": "pyproject",
+    "bytes": 543
+   },
+   {
+    "path": "sdk/python/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "f8341dd915d2af81feb503b16b0a941f80a57930",
+    "ecosystem": "pyproject",
+    "bytes": 2178,
+    "names": [
+     "pydantic"
+    ]
+   },
+   {
+    "path": "joy-ts/packages/client/package.json",
+    "kind": "dep",
+    "blob_sha": "a455a9f9c7b786fad0a3b558d4d36e37526c4f7b",
+    "ecosystem": "npm",
+    "bytes": 308
+   },
+   {
+    "path": "joy-ts/packages/dashboard/package.json",
+    "kind": "dep",
+    "blob_sha": "8d9027234bf4a4410c9cc125e38a83c4729e4fac",
+    "ecosystem": "npm",
+    "bytes": 482,
+    "dev": [
+     "esbuild"
+    ]
+   },
+   {
+    "path": "joy-ts/packages/gateway/package.json",
+    "kind": "dep",
+    "blob_sha": "a1a11ac933eab65d2fa0ed5dcb681ff0d37d5cef",
+    "ecosystem": "npm",
+    "bytes": 723,
+    "names": [
+     "@joy/client"
+    ]
    },
    {
     "path": "Dockerfile",
@@ -2502,13 +2643,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T00:57:36Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:45:42Z",
   "default_branch": "main",
   "pushed_at": "2026-10-30",
-  "stars": 29,
+  "stars": 30,
   "tree": {
    "sha": "133160e1f9f12663b572f8f1740d706239ae14d9",
-   "etag": "W/\"7e015016e43015ce843ab3a2a011ea738b69160857fe4721c3a3fafea6bd719f\"",
+   "etag": "W/\"d9bc655f00a035ee24aab4f9a67f057492b3cee052f09640cc169c12e28dd975\"",
    "truncated": false,
    "path_count": 2107,
    "matched": [
@@ -2524,6 +2666,25 @@
     "CamusDB.Sandbox/CamusDB.Sandbox.csproj",
     "CamusDB.Tests/CamusDB.Tests.csproj",
     "CamusDB.Wasm/CamusDB.Wasm.csproj",
+    "CamusDB.Workload.Tests/CamusDB.Workload.Tests.csproj",
+    "CamusDB.Workload/CamusDB.Workload.csproj",
+    "CamusDB/CamusDB.csproj",
+    "bench/package.json",
+    "CamusDB.Tests.Extensions/Fixture.Aggregate/Fixture.Aggregate.csproj",
+    "CamusDB.Tests.Extensions/Fixture.BannedApis/Fixture.BannedApis.csproj",
+    "CamusDB.Tests.Extensions/Fixture.Collision/Fixture.Collision.csproj",
+    "CamusDB.Tests.Extensions/Fixture.CrossKindDuplicate/Fixture.CrossKindDuplicate.csproj",
+    "CamusDB.Tests.Extensions/Fixture.Duplicate/Fixture.Duplicate.csproj",
+    "CamusDB.Tests.Extensions/Fixture.Good/Fixture.Good.csproj",
+    "CamusDB.Tests.Extensions/Fixture.GoodV2/Fixture.GoodV2.csproj",
+    "CamusDB.Tests.Extensions/Fixture.Helper/Fixture.Helper.csproj",
+    "CamusDB.Tests.Extensions/Fixture.NoManifest/Fixture.NoManifest.csproj",
+    "CamusDB.Tests.Extensions/Fixture.PInvoke/Fixture.PInvoke.csproj",
+    "CamusDB.Tests.Extensions/Fixture.Requires/Fixture.Requires.csproj",
+    "CamusDB.Tests.Extensions/Fixture.Rich/Fixture.Rich.csproj",
+    "CamusDB.Tests.Extensions/Fixture.TableFunctionCollision/Fixture.TableFunctionCollision.csproj",
+    "CamusDB.Tests.Extensions/Fixture.Unsafe/Fixture.Unsafe.csproj",
+    "CamusDB.Tests.Extensions/Fixture.UsesHelper/Fixture.UsesHelper.csproj",
     "docker/Dockerfile",
     "docker/Dockerfile.standalone",
     ".github/workflows/plan-quality-nightly.yml",
@@ -2678,6 +2839,160 @@
     "blob_sha": "19f5c485c0ca95c908f152a70b7cefbbaa771b93",
     "ecosystem": "csproj",
     "bytes": 1431
+   },
+   {
+    "path": "CamusDB.Workload.Tests/CamusDB.Workload.Tests.csproj",
+    "kind": "dep",
+    "blob_sha": "de59af52752ced7aa875fcfc1671d545d95c5d11",
+    "ecosystem": "csproj",
+    "bytes": 881,
+    "names": [
+     "Microsoft.NET.Test.Sdk",
+     "NUnit",
+     "NUnit3TestAdapter"
+    ]
+   },
+   {
+    "path": "CamusDB.Workload/CamusDB.Workload.csproj",
+    "kind": "dep",
+    "blob_sha": "3f3f116aeb3b0fe5d20bb23773060a2294eeb661",
+    "ecosystem": "csproj",
+    "bytes": 610,
+    "names": [
+     "CamusDB.Client",
+     "CommandLineParser"
+    ]
+   },
+   {
+    "path": "CamusDB/CamusDB.csproj",
+    "kind": "dep",
+    "blob_sha": "ef5f682e091c3744ace1d393e0719f899140375a",
+    "ecosystem": "csproj",
+    "bytes": 4646,
+    "names": [
+     "CommandLineParser",
+     "Grpc.AspNetCore",
+     "OpenTelemetry.Extensions.Hosting",
+     "OpenTelemetry.Instrumentation.AspNetCore",
+     "OpenTelemetry.Instrumentation.Runtime",
+     "OpenTelemetry.Exporter.Prometheus.AspNetCore",
+     "OpenTelemetry.Exporter.OpenTelemetryProtocol"
+    ]
+   },
+   {
+    "path": "bench/package.json",
+    "kind": "dep",
+    "blob_sha": "25d35113ca9bf26c784c295aee33be43c05bc1b7",
+    "ecosystem": "npm",
+    "bytes": 70,
+    "names": [
+     "node-fetch"
+    ]
+   },
+   {
+    "path": "CamusDB.Tests.Extensions/Fixture.Aggregate/Fixture.Aggregate.csproj",
+    "kind": "dep",
+    "blob_sha": "9203e021b593f5213414eec28873009afb888c0a",
+    "ecosystem": "csproj",
+    "bytes": 186
+   },
+   {
+    "path": "CamusDB.Tests.Extensions/Fixture.BannedApis/Fixture.BannedApis.csproj",
+    "kind": "dep",
+    "blob_sha": "9203e021b593f5213414eec28873009afb888c0a",
+    "ecosystem": "csproj",
+    "bytes": 186
+   },
+   {
+    "path": "CamusDB.Tests.Extensions/Fixture.Collision/Fixture.Collision.csproj",
+    "kind": "dep",
+    "blob_sha": "9203e021b593f5213414eec28873009afb888c0a",
+    "ecosystem": "csproj",
+    "bytes": 186
+   },
+   {
+    "path": "CamusDB.Tests.Extensions/Fixture.CrossKindDuplicate/Fixture.CrossKindDuplicate.csproj",
+    "kind": "dep",
+    "blob_sha": "9203e021b593f5213414eec28873009afb888c0a",
+    "ecosystem": "csproj",
+    "bytes": 186
+   },
+   {
+    "path": "CamusDB.Tests.Extensions/Fixture.Duplicate/Fixture.Duplicate.csproj",
+    "kind": "dep",
+    "blob_sha": "9203e021b593f5213414eec28873009afb888c0a",
+    "ecosystem": "csproj",
+    "bytes": 186
+   },
+   {
+    "path": "CamusDB.Tests.Extensions/Fixture.Good/Fixture.Good.csproj",
+    "kind": "dep",
+    "blob_sha": "9203e021b593f5213414eec28873009afb888c0a",
+    "ecosystem": "csproj",
+    "bytes": 186
+   },
+   {
+    "path": "CamusDB.Tests.Extensions/Fixture.GoodV2/Fixture.GoodV2.csproj",
+    "kind": "dep",
+    "blob_sha": "88c647ed8f3b1122fb90241ca3ed79d4f243e4c3",
+    "ecosystem": "csproj",
+    "bytes": 641
+   },
+   {
+    "path": "CamusDB.Tests.Extensions/Fixture.Helper/Fixture.Helper.csproj",
+    "kind": "dep",
+    "blob_sha": "35e3d8428b7cfcc172d63391c605ca228f0e4703",
+    "ecosystem": "csproj",
+    "bytes": 45
+   },
+   {
+    "path": "CamusDB.Tests.Extensions/Fixture.NoManifest/Fixture.NoManifest.csproj",
+    "kind": "dep",
+    "blob_sha": "9203e021b593f5213414eec28873009afb888c0a",
+    "ecosystem": "csproj",
+    "bytes": 186
+   },
+   {
+    "path": "CamusDB.Tests.Extensions/Fixture.PInvoke/Fixture.PInvoke.csproj",
+    "kind": "dep",
+    "blob_sha": "9203e021b593f5213414eec28873009afb888c0a",
+    "ecosystem": "csproj",
+    "bytes": 186
+   },
+   {
+    "path": "CamusDB.Tests.Extensions/Fixture.Requires/Fixture.Requires.csproj",
+    "kind": "dep",
+    "blob_sha": "9203e021b593f5213414eec28873009afb888c0a",
+    "ecosystem": "csproj",
+    "bytes": 186
+   },
+   {
+    "path": "CamusDB.Tests.Extensions/Fixture.Rich/Fixture.Rich.csproj",
+    "kind": "dep",
+    "blob_sha": "9203e021b593f5213414eec28873009afb888c0a",
+    "ecosystem": "csproj",
+    "bytes": 186
+   },
+   {
+    "path": "CamusDB.Tests.Extensions/Fixture.TableFunctionCollision/Fixture.TableFunctionCollision.csproj",
+    "kind": "dep",
+    "blob_sha": "9203e021b593f5213414eec28873009afb888c0a",
+    "ecosystem": "csproj",
+    "bytes": 186
+   },
+   {
+    "path": "CamusDB.Tests.Extensions/Fixture.Unsafe/Fixture.Unsafe.csproj",
+    "kind": "dep",
+    "blob_sha": "1d71b805b8004333fc92229b42d1ceedef4fd786",
+    "ecosystem": "csproj",
+    "bytes": 271
+   },
+   {
+    "path": "CamusDB.Tests.Extensions/Fixture.UsesHelper/Fixture.UsesHelper.csproj",
+    "kind": "dep",
+    "blob_sha": "3b5d51bb14177900109db95d2362abdacf2b855d",
+    "ecosystem": "csproj",
+    "bytes": 261
    },
    {
     "path": "docker/Dockerfile",
@@ -3022,15 +3337,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T01:43:14Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:55:50Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 12,
   "tree": {
-   "sha": "2197101d6cbe7a0e2115f0071178abb5170a1f1e",
-   "etag": "W/\"2ba1cc38adf8d38f9b4a75286251a7bde4adaba2bbbdb098fc656e47217118e0\"",
+   "sha": "8866972f83461f44b4b00d4bb44cc5c015267139",
+   "etag": "W/\"9160d58f040443d38fd1f322f6ce48c011b4c3835b53b6c89f4538ce216b144b\"",
    "truncated": false,
-   "path_count": 364,
+   "path_count": 376,
    "matched": [
     "package.json",
     "apps/server/package.json",
@@ -3365,13 +3681,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T02:09:18Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:03:13Z",
   "default_branch": "master",
   "pushed_at": "2026-10-30",
   "stars": 56,
   "tree": {
    "sha": "5432bd1744135c316f83a70279e1ff47358473f5",
-   "etag": "W/\"307b3257e80c9eb8fd54af5c52cd332bd7222ede6afff1afa546d03c302593cd\"",
+   "etag": "W/\"fb7d2b79e250c8f754bcfe78b51aec66533832d62c833fc31f4588a31849ecc5\"",
    "truncated": false,
    "path_count": 2231,
    "matched": [
@@ -3822,6 +4139,16 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "downstreamadapter/sink/mysql/sink.go",
+    "downstreamadapter/sink/mysql/sink_test.go",
+    "downstreamadapter/sink/mysql/causality/conflict_detector.go",
+    "downstreamadapter/sink/mysql/causality/helper.go",
+    "downstreamadapter/sink/mysql/causality/helper_test.go",
+    "downstreamadapter/sink/mysql/causality/node.go",
+    "downstreamadapter/sink/mysql/causality/slot.go",
+    "downstreamadapter/sink/mysql/causality/slot_benchmark_test.go",
+    "downstreamadapter/sink/mysql/causality/slot_test.go",
+    "downstreamadapter/sink/mysql/causality/txn_cache.go",
     "downstreamadapter/downstream_performance_test.go",
     "downstreamadapter/dispatcher/basic_dispatcher.go",
     "downstreamadapter/dispatcher/basic_dispatcher_active_active_test.go",
@@ -3861,7 +4188,89 @@
     "downstreamadapter/eventcollector/dispatcher_session_test_helper_test.go",
     "downstreamadapter/eventcollector/dispatcher_stat.go",
     "downstreamadapter/eventcollector/dispatcher_stat_test.go",
-    "downstreamadapter/eventcollector/event_collector.go"
+    "downstreamadapter/eventcollector/event_collector.go",
+    "downstreamadapter/eventcollector/event_collector_test.go",
+    "downstreamadapter/eventcollector/helper.go",
+    "downstreamadapter/eventcollector/log_coordinator_client.go",
+    "downstreamadapter/sink/sink.go",
+    "downstreamadapter/sink/sink_test.go",
+    "downstreamadapter/sink/write_gate.go",
+    "downstreamadapter/sink/write_gate_test.go",
+    "downstreamadapter/syncpoint/sync_point.go",
+    "downstreamadapter/sink/blackhole/sink.go",
+    "downstreamadapter/sink/blackhole/sink_test.go",
+    "downstreamadapter/sink/cloudstorage/buffer_manager.go",
+    "downstreamadapter/sink/cloudstorage/buffer_manager_test.go",
+    "downstreamadapter/sink/cloudstorage/dml_writers.go",
+    "downstreamadapter/sink/cloudstorage/dml_writers_routing_test.go",
+    "downstreamadapter/sink/cloudstorage/dml_writers_test.go",
+    "downstreamadapter/sink/cloudstorage/encoder_group.go",
+    "downstreamadapter/sink/cloudstorage/encoder_group_test.go",
+    "downstreamadapter/sink/cloudstorage/indexer.go",
+    "downstreamadapter/sink/cloudstorage/metrics.go",
+    "downstreamadapter/sink/cloudstorage/sink.go",
+    "downstreamadapter/sink/cloudstorage/sink_test.go",
+    "downstreamadapter/sink/cloudstorage/spool_metrics.go",
+    "downstreamadapter/sink/cloudstorage/task.go",
+    "downstreamadapter/sink/cloudstorage/task_test.go",
+    "downstreamadapter/sink/cloudstorage/test_helpers_test.go",
+    "downstreamadapter/sink/cloudstorage/writer.go",
+    "downstreamadapter/sink/cloudstorage/writer_test.go",
+    "downstreamadapter/sink/columnselector/column_selector.go",
+    "downstreamadapter/sink/columnselector/column_selector_test.go",
+    "downstreamadapter/sink/eventrouter/event_router.go",
+    "downstreamadapter/sink/eventrouter/event_router_test.go",
+    "downstreamadapter/sink/helper/helper.go",
+    "downstreamadapter/sink/helper/mq_row_event.go",
+    "downstreamadapter/sink/helper/row_callback.go",
+    "downstreamadapter/sink/helper/row_callback_test.go",
+    "downstreamadapter/sink/kafka/helper.go",
+    "downstreamadapter/sink/kafka/sink.go",
+    "downstreamadapter/sink/kafka/sink_test.go",
+    "downstreamadapter/sink/mock/sink_mock.go",
+    "downstreamadapter/sink/pulsar/ddl_producer.go",
+    "downstreamadapter/sink/pulsar/ddl_producer_test.go",
+    "downstreamadapter/sink/pulsar/dml_producer.go",
+    "downstreamadapter/sink/pulsar/dml_producer_test.go",
+    "downstreamadapter/sink/pulsar/helper.go",
+    "downstreamadapter/sink/pulsar/mock_producer.go",
+    "downstreamadapter/sink/pulsar/sink.go",
+    "downstreamadapter/sink/pulsar/sink_test.go",
+    "downstreamadapter/sink/redo/helper.go",
+    "downstreamadapter/sink/redo/meta.go",
+    "downstreamadapter/sink/redo/meta_test.go",
+    "downstreamadapter/sink/redo/metrics_collector.go",
+    "downstreamadapter/sink/redo/sink.go",
+    "downstreamadapter/sink/redo/sink_test.go",
+    "downstreamadapter/sink/statistics/metrics.go",
+    "downstreamadapter/sink/statistics/statistics.go",
+    "downstreamadapter/sink/topicmanager/kafka_topic_manager.go",
+    "downstreamadapter/sink/topicmanager/kafka_topic_manager_test.go",
+    "downstreamadapter/sink/topicmanager/pulsar_topic_manager.go",
+    "downstreamadapter/sink/topicmanager/pulsar_topic_manager_mock.go",
+    "downstreamadapter/sink/topicmanager/pulsar_topic_manager_test.go",
+    "downstreamadapter/sink/topicmanager/topic_manager.go",
+    "downstreamadapter/sink/topicmanager/topic_manager_mock.go",
+    "tests/integration_tests/canal_json_adapter_compatibility/run.sh",
+    "downstreamadapter/sink/eventrouter/partition/column_test.go",
+    "downstreamadapter/sink/eventrouter/partition/columns.go",
+    "downstreamadapter/sink/eventrouter/partition/generator.go",
+    "downstreamadapter/sink/eventrouter/partition/index_value.go",
+    "downstreamadapter/sink/eventrouter/partition/index_value_test.go",
+    "downstreamadapter/sink/eventrouter/partition/key.go",
+    "downstreamadapter/sink/eventrouter/partition/table.go",
+    "downstreamadapter/sink/eventrouter/partition/ts.go",
+    "downstreamadapter/sink/eventrouter/topic/expression.go",
+    "downstreamadapter/sink/eventrouter/topic/expression_pulsar_test.go",
+    "downstreamadapter/sink/eventrouter/topic/expression_test.go",
+    "downstreamadapter/sink/eventrouter/topic/topic.go",
+    "downstreamadapter/sink/eventrouter/topic/topic_test.go",
+    "tests/integration_tests/canal_json_adapter_compatibility/conf/diff_config.toml",
+    "tests/integration_tests/canal_json_adapter_compatibility/data/data.sql",
+    "tests/integration_tests/canal_json_adapter_compatibility/data/data_gbk.sql",
+    "tests/integration_tests/debezium02/sql/connector_read_binary_field_test.sql",
+    "tests/integration_tests/debezium02/sql/connector_test.sql",
+    "tests/integration_tests/debezium02/sql/connector_test_ro.sql"
    ]
   },
   "fail_count": 0
@@ -3871,13 +4280,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T02:11:55Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:04:11Z",
   "default_branch": "main",
   "pushed_at": "2022-06-15",
   "stars": 15,
   "tree": {
    "sha": "3f388d4a4e5816a39e5efe6c6d50ada4957f23e5",
-   "etag": "W/\"c476d11a77be76a8c5d9edb396e76742630b92c74e42082f99a309ef7c0c0e41\"",
+   "etag": "W/\"4cba569662fcf1ec8906712c10c8a2fa15a4bd89636d3b17ad2335708d090dfe\"",
    "truncated": false,
    "path_count": 163,
    "matched": [
@@ -3954,6 +4364,26 @@
    ],
    "docs_matrix": [],
    "paths": [
+    "plugins/polardb_pg_opensource/Makefile",
+    "plugins/polardb_pg_opensource/polardb_pg.go",
+    "common/polardb_pg/log/plugin_logger.go",
+    "plugins/polardb_pg_opensource/collector/polardb_pg_collector.go",
+    "plugins/polardb_pg_opensource/environment/environment_collector.go",
+    "plugins/polardb_pg_opensource/environment/environment_factory.go",
+    "plugins/polardb_pg_opensource/environment/polarflex_collector.go",
+    "plugins/polardb_pg_opensource/resource/resource_collector.go",
+    "plugins/polardb_pg_opensource/service/polardb_pg_service.go",
+    "conf_envs/conf_opensource_host_env/plugin/polardb_pg/golang_extern.conf",
+    "conf_envs/conf_opensource_host_env/plugin/polardb_pg/golang_extern.conf.develop",
+    "conf_envs/conf_opensource_host_env/plugin/polardb_pg/schema.json",
+    "conf_envs/conf_opensource_host_env/plugin/polardb_pg_multidimension/golang_extern.conf",
+    "plugins/polardb_pg_opensource/resource/fs/fs_collector.go",
+    "plugins/polardb_pg_opensource/resource/fs/local_dir_collector.go",
+    "plugins/polardb_pg_opensource/resource/fs/pfs_collector.go",
+    "plugins/polardb_pg_opensource/resource/io/disk_io_collector.go",
+    "plugins/polardb_pg_opensource/resource/io/polarswitch_io_collector.go",
+    "plugins/polardb_pg_opensource/resource/process/oom_controller.go",
+    "plugins/polardb_pg_opensource/resource/process/pg_process_collector.go",
     "Makefile.plugin",
     "internal/gather/plugin.go",
     "internal/gather/plugin_test.go",
@@ -3973,13 +4403,10 @@
     "plugins/perfdata_processor/perfdata_processor.go",
     "plugins/pluto/Makefile",
     "plugins/pluto/pluto.go",
-    "plugins/polardb_pg_opensource/Makefile",
-    "plugins/polardb_pg_opensource/polardb_pg.go",
     "plugins/prometheus_backend/Makefile",
     "plugins/prometheus_backend/prometheus_backend.go",
     "plugins/sar/Makefile",
     "plugins/sar/sar.go",
-    "common/polardb_pg/log/plugin_logger.go",
     "conf_envs/conf_opensource_host_env/plugin/plugin_golang_ctrl.conf",
     "conf_envs/conf_opensource_host_env/plugin/plugin_golang_db_backend.conf",
     "conf_envs/conf_opensource_host_env/plugin/plugin_golang_influxdb_backend.conf",
@@ -3993,7 +4420,24 @@
     "plugins/cgroup/collector/cgroup_collector.go",
     "plugins/cgroup/collector/cgroup_test.go",
     "plugins/db_backend/dao/dao.go",
-    "plugins/perf/collector/perf_collector.go"
+    "plugins/perf/collector/perf_collector.go",
+    "plugins/perf/collector/profiler.go",
+    "plugins/perf/collector/profiler_test.go",
+    "plugins/perf/collector/ztypes_mapping.go",
+    "plugins/sar/collector/sar_collector.go",
+    "plugins/sar/collector/sar_test.go",
+    "conf_envs/conf_opensource_host_env/plugin/ctrl/ctrl_extern.conf",
+    "conf_envs/conf_opensource_host_env/plugin/db_backend/db_backend.conf",
+    "conf_envs/conf_opensource_host_env/plugin/influxdb_backend/influxdb_backend.conf",
+    "conf_envs/conf_opensource_host_env/plugin/lua/golang_extern.conf",
+    "conf_envs/conf_opensource_host_env/plugin/lua/schema.json",
+    "conf_envs/conf_opensource_host_env/plugin/lua/test.lua",
+    "conf_envs/conf_opensource_host_env/plugin/perfdata_processor/perfdata_processor.conf",
+    "conf_envs/conf_opensource_host_env/plugin/pluto/golang_extern.conf",
+    "conf_envs/conf_opensource_host_env/plugin/pluto/schema.json",
+    "conf_envs/conf_opensource_host_env/plugin/prometheus_backend/prometheus_backend.conf",
+    "conf_envs/conf_opensource_host_env/plugin/sar/golang_extern.conf",
+    "conf_envs/conf_opensource_host_env/plugin/sar/schema.json"
    ]
   },
   "fail_count": 0
@@ -5664,15 +6108,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T03:59:07Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:43:29Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 322,
   "tree": {
-   "sha": "446056300012bece276f890c8d28979294fc4754",
-   "etag": "W/\"a9078814bef5aa45cfb3550b904fa1866ff1c43e7f38b5b80e6832d76275df13\"",
+   "sha": "78cfecfd194cce69e05c77af519ae8b2e5e13734",
+   "etag": "W/\"9122588fd7f486f761d8cf3a93d2e8757d39f079b1e24ff6de12a1889a5af8a9\"",
    "truncated": false,
-   "path_count": 541,
+   "path_count": 561,
    "matched": [
     "contrib/docker/Dockerfile.alpine",
     "contrib/docker/Dockerfile.rocky10",

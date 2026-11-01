@@ -2112,13 +2112,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T01:55:30Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:57:31Z",
   "default_branch": "main",
   "pushed_at": "2026-07-10",
   "stars": 11,
   "tree": {
    "sha": "b49d5c5ec17c255de7bd7500bb15d5853a847cbf",
-   "etag": "W/\"55073182c5a62bfeb38ffce35929d0da46b73e70f26bbaa207cdf6f32afda292\"",
+   "etag": "W/\"0ffb453bba46f28b042ab2cf8e2e308f2549f7c57b885bc1a95f2b984da1f411\"",
    "truncated": false,
    "path_count": 293,
    "matched": [
@@ -2134,6 +2135,15 @@
     "crates/galaxdb-embedded/Cargo.toml",
     "crates/galaxdb-io/Cargo.toml",
     "crates/galaxdb-observe/Cargo.toml",
+    "crates/galaxdb-query/Cargo.toml",
+    "crates/galaxdb-server/Cargo.toml",
+    "crates/galaxdb-sidecar/Cargo.toml",
+    "crates/galaxdb-sql/Cargo.toml",
+    "crates/galaxdb-storage/Cargo.toml",
+    "crates/galaxdb-vector/Cargo.toml",
+    "crates/galaxdb-versioning/Cargo.toml",
+    "crates/galaxdb-wire/Cargo.toml",
+    "tests/chaos/Cargo.toml",
     "Dockerfile",
     ".github/workflows/ci.yml",
     ".github/workflows/datafusion-bump.yml",
@@ -2368,6 +2378,208 @@
      "reqwest",
      "tempfile.workspace",
      "galaxdb-common.workspace"
+    ]
+   },
+   {
+    "path": "crates/galaxdb-query/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "ff72b62c94ee668cc3d41c1e2db52376ea525f07",
+    "ecosystem": "cargo",
+    "bytes": 1069,
+    "names": [
+     "galaxdb-common.workspace",
+     "galaxdb-sql.workspace",
+     "galaxdb-storage",
+     "arrow.workspace",
+     "async-trait",
+     "tokio",
+     "tracing.workspace",
+     "datafusion"
+    ],
+    "dev": [
+     "tokio",
+     "tempfile"
+    ]
+   },
+   {
+    "path": "crates/galaxdb-server/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "aa3595a9b90fee16afada1dfee3ec468870dd7ad",
+    "ecosystem": "cargo",
+    "bytes": 1306,
+    "names": [
+     "galaxdb-common.workspace",
+     "galaxdb-auth",
+     "galaxdb-cluster.workspace",
+     "galaxdb-sql",
+     "galaxdb-embedded.workspace",
+     "galaxdb-observe.workspace",
+     "galaxdb-wire.workspace",
+     "tokio",
+     "tracing",
+     "tracing-subscriber",
+     "tempfile",
+     "sysinfo"
+    ],
+    "dev": [
+     "tokio-postgres",
+     "tokio-postgres-rustls",
+     "rustls.workspace",
+     "rcgen",
+     "reqwest",
+     "serde_json.workspace",
+     "futures-util",
+     "bytes"
+    ]
+   },
+   {
+    "path": "crates/galaxdb-sidecar/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "e9d87794d0dc8ce00fd497dc28bbbe9d08fb3834",
+    "ecosystem": "cargo",
+    "bytes": 934,
+    "names": [
+     "galaxdb-common.workspace",
+     "galaxdb-observe.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "tokio.workspace",
+     "tracing.workspace",
+     "candle-core",
+     "candle-nn",
+     "candle-transformers",
+     "hf-hub",
+     "tokenizers"
+    ],
+    "dev": [
+     "tempfile.workspace"
+    ]
+   },
+   {
+    "path": "crates/galaxdb-sql/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "2c538c5960cfb594a4835e92828c3abcee52699a",
+    "ecosystem": "cargo",
+    "bytes": 795,
+    "names": [
+     "galaxdb-common.workspace",
+     "galaxdb-storage",
+     "galaxdb-versioning.workspace",
+     "galaxdb-vector",
+     "galaxdb-sidecar",
+     "galaxdb-auth",
+     "galaxdb-backup",
+     "galaxdb-observe.workspace",
+     "sqlparser.workspace",
+     "xxhash-rust.workspace",
+     "tracing.workspace"
+    ],
+    "dev": [
+     "tempfile.workspace",
+     "tokio.workspace",
+     "tracing-subscriber"
+    ]
+   },
+   {
+    "path": "crates/galaxdb-storage/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "1a3d42b3e99d725a5c4463bd2e6068367211f921",
+    "ecosystem": "cargo",
+    "bytes": 1174,
+    "names": [
+     "galaxdb-common.workspace",
+     "galaxdb-io",
+     "galaxdb-crypto",
+     "galaxdb-observe",
+     "crossbeam-skiplist.workspace",
+     "xxhash-rust.workspace",
+     "lz4_flex.workspace",
+     "zstd.workspace",
+     "tokio.workspace",
+     "tracing.workspace",
+     "prometheus.workspace"
+    ],
+    "dev": [
+     "tempfile",
+     "criterion",
+     "rand",
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/galaxdb-vector/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "483a5cb006236b72e55084c397444029b7ca82a4",
+    "ecosystem": "cargo",
+    "bytes": 502,
+    "names": [
+     "galaxdb-common.workspace",
+     "rand",
+     "memmap2.workspace",
+     "half.workspace",
+     "rayon.workspace",
+     "parking_lot.workspace"
+    ],
+    "dev": [
+     "tempfile.workspace",
+     "rand"
+    ]
+   },
+   {
+    "path": "crates/galaxdb-versioning/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "cdc8dc5e315dad89b1404d6d79f46fdf04a1a79f",
+    "ecosystem": "cargo",
+    "bytes": 1385,
+    "names": [
+     "galaxdb-common.workspace",
+     "galaxdb-vector.workspace",
+     "xxhash-rust.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "lance",
+     "arrow",
+     "tokio.workspace"
+    ],
+    "dev": [
+     "tempfile.workspace"
+    ]
+   },
+   {
+    "path": "crates/galaxdb-wire/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "f6a784097f4c95d6b12862f8ea8fd2a19d175b83",
+    "ecosystem": "cargo",
+    "bytes": 579,
+    "names": [
+     "galaxdb-common.workspace",
+     "galaxdb-sql",
+     "sqlparser.workspace",
+     "tokio",
+     "tracing.workspace",
+     "rustls.workspace",
+     "tokio-rustls.workspace"
+    ],
+    "dev": [
+     "tempfile.workspace",
+     "tokio",
+     "rcgen"
+    ]
+   },
+   {
+    "path": "tests/chaos/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "1d50cf8c40c233eeb2b9d132b69e1100e86df1dd",
+    "ecosystem": "cargo",
+    "bytes": 472,
+    "names": [
+     "galaxdb-common",
+     "galaxdb-storage",
+     "galaxdb-io",
+     "galaxdb-sidecar",
+     "tokio",
+     "rand",
+     "tempfile"
     ]
    },
    {

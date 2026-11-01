@@ -401,15 +401,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:11:54Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:22:29Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-29",
+  "pushed_at": "2026-10-31",
   "stars": 2062,
   "tree": {
-   "sha": "91dfab2132c4c4fcd3f9a115dbfa968b196b8b14",
-   "etag": "W/\"c13e1556642149aa9fcf281ba29011327294d5a2ea5bf5a44369ba737ba5366b\"",
+   "sha": "c7d7536bda6c44e7c148f699fcf8ad68914fb9d2",
+   "etag": "W/\"0fd10f16b15abe0a5e50fdc1eb6b7b6b028802be3eb2e1d3e939ab0b078048e4\"",
    "truncated": false,
-   "path_count": 12955,
+   "path_count": 13090,
    "matched": [
     "go.mod",
     "clients/python/pyproject.toml",
@@ -429,6 +430,10 @@
     "optools/images/Dockerfile.ci",
     "optools/images/Dockerfile.ci-builder",
     "optools/images/Dockerfile.dev",
+    "optools/images/Dockerfile.prebuilt",
+    "optools/images/gpu/Dockerfile",
+    "optools/images/gpu/Dockerfile.dev",
+    "optools/images/pythonserver/Dockerfile",
     ".github/workflows/ci-cancellation.yml",
     ".github/workflows/ci-scope-check.yml",
     ".github/workflows/connectorj-pool-reset.yml",
@@ -443,7 +448,12 @@
     ".github/workflows/mongodb-connector.yml",
     ".github/workflows/native-dependency-check.yml",
     ".github/workflows/python-sdk.yml",
-    ".github/workflows/race-seed-canary.yaml"
+    ".github/workflows/race-seed-canary.yaml",
+    ".github/workflows/release.yml",
+    ".github/workflows/robot.yml",
+    ".github/workflows/sca-go-module-cache.yaml",
+    ".github/workflows/test-coverage-bot-bridge.yml",
+    ".github/workflows/tpch-compare.yml"
    ]
   },
   "files": [
@@ -921,6 +931,45 @@
     ]
    },
    {
+    "path": "optools/images/Dockerfile.prebuilt",
+    "kind": "image",
+    "blob_sha": "f7d706d8e086c2d0f20270e303aba6d3bd289166",
+    "bytes": 1262,
+    "images": [
+     "${RUNTIME_IMAGE}"
+    ]
+   },
+   {
+    "path": "optools/images/gpu/Dockerfile",
+    "kind": "image",
+    "blob_sha": "aea18dcf4ecb2ef4102aa403be0ceb6e2ecc985a",
+    "bytes": 2280,
+    "images": [
+     "golang:1.27.0-bookworm",
+     "ubuntu:24.04"
+    ]
+   },
+   {
+    "path": "optools/images/gpu/Dockerfile.dev",
+    "kind": "image",
+    "blob_sha": "e9d539aeba0334afa2343ec80a4142e133c98cdf",
+    "bytes": 2382,
+    "images": [
+     "golang:1.27.0-bookworm",
+     "builder",
+     "ubuntu:24.04"
+    ]
+   },
+   {
+    "path": "optools/images/pythonserver/Dockerfile",
+    "kind": "image",
+    "blob_sha": "f729b5f7718df29b2e378e562957173547717fb1",
+    "bytes": 716,
+    "images": [
+     "python:3.9-bookworm"
+    ]
+   },
+   {
     "path": ".github/workflows/ci-cancellation.yml",
     "kind": "ci",
     "blob_sha": "a58ce9104032aece704a1c4781b9272dab75e79f",
@@ -1013,6 +1062,36 @@
      "description:",
      "${{"
     ]
+   },
+   {
+    "path": ".github/workflows/release.yml",
+    "kind": "ci",
+    "blob_sha": "8613386098d89f2f055fca46d8d8a9a8a4dc7631",
+    "bytes": 180
+   },
+   {
+    "path": ".github/workflows/robot.yml",
+    "kind": "ci",
+    "blob_sha": "bf82e3286fd435d97529fad73625d4646d530083",
+    "bytes": 394
+   },
+   {
+    "path": ".github/workflows/sca-go-module-cache.yaml",
+    "kind": "ci",
+    "blob_sha": "9faff8afaa03683a36faf2ca4fc6fce3bfa12b41",
+    "bytes": 17666
+   },
+   {
+    "path": ".github/workflows/test-coverage-bot-bridge.yml",
+    "kind": "ci",
+    "blob_sha": "a2b250c9e8c9162b252b8f0ac07d35ae12a8d6bd",
+    "bytes": 1169
+   },
+   {
+    "path": ".github/workflows/tpch-compare.yml",
+    "kind": "ci",
+    "blob_sha": "fa2d574fc8e461ecea11c9ba75b3aa6eeb097fa1",
+    "bytes": 963
    }
   ],
   "clues": {
@@ -1033,6 +1112,66 @@
     "docs/design/mysql_json_compat_28033.md"
    ],
    "paths": [
+    "pkg/sql/parsers/dialect/mysql/Makefile",
+    "pkg/sql/parsers/dialect/mysql/alter_charset_test.go",
+    "pkg/sql/parsers/dialect/mysql/alter_table_algorithm_test.go",
+    "pkg/sql/parsers/dialect/mysql/asof_join_test.go",
+    "pkg/sql/parsers/dialect/mysql/auto_id_cache_partition_test.go",
+    "pkg/sql/parsers/dialect/mysql/binary_prefix_syntax_test.go",
+    "pkg/sql/parsers/dialect/mysql/collate_test.go",
+    "pkg/sql/parsers/dialect/mysql/ctas_conflict_test.go",
+    "pkg/sql/parsers/dialect/mysql/datastream_sql_test.go",
+    "pkg/sql/parsers/dialect/mysql/dml_returning_base_test.go",
+    "pkg/sql/parsers/dialect/mysql/dml_returning_test.go",
+    "pkg/sql/parsers/dialect/mysql/empty_cte_body_test.go",
+    "pkg/sql/parsers/dialect/mysql/ewm_parse_test.go",
+    "pkg/sql/parsers/dialect/mysql/explain_format_json_test.go",
+    "pkg/sql/parsers/dialect/mysql/export_format_test.go",
+    "pkg/sql/parsers/dialect/mysql/foreigntable_sql_test.go",
+    "pkg/sql/parsers/dialect/mysql/grant_admin_option_test.go",
+    "pkg/sql/parsers/dialect/mysql/iceberg_sql_test.go",
+    "pkg/sql/parsers/dialect/mysql/index_option_test.go",
+    "pkg/sql/parsers/dialect/mysql/json_table_test.go",
+    "pkg/sql/parsers/dialect/mysql/kafka_sql_test.go",
+    "pkg/sql/parsers/dialect/mysql/keyword_policy_test.go",
+    "pkg/sql/parsers/dialect/mysql/keywords.go",
+    "pkg/sql/parsers/dialect/mysql/load_inline_format_test.go",
+    "pkg/sql/parsers/dialect/mysql/load_parallel.go",
+    "pkg/sql/parsers/dialect/mysql/load_parallel_test.go",
+    "pkg/sql/parsers/dialect/mysql/long_type_alias_test.go",
+    "pkg/sql/parsers/dialect/mysql/member_of_test.go",
+    "pkg/sql/parsers/dialect/mysql/mongodb_sql_test.go",
+    "pkg/sql/parsers/dialect/mysql/multi_insert_test.go",
+    "pkg/sql/parsers/dialect/mysql/mysql_lexer.go",
+    "pkg/sql/parsers/dialect/mysql/mysql_sql.go",
+    "pkg/sql/parsers/dialect/mysql/mysql_sql.y",
+    "pkg/sql/parsers/dialect/mysql/mysql_sql_test.go",
+    "pkg/sql/parsers/dialect/mysql/odbc_escape_type_test.go",
+    "pkg/sql/parsers/dialect/mysql/parse_limits.go",
+    "pkg/sql/parsers/dialect/mysql/parse_limits_test.go",
+    "pkg/sql/parsers/dialect/mysql/perform_test.go",
+    "pkg/sql/parsers/dialect/mysql/qualified_identifier_test.go",
+    "pkg/sql/parsers/dialect/mysql/scanner.go",
+    "pkg/sql/parsers/dialect/mysql/scanner_test.go",
+    "pkg/sql/parsers/dialect/mysql/select_into_outfile_fields_lines_test.go",
+    "pkg/sql/parsers/dialect/mysql/select_into_user_variables_test.go",
+    "pkg/sql/parsers/dialect/mysql/sequence_option_order_test.go",
+    "pkg/sql/parsers/dialect/mysql/sequence_options.go",
+    "pkg/sql/parsers/dialect/mysql/sounds_like_test.go",
+    "pkg/sql/parsers/dialect/mysql/spatial_type_test.go",
+    "pkg/sql/parsers/dialect/mysql/sql_mode.go",
+    "pkg/sql/parsers/dialect/mysql/sql_mode_test.go",
+    "pkg/sql/parsers/dialect/mysql/statement_boundary_test.go",
+    "pkg/sql/parsers/dialect/mysql/table_syntax_test.go",
+    "pkg/sql/parsers/dialect/mysql/window_local_rank_parser_test.go",
+    "pkg/sql/parsers/dialect/postgresql/Makefile",
+    "pkg/sql/parsers/dialect/postgresql/keywords.go",
+    "pkg/sql/parsers/dialect/postgresql/postgresql_lexer.go",
+    "pkg/sql/parsers/dialect/postgresql/postgresql_sql.go",
+    "pkg/sql/parsers/dialect/postgresql/postgresql_sql.y",
+    "pkg/sql/parsers/dialect/postgresql/postgresql_sql_test.go",
+    "pkg/sql/parsers/dialect/postgresql/scanner.go",
+    "pkg/sql/parsers/dialect/postgresql/scanner_test.go",
     "optools/connectorj_pool_reset_ci.bash",
     "proto/plugin.proto",
     ".github/workflows/connectorj-pool-reset.yml",
@@ -1072,7 +1211,107 @@
     "pkg/indexplugin/iscp/import_gpu.go",
     "pkg/indexplugin/plan/alter_column.go",
     "pkg/indexplugin/plan/capability.go",
-    "pkg/indexplugin/plan/coldef.go"
+    "pkg/indexplugin/plan/coldef.go",
+    "pkg/indexplugin/plan/dml.go",
+    "pkg/indexplugin/plan/hooks.go",
+    "pkg/indexplugin/plan/tablefunc.go",
+    "pkg/indexplugin/plan/tablefunc_test.go",
+    "pkg/indexplugin/plan/viewdef.go",
+    "pkg/indexplugin/plan/viewdef_test.go",
+    "pkg/indexplugin/search/hooks.go",
+    "pkg/pb/plugin/plugin.go",
+    "pkg/pb/plugin/plugin.pb.go",
+    "pkg/pb/plugin/plugin_test.go",
+    "pkg/sql/compile/ddl_drop_plugin_index_test.go",
+    "pkg/sql/compile/plugin_context.go",
+    "pkg/sql/foreigntvf/sql_fakedriver_test.go",
+    "pkg/sql/iceberg/internal_executor_adapter.go",
+    "pkg/sql/iceberg/internal_executor_adapter_test.go",
+    "pkg/sql/iceberg/maintenance_adapters.go",
+    "pkg/sql/iceberg/maintenance_adapters_test.go",
+    "pkg/sql/iceberg/write_adapters.go",
+    "pkg/sql/iceberg/write_adapters_test.go",
+    "pkg/sql/mongodb/driver.go",
+    "pkg/sql/mongodb/driver_monitor.go",
+    "pkg/sql/mongodb/driver_monitor_test.go",
+    "pkg/sql/plan/gpu_plugins_cpu_test.go",
+    "pkg/sql/plan/plugin.go",
+    "pkg/sql/plan/plugin_builder.go",
+    "pkg/sql/plan/plugin_context.go",
+    "pkg/tests/dml/uuid_driver_test.go",
+    ".agents/skills/mo-dev/references/index-plugin.md",
+    ".claude/skills/defect-hunt/references/matrixone-adapter.md",
+    ".claude/skills/mo-dev/references/index-plugin.md",
+    "clients/python/matrixone/sqlalchemy_ext/dialect.py",
+    "clients/python/tests/offline/test_dialect_schema_handling.py",
+    "clients/python/tests/online/test_dialect_schema_handling_online.py",
+    "clients/python/tests/online/test_mysql_driver_validation.py",
+    "pkg/fulltext/plugin/compile/alter_copy_test.go",
+    "pkg/fulltext/plugin/compile/async_admission_test.go",
+    "pkg/fulltext/plugin/compile/compile.go",
+    "pkg/fulltext/plugin/compile/identifier_test.go",
+    "pkg/fulltext/plugin/idxcron/idxcron.go",
+    "pkg/fulltext/plugin/idxcron/idxcron_test.go",
+    "pkg/fulltext/plugin/iscp/iscp.go",
+    "pkg/fulltext/plugin/plan/dml_test.go",
+    "pkg/fulltext/plugin/plan/plan.go",
+    "pkg/fulltext/plugin/plan/scan_options.go",
+    "pkg/fulltext/plugin/plan/schema.go",
+    "pkg/fulltext/plugin/plan/tablefunc.go",
+    "pkg/fulltext/plugin/plan/tablefunc_test.go",
+    "pkg/fulltext/plugin/plan/viewdef_test.go",
+    "pkg/fulltext/plugin/runtime/runtime.go",
+    "pkg/fulltext/plugin/runtime/runtime_test.go",
+    "pkg/fulltext/plugin/search/reader_port_test.go",
+    "pkg/fulltext/plugin/search/scan.go",
+    "pkg/fulltext/plugin/search/scan_test.go",
+    "pkg/fulltext/plugin/search/search.go",
+    "pkg/fulltext/plugin/search/search_test.go",
+    "pkg/fulltext2/plugin/compile/compile.go",
+    "pkg/fulltext2/plugin/compile/compile_cover_test.go",
+    "pkg/fulltext2/plugin/compile/compile_test.go",
+    "pkg/fulltext2/plugin/coverage/coverage.go",
+    "pkg/fulltext2/plugin/coverage/coverage_test.go",
+    "pkg/fulltext2/plugin/idxcron/idxcron.go",
+    "pkg/fulltext2/plugin/idxcron/idxcron_cover_test.go",
+    "pkg/fulltext2/plugin/iscp/iscp.go",
+    "pkg/fulltext2/plugin/iscp/iscp_cover_test.go",
+    "pkg/fulltext2/plugin/plan/alter.go",
+    "pkg/fulltext2/plugin/plan/alter_test.go",
+    "pkg/fulltext2/plugin/plan/plan.go",
+    "pkg/fulltext2/plugin/plan/plan_cover_test.go",
+    "pkg/fulltext2/plugin/plan/scan_options.go",
+    "pkg/fulltext2/plugin/plan/schema.go",
+    "pkg/fulltext2/plugin/plan/tablefunc.go",
+    "pkg/fulltext2/plugin/plan/token_filter_test.go",
+    "pkg/fulltext2/plugin/plan/viewdef_test.go",
+    "pkg/fulltext2/plugin/runtime/runtime.go",
+    "pkg/fulltext2/plugin/runtime/runtime_test.go",
+    "pkg/fulltext2/plugin/search/search.go",
+    "pkg/fulltext2/plugin/search/search_test.go",
+    "pkg/iceberg/adapter/iceberggo/adapter.go",
+    "pkg/iceberg/adapter/iceberggo/adapter_test.go",
+    "pkg/iceberg/adapter/iceberggo/go.mod",
+    "pkg/iceberg/adapter/iceberggo/go.sum",
+    "pkg/iceberg/adapter/iceberggo/io.go",
+    "pkg/iceberg/adapter/iceberggo/io_test.go",
+    "pkg/indexplugin/search/planreader/planreader.go",
+    "pkg/indexplugin/search/planreader/planreader_test.go",
+    "pkg/sql/colexec/connector/connector.go",
+    "pkg/sql/colexec/connector/types.go",
+    "pkg/sql/colexec/connector/types_test.go",
+    "pkg/sql/colexec/table_function/plugin.go",
+    "pkg/sql/colexec/table_function/plugin_test.go",
+    "pkg/sql/parsers/dialect/dialect_type.go",
+    "pkg/vectorindex/cagra/plugin/plugin.go",
+    "pkg/vectorindex/cagra/plugin/plugin_test.go",
+    "pkg/vectorindex/cagra/plugin/search_hooks_test.go",
+    "pkg/vectorindex/hnsw/plugin/plugin.go",
+    "pkg/vectorindex/ivfflat/plugin/plugin.go",
+    "pkg/vectorindex/ivfpq/plugin/plugin.go",
+    "pkg/vectorindex/ivfpq/plugin/plugin_test.go",
+    "pkg/vectorindex/ivfpq/plugin/search_hooks_test.go",
+    "test/distributed/cases/fulltext/fulltext_plugin_smoke.result"
    ],
    "matrix_urls": [
     "https://github.com/matrixorigin/artwork/blob/main/docs/overview/logo.png?raw=true",
@@ -1272,33 +1511,41 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:47:26Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:37:18Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-29",
+  "pushed_at": "2026-10-31",
   "stars": 82,
   "tree": {
-   "sha": "780889257ed291438b5e80c4b64649922159d2d1",
-   "etag": "W/\"cef89e4151ad136ab5c9fa97b2c5dca54537afc6f314c29d8f2393d7f8f653fb\"",
+   "sha": "187c0e692295725fab7df4f1fd486790c19aae1a",
+   "etag": "W/\"7e19667d0f54768a1cd02d2a37a192d943fff32dcd75cc4fe699dab844597763\"",
    "truncated": false,
-   "path_count": 18,
+   "path_count": 19,
    "matched": [
-    "setup.py",
-    ".github/workflows/django.yml"
+    "pyproject.toml",
+    ".github/workflows/django.yml",
+    ".github/workflows/publish.yml"
    ]
   },
   "files": [
    {
-    "path": "setup.py",
+    "path": "pyproject.toml",
     "kind": "dep",
-    "blob_sha": "0d718b9c88c070b9862e5381c07a7880730f2959",
-    "ecosystem": "setup_py",
-    "bytes": 1121
+    "blob_sha": "11d416d9cad78c52efbb601336f475c734337ae1",
+    "ecosystem": "pyproject",
+    "bytes": 981
    },
    {
     "path": ".github/workflows/django.yml",
     "kind": "ci",
-    "blob_sha": "c255b7d162613d92f7205b41049db4b8edd01ee7",
-    "bytes": 1573
+    "blob_sha": "73f8d72f6c0577113755a1e95eac1ebec59a3912",
+    "bytes": 1564
+   },
+   {
+    "path": ".github/workflows/publish.yml",
+    "kind": "ci",
+    "blob_sha": "b3d8ff6fa397101ceea5aceb638b1317db06e944",
+    "bytes": 1175
    }
   ],
   "clues": {
@@ -1941,13 +2188,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T01:14:21Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:49:28Z",
   "default_branch": "master",
   "pushed_at": "2023-05-18",
   "stars": 20,
   "tree": {
    "sha": "1dcffc1437917b62118727cac9df06f474bd81bf",
-   "etag": "W/\"01ba3fe7f9a43a72858168fa25cd7f2b6a57e1a983f8a405360823ae9b3526d3\"",
+   "etag": "W/\"5ddbcf53052806270abf0e011f7923b253db9bba9316976cd3db45d61125e7aa\"",
    "truncated": false,
    "path_count": 434,
    "matched": [
@@ -1963,6 +2211,18 @@
     "containers/node-alpine/package.json",
     "containers/static-next/package.json",
     "go/atourofgo/go.mod",
+    "go/concurrency/go.mod",
+    "go/p1/go.mod",
+    "go/p2/go.mod",
+    "go/reading/go.mod",
+    "go/tutorial/go.mod",
+    "js/redux/redux-connect/package.json",
+    "js/redux/redux-hooks/package.json",
+    "js/redux/redux-plain/package.json",
+    "js/redux/redux-toolkit-thunk/package.json",
+    "js/redux/redux-toolkit/package.json",
+    "go/tutorial/go-mod/greetings/go.mod",
+    "go/tutorial/go-mod/hello/go.mod",
     "containers/alpine-multi-stage/Dockerfile",
     "containers/alpine/Dockerfile",
     "containers/buildah-podman/Dockerfile",
@@ -1970,7 +2230,10 @@
     "containers/docker-compose/Dockerfile",
     "containers/kompose/Dockerfile",
     "containers/networking/Dockerfile",
-    "containers/node-alpine/Dockerfile"
+    "containers/node-alpine/Dockerfile",
+    "containers/static-next/Dockerfile",
+    "containers/volumes/Dockerfile",
+    "containers/dev-container/.devcontainer/Dockerfile"
    ]
   },
   "files": [
@@ -2097,6 +2360,198 @@
     "bytes": 38
    },
    {
+    "path": "go/concurrency/go.mod",
+    "kind": "dep",
+    "blob_sha": "9bc86c5f73abe22a5c01fb14f3a320393125a844",
+    "ecosystem": "go",
+    "bytes": 39
+   },
+   {
+    "path": "go/p1/go.mod",
+    "kind": "dep",
+    "blob_sha": "b96e788020c260d6387fca238b469fe031d62749",
+    "ecosystem": "go",
+    "bytes": 448,
+    "names": [
+     "github.com/grpc-ecosystem/grpc-gateway/v2",
+     "github.com/mattn/go-sqlite3",
+     "google.golang.org/grpc",
+     "google.golang.org/protobuf"
+    ],
+    "dev": [
+     "github.com/golang/protobuf",
+     "golang.org/x/net",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "google.golang.org/genproto"
+    ]
+   },
+   {
+    "path": "go/p2/go.mod",
+    "kind": "dep",
+    "blob_sha": "dff3268f8aa43eb27e301187d65fb7fd53d05966",
+    "ecosystem": "go",
+    "bytes": 31
+   },
+   {
+    "path": "go/reading/go.mod",
+    "kind": "dep",
+    "blob_sha": "45c99934ba090da30c661032aaa337d264b490e0",
+    "ecosystem": "go",
+    "bytes": 36
+   },
+   {
+    "path": "go/tutorial/go.mod",
+    "kind": "dep",
+    "blob_sha": "a5dddeb6f507b00edeed0bdc798c1ba1d23859f6",
+    "ecosystem": "go",
+    "bytes": 1068,
+    "names": [
+     "rsc.io/quote"
+    ],
+    "dev": [
+     "github.com/gin-contrib/sse",
+     "github.com/gin-gonic/gin",
+     "github.com/go-playground/locales",
+     "github.com/go-playground/universal-translator",
+     "github.com/go-playground/validator/v10",
+     "github.com/goccy/go-json",
+     "github.com/json-iterator/go",
+     "github.com/leodido/go-urn",
+     "github.com/mattn/go-isatty",
+     "github.com/modern-go/concurrent",
+     "github.com/modern-go/reflect2",
+     "github.com/pelletier/go-toml/v2",
+     "github.com/ugorji/go/codec",
+     "golang.org/x/crypto",
+     "golang.org/x/net",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "google.golang.org/protobuf",
+     "gopkg.in/yaml.v2",
+     "rsc.io/sampler"
+    ]
+   },
+   {
+    "path": "js/redux/redux-connect/package.json",
+    "kind": "dep",
+    "blob_sha": "0d19855db1a20aca8d9995c01f41ac2fc6597b66",
+    "ecosystem": "npm",
+    "bytes": 1049,
+    "names": [
+     "@testing-library/jest-dom",
+     "@testing-library/react",
+     "@testing-library/user-event",
+     "@twilio-paste/core",
+     "@twilio-paste/icons",
+     "format-number",
+     "immer",
+     "lodash",
+     "react",
+     "react-dom",
+     "react-redux",
+     "react-scripts",
+     "redux",
+     "reselect",
+     "web-vitals"
+    ]
+   },
+   {
+    "path": "js/redux/redux-hooks/package.json",
+    "kind": "dep",
+    "blob_sha": "ce7fb1e589d15102e087b17131c5c5428d740c4f",
+    "ecosystem": "npm",
+    "bytes": 981,
+    "names": [
+     "@testing-library/jest-dom",
+     "@testing-library/react",
+     "@testing-library/user-event",
+     "node-sass",
+     "react",
+     "react-dom",
+     "react-observable",
+     "react-redux",
+     "react-scripts",
+     "react-thunk",
+     "redux",
+     "rxjs",
+     "web-vitals"
+    ]
+   },
+   {
+    "path": "js/redux/redux-plain/package.json",
+    "kind": "dep",
+    "blob_sha": "1f1d18cfd68e6ea723161628de7f6b4878f7f029",
+    "ecosystem": "npm",
+    "bytes": 46,
+    "names": [
+     "redux"
+    ]
+   },
+   {
+    "path": "js/redux/redux-toolkit-thunk/package.json",
+    "kind": "dep",
+    "blob_sha": "48cbdea2cfc27fe9fa5097bdce56e3f907d93369",
+    "ecosystem": "npm",
+    "bytes": 927,
+    "names": [
+     "@reduxjs/toolkit",
+     "lodash",
+     "node-sass",
+     "react",
+     "react-dom",
+     "react-redux",
+     "react-scripts",
+     "redux",
+     "redux-observable",
+     "redux-saga",
+     "redux-thunk",
+     "rxjs"
+    ]
+   },
+   {
+    "path": "js/redux/redux-toolkit/package.json",
+    "kind": "dep",
+    "blob_sha": "958756d814d89ae33b50082ed2c581c864f08c34",
+    "ecosystem": "npm",
+    "bytes": 1092,
+    "names": [
+     "@reduxjs/toolkit",
+     "@testing-library/jest-dom",
+     "@testing-library/react",
+     "@testing-library/user-event",
+     "@twilio-paste/core",
+     "@twilio-paste/icons",
+     "react",
+     "react-dom",
+     "react-observable",
+     "react-redux",
+     "react-scripts",
+     "react-thunk",
+     "redux",
+     "redux-promise",
+     "rxjs",
+     "web-vitals"
+    ]
+   },
+   {
+    "path": "go/tutorial/go-mod/greetings/go.mod",
+    "kind": "dep",
+    "blob_sha": "aa06c8cae8aa2f5d003a3054c04365f1da9dc55d",
+    "ecosystem": "go",
+    "bytes": 38
+   },
+   {
+    "path": "go/tutorial/go-mod/hello/go.mod",
+    "kind": "dep",
+    "blob_sha": "6f12da18047a8c31b720da7c55b0eec4899c209d",
+    "ecosystem": "go",
+    "bytes": 147,
+    "names": [
+     "example.com/greetings"
+    ]
+   },
+   {
     "path": "containers/alpine-multi-stage/Dockerfile",
     "kind": "image",
     "blob_sha": "32540456768fac46119c4bcee5281cd9c5e83f90",
@@ -2167,6 +2622,34 @@
     "bytes": 326,
     "images": [
      "node:12-alpine"
+    ]
+   },
+   {
+    "path": "containers/static-next/Dockerfile",
+    "kind": "image",
+    "blob_sha": "336d7167baf9f8ef997e06b6445a0f0eae041851",
+    "bytes": 180,
+    "images": [
+     "node:alpine3.10",
+     "nginx:1.23.2-alpine"
+    ]
+   },
+   {
+    "path": "containers/volumes/Dockerfile",
+    "kind": "image",
+    "blob_sha": "81930db72c5ff3be873240bb698eb641bfda0dd1",
+    "bytes": 91,
+    "images": [
+     "node:16-alpine3.11"
+    ]
+   },
+   {
+    "path": "containers/dev-container/.devcontainer/Dockerfile",
+    "kind": "image",
+    "blob_sha": "0900329c59cba2c229160ffc148e5ff277d2f675",
+    "bytes": 61,
+    "images": [
+     "node:12-stretch"
     ]
    }
   ],
@@ -3550,15 +4033,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T03:15:14Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:22:37Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-30",
-  "stars": 4325,
+  "pushed_at": "2026-10-31",
+  "stars": 4326,
   "tree": {
-   "sha": "da5d2d5028310e43f511cf06a86672b5500f6ed5",
-   "etag": "W/\"02dfc2192ff33694722ffef177de8618591a940fd947a9b6a4677d60059b5266\"",
+   "sha": "83454bc53d1168f6ba21703aa49940e94c9e8ecc",
+   "etag": "W/\"d9abfbb691f8509417e8da6e8d58052b47724eeed39fc4f4c0c6399ed6b73f50\"",
    "truncated": false,
-   "path_count": 1567,
+   "path_count": 1582,
    "matched": [
     "go.mod",
     "cmd/pg/exporter/go.mod",
@@ -3570,6 +4054,22 @@
     "docker/etcd_tests/Dockerfile",
     "docker/fdb_tests/Dockerfile",
     "docker/golang/Dockerfile",
+    "docker/gp/Dockerfile",
+    "docker/gp_tests/Dockerfile",
+    "docker/lint/Dockerfile",
+    "docker/mariadb-walg/Dockerfile",
+    "docker/mariadb/Dockerfile",
+    "docker/mariadb_tests/Dockerfile",
+    "docker/mysql/Dockerfile",
+    "docker/mysql_tests/Dockerfile",
+    "docker/orioledb/Dockerfile",
+    "docker/pg/Dockerfile",
+    "docker/pg_tests/Dockerfile_pgbackrest",
+    "docker/pg_tests/Dockerfile_prefix",
+    "docker/redis/Dockerfile",
+    "docker/redis_tests/Dockerfile",
+    "docker/s3_fault_proxy/Dockerfile",
+    "docker/ssh/Dockerfile",
     ".github/workflows/build-cloudberry-image.yml",
     ".github/workflows/build-golang-image.yml",
     ".github/workflows/build-gp-image.yml",
@@ -3875,6 +4375,157 @@
     "bytes": 1654,
     "images": [
      "ubuntu:bionic"
+    ]
+   },
+   {
+    "path": "docker/gp/Dockerfile",
+    "kind": "image",
+    "blob_sha": "49deecb3dce70b3f0cf7fe80e0270a1a22c0811c",
+    "bytes": 1651,
+    "images": [
+     "ghcr.io/wal-g/ubuntu:18.04"
+    ]
+   },
+   {
+    "path": "docker/gp_tests/Dockerfile",
+    "kind": "image",
+    "blob_sha": "c1572eee3734c8db9cbaf1f25ac633b7189d6ab3",
+    "bytes": 1012,
+    "images": [
+     "wal-g/golang:latest",
+     "wal-g/gp:latest"
+    ]
+   },
+   {
+    "path": "docker/lint/Dockerfile",
+    "kind": "image",
+    "blob_sha": "fd069aacd7c660c2bd464b0698059eda8d5615e7",
+    "bytes": 221,
+    "images": [
+     "golangci/golangci-lint:${TAG}"
+    ]
+   },
+   {
+    "path": "docker/mariadb-walg/Dockerfile",
+    "kind": "image",
+    "blob_sha": "c825e822f5b72c7e39373e5085d17197a0c4e3e6",
+    "bytes": 1401,
+    "images": [
+     "mariadb:11.0"
+    ]
+   },
+   {
+    "path": "docker/mariadb/Dockerfile",
+    "kind": "image",
+    "blob_sha": "fe32b9cea3138b1f545867fb47ecff4654530dfa",
+    "bytes": 1000,
+    "images": [
+     "wal-g/ubuntu:22.04"
+    ]
+   },
+   {
+    "path": "docker/mariadb_tests/Dockerfile",
+    "kind": "image",
+    "blob_sha": "412ad2b134e7667f1c8472088cc328f1c2e13a37",
+    "bytes": 456,
+    "images": [
+     "wal-g/golang:latest",
+     "wal-g/mariadb:latest"
+    ]
+   },
+   {
+    "path": "docker/mysql/Dockerfile",
+    "kind": "image",
+    "blob_sha": "98255ab2fbec751a5f7899adbd1543019fd142d6",
+    "bytes": 2512,
+    "images": [
+     "wal-g/ubuntu:22.04"
+    ]
+   },
+   {
+    "path": "docker/mysql_tests/Dockerfile",
+    "kind": "image",
+    "blob_sha": "6db1b24275a3546cc037ba8603176095a19025dd",
+    "bytes": 721,
+    "images": [
+     "wal-g/golang:latest",
+     "${MYSQL_IMAGE}"
+    ]
+   },
+   {
+    "path": "docker/orioledb/Dockerfile",
+    "kind": "image",
+    "blob_sha": "1d58c8681ed5727c3ca467a9b0a0d3f884790b62",
+    "bytes": 5552,
+    "images": [
+     "wal-g/golang:latest",
+     "wal-g/ubuntu:22.04"
+    ]
+   },
+   {
+    "path": "docker/pg/Dockerfile",
+    "kind": "image",
+    "blob_sha": "29fc51ebce951b01ceb1d0fae3a77df68506d012",
+    "bytes": 2315,
+    "images": [
+     "wal-g/ubuntu:${UBUNTU_TAG}"
+    ]
+   },
+   {
+    "path": "docker/pg_tests/Dockerfile_pgbackrest",
+    "kind": "image",
+    "blob_sha": "8386c4fbbb141bbfc94da742532c0f5c7580bcc0",
+    "bytes": 2291,
+    "images": [
+     "${PGBACKREST_BUILD_BASE}",
+     "${PG_TESTS_IMAGE}"
+    ]
+   },
+   {
+    "path": "docker/pg_tests/Dockerfile_prefix",
+    "kind": "image",
+    "blob_sha": "8ea31d7f47d59be44fac208ae65bbee8a92ede6d",
+    "bytes": 2505,
+    "images": [
+     "wal-g/golang:latest",
+     "${PG_IMAGE}"
+    ]
+   },
+   {
+    "path": "docker/redis/Dockerfile",
+    "kind": "image",
+    "blob_sha": "0cb54539f195dccbc930f99ed1608a3f6c06c979",
+    "bytes": 460,
+    "images": [
+     "wal-g/ubuntu:18.04"
+    ]
+   },
+   {
+    "path": "docker/redis_tests/Dockerfile",
+    "kind": "image",
+    "blob_sha": "9e70c4b1b89994c91533ce52a712625b625886ec",
+    "bytes": 803,
+    "images": [
+     "wal-g/golang:latest",
+     "wal-g/redis:latest"
+    ]
+   },
+   {
+    "path": "docker/s3_fault_proxy/Dockerfile",
+    "kind": "image",
+    "blob_sha": "591a32f3017367e9223cca6769e73d5b69f31695",
+    "bytes": 141,
+    "images": [
+     "envoyproxy/envoy:v1.39.0@sha256:d59f7f5fa10cff6d5892b6c5e7df5c9297ddfb2c3683e33fbfb82da24de4fa66"
+    ]
+   },
+   {
+    "path": "docker/ssh/Dockerfile",
+    "kind": "image",
+    "blob_sha": "d89ee0e3962fa27f90e038cb0a6fd662b54f442d",
+    "bytes": 810,
+    "images": [
+     "debian:bookworm-slim"
     ]
    },
    {
@@ -5021,13 +5672,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:12:28Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:47:31Z",
   "default_branch": "main",
   "pushed_at": "2025-07-23",
   "stars": 223,
   "tree": {
    "sha": "cf5464b2ef65a791de6463ea45063d98dc6c8919",
-   "etag": "W/\"48c3c4207b04a6cc034ee40d58f7a467eb677fa23db25d9c462a05b48d591f9d\"",
+   "etag": "W/\"f730d0b5fde7892afa60909b1ec3cc2d21429d8877a96b4c6714454b1ea80dc8\"",
    "truncated": false,
    "path_count": 158,
    "matched": [
@@ -5043,6 +5695,13 @@
     "week-2/grafana-monitoring/fastapi-app/requirements.txt",
     "week-3/docker-multi-host-networking/app/requirements.txt",
     "week-3/docker-secrets-env/app/requirements.txt",
+    "week-3/docker-swarm-file-upload/app/requirements.txt",
+    "week-3/docker-volumes-swarm/app/requirements.txt",
+    "week-3/swarm-app-with-db/app/requirements.txt",
+    "week-3/swarm-healthchecks-restart-policies/app/requirements.txt",
+    "week-4/k8s-file-upload-app/app/requirements.txt",
+    "week-4/k8s-probes-demo/app/requirements.txt",
+    "week-5/helm-fastapi-app/app/requirements.txt",
     "week-1/file-upload-app/Dockerfile",
     "week-1/flask-docker-app/Dockerfile",
     "week-1/flask-ml-docker-app/Dockerfile",
@@ -5051,6 +5710,21 @@
     "week-1/postgres-flask-app/Dockerfile",
     "week-1/static-file-server/Dockerfile",
     "week-2/prometheus-monitoring/Dockerfile",
+    "week-4/k8s-configmap-secret-demo/Dockerfile",
+    "week-4/k8s-fastapi-demo/Dockerfile",
+    "week-4/k8s-file-upload-app/Dockerfile",
+    "week-4/k8s-probes-demo/Dockerfile",
+    "week-4/k8s-pv-pvc-demo/Dockerfile",
+    "week-2/fastapi-nginx-reverse-proxy/app/Dockerfile",
+    "week-2/grafana-monitoring/fastapi-app/Dockerfile",
+    "week-3/docker-multi-host-networking/app/Dockerfile",
+    "week-3/docker-secrets-env/app/Dockerfile",
+    "week-3/docker-swarm-file-upload/app/Dockerfile",
+    "week-3/docker-volumes-swarm/app/Dockerfile",
+    "week-3/swarm-app-with-db/app/Dockerfile",
+    "week-3/swarm-healthchecks-restart-policies/app/Dockerfile",
+    "week-5/helm-fastapi-app/app/Dockerfile",
+    "week-5/helm-fastapi-app/charts/fileupload/values.yaml",
     ".github/workflows/docker.yml"
    ]
   },
@@ -5194,6 +5868,90 @@
     ]
    },
    {
+    "path": "week-3/docker-swarm-file-upload/app/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "0786e0945a7a56c93467f26d4a6b981d55d618b4",
+    "ecosystem": "pypi",
+    "bytes": 21,
+    "names": [
+     "flask",
+     "gunicorn"
+    ]
+   },
+   {
+    "path": "week-3/docker-volumes-swarm/app/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "6d7503ce382eaccf599b5f0393cc88780c3a2f40",
+    "ecosystem": "pypi",
+    "bytes": 32,
+    "names": [
+     "fastapi",
+     "uvicorn",
+     "python-multipart"
+    ]
+   },
+   {
+    "path": "week-3/swarm-app-with-db/app/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "ec35b56b29d164dfe076d4970a36c846b49ec77b",
+    "ecosystem": "pypi",
+    "bytes": 57,
+    "names": [
+     "fastapi",
+     "uvicorn",
+     "psycopg2-binary",
+     "sqlalchemy",
+     "python-dotenv"
+    ]
+   },
+   {
+    "path": "week-3/swarm-healthchecks-restart-policies/app/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "f0615cfd0938066d9730af294b004eb78858ada4",
+    "ecosystem": "pypi",
+    "bytes": 15,
+    "names": [
+     "fastapi",
+     "uvicorn"
+    ]
+   },
+   {
+    "path": "week-4/k8s-file-upload-app/app/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "6d7503ce382eaccf599b5f0393cc88780c3a2f40",
+    "ecosystem": "pypi",
+    "bytes": 32,
+    "names": [
+     "fastapi",
+     "uvicorn",
+     "python-multipart"
+    ]
+   },
+   {
+    "path": "week-4/k8s-probes-demo/app/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "1363737a1a47a6620a0750efd9a3a448095ad893",
+    "ecosystem": "pypi",
+    "bytes": 33,
+    "names": [
+     "fastapi",
+     "uvicorn",
+     "python-multipart"
+    ]
+   },
+   {
+    "path": "week-5/helm-fastapi-app/app/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "6d7503ce382eaccf599b5f0393cc88780c3a2f40",
+    "ecosystem": "pypi",
+    "bytes": 32,
+    "names": [
+     "fastapi",
+     "uvicorn",
+     "python-multipart"
+    ]
+   },
+   {
     "path": "week-1/file-upload-app/Dockerfile",
     "kind": "image",
     "blob_sha": "8bcfacde42b351da4e2012bc31be59a65fa516bb",
@@ -5263,6 +6021,141 @@
     "bytes": 192,
     "images": [
      "python:3.10-slim"
+    ]
+   },
+   {
+    "path": "week-4/k8s-configmap-secret-demo/Dockerfile",
+    "kind": "image",
+    "blob_sha": "bf6e9a342a680e292d4768934021195bebf3c258",
+    "bytes": 150,
+    "images": [
+     "python:3.10-slim"
+    ]
+   },
+   {
+    "path": "week-4/k8s-fastapi-demo/Dockerfile",
+    "kind": "image",
+    "blob_sha": "bf6e9a342a680e292d4768934021195bebf3c258",
+    "bytes": 150,
+    "images": [
+     "python:3.10-slim"
+    ]
+   },
+   {
+    "path": "week-4/k8s-file-upload-app/Dockerfile",
+    "kind": "image",
+    "blob_sha": "38c74332641d6146a78c772120d2669e146dec9f",
+    "bytes": 173,
+    "images": [
+     "python:3.10-slim"
+    ]
+   },
+   {
+    "path": "week-4/k8s-probes-demo/Dockerfile",
+    "kind": "image",
+    "blob_sha": "b739822eb34122222abc586539fea942622ec3ab",
+    "bytes": 169,
+    "images": [
+     "python:3.10-slim"
+    ]
+   },
+   {
+    "path": "week-4/k8s-pv-pvc-demo/Dockerfile",
+    "kind": "image",
+    "blob_sha": "186fcfd8dc3fbd0a97713e7011bc6c23b622db1a",
+    "bytes": 152,
+    "images": [
+     "python:3.10-slim"
+    ]
+   },
+   {
+    "path": "week-2/fastapi-nginx-reverse-proxy/app/Dockerfile",
+    "kind": "image",
+    "blob_sha": "628cc31124b1246a2d80e75b7acdcd80fad98187",
+    "bytes": 190,
+    "images": [
+     "python:3.11-slim"
+    ]
+   },
+   {
+    "path": "week-2/grafana-monitoring/fastapi-app/Dockerfile",
+    "kind": "image",
+    "blob_sha": "0ffa79d4428176227c2ee0e93c51c29d5a4244a7",
+    "bytes": 196,
+    "images": [
+     "python:3.10-slim"
+    ]
+   },
+   {
+    "path": "week-3/docker-multi-host-networking/app/Dockerfile",
+    "kind": "image",
+    "blob_sha": "72c61981957ac86c559c11d6037f4e97b9f125df",
+    "bytes": 190,
+    "images": [
+     "python:3.10-slim"
+    ]
+   },
+   {
+    "path": "week-3/docker-secrets-env/app/Dockerfile",
+    "kind": "image",
+    "blob_sha": "0637a6228383d6c515a4c19b5dd0c8c5c96ca1cc",
+    "bytes": 170,
+    "images": [
+     "python:3.10-slim"
+    ]
+   },
+   {
+    "path": "week-3/docker-swarm-file-upload/app/Dockerfile",
+    "kind": "image",
+    "blob_sha": "b777c3409fe57d613e4f12519f48374dfe3832f7",
+    "bytes": 359,
+    "images": [
+     "python:3.10-slim"
+    ]
+   },
+   {
+    "path": "week-3/docker-volumes-swarm/app/Dockerfile",
+    "kind": "image",
+    "blob_sha": "0ffa79d4428176227c2ee0e93c51c29d5a4244a7",
+    "bytes": 196,
+    "images": [
+     "python:3.10-slim"
+    ]
+   },
+   {
+    "path": "week-3/swarm-app-with-db/app/Dockerfile",
+    "kind": "image",
+    "blob_sha": "72c61981957ac86c559c11d6037f4e97b9f125df",
+    "bytes": 190,
+    "images": [
+     "python:3.10-slim"
+    ]
+   },
+   {
+    "path": "week-3/swarm-healthchecks-restart-policies/app/Dockerfile",
+    "kind": "image",
+    "blob_sha": "3d37de295b212e1a700a4a785495b87dfd7d9c14",
+    "bytes": 279,
+    "images": [
+     "python:3.10-slim"
+    ]
+   },
+   {
+    "path": "week-5/helm-fastapi-app/app/Dockerfile",
+    "kind": "image",
+    "blob_sha": "628cc31124b1246a2d80e75b7acdcd80fad98187",
+    "bytes": 190,
+    "images": [
+     "python:3.11-slim"
+    ]
+   },
+   {
+    "path": "week-5/helm-fastapi-app/charts/fileupload/values.yaml",
+    "kind": "image",
+    "blob_sha": "e4295a1147d0f950035f8a60ffdfdaaf673b3d60",
+    "bytes": 163,
+    "images": [
+     "repository:"
     ]
    },
    {

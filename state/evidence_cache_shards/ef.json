@@ -315,13 +315,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T15:22:11Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:04:35Z",
   "default_branch": "main",
   "pushed_at": "2026-07-30",
   "stars": 0,
   "tree": {
    "sha": "8acf35e9a659976a41b1ffa59af00161b008fe9a",
-   "etag": "W/\"86bf5fd5399908b733151d559fc28dc4362f490b1cb74a940e70d7eb8f21c66c\"",
+   "etag": "W/\"365f426beb304117303de097cd235afe94ead5aa63e2f67bf8c305ff417c815c\"",
    "truncated": false,
    "path_count": 1358,
    "matched": [
@@ -336,7 +337,19 @@
     "cmd/http-service/Dockerfile",
     "images/br-federation-manager/Dockerfile",
     "images/br-federation-manager/Dockerfile.e2e",
-    "images/ebs-warmup/Dockerfile"
+    "images/ebs-warmup/Dockerfile",
+    "images/ebs-warmup/Dockerfile.e2e",
+    "images/tidb-backup-manager/Dockerfile",
+    "images/tidb-backup-manager/Dockerfile.e2e",
+    "images/tidb-operator/Dockerfile",
+    "images/tidb-operator/Dockerfile.e2e",
+    "images/tidb-operator/Dockerfile.new",
+    "marketplace/gcp/tidb-operator/Dockerfile",
+    "misc/images/tidb-control/Dockerfile",
+    "tests/images/e2e/Dockerfile",
+    "tests/images/kubekins-e2e/Dockerfile",
+    "tests/images/stability-test/Dockerfile",
+    "marketplace/gcp/tidb-operator/chart/tidb-mp/values.yaml"
    ]
   },
   "files": [
@@ -769,6 +782,117 @@
     "bytes": 176,
     "images": [
      "pingcap/tikv:v6.5.7"
+    ]
+   },
+   {
+    "path": "images/ebs-warmup/Dockerfile.e2e",
+    "kind": "image",
+    "blob_sha": "f1196ef2310f0bad630cbf229bc6b0b6e05d2e20",
+    "bytes": 117,
+    "images": [
+     "alpine:latest"
+    ]
+   },
+   {
+    "path": "images/tidb-backup-manager/Dockerfile",
+    "kind": "image",
+    "blob_sha": "bccb5669e48a928ddb78d5bf4e5477217879e763",
+    "bytes": 366,
+    "images": [
+     "ghcr.io/pingcap-qe/ci/tidb-operator_backup-manager-base:v2026.6.28-7-g6f649337"
+    ]
+   },
+   {
+    "path": "images/tidb-backup-manager/Dockerfile.e2e",
+    "kind": "image",
+    "blob_sha": "c34f1ab23bc35e500dfda4359178a451fcee6a12",
+    "bytes": 448,
+    "images": [
+     "ghcr.io/pingcap-qe/ci/tidb-operator_backup-manager-base:v2026.6.28-7-g6f649337"
+    ]
+   },
+   {
+    "path": "images/tidb-operator/Dockerfile",
+    "kind": "image",
+    "blob_sha": "a6feba9e013e627568dbcd5eac1ac31c4bec68d4",
+    "bytes": 495,
+    "images": [
+     "ghcr.io/pingcap-qe/bases/pingcap-base:v1.11.1@sha256:24ecefceae6b114e11f6ae675232af3fa4942c53011f807983ac5bff7a62e3d9"
+    ]
+   },
+   {
+    "path": "images/tidb-operator/Dockerfile.e2e",
+    "kind": "image",
+    "blob_sha": "26b2527e5f2bf36d6c7f30ee650ca5a8260d5b92",
+    "bytes": 472,
+    "images": [
+     "ghcr.io/pingcap-qe/bases/pingcap-base:v1.11.1@sha256:24ecefceae6b114e11f6ae675232af3fa4942c53011f807983ac5bff7a62e3d9"
+    ]
+   },
+   {
+    "path": "images/tidb-operator/Dockerfile.new",
+    "kind": "image",
+    "blob_sha": "a0a669734c41c95b088ab29254951c05da847a9b",
+    "bytes": 1286,
+    "images": [
+     "alpine:edge",
+     "alpine:latest"
+    ]
+   },
+   {
+    "path": "marketplace/gcp/tidb-operator/Dockerfile",
+    "kind": "image",
+    "blob_sha": "ea7a9cd7af3dbd2ff480e3fde871fb47f1565183",
+    "bytes": 62,
+    "images": [
+     "gcr.io/cloud-marketplace-tools/k8s/deployer_helm/onbuild"
+    ]
+   },
+   {
+    "path": "misc/images/tidb-control/Dockerfile",
+    "kind": "image",
+    "blob_sha": "fc96bf053d575b1619cec1ba66202abcd2d4a11a",
+    "bytes": 317,
+    "images": [
+     "bash:5.2.37"
+    ]
+   },
+   {
+    "path": "tests/images/e2e/Dockerfile",
+    "kind": "image",
+    "blob_sha": "ae3388ba48fbd2ab1471bc9fb9dfd6a7e0f5acf5",
+    "bytes": 464,
+    "images": [
+     "ghcr.io/pingcap-qe/ci/tidb-operator_e2e-base:v2026.6.28-7-g6f649337"
+    ]
+   },
+   {
+    "path": "tests/images/kubekins-e2e/Dockerfile",
+    "kind": "image",
+    "blob_sha": "01131d73c5289a3292dcca7870274d96b11e51a6",
+    "bytes": 2696,
+    "images": [
+     "debian:bookworm-slim"
+    ]
+   },
+   {
+    "path": "tests/images/stability-test/Dockerfile",
+    "kind": "image",
+    "blob_sha": "758522667783a121383563b59484239729469a50",
+    "bytes": 745,
+    "images": [
+     "alpine:3.10"
+    ]
+   },
+   {
+    "path": "marketplace/gcp/tidb-operator/chart/tidb-mp/values.yaml",
+    "kind": "image",
+    "blob_sha": "549a94c688809bb62fa6778126b75464bedc7589",
+    "bytes": 969,
+    "images": [
+     "prometheus:",
+     "tikv:",
+     "tidb:"
     ]
    }
   ],
@@ -1241,13 +1365,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:08:06Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:19:43Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-29",
-  "stars": 8548,
+  "pushed_at": "2026-10-31",
+  "stars": 8554,
   "tree": {
-   "sha": "565cf46eb2989c125859eba9bd923cd06769632d",
-   "etag": "W/\"63e6ac65bbc10989ea1c6b0000805a61f856e9bb5afdbecfdb1f0ff504c22ae5\"",
+   "sha": "0553a68def700abbcaaca8f5096da913f197804c",
+   "etag": "W/\"edd88d593f426ba7944b8c33e7deab1b630b4f2e41dfaab5df1546b6cd33a758\"",
    "truncated": false,
    "path_count": 6467,
    "matched": [
@@ -1263,6 +1388,8 @@
     "packages/stats/package.json",
     "packages/stats/pyproject.toml",
     "packages/stats/requirements.txt",
+    "packages/sdk-js/plugins/package.json",
+    "packages/back-end/test/integrations/pyproject.toml",
     "Dockerfile",
     "docker-compose.proxy.yml",
     "docker-compose.yml",
@@ -1801,6 +1928,34 @@
     ]
    },
    {
+    "path": "packages/sdk-js/plugins/package.json",
+    "kind": "dep",
+    "blob_sha": "a95eab1c109897a2d80c5ae92e23ca064cdc3b85",
+    "ecosystem": "npm",
+    "bytes": 86
+   },
+   {
+    "path": "packages/back-end/test/integrations/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "1a6d7e5d59eb0c77857d43b325279d2761cc527b",
+    "ecosystem": "pyproject",
+    "bytes": 796,
+    "names": [
+     "google-auth",
+     "google-cloud-bigquery",
+     "presto-python-client",
+     "mysql-connector-python",
+     "psycopg2",
+     "python-dotenv",
+     "sqlfluff",
+     "snowflake-connector-python",
+     "databricks-sql-connector",
+     "clickhouse-connect",
+     "redshift-connector",
+     "pyodbc"
+    ]
+   },
+   {
     "path": "Dockerfile",
     "kind": "image",
     "blob_sha": "c9f80cf70490bd1745dd427bf6eb25f0fcf93cdf",
@@ -1965,6 +2120,10 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "packages/shared/src/dialects/clickhouse.ts",
+    "packages/shared/src/dialects/mssql.ts",
+    "packages/shared/src/dialects/mysql.ts",
+    "packages/shared/src/dialects/postgres.ts",
     "packages/shared/dialects.d.ts",
     "packages/shared/dialects.js",
     "packages/sdk-js/plugins/index.js",
@@ -1991,12 +2150,8 @@
     "packages/shared/src/dialects/athena.ts",
     "packages/shared/src/dialects/base.ts",
     "packages/shared/src/dialects/bigquery.ts",
-    "packages/shared/src/dialects/clickhouse.ts",
     "packages/shared/src/dialects/databricks.ts",
     "packages/shared/src/dialects/index.ts",
-    "packages/shared/src/dialects/mssql.ts",
-    "packages/shared/src/dialects/mysql.ts",
-    "packages/shared/src/dialects/postgres.ts",
     "packages/shared/src/dialects/presto.ts",
     "packages/shared/src/dialects/redshift.ts",
     "packages/shared/src/dialects/snowflake.ts",
@@ -2004,7 +2159,24 @@
     "docs/static/images/integrations/framer/framer-plugin-add-to-canvas.png",
     "docs/static/images/integrations/framer/framer-plugin-settings.png",
     "packages/back-end/src/revisions/adapters/config.adapter.ts",
-    "packages/back-end/src/revisions/adapters/configSchemaNormalize.ts"
+    "packages/back-end/src/revisions/adapters/configSchemaNormalize.ts",
+    "packages/back-end/src/revisions/adapters/constant.adapter.ts",
+    "packages/back-end/src/revisions/adapters/saved-group.adapter.ts",
+    "packages/back-end/src/revisions/bulkPublish/BulkPublishableAdapter.ts",
+    "packages/back-end/src/revisions/bulkPublish/featureBulkAdapter.ts",
+    "packages/back-end/src/revisions/bulkPublish/genericBulkAdapter.ts",
+    "packages/back-end/src/services/eventForwarder/connector.ts",
+    "packages/back-end/test/integrations/dialects/array-element.test.ts",
+    "packages/back-end/test/integrations/dialects/cap-coalesce-value.test.ts",
+    "packages/back-end/test/integrations/dialects/funnel-sql.test.ts",
+    "packages/back-end/test/integrations/dialects/hll-data-type.test.ts",
+    "packages/back-end/test/integrations/dialects/journey-sql.test.ts",
+    "packages/front-end/components/Experiment/TabbedPage/FunnelConnector.tsx",
+    "packages/sdk-js/src/plugins/utils/instance.ts",
+    "packages/shared/src/dialects/clauses/approx-top-values.ts",
+    "packages/shared/src/dialects/clauses/indices-table-unpivot.ts",
+    "packages/shared/src/dialects/clauses/percentile-cap-select-clause.ts",
+    "packages/shared/src/dialects/clauses/quantile-column.ts"
    ],
    "matrix_urls": [
     "https://slack.growthbook.io?ref=readme-support"
@@ -2017,13 +2189,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:10:52Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:21:41Z",
   "default_branch": "main",
   "pushed_at": "2023-03-07",
-  "stars": 2532,
+  "stars": 2534,
   "tree": {
    "sha": "da6b9e0d0120693e0239a1dc4077ba452163d61a",
-   "etag": "W/\"ab37cf35718d7e4cf87809788442a37c68307c58109ed52fcdebbabf6d4e432b\"",
+   "etag": "W/\"6e946855046cbbdd763f649306d4acd505fafe0b73819ae0c63cbedbd47f3d93\"",
    "truncated": false,
    "path_count": 605,
    "matched": [
@@ -2039,6 +2212,12 @@
     "src/Services/Identity/IdentityService/IdentityService.csproj",
     "src/Services/Inventory/InventoryService.Api/InventoryService.Api.csproj",
     "src/Services/Inventory/InventoryService/InventoryService.csproj",
+    "src/Services/ProductCatalog/ProductCatalogService.Api/ProductCatalogService.Api.csproj",
+    "src/Services/ProductCatalog/ProductCatalogService/ProductCatalogService.csproj",
+    "src/Services/Sale/SaleService.Api/SaleService.Api.csproj",
+    "src/Services/Sale/SaleService/SaleService.csproj",
+    "src/Services/ShoppingCart/ShoppingCartService.Api/ShoppingCartService.Api.csproj",
+    "src/Services/ShoppingCart/ShoppingCartService/ShoppingCartService.csproj",
     "docker-compose.override.yml",
     "docker-compose.yml",
     "src/web/Dockerfile",
@@ -2046,7 +2225,16 @@
     "deploys/charts/coolstore-istio/values.yaml",
     "deploys/charts/coolstore/values.yaml",
     "deploys/dockers/docker-volume/Dockerfile",
-    "deploys/dockers/envoy-proxy/Dockerfile"
+    "deploys/dockers/envoy-proxy/Dockerfile",
+    "deploys/dockers/mssqldb/Dockerfile",
+    "deploys/dockers/mysqldb/Dockerfile",
+    "deploys/dockers/pnpm/Dockerfile",
+    "src/BFFs/WebApiGateway/Dockerfile",
+    "src/Services/Identity/IdentityService/Dockerfile",
+    "src/Services/Inventory/InventoryService.Api/Dockerfile",
+    "src/Services/ProductCatalog/ProductCatalogService.Api/Dockerfile",
+    "src/Services/Sale/SaleService.Api/Dockerfile",
+    "src/Services/ShoppingCart/ShoppingCartService.Api/Dockerfile"
    ]
   },
   "files": [
@@ -2243,6 +2431,57 @@
     ]
    },
    {
+    "path": "src/Services/ProductCatalog/ProductCatalogService.Api/ProductCatalogService.Api.csproj",
+    "kind": "dep",
+    "blob_sha": "ad02a7e1080f631412973c47d8bcf84dc27d4729",
+    "ecosystem": "csproj",
+    "bytes": 324
+   },
+   {
+    "path": "src/Services/ProductCatalog/ProductCatalogService/ProductCatalogService.csproj",
+    "kind": "dep",
+    "blob_sha": "87e825351733e16284e6ee1dffea09a5475d42a6",
+    "ecosystem": "csproj",
+    "bytes": 1491,
+    "names": [
+     "Microsoft.EntityFrameworkCore.Design",
+     "Microsoft.EntityFrameworkCore.Tools",
+     "NEST"
+    ]
+   },
+   {
+    "path": "src/Services/Sale/SaleService.Api/SaleService.Api.csproj",
+    "kind": "dep",
+    "blob_sha": "63f452f6ca0d2d3e160436edc4372c44719e88a3",
+    "ecosystem": "csproj",
+    "bytes": 304
+   },
+   {
+    "path": "src/Services/Sale/SaleService/SaleService.csproj",
+    "kind": "dep",
+    "blob_sha": "fa423a52dc44208dee93f7647341cec56ca09463",
+    "ecosystem": "csproj",
+    "bytes": 1349,
+    "names": [
+     "Microsoft.EntityFrameworkCore.Design",
+     "Microsoft.EntityFrameworkCore.Tools"
+    ]
+   },
+   {
+    "path": "src/Services/ShoppingCart/ShoppingCartService.Api/ShoppingCartService.Api.csproj",
+    "kind": "dep",
+    "blob_sha": "8747c319466c7f4741d9647d622a4c35f3568cc8",
+    "ecosystem": "csproj",
+    "bytes": 320
+   },
+   {
+    "path": "src/Services/ShoppingCart/ShoppingCartService/ShoppingCartService.csproj",
+    "kind": "dep",
+    "blob_sha": "16372857fe96a0bf352b6f0d07cec13d8c9c0048",
+    "ecosystem": "csproj",
+    "bytes": 417
+   },
+   {
     "path": "docker-compose.override.yml",
     "kind": "image",
     "blob_sha": "7297d5e6787ebca361f84e1bb50d3bd176a85b90",
@@ -2319,6 +2558,105 @@
     "bytes": 174,
     "images": [
      "envoyproxy/envoy:latest"
+    ]
+   },
+   {
+    "path": "deploys/dockers/mssqldb/Dockerfile",
+    "kind": "image",
+    "blob_sha": "033d4284ea64d702d6fc07e86211a20e3cf8c820",
+    "bytes": 684,
+    "images": [
+     "microsoft/mssql-server-linux:2017-latest"
+    ]
+   },
+   {
+    "path": "deploys/dockers/mysqldb/Dockerfile",
+    "kind": "image",
+    "blob_sha": "888feaa0ad67ecf34b6f6eaee159ef8a50486762",
+    "bytes": 149,
+    "images": [
+     "mysql:8.0.12"
+    ]
+   },
+   {
+    "path": "deploys/dockers/pnpm/Dockerfile",
+    "kind": "image",
+    "blob_sha": "757239d261dc5e6e3e79834fa99e31bc27929dc1",
+    "bytes": 104,
+    "images": [
+     "node:alpine"
+    ]
+   },
+   {
+    "path": "src/BFFs/WebApiGateway/Dockerfile",
+    "kind": "image",
+    "blob_sha": "edf87cf2c00e3c3e0a24e5da31d422e7a7151b79",
+    "bytes": 1437,
+    "images": [
+     "mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim",
+     "mcr.microsoft.com/dotnet/sdk:5.0-buster-slim",
+     "build",
+     "base"
+    ]
+   },
+   {
+    "path": "src/Services/Identity/IdentityService/Dockerfile",
+    "kind": "image",
+    "blob_sha": "21d6f9e9b9e5001f777fdd113fa6ac048c13ba83",
+    "bytes": 1507,
+    "images": [
+     "mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim",
+     "mcr.microsoft.com/dotnet/sdk:5.0-buster-slim",
+     "build",
+     "base"
+    ]
+   },
+   {
+    "path": "src/Services/Inventory/InventoryService.Api/Dockerfile",
+    "kind": "image",
+    "blob_sha": "567e35d58766798f9265c082e34b401841b0d7f0",
+    "bytes": 1673,
+    "images": [
+     "mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim",
+     "mcr.microsoft.com/dotnet/sdk:5.0-buster-slim",
+     "build",
+     "base"
+    ]
+   },
+   {
+    "path": "src/Services/ProductCatalog/ProductCatalogService.Api/Dockerfile",
+    "kind": "image",
+    "blob_sha": "05591d944963badfdb0ade6517bb2804600e85cd",
+    "bytes": 1763,
+    "images": [
+     "mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim",
+     "mcr.microsoft.com/dotnet/sdk:5.0-buster-slim",
+     "build",
+     "base"
+    ]
+   },
+   {
+    "path": "src/Services/Sale/SaleService.Api/Dockerfile",
+    "kind": "image",
+    "blob_sha": "d9a52f8d3579bb404c5704c48e0e4e23ea549c62",
+    "bytes": 1583,
+    "images": [
+     "mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim",
+     "mcr.microsoft.com/dotnet/sdk:5.0-buster-slim",
+     "build",
+     "base"
+    ]
+   },
+   {
+    "path": "src/Services/ShoppingCart/ShoppingCartService.Api/Dockerfile",
+    "kind": "image",
+    "blob_sha": "4e04851c67dd2fc8b1d6d948895877deed2b90fd",
+    "bytes": 1727,
+    "images": [
+     "mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim",
+     "mcr.microsoft.com/dotnet/sdk:5.0-buster-slim",
+     "build",
+     "base"
     ]
    }
   ],
@@ -2482,13 +2820,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:15:46Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:24:54Z",
   "default_branch": "main",
   "pushed_at": "2023-12-16",
   "stars": 1046,
   "tree": {
    "sha": "5d51d31bace7bec96c19574ec09acfbf8ed537be",
-   "etag": "W/\"d80094777888eeea3842223de0eacf70af8555745aff63c60d687f1d98b99498\"",
+   "etag": "W/\"ebb588030d67905a942c57008cf424fe0fc8ddd1c728b90760c68fae613b2b0b\"",
    "truncated": false,
    "path_count": 946,
    "matched": [
@@ -2503,7 +2842,49 @@
     "shop-gateway/pom.xml",
     "shop-goods/pom.xml",
     "shop-job/pom.xml",
-    "shop-manage/pom.xml"
+    "shop-manage/pom.xml",
+    "shop-order/pom.xml",
+    "shop-oss/pom.xml",
+    "shop-platform/pom.xml",
+    "shop-risk/pom.xml",
+    "shop-seller/pom.xml",
+    "shop-settlement/pom.xml",
+    "shop-user/pom.xml",
+    "shop-activity/shop-activity-api/pom.xml",
+    "shop-activity/shop-activity-client/pom.xml",
+    "shop-activity/shop-activity-model/pom.xml",
+    "shop-auth/shop-auth-resource/pom.xml",
+    "shop-auth/shop-auth-server-api/pom.xml",
+    "shop-cart/shop-cart-api/pom.xml",
+    "shop-cart/shop-cart-client/pom.xml",
+    "shop-cart/shop-cart-model/pom.xml",
+    "shop-elasticsearch/shop-elasticsearch-api/pom.xml",
+    "shop-elasticsearch/shop-elasticsearch-client/pom.xml",
+    "shop-elasticsearch/shop-elasticsearch-model/pom.xml",
+    "shop-goods/shop-goods-api/pom.xml",
+    "shop-goods/shop-goods-client/pom.xml",
+    "shop-goods/shop-goods-model/pom.xml",
+    "shop-job/shop-job-api/pom.xml",
+    "shop-job/shop-job-client/pom.xml",
+    "shop-job/shop-job-model/pom.xml",
+    "shop-order/shop-order-api/pom.xml",
+    "shop-order/shop-order-client/pom.xml",
+    "shop-order/shop-order-model/pom.xml",
+    "shop-platform/shop-platform-api/pom.xml",
+    "shop-platform/shop-platform-client/pom.xml",
+    "shop-platform/shop-platform-model/pom.xml",
+    "shop-risk/shop-risk-api/pom.xml",
+    "shop-risk/shop-risk-client/pom.xml",
+    "shop-risk/shop-risk-model/pom.xml",
+    "shop-seller/shop-seller-api/pom.xml",
+    "shop-seller/shop-seller-client/pom.xml",
+    "shop-seller/shop-seller-model/pom.xml",
+    "shop-settlement/shop-settlement-api/pom.xml",
+    "shop-settlement/shop-settlement-client/pom.xml",
+    "shop-settlement/shop-settlement-model/pom.xml",
+    "shop-user/shop-user-api/pom.xml",
+    "shop-user/shop-user-client/pom.xml",
+    "shop-user/shop-user-model/pom.xml"
    ]
   },
   "files": [
@@ -2688,6 +3069,599 @@
      "org.springframework.boot:spring-boot-starter-test",
      "quick.pager:shop-platform-client"
     ]
+   },
+   {
+    "path": "shop-order/pom.xml",
+    "kind": "dep",
+    "blob_sha": "9b7e9a3b79ee4cc0ed51695cb4d35dd3ed188152",
+    "ecosystem": "maven",
+    "bytes": 1427
+   },
+   {
+    "path": "shop-oss/pom.xml",
+    "kind": "dep",
+    "blob_sha": "04a37d0281ff36ec5a9ed7a97f7c2456bd67aadb",
+    "ecosystem": "maven",
+    "bytes": 3663,
+    "names": [
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "org.springframework.boot:spring-boot-starter-test",
+     "com.alibaba.cloud:aliyun-oss-spring-boot-starter",
+     "com.qiniu:qiniu-java-sdk",
+     "com.tencentcloudapi:tencentcloud-sdk-java",
+     "quick.pager:shop-common",
+     "org.apache.httpcomponents:httpmime"
+    ]
+   },
+   {
+    "path": "shop-platform/pom.xml",
+    "kind": "dep",
+    "blob_sha": "f6369bf732ab33eea7dfce57261c2847312fb6c8",
+    "ecosystem": "maven",
+    "bytes": 1210
+   },
+   {
+    "path": "shop-risk/pom.xml",
+    "kind": "dep",
+    "blob_sha": "c6fac7692886c3590a023f011de8cb81c279a8d8",
+    "ecosystem": "maven",
+    "bytes": 1423
+   },
+   {
+    "path": "shop-seller/pom.xml",
+    "kind": "dep",
+    "blob_sha": "b1ece33450c6764eeec874cd89bb3222f051d4cc",
+    "ecosystem": "maven",
+    "bytes": 2218
+   },
+   {
+    "path": "shop-settlement/pom.xml",
+    "kind": "dep",
+    "blob_sha": "9db34bcd12a94fb761ed4bbf7c724b9de1de9b27",
+    "ecosystem": "maven",
+    "bytes": 1215
+   },
+   {
+    "path": "shop-user/pom.xml",
+    "kind": "dep",
+    "blob_sha": "e9d58e4b26daf265042555c54e8493fb7315105f",
+    "ecosystem": "maven",
+    "bytes": 1475
+   },
+   {
+    "path": "shop-activity/shop-activity-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "680e01334a7e2f004f54194e5d4fbdb591a1886a",
+    "ecosystem": "maven",
+    "bytes": 4586,
+    "names": [
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-seata",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-sleuth",
+     "org.springframework.cloud:spring-cloud-starter-stream-rabbit",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "com.baomidou:mybatis-plus-boot-starter",
+     "mysql:mysql-connector-java",
+     "quick.pager:shop-auth-resource",
+     "com.alibaba:easyexcel",
+     "quick.pager:shop-user-client",
+     "quick.pager:shop-activity-model",
+     "quick.pager:shop-platform-client"
+    ]
+   },
+   {
+    "path": "shop-activity/shop-activity-client/pom.xml",
+    "kind": "dep",
+    "blob_sha": "9d1dd946439a6b945f4d27d1022bbedda5fe2c16",
+    "ecosystem": "maven",
+    "bytes": 2098,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "quick.pager:shop-activity-model"
+    ]
+   },
+   {
+    "path": "shop-activity/shop-activity-model/pom.xml",
+    "kind": "dep",
+    "blob_sha": "c0b0ae5332e02c4783c19dcda7fc4aac9955dae0",
+    "ecosystem": "maven",
+    "bytes": 1685,
+    "names": [
+     "quick.pager:shop-common"
+    ]
+   },
+   {
+    "path": "shop-auth/shop-auth-resource/pom.xml",
+    "kind": "dep",
+    "blob_sha": "7500680f43510766fc97a6ca23a43fc30e2cfd22",
+    "ecosystem": "maven",
+    "bytes": 2741,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-data-redis",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-oauth2",
+     "com.alibaba:fastjson",
+     "io.github.openfeign:feign-okhttp",
+     "org.apache.tomcat.embed:tomcat-embed-core"
+    ]
+   },
+   {
+    "path": "shop-auth/shop-auth-server-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "2dbb415d0ec81e7ba09f70609cefce9542cfff34",
+    "ecosystem": "maven",
+    "bytes": 3353,
+    "names": [
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "org.springframework.cloud:spring-cloud-starter-netflix-hystrix",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-oauth2",
+     "org.springframework.boot:spring-boot-starter-data-redis",
+     "org.springframework.boot:spring-boot-starter-jdbc",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "mysql:mysql-connector-java",
+     "quick.pager:shop-common"
+    ]
+   },
+   {
+    "path": "shop-cart/shop-cart-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "67ba0cff7e89a9b44a97155f8af95e9232d0ad22",
+    "ecosystem": "maven",
+    "bytes": 4318,
+    "names": [
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-seata",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-sleuth",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "com.baomidou:mybatis-plus-boot-starter",
+     "mysql:mysql-connector-java",
+     "quick.pager:shop-auth-resource",
+     "quick.pager:shop-cart-model",
+     "quick.pager:shop-seller-client",
+     "quick.pager:shop-goods-client"
+    ]
+   },
+   {
+    "path": "shop-cart/shop-cart-client/pom.xml",
+    "kind": "dep",
+    "blob_sha": "ec53b8d812b4026f9a0e8a5366c21dc7ec27e406",
+    "ecosystem": "maven",
+    "bytes": 2087,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "quick.pager:shop-cart-model"
+    ]
+   },
+   {
+    "path": "shop-cart/shop-cart-model/pom.xml",
+    "kind": "dep",
+    "blob_sha": "a9f56c667a0d47a56a2dd414ce997c82bc94c712",
+    "ecosystem": "maven",
+    "bytes": 1679,
+    "names": [
+     "quick.pager:shop-common"
+    ]
+   },
+   {
+    "path": "shop-elasticsearch/shop-elasticsearch-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "98945d78a84aa0e0f72ba08ad7fae658a94fe0d8",
+    "ecosystem": "maven",
+    "bytes": 3166,
+    "names": [
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "org.springframework.cloud:spring-cloud-starter-sleuth",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "org.springframework.data:spring-data-elasticsearch",
+     "quick.pager:shop-elasticsearch-model"
+    ]
+   },
+   {
+    "path": "shop-elasticsearch/shop-elasticsearch-client/pom.xml",
+    "kind": "dep",
+    "blob_sha": "a484446a1ff9e4fc725ff0cc71b97fde8c5a2056",
+    "ecosystem": "maven",
+    "bytes": 2114,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "quick.pager:shop-elasticsearch-model"
+    ]
+   },
+   {
+    "path": "shop-elasticsearch/shop-elasticsearch-model/pom.xml",
+    "kind": "dep",
+    "blob_sha": "50a267000b74442e2ef7e1ee89a6de739b1e5efa",
+    "ecosystem": "maven",
+    "bytes": 1697,
+    "names": [
+     "quick.pager:shop-common"
+    ]
+   },
+   {
+    "path": "shop-goods/shop-goods-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "e3026ca0b59b0fe792455afc869b4a2ed19ad73f",
+    "ecosystem": "maven",
+    "bytes": 4501,
+    "names": [
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-seata",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-sleuth",
+     "org.springframework.cloud:spring-cloud-starter-stream-rabbit",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "com.baomidou:mybatis-plus-boot-starter",
+     "mysql:mysql-connector-java",
+     "quick.pager:shop-auth-resource",
+     "quick.pager:shop-goods-model",
+     "quick.pager:shop-activity-client",
+     "quick.pager:shop-elasticsearch-client"
+    ]
+   },
+   {
+    "path": "shop-goods/shop-goods-client/pom.xml",
+    "kind": "dep",
+    "blob_sha": "0185e2756c201a020065f79ab970f6d1048cfad5",
+    "ecosystem": "maven",
+    "bytes": 2090,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "quick.pager:shop-goods-model"
+    ]
+   },
+   {
+    "path": "shop-goods/shop-goods-model/pom.xml",
+    "kind": "dep",
+    "blob_sha": "8db1e7b9c846f904de29a2c6bd235ad38a4f33c8",
+    "ecosystem": "maven",
+    "bytes": 1681,
+    "names": [
+     "quick.pager:shop-common"
+    ]
+   },
+   {
+    "path": "shop-job/shop-job-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "4df4afb51cc7cc58a7f331e33489489b984d9f75",
+    "ecosystem": "maven",
+    "bytes": 3514,
+    "names": [
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-sleuth",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "org.springframework.boot:spring-boot-starter-mail",
+     "org.springframework.boot:spring-boot-starter-quartz",
+     "com.baomidou:mybatis-plus-boot-starter",
+     "quick.pager:shop-job-model",
+     "mysql:mysql-connector-java",
+     "quick.pager:shop-auth-resource"
+    ]
+   },
+   {
+    "path": "shop-job/shop-job-client/pom.xml",
+    "kind": "dep",
+    "blob_sha": "a7a09afc9c8d828f67b32fff6c154808d6248689",
+    "ecosystem": "maven",
+    "bytes": 2330,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-netflix-ribbon",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "quick.pager:shop-job-model"
+    ]
+   },
+   {
+    "path": "shop-job/shop-job-model/pom.xml",
+    "kind": "dep",
+    "blob_sha": "6cb4f0aa9f59861a6efddb400b76c4d0b764fa61",
+    "ecosystem": "maven",
+    "bytes": 1814,
+    "names": [
+     "org.projectlombok:lombok",
+     "quick.pager:shop-common"
+    ]
+   },
+   {
+    "path": "shop-order/shop-order-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "e2ad77d4d05d06e4916bf91397f03c0f1bb865d6",
+    "ecosystem": "maven",
+    "bytes": 5108,
+    "names": [
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-seata",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-sleuth",
+     "org.springframework.cloud:spring-cloud-starter-stream-rabbit",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "org.apache.shardingsphere:sharding-jdbc-spring-boot-starter",
+     "org.apache.shardingsphere:sharding-transaction-base-seata-at",
+     "quick.pager:sharding-transaction-base-seata-at",
+     "com.baomidou:mybatis-plus-boot-starter",
+     "mysql:mysql-connector-java",
+     "quick.pager:shop-auth-resource",
+     "quick.pager:shop-order-model",
+     "quick.pager:shop-elasticsearch-client",
+     "quick.pager:shop-user-client"
+    ]
+   },
+   {
+    "path": "shop-order/shop-order-client/pom.xml",
+    "kind": "dep",
+    "blob_sha": "aa7766504e992aeb1d61a9a7b2101adde11b1398",
+    "ecosystem": "maven",
+    "bytes": 2089,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "quick.pager:shop-order-model"
+    ]
+   },
+   {
+    "path": "shop-order/shop-order-model/pom.xml",
+    "kind": "dep",
+    "blob_sha": "bb96ed8cf4441c010a6384a7effc5fd980b28960",
+    "ecosystem": "maven",
+    "bytes": 1680,
+    "names": [
+     "quick.pager:shop-common"
+    ]
+   },
+   {
+    "path": "shop-platform/shop-platform-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "318c5aa8b4dbae079896b758039241b86f1b04ee",
+    "ecosystem": "maven",
+    "bytes": 4333,
+    "names": [
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-seata",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-sleuth",
+     "org.springframework.cloud:spring-cloud-starter-stream-rabbit",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "com.baomidou:mybatis-plus-boot-starter",
+     "mysql:mysql-connector-java",
+     "quick.pager:shop-auth-resource",
+     "org.springframework.boot:spring-boot-starter-test",
+     "quick.pager:shop-platform-client"
+    ]
+   },
+   {
+    "path": "shop-platform/shop-platform-client/pom.xml",
+    "kind": "dep",
+    "blob_sha": "fb4beab03f5a5c1e5da1fba17f3117d51172e974",
+    "ecosystem": "maven",
+    "bytes": 2097,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "quick.pager:shop-platform-model"
+    ]
+   },
+   {
+    "path": "shop-platform/shop-platform-model/pom.xml",
+    "kind": "dep",
+    "blob_sha": "8ba87acd85c1992aeac88ea5c86d8eb88af6bf3d",
+    "ecosystem": "maven",
+    "bytes": 1686,
+    "names": [
+     "quick.pager:shop-common"
+    ]
+   },
+   {
+    "path": "shop-risk/shop-risk-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "6e2c467a3757b15a45d7308fb361aa71dabf81ad",
+    "ecosystem": "maven",
+    "bytes": 3931,
+    "names": [
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-seata",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-sleuth",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "com.baomidou:mybatis-plus-boot-starter",
+     "mysql:mysql-connector-java",
+     "quick.pager:shop-auth-resource",
+     "quick.pager:shop-risk-model"
+    ]
+   },
+   {
+    "path": "shop-risk/shop-risk-client/pom.xml",
+    "kind": "dep",
+    "blob_sha": "6e275076f6be970804943da7d11add44b31249d3",
+    "ecosystem": "maven",
+    "bytes": 2610,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-netflix-ribbon",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "quick.pager:shop-risk-model",
+     "quick.pager:shop-common"
+    ]
+   },
+   {
+    "path": "shop-risk/shop-risk-model/pom.xml",
+    "kind": "dep",
+    "blob_sha": "4088a8363f31932361147b65d079b7832880d958",
+    "ecosystem": "maven",
+    "bytes": 1679,
+    "names": [
+     "quick.pager:shop-common"
+    ]
+   },
+   {
+    "path": "shop-seller/shop-seller-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "273fb89a018a91ca2f7f6cb333582c78deddbb7b",
+    "ecosystem": "maven",
+    "bytes": 4631,
+    "names": [
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-seata",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-sleuth",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "com.baomidou:mybatis-plus-boot-starter",
+     "mysql:mysql-connector-java",
+     "quick.pager:shop-auth-resource",
+     "quick.pager:shop-seller-model"
+    ]
+   },
+   {
+    "path": "shop-seller/shop-seller-client/pom.xml",
+    "kind": "dep",
+    "blob_sha": "adb3485708995f0e062dcda3f54ee7432bcba344",
+    "ecosystem": "maven",
+    "bytes": 2093,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "quick.pager:shop-seller-model"
+    ]
+   },
+   {
+    "path": "shop-seller/shop-seller-model/pom.xml",
+    "kind": "dep",
+    "blob_sha": "e9f7a6cf1db5dc1e9068e80128d062cbfe2b03a6",
+    "ecosystem": "maven",
+    "bytes": 1682,
+    "names": [
+     "quick.pager:shop-common"
+    ]
+   },
+   {
+    "path": "shop-settlement/shop-settlement-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "5170f069bb253e4ce2649dde59975d097fc17917",
+    "ecosystem": "maven",
+    "bytes": 6876,
+    "names": [
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-seata",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-sleuth",
+     "org.springframework.cloud:spring-cloud-starter-stream-rabbit",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "quick.pager:shop-auth-resource",
+     "quick.pager:shop-settlement-model",
+     "quick.pager:shop-activity-client",
+     "quick.pager:shop-goods-client",
+     "quick.pager:shop-cart-client",
+     "quick.pager:shop-order-client",
+     "quick.pager:shop-platform-client",
+     "quick.pager:shop-user-client",
+     "quick.pager:shop-common"
+    ]
+   },
+   {
+    "path": "shop-settlement/shop-settlement-client/pom.xml",
+    "kind": "dep",
+    "blob_sha": "f5ed823eddf023b6dc774333cf73a5ebe73b174e",
+    "ecosystem": "maven",
+    "bytes": 2105,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "quick.pager:shop-settlement-model"
+    ]
+   },
+   {
+    "path": "shop-settlement/shop-settlement-model/pom.xml",
+    "kind": "dep",
+    "blob_sha": "ee035774de5958b6f2c2ad5fefdc7f1c22a08b07",
+    "ecosystem": "maven",
+    "bytes": 1691,
+    "names": [
+     "quick.pager:shop-common"
+    ]
+   },
+   {
+    "path": "shop-user/shop-user-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "b26e40759908537e2431b11be623823a34ea0f3d",
+    "ecosystem": "maven",
+    "bytes": 5216,
+    "names": [
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-seata",
+     "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "org.springframework.cloud:spring-cloud-starter-sleuth",
+     "org.springframework.cloud:spring-cloud-starter-stream-rabbit",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "com.baomidou:mybatis-plus-boot-starter",
+     "mysql:mysql-connector-java",
+     "quick.pager:shop-auth-resource",
+     "quick.pager:shop-user-client",
+     "quick.pager:shop-activity-client",
+     "quick.pager:shop-platform-client"
+    ]
+   },
+   {
+    "path": "shop-user/shop-user-client/pom.xml",
+    "kind": "dep",
+    "blob_sha": "9aa92c32b972ba60047cfd26d10f7ba10db199f6",
+    "ecosystem": "maven",
+    "bytes": 2087,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.cloud:spring-cloud-starter-openfeign",
+     "quick.pager:shop-user-model"
+    ]
+   },
+   {
+    "path": "shop-user/shop-user-model/pom.xml",
+    "kind": "dep",
+    "blob_sha": "efc12a11cf80baeb04c557ccc74e66a49ac9b707",
+    "ecosystem": "maven",
+    "bytes": 1679,
+    "names": [
+     "quick.pager:shop-common"
+    ]
    }
   ],
   "clues": {
@@ -2744,13 +3718,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:21:41Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:27:46Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-29",
+  "pushed_at": "2026-10-31",
   "stars": 488,
   "tree": {
-   "sha": "836dfd4335f9893ee8be4276e23950ae96f1c86d",
-   "etag": "W/\"5c62cdee7e138f66468ad5f2562fbc6211346337c76d2622ce24e1ad8f1465d9\"",
+   "sha": "80afdb762aa10dcaf3a3b86b03ddda9499be67a7",
+   "etag": "W/\"3c937862c054b40b0709046d76de58831a2ed539e4040dbf74c18d1b75349e58\"",
    "truncated": false,
    "path_count": 369,
    "matched": [
@@ -2823,13 +3798,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:22:56Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:28:15Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-29",
+  "pushed_at": "2026-10-31",
   "stars": 419,
   "tree": {
-   "sha": "abb39e5f5c174786eae3a1378b95b9392f287933",
-   "etag": "W/\"23e63751dcf3aaa3270643b6c7295a72c3cbada1c3b735adf0b02914c0780a64\"",
+   "sha": "e53c155a5fee581084e234c5f97c6c3738dac135",
+   "etag": "W/\"4c4e9dc9ac0eda1aadc39651103aa1262ba9e666725860bfa19a06a946d31198\"",
    "truncated": false,
    "path_count": 68,
    "matched": [
@@ -4111,13 +5087,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T03:08:58Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:16:29Z",
   "default_branch": "main",
   "pushed_at": "2026-10-30",
-  "stars": 18020,
+  "stars": 18024,
   "tree": {
    "sha": "8edc086b1f8f9f2974b9faf8ab7c639c85851b46",
-   "etag": "W/\"499196f63c14d07646a967330827ee7b20e7e8ace3b8befa50bc1c8c7fe06d75\"",
+   "etag": "W/\"54ee2643a4f9c235fd11722cf6a371ec7fb88c7793a02dc57bec15be87a14433\"",
    "truncated": false,
    "path_count": 707,
    "matched": [
@@ -4133,6 +5110,9 @@
     "core/wren-core-base/manifest-macro/Cargo.toml",
     "core/wren-core/benchmarks/Cargo.toml",
     "core/wren-core/benchmarks/requirements.txt",
+    "core/wren-core/core/Cargo.toml",
+    "core/wren-core/sqllogictest/Cargo.toml",
+    "core/wren-core/wren-example/Cargo.toml",
     ".github/workflows/cleanup-issues.yml",
     ".github/workflows/cleanup-pr-caches.yml",
     ".github/workflows/core-py-ci.yml",
@@ -4147,7 +5127,14 @@
     ".github/workflows/pull-request-title-validator.yaml",
     ".github/workflows/rc-release.yml",
     ".github/workflows/release-bindings-after-core.yml",
-    ".github/workflows/release-please.yml"
+    ".github/workflows/release-please.yml",
+    ".github/workflows/rust.yml",
+    ".github/workflows/sdk-langchain-ci.yml",
+    ".github/workflows/sdk-pydantic-ci.yml",
+    ".github/workflows/sync-docs.yml",
+    ".github/workflows/sync-wren-core-py-lock.yml",
+    ".github/workflows/wasm-ci.yml",
+    ".github/workflows/wren-ci.yml"
    ]
   },
   "files": [
@@ -4342,6 +5329,77 @@
     ]
    },
    {
+    "path": "core/wren-core/core/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "06fd4ab11f3d8d74e28cbfeb5d839e9c8edb73f1",
+    "ecosystem": "cargo",
+    "bytes": 1494,
+    "names": [
+     "async-trait",
+     "csv",
+     "datafusion",
+     "datafusion-session",
+     "itertools",
+     "log",
+     "parking_lot",
+     "petgraph",
+     "regex",
+     "serde",
+     "serde_json",
+     "serde_with",
+     "tokio",
+     "wren-core-base"
+    ],
+    "dev": [
+     "env_logger",
+     "insta"
+    ]
+   },
+   {
+    "path": "core/wren-core/sqllogictest/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "5cfa4b9d86604c57cab53a611d75021b1c9b745e",
+    "ecosystem": "cargo",
+    "bytes": 1062,
+    "names": [
+     "async-trait",
+     "bigdecimal",
+     "datafusion",
+     "half",
+     "log",
+     "rust_decimal",
+     "sqllogictest",
+     "thiserror",
+     "tokio",
+     "wren-core",
+     "itertools",
+     "object_store",
+     "clap",
+     "futures",
+     "tempfile"
+    ],
+    "dev": [
+     "env_logger",
+     "num_cpus",
+     "tokio"
+    ]
+   },
+   {
+    "path": "core/wren-core/wren-example/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "016437dcb2183a30d161ba2a392426733c9852c1",
+    "ecosystem": "cargo",
+    "bytes": 507,
+    "dev": [
+     "async-trait",
+     "datafusion",
+     "env_logger",
+     "serde_json",
+     "tokio",
+     "wren-core"
+    ]
+   },
+   {
     "path": ".github/workflows/cleanup-issues.yml",
     "kind": "ci",
     "blob_sha": "02e95756449c916744539a5d4c2a8fe6ae6021a7",
@@ -4430,6 +5488,52 @@
     "kind": "ci",
     "blob_sha": "8b463e803b7501fb0a006ba345d9684573a06f3d",
     "bytes": 7936
+   },
+   {
+    "path": ".github/workflows/rust.yml",
+    "kind": "ci",
+    "blob_sha": "2038e3d8da9e2cc31a86a970877fc4026c91b46d",
+    "bytes": 3568,
+    "images": [
+     "amd64/rust",
+     "arm64v8/rust"
+    ]
+   },
+   {
+    "path": ".github/workflows/sdk-langchain-ci.yml",
+    "kind": "ci",
+    "blob_sha": "a2e8e48328f4b9758c962b7f76ceb4e11db3574f",
+    "bytes": 2965
+   },
+   {
+    "path": ".github/workflows/sdk-pydantic-ci.yml",
+    "kind": "ci",
+    "blob_sha": "8121997804d52033551bcc11daf63724cfea200b",
+    "bytes": 2956
+   },
+   {
+    "path": ".github/workflows/sync-docs.yml",
+    "kind": "ci",
+    "blob_sha": "f2eea117e7897cdf0f14d53b1dfdcff4be5f79c6",
+    "bytes": 2663
+   },
+   {
+    "path": ".github/workflows/sync-wren-core-py-lock.yml",
+    "kind": "ci",
+    "blob_sha": "3e44fd0a22c792608b6066b22853b34c2f511bfe",
+    "bytes": 5406
+   },
+   {
+    "path": ".github/workflows/wasm-ci.yml",
+    "kind": "ci",
+    "blob_sha": "0bef5e4fde83438f0256b53097757e342d0e2d38",
+    "bytes": 2849
+   },
+   {
+    "path": ".github/workflows/wren-ci.yml",
+    "kind": "ci",
+    "blob_sha": "e077d0d044d64e8acdc00d994a51ba1c701f0724",
+    "bytes": 11946
    }
   ],
   "clues": {
@@ -4440,6 +5544,11 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "core/wren/src/wren/connector/clickhouse.py",
+    "core/wren/src/wren/connector/mssql.py",
+    "core/wren/src/wren/connector/mysql.py",
+    "core/wren/src/wren/connector/oracle.py",
+    "core/wren/src/wren/connector/postgres.py",
     "skills/.claude-plugin/marketplace.json",
     "skills/.claude-plugin/plugin.json",
     "core/wren/tests/connectors/__init__.py",
@@ -4462,15 +5571,10 @@
     "core/wren/src/wren/connector/base.py",
     "core/wren/src/wren/connector/bigquery.py",
     "core/wren/src/wren/connector/canner.py",
-    "core/wren/src/wren/connector/clickhouse.py",
     "core/wren/src/wren/connector/databricks.py",
     "core/wren/src/wren/connector/datafusion.py",
     "core/wren/src/wren/connector/duckdb.py",
     "core/wren/src/wren/connector/factory.py",
-    "core/wren/src/wren/connector/mssql.py",
-    "core/wren/src/wren/connector/mysql.py",
-    "core/wren/src/wren/connector/oracle.py",
-    "core/wren/src/wren/connector/postgres.py",
     "core/wren/src/wren/connector/redshift.py",
     "core/wren/src/wren/connector/snowflake.py",
     "core/wren/src/wren/connector/spark.py",
@@ -4479,7 +5583,15 @@
     "core/wren-core/core/src/mdl/dialect/inner_dialect.rs",
     "core/wren-core/core/src/mdl/dialect/mod.rs",
     "core/wren-core/core/src/mdl/dialect/utils.rs",
-    "core/wren-core/core/src/mdl/dialect/wren_dialect.rs"
+    "core/wren-core/core/src/mdl/dialect/wren_dialect.rs",
+    "core/wren/src/wren/skills_content/dlt-connector/SKILL.md",
+    "core/wren-core/core/src/mdl/function/dialect/mod.rs",
+    "core/wren/src/wren/skills_content/dlt-connector/references/dlt_sources.md",
+    "core/wren/src/wren/skills_content/dlt-connector/scripts/introspect_dlt.py",
+    "core/wren-core/core/src/mdl/function/dialect/bigquery/aggregate.rs",
+    "core/wren-core/core/src/mdl/function/dialect/bigquery/mod.rs",
+    "core/wren-core/core/src/mdl/function/dialect/bigquery/scalar.rs",
+    "core/wren-core/core/src/mdl/function/dialect/bigquery/window.rs"
    ]
   },
   "fail_count": 0
@@ -4837,13 +5949,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T03:15:59Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:23:14Z",
   "default_branch": "master",
   "pushed_at": "2026-10-30",
-  "stars": 3916,
+  "stars": 3917,
   "tree": {
    "sha": "48c8b7e6098391f81a62e3648a646f3572bc2183",
-   "etag": "W/\"646233733fc2e6f39086bf090dd0be280eadc723e86c3398ae91ab412e383f0b\"",
+   "etag": "W/\"c4faa7d16fc80193e783a3abf13347254f1c79c03eee986adbe1c7ab68f5add3\"",
    "truncated": false,
    "path_count": 5855,
    "matched": [
@@ -4869,7 +5982,17 @@
     ".github/workflows/check-translations.yml",
     ".github/workflows/check-windows-build.yml",
     ".github/workflows/promote-release.yml",
-    ".github/workflows/purge-website-cache.yml"
+    ".github/workflows/purge-website-cache.yml",
+    ".github/workflows/release-candidate.yml",
+    ".github/workflows/run-feature-tests-epas.yml",
+    ".github/workflows/run-feature-tests-pg.yml",
+    ".github/workflows/run-javascript-tests.yml",
+    ".github/workflows/run-python-tests-epas.yml",
+    ".github/workflows/run-python-tests-pg.yml",
+    ".github/workflows/run-python-tests-server-mode.yml",
+    ".github/workflows/snapshot-macos.yml",
+    ".github/workflows/snapshot-windows.yml",
+    ".github/workflows/snapshot.yml"
    ]
   },
   "files": [
@@ -5232,6 +6355,66 @@
     "kind": "ci",
     "blob_sha": "8c5d126c5ed5db654a0a835442e5a1be0dc31ccf",
     "bytes": 2027
+   },
+   {
+    "path": ".github/workflows/release-candidate.yml",
+    "kind": "ci",
+    "blob_sha": "3e12000be4f4d2604ecb7ead39503cb83eca86a2",
+    "bytes": 19695
+   },
+   {
+    "path": ".github/workflows/run-feature-tests-epas.yml",
+    "kind": "ci",
+    "blob_sha": "c8b09b094241815892a4b6e63af76cf6334fe09f",
+    "bytes": 7308
+   },
+   {
+    "path": ".github/workflows/run-feature-tests-pg.yml",
+    "kind": "ci",
+    "blob_sha": "23d43929cd21b066aea2d27296f9d21fffcea099",
+    "bytes": 7960
+   },
+   {
+    "path": ".github/workflows/run-javascript-tests.yml",
+    "kind": "ci",
+    "blob_sha": "cdec6963c78ed850d2ffd84ab7ae1bb7ebeed216",
+    "bytes": 1648
+   },
+   {
+    "path": ".github/workflows/run-python-tests-epas.yml",
+    "kind": "ci",
+    "blob_sha": "d1e72bf3a7e01a6489f9b74ff6e97c5be2cc993c",
+    "bytes": 13789
+   },
+   {
+    "path": ".github/workflows/run-python-tests-pg.yml",
+    "kind": "ci",
+    "blob_sha": "29ea9faac806ff40eb66c35e8e94fc2bc91d353f",
+    "bytes": 18187
+   },
+   {
+    "path": ".github/workflows/run-python-tests-server-mode.yml",
+    "kind": "ci",
+    "blob_sha": "32f3167dff036c492846303a28ea82b4f4d1b2f1",
+    "bytes": 8892
+   },
+   {
+    "path": ".github/workflows/snapshot-macos.yml",
+    "kind": "ci",
+    "blob_sha": "797cb2129e93b4a5fa7f6f456ed73e40ff8455dc",
+    "bytes": 7174
+   },
+   {
+    "path": ".github/workflows/snapshot-windows.yml",
+    "kind": "ci",
+    "blob_sha": "a6b27bb5d16b23ebb17c2b3887a776ef8ee0ac5b",
+    "bytes": 8188
+   },
+   {
+    "path": ".github/workflows/snapshot.yml",
+    "kind": "ci",
+    "blob_sha": "71a6d33b10b9d4d61330ea1764b47eae9271e800",
+    "bytes": 21629
    }
   ],
   "clues": {
@@ -5244,10 +6427,6 @@
     "docs/en_US/managing_database_objects.rst"
    ],
    "paths": [
-    "tools/get_chromedriver.py",
-    "web/pgadmin/utils/driver/__init__.py",
-    "web/pgadmin/utils/driver/abstract.py",
-    "web/pgadmin/utils/driver/registry.py",
     "web/pgadmin/utils/driver/psycopg3/__init__.py",
     "web/pgadmin/utils/driver/psycopg3/connection.py",
     "web/pgadmin/utils/driver/psycopg3/cursor.py",
@@ -5267,6 +6446,10 @@
     "web/pgadmin/utils/driver/psycopg3/tests/test_service_allowlist.py",
     "web/pgadmin/utils/driver/psycopg3/tests/test_sql_ascii_codec.py",
     "web/pgadmin/utils/driver/psycopg3/tests/test_ssh_tunnel_isolation.py",
+    "tools/get_chromedriver.py",
+    "web/pgadmin/utils/driver/__init__.py",
+    "web/pgadmin/utils/driver/abstract.py",
+    "web/pgadmin/utils/driver/registry.py",
     "web/pgadmin/static/js/components/ReactCodeMirror/extensions/dialect.js"
    ],
    "matrix_urls": [
@@ -5424,13 +6607,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T03:26:14Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:30:01Z",
   "default_branch": "master",
   "pushed_at": "2026-10-11",
   "stars": 1532,
   "tree": {
    "sha": "18f1f90f0488e963c920a4984a972446271ecdf5",
-   "etag": "W/\"db2553868c1b7e5288d4154d26a452c14ffa3f2a1f2d77ec1c3ec4d7c1795e5f\"",
+   "etag": "W/\"c2ed3b108c40b449c8fef2d93d46c8a02f67fd743f9d72c1dff06335b2984db9\"",
    "truncated": false,
    "path_count": 4669,
    "matched": [
@@ -5446,6 +6630,52 @@
     "ebean-ddl-generator/pom.xml",
     "ebean-jackson-mapper/pom.xml",
     "ebean-net-postgis-types/pom.xml",
+    "ebean-opentelemetry/pom.xml",
+    "ebean-pgvector-types/pom.xml",
+    "ebean-postgis-types/pom.xml",
+    "ebean-querybean/pom.xml",
+    "ebean-redis/pom.xml",
+    "ebean-redisson/pom.xml",
+    "ebean-spring-txn/pom.xml",
+    "ebean-test/pom.xml",
+    "kotlin-querybean-generator/pom.xml",
+    "platforms/pom.xml",
+    "querybean-generator/pom.xml",
+    "tests/pom.xml",
+    "composites/ebean-clickhouse/pom.xml",
+    "composites/ebean-cockroach/pom.xml",
+    "composites/ebean-db2/pom.xml",
+    "composites/ebean-h2/pom.xml",
+    "composites/ebean-hana/pom.xml",
+    "composites/ebean-mariadb/pom.xml",
+    "composites/ebean-mysql/pom.xml",
+    "composites/ebean-net-postgis/pom.xml",
+    "composites/ebean-nuodb/pom.xml",
+    "composites/ebean-oracle/pom.xml",
+    "composites/ebean-pgvector/pom.xml",
+    "composites/ebean-postgis/pom.xml",
+    "composites/ebean-postgres/pom.xml",
+    "composites/ebean-sqlite/pom.xml",
+    "composites/ebean-sqlserver/pom.xml",
+    "composites/ebean-yugabyte/pom.xml",
+    "composites/ebean/pom.xml",
+    "platforms/all/pom.xml",
+    "platforms/clickhouse/pom.xml",
+    "platforms/db2/pom.xml",
+    "platforms/h2/pom.xml",
+    "platforms/hana/pom.xml",
+    "platforms/hsqldb/pom.xml",
+    "platforms/mariadb/pom.xml",
+    "platforms/mysql/pom.xml",
+    "platforms/nuodb/pom.xml",
+    "platforms/oracle/pom.xml",
+    "platforms/postgres/pom.xml",
+    "platforms/sqlanywhere/pom.xml",
+    "platforms/sqlite/pom.xml",
+    "platforms/sqlserver/pom.xml",
+    "tests/test-dto-mapping/pom.xml",
+    "tests/test-java16/pom.xml",
+    "tests/test-kotlin/pom.xml",
     ".github/workflows/build.yml",
     ".github/workflows/db2luw.yml",
     ".github/workflows/h2database.yml",
@@ -5688,6 +6918,683 @@
     ]
    },
    {
+    "path": "ebean-opentelemetry/pom.xml",
+    "kind": "dep",
+    "blob_sha": "a08d1dfc06f688bc4bf6d5e2968109fdb9f49a59",
+    "ecosystem": "maven",
+    "bytes": 3288,
+    "names": [
+     "io.avaje:avaje-jsr305-x",
+     "io.ebean:ebean-core",
+     "io.opentelemetry:opentelemetry-context",
+     "io.opentelemetry:opentelemetry-api",
+     "io.opentelemetry:opentelemetry-sdk",
+     "io.opentelemetry:opentelemetry-exporter-otlp",
+     "io.avaje:junit",
+     "io.ebean:ebean-test",
+     "io.ebean:ebean-querybean",
+     "io.ebean:querybean-generator"
+    ]
+   },
+   {
+    "path": "ebean-pgvector-types/pom.xml",
+    "kind": "dep",
+    "blob_sha": "26fcf78af9be21484e1706e74990bae54e252d48",
+    "ecosystem": "maven",
+    "bytes": 2519,
+    "names": [
+     "io.ebean:ebean-platform-postgres",
+     "io.ebean:ebean-core",
+     "com.fasterxml.jackson.core:jackson-core",
+     "com.pgvector:pgvector",
+     "org.postgresql:postgresql",
+     "io.ebean:ebean-test",
+     "org.avaje.composite:logback"
+    ]
+   },
+   {
+    "path": "ebean-postgis-types/pom.xml",
+    "kind": "dep",
+    "blob_sha": "2c87eee0c74dba571dd5b52e8f17a31b3495ce4f",
+    "ecosystem": "maven",
+    "bytes": 2754,
+    "names": [
+     "io.ebean:ebean-platform-postgres",
+     "io.ebean:ebean-core",
+     "com.fasterxml.jackson.core:jackson-core",
+     "net.postgis:postgis-jdbc",
+     "org.postgresql:postgresql",
+     "org.geolatte:geolatte-geom",
+     "io.ebean:ebean-test",
+     "org.avaje.composite:logback"
+    ]
+   },
+   {
+    "path": "ebean-querybean/pom.xml",
+    "kind": "dep",
+    "blob_sha": "d2fc90691f5ca550bd0321421e7c6e742ae8d9a9",
+    "ecosystem": "maven",
+    "bytes": 3018,
+    "names": [
+     "io.ebean:ebean-core",
+     "io.avaje:avaje-jsr305-x",
+     "org.jspecify:jspecify",
+     "joda-time:joda-time",
+     "javax.validation:validation-api",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-ddl-generator",
+     "io.ebean:ebean-test",
+     "org.avaje.composite:logback",
+     "io.ebean:querybean-generator"
+    ]
+   },
+   {
+    "path": "ebean-redis/pom.xml",
+    "kind": "dep",
+    "blob_sha": "bf8e40a0d39926b0c27452290a58e5e5bb8d3363",
+    "ecosystem": "maven",
+    "bytes": 2353,
+    "names": [
+     "ch.qos.logback:logback-classic",
+     "redis.clients:jedis",
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-test",
+     "io.ebean:querybean-generator"
+    ]
+   },
+   {
+    "path": "ebean-redisson/pom.xml",
+    "kind": "dep",
+    "blob_sha": "9440bebf31d45ee7d45a629cb706a800c4ab11ff",
+    "ecosystem": "maven",
+    "bytes": 2765,
+    "names": [
+     "ch.qos.logback:logback-classic",
+     "org.redisson:redisson",
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-test",
+     "io.ebean:querybean-generator"
+    ]
+   },
+   {
+    "path": "ebean-spring-txn/pom.xml",
+    "kind": "dep",
+    "blob_sha": "e68820b21a1a4bd3c681ed44fb078a09c685e453",
+    "ecosystem": "maven",
+    "bytes": 3315,
+    "names": [
+     "org.slf4j:slf4j-api",
+     "io.ebean:ebean-core",
+     "com.fasterxml.jackson.core:jackson-databind",
+     "org.springframework:spring-jdbc",
+     "org.springframework:spring-test",
+     "org.springframework.boot:spring-boot-test",
+     "io.ebean:ebean-test",
+     "org.slf4j:jcl-over-slf4j"
+    ]
+   },
+   {
+    "path": "ebean-test/pom.xml",
+    "kind": "dep",
+    "blob_sha": "382a9f3de27017b3768cd2a117d0b1a9ca0d82a7",
+    "ecosystem": "maven",
+    "bytes": 10224,
+    "names": [
+     "io.avaje:avaje-applog",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-platform-h2",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-ddl-generator",
+     "com.fasterxml.jackson.core:jackson-databind",
+     "com.fasterxml.jackson.datatype:jackson-datatype-jsr310",
+     "io.ebean:ebean-test-containers",
+     "net.bytebuddy:byte-buddy",
+     "net.bytebuddy:byte-buddy-agent",
+     "org.assertj:assertj-core",
+     "org.glassfish.jaxb:jaxb-runtime",
+     "jakarta.activation:jakarta.activation-api",
+     "jakarta.xml.bind:jakarta.xml.bind-api",
+     "com.h2database:h2",
+     "io.avaje:avaje-jsr305-x",
+     "io.ebean:ebean-joda-time",
+     "io.ebean:ebean-jackson-jsonnode",
+     "io.ebean:ebean-jackson-mapper",
+     "io.ebean:ebean-platform-all",
+     "io.ebean:ebean-migration",
+     "io.avaje:mod-uuid",
+     "javax.transaction:jta",
+     "javax.validation:validation-api",
+     "jakarta.validation:jakarta.validation-api",
+     "joda-time:joda-time",
+     "commons-io:commons-io",
+     "org.postgresql:postgresql",
+     "com.microsoft.sqlserver:mssql-jdbc",
+     "com.mysql:mysql-connector-j",
+     "org.mariadb.jdbc:mariadb-java-client",
+     "com.sap.cloud.db.jdbc:ngdbc",
+     "com.oracle.database.jdbc:ojdbc8",
+     "com.ibm.db2:jcc",
+     "org.xerial:sqlite-jdbc",
+     "com.nuodb.jdbc:nuodb-jdbc",
+     "ru.yandex.clickhouse:clickhouse-jdbc",
+     "io.avaje:junit"
+    ]
+   },
+   {
+    "path": "kotlin-querybean-generator/pom.xml",
+    "kind": "dep",
+    "blob_sha": "c335526004da2888b481901ac97999b6c18fbee7",
+    "ecosystem": "maven",
+    "bytes": 4631,
+    "names": [
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-core",
+     "org.jetbrains.kotlin:kotlin-stdlib-jdk8",
+     "org.jetbrains.kotlin:kotlin-test",
+     "io.ebean:ebean-platform-h2",
+     "io.ebean:ebean-ddl-generator",
+     "javax.validation:validation-api"
+    ]
+   },
+   {
+    "path": "platforms/pom.xml",
+    "kind": "dep",
+    "blob_sha": "323c47350e5813082ceac6a18252da8c850c6286",
+    "ecosystem": "maven",
+    "bytes": 931
+   },
+   {
+    "path": "querybean-generator/pom.xml",
+    "kind": "dep",
+    "blob_sha": "ac94e1b95015921367f882ac7066e02ee04b1d4c",
+    "ecosystem": "maven",
+    "bytes": 2365,
+    "names": [
+     "io.avaje:avaje-prisms",
+     "io.ebean:ebean-annotation",
+     "io.ebean:jakarta-persistence-api",
+     "io.ebean:ebean-api"
+    ]
+   },
+   {
+    "path": "tests/pom.xml",
+    "kind": "dep",
+    "blob_sha": "5714b0bf77554043662132b321134ab71c475243",
+    "ecosystem": "maven",
+    "bytes": 1273
+   },
+   {
+    "path": "composites/ebean-clickhouse/pom.xml",
+    "kind": "dep",
+    "blob_sha": "42904532e413e12c81851faf810593456f62cbe6",
+    "ecosystem": "maven",
+    "bytes": 1634,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-clickhouse"
+    ]
+   },
+   {
+    "path": "composites/ebean-cockroach/pom.xml",
+    "kind": "dep",
+    "blob_sha": "9db3df9ca4e1e5f87f8a9c13e4a57fe7455853e6",
+    "ecosystem": "maven",
+    "bytes": 1629,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-postgres"
+    ]
+   },
+   {
+    "path": "composites/ebean-db2/pom.xml",
+    "kind": "dep",
+    "blob_sha": "b927dfa65722ae3a04440d7b091bffa746b4f036",
+    "ecosystem": "maven",
+    "bytes": 1606,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-db2"
+    ]
+   },
+   {
+    "path": "composites/ebean-h2/pom.xml",
+    "kind": "dep",
+    "blob_sha": "b7fb4adf9d106ccaf17c9028b599437b7935292d",
+    "ecosystem": "maven",
+    "bytes": 1602,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-h2"
+    ]
+   },
+   {
+    "path": "composites/ebean-hana/pom.xml",
+    "kind": "dep",
+    "blob_sha": "fe43ebbbca20fa02b8d5f3593cb5e19474152e4b",
+    "ecosystem": "maven",
+    "bytes": 1610,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-hana"
+    ]
+   },
+   {
+    "path": "composites/ebean-mariadb/pom.xml",
+    "kind": "dep",
+    "blob_sha": "6c95b4bf3b07e8e89e3d55e7a870ee429bb6e6a2",
+    "ecosystem": "maven",
+    "bytes": 1622,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-mariadb"
+    ]
+   },
+   {
+    "path": "composites/ebean-mysql/pom.xml",
+    "kind": "dep",
+    "blob_sha": "5b0ef59a08b845a138afa130d01c4c377afbab68",
+    "ecosystem": "maven",
+    "bytes": 1614,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-mysql"
+    ]
+   },
+   {
+    "path": "composites/ebean-net-postgis/pom.xml",
+    "kind": "dep",
+    "blob_sha": "32a22b3ba9158c4c241db2a30fbb23397e46ce12",
+    "ecosystem": "maven",
+    "bytes": 2478,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-postgres",
+     "io.ebean:ebean-net-postgis-types",
+     "org.postgresql:postgresql",
+     "net.postgis:postgis-jdbc"
+    ]
+   },
+   {
+    "path": "composites/ebean-nuodb/pom.xml",
+    "kind": "dep",
+    "blob_sha": "75ea193240926b108d6d2844b512337eb122271c",
+    "ecosystem": "maven",
+    "bytes": 1614,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-nuodb"
+    ]
+   },
+   {
+    "path": "composites/ebean-oracle/pom.xml",
+    "kind": "dep",
+    "blob_sha": "2ea499eee4f704b18f227f4a839c9636e3842c5c",
+    "ecosystem": "maven",
+    "bytes": 1618,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-oracle"
+    ]
+   },
+   {
+    "path": "composites/ebean-pgvector/pom.xml",
+    "kind": "dep",
+    "blob_sha": "115b8778eef49c8920d3bb469807e2d3ee82cd34",
+    "ecosystem": "maven",
+    "bytes": 2447,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-postgres",
+     "io.ebean:ebean-pgvector-types",
+     "org.postgresql:postgresql",
+     "com.pgvector:pgvector"
+    ]
+   },
+   {
+    "path": "composites/ebean-postgis/pom.xml",
+    "kind": "dep",
+    "blob_sha": "1fc50cbea0e3b092dc144f9b17ed22a4ec981e63",
+    "ecosystem": "maven",
+    "bytes": 2458,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-postgres",
+     "io.ebean:ebean-postgis-types",
+     "org.postgresql:postgresql",
+     "net.postgis:postgis-jdbc"
+    ]
+   },
+   {
+    "path": "composites/ebean-postgres/pom.xml",
+    "kind": "dep",
+    "blob_sha": "2fcb4139f9855b76a7cac5ee728dea724a3e9384",
+    "ecosystem": "maven",
+    "bytes": 1626,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-postgres"
+    ]
+   },
+   {
+    "path": "composites/ebean-sqlite/pom.xml",
+    "kind": "dep",
+    "blob_sha": "22e9f3fde90cf046cba152600f35a06e3e1dbfcc",
+    "ecosystem": "maven",
+    "bytes": 1618,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-sqlite"
+    ]
+   },
+   {
+    "path": "composites/ebean-sqlserver/pom.xml",
+    "kind": "dep",
+    "blob_sha": "899f9b4c4b6cfaa9818ba69e372c80025a151b6b",
+    "ecosystem": "maven",
+    "bytes": 1630,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-sqlserver"
+    ]
+   },
+   {
+    "path": "composites/ebean-yugabyte/pom.xml",
+    "kind": "dep",
+    "blob_sha": "72db5f5429ef420fbe607ca6ca47b027ff98e58b",
+    "ecosystem": "maven",
+    "bytes": 1626,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-postgres"
+    ]
+   },
+   {
+    "path": "composites/ebean/pom.xml",
+    "kind": "dep",
+    "blob_sha": "69030c01d22b353a135f953b31600fac5a553589",
+    "ecosystem": "maven",
+    "bytes": 2112,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-core",
+     "io.ebean:ebean-joda-time",
+     "io.ebean:ebean-jackson-jsonnode",
+     "io.ebean:ebean-jackson-mapper",
+     "io.ebean:ebean-datasource",
+     "io.ebean:ebean-migration",
+     "io.ebean:ebean-querybean",
+     "io.ebean:ebean-platform-all"
+    ]
+   },
+   {
+    "path": "platforms/all/pom.xml",
+    "kind": "dep",
+    "blob_sha": "06a9d4416ea2a83a6d3514a85b27c6f67c4a6340",
+    "ecosystem": "maven",
+    "bytes": 2583,
+    "names": [
+     "io.ebean:ebean-platform-h2",
+     "io.ebean:ebean-platform-clickhouse",
+     "io.ebean:ebean-platform-db2",
+     "io.ebean:ebean-platform-hana",
+     "io.ebean:ebean-platform-hsqldb",
+     "io.ebean:ebean-platform-mysql",
+     "io.ebean:ebean-platform-mariadb",
+     "io.ebean:ebean-platform-nuodb",
+     "io.ebean:ebean-platform-oracle",
+     "io.ebean:ebean-platform-postgres",
+     "io.ebean:ebean-platform-sqlanywhere",
+     "io.ebean:ebean-platform-sqlite",
+     "io.ebean:ebean-platform-sqlserver"
+    ]
+   },
+   {
+    "path": "platforms/clickhouse/pom.xml",
+    "kind": "dep",
+    "blob_sha": "1a0da38808c79feadad516626ad25759aa193a59",
+    "ecosystem": "maven",
+    "bytes": 733,
+    "names": [
+     "io.ebean:ebean-api"
+    ]
+   },
+   {
+    "path": "platforms/db2/pom.xml",
+    "kind": "dep",
+    "blob_sha": "b20ad202d296569e0e4d662b924bfa5e0d5e067c",
+    "ecosystem": "maven",
+    "bytes": 719,
+    "names": [
+     "io.ebean:ebean-api"
+    ]
+   },
+   {
+    "path": "platforms/h2/pom.xml",
+    "kind": "dep",
+    "blob_sha": "d4cd425dde7176ba74669bd1a0a495d787f8da24",
+    "ecosystem": "maven",
+    "bytes": 1036,
+    "names": [
+     "io.ebean:ebean-api",
+     "com.h2database:h2"
+    ]
+   },
+   {
+    "path": "platforms/hana/pom.xml",
+    "kind": "dep",
+    "blob_sha": "515e15385cc38c422cab9b41e0f5dfaa68f0a60d",
+    "ecosystem": "maven",
+    "bytes": 721,
+    "names": [
+     "io.ebean:ebean-api"
+    ]
+   },
+   {
+    "path": "platforms/hsqldb/pom.xml",
+    "kind": "dep",
+    "blob_sha": "89e8bd3ccf076e3c20f51df412d6f285efe63b77",
+    "ecosystem": "maven",
+    "bytes": 733,
+    "names": [
+     "io.ebean:ebean-platform-h2"
+    ]
+   },
+   {
+    "path": "platforms/mariadb/pom.xml",
+    "kind": "dep",
+    "blob_sha": "2489792329455ebb2dd67e7ba8de90c9942f3d2b",
+    "ecosystem": "maven",
+    "bytes": 881,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-platform-mysql"
+    ]
+   },
+   {
+    "path": "platforms/mysql/pom.xml",
+    "kind": "dep",
+    "blob_sha": "1ac34930ba2e424b84843fccd3ab658e99b333bc",
+    "ecosystem": "maven",
+    "bytes": 723,
+    "names": [
+     "io.ebean:ebean-api"
+    ]
+   },
+   {
+    "path": "platforms/nuodb/pom.xml",
+    "kind": "dep",
+    "blob_sha": "1d3ae4684e7e12c530b87fbef3594bdb7abb2f4a",
+    "ecosystem": "maven",
+    "bytes": 723,
+    "names": [
+     "io.ebean:ebean-api"
+    ]
+   },
+   {
+    "path": "platforms/oracle/pom.xml",
+    "kind": "dep",
+    "blob_sha": "f2645667f248caac2965ed425dc039607159265e",
+    "ecosystem": "maven",
+    "bytes": 725,
+    "names": [
+     "io.ebean:ebean-api"
+    ]
+   },
+   {
+    "path": "platforms/postgres/pom.xml",
+    "kind": "dep",
+    "blob_sha": "9f8cffb31c6f758af94b92713cde75e431678751",
+    "ecosystem": "maven",
+    "bytes": 1113,
+    "names": [
+     "io.ebean:ebean-api",
+     "io.ebean:ebean-test-containers",
+     "org.postgresql:postgresql"
+    ]
+   },
+   {
+    "path": "platforms/sqlanywhere/pom.xml",
+    "kind": "dep",
+    "blob_sha": "4153b8e0fff9353f5e2398fd23ac8d59dfe95310",
+    "ecosystem": "maven",
+    "bytes": 735,
+    "names": [
+     "io.ebean:ebean-api"
+    ]
+   },
+   {
+    "path": "platforms/sqlite/pom.xml",
+    "kind": "dep",
+    "blob_sha": "72a58477abb520f56eaa47c29ad7e50eb7b461dc",
+    "ecosystem": "maven",
+    "bytes": 725,
+    "names": [
+     "io.ebean:ebean-api"
+    ]
+   },
+   {
+    "path": "platforms/sqlserver/pom.xml",
+    "kind": "dep",
+    "blob_sha": "04ffe434e30a6abd11a19b816ddb72d82020cdb4",
+    "ecosystem": "maven",
+    "bytes": 731,
+    "names": [
+     "io.ebean:ebean-api"
+    ]
+   },
+   {
+    "path": "tests/test-dto-mapping/pom.xml",
+    "kind": "dep",
+    "blob_sha": "2eadb5f3b7f742a23cf9c106fa5f4f55fa382fd5",
+    "ecosystem": "maven",
+    "bytes": 3171,
+    "names": [
+     "io.ebean:ebean-h2",
+     "ch.qos.logback:logback-classic",
+     "io.ebean:ebean-test",
+     "io.ebean:querybean-generator",
+     "org.assertj:assertj-core"
+    ]
+   },
+   {
+    "path": "tests/test-java16/pom.xml",
+    "kind": "dep",
+    "blob_sha": "30faef070043f352245ef0f6b1526d91eefbfed4",
+    "ecosystem": "maven",
+    "bytes": 2153,
+    "names": [
+     "io.ebean:ebean-h2",
+     "ch.qos.logback:logback-classic",
+     "io.ebean:ebean-test",
+     "io.ebean:querybean-generator"
+    ]
+   },
+   {
+    "path": "tests/test-kotlin/pom.xml",
+    "kind": "dep",
+    "blob_sha": "57b5f34e3cffe3c200d6cdb5770dae19a1a2d70d",
+    "ecosystem": "maven",
+    "bytes": 5391,
+    "names": [
+     "org.jetbrains.kotlin:kotlin-stdlib-jdk8",
+     "ch.qos.logback:logback-classic",
+     "javax.validation:validation-api",
+     "io.ebean:ebean",
+     "io.avaje:junit",
+     "io.ebean:ebean-test",
+     "org.jetbrains.kotlin:kotlin-test"
+    ]
+   },
+   {
     "path": ".github/workflows/build.yml",
     "kind": "ci",
     "blob_sha": "9e2ee75f5689abcd97765de44b1607d9be1b1f73",
@@ -5820,7 +7727,16 @@
     "ebean-test/src/test/java/io/ebean/xtest/plugin/PropertyTest.java",
     "ebean-test/src/test/java/io/ebean/xtest/plugin/SpiServerTest.java",
     "ebean-test/src/test/java/org/tests/basic/event/TestQueryAdapter.java",
-    "ebean-test/src/test/java/org/tests/model/basic/VehicleDriver.java"
+    "ebean-test/src/test/java/org/tests/model/basic/VehicleDriver.java",
+    "ebean-test/src/test/java/org/tests/model/deleteorder/DcoLinkAdapter.java",
+    "ebean-test/src/test/java/org/tests/model/deleteorder/DcoParentAdapter.java",
+    "ebean-test/src/test/java/org/tests/model/elementcollection/EcPersonPersistAdapter.java",
+    "kotlin-querybean-generator/src/main/java/io/ebean/querybean/generator/KotlinLangAdapter.java",
+    "ebean-core/src/main/java/io/ebeanservice/docstore/api/mapping/DocPropertyAdapter.java",
+    "ebean-core/src/main/java/io/ebeanservice/docstore/api/support/DocStoreBeanBaseAdapter.java",
+    "ebean-test/src/test/java/org/tests/model/basic/event/CustomerPersistAdapter.java",
+    "ebean-test/src/test/java/org/tests/model/basic/event/SimpleTOneQueryAdapter.java",
+    "ebean-test/src/test/java/org/tests/model/basic/event/TWithPreInsertPersistAdapter.java"
    ],
    "matrix_urls": [
     "https://ebean.io/docs/db-migrations/",

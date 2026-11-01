@@ -658,13 +658,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:08:22Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:19:53Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-28",
-  "stars": 6002,
+  "pushed_at": "2026-10-31",
+  "stars": 6004,
   "tree": {
    "sha": "1e15df6aafa8fa910d852fd0a39c323357742ddf",
-   "etag": "W/\"67031b3de3ed9d61da0ab70ffe34736159869c927a663e7c910be1ac2bc64760\"",
+   "etag": "W/\"c1b7dfadf03236ea00c3baf5623058730bbd5e9f38b032539d17229ac7d0396a\"",
    "truncated": false,
    "path_count": 1412,
    "matched": [
@@ -680,6 +681,47 @@
     "packages/realm-common/package.json",
     "packages/realm-react/package.json",
     "packages/realm-tools/package.json",
+    "packages/realm-web-integration-tests/package.json",
+    "packages/realm-web/package.json",
+    "packages/realm/package.json",
+    "templates/expo-template/package.json",
+    "templates/react-native-template/package.json",
+    ".github/actions/baas-test-server/package.json",
+    "examples/electron-todo-list/frontend/package.json",
+    "examples/node-connection-and-error/node/package.json",
+    "examples/node-telemetry/node/package.json",
+    "examples/rn-connection-and-error/frontend/Gemfile",
+    "examples/rn-connection-and-error/frontend/package.json",
+    "examples/rn-multiple-realms/frontend/Gemfile",
+    "examples/rn-multiple-realms/frontend/package.json",
+    "examples/rn-todo-list/frontend/Gemfile",
+    "examples/rn-todo-list/frontend/package.json",
+    "install-tests/test-runners/ava/package.json",
+    "install-tests/test-runners/jest/package.json",
+    "install-tests/test-runners/mocha/package.json",
+    "integration-tests/environments/electron/package.json",
+    "integration-tests/environments/node/package.json",
+    "integration-tests/environments/react-native-test-app/Gemfile",
+    "integration-tests/environments/react-native-test-app/package.json",
+    "packages/realm/bindgen/package.json",
+    "templates/react-native-template/template/Gemfile",
+    "templates/react-native-template/template/package.json",
+    "examples/rn-connection-and-error/frontend/android/build.gradle",
+    "examples/rn-multiple-realms/frontend/android/build.gradle",
+    "examples/rn-todo-list/frontend/android/build.gradle",
+    "integration-tests/environments/react-native-test-app/android/build.gradle",
+    "packages/realm/binding/android/build.gradle",
+    "templates/react-native-template/template/android/build.gradle",
+    "examples/rn-connection-and-error/frontend/android/app/build.gradle",
+    "examples/rn-multiple-realms/frontend/android/app/build.gradle",
+    "examples/rn-todo-list/frontend/android/app/build.gradle",
+    "templates/react-native-template/template/android/app/build.gradle",
+    "integration-tests/tests/src/node/fixtures/electron/package.json",
+    "integration-tests/tests/src/node/fixtures/node/package.json",
+    "integration-tests/tests/src/node/fixtures/react-native/package.json",
+    "integration-tests/tests/src/node/fixtures/ts-node/package.json",
+    "integration-tests/tests/src/node/fixtures/electron/node_modules/electron/package.json",
+    "integration-tests/tests/src/node/fixtures/react-native/node_modules/react-native/package.json",
     "Dockerfile",
     "Dockerfile.android",
     "integration-tests/environments/electron/Dockerfile",
@@ -697,7 +739,13 @@
     ".github/workflows/pr-realm-web.yml",
     ".github/workflows/prepare-package-release.yml",
     ".github/workflows/prepare-release.yml",
-    ".github/workflows/prepare-templates-release.yml"
+    ".github/workflows/prepare-templates-release.yml",
+    ".github/workflows/publish-containers.yml",
+    ".github/workflows/publish-docs.yml",
+    ".github/workflows/publish-package-release.yml",
+    ".github/workflows/publish-release.yml",
+    ".github/workflows/publish-templates.yml",
+    ".github/workflows/test-server.yml"
    ]
   },
   "files": [
@@ -942,6 +990,618 @@
     ]
    },
    {
+    "path": "packages/realm-web-integration-tests/package.json",
+    "kind": "dep",
+    "blob_sha": "b242025caf0bccee609c562db3235c59f54e72f7",
+    "ecosystem": "npm",
+    "bytes": 1381,
+    "names": [
+     "@realm/app-importer",
+     "chai",
+     "js-base64",
+     "jwt-encode",
+     "mocha-remote-cli",
+     "mocha-remote-server",
+     "puppeteer",
+     "realm-web",
+     "webpack",
+     "webpack-dev-server",
+     "mocha-remote-client"
+    ],
+    "dev": [
+     "@types/fs-extra",
+     "@types/webpack",
+     "@types/webpack-env",
+     "fs-extra",
+     "html-webpack-plugin",
+     "mongodb-realm-cli",
+     "source-map-loader",
+     "ts-loader",
+     "webpack-cli"
+    ]
+   },
+   {
+    "path": "packages/realm-web/package.json",
+    "kind": "dep",
+    "blob_sha": "57b8e395dcce58c723dd9ac95b0c85416f269c7d",
+    "ecosystem": "npm",
+    "bytes": 2275,
+    "names": [
+     "@realm/common",
+     "bson",
+     "detect-browser",
+     "js-base64"
+    ],
+    "dev": [
+     "@realm/fetch",
+     "@types/js-base64"
+    ]
+   },
+   {
+    "path": "packages/realm/package.json",
+    "kind": "dep",
+    "blob_sha": "29b932a5a4abd836d5751771db0e56537b86df35",
+    "ecosystem": "npm",
+    "bytes": 8240,
+    "names": [
+     "@realm/fetch",
+     "bson",
+     "debug",
+     "node-machine-id",
+     "path-browserify",
+     "prebuild-install",
+     "react-native"
+    ],
+    "dev": [
+     "@babel/cli",
+     "@babel/core",
+     "@babel/plugin-transform-modules-commonjs",
+     "@commander-js/extra-typings",
+     "@realm/bindgen",
+     "@types/node",
+     "@types/path-browserify",
+     "cmake-js",
+     "command-line-args",
+     "commander",
+     "cross-env",
+     "glob",
+     "prebuild",
+     "react-native",
+     "typedoc-plugin-rename-defaults"
+    ]
+   },
+   {
+    "path": "templates/expo-template/package.json",
+    "kind": "dep",
+    "blob_sha": "371a6f69323e930f2898fa5d49e7bd8e08cdf708",
+    "ecosystem": "npm",
+    "bytes": 761,
+    "names": [
+     "@realm/react",
+     "expo",
+     "expo-dev-client",
+     "expo-splash-screen",
+     "expo-status-bar",
+     "react",
+     "react-native",
+     "react-native-get-random-values",
+     "realm"
+    ],
+    "dev": [
+     "@babel/core",
+     "@babel/plugin-proposal-decorators",
+     "@realm/babel-plugin",
+     "@types/react",
+     "typescript"
+    ]
+   },
+   {
+    "path": "templates/react-native-template/package.json",
+    "kind": "dep",
+    "blob_sha": "d5312d9c7556cab176ccb46b010c995f9ff15987",
+    "ecosystem": "npm",
+    "bytes": 482
+   },
+   {
+    "path": ".github/actions/baas-test-server/package.json",
+    "kind": "dep",
+    "blob_sha": "10c17ea4f4f31e3bf1fb47f05419b8d43d79ee38",
+    "ecosystem": "npm",
+    "bytes": 107
+   },
+   {
+    "path": "examples/electron-todo-list/frontend/package.json",
+    "kind": "dep",
+    "blob_sha": "455ae5878a5cb00de8cfb2987682174afe1c2e67",
+    "ecosystem": "npm",
+    "bytes": 1183,
+    "names": [
+     "@craco/craco",
+     "@realm/react",
+     "@testing-library/jest-dom",
+     "@testing-library/react",
+     "@testing-library/user-event",
+     "react",
+     "react-dom",
+     "react-router-dom",
+     "react-scripts",
+     "realm"
+    ],
+    "dev": [
+     "@babel/plugin-proposal-private-property-in-object",
+     "electron",
+     "electron-reloader",
+     "typescript",
+     "webpack-node-externals"
+    ]
+   },
+   {
+    "path": "examples/node-connection-and-error/node/package.json",
+    "kind": "dep",
+    "blob_sha": "79f2e63db710e57066ba2a7ea8f4f3a2e80ea8b5",
+    "ecosystem": "npm",
+    "bytes": 1145,
+    "names": [
+     "realm"
+    ],
+    "dev": [
+     "@types/node",
+     "typescript"
+    ]
+   },
+   {
+    "path": "examples/node-telemetry/node/package.json",
+    "kind": "dep",
+    "blob_sha": "4355c2cda27a587d56a9b20fa7fa9c03bdb705ba",
+    "ecosystem": "npm",
+    "bytes": 876,
+    "names": [
+     "debug",
+     "node-machine-id",
+     "realm"
+    ],
+    "dev": [
+     "@types/debug",
+     "@types/node",
+     "eslint",
+     "typescript"
+    ]
+   },
+   {
+    "path": "examples/rn-connection-and-error/frontend/Gemfile",
+    "kind": "dep",
+    "blob_sha": "6a7d5c7a49c357be79d9918296469947a5237ef0",
+    "ecosystem": "gem",
+    "bytes": 204,
+    "names": [
+     "cocoapods",
+     "activesupport"
+    ]
+   },
+   {
+    "path": "examples/rn-connection-and-error/frontend/package.json",
+    "kind": "dep",
+    "blob_sha": "76e1a03ab8968ad7bc332159de56e73f964c252e",
+    "ecosystem": "npm",
+    "bytes": 1078,
+    "names": [
+     "@realm/react",
+     "react",
+     "react-native",
+     "react-native-config",
+     "react-native-get-random-values",
+     "realm"
+    ],
+    "dev": [
+     "@babel/core",
+     "@babel/preset-env",
+     "@babel/runtime",
+     "@react-native/babel-preset",
+     "@react-native/eslint-config",
+     "@react-native/metro-config",
+     "@react-native/typescript-config",
+     "@types/react",
+     "@types/react-test-renderer",
+     "babel-jest",
+     "eslint",
+     "jest",
+     "prettier",
+     "react-test-renderer",
+     "typescript"
+    ]
+   },
+   {
+    "path": "examples/rn-multiple-realms/frontend/Gemfile",
+    "kind": "dep",
+    "blob_sha": "6a7d5c7a49c357be79d9918296469947a5237ef0",
+    "ecosystem": "gem",
+    "bytes": 204,
+    "names": [
+     "cocoapods",
+     "activesupport"
+    ]
+   },
+   {
+    "path": "examples/rn-multiple-realms/frontend/package.json",
+    "kind": "dep",
+    "blob_sha": "b6f89f2f61b33970bbb28d4b56db76897a722fe5",
+    "ecosystem": "npm",
+    "bytes": 1294,
+    "names": [
+     "@react-navigation/bottom-tabs",
+     "@react-navigation/native",
+     "@react-navigation/native-stack",
+     "@realm/react",
+     "react",
+     "react-native",
+     "react-native-config",
+     "react-native-safe-area-context",
+     "react-native-screens",
+     "react-native-vector-icons",
+     "realm"
+    ],
+    "dev": [
+     "@babel/core",
+     "@babel/preset-env",
+     "@babel/runtime",
+     "@react-native/babel-preset",
+     "@react-native/eslint-config",
+     "@react-native/metro-config",
+     "@react-native/typescript-config",
+     "@types/react",
+     "@types/react-test-renderer",
+     "babel-jest",
+     "eslint",
+     "jest",
+     "prettier",
+     "react-test-renderer",
+     "typescript"
+    ]
+   },
+   {
+    "path": "examples/rn-todo-list/frontend/Gemfile",
+    "kind": "dep",
+    "blob_sha": "6a7d5c7a49c357be79d9918296469947a5237ef0",
+    "ecosystem": "gem",
+    "bytes": 204,
+    "names": [
+     "cocoapods",
+     "activesupport"
+    ]
+   },
+   {
+    "path": "examples/rn-todo-list/frontend/package.json",
+    "kind": "dep",
+    "blob_sha": "f83b34f0146292950b094a4cc345e08d01eaf90f",
+    "ecosystem": "npm",
+    "bytes": 1067,
+    "names": [
+     "@realm/react",
+     "react",
+     "react-native",
+     "react-native-config",
+     "react-native-get-random-values",
+     "realm"
+    ],
+    "dev": [
+     "@babel/core",
+     "@babel/preset-env",
+     "@babel/runtime",
+     "@react-native/babel-preset",
+     "@react-native/eslint-config",
+     "@react-native/metro-config",
+     "@react-native/typescript-config",
+     "@types/react",
+     "@types/react-test-renderer",
+     "babel-jest",
+     "eslint",
+     "jest",
+     "prettier",
+     "react-test-renderer",
+     "typescript"
+    ]
+   },
+   {
+    "path": "install-tests/test-runners/ava/package.json",
+    "kind": "dep",
+    "blob_sha": "90e30357681c4e0dce6f20739467d840a8872d1f",
+    "ecosystem": "npm",
+    "bytes": 115,
+    "dev": [
+     "ava",
+     "realm"
+    ]
+   },
+   {
+    "path": "install-tests/test-runners/jest/package.json",
+    "kind": "dep",
+    "blob_sha": "57520a5013925433923b71b15c9e918168fb95fd",
+    "ecosystem": "npm",
+    "bytes": 116,
+    "dev": [
+     "jest",
+     "realm"
+    ]
+   },
+   {
+    "path": "install-tests/test-runners/mocha/package.json",
+    "kind": "dep",
+    "blob_sha": "9342e424e8dbc6a76f65be2b5a13bf581744764e",
+    "ecosystem": "npm",
+    "bytes": 118,
+    "dev": [
+     "mocha",
+     "realm"
+    ]
+   },
+   {
+    "path": "integration-tests/environments/electron/package.json",
+    "kind": "dep",
+    "blob_sha": "87499f54a6b189b9c03ceafe658bc3c7cc54cf8e",
+    "ecosystem": "npm",
+    "bytes": 2334,
+    "names": [
+     "@electron/remote",
+     "@realm/integration-tests",
+     "fs-extra",
+     "mocha-remote-client",
+     "@realm/app-importer"
+    ],
+    "dev": [
+     "@realm/mocha-reporter",
+     "command-line-args",
+     "electron",
+     "electron-builder",
+     "mocha-github-actions-reporter",
+     "mocha-junit-reporter",
+     "mocha-remote-cli"
+    ]
+   },
+   {
+    "path": "integration-tests/environments/node/package.json",
+    "kind": "dep",
+    "blob_sha": "41670b5498aba5e810d4acc654219a8294da4bf3",
+    "ecosystem": "npm",
+    "bytes": 1230,
+    "names": [
+     "@realm/integration-tests",
+     "mocha-github-actions-reporter",
+     "mocha-remote-cli",
+     "mocha-remote-client",
+     "realm"
+    ],
+    "dev": [
+     "@realm/app-importer",
+     "@realm/mocha-reporter",
+     "cmake-js"
+    ]
+   },
+   {
+    "path": "integration-tests/environments/react-native-test-app/Gemfile",
+    "kind": "dep",
+    "blob_sha": "20d5e24af96db809dcb48e50c2d8e96b7f3cc8e3",
+    "ecosystem": "gem",
+    "bytes": 509,
+    "names": [
+     "cocoapods",
+     "activesupport",
+     "xcodeproj",
+     "concurrent-ruby",
+     "bigdecimal",
+     "logger",
+     "benchmark",
+     "mutex_m"
+    ]
+   },
+   {
+    "path": "integration-tests/environments/react-native-test-app/package.json",
+    "kind": "dep",
+    "blob_sha": "977f239ae6b33abcd8ecf42fdb001d88eda0ef15",
+    "ecosystem": "npm",
+    "bytes": 4840,
+    "names": [
+     "base-64",
+     "mocha-remote-react-native",
+     "path-browserify",
+     "react",
+     "react-native",
+     "react-native-fetch-api",
+     "react-native-fs",
+     "react-native-get-random-values",
+     "react-native-polyfill-globals",
+     "realm",
+     "text-encoding",
+     "web-streams-polyfill"
+    ],
+    "dev": [
+     "@babel/core",
+     "@babel/preset-env",
+     "@react-native-community/cli",
+     "@react-native/babel-preset",
+     "@react-native/metro-config",
+     "@react-native/typescript-config",
+     "@rnx-kit/metro-config",
+     "@types/react",
+     "concurrently",
+     "mocha-remote-cli",
+     "pod-install",
+     "react-native-test-app"
+    ]
+   },
+   {
+    "path": "packages/realm/bindgen/package.json",
+    "kind": "dep",
+    "blob_sha": "d513fab7a994e2ca83808ab81cfa32c7f7b6c342",
+    "ecosystem": "npm",
+    "bytes": 73
+   },
+   {
+    "path": "templates/react-native-template/template/Gemfile",
+    "kind": "dep",
+    "blob_sha": "6a7d5c7a49c357be79d9918296469947a5237ef0",
+    "ecosystem": "gem",
+    "bytes": 204,
+    "names": [
+     "cocoapods",
+     "activesupport"
+    ]
+   },
+   {
+    "path": "templates/react-native-template/template/package.json",
+    "kind": "dep",
+    "blob_sha": "8ac5ebeddb8fea21617db0d7d9f07b48d760ed38",
+    "ecosystem": "npm",
+    "bytes": 1015,
+    "names": [
+     "@realm/react",
+     "react",
+     "react-native",
+     "react-native-get-random-values",
+     "realm"
+    ],
+    "dev": [
+     "@babel/core",
+     "@babel/preset-env",
+     "@babel/runtime",
+     "@react-native/babel-preset",
+     "@react-native/eslint-config",
+     "@react-native/metro-config",
+     "@react-native/typescript-config",
+     "@types/react",
+     "@types/react-test-renderer",
+     "babel-jest",
+     "eslint",
+     "jest",
+     "prettier",
+     "react-test-renderer",
+     "typescript"
+    ]
+   },
+   {
+    "path": "examples/rn-connection-and-error/frontend/android/build.gradle",
+    "kind": "dep",
+    "blob_sha": "cb9d6232a7044e0f3a653b5ba69d083626c85e69",
+    "ecosystem": "gradle",
+    "bytes": 545
+   },
+   {
+    "path": "examples/rn-multiple-realms/frontend/android/build.gradle",
+    "kind": "dep",
+    "blob_sha": "cb9d6232a7044e0f3a653b5ba69d083626c85e69",
+    "ecosystem": "gradle",
+    "bytes": 545
+   },
+   {
+    "path": "examples/rn-todo-list/frontend/android/build.gradle",
+    "kind": "dep",
+    "blob_sha": "cb9d6232a7044e0f3a653b5ba69d083626c85e69",
+    "ecosystem": "gradle",
+    "bytes": 545
+   },
+   {
+    "path": "integration-tests/environments/react-native-test-app/android/build.gradle",
+    "kind": "dep",
+    "blob_sha": "49972cbc744c89b9af55fbe9fbc915065cf1f3fa",
+    "ecosystem": "gradle",
+    "bytes": 623
+   },
+   {
+    "path": "packages/realm/binding/android/build.gradle",
+    "kind": "dep",
+    "blob_sha": "203737e1157e9570e2ed97644954bdc83afeb723",
+    "ecosystem": "gradle",
+    "bytes": 3524,
+    "names": [
+     "com.facebook.react:react-android"
+    ]
+   },
+   {
+    "path": "templates/react-native-template/template/android/build.gradle",
+    "kind": "dep",
+    "blob_sha": "cb9d6232a7044e0f3a653b5ba69d083626c85e69",
+    "ecosystem": "gradle",
+    "bytes": 545
+   },
+   {
+    "path": "examples/rn-connection-and-error/frontend/android/app/build.gradle",
+    "kind": "dep",
+    "blob_sha": "2f487191f3e118bd6422f405e350d50399ca8351",
+    "ecosystem": "gradle",
+    "bytes": 4766
+   },
+   {
+    "path": "examples/rn-multiple-realms/frontend/android/app/build.gradle",
+    "kind": "dep",
+    "blob_sha": "36cd87284665d58446ffeee647ffd3201e75d062",
+    "ecosystem": "gradle",
+    "bytes": 4758
+   },
+   {
+    "path": "examples/rn-todo-list/frontend/android/app/build.gradle",
+    "kind": "dep",
+    "blob_sha": "fbdb758ae144e3b48b1db7cd053c41cfa5775297",
+    "ecosystem": "gradle",
+    "bytes": 4746
+   },
+   {
+    "path": "templates/react-native-template/template/android/app/build.gradle",
+    "kind": "dep",
+    "blob_sha": "71ba86327601ea74a9f40b631a25665a53eddfa4",
+    "ecosystem": "gradle",
+    "bytes": 4738
+   },
+   {
+    "path": "integration-tests/tests/src/node/fixtures/electron/package.json",
+    "kind": "dep",
+    "blob_sha": "d1611ce25bbc1e54789d781398479e762e594232",
+    "ecosystem": "npm",
+    "bytes": 112,
+    "dev": [
+     "electron"
+    ]
+   },
+   {
+    "path": "integration-tests/tests/src/node/fixtures/node/package.json",
+    "kind": "dep",
+    "blob_sha": "9a729548bd06fb8a93c2b0bb6f5f0f690f8fa17d",
+    "ecosystem": "npm",
+    "bytes": 55
+   },
+   {
+    "path": "integration-tests/tests/src/node/fixtures/react-native/package.json",
+    "kind": "dep",
+    "blob_sha": "4030f518ca69e02777d9db0481b63b506c9f7774",
+    "ecosystem": "npm",
+    "bytes": 117,
+    "names": [
+     "react-native"
+    ]
+   },
+   {
+    "path": "integration-tests/tests/src/node/fixtures/ts-node/package.json",
+    "kind": "dep",
+    "blob_sha": "850947c50a82675759a0280421528173af1e8271",
+    "ecosystem": "npm",
+    "bytes": 124,
+    "dev": [
+     "typescript"
+    ]
+   },
+   {
+    "path": "integration-tests/tests/src/node/fixtures/electron/node_modules/electron/package.json",
+    "kind": "dep",
+    "blob_sha": "e2a8f03a41d62950de61f8a55bedd06fa8603b2d",
+    "ecosystem": "npm",
+    "bytes": 46
+   },
+   {
+    "path": "integration-tests/tests/src/node/fixtures/react-native/node_modules/react-native/package.json",
+    "kind": "dep",
+    "blob_sha": "fb9a6eb054a085bcd9222b937e44054e633881e1",
+    "ecosystem": "npm",
+    "bytes": 50
+   },
+   {
     "path": "Dockerfile",
     "kind": "image",
     "blob_sha": "d8b6952f932e2ef642b3531393999ccc1042e3c1",
@@ -1057,6 +1717,45 @@
     "kind": "ci",
     "blob_sha": "1c1f8181874aea289bbaad6ff4a73294a40e84c1",
     "bytes": 1313
+   },
+   {
+    "path": ".github/workflows/publish-containers.yml",
+    "kind": "ci",
+    "blob_sha": "9fd44b14d860296190c3c5e938d3471caf04a10a",
+    "bytes": 1296,
+    "images": [
+     "ghcr.io/${{"
+    ]
+   },
+   {
+    "path": ".github/workflows/publish-docs.yml",
+    "kind": "ci",
+    "blob_sha": "7f6295778891b952a20ccd908c76a77d2dd95c7c",
+    "bytes": 3497
+   },
+   {
+    "path": ".github/workflows/publish-package-release.yml",
+    "kind": "ci",
+    "blob_sha": "194ba0d40d1c6c4a127f67c3024d474836538911",
+    "bytes": 6418
+   },
+   {
+    "path": ".github/workflows/publish-release.yml",
+    "kind": "ci",
+    "blob_sha": "4e280b44c13c74f504b58937ff0907bb9ea65f87",
+    "bytes": 5985
+   },
+   {
+    "path": ".github/workflows/publish-templates.yml",
+    "kind": "ci",
+    "blob_sha": "0c464453c52fc2cbd7bf7a67bbf06c05632759ee",
+    "bytes": 591
+   },
+   {
+    "path": ".github/workflows/test-server.yml",
+    "kind": "ci",
+    "blob_sha": "83b91c3adb0e124d455eceeeab47004a9b5585b9",
+    "bytes": 1051
    }
   ],
   "clues": {
@@ -1105,13 +1804,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:12:27Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:22:48Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-28",
-  "stars": 1870,
+  "pushed_at": "2026-10-30",
+  "stars": 1871,
   "tree": {
    "sha": "f7d8c911eea42a0290f855a6842695ae65b8eb2d",
-   "etag": "W/\"4fe20cfcaf2f3bb7e0e00dc5d03412f9cb6da68b41fd7014516c151ec7757d10\"",
+   "etag": "W/\"7cbad32dfb36add06795673be69a596a8c27242f537c3f7c127453f26825c9f0\"",
    "truncated": false,
    "path_count": 264,
    "matched": [
@@ -1127,6 +1827,17 @@
     "crates/corro-devcluster/Cargo.toml",
     "crates/corro-pg/Cargo.toml",
     "crates/corro-tests/Cargo.toml",
+    "crates/corro-tpl/Cargo.toml",
+    "crates/corro-types/Cargo.toml",
+    "crates/corro-utils/Cargo.toml",
+    "crates/corrosion/Cargo.toml",
+    "crates/plum-foca/Cargo.toml",
+    "crates/spawn/Cargo.toml",
+    "crates/sqlite-functions/Cargo.toml",
+    "crates/sqlite-pool/Cargo.toml",
+    "crates/sqlite3-restore/Cargo.toml",
+    "crates/tripwire/Cargo.toml",
+    ".antithesis/client/rust-load-generator/Cargo.toml",
     ".antithesis/Dockerfile",
     ".antithesis/client/Dockerfile",
     ".antithesis/corrosion/Dockerfile",
@@ -1456,6 +2167,304 @@
     ]
    },
    {
+    "path": "crates/corro-tpl/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "266857a5a7d43aa4d7aa58d96894d5e1dc97dbba",
+    "ecosystem": "cargo",
+    "bytes": 921,
+    "names": [
+     "compact_str",
+     "corro-client",
+     "corro-types",
+     "csv",
+     "enquote",
+     "futures",
+     "hex",
+     "hostname",
+     "indexmap",
+     "rhai",
+     "rhai-tpl",
+     "serde",
+     "serde_json",
+     "thiserror",
+     "tokio",
+     "tokio-util",
+     "tracing",
+     "tripwire",
+     "uuid"
+    ],
+    "dev": [
+     "tracing-subscriber",
+     "tempfile",
+     "corro-tests"
+    ]
+   },
+   {
+    "path": "crates/corro-types/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "0910010ae094d6ba139b63bbdfbc80d74c160749",
+    "ecosystem": "cargo",
+    "bytes": 2237,
+    "names": [
+     "arc-swap",
+     "async-trait",
+     "bytes",
+     "camino",
+     "circular-buffer",
+     "compact_str",
+     "config",
+     "consul-client",
+     "corro-api-types",
+     "corro-base-types",
+     "corro-utils",
+     "deadpool",
+     "papaya",
+     "enquote",
+     "eyre",
+     "fallible-iterator",
+     "foca",
+     "futures",
+     "hex",
+     "indexmap",
+     "itertools",
+     "metrics",
+     "once_cell",
+     "opentelemetry",
+     "parking_lot",
+     "plum-foca",
+     "rand",
+     "rangemap",
+     "rcgen",
+     "rusqlite",
+     "seahash",
+     "serde",
+     "serde_json",
+     "serde_with",
+     "spawn",
+     "speedy",
+     "sqlite-functions",
+     "sqlite-pool",
+     "sqlite3-parser",
+     "tempfile",
+     "thiserror",
+     "time",
+     "tokio",
+     "tokio-util",
+     "tracing",
+     "tripwire",
+     "thread_local",
+     "uhlc",
+     "uuid",
+     "strum",
+     "antithesis_sdk",
+     "lazy_static",
+     "zstd"
+    ],
+    "dev": [
+     "corro-tests",
+     "tracing-subscriber"
+    ]
+   },
+   {
+    "path": "crates/corro-utils/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "6ea2a250e7bb40a1a30c5798b37dd8ed2814f180",
+    "ecosystem": "cargo",
+    "bytes": 257,
+    "names": [
+     "eyre",
+     "tokio",
+     "tracing"
+    ]
+   },
+   {
+    "path": "crates/corrosion/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "fdd4199a9c453b37ebd114b3cce080818833c84a",
+    "ecosystem": "cargo",
+    "bytes": 2312,
+    "names": [
+     "antithesis_sdk",
+     "build-info",
+     "bytes",
+     "camino",
+     "clap",
+     "config",
+     "consul-client",
+     "corro-admin",
+     "corro-agent",
+     "corro-api-types",
+     "corro-client",
+     "corro-tpl",
+     "corro-types",
+     "crc32fast",
+     "eyre",
+     "futures",
+     "hostname",
+     "hyper",
+     "metrics",
+     "metrics-exporter-prometheus",
+     "notify",
+     "notify-debouncer-mini",
+     "once_cell",
+     "opentelemetry",
+     "opentelemetry-otlp",
+     "opentelemetry_sdk.workspace",
+     "opentelemetry-semantic-conventions",
+     "rusqlite",
+     "seahash",
+     "serde",
+     "serde_json",
+     "shellwords",
+     "spawn",
+     "speedy",
+     "sqlite3-restore",
+     "tempfile",
+     "thiserror",
+     "tikv-jemallocator",
+     "time",
+     "tokio",
+     "tokio-metrics",
+     "tokio-serde",
+     "tokio-util",
+     "tracing",
+     "tracing-filter",
+     "tracing-opentelemetry",
+     "tracing-subscriber",
+     "tripwire",
+     "uuid",
+     "shell-words",
+     "metrics-util"
+    ],
+    "dev": [
+     "build-info-build",
+     "corro-tests"
+    ]
+   },
+   {
+    "path": "crates/plum-foca/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "c0d5e03d447b461348ca5c5e1f26e0e4257e5be5",
+    "ecosystem": "cargo",
+    "bytes": 403,
+    "names": [
+     "indexmap",
+     "serde",
+     "thiserror",
+     "speedy",
+     "strum",
+     "tracing",
+     "rand"
+    ],
+    "dev": [
+     "tracing-subscriber"
+    ]
+   },
+   {
+    "path": "crates/spawn/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "31e996425856ea230726017bf70ba6eca5bff6fa",
+    "ecosystem": "cargo",
+    "bytes": 447,
+    "names": [
+     "futures",
+     "pin-project-lite",
+     "parking_lot.workspace",
+     "tokio",
+     "tracing"
+    ]
+   },
+   {
+    "path": "crates/sqlite-functions/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "c582895dfd9098ea614ce218eccc82212d31bc8e",
+    "ecosystem": "cargo",
+    "bytes": 240,
+    "names": [
+     "rusqlite",
+     "serde_json"
+    ]
+   },
+   {
+    "path": "crates/sqlite-pool/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "25105efdc0e94591f71d3101b6a7e43231bbb0ff",
+    "ecosystem": "cargo",
+    "bytes": 666,
+    "names": [
+     "arc-swap",
+     "rusqlite",
+     "deadpool",
+     "metrics",
+     "tracing",
+     "tokio",
+     "tokio-util"
+    ],
+    "dev": [
+     "tempfile",
+     "eyre",
+     "corro-types"
+    ]
+   },
+   {
+    "path": "crates/sqlite3-restore/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "b50e0c4f2e0e63b04c276066c3b49c2165c28cef",
+    "ecosystem": "cargo",
+    "bytes": 367,
+    "names": [
+     "nix",
+     "thiserror",
+     "tracing"
+    ],
+    "dev": [
+     "rusqlite",
+     "tempfile"
+    ]
+   },
+   {
+    "path": "crates/tripwire/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "8418b18b8cc8692a20949a0d4b55b51e3dcc86e3",
+    "ecosystem": "cargo",
+    "bytes": 471,
+    "names": [
+     "futures",
+     "futures-util",
+     "pin-project-lite",
+     "tokio",
+     "tokio-stream",
+     "tracing"
+    ],
+    "dev": [
+     "assert2"
+    ]
+   },
+   {
+    "path": ".antithesis/client/rust-load-generator/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "c8dbbc93c5ced84060bff678a44b255c95aee6e9",
+    "ecosystem": "cargo",
+    "bytes": 731,
+    "names": [
+     "antithesis_sdk",
+     "clap",
+     "config",
+     "hickory-resolver",
+     "serde",
+     "tracing",
+     "tracing-subscriber",
+     "futures",
+     "tripwire",
+     "corro-client",
+     "corro-api-types",
+     "eyre.workspace",
+     "tokio.workspace",
+     "rusqlite",
+     "uuid"
+    ]
+   },
+   {
     "path": ".antithesis/Dockerfile",
     "kind": "image",
     "blob_sha": "4be09a199eb10f50a21a8bd471b9fee7a172fd8f",
@@ -1549,13 +2558,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:19:16Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:26:32Z",
   "default_branch": "master",
   "pushed_at": "2019-02-14",
   "stars": 639,
   "tree": {
    "sha": "c0e5a729e8a6c08df6ff7f377aa0cc3c2917d6db",
-   "etag": "W/\"f870059d4f344c38d2d3ab86fb721909fc6c4c5e658e0fe24e489bf9e97b46b5\"",
+   "etag": "W/\"1e202b6371b176f7a0aff00752dd3b8cb69db81a102927a593906044e490836e\"",
    "truncated": false,
    "path_count": 1185,
    "matched": [
@@ -1650,7 +2660,167 @@
     "src/main/webapp/jquery-easyui-1.3.3/plugins/jquery.window.js",
     "src/main/webapp/kindeditor-4.1.10/plugins/anchor/anchor.js",
     "src/main/webapp/kindeditor-4.1.10/plugins/autoheight/autoheight.js",
-    "src/main/webapp/kindeditor-4.1.10/plugins/baidumap/baidumap.js"
+    "src/main/webapp/kindeditor-4.1.10/plugins/baidumap/baidumap.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/baidumap/index.html",
+    "src/main/webapp/kindeditor-4.1.10/plugins/baidumap/map.html",
+    "src/main/webapp/kindeditor-4.1.10/plugins/clearhtml/clearhtml.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/code/code.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/code/prettify.css",
+    "src/main/webapp/kindeditor-4.1.10/plugins/code/prettify.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/emoticons.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/filemanager/filemanager.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/flash/flash.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/image/image.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/insertfile/insertfile.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/lineheight/lineheight.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/link/link.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/map/map.html",
+    "src/main/webapp/kindeditor-4.1.10/plugins/map/map.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/media/media.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/multiimage/multiimage.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/pagebreak/pagebreak.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/plainpaste/plainpaste.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/preview/preview.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/quickformat/quickformat.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/table/table.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/template/template.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/wordpaste/wordpaste.js",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/0.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/1.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/10.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/100.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/101.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/102.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/103.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/104.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/105.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/106.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/107.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/108.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/109.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/11.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/110.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/111.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/112.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/113.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/114.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/115.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/116.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/117.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/118.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/119.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/12.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/120.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/121.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/122.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/123.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/124.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/125.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/126.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/127.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/128.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/129.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/13.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/130.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/131.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/132.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/133.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/134.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/14.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/15.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/16.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/17.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/18.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/19.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/2.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/20.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/21.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/22.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/23.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/24.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/25.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/26.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/27.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/28.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/29.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/3.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/30.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/31.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/32.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/33.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/34.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/35.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/36.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/37.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/38.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/39.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/4.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/40.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/41.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/42.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/43.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/44.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/45.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/46.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/47.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/48.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/49.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/5.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/50.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/51.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/52.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/53.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/54.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/55.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/56.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/57.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/58.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/59.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/6.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/60.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/61.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/62.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/63.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/64.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/65.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/66.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/67.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/68.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/69.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/7.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/70.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/71.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/72.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/73.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/74.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/75.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/76.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/77.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/78.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/79.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/8.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/80.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/81.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/82.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/83.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/84.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/85.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/86.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/87.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/88.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/89.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/9.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/90.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/91.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/92.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/93.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/94.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/95.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/96.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/97.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/98.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/99.gif",
+    "src/main/webapp/kindeditor-4.1.10/plugins/emoticons/images/static.gif"
    ]
   },
   "fail_count": 0
@@ -1947,13 +3117,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:46:34Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:37:02Z",
   "default_branch": "master",
   "pushed_at": "2019-09-29",
   "stars": 85,
   "tree": {
    "sha": "daff1a1d24361daf0c8c5bc018838482002d7d62",
-   "etag": "W/\"9529cad158773017094650b9793cf10bb03085c26e85ce2ba43b20985bd4d0a3\"",
+   "etag": "W/\"41b194395c693df66eed3c937e16d54771bbcf94f9c6f594d02313c15784cdc0\"",
    "truncated": false,
    "path_count": 222,
    "matched": [
@@ -1964,7 +3135,13 @@
     "services/logstash/Dockerfile",
     "services/metricbeat/Dockerfile",
     "services/mongo/Dockerfile",
-    "services/mysql/Dockerfile"
+    "services/mysql/Dockerfile",
+    "services/nginx/Dockerfile",
+    "services/php/Dockerfile",
+    "services/rabbitmq/Dockerfile",
+    "services/redis/Dockerfile",
+    "demo/mysql-proxy/master/Dockerfile",
+    "demo/mysql-proxy/slave1/Dockerfile"
    ]
   },
   "files": [
@@ -2033,6 +3210,60 @@
    },
    {
     "path": "services/mysql/Dockerfile",
+    "kind": "image",
+    "blob_sha": "0d5a5e522ff62fe8a298bc2e8683b28b0f2ecbb8",
+    "bytes": 381,
+    "images": [
+     "mysql:${MYSQL_VER}"
+    ]
+   },
+   {
+    "path": "services/nginx/Dockerfile",
+    "kind": "image",
+    "blob_sha": "79afcf18a0138d0332b15b96bcc32afd9d611933",
+    "bytes": 660,
+    "images": [
+     "nginx:${NGINX_VER}"
+    ]
+   },
+   {
+    "path": "services/php/Dockerfile",
+    "kind": "image",
+    "blob_sha": "ae7cfc7860698e5bf872a97fd2e91d61e2248a17",
+    "bytes": 2099,
+    "images": [
+     "php:${PHP_VER}"
+    ]
+   },
+   {
+    "path": "services/rabbitmq/Dockerfile",
+    "kind": "image",
+    "blob_sha": "bc095d64b4ec5ec28a4998af582ad387f6d493d3",
+    "bytes": 293,
+    "images": [
+     "rabbitmq:${RABBITMQ_VER}"
+    ]
+   },
+   {
+    "path": "services/redis/Dockerfile",
+    "kind": "image",
+    "blob_sha": "924bd9d631ac631a583f791d4df37a203dfd9652",
+    "bytes": 389,
+    "images": [
+     "redis:${REDIS_VER}"
+    ]
+   },
+   {
+    "path": "demo/mysql-proxy/master/Dockerfile",
+    "kind": "image",
+    "blob_sha": "0d5a5e522ff62fe8a298bc2e8683b28b0f2ecbb8",
+    "bytes": 381,
+    "images": [
+     "mysql:${MYSQL_VER}"
+    ]
+   },
+   {
+    "path": "demo/mysql-proxy/slave1/Dockerfile",
     "kind": "image",
     "blob_sha": "0d5a5e522ff62fe8a298bc2e8683b28b0f2ecbb8",
     "bytes": 381,
@@ -2323,13 +3554,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T01:31:30Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:53:35Z",
   "default_branch": "main",
   "pushed_at": "2022-11-20",
   "stars": 14,
   "tree": {
    "sha": "550e34e731f4e70ca47c493db1153bb93d285e45",
-   "etag": "W/\"83795ee8a76172d869ac6ebf7597673342bf3f2b4aeb17e55664ba40d340e5fd\"",
+   "etag": "W/\"52cd6969f24cc90aac1cfbae4b492f061a0bffaf9b1baaf42f2a78dacf17b377\"",
    "truncated": false,
    "path_count": 1505,
    "matched": [
@@ -2617,13 +3849,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T02:02:38Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:59:01Z",
   "default_branch": "master",
   "pushed_at": "2018-04-17",
   "stars": 10,
   "tree": {
    "sha": "a3867454bb6dc76bbd8c911397e6c42d9295dd2e",
-   "etag": "W/\"98df58fb4fc3176d00f13e20d812808ba5d0de06f4d559ece10b8ef03bddcf61\"",
+   "etag": "W/\"f8d19e585601ad4f29820346d12ae980953209f6632d685f4d7aee04b6444013\"",
    "truncated": false,
    "path_count": 457,
    "matched": []
@@ -2675,7 +3908,127 @@
     "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/bg.js",
     "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/ca.js",
     "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/cs.js",
-    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/cy.js"
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/cy.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/da.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/de-ch.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/de.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/el.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/en-gb.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/en.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/eo.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/es-mx.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/es.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/et.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/eu.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/fa.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/fi.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/fo.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/fr-ca.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/fr.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/gl.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/gu.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/he.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/hi.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/hr.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/hu.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/id.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/it.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/ja.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/km.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/ko.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/ku.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/lt.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/lv.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/mk.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/mn.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/nb.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/nl.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/no.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/oc.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/pl.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/pt-br.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/pt.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/ro.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/ru.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/si.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/sk.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/sl.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/sq.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/sr-latn.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/sr.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/sv.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/th.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/tr.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/tt.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/ug.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/uk.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/vi.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/zh-cn.js",
+    "home/static/home/js/ckeditor/plugins/a11yhelp/dialogs/lang/zh.js",
+    "home/static/home/js/ckeditor/plugins/about/dialogs/hidpi/logo_ckeditor.png",
+    "home/static/home/js/ckeditor/plugins/link/images/hidpi/anchor.png",
+    "home/static/home/js/ckeditor/plugins/magicline/images/hidpi/icon-rtl.png",
+    "home/static/home/js/ckeditor/plugins/magicline/images/hidpi/icon.png",
+    "home/static/home/js/ckeditor/plugins/scayt/skins/moono-lisa/scayt.css",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/_translationstatus.txt",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/af.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/ar.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/az.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/bg.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/ca.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/cs.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/cy.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/da.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/de-ch.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/de.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/el.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/en-au.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/en-ca.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/en-gb.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/en.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/eo.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/es-mx.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/es.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/et.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/eu.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/fa.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/fi.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/fr-ca.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/fr.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/gl.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/he.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/hr.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/hu.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/id.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/it.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/ja.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/km.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/ko.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/ku.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/lt.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/lv.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/nb.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/nl.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/no.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/oc.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/pl.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/pt-br.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/pt.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/ru.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/si.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/sk.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/sl.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/sq.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/sv.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/th.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/tr.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/tt.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/ug.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/uk.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/vi.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/zh-cn.js",
+    "home/static/home/js/ckeditor/plugins/specialchar/dialogs/lang/zh.js",
+    "home/static/home/js/ckeditor/plugins/wsc/skins/moono-lisa/wsc.css"
    ]
   },
   "fail_count": 0
@@ -2798,13 +4151,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T02:16:38Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:05:24Z",
   "default_branch": "main",
   "pushed_at": "2026-10-11",
   "stars": 4,
   "tree": {
    "sha": "9c9493d78ffeb9f17073483ceb82947f64daf33f",
-   "etag": "W/\"805974559f6668dbd1d14fb92259c3fec770a7ade7c9df03b9f90da9e8fd1053\"",
+   "etag": "W/\"e8d59bf11e7000c43f90be601743894d28ff4a0f442bbe301b86f74cbbfd3709\"",
    "truncated": false,
    "path_count": 674,
    "matched": [
@@ -2820,6 +4174,8 @@
     "DH.NCode.VastBase/DH.NCode.VastBase.csproj",
     "DH.NCode/DH.NCode.csproj",
     "Test/Test.csproj",
+    "XCodeTool/XCodeTool.csproj",
+    "XUnitTest.XCode/XUnitTest.XCode.csproj",
     ".github/workflows/publish-beta.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/test.yml"
@@ -2946,6 +4302,30 @@
      "DH.NStardust",
      "SourceGear.sqlite3",
      "System.Data.SQLite"
+    ]
+   },
+   {
+    "path": "XCodeTool/XCodeTool.csproj",
+    "kind": "dep",
+    "blob_sha": "2c61e07e1a3f4413e25fe88ee43f2f14bea5dad2",
+    "ecosystem": "csproj",
+    "bytes": 2655
+   },
+   {
+    "path": "XUnitTest.XCode/XUnitTest.XCode.csproj",
+    "kind": "dep",
+    "blob_sha": "0fd2048b99c3a478c86212945b1f5d55cbc59fc6",
+    "ecosystem": "csproj",
+    "bytes": 6426,
+    "names": [
+     "DH.NNovaDb",
+     "InterSystems.Data.IRISClient",
+     "DH.NIP",
+     "DH.UnitTest",
+     "Microsoft.NET.Test.Sdk",
+     "System.Diagnostics.PerformanceCounter",
+     "xunit",
+     "xunit.runner.visualstudio"
     ]
    },
    {

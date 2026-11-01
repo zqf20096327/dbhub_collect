@@ -1033,13 +1033,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T19:52:07Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:13:39Z",
   "default_branch": "pdsl_main",
   "pushed_at": "2024-12-23",
   "stars": 0,
   "tree": {
    "sha": "4df18768fe0e12948b0ed298cbcfb7702c1606c7",
-   "etag": "W/\"6e082202588444ed526628a1a245df0bfb8c1e25c97d8c8efbad7e099bf39ead\"",
+   "etag": "W/\"2245927cf2c0ed48678fdbd4f65a2f52af61535569a89f6a8d2405c1ad4aae54\"",
    "truncated": false,
    "path_count": 13554,
    "matched": [
@@ -1055,6 +1056,10 @@
     "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/logger/Cargo.toml",
     "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/platform/Cargo.toml",
     "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/vector/Cargo.toml",
+    "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/vector_base64/Cargo.toml",
+    "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/cmd_drivers/convert_f32_to_bf16/Cargo.toml",
+    "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/cmd_drivers/load_and_insert_memory_index/Cargo.toml",
+    "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/cmd_drivers/search_memory_index/Cargo.toml",
     ".devcontainer/Dockerfile",
     ".github/obfarm/Dockerfile",
     "deps/oblib/src/lib/vector/vsag_lib/docker/Dockerfile.x86",
@@ -1292,6 +1297,55 @@
     ]
    },
    {
+    "path": "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/vector_base64/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "6f50ad96e6d4dfcaa5dd5bdaa664240788fb1eb5",
+    "ecosystem": "cargo",
+    "bytes": 346,
+    "names": [
+     "base64",
+     "bincode",
+     "half",
+     "serde"
+    ]
+   },
+   {
+    "path": "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/cmd_drivers/convert_f32_to_bf16/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "1993aab9dfa9933b07e130349b6869290b1555b0",
+    "ecosystem": "cargo",
+    "bytes": 297,
+    "names": [
+     "half"
+    ]
+   },
+   {
+    "path": "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/cmd_drivers/load_and_insert_memory_index/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "cbb4e1e3c34c66dd769eca7f6798e48ff79678bb",
+    "ecosystem": "cargo",
+    "bytes": 399,
+    "names": [
+     "diskann",
+     "logger",
+     "vector"
+    ]
+   },
+   {
+    "path": "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/cmd_drivers/search_memory_index/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "cba3709aa8e53423842f05d33760245635c10929",
+    "ecosystem": "cargo",
+    "bytes": 411,
+    "names": [
+     "bytemuck",
+     "diskann",
+     "num_cpus",
+     "rayon",
+     "vector"
+    ]
+   },
+   {
     "path": ".devcontainer/Dockerfile",
     "kind": "image",
     "blob_sha": "af052305562d9fef69e630a377f48d6df4cbada2",
@@ -1381,6 +1435,18 @@
    ],
    "docs_matrix": [],
    "paths": [
+    "src/observer/mysql/ob_async_cmd_driver.cpp",
+    "src/observer/mysql/ob_async_cmd_driver.h",
+    "src/observer/mysql/ob_async_plan_driver.cpp",
+    "src/observer/mysql/ob_async_plan_driver.h",
+    "src/observer/mysql/ob_query_driver.cpp",
+    "src/observer/mysql/ob_query_driver.h",
+    "src/observer/mysql/ob_sync_cmd_driver.cpp",
+    "src/observer/mysql/ob_sync_cmd_driver.h",
+    "src/observer/mysql/ob_sync_plan_driver.cpp",
+    "src/observer/mysql/ob_sync_plan_driver.h",
+    "tools/deploy/mysql_test/t/driver5114_bug.test",
+    "tools/deploy/mysql_test/r/mysql/driver5114_bug.result",
     "src/logservice/ob_locality_adapter.cpp",
     "src/logservice/ob_locality_adapter.h",
     "src/logservice/ob_location_adapter.cpp",
@@ -1409,18 +1475,64 @@
     "src/logservice/restoreservice/ob_log_restore_driver_base.h",
     "src/logservice/restoreservice/ob_log_restore_net_driver.cpp",
     "src/logservice/restoreservice/ob_log_restore_net_driver.h",
-    "src/observer/mysql/ob_async_cmd_driver.cpp",
-    "src/observer/mysql/ob_async_cmd_driver.h",
-    "src/observer/mysql/ob_async_plan_driver.cpp",
-    "src/observer/mysql/ob_async_plan_driver.h",
-    "src/observer/mysql/ob_query_driver.cpp",
-    "src/observer/mysql/ob_query_driver.h",
-    "src/observer/mysql/ob_sync_cmd_driver.cpp",
-    "src/observer/mysql/ob_sync_cmd_driver.h",
-    "src/observer/mysql/ob_sync_plan_driver.cpp",
-    "src/observer/mysql/ob_sync_plan_driver.h",
     "src/share/backup/ob_backup_io_adapter.cpp",
-    "src/share/backup/ob_backup_io_adapter.h"
+    "src/share/backup/ob_backup_io_adapter.h",
+    "src/share/vector_index/ob_plugin_vector_index_adaptor.cpp",
+    "src/share/vector_index/ob_plugin_vector_index_adaptor.h",
+    "src/share/vector_index/ob_plugin_vector_index_scheduler.cpp",
+    "src/share/vector_index/ob_plugin_vector_index_scheduler.h",
+    "src/share/vector_index/ob_plugin_vector_index_serialize.cpp",
+    "src/share/vector_index/ob_plugin_vector_index_serialize.h",
+    "src/share/vector_index/ob_plugin_vector_index_service.cpp",
+    "src/share/vector_index/ob_plugin_vector_index_service.h",
+    "src/share/vector_index/ob_plugin_vector_index_util.cpp",
+    "src/share/vector_index/ob_plugin_vector_index_util.h",
+    "src/share/vector_index/ob_plugin_vector_index_utils.cpp",
+    "src/share/vector_index/ob_plugin_vector_index_utils.h",
+    "src/storage/fts/ob_fts_plugin_helper.cpp",
+    "src/storage/fts/ob_fts_plugin_helper.h",
+    "src/storage/fts/ob_fts_plugin_mgr.cpp",
+    "src/storage/fts/ob_fts_plugin_mgr.h",
+    "src/storage/tx/ob_location_adapter.cpp",
+    "src/storage/tx/ob_location_adapter.h",
+    "src/storage/tx/ob_trans_deadlock_adapter.cpp",
+    "src/storage/tx/ob_trans_deadlock_adapter.h",
+    "src/storage/tx/ob_tx_log_adapter.cpp",
+    "src/storage/tx/ob_tx_log_adapter.h",
+    "tools/ob_admin/io_bench/ob_admin_io_adapter_bench.cpp",
+    "tools/ob_admin/io_bench/ob_admin_io_adapter_bench.h",
+    "unittest/storage/tx/ob_mock_tx_log_adapter.cpp",
+    "unittest/storage/tx/ob_mock_tx_log_adapter.h",
+    "deps/oblib/src/lib/ob_plugin.h",
+    "docs/docs/en/images/ide-settings-ccls-plugin-settings.png",
+    "docs/docs/en/images/ide-settings-ccls-plugin.png",
+    "docs/docs/en/images/ide-settings-cpp-plugins.png",
+    "docs/docs/en/images/ide-settings-remote-plugin-usage.png",
+    "docs/docs/en/images/ide-settings-remote-plugin.png",
+    "docs/docs/zh/images/ide-settings-ccls-plugin-settings.png",
+    "docs/docs/zh/images/ide-settings-ccls-plugin.png",
+    "docs/docs/zh/images/ide-settings-cpp-plugins.png",
+    "docs/docs/zh/images/ide-settings-remote-plugin-usage.png",
+    "docs/docs/zh/images/ide-settings-remote-plugin.png",
+    "src/logservice/libobcdc/src/ob_log_mysql_connector.cpp",
+    "src/logservice/libobcdc/src/ob_log_mysql_connector.h",
+    "src/storage/multi_data_source/adapter_define/mds_dump_kv_wrapper.cpp",
+    "src/storage/multi_data_source/adapter_define/mds_dump_kv_wrapper.h",
+    "src/storage/multi_data_source/adapter_define/mds_dump_node.cpp",
+    "src/storage/multi_data_source/adapter_define/mds_dump_node.h",
+    "src/storage/multi_data_source/adapter_define/mds_dump_obj_printer.h",
+    "src/storage/tx/deadlock_adapter/ob_session_id_pair.h",
+    "deps/oblib/src/lib/geo/ob_s2adapter.cpp",
+    "deps/oblib/src/lib/geo/ob_s2adapter.h",
+    "src/sql/engine/pdml/static/ob_pdml_op_data_driver.cpp",
+    "src/sql/engine/pdml/static/ob_pdml_op_data_driver.h",
+    "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/cmd_drivers/convert_f32_to_bf16/Cargo.toml",
+    "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/cmd_drivers/load_and_insert_memory_index/Cargo.toml",
+    "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/cmd_drivers/search_memory_index/Cargo.toml",
+    "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/cmd_drivers/convert_f32_to_bf16/src/main.rs",
+    "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/cmd_drivers/load_and_insert_memory_index/src/main.rs",
+    "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/cmd_drivers/search_memory_index/src/main.rs",
+    "deps/oblib/src/lib/vector/vsag_lib/extern/diskann/DiskANN/rust/cmd_drivers/search_memory_index/src/search_index_utils.rs"
    ]
   },
   "fail_count": 0
@@ -1859,13 +1971,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:54:30Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:39:20Z",
   "default_branch": "main",
   "pushed_at": "2026-10-27",
   "stars": 63,
   "tree": {
    "sha": "a38f2f9ed2a7da27d1a3a4d1244780b1d13f9119",
-   "etag": "W/\"5dc0205ea602d1d42d9e7426d57c06fdfe36af56b632fa694aae0dea882317df\"",
+   "etag": "W/\"5e99fd2d6df34a43abc90de119fdb9aefbea3399ec51a366679375aa614b41b9\"",
    "truncated": false,
    "path_count": 41,
    "matched": [
@@ -2143,13 +2256,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T00:41:59Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:41:13Z",
   "default_branch": "main",
   "pushed_at": "2026-04-07",
   "stars": 49,
   "tree": {
    "sha": "ff649fdb36e236386e0f8db74cc11f87e1a77b03",
-   "etag": "W/\"0781cca821cb135b3591617e00881f78c88d00f6317e5d3ce7cb817dcd55963e\"",
+   "etag": "W/\"ebdc6ea7c0982793829d697727f3cf0e5744af8f4f21ace0570afae3fdcd7401\"",
    "truncated": false,
    "path_count": 2179,
    "matched": [
@@ -2165,6 +2279,30 @@
     "Advanced Java/19-8-d9/Hibernate I/2/BookWebApp/pom.xml",
     "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/Hibernate2_Assignment2WebApplication/pom.xml",
     "Advanced Java/20-8-d10/Spring II/1/SpringWeb/pom.xml",
+    "Advanced Java/20-8-d10/Spring II/2/SpringWeb/pom.xml",
+    "Advanced Java/20-8-d10/Spring II/3/SpringWeb/pom.xml",
+    "Advanced Java/20-8-d10/Spring II/4/SpringMVC_ORM/pom.xml",
+    "Web Programming/3-8-d17/Dealing with REST API/Dealing with Rest API/react-client/package.json",
+    "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/1/HibernateUsingMaven/pom.xml",
+    "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/2/HibernateUsingMaven/pom.xml",
+    "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/3/HibernateMappings/pom.xml",
+    "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/4/HibernateMappings/pom.xml",
+    "Advanced Java/20-8-d10/Spring I/Spring I-1/1/SpringDI/pom.xml",
+    "Advanced Java/17-8-d7/JSP IV/1/JSPELExample/WebContent/JSPELExample/pom.xml",
+    "Advanced Java/18-8-d8/Maven Build Tool/1/SimpleMaven/target/classes/META-INF/maven/com.object/SimpleMaven/pom.xml",
+    "Advanced Java/19-8-d9/Hibernate I/1/SimpleHibernateWithMaven/target/classes/META-INF/maven/com/SimpleHibernateWithMaven/pom.xml",
+    "Advanced Java/18-8-d8/Maven Build Tool/2/WebMaven/target/m2e-wtp/web-resources/META-INF/maven/com.object/WebMaven/pom.xml",
+    "Advanced Java/19-8-d9/Hibernate I/2/BookWebApp/target/m2e-wtp/web-resources/META-INF/maven/com.example/BookWebApp/pom.xml",
+    "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/1/HibernateUsingMaven/target/classes/META-INF/maven/com.demo/HibernateUsingMaven/pom.xml",
+    "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/2/HibernateUsingMaven/target/classes/META-INF/maven/com.demo/HibernateUsingMaven/pom.xml",
+    "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/3/HibernateMappings/target/classes/META-INF/maven/com/HibernateMappings/pom.xml",
+    "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/4/HibernateMappings/target/classes/META-INF/maven/com/HibernateMappings/pom.xml",
+    "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/Hibernate2_Assignment2WebApplication/target/m2e-wtp/web-resources/META-INF/maven/com.object/Hibernate2_Assignment2WebApplication/pom.xml",
+    "Advanced Java/20-8-d10/Spring I/Spring I-1/1/SpringDI/target/classes/META-INF/maven/com.object/SpringDI/pom.xml",
+    "Advanced Java/20-8-d10/Spring II/1/SpringWeb/target/m2e-wtp/web-resources/META-INF/maven/com.example/SpringWeb/pom.xml",
+    "Advanced Java/20-8-d10/Spring II/2/SpringWeb/target/m2e-wtp/web-resources/META-INF/maven/com.example/SpringWeb/pom.xml",
+    "Advanced Java/20-8-d10/Spring II/3/SpringWeb/target/m2e-wtp/web-resources/META-INF/maven/com.example/SpringWeb/pom.xml",
+    "Advanced Java/20-8-d10/Spring II/4/SpringMVC_ORM/target/m2e-wtp/web-resources/META-INF/maven/com.demo/SpringMVC_ORM/pom.xml",
     ".github/workflows/action.yml",
     ".github/workflows/check_onpr.yml"
    ]
@@ -2335,6 +2473,303 @@
      "org.springframework:spring-webmvc",
      "javax.servlet.jsp:javax.servlet.jsp-api",
      "jstl:jstl"
+    ]
+   },
+   {
+    "path": "Advanced Java/20-8-d10/Spring II/2/SpringWeb/pom.xml",
+    "kind": "dep",
+    "blob_sha": "626eda8eb8bf5f6bcb9657f5c368757e5be538c2",
+    "ecosystem": "maven",
+    "bytes": 1443,
+    "names": [
+     "junit:junit",
+     "javax.servlet:jstl",
+     "org.springframework:spring-webmvc",
+     "javax.servlet.jsp:javax.servlet.jsp-api",
+     "jstl:jstl"
+    ]
+   },
+   {
+    "path": "Advanced Java/20-8-d10/Spring II/3/SpringWeb/pom.xml",
+    "kind": "dep",
+    "blob_sha": "626eda8eb8bf5f6bcb9657f5c368757e5be538c2",
+    "ecosystem": "maven",
+    "bytes": 1443,
+    "names": [
+     "junit:junit",
+     "javax.servlet:jstl",
+     "org.springframework:spring-webmvc",
+     "javax.servlet.jsp:javax.servlet.jsp-api",
+     "jstl:jstl"
+    ]
+   },
+   {
+    "path": "Advanced Java/20-8-d10/Spring II/4/SpringMVC_ORM/pom.xml",
+    "kind": "dep",
+    "blob_sha": "1f9ae8547f54ab620d6bc3d53a7af86fd9c16b49",
+    "ecosystem": "maven",
+    "bytes": 1823,
+    "names": [
+     "junit:junit",
+     "org.springframework:spring-webmvc",
+     "org.springframework:spring-orm",
+     "org.hibernate:hibernate-core",
+     "mysql:mysql-connector-java",
+     "javax.servlet:jstl"
+    ]
+   },
+   {
+    "path": "Web Programming/3-8-d17/Dealing with REST API/Dealing with Rest API/react-client/package.json",
+    "kind": "dep",
+    "blob_sha": "23535100e02d93c3e63311d866772467348c58c5",
+    "ecosystem": "npm",
+    "bytes": 849,
+    "names": [
+     "@testing-library/jest-dom",
+     "@testing-library/react",
+     "@testing-library/user-event",
+     "react",
+     "react-dom",
+     "react-router-dom",
+     "react-scripts",
+     "web-vitals"
+    ]
+   },
+   {
+    "path": "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/1/HibernateUsingMaven/pom.xml",
+    "kind": "dep",
+    "blob_sha": "9bfcf8d129b7e5d3cb8e64fbcea05dc5c34ac373",
+    "ecosystem": "maven",
+    "bytes": 852,
+    "names": [
+     "org.hibernate:hibernate-core",
+     "mysql:mysql-connector-java"
+    ]
+   },
+   {
+    "path": "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/2/HibernateUsingMaven/pom.xml",
+    "kind": "dep",
+    "blob_sha": "9bfcf8d129b7e5d3cb8e64fbcea05dc5c34ac373",
+    "ecosystem": "maven",
+    "bytes": 852,
+    "names": [
+     "org.hibernate:hibernate-core",
+     "mysql:mysql-connector-java"
+    ]
+   },
+   {
+    "path": "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/3/HibernateMappings/pom.xml",
+    "kind": "dep",
+    "blob_sha": "999a215bd6db59a7128fb3024a00cafd47213f5b",
+    "ecosystem": "maven",
+    "bytes": 836,
+    "names": [
+     "org.hibernate:hibernate-core",
+     "mysql:mysql-connector-java"
+    ]
+   },
+   {
+    "path": "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/4/HibernateMappings/pom.xml",
+    "kind": "dep",
+    "blob_sha": "999a215bd6db59a7128fb3024a00cafd47213f5b",
+    "ecosystem": "maven",
+    "bytes": 836,
+    "names": [
+     "org.hibernate:hibernate-core",
+     "mysql:mysql-connector-java"
+    ]
+   },
+   {
+    "path": "Advanced Java/20-8-d10/Spring I/Spring I-1/1/SpringDI/pom.xml",
+    "kind": "dep",
+    "blob_sha": "a920b84759738f94a1021aa10cf34d35226c52ef",
+    "ecosystem": "maven",
+    "bytes": 860,
+    "names": [
+     "org.springframework:spring-core",
+     "org.springframework:spring-context"
+    ]
+   },
+   {
+    "path": "Advanced Java/17-8-d7/JSP IV/1/JSPELExample/WebContent/JSPELExample/pom.xml",
+    "kind": "dep",
+    "blob_sha": "e588af9b3dd4616fd0afa75668797c556614cb5e",
+    "ecosystem": "maven",
+    "bytes": 867,
+    "names": [
+     "javax.servlet:javax.servlet-api",
+     "javax.servlet.jsp:jsp-api"
+    ]
+   },
+   {
+    "path": "Advanced Java/18-8-d8/Maven Build Tool/1/SimpleMaven/target/classes/META-INF/maven/com.object/SimpleMaven/pom.xml",
+    "kind": "dep",
+    "blob_sha": "aca3857f306da4c4998c03cb525b1774c20b44a1",
+    "ecosystem": "maven",
+    "bytes": 616,
+    "names": [
+     "mysql:mysql-connector-java"
+    ]
+   },
+   {
+    "path": "Advanced Java/19-8-d9/Hibernate I/1/SimpleHibernateWithMaven/target/classes/META-INF/maven/com/SimpleHibernateWithMaven/pom.xml",
+    "kind": "dep",
+    "blob_sha": "89e988a1a016b3a107b2b668576ea5a596ac86e6",
+    "ecosystem": "maven",
+    "bytes": 854,
+    "names": [
+     "org.hibernate:hibernate-core",
+     "mysql:mysql-connector-java"
+    ]
+   },
+   {
+    "path": "Advanced Java/18-8-d8/Maven Build Tool/2/WebMaven/target/m2e-wtp/web-resources/META-INF/maven/com.object/WebMaven/pom.xml",
+    "kind": "dep",
+    "blob_sha": "bcb8bfb0cfb7b6a4118124facbbb9fb12ad4247b",
+    "ecosystem": "maven",
+    "bytes": 918,
+    "names": [
+     "junit:junit",
+     "javax.servlet:jstl"
+    ]
+   },
+   {
+    "path": "Advanced Java/19-8-d9/Hibernate I/2/BookWebApp/target/m2e-wtp/web-resources/META-INF/maven/com.example/BookWebApp/pom.xml",
+    "kind": "dep",
+    "blob_sha": "298d271e86c37d33c55526299dd6401b78971ab2",
+    "ecosystem": "maven",
+    "bytes": 1476,
+    "names": [
+     "junit:junit",
+     "javax.servlet:javax.servlet-api",
+     "javax.servlet.jsp:javax.servlet.jsp-api",
+     "jstl:jstl",
+     "mysql:mysql-connector-java",
+     "org.hibernate:hibernate-core"
+    ]
+   },
+   {
+    "path": "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/1/HibernateUsingMaven/target/classes/META-INF/maven/com.demo/HibernateUsingMaven/pom.xml",
+    "kind": "dep",
+    "blob_sha": "9bfcf8d129b7e5d3cb8e64fbcea05dc5c34ac373",
+    "ecosystem": "maven",
+    "bytes": 852,
+    "names": [
+     "org.hibernate:hibernate-core",
+     "mysql:mysql-connector-java"
+    ]
+   },
+   {
+    "path": "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/2/HibernateUsingMaven/target/classes/META-INF/maven/com.demo/HibernateUsingMaven/pom.xml",
+    "kind": "dep",
+    "blob_sha": "9bfcf8d129b7e5d3cb8e64fbcea05dc5c34ac373",
+    "ecosystem": "maven",
+    "bytes": 852,
+    "names": [
+     "org.hibernate:hibernate-core",
+     "mysql:mysql-connector-java"
+    ]
+   },
+   {
+    "path": "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/3/HibernateMappings/target/classes/META-INF/maven/com/HibernateMappings/pom.xml",
+    "kind": "dep",
+    "blob_sha": "999a215bd6db59a7128fb3024a00cafd47213f5b",
+    "ecosystem": "maven",
+    "bytes": 836,
+    "names": [
+     "org.hibernate:hibernate-core",
+     "mysql:mysql-connector-java"
+    ]
+   },
+   {
+    "path": "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/4/HibernateMappings/target/classes/META-INF/maven/com/HibernateMappings/pom.xml",
+    "kind": "dep",
+    "blob_sha": "999a215bd6db59a7128fb3024a00cafd47213f5b",
+    "ecosystem": "maven",
+    "bytes": 836,
+    "names": [
+     "org.hibernate:hibernate-core",
+     "mysql:mysql-connector-java"
+    ]
+   },
+   {
+    "path": "Advanced Java/19-8-d9/Hibernate II/Hibernate II-1/Hibernate2_Assignment2WebApplication/target/m2e-wtp/web-resources/META-INF/maven/com.object/Hibernate2_Assignment2WebApplication/pom.xml",
+    "kind": "dep",
+    "blob_sha": "4244500bae2673b8930f4a0cec77457c6150da8e",
+    "ecosystem": "maven",
+    "bytes": 2613,
+    "names": [
+     "junit:junit",
+     "org.hibernate:hibernate-core",
+     "mysql:mysql-connector-java"
+    ]
+   },
+   {
+    "path": "Advanced Java/20-8-d10/Spring I/Spring I-1/1/SpringDI/target/classes/META-INF/maven/com.object/SpringDI/pom.xml",
+    "kind": "dep",
+    "blob_sha": "a920b84759738f94a1021aa10cf34d35226c52ef",
+    "ecosystem": "maven",
+    "bytes": 860,
+    "names": [
+     "org.springframework:spring-core",
+     "org.springframework:spring-context"
+    ]
+   },
+   {
+    "path": "Advanced Java/20-8-d10/Spring II/1/SpringWeb/target/m2e-wtp/web-resources/META-INF/maven/com.example/SpringWeb/pom.xml",
+    "kind": "dep",
+    "blob_sha": "626eda8eb8bf5f6bcb9657f5c368757e5be538c2",
+    "ecosystem": "maven",
+    "bytes": 1443,
+    "names": [
+     "junit:junit",
+     "javax.servlet:jstl",
+     "org.springframework:spring-webmvc",
+     "javax.servlet.jsp:javax.servlet.jsp-api",
+     "jstl:jstl"
+    ]
+   },
+   {
+    "path": "Advanced Java/20-8-d10/Spring II/2/SpringWeb/target/m2e-wtp/web-resources/META-INF/maven/com.example/SpringWeb/pom.xml",
+    "kind": "dep",
+    "blob_sha": "626eda8eb8bf5f6bcb9657f5c368757e5be538c2",
+    "ecosystem": "maven",
+    "bytes": 1443,
+    "names": [
+     "junit:junit",
+     "javax.servlet:jstl",
+     "org.springframework:spring-webmvc",
+     "javax.servlet.jsp:javax.servlet.jsp-api",
+     "jstl:jstl"
+    ]
+   },
+   {
+    "path": "Advanced Java/20-8-d10/Spring II/3/SpringWeb/target/m2e-wtp/web-resources/META-INF/maven/com.example/SpringWeb/pom.xml",
+    "kind": "dep",
+    "blob_sha": "626eda8eb8bf5f6bcb9657f5c368757e5be538c2",
+    "ecosystem": "maven",
+    "bytes": 1443,
+    "names": [
+     "junit:junit",
+     "javax.servlet:jstl",
+     "org.springframework:spring-webmvc",
+     "javax.servlet.jsp:javax.servlet.jsp-api",
+     "jstl:jstl"
+    ]
+   },
+   {
+    "path": "Advanced Java/20-8-d10/Spring II/4/SpringMVC_ORM/target/m2e-wtp/web-resources/META-INF/maven/com.demo/SpringMVC_ORM/pom.xml",
+    "kind": "dep",
+    "blob_sha": "1f9ae8547f54ab620d6bc3d53a7af86fd9c16b49",
+    "ecosystem": "maven",
+    "bytes": 1823,
+    "names": [
+     "junit:junit",
+     "org.springframework:spring-webmvc",
+     "org.springframework:spring-orm",
+     "org.hibernate:hibernate-core",
+     "mysql:mysql-connector-java",
+     "javax.servlet:jstl"
     ]
    },
    {
@@ -3701,13 +4136,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T02:52:51Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:10:57Z",
   "default_branch": "master",
   "pushed_at": "2022-09-07",
   "stars": 0,
   "tree": {
    "sha": "cc01274f20736890511474dead288917bc7594f4",
-   "etag": "W/\"78946d56b8bf9015e97c4a7a5162eeaa8f2ebbdab9c2696d234d6effdc2e9afc\"",
+   "etag": "W/\"79c302b4e03d618ccdc2d7a87b0221f5ba8ab096ae802fb37b6b8cb0abb095e1\"",
    "truncated": false,
    "path_count": 11540,
    "matched": [
@@ -3723,6 +4159,54 @@
     "shardingsphere-jdbc/pom.xml",
     "shardingsphere-kernel/pom.xml",
     "shardingsphere-mode/pom.xml",
+    "shardingsphere-proxy/pom.xml",
+    "shardingsphere-sql-parser/pom.xml",
+    "shardingsphere-test/pom.xml",
+    "examples/example-core/pom.xml",
+    "examples/other-example/pom.xml",
+    "examples/shardingsphere-example-generator/pom.xml",
+    "examples/shardingsphere-jdbc-example/pom.xml",
+    "examples/shardingsphere-proxy-example/pom.xml",
+    "shardingsphere-agent/shardingsphere-agent-api/pom.xml",
+    "shardingsphere-agent/shardingsphere-agent-bootstrap/pom.xml",
+    "shardingsphere-agent/shardingsphere-agent-core/pom.xml",
+    "shardingsphere-agent/shardingsphere-agent-distribution/pom.xml",
+    "shardingsphere-agent/shardingsphere-agent-plugins/pom.xml",
+    "shardingsphere-db-protocol/shardingsphere-db-protocol-core/pom.xml",
+    "shardingsphere-db-protocol/shardingsphere-db-protocol-mysql/pom.xml",
+    "shardingsphere-db-protocol/shardingsphere-db-protocol-opengauss/pom.xml",
+    "shardingsphere-db-protocol/shardingsphere-db-protocol-postgresql/pom.xml",
+    "shardingsphere-dialect-exception/shardingsphere-dialect-exception-core/pom.xml",
+    "shardingsphere-dialect-exception/shardingsphere-mysql-dialect-exception/pom.xml",
+    "shardingsphere-dialect-exception/shardingsphere-postgresql-dialect-exception/pom.xml",
+    "shardingsphere-distribution/shardingsphere-jdbc-distribution/pom.xml",
+    "shardingsphere-distribution/shardingsphere-proxy-distribution/pom.xml",
+    "shardingsphere-distribution/shardingsphere-src-distribution/pom.xml",
+    "shardingsphere-distsql/shardingsphere-distsql-parser/pom.xml",
+    "shardingsphere-distsql/shardingsphere-distsql-statement/pom.xml",
+    "shardingsphere-features/shardingsphere-db-discovery/pom.xml",
+    "shardingsphere-features/shardingsphere-encrypt/pom.xml",
+    "shardingsphere-features/shardingsphere-readwrite-splitting/pom.xml",
+    "shardingsphere-features/shardingsphere-shadow/pom.xml",
+    "shardingsphere-features/shardingsphere-sharding/pom.xml",
+    "shardingsphere-infra/shardingsphere-infra-binder/pom.xml",
+    "shardingsphere-infra/shardingsphere-infra-common/pom.xml",
+    "shardingsphere-infra/shardingsphere-infra-context/pom.xml",
+    "shardingsphere-infra/shardingsphere-infra-datetime/pom.xml",
+    "shardingsphere-infra/shardingsphere-infra-executor/pom.xml",
+    "shardingsphere-infra/shardingsphere-infra-merge/pom.xml",
+    "shardingsphere-infra/shardingsphere-infra-parser/pom.xml",
+    "shardingsphere-infra/shardingsphere-infra-rewrite/pom.xml",
+    "shardingsphere-infra/shardingsphere-infra-route/pom.xml",
+    "shardingsphere-infra/shardingsphere-infra-util/pom.xml",
+    "shardingsphere-jdbc/shardingsphere-jdbc-core/pom.xml",
+    "shardingsphere-jdbc/shardingsphere-jdbc-spring/pom.xml",
+    "shardingsphere-kernel/shardingsphere-authority/pom.xml",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/pom.xml",
+    "shardingsphere-kernel/shardingsphere-parser/pom.xml",
+    "shardingsphere-kernel/shardingsphere-schedule/pom.xml",
+    "shardingsphere-kernel/shardingsphere-single-table/pom.xml",
+    "shardingsphere-kernel/shardingsphere-sql-federation/pom.xml",
     "shardingsphere-distribution/shardingsphere-proxy-distribution/Dockerfile",
     "shardingsphere-test/shardingsphere-integration-test/shardingsphere-integration-test-fixture/Dockerfile",
     "shardingsphere-test/shardingsphere-integration-agent-test/shardingsphere-integration-agent-test-plugins/shardingsphere-integration-agent-test-jaeger/Dockerfile",
@@ -3977,6 +4461,510 @@
     "bytes": 1547
    },
    {
+    "path": "shardingsphere-proxy/pom.xml",
+    "kind": "dep",
+    "blob_sha": "3d59954734e9db76a81d19913cb4c57262dbd772",
+    "ecosystem": "maven",
+    "bytes": 1613
+   },
+   {
+    "path": "shardingsphere-sql-parser/pom.xml",
+    "kind": "dep",
+    "blob_sha": "d0487b9a6f1536ffdc066bc43063cf121c261cbc",
+    "ecosystem": "maven",
+    "bytes": 1686
+   },
+   {
+    "path": "shardingsphere-test/pom.xml",
+    "kind": "dep",
+    "blob_sha": "fc90f13eb61ee60c9b4dbf54ad512b719f4cd5d6",
+    "ecosystem": "maven",
+    "bytes": 3022,
+    "names": [
+     "org.testcontainers:testcontainers",
+     "javax.xml.bind:jaxb-api",
+     "com.sun.xml.bind:jaxb-core",
+     "com.sun.xml.bind:jaxb-impl",
+     "javax.activation:javax.activation-api"
+    ]
+   },
+   {
+    "path": "examples/example-core/pom.xml",
+    "kind": "dep",
+    "blob_sha": "5792c3fcb509d1c05a2e1171c76dd3b6868dafbe",
+    "ecosystem": "maven",
+    "bytes": 3038
+   },
+   {
+    "path": "examples/other-example/pom.xml",
+    "kind": "dep",
+    "blob_sha": "537063169d8319925a301021c82b5b5b45be50d7",
+    "ecosystem": "maven",
+    "bytes": 2883
+   },
+   {
+    "path": "examples/shardingsphere-example-generator/pom.xml",
+    "kind": "dep",
+    "blob_sha": "003042d716766cd0bb3f8837c016c8105f54dc21",
+    "ecosystem": "maven",
+    "bytes": 4230,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-infra-common",
+     "org.yaml:snakeyaml",
+     "org.freemarker:freemarker"
+    ]
+   },
+   {
+    "path": "examples/shardingsphere-jdbc-example/pom.xml",
+    "kind": "dep",
+    "blob_sha": "8b66cf03057ca5a304c93d0855eaf55674461836",
+    "ecosystem": "maven",
+    "bytes": 2937
+   },
+   {
+    "path": "examples/shardingsphere-proxy-example/pom.xml",
+    "kind": "dep",
+    "blob_sha": "30aff66a4d1042d282f02a71861cdb36af01a0c8",
+    "ecosystem": "maven",
+    "bytes": 3032
+   },
+   {
+    "path": "shardingsphere-agent/shardingsphere-agent-api/pom.xml",
+    "kind": "dep",
+    "blob_sha": "2ccb187a86f607d4b54ef4bc41f58fad36b5de76",
+    "ecosystem": "maven",
+    "bytes": 1393
+   },
+   {
+    "path": "shardingsphere-agent/shardingsphere-agent-bootstrap/pom.xml",
+    "kind": "dep",
+    "blob_sha": "a6dfe123159c04677b70e1bfe56c3be7eea5ce6b",
+    "ecosystem": "maven",
+    "bytes": 5082,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-agent-api",
+     "org.apache.shardingsphere:shardingsphere-agent-core"
+    ]
+   },
+   {
+    "path": "shardingsphere-agent/shardingsphere-agent-core/pom.xml",
+    "kind": "dep",
+    "blob_sha": "563db6a7323df86b07c67205e85c7823b850c8d2",
+    "ecosystem": "maven",
+    "bytes": 4544,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-agent-api",
+     "org.yaml:snakeyaml"
+    ]
+   },
+   {
+    "path": "shardingsphere-agent/shardingsphere-agent-distribution/pom.xml",
+    "kind": "dep",
+    "blob_sha": "3b0be6dd3154f7b4a4d66d5dad281931fbc2569e",
+    "ecosystem": "maven",
+    "bytes": 4393,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-agent-bootstrap",
+     "org.apache.shardingsphere:shardingsphere-agent-metrics-prometheus",
+     "org.apache.shardingsphere:shardingsphere-agent-logging-base",
+     "org.apache.shardingsphere:shardingsphere-agent-tracing-jaeger",
+     "org.apache.shardingsphere:shardingsphere-agent-tracing-opentracing",
+     "org.apache.shardingsphere:shardingsphere-agent-tracing-zipkin",
+     "org.apache.shardingsphere:shardingsphere-agent-tracing-opentelemetry"
+    ]
+   },
+   {
+    "path": "shardingsphere-agent/shardingsphere-agent-plugins/pom.xml",
+    "kind": "dep",
+    "blob_sha": "6f366c7000c0e784cae0a5c40c55c5f48d3f518b",
+    "ecosystem": "maven",
+    "bytes": 4697,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-agent-api",
+     "org.apache.shardingsphere:shardingsphere-proxy-frontend-core"
+    ]
+   },
+   {
+    "path": "shardingsphere-db-protocol/shardingsphere-db-protocol-core/pom.xml",
+    "kind": "dep",
+    "blob_sha": "a4d773b982c0920a4bdd45d6d32fec0b6ae3870f",
+    "ecosystem": "maven",
+    "bytes": 1816,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-dialect-exception-core",
+     "io.netty:netty-codec"
+    ]
+   },
+   {
+    "path": "shardingsphere-db-protocol/shardingsphere-db-protocol-mysql/pom.xml",
+    "kind": "dep",
+    "blob_sha": "f4cdef0c3b495d67d17341c138106a686ca8a879",
+    "ecosystem": "maven",
+    "bytes": 1905,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-db-protocol-core",
+     "org.apache.shardingsphere:shardingsphere-mysql-dialect-exception"
+    ]
+   },
+   {
+    "path": "shardingsphere-db-protocol/shardingsphere-db-protocol-opengauss/pom.xml",
+    "kind": "dep",
+    "blob_sha": "c1f9c3707ac08969ecb7633209447a8f3b6cd8bf",
+    "ecosystem": "maven",
+    "bytes": 1920,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-db-protocol-postgresql",
+     "org.apache.shardingsphere:shardingsphere-postgresql-dialect-exception"
+    ]
+   },
+   {
+    "path": "shardingsphere-db-protocol/shardingsphere-db-protocol-postgresql/pom.xml",
+    "kind": "dep",
+    "blob_sha": "f6e2d533042889c20169a269da9b38ed20712098",
+    "ecosystem": "maven",
+    "bytes": 1915,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-db-protocol-core",
+     "org.apache.shardingsphere:shardingsphere-postgresql-dialect-exception"
+    ]
+   },
+   {
+    "path": "shardingsphere-dialect-exception/shardingsphere-dialect-exception-core/pom.xml",
+    "kind": "dep",
+    "blob_sha": "b16b148736ba1b1731d6befdd149fb244baed634",
+    "ecosystem": "maven",
+    "bytes": 1677,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-infra-common"
+    ]
+   },
+   {
+    "path": "shardingsphere-dialect-exception/shardingsphere-mysql-dialect-exception/pom.xml",
+    "kind": "dep",
+    "blob_sha": "b1563a9b7f0498afbcfc31aab740d933bf3cc254",
+    "ecosystem": "maven",
+    "bytes": 1688,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-dialect-exception-core"
+    ]
+   },
+   {
+    "path": "shardingsphere-dialect-exception/shardingsphere-postgresql-dialect-exception/pom.xml",
+    "kind": "dep",
+    "blob_sha": "26d3f40c46ed58fa43599388856c0c3f987f8c5d",
+    "ecosystem": "maven",
+    "bytes": 1875,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-dialect-exception-core",
+     "org.postgresql:postgresql"
+    ]
+   },
+   {
+    "path": "shardingsphere-distribution/shardingsphere-jdbc-distribution/pom.xml",
+    "kind": "dep",
+    "blob_sha": "a1096385264c4807e4e2d17126fa14fa15000d88",
+    "ecosystem": "maven",
+    "bytes": 4197,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-jdbc-core",
+     "org.apache.shardingsphere:shardingsphere-database-datetime",
+     "org.apache.shardingsphere:shardingsphere-transaction-xa-narayana",
+     "org.apache.shardingsphere:shardingsphere-transaction-xa-bitronix",
+     "org.apache.shardingsphere:shardingsphere-transaction-base-seata-at",
+     "org.apache.shardingsphere:shardingsphere-cluster-mode-repository-etcd"
+    ]
+   },
+   {
+    "path": "shardingsphere-distribution/shardingsphere-proxy-distribution/pom.xml",
+    "kind": "dep",
+    "blob_sha": "5731edb10c4efc26e1c1b786ff396c9bd571b1b9",
+    "ecosystem": "maven",
+    "bytes": 10615,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-proxy-bootstrap",
+     "com.zaxxer:HikariCP",
+     "org.postgresql:postgresql",
+     "org.opengauss:opengauss-jdbc",
+     "ch.qos.logback:logback-classic"
+    ]
+   },
+   {
+    "path": "shardingsphere-distribution/shardingsphere-src-distribution/pom.xml",
+    "kind": "dep",
+    "blob_sha": "10fa4b66981e3d8f2b1b68c6de2473733310e241",
+    "ecosystem": "maven",
+    "bytes": 2742
+   },
+   {
+    "path": "shardingsphere-distsql/shardingsphere-distsql-parser/pom.xml",
+    "kind": "dep",
+    "blob_sha": "d1f7627dff686a87f313b537ba17e3c3b904cd88",
+    "ecosystem": "maven",
+    "bytes": 2752,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-distsql-statement",
+     "org.apache.shardingsphere:shardingsphere-sql-parser-engine",
+     "org.antlr:antlr4-runtime"
+    ]
+   },
+   {
+    "path": "shardingsphere-distsql/shardingsphere-distsql-statement/pom.xml",
+    "kind": "dep",
+    "blob_sha": "d7a50306c7fece93a17400cb60a353dbbc630d0c",
+    "ecosystem": "maven",
+    "bytes": 1670,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-sql-parser-statement"
+    ]
+   },
+   {
+    "path": "shardingsphere-features/shardingsphere-db-discovery/pom.xml",
+    "kind": "dep",
+    "blob_sha": "8bc8d2d74fffb51308d0d909fa9946b700b52bd5",
+    "ecosystem": "maven",
+    "bytes": 1762
+   },
+   {
+    "path": "shardingsphere-features/shardingsphere-encrypt/pom.xml",
+    "kind": "dep",
+    "blob_sha": "103f96963a497ce043b064b2cb5589271db0dc86",
+    "ecosystem": "maven",
+    "bytes": 1730
+   },
+   {
+    "path": "shardingsphere-features/shardingsphere-readwrite-splitting/pom.xml",
+    "kind": "dep",
+    "blob_sha": "ffafb0fcebf910025c93cb3ba25f10513d0d44de",
+    "ecosystem": "maven",
+    "bytes": 1735
+   },
+   {
+    "path": "shardingsphere-features/shardingsphere-shadow/pom.xml",
+    "kind": "dep",
+    "blob_sha": "8cbe3fb4be03d7633573314b3ec49da96ed511f6",
+    "ecosystem": "maven",
+    "bytes": 1670
+   },
+   {
+    "path": "shardingsphere-features/shardingsphere-sharding/pom.xml",
+    "kind": "dep",
+    "blob_sha": "9d5e37a7920be510560c878b71f23312e3999dd0",
+    "ecosystem": "maven",
+    "bytes": 1736
+   },
+   {
+    "path": "shardingsphere-infra/shardingsphere-infra-binder/pom.xml",
+    "kind": "dep",
+    "blob_sha": "4826c4eb484a2d8a1c3b3e5699a35f5eeeb9d642",
+    "ecosystem": "maven",
+    "bytes": 2324,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-dialect-exception-core",
+     "org.apache.shardingsphere:shardingsphere-sql-parser-engine",
+     "org.apache.shardingsphere:shardingsphere-infra-parser",
+     "org.apache.shardingsphere:shardingsphere-infra-common"
+    ]
+   },
+   {
+    "path": "shardingsphere-infra/shardingsphere-infra-common/pom.xml",
+    "kind": "dep",
+    "blob_sha": "e4370d00dde5eb8921a6b9347a90179c0518db0c",
+    "ecosystem": "maven",
+    "bytes": 3411,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-infra-util",
+     "org.apache.shardingsphere:shardingsphere-sql-parser-engine",
+     "org.apache.shardingsphere:shardingsphere-test-common",
+     "com.h2database:h2",
+     "com.zaxxer:HikariCP",
+     "org.apache.commons:commons-dbcp2"
+    ]
+   },
+   {
+    "path": "shardingsphere-infra/shardingsphere-infra-context/pom.xml",
+    "kind": "dep",
+    "blob_sha": "8b4896a313f5ccd6ce11c54433e4350f1c56ce5b",
+    "ecosystem": "maven",
+    "bytes": 3003,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-infra-binder",
+     "org.apache.shardingsphere:shardingsphere-infra-executor",
+     "org.apache.shardingsphere:shardingsphere-distsql-parser",
+     "org.apache.shardingsphere:shardingsphere-authority-core",
+     "org.apache.shardingsphere:shardingsphere-transaction-core",
+     "org.apache.shardingsphere:shardingsphere-sql-translator-core",
+     "org.apache.shardingsphere:shardingsphere-test-common"
+    ]
+   },
+   {
+    "path": "shardingsphere-infra/shardingsphere-infra-datetime/pom.xml",
+    "kind": "dep",
+    "blob_sha": "100688fd31a2d203bcea73a068dfdb7e58d6b728",
+    "ecosystem": "maven",
+    "bytes": 1582
+   },
+   {
+    "path": "shardingsphere-infra/shardingsphere-infra-executor/pom.xml",
+    "kind": "dep",
+    "blob_sha": "5d7d888f411ecaaecc98fe87a23ee45895734116",
+    "ecosystem": "maven",
+    "bytes": 2277,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-infra-common",
+     "org.apache.shardingsphere:shardingsphere-infra-rewrite",
+     "org.apache.shardingsphere:shardingsphere-test-fixture",
+     "io.vertx:vertx-mysql-client"
+    ]
+   },
+   {
+    "path": "shardingsphere-infra/shardingsphere-infra-merge/pom.xml",
+    "kind": "dep",
+    "blob_sha": "e9f5d8e707cfdc4b6b121986d9d80f96719c9930",
+    "ecosystem": "maven",
+    "bytes": 2281,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-infra-binder",
+     "org.apache.shardingsphere:shardingsphere-infra-executor",
+     "org.apache.shardingsphere:shardingsphere-test-fixture",
+     "org.apache.calcite:calcite-linq4j"
+    ]
+   },
+   {
+    "path": "shardingsphere-infra/shardingsphere-infra-parser/pom.xml",
+    "kind": "dep",
+    "blob_sha": "bb55515287fb4fe9513a02d8a3097083c34c1192",
+    "ecosystem": "maven",
+    "bytes": 2031,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-distsql-parser",
+     "org.apache.shardingsphere:shardingsphere-infra-common",
+     "com.github.ben-manes.caffeine:caffeine"
+    ]
+   },
+   {
+    "path": "shardingsphere-infra/shardingsphere-infra-rewrite/pom.xml",
+    "kind": "dep",
+    "blob_sha": "7d46bd98544a2e40b1fb534eeeb80a457a783544",
+    "ecosystem": "maven",
+    "bytes": 2366,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-infra-route",
+     "org.apache.shardingsphere:shardingsphere-sql-translator-core",
+     "org.apache.shardingsphere:shardingsphere-sql-translator-native-provider",
+     "org.apache.shardingsphere:shardingsphere-test-fixture"
+    ]
+   },
+   {
+    "path": "shardingsphere-infra/shardingsphere-infra-route/pom.xml",
+    "kind": "dep",
+    "blob_sha": "8fb996991eac27fe6b6d7e003b7ee19bb4ea4f0c",
+    "ecosystem": "maven",
+    "bytes": 1654,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-infra-binder"
+    ]
+   },
+   {
+    "path": "shardingsphere-infra/shardingsphere-infra-util/pom.xml",
+    "kind": "dep",
+    "blob_sha": "69577b2be012b1aabc0ca17ca97ed769ce82a922",
+    "ecosystem": "maven",
+    "bytes": 1665,
+    "names": [
+     "org.yaml:snakeyaml",
+     "org.apache.groovy:groovy"
+    ]
+   },
+   {
+    "path": "shardingsphere-jdbc/shardingsphere-jdbc-core/pom.xml",
+    "kind": "dep",
+    "blob_sha": "72ac78c7ccc0bdba05098b75aecd5d225c13638c",
+    "ecosystem": "maven",
+    "bytes": 7896,
+    "names": [
+     "org.apache.shardingsphere:shardingsphere-transaction-core",
+     "org.apache.shardingsphere:shardingsphere-sql-parser-sql92",
+     "org.apache.shardingsphere:shardingsphere-sql-parser-mysql",
+     "org.apache.shardingsphere:shardingsphere-sql-parser-postgresql",
+     "org.apache.shardingsphere:shardingsphere-sql-parser-oracle",
+     "org.apache.shardingsphere:shardingsphere-sql-parser-sqlserver",
+     "org.apache.shardingsphere:shardingsphere-sql-parser-opengauss",
+     "org.apache.shardingsphere:shardingsphere-mysql-dialect-exception",
+     "org.apache.shardingsphere:shardingsphere-postgresql-dialect-exception",
+     "org.apache.shardingsphere:shardingsphere-authority-core",
+     "org.apache.shardingsphere:shardingsphere-single-table-core",
+     "org.apache.shardingsphere:shardingsphere-traffic-core",
+     "org.apache.shardingsphere:shardingsphere-infra-context",
+     "org.apache.shardingsphere:shardingsphere-standalone-mode-core",
+     "org.apache.shardingsphere:shardingsphere-standalone-mode-repository-jdbc-h2",
+     "org.apache.shardingsphere:shardingsphere-cluster-mode-core",
+     "org.apache.shardingsphere:shardingsphere-sharding-core",
+     "org.apache.shardingsphere:shardingsphere-readwrite-splitting-core",
+     "org.apache.shardingsphere:shardingsphere-db-discovery-core",
+     "org.apache.shardingsphere:shardingsphere-encrypt-core",
+     "org.apache.shardingsphere:shardingsphere-shadow-core",
+     "org.apache.shardingsphere:shardingsphere-sql-federation-advanced-executor",
+     "org.apache.shardingsphere:shardingsphere-sql-federation-original-executor",
+     "org.apache.shardingsphere:shardingsphere-parser-core",
+     "org.apache.shardingsphere:shardingsphere-test-common",
+     "org.apache.commons:commons-collections4",
+     "org.postgresql:postgresql",
+     "mysql:mysql-connector-java",
+     "com.microsoft.sqlserver:mssql-jdbc",
+     "com.h2database:h2",
+     "com.zaxxer:HikariCP"
+    ]
+   },
+   {
+    "path": "shardingsphere-jdbc/shardingsphere-jdbc-spring/pom.xml",
+    "kind": "dep",
+    "blob_sha": "1e7705a0a167fe5b52e0bc7241ac2691fb84cc77",
+    "ecosystem": "maven",
+    "bytes": 1638
+   },
+   {
+    "path": "shardingsphere-kernel/shardingsphere-authority/pom.xml",
+    "kind": "dep",
+    "blob_sha": "4ed0a509ca8666a2dcbbf94c0c7c7c9907a40295",
+    "ecosystem": "maven",
+    "bytes": 1626
+   },
+   {
+    "path": "shardingsphere-kernel/shardingsphere-data-pipeline/pom.xml",
+    "kind": "dep",
+    "blob_sha": "3a902f8e9c6eab52536909d83217fab4e2f0e369",
+    "ecosystem": "maven",
+    "bytes": 1642
+   },
+   {
+    "path": "shardingsphere-kernel/shardingsphere-parser/pom.xml",
+    "kind": "dep",
+    "blob_sha": "f5e60c44a5506cf74e988a19afadfc9b24d64ff0",
+    "ecosystem": "maven",
+    "bytes": 1668
+   },
+   {
+    "path": "shardingsphere-kernel/shardingsphere-schedule/pom.xml",
+    "kind": "dep",
+    "blob_sha": "604bdd412ae063258ef016dd891eefe0c3dd4511",
+    "ecosystem": "maven",
+    "bytes": 1512
+   },
+   {
+    "path": "shardingsphere-kernel/shardingsphere-single-table/pom.xml",
+    "kind": "dep",
+    "blob_sha": "737122fcdb98c901a96ccfb5db8d9963b5c28692",
+    "ecosystem": "maven",
+    "bytes": 1577
+   },
+   {
+    "path": "shardingsphere-kernel/shardingsphere-sql-federation/pom.xml",
+    "kind": "dep",
+    "blob_sha": "873cf414fcd336b8d86cafe95f996b585da55122",
+    "ecosystem": "maven",
+    "bytes": 1712
+   },
+   {
     "path": "shardingsphere-distribution/shardingsphere-proxy-distribution/Dockerfile",
     "kind": "image",
     "blob_sha": "9d512f865dab9ed4bef88f012d7d4f7144acd3ac",
@@ -4113,46 +5101,206 @@
     "docs/blog/content/material/2022_06_02_Database_Mesh_2.0_Database_Governance_in_a_Cloud_Native_Environment.en.md"
    ],
    "paths": [
-    "shardingsphere-dialect-exception/pom.xml",
-    "shardingsphere-agent/shardingsphere-agent-plugins/pom.xml",
-    "shardingsphere-dialect-exception/shardingsphere-dialect-exception-core/pom.xml",
-    "shardingsphere-dialect-exception/shardingsphere-mysql-dialect-exception/pom.xml",
-    "shardingsphere-dialect-exception/shardingsphere-postgresql-dialect-exception/pom.xml",
-    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/pom.xml",
-    "shardingsphere-test/shardingsphere-integration-driver-test/pom.xml",
-    "shardingsphere-agent/shardingsphere-agent-plugins/shardingsphere-agent-plugin-logging/pom.xml",
-    "shardingsphere-agent/shardingsphere-agent-plugins/shardingsphere-agent-plugin-metrics/pom.xml",
-    "shardingsphere-agent/shardingsphere-agent-plugins/shardingsphere-agent-plugin-tracing/pom.xml",
-    "shardingsphere-features/shardingsphere-encrypt/shardingsphere-encrypt-plugin/pom.xml",
-    "shardingsphere-features/shardingsphere-sharding/shardingsphere-sharding-plugin/pom.xml",
-    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/pom.xml",
-    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/pom.xml",
-    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/pom.xml",
-    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/pom.xml",
-    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/pom.xml",
-    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sql92/pom.xml",
-    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/pom.xml",
-    "shardingsphere-test/shardingsphere-integration-agent-test/shardingsphere-integration-agent-test-plugins/pom.xml",
-    "docs/blog/content/material/2022_06_28_Cloud_native_deployment_for_a_high-performance_data_gateway_new API driver_Apache_ShardingSphere_5.1.2_is_released.en.md",
-    "docs/blog/content/material/2022_07_06_ShardingSphere-JDBC_Driver_Released_A_JDBC_Driver_That_Requires_No_Code_Modifications.en.md",
-    "shardingsphere-agent/shardingsphere-agent-plugins/shardingsphere-agent-plugin-logging/shardingsphere-agent-logging-base/pom.xml",
-    "shardingsphere-agent/shardingsphere-agent-plugins/shardingsphere-agent-plugin-metrics/shardingsphere-agent-metrics-api/pom.xml",
-    "shardingsphere-agent/shardingsphere-agent-plugins/shardingsphere-agent-plugin-metrics/shardingsphere-agent-metrics-prometheus/pom.xml",
-    "shardingsphere-agent/shardingsphere-agent-plugins/shardingsphere-agent-plugin-tracing/shardingsphere-agent-tracing-jaeger/pom.xml",
-    "shardingsphere-agent/shardingsphere-agent-plugins/shardingsphere-agent-plugin-tracing/shardingsphere-agent-tracing-opentelemetry/pom.xml",
-    "shardingsphere-agent/shardingsphere-agent-plugins/shardingsphere-agent-plugin-tracing/shardingsphere-agent-tracing-opentracing/pom.xml",
-    "shardingsphere-agent/shardingsphere-agent-plugins/shardingsphere-agent-plugin-tracing/shardingsphere-agent-tracing-test/pom.xml",
-    "shardingsphere-agent/shardingsphere-agent-plugins/shardingsphere-agent-plugin-tracing/shardingsphere-agent-tracing-zipkin/pom.xml",
-    "shardingsphere-features/shardingsphere-encrypt/shardingsphere-encrypt-plugin/shardingsphere-encrypt-sm/pom.xml",
-    "shardingsphere-features/shardingsphere-sharding/shardingsphere-sharding-plugin/shardingsphere-sharding-cosid/pom.xml",
-    "shardingsphere-features/shardingsphere-sharding/shardingsphere-sharding-plugin/shardingsphere-sharding-nanoid/pom.xml",
-    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/pom.xml",
-    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-opengauss/pom.xml",
-    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/pom.xml",
-    "shardingsphere-test/shardingsphere-integration-agent-test/shardingsphere-integration-agent-test-plugins/shardingsphere-integration-agent-test-common/pom.xml",
-    "shardingsphere-test/shardingsphere-integration-agent-test/shardingsphere-integration-agent-test-plugins/shardingsphere-integration-agent-test-jaeger/Dockerfile",
-    "shardingsphere-test/shardingsphere-integration-agent-test/shardingsphere-integration-agent-test-plugins/shardingsphere-integration-agent-test-jaeger/pom.xml",
-    "shardingsphere-test/shardingsphere-integration-agent-test/shardingsphere-integration-agent-test-plugins/shardingsphere-integration-agent-test-metrics/Dockerfile"
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/antlr4/imports/mysql/Alphabet.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/antlr4/imports/mysql/BaseRule.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/antlr4/imports/mysql/Comments.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/antlr4/imports/mysql/DALStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/antlr4/imports/mysql/DCLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/antlr4/imports/mysql/DDLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/antlr4/imports/mysql/DMLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/antlr4/imports/mysql/Keyword.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/antlr4/imports/mysql/Literals.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/antlr4/imports/mysql/MySQLKeyword.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/antlr4/imports/mysql/RLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/antlr4/imports/mysql/Symbol.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/antlr4/imports/mysql/TCLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/antlr4/imports/opengauss/Alphabet.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/antlr4/imports/opengauss/BaseRule.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/antlr4/imports/opengauss/Comments.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/antlr4/imports/opengauss/DALStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/antlr4/imports/opengauss/DCLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/antlr4/imports/opengauss/DDLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/antlr4/imports/opengauss/DMLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/antlr4/imports/opengauss/Keyword.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/antlr4/imports/opengauss/Literals.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/antlr4/imports/opengauss/OpenGaussKeyword.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/antlr4/imports/opengauss/StoreProcedure.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/antlr4/imports/opengauss/Symbol.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/antlr4/imports/opengauss/TCLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/main/antlr4/imports/oracle/Alphabet.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/main/antlr4/imports/oracle/BaseRule.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/main/antlr4/imports/oracle/Comments.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/main/antlr4/imports/oracle/DCLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/main/antlr4/imports/oracle/DDLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/main/antlr4/imports/oracle/DMLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/main/antlr4/imports/oracle/Keyword.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/main/antlr4/imports/oracle/Literals.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/main/antlr4/imports/oracle/OracleKeyword.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/main/antlr4/imports/oracle/StoreProcedure.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/main/antlr4/imports/oracle/Symbol.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/main/antlr4/imports/oracle/TCLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/antlr4/imports/postgresql/Alphabet.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/antlr4/imports/postgresql/BaseRule.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/antlr4/imports/postgresql/Comments.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/antlr4/imports/postgresql/DALStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/antlr4/imports/postgresql/DCLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/antlr4/imports/postgresql/DDLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/antlr4/imports/postgresql/DMLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/antlr4/imports/postgresql/Keyword.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/antlr4/imports/postgresql/Literals.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/antlr4/imports/postgresql/ModeLexer.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/antlr4/imports/postgresql/PostgreSQLKeyword.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/antlr4/imports/postgresql/StoreProcedure.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/antlr4/imports/postgresql/Symbol.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/antlr4/imports/postgresql/TCLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/antlr4/imports/sqlserver/Alphabet.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/antlr4/imports/sqlserver/BaseRule.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/antlr4/imports/sqlserver/Comments.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/antlr4/imports/sqlserver/DALStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/antlr4/imports/sqlserver/DCLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/antlr4/imports/sqlserver/DDLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/antlr4/imports/sqlserver/DMLStatement.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/antlr4/imports/sqlserver/Keyword.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/antlr4/imports/sqlserver/Literals.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/antlr4/imports/sqlserver/SQLServerKeyword.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/antlr4/imports/sqlserver/StoreProcedure.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/antlr4/imports/sqlserver/Symbol.g4",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/antlr4/imports/sqlserver/TCLStatement.g4",
+    "shardingsphere-test/shardingsphere-integration-agent-test/shardingsphere-integration-agent-test-plugins/shardingsphere-integration-agent-test-jaeger/src/test/resources/env/mysql/init.sql",
+    "shardingsphere-test/shardingsphere-integration-agent-test/shardingsphere-integration-agent-test-plugins/shardingsphere-integration-agent-test-metrics/src/test/resources/env/mysql/init.sql",
+    "shardingsphere-test/shardingsphere-integration-agent-test/shardingsphere-integration-agent-test-plugins/shardingsphere-integration-agent-test-opentelemetry/src/test/resources/env/mysql/init.sql",
+    "shardingsphere-test/shardingsphere-integration-agent-test/shardingsphere-integration-agent-test-plugins/shardingsphere-integration-agent-test-zipkin/src/test/resources/env/mysql/init.sql",
+    "shardingsphere-dialect-exception/shardingsphere-mysql-dialect-exception/src/main/java/org/apache/shardingsphere/dialect/mysql/exception/UnknownCharsetException.java",
+    "shardingsphere-dialect-exception/shardingsphere-mysql-dialect-exception/src/main/java/org/apache/shardingsphere/dialect/mysql/exception/UnknownCollationException.java",
+    "shardingsphere-dialect-exception/shardingsphere-mysql-dialect-exception/src/main/java/org/apache/shardingsphere/dialect/mysql/exception/UnsupportedPreparedStatementException.java",
+    "shardingsphere-dialect-exception/shardingsphere-mysql-dialect-exception/src/main/java/org/apache/shardingsphere/dialect/mysql/mapper/MySQLDialectExceptionMapper.java",
+    "shardingsphere-dialect-exception/shardingsphere-mysql-dialect-exception/src/main/java/org/apache/shardingsphere/dialect/mysql/vendor/MySQLVendorError.java",
+    "shardingsphere-dialect-exception/shardingsphere-mysql-dialect-exception/src/test/java/org/apache/shardingsphere/dialect/mysql/mapper/MySQLDialectExceptionMapperTest.java",
+    "shardingsphere-dialect-exception/shardingsphere-mysql-dialect-exception/src/test/java/org/apache/shardingsphere/dialect/mysql/vendor/MySQLVendorErrorTest.java",
+    "shardingsphere-dialect-exception/shardingsphere-postgresql-dialect-exception/src/main/java/org/apache/shardingsphere/dialect/postgresql/mapper/PostgreSQLDialectExceptionMapper.java",
+    "shardingsphere-dialect-exception/shardingsphere-postgresql-dialect-exception/src/main/java/org/apache/shardingsphere/dialect/postgresql/message/ServerErrorMessageBuilder.java",
+    "shardingsphere-dialect-exception/shardingsphere-postgresql-dialect-exception/src/main/java/org/apache/shardingsphere/dialect/postgresql/sqlstate/PostgreSQLState.java",
+    "shardingsphere-dialect-exception/shardingsphere-postgresql-dialect-exception/src/main/java/org/apache/shardingsphere/dialect/postgresql/vendor/PostgreSQLVendorError.java",
+    "shardingsphere-dialect-exception/shardingsphere-postgresql-dialect-exception/src/test/java/org/apache/shardingsphere/dialect/postgresql/mapper/PostgreSQLDialectExceptionMapperTest.java",
+    "shardingsphere-dialect-exception/shardingsphere-postgresql-dialect-exception/src/test/java/org/apache/shardingsphere/dialect/postgresql/message/ServerErrorMessageBuilderTest.java",
+    "shardingsphere-dialect-exception/shardingsphere-postgresql-dialect-exception/src/main/java/org/apache/shardingsphere/dialect/postgresql/exception/authority/EmptyUsernameException.java",
+    "shardingsphere-dialect-exception/shardingsphere-postgresql-dialect-exception/src/main/java/org/apache/shardingsphere/dialect/postgresql/exception/authority/InvalidPasswordException.java",
+    "shardingsphere-dialect-exception/shardingsphere-postgresql-dialect-exception/src/main/java/org/apache/shardingsphere/dialect/postgresql/exception/authority/PrivilegeNotGrantedException.java",
+    "shardingsphere-dialect-exception/shardingsphere-postgresql-dialect-exception/src/main/java/org/apache/shardingsphere/dialect/postgresql/exception/authority/UnknownUsernameException.java",
+    "shardingsphere-dialect-exception/shardingsphere-postgresql-dialect-exception/src/main/java/org/apache/shardingsphere/dialect/postgresql/exception/protocol/ProtocolViolationException.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/test/java/org/apache/shardingsphere/sql/parser/mysql/MySQLFormatTest.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/test/java/org/apache/shardingsphere/sql/parser/mysql/MySQLParameterizedTest.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/test/java/org/apache/shardingsphere/sql/parser/mysql/MySQLParserParameterizedTest.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/test/java/org/apache/shardingsphere/sql/parser/mysql/MySQLTableVistorTest.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/test/java/org/apache/shardingsphere/sql/parser/mysql/MySQLXAVisitorTest.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/test/java/org/apache/shardingsphere/sql/parser/mysql/UnsupportedMySQLParserParameterizedTest.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/test/java/org/apache/shardingsphere/sql/parser/opengauss/OpenGaussParserParameterizedTest.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/test/java/org/apache/shardingsphere/sql/parser/opengauss/UnsupportedOpenGaussParserParameterizedTest.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/test/java/org/apache/shardingsphere/sql/parser/oracle/OracleParserParameterizedTest.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/test/java/org/apache/shardingsphere/sql/parser/oracle/UnsupportedOracleParserParameterizedTest.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/test/java/org/apache/shardingsphere/sql/parser/postgresql/PostgreSQLParserParameterizedTest.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/test/java/org/apache/shardingsphere/sql/parser/postgresql/UnsupportedPostgreSQLParserParameterizedTest.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/test/java/org/apache/shardingsphere/sql/parser/sqlserver/SQLServerParserParameterizedTest.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/test/java/org/apache/shardingsphere/sql/parser/sqlserver/UnsupportedSQLServerParserParameterizedTest.java",
+    "shardingsphere-db-protocol/shardingsphere-db-protocol-mysql/src/main/java/org/apache/shardingsphere/db/protocol/mysql/packet/handshake/MySQLAuthPluginData.java",
+    "shardingsphere-db-protocol/shardingsphere-db-protocol-mysql/src/test/java/org/apache/shardingsphere/db/protocol/mysql/packet/handshake/MySQLAuthPluginDataTest.java",
+    "shardingsphere-features/shardingsphere-db-discovery/shardingsphere-db-discovery-provider/shardingsphere-db-discovery-mysql/src/main/java/org/apache/shardingsphere/dbdiscovery/mysql/exception/InvalidMGRPluginException.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/MySQLIncrementalDumperCreator.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/MySqlInventoryDumperCreator.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-opengauss/src/main/java/org/apache/shardingsphere/data/pipeline/opengauss/OpenGaussIncrementalDumperCreator.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/PostgreSQLIncrementalDumperCreator.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/PostgreSQLInventoryDumperCreator.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/java/org/apache/shardingsphere/sql/parser/mysql/parser/MySQLLexer.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/java/org/apache/shardingsphere/sql/parser/mysql/parser/MySQLParser.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/java/org/apache/shardingsphere/sql/parser/mysql/parser/MySQLParserFacade.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-mysql/src/main/java/org/apache/shardingsphere/sql/parser/mysql/visitor/MySQLSQLStatVisitor.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/java/org/apache/shardingsphere/sql/parser/opengauss/parser/OpenGaussLexer.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/java/org/apache/shardingsphere/sql/parser/opengauss/parser/OpenGaussParser.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-opengauss/src/main/java/org/apache/shardingsphere/sql/parser/opengauss/parser/OpenGaussParserFacade.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/main/java/org/apache/shardingsphere/sql/parser/oracle/parser/OracleLexer.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/main/java/org/apache/shardingsphere/sql/parser/oracle/parser/OracleParser.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-oracle/src/main/java/org/apache/shardingsphere/sql/parser/oracle/parser/OracleParserFacade.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/java/org/apache/shardingsphere/sql/parser/postgresql/parser/PostgreSQLLexer.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/java/org/apache/shardingsphere/sql/parser/postgresql/parser/PostgreSQLLexerBase.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/java/org/apache/shardingsphere/sql/parser/postgresql/parser/PostgreSQLParser.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-postgresql/src/main/java/org/apache/shardingsphere/sql/parser/postgresql/parser/PostgreSQLParserFacade.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/java/org/apache/shardingsphere/sql/parser/sqlserver/parser/SQLServerLexer.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/java/org/apache/shardingsphere/sql/parser/sqlserver/parser/SQLServerParser.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-dialect/shardingsphere-sql-parser-sqlserver/src/main/java/org/apache/shardingsphere/sql/parser/sqlserver/parser/SQLServerParserFacade.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/datasource/MySQLJdbcQueryPropertiesExtension.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/ddlgenerator/MySQLCreateTableSQLGenerator.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/GlobalTableMapEventMapping.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/MySQLColumnValueReader.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/MySQLIncrementalDumper.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/MySQLInventoryDumper.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/MySQLPositionInitializer.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/sqlbuilder/MySQLPipelineSQLBuilder.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/test/java/org/apache/shardingsphere/data/pipeline/mysql/datasource/MySQLJdbcQueryPropertiesExtensionTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/test/java/org/apache/shardingsphere/data/pipeline/mysql/fixture/FixturePipelineSQLBuilder.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/test/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/MySQLIncrementalDumperTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/test/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/MySQLInventoryDumperTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/test/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/MySQLPositionInitializerTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/test/java/org/apache/shardingsphere/data/pipeline/mysql/sqlbuilder/MySQLPipelineSQLBuilderTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-opengauss/src/main/java/org/apache/shardingsphere/data/pipeline/opengauss/datasource/OpenGaussJdbcQueryPropertiesExtension.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-opengauss/src/main/java/org/apache/shardingsphere/data/pipeline/opengauss/ddlgenerator/OpenGaussCreateTableSQLGenerator.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-opengauss/src/main/java/org/apache/shardingsphere/data/pipeline/opengauss/ingest/OpenGaussPositionInitializer.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-opengauss/src/main/java/org/apache/shardingsphere/data/pipeline/opengauss/ingest/OpenGaussWalDumper.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-opengauss/src/main/java/org/apache/shardingsphere/data/pipeline/opengauss/sqlbuilder/OpenGaussPipelineSQLBuilder.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-opengauss/src/test/java/org/apache/shardingsphere/data/pipeline/opengauss/datasource/OpenGaussJdbcQueryPropertiesExtensionTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-opengauss/src/test/java/org/apache/shardingsphere/data/pipeline/opengauss/fixture/FixturePipelineSQLBuilder.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-opengauss/src/test/java/org/apache/shardingsphere/data/pipeline/opengauss/sqlbuilder/OpenGaussPipelineSQLBuilderTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/datasource/PostgreSQLJdbcQueryPropertiesExtension.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/ddlgenerator/AbstractPostgresDDLAdapter.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/ddlgenerator/PostgreSQLCreateTableSQLGenerator.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/ddlgenerator/PostgresColumnPropertiesAppender.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/ddlgenerator/PostgresConstraintsPropertiesAppender.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/ddlgenerator/PostgresIndexSQLGenerator.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/ddlgenerator/PostgresTablePropertiesLoader.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/ingest/PostgreSQLColumnValueReader.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/ingest/PostgreSQLInventoryDumper.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/ingest/PostgreSQLPositionInitializer.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/ingest/PostgreSQLWalDumper.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/sqlbuilder/PostgreSQLPipelineSQLBuilder.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/util/PostgreSQLPipelineFreemarkerManager.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/test/java/org/apache/shardingsphere/data/pipeline/postgresql/datasource/PostgreSQLJdbcQueryPropertiesExtensionTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/test/java/org/apache/shardingsphere/data/pipeline/postgresql/fixture/FixturePipelineSQLBuilder.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/test/java/org/apache/shardingsphere/data/pipeline/postgresql/ingest/PostgreSQLJdbcDumperTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/test/java/org/apache/shardingsphere/data/pipeline/postgresql/ingest/PostgreSQLPositionInitializerTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/test/java/org/apache/shardingsphere/data/pipeline/postgresql/ingest/PostgreSQLWalDumperTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/test/java/org/apache/shardingsphere/data/pipeline/postgresql/sqlbuilder/PostgreSQLPipelineSQLBuilderTest.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-statement/src/main/java/org/apache/shardingsphere/sql/parser/sql/dialect/statement/mysql/MySQLStatement.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-statement/src/main/java/org/apache/shardingsphere/sql/parser/sql/dialect/statement/opengauss/OpenGaussStatement.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-statement/src/main/java/org/apache/shardingsphere/sql/parser/sql/dialect/statement/oracle/OracleStatement.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-statement/src/main/java/org/apache/shardingsphere/sql/parser/sql/dialect/statement/postgresql/PostgreSQLStatement.java",
+    "shardingsphere-sql-parser/shardingsphere-sql-parser-statement/src/main/java/org/apache/shardingsphere/sql/parser/sql/dialect/statement/sqlserver/SQLServerStatement.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/check/datasource/MySQLDataSourceChecker.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/binlog/BinlogContext.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/binlog/BinlogPosition.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/client/ConnectInfo.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/client/InternalResultSet.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/client/MySQLClient.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/client/PasswordEncryption.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/client/ServerInfo.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/client/ServerVersion.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/main/java/org/apache/shardingsphere/data/pipeline/mysql/prepare/datasource/MySQLDataSourcePreparer.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/test/java/org/apache/shardingsphere/data/pipeline/mysql/check/datasource/MySQLDataSourceCheckerTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/test/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/binlog/BinlogContextTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/test/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/binlog/BinlogPositionTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/test/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/client/MySQLClientTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/test/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/client/PasswordEncryptionTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/test/java/org/apache/shardingsphere/data/pipeline/mysql/ingest/client/ServerVersionTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-mysql/src/test/java/org/apache/shardingsphere/data/pipeline/mysql/prepare/datasource/MySQLDataSourcePreparerTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-opengauss/src/main/java/org/apache/shardingsphere/data/pipeline/opengauss/check/datasource/OpenGaussDataSourceChecker.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-opengauss/src/main/java/org/apache/shardingsphere/data/pipeline/opengauss/ingest/wal/OpenGaussLogicalReplication.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-opengauss/src/main/java/org/apache/shardingsphere/data/pipeline/opengauss/prepare/datasource/OpenGaussDataSourcePreparer.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/check/datasource/PostgreSQLDataSourceChecker.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/ingest/wal/LogicalReplication.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/ingest/wal/WalEventConverter.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/ingest/wal/WalPosition.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/main/java/org/apache/shardingsphere/data/pipeline/postgresql/prepare/datasource/PostgreSQLDataSourcePreparer.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/test/java/org/apache/shardingsphere/data/pipeline/postgresql/check/datasource/PostgreSQLDataSourceCheckerTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/test/java/org/apache/shardingsphere/data/pipeline/postgresql/ingest/wal/LogicalReplicationTest.java",
+    "shardingsphere-kernel/shardingsphere-data-pipeline/shardingsphere-data-pipeline-dialect/shardingsphere-data-pipeline-postgresql/src/test/java/org/apache/shardingsphere/data/pipeline/postgresql/ingest/wal/WalEventConverterTest.java"
    ],
    "matrix_urls": [
     "https://shardingsphere.apache.org/document/current/en/dev-manual/data-source/",
@@ -4778,13 +5926,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T03:56:23Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:42:41Z",
   "default_branch": "master",
   "pushed_at": "2018-10-31",
   "stars": 346,
   "tree": {
    "sha": "e5c7412649c67b8e92bd4ee26a49fb0b1288ff29",
-   "etag": "W/\"ee3d786a20ad99fc0c3f498a5b56745cc3d3007506f08dfe97a34a6523606bda\"",
+   "etag": "W/\"41ea330caf8fb00ce1b71b23aa3a292af37e99e205f2bda95c84efd54efd9d05\"",
    "truncated": false,
    "path_count": 101,
    "matched": [
@@ -4799,7 +5948,11 @@
     "samples/InMemorySample/InMemorySample.csproj",
     "samples/InteropSample/InteropSample.csproj",
     "samples/RegularExpressionSample/RegularExpressionSample.csproj",
-    "samples/ResultMetadataSample/ResultMetadataSample.csproj"
+    "samples/ResultMetadataSample/ResultMetadataSample.csproj",
+    "samples/ScalarFunctionSample/ScalarFunctionSample.csproj",
+    "src/Microsoft.Data.Sqlite.Core/Microsoft.Data.Sqlite.Core.csproj",
+    "src/Microsoft.Data.Sqlite/Microsoft.Data.Sqlite.csproj",
+    "test/Microsoft.Data.Sqlite.Tests/Microsoft.Data.Sqlite.Tests.csproj"
    ]
   },
   "files": [
@@ -4921,6 +6074,51 @@
     "bytes": 448,
     "names": [
      "SQLitePCLRaw.bundle_green"
+    ]
+   },
+   {
+    "path": "samples/ScalarFunctionSample/ScalarFunctionSample.csproj",
+    "kind": "dep",
+    "blob_sha": "e2034a61b44919183b9fde1bc0309e12ff013a3a",
+    "ecosystem": "csproj",
+    "bytes": 448,
+    "names": [
+     "SQLitePCLRaw.bundle_green"
+    ]
+   },
+   {
+    "path": "src/Microsoft.Data.Sqlite.Core/Microsoft.Data.Sqlite.Core.csproj",
+    "kind": "dep",
+    "blob_sha": "2d4338e5a05b1d647c6fc18d3577cbfe466cb1c1",
+    "ecosystem": "csproj",
+    "bytes": 2703,
+    "names": [
+     "SQLitePCLRaw.core",
+     "StyleCop.Analyzers"
+    ]
+   },
+   {
+    "path": "src/Microsoft.Data.Sqlite/Microsoft.Data.Sqlite.csproj",
+    "kind": "dep",
+    "blob_sha": "b314e6a6830938c3d93b98ef04259437255ea06f",
+    "ecosystem": "csproj",
+    "bytes": 1182,
+    "names": [
+     "SQLitePCLRaw.bundle_green"
+    ]
+   },
+   {
+    "path": "test/Microsoft.Data.Sqlite.Tests/Microsoft.Data.Sqlite.Tests.csproj",
+    "kind": "dep",
+    "blob_sha": "51312308545b3a01109965c7b50f59799c817f4a",
+    "ecosystem": "csproj",
+    "bytes": 807,
+    "names": [
+     "Microsoft.NET.Test.Sdk",
+     "SQLitePCLRaw.bundle_green",
+     "xunit",
+     "xunit.analyzers",
+     "xunit.runner.visualstudio"
     ]
    }
   ],

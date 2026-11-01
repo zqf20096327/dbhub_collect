@@ -4,13 +4,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T13:19:18Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T10:58:50Z",
   "default_branch": "tidb4pg_v5.3.0",
   "pushed_at": "2022-09-08",
   "stars": 394,
   "tree": {
    "sha": "8fe2e17f2fbabe1dc09a7d146d14b3ff24c390c0",
-   "etag": "W/\"012ab4f12df1164251b8887a8cecd89d74b24a5cc3d7e79427e06f728178192f\"",
+   "etag": "W/\"6121c0ab8d4e081bc7263cf39dda4e295d44cfc5178c5755df407b546ab21975\"",
    "truncated": false,
    "path_count": 2812,
    "matched": [
@@ -354,6 +355,7 @@
     "docs/design/2018-10-24-view-support.md"
    ],
    "paths": [
+    "store/driver/tikv_driver.go",
     "executor/adapter.go",
     "executor/adapter_test.go",
     "executor/admin_plugins.go",
@@ -388,12 +390,29 @@
     "store/driver/main_test.go",
     "store/driver/snap_interceptor_serial_test.go",
     "store/driver/sql_fail_serial_test.go",
-    "store/driver/tikv_driver.go",
     "store/driver/txn_serial_test.go",
     "types/parser_driver/main_test.go",
     "types/parser_driver/special_cmt_ctrl.go",
     "types/parser_driver/value_expr.go",
-    "types/parser_driver/value_expr_test.go"
+    "types/parser_driver/value_expr_test.go",
+    "store/driver/backoff/backoff.go",
+    "store/driver/error/error.go",
+    "store/driver/error/error_test.go",
+    "store/driver/options/options.go",
+    "store/driver/txn/batch_getter.go",
+    "store/driver/txn/batch_getter_test.go",
+    "store/driver/txn/binlog.go",
+    "store/driver/txn/driver_test.go",
+    "store/driver/txn/error.go",
+    "store/driver/txn/main_test.go",
+    "store/driver/txn/scanner.go",
+    "store/driver/txn/snapshot.go",
+    "store/driver/txn/txn_driver.go",
+    "store/driver/txn/union_iter.go",
+    "store/driver/txn/union_iter_test.go",
+    "store/driver/txn/unionstore_driver.go",
+    "br/pkg/lightning/backend/local/key_adapter.go",
+    "br/pkg/lightning/backend/local/key_adapter_test.go"
    ]
   },
   "fail_count": 0
@@ -1164,13 +1183,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T19:47:52Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:12:45Z",
   "default_branch": "master",
   "pushed_at": "2026-08-07",
   "stars": 0,
   "tree": {
    "sha": "bd9159edd1e502572e171e2610b105c60effe27d",
-   "etag": "W/\"3c3502fef6dc6846432684b0fdb0798782d82df61511383b576d0c76797b3042\"",
+   "etag": "W/\"06f0e66aa0c9949dad8d5505653dd1c8eba96060e3d989b7f24dcd429c03f806\"",
    "truncated": false,
    "path_count": 7572,
    "matched": [
@@ -1516,6 +1536,7 @@
     "docs/design/2024-07-12-support-vector-index.md"
    ],
    "paths": [
+    "pkg/store/driver/tikv_driver.go",
     "cmd/pluginpkg/BUILD.bazel",
     "cmd/pluginpkg/pluginpkg.go",
     "docs/design/2018-12-10-plugin-framework.md",
@@ -1555,7 +1576,42 @@
     "pkg/plugin/conn_ip_example/conn_ip_example.go",
     "pkg/plugin/conn_ip_example/conn_ip_example_test.go",
     "pkg/plugin/conn_ip_example/main_test.go",
-    "pkg/plugin/conn_ip_example/manifest.toml"
+    "pkg/plugin/conn_ip_example/manifest.toml",
+    "pkg/store/driver/BUILD.bazel",
+    "pkg/store/driver/client_test.go",
+    "pkg/store/driver/config_test.go",
+    "pkg/store/driver/main_test.go",
+    "pkg/store/driver/snap_interceptor_test.go",
+    "pkg/store/driver/sql_fail_test.go",
+    "pkg/store/driver/txn_test.go",
+    "pkg/types/parser_driver/BUILD.bazel",
+    "pkg/types/parser_driver/main_test.go",
+    "pkg/types/parser_driver/value_expr.go",
+    "pkg/types/parser_driver/value_expr_test.go",
+    "pkg/util/traceevent/adapter.go",
+    "pkg/util/traceevent/adapter_test.go",
+    "pkg/store/driver/backoff/BUILD.bazel",
+    "pkg/store/driver/backoff/backoff.go",
+    "pkg/store/driver/error/BUILD.bazel",
+    "pkg/store/driver/error/error.go",
+    "pkg/store/driver/error/error_test.go",
+    "pkg/store/driver/options/BUILD.bazel",
+    "pkg/store/driver/options/options.go",
+    "pkg/store/driver/txn/BUILD.bazel",
+    "pkg/store/driver/txn/batch_getter.go",
+    "pkg/store/driver/txn/batch_getter_test.go",
+    "pkg/store/driver/txn/driver_test.go",
+    "pkg/store/driver/txn/error.go",
+    "pkg/store/driver/txn/main_test.go",
+    "pkg/store/driver/txn/scanner.go",
+    "pkg/store/driver/txn/snapshot.go",
+    "pkg/store/driver/txn/txn_driver.go",
+    "pkg/store/driver/txn/union_iter.go",
+    "pkg/store/driver/txn/union_iter_test.go",
+    "pkg/store/driver/txn/unionstore_driver.go",
+    "pkg/ttl/ttlworker/integrationtest/manager_job_adapter_test.go",
+    "tests/integrationtest/r/executor/adapter.result",
+    "tests/integrationtest/t/executor/adapter.test"
    ],
    "matrix_urls": [
     "https://docs.pingcap.com/tidb/stable/mysql-compatibility",
@@ -1817,13 +1873,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:02:47Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:16:32Z",
   "default_branch": "main",
   "pushed_at": "2023-12-11",
   "stars": 0,
   "tree": {
    "sha": "017944f47749d9715b645fc0b6adc578256002ef",
-   "etag": "W/\"5c3ea2536dda61c08884f514e0cbe481255d6ca7c32d8f9236a8ec6ae9312597\"",
+   "etag": "W/\"df19f0937ee19937c6be1dd41e9e289db62b079aea10d6a0a33c9a9a7d6199d3\"",
    "truncated": false,
    "path_count": 10407,
    "matched": [
@@ -1951,6 +2008,16 @@
    ],
    "docs_matrix": [],
    "paths": [
+    "src/observer/mysql/ob_async_cmd_driver.cpp",
+    "src/observer/mysql/ob_async_cmd_driver.h",
+    "src/observer/mysql/ob_async_plan_driver.cpp",
+    "src/observer/mysql/ob_async_plan_driver.h",
+    "src/observer/mysql/ob_query_driver.cpp",
+    "src/observer/mysql/ob_query_driver.h",
+    "src/observer/mysql/ob_sync_cmd_driver.cpp",
+    "src/observer/mysql/ob_sync_cmd_driver.h",
+    "src/observer/mysql/ob_sync_plan_driver.cpp",
+    "src/observer/mysql/ob_sync_plan_driver.h",
     "src/logservice/ob_location_adapter.cpp",
     "src/logservice/ob_location_adapter.h",
     "src/logservice/ob_ls_adapter.cpp",
@@ -1974,23 +2041,24 @@
     "src/logservice/restoreservice/ob_log_restore_driver_base.h",
     "src/logservice/restoreservice/ob_log_restore_net_driver.cpp",
     "src/logservice/restoreservice/ob_log_restore_net_driver.h",
-    "src/observer/mysql/ob_async_cmd_driver.cpp",
-    "src/observer/mysql/ob_async_cmd_driver.h",
-    "src/observer/mysql/ob_async_plan_driver.cpp",
-    "src/observer/mysql/ob_async_plan_driver.h",
-    "src/observer/mysql/ob_query_driver.cpp",
-    "src/observer/mysql/ob_query_driver.h",
-    "src/observer/mysql/ob_sync_cmd_driver.cpp",
-    "src/observer/mysql/ob_sync_cmd_driver.h",
-    "src/observer/mysql/ob_sync_plan_driver.cpp",
-    "src/observer/mysql/ob_sync_plan_driver.h",
     "src/share/backup/ob_backup_io_adapter.cpp",
     "src/share/backup/ob_backup_io_adapter.h",
     "src/storage/tx/ob_location_adapter.cpp",
     "src/storage/tx/ob_location_adapter.h",
     "src/storage/tx/ob_trans_deadlock_adapter.cpp",
     "src/storage/tx/ob_trans_deadlock_adapter.h",
-    "src/storage/tx/ob_tx_log_adapter.cpp"
+    "src/storage/tx/ob_tx_log_adapter.cpp",
+    "src/storage/tx/ob_tx_log_adapter.h",
+    "unittest/storage/tx/ob_mock_tx_log_adapter.cpp",
+    "unittest/storage/tx/ob_mock_tx_log_adapter.h",
+    "src/logservice/libobcdc/src/ob_log_mysql_connector.cpp",
+    "src/logservice/libobcdc/src/ob_log_mysql_connector.h",
+    "src/storage/multi_data_source/adapter_define/mds_dump_node.cpp",
+    "src/storage/multi_data_source/adapter_define/mds_dump_node.h",
+    "deps/oblib/src/lib/geo/ob_s2adapter.cpp",
+    "deps/oblib/src/lib/geo/ob_s2adapter.h",
+    "src/sql/engine/pdml/static/ob_pdml_op_data_driver.cpp",
+    "src/sql/engine/pdml/static/ob_pdml_op_data_driver.h"
    ]
   },
   "fail_count": 0
@@ -2000,13 +2068,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:05:24Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:17:08Z",
   "default_branch": "master",
   "pushed_at": "2026-10-28",
   "stars": 0,
   "tree": {
    "sha": "441137df20c92a40e9db55e31a90aed8321b681b",
-   "etag": "W/\"1c9c4755cfe8d79cbddf7ba840855336cfd1112082fbe457d03b021c10f79f2f\"",
+   "etag": "W/\"832fd153e3ebb9095af3b10aeb61b9f81f4f82735880c45e0edaed71b84f0c29\"",
    "truncated": false,
    "path_count": 8920,
    "matched": [
@@ -2227,6 +2296,18 @@
    ],
    "docs_matrix": [],
    "paths": [
+    "src/observer/mysql/ob_async_cmd_driver.cpp",
+    "src/observer/mysql/ob_async_cmd_driver.h",
+    "src/observer/mysql/ob_async_plan_driver.cpp",
+    "src/observer/mysql/ob_async_plan_driver.h",
+    "src/observer/mysql/ob_query_driver.cpp",
+    "src/observer/mysql/ob_query_driver.h",
+    "src/observer/mysql/ob_sync_cmd_driver.cpp",
+    "src/observer/mysql/ob_sync_cmd_driver.h",
+    "src/observer/mysql/ob_sync_plan_driver.cpp",
+    "src/observer/mysql/ob_sync_plan_driver.h",
+    "tools/deploy/mysql_test/t/driver5114_bug.test",
+    "tools/deploy/mysql_test/r/mysql/driver5114_bug.result",
     "src/observer/ob_internal_table_refresh_adapter.cpp",
     "src/observer/ob_internal_table_refresh_adapter.h",
     "src/observer/ob_ls_runtime_adapter.cpp",
@@ -2244,16 +2325,6 @@
     "src/observer/change_stream/ob_change_stream_plugin.h",
     "src/observer/change_stream/ob_cs_plugin_async_index.cpp",
     "src/observer/change_stream/ob_cs_plugin_async_index.h",
-    "src/observer/mysql/ob_async_cmd_driver.cpp",
-    "src/observer/mysql/ob_async_cmd_driver.h",
-    "src/observer/mysql/ob_async_plan_driver.cpp",
-    "src/observer/mysql/ob_async_plan_driver.h",
-    "src/observer/mysql/ob_query_driver.cpp",
-    "src/observer/mysql/ob_query_driver.h",
-    "src/observer/mysql/ob_sync_cmd_driver.cpp",
-    "src/observer/mysql/ob_sync_cmd_driver.h",
-    "src/observer/mysql/ob_sync_plan_driver.cpp",
-    "src/observer/mysql/ob_sync_plan_driver.h",
     "src/observer/vector_index/ob_plugin_vector_index_adaptor.cpp",
     "src/observer/vector_index/ob_plugin_vector_index_scheduler.cpp",
     "src/observer/vector_index/ob_plugin_vector_index_scheduler.h",
@@ -2266,7 +2337,57 @@
     "src/rootserver/freeze/ob_major_freeze_coordinator_adapter.cpp",
     "src/rootserver/freeze/ob_major_freeze_coordinator_adapter.h",
     "src/share/geo/ob_s2adapter.cpp",
-    "src/share/geo/ob_s2adapter.h"
+    "src/share/geo/ob_s2adapter.h",
+    "src/storage/ls/ob_i_ls_runtime_adapter.h",
+    "src/storage/tx/ob_trans_deadlock_adapter.cpp",
+    "src/storage/tx/ob_trans_deadlock_adapter.h",
+    "src/storage/tx/ob_tx_log_adapter.cpp",
+    "src/storage/tx/ob_tx_log_adapter.h",
+    "src/storage/tx_storage/ob_log_storage_adapter.cpp",
+    "src/storage/tx_storage/ob_log_storage_adapter.h",
+    "tools/obtest/include/get_ob_connector_last_query_addr.inc",
+    "src/storage/multi_data_source/adapter_define/mds_dump_kv_wrapper.cpp",
+    "src/storage/multi_data_source/adapter_define/mds_dump_kv_wrapper.h",
+    "src/storage/multi_data_source/adapter_define/mds_dump_node.cpp",
+    "src/storage/multi_data_source/adapter_define/mds_dump_node.h",
+    "src/storage/multi_data_source/adapter_define/mds_dump_obj_printer.h",
+    "src/storage/tx/deadlock_adapter/ob_session_id_pair.h",
+    "tools/obtest/plugins/importserver/importserver.template",
+    "tools/obtest/plugins/importserver/importserver.xml",
+    "tools/obtest/plugins/proxyserver/proxyserver.template",
+    "tools/obtest/plugins/proxyserver/proxyserver.xml",
+    "tools/obtest/r/ob_connector/1002_datasource_blacklist_server.result",
+    "tools/obtest/r/ob_connector/1005_datasource_delay_alive_congested_retry.result",
+    "tools/obtest/r/ob_connector/1006_datasource_expire_cluster_resource.result",
+    "tools/obtest/r/ob_connector/1012_data_source_add_server.result",
+    "tools/obtest/r/ob_connector/1013_datasource_table_entry_servers_delete.result",
+    "tools/obtest/r/ob_connector/1014_datasource_blacklist_invalid_server.result",
+    "tools/obtest/r/ob_connector/1015_datasource_change_region.result",
+    "tools/obtest/r/ob_connector/1016_data_source_blacklist_invalid_ip.result",
+    "tools/obtest/r/ob_connector/1017_data_source_partition_by_hash.result",
+    "tools/obtest/r/ob_connector/1018_datasource_partition_by_range.result",
+    "tools/obtest/r/ob_connector/1019_datasource_partition_by_hash_range.result",
+    "tools/obtest/r/ob_connector/1021_datasource_read_two_tables.result",
+    "tools/obtest/r/ob_connector/3004_blacklist_server_return_error.result",
+    "tools/obtest/r/ob_connector/3010_ldc_same_region.result",
+    "tools/obtest/r/ob_connector/3011_ldc_other_region.result",
+    "tools/obtest/t/ob_connector/1002_datasource_blacklist_server.test",
+    "tools/obtest/t/ob_connector/1005_datasource_delay_alive_congested_retry.test",
+    "tools/obtest/t/ob_connector/1006_datasource_expire_cluster_resource.test",
+    "tools/obtest/t/ob_connector/1012_data_source_add_server.test",
+    "tools/obtest/t/ob_connector/1013_datasource_table_entry_servers_delete.test",
+    "tools/obtest/t/ob_connector/1014_datasource_blacklist_invalid_server.test",
+    "tools/obtest/t/ob_connector/1015_datasource_change_region.test",
+    "tools/obtest/t/ob_connector/1016_data_source_blacklist_invalid_ip.test",
+    "tools/obtest/t/ob_connector/1017_data_source_partition_by_hash.test",
+    "tools/obtest/t/ob_connector/1018_datasource_partition_by_range.test",
+    "tools/obtest/t/ob_connector/1019_datasource_partition_by_hash_range.test",
+    "tools/obtest/t/ob_connector/1021_datasource_read_two_tables.test",
+    "tools/obtest/t/ob_connector/3004_blacklist_server_return_error.test",
+    "tools/obtest/t/ob_connector/3010_ldc_same_region.test",
+    "tools/obtest/t/ob_connector/3011_ldc_other_region.test",
+    "src/sql/engine/pdml/static/ob_pdml_op_data_driver.cpp",
+    "src/sql/engine/pdml/static/ob_pdml_op_data_driver.h"
    ]
   },
   "fail_count": 0
@@ -2276,13 +2397,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:14:12Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:23:56Z",
   "default_branch": "main",
   "pushed_at": "2026-01-21",
   "stars": 1327,
   "tree": {
    "sha": "eeecff11529df6e2d942d557d8085688b684aae0",
-   "etag": "W/\"6a19d105ac6c829e6faf75fb6260032abcdb8e56747c4f7dce1b83ae06774e52\"",
+   "etag": "W/\"fb5a78dcdc9717b67605c0804dbea44a1a68ed91124e0f1f26622608c6932199\"",
    "truncated": false,
    "path_count": 1078,
    "matched": [
@@ -2298,6 +2420,21 @@
     "Tests/Tests.UWP/Tests.UWP.csproj",
     "Tests/Tests.XUnit/Tests.XUnit.csproj",
     "Tools/DeployApps/DeployApps.csproj",
+    "Tools/SetupUnityPackage/SetupUnityPackage.csproj",
+    "examples/QuickJournal/QuickJournal.csproj",
+    "examples/SimpleToDoAvalonia/SimpleToDo.csproj",
+    ".github/actions/benchmark-uploader/package.json",
+    "Tests/Benchmarks/Benchmarks.Android/Benchmarks.Android.csproj",
+    "Tests/Benchmarks/Benchmarks.iOS/Benchmarks.iOS.csproj",
+    "Tests/Benchmarks/Benchmarks/Benchmarks.csproj",
+    "Tests/Benchmarks/PerformanceTests/PerformanceTests.csproj",
+    "Tests/SourceGenerators/Realm.SourceGenerator.Tests/Realm.SourceGenerator.Tests.csproj",
+    "Tests/SourceGenerators/SourceGeneratorAssemblyToProcess/SourceGeneratorAssemblyToProcess.csproj",
+    "Tests/Weaver/AnalyticsAssembly/AnalyticsAssembly.csproj",
+    "Tests/Weaver/AssemblyToProcess/AssemblyToProcess.csproj",
+    "Tests/Weaver/Realm.FakeForWeaverTests/Realm.FakeForWeaverTests.csproj",
+    "Tests/Weaver/Realm.Fody.Tests/Realm.Fody.Tests.csproj",
+    "Tests/Weaver/RealmFreeAssemblyToProcess/RealmFreeAssemblyToProcess.csproj",
     ".github/workflows/Issue-Needs-Attention.yml",
     ".github/workflows/auto-assign.yml",
     ".github/workflows/check-changelog.yml",
@@ -2482,6 +2619,224 @@
      "StyleCop.Analyzers",
      "MongoDB.Bson"
     ]
+   },
+   {
+    "path": "Tools/SetupUnityPackage/SetupUnityPackage.csproj",
+    "kind": "dep",
+    "blob_sha": "f236423247848e4e6e72e19687ba00bd73017ac2",
+    "ecosystem": "csproj",
+    "bytes": 1300,
+    "names": [
+     "CommandLineParser",
+     "ILRepack.Lib",
+     "Microsoft.CodeAnalysis.NetAnalyzers",
+     "Mono.Cecil",
+     "NuGet.Protocol",
+     "SharpZipLib",
+     "StyleCop.Analyzers"
+    ]
+   },
+   {
+    "path": "examples/QuickJournal/QuickJournal.csproj",
+    "kind": "dep",
+    "blob_sha": "a3e4d12485e6dba79fa81d99e916d2fea790b36b",
+    "ecosystem": "csproj",
+    "bytes": 3389,
+    "names": [
+     "Microsoft.Extensions.Logging.Debug",
+     "CommunityToolkit.Maui",
+     "CommunityToolkit.Mvvm",
+     "Realm",
+     "StyleCop.Analyzers"
+    ]
+   },
+   {
+    "path": "examples/SimpleToDoAvalonia/SimpleToDo.csproj",
+    "kind": "dep",
+    "blob_sha": "54c2c802b242145fc4d4a5ed9ff2644d57854f4f",
+    "ecosystem": "csproj",
+    "bytes": 1473,
+    "names": [
+     "Avalonia",
+     "Avalonia.Desktop",
+     "Avalonia.ReactiveUI",
+     "CommunityToolkit.Mvvm",
+     "Realm",
+     "XamlNameReferenceGenerator"
+    ]
+   },
+   {
+    "path": ".github/actions/benchmark-uploader/package.json",
+    "kind": "dep",
+    "blob_sha": "6562c598933132204f0f9f90007bad9a747ddc29",
+    "ecosystem": "npm",
+    "bytes": 1667,
+    "names": [
+     "@actions/core",
+     "@actions/exec",
+     "@actions/github",
+     "@types/minimatch",
+     "abort-controller",
+     "du",
+     "fs",
+     "minimatch",
+     "node-fetch",
+     "realm-web"
+    ],
+    "dev": [
+     "@types/chai",
+     "@types/chai-as-promised",
+     "@types/du",
+     "@types/mocha",
+     "@types/node",
+     "@types/tmp",
+     "@typescript-eslint/parser",
+     "@vercel/ncc",
+     "chai",
+     "chai-as-promised",
+     "eslint",
+     "eslint-plugin-github",
+     "js-yaml",
+     "mocha",
+     "prettier",
+     "tmp",
+     "ts-node",
+     "typescript"
+    ]
+   },
+   {
+    "path": "Tests/Benchmarks/Benchmarks.Android/Benchmarks.Android.csproj",
+    "kind": "dep",
+    "blob_sha": "dc7c2eca95885d578bf5f25f3f6c37c8a70f5141",
+    "ecosystem": "csproj",
+    "bytes": 4038,
+    "names": [
+     "Xamarin.Forms",
+     "Xamarin.Essentials"
+    ]
+   },
+   {
+    "path": "Tests/Benchmarks/Benchmarks.iOS/Benchmarks.iOS.csproj",
+    "kind": "dep",
+    "blob_sha": "5750610afb3acbdde9c8e55bceb8e5a6c6fd44a3",
+    "ecosystem": "csproj",
+    "bytes": 5512,
+    "names": [
+     "Xamarin.Forms",
+     "Xamarin.Essentials"
+    ]
+   },
+   {
+    "path": "Tests/Benchmarks/Benchmarks/Benchmarks.csproj",
+    "kind": "dep",
+    "blob_sha": "8a240b50cc052c529153bee11df140bfd54b1c44",
+    "ecosystem": "csproj",
+    "bytes": 2523,
+    "names": [
+     "Microsoft.CodeAnalysis.Analyzers",
+     "PolySharp",
+     "Xamarin.Forms",
+     "Xamarin.Essentials",
+     "BenchmarkDotNet",
+     "StyleCop.Analyzers",
+     "Realm"
+    ]
+   },
+   {
+    "path": "Tests/Benchmarks/PerformanceTests/PerformanceTests.csproj",
+    "kind": "dep",
+    "blob_sha": "dd564d4e5fcc612acb253326b1c2d5eae021a567",
+    "ecosystem": "csproj",
+    "bytes": 3454,
+    "names": [
+     "BenchmarkDotNet",
+     "Bogus",
+     "Microsoft.CodeAnalysis.Analyzers",
+     "Microsoft.CodeAnalysis.NetAnalyzers",
+     "StyleCop.Analyzers",
+     "Realm"
+    ]
+   },
+   {
+    "path": "Tests/SourceGenerators/Realm.SourceGenerator.Tests/Realm.SourceGenerator.Tests.csproj",
+    "kind": "dep",
+    "blob_sha": "0fbe65a1d2e95133e13cbaa18dfe22fcf410bb4f",
+    "ecosystem": "csproj",
+    "bytes": 2012,
+    "names": [
+     "Microsoft.CodeAnalysis.Analyzers",
+     "Microsoft.CodeAnalysis.Common",
+     "Microsoft.CodeAnalysis.CSharp",
+     "Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.NUnit",
+     "Microsoft.CodeAnalysis.CSharp.Workspaces",
+     "Microsoft.NET.Test.Sdk",
+     "Newtonsoft.Json",
+     "NUnit",
+     "NUnit3TestAdapter",
+     "NUnit.Analyzers",
+     "coverlet.collector",
+     "NUnitLite"
+    ]
+   },
+   {
+    "path": "Tests/SourceGenerators/SourceGeneratorAssemblyToProcess/SourceGeneratorAssemblyToProcess.csproj",
+    "kind": "dep",
+    "blob_sha": "3ed9fc3fdb431afd1fb2d0270ab5c16fc46e420c",
+    "ecosystem": "csproj",
+    "bytes": 1226
+   },
+   {
+    "path": "Tests/Weaver/AnalyticsAssembly/AnalyticsAssembly.csproj",
+    "kind": "dep",
+    "blob_sha": "00440b1327d9b1e6cee8f756dc9b493974500835",
+    "ecosystem": "csproj",
+    "bytes": 2489,
+    "names": [
+     "System.Linq.Queryable",
+     "Realm",
+     "Realm.SourceGenerator"
+    ]
+   },
+   {
+    "path": "Tests/Weaver/AssemblyToProcess/AssemblyToProcess.csproj",
+    "kind": "dep",
+    "blob_sha": "fe59f627695b328e7169fc59a044d45801fae559",
+    "ecosystem": "csproj",
+    "bytes": 359
+   },
+   {
+    "path": "Tests/Weaver/Realm.FakeForWeaverTests/Realm.FakeForWeaverTests.csproj",
+    "kind": "dep",
+    "blob_sha": "4c831403b6da708311547ce922f01bab47f68544",
+    "ecosystem": "csproj",
+    "bytes": 2342,
+    "names": [
+     "MongoDB.Bson",
+     "System.Linq.Queryable"
+    ]
+   },
+   {
+    "path": "Tests/Weaver/Realm.Fody.Tests/Realm.Fody.Tests.csproj",
+    "kind": "dep",
+    "blob_sha": "7a3f1bddc4b156659e7528d2e646c14028d4536b",
+    "ecosystem": "csproj",
+    "bytes": 1757,
+    "names": [
+     "Microsoft.CSharp",
+     "Microsoft.NET.Test.Sdk",
+     "NUnit",
+     "NUnitLite",
+     "NUnit3TestAdapter",
+     "PropertyChanged.Fody",
+     "FodyHelpers"
+    ]
+   },
+   {
+    "path": "Tests/Weaver/RealmFreeAssemblyToProcess/RealmFreeAssemblyToProcess.csproj",
+    "kind": "dep",
+    "blob_sha": "454f0ec69e2f9c22fdfe509652452773ffdb77c3",
+    "ecosystem": "csproj",
+    "bytes": 215
    },
    {
     "path": ".github/workflows/Issue-Needs-Attention.yml",
@@ -2866,13 +3221,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:28:13Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:30:08Z",
   "default_branch": "master",
   "pushed_at": "2026-10-27",
   "stars": 255,
   "tree": {
    "sha": "6d14c67a9ae63dcce4225a6137b3e263aeb645f9",
-   "etag": "W/\"9c2010ece4c1732bcb310eb4b75a907176988b1932ae29d288e536522f1c8b9b\"",
+   "etag": "W/\"5f322bad53a4c8f9a495db01519a500d1c8cf6b62bd9c3cf2265a61b912f0932\"",
    "truncated": false,
    "path_count": 1306,
    "matched": [
@@ -2888,6 +3244,44 @@
     "cmd/ratescrapers/go.mod",
     "cmd/stock-scrapers/go.mod",
     "scripts/bifrost/package.json",
+    "cmd/exchange-scrapers/collector/go.mod",
+    "cmd/exchange-scrapers/ecb/go.mod",
+    "cmd/foreignscraper/historicalQuotes/go.mod",
+    "cmd/http/graphqlServer/go.mod",
+    "cmd/http/monitoringOracleFeeder/go.mod",
+    "cmd/http/monitoringServer/go.mod",
+    "cmd/http/oraclebuilder/go.mod",
+    "cmd/http/randomnessServer/go.mod",
+    "cmd/http/restServer/go.mod",
+    "cmd/http/snapshotServer/go.mod",
+    "cmd/keymanagement/k8sbridge/go.mod",
+    "cmd/keymanagement/signer/go.mod",
+    "cmd/services/blockchainservice/go.mod",
+    "cmd/services/filtersBlockService/go.mod",
+    "cmd/services/nftCollectionService/go.mod",
+    "cmd/services/oracleconfigsync/go.mod",
+    "cmd/services/pairDiscoveryService/go.mod",
+    "cmd/services/supplyService/go.mod",
+    "cmd/services/tradesBlockService/go.mod",
+    "cmd/services/tradesEstimationService/go.mod",
+    "cmd/services/volumeservice/go.mod",
+    "cmd/blockchain/ethereum/diaAzosNavOracleService/go.mod",
+    "cmd/blockchain/ethereum/diaDamFinanceOracleService/go.mod",
+    "cmd/blockchain/ethereum/diaDenarioOracleService/go.mod",
+    "cmd/blockchain/ethereum/diaDenarioPorOracleService/go.mod",
+    "cmd/blockchain/ethereum/diaFxOracleV2MultiupdateService/go.mod",
+    "cmd/blockchain/ethereum/diaOracleV2AstarService/go.mod",
+    "cmd/blockchain/ethereum/diaOracleV2BobaService/go.mod",
+    "cmd/blockchain/ethereum/diaOracleV2MultiupdateService/go.mod",
+    "cmd/blockchain/ethereum/diaOracleV2Service/go.mod",
+    "cmd/blockchain/ethereum/diaOracleV2WanchainService/go.mod",
+    "cmd/blockchain/ethereum/diaParallelOracleService/go.mod",
+    "cmd/blockchain/ethereum/diaPrimeLiquidityOracleService/go.mod",
+    "cmd/blockchain/ethereum/diaProsperavestOracleService/go.mod",
+    "cmd/blockchain/ethereum/diaSatusdPlusOracleService/go.mod",
+    "cmd/blockchain/ethereum/diaStarlayOracleService/go.mod",
+    "cmd/blockchain/ethereum/diaYahooFinanceOracleService/go.mod",
+    "cmd/exchange-scrapers/generic-collector/zenlink/go.mod",
     "build/Dockerfile-assetCollectionService",
     "build/Dockerfile-assetCollectionService-Dev",
     "build/Dockerfile-assetlists",
@@ -2896,6 +3290,22 @@
     "build/Dockerfile-collector",
     "build/Dockerfile-collector-aws",
     "build/Dockerfile-diaAzosNavOracleService",
+    "build/Dockerfile-diaDamFinanceOracleService",
+    "build/Dockerfile-diaDenarioOracleService",
+    "build/Dockerfile-diaDenarioPorOracleService",
+    "build/Dockerfile-diaFxOracleV2MultiupdateService",
+    "build/Dockerfile-diaOracleV2AstarService",
+    "build/Dockerfile-diaOracleV2BobaService",
+    "build/Dockerfile-diaOracleV2MultiupdateService",
+    "build/Dockerfile-diaOracleV2Service",
+    "build/Dockerfile-diaOracleV2WanchainService",
+    "build/Dockerfile-diaParallelOracleService",
+    "build/Dockerfile-diaPrimeLiquidityOracleService",
+    "build/Dockerfile-diaProsperavestOracleService",
+    "build/Dockerfile-diaSatusdPlusOracleService",
+    "build/Dockerfile-diaStarlayOracleService",
+    "build/Dockerfile-diaYahooFinanceOracleService",
+    "build/Dockerfile-filtersBlockService",
     ".github/workflows/pr-validation.yml",
     ".github/workflows/production-deployment.yml",
     ".github/workflows/test-aws-ecr-deployment.yml"
@@ -3527,6 +3937,1757 @@
     ]
    },
    {
+    "path": "cmd/exchange-scrapers/collector/go.mod",
+    "kind": "dep",
+    "blob_sha": "f3d4212ec8bd36852240575638a91fd8a89c7de4",
+    "ecosystem": "go",
+    "bytes": 10643,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/segmentio/kafka-go",
+     "github.com/sirupsen/logrus"
+    ],
+    "dev": [
+     "filippo.io/edwards25519",
+     "github.com/99designs/go-keychain",
+     "github.com/99designs/keyring",
+     "github.com/ChainSafe/go-schnorrkel",
+     "github.com/DataDog/zstd",
+     "github.com/Kucoin/kucoin-go-sdk",
+     "github.com/OneOfOne/xxhash",
+     "github.com/StackExchange/wmi",
+     "github.com/adshao/go-binance/v2",
+     "github.com/andres-erbsen/clock",
+     "github.com/armon/go-metrics",
+     "github.com/aybabtme/rgbterm",
+     "github.com/beldur/kraken-go-api-client",
+     "github.com/benbjohnson/clock",
+     "github.com/beorn7/perks",
+     "github.com/bgentry/speakeasy",
+     "github.com/bitfinexcom/bitfinex-api-go",
+     "github.com/bitly/go-simplejson",
+     "github.com/blendle/zapdriver",
+     "github.com/btcsuite/btcd",
+     "github.com/btcsuite/btcd/btcec/v2",
+     "github.com/btcsuite/btcutil",
+     "github.com/buger/jsonparser",
+     "github.com/bytedance/sonic",
+     "github.com/cespare/xxhash",
+     "github.com/cespare/xxhash/v2",
+     "github.com/chenzhuoyu/base64x",
+     "github.com/chenzhuoyu/iasm",
+     "github.com/confio/ics23/go",
+     "github.com/cosmos/btcutil",
+     "github.com/cosmos/cosmos-sdk",
+     "github.com/cosmos/go-bip39",
+     "github.com/cosmos/iavl",
+     "github.com/cosmos/ibc-go/v3",
+     "github.com/cosmos/ledger-cosmos-go",
+     "github.com/cosmos/ledger-go",
+     "github.com/cryptwire/go-binance/v2",
+     "github.com/danieljoos/wincred",
+     "github.com/davecgh/go-spew",
+     "github.com/deckarep/golang-set",
+     "github.com/decred/dcrd/dcrec/secp256k1/v4",
+     "github.com/dgraph-io/badger/v2",
+     "github.com/dgraph-io/ristretto",
+     "github.com/dgryski/go-farm",
+     "github.com/dustin/go-humanize",
+     "github.com/dvsekhvalnov/jose2go",
+     "github.com/ethereum/go-ethereum",
+     "github.com/fatih/color",
+     "github.com/fatih/structs",
+     "github.com/fsnotify/fsnotify",
+     "github.com/gabriel-vasile/mimetype",
+     "github.com/gagliardetto/binary",
+     "github.com/gagliardetto/metaplex-go",
+     "github.com/gagliardetto/solana-go",
+     "github.com/gagliardetto/treeout",
+     "github.com/ghodss/yaml",
+     "github.com/gin-contrib/sse",
+     "github.com/gin-gonic/gin",
+     "github.com/go-kit/kit",
+     "github.com/go-kit/log",
+     "github.com/go-logfmt/logfmt",
+     "github.com/go-ole/go-ole",
+     "github.com/go-playground/locales",
+     "github.com/go-playground/universal-translator",
+     "github.com/go-playground/validator/v10",
+     "github.com/go-redis/redis",
+     "github.com/go-resty/resty/v2",
+     "github.com/go-stack/stack",
+     "github.com/goccy/go-json",
+     "github.com/godbus/dbus",
+     "github.com/gofrs/uuid",
+     "github.com/gogo/protobuf",
+     "github.com/golang/protobuf",
+     "github.com/golang/snappy",
+     "github.com/google/btree",
+     "github.com/google/uuid",
+     "github.com/gorilla/mux",
+     "github.com/gorilla/rpc",
+     "github.com/gorilla/websocket",
+     "github.com/grpc-ecosystem/go-grpc-middleware"
+    ]
+   },
+   {
+    "path": "cmd/exchange-scrapers/ecb/go.mod",
+    "kind": "dep",
+    "blob_sha": "926615f19bb258dcbd049fffb8a5b66be846f189",
+    "ecosystem": "go",
+    "bytes": 156,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/sirupsen/logrus"
+    ]
+   },
+   {
+    "path": "cmd/foreignscraper/historicalQuotes/go.mod",
+    "kind": "dep",
+    "blob_sha": "e46b1738d4d2a1c8ac20660f8fb4ea2b52ce60cc",
+    "ecosystem": "go",
+    "bytes": 2057,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/sirupsen/logrus"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/deckarep/golang-set",
+     "github.com/ethereum/go-ethereum",
+     "github.com/fsnotify/fsnotify",
+     "github.com/ghodss/yaml",
+     "github.com/go-ole/go-ole",
+     "github.com/go-redis/redis",
+     "github.com/go-stack/stack",
+     "github.com/gorilla/websocket",
+     "github.com/influxdata/influxdb1-client",
+     "github.com/jackc/chunkreader/v2",
+     "github.com/jackc/pgconn",
+     "github.com/jackc/pgio",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgproto3/v2",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgtype",
+     "github.com/jackc/pgx/v4",
+     "github.com/jackc/puddle",
+     "github.com/kr/pretty",
+     "github.com/mattn/go-runewidth",
+     "github.com/nxadm/tail",
+     "github.com/pkg/errors",
+     "github.com/rogpeppe/go-internal",
+     "github.com/shirou/gopsutil",
+     "github.com/stretchr/objx",
+     "github.com/tkanos/gonfig",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/zekroTJA/timedmap",
+     "golang.org/x/crypto",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "gopkg.in/natefinch/npipe.v2",
+     "gopkg.in/yaml.v2"
+    ]
+   },
+   {
+    "path": "cmd/http/graphqlServer/go.mod",
+    "kind": "dep",
+    "blob_sha": "30f10d6a05e8a6cfaff33886fd93c3b478a216e8",
+    "ecosystem": "go",
+    "bytes": 9772,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/graph-gophers/graphql-go",
+     "github.com/prometheus/client_golang",
+     "github.com/sirupsen/logrus"
+    ],
+    "dev": [
+     "filippo.io/edwards25519",
+     "github.com/99designs/go-keychain",
+     "github.com/99designs/keyring",
+     "github.com/ChainSafe/go-schnorrkel",
+     "github.com/DataDog/zstd",
+     "github.com/Kucoin/kucoin-go-sdk",
+     "github.com/OneOfOne/xxhash",
+     "github.com/StackExchange/wmi",
+     "github.com/adshao/go-binance/v2",
+     "github.com/andres-erbsen/clock",
+     "github.com/armon/go-metrics",
+     "github.com/aybabtme/rgbterm",
+     "github.com/beldur/kraken-go-api-client",
+     "github.com/beorn7/perks",
+     "github.com/bgentry/speakeasy",
+     "github.com/bitfinexcom/bitfinex-api-go",
+     "github.com/bitly/go-simplejson",
+     "github.com/blendle/zapdriver",
+     "github.com/btcsuite/btcd",
+     "github.com/btcsuite/btcd/btcec/v2",
+     "github.com/btcsuite/btcutil",
+     "github.com/buger/jsonparser",
+     "github.com/cespare/xxhash",
+     "github.com/cespare/xxhash/v2",
+     "github.com/cnf/structhash",
+     "github.com/confio/ics23/go",
+     "github.com/cosmos/btcutil",
+     "github.com/cosmos/cosmos-sdk",
+     "github.com/cosmos/go-bip39",
+     "github.com/cosmos/iavl",
+     "github.com/cosmos/ibc-go/v3",
+     "github.com/cosmos/ledger-cosmos-go",
+     "github.com/cosmos/ledger-go",
+     "github.com/cryptwire/go-binance/v2",
+     "github.com/danieljoos/wincred",
+     "github.com/davecgh/go-spew",
+     "github.com/deckarep/golang-set",
+     "github.com/decred/dcrd/dcrec/secp256k1/v4",
+     "github.com/dgraph-io/badger/v2",
+     "github.com/dgraph-io/ristretto",
+     "github.com/dgryski/go-farm",
+     "github.com/dustin/go-humanize",
+     "github.com/dvsekhvalnov/jose2go",
+     "github.com/ethereum/go-ethereum",
+     "github.com/fatih/color",
+     "github.com/fatih/structs",
+     "github.com/fsnotify/fsnotify",
+     "github.com/gagliardetto/binary",
+     "github.com/gagliardetto/metaplex-go",
+     "github.com/gagliardetto/solana-go",
+     "github.com/gagliardetto/treeout",
+     "github.com/ghodss/yaml",
+     "github.com/go-kit/kit",
+     "github.com/go-kit/log",
+     "github.com/go-logfmt/logfmt",
+     "github.com/go-ole/go-ole",
+     "github.com/go-redis/redis",
+     "github.com/go-resty/resty/v2",
+     "github.com/go-stack/stack",
+     "github.com/godbus/dbus",
+     "github.com/gogo/protobuf",
+     "github.com/golang/protobuf",
+     "github.com/golang/snappy",
+     "github.com/google/btree",
+     "github.com/google/uuid",
+     "github.com/gorilla/mux",
+     "github.com/gorilla/rpc",
+     "github.com/gorilla/websocket",
+     "github.com/grpc-ecosystem/go-grpc-middleware",
+     "github.com/grpc-ecosystem/grpc-gateway",
+     "github.com/grpc-ecosystem/grpc-gateway/v2",
+     "github.com/gsterjov/go-libsecret",
+     "github.com/gtank/merlin",
+     "github.com/gtank/ristretto255",
+     "github.com/hashicorp/go-immutable-radix",
+     "github.com/hashicorp/golang-lru",
+     "github.com/hashicorp/hcl",
+     "github.com/hdevalence/ed25519consensus",
+     "github.com/inconshreveable/mousetrap",
+     "github.com/influxdata/influxdb1-client"
+    ]
+   },
+   {
+    "path": "cmd/http/monitoringOracleFeeder/go.mod",
+    "kind": "dep",
+    "blob_sha": "c06cd9f799ec0268d29af932884682abf2ed051a",
+    "ecosystem": "go",
+    "bytes": 3732,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/gin-gonic/gin",
+     "github.com/sirupsen/logrus",
+     "k8s.io/api",
+     "k8s.io/apimachinery",
+     "k8s.io/client-go"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/bytedance/sonic",
+     "github.com/chenzhuoyu/base64x",
+     "github.com/davecgh/go-spew",
+     "github.com/deckarep/golang-set",
+     "github.com/emicklei/go-restful/v3",
+     "github.com/ethereum/go-ethereum",
+     "github.com/gabriel-vasile/mimetype",
+     "github.com/gin-contrib/sse",
+     "github.com/go-logr/logr",
+     "github.com/go-ole/go-ole",
+     "github.com/go-openapi/jsonpointer",
+     "github.com/go-openapi/jsonreference",
+     "github.com/go-openapi/swag",
+     "github.com/go-playground/locales",
+     "github.com/go-playground/universal-translator",
+     "github.com/go-playground/validator/v10",
+     "github.com/go-stack/stack",
+     "github.com/goccy/go-json",
+     "github.com/gogo/protobuf",
+     "github.com/golang/protobuf",
+     "github.com/google/gnostic-models",
+     "github.com/google/gofuzz",
+     "github.com/google/uuid",
+     "github.com/gorilla/websocket",
+     "github.com/imdario/mergo",
+     "github.com/josharian/intern",
+     "github.com/json-iterator/go",
+     "github.com/klauspost/cpuid/v2",
+     "github.com/leodido/go-urn",
+     "github.com/mailru/easyjson",
+     "github.com/mattn/go-isatty",
+     "github.com/modern-go/concurrent",
+     "github.com/modern-go/reflect2",
+     "github.com/munnerz/goautoneg",
+     "github.com/pelletier/go-toml/v2",
+     "github.com/pkg/errors",
+     "github.com/shirou/gopsutil",
+     "github.com/spf13/pflag",
+     "github.com/tidwall/gjson",
+     "github.com/tidwall/match",
+     "github.com/tidwall/pretty",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/twitchyliquid64/golang-asm",
+     "github.com/ugorji/go/codec",
+     "golang.org/x/arch",
+     "golang.org/x/crypto",
+     "golang.org/x/net",
+     "golang.org/x/oauth2",
+     "golang.org/x/sys",
+     "golang.org/x/term",
+     "golang.org/x/text",
+     "golang.org/x/time",
+     "google.golang.org/appengine",
+     "google.golang.org/protobuf",
+     "gopkg.in/inf.v0",
+     "gopkg.in/natefinch/npipe.v2",
+     "gopkg.in/yaml.v2",
+     "gopkg.in/yaml.v3",
+     "k8s.io/klog/v2",
+     "k8s.io/kube-openapi",
+     "k8s.io/utils",
+     "sigs.k8s.io/json",
+     "sigs.k8s.io/structured-merge-diff/v4",
+     "sigs.k8s.io/yaml"
+    ]
+   },
+   {
+    "path": "cmd/http/monitoringServer/go.mod",
+    "kind": "dep",
+    "blob_sha": "c531cb785e5d868b5ef85d6ff9c93c60aa0e1701",
+    "ecosystem": "go",
+    "bytes": 3480,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/gin-gonic/gin",
+     "github.com/google/uuid",
+     "github.com/jackc/pgx/v4",
+     "github.com/sirupsen/logrus",
+     "k8s.io/api",
+     "k8s.io/apimachinery",
+     "k8s.io/client-go"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/davecgh/go-spew",
+     "github.com/deckarep/golang-set",
+     "github.com/ethereum/go-ethereum",
+     "github.com/gin-contrib/sse",
+     "github.com/go-logr/logr",
+     "github.com/go-ole/go-ole",
+     "github.com/go-playground/locales",
+     "github.com/go-playground/universal-translator",
+     "github.com/go-playground/validator/v10",
+     "github.com/go-redis/redis",
+     "github.com/go-stack/stack",
+     "github.com/goccy/go-json",
+     "github.com/gogo/protobuf",
+     "github.com/golang/protobuf",
+     "github.com/google/go-cmp",
+     "github.com/google/gofuzz",
+     "github.com/googleapis/gnostic",
+     "github.com/gorilla/websocket",
+     "github.com/imdario/mergo",
+     "github.com/influxdata/influxdb1-client",
+     "github.com/jackc/chunkreader/v2",
+     "github.com/jackc/pgconn",
+     "github.com/jackc/pgio",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgproto3/v2",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgtype",
+     "github.com/jackc/puddle",
+     "github.com/json-iterator/go",
+     "github.com/leodido/go-urn",
+     "github.com/mattn/go-isatty",
+     "github.com/modern-go/concurrent",
+     "github.com/modern-go/reflect2",
+     "github.com/pelletier/go-toml/v2",
+     "github.com/pkg/errors",
+     "github.com/shirou/gopsutil",
+     "github.com/spf13/pflag",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/ugorji/go/codec",
+     "golang.org/x/crypto",
+     "golang.org/x/net",
+     "golang.org/x/oauth2",
+     "golang.org/x/sys",
+     "golang.org/x/term",
+     "golang.org/x/text",
+     "golang.org/x/time",
+     "google.golang.org/appengine",
+     "google.golang.org/protobuf",
+     "gopkg.in/inf.v0",
+     "gopkg.in/natefinch/npipe.v2",
+     "gopkg.in/yaml.v2",
+     "k8s.io/klog/v2",
+     "k8s.io/utils",
+     "sigs.k8s.io/structured-merge-diff/v4",
+     "sigs.k8s.io/yaml"
+    ]
+   },
+   {
+    "path": "cmd/http/oraclebuilder/go.mod",
+    "kind": "dep",
+    "blob_sha": "1a5910f0a03d059156d8f14e28318dd03d23d62a",
+    "ecosystem": "go",
+    "bytes": 5088,
+    "names": [
+     "github.com/99designs/keyring",
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/gin-contrib/cors",
+     "github.com/gin-gonic/gin",
+     "github.com/sirupsen/logrus",
+     "github.com/stretchr/testify",
+     "google.golang.org/grpc"
+    ],
+    "dev": [
+     "github.com/99designs/go-keychain",
+     "github.com/Microsoft/go-winio",
+     "github.com/bits-and-blooms/bitset",
+     "github.com/btcsuite/btcd/btcec/v2",
+     "github.com/btcsuite/btcd/chaincfg/chainhash",
+     "github.com/bytedance/sonic",
+     "github.com/bytedance/sonic/loader",
+     "github.com/cloudwego/base64x",
+     "github.com/cloudwego/iasm",
+     "github.com/consensys/bavard",
+     "github.com/consensys/gnark-crypto",
+     "github.com/crate-crypto/go-ipa",
+     "github.com/crate-crypto/go-kzg-4844",
+     "github.com/danieljoos/wincred",
+     "github.com/davecgh/go-spew",
+     "github.com/deckarep/golang-set/v2",
+     "github.com/decred/dcrd/dcrec/secp256k1/v4",
+     "github.com/dvsekhvalnov/jose2go",
+     "github.com/ethereum/c-kzg-4844",
+     "github.com/gabriel-vasile/mimetype",
+     "github.com/ghodss/yaml",
+     "github.com/gin-contrib/sse",
+     "github.com/go-ole/go-ole",
+     "github.com/go-playground/locales",
+     "github.com/go-playground/universal-translator",
+     "github.com/go-playground/validator/v10",
+     "github.com/go-redis/redis",
+     "github.com/goccy/go-json",
+     "github.com/godbus/dbus",
+     "github.com/golang/protobuf",
+     "github.com/gorilla/websocket",
+     "github.com/gsterjov/go-libsecret",
+     "github.com/holiman/uint256",
+     "github.com/influxdata/influxdb1-client",
+     "github.com/jackc/chunkreader/v2",
+     "github.com/jackc/pgconn",
+     "github.com/jackc/pgio",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgproto3/v2",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgtype",
+     "github.com/jackc/pgx/v4",
+     "github.com/jackc/puddle",
+     "github.com/json-iterator/go",
+     "github.com/klauspost/cpuid/v2",
+     "github.com/leodido/go-urn",
+     "github.com/machinebox/graphql",
+     "github.com/matryer/is",
+     "github.com/mattn/go-isatty",
+     "github.com/mattn/go-runewidth",
+     "github.com/mmcloughlin/addchain",
+     "github.com/modern-go/concurrent",
+     "github.com/modern-go/reflect2",
+     "github.com/mtibben/percent",
+     "github.com/nxadm/tail",
+     "github.com/onsi/ginkgo",
+     "github.com/pelletier/go-toml/v2",
+     "github.com/pkg/errors",
+     "github.com/pmezard/go-difflib",
+     "github.com/shirou/gopsutil",
+     "github.com/shopspring/decimal",
+     "github.com/stretchr/objx",
+     "github.com/supranational/blst",
+     "github.com/tidwall/gjson",
+     "github.com/tidwall/match",
+     "github.com/tidwall/pretty",
+     "github.com/tkanos/gonfig",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/twitchyliquid64/golang-asm",
+     "github.com/ugorji/go/codec",
+     "github.com/yusufpapurcu/wmi",
+     "github.com/zekroTJA/timedmap",
+     "golang.org/x/arch",
+     "golang.org/x/crypto",
+     "golang.org/x/net",
+     "golang.org/x/sync",
+     "golang.org/x/sys",
+     "golang.org/x/term",
+     "golang.org/x/text"
+    ]
+   },
+   {
+    "path": "cmd/http/randomnessServer/go.mod",
+    "kind": "dep",
+    "blob_sha": "cb9a372d91001ceb34efc65f5fe87f89301116e6",
+    "ecosystem": "go",
+    "bytes": 1050,
+    "names": [
+     "github.com/diadata-org/diadata"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/deckarep/golang-set",
+     "github.com/ethereum/go-ethereum",
+     "github.com/go-ole/go-ole",
+     "github.com/go-stack/stack",
+     "github.com/gorilla/websocket",
+     "github.com/pkg/errors",
+     "github.com/shirou/gopsutil",
+     "github.com/sirupsen/logrus",
+     "github.com/tidwall/gjson",
+     "github.com/tidwall/match",
+     "github.com/tidwall/pretty",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "golang.org/x/crypto",
+     "golang.org/x/sys",
+     "gopkg.in/natefinch/npipe.v2"
+    ]
+   },
+   {
+    "path": "cmd/http/restServer/go.mod",
+    "kind": "dep",
+    "blob_sha": "02873501a66818052698ce83ebcf28c8b187d6af",
+    "ecosystem": "go",
+    "bytes": 4115,
+    "names": [
+     "github.com/appleboy/gin-jwt/v2",
+     "github.com/diadata-org/diadata",
+     "github.com/gin-contrib/cache",
+     "github.com/gin-gonic/contrib",
+     "github.com/gin-gonic/gin",
+     "github.com/sirupsen/logrus"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/bradfitz/gomemcache",
+     "github.com/btcsuite/btcd",
+     "github.com/btcsuite/btcd/btcec/v2",
+     "github.com/bytedance/sonic",
+     "github.com/chenzhuoyu/base64x",
+     "github.com/chenzhuoyu/iasm",
+     "github.com/deckarep/golang-set",
+     "github.com/decred/dcrd/dcrec/secp256k1/v4",
+     "github.com/dgrijalva/jwt-go",
+     "github.com/ethereum/go-ethereum",
+     "github.com/gabriel-vasile/mimetype",
+     "github.com/ghodss/yaml",
+     "github.com/gin-contrib/sse",
+     "github.com/go-ole/go-ole",
+     "github.com/go-playground/locales",
+     "github.com/go-playground/universal-translator",
+     "github.com/go-playground/validator/v10",
+     "github.com/go-redis/redis",
+     "github.com/go-stack/stack",
+     "github.com/goccy/go-json",
+     "github.com/gomodule/redigo",
+     "github.com/gorilla/websocket",
+     "github.com/influxdata/influxdb1-client",
+     "github.com/jackc/chunkreader/v2",
+     "github.com/jackc/pgconn",
+     "github.com/jackc/pgio",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgproto3/v2",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgtype",
+     "github.com/jackc/pgx/v4",
+     "github.com/jackc/puddle",
+     "github.com/json-iterator/go",
+     "github.com/klauspost/compress",
+     "github.com/klauspost/cpuid/v2",
+     "github.com/leodido/go-urn",
+     "github.com/lib/pq",
+     "github.com/machinebox/graphql",
+     "github.com/mattn/go-isatty",
+     "github.com/mattn/go-runewidth",
+     "github.com/memcachier/mc",
+     "github.com/modern-go/concurrent",
+     "github.com/modern-go/reflect2",
+     "github.com/onsi/ginkgo",
+     "github.com/pelletier/go-toml/v2",
+     "github.com/pierrec/lz4/v4",
+     "github.com/pkg/errors",
+     "github.com/robfig/go-cache",
+     "github.com/segmentio/kafka-go",
+     "github.com/shirou/gopsutil",
+     "github.com/shopspring/decimal",
+     "github.com/tidwall/gjson",
+     "github.com/tidwall/match",
+     "github.com/tidwall/pretty",
+     "github.com/tkanos/gonfig",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/twitchyliquid64/golang-asm",
+     "github.com/ugorji/go/codec",
+     "github.com/zekroTJA/timedmap",
+     "golang.org/x/arch",
+     "golang.org/x/crypto",
+     "golang.org/x/net",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "google.golang.org/protobuf",
+     "gopkg.in/natefinch/npipe.v2",
+     "gopkg.in/yaml.v2",
+     "gopkg.in/yaml.v3"
+    ]
+   },
+   {
+    "path": "cmd/http/snapshotServer/go.mod",
+    "kind": "dep",
+    "blob_sha": "6dc6f4f27ea4538a833e4607667c0f964ae75888",
+    "ecosystem": "go",
+    "bytes": 2793,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/gin-gonic/gin",
+     "github.com/lib/pq"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/bytedance/sonic",
+     "github.com/chenzhuoyu/base64x",
+     "github.com/deckarep/golang-set",
+     "github.com/ethereum/go-ethereum",
+     "github.com/gabriel-vasile/mimetype",
+     "github.com/gin-contrib/sse",
+     "github.com/go-ole/go-ole",
+     "github.com/go-playground/locales",
+     "github.com/go-playground/universal-translator",
+     "github.com/go-playground/validator/v10",
+     "github.com/go-redis/redis",
+     "github.com/go-stack/stack",
+     "github.com/goccy/go-json",
+     "github.com/gorilla/websocket",
+     "github.com/influxdata/influxdb1-client",
+     "github.com/jackc/chunkreader/v2",
+     "github.com/jackc/pgconn",
+     "github.com/jackc/pgio",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgproto3/v2",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgtype",
+     "github.com/jackc/pgx/v4",
+     "github.com/jackc/puddle",
+     "github.com/json-iterator/go",
+     "github.com/klauspost/cpuid/v2",
+     "github.com/leodido/go-urn",
+     "github.com/mattn/go-isatty",
+     "github.com/modern-go/concurrent",
+     "github.com/modern-go/reflect2",
+     "github.com/pelletier/go-toml/v2",
+     "github.com/pkg/errors",
+     "github.com/shirou/gopsutil",
+     "github.com/sirupsen/logrus",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/twitchyliquid64/golang-asm",
+     "github.com/ugorji/go/codec",
+     "golang.org/x/arch",
+     "golang.org/x/crypto",
+     "golang.org/x/net",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "google.golang.org/protobuf",
+     "gopkg.in/natefinch/npipe.v2",
+     "gopkg.in/yaml.v3"
+    ]
+   },
+   {
+    "path": "cmd/keymanagement/k8sbridge/go.mod",
+    "kind": "dep",
+    "blob_sha": "33b2baecd316efd6ed40b0b2178bb6d2e3ae04a9",
+    "ecosystem": "go",
+    "bytes": 3269,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/sirupsen/logrus",
+     "google.golang.org/grpc",
+     "k8s.io/api",
+     "k8s.io/apimachinery",
+     "k8s.io/client-go"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/davecgh/go-spew",
+     "github.com/deckarep/golang-set",
+     "github.com/emicklei/go-restful/v3",
+     "github.com/ethereum/go-ethereum",
+     "github.com/ghodss/yaml",
+     "github.com/go-logr/logr",
+     "github.com/go-ole/go-ole",
+     "github.com/go-openapi/jsonpointer",
+     "github.com/go-openapi/jsonreference",
+     "github.com/go-openapi/swag",
+     "github.com/go-stack/stack",
+     "github.com/gogo/protobuf",
+     "github.com/golang/protobuf",
+     "github.com/google/gnostic",
+     "github.com/google/go-cmp",
+     "github.com/google/gofuzz",
+     "github.com/google/uuid",
+     "github.com/gorilla/websocket",
+     "github.com/imdario/mergo",
+     "github.com/josharian/intern",
+     "github.com/json-iterator/go",
+     "github.com/mailru/easyjson",
+     "github.com/modern-go/concurrent",
+     "github.com/modern-go/reflect2",
+     "github.com/munnerz/goautoneg",
+     "github.com/pkg/errors",
+     "github.com/shirou/gopsutil",
+     "github.com/spf13/pflag",
+     "github.com/tidwall/gjson",
+     "github.com/tidwall/match",
+     "github.com/tidwall/pretty",
+     "github.com/tkanos/gonfig",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/zekroTJA/timedmap",
+     "golang.org/x/crypto",
+     "golang.org/x/net",
+     "golang.org/x/oauth2",
+     "golang.org/x/sys",
+     "golang.org/x/term",
+     "golang.org/x/text",
+     "golang.org/x/time",
+     "google.golang.org/appengine",
+     "google.golang.org/genproto",
+     "google.golang.org/protobuf",
+     "gopkg.in/inf.v0",
+     "gopkg.in/natefinch/npipe.v2",
+     "gopkg.in/yaml.v2",
+     "gopkg.in/yaml.v3",
+     "k8s.io/klog/v2",
+     "k8s.io/kube-openapi",
+     "k8s.io/utils",
+     "sigs.k8s.io/json",
+     "sigs.k8s.io/structured-merge-diff/v4",
+     "sigs.k8s.io/yaml"
+    ]
+   },
+   {
+    "path": "cmd/keymanagement/signer/go.mod",
+    "kind": "dep",
+    "blob_sha": "3a277cef1e62ab56573908f8a6800cf9381dad85",
+    "ecosystem": "go",
+    "bytes": 1755,
+    "names": [
+     "github.com/99designs/keyring",
+     "github.com/ethereum/go-ethereum",
+     "github.com/sirupsen/logrus",
+     "github.com/diadata-org/diadata",
+     "google.golang.org/grpc"
+    ],
+    "dev": [
+     "github.com/99designs/go-keychain",
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/danieljoos/wincred",
+     "github.com/deckarep/golang-set",
+     "github.com/dvsekhvalnov/jose2go",
+     "github.com/go-ole/go-ole",
+     "github.com/go-stack/stack",
+     "github.com/godbus/dbus",
+     "github.com/golang/protobuf",
+     "github.com/gorilla/websocket",
+     "github.com/gsterjov/go-libsecret",
+     "github.com/mtibben/percent",
+     "github.com/pkg/errors",
+     "github.com/shirou/gopsutil",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "golang.org/x/crypto",
+     "golang.org/x/net",
+     "golang.org/x/sys",
+     "golang.org/x/term",
+     "golang.org/x/text",
+     "google.golang.org/genproto",
+     "google.golang.org/protobuf",
+     "gopkg.in/natefinch/npipe.v2"
+    ]
+   },
+   {
+    "path": "cmd/services/blockchainservice/go.mod",
+    "kind": "dep",
+    "blob_sha": "6a0502e4ca8f99f9d6548f7ebb006f65c6f12546",
+    "ecosystem": "go",
+    "bytes": 2192,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/sirupsen/logrus"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/deckarep/golang-set",
+     "github.com/ethereum/go-ethereum",
+     "github.com/ghodss/yaml",
+     "github.com/go-ole/go-ole",
+     "github.com/go-redis/redis",
+     "github.com/go-stack/stack",
+     "github.com/gorilla/websocket",
+     "github.com/influxdata/influxdb1-client",
+     "github.com/jackc/chunkreader/v2",
+     "github.com/jackc/pgconn",
+     "github.com/jackc/pgio",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgproto3/v2",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgtype",
+     "github.com/jackc/pgx/v4",
+     "github.com/jackc/puddle",
+     "github.com/kr/pretty",
+     "github.com/lib/pq",
+     "github.com/mattn/go-runewidth",
+     "github.com/onsi/ginkgo",
+     "github.com/onsi/gomega",
+     "github.com/pkg/errors",
+     "github.com/rogpeppe/go-internal",
+     "github.com/rs/cors",
+     "github.com/shirou/gopsutil",
+     "github.com/stretchr/objx",
+     "github.com/tkanos/gonfig",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/zekroTJA/timedmap",
+     "golang.org/x/crypto",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "gopkg.in/natefinch/npipe.v2",
+     "gopkg.in/yaml.v2"
+    ]
+   },
+   {
+    "path": "cmd/services/filtersBlockService/go.mod",
+    "kind": "dep",
+    "blob_sha": "3d37562ecd4d675c6776f4d6b426762299244feb",
+    "ecosystem": "go",
+    "bytes": 2707,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/segmentio/kafka-go",
+     "github.com/sirupsen/logrus"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/btcsuite/btcd/btcec/v2",
+     "github.com/cnf/structhash",
+     "github.com/deckarep/golang-set",
+     "github.com/decred/dcrd/dcrec/secp256k1/v4",
+     "github.com/ethereum/go-ethereum",
+     "github.com/ghodss/yaml",
+     "github.com/go-ole/go-ole",
+     "github.com/go-redis/redis",
+     "github.com/go-stack/stack",
+     "github.com/gorilla/websocket",
+     "github.com/influxdata/influxdb1-client",
+     "github.com/jackc/chunkreader/v2",
+     "github.com/jackc/pgconn",
+     "github.com/jackc/pgio",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgproto3/v2",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgtype",
+     "github.com/jackc/pgx/v4",
+     "github.com/jackc/puddle",
+     "github.com/klauspost/compress",
+     "github.com/kr/text",
+     "github.com/lib/pq",
+     "github.com/machinebox/graphql",
+     "github.com/mattn/go-runewidth",
+     "github.com/onsi/ginkgo",
+     "github.com/pierrec/lz4/v4",
+     "github.com/pkg/errors",
+     "github.com/shirou/gopsutil",
+     "github.com/shopspring/decimal",
+     "github.com/stretchr/objx",
+     "github.com/tidwall/gjson",
+     "github.com/tidwall/match",
+     "github.com/tidwall/pretty",
+     "github.com/tkanos/gonfig",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/zekroTJA/timedmap",
+     "golang.org/x/crypto",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "gopkg.in/natefinch/npipe.v2",
+     "gopkg.in/yaml.v2"
+    ]
+   },
+   {
+    "path": "cmd/services/nftCollectionService/go.mod",
+    "kind": "dep",
+    "blob_sha": "494555c3ea0b25d3701ebddcfc5a13e73cc33ad3",
+    "ecosystem": "go",
+    "bytes": 238,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/jackc/pgconn",
+     "github.com/sirupsen/logrus"
+    ]
+   },
+   {
+    "path": "cmd/services/oracleconfigsync/go.mod",
+    "kind": "dep",
+    "blob_sha": "c7c54a1366bc6d20d5aea842277d2ff0a14cc115",
+    "ecosystem": "go",
+    "bytes": 1880,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/sirupsen/logrus"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/deckarep/golang-set",
+     "github.com/ethereum/go-ethereum",
+     "github.com/ghodss/yaml",
+     "github.com/go-ole/go-ole",
+     "github.com/go-redis/redis",
+     "github.com/go-stack/stack",
+     "github.com/gorilla/websocket",
+     "github.com/influxdata/influxdb1-client",
+     "github.com/jackc/chunkreader/v2",
+     "github.com/jackc/pgconn",
+     "github.com/jackc/pgio",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgproto3/v2",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgtype",
+     "github.com/jackc/pgx/v4",
+     "github.com/jackc/puddle",
+     "github.com/pkg/errors",
+     "github.com/shirou/gopsutil",
+     "github.com/tidwall/gjson",
+     "github.com/tidwall/match",
+     "github.com/tidwall/pretty",
+     "github.com/tkanos/gonfig",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/zekroTJA/timedmap",
+     "golang.org/x/crypto",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "gopkg.in/natefinch/npipe.v2",
+     "gopkg.in/yaml.v2"
+    ]
+   },
+   {
+    "path": "cmd/services/pairDiscoveryService/go.mod",
+    "kind": "dep",
+    "blob_sha": "eeaa34463765a43bac6dc50f8e37a4f8473c20eb",
+    "ecosystem": "go",
+    "bytes": 9625,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/sirupsen/logrus",
+     "github.com/tkanos/gonfig"
+    ],
+    "dev": [
+     "filippo.io/edwards25519",
+     "github.com/99designs/go-keychain",
+     "github.com/99designs/keyring",
+     "github.com/ChainSafe/go-schnorrkel",
+     "github.com/DataDog/zstd",
+     "github.com/Kucoin/kucoin-go-sdk",
+     "github.com/OneOfOne/xxhash",
+     "github.com/StackExchange/wmi",
+     "github.com/adshao/go-binance/v2",
+     "github.com/andres-erbsen/clock",
+     "github.com/armon/go-metrics",
+     "github.com/aybabtme/rgbterm",
+     "github.com/beldur/kraken-go-api-client",
+     "github.com/beorn7/perks",
+     "github.com/bgentry/speakeasy",
+     "github.com/bitfinexcom/bitfinex-api-go",
+     "github.com/bitly/go-simplejson",
+     "github.com/blendle/zapdriver",
+     "github.com/btcsuite/btcd",
+     "github.com/btcsuite/btcd/btcec/v2",
+     "github.com/btcsuite/btcutil",
+     "github.com/buger/jsonparser",
+     "github.com/cespare/xxhash",
+     "github.com/cespare/xxhash/v2",
+     "github.com/confio/ics23/go",
+     "github.com/cosmos/btcutil",
+     "github.com/cosmos/cosmos-sdk",
+     "github.com/cosmos/go-bip39",
+     "github.com/cosmos/iavl",
+     "github.com/cosmos/ibc-go/v3",
+     "github.com/cosmos/ledger-cosmos-go",
+     "github.com/cosmos/ledger-go",
+     "github.com/cryptwire/go-binance/v2",
+     "github.com/danieljoos/wincred",
+     "github.com/davecgh/go-spew",
+     "github.com/deckarep/golang-set",
+     "github.com/decred/dcrd/dcrec/secp256k1/v4",
+     "github.com/dgraph-io/badger/v2",
+     "github.com/dgraph-io/ristretto",
+     "github.com/dgryski/go-farm",
+     "github.com/dustin/go-humanize",
+     "github.com/dvsekhvalnov/jose2go",
+     "github.com/ethereum/go-ethereum",
+     "github.com/fatih/color",
+     "github.com/fatih/structs",
+     "github.com/fsnotify/fsnotify",
+     "github.com/gagliardetto/binary",
+     "github.com/gagliardetto/metaplex-go",
+     "github.com/gagliardetto/solana-go",
+     "github.com/gagliardetto/treeout",
+     "github.com/ghodss/yaml",
+     "github.com/go-kit/kit",
+     "github.com/go-kit/log",
+     "github.com/go-logfmt/logfmt",
+     "github.com/go-ole/go-ole",
+     "github.com/go-redis/redis",
+     "github.com/go-resty/resty/v2",
+     "github.com/go-stack/stack",
+     "github.com/godbus/dbus",
+     "github.com/gogo/protobuf",
+     "github.com/golang/protobuf",
+     "github.com/golang/snappy",
+     "github.com/google/btree",
+     "github.com/google/uuid",
+     "github.com/gorilla/mux",
+     "github.com/gorilla/rpc",
+     "github.com/gorilla/websocket",
+     "github.com/grpc-ecosystem/go-grpc-middleware",
+     "github.com/grpc-ecosystem/grpc-gateway",
+     "github.com/grpc-ecosystem/grpc-gateway/v2",
+     "github.com/gsterjov/go-libsecret",
+     "github.com/gtank/merlin",
+     "github.com/gtank/ristretto255",
+     "github.com/hashicorp/go-immutable-radix",
+     "github.com/hashicorp/golang-lru",
+     "github.com/hashicorp/hcl",
+     "github.com/hdevalence/ed25519consensus",
+     "github.com/inconshreveable/mousetrap",
+     "github.com/influxdata/influxdb1-client",
+     "github.com/jackc/chunkreader/v2"
+    ]
+   },
+   {
+    "path": "cmd/services/supplyService/go.mod",
+    "kind": "dep",
+    "blob_sha": "ab9c7c14a4a305dd4b1d4bac62866a3be781a5b0",
+    "ecosystem": "go",
+    "bytes": 2381,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/sirupsen/logrus"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/deckarep/golang-set",
+     "github.com/ethereum/go-ethereum",
+     "github.com/ghodss/yaml",
+     "github.com/go-ole/go-ole",
+     "github.com/go-redis/redis",
+     "github.com/go-stack/stack",
+     "github.com/google/uuid",
+     "github.com/gorilla/websocket",
+     "github.com/influxdata/influxdb1-client",
+     "github.com/jackc/chunkreader/v2",
+     "github.com/jackc/pgconn",
+     "github.com/jackc/pgio",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgproto3/v2",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgtype",
+     "github.com/jackc/pgx/v4",
+     "github.com/jackc/puddle",
+     "github.com/machinebox/graphql",
+     "github.com/matryer/is",
+     "github.com/mattn/go-runewidth",
+     "github.com/nxadm/tail",
+     "github.com/pkg/errors",
+     "github.com/rjeczalik/notify",
+     "github.com/shirou/gopsutil",
+     "github.com/shopspring/decimal",
+     "github.com/tidwall/gjson",
+     "github.com/tidwall/match",
+     "github.com/tidwall/pretty",
+     "github.com/tkanos/gonfig",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/zekroTJA/timedmap",
+     "golang.org/x/crypto",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "gopkg.in/natefinch/npipe.v2",
+     "gopkg.in/yaml.v2"
+    ]
+   },
+   {
+    "path": "cmd/services/tradesBlockService/go.mod",
+    "kind": "dep",
+    "blob_sha": "332a9e4e46b7405c1fc132350061afe2801b508c",
+    "ecosystem": "go",
+    "bytes": 9696,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/segmentio/kafka-go",
+     "github.com/sirupsen/logrus"
+    ],
+    "dev": [
+     "filippo.io/edwards25519",
+     "github.com/99designs/go-keychain",
+     "github.com/99designs/keyring",
+     "github.com/ChainSafe/go-schnorrkel",
+     "github.com/DataDog/zstd",
+     "github.com/Kucoin/kucoin-go-sdk",
+     "github.com/OneOfOne/xxhash",
+     "github.com/StackExchange/wmi",
+     "github.com/adshao/go-binance/v2",
+     "github.com/andres-erbsen/clock",
+     "github.com/armon/go-metrics",
+     "github.com/aybabtme/rgbterm",
+     "github.com/beldur/kraken-go-api-client",
+     "github.com/beorn7/perks",
+     "github.com/bgentry/speakeasy",
+     "github.com/bitfinexcom/bitfinex-api-go",
+     "github.com/bitly/go-simplejson",
+     "github.com/blendle/zapdriver",
+     "github.com/btcsuite/btcd",
+     "github.com/btcsuite/btcd/btcec/v2",
+     "github.com/btcsuite/btcutil",
+     "github.com/buger/jsonparser",
+     "github.com/cespare/xxhash",
+     "github.com/cespare/xxhash/v2",
+     "github.com/cnf/structhash",
+     "github.com/confio/ics23/go",
+     "github.com/cosmos/btcutil",
+     "github.com/cosmos/cosmos-sdk",
+     "github.com/cosmos/go-bip39",
+     "github.com/cosmos/iavl",
+     "github.com/cosmos/ibc-go/v3",
+     "github.com/cosmos/ledger-cosmos-go",
+     "github.com/cosmos/ledger-go",
+     "github.com/cryptwire/go-binance/v2",
+     "github.com/danieljoos/wincred",
+     "github.com/davecgh/go-spew",
+     "github.com/deckarep/golang-set",
+     "github.com/decred/dcrd/dcrec/secp256k1/v4",
+     "github.com/dgraph-io/badger/v2",
+     "github.com/dgraph-io/ristretto",
+     "github.com/dgryski/go-farm",
+     "github.com/dustin/go-humanize",
+     "github.com/dvsekhvalnov/jose2go",
+     "github.com/ethereum/go-ethereum",
+     "github.com/fatih/color",
+     "github.com/fatih/structs",
+     "github.com/fsnotify/fsnotify",
+     "github.com/gagliardetto/binary",
+     "github.com/gagliardetto/metaplex-go",
+     "github.com/gagliardetto/solana-go",
+     "github.com/gagliardetto/treeout",
+     "github.com/ghodss/yaml",
+     "github.com/go-kit/kit",
+     "github.com/go-kit/log",
+     "github.com/go-logfmt/logfmt",
+     "github.com/go-ole/go-ole",
+     "github.com/go-redis/redis",
+     "github.com/go-resty/resty/v2",
+     "github.com/go-stack/stack",
+     "github.com/godbus/dbus",
+     "github.com/gogo/protobuf",
+     "github.com/golang/protobuf",
+     "github.com/golang/snappy",
+     "github.com/google/btree",
+     "github.com/google/uuid",
+     "github.com/gorilla/mux",
+     "github.com/gorilla/rpc",
+     "github.com/gorilla/websocket",
+     "github.com/grpc-ecosystem/go-grpc-middleware",
+     "github.com/grpc-ecosystem/grpc-gateway",
+     "github.com/grpc-ecosystem/grpc-gateway/v2",
+     "github.com/gsterjov/go-libsecret",
+     "github.com/gtank/merlin",
+     "github.com/gtank/ristretto255",
+     "github.com/hashicorp/go-immutable-radix",
+     "github.com/hashicorp/golang-lru",
+     "github.com/hashicorp/hcl",
+     "github.com/hdevalence/ed25519consensus",
+     "github.com/inconshreveable/mousetrap",
+     "github.com/influxdata/influxdb1-client"
+    ]
+   },
+   {
+    "path": "cmd/services/tradesEstimationService/go.mod",
+    "kind": "dep",
+    "blob_sha": "1e4faa598e44d6424c5338a301ab04643d76ee41",
+    "ecosystem": "go",
+    "bytes": 205,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/segmentio/kafka-go",
+     "github.com/sirupsen/logrus"
+    ]
+   },
+   {
+    "path": "cmd/services/volumeservice/go.mod",
+    "kind": "dep",
+    "blob_sha": "03a20b4809b3a481267079d0509b23e234413c88",
+    "ecosystem": "go",
+    "bytes": 250,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/jasonlvhit/gocron",
+     "github.com/prometheus/common"
+    ],
+    "dev": [
+     "github.com/sirupsen/logrus"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaAzosNavOracleService/go.mod",
+    "kind": "dep",
+    "blob_sha": "4d272ffe501eabe3e75cef952274b417c0ab9eac",
+    "ecosystem": "go",
+    "bytes": 2264,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/machinebox/graphql",
+     "github.com/tidwall/gjson"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/btcsuite/btcd/btcec/v2",
+     "github.com/deckarep/golang-set",
+     "github.com/decred/dcrd/dcrec/secp256k1/v4",
+     "github.com/ghodss/yaml",
+     "github.com/go-ole/go-ole",
+     "github.com/go-redis/redis",
+     "github.com/go-stack/stack",
+     "github.com/google/uuid",
+     "github.com/gorilla/websocket",
+     "github.com/influxdata/influxdb1-client",
+     "github.com/jackc/chunkreader/v2",
+     "github.com/jackc/pgconn",
+     "github.com/jackc/pgio",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgproto3/v2",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgtype",
+     "github.com/jackc/pgx/v4",
+     "github.com/jackc/puddle",
+     "github.com/pkg/errors",
+     "github.com/rjeczalik/notify",
+     "github.com/shirou/gopsutil",
+     "github.com/shopspring/decimal",
+     "github.com/sirupsen/logrus",
+     "github.com/tidwall/match",
+     "github.com/tidwall/pretty",
+     "github.com/tkanos/gonfig",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/zekroTJA/timedmap",
+     "golang.org/x/crypto",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "gopkg.in/natefinch/npipe.v2",
+     "gopkg.in/yaml.v2"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaDamFinanceOracleService/go.mod",
+    "kind": "dep",
+    "blob_sha": "fb1a1e73c51c2b5a9ac446404c1bf3febcbf374e",
+    "ecosystem": "go",
+    "bytes": 185,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaDenarioOracleService/go.mod",
+    "kind": "dep",
+    "blob_sha": "6d884381da7cfda5a526694f44159817e34ea23a",
+    "ecosystem": "go",
+    "bytes": 415,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/google/uuid",
+     "github.com/machinebox/graphql",
+     "github.com/tidwall/gjson"
+    ],
+    "dev": [
+     "github.com/matryer/is"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaDenarioPorOracleService/go.mod",
+    "kind": "dep",
+    "blob_sha": "6bdf70f72ac527219417669c4260268d4f672b09",
+    "ecosystem": "go",
+    "bytes": 418,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/google/uuid",
+     "github.com/machinebox/graphql",
+     "github.com/tidwall/gjson"
+    ],
+    "dev": [
+     "github.com/matryer/is"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaFxOracleV2MultiupdateService/go.mod",
+    "kind": "dep",
+    "blob_sha": "1d8c29e173bd119560ff47e3cd66c74e1598358d",
+    "ecosystem": "go",
+    "bytes": 2272,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/machinebox/graphql",
+     "github.com/tidwall/gjson"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/btcsuite/btcd/btcec/v2",
+     "github.com/deckarep/golang-set",
+     "github.com/decred/dcrd/dcrec/secp256k1/v4",
+     "github.com/ghodss/yaml",
+     "github.com/go-ole/go-ole",
+     "github.com/go-redis/redis",
+     "github.com/go-stack/stack",
+     "github.com/google/uuid",
+     "github.com/gorilla/websocket",
+     "github.com/influxdata/influxdb1-client",
+     "github.com/jackc/chunkreader/v2",
+     "github.com/jackc/pgconn",
+     "github.com/jackc/pgio",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgproto3/v2",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgtype",
+     "github.com/jackc/pgx/v4",
+     "github.com/jackc/puddle",
+     "github.com/pkg/errors",
+     "github.com/rjeczalik/notify",
+     "github.com/shirou/gopsutil",
+     "github.com/shopspring/decimal",
+     "github.com/sirupsen/logrus",
+     "github.com/tidwall/match",
+     "github.com/tidwall/pretty",
+     "github.com/tkanos/gonfig",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/zekroTJA/timedmap",
+     "golang.org/x/crypto",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "gopkg.in/natefinch/npipe.v2",
+     "gopkg.in/yaml.v2"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaOracleV2AstarService/go.mod",
+    "kind": "dep",
+    "blob_sha": "238b20cb50b2f1f87eb7661c6f55b1972c3d0573",
+    "ecosystem": "go",
+    "bytes": 216,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/tidwall/gjson"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaOracleV2BobaService/go.mod",
+    "kind": "dep",
+    "blob_sha": "73dcabe7969fe5e3d46831e5fd9251e95f97cb30",
+    "ecosystem": "go",
+    "bytes": 261,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/machinebox/graphql"
+    ],
+    "dev": [
+     "github.com/matryer/is"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaOracleV2MultiupdateService/go.mod",
+    "kind": "dep",
+    "blob_sha": "7905672eeb6bc674e3d6bf291a54ab7751f996ef",
+    "ecosystem": "go",
+    "bytes": 2272,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/machinebox/graphql",
+     "github.com/tidwall/gjson"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/btcsuite/btcd/btcec/v2",
+     "github.com/deckarep/golang-set",
+     "github.com/decred/dcrd/dcrec/secp256k1/v4",
+     "github.com/ghodss/yaml",
+     "github.com/go-ole/go-ole",
+     "github.com/go-redis/redis",
+     "github.com/go-stack/stack",
+     "github.com/google/uuid",
+     "github.com/gorilla/websocket",
+     "github.com/influxdata/influxdb1-client",
+     "github.com/jackc/chunkreader/v2",
+     "github.com/jackc/pgconn",
+     "github.com/jackc/pgio",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgproto3/v2",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgtype",
+     "github.com/jackc/pgx/v4",
+     "github.com/jackc/puddle",
+     "github.com/pkg/errors",
+     "github.com/rjeczalik/notify",
+     "github.com/shirou/gopsutil",
+     "github.com/shopspring/decimal",
+     "github.com/sirupsen/logrus",
+     "github.com/tidwall/match",
+     "github.com/tidwall/pretty",
+     "github.com/tkanos/gonfig",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/zekroTJA/timedmap",
+     "golang.org/x/crypto",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "gopkg.in/natefinch/npipe.v2",
+     "gopkg.in/yaml.v2"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaOracleV2Service/go.mod",
+    "kind": "dep",
+    "blob_sha": "60d35892248c3e280cacbdc786fbb70e26a6488e",
+    "ecosystem": "go",
+    "bytes": 257,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/machinebox/graphql"
+    ],
+    "dev": [
+     "github.com/matryer/is"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaOracleV2WanchainService/go.mod",
+    "kind": "dep",
+    "blob_sha": "20dd1e214024e51e4871926b94505411693035be",
+    "ecosystem": "go",
+    "bytes": 185,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaParallelOracleService/go.mod",
+    "kind": "dep",
+    "blob_sha": "1652242ded8e7aa60e6e56ee34a6c3e8c45485ab",
+    "ecosystem": "go",
+    "bytes": 2265,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/machinebox/graphql",
+     "github.com/tidwall/gjson"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/btcsuite/btcd/btcec/v2",
+     "github.com/deckarep/golang-set",
+     "github.com/decred/dcrd/dcrec/secp256k1/v4",
+     "github.com/ghodss/yaml",
+     "github.com/go-ole/go-ole",
+     "github.com/go-redis/redis",
+     "github.com/go-stack/stack",
+     "github.com/google/uuid",
+     "github.com/gorilla/websocket",
+     "github.com/influxdata/influxdb1-client",
+     "github.com/jackc/chunkreader/v2",
+     "github.com/jackc/pgconn",
+     "github.com/jackc/pgio",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgproto3/v2",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgtype",
+     "github.com/jackc/pgx/v4",
+     "github.com/jackc/puddle",
+     "github.com/pkg/errors",
+     "github.com/rjeczalik/notify",
+     "github.com/shirou/gopsutil",
+     "github.com/shopspring/decimal",
+     "github.com/sirupsen/logrus",
+     "github.com/tidwall/match",
+     "github.com/tidwall/pretty",
+     "github.com/tkanos/gonfig",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/zekroTJA/timedmap",
+     "golang.org/x/crypto",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "gopkg.in/natefinch/npipe.v2",
+     "gopkg.in/yaml.v2"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaPrimeLiquidityOracleService/go.mod",
+    "kind": "dep",
+    "blob_sha": "64f674f8f4f5d1e3351f17dea69825663ab69aae",
+    "ecosystem": "go",
+    "bytes": 261,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/machinebox/graphql",
+     "github.com/tidwall/gjson"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaProsperavestOracleService/go.mod",
+    "kind": "dep",
+    "blob_sha": "5ffe5c3c2d8833506eedf413de828b64ab20ec2f",
+    "ecosystem": "go",
+    "bytes": 420,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/google/uuid",
+     "github.com/machinebox/graphql",
+     "github.com/tidwall/gjson"
+    ],
+    "dev": [
+     "github.com/matryer/is"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaSatusdPlusOracleService/go.mod",
+    "kind": "dep",
+    "blob_sha": "ed16db63b197075ad70e18c3fe180c111655649a",
+    "ecosystem": "go",
+    "bytes": 2267,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/machinebox/graphql",
+     "github.com/tidwall/gjson"
+    ],
+    "dev": [
+     "github.com/StackExchange/wmi",
+     "github.com/btcsuite/btcd",
+     "github.com/btcsuite/btcd/btcec/v2",
+     "github.com/deckarep/golang-set",
+     "github.com/decred/dcrd/dcrec/secp256k1/v4",
+     "github.com/ghodss/yaml",
+     "github.com/go-ole/go-ole",
+     "github.com/go-redis/redis",
+     "github.com/go-stack/stack",
+     "github.com/google/uuid",
+     "github.com/gorilla/websocket",
+     "github.com/influxdata/influxdb1-client",
+     "github.com/jackc/chunkreader/v2",
+     "github.com/jackc/pgconn",
+     "github.com/jackc/pgio",
+     "github.com/jackc/pgpassfile",
+     "github.com/jackc/pgproto3/v2",
+     "github.com/jackc/pgservicefile",
+     "github.com/jackc/pgtype",
+     "github.com/jackc/pgx/v4",
+     "github.com/jackc/puddle",
+     "github.com/pkg/errors",
+     "github.com/rjeczalik/notify",
+     "github.com/shirou/gopsutil",
+     "github.com/shopspring/decimal",
+     "github.com/sirupsen/logrus",
+     "github.com/tidwall/match",
+     "github.com/tidwall/pretty",
+     "github.com/tkanos/gonfig",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/zekroTJA/timedmap",
+     "golang.org/x/crypto",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "gopkg.in/natefinch/npipe.v2",
+     "gopkg.in/yaml.v2"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaStarlayOracleService/go.mod",
+    "kind": "dep",
+    "blob_sha": "d3d64d487c3f365a66fb1b5bced73f8d6659965a",
+    "ecosystem": "go",
+    "bytes": 296,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/machinebox/graphql",
+     "github.com/tidwall/gjson"
+    ],
+    "dev": [
+     "github.com/matryer/is"
+    ]
+   },
+   {
+    "path": "cmd/blockchain/ethereum/diaYahooFinanceOracleService/go.mod",
+    "kind": "dep",
+    "blob_sha": "a3356119f24ddf179e8d9f6e1f72e1cb10738dd7",
+    "ecosystem": "go",
+    "bytes": 259,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/ethereum/go-ethereum",
+     "github.com/machinebox/graphql",
+     "github.com/tidwall/gjson"
+    ]
+   },
+   {
+    "path": "cmd/exchange-scrapers/generic-collector/zenlink/go.mod",
+    "kind": "dep",
+    "blob_sha": "b792b732cfa0ab23009ebc8e0f18aef23ea5792b",
+    "ecosystem": "go",
+    "bytes": 9730,
+    "names": [
+     "github.com/diadata-org/diadata",
+     "github.com/segmentio/kafka-go",
+     "github.com/sirupsen/logrus"
+    ],
+    "dev": [
+     "contrib.go.opencensus.io/exporter/stackdriver",
+     "filippo.io/edwards25519",
+     "github.com/99designs/go-keychain",
+     "github.com/99designs/keyring",
+     "github.com/ChainSafe/go-schnorrkel",
+     "github.com/DataDog/zstd",
+     "github.com/Kucoin/kucoin-go-sdk",
+     "github.com/OneOfOne/xxhash",
+     "github.com/StackExchange/wmi",
+     "github.com/adshao/go-binance/v2",
+     "github.com/alexjorgef/go-bittrex",
+     "github.com/alexjorgef/signalr",
+     "github.com/andres-erbsen/clock",
+     "github.com/armon/go-metrics",
+     "github.com/aybabtme/rgbterm",
+     "github.com/beldur/kraken-go-api-client",
+     "github.com/beorn7/perks",
+     "github.com/bgentry/speakeasy",
+     "github.com/bitfinexcom/bitfinex-api-go",
+     "github.com/bitly/go-simplejson",
+     "github.com/blendle/zapdriver",
+     "github.com/btcsuite/btcd",
+     "github.com/buger/jsonparser",
+     "github.com/cespare/xxhash",
+     "github.com/cespare/xxhash/v2",
+     "github.com/confio/ics23/go",
+     "github.com/cosmos/btcutil",
+     "github.com/cosmos/cosmos-sdk",
+     "github.com/cosmos/go-bip39",
+     "github.com/cosmos/iavl",
+     "github.com/cosmos/ibc-go/v3",
+     "github.com/cosmos/ledger-cosmos-go",
+     "github.com/cosmos/ledger-go",
+     "github.com/cryptwire/go-binance/v2",
+     "github.com/danieljoos/wincred",
+     "github.com/davecgh/go-spew",
+     "github.com/deckarep/golang-set",
+     "github.com/dfuse-io/logging",
+     "github.com/dgraph-io/badger/v2",
+     "github.com/dgraph-io/ristretto",
+     "github.com/dgryski/go-farm",
+     "github.com/dustin/go-humanize",
+     "github.com/dvsekhvalnov/jose2go",
+     "github.com/ethereum/go-ethereum",
+     "github.com/fatih/color",
+     "github.com/fatih/structs",
+     "github.com/fsnotify/fsnotify",
+     "github.com/gagliardetto/binary",
+     "github.com/gagliardetto/metaplex-go",
+     "github.com/gagliardetto/solana-go",
+     "github.com/gagliardetto/treeout",
+     "github.com/ghodss/yaml",
+     "github.com/go-kit/kit",
+     "github.com/go-kit/log",
+     "github.com/go-logfmt/logfmt",
+     "github.com/go-ole/go-ole",
+     "github.com/go-redis/redis",
+     "github.com/go-resty/resty/v2",
+     "github.com/go-stack/stack",
+     "github.com/godbus/dbus",
+     "github.com/gogo/protobuf",
+     "github.com/golang/groupcache",
+     "github.com/golang/protobuf",
+     "github.com/golang/snappy",
+     "github.com/google/btree",
+     "github.com/google/uuid",
+     "github.com/gorilla/mux",
+     "github.com/gorilla/rpc",
+     "github.com/gorilla/websocket",
+     "github.com/grpc-ecosystem/go-grpc-middleware",
+     "github.com/grpc-ecosystem/grpc-gateway",
+     "github.com/grpc-ecosystem/grpc-gateway/v2",
+     "github.com/gsterjov/go-libsecret",
+     "github.com/gtank/merlin",
+     "github.com/gtank/ristretto255",
+     "github.com/hashicorp/go-immutable-radix",
+     "github.com/hashicorp/golang-lru",
+     "github.com/hashicorp/hcl",
+     "github.com/hdevalence/ed25519consensus",
+     "github.com/inconshreveable/mousetrap"
+    ]
+   },
+   {
     "path": "build/Dockerfile-assetCollectionService",
     "kind": "image",
     "blob_sha": "1fb7eb794675c1d12a466380efd726226cb9ea06",
@@ -3598,6 +5759,166 @@
     "kind": "image",
     "blob_sha": "9a91c865311154be4dc18bac8ae6beeeb43db272",
     "bytes": 429,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-diaDamFinanceOracleService",
+    "kind": "image",
+    "blob_sha": "315c5d5a54f1f8c7d328ea5d7dafd5d90cb060fd",
+    "bytes": 391,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-diaDenarioOracleService",
+    "kind": "image",
+    "blob_sha": "a74058ae75b877b3b580d32c6cbbea23282072db",
+    "bytes": 377,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-diaDenarioPorOracleService",
+    "kind": "image",
+    "blob_sha": "469bae380a4cbc93c35a73fbd0b54576f4faf9ec",
+    "bytes": 389,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-diaFxOracleV2MultiupdateService",
+    "kind": "image",
+    "blob_sha": "58a2a67414ca446506e63ec4b6507133ea14bfd2",
+    "bytes": 425,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-diaOracleV2AstarService",
+    "kind": "image",
+    "blob_sha": "e8c99f0f79f899036f631c88aeb89d3b5c4fceab",
+    "bytes": 377,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-diaOracleV2BobaService",
+    "kind": "image",
+    "blob_sha": "e488d941704175eedf88d273df85698707458cc2",
+    "bytes": 373,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-diaOracleV2MultiupdateService",
+    "kind": "image",
+    "blob_sha": "d33db1cfb6b6b7a43a498053f30a4d0ec95b4d1f",
+    "bytes": 453,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-diaOracleV2Service",
+    "kind": "image",
+    "blob_sha": "837548d0c9342dc96e6b95fb8a4351197400059e",
+    "bytes": 357,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-diaOracleV2WanchainService",
+    "kind": "image",
+    "blob_sha": "797767effb1f1e434e309e9699fef6439226d6a3",
+    "bytes": 389,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-diaParallelOracleService",
+    "kind": "image",
+    "blob_sha": "28dfc9da81cf6dbb6c12386a5b6d3c5321dabacc",
+    "bytes": 433,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-diaPrimeLiquidityOracleService",
+    "kind": "image",
+    "blob_sha": "b98dfa0d5f8e9ff6d5db2fc991d7e9de781e3c29",
+    "bytes": 405,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-diaProsperavestOracleService",
+    "kind": "image",
+    "blob_sha": "cf55243309df8caba9372b5e449b81d51bd86d11",
+    "bytes": 397,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-diaSatusdPlusOracleService",
+    "kind": "image",
+    "blob_sha": "770a044240d9adc28b88fb58ce568fc3d02004d8",
+    "bytes": 441,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-diaStarlayOracleService",
+    "kind": "image",
+    "blob_sha": "a35df96ebd9e40a49ab04961d8de3bd948be7947",
+    "bytes": 377,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-diaYahooFinanceOracleService",
+    "kind": "image",
+    "blob_sha": "5a70dc94e574a654364bb5f8fab86ed16ddb2cad",
+    "bytes": 397,
+    "images": [
+     "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
+     "gcr.io/distroless/base"
+    ]
+   },
+   {
+    "path": "build/Dockerfile-filtersBlockService",
+    "kind": "image",
+    "blob_sha": "8aeef3e93d6c37ba822d707270b2d5b3b44e4598",
+    "bytes": 386,
     "images": [
      "912394946097.dkr.ecr.eu-west-1.amazonaws.com/nexus/base-image/build:122",
      "gcr.io/distroless/base"
@@ -3724,13 +6045,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T00:48:55Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:43:45Z",
   "default_branch": "main",
   "pushed_at": "2026-10-30",
   "stars": 39,
   "tree": {
    "sha": "625a6e10c66f556fb1c72e2dff53b0252ff64311",
-   "etag": "W/\"b509cc130705da36f6b29e42e0e416a5b25c8efe380fca66187de52fad823417\"",
+   "etag": "W/\"81c7258778ae7c3b011290ff17120293ffe5bc85e1358da876b7fe33050924bd\"",
    "truncated": false,
    "path_count": 1960,
    "matched": [
@@ -3746,6 +6068,54 @@
     "modules/audit/composer.json",
     "modules/currency-context/composer.json",
     "modules/developer-experience/composer.json",
+    "modules/feature-flags/composer.json",
+    "modules/files-media/composer.json",
+    "modules/identity-core-filament/composer.json",
+    "modules/identity-core/composer.json",
+    "modules/identity-socialstream/composer.json",
+    "modules/import-export/composer.json",
+    "modules/integrations/composer.json",
+    "modules/jetstream-bridge/composer.json",
+    "modules/liberu-business-workflow-reconciliation-api/composer.json",
+    "modules/liberu-business-workflow-reconciliation-filament/composer.json",
+    "modules/liberu-business-workflow-reconciliation-livewire/composer.json",
+    "modules/liberu-business-workflow-reconciliation/composer.json",
+    "modules/liberu-executive-insights-api/composer.json",
+    "modules/liberu-executive-insights-filament/composer.json",
+    "modules/liberu-executive-insights-livewire/composer.json",
+    "modules/liberu-executive-insights/composer.json",
+    "modules/liberu-platform-orchestration-api/composer.json",
+    "modules/liberu-platform-orchestration-filament/composer.json",
+    "modules/liberu-platform-orchestration-livewire/composer.json",
+    "modules/liberu-platform-orchestration/composer.json",
+    "modules/liberu-revenue-and-care-orchestration-api/composer.json",
+    "modules/liberu-revenue-and-care-orchestration-filament/composer.json",
+    "modules/liberu-revenue-and-care-orchestration-livewire/composer.json",
+    "modules/liberu-revenue-and-care-orchestration/composer.json",
+    "modules/localization-core-livewire/composer.json",
+    "modules/localization-core/composer.json",
+    "modules/localization-mymemory/composer.json",
+    "modules/module-automation-ai-gateway-api/composer.json",
+    "modules/module-automation-ai-gateway-filament/composer.json",
+    "modules/module-automation-ai-gateway-livewire/composer.json",
+    "modules/module-automation-ai-gateway/composer.json",
+    "modules/module-automation-approvals-api/composer.json",
+    "modules/module-automation-approvals-filament/composer.json",
+    "modules/module-automation-approvals-livewire/composer.json",
+    "modules/module-automation-approvals/composer.json",
+    "modules/module-automation-automation-core-api/composer.json",
+    "modules/module-automation-automation-core-filament/composer.json",
+    "modules/module-automation-automation-core-livewire/composer.json",
+    "modules/module-automation-automation-core/composer.json",
+    "modules/module-automation-connectors-api/composer.json",
+    "modules/module-automation-connectors-filament/composer.json",
+    "modules/module-automation-connectors-livewire/composer.json",
+    "modules/module-automation-connectors/composer.json",
+    "modules/module-automation-data-processing-api/composer.json",
+    "modules/module-automation-data-processing-filament/composer.json",
+    "modules/module-automation-data-processing-livewire/composer.json",
+    "modules/module-automation-data-processing/composer.json",
+    "modules/module-automation-evaluation-api/composer.json",
     "Dockerfile",
     "docker-compose.yml",
     ".github/workflows/docker.yml",
@@ -4044,6 +6414,788 @@
     ]
    },
    {
+    "path": "modules/feature-flags/composer.json",
+    "kind": "dep",
+    "blob_sha": "d2781e8ce69bed500830b339e487999ffe2ab3ea",
+    "ecosystem": "composer",
+    "bytes": 859,
+    "names": [
+     "php",
+     "illuminate/database",
+     "illuminate/support",
+     "liberusoftware/module-manager"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/files-media/composer.json",
+    "kind": "dep",
+    "blob_sha": "24132ef5567e35576fc3e389a34637f579080aa6",
+    "ecosystem": "composer",
+    "bytes": 866,
+    "names": [
+     "php",
+     "illuminate/database",
+     "illuminate/support",
+     "liberusoftware/module-manager"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/identity-core-filament/composer.json",
+    "kind": "dep",
+    "blob_sha": "3680b67da02b666b396992beb5f879003e9f968a",
+    "ecosystem": "composer",
+    "bytes": 847,
+    "names": [
+     "php",
+     "filament/filament",
+     "liberusoftware/roles-permissions"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/identity-core/composer.json",
+    "kind": "dep",
+    "blob_sha": "041423d7fb496b88e537be172153f4b62f6fc8c1",
+    "ecosystem": "composer",
+    "bytes": 818,
+    "names": [
+     "php",
+     "illuminate/support",
+     "liberusoftware/module-manager"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/identity-socialstream/composer.json",
+    "kind": "dep",
+    "blob_sha": "b87d943c5a9d5e3d657ad6df7cfb50c6fb247833",
+    "ecosystem": "composer",
+    "bytes": 1069,
+    "names": [
+     "php",
+     "bursteri/socialstream",
+     "laravel/socialite",
+     "liberusoftware/identity-core",
+     "liberusoftware/module-manager",
+     "liberusoftware/organizations-teams"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/import-export/composer.json",
+    "kind": "dep",
+    "blob_sha": "f7f0153362a9cdacec0f048f5ebaa2283eeea665",
+    "ecosystem": "composer",
+    "bytes": 885,
+    "names": [
+     "php",
+     "illuminate/database",
+     "illuminate/support",
+     "liberusoftware/module-manager"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/integrations/composer.json",
+    "kind": "dep",
+    "blob_sha": "5b6df559bb18cd9ba56d8edd95be3b511ce07274",
+    "ecosystem": "composer",
+    "bytes": 845,
+    "names": [
+     "php",
+     "illuminate/database",
+     "illuminate/support",
+     "liberusoftware/module-manager"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/jetstream-bridge/composer.json",
+    "kind": "dep",
+    "blob_sha": "6985f6231722c78c2132aa5f83b6322330de4265",
+    "ecosystem": "composer",
+    "bytes": 966,
+    "names": [
+     "php",
+     "laravel/fortify",
+     "laravel/jetstream",
+     "liberusoftware/identity-core",
+     "liberusoftware/module-manager",
+     "liberusoftware/organizations-teams"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-business-workflow-reconciliation-api/composer.json",
+    "kind": "dep",
+    "blob_sha": "716103c256fa5fa68204ee2c49701bcae516edd6",
+    "ecosystem": "composer",
+    "bytes": 1125,
+    "names": [
+     "php",
+     "liberusoftware/liberu-business-workflow-reconciliation",
+     "illuminate/http",
+     "illuminate/routing",
+     "laravel/sanctum"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-business-workflow-reconciliation-filament/composer.json",
+    "kind": "dep",
+    "blob_sha": "2c3fade730f05e5d67b718a8179288c2960ddd6d",
+    "ecosystem": "composer",
+    "bytes": 1090,
+    "names": [
+     "php",
+     "liberusoftware/liberu-business-workflow-reconciliation",
+     "filament/filament"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-business-workflow-reconciliation-livewire/composer.json",
+    "kind": "dep",
+    "blob_sha": "88ce6d6de64492b8cf9884ee5bdc903564e1623f",
+    "ecosystem": "composer",
+    "bytes": 1089,
+    "names": [
+     "php",
+     "liberusoftware/liberu-business-workflow-reconciliation",
+     "livewire/livewire"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-business-workflow-reconciliation/composer.json",
+    "kind": "dep",
+    "blob_sha": "5c7e296ca9bcd9777427522afa1721c62c21e046",
+    "ecosystem": "composer",
+    "bytes": 1033,
+    "names": [
+     "php",
+     "illuminate/database",
+     "illuminate/events",
+     "illuminate/support"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-executive-insights-api/composer.json",
+    "kind": "dep",
+    "blob_sha": "53f412547aff21a2ec54dfa2815d46415d59dba6",
+    "ecosystem": "composer",
+    "bytes": 1017,
+    "names": [
+     "php",
+     "liberusoftware/liberu-executive-insights",
+     "illuminate/http",
+     "illuminate/routing",
+     "laravel/sanctum"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-executive-insights-filament/composer.json",
+    "kind": "dep",
+    "blob_sha": "0dbadd8584be60a567bedecd8fab55bead687791",
+    "ecosystem": "composer",
+    "bytes": 982,
+    "names": [
+     "php",
+     "liberusoftware/liberu-executive-insights",
+     "filament/filament"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-executive-insights-livewire/composer.json",
+    "kind": "dep",
+    "blob_sha": "e0b38ec5cf50fff0a41f03cdf53c531bebefff41",
+    "ecosystem": "composer",
+    "bytes": 981,
+    "names": [
+     "php",
+     "liberusoftware/liberu-executive-insights",
+     "livewire/livewire"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-executive-insights/composer.json",
+    "kind": "dep",
+    "blob_sha": "3fee096b7e3dff8f9bb6c2ce45b6a6c5de359c44",
+    "ecosystem": "composer",
+    "bytes": 939,
+    "names": [
+     "php",
+     "illuminate/database",
+     "illuminate/events",
+     "illuminate/support"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-platform-orchestration-api/composer.json",
+    "kind": "dep",
+    "blob_sha": "1d35a67f6223946e441376999945723567cfc747",
+    "ecosystem": "composer",
+    "bytes": 1049,
+    "names": [
+     "php",
+     "liberusoftware/liberu-platform-orchestration",
+     "illuminate/http",
+     "illuminate/routing",
+     "laravel/sanctum"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-platform-orchestration-filament/composer.json",
+    "kind": "dep",
+    "blob_sha": "c8623f1118477a326978152e6c32ac883858d549",
+    "ecosystem": "composer",
+    "bytes": 1014,
+    "names": [
+     "php",
+     "liberusoftware/liberu-platform-orchestration",
+     "filament/filament"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-platform-orchestration-livewire/composer.json",
+    "kind": "dep",
+    "blob_sha": "514a15d8c34e629a5ccd9c3c827d67ee3e50d7a1",
+    "ecosystem": "composer",
+    "bytes": 1013,
+    "names": [
+     "php",
+     "liberusoftware/liberu-platform-orchestration",
+     "livewire/livewire"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-platform-orchestration/composer.json",
+    "kind": "dep",
+    "blob_sha": "1e330f9e7f3889bcc6d5a3b9d7e3b7084627f639",
+    "ecosystem": "composer",
+    "bytes": 967,
+    "names": [
+     "php",
+     "illuminate/database",
+     "illuminate/events",
+     "illuminate/support"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-revenue-and-care-orchestration-api/composer.json",
+    "kind": "dep",
+    "blob_sha": "bafe1bab53ef366f7bdc95fe622eb85293f15338",
+    "ecosystem": "composer",
+    "bytes": 1105,
+    "names": [
+     "php",
+     "liberusoftware/liberu-revenue-and-care-orchestration",
+     "illuminate/http",
+     "illuminate/routing",
+     "laravel/sanctum"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-revenue-and-care-orchestration-filament/composer.json",
+    "kind": "dep",
+    "blob_sha": "c96045c0d0231e2af99ab9d6efbf7bed6b9ea7ed",
+    "ecosystem": "composer",
+    "bytes": 1070,
+    "names": [
+     "php",
+     "liberusoftware/liberu-revenue-and-care-orchestration",
+     "filament/filament"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-revenue-and-care-orchestration-livewire/composer.json",
+    "kind": "dep",
+    "blob_sha": "9ff0a6d5856c268e8043cbc44b7eaf083247863a",
+    "ecosystem": "composer",
+    "bytes": 1069,
+    "names": [
+     "php",
+     "liberusoftware/liberu-revenue-and-care-orchestration",
+     "livewire/livewire"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/liberu-revenue-and-care-orchestration/composer.json",
+    "kind": "dep",
+    "blob_sha": "6d3ccc598e88eb55e4120bc6a857eab49c4843cf",
+    "ecosystem": "composer",
+    "bytes": 1015,
+    "names": [
+     "php",
+     "illuminate/database",
+     "illuminate/events",
+     "illuminate/support"
+    ],
+    "dev": [
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/localization-core-livewire/composer.json",
+    "kind": "dep",
+    "blob_sha": "abdc2cc8bb530604522ecd8e5770f3984633ad72",
+    "ecosystem": "composer",
+    "bytes": 899,
+    "names": [
+     "php",
+     "livewire/livewire",
+     "liberusoftware/localization-core"
+    ],
+    "dev": [
+     "liberusoftware/profiles",
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/localization-core/composer.json",
+    "kind": "dep",
+    "blob_sha": "5644a096265d50aca2a4d575f6f63b72306c12be",
+    "ecosystem": "composer",
+    "bytes": 1008,
+    "names": [
+     "php",
+     "illuminate/contracts",
+     "illuminate/http",
+     "illuminate/support",
+     "liberusoftware/localization-contracts",
+     "liberusoftware/module-manager"
+    ],
+    "dev": [
+     "liberusoftware/profiles",
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/localization-mymemory/composer.json",
+    "kind": "dep",
+    "blob_sha": "d6df932145d786be4204fc6491634ed4f0629654",
+    "ecosystem": "composer",
+    "bytes": 933,
+    "names": [
+     "php",
+     "illuminate/http",
+     "illuminate/cache",
+     "liberusoftware/localization-contracts"
+    ],
+    "dev": [
+     "liberusoftware/localization-core",
+     "liberusoftware/package-testbench",
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-ai-gateway-api/composer.json",
+    "kind": "dep",
+    "blob_sha": "75bfde320286d3c79f9529cd009ee36283337532",
+    "ecosystem": "composer",
+    "bytes": 668,
+    "names": [
+     "php",
+     "illuminate/support",
+     "laravel/framework",
+     "liberusoftware/automation-ai-gateway"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-ai-gateway-filament/composer.json",
+    "kind": "dep",
+    "blob_sha": "51f762b90b2afdbdf3c958a28f7db787c9de53f0",
+    "ecosystem": "composer",
+    "bytes": 646,
+    "names": [
+     "php",
+     "filament/filament",
+     "liberusoftware/automation-ai-gateway"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-ai-gateway-livewire/composer.json",
+    "kind": "dep",
+    "blob_sha": "7f9603dd39a2b943a6c07cd1ceb87191c26fba68",
+    "ecosystem": "composer",
+    "bytes": 645,
+    "names": [
+     "php",
+     "livewire/livewire",
+     "liberusoftware/automation-ai-gateway"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-ai-gateway/composer.json",
+    "kind": "dep",
+    "blob_sha": "598ce1d80f36c5d83ae918f87c50cbe3313b8959",
+    "ecosystem": "composer",
+    "bytes": 619,
+    "names": [
+     "php",
+     "illuminate/database",
+     "illuminate/support"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-approvals-api/composer.json",
+    "kind": "dep",
+    "blob_sha": "40321a47e0ac0054bd83d52655feb4eca55eb742",
+    "ecosystem": "composer",
+    "bytes": 664,
+    "names": [
+     "php",
+     "illuminate/support",
+     "laravel/framework",
+     "liberusoftware/automation-approvals"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-approvals-filament/composer.json",
+    "kind": "dep",
+    "blob_sha": "bd198d2b4f48af8fa8f1094d691ffdd48d26ccc2",
+    "ecosystem": "composer",
+    "bytes": 642,
+    "names": [
+     "php",
+     "filament/filament",
+     "liberusoftware/automation-approvals"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-approvals-livewire/composer.json",
+    "kind": "dep",
+    "blob_sha": "91280d6fe9d4fc5515cc743bcc5a675fe527fcce",
+    "ecosystem": "composer",
+    "bytes": 641,
+    "names": [
+     "php",
+     "livewire/livewire",
+     "liberusoftware/automation-approvals"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-approvals/composer.json",
+    "kind": "dep",
+    "blob_sha": "99d22e34c01f7b0cda399998a6561c2f34518e17",
+    "ecosystem": "composer",
+    "bytes": 616,
+    "names": [
+     "php",
+     "illuminate/database",
+     "illuminate/support"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-automation-core-api/composer.json",
+    "kind": "dep",
+    "blob_sha": "7174d129dd5c4f8b52ab63d3e1ef400b5e5f35e1",
+    "ecosystem": "composer",
+    "bytes": 693,
+    "names": [
+     "php",
+     "illuminate/support",
+     "laravel/framework",
+     "liberusoftware/automation-automation-core"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-automation-core-filament/composer.json",
+    "kind": "dep",
+    "blob_sha": "adbcb80e7234856cda2550dde718d61225ab2908",
+    "ecosystem": "composer",
+    "bytes": 671,
+    "names": [
+     "php",
+     "filament/filament",
+     "liberusoftware/automation-automation-core"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-automation-core-livewire/composer.json",
+    "kind": "dep",
+    "blob_sha": "a05648bfa6b632babf4cfb21139837f9e5fca4ce",
+    "ecosystem": "composer",
+    "bytes": 670,
+    "names": [
+     "php",
+     "livewire/livewire",
+     "liberusoftware/automation-automation-core"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-automation-core/composer.json",
+    "kind": "dep",
+    "blob_sha": "25877b72f4f5921ae1e8afc58d32070a738b485b",
+    "ecosystem": "composer",
+    "bytes": 639,
+    "names": [
+     "php",
+     "illuminate/database",
+     "illuminate/support"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-connectors-api/composer.json",
+    "kind": "dep",
+    "blob_sha": "cf698ab9620bc7b082ad9d5a5c963445a887752f",
+    "ecosystem": "composer",
+    "bytes": 669,
+    "names": [
+     "php",
+     "illuminate/support",
+     "laravel/framework",
+     "liberusoftware/automation-connectors"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-connectors-filament/composer.json",
+    "kind": "dep",
+    "blob_sha": "9a125647b9d1a09646010f320c07311ba7d18606",
+    "ecosystem": "composer",
+    "bytes": 647,
+    "names": [
+     "php",
+     "filament/filament",
+     "liberusoftware/automation-connectors"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-connectors-livewire/composer.json",
+    "kind": "dep",
+    "blob_sha": "b87f8de8431a560474a4f0a86949d5cb70045a75",
+    "ecosystem": "composer",
+    "bytes": 646,
+    "names": [
+     "php",
+     "livewire/livewire",
+     "liberusoftware/automation-connectors"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-connectors/composer.json",
+    "kind": "dep",
+    "blob_sha": "bc3dfa06d35da86f104914eb544ebf38d47d2b08",
+    "ecosystem": "composer",
+    "bytes": 620,
+    "names": [
+     "php",
+     "illuminate/database",
+     "illuminate/support"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-data-processing-api/composer.json",
+    "kind": "dep",
+    "blob_sha": "5ad3e7524b735a30ae2927827e9c7a36daf3464e",
+    "ecosystem": "composer",
+    "bytes": 693,
+    "names": [
+     "php",
+     "illuminate/support",
+     "laravel/framework",
+     "liberusoftware/automation-data-processing"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-data-processing-filament/composer.json",
+    "kind": "dep",
+    "blob_sha": "108b3926fe47ce6013bbfd95a108b2fbc227b903",
+    "ecosystem": "composer",
+    "bytes": 671,
+    "names": [
+     "php",
+     "filament/filament",
+     "liberusoftware/automation-data-processing"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-data-processing-livewire/composer.json",
+    "kind": "dep",
+    "blob_sha": "5c6516a62a9a632239fb0f3100d40ee3e85aa6ec",
+    "ecosystem": "composer",
+    "bytes": 670,
+    "names": [
+     "php",
+     "livewire/livewire",
+     "liberusoftware/automation-data-processing"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-data-processing/composer.json",
+    "kind": "dep",
+    "blob_sha": "f243256679ea3b1e51752e21890864d962cc2aa6",
+    "ecosystem": "composer",
+    "bytes": 639,
+    "names": [
+     "php",
+     "illuminate/database",
+     "illuminate/support"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
+    "path": "modules/module-automation-evaluation-api/composer.json",
+    "kind": "dep",
+    "blob_sha": "87c6da79447fdeabb64da9b2dbad351cef731c9f",
+    "ecosystem": "composer",
+    "bytes": 669,
+    "names": [
+     "php",
+     "illuminate/support",
+     "laravel/framework",
+     "liberusoftware/automation-evaluation"
+    ],
+    "dev": [
+     "pestphp/pest"
+    ]
+   },
+   {
     "path": "Dockerfile",
     "kind": "image",
     "blob_sha": "d65de2c43ef6e2a755dfa905511898e615682ebc",
@@ -4150,7 +7302,37 @@
     "modules/module-automation-evaluation-filament/src/EvaluationFilamentPlugin.php",
     "modules/module-automation-image-filament/src/ImageFilamentPlugin.php",
     "modules/module-automation-prompt-registry-filament/src/PromptRegistryFilamentPlugin.php",
-    "modules/module-automation-rules-filament/src/RulesFilamentPlugin.php"
+    "modules/module-automation-rules-filament/src/RulesFilamentPlugin.php",
+    "modules/module-automation-video-filament/src/VideoFilamentPlugin.php",
+    "modules/module-automation-voice-filament/src/VoiceFilamentPlugin.php",
+    "modules/module-manager-filament/src/ModuleManagerFilamentPlugin.php",
+    "modules/organizations-teams-filament/src/OrganizationsFilamentPlugin.php",
+    "modules/roles-permissions-filament/src/RolesPermissionsFilamentPlugin.php",
+    "modules/sessions-devices-filament/src/SessionsDevicesFilamentPlugin.php",
+    "modules/settings-filament/src/SettingsFilamentPlugin.php",
+    "modules/integrations/src/Contracts/IntegrationAdapter.php",
+    "modules/module-automation-connectors-api/openapi/v1/connectors.yaml",
+    "modules/module-automation-connectors-api/src/Support/ResourcePayload.php",
+    "modules/module-automation-connectors-filament/src/Resources/ConnectorsResource.php",
+    "modules/module-automation-connectors-livewire/resources/views/resource-list.blade.php",
+    "modules/module-automation-connectors/database/migrations/2026_08_23_000000_create_automation_connectors_resources_table.php",
+    "modules/module-automation-connectors/database/migrations/2026_08_30_000003_add_lifecycle_metadata_to_automation_connectors_resources.php",
+    "modules/module-automation-connectors/src/Actions/CreateConnectorsResource.php",
+    "modules/module-automation-connectors/src/Actions/TransitionConnectorsResource.php",
+    "modules/module-automation-connectors/src/Domain/ConnectorAction.php",
+    "modules/module-automation-connectors/src/Domain/ConnectorDefinition.php",
+    "modules/module-automation-connectors/src/Domain/Cursor.php",
+    "modules/module-automation-connectors/src/Domain/RateLimit.php",
+    "modules/module-automation-connectors/src/Domain/ReconciliationReport.php",
+    "modules/module-automation-connectors/src/Domain/Webhook.php",
+    "modules/module-automation-connectors/src/Events/ResourceTransitioned.php",
+    "modules/module-automation-connectors/src/Models/ConnectorsResource.php",
+    "modules/module-automation-connectors/tests/Unit/DomainTest.php",
+    "modules/roles-permissions-filament/tests/Feature/RolesPermissionsFilamentPluginTest.php",
+    "modules/module-automation-connectors-api/src/Http/Controllers/ConnectorsResourceController.php",
+    "modules/module-automation-connectors-filament/src/Resources/ConnectorsResource/Pages/CreateConnectors.php",
+    "modules/module-automation-connectors-filament/src/Resources/ConnectorsResource/Pages/EditConnectors.php",
+    "modules/module-automation-connectors-filament/src/Resources/ConnectorsResource/Pages/ListConnectors.php"
    ]
   },
   "fail_count": 0
@@ -4160,13 +7342,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T00:54:44Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:45:11Z",
   "default_branch": "master",
   "pushed_at": "2026-10-22",
   "stars": 32,
   "tree": {
    "sha": "97eaff745a5c2cd174aeeeae1eae8b7e6d541f7b",
-   "etag": "W/\"84a426f0d8d8971d366beefa8391bd25aab1f14f354e89399bef9eb21937b0cc\"",
+   "etag": "W/\"b3107043600aa270f7d61a51ab819d2ae81b3c36e3bda8f5a5a0f9e4b8599743\"",
    "truncated": false,
    "path_count": 426,
    "matched": [
@@ -5684,13 +8867,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T03:14:10Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:21:40Z",
   "default_branch": "main",
   "pushed_at": "2026-10-20",
-  "stars": 5076,
+  "stars": 5083,
   "tree": {
    "sha": "9fd4edb2a9311bffa571db050f53f415705db294",
-   "etag": "W/\"ba1bf1653b3fbbe0eb939cb0e1b9e919f3e5b9368af2da9aecfe5f5e395a3870\"",
+   "etag": "W/\"f266e35d3d098bd5e956c030f9ca7c3eb414ffe41de6cdafed6ebc2706102cbe\"",
    "truncated": false,
    "path_count": 2080,
    "matched": [
@@ -5706,6 +8890,54 @@
     "qtserver/node_modules/aedes/package.json",
     "qtserver/node_modules/anymatch/package.json",
     "qtserver/node_modules/balanced-match/package.json",
+    "qtserver/node_modules/base64-js/package.json",
+    "qtserver/node_modules/binary-extensions/package.json",
+    "qtserver/node_modules/bl/package.json",
+    "qtserver/node_modules/brace-expansion/package.json",
+    "qtserver/node_modules/braces/package.json",
+    "qtserver/node_modules/broker-factory/package.json",
+    "qtserver/node_modules/buffer-from/package.json",
+    "qtserver/node_modules/buffer/package.json",
+    "qtserver/node_modules/chokidar/package.json",
+    "qtserver/node_modules/commist/package.json",
+    "qtserver/node_modules/concat-map/package.json",
+    "qtserver/node_modules/concat-stream/package.json",
+    "qtserver/node_modules/debug/package.json",
+    "qtserver/node_modules/end-of-stream/package.json",
+    "qtserver/node_modules/event-target-shim/package.json",
+    "qtserver/node_modules/events/package.json",
+    "qtserver/node_modules/fast-unique-numbers/package.json",
+    "qtserver/node_modules/fastfall/package.json",
+    "qtserver/node_modules/fastparallel/package.json",
+    "qtserver/node_modules/fastseries/package.json",
+    "qtserver/node_modules/fill-range/package.json",
+    "qtserver/node_modules/glob-parent/package.json",
+    "qtserver/node_modules/has-flag/package.json",
+    "qtserver/node_modules/help-me/package.json",
+    "qtserver/node_modules/hyperid/package.json",
+    "qtserver/node_modules/ieee754/package.json",
+    "qtserver/node_modules/ignore-by-default/package.json",
+    "qtserver/node_modules/inherits/package.json",
+    "qtserver/node_modules/ip-address/package.json",
+    "qtserver/node_modules/is-binary-path/package.json",
+    "qtserver/node_modules/is-extglob/package.json",
+    "qtserver/node_modules/is-glob/package.json",
+    "qtserver/node_modules/is-number/package.json",
+    "qtserver/node_modules/js-sdsl/package.json",
+    "qtserver/node_modules/lru-cache/package.json",
+    "qtserver/node_modules/minimatch/package.json",
+    "qtserver/node_modules/minimist/package.json",
+    "qtserver/node_modules/mqemitter/package.json",
+    "qtserver/node_modules/mqtt-packet/package.json",
+    "qtserver/node_modules/mqtt/package.json",
+    "qtserver/node_modules/ms/package.json",
+    "qtserver/node_modules/nodemon/package.json",
+    "qtserver/node_modules/normalize-path/package.json",
+    "qtserver/node_modules/number-allocator/package.json",
+    "qtserver/node_modules/once/package.json",
+    "qtserver/node_modules/picomatch/package.json",
+    "qtserver/node_modules/process-nextick-args/package.json",
+    "qtserver/node_modules/process/package.json",
     "Dockerfile",
     "web_ui/Dockerfile.dev",
     "Dockerfiles/Squid/Dockerfile",
@@ -6243,6 +9475,1034 @@
     ]
    },
    {
+    "path": "qtserver/node_modules/base64-js/package.json",
+    "kind": "dep",
+    "blob_sha": "c3972e39f2be5d735a25578c1f9adcc3b26e8068",
+    "ecosystem": "npm",
+    "bytes": 1115,
+    "dev": [
+     "babel-minify",
+     "benchmark",
+     "browserify",
+     "standard",
+     "tape"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/binary-extensions/package.json",
+    "kind": "dep",
+    "blob_sha": "4710c339aeb2d5885d2df14567c614d83e820cc7",
+    "ecosystem": "npm",
+    "bytes": 739,
+    "dev": [
+     "ava",
+     "tsd",
+     "xo"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/bl/package.json",
+    "kind": "dep",
+    "blob_sha": "3f7d265e0e7fe2c3a0cd02cf2d0bec1978346367",
+    "ecosystem": "npm",
+    "bytes": 3118,
+    "names": [
+     "@types/readable-stream",
+     "buffer",
+     "inherits",
+     "readable-stream"
+    ],
+    "dev": [
+     "faucet",
+     "standard",
+     "tape",
+     "typescript"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/brace-expansion/package.json",
+    "kind": "dep",
+    "blob_sha": "344788817d053e12e97670c5a56c006e3af5edfd",
+    "ecosystem": "npm",
+    "bytes": 1156,
+    "names": [
+     "balanced-match",
+     "concat-map"
+    ],
+    "dev": [
+     "matcha",
+     "tape"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/braces/package.json",
+    "kind": "dep",
+    "blob_sha": "c3c056e469726cdb0d0cb6cec73b3f79abf0eb23",
+    "ecosystem": "npm",
+    "bytes": 1647,
+    "names": [
+     "fill-range"
+    ],
+    "dev": [
+     "ansi-colors",
+     "bash-path",
+     "gulp-format-md",
+     "mocha"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/broker-factory/package.json",
+    "kind": "dep",
+    "blob_sha": "e2e07ca3c9fe172ef47cb01956291818fb6a08fd",
+    "ecosystem": "npm",
+    "bytes": 3112,
+    "names": [
+     "@babel/runtime",
+     "fast-unique-numbers",
+     "tslib",
+     "worker-factory"
+    ],
+    "dev": [
+     "@babel/core",
+     "@babel/plugin-external-helpers",
+     "@babel/plugin-transform-runtime",
+     "@babel/preset-env",
+     "@commitlint/cli",
+     "@commitlint/config-angular",
+     "@rollup/plugin-babel",
+     "chai",
+     "commitizen",
+     "cz-conventional-changelog",
+     "eslint",
+     "eslint-config-holy-grail",
+     "husky",
+     "karma",
+     "karma-chrome-launcher",
+     "karma-firefox-launcher",
+     "karma-mocha",
+     "karma-sauce-launcher",
+     "karma-sinon-chai",
+     "karma-webkit-launcher",
+     "karma-webpack",
+     "lint-staged",
+     "mocha",
+     "prettier",
+     "rimraf",
+     "rollup",
+     "sinon",
+     "sinon-chai",
+     "ts-loader",
+     "tsconfig-holy-grail",
+     "tslint",
+     "tslint-config-holy-grail",
+     "typescript",
+     "webpack"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/buffer-from/package.json",
+    "kind": "dep",
+    "blob_sha": "6ac5327bf8621ef03a3df8039518a98ba3d1648a",
+    "ecosystem": "npm",
+    "bytes": 304,
+    "dev": [
+     "standard"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/buffer/package.json",
+    "kind": "dep",
+    "blob_sha": "3b1b4986f8b9937818753fe0560d4cc5c15e7f23",
+    "ecosystem": "npm",
+    "bytes": 2597,
+    "names": [
+     "base64-js",
+     "ieee754"
+    ],
+    "dev": [
+     "airtap",
+     "benchmark",
+     "browserify",
+     "concat-stream",
+     "hyperquest",
+     "is-buffer",
+     "is-nan",
+     "split",
+     "standard",
+     "tape",
+     "through2",
+     "uglify-js"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/chokidar/package.json",
+    "kind": "dep",
+    "blob_sha": "e8f8b3d995e8ffbff13e0a5b8728c9dc769786a5",
+    "ecosystem": "npm",
+    "bytes": 1648,
+    "names": [
+     "anymatch",
+     "braces",
+     "glob-parent",
+     "is-binary-path",
+     "is-glob",
+     "normalize-path",
+     "readdirp",
+     "fsevents"
+    ],
+    "dev": [
+     "@types/node",
+     "chai",
+     "dtslint",
+     "eslint",
+     "mocha",
+     "rimraf",
+     "sinon",
+     "sinon-chai",
+     "typescript",
+     "upath"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/commist/package.json",
+    "kind": "dep",
+    "blob_sha": "6ec4232b3ee5d587c44e6137b8f5c345f82ceade",
+    "ecosystem": "npm",
+    "bytes": 656,
+    "dev": [
+     "minimist",
+     "pre-commit",
+     "standard",
+     "tape"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/concat-map/package.json",
+    "kind": "dep",
+    "blob_sha": "d3640e6b027b9ea87afbfd361ca12fc05cca0e9c",
+    "ecosystem": "npm",
+    "bytes": 989,
+    "dev": [
+     "tape"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/concat-stream/package.json",
+    "kind": "dep",
+    "blob_sha": "379782860f581fdb3f7c4b371f395a57d2a459ee",
+    "ecosystem": "npm",
+    "bytes": 1187,
+    "names": [
+     "buffer-from",
+     "inherits",
+     "readable-stream",
+     "typedarray"
+    ],
+    "dev": [
+     "tape"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/debug/package.json",
+    "kind": "dep",
+    "blob_sha": "ee8abb523dbe0ad51949ad8f864207164f38b051",
+    "ecosystem": "npm",
+    "bytes": 1479,
+    "names": [
+     "ms"
+    ],
+    "dev": [
+     "brfs",
+     "browserify",
+     "coveralls",
+     "karma",
+     "karma-browserify",
+     "karma-chrome-launcher",
+     "karma-mocha",
+     "mocha",
+     "mocha-lcov-reporter",
+     "sinon",
+     "xo"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/end-of-stream/package.json",
+    "kind": "dep",
+    "blob_sha": "0b530cdf544b8842e326744a7e4a0b8e46e4cde7",
+    "ecosystem": "npm",
+    "bytes": 777,
+    "names": [
+     "once"
+    ],
+    "dev": [
+     "tape"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/event-target-shim/package.json",
+    "kind": "dep",
+    "blob_sha": "40326f3d74ad45c877523f829018a0b44263f2d4",
+    "ecosystem": "npm",
+    "bytes": 2559,
+    "dev": [
+     "@babel/core",
+     "@babel/plugin-transform-modules-commonjs",
+     "@babel/preset-env",
+     "@babel/register",
+     "@mysticatea/eslint-plugin",
+     "@mysticatea/spy",
+     "assert",
+     "codecov",
+     "eslint",
+     "karma",
+     "karma-chrome-launcher",
+     "karma-coverage",
+     "karma-firefox-launcher",
+     "karma-growl-reporter",
+     "karma-ie-launcher",
+     "karma-mocha",
+     "karma-rollup-preprocessor",
+     "mocha",
+     "npm-run-all",
+     "nyc",
+     "opener",
+     "rimraf",
+     "rollup",
+     "rollup-plugin-babel",
+     "rollup-plugin-babel-minify",
+     "rollup-plugin-commonjs",
+     "rollup-plugin-json",
+     "rollup-plugin-node-resolve",
+     "rollup-watch",
+     "type-tester",
+     "typescript"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/events/package.json",
+    "kind": "dep",
+    "blob_sha": "b9580d88142d2921273599e2afaaec640906df6d",
+    "ecosystem": "npm",
+    "bytes": 859,
+    "dev": [
+     "airtap",
+     "functions-have-names",
+     "has",
+     "has-symbols",
+     "isarray",
+     "tape"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/fast-unique-numbers/package.json",
+    "kind": "dep",
+    "blob_sha": "99677b4c9aa3e34ef87812db74f235ede123d3b1",
+    "ecosystem": "npm",
+    "bytes": 4599,
+    "names": [
+     "@babel/runtime",
+     "tslib"
+    ],
+    "dev": [
+     "@babel/cli",
+     "@babel/core",
+     "@babel/plugin-external-helpers",
+     "@babel/plugin-transform-runtime",
+     "@babel/preset-env",
+     "@babel/register",
+     "@commitlint/cli",
+     "@commitlint/config-angular",
+     "@rollup/plugin-babel",
+     "chai",
+     "commitizen",
+     "cz-conventional-changelog",
+     "eslint",
+     "eslint-config-holy-grail",
+     "husky",
+     "karma",
+     "karma-browserstack-launcher",
+     "karma-chrome-launcher",
+     "karma-firefox-launcher",
+     "karma-mocha",
+     "karma-sinon-chai",
+     "karma-webkit-launcher",
+     "karma-webpack",
+     "lint-staged",
+     "mocha",
+     "prettier",
+     "rimraf",
+     "rollup",
+     "sinon",
+     "sinon-chai",
+     "tinybench",
+     "ts-loader",
+     "tsconfig-holy-grail",
+     "tslint",
+     "tslint-config-holy-grail",
+     "typescript",
+     "webpack"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/fastfall/package.json",
+    "kind": "dep",
+    "blob_sha": "23f01cf6b93552d30dd24a1231b3e295bb44d263",
+    "ecosystem": "npm",
+    "bytes": 1254,
+    "names": [
+     "reusify"
+    ],
+    "dev": [
+     "async",
+     "coveralls",
+     "fastbench",
+     "faucet",
+     "insync",
+     "istanbul",
+     "neo-async",
+     "pre-commit",
+     "run-waterfall",
+     "standard",
+     "tap-spec",
+     "tape",
+     "waterfallize"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/fastparallel/package.json",
+    "kind": "dep",
+    "blob_sha": "5a2a803bd3cc023ae88ec619a245da369885fa3e",
+    "ecosystem": "npm",
+    "bytes": 1144,
+    "names": [
+     "reusify",
+     "xtend"
+    ],
+    "dev": [
+     "async",
+     "coveralls",
+     "fastbench",
+     "faucet",
+     "insync",
+     "items",
+     "neo-async",
+     "nyc",
+     "parallelize",
+     "pre-commit",
+     "standard",
+     "tape"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/fastseries/package.json",
+    "kind": "dep",
+    "blob_sha": "3c4e4a2400b2605312186750201540e8058b3344",
+    "ecosystem": "npm",
+    "bytes": 1201,
+    "dev": [
+     "async",
+     "fastbench",
+     "neo-async",
+     "nyc",
+     "pre-commit",
+     "snazzy",
+     "standard",
+     "tape",
+     "tiny-each-async"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/fill-range/package.json",
+    "kind": "dep",
+    "blob_sha": "582357fb50baf6d7ceb473732ae6f2179ab4ff7b",
+    "ecosystem": "npm",
+    "bytes": 1760,
+    "names": [
+     "to-regex-range"
+    ],
+    "dev": [
+     "gulp-format-md",
+     "mocha",
+     "nyc"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/glob-parent/package.json",
+    "kind": "dep",
+    "blob_sha": "125c971c2701983e5569b097af23dc98a29525ff",
+    "ecosystem": "npm",
+    "bytes": 1105,
+    "names": [
+     "is-glob"
+    ],
+    "dev": [
+     "coveralls",
+     "eslint",
+     "eslint-config-gulp",
+     "expect",
+     "mocha",
+     "nyc"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/has-flag/package.json",
+    "kind": "dep",
+    "blob_sha": "e1eb17a15ed8808af7bd7085dc398108d9920ba2",
+    "ecosystem": "npm",
+    "bytes": 710,
+    "dev": [
+     "ava",
+     "xo"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/help-me/package.json",
+    "kind": "dep",
+    "blob_sha": "7a449448262484f8bea6094bbcaa6b92afd1dd3e",
+    "ecosystem": "npm",
+    "bytes": 829,
+    "dev": [
+     "commist",
+     "concat-stream",
+     "pre-commit",
+     "proxyquire",
+     "standard",
+     "tap-spec",
+     "tape"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/hyperid/package.json",
+    "kind": "dep",
+    "blob_sha": "4e0866fc35e712b0f37460f0028959b3c542a1e4",
+    "ecosystem": "npm",
+    "bytes": 1373,
+    "names": [
+     "buffer",
+     "uuid",
+     "uuid-parse"
+    ],
+    "dev": [
+     "@napi-rs/uuid",
+     "benchmark",
+     "bloomfilter",
+     "hashids",
+     "nanoid",
+     "nid",
+     "pre-commit",
+     "proxyquire",
+     "shortid",
+     "standard",
+     "tap-dot",
+     "tape",
+     "typescript"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/ieee754/package.json",
+    "kind": "dep",
+    "blob_sha": "7b23851384185c55cf62d4a590c40f543597d55f",
+    "ecosystem": "npm",
+    "bytes": 1194,
+    "dev": [
+     "airtap",
+     "standard",
+     "tape"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/ignore-by-default/package.json",
+    "kind": "dep",
+    "blob_sha": "38e0d2b4a1b15f6f467435b936dadbe1eab70960",
+    "ecosystem": "npm",
+    "bytes": 775,
+    "dev": [
+     "figures",
+     "standard"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/inherits/package.json",
+    "kind": "dep",
+    "blob_sha": "37b4366b83e63e037cd447090ec25b39fce27e01",
+    "ecosystem": "npm",
+    "bytes": 581,
+    "dev": [
+     "tap"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/ip-address/package.json",
+    "kind": "dep",
+    "blob_sha": "5cf811e8c563afcae61ee3ee84c4d12f4f50ae34",
+    "ecosystem": "npm",
+    "bytes": 1898,
+    "dev": [
+     "@types/chai",
+     "@types/mocha",
+     "@typescript-eslint/eslint-plugin",
+     "@typescript-eslint/parser",
+     "chai",
+     "documentation",
+     "eslint",
+     "eslint_d",
+     "eslint-config-airbnb",
+     "eslint-config-prettier",
+     "eslint-plugin-filenames",
+     "eslint-plugin-import",
+     "eslint-plugin-jsx-a11y",
+     "eslint-plugin-prettier",
+     "eslint-plugin-sort-imports-es6-autofix",
+     "mocha",
+     "nyc",
+     "prettier",
+     "release-it",
+     "source-map-support",
+     "tsx",
+     "typescript"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/is-binary-path/package.json",
+    "kind": "dep",
+    "blob_sha": "a8d005aed80f8729749e0302d16bf0a6f2ab7eb6",
+    "ecosystem": "npm",
+    "bytes": 657,
+    "names": [
+     "binary-extensions"
+    ],
+    "dev": [
+     "ava",
+     "tsd",
+     "xo"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/is-extglob/package.json",
+    "kind": "dep",
+    "blob_sha": "7a908369d39f558028f5345dd89b27c62d4d693c",
+    "ecosystem": "npm",
+    "bytes": 1220,
+    "dev": [
+     "gulp-format-md",
+     "mocha"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/is-glob/package.json",
+    "kind": "dep",
+    "blob_sha": "858af0378e9d36813353b51271aec88ee0d3328b",
+    "ecosystem": "npm",
+    "bytes": 1748,
+    "names": [
+     "is-extglob"
+    ],
+    "dev": [
+     "gulp-format-md",
+     "mocha"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/is-number/package.json",
+    "kind": "dep",
+    "blob_sha": "3715072609d61a010bff7116331b71f04206af96",
+    "ecosystem": "npm",
+    "bytes": 1599,
+    "dev": [
+     "ansi",
+     "benchmark",
+     "gulp-format-md",
+     "mocha"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/js-sdsl/package.json",
+    "kind": "dep",
+    "blob_sha": "1c35cd215288e7ed2118851e2958531ed62fc5ef",
+    "ecosystem": "npm",
+    "bytes": 5009,
+    "dev": [
+     "@babel/core",
+     "@babel/plugin-transform-modules-commonjs",
+     "@rollup/plugin-babel",
+     "@rollup/plugin-typescript",
+     "@types/babel__core",
+     "@types/chai",
+     "@types/delete-empty",
+     "@types/gulp",
+     "@types/gulp-babel",
+     "@types/gulp-filter",
+     "@types/gulp-rename",
+     "@types/gulp-sourcemaps",
+     "@types/gulp-tap",
+     "@types/gulp-terser",
+     "@types/gulp-uglify",
+     "@types/karma",
+     "@types/merge-stream",
+     "@types/mocha",
+     "@types/node",
+     "@typescript-eslint/eslint-plugin",
+     "@typescript-eslint/parser",
+     "all-contributors-cli",
+     "babel-plugin-remove-unused-import",
+     "browserslist",
+     "chai",
+     "commitlint",
+     "compare-versions",
+     "conventional-changelog-conventionalcommits",
+     "delete-empty",
+     "eslint",
+     "eslint-import-resolver-typescript",
+     "eslint-plugin-compat",
+     "eslint-plugin-import",
+     "get-npm-package-version",
+     "gh-pages",
+     "gulp",
+     "gulp-babel",
+     "gulp-clean",
+     "gulp-filter",
+     "gulp-rename",
+     "gulp-sourcemaps",
+     "gulp-tap",
+     "gulp-terser",
+     "gulp-typescript",
+     "gulp-uglify",
+     "husky",
+     "karma",
+     "karma-chrome-launcher",
+     "karma-edge-launcher",
+     "karma-firefox-launcher",
+     "karma-mocha",
+     "karma-mocha-reporter",
+     "karma-requirejs",
+     "karma-safarinative-launcher",
+     "karma-typescript",
+     "lint-staged",
+     "merge-stream",
+     "mocha",
+     "nyc",
+     "requirejs",
+     "rollup",
+     "rollup-plugin-license",
+     "rollup-plugin-ts",
+     "ts-macros",
+     "ts-mocha",
+     "ts-node",
+     "ts-transform-paths",
+     "tsconfig-paths",
+     "tslib",
+     "ttypescript",
+     "typedoc",
+     "typedoc-plugin-missing-exports",
+     "typescript"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/lru-cache/package.json",
+    "kind": "dep",
+    "blob_sha": "f3cd4c0cc53f7e29815a0e4a502c5e0b7ef34b2e",
+    "ecosystem": "npm",
+    "bytes": 2827,
+    "dev": [
+     "@types/node",
+     "@types/tap",
+     "benchmark",
+     "esbuild",
+     "eslint-config-prettier",
+     "marked",
+     "mkdirp",
+     "prettier",
+     "tap",
+     "tshy",
+     "tslib",
+     "typedoc",
+     "typescript"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/minimatch/package.json",
+    "kind": "dep",
+    "blob_sha": "566efdfe45cb80710f6a14075f7e360d392edbd7",
+    "ecosystem": "npm",
+    "bytes": 700,
+    "names": [
+     "brace-expansion"
+    ],
+    "dev": [
+     "tap"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/minimist/package.json",
+    "kind": "dep",
+    "blob_sha": "c10a3344411197a716883caad07f0319f5d69b89",
+    "ecosystem": "npm",
+    "bytes": 1788,
+    "dev": [
+     "@ljharb/eslint-config",
+     "aud",
+     "auto-changelog",
+     "eslint",
+     "in-publish",
+     "npmignore",
+     "nyc",
+     "safe-publish-latest",
+     "tape"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/mqemitter/package.json",
+    "kind": "dep",
+    "blob_sha": "6141107718c9c879f6d836077fe315f1785cd5d7",
+    "ecosystem": "npm",
+    "bytes": 1908,
+    "names": [
+     "fastparallel",
+     "qlobber"
+    ],
+    "dev": [
+     "@types/node",
+     "@typescript-eslint/eslint-plugin",
+     "@typescript-eslint/parser",
+     "markdownlint-cli",
+     "nyc",
+     "pre-commit",
+     "snazzy",
+     "standard",
+     "tape",
+     "tsd",
+     "typescript"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/mqtt-packet/package.json",
+    "kind": "dep",
+    "blob_sha": "32dd158a4311c930170081b6b95c0df7e8369598",
+    "ecosystem": "npm",
+    "bytes": 1256,
+    "names": [
+     "bl",
+     "debug",
+     "process-nextick-args"
+    ],
+    "dev": [
+     "pre-commit",
+     "readable-stream",
+     "standard",
+     "tap-spec",
+     "tape"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/mqtt/package.json",
+    "kind": "dep",
+    "blob_sha": "c07e2d6910efc3343292249d378ec17753709194",
+    "ecosystem": "npm",
+    "bytes": 4919,
+    "names": [
+     "@types/readable-stream",
+     "@types/ws",
+     "commist",
+     "concat-stream",
+     "debug",
+     "help-me",
+     "lru-cache",
+     "minimist",
+     "mqtt-packet",
+     "number-allocator",
+     "readable-stream",
+     "rfdc",
+     "socks",
+     "split2",
+     "worker-timers",
+     "ws"
+    ],
+    "dev": [
+     "@eslint/eslintrc",
+     "@eslint/js",
+     "@esm-bundle/chai",
+     "@release-it/conventional-changelog",
+     "@tsconfig/node20",
+     "@types/chai",
+     "@types/node",
+     "@types/sinon",
+     "@types/tape",
+     "@typescript-eslint/eslint-plugin",
+     "@typescript-eslint/parser",
+     "@web/test-runner",
+     "@web/test-runner-playwright",
+     "aedes-cli",
+     "chai",
+     "chokidar",
+     "conventional-changelog-cli",
+     "end-of-stream",
+     "esbuild",
+     "esbuild-plugin-polyfill-node",
+     "esbuild-register",
+     "eslint",
+     "eslint-config-prettier",
+     "eslint-plugin-import",
+     "eslint-plugin-prettier",
+     "global",
+     "globals",
+     "leaked-handles",
+     "mkdirp",
+     "mqtt-connection",
+     "mqtt-level-store",
+     "nyc",
+     "pre-commit",
+     "prettier",
+     "release-it",
+     "rimraf",
+     "should",
+     "sinon",
+     "snazzy",
+     "tape",
+     "ts-node",
+     "typescript"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/ms/package.json",
+    "kind": "dep",
+    "blob_sha": "49971890df8e2b9a4a5f4909fbd6678b862d8a50",
+    "ecosystem": "npm",
+    "bytes": 732,
+    "dev": [
+     "eslint",
+     "expect.js",
+     "husky",
+     "lint-staged",
+     "mocha",
+     "prettier"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/nodemon/package.json",
+    "kind": "dep",
+    "blob_sha": "0133959dbf17568ecba4732415f821a92268566c",
+    "ecosystem": "npm",
+    "bytes": 2072,
+    "names": [
+     "chokidar",
+     "debug",
+     "ignore-by-default",
+     "minimatch",
+     "pstree.remy",
+     "semver",
+     "simple-update-notifier",
+     "supports-color",
+     "touch",
+     "undefsafe"
+    ],
+    "dev": [
+     "@commitlint/cli",
+     "@commitlint/config-conventional",
+     "async",
+     "coffee-script",
+     "eslint",
+     "husky",
+     "mocha",
+     "nyc",
+     "proxyquire",
+     "semantic-release",
+     "should"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/normalize-path/package.json",
+    "kind": "dep",
+    "blob_sha": "ad61098a8a8fc51a4be93b25769a47959abd5ade",
+    "ecosystem": "npm",
+    "bytes": 1666,
+    "dev": [
+     "gulp-format-md",
+     "minimist",
+     "mocha"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/number-allocator/package.json",
+    "kind": "dep",
+    "blob_sha": "04940d61bcd17a8d18c9012b56e46cb7d4b89d2a",
+    "ecosystem": "npm",
+    "bytes": 2076,
+    "names": [
+     "debug",
+     "js-sdsl"
+    ],
+    "dev": [
+     "airtap",
+     "browserify",
+     "chai",
+     "codecov",
+     "eslint",
+     "eslint-config-standard",
+     "jsdoc",
+     "karma",
+     "karma-browserify",
+     "karma-chrome-launcher",
+     "karma-mocha",
+     "mocha",
+     "nyc",
+     "snazzy",
+     "standard",
+     "tslint",
+     "tslint-config-standard",
+     "typescript",
+     "uglify-es"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/once/package.json",
+    "kind": "dep",
+    "blob_sha": "16815b2fa111936c9681a1b76c5fce98421c1631",
+    "ecosystem": "npm",
+    "bytes": 574,
+    "names": [
+     "wrappy"
+    ],
+    "dev": [
+     "tap"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/picomatch/package.json",
+    "kind": "dep",
+    "blob_sha": "3db22d408f024ad3b0de10acc3a7c0ce4200c0e8",
+    "ecosystem": "npm",
+    "bytes": 1912,
+    "dev": [
+     "eslint",
+     "fill-range",
+     "gulp-format-md",
+     "mocha",
+     "nyc",
+     "time-require"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/process-nextick-args/package.json",
+    "kind": "dep",
+    "blob_sha": "6070b723fcd3476052a28040412e61d7df2511f4",
+    "ecosystem": "npm",
+    "bytes": 578,
+    "dev": [
+     "tap"
+    ]
+   },
+   {
+    "path": "qtserver/node_modules/process/package.json",
+    "kind": "dep",
+    "blob_sha": "d2cfaade44177ae54f02a65c33926eeb7929d83e",
+    "ecosystem": "npm",
+    "bytes": 609,
+    "dev": [
+     "mocha",
+     "zuul"
+    ]
+   },
+   {
     "path": "Dockerfile",
     "kind": "image",
     "blob_sha": "999d9bf2d89bb3cfca57b7720c40366e503cf267",
@@ -6539,13 +10799,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T03:40:08Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:37:02Z",
   "default_branch": "master",
   "pushed_at": "2026-09-29",
   "stars": 635,
   "tree": {
    "sha": "5d4966590e5426072912fad7a7e91118280f9584",
-   "etag": "W/\"6b0faf43940494c17ae22397b397420c8e3c268ef7ec889a09384493c004befe\"",
+   "etag": "W/\"6a37c4edc5ab42abe6de8b0fea381014a5645957a80e7341a4a2b185e57a58c2\"",
    "truncated": false,
    "path_count": 553,
    "matched": [
@@ -6561,6 +10822,46 @@
     "packages/migrations-base/package.json",
     "packages/mock-db-typed/package.json",
     "packages/mock-db/package.json",
+    "packages/mysql-config/package.json",
+    "packages/mysql-schema-cli/package.json",
+    "packages/mysql-schema-introspect/package.json",
+    "packages/mysql-schema-print-types/package.json",
+    "packages/mysql-test/package.json",
+    "packages/mysql-typed/package.json",
+    "packages/mysql/package.json",
+    "packages/pg-bulk/package.json",
+    "packages/pg-cluster/package.json",
+    "packages/pg-config/package.json",
+    "packages/pg-connection-string/package.json",
+    "packages/pg-create/package.json",
+    "packages/pg-data-type-id/package.json",
+    "packages/pg-errors/package.json",
+    "packages/pg-migrations/package.json",
+    "packages/pg-schema-cli/package.json",
+    "packages/pg-schema-introspect/package.json",
+    "packages/pg-schema-print-types/package.json",
+    "packages/pg-test/package.json",
+    "packages/pg-typed/package.json",
+    "packages/pg/package.json",
+    "packages/push-to-async-iterable/package.json",
+    "packages/queue/package.json",
+    "packages/shared-print-types/package.json",
+    "packages/shared/package.json",
+    "packages/split-sql-query/package.json",
+    "packages/sql-commenter/package.json",
+    "packages/sql/package.json",
+    "packages/sqlite-sync/package.json",
+    "packages/sqlite/package.json",
+    "packages/validate-unicode/package.json",
+    "packages/website/package.json",
+    "packages/websql-core/package.json",
+    "packages/websql/package.json",
+    "packages/with-container/package.json",
+    "packages/sql/web/package.json",
+    "packages/mysql-test/jest/globalSetup/package.json",
+    "packages/mysql-test/jest/globalTeardown/package.json",
+    "packages/pg-test/jest/globalSetup/package.json",
+    "packages/pg-test/jest/globalTeardown/package.json",
     ".github/workflows/rollingversions.yml",
     ".github/workflows/test.yml",
     ".github/workflows/website.yml"
@@ -6739,6 +11040,540 @@
     ]
    },
    {
+    "path": "packages/mysql-config/package.json",
+    "kind": "dep",
+    "blob_sha": "8d223c0da4c99ce066161ab2709f64c25c542817",
+    "ecosystem": "npm",
+    "bytes": 501,
+    "names": [
+     "cosmiconfig",
+     "funtypes"
+    ]
+   },
+   {
+    "path": "packages/mysql-schema-cli/package.json",
+    "kind": "dep",
+    "blob_sha": "d1395f7671d30446e5ef29eed1734accc0d8928c",
+    "ecosystem": "npm",
+    "bytes": 772,
+    "names": [
+     "@databases/mysql-config",
+     "@databases/mysql-schema-introspect",
+     "@databases/mysql-schema-print-types",
+     "chalk",
+     "interrogator",
+     "is-interactive",
+     "parameter-reducers"
+    ]
+   },
+   {
+    "path": "packages/mysql-schema-introspect/package.json",
+    "kind": "dep",
+    "blob_sha": "7f98fd744dc6e558d1dec71dd014201c6f4ba3f0",
+    "ecosystem": "npm",
+    "bytes": 499,
+    "names": [
+     "@databases/mysql",
+     "funtypes"
+    ]
+   },
+   {
+    "path": "packages/mysql-schema-print-types/package.json",
+    "kind": "dep",
+    "blob_sha": "bd8dda632ca917c86180d11a73351f3a48e1b464",
+    "ecosystem": "npm",
+    "bytes": 742,
+    "names": [
+     "@databases/mysql-config",
+     "@databases/shared-print-types",
+     "assert-never",
+     "@databases/mysql-schema-introspect"
+    ],
+    "dev": [
+     "@databases/mysql-schema-introspect"
+    ]
+   },
+   {
+    "path": "packages/mysql-test/package.json",
+    "kind": "dep",
+    "blob_sha": "d8d204e6b4d7f1a25b0e43e724aba71f3dbb8c85",
+    "ecosystem": "npm",
+    "bytes": 848,
+    "names": [
+     "@databases/mysql-config",
+     "@databases/with-container",
+     "modern-spawn",
+     "ms",
+     "mysql2",
+     "parameter-reducers",
+     "type-assertions"
+    ],
+    "dev": [
+     "@types/ms"
+    ]
+   },
+   {
+    "path": "packages/mysql-typed/package.json",
+    "kind": "dep",
+    "blob_sha": "62fad6dc53b2ea2bd82b21567afe319bfc01385f",
+    "ecosystem": "npm",
+    "bytes": 675,
+    "names": [
+     "@databases/mysql"
+    ],
+    "dev": [
+     "@databases/mysql",
+     "@databases/mysql-schema-print-types"
+    ]
+   },
+   {
+    "path": "packages/mysql/package.json",
+    "kind": "dep",
+    "blob_sha": "9ae4fa232897016a367c3e9c8fbbad6d102a8571",
+    "ecosystem": "npm",
+    "bytes": 753,
+    "names": [
+     "@babel/code-frame",
+     "@databases/escape-identifier",
+     "@databases/mysql-config",
+     "@databases/push-to-async-iterable",
+     "@databases/shared",
+     "@databases/sql",
+     "mysql2"
+    ]
+   },
+   {
+    "path": "packages/pg-bulk/package.json",
+    "kind": "dep",
+    "blob_sha": "27e5e13c294d8f2dd61f8ed1a1e9231f674ee1a6",
+    "ecosystem": "npm",
+    "bytes": 604,
+    "names": [
+     "@databases/pg"
+    ],
+    "dev": [
+     "@databases/pg"
+    ]
+   },
+   {
+    "path": "packages/pg-cluster/package.json",
+    "kind": "dep",
+    "blob_sha": "bfe43114237a0776245d2d26c679d5ee782c6221",
+    "ecosystem": "npm",
+    "bytes": 613,
+    "names": [
+     "@databases/pg"
+    ],
+    "dev": [
+     "@databases/pg"
+    ]
+   },
+   {
+    "path": "packages/pg-config/package.json",
+    "kind": "dep",
+    "blob_sha": "b9fb01dd5acaed78ac4bcef95f9ba2a1d9d584f9",
+    "ecosystem": "npm",
+    "bytes": 495,
+    "names": [
+     "cosmiconfig",
+     "funtypes"
+    ]
+   },
+   {
+    "path": "packages/pg-connection-string/package.json",
+    "kind": "dep",
+    "blob_sha": "ab57954e10bf1358f71d99f521c0b92929dbd3b4",
+    "ecosystem": "npm",
+    "bytes": 460
+   },
+   {
+    "path": "packages/pg-create/package.json",
+    "kind": "dep",
+    "blob_sha": "04dd94281c39ee47da9ca024168fd4f0b58e1db7",
+    "ecosystem": "npm",
+    "bytes": 667,
+    "names": [
+     "@databases/pg",
+     "@types/rimraf",
+     "chalk",
+     "cross-spawn",
+     "rimraf"
+    ]
+   },
+   {
+    "path": "packages/pg-data-type-id/package.json",
+    "kind": "dep",
+    "blob_sha": "774342f88e71eb4b380fba557887e573e98509f8",
+    "ecosystem": "npm",
+    "bytes": 475
+   },
+   {
+    "path": "packages/pg-errors/package.json",
+    "kind": "dep",
+    "blob_sha": "6cea1f276cd42bb8eca44ff89904400f23fa09d3",
+    "ecosystem": "npm",
+    "bytes": 582,
+    "dev": [
+     "pg-error-constants"
+    ]
+   },
+   {
+    "path": "packages/pg-migrations/package.json",
+    "kind": "dep",
+    "blob_sha": "9bfdc6f0600a3397927a70aeb8831cf0178b4afe",
+    "ecosystem": "npm",
+    "bytes": 957,
+    "names": [
+     "@databases/migrations-base",
+     "@databases/pg",
+     "@databases/pg-config",
+     "assert-never",
+     "chalk",
+     "interrogator",
+     "is-interactive",
+     "parameter-reducers",
+     "semver",
+     "sucrase"
+    ],
+    "dev": [
+     "@types/semver",
+     "lsr"
+    ]
+   },
+   {
+    "path": "packages/pg-schema-cli/package.json",
+    "kind": "dep",
+    "blob_sha": "e1a5268eecf040a09c00475214665b1ca7712c38",
+    "ecosystem": "npm",
+    "bytes": 754,
+    "names": [
+     "@databases/pg-config",
+     "@databases/pg-schema-introspect",
+     "@databases/pg-schema-print-types",
+     "chalk",
+     "interrogator",
+     "is-interactive",
+     "parameter-reducers"
+    ]
+   },
+   {
+    "path": "packages/pg-schema-introspect/package.json",
+    "kind": "dep",
+    "blob_sha": "aa2f0c3ce1bff529317926adf94e8b44506d9eb6",
+    "ecosystem": "npm",
+    "bytes": 572,
+    "names": [
+     "@databases/pg"
+    ],
+    "dev": [
+     "pg-types",
+     "prettier"
+    ]
+   },
+   {
+    "path": "packages/pg-schema-print-types/package.json",
+    "kind": "dep",
+    "blob_sha": "8a462893499cb9ab7eb6c7697401b02757855e6a",
+    "ecosystem": "npm",
+    "bytes": 771,
+    "names": [
+     "@databases/pg-config",
+     "@databases/pg-data-type-id",
+     "@databases/shared-print-types",
+     "assert-never",
+     "@databases/pg-schema-introspect"
+    ],
+    "dev": [
+     "@databases/pg-schema-introspect"
+    ]
+   },
+   {
+    "path": "packages/pg-test/package.json",
+    "kind": "dep",
+    "blob_sha": "312344fc9cc203fb7f46bc256fb9d863f6e7039a",
+    "ecosystem": "npm",
+    "bytes": 873,
+    "names": [
+     "@databases/pg-config",
+     "@databases/with-container",
+     "@types/cross-spawn",
+     "cross-spawn",
+     "modern-spawn",
+     "ms",
+     "parameter-reducers",
+     "type-assertions"
+    ],
+    "dev": [
+     "@types/ms"
+    ]
+   },
+   {
+    "path": "packages/pg-typed/package.json",
+    "kind": "dep",
+    "blob_sha": "0b1bec46f267c8a07ad5063a2ae0ff5c07ba1262",
+    "ecosystem": "npm",
+    "bytes": 764,
+    "names": [
+     "@databases/pg-bulk",
+     "@databases/pg"
+    ],
+    "dev": [
+     "@databases/pg",
+     "@databases/pg-cluster",
+     "@databases/pg-schema-print-types",
+     "assert-never"
+    ]
+   },
+   {
+    "path": "packages/pg/package.json",
+    "kind": "dep",
+    "blob_sha": "77e5424ce52648f12990f9c27ca15cd8afe6b0b9",
+    "ecosystem": "npm",
+    "bytes": 996,
+    "names": [
+     "@babel/code-frame",
+     "@databases/escape-identifier",
+     "@databases/pg-config",
+     "@databases/pg-connection-string",
+     "@databases/pg-data-type-id",
+     "@databases/pg-errors",
+     "@databases/push-to-async-iterable",
+     "@databases/shared",
+     "@databases/split-sql-query",
+     "@databases/sql",
+     "assert-never",
+     "pg",
+     "pg-cursor"
+    ]
+   },
+   {
+    "path": "packages/push-to-async-iterable/package.json",
+    "kind": "dep",
+    "blob_sha": "c8c1405cd0b90810ce157533b76c2de53a69e26a",
+    "ecosystem": "npm",
+    "bytes": 500,
+    "names": [
+     "@databases/queue"
+    ]
+   },
+   {
+    "path": "packages/queue/package.json",
+    "kind": "dep",
+    "blob_sha": "f1616d3c1e6d2b2c2c907aa2e48178a2003cdb08",
+    "ecosystem": "npm",
+    "bytes": 486
+   },
+   {
+    "path": "packages/shared-print-types/package.json",
+    "kind": "dep",
+    "blob_sha": "281a1efb19727f91b235d3b57a18d048a5ffc048",
+    "ecosystem": "npm",
+    "bytes": 734,
+    "names": [
+     "camelcase",
+     "mkdirp",
+     "pluralize",
+     "uppercamelcase"
+    ],
+    "dev": [
+     "@types/camelcase",
+     "@types/mkdirp",
+     "@types/pluralize",
+     "@types/uppercamelcase"
+    ]
+   },
+   {
+    "path": "packages/shared/package.json",
+    "kind": "dep",
+    "blob_sha": "1f6fefb96c4f4d3e30080ba06597c0974fd23970",
+    "ecosystem": "npm",
+    "bytes": 649,
+    "names": [
+     "@databases/connection-pool",
+     "@databases/lock",
+     "@databases/queue",
+     "@databases/split-sql-query",
+     "@databases/sql"
+    ]
+   },
+   {
+    "path": "packages/split-sql-query/package.json",
+    "kind": "dep",
+    "blob_sha": "cac3c93126af752e057281d92e80d5e5adb27e4b",
+    "ecosystem": "npm",
+    "bytes": 630,
+    "names": [
+     "@databases/sql"
+    ],
+    "dev": [
+     "@databases/sql"
+    ]
+   },
+   {
+    "path": "packages/sql-commenter/package.json",
+    "kind": "dep",
+    "blob_sha": "681f1b7adca5eb42470cd922a9082d95e77169c7",
+    "ecosystem": "npm",
+    "bytes": 671,
+    "names": [
+     "@databases/validate-unicode",
+     "@databases/sql"
+    ],
+    "dev": [
+     "@databases/sql"
+    ]
+   },
+   {
+    "path": "packages/sql/package.json",
+    "kind": "dep",
+    "blob_sha": "652cc106fa6e9f72e404fa4cbca64beb59a33200",
+    "ecosystem": "npm",
+    "bytes": 517
+   },
+   {
+    "path": "packages/sqlite-sync/package.json",
+    "kind": "dep",
+    "blob_sha": "838d1e5c6a0d8a78905508e2fe838d7825a6c81a",
+    "ecosystem": "npm",
+    "bytes": 701,
+    "names": [
+     "@databases/escape-identifier",
+     "@databases/sql",
+     "@databases/split-sql-query",
+     "@types/better-sqlite3",
+     "better-sqlite3"
+    ]
+   },
+   {
+    "path": "packages/sqlite/package.json",
+    "kind": "dep",
+    "blob_sha": "ba614e20a8bb547e6d5918e871a5c0ba1135a939",
+    "ecosystem": "npm",
+    "bytes": 654,
+    "names": [
+     "@databases/escape-identifier",
+     "@databases/sql",
+     "@types/sqlite3",
+     "sqlite3",
+     "then-queue"
+    ]
+   },
+   {
+    "path": "packages/validate-unicode/package.json",
+    "kind": "dep",
+    "blob_sha": "7efc130912e9ae68de50e0bfa7df19aa6be5d1aa",
+    "ecosystem": "npm",
+    "bytes": 519
+   },
+   {
+    "path": "packages/website/package.json",
+    "kind": "dep",
+    "blob_sha": "33f071a3a996916b75132cd9c07b076d4e42b438",
+    "ecosystem": "npm",
+    "bytes": 1126,
+    "names": [
+     "@databases/mock-db",
+     "@databases/mock-db-typed",
+     "@emotion/css",
+     "@emotion/react",
+     "@emotion/server",
+     "@emotion/styled",
+     "@tailwindcss/forms",
+     "@tailwindcss/typography",
+     "assert-never",
+     "front-matter",
+     "github-slugger",
+     "highlight.js",
+     "image-size",
+     "mdast-util-from-markdown",
+     "mdast-util-gfm-table",
+     "micromark-extension-gfm-table",
+     "next",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@emotion/babel-plugin",
+     "@types/github-slugger",
+     "@types/react",
+     "babel-plugin-macros",
+     "next-sitemap",
+     "tailwindcss",
+     "twin.macro"
+    ]
+   },
+   {
+    "path": "packages/websql-core/package.json",
+    "kind": "dep",
+    "blob_sha": "330fac6cef7b92d8d692edd33c33d4627816beb6",
+    "ecosystem": "npm",
+    "bytes": 557,
+    "names": [
+     "@babel/code-frame",
+     "@databases/escape-identifier",
+     "@databases/sql"
+    ]
+   },
+   {
+    "path": "packages/websql/package.json",
+    "kind": "dep",
+    "blob_sha": "1df8b7359f6db357c55c2205b65e0641f6b289e9",
+    "ecosystem": "npm",
+    "bytes": 555,
+    "names": [
+     "@databases/websql-core",
+     "websql"
+    ]
+   },
+   {
+    "path": "packages/with-container/package.json",
+    "kind": "dep",
+    "blob_sha": "66d054a0ff5536428473ad3f4dea6f674acd278f",
+    "ecosystem": "npm",
+    "bytes": 574,
+    "names": [
+     "@types/cross-spawn",
+     "cross-spawn",
+     "detect-port",
+     "modern-spawn"
+    ]
+   },
+   {
+    "path": "packages/sql/web/package.json",
+    "kind": "dep",
+    "blob_sha": "6d4c245ab656572b0dbf7f086547cd8fb9576fef",
+    "ecosystem": "npm",
+    "bytes": 60
+   },
+   {
+    "path": "packages/mysql-test/jest/globalSetup/package.json",
+    "kind": "dep",
+    "blob_sha": "19e81e10873b4752f71bc0446bdebbea5d62ff54",
+    "ecosystem": "npm",
+    "bytes": 92
+   },
+   {
+    "path": "packages/mysql-test/jest/globalTeardown/package.json",
+    "kind": "dep",
+    "blob_sha": "7cbcce7b7d26b854b6993c69003709b9316d1c2b",
+    "ecosystem": "npm",
+    "bytes": 98
+   },
+   {
+    "path": "packages/pg-test/jest/globalSetup/package.json",
+    "kind": "dep",
+    "blob_sha": "19e81e10873b4752f71bc0446bdebbea5d62ff54",
+    "ecosystem": "npm",
+    "bytes": 92
+   },
+   {
+    "path": "packages/pg-test/jest/globalTeardown/package.json",
+    "kind": "dep",
+    "blob_sha": "7cbcce7b7d26b854b6993c69003709b9316d1c2b",
+    "ecosystem": "npm",
+    "bytes": 98
+   },
+   {
     "path": ".github/workflows/rollingversions.yml",
     "kind": "ci",
     "blob_sha": "e0906c559b0d462efd3ae20c6a16ab10ead1b5c7",
@@ -6766,9 +11601,9 @@
     "docs/blog/2021-02-08-nodejs-database.md"
    ],
    "paths": [
+    "packages/mysql/src/MySqlDriver.ts",
     "packages/website/babel-plugin-macros.config.js",
     "packages/mock-db/src/Driver.ts",
-    "packages/mysql/src/MySqlDriver.ts",
     "packages/pg/src/Driver.ts",
     "packages/shared/src/Driver.ts",
     "packages/bigquery/src/implementation/BigQueryDriver.ts",
@@ -7280,13 +12115,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:08:17Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:46:16Z",
   "default_branch": "master",
   "pushed_at": "2026-04-09",
   "stars": 245,
   "tree": {
    "sha": "11f7e7a1b3f8b0cbf7fe05b42c670403ddeaeeaf",
-   "etag": "W/\"4d8f1b6dbbac490eabd64224f59844d1a52a1d86d29143c010c3ba66f454ced8\"",
+   "etag": "W/\"84b47bc0d5f93875ebd46b62e36ad739b132b8d4ee5b9d736022475d98547ff8\"",
    "truncated": false,
    "path_count": 545,
    "matched": [
@@ -7301,7 +12137,10 @@
     "DenunciadoWeb/Backend/Backend.csproj",
     "DenunciadoWeb/DenunciadoWeb/DenunciadoBackEnd.csproj",
     "DenunciadoWeb/Domain/Domain.csproj",
-    "DenunciadoApp/DenunciadoApp/DenunciadoApp.Android/DenunciadoApp.Android.csproj"
+    "DenunciadoApp/DenunciadoApp/DenunciadoApp.Android/DenunciadoApp.Android.csproj",
+    "DenunciadoApp/DenunciadoApp/DenunciadoApp.UWP/DenunciadoApp.UWP.csproj",
+    "DenunciadoApp/DenunciadoApp/DenunciadoApp.iOS/DenunciadoApp.iOS.csproj",
+    "DenunciadoApp/DenunciadoApp/DenunciadoApp/DenunciadoApp.csproj"
    ]
   },
   "files": [
@@ -7407,6 +12246,27 @@
     "blob_sha": "50bc7e29a724377db46abc847d32caadcf4ee097",
     "ecosystem": "csproj",
     "bytes": 9555
+   },
+   {
+    "path": "DenunciadoApp/DenunciadoApp/DenunciadoApp.UWP/DenunciadoApp.UWP.csproj",
+    "kind": "dep",
+    "blob_sha": "5b4717a1e6f5b75776d9520daf30438e741a180a",
+    "ecosystem": "csproj",
+    "bytes": 8071
+   },
+   {
+    "path": "DenunciadoApp/DenunciadoApp/DenunciadoApp.iOS/DenunciadoApp.iOS.csproj",
+    "kind": "dep",
+    "blob_sha": "a0760947dd5f8a9fba778ec127a791a8ccde27ff",
+    "ecosystem": "csproj",
+    "bytes": 8086
+   },
+   {
+    "path": "DenunciadoApp/DenunciadoApp/DenunciadoApp/DenunciadoApp.csproj",
+    "kind": "dep",
+    "blob_sha": "f3c35cc787edec802f52f25bcef7d6502c847dfe",
+    "ecosystem": "csproj",
+    "bytes": 6731
    }
   ],
   "clues": {

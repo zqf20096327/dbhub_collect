@@ -510,13 +510,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:10:39Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:21:26Z",
   "default_branch": "master",
   "pushed_at": "2025-12-27",
-  "stars": 2708,
+  "stars": 2709,
   "tree": {
    "sha": "658ddc50bbe4ad8e04b2f5aca9054ac43e1f37f8",
-   "etag": "W/\"caac77143619b423e1772454962dc185447bfa42d32d033fa1fb7408febe479e\"",
+   "etag": "W/\"306ebeffdac6110595d599268dd570d97a017d85b2511533bff06f09dafc316b\"",
    "truncated": false,
    "path_count": 488,
    "matched": [
@@ -536,7 +537,12 @@
     "docker/elk/elasticsearch/Dockerfile",
     "docker/elk/elasticsearch/Dockerfile.alpine",
     "docker/go-jaeger/jaeger-demo/Dockerfile",
-    "docker/go-otel/jaeger-demo/Dockerfile"
+    "docker/go-otel/jaeger-demo/Dockerfile",
+    "docker/grafana-promethues/go-demo/Dockerfile",
+    "docker/go-jaeger/src/grpc-demo/Dockerfile",
+    "docker/go-jaeger/src/http-demo/Dockerfile",
+    "docker/go-otel/src/grpc-demo/Dockerfile",
+    "docker/go-otel/src/http-demo/Dockerfile"
    ]
   },
   "files": [
@@ -856,6 +862,51 @@
     "images": [
      "jaegertracing/all-in-one"
     ]
+   },
+   {
+    "path": "docker/grafana-promethues/go-demo/Dockerfile",
+    "kind": "image",
+    "blob_sha": "f9e514eb50243460234bef4e015c0a17edeff0c2",
+    "bytes": 108,
+    "images": [
+     "amd64/golang:1.16.3-alpine3.12"
+    ]
+   },
+   {
+    "path": "docker/go-jaeger/src/grpc-demo/Dockerfile",
+    "kind": "image",
+    "blob_sha": "cab4b13655da10b7673acef50dceadd445cc75a3",
+    "bytes": 113,
+    "images": [
+     "amd64/golang:1.19.7-alpine3.17"
+    ]
+   },
+   {
+    "path": "docker/go-jaeger/src/http-demo/Dockerfile",
+    "kind": "image",
+    "blob_sha": "2a13a34caca0488430929265d85d73ece5e63ac9",
+    "bytes": 113,
+    "images": [
+     "amd64/golang:1.19.7-alpine3.17"
+    ]
+   },
+   {
+    "path": "docker/go-otel/src/grpc-demo/Dockerfile",
+    "kind": "image",
+    "blob_sha": "cab4b13655da10b7673acef50dceadd445cc75a3",
+    "bytes": 113,
+    "images": [
+     "amd64/golang:1.19.7-alpine3.17"
+    ]
+   },
+   {
+    "path": "docker/go-otel/src/http-demo/Dockerfile",
+    "kind": "image",
+    "blob_sha": "2a13a34caca0488430929265d85d73ece5e63ac9",
+    "bytes": 113,
+    "images": [
+     "amd64/golang:1.19.7-alpine3.17"
+    ]
    }
   ],
   "clues": {
@@ -886,13 +937,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:13:02Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:23:09Z",
   "default_branch": "master",
-  "pushed_at": "2026-08-07",
-  "stars": 1572,
+  "pushed_at": "2026-10-29",
+  "stars": 1573,
   "tree": {
    "sha": "83cc9049dc73ccf8f77e5645189acb5240878307",
-   "etag": "W/\"11ec3a76f41a8cbbacc0ae545c41ef40fc10aaa5282d5934586e5436a39772b0\"",
+   "etag": "W/\"fb0c8849e0b084b0ad800b7a59f64cb2b8875cad7fb0882a420b1178cfa175cf\"",
    "truncated": false,
    "path_count": 179,
    "matched": [
@@ -1287,13 +1339,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T00:38:42Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:40:21Z",
   "default_branch": "main",
   "pushed_at": "2026-10-08",
   "stars": 55,
   "tree": {
    "sha": "82f8f41215259ba530bab89446d7c18b5646829e",
-   "etag": "W/\"bc6dd62443c71df1885f0de1fa0590b7b7fa523c6a226fe485ac7376cee48aba\"",
+   "etag": "W/\"19cfb63f6dc0f51bc721ea50b084c7f03286eeea5585c6e3a6512c15119df6b7\"",
    "truncated": false,
    "path_count": 751,
    "matched": [
@@ -1309,6 +1362,8 @@
     "server/random_test/Cargo.toml",
     "server/stress_test/Cargo.toml",
     "server/utils/Cargo.toml",
+    "server/web-panel/package.json",
+    "client/android/app/build.gradle.kts",
     "docker/Dockerfile",
     "docker/Dockerfile.alpine-base",
     "docker/Dockerfile.debian",
@@ -1648,6 +1703,64 @@
      "rsa.workspace",
      "serde.workspace"
     ]
+   },
+   {
+    "path": "server/web-panel/package.json",
+    "kind": "dep",
+    "blob_sha": "4dfe6362b0cc4cda18d75ae499ccdd471a113db9",
+    "ecosystem": "npm",
+    "bytes": 1868,
+    "names": [
+     "@element-plus/icons-vue",
+     "@improbable-eng/grpc-web",
+     "@protobuf-ts/grpcweb-transport",
+     "@protobuf-ts/runtime",
+     "@protobuf-ts/runtime-rpc",
+     "@tailwindcss/vite",
+     "echarts",
+     "element-plus",
+     "pinia",
+     "vue",
+     "vue-echarts",
+     "vue-i18n",
+     "vue-router"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@tsconfig/node22",
+     "@types/jsdom",
+     "@types/node",
+     "@vitejs/plugin-vue",
+     "@vitejs/plugin-vue-jsx",
+     "@vitest/eslint-plugin",
+     "@vue/eslint-config-prettier",
+     "@vue/eslint-config-typescript",
+     "@vue/test-utils",
+     "@vue/tsconfig",
+     "autoprefixer",
+     "eslint",
+     "eslint-plugin-oxlint",
+     "eslint-plugin-playwright",
+     "eslint-plugin-vue",
+     "jiti",
+     "jsdom",
+     "npm-run-all2",
+     "oxlint",
+     "postcss",
+     "prettier",
+     "tailwindcss",
+     "typescript",
+     "vite",
+     "vitest",
+     "vue-tsc"
+    ]
+   },
+   {
+    "path": "client/android/app/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "59bc6113883c4949243e7a5175cff593d88e73d6",
+    "ecosystem": "gradle",
+    "bytes": 2442
    },
    {
     "path": "docker/Dockerfile",
@@ -2652,13 +2765,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T02:00:38Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:58:33Z",
   "default_branch": "master",
   "pushed_at": "2024-12-22",
   "stars": 10,
   "tree": {
    "sha": "eb7cf0be9f301e15ad1f24bd44fc182fd8a71bfc",
-   "etag": "W/\"213676778f0d3f388dae825e4ebbdbab37dfd0b08c6fadaf43cb95d08fa6bf5f\"",
+   "etag": "W/\"01929834e0155f92049c46cc5deb67c9817ed9c2aaa886485d7120dc6127cc37\"",
    "truncated": false,
    "path_count": 368,
    "matched": [
@@ -2673,7 +2787,12 @@
     "Json1App/Json1App.csproj",
     "NewInEFCore7/NewInEFCore7.csproj",
     "OwnedEntities/OwnedEntities.csproj",
-    "ShadowProperties/ShadowProperties.csproj"
+    "ShadowProperties/ShadowProperties.csproj",
+    "SortByColumnNameApp/SortByColumnNameApp.csproj",
+    "SqlServerLibrary/SqlServerLibrary.csproj",
+    "TestingStuff/TestingStuff.csproj",
+    "TranslationStringIndexOfApp/TranslationStringIndexOfApp.csproj",
+    "WebStandardsWithJson/WebStandardsWithJson.csproj"
    ]
   },
   "files": [
@@ -2837,6 +2956,70 @@
      "EntityFrameworkCoreHelpers",
      "Microsoft.EntityFrameworkCore.SqlServer",
      "Bogus"
+    ]
+   },
+   {
+    "path": "SortByColumnNameApp/SortByColumnNameApp.csproj",
+    "kind": "dep",
+    "blob_sha": "e82310522f45a17ab327e9794494a29925240282",
+    "ecosystem": "csproj",
+    "bytes": 1757,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Microsoft.EntityFrameworkCore.SqlServer",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "SqlServerLibrary/SqlServerLibrary.csproj",
+    "kind": "dep",
+    "blob_sha": "21534110182998b3d2b82e04005f9d2046d83a99",
+    "ecosystem": "csproj",
+    "bytes": 444,
+    "names": [
+     "Microsoft.Data.SqlClient"
+    ]
+   },
+   {
+    "path": "TestingStuff/TestingStuff.csproj",
+    "kind": "dep",
+    "blob_sha": "5cd99d95042fa0a29bc1e8c0085270b4fde31e61",
+    "ecosystem": "csproj",
+    "bytes": 986,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Microsoft.EntityFrameworkCore.SqlServer",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "TranslationStringIndexOfApp/TranslationStringIndexOfApp.csproj",
+    "kind": "dep",
+    "blob_sha": "2fb6842786df8dd63b0b50a722885e883d54c17b",
+    "ecosystem": "csproj",
+    "bytes": 1000,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Microsoft.EntityFrameworkCore.Sqlite",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "WebStandardsWithJson/WebStandardsWithJson.csproj",
+    "kind": "dep",
+    "blob_sha": "4cbec961e12dbca310e963c3e761c3d4f2073203",
+    "ecosystem": "csproj",
+    "bytes": 1620,
+    "names": [
+     "ConfigurationLibrary",
+     "Microsoft.EntityFrameworkCore.Design",
+     "ConsoleHelperLibrary",
+     "Microsoft.EntityFrameworkCore.SqlServer",
+     "System.Data.SqlClient",
+     "Spectre.Console"
     ]
    }
   ],
@@ -3201,15 +3384,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T03:48:06Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:40:13Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-27",
+  "pushed_at": "2026-10-31",
   "stars": 466,
   "tree": {
-   "sha": "476dd22f3d0338274f28adf7b524aded3c8bf2b8",
-   "etag": "W/\"02378e09bc77f4ccf9e4cab0c52328d6495b9caf974eaafc8b9cc3aeb7eef92d\"",
+   "sha": "32f98183b63baf423e5c079a099441622e91eb45",
+   "etag": "W/\"9fee3345c720ed16f041e601bbd1ce6d0361e27ad75a66b23acbaffb9a6038dc\"",
    "truncated": false,
-   "path_count": 227,
+   "path_count": 228,
    "matched": [
     "build.gradle",
     ".github/workflows/release.yml",

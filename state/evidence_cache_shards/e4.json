@@ -683,13 +683,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T15:56:55Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:09:48Z",
   "default_branch": "master",
   "pushed_at": "2020-03-27",
   "stars": 0,
   "tree": {
    "sha": "f2938ef54b522246f27342f9f691a2164cb93832",
-   "etag": "W/\"438ad7172115c8c46fc45cfc3a77843724bc94660b6ed1e224159ef3077393eb\"",
+   "etag": "W/\"72c4a6bd7ad88ac76d8da0765e0234e0e57013beb8101f86c48f9eef2f0aadee\"",
    "truncated": false,
    "path_count": 60,
    "matched": [
@@ -700,7 +701,11 @@
     "dashboard-installer/Dockerfile",
     "pd/Dockerfile",
     "tidb-binlog/Dockerfile",
-    "tidb-vision/Dockerfile"
+    "tidb-vision/Dockerfile",
+    "tidb/Dockerfile",
+    "tikv/Dockerfile",
+    "tispark/Dockerfile",
+    "docker/debug/Dockerfile"
    ]
   },
   "files": [
@@ -802,6 +807,42 @@
     "bytes": 168,
     "images": [
      "node:8"
+    ]
+   },
+   {
+    "path": "tidb/Dockerfile",
+    "kind": "image",
+    "blob_sha": "410af77e67c8ac805d57feec11aabf20d8880fb1",
+    "bytes": 136,
+    "images": [
+     "alpine:3.5"
+    ]
+   },
+   {
+    "path": "tikv/Dockerfile",
+    "kind": "image",
+    "blob_sha": "ebb61b5e8dae6a3445bb0806b35e1725b67285bf",
+    "bytes": 141,
+    "images": [
+     "pingcap/alpine-glibc"
+    ]
+   },
+   {
+    "path": "tispark/Dockerfile",
+    "kind": "image",
+    "blob_sha": "52f6d779eb80ba64d9bd7142f376b3ee8d3f20b0",
+    "bytes": 1632,
+    "images": [
+     "anapsix/alpine-java:8"
+    ]
+   },
+   {
+    "path": "docker/debug/Dockerfile",
+    "kind": "image",
+    "blob_sha": "97b5fb25edb612dacc1e804c2edbcad07c340c0a",
+    "bytes": 1326,
+    "images": [
+     "centos:7"
     ]
    }
   ],
@@ -1241,13 +1282,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:06:12Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:17:55Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-29",
-  "stars": 31459,
+  "pushed_at": "2026-10-30",
+  "stars": 31482,
   "tree": {
-   "sha": "a619e2727d9118607cde5cc1a407d84f223ff022",
-   "etag": "W/\"6b01a7a2799db475cb7cc156291f070664f096d7e34fc1a2680f870db9fe2521\"",
+   "sha": "d53d124e4769e34c4be8bcc5d21eed1855b090ef",
+   "etag": "W/\"751a6ef558ba39d386f67af2dfe2ec3fdf2bfeccf06762132f5b5a0ba6794d27\"",
    "truncated": false,
    "path_count": 939,
    "matched": [
@@ -1263,6 +1305,16 @@
     "packages/docs-test/package.json",
     "packages/docs-test/requirements.txt",
     "packages/hooks/package.json",
+    "packages/lib/package.json",
+    "packages/livekit-sdk-python/pyproject.toml",
+    "packages/memory-graph/package.json",
+    "packages/openai-sdk-python/pyproject.toml",
+    "packages/pipecat-sdk-python/pyproject.toml",
+    "packages/tools/package.json",
+    "packages/ui/package.json",
+    "packages/validation/package.json",
+    "apps/sdk-playground/python/pyproject.toml",
+    "packages/tools/test/chatapp/package.json",
     ".github/workflows/ci-python.yml",
     ".github/workflows/ci.yml",
     ".github/workflows/claude-auto-fix-ci.yml",
@@ -1347,7 +1399,7 @@
    {
     "path": "apps/mcp/package.json",
     "kind": "dep",
-    "blob_sha": "f818024154c20dc618080ffd7f59577d2d85ee4e",
+    "blob_sha": "5f3330151aa326ba400eb33d18a9bfe94da55839",
     "ecosystem": "npm",
     "bytes": 1861,
     "names": [
@@ -1536,6 +1588,212 @@
     "bytes": 116
    },
    {
+    "path": "packages/lib/package.json",
+    "kind": "dep",
+    "blob_sha": "b4fc310b00576e872ccdeaf1c3b40cdb1409d841",
+    "ecosystem": "npm",
+    "bytes": 621,
+    "names": [
+     "@ai-sdk/anthropic",
+     "@ai-sdk/google",
+     "@ai-sdk/groq",
+     "@better-auth/api-key",
+     "@better-fetch/fetch",
+     "@tanstack/react-query",
+     "@tanstack/react-query-devtools",
+     "ai-gateway-provider",
+     "better-auth",
+     "clsx",
+     "posthog-js",
+     "sonner",
+     "tailwind-merge",
+     "zod"
+    ]
+   },
+   {
+    "path": "packages/livekit-sdk-python/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "f699f894c14de768e1e9b7fffa40b8139882278f",
+    "ecosystem": "pyproject",
+    "bytes": 1358,
+    "names": [
+     "livekit-agents",
+     "pydantic",
+     "supermemory"
+    ]
+   },
+   {
+    "path": "packages/memory-graph/package.json",
+    "kind": "dep",
+    "blob_sha": "80d38ec86cae0cd6b0e860d14b0d4fab2f8da263",
+    "ecosystem": "npm",
+    "bytes": 1776,
+    "names": [
+     "d3-force",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@testing-library/jest-dom",
+     "@testing-library/react",
+     "@types/d3-force",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "happy-dom",
+     "typescript",
+     "vite",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/openai-sdk-python/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "a480f117b85a83ab070ba4947159495cca77b7ae",
+    "ecosystem": "pyproject",
+    "bytes": 2092,
+    "names": [
+     "openai",
+     "supermemory",
+     "typing-extensions",
+     "requests"
+    ]
+   },
+   {
+    "path": "packages/pipecat-sdk-python/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "4cf30adf44eba2f287ddbc756a32e1aa417387a5",
+    "ecosystem": "pyproject",
+    "bytes": 1721,
+    "names": [
+     "pipecat-ai",
+     "supermemory",
+     "pydantic",
+     "loguru"
+    ]
+   },
+   {
+    "path": "packages/tools/package.json",
+    "kind": "dep",
+    "blob_sha": "ea3bfe6342e0c22b089a41eeb015458a07f5845d",
+    "ecosystem": "npm",
+    "bytes": 2341,
+    "names": [
+     "lru-cache",
+     "openai",
+     "supermemory",
+     "zod",
+     "@ai-sdk/provider",
+     "@voltagent/core",
+     "ai"
+    ],
+    "dev": [
+     "@ai-sdk/anthropic",
+     "@ai-sdk/openai",
+     "@ai-sdk/provider",
+     "@anthropic-ai/sdk",
+     "@voltagent/core",
+     "@mastra/core",
+     "@total-typescript/tsconfig",
+     "@types/bun",
+     "ai",
+     "dotenv",
+     "tsdown",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/ui/package.json",
+    "kind": "dep",
+    "blob_sha": "74ff23ef657257f0e94a9f7ca9d9bb28b362c8cf",
+    "ecosystem": "npm",
+    "bytes": 1260,
+    "names": [
+     "@radix-ui/react-accordion",
+     "@radix-ui/react-alert-dialog",
+     "@radix-ui/react-avatar",
+     "@radix-ui/react-checkbox",
+     "@radix-ui/react-collapsible",
+     "@radix-ui/react-dialog",
+     "@radix-ui/react-dropdown-menu",
+     "@radix-ui/react-hover-card",
+     "@radix-ui/react-label",
+     "@radix-ui/react-popover",
+     "@radix-ui/react-progress",
+     "@radix-ui/react-scroll-area",
+     "@radix-ui/react-select",
+     "@radix-ui/react-separator",
+     "@radix-ui/react-slot",
+     "@radix-ui/react-tabs",
+     "@radix-ui/react-toggle",
+     "@radix-ui/react-toggle-group",
+     "@radix-ui/react-tooltip",
+     "class-variance-authority",
+     "cmdk",
+     "embla-carousel-react",
+     "lucide-react",
+     "motion",
+     "next-themes",
+     "recharts",
+     "sonner",
+     "tailwindcss",
+     "tw-animate-css",
+     "vaul"
+    ]
+   },
+   {
+    "path": "packages/validation/package.json",
+    "kind": "dep",
+    "blob_sha": "8ed19114400094112db7d3da8e49fead1f9d2f2c",
+    "ecosystem": "npm",
+    "bytes": 140
+   },
+   {
+    "path": "apps/sdk-playground/python/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "7ec6029984b60ff7593d8f166230e40d01eaf177",
+    "ecosystem": "pyproject",
+    "bytes": 381,
+    "names": [
+     "fastapi",
+     "httpx",
+     "uvicorn",
+     "python-dotenv",
+     "openai",
+     "supermemory-openai-sdk"
+    ]
+   },
+   {
+    "path": "packages/tools/test/chatapp/package.json",
+    "kind": "dep",
+    "blob_sha": "79f6ae16d64bbdf2de01d8a74862cc62fe8f0ed0",
+    "ecosystem": "npm",
+    "bytes": 944,
+    "names": [
+     "@ai-sdk/react",
+     "@posthog/ai",
+     "@supermemory/tools",
+     "ai",
+     "next",
+     "openai",
+     "posthog-node",
+     "react",
+     "react-dom",
+     "zod"
+    ],
+    "dev": [
+     "@tailwindcss/postcss",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "eslint",
+     "eslint-config-next",
+     "tailwindcss",
+     "typescript"
+    ]
+   },
+   {
     "path": ".github/workflows/ci-python.yml",
     "kind": "ci",
     "blob_sha": "2dda9c58933ef5fdfe7eeff01c9510e72bf85a81",
@@ -1643,13 +1901,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:26:50Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:29:38Z",
   "default_branch": "master",
   "pushed_at": "2024-03-10",
   "stars": 284,
   "tree": {
    "sha": "61d20867344f5bb2d3353ecd6a89e4e76021349b",
-   "etag": "W/\"456cfdb78802a1ac4f1757bea2c4838bc645f83378d3ff03ba4ef08bf773492e\"",
+   "etag": "W/\"a440f8732e72d22ee25d6cad8c775f6f53b96ea0bd0027170dfaa76458735e15\"",
    "truncated": false,
    "path_count": 1198,
    "matched": [
@@ -1665,6 +1924,28 @@
     "XClipper.Android/buildSrc/build.gradle.kts",
     "XClipper.Android/updater/build.gradle.kts",
     "XClipper.Android/modules/core-addons/build.gradle.kts",
+    "XClipper.Android/modules/core-auto-delete/build.gradle.kts",
+    "XClipper.Android/modules/core-clipboard/build.gradle.kts",
+    "XClipper.Android/modules/core-extension/build.gradle.kts",
+    "XClipper.Android/modules/core-github-updater/build.gradle.kts",
+    "XClipper.Android/modules/core-pinlock/build.gradle.kts",
+    "XClipper.Android/modules/core-private/build.gradle.kts",
+    "XClipper.Android/modules/core-special/build.gradle.kts",
+    "XClipper.Android/modules/core-sync/build.gradle.kts",
+    "XClipper.Android/modules/core/build.gradle.kts",
+    "XClipper.Android/modules/feature-clipboard/build.gradle.kts",
+    "XClipper.Android/modules/feature-crash-report/build.gradle.kts",
+    "XClipper.Android/modules/feature-home/build.gradle.kts",
+    "XClipper.Android/modules/feature-onboarding/build.gradle.kts",
+    "XClipper.Android/modules/feature-quicksettings/build.gradle.kts",
+    "XClipper.Android/modules/feature-settings/build.gradle.kts",
+    "XClipper.Android/modules/feature-special/build.gradle.kts",
+    "XClipper.Android/modules/feature-suggestions/build.gradle.kts",
+    "XClipper.Android/modules/feature-xcopy/build.gradle.kts",
+    "XClipper.Android/modules/library-color-sheet/build.gradle.kts",
+    "XClipper.Android/modules/library-floating-bubble/build.gradle.kts",
+    "XClipper.Android/modules/library-pin-lock/build.gradle.kts",
+    "XClipper.Android/modules/library-rounded-sheet/build.gradle.kts",
     ".github/workflows/android.yml",
     ".github/workflows/windows.yml"
    ]
@@ -1758,6 +2039,160 @@
     "bytes": 1152
    },
    {
+    "path": "XClipper.Android/modules/core-auto-delete/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "89062798d57ed4c6759956991b159b5f165a14b5",
+    "ecosystem": "gradle",
+    "bytes": 969
+   },
+   {
+    "path": "XClipper.Android/modules/core-clipboard/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "f674b8f610b8631cce81d18c9b03331acad1635e",
+    "ecosystem": "gradle",
+    "bytes": 638
+   },
+   {
+    "path": "XClipper.Android/modules/core-extension/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "eebf80f9522f831188c603b717b7e8913458eeca",
+    "ecosystem": "gradle",
+    "bytes": 826
+   },
+   {
+    "path": "XClipper.Android/modules/core-github-updater/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "e8128cb829c4e83d98eea12e028b5138105cbdf7",
+    "ecosystem": "gradle",
+    "bytes": 1378
+   },
+   {
+    "path": "XClipper.Android/modules/core-pinlock/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "39957c82f394106ba3a864a661bf72002c0105ed",
+    "ecosystem": "gradle",
+    "bytes": 551
+   },
+   {
+    "path": "XClipper.Android/modules/core-private/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "b0b084c5f05edc379ffa69a0a888ae0b022fda24",
+    "ecosystem": "gradle",
+    "bytes": 246
+   },
+   {
+    "path": "XClipper.Android/modules/core-special/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "79bf2b684c0d667748bef6764c8adb8cb2e4783c",
+    "ecosystem": "gradle",
+    "bytes": 1052
+   },
+   {
+    "path": "XClipper.Android/modules/core-sync/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "a93bc4c972e14018a4412526c775a544f0573e2d",
+    "ecosystem": "gradle",
+    "bytes": 1083
+   },
+   {
+    "path": "XClipper.Android/modules/core/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "f55e4077d679ae2ff548405ad5c9540267c7e5f2",
+    "ecosystem": "gradle",
+    "bytes": 2607
+   },
+   {
+    "path": "XClipper.Android/modules/feature-clipboard/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "c21eff9afc558a4dbe5ed8792845bf31ad16d3f8",
+    "ecosystem": "gradle",
+    "bytes": 745
+   },
+   {
+    "path": "XClipper.Android/modules/feature-crash-report/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "e81877f5c4386ba3b62ed112735f912ba5352ed0",
+    "ecosystem": "gradle",
+    "bytes": 771
+   },
+   {
+    "path": "XClipper.Android/modules/feature-home/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "b6f6d105211a79ec6f209175b8226c56db116866",
+    "ecosystem": "gradle",
+    "bytes": 1495
+   },
+   {
+    "path": "XClipper.Android/modules/feature-onboarding/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "b5f6e7cf14c92a4debaec7ed17612e27aeacc983",
+    "ecosystem": "gradle",
+    "bytes": 836
+   },
+   {
+    "path": "XClipper.Android/modules/feature-quicksettings/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "d06fb0ad281a496dfee8809b9f08b09c245e018f",
+    "ecosystem": "gradle",
+    "bytes": 308
+   },
+   {
+    "path": "XClipper.Android/modules/feature-settings/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "f688f33e8798ea809d9ad282b39bf13520055923",
+    "ecosystem": "gradle",
+    "bytes": 1376
+   },
+   {
+    "path": "XClipper.Android/modules/feature-special/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "aa106423082845268cac5f3c455f31e9e8bdf944",
+    "ecosystem": "gradle",
+    "bytes": 1053
+   },
+   {
+    "path": "XClipper.Android/modules/feature-suggestions/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "a571a7c24665e5928aefc226a0665ac388f62333",
+    "ecosystem": "gradle",
+    "bytes": 826
+   },
+   {
+    "path": "XClipper.Android/modules/feature-xcopy/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "6814408d4ff2931aa871006b46e8074acdf4f6d2",
+    "ecosystem": "gradle",
+    "bytes": 520
+   },
+   {
+    "path": "XClipper.Android/modules/library-color-sheet/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "6e2d813ff43e9e8e32fdd461006116f0c795c68e",
+    "ecosystem": "gradle",
+    "bytes": 441
+   },
+   {
+    "path": "XClipper.Android/modules/library-floating-bubble/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "533124b52a20a4a94c56a850c194efb7c0cf582e",
+    "ecosystem": "gradle",
+    "bytes": 457
+   },
+   {
+    "path": "XClipper.Android/modules/library-pin-lock/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "e7e9bbf6dca7dddcae15569cac207a5c82883f25",
+    "ecosystem": "gradle",
+    "bytes": 563
+   },
+   {
+    "path": "XClipper.Android/modules/library-rounded-sheet/build.gradle.kts",
+    "kind": "dep",
+    "blob_sha": "465472f085c4c2679441adcb835113f51e4fc8bc",
+    "ecosystem": "gradle",
+    "bytes": 246
+   },
+   {
     "path": ".github/workflows/android.yml",
     "kind": "ci",
     "blob_sha": "48396f3e4fcf64d8d6d26d405418915cf86df122",
@@ -1795,15 +2230,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:30:00Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:31:02Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-29",
-  "stars": 220,
+  "pushed_at": "2026-10-31",
+  "stars": 221,
   "tree": {
-   "sha": "6b557def61010e61abfcfd362fd50eb40259463f",
-   "etag": "W/\"34f6c7a89dc306514129516c678b8a0501f553fac9554584b71bd6626480999f\"",
+   "sha": "ca8cda2c6e309b6c46bcf2b67a0a4e5f6bbf5662",
+   "etag": "W/\"9db3f3ac58bc0155dbe21828ac4c6b5012aa7ac79ad4594d7166fde487f4df75\"",
    "truncated": false,
-   "path_count": 4611,
+   "path_count": 4624,
    "matched": [
     "Cargo.toml",
     "package.json",
@@ -1817,6 +2253,54 @@
     "crates/jazz-native-relay/Cargo.toml",
     "crates/jazz-native-transport/Cargo.toml",
     "crates/jazz-otel/Cargo.toml",
+    "crates/jazz-rn/package.json",
+    "crates/jazz-server/Cargo.toml",
+    "crates/jazz-sim/Cargo.toml",
+    "crates/jazz-testkit/Cargo.toml",
+    "crates/jazz-wasm/Cargo.toml",
+    "crates/jazz-wasm/package.json",
+    "crates/jazz/Cargo.toml",
+    "crates/wasm-tracing/Cargo.toml",
+    "dev/local-telemetry/go.mod",
+    "dev/rn-device-acceptance/package.json",
+    "examples/auth-betterauth-chat/package.json",
+    "examples/auth-simple-chat/package.json",
+    "examples/auth-workos-chat/package.json",
+    "examples/big-label/package.json",
+    "examples/branching-project-planner-ts/package.json",
+    "examples/chat-react/package.json",
+    "examples/cloudflare-worker-runtime-ts/package.json",
+    "examples/epic-drop/package.json",
+    "examples/jamazon-warehouse/package.json",
+    "examples/nextjs-csr-ssr/package.json",
+    "examples/todo-client-localfirst-expo/package.json",
+    "examples/todo-client-localfirst-react/package.json",
+    "examples/todo-client-localfirst-solid/package.json",
+    "examples/todo-client-localfirst-svelte/package.json",
+    "examples/todo-client-localfirst-ts/package.json",
+    "examples/todo-client-localfirst-vue/package.json",
+    "examples/todo-server-rs/Cargo.toml",
+    "examples/todo-server-ts/package.json",
+    "examples/world-tour/package.json",
+    "packages/create-jazz-e2e/package.json",
+    "packages/create-jazz/package.json",
+    "packages/inspector/package.json",
+    "packages/jazz-tools/package.json",
+    "starters/next-betterauth/package.json",
+    "starters/next-hybrid/package.json",
+    "starters/next-localfirst/package.json",
+    "starters/react-betterauth/package.json",
+    "starters/react-hybrid/package.json",
+    "starters/react-localfirst/package.json",
+    "starters/sveltekit-betterauth/package.json",
+    "starters/sveltekit-hybrid/package.json",
+    "starters/sveltekit-localfirst/package.json",
+    "starters/ts-betterauth/package.json",
+    "starters/ts-effect-betterauth/package.json",
+    "starters/ts-effect-localfirst/package.json",
+    "starters/ts-hybrid/package.json",
+    "starters/ts-localfirst/package.json",
+    "vendor/ruzstd/Cargo.toml",
     "dev/artifacts/linux-napi/Dockerfile",
     "dev/ci/toolchain/Dockerfile",
     "dev/artifacts/linux-napi/al2023/Dockerfile",
@@ -1834,7 +2318,15 @@
     ".github/workflows/perf-timeline-snapshot.yml",
     ".github/workflows/preview-build.yml",
     ".github/workflows/preview-jazz-tools-alpha-release.yml",
-    ".github/workflows/promote-inspector-production.yml"
+    ".github/workflows/promote-inspector-production.yml",
+    ".github/workflows/publish-jazz-crates-alpha.yml",
+    ".github/workflows/publish-jazz-tools-alpha.yml",
+    ".github/workflows/recover-alpha54-rn-publish.yml",
+    ".github/workflows/rn-device-acceptance.yml",
+    ".github/workflows/rn-native-artifacts.yml",
+    ".github/workflows/runner-pool-diagnostic.yml",
+    ".github/workflows/stage-inspector-production.yml",
+    ".github/workflows/starters-e2e.yml"
    ]
   },
   "files": [
@@ -2092,6 +2584,1323 @@
     ]
    },
    {
+    "path": "crates/jazz-rn/package.json",
+    "kind": "dep",
+    "blob_sha": "4501a7dffc5f41f4b73d910d4c7700c6d67385c3",
+    "ecosystem": "npm",
+    "bytes": 4901,
+    "names": [
+     "jazz-rn-android",
+     "jazz-rn-ios",
+     "expo",
+     "react",
+     "react-native"
+    ],
+    "dev": [
+     "@commitlint/config-conventional",
+     "@eslint/compat",
+     "@eslint/eslintrc",
+     "@eslint/js",
+     "@evilmartians/lefthook",
+     "@react-native-community/cli",
+     "@react-native/babel-preset",
+     "@react-native/eslint-config",
+     "@release-it/conventional-changelog",
+     "@types/jest",
+     "@types/react",
+     "commitlint",
+     "del-cli",
+     "eslint",
+     "eslint-config-prettier",
+     "eslint-plugin-prettier",
+     "jest",
+     "prettier",
+     "react",
+     "react-native",
+     "react-native-builder-bob",
+     "release-it",
+     "turbo",
+     "typescript"
+    ]
+   },
+   {
+    "path": "crates/jazz-server/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "20d83046b95a0c85484a0242150cf38e155adbb8",
+    "ecosystem": "cargo",
+    "bytes": 1965,
+    "names": [
+     "jazz",
+     "jazz-otel",
+     "axum",
+     "base64",
+     "futures",
+     "futures-util",
+     "http",
+     "jsonwebtoken",
+     "hex",
+     "opentelemetry",
+     "postcard",
+     "rusqlite",
+     "thiserror",
+     "reqwest",
+     "serde",
+     "serde_json",
+     "sha2",
+     "tokio",
+     "tower-http",
+     "tokio-tungstenite",
+     "tracing",
+     "tungstenite",
+     "uuid"
+    ],
+    "dev": [
+     "flate2",
+     "jazz",
+     "tempfile",
+     "tokio-tungstenite",
+     "tower"
+    ]
+   },
+   {
+    "path": "crates/jazz-sim/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "1d9b76c91c85e17fd9ae9d9511395e02708795c0",
+    "ecosystem": "cargo",
+    "bytes": 1270,
+    "names": [
+     "hdrhistogram",
+     "jazz",
+     "libc",
+     "pprof",
+     "postcard",
+     "rusqlite",
+     "serde_json",
+     "tempfile",
+     "uuid"
+    ],
+    "dev": [
+     "jazz-benchmark-guard"
+    ]
+   },
+   {
+    "path": "crates/jazz-testkit/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "9ea5cc21425adfde84d47f64374a2e9dc07cb65a",
+    "ecosystem": "cargo",
+    "bytes": 1456,
+    "names": [
+     "jazz.workspace",
+     "jazz-native-transport",
+     "jazz-server",
+     "jsonwebtoken",
+     "], optional",
+     "reqwest",
+     "serde",
+     "serde_json",
+     "tempfile",
+     "tokio",
+     "uuid",
+     "zstd"
+    ],
+    "dev": [
+     "postcard"
+    ]
+   },
+   {
+    "path": "crates/jazz-wasm/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "885db82f733b0f3e20957eae3baaf0101973e286",
+    "ecosystem": "cargo",
+    "bytes": 3095,
+    "names": [
+     "base64",
+     "console_error_panic_hook",
+     "ed25519-dalek",
+     "futures-util",
+     "futures-channel",
+     "jazz",
+     "js-sys",
+     "postcard",
+     "serde",
+     "serde-wasm-bindgen",
+     "serde_json",
+     "sha2",
+     "tracing",
+     "wasm-tracing",
+     "uuid",
+     "wasm-bindgen",
+     "wasm-bindgen-futures",
+     "web-time"
+    ],
+    "dev": [
+     "wasm-bindgen-test"
+    ]
+   },
+   {
+    "path": "crates/jazz-wasm/package.json",
+    "kind": "dep",
+    "blob_sha": "1df21d71f4ae27cf4e4cf563d8b25d94add1cccc",
+    "ecosystem": "npm",
+    "bytes": 828
+   },
+   {
+    "path": "crates/jazz/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "aff369fe0529014a91b7351b3e747da901ab2b00",
+    "ecosystem": "cargo",
+    "bytes": 3181,
+    "names": [
+     "futures-core",
+     "futures-channel",
+     "futures",
+     "futures-util",
+     "blake3",
+     "jazz-types.workspace",
+     "jazz-model.workspace",
+     "jazz-protocol.workspace",
+     "jazz-db.workspace",
+     "bytes",
+     "jazz-compression.workspace",
+     "postcard",
+     "serde",
+     "serde_json",
+     "thiserror",
+     "uuid",
+     "web-time",
+     "tracing",
+     "hex",
+     "rand",
+     "rustc-hash.workspace",
+     "serde_bytes",
+     "internment",
+     "smallvec",
+     "stacker",
+     "sha2",
+     "tokio",
+     "jsonwebtoken",
+     "], optional",
+     "base64",
+     "ed25519-dalek"
+    ],
+    "dev": [
+     "jazz",
+     "divan.workspace",
+     "jazz-benchmark-guard",
+     "hdrhistogram",
+     "tempfile",
+     "tar",
+     "libc",
+     "criterion",
+     "flate2",
+     "rusqlite",
+     "insta",
+     "reqwest",
+     "jsonwebtoken",
+     "futures",
+     "tokio",
+     "tower",
+     "rcgen"
+    ]
+   },
+   {
+    "path": "crates/wasm-tracing/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "15a1d70eace139a6651756162dcf77597ea00f4f",
+    "ecosystem": "cargo",
+    "bytes": 1058,
+    "names": [
+     "serde",
+     "serde-wasm-bindgen",
+     "tracing",
+     "tracing-subscriber",
+     "wasm-bindgen",
+     "js-sys"
+    ],
+    "dev": [
+     "wasm-bindgen-test",
+     "console_error_panic_hook",
+     "serde_json",
+     "tracing"
+    ]
+   },
+   {
+    "path": "dev/local-telemetry/go.mod",
+    "kind": "dep",
+    "blob_sha": "e289d58618d68505c6f5982cfcad307f9ef70671",
+    "ecosystem": "go",
+    "bytes": 10617,
+    "names": [
+     "github.com/evanw/esbuild",
+     "github.com/marcboeker/go-duckdb/v2",
+     "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/fileexporter",
+     "go.opentelemetry.io/collector/component",
+     "go.opentelemetry.io/collector/confmap",
+     "go.opentelemetry.io/collector/exporter",
+     "go.opentelemetry.io/collector/otelcol",
+     "go.opentelemetry.io/collector/processor",
+     "go.opentelemetry.io/collector/processor/batchprocessor",
+     "go.opentelemetry.io/collector/receiver",
+     "go.opentelemetry.io/collector/receiver/otlpreceiver",
+     "go.opentelemetry.io/collector/service",
+     "golang.org/x/sync"
+    ],
+    "dev": [
+     "github.com/DeRuina/timberjack",
+     "github.com/Microsoft/go-winio",
+     "github.com/apache/arrow-go/v18",
+     "github.com/beorn7/perks",
+     "github.com/cenkalti/backoff/v5",
+     "github.com/cespare/xxhash/v2",
+     "github.com/davecgh/go-spew",
+     "github.com/duckdb/duckdb-go-bindings",
+     "github.com/duckdb/duckdb-go-bindings/darwin-amd64",
+     "github.com/duckdb/duckdb-go-bindings/darwin-arm64",
+     "github.com/duckdb/duckdb-go-bindings/linux-amd64",
+     "github.com/duckdb/duckdb-go-bindings/linux-arm64",
+     "github.com/duckdb/duckdb-go-bindings/windows-amd64",
+     "github.com/ebitengine/purego",
+     "github.com/felixge/httpsnoop",
+     "github.com/foxboron/go-tpm-keyfiles",
+     "github.com/fsnotify/fsnotify",
+     "github.com/go-logr/logr",
+     "github.com/go-logr/stdr",
+     "github.com/go-ole/go-ole",
+     "github.com/go-viper/mapstructure/v2",
+     "github.com/gobwas/glob",
+     "github.com/goccy/go-json",
+     "github.com/golang/snappy",
+     "github.com/google/flatbuffers",
+     "github.com/google/go-tpm",
+     "github.com/google/uuid",
+     "github.com/grpc-ecosystem/grpc-gateway/v2",
+     "github.com/hashicorp/go-version",
+     "github.com/hashicorp/golang-lru/v2",
+     "github.com/inconshreveable/mousetrap",
+     "github.com/json-iterator/go",
+     "github.com/klauspost/compress",
+     "github.com/klauspost/cpuid/v2",
+     "github.com/knadh/koanf/maps",
+     "github.com/knadh/koanf/providers/confmap",
+     "github.com/knadh/koanf/v2",
+     "github.com/lufia/plan9stats",
+     "github.com/marcboeker/go-duckdb/arrowmapping",
+     "github.com/marcboeker/go-duckdb/mapping",
+     "github.com/mitchellh/copystructure",
+     "github.com/mitchellh/reflectwalk",
+     "github.com/modern-go/concurrent",
+     "github.com/modern-go/reflect2",
+     "github.com/munnerz/goautoneg",
+     "github.com/open-telemetry/opentelemetry-collector-contrib/internal/sharedcomponent",
+     "github.com/pierrec/lz4/v4",
+     "github.com/pmezard/go-difflib",
+     "github.com/power-devops/perfstat",
+     "github.com/prometheus/client_golang",
+     "github.com/prometheus/client_model",
+     "github.com/prometheus/common",
+     "github.com/prometheus/otlptranslator",
+     "github.com/prometheus/procfs",
+     "github.com/rs/cors",
+     "github.com/shirou/gopsutil/v4",
+     "github.com/spf13/cobra",
+     "github.com/spf13/pflag",
+     "github.com/stretchr/testify",
+     "github.com/tklauser/go-sysconf",
+     "github.com/tklauser/numcpus",
+     "github.com/yusufpapurcu/wmi",
+     "github.com/zeebo/xxh3",
+     "go.opentelemetry.io/auto/sdk",
+     "go.opentelemetry.io/collector",
+     "go.opentelemetry.io/collector/client",
+     "go.opentelemetry.io/collector/component/componentstatus",
+     "go.opentelemetry.io/collector/component/componenttest",
+     "go.opentelemetry.io/collector/config/configauth",
+     "go.opentelemetry.io/collector/config/configcompression",
+     "go.opentelemetry.io/collector/config/configgrpc",
+     "go.opentelemetry.io/collector/config/confighttp",
+     "go.opentelemetry.io/collector/config/configmiddleware",
+     "go.opentelemetry.io/collector/config/confignet",
+     "go.opentelemetry.io/collector/config/configopaque",
+     "go.opentelemetry.io/collector/config/configoptional",
+     "go.opentelemetry.io/collector/config/configretry",
+     "go.opentelemetry.io/collector/config/configtelemetry",
+     "go.opentelemetry.io/collector/config/configtls",
+     "go.opentelemetry.io/collector/confmap/xconfmap"
+    ]
+   },
+   {
+    "path": "dev/rn-device-acceptance/package.json",
+    "kind": "dep",
+    "blob_sha": "21692aeeb5371cbfcd5345afd0aa2a698600524b",
+    "ecosystem": "npm",
+    "bytes": 2063,
+    "names": [
+     "expo",
+     "expo-crypto",
+     "expo-dev-client",
+     "expo-secure-store",
+     "jazz-rn",
+     "jazz-tools",
+     "metro-runtime",
+     "react",
+     "react-native"
+    ],
+    "dev": [
+     "@expo/config-plugins",
+     "@types/node",
+     "@types/react",
+     "babel-preset-expo",
+     "typescript"
+    ]
+   },
+   {
+    "path": "examples/auth-betterauth-chat/package.json",
+    "kind": "dep",
+    "blob_sha": "b486b6bebcc5c3be345e9f8659a3491cacef4af5",
+    "ecosystem": "npm",
+    "bytes": 1160,
+    "names": [
+     "better-auth",
+     "jazz-napi",
+     "jazz-tools",
+     "next",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "@vitest/browser",
+     "@vitest/browser-playwright",
+     "jose",
+     "typescript",
+     "vite",
+     "vite-plugin-top-level-await",
+     "vite-plugin-wasm",
+     "vitest"
+    ]
+   },
+   {
+    "path": "examples/auth-simple-chat/package.json",
+    "kind": "dep",
+    "blob_sha": "9f098c658b42c2ae66ba2fd726b5d706fd0f648f",
+    "ecosystem": "npm",
+    "bytes": 1058,
+    "names": [
+     "express",
+     "jazz-tools",
+     "jose",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@types/express",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "@vitest/browser",
+     "@vitest/browser-playwright",
+     "tsx",
+     "typescript",
+     "vite",
+     "vite-plugin-top-level-await",
+     "vite-plugin-wasm",
+     "vitest"
+    ]
+   },
+   {
+    "path": "examples/auth-workos-chat/package.json",
+    "kind": "dep",
+    "blob_sha": "9c68498b058ec4838786002923143a146f3abe1a",
+    "ecosystem": "npm",
+    "bytes": 1113,
+    "names": [
+     "@workos-inc/authkit-react",
+     "jazz-tools",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "@vitest/browser",
+     "@vitest/browser-playwright",
+     "jose",
+     "typescript",
+     "vite",
+     "vite-plugin-top-level-await",
+     "vite-plugin-wasm",
+     "vitest"
+    ]
+   },
+   {
+    "path": "examples/big-label/package.json",
+    "kind": "dep",
+    "blob_sha": "9fda889033efc5473181c45bd1d5ef641faa1772",
+    "ecosystem": "npm",
+    "bytes": 1097,
+    "names": [
+     "@astryxdesign/core",
+     "@garden-co/design",
+     "better-auth",
+     "jazz-napi",
+     "jazz-tools",
+     "next",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "examples/branching-project-planner-ts/package.json",
+    "kind": "dep",
+    "blob_sha": "f26e2c2e9a75335e4735a2d7ef02504cffe82616",
+    "ecosystem": "npm",
+    "bytes": 411,
+    "names": [
+     "jazz-tools"
+    ],
+    "dev": [
+     "typescript",
+     "vite"
+    ]
+   },
+   {
+    "path": "examples/chat-react/package.json",
+    "kind": "dep",
+    "blob_sha": "8adca5cee77fdd25f477dd1cacea1d306c25adb9",
+    "ecosystem": "npm",
+    "bytes": 2149,
+    "names": [
+     "@multiavatar/multiavatar",
+     "@radix-ui/react-alert-dialog",
+     "@radix-ui/react-dialog",
+     "@radix-ui/react-dropdown-menu",
+     "@radix-ui/react-hover-card",
+     "@radix-ui/react-label",
+     "@radix-ui/react-separator",
+     "@radix-ui/react-slot",
+     "@radix-ui/react-toggle",
+     "@tailwindcss/vite",
+     "class-variance-authority",
+     "clsx",
+     "dompurify",
+     "jazz-tools",
+     "lucide-react",
+     "prosemirror-commands",
+     "prosemirror-history",
+     "prosemirror-keymap",
+     "prosemirror-model",
+     "prosemirror-schema-basic",
+     "prosemirror-schema-list",
+     "prosemirror-state",
+     "prosemirror-view",
+     "qrcode.react",
+     "react",
+     "react-dom",
+     "sonner",
+     "tailwind-merge",
+     "tailwindcss"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@types/dompurify",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "@vitest/browser",
+     "@vitest/browser-playwright",
+     "tsx",
+     "tw-animate-css",
+     "typescript",
+     "vite",
+     "vite-plugin-top-level-await",
+     "vite-plugin-wasm",
+     "vitest"
+    ]
+   },
+   {
+    "path": "examples/cloudflare-worker-runtime-ts/package.json",
+    "kind": "dep",
+    "blob_sha": "3c700a8b56f41999d2f0b09b157656bcdffc322a",
+    "ecosystem": "npm",
+    "bytes": 742,
+    "names": [
+     "jazz-tools",
+     "jazz-wasm"
+    ],
+    "dev": [
+     "@types/node",
+     "typescript",
+     "wrangler"
+    ]
+   },
+   {
+    "path": "examples/epic-drop/package.json",
+    "kind": "dep",
+    "blob_sha": "872380d1ab7d3caa774d1d3d99a1fd78f78f3f26",
+    "ecosystem": "npm",
+    "bytes": 1106,
+    "names": [
+     "@astryxdesign/core",
+     "@garden-co/design",
+     "jazz-tools",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "@vitest/browser",
+     "@vitest/browser-playwright",
+     "typescript",
+     "vite",
+     "vite-plugin-top-level-await",
+     "vite-plugin-wasm",
+     "vitest"
+    ]
+   },
+   {
+    "path": "examples/jamazon-warehouse/package.json",
+    "kind": "dep",
+    "blob_sha": "7d0865a668395b85fed52cb3f8efa5c1a6556a4e",
+    "ecosystem": "npm",
+    "bytes": 1323,
+    "names": [
+     "@astryxdesign/core",
+     "@garden-co/design",
+     "better-auth",
+     "jazz-napi",
+     "jazz-tools",
+     "next",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "@vitest/browser",
+     "@vitest/browser-playwright",
+     "typescript",
+     "vite",
+     "vite-plugin-top-level-await",
+     "vite-plugin-wasm",
+     "vitest"
+    ]
+   },
+   {
+    "path": "examples/nextjs-csr-ssr/package.json",
+    "kind": "dep",
+    "blob_sha": "858aff1b0ae2590714c8dc86c0397dca78a0e183",
+    "ecosystem": "npm",
+    "bytes": 938,
+    "names": [
+     "jazz-napi",
+     "jazz-tools",
+     "next",
+     "react",
+     "react-dom",
+     "server-only"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@tailwindcss/postcss",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "dotenv",
+     "tailwindcss",
+     "tsx",
+     "typescript"
+    ]
+   },
+   {
+    "path": "examples/todo-client-localfirst-expo/package.json",
+    "kind": "dep",
+    "blob_sha": "7e36483f0cb0e8b30f5fd9554445c24273f55b58",
+    "ecosystem": "npm",
+    "bytes": 1112,
+    "names": [
+     "expo",
+     "expo-crypto",
+     "expo-secure-store",
+     "jazz-rn",
+     "jazz-tools",
+     "metro-runtime",
+     "react",
+     "react-native"
+    ],
+    "dev": [
+     "@babel/plugin-transform-flow-strip-types",
+     "@types/react",
+     "babel-preset-expo",
+     "typescript"
+    ]
+   },
+   {
+    "path": "examples/todo-client-localfirst-react/package.json",
+    "kind": "dep",
+    "blob_sha": "6e01eba9b506bab682788889f79625ec350b80d0",
+    "ecosystem": "npm",
+    "bytes": 914,
+    "names": [
+     "jazz-tools",
+     "react",
+     "react-dom",
+     "sonner"
+    ],
+    "dev": [
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "@vitest/browser",
+     "@vitest/browser-playwright",
+     "typescript",
+     "vite",
+     "vite-plugin-top-level-await",
+     "vite-plugin-wasm",
+     "vitest"
+    ]
+   },
+   {
+    "path": "examples/todo-client-localfirst-solid/package.json",
+    "kind": "dep",
+    "blob_sha": "193e8e2fd88ee0397e8b487381b0ef2f4ce46514",
+    "ecosystem": "npm",
+    "bytes": 866,
+    "names": [
+     "jazz-tools",
+     "solid-js",
+     "solid-sonner"
+    ],
+    "dev": [
+     "@types/node",
+     "@vitest/browser",
+     "@vitest/browser-playwright",
+     "typescript",
+     "vite",
+     "vite-plugin-solid",
+     "vite-plugin-top-level-await",
+     "vite-plugin-wasm",
+     "vitest"
+    ]
+   },
+   {
+    "path": "examples/todo-client-localfirst-svelte/package.json",
+    "kind": "dep",
+    "blob_sha": "a12a7f91c2703f72ae7b8b9adc863397f3f2c77c",
+    "ecosystem": "npm",
+    "bytes": 904,
+    "names": [
+     "jazz-tools",
+     "svelte",
+     "svelte-sonner"
+    ],
+    "dev": [
+     "@sveltejs/vite-plugin-svelte",
+     "@vitest/browser",
+     "@vitest/browser-playwright",
+     "svelte-check",
+     "typescript",
+     "vite",
+     "vite-plugin-top-level-await",
+     "vite-plugin-wasm",
+     "vitest"
+    ]
+   },
+   {
+    "path": "examples/todo-client-localfirst-ts/package.json",
+    "kind": "dep",
+    "blob_sha": "ce0382d806ae9e770c5f57d17947765d7904b67a",
+    "ecosystem": "npm",
+    "bytes": 724,
+    "names": [
+     "jazz-tools"
+    ],
+    "dev": [
+     "@vitest/browser",
+     "@vitest/browser-playwright",
+     "typescript",
+     "vite",
+     "vite-plugin-top-level-await",
+     "vite-plugin-wasm",
+     "vitest"
+    ]
+   },
+   {
+    "path": "examples/todo-client-localfirst-vue/package.json",
+    "kind": "dep",
+    "blob_sha": "0ff3e8775eabf26249b07428424bc24edbf2b178",
+    "ecosystem": "npm",
+    "bytes": 858,
+    "names": [
+     "jazz-tools",
+     "vue",
+     "vue-sonner"
+    ],
+    "dev": [
+     "@vitejs/plugin-vue",
+     "@vitest/browser",
+     "@vitest/browser-playwright",
+     "typescript",
+     "vite",
+     "vite-plugin-top-level-await",
+     "vite-plugin-wasm",
+     "vitest",
+     "vue-tsc"
+    ]
+   },
+   {
+    "path": "examples/todo-server-rs/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "dc45fe1511297d09a81a80b5fc728f914d0d417c",
+    "ecosystem": "cargo",
+    "bytes": 1101,
+    "names": [
+     "jazz",
+     "jazz-native-transport",
+     "reqwest",
+     "tokio",
+     "tokio-stream",
+     "axum",
+     "serde",
+     "serde_json",
+     "tracing",
+     "tracing-subscriber",
+     "tower-http",
+     "uuid",
+     "futures-util",
+     "mimalloc"
+    ],
+    "dev": [
+     "jazz-server",
+     "tempfile",
+     "tower",
+     "http-body-util",
+     "futures-util",
+     "reqwest-eventsource",
+     "jsonwebtoken",
+     "base64"
+    ]
+   },
+   {
+    "path": "examples/todo-server-ts/package.json",
+    "kind": "dep",
+    "blob_sha": "78c84d460532f173cb32f339c532d8cc67602108",
+    "ecosystem": "npm",
+    "bytes": 563,
+    "names": [
+     "express",
+     "jazz-napi",
+     "jazz-tools"
+    ],
+    "dev": [
+     "@types/express",
+     "@types/node",
+     "tsx",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "examples/world-tour/package.json",
+    "kind": "dep",
+    "blob_sha": "172177a58b8f406ccda0c909edcc43b3851ff925",
+    "ecosystem": "npm",
+    "bytes": 1165,
+    "names": [
+     "@garden-co/design",
+     "jazz-tools",
+     "vue"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@vitejs/plugin-vue",
+     "@vitest/browser",
+     "@vitest/browser-playwright",
+     "typescript",
+     "vite",
+     "vite-plugin-top-level-await",
+     "vite-plugin-wasm",
+     "vitest",
+     "vue-tsc"
+    ]
+   },
+   {
+    "path": "packages/create-jazz-e2e/package.json",
+    "kind": "dep",
+    "blob_sha": "46fd1813daf1e70b651112fbfb5faa006e67b014",
+    "ecosystem": "npm",
+    "bytes": 859,
+    "names": [
+     "create-jazz",
+     "jazz-tools"
+    ],
+    "dev": [
+     "@types/node",
+     "picocolors",
+     "tsx",
+     "typescript",
+     "yaml"
+    ]
+   },
+   {
+    "path": "packages/create-jazz/package.json",
+    "kind": "dep",
+    "blob_sha": "177d15d6db31b265df90e310b78ad1fd8d4f7032",
+    "ecosystem": "npm",
+    "bytes": 998,
+    "names": [
+     "@clack/prompts",
+     "picocolors",
+     "tiged",
+     "yaml"
+    ],
+    "dev": [
+     "@types/node",
+     "tsup",
+     "tsx",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/inspector/package.json",
+    "kind": "dep",
+    "blob_sha": "b738a411e3e3ef6856e201ad594a51e3ee26f940",
+    "ecosystem": "npm",
+    "bytes": 1498,
+    "names": [
+     "@tanstack/react-table",
+     "jazz-tools",
+     "react",
+     "react-data-grid",
+     "react-dom",
+     "react-resizable-panels",
+     "react-router"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@testing-library/react",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react-swc",
+     "@vitest/ui",
+     "happy-dom",
+     "jsdom",
+     "typescript",
+     "vite",
+     "vite-plugin-top-level-await",
+     "vite-plugin-wasm",
+     "vitest"
+    ]
+   },
+   {
+    "path": "packages/jazz-tools/package.json",
+    "kind": "dep",
+    "blob_sha": "e4473e3b9f70ca6c0bbb839de2a3eda2f427bd74",
+    "ecosystem": "npm",
+    "bytes": 11181,
+    "names": [
+     "@noble/hashes",
+     "@opentelemetry/api",
+     "@opentelemetry/exporter-logs-otlp-http",
+     "@opentelemetry/exporter-trace-otlp-http",
+     "@opentelemetry/resources",
+     "@opentelemetry/sdk-logs",
+     "@opentelemetry/sdk-trace-base",
+     "@scure/bip39",
+     "@standard-schema/spec",
+     "esbuild",
+     "fs-native-extensions",
+     "jazz-wasm",
+     "jose",
+     "json-schema-to-ts",
+     "tr46",
+     "web-streams-polyfill",
+     "whatwg-url-without-unicode",
+     "jazz-napi",
+     "better-auth",
+     "effect",
+     "expo",
+     "expo-crypto",
+     "expo-secure-store",
+     "jazz-rn",
+     "react",
+     "react-native",
+     "solid-js",
+     "svelte",
+     "vue"
+    ],
+    "dev": [
+     "@better-auth/test-utils",
+     "@sveltejs/package",
+     "@sveltejs/vite-plugin-svelte",
+     "@testing-library/react",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "@vitest/browser",
+     "@vitest/browser-playwright",
+     "@vue/server-renderer",
+     "better-auth",
+     "effect",
+     "fake-indexeddb",
+     "jsdom",
+     "libsodium",
+     "libsodium-wrappers",
+     "react-dom",
+     "solid-js",
+     "svelte",
+     "typescript",
+     "undici",
+     "vite",
+     "vite-plugin-solid",
+     "vite-plugin-top-level-await",
+     "vite-plugin-wasm",
+     "vitest",
+     "vue",
+     "zod"
+    ]
+   },
+   {
+    "path": "starters/next-betterauth/package.json",
+    "kind": "dep",
+    "blob_sha": "907c760468eccdcf96999a41e0b67279089eac05",
+    "ecosystem": "npm",
+    "bytes": 639,
+    "names": [
+     "better-auth",
+     "jazz-tools",
+     "next",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "typescript"
+    ]
+   },
+   {
+    "path": "starters/next-hybrid/package.json",
+    "kind": "dep",
+    "blob_sha": "32ec004d4971af84cd3ad43156c342e45981b214",
+    "ecosystem": "npm",
+    "bytes": 667,
+    "names": [
+     "better-auth",
+     "jazz-napi",
+     "jazz-tools",
+     "next",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "typescript"
+    ]
+   },
+   {
+    "path": "starters/next-localfirst/package.json",
+    "kind": "dep",
+    "blob_sha": "5b38fcc7168215b6263924b9ceafc370bf35c6c8",
+    "ecosystem": "npm",
+    "bytes": 565,
+    "names": [
+     "jazz-tools",
+     "next",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "typescript"
+    ]
+   },
+   {
+    "path": "starters/react-betterauth/package.json",
+    "kind": "dep",
+    "blob_sha": "608fcebf50081c57166036851883a6970122a926",
+    "ecosystem": "npm",
+    "bytes": 1187,
+    "names": [
+     "@hono/node-server",
+     "better-auth",
+     "hono",
+     "jazz-tools",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "concurrently",
+     "happy-dom",
+     "tsx",
+     "typescript",
+     "vite",
+     "vitest",
+     "wait-on"
+    ]
+   },
+   {
+    "path": "starters/react-hybrid/package.json",
+    "kind": "dep",
+    "blob_sha": "bb81f6128421c782a8c15fdcbb3e556ae28e42a1",
+    "ecosystem": "npm",
+    "bytes": 1187,
+    "names": [
+     "@hono/node-server",
+     "better-auth",
+     "hono",
+     "jazz-napi",
+     "jazz-tools",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "concurrently",
+     "tsx",
+     "typescript",
+     "vite",
+     "vitest",
+     "wait-on"
+    ]
+   },
+   {
+    "path": "starters/react-localfirst/package.json",
+    "kind": "dep",
+    "blob_sha": "debcd87e883560ba37cbec3c9b209968c67d327b",
+    "ecosystem": "npm",
+    "bytes": 599,
+    "names": [
+     "jazz-tools",
+     "react",
+     "react-dom"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "typescript",
+     "vite"
+    ]
+   },
+   {
+    "path": "starters/sveltekit-betterauth/package.json",
+    "kind": "dep",
+    "blob_sha": "e05185d76a5c55c8163a76b37b2762b3779c207e",
+    "ecosystem": "npm",
+    "bytes": 760,
+    "names": [
+     "better-auth",
+     "jazz-tools",
+     "svelte"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@sveltejs/adapter-node",
+     "@sveltejs/kit",
+     "@sveltejs/vite-plugin-svelte",
+     "svelte-check",
+     "typescript",
+     "vite"
+    ]
+   },
+   {
+    "path": "starters/sveltekit-hybrid/package.json",
+    "kind": "dep",
+    "blob_sha": "cb7b433953f45ab8af73c9931c228a767c447446",
+    "ecosystem": "npm",
+    "bytes": 788,
+    "names": [
+     "better-auth",
+     "jazz-napi",
+     "jazz-tools",
+     "svelte"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@sveltejs/adapter-node",
+     "@sveltejs/kit",
+     "@sveltejs/vite-plugin-svelte",
+     "svelte-check",
+     "typescript",
+     "vite"
+    ]
+   },
+   {
+    "path": "starters/sveltekit-localfirst/package.json",
+    "kind": "dep",
+    "blob_sha": "04319d6a077be9391e87447325ab7839f7d83185",
+    "ecosystem": "npm",
+    "bytes": 686,
+    "names": [
+     "jazz-tools",
+     "svelte"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@sveltejs/adapter-node",
+     "@sveltejs/kit",
+     "@sveltejs/vite-plugin-svelte",
+     "svelte-check",
+     "typescript",
+     "vite"
+    ]
+   },
+   {
+    "path": "starters/ts-betterauth/package.json",
+    "kind": "dep",
+    "blob_sha": "7fca6a3458150856daf2df20a2ca75f6f0f74773",
+    "ecosystem": "npm",
+    "bytes": 1057,
+    "names": [
+     "@hono/node-server",
+     "better-auth",
+     "hono",
+     "jazz-napi",
+     "jazz-tools"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@types/node",
+     "concurrently",
+     "jsdom",
+     "tsx",
+     "typescript",
+     "vite",
+     "vitest",
+     "wait-on"
+    ]
+   },
+   {
+    "path": "starters/ts-effect-betterauth/package.json",
+    "kind": "dep",
+    "blob_sha": "17977330138c01780fe12faf974e08c3ef767902",
+    "ecosystem": "npm",
+    "bytes": 954,
+    "names": [
+     "@hono/node-server",
+     "better-auth",
+     "effect",
+     "hono",
+     "jazz-napi",
+     "jazz-tools"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@types/node",
+     "jsdom",
+     "tsx",
+     "typescript",
+     "vite",
+     "vitest"
+    ]
+   },
+   {
+    "path": "starters/ts-effect-localfirst/package.json",
+    "kind": "dep",
+    "blob_sha": "2f10b87a47850b0c9c12f1c27816a3b2b471943c",
+    "ecosystem": "npm",
+    "bytes": 561,
+    "names": [
+     "effect",
+     "jazz-tools"
+    ],
+    "dev": [
+     "@playwright/test",
+     "jsdom",
+     "typescript",
+     "vite",
+     "vitest"
+    ]
+   },
+   {
+    "path": "starters/ts-hybrid/package.json",
+    "kind": "dep",
+    "blob_sha": "212a8b65d94e68dc716ff236d8e353e745b50b5e",
+    "ecosystem": "npm",
+    "bytes": 1021,
+    "names": [
+     "@hono/node-server",
+     "better-auth",
+     "hono",
+     "jazz-napi",
+     "jazz-tools"
+    ],
+    "dev": [
+     "@playwright/test",
+     "@types/node",
+     "concurrently",
+     "tsx",
+     "typescript",
+     "vite",
+     "vitest",
+     "wait-on"
+    ]
+   },
+   {
+    "path": "starters/ts-localfirst/package.json",
+    "kind": "dep",
+    "blob_sha": "9b7e8f0e7f12ee724891db2e2c56714036395703",
+    "ecosystem": "npm",
+    "bytes": 521,
+    "names": [
+     "jazz-tools"
+    ],
+    "dev": [
+     "@playwright/test",
+     "jsdom",
+     "typescript",
+     "vite",
+     "vitest"
+    ]
+   },
+   {
+    "path": "vendor/ruzstd/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "95e3b1a5bd0a75d15f72366c0c05932d504ef3e3",
+    "ecosystem": "cargo",
+    "bytes": 1771
+   },
+   {
     "path": "dev/artifacts/linux-napi/Dockerfile",
     "kind": "image",
     "blob_sha": "100e8b88d0b5a51d072f7ddc8e5280387810fcf3",
@@ -2219,6 +4028,54 @@
     "kind": "ci",
     "blob_sha": "40082d71240683f8a15b45713b0a6877b78e7c68",
     "bytes": 2818
+   },
+   {
+    "path": ".github/workflows/publish-jazz-crates-alpha.yml",
+    "kind": "ci",
+    "blob_sha": "b5215f612652ae0a2a6160bf1cdf81c5c690b8ca",
+    "bytes": 958
+   },
+   {
+    "path": ".github/workflows/publish-jazz-tools-alpha.yml",
+    "kind": "ci",
+    "blob_sha": "1443b4338ff9fa896a643becb01c1debcf98a4a3",
+    "bytes": 39910
+   },
+   {
+    "path": ".github/workflows/recover-alpha54-rn-publish.yml",
+    "kind": "ci",
+    "blob_sha": "2ab492a2654e791637a03b105ca132bb3dfc8c04",
+    "bytes": 2680
+   },
+   {
+    "path": ".github/workflows/rn-device-acceptance.yml",
+    "kind": "ci",
+    "blob_sha": "2c683f92466a688865f4831cacaa5e2f1fd5bd16",
+    "bytes": 13959
+   },
+   {
+    "path": ".github/workflows/rn-native-artifacts.yml",
+    "kind": "ci",
+    "blob_sha": "13a0a18cd44644b3b2adfb5f23b33505cd7958f4",
+    "bytes": 9646
+   },
+   {
+    "path": ".github/workflows/runner-pool-diagnostic.yml",
+    "kind": "ci",
+    "blob_sha": "bf874df0b02246ba1863f15c0145c667ede3641e",
+    "bytes": 2019
+   },
+   {
+    "path": ".github/workflows/stage-inspector-production.yml",
+    "kind": "ci",
+    "blob_sha": "3b65079f090a7a7232de38a6cc7cc31f3a620d0a",
+    "bytes": 4706
+   },
+   {
+    "path": ".github/workflows/starters-e2e.yml",
+    "kind": "ci",
+    "blob_sha": "3530b0b70824bf3d404612d436dbea9d92ebe8e5",
+    "bytes": 15221
    }
   ],
   "clues": {
@@ -2504,13 +4361,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T00:48:04Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:43:16Z",
   "default_branch": "master",
   "pushed_at": "2026-07-09",
   "stars": 40,
   "tree": {
    "sha": "932f35bbc151d75b782905aac85ecff030428c17",
-   "etag": "W/\"5fffb26ca5423a3b1f5db32e82b59b1af0bdd931ac1ccaa30754dc7ddf743c9e\"",
+   "etag": "W/\"af5eb94e046ac4c8cbda117c9a87676a82b08200b9110220106373d198bd0288\"",
    "truncated": false,
    "path_count": 1777,
    "matched": [
@@ -2525,7 +4383,55 @@
     "Dapper1App/Dapper1App.csproj",
     "DapperAccessWinForms/DapperAccessWinForms.csproj",
     "DapperBirthdaysComputedColumns/DapperBirthdaysComputedColumns.csproj",
-    "DapperForAccessDatabase/DapperForAccessDatabase.csproj"
+    "DapperForAccessDatabase/DapperForAccessDatabase.csproj",
+    "DapperForAccessDatabaseMdb/DapperForAccessDatabaseMdb.csproj",
+    "DapperGetDatabaseAndTableNamesApp/DapperGetDatabaseAndTableNamesApp.csproj",
+    "DapperGetDatabaseAndTableNamesApp1/DapperGetDatabaseAndTableNamesApp1.csproj",
+    "DapperGetDatabaseAndTableNamesApp2/DapperGetDatabaseAndTableNamesApp2.csproj",
+    "DapperLibrary1/DapperLibrary1.csproj",
+    "DapperMultipleInsertsApp/DapperMultipleInsertsApp.csproj",
+    "DapperNorthWind2024/DapperNorthWind2024.csproj",
+    "DapperPersonRepository/DapperPersonRepository.csproj",
+    "DapperSamples/DapperSamples.csproj",
+    "DapperSimpleApp/DapperSimpleApp.csproj",
+    "DapperSimpleInsertApp/DapperSimpleInsertApp.csproj",
+    "DapperSqlServerLastValueApp/DapperSqlServerLastValueApp.csproj",
+    "DapperSqlServerRowCountSample/DapperSqlServerRowCountSample.csproj",
+    "DapperStoredProcedures1/DapperStoredProcedures1.csproj",
+    "DapperWithExcel/DapperWithExcel.csproj",
+    "DataGridViewButtonApp/DataGridViewButtonApp.csproj",
+    "DataGridViewSample/DataGridViewSample.csproj",
+    "DatabaseInspectorApp/DatabaseInspectorApp.csproj",
+    "DateLibrary/DateLibrary.csproj",
+    "DateTimeNullDapperApp/DateTimeNullDapperApp.csproj",
+    "DeleteDuplicateRowsSqlServerTable/DeleteDuplicateRowsSqlServerTable.csproj",
+    "EF_CoreBirthdaysComputedColumns/EF_CoreBirthdaysComputedColumns.csproj",
+    "EntityFrameworkCoreSqlServer/EntityFrameworkCoreSqlServer.csproj",
+    "EntityLibrary/EntityLibrary.csproj",
+    "EnumHasConversionDapper/EnumHasConversionDapper.csproj",
+    "EnumHasConversionDapper1/EnumHasConversionDapper1.csproj",
+    "EnumWithSqlClient/EnumWithSqlClient.csproj",
+    "ExplicitOperatorSample/ExplicitOperatorSample.csproj",
+    "FactoryConnectionSample/FactoryConnectionSample.csproj",
+    "GetValuesApp/GetValuesApp.csproj",
+    "GlobalConnection/GlobalConnection.csproj",
+    "InsertNewRecordApp/InsertNewRecordApp.csproj",
+    "InterfaceExtensionApp/InterfaceExtensionApp.csproj",
+    "MaskingSocialApp/MaskingSocialApp.csproj",
+    "NextResultsApp/GitHubSamples.csproj",
+    "NorthCustomersToolGenerated/NorthCustomersToolGenerated.csproj",
+    "NorthWindSqlLiteApp1/NorthWindSqlLiteApp1.csproj",
+    "PayneServiceLibrary/PayneServiceLibrary.csproj",
+    "ProductCatalogApp/ProductCatalogApp.csproj",
+    "ProductsCategoriesApp/ProductsCategoriesApp.csproj",
+    "ReverseEngineerNorthWind2024/ReverseEngineerNorthWind2024.csproj",
+    "ReverseEngineerNorthWindLibrary/ReverseEngineerNorthWindLibrary.csproj",
+    "RowFilterApp/RowFilterApp.csproj",
+    "SimpleEfCoreApp/SimpleEfCoreApp.csproj",
+    "SqlAddColumnWithValuesApp/SqlAddColumnWithValuesApp.csproj",
+    "SqlClientHelperApp/SqlClientHelperApp.csproj",
+    "SqlLiteInsertNulls/SqlLiteInsertNulls.csproj",
+    "SqlLiteSample1/SqlLiteSample1.csproj"
    ]
   },
   "files": [
@@ -2723,6 +4629,726 @@
      "System.Data.OleDb",
      "ObjectDumper.NET",
      "Spectre.Console"
+    ]
+   },
+   {
+    "path": "DapperForAccessDatabaseMdb/DapperForAccessDatabaseMdb.csproj",
+    "kind": "dep",
+    "blob_sha": "3669cc11b6edff63a9e0d9c55434be912e954530",
+    "ecosystem": "csproj",
+    "bytes": 1312,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Spectre.Console",
+     "Dapper",
+     "Dapper.Transaction",
+     "kp.Dapper.Handlers",
+     "ObjectDumper.NET",
+     "System.Data.OleDb"
+    ]
+   },
+   {
+    "path": "DapperGetDatabaseAndTableNamesApp/DapperGetDatabaseAndTableNamesApp.csproj",
+    "kind": "dep",
+    "blob_sha": "d232493165b541949feb8656fca5b14752b3b636",
+    "ecosystem": "csproj",
+    "bytes": 1040,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "DapperGetDatabaseAndTableNamesApp1/DapperGetDatabaseAndTableNamesApp1.csproj",
+    "kind": "dep",
+    "blob_sha": "6d46e56852c5e1de5c6ff3b29996c1460fa28994",
+    "ecosystem": "csproj",
+    "bytes": 680,
+    "names": [
+     "Serilog",
+     "Serilog.Sinks.File"
+    ]
+   },
+   {
+    "path": "DapperGetDatabaseAndTableNamesApp2/DapperGetDatabaseAndTableNamesApp2.csproj",
+    "kind": "dep",
+    "blob_sha": "4764386178ab1002bf8be28c2040a7d8e3574db5",
+    "ecosystem": "csproj",
+    "bytes": 917,
+    "names": [
+     "SeriLogThemesLibrary",
+     "Serilog.AspNetCore",
+     "Serilog.Sinks.Console",
+     "ConfigurationLibrary"
+    ]
+   },
+   {
+    "path": "DapperLibrary1/DapperLibrary1.csproj",
+    "kind": "dep",
+    "blob_sha": "6e3f28994b862b17d7748bbdbcd8f9447f526308",
+    "ecosystem": "csproj",
+    "bytes": 1042,
+    "names": [
+     "ConfigurationLibrary",
+     "Dapper",
+     "Dapper.SqlBuilder",
+     "Dapper.Transaction",
+     "Microsoft.Data.SqlClient",
+     "Serilog",
+     "Serilog.Sinks.File"
+    ]
+   },
+   {
+    "path": "DapperMultipleInsertsApp/DapperMultipleInsertsApp.csproj",
+    "kind": "dep",
+    "blob_sha": "dc19c8d7b1df2f14c3731e52b09e22cc0d495819",
+    "ecosystem": "csproj",
+    "bytes": 1254,
+    "names": [
+     "Bogus",
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "ConsoleConfigurationLibrary",
+     "Microsoft.Data.SqlClient",
+     "Dapper",
+     "Spectre.Console",
+     "System.Text.Json"
+    ]
+   },
+   {
+    "path": "DapperNorthWind2024/DapperNorthWind2024.csproj",
+    "kind": "dep",
+    "blob_sha": "fb2aaf2fbcd9716f73eb984b9295bada5aed9335",
+    "ecosystem": "csproj",
+    "bytes": 983,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Microsoft.Data.SqlClient",
+     "Dapper",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "DapperPersonRepository/DapperPersonRepository.csproj",
+    "kind": "dep",
+    "blob_sha": "3377475fabe9c4ab07b4278afdf33ac253a08862",
+    "ecosystem": "csproj",
+    "bytes": 1435,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Bogus",
+     "Dapper",
+     "Dapper.Transaction",
+     "Microsoft.Data.SqlClient",
+     "ObjectDumper.NET",
+     "Spectre.Console",
+     "Serilog",
+     "Serilog.Sinks.File"
+    ]
+   },
+   {
+    "path": "DapperSamples/DapperSamples.csproj",
+    "kind": "dep",
+    "blob_sha": "aa4806773bb1b71890884d54b23a5c77d1cd2414",
+    "ecosystem": "csproj",
+    "bytes": 1045,
+    "names": [
+     "ConfigurationLibrary",
+     "Dapper",
+     "Microsoft.Data.SqlClient",
+     "Spectre.Console",
+     "ConsoleHelperLibrary"
+    ]
+   },
+   {
+    "path": "DapperSimpleApp/DapperSimpleApp.csproj",
+    "kind": "dep",
+    "blob_sha": "8f20ebb328d4d7a374b62fbe7d16aa2e676347f3",
+    "ecosystem": "csproj",
+    "bytes": 6517
+   },
+   {
+    "path": "DapperSimpleInsertApp/DapperSimpleInsertApp.csproj",
+    "kind": "dep",
+    "blob_sha": "625f19752e8de4478226a7aef1a54eca34e28982",
+    "ecosystem": "csproj",
+    "bytes": 1139,
+    "names": [
+     "Dapper",
+     "FluentValidation",
+     "Microsoft.Data.SqlClient"
+    ]
+   },
+   {
+    "path": "DapperSqlServerLastValueApp/DapperSqlServerLastValueApp.csproj",
+    "kind": "dep",
+    "blob_sha": "21e948192f027d3d31f4d90787aea2a153a374c6",
+    "ecosystem": "csproj",
+    "bytes": 860,
+    "names": [
+     "System.Data.SqlClient",
+     "Dapper",
+     "ConfigurationLibrary"
+    ]
+   },
+   {
+    "path": "DapperSqlServerRowCountSample/DapperSqlServerRowCountSample.csproj",
+    "kind": "dep",
+    "blob_sha": "70394df30fc95dbfe5f3f401870d3157a6f1cad9",
+    "ecosystem": "csproj",
+    "bytes": 2136,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Spectre.Console",
+     "Microsoft.EntityFrameworkCore.SqlServer",
+     "Dapper",
+     "Microsoft.Data.SqlClient",
+     "Microsoft.Extensions.Configuration",
+     "Microsoft.Extensions.Configuration.EnvironmentVariables",
+     "Microsoft.Extensions.Configuration.FileExtensions",
+     "Microsoft.Extensions.Configuration.Json",
+     "Microsoft.Extensions.DependencyInjection",
+     "Microsoft.Extensions.DependencyInjection.Abstractions",
+     "Microsoft.Extensions.Logging",
+     "Microsoft.Extensions.Logging.Console",
+     "Microsoft.Extensions.Options"
+    ]
+   },
+   {
+    "path": "DapperStoredProcedures1/DapperStoredProcedures1.csproj",
+    "kind": "dep",
+    "blob_sha": "38b44d6434a62f999304b947c26a4feaf49d6d40",
+    "ecosystem": "csproj",
+    "bytes": 2261,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Dumpify",
+     "kp.Dapper.Handlers",
+     "Spectre.Console",
+     "Microsoft.EntityFrameworkCore.SqlServer",
+     "Dapper",
+     "Microsoft.Data.SqlClient",
+     "Microsoft.Extensions.Configuration",
+     "Microsoft.Extensions.Configuration.EnvironmentVariables",
+     "Microsoft.Extensions.Configuration.FileExtensions",
+     "Microsoft.Extensions.Configuration.Json",
+     "Microsoft.Extensions.DependencyInjection",
+     "Microsoft.Extensions.DependencyInjection.Abstractions",
+     "Microsoft.Extensions.Logging",
+     "Microsoft.Extensions.Logging.Console",
+     "Microsoft.Extensions.Options"
+    ]
+   },
+   {
+    "path": "DapperWithExcel/DapperWithExcel.csproj",
+    "kind": "dep",
+    "blob_sha": "5c214b3cb89fea447ce7859a725e219e1d2af34b",
+    "ecosystem": "csproj",
+    "bytes": 1277,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Dapper",
+     "Microsoft.Data.SqlClient",
+     "FastMember",
+     "Carbunql",
+     "SpreadsheetLight.Cross.Platform",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "DataGridViewButtonApp/DataGridViewButtonApp.csproj",
+    "kind": "dep",
+    "blob_sha": "8266cadd3e86a3bd7c46ef1be5e4846773d2b2e0",
+    "ecosystem": "csproj",
+    "bytes": 424
+   },
+   {
+    "path": "DataGridViewSample/DataGridViewSample.csproj",
+    "kind": "dep",
+    "blob_sha": "d7fca1e68e29e9eb8ac7f459f42e5d9c97fcd283",
+    "ecosystem": "csproj",
+    "bytes": 1167,
+    "names": [
+     "ConfigurationLibrary",
+     "Dapper",
+     "Microsoft.Data.SqlClient"
+    ]
+   },
+   {
+    "path": "DatabaseInspectorApp/DatabaseInspectorApp.csproj",
+    "kind": "dep",
+    "blob_sha": "ddaeb1063d147b120a3ce02bf9b71020ffe63e5c",
+    "ecosystem": "csproj",
+    "bytes": 1064,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "ConsoleConfigurationLibrary",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "DateLibrary/DateLibrary.csproj",
+    "kind": "dep",
+    "blob_sha": "6b794c255ec881b851cd1399fafc702e6cdb18ad",
+    "ecosystem": "csproj",
+    "bytes": 904,
+    "names": [
+     "Dapper",
+     "Microsoft.Data.SqlClient",
+     "ConfigurationLibrary",
+     "Serilog",
+     "Serilog.Extensions.Logging",
+     "Serilog.Sinks.File"
+    ]
+   },
+   {
+    "path": "DateTimeNullDapperApp/DateTimeNullDapperApp.csproj",
+    "kind": "dep",
+    "blob_sha": "589d868c44846079a73ff78f0babfc9f8d4a0868",
+    "ecosystem": "csproj",
+    "bytes": 1430,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleConfigurationLibrary",
+     "Dapper",
+     "Microsoft.Data.SqlClient",
+     "FluentValidation",
+     "ObjectDumper.NET"
+    ]
+   },
+   {
+    "path": "DeleteDuplicateRowsSqlServerTable/DeleteDuplicateRowsSqlServerTable.csproj",
+    "kind": "dep",
+    "blob_sha": "1d377491e31a26e549b5b3a047b70649fef7eed7",
+    "ecosystem": "csproj",
+    "bytes": 1539,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Dapper",
+     "kp.Dapper.Handlers",
+     "Microsoft.Data.SqlClient",
+     "ObjectDumper.NET",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "EF_CoreBirthdaysComputedColumns/EF_CoreBirthdaysComputedColumns.csproj",
+    "kind": "dep",
+    "blob_sha": "6cd11668e78c4c740a99494bb5b54dde3e38eaf0",
+    "ecosystem": "csproj",
+    "bytes": 1887,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Spectre.Console",
+     "Microsoft.EntityFrameworkCore.SqlServer",
+     "Microsoft.Extensions.Configuration",
+     "Microsoft.Extensions.Configuration.EnvironmentVariables",
+     "Microsoft.Extensions.Configuration.FileExtensions",
+     "Microsoft.Extensions.Configuration.Json",
+     "Microsoft.Extensions.DependencyInjection",
+     "Microsoft.Extensions.DependencyInjection.Abstractions",
+     "Microsoft.Extensions.Logging",
+     "Microsoft.Extensions.Logging.Console",
+     "Microsoft.Extensions.Options"
+    ]
+   },
+   {
+    "path": "EntityFrameworkCoreSqlServer/EntityFrameworkCoreSqlServer.csproj",
+    "kind": "dep",
+    "blob_sha": "2cd7f6003c8f4d535ac0faa11f5ec5d5e655dc27",
+    "ecosystem": "csproj",
+    "bytes": 1117,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "EntityLibrary/EntityLibrary.csproj",
+    "kind": "dep",
+    "blob_sha": "3115b62064b1cd78728741aaaaaf19e94d7a17d2",
+    "ecosystem": "csproj",
+    "bytes": 891,
+    "names": [
+     "Microsoft.EntityFrameworkCore.SqlServer",
+     "ConfigurationLibrary"
+    ]
+   },
+   {
+    "path": "EnumHasConversionDapper/EnumHasConversionDapper.csproj",
+    "kind": "dep",
+    "blob_sha": "6455913bc546eaebbeb14a9f97dd86b736b02e67",
+    "ecosystem": "csproj",
+    "bytes": 1743,
+    "names": [
+     "ConfigurationLibrary",
+     "Microsoft.Data.SqlClient",
+     "Dapper",
+     "ConsoleHelperLibrary",
+     "ObjectDumper.NET",
+     "Spectre.Console",
+     "StrEnum",
+     "StrEnum.Dapper"
+    ]
+   },
+   {
+    "path": "EnumHasConversionDapper1/EnumHasConversionDapper1.csproj",
+    "kind": "dep",
+    "blob_sha": "36b3353f3a00e52e47c41c9f38117a2a424d9387",
+    "ecosystem": "csproj",
+    "bytes": 1218,
+    "names": [
+     "ConfigurationLibrary",
+     "Microsoft.Data.SqlClient",
+     "Dapper",
+     "ConsoleHelperLibrary",
+     "ObjectDumper.NET",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "EnumWithSqlClient/EnumWithSqlClient.csproj",
+    "kind": "dep",
+    "blob_sha": "55d6fb8ac92faabbf3ae4ab9be0de73fe2ac9448",
+    "ecosystem": "csproj",
+    "bytes": 1385,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "DbPeekQueryLibrary",
+     "Microsoft.Data.SqlClient",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "ExplicitOperatorSample/ExplicitOperatorSample.csproj",
+    "kind": "dep",
+    "blob_sha": "1a66ab0467de5e6d47afe747bb5d0aea48ce3fff",
+    "ecosystem": "csproj",
+    "bytes": 1085,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "FactoryConnectionSample/FactoryConnectionSample.csproj",
+    "kind": "dep",
+    "blob_sha": "2d4928298091b8e3c3e5c87d33b8ae44c9b89376",
+    "ecosystem": "csproj",
+    "bytes": 1282,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Dapper",
+     "Microsoft.Data.SqlClient",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "GetValuesApp/GetValuesApp.csproj",
+    "kind": "dep",
+    "blob_sha": "df7a845ee04d3ecc777f1bc6745887efd19a4f3d",
+    "ecosystem": "csproj",
+    "bytes": 1247,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "DbPeekQueryLibrary",
+     "Microsoft.EntityFrameworkCore.SqlServer",
+     "System.Data.SqlClient",
+     "Microsoft.Data.SqlClient",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "GlobalConnection/GlobalConnection.csproj",
+    "kind": "dep",
+    "blob_sha": "c7c33c4c37af29fcf8483787a40c8c814af06784",
+    "ecosystem": "csproj",
+    "bytes": 725,
+    "names": [
+     "DbPeekQueryLibrary",
+     "Dapper",
+     "Dommel",
+     "Microsoft.Data.SqlClient",
+     "ConfigurationLibrary"
+    ]
+   },
+   {
+    "path": "InsertNewRecordApp/InsertNewRecordApp.csproj",
+    "kind": "dep",
+    "blob_sha": "788674714b86fd6b20b019526a51e07db84a3f5b",
+    "ecosystem": "csproj",
+    "bytes": 2066,
+    "names": [
+     "Bogus",
+     "Dapper",
+     "Dapper.Contrib",
+     "Dapper.Transaction",
+     "DbPeekQueryLibrary",
+     "Microsoft.Data.SqlClient",
+     "ConfigurationLibrary",
+     "Serilog",
+     "Serilog.Sinks.File"
+    ]
+   },
+   {
+    "path": "InterfaceExtensionApp/InterfaceExtensionApp.csproj",
+    "kind": "dep",
+    "blob_sha": "2239c41b76c29cc6dfe4ae24281a6a895e8317b0",
+    "ecosystem": "csproj",
+    "bytes": 831,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "MaskingSocialApp/MaskingSocialApp.csproj",
+    "kind": "dep",
+    "blob_sha": "089528707198a3bbe5792e9b191041c245d53e55",
+    "ecosystem": "csproj",
+    "bytes": 1215,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Microsoft.Data.SqlClient",
+     "Dapper",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "NextResultsApp/GitHubSamples.csproj",
+    "kind": "dep",
+    "blob_sha": "97853f07875e04cb1db12ce906218f7874371cd2",
+    "ecosystem": "csproj",
+    "bytes": 1050,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Dapper",
+     "Microsoft.Data.SqlClient",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "NorthCustomersToolGenerated/NorthCustomersToolGenerated.csproj",
+    "kind": "dep",
+    "blob_sha": "fe46a69d506f0db1944fff667ee3bc5f1f17b7fc",
+    "ecosystem": "csproj",
+    "bytes": 2155,
+    "names": [
+     "Dapper",
+     "Dommel",
+     "Microsoft.Data.SqlClient",
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Spectre.Console",
+     "Microsoft.Extensions.Configuration",
+     "Microsoft.Extensions.Configuration.EnvironmentVariables",
+     "Microsoft.Extensions.Configuration.FileExtensions",
+     "Microsoft.Extensions.Configuration.Json",
+     "Microsoft.Extensions.DependencyInjection",
+     "Microsoft.Extensions.DependencyInjection.Abstractions",
+     "Microsoft.Extensions.Logging",
+     "Microsoft.Extensions.Logging.Console",
+     "Microsoft.Extensions.Options"
+    ]
+   },
+   {
+    "path": "NorthWindSqlLiteApp1/NorthWindSqlLiteApp1.csproj",
+    "kind": "dep",
+    "blob_sha": "31dba0f99af09241808a762119bf4334a09e1281",
+    "ecosystem": "csproj",
+    "bytes": 2727,
+    "names": [
+     "Diacritics",
+     "Microsoft.EntityFrameworkCore.Sqlite",
+     "Microsoft.Extensions.Hosting",
+     "Newtonsoft.Json",
+     "Serilog",
+     "SeriLogThemesLibrary",
+     "Serilog.Extensions.Logging.File",
+     "Serilog.Sinks.File",
+     "ConfigurationLibrary",
+     "ConsoleConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Spectre.Console",
+     "Spectre.Console.Json",
+     "Microsoft.EntityFrameworkCore.SqlServer",
+     "Microsoft.Data.SqlClient",
+     "Dapper"
+    ]
+   },
+   {
+    "path": "PayneServiceLibrary/PayneServiceLibrary.csproj",
+    "kind": "dep",
+    "blob_sha": "dc522c334e0e48fe44a8c3baf0a8082f98f4f3e5",
+    "ecosystem": "csproj",
+    "bytes": 918,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleConfigurationLibrary"
+    ]
+   },
+   {
+    "path": "ProductCatalogApp/ProductCatalogApp.csproj",
+    "kind": "dep",
+    "blob_sha": "542cb9de2f5a8ba5556344a3bf1c0523f77f6365",
+    "ecosystem": "csproj",
+    "bytes": 1215,
+    "names": [
+     "Bogus",
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Dapper.JsonTypeMapping",
+     "Microsoft.Data.SqlClient",
+     "Dapper",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "ProductsCategoriesApp/ProductsCategoriesApp.csproj",
+    "kind": "dep",
+    "blob_sha": "e003ac7c20874112f65489cdf1604ac0e7f2c099",
+    "ecosystem": "csproj",
+    "bytes": 1455,
+    "names": [
+     "Microsoft.EntityFrameworkCore.SqlServer",
+     "EntityCoreFileLogger",
+     "ConsoleHelperLibrary",
+     "Dapper",
+     "Dommel",
+     "Microsoft.Data.SqlClient",
+     "ConfigurationLibrary"
+    ]
+   },
+   {
+    "path": "ReverseEngineerNorthWind2024/ReverseEngineerNorthWind2024.csproj",
+    "kind": "dep",
+    "blob_sha": "3305c8afb02ca3cff3a8f9ebf9a26d16cfa3f8ce",
+    "ecosystem": "csproj",
+    "bytes": 1306,
+    "names": [
+     "Serilog",
+     "SeriLogThemesLibrary",
+     "Serilog.Extensions.Logging.File",
+     "Serilog.Sinks.File",
+     "ConfigurationLibrary",
+     "ConsoleConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Spectre.Console",
+     "Spectre.Console.Json"
+    ]
+   },
+   {
+    "path": "ReverseEngineerNorthWindLibrary/ReverseEngineerNorthWindLibrary.csproj",
+    "kind": "dep",
+    "blob_sha": "acfdd6686a46ccefdb07afbc4c4cf6da48f80d82",
+    "ecosystem": "csproj",
+    "bytes": 624,
+    "names": [
+     "Microsoft.EntityFrameworkCore.SqlServer",
+     "Serilog",
+     "SeriLogThemesLibrary",
+     "Serilog.Extensions.Logging.File",
+     "Serilog.Sinks.File"
+    ]
+   },
+   {
+    "path": "RowFilterApp/RowFilterApp.csproj",
+    "kind": "dep",
+    "blob_sha": "a6e53f5a2f5425818cadf247f05852f2d5686250",
+    "ecosystem": "csproj",
+    "bytes": 802,
+    "names": [
+     "ConfigurationLibrary",
+     "Microsoft.Data.SqlClient"
+    ]
+   },
+   {
+    "path": "SimpleEfCoreApp/SimpleEfCoreApp.csproj",
+    "kind": "dep",
+    "blob_sha": "1d05b36524cca99cebf579baea52ebf7bb547263",
+    "ecosystem": "csproj",
+    "bytes": 1664,
+    "names": [
+     "ConfigurationLibrary",
+     "FluentValidation",
+     "Microsoft.EntityFrameworkCore.SqlServer"
+    ]
+   },
+   {
+    "path": "SqlAddColumnWithValuesApp/SqlAddColumnWithValuesApp.csproj",
+    "kind": "dep",
+    "blob_sha": "4da1d1227e2e69b08a41434c92e1db335c026bfa",
+    "ecosystem": "csproj",
+    "bytes": 1058,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Dapper",
+     "kp.Dapper.Handlers",
+     "Microsoft.Data.SqlClient",
+     "Spectre.Console"
+    ]
+   },
+   {
+    "path": "SqlClientHelperApp/SqlClientHelperApp.csproj",
+    "kind": "dep",
+    "blob_sha": "4d9491738b344f9f053a0e78d31ba18cb2a5aa6b",
+    "ecosystem": "csproj",
+    "bytes": 2114,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleConfigurationLibrary",
+     "Dapper",
+     "Microsoft.Data.SqlClient",
+     "FluentValidation",
+     "ObjectDumper.NET"
+    ]
+   },
+   {
+    "path": "SqlLiteInsertNulls/SqlLiteInsertNulls.csproj",
+    "kind": "dep",
+    "blob_sha": "890be01f51dca99cc3829b054bb8a57424587824",
+    "ecosystem": "csproj",
+    "bytes": 1163,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Dapper",
+     "Spectre.Console",
+     "System.Data.SQLite.Core"
+    ]
+   },
+   {
+    "path": "SqlLiteSample1/SqlLiteSample1.csproj",
+    "kind": "dep",
+    "blob_sha": "f8a96940489c1bd847c8e27f04cf2998e89b5967",
+    "ecosystem": "csproj",
+    "bytes": 1062,
+    "names": [
+     "ConfigurationLibrary",
+     "ConsoleHelperLibrary",
+     "Dapper",
+     "Spectre.Console",
+     "System.Data.SQLite.Core"
     ]
    }
   ],
@@ -3255,15 +5881,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T01:20:19Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:51:23Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 18,
   "tree": {
-   "sha": "705ad1ab9824a270188c061d421785d5d9a116e1",
-   "etag": "W/\"0342a7fc4a6f531fdefeac9e3dbf90eebf872da52b2218afdd20432c65f8c567\"",
+   "sha": "f40f91c952849d0466668c27d57a61929f0089cb",
+   "etag": "W/\"eb2e05e4aef18baa66fb301895c6872239af7373701cf2b98de3a650e0c488e2\"",
    "truncated": false,
-   "path_count": 4104,
+   "path_count": 5346,
    "matched": [
     "Cargo.toml",
     "benches/Cargo.toml",
@@ -3277,6 +5904,41 @@
     "crates/cursor/Cargo.toml",
     "crates/datastore/Cargo.toml",
     "crates/db/Cargo.toml",
+    "crates/defra-core/Cargo.toml",
+    "crates/defra-node/Cargo.toml",
+    "crates/defra-version/Cargo.toml",
+    "crates/document/Cargo.toml",
+    "crates/edge/Cargo.toml",
+    "crates/events/Cargo.toml",
+    "crates/ffi/Cargo.toml",
+    "crates/http/Cargo.toml",
+    "crates/identity/Cargo.toml",
+    "crates/inputs/Cargo.toml",
+    "crates/keyring/Cargo.toml",
+    "crates/kms/Cargo.toml",
+    "crates/lens/Cargo.toml",
+    "crates/orbis/Cargo.toml",
+    "crates/p2p-adapter/Cargo.toml",
+    "crates/p2p/Cargo.toml",
+    "crates/pg-compat/Cargo.toml",
+    "crates/query/Cargo.toml",
+    "crates/replication-filter/Cargo.toml",
+    "crates/schema/Cargo.toml",
+    "crates/storage/Cargo.toml",
+    "crates/telemetry/Cargo.toml",
+    "crates/vera/Cargo.toml",
+    "crates/wasm/Cargo.toml",
+    "crates/workers/Cargo.toml",
+    "crates/zanzibar/Cargo.toml",
+    "tools/ffi-test/Cargo.toml",
+    "tools/integration-test/Cargo.toml",
+    "tools/lens-host/Cargo.toml",
+    "tools/perf/Cargo.toml",
+    "tools/pg-compat-harness/package.json",
+    "tools/vector-bench/Cargo.toml",
+    "crates/p2p/testdata/gen_message_fixtures/go.mod",
+    "crates/p2p/testdata/gen_pubsub_rpc_fixture/go.mod",
+    "tools/integration-test/test-lenses/set_default/Cargo.toml",
     "Dockerfile",
     "Dockerfile.release",
     ".github/workflows/artifacts.yml",
@@ -3299,9 +5961,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "676eca5ad5b5fb4e3d5c17e3bc6b19350c16067c",
+    "blob_sha": "9238603294616be1081416873e489e3438e99823",
     "ecosystem": "cargo",
-    "bytes": 11669
+    "bytes": 11646
    },
    {
     "path": "benches/Cargo.toml",
@@ -3678,6 +6340,1043 @@
     ]
    },
    {
+    "path": "crates/defra-core/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "b6e11d53357fe2553cd4c7d41cbfeab6bbbbca7b",
+    "ecosystem": "cargo",
+    "bytes": 1865,
+    "names": [
+     "thiserror.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "serde_bytes.workspace",
+     "ciborium.workspace",
+     "uuid.workspace",
+     "multibase",
+     "cid.workspace",
+     "multihash.workspace",
+     "serde_ipld_dagcbor.workspace",
+     "ipld-core.workspace",
+     "rapidhash.workspace",
+     "kovan-map.workspace",
+     "kovan-queue.workspace",
+     "sha2.workspace",
+     "rand.workspace",
+     "zeroize",
+     "async-trait.workspace",
+     "regolith.workspace",
+     "bytes.workspace",
+     "tracing.workspace"
+    ],
+    "dev": [
+     "futures.workspace",
+     "workers",
+     "multihash-codetable.workspace",
+     "proptest.workspace"
+    ]
+   },
+   {
+    "path": "crates/defra-node/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "d6d401a16ae2d5793a47e4a36e5d920642854e45",
+    "ecosystem": "cargo",
+    "bytes": 4498,
+    "names": [
+     "rapidhash.workspace",
+     "kovan-queue.workspace",
+     "regolith.workspace",
+     "crypto",
+     "hex.workspace",
+     "keyring",
+     "zeroize",
+     "crdt",
+     "db",
+     "storage",
+     "query",
+     "events",
+     "acp",
+     "vera",
+     "identity",
+     "defra-core",
+     "edge",
+     "workers",
+     "schema",
+     "lens",
+     "tracing.workspace",
+     "async-trait",
+     "serde.workspace",
+     "serde_json.workspace",
+     "thiserror.workspace",
+     "axum",
+     "reqwest",
+     "tracing-subscriber",
+     "defra-http",
+     "p2p",
+     "defra-p2p-adapter",
+     "kms",
+     "blockstore",
+     "replication-filter",
+     "libp2p",
+     "telemetry"
+    ],
+    "dev": [
+     "zanzibar",
+     "document",
+     "defra-core",
+     "edge",
+     "axum.workspace",
+     "defra-http",
+     "defra-p2p-adapter",
+     "futures.workspace",
+     "kovan.workspace",
+     "crypto",
+     "tempfile",
+     "cid.workspace",
+     "base64",
+     "zstd",
+     "tar"
+    ]
+   },
+   {
+    "path": "crates/defra-version/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "8f499b1c411310f28ff9a5a4ac46c358a5ee702a",
+    "ecosystem": "cargo",
+    "bytes": 337,
+    "names": [
+     "serde"
+    ],
+    "dev": [
+     "serde_json"
+    ]
+   },
+   {
+    "path": "crates/document/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "2bcb706450c056a51fd29ac18b82eccee90b15d0",
+    "ecosystem": "cargo",
+    "bytes": 1055,
+    "names": [
+     "schema",
+     "defra-core",
+     "serde",
+     "serde_json",
+     "ciborium",
+     "cid",
+     "uuid",
+     "multibase",
+     "chrono",
+     "base64",
+     "thiserror",
+     "rapidhash"
+    ],
+    "dev": [
+     "multihash",
+     "sha2"
+    ]
+   },
+   {
+    "path": "crates/edge/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "65cdb2ec9086b5d36c6146731cc41408c59bcf15",
+    "ecosystem": "cargo",
+    "bytes": 1102,
+    "names": [
+     "defra-core",
+     "regolith",
+     "workers",
+     "n0-future.workspace",
+     "thiserror.workspace",
+     "tracing.workspace"
+    ]
+   },
+   {
+    "path": "crates/events/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "96b077dea554b482a2c93e6ed341fbaf5132ed14",
+    "ecosystem": "cargo",
+    "bytes": 923,
+    "names": [
+     "defra-core",
+     "async-trait.workspace",
+     "async-channel",
+     "kovan",
+     "rapidhash.workspace",
+     "bytes.workspace",
+     "cid.workspace",
+     "thiserror.workspace",
+     "tracing.workspace"
+    ],
+    "dev": [
+     "regolith.workspace",
+     "workers"
+    ]
+   },
+   {
+    "path": "crates/ffi/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "5c4432ac1b979b1603bc7ebf845d98c9ea2baeed",
+    "ecosystem": "cargo",
+    "bytes": 2843,
+    "names": [
+     "rapidhash.workspace",
+     "edge",
+     "workers",
+     "serde.workspace",
+     "serde_json.workspace",
+     "serde_yaml",
+     "serde_ipld_dagcbor.workspace",
+     "serde_bytes.workspace",
+     "base64.workspace",
+     "zeroize",
+     "thiserror.workspace",
+     "tracing.workspace",
+     "tracing-chrome",
+     "tracing-subscriber",
+     "regolith.workspace",
+     "kovan.workspace",
+     "kovan-channel.workspace",
+     "kovan-map.workspace",
+     "kovan-queue.workspace",
+     "sha2.workspace",
+     "hex.workspace",
+     "crypto",
+     "db",
+     "defra-core",
+     "defra-p2p-adapter",
+     "document",
+     "events",
+     "storage",
+     "query",
+     "schema",
+     "identity",
+     "acp",
+     "lens",
+     "p2p",
+     "blockstore",
+     "defra-node",
+     "cid.workspace"
+    ],
+    "dev": [
+     "cbindgen",
+     "defra-core",
+     "tokio",
+     "tempfile"
+    ]
+   },
+   {
+    "path": "crates/http/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "fd92ed77f0db89680938774304aeb0e8de73bb93",
+    "ecosystem": "cargo",
+    "bytes": 3279,
+    "names": [
+     "query",
+     "defra-p2p-adapter",
+     "identity",
+     "schema",
+     "acp",
+     "events",
+     "defra-core",
+     "defra-version",
+     "crypto",
+     "lens",
+     "db",
+     "hex",
+     "base64.workspace",
+     "cid.workspace",
+     "edge",
+     "workers",
+     "tokio",
+     "tokio-stream",
+     "async-trait.workspace",
+     "futures.workspace",
+     "async-stream",
+     "serde.workspace",
+     "serde_json.workspace",
+     "rapidhash.workspace",
+     "kovan.workspace",
+     "kovan-map.workspace",
+     "kovan-queue.workspace",
+     "axum",
+     "axum-server",
+     "rustls",
+     "tower",
+     "tower-http",
+     "hyper",
+     "thiserror.workspace",
+     "tracing.workspace",
+     "telemetry"
+    ],
+    "dev": [
+     "regolith.workspace",
+     "defra-core",
+     "edge",
+     "tokio",
+     "tower",
+     "urlencoding",
+     "crypto",
+     "defra-http",
+     "storage"
+    ]
+   },
+   {
+    "path": "crates/identity/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "93f7f3f491ad75c4f014bb21f00f9a6b1ba3fc93",
+    "ecosystem": "cargo",
+    "bytes": 764,
+    "names": [
+     "defra-core",
+     "crypto",
+     "thiserror.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "hex.workspace",
+     "base64.workspace",
+     "k256.workspace",
+     "p256",
+     "web-time.workspace"
+    ],
+    "dev": [
+     "proptest.workspace",
+     "workers"
+    ]
+   },
+   {
+    "path": "crates/inputs/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "b23ee80e9824a4f06da38715974b4bbea064dfba",
+    "ecosystem": "cargo",
+    "bytes": 1282,
+    "names": [
+     "defra-core",
+     "regolith.workspace",
+     "workers",
+     "rapidhash.workspace",
+     "tracing.workspace",
+     "edge",
+     "n0-future.workspace"
+    ],
+    "dev": [
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/keyring/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "0a2c71eabfe93de82d867250d3798d142d3d8250",
+    "ecosystem": "cargo",
+    "bytes": 1969,
+    "names": [
+     "thiserror.workspace",
+     "base64",
+     "zeroize",
+     "tempfile",
+     "aes",
+     "aes-gcm.workspace",
+     "aes-kw",
+     "pbkdf2",
+     "sha2.workspace",
+     "rand.workspace",
+     "serde_json.workspace"
+    ],
+    "dev": [
+     "josekit",
+     "serial_test"
+    ]
+   },
+   {
+    "path": "crates/kms/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "605a0dd4b616223f432200ae97b6743c6a8371f2",
+    "ecosystem": "cargo",
+    "bytes": 2134,
+    "names": [
+     "bytes.workspace",
+     "regolith.workspace",
+     "ciborium.workspace",
+     "defra-core",
+     "crypto",
+     "acp",
+     "identity",
+     "orbis",
+     "vera",
+     "inputs",
+     "edge",
+     "futures.workspace",
+     "async-trait.workspace",
+     "kovan.workspace",
+     "kovan-map.workspace",
+     "rapidhash.workspace",
+     "thiserror.workspace",
+     "tracing.workspace",
+     "serde",
+     "serde_bytes",
+     "base64",
+     "zeroize",
+     "rand",
+     "uuid",
+     "cid",
+     "x25519-dalek",
+     "async-channel"
+    ],
+    "dev": [
+     "tokio",
+     "workers",
+     "kovan-queue.workspace"
+    ]
+   },
+   {
+    "path": "crates/lens/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "c7b2d4caf23810564f9b0c64783d88870449d51b",
+    "ecosystem": "cargo",
+    "bytes": 1408,
+    "names": [
+     "async-trait.workspace",
+     "futures.workspace",
+     "rapidhash.workspace",
+     "kovan-map.workspace",
+     "regolith.workspace",
+     "workers",
+     "serde.workspace",
+     "serde_json.workspace",
+     "thiserror.workspace",
+     "tracing.workspace",
+     "base64.workspace",
+     "sha2.workspace",
+     "hex.workspace",
+     "wasmtime"
+    ]
+   },
+   {
+    "path": "crates/orbis/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "077fcd1af3dac18fa3bd502d47731f9bed8fc56e",
+    "ecosystem": "cargo",
+    "bytes": 1241,
+    "names": [
+     "defra-core",
+     "identity",
+     "crypto",
+     "tonic",
+     "tonic-prost",
+     "prost",
+     "edge",
+     "base64.workspace",
+     "serde_json.workspace",
+     "sha2.workspace",
+     "uuid.workspace",
+     "hex.workspace",
+     "thiserror.workspace"
+    ],
+    "dev": [
+     "edge",
+     "tokio",
+     "tokio-stream.workspace",
+     "regolith.workspace",
+     "rapidhash.workspace",
+     "blst",
+     "tonic-build",
+     "tonic-prost-build"
+    ]
+   },
+   {
+    "path": "crates/p2p-adapter/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "e6a2b48db14e11f88228aa301d705e07aa436116",
+    "ecosystem": "cargo",
+    "bytes": 2292,
+    "names": [
+     "acp",
+     "blockstore",
+     "db",
+     "defra-core",
+     "document",
+     "events",
+     "identity",
+     "lens",
+     "p2p",
+     "kms",
+     "edge",
+     "query",
+     "replication-filter",
+     "schema",
+     "storage",
+     "workers",
+     "async-trait.workspace",
+     "bytes.workspace",
+     "chrono",
+     "cid.workspace",
+     "hex.workspace",
+     "kovan.workspace",
+     "regolith.workspace",
+     "kovan-map.workspace",
+     "kovan-queue.workspace",
+     "n0-future.workspace",
+     "libp2p",
+     "rapidhash.workspace",
+     "serde.workspace",
+     "serde_bytes.workspace",
+     "serde_ipld_dagcbor.workspace",
+     "serde_json.workspace",
+     "sha2.workspace",
+     "tokio",
+     "thiserror.workspace",
+     "tracing.workspace",
+     "web-time.workspace",
+     "zeroize"
+    ],
+    "dev": [
+     "edge",
+     "tokio",
+     "crypto",
+     "data-encoding",
+     "iroh.workspace"
+    ]
+   },
+   {
+    "path": "crates/p2p/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "4143d60899dc50b2890a20a9a0ec6c204bfdf4ad",
+    "ecosystem": "cargo",
+    "bytes": 5211,
+    "names": [
+     "defra-core",
+     "document",
+     "crypto",
+     "blockstore",
+     "datastore",
+     "storage",
+     "identity",
+     "acp",
+     "kms",
+     "edge",
+     "workers",
+     "kovan",
+     "kovan-map",
+     "kovan-queue",
+     "kovan-channel",
+     "regolith",
+     "libp2p",
+     "bitswap",
+     "libp2p-stream",
+     "multiaddr",
+     "tokio",
+     "async-trait",
+     "futures",
+     "n0-future.workspace",
+     "web-time.workspace",
+     "serde",
+     "serde_json",
+     "ciborium",
+     "serde_bytes",
+     "postcard",
+     "base64",
+     "hex",
+     "sha2",
+     "chrono",
+     "uuid",
+     "cid",
+     "multihash-codetable",
+     "ipld-core",
+     "serde_ipld_dagcbor",
+     "thiserror",
+     "tracing",
+     "rlimit",
+     "sysinfo",
+     "bytes",
+     "rapidhash",
+     "unsigned-varint",
+     "lru",
+     "iroh",
+     "iroh-gossip",
+     "iroh-tickets",
+     "iroh-relay",
+     "rustls",
+     "rand",
+     "blake3"
+    ],
+    "dev": [
+     "edge",
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/pg-compat/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "8a3eeed109864f5b37d13a2b853cc7dec7c13438",
+    "ecosystem": "cargo",
+    "bytes": 1242,
+    "names": [
+     "query",
+     "schema",
+     "identity",
+     "pgwire",
+     "sqlparser",
+     "tokio",
+     "async-trait",
+     "kovan.workspace",
+     "regolith.workspace",
+     "serde_json",
+     "tracing",
+     "regex",
+     "thiserror",
+     "futures",
+     "rapidhash.workspace"
+    ]
+   },
+   {
+    "path": "crates/query/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "d20e039a44f26489d3f4abdf1e1e9f5ad8df74d8",
+    "ecosystem": "cargo",
+    "bytes": 1826,
+    "names": [
+     "workers",
+     "bytes.workspace",
+     "web-time.workspace",
+     "rapidhash.workspace",
+     "kovan.workspace",
+     "kovan-map.workspace",
+     "kovan-queue.workspace",
+     "regolith.workspace",
+     "inputs",
+     "cursor",
+     "defra-core",
+     "document",
+     "crdt",
+     "storage",
+     "schema",
+     "identity",
+     "acp",
+     "lens",
+     "async-trait.workspace",
+     "futures.workspace",
+     "sync_wrapper",
+     "serde.workspace",
+     "serde_json.workspace",
+     "ciborium.workspace",
+     "thiserror.workspace",
+     "base64.workspace",
+     "cid.workspace",
+     "sha2.workspace",
+     "tracing.workspace",
+     "bm25.workspace",
+     "graphql-parser.workspace",
+     "regex",
+     "async-graphql",
+     "chrono"
+    ],
+    "dev": [
+     "defra-core"
+    ]
+   },
+   {
+    "path": "crates/replication-filter/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "4bf68d3d6156998251fa7bd1fd0a6963f92099ce",
+    "ecosystem": "cargo",
+    "bytes": 527,
+    "names": [
+     "p2p",
+     "query",
+     "schema",
+     "kovan-map.workspace",
+     "rapidhash.workspace",
+     "serde_json.workspace"
+    ]
+   },
+   {
+    "path": "crates/schema/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "316369a0e17427c15636c2282979c00f4a882377",
+    "ecosystem": "cargo",
+    "bytes": 739,
+    "names": [
+     "defra-core",
+     "thiserror.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "serde_ipld_dagcbor.workspace",
+     "cid.workspace",
+     "multihash.workspace",
+     "rapidhash.workspace",
+     "sha2.workspace",
+     "tracing.workspace"
+    ],
+    "dev": [
+     "proptest.workspace"
+    ]
+   },
+   {
+    "path": "crates/storage/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "cb8b7724db803bf206c44788a8a2d1d458232b7f",
+    "ecosystem": "cargo",
+    "bytes": 2109,
+    "names": [
+     "web-time.workspace",
+     "defra-core",
+     "crdt",
+     "document",
+     "schema",
+     "regolith.workspace",
+     "workers",
+     "bytes.workspace",
+     "chrono",
+     "async-trait.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "cid.workspace",
+     "thiserror.workspace",
+     "rapidhash.workspace",
+     "sha2.workspace",
+     "zeroize",
+     "tracing.workspace",
+     "telemetry",
+     "bm25.workspace",
+     "hex"
+    ],
+    "dev": [
+     "proptest.workspace",
+     "tempfile"
+    ]
+   },
+   {
+    "path": "crates/telemetry/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "3eb9390b055f1f71afa54c0da581b2af2bd8f38a",
+    "ecosystem": "cargo",
+    "bytes": 3141,
+    "names": [
+     "kovan",
+     "rapidhash.workspace",
+     "regolith.workspace",
+     "reqwest",
+     "tracing.workspace",
+     "tracing-subscriber",
+     "thiserror",
+     "opentelemetry",
+     "opentelemetry_sdk",
+     "opentelemetry-otlp",
+     "opentelemetry-semantic-conventions",
+     "tracing-opentelemetry"
+    ]
+   },
+   {
+    "path": "crates/vera/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "e7015b93435f8150302035931f4398ba87e8d0c0",
+    "ecosystem": "cargo",
+    "bytes": 2879,
+    "names": [
+     "reqwest",
+     "cosmrs",
+     "serde.workspace",
+     "serde_json.workspace",
+     "tokio",
+     "async-trait.workspace",
+     "thiserror.workspace",
+     "k256.workspace",
+     "hex.workspace",
+     "acp",
+     "zanzibar",
+     "identity",
+     "defra-core",
+     "crypto",
+     "keyring",
+     "events",
+     "tempfile",
+     "vera-client",
+     "vera-domain",
+     "vera-modules",
+     "commonware-codec",
+     "kovan.workspace",
+     "kovan-map.workspace",
+     "kovan-queue.workspace",
+     "inputs",
+     "tracing.workspace",
+     "sha2.workspace",
+     "rapidhash.workspace",
+     "regolith.workspace",
+     "base64.workspace",
+     "alloy-sol-types.workspace",
+     "alloy-primitives.workspace",
+     "bs58.workspace",
+     "acp-light-client"
+    ],
+    "dev": [
+     "edge",
+     "tokio",
+     "kovan-queue.workspace"
+    ]
+   },
+   {
+    "path": "crates/wasm/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "1593f6ec9a1f31b64b31896915f31fc92837ec51",
+    "ecosystem": "cargo",
+    "bytes": 3661,
+    "names": [
+     "bytes",
+     "wasm-bindgen",
+     "wasm-bindgen-futures",
+     "js-sys",
+     "web-sys",
+     "serde-wasm-bindgen",
+     "serde.workspace",
+     "serde_json.workspace",
+     "rapidhash.workspace",
+     "thiserror.workspace",
+     "futures.workspace",
+     "async-trait.workspace",
+     "console_error_panic_hook",
+     "sha2.workspace",
+     "hex.workspace",
+     "getrandom",
+     "db",
+     "storage",
+     "schema",
+     "document",
+     "query",
+     "defra-core",
+     "edge",
+     "workers",
+     "crypto",
+     "identity",
+     "zeroize",
+     "events",
+     "acp",
+     "defra-p2p-adapter",
+     "p2p",
+     "iroh.workspace",
+     "hkdf",
+     "cid.workspace"
+    ],
+    "dev": [
+     "wasm-bindgen-test",
+     "web-sys",
+     "gloo-timers",
+     "defra-perf"
+    ]
+   },
+   {
+    "path": "crates/workers/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "2a7afbca84f27938d875427dd3442eb57840135b",
+    "ecosystem": "cargo",
+    "bytes": 850,
+    "names": [
+     "regolith.workspace",
+     "rapidhash.workspace",
+     "tracing.workspace"
+    ]
+   },
+   {
+    "path": "crates/zanzibar/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "678ddac33ac96f448809c0c1fafb025178ce40d3",
+    "ecosystem": "cargo",
+    "bytes": 738,
+    "names": [
+     "identity",
+     "async-trait.workspace",
+     "thiserror.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "rapidhash.workspace",
+     "tracing.workspace",
+     "kovan-map.workspace"
+    ],
+    "dev": [
+     "futures.workspace",
+     "workers",
+     "proptest.workspace"
+    ]
+   },
+   {
+    "path": "tools/ffi-test/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "6fce00183603157599aaa1c16972392fa95345da",
+    "ecosystem": "cargo",
+    "bytes": 680,
+    "names": [
+     "rapidhash.workspace",
+     "axum",
+     "defra-version",
+     "clap",
+     "tokio",
+     "serde",
+     "serde_json",
+     "thiserror",
+     "chrono",
+     "colored",
+     "dirs"
+    ]
+   },
+   {
+    "path": "tools/integration-test/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "cc5ca61dc747b70b783bffe9aa6845892a3790f8",
+    "ecosystem": "cargo",
+    "bytes": 5440,
+    "names": [
+     "vera-harness",
+     "commonware-codec",
+     "defra-harness",
+     "crypto",
+     "document",
+     "tokio",
+     "reqwest",
+     "serde_json",
+     "futures",
+     "paste",
+     "ctor",
+     "chrono",
+     "defra-node",
+     "events",
+     "async-channel",
+     "cli",
+     "query",
+     "schema",
+     "defra-core",
+     "serde.workspace",
+     "tempfile",
+     "thiserror.workspace",
+     "workers",
+     "edge",
+     "testo",
+     "kovan.workspace",
+     "regolith.workspace",
+     "rapidhash.workspace",
+     "cid",
+     "base64",
+     "hex",
+     "identity"
+    ],
+    "dev": [
+     "mantra-macros",
+     "keyring",
+     "vera-client",
+     "vera-domain",
+     "vera-modules",
+     "alloy-sol-types.workspace",
+     "acp",
+     "vera",
+     "libc",
+     "p2p",
+     "ciborium",
+     "serial_test"
+    ]
+   },
+   {
+    "path": "tools/lens-host/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "33337b3b07bfa702a13ae71044368f7bca60b478",
+    "ecosystem": "cargo",
+    "bytes": 488,
+    "names": [
+     "lens",
+     "serde_json.workspace",
+     "tokio"
+    ]
+   },
+   {
+    "path": "tools/perf/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "eb76f98554eb6068484911bb4eda4bd53bcd7c77",
+    "ecosystem": "cargo",
+    "bytes": 1028,
+    "names": [
+     "serde",
+     "serde_json.workspace"
+    ]
+   },
+   {
+    "path": "tools/pg-compat-harness/package.json",
+    "kind": "dep",
+    "blob_sha": "f88ef32842b5e0171203ab29f7c8d26b64f73182",
+    "ecosystem": "npm",
+    "bytes": 493,
+    "names": [
+     "drizzle-orm",
+     "postgres"
+    ],
+    "dev": [
+     "@types/bun",
+     "drizzle-kit",
+     "typescript"
+    ]
+   },
+   {
+    "path": "tools/vector-bench/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "25dcf8ed710d144d0be0bba78d0158fe82133898",
+    "ecosystem": "cargo",
+    "bytes": 390,
+    "names": [
+     "arrow",
+     "parquet",
+     "rayon",
+     "usearch"
+    ]
+   },
+   {
+    "path": "crates/p2p/testdata/gen_message_fixtures/go.mod",
+    "kind": "dep",
+    "blob_sha": "caa6636f544248a5626e9d7d5ab1ff6b75492587",
+    "ecosystem": "go",
+    "bytes": 136,
+    "names": [
+     "github.com/fxamacker/cbor/v2"
+    ],
+    "dev": [
+     "github.com/x448/float16"
+    ]
+   },
+   {
+    "path": "crates/p2p/testdata/gen_pubsub_rpc_fixture/go.mod",
+    "kind": "dep",
+    "blob_sha": "10b0121278bf8253f57088fce8254431f543c19b",
+    "ecosystem": "go",
+    "bytes": 865,
+    "names": [
+     "github.com/fxamacker/cbor/v2",
+     "github.com/ipfs/go-cid",
+     "github.com/ipld/go-ipld-prime",
+     "github.com/multiformats/go-multihash"
+    ],
+    "dev": [
+     "github.com/klauspost/cpuid/v2",
+     "github.com/minio/sha256-simd",
+     "github.com/mr-tron/base58",
+     "github.com/multiformats/go-base32",
+     "github.com/multiformats/go-base36",
+     "github.com/multiformats/go-multibase",
+     "github.com/multiformats/go-varint",
+     "github.com/polydawn/refmt",
+     "github.com/spaolacci/murmur3",
+     "github.com/x448/float16",
+     "golang.org/x/crypto",
+     "golang.org/x/sys",
+     "lukechampine.com/blake3"
+    ]
+   },
+   {
+    "path": "tools/integration-test/test-lenses/set_default/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "6257a9cdb6e87fe306ab13b86a08237e7694ac74",
+    "ecosystem": "cargo",
+    "bytes": 219,
+    "names": [
+     "serde",
+     "serde_json",
+     "lens_sdk"
+    ]
+   },
+   {
     "path": "Dockerfile",
     "kind": "image",
     "blob_sha": "f92a4025917f9a81d0d82471be92124557d12c10",
@@ -3729,8 +7428,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "082926ce917323db8466f190b4002a119f71f2b3",
-    "bytes": 26898
+    "blob_sha": "ba24dd1e876f98842871b24e3e9f5fec39b487c1",
+    "bytes": 29056
    },
    {
     "path": ".github/workflows/native-consumer.yml",
@@ -3747,14 +7446,14 @@
    {
     "path": ".github/workflows/perf-pr.yml",
     "kind": "ci",
-    "blob_sha": "93b84c2b96aba1ae83e9b630b94bd5f906daab57",
-    "bytes": 9979
+    "blob_sha": "d2f8b9970304cc3ebfc893397bcaf5c4236c58b5",
+    "bytes": 10592
    },
    {
     "path": ".github/workflows/perf.yml",
     "kind": "ci",
-    "blob_sha": "d6e206b4492eaa1ad1158ee614e1f6b3ddb178f3",
-    "bytes": 26118
+    "blob_sha": "c74aeb063b54d0adf2abff284e60e45624d53f1a",
+    "bytes": 26355
    },
    {
     "path": ".github/workflows/release.yml",
@@ -3765,8 +7464,8 @@
    {
     "path": ".github/workflows/unit-tests.yml",
     "kind": "ci",
-    "blob_sha": "c2343f117044b01b2c8b24d9c24cdbb16450929b",
-    "bytes": 2355
+    "blob_sha": "5a40b29077633f28ee18c227524c733b96bb1fd0",
+    "bytes": 4156
    },
    {
     "path": ".github/workflows/validate-title.yml",
@@ -3794,7 +7493,6 @@
     "proofs/tla/MC_HistoryDriver_Red_SwallowedAbort.cfg",
     "proofs/tla/MC_HistoryDriver_Red_TimerDelay.cfg",
     "proofs/tla/MC_HistoryDriver_Red_UnpacedRetry.cfg",
-    "crates/cli/src/acp_adapter.rs",
     "crates/cli/src/backup_adapter.rs",
     "crates/cli/src/block_adapter.rs",
     "crates/cli/src/collection_mgmt_adapter.rs",
@@ -3802,18 +7500,17 @@
     "crates/cli/src/dump_adapter.rs",
     "crates/cli/src/encrypted_index_adapter.rs",
     "crates/cli/src/index_adapter.rs",
-    "crates/cli/src/lens_adapter.rs",
     "crates/cli/src/nac_adapter.rs",
     "crates/cli/src/nac_adapter_tests.rs",
     "crates/cli/src/p2p_adapter.rs",
     "crates/cli/src/schema_adapter.rs",
-    "crates/cli/src/txn_adapter.rs",
-    "crates/cli/src/vera_acp_adapter.rs",
     "crates/cli/src/view_adapter.rs",
     "crates/p2p-adapter/src/iroh.rs",
     "crates/p2p-adapter/src/iroh_restore.rs",
     "crates/p2p-adapter/src/lib.rs",
     "crates/p2p-adapter/src/libp2p.rs",
+    "crates/p2p-adapter/src/operations.rs",
+    "crates/p2p-adapter/src/peer.rs",
     "crates/p2p-adapter/src/peer_details.rs",
     "crates/p2p-adapter/src/pooled_doc_pusher.rs",
     "crates/p2p-adapter/src/read_gate.rs",
@@ -3825,7 +7522,39 @@
     "crates/p2p-adapter/src/retry.rs",
     "crates/p2p-adapter/src/retry_pool_tests.rs",
     "crates/p2p-adapter/src/retry_sweep_tests.rs",
-    "crates/p2p-adapter/src/schema_history.rs"
+    "crates/p2p-adapter/src/schema_history.rs",
+    "crates/p2p-adapter/src/transport_doc_pusher.rs",
+    "crates/p2p-adapter/src/transport_version_syncer.rs",
+    "crates/p2p-adapter/src/version_syncer.rs",
+    "crates/p2p-adapter/tests/iroh_peer.rs",
+    "docs/validation/regolith-887502472/defra-final-887-full-driver.log.gz",
+    "crates/bitswap/src/client/driver.rs",
+    "crates/cli/tests/unit/index_adapter.rs",
+    "crates/p2p-adapter/src/doc_sync/dispatch.rs",
+    "crates/p2p-adapter/src/doc_sync/mod.rs",
+    "crates/p2p-adapter/src/doc_sync/pubsub_replies.rs",
+    "crates/p2p-adapter/src/doc_sync/sync.rs",
+    "crates/p2p-adapter/src/doc_sync/test_support.rs",
+    "crates/p2p-adapter/src/iroh_peer/config.rs",
+    "crates/p2p-adapter/src/iroh_peer/events.rs",
+    "crates/p2p-adapter/src/iroh_peer/mod.rs",
+    "crates/p2p-adapter/src/iroh_peer/peer.rs",
+    "crates/p2p-adapter/src/iroh_peer/shutdown.rs",
+    "crates/p2p-adapter/src/libp2p/branchable_sync.rs",
+    "crates/p2p-adapter/src/manage/auth.rs",
+    "crates/p2p-adapter/src/manage/client.rs",
+    "crates/p2p-adapter/src/manage/hooks.rs",
+    "crates/p2p-adapter/src/manage/mod.rs",
+    "crates/p2p-adapter/src/manage/requester_impl.rs",
+    "crates/p2p-adapter/src/manage/serve.rs",
+    "crates/p2p-adapter/tests/libp2p/branchable_sync.rs",
+    "crates/p2p-adapter/tests/libp2p/replicator_completion.rs",
+    "crates/p2p-adapter/tests/unit/replicator_install_store.rs",
+    "crates/p2p-adapter/tests/unit/replicator_installs.rs",
+    "crates/p2p-adapter/tests/unit/retry_hints.rs",
+    "crates/p2p-adapter/tests/unit/schema_history.rs",
+    "crates/p2p/tests/iroh/gossip_driver.rs",
+    "crates/p2p/src/iroh/gossip/driver.rs"
    ],
    "matrix_urls": [
     "https://github.com/n0-computer/iroh"
@@ -4436,13 +8165,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T01:49:08Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:56:39Z",
   "default_branch": "develop",
   "pushed_at": "2022-03-21",
   "stars": 11,
   "tree": {
    "sha": "97cbd1083eed21e728e4a44e2499260d5b7473ce",
-   "etag": "W/\"035268b0a5c717d360277b9c26d3de35ce0191fb6bd06ffcb11252dacee6364f\"",
+   "etag": "W/\"1dbf9d67bd3b2d027b2d9bfe98008e265a30f4745d82175fa894fd97dd6040cf\"",
    "truncated": false,
    "path_count": 439,
    "matched": [
@@ -5162,13 +8892,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T02:14:46Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:04:55Z",
   "default_branch": "main",
   "pushed_at": "2024-03-06",
   "stars": 7,
   "tree": {
    "sha": "27ab095816af156c0b9a5ed99463135f85f06f43",
-   "etag": "W/\"cc32ea2b6f4033d77544f0c6badd11269420d7a348d6a90ea8c3b9eab88552d1\"",
+   "etag": "W/\"896d47e71febbc93659e715e4a9a83fe11384977365032de900f58beba90c733\"",
    "truncated": false,
    "path_count": 2862,
    "matched": [
@@ -5327,6 +9058,36 @@
     "docs/zh_CN/supported-platforms.md"
    ],
    "paths": [
+    "src/driver/mysql/MysqlConnectionCredentialsOptions.ts",
+    "src/driver/mysql/MysqlConnectionOptions.ts",
+    "src/driver/mysql/MysqlDriver.ts",
+    "src/driver/mysql/MysqlQueryRunner.ts",
+    "src/driver/oracle/OracleConnectionCredentialsOptions.ts",
+    "src/driver/oracle/OracleConnectionOptions.ts",
+    "src/driver/oracle/OracleDriver.ts",
+    "src/driver/oracle/OracleQueryRunner.ts",
+    "src/driver/postgres/PostgresConnectionCredentialsOptions.ts",
+    "src/driver/postgres/PostgresConnectionOptions.ts",
+    "src/driver/postgres/PostgresDriver.ts",
+    "src/driver/postgres/PostgresQueryRunner.ts",
+    "src/driver/sqlite-abstract/AbstractSqliteDriver.ts",
+    "src/driver/sqlite-abstract/AbstractSqliteQueryRunner.ts",
+    "src/driver/sqlite/SqliteConnectionOptions.ts",
+    "src/driver/sqlite/SqliteDriver.ts",
+    "src/driver/sqlite/SqliteQueryRunner.ts",
+    "src/driver/sqlserver/MssqlParameter.ts",
+    "src/driver/sqlserver/SqlServerConnectionCredentialsOptions.ts",
+    "src/driver/sqlserver/SqlServerConnectionOptions.ts",
+    "src/driver/sqlserver/SqlServerDriver.ts",
+    "src/driver/sqlserver/SqlServerQueryRunner.ts",
+    "src/driver/sqlserver/authentication/AzureActiveDirectoryAccessTokenAuthentication.ts",
+    "src/driver/sqlserver/authentication/AzureActiveDirectoryMsiAppServiceAuthentication.ts",
+    "src/driver/sqlserver/authentication/AzureActiveDirectoryMsiVmAuthentication.ts",
+    "src/driver/sqlserver/authentication/AzureActiveDirectoryPasswordAuthentication.ts",
+    "src/driver/sqlserver/authentication/AzureActiveDirectoryServicePrincipalSecret.ts",
+    "src/driver/sqlserver/authentication/DefaultAuthentication.ts",
+    "src/driver/sqlserver/authentication/NtlmAuthentication.ts",
+    "test/functional/driver/postgres/specific-options.ts",
     "src/driver/Driver.ts",
     "src/driver/DriverFactory.ts",
     "src/driver/DriverUtils.ts",
@@ -5366,7 +9127,34 @@
     "src/driver/expo/ExpoDriver.ts",
     "src/driver/expo/ExpoQueryRunner.ts",
     "src/driver/mongodb/MongoConnectionOptions.ts",
-    "src/driver/mongodb/MongoDriver.ts"
+    "src/driver/mongodb/MongoDriver.ts",
+    "src/driver/mongodb/MongoQueryRunner.ts",
+    "src/driver/mongodb/typings.ts",
+    "src/driver/nativescript/NativescriptConnectionOptions.ts",
+    "src/driver/nativescript/NativescriptDriver.ts",
+    "src/driver/nativescript/NativescriptQueryRunner.ts",
+    "src/driver/react-native/ReactNativeConnectionOptions.ts",
+    "src/driver/react-native/ReactNativeDriver.ts",
+    "src/driver/react-native/ReactNativeQueryRunner.ts",
+    "src/driver/sap/SapConnectionCredentialsOptions.ts",
+    "src/driver/sap/SapConnectionOptions.ts",
+    "src/driver/sap/SapDriver.ts",
+    "src/driver/sap/SapQueryRunner.ts",
+    "src/driver/sqljs/SqljsConnectionOptions.ts",
+    "src/driver/sqljs/SqljsDriver.ts",
+    "src/driver/sqljs/SqljsQueryRunner.ts",
+    "src/driver/types/ColumnTypes.ts",
+    "src/driver/types/DataTypeDefaults.ts",
+    "src/driver/types/DatabaseType.ts",
+    "src/driver/types/IsolationLevel.ts",
+    "src/driver/types/MappedColumnTypes.ts",
+    "src/driver/types/MetadataTableType.ts",
+    "src/driver/types/ReplicationMode.ts",
+    "src/driver/types/UpsertType.ts",
+    "test/functional/driver/MongoDriver.ts",
+    "test/functional/driver/driver-utils.ts",
+    "test/functional/driver/convert-to-entity/convert-to-entity.ts",
+    "test/functional/driver/convert-to-entity/entity/Post.ts"
    ],
    "matrix_urls": [
     "https://www.neptune-software.com/",
@@ -6277,13 +10065,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T03:34:30Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:34:27Z",
   "default_branch": "master",
   "pushed_at": "2020-09-13",
   "stars": 867,
   "tree": {
    "sha": "394a65fde4ad8e6e539ad1e34a7b78f1a3ea6510",
-   "etag": "W/\"52d794c93cacf3b6ef12b9087e485961e3c4810c57516329e731ec373466ed92\"",
+   "etag": "W/\"72bd4d9343890304299e119f132a56552b6a73c2cbc0780649b8b57e15977240\"",
    "truncated": false,
    "path_count": 561,
    "matched": [
@@ -6298,7 +10087,8 @@
     "backend/Dockerfile-unit-test",
     "frontend/Dockerfile",
     "frontend/Dockerfile-lint",
-    "frontend/Dockerfile-test"
+    "frontend/Dockerfile-test",
+    "story/Dockerfile"
    ]
   },
   "files": [
@@ -6487,6 +10277,15 @@
     "images": [
      "node:12.11.1-alpine"
     ]
+   },
+   {
+    "path": "story/Dockerfile",
+    "kind": "image",
+    "blob_sha": "41b4e5aabcc8141ade99d71c897364e75d026da2",
+    "bytes": 151,
+    "images": [
+     "nginx:1.17.5-alpine"
+    ]
    }
   ],
   "clues": {
@@ -6536,7 +10335,107 @@
     "backend/app/adapter/sqldb/bool.go",
     "backend/app/adapter/sqldb/changelog.go",
     "backend/app/adapter/sqldb/changelog_integration_test.go",
-    "backend/app/adapter/sqldb/facebooksso.go"
+    "backend/app/adapter/sqldb/facebooksso.go",
+    "backend/app/adapter/sqldb/facebooksso_integration_test.go",
+    "backend/app/adapter/sqldb/featuretoggle.go",
+    "backend/app/adapter/sqldb/featuretoggle_test.go",
+    "backend/app/adapter/sqldb/githubsso.go",
+    "backend/app/adapter/sqldb/githubsso_integration_test.go",
+    "backend/app/adapter/sqldb/googlesso.go",
+    "backend/app/adapter/sqldb/googlesso_integration_test.go",
+    "backend/app/adapter/sqldb/main_test.go",
+    "backend/app/adapter/sqldb/short_link.go",
+    "backend/app/adapter/sqldb/short_link_integration_test.go",
+    "backend/app/adapter/sqldb/time.go",
+    "backend/app/adapter/sqldb/user.go",
+    "backend/app/adapter/sqldb/user_changelog.go",
+    "backend/app/adapter/sqldb/user_changelog_integration_test.go",
+    "backend/app/adapter/sqldb/user_integration_test.go",
+    "backend/app/adapter/sqldb/user_short_link.go",
+    "backend/app/adapter/sqldb/user_short_link_integration_test.go",
+    "backend/app/adapter/sqldb/userrole.go",
+    "backend/app/adapter/sqldb/userrole_integration_test.go",
+    "backend/app/adapter/gqlapi/input/shortlink.go",
+    "backend/app/adapter/gqlapi/resolver/authmutation.go",
+    "backend/app/adapter/gqlapi/resolver/authquery.go",
+    "backend/app/adapter/gqlapi/resolver/authquery_test.go",
+    "backend/app/adapter/gqlapi/resolver/change.go",
+    "backend/app/adapter/gqlapi/resolver/changelog.go",
+    "backend/app/adapter/gqlapi/resolver/error.go",
+    "backend/app/adapter/gqlapi/resolver/mutation.go",
+    "backend/app/adapter/gqlapi/resolver/query.go",
+    "backend/app/adapter/gqlapi/resolver/query_test.go",
+    "backend/app/adapter/gqlapi/resolver/resolver.go",
+    "backend/app/adapter/gqlapi/resolver/url.go",
+    "backend/app/adapter/gqlapi/resolver/url_test.go",
+    "backend/app/adapter/gqlapi/resolver/viewer.go",
+    "backend/app/adapter/gqlapi/scalar/time.go",
+    "backend/app/adapter/grpcapi/proto/metatag.pb.go",
+    "backend/app/adapter/grpcapi/proto/metatag.proto",
+    "backend/app/adapter/routing/handle/analytics.go",
+    "backend/app/adapter/routing/handle/feature.go",
+    "backend/app/adapter/routing/handle/handle.go",
+    "backend/app/adapter/routing/handle/long_link.go",
+    "backend/app/adapter/routing/handle/search.go",
+    "backend/app/adapter/routing/handle/serve.go",
+    "backend/app/adapter/routing/handle/sso_signin.go",
+    "backend/app/adapter/routing/handle/token.go",
+    "backend/app/adapter/routing/public/favicon-16x16.png",
+    "backend/app/adapter/routing/public/favicon-32x32.png",
+    "backend/app/adapter/routing/public/index.html",
+    "backend/app/adapter/routing/public/oauth2-redirect.html",
+    "backend/app/adapter/routing/public/swagger-ui-bundle.js",
+    "backend/app/adapter/routing/public/swagger-ui-bundle.js.map",
+    "backend/app/adapter/routing/public/swagger-ui-standalone-preset.js",
+    "backend/app/adapter/routing/public/swagger-ui-standalone-preset.js.map",
+    "backend/app/adapter/routing/public/swagger-ui.css",
+    "backend/app/adapter/routing/public/swagger-ui.css.map",
+    "backend/app/adapter/routing/public/swagger-ui.js",
+    "backend/app/adapter/routing/public/swagger-ui.js.map",
+    "backend/app/adapter/sqldb/migration/10_rename_github_oauth_user_table.sql",
+    "backend/app/adapter/sqldb/migration/11_add_uniqueness_to_githubsso_table.sql",
+    "backend/app/adapter/sqldb/migration/12_create_changelog_table.sql",
+    "backend/app/adapter/sqldb/migration/13_create_user_changelog_table.sql",
+    "backend/app/adapter/sqldb/migration/14_create_feature_toggle_table.sql",
+    "backend/app/adapter/sqldb/migration/15_create_user_role_table.sql",
+    "backend/app/adapter/sqldb/migration/16_switch_from_email_to_id.sql",
+    "backend/app/adapter/sqldb/migration/17_add_constraints_to_user_role_table.sql",
+    "backend/app/adapter/sqldb/migration/18_alter_githubsso_table.sql",
+    "backend/app/adapter/sqldb/migration/19_add_constraints_to_user_changelog_table.sql",
+    "backend/app/adapter/sqldb/migration/1_create_url_table.sql",
+    "backend/app/adapter/sqldb/migration/20_create_facebook_sso_table.sql",
+    "backend/app/adapter/sqldb/migration/21_create_google_sso_table.sql",
+    "backend/app/adapter/sqldb/migration/22_add_cascade_to_githubsso_table.sql",
+    "backend/app/adapter/sqldb/migration/23_set_title_and_released_at_to_not_null_changelog.sql",
+    "backend/app/adapter/sqldb/migration/24_rename_url_to_short_link.sql",
+    "backend/app/adapter/sqldb/migration/25_add_type_to_feature_toggle_table.sql",
+    "backend/app/adapter/sqldb/migration/26_add_meta_tags_to_url.sql",
+    "backend/app/adapter/sqldb/migration/27_add_app_table.sql",
+    "backend/app/adapter/sqldb/migration/28_add_api_key_table.sql",
+    "backend/app/adapter/sqldb/migration/29_create_incident_table.sql",
+    "backend/app/adapter/sqldb/migration/2_create_user_table.sql",
+    "backend/app/adapter/sqldb/migration/30_create_progress_table.sql",
+    "backend/app/adapter/sqldb/migration/3_rename_url_table_and_columns.sql",
+    "backend/app/adapter/sqldb/migration/4_rename_user_table_and_columns.sql",
+    "backend/app/adapter/sqldb/migration/5_create_user_url_relation_table.sql",
+    "backend/app/adapter/sqldb/migration/6_add_user_id_column.sql",
+    "backend/app/adapter/sqldb/migration/7_create_github_oauth_user_relation_table.sql",
+    "backend/app/adapter/sqldb/migration/8_create_public_url_table.sql",
+    "backend/app/adapter/sqldb/migration/9_change_url_alias_type.sql",
+    "backend/app/adapter/sqldb/table/apikey.go",
+    "backend/app/adapter/sqldb/table/app.go",
+    "backend/app/adapter/sqldb/table/changelog.go",
+    "backend/app/adapter/sqldb/table/facebooksso.go",
+    "backend/app/adapter/sqldb/table/featuretoggle.go",
+    "backend/app/adapter/sqldb/table/githubsso.go",
+    "backend/app/adapter/sqldb/table/googlesso.go",
+    "backend/app/adapter/sqldb/table/incident.go",
+    "backend/app/adapter/sqldb/table/progress.go",
+    "backend/app/adapter/sqldb/table/short_link.go",
+    "backend/app/adapter/sqldb/table/user.go",
+    "backend/app/adapter/sqldb/table/user_changelog.go",
+    "backend/app/adapter/sqldb/table/user_short_link.go",
+    "backend/app/adapter/sqldb/table/userrole.go"
    ]
   },
   "fail_count": 0
@@ -6774,13 +10673,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:17:36Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:47:41Z",
   "default_branch": "master",
   "pushed_at": "2026-10-20",
-  "stars": 217,
+  "stars": 218,
   "tree": {
    "sha": "aebb2755008e88d89aeb6230a5191fa10e5b53d9",
-   "etag": "W/\"1cb3618fb9e404b3e25d1339c874ab59355de160ea58b01d7e12e0753ccfcb62\"",
+   "etag": "W/\"7363fc37d54ac478e120535bbac05ebe0e32900112ccd4cdde224ef6b1d63f21\"",
    "truncated": false,
    "path_count": 27189,
    "matched": [
@@ -6842,6 +10742,15 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "dbmulticloud/oracle_db_aws_identity_connector.go",
+    "dbmulticloud/oracle_db_aws_identity_connector_summary.go",
+    "dbmulticloud/oracle_db_aws_identity_connector_summary_collection.go",
+    "dbmulticloud/oracle_db_azure_connector.go",
+    "dbmulticloud/oracle_db_azure_connector_summary.go",
+    "dbmulticloud/oracle_db_azure_connector_summary_collection.go",
+    "dbmulticloud/oracle_db_gcp_identity_connector.go",
+    "dbmulticloud/oracle_db_gcp_identity_connector_summary.go",
+    "dbmulticloud/oracle_db_gcp_identity_connector_summary_collection.go",
     "appmgmtcontrol/activate_monitoring_plugin_request_response.go",
     "cloudbridge/get_plugin_request_response.go",
     "cloudbridge/plugin.go",
@@ -6881,7 +10790,158 @@
     "databasemanagement/check_external_my_sql_database_connector_connection_status_request_response.go",
     "databasemanagement/cloud_db_system_connector.go",
     "databasemanagement/cloud_db_system_connector_collection.go",
-    "databasemanagement/cloud_db_system_connector_summary.go"
+    "databasemanagement/cloud_db_system_connector_summary.go",
+    "databasemanagement/cloud_db_system_discovery_connector.go",
+    "databasemanagement/cloud_db_system_discovery_macs_connector.go",
+    "databasemanagement/cloud_db_system_macs_connector.go",
+    "databasemanagement/cloud_exadata_storage_connector.go",
+    "databasemanagement/cloud_exadata_storage_connector_collection.go",
+    "databasemanagement/cloud_exadata_storage_connector_status.go",
+    "databasemanagement/cloud_exadata_storage_connector_summary.go",
+    "databasemanagement/connector_details.go",
+    "databasemanagement/create_cloud_db_system_connector_details.go",
+    "databasemanagement/create_cloud_db_system_connector_request_response.go",
+    "databasemanagement/create_cloud_db_system_macs_connector_details.go",
+    "databasemanagement/create_cloud_exadata_storage_connector_details.go",
+    "databasemanagement/create_cloud_exadata_storage_connector_request_response.go",
+    "databasemanagement/create_external_db_system_connector_details.go",
+    "databasemanagement/create_external_db_system_connector_request_response.go",
+    "databasemanagement/create_external_db_system_macs_connector_details.go",
+    "databasemanagement/create_external_exadata_storage_connector_details.go",
+    "databasemanagement/create_external_exadata_storage_connector_request_response.go",
+    "databasemanagement/create_external_my_sql_database_connector_details.go",
+    "databasemanagement/create_external_my_sql_database_connector_request_response.go",
+    "databasemanagement/create_my_sql_database_connector_details.go",
+    "databasemanagement/delete_cloud_db_system_connector_request_response.go",
+    "databasemanagement/delete_cloud_exadata_storage_connector_request_response.go",
+    "databasemanagement/delete_external_db_system_connector_request_response.go",
+    "databasemanagement/delete_external_exadata_storage_connector_request_response.go",
+    "databasemanagement/delete_external_my_sql_database_connector_request_response.go",
+    "databasemanagement/direct_connector_details.go",
+    "databasemanagement/external_connector_details.go",
+    "databasemanagement/external_db_system_connector.go",
+    "databasemanagement/external_db_system_connector_collection.go",
+    "databasemanagement/external_db_system_connector_summary.go",
+    "databasemanagement/external_db_system_discovery_connector.go",
+    "databasemanagement/external_db_system_discovery_macs_connector.go",
+    "databasemanagement/external_db_system_macs_connector.go",
+    "databasemanagement/external_exadata_storage_connector.go",
+    "databasemanagement/external_exadata_storage_connector_collection.go",
+    "databasemanagement/external_exadata_storage_connector_status.go",
+    "databasemanagement/external_exadata_storage_connector_summary.go",
+    "databasemanagement/external_my_sql_database_connector.go",
+    "databasemanagement/get_cloud_db_system_connector_request_response.go",
+    "databasemanagement/get_cloud_exadata_storage_connector_request_response.go",
+    "databasemanagement/get_external_db_system_connector_request_response.go",
+    "databasemanagement/get_external_exadata_storage_connector_request_response.go",
+    "databasemanagement/get_external_my_sql_database_connector_request_response.go",
+    "databasemanagement/list_cloud_db_system_connectors_request_response.go",
+    "databasemanagement/list_cloud_exadata_storage_connectors_request_response.go",
+    "databasemanagement/list_external_db_system_connectors_request_response.go",
+    "databasemanagement/list_external_exadata_storage_connectors_request_response.go",
+    "databasemanagement/list_my_sql_database_connectors_request_response.go",
+    "databasemanagement/macs_connector_details.go",
+    "databasemanagement/my_sql_connector_collection.go",
+    "databasemanagement/my_sql_connector_type.go",
+    "databasemanagement/my_sql_database_connector_summary.go",
+    "databasemanagement/private_end_point_connector_details.go",
+    "databasemanagement/update_cloud_db_system_connector_details.go",
+    "databasemanagement/update_cloud_db_system_connector_request_response.go",
+    "databasemanagement/update_cloud_db_system_macs_connector_details.go",
+    "databasemanagement/update_cloud_exadata_storage_connector_details.go",
+    "databasemanagement/update_cloud_exadata_storage_connector_request_response.go",
+    "databasemanagement/update_external_db_system_connector_details.go",
+    "databasemanagement/update_external_db_system_connector_request_response.go",
+    "databasemanagement/update_external_db_system_macs_connector_details.go",
+    "databasemanagement/update_external_exadata_storage_connector_details.go",
+    "databasemanagement/update_external_exadata_storage_connector_request_response.go",
+    "databasemanagement/update_external_my_sql_database_connector_details.go",
+    "databasemanagement/update_external_mysql_database_connector_request_response.go",
+    "databasemanagement/update_my_sql_database_connector_details.go",
+    "dataintegration/connector_attribute.go",
+    "datasafe/change_on_prem_connector_compartment_details.go",
+    "datasafe/change_on_prem_connector_compartment_request_response.go",
+    "datasafe/create_on_prem_connector_details.go",
+    "datasafe/create_on_prem_connector_request_response.go",
+    "datasafe/delete_on_prem_connector_request_response.go",
+    "datasafe/generate_on_prem_connector_configuration_details.go",
+    "datasafe/generate_on_prem_connector_configuration_request_response.go",
+    "datasafe/get_on_prem_connector_request_response.go",
+    "datasafe/list_on_prem_connectors_request_response.go",
+    "datasafe/on_prem_connector.go",
+    "datasafe/on_prem_connector_lifecycle_state.go",
+    "datasafe/on_prem_connector_summary.go",
+    "datasafe/on_premise_connector.go",
+    "datasafe/update_on_prem_connector_details.go",
+    "datasafe/update_on_prem_connector_request_response.go",
+    "datasafe/update_on_prem_connector_wallet_details.go",
+    "datasafe/update_on_prem_connector_wallet_request_response.go",
+    "dbmulticloud/change_oracle_db_aws_identity_connector_compartment_details.go",
+    "dbmulticloud/change_oracle_db_aws_identity_connector_compartment_request_response.go",
+    "dbmulticloud/change_oracle_db_azure_connector_compartment_details.go",
+    "dbmulticloud/change_oracle_db_azure_connector_compartment_request_response.go",
+    "dbmulticloud/change_oracle_db_gcp_identity_connector_compartment_details.go",
+    "dbmulticloud/change_oracle_db_gcp_identity_connector_compartment_request_response.go",
+    "dbmulticloud/create_oracle_db_aws_identity_connector_details.go",
+    "dbmulticloud/create_oracle_db_aws_identity_connector_request_response.go",
+    "dbmulticloud/create_oracle_db_azure_connector_details.go",
+    "dbmulticloud/create_oracle_db_azure_connector_request_response.go",
+    "dbmulticloud/create_oracle_db_gcp_identity_connector_details.go",
+    "dbmulticloud/create_oracle_db_gcp_identity_connector_request_response.go",
+    "dbmulticloud/dbmulticloud_oracledbazureconnector_client.go",
+    "dbmulticloud/delete_oracle_db_aws_identity_connector_request_response.go",
+    "dbmulticloud/delete_oracle_db_azure_connector_request_response.go",
+    "dbmulticloud/delete_oracle_db_gcp_identity_connector_request_response.go",
+    "dbmulticloud/get_oracle_db_aws_identity_connector_request_response.go",
+    "dbmulticloud/get_oracle_db_azure_connector_request_response.go",
+    "dbmulticloud/get_oracle_db_gcp_identity_connector_request_response.go",
+    "dbmulticloud/list_oracle_db_aws_identity_connectors_request_response.go",
+    "dbmulticloud/list_oracle_db_azure_connectors_request_response.go",
+    "dbmulticloud/list_oracle_db_gcp_identity_connectors_request_response.go",
+    "dbmulticloud/patch_oracle_db_azure_connector_details.go",
+    "dbmulticloud/patch_oracle_db_azure_connector_request_response.go",
+    "dbmulticloud/refresh_oracle_db_aws_identity_connector_request_response.go",
+    "dbmulticloud/refresh_oracle_db_azure_connector_request_response.go",
+    "dbmulticloud/refresh_oracle_db_gcp_identity_connector_request_response.go",
+    "dbmulticloud/update_oracle_db_aws_identity_connector_details.go",
+    "dbmulticloud/update_oracle_db_aws_identity_connector_request_response.go",
+    "dbmulticloud/update_oracle_db_azure_connector_details.go",
+    "dbmulticloud/update_oracle_db_azure_connector_request_response.go",
+    "dbmulticloud/update_oracle_db_gcp_identity_connector_details.go",
+    "dbmulticloud/update_oracle_db_gcp_identity_connector_request_response.go",
+    "filestorage/add_outbound_connector_lock_request_response.go",
+    "filestorage/change_outbound_connector_compartment_details.go",
+    "filestorage/change_outbound_connector_compartment_request_response.go",
+    "filestorage/create_outbound_connector_details.go",
+    "filestorage/create_outbound_connector_request_response.go",
+    "filestorage/delete_outbound_connector_request_response.go",
+    "filestorage/get_outbound_connector_request_response.go",
+    "filestorage/list_outbound_connectors_request_response.go",
+    "filestorage/outbound_connector.go",
+    "filestorage/outbound_connector_summary.go",
+    "filestorage/remove_outbound_connector_lock_request_response.go",
+    "filestorage/update_outbound_connector_details.go",
+    "filestorage/update_outbound_connector_request_response.go",
+    "generativeai/cancel_vector_store_connector_file_sync_request_response.go",
+    "generativeai/connector_configuration.go",
+    "generativeai/create_vector_store_connector_details.go",
+    "generativeai/create_vector_store_connector_file_sync_details.go",
+    "generativeai/create_vector_store_connector_file_sync_request_response.go",
+    "generativeai/create_vector_store_connector_request_response.go",
+    "generativeai/delete_vector_store_connector_request_response.go",
+    "generativeai/get_vector_store_connector_file_sync_request_response.go",
+    "generativeai/get_vector_store_connector_request_response.go",
+    "generativeai/get_vector_store_connector_stats_request_response.go",
+    "generativeai/list_vector_store_connector_file_sync_ingestion_logs_request_response.go",
+    "generativeai/list_vector_store_connector_file_syncs_request_response.go",
+    "generativeai/list_vector_store_connector_ingestion_logs_request_response.go",
+    "generativeai/list_vector_store_connectors_request_response.go",
+    "generativeai/update_vector_store_connector_details.go",
+    "generativeai/update_vector_store_connector_request_response.go",
+    "generativeai/vector_store_connector.go",
+    "generativeai/vector_store_connector_collection.go",
+    "generativeai/vector_store_connector_file_sync.go",
+    "generativeai/vector_store_connector_file_sync_collection.go"
    ],
    "matrix_urls": [
     "https://golang.org/dl/",

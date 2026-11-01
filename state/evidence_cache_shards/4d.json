@@ -434,13 +434,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T19:49:06Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:13:03Z",
   "default_branch": "main",
   "pushed_at": "2023-11-08",
   "stars": 0,
   "tree": {
    "sha": "fe17d4127f5e1b5bfbd96be55dbebd971f23390d",
-   "etag": "W/\"a397068cb3a4ec52d59bae5dd77b5e5a506ec592edc2c66b29073fe85048b553\"",
+   "etag": "W/\"351d404e761942ce59253f33903aeb192f6917f1d9ff869ebba1809cdfbb3113\"",
    "truncated": false,
    "path_count": 737,
    "matched": [
@@ -456,6 +457,8 @@
     "ruoyi-oss/pom.xml",
     "ruoyi-sms/pom.xml",
     "ruoyi-system/pom.xml",
+    "ruoyi-extend/ruoyi-monitor-admin/pom.xml",
+    "ruoyi-extend/ruoyi-xxl-job-admin/pom.xml",
     "ruoyi-admin/Dockerfile",
     "ruoyi-extend/ruoyi-monitor-admin/Dockerfile",
     "ruoyi-extend/ruoyi-xxl-job-admin/Dockerfile"
@@ -677,6 +680,40 @@
      "com.ruoyi:ruoyi-flowable",
      "com.ruoyi:ruoyi-oss",
      "com.ruoyi:ruoyi-sms"
+    ]
+   },
+   {
+    "path": "ruoyi-extend/ruoyi-monitor-admin/pom.xml",
+    "kind": "dep",
+    "blob_sha": "4fedc792eb0dafa77f5dc7d1da23f1384e829e5d",
+    "ecosystem": "maven",
+    "bytes": 2179,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.boot:spring-boot-starter-security",
+     "de.codecentric:spring-boot-admin-starter-server",
+     "de.codecentric:spring-boot-admin-starter-client",
+     "org.projectlombok:lombok"
+    ]
+   },
+   {
+    "path": "ruoyi-extend/ruoyi-xxl-job-admin/pom.xml",
+    "kind": "dep",
+    "blob_sha": "73f896e58e640d1fb33d81f0ba974f8324ee98d6",
+    "ecosystem": "maven",
+    "bytes": 3635,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-parent",
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.boot:spring-boot-starter-test",
+     "org.springframework.boot:spring-boot-starter-freemarker",
+     "org.springframework.boot:spring-boot-starter-mail",
+     "org.springframework.boot:spring-boot-starter-actuator",
+     "org.mybatis.spring.boot:mybatis-spring-boot-starter",
+     "com.mysql:mysql-connector-j",
+     "com.dm:DmJdbcDriver",
+     "de.codecentric:spring-boot-admin-starter-client",
+     "com.xuxueli:xxl-job-core"
     ]
    },
    {
@@ -1183,13 +1220,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:25:37Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:29:11Z",
   "default_branch": "main",
   "pushed_at": "2026-10-29",
   "stars": 326,
   "tree": {
    "sha": "3c5fc546423b60a092c0b1d178c4b1999a7bccda",
-   "etag": "W/\"785619c3747ed50dca7c2d574d87eca4b665b2955d9ac4c6edc8e514de2ef8bb\"",
+   "etag": "W/\"ca23b163e8cbe16ed7971f36b018d90ca2e188fcd4a044e14a0ccf690e2424fc\"",
    "truncated": false,
    "path_count": 489,
    "matched": [
@@ -1205,6 +1243,15 @@
     "crates/rushdb-mongodb/Cargo.toml",
     "crates/rushdb-protocol/Cargo.toml",
     "crates/rushdb-query/Cargo.toml",
+    "crates/rushdb-raft/Cargo.toml",
+    "crates/rushdb-server/Cargo.toml",
+    "crates/rushdb-sql/Cargo.toml",
+    "crates/rushdb-storage-integration/Cargo.toml",
+    "crates/rushdb-storage/Cargo.toml",
+    "crates/rushdb-textsearch/Cargo.toml",
+    "crates/rushdb-tx/Cargo.toml",
+    "crates/rushdb-types/Cargo.toml",
+    "crates/rushdb-vector/Cargo.toml",
     "Dockerfile",
     "charts/rushdb/values.yaml",
     ".github/workflows/ci.yml",
@@ -1400,6 +1447,232 @@
      "serde_json",
      "thiserror",
      "uuid"
+    ]
+   },
+   {
+    "path": "crates/rushdb-raft/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "0a299c073a526bcb2a320722272fe75ccca40739",
+    "ecosystem": "cargo",
+    "bytes": 845,
+    "names": [
+     "rushdb-types",
+     "rushdb-storage",
+     "rushdb-lmpg",
+     "serde_json",
+     "thiserror",
+     "uuid",
+     "serde",
+     "openraft",
+     "openraft-memstore",
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/rushdb-server/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "63af32ec0555b04d8068afc15ec0b0e53ab303fd",
+    "ecosystem": "cargo",
+    "bytes": 3541,
+    "names": [
+     "roaring",
+     "tikv-jemallocator",
+     "tikv-jemalloc-ctl",
+     "rushdb-types",
+     "rushdb-storage",
+     "rushdb-lmpg",
+     "rushdb-tx",
+     "rushdb-raft",
+     "rushdb-query",
+     "rushdb-authz",
+     "rushdb-textsearch",
+     "rushdb-vector",
+     "rushdb-sql",
+     "rushdb-engine",
+     "rushdb-protocol",
+     "rushdb-grpc",
+     "rushdb-bolt",
+     "rushdb-language",
+     "rushdb-mongodb",
+     "rushdb-backup",
+     "serde",
+     "serde_json",
+     "hmac",
+     "sha2",
+     "base64",
+     "clap",
+     "thiserror",
+     "crc32fast",
+     "axum",
+     "axum-server",
+     "reqwest",
+     "rustls-pemfile",
+     "hex",
+     "tower-http",
+     "tracing",
+     "tracing-subscriber",
+     "prometheus",
+     "uuid",
+     "async-trait",
+     "futures",
+     "pgwire",
+     "tokio",
+     "tokio-stream",
+     "serde_yml",
+     "chrono",
+     "libc",
+     "tempfile"
+    ],
+    "dev": [
+     "redb",
+     "tokio",
+     "tokio-postgres",
+     "tonic",
+     "rcgen",
+     "native-tls",
+     "rustls"
+    ]
+   },
+   {
+    "path": "crates/rushdb-sql/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "a55609ee028e3d4f11c464631f621754b9bbc1f3",
+    "ecosystem": "cargo",
+    "bytes": 1053,
+    "names": [
+     "rushdb-storage",
+     "rushdb-lmpg",
+     "rushdb-query",
+     "rushdb-types",
+     "rushdb-textsearch",
+     "serde_json",
+     "thiserror",
+     "datafusion",
+     "datafusion-expr",
+     "datafusion-common",
+     "arrow",
+     "arrow-json",
+     "futures",
+     "async-trait",
+     "blake3",
+     "uuid",
+     "tokio"
+    ]
+   },
+   {
+    "path": "crates/rushdb-storage-integration/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "0c652cf48ab31b3d1f3884a5dab34667713074b8",
+    "ecosystem": "cargo",
+    "bytes": 350,
+    "names": [
+     "rushdb-types",
+     "rushdb-storage",
+     "rushdb-lmpg",
+     "serde_json",
+     "uuid"
+    ]
+   },
+   {
+    "path": "crates/rushdb-storage/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "5e5021fd8d19260d1c97a51e1bab1e0b4295ef12",
+    "ecosystem": "cargo",
+    "bytes": 864,
+    "names": [
+     "rushdb-types",
+     "serde",
+     "serde_json",
+     "thiserror",
+     "uuid",
+     "redb",
+     "zstd",
+     "crc32fast"
+    ],
+    "dev": [
+     "uuid",
+     "serde_json"
+    ]
+   },
+   {
+    "path": "crates/rushdb-textsearch/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "1a86a6d72a326fe762f1be5455864464a75656c1",
+    "ecosystem": "cargo",
+    "bytes": 777,
+    "names": [
+     "rushdb-types",
+     "rushdb-storage",
+     "rushdb-lmpg",
+     "serde_json",
+     "thiserror",
+     "serde",
+     "uuid",
+     "tantivy",
+     "tempfile"
+    ],
+    "dev": [
+     "uuid"
+    ]
+   },
+   {
+    "path": "crates/rushdb-tx/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "e23d3b5ed7d5c465b19735e5aa5a5fd0adda4ea3",
+    "ecosystem": "cargo",
+    "bytes": 713,
+    "names": [
+     "rushdb-types",
+     "rushdb-storage",
+     "rushdb-lmpg",
+     "rushdb-authz",
+     "serde",
+     "serde_json",
+     "uuid",
+     "thiserror"
+    ]
+   },
+   {
+    "path": "crates/rushdb-types/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "9bef58b31cd15a07e66c6bf7c7759f40a686b516",
+    "ecosystem": "cargo",
+    "bytes": 1009,
+    "names": [
+     "serde",
+     "serde_json",
+     "postcard",
+     "uuid",
+     "thiserror",
+     "sha2",
+     "blake3",
+     "chrono"
+    ]
+   },
+   {
+    "path": "crates/rushdb-vector/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "6c5b656c9bb8beeeb7a00240a3b7a1f7f97fe795",
+    "ecosystem": "cargo",
+    "bytes": 1266,
+    "names": [
+     "rushdb-types",
+     "rushdb-storage",
+     "rushdb-lmpg",
+     "serde",
+     "serde_json",
+     "uuid",
+     "blake3",
+     "thiserror",
+     "tracing",
+     "usearch",
+     "arc-swap",
+     "im",
+     "turbovec"
+    ],
+    "dev": [
+     "uuid",
+     "tempfile"
     ]
    },
    {
@@ -1686,13 +1959,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T00:38:44Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:40:24Z",
   "default_branch": "master",
   "pushed_at": "2022-12-16",
   "stars": 55,
   "tree": {
    "sha": "ca05ee3290a53be05bc81d589adf1fc8d524a257",
-   "etag": "W/\"0aeb485fc35cf1ff83b93fd2ff8cdfe949707168ca14933392360622a6eb33e2\"",
+   "etag": "W/\"d9d2c3f4d9695063d93d83441494bb87d4fec172d3ac44f725851a1a80c74825\"",
    "truncated": false,
    "path_count": 2346,
    "matched": [
@@ -1860,7 +2134,167 @@
     "ssm_web/target/ssm_web/plugins/datatables/jquery.dataTables_themeroller.css",
     "ssm_web/target/ssm_web/plugins/datepicker/bootstrap-datepicker.js",
     "ssm_web/target/ssm_web/plugins/datepicker/datepicker3.css",
-    "ssm_web/target/ssm_web/plugins/daterangepicker/daterangepicker.css"
+    "ssm_web/target/ssm_web/plugins/daterangepicker/daterangepicker.css",
+    "ssm_web/target/ssm_web/plugins/daterangepicker/daterangepicker.js",
+    "ssm_web/target/ssm_web/plugins/daterangepicker/daterangepicker.zh-CN.js",
+    "ssm_web/target/ssm_web/plugins/daterangepicker/moment.js",
+    "ssm_web/target/ssm_web/plugins/daterangepicker/moment.min.js",
+    "ssm_web/target/ssm_web/plugins/fastclick/fastclick.js",
+    "ssm_web/target/ssm_web/plugins/fastclick/fastclick.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/excanvas.js",
+    "ssm_web/target/ssm_web/plugins/flot/excanvas.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.colorhelpers.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.colorhelpers.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.canvas.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.canvas.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.categories.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.categories.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.crosshair.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.crosshair.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.errorbars.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.errorbars.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.fillbetween.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.fillbetween.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.image.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.image.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.navigate.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.navigate.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.pie.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.pie.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.resize.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.resize.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.selection.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.selection.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.stack.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.stack.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.symbol.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.symbol.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.threshold.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.threshold.min.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.time.js",
+    "ssm_web/target/ssm_web/plugins/flot/jquery.flot.time.min.js",
+    "ssm_web/target/ssm_web/plugins/fullcalendar/fullcalendar.css",
+    "ssm_web/target/ssm_web/plugins/fullcalendar/fullcalendar.js",
+    "ssm_web/target/ssm_web/plugins/fullcalendar/fullcalendar.min.css",
+    "ssm_web/target/ssm_web/plugins/fullcalendar/fullcalendar.min.js",
+    "ssm_web/target/ssm_web/plugins/fullcalendar/fullcalendar.print.css",
+    "ssm_web/target/ssm_web/plugins/iCheck/all.css",
+    "ssm_web/target/ssm_web/plugins/iCheck/icheck.js",
+    "ssm_web/target/ssm_web/plugins/iCheck/icheck.min.js",
+    "ssm_web/target/ssm_web/plugins/input-mask/jquery.inputmask.date.extensions.js",
+    "ssm_web/target/ssm_web/plugins/input-mask/jquery.inputmask.extensions.js",
+    "ssm_web/target/ssm_web/plugins/input-mask/jquery.inputmask.js",
+    "ssm_web/target/ssm_web/plugins/input-mask/jquery.inputmask.numeric.extensions.js",
+    "ssm_web/target/ssm_web/plugins/input-mask/jquery.inputmask.phone.extensions.js",
+    "ssm_web/target/ssm_web/plugins/input-mask/jquery.inputmask.regex.extensions.js",
+    "ssm_web/target/ssm_web/plugins/ionslider/ion.rangeSlider.css",
+    "ssm_web/target/ssm_web/plugins/ionslider/ion.rangeSlider.min.js",
+    "ssm_web/target/ssm_web/plugins/ionslider/ion.rangeSlider.skinFlat.css",
+    "ssm_web/target/ssm_web/plugins/ionslider/ion.rangeSlider.skinNice.css",
+    "ssm_web/target/ssm_web/plugins/jQuery/jquery-2.2.3.min.js",
+    "ssm_web/target/ssm_web/plugins/jQueryUI/jquery-ui.js",
+    "ssm_web/target/ssm_web/plugins/jQueryUI/jquery-ui.min.js",
+    "ssm_web/target/ssm_web/plugins/jvectormap/jquery-jvectormap-1.2.2.css",
+    "ssm_web/target/ssm_web/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js",
+    "ssm_web/target/ssm_web/plugins/jvectormap/jquery-jvectormap-usa-en.js",
+    "ssm_web/target/ssm_web/plugins/jvectormap/jquery-jvectormap-world-mill-en.js",
+    "ssm_web/target/ssm_web/plugins/knob/jquery.knob.js",
+    "ssm_web/target/ssm_web/plugins/morris/morris.css",
+    "ssm_web/target/ssm_web/plugins/morris/morris.js",
+    "ssm_web/target/ssm_web/plugins/morris/morris.min.js",
+    "ssm_web/target/ssm_web/plugins/pace/pace.css",
+    "ssm_web/target/ssm_web/plugins/pace/pace.js",
+    "ssm_web/target/ssm_web/plugins/pace/pace.min.css",
+    "ssm_web/target/ssm_web/plugins/pace/pace.min.js",
+    "ssm_web/target/ssm_web/plugins/raphael/raphael-min.js",
+    "ssm_web/target/ssm_web/plugins/select2/select2.css",
+    "ssm_web/target/ssm_web/plugins/select2/select2.full.js",
+    "ssm_web/target/ssm_web/plugins/select2/select2.full.min.js",
+    "ssm_web/target/ssm_web/plugins/select2/select2.js",
+    "ssm_web/target/ssm_web/plugins/select2/select2.min.css",
+    "ssm_web/target/ssm_web/plugins/select2/select2.min.js",
+    "ssm_web/target/ssm_web/plugins/slimScroll/jquery.slimscroll.js",
+    "ssm_web/target/ssm_web/plugins/slimScroll/jquery.slimscroll.min.js",
+    "ssm_web/target/ssm_web/plugins/sparkline/jquery.sparkline.js",
+    "ssm_web/target/ssm_web/plugins/sparkline/jquery.sparkline.min.js",
+    "ssm_web/target/ssm_web/plugins/timepicker/bootstrap-timepicker.css",
+    "ssm_web/target/ssm_web/plugins/timepicker/bootstrap-timepicker.js",
+    "ssm_web/target/ssm_web/plugins/timepicker/bootstrap-timepicker.min.css",
+    "ssm_web/target/ssm_web/plugins/timepicker/bootstrap-timepicker.min.js",
+    "ssm_web/target/ssm_web/plugins/treeTable/jquery.treetable.css",
+    "ssm_web/target/ssm_web/plugins/treeTable/jquery.treetable.js",
+    "ssm_web/target/ssm_web/plugins/treeTable/jquery.treetable.theme.default.css",
+    "ssm_web/src/main/webapp/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css",
+    "ssm_web/src/main/webapp/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js",
+    "ssm_web/src/main/webapp/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css",
+    "ssm_web/src/main/webapp/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js",
+    "ssm_web/src/main/webapp/plugins/bootstrap-markdown/README.md",
+    "ssm_web/src/main/webapp/plugins/bootstrap-markdown/bower.json",
+    "ssm_web/src/main/webapp/plugins/bootstrap-markdown/package.json",
+    "ssm_web/src/main/webapp/plugins/bootstrap-slider/bootstrap-slider.js",
+    "ssm_web/src/main/webapp/plugins/bootstrap-slider/slider.css",
+    "ssm_web/src/main/webapp/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.zh-CN.js",
+    "ssm_web/src/main/webapp/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.js",
+    "ssm_web/src/main/webapp/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js",
+    "ssm_web/src/main/webapp/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.css",
+    "ssm_web/src/main/webapp/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css",
+    "ssm_web/src/main/webapp/plugins/chartjs/Chart.js",
+    "ssm_web/src/main/webapp/plugins/chartjs/Chart.min.js",
+    "ssm_web/src/main/webapp/plugins/ckeditor/CHANGES.md",
+    "ssm_web/src/main/webapp/plugins/ckeditor/LICENSE.md",
+    "ssm_web/src/main/webapp/plugins/ckeditor/README.md",
+    "ssm_web/src/main/webapp/plugins/ckeditor/build-config.js",
+    "ssm_web/src/main/webapp/plugins/ckeditor/ckeditor.js",
+    "ssm_web/src/main/webapp/plugins/ckeditor/config.js",
+    "ssm_web/src/main/webapp/plugins/ckeditor/contents.css",
+    "ssm_web/src/main/webapp/plugins/ckeditor/styles.js",
+    "ssm_web/src/main/webapp/plugins/colorpicker/bootstrap-colorpicker.css",
+    "ssm_web/src/main/webapp/plugins/colorpicker/bootstrap-colorpicker.js",
+    "ssm_web/src/main/webapp/plugins/colorpicker/bootstrap-colorpicker.min.css",
+    "ssm_web/src/main/webapp/plugins/colorpicker/bootstrap-colorpicker.min.js",
+    "ssm_web/src/main/webapp/plugins/datatables/dataTables.bootstrap.css",
+    "ssm_web/src/main/webapp/plugins/datatables/dataTables.bootstrap.js",
+    "ssm_web/src/main/webapp/plugins/datatables/dataTables.bootstrap.min.js",
+    "ssm_web/src/main/webapp/plugins/datatables/jquery.dataTables.css",
+    "ssm_web/src/main/webapp/plugins/datatables/jquery.dataTables.js",
+    "ssm_web/src/main/webapp/plugins/datatables/jquery.dataTables.min.css",
+    "ssm_web/src/main/webapp/plugins/datatables/jquery.dataTables.min.js",
+    "ssm_web/src/main/webapp/plugins/datatables/jquery.dataTables_themeroller.css",
+    "ssm_web/src/main/webapp/plugins/datepicker/bootstrap-datepicker.js",
+    "ssm_web/src/main/webapp/plugins/datepicker/datepicker3.css",
+    "ssm_web/src/main/webapp/plugins/daterangepicker/daterangepicker.css",
+    "ssm_web/src/main/webapp/plugins/daterangepicker/daterangepicker.js",
+    "ssm_web/src/main/webapp/plugins/daterangepicker/daterangepicker.zh-CN.js",
+    "ssm_web/src/main/webapp/plugins/daterangepicker/moment.js",
+    "ssm_web/src/main/webapp/plugins/daterangepicker/moment.min.js",
+    "ssm_web/src/main/webapp/plugins/fastclick/fastclick.js",
+    "ssm_web/src/main/webapp/plugins/fastclick/fastclick.min.js",
+    "ssm_web/src/main/webapp/plugins/flot/excanvas.js",
+    "ssm_web/src/main/webapp/plugins/flot/excanvas.min.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.colorhelpers.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.colorhelpers.min.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.canvas.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.canvas.min.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.categories.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.categories.min.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.crosshair.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.crosshair.min.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.errorbars.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.errorbars.min.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.fillbetween.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.fillbetween.min.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.image.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.image.min.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.min.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.navigate.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.navigate.min.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.pie.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.pie.min.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.resize.js",
+    "ssm_web/src/main/webapp/plugins/flot/jquery.flot.resize.min.js"
    ]
   },
   "fail_count": 0
@@ -1998,13 +2432,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T00:44:54Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T11:42:03Z",
   "default_branch": "master",
   "pushed_at": "2017-12-18",
   "stars": 44,
   "tree": {
    "sha": "255a3a6b8cfdd423eb2b7f5436fec91024ec9ddd",
-   "etag": "W/\"1a3e946d060a53513ee578201c3d762dd7d1516b01824a1d1114117e1c22214d\"",
+   "etag": "W/\"9f648d8dc199d7c8941f8eb50710ef9671b8bbb596b5ae4a5448e5c53abf32fb\"",
    "truncated": false,
    "path_count": 16678,
    "matched": [
@@ -2018,7 +2453,23 @@
     "vendor/golang.org/x/net/http2/Dockerfile",
     "vendor/k8s.io/apiextensions-apiserver/artifacts/simple-image/Dockerfile",
     "vendor/k8s.io/client-go/examples/in-cluster-client-configuration/Dockerfile",
-    "vendor/k8s.io/kubernetes/build/build-image/Dockerfile"
+    "vendor/k8s.io/kubernetes/build/build-image/Dockerfile",
+    "vendor/k8s.io/kubernetes/build/debian-base/Dockerfile",
+    "vendor/k8s.io/kubernetes/build/debian-base/Dockerfile.build",
+    "vendor/k8s.io/kubernetes/build/debian-hyperkube-base/Dockerfile",
+    "vendor/k8s.io/kubernetes/build/debian-iptables/Dockerfile",
+    "vendor/k8s.io/kubernetes/build/pause/Dockerfile",
+    "vendor/k8s.io/kubernetes/examples/explorer/Dockerfile",
+    "vendor/k8s.io/kubernetes/examples/guestbook-go/Dockerfile",
+    "vendor/k8s.io/kubernetes/examples/https-nginx/Dockerfile",
+    "vendor/k8s.io/kubernetes/examples/kubectl-container/Dockerfile",
+    "vendor/k8s.io/kubernetes/hack/gen-swagger-doc/Dockerfile",
+    "vendor/github.com/docker/distribution/contrib/docker-integration/Dockerfile",
+    "vendor/github.com/docker/distribution/project/dev-image/Dockerfile",
+    "vendor/golang.org/x/sys/unix/linux/Dockerfile",
+    "vendor/k8s.io/kubernetes/build/build-image/cross/Dockerfile",
+    "vendor/k8s.io/kubernetes/cluster/addons/addon-manager/Dockerfile",
+    "vendor/k8s.io/kubernetes/cluster/addons/python-image/Dockerfile"
    ]
   },
   "files": [
@@ -2134,6 +2585,138 @@
     "images": [
      "gcr.io/google_containers/kube-cross:KUBE_BUILD_IMAGE_CROSS_TAG"
     ]
+   },
+   {
+    "path": "vendor/k8s.io/kubernetes/build/debian-base/Dockerfile",
+    "kind": "image",
+    "blob_sha": "749f3bf7c1352d4d22871a05c4c4801e625b5e86",
+    "bytes": 636
+   },
+   {
+    "path": "vendor/k8s.io/kubernetes/build/debian-base/Dockerfile.build",
+    "kind": "image",
+    "blob_sha": "8992d6bea9dbfdb9390325c10eadeaab87fa9233",
+    "bytes": 3372,
+    "images": [
+     "BASEIMAGE"
+    ]
+   },
+   {
+    "path": "vendor/k8s.io/kubernetes/build/debian-hyperkube-base/Dockerfile",
+    "kind": "image",
+    "blob_sha": "6e93390c0e1ffd2d033abae5fea2490476fd26a1",
+    "bytes": 1098,
+    "images": [
+     "BASEIMAGE"
+    ]
+   },
+   {
+    "path": "vendor/k8s.io/kubernetes/build/debian-iptables/Dockerfile",
+    "kind": "image",
+    "blob_sha": "8b1f7b5f76ce5e15f5784cd80a7bfd9394d02dba",
+    "bytes": 946,
+    "images": [
+     "BASEIMAGE"
+    ]
+   },
+   {
+    "path": "vendor/k8s.io/kubernetes/build/pause/Dockerfile",
+    "kind": "image",
+    "blob_sha": "09f713292b313c21d73de0eba6120e567fcfcee6",
+    "bytes": 661
+   },
+   {
+    "path": "vendor/k8s.io/kubernetes/examples/explorer/Dockerfile",
+    "kind": "image",
+    "blob_sha": "71c686c567dec53fbd710c7c927a9a7274a04424",
+    "bytes": 684
+   },
+   {
+    "path": "vendor/k8s.io/kubernetes/examples/guestbook-go/Dockerfile",
+    "kind": "image",
+    "blob_sha": "a58ebae382d27b7a6facc227b5a6779e99706d7f",
+    "bytes": 833,
+    "images": [
+     "busybox:ubuntu-14.04"
+    ]
+   },
+   {
+    "path": "vendor/k8s.io/kubernetes/examples/https-nginx/Dockerfile",
+    "kind": "image",
+    "blob_sha": "f584088618e62279c9e0bd2190ba2d94689ad236",
+    "bytes": 866,
+    "images": [
+     "nginx"
+    ]
+   },
+   {
+    "path": "vendor/k8s.io/kubernetes/examples/kubectl-container/Dockerfile",
+    "kind": "image",
+    "blob_sha": "add0569c0b68e44ec12147a3e01f4d6d686e9f18",
+    "bytes": 645
+   },
+   {
+    "path": "vendor/k8s.io/kubernetes/hack/gen-swagger-doc/Dockerfile",
+    "kind": "image",
+    "blob_sha": "7eb2fdaa59740338f92e30ad01a6af4aa2426c40",
+    "bytes": 1590,
+    "images": [
+     "java:7-jre"
+    ]
+   },
+   {
+    "path": "vendor/github.com/docker/distribution/contrib/docker-integration/Dockerfile",
+    "kind": "image",
+    "blob_sha": "7a047a689e8433c528ffe966984a5d418d5f6ada",
+    "bytes": 226,
+    "images": [
+     "distribution/golem:0.1"
+    ]
+   },
+   {
+    "path": "vendor/github.com/docker/distribution/project/dev-image/Dockerfile",
+    "kind": "image",
+    "blob_sha": "1e2a8471cfb4eff09dde0d3418a78bae90e21321",
+    "bytes": 599,
+    "images": [
+     "ubuntu:14.04"
+    ]
+   },
+   {
+    "path": "vendor/golang.org/x/sys/unix/linux/Dockerfile",
+    "kind": "image",
+    "blob_sha": "4397143c9dbe8cb4c344c0be0cac944abef4e36e",
+    "bytes": 1952,
+    "images": [
+     "ubuntu:16.04"
+    ]
+   },
+   {
+    "path": "vendor/k8s.io/kubernetes/build/build-image/cross/Dockerfile",
+    "kind": "image",
+    "blob_sha": "6b7db4fc10d2d7e524362234fc2faa969901cf6a",
+    "bytes": 3039,
+    "images": [
+     "golang:1.8.3"
+    ]
+   },
+   {
+    "path": "vendor/k8s.io/kubernetes/cluster/addons/addon-manager/Dockerfile",
+    "kind": "image",
+    "blob_sha": "c8961bd93139a5772899bb750f0f9e4f8ed92256",
+    "bytes": 711,
+    "images": [
+     "BASEIMAGE"
+    ]
+   },
+   {
+    "path": "vendor/k8s.io/kubernetes/cluster/addons/python-image/Dockerfile",
+    "kind": "image",
+    "blob_sha": "5205aeb37d49ba93ec687f9e8324f27f8b4c7f2f",
+    "bytes": 633,
+    "images": [
+     "python:2.7-slim"
+    ]
    }
   ],
   "clues": {
@@ -2183,7 +2766,167 @@
     "vendor/github.com/gogo/protobuf/plugin/size/size.go",
     "vendor/github.com/gogo/protobuf/plugin/size/sizetest.go",
     "vendor/github.com/gogo/protobuf/plugin/stringer/stringer.go",
-    "vendor/github.com/gogo/protobuf/plugin/stringer/stringertest.go"
+    "vendor/github.com/gogo/protobuf/plugin/stringer/stringertest.go",
+    "vendor/github.com/gogo/protobuf/plugin/testgen/testgen.go",
+    "vendor/github.com/gogo/protobuf/plugin/union/union.go",
+    "vendor/github.com/gogo/protobuf/plugin/union/uniontest.go",
+    "vendor/github.com/gogo/protobuf/plugin/unmarshal/unmarshal.go",
+    "vendor/github.com/gogo/protobuf/protoc-gen-gogo/plugin/Makefile",
+    "vendor/github.com/gogo/protobuf/protoc-gen-gogo/plugin/plugin.pb.go",
+    "vendor/github.com/golang/protobuf/protoc-gen-go/plugin/Makefile",
+    "vendor/github.com/golang/protobuf/protoc-gen-go/plugin/plugin.pb.go",
+    "vendor/github.com/golang/protobuf/protoc-gen-go/plugin/plugin.pb.golden",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-analyze/README.md",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-analyze/main.go",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-go-generator/Makefile",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-go-generator/README.md",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-go-generator/funcmap.go",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-go-generator/gofmt.go",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-go-generator/main.go",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-go-generator/renderer.go",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-go-generator/templates.go",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-go-sample/main.go",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-swift-generator/Makefile",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-swift-generator/Package.swift",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-swift-generator/README.md",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-swift-sample/Package.swift",
+    "vendor/github.com/googleapis/gnostic/test/errors/invalid-plugin-invocation.errors",
+    "vendor/k8s.io/apiserver/plugin/pkg/audit/BUILD",
+    "vendor/k8s.io/apiserver/plugin/pkg/audit/doc.go",
+    "vendor/k8s.io/apiserver/plugin/pkg/authenticator/BUILD",
+    "vendor/k8s.io/apiserver/plugin/pkg/authenticator/doc.go",
+    "vendor/k8s.io/kubernetes/cmd/kube-controller-manager/app/plugins.go",
+    "vendor/k8s.io/kubernetes/cmd/kubelet/app/plugins.go",
+    "vendor/k8s.io/kubernetes/docs/man/man1/kubectl-plugin.1",
+    "vendor/k8s.io/kubernetes/docs/user-guide/kubectl/kubectl_plugin.md",
+    "vendor/k8s.io/kubernetes/docs/yaml/kubectl/kubectl_plugin.yaml",
+    "vendor/k8s.io/kubernetes/examples/storage/rethinkdb/driver-service.yaml",
+    "vendor/k8s.io/kubernetes/federation/pkg/dnsprovider/plugins.go",
+    "vendor/k8s.io/kubernetes/federation/pkg/federatedtypes/adapter.go",
+    "vendor/k8s.io/kubernetes/pkg/kubectl/cmd/plugin.go",
+    "vendor/k8s.io/kubernetes/pkg/kubectl/cmd/plugin_test.go",
+    "vendor/k8s.io/kubernetes/pkg/kubectl/plugins/BUILD",
+    "vendor/k8s.io/kubernetes/pkg/kubectl/plugins/env.go",
+    "vendor/k8s.io/kubernetes/pkg/kubectl/plugins/env_test.go",
+    "vendor/k8s.io/kubernetes/pkg/kubectl/plugins/loader.go",
+    "vendor/k8s.io/kubernetes/pkg/kubectl/plugins/loader_test.go",
+    "vendor/k8s.io/kubernetes/pkg/kubectl/plugins/plugins.go",
+    "vendor/k8s.io/kubernetes/pkg/kubectl/plugins/plugins_test.go",
+    "vendor/k8s.io/kubernetes/pkg/kubectl/plugins/runner.go",
+    "vendor/k8s.io/kubernetes/pkg/kubectl/plugins/runner_test.go",
+    "vendor/k8s.io/kubernetes/pkg/kubelet/cm/device_plugin_handler.go",
+    "vendor/k8s.io/kubernetes/pkg/kubelet/cm/device_plugin_handler_stub.go",
+    "vendor/k8s.io/kubernetes/pkg/kubelet/cm/device_plugin_handler_test.go",
+    "vendor/k8s.io/kubernetes/pkg/kubelet/deviceplugin/BUILD",
+    "vendor/k8s.io/kubernetes/pkg/kubelet/deviceplugin/device_plugin_stub.go",
+    "vendor/k8s.io/kubernetes/pkg/kubelet/deviceplugin/endpoint.go",
+    "vendor/k8s.io/kubernetes/pkg/kubelet/deviceplugin/endpoint_test.go",
+    "vendor/k8s.io/kubernetes/pkg/kubelet/deviceplugin/manager.go",
+    "vendor/k8s.io/kubernetes/pkg/kubelet/deviceplugin/manager_test.go",
+    "vendor/k8s.io/kubernetes/pkg/kubelet/deviceplugin/types.go",
+    "vendor/k8s.io/kubernetes/pkg/kubelet/deviceplugin/utils.go",
+    "vendor/k8s.io/kubernetes/pkg/kubelet/deviceplugin/utils_test.go",
+    "vendor/k8s.io/kubernetes/pkg/kubelet/network/plugins.go",
+    "vendor/k8s.io/kubernetes/pkg/volume/flexvolume/driver-call.go",
+    "vendor/k8s.io/kubernetes/pkg/volume/flexvolume/driver-call_test.go",
+    "vendor/k8s.io/kubernetes/pkg/volume/flexvolume/plugin-defaults.go",
+    "vendor/k8s.io/kubernetes/pkg/volume/flexvolume/plugin.go",
+    "vendor/k8s.io/kubernetes/pkg/volume/flexvolume/plugin_test.go",
+    "vendor/k8s.io/kubernetes/pkg/volume/scaleio/sio_plugin.go",
+    "vendor/k8s.io/kubernetes/plugin/cmd/kube-scheduler/BUILD",
+    "vendor/k8s.io/kubernetes/plugin/cmd/kube-scheduler/OWNERS",
+    "vendor/k8s.io/kubernetes/plugin/cmd/kube-scheduler/scheduler.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/OWNERS",
+    "vendor/k8s.io/kubernetes/plugin/pkg/auth/BUILD",
+    "vendor/k8s.io/kubernetes/plugin/pkg/auth/OWNERS",
+    "vendor/k8s.io/kubernetes/plugin/pkg/auth/doc.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/scheduler/BUILD",
+    "vendor/k8s.io/kubernetes/plugin/pkg/scheduler/OWNERS",
+    "vendor/k8s.io/kubernetes/plugin/pkg/scheduler/scheduler.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/scheduler/scheduler_test.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/scheduler/testutil.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/fileinfo.go",
+    "vendor/github.com/docker/distribution/registry/storage/driver/storagedriver.go",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-analyze/statistics/stats.go",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-analyze/summarize/main.go",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-go-generator/encode-templates/main.go",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-go-generator/templates/client.go.tmpl",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-go-generator/templates/provider.go.tmpl",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-go-generator/templates/server.go.tmpl",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-go-generator/templates/types.go.tmpl",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-swift-generator/Templates/client.swift.tmpl",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-swift-generator/Templates/fetch.swift.tmpl",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-swift-generator/Templates/server.swift.tmpl",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-swift-generator/Templates/types.swift.tmpl",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-swift-sample/Sources/OpenAPIv2.pb.swift",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-swift-sample/Sources/io.swift",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-swift-sample/Sources/main.swift",
+    "vendor/github.com/googleapis/gnostic/plugins/gnostic-swift-sample/Sources/plugin.pb.swift",
+    "vendor/k8s.io/apiserver/pkg/admission/plugin/initialization/BUILD",
+    "vendor/k8s.io/apiserver/pkg/admission/plugin/initialization/initialization.go",
+    "vendor/k8s.io/apiserver/pkg/admission/plugin/initialization/initialization_test.go",
+    "vendor/k8s.io/apiserver/pkg/server/options/encryptionconfig/plugins.go",
+    "vendor/k8s.io/apiserver/plugin/pkg/audit/log/BUILD",
+    "vendor/k8s.io/apiserver/plugin/pkg/audit/log/backend.go",
+    "vendor/k8s.io/apiserver/plugin/pkg/audit/log/backend_test.go",
+    "vendor/k8s.io/apiserver/plugin/pkg/audit/webhook/BUILD",
+    "vendor/k8s.io/apiserver/plugin/pkg/audit/webhook/webhook.go",
+    "vendor/k8s.io/apiserver/plugin/pkg/audit/webhook/webhook_test.go",
+    "vendor/k8s.io/apiserver/plugin/pkg/audit/webhook/webhook_v1alpha1_test.go",
+    "vendor/k8s.io/apiserver/plugin/pkg/authenticator/password/BUILD",
+    "vendor/k8s.io/apiserver/plugin/pkg/authenticator/password/doc.go",
+    "vendor/k8s.io/apiserver/plugin/pkg/authorizer/webhook/BUILD",
+    "vendor/k8s.io/apiserver/plugin/pkg/authorizer/webhook/certs_test.go",
+    "vendor/k8s.io/apiserver/plugin/pkg/authorizer/webhook/gencerts.sh",
+    "vendor/k8s.io/apiserver/plugin/pkg/authorizer/webhook/webhook.go",
+    "vendor/k8s.io/apiserver/plugin/pkg/authorizer/webhook/webhook_test.go",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/BUILD",
+    "vendor/k8s.io/client-go/plugin/pkg/client/auth/plugins.go",
+    "vendor/k8s.io/kubernetes/cluster/addons/cluster-monitoring/stackdriver/heapster-controller.yaml",
+    "vendor/k8s.io/kubernetes/cluster/addons/cluster-monitoring/stackdriver/heapster-service.yaml",
+    "vendor/k8s.io/kubernetes/cmd/kube-apiserver/app/options/plugins.go",
+    "vendor/k8s.io/kubernetes/federation/cmd/federation-apiserver/app/plugins.go",
+    "vendor/k8s.io/kubernetes/federation/cmd/federation-controller-manager/app/plugins.go",
+    "vendor/k8s.io/kubernetes/pkg/controller/node/ipam/adapter.go",
+    "vendor/k8s.io/kubernetes/pkg/kubelet/network/testing/mock_network_plugin.go",
+    "vendor/k8s.io/kubernetes/pkg/kubelet/network/testing/plugins_test.go",
+    "vendor/k8s.io/kubernetes/plugin/cmd/kube-scheduler/app/BUILD",
+    "vendor/k8s.io/kubernetes/plugin/cmd/kube-scheduler/app/configurator.go",
+    "vendor/k8s.io/kubernetes/plugin/cmd/kube-scheduler/app/configurator_test.go",
+    "vendor/k8s.io/kubernetes/plugin/cmd/kube-scheduler/app/server.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/admit/BUILD",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/admit/admission.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/admit/admission_test.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/alwayspullimages/BUILD",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/alwayspullimages/admission.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/alwayspullimages/admission_test.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/antiaffinity/BUILD",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/antiaffinity/admission.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/antiaffinity/admission_test.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/antiaffinity/doc.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/defaulttolerationseconds/BUILD",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/defaulttolerationseconds/admission.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/defaulttolerationseconds/admission_test.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/deny/BUILD",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/deny/admission.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/deny/admission_test.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/eventratelimit/BUILD",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/eventratelimit/admission.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/eventratelimit/admission_test.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/eventratelimit/cache.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/eventratelimit/cache_test.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/eventratelimit/clock.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/eventratelimit/config.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/eventratelimit/doc.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/eventratelimit/limitenforcer.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/exec/BUILD",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/exec/admission.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/exec/admission_test.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/gc/BUILD",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/gc/gc_admission.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/gc/gc_admission_test.go",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/imagepolicy/BUILD",
+    "vendor/k8s.io/kubernetes/plugin/pkg/admission/imagepolicy/admission.go"
    ]
   },
   "fail_count": 0
@@ -3123,13 +3866,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T02:20:57Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:06:05Z",
   "default_branch": "main",
   "pushed_at": "2025-07-18",
   "stars": 2,
   "tree": {
    "sha": "70146ffac802c29f9edaa6d5fe838e63759e773e",
-   "etag": "W/\"8f95b6ba0d2e0625661c04a5a5d13bf46b2fc8d5c0ac873b0b359caa3210816e\"",
+   "etag": "W/\"10af21017cb76b5889e6de86a6fd710f4dd4ae59a9e1f89a371b26d973a0421b\"",
    "truncated": false,
    "path_count": 62,
    "matched": [
@@ -3201,7 +3945,9 @@
     "src/main/java/org/hibernate/community/dialect/function/array/GaussDBArrayRemoveFunction.java",
     "src/main/java/org/hibernate/community/dialect/function/array/GaussDBArrayRemoveIndexFunction.java",
     "src/main/java/org/hibernate/community/dialect/function/array/GaussDBArrayReplaceFunction.java",
-    "src/main/java/org/hibernate/community/dialect/function/array/GaussDBArraySetFunction.java"
+    "src/main/java/org/hibernate/community/dialect/function/array/GaussDBArraySetFunction.java",
+    "src/main/java/org/hibernate/community/dialect/function/array/GaussDBArrayTrimFunction.java",
+    "src/main/java/org/hibernate/community/dialect/function/json/GaussDBJsonObjectFunction.java"
    ]
   },
   "fail_count": 0
@@ -3460,13 +4206,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T02:42:30Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:09:51Z",
   "default_branch": "master",
   "pushed_at": "2023-04-28",
   "stars": 0,
   "tree": {
    "sha": "aca67c573825ffaffffe24f51f0f3397632306dc",
-   "etag": "W/\"d7b9bea0fefcb566cc40ade246bea7b8bba771fda3b9b8aa38c5bed7811bd2e3\"",
+   "etag": "W/\"9cbcefdd4a9554806c186ff8298ca8cc93e9a48a59658072ce4f6f094d1b8c6d\"",
    "truncated": false,
    "path_count": 468,
    "matched": [
@@ -3482,7 +4229,10 @@
     "src/mail/dockerfile/core/Dockerfile.dev",
     "src/mail/dockerfile/core_utils/Dockerfile",
     "src/mail/dockerfile/core_utils/Dockerfile.git_tool",
-    "src/mail/dockerfile/exim4/Dockerfile"
+    "src/mail/dockerfile/exim4/Dockerfile",
+    "src/mail/dockerfile/web/Dockerfile",
+    "src/mail/dockerfile/web/Dockerfile.dev",
+    "src/mail/dockerfile/web/Dockerfile.nginx"
    ]
   },
   "files": [
@@ -3625,6 +4375,33 @@
     "bytes": 982,
     "images": [
      "ubuntu:14.04"
+    ]
+   },
+   {
+    "path": "src/mail/dockerfile/web/Dockerfile",
+    "kind": "image",
+    "blob_sha": "b7fc22fa8e62c05de0bc53e85ce461d69344ece4",
+    "bytes": 1465,
+    "images": [
+     "alpine:3.8"
+    ]
+   },
+   {
+    "path": "src/mail/dockerfile/web/Dockerfile.dev",
+    "kind": "image",
+    "blob_sha": "52af2e8b879e65abe87c572ec970813ec9c8d5ab",
+    "bytes": 1819,
+    "images": [
+     "alpine:3.8"
+    ]
+   },
+   {
+    "path": "src/mail/dockerfile/web/Dockerfile.nginx",
+    "kind": "image",
+    "blob_sha": "b604bf2320ed0150a94c8b0dc3174b72896cdb06",
+    "bytes": 7444,
+    "images": [
+     "alpine:3.8"
     ]
    }
   ],
@@ -4194,15 +4971,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:16:52Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:47:23Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-10-31",
   "stars": 225,
   "tree": {
-   "sha": "a3abfbbf8a5e7fa6673a7b4b7ffaff09ca9629a4",
-   "etag": "W/\"c50e446eabec4f2998c1efb77b9ab1309528f702a81061a17b4eb29ee65e619f\"",
+   "sha": "1c21a1925da5dc745fb71b3d64c823ee72b915e5",
+   "etag": "W/\"06ce89b49dfb384c1e6c56a34d08bea3411f514d11992da737bcb29049e793d5\"",
    "truncated": false,
-   "path_count": 3786,
+   "path_count": 3787,
    "matched": [
     "Cargo.toml",
     "crates/mcp-agent-mail-agent-detect/Cargo.toml",
@@ -4216,6 +4994,13 @@
     "crates/mcp-agent-mail-server/Cargo.toml",
     "crates/mcp-agent-mail-share/Cargo.toml",
     "crates/mcp-agent-mail-storage/Cargo.toml",
+    "crates/mcp-agent-mail-test-helpers/Cargo.toml",
+    "crates/mcp-agent-mail-tools/Cargo.toml",
+    "crates/mcp-agent-mail/Cargo.toml",
+    "experimental/mcp-agent-mail-wasm/Cargo.toml",
+    "vendor/uring-fs/Cargo.toml",
+    "crates/mcp-agent-mail-guard/fuzz/Cargo.toml",
+    "crates/mcp-agent-mail-storage/fuzz/Cargo.toml",
     "Dockerfile",
     "Dockerfile.release",
     "tests/e2e/Dockerfile.migration",
@@ -4233,14 +5018,20 @@
     ".github/workflows/gh326-private-export.yml",
     ".github/workflows/installer-exit.yml",
     ".github/workflows/issue353-native.yml",
-    ".github/workflows/land-atc-reliability-20260918.yml"
+    ".github/workflows/land-atc-reliability-20260918.yml",
+    ".github/workflows/notify-acfs.yml",
+    ".github/workflows/observability_drift.yml",
+    ".github/workflows/publish.yml",
+    ".github/workflows/reservation-restrictions.yml",
+    ".github/workflows/search-v3-weekly.yml",
+    ".github/workflows/supply-chain-audit.yml"
    ]
   },
   "files": [
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "b7fe881fa6ead7a50b63016de5753538c92a38b4",
+    "blob_sha": "fc99fd8812e30b92c935dd6c388058efb23841a1",
     "ecosystem": "cargo",
     "bytes": 13359
    },
@@ -4534,9 +5325,9 @@
    {
     "path": "crates/mcp-agent-mail-server/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "acba586d9be1de840208e8147f4b84e762337810",
+    "blob_sha": "b89d60936e86520e59402409fde5ede57794e7d4",
     "ecosystem": "cargo",
-    "bytes": 4015,
+    "bytes": 4179,
     "names": [
      "asupersync.workspace",
      "serde.workspace",
@@ -4566,6 +5357,7 @@
      "walkdir.workspace",
      "sha2.workspace",
      "fs2.workspace",
+     "git2.workspace",
      "mcp-agent-mail-core",
      "mcp-agent-mail-db",
      "mcp-agent-mail-share",
@@ -4575,7 +5367,6 @@
     "dev": [
      "asupersync",
      "criterion.workspace",
-     "git2.workspace",
      "proptest.workspace",
      "tempfile.workspace",
      "ftui-harness.workspace",
@@ -4645,6 +5436,135 @@
      "criterion.workspace",
      "mcp-agent-mail-test-helpers.workspace",
      "toml.workspace"
+    ]
+   },
+   {
+    "path": "crates/mcp-agent-mail-test-helpers/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "852d3510afcf262accbaba20a60084fd2ceab3d5",
+    "ecosystem": "cargo",
+    "bytes": 582,
+    "names": [
+     "git2.workspace",
+     "tempfile",
+     "tracing.workspace"
+    ]
+   },
+   {
+    "path": "crates/mcp-agent-mail-tools/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "d93b2883aa2f3eeeb289bc2a96c2ac9876371484",
+    "ecosystem": "cargo",
+    "bytes": 2162,
+    "names": [
+     "mcp-agent-mail-core",
+     "mcp-agent-mail-db",
+     "mcp-agent-mail-storage",
+     "mcp-agent-mail-guard",
+     "fastmcp",
+     "fastmcp-protocol",
+     "fastmcp-core",
+     "fastmcp-server",
+     "asupersync",
+     "serde",
+     "serde_json",
+     "thiserror",
+     "chrono",
+     "tracing",
+     "git2",
+     "globset",
+     "smallvec",
+     "sha2",
+     "hex",
+     "fs2",
+     "ed25519-dalek",
+     "base64"
+    ],
+    "dev": [
+     "asupersync",
+     "arbitrary",
+     "mcp-agent-mail-test-helpers.workspace",
+     "proptest.workspace",
+     "tempfile.workspace"
+    ]
+   },
+   {
+    "path": "crates/mcp-agent-mail/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "7361848025799383c7671bf2ba0d5cd71ab743b2",
+    "ecosystem": "cargo",
+    "bytes": 2347,
+    "names": [
+     "mimalloc",
+     "mcp-agent-mail-core",
+     "mcp-agent-mail-storage",
+     "mcp-agent-mail-tools",
+     "mcp-agent-mail-server",
+     "mcp-agent-mail-cli",
+     "clap",
+     "serde",
+     "serde_json",
+     "tracing",
+     "tracing-subscriber",
+     "ftui-runtime"
+    ],
+    "dev": [
+     "asupersync",
+     "criterion",
+     "fastmcp",
+     "fastmcp-core",
+     "mcp-agent-mail-conformance",
+     "mcp-agent-mail-db",
+     "mcp-agent-mail-share",
+     "tempfile",
+     "sha2",
+     "hex"
+    ]
+   },
+   {
+    "path": "experimental/mcp-agent-mail-wasm/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "2370bd5d47dcb606aaca5a8f1b8120456c4b4c20",
+    "ecosystem": "cargo",
+    "bytes": 4213,
+    "names": [
+     "serde",
+     "serde_json"
+    ]
+   },
+   {
+    "path": "vendor/uring-fs/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "1fe791ef0ca3d4734fd7573d2a6925d75f25f125",
+    "ecosystem": "cargo",
+    "bytes": 290,
+    "dev": [
+     "pollster",
+     "tempfile"
+    ]
+   },
+   {
+    "path": "crates/mcp-agent-mail-guard/fuzz/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "bcca5bfca6d7d53e226b60ea7fbbca631b8fe202",
+    "ecosystem": "cargo",
+    "bytes": 2683,
+    "names": [
+     "arbitrary",
+     "libfuzzer-sys",
+     "mcp-agent-mail-guard"
+    ]
+   },
+   {
+    "path": "crates/mcp-agent-mail-storage/fuzz/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "fe8cb277092229f59329157af4d0004fd2b7310f",
+    "ecosystem": "cargo",
+    "bytes": 2693,
+    "names": [
+     "arbitrary",
+     "libfuzzer-sys",
+     "mcp-agent-mail-storage"
     ]
    },
    {
@@ -4766,6 +5686,42 @@
     "kind": "ci",
     "blob_sha": "8cfe1ff21b2c4acc252dde3d4aab3cc80da24cd3",
     "bytes": 5320
+   },
+   {
+    "path": ".github/workflows/notify-acfs.yml",
+    "kind": "ci",
+    "blob_sha": "f602a697fa67edb65cf93bb9c14ea9da38c2060d",
+    "bytes": 4096
+   },
+   {
+    "path": ".github/workflows/observability_drift.yml",
+    "kind": "ci",
+    "blob_sha": "53fb7d981f871c55445f3b6e968baa4b0408dd67",
+    "bytes": 1081
+   },
+   {
+    "path": ".github/workflows/publish.yml",
+    "kind": "ci",
+    "blob_sha": "0ec7fbbaafea001c166775fdfc651cffbe5293b7",
+    "bytes": 8087
+   },
+   {
+    "path": ".github/workflows/reservation-restrictions.yml",
+    "kind": "ci",
+    "blob_sha": "96b23c910ef7e51ce1edc6d6c373f57daea98ab5",
+    "bytes": 2437
+   },
+   {
+    "path": ".github/workflows/search-v3-weekly.yml",
+    "kind": "ci",
+    "blob_sha": "11d42cd617be5f8110b48d0b2acc6880941dc2b1",
+    "bytes": 1255
+   },
+   {
+    "path": ".github/workflows/supply-chain-audit.yml",
+    "kind": "ci",
+    "blob_sha": "d791870c289393a19c0f6e60d753eb84fc09bf25",
+    "bytes": 1693
    }
   ],
   "clues": {
@@ -10894,6 +11850,49 @@
    "changelog": [
     "CHANGELOG.md"
    ],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "Abdullayews/greencampus": {
+  "fn": "Abdullayews/greencampus",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-01T12:08:07Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-30",
+  "stars": 0,
+  "tree": {
+   "sha": "243a253d36d93065bb314ced6c29d912960d8090",
+   "etag": "W/\"e6d35eaccf194dc7c28ee46b97de66a440c3b4827a0b05e881319cda99e9a28c\"",
+   "truncated": false,
+   "path_count": 6,
+   "matched": [
+    "requirements.txt"
+   ]
+  },
+  "files": [
+   {
+    "path": "requirements.txt",
+    "kind": "dep",
+    "blob_sha": "fc2549c37f946249a868a06a4ebac3714a34d047",
+    "ecosystem": "pypi",
+    "bytes": 77,
+    "names": [
+     "flask",
+     "pymysql",
+     "requests",
+     "gunicorn",
+     "dbutils"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": []
