@@ -1,22 +1,23 @@
 # -*- coding: utf-8 -*-
-"""适配引擎判定入口（ATTRIBUTION T2a，2026-11-01）。
+"""适配引擎判定入口（ATTRIBUTION T2a 骨架 → T2c 接线，2026-11-01）。
 
 纯函数 judge(evidence_pack) → verdict：不碰网络、不碰存储、同输入同输出
 （无时钟无随机——可 diff 验收）。分层接线：
-  T2a（本卡）  schema 校验 + 按库聚合票数与证据链（机械层）
-  T2b          matcher：采集侧指纹 → 证据包（本入口的输入生产者）
-  T2c          quorum ≥2 票立案 + E-CI 消歧，在本入口内接线——接线前 dbs 恒空，
-               骨架不抢政策（不达标不硬推，见台账 T2c 卡）
+  T2a  schema 校验 + 按库聚合票数与证据链（机械层）
+  T2b  matcher：采集侧指纹 → 证据包（本入口的输入生产者）
+  T2c  quorum.vote 在本入口末段接线：≥2 票立案 + E-CI 消歧 → dbs 终局
 
-verdict 字段（证据卡片骨架，方案 §3.2「每仓一张证据卡片」）：
+verdict 字段（证据卡片，方案 §3.2「每仓一张证据卡片」）：
   fn / meta    证据包原样透传
   engine       引擎版本（结论可追溯到代码版本）
   status       no_evidence（空包/全空——验收要求不炸）
-               pending_quorum（有票，待 T2c 立案裁决）
-  dbs          立案库名单——quorum 接线前恒为 []
+               below_quorum（有票无一立案——单弱信号只记录）
+               case_opened（立案， dbs 非空；复核/签发归 T3/T4 人与 AI）
+  dbs          立案库名单（票降序；国产立案的兼容基座联动双标殿后）
   per_db       {db: {"votes": 合计票, "kinds": {型: 条数},
                      "chain": [该库全部证据条目，票降序+型序，人读证据链]}}
-  notes        判定层备注（E-CI 消歧/互补标记等，T2c 起写入）
+  recheck      topic 有而指纹无的库（矛盾=互补，进人工复核）
+  notes        single_strong（2 票单证须复核）/ ci_linkage（双标联动）等注记
 """
 from __future__ import annotations
 
@@ -27,9 +28,10 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from attribution import quorum
 from attribution.evidence_model import EVIDENCE_KINDS, normalize_pack
 
-ENGINE_VERSION = "0.1.0"   # T2a 骨架；T2b/T2c 接线时递增次版本
+ENGINE_VERSION = "0.2.0"   # 0.1.0=T2a 骨架；0.2.0=T2c quorum+E-CI 接线
 
 _KIND_ORDER = {k: i for i, k in enumerate(EVIDENCE_KINDS)}
 
@@ -53,12 +55,11 @@ def judge(pack) -> dict:
     for e in per_db.values():
         e["chain"].sort(key=_chain_order)
 
-    return {
+    return quorum.vote({
         "fn": fn,
         "meta": meta,
         "engine": ENGINE_VERSION,
-        "status": "pending_quorum" if per_db else "no_evidence",
-        "dbs": [],   # quorum（T2c）接线前恒空——聚合是机械，立案是政策
+        "dbs": [],
         "per_db": dict(sorted(per_db.items(), key=lambda kv: (-kv[1]["votes"], kv[0]))),
         "notes": [],
-    }
+    })

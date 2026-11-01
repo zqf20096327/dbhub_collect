@@ -111,7 +111,8 @@ def main() -> int:
     ck(v["per_db"].get("MySQL", {}).get("votes") == 1.0, "MySQL dep 1 票")
     ck(v["per_db"].get("PostgreSQL", {}).get("votes") == 1.0, "PostgreSQL dep 1 票")
     ck("topic_complement" not in pack["meta"], "topic(SQL Server) 与指纹同库互证，非互补")
-    ck(v["status"] == "pending_quorum" and not v["dbs"], "quorum 未接线 dbs 恒空")
+    ck(v["status"] == "case_opened" and v["dbs"] == ["SQL Server"],
+       f"SQL Server 4.0 票(dep+image+topic 三证)应立案：{v['dbs']}")
 
     # 6) 矛盾=互补：topic 库无指纹同库命中 → 互补标记，不判冲突不丢弃
     pack = build_pack("x/y", {"fn": "x/y", "status": "ok", "collected_at": TS,
@@ -159,7 +160,8 @@ def main() -> int:
     pv = FIX["snapshots"]["pivotlake/pivot"]
     try:
         v = judge(build_pack(pv["fn"], pv, {"topics": FIX["topics"]["pivotlake/pivot"]}))
-        ck(v["status"] in ("no_evidence", "pending_quorum"), "pivotlake 可判不炸")
+        ck(v["status"] in ("no_evidence", "below_quorum", "case_opened"),
+           "pivotlake 可判不炸")
     except Exception as e:                                       # noqa: BLE001
         fails.append(f"[FAIL] pivotlake 构包炸：{e}")
 
