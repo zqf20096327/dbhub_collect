@@ -1,63 +1,73 @@
 #!/usr/bin/env python3
-"""unattr_judge.py — 未归类项目判定器（手工执行，只读采集数据、只写自己的台账）。
+"""unattr_judge.py — 未归类项目判定器 v2（T2e 薄壳，零网络，2026-11-01 重写）。
 
-定位：给每个未归类项目一个可查的判定——为什么没归上 + 属于哪类；
+定位不变：给每个未归类项目一个可查的判定——为什么没归上 + 属于哪类；
 疑似 17 库生态的给出带证据的归属草案（签发权永远在人，进 config/overrides.json）。
-不动 collect/interpret/db_scan 任何逻辑；不写归属。
 
-四步流水：
-  ① 圈范围：页面池未归类 ∩ 已解读（未解读留给夜间队列，不重复花钱）
-  ② 信号层（零网络）：范围外标记/词表 → oos；教程词表 → edu；
-     db_scan 有候选但从未裁决 → desc_pending；AI 裁决过无 support → judged_no_support
-  ③ 侦查层（GitHub API）：E1 仓库树结构 + E3 依赖指纹（七语言清单）
-  ④ 判定层：draft / recheck / gated_app_cat / no_evidence / partial_scan / api_error
+旧版（10-29 口径修正版已 stash 存档，六处修正全部吸收）自打 GitHub API 的
+E1/E3 侦查层退役——证据层分片（evidence_collect 31,884 仓）+ attribution
+引擎（T2b matcher × T2c quorum）接管判定；本文件只剩四步薄壳：
 
-用法（手工，建议 PYTHONUTF8=1）：
-  python interpret/unattr_judge.py --dry-run          # 只看信号层统计，不联网不写盘
-  python interpret/unattr_judge.py --limit 400        # 默认分批（API 配额安全）
-  python interpret/unattr_judge.py --limit 0          # 全量（配额墙前优雅收尾，续跑接力）
-  python interpret/unattr_judge.py --retry-errors     # 只补扫 api_error / partial_scan
-  python interpret/unattr_judge.py --report-only      # 不联网，仅重出报告
+  ① 圈范围：无 README 行号引证 ∩ 已解读（10-29 口径沿用：唯有行号引证算
+     已有归属，规则/AI 预归属照常进判定；未解读留给夜间队列）
+  ② 信号层（口径与旧版逐字不变，零网络）：范围外词表 → oos（v3 含 graal）；
+     教程词表 → edu；db_scan 有候选从未裁决 → desc_pending；
+     AI 裁决过无 support → judged_no_support
+  ③ 证据层读取（零网络）：state/evidence_cache_shards 按 rec["fn"] 对齐；
+     无记录/partial → pending_evidence（进增量补采队列；
+     api_error/partial_scan 两状态退役）；empty_repo/gone → no_evidence 终局
+  ④ 判定层（attribution 引擎）：build_pack × judge →
+     case_opened   → draft（quorum ≥2 票立案；镜像/目录级单证 strength=strong）
+     below_quorum  → recheck（单弱信号只记录：全 0.5=weak / 仅 topic=topic_only /
+                      其余凑不满 2 票=dep_only）——43 案例 dep_only 清单同源
+     空包          → no_evidence；cat 非 Tool → gated_app_cat（dbs_raw 留痕）
 
-产物：state/unattr_verdicts.json（幂等台账）+ state/unattr_judge_report.md（报告）。
+CLI 兼容：--mode/--limit/--dry-run/--report-only/--min-stars 保留
+（零网络后 --limit 默认 0=全量，跑一轮 ≈ 十秒级）；--threads/--retry-errors
+随网络层一起退役。台账 state/unattr_verdicts.json 字段结构兼容
+（status/dbs/evidence/strength/branch/stars/lang/cat/scanned）——
+collect/pool_core 出池闸门与 tools/unattr_prescreen 两消费方零改动。
+evidence 字符串保持旧格式（"依赖 w ∈ 清单"/"路径 p"/"镜像 w ∈ p"），
+prescreen 的红旗解析（∈ 清单名）与 overrides 备料照常工作。
+
+产物：state/unattr_verdicts.json（幂等台账，compact+tmp/replace+LF 原子写）+
+state/unattr_judge_report.md（报告）。旧 draft 122 名单已冻结存档
+state/unattr_draft_122_archive.md（T3a 素材）。
 """
 from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 import sys
-import threading
-import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 
-import requests
-
 ROOT = Path(__file__).resolve().parents[1]          # dbhub_collect
-sys.path.insert(0, str(ROOT / "lib"))
-from gh import load_env                             # noqa: E402  与现管线同款 .env 装载
-from interp_store import load_cache                 # noqa: E402  分片缓存读取（兼容旧单文件）
+for p in (str(ROOT), str(ROOT / "lib")):
+    if p not in sys.path:
+        sys.path.insert(0, p)
+
+from attribution.api import judge                    # noqa: E402  T2a/T2c 引擎入口
+from attribution.matcher import build_pack           # noqa: E402  T2b 匹配器
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
 except Exception:
     pass
 
-CACHE = ROOT / "state" / "interp_cache.json"
 SCAN = ROOT / "state" / "db_scan.json"
 OUT = ROOT / "state" / "unattr_verdicts.json"
 REPORT = ROOT / "state" / "unattr_judge_report.md"
+EVIDENCE_SHARDS = ROOT / "state" / "evidence_cache_shards"
+INTERP_SHARDS = ROOT / "state" / "interp_cache_shards"
 
 DB_ORDER = ["PostgreSQL", "MySQL", "Oracle", "SQLite", "SQL Server", "ClickHouse",
             "MariaDB", "TiDB", "OceanBase", "PolarDB", "Dameng", "openGauss",
             "GaussDB", "GBase", "TDSQL", "YashanDB", "GoldenDB"]
 DB17 = set(DB_ORDER)
 
-# ── 词表 v2：范围外补 ignite/immudb/sled/convex/isar/heavydb/featurebase 等独立库本体；
-#    命中名单在报告里列出供人工抽检（防普通英文词误伤） ──────────────────────
+# ── 信号层词表（口径与旧版逐字不变；v3 含 graal）─────────────────────────
 OOS_RE = re.compile(
     r"(redis|valkey|dragonfly|kvrocks|etcd|zookeeper|mongo|couch|neo4j|falkordb|"
     r"memgraph|arangodb|nebulagraph|qdrant|milvus|weaviate|pinecone|faiss|lancedb|"
@@ -67,125 +77,52 @@ OOS_RE = re.compile(
     r"yugabyte|singlestore|memsql|surreal|libsql|turso|realm|firebase|firestore|"
     r"dynamodb|hbase|cassandra|scylla|kafka|pulsar|rocksdb|badger|boltdb|sled|"
     r"leveldb|pebble|foundationdb|spacetimedb|dgraph|lowdb|dexie|indexeddb|pouchdb|"
-    r"firebird|ignite|immudb|convex|isar|heavydb|heavyai|featurebase|monetdb|cratedb)", re.I)
+    r"firebird|ignite|immudb|convex|isar|heavydb|heavyai|featurebase|monetdb|"
+    r"cratedb|graal)", re.I)
 EDU_RE = re.compile(
     r"(awesome|curated|interview|面试|教程|笔记|八股|roadmap|tutorial|cheatsheet|"
     r"leetcode|ebook|学习|入门|手册|宝典|boilerplate|starter[-_ ]?kit|study[-_ ]?notes|"
     r"源码解析|waking[-_ ]?up|30[-_ ]?days)", re.I)
 
-# ── E1：库 ↔ 目录/文件名别名 ─────────────────────────────────────────────
-DIR_ALIAS = {
-    "PostgreSQL": ["postgres", "postgresql", "pgsql", "psycopg"],
-    "MySQL": ["mysql"],
-    "Oracle": ["oracle"],
-    "SQLite": ["sqlite"],
-    "SQL Server": ["mssql", "sqlserver", "sql_server", "mssqlserver"],
-    "ClickHouse": ["clickhouse"],
-    "MariaDB": ["mariadb"],
-    "TiDB": ["tidb", "tikv"],
-    "OceanBase": ["oceanbase"],
-    "PolarDB": ["polardb", "polardbx"],
-    "Dameng": ["dameng", "dm8"],
-    "openGauss": ["opengauss"],
-    "GaussDB": ["gaussdb"],
-    "GBase": ["gbase"],
-    "TDSQL": ["tdsql"],
-    "YashanDB": ["yashan"],
-    "GoldenDB": ["goldendb"],
-}
-DIR_CTX = re.compile(r"(connector|driver|adapter|dbms|dialect|backend|engine)", re.I)
-FILE_PAT = re.compile(
-    r"^(conn|dialect|driver|adapter|connector)_([a-z0-9_]+)\.(py|go|java|ts|js|rs|cs|rb|php|cpp)$", re.I)
-
-# ── E3：依赖指纹（七语言清单通用的驱动/连接器名，精度优先） ────────────────
-DEP_ALIAS = {
-    "PostgreSQL": ["psycopg", "asyncpg", "pg8000", "lib/pq", "jackc/pgx",
-                   "postgresql", "npgsql", "libpq"],
-    "MySQL": ["pymysql", "mysqlclient", "mysql-connector", "go-sql-driver/mysql",
-              "mysql2", "mysql-connector-java", "com.mysql", "mysql.data",
-              "libmysql", "mysqlconnector"],
-    "Oracle": ["oracledb", "cx-oracle", "cx_oracle", "go-oci8", "godror", "ojdbc",
-               "oracle.manageddataaccess", "oracle-enhanced"],
-    "SQLite": ["better-sqlite3", "sqlite-jdbc", "go-sqlite3", "rusqlite",
-               "system.data.sqlite", "sqlite3"],
-    "SQL Server": ["pymssql", "mssql-jdbc", "go-mssqldb", "sqljdbc",
-                   "microsoft.data.sqlclient", "sqlclient"],
-    "ClickHouse": ["clickhouse-driver", "clickhouse-connect", "clickhouse-jdbc",
-                   "clickhouse-go", "clickhouse-rs"],
-    "MariaDB": ["mariadb"],
-    "TiDB": ["go-tidb", "pytidb"],
-    "OceanBase": ["pyobclient", "oceanbase"],
-    "Dameng": ["dmPython", "dm8"],
-    "openGauss": ["psycopg2-opengauss", "opengauss"],
-    "GBase": ["gbase"],
-    "TDSQL": ["tdsql"],
-}
-DEP_FILE_RE = re.compile(
-    r"(^|/)(requirements[\w.]*\.txt|pyproject\.toml|setup\.py|package\.json|go\.mod|"
-    r"pom\.xml|Cargo\.toml|composer\.json|Gemfile|vcpkg\.json|conanfile\.(?:txt|py)|"
-    r"[\w.\-]+\.csproj|CMakeLists\.txt)$")
-WEAK_PATH_RE = re.compile(r"(^|/)(docs?|examples?|samples?|tests?|benchmarks?|demo)(/|$)", re.I)
-
 TOOL_CATS = {"内核/引擎", "安全/审计", "测试/质量", "备份", "监控", "高可用",
              "迁移", "建模/设计", "连接/代理", "开发库", "管理", "平台"}
 
-SESSION = requests.Session()
-LOCK = threading.Lock()
-API = "https://api.github.com"
+
+def load_interp_projection() -> dict[str, dict]:
+    """解读分片流式最小投影：fn → {cat, db_verdicts}（99MB 分片勿全载进 dict；
+    generated_at 取最新，等价旧版 latest_by_fn）。"""
+    out: dict[str, dict] = {}
+    for p in sorted(INTERP_SHARDS.glob("*.json")):
+        for rec in json.loads(p.read_text(encoding="utf-8")).values():
+            fn = rec.get("fn") or ""
+            if not fn:
+                continue
+            g = rec.get("generated_at") or ""
+            cur = out.get(fn)
+            if cur is not None and g < cur["_g"]:
+                continue
+            cls = rec.get("classification") or {}
+            out[fn] = {"cat": cls.get("cat") or "其他",
+                       "db_verdicts": cls.get("db_verdicts") or [], "_g": g}
+    return out
 
 
-def token_to_db(tok: str):
-    for db, al in DIR_ALIAS.items():
-        if tok in al:
-            return db
-    return None
+def load_evidence_for(scope: set[str]) -> dict[str, dict]:
+    """证据分片流式读取，只留圈内 fn（75MB 勿全载；分片键形态不一按 rec["fn"]）。"""
+    out: dict[str, dict] = {}
+    for p in sorted(EVIDENCE_SHARDS.glob("*.json")):
+        for rec in json.loads(p.read_text(encoding="utf-8")).values():
+            fn = rec.get("fn") or ""
+            if fn in scope:
+                out[fn] = rec
+    return out
 
 
-def latest_by_fn(cache: dict) -> dict:
-    m = {}
-    for e in cache.values():
-        if isinstance(e, dict) and e.get("fn"):
-            cur = m.get(e["fn"])
-            if cur is None or (e.get("generated_at") or "") >= (cur.get("generated_at") or ""):
-                m[e["fn"]] = e
-    return m
-
-
-# ── collect-only 兜底：GitHub Actions 上无页面池，从本仓数据推导未归类名单 ──
-def load_collect_rows(byfn: dict):
-    """快照 pool.json + 规则词表(config/db_profiles) + AI 支持缓存 → 页面池同构行。
-    口径镜像 build_demo 的四通道 + AI dbs（独立实现，仅用于候选发现，容许微小偏差）。"""
+def collect_rows(interp: dict, scan: dict) -> list[dict]:
+    """池（pool_store 滚动活文件）→ 圈内行：无行号引证者进判定（10-29 口径：
+    唯有 README 行号引证算已有归属；规则/AI 预归属照常进判定）。"""
     sys.path.insert(0, str(ROOT / "config"))
     import db_profiles as dp
-
-    def norm_topic(t):
-        if isinstance(t, dict):
-            t = t.get("name", "")
-        return t.strip().lower()                 # 与 build_demo 逐字符一致（键不去引号）
-
-    topic2db, org2db, watch2db, alias2db = {}, {}, {}, {}
-    for p in dp.PROFILES:
-        if not p.get("enabled", True):
-            continue
-        name = p["name"]
-        for t in p.get("topics", []):
-            topic2db[norm_topic(t)] = name
-        for o in p.get("orgs", []):
-            org2db[(o["name"] if isinstance(o, dict) else o).lower()] = name
-        for w in p.get("watch", []):
-            watch2db[w.lower()] = name
-        for kw in p.get("search") or []:
-            if isinstance(kw, str) and kw != "auto":
-                topic2db[kw.strip('"').lower()] = name
-        for a in p.get("aliases", []):
-            try:
-                re.compile(a)
-                if any(c in a for c in r"\s[]()|*+?{}"):
-                    continue
-            except re.error:
-                pass
-            alias2db[a.lower()] = name
-    topic2db.update(org2db)
     oos_tokens = {w.lower() for w in dp.GLOBAL.get("out_of_scope_dbs", [])}
 
     import pool_store
@@ -196,170 +133,159 @@ def load_collect_rows(byfn: dict):
     rows, seen = [], set()
     for it in items:
         fn = it.get("full_name") or ""
-        if not fn or fn in seen:                     # 与 build_demo 主循环同款去重（first-wins）
+        if not fn or fn in seen:                     # first-wins 去重（同旧版）
             continue
         seen.add(fn)
-        stopic = (it.get("source_topic") or "").strip().strip('\'"').strip().lower()
-        dbs = set()
-        db = topic2db.get(stopic, "")
-        if not db and it.get("source") == "org":
-            db = org2db.get(stopic, "")
-        if db:
-            dbs.add(db)
-        for t in it.get("topics") or []:
-            tl = t.lower()
-            if tl in topic2db:
-                dbs.add(topic2db[tl])
-            elif tl in alias2db:
-                dbs.add(alias2db[tl])
-        if (it.get("owner") or "").lower() in org2db:
-            dbs.add(org2db[it["owner"].lower()])
-        e = byfn.get(fn)
-        ai_dbs = ((e.get("classification") or {}).get("dbs") or []) if e else []
-        if dbs or [d for d in ai_dbs if d in DB17]:
-            continue                                    # 已归属（规则或 AI）→ 非未归类
-        cat = (((e.get("classification") or {}).get("cat")) if e else "") or "其他"
+        cands = ((scan.get(fn) or {}).get("cands") if isinstance(scan.get(fn), dict) else None) or {}
+        if any(any(c.get("line") is not None for c in v) for v in cands.values()):
+            continue                                 # 已有 README 行号引证 → 无需判定
         oos_hit = sorted({t for t in (it.get("topics") or [])} & oos_tokens)[:2]
-        ev = ("范围外:" + ",".join(oos_hit)) if oos_hit else ""
-        row = [fn, it.get("description") or "", it.get("language") or "",
-               it.get("stars") or 0, 0, "", [], cat] + [""] * 14 + [ev]
-        rows.append(row)
-    rows.sort(key=lambda r: -r[3])
+        rows.append({"fn": fn, "desc": it.get("description") or "",
+                     "lang": it.get("language") or "", "stars": it.get("stars") or 0,
+                     "topics": list(it.get("topics") or []),
+                     "cat": (interp.get(fn) or {}).get("cat", "其他"),
+                     "ev": ("范围外:" + ",".join(oos_hit)) if oos_hit else ""})
+    rows.sort(key=lambda r: -r["stars"])
     return rows
 
 
-def fetch_tree(fn: str):
-    """main/master 直试；罕见默认分支（develop/2.x 等）用一次 repo API 兜底。"""
-    for br in ("main", "master"):
-        try:
-            r = SESSION.get(f"{API}/repos/{fn}/git/trees/{br}?recursive=1",
-                            timeout=(4, 25))
-            if r.status_code == 200:
-                j = r.json()
-                return br, [t.get("path", "") for t in j.get("tree", [])], bool(j.get("truncated"))
-        except requests.RequestException:
-            continue
-    try:
-        info = SESSION.get(f"{API}/repos/{fn}", timeout=(4, 15))
-        if info.status_code == 200:
-            br = info.json().get("default_branch") or ""
-            if br and br not in ("main", "master"):
-                r = SESSION.get(f"{API}/repos/{fn}/git/trees/{br}?recursive=1",
-                                timeout=(4, 25))
-                if r.status_code == 200:
-                    j = r.json()
-                    return br, [t.get("path", "") for t in j.get("tree", [])], bool(j.get("truncated"))
-    except requests.RequestException:
-        pass
-    return None
+def page_rows(interp: dict) -> list[dict]:
+    """页面池 pool.js → 圈内行（本地调试用；行结构 [fn,desc,lang,stars,?,?,'',[],cat,…,ev]）。"""
+    s = Path(_PAGE_POOL_DEFAULT).read_text(encoding="utf-8")
+    pool = json.loads(re.search(r"window\.POOL=(\[.*?\]);?\n", s, re.S).group(1))
+    rows = []
+    for r in pool:
+        if r[5]:
+            continue                                 # 已归属
+        rows.append({"fn": r[0], "desc": r[1], "lang": r[2], "stars": r[3],
+                     "topics": [],                   # 页面行无 topics → 无 topic 证据
+                     "cat": r[7] or "其他", "ev": r[22] if len(r) > 22 else ""})
+    rows.sort(key=lambda r: -r["stars"])
+    return rows
 
 
-def fetch_raw(fn: str, branch: str, path: str) -> str:
-    try:
-        r = SESSION.get(f"https://raw.githubusercontent.com/{fn}/{branch}/{path}",
-                        timeout=(4, 10))
-        return r.text if r.status_code == 200 else ""
-    except requests.RequestException:
-        return ""
+def evidence_strings(verdict: dict) -> list[str]:
+    """证据链 → 旧格式字符串（prescreen 依赖：『依赖 w ∈ 清单』可解析红旗、
+    『路径 p』可拼 evidence 链接；同源去重，票降序）。镜像/矩阵证据是旧台账
+    没有的形态——纯镜像立案的 draft 若无任何 依赖/路径 前缀串，prescreen 的
+    _override_row 会因 paths/deps 双空越界，故兜底补一条纯「路径 {文件}」
+    （证据本就在该文件，非伪造）。"""
+    out, seen = [], set()
+    src_of_nonpath = None
+    for e in verdict["per_db"].values():
+        for it in e["chain"]:
+            key = (it["kind"], it["source"])
+            if key in seen:
+                continue
+            seen.add(key)
+            if it["kind"] != "topic" and src_of_nonpath is None:
+                src_of_nonpath = it["source"]
+            words = (it.get("detail") or {}).get("words") or []
+            w = words[0] if words else it["db"]
+            out.append({"dep": f"依赖 {w} ∈ {it['source']}",
+                        "tree": f"路径 {it['source']}",
+                        "image": f"镜像 {w} ∈ {it['source']}",
+                        "ci": f"矩阵 {w} ∈ {it['source']}",
+                        "topic": it["source"]}[it["kind"]])
+    out = out[:6]
+    if src_of_nonpath and not any(s.startswith(("依赖", "路径", "文件")) for s in out):
+        out.append(f"路径 {src_of_nonpath}")        # 兜底放 cap 后，防被 [:6] 切掉
+    return out
 
 
-def scan_tree(paths):
-    """E1：连接器语境路径 / conn_ 文件名 → [(db, 强度, 证据)]（强度恒 strong）。"""
-    hits = []
-    for p in paths:
-        parts = p.lower().split("/")
-        if len(parts) < 2:
-            continue
-        ctx = any(DIR_CTX.search(x) for x in parts[:-1])
-        stem = parts[-1].rsplit(".", 1)[0] if "." in parts[-1] else parts[-1]
-        db = token_to_db(stem) or (token_to_db(parts[-2]) if parts[-2] and "." not in parts[-2] else None)
-        if ctx and db:
-            hits.append((db, "strong", f"路径 {p}"))
-            continue
-        m = FILE_PAT.match(parts[-1])
-        if m:
-            db = token_to_db(m.group(2).lower().strip("_"))
-            if db:
-                hits.append((db, "strong", f"文件 {p}"))
-    return hits
+def _recheck_strength(verdict: dict) -> str:
+    """below_quorum 的强度标签（沿用旧报告语义）：全 0.5=weak / 仅 topic=topic_only /
+    其余（有 1 票级证据但凑不满 2 票）=dep_only。"""
+    chains = [it for e in verdict["per_db"].values() for it in e["chain"]]
+    if chains and all(it["kind"] == "topic" for it in chains):
+        return "topic_only"
+    if chains and all(it["votes"] <= 0.5 for it in chains):
+        return "weak"
+    return "dep_only"
 
 
-def scan_deps(paths, fn, branch):
-    """E3：依赖清单 → [(db, 强度, 证据)]。根级优先+深度次之封顶 6 文件；
-    docs/examples/tests 路径下的依赖证据降为 weak。"""
-    dep_paths = [p for p in paths if DEP_FILE_RE.search(p)]
-    dep_paths.sort(key=lambda p: (p.count("/"), p))
-    hits, seen = [], set()
-    for p in dep_paths[:6]:
-        raw = fetch_raw(fn, branch, p)
-        if not raw:
-            continue
-        strength = "weak" if WEAK_PATH_RE.search(p) else "med"
-        low = raw.lower()
-        for db, toks in DEP_ALIAS.items():
-            for t in toks:
-                if t in low and (db, p) not in seen:
-                    seen.add((db, p))
-                    hits.append((db, strength, f"依赖 {t} ∈ {p}"))
-    return hits
-
-
-def judge_one(r, scan, byfn):
-    """单条判定：信号层（零网络）→ 侦查层（联网）→ 判定层。"""
-    fn, stars, cat, lang, desc, ev_field = r[0], r[3], r[7], r[2], r[1], r[22]
-    base = {"stars": stars, "cat": cat, "lang": lang or "无",
+def judge_one(row: dict, scan: dict, evidence: dict) -> dict:
+    """单条判定：信号层（口径不变）→ 证据层 → 引擎判定层。"""
+    fn = row["fn"]
+    base = {"stars": row["stars"], "cat": row["cat"], "lang": row["lang"] or "无",
             "scanned": datetime.now().strftime("%Y-%m-%d")}
 
-    # ② 信号层
-    if (ev_field or "").find("范围外") >= 0 or OOS_RE.search(fn + " " + (desc or "")):
-        return fn, {**base, "dbs": [], "status": "oos"}
-    if EDU_RE.search(fn + " " + (desc or "")):
-        return fn, {**base, "dbs": [], "status": "edu"}
+    # ② 信号层（零网络，口径与旧版逐字一致）
+    if "范围外" in (row["ev"] or "") or OOS_RE.search(fn + " " + (row["desc"] or "")):
+        return {**base, "dbs": [], "status": "oos"}
+    if EDU_RE.search(fn + " " + (row["desc"] or "")):
+        return {**base, "dbs": [], "status": "edu"}
     sc = scan.get(fn)
     cands = [d for d in ((sc.get("cands") if isinstance(sc, dict) else None) or {}) if d in DB17]
-    e = byfn.get(fn)
-    verdicts = ((e.get("classification") or {}).get("db_verdicts") or []) if e else []
+    verdicts = row.get("db_verdicts") or []
     if cands and not verdicts:
-        return fn, {**base, "dbs": [], "status": "desc_pending",
-                    "evidence": ["简介候选: " + ",".join(cands)]}
+        return {**base, "dbs": [], "status": "desc_pending",
+                "evidence": ["简介候选: " + ",".join(cands)]}
     if verdicts:                                     # 问过、判过非 support
-        return fn, {**base, "dbs": [], "status": "judged_no_support"}
+        return {**base, "dbs": [], "status": "judged_no_support"}
 
-    # ③ 侦查层
-    got = fetch_tree(fn)
-    if got is None:
-        return fn, {**base, "dbs": [], "status": "api_error",
-                    "evidence": ["取树失败/仓库不存在"]}
-    branch, paths, truncated = got
-    ev = scan_tree(paths) + (scan_deps(paths, fn, branch) if len(paths) <= 20000 else [])
-    dbs = sorted({db for db, _, _ in ev}, key=DB_ORDER.index)
-    if truncated:
-        return fn, {**base, "dbs": dbs, "status": "partial_scan",
-                    "evidence": [d for _, _, d in ev][:6], "branch": branch}
-    if not dbs:
-        return fn, {**base, "dbs": [], "status": "no_evidence", "branch": branch}
+    # ③ 证据层：分片对齐（无记录/partial → 补采队列；empty_repo/gone → 终局）
+    rec = evidence.get(fn)
+    if rec is None:
+        return {**base, "dbs": [], "status": "pending_evidence",
+                "evidence": ["证据分片无记录（进增量补采队列）"]}
+    if rec.get("status") == "partial":
+        return {**base, "dbs": [], "status": "pending_evidence",
+                "evidence": ["证据 partial 树截断（待重采）"]}
+    if rec.get("status") != "ok":
+        return {**base, "dbs": [], "status": "no_evidence",
+                "evidence": [f"证据状态: {rec.get('status')}"]}
 
-    # ④ 判定层：cat 门 + 证据强度（弱证据/独立库依赖模式 → recheck）
-    strong = {db for db, s, _ in ev if s == "strong"}
-    all_weak = all(s == "weak" for _, s, _ in ev)
-    if cat not in TOOL_CATS:
-        return fn, {**base, "dbs": [], "dbs_raw": dbs, "status": "gated_app_cat",
-                    "evidence": [d for _, _, d in ev][:6], "branch": branch}
-    if all_weak or (cat == "内核/引擎" and not strong):
-        return fn, {**base, "dbs": dbs, "status": "recheck",
-                    "evidence": [d for _, _, d in ev][:6], "branch": branch,
-                    "strength": "weak" if all_weak else "dep_only"}
-    return fn, {**base, "dbs": dbs, "status": "draft",
-                "evidence": [d for _, _, d in ev][:6], "branch": branch,
-                "strength": "strong" if strong else "med"}
+    # ④ 判定层：matcher × quorum 引擎
+    verdict = judge(build_pack(fn, rec, {"topics": row["topics"]}))
+    branch = rec.get("default_branch") or "main"
+    ev = evidence_strings(verdict)
+    if verdict["status"] == "no_evidence":           # 空包（含 42/43 历史出池路径）
+        return {**base, "dbs": [], "status": "no_evidence", "branch": branch}
+    if verdict["status"] == "below_quorum":          # 单弱信号只记录 → recheck
+        dbs = sorted(verdict["per_db"], key=DB_ORDER.index)
+        return {**base, "dbs": dbs, "status": "recheck", "evidence": ev,
+                "branch": branch, "strength": _recheck_strength(verdict)}
+    chains = [it for e in verdict["per_db"].values() for it in e["chain"]]
+    if all(it["kind"] == "topic" for it in chains):
+        # 同通道叠票不放直通：postgres+postgresql 双 topic 同库叠满 2 票是
+        # 自声明重复计数非双源互证（方案 §4.5 topic 不绕过证据体系）→ recheck
+        dbs = sorted(verdict["per_db"], key=DB_ORDER.index)
+        return {**base, "dbs": dbs, "status": "recheck", "evidence": ev,
+                "branch": branch, "strength": "topic_only"}
+    if row["cat"] not in TOOL_CATS:                  # case_opened 但非工具类 → 门后
+        return {**base, "dbs": [], "dbs_raw": verdict["dbs"], "status": "gated_app_cat",
+                "evidence": ev, "branch": branch}
+    strong = any(it["votes"] >= 2.0 and it["kind"] in ("image", "tree") for it in chains)
+    return {**base, "dbs": verdict["dbs"], "status": "draft", "evidence": ev,
+            "branch": branch, "strength": "strong" if strong else "med",
+            "votes": {db: e["votes"] for db, e in verdict["per_db"].items()}}
 
 
-def write_report(ledger: dict, skipped_n: int):
-    st = {}
+def signal_preview(rows: list[dict], scan: dict) -> dict:
+    """--dry-run 信号层预演（不触证据分片，零网络出数）。"""
+    sig = {"oos": 0, "edu": 0, "desc_pending": 0, "judged_no_support": 0, "需证据判定": 0}
+    for r in rows:
+        fn, desc, ev = r["fn"], r["desc"], r["ev"]
+        if "范围外" in (ev or "") or OOS_RE.search(fn + " " + (desc or "")):
+            sig["oos"] += 1
+        elif EDU_RE.search(fn + " " + (desc or "")):
+            sig["edu"] += 1
+        else:
+            sc = scan.get(fn)
+            cands = [d for d in ((sc.get("cands") if isinstance(sc, dict) else None) or {}) if d in DB17]
+            vd = r.get("db_verdicts") or []
+            sig["desc_pending" if (cands and not vd)
+                else ("judged_no_support" if vd else "需证据判定")] += 1
+    return sig
+
+
+def write_report(ledger: dict, skipped_n: int) -> None:
+    st: dict[str, int] = {}
     for v in ledger.values():
         st[v.get("status", "?")] = st.get(v.get("status", "?"), 0) + 1
     lines = [
-        "# unattr_judge 判定报告",
+        "# unattr_judge 判定报告（v2 薄壳：attribution 引擎判定）",
         f"生成：{datetime.now().strftime('%Y-%m-%d %H:%M')} · 台账 {len(ledger)} 条"
         f" · 圈外未解读 {skipped_n} 条（留给夜间队列）",
         "",
@@ -371,10 +297,12 @@ def write_report(ledger: dict, skipped_n: int):
     lines += ["", f"## 归属草案（draft {len(hits)} 条，人工签发进 overrides.json；Top 30）", ""]
     for fn, v in hits[:30]:
         lines.append(f"- {v['stars']:>6}★ {fn} → {','.join(v['dbs'])}"
+                     f"（{v.get('strength')}，"
+                     f"{','.join(f'{d}={w:g}' for d, w in (v.get('votes') or {}).items())}）"
                      f"｜{v['evidence'][0] if v['evidence'] else ''}")
-    lines += ["", "## 待复核（recheck：弱证据 / 独立库依赖模式）", ""]
+    lines += ["", "## 待复核（recheck：单弱信号只记录——weak/topic_only/dep_only）", ""]
     for fn, v in sorted([(a, b) for a, b in ledger.items() if b.get("status") == "recheck"],
-                        key=lambda x: -x[1]["stars"]):
+                        key=lambda x: -x[1]["stars"])[:40]:
         lines.append(f"- {v['stars']:>6}★ {fn} → {','.join(v['dbs'])}（{v.get('strength')}）"
                      f"｜{v['evidence'][0] if v['evidence'] else ''}")
     lines += ["", "## 范围外命中抽检（防词表误伤，人工瞄一眼 Top 20）", ""]
@@ -384,119 +312,89 @@ def write_report(ledger: dict, skipped_n: int):
     lines += ["", f"## 分层小结：desc_pending {st.get('desc_pending', 0)}"
               f" · judged_no_support {st.get('judged_no_support', 0)}"
               f" · no_evidence {st.get('no_evidence', 0)}"
-              f" · api_error/partial {st.get('api_error', 0) + st.get('partial_scan', 0)}"
-              f"（--retry-errors 补扫）"]
-    REPORT.write_text("\n".join(lines) + "\n", encoding="utf-8")
+              f" · pending_evidence {st.get('pending_evidence', 0)}（增量补采队列）"]
+    REPORT.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 
 
-def main():
-    ap = argparse.ArgumentParser(description="未归类项目判定器（手工执行）")
-    ap.add_argument("--page-pool", default="D:/dbhub_page/data/pool.js",
+def atomic_write_compact(path: Path, obj) -> None:
+    """台账原子写：tmp+replace + LF（compact——4k+ 条 indent 会翻三倍；
+    轮转三副本对每轮全量重写的台账只添 .N 垃圾，不采用）。"""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(obj, ensure_ascii=False), encoding="utf-8", newline="\n")
+    tmp.replace(path)
+
+
+_PAGE_POOL_DEFAULT = "D:/dbhub_page/data/pool.js"
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description="未归类项目判定器 v2（T2e 薄壳，零网络）")
+    ap.add_argument("--page-pool", default=_PAGE_POOL_DEFAULT,
                     help="页面池 pool.js 路径（本地优先；缺失自动切 collect 模式）")
     ap.add_argument("--mode", choices=["auto", "page", "collect"], default="auto",
-                    help="auto=页面池在用 page 否则 collect；collect=仅本仓数据推导（Actions 用）")
-    ap.add_argument("--limit", type=int, default=400,
-                    help="本轮扫描条数上限（0=全量；默认分批保 API 配额）")
-    ap.add_argument("--threads", type=int, default=3)
-    ap.add_argument("--retry-errors", action="store_true",
-                    help="只补扫 api_error / partial_scan 条目")
-    ap.add_argument("--dry-run", action="store_true", help="信号层统计，不联网不写盘")
-    ap.add_argument("--report-only", action="store_true", help="不联网，仅重出报告")
+                    help="auto=页面池在用 page 否则 collect；collect=池活文件推导（规范模式）")
+    ap.add_argument("--limit", type=int, default=0,
+                    help="本轮判定条数上限（0=全量；零网络跑一轮≈十秒级）")
+    ap.add_argument("--min-stars", type=int, default=0,
+                    help="只判 Star ≥ N 的项目（长尾分批消化）")
+    ap.add_argument("--dry-run", action="store_true", help="信号层统计，不写盘")
+    ap.add_argument("--report-only", action="store_true", help="不重判，仅重出报告")
     args = ap.parse_args()
 
-    load_env()                                       # 读本仓 .env（GITHUB_TOKEN）
-    tok = os.environ.get("GITHUB_TOKEN", "")
-    if tok:
-        SESSION.headers.update({"Authorization": f"Bearer {tok}",
-                                "User-Agent": "unattr-judge"})
-    else:
-        print("警告：.env 无 GITHUB_TOKEN，匿名限速 60/hr", flush=True)
-
-    cache = load_cache()
-    byfn = latest_by_fn(cache)
     scan = json.loads(SCAN.read_text(encoding="utf-8"))
+    interp = load_interp_projection()
 
     use_collect = args.mode == "collect" or (
         args.mode == "auto" and not Path(args.page_pool).is_file())
     if use_collect:
-        unattr = load_collect_rows(byfn)
-        mode_note = "collect 模式（仅本仓数据推导，口径容许微小偏差）"
+        rows = collect_rows(interp, scan)
+        mode_note = "collect 模式（闸门=有行号引证才跳过；规则/AI 预归属仍进判定）"
     else:
-        s = Path(args.page_pool).read_text(encoding="utf-8")
-        pool = json.loads(re.search(r"window\.POOL=(\[.*?\]);?\n", s, re.S).group(1))
-        unattr = [r for r in pool if not r[5]]
-        mode_note = "page 模式"
+        rows = page_rows(interp)
+        mode_note = "page 模式（页面行无 topics → 无 topic 证据）"
+    for r in rows:                                   # 判定要用的解读字段挂到行上
+        ip = interp.get(r["fn"]) or {}
+        r["db_verdicts"] = ip.get("db_verdicts") or []
+        r["cat"] = ip.get("cat") or r.get("cat") or "其他"
 
-    todo = [r for r in unattr if r[0] in byfn]
-    todo.sort(key=lambda r: -r[3])
-    skipped_n = len(unattr) - len(todo)
-    print(f"[{mode_note}] 未归类 {len(unattr)} · 已解读 {len(todo)} · 未解读(圈外) {skipped_n}", flush=True)
+    if args.min_stars > 0:
+        before = len(rows)
+        rows = [r for r in rows if r["stars"] >= args.min_stars]
+        mode_note += f" · Star≥{args.min_stars} 过滤 {before}→{len(rows)}"
 
-    # 信号层预演（零网络出数）
-    sig = {"oos": 0, "edu": 0, "desc_pending": 0, "judged_no_support": 0, "需侦查": 0}
-    for r in todo:
-        fn, desc, evf = r[0], r[1], r[22]
-        if (evf or "").find("范围外") >= 0 or OOS_RE.search(fn + " " + (desc or "")):
-            sig["oos"] += 1
-        elif EDU_RE.search(fn + " " + (desc or "")):
-            sig["edu"] += 1
-        else:
-            cands = [d for d in (((scan.get(fn) or {}).get("cands")) or {}) if d in DB17]
-            vd = (byfn[fn].get("classification") or {}).get("db_verdicts") or []
-            sig["desc_pending" if (cands and not vd) else ("judged_no_support" if vd else "需侦查")] += 1
-    print("信号层预演:", sig, flush=True)
+    todo = [r for r in rows if r["fn"] in interp]
+    todo.sort(key=lambda r: -r["stars"])
+    skipped_n = len(rows) - len(todo)
+    print(f"[{mode_note}] 未归类 {len(rows)} · 已解读 {len(todo)} · 未解读(圈外) {skipped_n}", flush=True)
+
+    print("信号层预演:", signal_preview(todo, scan), flush=True)
     if args.dry_run:
-        return
+        return 0
 
     ledger = json.loads(OUT.read_text(encoding="utf-8")) if OUT.is_file() else {}
-    # 幂等策略：网络产物（draft/recheck/gated/no_evidence）粘住不重扫；
-    # 信号层产物（oos/edu/desc_pending/judged）随管线/快照演变——垫后重算。
-    # 批次排序：全新条目优先（先消化积压），可重试次之，易变态重算垫后——
-    # 否则星序头部的重算会吃掉 limit，新侦查推进不动（实测批次2仅净进80条）。
-    STICKY_NET = {"draft", "recheck", "gated_app_cat", "no_evidence"}
-    RETRYABLE = {"api_error", "partial_scan"}
-    fresh, retry, volatile = [], [], []
-    for r in todo:
-        st_old = (ledger.get(r[0]) or {}).get("status")
-        if st_old is None:
-            fresh.append(r)
-        elif st_old in RETRYABLE:
-            retry.append(r)
-        elif st_old not in STICKY_NET:
-            volatile.append(r)
-    batch = retry if args.retry_errors else (fresh + retry + volatile)
-    batch = batch if args.limit <= 0 else batch[:args.limit]
     if not args.report_only:
-        print(f"本轮联网扫描 {len(batch)} 条 · {args.threads} 线程", flush=True)
-        t0, err_streak, done_n = time.time(), 0, 0
-        with ThreadPoolExecutor(max_workers=args.threads) as ex:
-            futs = {ex.submit(judge_one, r, scan, byfn): r[0] for r in batch}
-            for fut in as_completed(futs):
-                try:
-                    fn, rec = fut.result()
-                except Exception as exc:              # 单条异常不拖垮整轮
-                    fn, rec = futs[fut], {"status": "api_error", "evidence": [f"异常 {exc}"]}
-                with LOCK:
-                    ledger[fn] = rec
-                    done_n += 1
-                    err_streak = err_streak + 1 if rec.get("status") == "api_error" else 0
-                    if done_n % 20 == 0:
-                        OUT.write_text(json.dumps(ledger, ensure_ascii=False), encoding="utf-8")
-                        hit = sum(1 for v in ledger.values() if v.get("dbs"))
-                        print(f"  进度 {done_n}/{len(batch)} · 有据 {hit}"
-                              f" · {(time.time()-t0)/60:.1f} 分钟", flush=True)
-                if err_streak >= 8:                   # 连续失败≈配额/网络墙
-                    ex.shutdown(cancel_futures=True)  # 真正取消未起跑的任务（否则 with 块会跑完全部）
-                    print("连续 8 条失败（疑似配额墙），本轮收尾——续跑自动接力", flush=True)
-                    break
-        OUT.write_text(json.dumps(ledger, ensure_ascii=False), encoding="utf-8")
-        print(f"扫描完成：{done_n} 条 · {(time.time()-t0)/60:.1f} 分钟", flush=True)
+        batch = todo if args.limit <= 0 else todo[:args.limit]
+        evidence = load_evidence_for({r["fn"] for r in batch})
+        for r in batch:
+            ledger[r["fn"]] = judge_one(r, scan, evidence)
+        atomic_write_compact(OUT, ledger)
+        fst: dict[str, int] = {}
+        for r in batch:
+            st = ledger[r["fn"]].get("status", "?")
+            fst[st] = fst.get(st, 0) + 1
+        st_all: dict[str, int] = {}
+        for v in ledger.values():
+            st_all[v.get("status", "?")] = st_all.get(v.get("status", "?"), 0) + 1
+        print(f"本轮判定 {len(batch)} 条：{sorted(fst.items(), key=lambda x: -x[1])}", flush=True)
+        print(f"台账累计 {len(ledger)} 条：{sorted(st_all.items(), key=lambda x: -x[1])}", flush=True)
 
     write_report(ledger, skipped_n)
     drafts = sum(1 for v in ledger.values() if v.get("status") == "draft")
     print(f"台账 {OUT}\n报告 {REPORT}", flush=True)
     print(f"==== 判定小结：draft {drafts} 条 · 详见报告 ====", flush=True)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

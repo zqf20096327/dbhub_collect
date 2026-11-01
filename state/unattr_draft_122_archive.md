@@ -1,0 +1,327 @@
+# unattr_judge 旧版 draft 122 名单存档（T2e 素材，2026-11-01）
+
+> 来源：state/unattr_verdicts.json 旧版（10-09 T1/T2 签发后的存量 draft）。旧版判定器退役
+> （T2e 重写为零网络薄壳），本名单冻结供 T3a 试点（draft 122 全量段）与人工签发备料。
+> 注意：新引擎 quorum 口径更严（≥2 票立案/弱路径 0.5 票），重判后部分条目可能降为 recheck。
+
+共 122 条（star 降序）：
+
+-  38587★ sqlmapproject/sqlmap → PostgreSQL,MySQL,Oracle,SQLite,SQL Server,ClickHouse（strong）
+    - 路径 plugins/dbms/clickhouse
+    - 路径 plugins/dbms/clickhouse/__init__.py
+-  23811★ sinaptik-ai/pandas-ai → PostgreSQL,MySQL,Oracle,SQL Server（strong）
+    - 路径 extensions/ee/connectors/oracle
+    - 路径 extensions/ee/connectors/oracle/LICENSE
+-  20074★ eosphoros-ai/DB-GPT → PostgreSQL,MySQL,Oracle,SQLite,SQL Server,ClickHouse,OceanBase,openGauss,GaussDB（strong）
+    - 文件 packages/dbgpt-ext/src/dbgpt_ext/datasource/rdbms/conn_clickhouse.py
+    - 文件 packages/dbgpt-ext/src/dbgpt_ext/datasource/rdbms/conn_gaussdb.py
+-   4873★ pudo/dataset → PostgreSQL,MySQL（med）
+    - 依赖 psycopg ∈ pyproject.toml
+    - 依赖 pymysql ∈ pyproject.toml
+-   4757★ sqlectron/sqlectron → SQLite（med）
+    - 依赖 sqlite3 ∈ package.json
+-   3715★ morphik-org/morphik-core → PostgreSQL（med）
+    - 依赖 psycopg ∈ pyproject.toml
+-   3284★ OmniDB/OmniDB → PostgreSQL,MySQL,Oracle（med）
+    - 依赖 psycopg ∈ requirements.txt
+    - 依赖 pymysql ∈ requirements.txt
+-   2111★ feldera/feldera → PostgreSQL（strong）
+    - 路径 crates/adapters/src/integrated/postgres.rs
+    - 路径 crates/adapters/src/integrated/postgres
+-   2012★ eosphoros-ai/DB-GPT-Hub → MySQL（med）
+    - 依赖 pymysql ∈ src/dbgpt-hub-gql/setup.py
+-   1838★ schemacrawler/SchemaCrawler → PostgreSQL,MySQL,Oracle,SQLite,SQL Server,ClickHouse,MariaDB（strong）
+    - 路径 schemacrawler-dbconnectors/src/main/resources/dbconnectors/clickhouse.yaml
+    - 路径 schemacrawler-dbconnectors/src/test/resources/parsed_dbconnectors_output/clickhouse.yaml
+-   1449★ dotnet/ef6 → SQL Server（med）
+    - 依赖 sqlclient ∈ src/EntityFramework.NuGet/EntityFramework.NuGet.csproj
+    - 依赖 sqlclient ∈ src/EntityFramework.SqlServer/EntityFramework.SqlServer.InternalsVisibleTo.csproj
+-   1399★ FrigadeHQ/remote-storage → SQLite（med）
+    - 依赖 sqlite3 ∈ apps/remote-storage-server/package.json
+-    880★ schotime/NPoco → PostgreSQL,SQL Server（med）
+    - 依赖 microsoft.data.sqlclient ∈ src/NPoco.SqlServer.SystemData/NPoco.SqlServer.SystemData.csproj
+    - 依赖 microsoft.data.sqlclient ∈ src/NPoco.SqlServer/NPoco.SqlServer.csproj
+-    760★ ronin-rb/ronin → SQLite（med）
+    - 依赖 sqlite3 ∈ Gemfile
+-    733★ kubedb/cli → MySQL（strong）
+    - 路径 vendor/github.com/go-sql-driver/mysql
+    - 路径 vendor/github.com/go-sql-driver/mysql/.gitignore
+-    664★ qustavo/sqlhooks → PostgreSQL,MySQL,SQLite（med）
+    - 依赖 lib/pq ∈ go.mod
+    - 依赖 go-sql-driver/mysql ∈ go.mod
+-    651★ datacleaner/DataCleaner → PostgreSQL（med）
+    - 依赖 postgresql ∈ pom.xml
+-    632★ apache/arrow-adbc → PostgreSQL,SQLite,SQL Server（strong）
+    - 路径 c/driver/postgresql
+    - 路径 c/driver/postgresql/AdbcDriverPostgreSQLConfig.cmake.in
+-    591★ aiidateam/aiida-core → PostgreSQL,MySQL（med）
+    - 依赖 psycopg ∈ pyproject.toml
+    - 依赖 pymysql ∈ pyproject.toml
+-    567★ auraphp/Aura.Sql → PostgreSQL（med）
+    - 依赖 postgresql ∈ composer.json
+-    546★ mwarkentin/django-watchman → MySQL,SQL Server（med）
+    - 依赖 mysqlclient ∈ pyproject.toml
+    - 依赖 sqlclient ∈ pyproject.toml
+-    448★ hanami/model → MySQL,SQLite（med）
+    - 依赖 mysql2 ∈ Gemfile
+    - 依赖 sqlite3 ∈ Gemfile
+-    443★ CERT-Polska/mquery → PostgreSQL（med）
+    - 依赖 psycopg ∈ requirements.txt
+-    436★ top-think/think-orm → PostgreSQL,MySQL,Oracle,SQLite（strong）
+    - 路径 src/db/connector/Mysql.php
+    - 路径 src/db/connector/Oracle.php
+-    416★ oltpbenchmark/oltpbench → PostgreSQL,Oracle（med）
+    - 依赖 postgresql ∈ pom.xml
+    - 依赖 ojdbc ∈ pom.xml
+-    345★ apache/cayenne → PostgreSQL,MySQL,Oracle,SQLite,SQL Server,MariaDB（med）
+    - 依赖 postgresql ∈ pom.xml
+    - 依赖 mysql-connector ∈ pom.xml
+-    343★ r2dbc/r2dbc-client → PostgreSQL,MySQL,SQL Server（med）
+    - 依赖 postgresql ∈ pom.xml
+    - 依赖 mysql-connector ∈ pom.xml
+-    301★ hellofresh/klepto → PostgreSQL,MySQL（med）
+    - 依赖 lib/pq ∈ go.mod
+    - 依赖 go-sql-driver/mysql ∈ go.mod
+-    278★ dao-xyz/peerbit → SQLite（med）
+    - 依赖 better-sqlite3 ∈ package.json
+    - 依赖 sqlite3 ∈ packages/log/package.json
+-    257★ fuma-nama/fumadb → MySQL,SQLite,MariaDB（med）
+    - 依赖 mysql2 ∈ packages/fumadb/package.json
+    - 依赖 better-sqlite3 ∈ packages/fumadb/package.json
+-    251★ Log2n-io/Typhon → Oracle（strong）
+    - 路径 test/Typhon.Engine.Tests/Runtime/Subscriptions/Oracle
+    - 路径 test/Typhon.Engine.Tests/Runtime/Subscriptions/Oracle/OracleHarness.cs
+-    237★ yokyak/react-agent → MySQL,SQLite（med）
+    - 依赖 mysql2 ∈ packages/react-agent-server/package.json
+    - 依赖 sqlite3 ∈ packages/react-agent-server/package.json
+-    214★ mweibel/connect-session-sequelize → SQLite（med）
+    - 依赖 sqlite3 ∈ package.json
+-    200★ garden-co/jazz → SQLite（strong）
+    - 路径 dev/benchmarks/storage/native/benches/native_storage_engines/sqlite.rs
+    - 依赖 rusqlite ∈ crates/groove/Cargo.toml
+-    186★ ManyDesigns/Portofino → PostgreSQL（med）
+    - 依赖 postgresql ∈ pom.xml
+    - 依赖 postgresql ∈ demo-tt/pom.xml
+-    176★ polypheny/Polypheny-DB → PostgreSQL（strong）
+    - 路径 dbms/src/test/java/org/polypheny/db/adapter/postgres
+    - 路径 dbms/src/test/java/org/polypheny/db/adapter/postgres/source
+-    162★ golobby/orm → PostgreSQL,MySQL,SQLite（med）
+    - 依赖 lib/pq ∈ go.mod
+    - 依赖 go-sql-driver/mysql ∈ go.mod
+-    155★ iWinston/typeorm-plus → PostgreSQL,MySQL,Oracle,SQLite,SQL Server,MariaDB（strong）
+    - 路径 src/driver/mysql
+    - 路径 src/driver/mysql/MysqlConnectionCredentialsOptions.ts
+-    148★ jpsca/sqla-wrapper → PostgreSQL（med）
+    - 依赖 psycopg ∈ pyproject.toml
+-    143★ willsoto/nestjs-objection → SQLite（med）
+    - 依赖 sqlite3 ∈ package.json
+-    134★ hongyuanw/simple-sharding → MySQL（med）
+    - 依赖 mysql-connector ∈ pom.xml
+-    123★ renuo/hotsheet → SQLite（med）
+    - 依赖 sqlite3 ∈ Gemfile
+-    118★ mutable-org/mutable → PostgreSQL（strong）
+    - 路径 benchmark/database_connectors/postgresql.md
+    - 路径 benchmark/database_connectors/postgresql.py
+-    114★ MatteoGuadrini/pyreports → PostgreSQL,MySQL（med）
+    - 依赖 psycopg ∈ pyproject.toml
+    - 依赖 mysql-connector ∈ pyproject.toml
+-    106★ stephenafamo/scan → PostgreSQL（med）
+    - 依赖 jackc/pgx ∈ go.mod
+-     84★ FROWNINGdev/django-orm-lens → PostgreSQL（med）
+    - 依赖 postgresql ∈ package.json
+-     83★ jaxio/celerio → MySQL,Oracle（strong）
+    - 路径 celerio-engine/src/main/java/com/jaxio/celerio/configuration/database/mysql
+    - 路径 celerio-engine/src/main/java/com/jaxio/celerio/configuration/database/mysql/MysqlEnumExtension.java
+-     77★ FCO/Red → SQLite（strong）
+    - 路径 docs/api/Red/Driver/SQLite
+    - 路径 docs/api/Red/Driver/SQLite/SchemaReader.md
+-     76★ SatoriCyber/universal-data-permissions-scanner → PostgreSQL（med）
+    - 依赖 psycopg ∈ pyproject.toml
+-     71★ kubedb/apimachinery → MySQL（strong）
+    - 路径 vendor/github.com/go-sql-driver/mysql
+    - 路径 vendor/github.com/go-sql-driver/mysql/.gitignore
+-     67★ yeecode/DynamicDataSource → MySQL（med）
+    - 依赖 mysql-connector ∈ pom.xml
+    - 依赖 mysql-connector ∈ demo/pom.xml
+-     66★ mtgjson/mtgsqlive → MySQL（med）
+    - 依赖 pymysql ∈ requirements.txt
+    - 依赖 pymysql ∈ requirements_test.txt
+-     66★ cycle/active-record → PostgreSQL,MySQL,SQLite,SQL Server（strong）
+    - 路径 tests/Acceptance/Driver/MySQL
+    - 路径 tests/Acceptance/Driver/MySQL/ActiveRecordTest.php
+-     64★ short-d/app → PostgreSQL,MySQL,SQLite（med）
+    - 依赖 lib/pq ∈ go.mod
+    - 依赖 go-sql-driver/mysql ∈ go.mod
+-     64★ amilajack/compat-db → SQLite（med）
+    - 依赖 sqlite3 ∈ package.json
+-     61★ omnilib/aql → MySQL,SQLite（strong）
+    - 路径 aql/engines/mysql.py
+    - 路径 aql/engines/sqlite.py
+-     61★ SeldonIO/goven → PostgreSQL（med）
+    - 依赖 lib/pq ∈ go.mod
+-     60★ hidal-go/hidalgo → PostgreSQL,MySQL（med）
+    - 依赖 lib/pq ∈ go.mod
+    - 依赖 go-sql-driver/mysql ∈ go.mod
+-     57★ HazelnutParadise/insyra → PostgreSQL,MySQL,SQLite,SQL Server（med）
+    - 依赖 jackc/pgx ∈ go.mod
+    - 依赖 go-sql-driver/mysql ∈ go.mod
+-     50★ hhxsv5/gin-x → PostgreSQL,MySQL（med）
+    - 依赖 lib/pq ∈ go.mod
+    - 依赖 go-sql-driver/mysql ∈ go.mod
+-     49★ schic/DQCS → PostgreSQL,Oracle（med）
+    - 依赖 postgresql ∈ pom.xml
+    - 依赖 ojdbc ∈ pom.xml
+-     44★ rom-rb/rom-repository → SQLite（med）
+    - 依赖 sqlite3 ∈ Gemfile
+-     44★ browniebroke/django-remake-migrations → PostgreSQL（med）
+    - 依赖 psycopg ∈ pyproject.toml
+-     42★ Magenic/MAQS → PostgreSQL,SQLite,SQL Server（med）
+    - 依赖 npgsql ∈ Framework/BaseDatabaseTest/BaseDatabaseTest.csproj
+    - 依赖 sqlite3 ∈ Framework/BaseDatabaseTest/BaseDatabaseTest.csproj
+-     37★ jhannes/fluent-jdbc → PostgreSQL,Oracle,SQLite,SQL Server（med）
+    - 依赖 postgresql ∈ pom.xml
+    - 依赖 ojdbc ∈ pom.xml
+-     35★ wayofdev/laravel-cycle-orm-adapter → PostgreSQL（med）
+    - 依赖 postgresql ∈ composer.json
+-     35★ sayanarijit/sqla-fancy-core → PostgreSQL（med）
+    - 依赖 psycopg ∈ pyproject.toml
+-     35★ apllodb/apllodb → SQLite（strong）
+    - 路径 apllodb-immutable-schema-engine-infra/src/sqlite.rs
+    - 路径 apllodb-immutable-schema-engine-infra/src/sqlite
+-     34★ datazip-inc/olake-ui → PostgreSQL,SQLite（med）
+    - 依赖 lib/pq ∈ server/go.mod
+    - 依赖 go-sqlite3 ∈ server/go.mod
+-     33★ wonderbeyond/SQLAlchemy-Nested-Mutable → PostgreSQL（med）
+    - 依赖 psycopg ∈ pyproject.toml
+-     33★ keeps/dbptk-ui → PostgreSQL,MySQL（med）
+    - 依赖 postgresql ∈ pom.xml
+    - 依赖 mysql-connector ∈ pom.xml
+-     32★ jegelstaff/formulize → MySQL（strong）
+    - 路径 class/database/drivers/mysql
+    - 路径 class/database/drivers/mysql/database.php
+-     32★ BjoernKW/Schematic → PostgreSQL（med）
+    - 依赖 postgresql ∈ pom.xml
+-     30★ rusq/osx-callhistory-decryptor → SQLite（med）
+    - 依赖 go-sqlite3 ∈ go.mod
+-     30★ apache/cocoon → GBase（med）
+    - 依赖 gbase ∈ pom.xml
+-     29★ phalcon/migrations → PostgreSQL,MySQL,SQLite（strong）
+    - 路径 src/Db/Adapter/Mysql.php
+    - 路径 src/Db/Adapter/Postgresql.php
+-     29★ microknights/Log4NetAdoNetAppender → PostgreSQL,MySQL,SQL Server（med）
+    - 依赖 microsoft.data.sqlclient ∈ src/MicroKnights.Log4NetAdoNetAppender.StrongName.csproj
+    - 依赖 microsoft.data.sqlclient ∈ src/MicroKnights.Log4NetAdoNetAppender.csproj
+-     28★ dbeaver/dbeaver-common → ClickHouse（med）
+    - 依赖 clickhouse-jdbc ∈ root/pom.xml
+-     28★ abcsys/libem → MySQL（med）
+    - 依赖 mysql-connector ∈ serve/requirements.txt
+    - 依赖 mysql-connector ∈ arena/serve/requirements.txt
+-     27★ oscova/syn-bot-samples → SQLite（med）
+    - 依赖 system.data.sqlite ∈ natural-language-interface-to-database/NLI-Database-Oscova/NLI-Database-Oscova.csproj
+    - 依赖 system.data.sqlite ∈ natural-language-interface-to-database/NLI-Database-SIML/NLI-Database-SIML.csproj
+-     25★ JaCraig/SQLHelper → SQL Server（med）
+    - 依赖 microsoft.data.sqlclient ∈ src/SQLHelper.DB/SQLHelper.DB.csproj
+-     24★ Open-NET-Libraries/Open.Database.Extensions → SQL Server（med）
+    - 依赖 microsoft.data.sqlclient ∈ Source/MSSqlClient/Open.Database.Extensions.MSSqlClient.csproj
+-     22★ adambanaszkiewicz/query-builder → PostgreSQL,MySQL,SQLite,SQL Server（strong）
+    - 路径 src/QueryBuilder/ConnectionAdapters/Mssql.php
+    - 路径 src/QueryBuilder/ConnectionAdapters/Mysql.php
+-     21★ toddbirchard/pythonmyadmin → MySQL（med）
+    - 依赖 pymysql ∈ pyproject.toml
+    - 依赖 pymysql ∈ requirements.txt
+-     21★ morph-kgc/3xtudio → PostgreSQL,MySQL,Oracle（med）
+    - 依赖 psycopg ∈ requirements.txt
+    - 依赖 pymysql ∈ requirements.txt
+-     21★ dbunit/dbunit-extension → PostgreSQL,MySQL,Oracle,SQL Server,MariaDB（med）
+    - 依赖 postgresql ∈ pom.xml
+    - 依赖 mysql-connector ∈ pom.xml
+-     20★ stoolap/stoolap-node → SQLite（med）
+    - 依赖 better-sqlite3 ∈ package.json
+-     20★ patrick204nqh/dbwatcher → SQLite（med）
+    - 依赖 sqlite3 ∈ Gemfile
+    - 依赖 sqlite3 ∈ spec/dummy/Gemfile
+-     20★ The404Hacking/sqlmap → PostgreSQL,MySQL,Oracle,SQLite,SQL Server（strong）
+    - 路径 plugins/dbms/mssqlserver
+    - 路径 plugins/dbms/mssqlserver/__init__.py
+-     19★ ssbc/margaret → SQLite（med）
+    - 依赖 go-sqlite3 ∈ go.mod
+-     19★ radcortez/flyway-junit5-extensions → PostgreSQL（med）
+    - 依赖 postgresql ∈ extension/pom.xml
+    - 依赖 postgresql ∈ examples/quarkus/pom.xml
+-     19★ flyway/flyway-community-db-support → PostgreSQL,ClickHouse,OceanBase（med）
+    - 依赖 oceanbase ∈ pom.xml
+    - 依赖 clickhouse-jdbc ∈ flyway-database-clickhouse/pom.xml
+-     19★ YaoApp/xun → PostgreSQL,MySQL,SQLite（med）
+    - 依赖 lib/pq ∈ go.mod
+    - 依赖 go-sql-driver/mysql ∈ go.mod
+-     19★ CognizantOpenSource/maqs-dotnet → PostgreSQL,SQLite,SQL Server（med）
+    - 依赖 npgsql ∈ Framework/BaseDatabaseTest/BaseDatabaseTest.csproj
+    - 依赖 sqlite3 ∈ Framework/BaseDatabaseTest/BaseDatabaseTest.csproj
+-     18★ hashicorp/go-dbw → PostgreSQL,SQLite（med）
+    - 依赖 jackc/pgx ∈ go.mod
+    - 依赖 go-sqlite3 ∈ go.mod
+-     18★ bdurand/capture_migration_sql → SQLite（med）
+    - 依赖 sqlite3 ∈ Gemfile
+-     17★ flyway/flyway-ant → Oracle（med）
+    - 依赖 ojdbc ∈ IT/pom.xml
+-     17★ SleekwareDB/sleekwaredb → MySQL,SQLite,SQL Server（strong）
+    - 路径 backend/system/database/drivers/mssql
+    - 路径 backend/system/database/drivers/mssql/index.html
+-     17★ LuanMaik/nestjs-typeorm-transaction-unitOfWork-AsyncLocalStorage → MySQL（med）
+    - 依赖 mysql2 ∈ package.json
+-     17★ FrancoLiberali/cql → PostgreSQL,MySQL,SQLite,SQL Server（med）
+    - 依赖 jackc/pgx ∈ go.mod
+    - 依赖 go-sql-driver/mysql ∈ go.mod
+-     16★ ilorm/core → MySQL（med）
+    - 依赖 mysql2 ∈ package.json
+-     16★ htmfilho/digger → PostgreSQL,SQL Server（med）
+    - 依赖 postgresql ∈ java/pom.xml
+    - 依赖 mssql-jdbc ∈ java/pom.xml
+-     16★ apache/metamodel-membrane → PostgreSQL,GBase（med）
+    - 依赖 postgresql ∈ core/pom.xml
+    - 依赖 gbase ∈ swagger-codegen/pom.xml
+-     15★ pavankjadda/LiquibaseDemo → MySQL（med）
+    - 依赖 mysql-connector ∈ pom.xml
+-     15★ bastienboutonnet/sheetwork → PostgreSQL（strong）
+    - 路径 sheetwork/core/adapters/postgres
+    - 路径 sheetwork/core/adapters/postgres/__init__.py
+-     15★ Wsiegenthaler/sequelize-embed → SQLite（med）
+    - 依赖 sqlite3 ∈ package.json
+-     13★ speedment/speedment-code-samples → MySQL（med）
+    - 依赖 mysql-connector ∈ enterprise/advanced-aggregator-example/pom.xml
+    - 依赖 mysql-connector ∈ enterprise/aggregate-json-example/pom.xml
+-     13★ pioz/plucker → SQLite（med）
+    - 依赖 sqlite3 ∈ Gemfile
+-     13★ ioquatix/activerecord-rack → SQLite（med）
+    - 依赖 sqlite3 ∈ Gemfile
+-     13★ gothunder/thunder → SQLite（med）
+    - 依赖 go-sqlite3 ∈ go.mod
+-     13★ ashkrit/corejava → SQLite（med）
+    - 依赖 sqlite-jdbc ∈ jdbcplus/pom.xml
+    - 依赖 sqlite-jdbc ∈ jdbcproxy/pom.xml
+-     12★ rlemaigre/JMiniORM → PostgreSQL（med）
+    - 依赖 postgresql ∈ pom.xml
+-     12★ kamichidu/goen → PostgreSQL,MySQL,SQLite（strong）
+    - 路径 dialect/postgres
+    - 路径 dialect/postgres/dialect.go
+-     12★ Zenithar/go-pkg → PostgreSQL（strong）
+    - 路径 db/adapter/postgresql
+    - 路径 db/adapter/postgresql/connection.go
+-     12★ WailanTirajoh/dbviewer → SQLite（med）
+    - 依赖 sqlite3 ∈ Gemfile
+-     12★ Matific/broken-down-models → PostgreSQL（med）
+    - 依赖 psycopg ∈ pyproject.toml
+-     11★ jproggy/snippetory → MySQL,SQLite（med）
+    - 依赖 mysql-connector ∈ snippetory-sql/pom.xml
+    - 依赖 sqlite-jdbc ∈ snippetory-sql/pom.xml
+-     11★ ilkerkorkut/gorm-hazelcast → PostgreSQL（med）
+    - 依赖 lib/pq ∈ go.mod
+-     11★ andrehertwig/admintool → MySQL（med）
+    - 依赖 mysql-connector ∈ admin-tools-demo-core/pom.xml
+-     11★ RicardoBrazao/systematize → SQLite（med）
+    - 依赖 sqlite3 ∈ spec/testapp/Gemfile
+-     10★ soul-soft/Soul.SqlBatis → PostgreSQL,MySQL（med）
+    - 依赖 npgsql ∈ src/Soul.SqlBatis.Test/Soul.SqlBatis.Test.csproj
+    - 依赖 mysqlconnector ∈ src/Soul.SqlBatis.Test/Soul.SqlBatis.Test.csproj
+-     10★ emilioforrer/adonis-translatable → SQLite（med）
+    - 依赖 sqlite3 ∈ package.json
