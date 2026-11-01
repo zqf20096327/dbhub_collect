@@ -1,0 +1,33 @@
+{
+  "_readme": "误伤反例+正例契约（ATTRIBUTION T1b）。每条：pkg=依赖名，dev=true 表示位于 devDeps，expect=期望命中库列表（[] 即不得命中任何库），expect_dev=true 表示命中必须带 dev 降档标志。反例源自 10 月审计实测误伤与 10-31 词表设计（pg-electron/@types 类）；正例覆盖 17 库词表主路径。改词表前先看这条会不会破。",
+  "cases": [
+    {"pkg": "pg", "expect": ["PostgreSQL"], "note": "exact 正例：npm/ruby 官方驱动名恰为 pg"},
+    {"pkg": "pg-electron", "expect": [], "note": "exact 反例：含 pg 子串但不是 pg 包——档位必须挡住"},
+    {"pkg": "pg-parse", "expect": [], "note": "同上"},
+    {"pkg": "@types/pg", "expect": [], "note": "类型声明包排除（防子串档撞 @types/better-sqlite3 全家）"},
+    {"pkg": "jsonwebtoken", "expect": [], "note": "卡文钦定反例：不得命中任何库"},
+    {"pkg": "psycopg2-binary", "expect": ["PostgreSQL"], "note": "子串正例"},
+    {"pkg": "github.com/jackc/pgx/v5", "expect": ["PostgreSQL"], "note": "Go require 路径形态"},
+    {"pkg": "sqlite3", "dev": true, "expect": ["SQLite"], "expect_dev": true, "note": "devDeps 命中必须带 dev 降档标志（卡文：deps 与 devDeps 区分）"},
+    {"pkg": "better-sqlite3", "expect": ["SQLite"]},
+    {"pkg": "mysqlclient", "expect": ["MySQL"], "note": "11-01 真实流量实测：sqlclient ⊂ mysqlclient 曾双判 SQL Server——子串吸收修复的回归锚"},
+    {"pkg": "sqlclient", "expect": ["SQL Server"], "note": "吸收不误伤：裸 sqlclient（.NET 旧驱动）仍命中"},
+    {"pkg": "System.Data.SqlClient", "expect": ["SQL Server"], "note": ".NET 旧驱动命名空间形态"},
+    {"pkg": "go-sql-driver/mysql", "expect": ["MySQL"], "note": "SSE-DZH/OceanBase 活案例的判定源"},
+    {"pkg": "mysql2", "expect": ["MySQL"]},
+    {"pkg": "com.mysql:mysql-connector-j", "expect": ["MySQL"], "note": "maven groupId:artifactId 形态"},
+    {"pkg": "sqlalchemy", "expect": [], "note": "铁律：ORM 永不进门"},
+    {"pkg": "typeorm", "expect": [], "note": "铁律：ORM"},
+    {"pkg": "prisma", "expect": [], "note": "铁律：通用库"},
+    {"pkg": "react", "expect": []},
+    {"pkg": "express", "expect": []},
+    {"pkg": "DmJdbcDriver", "expect": ["Dameng"], "note": "大小写归一正例（Java 驱动类名）"},
+    {"pkg": "huaweicloud-gaussdb", "expect": ["GaussDB"], "note": "国产 4 库新词正例"},
+    {"pkg": "polardb-pg", "expect": ["PolarDB"], "note": "polardb 子串盖 polardb-pg；不得误判 PostgreSQL"},
+    {"pkg": "yashandb", "expect": ["YashanDB"]},
+    {"pkg": "pyobclient", "expect": ["OceanBase"]},
+    {"pkg": "tidb-lite", "expect": ["TiDB"]},
+    {"pkg": "oracle.manageddataaccess.core", "expect": ["Oracle"], "note": ".NET Oracle 驱动 NuGet"},
+    {"pkg": "clickhouse-jdbc", "expect": ["ClickHouse"]}
+  ]
+}
