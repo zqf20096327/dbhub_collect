@@ -250,7 +250,9 @@ def _unlinked_fns() -> set[str]:
     （done）但 db_verdicts 空、且未被 config/overrides.json 人工签发归属的
     fn 集合——17 库外 DB 产品本体（redis/duckdb 等）与教学内容仓由此出池。
     未解读 / 缓存缺 / rejected 的不在集合（留池：解读中或等待 retry 捞回，
-    被误剔的救回后自动回池）。读失败返回空集（发现桶照收——宁可多收不漏收）。"""
+    被误剔的救回后自动回池）。读失败返回空集（发现桶照收——宁可多收不漏收）。
+    T0 出池闸门（2026-11-01）：圈定结果逐 fn 过闸——"已侦查且真无关"才准出，
+    no_evidence/draft/无台账记录一律拦下（防 sqlc 式误杀），出池走审计日志。"""
     out: set[str] = set()
     try:
         st = _load(HERE / "state" / "interp_state.json").get("items") or {}
@@ -269,7 +271,73 @@ def _unlinked_fns() -> set[str]:
                 out.add(fn)
     except Exception:                             # noqa: BLE001 口径数据面缺失=不过滤
         return set()
-    return out
+    return _apply_exit_gate(out)
+
+
+# ── T0 出池闸门（ATTRIBUTION_TASKS T0）─────────────────────────────────
+# 旧口径把"没证据"和"真无关"一起出池，sqlc 式误杀由此而来（卡片依据 §2.5）。
+# 准出 = 台账明确判过非适配（AI 判无支持/范围外/教学）；
+# HOLD = no_evidence（E1/E3 无证据≠终局，等引擎六型证据翻案）、
+#        draft/recheck/gated_app_cat/desc_pending（有候选证据，等签发）、
+#        无台账记录（从未侦查）。台账整体缺失=关闸全 HOLD（宁多收不漏收）。
+_EXIT_OK_STATUS = {
+    "judged_no_support": "AI 解读过、判非任何库支持",
+    "oos": "17 库外生态本体（范围外）",
+    "edu": "教程/面试/学习资料仓",
+}
+
+
+def _apply_exit_gate(candidates: set[str], verdicts: dict | None = None,
+                     audit_path: Path | None = None) -> set[str]:
+    """candidates 逐 fn 过闸：返回准出集合；HOLD 拦下留池并写审计日志。"""
+    if not candidates:
+        return set()
+    if verdicts is None:
+        try:
+            verdicts = _load(HERE / "state" / "unattr_verdicts.json")
+        except Exception:                         # noqa: BLE001
+            verdicts = {}
+    if not isinstance(verdicts, dict) or not verdicts:
+        return set()                              # 台账缺失：关闸
+    exits: list[dict] = []
+    hold = 0
+    for fn in sorted(candidates):
+        st = (verdicts.get(fn) or {}).get("status")
+        if st in _EXIT_OK_STATUS:
+            exits.append({"fn": fn, "status": st,
+                          "reason": _EXIT_OK_STATUS[st]})
+        else:
+            hold += 1
+    if exits or hold:
+        _append_exit_audit(exits, hold, audit_path
+                           or HERE / "state" / "pool_exit_audit.json")
+    return {e["fn"] for e in exits}
+
+
+def _append_exit_audit(exits: list[dict], hold: int, path: Path) -> None:
+    """审计日志：items 按 fn 记首次出池+当时证据状态（幂等覆盖），runs 记每轮
+    摘要。atomic_write_json 三副本轮转（[[atomic-write-rotation]]：勿裸写）。"""
+    try:
+        doc = _load(path) if path.is_file() else {}
+    except Exception:                             # noqa: BLE001 损坏则重建
+        doc = {}
+    items: dict = doc.get("items") or {}
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    new = 0
+    for e in exits:
+        if e["fn"] not in items:
+            new += 1
+        items[e["fn"]] = {"first_exit": items.get(e["fn"], {}).get(
+                              "first_exit", now),
+                          "last_seen": now, "status": e["status"],
+                          "reason": e["reason"]}
+    runs = doc.get("runs") or []
+    runs.append({"date": now, "exits": len(exits), "new": new, "holds": hold})
+    atomic_write_json(path, {
+        "_readme": "T0 出池闸门审计（ATTRIBUTION_TASKS T0）：items=准出仓"
+                   "（fn→首次出池日/当时台账 status/原因）；runs=每轮摘要"
+                   "（holds=拦下留池数：no_evidence/draft/无记录等，等引擎翻案）",
+        "items": items, "runs": runs})
 
 
 def _drop_unlinked(items: dict, unlinked: set[str]) -> tuple[dict, int]:
@@ -307,7 +375,8 @@ def run(section: str, args) -> None:
                     - set(dp.GLOBAL["discovery_topics"]))
     unlinked_fns = _unlinked_fns()
     if unlinked_fns:
-        log.info("发现桶口径数据面：已解读无归属 %d 条（只留已关联 17 库，10-09 定案）",
+        log.info("发现桶口径数据面：已解读无归属且过 T0 闸门（判非适配）%d 条"
+                 "——no_evidence/draft/无台账记录的已拦下留池（10-09 定案+T0 闸门）",
                  len(unlinked_fns))
 
     if args.dry_run:
