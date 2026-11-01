@@ -42,6 +42,8 @@ DEP_ALLOWED_NEW = {
     ("GaussDB", "huaweicloud-gaussdb"),
     ("YashanDB", "yashandb"),
     ("GoldenDB", "goldendb"),
+    ("PostgreSQL", "tokio-postgres"),   # 11-01 用户过目补入（rust 驱动，pivotlake 案例）
+    ("PostgreSQL", "postgres"),
 }
 
 

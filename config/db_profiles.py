@@ -84,7 +84,9 @@ PROFILES = [
      "brand_infer": {"percona": ["MySQL", "PostgreSQL"]},
      "watch": ["postgres/postgres", "darold/ora2pg"],
      "drivers": ["psycopg", "asyncpg", "pg8000", "lib/pq", "jackc/pgx",
-                 "postgresql", "npgsql", "libpq"],
+                 "postgresql", "npgsql", "libpq", "tokio-postgres", "postgres"],
+                 # postgres/tokio-postgres：rust 生态官方驱动 crate（11-01 用户过目补入；
+                 # 子串档——postgres ⊂ postgresql 同库吸收不误伤，跨库无撞词）
      "drivers_exact": ["pg"],
      "images": ["postgres"],
      "ports": [5432],
