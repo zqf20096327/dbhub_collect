@@ -116,7 +116,7 @@
 - **验收**：复现 10-31 实测数字 ±10%：匹配不到 ≥1,400 / 不完整 ≥1,300 / 双源 ≥700（词表已扩，数字只会更高）
 - **防坑**：30,169 仓全量扫描注意内存——流式逐分片处理勿一次载入
 
-### T2e 重写 unattr_judge（薄壳，零网络）
+### T2e 重写 unattr_judge（薄壳，零网络） ｜✅ 2026-11-01 完成（3ad8ef6f；全量 6,025 条 3.4s 零网络：draft 266/recheck 1,608/gated 668/pending_evidence 40；prescreen 可读 T1 75+红旗 15；T0 出池门绿。金丝雀 3/5 机械过，2 案呈报：sqlmap→no_evidence 系证据层采样缺口〔PATH_CLUE_CAP=40 字典序截断+零依赖清单，建议采集层 17 库 token 加权〕；sqlc draft 含 CH 系根级 compose 镜像新信号面〔testdata 弱路径机制已验 0.5 票，T3b 裁〕。同通道 topic 叠票降级 recheck〔§4.5〕）
 - **目标**：unattr_judge.py 推倒重写（名字不变）：读 evidence 分片 + attribution 词表/匹配，替代旧版自打 GitHub API 的侦查层（定时已因 Core 配额冲突暂定）
 - **输入**：`state/evidence_cache_shards/`（31,884 仓）、T1c vocab、T2b matcher；旧版 10-29 未推送的 6 处口径修正（README 行号引证豁免/OOS 补 graal/testdata 弱路径/firm 收紧/--min-stars——重写前先 `git stash` 存档，口径融进新版）
 - **输出**：新版 `interpret/unattr_judge.py`：圈范围（已解读无归属+未签发）→ 信号层（oos/edu/desc_pending/judged_no_support 口径不变）→ 证据层读取（按 `rec["fn"]` 对齐）→ matcher 判定 → 台账 `state/unattr_verdicts.json`（字段结构兼容，unattr_prescreen/T0 消费方不动）；旧 draft 122 名单先存档 `state/unattr_draft_122_archive.md`（T3a 素材）
