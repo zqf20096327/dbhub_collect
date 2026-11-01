@@ -107,7 +107,14 @@ IMAGE_PATH_RE = [            # 镜像/服务配置（compose、Dockerfile、helm
     re.compile(r"(^|/)values\.ya?ml$"),        # helm chart 的 image: 常在 values.yaml
 ]
 CI_PATH_RE = re.compile(r"^\.github/workflows/[^/]+\.ya?ml$")
-CAPS = {"dep": 12, "image": 8, "ci": 15}
+# 11-01 试点校准（tools/pilot_recollect.py，T3b 漏配大户实测）：旧上限把
+# monorepo/大仓的关键指纹截在样本外——全池 3,325 仓（10.6%）至少一项打满，
+# sqlmap 路径线索按字典序截断、airbyte 三项满冠；放宽后 sqlmap 5 库 14-16 票
+# 全回收。raw 走 CDN 免费不占 Core 配额，放宽只费时（~10s/仓）。
+CAPS = {"dep": 60, "image": 24, "ci": 40}
+# 旧上限（打满检测用）：树未变 304 短路复用旧记录会让打满仓永远吃旧样本——
+# 命中旧上限的记录强制全量重采一次（自愈；重采后打满新上限的不再循环）。
+OLD_CAPS = {"dep": 12, "image": 8, "ci": 15}
 
 # 线索（只记路径，不抓原文——裁决时按需 raw）
 CHANGELOG_RE = re.compile(r"(?i)^changelog(\.[^/]*)?$")
@@ -117,7 +124,35 @@ DOCS_MATRIX_RE = re.compile(r"(?i)(support|matrix|compat|driver|database)[^/]*\.
 # 路径指纹：connector/mysql、driver/postgres 这类目录结构是路径证据的本体
 # （unattr_judge E1 同款信号）。纯结构词、不含库名——库名留在路径里由引擎匹配。
 PATH_CLUE_RE = re.compile(r"(?i)(connector|driver|dialect|adapter|plugin)")
-PATH_CLUE_CAP = 40
+PATH_CLUE_CAP = 200
+OLD_PATH_CLUE_CAP = 40
+
+_db_path_tokens: set[str] | None = None
+
+
+def _db_token_in(path: str) -> bool:
+    """路径段是否含 17 库 token（段相等或段前缀+数字/-/_/. 边界——与引擎
+    match_path 同款边界，防 oraclelinux 撞 oracle）。只用于采样加权排序，
+    不做判定（零判定口径不变：记录的仍是原始路径，匹配/赋票在引擎侧）。
+    token 源 = attribution.vocab（db_profiles 单一事实源派生）。"""
+    global _db_path_tokens
+    if _db_path_tokens is None:
+        from attribution.vocab import dir_vocab
+        _db_path_tokens = {t.lower() for toks in dir_vocab().values() for t in toks}
+    for seg in path.lower().split("/"):
+        for t in _db_path_tokens:
+            if seg == t or (seg.startswith(t) and len(seg) > len(t)
+                            and seg[len(t)] in "0123456789-_."):
+                return True
+    return False
+
+
+def _hit_old_caps(rec: dict) -> bool:
+    """旧记录是否打满旧上限（12/8/15/40 任一命中）→ 304 树未变也要重采。"""
+    kinds = Counter(f.get("kind") for f in rec.get("files") or [])
+    paths = len((rec.get("clues") or {}).get("paths") or [])
+    return (any(kinds.get(k, 0) >= v for k, v in OLD_CAPS.items())
+            or paths >= OLD_PATH_CLUE_CAP)
 
 
 def _dedupe(items) -> list[str]:
@@ -350,8 +385,10 @@ def select_targets(paths: list[str]) -> dict:
         elif (DOCS_DIR_RE.match(p) and DOCS_MATRIX_RE.search(p)
               and len(clues["docs_matrix"]) < 5):
             clues["docs_matrix"].append(p)
-    # 路径指纹：浅层优先（根附近的结构信号 > 深层），上限 PATH_CLUE_CAP
-    clues["paths"] = sorted(path_clues, key=lambda x: (x.count("/"), x))[:PATH_CLUE_CAP]
+    # 路径指纹：17 库 token 命中优先（sqlmap 的 plugins/dbms/mysql 深层路径按
+    # 旧"浅层+字典序"永远排不进前 40——11-01 试点实证），再浅层、再字典序
+    clues["paths"] = sorted(path_clues,
+                            key=lambda x: (not _db_token_in(x), x.count("/"), x))[:PATH_CLUE_CAP]
     # 根级优先（路径深度升序），monorepo 子包按字典序取前 N
     dep.sort(key=lambda t: (t[0].count("/"), t[0]))
     image.sort(key=lambda t: (t[0].count("/"), t[0]))
@@ -435,6 +472,10 @@ def collect_repo(client: GitHubClient, raw: RawFetcher, fn: str,
     }
     prev_tree = (prev or {}).get("tree") or {}
     prev_branch = (prev or {}).get("default_branch")
+
+    # 11-01 自愈：旧记录打满旧上限 → 树未变（304）也不能复用旧样本，强制重采
+    if prev is not None and _hit_old_caps(prev):
+        prev, prev_tree, prev_branch = None, {}, None
 
     # --- 树：先验分支 → main → master；全 404 再花 1 调查 default_branch ---
     data = branch = new_etag = None
@@ -670,7 +711,8 @@ def run_collect_loop(client: GitHubClient, raw: RawFetcher, store: EvidenceCache
     try:
         for idx, (fn, pool_rec) in enumerate(todo, 1):
             prev = store.get(fn)
-            if prev and prev.get("epoch") == EPOCH and prev.get("status") in TERMINAL_OK:
+            if prev and prev.get("epoch") == EPOCH and prev.get("status") in TERMINAL_OK \
+                    and not _hit_old_caps(prev):     # 11-01：打满旧上限 → 不跳过，重采自愈
                 cnt["skip"] += 1
                 log.debug("[%d/%d] %s 跳过（已采）", idx, total, fn)
                 continue

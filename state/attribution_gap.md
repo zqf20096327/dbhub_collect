@@ -1,12 +1,12 @@
 # 适配缺口报告（attribution scan --gap）
 
-- 生成 2026-11-01T06:09:44Z · 引擎 0.3.0 · 比对域：证据 31,884 条（ok 31,345） ∩ 解读 30,169（未解读另册 1,715）
-- **漏报 2,483 / 不完整 1,710 / 双源 strong 1,343**（10-31 实测 1,468 / 1,432 / 778，验收线 ≥1,400 / ≥1,300 / ≥700）
+- 生成 2026-11-01T09:48:54Z · 引擎 0.3.0 · 比对域：证据 31,888 条（ok 31,347） ∩ 解读 30,172（未解读另册 1,716）
+- **漏报 2,485 / 不完整 1,710 / 双源 strong 1,343**（10-31 实测 1,468 / 1,432 / 778，验收线 ≥1,400 / ≥1,300 / ≥700）
 - 口径：dbs=解读分片 classification.dbs；指纹命中=dep/image/ci/tree 四型证据（仅 topic 不算）；双源=漏报子集；star 降序
 
 - 不完整可补库位 Top：MySQL 876 · PostgreSQL 406 · SQLite 255 · SQL Server 184 · MariaDB 126 · Oracle 97 · ClickHouse 95 · OceanBase 30 · TiDB 19 · openGauss 19
 
-## 清单一 · 漏报（匹配不到：dbs 空、指纹有命中） —— 2,483 仓
+## 清单一 · 漏报（匹配不到：dbs 空、指纹有命中） —— 2,485 仓
 
 | # | 仓 | star | 指纹命中 | 立案(quorum) |
 |---|---|---|---|---|
@@ -17,51 +17,51 @@
 | 5 | makeplane/plane | 60,450 | PostgreSQL | PostgreSQL |
 | 6 | metabase/metabase | 49,557 | ClickHouse+MariaDB+MySQL+PostgreSQL | ClickHouse+PostgreSQL+MySQL |
 | 7 | payloadcms/payload | 45,113 | PostgreSQL+SQLite | PostgreSQL |
-| 8 | cockroachdb/cockroach | 32,551 | PostgreSQL | PostgreSQL |
-| 9 | supermemoryai/supermemory | 31,122 | PostgreSQL | PostgreSQL |
-| 10 | TencentCloud/TencentDB-Agent-Memory | 29,863 | TDSQL | — |
-| 11 | taosdata/TDengine | 25,151 | MySQL+PostgreSQL | — |
-| 12 | dubinc/dub.link | 24,998 | MySQL | — |
-| 13 | tursodatabase/turso | 24,655 | SQLite | SQLite |
-| 14 | dolthub/dolt | 24,582 | MariaDB+MySQL+PostgreSQL+SQL Server | MySQL+MariaDB |
-| 15 | sinaptik-ai/pandas-ai | 23,846 | MySQL+Oracle+PostgreSQL+SQL Server | Oracle+PostgreSQL |
-| 16 | oracle/graal | 21,728 | Oracle | Oracle |
-| 17 | eosphoros-ai/DB-GPT | 20,079 | MySQL+OceanBase | MySQL |
-| 18 | sqlc-dev/sqlc | 18,347 | ClickHouse+MySQL+PostgreSQL+SQL Server+SQLite | MySQL+PostgreSQL+SQL Server+SQLite+ClickHouse |
-| 19 | xerj-org/xerj | 17,555 | SQLite | — |
-| 20 | questdb/questdb | 17,423 | PostgreSQL | PostgreSQL |
-| 21 | tikv/tikv | 16,931 | TiDB | — |
-| 22 | zhisheng17/flink-learning | 15,097 | MySQL | MySQL+ClickHouse |
-| 23 | TencentCloud/CubeSandbox | 13,024 | TDSQL | — |
-| 24 | StarRocks/starrocks | 12,158 | MariaDB+MySQL | MariaDB+MySQL |
-| 25 | pingcap/awesome-database-learning | 11,174 | TiDB | — |
-| 26 | blinkospace/blinko | 11,062 | PostgreSQL+SQLite | PostgreSQL |
-| 27 | pingcap/talent-plan | 11,030 | TiDB | — |
-| 28 | zfile-dev/zfile | 10,853 | MySQL+SQLite | MySQL |
-| 29 | getlago/lago | 10,661 | ClickHouse+PostgreSQL | ClickHouse+PostgreSQL |
-| 30 | yugabyte/yugabyte-db | 10,580 | PostgreSQL | PostgreSQL |
-| 31 | doctrine/dbal | 9,702 | MariaDB+MySQL+PostgreSQL+SQL Server | MariaDB+MySQL+PostgreSQL+SQL Server+Oracle+SQLite |
-| 32 | activeloopai/deeplake | 9,248 | PostgreSQL | PostgreSQL |
-| 33 | codenotary/immudb | 9,041 | PostgreSQL | — |
-| 34 | benawad/dogehouse | 9,017 | PostgreSQL | PostgreSQL |
-| 35 | growthbook/growthbook | 8,478 | ClickHouse+MySQL+PostgreSQL+SQL Server | ClickHouse+MySQL+SQL Server+PostgreSQL |
-| 36 | jOOQ/jOOQ | 6,794 | ClickHouse+MariaDB+PostgreSQL | PostgreSQL+MySQL+Oracle+SQL Server |
-| 37 | TableProApp/TablePro | 6,214 | ClickHouse+MySQL+PostgreSQL+SQL Server | MySQL+PostgreSQL+SQL Server+SQLite |
-| 38 | liquibase/liquibase | 5,621 | MariaDB+MySQL+Oracle+PostgreSQL+SQL Server+SQLite | MariaDB+SQL Server+MySQL+Oracle+PostgreSQL |
-| 39 | lukevella/rallly | 5,293 | PostgreSQL | PostgreSQL |
-| 40 | malisper/pgrust | 5,233 | PostgreSQL | PostgreSQL |
-| 41 | oracle/opengrok | 4,970 | Oracle | — |
-| 42 | pudo/dataset | 4,874 | MySQL+PostgreSQL | — |
-| 43 | backup/backup | 4,856 | MySQL+PostgreSQL | MySQL+PostgreSQL |
-| 44 | linhaojun857/aurora | 4,663 | MySQL | MySQL |
-| 45 | supabase/supabase-js | 4,576 | PostgreSQL | PostgreSQL |
-| 46 | crate/crate | 4,443 | PostgreSQL | PostgreSQL |
-| 47 | oceanbase/miniob | 4,427 | OceanBase | — |
-| 48 | cozodb/cozo | 4,131 | SQLite | — |
-| 49 | flippercloud/flipper | 3,972 | MySQL+PostgreSQL+SQLite | PostgreSQL+MySQL |
-| 50 | rbmonster/learning-note | 3,815 | MySQL | MySQL |
+| 8 | sqlmapproject/sqlmap | 38,613 | ClickHouse+MySQL+Oracle+PostgreSQL+SQL Server+SQLite | MySQL+Oracle+PostgreSQL+SQL Server+ClickHouse+SQLite |
+| 9 | cockroachdb/cockroach | 32,551 | PostgreSQL | PostgreSQL |
+| 10 | supermemoryai/supermemory | 31,122 | PostgreSQL | PostgreSQL |
+| 11 | TencentCloud/TencentDB-Agent-Memory | 29,863 | TDSQL | — |
+| 12 | taosdata/TDengine | 25,151 | MySQL+PostgreSQL | — |
+| 13 | dubinc/dub.link | 24,998 | MySQL | — |
+| 14 | tursodatabase/turso | 24,655 | SQLite | SQLite |
+| 15 | dolthub/dolt | 24,582 | MariaDB+MySQL+PostgreSQL+SQL Server | MySQL+MariaDB |
+| 16 | sinaptik-ai/pandas-ai | 23,846 | MySQL+Oracle+PostgreSQL+SQL Server | Oracle+PostgreSQL |
+| 17 | oracle/graal | 21,728 | Oracle | Oracle |
+| 18 | eosphoros-ai/DB-GPT | 20,079 | MySQL+OceanBase | MySQL |
+| 19 | sqlc-dev/sqlc | 18,347 | ClickHouse+MySQL+PostgreSQL+SQL Server+SQLite | MySQL+PostgreSQL+SQL Server+SQLite+ClickHouse |
+| 20 | xerj-org/xerj | 17,555 | SQLite | — |
+| 21 | questdb/questdb | 17,423 | PostgreSQL | PostgreSQL |
+| 22 | tikv/tikv | 16,931 | TiDB | — |
+| 23 | zhisheng17/flink-learning | 15,097 | MySQL | MySQL+ClickHouse |
+| 24 | TencentCloud/CubeSandbox | 13,024 | TDSQL | — |
+| 25 | StarRocks/starrocks | 12,158 | MariaDB+MySQL | MariaDB+MySQL |
+| 26 | pingcap/awesome-database-learning | 11,174 | TiDB | — |
+| 27 | blinkospace/blinko | 11,062 | PostgreSQL+SQLite | PostgreSQL |
+| 28 | pingcap/talent-plan | 11,030 | TiDB | — |
+| 29 | zfile-dev/zfile | 10,853 | MySQL+SQLite | MySQL |
+| 30 | getlago/lago | 10,661 | ClickHouse+PostgreSQL | ClickHouse+PostgreSQL |
+| 31 | yugabyte/yugabyte-db | 10,580 | PostgreSQL | PostgreSQL |
+| 32 | doctrine/dbal | 9,702 | MariaDB+MySQL+PostgreSQL+SQL Server | MariaDB+MySQL+PostgreSQL+SQL Server+Oracle+SQLite |
+| 33 | activeloopai/deeplake | 9,248 | PostgreSQL | PostgreSQL |
+| 34 | codenotary/immudb | 9,041 | PostgreSQL | — |
+| 35 | benawad/dogehouse | 9,017 | PostgreSQL | PostgreSQL |
+| 36 | growthbook/growthbook | 8,478 | ClickHouse+MySQL+PostgreSQL+SQL Server | ClickHouse+MySQL+SQL Server+PostgreSQL |
+| 37 | jOOQ/jOOQ | 6,794 | ClickHouse+MariaDB+PostgreSQL | PostgreSQL+MySQL+Oracle+SQL Server |
+| 38 | TableProApp/TablePro | 6,214 | ClickHouse+MySQL+PostgreSQL+SQL Server | MySQL+PostgreSQL+SQL Server+SQLite |
+| 39 | liquibase/liquibase | 5,621 | MariaDB+MySQL+Oracle+PostgreSQL+SQL Server+SQLite | MariaDB+SQL Server+MySQL+Oracle+PostgreSQL |
+| 40 | lukevella/rallly | 5,293 | PostgreSQL | PostgreSQL |
+| 41 | malisper/pgrust | 5,233 | PostgreSQL | PostgreSQL |
+| 42 | oracle/opengrok | 4,970 | Oracle | — |
+| 43 | pudo/dataset | 4,874 | MySQL+PostgreSQL | — |
+| 44 | backup/backup | 4,856 | MySQL+PostgreSQL | MySQL+PostgreSQL |
+| 45 | linhaojun857/aurora | 4,663 | MySQL | MySQL |
+| 46 | supabase/supabase-js | 4,576 | PostgreSQL | PostgreSQL |
+| 47 | crate/crate | 4,443 | PostgreSQL | PostgreSQL |
+| 48 | oceanbase/miniob | 4,427 | OceanBase | — |
+| 49 | cozodb/cozo | 4,131 | SQLite | — |
+| 50 | flippercloud/flipper | 3,972 | MySQL+PostgreSQL+SQLite | PostgreSQL+MySQL |
 
-… 其余 2,433 仓见台账 JSON
+… 其余 2,435 仓见台账 JSON
 
 ## 清单二 · 不完整（已归但指纹显示还支持别的） —— 1,710 仓
 

@@ -1,21 +1,22 @@
 # unattr_judge 判定报告（v2 薄壳：attribution 引擎判定）
-生成：2026-11-01 14:09 · 台账 9952 条 · 圈外未解读 1166 条（留给夜间队列）
+生成：2026-11-01 17:48 · 台账 9952 条 · 圈外未解读 1166 条（留给夜间队列）
 
 ## 状态分布
-- no_evidence: 3875
+- no_evidence: 3874
 - recheck: 1774
 - oos: 1517
 - judged_no_support: 894
 - gated_app_cat: 719
 - desc_pending: 501
 - edu: 334
-- draft: 292
+- draft: 293
 - pending_evidence: 40
 - partial_scan: 6
 
-## 归属草案（draft 292 条，人工签发进 overrides.json；Top 30）
+## 归属草案（draft 293 条，人工签发进 overrides.json；Top 30）
 
 -  50025★ metabase/metabase → ClickHouse,PostgreSQL,MySQL（strong，ClickHouse=12,PostgreSQL=4.5,MySQL=2.5,MariaDB=0.5）｜路径 modules/drivers/clickhouse/LICENSE.txt
+-  38820★ sqlmapproject/sqlmap → MySQL,Oracle,PostgreSQL,SQL Server,ClickHouse,SQLite（strong，MySQL=16,Oracle=16,PostgreSQL=16,SQL Server=16,ClickHouse=14,SQLite=14）｜路径 plugins/dbms/mysql/__init__.py
 -  31471★ supermemoryai/supermemory → PostgreSQL（med，PostgreSQL=3）｜topic:postgres
 -  23919★ sinaptik-ai/pandas-ai → Oracle,PostgreSQL（strong，Oracle=11.5,PostgreSQL=3,MySQL=1,SQL Server=1）｜路径 extensions/ee/connectors/oracle/LICENSE
 -  20223★ eosphoros-ai/DB-GPT → MySQL（strong，MySQL=4,OceanBase=1）｜镜像 mysql ∈ docker-compose.yml
@@ -44,7 +45,6 @@
 -    760★ ronin-rb/ronin → SQLite（med，）｜依赖 sqlite3 ∈ Gemfile
 -    732★ kubedb/cli → MySQL（strong，MySQL=53）｜路径 vendor/github.com/go-sql-driver/mysql/.gitignore
 -    720★ wuba/Antenna → MySQL（strong，MySQL=5）｜镜像 mysql ∈ docker-compose.yml
--    651★ datacleaner/DataCleaner → PostgreSQL（med，）｜依赖 postgresql ∈ pom.xml
 
 ## 待复核（recheck：单弱信号只记录——weak/topic_only/dep_only）
 
@@ -112,4 +112,4 @@
 -  27369★ valkey-io/valkey
 -  25254★ clockworklabs/SpacetimeDB
 
-## 分层小结：desc_pending 501 · judged_no_support 894 · no_evidence 3875 · pending_evidence 40（增量补采队列）
+## 分层小结：desc_pending 501 · judged_no_support 894 · no_evidence 3874 · pending_evidence 40（增量补采队列）

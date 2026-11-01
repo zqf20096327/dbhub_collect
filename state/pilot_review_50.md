@@ -29,7 +29,7 @@
 |---|---|---|---|---|---|---|
 | 1 | grafana/grafana | 77,584 | ∅ | MySQL+PostgreSQL | topic:MySQL@topic:mysql; dep:MySQL@go.mod | 　MySQL+PostgreSQL+SQL SERVER |
 | 2 | coollabsio/coolify | 65,322 | ∅ | PostgreSQL+MariaDB+MySQL | image:PostgreSQL@docker-compose.dev-multi; image:PostgreSQL@docker-compose.windows.y | PostgreSQL+MariaDB+MySQL+CLICKHOUSE+SQLITE　 |
-| 3 | metabase/metabase | 50,025 | ∅ | ClickHouse+PostgreSQL+MySQL | tree:ClickHouse@modules/drivers/clickhou; tree:ClickHouse@modules/drivers/clickhou |  |
+| 3 | metabase/metabase | 50,025 | ∅ | ClickHouse+PostgreSQL+MySQL | tree:ClickHouse@modules/drivers/clickhou; tree:ClickHouse@modules/drivers/clickhou | 同意引擎建议 |
 | 4 | DeusData/codebase-memory-mcp | 47,856 | ∅ | SQLite | topic:SQLite@topic:sqlite | 　同意引擎建议 |
 | 5 | drawdb-io/drawdb | 40,195 | ∅ | MariaDB+Oracle+PostgreSQL+SQL Server+SQLite | topic:MariaDB@topic:mariadb; topic:Oracle@topic:oracle-database | 　同意引擎建议 |
 | 6 | sqlmapproject/sqlmap | 38,820 | ∅ | no_evidence | — | 　ClickHouse+sql server +mysql+oracle+postgresql |

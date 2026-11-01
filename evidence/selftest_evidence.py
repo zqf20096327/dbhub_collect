@@ -174,7 +174,7 @@ def test_extract() -> None:
         "src/connector/mysql/conn.go", "internal/dialect/postgres/dialect.go",
     ] + [f"svc{i}/package.json" for i in range(20)])
     kinds = [k for _, k, _ in sel["fetch"]]
-    check("选择表：dep 上限 12", kinds.count("dep") == 12, str(kinds))
+    check("选择表：dep 放宽后全收（23<60，11-01 试点校准）", kinds.count("dep") == 23, str(kinds))
     check("选择表：根级 package.json 优先", ("package.json", "dep", "npm") in sel["fetch"])
     check("选择表：image/ci", ("docker-compose.yml", "image", None) in sel["fetch"]
           and (".github/workflows/ci.yml", "ci", None) in sel["fetch"])
@@ -185,6 +185,23 @@ def test_extract() -> None:
           "src/connector/mysql/conn.go" in sel["clues"]["paths"]
           and "internal/dialect/postgres/dialect.go" in sel["clues"]["paths"],
           str(sel["clues"]["paths"]))
+
+    # 11-01 试点校准：17 库 token 加权——250 条浅层无库路径挤不掉 1 条深层
+    # 含库路径（sqlmap 的 plugins/dbms/mysql 按旧"浅层+字典序"永进不了前 40）
+    many = ec.select_targets(
+        [f"pkg{i:03d}/plugin/conn.go" for i in range(250)]
+        + ["very/deep/path/connector/mysql/conn.go"])
+    check("路径加权：深层含库路径优先于浅层无库", "very/deep/path/connector/mysql/conn.go"
+          in many["clues"]["paths"], str(many["clues"]["paths"][:3]))
+    check("路径加权：上限 200 生效", len(many["clues"]["paths"]) == 200,
+          str(len(many["clues"]["paths"])))
+
+    # 11-01 自愈守卫：打满旧上限（12/8/15/40）的记录 304 也要重采
+    capped_dep = {"files": [{"kind": "dep"}] * 12, "clues": {}}
+    capped_paths = {"files": [], "clues": {"paths": ["x"] * 40}}
+    fresh = {"files": [{"kind": "dep"}] * 11, "clues": {"paths": ["x"] * 39}}
+    check("自愈检测：打满旧上限任一命中", ec._hit_old_caps(capped_dep)
+          and ec._hit_old_caps(capped_paths) and not ec._hit_old_caps(fresh))
 
 
 # ---------------- 3. 端到端（FakeClient） ----------------
