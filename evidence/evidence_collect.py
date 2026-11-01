@@ -113,8 +113,11 @@ CI_PATH_RE = re.compile(r"^\.github/workflows/[^/]+\.ya?ml$")
 # 全回收。raw 走 CDN 免费不占 Core 配额，放宽只费时（~10s/仓）。
 CAPS = {"dep": 60, "image": 24, "ci": 40}
 # 旧上限（打满检测用）：树未变 304 短路复用旧记录会让打满仓永远吃旧样本——
-# 命中旧上限的记录强制全量重采一次（自愈；重采后打满新上限的不再循环）。
+# 命中旧上限的记录强制全量重采一次（自愈）。
 OLD_CAPS = {"dep": 12, "image": 8, "ci": 15}
+# 采样上限版本戳：打满检测只认旧版记录。重采后的大仓存 60 条 dep/200 条路径，
+# 数值上仍 ≥ 旧上限——没有版本戳会被每班当成"还没治"反复重采（死循环）。
+CAPS_V = 2
 
 # 线索（只记路径，不抓原文——裁决时按需 raw）
 CHANGELOG_RE = re.compile(r"(?i)^changelog(\.[^/]*)?$")
@@ -148,7 +151,10 @@ def _db_token_in(path: str) -> bool:
 
 
 def _hit_old_caps(rec: dict) -> bool:
-    """旧记录是否打满旧上限（12/8/15/40 任一命中）→ 304 树未变也要重采。"""
+    """旧版记录是否打满旧上限（12/8/15/40 任一命中）→ 304 树未变也要重采。
+    caps_v≥2 = 放宽后采的，天然免疫（重采后仍打满 60/24/40 的不再循环）。"""
+    if rec.get("caps_v", 1) >= CAPS_V:
+        return False
     kinds = Counter(f.get("kind") for f in rec.get("files") or [])
     paths = len((rec.get("clues") or {}).get("paths") or [])
     return (any(kinds.get(k, 0) >= v for k, v in OLD_CAPS.items())
@@ -463,6 +469,7 @@ def collect_repo(client: GitHubClient, raw: RawFetcher, fn: str,
     """采单仓 → 证据记录。预算异常原样上抛；HTTP 404/409/410 就地分类为终态。"""
     rec = {
         "fn": fn, "v": REC_V, "epoch": EPOCH, "status": "ok",
+        "caps_v": CAPS_V,          # 本版上限采的样本（打满检测天然免疫）
         "collected_at": _iso_now(),
         "default_branch": (prev or {}).get("default_branch"),
         "pushed_at": (pool_rec.get("pushed_at") or "")[:10],
@@ -498,7 +505,10 @@ def collect_repo(client: GitHubClient, raw: RawFetcher, fn: str,
         if status == 304:              # 树未变：续用旧记录，只刷新时间戳
             merged = dict(prev or {})
             merged.update({"pushed_at": rec["pushed_at"],
-                           "collected_at": rec["collected_at"], "epoch": EPOCH})
+                           "collected_at": rec["collected_at"], "epoch": EPOCH,
+                           "caps_v": CAPS_V})
+            # 能走到 304 说明 prev 未打满旧上限（打满的在上面已被清空）——样本
+            # 从未截断，对 v2 上限同样完整，版本戳直接升到位。
             return merged
         data, branch = tdata, cand
         break
@@ -795,9 +805,15 @@ def _tasks_remaining(tasks: list[dict], store: dict) -> int:
     n = 0
     for t in tasks:
         rec = store.get(t["fn"])
-        if not (rec and rec.get("epoch") == EPOCH and rec.get("status") in TERMINAL_OK):
-            if not (rec and rec.get("fail_count", 0) >= MAX_FAILS):
-                n += 1
+        if rec and rec.get("fail_count", 0) >= MAX_FAILS:
+            continue
+        done = (rec and rec.get("epoch") == EPOCH
+                and rec.get("status") in TERMINAL_OK
+                and not _hit_old_caps(rec))
+        # 11-01：打满旧上限的已采仓不算扫完——auto 才会继续走 sweep 自愈重采，
+        # 治完（caps_v≥2）这里自然归零、auto 回 incremental 稳态。
+        if not done:
+            n += 1
     return n
 
 

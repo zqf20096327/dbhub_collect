@@ -203,6 +203,19 @@ def test_extract() -> None:
     check("自愈检测：打满旧上限任一命中", ec._hit_old_caps(capped_dep)
           and ec._hit_old_caps(capped_paths) and not ec._hit_old_caps(fresh))
 
+    # 11-01 补丁：caps_v 版本戳——重采后的大仓存 60 dep/200 路径，数值上仍 ≥
+    # 旧上限，没版本戳会被每班反复重采（死循环）；打满仓要算"没扫完"让 auto 走 sweep
+    recapped = {"caps_v": ec.CAPS_V, "files": [{"kind": "dep"}] * 60,
+                "clues": {"paths": ["x"] * 200}}
+    check("版本戳：caps_v≥2 打满新上限也不重采", not ec._hit_old_caps(recapped))
+    ok_rec = {"epoch": ec.EPOCH, "status": "ok", "caps_v": ec.CAPS_V,
+              "files": [{"kind": "dep"}] * 3, "clues": {}}
+    capped_rec = {"epoch": ec.EPOCH, "status": "ok",
+                  "files": [{"kind": "dep"}] * 12, "clues": {}}
+    tasks = [{"fn": "a/x"}, {"fn": "a/y"}, {"fn": "a/z"}]
+    n = ec._tasks_remaining(tasks, {"a/x": ok_rec, "a/y": capped_rec})
+    check("清单余量：打满旧上限算没扫完（auto 继续走 sweep）", n == 2, str(n))
+
 
 # ---------------- 3. 端到端（FakeClient） ----------------
 GO_MOD = "module example.com/app\n\nrequire github.com/go-sql-driver/mysql v1.7.1\n"
@@ -241,6 +254,17 @@ def test_collect_repo() -> None:
                              {"pushed_at": "2026-10-29", "stars": 10}, rec)
     check("304 合并：保旧值刷新戳", merged["pushed_at"] == "2026-10-29"
           and merged["files"] == rec["files"] and merged["epoch"] == ec.EPOCH)
+    check("版本戳：新采/304 合并均打 caps_v", rec.get("caps_v") == ec.CAPS_V
+          and merged.get("caps_v") == ec.CAPS_V)
+
+    # 11-01 自愈：旧版打满记录（无 caps_v、12 dep）树未变也不许 304 复用 → 全量重采
+    client4, raw4 = _fake_env()
+    old_capped = dict(rec, files=[{"kind": "dep", "path": f"p{i}/go.mod"} for i in range(12)])
+    old_capped.pop("caps_v", None)
+    healed = ec.collect_repo(client4, raw4, "o/r", {"pushed_at": "2026-10-29", "stars": 10}, old_capped)
+    check("自愈重采：打满旧记录不走 304、样本重抓并打版本戳",
+          healed["files"] != old_capped["files"] and healed.get("caps_v") == ec.CAPS_V
+          and raw4.count > 0, f"files={len(healed['files'])} raw={raw4.count}")
 
     # 空仓 409 → 终态
     c3 = FakeClient({})
