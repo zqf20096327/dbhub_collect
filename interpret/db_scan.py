@@ -36,28 +36,12 @@ from rm_clean import clean_readme   # noqa: E402
 OUT = ROOT / "state" / "db_scan.json"
 READMES = ROOT / "data" / "readmes"
 
-# 17 库词汇表：库名 → 匹配词（小写；ASCII 词带边界，中文直接匹配）
-# 词边界 (?![a-z0-9]) 使短词匹配不了带后缀的常用写法——10-01 实测误降级：
-# sqlite3 / sqlite2 / mysqli / psql 必须显式列出，否则全文提到也不提名。
-DB_VOCAB = {
-    "PostgreSQL":  ["postgresql", "postgres", "psql", "pg", "psycopg", "libpq", "pgvector"],
-    "MySQL":       ["mysql", "mysqli", "pymysql", "mysqlclient", "go-sql-driver"],
-    "Oracle":      ["oracle"],
-    "SQLite":      ["sqlite", "sqlite2", "sqlite3"],
-    "SQL Server":  ["sql server", "mssql", "sqlserver"],
-    "ClickHouse":  ["clickhouse"],
-    "MariaDB":     ["mariadb"],
-    "TiDB":        ["tidb", "tikv"],
-    "OceanBase":   ["oceanbase"],
-    "PolarDB":     ["polardb", "polardbx"],
-    "Dameng":      ["dameng", "dm8", "达梦"],
-    "openGauss":   ["opengauss"],
-    "GaussDB":     ["gaussdb"],
-    "GBase":       ["gbase"],
-    "TDSQL":       ["tdsql"],
-    "YashanDB":    ["yashandb", "yashan", "崖山"],
-    "GoldenDB":    ["goldendb"],
-}
+# 17 库词汇表（T1c 归一，2026-11-01）：单一事实源 db_profiles + attribution/vocab
+# 派生，本文件不再持有词表；selftest_vocab 断言与原表零 diff（行为纯搬家）。
+# 词边界 (?![a-z0-9]) 规则见 _COMPILED 不变——短词显式列出防 10-01 误降级
+# （sqlite3/sqlite2/mysqli/psql，现集中于 vocab.README_TERMS_EXTRA）。
+from attribution.vocab import readme_vocab   # noqa: E402
+DB_VOCAB = readme_vocab()
 _COMPILED = {db: re.compile("|".join(
                  r"(?<![a-z0-9])" + re.escape(t) + r"(?![a-z0-9])" if t.isascii()
                  else re.escape(t)
