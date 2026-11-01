@@ -10598,5 +10598,73 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2c49b94b1958": {
+  "identity": {
+   "one_liner": "TRMNL 电子墨水屏的自托管 BYOS 服务器，NestJS+Vue 单容器加 Postgres",
+   "review": "Kuroshiro 是面向 TRMNL 生态的自托管 BYOS 后端，将 TRMNL/Xteink/Kindle 等设备指向它即可管理面板显示。它把 NestJS API 与 Vue 3 管理 UI 打包进一个 Docker 镜像，数据存于 Postgres（TypeORM），启动时自动执行数据库迁移；支持导入 trmnl.com Recipes、插件轮询/Webhook、屏幕排程、固件 OTA 与 Prometheus 指标。项目处于 alpha 阶段，API 与配置格式尚未冻结。",
+   "highlights": [
+    "提供 Recipe 导入、插件（轮询 API/Webhook）、屏幕排程、固件 OTA 与设备模拟器",
+    "单 Docker 镜像部署，依赖 Postgres 存储，提供 /health 健康检查与 Prometheus /metrics 端点",
+    "可打包为 Home Assistant 附加组件运行，附带自己的 Postgres 实例"
+   ],
+   "use_cases": [
+    "自托管管理 TRMNL 等电子墨水屏设备的面板内容与固件",
+    "替代 trmnl.com 云端、在本地网络运行 BYOS 服务器",
+    "集成到 Home Assistant 环境作为附加组件部署"
+   ],
+   "use_cases_ok": true
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**A self-hosted server for TRMNL e-ink displays that imports the official Recipes. One Docker image, your Postgres, nothing else.** ／ image: postgres:18-alpine",
+     "lines": [
+      5,
+      23
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明部署为「该镜像加一个 Postgres 数据库」，用 Postgres 存储自身数据，属使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT（L53 表格声明，非许可证章节）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A self-hosted server for TRMNL e-ink displays that imports the official Recipes. One Docker image, your Postgres, nothing else.** ／ Kuroshiro is a BYOS (Bring Your Own Server) backend for the TRMNL ecosystem: point a TRMNL, an Xteink, a Kindle or any device running the open-source TRMNL firmware at it, and Kuroshiro decides what the panel shows and when. It bundles a NestJS API and a Vue 3 admin UI into one container, so the whole deployment is that image plus a Postgres database. ／ pnpm workspace · NestJS + TypeORM on Postgres · Vue 3 + Reka UI + CodeMirror built with Vite · Vitest and Playwright in real Chromium · one Docker image.",
+   "evidence_lines": [
+    5,
+    16,
+    120
+   ]
+  },
+  "fn": "PhyberApex/kuroshiro",
+  "sha": "2c49b94b1958",
+  "source": "readme",
+  "generated_at": "2026-11-01",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
