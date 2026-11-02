@@ -4506,15 +4506,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T12:43:49Z",
+  "collected_at": "2026-11-02T20:34:58Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-30",
-  "stars": 315,
+  "pushed_at": "2026-11-02",
+  "stars": 316,
   "tree": {
-   "sha": "ebe79af5bf54c5561582a90558c505b0795ad7e3",
-   "etag": "W/\"43217491567fd31097563bb670f7081920052cb667e2228fdabf7e9b187e58c5\"",
+   "sha": "4696fdeb59faebb909d15f32e7ee1b8e70ef68b5",
+   "etag": "W/\"ca36ae72ee7d03e6e8eeddc245aecc26b68382c25ff7e45572d148eab4ee6bfd\"",
    "truncated": false,
-   "path_count": 21929,
+   "path_count": 21890,
    "matched": [
     "client/package.json",
     "services/Cargo.toml",
@@ -4525,7 +4525,6 @@
     "i18n/tools/package.json",
     "services/imaging/Cargo.toml",
     "services/tms/go.mod",
-    "tools/extraction-finetune/pyproject.toml",
     "tools/pkgsplit/go.mod",
     "client/apps/dash/package.json",
     "client/apps/web/package.json",
@@ -4560,6 +4559,8 @@
     "services/crates/rules/fuzz/Cargo.toml",
     "services/crates/sandbox/fuzz/Cargo.toml",
     "services/crates/scripts/fuzz/Cargo.toml",
+    ".agents/skills/rust-best-practices/evals/bevy-arena-regen/files/Cargo.toml",
+    ".agents/skills/rust-review/evals/review-bevy-arena/files/Cargo.toml",
     "deploy/Dockerfile.client",
     "deploy/Dockerfile.imaging",
     "deploy/Dockerfile.imaging.dockerignore",
@@ -4573,7 +4574,6 @@
     ".github/workflows/release.yml",
     ".github/workflows/rust.yml",
     ".github/workflows/test-client.yml",
-    ".github/workflows/test-ml.yml",
     ".github/workflows/test-samsara-sim.yml",
     ".github/workflows/test-tms.yml"
    ]
@@ -4582,12 +4582,13 @@
    {
     "path": "client/package.json",
     "kind": "dep",
-    "blob_sha": "32991d2b55338a58d0501d144370f9467c60f4c4",
+    "blob_sha": "93d50aad9d696e26c1e33a8e51a51e872332b794",
     "ecosystem": "npm",
-    "bytes": 945,
+    "bytes": 969,
     "dev": [
      "@tanstack/eslint-plugin-query",
      "eslint-plugin-better-tailwindcss",
+     "oxfmt",
      "oxlint",
      "oxlint-tsgolint",
      "turbo"
@@ -4822,7 +4823,7 @@
    {
     "path": "services/tms/go.mod",
     "kind": "dep",
-    "blob_sha": "f6cbce6760e4c029700cf252943c888b16be48ec",
+    "blob_sha": "4ef5bddb25c87db135b253267a2e3eff5b2a3335",
     "ecosystem": "go",
     "bytes": 15183,
     "names": [
@@ -4988,18 +4989,6 @@
      "github.com/standard-webhooks/standard-webhooks/libraries",
      "github.com/tidwall/match",
      "github.com/tidwall/pretty"
-    ]
-   },
-   {
-    "path": "tools/extraction-finetune/pyproject.toml",
-    "kind": "dep",
-    "blob_sha": "ae3056cff53ebab4cdb233525805527655e8debf",
-    "ecosystem": "pyproject",
-    "bytes": 1479,
-    "names": [
-     "pydantic",
-     "pyyaml",
-     "jsonschema"
     ]
    },
    {
@@ -5755,6 +5744,26 @@
     ]
    },
    {
+    "path": ".agents/skills/rust-best-practices/evals/bevy-arena-regen/files/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "d413a42aada13e8eddf5cb699838cd0a1ef37805",
+    "ecosystem": "cargo",
+    "bytes": 354,
+    "names": [
+     "bevy"
+    ]
+   },
+   {
+    "path": ".agents/skills/rust-review/evals/review-bevy-arena/files/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "7aad2f135ad4d72262152e5d12e52c161b746c0e",
+    "ecosystem": "cargo",
+    "bytes": 173,
+    "names": [
+     "bevy"
+    ]
+   },
+   {
     "path": "deploy/Dockerfile.client",
     "kind": "image",
     "blob_sha": "c24fb1845ff404268c104f4dc946bccac81f8b39",
@@ -5857,12 +5866,6 @@
     "kind": "ci",
     "blob_sha": "8f87f0701eda98cc584d7e95c678cde34355bc25",
     "bytes": 8275
-   },
-   {
-    "path": ".github/workflows/test-ml.yml",
-    "kind": "ci",
-    "blob_sha": "be7a5726d66a40b7bd0c96f3cc4909c1d9416614",
-    "bytes": 1027
    },
    {
     "path": ".github/workflows/test-samsara-sim.yml",
@@ -6021,6 +6024,7 @@
     "services/tms/internal/modules/agent/adapters/postgres/aiproviderrepository/dismissal.go",
     "services/tms/internal/modules/agent/adapters/postgres/aiproviderrepository/keys.go",
     "services/tms/internal/modules/agent/adapters/postgres/aiproviderrepository/keys_integration_test.go",
+    "services/tms/internal/modules/agent/adapters/postgres/aiproviderrepository/nova_integration_test.go",
     "services/tms/internal/modules/agent/adapters/postgres/aiproviderrepository/render_test.go",
     "services/tms/internal/modules/agent/adapters/postgres/airetrievalrepository/catalog.go",
     "services/tms/internal/modules/agent/adapters/postgres/airetrievalrepository/embedding.go",
@@ -6084,8 +6088,7 @@
     "services/tms/internal/modules/agent/adapters/postgres/recordsummaryrepository/summaries.go",
     "services/tms/internal/modules/agent/adapters/postgres/recordsummaryrepository/summaries_integration_test.go",
     "services/tms/internal/modules/agent/adapters/postgres/recordsummaryrepository/summaries_test.go",
-    "services/tms/internal/modules/agent/adapters/postgres/roleagentgrantrepository/render_test.go",
-    "services/tms/internal/modules/agent/adapters/postgres/roleagentgrantrepository/roleagentgrant.go"
+    "services/tms/internal/modules/agent/adapters/postgres/roleagentgrantrepository/render_test.go"
    ]
   },
   "fail_count": 0
@@ -6133,15 +6136,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T18:32:22Z",
+  "collected_at": "2026-11-02T20:37:18Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-31",
-  "stars": 203,
+  "pushed_at": "2026-11-02",
+  "stars": 206,
   "tree": {
-   "sha": "829ae2d77272de3142a7d7cabaa2328bb34bb171",
-   "etag": "W/\"79e467f88fbcb39cc5f570dad99d93e65350a0e47bd540afb733135162cd5ad2\"",
+   "sha": "13705267e69594fddbcf0d93aff8734bd4694b57",
+   "etag": "W/\"3dbe92ac33c83878c18ed82114e4038feaf158b9b68a19a9ca7ed754473aef05\"",
    "truncated": false,
-   "path_count": 460,
+   "path_count": 463,
    "matched": [
     "package.json",
     "dsh-mneme/package.json",
@@ -6164,9 +6167,9 @@
    {
     "path": "dsh-mneme/package.json",
     "kind": "dep",
-    "blob_sha": "317c5e84c68388e673fa7a6268c70fd8bfa345ef",
+    "blob_sha": "cb1583f99db7f8a206ea395c756682ed9bfca418",
     "ecosystem": "npm",
-    "bytes": 3282,
+    "bytes": 3283,
     "names": [
      "morphicons",
      "@deepseek-ai/cordis",
@@ -6784,15 +6787,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:45:21Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-02T20:40:40Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-11-01",
   "stars": 127,
   "tree": {
-   "sha": "7ff7d2dfb0d72627e2b0b3eb4d1c2bc2a369a09d",
-   "etag": "W/\"c36736e60455687476ef23877416c9a81a60347b836b95cf6367894d243daa79\"",
+   "sha": "2144c0c19bb744044f3088f534bd8b661cb5e283",
+   "etag": "W/\"7a08036aebad4cc84b798bb62a1d864d4a85c36e2e3c7a9e77578ca583d0740e\"",
    "truncated": false,
-   "path_count": 255,
+   "path_count": 248,
    "matched": [
     "requirements.txt",
     "docs/Gemfile"
@@ -6802,9 +6806,9 @@
    {
     "path": "requirements.txt",
     "kind": "dep",
-    "blob_sha": "a8f2d3b4bf6473373b8462708530c85f775218a9",
+    "blob_sha": "01d4a6ccfb97409cf25a03d39c36f317cf28e116",
     "ecosystem": "pypi",
-    "bytes": 1285,
+    "bytes": 1267,
     "names": [
      "flask",
      "python-dotenv",
@@ -6824,7 +6828,6 @@
      "nba_api",
      "python-json-logger",
      "pytest",
-     "pytest-cov",
      "matplotlib"
     ]
    },
@@ -12607,15 +12610,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T19:46:04Z",
+  "collected_at": "2026-11-02T21:10:26Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-11-01",
   "stars": 3,
   "tree": {
-   "sha": "139581764b5533f3da605754a865a693c317f049",
-   "etag": "W/\"a9194c14f347eb2cda3cd2976f28e19bdad32ffc8b454ef5887333c5cf2c2215\"",
+   "sha": "d16310b70be41abb8abb26aa591dcd66e3fd971b",
+   "etag": "W/\"fcb546f157fdf6584938f8ac0c9d0348e045d2a8d200bb7a904168cf615a51f0\"",
    "truncated": false,
-   "path_count": 232,
+   "path_count": 230,
    "matched": [
     "DB2Sheet.csproj"
    ]
@@ -12624,9 +12627,9 @@
    {
     "path": "DB2Sheet.csproj",
     "kind": "dep",
-    "blob_sha": "b7084768d0ca2e462a6aa6b2d42d685eecabfdb1",
+    "blob_sha": "0e03cbc53e1e6ad02acdc391d93453c3438f7e4b",
     "ecosystem": "csproj",
-    "bytes": 23324,
+    "bytes": 23148,
     "names": [
      "AvalonEdit",
      "MySqlConnector",

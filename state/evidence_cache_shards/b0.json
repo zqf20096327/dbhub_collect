@@ -728,13 +728,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T11:34:08Z",
+  "collected_at": "2026-11-02T20:40:19Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-11-02",
   "stars": 132,
   "tree": {
    "sha": "80e504265e2dda31a0bad978fb9e54cedc47d0ff",
-   "etag": "W/\"85bbda664fb0df2b672e0949d35148fe5afe65921c6ce00e47eaf2d53b41d8d5\"",
+   "etag": "W/\"9713485ffa854a3f3c288e0acd2c51914e497f30116be69197ee7b9e5162d69a\"",
    "truncated": false,
    "path_count": 2017,
    "matched": [
@@ -5391,21 +5391,22 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T18:40:11Z",
+  "collected_at": "2026-11-02T20:41:24Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-31",
+  "pushed_at": "2026-11-02",
   "stars": 117,
   "tree": {
-   "sha": "0875206013c89946fee47050bbd79f849c6ef7fd",
-   "etag": "W/\"157b7e79f74da1b2a133ecbf63d70eade506c67e89b8fc42c9f7f19734d43bcc\"",
+   "sha": "daa7bd4fae6f969c24496a0621796a1748a57ac6",
+   "etag": "W/\"ab54620e2725fd33668b16bc5e1da267b011804b7d4e1060f3ad5389bffac3d2\"",
    "truncated": false,
-   "path_count": 4588,
+   "path_count": 4654,
    "matched": [
     "Cargo.toml",
     "package.json",
     "modules/Cargo.toml",
     "server/Cargo.toml",
     "apps/desktop/package.json",
+    "apps/web/package.json",
     "packages/backend-client/package.json",
     "packages/driver-api/Cargo.toml",
     "packages/driver-sdk/package.json",
@@ -5435,7 +5436,8 @@
     ".github/workflows/ci.yml",
     ".github/workflows/pages.yml",
     ".github/workflows/publish-driver-api.yml",
-    ".github/workflows/release.yml"
+    ".github/workflows/release.yml",
+    ".github/workflows/workflow-db-tests.yml"
    ]
   },
   "files": [
@@ -5559,11 +5561,12 @@
    {
     "path": "server/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "9d51ae3a46f7a80336b8383608b80a90be5242b0",
+    "blob_sha": "a40ed5f3dbfcfe690e97aa14fa13acd0bc987ac4",
     "ecosystem": "cargo",
-    "bytes": 3383,
+    "bytes": 5664,
     "names": [
      "datazen",
+     "datazen-driver-api",
      "async-trait",
      "axum",
      "tower-http",
@@ -5573,13 +5576,25 @@
      "serde",
      "serde_json",
      "thiserror",
+     "sha2",
+     "hmac",
+     "base64",
+     "rand",
+     "subtle",
      "libc",
      "tracing",
      "tracing-subscriber",
-     "uuid"
+     "uuid",
+     "reqwest",
+     "jsonwebtoken",
+     "tokio-stream"
     ],
     "dev": [
-     "tower"
+     "tower",
+     "tokio",
+     "serde_json",
+     "futures-util",
+     "async-trait"
     ]
    },
    {
@@ -5611,6 +5626,35 @@
     "dev": [
      "@testing-library/jest-dom",
      "@testing-library/react"
+    ]
+   },
+   {
+    "path": "apps/web/package.json",
+    "kind": "dep",
+    "blob_sha": "6d47681fc5f73a0395989a72f875ee298675fbb3",
+    "ecosystem": "npm",
+    "bytes": 1320,
+    "names": [
+     "@codemirror/autocomplete",
+     "@codemirror/commands",
+     "@codemirror/lang-sql",
+     "@codemirror/language",
+     "@codemirror/lint",
+     "@codemirror/search",
+     "@codemirror/state",
+     "@codemirror/view",
+     "@datazen/backend-client",
+     "@datazen/frontend",
+     "react",
+     "react-dom",
+     "zustand"
+    ],
+    "dev": [
+     "@tailwindcss/vite",
+     "@vitejs/plugin-react",
+     "typescript",
+     "vite",
+     "vitest"
     ]
    },
    {
@@ -6163,8 +6207,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "f5a88d680b40147c2cceb25e0942c4998029bdf1",
-    "bytes": 27184
+    "blob_sha": "4eef9812b9d2a2d2ddd8a3f2c912c8d49c97cdec",
+    "bytes": 31593
    },
    {
     "path": ".github/workflows/pages.yml",
@@ -6183,6 +6227,16 @@
     "kind": "ci",
     "blob_sha": "3e0520dd176caf47fb12b10d028b1526f57db792",
     "bytes": 47204
+   },
+   {
+    "path": ".github/workflows/workflow-db-tests.yml",
+    "kind": "ci",
+    "blob_sha": "45097b443e30a3dab4d4cf4270519f8ec38ce29d",
+    "bytes": 5371,
+    "images": [
+     "postgres:16",
+     "mysql:8"
+    ]
    }
   ],
   "clues": {
@@ -9831,13 +9885,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T09:24:14Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-02T21:01:11Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-19",
+  "pushed_at": "2026-11-01",
   "stars": 15,
   "tree": {
    "sha": "4df6e68de0019cbfa24a070ced154cf419cafe71",
-   "etag": "W/\"2f96e594bb74326ee9c79686fd5c3040a1de71c7e536282d133dc7d358917ab5\"",
+   "etag": "W/\"0ba4bf8bf5113a26f25544a9b7997b0b524b60d4db94bc4729e247ad13a37c73\"",
    "truncated": false,
    "path_count": 133,
    "matched": [
@@ -11101,15 +11156,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T19:43:18Z",
+  "collected_at": "2026-11-02T21:08:04Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-31",
+  "pushed_at": "2026-11-01",
   "stars": 7,
   "tree": {
-   "sha": "2fc62a9bec80bc19cc72fa976bee535fa7e36608",
-   "etag": "W/\"cff0123d29ab2d4bf06123ba4f87040ee9cdc50ca3e594b9a4586293954f9df1\"",
+   "sha": "c41023c899e3676a3faefb22859c664a24b97336",
+   "etag": "W/\"f4b1a122eab370e8e270bd364833993b2f74f50d3246d4eef46f0ce4c086ff03\"",
    "truncated": false,
-   "path_count": 677,
+   "path_count": 681,
    "matched": [
     "package.json",
     ".github/workflows/npm-checks.yml"

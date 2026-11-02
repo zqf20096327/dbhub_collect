@@ -4234,15 +4234,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T11:45:30Z",
+  "collected_at": "2026-11-02T20:52:58Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-31",
-  "stars": 30,
+  "pushed_at": "2026-11-01",
+  "stars": 31,
   "tree": {
-   "sha": "55b4481accb9addc936fb1fd29af316312b71426",
-   "etag": "W/\"ecb72e5eb1c0d045f86c0992b9c95b171f5f4b2826766fe0b8578e8cbf2ae2cc\"",
+   "sha": "4b0b1f6fc8e4b411129b840406b6157c5e6909e2",
+   "etag": "W/\"7e8d9ce7cd22ff3732111b1f1ee3507e2d4a1086ecfc79376917e2ef69faaf8a\"",
    "truncated": false,
-   "path_count": 145,
+   "path_count": 146,
    "matched": [
     "go.mod",
     "Dockerfile.demo",
@@ -8906,15 +8906,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T18:36:00Z",
+  "collected_at": "2026-11-02T20:39:25Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-31",
+  "pushed_at": "2026-11-01",
   "stars": 150,
   "tree": {
-   "sha": "37d2a7e2d395120f8f707af4db9dd18c4157080b",
-   "etag": "W/\"89821712065b9ae5b5250ef07398bf40dfdc37168bd370dc15875840c4e69f0b\"",
+   "sha": "c7288f557b03186e2afc4747d10e06acfc21b427",
+   "etag": "W/\"9380b817194af23ccc35466fd83c22f20a912dad19949c240a445467529f6333\"",
    "truncated": false,
-   "path_count": 1812,
+   "path_count": 1819,
    "matched": [
     "Cargo.toml",
     "fuzz/Cargo.toml",
@@ -8931,6 +8931,7 @@
     "tests/Dockerfile.e2e-base-lite",
     "tests/Dockerfile.e2e-coverage",
     "tests/Dockerfile.e2e-upgrade",
+    "tests/Dockerfile.pg-react-1198",
     "tests/Dockerfile.release-e2e",
     "benchmarks/s1/Dockerfile",
     "benchmarks/s1/Dockerfile.arm64-sdk",
@@ -8943,7 +8944,6 @@
     "tests/repro/react11-using/Dockerfile",
     "benchmarks/s1/qualification/local-arm64-1191-5877838/build-evidence/Dockerfile",
     "benchmarks/s1/qualification/local-arm64-1191-5877838/build-evidence/Dockerfile.arm64-sdk",
-    "benchmarks/s1/qualification/local-arm64-1191-5877838/build-evidence/Dockerfile.dockerignore",
     ".github/workflows/benchmarks.yml",
     ".github/workflows/build.yml",
     ".github/workflows/builder-image.yml",
@@ -8961,6 +8961,7 @@
     ".github/workflows/fuzz-smoke.yml",
     ".github/workflows/ghcr.yml",
     ".github/workflows/lint.yml",
+    ".github/workflows/pg-react-1198-joint-audit.yml",
     ".github/workflows/pgxn.yml",
     ".github/workflows/release.yml",
     ".github/workflows/s1-qualification.yml",
@@ -9096,11 +9097,12 @@
    {
     "path": "tests/Dockerfile.e2e",
     "kind": "image",
-    "blob_sha": "1e369f30a5ce96c1e6917e32c0e5b887473b86a9",
-    "bytes": 7672,
+    "blob_sha": "f6afb577f834f30c8b9f623faabd30ff0ec75bf4",
+    "bytes": 7943,
     "images": [
      "${BUILDER_IMAGE}",
-     "postgres:18.6-bookworm@sha256:bbf83594798e144bff365a9c191c5d779f181fb3135902064ab8ff11918020fc"
+     "postgres:18.6-bookworm@sha256:bbf83594798e144bff365a9c191c5d779f181fb3135902064ab8ff11918020fc",
+     "runtime-base"
     ]
    },
    {
@@ -9137,6 +9139,17 @@
     "bytes": 4085,
     "images": [
      "${BASE_IMAGE}"
+    ]
+   },
+   {
+    "path": "tests/Dockerfile.pg-react-1198",
+    "kind": "image",
+    "blob_sha": "3ab9a0779a4fad7a29d5136893b07311d483b33d",
+    "bytes": 2566,
+    "images": [
+     "${S1_BUILDER}",
+     "compiler",
+     "postgres:18.6-bookworm"
     ]
    },
    {
@@ -9250,12 +9263,6 @@
     ]
    },
    {
-    "path": "benchmarks/s1/qualification/local-arm64-1191-5877838/build-evidence/Dockerfile.dockerignore",
-    "kind": "image",
-    "blob_sha": "a04c36fc1218503012c70e0d3337fb60309b8425",
-    "bytes": 341
-   },
-   {
     "path": ".github/workflows/benchmarks.yml",
     "kind": "ci",
     "blob_sha": "ae31d16ba59bc245fb4865a48d6bc800542365ae",
@@ -9282,8 +9289,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "8ced24eaf34276242918d0f721a583d1b7825bd7",
-    "bytes": 96169
+    "blob_sha": "0889f488248af5b7f4bf85eb3eec0a9cb5b5d2ef",
+    "bytes": 96970
    },
    {
     "path": ".github/workflows/codeql.yml",
@@ -9356,6 +9363,12 @@
     "kind": "ci",
     "blob_sha": "8a395b4b309fff5aff3f3b50114dd95e0fe366d4",
     "bytes": 1998
+   },
+   {
+    "path": ".github/workflows/pg-react-1198-joint-audit.yml",
+    "kind": "ci",
+    "blob_sha": "cf4f2576e484da1ca81637035258bb1bf4a99d27",
+    "bytes": 5958
    },
    {
     "path": ".github/workflows/pgxn.yml",
@@ -10162,13 +10175,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T18:55:39Z",
+  "collected_at": "2026-11-02T20:48:08Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-31",
+  "pushed_at": "2026-11-01",
   "stars": 49,
   "tree": {
    "sha": "91a9bf5f880f1283cfbf7f3db63372f2a5f2573b",
-   "etag": "W/\"fe8db7167c7780db2b6f96634ea2c3d0e4c3fab08648dd1c77d2f6df16ec1828\"",
+   "etag": "W/\"481254522928aa01faa21631bf09173f6a53088c35a414a1fa2f013d52513d2d\"",
    "truncated": false,
    "path_count": 461,
    "matched": [
