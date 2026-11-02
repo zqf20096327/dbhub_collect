@@ -11222,5 +11222,223 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9f8cc2e2b3a5": {
+  "identity": {
+   "one_liner": "管理富士胶片配方并浏览 JPEG 图库的 Django 应用",
+   "review": "Filmcase 是一个 Django Web 应用，用于管理富士相机配方和浏览 JPEG 图库：读取图片 EXIF 匹配配方、生成分享卡片、经 USB/WebUSB 将配方推送到相机。提供 Lite（SQLite）、Full（PostgreSQL+RabbitMQ+Celery）和 Docker 三种安装模式；无身份认证，不应暴露到公网。适合富士摄影用户自托管管理照片与配方。",
+   "highlights": [
+    "读取 JPEG 的 EXIF 数据，将图片匹配到拍摄所用配方并支持按配方过滤分组",
+    "支持通过 USB/WebUSB 将配方推送到相机自定义插槽（X-Trans IV/V 及 X-T2 等机型）",
+    "提供 Lite/Full/Docker 三种安装模式，Lite 使用 SQLite 无需数据库服务器"
+   ],
+   "use_cases": [
+    "个人或小型图库的富士照片与配方管理",
+    "通过手机/平板浏览过滤照片目录并推送配方到相机",
+    "自托管服务器上以 Docker 常驻运行供远程访问"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Database**|SQLite (file, no server)|PostgreSQL|PostgreSQL (container)| ／ |**OS services to install**|None|PostgreSQL, RabbitMQ|Docker only| ／ Parallel image processing via Celery. Requires PostgreSQL and RabbitMQ.",
+     "lines": [
+      45,
+      48,
+      76
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Database**|SQLite (file, no server)|PostgreSQL|PostgreSQL (container)| ／ make setup-lite # creates venv, installs deps, generates SQLite config, runs migrations",
+     "lines": [
+      45,
+      68
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用 SQLite/PostgreSQL 存储自身数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU General Public License v3.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Filmcase is a Django application for managing Fujifilm camera recipes and browsing your image catalog. It reads EXIF data from your JPEG files, matches images to the Fujifilm recipe they were shot with, and lets you filter and group your catalog by recipe. You can push recipes directly to your camera over USB and explore relationships between recipes through an interactive graph. ／ |**Database**|SQLite (file, no server)|PostgreSQL|PostgreSQL (container)| ／ Parallel image processing via Celery. Requires PostgreSQL and RabbitMQ.",
+   "evidence_lines": [
+    3,
+    45,
+    76
+   ]
+  },
+  "fn": "gosku/Filmcase",
+  "sha": "9f8cc2e2b3a5",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f8944a093a3f": {
+  "identity": {
+   "one_liner": "本地优先个人知识库 CLI，基于 Postgres+pgvector 混合检索与 MCP 服务",
+   "review": "second-brain 提供 brain CLI 与本地 Web UI，将 Markdown 笔记、PDF/DOCX、Slack、Gmail、会议转录等文档存入 Postgres+pgvector，提供 FTS+向量混合检索、GraphRAG 实体图与 LLM 富化，并通过内置 MCP 服务器供 AI agent 查询。面向个人用户管理本地知识，可全本地运行于 Ollama，无需云端 API。MIT 许可，Python 3.11+，依赖 Docker 运行 Postgres 容器。",
+   "highlights": [
+    "提供 FTS+向量混合检索、GraphRAG 实体图与 LLM 富化，支持 Ollama 本地运行",
+    "内置 MCP 服务器（brain-mcp）与 --json 机器可读输出，供 AI agent 查询",
+    "支持从 TXT/MD/PDF/DOCX 及 Slack、Gmail、Krisp 转录摄取文档，含 brain ui 本地 Web 界面"
+   ],
+   "use_cases": [
+    "个人知识库与笔记的本地集中存储与检索",
+    "让 AI 编码代理/助手通过 MCP 查询个人文档语料以节省上下文 token",
+    "职业文档、会议转录、周报摘要等内容的摄取与回顾"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Stores career docs, interview prep, Krisp transcripts, Slack threads, Gmail, and authored Markdown notes in Postgres + pgvector. Any agent reaches all of it through the `brain` CLI or the bundled `brain-mcp` MCP server — no re-pasting context into every chat.  ／ Install the CLI, then run the offline demo — a throwaway Postgres seeded with a synthetic *Larkspur* compliance corpus. No Ollama, no personal data, no model downloads: ／ Full install — the `brain` CLI plus the runtime (Postgres, and optionally Ollama / graph):",
+     "lines": [
+      12,
+      46,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 Postgres+pgvector 存储其知识库数据，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Stores career docs, interview prep, Krisp transcripts, Slack threads, Gmail, and authored Markdown notes in Postgres + pgvector. Any agent reaches all of it through the `brain` CLI or the bundled `brain-mcp` MCP server — no re-pasting context into every chat. You read it through the CLI or the local web UI, and the vault is plain Markdown you can open in any editor. ／ **Prerequisites (core):** Git, Python 3.11+, and a running Docker (Desktop or Engine) — the Postgres + pgvector database runs in a container on port 55432.",
+   "evidence_lines": [
+    12,
+    94
+   ]
+  },
+  "fn": "mshtawythug/second-brain",
+  "sha": "f8944a093a3f",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5e1ec5f3f18b": {
+  "identity": {
+   "one_liner": "自托管 MCP 记忆服务器，为 AI 代理提供混合检索与神经记忆图",
+   "review": "这是一个面向 AI 代理和团队的自托管 MCP 记忆服务，提供混合检索（语义+BM25）、Hebbian 学习构建的记忆图、72 个 MCP 工具、工作区/RBAC 多租户隔离和 Next.js 管理界面。技术栈为 FastAPI + PostgreSQL + Qdrant + Redis，需 Docker 与 Python 3.11+/Node.js 24+ 部署，向量后端可选内嵌 LanceDB（单进程场景）。",
+   "highlights": [
+    "提供 recall 精确检索与 explore 图遍历两条独立搜索路径，并实现 72 个 MCP 工具",
+    "支持工作区/RBAC/上下文隔离的多租户架构，数据按 workspace_id→context_id→user_id 过滤",
+    "向量后端默认 Qdrant，单进程部署可切换内嵌 LanceDB（preview）"
+   ],
+   "use_cases": [
+    "为 Claude/ChatGPT/Gemini 等 MCP 客户端提供跨会话持久记忆",
+    "团队/组织级共享知识与代理状态管理",
+    "自托管场景下的语义与关系式记忆检索"
+   ],
+   "AI 相关": "flag=true"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Kagura Memory Cloud**|**PostgreSQL + Qdrant + Neural graph**|**Hebbian + Sleep Maintenance**|**Team / org**| ／ **Tech stack:** FastAPI (async) · PostgreSQL · Qdrant · Redis · Next.js 16 · OAuth2 · MCP over Streamable HTTP",
+     "lines": [
+      40,
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL、Qdrant、Redis 列为其技术栈组成部分，该仓库是使用这些数据库存储数据的应用服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Tech stack:** FastAPI (async) · PostgreSQL · Qdrant · Redis · Next.js 16 · OAuth2 · MCP over Streamable HTTP ／ |**72 MCP Tools**|Guide, Memory, Agent Substrate, Agent Control Plane, Neural edges, Contexts, Tags, Files (R2), Analyses (Memory Analysis), Resources, Secrets, Sleep Maintenance, Usage, API-Key Bindings|",
+   "evidence_lines": [
+    99,
+    50
+   ]
+  },
+  "fn": "kagura-ai/memory-cloud",
+  "sha": "5e1ec5f3f18b",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

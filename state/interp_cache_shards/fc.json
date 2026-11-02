@@ -11444,5 +11444,206 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "611bfa875f35": {
+  "identity": {
+   "one_liner": "AI 漫剧生成应用：分阶段工作流+审批门+对话助手",
+   "review": "将一句故事想法经 15 个阶段、6 个审批门生成带配音字幕和背景音乐的漫剧短片的 AI 项目，前端 React、后端 FastAPI、引擎基于 pi-agent-core，工作流与助手共享一个 SQLite 文件。面向学习/演示场景，README 明确说明不适合生产环境。",
+   "highlights": [
+    "提供 15 个阶段、6 个审批门的分阶段生成流程，支持断点恢复与部分重跑",
+    "工作流引擎与对话助手共享一个 SQLite（WAL）文件",
+    "提供每类服务商的测试模式（Fake），并支持 docker compose 部署"
+   ],
+   "use_cases": [
+    "从故事想法生成漫剧短片的创作流程演示",
+    "分阶段 AI 工作流编排与审批门机制的学习参考"
+   ],
+   "use_cases_placeholder": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**分阶段工作流 + pi-agent-core 对话助手**，两者共用一个 Node 引擎和一个 SQLite 文件： ／ └──────── 共享 SQLite（WAL）+ /static 媒体 ────────┘",
+     "lines": [
+      86,
+      94
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明工作流、助手与后端共用一个 SQLite 文件存储项目与对话数据，SQLite 是其存储组件而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "ai_note": "含 pi-agent-core 对话助手，属 AI agent 应用（非 DBA 工具），kind 取 other 更贴切但清单限定下按 agent 类记",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai_final": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "openOii 把一句故事想法变成一部带配音、字幕和背景音乐的漫剧短片：先规划大纲、角色和分镜，再出角色形象和分镜画面，经过质量审查后生成视频并合成成片。整个过程在一块画布上进行，每个阶段都可以停下来确认、修改或重来。 ／ > 这是一个**学习 / 演示项目**，重点是验证阶段编排、审批门、断点恢复、实时进度和对话式操作。**不适合直接用于生产环境。** ／ **分阶段工作流 + pi-agent-core 对话助手**，两者共用一个 Node 引擎和一个 SQLite 文件：",
+   "evidence_lines": [
+    35,
+    38,
+    86
+   ]
+  },
+  "fn": "xeronsh/openOii",
+  "sha": "611bfa875f35",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b41961eefc22": {
+  "identity": {
+   "one_liner": "自托管的 Linktree 替代品，基于 Next.js 与 SQLite 的链接主页应用",
+   "review": "LinkBreeze 是一个可自托管的链接主页（link-in-bio）应用，提供多页面、主题定制、二维码、邮件收集、无 Cookie 的访问分析、定时备份与自定义域名绑定，并内置从 Linktree 等平台导入的迁移向导。面向需要自行托管链接主页的个人创作者或团队，通过 Docker 一条命令安装，数据存储于 SQLite 文件，支持 OIDC 单点登录。",
+   "highlights": [
+    "支持多页面、主题自定义、自定义域名、二维码与嵌入组件",
+    "内置无 Cookie 的访问分析，IP 哈希并自动清理",
+    "支持应用内定时备份及 SQLite 备份 sidecar（可对接 S3 异地存储），并提供从 Linktree、Bento、Hopp.bio 等导入的迁移向导"
+   ],
+   "use_cases": [
+    "个人创作者自托管链接主页并查看访问统计",
+    "将现有 Linktree/Bento 等平台的链接页迁移至自有服务器",
+    "在 NAS/家庭服务器上以 Docker 运行并使用自有域名发布页面"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Scheduled SQLite backups (raw dump sidecar, S3 offsite)|`docker-compose.with-backup.yml`| ／ |`DATABASE_PATH`|`./data/linkbreeze.db`|SQLite database file path|",
+     "lines": [
+      184,
+      275
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其数据以 SQLite 文件存储（DATABASE_PATH 指向 linkbreeze.db），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`DATABASE_PATH`|`./data/linkbreeze.db`|SQLite database file path| ／ > **Stop paying $15/mo for Linktree.** LinkBreeze is a free, self-hosted link hub: fast, customizable, with built-in analytics. **Install in one command.** ／ curl -fsSL https://linkbreeze.omnirise.dev/install.sh | bash",
+   "evidence_lines": [
+    275,
+    16,
+    62
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "OmniRise/LinkBreeze",
+  "sha": "b41961eefc22",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "60a504fbb79c": {
+  "identity": {
+   "one_liner": "CC-BY-SA-4.0 许可的 NGC/IC 天体数据库",
+   "review": "OpenNGC 整合 NED、HyperLEDA、SIMBAD、HEASARC 等多个天文数据源，生成包含 NGC/IC 天体位置与主要数据的数据库，以 CSV 目录和星云轮廓数据发布，并提供转换为 Skychart/Stellarium 目录的 Python 脚本、PyOngc 接口及 TAP 服务。适用于天文爱好者与开发者需要无许可限制天体目录的场景。",
+   "highlights": [
+    "整合 NED、HyperLEDA、SIMBAD、HEASARC 等多数据源的天体位置与主数据",
+    "以 CC-BY-SA-4.0 许可发布，附带 addendum 目录与星云轮廓数据",
+    "提供 shape.py 脚本生成 Skychart/Stellarium 目录，并有 PyOngc 与 TAP 接口"
+   ],
+   "use_cases": [
+    "天文软件需要导入 NGC/IC 天体目录数据",
+    "构建星图/天文查询应用的数据底本",
+    "天体数据研究与分析"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未表明其为服务数据库生态的工具或使用某数据库的应用，仅为天文数据目录集",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "CC-BY-SA-4.0 数据许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OpenNGC is a database containing positions and main data of ／ license limitations, OpenNGC is released under CC-BY-SA-4.0 license,",
+   "evidence_lines": [
+    11,
+    14
+   ]
+  },
+  "fn": "mattiaverga/OpenNGC",
+  "sha": "60a504fbb79c",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

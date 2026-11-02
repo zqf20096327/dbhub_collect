@@ -11748,5 +11748,59 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "12521d9bfba2": {
+  "identity": {
+   "one_liner": "Swift 的 RFC 9562 UUIDv7 类型库，含多种库集成",
+   "review": "这是一个 Swift 语言库，实现符合 RFC 9562 的 UUID v7 数据类型，在前 48 位嵌入时间戳以提供可排序性和更好的索引局部性，并保证单调递增生成。面向 Swift 开发者，通过包 trait 提供 Tagged、GRDB、StructuredQueries、Dependencies、SQLiteData 等库的集成，可用作数据库主键。支持 Swift Package Manager 安装或直接拷贝单文件使用。",
+   "highlights": [
+    "实现符合 RFC 9562 的 UUID v7 类型，嵌入 48 位时间戳支持排序",
+    "利用 rand_a 位保证单调递增生成，含亚毫秒级单调性",
+    "通过包 trait 提供 GRDB、StructuredQueries、SQLiteData、Tagged、Dependencies 等集成"
+   ],
+   "use_cases": [
+    "在 Swift 应用中将 UUIDv7 用作数据库主键",
+    "GRDB/SQLiteData 等持久化场景下生成与解析 UUIDv7 列值",
+    "需要可排序 ID 生成（如 AppIntents 实体标识）的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 未出现候选库名；库本身提供 GRDB/SQLiteData 等 Swift 持久化库的值类型集成，属于为数据持久化生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An RFC 9562 compliant UUIDV7 data type with cross-platform support and support for popular libraries. ／ - GRDB ／  - Adds `DatabaseValueConvertible` and `StatementColumnConvertible` conformances to `UUIDV7`.",
+   "evidence_lines": [
+    5,
+    64,
+    66
+   ]
+  },
+  "fn": "mhayes853/swift-uuidv7",
+  "sha": "12521d9bfba2",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

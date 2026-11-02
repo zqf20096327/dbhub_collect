@@ -12190,5 +12190,206 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9a79899a49ca": {
+  "identity": {
+   "one_liner": "HTTP 反向代理缓存与 TSDB 查询加速器",
+   "review": "Trickster 提供反向代理缓存与时序数据库查询加速能力，通过 Delta Proxy 缓存、Step Alignment、Fast Forward 等机制减少对后端 TSDB 的重复查询，支持 Prometheus、ClickHouse、InfluxDB 等多种数据源。适合使用仪表盘查询时序数据库的运维与平台团队部署，可作为 Kubernetes Ingress/Gateway 控制器运行，通过 Docker、Helm 或源码构建安装。",
+   "highlights": [
+    "提供 Delta Proxy 缓存、Step Alignment 与 Fast Forward 三种时序加速机制",
+    "支持 Kubernetes、AWS、Azure、Consul 等来源的后端池自动发现，可部署为 Kubernetes Ingress 或 Gateway Controller",
+    "支持内存、文件系统、Redis、Valkey、bbolt 等多种缓存层"
+   ],
+   "use_cases": [
+    "为仪表盘应用加速对时序数据库的重复查询",
+    "作为 HTTP 应用（静态文件服务器、REST API）的反向代理缓存",
+    "在 Kubernetes 集群中作为缓存代理或 Gateway/Ingress 控制器运行"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "TimescaleDB / PostgreSQL",
+     "lines": [
+      57
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL",
+     "lines": [
+      61
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为时序数据库提供查询加速代理服务，是服务于数据库生态的组件而非使用数据库存储的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Trickster is an HTTP reverse proxy/cache for http applications and a dashboard query accelerator for time series databases. ／ Trickster works with virtually any Dashboard application that makes queries to any of these TSDBs: ／ Trickster dramatically improves dashboard chart rendering times for end users by eliminating redundant computations on the TSDBs it fronts. In short, Trickster makes read-heavy Dashboard/TSDB environments, as well as those with high-cardinality datasets, significantly more performant and scalable.",
+   "evidence_lines": [
+    10,
+    47,
+    43
+   ]
+  },
+  "fn": "trickstercache/trickster",
+  "sha": "9a79899a49ca",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5ad691966f5d": {
+  "identity": {
+   "one_liner": "Kysely 官方命令行工具，提供迁移、seed 与 SQL 执行",
+   "review": "kysely-ctl 是查询构建器 Kysely 的官方 CLI，提供 migrate、seed、sql 等命令，配置文件为 kysely.config.ts，可复用已有 Kysely 实例，并在命令层面与 Knex.js CLI 保持功能对应。适用于使用 Kysely 的 TypeScript 开发者，需项目内安装 kysely >= 0.18.1；rollback 不带 --all 标志时不受支持。",
+   "highlights": [
+    "提供 migrate、seed、sql 命令模块，支持交互式 SQL 执行",
+    "跨运行时支持 Node.js、Bun、Deno，兼容 ESM 与 CommonJS",
+    "支持自定义迁移/seed 文件前缀及 c12 环境配置扩展"
+   ],
+   "use_cases": [
+    "在 TypeScript 项目中执行数据库 schema 迁移与回滚",
+    "管理 seed 数据的生成与执行",
+    "从命令行直接对数据库运行 SQL 查询"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "✔ sqlite ❯",
+     "lines": [
+      206
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Kysely 生态提供命令行迁移与 SQL 执行能力的工具，本身不存储业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`kysely-ctl` is the official command-line tool for Kysely. ／  The <code>migrate</code> module mirrors Knex.js CLI's module of the ／  The <code>sql</code> module allows you to run SQL queries directly from the command line using the <code>kysely</code> instance.",
+   "evidence_lines": [
+    15,
+    143,
+    193
+   ]
+  },
+  "fn": "kysely-org/kysely-ctl",
+  "sha": "5ad691966f5d",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "89c4def813da": {
+  "identity": {
+   "one_liner": "JSON 格式的动漫 ID 跨站点映射数据库，经 npm 发布",
+   "review": "该仓库提供一个 JSON 格式的数据库，将 MyAnimeList、Annict、AniList 与 Syoboi Calendar 四个动漫站点的条目 ID 相互映射，包含约 37134 条动漫记录，每周更新一次并通过 npm 发布。面向需要在多个动漫服务间关联同一作品的开发者，通过 npm/yarn 安装后以 TypeScript 类型 Anime（含 mal_id、annict_id、anilist_id、syobocal_tid 字段）使用。",
+   "highlights": [
+    "提供 MAL、Annict、AniList、Syobocal 四站点间的动漫 ID 关系映射数据",
+    "包含 37134 条动漫记录，每周通过 npm 发布一次",
+    "提供 Anime TypeScript 类型定义，返回 Anime 数组"
+   ],
+   "use_cases": [
+    "动漫应用中关联不同站点（MAL/AniList/Annict 等）的同一作品",
+    "需要跨站点 ID 转换或数据对齐的开发场景"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未说明其使用或服务于某一数据库软件，只是名为 database 的 JSON 数据集",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "@kawaiioverflow/arm is a JSON-based database to relational mapping Anime ID's between MAL, Annict, AniList and Syobocal. ／ The database has **37134** anime, it consists of data from several services.",
+   "evidence_lines": [
+    3,
+    43
+   ]
+  },
+  "fn": "kawaiioverflow/arm",
+  "sha": "89c4def813da",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

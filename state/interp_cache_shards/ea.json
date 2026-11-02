@@ -10570,5 +10570,92 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8f20482eaeb6": {
+  "identity": {
+   "one_liner": "Go+React 编写的 WordPress/PHP 托管控制面板，多租户隔离，数据库驱动收敛",
+   "review": "用于 Debian 13 的 Web 托管控制面板，面向主机管理员与多租户托管场景，提供 PHP 站点、邮件、DNS、SSL、备份、安全与数据库管理；单一二进制提供 API 和内嵌 SPA，特权操作由 root Unix-socket 代理执行，60 秒调和器读取面板数据库收敛各服务状态。依赖 MariaDB 11、Redis、PowerDNS 等组件，以脚本一键安装。",
+   "highlights": [
+    "提供 per-user Linux 账户、PHP-FPM、cgroup v2 配额与 bubblewrap SSH 沙箱隔离",
+    "支持 Restic 加密备份与 MariaDB/PostgreSQL 的按库下载和文件恢复",
+    "包含 cPanel/WHM 迁移、IMAP 邮件迁移与 CrowdSec WAF 安全套件"
+   ],
+   "use_cases": [
+    "WordPress/PHP 站点的多租户托管部署与管理",
+    "服务器邮件、DNS、SSL 与数据库的一体化运维",
+    "cPanel/WHM 服务器迁移到自建托管环境"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL (chunked async upload; pgAdmin custom/tar formats accepted) ／ - Databases (MariaDB + Postgres, tabbed) with phpMyAdmin (MariaDB) / ／ Adminer (Postgres) SSO + per-database Download + Restore-from-file",
+     "lines": [
+      154,
+      221,
+      222
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "preserved MySQL users + password hashes",
+     "lines": [
+      134
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MariaDB 11 ／ binaries, builds the SPA with Vite, writes systemd units, provisions MariaDB + ／ migrations against MariaDB 11.x",
+     "lines": [
+      27,
+      92,
+      145
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "面板部署并管理 MariaDB/PostgreSQL 实例（phpMyAdmin/Adminer、按库备份恢复），为托管环境服务而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A modern hosting control panel for WordPress and PHP hosting, built with Go and React.** ／ binaries, builds the SPA with Vite, writes systemd units, provisions MariaDB + ／  PostgreSQL (chunked async upload; pgAdmin custom/tar formats accepted)",
+   "evidence_lines": [
+    10,
+    92,
+    154
+   ]
+  },
+  "fn": "shukiv/jabali-panel",
+  "sha": "8f20482eaeb6",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

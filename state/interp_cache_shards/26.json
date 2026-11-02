@@ -11094,5 +11094,128 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b094ecfb9a40": {
+  "identity": {
+   "one_liner": "Rust 单二进制图数据库，JSON 写入自动推断类型并建图",
+   "review": "RushDB 是一个自托管的开源数据库引擎，用 Rust 实现为单一二进制进程，将写入的 JSON 记录自动类型推断并按嵌套结构连接为属性图，提供 JSON 查询语言、SQL、Cypher、Gremlin、Mongo 风格文档及向量/全文/混合检索等多种查询接口。面向需要存储带关系记录并检索的开发者。注意 openCypher、ISO GQL、Bolt 仍为候选发布阶段，复制为异步且无自动故障转移。",
+   "highlights": [
+    "写入 JSON 自动类型推断，嵌套对象成为关联记录，支持 JSON/SQL/Cypher/Gremlin/PGQ/Mongo 风格查询语言",
+    "提供向量索引（精确与 HNSW）、BM25 全文索引与混合检索，含 WAL、MVCC、时间点恢复备份和流复制",
+    "单进程支持 HTTP、PostgreSQL wire protocol、gRPC 与 Bolt 协议"
+   ],
+   "use_cases": [
+    "以 JSON 直接写入记录并在其关系图上做跨关系查询",
+    "通过 psql 或 PostgreSQL 驱动以 SQL 查询图中数据",
+    "使用向量、全文或混合检索场景下的记录搜索"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "**SQL** over the PostgreSQL wire protocol, with `psql` or any PostgreSQL ／ |**Standard protocols**|HTTP, the PostgreSQL wire protocol, gRPC and Bolt from one process.|",
+     "lines": [
+      55,
+      92
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "RushDB 自身是数据库引擎与查询服务，不依赖外部数据库存储数据，为应用提供存储与检索能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Mongo-style documents, plus vector, full-text and hybrid search. One Rust ／ |**Properties are first-class**|The Labeled Meta-Property Graph (LMPG) stores each property as a typed definition shared by the records that use it, so schema discovery, value ranges and facets come from the storage layout itself.| ／ |**Standard protocols**|HTTP, the PostgreSQL wire protocol, gRPC and Bolt from one process.|",
+   "evidence_lines": [
+    9,
+    88,
+    92
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Karolstahhcon/RushDB",
+  "sha": "b094ecfb9a40",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::LitSeek literature and materials hybrid retrieval - Qoder x OceanBase 2026 competition": {
+  "identity": {
+   "one_liner": "文献资料混合检索工具，竞赛项目",
+   "review": "基于简介：LitSeek 实现文献和资料的混合检索，是 Qoder 与 OceanBase 2026 竞赛的参赛项目。简介未说明安装方式、运行环境与面向用户，故以保守描述编目，其与 OceanBase 的具体集成方式暂不可验证。",
+   "highlights": [
+    "提供文献与资料的混合检索",
+    "为 Qoder x OceanBase 2026 竞赛项目"
+   ],
+   "use_cases": [
+    "文献资料检索场景",
+    "竞赛项目用途"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "Qoder x OceanBase 2026 competition"
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "简介仅在竞赛名中提及 OceanBase，未说明是否使用其存储或为数据库生态提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "LitSeek literature and materials hybrid retrieval - Qoder x OceanBase 2026 competition"
+  },
+  "fn": "333yeah/qoder-literature-search",
+  "sha": "desc::LitSeek literature and materials hybrid retrieval - Qoder x OceanBase 2026 competition",
+  "source": "desc",
+  "generated_at": "2026-11-02",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

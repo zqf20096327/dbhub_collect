@@ -10899,5 +10899,72 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e8b52a3f87de": {
+  "identity": {
+   "one_liner": "Telegram 聊天/论坛导出工具，将消息写入 SQLite 与按话题分文件夹",
+   "review": "一个 Python CLI 工具，通过 Telethon 用多账号并行和 Telegram 的 takeout 导出模式，把整个聊天或论坛一次性导出为 SQLite 数据库、按话题分目录的文件、messages.txt/jsonl 及离线 index.html；支持断点续传、增量更新、日期/作者/类型过滤和代理。适合需要本地归档 Telegram 大型群组或论坛的用户，需自备 api_id/api_hash。",
+   "highlights": [
+    "支持将聊天消息写入 SQLite，进度每 100 条提交一次，中断后可从断点续传",
+    "支持多账号并行下载及 Telegram takeout 数据导出模式，按消息 ID 范围分片下载",
+    "提供日期范围、作者、消息类型过滤及 SOCKS5/HTTP 代理支持"
+   ],
+   "use_cases": [
+    "批量备份 Telegram 聊天记录与论坛话题到本地",
+    "生成可离线浏览的 HTML 归档或供脚本处理的 JSONL 数据",
+    "定时增量更新已导出的聊天（配合 --update-all 与 cron）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Dump an entire Telegram chat into SQLite and a folder per forum topic at **over 100,000 messages a minute**. It runs Telegram's own data-export mode with parallel workers on several accounts, so a chat of several hundred thousand messages is done in minutes: a ／ - Progress is committed to SQLite every 100 messages. An interrupted run resumes where it stopped, and later runs fetch only new messages and append them to the files, so a repeat run of a large chat takes seconds. When a forum topic is renamed, its folder is ",
+     "lines": [
+      13,
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是该工具存储导出消息和下载进度的数据库，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dump an entire Telegram chat into SQLite and a folder per forum topic at **over 100,000 messages a minute**. It runs Telegram's own data-export mode with parallel workers on several accounts, so a chat of several hundred thousand messages is done in minutes: about 4× faster than Telegram Desktop's own export, and a whole forum in one pass instead of topic by topic. ／ - Progress is committed to SQLite every 100 messages. An interrupted run resumes where it stopped, and later runs fetch only new messages and append them to the files, so a repeat run of a large chat takes seconds. When a forum topic is renamed, its folder is renamed too. ／ - `index.html` to read the dump in a browser, offline; `messages.txt` for reading in an editor, `messages.jsonl` for scripts, and the SQLite database for queries.",
+   "evidence_lines": [
+    13,
+    28,
+    34
+   ]
+  },
+  "fn": "renkagod/tg-chat-dump",
+  "sha": "e8b52a3f87de",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

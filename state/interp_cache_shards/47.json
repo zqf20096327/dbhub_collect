@@ -11376,5 +11376,148 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9453164cc3b7": {
+  "identity": {
+   "one_liner": "水文水资源公开数据集的 Python 统一下载与整理库",
+   "review": "AquaFetch 是一个 Python 包，用于自动下载、解析、清洗并统一约 70 个免费水资源数据集，涵盖降雨径流、地表水质和污水处理三类数据，通过 rr/wq/wwt 三个子模块提供面向对象或函数式 API。面向水文学与水质研究人员，避免重复预处理。基于 pandas/numpy 返回 DataFrame，需 pip 安装，与数据库本身无关。",
+   "highlights": [
+    "支持约 70 个水资源数据集的自动下载、解析、清洗与格式统一",
+    "提供 rr、wq、wwt 三个子模块，覆盖降雨径流、地表水质、污水处理数据",
+    "返回 DataFrame 等即用格式，依赖 numpy、pandas、requests，可选 xarray、netCDF4 等"
+   ],
+   "use_cases": [
+    "获取 CAMELS、LamaH 等降雨径流数据集用于水文建模",
+    "获取地表水质与污水处理实验数据用于分析研究",
+    "批量统一处理多来源水资源原始数据，减少手工预处理"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未提及使用或适配任何数据库，仅通过 pip 安装的数据下载与处理 Python 包",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AquaFetch is a Python package designed for the automated downloading, parsing, cleaning, and harmonization of freely available water resource datasets related to rainfall-runoff processes, surface water quality, and wastewater treatment. The package currently supports approximately 70 datasets, each containing between 1 to hundreds of parameters. It facilitates the downloading and transformation of raw data into consistent, easy-to-use, analysis-ready formats. This allows users to directly access and utilize the data without labor-intensive and time-consuming preprocessing. ／ You can install AquaFetch using `pip` ／ numpy, pandas and requests. To install the library with full list of dependencies use the",
+   "evidence_lines": [
+    9,
+    17,
+    30
+   ]
+  },
+  "fn": "hyex-research/AquaFetch",
+  "sha": "9453164cc3b7",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bc708da5adc6": {
+  "identity": {
+   "one_liner": "为 Claude Code 与 Codex 提供跨会话记忆的本地插件，基于 SQLite 存储",
+   "review": "deja 是安装在 Claude Code 和 OpenAI Codex 上的记忆插件，通过 hooks 在会话各阶段记录错误与修复、注入会话简报，并检索历史修复。记忆以单个 SQLite 文件存储（用 FTS5 做 BM25 检索），无后台进程、无额外 LLM 调用，含 MCP 工具和 HTML 查看界面。面向使用 AI 编码助手的开发者。",
+   "highlights": [
+    "通过 MCP 工具提供 recall/remember/forget/lineage 等记忆与数据血缘查询能力",
+    "错误签名匹配与修复召回，记忆锚定文件哈希以标记过期",
+    "单 SQLite 文件存储，SQLite FTS5 实现 BM25 排序检索"
+   ],
+   "use_cases": [
+    "为 Claude Code / Codex 会话提供跨会话错误修复记忆",
+    "对含 SQL、dbt、Airflow 文件的仓库生成数据血缘图",
+    "本地查看和管理 AI 会话产生的决策与修复记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "No background worker, no port, no vector database, no Python, no LLM calls of its own. It adds about 1,100 tokens to a typical session (measured). Short-lived Node processes and one SQLite file with full-text search built in. ／ Ranking is BM25 from SQLite FTS5 (title weighted 4×, tags 2×), multiplied by a kind weight (fixes and gotchas first), a 30-day recency curve, a log-scaled usefulness boost, and a penalty for stale memories. The architecture notes cover the signature algorithm,",
+     "lines": [
+      36,
+      137
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- #41 22d ago: ran `docker compose up -d postgres`; then `npm run test:integration` passed. ／ |SQL (Postgres, MySQL, Snowflake, BigQuery, Spark SQL, Hive)|`INSERT INTO/OVERWRITE`, `MERGE INTO … USING`, `CREATE TABLE/VIEW … AS`, `COPY INTO`, `UPDATE`, `DELETE`; `FROM` / `JOIN` inputs with CTEs excluded; column lists from DDL|",
+     "lines": [
+      84,
+      147
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|SQL (Postgres, MySQL, Snowflake, BigQuery, Spark SQL, Hive)|`INSERT INTO/OVERWRITE`, `MERGE INTO … USING`, `CREATE TABLE/VIEW … AS`, `COPY INTO`, `UPDATE`, `DELETE`; `FROM` / `JOIN` inputs with CTEs excluded; column lists from DDL|",
+     "lines": [
+      147
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储自身记忆数据，服务对象是 AI 编码代理而非数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**deja gives Claude Code a memory that behaves like a senior teammate's.** It installs in two commands, runs entirely on your machine, and adds no cost to a session. It works the same in OpenAI Codex, with one memory shared between both. ／ No background worker, no port, no vector database, no Python, no LLM calls of its own. It adds about 1,100 tokens to a typical session (measured). Short-lived Node processes and one SQLite file with full-text search built in. ／ Ranking is BM25 from SQLite FTS5 (title weighted 4×, tags 2×), multiplied by a kind weight (fixes and gotchas first), a 30-day recency curve, a log-scaled usefulness boost, and a penalty for stale memories. The architecture notes cover the signature algorithm, schema, concurrency model and failure handling in detail.",
+   "evidence_lines": [
+    21,
+    36,
+    137
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "sagarkonkanagaon-netizenk/deja",
+  "sha": "bc708da5adc6",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

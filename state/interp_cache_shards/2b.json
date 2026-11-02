@@ -12344,5 +12344,250 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eeeefeffdcdb": {
+  "identity": {
+   "one_liner": "Discord 邮箱域名验证机器人，发送6位验证码并授予角色",
+   "review": "该机器人用于 Discord 服务器成员的邮箱域名验证：用户提交限定域名（如 .edu）的邮箱后收到 6 位验证码，通过后获得已验证角色，支持按域名分配不同角色、黑名单与多语言。面向大学、公司、组织类服务器管理者，可通过托管 bot 使用或用 Docker/Node.js 自部署，验证数据存于本地 bot.db，可选用 SQLCipher 加密。",
+   "highlights": [
+    "提供 /setup 引导向导及角色、域名、黑名单等斜杠命令管理",
+    "支持通配符域名匹配与按域名分配不同角色",
+    "数据可通过 SQLCipher（AES-256）加密存储"
+   ],
+   "use_cases": [
+    "大学/学院服务器验证 .edu 学生邮箱",
+    "公司服务器验证员工企业邮箱",
+    "组织服务器限制仅已验证成员访问"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- The Docker image ships a SQLCipher build. For a manual installation, build `sqlite3` against SQLCipher the way the Dockerfile does; otherwise the bot refuses to start when a key is set.",
+     "lines": [
+      275
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "机器人将验证数据存储在本地 bot.db（SQLite）中，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "With the `DB_ENCRYPTION_KEY` environment variable set, the bot keeps `config/bot.db` encrypted with SQLCipher (AES-256). An existing unencrypted database is encrypted in place on the next start. You can also set the key as `databaseEncryptionKey` in `config.json`, but the environment variable is better: `config.json` sits next to the database, so a copy of the config folder would carry the key along with the data. ／ - The Docker image ships a SQLCipher build. For a manual installation, build `sqlite3` against SQLCipher the way the Dockerfile does; otherwise the bot refuses to start when a key is set.",
+   "evidence_lines": [
+    271,
+    275
+   ]
+  },
+  "fn": "lkaesberg/EmailVerify",
+  "sha": "eeeefeffdcdb",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2bc95841660e": {
+  "identity": {
+   "one_liner": "汽修车间预约与工单排程管理应用，基于 .NET + React + PostgreSQL",
+   "review": "ARSM 是面向汽修企业的车间管理 Web 应用，提供预约登记、技工认领工单、维修进度跟踪、月历视图、配件与工时价格目录、报价单 PDF 导出及按年月的公司经营报表。后端为 ASP.NET Core + EF Core + JWT，前端 React，数据库为 PostgreSQL，通过 .NET Aspire 编排 PostgreSQL 与 RustFS 对象存储。适合汽修团队的技工和管理员日常使用，本地运行需 Docker。",
+   "highlights": [
+    "提供预约登记、工单认领/取消认领与实时状态更新流程",
+    "支持含增值税净/毛价的配件与工时目录、车辆报价单生成及 PDF 导出",
+    "支持技工与管理员两种角色权限，通过 .NET Aspire 编排 PostgreSQL 与 RustFS 本地栈"
+   ],
+   "use_cases": [
+    "汽修车间日常预约排程与工单进度跟踪",
+    "按车辆生成配件/工时报价单并导出 PDF",
+    "按年月统计公司经营结果报表"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL| ／ - `app/AutoService.AppHost`: Aspire orchestration (PostgreSQL + RustFS + ApiService + WebUI)",
+     "lines": [
+      36,
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PostgreSQL 是该业务应用存储数据的数据库（Database 层为 PostgreSQL，AppHost 编排启动 PostgreSQL 容器）",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ARSM is a workshop scheduling and operations app for auto service teams. It helps mechanics and admins organize appointments, claim work, and track repair progress in one responsive dashboard. ／ |Database|PostgreSQL| ／ - Docker Desktop running locally (required for the PostgreSQL and RustFS containers via AppHost)",
+   "evidence_lines": [
+    12,
+    36,
+    59
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "hajdu-patrik/ARSM",
+  "sha": "2bc95841660e",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "173671f1712a": {
+  "identity": {
+   "one_liner": "基于 Raft 的分布式锁与一致性键值存储集群",
+   "review": "Kahuna 是一个 .NET 实现的开源分布式系统服务器，提供分布式锁（fencing token/租约）、带事务与 watcher 的键值存储、全局有序 ID 序列器和限流器；面向需要在分布式应用中协调并发与共享状态的 .NET 开发者，通过 dotnet tool 安装，支持单节点与多节点集群、MVCC 快照隔离、2PC 事务及 Kubernetes Operator（alpha）。",
+   "highlights": [
+    "提供分布式锁、键值存储与有序 ID 序列器三类能力，通过 Raft 复制实现容错",
+    "采用 MVCC 与 2PC，支持乐观/悲观两种并发控制模式和分区自动分裂",
+    "提供 Kahuna.Client、CLI、Kubernetes Operator（alpha）与 Web Dashboard"
+   ],
+   "use_cases": [
+    ".NET 分布式应用中的跨进程互斥与速率限制",
+    "元数据、缓存或应用状态的集群化存储",
+    "需要全局有序 ID 的队列与事件系统"
+   ],
+   "use_cases_hint": null
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明它是提供锁、KV 存储与序列器的分布式集群服务器组件，服务分布式应用而非使用某数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Distributed locking with fencing tokens and leases ／ Kahuna is a scalable, fault-tolerant distributed system. It combines lock management, key-value ／ Each partition has its own Raft group. Raft is a consensus protocol. It replicates all changes",
+   "evidence_lines": [
+    9,
+    121,
+    134
+   ]
+  },
+  "fn": "kahunakv/kahuna",
+  "sha": "173671f1712a",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f62406068202": {
+  "identity": {
+   "one_liner": "LSE ST445 数据管理与可视化课程的动手教程仓库",
+   "review": "这是伦敦政治经济学院统计系 ST445 课程的教学资源仓库，包含配套课程的动手教程，内容覆盖数据存储、结构化、管理与可视化方法。使用者是选修该课程的学生，仓库附有学术诚信要求，教学文本采用 CC BY 4.0 许可、代码采用 MIT 许可。仓库本身不提供可安装的数据库工具或组件。",
+   "highlights": [
+    "提供 ST445 课程配套的动手教程集合",
+    "覆盖数据的存储、结构化、管理、导入与可视化教学内容",
+    "教学文本与代码分别采用 CC BY 4.0 和 MIT 许可"
+   ],
+   "use_cases": [
+    "ST445 课程学习与自学参考资料",
+    "数据管理与可视化教学示例",
+    "课程评估中的代码与概念引用来源"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "dbs": [],
+   "eco": "unclear",
+   "eco_why": "README 未说明仓库为数据库生态提供服务或依赖数据库存数据，仅是课程教程集合",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：教学文本 CC BY 4.0，代码 MIT，数据集保留各自原许可",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Welcome to the **ST445 - Managing and Visualising Data** course repository! This collection of hands-on tutorials is designed to complement your learning journey through the principles, challenges, and opportunities around data. Click here for the official Moodle Page. ／ Understanding methods for storing, structuring, managing, and visualising data is a core element of any data science foundation, and this course covers these fundamentals. It will complement the coverage of programming and statistical methods in other courses and integrate well with courses that involve importing, manipulating, storing, and retrieving structured and semi-structured data. The coverage of visualisation will raise awareness of how graphics can tap into the human brain's visual processing for a rich understanding of data, and how principles of visual perception can guide methods of visualising data.",
+   "evidence_lines": [
+    13,
+    17
+   ]
+  },
+  "fn": "LeonardooAlves/LSE-ST445",
+  "sha": "f62406068202",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

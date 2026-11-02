@@ -12721,5 +12721,230 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5026ec531093": {
+  "identity": {
+   "one_liner": "Kotlin 多平台库，将 Otzaria 数据库转换为 SQLite 并提供查询访问",
+   "review": "该项目提供一组 Kotlin 多平台模块，用于把 Otzaria（及 Sefaria 导出）数据库转换为带 FTS5 全文检索的 SQLite 数据库，并提供 DAO、目录构建和 Lucene 索引工具，面向需要构建和查询犹太宗教文本库的 JVM/Kotlin 开发者，通过 Maven 导入，生成侧依赖 Gradle 与 JDK 11+。",
+   "highlights": [
+    "提供 core/dao/searchindex/catalog 等多模块，包含数据模型、数据库访问层与 Lucene 全文索引构建器",
+    "支持将 Otzaria 数据库转换为 SQLite 格式并使用 FTS5 进行全文检索",
+    "提供 Sefaria 导出一步导入 SQLite 的生成管线（Gradle 任务）"
+   ],
+   "use_cases": [
+    "构建和查询犹太宗教文本的统一 SQLite 数据库",
+    "对大型文本集合进行全文搜索与目录/书签导航",
+    "通过 Maven 在 Kotlin/JVM 项目中集成文本库数据访问"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A Kotlin Multiplatform library + JVM tooling to build and query a unified SQLite database of Jewish texts (Sefaria + Otzaria), with Lucene-based full-text search. ／ SeforimLibrary is a comprehensive solution for working with Jewish religious texts from the Otzaria database. The project converts the original Otzaria database into a modern SQLite database with full-text search capabilities using FTS5, making it efficient to ／ - **dao**: Provides database access objects and repositories for interacting with the SQLite database",
+     "lines": [
+      3,
+      7,
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为特定 SQLite 数据格式提供转换、访问与索引能力的库和工具集，而非仅消费数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Zayit Public License：GNU AGPL v3 加回授条款、署名条款与商标条款",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Kotlin Multiplatform library + JVM tooling to build and query a unified SQLite database of Jewish texts (Sefaria + Otzaria), with Lucene-based full-text search. ／ - **dao**: Provides database access objects and repositories for interacting with the SQLite database",
+   "evidence_lines": [
+    3,
+    12
+   ]
+  },
+  "fn": "kdroidFilter/SeforimLibrary",
+  "sha": "5026ec531093",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6bf8e84cdbb6": {
+  "identity": {
+   "one_liner": "Python SQL 库，将对象方法映射到 SQL 脚本文件",
+   "review": "quma 是面向 Python 3.11+ 的数据库库，把对象方法映射到 SQL 脚本文件并执行，支持 SQLite、PostgreSQL、MySQL、MariaDB，提供连接池、动态 SQL 模板和 asyncio 异步 API。适合偏好直接书写 SQL、不用 ORM 的开发者；定位为 ORM 的替代用法而非 ORM 本身。",
+   "highlights": [
+    "将对象方法映射到 SQL 脚本文件，统一使用 :name 占位符",
+    "提供简单连接池与动态 SQL 模板（如条件 WHERE）",
+    "提供 asyncio 异步 API（psycopg 3 / asyncmy 驱动）"
+   ],
+   "use_cases": [
+    "在 Python 项目中以 SQL 脚本文件方式组织查询，替代 ORM",
+    "基于 Starlette/FastAPI/Litestar 的 asyncio 应用访问数据库"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It maps object methods to SQL script files and supports **SQLite**, **PostgreSQL**, ／ Starlette, FastAPI or Litestar (PostgreSQL with psycopg 3, MySQL and",
+     "lines": [
+      6,
+      12
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**MySQL** and **MariaDB**. Scripts use the same ``:name`` placeholders with ／ Starlette, FastAPI or Litestar (PostgreSQL with psycopg 3, MySQL and",
+     "lines": [
+      7,
+      12
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It maps object methods to SQL script files and supports **SQLite**, **PostgreSQL**, ／ db = Database('sqlite3:///:memory:', '/path/to/sql/scripts',",
+     "lines": [
+      6,
+      53
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**MySQL** and **MariaDB**. Scripts use the same ``:name`` placeholders with ／ MariaDB with asyncmy).",
+     "lines": [
+      7,
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为多数据库提供访问能力的 Python 库，而非使用某库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "quma is a small SQL database library for **Python** 3.11 and higher. ／ It maps object methods to SQL script files and supports **SQLite**, **PostgreSQL**, ／ It also provides a simple connection pool and templating for dynamic SQL like",
+   "evidence_lines": [
+    5,
+    6,
+    10
+   ]
+  },
+  "fn": "ebenefuenf/quma",
+  "sha": "6bf8e84cdbb6",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "af706c510abf": {
+  "identity": {
+   "one_liner": "自托管记账应用，Rails 实现，数据存于 SQLite",
+   "review": "MoneyPouch 是一个自托管的个人开销记录应用，用 Docker 单命令部署，通过快捷输入快速记录支出，支持 CSV/Excel 导入导出和可选的 SimpleFIN 银行同步，数据保存在用户自有卷中的 SQLite 文件。面向想自管数据、只看钱花在哪而不做预算的个人或小圈子。",
+   "highlights": [
+    "一条 docker run 命令即可启动，数据存于自有卷中的 SQLite 文件",
+    "支持文本式快速记账（如 `Chipotle 11.25 yesterday`）、CSV/Excel 导入导出",
+    "可选通过 SimpleFIN 协议同步银行交易，访问 URL 加密存储"
+   ],
+   "use_cases": [
+    "个人自托管记录日常开销与支出趋势",
+    "在家庭服务器或树莓派上运行并与朋友共享账户",
+    "从 Excel/CSV 迁移历史交易记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Your data, your server.** One command starts it. Your data is in SQLite files in a volume you own.",
+     "lines": [
+      40
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用本身使用 SQLite 存储业务数据，而非为数据库生态提供工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "docker run -d --name moneypouch --restart unless-stopped -p 8080:80 -v moneypouch-data:/rails/storage ghcr.io/kenyounot123/moneypouch:latest ／ - **Your data, your server.** One command starts it. Your data is in SQLite files in a volume you own.",
+   "evidence_lines": [
+    30,
+    40
+   ]
+  },
+  "fn": "kenyounot123/moneypouch",
+  "sha": "af706c510abf",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

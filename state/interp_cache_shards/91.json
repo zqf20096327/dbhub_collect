@@ -11537,5 +11537,150 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3e6a75287501": {
+  "identity": {
+   "one_liner": "Geometry Dash 私服核心，PHP 实现，含存档/关卡/账号/JSON API",
+   "review": "MuchoCore 是一个用 PHP 8.2+ 编写的 Geometry Dash 私人服务器（GDPS）核心，提供账号、关卡、评论、分数、Cloud Save、社交、管理与审核功能及 JSON API v2，面向想自建 GD 服务器的玩家与服主。支持共享主机 FTP/ZIP 安装与 VPS 一键安装（Docker + MariaDB + Caddy），另有实验性 PHP 7 原生预览版；运行依赖 MySQL 8.0.29+/MariaDB 10.4+。",
+   "highlights": [
+    "提供账号、关卡、分数、评论、Cloud Save、社交与审核功能及 JSON API v2",
+    "支持共享主机（FTP/ZIP）与 Linux VPS 一键安装（Docker、MariaDB、Caddy）",
+    "包含迁移工具、速率限制、测试与安全工具，并支持 Cvolton 数据导入"
+   ],
+   "use_cases": [
+    "自建 Geometry Dash 私人服务器",
+    "在共享主机或 VPS 上部署 GDPS 并管理玩家内容",
+    "从旧版 GDPS 核心（如 Cvolton）导入账号/关卡/分数数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Requires:** PHP 8.2+ (8.3+ recommended), MySQL 8.0.29+ / MariaDB 10.4+, PDO MySQL, HTTPS, a database user, FTP or File Manager. For automatic bootstrap, PHP ZIP and outbound HTTPS to GitHub are also required. ／ 2. Enter your FTP/FTPS host and credentials, public HTTPS domain, and MySQL credentials. ／ This build runs entirely on shared hosting with its own MySQL connection, compiled PHP 7-compatible application services and English administration pages. It requires no VPS proxy, Composer installation or process-launch functions on the host. PHP 7 is obsolet",
+     "lines": [
+      23,
+      28,
+      51
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**VPS (Linux)**|One-command installer|Full PHP 8+ MuchoCore, Docker, MariaDB, Caddy, admin and worker| ／ **Requires:** PHP 8.2+ (8.3+ recommended), MySQL 8.0.29+ / MariaDB 10.4+, PDO MySQL, HTTPS, a database user, FTP or File Manager. For automatic bootstrap, PHP ZIP and outbound HTTPS to GitHub are also required. ／ 3. Enter your domain and initial admin password when prompted. The installer sets up Docker, PHP, MariaDB, Caddy, workers, migrations and configuration.",
+     "lines": [
+      15,
+      23,
+      114
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明安装时需要准备数据库并用 MySQL/MariaDB 连接存储数据，属使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# MuchoCore — Geometry Dash Private Server (GDPS) ／ **Requires:** PHP 8.2+ (8.3+ recommended), MySQL 8.0.29+ / MariaDB 10.4+, PDO MySQL, HTTPS, a database user, FTP or File Manager. For automatic bootstrap, PHP ZIP and outbound HTTPS to GitHub are also required. ／ 3. Enter your domain and initial admin password when prompted. The installer sets up Docker, PHP, MariaDB, Caddy, workers, migrations and configuration.",
+   "evidence_lines": [
+    1,
+    23,
+    114
+   ]
+  },
+  "fn": "IZKGMD/GMDmucho-core",
+  "sha": "3e6a75287501",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6ebec0db1061": {
+  "identity": {
+   "one_liner": "本地 MCP AI 记忆服务器，多代理共享同一份带版本的 SQLite 记忆",
+   "review": "这是一个面向 MCP 代理的本地记忆服务器，让 Claude Code、Cursor、Codex 等编码代理读写同一份共享记忆，每次修改保留版本记录。数据以单个 SQLite 文件存于本机，模型下载后可离线运行、无需 API key，并提供 init 自动配置、session 导入和本地 viewer。适合同时使用多个 AI 编码工具、希望记忆不分散的开发者；限制是仅覆盖 MCP 代理生态，部分 IDE 加密会话无法读取。",
+   "highlights": [
+    "提供 7 个 MCP 工具（search_brain、add_memory、update_memory 等），各代理使用相同接口",
+    "所有记忆修改保留版本记录，含写入者与时间，可归档和恢复",
+    "支持从 41 个编码代理导入会话历史，以及导入 Markdown/Obsidian 内容"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理之间共享持久化的偏好、决策与项目上下文",
+    "将既有代理的 CLAUDE.md/规则文件与会话历史迁移为统一记忆库",
+    "本地离线环境下的代理记忆管理与查看"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **It stays yours.** One SQLite file on your machine, MIT licensed, exportable to plain Markdown.",
+     "lines": [
+      41
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确所有记忆保存在本机一个 SQLite 文件中，SQLite 是其存储数据的组件而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local-first, open-source AI memory server for MCP. After a one-time model download it runs offline with no API key, keeps everything in one SQLite file on your machine, and speaks the same 7 tools as the hosted Make0 Brain. It can also start full: one command imports the sessions 41 coding agents already keep on disk. ／ - **It stays yours.** One SQLite file on your machine, MIT licensed, exportable to plain Markdown.",
+   "evidence_lines": [
+    5,
+    41
+   ]
+  },
+  "fn": "make0-official/brain-oss",
+  "sha": "6ebec0db1061",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

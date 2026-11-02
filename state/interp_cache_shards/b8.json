@@ -10069,5 +10069,303 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3cfc3e4a875b": {
+  "identity": {
+   "one_liner": "AI agent 长期记忆存储，单 Rust 二进制，向量+FTS5 混合检索",
+   "review": "Uteke 是一个为 AI agent 提供跨会话长期记忆的本地工具，以单个 Rust 二进制运行，无需 API key，通过 MCP 协议（stdio/HTTP）供 Claude Code、Cursor 等客户端共享同一记忆库。检索采用本地向量与 SQLite FTS5 全文搜索的 RRF 融合排序，检索路径无 LLM 调用；支持多 agent 房间、时间点回溯和记忆衰减。提供自托管与 Uteke Cloud 两种运行方式。",
+   "highlights": [
+    "实现 MCP Server，支持 stdio 与 Streamable HTTP 两种传输，供 Claude Code、Cursor、Hermes 等 MCP 客户端接入",
+    "本地向量与 SQLite FTS5 全文搜索经 RRF 融合为单一排序，查询不消耗 LLM token",
+    "支持多 agent 共享房间、作者归属、时间点回溯（--at）、关系图与记忆衰减"
+   ],
+   "use_cases": [
+    "为多个 AI agent 提供共享的跨会话长期记忆",
+    "数据需保留在本机的本地化 agent 记忆自托管部署",
+    "基于公开数据集复现或自行运行 LongMemEval-S 记忆检索评测"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Finds by meaning and by keyword.** Local vectors and SQLite full-text search, fused into one ranking (how it works).",
+     "lines": [
+      39
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 AI agent 生态提供记忆存储服务的独立工具，内部使用 SQLite 与本地向量实现检索",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Finds by meaning and by keyword.** Local vectors and SQLite full-text search, fused into one ranking (how it works). ／ { \"mcpServers\": { \"uteke\": { \"command\": \"uteke-mcp\" } } } ／ |🔌 **MCP Server**|JSON-RPC over stdio + Streamable HTTP. Works with Claude Code, Cursor, Hermes.|",
+   "evidence_lines": [
+    39,
+    59,
+    193
+   ]
+  },
+  "fn": "codecoradev/uteke",
+  "sha": "3cfc3e4a875b",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4e9bb29b10e1": {
+  "identity": {
+   "one_liner": "用 Embedded Swift 从零编写的 64 位 ARM 操作系统内核",
+   "review": "一个面向 64 位 ARM、用 Embedded Swift 编写的操作系统项目，实现 MMU 进程隔离、能力安全模型、内核内 TCP/IP 栈和三层文件系统，可在 QEMU 与真实 ARM 裸机上运行 nginx、Node.js 和 SQLite。适合系统编程学习与实验用途，README 明确说明其为学习项目、非生产环境。",
+   "highlights": [
+    "提供 MMU 进程隔离与基于 capability/principal 的安全模型",
+    "内核内实现 TCP/IP 栈（DHCP/TCP/UDP/DNS/HTTP/TLS）与三层文件系统",
+    "可在 QEMU 及 Hetzner ARM 裸机硬件上启动并运行 nginx、Node.js、SQLite"
+   ],
+   "use_cases": [
+    "操作系统内核开发与系统编程学习",
+    "ARM 裸机/QEMU 上的应用托管实验",
+    "嵌入式/appliance 场景的最小化系统构建"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **A three-tier filesystem** — an immutable signed read-only base, a RAM `tmpfs` scratch tier, and a persistent, `fsync`-durable `/data` tier, durable enough to back SQLite (`make datafs-sqlite-test`).",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是操作系统内核/运行环境本体，README 声明其持久化数据层可用于支撑 SQLite 运行",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A modern operating system written from scratch in Embedded Swift for 64-bit ARM** — a small, capability-isolated, fast-booting core, built by *removing* legacy rather than emulating it. Small enough to trust; real enough to run nginx and Node.js. ／ - **A three-tier filesystem** — an immutable signed read-only base, a RAM `tmpfs` scratch tier, and a persistent, `fsync`-durable `/data` tier, durable enough to back SQLite (`make datafs-sqlite-test`). ／ It is a learning project: intentionally minimal, rough in places, and not production. Some pieces stay in C/asm on purpose — third-party code (busybox, the newlib port) and the MMIO / boot / syscall bridges — but the rule is **Swift by default**. The goal is a small, testable, modern core.",
+   "evidence_lines": [
+    8,
+    26,
+    30
+   ]
+  },
+  "fn": "asaptf/swift-os",
+  "sha": "4e9bb29b10e1",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e159c93a486a": {
+  "identity": {
+   "one_liner": "Google Zanzibar 论文的带批注托管阅读版",
+   "review": "该项目托管 USENIX ATC 2019 的 Zanzibar 授权系统论文，并在论文各段落旁提供批注、高亮和可分享链接，批注以 YAML 文件组织、可按集合开关。读者通过 NextJS 开发的阅读应用浏览，用 pnpm 启动开发服务器本地运行，也可托管其他 MDX 格式论文。适合阅读 Zanzibar 论文并对照社区批注的读者。",
+   "highlights": [
+    "提供 USENIX ATC 2019 Zanzibar 论文的托管副本及分段批注注释",
+    "批注以 YAML 文件存储，支持按集合开关和 URL 深链接定位",
+    "阅读应用基于 NextJS/MDX 实现，支持选区分享链接与预览图生成"
+   ],
+   "use_cases": [
+    "阅读并批注式研究 Zanzibar 论文",
+    "为其他论文搭建批注阅读站点",
+    "本地运行论文阅读器进行浏览与分享"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 仅描述论文阅读应用，批注存于 YAML，未显示其为数据库生态服务或依赖某数据库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Zanzibar Annotated is a hosted copy of the paper presented at USENIX ATC 2019 describing the Zanzibar authorization system. ／ The paper is presented by a reader app developed using the [NextJS] framework, [Tailwind CSS] for styling, and [MDX] for markdown integration in React. ／ The [default annotation provider] implementation uses YAML files to store all annotations and provides hooks for components to get annotations and annotation related state.",
+   "evidence_lines": [
+    6,
+    36,
+    58
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "authzed/zanzibar-annotated",
+  "sha": "e159c93a486a",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f8bb1fc0a7f1": {
+  "identity": {
+   "one_liner": "作者个人书籍目录仓库，含数据建模等书籍下载链接",
+   "review": "该仓库汇总作者所著书籍的链接与说明，涵盖数据建模（概念模型到 SQL）、Linux 入门等已出版作品，以及仍在编写中的 Node.js 实践指南章节草稿；提供免费 PDF 和付费 ePUB/Kindle 两种获取渠道。适用于想获取这些书籍资料的读者，本身不是软件项目。",
+   "highlights": [
+    "提供数据建模书籍（概念模型到 SQL）的 PDF 与 ePUB/Kindle 下载链接",
+    "包含仍在开发中的 Node.js 书籍章节草稿目录",
+    "PDF 版本声明免费提供"
+   ],
+   "use_cases": [
+    "查找作者出版的数据建模与 Linux 书籍",
+    "跟踪开发中 Node.js 书籍的章节进展",
+    "获取相关主题的推荐文章与站点链接"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "仓库仅为书籍链接与目录，不含使用或服务任何数据库的代码",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Este repositório reúne os livros de minha autoria, tanto os já publicados quanto os que estão em desenvolvimento, além de materiais complementares sobre os assuntos abordados neles. ／ > **Banco de dados - Modelagem de dados: Do modelo conceitual ao SQL (2ª edição)** ／ ### Banco de dados",
+   "evidence_lines": [
+    5,
+    9,
+    20
+   ]
+  },
+  "fn": "fabiojaniolima/livros",
+  "sha": "f8bb1fc0a7f1",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::OceanBase 2026 仓库/新赛题监控看板（静态快照）": {
+  "identity": {
+   "one_liner": "OceanBase 2026 仓库/新赛题监控看板（静态快照）",
+   "review": "基于简介：该项目为 OceanBase 2026 仓库与新赛题数据提供监控看板，以静态快照形式呈现。面向参与 OceanBase 相关赛题的用户，用于查看仓库/赛题的监控状态。安装与运行方式简介中未说明，是否包含实时采集能力亦无从确认。",
+   "highlights": [
+    "提供 OceanBase 2026 仓库/新赛题监控看板",
+    "以静态快照形式呈现数据"
+   ],
+   "use_cases": [
+    "查看 OceanBase 2026 仓库监控信息",
+    "查看新赛题监控看板数据"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "OceanBase 2026 仓库/新赛题监控看板（静态快照）"
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 OceanBase 仓库/赛题提供监控看板，服务于 OceanBase 生态而非仅使用该数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "OceanBase 2026 仓库/新赛题监控看板（静态快照）"
+  },
+  "fn": "Lucy2025-creator/oceanbase-watch",
+  "sha": "desc::OceanBase 2026 仓库/新赛题监控看板（静态快照）",
+  "source": "desc",
+  "generated_at": "2026-11-02",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

@@ -10528,5 +10528,74 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a0586e5751fa": {
+  "identity": {
+   "one_liner": "加密货币行情数据采集存储服务，基于 cryptofeed 写入多种后端",
+   "review": "Cryptostore 通过 cryptofeed 订阅 30 个加密货币交易所的行情数据，将规范化后的数据写入 PostgreSQL、Redis、MongoDB、InfluxDB、QuestDB、Kafka 等后端，并可通过内置服务器以 TCP、Unix socket、ZeroMQ 实时分发给应用。支持单配置文件驱动、多 worker 分片扩展、pcap 原始报文录制。适用于需要自建行情采集管道的开发者，需自备数据库表结构。",
+   "highlights": [
+    "支持 PostgreSQL、Redis、MongoDB、InfluxDB 2、QuestDB、Kafka 多种存储后端，可同时路由多个后端",
+    "内置流式服务器，通过 TCP、Unix socket、ZeroMQ PUB 输出实时数据",
+    "支持多 worker 线程分片扩展与 pcap 原始报文录制回放"
+   ],
+   "use_cases": [
+    "采集交易所行情数据并存入自有数据库",
+    "为交易或分析应用搭建实时行情分发服务",
+    "录制交易所原始报文用于后续回放分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "postgres: ／ type: postgres ／ * **Storage backends**: PostgreSQL, Redis (sorted sets or streams), MongoDB, InfluxDB 2, QuestDB, Kafka",
+     "lines": [
+      14,
+      15,
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "cryptostore 是使用 PostgreSQL 等数据库存储加密货币行情数据的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Cryptostore subscribes to cryptocurrency exchanges with cryptofeed, ／ * **Storage backends**: PostgreSQL, Redis (sorted sets or streams), MongoDB, InfluxDB 2, QuestDB, Kafka ／ |`postgres`|PostgreSQL, one table per data type. Tables must exist, see PostgreSQL tables|`host`, `port`, `db` (`database`), `user`, `pw` (`password`), `table`, `custom_columns`|",
+   "evidence_lines": [
+    8,
+    20,
+    98
+   ]
+  },
+  "fn": "bmoscon/cryptostore",
+  "sha": "a0586e5751fa",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

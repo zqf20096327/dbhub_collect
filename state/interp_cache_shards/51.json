@@ -12074,5 +12074,115 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "36efa5ec36ec": {
+  "identity": {
+   "one_liner": "Rust 编写的 Redis/Valkey 协议兼容内存键值数据库，内置全文与向量搜索",
+   "review": "KiviDB 是一个用 Rust 实现的内存键值数据库服务器，通过 RESP2/RESP3 协议兼容 Redis 命令面，默认监听 6380 端口，内置 Redis Stack 风格的 FT.* 全文与向量搜索命令，支持快照和可选 AOF 持久化，并提供 default/lua/tls/full 四种 Cargo feature 构建变体，面向希望以现有 Redis 客户端接入替代服务器的用户。",
+   "highlights": [
+    "支持 Redis 协议 RESP2/RESP3，现有 Redis 客户端与 redis-cli 可直接连接",
+    "实现 Redis Stack 风格 FT.* 命令，支持 BM25 全文、标签/数值过滤与 FLAT/HNSW 向量搜索",
+    "提供快照（dump.kdb，含 HNSW 图）与可选 append-only file 持久化，支持 Lua 脚本与 TLS 构建变体"
+   ],
+   "use_cases": [
+    "以 Redis 客户端接入的缓存/键值存储场景",
+    "需要在哈希字段上做全文检索与向量近邻搜索的应用",
+    "与 Redis 并行部署（不同端口）的独立服务端"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "仓库本身是一个数据库服务器/存储引擎，既不是为其他数据库服务的工具，也不是使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**KiviDB** is a fast, multi-threaded alternative to Redis® and Valkey, written in Rust. It ／ core on a sharded in-memory key-value design, and persists to snapshots and an optional ／ - **Protocol**: Redis-compatible command surface (see COMMANDS.md for the supported commands)",
+   "evidence_lines": [
+    14,
+    17,
+    31
+   ]
+  },
+  "fn": "kividbio/kividb",
+  "sha": "36efa5ec36ec",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7121a9f97a96": {
+  "identity": {
+   "one_liner": "基于 Git 的 T 细胞受体抗原特异性数据库存储与构建仓库",
+   "review": "该仓库聚合已发表的 T 细胞受体抗原特异性信息，将受体与肽-MHC 复合物及其实验证据关联，并通过构建流程验证、组装和发布数据。面向免疫学研究者，提供下载快照、网页 GUI 及 vdjmatch 注释工具配合使用；包含 10x dextramer 实验的链共现调用脚本，构建需 Python（uv）以及可选的 R 和 pandoc。",
+   "highlights": [
+    "提供按出版物组织的分块数据（chunks/）及自动验证、组装、发布构建流程",
+    "支持记录置信度评分（v3.2a/v3.2b）与 V-J 连接、CDR3 序列的标准化校验",
+    "提供 10x dextramer 检测的链共现调用处理脚本（dcode、ITRAP 数据处理）"
+   ],
+   "use_cases": [
+    "查询受体/克隆注释与抗原特异性证据（配合 vdjmatch）",
+    "检索 TCRNET/TCREmp motif 成员及位置特异性频率",
+    "获取已知特异性受体的结构与坐标关联数据（Parquet/gzip 表）"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "仓库以 Git 存储生物数据并用自有构建脚本处理，未声明依赖某数据库管理系统提供存储服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "VDJdb aggregates published information on T-cell receptor antigen specificity - the ability to ／ This repository holds the submissions to the database and the build that validates, assembles and ／ uv sync --extra motifs --extra confidence --extra summary --extra test",
+   "evidence_lines": [
+    9,
+    24,
+    80
+   ]
+  },
+  "fn": "antigenomics/vdjdb-db",
+  "sha": "7121a9f97a96",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

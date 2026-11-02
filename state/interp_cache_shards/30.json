@@ -11294,5 +11294,193 @@
   "generated_at": "2026-10-28",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "85338cac17a6": {
+  "identity": {
+   "one_liner": "为 DeepSeek Harness 提供跨会话记忆的插件，本地 SQLite + Markdown 存储",
+   "review": "dsh-mneme 是 DeepSeek Harness 的跨会话记忆插件，面向使用 DSH 及任意 MCP 客户端（Claude Code、Cursor 等）的 AI 用户。记忆存于本机 SQLite 并镜像为可编辑 Markdown，支持关键词/向量/BM25/实体四路检索、autoDream 后台巩固、冲突冻结待裁决、作用域隔离，并提供含 10 个模型工具的 MCP server、CLI 与独立 daemon。",
+   "highlights": [
+    "记忆以 SQLite 存储并生成可手工编辑的 Markdown 镜像，人工改动优先",
+    "支持 keyword/vector/BM25/entity 四路检索，嵌入可配置为本地离线运行",
+    "内置零依赖 stdio MCP server（mneme-memory），并提供独立常驻 daemon"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness 会话提供跨会话长期记忆",
+    "通过 MCP server 向 Claude Code、Cursor 等客户端挂载记忆工具",
+    "多 Agent/多项目场景下按作用域隔离记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 记忆只落在本机：SQLite 存储 + 可手工编辑的 Markdown 镜像，不经过任何 mneme 服务器",
+     "lines": [
+      161
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是面向 AI 代理的记忆插件，使用 SQLite 作为本机存储介质，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 记忆只落在本机：SQLite 存储 + 可手工编辑的 Markdown 镜像，不经过任何 mneme 服务器 ／ 插件自带零依赖 stdio MCP server（独立 npm 包 **`mneme-memory`**，bin 名 `mneme-mcp`），任何 MCP 客户端都能挂载记忆六件套（`memory_save` / `memory_search` / `memory_list` / `memory_get` / `memory_update` / `memory_delete`）。",
+   "evidence_lines": [
+    161,
+    169
+   ]
+  },
+  "fn": "slow-stack/mneme",
+  "sha": "85338cac17a6",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "27392fb4336e": {
+  "identity": {
+   "one_liner": "基于 Windows 原生 SQLite 的 PowerShell 零依赖嵌入式文档数据库引擎",
+   "review": "PSLocalBase 是一个供 PowerShell 使用的嵌入式 NoSQL 文档数据库引擎，通过 P/Invoke 调用 Windows 自带的 winsqlite3.dll 并利用其 JSON 函数实现文档存储，返回 PSCustomObject，仅支持 Windows 平台（PowerShell 5.1/7+）。附带 WPF Playground 图形工具，正式包不含 GUI，通过 PowerShell Gallery 安装。",
+   "highlights": [
+    "零外部依赖，直接调用 Windows 系统自带的 winsqlite3.dll，支持文档的嵌套结构存储与点号访问",
+    "提供 fluent API，包含 set/add/update/upsert 等文档操作及集合管理方法，配置 WAL 模式与缓存、超时等选项",
+    "附带 WPF Playground 图形化工具，支持数据检查、代码教程和控制台执行"
+   ],
+   "use_cases": [
+    "Windows 环境下 PowerShell 自动化脚本的本地数据持久化",
+    "需要文档型键值存储且不希望安装外部数据库或依赖包的场景",
+    "通过 Playground GUI 进行交互式数据查询与调试学习"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Under the hood, it operates as a native NoSQL Document Store built on top of Windows' pre-installed SQLite engine (`winsqlite3.dll`) using its built-in JSON functions. It incurs zero overhead by running in-memory P/Invoke directly in C, returns native PowerS ／ |`cacheSizeMB`|`16`|SQLite page cache size.|",
+     "lines": [
+      12,
+      115
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库引擎/开发库，SQLite 是其底层实现机制而非其服务的目标数据库，且 README 提及 winsqlite3.dll 为运行基础。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **PSLocalBase** is a lightweight, zero-dependency embedded document (NoSQL / Key-Value) database engine for PowerShell, inspired by the JavaScript library Localbase. ／ > Under the hood, it operates as a native NoSQL Document Store built on top of Windows' pre-installed SQLite engine (`winsqlite3.dll`) using its built-in JSON functions. It incurs zero overhead by running in-memory P/Invoke directly in C, returns native PowerShell objects (`[PSCustomObject]`) with seamless dot-notation access, and provides full support for arrays and nested document structures. ／ - **Native OS Engine:** Interacts with the native Windows library `C:\\Windows\\System32\\winsqlite3.dll` using dynamic C# and P/Invoke compiled at runtime via `Add-Type`.",
+   "evidence_lines": [
+    10,
+    12,
+    39
+   ]
+  },
+  "fn": "cmartineztech/PSLocalBase",
+  "sha": "27392fb4336e",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::PowerContext 2026 competition - processing-01-count-trigger (OceanBase PowerContext v1.2.0 baseline)": {
+  "identity": {
+   "one_liner": "OceanBase PowerContext 2026 竞赛的 count-trigger 处理题基线仓库",
+   "review": "该仓库包含 PowerContext 2026 竞赛中 processing-01-count-trigger 题目的基线实现，基于 OceanBase PowerContext v1.2.0 运行。面向参加该竞赛的开发者，可用作对照基线。简介未提供安装、运行方式及题目具体逻辑的更多信息，细节需查看仓库内容确认。",
+   "highlights": [
+    "包含 processing-01-count-trigger 题目的基线代码",
+    "基于 OceanBase PowerContext v1.2.0"
+   ],
+   "use_cases": [
+    "参赛者对照 count-trigger 题目的基线实现",
+    "在 OceanBase PowerContext v1.2.0 环境下验证解题方案"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "PowerContext 2026 competition - processing-01-count-trigger (OceanBase PowerContext v1.2.0 baseline)"
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "简介仅表明是 OceanBase PowerContext 竞赛题基线，无法确认其为数据库生态服务工具还是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "PowerContext 2026 competition - processing-01-count-trigger (OceanBase PowerContext v1.2.0 baseline)"
+  },
+  "fn": "lihengba/powercontext-tmp",
+  "sha": "desc::PowerContext 2026 competition - processing-01-count-trigger (OceanBase PowerContext v1.2.0 baseline)",
+  "source": "desc",
+  "generated_at": "2026-11-02",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

@@ -11726,5 +11726,144 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8ff978470469": {
+  "identity": {
+   "one_liner": "Rust 编写的 ArchLord 服务器模拟器，数据存于 MariaDB",
+   "review": "ArchCore 是针对 64 位 ArchLord 客户端的服务器模拟器，实现登录与世界服，通过 Ghidra 逆向客户端重建协议，用 Rust 编写并以 MariaDB 存储数据。面向想搭建 ArchLord 私服或参与逆向、服务端开发的社区成员，需自备 MariaDB 和游戏客户端，多数玩法功能处于模拟器验证阶段。",
+   "highlights": [
+    "提供登录服与世界服，协议经逆向客户端可执行文件重建",
+    "通过 db-init 命令生成数据库 schema 与测试账号",
+    "包含 GM 命令面板、数据库编辑器等配套生态工具"
+   ],
+   "use_cases": [
+    "搭建 ArchLord 64 位客户端的私人服务器",
+    "研究 MMO 网络协议与逆向工程实践",
+    "基于 MariaDB 的游戏数据编辑与内容开发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**ArchCore** is a server emulator (login + world) for the **64-bit ArchLord** client. It is written in **Rust** and stores its data in **MariaDB**. The protocol was rebuilt by ／ Requirements: Rust 1.85 or later (rustup), MariaDB, and a 64-bit ArchLord client extracted to",
+     "lines": [
+      17,
+      58
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明项目将数据存储在 MariaDB 中，数据库为应用的数据存储层",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GPL-3.0-or-later，单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**ArchCore** is a server emulator (login + world) for the **64-bit ArchLord** client. It is written in **Rust** and stores its data in **MariaDB**. The protocol was rebuilt by ／ Requirements: Rust 1.85 or later (rustup), MariaDB, and a 64-bit ArchLord client extracted to",
+   "evidence_lines": [
+    17,
+    58
+   ]
+  },
+  "fn": "BlaMacfly/ArchCore",
+  "sha": "8ff978470469",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7b68e7eaa533": {
+  "identity": {
+   "one_liner": "CoCreate 生态的 TiDB CRUD 封装与多租户状态路由客户端",
+   "review": "该库将 TiDB 的分布式 SQL 能力封装为 CoCreate 统一 JSON CRUD 接口，把 JSON 操作翻译为 MySQL 兼容查询，并支持向 TiDB、MongoDB、Qdrant 多后端并行写入及多租户状态路由。面向使用 CoCreate 协作生态并需要以 JSON 语法操作 TiDB 的开发者，npm/yarn 安装。",
+   "highlights": [
+    "提供统一 JSON 接口，将 object.create/object.read 等 NoSQL 风格操作翻译为针对 TiDB 的 MySQL 兼容查询",
+    "支持单次 API 调用并行写入多个目标数据库（TiDB、MongoDB、Qdrant）",
+    "支持多租户状态路由，自动注入租户元数据实现隔离的查询边界"
+   ],
+   "use_cases": [
+    "在协作应用中以 JSON 语法操作 TiDB 分布式 SQL 数据",
+    "需要将同一数据并行持久化到 SQL、文档库与向量库的场景",
+    "多租户环境下对 TiDB 集群进行租户隔离的数据读写"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "A highly efficient, enterprise-grade TiDB distributed SQL database CRUD wrapper and state-routing backend client for the collaborative CoCreate ecosystem. This wrapper maps TiDB's advanced HTAP (Hybrid Transactional and Analytical Processing), cloud-native sca ／ For a complete guide and working integration examples, refer to the CoCreate TiDB Documentation.",
+     "lines": [
+      3,
+      7
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "A highly efficient, enterprise-grade TiDB distributed SQL database CRUD wrapper and state-routing backend client for the collaborative CoCreate ecosystem. This wrapper maps TiDB's advanced HTAP (Hybrid Transactional and Analytical Processing), cloud-native sca ／ * **Unified JSON Interface (MongoDB-like Syntax):** You don't need to write manual relational SQL strings or manage massive sharding keys. CoCreate translates standard NoSQL JSON CRUD operations (such as `object.create` or `object.read`) transparently into hig",
+     "lines": [
+      3,
+      15
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 TiDB 提供 CRUD 封装与状态路由服务的客户端库，属于数据库生态工具而非存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A highly efficient, enterprise-grade TiDB distributed SQL database CRUD wrapper and state-routing backend client for the collaborative CoCreate ecosystem. This wrapper maps TiDB's advanced HTAP (Hybrid Transactional and Analytical Processing), cloud-native scale, and MySQL-compatible database engines into CoCreate's unified JSON interface. ／ * **Unified JSON Interface (MongoDB-like Syntax):** You don't need to write manual relational SQL strings or manage massive sharding keys. CoCreate translates standard NoSQL JSON CRUD operations (such as `object.create` or `object.read`) transparently into highly optimized MySQL-compatible queries executed over TiDB's distributed engine layer.",
+   "evidence_lines": [
+    3,
+    15
+   ]
+  },
+  "fn": "CoCreateJS/tidb",
+  "sha": "7b68e7eaa533",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

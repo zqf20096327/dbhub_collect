@@ -11468,5 +11468,202 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b1e4000119f6": {
+  "identity": {
+   "one_liner": "git托管的AI代理失败修复知识库，经MCP接口检索",
+   "review": "MisakaNet 是一个面向 AI 编码代理的失败记忆库：每次故障修复以 Markdown lesson 形式入库，按 E0–E4 证据等级分级，本地用标准库 BM25 检索，托管端点可选语义回退。通过 MCP server（本地 stdio 提供 11 个工具）、WebMCP 等接口供 Claude Code、Codex、Cursor 等 MCP 客户端调用。定位为故障恢复知识层，非通用记忆系统，检索依赖语料覆盖，无匹配时返回 no_match 与 intake 表单。",
+   "highlights": [
+    "提供 MCP server（8 个工具，本地 stdio 版含 11 个）及 WebMCP、llms.txt、A2A 发现接口",
+    "lesson 为 Markdown 文件，按 E0–E4 证据等级分级并存于 git 仓库",
+    "本地检索基于 Python 标准库 BM25，托管端点提供可关闭的语义回退（bge-m3 + Vectorize）"
+   ],
+   "use_cases": [
+    "AI 代理调试时检索历史上已验证的同类故障修复方案",
+    "团队沉淀故障修复经验供后续代理复用（E4 需两个以上不同客户端复现检索）",
+    "向语料提交新故障 intake，纳入 CI 审核流程"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未声明适配或使用任何具体数据库，本地检索为标准库 BM25，与数据库生态的直接服务关系证据不足",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> MisakaNet is that place: a git-backed **failure memory**. Every lesson is a Markdown file in this ／ **Git-backed failure memory for AI coding agents.** An error shows up → the agent searches → it ／ Python standard library. The hosted MCP endpoint adds an **optional semantic fallback** (bge-m3 +",
+   "evidence_lines": [
+    13,
+    87,
+    92
+   ]
+  },
+  "fn": "Ikalus1988/MisakaNet",
+  "sha": "b1e4000119f6",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a7b75e10d00d": {
+  "identity": {
+   "one_liner": "本地优先的 AI 长篇网文写作工坊，以本地 SQLite 单文件存储稿件与设定",
+   "review": "Novel Smith 是一个运行在本地的长篇网文写作应用：AI 起草正文、章纲，用户审阅修改；内置分层记忆引擎（近章全文+摘要+压缩要点）与自动抽取角色卡/世界书的管线，数据全部写入本地单个 SQLite 文件（./data/novelforge.db），不依赖外部数据库服务。面向写中长篇网文、需长期维护人设与伏笔的作者；AI 功能需自备 LLM API Key，桌面版提供 Windows 安装包，未做代码签名。",
+   "highlights": [
+    "分层记忆引擎：近 4 章全文+近 3 章摘要+远楼层压缩，配 S/A/B/C 四级事件衰减",
+    "每章自动抽取人物/地点/势力生成角色卡与世界书词条（15 类分类器），支持 TXT/Markdown/HTML/EPUB/DOCX 五格式导出",
+    "数据存储于本地单一 SQLite 文件（./data/novelforge.db），无账号、无云服务、无遥测；去 AI 味自检为 12 条纯本地规则，零 LLM 调用"
+   ],
+   "use_cases": [
+    "写中长篇网文/小说，需长期维护人设、伏笔、世界观",
+    "介意稿件上传云端、要求本地离线写作与存储",
+    "对成稿做本地去 AI 味规则自检与五格式导出发布"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🔒 **未发表稿件零上传** —— 全部存在你电脑上的一个本地 SQLite 文件里，正文和 API Key 都不出本机；无账号、无云、无遥测。 ／ **生成正文、拆书、角色与世界书管理要写本地 SQLite 文件**，所以要在你自己机器上跑（在线 demo 跑在无状态云环境，写不了本地文件）。**你的文字不出本机。** ／ - **💾 本地单一 SQLite 文件库** —— `./data/novelforge.db`，零配置开箱即用；备份就是复制这个文件。无云服务、无订阅、无账号、无遥测。",
+     "lines": [
+      44,
+      151,
+      183
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明生成正文、角色与世界书数据写入本地 SQLite 文件存储，SQLite 是其数据存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**生成正文、拆书、角色与世界书管理要写本地 SQLite 文件**，所以要在你自己机器上跑（在线 demo 跑在无状态云环境，写不了本地文件）。**你的文字不出本机。** ／ - **💾 本地单一 SQLite 文件库** —— `./data/novelforge.db`，零配置开箱即用；备份就是复制这个文件。无云服务、无订阅、无账号、无遥测。",
+   "evidence_lines": [
+    151,
+    183
+   ]
+  },
+  "fn": "huanweide/novel-smith",
+  "sha": "a7b75e10d00d",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "33a24fcd3625": {
+  "identity": {
+   "one_liner": "自托管渗透测试报告平台，用 PostgreSQL 存储数据并支持 AI 辅助撰写",
+   "review": "Pental Report 是一个运行在自有服务器上的渗透测试报告生成系统，供安全测试团队管理客户、项目（engagement）、漏洞发现（findings），内置 22 套检查清单与 21 套 runbook，支持 CVSS 3.1/4.0 评分，并可将报告导出为 PDF 或 Word。安装通过脚本以 Docker Compose 部署，自带 PostgreSQL 实例存储数据；AI 功能需用户自带 API 密钥。",
+   "highlights": [
+    "提供客户、项目、阶段、漏洞发现与发现库的完整管理，支持自定义字段与章节",
+    "内置 22 套检查清单与 21 套 runbook，覆盖 OSSTMM、PTES、OWASP WSTG/ASVS/MASVS 等标准，可导入导出 Excel/Word/JSON",
+    "支持基于 CVSS 3.1 和 4.0 指标构建评分，并可生成品牌化 PDF/Word 报告"
+   ],
+   "use_cases": [
+    "渗透测试团队自托管记录发现并交付客户报告",
+    "团队通过 Tailscale 或自有域名协作撰写报告",
+    "使用自带 API 密钥的 AI 从证据生成漏洞描述草稿"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The installer checks Docker, downloads the latest release, makes your settings with new secrets, and starts Pental Report beside its own PostgreSQL. Then it opens your browser on the first-run page with the setup code already filled in: you name your firm, mak ／ docker compose exec -T db pg_dump -U postgres report > report-$(date +%F).sql ／ docker compose exec -T db psql -U postgres -c \"DROP DATABASE report WITH (FORCE)\" -c \"CREATE DATABASE report OWNER report\"",
+     "lines": [
+      42,
+      263,
+      274
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用自带 PostgreSQL 作为其数据存储（installer starts Pental Report beside its own PostgreSQL）",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Pental Report is free, open-source penetration test reporting that runs on your own server. ／ The installer checks Docker, downloads the latest release, makes your settings with new secrets, and starts Pental Report beside its own PostgreSQL. Then it opens your browser on the first-run page with the setup code already filled in: you name your firm, make the first administrator account, set up your authenticator app, and you are in. Your logo, colours and theme are in Settings, Branding. It finishes like this: ／ docker compose up -d",
+   "evidence_lines": [
+    13,
+    42,
+    98
+   ]
+  },
+  "fn": "pental-io/report",
+  "sha": "33a24fcd3625",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

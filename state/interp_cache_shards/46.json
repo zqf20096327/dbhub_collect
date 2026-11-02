@@ -10958,5 +10958,126 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2313ed7eccbb": {
+  "identity": {
+   "one_liner": "查询美国邮编的 Python/Rust 库，数据内嵌于包中",
+   "review": "Zipcodes 是一个用于查询美国邮编的库，提供 is_real、matching、filter_by 等函数；2.0 起以 Rust 实现核心，通过 PyO3 同时发布 Python 包与 Rust crate，数据集编译进扩展模块、无需数据库或网络。适用于需要离线邮编校验与检索的 Python/Rust 开发者，Python API 与 1.x 兼容。",
+   "highlights": [
+    "以 Rust 实现核心，同一代码库发布 Python 包与 Rust crate",
+    "数据集内嵌于安装包，无需 SQLite、网络或运行时数据文件",
+    "数据由 GitHub Actions 每月自动重建并发布"
+   ],
+   "use_cases": [
+    "表单邮编校验与补全",
+    "按州/城市/县/坐标过滤邮编",
+    "离线查询邮编经纬度与距离计算"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Zipcodes is a simple library for querying U.S. zipcodes. No SQLite, no",
+     "lines": [
+      7
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该库不依赖数据库且不面向数据库生态服务，仅作为内嵌数据的邮编查询库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Zipcodes is a simple library for querying U.S. zipcodes. No SQLite, no ／ Since 2.0, the library is implemented in Rust and published from a single ／ $ python -m pip install zipcodes",
+   "evidence_lines": [
+    7,
+    10,
+    39
+   ]
+  },
+  "fn": "seanpianka/Zipcodes",
+  "sha": "2313ed7eccbb",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d2c8936d164d": {
+  "identity": {
+   "one_liner": "Rust 本地 AI 运行时与集成框架，含代理路由、CLI/MCP 接口",
+   "review": "ABI 是一个用 Rust 实现的本地 AI 运行时与集成框架，提供确定性配置路由、代理与工具契约、provider 连接器及 CLI/MCP 接口，依赖同仓 WDBX 作为存储，需按 CI 记录的版本对齐编译。面向需要在本地编排代理与模型调用的开发者；README 明确多数分布式、训练类能力尚未实现，属研究性质。",
+   "highlights": [
+    "提供 CLI 与 MCP（stdio JSON-RPC 及 HTTP+SSE 兼容监听）两种接口",
+    "支持显式 provider 路由与 OpenAI 兼容本地桥接、Apple Intelligence 实时调用",
+    "依赖同级 WDBX 仓库作为存储，提供 wdbx 查询/统计/持久化命令"
+   ],
+   "use_cases": [
+    "本地搭建代理编排与模型调用流水线",
+    "通过 MCP 服务器向外部客户端暴露 AI 工具",
+    "研究持久化存储与代理调度的集成实验"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "项目本身是 AI 代理框架，使用的存储是其自有同级仓库 WDBX，不在候选清单中，无法判定其为数据库生态工具或应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "and WDBX ecosystem. It provides deterministic profile routing, agent and tool ／ contracts, provider connectors, model-artifact foundations, and a CLI/MCP ／ ABI requires the sibling WDBX checkout, not just this repository:",
+   "evidence_lines": [
+    7,
+    8,
+    64
+   ]
+  },
+  "fn": "donaldfilimon/abi",
+  "sha": "d2c8936d164d",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

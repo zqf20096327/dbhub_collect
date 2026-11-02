@@ -11275,5 +11275,179 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "68fee7dd8e15": {
+  "identity": {
+   "one_liner": "C#/.NET 编写的分布式 SQL 数据库，Raft 复制 + 事务性 KV 存储",
+   "review": "CamusDB 是用 C# 在 .NET 上实现的分布式 SQL 数据库引擎，通过 Raft 复制和事务性键值存储层提供 SQL 接口，默认可串行化隔离，支持数据库写时复制分支、已删除对象恢复、时间旅行读取和查询结果缓存，客户端经 JSON/HTTP 或 gRPC 访问。适合需要在 .NET 环境运行强一致性分布式数据库的开发与运维人员，但 README 提示部分功能仍为 alpha，API 和存储格式可能在版本间变化。",
+   "highlights": [
+    "提供 SQL 接口，默认可串行化隔离，跨分区写入使用 Raft 共识之上的两阶段提交",
+    "支持数据库写时复制分支（CREATE DATABASE … BRANCH FROM）、已删除对象恢复与 AS OF SYSTEM TIME 时间旅行读取",
+    "引擎为纯 .NET 实现，并编译为 WebAssembly 可在浏览器中运行多节点集群演示"
+   ],
+   "use_cases": [
+    "需要强一致性/可串行化隔离的分布式事务场景",
+    "生产库的临时分支克隆、schema 迁移演练、按 PR 的临时数据库",
+    "误删数据的恢复与历史快照读取（时间旅行查询）"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **SQL dialect** — SELECT (including `FROM`-less `SELECT <expr>`), INSERT, UPDATE, DELETE, TRUNCATE, CREATE/DROP/ALTER TABLE, transactions (BEGIN / COMMIT / ROLLBACK), parameterized placeholders, prepared statements, table aliases, derived tables, inner, left ／ - **JSON documents** — a `jsonb` column (`json` is an alias) stored as canonical binary CBOR, with the PostgreSQL operators (`->`, `->>`, `#>`, `@>`, `?`, `||`, `#-`, …), functions (`jsonb_set`, `jsonb_build_object`, `jsonb_each`, `jsonb_agg`, …) and GIN index",
+     "lines": [
+      74,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库本身是数据库引擎/存储内核，为应用提供数据存储服务，而非使用某个数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CamusDB is a SQL distributed database written in C# on .NET. It provides a SQL interface with a Raft-replicated, transactional key-value storage layer, and makes a few opinionated choices: **serializable isolation/strong consistency are the default**; databases can be **branched copy-on-write like code**; and **dropped objects are recoverable** instead of instantly destroyed. It can auto-scale based on traffic. Development is driven by performance, Jepsen-style testing, chaos engineering, fault injection, and degraded-state testing. ／ CamusDB's engine is written in modern C# on .NET: the SQL parser, the query planner and operators, the transaction layer, and the embedded Kahuna storage node all run in a single .NET process (with RocksDB underneath for persistence). Because the engine itself is pure .NET, extending it means writing ordinary C#: bring your own NuGet libraries and custom business logic directly into the database layer without crossing a language boundary or fighting a foreign extension API. Reading and debugging the engine is equally direct, and it runs on any platform .NET 10 supports. Clients talk to it over a JSON/HTTP API or a gRPC API with a .NET client library.",
+   "evidence_lines": [
+    3,
+    67
+   ]
+  },
+  "fn": "camusdb/camusdb",
+  "sha": "68fee7dd8e15",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "27684e3df09a": {
+  "identity": {
+   "one_liner": "基于 Zig 的终端 TUI 数据库浏览与 SQL 客户端",
+   "review": "zpeek 是一个用 Zig 编写的终端数据库浏览与 SQL 客户端，提供表浏览、外键跳转、SQL 执行、CSV/JSON 导出、EXPLAIN 查看和 schema 检查等功能，内置驱动与 SQLite 无需额外客户端库。面向希望在编辑器终端或 SSH 远程服务器上进行数据库操作的开发者，连接支持只读等访问模式控制，客户端侧 SQL 检查明确声明不构成安全边界。",
+   "highlights": [
+    "支持浏览、过滤、排序表数据并跟进外键，执行 SQL 并导出 CSV/JSON",
+    "内置驱动与 SQLite，单个二进制无需安装额外客户端库",
+    "连接支持命名配置、TLS 及只读/受限访问模式选择"
+   ],
+   "use_cases": [
+    "在编辑器终端或 SSH 服务器上浏览和查询数据库",
+    "通过 SQL 查询导出 CSV/JSON 结果",
+    "以只读模式查看生产数据库数据"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A keyboard-driven database browser and SQL client for your terminal. PostgreSQL · MySQL/MariaDB · SQLite · ClickHouse ／ zpeek 'postgres://user@host:5432/db' ／ Passwords can come from `$PGPASSWORD`, `$MYSQL_PWD`, or `$CLICKHOUSE_PASSWORD`; URLs also accept a password, for example `postgres://user:pass@host:5432/db`. See connections and TLS for saved profiles and more options.",
+     "lines": [
+      5,
+      57,
+      62
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A keyboard-driven database browser and SQL client for your terminal. PostgreSQL · MySQL/MariaDB · SQLite · ClickHouse ／ zpeek 'mysql://user@host:3306/db' ／ Passwords can come from `$PGPASSWORD`, `$MYSQL_PWD`, or `$CLICKHOUSE_PASSWORD`; URLs also accept a password, for example `postgres://user:pass@host:5432/db`. See connections and TLS for saved profiles and more options.",
+     "lines": [
+      5,
+      58,
+      62
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A keyboard-driven database browser and SQL client for your terminal. PostgreSQL · MySQL/MariaDB · SQLite · ClickHouse ／ ### 1. Open an existing local SQLite database ／ zpeek ./data.sqlite",
+     "lines": [
+      5,
+      46,
+      49
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "A keyboard-driven database browser and SQL client for your terminal. PostgreSQL · MySQL/MariaDB · SQLite · ClickHouse ／ zpeek 'clickhouse://user@host:8123/db' ／ Passwords can come from `$PGPASSWORD`, `$MYSQL_PWD`, or `$CLICKHOUSE_PASSWORD`; URLs also accept a password, for example `postgres://user:pass@host:5432/db`. See connections and TLS for saved profiles and more options.",
+     "lines": [
+      5,
+      59,
+      62
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A keyboard-driven database browser and SQL client for your terminal. PostgreSQL · MySQL/MariaDB · SQLite · ClickHouse",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将其定位为数据库浏览与 SQL 客户端工具，用于操作数据库而非使用数据库存储业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Browse tables. Follow foreign keys. Run SQL. ／  A keyboard-driven database browser and SQL client for your terminal. PostgreSQL · MySQL/MariaDB · SQLite · ClickHouse ／ My editor didn't have a database client, so checking data meant jumping between windows. I built zpeek as a lightweight database client I could run in my editor's terminal or on a server over SSH, keeping database work in the same place as everything else.",
+   "evidence_lines": [
+    3,
+    5,
+    83
+   ]
+  },
+  "fn": "alaleks/zpeek",
+  "sha": "27684e3df09a",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10828,5 +10828,71 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8f96f63505c0": {
+  "identity": {
+   "one_liner": "非官方 FinViz 网站抓取 API，提供股票数据筛选与导出",
+   "review": "这是一个针对 finviz.com 的非官方 Python 库，用于获取股票数据、新闻、内部人交易和分析师目标价，并提供多条件股票筛选器（Screener）。筛选结果可导出为 CSV、SQLite 数据库文件或 pandas DataFrame，并支持异步请求。数据有 15-20 分钟延迟，仅供金融分析研究使用，不适合实时交易。",
+   "highlights": [
+    "提供 get_stock/get_news/get_insider/get_analyst_price_targets 等单只股票数据获取函数",
+    "提供 Screener 筛选器，结果可导出 CSV、SQLite、pandas DataFrame",
+    "支持异步请求方式获取数据"
+   ],
+   "use_cases": [
+    "金融分析与研究中的股票基本面数据采集",
+    "批量筛选股票并导出为 CSV/SQLite 供后续处理",
+    "下载个股 K 线图表"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# Export to SQLite ／ stock_list.to_sqlite(\"stocks.sqlite3\")",
+     "lines": [
+      98,
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 中 SQLite 仅作为筛选结果导出目标（to_sqlite），该库并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " stock_list.to_sqlite(\"stocks.sqlite3\") ／  # Export to pandas DataFrame (requires pandas)",
+   "evidence_lines": [
+    99,
+    101
+   ]
+  },
+  "fn": "mariostoev/finviz",
+  "sha": "8f96f63505c0",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

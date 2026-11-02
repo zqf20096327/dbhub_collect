@@ -9822,5 +9822,240 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9b4f2977d667": {
+  "identity": {
+   "one_liner": "Kotlin 多平台协程优先 SQL 工具库，带编译期查询校验",
+   "review": "sqlx4k 是面向 Kotlin Multiplatform 的 SQL 工具库，非 ORM，通过 Gradle 插件与 KSP 代码生成提供 @Repository/@Query 的 CRUD 实现及编译期 SQL 校验与优化，驱动层支持连接池、事务和保存点。适配 PostgreSQL、MySQL/MariaDB、SQLite（含 SQLCipher），支持 JVM/Android/iOS/macOS/Linux/Windows 目标，适合在 Kotlin 多平台项目中直接访问数据库的开发者。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、SQLite 及 SQLCipher，目标平台含 JVM/Android/iOS/macOS/Linux/Windows",
+    "提供编译期 SQL 语法与 schema 校验及查询优化，错误查询使构建失败",
+    "提供连接池、事务/保存点、预编译语句、Row mapper 及数据库迁移"
+   ],
+   "use_cases": [
+    "Kotlin 多平台应用中的类型安全数据库访问层",
+    "需要在编译期发现 SQL 错误而非运行时报错的项目",
+    "直接使用驱动执行 SQL 并管理连接与事务的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A coroutine-first SQL toolkit with compile-time query validations for Kotlin Multiplatform. PostgreSQL, MySQL/MariaDB, ／ implementation(\"io.github.smyrgeorge:sqlx4k-postgres:1.18.0\") ／ - Supported databases: PostgreSQL, MySQL, MariaDB, SQLite",
+     "lines": [
+      10,
+      57,
+      177
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A coroutine-first SQL toolkit with compile-time query validations for Kotlin Multiplatform. PostgreSQL, MySQL/MariaDB, ／ implementation(\"io.github.smyrgeorge:sqlx4k-mysql:1.18.0\") ／ - Supported databases: PostgreSQL, MySQL, MariaDB, SQLite",
+     "lines": [
+      10,
+      59,
+      177
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "and SQLite are supported. ／ - Supported databases: PostgreSQL, MySQL, MariaDB, SQLite ／ and SQLCipher (encrypted SQLite)",
+     "lines": [
+      11,
+      177,
+      178
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A coroutine-first SQL toolkit with compile-time query validations for Kotlin Multiplatform. PostgreSQL, MySQL/MariaDB, ／ - Supported databases: PostgreSQL, MySQL, MariaDB, SQLite ／ - MySQL/MariaDB: examples/mysql",
+     "lines": [
+      10,
+      177,
+      221
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为与数据库通信的工具库，并明确列出支持的数据库适配。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A coroutine-first SQL toolkit with compile-time query validations for Kotlin Multiplatform. PostgreSQL, MySQL/MariaDB, ／ **sqlx4k** is not an ORM. Instead, it provides a comprehensive toolkit of primitives and utilities to communicate ／ - Supported databases: PostgreSQL, MySQL, MariaDB, SQLite",
+   "evidence_lines": [
+    10,
+    15,
+    177
+   ]
+  },
+  "fn": "smyrgeorge/sqlx4k",
+  "sha": "9b4f2977d667",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "90ae9f7b3c0a": {
+  "identity": {
+   "one_liner": "本地优先的科学文献 RAG 工具包与 FastAPI 服务，SQLite 持久化",
+   "review": "一个本地优先的 Python 工具包和 FastAPI 服务，用于构建可审查的文献工作流：摄取论文语料、执行比较或假设性问题的检索与回答，并保留冻结证据、人工筛选决策与运行历史；默认使用 fake 适配器可离线运行，SQLite 存储文档、图数据与运行记录，模型供应商适配器为可选项。适合需要在本地对文献证据链进行逐条核查的研究人员。",
+   "highlights": [
+    "提供 FastAPI 服务与浏览器界面，支持摄取、检索预览、证据导出为 JSON/Markdown/CSV/BibTeX",
+    "使用 SQLite 持久化文档、图数据与运行历史，保存冻结证据与人工标注、筛选决策",
+    "默认无需模型凭据即可离线运行，支持可选的模型供应商适配器"
+   ],
+   "use_cases": [
+    "论文筛选与人工纳入/排除决策管理",
+    "对已保存回答的证据来源进行离线核查与审查",
+    "本地文献语料的检索、集合管理与语料漂移检查"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "literature workflows, with SQLite persistence and optional model-provider adapters.",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该项目以 SQLite 持久化自身数据（文献文档、图数据与运行记录），属于使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**local-first Python toolkit and FastAPI service** for building inspectable ／ literature workflows, with SQLite persistence and optional model-provider adapters. ／ The demo explicitly uses the fake model, ingests a synthetic fixture into a",
+   "evidence_lines": [
+    9,
+    10,
+    30
+   ]
+  },
+  "fn": "Francis1998/scholar-rag-agent",
+  "sha": "90ae9f7b3c0a",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "03aca1ead733": {
+  "identity": {
+   "one_liner": "自托管家庭网络监控面板，Go+React，数据存 SQLite",
+   "review": "NetPulse 是一个自托管的 PWA 监控面板，通过 SSH/SNMP/厂商集成采集 OpenWrt、GL.iNet、MikroTik、Asuswrt 及 UniFi 等路由器的状态，提供拓扑图、设备识别、WAN 测速、WireGuard 与 AdGuard Home 统计和告警，并内置只读 MCP 服务器供 AI 助手查询。面向家用局域网管理员，后端为单个 Go 二进制，测速结果与历史存于 SQLite，默认一切不出局域网。",
+   "highlights": [
+    "通过 SSE 实时展示路由器健康分、拓扑图、设备列表与告警",
+    "支持 OpenWrt 原生 .ipk/.apk 代理及 MikroTik、Asuswrt、UniFi、SNMP 等外部集成",
+    "内置只读 MCP 服务器（默认关闭）和多用户、i18n ES/EN"
+   ],
+   "use_cases": [
+    "监控 OpenWrt/GL.iNet 家庭路由器集群状态与健康度",
+    "自动绘制有线/无线网络拓扑并识别接入设备",
+    "按计划执行 WAN 测速并在速度低于套餐比例时告警"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite with a seven-day chart and recent history. Choose M-Lab NDT (the default),",
+     "lines": [
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明测速结果与历史存于 SQLite，SQLite 仅为其数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLite with a seven-day chart and recent history. Choose M-Lab NDT (the default), ／ **What it runs on.** The server is one static Go binary on any Linux box. ／ **What it runs on.** The server is one static Go binary on any Linux box.",
+   "evidence_lines": [
+    70,
+    74,
+    74
+   ]
+  },
+  "fn": "gnacho/netpulse",
+  "sha": "03aca1ead733",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

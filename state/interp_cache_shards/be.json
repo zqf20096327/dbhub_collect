@@ -10709,5 +10709,116 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3333d1cd3049": {
+  "identity": {
+   "one_liner": "基于 Atomic Data 规范的自托管实时数据服务器与工作区",
+   "review": "atomic-server 是一个自托管的服务器实现，提供存储、全文搜索、实时同步与 RESTful API，数据模型遵循 Atomic Data 规范，内置表格编辑、文档协作和 JS/React/Svelte/Rust/Flutter SDK。适用于需要本地优先数据存储和自建数据服务的个人或团队；README 标注项目处于 alpha 阶段，1.0 前可能存在破坏性变更。",
+   "highlights": [
+    "提供自托管服务器，包含存储、搜索、同步与 RESTful API（JSON-AD、RDF、JSON-LD 等格式）",
+    "提供 JavaScript、React、Svelte、Rust、Dart/Flutter 客户端库及 atomic-cli 命令行工具",
+    "支持本地加密存储、版本历史、实时协作，并包含 MCP 的 AI 支持"
+   ],
+   "use_cases": [
+    "自托管个人数据存储与文档/表格工作区",
+    "基于 Atomic Data 与 CRDT 同步协议构建本地优先应用",
+    "需要全文搜索、权限控制和版本历史的数据管理服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "仓库主要提供面向终端用户的工作区应用与自托管服务器，其数据存储使用自身的 Atomic Data/redb 实现，而非为某个外部数据库生态服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **AtomicServer**, the self-hostable server for storage, search, sharing and sync. ／ _Status: alpha. Breaking changes are expected until 1.0._ ／ - 🚀 **Fast**: under 1ms median response time, powered by actix-web and redb.",
+   "evidence_lines": [
+    21,
+    31,
+    57
+   ]
+  },
+  "fn": "ontola/atomic-server",
+  "sha": "3333d1cd3049",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4445a9dd06ec": {
+  "identity": {
+   "one_liner": "Rust 嵌入式元数据引擎，基于持久化自适应基数树（ART）",
+   "review": "holt 是一个嵌入式的 Rust 元数据存储引擎，以持久化 Adaptive Radix Tree 为核心数据结构，面向路径形键（如 S3 对象名、文件系统 dentry）的点查与前缀列举场景，提供 WAL、checkpoint、崩溃恢复与原子批次写入。适合需要在应用内嵌元数据索引的开发者；README 明确说明它不面向通用 KV、分析或向量检索负载，且尚处 pre-1.0，小版本可能破坏源码兼容。",
+   "highlights": [
+    "提供持久化 ART、O(key.len) 点查、前缀扫描与 S3 风格 delimiter rollup",
+    "包含逻辑 WAL、group commit、checkpointing 与 reopen recovery 的崩溃安全持久化",
+    "支持多 tree 数据库、原子元数据批次、乐观读与逐 blob 锁的并发热路径，以及 Linux io_uring 与 SIMD 检索"
+   ],
+   "use_cases": [
+    "对象存储与文件系统元数据管理",
+    "lakehouse 文件目录与制品/包注册表目录",
+    "分布式系统中嵌入式元数据索引"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是为应用提供嵌入式元数据存储能力的引擎/组件，而非使用外部数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`holt` is an embedded Rust metadata engine built around a persistent ／ It is not trying to be a generic KV database. The point is narrower: ／ Holt is pre-1.0. The public API is intentionally small and stable within",
+   "evidence_lines": [
+    12,
+    17,
+    213
+   ]
+  },
+  "fn": "NoKV-Lab/holt",
+  "sha": "4445a9dd06ec",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

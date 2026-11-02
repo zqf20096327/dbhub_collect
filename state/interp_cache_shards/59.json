@@ -9828,5 +9828,135 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5e249aee30fe": {
+  "identity": {
+   "one_liner": "自托管餐厅点餐/收银管理系统，基于 NestJS+Postgres+Next.js",
+   "review": "面向餐厅、咖啡馆、云厨房及多门店连锁的餐厅管理 POS 系统，包含点餐收银、桌台预订、厨房显示、库存、员工薪资、会计与 CRM 等模块。整体栈通过 Docker Compose 运行在本地 LAN 服务器上，使用 Postgres 存储数据，断网后仍可继续营业；也支持部署到 VPS 或通过隧道暴露访问。",
+   "highlights": [
+    "提供 20 个模块：POS 计费、桌台预订、KDS 厨房显示、库存、采购、CRM、员工排班薪资、会计、报表等",
+    "Offline-first 设计，Docker Compose 单机部署于餐厅本地局域网，断网可继续运行",
+    "支持 UPI QR 收款、ESC/POS 打印、RBAC 权限、双因素登录、GHCR 多架构镜像与 CasaOS/ZimaOS 清单安装"
+   ],
+   "use_cases": [
+    "餐厅/咖啡馆/酒吧本地自托管点餐收银与堂食外送管理",
+    "多门店连锁的分支管理与跨店库存调拨",
+    "无互联网依赖的离线环境营业（本地 LAN 服务器）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "chains. The whole stack — Postgres, API, and web app — runs on one local ／ Already shipped and running against real Docker/Postgres today: auth +",
+     "lines": [
+      44,
+      155
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Postgres over the originally-specced SQLite — is in",
+     "lines": [
+      268
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Postgres 是该应用自身运行的存储层（stack 的一部分），项目是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3 单许可",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "chains. The whole stack — Postgres, API, and web app — runs on one local ／ **Open-source, self-hosted restaurant POS & management system** — billing",
+   "evidence_lines": [
+    44,
+    5
+   ]
+  },
+  "fn": "Raktim94/nodedr-restaurant-pos",
+  "sha": "5e249aee30fe",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bb17c03ebed7": {
+  "identity": {
+   "one_liner": "ИТМО 大学课程笔记仓库，用 TeX/Typst/Markdown 编写并可脚本构建",
+   "review": "该仓库收录 ИТМО 大学 ИСy27 班多门课程的讲义笔记，涵盖数据库、操作系统、Java、机器学习、数学等科目，按学期组织并提供考试大纲。面向同校学生复习使用。笔记以 TeX、Typst、Markdown 三种格式编写，仓库提供 Python 构建脚本（build.py），需 Python 3.10+ 及 latexmk、typst 等工具编译生成。内容为 Unlicense/CC0 双公共领域许可，部分课程笔记仍在编写中。",
+   "highlights": [
+    "包含从第二学期到第七学期多门课程（含数据库、数据库设计、操作系统、机器学习等）的讲义笔记及部分考试大纲",
+    "提供 Python 构建脚本，支持将 TeX、Typst、Markdown 三种格式的笔记编译输出",
+    "采用 Unlicense / CC0 1.0 Universal 双许可，内容可自由使用与修改"
+   ],
+   "use_cases": [
+    "ИТМО 学生按科目复习课程内容与准备考试",
+    "需要本地编译 TeX/Typst 笔记源文件生成文档",
+    "查找数据库等课程的公开学习笔记资源"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "仓库仅是课程学习笔记的集合，不含为数据库生态服务的工具或组件功能",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "Unlicense 或 CC0 1.0 Universal 双许可；第三方图片与引用文字不在此许可范围内",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Конспекты по разным предметам первого потока ИСy27 университета ИТМО** ／ Конспекты представлены файлами на трех языках разметки: TeX, Typst, Markdown ／ Для сборки есть 3 скрипта, для их запуска нужны:",
+   "evidence_lines": [
+    3,
+    309,
+    311
+   ]
+  },
+  "fn": "pelmesh619/itmo_conspects",
+  "sha": "bb17c03ebed7",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

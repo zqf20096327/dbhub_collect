@@ -9103,5 +9103,108 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e3f32ee70e66": {
+  "identity": {
+   "one_liner": "供编码代理使用的分析工程技能集，提供探索/转换/维护循环",
+   "review": "Dex 是一组面向编码代理（Claude Code、Codex 等）的分析工程技能，通过 exmergo-dex-core 引擎让代理探索数据库、构建 dbt 模型与语义层，并在 schema 变化时维护模型。面向分析工程师团队使用，内置查询防火墙、PII 标记、成本预估账本等防护；源数据只读，构建在开发目标上执行。",
+   "highlights": [
+    "提供 explore/transform/maintain 三类技能，生成列画像、ER 图（Mermaid）并验证连接关系",
+    "支持 Snowflake、BigQuery、Databricks、Redshift、Postgres、DuckDB、ClickHouse、Trino 连接器及 dbt、Ossie、Cube、SLayer 语义层",
+    "内置查询防火墙拦截个人数据入上下文，扫描先估价并记录本地花费账本"
+   ],
+   "use_cases": [
+    "让编码代理在仓库中探索数据表结构、画像并验证表间连接",
+    "以可审查计划方式构建和重构 dbt 模型、测试、文档与指标",
+    "监测 schema、行量、粒度与指标定义的漂移并审查修复建议"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Postgres**|Operational database|✅|`postgres`|Database-seconds|`pg_service.conf`, `DATABASE_URL`, `PG*` env, or a dbt profile Also works with Supabase, Neon, and more managed Postgres platforms| ／ scan on a production Postgres primary is a real cost too.",
+     "lines": [
+      217,
+      226
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|**Trino**|Federated query engine|✅|`trino`|Cluster-seconds|`TRINO_URL`, `TRINO_*` env, or a dbt profile Also works with: MySQL, SQL Server, MongoDB, and more databases through Trino catalogs|",
+     "lines": [
+      220
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "|**Trino**|Federated query engine|✅|`trino`|Cluster-seconds|`TRINO_URL`, `TRINO_*` env, or a dbt profile Also works with: MySQL, SQL Server, MongoDB, and more databases through Trino catalogs|",
+     "lines": [
+      220
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**ClickHouse**|Analytical database|✅|`clickhouse`|Compute-seconds on Cloud, database-seconds self-hosted|`CLICKHOUSE_URL`, `CLICKHOUSE_*` env, or a dbt profile|",
+     "lines": [
+      219
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "`.dex/dex.db` is the SQLite backend's equivalent of `cache.json`, so it gets",
+     "lines": [
+      338
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明通过连接器对接数据库与数仓，为分析工程提供代理技能，属于服务数据库生态的工具而非使用库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Postgres**|Operational database|✅|`postgres`|Database-seconds|`pg_service.conf`, `DATABASE_URL`, `PG*` env, or a dbt profile Also works with Supabase, Neon, and more managed Postgres platforms| ／ |**ClickHouse**|Analytical database|✅|`clickhouse`|Compute-seconds on Cloud, database-seconds self-hosted|`CLICKHOUSE_URL`, `CLICKHOUSE_*` env, or a dbt profile| ／ Choose the semantic layer independently of your database connector. Dex supports",
+   "evidence_lines": [
+    217,
+    219,
+    232
+   ]
+  },
+  "fn": "exmergo/dex",
+  "sha": "e3f32ee70e66",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

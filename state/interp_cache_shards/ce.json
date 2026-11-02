@@ -11922,5 +11922,153 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a1bec9845621": {
+  "identity": {
+   "one_liner": "自托管多用户间隔重复闪卡服务，内置 FSRS v6 调度与 MCP 服务器",
+   "review": "Engram 是一个用 Go 编写的自托管间隔重复（SRS）闪卡服务，实现 FSRS v6 调度算法、10 种卡片类型、Markdown/TeX 渲染和 Anki .apkg 导入导出，内置 REST API 与 MCP 服务器供 AI 客户端创建卡片和管理复习；支持 OIDC 单点登录的多用户架构，存储可用内嵌 SQLite 或 PostgreSQL，通过 Docker 或源码部署，面向需要自建学习复习系统的个人与团队用户。",
+   "highlights": [
+    "实现 FSRS v6 调度算法，支持 Anki 风格笔记类型、模板、CSS、MathJax 公式及 .apkg 包的导入导出",
+    "内置 MCP 服务器（/mcp，Streamable HTTP），提供牌组管理、笔记创建、复习提交、导入导出等 MCP 工具",
+    "支持多用户与牌组共享（OIDC/SSO），存储可选 SQLite 或 PostgreSQL，提供 REST API 与 PWA 前端"
+   ],
+   "use_cases": [
+    "自托管个人或多人闪卡学习与复习平台",
+    "通过 MCP 将 Claude Desktop、Cursor 等 AI 客户端接入闪卡库，自动生成卡片和辅助复习",
+    "从 Anki 迁移牌组（含子牌组、模板、媒体、复习历史与 FSRS 权重）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "### Production Setup (Docker Compose with PostgreSQL) ／ For multi-user or production setups, PostgreSQL is recommended. ／ image: postgres:18 ／ |`DB_DRIVER`|Database driver (`sqlite` or `postgres`)|`postgres` (or `sqlite`)|",
+     "lines": [
+      87,
+      89,
+      96,
+      123
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Run a standalone instance with embedded SQLite storage (ideal for personal use): ／ |`DB_DRIVER`|Database driver (`sqlite` or `postgres`)|`postgres` (or `sqlite`)| ／ |`DB_DSN`|Database connection string or SQLite file path|`postgres://user:pass@localhost:5432/engram?sslmode=disable`|",
+     "lines": [
+      75,
+      123,
+      124
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Engram 使用 SQLite 或 PostgreSQL 作为自身存储后端，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Engram is an open-source, self-hosted spaced repetition flashcard service. Built with a modern Svelte 5 SPA frontend and a Go backend, it pairs the state-of-the-art **FSRS v6** scheduling algorithm with a native **Model Context Protocol (MCP)** server for AI-assisted card creation and workflow automation. ／ Run a standalone instance with embedded SQLite storage (ideal for personal use): ／ For multi-user or production setups, PostgreSQL is recommended.",
+   "evidence_lines": [
+    10,
+    75,
+    89
+   ]
+  },
+  "fn": "bestnite/engram",
+  "sha": "a1bec9845621",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f0de2e47c681": {
+  "identity": {
+   "one_liner": "将礼拜时间同步并安排进 Google Calendar 的 Web 应用",
+   "review": "PrayerFit 是一个面向穆斯林用户的日历同步应用：按用户地址计算礼拜时间，读取清真寺的 MAWAQIT 页面获取 iqamah/Jumuah 时间，并依据用户日历中的空闲时段自动移动礼拜条目，写入独立的 Google Calendar。后端为 FastAPI，使用 PostgreSQL 存储数据并通过 Alembic 做迁移，提供 Google OAuth 登录与 Docker Compose 部署。",
+   "highlights": [
+    "按位置计算礼拜时间并读取清真寺 MAWAQIT 页面数据，同步到独立的 Google Calendar",
+    "根据用户日历事件自动调整礼拜时间，每 5 分钟复查一次",
+    "提供 Docker Compose 部署及 pytest/Playwright 测试"
+   ],
+   "use_cases": [
+    "需要将每日礼拜时间与个人日程协调的穆斯林用户",
+    "跟踪本地清真寺 iqamah/Jumuah 时间变更",
+    "通过 Google Calendar 管理礼拜提醒的个人日程规划"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. Postgres, with SQLAlchemy and Alembic: the database and its migrations.",
+     "lines": [
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该 Web 应用使用 Postgres 存储数据（L66），数据库仅为其后端组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It syncs your daily prayers and masjid times to your Google Calendar, based on your location, and plans them around your day. ／ 2. Postgres, with SQLAlchemy and Alembic: the database and its migrations. ／ 4. Docker Compose: runs the website, backend, worker, and database the same way on my laptop and the server.",
+   "evidence_lines": [
+    27,
+    66,
+    68
+   ]
+  },
+  "fn": "hakeemkashif-34/PrayerFit",
+  "sha": "f0de2e47c681",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8985,5 +8985,264 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c872ef9f653b": {
+  "identity": {
+   "one_liner": "为编码 agent 提供本地长期记忆的 SQLite 存储工具",
+   "review": "Hippo 是面向编码 agent（Claude Code、Codex、Cursor 等，及任意 MCP 客户端）的长期记忆层，把记忆存在本地 SQLite 库并以 markdown 镜像保持可读可提交；检索默认用 BM25 无需模型，支持按结果标记降权、supersede 替换旧事实，并从 git 提交与 Slack/GitHub 导入记忆。安装为 npm 包，运行 hippo init 完成项目内初始化。",
+   "highlights": [
+    "本地 SQLite 存储 + markdown 镜像，默认 BM25 检索、零运行时依赖",
+    "支持通过 MCP 或 HTTP 从多工具读写同一存储，记忆可跨 agent 迁移",
+    "提供错误记忆降权、supersede 事实替换、衰减/合并/去重等记忆管理机制"
+   ],
+   "use_cases": [
+    "为多个编码 agent 配置统一的本地长期记忆存储",
+    "从 ChatGPT、CLAUDE.md、Cursor 规则、Slack 等来源导入记忆并集中检索",
+    "按项目/git 仓库维护可追溯、可删除的记忆条目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Hippo keeps your coding agents' memories in a SQLite store on your machine, with markdown mirrors you can read and commit. Search is BM25 out of the box, with no model and no network call; embeddings are an optional install. `hippo init` installs hooks for Cla",
+     "lines": [
+      15
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "hippo decide \"Use PostgreSQL for all new services\" --context \"JSONB support\"",
+     "lines": [
+      312
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **LongMemEval oracle split, all 500 questions in one pooled store, BM25 only, no embeddings, v0.11: R@5 = 74.0%** (benchmarks/README.md, scripts in benchmarks/longmemeval/). A different setup from the per-haystack results under Benchmarks, so the two are not",
+     "lines": [
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该项目自身存储记忆的后端，README 未声明为数据库生态提供服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Hippo keeps your coding agents' memories in a SQLite store on your machine, with markdown mirrors you can read and commit. Search is BM25 out of the box, with no model and no network call; embeddings are an optional install. `hippo init` installs hooks for Claude Code and OpenCode, adds 2 hooks to Codex's `hooks.json` when Codex is installed (Codex runs them once you trust them in `/hooks`), and adds instructions to an existing `AGENTS.md` for Codex, Cursor, OpenClaw and Pi. Any MCP client can connect. Mark a memory wrong and it ranks lower; run `hippo supersede` and the old fact leaves recall. Zero runtime deps. ／ npm install -g hippo-memory && hippo init ／ Works with:    Claude Code, Codex, Cursor, OpenClaw, OpenCode, Pi, any MCP client",
+   "evidence_lines": [
+    15,
+    20,
+    30
+   ]
+  },
+  "fn": "kitfunso/hippo-memory",
+  "sha": "c872ef9f653b",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "141b60ca1abe": {
+  "identity": {
+   "one_liner": "SQLite 数据取证恢复工具，扫描并还原已删除记录",
+   "review": "FQLite 是一个用 Java 编写的 SQLite 取证工具，用于查找并恢复数据库文件中标记为已删除的记录，支持 freelist 页、未分配空间、已删表及 WAL/回滚日志的恢复，并提供 CSV/HTML 导出、十六进制查看器和内置 Text2SQL AI 助手（需下载本地 LLM 模型）。面向司法取证人员，提供 macOS/Windows/Linux 图形界面安装包。",
+   "highlights": [
+    "扫描 SQLite 数据库文件并恢复已删除记录，包括 freelist 页、未分配空间和已删除表",
+    "支持 WAL 归档、sqlcipher 加密库、多种编码及 BLOB 格式识别，提供 CSV/TSV/HTML 导出",
+    "内置 AI Text2SQL 助手，基于本地 GGUF 模型生成 SQLite 查询"
+   ],
+   "use_cases": [
+    "移动设备取证中的已删除 SQLite 数据恢复",
+    "数据库文件取证分析（WAL、回滚日志、加密库）",
+    "通过 AI 助手构建 SQLite 查询并导出恢复数据"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "### FQLite - Forensic SQLite Data Recovery Tool ／ FQLite is a tool to find and restore deleted records in SQLite databases. It therefore examines the database for entries marked as deleted. Those entries can be recovered and displayed. It is written in the Java programming language. The program can operate wi ／ * Export recovered data into a new SQLite database",
+     "lines": [
+      3,
+      5,
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为检查并恢复 SQLite 数据库文件中已删除记录的取证工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "FQLite is a tool to find and restore deleted records in SQLite databases. It therefore examines the database for entries marked as deleted. Those entries can be recovered and displayed. It is written in the Java programming language. The program can operate with a simple graphical user interface (GUI mode). The program is able to search a SQLite database file for regular as well as deleted records. ／ * support a forensically sound investigation of database files",
+   "evidence_lines": [
+    5,
+    20
+   ]
+  },
+  "fn": "pawlaszczyk/fqlite",
+  "sha": "141b60ca1abe",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2e486bdd0bd6": {
+  "identity": {
+   "one_liner": "PHP 轻量 NoSQL 文档库，以 JSON 平面文件存储数据",
+   "review": "Jisly 是一个 PHP 开源库，用平面 JSON 文件实现文档型 NoSQL 存储，每个集合对应一个文件，数据操作时全量载入内存并写回文件系统，提供 insert/find/findOne/update/delete 等 CRUD 接口，支持 OR/AND 逻辑操作符和基于 _rid 的精确匹配，并管理并发访问。适合想在 PHP 项目中快速启用文件级文档存储的开发者；其更新和删除会重写整个文件，开销随集合规模线性增长。通过 Composer/Packagist 安装。",
+   "highlights": [
+    "以平面 JSON 文件存储文档，每个集合对应一个文件，无需外部数据库服务",
+    "提供文档型查询接口 find/findOne/update/delete，支持 OR/AND 逻辑操作符",
+    "每个文档带唯一 _rid 标识符，声明支持并发访问管理，附带 PHPBench 基准测试套件"
+   ],
+   "use_cases": [
+    "需要内存加平面文件存储、文档导向查询语法的 PHP 项目快速启动",
+    "无独立数据库服务的轻量数据持久化场景",
+    "集合规模较小的 PHP 应用数据存储"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "该仓库本身是一个 NoSQL 存储引擎库，既非为其他数据库服务的工具，也非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The smallest PHP lightweight NoSQL database library, flat file JSON. ／ storage using a NoSQL (document oriented) query syntax. ／ 2. Each collection is physically represented by a file.",
+   "evidence_lines": [
+    7,
+    10,
+    41
+   ]
+  },
+  "fn": "r0mdau/jisly",
+  "sha": "2e486bdd0bd6",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "75e91774ae7d": {
+  "identity": {
+   "one_liner": "C++17 实现的分布式 KV 存储引擎，基于 Raft 复制与哈希区间分片",
+   "review": "AdvisKV 是用 C++17 编写的分布式键值存储系统，数据按 db+table+key 组织，由 Meta 节点负责库表与集群管理、Storage 节点存储数据，客户端经 SDK 路由缓存访问 Leader。支持 Raft 复制、ReadIndex 线性一致读、副本数在线调整、WAL/Snapshot 持久化恢复，可用于学习分布式存储实现的场景。限制包括 KV 引擎为内存 Map、Meta 单进程无高可用、不支持分片分裂与自动负载均衡。",
+   "highlights": [
+    "实现 Raft 复制、ReadIndex 线性一致读与 PreVote 预选举",
+    "支持哈希区间分片、副本数在线调整与坏副本自动替换",
+    "包含 WAL 与 Snapshot 持久化，及单元、E2E 和 Maelstrom 测试"
+   ],
+   "use_cases": [
+    "学习 Raft 与分布式 KV 存储的实现细节",
+    "自建分片 KV 存储的实验与原型验证",
+    "基于 gRPC/Protobuf 的存储系统二次开发参考"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "项目本身是 KV 存储引擎与集群系统，不依赖外部数据库，属于数据库生态的存储引擎层。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AdvisKV 是 C++17 分布式 Key-Value 存储系统，一个小而完整的分布式KV，当前版本是 v0.1.9。 ／ - Raft 复制、基于 ReadIndex 的线性一致读，以及 PreVote 预选举。 ／ |Storage|为分片提供 KV 读写，用 Raft、WAL 和 Snapshot 完成复制、持久化与恢复。|",
+   "evidence_lines": [
+    13,
+    22,
+    93
+   ]
+  },
+  "fn": "advisedy/adviskv",
+  "sha": "75e91774ae7d",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

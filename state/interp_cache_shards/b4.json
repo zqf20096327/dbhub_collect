@@ -11830,5 +11830,193 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fc83957ee513": {
+  "identity": {
+   "one_liner": "原生 macOS Postgres GUI，内置文本转 SQL 草拟",
+   "review": "Widen 是面向 macOS 14+ 的开源原生 PostgreSQL GUI 客户端，用于浏览 schema、保存查询会话并手动执行 SQL；可调用云端模型 Particle-1 从英文问题草拟 SQL，执行前需人工审查，且内置确定性安全校验器（禁 DDL、语句超时、写操作需确认等）。Text-to-SQL 处于 beta，需自备 Particle API key，当前仅支持 PostgreSQL、导出仅 CSV。适合日常使用 Postgres 并希望辅助生成查询的用户。",
+   "highlights": [
+    "读取并浏览连接数据库的 schema、表、列、类型和外键",
+    "文本转 SQL 草拟结果经确定性安全校验器审查后由用户决定是否执行",
+    "无后端、无账号，密码存于 macOS 钥匙串"
+   ],
+   "use_cases": [
+    "在 macOS 上浏览和管理 PostgreSQL schema 与查询会话",
+    "从英文问题草拟 SQL 并人工审查后执行",
+    "对写入操作需要确认与只读守卫的受控查询场景"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Open-source, native Postgres GUI for macOS. Ask questions in English; review ／ Widen is an open-source, native Postgres GUI for macOS 14+. It reads your ／ |PostgreSQL|Widen is Postgres-only today. Postgres.app works well for local testing.|",
+     "lines": [
+      8,
+      23,
+      109
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供连接、schema 浏览与查询执行的 GUI 工具，非以数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Widen is an open-source, native Postgres GUI for macOS 14+. It reads your ／ |PostgreSQL|Widen is Postgres-only today. Postgres.app works well for local testing.| ／ Widen is a lightweight, native Postgres workbench for browsing schemas, keeping",
+   "evidence_lines": [
+    23,
+    109,
+    169
+   ]
+  },
+  "fn": "betocmn/widen",
+  "sha": "fc83957ee513",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "257830e06fb4": {
+  "identity": {
+   "one_liner": "直接对 Parquet 文件运行分析型 SQL 的编译型查询引擎",
+   "review": "QumirDB 是一个将 SQL 查询的表达式与算子编译为机器码或 WebAssembly 后执行的查询引擎，可直接读取 Parquet 文件做过滤、连接、聚合与排序，支持原生/命令行方式和浏览器工作台（OPFS 数据集）。适合需要在本地或浏览器内对 Parquet 数据做分析查询、并通过 CREATE MODULE 注册 Rust UDF 与 SQL 一起被 LLVM 联合优化的开发者。本地构建见 docs/building.md。",
+   "highlights": [
+    "将查询内核通过 Qumir AST 编译为 LLVM 模块，支持原生机器码与 WebAssembly 两种执行目标",
+    "支持通过 CREATE MODULE 注册 Rust 模块，其 LLVM bitcode 与查询代码联合优化内联",
+    "包含 SQL 解析器、逻辑计划、谓词下推/join 重排/row-group 剪枝等优化和任务调度执行器，附带 TPC-H/TPC-DS/ClickBench 基准"
+   ],
+   "use_cases": [
+    "在本地对 Parquet 文件运行分析型 SQL（过滤、连接、聚合、排序）",
+    "在浏览器工作台中对 OPFS 数据集执行 SQL 并查看逻辑/物理计划",
+    "用 Rust 编写自定义计算（UDF）并与 SQL 查询融合执行"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是直接对 Parquet 文件执行 SQL 的查询引擎，为数据处理提供引擎能力而非使用某个数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A compiled SQL engine for Parquet, running natively and in the browser.** ／ QumirDB runs analytical SQL queries directly over Parquet files: filtering ／ - `qdb/`: engine library. SQL/parser, logical plan, passes, kernel",
+   "evidence_lines": [
+    3,
+    5,
+    218
+   ]
+  },
+  "fn": "QumirLabs/qumirdb",
+  "sha": "257830e06fb4",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "42e04c551f23": {
+  "identity": {
+   "one_liner": "异步 WhatsApp 多设备 Python 客户端库，原生实现 Noise/Signal 协议",
+   "review": "这是一个 Python 异步库，用于以 WhatsApp 多设备方式收发消息，原生实现 Noise、Signal 与 WABinary 协议，不依赖官方 Cloud API。面向需要构建聊天机器人或消息处理程序的 Python 开发者。会话凭据、密钥、聊天、联系人和消息存储在一个 SQLite .session 文件中；需注意其为非官方客户端，README 提示使用可能违反服务条款。",
+   "highlights": [
+    "原生实现 Noise 握手、Signal（X3DH、double ratchet）与 WABinary 编解码",
+    "使用单个 SQLite 会话文件保存凭据、Signal 会话、聊天、联系人与消息，支持历史消息查询",
+    "提供发送文本/图片、接收事件路由、群组管理、App state 同步等 API"
+   ],
+   "use_cases": [
+    "构建 WhatsApp 异步聊天机器人",
+    "程序化读取与查询本地保存的聊天历史",
+    "集成 WhatsApp 消息收发能力的 Python 应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`.session` is SQLite and holds everything: credentials, Signal sessions, prekeys,",
+     "lines": [
+      48
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储 .session 文件中的凭据、会话与消息数据，而非为数据库生态提供工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`.session` is SQLite and holds everything: credentials, Signal sessions, prekeys, ／ An asynchronous WhatsApp Multi-Device client for Python: a native implementation of the",
+   "evidence_lines": [
+    48,
+    9
+   ]
+  },
+  "fn": "Yarfer800/aiowapy",
+  "sha": "42e04c551f23",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

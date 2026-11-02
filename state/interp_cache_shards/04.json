@@ -10989,5 +10989,213 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c5b19b7b77d2": {
+  "identity": {
+   "one_liner": "自托管主机计费平台与客户门户，Laravel+MySQL 构建",
+   "review": "PNLCS 是一个面向主机商、转售商和基础设施提供商的开源自托管计费与客户门户系统，覆盖订单、循环账单、域名、SSL、工单和联盟跟踪。客户可直接在计费门户内管理主机文件、数据库、DNS、备份等；通过服务器模块对接 Panelica、cPanel 等面板，支持 Stripe、PayPal 等支付网关。要求 MySQL 8.0+，MIT 许可。",
+   "highlights": [
+    "提供客户门户与管理后台，包含账单、发票、域名、SSL、工单、知识库与联盟跟踪功能",
+    "内置服务器模块，可对接 Panelica、cPanel、Plesk、DirectAdmin、HestiaCP、aaPanel、Proxmox VE 与 Vultr",
+    "支持 Stripe、PayPal、Authorize.Net、iyzico、Mollie、Razorpay、Tpay 等支付网关与 30 种语言界面"
+   ],
+   "use_cases": [
+    "主机商销售虚拟主机/VPS 并自动在面板服务器上开通账户",
+    "自托管替代 WHMCS 管理循环账单、发票与客户生命周期",
+    "客户经计费门户自行管理文件、数据库、DNS、备份等主机功能"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL 8.0+",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL, MySQL, Redis, BIND, mail (Postfix/Dovecot), FTP, ClamAV,",
+     "lines": [
+      85
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|Database|MySQL 8.0 or MariaDB 10.6+|",
+     "lines": [
+      436
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- Keep `DB_CONNECTION=mysql` for MariaDB too; do not switch to `sqlite` (some",
+     "lines": [
+      693
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是基于 Laravel 与 MySQL 存数据的计费应用，仅为数据库生态的使用方而非服务工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**PNLCS** is a free, open-source, self-hosted **hosting billing platform** ／  MySQL 8.0+ ／ - Server modules for Panelica, cPanel, Plesk, DirectAdmin, HestiaCP, aaPanel,",
+   "evidence_lines": [
+    35,
+    11,
+    56
+   ]
+  },
+  "fn": "Panelica/pnlcs",
+  "sha": "c5b19b7b77d2",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f8178be9f537": {
+  "identity": {
+   "one_liner": "面向 OpenStreetMap 数据的 C++ 地理空间数据库引擎",
+   "review": "GeoDesk 提供 C++ 库与 GOL 文件格式，将 .osm.pbf 数据转换为可查询的地理对象库，支持标签、way-node、relation 成员查询及几何测量，可增量应用 OSM 变更，全部进程内运行无需数据库服务器；另有 Java 与 Python 版本。适用于需要本地处理 OSM 数据的 C++ 开发者。",
+   "highlights": [
+    "将 .osm.pbf 文件转换为 GOL 地理对象库，支持查询 OSM 要素的标签、way-node 与 relation 成员",
+    "支持通过每日/每小时/每分钟 OSM 变更文件进行增量更新",
+    "可选集成 GEOS 实现缓冲区、联合、简化、凸包/凹包等几何操作"
+   ],
+   "use_cases": [
+    "基于 OpenStreetMap 数据进行本地空间查询（如查找指定范围内要素）",
+    "需要进程内运行、不依赖数据库服务器的地理数据应用",
+    "基于 .osm.pbf 构建并增量维护区域地理数据库"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "项目本身是地理空间数据库引擎与查询库，为 OSM 数据的存储与查询提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GeoDesk is a fast and storage-efficient geospatial database for OpenStreetMap data. ／  It runs entirely in-process, no database server required.",
+   "evidence_lines": [
+    1,
+    23
+   ]
+  },
+  "fn": "clarisma/libgeodesk",
+  "sha": "f8178be9f537",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b091ea705a81": {
+  "identity": {
+   "one_liner": "Hermes Agent 的本地只读实时监控仪表盘插件",
+   "review": "为 Hermes Agent 提供本地实时可观测面板：通过 SQLite 只读连接读取 state.db 等数据源，展示健康检查、Token/费用、会话、技能、定时任务、错误事故等，并以 WebSocket 推送增量事件。以用户级插件形式运行于官方 Dashboard，含可选 Telegram/飞书告警脚本与 macOS 桌面 Alpha。面向 Hermes Agent 的本机使用者与运维者；限制为仅本地监听、测试平台为 macOS，Windows 为实验性。",
+   "highlights": [
+    "以 SQLite mode=ro 只读方式读取 Hermes 核心数据，日志先脱敏、无出站遥测",
+    "提供 13 个功能 Tab：健康总览、实时活动、Token/费用、会话、时间线、错误事故等，WebSocket 2 秒级增量事件流",
+    "附带 hud_alert.py 脚本，可将新事故/升级/恢复推送到 Telegram 与飞书"
+   ],
+   "use_cases": [
+    "监控 Hermes Agent 运行健康、错误与事故",
+    "追踪 LLM 调用 Token 消耗与费用",
+    "对定时任务与渠道状态进行巡检与告警推送"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "├─ state.db / session_model_usage ← SQLite 只读连接 (mode=ro)",
+     "lines": [
+      103
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Hermes Agent 数据库文件提供只读监控面板的工具/插件，而非以数据库存储自身业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "  ├─ state.db / session_model_usage     ← SQLite 只读连接 (mode=ro) ／ - 插件 API 挂 `/api/plugins/hermes-hud/`，复用 Dashboard 标准 session-token 鉴权 ／ - **只读边界**：Hermes 核心数据全程只读（state.db 用 `mode=ro` + `query_only` + 短超时，",
+   "evidence_lines": [
+    103,
+    108,
+    115
+   ]
+  },
+  "fn": "Diabloluo/hermes-hud",
+  "sha": "b091ea705a81",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

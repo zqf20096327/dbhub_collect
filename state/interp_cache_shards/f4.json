@@ -10986,5 +10986,250 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "41aa7013ad90": {
+  "identity": {
+   "one_liner": "开源自托管 PaaS 平台，部署应用、数据库与一键服务",
+   "review": "Coolify 是一个可自托管的开源应用部署平台，用户通过 SSH 在自己的服务器（VPS、裸金属、树莓派等）上部署应用、托管数据库及 360 余个一键服务，支持 Git 推送自动部署、回滚、HTTPS、反向代理、备份与多服务器管理，并提供仪表盘、API、CLI 与 MCP 等操作入口；适合希望在自有基础设施上运行 PaaS 式部署流程的开发者与团队。",
+   "highlights": [
+    "支持从 GitHub/GitLab/Bitbucket/Gitea 经 Nixpacks、Dockerfile、Docker Compose 或预构建镜像部署应用",
+    "支持部署托管数据库与 360+ 一键服务，含持久化存储与自动生成凭据",
+    "提供 API、CLI、MCP、Webhook 及基于团队的访问控制等管理接口"
+   ],
+   "use_cases": [
+    "在自有服务器上部署和管理数据库实例",
+    "通过 Git 推送自动构建与部署应用",
+    "需要 HTTPS、反向代理、备份等运维能力的自托管环境"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "平台提供数据库的部署、备份与凭据管理能力，为数据库运行提供服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Coolify is an open-source and self-hostable alternative to Heroku, Netlify, and Vercel. It helps you manage servers, applications, and databases on your own hardware. You only need an SSH connection. ／ - **Run databases and services:** Deploy managed databases and more than 360 one-click services with persistent storage and generated credentials. ／ - **Protect your workloads:** Configure database and storage backups, scheduled tasks, environment variables, secrets, and notifications.",
+   "evidence_lines": [
+    16,
+    25,
+    29
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "coollabsio/coolify",
+  "sha": "41aa7013ad90",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "66277ccc7f34": {
+  "identity": {
+   "one_liner": "基于 LMDB 的 Swift 类型安全本地持久化库",
+   "review": "Empire 是一个面向 Swift/macOS 与 iOS 开发者的本地持久化库，通过宏 @IndexKeyRecord 从类型生成 schema，数据以有序键索引形式存储在 LMDB 之上，仅支持按键查询，非键字段查询需全量扫描。README 明确标注其仍处实验阶段，缺乏真实环境检验。",
+   "highlights": [
+    "通过 Swift 宏定义 schema，提供编译期查询校验",
+    "基于 LMDB 有序键索引存储，核心 LMDB 支持可作为独立库使用",
+    "支持并发与任务取消，事务可随 Task 取消而中止"
+   ],
+   "use_cases": [
+    "Swift 应用中替代 UserDefaults/扁平文件的本地结构化数据存储",
+    "按键前缀组织的记录检索（如按姓氏+名字的复合键查询）",
+    "需要 CKRecord 兼容的 CloudKit 数据持久化"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是为 Swift 应用提供本地持久化能力的存储库，基于 LMDB 构建索引数据存储，而非使用某个数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Empire is a minimalistic local persistence system with an emphasis on type safety and low overhead. It is backed by a sorted key-value store that is far simpler than a full SQL database. SQL is very powerful, but for many problem domains you just don't need it. ／ - Backed by a sorted-key index data store ([LMDB][LMDB]) ／ User data is important. This library has a bunch of tests, but it has no real-world testing. I plan on using this myself, but even I haven't gotten to that yet. It should be considered *functional*, but experimental.",
+   "evidence_lines": [
+    9,
+    18,
+    114
+   ]
+  },
+  "fn": "mattmassicotte/Empire",
+  "sha": "66277ccc7f34",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "51ae481b17d6": {
+  "identity": {
+   "one_liner": "本地运行的 AI 交易日志，导入券商 CSV 生成回合交易与 KPI",
+   "review": "Trading Journal AI 是一个本地优先的交易日志应用：导入券商 CSV（含 Thinkorswim、Interactive Brokers 导入器）后重建回合交易，用确定性代码计算胜率、盈亏比、期望值等指标，并提供 Exit Lab 出场回放与 Leak Finder 亏损归因；Claude 仅作为可选的分析层。数据存于本地 SQLite 文件，无需账号、无遥测。适合个人日内交易者在自己机器上记录和分析交易。",
+   "highlights": [
+    "支持 Thinkorswim 和 Interactive Brokers 的 CSV 导入，并提供通用券商模板",
+    "交易分组、盈亏与统计由带测试的确定性代码计算，AI 分析为可选层",
+    "Exit Lab 基于历史分钟线回放备选出场方案，Leak Finder 归因亏损交易组"
+   ],
+   "use_cases": [
+    "个人交易者本地记录并复盘交易过程与绩效",
+    "通过历史分钟价回放比较不同止损/止盈出场规则",
+    "无需账号与遥测的私有交易数据管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Your data stays on your computer.** One SQLite file, no account, no telemetry.",
+     "lines": [
+      13
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明交易日志数据存于本地 SQLite 文件，SQLite 仅作该应用的存储介质，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可，README 声明无付费层",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Your data stays on your computer.** One SQLite file, no account, no telemetry. ／ A trading journal that runs on your own machine. Import your broker's CSV and it rebuilds your ／ Trading Journal AI is designed as a **local-first application**.",
+   "evidence_lines": [
+    13,
+    8,
+    124
+   ]
+  },
+  "fn": "simonro/Trading-Journal-AI",
+  "sha": "51ae481b17d6",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9b606c48ea44": {
+  "identity": {
+   "one_liner": "PHP 库，生成 64 位时间有序 ID 并提供定长 Base58 字符串形式",
+   "review": "Tidbit 是一个 PHP 8.4+ 的 ID 生成库，实现 63 位时间有序标识符：41 位毫秒时间戳、节点位、计数器位，以 8 字节 BIGINT 存储，并提供 11 字符定长 Base58 字符串用于 URL 和 API。支持按指定时间回填 ID、注入 PSR-20 时钟，供需要在数据库主键中使用紧凑有序 ID 的 PHP 开发者使用。",
+   "highlights": [
+    "生成 63 位、适配 BIGINT 的毫秒级时间有序 ID，含 Base58 定长字符串转换",
+    "支持按给定时间回填 ID（createAt），工厂按进程隔离无需协调",
+    "时钟（PSR-20）与随机源可注入，便于确定性测试"
+   ],
+   "use_cases": [
+    "为数据库表生成紧凑有序主键",
+    "URL/API 中使用短定长 ID 字符串",
+    "历史数据导入时按已有时间生成 ID"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- Base58 is case-sensitive. Store the integer, not the string. If you must store the string, use `CHAR(11)` with a binary collation (`ascii_bin` in MySQL).",
+     "lines": [
+      100
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为应用生成数据库主键 ID 的 PHP 组件，服务于数据库存储场景而非数据库本体",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Short, time-sorted, 64-bit identifiers for PHP. ／ - Fits a signed `BIGINT`: 8 bytes in the database, native indexes, no binary columns. ／ composer require garak/tidbit",
+   "evidence_lines": [
+    3,
+    9,
+    28
+   ]
+  },
+  "fn": "garak/tidbit",
+  "sha": "9b606c48ea44",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11092,5 +11092,477 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7ca99e4942db": {
+  "identity": {
+   "one_liner": "AI 代理记忆库：因果图引擎+评分机制，内置 stdio MCP 服务器",
+   "review": "Papez 是一个用于 AI 代理记忆的 Python 库，核心为内存中因果图引擎，用乘法公式（相关性×连接度×再激活）为记忆打分并支持主动遗忘，附带 stdio MCP 服务器供 Claude 等客户端接入。基础安装无数据库依赖，状态存内存并可持久化为 JSON；带 Postgres 等后端与 REST API 的托管版单独发布，不属于本包。适用于需要为 LLM 代理构建记忆层的开发者。",
+   "highlights": [
+    "提供 stdio MCP 服务器与 memory_store/recall/search/traverse 等记忆工具",
+    "实现因果图引擎、ACT-R 式评分与主动遗忘机制，支持 JSON 持久化",
+    "基础安装无数据库依赖；另有托管产品提供 Postgres 等后端与 REST API"
+   ],
+   "use_cases": [
+    "为 AI 代理/LLM 应用构建带因果关系的长期记忆层",
+    "通过 MCP 将记忆能力接入 Claude Code/Claude Desktop 等客户端",
+    "需要记忆修正（supersede）、幂等写入与空间管理的多用户场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "This package (`papez`) is the core library: an in-memory causal graph engine with optional JSON persistence, plus a stdio MCP server. It has no database dependency and no REST API. A hosted product built on top of this library — with Postgres, additional stora ／ Additional backends — Postgres/pgvector, FalkorDB, MongoDB, and an Obsidian vault adapter — along with a REST API, OAuth, and multi-user auth, are part of the hosted product at `api.papez.ai` and are not included in this repo.",
+     "lines": [
+      30,
+      328
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Self-reported vendor figures above ~90 use different answerers/judges and are not comparable — the oracle retrieval ceiling under this frozen protocol is 94.9. Reproduce it yourself: Astrix-Labs/locomo-harness · full methodology · per-run results.",
+     "lines": [
+      22
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "核心库无数据库依赖（L30 明示 no database dependency），Postgres 仅属托管产品后端，与数据库生态关系证据不足。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3（README 徽章标注）",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This package (`papez`) is the core library: an in-memory causal graph engine with optional JSON persistence, plus a stdio MCP server. It has no database dependency and no REST API. A hosted product built on top of this library — with Postgres, additional storage backends, and a REST/HTTP MCP API — is available separately at `api.papez.ai`; it is not part of this package. ／ Install the package. The base install has zero database dependencies — state lives in memory and is optionally persisted to a JSON file. ／ python3 -m papez",
+   "evidence_lines": [
+    30,
+    44,
+    61
+   ]
+  },
+  "fn": "Astrix-Labs/papez",
+  "sha": "7ca99e4942db",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "68c930dfa7bd": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core 与 SQL Server 的交易订单管理系统",
+   "review": "这是一个以后端为主的交易订单管理系统，用于模拟金融品种管理、股票下单、交易执行与持仓跟踪，不执行真实交易。当前处于 MVP 阶段，已完成 REST API、Swagger 文档与 SQL Server 2022 Docker 容器和 EF Core 的集成，后续阶段计划实现品种 CRUD、订单管理等，适合作为 C#/.NET 学习与作品集项目。",
+   "highlights": [
+    "提供基于 ASP.NET Core 的 REST API 与 Swagger/OpenAPI 文档",
+    "通过 Docker Compose 运行 SQL Server 2022 容器，并使用 EF Core Code First 迁移",
+    "提供应用健康检查与 SQL Server 连接状态端点"
+   ],
+   "use_cases": [
+    "金融交易订单管理的教学/作品集后端开发",
+    ".NET Web API 与 EF Core 集成的学习实践",
+    "基于 Docker 的本地 SQL Server 开发环境搭建"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Database:** Microsoft SQL Server 2022 ／ |2|SQL Server, Docker & EF Core Integration|Completed| ／ - SQL Server 2022 containerization",
+     "lines": [
+      26,
+      40,
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 SQL Server 存储数据的交易订单管理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SAZOTECH-TRADING is a backend-focused trading order management system designed to simulate financial instrument management, stock trading orders, trade execution, and portfolio positions. ／ - **Database:** Microsoft SQL Server 2022 ／ **Database:** `SazotechTradingDb`",
+   "evidence_lines": [
+    16,
+    26,
+    71
+   ]
+  },
+  "fn": "datasifaw/SAZOTECH-TRADING",
+  "sha": "68c930dfa7bd",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0bcbbd44420a": {
+  "identity": {
+   "one_liner": "Rust 的 TypeID 标识符库，为 UUID 添加可读类型前缀并生成全局唯一 ID",
+   "review": "该仓库是 TypeID 规范 v0.3.0 的 Rust 实现，由 mti、typeid-prefix、typeid-suffix 三个 crate 组成，用于生成、解析和校验带类型前缀的标识符，支持 UUIDv1/v3/v4/v5/v6/v7，可选 Serde 序列化与 tracing 埋点。面向需要在应用中管理实体标识符的 Rust 开发者，通过 cargo 添加依赖即可使用；全库声明零 unsafe 代码并含规格测试向量。",
+   "highlights": [
+    "实现 TypeID 规范 v0.3.0，支持 UUIDv1/v3/v4/v5/v6/v7/Nil 及时间可排序的 UUIDv7",
+    "提供三个可独立使用的 crate：高级 API、前缀校验、Base32 后缀编码",
+    "可选 serde 序列化与 instrument tracing 特性，workspace 禁用 unsafe 代码"
+   ],
+   "use_cases": [
+    "为 Rust 应用的实体生成自描述、类型安全的标识符",
+    "在日志与调试中区分不同实体类型的 ID 而无需查询数据库",
+    "构建依赖时间排序 ID 或自定义 Base32 编码方案的系统"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 定位为面向 Rust 应用的标识符生成/解析库，主题标签含 database，为数据库标识符管理提供支撑而非仅作为数据库客户端的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：MIT OR Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This workspace provides three complementary Rust crates for working with TypeIDs: ／ - **Start in two lines of code** with the high-level `mti` crate ／ - **Production-ready**: implements TypeID Specification v0.3.0, zero unsafe code, extensively tested",
+   "evidence_lines": [
+    13,
+    15,
+    16
+   ]
+  },
+  "fn": "Govcraft/mti",
+  "sha": "0bcbbd44420a",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "500ae9974d31": {
+  "identity": {
+   "one_liner": "自托管创客空间管理系统，Django+React，多租户",
+   "review": "Space Works 是一个自托管的多租户创客空间管理系统，覆盖设备目录、工具借用（含 QR 自助借还）、3D 打印任务、活动报名、成员与审计日志等功能。面向创客空间/Fablab 运营者使用。技术栈为 Django + React，通过 Docker Compose 一键部署，使用 PostgreSQL、Redis、Silo 对象存储与 Celery，支持 Telegram/Slack 等通知渠道和 OIDC 登录。AGPL-3.0 许可。",
+   "highlights": [
+    "提供设备目录、QR 自助借还、3D 打印管理、活动与预订、审计日志等多租户模块",
+    "通过 Docker Compose 部署，组合 PostgreSQL、Redis、Silo 对象存储与 Celery",
+    "支持按创客空间开关模块，提供 Telegram/Slack/Mattermost/Discord 通知与 OIDC/手机短信登录"
+   ],
+   "use_cases": [
+    "创客空间/Fablab 管理工具与设备库存、借用与问责记录",
+    "管理 3D 打印请求、打印机与耗材",
+    "社区活动报名、签到与成员目录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres and Silo object storage when a makerspace has one small server and nobody to operate a stack. ／ Space Works runs entirely through Docker Compose — it brings up **PostgreSQL, Redis, Silo object storage (the maintained, S3-compatible fork of the archived MinIO), the",
+     "lines": [
+      44,
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用通过 Docker Compose 启动 PostgreSQL、Redis 等组件并存取数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Self-hostable, multi-tenant management platform for makerspaces — run your ／ Space Works runs entirely through Docker Compose — it brings up **PostgreSQL, Redis, Silo object storage (the maintained, S3-compatible fork of the archived MinIO), the",
+   "evidence_lines": [
+    5,
+    91
+   ]
+  },
+  "fn": "SpaceWorks-Labs/SpaceWorks",
+  "sha": "500ae9974d31",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ae947168a1fb": {
+  "identity": {
+   "one_liner": "城市事件上报管理平台，Java 后端+Web/移动客户端",
+   "review": "UrbanPulse 是一个用于登记、跟踪和处置市民上报城市事件的平台，含 Spring Boot 后端、员工用 Web 端与市民用移动端，数据存储于 PostgreSQL/PostGIS，通过 Flyway 迁移建库，用 Docker Compose 与 Maven Wrapper 启动。README 注明仍处于早期开发，事件校验、分派、解决等流程尚未实现，适合市政场景的开发者部署试用或参与开发。",
+   "highlights": [
+    "提供基于 OpenAPI 3.1 合同的事件上报、列表、详情与状态历史接口，内置乐观锁与追加式审计记录",
+    "数据库 schema 由 Flyway 迁移生成，并附带 dev/demo/perf 三种样本数据集",
+    "集成测试通过 Testcontainers 启动 PostGIS 容器，附带 Docker Compose 编排与 GitHub Actions 流水线"
+   ],
+   "use_cases": [
+    "市政工作人员通过 Web 收件箱查看和处理市民上报的事件",
+    "市民通过移动端上报城市事件并查看自己的报告",
+    "作为带有完整文档与 ADR 的 Spring Boot + PostgreSQL 全栈项目示例运行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL 18 with PostGIS 3.6 ／ Install Java 25, Docker Engine or Docker Desktop, and Git. Maven and PostgreSQL do not need to be installed locally. To work on the web or mobile clients, also install Node.js 24; pnpm is provided by Corepack (see the development guide). ／ - Replace `POSTGRES_PASSWORD`.",
+     "lines": [
+      31,
+      43,
+      72
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 PostgreSQL/PostGIS 存储事件数据的业务应用，README 未提供面向数据库生态的工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "UrbanPulse is a platform for managing urban incidents reported by citizens and enriching them with contextual data from the city of Malaga. ／ - **Data:** the database schema of the whole data model, created by Flyway migrations, and sample data behind the `dev`, `demo` and `perf` profiles (datasets). ／ - PostgreSQL 18 with PostGIS 3.6",
+   "evidence_lines": [
+    3,
+    21,
+    31
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Dalibex/urban-incidence-manager",
+  "sha": "ae947168a1fb",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ee53794df1a7": {
+  "identity": {
+   "one_liner": "开源配送物流管理系统（TMS/WMS），基于 .NET 10 + PostgreSQL",
+   "review": "Logistico 是面向配送公司的开源物流管理系统，覆盖下单、驿站分拣、卡车干线、快递员移动端、货到付款结算、退货、客户跟踪页与审计日志，界面以阿拉伯语 RTL 为默认并支持英语，附带面向伊拉克市场的需求分析页。面向快递公司、卖家门户与快递员三类角色使用，部署依赖 .NET 10 SDK 与 PostgreSQL 16+，可用 Docker Compose 启动。",
+   "highlights": [
+    "提供 Web 控制台与 Flutter 移动端（Android/iOS），支持条码扫描、签收证明与货到付款现金管理",
+    "支持按角色划分的权限（五种办公角色及快递员、卖家）与只追加的审计日志",
+    "支持阿拉伯语 RTL 界面、客户跟踪页与匿名的 CSV 开放数据导出"
+   ],
+   "use_cases": [
+    "配送/快递公司管理订单、驿站、卡车线路与退货流程",
+    "货到付款（COD）业务的现金交接与卖家结算",
+    "伊拉克等以地标地址为主的电商配送运营与需求分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ Version 3.0 · Arabic-first (RTL) · English · .NET 10 · Blazor WebAssembly · PostgreSQL · Flutter mobile app · Apache-2.0 ／ Prerequisites: .NET 10 SDK and PostgreSQL 16+. ／ psql -d postgres -c \"CREATE ROLE logistico LOGIN PASSWORD 'logistico_dev' CREATEDB;\" # once",
+     "lines": [
+      8,
+      12,
+      129,
+      132
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL 存储业务数据的物流管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Open-source delivery and logistics management system — courier app with proof of delivery, cash on delivery (COD), hubs and shelves, trucks between cities, returns, shipment tracking and an audit log. Built for Iraq, useful anywhere the address is a neighbourhood and a landmark.** ／ PostgreSQL",
+   "evidence_lines": [
+    3,
+    8
+   ]
+  },
+  "fn": "Haix02/logistico-software",
+  "sha": "ee53794df1a7",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "54d77ab010e9": {
+  "identity": {
+   "one_liner": "基于纯 Markdown 与 SQLite FTS5 的本地知识库 CLI",
+   "review": "sovereign-kb（skb）是一个本地优先的知识库命令行工具：将 Markdown 笔记目录索引到 SQLite FTS5，提供 BM25 检索、wikilink 图增强、可选 Ollama 本地向量的混合搜索，并通过 --json 输出供 Claude Code、Cursor 等 AI 编码代理跨会话检索项目记忆。目标用户是工程师及其 AI 代理；零运行时依赖，删除 .kb/ 不影响原 Markdown 文件。",
+   "highlights": [
+    "在 Python 3.10+ 标准库 + SQLite FTS5 上本地运行，零运行时依赖",
+    "提供 BM25 排名、wikilink 图传播与可选本地嵌入（Ollama）的混合检索，支持 --json 输出供编码代理调用",
+    "包含 capture/search/verify/dashboard/scaffold 等 CLI 子命令及本地 Web 仪表盘"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供跨会话的项目决策与上下文记忆",
+    "对已有 Obsidian vault 或 docs/ 目录进行本地全文索引与搜索",
+    "初始化带模板的笔记 vault 并通过 Git 提交/推送同步变更"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything runs locally on **Python 3.10+ standard library + SQLite FTS5** with **zero runtime dependencies**. Delete `.kb/` at any time and your plain Markdown files remain untouched. ／ - How SQLite FTS5 BM25, optional `hips` Rust Block-Max WAND (`skb hips`), 768-d local Ollama embeddings, Reciprocal Rank Fusion (RRF), and 1-hop `[[Wikilink]]` graph propagation work together.",
+     "lines": [
+      11,
+      118
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目以 SQLite FTS5 作为其 Markdown 检索引擎组件，是为工程师和 AI 代理服务的知识库工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Everything runs locally on **Python 3.10+ standard library + SQLite FTS5** with **zero runtime dependencies**. Delete `.kb/` at any time and your plain Markdown files remain untouched. ／  - How SQLite FTS5 BM25, optional `hips` Rust Block-Max WAND (`skb hips`), 768-d local Ollama embeddings, Reciprocal Rank Fusion (RRF), and 1-hop `[[Wikilink]]` graph propagation work together. ／ Point `skb` at any folder of `.md` files—or initialize a fresh vault in one command. Capture architectural decisions from your terminal, search across your notes by keyword + `[[wikilinks]]` + optional local embeddings, and give your AI coding agents (`Claude Code`, `Cursor`, `OpenCode`, `Codex`) persistent project memory.",
+   "evidence_lines": [
+    11,
+    118,
+    9
+   ]
+  },
+  "fn": "iliachry/sovereign-kb",
+  "sha": "54d77ab010e9",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

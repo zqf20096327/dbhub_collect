@@ -11087,5 +11087,74 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e9a5c7a7fe84": {
+  "identity": {
+   "one_liner": "本地 MCP 工作笔记服务器，会话持久化于 SQLite",
+   "review": "一个以 stdio 运行的本地 MCP 服务器，为调用方提供可恢复的工作笔记：以 create_session/add_step 等工具记录证据、决策、风险与下一步动作，数据以明文 SQLite（WAL）存于本地目录，支持幂等重试、分页、JSON 导出导入及备份恢复。面向使用 Claude Desktop、VS Code 等 MCP 客户端的开发者。它只记录调用方写入的内容，不做推理生成；NFS/SMB 与多主机共享不受支持。",
+   "highlights": [
+    "提供 create_session、add_step、read_session、finalize_session 等 MCP 工具，支持 note/decision/risk 等 8 种笔记类型",
+    "数据以 SQLite（WAL、synchronous FULL）持久化，写入按 request_id 幂等，支持分页与游标读取",
+    "提供 JSON 导出/导入与 Python 模块级的备份/恢复命令"
+   ],
+   "use_cases": [
+    "在 MCP 客户端中记录跨重启可恢复的任务笔记、决策与证据",
+    "通过 uvx 接入 Claude Code、Claude Desktop、VS Code、Gemini CLI、Codex CLI",
+    "对工作笔记会话做本地备份、快照与 JSON 归档"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "and next actions for a difficult task, stored durably in SQLite and readable after ／ SQLite (WAL, synchronous FULL, 5 s busy timeout). Use a local disk; NFS/SMB and",
+     "lines": [
+      12,
+      148
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是一个 MCP 服务器组件，为 MCP 客户端生态提供笔记持久化服务，SQLite 仅为其内部存储后端",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local MCP server for **working notes you can resume**: evidence, decisions, risks ／ installed, `uvx mcp-sequential-thinking` runs it without a manual install ／  SQLite (WAL, synchronous FULL, 5 s busy timeout). Use a local disk; NFS/SMB and",
+   "evidence_lines": [
+    11,
+    23,
+    148
+   ]
+  },
+  "fn": "arben-adm/mcp-sequential-thinking",
+  "sha": "e9a5c7a7fe84",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

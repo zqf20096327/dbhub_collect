@@ -11541,5 +11541,125 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d450a287b04e": {
+  "identity": {
+   "one_liner": "Rust 异步存储引擎库，混合内存行存与磁盘列存",
+   "review": "DoraDB 是用 Rust 从零实现的存储引擎库，混合管理内存行存储与磁盘列存储，并提供跨两者的完整事务支持。通过 doradb_storage crate 提供建表、事务 DML、二级索引扫描等 API，依赖 Linux io_uring 实现异步直接 IO。面向希望在 Rust 异步生态中构建数据库系统的开发者，README 明确注明项目仍在开发中。",
+   "highlights": [
+    "混合引擎：内存行存储与磁盘列存储统一管理，支持完整事务",
+    "基于 Linux io_uring 的异步直接 IO，runtime 无关",
+    "包含 buffer pool、B+Tree 索引、二级索引、redo/undo 日志、恢复与垃圾回收等完整存储引擎组件"
+   ],
+   "use_cases": [
+    "作为 Rust 应用自建数据库或专用存储的存储引擎库",
+    "研究事务处理、B+Tree 索引、WAL 恢复等存储引擎设计",
+    "需要事务性行/列混合存储的场景（实验阶段）"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "提供存储引擎库及配套 API，供构建数据库系统使用，而非使用现有数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "双许可（README 声明 licensed under either of，具体条款行截断）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DoraDB is an attempt to build a modern and fast storage engine in Rust from scratch. ／ The storage engine is designed as a hybrid engine managing both in-memory row store and on-disk column store, with full transactional support across all data. ／ - io: Async direct IO system using Linux `io_uring`, which must be available in the runtime environment.",
+   "evidence_lines": [
+    8,
+    15,
+    84
+   ]
+  },
+  "fn": "jiangzhe/doradb",
+  "sha": "d450a287b04e",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0b6008bd076c": {
+  "identity": {
+   "one_liner": "个人自托管服务器基础设施的文档记录仓库",
+   "review": "这是作者记录自己逐步实现服务自托管的文档仓库，内容涵盖 NUC 服务器、VPN、Git 服务、MQTT 遥测、备份等搭建与运维笔记，其中包含以 PostgreSQL（TimescaleDB、PostgREST）为核心的数据库与 API 板块。面向作者本人及想了解其架构的读者，属使用 PostgreSQL 存取数据的个人基础设施文档，而非面向第三方的工具。",
+   "highlights": [
+    "记录服务器、VPN、MQTT、备份、监控等自托管组件的配置与验证过程",
+    "包含 PostgreSQL、TimescaleDB、PostgREST 的数据库与 API 服务文档",
+    "按 TOC 组织为服务器设置、服务、监控、IoT 遥测、数据库、AI/GPU 等板块"
+   ],
+   "use_cases": [
+    "参考个人自托管基础设施（VPN、Git、MQTT、备份）的搭建记录",
+    "了解 PostgreSQL/TimescaleDB/PostgREST 在自托管环境中的组织方式",
+    "查阅物联网与遥测数据管道（MQTT 到 TimescaleDB）的文档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL ／ - Which database uses PostGIS; the table lists behind the short database names; whether `air` and `sisterapi` exist. PostgreSQL.",
+     "lines": [
+      115,
+      154
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 记录的自托管基础设施以 PostgreSQL 作为数据存储组件（数据库/API 板块），而非为数据库生态提供工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "### Databases and APIs ／ - PostgreSQL ／ - MQTT to TimescaleDB and PostgREST",
+   "evidence_lines": [
+    113,
+    115,
+    109
+   ]
+  },
+  "fn": "TheBeachLab/selfhosted",
+  "sha": "0b6008bd076c",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

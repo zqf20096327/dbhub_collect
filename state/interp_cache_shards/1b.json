@@ -12485,5 +12485,132 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "48e3efd10b22": {
+  "identity": {
+   "one_liner": "Rust 编写的可扩展关系数据库系统，支持嵌入式与服务器模式",
+   "review": "Turborel 是一个用 Rust 实现的关系数据库系统，既能作为库嵌入使用，也能以 turboreld 服务器进程运行并通过自带的命令行客户端 turborel 以 SQL 查询。其架构几乎各组件（存储引擎、索引、优化器规则、认证、传输协议等）均为插件接口，支持可替换实现；提供序列化事务、MVCC、WAL 与恢复。当前处于 0.0.0 alpha 阶段，API/协议/文件格式均可能变动。",
+   "highlights": [
+    "可扩展插件式架构：存储引擎、索引方法、优化器规则、认证与传输协议等均为可替换接口",
+    "支持 SQL 标准并实现串行化事务、MVCC、WAL、检查点与崩溃恢复",
+    "可嵌入为库或作为 TCP/Unix socket/Windows 命名管道服务器运行，支持 TLS 与预编译语句"
+   ],
+   "use_cases": [
+    "需要嵌入式关系数据库的应用开发",
+    "需要插件式定制存储引擎/索引/优化器的数据库研究与实验",
+    "通过 CLI 客户端以 SQL 访问本地或远程数据库实例"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库系统本体，包含服务端与客户端组件，而非仅为某数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "代码采用 BSD 2-Clause 许可；turborel 名称与商标不在该许可范围内",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "turborel (TUR-boh-rel) is a relational database system written in ／ Nearly every part of turborel is a plug-in point. Storage engines, index ／ - Standard SQL implementing SQL-86 in full, SQL-92 being taken in full, and each",
+   "evidence_lines": [
+    7,
+    12,
+    20
+   ]
+  },
+  "fn": "turborel/turborel",
+  "sha": "48e3efd10b22",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b6d97d80931a": {
+  "identity": {
+   "one_liner": "API Evangelist 维护的 PingCAP 公开 API 面第三方编目档案",
+   "review": "该仓库收录 API Evangelist 对 PingCAP 公司公开 API 面的第三方结构化档案：TiDB Cloud 的 REST API 族（集群、备份、导入导出、changefeed、IAM、计费等 45 个 API）、ticloud CLI、Terraform provider、PyTiDB SDK 及官方 TiDB MCP Server 的 OpenAPI/AsyncAPI 等机器可读描述，并提供独立的 Kin Score/Agent Readiness 评分。仓库本身不含软件，面向需要了解 PingCAP API 面的开发者与安全合规团队，不是 PingCAP 官方仓库。",
+   "highlights": [
+    "编目 PingCAP/TiDB Cloud 的 45 个公开 API 的 OpenAPI 等机器可读规格",
+    "提供独立计算的 Kin Score 与 Agent Readiness 评分",
+    "仓库不含软件与可执行文件，仅含文本与 API 描述"
+   ],
+   "use_cases": [
+    "查阅 TiDB Cloud REST API（集群管理、备份、导入导出、计费等）的公开规格",
+    "获取 PingCAP 公开 API 面的独立评分与变更记录",
+    "安全合规团队核对档案所依据的公开 URL 来源"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "PingCAP is the company behind TiDB, an open-source, MySQL-compatible distributed SQL database built for hybrid transactional and analytical processing (HTAP), horizontal scale-out, Raft-based strong consistency, and vector search for AI workloads. PingCAP oper ／ - TiDB MCP Server — Official Model Context Protocol server maintained by PingCAP that exposes a TiDB or TiDB Cloud database to MCP-capable agents and IDEs. Ships in the pytidb…",
+     "lines": [
+      65,
+      75
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "PingCAP is the company behind TiDB, an open-source, MySQL-compatible distributed SQL database built for hybrid transactional and analytical processing (HTAP), horizontal scale-out, Raft-based strong consistency, and vector search for AI workloads. PingCAP oper ／ **Areas:** Distributed SQL · Database · tidb · HTAP · MySQL Compatible · Cloud Database · Database-as-a-Service · Vector Search · Data Migration · Change Data Capture · Open Source · Infrastructure",
+     "lines": [
+      65,
+      67
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库只是第三方编目的 API 描述档案，不含任何为数据库生态服务的可运行工具或组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> **This is not our API.** This repository is an independent, third-party profile of a company's ／ > **This repository contains no software, and we will never ask you to download anything.** There is ／ PingCAP is the company behind TiDB, an open-source, MySQL-compatible distributed SQL database built for hybrid transactional and analytical processing (HTAP), horizontal scale-out, Raft-based strong consistency, and vector search for AI workloads. PingCAP operates TiDB Cloud, the fully managed DBaaS delivered in Starter, Essential, Premium, Dedicated, BYOC and Lake tiers across AWS, Google Cloud, Azure and Alibaba Cloud. Developers manage the platform programmatically through the TiDB Cloud REST API family (cluster, branch, import, export, changefeed, IAM, billing and Data Service surfaces), the `ticloud` CLI, a Terraform provider, the TiDB Cloud Serverless JavaScript driver, the PyTiDB Python SDK, and an official TiDB MCP Server for agents. PingCAP also publishes OpenAPI for the TiDB Data Migration (DM) control plane and the OSS Insight public API.",
+   "evidence_lines": [
+    5,
+    50,
+    65
+   ]
+  },
+  "fn": "api-evangelist/pingcap",
+  "sha": "b6d97d80931a",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

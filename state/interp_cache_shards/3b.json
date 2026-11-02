@@ -10926,5 +10926,101 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3c0ffb67edae": {
+  "identity": {
+   "one_liner": "单二进制 OLTP 数据库服务器，编译执行 T-SQL 存储过程",
+   "review": "LionSQL 是一个用 Go 编写的单二进制 OLTP 数据库服务器，原生编译执行 T-SQL 和存储过程，同时提供 PostgreSQL wire v3（5433 端口）与 SQL Server TDS（1433 端口）双协议监听，内置连接池、Web 管理界面、REST API、热备份与 WAL 流复制。面向需要运行 T-SQL 业务逻辑或用 PostgreSQL 客户端/驱动接入的用户；支持 macOS/Linux，磁盘引擎依赖 WiredTiger 开发库。",
+   "highlights": [
+    "同时提供 PostgreSQL v3 协议（5433）与 SQL Server TDS 协议（1433）监听，支持 psql、sqlcmd 等客户端接入",
+    "支持存储过程、函数、触发器、窗口函数等 T-SQL 扩展，查询编译为 VDBE 字节码执行",
+    "内置 Web 管理界面（8090 端口）、REST CRUD API、JavaScript/TypeScript SDK、在线快照备份与 WAL 流复制"
+   ],
+   "use_cases": [
+    "需要以 T-SQL/存储过程运行业务逻辑的 OLTP 场景",
+    "使用 PostgreSQL 生态客户端（psql、pgx、Prisma、psycopg2）接入的服务端数据存储",
+    "从 SQL Server 工具链（SSMS、sqlcmd、.NET SqlClient）连接的兼容场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "- **PostgreSQL v3 Protocol (Port 5433)**: Fully compatible with `psql`, DBeaver, GORM, Prisma, and pgx, supporting SSL/TLS encryption and binary parameter binding.",
+     "lines": [
+      34
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Database Migration Guide**: Procedures for migrating from PostgreSQL, MSSQL, SQLite, and MySQL.",
+     "lines": [
+      323
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **SQLLogicTest (SLT) 1.0 GA Full Suite (40,000+ Queries) Oracle Verification**:",
+     "lines": [
+      360
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Database Migration Guide**: Procedures for migrating from PostgreSQL, MSSQL, SQLite, and MySQL.",
+     "lines": [
+      323
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "compat",
+     "quote": "- **Microsoft SQL Server TDS Protocol (Port 1433)**: Instantly compatible with SSMS, Azure Data Studio, `sqlcmd`, and MSSQL drivers, supporting RPC prepared execution.",
+     "lines": [
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是提供 wire 协议服务的数据库服务器组件，而非使用某个数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "LionSQL is a high-performance, embedded OLTP database engine that natively compiles and executes Microsoft SQL Server T-SQL & stored procedures and complex business logic on a sub-microsecond VDBE bytecode virtual machine, while simultaneously offering broad compatibility with PostgreSQL SQL dialects and the standard PGWire v3 protocol. It comes fully equipped with a built-in web management studio for real-time telemetry and schema administration, as well as an integrated goroutine connection pooler capable of handling tens of thousands of concurrent connections—eliminating the need for additional software to achieve a complete operational environment. Packaging this complete enterprise feature set into a single, ultra-compact static binary under 100MB (currently ~50MB) with zero external dependencies, LionSQL delivers blazing-fast transaction throughput of tens of thousands of transactions per second with predictable sub-millisecond latency and non-blocking snapshot isolation. ／  - **PostgreSQL v3 Protocol (Port 5433)**: Fully compatible with `psql`, DBeaver, GORM, Prisma, and pgx, supporting SSL/TLS encryption and binary parameter binding. ／  - **Microsoft SQL Server TDS Protocol (Port 1433)**: Instantly compatible with SSMS, Azure Data Studio, `sqlcmd`, and MSSQL drivers, supporting RPC prepared execution.",
+   "evidence_lines": [
+    16,
+    34,
+    35
+   ]
+  },
+  "fn": "MaroShim/LionSQL",
+  "sha": "3c0ffb67edae",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

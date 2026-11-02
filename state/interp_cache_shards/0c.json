@@ -12284,5 +12284,82 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "31c9cc240092": {
+  "identity": {
+   "one_liner": "蜜蜂记账 App 的自部署同步云端，单 Docker 容器提供实时同步与 Web 端",
+   "review": "为 BeeCount 蜜蜂记账 App 提供的自托管云端，一个 Docker 镜像运行 FastAPI 后端与 Web 控制台，支持 iOS/Android/Web 三端实时同步、共享账本、内置加密备份与 MCP server 供 LLM 操作账本。数据以 SQLite 存储，面向想自托管账本数据的个人用户。",
+   "highlights": [
+    "提供 WebSocket 双向实时同步与共享账本多人协作",
+    "内置 rclone 多远端 AES-256 加密备份与 APScheduler 定时调度",
+    "内置 MCP server 与文档 RAG，可在 LLM 客户端中查询与记账"
+   ],
+   "use_cases": [
+    "个人自托管账本云，实现移动端与 Web 多端同步",
+    "家庭/团队共享账本多人协作记账",
+    "本地数据定时加密备份到 S3/WebDAV 等远端"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|部署成本|单容器 + 1 个 volume|容器 + Postgres|容器 + 文件存储|多服务|",
+     "lines": [
+      23
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🛡️ **无锁定** — 数据 = SQLite + 附件文件,随时打包带走 ／ `./data/` 目录包含所有持久化数据:SQLite 数据库、附件、备份归档、JWT 密钥。直接打包目录即可:",
+     "lines": [
+      31,
+      193
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它使用 SQLite 存储账本持久化数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "商业源代码许可证（BSL），个人自部署/学习研究免费，商业使用需付费授权",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**BeeCount(蜜蜂记账) App 的自部署同步云端。** 让 iOS / Android / Web 三端共用一份完全属于你的账本 — 无广告、无订阅、无第三方依赖。 ／ `./data/` 目录包含所有持久化数据:SQLite 数据库、附件、备份归档、JWT 密钥。直接打包目录即可: ／ 预构建镜像 `sunxiao0721/beecount-cloud` 一体化打包 FastAPI 后端 + Web 控制台 — 单容器 + 一个数据卷,搞定。",
+   "evidence_lines": [
+    8,
+    193,
+    145
+   ]
+  },
+  "fn": "TNT-Likely/BeeCount-Cloud",
+  "sha": "31c9cc240092",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

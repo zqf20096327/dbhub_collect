@@ -10977,5 +10977,136 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "de4d479df982": {
+  "identity": {
+   "one_liner": "APS 示例：按需连接外部数据库为 Viewer 属性面板扩展自定义属性",
+   "review": "这是 Autodesk Platform Services 的 .NET 示例，演示如何在按需模式下连接外部数据库（示例中为 MongoDB Atlas），将外部库中的属性读取并聚合到 Viewer 属性面板，并支持在面板中更新/创建数据，通过 Websocket 向其他客户端通知变更；面向 APS/BIM360/ACC 的开发者，需 Autodesk 开发者凭据运行。",
+   "highlights": [
+    "读取外部数据库（示例为 MongoDB）并聚合属性到 Viewer 属性面板",
+    "通过 Websocket 向多个客户端通知属性变更",
+    "提供本地运行方式，依赖 APS 账户与 .NET 6"
+   ],
+   "use_cases": [
+    "为 BIM360/ACC 模型元素挂接自定义属性",
+    "学习 APS Data Management API 与外部数据库的集成",
+    "演示多客户端属性同步通知机制"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 MongoDB 存储属性的 APS 示例应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "discontinued",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This sample demonstrates how to connect with an external DB on demand, adding custom properties to Viewer property panel. ／ 1 - User select an element from the scene, which triggers a job to retrieve associated properties (specific to this element) from an external DB (MongoDB in this case) ／ 1. **APS Account**: Learn how to create a APS Account, activate subscription and create an app at this tutorial.",
+   "evidence_lines": [
+    20,
+    26,
+    44
+   ]
+  },
+  "fn": "autodesk-platform-services/aps-db-sample",
+  "sha": "de4d479df982",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a92ba28ef4be": {
+  "identity": {
+   "one_liner": "基于 .NET 8/WPF 的压铸 SCADA 上位机，S7 采集并同步 SQLite 到 SQL Server",
+   "review": "这是一个用 C#/.NET 8 与 WPF 编写的压铸设备 SCADA 上位机项目，面向工业上位机开发学习者与实践者。它通过 S7 协议与西门子 PLC 或仿真环境通信，实现参数采集、受控写入、报警、周期识别，数据先落本地 SQLite，再经 Outbox 队列同步到可选的 SQL Server。仅支持 Windows 平台，且仓库未声明开源许可证。",
+   "highlights": [
+    "通过 S7 协议读取 PLC 数据，支持参数范围检查、受控写入与写后回读",
+    "提供报警产生/恢复/确认记录、生产周期识别与实时趋势及历史数据查询",
+    "采用 Outbox 队列实现 SQLite 到 SQL Server 的后台同步，含失败记录与人工重试",
+    "包含用户注册登录、角色权限管理与操作日志审计"
+   ],
+   "use_cases": [
+    "压铸设备产线状态、工艺参数与报警的监控展示",
+    "需要本地缓存并异步同步至远程数据库的工业采集场景",
+    "C#/WPF 上位机与 PLC 通信的学习实践项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite 本地数据持久化 ／ |本地数据库|SQLite、Microsoft.Data.Sqlite|",
+     "lines": [
+      15,
+      29
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- SQL Server 可选远程存储 ／ |远程数据库|SQL Server、Microsoft.Data.SqlClient|",
+     "lines": [
+      16,
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 与 SQL Server 存储自身业务数据，本身是 SCADA 上位机应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "仓库未声明开源许可证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MyDieCastingSCADA 是一个基于 C#、.NET 8 和 WPF 开发的压铸设备 SCADA 上位机学习与实践项目。系统通过 S7 协议与西门子 PLC 或本机仿真环境通信，用于展示设备状态、工艺参数、报警、生产周期和历史数据，并支持 SQLite 本地存储及可选的 SQL Server 同步。 ／ 业务数据写入SQLite ／     → 写入SQL Server",
+   "evidence_lines": [
+    3,
+    74,
+    77
+   ]
+  },
+  "fn": "agentthink/cast-hmi",
+  "sha": "a92ba28ef4be",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

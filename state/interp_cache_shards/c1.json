@@ -11432,5 +11432,197 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a9e23cd75971": {
+  "identity": {
+   "one_liner": "面向数据科学的 Agentic LLM，自主完成数据分析并生成报告",
+   "review": "DeepAnalyze 是用于数据科学任务的智能体化大语言模型系统，可自主执行数据准备、分析、建模、可视化和报告生成，支持数据库、CSV、Excel 等多种数据源。面向数据分析人员与研究者，通过 vLLM 部署 DeepAnalyze-8B 模型，提供 WebUI、JupyterUI、CLI 等交互界面，并支持 Docker 沙箱执行代码；推理需 GPU 且按显存选择量化版本。",
+   "highlights": [
+    "支持数据准备、分析、建模、可视化与报告生成的完整数据科学流程",
+    "支持结构化、半结构化与非结构化多类数据源的深度研究",
+    "提供 WebUI、JupyterUI、CLI 多种交互界面及 OpenAI 风格 API"
+   ],
+   "use_cases": [
+    "对上传数据进行自动化分析并生成研究/分析报告",
+    "本地部署开源数据分析助手处理数据科学任务",
+    "通过 API 或 CLI 集成到数据工程与分析工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 将数据库列为可读取的数据源之一（L22），仓库本体是数据分析智能体应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**DeepAnalyze** is the first agentic LLM for autonomous data science. It can autonomously complete a wide range of data-centric tasks without human intervention, supporting: ／ - 🔍 **Open-ended data research**: Conduct deep research on diverse data sources, including structured data (Databases, CSV, Excel), semi-structured data (JSON, XML, YAML), and unstructured data (TXT, Markdown), and finally produce analyst-grade research reports.",
+   "evidence_lines": [
+    20,
+    22
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "ruc-datalab/DeepAnalyze",
+  "sha": "a9e23cd75971",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e0b203444215": {
+  "identity": {
+   "one_liner": "面向 Roblox 的无锁事件溯源数据存储库，状态为已验证操作的折叠",
+   "review": "这是一个供 Roblox/Luau 开发者使用的 datastore 库：开发者不直接写状态，而是提交带名称的变更操作，由自定义 reducer 校验后保存，从而在无会话锁的情况下实现多服务器一致的写入语义。支持事务、实体存储、全局计数器和数据迁移，可通过 Wally、模型文件或 npm（roblox-ts）安装，采用 MIT 许可。",
+   "highlights": [
+    "提供无锁的跨服务器写入，状态由验证性折叠（validating fold）计算，每次变更仅保存一次",
+    "支持最多 29 个玩家或键的事务、实体存储、全局计数器、数据迁移与幂等重试写入",
+    "提供类型化的操作定义与 roblox-ts TypeScript 类型支持"
+   ],
+   "use_cases": [
+    "Roblox 游戏中跨服务器一致的玩家数据存储",
+    "多服务器环境下需要防止超卖/重复扣款的金币、限量物品与交易场景",
+    "公会、排行榜、世界记录等实体数据的存储管理"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 将其定位为面向 Roblox 开发者的 datastore 库，本身实现数据存储语义而非消费数据的终端应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A datastore library for Roblox with no session locks. You never write state. You write down ／ change exactly once. ／ **Model file**: insert the Ledger module anywhere server side.",
+   "evidence_lines": [
+    6,
+    8,
+    48
+   ]
+  },
+  "fn": "XoifaiI/Ledger",
+  "sha": "e0b203444215",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c68d11fa5f0e": {
+  "identity": {
+   "one_liner": "基于 Flask+MySQL 的混合摩托车业务管理系统，ERD 建模转关系库并提供 Web 界面",
+   "review": "该项目把混合摩托车业务设计为 ER 图并转化为符合 3NF 的 MySQL 数据库，用 Flask 提供 7 张表的增删改查、仪表盘、订单追踪、SQL 报表和只读 SQL 控制台，每页展示所执行的 SQL。适合作为数据库课程设计或教学演示使用；SQLite 3 仅作为无服务器演示的后备数据库。",
+   "highlights": [
+    "提供客户、员工、车辆、车型、订单、支付、服务记录 7 张表的 CRUD 界面与外键下拉选择",
+    "包含仪表盘、9 个 SQL 报表和只读 SELECT 的 SQL 控制台，页面显示执行的 SQL 语句",
+    "内置 3NF 数据字典、视图、索引、存储过程、触发器与事务示例，约束错误以可读信息返回"
+   ],
+   "use_cases": [
+    "数据库课程中演示 ERD→关系模型→Web 应用的完整流程",
+    "混合摩托车业务的订单、库存、支付与服务记录管理",
+    "学习 JOIN、聚合、子查询、触发器、事务等 SQL 概念的示例项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**A web-based database application: ERD → MySQL relational database → Flask web interface** ／ |Database|**MySQL 8.x** (MySQL Workbench) · SQLite 3 as fallback / serverless demo| ／ This project designs that business as an **Entity Relationship Diagram**, converts it into a **normalised relational database (MySQL)** with primary keys, foreign keys and constraints, and provides a **responsive web interface (Flask)** to insert, view, search",
+     "lines": [
+      3,
+      43,
+      20
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Database|**MySQL 8.x** (MySQL Workbench) · SQLite 3 as fallback / serverless demo|",
+     "lines": [
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是用 MySQL/SQLite 存储业务数据的 Flask Web 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A web-based database application: ERD → MySQL relational database → Flask web interface** ／ This project designs that business as an **Entity Relationship Diagram**, converts it into a **normalised relational database (MySQL)** with primary keys, foreign keys and constraints, and provides a **responsive web interface (Flask)** to insert, view, search, update and delete records. Every page shows which SQL is executed, so the link between the web interface and the database is always visible. ／ |Database|**MySQL 8.x** (MySQL Workbench) · SQLite 3 as fallback / serverless demo|",
+   "evidence_lines": [
+    3,
+    20,
+    43
+   ]
+  },
+  "fn": "DuresameenShafi/revon-tms",
+  "sha": "c68d11fa5f0e",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11939,5 +11939,72 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a554ef00b492": {
+  "identity": {
+   "one_liner": "基于 Elixir/Postgres 的双向通讯平台，核心接口经 glific APIs 提供",
+   "review": "Glific 是一个双向通讯平台的主应用，通过 glific APIs 提供核心接口，使用 Elixir 编写并依赖 PostgreSQL 存储数据，通过 Gupshup 的 API 集成收发 WhatsApp 消息。面向需要接入 WhatsApp 通讯的组织（README 提及 NGO 等社会影响项目）。部署要求自行安装 Elixir/Erlang、PostgreSQL（v13/14/17）、SSL 证书，生产环境使用 Oban Pro 需购买许可。",
+   "highlights": [
+    "提供 glific APIs 作为核心接口，支持 GraphQL（主题标签）",
+    "通过 Gupshup API 集成发送和接收 WhatsApp 消息",
+    "使用 Oban 处理后台任务与定时任务，支持 Oban Pro 或免费版 Oban"
+   ],
+   "use_cases": [
+    "需要双向 WhatsApp 消息通讯的组织平台",
+    "基于 glific APIs 构建通讯相关应用",
+    "面向 NGO 等社会影响项目的通讯部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "#### Postgres ／ Tested with Postgres versions: ／ SSL (Secure Sockets Layer) provides encrypted connections between Glific and your PostgreSQL database. In Glific, SSL is enabled by default for all environments except test to ensure secure database communications. While optional, it's recommended for production deployments. You can disable SSL by setting the `ENABLE_DB_SSL` environment variable to `false`. If you are disabling SSL, skip to the end of this section.",
+     "lines": [
+      51,
+      55,
+      232
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Glific 使用 PostgreSQL 存储数据并集成 Gupshup 收发 WhatsApp 消息，是为通讯业务服务的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "#### Postgres ／ Gupshup is a messaging platform that enables bots and businesses to communicate with users over WhatsApp and other channels. In Glific, we use Gupshup to send and receive WhatsApp messages via API integration. ／ SSL (Secure Sockets Layer) provides encrypted connections between Glific and your PostgreSQL database. In Glific, SSL is enabled by default for all environments except test to ensure secure database communications. While optional, it's recommended for production deployments. You can disable SSL by setting the `ENABLE_DB_SSL` environment variable to `false`. If you are disabling SSL, skip to the end of this section.",
+   "evidence_lines": [
+    51,
+    129,
+    232
+   ]
+  },
+  "fn": "glific/glific",
+  "sha": "a554ef00b492",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

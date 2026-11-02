@@ -10617,5 +10617,73 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d0bf04d3354d": {
+  "identity": {
+   "one_liner": "AI agent 运行时审计与执行前护栏工具，拦截高风险动作",
+   "review": "AgentWatch（现名 Panoptis）面向构建和运维 AI agent 的团队，通过独立模型审计推理链并在动作执行前拦截危险操作，提供回放、对比、回滚和告警。v3 版本从主动拦截转向被动取证分析，运行时证据存储依赖 Postgres 服务，多数分析功能标注为实验性。",
+   "highlights": [
+    "提供执行前拦截：内置 40+ 危险模式（如 DROP TABLE、rm -rf）识别与阻断",
+    "支持 LangChain、LangGraph、CrewAI、AutoGen、AutoGPT、smolagents、Claude Code 等框架适配器",
+    "提供 CLI（observe/inspect/replay/compare/rollback）、REST API 与实时 Dashboard"
+   ],
+   "use_cases": [
+    "为 AI agent 的工具调用增加执行前安全审计与拦截",
+    "对 agent 运行记录进行回放、对比与证据溯源分析",
+    "对 agent 会话进行 token 预算控制与成本追踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "That's it. Set `AGENTWATCH_API_KEY` in `.env` (compose refuses to start without it); everything else has working defaults, customizable via .env.example. The v3 evidence store lives on the Postgres service, so it survives container restarts. ／ |**Backend**|FastAPI · PostgreSQL · Redis · Celery|",
+     "lines": [
+      156,
+      261
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其 v3 证据存储运行在 Postgres 服务上，后端技术栈包含 PostgreSQL，属于使用数据库存储自身数据的项目。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "That's it. Set `AGENTWATCH_API_KEY` in `.env` (compose refuses to start without it); everything else has working defaults, customizable via .env.example. The v3 evidence store lives on the Postgres service, so it survives container restarts. ／ |**Backend**|FastAPI · PostgreSQL · Redis · Celery|",
+   "evidence_lines": [
+    156,
+    261
+   ]
+  },
+  "fn": "Shinraya-Tech-Labs/AgentWatch",
+  "sha": "d0bf04d3354d",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

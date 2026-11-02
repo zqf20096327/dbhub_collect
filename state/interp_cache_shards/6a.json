@@ -11051,5 +11051,382 @@
   "generated_at": "2026-10-31",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "8b47c37f186f": {
+  "identity": {
+   "one_liner": "MAC地址厂商OUI查询数据库，合并IEEE/Nmap/Wireshark/HDM四源数据",
+   "review": "该项目将 IEEE、Wireshark、Nmap、HDM 四个 OUI 登记源合并去重为约 5.9 万条 MAC 厂商前缀数据，提供 TXT/CSV/JSON/XML/SQLite/SQL 等 10 种格式下载与浏览器在线查询，并附 Node.js CLI 与月度自动更新脚本。面向网络设备识别、无线安全分析等使用者；SQLite/Postgres/MySQL 仅作为数据分发格式，非数据库工具。",
+   "highlights": [
+    "提供 10 种下载格式，包含带索引的 SQLite 数据库文件和可导入 Postgres/MySQL/D1 的 SQL 脚本",
+    "合并 4 个来源并去重交叉验证，含设备类型分类、注销状态与登记人历史等字段",
+    "通过 GitHub Actions 每月自动更新，并提供跨平台 Node.js 查询 CLI 与浏览器在线查询"
+   ],
+   "use_cases": [
+    "网络中发现/识别未知设备的 MAC 厂商归属",
+    "渗透测试与 wardriving 中对 AP、IoT、摄像头等设备按厂商分类",
+    "将 OUI 数据以 SQLite/SQL 格式接入自有脚本或数据库做批量查询"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|SQL|script|Postgres/MySQL/D1 import|import-to-d1.sql|",
+     "lines": [
+      158
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|SQL|script|Postgres/MySQL/D1 import|import-to-d1.sql|",
+     "lines": [
+      158
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|indexed|Ready-to-query DB|master_oui.db| ／ ### `sqlite3`",
+     "lines": [
+      157,
+      212
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|`registrant_history`|string|`TEKELEC \\|PRIVATE \\|TEKELEC \\|Oracle` (every registrant the block has had, oldest first; only when it changed)|",
+     "lines": [
+      186
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库本体是 OUI 数据集，SQLite/MySQL/Postgres 仅作为数据分发与导入格式出现，不构成对某个数据库生态的工具服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|SQLite|indexed|Ready-to-query DB|master_oui.db| ／ |SQL|script|Postgres/MySQL/D1 import|import-to-d1.sql| ／ bash download-sources.sh        # Pulls IEEE + Wireshark + Nmap + HDM",
+   "evidence_lines": [
+    157,
+    158,
+    256
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Ringmast4r/OUI-Master-Database",
+  "sha": "8b47c37f186f",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "49d301995f25": {
+  "identity": {
+   "one_liner": "自托管基础设施费用记账面板，经主机商 API 自动同步余额与扣费",
+   "review": "个人 single-user 面板，通过各主机商 API 自动同步服务器列表、账户余额、扣费日期并生成快照与支出预测，支持多币种、Telegram 通知、REST API 与 MCP 接口；使用 NestJS + Prisma + PostgreSQL 存储，Docker 部署。适合自托管多台服务器、需要统一追踪 VPS/域名/CDN 等开支的运维者。",
+   "highlights": [
+    "对接约 20 家主机商 API，自动同步余额、资源列表、扣费日期并记录每日余额快照",
+    "提供多币种换算、月/年支出分析与未来扣费预测，Telegram 通知低余额与同步错误",
+    "内置 REST API（Bearer 令牌、只读/全量权限）与 MCP 服务器端点；供应商令牌以 AES-256-GCM 加密存储"
+   ],
+   "use_cases": [
+    "自托管多台 VPS/服务器者统一追踪各主机商账户余额与开支",
+    "按提供商/国家/币种维度生成年度与月度基础设施费用报表和预测",
+    "通过 API/MCP 将账单数据接入其他工具或 AI 客户端"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Backend:** NestJS 11 (Node 22) · Prisma 7 · PostgreSQL 18 · zod (`nestjs-zod`) · axios · grammY ／ - **Деплой:** единый Docker-образ (бэкенд раздаёт API + собранный SPA) + отдельный Postgres ／ docker compose exec -T infra-billing-db sh -c 'pg_dump -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\" -Fc' > backups/infra_billing-$(date +%Y%m%d-%H%M).dump",
+     "lines": [
+      45,
+      48,
+      92
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 PostgreSQL 存储自身计费数据的自托管应用面板，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Персональная (**single-user, self-hosted**) панель учёта расходов на инфраструктуру: VPS, ／ - **Backend:** NestJS 11 (Node 22) · Prisma 7 · PostgreSQL 18 · zod (`nestjs-zod`) · axios · grammY ／ - **Деплой:** единый Docker-образ (бэкенд раздаёт API + собранный SPA) + отдельный Postgres",
+   "evidence_lines": [
+    3,
+    45,
+    48
+   ]
+  },
+  "fn": "mishkatik/infra-billing",
+  "sha": "49d301995f25",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3b2877b67e33": {
+  "identity": {
+   "one_liner": "Rust+GPUI 原生跨平台数据库 GUI 客户端与 SQL 编辑器",
+   "review": "FluxDB 是一个桌面端数据库客户端，在同一窗口内提供 SQL 编辑、数据编辑回写、表结构管理、ER 图、备份恢复，以及 MongoDB 和 Redis 工作台，支持 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦、MongoDB、Redis 等数据源。适合需要在本地统一管理多种数据库的开发与运维人员；MySQL/PostgreSQL 备份依赖本机客户端工具，MariaDB 尚未支持。",
+   "highlights": [
+    "支持 SQL 编辑补全、结果集编辑回写、TXT/CSV/JSON/XML 导入导出与 .sql 文件执行",
+    "提供基于外键的 ER 图，可导出 JSON/DBML/Mermaid/SVG",
+    "内置可选 AI Agent，支持 MCP Client/Server，写入类操作需审批"
+   ],
+   "use_cases": [
+    "在同一桌面应用中管理多种关系型数据库、MongoDB 与 Redis",
+    "数据浏览、筛选、编辑与批量导入导出",
+    "表结构可视化设计与逻辑关系记录"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |PostgreSQL|SQL 查询、Schema / 对象浏览、表结构管理、数据编辑、用户与角色管理、psql 工具入口|`pg_dump` plain SQL 备份，`psql` 恢复|TLS、SSH、代理、Schema 作用域、超时|-|",
+     "lines": [
+      5,
+      104
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |MySQL|SQL 查询、对象浏览、表结构管理、数据编辑、导入导出、原生客户端工具入口|`mysqldump` 逻辑备份，SQL 恢复|TLS / SSL、SSH 隧道、代理、超时、字符集|-|",
+     "lines": [
+      5,
+      102
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **新增 Oracle 数据源**：Service Name / SID 连接、Schema / 对象浏览、SQL 查询、表结构管理与设计、数据编辑、筛选与排序、SQL 补全、用户与权限管理、本机逻辑导出，以及 AI 页面上下文与受控执行。",
+     "lines": [
+      5,
+      34
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |SQLite|本地文件连接、SQL 查询、对象浏览、表结构管理、数据编辑|`VACUUM INTO` 完整一致快照；恢复到新文件并检查完整性与外键|本地文件路径|-|",
+     "lines": [
+      5,
+      106
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |SQL Server|T-SQL 查询、数据库 / Schema / 对象浏览、表结构管理与数据编辑、表数据导入导出、登录名 / 数据库用户 / 角色成员 / 显式权限管理、对象级逻辑备份恢复、AI 页面上下文与受控执行|对象级逻辑 SQL 备份与恢复|SQL Server 认证、TLS、显式端口；命名实例需填写实际端口|Windows 集成认证、Azure AD、包含数据库用户、列级权限编辑、用户自定义服务器角色、SQL Browser / 命名实例自动解析、数据库级物理备份（`BACKUP DATABASE`",
+     "lines": [
+      5,
+      105
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "MariaDB 尚未支持。它只出现在规划中，不应被视为当前能力。",
+     "lines": [
+      112
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |TiDB|复用 MySQL 协议链路，适配 SQL 方言、补全与表结构管理|复用 MySQL 逻辑备份能力|连接能力与 MySQL 一致|-|",
+     "lines": [
+      5,
+      103
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |达梦 DM8|Schema / 对象浏览、SQL 查询、表结构管理与设计、数据编辑、表数据导入|逻辑备份与 SQL 恢复；当前恢复面向单 Schema|实例与 Schema 连接配置|-|",
+     "lines": [
+      5,
+      107
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为多种数据库提供连接、查询、编辑与备份能力的客户端工具，本身不存储业务数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "TiDB",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0 单一开源许可证",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**原生跨平台数据库客户端与 SQL 编辑器，面向高性能、低开销的桌面体验设计：在一个窗口中完成查询、数据编辑、结构管理和 Redis 调试。** ／ FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、Oracle、SQLite、TiDB、达梦 DM8、MongoDB 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |数据库|当前能力|备份 / 恢复|连接与限制|尚未支持|",
+   "evidence_lines": [
+    3,
+    5,
+    100
+   ]
+  },
+  "fn": "fluxdb-alt/fluxDB",
+  "sha": "3b2877b67e33",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "79dfe1f83031": {
+  "identity": {
+   "one_liner": "OceanBase 4.x MySQL 模式 SQL 解析器，纯 Go 实现",
+   "review": "这是一个用 goyacc 移植官方 Bison 文法实现的 OceanBase（MySQL 模式）SQL 解析库，面向需要程序化解析 SQL 的 Go 集成方。提供类型化 AST、round-trip 重建、JSON 序列化、源码 Span，并支持按 OceanBase 版本做特性门控；README 未给出许可类型细节。",
+   "highlights": [
+    "提供类型化 AST，支持 SQL 文本 round-trip 重建、Visitor 遍历与 JSON 双向序列化",
+    "支持按 OceanBase 版本做语法特性门控（WithVersion 严格限定语法面）",
+    "纯 Go 实现，运行期零外部依赖，官方 4.2.5 文法 91 个语句分支全部实现"
+   ],
+   "use_cases": [
+    "在 Go 项目中解析 OceanBase MySQL 模式 SQL 并生成 AST",
+    "需要按 OceanBase 具体版本校验 SQL 语法可用性的场景",
+    "SQL 格式化、规范重建或 AST 结构化处理"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "OceanBase 4.x（MySQL 模式）SQL Parser —— 纯 Go 实现。 ／ 并原生支持**按 OceanBase 版本做特性门控**（`WithVersion(\"4.2.5\")` 即严格限定到",
+     "lines": [
+      3,
+      8
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "- 部分 MySQL 兼容语法为**超集**（OB 各版文法均无）：`QUALIFY`、`PROCEDURE ANALYSE`、",
+     "lines": [
+      147
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为解析 OceanBase SQL 提供开发库能力，是服务数据库生态的组件而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OceanBase 4.x（MySQL 模式）SQL Parser —— 纯 Go 实现。 ／ 解析引擎用 **goyacc 移植官方 Bison 文法**（`sql_parser_mysql_mode.y`），词法、AST、 ／ go get github.com/zetatez/ob-sql-parser",
+   "evidence_lines": [
+    3,
+    5,
+    40
+   ]
+  },
+  "fn": "zetatez/ob-sql-parser",
+  "sha": "79dfe1f83031",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

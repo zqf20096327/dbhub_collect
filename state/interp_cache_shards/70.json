@@ -11344,5 +11344,229 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cf57e3a9df8d": {
+  "identity": {
+   "one_liner": "企业 AI 资产治理平台，基于 cordis/dsh 插件树运行",
+   "review": "元冰可 AIOS 是一个可自主部署的企业 AI 运行与治理平台，把 MCP 服务、Skill、模型渠道、数字员工等 AI 资产登记到组织名下，提供目标-项目-任务派发、审批中心、预算计量、权限矩阵与审计日志。面向需要 AI 资产确权与成本归账的企业团队；以 cordis 插件树组织，可作 dsh 插件挂载，运行时依赖 Node 22 与内置 node:sqlite，存储当前面向单进程。",
+   "highlights": [
+    "提供 AI 资产的生命周期状态机、85 个权限点与审批流程",
+    "支持部门 × Agent × Skill 维度的成本归集与用量计量，并保留审计日志",
+    "可作为 dsh web profile 插件挂载，并提供 MCP 接口、OpenAPI 描述与运维 CLI"
+   ],
+   "use_cases": [
+    "企业对 MCP 服务、Skill、模型渠道等 AI 资产进行登记确权与授权管理",
+    "数字员工任务派发、高风险操作审批与全程留痕",
+    "AI 能力调用的用量统计与内部成本归账"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "平台自身使用 Node 内置 node:sqlite 做单进程持久化存储，属使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 面向企业的 AI 运行与治理平台 · 支持自主部署 · 基于 dsh / cordis 插件体系 ／ 实例本身是一棵 cordis 插件树，与 dsh 使用同一个插件框架。每个业务域是一个独立插件包，自行声明依赖、权限点和事件，可以单独启停；跨插件协作只经由事件总线和扩展点，插件之间不直接读写彼此的数据。仓库包含 25 个插件清单与 9 份领域运维 Skill。 ／ - **数据与可用性**：当前存储形态面向单进程运行，不应让多个进程同时使用同一数据目录；部署前请规划备份和恢复。",
+   "evidence_lines": [
+    7,
+    99,
+    126
+   ]
+  },
+  "fn": "01men/ybkkasi",
+  "sha": "cf57e3a9df8d",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "57b3087c7871": {
+  "identity": {
+   "one_liner": "Python 编写的业余无线电 DX cluster 核心，含 telnet、Web UI 与 SQLite 持久化",
+   "review": "pyCluster 是一个用 Python 实现的业余无线电 DX cluster 服务端，为用户提供 telnet 接入和公共 Web UI，为系统管理员提供 Web 控制台，将 spot、消息和用户偏好存入 SQLite，并支持与 DXSpider 系节点的链路互联。适合业余无线电爱好者在独立 Linux 主机上部署运行自己的 cluster 节点。",
+   "highlights": [
+    "提供 telnet、公共 Web UI 和系统管理员 Web 控制台三种界面",
+    "将 spots、消息和用户偏好持久化存储于 SQLite",
+    "支持与 DXSpider 系遗留 cluster 节点建立链路连接，并集成 fail2ban 和基于时长的数据清理"
+   ],
+   "use_cases": [
+    "在 VPS、树莓派或独立服务器上部署业余无线电 DX cluster 节点",
+    "为 ham radio 操作者提供 spots 查看与发布的 telnet/Web 服务",
+    "与 DXSpider 系既有 cluster 网络建立多链路互联"
+   ],
+   "classification": {
+    "cat": "应用",
+    "db_verdicts": [
+     {
+      "db": "SQLite",
+      "rel": "support",
+      "lines": [
+       30
+      ]
+     }
+    ],
+    "eco": "app",
+    "eco_why": "项目是一个直接面向用户的 DX cluster 应用，README 明言以 SQLite 存储数据而非为数据库生态提供工具",
+    "ai": {
+     "flag": false,
+     "kind": []
+    },
+    "persona": "use",
+    "official": {
+     "flag": false,
+     "of": null
+    }
+   },
+   "signals": {
+    "status": "active",
+    "license_note": "",
+    "install": [
+     "source"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     3,
+     30
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- stores spots, messages, and user preferences in SQLite",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个直接面向用户的 DX cluster 应用，README 明言以 SQLite 存储数据而非为数据库生态提供工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pyCluster is a modern DX cluster core written in Python. ／ - stores spots, messages, and user preferences in SQLite",
+   "evidence_lines": [
+    3,
+    30
+   ]
+  },
+  "fn": "AI3I/pyCluster",
+  "sha": "57b3087c7871",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5ea8334610e5": {
+  "identity": {
+   "one_liner": "校园问题报修系统：Flutter+Shelf+PostgreSQL 实现照片/位置上报与处理闭环",
+   "review": "一个校园问题报修系统，学生以照片加位置提交问题，工作人员认领并解决后学生收到站内通知。为课程团队项目而建，采用分层架构（domain/application/infrastructure/api），数据存于 PostgreSQL 16，含 EXIF 清理、参数化查询、角色鉴权等隐私安全决策，明确声明非生产系统，首版功能范围有限。",
+   "highlights": [
+    "使用 PostgreSQL 16 存储，通过迁移 SQL 文件（db/migrations，V1-V4）管理 schema",
+    "实现 Student/Staff 双角色流程：上报、认领（409 防重复认领）、解决、通知，状态变更记录在案",
+    "隐私与安全决策包括 EXIF 清理、bcrypt/argon2 密码哈希、参数化查询、请求限速"
+   ],
+   "use_cases": [
+    "校园/机构内部问题上报与处理流程管理",
+    "分层架构与 TDD 的课程/团队协作开发参考",
+    "多语言边缘服务（Python FastAPI 报表、C# 导出）围绕 Dart 核心的实践示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Veritabanı|PostgreSQL 16|",
+     "lines": [
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统使用 PostgreSQL 作为自身数据存储，README 未提供面向数据库生态的工具能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Veritabanı|PostgreSQL 16| ／ |Infrastructure|PostgreSQL ve dosya sistemi gerçeklemeleri| ／ |Tür|Ders projesi (canlı demo ve sunum için; üretim sistemi değil)|",
+   "evidence_lines": [
+    55,
+    124,
+    51
+   ]
+  },
+  "fn": "HuseyinEmreTech/kampus-bildirim-sistemi",
+  "sha": "5ea8334610e5",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

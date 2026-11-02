@@ -11240,5 +11240,355 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b7418a8439d9": {
+  "identity": {
+   "one_liner": "自托管个人站点，整合笔记/动态/作品/收藏/日志，Rust axum + SQLite",
+   "review": "一个可自托管的个人网站系统，包含笔记、动态、作品、收藏、航行日志等页面，以夜空主题呈现。前端用 React 19 与 TanStack Start，后端用 Rust 的 axum 框架并通过 sqlx 使用 SQLite 存数据，通过 Docker Compose 一键部署，内置 Caddy 提供 HTTPS，带首次设置向导、多语言界面和 MCP server 供 AI 助手调用管理接口写文章。适合想搭建个人站点的用户。",
+   "highlights": [
+    "通过 Docker Compose 部署，首次运行提供设置向导，用 GitHub 或 Google OAuth 认领站点",
+    "支持五种语言，文章用 MDX 编写，管理后台提供评论审核、定时发布、RSS 与 newsletter",
+    "内置 MCP server，提供 31 个工具让 AI 助手通过管理 API 写文章和管理站点设置"
+   ],
+   "use_cases": [
+    "搭建自托管的个人博客/主页站点",
+    "用夜空主题集中展示笔记、作品、收藏与照片",
+    "通过 MCP 让 AI 助手代管内容发布与站点设置"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Backend**|Rust 2024 · axum · tokio · sqlx (SQLite) · JWT · image / resvg / thumbhash (images and share images) · ferrous-opencc · utoipa (OpenAPI at `/api/docs`) · Sentry SDK|",
+     "lines": [
+      205
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 作为后端存储的个人站点应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "docker compose up -d",
+   "evidence_lines": [
+    38
+   ]
+  },
+  "fn": "Koimsurai/sora-to-ki",
+  "sha": "b7418a8439d9",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c2b762d4cf24": {
+  "identity": {
+   "one_liner": "自托管深度链接引擎，提供设备检测、延迟深链与点击分析",
+   "review": "LinkForty Core 是一个可自托管的深度链接服务，实现短链生成、按设备路由、延迟深度链接安装归因、点击统计、QR 码生成与 Webhooks，并提供 REST API 与多端 SDK。面向需要自建链接归因基础设施的移动应用团队。数据存储在用户自己的 PostgreSQL，可选 Redis 缓存，采用 AGPL-3.0 许可，不含认证功能，需自行接入。",
+   "highlights": [
+    "支持按设备类型（iOS/Android/web）智能路由与定向规则过滤",
+    "提供延迟深度链接、点击分析、UTM 跟踪、QR 码生成与 HMAC 签名 Webhooks",
+    "REST API 配套 React Native、Expo、iOS、Android SDK，支持 Docker 部署"
+   ],
+   "use_cases": [
+    "移动应用的自托管短链与安装归因服务",
+    "替代已停止服务的 Firebase Dynamic Links 的场景",
+    "需要数据自持的跨平台深度链接与点击统计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Full data ownership** — All click data, analytics, and attribution stored in your PostgreSQL database ／ - **PostgreSQL Storage** - Reliable data persistence with full SQL capabilities",
+     "lines": [
+      20,
+      57
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 PostgreSQL 作为自身点击与分析数据的存储后端，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "npm",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **PostgreSQL Storage** - Reliable data persistence with full SQL capabilities ／  Self-hosted deep linking engine with device detection, analytics, deferred deep linking, and smart routing. No per-click pricing, no vendor lock-in, full data ownership — runs on your own PostgreSQL. Firebase Dynamic Links shut down in August 2025; LinkForty is a production-ready, open-source replacement you can deploy today.",
+   "evidence_lines": [
+    57,
+    7
+   ]
+  },
+  "fn": "LinkForty/core",
+  "sha": "c2b762d4cf24",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "21b68ec1076d": {
+  "identity": {
+   "one_liner": "桌面 SQL 学习工作台，本地 SQLite 执行配合 AI 导师与可视化 schema",
+   "review": "PractiSQL 是面向 SQL 学习者的桌面教学工作台：内置课程、练习、挑战、测验与 PDF 学习手册，查询在本地 SQLite 上执行，支持加载 SQLite 数据库、SQL dump 或 CSV，也可将 PostgreSQL、MySQL、SQL Server 导入为本地学习副本。AI 导师需连接 ChatGPT 或 API 提供方；目前提供 Windows x64 安装包，macOS 版本尚在准备中。",
+   "highlights": [
+    "提供本地 SQL 编辑、schema 可视化、查询历史与基于 schema 的本地代码补全，无需 AI 连接即可使用",
+    "包含课程、练习挑战、考试与数据项目工作流，答案在本地数据库副本上校验",
+    "支持导入 SQLite 数据库、SQL dump、CSV，以及 PostgreSQL/MySQL/SQL Server 服务器导入为学习副本"
+   ],
+   "use_cases": [
+    "SQL 初学者按课程路径学习并完成练习",
+    "教学中使用本地示例或自有数据库搭建练习工作区",
+    "连接 AI 提供方获取针对当前 schema 与查询结果的讲解"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Does an imported server database remain a live server workspace?** Supported PostgreSQL, MySQL and SQL Server imports create a local SQLite learning copy. Querying that copy is separate from querying the original server.",
+     "lines": [
+      200
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Does an imported server database remain a live server workspace?** Supported PostgreSQL, MySQL and SQL Server imports create a local SQLite learning copy. Querying that copy is separate from querying the original server.",
+     "lines": [
+      200
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A desktop SQL learning workspace that brings local SQLite, an AI tutor, visual schemas, and hands-on practice together through a coordinated **AI harness**. ／ **Use it as a SQL playground without AI.** Load a SQLite database, SQL dump or CSV, write your own queries and inspect the actual results. The editor, schema viewer and local completion do not require an AI connection. Connect the tutor when you want explanati",
+     "lines": [
+      7,
+      21
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**Does an imported server database remain a live server workspace?** Supported PostgreSQL, MySQL and SQL Server imports create a local SQLite learning copy. Querying that copy is separate from querying the original server.",
+     "lines": [
+      200
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是使用本地 SQLite 执行查询并提供学习功能的应用程序，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A desktop SQL learning workspace that brings local SQLite, an AI tutor, visual schemas, and hands-on practice together through a coordinated **AI harness**. ／ **Use it as a SQL playground without AI.** Load a SQLite database, SQL dump or CSV, write your own queries and inspect the actual results. The editor, schema viewer and local completion do not require an AI connection. Connect the tutor when you want explanations or generated SQL. ／ Local SQLite databases and file imports can become learning workspaces. Supported server imports create a local learning copy; they are separate from ordinary query execution against that copy.",
+   "evidence_lines": [
+    7,
+    21,
+    113
+   ]
+  },
+  "fn": "canyrtcn/PractiSQL",
+  "sha": "21b68ec1076d",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "debc83a2a77f": {
+  "identity": {
+   "one_liner": "算法竞赛训练桌面工作台，本机 SQLite 存储题库与训练记录",
+   "review": "TB 是面向算法竞赛学习者的 Windows 桌面训练应用，提供题库题解阅读、C++ 编辑与本地样例评测、向 Codeforces/AtCoder/牛客/QOJ 等原站后台提交、模拟赛与复习计划等功能，训练记录和题目数据用本机 SQLite 存储，支持账号分块同步与 JSON 导出；公开安装仅限 Windows 10/11 x64 用户版。",
+   "highlights": [
+    "提供题库、题解、C++ 编辑器、本地样例运行与四平台原站提交功能",
+    "使用本机 SQLite 存储个人数据库，自动更新前在线备份并验证 SHA-256",
+    "支持账号同步（训练、提交代码、草稿、偏好）及 JSON 数据导出"
+   ],
+   "use_cases": [
+    "算法竞赛日常刷题与图文题解学习",
+    "模拟赛计时训练与间隔复习管理",
+    "向 Codeforces、AtCoder 等原站后台提交并记录成绩"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "保存草稿并退出 TB 后安装到原目录，个人数据库、代码和导入内容保留。自动更新会先保存草稿、在线备份 SQLite、验证 SHA-256，再替换程序。跨电脑使用同一账号时，各电脑应升级到同一版本。原站登录保存在 TB 专用浏览器中，无需扩展。",
+     "lines": [
+      53
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明个人数据、题库与训练记录由本机 SQLite 存储，项目是使用数据库存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "保存草稿并退出 TB 后安装到原目录，个人数据库、代码和导入内容保留。自动更新会先保存草稿、在线备份 SQLite、验证 SHA-256，再替换程序。跨电脑使用同一账号时，各电脑应升级到同一版本。原站登录保存在 TB 专用浏览器中，无需扩展。 ／ 账号同步包括训练、完整提交代码、草稿、目标、经验、收藏和偏好；冲突草稿另存。原站 Cookie 与翻译密钥不进入公共题库，翻译密钥使用 Windows DPAPI 保护。设置中的数据导出为 JSON，不含密码、Cookie 或 API 密钥。 ／ python backend/backend.py --offline",
+   "evidence_lines": [
+    53,
+    144,
+    147
+   ]
+  },
+  "fn": "3097729287/acm-algo-trainer",
+  "sha": "debc83a2a77f",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a68273ac2262": {
+  "identity": {
+   "one_liner": "基于 Node.js 与 WebSocket 的实时多人对战网页游戏",
+   "review": "该项目实现一个实时多人格斗网页游戏，玩法结合猜拳与攻击选择，通过 Anger、Satisfaction、Confidence 三条情绪数值槽影响胜负。前端为极简 SPA，后端用原生 Node.js 与 WebSocket 通信，据仓库描述支持在 Oracle XE 21c 与 TiDB 之间切换数据库。README 提供克隆、npm 安装与启动步骤，适合想体验或参与开发的玩家与开发者。",
+   "highlights": [
+    "使用原生 Node.js 与 WebSockets 实现实时多人对战",
+    "前端为极简单页应用（SPA），通过 npm 安装并启动",
+    "据仓库描述支持 Oracle XE 21c 与 TiDB 之间的数据库切换"
+   ],
+   "use_cases": [
+    "在线多人猜拳格斗游戏娱乐",
+    "Node.js WebSocket 实时交互玩法的学习参考",
+    "情绪调节主题的互动体验"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是一个使用数据库存储数据的游戏应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "The **Anger Management Game** is a web‑based interactive experience that helps users explore and regulate emotions through tactical combat. Players face off in fast‑paced rounds, using a blend of classic Rock‑Paper‑Scissors and strategic attacks to influence three emotional meters—**Anger**, **Satisfaction**, and **Confidence**—and ultimately achieve victory. ／    npm install ／    npm start",
+   "evidence_lines": [
+    4,
+    38,
+    42
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "villaincause/anger-management",
+  "sha": "a68273ac2262",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

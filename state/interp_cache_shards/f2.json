@@ -11743,5 +11743,288 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "534eff12d5ab": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core 和 EF Core 的自托管个人博客系统",
+   "review": "Moonglade 是一个面向开发者的自托管博客平台，提供文章、评论、分类、归档等博客功能，并包含管理后台。默认使用 PostgreSQL，也支持 SQL Server，通过 EF Core 数据提供程序适配两种数据库；数据库升级需管理员手动执行 SQL 脚本。适合想自建博客的开发者通过 Docker 或 dotnet 运行部署。",
+   "highlights": [
+    "提供文章发布、评论、分类标签、归档、数据导入导出等博客功能，支持 RSS/Atom/sitemap 等发现协议",
+    "通过独立的 EF Core 提供程序项目支持 PostgreSQL 和 SQL Server 两种数据库",
+    "数据库迁移脚本手动执行，脚本要求幂等；Docker Compose 可一键启动并注入连接字符串"
+   ],
+   "use_cases": [
+    "开发者自托管个人博客",
+    "需要 Markdown/HTML 双编辑器与评论管理的博客站点",
+    "部署在云服务器或本地的小型内容站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`src/Moonglade.Data.PostgreSql`, `src/Moonglade.Data.SqlServer`|PostgreSQL and SQL Server provider registration and provider-specific EF Core behavior.| ／ Compose starts PostgreSQL and supplies the database connection string to the web container. For a direct `dotnet run`, the default connection string in `appsettings.json` points to PostgreSQL on `localhost:5432`; override it with `ConnectionStrings__MoongladeD ／ PostgreSQL is the default database. SQL Server remains supported when configured explicitly.",
+     "lines": [
+      25,
+      62,
+      75
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|`src/Moonglade.Data.PostgreSql`, `src/Moonglade.Data.SqlServer`|PostgreSQL and SQL Server provider registration and provider-specific EF Core behavior.| ／ |PostgreSQL|SQL Server 2025 or LocalDB| ／ |SQL Server|`Server=(local);Database=moonglade;Trusted_Connection=True;`|",
+     "lines": [
+      25,
+      71,
+      80
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL/SQL Server 存储博客数据的 Web 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Moonglade** is a personal blogging platform built for developers. It features essential blogging tools: posts, comments, categories, tags, archives, and pages. ／ |`src/Moonglade.Data.PostgreSql`, `src/Moonglade.Data.SqlServer`|PostgreSQL and SQL Server provider registration and provider-specific EF Core behavior.| ／ PostgreSQL is the default database. SQL Server remains supported when configured explicitly.",
+   "evidence_lines": [
+    3,
+    25,
+    75
+   ]
+  },
+  "fn": "EdiWang/Moonglade",
+  "sha": "534eff12d5ab",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "344bd2597ed2": {
+  "identity": {
+   "one_liner": "基于 Telegram Bot 与 WebUI 的 VPS 服务器监控管理工具，使用 SQLite 存储",
+   "review": "这是一个通过 Telegram Bot 和 Web/PWA 界面监控、管理 VPS/独立服务器的自托管工具，面向系统管理员、DevOps 和主机服务商。采用 Agent-Client 架构支持多节点，提供 CPU/RAM/磁盘/网络指标采集、SSH 终端、systemd 服务管理、备份与计费提醒等功能，数据存储在 SQLite（aiosqlite），支持 Docker 与 Systemd 两种部署方式。",
+   "highlights": [
+    "通过 Telegram Bot 与 WebUI/PWA 提供 CPU、RAM、磁盘、网络实时指标采集与告警",
+    "采用 Agent-Client 架构，支持多节点管理与远程 SSH Web 终端",
+    "内置 systemd 服务管理、定时备份、计费提醒与 Fail2Ban 集成"
+   ],
+   "use_cases": [
+    "系统管理员从单一入口集中监控和管理多台服务器",
+    "VPN/主机服务商对客户节点做状态监控与到期提醒",
+    "通过手机 Telegram 远程执行服务重启、系统优化等运维操作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "│ ├── SQLite DB (nodes, users, metrics) │ ／ - **Database:** SQLite (aiosqlite)",
+     "lines": [
+      129,
+      135
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储自身节点、用户与指标数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "│  ├── SQLite DB (nodes, users, metrics)          │ ／ - **Database:** SQLite (aiosqlite) ／ **VPS Manager Telegram Bot** — это комплексное решение enterprise-класса для управления серверной инфраструктурой через Telegram и веб-интерфейс.",
+   "evidence_lines": [
+    129,
+    135,
+    35
+   ]
+  },
+  "fn": "jatixs/tgbotvpscp",
+  "sha": "344bd2597ed2",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "383ee4182d30": {
+  "identity": {
+   "one_liner": "AI 原生财务智能平台，以知识图谱建模账簿、报表与投资组合",
+   "review": "这是一个开源财务智能平台，将会计账簿、财务报告和投资组合数据建模为知识图谱，支持 AI 代理和分析师通过自然语言与 Cypher 查询和操作。适用于会计、财报编制和投资管理场景，基于 PostgreSQL、LadybugDB、DuckDB 等开源引擎构建，通过 Docker 环境和 GitHub Actions 部署到自有 AWS 账户运行。",
+   "highlights": [
+    "提供 RoboLedger 会计与财务报告扩展，包含信息块、事件块、分类账块三类原子写入单元",
+    "支持多租户架构，每个租户拥有独立图数据库与 schema-per-tenant 的 PostgreSQL 隔离",
+    "提供 MCP 与自然语言查询接口，写操作采用带幂等键的 OperationEnvelope 机制"
+   ],
+   "use_cases": [
+    "企业会计与结账流程管理、财务报表生成",
+    "SEC XBRL 公开财报数据的查询与分析",
+    "私募持仓组合管理与跨图谱投资研究"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL for IAM, graph metadata, extensions and Dagster",
+     "lines": [
+      78
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "平台以 PostgreSQL 存储 IAM、图元数据及扩展数据，是使用数据库的应用系统而非数据库服务工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- PostgreSQL for IAM, graph metadata, extensions and Dagster ／ Extensions are domain-specific subsystems that bring their own schema, OLTP tables, API routes, data pipelines, and dedicated frontend apps. They share a single PostgreSQL database with schema-per-tenant isolation and materialize to the graph for analytical queries. Domain content is authored as **block molecules** — self-describing envelopes bundling atomic facts with their structure, rules, and verification — never bare rows.",
+   "evidence_lines": [
+    78,
+    23
+   ]
+  },
+  "fn": "RoboFinSystems/robosystems",
+  "sha": "383ee4182d30",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7a7ebb142c56": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的持久化 MCP 消息总线，内置 SQLite 存储",
+   "review": "minymaton 是一个用 Rust 实现的 MCP 消息总线服务器，让多个编码代理（Copilot CLI、Claude Code、Codex 等）跨会话和跨机器协调。消息在 publish 返回前先提交到持久存储（公开发布版捆绑 SQLite WAL 后端），每个订阅维护独立进度，批次需接收方确认。存储后端通过 QueueStore/QueueReader trait 抽象可替换。适合需要在多台机器上协调多个代理会话的用户。",
+   "highlights": [
+    "消息在 publish 返回前提交到持久存储，订阅进度跨服务器重启保留，批次在确认前保持 pending",
+    "提供 stream、subscription、publish、receive 四个基础 MCP 工具，支持广播流或定向单收",
+    "存储后端通过 QueueStore/QueueReader trait 抽象，Queue::with_backend 可接入其他后端实现"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理跨会话/跨机器协调消息与任务交接",
+    "需要消息持久化与确认重投递的代理间通信",
+    "通过 SSH 隧道或 HTTPS 代理远程访问共享代理收件箱"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Messages commit to durable storage before `publish` returns (bundled SQLite in ／ > **The floor.** The public server is one SQLite-backed process with a loopback-only listener ／ (`AGPL-3.0-only`) distribution ships the single-node bundled SQLite WAL backend",
+     "lines": [
+      32,
+      38,
+      91
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI 编码代理提供 MCP 消息总线服务，SQLite 仅作为内置存储后端被使用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "开源分发版为 AGPL-3.0-only",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**minymaton lets the agents you already use coordinate through a durable MCP message bus.** ／ (`AGPL-3.0-only`) distribution ships the single-node bundled SQLite WAL backend ／ Or install from crates.io: `cargo install minymaton` installs the server as",
+   "evidence_lines": [
+    19,
+    91,
+    151
+   ]
+  },
+  "fn": "immutlex-dev/minymaton",
+  "sha": "7a7ebb142c56",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

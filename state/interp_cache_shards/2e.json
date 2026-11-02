@@ -12230,5 +12230,225 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2ba8e9fb3893": {
+  "identity": {
+   "one_liner": "SQLite 的 Swift 开发工具库，提供 SQL 生成与数据库观察",
+   "review": "GRDB 是一个面向 Swift 应用开发的 SQLite 工具库，用于将应用的持久化数据存入 SQLite 数据库。它提供 SQL 生成、数据库变更观察、多线程并发访问（含 WAL）、schema 迁移等内置能力，支持记录模型映射与 Swift 查询接口，并适配 Combine、RxSwift 与 Swift 并发。适用于 iOS/macOS 等 Apple 平台的应用开发者，要求 SQLite 3.20.0+ 与 Swift 6.1+。",
+   "highlights": [
+    "提供 SQL 生成、记录模型（records）与 Swift 查询接口",
+    "提供数据库观察，可在数据变更时获得通知",
+    "支持多线程并发访问及 WAL 数据库，内置 schema 迁移工具"
+   ],
+   "use_cases": [
+    "iOS/macOS/tvOS/watchOS 应用本地数据持久化",
+    "需要响应数据库变更的通知驱动 UI 更新",
+    "应用版本迭代中的数据库 schema 演进"
+   ],
+   "cat_note": ""
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "GRDB: A toolkit for SQLite databases, with a focus on application development. ／ Use this library to save your application’s permanent data into SQLite databases. It comes with built-in tools that address common needs:",
+     "lines": [
+      1,
+      22
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "GRDB 是为应用操作 SQLite 数据库服务的 Swift 工具库，不是使用数据库存储自身业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GRDB: A toolkit for SQLite databases, with a focus on application development. ／ Use this library to save your application’s permanent data into SQLite databases. It comes with built-in tools that address common needs: ／ - **Migrations**",
+   "evidence_lines": [
+    1,
+    22,
+    36
+   ]
+  },
+  "fn": "groue/GRDB.swift",
+  "sha": "2ba8e9fb3893",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c64eef9e41e9": {
+  "identity": {
+   "one_liner": "自托管订阅记录管理 Web 应用，使用 SQLite 存储",
+   "review": "一个用于记录和管理订阅与支出的单页 Web 应用，支持增删改订阅、日历视图、周期费用汇总、多币种，并可通过 NTFY 或 Gotify 发送到期通知。数据存储在 SQLite，提供 Docker Compose 和 Node.js 手动两种部署方式，适合个人自托管使用。",
+   "highlights": [
+    "提供订阅的增删改查、日历视图与周/月/年费用汇总",
+    "集成 NTFY 和 Gotify 发送订阅到期通知",
+    "提供 Docker Compose 部署与手动 Node.js 部署方式"
+   ],
+   "use_cases": [
+    "个人订阅与周期支出跟踪",
+    "自托管部署管理个人财务记录",
+    "基于 NTFY/Gotify 的付款到期提醒"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🗄️ SQLite",
+     "lines": [
+      23
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用以 SQLite 作为技术栈存储数据，是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This single-page web application lets you keep track of and manage your subscriptions. You can add, edit, delete, and view subscriptions all in one place. You can set up notifications for each subscription using NTFY or Gotify. The app provides a general summary of all your subscriptions and a detailed summary for each payment account, all within a single, intuitive interface. ／ - 🗄️ SQLite",
+   "evidence_lines": [
+    5,
+    23
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "dh1011/subscription-manager",
+  "sha": "c64eef9e41e9",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fdc812fc2b63": {
+  "identity": {
+   "one_liner": "以 SQLite 开箱即用的 WordPress Docker 镜像",
+   "review": "该项目提供基于官方镜像打包的 WordPress Docker 镜像，用 SQLite Database Integration 插件替换默认 MySQL 存储并附带诊断、SELECT 大小写兼容修复、页面性能展示和 SMTP/OwlMail 集成等 must-use 插件，通过 docker run 或 docker compose 启动。适合想以 SQLite 运行 WordPress 站点的使用者；README 明确它不是 MySQL/MariaDB 迁移工具。",
+   "highlights": [
+    "基于官方 WordPress 镜像打包，内置 sqlite-database-integration 插件，通过 Docker Hub/GHCR 发布五平台镜像",
+    "附带只读 SQLite 诊断页、SELECT id 大小写兼容修复等 must-use 插件",
+    "发布包含 SPDX SBOM、SLSA provenance 与 Sigstore 签名"
+   ],
+   "use_cases": [
+    "以 SQLite 为存储快速运行 WordPress 站点",
+    "容器化部署并需 SQLite 运行状态诊断",
+    "WordPress 站点通过 SMTP/OwlMail 发送邮件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- Uses the upstream PHP MySQL parser on all supported architectures. ／ ## MySQL Parser ／ `v3.1.2`. Upstream removed the optional Rust extension `wp_mysql_parser` in",
+     "lines": [
+      14,
+      16,
+      20
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "WordPress with SQLite, ready to use out of the box. ／ > bundles SQLite Database Integration `3.1.2` and is available from Docker Hub",
+     "lines": [
+      3,
+      6
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "use SQLite. It is **not** a MySQL or MariaDB migration tool. Pointing an existing ／ MariaDB may be more appropriate for workloads with sustained concurrent writes.",
+     "lines": [
+      225,
+      232
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述 WordPress 应用镜像使用 SQLite 存储数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Docker SQLite WordPress ／ WordPress with SQLite, ready to use out of the box. ／ The image bundles a read-only diagnostics must-use plugin, `sqlite-diagnostics.php`, dropped into `wp-content/mu-plugins/`. It adds a **Tools → SQLite Diagnostics** page (visible to administrators with the `manage_options` capability) that gathers the SQLite runtime state into one place: whether the native `wp_mysql_parser` extension is loaded and which parse path is active, the SQLite version and source id, PHP/architecture and `pdo_sqlite` details, the SQLite drop-in version and database file path/size, and the bundled `sqlite-database-integration` plugin version. It also detects the native lexer and parser independently, reads key PRAGMA values (journal mode, synchronous, page/cache sizes, foreign keys, etc.) from the live site connection, and breaks down on-disk storage into the main file plus its WAL and SHM sidecars and their combined total. The page performs no writes and probes the SQLite version through an in-memory database, so the live site database is never modified.",
+   "evidence_lines": [
+    1,
+    3,
+    25
+   ]
+  },
+  "fn": "soulteary/docker-sqlite-wordpress",
+  "sha": "fdc812fc2b63",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

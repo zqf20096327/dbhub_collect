@@ -12595,5 +12595,155 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dd55110703d3": {
+  "identity": {
+   "one_liner": "基于 .NET 与 FreeSql 的前后端分离 CMS",
+   "review": "该项目是 Lin CMS 的 ASP.NET Core 后端实现，配套 Vue 前端，包含用户管理、权限、日志、文章、评论、点赞、通知、标签等功能，提供 Docker 部署、OAuth 登录（GitHub/QQ/Gitee）、代码生成与 CI/CD 配置。数据访问通过 FreeSql ORM 实现，可运行于 MySQL、SqlServer、Oracle、SQLite、PostgreSQL。适合熟悉 C# 和 Vue 的开发者用来构建内容管理类应用。",
+   "highlights": [
+    "通过 FreeSql ORM 支持 MySQL、SqlServer、Oracle、SQLite、PostgreSQL 多种数据库",
+    "内置用户管理、权限、日志、文章、评论点赞、通知、标签等 CMS 模块",
+    "提供 JWT 认证、GitHub/QQ/Gitee OAuth 登录、Docker 部署与 GitHub Action/Azure DevOps CI/CD"
+   ],
+   "use_cases": [
+    "开发需要权限与内容管理的 CMS 类 Web 应用",
+    "搭建掘金风格的技术专栏/博客站点",
+    "作为 .NET 后端前后端分离项目的工程实践参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Database：ORM:FreeSql+DataBase:MySQL5.6/MsSqlServer/Oracle/Sqlite/PostgreSQL",
+     "lines": [
+      96
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- Database：ORM:FreeSql+DataBase:MySQL5.6/MsSqlServer/Oracle/Sqlite/PostgreSQL",
+     "lines": [
+      96
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Database：ORM:FreeSql+DataBase:MySQL5.6/MsSqlServer/Oracle/Sqlite/PostgreSQL",
+     "lines": [
+      96
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用数据库存储数据的 CMS 应用系统，README 通过 FreeSql 声明其支持的数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "Oracle",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Database：ORM:FreeSql+DataBase:MySQL5.6/MsSqlServer/Oracle/Sqlite/PostgreSQL ／ This is an ASP.NET Core implementation of the Lin CMS backend, paired with a Vue.js frontend. It includes permissions, dictionary items, articles, comments and likes, notifications, tags, and other Juejin-style features.",
+   "evidence_lines": [
+    96,
+    20
+   ]
+  },
+  "fn": "luoyunchong/lin-cms-dotnetcore",
+  "sha": "dd55110703d3",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8b35c5a81914": {
+  "identity": {
+   "one_liner": "Home Assistant 实验性 AI 应用，用 Pi Durable + SQLite 实现持久化任务与人工审核的设备控制",
+   "review": "Hearth Pi 是一个运行于 Home Assistant OS 上的第三方实验性 AI 应用（add-on），通过 Pi Durable 持久层把输入、任务检查点和会话记录写入 SQLite，对灯光/开关等 HA 操作提供作用域受限的只读发现与默认需人工确认的提议式执行。面向 Home Assistant 用户，需 Node 24 环境或 HA OS amd64/aarch64 主机安装，作者标注为技术预览、未经安全审计。",
+   "highlights": [
+    "通过 Pi Durable 将任务检查点、会话与文档以 synchronous=FULL 写入 SQLite，重启后可恢复到已提交状态",
+    "HA 读取按明确作用域授权，动作为不可变提议，默认禁用并需人工逐条确认",
+    "提供可选的独立无网络编码 worker 容器与本地 open-weight 风险判断 add-on（hearth_judge）"
+   ],
+   "use_cases": [
+    "在 Home Assistant 中以人工审核方式通过聊天控制灯光/开关",
+    "为 AI 代理任务提供可重启恢复的持久化会话与检查点",
+    "在本地网络上通过 OpenAI 兼容服务器或本机 llama.cpp 模型运行代理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Continuity, not just history.** Genuine pinned Pi Durable commits admitted inputs, task checkpoints, transcripts and documents to SQLite with `synchronous=FULL`. One writer owns each store. Reconnect to committed state.",
+     "lines": [
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个 Home Assistant add-on 应用，使用 SQLite 作为自身持久化存储而非为数据库生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Independent community App · 0.8.3 · experimental.** Not an official Home Assistant or Pi product. The pinned Pi 1.0.1 APIs are experimental. This is a technical preview, not a production recommendation or external security audit. ／ - **Continuity, not just history.** Genuine pinned Pi Durable commits admitted inputs, task checkpoints, transcripts and documents to SQLite with `synchronous=FULL`. One writer owns each store. Reconnect to committed state. ／ Requires **Home Assistant OS**, an administrator account and an **amd64 or aarch64** host. Use an authorized test installation with a backup; this is an experimental third-party App, not HACS or a Devices & services integration (only the optional Hearth Assist voice link adds a HACS integration).",
+   "evidence_lines": [
+    7,
+    15,
+    43
+   ]
+  },
+  "fn": "cosmyo/ha-pi-durable",
+  "sha": "8b35c5a81914",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

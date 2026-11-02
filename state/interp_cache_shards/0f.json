@@ -10845,5 +10845,241 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8da62a4fa5f0": {
+  "identity": {
+   "one_liner": "自托管开源算法交易平台，通过36个券商插件统一交易接口",
+   "review": "OpenAlgo 是一个基于 Python Flask + React 的自托管算法交易平台，面向交易者。它通过 36 个券商插件提供统一 REST API，并支持五种交易方式：统一 API、Python 策略托管、无代码 Flow 构建器、AI Agent 聊天下单和期权/组合分析工具，内置 ₹1 亿模拟资金的 Analyzer 测试模式与订单审批流程。",
+   "highlights": [
+    "提供统一 REST API 层（57 个方法/路径对）与基于 ZMQ 的 WebSocket 实时行情代理",
+    "支持 36 个券商插件，并提供无代码 Flow 可视化策略构建器与浏览器内 Python 策略托管",
+    "内置期权分析、组合回测等二十个分析工具及 ₹1 Crore 模拟资金的 Analyzer Mode"
+   ],
+   "use_cases": [
+    "将券商交易 API 统一接入 TradingView、Amibroker、Excel 等外部平台执行策略",
+    "无代码用户用拖拽节点构建策略，Python 用户托管定时运行的并行策略",
+    "实盘前用模拟资金的 Analyzer Mode 验证订单逻辑与期权组合策略"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite** - 5 databases (main, logs, latency, health, sandbox)",
+     "lines": [
+      292
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明六个操作数据存储支撑交易应用本身，数据库仅作为该平台的数据存储，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OpenAlgo is a free, open source, self-hosted **trading platform**, not just a broker bridge. Built on Python Flask + React 19, it gives traders a full-stack environment to **design, host, and execute strategies** through **36 broker plugins**: 35 securities integrations and Delta Exchange for crypto derivatives. Whether you write Python, prefer drag-and-drop, or trade options, OpenAlgo provides a common interface without tying strategy code to one adapter. ／ OpenAlgo is no longer just \"an API layer in front of your broker.\" Today it combines four trading surfaces in one self-hosted instance, sharing the active broker session, market-data infrastructure, and six operational data stores across the journey from idea to testing and live execution. ／ Order workflows from the REST API, hosted strategies, and Flow can use Analyzer Mode before live execution. Analytics pages, dashboards, PnL tracking, latency monitoring, notifications, and MCP reuse the same application services where their specific capabilities apply.",
+   "evidence_lines": [
+    11,
+    13,
+    25
+   ]
+  },
+  "fn": "marketcalls/openalgo",
+  "sha": "8da62a4fa5f0",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4b5f8dae5516": {
+  "identity": {
+   "one_liner": "基于 Kysely 的类型安全数据层，含插件化执行器与 RLS",
+   "review": "Kysera 是构建在 Kysely 查询构建器之上的 TypeScript 数据层，提供 Repository 与函数式 DAL 两种数据访问模式，通过统一的 executor 插件核心实现软删除、行级安全、审计和迁移等能力，支持 PostgreSQL、MySQL、SQLite 和 MSSQL（实验性）。面向需要多租户隔离、原子审计等重负载数据层的后端开发者，非 ORM，也不含 schema DSL。",
+   "highlights": [
+    "提供统一插件拦截核心，RLS、软删除、审计等横切能力作用于 Repository、DAL 及事务内全部路径",
+    "支持声明式行级安全并生成 PostgreSQL 原生 CREATE POLICY DDL",
+    "提供带咨询锁与 sha256 校验的并发安全迁移运行器及 doctor/live-DB codegen CLI"
+   ],
+   "use_cases": [
+    "需要多租户行级隔离的后端服务数据访问层",
+    "写操作需与审计日志原子一致的场景（如金融写入）",
+    "多个服务共享统一迁移历史与类型化数据库接口"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`@kysera/rls`|Declarative row-level security + native PostgreSQL RLS generation|~57 KB| ／ |`@kysera/dialects`|PostgreSQL / MySQL / SQLite / MSSQL adapters, unified error matching|~21 KB| ／ ||PostgreSQL|MySQL|SQLite|MSSQL|",
+     "lines": [
+      84,
+      89,
+      162
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`@kysera/dialects`|PostgreSQL / MySQL / SQLite / MSSQL adapters, unified error matching|~21 KB| ／ (`pg_try_advisory_lock`), MySQL (`GET_LOCK`), and MSSQL (`sp_getapplock`); sha256 ／ ||PostgreSQL|MySQL|SQLite|MSSQL|",
+     "lines": [
+      89,
+      145,
+      162
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`@kysera/dialects`|PostgreSQL / MySQL / SQLite / MSSQL adapters, unified error matching|~21 KB| ／ ||PostgreSQL|MySQL|SQLite|MSSQL|",
+     "lines": [
+      89,
+      162
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|`@kysera/dialects`|PostgreSQL / MySQL / SQLite / MSSQL adapters, unified error matching|~21 KB| ／ (`pg_try_advisory_lock`), MySQL (`GET_LOCK`), and MSSQL (`sp_getapplock`); sha256 ／ ||PostgreSQL|MySQL|SQLite|MSSQL|",
+     "lines": [
+      89,
+      145,
+      162
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Kysely 及多种数据库提供数据访问、迁移、RLS 等能力的开发库，为数据库生态服务而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " The type-safe data layer for Kysely. ／ Layer 5  Plugins          @kysera/soft-delete · audit · timestamps · rls ／ ||PostgreSQL|MySQL|SQLite|MSSQL|",
+   "evidence_lines": [
+    5,
+    58,
+    162
+   ]
+  },
+  "fn": "kysera-dev/kysera",
+  "sha": "4b5f8dae5516",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bcd1865e6dff": {
+  "identity": {
+   "one_liner": "本地优先、可恢复、可审计的 Agent Runtime",
+   "review": "FCode 是一个围绕责任链构建的 Agent 工作空间：模型负责提议，Runtime 负责计划、权限、预算、工具校验与崩溃恢复，人保留关键决定权。面向需要过程可验证、可回放、可审计的 Agent 应用开发者；其事件日志以 SQLite 实现，含 MCP 桥与 Work/Chat 控制台，仅验证单 Agent 场景，不是操作系统级沙箱。",
+   "highlights": [
+    "提供权限门控、预算控制、签名收据与哈希链轨迹，支持回放、导出与重新校验",
+    "使用 SQLite 事件日志实现状态重建与断点续跑",
+    "包含 MCP 桥与 661 项 Python 测试、8 个端到端场景的回归体系"
+   ],
+   "use_cases": [
+    "需要可审计执行轨迹与审批留痕的 Agent 任务运行",
+    "Agent 崩溃后从事件日志恢复继续执行",
+    "通过演示场景验证治理语义（越权拒绝、崩溃恢复、篡改检测）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**记忆**|SQLite 事件日志、上下文重建、运行历史、案例与事实投影、断点续跑|不是无限记忆或完整知识系统|",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该项目自身的事件日志存储依赖，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 一个本地优先、可恢复、可审计的 Agent Runtime。 ／ |**记忆**|SQLite 事件日志、上下文重建、运行历史、案例与事实投影、断点续跑|不是无限记忆或完整知识系统| ／ FCode 是一个独立开源项目，不是 Moonshot AI 官方产品。",
+   "evidence_lines": [
+    9,
+    50,
+    154
+   ]
+  },
+  "fn": "Anhao1314/FCode-FlowCredit",
+  "sha": "bcd1865e6dff",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

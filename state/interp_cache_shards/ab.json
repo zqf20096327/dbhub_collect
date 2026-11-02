@@ -11299,5 +11299,79 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "787ff409da9f": {
+  "identity": {
+   "one_liner": "演示工具调用智能体循环的 Python 应用，用 SQLite 持久化结果",
+   "review": "一个本地运行的 Python 演示项目，展示智能体如何选择工具、执行、保存并在重启后召回结果，包含计算、记忆、时间等四个工具和浏览器回放界面，支持接入 OpenAI 兼容模型。适合想理解工具调用智能体运行机制的学习者。服务器仅绑定 localhost，无多用户支持，属学习用途项目。",
+   "highlights": [
+    "提供计算、保存事实、召回事实、获取时间四个工具，执行步骤和结果持久化在本地 SQLite 数据库",
+    "支持 Demo 固定规则模式和 Live 模式接入 OpenAI 兼容模型，浏览器界面可回放记录的运行轨迹",
+    "内置循环/工具调用/参数大小等预算限制，并对持久化轨迹执行七项确定性完整性检查"
+   ],
+   "use_cases": [
+    "学习工具调用智能体的基本循环（选动作-执行-读结果-决策）",
+    "本地演示智能体重启后从 SQLite 召回已保存结果",
+    "用完整性检查和轨迹导出观察智能体的执行记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "in SQLite, and shows each tool call and result. Restart the app and ask for the value again: ／ and run the recall example. It retrieves `launch score: 391` from SQLite. ／ |Memory|Stores facts and run history, including model provenance, in a local SQLite database|",
+     "lines": [
+      6,
+      72,
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该应用将事实和运行历史存入本地 SQLite 数据库，SQLite 仅作为其存储层。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "in SQLite, and shows each tool call and result. Restart the app and ask for the value again: ／ |Memory|Stores facts and run history, including model provenance, in a local SQLite database| ／ This is a local learning project with four tools. The server binds to localhost and has no",
+   "evidence_lines": [
+    6,
+    85,
+    140
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "LobsterQBA/loop-agent",
+  "sha": "787ff409da9f",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

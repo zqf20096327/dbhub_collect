@@ -11048,5 +11048,333 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dbc315a6b3db": {
+  "identity": {
+   "one_liner": "Node.js/Deno/Bun 的 PostgreSQL 客户端驱动库",
+   "review": "Postgres.js 是一个面向 JavaScript 运行时（Node.js 20+、Bun、Cloudflare Workers，Deno 经 Node 兼容层运行）的 PostgreSQL 客户端库，使用 ES6 标签模板字符串处理查询参数，参数由数据库端处理转义与类型推断，从而避免 SQL 注入。提供动态查询构建、游标、事务等接口，适用于在 JS 应用中连接和操作 PostgreSQL 的开发者。",
+   "highlights": [
+    "基于标签模板字符串实现安全的查询参数化，参数由 PostgreSQL 服务器处理转义与类型",
+    "提供动态查询构建、动态列选择/插入/更新、游标分批读取与 .describe() 查询描述等接口",
+    "无依赖 ES 模块，支持 Node.js 20+、Bun、Cloudflare Workers 及 Deno"
+   ],
+   "use_cases": [
+    "Node.js/Bun/Deno 应用中连接与查询 PostgreSQL",
+    "需要动态构建 SQL 片段（过滤、排序、插入、更新）的服务端代码",
+    "需要游标分批处理大量查询结果的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Fastest full PostgreSQL nodejs client ／ - 🚀 Fastest full-featured PostgreSQL client ／ Good UX with Postgres.js",
+     "lines": [
+      1,
+      3,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为 PostgreSQL 的 nodejs 客户端驱动，为数据库提供连接与查询能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Fastest full PostgreSQL nodejs client ／ $ npm install postgres ／ Postgres.js needs Node.js 20 or later, Bun, or Cloudflare Workers. Deno runs it through its Node.js compatibility. It is an ES module with no dependencies.",
+   "evidence_lines": [
+    1,
+    15,
+    18
+   ]
+  },
+  "fn": "porsager/postgres",
+  "sha": "dbc315a6b3db",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "55d993b6c26c": {
+  "identity": {
+   "one_liner": "基于 LLM 的个人 AI 实体系统，以记忆衰减与上下文压缩实现长期持续对话",
+   "review": "MIRA 是一个开源 AI 助手/聊天机器人项目，维护单一永久对话线程，通过分段折叠生成第一人称记忆、按使用天数衰减的记忆管理、上下文压缩及行为反馈循环（Text-Based LoRA）实现长期持续性，内置联系人、邮件、提醒、Web 搜索等工具并支持自建工具，依赖 PostgreSQL/Valkey 存储，面向想运行个人数字实体的用户。",
+   "highlights": [
+    "提供第一人称记忆折叠与按使用天数衰减的记忆管理",
+    "支持工具从文件系统自动发现与注册，可按需启用",
+    "实现异步会话处理与滚动式上下文压缩"
+   ],
+   "use_cases": [
+    "长期持续的 AI 助手对话",
+    "个人记忆与文档的持久化管理",
+    "通过 tools/ 目录扩展自定义工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The loop works like this: After each conversation segment collapses, an assessment extractor compares the conversation against MIRA's behavioral contract. It records alignment, misalignment, and contextual passes with the specific evidence and prompt section i ／ Segment collapse and live context compaction are deliberately separate. Collapse is the durable end of a conversational segment. Live compaction is a pressure-release valve for a conversation that is still active: older messages are replaced in the provider re ／ 8. Service verification (PostgreSQL, Valkey, Vault running and accessible) ／ docker run -it -v mira-data:/opt/vault -v mira-userdata:/opt/mira/app/data -v mira-pgdata:/var/lib/postgresql/17/main -v mira-valkey:/var/lib/valkey -v mira-backups:/opt/mira/backups -p 1993:1993 mira:latest",
+     "lines": [
+      40,
+      83,
+      133,
+      225
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "MIRA 是使用 PostgreSQL 存储行为信号与会话历史的 AI 应用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The loop works like this: After each conversation segment collapses, an assessment extractor compares the conversation against MIRA's behavioral contract. It records alignment, misalignment, and contextual passes with the specific evidence and prompt section involved. These signals accumulate in Postgres.",
+   "evidence_lines": [
+    40
+   ]
+  },
+  "fn": "taylorsatula/mira",
+  "sha": "55d993b6c26c",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8dba0b923743": {
+  "identity": {
+   "one_liner": "Rust 实现的 RESP 协议内存键值服务器，内置锁、限流、队列与 Raft 故障转移",
+   "review": "Ruvio 是用 Rust 编写的内存键值服务器，讲 RESP 协议，redis-cli 与现有 RESP 客户端可直接连接。除基本读写外，以单命令提供分布式锁（LEASE/SEMAPHORE）、限流、延迟队列、变更订阅等构件，并支持 Raft 副本故障转移与多种持久化模式。适合需要兼容 Redis 协议的缓存与协调场景的使用者；服务端为 AGPL-3.0，客户端为 MIT。",
+   "highlights": [
+    "实现 RESP2/RESP3 协议，redis-cli 与现有 RESP 客户端可直接连接，提供 Rust、C#、Go、Java、Python、Node.js 六种官方客户端",
+    "以单命令提供锁、信号量、限流、条件写、延迟队列、变更订阅等构件",
+    "支持 Raft 副本故障转移，持久化可选 memory/snapshot/everysec/always，附带浏览器端 Operator UI"
+   ],
+   "use_cases": [
+    "作为与 RESP 协议兼容的缓存或键值存储使用",
+    "需要分布式锁、限流、幂等去重或延迟队列的应用协调",
+    "希望查看运行中服务器数据、Pub/Sub 与 ACL 用户的运维场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "仓库为数据库/键值引擎本体，为应用提供服务而非为现有数据库生态服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "服务端 AGPL-3.0，客户端 MIT 双许可",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " A Rust key-value server that speaks RESP. <code>redis-cli</code> and existing RESP clients connect. ／ |**Wire compatible**|RESP2, and RESP3 after `HELLO 3`; `redis-cli` and existing RESP clients connect. The command list that CI checks is docs/compatibility-matrix.json.| ／ |`CLIENT DURABILITY`|Holds this connection's replies until `n` replicas have the writes on disk; `ruvio coordinator` fails over only to a replica that has them.|",
+   "evidence_lines": [
+    6,
+    46,
+    130
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "salihcantekin/ruvio",
+  "sha": "8dba0b923743",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "73d57eba2c87": {
+  "identity": {
+   "one_liner": "实时抗议活动地图 Web 应用，用户互相上报现场事件并共享位置信息",
+   "review": "Cortège 是一个自托管的自由软件 Web 应用，用于在示威活动中实时共享现场上报信息（危险、医护点、法律支援等），提供振动提醒、法律信息、活动日程和离线模式。面向活动参与者与组织者，服务端仅需 Node 22+，数据上报在数分钟后自动过期，不使用账号或追踪。README 未描述其对具体数据库的适配细节，SQLite 仅出现在仓库主题标签中，未见正文证实。",
+   "highlights": [
+    "提供现场事件的实时上报、确认与自动过期机制",
+    "支持近场危险振动提醒、法律团队信息、活动日程与离线轻量模式",
+    "声明不使用账号、cookie 或追踪器，位置数据不上传，服务器可离线提供地图并支持 Tor 访问"
+   ],
+   "use_cases": [
+    "示威活动中参与者之间共享实时现场情况",
+    "组织者与法律团队发布本地化公告并处理虚假上报",
+    "个人自托管私有实例以掌控数据与隐私"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 将其描述为使用数据库存储的 Web 应用（主题标签含 sqlite），本身并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，附加条件：部署修改版须公开源码并保留来源标识",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Cortège est une appli web gratuite et libre : pendant une manif, chacun·e signale ce qu'il ou elle voit (nasse, lacrymo, charge, street medics, legal team, zone calme…) et tout le monde le voit sur la carte, en quelques secondes. Pas de compte, pas de pub, pas de pistage. ／ Cortège tourne sur un petit serveur (Node 22.13+, aucune dépendance à installer) ou sur un hébergement mutualisé avec cPanel : ／ Licence AGPL-3.0 : toute version modifiée mise en ligne doit publier son code. Toute instance garde aussi la mention d'origine dans son interface : voir les conditions additionnelles.",
+   "evidence_lines": [
+    7,
+    30,
+    45
+   ]
+  },
+  "fn": "n-e-r-u/cortege",
+  "sha": "73d57eba2c87",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "067755261d86": {
+  "identity": {
+   "one_liner": "面向 LLM 的情绪感知记忆引擎，以稀疏编码存储记忆",
+   "review": "MnemoVault 是一个为 LLM/智能体提供持久记忆的插件型引擎，把记忆存为固定大小的稀疏编码单元（int8 向量、类型化超边）而非文本，每轮通过四通道召回注入约 116 个 token，遗忘基于打分决策。可独立运行，也可作为 DeepSeek Harness (DSH) 的插件使用；仅依赖 Node 内置 node:sqlite/node:zlib，目前为 v0.6.1 开发者预览版。",
+   "highlights": [
+    "提供 observe/remember/recall/forget/status 引擎接口，支持独立运行及 DSH 插件方式接入",
+    "记忆以 341B（v0.6 后 277B）定长单元存储：稀疏码、int8 向量、类型化超边，每轮注入约 116 token",
+    "包含情绪内核（appraisal→PAD、mood-congruence、arousal inverted-U）与 3D 星图投影，遗忘为多因子打分决策"
+   ],
+   "use_cases": [
+    "为 LLM 智能体/陪伴类应用提供跨轮次持久记忆",
+    "作为 DeepSeek Harness 的记忆插件运行",
+    "需要在 token 预算受控下做确定性记忆注入的智能体管线"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|**Size**|11 packages · 73 source files / ~23,300 lines of TS (`.ts` + `.tsx`, UI included) · 265 tests · **no third-party runtime dependency outside `@deepseek-ai/*`** (the only external one is `schemastery` for config schemas; the rest is Node built-in: `nod",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Runtime dependencies|**zero** (`node:sqlite` + `node:zlib`)|vector DB + LLM|Neo4j + LLM|Postgres + LLM|",
+     "lines": [
+      497
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它是面向 LLM 智能体的记忆插件，仅通过 Node 内置 node:sqlite 存取，未声明服务任何数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**An emotion-aware memory engine for LLMs.** Sparse-code memory lattice, four-channel recall, ／ affect kernel, 3D star map. Runs standalone, or as a plugin inside DeepSeek Harness. ／ |**Size**|11 packages · 73 source files / ~23,300 lines of TS (`.ts` + `.tsx`, UI included) · 265 tests · **no third-party runtime dependency outside `@deepseek-ai/*`** (the only external one is `schemastery` for config schemas; the rest is Node built-in: `node:sqlite` / `node:zlib`)|",
+   "evidence_lines": [
+    5,
+    6,
+    30
+   ]
+  },
+  "fn": "Rain13Sad/bcf-mnemovault",
+  "sha": "067755261d86",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

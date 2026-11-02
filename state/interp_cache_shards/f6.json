@@ -12180,5 +12180,471 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d5f00dc1015c": {
+  "identity": {
+   "one_liner": "C++ 实现的内存列式图数据库引擎",
+   "review": "TuringDB 是用 C++ 构建的内存列式图数据库引擎，支持嵌入进程内运行或以守护进程/REST 服务方式部署，使用 Cypher 方言查询，内置 Git 风格版本控制、时间旅行查询、快照隔离和向量检索（GraphRAG），并提供 WebGL 图可视化界面。面向分析型、AI 驱动和读密集型工作负载的用户；社区版采用 BSL 许可。",
+   "highlights": [
+    "支持嵌入式运行与服务器模式（REST API），提供 Python SDK",
+    "提供 Git 风格版本控制、分支/回滚/时间旅行查询与快照隔离的 ACID 事务",
+    "内置向量检索（kNN）与 WebGL 图可视化界面，支持 JSONL/CSV/GML/Parquet 导入"
+   ],
+   "use_cases": [
+    "需要多跳图遍历的分析型查询场景（如欺诈检测、知识图谱探索）",
+    "GraphRAG、agent 记忆与 embeddings 检索等 AI 管线",
+    "金融、合规等需要可审计历史与时间旅行查询的场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "该仓库本身是图数据库引擎，不属于为其他数据库服务的工具，也非使用其他数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Community Edition 采用 Business Source License (BSL)",
+   "install": [
+    "pypi",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TuringDB is a high-performance, in-memory, column-oriented graph database engine, built in C++ for analytical, AI-driven, and read-intensive workloads. ／ pip install turingdb ／ Prefer a long-running server (REST API on `http://localhost:6666`)?",
+   "evidence_lines": [
+    23,
+    36,
+    76
+   ]
+  },
+  "fn": "turing-db/turingdb",
+  "sha": "d5f00dc1015c",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0a82f8c83046": {
+  "identity": {
+   "one_liner": "Rust 编写的终端 TUI 数据库客户端，带 MCP 服务",
+   "review": "LazyDB 是一个 Rust 编写的键盘驱动终端数据库工作台，提供 SQL 编辑、表数据浏览、监控面板和 Redis/MongoDB 键值与文档浏览，通过内置 MCP 服务器向 Claude Code 等编码代理暴露数据库配置。面向终端与 Neovim 用户。当前为 beta，功能随数据库类型不同而变化。",
+   "highlights": [
+    "支持 Server SQL、嵌入式 SQL、键值/文档、搜索等多类数据库的浏览与 SQL 执行",
+    "内置 MCP 服务器，可向编码代理授予数据库访问（默认拒绝写入）",
+    "提供 Neovim 插件与 SQL 语言服务器补全"
+   ],
+   "use_cases": [
+    "在终端中连接多类数据库执行 SQL 与浏览数据",
+    "让编码代理通过 MCP 访问项目数据库配置",
+    "在 Neovim 中进行 SQL 编辑与补全"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Server SQL|PostgreSQL, CockroachDB, MySQL, MariaDB, TiDB, Oracle, SQL Server, ClickHouse, Snowflake|",
+     "lines": [
+      85
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Server SQL|PostgreSQL, CockroachDB, MySQL, MariaDB, TiDB, Oracle, SQL Server, ClickHouse, Snowflake|",
+     "lines": [
+      85
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Server SQL|PostgreSQL, CockroachDB, MySQL, MariaDB, TiDB, Oracle, SQL Server, ClickHouse, Snowflake| ／ Oracle requires Oracle Instant Client. DuckDB requires an optional C API runtime",
+     "lines": [
+      85,
+      90
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Embedded SQL|SQLite, DuckDB|",
+     "lines": [
+      86
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|Server SQL|PostgreSQL, CockroachDB, MySQL, MariaDB, TiDB, Oracle, SQL Server, ClickHouse, Snowflake|",
+     "lines": [
+      85
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|Server SQL|PostgreSQL, CockroachDB, MySQL, MariaDB, TiDB, Oracle, SQL Server, ClickHouse, Snowflake|",
+     "lines": [
+      85
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Server SQL|PostgreSQL, CockroachDB, MySQL, MariaDB, TiDB, Oracle, SQL Server, ClickHouse, Snowflake|",
+     "lines": [
+      85
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|Server SQL|PostgreSQL, CockroachDB, MySQL, MariaDB, TiDB, Oracle, SQL Server, ClickHouse, Snowflake|",
+     "lines": [
+      85
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为多类数据库提供客户端连接、浏览与 SQL 执行能力，是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 或 Apache-2.0 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Server SQL|PostgreSQL, CockroachDB, MySQL, MariaDB, TiDB, Oracle, SQL Server, ClickHouse, Snowflake| ／ Give Claude Code, Codex, or OpenCode access to the current project's database ／ lazydb mcp setup",
+   "evidence_lines": [
+    85,
+    108,
+    112
+   ]
+  },
+  "fn": "yelog/lazydb",
+  "sha": "0a82f8c83046",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "262d36300602": {
+  "identity": {
+   "one_liner": "NYCMesh 成员与节点信息追踪数据库应用",
+   "review": "MeshDB 是 NYCMesh 社区用来记录建筑、成员、装机、节点、设备和链路信息的数据管理系统，基于 Django 与 PostgreSQL 构建，提供 REST API 供机器人和人工使用。README 详述了开发环境搭建、docker compose 启动外部服务、Celery 后台任务、集成测试与权限分组等内容，主要面向该项目自身及社区贡献者。",
+   "highlights": [
+    "基于 Django/DRF 提供带 Token 认证和分级权限的 REST API",
+    "使用 PostgreSQL 存储数据，通过 docker compose 一键启动 Pelias、Redis 等外部服务",
+    "包含 pytest 单元测试与集成测试，以及 scramble_members PII 混淆脚本"
+   ],
+   "use_cases": [
+    "社区网络组织追踪成员装机与节点设备信息",
+    "为自动化机器人程序提供查询/写入用的 API 接口",
+    "作为 NYCMesh 内部管理后台与地图前端的数据源"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL ／ docker compose up -d postgres pelias redis ／ Postgres URLs according to the comments in the file newly created",
+     "lines": [
+      30,
+      112,
+      166
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是使用 PostgreSQL 存储自身成员/节点数据的应用系统，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "We use `MeshDB` to track information about Buildings, Members, Installs, Nodes, ／ - PostgreSQL ／ docker compose up -d postgres pelias redis",
+   "evidence_lines": [
+    11,
+    30,
+    112
+   ]
+  },
+  "fn": "nycmeshnet/meshdb",
+  "sha": "262d36300602",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f784b4ce5615": {
+  "identity": {
+   "one_liner": "AI 编码代理的本地协作层，提供跨会话共享记忆与消息",
+   "review": "MeMesh 为本机上的 AI 编码代理（Claude Code、Codex、Hermes Agent 等）提供共享记忆、消息收发与会话交接能力，记忆以单个 SQLite 数据库文件（~/.memesh/knowledge-graph.db）持久化，通过 MCP、CLI、hooks 及 12 个记忆/协调工具暴露功能，消息仅限同一台计算机内的本地路由。适合在同机多代理间复用上下文的开发者。",
+   "highlights": [
+    "提供 remember/recall/task_state/message 等 12 个记忆与协调工具及 10 个 hooks",
+    "记忆持久化为本地单个 SQLite 数据库文件，支持 JSON 导出/导入备份",
+    "支持本地代理间消息发现与投递，单条负载上限 64 KiB"
+   ],
+   "use_cases": [
+    "在 Claude Code 与 Codex 会话之间发送任务、评审请求与结果",
+    "跨会话保存项目决策、偏好与经验教训供后续复用",
+    "记录会话交接内容（目标、下一步、阻塞项）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Remember that this project uses SQLite.",
+     "lines": [
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是面向 AI 编码代理的应用，SQLite 仅作为其自身的本地存储后端，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Local collaboration layer for AI coding agents.** ／ By default, memories live in one file on your computer: `~/.memesh/knowledge-graph.db`. MeMesh needs no separate AI model. Automatic reminders depend on the host integration; a handoff is context, not a guarantee that a task will restart itself. ／ - Works today: an MCP, HTTP, or CLI sender can durably send one untrusted JSON-encoded payload of at most 65,536 UTF-8 bytes (64 KiB) to one named local recipient. A receiver can fetch it separately, resume from an opaque cursor after restart, and record intake, acknowledgement, workflow disposition, and host activation as separate facts.",
+   "evidence_lines": [
+    5,
+    14,
+    107
+   ]
+  },
+  "fn": "PCIRCLE-AI/memesh",
+  "sha": "f784b4ce5615",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f02295fc3544": {
+  "identity": {
+   "one_liner": "自托管错误追踪服务，Sentry SDK 兼容，双容器部署",
+   "review": "Epure 是一个自托管的错误追踪工具，接收 Sentry SDK 发送的错误信封，经 ingest 与 worker 处理后分组存入 PostgreSQL 16，并提供问题看板。面向独立开发者和小团队。它只存储错误与堆栈，不存储 traces、replay、profiling 数据，以 Docker Compose 两容器方式部署。",
+   "highlights": [
+    "兼容官方 Sentry SDK，仅需更换 DSN",
+    "两容器部署（应用 + PostgreSQL 16），支持 docker compose 启动",
+    "支持分组 issue、堆栈展示、sourcemaps、告警 webhook、RBAC 与 PostgreSQL RLS"
+   ],
+   "use_cases": [
+    "替代 Sentry 自托管方案用于错误收集与分组",
+    "在小型 VPS 上以低资源占用运行错误追踪服务",
+    "部署在 Render/Railway/Coolify 等平台"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 16 ／ Self-hosted error tracking with predictable incident economics: grouped issues and stack traces, one Rust binary and PostgreSQL 16. ／  How an error gets in: your app sends an envelope to ingest (202 ACK), a worker demangles and groups into Postgres 16, and you open the dashboard over a session. One Rust binary on :8080. No Kafka, Redis, or ClickHouse. ／ * RBAC and PostgreSQL RLS ／ |**Database**|PostgreSQL 16|See their docs|Multiple datastores|PostgreSQL| ／ **Project Status:** Production ready for SaaS and engineering teams. Two-container Compose, PostgreSQL 16 with RLS, Spike Valve flood protection, and official Sentry SDK wire compatibility. Changelog.",
+     "lines": [
+      8,
+      12,
+      92,
+      101,
+      112,
+      114
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "How an error gets in: your app sends an envelope to ingest (202 ACK), a worker demangles and groups into Postgres 16, and you open the dashboard over a session. One Rust binary on :8080. No Kafka, Redis, or ClickHouse.",
+     "lines": [
+      92
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它以 PostgreSQL 16 作为自身存储组件，为错误追踪这一开发运维场景服务，属于使用数据库作为存储的生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0，无独立闭源核心；另有付费 Cloud 托管版本",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted error tracking with predictable incident economics: grouped issues and stack traces, one Rust binary and PostgreSQL 16. ／ Two containers. The SDK talks to ingest; ingest returns 202 and a worker writes Postgres. The dashboard is the same binary. ／ **Project Status:** Production ready for SaaS and engineering teams. Two-container Compose, PostgreSQL 16 with RLS, Spike Valve flood protection, and official Sentry SDK wire compatibility. Changelog.",
+   "evidence_lines": [
+    12,
+    90,
+    114
+   ]
+  },
+  "fn": "epure-sh/epure",
+  "sha": "f02295fc3544",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "48a717280b45": {
+  "identity": {
+   "one_liner": "VoIP.ms 短信/彩信自托管 Web 收发门户",
+   "review": "这是一个面向 VoIP.ms 用户的自托管 Web 应用，将名下号码的 SMS/MMS 汇总到一个收件箱，提供推送通知、联系人、附件、多号码管理和多人协作的 Team 模式；通过轮询或 VoIP.ms webhook 接收消息，数据用 SQLite 存储，可部署于 Docker 或 cPanel 共享主机（需 PHP 8.4+ 与 pdo_sqlite）。属于使用数据库存数据的应用，而非数据库生态工具。",
+   "highlights": [
+    "支持多 VoIP.ms 号码与多账户统一收件箱，Team 模式下多用户分权限收发",
+    "支持轮询（10s/60s）或 VoIP.ms webhook 回调两种接收方式，含推送通知",
+    "数据（SQLite 数据库与媒体文件）存于 ./data，提供 Docker 与 cPanel 共享主机两种运行方式"
+   ],
+   "use_cases": [
+    "为 VoIP.ms 号码搭建私有短信收发门户",
+    "办公室/家庭多人共用号码并区分读写权限",
+    "在无公网暴露的家用网络或 cPanel 共享主机上运行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Open <http://localhost:8080>, sign in with `APP_PASSWORD` and follow the wizard. Data (SQLite database and media) lives in `./data`; the container makes it writable for the app user on startup (see `PUID`/`PGID`). ／ **You need** PHP 8.4 or later with `pdo_sqlite`, `openssl`, `curl` and `mbstring` (all on by default in cPanel; choose the version in *MultiPHP Manager*), a subdomain with HTTPS, and cron jobs. The steps below are the short version; the step-by-step guide give",
+     "lines": [
+      171,
+      183
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用将自身数据（SQLite 数据库和媒体）存于 ./data，SQLite 仅作为其存储介质。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "",
+   "evidence_lines": []
+  },
+  "fn": "dansleboby/voip-ms-sms-portal",
+  "sha": "48a717280b45",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

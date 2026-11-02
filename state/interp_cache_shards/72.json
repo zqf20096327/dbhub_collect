@@ -10991,5 +10991,284 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "574c48d202d8": {
+  "identity": {
+   "one_liner": "基于对象存储的云原生嵌入式 LSM 存储引擎",
+   "review": "SlateDB 是一个用 Rust 编写的嵌入式 LSM-tree 存储引擎，将 SST 数据写入对象存储（S3、GCS 等）而非本地磁盘，提供 get/put/delete、范围查询、事务、压缩、块缓存、CDC 等能力，通过 object_store crate 支持任意实现该 trait 的对象存储，官方提供 Go/Java/Python 等语言绑定，供需要在 Rust 应用中嵌入键值存储的开发者使用，代价是对象存储的更高延迟与 API 成本。",
+   "highlights": [
+    "基于 LSM-tree 实现的嵌入式键值存储引擎，数据持久化到对象存储",
+    "提供 get/put/delete、范围查询、事务、合并运算符、CDC、数据库拆分/合并等功能",
+    "通过 object_store crate 支持任意实现 ObjectStore trait 的对象存储，并提供 Go/Java/Python 等官方语言绑定"
+   ],
+   "use_cases": [
+    "在 Rust 应用中嵌入键值存储并将数据存放于对象存储（S3/GCS 等）",
+    "需要大容量、高持久性、易于复制的存储后端",
+    "通过语言绑定在 Go/Java/Python 等项目中使用 SlateDB"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 定位其为嵌入式存储引擎，是供上层应用使用的存储组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SlateDB is an embedded storage engine built as a log-structured merge-tree. Unlike traditional LSM-tree storage engines, SlateDB writes data to object storage (S3, GCS, ABS, MinIO, Tigris, and so on). Leveraging object storage allows SlateDB to provide bottomless storage capacity, high durability, and easy replication. The trade-off is that object storage has a higher latency and higher API cost than local disk. ／ SlateDB uses the `object_store` crate to interact with object storage, and therefore supports any object storage that implements the `ObjectStore` trait. You can use the crate in your project to interact with any object storage that implements the `ObjectStore` trait. SlateDB also re-exports the `object_store` crate for your convenience. ／ - [x] Basic API (get, put, delete)",
+   "evidence_lines": [
+    15,
+    44,
+    63
+   ]
+  },
+  "fn": "slatedb/slatedb",
+  "sha": "574c48d202d8",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1d13a3966134": {
+  "identity": {
+   "one_liner": "自托管页面与数据库协作工作区，内置 MCP 服务器",
+   "review": "Leafdesk 是一个可自托管的开源工作区应用，提供页面编辑、数据库视图、实时协作和邮件集成，并内置 MCP 服务器供 AI 助手通过 OAuth 访问。数据存储在 PostgreSQL，可通过 docker compose 一键部署或使用桌面版。适合需要知识库协作并让 AI 助手读写工作区的团队使用。",
+   "highlights": [
+    "支持页面与多种数据库视图（表格、看板、日历、时间线等），数据存储于 PostgreSQL",
+    "内置 MCP 服务器，AI 助手经 OAuth 2.1 授权后可读取和编辑工作区",
+    "提供 docker compose 一键自托管部署及 macOS/Windows/Linux 桌面应用"
+   ],
+   "use_cases": [
+    "团队知识库与项目数据库协作管理",
+    "让 Claude 等 MCP 客户端搜索、读取和编辑工作区内容",
+    "从 Notion、Obsidian、Confluence 等导入既有页面数据"
+   ],
+   "personal_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "GitHub pull requests, a calendar's events (both ways for Google Calendar), a PostgreSQL table or a Google Sheets ／ - **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL, ／ random auth secret (`BETTER_AUTH_SECRET`) and a random password for the bundled PostgreSQL into the",
+     "lines": [
+      28,
+      32,
+      77
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用数据存储在用户自己的 PostgreSQL（bundled 或 external），属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL, ／ random auth secret (`BETTER_AUTH_SECRET`) and a random password for the bundled PostgreSQL into the",
+   "evidence_lines": [
+    32,
+    77
+   ]
+  },
+  "fn": "esmworks/leafdesk",
+  "sha": "1d13a3966134",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9e9be3ca1431": {
+  "identity": {
+   "one_liner": "AI 驱动的 ORM 查询分析器，检测 N+1、缺失索引等问题并返回修复代码",
+   "review": "一个运行在 ORM 层的数据库查询分析工具：用户提交 GitHub 仓库、本地文件夹或单条 ORM 查询，工具提取查询代码块与 schema 后交给 Meta 模型分析，输出 N+1、缺失索引、过度取数等问题的分级报告、生成的 SQL、修复后的 ORM 代码及迁移脚本。面向使用各类 ORM 的后端工程师，需自备 Meta API key，Node.js/Express + React 架构可自托管。",
+   "highlights": [
+    "支持 8 种语言、约 30 个 ORM/查询构建器（Prisma、SQLAlchemy、GORM、Hibernate 等）的分析",
+    "可扫描 GitHub 仓库或本地文件夹，返回按严重度排序的问题列表与修复代码",
+    "支持多种 Meta 模型切换（含分析、执行计划图生成、语音输入）及自托管部署"
+   ],
+   "use_cases": [
+    "上线前检测后端代码中的 N+1 查询和缺失索引",
+    "对现有代码库做批量 ORM 查询审查并获取迁移脚本",
+    "粘贴单条 ORM 查询获取生成的 SQL 与修复建议"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它分析数据库查询代码质量，本身不存业务数据，是为数据库开发流程服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "AI-powered database query analyzer that finds N+1 problems, missing indexes, overfetching, and more — across every major backend language — and gives you the fixed code back. ／ **Backend Friend works at the ORM level** — where you actually write code. It understands your schema, reads your queries, and gives you back fixed ORM code and a migration script. Not a SQL explanation. The actual fix, ready to paste. ／ 1. **Extract** — scans every backend file, pulls only ORM query blocks (±25 lines of context). A 100K-line repo becomes ~200 relevant lines.",
+   "evidence_lines": [
+    5,
+    38,
+    49
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "rockeykotwal/backend-friend",
+  "sha": "9e9be3ca1431",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cc3bbfbe80d2": {
+  "identity": {
+   "one_liner": "嵌入 Excel/WPS 的插件，直接执行 SQL 把数据库查询结果写入工作表",
+   "review": "db-to-excel 是运行在 Windows Excel/WPS 中的 VSTO 插件，在表格内部执行 SQL，将查询结果写入工作表，支持多 SQL 批量刷新到多个 Sheet，并提供 AI 对话生成只读 SQL（需配置 Skill 知识库以避免虚构字段）。面向需要定期更新报表底稿的数据分析与报表岗位，依赖 .NET Framework 4.7.2，仅支持 Windows。",
+   "highlights": [
+    "在 Excel/WPS 内直接执行 SQL 并把查询结果写入工作表，支持多 SQL 批量刷新到对应 Sheet",
+    "内置支持 SQL Server、MySQL、PostgreSQL、SQLite、DuckDB，并可经 JDBC 通用连接接入其他数据库（如 MaxCompute）",
+    "内置 AI 助手，用自然语言生成只读 SQL，不自动执行 SQL，凭据不自动发送至大模型"
+   ],
+   "use_cases": [
+    "定期更新包含多 Sheet 的报表底稿，替代手工导出粘贴数据",
+    "在 Excel/WPS 内直接查询数据库并预览结果后再写入",
+    "通过 AI 助手按业务需求生成 SQL（需维护表结构 Skill）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> 内置支持 SQL Server、MySQL、PostgreSQL、SQLite、DuckDB。 也可选用 JDBC 通用连接，需本机装Java环境，并准备对应数据库的 `.jar` 驱动文件。针对阿里云MaxCompute数仓，使用JDBC连接，详见：阿里云 MaxCompute JDBC 连接配置",
+     "lines": [
+      39
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "> 内置支持 SQL Server、MySQL、PostgreSQL、SQLite、DuckDB。 也可选用 JDBC 通用连接，需本机装Java环境，并准备对应数据库的 `.jar` 驱动文件。针对阿里云MaxCompute数仓，使用JDBC连接，详见：阿里云 MaxCompute JDBC 连接配置",
+     "lines": [
+      39
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 内置支持 SQL Server、MySQL、PostgreSQL、SQLite、DuckDB。 也可选用 JDBC 通用连接，需本机装Java环境，并准备对应数据库的 `.jar` 驱动文件。针对阿里云MaxCompute数仓，使用JDBC连接，详见：阿里云 MaxCompute JDBC 连接配置",
+     "lines": [
+      39
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "> 内置支持 SQL Server、MySQL、PostgreSQL、SQLite、DuckDB。 也可选用 JDBC 通用连接，需本机装Java环境，并准备对应数据库的 `.jar` 驱动文件。针对阿里云MaxCompute数仓，使用JDBC连接，详见：阿里云 MaxCompute JDBC 连接配置",
+     "lines": [
+      39
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明其定位是为数据库到工作表的数据同步提供服务的插件工具，数据库是其连接的数据源而非存储后端",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3.0",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "db-to-excel 是嵌入 Windows Excel / WPS 表格的插件，在表格内部直接执行 SQL，把数据库查询结果写入工作表。插件只负责【数据库到工作表的数据同步】，保留原有的 Excel 生态：公式、透视表、图表、看板不需重构。定期报表更新不再依靠手工搬运数据。同时，该插件内置 AI 对话助手，使用自然语言描述业务需求，即可生成只读 SQL 语句。 ／  > 内置支持 SQL Server、MySQL、PostgreSQL、SQLite、DuckDB。 也可选用 JDBC 通用连接，需本机装Java环境，并准备对应数据库的 `.jar` 驱动文件。针对阿里云MaxCompute数仓，使用JDBC连接，详见：阿里云 MaxCompute JDBC 连接配置",
+   "evidence_lines": [
+    16,
+    39
+   ]
+  },
+  "fn": "GouMaoMao/db-to-excel",
+  "sha": "cc3bbfbe80d2",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

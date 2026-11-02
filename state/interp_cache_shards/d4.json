@@ -9307,5 +9307,220 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5ed061e3e61c": {
+  "identity": {
+   "one_liner": "后端工程可视化学习指南，含数据库内部与SQL内容",
+   "review": "该仓库以图解方式整理后端工程知识，涵盖低层设计、系统设计、分布式系统（含Raft共识、一致性模型）、数据库内部机制（索引、WAL、隔离级别）、SQL语法及安全基础。面向学习者与面试准备者，纯文档资源，不含可安装运行的软件组件。",
+   "highlights": [
+    "以可视化图表讲解后端工程、分布式系统与数据库主题",
+    "包含数据库内部机制内容：索引、Write-Ahead Logging、隔离级别与锁",
+    "包含SQL专题：子查询、CTE、视图、窗口函数、正则表达式"
+   ],
+   "use_cases": [
+    "后端工程概念学习与复习",
+    "技术面试准备",
+    "数据库内部与分布式系统概念参考"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "仓库为知识文档合集，不含为数据库生态服务的工具或使用数据库的应用代码",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A structured visual guide to **Backend Engineering**, **System Design**, **Distributed Systems**, **Low Level Design**, **Databases**, and **Backend Security**. ／ - Database Internals ／ ## SQL Architecture",
+   "evidence_lines": [
+    3,
+    35,
+    298
+   ]
+  },
+  "fn": "100NikhilBro/backend-engineering-foundations",
+  "sha": "5ed061e3e61c",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7ed341a9dd94": {
+  "identity": {
+   "one_liner": "预填充植物学分类数据库，含约18.5k物种与Rust查询API",
+   "review": "Botanica 是一个预填充的植物学数据库项目，内置分类学（科/属/种）、栽培需求、俗名等知识层数据，以 Parquet 分片发布，可用 DuckDB 直接查询，同时提供 Rust 库形式的内存查询 API；数据来源标注 USDA、GRIN、POWO 等并带来源溯源列。适合植物学研究、园艺管理或需要离线植物数据的开发者；多数深层护理字段仍缺失，知识层深度不均。",
+   "highlights": [
+    "提供约 18,566 物种、532 科/3,687 属的分类数据及约 24.7 万俗名行，以 Parquet 分片发布，可通过 DuckDB glob 读取",
+    "每个知识事实带 source/provenance 行级溯源列，数据来源含 USDA PLANTS、GRIN、POWO、GBIF、Wikidata",
+    "提供 Rust API（Family/Genus/Species 类型与查询模块）及 KEEP 导出、gap_report 等脚本"
+   ],
+   "use_cases": [
+    "需要离线植物分类与栽培知识数据的查询与分析",
+    "基于 DuckDB 对 species/traits/vernacular_names 等表做 SQL 查询",
+    "在 Rust 项目中集成植物学数据库类型与查询 API"
+   ],
+   "use_cases_end": false
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "项目本身是独立的植物学数据库产品，仅以 DuckDB 作为读取 Parquet 的工具，无明确为某数据库生态服务的组件证据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT OR Apache-2.0 双许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "## This is a loaded database, not an empty shell ／ `part-NNNNNN.parquet` files (every part ≤ 40 MB, so we never need Git LFS). DuckDB reads ／ - DuckDB migrations for L1/L2 + empty L3",
+   "evidence_lines": [
+    11,
+    42,
+    98
+   ]
+  },
+  "fn": "Michael-A-Kuykendall/botanica",
+  "sha": "7ed341a9dd94",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "328af33ecc87": {
+  "identity": {
+   "one_liner": "基于 SQLAlchemy Core 与 DAG 编排的 Python 数据工作流工具库",
+   "review": "pydwt 是一个 Python 数据工作流工具库，通过 Session/DataFrame 构建基于 SQLAlchemy 的 SQL 查询，任务经装饰器注册为 DAG 节点并由线程执行器按依赖顺序运行，支持物化为表/视图、导出 DAG PNG 及 CLI 项目脚手架。适合用 Python 编写 SQL 转换管道的数据工程师。项目已于 2023 年归档，不再维护，最新 PyPI 版本为 0.1.1，源码分支为 0.2.0a0 alpha，GPL-3.0 许可。",
+   "highlights": [
+    "提供 Session 与 DataFrame 模块，基于 SQLAlchemy 引擎构建 SQL 查询并支持 materialize 为表或视图",
+    "支持通过 @Task 装饰器定义任务及 depends_on 声明上游依赖，由 ThreadExecutor 按依赖层级执行 DAG",
+    "提供 CLI 子命令：new 创建项目、export-dag 导出 PNG、run 执行任务、test-connection 测试连接"
+   ],
+   "use_cases": [
+    "用 Python 编写依赖有序的 SQL 数据转换管道（ETL/ELT）",
+    "需要将查询结果物化为数据库表或视图的分析场景",
+    "生成带配置文件与目录结构的项目脚手架并导出 DAG 可视化"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "作为通过 SQLAlchemy 连接 URL 操作数据库的数据工作流工具，为数据管道场景服务，不依赖特定数据库产品。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "discontinued",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Python data workflows combining SQLAlchemy Core transformations with directed ／ ## Project status: Archived ／ This project is licensed under GPL-3.0.",
+   "evidence_lines": [
+    15,
+    3,
+    205
+   ]
+  },
+  "fn": "Mg30/pydwt",
+  "sha": "328af33ecc87",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "905df3e34c6d": {
+  "identity": {
+   "one_liner": "理疗诊所预约演示应用，前端周历排班，数据存内存",
+   "review": "这是一个虚构理疗诊所的预约排班前端演示，提供按员工分列的周历、客户列表和服务列表。README 说明其为 feedhack 平台的演示载体，访客可在页面上请求变更并观察构建过程。无后端，记录仅存于内存并在刷新后重置，不适合真实业务数据存储。",
+   "highlights": [
+    "提供按员工分列的当前周日历、客户列表与诊所服务列表",
+    "预约元素带有 data-appointment、data-client、data-service 等稳定属性及各区域 id",
+    "无后端，记录存于内存并在页面刷新后重置"
+   ],
+   "use_cases": [
+    "作为 feedhack 平台演示变更构建过程的展示载体",
+    "前端页面结构与 DOM 属性相关的交互演示场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明它是诊所预约业务的前端应用演示，且声明无后端、数据仅存内存，不提供任何数据库服务功能。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Fictional booking software for a physiotherapy clinic: a day calendar with a ／ clinic's services. It is a demo product that feedhack ／ There is no backend: records live in memory and reset on reload.",
+   "evidence_lines": [
+    3,
+    5,
+    11
+   ]
+  },
+  "fn": "feedhack-ai/tidboka",
+  "sha": "905df3e34c6d",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -12314,5 +12314,295 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "06f6ed9673c6": {
+  "identity": {
+   "one_liner": "数据库承载的 AI Agent 管理与协作平台",
+   "review": "Chuanxu Community Edition 是一个将 Agent、任务、协作门、知识、记忆、属性图、权限与审计记录持久化为数据库实体的 AI Agent 管理平台，供需要治理外部 Agent 注册与网关 API 的团队使用。统一社区包可在 Oracle、PostgreSQL、YashanDB 三种后端中按安装选择其一，每进程仅支持单库，切换后端需重启且不迁移数据。",
+   "highlights": [
+    "将任务、记忆、知识、权限、审计等实体持久化到数据库，运行时每进程选定单一后端",
+    "集成 MCP，并为外部 Agent 提供受治理的注册与网关 API",
+    "提供 /api/health 与 /api/ready 健康检查接口及离线安装脚本"
+   ],
+   "use_cases": [
+    "在 Oracle/PostgreSQL/YashanDB 上部署多 Agent 协作与任务管理平台",
+    "需要对外部 Agent 进行注册治理与网关接入的场景",
+    "要求权限与审计记录落库的 Agent 运营环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Apache-2.0**. Supported database keys: **oracle, pg, yashandb**. The unified Community ／ PostgreSQL only; the three Enterprise packages remain database-specific. ／ |PostgreSQL|`config.pg.example.json`|`bash scripts/install_offline.sh --database pg`|`requirements/pg.txt`|",
+     "lines": [
+      26,
+      28,
+      71
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "**Apache-2.0**. Supported database keys: **oracle, pg, yashandb**. The unified Community ／ selected backend's prerequisites. For v5.0.1 Oracle and YashanDB, SYS must ／ |Oracle|`config.oracle.example.json`|`bash scripts/install_offline.sh --database oracle`|`requirements/oracle.txt`|",
+     "lines": [
+      26,
+      43,
+      70
+     ]
+    },
+    {
+     "db": "YashanDB",
+     "rel": "support",
+     "quote": "**Apache-2.0**. Supported database keys: **oracle, pg, yashandb**. The unified Community ／ selected backend's prerequisites. For v5.0.1 Oracle and YashanDB, SYS must ／ |YashanDB|`config.yashandb.example.json`|`bash scripts/install_offline.sh --database yashandb`|`requirements/yashandb.txt` plus bundled native client|",
+     "lines": [
+      26,
+      43,
+      72
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "平台以 Oracle/PostgreSQL/YashanDB 作为自身数据持久化后端，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "Oracle",
+    "YashanDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，社区版与企业版区分，企业版代码不含于社区包",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A database-backed AI Agent management platform. Tasks, collaboration barriers, ／ **Apache-2.0**. Supported database keys: **oracle, pg, yashandb**. The unified Community ／ 5. Run `./start_web_server.sh start`. Dashboard: `/app/`; Portal: `/portal`.",
+   "evidence_lines": [
+    5,
+    26,
+    54
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Haiwen-Yin/AI-Agent-Infra-with-DB-Community-Edition",
+  "sha": "06f6ed9673c6",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9b79f37ae2cd": {
+  "identity": {
+   "one_liner": "西班牙语方法名的 PHP 对象关系映射（ORM）库",
+   "review": "PIPE 是一个用 PHP 编写的 ORM 库，特点是通过西班牙语命名的方法与数据库表模型交互，涵盖插入、查询、更新、删除、迁移和事务等操作。面向使用西班牙语的 PHP 开发者，采用 MIT 许可证开源发布。",
+   "highlights": [
+    "提供西班牙语命名的 API 方法进行数据库表的增删改查操作",
+    "支持迁移与事务功能",
+    "基于 MIT 许可证的开源库"
+   ],
+   "use_cases": [
+    "偏好西班牙语 API 的 PHP 项目数据持久层开发",
+    "需要进行数据库表模型映射与 CRUD 操作的应用",
+    "涉及迁移与事务管理的 PHP 应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 说明它是用于数据库表模型交互的 ORM 库，属于为数据库生态服务的开发组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单一许可证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "PIPE es un ORM - Mapeador Objeto Relacional desarrollado en PHP, que permite interactuar con el modelo de las tablas en la base de datos accediendo a métodos escritos en español. https://pipe.proes.io ／ El ORM PIPE es una librería de código abierto bajo la Licencia MIT.",
+   "evidence_lines": [
+    12,
+    29
+   ]
+  },
+  "fn": "proesio/pipe",
+  "sha": "9b79f37ae2cd",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "699f01c1afdc": {
+  "identity": {
+   "one_liner": "Rust/SvelteKit 自托管网店系统，含商店、后台、支付与备份",
+   "review": "一个用 Rust(Axum/SQLx) 后端加 SvelteKit 前端实现的自托管网店系统，以单一 Docker/Podman Compose 栈交付，包含店面、管理后台、Stripe/PayPal 支付、PDF 发票、age 加密备份与签名更新回滚机制，面向想自建商店的个人或小团队，依赖 PostgreSQL 存数据。",
+   "highlights": [
+    "以单一 Compose 栈部署 storefront、admin、backend、db、updater 等服务",
+    "支持 Stripe、PayPal 支付、PDF 发票、ZUGFeRD 电子发票",
+    "数据库与上传文件经 age 加密备份，更新带签名验证与自动回滚"
+   ],
+   "use_cases": [
+    "自托管网上商店",
+    "小型商家管理商品、库存与订单",
+    "符合德国/EU 法规要求的在线销售"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A self-hosted webshop with a **Rust** backend (Axum, SQLx, PostgreSQL) and **SvelteKit** storefront and admin dashboard, shipped as one Compose stack (Docker or Podman) with signed one-click updates and encrypted backups. ／ |`db`|PostgreSQL 16|Data, on an internal network only the backend can reach (no internet access)|",
+     "lines": [
+      3,
+      16
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 PostgreSQL 存储数据的完整网店应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted webshop with a **Rust** backend (Axum, SQLx, PostgreSQL) and **SvelteKit** storefront and admin dashboard, shipped as one Compose stack (Docker or Podman) with signed one-click updates and encrypted backups. ／ |`db`|PostgreSQL 16|Data, on an internal network only the backend can reach (no internet access)|",
+   "evidence_lines": [
+    3,
+    16
+   ]
+  },
+  "fn": "MrJSA/RustCraft",
+  "sha": "699f01c1afdc",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1e09ef3eb060": {
+  "identity": {
+   "one_liner": "Windows 玻璃态桌面任务管理与截止时间提醒工具",
+   "review": "CheckIt 是一款面向 Windows 10/11 用户的桌面任务管理与截止时间提醒应用，提供悬浮小组件倒计时、多级提醒和系统托盘驻留。数据经 rusqlite 以 WAL 模式存于本地 SQLite，支持手动与每日自动备份、恢复及删除撤销，完全离线运行，通过 Tauri 2 安装包分发。",
+   "highlights": [
+    "任务管理与多级提醒，Rust 后台调度器支持重启/休眠恢复后补查",
+    "数据经 rusqlite 以 WAL 模式存储于本地 SQLite，支持手动与每日自动备份/恢复",
+    "基于 Tauri 2，提供 Windows 系统通知、托盘驻留与单实例保护"
+   ],
+   "use_cases": [
+    "记录任务截止时间并通过桌面悬浮组件持续查看倒计时",
+    "需要离线本地保存的待办与提醒管理",
+    "依赖多级提醒防止错过 deadline 的日常工作安排"
+   ],
+   "ai_kind": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite 持久化**：全部数据本地存储于系统应用数据目录，完全离线可用 ／ |数据库|SQLite（rusqlite，WAL 模式）| ／ 数据目录：`%APPDATA%\\com.checkit.desktop\\checkit.db`（SQLite，可随时备份）。",
+     "lines": [
+      35,
+      58,
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 仅作为该桌面应用的本地数据存储，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**CheckIt** 是一款轻量、美观、可靠的 Windows 玻璃态桌面任务管理与截止时间提醒工具。以 Deadline 为中心设计：快速记录任务，桌面悬浮小组件持续显示倒计时，多级提醒确保截止时间不再被遗忘。 ／ - **SQLite 持久化**：全部数据本地存储于系统应用数据目录，完全离线可用 ／ |数据库|SQLite（rusqlite，WAL 模式）|",
+   "evidence_lines": [
+    9,
+    35,
+    58
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Zane-up/CheckIt",
+  "sha": "1e09ef3eb060",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

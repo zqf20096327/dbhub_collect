@@ -10868,5 +10868,87 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1e971ed52c08": {
+  "identity": {
+   "one_liner": "AI 智能体记忆引擎，基于 SQLite/PostgreSQL 的分层符号化记忆存储",
+   "review": "InfinityDB 是一个为 AI 智能体提供持久记忆的开源引擎，将对话与工具日志分层存储为 L0-L6 记忆金字塔（原始日志、原子事实、因果图等），使用 SQLite FTS5 做混合检索，后端可运行在 SQLite 或 PostgreSQL，支持 WAL 持久化配置。提供 Python/Node SDK、LangChain/CrewAI/LlamaIndex 适配器及 MCP server，面向构建智能体应用的开发者。README 明确声明当前基准数据未经独立验证，不作为性能保证。",
+   "highlights": [
+    "提供 L0-L6 分层记忆结构，含原子事实提取、因果图、SHA-256 溯源链与多租户策略",
+    "使用 SQLite FTS5 做关键词索引，结合重要性权重与时间衰减排序做混合检索",
+    "提供 Python/Node SDK、LangChain/CrewAI/LlamaIndex/Vercel AI SDK 适配器和 MCP server"
+   ],
+   "use_cases": [
+    "为多轮对话智能体提供持久化记忆存储与检索",
+    "多智能体团队的共享记忆与租户级策略隔离",
+    "需要记忆溯源审计的智能体应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Symbolic short-term memory + layered long-term memory. Zero external API dependencies. Runs locally on SQLite to Postgres.",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Symbolic short-term memory + layered long-term memory. Zero external API dependencies. Runs locally on SQLite to Postgres. ／ * **Indexed Hybrid Retrieval:** SQLite FTS5 narrows keyword candidates; importance weighting and Ebbinghaus time-decay rank the retrieved facts. Latency depends on dataset, hardware, and workload. ／ L0 RAW LOGS -> Verbatim conversation & tool logs stored on disk/SQLite (offloaded from context)",
+     "lines": [
+      6,
+      30,
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 SQLite/PostgreSQL 作为自身存储后端使用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Symbolic short-term memory + layered long-term memory. Zero external API dependencies. Runs locally on SQLite to Postgres. ／ L0 RAW LOGS       -> Verbatim conversation & tool logs stored on disk/SQLite (offloaded from context) ／ ### Claude Desktop & Cursor (MCP)",
+   "evidence_lines": [
+    6,
+    45,
+    199
+   ]
+  },
+  "fn": "infinitydb-ai/infinitydb",
+  "sha": "1e971ed52c08",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

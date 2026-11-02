@@ -12338,5 +12338,133 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e4cc9be5c650": {
+  "identity": {
+   "one_liner": "Laravel Filament 通知发送插件，基于模板与多渠道驱动推送通知",
+   "review": "这是一个 Laravel/Filament 插件，通过通知模板和多种渠道（Email、Database、Discord、FCM）向用户发送通知，提供模板 CRUD、通知日志、队列发送和 GUI 邮件设置，并支持注册自定义驱动、类型与动作。面向使用 Filament 构建后台的 Laravel 开发者，需运行队列 worker 才能发送通知。",
+   "highlights": [
+    "提供基于模板的通知发送，支持 Email、Database、Discord、FCM 多渠道",
+    "支持通过 Driver 抽象类注册自定义驱动，并提供表格列、动作、过滤器等资源 hooks 扩展",
+    "通知基于队列运行，支持通过 GUI 直接修改 SMTP 邮件设置"
+   ],
+   "use_cases": [
+    "为 Filament 后台应用添加用户通知功能",
+    "通过模板统一管理多渠道通知内容",
+    "集成 Firebase/FCM 推送和 Discord 通知"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "该插件面向 Laravel/Filament 应用开发者发送通知，数据库仅作为通知渠道之一（Database Driver），并非为数据库生态服务的工具或以数据库存储为核心的独立应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Send notification to users using notification templates and multi notification channels, it's support Filament Native Notification Service with macro, and a full integration to FCM service worker notifications ／ - [x] Use Database Driver ／ - Database",
+   "evidence_lines": [
+    12,
+    24,
+    127
+   ]
+  },
+  "fn": "tomatophp/filament-alerts",
+  "sha": "e4cc9be5c650",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "781101a15f51": {
+  "identity": {
+   "one_liner": "本地优先的 AI 文档阅读器，支持问答引用、OCR 与笔记",
+   "review": "Knowwise 是一个本地优先的桌面文档阅读器，支持 PDF/Markdown/DOCX 阅读、按页或选区范围的问答与可回跳引用、离线 OCR、本地 OPUS-MT 翻译、笔记标注和知识图谱，数据用 SQLite/FTS5 存于本机。适合需要在本地处理文档并接 OpenAI 兼容或 Ollama 模型的个人用户；模型未配置时阅读、搜索、OCR 等本地功能仍可用。",
+   "highlights": [
+    "支持 PDF/Markdown/DOCX 阅读、按页/节/选区问答与可回跳引用",
+    "支持基于 Tesseract.js 的离线增量 OCR，含进度、暂停/恢复/取消",
+    "数据经 SQLite/FTS5 本地存储，模型请求经单一外发网关并使用 OS 凭据存储"
+   ],
+   "use_cases": [
+    "本地阅读与问答长 PDF/DOCX 文档并生成笔记、摘要等学习产物",
+    "无网络环境下进行离线 OCR 与本地中英翻译",
+    "在受限网络策略下使用带外发网关与审计的 AI 阅读工具"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Backend:** Rust, Tauri 2, SQLite (rusqlite), FTS5. ／ |Data|SQLite, FTS5, rusqlite|",
+     "lines": [
+      62,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明文档、索引、笔记等应用数据存储在 SQLite 中，该项目是使用数据库的桌面应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，本地翻译模型权重为 CC-BY-4.0、ONNX Runtime 为 MIT 且不随仓库分发",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Backend:** Rust, Tauri 2, SQLite (rusqlite), FTS5. ／ |Data|SQLite, FTS5, rusqlite|",
+   "evidence_lines": [
+    62,
+    74
+   ]
+  },
+  "fn": "baozi0821/knowwise",
+  "sha": "781101a15f51",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

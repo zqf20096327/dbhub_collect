@@ -11116,5 +11116,353 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3d1daa1d818e": {
+  "identity": {
+   "one_liner": "轻量 PHP 开发框架，按请求路径加载命名空间控制器",
+   "review": "SlightPHP 是一个 PHP Web 开发框架，按请求路径将 URL 映射到命名空间控制器方法，应用自身负责响应输出、状态码、权限与输入校验。运行需 PHP 8.0+ 及 PDO、Redis 扩展，插件（Config、Db、Tpl 等）通过 Composer 加载，适用于使用 PHP 构建网站和应用的开发者。",
+   "highlights": [
+    "按请求路径加载命名空间控制器并调用公开方法，支持 PATH_INFO 或 setPathInfo() 指定路径",
+    "插件机制基于 Composer 加载，包含 \\SlightPHP\\Config、\\SlightPHP\\Db、\\SlightPHP\\Tpl 等",
+    "通过 Composer 安装，依赖 PHP 8.0+、PDO 与 Redis 扩展"
+   ],
+   "use_cases": [
+    "使用 PHP 构建按路径路由的 Web 应用",
+    "需要轻量控制器调度机制的项目",
+    "通过插件扩展数据库、模板、配置能力的 PHP 项目"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 表明这是通用 PHP 开发框架，仅通过 Db 插件等与数据库交互，未见其为数据库生态服务的证据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SlightPHP 是一个轻量 PHP 框架，按照请求路径加载命名空间控制器并调用公开方法。应用负责响应输出、状态码、权限和输入校验。 ／ 需要 PHP 8.0+、PDO 和 Redis 扩展；Composer 还会安装 Guzzle 和 Gregwar Captcha。使用数据库、Redis 服务或验证码时，还需准备相应驱动、服务和扩展。 ／ `/home/main/entry` 映射到 `Home\\MainController::Entry()`。可在 Web 服务器中设置 `PATH_INFO`，或使用 `SlightPHP::setPathInfo()` 明确指定路径。插件通过 Composer 加载，例如 `\\SlightPHP\\Config`、`\\SlightPHP\\Db`、`\\SlightPHP\\Tpl`。",
+   "evidence_lines": [
+    3,
+    7,
+    33
+   ]
+  },
+  "fn": "hetao29/slightphp",
+  "sha": "3d1daa1d818e",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "692fd4d7a9d8": {
+  "identity": {
+   "one_liner": "基于 LMDB 的 Python 文档数据库",
+   "review": "shelfdb 是一个面向 Python 的小型文档数据库，底层使用 LMDB 存储，提供基于 asyncio 的客户端/服务端协议，支持 TCP 与 Unix socket 连接。写入事务采用单写者队列，读取使用独立快照；协议通过 dill 序列化 Python 回调，仅适合受信任进程间使用。适合需要在 Python 应用中嵌入简单文档存储的开发者。",
+   "highlights": [
+    "基于 LMDB 存储的文档数据库，客户端通过 asyncio 异步接口连接",
+    "支持 TCP 与 Unix socket 两种连接方式，提供写事务队列与快照读",
+    "协议使用 dill 序列化 Python 调用对象，消息最大 4 GiB"
+   ],
+   "use_cases": [
+    "Python 应用中嵌入轻量文档存储",
+    "受信任进程间的小型客户端/服务端数据存取",
+    "需要事务提交/回滚语义的异步数据读写场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明其自身是数据库（LMDB-backed shelf database），运行协议服务端供客户端读写，而非使用其他数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tiny LMDB-backed shelf database utilities. ／ > The client/server protocol uses `dill` to support Python callables. Only use it ／ shelfdb server",
+   "evidence_lines": [
+    3,
+    12,
+    85
+   ]
+  },
+  "fn": "keenlycode/shelfdb",
+  "sha": "692fd4d7a9d8",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e19f4860be5c": {
+  "identity": {
+   "one_liner": "自托管的 AI 短剧/短视频创作工坊，7 阶段流水线生成剧本与成片",
+   "review": "OpenMontage Drama Studio 是一个自托管 Web 工作室，用户输入一句创意后由 Agent 驱动剧本、角色、分镜、配音、剪辑等 7 个阶段的生成流程，适合短剧、短视频和广告视频创作者使用。技术栈为 FastAPI+React，数据存 PostgreSQL，任务队列用 Redis，媒体存 MinIO/S3；图像与视频生成需自备付费的 Seedream/Seedance 密钥。",
+   "highlights": [
+    "提供 7 阶段创作流水线（剧本→角色→场景→道具→分镜→配音→剪辑），支持逐阶段编辑或 Agent 一键运行",
+    "支持自托管部署，Docker Compose 一键启动并捆绑 PostgreSQL 16、Redis 7、MinIO",
+    "文本/图像/视频模型按账户自行配置密钥，支持 DeepSeek、OpenAI、Claude、Gemini 等"
+   ],
+   "use_cases": [
+    "制作 AI 短剧与分镜视频",
+    "生成抖音/TikTok 等平台的带货或产品广告视频",
+    "团队自托管部署的 AIGC 视频内容生产"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "FastAPI (studio/server) ──▶ PostgreSQL (projects · studio_kv · meta) ／ |PostgreSQL 16|✅ bundled| ／ Docker — one shot (Postgres + Redis + MinIO + Studio):",
+     "lines": [
+      133,
+      151,
+      164
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 架构图显示 FastAPI 服务将项目数据存储于 PostgreSQL，属使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "  FastAPI (studio/server) ──▶ PostgreSQL  (projects · studio_kv · meta) ／ |PostgreSQL 16|✅ bundled|",
+   "evidence_lines": [
+    133,
+    151
+   ]
+  },
+  "fn": "charliewwdev/OpenMontage",
+  "sha": "e19f4860be5c",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1edc9a8df6c9": {
+  "identity": {
+   "one_liner": "Go database/sql 扩展库，提供命名查询与结构体扫描",
+   "review": "jmoiron/sqlx 的社区维护分叉，扩展 Go 标准 database/sql：将行扫描进结构体/映射/切片、命名参数查询、In 展开、Rebind 占位符转换、批量插入等。CI 持续在 PostgreSQL、MySQL、SQLite 上测试。适合需要直接操作 database/sql 而不引入 ORM 的 Go 开发者。",
+   "highlights": [
+    "支持命名参数查询、结构体扫描、In 展开、Rebind 占位符转换与批量插入",
+    "API 与上游 v1.4.0 一致，迁移仅需更改导入路径",
+    "CI 对 PostgreSQL 16、MySQL 8 与 SQLite 运行竞态测试"
+   ],
+   "use_cases": [
+    "Go 项目中需要 database/sql 之上的结构体扫描与命名查询",
+    "从 jmoiron/sqlx 迁移以获得持续维护的版本",
+    "需要处理含字符串字面量/注释中占位符的 SQL 场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 16, MySQL 8 and SQLite, plus `vet`, `staticcheck`, `goimports` ／ > - `::` is a PostgreSQL cast and passes through untouched. The old escape that ／ **Databases.** CI tests every change against PostgreSQL 16, MySQL 8 and",
+     "lines": [
+      33,
+      90,
+      194
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL 16, MySQL 8 and SQLite, plus `vet`, `staticcheck`, `goimports` ／ **Databases.** CI tests every change against PostgreSQL 16, MySQL 8 and",
+     "lines": [
+      33,
+      194
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "|`@p1`|`sqlserver`, `azuresql`|",
+     "lines": [
+      205
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库生态服务的 Go 数据访问开发库，通过通用 database/sql 层适配各数据库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It extends Go's standard `database/sql` package. Its `DB`, `Tx`, `Stmt` and ／  PostgreSQL 16, MySQL 8 and SQLite, plus `vet`, `staticcheck`, `goimports` ／ **Databases.** CI tests every change against PostgreSQL 16, MySQL 8 and",
+   "evidence_lines": [
+    17,
+    33,
+    194
+   ],
+   "softened": []
+  },
+  "fn": "secondwindoss/sqlx",
+  "sha": "1edc9a8df6c9",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3a76e69acf02": {
+  "identity": {
+   "one_liner": "openGauss/GaussDB 的 Terraform Provider，以声明式管理逻辑数据库层",
+   "review": "这是一个 Terraform/OpenTofu Provider，用于声明式管理 openGauss/GaussDB 的租户、角色、授权、表空间、发布与复制槽等逻辑层资源，替换 lib/pq 为 gaussdb-go 驱动并实现 sha256 认证；不支持原生 PostgreSQL。适合需要以 IaC 方式管理 GaussDB/openGauss 5.0 实例的运维与平台团队，需从源码构建后以 dev override 方式安装。",
+   "highlights": [
+    "提供 gaussdb_database/role/schema/grant/tablespace/publication/replication_slot 等 Terraform 资源",
+    "以 gaussdb-go 驱动替换 lib/pq，支持 openGauss 原生 sha256 认证与 openGauss 方言选项",
+    "附带 modules/tenant 租户模块，兼容 OpenTofu 1.13"
+   ],
+   "use_cases": [
+    "以 Terraform/OpenTofu 代码化声明 GaussDB 租户、角色与授权",
+    "管理带存储配额的表空间与复制槽",
+    "为 broker 类多租户方案批量创建数据库租户"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "cyrilgdn/terraform-provider-postgresql: ／ Vanilla PostgreSQL is not supported. Every resource and option is",
+     "lines": [
+      9,
+      14
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "A Terraform provider for **openGauss / GaussDB** (including Huawei Cloud HCS ／ more — with openGauss's native **sha256 authentication**.",
+     "lines": [
+      3,
+      6
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# terraform-provider-gaussdb ／ A Terraform provider for **openGauss / GaussDB** (including Huawei Cloud HCS ／ enterprise GaussDB), managing the logical-database layer: tenants, roles,",
+     "lines": [
+      1,
+      3,
+      4
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 openGauss/GaussDB 提供 Terraform 资源管理的 Provider，属于服务数据库生态的工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "openGauss",
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Terraform provider for **openGauss / GaussDB** (including Huawei Cloud HCS ／ enterprise GaussDB), managing the logical-database layer: tenants, roles, ／ resource speaks the openGauss dialect (`SYSADMIN` roles, `DBCOMPATIBILITY`,",
+   "evidence_lines": [
+    3,
+    4,
+    12
+   ]
+  },
+  "fn": "alex-tw-lam/terraform-provider-gaussdb",
+  "sha": "3a76e69acf02",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

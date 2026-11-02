@@ -11749,5 +11749,230 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e3bad04f448d": {
+  "identity": {
+   "one_liner": "本地运行的 CPAP 呼吸机数据查看器，解析 SD 卡/蓝牙数据并以 Web 仪表盘展示",
+   "review": "一个 C++ 服务（内置 Angular Web UI），读取 CPAP 呼吸机 SD 卡、Sleep Bridge Lite、WiFi 卡或 AirSense 11 蓝牙数据，自行解析后存入 SQLite/PostgreSQL/MySQL 数据库，提供夜间图表、事件浏览、PDF 报告，并可通过 MQTT 发布到 Home Assistant。面向个人 CPAP 使用者，README 明确声明非医疗设备，解析的是逆向工程得到的未公开格式。",
+   "highlights": [
+    "支持 ResMed、Löwenstein、Sefam、Luna 等多个厂商机型的数据文件解析",
+    "数据可存入 SQLite（默认）、PostgreSQL 或 MySQL/MariaDB",
+    "可通过 MQTT 自动发现向 Home Assistant 发布 47+ 传感器，并提供 PDF 报告生成"
+   ],
+   "use_cases": [
+    "在本地查看和分析 CPAP 每晚治疗数据（信号图表、呼吸事件）",
+    "生成日期范围内的 PDF 报告供医生查看",
+    "将治疗数据接入 Home Assistant 做自动化"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Any database**: SQLite (default, zero setup), PostgreSQL, or MySQL/MariaDB ／ If you'd rather have PostgreSQL and an MQTT broker alongside it, clone the repo",
+     "lines": [
+      71,
+      133
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Any database**: SQLite (default, zero setup), PostgreSQL, or MySQL/MariaDB",
+     "lines": [
+      71
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Any database**: SQLite (default, zero setup), PostgreSQL, or MySQL/MariaDB",
+     "lines": [
+      71
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Any database**: SQLite (default, zero setup), PostgreSQL, or MySQL/MariaDB",
+     "lines": [
+      71
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它将解析后的 CPAP 数据存入 SQLite/PostgreSQL/MySQL 数据库，数据库是其存储后端而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A C++ service with a built-in Angular web UI. It takes the files your CPAP ／ card, or from a folder), parses them itself, stores the results in a database, ／ - **Any database**: SQLite (default, zero setup), PostgreSQL, or MySQL/MariaDB",
+   "evidence_lines": [
+    26,
+    29,
+    71
+   ]
+  },
+  "fn": "hms-homelab/hms-cpap",
+  "sha": "e3bad04f448d",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "76bfc0fa422b": {
+  "identity": {
+   "one_liner": "Rust 编写的结构化 JSON 日志存储，用 trie 存键集+类型化列存压缩",
+   "review": "kibbr 是一个面向结构化 JSON 日志的单二进制存储引擎，将每行的键集（shape）在内存 trie 中保存一次，值以类型化列追加到磁盘，支持 TrieQL 查询、HTTP 摄入/查询 API、WAL 重放与压实，并带内置 Web 控制台。适合需要把 3 天至约 6 个月的中期日志保持可查询且节省空间的团队；不支持自由文本搜索，无 Elasticsearch 兼容 API，schema 合并与 S3 冷层尚未实现。",
+   "highlights": [
+    "每个日志行的键集在内存 trie 中存储一次，值按类型化列写入磁盘",
+    "支持 WAL 无损重放、压实、HTTP 摄入/查询接口及内置 Web 控制台",
+    "提供 TrieQL 查询语言与 gen-logs、compact、bench-storage 等子命令"
+   ],
+   "use_cases": [
+    "存放数天到数月仍需可查询的结构化 JSON 应用日志",
+    "通过 Vector 将容器日志摄入并留存",
+    "对已有 ndjson 日志做存储体积基准测量"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是自带存储引擎与查询语言的日志存储系统，为日志数据管理服务，而非使用某个现有数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-only，贡献条款 MIT，商业条款见 COMMERCIAL.md",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A log store for structured JSON logs that keeps ~25% of the raw bytes on real-world data and still answers queries in milliseconds. One static binary, written in Rust.** ／ The code is a workspace of five crates: `kibbr-core` (flattening, types, fingerprints), `kibbr-storage` (trie, catalog, day files, WAL), `kibbr-engine` (TrieQL, planning, scanning), `kibbr-server` (HTTP), and the `kibbr` binary over them. ／ kibbr is currently under development. It runs, it measures, and it isn't finished. Schema merging and a cold S3 tier are designed but not built.",
+   "evidence_lines": [
+    6,
+    154,
+    158
+   ]
+  },
+  "fn": "pratyaydeep/kibbr",
+  "sha": "76bfc0fa422b",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e849743690e7": {
+  "identity": {
+   "one_liner": "基于 SQLite 与 LLM 的个人信息整理中枢",
+   "review": "一个自托管的个人信息流水线应用：把群通知、随手记、聊天截图等碎片交给 LLM 消化成带日期与证据链的事项，分看板、通知、存疑库三类落位。面向个人及小范围邀请制多账户使用；数据存于 SQLite（每账户一库），AI 走 OpenAI 兼容接口，需 Node.js 22+，提供 Windows 便携包。",
+   "highlights": [
+    "支持信源适配器契约接入，含群机器人 Webhook 与对话录入",
+    "提供证据链与全量快照版本链，事项元素可回溯原始消息",
+    "SQLite 单文件存储，每账户独立数据库，支持行为围栏校验 AI 写入"
+   ],
+   "use_cases": [
+    "将群通知与聊天碎片自动整理成带截止日期的事项看板",
+    "自托管管理个人通知、存疑信息与原文档案",
+    "邀请制小团队各自独立记账互不干扰"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ - **自托管**：SQLite 单文件数据，拷走即备份；AI 走 OpenAI 兼容接口，可接本地模型。 ／ apps/server Fastify + SQLite：存储 / 消化裁决（agent0）/ 执行器与围栏 / 信源宿主",
+     "lines": [
+      24,
+      56,
+      153
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它以 SQLite 作为自身数据存储，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，网络服务形式提供修改版须开源",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "apps/server        Fastify + SQLite：存储 / 消化裁决（agent0）/ 执行器与围栏 / 信源宿主 ／ - **自托管**：SQLite 单文件数据，拷走即备份；AI 走 OpenAI 兼容接口，可接本地模型。 ／  一条个人信息流水线：群通知、随手记、聊天碎片丢进来，AI 消化成完整的事项；不用做但值得知道的事进「通知」；拿不准的进存疑库，等你决定。",
+   "evidence_lines": [
+    153,
+    56,
+    9
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Lotuses-robot/Summarizing",
+  "sha": "e849743690e7",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

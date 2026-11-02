@@ -11699,5 +11699,153 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7d41f1e1035d": {
+  "identity": {
+   "one_liner": "AI 编码代理的持久化工作记忆 MCP 服务器，默认 SQLite 存储",
+   "review": "面向 Cursor、Claude Code、Windsurf 等 AI 编码代理的本地 MCP 服务器，提供 5 个动词（retrieve/remember/revise/nudge/health）存储和检索架构决策、不变量与经验教训，支持近重复检测、时间谱系与 pre-commit 差异审计。默认经 node:sqlite 使用 SQLite（零 Docker），多机多代理场景可切换 STORAGE_MODE=postgres 启用 pgvector。",
+   "highlights": [
+    "提供 5 个 MCP 工具动词，实现记忆的写入、检索、修订/失效、差异审计与健康检查",
+    "默认使用 SQLite（FTS5 词法索引 + Float32Array 向量 blobs），支持 STORAGE_MODE=postgres 切换到服务端 pgvector HNSW 索引",
+    "支持离线关键词模式及可选的 Ollama / OpenRouter 嵌入模型"
+   ],
+   "use_cases": [
+    "为 AI 编码代理跨会话持久化项目架构决策与项目规则",
+    "pre-commit 阶段对 proposed diff 检查是否违反项目不变量",
+    "多机多代理协作时通过 PostgreSQL 集中存储共享记忆"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Storage: SQLite-First-lightgrey.svg) ／ 1. Validate Node >= 22.0.0 and initialize `.agent/context.db` via `node:sqlite`. ／ * **Use SQLite (Default)**: Perfect for single developers, local IDE sessions, and projects with thousands of decisions—featuring compact `Float32Array` binary vector blobs (`4 KB`/row) and an external-content Porter-stemmed `FTS5` lexical index. Zero Docker, ",
+     "lines": [
+      8,
+      37,
+      89
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* **Use PostgreSQL (`STORAGE_MODE=postgres`)**: Required only when scaling to multi-agent swarms across different machines needing centralized persistence and server-side pgvector HNSW indexing.",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 AI 编码代理服务的本地 MCP 服务器，使用 SQLite/PostgreSQL 作为其记忆存储后端，而非以数据库为核心功能面终用户的数据库本体。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Local MCP server: five tools to store, retrieve, and retire project decisions. SQLite by default — powering the `$0.00` Zero-LLM Raw-RAG + 4-Way RRF memory substrate behind **`#1 Overall` (`91.17%`, `547/600` @ `$24.54`)** and **`#1 Open-Weights` (`54.17%` `Gemma 4 31B` @ `$0.00`)** on Official `DolphinBench`, plus `10M`-token ICLR 2026 `BEAM`. ／ 1. Validate Node >= 22.0.0 and initialize `.agent/context.db` via `node:sqlite`. ／ * **Use PostgreSQL (`STORAGE_MODE=postgres`)**: Required only when scaling to multi-agent swarms across different machines needing centralized persistence and server-side pgvector HNSW indexing.",
+   "evidence_lines": [
+    3,
+    37,
+    90
+   ]
+  },
+  "fn": "kruschdev/krusch-context-mcp",
+  "sha": "7d41f1e1035d",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ed302ca11ed2": {
+  "identity": {
+   "one_liner": "无服务器本地优先的 PWA 数据管理/跟踪应用",
+   "review": "Anita 是一个无需服务器、可离线运行的数据管理 PWA，用户可用预置模板或自定义数据结构来跟踪管理各类信息。数据可存于浏览器 IndexedDB、本地 JSON/SQLite 文件，或通过 Dropbox/WordPress 插件同步。适合注重数据私密性的个人用户；项目仍处早期 Beta 阶段。",
+   "highlights": [
+    "支持本地 IndexedDB、JSON 及 SQLite 文件多种存储方式",
+    "支持自定义数据结构、数据类型及章节间父子关系",
+    "提供与 Dropbox 和 WordPress（插件）的远程数据同步"
+   ],
+   "use_cases": [
+    "个人数据/信息跟踪与整理（离线使用）",
+    "基于模板快速搭建小型数据管理项目",
+    "通过 WordPress 站点共享协作管理项目数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- [X] locally in a JSON or SQLite file in the device FS see the blog post;",
+     "lines": [
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 IndexedDB/JSON/SQLite 存储自身数据的数据管理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- [X] full support for CRUD operations on data stored: ／  - [X] locally in a JSON or SQLite file in the device FS see the blog post; ／ - [X] support for synchronization of locally stored data with at least one remote data store: Dropbox and WordPress (see below);",
+   "evidence_lines": [
+    31,
+    33,
+    40
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "anita-app/anita",
+  "sha": "ed302ca11ed2",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

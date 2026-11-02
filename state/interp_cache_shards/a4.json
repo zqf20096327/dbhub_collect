@@ -10338,5 +10338,196 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "162babc336b4": {
+  "identity": {
+   "one_liner": "数据工程 AI 代理工具层，提供 SQL 分析、血缘与仓库连接",
+   "review": "altimate-code 是一个面向数据团队的开源 AI 代理 CLI（OpenCode 的 fork），为 LLM 提供 100 多个确定性工具：SQL 反模式检测、列级血缘提取、跨方言 SQL 转译与数据比对、dbt 清单解析与测试生成、FinOps 成本分析及 PII 检测。可独立运行于终端，也可作为插件挂在 Claude Code/Codex 之下，供数据工程师与分析团队使用。",
+   "highlights": [
+    "提供跨方言 SQL 转译与行级数据比对，支持多仓库与多种 diff 算法",
+    "提供 SQL 解析式的反模式检测、列级血缘提取与 PII 扫描（30+ 正则模式、15 类别）",
+    "内置 dbt 清单解析、单元测试生成，以及按 Builder/Analyst/Plan 模式划分权限的代理机制"
+   ],
+   "use_cases": [
+    "在终端或 CI 流水线中对 dbt 项目做模型脚手架、单元测试生成与 PR/MR 审查",
+    "跨数据仓库迁移时的 SQL 方言转译与表数据一致性比对",
+    "仓库成本分析（credit 消耗、昂贵查询、闲置资源）与查询前 PII/策略检查"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Transpile SQL between Snowflake, BigQuery, Databricks, Redshift, PostgreSQL, MySQL, SQL Server, and DuckDB. ／ Snowflake · BigQuery · Databricks · PostgreSQL · Redshift · Trino · ClickHouse · DuckDB · MySQL · SQL Server (incl. Microsoft Fabric) · Oracle · SQLite · MongoDB",
+     "lines": [
+      150,
+      190
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Transpile SQL between Snowflake, BigQuery, Databricks, Redshift, PostgreSQL, MySQL, SQL Server, and DuckDB. ／ Snowflake · BigQuery · Databricks · PostgreSQL · Redshift · Trino · ClickHouse · DuckDB · MySQL · SQL Server (incl. Microsoft Fabric) · Oracle · SQLite · MongoDB",
+     "lines": [
+      150,
+      190
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Transpile SQL between Snowflake, BigQuery, Databricks, Redshift, PostgreSQL, MySQL, SQL Server, and DuckDB. ／ Snowflake · BigQuery · Databricks · PostgreSQL · Redshift · Trino · ClickHouse · DuckDB · MySQL · SQL Server (incl. Microsoft Fabric) · Oracle · SQLite · MongoDB",
+     "lines": [
+      150,
+      190
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Snowflake · BigQuery · Databricks · PostgreSQL · Redshift · Trino · ClickHouse · DuckDB · MySQL · SQL Server (incl. Microsoft Fabric) · Oracle · SQLite · MongoDB",
+     "lines": [
+      190
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Snowflake · BigQuery · Databricks · PostgreSQL · Redshift · Trino · ClickHouse · DuckDB · MySQL · SQL Server (incl. Microsoft Fabric) · Oracle · SQLite · MongoDB",
+     "lines": [
+      190
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Snowflake · BigQuery · Databricks · PostgreSQL · Redshift · Trino · ClickHouse · DuckDB · MySQL · SQL Server (incl. Microsoft Fabric) · Oracle · SQLite · MongoDB",
+     "lines": [
+      190
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据仓库与 dbt 生态提供 SQL 分析、血缘、转译与连接能力，是服务于数据库使用的工具层而非存储数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server",
+    "Oracle",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，README 提到另有 GitHub App 形态",
+   "install": [
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The intelligence layer for data engineering AI — 100+ deterministic tools for SQL analysis, ／ |Cross-dialect SQL translation|None|Snowflake ↔ BigQuery ↔ Databricks ↔ Redshift| ／ - **dbt Native** — manifest parsing, test generation, model scaffolding, medallion patterns, impact analysis",
+   "evidence_lines": [
+    5,
+    103,
+    119
+   ]
+  },
+  "fn": "AltimateAI/altimate-code",
+  "sha": "162babc336b4",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "16f710f2a373": {
+  "identity": {
+   "one_liner": "基于 SQLite 索引的编码代理持久记忆/证据检索层",
+   "review": "unified-brain 读取代码仓库的完整 git 历史，用 tree-sitter 解析符号并存入一个 SQLite 文件，再通过嵌入检索与 Jev 判断模型回答「某符号为什么这样做」及生成变更时间线报告，通过 MCP 接入 Cursor、Claude Code 等代理工具。面向需要在不丢失上下文的情况下查询大型代码库历史的开发者；README 未在可见范围内说明许可证。",
+   "highlights": [
+    "读取仓库全部 git 历史，用 tree-sitter 将符号及引入提交存入单个 SQLite 库文件",
+    "通过 MCP 运行于 Cursor、OpenCode、Claude Code 等代理工具",
+    "提供 Ask 与 Timeline/报告两类查询，附证据链",
+    "摄入阶段不使用 LLM，仅 CPU 加 git 工作"
+   ],
+   "use_cases": [
+    "查询大型开源代码库中符号的历史演进原因",
+    "对指定提交范围生成变更判定报告",
+    "为长时间运行的编码代理提供无上下文丢失的记忆层"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The magic sauce is an intermediary OS (SQLITE) memory layer that facilitates retrieval, filtering and judging through a System One model, namely Jev. ／ introduced it, using tree-sitter, in one SQLite ／ |`store.py`|the database: one SQLite file, with the text index for grep and the vector tables|",
+     "lines": [
+      7,
+      72,
+      266
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其内部存储介质（<repo>/.unified-brain.db），并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "The magic sauce is an intermediary OS (SQLITE) memory layer that facilitates retrieval, filtering and judging through a System One model, namely Jev. ／ introduced it, using tree-sitter, in one SQLite ／ The ingester reads the git history and writes one file,",
+   "evidence_lines": [
+    7,
+    72,
+    132
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "DevLoops-ai/unified-brain",
+  "sha": "16f710f2a373",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

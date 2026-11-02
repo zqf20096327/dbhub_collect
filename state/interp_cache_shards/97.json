@@ -10888,5 +10888,168 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e1b44c2075df": {
+  "identity": {
+   "one_liner": "基于 Postgres/SQLite 的事务性后台任务队列库",
+   "review": "River 是一个多语言后台任务队列库，将任务与应用数据存放在同一数据库中，利用事务保证任务入队与业务变更一致。提供重试、定时、唯一任务、多队列、Web UI 等功能，并支持 Go/Java/JS/Ruby/Rust 客户端跨语言互操作。适用于使用 Postgres 或 SQLite 的应用开发者。",
+   "highlights": [
+    "支持 Go、Java、JavaScript/TypeScript、Ruby、Rust 多语言实现且相互兼容",
+    "任务入队与业务数据变更共享同一数据库事务，提交即入队、回滚即取消",
+    "提供批量插入（Postgres COPY FROM）、定时/cron 任务、唯一任务与 Web UI"
+   ],
+   "use_cases": [
+    "Go 等应用的后台异步任务处理",
+    "多语言服务共享同一任务队列",
+    "需要任务与数据库事务一致性的场景"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "River is a fast, transactional job queue backed by Postgres or SQLite. It ／ Postgres `COPY FROM`.",
+     "lines": [
+      3,
+      116
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "River is a fast, transactional job queue backed by Postgres or SQLite. It",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "River 是为应用提供后台任务队列能力的库，以 Postgres/SQLite 作为存储后端，属于数据库生态工具组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "River is a fast, transactional job queue backed by Postgres or SQLite. It ／ River encourages using the same database for application data and the job",
+   "evidence_lines": [
+    3,
+    11
+   ]
+  },
+  "fn": "riverqueue/river",
+  "sha": "e1b44c2075df",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7894087f88bb": {
+  "identity": {
+   "one_liner": ".NET/.NET Core 平台的 ADO.NET MySQL 数据提供程序",
+   "review": "这是一个面向 .NET 和 .NET Core 的 MySQL ADO.NET 数据提供程序库，实现 DbConnection、DbCommand 等标准接口，供托管代码查询和更新数据库。兼容 MySQL 5.5+ 和 MariaDB 10.x+，纯托管代码实现 MySQL 协议，支持异步 API、DbBatch、DbDataSource 及 OpenTelemetry。适用于需要在 .NET 应用中连接 MySQL 系数据库的开发者。",
+   "highlights": [
+    "实现 ADO.NET 核心 API（DbConnection/DbCommand/DbDataReader/DbTransaction/DbBatch/DbDataSource）",
+    "纯托管代码 clean-room 实现 MySQL 协议，支持 MySQL 5.5+ 与 MariaDB 10.x+",
+    "支持异步操作与 OpenTelemetry tracing/metrics"
+   ],
+   "use_cases": [
+    ".NET/.NET Core 应用中连接 MySQL 系数据库执行查询与更新",
+    "需要全异步数据库访问的 .NET 项目",
+    "需要连接 MariaDB 等 MySQL 兼容服务器的 .NET 场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# MySQL Connector for .NET and .NET Core ／ provider for MySQL and other compatible servers including MariaDB. ／ This library is compatible with many MySQL-compatible servers, including MySQL 5.5 and newer and MariaDB 10.x and newer.",
+     "lines": [
+      1,
+      6,
+      25
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "provider for MySQL and other compatible servers including MariaDB. ／ This library is compatible with many MySQL-compatible servers, including MySQL 5.5 and newer and MariaDB 10.x and newer.",
+     "lines": [
+      6,
+      25
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "* LINQ to DB (GitHub, NuGet) including ClickHouse support",
+     "lines": [
+      46
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 自述为 ADO.NET 数据提供程序库，用于从托管代码查询和更新数据库，是为数据库生态服务的驱动组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# MySQL Connector for .NET and .NET Core ／ provider for MySQL and other compatible servers including MariaDB. ／ needed to query and update databases from managed code.",
+   "evidence_lines": [
+    1,
+    6,
+    9
+   ]
+  },
+  "fn": "mysql-net/MySqlConnector",
+  "sha": "7894087f88bb",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

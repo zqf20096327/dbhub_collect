@@ -10218,5 +10218,200 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "13391cf461b9": {
+  "identity": {
+   "one_liner": "自托管本地相册应用，将文件夹转为类 Instagram 信息流，SQLite 存元数据",
+   "review": "Foldergram 是一个自托管的 Node.js/Vue 3 网页应用，把本地媒体文件夹映射为个人资料页与信息流，支持图片和视频的缩略图、预览生成与 Reels 浏览。元数据存于 SQLite 并内置版本化迁移，运行时读取 SQLite 而非实时扫描文件系统；无多用户、云同步或上传功能，适合个人本地媒体浏览场景。",
+   "highlights": [
+    "从配置的 GALLERY_ROOT 索引媒体，元数据存入 SQLite，生成缩略图与预览",
+    "支持 eager/lazy 两种衍生图生成模式，运行时读取 SQLite 与已生成衍生文件",
+    "提供 Docker Compose 部署与源码运行两种方式，含自动 SQLite 迁移"
+   ],
+   "use_cases": [
+    "个人本地照片/视频库的网页化浏览与管理",
+    "基于文件夹结构的类社媒信息流展示",
+    "本地局域网内自托管媒体画廊"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Foldergram indexes supported media from a configured `GALLERY_ROOT`, stores metadata in SQLite, generates thumbnails and previews, and serves a fast feed-style web app for local browsing. Derivatives can be generated during scans or lazily on first request, an ／ - Shared likes in SQLite for signed-in admin/viewer sessions, plus browser-local favorites in public mode. ／ Runtime reads come from SQLite and generated derivatives, not from live filesystem scans on every request.",
+     "lines": [
+      25,
+      37,
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 SQLite 存储自身元数据的媒体画廊应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Foldergram is a self-hosted web application that turns your local folders into a beautiful, instagram-style feed and profile. It turns your local folder to app folders (profiles), and serves a lightning-fast Progressive Web App (PWA). ／ Foldergram indexes supported media from a configured `GALLERY_ROOT`, stores metadata in SQLite, generates thumbnails and previews, and serves a fast feed-style web app for local browsing. Derivatives can be generated during scans or lazily on first request, and image detail pages can be configured to use generated previews or originals. The current app includes Home, Reels, Explore, Library, Likes, Moments or Highlights, App Folder pages, post detail views, original-media download controls, delete actions, scan controls, and rebuild tools. ／ Runtime reads come from SQLite and generated derivatives, not from live filesystem scans on every request.",
+   "evidence_lines": [
+    23,
+    25,
+    57
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "foldergram/foldergram",
+  "sha": "13391cf461b9",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4f372f8390a4": {
+  "identity": {
+   "one_liner": "面向 OpenStreetMap 数据的地理空间数据库引擎",
+   "review": "GeoDesk 是一个面向 OpenStreetMap 数据的地理空间数据库引擎，提供 Java 库（另有 C++ 与 Python 版本），将 .osm.pbf 数据转换为 GOL 文件并支持查询、增量更新，API 直接返回 Node/Way/Relation 对象并与 JTS 集成。面向需要在 Java 应用中处理 OSM 地理数据的开发者，通过 Maven 引入使用。",
+   "highlights": [
+    "提供将 .osm.pbf 数据转换为 GOL 文件并支持增量更新的存储格式",
+    "提供 Java API，查询返回 Node、Way、Relation 对象，并与 Java Topology Suite (JTS) 集成",
+    "支持自有查询语言及 Maven 依赖引入"
+   ],
+   "use_cases": [
+    "在 Java 应用中查询和分析 OpenStreetMap 地理要素",
+    "构建和增量维护区域级 OSM 数据库（GOL 文件）",
+    "基于 JTS 进行缓冲区、合并等几何运算"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明它是数据库引擎及供开发使用的库，而非仅使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GeoDesk is a fast and storage-efficient geospatial database for OpenStreetMap data. Also available for C++ and for Python. ／ - **Intuitive API** &mdash; No need for object-relational mapping; GeoDesk queries return `Node`, `Way` and `Relation` objects. Quickly discover tags, way-nodes and relation members. Get a feature's `Geometry`, measure its length/area. ／ <dependency>",
+   "evidence_lines": [
+    3,
+    20,
+    35
+   ]
+  },
+  "fn": "clarisma/geodesk",
+  "sha": "4f372f8390a4",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a8638683b923": {
+  "identity": {
+   "one_liner": "Go+SQLite 的本地咖啡厅/小餐馆收银 POS 系统",
+   "review": "一个面向墨西哥小型咖啡店和餐馆的离线单机 POS 应用，服务器为 Go 单二进制，用 SQLite（纯 Go 驱动、WAL、内嵌迁移）存数据，支持 iPad/手机通过局域网作为带 PIN 的服务终端，并驱动 ESC/POS 热敏打印机；仅支持 macOS 12+，目前为 beta，不开具发票也不管理库存。",
+   "highlights": [
+    "单二进制内嵌模板/迁移，SQLite WAL 存储，支持每日自动备份",
+    "支持 ESC/POS 热敏打印（USB 经 CUPS 或 TCP 9100）与多终端 PIN 登录",
+    "支持插件扩展（Go SDK）与经 Tailscale 的远程管理"
+   ],
+   "use_cases": [
+    "小咖啡店/餐馆的本地离线点单与收银",
+    "无云服务依赖的门店销售报表与订单管理",
+    "基于 POS 事件日志的插件化扩展（如库存）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Mac, base de datos SQLite, impresoras térmicas ESC/POS por USB o red, y ／ |Base de datos|SQLite (driver puro Go, sin cgo), modo WAL, migraciones embebidas| ／ internal/database/ conexión SQLite, migraciones, respaldos y mantenimiento",
+     "lines": [
+      8,
+      129,
+      139
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储业务数据的 POS 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0，SDK 部分为 MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Punto de venta **libre y gratuito** para cafeterías y restaurantes pequeños, ／ |Servidor|Go (`net/http`), un solo binario| ／ |Base de datos|SQLite (driver puro Go, sin cgo), modo WAL, migraciones embebidas|",
+   "evidence_lines": [
+    6,
+    128,
+    129
+   ]
+  },
+  "fn": "Calebpyn/open-pos",
+  "sha": "a8638683b923",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

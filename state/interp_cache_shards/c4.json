@@ -11882,5 +11882,248 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "857d8ce5bac2": {
+  "identity": {
+   "one_liner": "ASP.NET Core 个人/企业管理 Web 应用，用 PostgreSQL 存储",
+   "review": "Maroik 是一个 ASP.NET Core MVC Web 应用，包含费用追踪、预算表、日历、公告板、看板、文件管理器、用户管理和管理后台。面向需要自托管个人/业务管理的用户。它通过 Docker 栈运行 PostgreSQL 与 RabbitMQ，附 Deploy.sh 部署脚本、每小时备份脚本和从备份恢复流程，schema 变更需从 Init.sql 重建数据库。",
+   "highlights": [
+    "提供费用追踪、预算表、日历、公告板、看板、文件管理器和基于角色的用户管理功能",
+    "包含 Deploy.sh 一键部署脚本，支持本地构建和 GitHub 镜像两种部署方式",
+    "每小时通过 Backup.sh 生成备份压缩包，并支持从备份恢复整个栈"
+   ],
+   "use_cases": [
+    "自托管的个人财务与预算管理",
+    "个人看板、日历日程与文件存储",
+    "带角色权限的多人站点（公告板、用户管理）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`Maroik.DB/PostgreSQL/SQL_Init_Script/Production/Init.sql`|The database the stack starts from: a backup's `pg_dump`, or `Debugging/Init.sql` (same schema, demo data) on a new server.|",
+     "lines": [
+      75
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|2021-05|Project starts as *MyLaboratory*: ASP.NET Core (2.1 → .NET 5) with MariaDB, run under docker-compose from the first week|",
+     "lines": [
+      222
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是用 PostgreSQL 存数据的 Web 应用，属于使用数据库而非服务数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`Maroik.DB/PostgreSQL/SQL_Init_Script/Production/Init.sql`|The database the stack starts from: a backup's `pg_dump`, or `Debugging/Init.sql` (same schema, demo data) on a new server.| ／ Maroik is a modern web application built with ASP.NET Core MVC, featuring a comprehensive set of tools for personal and business management. It includes features such as expense tracking, spreadsheet-style budgets, calendar management with e-mail reminders, bulletin boards, a personal Kanban board, a personal file drive, and role-based user management.",
+   "evidence_lines": [
+    75,
+    123
+   ]
+  },
+  "fn": "IkhyeonJo/Maroik",
+  "sha": "857d8ce5bac2",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1aad6acb0840": {
+  "identity": {
+   "one_liner": "AI 辅助开发治理编排框架，协调专家角色并保留证据与人权门控",
+   "review": "Orchestra 是一个面向 AI 辅助软件开发的工作流编排框架，通过架构、实现、安全、测试等专家角色路由任务，提供基于证据的验证、人工审批门控与本地自适应记忆。它本身不是 AI 模型，依赖兼容的编码宿主运行；JEV 建议组件目前处于离线试点状态，普通使用无需 API 密钥。",
+   "highlights": [
+    "提供专家角色协调、有界执行与任务交接机制",
+    "支持基于证据的验证、人工审批边界与本地自适应记忆",
+    "包含 Scribe 文档功能，可整理需求、重建文档并识别缺口"
+   ],
+   "use_cases": [
+    "需要治理与人工门控的 AI 辅助开发流程",
+    "多专家角色协作的复杂软件任务编排",
+    "开发过程中的文档重建与需求蓝图整理"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未描述针对特定数据库的服务、适配或存储用途，仅主题标签含 database",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT license",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Orchestra coordinates AI-assisted development across specialists for architecture, implementation, UI/UX, data, security, testing, documentation, and governance. It routes the task, preserves evidence, validates results, and respects human authority. ／ Orchestra is **not an AI model**. It works around compatible coding hosts and does not replace engineering judgment. ／ Installation · MCP · Architecture · Governance · Developer portal · Detailed documentation map · Machine index",
+   "evidence_lines": [
+    8,
+    10,
+    72
+   ]
+  },
+  "fn": "Baelfyre/Orchestra",
+  "sha": "1aad6acb0840",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "43e48ec9ab1c": {
+  "identity": {
+   "one_liner": "Magento 2 数据库变更追踪模块，简化 data patch 编写",
+   "review": "该模块面向 Magento 2 开发者，用于在各环境间追踪并复现数据库变更。它在原生 data patch 基础上提供基类与 Facade 辅助类，简化 admin 配置、CMS 内容、EAV 属性等补丁代码，通过 bin/magento setup:upgrade 执行。要求 Magento 2.4.6+、PHP 8.1-8.4，经 Composer 安装。README 宣布因 Agentic Coding 兴起而停止维护（retiring）。",
+   "highlights": [
+    "提供 Migration 基类，简化 Magento 2 data patch 的编写结构",
+    "提供 Facade 辅助类，用于 admin 配置、CMS 内容、EAV 属性等常见补丁任务",
+    "通过 bin/magento setup:upgrade 在各环境间追踪数据库变更"
+   ],
+   "use_cases": [
+    "在多个开发机与项目环境间同步数据库变更",
+    "替代手写冗长的 Magento 2 data patch",
+    "批量创建或更新 admin 配置、CMS 内容、EAV 属性数据"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是为 Magento 2 生态服务的数据库变更管理扩展，而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "deprecated",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A dev-friendly approach to keep track of database changes in Magento 2 ／ Magento supports data patches out of the box, ／ - make it extend `Discorgento\\Migrations\\Setup\\Migration`;",
+   "evidence_lines": [
+    6,
+    21,
+    44
+   ]
+  },
+  "fn": "discorgento/module-migrations",
+  "sha": "43e48ec9ab1c",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c1f0ae4c8c09": {
+  "identity": {
+   "one_liner": "马来西亚甲烷排放研究知识库与文献监控工作流",
+   "review": "该项目用于汇集、评审与维护马来西亚甲烷排放因子相关文献，包含文献发现（OpenAlex）、来源核验、评审队列、Obsidian 兼容 wiki 及月度自动化脚本。使用者是甲烷研究领域负责人，数据库提交需单独审批授权，自动化运行本身不上传 TIDBRepo。",
+   "highlights": [
+    "基于 OpenAlex 的月度文献发现与筛选流水线，输出候选评审队列与 CSV 包",
+    "提供 Obsidian 兼容 wiki、链接/重复项校验脚本及 GitHub 工作流验证",
+    "通过 systemd 定时器与桌面自动化执行月度运行、通知与因子审计"
+   ],
+   "use_cases": [
+    "维护领域文献知识库与来源追溯",
+    "月度自动发现并评审新文献",
+    "对排放因子数据做一致性与离群值审计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该仓库是使用/维护研究数据库（TIDBRepo 快照与提交记录）的研究应用，并非为数据库生态服务的通用工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "A research knowledge base and literature-monitoring workflow for methane emissions and emission factors relevant to Malaysia. It brings together source evidence, quantitative factor assessments, research gaps, an Obsidian-compatible wiki, and reviewed updates to TIDBRepo. ／ 6. **Submit database records separately:** suitability approval and upload authorization are recorded separately. Explicitly approved API operations use source-specific payload checks, duplicate checks and read-back verification. The scheduled literature run never uploads to TIDBRepo. ／ The existing Ubuntu user service calls `deploy/run_monthly.sh`, which takes a nonblocking lock and runs the monthly orchestrator. The configured discovery timer runs on the **first of each month at 03:15 local time**, with up to 45 minutes of random delay and persistent catch-up. Preserve the installed timer and schedule unless the owner approves a change.",
+   "evidence_lines": [
+    3,
+    30,
+    36
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "yusriy/tidbrepo-malaysia-methane",
+  "sha": "c1f0ae4c8c09",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

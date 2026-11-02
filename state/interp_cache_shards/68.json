@@ -10893,5 +10893,61 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1288e34a4cc1": {
+  "identity": {
+   "one_liner": "Go 编写的嵌入式 JSON 数据库，提供零配置 REST API 与可插拔存储引擎",
+   "review": "ElysianDB 是一个自包含的后端引擎，将原始 JSON 直接转为带 CRUD、过滤、分页、鉴权和 ACL 的 REST API，内置分片内存存储加 WAL 持久化的默认引擎，并可通过可插拔引擎运行在 MongoDB 上（beta）。适合原型开发、内部工具和读多写少场景；不支持复杂 join 和重事务负载。",
+   "highlights": [
+    "单二进制提供 REST API、Redis 风格 TCP 协议、KV 端点及可选 Admin UI 和 Prometheus /metrics",
+    "内部引擎提供分片内存存储、定期磁盘持久化、WAL 崩溃恢复和惰性索引",
+    "支持通过 YAML 配置切换存储引擎，提供 JS/TS 官方客户端"
+   ],
+   "use_cases": [
+    "快速原型与 MVP 开发",
+    "内部工具与管理后台",
+    "读多写少、访问模式可预测的 API 服务"
+   ],
+   "official_noted": ""
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 将其描述为自带嵌入式数据存储并提供 API 的数据库/后端引擎，同时支持 MongoDB 作为外接存储引擎",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It combines automatic REST API generation, advanced querying and indexing, authentication, ACLs, hooks, and optional KV and TCP interfaces into a single fast Go binary, while supporting multiple storage backends through a pluggable engine system. ／ * Sharded in-memory storage ／ > **Beta.** The `mongodb` engine is not yet fully functional and is not interchangeable with the `internal` engine: switching engines can change behavior. The remaining work is tracked in #167 and #164. Use the `internal` engine unless you are testing MongoDB support.",
+   "evidence_lines": [
+    11,
+    46,
+    57
+   ]
+  },
+  "fn": "elysiandb/elysiandb",
+  "sha": "1288e34a4cc1",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

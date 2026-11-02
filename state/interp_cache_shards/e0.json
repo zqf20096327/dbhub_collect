@@ -10923,5 +10923,148 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "92424798e398": {
+  "identity": {
+   "one_liner": "自托管行业热点日报站框架，用 LLM 采集筛选聚簇生成日报",
+   "review": "AIHOT 是一个内容精选网站框架，每日从 RSS、网页列表、X、微信公众号等信源收资料，由大模型预筛、两次评分、写中文摘要并聚簇成事件后生成日报/周报/月报。适合想自建行业资讯站的个人或团队；技术栈为 Node.js 24 + PostgreSQL + Docker Compose，精选提示词与门槛可配置，开源版不含原站信源与运营数据。",
+   "highlights": [
+    "支持 RSS、网页列表、JSON 接口、X 账号、微信公众号及脚本推送六种信源",
+    "提供 MCP、公开 API、RSS、llms.txt 等 Agent 接入出口",
+    "内置后台支持信源管理、人工评分更正、逐步换模型与预算熔断"
+   ],
+   "use_cases": [
+    "为法律、金融、HR 等行业搭建自托管热点日报站",
+    "让 Agent 通过 MCP 或 API 订阅精选内容",
+    "替换信源与提示词后作为内容聚合框架复用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 17 ／ 技术栈：Node.js 24 · TypeScript · React Router（服务端渲染）· Fastify · PostgreSQL · pg-boss · Tailwind CSS · Docker Compose。",
+     "lines": [
+      5,
+      140
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用 PostgreSQL 存储数据的新闻聚合网站应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，名称与 Logo 及字体不在许可范围",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 一个自己找热点、自己写日报的网站框架。 ／ 技术栈：Node.js 24 · TypeScript · React Router（服务端渲染）· Fastify · PostgreSQL · pg-boss · Tailwind CSS · Docker Compose。",
+   "evidence_lines": [
+    9,
+    140
+   ]
+  },
+  "fn": "KKKKhazix/AIHOT",
+  "sha": "92424798e398",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dfc42f89d38e": {
+  "identity": {
+   "one_liner": "本地知识库 RAG 检索引擎，默认 SQLite FTS5/BM25 + Jev 重排",
+   "review": "Jev RAG 是一个开源本地知识库检索/RAG 工具：对本地文档文件夹建立索引，提供 BM25、agentic 词法检索、混合检索等七条可选管线，输出带文件引用的答案。默认路径无需向量库，依赖 SQLite FTS5/BM25；检索到的段落会发送给配置的远程 LLM 供答。面向想在本地检索个人文档、并复现基准实验的开发者。",
+   "highlights": [
+    "七条可选检索管线，默认为无需 embedding 和向量库的 SQLite FTS5/BM25 路径",
+    "发布可复现的 BEIR NFCorpus 基准结果，包含质量、延迟、成本及负面实验数据",
+    "提供 Web 界面与 CLI，支持中英文搜索界面"
+   ],
+   "use_cases": [
+    "本地文档知识库检索与带引用的问答",
+    "无向量数据库的轻量 RAG 检索实验",
+    "检索管线基准评测与复现"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "only Python 3.9+ with SQLite FTS5: no package install, API key, embeddings, or ／ default: local files -> SQLite BM25 ----------------------> Jev -> MiniMax ／ Jev RAG indexes a local folder and defaults to vector-free SQLite FTS5/BM25.",
+     "lines": [
+      34,
+      199,
+      205
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为本地知识检索服务，使用 SQLite 作为索引存储组件，并非以 SQLite 存业务数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Jev RAG is an open-source local knowledge search engine with seven selectable pipelines: BM25 + Jev by default, agentic lexical search, embedding hybrid retrieval, multi-round Agentic Hybrid, taxonomy-routed hybrid retrieval, a unified Jev Passage Gate, and hierarchical Jev Line Search.** ／ only Python 3.9+ with SQLite FTS5: no package install, API key, embeddings, or ／ default: local files -> SQLite BM25 ----------------------> Jev -> MiniMax",
+   "evidence_lines": [
+    3,
+    34,
+    199
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "aifabrice/jev-rag",
+  "sha": "dfc42f89d38e",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

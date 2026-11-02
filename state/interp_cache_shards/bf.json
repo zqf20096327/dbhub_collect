@@ -11364,5 +11364,149 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "43eb86393c40": {
+  "identity": {
+   "one_liner": "SQLite 后端的事件存储与文档数据库 .NET 库",
+   "review": "Fisher 是 JasperFx Critter Stack 的成员，为 .NET 开发者提供基于 SQLite 文件的事件溯源和文档存储，提供与 Marten/Polecat 相同的 API，无需安装数据库服务器。1.0 版 API 稳定但与 Marten 并非功能对等，缺少编译查询等特性，且每个数据库文件仅支持一个写入者。",
+   "highlights": [
+    "提供事件存储与文档存储，通过 AddFisher 注入 DI，支持 LINQ 查询、投影、订阅与多租户",
+    "数据库以文件形式嵌入应用进程内，备份为文件复制，测试无需外部 fixture",
+    "通过 JasperFx.Events.ComplianceTests 63 个套件 773 项测试及自有 2,871 项测试"
+   ],
+   "use_cases": [
+    "在 .NET 应用中实现事件溯源架构",
+    "需要进程内嵌入式文档存储的场景",
+    "Marten/Polecat API 风格的 SQLite 后端开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite-backed Event Store and Document Database inside the Critter Stack. ／ Fisher is Marten and Polecat for SQLite —",
+     "lines": [
+      3,
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 .NET 应用提供基于 SQLite 的存储能力组件，而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SQLite-backed Event Store and Document Database inside the Critter Stack. ／ Fisher is Marten and Polecat for SQLite — ／ > `Fisher.AspNetCore` and `Fisher.EntityFrameworkCore` companion packages all work and are tested.",
+   "evidence_lines": [
+    3,
+    13,
+    25
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "JasperFx/fisher",
+  "sha": "43eb86393c40",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5d6b95bef0fa": {
+  "identity": {
+   "one_liner": "查看 ClickHouse 物化视图数据流的只读终端 UI 工具",
+   "review": "ch_insp 是一个 Go 编写的只读终端 UI 工具，用于浏览 ClickHouse 物化视图及其与源表、目标表之间的数据流，支持依赖图展示、列血缘、SQL 定义检查，以及节点读写速率和物化视图错误观察。面向 ClickHouse 使用者和运维人员，可连接在线节点，也可离线解析 SQL schema 转储；指标依赖本地系统日志且为只读访问。",
+   "highlights": [
+    "以只读方式可视化源表、物化视图与目标表之间的数据流，支持列血缘与 SQL 定义检查",
+    "支持连接集群多节点观察读写速率和物化视图错误，或离线解析 SQL schema 转储",
+    "提供 Linux/macOS/Windows 多平台二进制、deb/rpm 包及 Homebrew、Scoop 安装方式"
+   ],
+   "use_cases": [
+    "排查 ClickHouse 物化视图链路与表依赖关系",
+    "观察本地节点物化视图读写速率与错误",
+    "无服务器环境下离线检查 SQL schema 转储"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "A read-only terminal UI for exploring ClickHouse materialized views and the data flows between their source and target tables. ／ - Observe local-node read/write rates, recent history and materialized-view errors when ClickHouse logs are available. ／ Connect to ClickHouse using a URL or command-line options:",
+     "lines": [
+      3,
+      11,
+      55
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "专为 ClickHouse 提供物化视图数据流检查功能的工具，通过连接 URL 或命令行选项接入 ClickHouse。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A read-only terminal UI for exploring ClickHouse materialized views and the data flows between their source and target tables. ／ Connect to ClickHouse using a URL or command-line options:",
+   "evidence_lines": [
+    3,
+    55
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "renatko/ch_insp",
+  "sha": "5d6b95bef0fa",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

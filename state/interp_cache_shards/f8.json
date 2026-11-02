@@ -11305,5 +11305,271 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7207cf9bdc36": {
+  "identity": {
+   "one_liner": "ZODB 是面向 Python 的透明对象持久化数据库",
+   "review": "ZODB 为 Python 提供对象型数据库，直接持久化 Python 对象，无需单独的数据库操作语言或 ORM 映射层，支持透明持久化与 ACID 事务。面向需要对象持久化的 Python 开发者，运行于 Python 3.10+ 及 PyPy。README 未展示安装命令，但 PyPI 徽章表明通过 PyPI 发布。",
+   "highlights": [
+    "为 Python 提供透明对象持久化，无需数据库专用语言或对象关系映射",
+    "支持 ACID 事务",
+    "运行于 Python 3.10 及以上版本和 PyPy"
+   ],
+   "use_cases": [
+    "需要将 Python 对象直接持久化的应用开发",
+    "希望避免 ORM 映射层的对象存储场景",
+    "需要事务性保证的 Python 数据存储"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "ZODB 本身是一个数据库存储引擎/数据库本体，而非使用其他数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ZODB provides an object-oriented database for Python that provides a ／ high-degree of transparency. ZODB runs on Python 3.10 and ／ ZODB is an ACID Transactional database.",
+   "evidence_lines": [
+    23,
+    24,
+    38
+   ]
+  },
+  "fn": "zopefoundation/ZODB",
+  "sha": "7207cf9bdc36",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "43333c744ec8": {
+  "identity": {
+   "one_liner": "本地优先桌面知识管理应用，支持 SQLite 或 Markdown 仓库存储",
+   "review": "Jylos 是一个基于 Java 21 + JavaFX 的单用户桌面知识管理应用，提供 Markdown 编辑、wiki-links、反向链接、知识图谱、看板、Canvas、插件系统和笔记级 AES-256 加密，数据可存为 SQLite 数据库或纯 Markdown 文件仓库，供偏好本地离线工作流的个人用户使用，无云后端、无账户、无遥测。",
+   "highlights": [
+    "支持 SQLite 或文件系统 Markdown 仓库两种存储模式，可导入 Obsidian 仓库与 Evernote .enex 导出文件",
+    "提供 wiki-links、backlinks、知识图谱视图、Kanban 看板和 Canvas 编辑器，兼容 Obsidian 内部链接语法",
+    "提供可选的 AES-256-GCM 笔记级加密、外部 JAR 插件系统与主题扩展"
+   ],
+   "use_cases": [
+    "个人本地离线笔记与知识库管理",
+    "从 Obsidian 或 Evernote 迁移笔记内容",
+    "需要本地加密私有笔记的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ Jylos is a local-first knowledge-management application: Markdown notes, wiki-links, backlinks, an interactive knowledge graph, a Kanban board, optional per-note encryption, a plugin system, and your choice of **SQLite** or a plain **Markdown vault** on disk. ／ - **Local-first and offline** — your notes are plain `.md` files (vault mode) or a single SQLite database; you own the data, no cloud backend, no account, no telemetry.",
+     "lines": [
+      12,
+      38,
+      44
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Jylos 是用 SQLite 存储笔记数据的桌面知识管理应用，数据库仅为其存储后端。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Jylos is a local-first knowledge-management application: Markdown notes, wiki-links, backlinks, an interactive knowledge graph, a Kanban board, optional per-note encryption, a plugin system, and your choice of **SQLite** or a plain **Markdown vault** on disk. ／ - **Local-first and offline** — your notes are plain `.md` files (vault mode) or a single SQLite database; you own the data, no cloud backend, no account, no telemetry. ／ - Storage: **SQLite** (default) or **filesystem Markdown vault** (`.md` + YAML frontmatter; optional **Git** menu for commit/stage/sync)",
+   "evidence_lines": [
+    38,
+    44,
+    63
+   ]
+  },
+  "fn": "RGiskard7/jylos",
+  "sha": "43333c744ec8",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "baf65f15389c": {
+  "identity": {
+   "one_liner": "中国招聘信息聚合项目，发布可本地查询的 SQLite 数据快照",
+   "review": "该项目定时采集中国校招、实习、社招岗位信息，发布为本地 SQLite 数据快照（jobs/jd_text/calendar 三个库），供求职者通过 CLI 或 MCP 离线筛选、搜索岗位与查询招聘日历。数据采集运行在 GitHub Actions，查询在用户本地执行，无需 API key 或部署服务器。",
+   "highlights": [
+    "提供 CLI 和 MCP 两类查询入口，共享同一查询层，CLI 支持 JSON 与表格输出",
+    "数据以 SQLite 文件快照分发，包含岗位、JD 原文与招聘日历三类库，支持 FTS5 索引",
+    "包含 27 个采集适配器与 2,242 个启用数据源，采集定时运行于 GitHub Actions"
+   ],
+   "use_cases": [
+    "按公司、城市、届次、毕业年份筛选校招/实习/社招岗位",
+    "通过 MCP 客户端接入个人工作流查询岗位与招聘日历",
+    "离线分析招聘数据并核对原始投递入口"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "把分散的公开招聘信息整理成可追溯的 SQLite 数据集。按公司、城市、届次筛选，搜索职位描述，查看招聘时间与原始投递入口。提供 CLI 和 MCP，查询无需 API key，也无需部署服务器。 ／ |掌握自己的数据|SQLite 本地查询，可离线分析；代码与数据分开发版|",
+     "lines": [
+      14,
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为岗位数据的本地存储格式发布快照，SQLite 是其数据载体而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码 MIT License；招聘文本与来源站点内容权利归原权利人",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "把分散的公开招聘信息整理成可追溯的 SQLite 数据集。按公司、城市、届次筛选，搜索职位描述，查看招聘时间与原始投递入口。提供 CLI 和 MCP，查询无需 API key，也无需部署服务器。 ／ |掌握自己的数据|SQLite 本地查询，可离线分析；代码与数据分开发版| ／ GitHub Actions 定时采集并发布 `data-latest`，CLI 下载快照后在本地查询。失败抓取不会直接导致岗位下架。数据规模、源可用性和字段完整性随发布变化，使用时应核对 `data_as_of` 和原始链接。",
+   "evidence_lines": [
+    14,
+    32,
+    123
+   ]
+  },
+  "fn": "lijiaqi-AI-Product-Manager/job_radar",
+  "sha": "baf65f15389c",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "97ed3373c1c5": {
+  "identity": {
+   "one_liner": "基于 Node.js 与 Groq 的 AI 对话聊天应用",
+   "review": "CogniStream 是一个用 Node.js/Express 和 Groq API 构建的全栈 AI 对话 Web 应用，面向需要流式 LLM 聊天的用户。它通过 SSE 实现逐 token 流式输出，使用 TiDB Cloud/MySQL 做会话与聊天记录持久化，并提供速率限制和 Zod 校验；数据存储依赖 TiDB Cloud 而非本地数据库。",
+   "highlights": [
+    "通过 SSE 实现逐 token 的实时流式响应，支持停止/取消控制",
+    "使用 TiDB Cloud/MySQL 连接池持久化会话与聊天记录，提供聊天记录的搜索、星标、删除与导出等 CRUD 功能",
+    "集成 API 速率限制（5 req/min）与 Zod schema 校验"
+   ],
+   "use_cases": [
+    "搭建带会话持久化的 LLM 聊天 Web 应用",
+    "需要 SSE 流式输出的 AI 问答场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Database:** TiDB Cloud / MySQL (Connection Pooling, `express-mysql-session`) ／ Connection Pooling: Uses pooled MySQL connections to manage database resources efficiently.",
+     "lines": [
+      11,
+      34
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "- **Database:** TiDB Cloud / MySQL (Connection Pooling, `express-mysql-session`)",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 TiDB Cloud/MySQL 存储会话与聊天记录的 Web 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CogniStream is a full-stack, AI-powered conversational web application built with Node.js, Express, and the Groq SDK. It provides low-latency token streaming, multi-turn session persistence, and complete chat history management. ／ - **Database:** TiDB Cloud / MySQL (Connection Pooling, `express-mysql-session`)",
+   "evidence_lines": [
+    3,
+    11
+   ]
+  },
+  "fn": "Nikitha9n/CogniStream",
+  "sha": "97ed3373c1c5",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

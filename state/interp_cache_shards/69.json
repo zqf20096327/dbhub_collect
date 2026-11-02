@@ -11594,5 +11594,73 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8dbfb68305ea": {
+  "identity": {
+   "one_liner": "MySQL 表数据快速导入/同步命令行工具",
+   "review": "Swoof 是一个用 Go 编写的 MySQL 表导入工具，可在源库与目标库之间复制表结构和数据。它先写入临时表再原子重命名替换原表，支持多目标并行分发、通配符表名、WHERE 行过滤、schema 差异检测（-diff/-drifted）、函数/视图/存储过程导入。适用于开发者从生产库拉取表数据到本地开发环境。通过 go install 或预编译包安装。",
+   "highlights": [
+    "通过查询方式导入，先写临时表完成后再替换原表，避免长导入干扰使用中的库",
+    "支持多目标并行分发、glob 通配符表名、WHERE 行级过滤",
+    "提供 schema 差异检测（-diff/-drifted）及函数/视图/存储过程导入"
+   ],
+   "use_cases": [
+    "将生产库表数据拉取到本地开发环境",
+    "同步指定表或按条件过滤的行到多个目标库",
+    "检测并修复开发库与生产库之间的 schema 漂移"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Just swoof it in. Ultra fast MySQL table importer. ／ This still uses MySQL commands to do the importing, so it wont be as quick as, say, the Percona xtra-backup tool, but because it uses queries, this will work across a broad range of MySQL versions. ／ You can read more about DSNs here <https://github.com/go-sql-driver/mysql#dsn-data-source-name>.",
+     "lines": [
+      8,
+      12,
+      242
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为 MySQL 表导入工具，服务于数据库数据复制场景",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Just swoof it in. Ultra fast MySQL table importer. ／ This still uses MySQL commands to do the importing, so it wont be as quick as, say, the Percona xtra-backup tool, but because it uses queries, this will work across a broad range of MySQL versions.",
+   "evidence_lines": [
+    8,
+    12
+   ]
+  },
+  "fn": "StirlingMarketingGroup/swoof",
+  "sha": "8dbfb68305ea",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

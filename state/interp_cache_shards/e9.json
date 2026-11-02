@@ -13269,5 +13269,144 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "255fc0ad8d82": {
+  "identity": {
+   "one_liner": "Java 服务层，以 PostgreSQL 线协议在网络上提供 DuckDB 访问",
+   "review": "SlackerDB 是一个 Java 编写的代理服务，将 DuckDB 暴露为可通过 PostgreSQL 线协议访问的网络服务，支持 JDBC/ODBC/psql 等客户端、多会话共享同一 DuckDB 文件、COPY 批量导入导出、SQL 注册为 HTTP 端点等能力，可独立运行或嵌入 Java 应用。适合需要让多个客户端并发访问 DuckDB 分析数据集的场景。注意它是协议兼容而非适配 PostgreSQL 本体，后端为 DuckDB。",
+   "highlights": [
+    "实现 PostgreSQL 线协议，标准 PostgreSQL 客户端（JDBC、ODBC、libpq、psql）可直接连接",
+    "支持多客户端会话共享同一 DuckDB 数据库，并提供 COPY 批量导入导出",
+    "支持将参数化 SQL 注册为带缓存和版本管理的 HTTP 端点，并可嵌入 Java 应用运行"
+   ],
+   "use_cases": [
+    "为支持 PostgreSQL 连接的 BI 工具和报表应用提供分析数据引擎",
+    "多团队/多工具并发查询共享的 .duckdb 数据文件",
+    "在 Java 应用内嵌网络化分析存储"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "SlackerDB is a Java‑based service layer that puts DuckDB on the network. It speaks the PostgreSQL wire protocol, so standard PostgreSQL JDBC clients connect without any special driver; it also lets multiple clients share the same DuckDB database — **something  ／ * *PostgreSQL Wire Protocol* – Standard PostgreSQL clients connect as‑is: JDBC, ODBC, libpq, psql, Python.",
+     "lines": [
+      8,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为把 DuckDB 放到网络上的服务层/代理，为数据库访问提供服务而非使用数据库存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SlackerDB is a Java‑based service layer that puts DuckDB on the network. It speaks the PostgreSQL wire protocol, so standard PostgreSQL JDBC clients connect without any special driver; it also lets multiple clients share the same DuckDB database — **something a single‑process DuckDB cannot do**. On top of that, it provides a bulk COPY channel for importing and exporting data, and a registered‑SQL layer that turns queries into cacheable HTTP endpoints. ／ * *PostgreSQL Wire Protocol* – Standard PostgreSQL clients connect as‑is: JDBC, ODBC, libpq, psql, Python. ／ * *Database Proxy* – Manages multiple database instances through a proxy and connects to different instances through a unified port.",
+   "evidence_lines": [
+    8,
+    14,
+    28
+   ]
+  },
+  "fn": "robotslacker/slackerdb",
+  "sha": "255fc0ad8d82",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "981dc6700001": {
+  "identity": {
+   "one_liner": "自托管的身份认证服务，提供账号、会话与登录管理",
+   "review": "Knell 是一个自托管认证服务，为应用提供注册、登录、JWT 访问与刷新令牌、会话与设备管理等 REST API，并包含限流、账户锁定、IP 封禁和审计日志。要求 Node.js 20+ 与 PostgreSQL 14+，可通过 pnpm 或 docker-compose 运行。当前为 v0.1.0，邮箱验证、密码重置、2FA、OAuth 等功能尚未实现，列入后续路线图。",
+   "highlights": [
+    "提供 signup/login/refresh/sessions/logout 等 REST 认证接口，使用 Argon2id 密码哈希与 JWT 令牌",
+    "内置限流、账户锁定、IP 封禁、设备跟踪与审计日志等防护机制",
+    "依赖 PostgreSQL 作为后端存储，支持 Docker 与 docker-compose 部署"
+   ],
+   "use_cases": [
+    "为自托管应用提供集中式登录与会话管理，替代按用户计费的第三方认证服务",
+    "需要审计日志与防暴力破解防护的内部系统接入层",
+    "多设备会话监控与强制注销（revoke sessions）场景"
+   ],
+   "cat_notes": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL backend ／ **Requirements:** Node.js 20+, PostgreSQL 14+ ／ DATABASE_URL=postgres://localhost:5432/knell",
+     "lines": [
+      18,
+      41,
+      53
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL 存储数据的自托管认证应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Self-hosted auth that actually makes sense. Handles accounts, sessions, and sign-in so your apps don't have to. ／ - PostgreSQL backend ／ **Requirements:** Node.js 20+, PostgreSQL 14+",
+   "evidence_lines": [
+    3,
+    18,
+    41
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "roadsman/knell-auth",
+  "sha": "981dc6700001",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

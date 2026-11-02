@@ -12545,5 +12545,208 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c4052a837e37": {
+  "identity": {
+   "one_liner": "自托管 Obsidian 笔记库同步服务器，Git 为数据源，SQLite 存元数据",
+   "review": "PKV Sync 是一个可部署在自己服务器上的 Obsidian 笔记库同步服务：每个 vault 对应一个 bare git 仓库，元数据存于单个 SQLite 数据库，支持多用户多设备实时推送同步、文件历史与冲突解决，并通过内置 MCP 接口向 AI 工具提供读写能力。用户需自备域名并按 Docker Compose 部署流程安装；当前版本尚未内置端到端加密，服务器可读取 vault 内容。",
+   "highlights": [
+    "提供多用户、多 vault 同步，基于 bare git 仓库实现文件历史、diff 与单文件恢复",
+    "内置 MCP 接口（stdio 或 /mcp 路由），支持 AI 代理对 vault 的检索、lint 与带 dry run 的写入",
+    "提供五语言管理面板，管理用户、设备令牌、vault、邀请与 blob GC"
+   ],
+   "use_cases": [
+    "在自有服务器上同步 Obsidian 笔记到手机、平板与桌面",
+    "从 Obsidian Sync 迁移到自托管方案",
+    "用 LLM 代理维护与检索个人 wiki 笔记库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Mature technology, on purpose.** Single binary, single SQLite metadata DB, one",
+     "lines": [
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是一个以 SQLite 存储元数据的自托管同步服务应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PKV Sync is a self-hosted, Git-native sync server for Obsidian vaults. ／ - **Mature technology, on purpose.** Single binary, single SQLite metadata DB, one ／ ## Quick start with Docker Compose",
+   "evidence_lines": [
+    3,
+    57,
+    60
+   ]
+  },
+  "fn": "CyberKurry/pkv-sync",
+  "sha": "c4052a837e37",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "802b0c26f2b7": {
+  "identity": {
+   "one_liner": "AsenaJS 框架的 Drizzle ORM 集成包，提供数据库服务与仓库类",
+   "review": "这是运行在 Bun 上的 AsenaJS 框架的 Drizzle ORM 集成包，提供 @Database 服务、类型安全的 @Repository 类和声明式 @Transaction 装饰器，面向使用 AsenaJS + TypeScript 的开发者。需 Bun 1.4+ 与 drizzle-orm 0.45.2+，驱动支持 pg、mysql2 或 bun-sql，通过 bun 安装。",
+   "highlights": [
+    "提供 @Database 服务、类型安全的 @Repository 类与声明式 @Transaction",
+    "内置 create、findAll、paginate 等仓库方法，可经 @Inject 注入服务",
+    "支持 pg、mysql2 与 bun-sql 驱动"
+   ],
+   "use_cases": [
+    "在 AsenaJS/Bun 项目中以仓库模式访问 PostgreSQL",
+    "需要声明式事务管理的 TypeScript 后端开发",
+    "基于 Drizzle ORM 的类型安全数据访问层封装"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Requirements:** Bun 1.4+, `@asenajs/asena` 0.11+, `drizzle-orm` 0.45.2+, and a driver (`pg` or `mysql2`; `bun-sql` needs none). ／ bun add @asenajs/asena-drizzle drizzle-orm pg ／ import { pgTable, text, uuid } from 'drizzle-orm/pg-core';",
+     "lines": [
+      9,
+      14,
+      22
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AsenaJS 框架提供数据库 ORM 集成组件，属服务数据库访问的库而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Drizzle ORM integration for AsenaJS - `@Database` services, type-safe `@Repository` classes and declarative `@Transaction`s. ／ **Requirements:** Bun 1.4+, `@asenajs/asena` 0.11+, `drizzle-orm` 0.45.2+, and a driver (`pg` or `mysql2`; `bun-sql` needs none). ／ bun add @asenajs/asena-drizzle drizzle-orm pg",
+   "evidence_lines": [
+    7,
+    9,
+    14
+   ]
+  },
+  "fn": "AsenaJs/asena-drizzle",
+  "sha": "802b0c26f2b7",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e44e31d3ffa9": {
+  "identity": {
+   "one_liner": "为 AI 代理接入多台 T3 Code 机器提供统一 MCP 网关的服务器",
+   "review": "一个部署在 T3 Code 旁边的网关服务器，为托管 AI 代理（如 Grok Bot、Notion agent）提供单一 OAuth 登录与统一 MCP 地址，跨多台机器启动、跟进、接手编码任务，任务状态存于本地 SQLite 以在重启后恢复，并通过 webhook 通知代理。面向已运行 T3 Code 且需要无人值守代理的用户；需自行搭建 HTTPS 隧道暴露入口。",
+   "highlights": [
+    "提供统一 MCP 端点，代理一次登录即可访问多台配置的 T3 机器",
+    "任务带稳定 ID 与幂等 requestId，状态存本地 SQLite，重启后可恢复",
+    "支持 webhook 外发通知、令牌轮换/吊销与按项目的代理权限限制"
+   ],
+   "use_cases": [
+    "让云端 AI 代理无人值守地在多台 T3 Code 机器上启动和跟进编码任务",
+    "接管用户在 T3 中手工开始的线程并持续跟进",
+    "通过 webhook 集成外部代理的工作流通知"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Job state lives in a local SQLite database, so a gateway restart picks up where it left off.",
+     "lines": [
+      98
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "网关为 T3 Code 生态提供代理接入与任务管理服务，SQLite 仅作本地任务状态存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The gateway is a small server you run next to T3 Code. It gives an outside bot, such as Grok Bot or a Notion agent, one sign-in and one MCP address for all your machines. (MCP is the protocol agents use to call tools.) Through it, a bot can: ／ Bots connect to one HTTPS endpoint, `https://<your gateway>/mcp`. The gateway connects to each T3 host for them, so adding a machine is a config entry and one `hosts enroll` command, not a new connection in every bot. ／ - Job state lives in a local SQLite database, so a gateway restart picks up where it left off.",
+   "evidence_lines": [
+    7,
+    70,
+    98
+   ]
+  },
+  "fn": "boundsj/t3-fleet-gateway",
+  "sha": "e44e31d3ffa9",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

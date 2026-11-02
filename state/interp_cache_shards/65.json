@@ -10584,5 +10584,186 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "35abbe307af5": {
+  "identity": {
+   "one_liner": "C 语言事务性 KV 存储引擎库，基于 LSM-tree",
+   "review": "TidesDB 是用 C 编写的嵌入式事务性键值存储引擎库，底层采用 LSM-tree，支持 ACID/MVCC、列族、混合 LSM+BTree、5 种隔离级别与 2PC-XA 等事务 API。README 明确其非完整数据库，可用于在其上构建数据库或作为独立 KV/列存储使用，跨 Linux/macOS/Windows 等多平台。",
+   "highlights": [
+    "提供带 MVCC 的 ACID 事务 API，含 5 个隔离级别与 2PC-XA",
+    "采用混合 LSM+BTree 结构，支持可配置压缩管道（Snappy/LZ4/Zstd）与 TTL",
+    "可嵌入或独立运行，文件在 x86/ARM/RISC-V/PowerPC 等多平台间可移植"
+   ],
+   "use_cases": [
+    "作为库在之上构建数据库系统",
+    "作为独立的键值/列存储使用",
+    "需要事务性与崩溃安全的嵌入式 OLTP 存储场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 定位为可被用于构建数据库的存储引擎库，是为数据库生态服务的组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "多许可：主许可为 Mozilla Public License 2.0，依赖另有附加许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TidesDB is a fast and efficient transactional key value storage engine library written in C. The underlying data structure is based on a log-structured merge-tree (LSM-tree). ／ It is not a full-featured database, but rather a library that can be used to build a database atop of or used as a standalone key-value/column store. ／ Multiple licenses apply to TidesDB. The primary license is Mozilla Public License Version 2.0 (TidesDB), while additional licenses apply to the dependencies used in the project.",
+   "evidence_lines": [
+    1,
+    3,
+    29
+   ]
+  },
+  "fn": "tidesdb/tidesdb",
+  "sha": "35abbe307af5",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8fb299451d16": {
+  "identity": {
+   "one_liner": "将 Objection.js 与 Knex 集成进 NestJS 的模块",
+   "review": "该仓库提供一个 NestJS 模块 @willsoto/nestjs-objection，通过 ObjectionModule.register/registerAsync 将 Objection.js ORM 和 Knex 连接注入 Nest 应用，支持多连接命名注册。Knex 与 Objection 为 peerDependencies 需单独安装。面向使用 NestJS 框架并采用 Objection 作为 ORM 的开发者。",
+   "highlights": [
+    "提供 ObjectionModule.register 与 registerAsync 两种注册方式",
+    "支持多连接场景，通过 name 标识各连接",
+    "支持注入 Knex 连接与 Objection 模型"
+   ],
+   "use_cases": [
+    "NestJS 项目中使用 Objection.js 作为 ORM",
+    "需要在应用中管理多个数据库连接",
+    "结合 @nestjs/terminus 做连接健康检查"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "该模块为 NestJS 应用集成 ORM/连接管理，是服务于数据库使用的框架组件而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Integrates Objection.js and Knex with Nest ／ pnpm add @willsoto/nestjs-objection ／ |`name`|`string`|`false`|`KNEX_CONNECTION` token|This is **required** only if you are using multiple connections|",
+   "evidence_lines": [
+    10,
+    15,
+    48
+   ]
+  },
+  "fn": "willsoto/nestjs-objection",
+  "sha": "8fb299451d16",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "98a95d6f1af2": {
+  "identity": {
+   "one_liner": "AI 代理的本地持久化记忆层，基于 SQLite 图结构存储",
+   "review": "MemOS 为 LLM 和 AI 代理提供跨会话持久化的记忆层，记忆以图结构（节点+边）存储在本地 SQLite 中，支持 FTS5 全文检索、嵌入语义搜索与 MCP 适配器。提供 TypeScript SDK、Python HTTP 服务、CLI 及 Ollama/LangChain/CrewAI 适配器。面向构建代理应用的开发者，数据全部留在本机。",
+   "highlights": [
+    "本地 SQLite 存储（WAL 模式），支持进程重启后持久化与 FTS5 全文检索",
+    "图结构记忆（节点+类型化边），支持矛盾、派生等关系及关联召回",
+    "提供 MCP 适配器（stdio + Streamable HTTP）及 Ollama/LangChain/CrewAI/OpenAI/Anthropic 适配器"
+   ],
+   "use_cases": [
+    "为 AI 代理/LLM 应用添加跨会话持久记忆",
+    "本地知识/笔记摄取与全文、语义混合检索",
+    "通过 MCP 服务器向 Claude、Cursor 等代理工具提供记忆能力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Local-first**|Your data never leaves your machine. SQLite-backed, zero cloud dependencies.| ／ - **Persistent** — survives process restarts (SQLite WAL mode) ／ |Full-text search (SQLite FTS5)|✅|",
+     "lines": [
+      73,
+      79,
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 SQLite 作为自身存储后端使用，是为 AI 代理服务而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Universal, local-first, persistent memory layer for AI agents. ／ |**Local-first**|Your data never leaves your machine. SQLite-backed, zero cloud dependencies.| ／ |MCP adapter (stdio + Streamable HTTP)|✅|",
+   "evidence_lines": [
+    5,
+    73,
+    113
+   ]
+  },
+  "fn": "Markgatcha/memos",
+  "sha": "98a95d6f1af2",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

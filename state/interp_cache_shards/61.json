@@ -11682,5 +11682,208 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aa355eda39eb": {
+  "identity": {
+   "one_liner": "PostgreSQL 的云原生表访问方法存储引擎扩展",
+   "review": "OrioleDB 是一个以 PostgreSQL 扩展形式实现的存储引擎，基于 table access method 框架，提供无缓冲映射、基于 UNDO 日志的 MVCC、写时复制检查点和行级 WAL 等机制，目标受众是需要在 PostgreSQL 上试验新存储模型的开发者和 DBA。项目处于 public beta，官方明确不建议生产使用，构建需依赖特定补丁版本的 PostgreSQL 源码。",
+   "highlights": [
+    "以 PostgreSQL 扩展实现，通过 table access method 框架提供存储引擎，使用 CREATE TABLE ... USING orioledb 启用",
+    "实现 UNDO 日志 MVCC、页合并与 64 位事务标识，消除专用垃圾回收进程和 VACUUM 需求",
+    "实现行级 WAL 与并行 apply 支持，面向 raft 共识复制和 active-active 多主设计",
+    "提供 amd64/arm64v8 的 Docker 镜像，支持 ICU、C、POSIX 及 PostgreSQL 17+ 内置排序规则"
+   ],
+   "use_cases": [
+    "为 PostgreSQL 试验替代存储引擎（如消除表膨胀、事务 ID 回卷）的测试与基准环境",
+    "基于 row-level WAL 与 raft 复制架构的分布式/多主方案的研发基础"
+   ],
+   "notes": "安装方式含 docker 镜像（orioledb/orioledb）与源码构建两种。"
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# OrioleDB – a cloud-native storage engine for PostgreSQL ／ OrioleDB is a new storage engine for PostgreSQL, bringing a modern approach to",
+     "lines": [
+      1,
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供存储引擎扩展，属于数据库内核生态组件而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "双许可：Apache License 2.0 与 PostgreSQL License",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# OrioleDB – a cloud-native storage engine for PostgreSQL ／ OrioleDB consists of an extension, building on the innovative table access ／ OrioleDB is dual-licensed under the Apache License 2.0 and the PostgreSQL License. ／ OrioleDB now has public beta status. It is recommended for experiments,",
+   "evidence_lines": [
+    1,
+    16,
+    66,
+    69
+   ]
+  },
+  "fn": "orioledb/orioledb",
+  "sha": "aa355eda39eb",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "23b7fd78bde2": {
+  "identity": {
+   "one_liner": "Express+React 全栈学习与原型 starter，内置同步 SQLite",
+   "review": "StartER 是一个面向学习和快速原型的 Express + React 全栈模板/框架，提供后端、前端、共享类型与 API 契约测试，强调零魔法、可读代码以便 AI 协作开发；使用 SQLite 同步 API 存数据，npm/clone 方式运行，MIT 许可，适合学生与开发者原型开发。",
+   "highlights": [
+    "提供 Express 5 后端与 React 19 前端及共享类型契约",
+    "使用 SQLite 零配置同步 API 进行数据读写",
+    "提供 make:clone 模式克隆与 tests/contracts 契约验证机制"
+   ],
+   "use_cases": [
+    "全栈开发学习与教学",
+    "AI 代理协作下的快速原型开发",
+    "新项目启动模板（boilerplate）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Sync SQLite:** direct data access that AI can read and write without `async`/`await` confusion. ／ - **Database**: SQLite (zero-config, sync API)",
+     "lines": [
+      61,
+      69
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其 Database 为 SQLite，用它存储应用数据，属使用数据库的全栈应用模板",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "StartER is an open-source framework for **learning** and **building** fullstack web applications. It provides: ／ - **Sync SQLite:** direct data access that AI can read and write without `async`/`await` confusion. ／ - **Database**: SQLite (zero-config, sync API)",
+   "evidence_lines": [
+    19,
+    61,
+    69
+   ]
+  },
+  "fn": "rocambille/start-express-react",
+  "sha": "23b7fd78bde2",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6dbd39337f1e": {
+  "identity": {
+   "one_liner": "自托管单二进制 AI 多智能体协作平台，内嵌 SQLite 与 Web 应用",
+   "review": "kwant 是一个用 Rust 编写的自托管 AI 机器人团队应用，内置 SQLite 数据库和 React Web 应用于单个二进制中，支持多空间、多账户、定时任务、审批流程和 MCP 工具服务器，可接入 Claude/Codex/Grok CLI 或各家 API 密钥。适合想在本地或 VPS 上运行多个 AI 机器人协作的个人和小团队使用。",
+   "highlights": [
+    "多个机器人通过 @mention 交接工作，含定时 routines、审批卡与 Inbox",
+    "支持 Claude、Codex、Grok CLI 登录及 Anthropic/OpenAI/xAI API 密钥，多账户优先级回退",
+    "单二进制自包含 SQLite 与 Web 应用，支持 VPS 自托管与手机 Web Push 通知"
+   ],
+   "use_cases": [
+    "在个人电脑或 VPS 上自托管一支 AI 机器人团队，分工处理日常任务",
+    "为工作、副业、家庭等场景建立隔离的多空间机器人配置",
+    "对高风险操作（git push、网络调用等）配置审批控制后让机器人自主运行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It's written in Rust (Tokio, Axum, SQLite) with a React web app embedded in the binary. ／ `kwnt` is self-contained: SQLite and the web app are inside it.",
+     "lines": [
+      12,
+      96
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以内嵌 SQLite 存数据，是一个使用数据库的终端用户应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It's written in Rust (Tokio, Axum, SQLite) with a React web app embedded in the binary. ／ `kwnt` is self-contained: SQLite and the web app are inside it.",
+   "evidence_lines": [
+    12,
+    96
+   ]
+  },
+  "fn": "alexsergivan/kwant",
+  "sha": "6dbd39337f1e",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10541,5 +10541,161 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ce330f711fdf": {
+  "identity": {
+   "one_liner": "自托管 DNS 策略引擎，基于黑/白名单返回允许/拦截决策",
+   "review": "Blockinator 是一个自托管 DNS 策略管理系统：DNS 服务器（如 Technitium，经配套插件）发送查询元数据，它依据黑/白名单、客户端/网络/PTR 目标和调度窗口返回允许或拦截决策。面向自托管 DNS 的管理员，提供查询历史、统计和管理控制台，数据存储默认用 SQLite，可选 MySQL，经 Docker Compose 部署。",
+   "highlights": [
+    "支持按 IPv4/IPv6 网络、客户端、PTR 主机名定向策略，白名单优先级与每列表最多 32 个调度窗口",
+    "支持从 URL、文件或粘贴规则导入列表，提供 Policy Tester、查询历史与流量/响应时间统计",
+    "使用 SQLite 或 MySQL 存储，通过 Caddy 提供 HTTPS，支持管理员账户与命名 API 密钥"
+   ],
+   "use_cases": [
+    "为 Technitium 等 DNS 服务器提供集中式黑/白名单过滤决策",
+    "按客户端、网络或时间窗口实施差异化 DNS 解析策略",
+    "查看 DNS 查询日志与流量、响应时间统计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Use SQLite or MySQL, managed HTTPS through Caddy, administrator accounts, and named API keys. ／ SQLite is the default. For MySQL, complete database setup before starting. Preserve `.env` and `./data`, which contains SQLite data, TLS files, and Caddy state.",
+     "lines": [
+      22,
+      55
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Use SQLite or MySQL, managed HTTPS through Caddy, administrator accounts, and named API keys. ／ SQLite is the default. For MySQL, complete database setup before starting. Preserve `.env` and `./data`, which contains SQLite data, TLS files, and Caddy state.",
+     "lines": [
+      22,
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该系统将 SQLite/MySQL 用作自身数据存储，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted DNS policy management with block lists, whitelists, schedules, and query history. Your DNS server sends query metadata; Blockinator returns an allow/block decision. Connect Technitium using the companion plugin. ／ - Use SQLite or MySQL, managed HTTPS through Caddy, administrator accounts, and named API keys. ／ SQLite is the default. For MySQL, complete database setup before starting. Preserve `.env` and `./data`, which contains SQLite data, TLS files, and Caddy state.",
+   "evidence_lines": [
+    5,
+    22,
+    55
+   ]
+  },
+  "fn": "StealthCat/blockinator-web",
+  "sha": "ce330f711fdf",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1fa87c481fc3": {
+  "identity": {
+   "one_liner": "Node.js 无主分布式定时任务库，用原子认领+租约选运行实例",
+   "review": "anarchon 是面向 Node.js 集群的 cron 与间隔调度库，不依赖 leader 或分布式锁：每个实例本地计算时间槽，通过 Redis/Valkey/PostgreSQL/SQLite 等后端上的原子认领选出唯一运行者，并用租约、心跳、接管和补跑机制处理崩溃、冻结与滚动发布。需要后端显式配置，保证为 at-least-once，要求任务处理器幂等。",
+   "highlights": [
+    "支持 Redis、Valkey、PostgreSQL、SQLite、RabbitMQ、NATS JetStream 作为后端，通过单一原子认领为每个时间槽选出唯一运行实例",
+    "以 Lua 脚本实现 Redis 上的原子认领，依赖服务端时钟测量租约，避免实例间时钟差异影响"
+   ],
+   "use_cases": [
+    "多实例 Node.js 集群中运行定时任务且要求每个时间槽只有一个实例执行",
+    "需要容忍实例崩溃/冻结后自动接管并补跑失败任务的作业调度",
+    "无独立 leader 组件、以共享存储为协调媒介的轻量分布式 cron 部署"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Leaderless scheduling for Node.js clusters. Run the same jobs in every instance; an atomic claim in Redis, Valkey, PostgreSQL or SQLite selects one runner for each scheduled slot. The default `lease` strategy retries after a runner stops renewing its lease. Th ／ pnpm add anarchon pg # PostgreSQL (or bring your own pg / postgres.js client)",
+     "lines": [
+      11,
+      61
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Leaderless scheduling for Node.js clusters. Run the same jobs in every instance; an atomic claim in Redis, Valkey, PostgreSQL or SQLite selects one runner for each scheduled slot. The default `lease` strategy retries after a runner stops renewing its lease. Th ／ Three anarchon processes on one SQLite file: one wins each run; after a graceful stop and after kill -9, another process starts the same run again as attempt 2",
+     "lines": [
+      11,
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供专门的 PostgresBackend/SqliteBackend 等数据库后端适配，是为 Node.js 应用调度服务的组件库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Leaderless scheduling for Node.js clusters. Run the same jobs in every instance; an atomic claim in Redis, Valkey, PostgreSQL or SQLite selects one runner for each scheduled slot. The default `lease` strategy retries after a runner stops renewing its lease. That gives at-least-once execution after failures, not exactly-once side effects: handlers should be idempotent, and a frozen runner can briefly overlap its replacement. ／ pnpm add anarchon pg                    # PostgreSQL (or bring your own pg / postgres.js client) ／ |`backend`|none: required|Where runs are stored: `new RedisBackend(...)`, `new PostgresBackend(...)`, `new SqliteBackend(...)` and the rest. See Backends|",
+   "evidence_lines": [
+    11,
+    61,
+    123
+   ],
+   "softened": [
+    "highlights:『优雅』删条x1"
+   ]
+  },
+  "fn": "aristoteliss/anarchon",
+  "sha": "1fa87c481fc3",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -12020,5 +12020,166 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4041b9b92810": {
+  "identity": {
+   "one_liner": "可嵌入 JSON 文档数据库引擎 C 库，含类 XPath 查询语言 JQL",
+   "review": "EJDB2 是以 C11 编写的可嵌入 JSON 数据库引擎库，单文件存储，底层使用 IOWOW 键值存储引擎，并提供 HTTP/WebSocket 端点（IWNET）。它提供 JQL 查询语言用于查询和更新 JSON 文档，支持集合连接、在线备份及多语言绑定，可在 Linux/macOS/iOS/Windows 等平台运行，供需要在应用内嵌 JSON 存储的开发者使用，需从源码构建安装。",
+   "highlights": [
+    "提供 C11 API 与单文件数据库，支持在线备份",
+    "实现类 XPath 的 JQL 查询语言，支持集合连接与 JSON Patch（rfc7386/rfc6902）数据修改",
+    "基于 IOWOW 持久键值存储引擎，提供 HTTP REST/WebSocket 端点及多语言原生绑定"
+   ],
+   "use_cases": [
+    "应用内嵌 JSON 文档存储",
+    "通过 HTTP/WebSocket 端点交互式查询和更新 JSON 数据",
+    "移动端（Android/iOS）或 Flutter 应用中的本地 JSON 数据库"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是数据库存储引擎本身（可嵌入 JSON 数据库引擎 C 库），而非为其他数据库服务的工具或使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "EJDB2 is an embeddable JSON database engine published under MIT license. ／ * Powered by IOWOW - The persistent key/value storage engine",
+   "evidence_lines": [
+    8,
+    17
+   ]
+  },
+  "fn": "Softmotions/ejdb",
+  "sha": "4041b9b92810",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "59267e530909": {
+  "identity": {
+   "one_liner": "QQNT SQLite 数据库解密、消息解析导出与统计分析流水线",
+   "review": "该项目面向 QQNT（新版 QQ）用户，提供从数据库密钥计算、SQLCipher 解密到消息解析导出（TXT/MD/HTML）、好友查询、统计及 WebUI 的一站式流程，内置轻量 protobuf 解析器，并接入 Tealina28/QQNT_Export 导出与 Table2D 研究分析套件；运行于 Linux/Android，需读取 QQ 私有目录，适用于聊天记录导出与数据库逆向研究场景。",
+   "highlights": [
+    "实现 QQNT 数据库解密（含 gpro 系列 db 与大文件锁页问题的处理）",
+    "支持导出 TXT、MD、HTML 格式消息，覆盖红包、图片、Ark 卡片、引用、撤回等多种消息类型",
+    "提供 CLI 子命令、TUI/WebUI 交互及好友列表 JSON 输出，内置轻量 protobuf 解析器"
+   ],
+   "use_cases": [
+    "QQNT 聊天记录解密导出与备份",
+    "好友列表与消息数据统计分析",
+    "QQNT 数据库与 protobuf 结构的逆向研究"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "项目为 QQNT 的 SQLite 数据库提供解密、转储、解析与导出等数据处理服务，属于为数据库数据服务的工具而非使用数据库存储的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "⛏ 全方位友好的 QQNT 数据库到信息一站式流水线：涵盖数据库解密与转储、消息解析与导出、统计分析、好友查询及 WebUI，并提供专为逆向研究与开发设计的数据库和消息研究分析套件。 ／ |`db [files...]`|为选定用户解密指定的数据库文件| ／ - 可能解决了 sqlcipher 解密大于 1GiB 数据库时报 `database disk image is malformed` 的问题，",
+   "evidence_lines": [
+    3,
+    148,
+    119
+   ]
+  },
+  "fn": "miniyu157/qq-dump",
+  "sha": "59267e530909",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "acaadc9ea807": {
+  "identity": {
+   "one_liner": "Searchcraft 搜索引擎 API 的 PSR 兼容 PHP 客户端 SDK",
+   "review": "该仓库是 Searchcraft 搜索引擎 API 的官方 PHP 客户端，通过 PSR-18 HTTP 客户端（如 Guzzle）调用服务端，提供搜索（含模糊、多子句、联邦搜索）、索引与文档管理、停用词、联邦管理、密钥权限及 AI 摘要流式接口。面向使用 PHP 8 接入 Searchcraft 的开发者；需自行安装 PSR-18 HTTP 客户端依赖。",
+   "highlights": [
+    "提供搜索、索引、文档、停用词、联邦、认证密钥与 Measure 等 API 的封装，支持多子句复杂查询与 federatedQuery 跨索引搜索",
+    "基于 PSR-18 HTTP 客户端发现机制，可替换使用自定义 HTTP 客户端",
+    "支持 AI 能力接口，含流式搜索摘要（SSE 事件解析），需引擎 0.10.0 及以上"
+   ],
+   "use_cases": [
+    "在 PHP 应用中接入 Searchcraft 实现站点搜索/输入即搜索",
+    "通过脚本管理 Searchcraft 索引 schema、文档增删改与统计",
+    "需要多索引联邦搜索或基于密钥位掩码的细粒度权限管理的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "该仓库是为 Searchcraft 搜索引擎服务的官方 API 客户端 SDK，而非使用其存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A PSR-compatible PHP client for the Searchcraft API. ／ composer require searchcraft/searchcraft-php ／ Searchcraft PHP Client does not include a specific HTTP client in its `require` dependencies but Guzzle is recommended. You will need to install one in order to use the Searchcraft client.",
+   "evidence_lines": [
+    5,
+    14,
+    58
+   ]
+  },
+  "fn": "searchcraft-inc/searchcraft-client-php",
+  "sha": "acaadc9ea807",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

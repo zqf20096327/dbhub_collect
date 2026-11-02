@@ -11137,5 +11137,390 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dc30a97330c8": {
+  "identity": {
+   "one_liner": "AI 代理跨会话记忆工具，SQLite 存储，经 MCP 暴露",
+   "review": "Cairn Memory 为 Claude Code 和 Codex 等客户端提供跨会话记忆：本地模式将记忆存入用户自己的 SQLite 文件并通过 MCP 工具（保存/检索/检查/更正/遗忘）操作，每条记忆附带 Source Receipt 源文本以便核查；也可连接 cairn.ink 云端自动记忆。语义召回需自备 OpenAI key。面向需要会话间保留上下文的开发者。",
+   "highlights": [
+    "提供 remember/recall/inspect/correct/forget 五个显式 MCP 记忆工具",
+    "本地记忆持久化于用户自有的 SQLite 数据库，无需账号",
+    "每条记忆附带提交源文本（Source Receipt）供检查与按版本更正"
+   ],
+   "use_cases": [
+    "在多个 AI 编码会话之间保留项目偏好与决策上下文",
+    "需要查看、更正或遗忘已保存记忆的场景",
+    "基于 MCP 或 JavaScript 在记忆层上构建集成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Cairn's open-source memory layer stores memories in your own SQLite file and",
+     "lines": [
+      80
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其记忆数据的本地存储介质，项目本身是面向 AI 代理的记忆应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Cairn's open-source memory layer stores memories in your own SQLite file and ／ **Cairn Memory** is Cairn.ink's open-source AI memory toolkit for Claude Code",
+   "evidence_lines": [
+    80,
+    20
+   ]
+  },
+  "fn": "Cairn-ink/cairn-memory",
+  "sha": "dc30a97330c8",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "922bd05722c6": {
+  "identity": {
+   "one_liner": "VPS 部署操作指南合集，覆盖服务器、应用与数据库安装备份",
+   "review": "该仓库是一份以 Markdown 文档为主的部署笔记合集，提供在 Ubuntu VPS 或 Vercel 上部署 Node/MERN 应用、配置 Nginx/HTTPS、安装多种数据库及配置备份的逐步指南。面向自行完成生产部署的开发者；无代码组件，数据库内容仅为其安装与备份教程的版本说明。",
+   "highlights": [
+    "提供 MongoDB、PostgreSQL、MySQL、MariaDB、Redis 等数据库在 Ubuntu 上的安装指南",
+    "包含数据库自动备份与恢复的操作指南",
+    "覆盖从初始服务器设置到 HTTPS、PM2、Docker Compose 的部署流程文档"
+   ],
+   "use_cases": [
+    "在 Ubuntu VPS 上从零部署 Node.js/MERN 项目",
+    "为 VPS 上的数据库配置安装源与每日备份",
+    "搭建 Nginx/HTTPS 与自动化部署流水线的参考步骤"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|PostgreSQL|PostgreSQL 16 / 18| ／ |PostgreSQL|18|Default on 26.04; via the official PGDG repo on 24.04|",
+     "lines": [
+      49,
+      78
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|MySQL|MySQL 8.0 / 8.4 LTS (9.7 LTS optional)| ／ |MySQL|8.4 LTS|Default on 26.04 (8.0 on 24.04)|",
+     "lines": [
+      50,
+      79
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|MariaDB|MariaDB 10.11 / 11.8 LTS (12.3 LTS optional)| ／ |MariaDB|11.8 LTS|Default on 26.04 (10.11 on 24.04)|",
+     "lines": [
+      51,
+      80
+     ]
+    }
+   ],
+   "dbs": [],
+   "eco": "unclear",
+   "eco_why": "仓库内容为部署教程文档，既非为数据库生态服务的工具组件，也非以数据库存储数据的应用程序。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Practical, copy-paste friendly guides to deploy JavaScript (MERN / Node.js) projects on a Linux VPS or on Vercel — from a fresh server to HTTPS, databases, automatic deployments and backups. ／ ### 3. Databases ／ |Database backups|Automated daily dumps + restore for all of the above|",
+   "evidence_lines": [
+    5,
+    44,
+    53
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "manuelebeh/deployment_notes",
+  "sha": "922bd05722c6",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8ed314b5b10b": {
+  "identity": {
+   "one_liner": "本地 GEO 监测工具，通过 Playwright 网页采集 AI 搜索结果并存入 SQLite",
+   "review": "一个单机版 GEO 数据采集工具，通过网页自动化从豆包、Kimi 等 AI 平台批量采集问答与引用链接，采集结果、截图、批次状态写入本地 SQLite，并生成 CSV、Markdown 与 JSON 报告，用于核验合作伙伴推广效果。面向需要监测品牌在 AI 搜索中提及情况的市场或运营人员；依赖 Chromium 与网页登录状态，不支持无交互环境的自动登录。",
+   "highlights": [
+    "通过 Playwright browser context 批量采集豆包、Kimi 等平台的网页回答、引用链接与截图",
+    "将样本、批次与失败状态写入本地 SQLite（data/geonow.sqlite3），支持按批次去重与 API 结果导入",
+    "生成 CSV、中文 Markdown 与摘要 JSON 报告，统计品牌提及率、推荐率与引用率"
+   ],
+   "use_cases": [
+    "监测品牌在 AI 搜索平台回答中的提及与推荐情况",
+    "合作推广投放前后的时间相关性对比观察",
+    "离线 fixture 验证采集、报告链路用于开发调试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "这是一个基于 `jerry3747/geo-data-engine` 采集思路改造、用于独立核验合作伙伴推广效果的本地 GEO 监测工具。第一阶段支持豆包和 Kimi 网页采集，并把每次回答、引用链接、时间、模式设置、截图和采集状态写入 SQLite；API 数据通过单独的导入入口保存为 `source=api`，报告会与网页数据分开统计。上游适配细节见 `references/upstream.md`。 ／ 如果当前机器尚未安装 Chromium 或暂时无法登录，可先用离线 fixture 验证 SQLite、截图路径、CSV 和报告链路（fixture 明确标记为离线结果，不代表真实网页数据）： ／ - `data/geonow.sqlite3`：历史记录，包含 `runs` 和 `samples`。",
+     "lines": [
+      3,
+      22,
+      56
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储采集的历史记录，SQLite 仅为其本地数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "这是一个基于 `jerry3747/geo-data-engine` 采集思路改造、用于独立核验合作伙伴推广效果的本地 GEO 监测工具。第一阶段支持豆包和 Kimi 网页采集，并把每次回答、引用链接、时间、模式设置、截图和采集状态写入 SQLite；API 数据通过单独的导入入口保存为 `source=api`，报告会与网页数据分开统计。上游适配细节见 `references/upstream.md`。 ／ - `data/geonow.sqlite3`：历史记录，包含 `runs` 和 `samples`。",
+   "evidence_lines": [
+    3,
+    56
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "jerry3747/geo-data-engine",
+  "sha": "8ed314b5b10b",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "788b7e42d80c": {
+  "identity": {
+   "one_liner": "用于创建和管理 PolarDB 实例的 Terraform 模块",
+   "review": "该仓库是面向 Alibaba Cloud Stack 的 Terraform 模块，通过 HCL 声明式配置创建 PolarDB 实例，并管理其中的数据库、账号权限、备份策略和连接配置，也支持复用已有实例。依赖 Terraform >= 1.5.6 与 alibabacloudstack provider，适用于需要以基础设施即代码方式管库的运维人员。默认引擎为 MySQL 8.0，采用 MIT 许可。",
+   "highlights": [
+    "提供创建 PolarDB 实例、数据库、账号及权限管理的 Terraform 模块",
+    "支持配置备份策略与数据库连接，或复用已有 PolarDB 实例",
+    "提供基础/高级用法及 examples 目录中的多个使用示例"
+   ],
+   "use_cases": [
+    "以 Terraform 声明式方式创建和管理 PolarDB 实例与账号",
+    "为实例统一配置备份策略和连接配置",
+    "在已有 PolarDB 实例上补齐数据库与权限管理"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PolarDB",
+     "rel": "support",
+     "quote": "# Alibaba Cloud PolarDB Terraform Module ／ This module creates **PolarDB instances, databases, accounts, backup policies, and connection configurations** on Alibaba Cloud Stack. ／ - Creates a new PolarDB DB instance",
+     "lines": [
+      1,
+      3,
+      7
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|`engine`|Database engine type|`string`|`\"MySQL\"`|No|",
+     "lines": [
+      75
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该模块是为 PolarDB 产品提供 Terraform 资源编排能力的工具，非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PolarDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Alibaba Cloud PolarDB Terraform Module ／ This module creates **PolarDB instances, databases, accounts, backup policies, and connection configurations** on Alibaba Cloud Stack. ／ |alibabacloudstack|>= 3.18.24, < 3.19.0|",
+   "evidence_lines": [
+    1,
+    3,
+    65
+   ]
+  },
+  "fn": "apsarastack-automation/terraform-alibabacloudstack-polardb",
+  "sha": "788b7e42d80c",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "48ad7079b5c5": {
+  "identity": {
+   "one_liner": "面向孟加拉国的家教市场与课程管理平台，React+Go+MySQL/TiDB",
+   "review": "TuitionHub 是一个运行在 Vercel 上的家教对接与学费管理应用：管理员人工核验家教/机构证件后上架，家长与学生可搜索、聊天、约试课，成交后提供课表、考勤、作业、成绩、材料与费用跟踪。技术栈为 React 19 前端、Go+Gin 后端，生产库用 TiDB Cloud，本地用 Docker 中的 MySQL 8.4，含 43 张表和前向迁移工具，适合需要完整源码参考的全栈学习者。",
+   "highlights": [
+    "提供人工证件核验、平台内聊天、试课确认与课堂管理（考勤/作业/评分/费用）流程",
+    "后端为 Go+Gin，数据库支持 TiDB Cloud（生产）与 MySQL 8.4 Docker（本地），内置仅前向、拒绝破坏性语句的迁移工具",
+    "单域名部署网站与 API，会话 Cookie 使用 SameSite=Strict，无需 CORS"
+   ],
+   "use_cases": [
+    "为家教/辅导机构提供学员与教师管理、排课与费用跟踪",
+    "作为 React+Go+MySQL/TiDB 全栈部署（Vercel）的参考实现",
+    "需要人工实名审核机制的平台类应用场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Backend|Go 1.25, Gin 1.11, sqlx, go-sql-driver/mysql, golang-jwt v5, bcrypt (`x/crypto`), go-playground/validator, `x/image` (WebP)| ／ |Database|MySQL 8.4 (local, Docker) · TiDB Cloud Starter (production, MySQL-compatible)| ／ - **Production:** TiDB Cloud Starter (MySQL-compatible), AWS Singapore. **Local:** MySQL 8.4 in Docker.",
+     "lines": [
+      118,
+      119,
+      147
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|Hosting|Vercel Hobby (website + Go API) and TiDB Cloud Starter in Singapore (database). $0 per month.| ／ |Database|MySQL 8.4 (local, Docker) · TiDB Cloud Starter (production, MySQL-compatible)| ／ A -- \"sqlx, TLS\" --> D[(TiDB Cloud Starter<br/>43 tables)] ／ - **Production:** TiDB Cloud Starter (MySQL-compatible), AWS Singapore. **Local:** MySQL 8.4 in Docker.",
+     "lines": [
+      56,
+      119,
+      131,
+      147
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统以 MySQL/TiDB 作为存储数据库运行家教市场业务，属使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Database|MySQL 8.4 (local, Docker) · TiDB Cloud Starter (production, MySQL-compatible)| ／ - **Production:** TiDB Cloud Starter (MySQL-compatible), AWS Singapore. **Local:** MySQL 8.4 in Docker.",
+   "evidence_lines": [
+    119,
+    147
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Razia-rosie/Tution-Hub",
+  "sha": "48ad7079b5c5",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

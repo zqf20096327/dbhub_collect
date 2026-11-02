@@ -9264,5 +9264,258 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d35be2dc5b2a": {
+  "identity": {
+   "one_liner": "C++17 控制台银行模拟教学应用，支持文件持久化与备份恢复",
+   "review": "MiniBank C++ 是一个面向 Windows 控制台的银行账户模拟教学程序，用于练习账户管理、存取转账、操作历史，以及基于版本化文本文件的保存、加载和 .bak 备份恢复；项目定位为本地演示，使用文件持久化而非数据库，不处理真实银行交易，含 18 套测试。",
+   "highlights": [
+    "提供账户创建、查询、存取款与转账功能，金额以分（centimes）为单位避免浮点误差",
+    "支持版本化文本格式（MINIBANK|1）的完整状态导出、加载与 .bak 备份恢复，加载需确认且校验完整性",
+    "包含 18 套测试覆盖序列化、反序列化、加载与恢复流程"
+   ],
+   "use_cases": [
+    "C++ 面向对象编程与数据校验的教学练习",
+    "文件持久化与备份恢复机制的演示实验",
+    "本地单用户银行操作模拟场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 明确说明持久化基于本地文件（data/minibank.txt/.bak），未声明使用任何数据库，既非数据库生态工具也非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MiniBank est une application bancaire pédagogique en **C++17**, exécutée en console sous **Windows**. Elle permet de gérer des comptes et des mouvements bancaires, de consulter les informations enregistrées en mémoire, puis de sauvegarder ou restaurer l'état de la banque. ／ La persistance utilise un format texte versionné (`MINIBANK|1`) qui représente les comptes, les opérations et les compteurs utiles à la continuité des identifiants. L'intégrité du contenu est vérifiée lors du chargement. ／ - Persistance fondée sur des fichiers locaux, sans gestion multi-utilisateur ou transactions concurrentes.",
+   "evidence_lines": [
+    3,
+    79,
+    128
+   ]
+  },
+  "fn": "datasifaw/MiniBank_Cpp",
+  "sha": "d35be2dc5b2a",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9f0e0f8f88e9": {
+  "identity": {
+   "one_liner": "DMR 数字电台用户 ID 数据文件仓库，每30分钟自动生成",
+   "review": "该仓库发布 DMR 用户数据库的 BETA 版数据文件，每 30 分钟自动重建，包含 31 万余条用户记录，按 Ailunce HD1、Anytone、Tytera MD-380/390、MD-2017 及 Pi-Star 等设备格式分别提供下载，并附将数据文件接入 Pi-Star 的 SSH 操作步骤，供 DMR 电台用户更新本机通讯录/呼号显示使用。",
+   "highlights": [
+    "提供适配 Ailunce、Anytone、Tytera 多种电台及 Pi-Star 的多格式数据文件",
+    "数据每 30 分钟自动重新生成，包含已注册的新 DMR 用户",
+    "README 提供修改 Pi-Star 更新脚本以替换数据源的操作步骤"
+   ],
+   "use_cases": [
+    "为 DMR 电台更新用户 ID/呼号数据文件",
+    "替换 Pi-Star 默认的 DMRIds.dat 数据来源",
+    "需要获取较新注册用户数据的 DMR 用户"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "仓库只发布供电台设备使用的数据文件，未涉及任何数据库产品的服务或适配",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DMR user database BETA is an \"up to date\" database wich are automatically created every 30 minutes. This means that new dmr users who register, will be automatically added here to the databases, but the data might not be complete. If you always need to be up to date, even if the display might not show all the information for the newest users, then these files are what you need. ／  Download latest DMR user database BETA for Ailunce, Anytone and Tytera",
+   "evidence_lines": [
+    7,
+    63
+   ]
+  },
+  "fn": "DMR-Database/database-beta",
+  "sha": "9f0e0f8f88e9",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "74aa77d6cf88": {
+  "identity": {
+   "one_liner": "以 Conn3x/OpenTofu 声明式配置自托管 n8n 工作流自动化的部署模块",
+   "review": "这是一个 Conn3x circuit（OpenTofu 模块），用于在自己的主机上以 Podman 容器方式部署 n8n 工作流自动化工具，支持 SQLite 或 PostgreSQL 作为存储、主机生成加密密钥、可选自动创建 owner 账户，并配置反向代理相关环境变量。面向需要自托管 n8n 的运维人员；不包含数据备份、TLS 和队列模式配置，SQLite 切换 PostgreSQL 不会自动迁移数据。",
+   "highlights": [
+    "通过 Podman Quadlet 以 systemd 服务运行官方 n8n 镜像，按 tag 与 digest 固定版本",
+    "支持 SQLite（默认）与 PostgreSQL 两种数据存储，postgres 参数可配置 host/port/database/username/schema",
+    "在主机上生成 N8N_ENCRYPTION_KEY 与 owner 密码文件（0600 权限），不进入 plan/state/CI 日志"
+   ],
+   "use_cases": [
+    "在自有主机上声明式部署自托管 n8n 实例",
+    "为 n8n 配置 PostgreSQL 后端与反向代理前置的 webhook 地址",
+    "接管已有 n8n 实例并保留其加密密钥与数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "### With PostgreSQL ／ SQLite suits one person or a small team. For more, or for workflows that run often, keep n8n's data in PostgreSQL: ／ `postgres = {}` means the defaults: `127.0.0.1:5432`, database and user `n8n`, schema `public`. Give any of `host`, `port`, `database`, `username` and `schema` to change them. The password reaches n8n as `DB_POSTGRESDB_PASSWORD` in a root-only env file, writte",
+     "lines": [
+      58,
+      60,
+      69
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "n8n runs from its official image under Podman as a systemd service, pinned by tag and digest, and listens on `127.0.0.1:5678` for a reverse proxy in front. It keeps its data in SQLite under `/var/lib/n8n` unless you point it at PostgreSQL, such as one from cir ／ SQLite suits one person or a small team. For more, or for workflows that run often, keep n8n's data in PostgreSQL: ／ Switching an existing instance from SQLite to PostgreSQL doesn't move its data. n8n starts on the empty database as a new instance. Export your workflows and credentials first with `n8n export:workflow` and `n8n export:credentials`, inside the container.",
+     "lines": [
+      7,
+      60,
+      71
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该模块部署的 n8n 使用 SQLite/PostgreSQL 存储自身的工作流、凭据与执行数据，数据库仅作为其持久化后端。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "n8n runs from its official image under Podman as a systemd service, pinned by tag and digest, and listens on `127.0.0.1:5678` for a reverse proxy in front. It keeps its data in SQLite under `/var/lib/n8n` unless you point it at PostgreSQL, such as one from circuit-postgres. If you give it an owner, the first apply creates that account for you, so nobody else can claim the instance before you open it. It runs on Debian, Ubuntu, Fedora and Rocky Linux. ／ SQLite suits one person or a small team. For more, or for workflows that run often, keep n8n's data in PostgreSQL: ／ 4. Through circuit-podman v0.1.0, installs Podman and runs `ghcr.io/n8n-io/n8n:VERSION@DIGEST` as `n8n.service`: a Quadlet unit on the host network that reads `keys.env`, mounts `/var/lib/n8n` as `/home/node/.n8n`, and carries the settings below. `postgres_password` and `environment` go to `/etc/containers/env/n8n.env`, mode `0600`, written from ephemeral values so they never reach the plan or state.",
+   "evidence_lines": [
+    7,
+    60,
+    102
+   ]
+  },
+  "fn": "conn3xorg/circuit-n8n",
+  "sha": "74aa77d6cf88",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a16b1cc26761": {
+  "identity": {
+   "one_liner": "AI 代理维护的自托管任务看板，Python 单文件+SQLite 存储",
+   "review": "Pult 是一个自托管任务看板：AI 代理（如 Claude Code、Codex）在会话开始时读取摘要，结束时批量更新卡片状态，人通过网页查看。单 Python 文件、无第三方依赖，用 SQLite 存数据，支持 Telegram 摘要、多代理多用户权限和操作日志。界面与文档仅俄语，需代理能执行命令或发 HTTP 请求。适合用 AI 代理协作的个人或小团队。",
+   "highlights": [
+    "代理通过 pult.py CLI 或 HTTP API 在会话首尾读写看板",
+    "单 Python 文件实现服务器，仅依赖标准库和 SQLite，每日自动备份数据库",
+    "支持多用户与多模型权限隔离、字段级冲突合并和完整变更日志"
+   ],
+   "use_cases": [
+    "AI 编码代理的跨会话任务交接与外部记忆",
+    "人与多个 AI 代理共享的任务状态跟踪",
+    "通过 Telegram 接收摘要并远程查看任务进展"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite, no dependencies. The interface and the docs are in Russian.* ／ - **Ничего лишнего.** Один файл Python без зависимостей и SQLite, около 15 МБ памяти; страница без внешних ／ |Сервер: HTTPS, API, страница, SQLite, копия базы раз в сутки — одна программа на стандартной библиотеке|`server/pult_server.py`|",
+     "lines": [
+      9,
+      31,
+      167
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 作为自身的数据存储，是一个独立的看板应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU AGPL v3 或更新版本",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLite, no dependencies. The interface and the docs are in Russian.* ／ |Сервер: HTTPS, API, страница, SQLite, копия базы раз в сутки — одна программа на стандартной библиотеке|`server/pult_server.py`|",
+   "evidence_lines": [
+    9,
+    167
+   ]
+  },
+  "fn": "ArtYudin89/pult",
+  "sha": "a16b1cc26761",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

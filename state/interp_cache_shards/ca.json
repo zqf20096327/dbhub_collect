@@ -10434,5 +10434,92 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6d6bbdd2d1bd": {
+  "identity": {
+   "one_liner": "备份恢复演练工具：自动还原备份到临时容器并生成审计报告",
+   "review": "restoredrill 是一个 CLI 工具，用于验证 PostgreSQL 和 MySQL 备份是否可成功恢复：取最新备份、还原进一次性 Docker 容器、运行用户定义的检查、生成含还原时间的 JSON 报告，支持 Prometheus/Slack/webhook 通知与 CI 定时任务。面向需要留存恢复演练证据以满足 SOC 2、ISO 27001 等合规审计的运维与 DevOps 人员。当前仅支持 PostgreSQL 及 MySQL 8 的 mysqldump 文件，不支持 MariaDB。",
+   "highlights": [
+    "支持将 pg_dump/mysqldump 备份自动还原到一次性容器并运行分层检查（预检、结构、读路径、RTO、环境）",
+    "生成含时间戳与全部字段的 JSON 审计报告，支持 RPO 新鲜度检查与 RTO 目标追踪",
+    "提供 Prometheus 指标、Slack/webhook 通知输出，并可通过 GitHub Action 在 CI 中运行"
+   ],
+   "use_cases": [
+    "定期自动验证备份可恢复性，为 SOC 2 / ISO 27001 / AWS FTR 审计提供证据报告",
+    "在 CI 或定时任务中运行恢复演练，失败时通过退出码和通知告警"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Untested backups aren't backups.** restoredrill proves your PostgreSQL and MySQL backups actually restore. It fetches the latest backup, restores it into a throwaway container, runs checks you define, and writes a JSON report with the restore time. Or, if so ／ > Status: v0.4.2, early days. Postgres, plus MySQL 8 from `mysqldump` files. Things may still change. ／ - A PostgreSQL backup: a `pg_dump -Fc` archive or a plain SQL dump, on the local disk or in S3 (the `aws` CLI is required for an S3 source); or a pgbackrest repository (see `examples/pgbackrest.yml`); or an already-restored database that another tool produced (`psql` is required on the host; see `examples/existing-connection.yml`)",
+     "lines": [
+      3,
+      5,
+      83
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Untested backups aren't backups.** restoredrill proves your PostgreSQL and MySQL backups actually restore. It fetches the latest backup, restores it into a throwaway container, runs checks you define, and writes a JSON report with the restore time. Or, if so ／ > Status: v0.4.2, early days. Postgres, plus MySQL 8 from `mysqldump` files. Things may still change. ／ 2. **Structural**: did the restore finish, are enough tables there, and are sequences in sync with their tables. On MySQL, whether any view, trigger, event or routine came back with a `DEFINER` account that doesn't exist. ／ - Or a MySQL backup: a plain SQL `mysqldump` file, on the local disk or in S3 (see `examples/mysql.yml`)",
+     "lines": [
+      3,
+      5,
+      51,
+      84
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "Databasus is a solid self-hosted backup platform for Postgres, MySQL, MariaDB, and MongoDB, with a full web UI and restore verification built in. If you want one dashboard managing backups across several database engines, start there. BackupDrill does somethin ／ - MySQL support covers only MySQL 8 and a plain `mysqldump` SQL file. restoredrill does not support MariaDB, a compressed dump, a physical backup tool such as XtraBackup, or point-in-time recovery. Every check runs against the single database named in `mysql.d",
+     "lines": [
+      21,
+      117
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为 PostgreSQL/MySQL 备份的恢复验证提供服务，属于数据库生态的运维工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Untested backups aren't backups.** restoredrill proves your PostgreSQL and MySQL backups actually restore. It fetches the latest backup, restores it into a throwaway container, runs checks you define, and writes a JSON report with the restore time. Or, if something else already restored a copy for you, it can just connect and run the same checks against that instead. ／ > Status: v0.4.2, early days. Postgres, plus MySQL 8 from `mysqldump` files. Things may still change.",
+   "evidence_lines": [
+    3,
+    5
+   ]
+  },
+  "fn": "ahmadpiran/restoredrill",
+  "sha": "6d6bbdd2d1bd",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

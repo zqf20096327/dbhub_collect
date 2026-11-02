@@ -11986,5 +11986,250 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5071c8a20497": {
+  "identity": {
+   "one_liner": "开源自托管 CRM，内置 MCP 服务器供 AI 代理读写数据",
+   "review": "Relaticle 是一个自托管 CRM 应用，管理公司、联系人、商机、任务等数据，通过内置 MCP 服务器和 REST API 让 Claude、ChatGPT 等 AI 代理读取和更新 CRM 数据。基于 Laravel/Filament 构建，使用 PostgreSQL 存储，面向无需销售团队的小团队，采用 Docker 自托管部署。",
+   "highlights": [
+    "提供 MCP 服务器与 REST API，支持 AI 代理对 CRM 数据的完整 CRUD 操作",
+    "支持自定义字段与记录间关联，字段级加密，无需迁移",
+    "多工作区数据隔离与基于角色的权限控制"
+   ],
+   "use_cases": [
+    "无专职销售团队的小团队管理客户与商机",
+    "将 AI 代理接入自有客户数据进行分析与更新",
+    "需要数据自托管的隐私敏感型 CRM 使用场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The fastest way to self-host. Six containers: the app, a queue worker, a scheduler, a websocket server, PostgreSQL, and Redis. ／ - PostgreSQL 17+",
+     "lines": [
+      48,
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是用 PostgreSQL 存数据的 CRM 应用，数据库仅作为其存储依赖。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，packages/Cloud 部分另有自己的许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Relaticle is a self-hosted CRM your AI agents can work in. Connect Claude, ChatGPT, or an open-source model over MCP to read, write, and analyze your CRM data. Custom fields, REST API, and multi-workspace isolation. ／ The fastest way to self-host. Six containers: the app, a queue worker, a scheduler, a websocket server, PostgreSQL, and Redis.",
+   "evidence_lines": [
+    25,
+    48
+   ]
+  },
+  "fn": "relaticle/relaticle",
+  "sha": "5071c8a20497",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "10786c15d4d6": {
+  "identity": {
+   "one_liner": "开源 agentic 运维平台，AI 代理跨云、K8s 与数据库执行运维",
+   "review": "Nudgebee 是一个自托管的开源智能体运维平台，为云、SRE、DevOps 与 FinOps 团队提供事故调查、成本优化、Kubernetes/云操作与数据库诊断代理。代理可在 Temporal 上运行带审批门控的 runbook，支持接入 Slack/Teams 等渠道，并允许自带 LLM 模型。采用 BSL 1.1 许可，通过 Docker Compose 或 Helm 部署。",
+   "highlights": [
+    "提供针对 Postgres、MySQL、SQL Server、Oracle、ClickHouse 的数据库诊断代理",
+    "支持在 Temporal 上运行带审批门控的 runbook 自动化",
+    "支持自托管部署与自带 LLM 模型，配置变更与运行记录写入审计日志"
+   ],
+   "use_cases": [
+    "对 Postgres/MySQL 等数据库进行自动化诊断",
+    "通过审批门控 runbook 自动化重复性运维操作",
+    "Kubernetes 与多云环境的运维与成本优化"
+   ],
+   "use_cases_truncated": false
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Diagnose databases** — agents for Postgres, MySQL, SQL Server, Oracle and ClickHouse, plus a Redis tool.",
+     "lines": [
+      19
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Diagnose databases** — agents for Postgres, MySQL, SQL Server, Oracle and ClickHouse, plus a Redis tool.",
+     "lines": [
+      19
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **Diagnose databases** — agents for Postgres, MySQL, SQL Server, Oracle and ClickHouse, plus a Redis tool.",
+     "lines": [
+      19
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Diagnose databases** — agents for Postgres, MySQL, SQL Server, Oracle and ClickHouse, plus a Redis tool.",
+     "lines": [
+      19
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **Diagnose databases** — agents for Postgres, MySQL, SQL Server, Oracle and ClickHouse, plus a Redis tool.",
+     "lines": [
+      19
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server",
+    "ClickHouse"
+   ],
+   "eco": "tool",
+   "eco_why": "平台包含专门的数据库诊断代理，为数据库生态提供服务，而非仅以数据库存储自身数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BSL 1.1",
+   "install": [
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The open-source agentic ops platform for cloud, SRE, DevOps, support and FinOps teams: self-hosted, on your own models. ／ Nudgebee puts AI agents to work on your team's repeatable ops work, across incidents, cost, Kubernetes, cloud and databases, with guardrails that make them safe to run in production. ／ - **Diagnose databases** — agents for Postgres, MySQL, SQL Server, Oracle and ClickHouse, plus a Redis tool.",
+   "evidence_lines": [
+    3,
+    14,
+    19
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "nudgebee/nudgebee",
+  "sha": "10786c15d4d6",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "65b390ccd717": {
+  "identity": {
+   "one_liner": "包含认证、客户端、审计服务与 PostgreSQL 的 Docker Compose 应用集",
+   "review": "这是一个容器化的多服务工作区，包含 Node.js 认证服务、两个 Spring Boot 服务（客户端与审计）以及一个 PostgreSQL 数据库，通过 Docker Compose 一键构建、启动和停止。面向需要本地运行该应用栈的开发者，数据库 schema 由 SQL 脚本初始化，服务间通过环境变量与共享 JWT 密钥连接。",
+   "highlights": [
+    "提供 Docker Compose 一键构建与启动全部服务",
+    "使用 PostgreSQL 存储数据，schema 与测试数据由 SQL 脚本初始化",
+    "提供认证、行情报价与审计等服务端点"
+   ],
+   "use_cases": [
+    "本地容器化运行认证/行情/审计微服务栈",
+    "基于 PostgreSQL 的应用开发与测试环境搭建"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- postgres (PostgreSQL, port 5432)",
+     "lines": [
+      7
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是一组业务服务及存储数据的 PostgreSQL 实例，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This workspace now includes Docker support for: ／ - postgres (PostgreSQL, port 5432) ／ - Database schema/data is initialized from:",
+   "evidence_lines": [
+    3,
+    7,
+    38
+   ]
+  },
+  "fn": "nathanwoohooyay/tidbits",
+  "sha": "65b390ccd717",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

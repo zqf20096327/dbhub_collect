@@ -10944,5 +10944,86 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a4f32a235b5b": {
+  "identity": {
+   "one_liner": "荷兰租房市场自托管监控器，抓取多平台房源并多渠道推送告警",
+   "review": "FlatRadar 是一个可自托管的荷兰租房监控应用，抓取 Holland2Stay、OurDomain、OurCampus、Xior 等 7 个平台的房源，按用户的租金/面积/城市等过滤条件匹配后通过 Telegram、邮件、WhatsApp、iOS/Android 推送等渠道通知，并支持多用户、Holland2Stay 自动预订到支付页、Web/iOS/Android/桌面客户端。面向在荷兰找房的个人用户；数据存储使用 SQLite，提供 Docker 部署与源码运行两种方式。",
+   "highlights": [
+    "监控 7 个荷兰租房平台并按自定义过滤条件匹配房源",
+    "支持 Telegram、Email、WhatsApp、iMessage、iOS/Android 推送等多种通知渠道",
+    "支持多用户角色、Web 仪表盘及移动端/桌面客户端，Holland2Stay 可自动预订至支付页"
+   ],
+   "use_cases": [
+    "在荷兰找房时第一时间获知匹配房源",
+    "多用户共享自托管租房监控实例",
+    "Holland2Stay 房源自动预订流程加速"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "independent processes that share SQLite and use process-control requests for ／ docker exec h2s python -c \"import sqlite3; sqlite3.connect('data/listings.db').execute('VACUUM INTO ?', ('data/listings.db.bak.$(date +%Y%m%dT%H%M%S)',))\" ／ sqlite3.connect('data/listings.db').execute('VACUUM INTO \\\"data/backup.db\\\"')\"",
+     "lines": [
+      216,
+      228,
+      249
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用以 SQLite 存储抓取的房源数据（listings.db），数据库仅作为应用自身存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "independent processes that share SQLite and use process-control requests for ／ docker exec h2s python -c \"import sqlite3; sqlite3.connect('data/listings.db').execute('VACUUM INTO ?', ('data/listings.db.bak.$(date +%Y%m%dT%H%M%S)',))\"",
+   "evidence_lines": [
+    216,
+    228
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "751K/holland2stay-monitor",
+  "sha": "a4f32a235b5b",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

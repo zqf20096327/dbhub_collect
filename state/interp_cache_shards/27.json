@@ -11285,5 +11285,213 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f741cb29ba6f": {
+  "identity": {
+   "one_liner": "用深度学习与机器学习模型预测 NBA 比赛结果的 Python 项目",
+   "review": "该项目通过采集 NBA 比赛数据存入 SQLite，运行多个预测引擎（层级神经网络、Transformer、Ridge/XGBoost/MLP 及集成）生成让分与胜负预测，并以 Flask Web 应用和仪表盘展示预测与 Vegas 盘口对比。面向对 NBA 比赛预测感兴趣的个人用户，需自行下载 starter 数据库并通过 cron 或手动运行数据管道更新。",
+   "highlights": [
+    "自动化每日管道采集比赛数据、box scores、play-by-play、伤病报告和盘口并存入 SQLite 数据库",
+    "包含多个预测引擎：分层神经网络、Transformer、Ridge/XGBoost/MLP 模型及等权集成",
+    "提供 Flask Web 应用与仪表盘，展示预测并与 Vegas 盘口及实际结果对比"
+   ],
+   "use_cases": [
+    "NBA 比赛结果与让分预测",
+    "多模型预测表现的持续跟踪与回测"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* **Data Collection** — Automatically collects game data, box scores, play-by-play, injury reports, and betting lines from the NBA API, ESPN and Covers into a SQLite database. ／ Download `NBA_AI_starter.sqlite.gz` from GitHub Releases into the project root, then extract it: ／ python -c \"import gzip, shutil; shutil.copyfileobj(gzip.open('NBA_AI_starter.sqlite.gz','rb'), open('data/NBA_AI_starter.sqlite','wb'))\"",
+     "lines": [
+      19,
+      87,
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统将比赛数据采集存入 SQLite 数据库并由 Web 应用读取展示，SQLite 是其存储数据的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* **Data Collection** — Automatically collects game data, box scores, play-by-play, injury reports, and betting lines from the NBA API, ESPN and Covers into a SQLite database. ／ The system runs a fully automated daily pipeline that collects game data, updates player ability models, and generates pre-game predictions for all upcoming games using multiple prediction engines. A Flask web app displays predictions alongside Vegas lines, with a dashboard for tracking model performance over time.",
+   "evidence_lines": [
+    19,
+    13
+   ]
+  },
+  "fn": "NBA-Betting/NBA_AI",
+  "sha": "f741cb29ba6f",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b66b62be908f": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的 MCP 工具服务器，提供 40 个工具",
+   "review": "agent-tool 是一个 MCP 协议工具服务器，为 Claude Code、Cursor、Codex 等 AI 代理提供编码感知的文件读写、二进制静态分析与反编译、DAP 调试、SSH/SFTP、进程管理、MySQL/MariaDB 查询、Redis 命令等 40 个工具，通过 profile 机制按需暴露工具以控制上下文体积。适用于需要扩展代理本机操作能力的开发者。",
+   "highlights": [
+    "将 40 个工具打包为单一二进制，通过 compact profile 按需暴露工具 schema",
+    "提供编码感知的文件读写与静态二进制分析、DAP 调试器、进程内存工具",
+    "内置 MySQL/MariaDB SQL 查询工具与 Redis 命令工具"
+   ],
+   "use_cases": [
+    "为 AI 编码代理扩展 SSH、文件、网络、调试等本机操作能力",
+    "让代理直接执行 MySQL/MariaDB 查询和 Redis 命令",
+    "二进制逆向分析与反编译工作流"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Too many separate tools**: Making the agent find, install, and configure Redis CLI, MySQL client, SSH client, etc. is tedious and error-prone. agent-tool bundles 40 tools into one binary and exposes them on demand through compact profiles. ／ Common compact operations include SSH execution, MySQL queries, file copy, Windows ／ |**MySQL**|Execute SQL queries on MySQL/MariaDB. Table-formatted SELECT results with configurable row/column/cell/total-output limits; affected rows for DML. Use SQL LIMIT/OFFSET for paging|✅|",
+     "lines": [
+      17,
+      40,
+      80
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**MySQL**|Execute SQL queries on MySQL/MariaDB. Table-formatted SELECT results with configurable row/column/cell/total-output limits; affected rows for DML. Use SQL LIMIT/OFFSET for paging|✅|",
+     "lines": [
+      80
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "The existing `analyze` tool can save user comments and labels in SQLite with",
+     "lines": [
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 AI 代理服务并包含 MySQL/MariaDB 查询、Redis 命令等数据库访问工具的组件，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MCP (Model Context Protocol) tool server for AI coding agents. ／ - **Too many separate tools**: Making the agent find, install, and configure Redis CLI, MySQL client, SSH client, etc. is tedious and error-prone. agent-tool bundles 40 tools into one binary and exposes them on demand through compact profiles. ／ |**MySQL**|Execute SQL queries on MySQL/MariaDB. Table-formatted SELECT results with configurable row/column/cell/total-output limits; affected rows for DML. Use SQL LIMIT/OFFSET for paging|✅|",
+   "evidence_lines": [
+    9,
+    17,
+    80
+   ]
+  },
+  "fn": "knewstimek/agent-tool",
+  "sha": "b66b62be908f",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c60e75e1f55a": {
+  "identity": {
+   "one_liner": "OpenStreetMap 地理对象库（GOL）的构建与管理命令行工具",
+   "review": "GeoDesk 的 GOL 命令行工具，用于从 .osm.pbf 文件构建 Geo-Object Library（GeoDesk 为 OpenStreetMap 要素定义的紧凑数据库格式），支持 GOQL 查询并导出 CSV、GeoJSON 等多种格式，还可生成地图。适合需要离线管理、查询和导出 OSM 数据的开发者与 GIS 用户；以单个可执行文件发布，也可从源码构建。",
+   "highlights": [
+    "提供从 OpenStreetMap .osm.pbf 数据构建 GOL 库的 gol build 命令",
+    "支持 GOQL 查询并导出 CSV、GeoJSON 等多种格式",
+    "提供 gol map 命令在地图上展示查询结果"
+   ],
+   "use_cases": [
+    "从 OSM PBF 数据构建本地地理对象库",
+    "按标签条件查询 OSM 要素并导出为 CSV/GeoJSON",
+    "将查询结果在地图上可视化"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "该工具用于构建和管理 GeoDesk 自有的 Geo-Object Library 数据库格式，为地理空间/OSM 生态服务，而非使用某个数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Build and manage Geo-Object Libraries (GeoDesk's compact database format for OpenStreetMap features). ／ `gol` is a single self-contained executable. Simply download and unzip. ／ gol build france france-latest.osm.pbf",
+   "evidence_lines": [
+    3,
+    9,
+    16
+   ]
+  },
+  "fn": "clarisma/geodesk-gol",
+  "sha": "c60e75e1f55a",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

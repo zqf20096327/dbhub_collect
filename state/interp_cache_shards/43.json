@@ -10666,5 +10666,72 @@
   "generated_at": "2026-11-01",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "519d0fd52622": {
+  "identity": {
+   "one_liner": "Mesh 网络桌面客户端，内置 SQLite 本地历史存储",
+   "review": "这是一个基于 Electron 的跨平台桌面客户端，用于连接 Meshtastic、MeshCore 和 Reticulum 三种 RF mesh 网络协议栈，支持 BLE、USB 串行、Wi-Fi/TCP、MQTT 等传输方式。它使用本地 SQLite 数据库持久化消息与节点历史（保留期可配置），并提供路由诊断、信道配置、远程管理等功能，面向桌面端 mesh 网络用户及应急通信（EMCOMM）场景。",
+   "highlights": [
+    "支持 Meshtastic、MeshCore、Reticulum 三种协议栈，可通过协议切换器在一台桌面应用内切换使用",
+    "使用本地 SQLite 数据库保存消息和节点历史，保留期限可配置",
+    "支持 BLE、USB 串行、Wi-Fi/TCP、MQTT 等多种传输方式，并提供路由诊断功能"
+   ],
+   "use_cases": [
+    "桌面端管理 Meshtastic/MeshCore/Reticulum mesh 网络节点与信道",
+    "需要跨重启保留消息与节点历史并支持路由诊断的 mesh 网络使用场景",
+    "通过 MQTT 网关与 RF mesh 混合组网及应急通信（EMCOMM）场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "With a dedicated local SQLite database, Mesh-Client keeps message and node history across restarts, subject to configurable retention limits. Diagnostic logs are stored separately in rotating local files. It provides one reliable hub for Meshtastic, MeshCore,  ／ - **Durable message history:** Local SQLite storage with configurable retention limits.",
+     "lines": [
+      32,
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其为使用 SQLite 本地存储数据的桌面客户端应用，SQLite 仅作为应用内嵌存储而非被服务的数据库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Cross-platform **Electron** desktop client for **Meshtastic**, **MeshCore**, and **Reticulum (LXMF)** on **macOS**, **Linux**, and **Windows** — **BLE**, **USB serial**, **Wi-Fi/TCP**, **MQTT**, local **SQLite** history, **routing diagnostics**, **16-language UI**, plus a Ratspeak-compatible Reticulum sidecar (**Games**, **encrypted paper**, **LXST voice**, Nomad, RRC, Remote). EMCOMM support via MECP & TAK. ／ With a dedicated local SQLite database, Mesh-Client keeps message and node history across restarts, subject to configurable retention limits. Diagnostic logs are stored separately in rotating local files. It provides one reliable hub for Meshtastic, MeshCore, and Reticulum (via an AGPL Rust sidecar), delivering a unified workflow regardless of protocol or hardware. ／ - **Durable message history:** Local SQLite storage with configurable retention limits.",
+   "evidence_lines": [
+    3,
+    32,
+    36
+   ]
+  },
+  "fn": "Colorado-Mesh/mesh-client",
+  "sha": "519d0fd52622",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

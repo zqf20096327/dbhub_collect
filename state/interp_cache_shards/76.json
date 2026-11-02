@@ -10996,5 +10996,272 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "564d34cad9f3": {
+  "identity": {
+   "one_liner": "《寂静岭》系列逆向工程与文件格式文档仓库",
+   "review": "该仓库为《寂静岭》系列的逆向工程中心库，提供游戏文件格式文档及提取、查看游戏资源（3D 模型、纹理、归档、音频）的脚本与工具，覆盖 010 Editor 二进制模板、Noesis/QuickBMS 脚本、解密工具和 DWARF 调试头文件。面向逆向工程研究者与 mod 制作者使用；与数据库本身无直接关系。",
+   "highlights": [
+    "提供多款工具（010 Editor、Noesis、QuickBMS、3D Model Researcher）的解析脚本，用于提取和查看游戏资产",
+    "包含 Silent Hill 1 overlay 解密工具，使用基于 XOR 的线性同余生成器",
+    "收录 demo/原型列表、论坛/wiki 知识存档及相关 GitHub 仓库清单等文档资料"
+   ],
+   "use_cases": [
+    "逆向分析《寂静岭》系列游戏的文件格式",
+    "提取、预览和转换游戏 3D 模型与纹理资产",
+    "查找系列 demo/原型及社区工具资源"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未描述任何与数据库生态相关的服务或依赖，仅为主题标签含 database 的游戏逆向工程仓库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A central repository for **Silent Hill** series reverse engineering, file format documentation, and modding tools. ／ - Provide tools and scripts for extracting and viewing game assets (3D models, textures, archives, audio) ／ Binary template scripts written in a **C-like** language for **010 Editor**, a hex editor. These templates overlay raw binary data with named fields, allowing you to inspect and understand Silent Hill file formats directly. They also serve as file format specifications.",
+   "evidence_lines": [
+    3,
+    8,
+    17
+   ]
+  },
+  "fn": "Sparagas/Silent-Hill",
+  "sha": "564d34cad9f3",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "60f4d2b6075f": {
+  "identity": {
+   "one_liner": "本地 AI 编程代理历史索引与检索桌面应用，基于 SQLite + FTS5/sqlite-vec",
+   "review": "这是一个本地优先的桌面应用，把 Claude Code、Codex、Cursor、Gemini CLI 等 12 个 AI 编程工具的会话记录索引进一个本地 SQLite 库，提供关键词（FTS5/BM25）与设备端语义向量（sqlite-vec）融合检索、RAG 问答、MCP server、CLI 与 VS Code 扩展。面向使用多个 AI 编程代理的开发者。数据全部留在本机，License 为 AGPL-3.0，Linux 需 glibc 2.38+。",
+   "highlights": [
+    "将 12 种 AI 编程代理的会话索引到单一本地 SQLite 存储，支持混合排序检索（FTS5/BM25 + sqlite-vec KNN + RRF）",
+    "内置 MCP server、CLI（cal）与 VS Code/Cursor 扩展，支持代理读写记忆、会话快照与 thread→commit 关联",
+    "本地运行嵌入模型（fastembed bge-small-en-v1.5），索引不出本机，密钥存 OS keychain"
+   ],
+   "use_cases": [
+    "跨多个 AI 编程工具统一检索和回顾历史会话与决策",
+    "通过 MCP/钩子向代理注入项目记忆与过往决策",
+    "审计 PR 时回溯变更背后的会话来源（cal audit-pr）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Indexes** every conversation from 12 coding agents into one local SQLite store: Claude Code, Codex, Cursor, Gemini CLI, Qwen Code, Goose, OpenCode, Continue, Cline, Roo Code, Kilo Code, and Copilot Chat (the built-in chat panel of VS Code, Cursor, VSCodium ／ - **Searches** them with hybrid ranking: keyword (SQLite FTS5 / BM25) fused with on-device semantic similarity (sqlite-vec KNN, no cloud) via Reciprocal Rank Fusion. Filter by source, project, subagents, starred, and tags. ／ - **Store/search:** bundled SQLite + FTS5 (`rusqlite`); on-device embeddings via `fastembed` (bge-small-en-v1.5, 384-dim); KNN in SQL via `sqlite-vec` (vec0)",
+     "lines": [
+      28,
+      29,
+      51
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用内置 SQLite 作为自身索引存储，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> **Local index & search for your AI coding-agent threads** across **12 tools** (Claude Code, Codex, Cursor, Gemini CLI, Qwen Code, Goose, OpenCode, Continue, Cline, Roo Code, Kilo Code, Copilot Chat), plus a provider-agnostic chat, an MCP server, a CLI, and a VS Code / Cursor extension. Your history stays on your machine. ／ - **Indexes** every conversation from 12 coding agents into one local SQLite store: Claude Code, Codex, Cursor, Gemini CLI, Qwen Code, Goose, OpenCode, Continue, Cline, Roo Code, Kilo Code, and Copilot Chat (the built-in chat panel of VS Code, Cursor, VSCodium and Windsurf). Adding another source is a small, documented contract. ／ - **Store/search:** bundled SQLite + FTS5 (`rusqlite`); on-device embeddings via `fastembed` (bge-small-en-v1.5, 384-dim); KNN in SQL via `sqlite-vec` (vec0)",
+   "evidence_lines": [
+    10,
+    28,
+    51
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "BetaBots-LLC/callimachus",
+  "sha": "60f4d2b6075f",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "58fb646bb84b": {
+  "identity": {
+   "one_liner": "基于 Blazor 与 PostgreSQL 的 .NET 电商起始应用",
+   "review": "BlazorShop 是一个 .NET 10 电商起始项目与参考应用，包含 SSR 店面、Blazor WebAssembly 顾客/管理端工作区、ASP.NET Core Web API，使用 EF Core + PostgreSQL 持久化，支持 Stripe 等支付、目录管理、订单跟踪与 Docker Compose 部署。面向希望搭建 .NET 在线商店的开发者与中小商家，README 记录了 RC 审计为 NO-GO，生产就绪门槛未完成。",
+   "highlights": [
+    "提供服务端渲染店面、Blazor WebAssembly 顾客/管理端工作区与 ASP.NET Core Web API",
+    "使用 EF Core 10 + PostgreSQL 持久化，含目录、购物车、订单与 Stripe 支付流程",
+    "提供 Docker Compose 生产部署、Aspire 编排、OpenTelemetry 可观测性与 GitHub Actions CI"
+   ],
+   "use_cases": [
+    "为 .NET/Blazor 电商项目寻找参考架构的开发者",
+    "需要起步模板的中小商家线上商店",
+    "学习 ASP.NET Core、EF Core、PostgreSQL 与分层架构的实践项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "BlazorShop is an open-source, opinionated .NET 10 e-commerce starter and reference application built with ASP.NET Core, Blazor, PostgreSQL, and Microsoft Aspire. It combines a server-rendered public storefront, a Blazor WebAssembly customer/admin workspace, an",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明该电商应用使用 PostgreSQL 作为持久化存储，数据库仅为应用的数据存储依赖。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "BlazorShop is an open-source, opinionated .NET 10 e-commerce starter and reference application built with ASP.NET Core, Blazor, PostgreSQL, and Microsoft Aspire. It combines a server-rendered public storefront, a Blazor WebAssembly customer/admin workspace, an ASP.NET Core Web API, production Docker deployment, and an isolated live demo. ／ - Entity Framework Core 10 + PostgreSQL ／  - Production Docker Compose deployment with separate Storefront, Web, API, and PostgreSQL services",
+   "evidence_lines": [
+    5,
+    85,
+    66
+   ]
+  },
+  "fn": "unrealbg/BlazorShop",
+  "sha": "58fb646bb84b",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "456f92f76068": {
+  "identity": {
+   "one_liner": "静态网站自托管评论系统，单文件 SQLite 存储",
+   "review": "这是一个为静态网站提供评论功能的自托管服务，通过一行 script 标签嵌入，支持 Markdown、三级嵌套回复、垃圾评论过滤、邮件通知和管理后台审核。数据存于单个 SQLite 文件，无需独立数据库服务器。适合想自持评论数据的静态站点（Ghost/Hugo/Jekyll 等）作者部署使用。",
+   "highlights": [
+    "提供 script 标签嵌入的评论组件，支持 Markdown 与三级嵌套回复",
+    "使用单文件 SQLite 存储全部数据，无需数据库服务器",
+    "内置蜜罐反垃圾、屏蔽词队列审核与加密存储的 SMTP 邮件通知"
+   ],
+   "use_cases": [
+    "为静态博客或文档站添加评论功能",
+    "需要自托管并完全掌控评论数据的场景",
+    "多域名站点集中管理评论区"
+   ],
+   "personas": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**SQLite, no database server**|Everything lives in a single file on your machine. Nothing to provision, nothing to pay for, trivial to back up.|",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是评论系统应用，使用 SQLite 存储自身数据，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**SQLite, no database server**|Everything lives in a single file on your machine. Nothing to provision, nothing to pay for, trivial to back up.| ／  Self-hosted comments for static sites. One script tag. Your data, your server, no subscriptions.",
+   "evidence_lines": [
+    21,
+    2
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "karthikeyankc/discuss",
+  "sha": "456f92f76068",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

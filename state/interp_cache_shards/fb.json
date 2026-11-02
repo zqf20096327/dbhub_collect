@@ -10961,5 +10961,61 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d8d3b026b78f": {
+  "identity": {
+   "one_liner": "CVE PoC/漏洞利用索引聚合库，每日归一化多源威胁情报为 JSON 数据集",
+   "review": "该仓库每 24 小时从 CVEProject/cvelistV5、Nuclei、ExploitDB、Metasploit、CISA KEV 等来源聚合并去重漏洞与 PoC 数据，输出压缩 JSON 索引，可通过 curl 直接下载后用 jq 等本地工具查询。面向 SOC 团队、渗透测试与漏洞研究人员；README 明确针对 RAG/LLM 检索场景做了 token 压缩设计。",
+   "highlights": [
+    "每日通过 GitHub Actions 聚合 CVE、ExploitDB、Nuclei、CISA KEV 等多源数据并去重归一化",
+    "提供 minified JSON 格式数据集，可直接 curl 下载、无需 API 密钥",
+    "内置 0-100 漏洞风险评分（基于 KEV、EPSS、CVSS、PoC 证据等）"
+   ],
+   "use_cases": [
+    "漏洞研究与 PoC 检索",
+    "SOC/威胁情报团队的 CVE 风险评估",
+    "RAG/LLM 威胁情报数据源"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "该仓库是漏洞情报数据索引，与数据库生态无适配或存储依赖证据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SecureWithUmer/Exploit-Index** is the world's premier, zero-API aggregated index of Common Vulnerabilities and Exposures (CVEs) containing **150,000+ Verified Exploits and Proof of Concept (PoC) scripts for research all in one place**. Designed for elite SOC teams, DevSecOps engineers, Penetration Testers, and AI-driven Threat Intelligence systems, it completely replaces manual searches by normalizing and deduplicating global offensive security data into a single, high-performance canonical source. ／ Our fault-tolerant GitHub Actions workflow passively aggregates and normalizes exploit intelligence spanning from **1999 to 2027** every 24 hours without hitting API rate limits. ／ Designed for terminal operators, bug bounty hunters, and red teamers. Query our PoC datasets locally using raw standard tools—no API keys required.",
+   "evidence_lines": [
+    21,
+    65,
+    85
+   ]
+  },
+  "fn": "SecureWithUmer/Exploit-Index",
+  "sha": "d8d3b026b78f",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

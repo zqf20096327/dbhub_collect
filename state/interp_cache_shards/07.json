@@ -11456,5 +11456,177 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "312d6df1a5a5": {
+  "identity": {
+   "one_liner": "面向语义查询处理引擎的多模态基准测试框架",
+   "review": "SemBench 是针对语义查询处理引擎的基准测试套件，覆盖 5 个真实场景、55 条查询，涉及表格、文本、图像、音频多模态数据与语义过滤/连接/映射等算子。提供自动数据集下载、多模态数据库生成和按系统隔离的环境安装脚本，并维护在线排行榜。面向语义查询系统的研究者与开发者，用于评测质量、成本、效率和内存指标。",
+   "highlights": [
+    "提供 5 个场景、55 条覆盖文本/图像/音频/表格模态的基准查询",
+    "支持 LOTUS、Palimpzest、ThalamusDB、CAESURA、FlockMTL、BigQuery 等系统的标准化评测接口",
+    "自动化数据集下载、数据库生成与质量/成本/效率/内存指标评估"
+   ],
+   "use_cases": [
+    "评测基于 LLM 的语义查询处理系统",
+    "对比不同语义算子实现的准确率、成本与执行时间",
+    "扩展新系统接入统一基准与排行榜"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明其为评测语义查询系统的基准框架，自动生成数据库并运行评测，而非使用某个数据库存储自身数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SemBench is a benchmark targeting a novel class of systems: **semantic query processing engines**. Those systems rely inherently on generative and reasoning capabilities of state-of-the-art large language models (LLMs). They extend SQL with semantic operators, configured by natural language instructions, that are evaluated via LLMs and enable users to perform various operations on multimodal data. ／ - **System-agnostic Design**: Extensible and already supports LOTUS, Palimpzest, ThalamusDB, CAESURA, BigQuery, DuckDB FlockMTL ／ We understand that downloading datasets, generating databases, and setting up environments can be tedious—especially in the systems area, where each system often requires a unique setup. SemBench automates all of these steps for you! It automatically downloads datasets and generates multi-modal databases. Setting up environments for SemBench and four supported systems (LOTUS, Palimpzest, ThalamusDB, and BigQuery) takes just one script.",
+   "evidence_lines": [
+    33,
+    53,
+    43
+   ]
+  },
+  "fn": "SemBench/SemBench",
+  "sha": "312d6df1a5a5",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4c9dda18ef2d": {
+  "identity": {
+   "one_liner": "Oracle Cloud ARM 免费实例自动抢注脚本",
+   "review": "基于 OCI Python SDK 的自动化脚本，循环尝试创建 Oracle Cloud Always Free 的 ARM 实例（VM.Standard.A1.Flex），支持解析 main.tf 配置、退避重试和 Telegram 通知，通过 Docker Compose 运行，仅支持密钥登录方式。适用于想获取甲骨文免费 ARM 份额的用户。",
+   "highlights": [
+    "基于 OCI Python SDK 自动循环创建 VM.Standard.A1.Flex 实例",
+    "解析 main.tf 配置文件，支持退避重试与网络容错",
+    "支持 Telegram 通知，提供 Docker 部署方式"
+   ],
+   "use_cases": [
+    "抢注 Oracle Cloud Always Free ARM 免费实例",
+    "定时循环重试创建容量不足的 A1 实例",
+    "配合 Telegram 接收抢注成功/失败通知"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "该脚本基于 Oracle Cloud Infrastructure (OCI) Python SDK 开发，用于自动循环抢注 Oracle Cloud Always Free 免费阶梯的 ARM 架构实例（`VM.Standard.A1.Flex`）。支持自动解析 `main.tf` 配置文件、智能退避重试、网络容错与 Telegram 通知推送。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "脚本面向 Oracle Cloud 云资源创建，README 未涉及任何数据库的适配或使用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### Oracle ARM 抢注脚本 ／ 该脚本基于 Oracle Cloud Infrastructure (OCI) Python SDK 开发，用于自动循环抢注 Oracle Cloud Always Free 免费阶梯的 ARM 架构实例（`VM.Standard.A1.Flex`）。支持自动解析 `main.tf` 配置文件、智能退避重试、网络容错与 Telegram 通知推送。",
+   "evidence_lines": [
+    1,
+    3
+   ]
+  },
+  "fn": "slippersheepig/oracle_arm",
+  "sha": "4c9dda18ef2d",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7ebed5c6793b": {
+  "identity": {
+   "one_liner": "汇总2027法国总统大选民调数据的CSV/JSON数据集仓库",
+   "review": "该项目汇集2027年法国总统选举各民调机构的投票意愿数据，提供合并后的CSV文件与JSON数据流，含候选人、民调假设等结构化字段。社区通过提交CSV文件并经GitHub Actions自动校验与合并来贡献数据，使用pytest做本地验证。未使用数据库，仅以文件形式存储与分发数据。",
+   "highlights": [
+    "提供合并后的民调结果CSV文件与JSON数据流",
+    "通过GitHub Actions自动校验CSV格式与数据一致性并生成合并文件",
+    "定义候选人、民调元数据与结果的结构化CSV字段格式"
+   ],
+   "use_cases": [
+    "获取2027法国总统选举民调的汇总数据用于分析",
+    "以结构化CSV格式贡献新的民调数据"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README仅以CSV/JSON文件存储民调数据，未出现任何数据库的使用或服务证据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Deux fichiers principaux contiennent l'ensemble des résultats de sondages consolidés avec leurs métadonnées: ／ 4. Testez localement avec `pytest` et `python merge.py` (vérification locale avant PR) ／ GitHub Actions valide automatiquement :",
+   "evidence_lines": [
+    8,
+    45,
+    50
+   ]
+  },
+  "fn": "MieuxVoter/presidentielle2027",
+  "sha": "7ebed5c6793b",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

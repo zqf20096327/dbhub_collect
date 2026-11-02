@@ -9344,5 +9344,298 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a6867cbd2e28": {
+  "identity": {
+   "one_liner": "Waline：带后端部署的评论系统，支持多种数据库存储",
+   "review": "Waline 是一个带后端服务的评论系统，客户端与服务端分离部署，存储端支持 PostgreSQL、MySQL、SQLite、TiDB、MongoDB 等多种数据库，部署平台包括 Vercel、CloudBase、Docker 等。功能包含评论管理、邮件/微信/QQ/Telegram 通知、Akismet 反垃圾、IP 限频与关键词限制、社交登录等。适合博客等站点为其添加评论功能，需自行选择部署与存储服务。",
+   "highlights": [
+    "支持多种存储服务（PostgreSQL、MySQL、SQLite、TiDB、MongoDB、CloudBase、GitHub）与多种部署方式",
+    "提供评论管理、删除、置顶、点赞及 IP 限频、关键词限制、IP 黑名单等管理能力",
+    "集成 Akismet 与邮件、微信、QQ、Telegram 通知，支持 i18n 与自定义语言"
+   ],
+   "use_cases": [
+    "为博客或静态站点添加评论功能",
+    "需要评论反垃圾与内容审核的场景",
+    "多部署环境（Serverless/Docker/自托管）下自建评论后端"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|@waline/client|Vercel|PostgreSQL|",
+     "lines": [
+      31
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MiniValine|CloudBase|MySQL|",
+     "lines": [
+      32
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|sodesu|Baidu Cloud CFC|SQLite|",
+     "lines": [
+      33
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "||Alibaba Cloud FC|TiDB|",
+     "lines": [
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL/MySQL/SQLite/TiDB 列为存储选项，系统使用这些数据库存评论数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-2.0",
+   "install": [
+    "npm",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A simple comment system with backend support. ／ |@waline/client|Vercel|PostgreSQL| ／ |MiniValine|CloudBase|MySQL|",
+   "evidence_lines": [
+    11,
+    31,
+    32
+   ]
+  },
+  "fn": "walinejs/waline",
+  "sha": "a6867cbd2e28",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "612ecba86673": {
+  "identity": {
+   "one_liner": "Rust 库，实现 PostgreSQL 逻辑/物理复制协议解析与 WAL 流式消费",
+   "review": "pg-walstream 是一个 Rust 库，用于解析并流式消费 PostgreSQL 的逻辑与物理复制 WAL 数据，支持协议 v1-4、两阶段提交、并行流、快照接管与复制槽管理，默认用纯 Rust TLS 后端（可选 libpq）。面向需要在 Rust 应用中实现 CDC 或构建备用节点的开发者，以 crate 形式引入项目编译使用。",
+   "highlights": [
+    "实现 PostgreSQL 逻辑复制协议 v1-4 与物理复制流、BASE_BACKUP 命令",
+    "提供 serde 类型化行反序列化、快照接管（snapshot/capture_aligned）与按 LSN 截断回放",
+    "支持 rustls-tls 与 libpq 双连接后端，并提供 no_std 解析器构建（可编译到 wasm/嵌入式目标）"
+   ],
+   "use_cases": [
+    "在 Rust 服务中消费逻辑复制流实现 CDC 管道",
+    "构建备用节点或 PITR 场景的物理 WAL 流获取",
+    "基于初始快照加增量流的表数据同步"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A high-performance Rust library for PostgreSQL logical and physical replication protocol parsing and streaming. Provides a robust, type-safe interface for consuming PostgreSQL Write-Ahead Log (WAL) streams. ／ - **Full Logical Replication Support**: Implements PostgreSQL logical replication protocol versions 1-4",
+     "lines": [
+      10,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为消费 PostgreSQL 复制协议/WAL 流提供接口的 Rust 库，属于为 PostgreSQL 生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A high-performance Rust library for PostgreSQL logical and physical replication protocol parsing and streaming. Provides a robust, type-safe interface for consuming PostgreSQL Write-Ahead Log (WAL) streams. ／ - **Full Logical Replication Support**: Implements PostgreSQL logical replication protocol versions 1-4 ／ pg_walstream = \"0.10\"",
+   "evidence_lines": [
+    10,
+    14,
+    42
+   ]
+  },
+  "fn": "isdaniel/pg-walstream",
+  "sha": "612ecba86673",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "aa5ee05db1ea": {
+  "identity": {
+   "one_liner": "面向华为云Stack的Cloud Service Broker brokerpak，经OpenTofu开通服务",
+   "review": "这是一个 Cloud Service Broker 的 brokerpak 打包项目，通过内置的 OpenTofu 及 huaweicloud/hcs provider 二进制，在华为云 Stack (HCS 8.5.x) 离线环境中开通云服务，并将绑定凭据写入 Kubernetes Secret。面向在气隙私有云中使用 Kubernetes Service Catalog 的平台运维人员。README 显示目前 pak 仅随附 CSMS 密钥服务，PostgreSQL/GaussDB 等仅在项目简介中提及。",
+   "highlights": [
+    "以 brokerpak 形式捆绑 tofu 二进制与 provider，运行时无需访问 registry，适配气隙环境",
+    "通过 Open Service Broker API 与 Kubernetes Service Catalog 集成，绑定凭据以 Secret 返回",
+    "Terraform 模块通过 tofu validate 校验，broker 行为有集成测试覆盖"
+   ],
+   "use_cases": [
+    "在华为云 Stack 气隙环境中通过 K8s Service Catalog 自助开通服务",
+    "以声明式 ServiceInstance/ServiceBinding 方式管理 HCS 资源生命周期"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "personal_note": null
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是为 Cloud Service Broker 提供服务开通能力的 brokerpak 组件，本身不直接使用数据库存储数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A Cloud Service Broker (CSB) ／ - CSB executes the per-service Terraform (OpenTofu) modules shipped inside the brokerpak. ／  `.brokerpak` — no registry access is ever required, which is what makes this usable in",
+   "evidence_lines": [
+    3,
+    21,
+    24
+   ]
+  },
+  "fn": "alex-tw-lam/csb-brokerpak-hcs",
+  "sha": "aa5ee05db1ea",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1287a9eb3a91": {
+  "identity": {
+   "one_liner": "Harness DBDO 教程：用 Expand→Migrate→Contract 模式做向后兼容的 schema 变更",
+   "review": "这是一个 Harness DBDO 平台的教程仓库（Tidbit），演示电商场景下将 name 列拆分为 first_name/last_name 的向后兼容迁移：通过 Liquibase changeset 分 Expand/Migrate/Contract 四阶段流水线执行，配合 Harness FME 特性开关控制渐进发布与即时回滚，并用同步触发器保证 v1/v2 写入一致。面向使用 Harness Database DevOps 的开发者，依赖 PostgreSQL 与 Harness 账号。",
+   "highlights": [
+    "提供 Expand→Migrate→Contract 四阶段 Liquibase 迁移流水线及各阶段状态验证脚本",
+    "使用 Harness FME 特性开关控制渐进发布与免重新部署的即时回滚",
+    "包含同步触发器示例，保持迁移窗口内新旧列数据一致"
+   ],
+   "use_cases": [
+    "学习滚动部署期间新旧版本应用共存下的 schema 变更实践",
+    "在 Harness DBDO 中配置 Liquibase 迁移流水线与审批门禁",
+    "演示特性开关驱动的数据库 schema 渐进切换"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- A PostgreSQL database (local, cloud, or any managed provider) ／ Use any PostgreSQL database — local Docker, Neon, Supabase, RDS, or any managed provider.",
+     "lines": [
+      38,
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是一个使用 PostgreSQL 存数据的演示应用与教程，而非为数据库生态提供通用能力的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A backward-compatible schema change is a database migration that allows the old and new versions of an application to run against the same database simultaneously. During a rolling deployment, v1 and v2 pods are both live at the same time — the schema must work for both. ／ - **Harness DBDO pipeline** — four stages, each applying one Liquibase changeset with a shell script proving the DB state after each migration ／ - A PostgreSQL database (local, cloud, or any managed provider)",
+   "evidence_lines": [
+    7,
+    20,
+    38
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "harness-community/dbdo-tidbits-backward-compat-schema",
+  "sha": "1287a9eb3a91",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

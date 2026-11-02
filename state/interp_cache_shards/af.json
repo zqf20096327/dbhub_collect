@@ -11976,5 +11976,261 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fed663fedd28": {
+  "identity": {
+   "one_liner": "单人运营公司的 AI 辅助仪表盘应用，用 SQLite 本地存储",
+   "review": "FounderOS 是一个 Node.js/Next.js 单体应用，把客户、沟通、社媒、财务、AI 代理和知识图谱整合到一个本地仪表盘中，供单人运营公司使用；数据通过 better-sqlite3 存储在本地 SQLite 文件中，无需独立数据库服务器，默认绑定 127.0.0.1，可选设置操作员密码。",
+   "highlights": [
+    "通过 better-sqlite3 将数据存储在本地 data/ 目录的 SQLite 文件中，无需数据库服务器",
+    "内置演示模式（demo-data/），无需 API 密钥即可启动，可切换为自有工作区",
+    "支持集成 IMAP/SMTP、Slack、Notion、Stripe 等服务，并可用 Vercel AI Gateway 驱动代理对话"
+   ],
+   "use_cases": [
+    "单人运营者在统一仪表盘中管理客户、财务、社媒和任务",
+    "配置 AI 代理处理通信、内容工作流等部门事务",
+    "本地知识库搜索与公司上下文管理（可选 G-Brain CLI）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|SQLite through `better-sqlite3`, kept in local files under `data/` (your workspace) and `demo-data/` (the demo company)|",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明数据经 better-sqlite3 存入本地 SQLite 文件，该应用仅以 SQLite 作为自身存储层。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "FounderOS is a single Node.js app. There is no separate backend, database ／ |Storage|SQLite through `better-sqlite3`, kept in local files under `data/` (your workspace) and `demo-data/` (the demo company)|",
+   "evidence_lines": [
+    12,
+    20
+   ]
+  },
+  "fn": "Bennettxai/FounderOS",
+  "sha": "fed663fedd28",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5b8444beb137": {
+  "identity": {
+   "one_liner": "本地优先的图像提示词库应用，用 SQLite 存储提示词与图片",
+   "review": "这是一个本地运行的图像提示词管理应用，将图片连同提示词、标签、集合与备注保存在本地 SQLite 和本地文件中，无需账号；可选连接 ChatGPT 或 Grok 生成图像和建议标题。适合需要离线整理、检索和复用图像生成提示词的个人用户。",
+   "highlights": [
+    "使用本地 SQLite 和本地图片文件存储，无需账号即可保存、搜索和整理",
+    "支持集合、标签、关键词与结构化搜索（如 tag:/collection:/sort: 过滤）",
+    "可选 ChatGPT/Grok OAuth 连接，用于图像生成与标题建议，含模板变量提示词"
+   ],
+   "use_cases": [
+    "本地保存和管理 AI 生图提示词与图片素材",
+    "按集合与标签浏览、检索并复用提示词",
+    "通过已连接的 ChatGPT/Grok 账号从提示词生成图像"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Your library uses local SQLite and local image files. You do not need an account to save, search, or organize it. Optional ChatGPT and Grok connections let you generate images and suggest titles; those requests run on the provider's servers, not on your comput",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用使用本地 SQLite 存储其库数据，SQLite 是其数据存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later，示例数据与第三方素材另有许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Image Prompt Library** is a local-first app for saving images with their prompts, sources, and notes. Browse visually, organize cards into collections and tags, and find a prompt when you want to use it again. ／ Your library uses local SQLite and local image files. You do not need an account to save, search, or organize it. Optional ChatGPT and Grok connections let you generate images and suggest titles; those requests run on the provider's servers, not on your computer. ／ Application code is **AGPL-3.0-or-later**. See LICENSE and NOTICE. Sample data and third-party assets have separate licenses, listed above.",
+   "evidence_lines": [
+    10,
+    12,
+    143
+   ]
+  },
+  "fn": "EddieTYP/image-prompt-library",
+  "sha": "5b8444beb137",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d3cdddc389d8": {
+  "identity": {
+   "one_liner": "基于 Apache Beam 的 Rust 流式数据库",
+   "review": "FlareDB 是一个以 Rust 编写的流式数据库，以 Apache Beam 作为编程接口，运行 Beam SDK（Java/Python/Go/SQL）提交的批处理与流式管道。它采用统一的流与表架构，管道执行中 PCollection 在流与物化表状态之间转换，将数据处理与存储合并于单一系统。适合需要用 Beam 模型构建数据管道的开发者，通过 CLI 安装并启动本地实例，以 Runner SDK 提交作业。",
+   "highlights": [
+    "以 Apache Beam 为编程接口，支持 Java/Python/Go/SQL 编写的批处理与流式管道",
+    "统一的流与表架构，管道数据可在流与物化表状态间转换",
+    "提供 CLI（flare init/up/down）管理本地实例并接受管道作业"
+   ],
+   "use_cases": [
+    "构建批处理与流式数据管道",
+    "在单一系统中统一流处理与物化状态存储",
+    "使用 Beam SDK 开发并由 Rust 运行时执行管道"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "FlareDB 本身是一个流式数据库引擎/运行时，为 Beam 数据管道提供执行与存储，而非使用其他数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**FlareDB** is a streaming database for building and running batch and streaming data pipelines. It uses Apache Beam as its programming interface. Beam provides a rich programming model for writing batch and streaming data pipelines in Java, Python, Go and SQL, while FlareDB provides a Rust based runtime to execute pipelines written with Beam SDKs. ／ Its based on a unified streams-and-tables architecture. Streams represent data in motion, while tables represent that same data as materialized state. FlareDB brings these concepts together in a single engine. As pipelines execute, PCollections transition naturally between streams and materialized table state, allowing FlareDB to unify data processing and storage within a single system. ／ This command performs the initial setup by creating the required local directories and downloading the FlareDB binary and Apache Beam worker JAR.",
+   "evidence_lines": [
+    8,
+    10,
+    38
+   ]
+  },
+  "fn": "flare-db/flare-db",
+  "sha": "d3cdddc389d8",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "20b38d658345": {
+  "identity": {
+   "one_liner": "基于 Node/Express 与 MySQL 的 AI 个人记账应用",
+   "review": "FinAI 是一个全栈个人财务与支出追踪应用，前端用 React，后端为 Node.js/Express REST API，数据存于 MySQL（MySQL2 驱动），并通过 Groq AI 提供财务洞察与预算提醒。面向个人用户记录收支与预算；安装需自行配置 .env（数据库、JWT、Groq API key），README 未提供部署细节。",
+   "highlights": [
+    "提供用户注册登录（JWT 与 session 保护）与交易记录管理",
+    "使用 Groq AI 生成消费分析与财务建议",
+    "支持月度预算上限设置与超支告警"
+   ],
+   "use_cases": [
+    "个人收支与预算追踪",
+    "带 AI 洞察的财务仪表盘",
+    "交易历史查看与筛选"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "FinAI is a modern, full-stack personal finance and expense tracking application built using **React**, **Node.js/Express**, and **MySQL**. It leverages **Groq AI** to provide smart financial insights, automated budget tracking, and real-time transaction manage ／ - **MySQL** with MySQL2 ／ MySQL",
+     "lines": [
+      3,
+      31,
+      59
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用使用 MySQL 存储财务数据，MySQL 是其数据存储层。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "FinAI is a modern, full-stack personal finance and expense tracking application built using **React**, **Node.js/Express**, and **MySQL**. It leverages **Groq AI** to provide smart financial insights, automated budget tracking, and real-time transaction management. ／ - **MySQL** with MySQL2",
+   "evidence_lines": [
+    3,
+    31
+   ]
+  },
+  "fn": "ShubhamKumar-25/AI-Expense-Tracker",
+  "sha": "20b38d658345",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

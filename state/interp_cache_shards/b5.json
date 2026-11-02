@@ -11966,5 +11966,234 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fca79ceaa2dc": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，通过 COPY 读写 Parquet 文件",
+   "review": "pg_parquet 是一个 PostgreSQL 扩展，借助 pgrx 扩展 COPY 命令、基于 Apache Arrow 实现 Postgres 表与 Parquet 文件间的读写，支持 S3、Azure Blob、GCS、http(s)、本地文件及标准/程序流，并提供 schema 推断建表与 Parquet schema/元数据检查函数。面向需要在 Postgres 与 Parquet 生态间搬运数据的开发者与数据工程师；需从源码用 rustup/cargo-pgrx 构建，依赖 pgrx。",
+   "highlights": [
+    "通过 COPY TO/FROM 读写位于 S3、Azure Blob Storage、Google Cloud Storage、http(s) 端点或文件系统的 Parquet 文件",
+    "支持从 Parquet 文件推断列定义建表（definition_from/load_from）及 stdin/stdout、程序流传输",
+    "提供 parquet.schema/metadata/file_metadata/kv_metadata 函数查看 Parquet schema、列统计与自定义元数据"
+   ],
+   "use_cases": [
+    "将 Postgres 表/查询结果导出为 Parquet 文件用于数据交换",
+    "从 Parquet 文件导入数据到 Postgres 表（含类型转换与 schema 推断）",
+    "在 SQL 中检查 Parquet 文件的 schema 与统计元数据"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Ap",
+     "lines": [
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明其为扩展 PostgreSQL COPY 命令、为 Postgres 提供 Parquet 读写能力的扩展（L8）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Apache Arrow project to read and write Parquet files and pgrx project to extend PostgreSQL's `COPY` command. ／ ## Installation From Source",
+   "evidence_lines": [
+    8,
+    21
+   ]
+  },
+  "fn": "CrunchyData/pg_parquet",
+  "sha": "fca79ceaa2dc",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e38aeaa5a80d": {
+  "identity": {
+   "one_liner": "基于 Gradio 的 GPT 训练可视化平台，一键完成预训练与 SFT",
+   "review": "一个从 karpathy/nanoGPT 升级的可视化训练平台，通过 Gradio 图形界面完成数据处理、模型预训练、监督微调（SFT，支持 Alpaca 格式）、文本生成与模型对比，面向零基础学习者、研究者和开发者；支持字符级或自定义分词器、分布式训练、断点续训与中英双语界面，可用 Docker 或本地 Python 虚拟环境部署。",
+   "highlights": [
+    "提供图形界面完成数据处理、训练、推理、SFT 微调与模型对比",
+    "支持字符级分词与自定义分词器（如 Qwen）、多进程与分布式训练",
+    "支持 checkpoint 断点续训与 .txt/.jsonl 多种数据格式"
+   ],
+   "use_cases": [
+    "深度学习入门者体验 LLM 训练流程",
+    "研究者实验模型架构并做 SFT 微调",
+    "构建对话模型并进行交互式推理"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未声明使用任何数据库存储数据，topic 标签 database 无正文证据支撑。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A visualized training platform upgraded from karpathy/nanoGPT. Make GPT training fun and approachable! ／ - 📱 **Visual Interface** — Say goodbye to command line ／ ### Option 1: Docker Deployment (Recommended) 🐳",
+   "evidence_lines": [
+    19,
+    38,
+    62
+   ]
+  },
+  "fn": "ystemsrx/mini-nanoGPT",
+  "sha": "e38aeaa5a80d",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b5de67fbcd95": {
+  "identity": {
+   "one_liner": "text-to-SQL 权限感知 schema 选择工具，按调用者授权裁剪提示中的表清单",
+   "review": "schemagate 是一个 Python 库/CLI，用于在 text-to-SQL 流程中选择 schema：先按调用者的授权过滤可读表，再把裁剪后的 DDL 送入 LLM 提示，避免 RLS 静默过滤导致的误导性结果。面向构建 SQL agent 的开发者，支持 LangChain、LlamaIndex、MCP，适配 PostgreSQL、Oracle、MySQL、SQL Server 和 SQLite，通过 pip 或 Docker 安装。",
+   "highlights": [
+    "按调用者授权过滤表清单，受限表不进入 LLM 提示",
+    "内置离线选择器（BM25 加哈希嵌入器），不调用模型即可生成 schema 选择",
+    "提供 LangChain/LlamaIndex/MCP 集成、CLI、studio 页面及 Docker 镜像"
+   ],
+   "use_cases": [
+    "为多角色用户的 SQL agent 实现 schema 级访问控制",
+    "大 schema 下压缩 text-to-SQL 提示的 token 占用",
+    "在 MCP 服务或 LlamaIndex/LangChain 管道中接入授权感知的表选择"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Most text-to-SQL prompts carry the whole schema, and on a big database that is most of the prompt, on every question. schemagate sends the model only the tables the question needs: **91.1% fewer schema tokens (median) on databases with 50+ tables** (benchmark) ／ pip install 'schemagate[postgres]'     'schemagate[oracle]'",
+     "lines": [
+      17,
+      189
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Most text-to-SQL prompts carry the whole schema, and on a big database that is most of the prompt, on every question. schemagate sends the model only the tables the question needs: **91.1% fewer schema tokens (median) on databases with 50+ tables** (benchmark) ／ pip install 'schemagate[mssql]' 'schemagate[mysql]'",
+     "lines": [
+      17,
+      190
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "UniQL Oracle: 64.5% first try ／ pip install 'schemagate[postgres]' 'schemagate[oracle]'",
+     "lines": [
+      9,
+      189
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "pip install 'schemagate[mssql]' 'schemagate[mysql]'",
+     "lines": [
+      190
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Most text-to-SQL prompts carry the whole schema, and on a big database that is most of the prompt, on every question. schemagate sends the model only the tables the question needs: **91.1% fewer schema tokens (median) on databases with 50+ tables** (benchmark)",
+     "lines": [
+      17
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库生态提供 text-to-SQL 访问控制组件，本身不存数据，通过驱动适配多种数据库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Most text-to-SQL prompts carry the whole schema, and on a big database that is most of the prompt, on every question. schemagate sends the model only the tables the question needs: **91.1% fewer schema tokens (median) on databases with 50+ tables** (benchmark). It filters by the caller's grants first, so restricted tables are absent from the prompt rather than ranked low. Works with LangChain, LlamaIndex, MCP, or any SQL agent, on Postgres, Oracle, MySQL, SQL Server and SQLite. ／ pip install 'schemagate[postgres]'     'schemagate[oracle]' ／ pip install 'schemagate[mssql]'        'schemagate[mysql]'",
+   "evidence_lines": [
+    17,
+    189,
+    190
+   ]
+  },
+  "fn": "ashishsinha1602/schemagate",
+  "sha": "b5de67fbcd95",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

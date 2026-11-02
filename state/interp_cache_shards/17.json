@@ -12336,5 +12336,113 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d5f1335681f3": {
+  "identity": {
+   "one_liner": "Symfony Bundle，从 Doctrine schema 生成 ER 图与 UML 类图",
+   "review": "一个 Symfony Bundle，读取应用的 Doctrine schema 和实体，通过 doctrine:diagram:er / :class 命令生成 ER 图和 UML 类图，支持 mini/midi/maxi 三档细节、PlantUML 主题、表和类的包含/排除过滤，输出 puml/svg/png 格式，可本地或经 PlantUML 服务器渲染，面向使用 Symfony 与 Doctrine 的开发者做 schema 可视化。",
+   "highlights": [
+    "提供 bin/console 命令从 Doctrine DBAL 连接生成 ER 图、从实体生成类图",
+    "支持 puml/svg/png 三种输出格式及 PlantUML 主题",
+    "支持按 include/exclude 模式过滤表或类"
+   ],
+   "use_cases": [
+    "为 Symfony + Doctrine 项目生成数据库 schema 可视化文档",
+    "在开发流程中检查当前实体与数据库结构",
+    "通过 CI 或 PlantUML 服务器批量渲染 schema 图"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它读取 Doctrine schema 为数据库生成图表，是为数据库开发工作服务的工具，不作为应用存储数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Generate Entity-Relationship and UML class diagrams from a Symfony ／ * Generate ER diagrams from a Doctrine DBAL connection and class diagrams from ／ bin/console doctrine:diagram:er",
+   "evidence_lines": [
+    3,
+    16,
+    42
+   ]
+  },
+  "fn": "jawira/doctrine-diagram-bundle",
+  "sha": "d5f1335681f3",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "619252c9bb51": {
+  "identity": {
+   "one_liner": "Symfony 数据导入/导出 dataflow 框架，Reader-Steps-Writer 流水线",
+   "review": "一个 Symfony bundle，提供固定的三段式数据流结构（一个 Reader、若干 Steps、一个或多个 Writer）用于创建导入/导出任务。支持命令行运行与定时调度，任务和调度信息通过 Doctrine DBAL 存入数据库表，可配置多 DBAL 连接、Messenger 并发执行和文件系统异常存储。面向需要在 Symfony 应用中编排数据处理流程的开发者，需通过 composer 安装并迁移建表。",
+   "highlights": [
+    "提供 reader/steps/writer 三段式线性数据流工作流，支持同步与异步步骤",
+    "支持命令行运行与定时调度 dataflow 任务，任务信息通过 Doctrine DBAL 存储",
+    "可与 Symfony Messenger 集成并发执行，兼容 PortPHP 的 reader/writer 适配器"
+   ],
+   "use_cases": [
+    "在 Symfony 应用中构建数据导入/导出流水线",
+    "定时执行批处理数据迁移任务",
+    "接入 PortPHP 通用 reader/writer 处理文件、数据库、webservice 等数据源"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "作为数据导入/导出框架，通过 Doctrine DBAL 连接读写数据库并存储任务调度，为数据处理场景提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DataflowBundle is a bundle for Symfony 3.4+ ／ The reader can read data from anywhere and return data row by row. Each step processes the current row data. ／ This bundle uses Doctrine DBAL to store Dataflow schedule into the database table (`cr_dataflow_scheduled`)",
+   "evidence_lines": [
+    7,
+    26,
+    89
+   ]
+  },
+  "fn": "code-rhapsodie/dataflow-bundle",
+  "sha": "619252c9bb51",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

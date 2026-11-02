@@ -11785,5 +11785,226 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "73285ad47b7f": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL+AGE+pgvector 的确定性代码图上下文引擎，供 AI 编码代理检索",
+   "review": "BGTS Context Engine 将代码仓库索引为符号/调用/引用图，存储在 PostgreSQL（含 Apache AGE 与 pgvector），通过图遍历返回确定性排序的上下文结果，并以 MCP/REST 接口供 Cursor、Claude Code、OpenCode 等编码代理调用；检索路径不含 LLM，可选的上下文选择器需自行配置模型。适合需要为 AI 代理提供代码库定位与上下文的开发团队。",
+   "highlights": [
+    "将仓库索引为代码图（符号、调用、引用、类型层级、HTTP 路由），通过图遍历回答查询",
+    "提供 MCP（stdio）与 REST 两种接口，附带多个编辑器/代理的一键初始化命令",
+    "检索路径确定性（无模型、无随机性），嵌入仅用于入口点查找",
+    "运行于 PostgreSQL 16，集成 Apache AGE 与 pgvector"
+   ],
+   "use_cases": [
+    "为 AI 编码代理（Cursor、Claude Code、Copilot 等）提供代码定位上下文以减少搜索调用",
+    "对代码库进行结构化索引以支持跨语言调用关系查询",
+    "需要可复现检索结果（同任务同提交返回同排序）的场景"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# 1. PostgreSQL 16 with Apache AGE + pgvector, in one database",
+     "lines": [
+      103
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以 PostgreSQL（含 AGE/pgvector）作为自身存储，是为 AI 编码代理服务的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 1. PostgreSQL 16 with Apache AGE + pgvector, in one database ／ bce serve        # REST at :8000/docs, web UI at :8000/ui/ ／ bce serve-mcp    # MCP over stdio, for agents (install the [mcp] extra; see below)",
+   "evidence_lines": [
+    103,
+    112,
+    113
+   ]
+  },
+  "fn": "bgts-ai-org/bgts-context-engine",
+  "sha": "73285ad47b7f",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8b3e9371ab6d": {
+  "identity": {
+   "one_liner": "自托管个人理财跟踪应用，Docker 部署，数据存于 SQLite",
+   "review": "一个自托管的个人理财跟踪 Web 应用，用于记录月度预算、资产、投资组合并建模住房贷款，数据通过 Docker 在服务端存入 SQLite，支持挪威语与英语。面向个人用户；提供桌面安装包、Docker 镜像和源码构建三种运行方式，无内置登录，需经反向代理或 VPN 暴露。",
+   "highlights": [
+    "记录预算、资产、投资、净值与住房贷款摊销，支持多种货币",
+    "数据服务端存储于 SQLite，提供每日自动备份与导出",
+    "内置 MCP 服务器，允许 AI 助手读取财务数据"
+   ],
+   "use_cases": [
+    "个人月度预算与日常记账",
+    "投资组合与净值跟踪",
+    "住房贷款方案测算"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "React TypeScript Vite Docker SQLite ／ They are the same application. The desktop app runs the same server, the same SQLite database and",
+     "lines": [
+      5,
+      44
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用以 SQLite 作为自身数据存储，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A self-hosted personal finance tracker. Track monthly budgets, manage assets and investments, model housing loans, and get smart spending recommendations. All data is stored server-side in a SQLite database via Docker — zero browser storage. Norwegian is natively supported. ／ They are the same application. The desktop app runs the same server, the same SQLite database and ／ Headroom ships a local Model Context Protocol server",
+   "evidence_lines": [
+    19,
+    44,
+    221
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "mortennordbye/headroom",
+  "sha": "8b3e9371ab6d",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "37dc8c65d50a": {
+  "identity": {
+   "one_liner": "tree-sitter+SQLite 代码索引字典，为 LLM 问答预检索上下文",
+   "review": "codedict 用 tree-sitter 解析项目代码，把函数、路由、调用关系等写入本地 SQLite 索引（FTS5 检索），无需 AI；查询时经 Claude Code hook 或 MCP 服务器把检索结果随问题一起交给 LLM，以减少对话轮次与 token 消耗。面向使用 Claude Code、Cursor 等 AI 编码工具的开发者；支持 Python/JS/TS/C#/Java/Go 等语言，含检索模式的基准数据。",
+   "highlights": [
+    "用 tree-sitter 一次解析代码，将函数、HTTP 路由、SQL 表与调用关系存入本地 SQLite 索引",
+    "提供 FTS5 检索、MCP 服务器与 Claude Code hook 集成，支持接入其他 AI 工具与本地模型",
+    "索引随文件变更增量更新，支持 Python/JS/TS/C#/Java/Go 等语言解析"
+   ],
+   "use_cases": [
+    "为 AI 编码助手（Claude Code、Cursor 等）预检索代码上下文以减少 token 消耗",
+    "开发者查询函数位置、调用者与调用链",
+    "生成含 Mermaid 图的项目结构 Markdown 手册"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "1. **Reads the code once.** Finds every function, class, HTTP route and SQL table, and who calls whom. Stores it all in a local SQLite file, spending zero tokens. ／ 9. **Search:** SQLite FTS5 over identifier words (`calculateTax` → `calculate tax`), path and docs, accent-insensitive, with inflections.",
+     "lines": [
+      82,
+      187
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其将索引数据存入本地 SQLite 文件（.codedict/index.db），SQLite 是其存储依赖而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "    C[\"Your code\"] -->|\"tree-sitter, no AI\"| I[(\"Local index<br>.codedict/index.db\")] ／ 1. **Reads the code once.** Finds every function, class, HTTP route and SQL table, and who calls whom. Stores it all in a local SQLite file, spending zero tokens. ／ |**The AI**|`.codedict/ai/`, `codedict search` and the MCP server|A compact map of the project and ready answers per question|",
+   "evidence_lines": [
+    76,
+    82,
+    107
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Marqueos/codedict",
+  "sha": "37dc8c65d50a",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10281,5 +10281,190 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f9df0af5a4c8": {
+  "identity": {
+   "one_liner": "基于 Laravel/Filament/Livewire 的持久化浏览器游戏（PBBG）平台",
+   "review": "这是一个以 Laravel 为基础的可部署浏览器游戏平台，包含玩家、任务、战斗、公会、市场交易、排行榜等游戏域模块，并集成 Filament 管理面板、队列与可观测性支持。面向希望在 Laravel 生态上运行或二次开发 PBBG 的 PHP 开发者。模块以独立 Composer 包形式安装到 /modules、/themes 目录，由 composer.lock 锁定版本；要求 PHP 8.5 与 Laravel 支持的 SQL 数据库。",
+   "highlights": [
+    "提供游戏域系统：玩家、任务、战斗、制作、背包、公会、市场交易、成就与排行榜",
+    "模块与主题为独立版本化 Composer 包，安装到受 Git 跟踪的 /modules 与 /themes 目录",
+    "支持 Jetstream 认证、两步验证、passkey、Filament 管理面板及队列/调度/备份/可观测性组件"
+   ],
+   "use_cases": [
+    "部署运行一个持久化浏览器游戏（PBBG）",
+    "基于 Liberu 模块体系进行游戏功能的组合安装与二次开发",
+    "通过发布的 Composer 包机制维护多项目共享的游戏能力模块"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 Laravel 所支持 SQL 数据库的游戏平台应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Liberu Browser Game is the deployable host for a persistent browser-based game. It combines the Liberu Composer ecosystem with game-domain systems for players, quests, combat, crafting, inventory, guilds, marketplace trading, achievements, rewards, notifications, and leaderboards. ／ |Database|A Laravel-supported SQL database|",
+   "evidence_lines": [
+    11,
+    36
+   ]
+  },
+  "fn": "liberusoftware/browser-game-laravel",
+  "sha": "f9df0af5a4c8",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "215bb9b2082c": {
+  "identity": {
+   "one_liner": "LiveKit 自托管服务器的管理控制台，Webhook 历史存 SQLite",
+   "review": "为自托管 LiveKit 服务器提供的可自托管管理控制台，展示房间、会话、通话历史、SIP 干线、egress/ingress 与用量，并管理 Agent worker 状态。前端 React + Vite，Express 后端将 API 密钥保存在服务端，并把 LiveKit webhook 历史记录到 SQLite 数据库中。适合自托管 LiveKit 的运维团队使用。",
+   "highlights": [
+    "通过 LiveKit server/SIP/egress/ingress API 提供房间、SIP、egress/ingress 的实时查看与操作",
+    "接收并验证 LiveKit webhook，将 sessions/calls/usage 等历史存入 SQLite",
+    "提供 Admin/Viewer 两种角色的访问控制，密码以 scrypt 哈希存储"
+   ],
+   "use_cases": [
+    "自托管 LiveKit 服务器的日常运维监控",
+    "通话/会话历史与用量分析查询",
+    "Agent worker 状态与延迟观测"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "API key/secret so the browser never sees them, receives LiveKit webhooks and stores history in SQLite. ／ |Sessions, participants, events, calls, usage, overview insights|Webhooks stored in SQLite (history starts when the collector starts)|",
+     "lines": [
+      5,
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用数据库（SQLite 存自身 webhook 历史）的管理控制台应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hostable admin console for a **self-hosted LiveKit** server, modeled on the LiveKit Cloud dashboard ／ API key/secret so the browser never sees them, receives LiveKit webhooks and stores history in SQLite. ／ |Sessions, participants, events, calls, usage, overview insights|Webhooks stored in SQLite (history starts when the collector starts)|",
+   "evidence_lines": [
+    3,
+    5,
+    34
+   ]
+  },
+  "fn": "unpod-ai/livekit-console",
+  "sha": "215bb9b2082c",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c5dd326fd7b6": {
+  "identity": {
+   "one_liner": "OceanBase 数据库大赛 AMD 赛道的赛事公告与 FAQ 文档",
+   "review": "该仓库收录 OceanBase 数据库大赛 AMD 赛道的入群须知，包含 AMD Radeon Cloud GPU 算力申领与额度发放规则、seekdb 优化赛题的评分门槛（Recall、显存、查询回归）、零分与报错自查表及评测排队说明，面向参赛开发者使用；内容为赛事运营文档，不含可安装的软件。",
+   "highlights": [
+    "说明 GPU 算力申领流程与 Credits 每日刷新规则",
+    "给出赛题评分公式、Recall 硬门槛与资源上限的具体数值",
+    "提供零分原因分布表与错误自查表用于提交前自测"
+   ],
+   "use_cases": [
+    "参赛者申领与使用 Radeon Cloud GPU 算力",
+    "提交前按自查表排查仓库、基线与评分门槛问题",
+    "查询评测耗时与提测进度流程"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "欢迎参与 OceanBase 数据库大赛 AMD 赛题！免费 GPU 算力资源已就位。 ／ - OceanBase 大赛 AMD 赛题及实践指南：赛题一：部署一个 seekdb ／ V5 基线仓库为 `https://github.com/zihaomu/seekdb`，分支为 `amd-oceanbase-official-contest-base-v5`，冻结 commit 为 `634888d9b037153fa143d2c913ba4b25503e1d62`。可在本地答题仓库检查：",
+     "lines": [
+      3,
+      32,
+      119
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 为赛事公告与 FAQ 文档，未描述任何为数据库生态服务的工具或应用本身。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "欢迎参与 OceanBase 数据库大赛 AMD 赛题！免费 GPU 算力资源已就位。 ／ **本题评的是质量合格前提下的端到端提速，kernel 更快不等于一定有分。** 先区分两种情况：完成检查但硬门槛未通过，本次总分为 0；仓库、版本、编译或运行错误导致未完成评测，本次不计分，见下一问。",
+   "evidence_lines": [
+    3,
+    40
+   ]
+  },
+  "fn": "AMD-DEV-CONTEST/Oceanbase-2026-competition-AMD-Doc",
+  "sha": "c5dd326fd7b6",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

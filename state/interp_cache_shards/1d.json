@@ -8701,5 +8701,181 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0aa55890e7e4": {
+  "identity": {
+   "one_liner": "Python 嵌入式对象与向量数据库",
+   "review": "ObjectBox Python 是一个嵌入式的对象与向量数据库，提供 CRUD API 与向量检索，用于本地存取 Python 对象和 embeddings，支持 RAG、相似度搜索等本地 AI 应用场景。安装通过 pip 完成，另有提供数据同步的 objectbox-sync 变体包。面向需要在设备本地存储和检索数据的 Python 开发者。",
+   "highlights": [
+    "支持将 Python 对象与向量直接存储，提供 CRUD API 与跨关系查询",
+    "支持向量检索，可用于 RAG、生成式 AI 与相似度搜索",
+    "支持 Linux/macOS/Windows 多平台，含 x86-64 与 ARM 架构"
+   ],
+   "use_cases": [
+    "设备端 AI 应用中的 embeddings 管理与相似度搜索",
+    "离线优先的本地数据存储（配合 Sync 可在线同步）",
+    "Python 应用中的嵌入式对象持久化"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "项目本身是嵌入式数据库及其 Python 绑定，属于为应用提供存储能力的数据库组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ObjectBox Python is a lightweight yet powerful on-device object and vector database. ／ And because it's an embedded database, there's no setup required. ／ Its advanced vector search empowers on-device AI applications including RAG, generative AI, and similarity searches.",
+   "evidence_lines": [
+    2,
+    4,
+    6
+   ]
+  },
+  "fn": "objectbox/objectbox-python",
+  "sha": "0aa55890e7e4",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "929c6d700870": {
+  "identity": {
+   "one_liner": "Stoolap 嵌入式 SQL 数据库的 Node.js 驱动",
+   "review": "该项目是 Stoolap 嵌入式 SQL 数据库的 JavaScript 驱动，通过 N-API C 原生插件与 Node.js、Bun、Deno 集成，提供异步与同步两套 API，包含 Database、PreparedStatement、Transaction、游标迭代和批量执行等接口。面向需要在 JS 环境中操作 Stoolap 数据库的开发者，安装时需 C 编译环境通过 node-gyp 编译薄插件层。",
+   "highlights": [
+    "提供异步与同步 API，支持 Database、PreparedStatement、Transaction 三类接口及参数绑定",
+    "通过原生 N-API C 插件实现，可在 Node.js、Bun、Deno 运行",
+    "支持游标分块迭代、批量执行、handle 克隆及 WAL 持久化配置参数"
+   ],
+   "use_cases": [
+    "在 Node.js/Bun/Deno 应用中读写 Stoolap 数据库",
+    "使用文件持久化模式并通过 sync_mode 配置持久性与性能权衡",
+    "在 worker threads 等并发场景中通过 clone() 共享底层引擎"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "该项目是 Stoolap 数据库的驱动绑定，为该数据库生态提供语言接入组件而非自身存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "High-performance JavaScript driver for Stoolap, a modern embedded SQL database with MVCC, time-travel queries, and full ACID compliance. ／ Built with a native N-API C addon for minimal overhead. Works with Node.js, Bun, and Deno. Provides both async and sync APIs. ／ npm install @stoolap/node",
+   "evidence_lines": [
+    3,
+    5,
+    15
+   ]
+  },
+  "fn": "stoolap/stoolap-node",
+  "sha": "929c6d700870",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9b984de7c365": {
+  "identity": {
+   "one_liner": "PostgreSQL 迁移脚本静态分析工具，检测锁表、重写与破坏性操作",
+   "review": "migsafe 是一个针对 PostgreSQL 迁移 SQL 的静态分析 linter，检测锁、重写、破坏性步骤和缺失的 timeout 等风险。面向在 CI 或本地合并前审查迁移脚本的开发者，支持单文件/目录检查、--fail-on 阈值、JSON 机器可读输出和非零退出码集成。通过 pipx 安装，Python 3.9+，无运行时依赖。",
+   "highlights": [
+    "支持对单个迁移文件或整个目录进行检查，可通过 --fail-on 设置阈值使构建失败",
+    "提供 --json 机器可读输出，供机器人或 agent 使用",
+    "检查迁移中的锁、重写、破坏性步骤和缺失的 lock_timeout"
+   ],
+   "use_cases": [
+    "合并前对 PostgreSQL 迁移脚本做静态检查",
+    "在 CI 中集成迁移风险门禁（基于退出码与 --fail-on）",
+    "为 bot/agent 提供迁移检查的 JSON 输出接口"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**This migration would have locked your `users` table. migsafe tells you before you merge it.** Static analysis for PostgreSQL migrations: locks, rewrites, destructive steps, missing timeouts.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 迁移脚本提供静态检查服务的独立工具，不以数据库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**This migration would have locked your `users` table. migsafe tells you before you merge it.** Static analysis for PostgreSQL migrations: locks, rewrites, destructive steps, missing timeouts. ／ Exit code is `2` when a finding at or above `--fail-on` exists, so `migsafe check migrations/ && psql ...` is safe by default.",
+   "evidence_lines": [
+    3,
+    39
+   ]
+  },
+  "fn": "mgkvibez/migsafe",
+  "sha": "9b984de7c365",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

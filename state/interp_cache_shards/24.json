@@ -9708,5 +9708,234 @@
   "generated_at": "2026-10-31",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "574c2c11e6d0": {
+  "identity": {
+   "one_liner": "闲鱼虚拟商品多租户自动化运营系统，覆盖发货、客服与售后",
+   "review": "一个基于 Java/Spring Boot 与 Vue 的闲鱼虚拟商品自动运营系统，提供自动发货（固定内容/卡密）、AI 客服、自动评价与售后跟进等全流程能力，面向多租户商家。核心链路仅依赖 MySQL，通过行级锁实现卡密原子预占，任务持久化支持异常恢复；通过 Docker Compose 自部署，需自行承担闲鱼接口与风控变化风险。",
+   "highlights": [
+    "卡密交付采用 MySQL 行级锁整单预占，发送成功后核销，失败释放或转人工复核",
+    "订单与回复任务持久化，支持 Worker 租约、超时回收与退避重试",
+    "账号、商品、订单、库存与 AI 知识库按租户隔离，支持多账号多租户"
+   ],
+   "use_cases": [
+    "虚拟商品（网盘链接、激活码、卡密等）自动发货运营",
+    "闲鱼买家咨询的自动回复与 AI 客服",
+    "多商家共用平台的租户化运维与异常集中处理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL ／ |原子卡密交付|MySQL 行级锁整单预占，发送成功后核销，失败释放或转人工复核|避免并发订单导致重复发卡、少发和超卖|",
+     "lines": [
+      12,
+      66
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- 全新环境使用 MySQL，不提供 SQLite 历史数据自动迁移。",
+     "lines": [
+      412
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统以 MySQL 存储业务数据（账号、订单、库存等），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MySQL ／ 它不只是在收到订单后发送一段文本，而是把 **订单发现、幂等入队、库存预占、双通道交付、失败重试和人工复核** 串成可恢复的完整链路。固定内容与卡密两种交付模式严格互斥，账号、商品、消息、订单、库存、任务和 AI 知识库按租户隔离。核心任务链路只依赖 MySQL，不强制引入 Redis 或消息队列，兼顾部署成本与后续扩展。 ／ |原子卡密交付|MySQL 行级锁整单预占，发送成功后核销，失败释放或转人工复核|避免并发订单导致重复发卡、少发和超卖|",
+   "evidence_lines": [
+    12,
+    19,
+    66
+   ]
+  },
+  "fn": "Evvvvvvvan/XianYuSmart",
+  "sha": "574c2c11e6d0",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d2d7da7fae1c": {
+  "identity": {
+   "one_liner": "Lealone 数据库的官方文档仓库",
+   "review": "这是 Lealone 项目的文档仓库，包含数据库快速入门、从源码构建指南、设计文档、SQL 语法参考、函数与数据类型说明，以及 AI 应用演示等内容，面向使用或参与开发 Lealone 数据库的用户和开发者。提供 jar 包下载入口并可通过 DBeaver 访问。",
+   "highlights": [
+    "包含数据库快速入门与从源码构建指南",
+    "提供 SQL Reference：SQL 语法、函数与数据类型",
+    "包含设计文档、Wiki 与 Change Log"
+   ],
+   "use_cases": [
+    "学习 Lealone 数据库的使用与安装",
+    "查阅 Lealone SQL 语法、函数与数据类型",
+    "参与 Lealone 源码构建与开发"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "文档服务于 Lealone 数据库本身的构建与使用，属于数据库本体配套文档",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " * 从源码构建 Lealone ／  * SQL Grammar",
+   "evidence_lines": [
+    13,
+    25
+   ]
+  },
+  "fn": "lealone/Lealone-Docs",
+  "sha": "d2d7da7fae1c",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "08e6f8a55b59": {
+  "identity": {
+   "one_liner": "ioBroker 的 SQL 历史数据适配器，将状态历史写入 SQL 数据库",
+   "review": "ioBroker 平台的历史记录适配器，把 ioBroker 各数据点的状态值按时间序列持久化到 PostgreSQL、MySQL、MS-SQL 或 SQLite。提供防抖、仅记录变化值、保留期清理、RAM 缓冲等记录策略，并展示数据库中各 ID 的存储统计。面向使用 ioBroker 平台并需要保存设备状态历史的用户，README 详细给出各库表结构与安装提示。",
+   "highlights": [
+    "将 ioBroker 状态历史按时间序列写入 PostgreSQL、MySQL、MS-SQL 或 SQLite",
+    "提供防抖、仅记录变化值、块时间、保留期与 RAM 缓冲等记录控制选项",
+    "提供统计页，列出数据库中每个 ID 的存储类型、值数量、估算大小与时间范围，并支持确认后清理"
+   ],
+   "use_cases": [
+    "为 ioBroker 智能家居数据点保存长期历史数据",
+    "按自定义策略（防抖、仅变化、保留期）控制数据点记录",
+    "直接用 SQL 查询 states 历史表（sources/datapoints/ts_* 表）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Supports PostgreSQL, mysql, Microsoft SQL Server and sqlite. ／ - **DB Type**: Type of the SQL DB: MySQL, PostgreSQL, MS-SQL or SQLite3",
+     "lines": [
+      12,
+      20
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Supports PostgreSQL, mysql, Microsoft SQL Server and sqlite. ／ - **DB Type**: Type of the SQL DB: MySQL, PostgreSQL, MS-SQL or SQLite3 ／ - **Unix socket** (MySQL only): Path of a local unix socket, e.g. `/var/run/mysqld/mysqld.sock`. When set, the adapter connects through that socket and ignores Host and Port, which are hidden. Useful when the server runs on the same machine — it is faster than",
+     "lines": [
+      12,
+      20,
+      22
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Supports PostgreSQL, mysql, Microsoft SQL Server and sqlite. ／ - **DB Type**: Type of the SQL DB: MySQL, PostgreSQL, MS-SQL or SQLite3 ／ ### SQLite:",
+     "lines": [
+      12,
+      20,
+      56
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Supports PostgreSQL, mysql, Microsoft SQL Server and sqlite. ／ - **Host**: IP address or host name with SQL Server ／ - **Port**: Port of SQL Server (leave blank if not sure)",
+     "lines": [
+      12,
+      21,
+      23
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该适配器是使用 SQL 数据库存放 ioBroker 状态历史的应用组件，数据库仅作为存储后端被使用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This adapter saves state history into SQL DB. ／ Supports PostgreSQL, mysql, Microsoft SQL Server and sqlite. ／ - **DB Type**: Type of the SQL DB: MySQL, PostgreSQL, MS-SQL or SQLite3",
+   "evidence_lines": [
+    10,
+    12,
+    20
+   ]
+  },
+  "fn": "ioBroker/ioBroker.sql",
+  "sha": "08e6f8a55b59",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

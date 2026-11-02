@@ -10797,5 +10797,146 @@
   "generated_at": "2026-10-30",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4871821f16c7": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 AI 代理记忆层，含 MCP 服务器",
+   "review": "Mnemosyne 是一个面向 AI 代理的记忆层，用于为 Claude Code、Cursor 等 MCP 客户端及 Python 代理提供长期记忆。数据存储在单个 SQLite 文件中，采用 sqlite-vec 与 FTS5 混合检索及 BEAM 三层架构，通过 pip 安装、无需外部服务；基准数据为 v3.0.0 时点结果，尚未在当前版本重跑。",
+   "highlights": [
+    "在 SQLite 内实现 sqlite-vec 向量与 FTS5 全文的混合检索（50% 向量 + 30% FTS5 + 20% 重要性评分）",
+    "内置 MCP 服务器（stdio/SSE）与 Python SDK，适配 Cursor、Claude Code、Codex 等多种代理平台",
+    "支持可选双向同步与客户端加密（Fernet/PyNaCl），同步时服务端仅见元数据"
+   ],
+   "use_cases": [
+    "为 MCP 客户端代理添加持久化长期记忆",
+    "在 Python 代理中通过 remember/recall API 存取事实",
+    "本地离线环境下运行无云依赖的代理记忆存储"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "*Zero-cloud AI memory that works everywhere. SQLite-backed. One pure-Python dependency.* ／ **Mnemosyne** is a universal, Hermes-first memory layer that works with any agent framework (Claude Code, Cursor, Codex, OpenWebUI, OpenClaw, or your own custom agent). One `pip install`, one SQLite database. No external services required. ／ Mnemosyne is measured on **BEAM** (ICLR 2026), in one SQLite file with no cloud dependency. A **LongMemEval** (ICLR 2025) run is pending.",
+     "lines": [
+      5,
+      18,
+      74
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|**Local-first**|✅ SQLite|⚠️ Hybrid|❌ Docker+PG|⚠️ PG+worker|❌ SaaS|✅ SQLite|✅ Embedded| ／ |**Zero deps**|✅ pip only|❌ Qdrant/PG|❌ PG+vector|❌ PG+3 LLMs|❌ SaaS infra|✅ pip only|✅ pip only|",
+     "lines": [
+      162,
+      163
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Mnemosyne 使用 SQLite 作为自身数据存储后端，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "*Zero-cloud AI memory that works everywhere. SQLite-backed. One pure-Python dependency.* ／ **Mnemosyne** is a universal, Hermes-first memory layer that works with any agent framework (Claude Code, Cursor, Codex, OpenWebUI, OpenClaw, or your own custom agent). One `pip install`, one SQLite database. No external services required. ／ - **Episodic memory** -- Long-term storage with sqlite-vec + FTS5 hybrid search",
+   "evidence_lines": [
+    5,
+    18,
+    151
+   ]
+  },
+  "fn": "mnemosyne-oss/mnemosyne",
+  "sha": "4871821f16c7",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e6ed46834b1a": {
+  "identity": {
+   "one_liner": "TiKV 公开 API 的第三方编目档案，含评分与 API 描述",
+   "review": "该仓库不包含任何软件，是 API Evangelist 对 TiKV 公开 API 面（8 个 API，含 Java/Rust/Python 官方客户端、配置/状态/监控端点）的独立第三方档案，发布 OpenAPI、JSON Schema、Postman 集合等工件于 APIs.io，并按公开的 Kin Score 评分规则给出评分。适合需要查看 TiKV 管理 API 结构与契约质量的开发者或安全合规团队参考。",
+   "highlights": [
+    "提供 TiKV 8 个 API 的目录：Java/Rust/Python 官方客户端及配置、调试、指标、Region、状态 API",
+    "发布 JSON Schema、JSON-LD、Postman/Open Collection、Spectral 治理规则等机器可读工件",
+    "包含按公开评分规则计算的 Kin Score 与 Agent Readiness 评分及分项明细"
+   ],
+   "use_cases": [
+    "查找 TiKV HTTP 管理 API 及官方客户端的公开契约描述",
+    "评估 API 公开工件的可发现性与契约治理情况",
+    "安全或合规团队核查该档案所依据的公开 URL 来源"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "TiKV is a CNCF-graduated distributed transactional key-value database built in Rust with Raft consensus. Originally created to complement TiDB, it provides horizontal scalability, strong consistency, and high availability with ACID transaction support. Client ",
+     "lines": [
+      65
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库不含软件，只是对 TiKV 公开 API 面的第三方编目档案，并非为数据库生态运行的工具或使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **This is not our API.** This repository is an independent, third-party profile of a company's ／ > **This repository contains no software, and we will never ask you to download anything.** There is ／ TiKV is a CNCF-graduated distributed transactional key-value database built in Rust with Raft consensus. Originally created to complement TiDB, it provides horizontal scalability, strong consistency, and high availability with ACID transaction support. Client APIs are available for Java, Rust, Python, Go, and C++. An HTTP management API provides status, configuration, and monitoring endpoints.",
+   "evidence_lines": [
+    5,
+    50,
+    65
+   ]
+  },
+  "fn": "api-evangelist/tikv",
+  "sha": "e6ed46834b1a",
+  "source": "readme",
+  "generated_at": "2026-11-02",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
