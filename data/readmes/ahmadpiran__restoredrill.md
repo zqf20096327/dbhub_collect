@@ -2,7 +2,7 @@
 
 **Untested backups aren't backups.** restoredrill proves your PostgreSQL and MySQL backups actually restore. It fetches the latest backup, restores it into a throwaway container, runs checks you define, and writes a JSON report with the restore time. Or, if something else already restored a copy for you, it can just connect and run the same checks against that instead.
 
-> Status: v0.4.0, early days. Postgres, plus MySQL 8 from `mysqldump` files. Things may still change.
+> Status: v0.4.2, early days. Postgres, plus MySQL 8 from `mysqldump` files. Things may still change.
 
 ## Why
 
@@ -95,7 +95,16 @@ If a notification fails to reach its destination, `notify_errors` records this, 
 
 ## CI usage
 
-The exit code makes restoredrill a good fit for a scheduled CI job. See [`.github/workflows/restoredrill.yml`](.github/workflows/restoredrill.yml) for a working example, or use [`action.yml`](action.yml) directly in your own workflow. When a person runs restoredrill by hand, pass `--trigger manual` and `--triggered-by`. The evidence output has the same format in both cases.
+The exit code makes restoredrill a good fit for a scheduled CI job. See [`.github/workflows/restoredrill.yml`](.github/workflows/restoredrill.yml) for a working example, or use the GitHub Action in your own workflow. When a person runs restoredrill by hand, pass `--trigger manual` and `--triggered-by`. The evidence output has the same format in both cases.
+
+```yaml
+- uses: actions/checkout@v4
+- uses: ahmadpiran/restoredrill@v0.4.2
+  with:
+    config: restoredrill.yml
+```
+
+The action downloads the release binary for the runner and checks it against the published checksums. It needs a Linux or macOS runner with Docker. It uploads the JSON report as a build artifact, even when the drill fails. Set `version` to pin a restoredrill release (the default is `latest`), and `report-artifact-name` to an empty string to skip the upload. `report-path` must match `report.path` in your config.
 
 ## Limits
 
