@@ -1,24 +1,40 @@
 name: readme-monthly
-# 月度全量校准手动补跑：非 1 号也能跑（nightly-collect 里 MODE 由 UTC 日期门控）。
-# 与 nightly-collect 同 concurrency 组：串行排队，不抢 Core 配额、提交不撞车。
+# README 月度全量校准（2026-11 B 方案：从 nightly-collect 剥离为独立接力工作流）。
+# 背景：全量 36k+ 仓实测 ≥10h，塞 nightly 6h 窗必翻车——2026-11-01 run#56 富集吃满
+# 窗口，README 月度步被 6h 硬墙砍死、连"提交并推送"都跳过，整晚池/富集/校准全丢。
+# 设计四支柱：
+#   1. 双 job 链式接力（2 × ~5.8h 墙钟 > 10h 实测），needs 串行不并行；
+#   2. calibrated 周期戳（readme_sweep --cycle M%Y-%m）跨窗/跨日/跨 job 续跑不重扫
+#      （旧日期戳只能同日接力；周期 ID 与旧日期戳天然不冲突，state 免迁移）；
+#   3. 每 job 顶部 guard：周期已完成则 ~1 分钟空转退出——schedule 月 2-6 连挂五晚，
+#      跑完后的空窗只花秒级 checkout 钱；
+#   4. 提交步 if: always()——job b 死不牵连 job a 已入账的 calibrated 断点
+#      （run#56 教训：提交是最后一步，job 被砍=整晚白做）。
+# 时间窗 23:23 UTC：避开整点 cron 排队高峰（run#56 排到 20:24 的教训）；nightly
+# （16:00 起最晚 ~22:00 收工）不撞车；与 evidence :35 班偶同小时桶，由保底线睡等
+# 兜底（CoreReserveOut→睡到 reset 再续），最多损墙钟不损数据。
 on:
+  schedule:
+    - cron: '23 23 2-6 * *'      # UTC 23:23 = 北京 07:23，月 2-6 日至周期完成
   workflow_dispatch:
     inputs:
-      max_total_minutes:
-        description: '本窗总时长（分钟，默认吃满单 job 帽 ~345）'
+      cycle:
+        description: '校准周期 ID（缺省当月；补历史账如 M2026-11）'
         type: string
         default: ''
 permissions:
   contents: write
 concurrency:
-  group: nightly-collect
+  group: readme-monthly          # 自我串行；不与 nightly 同组（不再等其 6h 窗）
   cancel-in-progress: false
 jobs:
-  readme-monthly:
+  calibrate-a:
     runs-on: ubuntu-latest
-    timeout-minutes: 355          # 平台单 job 上限 6h，留 5 分钟提交
+    timeout-minutes: 355         # 平台单 job 帽 6h，留 5 分钟提交
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: refs/heads/main   # 排队期间 main 前进，锁触发 sha 会白做（同 collect.yml）
 
       - name: 记录 job 起点（算剩余时间预算）
         run: echo "JOB_T0=$(date +%s)" >> "$GITHUB_ENV"
@@ -43,33 +59,113 @@ jobs:
           fi
           echo "用池: data/snapshot_latest/pool.json（$(python -c "import json;print(len(json.load(open('data/snapshot_latest/pool.json')))") ) 仓）"
 
-      # calibrated 当日标记跨 run 接力：本窗校验过的下窗自动跳过（9845284c），
-      # 断点续采 = 再 dispatch 一次即接着跑
-      - name: README 月度全量校准
+      - name: 周期守卫（已完成则本窗空转）
+        id: guard
+        env:
+          CYCLE: ${{ github.event.inputs.cycle || '' }}
+        run: |
+          N=$(python collect/readme_sweep.py --mode monthly --count-only \
+            --cycle "$CYCLE" --pool data/snapshot_latest/pool.json)
+          echo "周期 ${CYCLE:-当月自动} 剩余未校准: $N 仓"
+          if [ "$N" -eq 0 ]; then echo "skip=true" >> "$GITHUB_OUTPUT"; else echo "skip=false" >> "$GITHUB_OUTPUT"; fi
+
+      # 参数同 nightly README 步成熟件：--max-calls 4200 = 5000 小时帽 − 800 保底线，
+      # 实测 ~77 调/分 → 54 分钟/窗；--wait-windows 10 触保底线睡到 reset 再续；
+      # 总墙钟 = job 剩余 − 10 分钟提交（REM 公式，同 collect.yml）
+      - name: README 月度全量校准（周期接力）
+        if: steps.guard.outputs.skip != 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYCLE: ${{ github.event.inputs.cycle || '' }}
         run: |
           REM=$(( 355*60 - ($(date +%s) - JOB_T0) - 600 ))
           [ "$REM" -lt 300 ] && REM=300
-          MT="${{ github.event.inputs.max_total_minutes }}"
-          [ -n "$MT" ] && REM=$(( MT * 60 ))
           echo "本窗总预算 $(( REM / 60 )) 分钟"
-          python collect/readme_sweep.py --mode monthly --pool data/snapshot_latest/pool.json \
+          python collect/readme_sweep.py --mode monthly --cycle "$CYCLE" \
+            --pool data/snapshot_latest/pool.json \
             --max-calls 4200 --max-minutes 60 \
             --wait-windows 10 --max-total-minutes $(( REM / 60 ))
 
-      - name: 出池仓清理 dry-run 清单（月度窗口尾部，人工过目后本地 --apply）
-        run: python tools/purge_outpool.py || echo "::warning::purge dry-run 失败（不影响校准）"
-
       - name: 提交并推送
+        if: ${{ always() && steps.guard.outputs.skip != 'true' }}
         run: |
           git config user.name "zqf20096327"
           git config user.email "zqf20096327@users.noreply.github.com"
           git add -A
-          git commit -m "README 月度校准补跑 $(date -u +%F\ %H:%M)" || { echo "无变更"; exit 0; }
+          git commit -m "README 月度校准接力 $(date -u +%F\ %H:%M)" || { echo "无变更"; exit 0; }
           for i in 1 2 3 4 5; do
             git pull --rebase --autostash >/dev/null 2>&1 || true
             git push && { echo "已推送"; exit 0; }
             echo "推送撞车，40s 后重试（$i/5）"; sleep 40
           done
-          echo "::warning::推送 5 次未成功，本窗 calibrated 标记丢失，重新 dispatch 即从头续跑"
+          echo "::warning::推送 5 次未成功，本窗 calibrated 丢失，下窗从头续跑（周期戳防重扫已入 state 的部分不受影响）"
+
+  calibrate-b:
+    needs: calibrate-a
+    if: ${{ !cancelled() }}      # a 失败也续跑：其提交步 always 已保住断点，接力不断
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refs/heads/main   # 重取 main：带上 job a 刚推的 calibrated 断点
+
+      - name: 记录 job 起点（算剩余时间预算）
+        run: echo "JOB_T0=$(date +%s)" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install requests
+
+      - name: 衔接当日池（准备 snapshot_latest）
+        run: |
+          mkdir -p data/snapshot_latest
+          if [ -f data/live/pool.ndjson ]; then
+            python -c "import sys; sys.path.insert(0,'lib'); import pool_store; \
+              recs,_ = pool_store.load_latest('pool'); import json; \
+              json.dump(recs, open('data/snapshot_latest/pool.json','w',encoding='utf-8'), ensure_ascii=False)"
+          else
+            POOL=$(ls -t data/snapshot_*/pool.json 2>/dev/null | head -1)
+            [ -z "$POOL" ] && { echo "无可用 pool"; exit 1; }
+            cp "$POOL" data/snapshot_latest/pool.json
+          fi
+
+      - name: 周期守卫（a 已完成则空转收尾）
+        id: guard
+        env:
+          CYCLE: ${{ github.event.inputs.cycle || '' }}
+        run: |
+          N=$(python collect/readme_sweep.py --mode monthly --count-only \
+            --cycle "$CYCLE" --pool data/snapshot_latest/pool.json)
+          echo "周期 ${CYCLE:-当月自动} 剩余未校准: $N 仓"
+          if [ "$N" -eq 0 ]; then echo "skip=true" >> "$GITHUB_OUTPUT"; else echo "skip=false" >> "$GITHUB_OUTPUT"; fi
+
+      - name: README 月度全量校准（周期接力·续窗）
+        if: steps.guard.outputs.skip != 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYCLE: ${{ github.event.inputs.cycle || '' }}
+        run: |
+          REM=$(( 355*60 - ($(date +%s) - JOB_T0) - 600 ))
+          [ "$REM" -lt 300 ] && REM=300
+          echo "本窗总预算 $(( REM / 60 )) 分钟"
+          python collect/readme_sweep.py --mode monthly --cycle "$CYCLE" \
+            --pool data/snapshot_latest/pool.json \
+            --max-calls 4200 --max-minutes 60 \
+            --wait-windows 10 --max-total-minutes $(( REM / 60 ))
+
+      - name: 提交并推送
+        if: ${{ always() && steps.guard.outputs.skip != 'true' }}
+        run: |
+          git config user.name "zqf20096327"
+          git config user.email "zqf20096327@users.noreply.github.com"
+          git add -A
+          git commit -m "README 月度校准接力 $(date -u +%F\ %H:%M)" || { echo "无变更"; exit 0; }
+          for i in 1 2 3 4 5; do
+            git pull --rebase --autostash >/dev/null 2>&1 || true
+            git push && { echo "已推送"; exit 0; }
+            echo "推送撞车，40s 后重试（$i/5）"; sleep 40
+          done
+          echo "::warning::推送 5 次未成功，本窗 calibrated 丢失，重跑同 cycle 续扫"

@@ -4,12 +4,8 @@ on:
     - cron: '0 16 * * *'      # 每天一窗（UTC 16 = 北京 00:00）。采集已稳定，
                               # 单 job 上限 6h、窗内自计时，跑完即收工；当窗
                               # 未跑完的量靠断点续采次日继续，不丢数据。
-  workflow_dispatch:             # 手动触发（可勾选强制月度校准）
+  workflow_dispatch:             # 手动触发（冒烟）
     inputs:
-      force_monthly:
-        description: '强制 README 走月度全量校准（不受 1 号限制；calibrated 按日标记跨窗接力不重烧）'
-        type: boolean
-        default: false
       limit:
         description: '冒烟：富集/README 各最多处理 N 个仓（0=不限；>0 时跳过池采集，看单个仓耗时）'
         default: '0'
@@ -74,7 +70,7 @@ jobs:
         run: |
           # 跨小时等待：触保底线按响应头 reset 睡到下一小时窗再续（预算按窗发新，
           # 吃满 220 分钟——旧行为触线即停，49.9 分钟就收工浪费 3/4 预算）。
-          # 每窗 6 个，月度校准日 README 靠 REM 公式自动分得剩余时间，无需让路
+          # 每窗 6 个，README 预算由 REM 公式按窗内剩余时间自动分配，无需让路
           python enrich/enrich.py --tier all --pool data/snapshot_latest/pool.json --max-calls 5000 --max-minutes 220 --wait-windows 8 \
             --limit "${{ github.event.inputs.limit || '0' }}"
 
@@ -84,19 +80,19 @@ jobs:
       # （360min - 已用 - 留 10 分钟给提交），保证提交步骤必定执行、当晚数据不丢
       # --max-calls 4200 = 5000 小时帽 − 800 保底线：富集串行先跑完，README 是本小时
       # Core 唯一消费者（仅首窗可能继承富集的残小时，由响应头保底线兜底睡等），
-      # 实测节奏 ~77 调/分 → 4200 ≈ 54 分钟，与 --max-minutes 60 匹配。旧值 3000
-      # 会浪费 ~1200/时容量，且 34275 仓月度校准两窗跑不完（10-01 实算）
-      - name: README 增量（每月 1 号自动转月度全量校准）
+      # 实测节奏 ~77 调/分 → 4200 ≈ 54 分钟，与 --max-minutes 60 匹配。
+      # （月度全量校准 2026-11 起移 readme-monthly.yml：36k+ 实测 ≥10h 塞不进
+      #   nightly 6h 窗——11-01 run#56 富集吃满窗口，README 月度被硬墙砍死、连
+      #   提交步都跳过整晚丢失；nightly 从此恒 weekly，月初无模式切换）
+      - name: README 增量（恒 weekly；月度全量校准在 readme-monthly.yml）
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          MODE=weekly; [ "$(date -u +%d)" = "01" ] && MODE=monthly
-          [ "${{ github.event.inputs.force_monthly }}" = "true" ] && MODE=monthly
-          echo "README 模式: $MODE（force_monthly=${{ github.event.inputs.force_monthly || 'false' }}）"
+          echo "README 模式: weekly"
           REM=$(( 360*60 - ($(date +%s) - JOB_T0) - 600 ))
           [ "$REM" -lt 300 ] && REM=300
           echo "README 本窗总预算 $(( REM / 60 )) 分钟"
-          python collect/readme_sweep.py --mode "$MODE" --pool data/snapshot_latest/pool.json \
+          python collect/readme_sweep.py --mode weekly --pool data/snapshot_latest/pool.json \
             --max-calls 4200 --max-minutes 60 \
             --wait-windows 10 --max-total-minutes $(( REM / 60 )) \
             --limit "${{ github.event.inputs.limit || '0' }}"

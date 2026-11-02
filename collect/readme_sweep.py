@@ -12,8 +12,9 @@
 用法：
   python readme_sweep.py --mode init [--pool data/snapshot_YYYYMMDD/pool.json]
   python readme_sweep.py --mode weekly --pool ...     # 仅 pushed_at 有变化的
-  python readme_sweep.py --mode monthly --pool ...    # 全量 ETag 扫描
-  python readme_sweep.py --mode weekly --pool ... --wait-windows 10   # CI 跨窗续
+  python readme_sweep.py --mode monthly --pool ...    # 全量 ETag 扫描（周期戳接力）
+  python readme_sweep.py --mode monthly --pool ... --cycle M2026-11 --wait-windows 10
+  python readme_sweep.py --mode monthly --count-only --pool ...   # guard：剩多少未校准
 产物：state/readme_state.json（原子写+轮转）+ data/readmes/{fn安全名}.md
 """
 from __future__ import annotations
@@ -77,13 +78,21 @@ def save_state(st: dict) -> None:
 
 # ---------------- 主流程 ----------------
 
-# 月度校准标记：本进程 UTC 日。304/200/404 校验过的仓打上，pick_targets(monthly)
-# 据此排除——否则每窗从池头重新枚举，3000/窗的预算全花在对同一批仓重复发 304 条件
-# 请求上，后面的仓永远轮不到（2026-10-01 首次 monthly 实发：连开 6 窗只扫到前 3000）。
-CAL_DATE = datetime.now(timezone.utc).strftime("%Y%m%d")
+# 月度校准标记：周期 ID（--cycle 缺省当月 M%Y-%m）。304/200/404 校验过的仓打上，
+# pick_targets(monthly) 据此排除——否则每窗从池头重新枚举，3000/窗的预算全花在对
+# 同一批仓重复发 304 条件请求上，后面的仓永远轮不到（2026-10-01 首次 monthly 实发：
+# 连开 6 窗只扫到前 3000）。2026-11 起日期戳升级为周期戳：全量 36k+ 实测 ≥10h 必然
+# 跨日/跨 job 接力，日期戳次日会把已校准仓重新枚举（readme-monthly.yml 双 job 链
+# 依赖此接力）。旧日期戳（%Y%m%d）与新周期 ID 天然不冲突，旧 state 免迁移。
+# calibrated 仅 monthly 模式写——weekly 若也打周期戳，月内增量扫过的仓会被当月
+# 月度跳过，"全量对账"静默退化成"静水仓对账"。
 
 
-def pick_targets(args, pool: list, items: dict) -> list:
+def cycle_of(args) -> str:
+    return args.cycle or datetime.now(timezone.utc).strftime("M%Y-%m")
+
+
+def pick_targets(args, pool: list, items: dict, cycle: str) -> list:
     """按模式取待扫目标（failed=三振隔离，剔除防跨窗轮空转；monthly 排除当日已校准项）。"""
     if args.mode == "init":
         # 按 star 降序铺，先高价值；--layer1 只铺分类层对象（canon 命中者由 classify 产出）
@@ -105,9 +114,13 @@ def pick_targets(args, pool: list, items: dict) -> list:
         return [it["full_name"] for it in pool
                 if (it.get("pushed_at") or "") > (items.get(it["full_name"]) or {}).get("checked_pushed", "")
                 and (items.get(it["full_name"]) or {}).get("status") not in ("no_readme", "failed")]
-    # monthly：全量校准但排除本 UTC 日已校验过的（跨窗推进；无此排除会每窗从头重扫）
-    return [it["full_name"] for it in pool
-            if (items.get(it["full_name"]) or {}).get("calibrated") != CAL_DATE]
+    # monthly：全量校准但排除本周期已校验过的（跨窗/跨日/跨 job 推进；无此排除会
+    # 每窗从头重扫）。no_readme 排最前：weekly 永久排除它们，月度是唯一翻盘通道，
+    # 先扫先捞——就算中途断窗，最有价值的部分已入库（sort 稳定，组内保持池序）。
+    targets = [it["full_name"] for it in pool
+               if (items.get(it["full_name"]) or {}).get("calibrated") != cycle]
+    targets.sort(key=lambda fn: (items.get(fn) or {}).get("status") != "no_readme")
+    return targets
 
 
 def run(args):
@@ -118,22 +131,25 @@ def run(args):
     by_fn = {it["full_name"]: it for it in pool}
     st = load_state()
     items = st.setdefault("items", {})
+    cycle = cycle_of(args)
+    cal = {"calibrated": cycle} if args.mode == "monthly" else {}
 
     READMES.mkdir(parents=True, exist_ok=True)
     client = GitHubClient(Budget(max_calls=args.max_calls, max_minutes=args.max_minutes))
     reserve = client.budget.reserve_remaining
     t0 = time.time()
     deadline = t0 + args.max_total_minutes * 60 if args.max_total_minutes else None
-    counts = {"done": 0, "unchanged": 0, "no_readme": 0, "failed": 0, "oversized": 0}
+    counts = {"done": 0, "unchanged": 0, "no_readme": 0, "failed": 0, "oversized": 0,
+              "flipped": 0}
     stop_reason = None
     quarantined = []
     windows = waits = total_calls = 0
     stuck_rounds = 0
     visited = 0                                    # 冒烟用：本次已处理的目标数
-    targets = pick_targets(args, pool, items)
+    targets = pick_targets(args, pool, items, cycle)
     targets0 = len(targets)
-    log.info("模式 %s · 目标 %d 项（池 %d）· 跨窗等待上限 %d 次 · 总时长 %s 分钟",
-             args.mode, targets0, len(pool), args.wait_windows,
+    log.info("模式 %s（周期 %s）· 目标 %d 项（池 %d）· 跨窗等待上限 %d 次 · 总时长 %s 分钟",
+             args.mode, cycle, targets0, len(pool), args.wait_windows,
              args.max_total_minutes or "∞")
 
     while targets:
@@ -160,7 +176,7 @@ def run(args):
             log.warning("Core 剩余 %d 触保底线——睡 %.0f 分钟到下一小时窗（等待 %d/%d）",
                         rem, wait_sec / 60, waits, args.wait_windows)
             time.sleep(wait_sec)
-            targets = pick_targets(args, pool, items)
+            targets = pick_targets(args, pool, items, cycle)
             continue
         # 本窗一轮：预算按窗发新的（跨窗续跑时每窗各得一份 max_calls/max_minutes）
         client.budget = Budget(max_calls=args.max_calls, max_minutes=args.max_minutes)
@@ -188,7 +204,7 @@ def run(args):
                     code = getattr(e.response, "status_code", None)
                     if code == 404:
                         rec.update({"status": "no_readme", "etag": None, "fail_count": 0,
-                                    "last_error": "", "calibrated": CAL_DATE})
+                                    "last_error": "", **cal})
                         counts["no_readme"] += 1
                         continue
                     # 其余 HTTP 状态按仓记振继续（毒仓不得阻断循环，与 enrich 同策略）
@@ -217,22 +233,28 @@ def run(args):
                 if status == 304:
                     counts["unchanged"] += 1
                     rec["checked_pushed"] = by_fn.get(fn, {}).get("pushed_at", "")
-                    rec["calibrated"] = CAL_DATE
+                    if args.mode == "monthly":
+                        rec["calibrated"] = cycle
                     continue
                 if text is None or not text.strip():
                     rec.update({"status": "no_readme", "etag": None, "fail_count": 0,
-                                "calibrated": CAL_DATE})
+                                **cal})
                     counts["no_readme"] += 1
                     continue
                 fn_to_file(fn).write_text(text, encoding="utf-8")
                 nsha = sha1_of(normalize(text))
+                prev_status = rec.get("status")
                 rec.update({"status": "oversized" if truncated else "done",
                             "etag": new_etag, "sha": nsha,
                             "updated": datetime.now(timezone.utc).strftime("%Y%m%d"),
                             "checked_pushed": by_fn.get(fn, {}).get("pushed_at", ""),
                             "fail_count": 0, "last_error": "",
-                            "calibrated": CAL_DATE})
+                            **cal})
                 counts["oversized" if truncated else "done"] += 1
+                if prev_status == "no_readme":
+                    # 月度校准的核心增量：no_readme 仓主补了 README 被 weekly 永久跳过，
+                    # 只有这里捞得回——单独计数，作为月度全量存留价值的直接证据
+                    counts["flipped"] += 1
                 if (i + 1) % 200 == 0:
                     save_state(st)
                     log.info("进度 %d/%d · %s", i + 1, len(targets), counts)
@@ -252,7 +274,7 @@ def run(args):
         stuck_rounds = 0 if progressed else stuck_rounds + 1
         if round_stop is None:
             # 本轮自然扫完：目标集仍在收缩才续下一轮（monthly 全量单轮即止，防空转）
-            nxt = pick_targets(args, pool, items)
+            nxt = pick_targets(args, pool, items, cycle)
             if len(nxt) < len(targets):
                 targets = nxt
                 continue
@@ -277,7 +299,7 @@ def run(args):
             log.warning("配额触线——睡 %.0f 分钟到下一窗再续（等待 %d/%d）",
                         wait_sec / 60, waits, args.wait_windows)
             time.sleep(wait_sec)
-            targets = pick_targets(args, pool, items)
+            targets = pick_targets(args, pool, items, cycle)
             continue
         if stuck_rounds >= 2:
             stop_reason = f"{round_stop}（连续 {stuck_rounds} 轮无进展，收尾防空转）"
@@ -285,7 +307,10 @@ def run(args):
         log.info("本窗停止：%s（断点已存，续跑）", round_stop)
         targets = pick_targets(args, pool, items)
 
-    summary = {"mode": args.mode, "targets": targets0, "counts": counts,
+    remaining = len(pick_targets(args, pool, items, cycle)) if args.mode == "monthly" else None
+    summary = {"mode": args.mode, "cycle": cycle, "targets": targets0, "counts": counts,
+               "remaining": remaining,
+               "cycle_complete": remaining == 0 if remaining is not None else None,
                "api_calls": total_calls,
                "elapsed_min": round((time.time() - t0) / 60, 1),
                "windows": windows, "waits": waits,
@@ -293,16 +318,34 @@ def run(args):
     atomic_write_json(HERE / "state" / "readme_summary.json", summary)
     log.info("==== %s 完成：%s · API %d 次 · %s 分钟 · %d 窗/等 %d 次 ====", args.mode, counts,
              summary["api_calls"], summary["elapsed_min"], windows, waits)
+    if remaining == 0:
+        log.info("周期 %s 校准完成（全池已过 ETag 对账）", cycle)
+    elif remaining is not None:
+        log.warning("周期 %s 尚余 %d 仓未校准（下窗接力，已校准不重扫）", cycle, remaining)
     if stop_reason:
         log.warning("预算停止：%s（断点已存，重跑同命令续）", stop_reason)
     if quarantined:
         log.warning("三振隔离 %d 项（人工复核）：%s", len(quarantined), quarantined[:10])
 
 
+def count_only(args) -> int:
+    """guard 用：打印本周期剩余未校准目标数（零 API 零写入）。"""
+    pool = json.loads(Path(args.pool).read_text(encoding="utf-8"))
+    items = load_state().setdefault("items", {})
+    n = len(pick_targets(args, pool, items, cycle_of(args)))
+    print(n)
+    return n
+
+
 def main():
     ap = argparse.ArgumentParser(description="README 采集（init/weekly/monthly）")
     ap.add_argument("--mode", choices=["init", "weekly", "monthly"], required=True)
     ap.add_argument("--pool", default=str(HERE / "data" / "snapshot_latest" / "pool.json"))
+    ap.add_argument("--cycle", default="",
+                    help="月度校准周期 ID（缺省当月 M%%Y-%%m；calibrated 存此值，"
+                         "跨窗/跨日/跨 job 接力不重扫）")
+    ap.add_argument("--count-only", action="store_true",
+                    help="只打印本周期剩余未校准数后退出（零 API 零写入，guard 用）")
     ap.add_argument("--layer1", action="store_true", help="init 时只铺分类层对象")
     ap.add_argument("--max-calls", type=int, default=4000)
     ap.add_argument("--max-minutes", type=float, default=90.0,
@@ -319,6 +362,8 @@ def main():
     logging.basicConfig(level=logging.DEBUG if args.v else logging.INFO,
                         format="%(asctime)s %(levelname)-6s %(name)s | %(message)s",
                         datefmt="%H:%M:%S")
+    if args.count_only:
+        return count_only(args)
     run(args)
 
 
