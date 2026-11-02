@@ -2,19 +2,19 @@
 
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fgradyzhuo%2Fswift-kurrentdb%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb)
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fgradyzhuo%2Fswift-kurrentdb%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](Licence)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Swift Package Index](https://img.shields.io/badge/Swift%20Package%20Index-available-brightgreen)](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb)
 [![Swift-build-testing](https://github.com/gradyzhuo/swift-kurrentdb/actions/workflows/swift-build-testing.yml/badge.svg)](https://github.com/gradyzhuo/swift-kurrentdb/actions/workflows/swift-build-testing.yml)
 [![codecov](https://codecov.io/gh/gradyzhuo/swift-kurrentdb/graph/badge.svg)](https://codecov.io/gh/gradyzhuo/swift-kurrentdb)
 
 <div align=center>
-<img src="https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:fikpipzuggbnuqew3treexnn/bafkreiadjakshxna7sn2gtwxdibew7e66vp3xplpghr72sxpwptsq7gf3i@jpeg" height="128px" width="128px" >
+<img src="docs/assets/swift-kurrentdb-github-banner.png" alt="swift-kurrentdb — Event Sourcing for Swift" width="100%">
     
 **A modern, type-safe Swift client for Kurrent (formerly EventStoreDB)**
 
 Built for Server-Side Swift and Event Sourcing
 
-[Documentation](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb) | [Getting Started](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb/getting-started) | [Discussions](https://github.com/gradyzhuo/swift-kurrentdb/discussions) | [Benchmark](https://gradyzhuo.github.io/swift-kurrentdb/benchmarks.html)
+[Documentation](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb) | [Getting Started](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb/getting-started) | [Discussions](https://github.com/gradyzhuo/swift-kurrentdb/discussions) | [Benchmark](https://gradyzhuo.github.io/swift-kurrentdb/benchmarks.html)
 
 </div>
 
@@ -28,7 +28,7 @@ Event Sourcing is a powerful pattern for building scalable, auditable systems. s
 - **Modern Concurrency** — Full async/await with Swift 6 data-race safety
 - **Compile-Time Safety** — Swift 6 strict concurrency compliance with typed throws
 - **Cluster-Ready** — First-class support for multi-node TLS clusters
-- **Well-Documented** — Comprehensive guides on [Swift Package Index](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb)
+- **Well-Documented** — Comprehensive guides in the [documentation](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb)
 - **Typed Errors** — All operations throw `KurrentError` for precise error handling
 
 ---
@@ -43,7 +43,7 @@ Add to your `Package.swift`:
 ```swift
 // 2.x — current stable, target-based API
 dependencies: [
-    .package(url: "https://github.com/gradyzhuo/swift-kurrentdb.git", from: "2.4.3")
+    .package(url: "https://github.com/gradyzhuo/swift-kurrentdb.git", from: "2.6.0")
 ]
 ```
 
@@ -70,11 +70,11 @@ let settings = ClientSettings.localhost()
     .authenticated(.credentials(username: "admin", password: "changeit"))
 
 // Local development — multi-node TLS cluster
-let localCluster = ClientSettings.localhost(ports: 2111, 2112, 2113)
+let localCluster = try ClientSettings.localhost(ports: 2111, 2112, 2113)
     .secure(true)
     .tlsVerifyCert(false)
     .authenticated(.credentials(username: "admin", password: "changeit"))
-    .certificate(path: "/path/to/ca.crt")
+    .certificate(path: "/path/to/ca.crt", fallback: .none)
 
 // Production — remote cluster (TLS enabled by default)
 let production = ClientSettings.remote(
@@ -94,7 +94,7 @@ let client = KurrentDBClient(settings: settings)
 
 Create one client per application and reuse it. Calls that complete before they return — appends, deletes, metadata, reads, projection statistics, management operations — share one connection per node. Calls that hand you a live stream — subscriptions and persistent subscriptions — each get their own connection, so long-lived subscriptions never compete with other calls for capacity. `client.shutdown()` closes every connection the client opened and makes further calls throw `KurrentError.connectionClosed`; calling it again does nothing.
 
-Need a database per test? The `KurrentDBPool` library lends out clients for a set of independent KurrentDB instances, one caller per instance at a time — see [Client pools](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb/client-pools).
+Need a database per test? The `KurrentDBPool` library lends out clients for a set of independent KurrentDB instances, one caller per instance at a time — see [Client pools](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb/client-pools).
 
 ---
 
@@ -126,6 +126,11 @@ let responses = try await client.streams(specified: "orders").read {
 for try await response in responses {
     let readEvent = try response.event
     print("Event: \(readEvent.record.eventType)")
+}
+
+// Bounded memory: events arrive as you iterate and the RPC ends with the loop
+for try await response in client.streams(specified: "orders").read().lazy {
+    _ = response
 }
 ```
 
@@ -384,7 +389,7 @@ import KurrentDB_V1   // was: import KurrentDB
 
 `KurrentDB_V1` gives you access to all 1.x methods (marked `@deprecated`) while you migrate to the new API at your own pace.
 
-👉 [Full Migration Guide — 1.x to 2.x](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb/migration-guide)
+👉 [Full Migration Guide — 1.x to 2.x](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb/migration-guide)
 
 ---
 
@@ -426,13 +431,17 @@ Coverage is measured on every CI run against a live 3-node TLS KurrentDB cluster
 
 ### Optimistic Concurrency
 
-Streams write-side error paths are explicitly covered:
+Stream error paths are explicitly covered:
 
 | Scenario | Expected Error |
 |----------|---------------|
 | Append at stale revision (`.at(99)`, stream at 0) | `wrongExpectedVersion` |
 | Append with `.noStream` to an existing stream | `wrongExpectedVersion` |
 | Two concurrent writers at the same revision | One succeeds, one `wrongExpectedVersion` |
+| Delete or tombstone a missing stream with `.streamExists` | `wrongExpectedVersion` with `current: .noStream` |
+| Tombstone at stale revision (`.at(5)`, stream at 0) | `wrongExpectedVersion` with `current: .revision(0)` |
+| Read a tombstoned stream, buffered and lazy | `resourceDeleted` |
+| Read `$all` without credentials, buffered and lazy | `accessDenied` |
 
 ### Persistent Subscription Lifecycle
 
@@ -455,6 +464,7 @@ Streams write-side error paths are explicitly covered:
 
 | Server Version | Status | Notes |
 |:--------------:|:------:|-------|
+| **KurrentDB 26.2** | ✅ Supported | Everything except creating transient projections, which the server rejects as deprecated. A multi-node cluster needs a Kurrent license; CI tests a single node |
 | **KurrentDB 26.1** | ✅ Supported | Full feature support |
 | **KurrentDB 26.0** | ✅ Supported | Everything except AppendRecords (26.1+) |
 | **KurrentDB 25.1** | ✅ Supported | Everything except AppendRecords (26.1+) |
@@ -471,6 +481,16 @@ docker compose up -d
 
 This generates TLS certificates automatically and starts nodes on ports 2111, 2112, and 2113.
 
+Or a single TLS node with your own admin and ops passwords, for developing an application against it:
+
+```bash
+cd server/standalone
+cp .env.example .env    # set KURRENTDB_ADMIN_PASSWORD and KURRENTDB_OPS_PASSWORD
+docker compose up -d
+```
+
+The first start writes a CA to `server/standalone/certs/ca/ca.crt`; connect with `esdb://admin:<password>@localhost:2113?tls=true&tlsCaFile=<path to ca.crt>`, percent-encoding the password if it holds characters such as `@`, `/`, `?`, `#`, `%` or spaces. Manage users in the Admin UI at https://localhost:2113 or with `client.users`. If `.env` sets `KURRENTDB_PORT`, use that port instead of 2113.
+
 Or a single insecure node for quick testing:
 
 ```bash
@@ -480,25 +500,25 @@ docker run --rm -d -p 2113:2113 \
   -e KURRENTDB_START_STANDARD_PROJECTIONS=true \
   -e KURRENTDB_INSECURE=true \
   -e KURRENTDB_ENABLE_ATOM_PUB_OVER_HTTP=true \
-  docker.kurrent.io/kurrent-latest/kurrentdb:25.1
+  docker.io/kurrentplatform/kurrentdb:25.1
 ```
 
 ## Documentation
 
 | Guide | Description |
 |-------|-------------|
-| [Migration Guide (1.x → 2.x)](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb/migration-guide) | What changed in 2.0 and how to update your code |
-| [Getting Started](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb/getting-started) | Connection settings, first event, basic usage |
-| [Appending Events](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb/appending-events) | EventData, concurrency control, idempotency, multi-stream writes |
-| [Reading Events](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb/reading-events) | Forward/backward reading, $all stream, server-side filters |
-| [Projections](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb/managing-projections) | Create, manage, and query projection state |
-| [Persistent Subscriptions](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb/persistent-subscriptions) | Competing consumers, ACK/NAK, subscription groups |
-| [User Management](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb/user-management) | Create, enable, disable, password management |
-| [Cluster Gossip](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb/cluster-gossip) | Cluster discovery, node health monitoring |
-| [Monitoring](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb/server-statistics) | Real-time server statistics |
-| [Server Operations](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb/server-operations) | Scavenge, index merge, shutdown, node management |
-| [Client Pools](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb/client-pools) | `KurrentDBPool`: borrow a client per test from independent instances |
-| [Full API Reference](https://swiftpackageindex.com/gradyzhuo/swift-kurrentdb/documentation/kurrentdb) | Complete API documentation |
+| [Migration Guide (1.x → 2.x)](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb/migration-guide) | What changed in 2.0 and how to update your code |
+| [Getting Started](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb/getting-started) | Connection settings, first event, basic usage |
+| [Appending Events](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb/appending-events) | EventData, concurrency control, idempotency, multi-stream writes |
+| [Reading Events](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb/reading-events) | Forward/backward reading, $all stream, server-side filters |
+| [Projections](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb/managing-projections) | Create, manage, and query projection state |
+| [Persistent Subscriptions](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb/persistent-subscriptions) | Competing consumers, ACK/NAK, subscription groups |
+| [User Management](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb/user-management) | Create, enable, disable, password management |
+| [Cluster Gossip](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb/cluster-gossip) | Cluster discovery, node health monitoring |
+| [Monitoring](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb/server-statistics) | Real-time server statistics |
+| [Server Operations](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb/server-operations) | Scavenge, index merge, shutdown, node management |
+| [Client Pools](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb/client-pools) | `KurrentDBPool`: borrow a client per test from independent instances |
+| [Full API Reference](https://gradyzhuo.github.io/swift-kurrentdb/documentation/kurrentdb) | Complete API documentation |
 
 ## Contributing
 
@@ -510,7 +530,7 @@ Contributions are welcome! Whether it's bug reports, feature requests, documenta
 
 ## License
 
-MIT License — see [Licence](Licence) for details.
+MIT License — see [LICENSE](LICENSE) for details. The Protocol Buffer definitions under `proto/` come from Kurrent and Event Store repositories; [NOTICE](NOTICE) lists their sources and licenses.
 
 ---
 

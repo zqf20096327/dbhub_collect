@@ -4,7 +4,7 @@
 
 ### Let AI agents write to your Postgres. Each run works on its own branch; your rules decide what lands.
 
-![release](https://img.shields.io/badge/release-v0.4.5%20beta-f59e0b?style=flat-square)
+![release](https://img.shields.io/badge/release-v0.4.6%20beta-f59e0b?style=flat-square)
 ![postgres wire](https://img.shields.io/badge/postgres-wire%20protocol-336791?style=flat-square&logo=postgresql&logoColor=white)
 ![mcp](https://img.shields.io/badge/MCP-ready-7c3aed?style=flat-square)
 ![rust](https://img.shields.io/badge/rust-1.90%2B-b7410e?style=flat-square&logo=rust&logoColor=white)
@@ -27,7 +27,7 @@ It speaks the Postgres wire protocol, so `psql`, drivers and ORMs connect to it.
 <p align="center"><img src="docs/assets/attach-demo.gif" alt="An agent cleans up a CRM in its own world beside a real Postgres: the diff, a merge policy holding back its deletes, Postgres unchanged until a person approves, then the change written to Postgres" width="820"></p>
 
 > [!IMPORTANT]
-> **Public beta, version 0.4.5.** Try it on a staging copy first, not production. It is built by one person and has no outside production use yet. Chronos is not Postgres: it runs much of Postgres 16's SQL, not all of it. Read [Where it stands](#where-it-stands) before you move data in.
+> **Public beta, version 0.4.6.** Try it on a staging copy first, not production. It is built by one person and has no outside production use yet. Chronos is not Postgres: it runs much of Postgres 16's SQL, not all of it. Read [Where it stands](#where-it-stands) before you move data in.
 
 ## In one example
 
@@ -91,7 +91,7 @@ Options, set as environment variables for the script:
 | Variable | What it does |
 |---|---|
 | `CHRONOS_INSTALL_DIR=<folder>` | installs into another folder you can write (default `~/.local/bin`) |
-| `CHRONOS_VERSION=v0.4.5` | installs a given release tag instead of the latest |
+| `CHRONOS_VERSION=v0.4.6` | installs a given release tag instead of the latest |
 | `CHRONOS_VERIFY=1` | also checks the build's signature with [cosign](https://docs.sigstore.dev/cosign/system_config/installation/) (keyless, Sigstore) |
 
 If `~/.local/bin` isn't on your `PATH`, the script says so; add it with `export PATH="$HOME/.local/bin:$PATH"`. The examples below use `psql`: `brew install libpq` on macOS, `sudo apt-get install postgresql-client` on Debian or Ubuntu.
@@ -212,7 +212,7 @@ Other things in the box: time travel (`select * from orders as of '-1 hour'`, `r
 
 ## Where it stands
 
-Chronos DB 0.4.5 is a **public beta**. Use it with staging copies first. More detail: [What Chronos guarantees today](docs/guarantees.md) and [What it protects, and what it doesn't](docs/what-chronos-protects.md).
+Chronos DB 0.4.6 is a **public beta**. Use it with staging copies first. More detail: [What Chronos guarantees today](docs/guarantees.md) and [What it protects, and what it doesn't](docs/what-chronos-protects.md).
 
 **Project.** One maintainer. The storage engine has not had an outside review. No outside production use yet.
 
@@ -229,11 +229,12 @@ Known gaps include: no C extensions or functions in languages other than SQL and
 
 **Attach limits** (Stage 1, for staging copies):
 
-- Postgres 12 or later. Tested on 16, 17 and 18, and on Neon, direct and through its pooler.
-- Each attached table needs a primary key, and no generated columns or row-level security. Partitioned and inheriting tables aren't attached.
+- Postgres 12 or later. Tested on 12 to 18, on Neon (direct and through its pooler) and on Supabase (through its pooler, Supavisor).
+- Each attached table needs a primary key, or a unique index on NOT NULL columns to stand for one. A partitioned table is attached whole; inheriting tables aren't. Generated columns are attached, worked out by Postgres. A table with row-level security on is attached only if the role reads every row (Supabase turns it on for every table).
 - At most 50,000 changed rows per merge by default (`CHRONOS_ATTACH_MAX_ROWS` raises it to 1,000,000), all in one transaction.
-- Rows no merge touched are as fresh as the last refresh (`chronos refresh`, or `chronos serve --refresh-every 5m`). A refresh reads every attached table whole.
-- Columns added in Postgres are picked up by a refresh. Other schema changes (dropped, renamed or retyped columns) need a new attach.
+- Rows no merge touched are as fresh as the last refresh (`chronos refresh`, or `chronos serve --refresh-every 5m`), which reads every attached table whole. With `chronos serve --follow`, main takes Postgres's changes about a second after they commit (needs `wal_level = logical`).
+- A refresh takes columns added, dropped, renamed or retyped in Postgres, and new enum labels. A table whose key, row security or generated columns change needs a new attach.
+- A merge that checks its reads against Postgres can't check a read of more than 100,000 rows of one table: it waits for a person. An agent held to one tenant counts only that tenant's rows, and only they can hold its merge.
 - Details: [Limits in Stage 1](docs/guides/attach-postgres.md#limits-in-stage-1).
 
 **Operations.** One process per database folder (share it through `chronos serve`). No hot standby or automatic failover. macOS 13+ and Linux only. See [Operations](docs/operations.md).
@@ -247,7 +248,7 @@ Known gaps include: no C extensions or functions in languages other than SQL and
 | `psql`, Postgres drivers and ORMs | Connect to port 5433. Each world is also a database name: `postgres://127.0.0.1:5433/run_42` | [Postgres compatibility: clients](docs/postgres-compatibility.md#clients) |
 | TypeScript / JavaScript | `npm install @chronosdb/client`, or copy [one file](clients/typescript/chronos.ts) with no dependencies. Talks to the HTTP API on port 7070 | [Clients](docs/reference/clients.md) |
 | Python | Copy [one file](clients/python/chronos.py), standard library only (Python 3.9+). Not on PyPI yet | [Clients](docs/reference/clients.md) |
-| Claude Code and other MCP clients | `chronos mcp <folder>`: 30 tools (fork, diff, merge preview, checkpoints, simulations, reviews...) | [MCP](docs/reference/mcp.md) |
+| Claude Code and other MCP clients | `chronos mcp <folder>`: 31 tools (fork, diff, merge preview, checkpoints, simulations, reviews...) | [MCP](docs/reference/mcp.md) |
 | Chronos Studio (web UI) | `chronos studio mydb`: worlds, a data grid, SQL, search, and a Changes view to review and merge. Built into every install, opens on 127.0.0.1 only | [Studio](docs/studio.md) |
 | HTTP | `POST /v1/<op>` with JSON | [HTTP API](docs/http-api.md) |
 | Rust, embedded | The engine is a Rust library (`chronos::Db`). Not on crates.io; build it from this repository | [Quickstart: Rust](docs/quickstart.md#from-rust) |
@@ -310,7 +311,7 @@ The same pages, with search, are on the [docs site](https://chronosdb-docs.verce
 - **Security issues:** report them privately, as [SECURITY.md](SECURITY.md) describes.
 - **Contributing:** see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-What changed in each release: [CHANGELOG.md](CHANGELOG.md). This release: [v0.4.3](https://github.com/Abhishekxdg/chronosdb/releases/tag/v0.4.3), 2026-10-30.
+What changed in each release: [CHANGELOG.md](CHANGELOG.md). This release: [v0.4.6](https://github.com/Abhishekxdg/chronosdb/releases/tag/v0.4.6), 2026-11-01.
 
 ## What's in this repository
 

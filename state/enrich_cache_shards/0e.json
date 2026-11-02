@@ -363,7 +363,11 @@
    "HTML": 78,
    "Jupyter Notebook": 22
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "oracle/weblogic-monitoring-exporter": {
   "commit_90d": 14,
@@ -2419,12 +2423,12 @@
   }
  },
  "oceanbase/HammerDB": {
-  "commit_90d": 76,
-  "commit_7d": 0,
-  "rel_ver": "v6.0-ob-preview.1",
-  "rel_pub": "2026-09-17",
-  "rel_days": 15,
-  "rel_n90": 1,
+  "commit_90d": 119,
+  "commit_7d": 7,
+  "rel_ver": "v6.1-ob-oracle-experimental.3",
+  "rel_pub": "2026-10-27",
+  "rel_days": 6,
+  "rel_n90": 9,
   "rel_pre": true,
   "rel_none": false,
   "sec_n": 0,
@@ -2439,14 +2443,31 @@
    "C": 0,
    "Python": 0
   },
-  "enriched_at": "20261002",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261002",
-   "release": "20261002",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261002",
    "contrib": "20261002",
    "lang": "20261002"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v6.1-ob-oracle-experimental.3",
+    "d": "2026-10-27",
+    "n": "- **OceanBase Oracle mode now connects directly through official libobclient (OceanBase Connector/C).** OBCI is no longer needed by this backend.\n- SSL mode, CApath/CA, client certificate/key and cipher controls remain consistent with MySQL mode, with independently saved profiles. **OBCI Library** and **OBCI Service Name** controls are removed; legacy saved values are ignored. The existing `server` cipher value means default negotiation.\n- Oracle DATE outputs no longer need the OBCI-specific conversion wrap"
+   },
+   {
+    "t": "v6.1-ob-preview.5",
+    "d": "2026-10-19",
+    "n": "Each extracted platform archive passes 110 checks (60 helpers, 28 generated-driver checks, 8 feature checks and 14 real Tk dialog checks), exact embedded/top-level source comparison, MySQL driver loading, GUI startup and Web Service HTTP 200 smoke tests. Dialog checks exercise all eight C/H option forms and tab visibility. This release does not add Oracle UI, an Oracle driver or Oracle SQL support to the MySQL branch.\n- Tenant Mode now stays above the Connection / Settings tabs in TPROC-C and TPROC-H Schema"
+   },
+   {
+    "t": "v6.1-ob-oracle-experimental.2",
+    "d": "2026-10-19",
+    "n": "- New OceanBase Oracle TPROC-H schemas use `LINEITEM` primary key **`(L_ORDERKEY, L_LINENUMBER)`**. The ordinary schema now matches the existing OceanBase distributed layout and supports order-key range scans during RF2.\nThe official `OB_ENABLE_SSL` switch was verified with OBCI 2.1.1.4. For the current encryption-only path, choose One-Way, clear SSL CApath and SSL CA, and keep SSL Cipher as `server`. OBCI can fall back to plaintext; the switch does not establish certificate verification. CA mapping, mutual"
+   }
+  ]
  },
  "pgexperts/pgx-bm25": {
   "rel_ver": "v1.0.0",

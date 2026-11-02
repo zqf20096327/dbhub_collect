@@ -1,10 +1,10 @@
 {
  "orioledb/orioledb": {
-  "commit_7d": 14,
-  "commit_90d": 506,
+  "commit_7d": 18,
+  "commit_90d": 485,
   "rel_ver": "beta19",
   "rel_pub": "2026-10-01",
-  "rel_days": 24,
+  "rel_days": 32,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 44,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "C": 59,
    "Python": 27,
@@ -23,14 +23,31 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "beta19",
+    "d": "2026-10-01",
+    "n": "- Segfault in CREATE DATABASE ... TEMPLATE with enum-indexed columns (3424e8a7, 6c063455, fbb28d32)\nFull Changelog: https://github.com/orioledb/orioledb/compare/beta18...beta19"
+   },
+   {
+    "t": "beta18",
+    "d": "2026-09-23",
+    "n": "- A standby restartpoint now writes its in-progress oxids to the xid file; a promoted standby no longer resurrects uncommitted rows\n- orioledb_tbl_structure() no longer prints fixed-length by-reference values as \"TOASTed\" (74603e7d)\nSYS_TREES_CATALOG_XID_UNDO_LOCATION mapping that could not answer correctly for OrioleDB-only transactions (e870092e, 37871e9e,\n- orioledb_slot_retain_undo_location() SQL function for observing slot undo retention\n- orioledb_tbl_check() accounts for extents freed since the last "
+   },
+   {
+    "t": "beta17",
+    "d": "2026-09-04",
+    "n": "- composite-PK bitmap scan dropped a row under `FOR UPDATE` + EPQ ([ef95f680](https://github.com/orioledb/orioledb/commit/ef95f680))\n- a torn `OIndex`/`OTable` pair no longer builds an index descriptor ([d8c0f04b](https://github.com/orioledb/orioledb/commit/d8c0f04b))\n- binary compatibility documentation ([3a957b0e](https://github.com/orioledb/orioledb/commit/3a957b0e))\n- SQLSmith fuzzing, Antithesis/Jepsen harness, wal-g and pgBackRest integration tests ([cfd0db63](https://github.com/orioledb/orioledb/comm"
+   }
+  ]
  },
  "crbnos/carbon": {
-  "commit_7d": 133,
-  "commit_90d": 1186,
+  "commit_7d": 142,
+  "commit_90d": 1278,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -38,7 +55,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 48,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "TypeScript": 88,
    "PLpgSQL": 8,
@@ -48,8 +65,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
   }
  },
@@ -84,12 +101,12 @@
   }
  },
  "Altinity/clickhouse-backup": {
-  "commit_90d": 344,
-  "commit_7d": 34,
-  "rel_ver": "v2.8.2",
-  "rel_pub": "2026-10-21",
-  "rel_days": 4,
-  "rel_n90": 2,
+  "commit_90d": 365,
+  "commit_7d": 37,
+  "rel_ver": "v2.8.3",
+  "rel_pub": "2026-10-30",
+  "rel_days": 3,
+  "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -104,12 +121,29 @@
    "Dockerfile": 0,
    "Makefile": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v2.8.3",
+    "d": "2026-10-30",
+    "n": "- support Antalya `metadata_type=cas` disks with `use_embedded_backup_restore: true`, `create_remote` no longer fails with `disk \"cas\" ... is not exists locally` and `restore_remote` no longer fails with `unsupported <metadata_type>cas</metadata_type>`, without embedded mode a table on a CAS disk fails with an explicit error, because `FREEZE` on CAS leaves no local files to hardlink, fix [#1562](https://github.com/Altinity/clickhouse-backup/issues/1562)\n- `restore` and `restore_remote` no longer drop and re"
+   },
+   {
+    "t": "v2.8.2",
+    "d": "2026-10-21",
+    "n": "- add `azblob.chunk_size` (env `AZBLOB_CHUNK_SIZE`, default `0`), a fixed upload block size used when `ceil(file size / chunk_size) <= max_parts_count`, clamped to [2MiB, 4000MiB], `0` keeps the automatic `file size / max_parts_count` clamped to [2MiB, 10MiB], brings back the explicit size removed together with `AZBLOB_BUFFER_SIZE` in v2.6.6, fix [#1142](https://github.com/Altinity/clickhouse-backup/issues/1142)\n- back up and restore Kafka offsets of Kafka engine tables with `kafka_keeper_path` / `kafka_rep"
+   },
+   {
+    "t": "v2.8.1",
+    "d": "2026-09-17",
+    "n": "- add `clickhouse.drop_replica_if_exists` (env `CLICKHOUSE_DROP_REPLICA_IF_EXISTS`, CLI `--drop-replica-if-exists` for `restore`/`restore_remote`, also accepted as the `drop_replica_if_exists` query argument by `POST /backup/restore` and `POST /backup/restore_remote`) — when the replica entry `<replica_path>/replicas/<replica_name>` of a restored `Replicated*MergeTree` still exists in ZooKeeper but no local table uses that path, execute `SYSTEM DROP REPLICA '<replica_name>' FROM ZKPATH '<replica_path>'` a"
+   }
+  ]
  },
  "JetBrains/xodus": {
   "commit_90d": 0,
@@ -130,7 +164,10 @@
    "Kotlin": 25,
    "FreeMarker": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "dim_ts": {
+   "security": "20261102"
+  }
  },
  "nonacosa/new-bee": {
   "commit_90d": 0,

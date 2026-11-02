@@ -3,9 +3,11 @@
 Single-binary, high-concurrency OLTP database server supporting T-SQL and stored procedures
 
 [![Version](https://img.shields.io/badge/version-v0.90.0--beta4-blue.svg)](CHANGELOG.md)
-[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](README.md)
+[![Go Version](https://img.shields.io/badge/Go-1.24%2B-00ADD8.svg?logo=go&logoColor=white)](go.mod)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green.svg)](LICENSE)
-[![Go Report](https://img.shields.io/badge/go-1.22+-00ADD8.svg)](https://go.dev)
+[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](README.md)
+[![Architecture](https://img.shields.io/badge/Architecture-PGWire%20%7C%20T--SQL%20%7C%20VDBE-blueviolet)](doc/ARCHITECTURE.md)
+[![Website](https://img.shields.io/badge/Website-lionsql.com-1b5e20)](https://lionsql.com)
 
 (한국어 문서는 [README.ko.md](README.ko.md)를 참조하세요.)
 
@@ -476,6 +478,9 @@ LionSQL provides comprehensive documentation covering system architecture, opera
 ### [Master Technical Documentation Directory (doc/README.md)](doc/README.md)
 Start here for a complete subject-based directory of all architectural blueprints, internals, and guides.
 
+### [Official Application Integration Guides (guide/README.md)](guide/README.md)
+Step-by-step zero-modification deployment and integration guides for 10 production applications (`Gitea`, `Grafana`, `Metabase`, `Vaultwarden`, `Casdoor`, `Umami`, `Apache Answer`, `Woodpecker CI`, `Vikunja`, and `IOTA-SDK ERP`).
+
 ### Backend-as-a-Service (BaaS) & Developer APIs
 - **[Official Web SDK & HTML Embedding Guide](doc/WEB_SDK.md)**: Universal zero-dependency client library and HTML embedding patterns for Web, Node.js, Bun, and Deno.
 - **[Auto-Generated RESTful CRUD API](doc/REST_API_RECORDS_GUIDE.md)**: Zero-code `/api/records/:table` endpoints with rich boolean filter expressions.
@@ -539,6 +544,16 @@ LionSQL strictly adheres to a **3-Stage Verification Pipeline** for every change
 
      # WiredTiger persistent B+Tree engine run
      ./scripts/verify_report.sh --engine=wiredtiger
+     ```
+
+   - **SQLLogicTest (SLT) 1.0 GA Full Suite (40,000+ Queries) Oracle Verification**:
+     Runs full regression across official SQLite test suites (`select1~5.test`), specification clauses (`evidence/*`), B-Tree index paths (`index/*`), synthetic fuzzing expressions (`random/*`), and curated edge suites (see [`doc/SQLLOGICTEST_GUIDE.md`](doc/SQLLOGICTEST_GUIDE.md)):
+     ```bash
+     # 1. Fetch 1.0 GA full suite (on-demand caching)
+     ./scripts/fetch_slt.sh
+
+     # 2. 8-core concurrent verification (~15-20s completion)
+     ./bin/sqllogictest -dir test/slt -parallel 8
      ```
 3. **Commit Integrity**:
    - Conventional Commits format (`feat`, `fix`, `docs`, `refactor`, `test`).

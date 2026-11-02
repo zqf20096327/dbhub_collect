@@ -85,7 +85,7 @@ fn main() -> Result<(), DatabaseError> {
 }
 ```
 
-More: [hello_world](examples/hello_world.rs), [transaction](examples/transaction.rs).
+More: [hello_world](examples/hello_world.rs), [transaction](examples/transaction.rs), [program](examples/program.rs).
 
 ## Storage Backends
 | Builder | Storage |
@@ -95,7 +95,7 @@ More: [hello_world](examples/hello_world.rs), [transaction](examples/transaction
 | `build_in_memory()` | In-memory, for tests and temporary data |
 | `build_optimistic()` | RocksDB with optimistic transactions |
 
-Feature flags, checkpoints, and transaction isolation: [docs/features.md](docs/features.md), [docs/transaction-isolation.md](docs/transaction-isolation.md).
+Feature flags, checkpoints, and transaction isolation: [docs/features.md](docs/features.md).
 
 ## Shell, WebAssembly, Python
 
@@ -135,9 +135,9 @@ print(list(db.run("select * from demo")))
 
 | Backend | TpmC | New-Order | Payment | Order-Status | Delivery | Stock-Level |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| KiteSQL LMDB | 165956 | 303 | 75 | 43 | 436 | 318 |
-| KiteSQL RocksDB | 50739 | 392 | 188 | 198 | 11743 | 812 |
-| SQLite (WAL, `synchronous=OFF`) | 191484 | 274 | 41 | 33 | 343 | 268 |
+| KiteSQL LMDB | 209840 | 254 | 50 | 28 | 345 | 202 |
+| KiteSQL RocksDB | 48049 | 354 | 85 | 146 | 14511 | 562 |
+| SQLite (WAL, `synchronous=OFF`) | 192435 | 270 | 40 | 33 | 344 | 265 |
 
 👉 [Details and how to reproduce](tpcc/README.md)
 

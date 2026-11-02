@@ -2,7 +2,8 @@
 
 A central repository for **Silent Hill** series reverse engineering, file format documentation, and modding tools.
 
-This project aims to:
+This repository aims to:
+
 - Document file formats used across the Silent Hill series
 - Provide tools and scripts for extracting and viewing game assets (3D models, textures, archives, audio)
 - Catalog demos, prototypes, related media, and community resources
@@ -38,13 +39,13 @@ Covers formats for Silent Hill 1–4, Origins, Shattered Memories, Homecoming, a
 ### [Noesis — Python Plugins](Noesis%20-%20Python%20Plugins)
 Python plugins for **[Noesis](https://richwhitehouse.com/index.php?content=inc_projects.php&showproject=91)**, a tool for previewing and converting 3D models and 2D images. These plugins add support for Silent Hill model and texture formats, enabling viewing and export of game assets.
 
-Includes plugins for Silent Hill 1–4, Origins, and Shattered Memories across PS1, PS2, and PC platforms.
+Includes plugins for Silent Hill 1–4, Origins, The Escape, and Homecoming collision data across PS1, PS2, PC, and iOS formats. See the plugin list for the specific formats supported.
 
 ### [3D Model Researcher — Scripts](3D%20Model%20Researcher%20-%20Scripts)
 Python scripts for **[3D Model Researcher](https://mr.game-viewer.org/)**, a tool designed to reverse engineer 3D model formats. These scripts enable viewing of Silent Hill 3D models.
 
 ### [QuickBMS — Scripts](QuickBMS%20-%20Scripts)
-Extraction scripts for **[QuickBMS](https://aluigi.altervista.org/quickbms.htm)**, a universal file extractor. These scripts handle Silent Hill 4 archive formats (`.bin` and `.sh4`), extracting individual files with auto-detected type extensions.
+Extraction scripts for **[QuickBMS](https://aluigi.altervista.org/quickbms.htm)**, a universal file extractor. The scripts cover Silent Hill 1 disc data and Silent Hill 4 archive formats (`.bin` and `.sh4`). See the [QuickBMS README](QuickBMS%20-%20Scripts/README.md) for usage and tested-file details.
 
 ---
 
@@ -55,6 +56,7 @@ Standalone utility scripts for specific tasks. Currently contains a **Silent Hil
 
 ## [Debug — dwarf2cpp](Debug%20-%20dwarf2cpp)
 C/C++ header files generated from DWARF debug symbols found in Silent Hill demo and beta disc executables, extracted using **[dwarf2cpp](https://github.com/nicknick0630/dwarf2cpp)**. These headers reveal original struct definitions, variable names, and type information from the game's source code. Contains debug data from:
+
 - Silent Hill 2 (Japan) (Beta) (2001-04-25)
 - Silent Hill 2 (USA) (Beta)
 - Silent Hill 4 — E3 Trial Version (E3 2004)

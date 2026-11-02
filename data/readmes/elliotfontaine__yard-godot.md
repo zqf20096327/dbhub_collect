@@ -65,10 +65,11 @@ If a scan directory is set, entries are managed automatically. Otherwise, you ca
 
 ### Inspector dropdown with `@export_custom`
 
-`Registry.PROPERTY_HINT_CUSTOM` enables a dropdown in the inspector for any `StringName`, `String`, `Array[StringName]`, or `Array[String]` property, populated with the string IDs of a given registry.
+`Registry.PROPERTY_HINT_CUSTOM` enables a dropdown in the inspector for any `StringName` or `String` property, populated with the string IDs of a given registry. It also works on the elements of a typed `Array` or a `PackedStringArray`, and on the keys or values of a typed `Dictionary`.
 
 ```gdscript
 @export_custom(Registry.PROPERTY_HINT_CUSTOM, "res://data/item_registry.tres") var item: StringName
+@export_custom(Registry.PROPERTY_HINT_CUSTOM, "res://data/item_registry.tres") var prices: Dictionary[StringName, int]
 ```
 
 ### Loading entries at runtime
@@ -94,7 +95,7 @@ var string_id := ENEMIES.get_string_id_of(loaded_resource)
 
 ### Querying entries through the property index
 
-Set up indexed properties in **Registry Settings** and press **Reindex** to bake the index. At runtime, queries run without loading any resource.
+List the properties to index in **Registry Settings**. YARD bakes their values into the registry file when you save the settings, and again each time you run the project from the editor or export it. At runtime, queries run without loading any resource.
 
 ```gdscript
 # Single property (exact value or predicate)
@@ -108,7 +109,13 @@ var forest_without_boss := ROOMS.where({
 })
 ```
 
-Properties support dot notation for nested resources: `&"weapon.rarity"` resolves the `rarity` property of the subresource stored in `weapon`.
+To index a property of a nested resource, use a dot-separated path, both in **Registry Settings** and in your queries. For example, if each enemy has a `weapon` property holding a `Weapon` resource, indexing `weapon.rarity` lets you find enemies by the rarity of their weapon:
+
+```gdscript
+var legendary_wielders := ENEMIES.filter(&"weapon.rarity", Rarity.LEGENDARY)
+```
+
+Paths can go several levels deep (e.g. `weapon.enchantment.element`).
 
 ## Contributing
 

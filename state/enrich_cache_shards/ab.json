@@ -1,10 +1,10 @@
 {
  "diesel-rs/diesel": {
-  "commit_7d": 25,
-  "commit_90d": 431,
+  "commit_7d": 54,
+  "commit_90d": 452,
   "rel_ver": "v2.3.14",
   "rel_pub": "2026-10-07",
-  "rel_days": 18,
+  "rel_days": 26,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 394,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Rust": 100,
    "PLpgSQL": 0,
@@ -22,10 +22,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v2.3.14",
+    "d": "2026-10-07",
+    "n": "* Add support for sqlite-wasm-rs 0.6\n* Fixed a failed top-level `COMMIT`, such as a deferred foreign key violation on SQLite, leaving the transaction open\n-   Providing knowledge and help to maintain the MySQL/MariaDB backend. This is currently the only in-tree backend that is not used by any maintainers, so having someone around that actually uses this backend would be very helpful for the Diesel project."
+   },
+   {
+    "t": "v2.3.13",
+    "d": "2026-09-04",
+    "n": "* Fixed undefined behavior in `SqliteConnection::serialize_database_to_buffer` when SQLite returns a null buffer for an empty deserialized database or an allocation failure. `SerializedDatabase::as_slice` is deprecated in favor of the new `SerializedDatabase::try_as_slice`, which reports the allocation failure as an error instead of panicking.\n* Fixed a possible null pointer dereference in the custom SQLite aggregate function support when SQLite fails to allocate the aggregate state\n* MySQL and MariaDB now "
+   },
+   {
+    "t": "v2.3.12",
+    "d": "2026-08-07",
+    "n": "* Fixed FromSql/ToSql for chrono::NaiveTime on MySQL dropping the fractional-seconds component of TIME values, so a TIME(N) column now round-trips its microseconds like DATETIME / TIMESTAMP already did.\n* Extended libsqlite3-sys support to include 0.38\n-   Providing knowledge and help to maintain the MySQL/MariaDB backend. This is currently the only in-tree backend that is not used by any maintainers, so having someone around that actually uses this backend would be very helpful for the Diesel project."
+   }
+  ]
  },
  "DataWithBaraa/sql-ultimate-course": {
   "commit_90d": 21,
@@ -52,8 +69,8 @@
   }
  },
  "rlaope/estudy": {
-  "commit_90d": 103,
-  "commit_7d": 7,
+  "commit_90d": 102,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -65,10 +82,11 @@
    "Rust": 88,
    "Python": 12
   },
-  "enriched_at": "20261004",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261004",
-   "release": "20261004"
+   "commit": "20261102",
+   "release": "20261102",
+   "security": "20261102"
   }
  },
  "kubedb/cli": {

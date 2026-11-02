@@ -307,8 +307,9 @@ The key is printed once to stdout and the `[[security.api_keys]]` stanza to stde
 roles bundle four capabilities — `admin` (everything), `writer` (read and write), `reader`
 (read only) — and `allowed_indexes` restricts a key to named indexes for every role.
 
-`--key-out` and `--hash-out` write the two files the rest of the design already expects,
-created `0600` and never overwritten:
+`--key-out` and `--hash-out` write the two files the rest of the design already expects, never
+overwritten: the key `0600`, and the digest `0640` in the group of its directory, so in the
+packages' `/etc/cameodb/keys` the service reads it with nothing more to do:
 
 ```bash
 cameodb keygen --role writer --label team-a \
@@ -409,3 +410,18 @@ Please review our [Code of Conduct](.github/CODE_OF_CONDUCT.md) before participa
 ## 📄 License
 
 CameoDB uses a multi-license model — see [LICENSE](LICENSE) for details. In short: the core crates are Apache-2.0, the client SDK and bench harness are MIT, and the server is FSL-1.1-ALv2 (a.k.a. FSL-1.1-Apache-2.0 — converting to Apache-2.0 two years after release). License texts live in [licenses/](licenses/).
+
+## 📊 Measured Performance
+
+### Croatian analyzers (`hr_stem`, `hr_stem_fold`)
+
+Measured against hand-checked Croatian (hr500k, hrLex); method and data in [tools/hr-lexicon](tools/hr-lexicon/README.md).
+
+| Metric | Result |
+|---|---|
+| Base-form query F1, `hr_stem` | 97.1% |
+| Base-form query F1, `hr_stem_fold` | 96.9% |
+| Base form typed without diacritics, share of accented occurrences reached (`hr_stem_fold`) | 97.6% |
+| Analysis cost | about 40 ns per token on frequent words, about 200 ns on rare ones |
+| Embedded data (both analyzers) | 5.45 MB, mapped straight from the binary |
+| Dictionary | 1.7 million word forms, learned from a 3.46-billion-token corpus |

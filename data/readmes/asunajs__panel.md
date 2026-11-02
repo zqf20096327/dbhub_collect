@@ -9,9 +9,49 @@
 - 用 JavaScript 写插件，把一组重复操作做成按钮或定时任务
 - 只想跑一段 Shell / Python / JavaScript，不想为它写完整插件
 
-当前版本：**0.1.9**。设置页可以直接看到正在运行的面板版本。
+当前版本：**0.2.1**。设置页可以直接看到正在运行的面板版本和构建 commit。
 
 ![面板首页](docs/screenshots/web-dashboard.png)
+
+---
+
+## 最快跑起来
+
+零基础只看这三步，后面所有章节都可以先跳过。
+
+### 1. 装
+
+Linux、树莓派、旧手机（Termux）一行搞定：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/asunajs/panel/main/install.sh | bash
+```
+
+Windows 直接下 [`plugin-panel-windows-x86_64.exe`](https://github.com/asunajs/panel/releases/latest)，双击就能跑。
+
+### 2. 运行
+
+```bash
+plugin-panel
+```
+
+第一次启动会在终端打印一行**一次性口令**，形如 `K7QM-3XP9`。留着它，下一步要用。
+
+### 3. 打开浏览器，设一个口令
+
+```text
+http://127.0.0.1:8787
+```
+
+会自动跳到设置页：输两遍新口令，再填终端里那个一次性口令，点「完成设置」。
+
+> 从**别的设备**访问（树莓派、盒子这类没有本机屏幕的机器）：用 `BIND_ADDR=0.0.0.0:8787` 启动，
+> 终端会把局域网地址排在前面打印出来，照那条打开就行。
+面板会自动重启，然后用刚设的口令登录就行。
+
+> 一次性口令只在**还没设过口令**时出现，设完就没有了。
+> 要服务化部署（systemd / 反代 / 容器、想跳过引导）可以直接配 `PANEL_TOKEN_HASH`，
+> 见[第一次启动](#第一次启动)。
 
 ---
 
@@ -84,9 +124,10 @@ chmod +x plugin-panel
 ./plugin-panel
 ```
 
-### 从源码运行
+<details>
+<summary>从源码运行（需要 Rust 工具链）</summary>
 
-需要 Rust 工具链。第一次编译会久一点。
+第一次编译会久一点。
 
 ```bash
 git clone https://github.com/asunajs/panel.git
@@ -95,11 +136,15 @@ cargo build --release
 ./target/release/plugin-panel
 ```
 
+</details>
+
 ---
 
 ## 第一次启动
 
-面板必须设置口令，没有口令会直接拒绝启动。
+第一次启动会在终端打印一次性口令，浏览器打开面板会自动跳到设置页。
+下面这条路是**服务化部署**用的（systemd / 反代 / 容器，没有终端可看一次性口令）；
+单机直接跑的话看上面的[最快跑起来](#最快跑起来)就够了。
 
 先生成一个口令哈希：
 
@@ -351,6 +396,18 @@ curl -X PUT \
 
 如果之前登录过，换口令后旧会话会失效，重新登录即可。
 
+### 口令忘了怎么办
+
+凭据存在 **`<数据库所在目录>/credential`**（默认 `data/credential`，权限 0600）。
+删掉它、重启面板，就会重新进引导页，用终端里打印的一次性口令设个新口令：
+
+```bash
+rm data/credential
+plugin-panel
+```
+
+⚠ 删之前确认你还要保留 `data/panel.db` —— 只删 `credential`，别把整个目录清空。
+
 ### 端口被占用
 
 换一个端口：
@@ -473,6 +530,9 @@ plugin-panel
 
 ## 开发
 
+<details>
+<summary>跑测试 / 冒烟</summary>
+
 ```bash
 cargo test
 cargo clippy --all-targets -- -D warnings
@@ -486,6 +546,8 @@ python3 scripts/smoke.py ./target/release/plugin-panel
 ```bash
 PANEL_TOKEN=dev-token PANEL_ALLOW_PLAIN_TOKEN=1 WEB_DEV_DIR=./web ./target/release/plugin-panel
 ```
+
+</details>
 
 ---
 

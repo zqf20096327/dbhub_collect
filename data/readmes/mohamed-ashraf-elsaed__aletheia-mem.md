@@ -17,6 +17,11 @@
 ![Status](https://img.shields.io/badge/status-alpha-orange)
 ![Bun](https://img.shields.io/badge/bun-%3E%3D1.1-black)
 ![Platform](https://img.shields.io/badge/platform-linux%20%7C%20macOS%20%7C%20Windows%20%28CI%20tested%29-lightgrey)
+[![As seen on Open Source Alternatives](https://www.opensourcealternatives.to/badge-osa.svg)](https://www.opensourcealternatives.to)
+
+<a href="https://alternativeto.net/software/aletheia-mem/about/?utm_source=badge&utm_medium=referral"><img src="https://alternativeto.net/static/badges/badge-compact-color.svg" alt="Aletheia Memory on AlternativeTo" height="44"></a>
+
+Listed in the [official MCP Registry](https://registry.modelcontextprotocol.io/v0/servers?search=aletheia-mem), [Glama](https://glama.ai/mcp/servers/mohamed-ashraf-elsaed/aletheia-mem), [mcpservers.org](https://mcpservers.org/servers/mohamed-ashraf-elsaed/aletheia-mem), [TensorBlock awesome-mcp-servers](https://github.com/TensorBlock/awesome-mcp-servers/pull/4715) and [AlternativeTo](https://alternativeto.net/software/aletheia-mem/).
 
 </div>
 
@@ -28,15 +33,15 @@ aletheia-server
 # open http://127.0.0.1:37790
 ~~~
 
-<p align="center"><img src="https://raw.githubusercontent.com/mohamed-ashraf-elsaed/aletheia-mem/main/docs/screenshots/memory-dark.webp" alt="The Memory tab: search, edit, pin and export what Aletheia stored" width="48%"> <img src="https://raw.githubusercontent.com/mohamed-ashraf-elsaed/aletheia-mem/main/docs/screenshots/work-dark.webp" alt="The Work tab: captured sessions, facts and goals" width="48%"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/mohamed-ashraf-elsaed/aletheia-mem/main/docs/screenshots/home-projects-light.webp" alt="The Home page: your projects, your rules and how to start, in plain words (demo data)" width="48%"> <img src="https://raw.githubusercontent.com/mohamed-ashraf-elsaed/aletheia-mem/main/docs/screenshots/home-project-light.webp" alt="One project on the Home page: what Aletheia knows, with a Hide button, and the rules for it (demo data)" width="48%"></p>
 
-<p align="center"><a href="https://mohamed-ashraf-elsaed.github.io/aletheia-mem/">Docs site</a> · <a href="https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/06-frontend.md">Frontend guide</a> · <a href="https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/CHANGELOG.md">Changelog</a> · <a href="https://github.com/mohamed-ashraf-elsaed/aletheia-mem/issues">Issues</a></p>
+<p align="center"><a href="https://aletheia.mohamedashrafelsaed.com/">Docs site</a> · <a href="https://mohamedashrafelsaed.com/projects/aletheia/">Project page</a> · <a href="https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/06-frontend.md">Frontend guide</a> · <a href="https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/CHANGELOG.md">Changelog</a> · <a href="https://github.com/mohamed-ashraf-elsaed/aletheia-mem/issues">Issues</a></p>
 
 **Status: alpha.** The memory engine and the installers work in tests. The real Claude Code, Command Code, Codex CLI and
 OpenCode listed the generated MCP config. Hooks have run in real sessions of Claude Code (two days of use), Command Code (one short session) and Codex CLI (one interactive session), all on the author's machine and one user, with secrets redacted and no leaks found by the checker. No hook has run inside Cursor, Gemini CLI, Windsurf or OpenCode yet, and answer accuracy is not measured. CI runs the test suite on Linux, macOS and Windows. On Windows, two hook checks (Windsurf and Gemini CLI) are skipped and no real tool was tried there, so Windows is tested in CI only.
 
 <!-- claims:begin -->
-**1,493 tests** — 0 failures (run `bun test`).
+**1,515 tests** — 0 failures (run `bun test`).
 <!-- claims:end -->
 
 [English](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/README.md) · [中文](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.zh.md) · [Español](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.es.md) · [Português (Brasil)](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.pt-br.md) · [日本語](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.ja.md) · [Deutsch](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.de.md) · [Français](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.fr.md) · [한국어](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.ko.md) · [हिन्दी](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.hi.md) · [العربية](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.ar.md) · [Русский](https://github.com/mohamed-ashraf-elsaed/aletheia-mem/blob/main/docs/i18n/README.ru.md).
@@ -102,7 +107,7 @@ the instruction file each tool already reads. What has and has not been checked:
 | claude-code | full | MCP connection 2.1.312 on 2026-10-27; hooks ran in real sessions over two days of use; one user on one machine | SessionStart, UserPromptSubmit, PostToolUse, Stop, SessionEnd |
 | command-code | full | MCP connection 1.88.1 on 2026-10-27; hooks ran in one short session; one user on one machine | SessionStart, PostToolUse, Stop |
 | cursor | full | config written from docs, not tested on a real install | sessionStart, beforeSubmitPrompt, postToolUse, afterAgentResponse, stop, sessionEnd |
-| codex | full | MCP connection 0.130.0 on 2026-10-27; hooks ran in one interactive session (reviewed once with /hooks); one user on one machine | SessionStart, UserPromptSubmit, PostToolUse, Stop, SessionEnd |
+| codex | full | MCP connection 0.165.0 on 2026-10-29; hooks ran in one interactive session (reviewed once with /hooks); one user on one machine | SessionStart, UserPromptSubmit, PostToolUse, Stop, SessionEnd |
 | gemini-cli | full | config written from docs, not tested on a real install | SessionStart, BeforeAgent, AfterTool, AfterAgent, SessionEnd |
 | windsurf | full | config written from docs, not tested on a real install | pre_user_prompt, post_run_command, post_write_code, post_cascade_response |
 | opencode | mcp+rules | MCP connection 1.18.33 on 2026-10-27; hooks not run | none (MCP and rules only) |
@@ -257,7 +262,7 @@ docs/           the documents
 
 ## Documentation
 
-The full documentation is at <https://mohamed-ashraf-elsaed.github.io/aletheia-mem/docs/>. The Markdown in `docs/` is
+The full documentation is at <https://aletheia.mohamedashrafelsaed.com/docs/>. The Markdown in `docs/` is
 canonical.
 
 1. **Get started:** [Introduction](docs/start/introduction.md) · [Installation](docs/start/installation.md)
@@ -285,8 +290,8 @@ canonical.
 8. **Internals:** [Architecture](docs/01-architecture.md) · [Data model](docs/02-data-model.md)
    · [Frontend](docs/06-frontend.md) · [Operations](docs/07-operations.md)
 
-AI tools can read [llms.txt](https://mohamed-ashraf-elsaed.github.io/aletheia-mem/llms.txt), or
-[llms-full.txt](https://mohamed-ashraf-elsaed.github.io/aletheia-mem/llms-full.txt) for every page in one file.
+AI tools can read [llms.txt](https://aletheia.mohamedashrafelsaed.com/llms.txt), or
+[llms-full.txt](https://aletheia.mohamedashrafelsaed.com/llms-full.txt) for every page in one file.
 
 ## Contributing
 

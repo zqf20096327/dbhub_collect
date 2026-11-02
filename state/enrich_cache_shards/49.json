@@ -88,11 +88,11 @@
   }
  },
  "Dicklesworthstone/mcp_agent_mail": {
-  "commit_7d": 7,
-  "commit_90d": 37,
+  "commit_7d": 2,
+  "commit_90d": 39,
   "rel_ver": "v0.3.2",
   "rel_pub": "2026-04-16",
-  "rel_days": 192,
+  "rel_days": 200,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -101,7 +101,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 1,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Python": 80,
    "HTML": 13,
@@ -111,10 +111,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v0.3.2",
+    "d": "2026-04-16",
+    "n": "**Full Changelog**: https://github.com/Dicklesworthstone/mcp_agent_mail/compare/v0.3.1...v0.3.2"
+   },
+   {
+    "t": "v0.3.0",
+    "d": "2026-01-07",
+    "n": "- **SQLite Concurrency**: Pool tuning for better concurrent access\n- `fix(db)`: Python 3.14 cancellation safety and pool tuning for SQLite"
+   },
+   {
+    "t": "v0.2.1",
+    "d": "2026-01-06",
+    "n": "- SQLite now uses `NullPool` to prevent FD exhaustion on macOS\n- PostgreSQL and other backends retain standard pooling configuration\n- `fix(db)`: Python 3.14 cancellation safety and FD exhaustion prevention"
+   }
+  ]
  },
  "yinqiwen/ardb": {
   "commit_90d": 0,
@@ -136,7 +153,10 @@
    "Lua": 1,
    "Makefile": 1
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "dim_ts": {
+   "security": "20261102"
+  }
  },
  "go-gormigrate/gormigrate": {
   "commit_90d": 7,
@@ -247,11 +267,11 @@
   "enriched_at": "20260927"
  },
  "treflehq/trefle-api": {
-  "commit_90d": 148,
-  "commit_7d": 0,
+  "commit_90d": 229,
+  "commit_7d": 7,
   "rel_ver": "v2.3.0",
   "rel_pub": "2026-09-05",
-  "rel_days": 22,
+  "rel_days": 58,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -267,7 +287,28 @@
    "SCSS": 4,
    "Shell": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "rel_notes": [
+   {
+    "t": "v2.3.0",
+    "d": "2026-09-05",
+    "n": "- **Facts now record the identifier the value carries at its source.** A fact said `powo` without saying which POWO record, so the trail stopped at the database name. `GET /api/v1/species/{id}/facts` now returns `source_record_id`, including on rejected claims — the ones you most want to trace back."
+   },
+   {
+    "t": "v2.2.0",
+    "d": "2026-09-04",
+    "n": "Hardening of the data provenance system, driven by curating real species rather than by reading the code.\n\n## Source arbitration\n- **A tie no longer overwrites.** Only a strictly stronger source may replace a value that is already filled. When two sources of equal authority disagree, the existing value stays and the newcomer is recorded as a conflicting fact, instead of the outcome depending on which pipeline ran last.\n- **Values that predate provenance recording are no longer defenceless.** They carry no f"
+   },
+   {
+    "t": "v2.1.0",
+    "d": "2026-09-04",
+    "n": "- Source arbitration at ingestion: a weaker source no longer silently overwrites a stronger one (conflicting claims are kept and visible), implausible values are rejected before they reach the database, human-accepted corrections always win"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "ekylibre/ekylibre": {
   "commit_90d": 0,
@@ -465,11 +506,11 @@
   "enriched_at": "20260927"
  },
  "sbt/flyway-sbt": {
-  "commit_90d": 39,
-  "commit_7d": 4,
+  "commit_90d": 33,
+  "commit_7d": 2,
   "rel_ver": "v11.11.0",
   "rel_pub": "2025-08-11",
-  "rel_days": 412,
+  "rel_days": 448,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -482,7 +523,28 @@
    "Scala": 99,
    "Java": 1
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "rel_notes": [
+   {
+    "t": "v11.11.0",
+    "d": "2025-08-11",
+    "n": "flyway-sbt, originally developed by Boxfuse GmbH and @davidmweber, is an sbt plugin for Flyway database migration. The project was transferred from the flyway org to sbt org in 2024, and will be published under a new Maven organization:"
+   },
+   {
+    "t": "v10.21.0",
+    "d": "2024-11-16",
+    "n": "flyway-sbt, originally developed by Boxfuse GmbH and @davidmweber, is an sbt plugin for Flyway database migration. The project was transferred from the flyway org to sbt org in 2024, and will be published under a new Maven organization:\nDatabase support in Flyway has been modularized as of Flyway 10.0.0. You need to include the respective database module in your project configuration now. See following pull request for more details:"
+   },
+   {
+    "t": "v9.22.0",
+    "d": "2024-11-08",
+    "n": "flyway-sbt, originally developed by Boxfuse GmbH and @davidmweber, is an sbt plugin for Flyway database migration. The project was transferred from the flyway org to sbt org in 2024, and will be published under a new Maven organization:"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "sjdonado/bit": {
   "commit_90d": 12,
@@ -628,11 +690,12 @@
    "HTML": 1,
    "Shell": 0
   },
-  "enriched_at": "20260929",
-  "commit_90d": 562,
-  "commit_7d": 8,
+  "enriched_at": "20261102",
+  "commit_90d": 528,
+  "commit_7d": 6,
   "dim_ts": {
-   "commit": "20260929"
+   "commit": "20261102",
+   "release": "20261102"
   }
  },
  "guidocella/eloquent-insert-on-duplicate-key": {

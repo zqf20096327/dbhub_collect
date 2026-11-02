@@ -4,7 +4,7 @@
 [![NPM downloads](https://img.shields.io/npm/dt/@willsoto/nestjs-objection.svg)](https://www.npmjs.com/package/@willsoto/nestjs-objection)
 ![](https://github.com/willsoto/nestjs-objection/workflows/tests/badge.svg)
 
-<!-- prettier-ignore-start -->
+<!-- oxfmt-ignore-start -->
 
 <!-- toc -->
 
@@ -21,7 +21,7 @@
 
 <!-- tocstop -->
 
-<!-- prettier-ignore-end -->
+<!-- oxfmt-ignore-end -->
 
 ## Description
 
@@ -46,6 +46,7 @@ pnpm add knex objection
 ```typescript
 import { Module } from "@nestjs/common";
 import { ObjectionModule } from "@willsoto/nestjs-objection";
+
 import { BaseModel } from "./base";
 import { User } from "./user";
 
@@ -80,6 +81,7 @@ import { Module } from "@nestjs/common";
 import { ObjectionModule } from "@willsoto/nestjs-objection";
 import knex from "knex";
 import { knexSnakeCaseMappers } from "objection";
+
 import { ConfigModule, ConfigService } from "../config";
 import { BaseModel } from "./base";
 import { User } from "./user";
@@ -124,11 +126,7 @@ export class DatabaseModule {}
 
 ```ts
 import { Inject, Injectable } from "@nestjs/common";
-import {
-  HealthCheckError,
-  HealthIndicator,
-  HealthIndicatorResult,
-} from "@nestjs/terminus";
+import { HealthCheckError, HealthIndicator, HealthIndicatorResult } from "@nestjs/terminus";
 import { Connection, KNEX_CONNECTION } from "@willsoto/nestjs-objection";
 
 @Injectable()
@@ -151,6 +149,7 @@ export class PrimaryDatabaseHealthIndicator extends HealthIndicator {
 
 ```ts
 import { Inject, Injectable } from "@nestjs/common";
+
 import { User } from "./user";
 
 @Injectable()
@@ -167,6 +166,8 @@ export class UserService {
 
 When using multiple connections, you must **name** each connection when registering it.
 Otherwise subsequent connections will override the previous ones.
+With `registerAsync`, set `name` on the `registerAsync` options themselves; any `name` returned
+from the factory is ignored.
 
 ```ts
 @Module({
@@ -178,8 +179,6 @@ Otherwise subsequent connections will override the previous ones.
       inject: [ConfigService],
       useFactory(config: ConfigService) {
         return {
-          // You must provide a name for the connection here as well...
-          name: "connection1",
           Model: BaseModel1,
           config: {
             client: "sqlite3",

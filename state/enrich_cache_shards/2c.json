@@ -1,29 +1,46 @@
 {
  "The-Vibe-Company/quivr": {
-  "commit_7d": 0,
-  "commit_90d": 569,
-  "rel_ver": "v2.0.0-alpha.7",
-  "rel_pub": "2026-10-14",
-  "rel_days": 11,
-  "rel_n90": 7,
-  "rel_pre": true,
+  "commit_7d": 20,
+  "commit_90d": 589,
+  "rel_ver": "v2.0.2",
+  "rel_pub": "2026-10-30",
+  "rel_days": 3,
+  "rel_n90": 10,
+  "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
   "sec_worst": null,
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 116,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Python": 99,
    "Shell": 1
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v2.0.2",
+    "d": "2026-10-30",
+    "n": "2.0.2 moves the search database to Weaviate 1.39.14. It changes no API, no configuration and no stored data. Upgrade any 2.0.x installation to it.\n- **Safer restarts.** A crash right after a shutdown could leave a keyword-search file empty, and the database would then not start without a manual repair. Startup and shutdown are also faster.\n1. Back up the search database volume.\n* **deploy:** pin Weaviate 1.39.14 for filtered-search panics and RQ memory ([#3976](https://github.com/The-Vibe-Company/quivr/issu"
+   },
+   {
+    "t": "v2.0.1",
+    "d": "2026-10-30",
+    "n": "- **Weaviate 1.39.13** replaces 1.39.10 as the search database. It rejects TLS certificate chains built on the eight leaked eMudhra intermediate certificates (CVE-2026-111943). Weaviate uses TLS for backups, OIDC and model modules.\n1. Back up the search database volume, as before any database upgrade."
+   },
+   {
+    "t": "v2.0.0",
+    "d": "2026-10-29",
+    "n": "- **Search** recovers after a database restart, with its buffers restored and its hydration work bounded."
+   }
+  ]
  },
  "pgsty/pigsty": {
   "commit_7d": 0,

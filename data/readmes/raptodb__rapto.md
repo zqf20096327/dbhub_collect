@@ -20,30 +20,28 @@ Although Rapto is still an immature project and depends in part on the optimizat
 
 *\* Benchmarked on WSL2 with Intel Core i7-12700H, server instance with default parameters*
 ```
-Dataset: keys=100000 key=3B value=3B; Warmup: 16 batches.
-Benchmarking test=get with 1 parallel clients...
-Summary:     10000000 operations completed in 5.17s
-             1934155.65 ops/s 30221.18 batches/s throughput
+Benchmarking test=get-hit with 1 parallel clients...
+Dataset: keys=1000000 key=12B value=3B; Warmup: 512 batches.
+Summary:     100032 operations completed in 63.198ms
+             1582833.15 ops/s 24731.77 batches/s throughput
 Latencies:   avg       min       p50       p95       p99       max      
-batch=64     33.089us  19.846us  31.636us  37.33us   59.718us  5.608ms
+batch=64     40.433us  27.26us   38.381us  51.402us  76.035us  169.563us
 ```
 
 ```
-Dataset: keys=100000 key=3B value=3B; Warmup: 16 batches.
-Benchmarking test=get with 512 parallel clients...
-Summary:     10027008 operations completed in 146.82ms
-             68294442.90 ops/s 1067100.67 batches/s throughput
+Benchmarking test=get-hit with 512 parallel clients...
+Dataset: keys=1000000 key=12B value=3B; Warmup: 512 batches.
+Summary:     131072 operations completed in 2.854ms
+             45913105.86 ops/s 717392.28 batches/s throughput
 Latencies:   avg       min       p50       p95       p99       max      
-batch=64     254.418us 8.511us   243.701us 431.249us 584.937us 2.58ms
+batch=64     305.556us 27.898us  312.724us 536.43us  764.004us 1.251ms
 ```
 
 Here, we can see that throughput increases significantly as the number of clients grows. **But the server is entirely single-threaded**. Rather, a larger number of concurrent clients keeps the event loop constantly fed, allowing the server to amortize event handling costs. This occurs because the architecture enabled me to optimize the `epoll`-based event poller **separately and independently**.
 
 This aspect also leads to a very interesting concept regarding how requests work, which we will call [Batch](#quick-start-with-batch).
 
-However, performance is not only related to this, but also to techniques that reduce memory usage and decrease the frequency of allocations. <br>
-For example, in storage keys, the tag derived from the *3 LSBs* provided by pointer alignment is used to store the value type: it allows us to make use of 3 otherwise unused bits and avoid an additional pointer indirection. <br>
-Allocation frequency can also be reduced by preallocating and reusing the same buffer for different objects. Rapto reuses the same buffer used to receive requests, process queries, and build the replies to be sent back, reducing cache invalidations and unnecessary allocations.
+However, performance is not only related to this, but also to techniques that reduce memory usage and decrease the frequency of allocations, which can be reduced by preallocating and reusing the same buffer for different objects. Rapto reuses the same buffer used to receive requests, process queries, and build the replies to be sent back, reducing cache invalidations and unnecessary allocations.
 
 ## Quick start with Batch
 
@@ -168,7 +166,7 @@ zig fetch --save git+https://github.com/raptodb/rapto
 Then add it as dependency:
 ```zig
 const rapto = b.dependency("rapto", .{ .target = target, .optimize = optimize });
-exe.root_module.addImport("rapto", rapto.module("rapto-client"));
+exe.root_module.addImport("rapto-client", rapto.module("rapto"));
 ```
 
 But, if you need a client in another programming language, you can create it yourself by following `Client.zig`, `Client/value.zig` and understanding how works "frames" and "pipeline" concept.
@@ -229,7 +227,7 @@ while (try iterator.next(io)) |keys_iter| {
 
 This will allow, in the future, once the `inspect` tool is implemented, the AOF to be compacted, modified, analyzed, and its statistics displayed. For now, we can only record and load the AOF, with the ability to load batches up to a given timestamp.
 
-## Build and testing
+## Build, testing and coverage
 
 To build and run:
 ```sh
@@ -244,7 +242,13 @@ To run unit tests:
 ```sh
 zig build test
 ```
+
 More unit tests will be available. Fuzz testing and integration will also be supported soon.
+
+To generate test coverage report:
+```sh
+zig build coverage
+```
 
 ## Run the benchmark yourself
 
@@ -255,36 +259,46 @@ Benchmarks are sufficiently configurable and allow isolated testing by consideri
 
 To learn how to customize benchmarks, simply **run** `./raptodb help` and check the benchmark section or follow these runs:
 
-*\* Benchmarked on WSL2 with Intel Core i7-12700H, server instance with default parameters*
+*\* Benchmarked on WSL2 with Intel Core i7-12700H*
 ```
-> ./raptodb benchmark --test get --dataset-keys 10000000 --ops 10000000
-  --key-size 64 --value-size 64 --batch-size 1024 --warmup-batches 8 --clients 1
-Dataset: keys=10000000 key=64B value=64B; Warmup: 8 batches.
-Benchmarking test=get with 1 parallel clients...
-Summary:     10000384 operations completed in 1.012s
-             9875275.13 ops/s 9643.82 batches/s throughput
+> ./raptodb benchmark --test get-hit --dataset-keys 10000000 --ops 10000000
+  --value-size 64 --batch-size 1024 --clients 1
+Benchmarking test=get-hit with 1 parallel clients...
+Dataset: keys=10000000 key=12B value=64B; Warmup: 512 batches.
+Summary:     10000384 operations completed in 2.048s
+             4882136.67 ops/s 4767.71 batches/s throughput
 Latencies:   avg       min       p50       p95       p99       max      
-batch=1024   103.693us 90.66us   98.141us  127.618us 180.381us 802.766us
+batch=1024   209.744us 185.757us 200.281us 243.925us 397.393us 1.035ms
 ```
 ```
-> ./raptodb benchmark --test set --dataset-keys 100000 --ops 1000000
-  --key-size 64 --value-size 64 --batch-size 1024 --warmup-batches 8 --clients 1
-Dataset: keys=100000 key=64B value=64B; Warmup: 8 batches.
+> ./raptodb benchmark --test get-miss --dataset-keys 1000000 --ops 1000000
+  --key-size 512 --value-size 512 --batch-size 1024 --warmup-batches 8 --clients 1
+Benchmarking test=get-miss with 1 parallel clients...
+Dataset: empty; Warmup: 8 batches.
+Summary:     1000448 operations completed in 280.102ms
+             3571721.92 ops/s 3488.01 batches/s throughput
+Latencies:   avg       min       p50       p95       p99       max      
+batch=1024   286.696us 245.004us 280.869us 339.726us 382.132us 555.327us
+```
+```
+> ./raptodb benchmark --test set --dataset-keys 1000000 --ops 1000000
+  --key-size 64 --value-size 64 --batch-size 1024 --clients 1
 Benchmarking test=set with 1 parallel clients...
-Summary:     1000448 operations completed in 269.99ms
-             3705487.29 ops/s 3618.64 batches/s throughput
+Dataset: keys=1000000 key=64B value=64B; Warmup: no.
+Summary:     1000448 operations completed in 321.764ms
+             3109252.38 ops/s 3036.38 batches/s throughput
 Latencies:   avg       min       p50       p95       p99       max      
-batch=1024   276.346us 129.773us 183.717us 328.096us 837.586us 35.41ms
+batch=1024   329.339us 172.491us 196.63us  651.773us 787.3us   87.874ms
 ```
 ```
 > ./raptodb benchmark --test set --dataset-keys 100000 --ops 100000
-  --key-size 3 --value-size 3 --batch-size 1 --clients 128 --warmup-batches 0
-Dataset: keys=100000 key=3B value=3B; Warmup: no.
+  --value-size 3 --batch-size 1 --clients 128 --warmup-batches 0
 Benchmarking test=set with 128 parallel clients...
-Summary:     100096 operations completed in 207.89ms
-             481485.16 ops/s 481485.16 batches/s throughput
+Dataset: keys=100000 key=12B value=3B; Warmup: no.
+Summary:     100096 operations completed in 181.551ms
+             551336.83 ops/s 551336.83 batches/s throughput
 Latencies:   avg       min       p50       p95       p99       max      
-batch=1      183.511us 5.737us   197.275us 323.018us 446.656us 5.166ms
+batch=1      163.508us 16.165us  163.81us  285.347us 392.915us 5.433ms
 ```
 
 ## For contributors

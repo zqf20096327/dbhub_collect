@@ -1,9 +1,9 @@
 {
  "dolthub/dolt": {
-  "commit_7d": 112,
-  "commit_90d": 1016,
-  "rel_ver": "v2.6.0",
-  "rel_pub": "2026-10-23",
+  "commit_7d": 39,
+  "commit_90d": 993,
+  "rel_ver": "v2.6.2",
+  "rel_pub": "2026-10-31",
   "rel_days": 2,
   "rel_n90": 12,
   "rel_pre": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 144,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Go": 80,
    "Shell": 19,
@@ -23,10 +23,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v2.6.2",
+    "d": "2026-10-31",
+    "n": "Switch imports from the deprecated `go-mysql-server/enginetest/scriptgen/setup` re-export package to `go-mysql-server/enginetest/setup`. No behavior change; the old package only aliased the new one.\n* [4076](https://github.com/dolthub/go-mysql-server/pull/4076): Skip resolving virtual columns for DROP and SHOW statements so tables with unresolvable generated expressions can be inspected and repaired.\n* [4094](https://github.com/dolthub/go-mysql-server/pull/4094): Support unary bitwise complement\n* [4078](ht"
+   },
+   {
+    "t": "v2.6.1",
+    "d": "2026-10-26",
+    "n": "* [4056](https://github.com/dolthub/go-mysql-server/pull/4056): Fix accidentally dropping filters in complex joins\nthe new script in `SubqueriesScriptTests` covers the query from the issue, the same thing with an inner `JOIN LATERAL`, and a `LEFT JOIN LATERAL` over a table that mixes an inner and an outer filter. all three failed with the error above and pass now, and i checked the expected results against mysql 8.4. the rest of `./sql/...` and `./enginetest/...` has the same results as main under `-tags gm"
+   },
+   {
+    "t": "v2.6.0",
+    "d": "2026-10-23",
+    "n": "* [4056](https://github.com/dolthub/go-mysql-server/pull/4056): Fix accidentally dropping filters in complex joins\nfilter-branch creates a new database for each commit it replays and never closed them, so their sequence trackers could still be reading the store when dolt closed it. That panic made filter-branch.bats fail intermittently. The rebased engine now closes the databases it owns, and filter-branch closes the engine. Adds a unit regression test.\n* [4023](https://github.com/dolthub/go-mysql-server/pu"
+   }
+  ]
  },
  "go-sql-driver/mysql": {
   "commit_7d": 2,
@@ -54,12 +71,12 @@
   }
  },
  "jaredwray/keyv": {
-  "commit_7d": 5,
-  "commit_90d": 134,
+  "commit_7d": 3,
+  "commit_90d": 115,
   "rel_ver": "v6.1.0",
   "rel_pub": "2026-10-06",
-  "rel_days": 19,
-  "rel_n90": 2,
+  "rel_days": 27,
+  "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -67,7 +84,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 81,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "HTML": 64,
    "TypeScript": 34,
@@ -77,10 +94,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v6.1.0",
+    "d": "2026-10-06",
+    "n": "Migration from v5: v5's Keyv also prefixed every key with `<namespace>:`, so the setting depends on the adapter. A default v5 `@keyv/redis` setup stored `keyv::keyv:foo`, which v6 reads with `new Keyv(new KeyvRedis(uri, { namespaceSeparator: '::keyv:' }), { namespace: 'keyv' })`. If you used `createKeyv()`, set only the same `namespace`. For other adapters, see [The Default `keyv` Namespace Was Removed](https://keyv.org/docs/migration/v5-to-v6/#the-default-keyv-namespace-was-removed).\n- **keyv:** `throwOnEr"
+   },
+   {
+    "t": "v6.0.0-rc.1",
+    "d": "2026-08-03",
+    "n": "- 34 dependency and tooling upgrades across the monorepo — highlights: TypeScript 6→7, pnpm 11.5→11.18, better-sqlite3 12→13 (N-API, drops `prebuild-install`), mongodb 7.4→7.5, mysql2 3.22→3.23, iovalkey 0.3→0.4, `@redis/client` 6.0→6.1, hookified 3.0.1→3.0.2, `actions/setup-node` v6→v7, and the Node engines floor raised to ≥ 22.19.0. Full inventory below.\n- mysql: add docs (e07dc4c, #2019)\nMigration: `@keyv/mysql` tables created under `6.0.0-beta.4` use the previous key column type. R"
+   },
+   {
+    "t": "v6.0.0-beta.4",
+    "d": "2026-06-18",
+    "n": "- **mysql:** return `undefined` instead of `null`, guard `getMany`, and align tests/docs. (d76926b, #1969)\n- **postgres:** code/test review for `@keyv/postgres`. (9fa6847, #1971)\n- **redis:** full code and test review cleanup. (480a560, #1974)\n- **mongo:** uniform test suite, fix README API docs. (0240400, #1968)\n- **mongo:** documentation and fixes (includes #1980 review follow-ups). (f31850d, #1976)\n- **sqlite:** full code and test review cleanup. (8539cfd, #1975)\n- mongo - test: uniform test suite, fix R"
+   }
+  ]
  },
  "okbob/pspg": {
   "commit_7d": 10,
@@ -136,11 +170,11 @@
   }
  },
  "tikv/pd": {
-  "commit_90d": 110,
-  "commit_7d": 13,
+  "commit_90d": 118,
+  "commit_7d": 16,
   "rel_ver": "v7.5.8",
   "rel_pub": "2026-09-17",
-  "rel_days": 38,
+  "rel_days": 46,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -155,12 +189,29 @@
    "Makefile": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v7.5.8",
+    "d": "2026-09-17",
+    "n": "For new features, improvements, and bug fixes released in v7.5.8 for PD, see [TiDB v7.5.8 release notes](https://docs.pingcap.com/tidb/stable/release-7.5.8).\n\nSee the difference from the issue perspective:\n<details>\n\n- tikv/pd#9854\n- tikv/pd#9855\n- tikv/pd#9942\n\n</details>"
+   },
+   {
+    "t": "v8.5.8",
+    "d": "2026-08-27",
+    "n": "For new features, improvements, and bug fixes released in v8.5.8 for PD, see [TiDB v8.5.8 release notes](https://docs.pingcap.com/tidb/stable/release-8.5.8).\n\nSee the difference from the issue perspective:\n<details>\n\n- tikv/pd#11022\n- tikv/pd#9605\n- tikv/pd#10964\n- tikv/pd#11070\n- tikv/pd#10063\n\n</details>"
+   },
+   {
+    "t": "v8.5.7",
+    "d": "2026-07-09",
+    "n": "For new features, improvements, and bug fixes released in v8.5.7 for PD, see [TiDB v8.5.7 release notes](https://docs.pingcap.com/tidb/stable/release-8.5.7).\n\nSee the difference from the issue perspective:\n<details>\n\n- tikv/pd#5718\n- tikv/pd#10722\n- tikv/pd#10684\n- tikv/pd#9745\n- tikv/pd#10687\n- tikv/pd#10251\n- tikv/pd#10681\n- tikv/pd#10744\n- tikv/pd#10797\n- tikv/pd#10684\n- tikv/pd#10795\n- tikv/pd#8978\n- tikv/pd#9477\n- tikv/pd#10705\n- tikv/pd#10868\n- tikv/pd#10876\n- tikv/pd#10901\n\n</details>"
+   }
+  ]
  },
  "foldergram/foldergram": {
   "commit_90d": 11,
@@ -396,7 +447,7 @@
   }
  },
  "datenanfragen/data": {
-  "commit_90d": 14,
+  "commit_90d": 15,
   "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
@@ -409,7 +460,11 @@
    "TypeScript": 98,
    "JavaScript": 2
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "Hesper-Labs/owly": {
   "commit_90d": 0,
@@ -2622,8 +2677,8 @@
   }
  },
  "CommonwealthPasta/tdsql": {
-  "commit_90d": 15,
-  "commit_7d": 0,
+  "commit_90d": 66,
+  "commit_7d": 5,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2634,10 +2689,10 @@
   "lang": {
    "Rust": 100
   },
-  "enriched_at": "20261002",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261002",
-   "release": "20261002",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261002",
    "contrib": "20261002",
    "lang": "20261002"

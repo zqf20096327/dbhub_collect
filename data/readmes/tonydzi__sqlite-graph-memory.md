@@ -2,16 +2,85 @@
 
 <!-- mcp-name: io.github.tonydzi/sqlite-graph-memory -->
 
-[![PyPI](https://img.shields.io/pypi/v/sqlite-graph-memory)](https://pypi.org/project/sqlite-graph-memory/) [![tests](https://img.shields.io/github/actions/workflow/status/tonydzi/sqlite-graph-memory/tests.yml?label=tests)](https://github.com/tonydzi/sqlite-graph-memory/actions/workflows/tests.yml) [![MCP Registry](https://img.shields.io/badge/MCP%20Registry-io.github.tonydzi%2Fsqlite--graph--memory-blue)](https://registry.modelcontextprotocol.io/v0/servers?search=sqlite-graph-memory) [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+Your coding agent remembers what you already wrote down, and reaches the note a plain search
+misses by following the links between your notes. It is an MCP server and a CLI over any
+folder of markdown, Obsidian vaults included: `pip install`, point it at the folder, and
+Claude Code, Cursor, Codex or any other MCP client can recall from it.
 
-Long-term memory for coding agents that lives in the notes you already keep: an MCP server
-and a CLI over any folder of markdown, Obsidian vaults included. `pip install`, point it at
-the folder, and Claude Code, Cursor, Codex or any other MCP client can recall from it.
+![sgm-index builds the index of the 202-note bench vault, then sgm-ask --ab shows tool-lanternfish entering the top 5 only through a graph hop; the one-minute CPU indexing wait is cut](docs/demo.gif)
 
 **Your agent forgets everything between sessions, and plain vector search gives it back
 flat, unrelated chunks. This gives it associative recall over your own markdown notes:
 vector search finds the entry points, the `[[wikilinks]]` you already wrote are the graph.
 One SQLite file, no graph database, no ETL pass, no server.**
+
+[![PyPI](https://img.shields.io/pypi/v/sqlite-graph-memory)](https://pypi.org/project/sqlite-graph-memory/) [![tests](https://img.shields.io/github/actions/workflow/status/tonydzi/sqlite-graph-memory/tests.yml?label=tests)](https://github.com/tonydzi/sqlite-graph-memory/actions/workflows/tests.yml) [![MCP Registry](https://img.shields.io/badge/MCP%20Registry-io.github.tonydzi%2Fsqlite--graph--memory-blue)](https://registry.modelcontextprotocol.io/v0/servers?search=sqlite-graph-memory) [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
+## Install in your client
+
+Already using your own agent rules and projects? The [Russian existing-setup guide (proposed revision)](https://github.com/tonydzi/second-brain-starter-kit/blob/codex/dima-brain-H55019/docs/EXISTING-SETUP.ru.md) combines this memory backend with the optional starter-kit method, preserves existing settings, and checks recall in a fresh chat. Install one memory connection per client; the starter-kit memory plugin and manual registration are alternatives.
+
+Build the index once (any folder of markdown; [`uv`](https://docs.astral.sh/uv/) gives you `uvx`):
+
+```bash
+BRAIN_INDEX_DIR=$HOME/.sgm-index uvx --from 'sqlite-graph-memory[embeddings]' sgm-index ~/notes
+```
+
+Then point your client at the server. Use the absolute path of that index folder.
+
+**Cold-start timeout (source checkout, not yet in PyPI 0.3.3).** The MCP server starts recall in a separate process. Its default deadline is 60 seconds; if loading the models exceeds that on your machine, set `BRAIN_RECALL_TIMEOUT=180` in the server's environment. Values from 1 to 600 integer seconds are accepted; invalid values return an error. Your MCP client's own tool timeout must also allow the longer call. Until this change is released, PyPI 0.3.3 does not read this setting: use `sgm-ask --ask` directly as the working fallback and do not report MCP recall as verified merely because the CLI works.
+
+**Claude Code**
+
+```bash
+claude mcp add sqlite-graph-memory -e BRAIN_INDEX_DIR=$HOME/.sgm-index -- uvx --with 'sqlite-graph-memory[embeddings]' sqlite-graph-memory
+```
+
+**Cursor** (`~/.cursor/mcp.json`; Claude Desktop, Zed and Windsurf take the same `mcpServers` block)
+
+```json
+{
+  "mcpServers": {
+    "sqlite-graph-memory": {
+      "command": "uvx",
+      "args": ["--with", "sqlite-graph-memory[embeddings]", "sqlite-graph-memory"],
+      "env": { "BRAIN_INDEX_DIR": "/absolute/path/to/.sgm-index" }
+    }
+  }
+}
+```
+
+**VS Code** (`.vscode/mcp.json` in the workspace)
+
+```json
+{
+  "servers": {
+    "sqlite-graph-memory": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["--with", "sqlite-graph-memory[embeddings]", "sqlite-graph-memory"],
+      "env": { "BRAIN_INDEX_DIR": "/absolute/path/to/.sgm-index" }
+    }
+  }
+}
+```
+
+**Codex** (`~/.codex/config.toml`)
+
+```toml
+[mcp_servers.sqlite-graph-memory]
+command = "uvx"
+args = ["--with", "sqlite-graph-memory[embeddings]", "sqlite-graph-memory"]
+env = { BRAIN_INDEX_DIR = "/absolute/path/to/.sgm-index" }
+```
+
+Size, `du -sh` of a fresh Python 3.12 venv on an x86_64 Mac (1 Nov 2026): the base install is
+26 MB and has no torch (numpy only, enough for the graph half and the SQLite ledger);
+with `[embeddings]`, which indexing and recall need, it is 879 MB, 540 MB of that torch 2.2.2
+CPU. On Linux the default torch wheel brings CUDA libraries and is bigger; not measured here.
+Already installed with pip? Replace `uvx --with ... sqlite-graph-memory` by `sgm-mcp`
+([`examples/mcp-config.json`](examples/mcp-config.json)). Agents that read files first:
+[`llms.txt`](llms.txt).
 
 ## Three commands
 
@@ -59,14 +128,6 @@ That is the idea in one query, and it is not a blanket win. On this same vault v
 ranks ahead of graph mode overall; the numbers are in [`bench/`](bench/README.md). `--ab`
 exists so you can measure which one wins on your own notes.
 
-**From any MCP client** (Claude Desktop, Cursor, Zed, Windsurf): `sgm-mcp` after the install
-above, or `uvx --with 'sqlite-graph-memory[embeddings]' sqlite-graph-memory`. Set
-`BRAIN_INDEX_DIR` to the `index` folder `sgm-index` wrote. Config:
-[`examples/mcp-config.json`](examples/mcp-config.json). Claude Code:
-`claude mcp add sqlite-graph-memory -e BRAIN_INDEX_DIR=/path/to/index -- sgm-mcp`.
-Codex: a `[mcp_servers.sqlite-graph-memory]` table in `~/.codex/config.toml` with
-`command = "sgm-mcp"`. Agents that read files first: [`llms.txt`](llms.txt).
-
 ## What it is
 
 Graph RAG on SQLite for AI agents — a working pilot, not a framework. It is the extracted
@@ -93,7 +154,7 @@ For a single-user agent over a markdown knowledge base, all three are overkill:
   edges as `[[wikilinks]]`, and `brain_ask.py` just parses them.
   No extraction pass, and edge quality beats anything a model would mine.
 - **SQLite is enough** — the only things worth persisting are derived state (a per-turn
-  ledger) and telemetry, and both are defined in [`schema.sql`](schema.sql).
+  ledger) and telemetry, and both are defined in [`schema.sql`](src/sqlite_graph_memory/schema.sql).
   One file, stdlib driver, zero ops.
 - The expensive part of RAG quality is a **reranker**, not graph infrastructure — see the
   rerank step in `brain_ask.py`.
@@ -125,7 +186,7 @@ markdown notes (with [[wikilinks]])
                                 turnstate_show.py = read-only viewer.
 ```
 
-[`schema.sql`](schema.sql) documents both tables. The graph is **not** materialized in SQL:
+[`schema.sql`](src/sqlite_graph_memory/schema.sql) documents both tables. The graph is **not** materialized in SQL:
 `brain_ask.py` parses edges from the notes at query time, bounded to 1 hop / 40 neighbours.
 That keeps the graph permanently in sync with the notes at zero maintenance cost; materialize
 an edge table only when hop depth or corpus size demands it.
@@ -145,7 +206,7 @@ an edge table only when hop depth or corpus size demands it.
   vector-only recall, no ledger row.
   A memory layer must never make the agent worse than having no memory layer.
 - **Measure, don't believe.** `--ab` runs both pipelines on every real query and logs how
-  many notes the graph promoted into the top-N, to `ab_recall` in [`schema.sql`](schema.sql).
+  many notes the graph promoted into the top-N, to `ab_recall` in [`schema.sql`](src/sqlite_graph_memory/schema.sql).
   Whether "associative memory" earns its keep is a weekly SQL query, not a vibe.
 
 ### What's intentionally missing
@@ -222,7 +283,7 @@ A/B RECALL: how should agent memory work
 
 On a corpus this small the graph adds nothing — every note is already in the candidate
 pool. The interesting deltas appear at scale, and that is exactly what the `ab_recall`
-table in [`schema.sql`](schema.sql) accumulates evidence for.
+table in [`schema.sql`](src/sqlite_graph_memory/schema.sql) accumulates evidence for.
 
 ## Public benchmark — `bench/`
 
@@ -351,6 +412,11 @@ Seven other changes were rejected by the same ruler, under one rule fixed in adv
 | `sqlite-vec` (vec0) | full scan 11.99 s vs 0.14 s for a plain SQLite table, and its ANN missed 1.2 hits of 60 -> vectors live in SQLite, **the extension does not** |
 | bi-temporal demotion of superseded notes | temporal +0.130 nDCG on a 41-question temporal set, but title −0.012 -> **merged behind a flag, default off** (in the home pipeline, not in this package) |
 
+The two rows marked "home pipeline" are not in this package: BM25 fusion and superseded-note
+demotion exist only in the maintainer's home build. Check it yourself in a clone:
+`grep -rniE 'bm25|superseded' src/` prints nothing. The PageRank lane above is the one
+merged change that ships (`src/sqlite_graph_memory/ppr.py`).
+
 None of those verdicts is a claim about the models. They are claims about *this corpus with
 this ruler*, which is the only kind of claim a swap decision actually needs — and the reason
 the module is here rather than in a blog post is that your corpus will disagree with ours.
@@ -371,7 +437,7 @@ while the metric is broken never tested the metric.
 
 ## Roadmap
 
-**Now — [latest release](https://github.com/tonydzi/sqlite-graph-memory/releases/latest)** (v0.3.1 on PyPI and in the MCP Registry as of 2026-10-19).
+**Now — [latest release](https://github.com/tonydzi/sqlite-graph-memory/releases/latest)** (the version badge above is the one on PyPI; the same version is in the MCP Registry).
 The pilot as it runs daily: retrieval pipeline, per-turn ledger and A/B telemetry, all in
 `brain_ask.py` and `turnstate_hook.py`, plus the bi-temporal design note. Known defects live in
 the [tracker](https://github.com/tonydzi/sqlite-graph-memory/issues) rather than in footnotes
@@ -390,7 +456,8 @@ does not notice, and that drift is the defect this paragraph used to carry twice
   materialize the graph instead of parsing it at query time, give every edge a validity
   window (`valid_from` / `valid_to` / `observed_at`) so a rebuild *closes* superseded facts
   instead of deleting them: history is kept, recall prefers the present, and `as_of` queries
-  can reconstruct the past. Non-destructive aging by confidence decay. The day-1 A/B result
+  can reconstruct the past. Non-destructive aging by confidence decay. None of this is in
+  the package yet: it is a design note plus a home-pipeline experiment. The day-1 A/B result
   — context size ~unchanged, retrieved candidates ~60% fresher by mean age — is written up
   with its caveats in `docs/bitemporal.md`: the volume win is longitudinal, so that is one
   day on one corpus, not a benchmark.
@@ -445,6 +512,7 @@ Questions, war stories, or you want to run this on your own fleet:
 You tried this on your own notes and something was missing or broke. That is the most useful
 thing anyone can tell us.
 
+- **Install or first run gone wrong:** run `sgm-doctor` first. It checks Python, numpy, torch, the models and your index in plain words and prints the fix for each.
 - **You started and it did not work:** [open the 3-question form](https://github.com/tonydzi/sqlite-graph-memory/issues/new?template=feature_request.yml) (what you tried, what broke, which machine).
 - **Not sure it is a bug, or just an idea:** [Discussions → Ideas](https://github.com/tonydzi/sqlite-graph-memory/discussions/categories/ideas).
 

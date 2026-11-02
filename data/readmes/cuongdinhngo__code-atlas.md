@@ -137,18 +137,30 @@ and T-SQL via npm, Python needs nothing), and writes `<your-project>/.mcp.json` 
 interpreter, each `CA_<LANG>_CMD` and the working directory filled in — the three things that are easy
 to get wrong by hand. Run it with no path to print the snippet instead of writing it.
 
-To run the server without a checkout: `uvx --from git+https://github.com/cuongdinhngo/code-atlas.git@v0.9.1
-code-atlas`, or `pipx run --spec git+https://github.com/cuongdinhngo/code-atlas.git@v0.9.1 code-atlas` —
+To run the server without a checkout: `uvx --from git+https://github.com/cuongdinhngo/code-atlas.git@v0.10.0
+code-atlas`, or `pipx run --spec git+https://github.com/cuongdinhngo/code-atlas.git@v0.10.0 code-atlas` —
 the adapters still need their own runtimes on `PATH`, and a checkout to launch them from.
 
 **In Claude Code, install it as a plugin** — the server, the hooks and the skill in one step, for every
 project. The plugin launches the console scripts by name, so put them on `PATH` with a tool install:
 
 ```bash
-uv tool install git+https://github.com/cuongdinhngo/code-atlas.git@v0.9.1   # or: pipx install git+…@v0.9.1
-claude plugin marketplace add cuongdinhngo/code-atlas#v0.9.1
+uv tool install git+https://github.com/cuongdinhngo/code-atlas.git@v0.10.0   # or: pipx install git+…@v0.10.0
+claude plugin marketplace add cuongdinhngo/code-atlas#v0.10.0
 claude plugin install code-atlas@code-atlas
 ```
+
+**Verify the release first.** Each GitHub Release carries the wheel, a CycloneDX SBOM and a signed
+build-provenance attestation from the workflow that built it from the signed tag. Check the wheel,
+then install that file ([`releasing.md`](docs/runbooks/releasing.md) has the steps):
+
+```bash
+gh release download vX.Y.Z --repo cuongdinhngo/code-atlas --pattern '*.whl'
+gh attestation verify code_atlas-X.Y.Z-py3-none-any.whl --repo cuongdinhngo/code-atlas
+uv tool install ./code_atlas-X.Y.Z-py3-none-any.whl
+```
+
+Releases from 0.10.0 on carry this proof; 0.9.1 and earlier were cut by hand and carry none.
 
 **Install from this repository only.** code-atlas is not published on PyPI: the packages
 `code-atlas-mcp` and `codeatlas` there are other projects, so never install code-atlas by a
@@ -186,20 +198,31 @@ repo to index, `env.CA_PHP_CMD` = `php /abs/path/to/code-atlas/adapters/php/inde
 adapter lives in this checkout, so `CA_PHP_CMD` must be an **absolute** path. Details in
 [`adapters/php/README.md`](adapters/php/README.md).
 
-**In a container** — no host Python or PHP needed; the image bundles the pinned adapters:
+**In a container** — no host Python or PHP needed; the image bundles the pinned adapters and runs as
+user 10001. The repo is mounted read-only; its `.code-atlas/` is the one writable mount:
 
 ```bash
 docker build -f docker/Dockerfile.runtime -t code-atlas-server .
+mkdir -p .code-atlas   # in the repo you index; the mount below needs it to exist
+docker run -i --rm --user "$(id -u):$(id -g)" --read-only --tmpfs /tmp --cap-drop=ALL \
+  --security-opt=no-new-privileges --network=none \
+  -v "$PWD":/workspace:ro -v "$PWD/.code-atlas":/workspace/.code-atlas code-atlas-server
 ```
 
 ```jsonc
-// .mcp.json — the server indexes the mounted repo and writes .code-atlas/graph.db into it
+// .mcp.json — use your own uid:gid (`id -u`, `id -g`) so the repo's owner is the user git trusts
 {"mcpServers": {"code-atlas": {"command": "docker",
-  "args": ["run", "-i", "--rm", "-v", "/abs/path/to/your-project:/workspace", "code-atlas-server"]}}}
+  "args": ["run", "-i", "--rm", "--user", "1000:1000", "--read-only", "--tmpfs", "/tmp",
+    "--cap-drop=ALL", "--security-opt=no-new-privileges", "--network=none",
+    "-v", "/abs/path/to/your-project:/workspace:ro",
+    "-v", "/abs/path/to/your-project/.code-atlas:/workspace/.code-atlas", "code-atlas-server"]}}}
 ```
 
-MCP speaks over stdio, so `-i` is required; the server indexes `/workspace`, so mount the repo
-there. Add `"--user", "1000:1000"` to keep `.code-atlas/` writes owned by you. See [`docker/`](docker/).
+`generate_onboarding` writes `docs/onboarding/` under the repo, which this line mounts read-only; to
+run it, `mkdir -p docs/onboarding` and add `-v "$PWD/docs/onboarding":/workspace/docs/onboarding`.
+
+MCP speaks over stdio, so `-i` is required. With `--user` set to the repo's owner, a repo that commits its
+`.code-atlas/` is refused, as on the host. See [`docker/`](docker/).
 </details>
 
 <details>
@@ -479,7 +502,7 @@ vulnerabilities go through [`SECURITY.md`](SECURITY.md).
 
 - **Shipped.** Phase 1 (closed 2026-09-27): the core, the onboarding system map and four adapters —
   PHP, TypeScript/JavaScript, T-SQL and Python — with **24 tools**. Phase 2 so far: releases
-  0.2.0–0.9.1 and the Claude Code plugin; what each release changed is in [`CHANGELOG.md`](CHANGELOG.md).
+  0.2.0–0.10.0 and the Claude Code plugin; what each release changed is in [`CHANGELOG.md`](CHANGELOG.md).
 - **Open.** Graph coverage and freshness work; each ticket and its gate is in
   [`docs/BACKLOG.md`](docs/BACKLOG.md). Nothing is open on the onboarding map.
 - **Deferred.** The C#/.NET adapter — the only language left, held since 2026-08-04

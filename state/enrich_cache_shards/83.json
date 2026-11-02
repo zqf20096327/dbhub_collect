@@ -1,10 +1,10 @@
 {
  "vitessio/vitess": {
-  "commit_7d": 28,
-  "commit_90d": 289,
+  "commit_7d": 30,
+  "commit_90d": 300,
   "rel_ver": "v24.0.5",
   "rel_pub": "2026-10-13",
-  "rel_days": 12,
+  "rel_days": 20,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -22,7 +22,7 @@
    "GHSA-j8pc-mcwq-qrg6(-,high)"
   ],
   "contrib_n": 329,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Go": 94,
    "Java": 2,
@@ -32,10 +32,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v24.0.5",
+    "d": "2026-10-13",
+    "n": "- Unknown mode names and invalid numeric values fail with MySQL's own errors: `ER_WRONG_VALUE_FOR_VAR` (1231), and `ER_UNSUPPORTED_SQL_MODE` (3899) for the bits of modes removed in MySQL 8.0.\n`--db-charset`, and the other places a MySQL connection character set is configured, no longer accept `sjis`, `cp932`, `gb18030`, `gbk`, `big5`, `ucs2`, `utf16`, `utf16le` or `utf32`, whether given as a character set or as one of its collations. A tablet configured with one of them fails to start, VTGate refuses a `SET"
+   },
+   {
+    "t": "v23.0.8",
+    "d": "2026-10-13",
+    "n": "- Unknown mode names and invalid numeric values fail with MySQL's own errors: `ER_WRONG_VALUE_FOR_VAR` (1231), and `ER_UNSUPPORTED_SQL_MODE` (3899) for the bits of modes removed in MySQL 8.0.\n`--db-charset`, and the other places a MySQL connection character set is configured, no longer accept `sjis`, `cp932`, `gb18030`, `gbk`, `big5`, `ucs2`, `utf16`, `utf16le` or `utf32`, whether given as a character set or as one of its collations. A tablet configured with one of them fails to start, VTGate refuses a `SET"
+   },
+   {
+    "t": "v24.0.4",
+    "d": "2026-10-01",
+    "n": "- A server-side CRL (`--grpc-crl`, `--mysql-server-ssl-crl`) without the matching CA (`--grpc-ca`, `--mysql-server-ssl-ca`). Without a CA no client certificate is requested, so the CRL could not apply. Configure the CA, or drop the CRL.\n- A server-side CRL (`--grpc-crl`, `--mysql-server-ssl-crl`) without the matching certificate and key (`--grpc-cert` and `--grpc-key`, `--mysql-server-ssl-cert` and `--mysql-server-ssl-key`). The server is then not configured for TLS at all: the gRPC server used to start in "
+   }
+  ]
  },
  "macrozheng/mall-swarm": {
   "commit_7d": 0,
@@ -62,20 +79,20 @@
   }
  },
  "Sequel-Ace/Sequel-Ace": {
-  "commit_7d": 21,
-  "commit_90d": 1181,
+  "commit_7d": 34,
+  "commit_90d": 1198,
   "rel_ver": "production/6.1.0-20117",
   "rel_pub": "2026-10-23",
-  "rel_days": 2,
+  "rel_days": 10,
   "rel_n90": 9,
-  "rel_pre": true,
+  "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
   "sec_worst": null,
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 123,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Objective-C": 57,
    "Swift": 28,
@@ -85,17 +102,34 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "production/6.1.0-20117",
+    "d": "2026-10-23",
+    "n": "- Add search to the database selector for quickly finding databases\n- Show INET column types only on supported MariaDB versions\n- Only show INET column types for compatible MariaDB version ([215d63bc3](https://github.com/Sequel-Ace/Sequel-Ace/commit/215d63bc31a99d73fd29ebdf582142ed05494a95), [#2772](https://github.com/Sequel-Ace/Sequel-Ace/pull/2772))\n- Restore Sphinx queries when no database is selected\n- Searchable database selector ([424e86ad7](https://github.com/Sequel-Ace/Sequel-Ace/commit/424e86ad7b97"
+   },
+   {
+    "t": "production/6.0.3-20116",
+    "d": "2026-10-08",
+    "n": "- Improve database renaming permission checks and filter restoration.\n- Don't let an open question and a main-thread caller wait for each other ([e4dbbca7d](https://github.com/Sequel-Ace/Sequel-Ace/commit/e4dbbca7dbbac4ec33a8d93897a70e6f1164c63d), [#2738](https://github.com/Sequel-Ace/Sequel-Ace/pull/2738))\n- Rename Database reads only its own grants, and a filter set aside stays set aside ([49ebe052b](https://github.com/Sequel-Ace/Sequel-Ace/commit/49ebe052bf071e7ab04e6eb1079b4bc6d34c9a63), [#2739](https:/"
+   },
+   {
+    "t": "production/6.0.2-20115",
+    "d": "2026-10-04",
+    "n": "- Fix database renaming with views, routines, permissions, and case-sensitive names.\n- Rename Database reads only its own triggers on a case-sensitive server ([bcb89437e](https://github.com/Sequel-Ace/Sequel-Ace/commit/bcb89437e2e7edd65d0fe3ccf9fd594d421dda1a), [#2732](https://github.com/Sequel-Ace/Sequel-Ace/pull/2732))\n- Rename Database keeps the source database when not every object moved ([cec37be7f](https://github.com/Sequel-Ace/Sequel-Ace/commit/cec37be7fded35b75794495cf5a4b51f90faebb7), [#2667](https"
+   }
+  ]
  },
  "pgrundev/pgbot": {
-  "commit_90d": 332,
-  "commit_7d": 6,
+  "commit_90d": 340,
+  "commit_7d": 8,
   "rel_ver": "v0.9.0",
   "rel_pub": "2026-10-19",
-  "rel_days": 6,
+  "rel_days": 14,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -111,12 +145,29 @@
    "Nix": 0,
    "Makefile": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v0.9.0",
+    "d": "2026-10-19",
+    "n": "* e8aa24f3587edb92911fa96a845421d0e7b3d705 feat(ai): add an opper provider alias (#118)\n* 14b7543d74a973dbdb241bdc453cf736b66373c5 Integrate nixpks build (#45)\n* 96df3d4e8e897b1615688e908e2d4a76b6e76766 Switch the PostgreSQL driver from pgx to pgGo (#114)\n* 69cab1e4124d17fedb9836649fcda49610b16e84 build(deps): bump golang.org/x/sync from 0.23.0 to 0.24.0 (#120)\n* bcdc6aa314dc19f0933c303ffc723271d970ab50 build(deps): bump modernc.org/sqlite from 1.56.0 to 1.57.0 (#39)\n* b6671361d974c2773c87262b839445e84c860d"
+   },
+   {
+    "t": "v0.8.1",
+    "d": "2026-09-06",
+    "n": "## Changelog\n* e3834c11d75e81eeeb4140b5e06d396071fa166a release: sign the checksum with the cosign bundle only; cut 0.8.1"
+   },
+   {
+    "t": "v0.7.2",
+    "d": "2026-09-01",
+    "n": "* e113e43748b73a1f2a94dd651ee063ca5261dde0 feat(erd): show indexes and database info on every diagram"
+   }
+  ]
  },
  "sist2app/sist2": {
   "commit_90d": 187,
@@ -147,12 +198,12 @@
   }
  },
  "mergesort/Boutique": {
-  "commit_90d": 7,
-  "commit_7d": 0,
-  "rel_ver": "3.0.2",
-  "rel_pub": "2026-05-05",
-  "rel_days": 145,
-  "rel_n90": 0,
+  "commit_90d": 8,
+  "commit_7d": 8,
+  "rel_ver": "3.1.0",
+  "rel_pub": "2026-11-01",
+  "rel_days": 1,
+  "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -163,7 +214,29 @@
   "lang": {
    "Swift": 100
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "rel_notes": [
+   {
+    "t": "3.1.0",
+    "d": "2026-11-01",
+    "n": "Boutique 3.1 is focused on correctness and performance improvements. Most of these were found by @inanna-malick using her technique of [Property Testing with Agent Swarms](https://recursion.wtf/posts/agents-and-property-tests). The findings were primarily correctness bugs, but they also opened up opportunities for other improvements to the Store's correctness, mutation ordering, and Keychain persistence.\r\n\r\n### Store correctness\r\n\r\n- Fix chained removals using the wrong storage keys on disk. (#84)\r\n- Preser"
+   },
+   {
+    "t": "3.0.2",
+    "d": "2026-05-05",
+    "n": "Say hello to [plugins](https://github.com/mergesort/Boutique#coding-agent-plugins) for Claude Code and Codex. Now your favorite coding agent can learn, use, and integrate Boutique into your app without you lifting a finger."
+   },
+   {
+    "t": "3.0.1",
+    "d": "2025-04-18",
+    "n": "This release restores a behavior where updating a `StoredValue` or `SecurelyStoredValue` would update any View that was referencing those values.\r\n\r\n---\r\n\r\nDon't let these lil release notes drown out [all of the changes in Boutique 3.0](https://github.com/mergesort/Boutique/releases/tag/3.0.0), in case you missed that big update."
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102",
+   "security": "20261102"
+  }
  },
  "cunyu1943/ebooks": {
   "commit_90d": 0,

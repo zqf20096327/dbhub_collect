@@ -29,7 +29,7 @@
 
 * **Drop-in Replacement**: Fully compatible with previous UCanAccess versions.
 
-* **Modern Core**: Built on top of the latest **Jackcess 5.1.6** and **HSQLDB 2.7.4** for maximum stability and security.
+* **Modern Core**: Built on top of the latest **Jackcess 5.2.0** and **HSQLDB 2.7.4** for maximum stability and security.
 
 * **Comprehensive SQL Support**: Supports SELECT, INSERT, UPDATE, DELETE, and even complex DDL operations like `ALTER TABLE`.
 
@@ -41,7 +41,7 @@
 
 ## 🛠 Tech Stack & Requirements
 
-* **Java Version**: 11 or higher (LTS versions like Java 17 and 21 are fully supported and tested).
+* **Java Version**: 11 or higher (LTS versions like Java 17 and 21 are fully supported, the tests run on Java 11, 17 and 21).
 
 * **Build Tool**: [Maven](https://maven.apache.org/)
 
@@ -49,7 +49,9 @@
 
     * [Jackcess](https://github.com/spannm/jackcess/)
 
-    * [HyperSQL Database (HSQLDB)](http://hsqldb.org/)
+    * [Jackcess Encrypt](https://github.com/spannm/jackcess-encrypt/) (optional, for encrypted databases)
+
+    * [HyperSQL Database (HSQLDB)](https://hsqldb.org/)
 
 <p style="height: 20px;">&nbsp;</p>
 
@@ -63,34 +65,51 @@ To use UCanAccess in your project, add the following dependency.
 <dependency>
     <groupId>io.github.spannm</groupId>
     <artifactId>ucanaccess</artifactId>
-    <version>5.1.7</version>
+    <version>5.2.0</version>
 </dependency>
 ```
 
 ### Gradle (Groovy / `build.gradle`)
 
 ```groovy
-implementation 'io.github.spannm:ucanaccess:5.1.7'
+implementation 'io.github.spannm:ucanaccess:5.2.0'
 ```
 
 ### Gradle (Kotlin DSL / `build.gradle.kts`)
 
 ```kotlin
-implementation("io.github.spannm:ucanaccess:5.1.7")
+implementation("io.github.spannm:ucanaccess:5.2.0")
 ```
 
 <p style="height: 20px;">&nbsp;</p>
 
 ## 🔁 Migrating from `net.sf.ucanaccess`
 
-Still on the original `net.sf.ucanaccess:ucanaccess` artifact? That project has had no release since 2020 and no longer receives security or compatibility updates. Switching to this fork is a **drop-in, API-compatible change** — no code changes required, just update your dependency coordinates:
+Still on the original `net.sf.ucanaccess:ucanaccess` artifact? That project has had no release since 2020 and no longer receives security or compatibility updates. Development of UCanAccess continues here. For most projects, switching is a **drop-in change**: the JDBC driver class and connection URL stay the same, just update your dependency coordinates:
 
 ```diff
 - <groupId>net.sf.ucanaccess</groupId>
 + <groupId>io.github.spannm</groupId>
   <artifactId>ucanaccess</artifactId>
 - <version>5.0.1</version>
-+ <version>5.1.7</version>
++ <version>5.2.0</version>
+```
+
+If you pass your own class with the `jackcessOpener` connection property, adapt it as well:
+
+- implement `net.ucanaccess.jdbc.IJackcessOpenerInterface` instead of `JackcessOpenerInterface`
+- Jackcess is now `io.github.spannm:jackcess` with the package `io.github.spannm.jackcess` instead of `com.healthmarketscience.jackcess`
+- `DatabaseBuilder` uses fluent `with...` methods, e.g. `withReadOnly(true)` instead of `setReadOnly(true)`
+
+If another dependency still pulls in `net.sf.ucanaccess:ucanaccess`, exclude it there. Both artifacts contain the same classes, and whichever comes first on the classpath wins:
+
+```xml
+<exclusions>
+  <exclusion>
+    <groupId>net.sf.ucanaccess</groupId>
+    <artifactId>ucanaccess</artifactId>
+  </exclusion>
+</exclusions>
 ```
 
 You get current Jackcess/HSQLDB versions (with their CVE fixes), tested Java 11/17/21 support on Linux and Windows, and active maintenance — with the same JDBC driver class and connection URL you already use.
@@ -130,7 +149,7 @@ String url = "jdbc:ucanaccess://C:/path/to/your/database.accdb;allowRemoteLinks=
 
 <p style="height: 20px;">&nbsp;</p>
 
-## ❤️ Why this Fork?
+## Why a New Home?
 
 The original project (developed by Marco Amadei and Gord Thompson) was the gold standard for Access connectivity but went quiet in 2020, leaving `net.sf.ucanaccess:ucanaccess` unmaintained at version 5.0.1.
 As a long-time contributor and Java enthusiast, I decided to give UCanAccess a **new home**.

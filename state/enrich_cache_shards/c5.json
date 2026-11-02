@@ -81,11 +81,11 @@
   }
  },
  "feigeCode/navop": {
-  "commit_90d": 2339,
-  "commit_7d": 70,
-  "rel_ver": "v0.21.1",
-  "rel_pub": "2026-10-22",
-  "rel_days": 3,
+  "commit_90d": 3605,
+  "commit_7d": 213,
+  "rel_ver": "v0.22.0",
+  "rel_pub": "2026-10-28",
+  "rel_days": 5,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -101,12 +101,29 @@
    "JavaScript": 0,
    "Shell": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v0.22.0",
+    "d": "2026-10-28",
+    "n": "- \"Delete record\" in the database grid now deletes the whole selection: right-clicking inside a multi-row selection no longer removes only the first row, while right-clicking outside the selection still deletes a single row.\n- SQL Server databases at a lower compatibility level paginate again: below level 110 the grid falls back to `ROW_NUMBER()` paging, so previewing a table no longer shows a blank page.\n- SQL Server 低兼容级别的库恢复分页能力：兼容级别低于 110 时回退 `ROW_NUMBER()` "
+   },
+   {
+    "t": "v0.21.2",
+    "d": "2026-10-26",
+    "n": "### 修复与优化\n\n- 个人同步：修复引用了钥匙串凭据的连接在多设备间持续产生假冲突的问题。连接载荷里的凭据引用导出时保留了源设备的本地整数 ID，而每台设备的行号各不相同，导致同一条连接跨设备的 checksum 永不相等，被判定为「双方都改过」而反复冲突、来回覆盖。现在导出载荷统一只保留跨设备稳定的 `credential_cloud_id`，整数 ID 置零（下载时仍按云端 ID 映射回本机行号，"
+   },
+   {
+    "t": "v0.21.1",
+    "d": "2026-10-22",
+    "n": "- Connection forms: the \"AI Access\" row in the SSH, MySQL, Redis and MongoDB forms no longer renders as a raw key such as `ConnectionForm.ai_access`. Each of those four crates assembled the i18n key by itself while only the crate that provides the widget defines it, so rust-i18n returned the key verbatim; the row now uses the shared text from `connection_form`, and a repository-wide contract test guards against the same class of miss (16 other broken keys are fixed as well, including the save-failure notice"
+   }
+  ]
  },
  "mymarilyn/clickhouse-driver": {
   "commit_90d": 11,

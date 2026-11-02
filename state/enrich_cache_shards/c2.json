@@ -1,10 +1,10 @@
 {
  "netdata/netdata": {
-  "commit_7d": 48,
-  "commit_90d": 942,
+  "commit_7d": 96,
+  "commit_90d": 972,
   "rel_ver": "v2.12.2",
   "rel_pub": "2026-10-23",
-  "rel_days": 2,
+  "rel_days": 10,
   "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
@@ -22,7 +22,7 @@
    "GHSA-pmhq-4cxq-wj93(CVE-2024-32019,high)"
   ],
   "contrib_n": 403,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Go": 47,
    "C": 30,
@@ -32,10 +32,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v2.12.2",
+    "d": "2026-10-23",
+    "n": "- `dbengine`: gaps of a single second are now cached like longer ones, so repeated queries over them no longer search the journals again, and a cached gap no longer overlaps the first point of the page that follows it ([#24370](https://github.com/netdata/netdata/pull/24370), [@ktsaou](https://github.com/ktsaou))\n## Database\n- `dbengine`: corrupted gorilla-compressed pages whose length is not a multiple of the buffer size are now rejected instead of being read past the end of their allocation ([#24310](https"
+   },
+   {
+    "t": "v2.12.1",
+    "d": "2026-10-08",
+    "n": "This release fixes a startup crash and a timezone detection bug in the Windows Agent, stabilizes the eBPF collector across a wider range of kernels and libbpf versions, reduces the load the Docker collector places on the Docker daemon, and removes unnecessary work from dbengine datafile deletion on busy Parents.\n- Removed a scan of the open cache that ran on every dbengine datafile deletion only to feed a debug check compiled out of release builds. The scan walked the whole clean queue under its lock, which"
+   },
+   {
+    "t": "v2.12.0",
+    "d": "2026-09-30",
+    "n": "**dbengine** — flush and shutdown workers that wait for extent writes are now bounded, so they can no longer by\ncheck in `sqlite_health`, unused `health_log_detail` indexes were removed, alerts are no longer reinitialized for\n- Fixed dbengine defects: flush and shutdown workers that wait for extent writes are bounded, and pool threads no longer flush inline, so they can no longer by themselves exhaust the libuv pool and hang the agent (for example at shutdown, on \"wait for dbengine collectors to finish\");"
+   }
+  ]
  },
  "DotNetNext/SqlSugar": {
   "commit_7d": 0,
@@ -64,11 +81,11 @@
   }
  },
  "apache/kvrocks": {
-  "commit_7d": 13,
-  "commit_90d": 69,
+  "commit_7d": 9,
+  "commit_90d": 77,
   "rel_ver": "v2.17.0",
   "rel_pub": "2026-09-19",
-  "rel_days": 36,
+  "rel_days": 44,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -77,7 +94,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 183,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "C++": 66,
    "Go": 32,
@@ -87,10 +104,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v2.17.0",
+    "d": "2026-09-19",
+    "n": "* `DEBUG`, `FLUSHMEMTABLE`, `FLUSHBLOCKCACHE`, and `_db_name` now require admin permission. Clients authenticated with namespace tokens can no longer run these commands. See https://github.com/apache/kvrocks/pull/3570.\n* Cluster slot migration now uses only `raw-key-value`. The `redis-command` migration path and fallback have been removed; the destination must support `APPLYBATCH`. The `migrate-type`, `migrate-speed`, and `migrate-pipeline-size` settings are deprecated. Use `migrate-batch-rate-limit-mb` and"
+   },
+   {
+    "t": "v2.16.0",
+    "d": "2026-06-21",
+    "n": "* chore(config): remove the deprecated configuration `rocksdb.max_background_{compactions,flushes}` and set default to -1 by @yatriks in https://github.com/apache/kvrocks/pull/3398\n**Highlights**: This release continues to improve Redis compatibility and operational visibility. New command coverage includes `CLIENT PAUSE`/`CLIENT UNPAUSE`, `CLIENT SETINFO`, `LATENCY`, `TDIGEST.TRIMMED_MEAN`, `BITPOS` `BYTE`/`BIT` range units, conditional `SET` options (`IFEQ`, `IFNE`, `IFDEQ`, `IFDNE`), `DUMP` support for t"
+   },
+   {
+    "t": "v2.15.0",
+    "d": "2026-02-27",
+    "n": "**Highlights**: This release expands command coverage with new TimeSeries commands and broader TDigest support. It also introduces new commands such as `DELEX`, `DIGEST`, and `MSETEX`, and adds the `redis-databases` option to enable `SELECT` support, further improving Redis compatibility.\n* feat: add redis-databases option to support SELECT command by @hanxi in https://github.com/apache/kvrocks/pull/3294\n* fix(string): add empty string value check for INCR to match Redis behavior by @sryanyuan in https://gi"
+   }
+  ]
  },
  "rathena/rathena": {
   "commit_7d": 2,
@@ -200,10 +234,10 @@
  },
  "symisc/unqlite": {
   "commit_7d": 0,
-  "commit_90d": 2,
+  "commit_90d": 3,
   "rel_ver": "1.2.1",
   "rel_pub": "2026-05-01",
-  "rel_days": 149,
+  "rel_days": 185,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -212,15 +246,35 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 22,
-  "enriched_at": "20260929",
+  "enriched_at": "20261102",
   "lang": {
    "C": 100,
    "Python": 0,
    "CMake": 0
   },
   "dim_ts": {
-   "lang": "20260929"
-  }
+   "lang": "20260929",
+   "commit": "20261102",
+   "release": "20261102",
+   "security": "20261102"
+  },
+  "rel_notes": [
+   {
+    "t": "1.2.1",
+    "d": "2026-05-01",
+    "n": "UnQLite is a self-contained, serverless, transactional database engine for C and C++ applications. It runs in-process, stores data in a single portable file, and ships as a compact embed-friendly codebase with no external dependencies. Two operational layers are provided: a raw key/value store for binary-safe records and a document store powered by the Jx9 embedded scripting language.\n- Shared-database corruption issue reported in issue #137.\n- Database sync issue where a dirty commit was not properly appli"
+   },
+   {
+    "t": "v1.1.9",
+    "d": "2019-05-22",
+    "n": "Fixed minor file handle leak under specific conditions as described in https://github.com/symisc/unqlite/issues/74."
+   },
+   {
+    "t": "1.1.9",
+    "d": "2018-05-16",
+    "n": "Fixed obscure memory leak in unqlite_commit()."
+   }
+  ]
  },
  "pawurb/rails-pg-extras": {
   "commit_90d": 0,
@@ -752,11 +806,11 @@
    "Python": 1,
    "Inno Setup": 0
   },
-  "enriched_at": "20261027",
-  "commit_90d": 489,
-  "commit_7d": 46,
+  "enriched_at": "20261102",
+  "commit_90d": 493,
+  "commit_7d": 96,
   "dim_ts": {
-   "commit": "20261002",
+   "commit": "20261102",
    "release": "20261027"
   }
  },

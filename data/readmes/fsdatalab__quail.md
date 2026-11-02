@@ -1,32 +1,49 @@
-# Quail
+<p align="center">
+  <img src="docs/assets/quail-logo.svg" alt="Quail logo" width="112">
+</p>
 
-Quail (QUery Aware Inference Layer) is an open-source, extensible
-execution engine for AI-SQL, being developed at
-[Full Stack Data Lab](https://fsdatalab.github.io/) at CMU.
+<h1 align="center">Quail</h1>
 
-AI-SQL is a variant of SQL with operators that let you write logic
-in natural language for an LLM to evaluate on every row.
+<p align="center">
+  <b>An open-source inference engine for AI functions in SQL</b><br>
+  from the <a href="https://fsdatalab.github.io/">Full Stack Data Lab</a> at CMU
+</p>
+
+<p align="center">
+  <a href="https://pypi.org/project/quail-engine/"><img src="https://img.shields.io/pypi/v/quail-engine" alt="PyPI"></a>
+  <a href="https://fsdatalab.github.io/quail"><img src="https://img.shields.io/badge/docs-fsdatalab.github.io%2Fquail-blue" alt="Docs"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License: MIT"></a>
+</p>
+
+Quail (QUery-Aware Inference Layer) runs LLMs over large datasets,
+from SQL, on your own GPUs. Quail's secret sauce is to optimize LLM
+inference and memory management for each query as a whole. This makes
+Quail lightning fast: **1.8x faster on average** than well-tuned vLLM
+baselines, and **up to 14x faster** on queries with AI joins
+([details](https://fsdatalab.github.io/blog/introducing-quail/))!
 
 ```sql
-SELECT r.id
+SELECT r.id,
+       AI.EXTRACT(r.body, {'actor': 'Which actor does the reviewer name?'}) AS review
 FROM reviews r
 WHERE AI.IF(PROMPT('Does this review discuss the ending?\n\n{0}', r.body))
 ```
 
 [Documentation](https://fsdatalab.github.io/quail) |
 [Quickstart](https://fsdatalab.github.io/quail/docs/user-guide/quickstart) |
+[Blog](https://fsdatalab.github.io/blog/) |
 [QUAIL-B](https://github.com/fsdatalab/quail-bench)
 
 ## Install
 
 Install [quail-engine from PyPI](https://pypi.org/project/quail-engine/).
-The package is named `quail-engine`; in Python, import `quail`.
+In Python, import `quail`.
 
 ```bash
 uv pip install quail-engine
 ```
 
-Requires Python 3.12 and a CUDA GPU.
+You need Python 3.12 and a CUDA GPU.
 
 ## Example
 
@@ -58,11 +75,10 @@ with quail.Session(config=config) as session:
 
 ## Quail Server
 
-Quail Server is an optional HTTP server that runs on the machine with
-the GPU. You start it once, send queries to it with `endpoint`, and
-the query keeps running after the client disconnects. `submit()`
-returns once the server has saved the record, and `get_run` reads
-that record later.
+You can use Quail Server to run queries on the machine with your GPU.
+Start the HTTP server and set `endpoint` to its address. Your queries
+continue if you disconnect. `submit()` returns after the server saves
+your query. Use `get_run(query_id)` to reconnect later.
 
 ```bash
 uv pip install "quail-engine[server]"
@@ -101,35 +117,34 @@ with quail.Session(
 
 See [Quail Server](https://fsdatalab.github.io/quail/docs/user-guide/server).
 
-## Supported operators
+## Supported functions
 
-Quail supports AI-powered filters, joins, `EXISTS` / `NOT EXISTS`,
-numeric scores (`AI.SCORE`), and classification (`AI.CLASSIFY`).
-`AI.EXTRACT` and `AI.MAP` are planned additions.
+You can use filters and joins evaluated by a language model,
+`EXISTS` / `NOT EXISTS`, numeric scores (`AI.SCORE`), classification
+(`AI.CLASSIFY`), extracting text that answers a question (`AI.EXTRACT`),
+and writing a text answer for each document (`AI.MAP`).
 
-We support two AI-SQL dialects:
+You can write queries in two SQL dialects for AI functions:
 [Snowflake `AI_FILTER`](https://docs.snowflake.com/en/user-guide/snowflake-cortex/aisql)
 and
-[BigQuery `AI.IF`](https://cloud.google.com/blog/products/data-analytics/sql-reimagined-for-the-ai-era-with-bigquery-ai-functions),
-plus a Python builder API.
+[BigQuery `AI.IF`](https://cloud.google.com/blog/products/data-analytics/sql-reimagined-for-the-ai-era-with-bigquery-ai-functions).
 
 ## Supported models and GPUs
 
-| Model | Device |
-| --- | --- |
-| Qwen3 4B fp8 | NVIDIA H100 SXM |
-| Qwen3 32B fp8 | NVIDIA RTX PRO 6000 Blackwell Server Edition |
-| DiffusionGemma 26B-A4B fp8 | NVIDIA H100 SXM |
-
-1, 2, 4, or 8 GPUs per query. We are actively adding more models
-and hardware.
+Quail runs Qwen3, Qwen3.5, Qwen3.6, Qwen3.8, LFM2, DiffusionGemma, and
+Decision 2.0 Kai models on NVIDIA H100 SXM, B200, L40S, and RTX PRO 6000
+Blackwell GPUs, with 1, 2, 4, or 8 GPUs per query. See
+[Supported models and GPUs](https://fsdatalab.github.io/quail/docs/user-guide/models)
+for each model's AI functions and GPU limits.
 
 ## Development
 
 ```bash
-uv run ruff check quail tests experiments tools
+uv run ruff check quail bench calibrate tests experiments tools
 uv run python tools/check_long_strings.py
+uv run python tools/check_names.py
 uv run vulture
+uv run lint-imports
 uv run pytest -q
 ```
 

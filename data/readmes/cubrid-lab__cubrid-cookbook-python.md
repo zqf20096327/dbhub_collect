@@ -1,25 +1,39 @@
+<!-- CUBRID-LAB-ICON:START -->
+<p align="center">
+  <a href="https://github.com/cubrid-lab/brand"><img src="https://raw.githubusercontent.com/cubrid-lab/brand/e55990a6a0b2c3b0d133985951d41e42b62a8588/dist/icons/cubrid-cookbook-python.svg" alt="cubrid-cookbook-python icon (CUBRID Lab brand repository)" width="120"></a>
+</p>
+<!-- CUBRID-LAB-ICON:END -->
+
 # CUBRID Python Cookbook
 
 **Production-ready Python examples for CUBRID** — from first connection to production API, with migration guides, performance patterns, and common pitfalls.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CUBRID 11.2 | 11.4](https://img.shields.io/badge/CUBRID-11.2%20%7C%2011.4-green.svg)](SUPPORT_MATRIX.md)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
 ![pycubrid](https://img.shields.io/badge/pycubrid-%E2%89%A51.6.1-blue)
 ![sqlalchemy-cubrid](https://img.shields.io/badge/sqlalchemy--cubrid-%E2%89%A51.0-blue)
 ![status](https://img.shields.io/badge/status-active%20development-yellow)
 
 ---
 
-<img src="docs/demo-agent-state.gif" alt="AI agent state management demo" width="100%"/>
+<a href="docs/demo-agent-state.gif"><img src="docs/demo-agent-state.png" alt="AI agent state management demo, last frame of the recording" width="100%"/></a>
+
+<sub>▶ [Play the recording](docs/demo-agent-state.gif) (animated GIF, 9 seconds). The images on this page are still frames of real recordings of the examples against CUBRID; select one to play it. How they were made: [`demos/`](demos/README.md).</sub>
 
 ## Get Started
 
+**New to CUBRID? Start here:** [your first CUBRID database from Python](quickstart/first-cubrid/README.md)
+starts a local practice database, connects from Python, saves and reads rows, and
+shows `commit`, `rollback` and cleanup, before any framework.
+
 | Your Goal | Go Here | Time |
 |-----------|---------|------|
-| **Start in 5 minutes** | [`quickstart/5min-fastapi/`](quickstart/5min-fastapi/) | 5 min |
-| **Start with SQLAlchemy** | [`quickstart/5min-sqlalchemy/`](quickstart/5min-sqlalchemy/) | 5 min |
+| **New to CUBRID** | [`quickstart/first-cubrid/`](quickstart/first-cubrid/) | about 15 min once Docker and Python are installed |
+| **Start in 5 minutes** | [`quickstart/5min-fastapi/`](quickstart/5min-fastapi/README.md) | about 5 min once Docker is installed |
+| **Start with SQLAlchemy** | [`quickstart/5min-sqlalchemy/`](quickstart/5min-sqlalchemy/README.md) | about 5 min once Docker and Python are installed |
 | **Migrate from Java** | [`migration/java-to-python/`](migration/java-to-python/) | 30 min |
+| **Move from the CUBRIDdb driver to pycubrid** | [`migration/cubriddb-to-pycubrid/`](migration/cubriddb-to-pycubrid/) | 20 min |
 | **Build a production API** | [`templates/api-service-fastapi/`](templates/api-service-fastapi/) | 15 min |
 
 ---
@@ -28,25 +42,38 @@
 
 ### Quickstart
 
-Get a working CUBRID + FastAPI app running with Docker in under 5 minutes.
+Get a working CUBRID + FastAPI app running with Docker in about 5 minutes, once
+Docker is installed and its images are downloaded:
 
 ```bash
-cd quickstart/5min-fastapi
-docker compose up -d --wait cubrid
-pip install -r requirements.txt
-uvicorn app:app --reload
+git clone https://github.com/cubrid-lab/cubrid-cookbook-python.git
+cd cubrid-cookbook-python/quickstart/5min-fastapi
+docker compose up -d --build --wait
+curl -sS -X POST localhost:8000/items -H 'Content-Type: application/json' -d '{"val": "hello from the quickstart"}'
+# {"val":"hello from the quickstart","id":1}
 # Open http://localhost:8000/docs
 ```
 
-The host-run API connects to `localhost` by default (`CUBRID_HOST` overrides it).
-To run both the API and database in Docker instead, use `docker compose up -d --build`
-in that directory; Compose sets `CUBRID_HOST=cubrid` for the API.
+The [FastAPI quickstart](quickstart/5min-fastapi/README.md) explains each step,
+also runs the API on your machine with Uvicorn, and shows how to stop and clean
+up. The [SQLAlchemy quickstart](quickstart/5min-sqlalchemy/README.md) does the
+same for one Core and ORM script.
+
+<a href="docs/demo-fastapi.gif"><img src="docs/demo-fastapi.png" alt="FastAPI quickstart: GET /items in Swagger UI returning the item created with POST /items against CUBRID, last frame of the recording" width="100%"/></a>
+
+<sub>▶ [Play the recording](docs/demo-fastapi.gif) (animated GIF, 12 seconds)</sub>
 
 ### Migration Guide
 
 Side-by-side Java JDBC → Python migration with real code comparisons. Covers connections, CRUD (DB-API and ORM), transactions, and batch operations.
 
 > CUBRID's JDBC driver and Python driver use the same CAS protocol — zero data migration required.
+
+Already on Python with the official `CUBRIDdb` C-extension driver? The separate
+[CUBRIDdb → pycubrid guide](migration/cubriddb-to-pycubrid/) is a driver-to-driver
+migration: connection arguments, the autocommit default, thread sharing, parameters,
+error attributes and LOBs, with four runnable pycubrid recipes. It is not a drop-in
+replacement claim.
 
 ### Production Templates
 
@@ -62,15 +89,19 @@ Copy-and-customize starting points for real applications:
 | [`ai-agent/`](templates/ai-agent/) | AI agent state store + MCP toolchain + RAG metadata (5 live-tested scripts) |
 | [`dashboard/`](templates/dashboard/) | Interactive dashboard with Streamlit |
 
+<a href="docs/demo-dashboard.gif"><img src="docs/demo-dashboard.png" alt="Streamlit dashboard template showing CUBRID rows after docker compose up, last frame of the recording" width="100%"/></a>
+
+<sub>▶ [Play the recording](docs/demo-dashboard.gif) (animated GIF, 12 seconds)</sub>
+
 ### Performance
 
 Benchmark-backed optimization patterns:
 
 | Pattern | Impact |
 |---------|--------|
-| [Fetch optimization](performance/fetch-optimization/) | SELECT 10K rows: 96ms → 78ms (−19%) |
-| [Bulk insert](performance/bulk-insert/) | COMMIT is 7× costlier than INSERT — batch your writes |
-| [Connection pooling](performance/connection-pooling/) | Reuse connections to avoid 1.7ms/connect overhead |
+| [Fetch optimization](performance/fetch-optimization/) | `fetchall()` vs `fetchone()`, column selection and server-side pagination |
+| [Bulk insert](performance/bulk-insert/) | batch your COMMITs (~28 → ~1,279 rows/s, pycubrid 1.10.0) |
+| [Connection pooling](performance/connection-pooling/) | reuse connections (~5.9 ms vs ~0.8 ms per query, pycubrid 1.10.0) |
 
 ### Pitfalls
 
@@ -82,12 +113,12 @@ Step-by-step reference for every core operation:
 
 | Topic | File |
 |-------|------|
-| [Connecting](fundamentals/connect/) | Basic connection, metadata, context managers |
-| [CRUD](fundamentals/crud/) | INSERT, SELECT, UPDATE, DELETE with parameters |
-| [Transactions](fundamentals/transactions/) | Commit, rollback, savepoints, auto-commit |
+| [Connecting](fundamentals/connect/) | Basic connection, metadata, context managers (redirect to `fundamentals/pycubrid/01_connect.py`) |
+| [CRUD](fundamentals/crud/) | INSERT, SELECT, UPDATE, DELETE with parameters (redirect to `fundamentals/pycubrid/02_crud.py`) |
+| [Transactions](fundamentals/transactions/) | Commit, rollback, savepoints, auto-commit (redirect to `fundamentals/pycubrid/03_transactions.py`) |
 | [Parameterized queries](fundamentals/parameterized-queries/) | Safe parameter binding (client-side, not server-side prepare) |
-| [Error handling](fundamentals/error-handling/) | Exception types, retry patterns |
-| [LOB handling](fundamentals/lob-handling/) | BLOB/CLOB operations |
+| [Error handling](fundamentals/error-handling/) | Exception types, retry patterns (`05_error_handling.py` redirects to `fundamentals/pycubrid/05_error_handling.py`) |
+| [LOB handling](fundamentals/lob-handling/) | BLOB/CLOB operations (redirect to `fundamentals/pycubrid/06_lob.py`) |
 | [ORM basics](fundamentals/orm-basics/) | SQLAlchemy engine, core, ORM, relationships |
 | [pycubrid driver](fundamentals/pycubrid/) | 22 DB-API recipes: cursors, window functions, recursive CTEs, pagination, timezone/ENUM types |
 | [SQLAlchemy recipes](fundamentals/sqlalchemy/) | 7 recipes including SET/MULTISET/SEQUENCE collection types |
@@ -103,7 +134,7 @@ Step-by-step reference for every core operation:
 
 ```
 pycubrid (DB-API 2.0 driver)
-├── Direct usage ─── fundamentals/connect, crud, transactions, pycubrid
+├── Direct usage ─── quickstart/first-cubrid (start here), fundamentals/pycubrid (connect, crud, transactions are redirects to it)
 ├── SQLAlchemy ───── fundamentals/orm-basics, sqlalchemy, quickstart/5min-sqlalchemy
 ├── FastAPI ──────── quickstart/5min-fastapi, templates/api-service-fastapi
 ├── Flask ─────────── templates/flask
@@ -138,20 +169,30 @@ from sqlalchemy import create_engine
 engine = create_engine("cubrid+pycubrid://dba@localhost:33000/testdb")
 ```
 
-Start the database:
+Start, stop and remove the database (the root `docker-compose.yml` service `cubrid`):
 ```bash
-docker compose up -d
+make docker-up      # start CUBRID (CUBRID_VERSION=11.4 selects another image) and wait until testdb answers
+make docker-down    # stop it; the database stays in the Docker volumes
+make docker-clean   # DESTRUCTIVE: delete the containers and volumes, database included
 ```
+
+Validate a checkout with the standard sequence, `make test` (offline, results in `test-results/test/`) and then `make verify` (the complete live validation, see [CONTRIBUTING.md](CONTRIBUTING.md#live-verification)). The focused `verify-*` lanes are for debugging, print `PARTIAL`, and are listed under [Advanced debugging lanes](CONTRIBUTING.md#advanced-debugging-lanes).
+
+`make up` and `make down` remain aliases of `make docker-up` and `make docker-down`.
+The broker listens on `127.0.0.1` only. `CUBRID_TEST_PORT` publishes it on another
+host port, but the examples connect to `33000`, so leave it unset for them.
 
 ## Project Structure
 
 ```
 cubrid-cookbook-python/
 ├── quickstart/
+│   ├── first-cubrid/          # New to CUBRID: a guided first tutorial with pycubrid
 │   ├── 5min-fastapi/          # Docker + FastAPI in 5 minutes
 │   └── 5min-sqlalchemy/       # Docker + SQLAlchemy in 5 minutes
 ├── migration/
-│   └── java-to-python/        # JDBC → pycubrid/SQLAlchemy migration
+│   ├── java-to-python/        # JDBC → pycubrid/SQLAlchemy migration
+│   └── cubriddb-to-pycubrid/  # Official CUBRIDdb driver → pycubrid
 ├── templates/
 │   ├── api-service-fastapi/   # Production REST API (12 recipes)
 │   ├── flask/                 # Flask + Flask-SQLAlchemy (11 recipes)
@@ -187,7 +228,7 @@ cubrid-cookbook-python/
 ## Related Projects
 
 - [pycubrid](https://github.com/cubrid-lab/pycubrid) — Pure Python DB-API 2.0 driver for CUBRID
-- [sqlalchemy-cubrid](https://github.com/cubrid-lab/sqlalchemy-cubrid) — SQLAlchemy 2.0 dialect for CUBRID
+- [sqlalchemy-cubrid](https://github.com/cubrid-lab/sqlalchemy-cubrid) — SQLAlchemy 2.0/2.1 dialect for CUBRID
 - [CUBRID](https://www.cubrid.org/) — The CUBRID database
 
 ## Roadmap

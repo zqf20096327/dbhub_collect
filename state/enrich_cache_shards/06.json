@@ -1,11 +1,11 @@
 {
  "oracle/graaljs": {
-  "commit_7d": 74,
-  "commit_90d": 1590,
+  "commit_7d": 9,
+  "commit_90d": 1325,
   "rel_ver": "graal-25.4.4.1.1",
   "rel_pub": "2026-09-22",
-  "rel_days": 33,
-  "rel_n90": 3,
+  "rel_days": 41,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 350,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "C++": 29,
    "C": 24,
@@ -23,18 +23,35 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "graal-25.4.4.1.1",
+    "d": "2026-09-22",
+    "n": "You can download GraalJS as a Native Standalone distribution for Oracle GraalVM or GraalVM Community Edition.\nTo distinguish between Oracle GraalVM and GraalVM Community Edition, the Community Edition distribution has the suffix `-community` in its name."
+   },
+   {
+    "t": "graal-25.3.4.1",
+    "d": "2026-08-25",
+    "n": "You can download GraalJS as a Native Standalone distribution for Oracle GraalVM or GraalVM Community Edition.\nTo distinguish between Oracle GraalVM and GraalVM Community Edition, the Community Edition distribution has the suffix `-community` in its name."
+   },
+   {
+    "t": "graal-25.2.4",
+    "d": "2026-07-28",
+    "n": "You can download GraalJS as a Native Standalone distribution for Oracle GraalVM or GraalVM Community Edition.\nTo distinguish between Oracle GraalVM and GraalVM Community Edition, the Community Edition distribution has the suffix `-community` in its name."
+   }
+  ]
  },
  "janbjorge/pgqueuer": {
-  "commit_90d": 217,
-  "commit_7d": 47,
+  "commit_90d": 241,
+  "commit_7d": 27,
   "rel_ver": "v1.6.0",
   "rel_pub": "2026-10-11",
-  "rel_days": 14,
-  "rel_n90": 6,
+  "rel_days": 22,
+  "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -49,12 +66,29 @@
    "CSS": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v1.6.0",
+    "d": "2026-10-11",
+    "n": "- PostgreSQL 13 (EOL). CI tests 14–18. Stay on v1.5.0 if you need 13.\n- `PGQUEUER_*` settings are read once per process and shared. `DBSettings` object names are validated before reaching SQL. The default channel now follows a `PGQUEUER_PREFIX` set after `import pgqueuer`."
+   },
+   {
+    "t": "v1.5.0",
+    "d": "2026-10-04",
+    "n": "Now one declared schema is the source of truth. Install renders it; upgrade compares it with the catalog and runs the difference. Install and upgrade can no longer disagree, and a database from any earlier release ends up with the same schema.\nIf you apply `pgq sql upgrade` yourself instead: the script drops and recreates the notify trigger on every apply, and on PostgreSQL 14+ its first apply drops the statistics unique index before rebuilding it. Run it in a quiet window.\n- **A worker no longer starts a s"
+   },
+   {
+    "t": "v1.4.0",
+    "d": "2026-09-14",
+    "n": "# PgQueuer v1.4.0\r\n\r\n`concurrency_limit` now holds when several workers dequeue at the same time (#761).\r\n\r\nThat is the reason for this release. Most of the other commits were the SQL and test work needed to make the limit a table invariant instead of a count.\r\n\r\n## Upgrade\r\n\r\nRun `pgq upgrade` **before** starting 1.4.0 workers:\r\n\r\n```sql\r\nALTER TABLE pgqueuer ADD COLUMN IF NOT EXISTS slot BIGINT;\r\nCREATE UNIQUE INDEX IF NOT EXISTS pgqueuer_picked_slot_idx\r\n    ON pgqueuer (entrypoint, slot)\r\n    WHERE (sta"
+   }
+  ]
  },
  "exonum/exonum": {
   "commit_90d": 0,
@@ -353,11 +387,11 @@
   "enriched_at": "20260927"
  },
  "siberiacancode/mock-config": {
-  "commit_90d": 72,
-  "commit_7d": 5,
+  "commit_90d": 36,
+  "commit_7d": 0,
   "rel_ver": "@4.0.3",
   "rel_pub": "2025-01-31",
-  "rel_days": 604,
+  "rel_days": 640,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -372,7 +406,28 @@
    "JavaScript": 1,
    "CSS": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "rel_notes": [
+   {
+    "t": "@4.0.3",
+    "d": "2025-01-31",
+    "n": "### Bugs\r\n\r\n1. Undefined port if port not set in flat config (https://github.com/siberiacancode/mock-config-server/issues/225)\r\n2. request.context not set for GraphQL requests (https://github.com/siberiacancode/mock-config-server/issues/226)"
+   },
+   {
+    "t": "@4.0.2",
+    "d": "2025-01-19",
+    "n": "### Bugs\r\n\r\n1. First element in flat config always seperate (https://github.com/siberiacancode/mock-config-server/issues/219)"
+   },
+   {
+    "t": "@4.0.1",
+    "d": "2025-01-14",
+    "n": "### Bugs \r\n\r\n1. Crush if send empty body in POST request (https://github.com/siberiacancode/mock-config-server/issues/216)"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "mmvergara/supadart": {
   "commit_90d": 16,
@@ -2503,6 +2558,26 @@
    "security": "20261027",
    "contrib": "20261027",
    "lang": "20261027"
+  }
+ },
+ "lihengba/powercontext-tmp": {
+  "commit_90d": 0,
+  "commit_7d": 0,
+  "rel_ver": null,
+  "rel_none": true,
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": null,
+  "lang": {},
+  "enriched_at": "20261102",
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102",
+   "security": "20261102",
+   "contrib": "20261102",
+   "lang": "20261102"
   }
  }
 }

@@ -19,7 +19,7 @@ storage using a NoSQL (document oriented) query syntax.
 This lib can be found on [Packagist](https://packagist.org/packages/r0mdau/jisly)
 
 ```
-composer require r0mdau/jisly:^2.0
+composer require r0mdau/jisly:^3.0
 ```
 
 ## Loading the library
@@ -37,7 +37,8 @@ public function saveCart(): void {
 
 # Definitions
 
-1. Each document has a unique identifier called `_rid`.
+1. Each document has a unique identifier called `_rid`. Searches match `_rid` exactly (`"0123"` does not find `"123"`),
+while other attributes use loose comparison (`"123"` finds `123`).
 2. Each collection is physically represented by a file.
 3. The files are stored in a single working directory. The Jisly class is instantiated with the path to this directory
 as a parameter.
@@ -108,7 +109,7 @@ $results = $database->collection($file)->find(
 );
 ```
 
-Return the first document that as a `name` attribute with `19` as an object value :
+Return the first document that has a `name` attribute with `19` as an object value, or `null` if none matches :
 ```php
 $result = $database->collection($file)->findOne(
   [
@@ -147,7 +148,8 @@ $result = $database->collection($file)->findOne(
 
 ### Update method
 
-For the modification, the documents concerned are entirely replaced by the second **array()** given in parameter.
+For the modification, the documents concerned are entirely replaced by the second **array()** given in parameter. The
+document keeps its `_rid`, even if the array omits it or gives another one.
 
 *You must first find all the documents to replace to provide the `_rid` attribute to the update method.*
 
@@ -161,3 +163,29 @@ $successBool = $database->collection($file)->update(
   ]
 );
 ```
+
+# Benchmarks
+
+The benchmark suite lives in `benchmark/` and runs with [PHPBench](https://github.com/phpbench/phpbench):
+
+```
+composer bench
+```
+
+Each operation is timed against collections of 100, 1,000 and 10,000 documents. Indicative results (mode per call,
+PHP 8.3, x86_64 cloud VM, local disk):
+
+| Operation                  | 100 docs | 1,000 docs | 10,000 docs |
+|----------------------------|---------:|-----------:|------------:|
+| Open a collection          |  0.13 ms |    1.2 ms  |      15 ms  |
+| `insert()`                 |  0.01 ms |   0.01 ms  |    0.01 ms  |
+| `find()` all               |   < 1 µs |     < 1 µs |      < 1 µs |
+| `find()` with `OR`         |  0.06 ms |    0.6 ms  |     7.7 ms  |
+| `find()` with `AND`        |  0.07 ms |    0.6 ms  |     8.0 ms  |
+| `findOne()` by `_rid`      |   < 2 µs |     < 2 µs |      < 2 µs |
+| `update()`                 |  0.63 ms |    3.0 ms  |      36 ms  |
+| `delete()`                 |  0.63 ms |    3.2 ms  |      32 ms  |
+
+Opening a collection reads the whole file, searches scan every document, and `update()` / `delete()` rewrite the
+whole file, so these grow linearly with the collection size. `insert()` only appends a line and a search on `_rid`
+only looks up that document, so their cost stays flat.

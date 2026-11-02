@@ -38,10 +38,10 @@
  },
  "TencentCloud/CubeSandbox": {
   "commit_7d": 29,
-  "commit_90d": 466,
+  "commit_90d": 445,
   "rel_ver": "v0.7.3",
   "rel_pub": "2026-10-12",
-  "rel_days": 13,
+  "rel_days": 21,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -53,7 +53,7 @@
    "GHSA-8frp-jfpv-5vhv(-,high)"
   ],
   "contrib_n": 101,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Go": 32,
    "Rust": 26,
@@ -63,17 +63,34 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v0.7.3",
+    "d": "2026-10-12",
+    "n": "- S3lvol hot upgrade: the sandbox I/O pause during an upgrade drops sharply, from about 40 s to about 8 s (#1822).\n- Cross-node restore no longer copies the whole disk to the node. A restored sandbox lazy-loads on demand, and repeated data can be accelerated by the local cache (#1898).\n- Fixed paused sandboxes losing metadata (labels, template, specs, volume mounts) in Info queries, introduced in v0.7.0 (#1861).\nSandboxes can now be created with an E2B-compatible `mcp` parameter, which starts an MCP (Model "
+   },
+   {
+    "t": "v0.7.3-rc2",
+    "d": "2026-10-12",
+    "n": "v0.7.3-rc2"
+   },
+   {
+    "t": "v0.7.3-rc1",
+    "d": "2026-10-12",
+    "n": "v0.7.3-rc1"
+   }
+  ]
  },
  "Donkie/Spoolman": {
-  "commit_7d": 4,
-  "commit_90d": 528,
-  "rel_ver": "v0.27.0",
-  "rel_pub": "2026-09-25",
-  "rel_days": 30,
+  "commit_7d": 26,
+  "commit_90d": 506,
+  "rel_ver": "v0.27.1",
+  "rel_pub": "2026-10-31",
+  "rel_days": 2,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -82,7 +99,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 136,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Python": 38,
    "TypeScript": 37,
@@ -92,18 +109,35 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v0.27.1",
+    "d": "2026-10-31",
+    "n": "* Drop the unused influxdb-client dependency by @Donkie in https://github.com/Donkie/Spoolman/pull/1272\n* Importing from SpoolmanDB reuses an existing manufacturer with the same name instead of creating a duplicate.\n* Reuse a same-name manufacturer when importing from SpoolmanDB by @Donkie in https://github.com/Donkie/Spoolman/pull/1266"
+   },
+   {
+    "t": "v0.27.0",
+    "d": "2026-09-25",
+    "n": "* The SpoolmanDB search in the filament pickers now pages through its results, so you're no longer stuck with the first batch.\n* Writing a backup now closes the SQLite connections it opens (#1104 by @jpapiez).\n* fix(database): close the sqlite connections used to write a backup by @jpapiez in https://github.com/Donkie/Spoolman/pull/1104\n* SQLite searches are now case-insensitive for non-ASCII characters too (#1078 by @romasku).\n* Page through SpoolmanDB search results in the filament pickers by @Donkie in h"
+   },
+   {
+    "t": "v0.26.1",
+    "d": "2026-08-07",
+    "n": "Mostly updates to the frontend to fix issues that came in, enjoy!\r\n\r\n## What's Changed\r\n* fix: last-used sort order and the phantom \"in use\" label by @Donkie in https://github.com/Donkie/Spoolman/pull/990\r\n* fix(add): let filament extra fields be filled in while creating a filament by @Donkie in https://github.com/Donkie/Spoolman/pull/997\r\n* client_v2: add delete for filaments and manufacturers by @Donkie in https://github.com/Donkie/Spoolman/pull/998\r\n* Show all filament and manufacturer fields in the libr"
+   }
+  ]
  },
  "borgmatic-collective/borgmatic": {
-  "commit_7d": 37,
-  "commit_90d": 174,
-  "rel_ver": "2.1.10",
-  "rel_pub": "2026-10-05",
-  "rel_days": 20,
-  "rel_n90": 4,
+  "commit_7d": 23,
+  "commit_90d": 196,
+  "rel_ver": "2.2.0",
+  "rel_pub": "2026-10-29",
+  "rel_days": 4,
+  "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -111,7 +145,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 95,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Python": 100,
    "Shell": 0,
@@ -119,17 +153,34 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "2.2.0",
+    "d": "2026-10-29",
+    "n": "* #1368: Fix a hang in which a database dump command spewing lots of output could send borgmatic\ninto a loop. This was most prevalent with MongoDB.\ndumping hundreds of databases.\n* Fix a Postgresql hook error when restoring a directory format database with an overridden\n* Fix a bug in which borgmatic didn't correctly rename checkpoint archives when database hooks were"
+   },
+   {
+    "t": "2.1.10",
+    "d": "2026-10-05",
+    "n": "* #1185: Add support for setting top-level configuration options under each repository, making\n   those options repository-specific. See the documentation for more information:\n   https://torsion.org/borgmatic/reference/configuration/repositories/\n * #1361: Update command-line overrides to support disabling configuration options, e.g.\n   \"--no-btrfs\" to temporarily disable the Btrfs hook.\n * #1361: Fix a traceback (TypeError) in command-line overrides when setting a sub-option of an\n   option without a conf"
+   },
+   {
+    "t": "2.1.9",
+    "d": "2026-09-25",
+    "n": "* #1355: Fix a regression in which the MongoDB hook no longer worked with passwordless database\n* #951: For the PostgreSQL, MariaDB, and MySQL database hooks, support globs in configured database\nnames (e.g. \"users_*\"), so borgmatic can dump multiple matching databases without needing each"
+   }
+  ]
  },
  "schemacrawler/SchemaCrawler": {
-  "commit_90d": 341,
-  "commit_7d": 7,
+  "commit_90d": 320,
+  "commit_7d": 24,
   "rel_ver": "early-access-release",
-  "rel_pub": "2026-10-22",
-  "rel_days": 3,
+  "rel_pub": "2026-10-31",
+  "rel_days": 2,
   "rel_n90": 12,
   "rel_pre": true,
   "rel_none": false,
@@ -145,12 +196,29 @@
    "FreeMarker": 1,
    "Python": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "early-access-release",
+    "d": "2026-10-31",
+    "n": "SchemaCrawler early access release at last commit 0b4a6997186a1b739cdebf86f170d24dff90ba5a"
+   },
+   {
+    "t": "v18.0.1",
+    "d": "2026-10-30",
+    "n": "* Bump com.ing.data:cassandra-jdbc-wrapper from 5.0.3 to 5.0.4 by @dependabot[bot] in https://github.com/schemacrawler/SchemaCrawler/pull/2531\n* Bump com.clickhouse:clickhouse-jdbc from 0.10.0 to 0.11.0 by @dependabot[bot] in https://github.com/schemacrawler/SchemaCrawler/pull/2536"
+   },
+   {
+    "t": "v17.16.0",
+    "d": "2026-10-14",
+    "n": "SchemaCrawler  release at last commit e9b682b945a6c4a9305b4effe1c748d0324fa0fe\nSee the change history at https://www.schemacrawler.com/changes-report.html\n\n\n## What's Changed\n* Bump com.fasterxml.woodstox:woodstox-core from 7.2.2 to 7.3.0 by @dependabot[bot] in https://github.com/schemacrawler/SchemaCrawler/pull/2521\n* Bump chainguard-dev/actions/setup-gitsign from 1.6.37 to 1.6.40 by @dependabot[bot] in https://github.com/schemacrawler/SchemaCrawler/pull/2522\n* Use catalog projections instead of reducing c"
+   }
+  ]
  },
  "compose/transporter": {
   "commit_90d": 0,

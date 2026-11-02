@@ -48,14 +48,14 @@ It runs either as a standalone server (`dbserver`, `dbproxy`) or **embedded dire
     git clone ...
     # compile it
     cd slackerdb
-    mvn clean compile package -Dmaven.test.skip=true
+    mvn clean compile package -DskipTests
 
     # All compiled results will be placed in the dist directory:
-    #    sla
+    #    slackerdb-dist
 
 [...截断...]
 
-ckerdb-dist_0.2.2.zip
+_0.2.2.zip
     #        distribution package - standalone jar packages, plugin jar,
     #        default configuration files and start/stop scripts.
     #    slackerdb-src_0.2.2.zip
@@ -70,7 +70,7 @@ ckerdb-dist_0.2.2.zip
     # PDF documentation is not built by default, and it is not packed into the
     # distribution package either: the PDFs ship in slackerdb-docs_0.2.2.zip.
     # To generate them, add -Ppdf:
-    #    mvn -Ppdf clean compile package -Dmaven.test.skip=true
+    #    mvn -Ppdf clean compile package -DskipTests
     # To rebuild only the documentation, build the docs module on its own:
     # that writes dist/slackerdb-docs_0.2.2.zip and leaves the release
     # packages untouched.
@@ -150,4 +150,7 @@ Run the following commands to complete the build:
 ==== Stop db proxy
 
 ....
-    java -jar dbproxy/target/slackerdb-dbproxy-0.2.2-standalon
+    java -jar dbproxy/target/slackerdb-dbproxy-0.2.2-standalone.jar stop
+....
+
+==== 

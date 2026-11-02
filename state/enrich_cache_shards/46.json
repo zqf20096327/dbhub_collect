@@ -58,7 +58,7 @@
    "GHSA-2hj9-cxmc-m4g7(CVE-2021-32814,high)"
   ],
   "contrib_n": 9,
-  "enriched_at": "20261004",
+  "enriched_at": "20261102",
   "lang": {
    "Rust": 100,
    "Shell": 0,
@@ -69,15 +69,16 @@
   "dim_ts": {
    "lang": "20260929",
    "commit": "20261004",
-   "release": "20261004"
+   "release": "20261004",
+   "security": "20261102"
   }
  },
  "akvorado/akvorado": {
-  "commit_7d": 39,
-  "commit_90d": 381,
+  "commit_7d": 6,
+  "commit_90d": 349,
   "rel_ver": "v2026.10.1",
   "rel_pub": "2026-10-25",
-  "rel_days": 0,
+  "rel_days": 8,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -89,7 +90,7 @@
    "GHSA-wr88-h9r3-fqh3(-,high)"
   ],
   "contrib_n": 51,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Go": 90,
    "Vue": 6,
@@ -99,10 +100,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v2026.10.1",
+    "d": "2026-10-25",
+    "n": "- ✨ *inlet*: add support for IPFIX over TCP and SCTP\r\n- ✨ *outlet*: add `SetName()` to exporter classifiers to rename exporters\r\n- ✨ *console*: add buttons to reverse the direction of dimensions and filter\r\n- ✨ *outlet*: add support for SrcOuterAddr, DstOuterAddr and IPOuterTos when decapsulating\r\n- ✨ *orchestrator*: keep data forever when the TTL of a resolution is 0\r\n- 🩹 *outlet*: fix NetFlow and IPFIX flow start timestamps (with `netflow-first-switched`)\r\n- 🩹 *outlet*: decode 802.1ad (Qin"
+   },
+   {
+    "t": "v2026.10.0",
+    "d": "2026-10-03",
+    "n": "- 🌱 *outlet*: ClickHouse server selection strategy is configurable through `outlet.clickhouse.server-selection`: `sticky-random` (the default) or `round-robin`.\n- 🌱 *docker*: update ClickHouse to 26.8 (not mandatory)"
+   },
+   {
+    "t": "v2026.8.1",
+    "d": "2026-08-29",
+    "n": "- 🌱 *outlet*: add [DB-IP](https://db-ip.com/) support for GeoIP\n- 🌱 *orchestrator*: allow several Akvorado databases on the same ClickHouse cluster"
+   }
+  ]
  },
  "bvaughn/js-search": {
   "commit_7d": 0,
@@ -114,13 +132,14 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 12,
-  "enriched_at": "20260929",
+  "enriched_at": "20261102",
   "lang": {
    "JavaScript": 99,
    "HTML": 1
   },
   "dim_ts": {
-   "lang": "20260929"
+   "lang": "20260929",
+   "security": "20261102"
   }
  },
  "backup-manager/backup-manager": {
@@ -175,11 +194,11 @@
  },
  "nfrastack/db-backup": {
   "commit_90d": 30,
-  "commit_7d": 0,
-  "rel_ver": "5.0.5",
-  "rel_pub": "2026-10-07",
-  "rel_days": 18,
-  "rel_n90": 9,
+  "commit_7d": 2,
+  "rel_ver": "5.0.7",
+  "rel_pub": "2026-10-30",
+  "rel_days": 3,
+  "rel_n90": 10,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -194,19 +213,36 @@
    "Dockerfile": 0,
    "Shell": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "5.0.7",
+    "d": "2026-10-30",
+    "n": "- (postgres) fix publication column lists dropped by nested query on open rows\n15 day trials are available to test features such as incremental/differential backups, archiving and more..  https://www.nfrastack.com/db-backup/license/trial\n- (postgres) copy temporal and interval columns as raw text to fix timestamptz year-10000 dump failure\n- (postgres) fix globals dump aborting on roles with infinity valid-until\n- (postgres) force UTC session\n- (postgres) include REVOKE statements before GRANTS\n- (postgres) "
+   },
+   {
+    "t": "5.0.6",
+    "d": "2026-10-26",
+    "n": "- (postgres) switch to ALTER TABLE (drop ONLY) for paritioned foreign keys\n15 day trials are available to test features such as incremental/differential backups, archiving and more..  [https://www.nfrastack.com/db-backup/license/trial](https://www.nfrastack.com/db-backup/license/trial)\n- (sqlite) warn on unwritable directory for wal\n- (postgres) create indexes on materialized views\n- (postgres) use ALTER procedure for procedure grants and ownership"
+   },
+   {
+    "t": "5.0.5",
+    "d": "2026-10-07",
+    "n": "- (mysql) try to query server for SQL mode - fallback to writing backticks everywhere\n- (mongo) chunk large operations\n- (mssql) fix trailing GO statements leaking into another batch\n- (postgres) encode TIME columns in COPY format\n- (postgres) allow auth-source db to be used instead of postgres for list ops\n- (postgres) skip views with unreadable definitions instead of aborting\n- (mssql) switch to streaming\n- (mysql) switch to streaming\n- (postgres) allow auth-source db to be used instead of hardcoding post"
+   }
+  ]
  },
  "jtv/libpqxx": {
-  "commit_90d": 14,
-  "commit_7d": 3,
+  "commit_90d": 17,
+  "commit_7d": 4,
   "rel_ver": "8.0.2",
   "rel_pub": "2026-07-18",
-  "rel_days": 99,
+  "rel_days": 107,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -222,12 +258,29 @@
    "M4": 1,
    "Makefile": 1
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "8.0.2",
+    "d": "2026-07-18",
+    "n": "Also, there is now a simple benchmark tool for comparing the performance of different ways to retrieve data from the database.  It's still very limited."
+   },
+   {
+    "t": "7.10.7",
+    "d": "2026-05-13",
+    "n": "Still eliminating some internal things that _might_ cause problems like in #1195 (a crash on shutdown on some systems in some builds, hard to reproduce).  It's possible that 7.10.6 already fixed all these problems, but just in case, we'll take a bit more of the related changes I made in 8.0 and backport them to 7.10."
+   },
+   {
+    "t": "7.10.6",
+    "d": "2026-05-08",
+    "n": "Fixes some warnings, and hopefully also a crash-on-exit on some systems with gcc 15 that I was unable to reproduce.\r\n\r\nThis is _not the most up-to-date version_ of libpqxx; the most up-to-date versions are the ones in the 8.0 series."
+   }
+  ]
  },
  "deepakpadhi986/AI-Resume-Analyzer": {
   "commit_90d": 1,
@@ -1888,11 +1941,11 @@
   }
  },
  "alibabacloud-automation/terraform-alicloud-eip-slb-ecs-redis-polardb": {
-  "commit_90d": 15,
+  "commit_90d": 14,
   "commit_7d": 1,
   "rel_ver": "v3.0.0",
   "rel_pub": "2026-04-22",
-  "rel_days": 163,
+  "rel_days": 194,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -1906,14 +1959,31 @@
    "Go": 34,
    "Shell": 20
   },
-  "enriched_at": "20261002",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261002",
-   "release": "20261002",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261002",
    "contrib": "20261002",
    "lang": "20261002"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v3.0.0",
+    "d": "2026-04-22",
+    "n": "## [3.0.0](https://github.com/alibabacloud-automation/terraform-alicloud-eip-slb-ecs-redis-polardb/compare/v2.0.2...v3.0.0) (2026-04-22)\n\n\n### ⚠ BREAKING CHANGES\n\n* add provider version constraint for aliyun/alicloud\n\n### Features\n\n* add provider version constraint for aliyun/alicloud ([c2fb3a0](https://github.com/alibabacloud-automation/terraform-alicloud-eip-slb-ecs-redis-polardb/commit/c2fb3a0731775b86f3af9cc494dadd3a5fad3cb8))"
+   },
+   {
+    "t": "v2.0.2",
+    "d": "2025-11-27",
+    "n": "## [2.0.2](https://github.com/alibabacloud-automation/terraform-alicloud-eip-slb-ecs-redis-polardb/compare/v2.0.1...v2.0.2) (2025-11-27)"
+   },
+   {
+    "t": "v2.0.1",
+    "d": "2025-10-16",
+    "n": "## [2.0.1](https://github.com/alibabacloud-automation/terraform-alicloud-eip-slb-ecs-redis-polardb/compare/v2.0.0...v2.0.1) (2025-10-16)\n\n\n### Bug Fixes\n\n* improve the examples ([bac365f](https://github.com/alibabacloud-automation/terraform-alicloud-eip-slb-ecs-redis-polardb/commit/bac365fc49e83a2626b9af1cd50876aa0c54b4ec))"
+   }
+  ]
  },
  "huayalong/adp-dm": {
   "commit_90d": 0,

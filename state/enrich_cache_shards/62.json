@@ -1,11 +1,11 @@
 {
  "getlago/lago": {
-  "commit_7d": 5,
-  "commit_90d": 50,
+  "commit_7d": 13,
+  "commit_90d": 62,
   "rel_ver": "v1.55.0",
   "rel_pub": "2026-10-07",
-  "rel_days": 18,
-  "rel_n90": 6,
+  "rel_days": 26,
+  "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 48,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Go": 88,
    "Shell": 10,
@@ -22,10 +22,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v1.55.0",
+    "d": "2026-10-07",
+    "n": "## What's Changed\n* fix(docker): Raise Node heap size for the single image front build by @groyoh in https://github.com/getlago/lago/pull/815\n* ci: Add a 10 minute timeout to Docker CI by @groyoh in https://github.com/getlago/lago/pull/816\n* fix(ci): make a stuck Docker CI stack report what blocked it by @IxDay in https://github.com/getlago/lago/pull/817\n* ci(docker): Test the single image after each release by @groyoh in https://github.com/getlago/lago/pull/818\n* fix(docker): Skip the build cleanup in a dr"
+   },
+   {
+    "t": "v1.54.0",
+    "d": "2026-10-06",
+    "n": "* feat(redis): Expose Redis Sentinel settings and optional credentials for Sidekiq and cache by @KamikX in https://github.com/getlago/lago/pull/813"
+   },
+   {
+    "t": "v1.53.0",
+    "d": "2026-09-08",
+    "n": "* fix(events-processor): scope redis ctx per event by @vincent-pochet in https://github.com/getlago/lago/pull/785"
+   }
+  ]
  },
  "zuoyebang/bitalostored": {
   "commit_7d": 0,
@@ -77,26 +94,26 @@
   }
  },
  "pi-hole/FTL": {
-  "commit_90d": 147,
+  "commit_90d": 392,
   "commit_7d": 0,
-  "rel_ver": "v6.7.1",
-  "rel_pub": "2026-09-19",
-  "rel_days": 15,
+  "rel_ver": "v6.8",
+  "rel_pub": "2026-10-17",
+  "rel_days": 16,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
-  "sec_n": 17,
+  "sec_n": 26,
   "sec_worst": "high",
-  "sec_last": "2026-09-19",
+  "sec_last": "2026-10-17",
   "sec_ids": [
-   "GHSA-7997-2868-rjfg(-,medium)",
-   "GHSA-gx63-h4w6-f46g(-,high)",
-   "GHSA-2794-hrj8-5jg9(-,high)",
-   "GHSA-ww5x-xx4x-qvjr(-,high)",
-   "GHSA-8j7w-m3cr-6q6x(CVE-2026-65963,high)",
-   "GHSA-g7v8-8q8f-hprp(CVE-2026-65964,medium)",
-   "GHSA-w8cr-2cwg-92cg(CVE-2026-71304,high)",
-   "GHSA-r5vh-5q82-jg7q(CVE-2026-65966,low)"
+   "GHSA-8fc6-q9x4-892v(-,medium)",
+   "GHSA-322h-f873-hp54(-,low)",
+   "GHSA-xj4x-gf2g-r6m7(-,medium)",
+   "GHSA-v53r-4564-3449(-,medium)",
+   "GHSA-667h-gpmh-7gxc(-,medium)",
+   "GHSA-2h7g-g549-hf74(-,high)",
+   "GHSA-9828-2f2q-2c8v(-,low)",
+   "GHSA-mqr7-j2p5-5495(-,low)"
   ],
   "contrib_n": 115,
   "lang": {
@@ -106,11 +123,29 @@
    "Shell": 1,
    "CMake": 0
   },
-  "enriched_at": "20261004",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261004",
-   "release": "20261004"
-  }
+   "commit": "20261102",
+   "release": "20261102",
+   "security": "20261102"
+  },
+  "rel_notes": [
+   {
+    "t": "v6.8",
+    "d": "2026-10-17",
+    "n": "- FTL no longer hands a symbolic link (e.g. `pihole-FTL.db` or `FTL.log` linked to another disk) to the `pihole` user, and warns about it on every start. Such a target has to be owned by `pihole` already.\nThis is a minor release rather than v6.7.2: there are enough visible behaviour changes that a patch version would undersell it. It backports the bug fixes that landed on `development` since v6.7.1 and updates the embedded dnsmasq (v2.93+30) and SQLite (v3.53.3).\n- Crashes with 257+ alias-clients, with a no"
+   },
+   {
+    "t": "v6.7.1",
+    "d": "2026-09-19",
+    "n": "- `database.maxDBdays` is an unsigned value now. A negative value kept the queries forever and is migrated to `4294967295`, which continues to do so.\n- Database connection leaks and counter skew, gravity regex and search-term handling, config write races, API error paths and response correctness"
+   },
+   {
+    "t": "v6.7",
+    "d": "2026-07-06",
+    "n": "* Harden API/database races in civetweb and DB threads by @DL6ER in https://github.com/pi-hole/FTL/pull/2881\n* Update embedded SQLite3 to v3.53.1 by @DL6ER in https://github.com/pi-hole/FTL/pull/2891\n* Allow using local `manuf`s to generate macvendor.db by @darkexplosiveqwx in https://github.com/pi-hole/FTL/pull/2918"
+   }
+  ]
  },
  "bricks-cloud/BricksLLM": {
   "commit_90d": 0,
@@ -137,8 +172,8 @@
   }
  },
  "djezzzl/database_consistency": {
-  "commit_90d": 67,
-  "commit_7d": 25,
+  "commit_90d": 70,
+  "commit_7d": 5,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -153,10 +188,10 @@
    "CSS": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
   }
  },
@@ -212,7 +247,7 @@
   }
  },
  "ankur-anand/unisondb": {
-  "commit_90d": 12,
+  "commit_90d": 14,
   "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
@@ -228,7 +263,11 @@
    "HCL": 1,
    "Makefile": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "ClouGence/open-cdm": {
   "commit_90d": 91,
@@ -2523,12 +2562,12 @@
   }
  },
  "LiXiangYu0612/vbdul": {
-  "commit_90d": 15,
-  "commit_7d": 14,
-  "rel_ver": "v1.1.6",
-  "rel_pub": "2026-10-02",
-  "rel_days": 0,
-  "rel_n90": 7,
+  "commit_90d": 41,
+  "commit_7d": 5,
+  "rel_ver": "v1.1.17",
+  "rel_pub": "2026-10-23",
+  "rel_days": 10,
+  "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -2537,14 +2576,31 @@
   "sec_ids": [],
   "contrib_n": 1,
   "lang": {},
-  "enriched_at": "20261002",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261002",
-   "release": "20261002",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261002",
    "contrib": "20261002",
    "lang": "20261002"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v1.1.17",
+    "d": "2026-10-23",
+    "n": "- jsonb 数组与对象的收尾符号、分隔符在缓冲区末尾会越界写 1~3 字节（PostgreSQL 与 VastBase 两种内核共四处），已修正。\n- `verify` 按内核分派：校验和算法仅对 VastBase 内核生效，PostgreSQL 内核不再全页误报；40 字节页头专属字段不再在 24 字节页头的引擎上误读。\n- 离线扫描改为按提交日志判死：VastBase 参考 pg_csnlog（主）、pg_clog（辅），PostgreSQL 参考 pg_xact。此前只看元组头提示位，提示"
+   },
+   {
+    "t": "v1.1.16",
+    "d": "2026-10-21",
+    "n": "括号（schema/db 级 DDL 同源同害，存量缺陷）；已按 PG15/16/17 拆分修正\nschema/db 的语法）\n- 活库检测进程名补充 vastbase；术语统一 PostgreSQL/VastBase；"
+   },
+   {
+    "t": "v1.1.15",
+    "d": "2026-10-20",
+    "n": "越界，补齐与 PostgreSQL 侧同款守卫"
+   }
+  ]
  },
  "klomt/tiendanegocio-tidb": {
   "commit_90d": 1,

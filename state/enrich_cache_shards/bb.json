@@ -23,12 +23,12 @@
   }
  },
  "ddev/ddev": {
-  "commit_7d": 37,
-  "commit_90d": 260,
-  "rel_ver": "v1.25.4",
-  "rel_pub": "2026-09-02",
-  "rel_days": 53,
-  "rel_n90": 1,
+  "commit_7d": 16,
+  "commit_90d": 247,
+  "rel_ver": "v1.25.5",
+  "rel_pub": "2026-10-26",
+  "rel_days": 7,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 2,
@@ -39,7 +39,7 @@
    "GHSA-x2xq-qhjf-5mvg(CVE-2026-32885,medium)"
   ],
   "contrib_n": 381,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Go": 74,
    "Shell": 13,
@@ -49,10 +49,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v1.25.5",
+    "d": "2026-10-26",
+    "n": "- Ctrl-C, SIGTERM, or closing the terminal no longer leaves temporary containers like `start-chown-*` holding project volumes. Interrupting `ddev import-db`, `ddev export-db`, or `ddev snapshot` leaves no partial dump, snapshot, or temporary directory, and Ctrl-C stops a shell loop that runs `ddev`\n- `ddev delete` removes leftover utility containers that kept the database volume in use, thanks to @wazum\n- `ddev export-db` always uses `--single-transaction`, and on MySQL 9.5+ it no longer writes GTID stateme"
+   },
+   {
+    "t": "v1.25.4",
+    "d": "2026-09-02",
+    "n": "- [`ddev start --reset-database`](https://docs.ddev.com/en/stable/users/usage/database-management/#starting-over-with-a-new-database) deletes the database and starts fresh. It takes a snapshot first, using the database version that created the data, so this also works when you already changed `database:` in your config. `ddev config --database=` now warns instead of failing, and `ddev delete` no longer refuses to work on a project whose data came from a different database server\n- DDEV stops writing databas"
+   },
+   {
+    "t": "v1.25.3",
+    "d": "2026-07-06",
+    "n": "- Use wrapper scripts in `ddev-dbserver` to avoid `mysql` deprecation warnings with MariaDB 11.x+\n* ci(github): add brew sandbox setup, remove obsolete env, for #8469 by @stasadev in https://github.com/ddev/ddev/pull/8512\n- **MariaDB 12.3 LTS support**\n- Support the Flatpak user binary for DBeaver on Linux, thanks to @nickchomey\n* docs(configuration): Add `ddev config --database=<database type>:<version>` example command (#8387) [skip ci] by @silverham in https://github.com/ddev/ddev/pull/8387\n* feat: add M"
+   }
+  ]
  },
  "percona/grafana-dashboards": {
   "commit_7d": 0,
@@ -169,11 +186,11 @@
   }
  },
  "Willxup/cpa-usage-keeper": {
-  "commit_90d": 954,
-  "commit_7d": 79,
-  "rel_ver": "v2.0.1",
-  "rel_pub": "2026-10-23",
-  "rel_days": 2,
+  "commit_90d": 998,
+  "commit_7d": 92,
+  "rel_ver": "v2.0.3",
+  "rel_pub": "2026-10-30",
+  "rel_days": 3,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -189,12 +206,29 @@
    "Shell": 0,
    "CSS": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v2.0.3",
+    "d": "2026-10-30",
+    "n": "## What's Changed:\r\n\r\nThis release adds support for third-party API key identities, refines request details and dashboard layouts, and reorganizes the documentation.\r\n\r\n- Keeper now associates eligible CPA plugin usage with third-party identities. API Key Settings displays native keys and third-party identities as cards with editable aliases and source labels. Third-party identities cannot reveal or copy a key or be used to sign in to Key Viewer. ([#679](https://github.com/Willxup/cpa-usage-keeper/pull/679)"
+   },
+   {
+    "t": "v2.0.2",
+    "d": "2026-10-27",
+    "n": "## What's Changed:\r\n\r\nThis release improves API Key filtering and request details, fixes token accounting and quota state updates, and makes quota history faster and more accurate.\r\n\r\n- API Key filters now show keys with recorded usage for the active page and time range across Overview, Realtime, Analysis, and Request Events. Valid selections are retained when switching ranges, and background refreshes keep existing options visible. ([#675](https://github.com/Willxup/cpa-usage-keeper/pull/675))\r\n- Request d"
+   },
+   {
+    "t": "v2.0.1",
+    "d": "2026-10-23",
+    "n": "## What's Changed:\r\n\r\nThis release adds OIDC administrator login, fixes time-boundary handling in usage statistics and request archival, and improves credential synchronization and quota refreshes.\r\n\r\n- Added optional administrator login through an OpenID Connect provider, with an optional subject allowlist and configurable reauthentication. Password login remains available, and OIDC sessions can be viewed and revoked in Session Management. ([#655](https://github.com/Willxup/cpa-usage-keeper/pull/655))\r\n- F"
+   }
+  ]
  },
  "Evokoa/pgGraph": {
   "commit_90d": 300,

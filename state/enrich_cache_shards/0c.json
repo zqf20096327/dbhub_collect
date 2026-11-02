@@ -1,10 +1,10 @@
 {
  "postgres-ai/database-lab-engine": {
-  "commit_7d": 8,
-  "commit_90d": 82,
+  "commit_7d": 12,
+  "commit_90d": 90,
   "rel_ver": "v4.2.1",
   "rel_pub": "2026-10-08",
-  "rel_days": 17,
+  "rel_days": 25,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 24,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Go": 71,
    "TypeScript": 25,
@@ -23,10 +23,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v4.2.1",
+    "d": "2026-10-08",
+    "n": "- Clone major upgrade no longer fails at the check stage on instances that mount TLS certificates or other files into clones: the upgrade container now gets the volumes from `databaseContainer.containerConfig` ([!1206](https://gitlab.com/postgres-ai/database-lab/-/merge_requests/1206), [#792](https://gitlab.com/postgres-ai/database-lab/-/issues/792))\n- Creating a clone for a restricted user no longer fails with `cannot alter partition ... with an incomplete detach` when the snapshot holds a partition with a"
+   },
+   {
+    "t": "v4.2.0",
+    "d": "2026-09-11",
+    "n": "- Deletion protection and auto-deletion for branches and snapshots: protect a branch or snapshot forever or for a set duration, and let the new `retention` config section delete unused ones after N minutes (safe-only: anything with clones, children or protection is never removed); new `PATCH /branch/{name}` and `PATCH /snapshot/{id}` endpoints and `--protected` options in `dblab branch` and `dblab snapshot update` ([!1161](https://gitlab.com/postgres-ai/database-lab/-/merge_requests/1161), [!1166](https://g"
+   },
+   {
+    "t": "v4.1.4",
+    "d": "2026-09-01",
+    "n": "- CE UI: bump `cypress` to 15.x, which drops the `extract-zip` and `enquirer` advisories that had no upstream fix ([!1184](https://gitlab.com/postgres-ai/database-lab/-/merge_requests/1184))\n- CI: install `google-cloud-cli` instead of the retired `google-cloud-sdk` package, which no longer resolves on Debian trixie ([!1183](https://gitlab.com/postgres-ai/database-lab/-/merge_requests/1183))\n- CE UI: add the `postcss`, `brace-expansion`, `form-data`, `tmp`, `fast-uri`, `immutable`, `js-yaml` and `ws` overrid"
+   }
+  ]
  },
  "x2bool/xlite": {
   "commit_90d": 0,
@@ -2972,6 +2989,29 @@
    "security": "20261029",
    "contrib": "20261029",
    "lang": "20261029"
+  }
+ },
+ "picantitooo/sentryx-surveillance": {
+  "rel_ver": null,
+  "rel_none": true,
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 3,
+  "lang": {
+   "Python": 55,
+   "Svelte": 27,
+   "JavaScript": 17,
+   "HTML": 1,
+   "PowerShell": 1
+  },
+  "enriched_at": "20261102",
+  "dim_ts": {
+   "release": "20261102",
+   "security": "20261102",
+   "contrib": "20261102",
+   "lang": "20261102"
   }
  }
 }

@@ -3,6 +3,7 @@
 [![CI](https://github.com/simonro/Trading-Journal-AI/actions/workflows/ci.yml/badge.svg)](https://github.com/simonro/Trading-Journal-AI/actions/workflows/ci.yml)
 [![Latest release](https://img.shields.io/github/v/release/simonro/Trading-Journal-AI)](https://github.com/simonro/Trading-Journal-AI/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Watch on YouTube](https://img.shields.io/badge/Watch%20on-YouTube-FF0000?logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=rsNizd9niG4)
 
 A trading journal that runs on your own machine. Import your broker's CSV and it rebuilds your
 round-trip trades, tracks the numbers that matter (win rate, profit factor, expectancy, drawdown,
@@ -16,12 +17,22 @@ your days on process.
 - **Thinkorswim and Interactive Brokers** importers, plus a template for any other broker.
 - **Free and MIT licensed.** No paid tier.
 
-**[Quick start](#quick-start)** · **[Watch the walkthrough](https://www.youtube.com/watch?v=LTR4HOfS_hc)** · **[Releases](https://github.com/simonro/Trading-Journal-AI/releases)** · **[Privacy](#privacy-and-your-data)**
+**[Quick start](#quick-start)** · **[Watch the walkthrough](https://www.youtube.com/watch?v=rsNizd9niG4)** · **[Releases](https://github.com/simonro/Trading-Journal-AI/releases)** · **[Privacy](#privacy-and-your-data)**
 
 **What this is not:** Not financial advice. Not a signal service. Every screenshot below is the
 synthetic demo seed, not anyone's real trades.
 
 ![The dashboard: net P&L over a live equity curve, every session as one strip, measures against your goals, and the month beside your recent trades](docs/screenshot-dashboard.png)
+
+## Watch the walkthrough
+
+[![Watch on YouTube](https://img.shields.io/badge/Watch%20on%20YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=rsNizd9niG4)
+
+[![Watch: Better Than TradeZella? The Free AI Trading Journal I Built](docs/walkthrough-video.jpg)](https://www.youtube.com/watch?v=rsNizd9niG4)
+
+A tour of the current version: the Dashboard, Trade View, Day Review, Leaks and Exit Lab, on a
+demo account with synthetic trades. The install and update prompts for Claude Code or Codex are in
+the video description, ready to paste.
 
 ## Exit Lab
 
@@ -50,8 +61,11 @@ The rules it plays by:
 
 **Prices.** Exit Lab needs historical minute bars from Alpaca. Add `APCA_API_KEY_ID` and
 `APCA_API_SECRET_KEY` to `backend/.env` (a free Alpaca account works: it serves SIP history
-older than 15 minutes), then press **Load prices** in Exit Lab. Prices are cached in your
-database; a calculation never downloads anything by itself.
+older than 15 minutes), then press **Load missing prices** in Exit Lab. One background job
+fetches every session and warm-up window your trades are missing, with a progress bar and a
+plain list of any that failed. Opening a trade's Exits tab also loads that trade's missing
+prices once; its **Load prices** link is the retry. Prices are cached in your database; a
+calculation never downloads anything by itself.
 
 **Try it on synthetic trades.** The demo builds its own database,
 `backend/exitlab_demo.db`, labeled **Synthetic trades, historical market prices**: generated
@@ -78,6 +92,38 @@ and `set PORT=3020` plus `set REACT_APP_API_URL=http://localhost:8020` in termin
 The [Exit Lab guide](docs/README.md) and the [engine notes](backend/exitlab/README.md)
 cover eligibility, fill order and the API.
 
+## Leak Finder
+
+Reports > Leaks ranks the groups of your trades that cost you money, using only what you knew
+when you entered, so every leak is something you could have skipped. It describes your history;
+it does not predict future results.
+
+- **A leak** is a group of at least 20 trades sharing one thing known at entry (entry window, trade
+  number of the day, losses just before, minutes since the last loss, how the day stood, size against
+  your usual for that account and ticker, instrument, side, weekday, playbook setup, and the diary
+  fields: strategy, source, emotion) whose net is below zero. Size is the first entry only, so a
+  later add does not count. Sequence features count every entry of the day, breakeven and open
+  trades included, and only trades fully closed before this one was entered.
+- **Up to three leaks**, picked greedily: worst first, its trades removed, the rest recomputed. The
+  headline total never counts a trade twice, and sits beside your net without the leaks.
+- **Confidence** is a Welch t against the rest of the same dimension: 2+ solid, 1-2 likely, under 1
+  could be noise.
+- **New in the last 30 days**: groups of 10+ trades losing over the last 30 days of the range but not
+  over the whole range. **What is working**: the two groups that beat the rest by the most, one per
+  dimension.
+- **Trade management and costs.** Hold time, scaling out and mistake tags (logged after the trade,
+  mostly about what happened in it) are shown beside the leaks and never ranked as one. Hold time
+  runs from the first entry to the last exit across days. Commissions and fees are broken down by
+  instrument.
+- **Show N trades** lists the trades behind a finding; a row opens the trade and Back returns to Leaks.
+
+The rules are plain code in `backend/leaks.py` (pure functions, tested in
+`backend/tests/test_leaks.py`), and `/api/leaks` loads the same trades as `/api/reports` (net P&L not
+zero, same account and date filters), so the two reconcile. With an Anthropic key,
+`/api/leaks/explain` asks Claude for one sentence per finding from the numbers only, cached in the
+`leak_explanations` table under a hash of those numbers, so it reruns only when they change. Without
+a key the tab keeps its plain template sentences.
+
 ## Privacy and your data
 
 Trading Journal AI is designed as a **local-first application**.
@@ -101,12 +147,23 @@ Some features use third-party APIs and are completely optional.
 
 When you use AI analysis or the Brain assistant, the information required to answer your request may be sent to Anthropic's API. This can include trade information, journal context, or images you explicitly ask the AI to analyze.
 
+With a key set, opening Reports > Leaks sends each finding's group name and totals (trade count, net, per-trade average, win rate) to write its one-sentence explanation. Individual trades and trade ids are not sent.
+
 The core journal, trade reconstruction, P&L calculations, reports, and statistics do not require Claude.
 
 **Market data (Alpaca)**
 
-If you add Alpaca keys, the trade chart and Exit Lab's **Load prices** ask Alpaca for price bars:
+If you add Alpaca keys, the trade chart and Exit Lab's **Load missing prices** and **Load prices** ask Alpaca for price bars:
 the ticker (plus SPY for Exit Lab) and the date range, nothing about your trades or account.
+
+**Update check (GitHub)**
+
+When the backend starts, it asks GitHub's public releases page whether a newer version exists, at
+most once a day (the answer is cached in `backend/update_check.json`). That is one anonymous request
+to `api.github.com`: GitHub sees your IP address and the app version, nothing about your trades,
+keys or settings. If a newer release exists you get a notice in the app and a line in the backend
+window; nothing is ever downloaded or installed for you. Offline, it stays silent. Turn it off with
+`UPDATE_CHECK=0` in `backend/.env`.
 
 ### API keys
 
@@ -139,7 +196,8 @@ Trade reconstruction, P&L, commissions, statistics, and other core trading calcu
 - **Reports**: breakdowns by day of week, time of day, hold time, setup, grade, symbol, side, emotion,
   plus a Sources & Tags tab that scores where your ideas come from. One switch flips the whole page
   between bars and full numeric tables, and rows under ten trades are marked thin so a one-trade
-  strategy at 100% cannot sit at the top
+  strategy at 100% cannot sit at the top. A Leaks tab ranks what costs you money
+  (see [Leak Finder](#leak-finder))
 - **Diary**: upload handwritten notes, screenshots, or typed text; Claude extracts strategy, stops, R-multiples, emotional state, and mistakes, and matches them to your actual trades
 - **Day Review**: the session drawn as one picture, running P&L from the open to the close with every
   trade marked where you entered it, plus an AI coaching report graded on process rather than P&L.
@@ -182,13 +240,6 @@ or delete one and reassign its trades.
 
 ![Settings: the strategy, source and tag library with rename, merge and delete](docs/screenshot-settings.png)
 
-## Watch the walkthrough
-
-[![Watch: I built my own AI trading journal and stopped paying monthly](docs/video-thumbnail.png)](https://www.youtube.com/watch?v=LTR4HOfS_hc)
-
-A full tour of the app, an install from an empty folder, and three prompts that change it while
-the camera is running. Every prompt used in the video is in the video description, ready to paste.
-
 ## Quick start
 
 Requirements: [Python 3.11+](https://www.python.org/downloads/) and [Node.js 18+](https://nodejs.org/) (the current LTS is recommended).
@@ -227,6 +278,10 @@ then import your broker's statement on the Import page.
 
 ## Updating to a new release
 
+When a newer release is out, the app shows a notice at the top of the page with a link to the
+release notes (how the check works is under [Privacy](#privacy-and-your-data)). It never updates itself;
+you choose when, with the steps below.
+
 Your trades live in `backend/trading_journal.db` and your keys in `backend/.env`. Neither is part of
 a release, so an update never touches them. New tables are created on the first start and nothing
 existing is rewritten.
@@ -241,11 +296,12 @@ launch.bat
 ```
 
 **If you downloaded the ZIP:** unzip the new version into a new folder, then copy your two files
-across before starting it:
+across before starting it, plus the `uploads` folder if you have uploaded diary images:
 
 ```bash
 copy old-folder\backend\.env               new-folder\backend\.env
 copy old-folder\backend\trading_journal.db new-folder\backend\trading_journal.db
+xcopy /e /i old-folder\backend\uploads     new-folder\backend\uploads
 ```
 
 Then run `npm install` in `frontend/` once and start it with `launch.bat`.
@@ -306,6 +362,7 @@ Everything is optional; the app runs without any keys and tells you exactly whic
 | `ALPACA_ENV_FILE` | Optional. Path to another `.env` file that holds the Alpaca keys for Exit Lab. When set, Exit Lab reads its keys only from that file. |
 | `ALPACA_DATA_FEED` | Optional, defaults to `iex` (free-tier data). Set to `sip` only if your key has a paid market-data subscription. |
 | `FRONTEND_ORIGINS` | Optional. Any `localhost`/`127.0.0.1` port is already accepted; add comma-separated origins here only for a frontend served from another host. |
+| `UPDATE_CHECK` | Optional. `0` turns off the once-a-day check for a newer release on GitHub. |
 
 ## Make it yours with Claude Code
 

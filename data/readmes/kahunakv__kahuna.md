@@ -6,9 +6,9 @@ Distributed systems are difficult to build correctly. Execution can be non-deter
 
 Kahuna is an open-source project. It gives developers ready-made solutions for three common problems in distributed systems:
 
-- Distributed locking
-- A distributed key/value store
-- A distributed sequencer
+- Distributed locking with fencing tokens and leases
+- Consistent key/value store with transactions and watchers
+- Distributed sequencer for ordered IDs
 
 ### **Distributed Locking**
 
@@ -46,6 +46,13 @@ These capabilities work together. They give you a foundation for reliable and sc
 Historically, it referred to doctors, surgeons, dentists, priests, ministers, and sorcerers.
 
 Read the [documentation](https://kahunakv.github.io/) for architecture details, installation steps, and usage examples.
+
+Repository guides cover [storage engines and extensions](docs/storage-engines-guide.md),
+[embedding and startup](Kahuna.Core/Embedding/README.md),
+[batched point and range probes](docs/batched-probes-guide.md),
+[transaction sessions](docs/reusable-transaction-coordinator-guide.md),
+[key-value watch streams](docs/keyvalue-watch-streams-guide.md), and
+[script expression semantics](docs/script-expression-semantics-guide.md).
 
 ## Installation
 
@@ -107,7 +114,8 @@ scripts in `scripts/`.
 
 ## Architecture
 
-<img src="https://github.com/user-attachments/assets/b60b213c-d12d-48a5-ba22-38fe99d2a590" height="350">
+<img width="838" height="578" alt="architecture" src="https://github.com/user-attachments/assets/fea5e105-29b4-4713-bfbe-bdd097ac3a1e" />
+
 
 ### Distributed Storage Engine
 

@@ -28,13 +28,13 @@
   }
  },
  "crate/crate": {
-  "commit_7d": 27,
-  "commit_90d": 352,
+  "commit_7d": 30,
+  "commit_90d": 357,
   "rel_ver": "6.5.0",
   "rel_pub": "2026-10-13",
-  "rel_days": 12,
+  "rel_days": 20,
   "rel_n90": 7,
-  "rel_pre": true,
+  "rel_pre": false,
   "rel_none": false,
   "sec_n": 10,
   "sec_worst": "critical",
@@ -50,7 +50,7 @@
    "GHSA-2xv8-gjwh-fv8p(CVE-2026-49989,low)"
   ],
   "contrib_n": 107,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Java": 100,
    "Python": 0,
@@ -59,10 +59,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "6.5.0",
+    "d": "2026-10-13",
+    "n": "Release notes:\r\n\r\n - https://cratedb.com/docs/crate/reference/en/master/appendices/release-notes/6.5.0.html\r\n\r\nDownload on:\r\n\r\n - https://cratedb.com/download"
+   },
+   {
+    "t": "6.4.6",
+    "d": "2026-10-08",
+    "n": "Release notes:\r\n\r\n - https://cratedb.com/docs/crate/reference/en/6.4/appendices/release-notes/6.4.6.html\r\n\r\nComplete list of changes in 6.4:\r\n\r\n - https://cratedb.com/docs/crate/reference/en/master/appendices/release-notes/6.4.0.html\r\n\r\nDownload on:\r\n\r\n - https://cratedb.com/download"
+   },
+   {
+    "t": "6.4.5",
+    "d": "2026-09-16",
+    "n": "Release notes:\r\n\r\n - https://cratedb.com/docs/crate/reference/en/6.4/appendices/release-notes/6.4.5.html\r\n\r\nComplete list of changes in 6.4:\r\n\r\n - https://cratedb.com/docs/crate/reference/en/master/appendices/release-notes/6.4.0.html\r\n\r\nDownload on:\r\n\r\n - https://cratedb.com/download"
+   }
+  ]
  },
  "cozodb/cozo": {
   "commit_7d": 0,
@@ -117,7 +134,7 @@
   }
  },
  "iptv-org/database": {
-  "commit_90d": 149,
+  "commit_90d": 152,
   "commit_7d": 6,
   "rel_ver": null,
   "rel_none": true,
@@ -131,20 +148,21 @@
    "TypeScript": 39,
    "Shell": 0
   },
-  "enriched_at": "20261004",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261004",
-   "release": "20261004"
+   "commit": "20261102",
+   "release": "20261102",
+   "security": "20261102"
   }
  },
  "sbondCo/Watcharr": {
-  "commit_90d": 116,
-  "commit_7d": 17,
-  "rel_ver": "v4.3.0",
-  "rel_pub": "2026-10-24",
-  "rel_days": 1,
+  "commit_90d": 72,
+  "commit_7d": 6,
+  "rel_ver": "v4.4.0-beta.1",
+  "rel_pub": "2026-10-31",
+  "rel_days": 2,
   "rel_n90": 6,
-  "rel_pre": false,
+  "rel_pre": true,
   "rel_none": false,
   "sec_n": 2,
   "sec_worst": "high",
@@ -161,20 +179,37 @@
    "SCSS": 1,
    "JavaScript": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v4.4.0-beta.1",
+    "d": "2026-10-31",
+    "n": "> [!CAUTION]\r\n> Backup before trying (https://watcharr.app/docs/server_config/backup)!\r\n\r\n[See changelog (look at unreleased section).](https://github.com/sbondCo/Watcharr/blob/v4.4.0-beta.1/CHANGELOG.md)\r\n\r\n## Bugs?\r\n\r\nIf you need help, encounter an issue or find a bug please [create an issue](https://github.com/sbondCo/Watcharr/issues/new/choose) or [join our space on Matrix](https://matrix.to/#/#watcharr:matrix.org) for support. Always happy to help and every bug report is truly appreciated!\r\n\r\n## Etc\r\n\r"
+   },
+   {
+    "t": "v4.3.0",
+    "d": "2026-10-24",
+    "n": "- Database: Renamed `New()` to `Open()` as it will no longer run `Setup()`. That will be done from caller after running New(). This lets us setup our logging for the db after New(), but before migrations are run in Setup().\n- Middleware: Removed \"extra info\" from `AuthRequired`. User from db is now fetched with new `WithUser` middleware.\n- Handbook: A new way for Watcharr to help out when you aren't sure what to do. In beta stages, but the vision is all Watcharr documentation relating to usage/configuring w"
+   },
+   {
+    "t": "v4.3.0-beta.2",
+    "d": "2026-10-21",
+    "n": "- CleanupImages: Refactored function. Now uses a new helper function that gets references from sqlite schema table directly so we don't have to manually keep track of the query.\n> This release contains migrations that will break your database when reverting back to the current version, so it's important to use a copy of your database for testing this release! Then swap back to your old one if you need to go back. It's best to keep the original copy available until the final release is out incase any migrati"
+   }
+  ]
  },
  "bareos/bareos": {
-  "commit_90d": 308,
-  "commit_7d": 15,
-  "rel_ver": "Release/25.1.1",
-  "rel_pub": "2026-09-03",
-  "rel_days": 52,
-  "rel_n90": 4,
+  "commit_90d": 321,
+  "commit_7d": 19,
+  "rel_ver": "Release/25.1.2",
+  "rel_pub": "2026-10-27",
+  "rel_days": 6,
+  "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 14,
@@ -198,12 +233,29 @@
    "Python": 7,
    "Shell": 5
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "Release/25.1.2",
+    "d": "2026-10-27",
+    "n": "- plugins: (debian) add missing data from /etc/postgresql [PR #2828]"
+   },
+   {
+    "t": "Release/24.0.12",
+    "d": "2026-10-27",
+    "n": "We are happy to announce [maintenance release 24.0.12](https://download.bareos.com/bareos/release/24/)\r\n\r\n**This release contains several security fixes. We strongly encourage you to at least update your director and webui in a timely manner.**\r\n\r\nWe recommend to upgrade to the latest version. In case you like our consultants to help with upgrading or other planning regarding backup strategy or [open source in general](https://www.bareos.com/company/opensourceexpertise/) please [contact us](https://www.bare"
+   },
+   {
+    "t": "Release/23.1.9",
+    "d": "2026-10-27",
+    "n": "We are happy to announce [maintenance release 23.1.9](https://download.bareos.com/bareos/release/23/)\r\n\r\n**This release contains several security fixes. We strongly encourage you to at least update your director and webui in a timely manner.**\r\n\r\nWe recommend to upgrade to the latest version. In case you like our consultants to help with upgrading or other planning regarding backup strategy or [open source in general](https://www.bareos.com/company/opensourceexpertise/) please [contact us](https://www.bareo"
+   }
+  ]
  },
  "joaoh82/rust_sqlite": {
   "commit_90d": 2,
@@ -589,8 +641,8 @@
   "enriched_at": "20260927"
  },
  "nestjs/azure-database": {
-  "commit_90d": 24,
-  "commit_7d": 0,
+  "commit_90d": 23,
+  "commit_7d": 12,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -602,7 +654,11 @@
    "TypeScript": 98,
    "JavaScript": 2
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "longevityframework/longevity": {
   "commit_90d": 0,
@@ -1986,11 +2042,11 @@
   }
  },
  "devlive-community/metaforge": {
-  "commit_90d": 137,
-  "commit_7d": 27,
+  "commit_90d": 406,
+  "commit_7d": 270,
   "rel_ver": "2025.1.1",
   "rel_pub": "2025-07-28",
-  "rel_days": 455,
+  "rel_days": 462,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -2006,14 +2062,31 @@
    "ANTLR": 5,
    "TypeScript": 4
   },
-  "enriched_at": "20261030",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261026",
-   "release": "20261026",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261030",
    "contrib": "20260930",
    "lang": "20260930"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "2025.1.1",
+    "d": "2025-07-28",
+    "n": "- **🐬 DolphinDB 数据库支持**: 全新支持 DolphinDB 时序数据库，扩展了高性能时间序列数据处理能力\n- **达梦数据库增强**: 改进了达梦数据库连接器的兼容性，解决了 Docker 平台兼容性问题\n- 新增的 DolphinDB 支持需要相应的插件配置"
+   },
+   {
+    "t": "2025.1.0",
+    "d": "2025-03-02",
+    "n": "We would like to thank all developers and users who have contributed to DataCap. Your support and feedback are the driving force behind our continuous improvement. We will continue our efforts to provide you with better data transformation, integration, and visualization experiences.\n### 💻 ClickHouse Compatibility Improvements\n- Optimized database, table, and column retrieval approaches"
+   },
+   {
+    "t": "2024.4.1",
+    "d": "2024-12-31",
+    "n": "- Added database management feature: You can create, delete, and switch databases\n- Supports com.dbschema.MongoJdbcDriver adaptation\n- Support for CREATE DATABASE syntax\nThank you to the community for your continued support and feedback. If you have questions or suggestions, please feel free to contact us via GitHub Issues.\n2. **MongoDB driver upgrade**\n1. **Database Enhancements (Implementations)**\n- Optimized the acquisition of the Dameng database plug-in version"
+   }
+  ]
  },
  "j1m1l0k0/BlazeEmulatorBF4": {
   "rel_ver": null,

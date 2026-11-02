@@ -56,6 +56,7 @@ Every measurement we have ever published is indexed in [`docs/evals/`](docs/eval
 pre-registrations kept next to their results, including the runs that failed and the one
 claim we retracted.
 
+- **Z0 round 2, 16 repositories, Claude Code with hippo against its built-in memory: no extra cost (ratio 0.999 [0.962, 1.037]) and about 12% less spent on teach and correction turns. A drop in repeat mistakes is not shown (-8.9 points [-18.5, +0.7], under the pre-registered 15-point minimum).** ([result](docs/evals/2026-11-01-z0-round2-result.md))
 - **Sequential Learning Benchmark.** [benchmarks/sequential-learning/](benchmarks/sequential-learning/). 50 tasks, 10 buried traps. Measures whether agents learn from past mistakes, not just retrieve text. v0.11.0 informal magnitude RETRACTED v1.7.9; mechanism remains shipped. See [CHANGELOG.md](./CHANGELOG.md) v1.7.9 entry.
 - **LongMemEval oracle split, all 500 questions in one pooled store, BM25 only, no embeddings, v0.11: R@5 = 74.0%** ([benchmarks/README.md](benchmarks/README.md), scripts in [benchmarks/longmemeval/](benchmarks/longmemeval/)). A different setup from the per-haystack results under [Benchmarks](#benchmarks), so the two are not a before and after.
 - **On a private 300-query developer store, R@1 0.41 to 0.62 with `hippo recall "<query>" --reranker jev`**, the free local cross-encoder against Jev ([full eval](docs/evals/2026-09-19-jev-reranker.md)). The opt-in [TypeSafe Jev](https://typesafe.ai) reranker, off by default, about 0.0004 USD a recall. 2000-draw paired bootstrap; the margin held in 20 of 20 seeds and a permutation null reached it in 0 of 200 runs. Ranking only: three graded tests on one 150-question LongMemEval set did **not** show a better answer rate than the free local cross-encoder, and that negative result is in the same doc. What it buys today is a shorter context: on that set, 2 memories ranked by Jev answered as well as 5 ranked by the cross-encoder.
@@ -202,7 +203,7 @@ hippo capture --file conversation.md --dry-run
 
 ### Slack ingestion (E1.3)
 
-Hippo accepts Slack Events API webhooks at `POST /v1/connectors/slack/events`. Configure `SLACK_SIGNING_SECRET` (validated on every request) and point Slack at `https://<your-host>/v1/connectors/slack/events`. Messages land as `kind='raw'` memories with `slack://team/channel/ts` provenance and a `slack:public:Cxxx` or `slack:private:Cxxx` scope. Source deletions are honored (GDPR).
+Hippo accepts Slack Events API webhooks at `POST /v1/connectors/slack/events`. Configure `SLACK_SIGNING_SECRET` (validated on every request) and point Slack at `https://<your-host>/v1/connectors/slack/events`. Messages land as `kind='raw'` memories with `slack://team/channel/ts` provenance and a `slack:public:Cxxx` or `slack:private:Cxxx` scope. Source deletions are honored (GDPR). To rotate the secret, put the new one in `SLACK_SIGNING_SECRET` and the old one in `SLACK_SIGNING_SECRET_PREVIOUS`, and set `SLACK_SIGNING_SECRET_PREVIOUS_UNTIL` to an ISO date (`2026-12-01` means 00:00 UTC that day) or timestamp. From then on requests signed with the old secret are refused, with one warning in the log. Left unset, the old secret works for as long as it stays in the environment.
 
 Backfill an existing channel: `SLACK_BOT_TOKEN=xoxb-... hippo slack backfill --channel C0000`. Inspect malformed events: `hippo slack dlq list`.
 
@@ -264,6 +265,8 @@ hippo handoff show 3              # show a specific handoff by ID
 hippo session resume              # re-inject latest handoff as context
 ```
 
+The per-prompt hook (Claude Code and Codex) prints only your own session's handoff. It no longer prints another session's handoff, not even as a pointer. To pick up another session's work, run `hippo context --auto`.
+
 ### Working memory
 
 Working memory is a bounded scratchpad for current-state notes. It's separate from long-term memory. Entries stay until you run `hippo wm flush`.
@@ -298,7 +301,7 @@ hippo recall "data pipeline" --why --limit 5
 
 Input enters the buffer. Important things get encoded into episodic memory. During "sleep," related episodes are merged into one semantic memory, by word overlap. Weak memories decay and disappear.
 
-The store is SQLite (`.hippo/hippo.db`). The markdown files are mirrors written after each change. `index.json` is no longer refreshed by writes, deletes or recalls: it is written only when you call `rebuildIndex()` from the package, so a copy an older version left on disk goes stale. Read the store through the CLI, the MCP server or the HTTP API.
+The store is SQLite (`.hippo/hippo.db`). The markdown files are mirrors written after each change. `index.json` is no longer refreshed by writes, deletes or recalls, so a copy an older version left on disk goes stale. Read the store through the CLI, the MCP server or the HTTP API.
 
 ```mermaid
 flowchart TD
@@ -680,7 +683,7 @@ hippo watch -- npm run build
 # next time an agent asks about build issues, the memory is there
 ```
 
-The command runs with no shell, so each argument reaches the program as written. To run a shell line with pipes or `&&`, pass it as one string after `--shell`: `hippo watch --shell "npm test && npm run build"`.
+The command runs with no shell, so each argument reaches the program as written. To run a shell line with pipes or `&&`, name the shell: `hippo watch -- sh -c "npm test && npm run build"`.
 
 ---
 
@@ -738,7 +741,7 @@ The command runs with no shell, so each argument reaches the program as written.
 | `hippo failures [--days n]` | Failed tool calls the capture-error hook saw, by outcome, and how many errors first happened in another session |
 | `hippo embed` | Embed all memories for semantic search |
 | `hippo embed --status` | Show embedding coverage |
-| `hippo watch -- <command> [args...]` | Run command with no shell, auto-learn from failures (`--shell "<line>"` runs one line through the shell) |
+| `hippo watch -- <command> [args...]` | Run command with no shell, auto-learn from failures |
 | `hippo learn --git` | Scan recent git commits for lessons |
 | `hippo learn --git --days <n>` | Scan N days back (default: 7) |
 | `hippo learn --git --repos <paths>` | Scan multiple repos (comma-separated) |
@@ -783,10 +786,10 @@ The command runs with no shell, so each argument reaches the program as written.
 | `hippo wm read --scope <s>` | Read working memory entries |
 | `hippo wm clear --scope <s>` | Clear working memory |
 | `hippo wm flush --scope <s>` | Flush working memory (session end) |
-| `hippo dashboard` | Open web dashboard at localhost:3333 (memory health by project, and the card board); open the printed URL, which carries a per-start access token |
+| `hippo dashboard` | Open web dashboard at localhost:3333 (memory health by project, and the card board); open the URL in the `dashboard.url` file the start line names (on Windows it sits in the global hippo folder under your profile); its one-time ticket opens the dashboard once, within 10 minutes of the start |
 | `hippo dashboard --port <n>` | Use custom port |
 | `hippo mcp` | Start MCP server (stdio transport) |
-| `hippo serve` | Start the HTTP API server for this store on `127.0.0.1:6789` (`--port <n>` or `HIPPO_PORT`; `--host <host>`, which off loopback needs `HIPPO_REQUIRE_AUTH=1`). Every request needs an API key (`hippo auth create`, then `Authorization: Bearer <key>`; the hippo CLI reads `HIPPO_API_KEY`). `HIPPO_ALLOW_KEYLESS_LOCAL=1` lets requests from this machine in without one, as a member (`HIPPO_KEYLESS_LOCAL_ROLE=admin` makes them host admin, for sleep and the quarantine routes); `HIPPO_REQUIRE_AUTH=1` wins over it. Each caller gets 20 requests a second, burst 40 (`HIPPO_CALLER_RPS`; `0` turns it off). See [Security defaults](docs/UPGRADING-2.0.md#security-defaults) |
+| `hippo serve` | Start the HTTP API server for this store on `127.0.0.1:6789` (`--port <n>` or `HIPPO_PORT`; `--host <host>`, which off loopback needs TLS or `--allow-cleartext`). Every request needs an API key, from this machine too (`hippo auth create`, then `Authorization: Bearer <key>`). Each start writes a fresh member key to `.hippo/server.key`, readable by you alone, and the hippo CLI and hooks send it when `HIPPO_API_KEY` is unset (sleep and the quarantine routes need an admin key). Each caller gets 20 requests a second, burst 40 (`HIPPO_CALLER_RPS`; `0` turns it off). See [Security defaults](docs/UPGRADING-2.0.md#security-defaults) |
 | `hippo serve --tls-cert <file> --tls-key <file>` | Serve HTTPS with that PEM certificate and key (or set `HIPPO_TLS_CERT` and `HIPPO_TLS_KEY`). Without them a network bind refuses to start, since API keys and memory text would travel in cleartext; behind a TLS-terminating proxy, pass `--allow-cleartext` (or set `HIPPO_ALLOW_CLEARTEXT=1`) |
 
 On `heartbeat`, `block`, `review` and `complete`, a given `--run` is checked against the card's live run and the command is refused, unchanged, if the two do not match.
@@ -826,14 +829,14 @@ hippo hook install opencode      # patches AGENTS.md + installs the opencode TS 
 
 This adds a `<!-- hippo:start -->` ... `<!-- hippo:end -->` block that tells the agent to:
 1. Run `hippo context --auto --budget 1500` at the start of a task. In Claude Code and Codex, whose prompt hook already injects pinned rules and matching memories, only if no hippo memory block has appeared in the session
-2. Run `hippo remember "<what went wrong and why>" --error` the moment it finds out why something failed, never as a closing step
+2. Everywhere but Claude Code, whose hooks store failed tool calls: run `hippo remember "<description of what went wrong>" --error` the moment it finds out why something failed, never as a closing step
 3. Everywhere but Claude Code, whose own auto memory does this job: run a plain `hippo remember` the moment it learns something that should outlive the session, leaving out secrets and personal details
 4. Capture a short summary with `hippo capture --stdin` when the session ends, but only where no hook captures the session: Cursor, OpenClaw, OpenCode, Pi, and Codex without its wrapper
 
 The block asks for nothing a hook already does, because each extra tool call re-reads the whole context. Re-running `hippo init` swaps a block an older hippo wrote for the current one, as long as nobody edited it. It leaves an edited block alone and says so, and never touches text outside the markers.
 
 For Claude Code, it also adds 7 hook entries to `~/.claude/settings.json`:
-- a `SessionEnd` hook that runs `hippo sleep` and then `hippo capture` when the session exits. Capture matches the last 20 user and 10 assistant messages of the transcript against word patterns for decisions, rules, errors and preferences. It uses no model and does not read earlier turns, so record lessons with `hippo remember` as you go.
+- a `SessionEnd` hook that runs `hippo sleep` and then `hippo capture` when the session exits. Capture matches the last 20 user and 10 assistant messages of the transcript against word patterns for decisions, rules, errors and preferences. It uses no model and does not read earlier turns, so a correction older than that window needs a `hippo remember` by hand.
 - a `SessionStart` hook that prints the previous session's consolidation log on stderr, where `claude --debug` shows it. When the last sleep failed or a compaction summary was set aside, it shows you one line that points to `hippo doctor`.
 - a `UserPromptSubmit` hook that runs `hippo context --pinned-only --include-recent 5 --format additional-context` every turn. It re-injects pinned memories (`hippo remember <text> --pin`) plus up to 5 memories that share words with your prompt. When nothing matches, it adds only the pinned ones. Since 1.55.0 this replaces the 5 newest memories, which cut the median block from 847 to 533 tokens in our eval. `{"pinnedInject":{"promptRecall":false}}` brings back the 5 newest, so fresh same-session lessons appear on the next prompt whatever you ask. The block is rendered without live strength percentages, so it stays byte-identical while its memories do not change, and it is sent only when it changed since the session's last prompt: an unchanged block is skipped, resent every 10 skips (`pinnedInject.refreshTurns`, `0` never resends) and resent after compaction. The prompt-matched memories go in a separate block that is never skipped, so they are sent on every prompt they match. `{"pinnedInject":{"skipUnchanged":false}}` sends the pinned block every turn as before. Opt out entirely with `{"pinnedInject":{"enabled":false}}` in `.hippo/config.json`.
 - a `PreCompact` hook that runs `hippo pre-compact` before the transcript gets summarized. It records the compaction in the store, saves a working-state snapshot (task/summary/next step) so mid-session compaction can't drop it, and asks the summariser to end its summary with a "Memories for hippo" list: the lessons, decisions and corrections from the session that should outlive it. The `SessionEnd` hook still owns extracting durable memories from the transcript.
@@ -865,14 +868,8 @@ block has appeared in this session, run this at the start of a task:
 hippo context --auto --budget 1500
 ```
 
-When you find out why something failed, record it right then, while you
-work, never as a closing step:
-```bash
-hippo remember "<what went wrong and why>" --error
-```
-
 The installed hooks store failed tool calls and capture the session when it
-ends, so there is nothing to run before you finish.
+ends, so there is nothing to record or run by hand.
 ````
 
 ### MCP Server

@@ -1,857 +1,465 @@
 = Eclipse JNoSQL
 :toc: auto
 
-== Introduction
+Eclipse JNoSQL is an open-source Java framework for NoSQL persistence. It implements https://jakarta.ee/specifications/nosql/[Jakarta NoSQL] and https://jakarta.ee/specifications/data/[Jakarta Data], and its query architecture is aligned with https://github.com/jakartaee/query[Jakarta Query]. It provides object mapping, templates, repositories, and fluent query APIs for six NoSQL database models: Key-Value, Document, Wide-Column, Graph, Time Series, and Vector.
 
-Eclipse JNoSQL is a compatible implementation of the https://jakarta.ee/specifications/nosql/[Jakarta NoSQL] and https://jakarta.ee/specifications/data/[Jakarta Data] specifications, a Java framework that streamlines the integration of Java applications with NoSQL databases.
+The framework integrates with Jakarta CDI and MicroProfile Config and runs on Java SE and compatible Jakarta EE environments. It offers common persistence abstractions and also gives access to the capabilities of each database.
 
-== Goals
-
-* Increase productivity performing common NoSQL operations
-* Rich Object Mapping integrated with Contexts and Dependency Injection (CDI)
-* Java-based Query and Fluent-API
-* Persistence lifecycle events
-* Low-level mapping using Standard NoSQL APIs
-* Specific template API to each NoSQL category
-* Annotation-oriented using JPA-like naming when it makes sense
-* Extensible to explore the particular behavior of a NoSQL database
-* Explore the popularity of Apache TinkerPop in Graph API
-* Jakarta NoSQL and Data implementations
+NOTE: Jakarta NoSQL standardizes the mapping annotations and the common `Template` API. The specialized APIs for each database model, including Graph, Time Series and Vector, are Eclipse JNoSQL capabilities beyond the standard. Jakarta Query integration is an architectural direction and is not yet a complete, published feature (see <<Querying with Jakarta Query>>).
 
 == Why Eclipse JNoSQL?
 
-Eclipse JNoSQL is a Java framework that unifies NoSQL access across different database types, including Key-Value, Column Family, Document, Graph, and Time Series. Built on top of the Jakarta NoSQL and Jakarta Data specifications, it simplifies development through standard annotations, fluent APIs, and full compatibility with Jakarta EE and MicroProfile runtimes.
+* *Less boilerplate:* annotation-based mapping and ready-to-use persistence operations.
+* *Familiar concepts across databases:* the same mapping, `Template` and repository programming model for different NoSQL databases.
+* *Jakarta EE standards:* Jakarta NoSQL, Jakarta Data, CDI, and MicroProfile Config.
+* *A choice of access styles:* template-based programmatic access or declarative repositories.
+* *Database-specific features:* specialized templates expose what is particular to each model and provider.
+* *Polyglot persistence:* several databases and models can be used in one application, selected through CDI qualifiers.
+* *Externalized configuration:* settings are supplied through MicroProfile Config.
 
-Use Eclipse JNoSQL to:
+A common API does not make databases interchangeable. Databases differ in query operations, indexing, consistency guarantees, transactions, and data models, so the features you rely on must be supported by the selected provider.
 
-* Increase productivity with annotation-based object mapping
-* Write expressive queries using a fluent or method-name DSL
-* Reduce boilerplate through CDI-managed components and lifecycle events
-* Switch NoSQL vendors with minimal code changes
-* Align with modern practices like Domain-Driven Design (DDD)
-* Rely on a standards-based solution compatible with Jakarta EE and MicroProfile servers
+== Jakarta Standards and Architecture
 
-== One Mapping API to Multiples NoSQL Databases
+Three complementary Jakarta specifications are involved. They complement each other rather than compete:
 
-Eclipse JNoSQL provides one API for each NoSQL database type. However, it incorporates the same annotations from the https://jakarta.ee/specifications/persistence/[Jakarta Persistence] specification and inherits from the Java Persistence Java Persistence API (JPA) to map Java objects. Therefore, with just these annotations that look like JPA, there is support for more than twenty NoSQL databases.
-
-[source,java]
-----
-@Entity
-public class Car {
-
-    @Id
-    private Long id;
-    @Column
-    private String name;
-    @Column
-    private CarType type;
- //...
-}
-----
-
-These annotations from the Mapping API will look familiar to the Jakarta Persistence/JPA developer:
-
-[cols="Annotation description"]
+[cols="1,3"]
 |===
-|Annotation|Description
+|Specification|Responsibility
 
-|`@jakarta.nosql.Entity`
-|Specifies that the class is an entity. This annotation is applied to the entity class.
+|https://jakarta.ee/specifications/nosql/[Jakarta NoSQL]
+|Object mapping annotations and the common `Template` persistence API.
 
-|`@jakarta.nosql.Id`
-|Specifies the primary key of an entity.
+|https://jakarta.ee/specifications/data/[Jakarta Data]
+|Repository-based persistence: `@Repository` interfaces, query methods, and declarative queries.
 
-|`@jakarta.nosql.Column`
-|Specify the mapped column for a persistent property or field.
-
-|`@jakarta.nosql.Embeddable`
-|Specifies a class whose instances are stored as an intrinsic part of an owning entity and share the entity's identity.
-
-|`@jakarta.nosql.Convert`
-|Specifies the conversion of a Basic field or property.
-
-|`@org.eclipse.jnosql.mapping.MappedSuperclass`
-|Designates a class whose mapping information is applied to the entities that inherit from it. A mapped superclass has no separate table defined for it.
-
-|`@jakarta.nosql.Inheritance`
-|Specifies the inheritance strategy to be used for an entity class hierarchy.
-
-|`@jakarta.nosql.DiscriminatorColumn`
-|Specifies the discriminator column for the mapping strategy.
-
-|`@jakarta.nosql.DiscriminatorValue`
-|Specifies the value of the discriminator column for entities of the given type.
-
+|https://github.com/jakartaee/query[Jakarta Query]
+|A common object-oriented query language shared across Jakarta persistence specifications.
 |===
 
-IMPORTANT: Although similar to JPA, Jakarta NoSQL defines persistable fields with either the ```@Id``` or ```@Column``` annotation.
+The query constructs that can be used depend on the Eclipse JNoSQL version and on the database provider.
 
-After mapping an entity, you can explore the advantage of using a ```Template``` interface, which can increase productivity on NoSQL operations.
+== Persistence with Jakarta NoSQL
 
-[source,java]
-----
-@Inject
-Template template;
-...
+=== Object Mapping
 
-Car ferrari = Car.id(1L)
-        .name("Ferrari")
-        .type(CarType.SPORT);
+Jakarta NoSQL defines its own mapping annotations in the `jakarta.nosql` package, such as `@Entity`, `@Id`, `@Column`, `@Embeddable`, `@Convert`, `@MappedSuperclass`, `@Inheritance`, `@DiscriminatorColumn` and `@DiscriminatorValue`. Some names will look familiar to Jakarta Persistence developers, but they are not inherited from it. See the https://www.jnosql.org/docs/annotations.html[mapping annotations guide] for details.
 
-template.insert(ferrari);
-Optional<Car> car = template.find(Car.class, 1L);
-template.delete(Car.class, 1L);
-
-List<Car> cars = template.select(Car.class).where("name").eq("Ferrari").result();
-template.delete(Car.class).execute();
-----
-
-This template has specialization to take advantage of a particular NoSQL database type.
-
-A ``Repository`` interface is also provided for exploring the Domain-Driven Design (DDD) pattern for a higher abstraction.
-
-[source,java]
-----
-public interface CarRepository extends PageableRepository<Car, String> {
-
-    Optional<Car> findByName(String name);
-
-}
-
-@Inject
-CarRepository repository;
-...
-
-Car ferrari = Car.id(1L)
-        .name("Ferrari")
-        .type(CarType.SPORT);
-
-repository.save(ferrari);
-Optional<Car> idResult = repository.findById(1L);
-Optional<Car> nameResult = repository.findByName("Ferrari");
-----
-
-== Getting Started
-
-Eclipse JNoSQL requires these minimum requirements:
-
-* Java 17 (or higher)
-* https://jakarta.ee/specifications/cdi/3.0/[Jakarta Contexts & Dependency Injection 3.0] (CDI)
-* https://jakarta.ee/specifications/jsonb/2.0/[Jakarta JSON Binding 2.0] (JSON-B)
-* https://jakarta.ee/specifications/jsonp/2.2/[Jakarta JSON Processing 2.0] (JSON-P)
-* https://microprofile.io/microprofile-config/[MicroProfile Config]
-
-=== NoSQL Database Types
-
-Eclipse JNoSQL provides common annotations and interfaces. Thus, the same annotations and interfaces, ```Template``` and ```Repository```, will work across the supported NoSQL database types.
-
-As a reference implementation for Jakarta NoSQL, Eclipse JNoSQL provides particular behavior for each database type required by the specification and also supports Graph and Time Series databases:
-
-* Key-Value
-* Column Family
-* Document
-* Graph
-* Time Series
-
-=== Key-Value
-
-Jakarta NoSQL provides a Key-Value template to explore the specific behavior of this NoSQL type.
-
-Eclipse JNoSQL offers a mapping implementation for Key-Value NoSQL types:
-
-[source,xml]
-----
-<dependency>
-    <groupId>org.eclipse.jnosql.mapping</groupId>
-    <artifactId>jnosql-mapping-key-value</artifactId>
-    <version>1.1.19</version>
-</dependency>
-----
-
-Furthermore, check for a Key-Value databases. You can find some implementations in the https://github.com/eclipse/jnosql-databases[JNoSQL Databases].
-
-[source,java]
-----
-@Inject
-KeyValueTemplate template;
-...
-
-Car ferrari = Car.id(1L).name("ferrari").city("Rome").type(CarType.SPORT);
-
-template.put(ferrari);
-Optional<Car> car = template.get(1L, Car.class);
-template.delete(1L);
-----
-
-Key-Value is database agnostic. Thus, you can change the database in your application with no or minimal impact on source code.
-
-You can define the database settings using the https://microprofile.io/microprofile-config/[MicroProfile Config] specification, so you can add properties and overwrite it in the environment following the https://12factor.net/config[Twelve-Factor App].
-
-[source,properties]
-----
-jnosql.keyvalue.database=<DATABASE>
-jnosql.keyvalue.provider=<CLASS-DRIVER>
-jnosql.provider.host=<HOST>
-jnosql.provider.user=<USER>
-jnosql.provider.password=<PASSWORD>
-----
-
-TIP: The ```jnosql.keyvalue.provider``` property is necessary when you have more than one driver in the classpath. Otherwise, it will take the first one.
-
-These configuration settings are the default behavior. Nevertheless, there is an option to programmatically configure these settings. Create a class that implements the ```Supplier<BucketManager>``` interface and then define it using the ```@Alternative``` and ```@Priority``` annotations.
-
-[source,java]
-----
-@Alternative
-@Priority(Interceptor.Priority.APPLICATION)
-@ApplicationScoped
-public class ManagerSupplier implements Supplier<BucketManager> {
-
-    @Produces
-    public BucketManager get() {
-        Settings settings = Settings.builder()
-                .put("credential", "value")
-                .build();
-        KeyValueConfiguration configuration = new NoSQLKeyValueProvider();
-        BucketManagerFactory factory = configuration.apply(settings);
-        return factory.apply("database");
-    }
-}
-----
-
-You can work with several Key-Value database instances through the CDI qualifier. To identify each database instance, make a ```BucketManager``` visible for CDI by adding the ```@Produces``` and the ```@Database``` annotations in the method.
-
-[source,java]
-----
-@Inject
-@Database(value = DatabaseType.KEY_VALUE, provider = "databaseA")
-private KeyValueTemplate templateA;
-
-@Inject
-@Database(value = DatabaseType.KEY_VALUE, provider = "databaseB")
-private KeyValueTemplate templateB;
-
-// producers methods
-@Produces
-@Database(value = DatabaseType.KEY_VALUE, provider = "databaseA")
-public BucketManager getManagerA() {
-    BucketManager manager = // instance;
-    return manager;
-}
-
-@Produces
-@Database(value = DatabaseType.KEY_VALUE, provider = "databaseB")
-public BucketManager getManagerB() {
-    BucketManager manager = // instance;
-    return manager;
-}
-----
-
-
-The KeyValue Database module provides a simple way to integrate the `KeyValueDatabase` annotation with CDI, allowing you to inject collections managed by the key-value database. This annotation works seamlessly with various collections, such as List, Set, Queue, and Map.
-
-To inject collections managed by the key-value database, use the `@KeyValueDatabase` annotation in combination with CDI's `@Inject` annotation. Here's how you can use it:
-
-[source,java]
-----
-import javax.inject.Inject;
-
-// Inject a List<String> instance from the "names" bucket in the key-value database.
-@Inject
-@KeyValueDatabase("names")
-private List<String> names;
-
-// Inject a Set<String> instance from the "fruits" bucket in the key-value database.
-@Inject
-@KeyValueDatabase("fruits")
-private Set<String> fruits;
-
-// Inject a Queue<String> instance from the "orders" bucket in the key-value database.
-@Inject
-@KeyValueDatabase("orders")
-private Queue<String> orders;
-
-// Inject a Map<String, String> instance from the "orders" bucket in the key-value database.
-@Inject
-@KeyValueDatabase("orders")
-private Map<String, String> map;
-----
-
-=== Column Family
-
-Jakarta NoSQL provides a Column Family template to explore the specific behavior of this NoSQL type.
-
-Eclipse JNoSQL offers a mapping implementation for Column NoSQL types:
-[source,xml]
-----
-<dependency>
-    <groupId>org.eclipse.jnosql.mapping</groupId>
-    <artifactId>jnosql-mapping-column</artifactId>
-    <version>1.1.19</version>
-</dependency>
-----
-
-Furthermore, check for a Column Family databases. You can find some implementations in the https://github.com/eclipse/jnosql-databases[JNoSQL Databases].
-
-[source,java]
-----
-@Inject
-ColumnTemplate template;
-...
-
-Car ferrari = Car.id(1L)
-        .name("ferrari").city("Rome")
-        .type(CarType.SPORT);
-
-template.insert(ferrari);
-Optional<Car> car = template.find(Car.class, 1L);
-
-template.delete(Car.class).where("id").eq(1L).execute();
-
-Optional<Car> result = template.singleResult("FROM Car WHERE _id = 1");
-----
-
-Column Family is database agnostic. Thus, you can change the database in your application with no or minimal impact on source code.
-
-You can define the database settings using the https://microprofile.io/microprofile-config/[MicroProfile Config] specification, so you can add properties and overwrite it in the environment following the https://12factor.net/config[Twelve-Factor App].
-
-[source,properties]
-----
-jnosql.column.database=<DATABASE>
-jnosql.column.provider=<CLASS-DRIVER>
-jnosql.provider.host=<HOST>
-jnosql.provider.user=<USER>
-jnosql.provider.password=<PASSWORD>
-----
-
-TIP: The ```jnosql.column.provider``` property is necessary when you have more than one driver in the classpath. Otherwise, it will take the first one.
-
-These configuration settings are the default behavior. Nevertheless, there is an option to programmatically configure these settings. Create a class that implements the ```Supplier<ColumnManager>``` interface, then define it using the ```@Alternative``` and ```@Priority``` annotations.
-
-[source,java]
-----
-@Alternative
-@Priority(Interceptor.Priority.APPLICrATION)
-@ApplicationScoped
-public class ManagerSupplier implements Supplier<DatabaseManager> {
-
-    @Produces
-    @Database(DatabaseType.COLUMN)
-    public DatabaseManager get() {
-        Settings settings = Settings.builder()
-                .put("credential", "value")
-                .build();
-        DatabaseConfiguration configuration = new NoSQLColumnProvider();
-        DatabaseManagerFactory factory = configuration.apply(settings);
-        return factory.apply("database");
-    }
-}
-----
-
-You can work with several column database instances through CDI qualifier. To identify each database instance, make a ``ColumnManager`` visible for CDI by putting the ```@Produces``` and the ```@Database``` annotations in the method.
-
-[source,java]
-----
-@Inject
-@Database(value = DatabaseType.COLUMN, provider = "databaseA")
-private ColumnTemplate templateA;
-
-@Inject
-@Database(value = DatabaseType.COLUMN, provider = "databaseB")
-private ColumnTemplate templateB;
-
-// producers methods
-@Produces
-@Database(value = DatabaseType.COLUMN, provider = "databaseA")
-public ColumnManager getManagerA() {
-    return manager;
-}
-
-@Produces
-@Database(value = DatabaseType.COLUMN, provider = "databaseB")
-public ColumnManager getManagerB() {
-    return manager;
-}
-----
-
-=== Document
-
-Jakarta NoSQL provides a Document template to explore the specific behavior of this NoSQL type.
-
-Eclipse JNoSQL offers a mapping implementation for Document NoSQL types:
-
-[source,xml]
-----
-<dependency>
-    <groupId>org.eclipse.jnosql.mapping</groupId>
-    <artifactId>jnosql-mapping-document</artifactId>
-    <version>1.1.19</version>
-</dependency>
-----
-
-Furthermore, check for a Document databases. You can find some implementations in the https://github.com/eclipse/jnosql-databases[JNoSQL Databases].
-
-[source,java]
-----
-@Inject
-DocumentTemplate template;
-...
-
-Car ferrari = Car.id(1L)
-        .name("ferrari")
-        .city("Rome")
-        .type(CarType.SPORT);
-
-template.insert(ferrari);
-Optional<Car> car = template.find(Car.class, 1L);
-
-template.delete(Car.class).where("id").eq(1L).execute();
-
-Optional<Car> result = template.singleResult("FROM Car WHERE _id = 1");
-----
-
-Document is database agnostic. Thus, you can change the database in your application with no or minimal impact on source code.
-
-You can define the database settings using the https://microprofile.io/microprofile-config/[MicroProfile Config] specification, so you can add properties and overwrite it in the environment following the https://12factor.net/config[Twelve-Factor App].
-
-[source,properties]
-----
-jnosql.document.database=<DATABASE>
-jnosql.document.provider=<CLASS-DRIVER>
-jnosql.provider.host=<HOST>
-jnosql.provider.user=<USER>
-jnosql.provider.password=<PASSWORD>
-----
-
-TIP: The ```jnosql.document.provider``` property is necessary when you have more than one driver in the classpath. Otherwise, it will take the first one.
-
-These configuration settings are the default behavior. Nevertheless, there is an option to programmatically configure these settings. Create a class that implements the ```Supplier<DocumentManager>```, then define it using the ```@Alternative``` and ```@Priority``` annotations.
-
-[source,java]
-----
-@Alternative
-@Priority(Interceptor.Priority.APPLICATION)
-@ApplicationScoped
-public class ManagerSupplier implements Supplier<DatabaseManager> {
-
-    @Produces
-    @Database(DatabaseType.DOCUMENT)
-    public DatabaseManager get() {
-        Settings settings = Settings.builder()
-                .put("credential", "value")
-                .build();
-        DatabaseConfiguration configuration = new NoSQLDocumentProvider();
-        DatabaseManagerFactory factory = configuration.apply(settings);
-        return factory.apply("database");
-    }
-}
-----
-
-You can work with several document database instances through CDI qualifier. To identify each database instance, make a ```DocumentManager``` visible for CDI by putting the ```@Produces``` and the ```@Database``` annotations in the method.
-
-[source,java]
-----
-@Inject
-@Database(value = DatabaseType.DOCUMENT, provider = "databaseA")
-private DocumentTemplate templateA;
-
-@Inject
-@Database(value = DatabaseType.DOCUMENT, provider = "databaseB")
-private DocumentTemplate templateB;
-
-// producers methods
-@Produces
-@Database(value = DatabaseType.DOCUMENT, provider = "databaseA")
-public DocumentManager getManagerA() {
-    return manager;
-}
-
-@Produces
-@Database(value = DatabaseType.DOCUMENT, provider = "databaseB")
-public DocumentManager getManagerB() {
-    return manager;
-}
-----
-
-=== Time Series
-
-Use the Time Series Mapping module to store, query, and manage Java entities in a time-series database.
-
-Add the module to your project:
-
-[source,xml]
-----
-<dependency>
-    <groupId>org.eclipse.jnosql.mapping</groupId>
-    <artifactId>jnosql-mapping-timeseries</artifactId>
-    <version>1.1.19</version>
-</dependency>
-----
-
-Map a time-series record as a Jakarta NoSQL entity:
+The examples below use this entity:
 
 [source,java]
 ----
 @Entity
-public class SensorReading {
-
-    @Id
-    private Instant timestamp;
-
-    @Column
-    private String sensor;
-
-    @Column
-    private double value;
-
-    // constructors, getters, and setters
-}
-----
-
-Inject `TimeSeriesTemplate` to perform persistence and query operations:
-
-[source,java]
-----
-@Inject
-private TimeSeriesTemplate template;
-
-SensorReading reading = new SensorReading(
-        Instant.now(),
-        "sensor-1",
-        21.5);
-
-template.insert(reading);
-
-Optional<SensorReading> result =
-        template.find(SensorReading.class, reading.getTimestamp());
-
-List<SensorReading> readings = template.select(SensorReading.class)
-        .where("sensor").eq("sensor-1")
-        .result();
-----
-
-You can also use Jakarta Data repositories:
-
-[source,java]
-----
-@Repository
-public interface SensorReadingRepository
-        extends BasicRepository<SensorReading, Instant> {
-
-    List<SensorReading> findBySensor(String sensor);
-}
-
-@Inject
-@Database(DatabaseType.TIME_SERIES)
-private SensorReadingRepository repository;
-----
-
-Configure the database name and provider using MicroProfile Config:
-
-[source,properties]
-----
-jnosql.timeseries.database=<DATABASE>
-jnosql.timeseries.provider=<CLASS-DRIVER>
-jnosql.provider.host=<HOST>
-jnosql.provider.user=<USER>
-jnosql.provider.******
-----
-
-TIP: The `jnosql.timeseries.provider` property is necessary when more than one time-series database provider is available in the classpath.
-
-Applications that create the database manager programmatically can expose it through CDI:
-
-[source,java]
-----
-@Produces
-@Database(DatabaseType.TIME_SERIES)
-public DatabaseManager getTimeSeriesManager() {
-    return manager;
-}
-----
-
-Use named providers when the application connects to multiple time-series databases:
-
-[source,java]
-----
-@Inject
-@Database(value = DatabaseType.TIME_SERIES, provider = "metrics")
-private TimeSeriesTemplate metrics;
-
-@Inject
-@Database(value = DatabaseType.TIME_SERIES, provider = "audit")
-private TimeSeriesTemplate audit;
-----
-
-=== Vector Database
-
-Use the Vector Mapping module to store and query Java entities in a vector database.
-
-Add the module to your project:
-
-[source,xml]
-----
-<dependency>
-    <groupId>org.eclipse.jnosql.mapping</groupId>
-    <artifactId>jnosql-mapping-vector</artifactId>
-    <version>1.1.19</version>
-</dependency>
-----
-
-A regular Jakarta NoSQL entity can be persisted in a vector database by declaring one `@Column` attribute whose type implements `Vector`.
-
-[source,java]
-----
-@Entity
-public class Article {
+public class Product {
 
     @Id
     private String id;
 
     @Column
-    private String content;
+    private String name;
 
     @Column
-    private String author;
+    private BigDecimal price;
 
-    @Column
-    private int year;
+    public Product() {
+    }
 
-    @Column
-    private DenseVector embedding;
+    public Product(String id, String name, BigDecimal price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
 
-    // constructors, getters, and setters
+    // accessors omitted
 }
 ----
 
-For a vector database, the entity is interpreted conceptually as:
+=== Template API
 
-[source,text]
-----
-Article
-├── id        -> identifier
-├── embedding -> vector
-└── payload
-    ├── content
-    ├── author
-    └── year
-----
-
-The vector attribute does not require a predefined name such as `embedding`. It is identified by the `Vector` type hierarchy. All remaining persisted attributes are available to the provider as payload or metadata.
-
-The initial supported representation is `DenseVector`, which represents an ordered sequence of floating-point values:
-
-[source,java]
-----
-DenseVector vector = DenseVector.of(
-        0.12F,
-        0.45F,
-        0.78F
-);
-----
-
-The number of dimensions corresponds to the number of values in the vector.
-
-Vector generation is outside the scope of Eclipse JNoSQL. A vector may be produced by an embedding model, recommendation model, image or audio encoder, feature extractor, or another application-level mechanism. Eclipse JNoSQL is responsible for persisting and querying the resulting vector.
-
-Inject `VectorTemplate` to use vector-native search operations:
+`Template` is the common Jakarta NoSQL persistence abstraction. CDI manages the injection of the configured persistence components:
 
 [source,java]
 ----
 @Inject
-private VectorTemplate template;
+Template template;
 
-Vector queryVector = DenseVector.of(
-        0.10F,
-        0.42F,
-        0.80F
-);
+Product keyboard = new Product("p-1", "Keyboard", new BigDecimal("49.90"));
 
-List<Article> articles = template.searchNearestNeighbors(
-        Article.class,
-        queryVector,
-        Limit.of(10)
-);
+template.insert(keyboard);
+Optional<Product> found = template.find(Product.class, "p-1");
+List<Product> products = template.select(Product.class)
+        .where("name").eq("Keyboard")
+        .result();
+template.delete(Product.class, "p-1");
 ----
 
-`VectorTemplate` extends `Template`, so regular persistence operations such as insert, update, find by identifier, and delete remain available:
+`Template` provides a common abstraction, but it does not erase the differences between database models and providers.
+
+=== Specialized Templates
+
+Eclipse JNoSQL provides a specialized template for each database model. `KeyValueTemplate` and `SemiStructuredTemplate` extend `Template`; all the other specializations extend `SemiStructuredTemplate`.
+
+[cols="2,3,3"]
+|===
+|Template|Main capability|Availability
+
+|`KeyValueTemplate`
+|Key-oriented operations
+|Released
+
+|`DocumentTemplate`
+|Document filtering and queries
+|Released
+
+|`ColumnTemplate`
+|Wide-Column operations
+|Released
+
+|`GraphTemplate`
+|Graph relationships and operations, such as edges
+|Released
+
+|`TimeSeriesTemplate`
+|Time-oriented queries
+|Released
+
+|`VectorTemplate`
+|Vector similarity operations
+|Development branch only
+|===
+
+== Repositories with Jakarta Data
+
+Jakarta Data repositories provide a declarative persistence interface. The repository identifier type must match the entity `@Id` type:
 
 [source,java]
 ----
-Article article = new Article(
-        "article-123",
-        "Jakarta NoSQL and vector databases",
-        "Otavio Santana",
-        2026,
-        vector
-);
+@Repository
+public interface ProductRepository extends BasicRepository<Product, String> {
 
-template.insert(article);
+    List<Product> findByName(String name);
+}
 
-Optional<Article> result =
-        template.find(Article.class, "article-123");
+@Inject
+ProductRepository repository;
+
+repository.save(new Product("p-1", "Keyboard", new BigDecimal("49.90")));
+Optional<Product> found = repository.findById("p-1");
+List<Product> keyboards = repository.findByName("Keyboard");
 ----
 
-Vector databases primarily provide similarity-based search rather than traditional lexical or exact-value query operations. Therefore, some regular query operations inherited from `Template` may not be supported by a particular vector database provider and may result in `UnsupportedOperationException`.
+Use a `Template` for direct programmatic persistence operations and a repository for a declarative interface. Neither replaces the other: repositories do not remove the need for specialized templates when you need model-specific operations.
 
-Payload attributes can also be used to restrict nearest-neighbor searches:
+== Querying with Jakarta Query
+
+https://github.com/jakartaee/query[Jakarta Query] defines a common object-oriented query language for Jakarta persistence APIs, such as Jakarta Data repositories. It has two levels:
+
+* *Jakarta Query Core:* common capabilities intended for broad compatibility across persistence technologies.
+* *Jakarta Query Extended:* additional language capabilities for technologies that support them.
+
+NoSQL databases do not share the same query capabilities, so a provider may support only part of the language, and Eclipse JNoSQL respects those limitations.
+
+IMPORTANT: Jakarta Query integration is not a complete feature in a published release. The current implementation uses its own query parser, which supports the Jakarta Data Query Language (JDQL) subset, and it does not depend on the Jakarta Query API. This README therefore has no Jakarta Query examples. See the https://github.com/jakartaee/query[Jakarta Query project] and the link:CHANGELOG.adoc[changelog] for updates.
+
+== Supported NoSQL Database Models
+
+Each model has a mapping module and a specialized template. Whether a model can be used with a given database depends on the available provider integrations, which are maintained in the https://github.com/eclipse-jnosql/jnosql-databases[JNoSQL databases project].
+
+[cols="2,4,3,2"]
+|===
+|Model|Description and typical use|Template|Guide
+
+|Key-Value
+|Values stored and retrieved by key. Typical use: caches, sessions, shopping carts.
+|`KeyValueTemplate`
+|https://www.jnosql.org/docs/key-value.html[Key-Value]
+
+|Document
+|Self-describing, JSON-like documents. Typical use: catalogs and content.
+|`DocumentTemplate`
+|https://www.jnosql.org/docs/document.html[Document]
+
+|Wide-Column
+|Rows with flexible sets of columns grouped in column families. Typical use: large-scale, write-heavy data.
+|`ColumnTemplate`
+|https://www.jnosql.org/docs/column.html[Wide-Column]
+
+|Graph
+|Vertices and edges. Typical use: relationships, recommendations. An Eclipse JNoSQL capability, not standardized by Jakarta NoSQL; Apache TinkerPop is one integration option.
+|`GraphTemplate`
+|https://www.jnosql.org/docs/graph.html[Graph]
+
+|Time Series
+|Time-ordered records. Typical use: metrics and sensor data. An Eclipse JNoSQL capability, not standardized by Jakarta NoSQL.
+|`TimeSeriesTemplate`
+|https://www.jnosql.org/docs/time-series.html[Time Series]
+
+|Vector
+|Vector similarity search over dense, sparse, and multi-vectors. Typical use: semantic search and recommendations. An Eclipse JNoSQL capability, available only on the development branch.
+|`VectorTemplate`
+|https://www.jnosql.org/docs/vector.html[Vector]
+|===
+
+The mapping modules are published under the `org.eclipse.jnosql.mapping` group, for example `jnosql-mapping-document`, `jnosql-mapping-column`, `jnosql-mapping-key-value`, `jnosql-mapping-graph` and `jnosql-mapping-timeseries`. `jnosql-mapping-vector` exists only on the development branch (`2.0.0-SNAPSHOT`).
+
+=== Provider Selection and Configuration
+
+Database settings are read through MicroProfile Config, using properties such as `jnosql.<model>.database` and `jnosql.<model>.provider`. The provider property is necessary when more than one driver is on the classpath. The property prefixes are `jnosql.keyvalue`, `jnosql.document`, `jnosql.column`, `jnosql.graph` and `jnosql.timeseries`.
+
+To use several databases of the same model, qualify the injection point with `@Database`. The provider name must match a manager producer that carries the same qualifier (see <<Programmatic Configuration>>):
 
 [source,java]
 ----
-List<Article> articles = template.searchNearestNeighbors(
-        Article.class,
-        queryVector,
-        Map.of(
-                "author", "Otavio Santana",
-                "year", 2026
-        ),
-        Limit.of(10)
-);
+@Inject
+@Database(value = DatabaseType.DOCUMENT, provider = "databaseA")
+DocumentTemplate templateA;
 ----
 
-In the initial API, each entry in the filter map represents an equality predicate, and multiple entries are combined using logical `AND`.
+Key-Value databases additionally support injecting `List`, `Set`, `Queue` and `Map` instances backed by a bucket with `@Inject @KeyValueDatabase("bucket")`.
 
-Threshold-based vector searches are also available:
+=== Programmatic Configuration
+
+MicroProfile Config is the conventional way to configure a database, and most applications need nothing else. Sometimes more control over the creation of the database manager is needed: custom connection settings, provider-specific initialization, settings assembled in code, or integration with application-managed connection infrastructure. For these cases, Eclipse JNoSQL exposes configuration and factory abstractions, so an application can create the database manager itself and expose it through CDI.
+
+The three mechanisms solve different problems and can be combined: MicroProfile Config externalizes settings, CDI qualifiers select among configured integrations, and programmatic configuration customizes how a manager is built. The example below is for the Key-Value model; other models use their own manager types, providers and settings (for example `DatabaseManager` for the semi-structured models).
 
 [source,java]
 ----
-List<Article> articles = template.searchWithinThreshold(
-        Article.class,
-        queryVector,
-        0.85F
-);
-----
+import jakarta.annotation.Priority;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Alternative;
+import jakarta.enterprise.inject.Disposes;
+import jakarta.enterprise.inject.Produces;
+import jakarta.interceptor.Interceptor;
+import java.util.function.Supplier;
+import org.eclipse.jnosql.communication.Settings;
+import org.eclipse.jnosql.communication.keyvalue.BucketManager;
+import org.eclipse.jnosql.communication.keyvalue.BucketManagerFactory;
+import org.eclipse.jnosql.communication.keyvalue.KeyValueConfiguration;
 
-The meaning and valid range of a threshold depend on the similarity or distance metric configured by the underlying vector database.
-
-=== Graph
-
-Eclipse JNoSQL provides a Graph API that simplifies working with graph databases such as Neo4j and Apache TinkerPop. This API enables seamless integration with graph databases while following the Jakarta NoSQL specifications.
-
-To start using graph databases with Eclipse JNoSQL, add the required dependency:
-
-[source,xml]
-----
-<dependency>
-    <groupId>org.eclipse.jnosql.mapping</groupId>
-    <artifactId>jnosql-mapping-graph</artifactId>
-    <version>1.1.19</version>
-</dependency>
-----
-
-==== Using the Relationship on Graph (Edge)
-
-The `EdgeBuilder` provides a fluent API to define edges between entities, including properties.
-
-[source,java]
-----
-
-private GraphTemplate template;
-
-Person person = new Person();
-Book book = new Book();
-
-Edge<Person, Book> edge = Edge.source(person)
-        .label("READS")
-        .target(book)
-        .property("since", 2019)
-        .property("format", "digital")
-        .build();
-
-template.edge(edge);
-----
-
-==== Configuring a Graph Database
-
-You can configure your graph database using MicroProfile Config properties.
-
-[source,properties]
-----
-jnosql.graph.database=<DATABASE>
-jnosql.graph.provider=<CLASS-DRIVER>
-----
-
-You can also configure the database programmatically by providing a `GraphDatabaseManager` implementation.
-
-[source,java]
-----
 @Alternative
 @Priority(Interceptor.Priority.APPLICATION)
 @ApplicationScoped
-public class GraphManagerSupplier implements Supplier<GraphDatabaseManager> {
+public class CustomBucketManagerProducer implements Supplier<BucketManager> {
 
+    @Override
     @Produces
-    @Database(DatabaseType.GRAPH)
-    @Default
-    public GraphDatabaseManager get() {
+    @ApplicationScoped
+    public BucketManager get() {
+        // illustrative: keys and values are specific to each provider
         Settings settings = Settings.builder()
-                .put("credential", "value")
+                .put("<provider-setting-key>", "<value from your secure configuration>")
                 .build();
-        GraphConfiguration configuration = new NoSQLGraphProvider();
-        GraphDatabaseManagerFactory factory = configuration.apply(settings);
+
+        // the first KeyValueConfiguration found on the classpath; use
+        // getConfiguration(ProviderConfiguration.class) to pick a specific provider
+        KeyValueConfiguration configuration = KeyValueConfiguration.getConfiguration();
+        BucketManagerFactory factory = configuration.apply(settings);
         return factory.apply("database");
+    }
+
+    void close(@Disposes BucketManager manager) {
+        manager.close();
     }
 }
 ----
 
-By using the `@Database` annotation, multiple graph database instances can be configured for CDI injection.
+This example is illustrative rather than executable, because the settings keys and the provider depend on the database integration on the classpath. `Supplier<BucketManager>` follows the convention of JNoSQL's default producers; CDI only requires the `@Produces` method. Do not hard-code credentials; read them from a secure source.
+
+* `@Produces` exposes the returned `BucketManager` as a CDI bean.
+* `@Alternative` marks the bean as an alternative, which is not used unless it is enabled.
+* `@Priority` enables the alternative for the whole application. Eclipse JNoSQL also provides a default, unqualified `BucketManager` producer that reads MicroProfile Config; an enabled alternative takes precedence over it, which avoids ambiguous resolution. A producer without the alternative annotations would be ambiguous with the default one, unless it uses a qualifier such as `@Database`.
+* `@ApplicationScoped` defines the lifecycle of the bean and of the manager.
+
+The disposer pairs with the producer declared in the same bean class and releases the manager when CDI destroys it. It does not conflict with the framework: Eclipse JNoSQL's own disposer belongs to its default producer class, which is replaced when the alternative is enabled. Because the custom producer owns the manager, it is also responsible for closing it. The producer and the produced bean's lifecycle are separate concerns: `@ApplicationScoped` on the class scopes the producer bean, while `@ApplicationScoped` on the method scopes the produced manager.
+
+When the application starts, it creates the settings, the provider creates the manager factory, and the factory creates the manager. CDI then makes that manager available to the Key-Value persistence integration, such as `KeyValueTemplate` and the `@KeyValueDatabase` collections. The Key-Value default producer is unqualified, so the custom producer is unqualified as well.
+
+The Wide-Column example follows the same mechanism with a different manager type and a model-specific qualifier. It is illustrative for the same reasons:
+
+[source,java]
+----
+import jakarta.annotation.Priority;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Alternative;
+import jakarta.enterprise.inject.Disposes;
+import jakarta.enterprise.inject.Produces;
+import jakarta.interceptor.Interceptor;
+import java.util.function.Supplier;
+import org.eclipse.jnosql.communication.Settings;
+import org.eclipse.jnosql.communication.semistructured.DatabaseConfiguration;
+import org.eclipse.jnosql.communication.semistructured.DatabaseManager;
+import org.eclipse.jnosql.communication.semistructured.DatabaseManagerFactory;
+import org.eclipse.jnosql.mapping.Database;
+import org.eclipse.jnosql.mapping.DatabaseType;
+
+@Alternative
+@Priority(Interceptor.Priority.APPLICATION)
+@ApplicationScoped
+public class CustomColumnManagerProducer implements Supplier<DatabaseManager> {
+
+    @Override
+    @Produces
+    @Database(DatabaseType.COLUMN)
+    @ApplicationScoped
+    public DatabaseManager get() {
+        Settings settings = Settings.builder()
+                .put("<provider-setting-key>", "<value from your secure configuration>")
+                .build();
+
+        DatabaseConfiguration configuration = DatabaseConfiguration.getConfiguration();
+        DatabaseManagerFactory factory = configuration.apply(settings);
+        return factory.apply("database");
+    }
+
+    void close(@Disposes @Database(DatabaseType.COLUMN) DatabaseManager manager) {
+        manager.close();
+    }
+}
+----
+
+`@Database(DatabaseType.COLUMN)` is the CDI qualifier that identifies the Wide-Column manager. Eclipse JNoSQL's default Wide-Column producer carries the same qualifier, and the Wide-Column integration looks up a `DatabaseManager` with it, so the custom producer must declare the same qualifier, and the disposer must match the producer's type and qualifiers. Changing only the qualifier does not switch database models: each model needs its own manager type, configuration API, provider, and qualifier.
+
+[cols="1,1,1"]
+|===
+| |Key-Value |Wide-Column
+
+|Manager
+|`BucketManager`
+|`DatabaseManager`
+
+|Configuration
+|`KeyValueConfiguration`
+|`DatabaseConfiguration`
+
+|Factory
+|`BucketManagerFactory`
+|`DatabaseManagerFactory`
+
+|CDI selection
+|Unqualified (default) producer
+|`@Database(DatabaseType.COLUMN)`
+|===
+
+The two examples apply the same extension mechanism to different models; neither supersedes the other. Both customize the communication-level manager only: the Jakarta NoSQL `Template` and the Jakarta Data repositories are used exactly as before. To keep several managers of one model, add a provider name, as in `@Database(value = DatabaseType.COLUMN, provider = "databaseA")`, and inject the template with the same qualifier.
+
+==== Database Model Qualifiers
+
+`@Database` is a CDI qualifier (`org.eclipse.jnosql.mapping.Database`) that JNoSQL uses to distinguish database integrations. Its `value` is a `DatabaseType` constant and its optional `provider` names a specific configured integration. The qualifier names the model, while the manager interface depends on the model:
+
+[cols="1,2,2"]
+|===
+|Database Model |Qualifier |Default manager producer
+
+|Key-Value
+|`@Database(DatabaseType.KEY_VALUE)` on templates and repositories
+|`BucketManager`, unqualified
+
+|Document
+|`@Database(DatabaseType.DOCUMENT)`
+|`DatabaseManager`, qualified
+
+|Wide-Column
+|`@Database(DatabaseType.COLUMN)`
+|`DatabaseManager`, qualified
+
+|Graph
+|`@Database(DatabaseType.GRAPH)` on templates and repositories
+|`GraphDatabaseManager`, unqualified
+
+|Time Series
+|`@Database(DatabaseType.TIME_SERIES)`
+|`DatabaseManager`, qualified
+
+|Vector
+|`@Database(DatabaseType.VECTOR)` (main branch only)
+|`VectorManager`, qualified (`@Default` as well)
+|===
+
+The qualifier selects the CDI bean; the manager interface is a separate concern. Key-Value and Graph manager producers are unqualified in this repository, so a custom producer for them is unqualified too, as in the Key-Value example above.
+
+The qualifier on an injection point must match the qualifier of the produced bean, so the same type can be injected once per model:
 
 [source,java]
 ----
 @Inject
-@Database(value = DatabaseType.GRAPH, provider = "graphA")
-private GraphTemplate graphA;
+@Database(DatabaseType.COLUMN)
+DatabaseManager columnManager;
 
 @Inject
-@Database(value = DatabaseType.GRAPH, provider = "graphB")
-private GraphTemplate graphB;
+@Database(DatabaseType.DOCUMENT)
+DatabaseManager documentManager;
 ----
 
-=== Jakarta Data
+Producer and disposer must carry identical qualifiers, otherwise CDI will not pair them and the manager will not be closed:
 
-Eclipse JNoSQL as a https://jakarta.ee/specifications/data/1.0/jakarta-data-1.0[Jakarta Data] exploring more the NoSQL capabilities, provides a mapping API that allows you to map Java objects to NoSQL databases.
+[source,java]
+----
+@Produces
+@Database(DatabaseType.COLUMN)
+public DatabaseManager get() { /* programmatic configuration */ }
 
-=== Jakarta NoSQL
+public void close(@Disposes @Database(DatabaseType.COLUMN) DatabaseManager manager) {
+    manager.close();
+}
+----
 
-Eclipse JNoSQL is a https://jakarta.ee/specifications/nosql/1.0/jakarta-nosql-1.0[Jakarta NoSQL] implementation that provides a standard way to access NoSQL databases in Java applications. It offers a set of annotations and APIs to interact with various NoSQL database types, including Key-Value, Column Family, Document, Graph, and Time Series.
+A Document producer and disposer use `@Database(DatabaseType.DOCUMENT)` in both places. When adapting an example to another model, change together: the manager type, the configuration and factory APIs, the provider implementation, the producer qualifier, the disposer qualifier and any `provider` name, and keep them consistent with the injection points. Changing only the `@Database` value is not enough.
 
-=== More Information
+See the https://www.jnosql.org/docs/key-value.html[Key-Value] and https://www.jnosql.org/docs/column.html[Wide-Column] guides and the https://github.com/eclipse-jnosql/jnosql-databases[database integrations] for provider-specific settings.
 
-Check the https://www.jnosql.org/spec/[reference documentation] and https://www.jnosql.org/javadoc/[JavaDocs] to learn more.
+== Requirements and Runtime Integration
 
-== Code of Conduct
+The latest stable release line (1.x.x) requires:
 
-This project is governed by the Eclipse Foundation Code of Conduct. By participating, you are expected to uphold this code of conduct. Please report unacceptable behavior to mailto:codeofconduct@eclipse.org[codeofconduct@eclipse.org].
+* Java 17 or higher
+* https://jakarta.ee/specifications/cdi/4.1/[Jakarta CDI 4.1]
+* https://jakarta.ee/specifications/jsonb/3.0/[Jakarta JSON Binding 3.0]
+* https://jakarta.ee/specifications/jsonp/2.1/[Jakarta JSON Processing 2.1]
+* https://microprofile.io/microprofile-config/[MicroProfile Config 3.1]
 
-== Getting Help
+The development branch (`2.0.0-SNAPSHOT`) and the 1.2.0 milestones require Java 21. See the https://www.jnosql.org/docs/minimum.html[minimum requirements guide] for details.
 
-Having trouble with Eclipse JNoSQL? We’d love to help!
+* *Java SE:* the application provides a compatible CDI implementation and bootstraps the CDI container explicitly.
+* *Jakarta EE:* a compatible runtime manages CDI initialization and the application components.
 
-Please report any bugs, concerns or questions with Eclipse JNoSQL to https://github.com/eclipse/jnosql[https://github.com/eclipse/jnosql].
+The supporting services, the JNoSQL modules, and the database drivers needed depend on the selected runtime and provider.
 
-If your issue refers to the https://github.com/eclipse/jnosql-databases[JNoSQL databases project] or
-the https://github.com/eclipse/jnosql-extensions[JNoSQL extensions project], please, open the issue in this repository following the instructions in the
-templates.
+== Documentation and Examples
+
+* https://www.jnosql.org/[Official website] and the https://www.jnosql.org/docs/introduction.html[introduction guide]
+* https://www.jnosql.org/docs/minimum.html[Minimum requirements]
+* https://www.jnosql.org/docs/annotations.html[Mapping annotations]
+* https://github.com/eclipse-jnosql/jnosql-databases[Database integrations]
+* https://github.com/JNOSQL/demos-se[Java SE demos]
+* https://jakarta.ee/specifications/nosql/[Jakarta NoSQL], https://jakarta.ee/specifications/data/[Jakarta Data] and https://github.com/jakartaee/query[Jakarta Query] specifications
+* link:MAPPING.adoc[Mapping API] and the communication layer notes in this repository
+* link:MIGRATION.adoc[Migration guide], for upgrading from 1.0.0-b6 (Jakarta EE 9 package names and the reduced scope of Jakarta NoSQL)
+* link:CHANGELOG.adoc[Changelog]
 
 == Building from Source
 
-You don’t need to build from source to use the project, but should you be interested in doing so, you can build it using Maven and Java 21 or higher.
+You do not need to build from source to use the project. To build it, use Maven and Java 21 or higher (the compiler source and target are 21). This is separate from the minimum Java runtime of the published 1.1.x artifacts.
 
-[source, Bash]
+[source,bash]
 ----
 mvn clean install
 ----
 
-== Contributing
+This compiles all modules and runs their unit tests. The database drivers and their integration tests live in the https://github.com/eclipse-jnosql/jnosql-databases[JNoSQL databases project].
 
-We are very happy you are interested in helping us and there are plenty ways you can do so.
+== Contributing and Community
 
-- https://github.com/eclipse/jnosql/issues[**Open an Issue:**]  Recommend improvements, changes and report bugs
+* https://github.com/eclipse-jnosql/jnosql/issues[Open an issue] to report bugs or recommend improvements.
+* Open a pull request after reading the link:CONTRIBUTING.adoc[contributing guide], which covers the development process and the Eclipse Contributor Agreement.
+* Eclipse JNoSQL's testing practices are described in the link:TESTING-GUIDELINE.adoc[testing guideline].
+* Ask questions and share ideas in the https://github.com/eclipse-jnosql/jnosql/discussions[GitHub discussions].
+* Issues about the https://github.com/eclipse-jnosql/jnosql-databases[databases project] or the https://github.com/eclipse-jnosql/jnosql-extensions[extensions project] belong in those repositories.
+* Report security vulnerabilities as described in link:SECURITY.adoc[SECURITY].
+* The project is an https://projects.eclipse.org/projects/technology.jnosql[Eclipse Foundation project].
+* This project is governed by the Eclipse Foundation Code of Conduct (link:CODE_OF_CONDUCT.md[CODE_OF_CONDUCT]). Please report unacceptable behavior to mailto:codeofconduct@eclipse.org[codeofconduct@eclipse.org].
 
-- **Open a Pull Request:** If you feel like you can even make changes to our source code and suggest them, just check out our link:CONTRIBUTING.adoc[contributing guide] to learn about the development process, how to suggest bugfixes and improvements.
-
-Here are the badges of this project:
+Project badges:
 [%autowidth,cols="a,a,a,a", frame=none, grid=none, role=stretch ]
 |===
 | image::https://sonarcloud.io/api/project_badges/measure?project=org.eclipse.jnosql%3Ajakarta-nosql-parent&metric=sqale_rating[ link=https://sonarcloud.io/summary/new_code?id=org.eclipse.jnosql%3Ajakarta-nosql-parent, window=_blank, target=_blank]
@@ -867,115 +475,31 @@ Here are the badges of this project:
 | image::https://sonarcloud.io/api/project_badges/measure?project=org.eclipse.jnosql%3Ajakarta-nosql-parent&metric=security_rating[window=_blank, link=https://sonarcloud.io/summary/new_code?id=org.eclipse.jnosql%3Ajakarta-nosql-parent]
 |===
 
-== Testing Guideline
+== Compatibility and Versioning
 
-This project's testing guideline will help you understand Jakarta Data's testing practices.
-Please take a look link:TESTING-GUIDELINE.adoc[at the file].
+Eclipse JNoSQL uses https://semver.org/[Semantic Versioning] (`MAJOR.MINOR.PATCH`) combined with Jakarta EE generations:
 
-== Migration
+* *MAJOR* reflects the Jakarta EE generation of the release line. A new generation requires a new major version and may require a newer Java version.
+* *MINOR* adds backward-compatible features within the same Jakarta EE generation.
+* *PATCH* delivers backward-compatible fixes and maintenance.
 
-This migration guide explains how to upgrade from Eclipse JNoSQL version 1.0.0-b6 to the latest version, considering two significant changes: upgrading to Jakarta EE 9 and reducing the scope of the Jakarta NoSQL specification to only run on the Mapping. The guide provides instructions on updating package names and annotations to migrate your Eclipse JNoSQL project successfully.
+[cols="1,2,2,3"]
+|===
+|Release line|Jakarta EE|Status|Notes
 
-link:MIGRATION.adoc[Migration Guide]
+|`1.x.x`
+|11
+|Stable (latest: 1.2.0)
+|Java 17 or higher.
 
-== Compatibility and Innovation Strategy
+|`2.x.x`
+|12
+|Planned (development branch is `2.0.0-SNAPSHOT`)
+|Compatibility baseline for the next Jakarta EE generation; not a published-release guarantee.
+|===
 
+Upgrading within a major version keeps the same Jakarta EE generation. Upgrading between major versions requires managing the Jakarta EE platform transition, checking the required Java version, and handling incompatible API changes.
 
+== License
 
-Eclipse JNoSQL preserves stability and drives innovation by using a versioning strategy based on https://semver.org/[Semantic Versioning] and Jakarta EE platform generations.
-
-
-
-The Eclipse JNoSQL version follows the `MAJOR.MINOR.PATCH` format:
-
-
-
-[source,text]
-----
-MAJOR.MINOR.PATCH
-----
-
-Where:
-
-* *MAJOR* reflects the Jakarta EE generation supported by the Eclipse JNoSQL release line. Upgrading to a new Jakarta EE generation requires a new major version. Because each Jakarta EE platform version may require a different minimum Java version, applications must verify and adopt the necessary Java version when migrating between major versions.
-* *MINOR* introduces backward-compatible features, APIs, and improvements while remaining within the same Jakarta EE generation.
-* *PATCH* delivers backward-compatible bug fixes and maintenance updates without adding new features.
-
-
-
-For example:
-
-
-
-[source,text]
-----
-1.x.x -> Jakarta EE 11
-2.x.x -> Jakarta EE 12
-3.x.x -> next Jakarta EE generation
-----
-
-A new Jakarta EE generation requires a new Eclipse JNoSQL major version.
-
-Within each major version, minor and patch releases follow Semantic Versioning.
-
-The `1.x.x` release line of Eclipse JNoSQL targets Jakarta EE 11.
-
-Within this release line:
-
-* A *patch release*, such as `1.1.19` to `1.1.20`, contains backward-compatible bug fixes, maintenance updates, and compatible corrections.
-* A *minor release*, such as `1.1.x` to `1.2.0`, may add new backward-compatible features, APIs, and improvements while remaining compatible with Jakarta EE 11.
-* A *major release*, such as moving from `1.x.x` to `2.0.0`, upgrades Eclipse JNoSQL to the next Jakarta EE generation and establishes a new compatibility baseline. This migration may also require adopting a newer Java version, as specified by the target Jakarta EE platform.
-
-
-
-For example:
-
-
-
-[source,text]
-----
-1.1.19 -> Jakarta EE 11, maintenance release
-1.1.20 -> Jakarta EE 11, maintenance release
-1.2.0  -> Jakarta EE 11, new backward-compatible features
-1.3.0  -> Jakarta EE 11, additional backward-compatible features
-2.0.0  -> Jakarta EE 12
-----
-
-
-
-Applications can upgrade within the same major version to stay on the same Jakarta EE generation.
-
-
-
-Minor releases add new capabilities without changing the Jakarta EE compatibility baseline. Patch releases provide bug fixes and maintenance updates only.
-
-
-
-A new major version adopts a new Jakarta EE generation. For example, Eclipse JNoSQL `2.x.x` targets Jakarta EE 12. Applications upgrading from `1.x.x` to `2.x.x` must manage the Jakarta EE platform transition, verify the required Java version, and deal with any incompatible API changes.
-
-
-
-The versioning contract can be summarized as follows:
-
-
-
-* *PATCH* releases provide backward-compatible bug fixes and maintenance updates.
-* *MINOR* releases introduce backward-compatible features and improvements within the same Jakarta EE generation.
-* *MAJOR* releases align Eclipse JNoSQL with a new Jakarta EE generation and may introduce backward-incompatible API changes. Migrating to a major version also requires checking the minimum Java version the target Jakarta EE platform supports.
-
-This strategy combines Semantic Versioning with an explicit Jakarta EE compatibility model:
-
-[source,text]
-----
-Eclipse JNoSQL 1.x.x -> Jakarta EE 11
-Eclipse JNoSQL 2.x.x -> Jakarta EE 12
-Eclipse JNoSQL 3.x.x -> next Jakarta EE generation
-----
-
-The major version indicates the Jakarta EE compatibility baseline. Minor and patch versions allow Eclipse JNoSQL to evolve within that baseline according to Semantic Versioning. When upgrading between major versions, developers should consider both the Jakarta EE platform version and its minimum Java requirement as part of the compatibility boundary.
-
-== Learn More
-
-If you want to know more about both the communication and mapping layer, there are two complementary files for it each specific topic:
-
-* link:MAPPING.adoc[Mapping API]
+Eclipse JNoSQL is dual-licensed under the https://www.eclipse.org/legal/epl-2.0[Eclipse Public License 2.0] and the https://www.apache.org/licenses/LICENSE-2.0[Apache License 2.0]. See the link:LICENSE[LICENSE] and link:NOTICE.adoc[NOTICE] files.

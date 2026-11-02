@@ -9,7 +9,7 @@
   <br>
   <img alt="Claude Code plugin" src="https://img.shields.io/badge/Claude%20Code-plugin-8a7f6e">
   <img alt="Runs locally" src="https://img.shields.io/badge/runs-100%25%20local-B3361F">
-  <a href="https://github.com/dheerajponnaganti/thenwise/actions/workflows/ci.yml"><img alt="CI on macOS, Linux and Windows" src="https://github.com/dheerajponnaganti/thenwise/actions/workflows/ci.yml/badge.svg?branch=main"></a>
+  <a href="https://github.com/dheerajponnaganti/thenwise/actions/workflows/ci.yml"><img alt="CI status" src="https://github.com/dheerajponnaganti/thenwise/actions/workflows/ci.yml/badge.svg?branch=main"></a>
   <a href="https://github.com/dheerajponnaganti/thenwise/discussions"><img alt="Questions welcome" src="https://img.shields.io/badge/questions-discussions-8a7f6e"></a>
   <a href="CONTRIBUTING.md"><img alt="Pull requests welcome" src="https://img.shields.io/badge/PRs-welcome-241C15"></a>
 </p>
@@ -25,7 +25,9 @@
 /plugin install thenwise@thenwise
 ```
 
-Graded blind on hidden answers: **83%** right against 47% for plain Claude Code on your own history, and **88%** against 25% from a teammate's shared chats. [How we measured](#measured-with-the-answers-hidden).
+Needs Node 22.16 or later. Start a new session after installing.
+
+Graded blind on hidden answers: **93%** right against 37% for plain Claude Code on your own history, and **88%** against 17% from a teammate's shared chats. [How we measured](#measured-with-the-answers-hidden).
 
 Your project lays down history every day. A chat settles a question. A commit lands. An idea fails on a Tuesday and nobody writes it down. Weeks later the reason is buried, and Claude starts from zero.
 
@@ -61,9 +63,9 @@ Ask Claude to change a file with a dead end in its past, and it checks before it
 
 ## Measured, with the answers hidden
 
-Sounds good. Does it hold up? We tested it the hard way.
+Make every token count. We tested it the hard way.
 
-<p align="center"><img src="assets/readme/measurements.png" width="100%" alt="Field measurements with hidden answers, graded blind. Individual, on your own history: 1.8 times more questions answered right (83% with Thenwise, 47% for plain Claude Code reading git, about 13% with no git), 40% fewer tokens per answer, 2.2 times faster answers (23 seconds against 51). Teams, from a teammate's shared chats: 3.5 times more questions answered right (88% against 25%), 24% fewer tokens, 1.5 times faster (22 seconds against 33). And 2,500 chats remembered 84 seconds after install."></p>
+<p align="center"><img src="assets/readme/measurements.png" width="100%" alt="Field measurements with hidden answers, graded blind. Individual, on your own history: 2.5 times more questions answered right (93% with Thenwise, 37% for plain Claude Code reading git), half the raw tokens, 1.9 times faster answers (14 seconds against 26). Teams, from a teammate's shared chats: 5.3 times more questions answered right (88% against 17%), 39% fewer raw tokens, 1.5 times faster (16 seconds against 24). And 2,500 chats remembered 84 seconds after install."></p>
 
 Individual: Claude answers about your own history. Teams: a teammate asks about a project they never worked on and answers from its shared chats. In both tests, plain Claude Code could read the repository and its git history. Thenwise runs on its own records: your chats are the core, and git is an add-on that adds commits and pull requests when you have them. [How we measured](docs/eval.md): the questions, the two arms and the blind grading.
 
@@ -76,7 +78,7 @@ A memory this deep has to be private. This one lives on your disk and nowhere el
 | **Local** | One folder on your disk, readable by you alone. |
 | **Masked** | Keys and tokens become `[secret masked]` before a single byte is written. |
 | **No middleman** | No model stands between your question and your memory. Search, hooks and tools make zero network calls. |
-| **Off the record** | Put `[no-memory]` in a prompt and that whole chat is never kept. |
+| **Off the record** | Start or end your first prompt with `[no-memory]`, or give it a line of its own in any prompt, and that whole chat is never kept. |
 | **Forgettable** | `thenwise forget` erases a chat or a whole project, and it stays gone. |
 | **Chats** | Chats stay home unless you share a project. Raw transcripts never travel. |
 | **No telemetry** | No account, no sign-up, no usage reports. Nothing phones home. |
@@ -102,7 +104,7 @@ Three sources settle into one SQLite store on your disk. Search runs on full tex
 
 ### Fast enough to forget
 
-Hooks answer in about 50 ms and a search takes milliseconds, so Claude never waits on its memory. On your own history, answers came 2.2 times faster and used 40% fewer tokens than plain Claude Code digging through it alone.
+Hooks answer in about 50 ms and a search takes milliseconds, so Claude never waits on its memory. On your own history, answers came 1.9 times faster and used half the raw tokens of plain Claude Code digging through it alone.
 
 ## The toolbelt
 
@@ -179,13 +181,13 @@ Start alone. Add your team when you want to.
 
 ## Questions people ask
 
-**Does it send my code anywhere?** No. Your code, your chats and your memory stay on your disk. The only things that ever leave are the ones you switch on: PR lookups through `gh`, `distill`, Teams, and an issue report you approve line by line.
+**Does it send my code anywhere?** No. Your code, your chats and your memory stay on your disk. The only things that ever leave are the ones you switch on: PR lookups through `gh`, `distill`, Teams, and an issue report you approve line by line. One small request runs by default: once a day the background sync asks npm for the newest Thenwise version. It sends nothing about you or your work, and `thenwise update-check off` stops it.
 
 **Does it need a model or an API key?** No. No model runs inside Thenwise, so there is no key to add and no extra bill.
 
-**Does it slow Claude down?** No. Hooks take about 50 ms, search takes milliseconds, and in our tests answers arrived 1.5 to 2.2 times faster.
+**Does it slow Claude down?** No. Hooks take about 50 ms, search takes milliseconds, and in our tests answers arrived 1.5 to 1.9 times faster.
 
-**What does it cost in tokens?** Less than going without: 24% to 40% fewer tokens per answer about the past. In a chat that needs no memory, it adds about 1%.
+**What does it cost in tokens?** Less than going without: up to half the raw tokens on questions about the past. In a chat that needs no memory, it adds about 1%.
 
 **How does it fit with CLAUDE.md and Claude's own memory?** They hold your standing rules. Thenwise holds the history: what was decided, what was tried, and what was true on any day. It reads your CLAUDE.md files too.
 
@@ -206,7 +208,9 @@ On Claude Code 2.1.275 or later, one line does it:
 /plugin install thenwise --marketplace dheerajponnaganti/thenwise
 ```
 
-Ships as built JavaScript, so there is nothing to compile. Runs on macOS, Linux and Windows, and every push passes a fresh install on all three. Needs Node 22.16 or later. Want it in your terminal too? `npm install -g thenwise`.
+Start a new session after installing. Turn on auto-update for this marketplace in `/plugin`, so fixes reach you on their own.
+
+Ships as built JavaScript, so there is nothing to compile. Runs on macOS, Linux and Windows, and every push passes a fresh install on all three. Needs Node 22.16 or later, and git to read your commits on any host. Want it in your terminal too? `npm install -g thenwise`.
 
 ## First run
 
@@ -232,7 +236,7 @@ In Claude Code:
 - `/thenwise:off [all]` and `/thenwise:on [all]`: pause or resume memory for this project, or everywhere.
 - `/thenwise:forget <session id or project folder>`: remove a chat or a project from memory.
 - `/thenwise:backup`: back up the vault now.
-- `/thenwise:inbox [accept <id...> | reject <id...>]`: review the notes Thenwise proposed from your chats.
+- `/thenwise:inbox [accept <id...> | reject <id...>]`: review the notes Thenwise proposed from your chats, commits and PRs.
 - `/thenwise:logs`: the latest log lines, errors first.
 - `/thenwise:report [what happened]`: report a problem or an idea. Claude drafts it, you read every line, nothing is sent without your yes.
 
@@ -273,7 +277,7 @@ Opt in to more: `"team": { "auto_share": ["decision", "dead_end"], "auto_share_p
 
 Claude Code's own chat files are only read, never changed.
 
-**What leaves the machine.** Nothing, until you switch on one of these: PR lookups through `gh`, `distill` (through `claude -p`), Teams (only the notes and project chats you share), and an issue report you approve line by line.
+**What leaves the machine.** None of your work, until you switch on one of these: PR lookups through `gh`, `distill` (through `claude -p`), Teams (only the notes and project chats you share), and an issue report you approve line by line. The one request on by default is the daily version check: the background sync makes one GET to npm for the newest Thenwise version, sending no version, id or project data, so npm sees only an IP address. Turn it off with `thenwise update-check off`, `"update_check": false` in config.json, or `THENWISE_NO_UPDATE_CHECK=1`.
 
 **Forget.**
 

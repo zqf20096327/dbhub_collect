@@ -1,114 +1,60 @@
-<div align="center">
-  <img src="frontend/static/branding/logo.jpg" alt="PGWarden logo" width="180" />
-  <h1>PGWarden</h1>
-  <p><strong>Source-available PostgreSQL observability, schema intelligence, and alerting.</strong></p>
-  <p>Monitor your PostgreSQL fleet from one place, investigate performance issues, and keep schema changes visible.</p>
-</div>
+# CI and releases
 
-![PGWarden overview](docs/images/overview.png)
+Pull requests targeting `main` and pushes to `main` run the same checks:
 
-## Why PGWarden?
+- Python lint for syntax errors and fatal constructs, plus Bash syntax checks.
+- The full `run_tests.sh` suite: migrations, API, analytics, notifier, collector,
+  installer and frontend tests, followed by Svelte compile and type checks.
+- A production frontend build and Docker builds for all six services.
 
-Running PostgreSQL well means seeing more than whether a database is online. PGWarden brings operational signals, query activity, lock contention, schema metadata, and alerting into one self-hosted workspace so teams can identify problems faster and track how their databases evolve.
+Dependencies are installed from committed lockfiles. CI uses Python 3.13,
+Node.js 22 and uv 0.11.16. Docker builds use the same contexts as Compose;
+analytics and notifier require the repository root. Actions are pinned to
+commit SHAs. PRs have read-only repository permissions and do not publish images.
+Test reports are retained as workflow artifacts for 14 days.
 
-## Highlights
+The existing `npm run lint` command also checks full frontend formatting and
+ESLint conventions. It currently reports formatting and ESLint debt and is not a required
+CI step; frontend static validation runs through `npm run check` instead.
 
-- **Monitor multiple PostgreSQL servers** from a centralized dashboard.
-- **Inspect live workload** with active-query and lock visibility.
-- **Track database health** through connections, CPU, memory, throughput, table statistics, vacuum signals, and index usage.
-- **Explore schema metadata and history** for tables, columns, indexes, and related database objects.
-- **Analyze performance trends** using time-series data stored in TimescaleDB.
-- **Configure alerts** for important operational thresholds, with Slack, Discord, Microsoft Teams, and SMTP email delivery.
-- **Protect credentials** by encrypting stored database and notification credentials with Fernet encryption.
+## Publish a version
 
-## Architecture at a glance
-
-PGWarden is a Docker Compose stack with focused services. The API and web interface provide the operator experience; background workers collect data, calculate analytics, and deliver notifications; TimescaleDB stores application data and time-series metrics.
-
-| Component | Responsibility |
-| --- | --- |
-| **Frontend** | Web dashboard for monitoring, schema exploration, configuration, and alerts. |
-| **API** | FastAPI service for authentication, configuration, and data access. |
-| **Collector** | Polls registered PostgreSQL targets and persists operational metrics. |
-| **Analytics** | Produces derived performance and database insights. |
-| **Notifier** | Evaluates alert rules and sends notifications to configured channels. |
-| **TimescaleDB** | Stores PGWarden configuration, metadata, and time-series observations. |
-| **Migrations** | Applies the central database schema during startup. |
-
-## Quick start
-
-### Prerequisites
-
-- [Docker Engine](https://docs.docker.com/engine/install/)
-- [Docker Compose](https://docs.docker.com/compose/install/) v2
-- Network access from the collector to each PostgreSQL instance you intend to monitor
-
-### 1. Clone the repository
+After merging and checking that CI passed on `main`:
 
 ```bash
-git clone https://github.com/pedrohgoncalvess/pgwarden.git
-cd pgwarden
+git switch main
+git pull --ff-only origin main
+git tag -a v1.2.0 -m "Release v1.2.0"
+git push origin v1.2.0
 ```
 
-### 2. Create and configure your environment file
+Supported tags are `vMAJOR.MINOR.PATCH` and prereleases such as
+`v1.2.0-rc.1`, `v1.2.0-beta.1` or `v1.2.0-alpha.1`. The release workflow rejects
+other `v*` tags and commits that are not reachable from `main`. It repeats the
+checks on the tagged commit before publishing anything.
 
-```bash
-cp .env.example .env
+Successful checks trigger Linux AMD64 builds and publication to GitHub Container
+Registry using the built-in `GITHUB_TOKEN`, with `packages: write` limited to the
+image jobs. No Docker Hub credentials or custom token are needed. Images are:
+
+```text
+ghcr.io/<owner>/<repository>/api:1.2.0
+ghcr.io/<owner>/<repository>/collector:1.2.0
+ghcr.io/<owner>/<repository>/migrations:1.2.0
+ghcr.io/<owner>/<repository>/frontend:1.2.0
+ghcr.io/<owner>/<repository>/analytics:1.2.0
+ghcr.io/<owner>/<repository>/notifier:1.2.0
 ```
 
-Before starting the stack, replace the placeholder values in `.env`. At a minimum, generate unique values for `ENCRYPTION_KEY` and `JWT_SECRET_KEY`:
+Each image also receives a `sha-<short-commit>` tag. Stable versions update
+`latest`; prereleases retain their full version (for example `1.2.0-rc.1`) and do
+not update `latest`. A GitHub release with generated notes is created only after
+all six images publish successfully. Prereleases are marked accordingly.
+Image publication across multiple services is not transactional: a failed
+matrix job can leave some images published without a GitHub release. Rerun
+failed jobs for that tag to finish the release.
 
-```bash
-python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
-python -c "import secrets; print(secrets.token_urlsafe(32))"
-```
-
-Use the first value for `ENCRYPTION_KEY` and the second for `JWT_SECRET_KEY`. Do not reuse the example values or commit your `.env` file. Review the optional database, API port, and CORS settings in [`.env.example`](.env.example) for your environment.
-
-### 3. Start PGWarden
-
-```bash
-docker compose up -d --build
-```
-
-The migrations service completes before the application services start. Check the stack status with:
-
-```bash
-docker compose ps
-```
-
-### 4. Open the application
-
-- **Dashboard:** [http://localhost:3000](http://localhost:3000)
-- **API documentation:** [http://localhost:8080/docs](http://localhost:8080/docs)
-
-For a production deployment, set distinct database and administrator credentials rather than relying on Compose defaults. PGWarden warns when shipped default credentials remain active.
-
-## Configuration and operations
-
-The root [`config.yaml`](config.yaml) contains collector and notifier configuration. All environment variables are documented in [`.env.example`](.env.example). For production, inject the equivalent values through Docker secrets or your deployment platform's secret manager instead of committing a `.env` file.
-
-Useful Compose commands:
-
-```bash
-# Follow all service logs
-docker compose logs -f
-
-# Stop the stack while keeping the database volume
-docker compose down
-```
-
-## Contributing
-
-Contributions, bug reports, and feature proposals are welcome.
-
-1. Fork the repository and create a branch from the default branch.
-2. Make a focused change and add or update tests where appropriate.
-3. Run the relevant checks locally.
-4. Open a pull request that explains the problem, approach, and validation.
-
-Please keep pull requests small and avoid committing secrets, generated local files, or production data.
-
-## License
-
-PGWarden is licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE). You may use, run, modify, and share it for non-commercial purposes. Commercial use, including monetizing the software or a service based on it, requires separate permission from the copyright holder.
+The repository must permit Actions and package publication. For anonymous
+container pulls, set each GHCR package's visibility to public after its initial
+publication. Configure branch protection on `main` to require CI checks before
+merging. The workflow does not deploy to running servers.

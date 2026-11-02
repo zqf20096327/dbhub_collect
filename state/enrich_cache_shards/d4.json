@@ -49,11 +49,11 @@
   }
  },
  "xtdb/xtdb": {
-  "commit_7d": 90,
-  "commit_90d": 639,
+  "commit_7d": 28,
+  "commit_90d": 629,
   "rel_ver": "v2.2.0",
   "rel_pub": "2026-10-21",
-  "rel_days": 4,
+  "rel_days": 12,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -62,7 +62,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 32,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Clojure": 57,
    "Kotlin": 39,
@@ -72,10 +72,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v2.2.0",
+    "d": "2026-10-21",
+    "n": "* **Garbage collection**: XT's primary index is a [log-structured merge tree](https://xtdb.com/blog/building-a-bitemp-index-3-storage) on object storage, which periodically compacts its files; 2.2 adds a background process that removes the files that compaction has superseded, keeping storage costs in check.\n* **Blocks are now flushed every 15 minutes** on a quiet database, rather than every four hours (**breaking**, in that it's a new default).\n* **Fewer ways to wedge a node**: object-store I/O is now boun"
+   },
+   {
+    "t": "v2.1.1",
+    "d": "2026-10-21",
+    "n": "# 2.1.1\r\n\r\n2.1.1 is a single-purpose patch release - it's the version to roll back to if you need to back out of 2.2.\r\n\r\n* #6248: 2.1.1 can read transactions written by 2.2 nodes.\r\n  2.2 writes transactions to the log in a new format that 2.1.0 doesn't recognise, so a 2.1.0 node started against a log that 2.2 has written to stops ingesting at the first 2.2 transaction.\r\n  2.1.1 reads both formats (and still writes the 2.1 one, which 2.2 reads), so it can pick up from where your 2.2 nodes left off.\r\n\r\nA few "
+   },
+   {
+    "t": "v2.2.0-rc2",
+    "d": "2026-10-20",
+    "n": "For those characteristics to be able to arrive after `BEGIN`, the transaction can't fix its read basis _at_ `BEGIN` - so (**breaking**) the snapshot and `current_timestamp` are now fixed at the transaction's first query, as Postgres does for a repeatable-read snapshot.\nThe upshot for cookieless clients - which the Java ADBC driver is, by default - is that a `SET` no longer leaks across to other clients, nor persists to your next call.\n* Decimal and array parameters no longer make every result column come ba"
+   }
+  ]
  },
  "processone/tsung": {
   "commit_7d": 0,
@@ -2751,12 +2768,12 @@
   }
  },
  "alibabacloud-sdk-cpp/polardbx-20200202": {
-  "commit_90d": 4,
-  "commit_7d": 0,
-  "rel_ver": "3.12.0",
-  "rel_pub": "2026-08-31",
-  "rel_days": 32,
-  "rel_n90": 4,
+  "commit_90d": 5,
+  "commit_7d": 2,
+  "rel_ver": "3.12.2",
+  "rel_pub": "2026-10-30",
+  "rel_days": 3,
+  "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -2768,14 +2785,31 @@
    "C++": 100,
    "CMake": 0
   },
-  "enriched_at": "20261002",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261002",
-   "release": "20261002",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261002",
    "contrib": "20261002",
    "lang": "20261002"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "3.12.2",
+    "d": "2026-10-30",
+    "n": "- Update API DescribeDBInstanceAttribute: add response parameters Body.DBInstance.SearchEnabled.\n- Update API DescribeDBInstanceAttribute: add response parameters Body.DBInstance.SearchInstance."
+   },
+   {
+    "t": "3.12.1",
+    "d": "2026-10-28",
+    "n": "- Generated 2020-02-02 for `polardbx`."
+   },
+   {
+    "t": "3.12.0",
+    "d": "2026-08-31",
+    "n": "- Support API QueryColumnarLog.\n- Support API QueryColumnarLogSSE.\n- Update API ExecuteMetaQuery: add request parameters MaxResultRows.\n- Update API ExecuteMetaQuery: add response parameters Body.Data.AppliedOffset.\n- Update API ExecuteMetaQuery: add response parameters Body.Data.AppliedRowLimit.\n- Update API ExecuteMetaQuery: add response parameters Body.Data.HasMore.\n- Update API ExecuteMetaQuery: add response parameters Body.Data.RecordsSizeBytes.\n- Update API ExecuteMetaQuery: add response parameters Bo"
+   }
+  ]
  },
  "askmadsen/dm8100-project": {
   "commit_90d": 0,

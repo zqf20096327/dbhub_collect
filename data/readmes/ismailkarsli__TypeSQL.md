@@ -4,6 +4,8 @@ Write SQL in TypeScript and get exact types for rows and parameters. TypeSQL par
 
 TypeSQL supports PostgreSQL and SQLite. MySQL is planned.
 
+**This library is in an early stage, so expect many experimental changes. Every breaking change will ship in a major release.**
+
 [![TypeSQL migrations and typed queries](assets/demo.gif)](https://cdn.jsdelivr.net/gh/ismailkarsli/TypeSQL@main/assets/demo.mp4)
 
 ## Get started
@@ -49,7 +51,7 @@ Every TypeScript editor shows a query's row type on hover and underlines mistake
 
 ## Documentation
 
-The full guide is at **[typesql.karsli.net](https://typesql.karsli.net)**. It covers the SQL TypeSQL supports, parameters and fragments, writing data, and known limits.
+The full guide is at **[typesql.karsli.net](https://typesql.karsli.net)**. It covers the SQL TypeSQL supports, parameters and fragments, writing data, and known limits. Upgrading? See the [upgrade guide](https://typesql.karsli.net/guide/upgrading) and the [changelog](https://typesql.karsli.net/changelog).
 
 ## License
 

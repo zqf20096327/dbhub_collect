@@ -398,6 +398,46 @@ Data type descriptions
 * O = Double
 * + = Autoincrement
 
+## Processing untrusted files
+
+The parser is hardened against malformed files: crafted headers cannot force
+huge allocations, unbounded loops, path traversal, or crashes from truncated
+data. If you accept DBF uploads (for example in a web application), also:
+
+* Treat every column name and value as untrusted text. HTML-escape it before
+  rendering it, and escape JSON before embedding it in a `<script>` tag.
+* Pass the upload as a `StringIO` (with an explicit memo `StringIO` if there is
+  one) rather than as a path, so memo files are never looked up in a shared
+  upload directory.
+* Limit upload size and processing time. Many records can point at the same
+  large memo, so exported output can be far larger than the uploaded files.
+  Pass `max_memo_size:` to cut off each memo after that many bytes:
+
+  ```ruby
+  DBF::Table.new(upload, memo_upload, max_memo_size: 64 * 1024)
+  ```
+
+  `DBF::Database::Foxpro.new` takes the same option.
+* Rescue `DBF::Error`, and also `StandardError` if a malformed file must never
+  fail a request.
+* `Table#to_csv` prefixes a `'` to string cells that begin with `=`, `+`, `-`,
+  `@`, tab, or carriage return so spreadsheets do not run them as formulas.
+* Text is passed through as it is, including Unicode bidirectional controls
+  (such as U+202E RIGHT-TO-LEFT OVERRIDE) and zero-width characters. These
+  make displayed text differ from the underlying data (in a web page, a CSV
+  export, or `dbf` terminal output), but some real data needs them, so the
+  library does not remove them. Strip or flag them yourself where that
+  matters:
+
+  ```ruby
+  value.gsub(/[​-‏‪-‮⁠-⁤⁦-⁩﻿]/, '')
+  ```
+
+* Column descriptors that do not fit within the header length or record
+  length are ignored, and the library prints a warning (silenced when
+  `$VERBOSE` is nil). If a file you trust loses columns, its header has wrong
+  length fields.
+
 ## Limitations
 
 * DBF is read-only

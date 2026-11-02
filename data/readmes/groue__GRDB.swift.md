@@ -15,7 +15,7 @@
     <a href="https://github.com/groue/GRDB.swift/actions/workflows/CI.yml"><img alt="CI Status" src="https://github.com/groue/GRDB.swift/actions/workflows/CI.yml/badge.svg?branch=master"></a>
 </p>
 
-**Latest release**: June 18, 2026 • [version 7.11.1](https://github.com/groue/GRDB.swift/tree/v7.11.1) • [CHANGELOG](CHANGELOG.md) • [Migrating From GRDB 6 to GRDB 7](Documentation/GRDB7MigrationGuide.md)
+**Latest release**: November 1, 2026 • [version 7.12.0](https://github.com/groue/GRDB.swift/tree/v7.12.0) • [CHANGELOG](CHANGELOG.md) • [Migrating From GRDB 6 to GRDB 7](Documentation/GRDB7MigrationGuide.md)
 
 **Requirements**: iOS 13.0+ / macOS 10.15+ / tvOS 13.0+ / watchOS 7.0+ &bull; SQLite 3.20.0+ &bull; Swift 6.1+ / Xcode 16.3+
 
@@ -95,11 +95,11 @@ struct Player: Codable, Identifiable, FetchableRecord, PersistableRecord {
 
 // 4. Write and read in the database
 try dbQueue.write { db in
-    try Player(id: "1", name: "Arthur"
+    try Player(id: "1", name: "Arth
 
 [...截断...]
 
-, score: 100).insert(db)
+ur", score: 100).insert(db)
     try Player(id: "2", name: "Barbara", score: 1000).insert(db)
 }
 
@@ -205,7 +205,7 @@ try dbQueue.write { db in
     player.score += 10
     try player.update(db)
     
-    try player.updateChanges { $0.score += 10 }
+    try player.updateChanges(db) { $0.score += 10 }
     
     // Delete a record
     try player.delete(db)
@@ -270,5 +270,3 @@ for try await players in observation.values(in: dbQueue) {
 let cancellable = observation.publisher(in: dbQueue).sink(
     receiveCompletion: { completion in ... },
     receiveValue: { (players: [Player]) in print("Fresh players: \(players)") })
-
-// RxS

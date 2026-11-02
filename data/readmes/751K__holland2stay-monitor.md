@@ -4,24 +4,32 @@
 
 > 中文版：[README_cn.md](README_cn.md)
 
-FlatRadar is a self-hosted monitor for the Dutch rental market. It tracks
+FlatRadar monitors the Dutch rental market. It runs as a hosted service at
+[flatradar.app](https://flatradar.app) and can also be self-hosted. It tracks
 Holland2Stay, OurDomain, OurCampus, Xior, Magis, Student Experience and Plaza,
-and as soon as a listing matches
-your criteria it sends a notification through the channels you enabled, with a
-direct link included. For Holland2Stay it goes one step further: it first
-carries the booking through to the payment page, then sends the payment link
-along with the alert, so only the payment itself remains.
+and as soon as a listing matches your criteria it sends a notification through
+the channels you enabled, with a direct link included. For Holland2Stay it goes
+one step further: it first carries the booking through to the payment page, then
+sends the payment link along with the alert, so only the payment itself remains.
+For Plaza, it can submit applications automatically when the user enables it.
 
 **Paying on your behalf is outside what FlatRadar does, and it cannot guarantee
 a booking succeeds.** Whether you get the unit still depends on the competition
 on the platform.
 
-The project runs both locally and on a server.
+## How to use it
 
-**Website — [flatradar.app](https://flatradar.app)**
+| Path | Best for | Start here |
+|---|---|---|
+| **Hosted service** | Most people | Open [flatradar.app](https://flatradar.app). The first sign-in creates an account automatically; set filters and notification channels in the panel. Nothing to install. |
+| **Mobile apps** | Alerts on your phone | [iOS](https://apps.apple.com/us/app/flarradar/id6769857080) · [Android APK](https://github.com/751K/FlatRadar-Android/releases/latest/download/app-release.apk) |
+| **Desktop builds** | macOS / Windows | Download from [Releases](https://github.com/751K/holland2stay-monitor/releases) |
+| **Self-hosting** | Your own instance, database and delivery | [Quick start](#quick-start) below. Needs Docker and about 2 GB of RAM; depending on your network a residential proxy may be required. |
 
-[User guide](https://flatradar.app/guide) ·
-[Support](https://flatradar.app/support) ·
+The hosted service and self-hosting run the same codebase.
+
+Guide: [flatradar.app/guide](https://flatradar.app/guide) ·
+Support: [flatradar.app/support](https://flatradar.app/support) ·
 [support@flatradar.app](mailto:support@flatradar.app)
 
 > FlatRadar is an independent, unofficial tool. It is not affiliated with,
@@ -41,7 +49,7 @@ The project runs both locally and on a server.
 | **Filters** | Maximum rent, minimum area, minimum floor, type, occupancy, city, neighbourhood, platform, contract type, tenant requirements, and others |
 | **Views** | List, map, calendar, dashboard and charts, in English or Chinese |
 | **Multiple users** | Supported. Guest, user and admin roles; every user keeps independent filters and credentials |
-| **Auto-booking** | Holland2Stay only, and it stops at the payment page — see [Auto-booking](#auto-booking) |
+| **Automatic booking and applications** | Holland2Stay stops at the payment page; Plaza applications can be submitted automatically and are off by default — see [Auto-booking](#auto-booking) |
 
 ### Platform coverage
 
@@ -51,9 +59,9 @@ The project runs both locally and on a server.
 | OurDomain | Amsterdam Diemen / South-East | Proven | Notify only (booking flow built, not enabled) |
 | Xior | Any of 30 buildings across 14 cities | Proven | Notify only (booking flow built, not enabled) |
 | OurCampus | Amsterdam Diemen (1 building) | Checked against real markup; very low volume | Notify only |
-| Magis | 17 buildings across 5 cities (9 in Eindhoven) | Added 2026-09-01; plain HTTP, no anti-bot | Notify only |
-| Student Experience | Amsterdam (4 sites) and Leiden | Added 2026-09-02; the listing date lives only on the detail page, so each unit costs an extra request | Notify only |
-| Plaza | 13 Dutch cities | Added 2026-09-02; a paid account (€27.50/yr) is required to *apply*, not to see listings | Notify only |
+| Magis | 17 buildings across 5 cities (9 in Eindhoven) | Verified against live data; plain HTTP, no anti-bot | Notify only |
+| Student Experience | Amsterdam (4 sites) and Leiden | Verified against live data; the listing date lives only on the detail page, so each unit costs an extra request | Notify only |
+| Plaza | 13 Dutch cities | Verified against live data; a paid account (€27.50/yr) is required to *apply*, not to see listings | Automatic applications supported, off by default |
 
 A platform can also run in **shadow mode** (`SHADOW_SOURCES`): scraped and stored
 as usual, but it sends no notifications. That is how a newly added scraper is
@@ -83,6 +91,7 @@ Coverage shifts as third-party sites change. The scrapers are documented in
 | Docker | Engine 20.10+ with the Compose plugin | `docker compose`, not the old `docker-compose` script |
 | Python | 3.11+ | Only for running from source. The Docker image ships 3.11; CI and desktop builds use 3.12 |
 | OS | Linux recommended | See the [macOS note](#running-from-source) below |
+| Network | Residential or mobile proxy may be required | Some platforms have returned 403 to datacenter exit IPs. Cloud deployment reads `HTTPS_PROXY`; a proxy account is an extra cost, and none of it is needed for the hosted service |
 | Domain | Optional | Needed only for the HTTPS deployment. The local path below runs without one |
 
 ---
@@ -110,7 +119,9 @@ Holland2Stay in Eindhoven only; enable the rest from the panel.
 
 ### 2. Cloud deployment
 
-Set up the networking side yourself before you begin.
+Set up the networking side yourself before you begin. DNS, firewall ports, TLS
+certificates, client IP handling and replacing Caddy with your own reverse proxy
+are covered in [DEPLOYMENT.md](DEPLOYMENT.md).
 
 **Step 1** — create the config and data directories:
 
@@ -129,9 +140,9 @@ SESSION_COOKIE_SECURE=true
 ```
 
 - `WEB_PASSWORD` — the container refuses to start while it is empty.
-- `HTTPS_PROXY` — needed on any datacenter IP, which is what a VPS gives you.
-  Without it Cloudflare 403s Holland2Stay and that source stays in its breaker
-  loop. Skip it only if the server has a residential exit.
+- `HTTPS_PROXY` — configure an appropriate residential or mobile proxy if the
+  server's exit is blocked. Datacenter exits have previously received 403s;
+  availability depends on the actual network and platform response.
 - `PUBLIC_BASE_URL` — verification emails are built from it; unset, the app
   refuses to send them.
 - `SESSION_COOKIE_SECURE` — `.env.example` ships `false`; set it to `true` for
@@ -181,6 +192,19 @@ cities to monitor. Both user-level and system-level settings are managed from th
 panel; `.env` only needs editing when credentials, the domain or the timezone
 change.
 
+### First run checklist
+
+1. Sign in to the panel as admin.
+2. Open the Users page and create the user(s) who should receive alerts.
+3. For each user, enable at least one notification channel and send a test.
+4. Open the Settings page and enable the platforms **and** their cities or
+   buildings — both are required; ticking only cities does nothing.
+5. Watch `/monitoring` for the first complete round and confirm that the
+   expected sources report data.
+6. Keep day-to-day changes in the panel. `.env` is only for deployment settings,
+   secrets and proxy configuration; writing runtime keys back into `.env`
+   overrides the dashboard.
+
 ### Running from source
 
 For development. Production should use Docker — the container pins the Chromium
@@ -195,7 +219,8 @@ python monitor.py                # scraper loop, separate terminal
 ```
 
 Open `http://127.0.0.1:8088`. Note that `web.py` and `monitor.py` are two
-independent processes that only talk through SQLite — running just `web.py`
+independent processes that share SQLite and use process-control requests for
+reloads — running just `web.py`
 gives you a panel that never gets new data.
 
 > **macOS**: the free CloakBrowser build for macOS lags the Linux one, and
@@ -208,7 +233,7 @@ gives you a panel that never gets new data.
 
 ```bash
 cd /path/to/holland2stay-monitor
-cp data/listings.db "data/listings.db.bak.$(date +%Y%m%dT%H%M%S)"
+docker exec h2s python -c "import sqlite3; sqlite3.connect('data/listings.db').execute('VACUUM INTO ?', ('data/listings.db.bak.$(date +%Y%m%dT%H%M%S)',))"
 git pull
 docker compose build h2s
 docker compose up -d --force-recreate h2s
@@ -244,28 +269,28 @@ Configuration lives in three places:
 | System: sources, cities, intervals | SQLite `app_settings` | Dashboard → Settings |
 | Deployment: credentials, paths, timezone, base URL | `.env` | Text editor |
 
-**Monitoring scope and polling cadence are not in `.env`.** As of v1.16.0,
-20 keys — `SOURCES`, `CITIES`, `*_CITIES`, `AVAILABILITY_FILTERS`,
+Monitoring scope and polling cadence are managed in the database. Runtime keys —
+`SOURCES`, `CITIES`, `*_CITIES`, `AVAILABILITY_FILTERS`,
 `CHECK_INTERVAL`, `PEAK_*` and friends — live in the database and are managed
 from the dashboard. First start migrates them out of `.env` automatically,
 backing up the whole file to `.env.bak.<timestamp>` beforehand and logging
 exactly what moved.
 
-What remains in `.env` is roughly 28 keys in three groups:
+Deployment configuration, credentials and advanced tuning can remain in `.env`:
 
-| Group | Count | Notes |
-|---|---|---|
-| Credentials | 14 | Passwords, API keys, encryption key, proxy URLs. **Never in the database** — databases get backed up, exported, downloaded |
-| Deployment facts | 5 | `DB_PATH`, `TIMEZONE`, `PUBLIC_BASE_URL`, `SESSION_COOKIE_SECURE`, `SUPPORT_EMAIL`. `DB_PATH` must stay here — you need the database before you can read the settings table |
-| Thresholds and switches | 9 | Notification channel toggles and quotas; all have defaults, most deployments set none |
+| Group | Notes |
+|---|---|
+| Server credentials | Passwords, API keys, encryption key and proxy URLs. Per-user platform and channel credentials are stored encrypted in user configuration. |
+| Deployment facts | `DB_PATH`, `TIMEZONE`, `PUBLIC_BASE_URL`, `SESSION_COOKIE_SECURE`, `SUPPORT_EMAIL`. `DB_PATH` must be available before opening the database. |
+| Thresholds and switches | Notification channel toggles, quotas and other advanced settings; most have defaults. |
 
 The ones worth knowing up front:
 
 | Key | Default | What it controls |
 |---|---|---|
 | `WEB_PASSWORD` | — | **Required.** The container refuses to start without it |
-| `HTTPS_PROXY` | — | Required in production. Datacenter IPs get 403'd by Cloudflare on Holland2Stay |
-| `PUBLIC_BASE_URL` | — | Required in production, or verification emails link to an internal host |
+| `HTTPS_PROXY` | — | Proxy for scraping when the server's exit is blocked |
+| `PUBLIC_BASE_URL` | — | Required for verification emails; without a valid HTTPS URL the service refuses to generate the link |
 | `MONITOR_HEARTBEAT_MAX_AGE` | `900` | How long the monitor may be silent before `/health` reports unhealthy |
 | `HEALTH_*` / `WATCHDOG_*` | see `.env.example` | Thresholds for the data-degradation alerts behind `/monitoring` |
 | `STALE_RESERVED_HOURS` / `STALE_OCCUPIED_HOURS` | `0.5` / `2` | How long a listing must be absent from the feed before it is inferred Reserved, then Occupied — see [Listing status](#listing-status) |
@@ -275,18 +300,20 @@ key names and their groups are registered in `env_registry.py`.
 
 ### Environment variables win over the database
 
-Resolution order is **environment variable > `app_settings` > code default**.
+For runtime settings, precedence is **startup environment > runtime entries left in `.env` > `app_settings` > code default**.
 The environment layer exists as an override hatch for containerised debugging:
 
 ```bash
 docker compose run -e CHECK_INTERVAL=30 h2s python monitor.py
 ```
 
-The cost is that it is invisible: the dashboard shows one value, the process
-uses another. So the dashboard flags "overridden by an environment variable,
+An override can make the saved value differ from the value in use. The dashboard
+flags "overridden by an environment variable,
 changes here will not take effect", and the monitor warns at startup about any
 such key left in `.env`. **Use the dashboard for day-to-day changes** — writing
-these keys back into `.env` silently overrides it.
+these keys back into `.env` overrides it. Deployment settings, secrets and tuning
+settings do not hot-reload; restart the affected process after changing them.
+Restart the whole application if the database path changes.
 
 ### Input validation
 
@@ -328,12 +355,14 @@ Its `Settings` section answers the most common post-deploy question: whether the
 
 ## Listing status
 
-No platform tells you a unit is gone. They simply stop returning it. Xior is the
-only source whose feed carries a real `Occupied` state, and even there it covers
-just part of the picture. Everywhere else, a terminal status is something the
-system worked out rather than something a platform said.
+Platform feeds do not always say when a listing has been removed. Some report
+unavailable or occupied statuses directly; for other listings the system infers
+state from absence in complete scans. The panel distinguishes inferred states
+from upstream reports.
 
-So absence is the signal, and it is read in two steps:
+For feeds that do not cover reservations, absence normally leads to an inferred
+Reserved state and then Occupied. When the configured Holland2Stay feed includes
+Reserved, the intermediate inference can be skipped:
 
 ```mermaid
 stateDiagram-v2
@@ -346,6 +375,7 @@ stateDiagram-v2
     [*] --> A: first seen in the feed
     A --> R: gone 30 min
     R --> O: gone 2 h
+    A --> O: reservations covered and gone 2 h
     R --> A: seen again
     O --> A: seen again
 ```
@@ -355,15 +385,15 @@ Anything the system inferred carries an **inferred** badge in the panel and a
 never confused — in practice most `Occupied` rows you see will be inferred.
 Inferred transitions do not generate notifications.
 
-Two hours is not arbitrary — it is Holland2Stay's own payment deadline. A
-reservation that has been out of the feed longer than that has resolved one way
-or the other. The intermediate Reserved stop exists so that being wrong is
+The two-hour default is informed by Holland2Stay's payment window; the result
+remains an inference and may differ from the platform's current state. The
+intermediate Reserved stop exists so that being wrong is
 cheap: `Reserved → Available` is an ordinary transition, whereas jumping
 straight to Occupied and then seeing the listing return produces a wave of false
 "back on the market" alerts. Both thresholds are configurable
 (`STALE_RESERVED_HOURS` / `STALE_OCCUPIED_HOURS`); the reasoning and the failure
 modes behind them are in
-[ARCHITECTURE.md §5.13](ARCHITECTURE.md#513-从-feed-里消失是唯一的下架信号).
+[Architecture: listing status and completeness](ARCHITECTURE.md#status-convergence).
 
 Convergence only runs for source/city pairs that were **completely** scanned
 that round. A failed scrape is never read as "the listings are gone".
@@ -372,19 +402,34 @@ that round. A failed scrape is never read as "the listings are gone".
 
 ## Auto-booking
 
-Enabled for Holland2Stay only. It signs in with the account you configure,
+For Holland2Stay, it signs in with the account you configure,
 attempts eligible directly-bookable listings, and **stops at the payment URL** —
 it never completes a payment.
 
-Xior, OurDomain and OurCampus run the same RENTCafe backend and share one
-implementation ([`bookers/rentcafe.py`](../bookers/rentcafe.py)). The code is
-complete, reCAPTCHA solving is wired up, and the flow has been walked end-to-end
-against a live site. The feature is still **switched off**.
+If the Holland2Stay booking outcome is uncertain, auto-booking is paused for
+that account and the user is asked to check it. Sign in to Holland2Stay to check
+your orders or reservations, pay or cancel as appropriate, then select
+“Checked; resume auto-booking” in user settings. Protection cannot be removed
+while the booking task is running; stop monitoring first if it is stuck. This
+protection survives monitor restarts and applies to all users sharing the account.
+
+For Plaza, users can configure their username and password and separately enable
+automatic applications. The switch is off by default. An application is submitted
+directly and does not guarantee a successful rental. See [Plaza](PLAZA.md).
+If an application outcome is uncertain, check your applications on Plaza and
+select “Checked; resume applications for this listing” in user settings. Only
+that account and listing are paused; other listings can still be processed.
+Protection cannot be removed while the application task is running.
+
+Xior, OurDomain and OurCampus use RENTCafe and share an implementation
+([`bookers/rentcafe.py`](../bookers/rentcafe.py)). Captcha solving and parts of
+the application flows are implemented, but their end-to-end booking paths have
+not been verified and remain **switched off**.
 
 | Platform | Reached | Missing |
 |---|---|---|
-| Xior | Applicant form, draft saved, ID document uploaded (2026-08-03, real account) | Whether the form saves cleanly once the system supplies the document. And a Xior draft **does not hold the unit** — it stops a step earlier than Holland2Stay, because the next page asks for IBAN/SWIFT |
-| OurDomain | Entry leg verified against the live site (2026-08-04): floorplans → available units → terms POST, all 18 form fields landing | Everything after login. This flow has no unit-picker page, so falling out of it has no recovery path — the code aborts loudly rather than continuing with a mismatched context. Needs a real OurDomain account |
+| Xior | A real account reached the application form and saved a draft (2026-08-03) | Saving after the system uploads the ID document has not been verified. A draft **does not hold the unit**; the next page asks for IBAN/SWIFT. |
+| OurDomain | Entry leg verified against the live site (2026-08-04): floorplans → available units → terms POST | The post-login path needs real-account verification. If the application form is missing, the implementation retries unit selection once and aborts if the form is still unavailable. |
 | OurCampus | `OurCampusBooker` registered and credentials can be entered in the panel, but **off for users** (not in `_AUTO_BOOK_SOURCES`). Verified with a real account: unit selection, terms page, Start Application (v3 accepted first try) and login all work | Landing on Applicant Info after login does not work yet. The premise that starting an application holds the unit is disproved: the site states it only enters you into the lottery |
 | Magis | Nothing | Booking flow has never been scouted |
 
@@ -409,11 +454,11 @@ mismatch and would only interrupt a scrape in progress.
 | Symptom | Cause and fix |
 |---|---|
 | No alerts at all, dashboard shows stale listings | The monitor process is down. `supervisorctl status` to confirm, then `supervisorctl start monitor`. `/health` returns 503 once the heartbeat is older than `MONITOR_HEARTBEAT_MAX_AGE`. |
-| A source shows `down` or `warn` on `/monitoring` | The card lists which rule fired. Thresholds and their rationale: [ARCHITECTURE.md §5.12](ARCHITECTURE.md). |
+| A source shows `down` or `warn` on `/monitoring` | The card lists which rule fired. See [health and troubleshooting](ARCHITECTURE.md#health-and-troubleshooting). |
 | Need logs from a specific time window | `/logs` filters server-side by keyword, level and `since`/`until` — it is not limited to what is currently on screen. |
 | Logs repeat `H2S source 熔断` | Cloudflare is blocking your exit IP. The breaker pauses that one source and retries a single city later. If it persists, set `HTTPS_PROXY`. |
 | Logs repeat `CF 挑战 ... 未解开` | Same cause — usually IP reputation rather than anything local. |
-| One platform always returns 0 listings | May be genuine. Check whether the round was marked complete; see [ARCHITECTURE.md §5.7](ARCHITECTURE.md#57-completeness-决定能否做状态收敛). |
+| One platform always returns 0 listings | May be genuine. Check whether the round was marked complete; see [listing status and completeness](ARCHITECTURE.md#status-convergence). |
 | A listing you know is taken still shows as available | Its city was not completely scanned, so it never became eligible for convergence. Check `(complete/targets)` on `/monitoring`. |
 | A batch of listings turned Occupied at once | Expected if they carry the **inferred** badge — that is aging catching up after a restart or a threshold change, and it generates no notifications. Without the badge, the platform actually reported it. |
 | Logs repeat `抓到 0 个单元，第 N/3 轮` | Normal. An empty result from OurDomain/OurCampus has to repeat for 3 rounds before it counts, so a single bad round cannot converge a whole building. |
@@ -432,11 +477,12 @@ own monitoring if you want to be paged.
 
 | Document | For |
 |---|---|
-| [User Guide](https://flatradar.app/guide) | Screenshots and daily use |
-| [ARCHITECTURE.md](ARCHITECTURE.md) | How the system runs, and every failure mode worth knowing before you debug one |
+| [User Guide](https://flatradar.app/guide) | Panel settings and daily use |
+| [DEPLOYMENT.md](DEPLOYMENT.md) | Docker topology, Caddy and TLS, ports, logs, and using a different reverse proxy |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | System architecture, key failure boundaries and troubleshooting entry points |
 | [API.md](API.md) | Backend contracts for mobile and integrations |
 | [CHANGELOG.md](CHANGELOG.md) | Release history |
-| [H2S.md](H2S.md) · [H2S_BOOKING_OPS.md](H2S_BOOKING_OPS.md) · [XIOR.md](XIOR.md) · [OURDOMAIN.md](OURDOMAIN.md) · [PLAZA.md](PLAZA.md) · [SCRAPING_RECON.md](SCRAPING_RECON.md) | Per-platform research; `PLAZA.md` covers booking only — Plaza's scraping side, with Magis and Student Experience, is in `SCRAPING_RECON.md` |
+| [H2S.md](H2S.md) · [H2S_BOOKING_OPS.md](H2S_BOOKING_OPS.md) · [RENTCAFE.md](RENTCAFE.md) · [XIOR.md](XIOR.md) · [OURDOMAIN.md](OURDOMAIN.md) · [PLAZA.md](PLAZA.md) · [SCRAPING_RECON.md](SCRAPING_RECON.md) | Per-platform research; `RENTCAFE.md` covers the booking flow shared by Xior, OurDomain and OurCampus, and `PLAZA.md` covers Plaza booking only — Plaza's scraping side, with Magis and Student Experience, is in `SCRAPING_RECON.md` |
 | [iOS_README.md](https://github.com/751K/FlatRadar-iOS/blob/master/docs/iOS_README.md) | iOS client — moved to [FlatRadar-iOS](https://github.com/751K/FlatRadar-iOS) |
 | [ANDROID_PLAN.md](https://github.com/751K/FlatRadar-Android/blob/master/docs/ANDROID_PLAN.md) | Android client — moved to [FlatRadar-Android](https://github.com/751K/FlatRadar-Android) |
 | [dataflow_en.mmd](dataflow_en.mmd) · [dataflow_ch.mmd](dataflow_ch.mmd) | Full scrape/notify flow as a Mermaid diagram |

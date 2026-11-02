@@ -7,6 +7,8 @@
 > Зеркало этого репозитория доступно на GitLab: <https://gitlab.com/pelmeshke/itmo_conspects>  
 > Также конспекты доступны на <https://pelmeshke.gitlab.io/itmo_conspects/>
 
+<!-- recently-visited -->
+
 ## VII семестр
 
 * Технологии сборки и развертывания программного обеспечения (DevOps)
@@ -20,6 +22,10 @@
         * Лекция №3 - в разработке
         * Лекция №4 - в разработке
         * Лекция №5 - в разработке
+        * Лекция №6 - в разработке
+        * Лекция №7 - в разработке
+        * Лекция №8 - в разработке
+        * Лекция №9 - в разработке
 
 * Функциональное программирование
 
@@ -30,30 +36,42 @@
         * [Лекция №1](https://pelmesh619.github.io/itmo_conspects/funcprog/funcprog-holopov/funcprog-holopov_2026_09_03.html)
         * [Лекция №3](https://pelmesh619.github.io/itmo_conspects/funcprog/funcprog-holopov/funcprog-holopov_2026_09_17.html)
         * [Лекция №5](https://pelmesh619.github.io/itmo_conspects/funcprog/funcprog-holopov/funcprog-holopov_2026_10_01.html)
+        * [Лекция №7](https://pelmesh619.github.io/itmo_conspects/funcprog/funcprog-holopov/funcprog-holopov_2026_10_15.html)
+        * [Лекция №9](https://pelmesh619.github.io/itmo_conspects/funcprog/funcprog-holopov/funcprog-holopov_2026_10_29.html)
 
 * Разработка нагруженных систем (лектор Суховицкий А. А.)
 
     Лекций по этому предмету нет, но возможно тут появится конспект теории
 
+    * [Заметка №1](https://pelmesh619.github.io/itmo_conspects/highload/highload_01_intro.html)
+
 * Тестирование ПО
 
     * Трек от Яндекса (лектор Гилёва В. С.)
 
-        [**Весь курс**](https://pelmesh619.github.io/itmo_conspects/funcprog/funcprog-holopov/funcprog-holopov_superconspect.html)
+        [**Весь курс**](https://pelmesh619.github.io/itmo_conspects/softwareqa/softwareqa-yandex/softwareqa-yandex_superconspect.html)
 
         * [Лекция №1](https://pelmesh619.github.io/itmo_conspects/softwareqa/softwareqa-yandex/softwareqa-yandex_2026_09_04.html)
         * [Лекция №2](https://pelmesh619.github.io/itmo_conspects/softwareqa/softwareqa-yandex/softwareqa-yandex_2026_09_11.html)
-        * Лекция №3 - в разработке
-        * Лекция №4 - в разработке
+        * [Лекция №3](https://pelmesh619.github.io/itmo_conspects/softwareqa/softwareqa-yandex/softwareqa-yandex_2026_09_18.html)
+        * [Лекция №4](https://pelmesh619.github.io/itmo_conspects/softwareqa/softwareqa-yandex/softwareqa-yandex_2026_09_25.html)
         * Лекция №5 - в разработке
+        * Лекция №6 - перенесена
+        * Лекция №7.1 - в разработке
+        * [Лекция №7.2](https://pelmesh619.github.io/itmo_conspects/softwareqa/softwareqa-yandex/softwareqa-yandex_2026_10_16.html)
+        * Лекция №8 - в разработке
+        * Лекция №9 - в разработке
+        * Лекция №10 - в разработке
 
 * Введение в технологическое предпринимательство (лектор Волхонцев А. А.)
 
     [**Весь курс**](https://pelmesh619.github.io/itmo_conspects/techentrep/techentrep_superconspect.html)
 
     * [Лекция №1](https://pelmesh619.github.io/itmo_conspects/techentrep/techentrep_2026_09_05.html)
-    * Лекция №3 - в разработке
+    * [Лекция №3](https://pelmesh619.github.io/itmo_conspects/techentrep/techentrep_2026_09_19.html)
     * [Лекция №5](https://pelmesh619.github.io/itmo_conspects/techentrep/techentrep_2026_10_03.html)
+    * [Лекция №7](https://pelmesh619.github.io/itmo_conspects/techentrep/techentrep_2026_10_17.html)
+    * [Лекция №9](https://pelmesh619.github.io/itmo_conspects/techentrep/techentrep_2026_10_31.html)
 
 * Администрирование в ОС Windows (лектор Береснев А. Д.)
 
@@ -62,11 +80,14 @@
     * [Лекция №2](https://pelmesh619.github.io/itmo_conspects/admwindows/admwindows_2026_09_07.html)
     * [Лекция №4](https://pelmesh619.github.io/itmo_conspects/admwindows/admwindows_2026_09_21.html)
     * [Лекция №6](https://pelmesh619.github.io/itmo_conspects/admwindows/admwindows_2026_10_05.html)
+    * Лекция №8 - перенесена
 
 * Анализ данных и информационных поиск (лектор Хлопотов М. В.)
 
-    * Лекция №3 - в разработке
+    * [Лекция №3](https://pelmesh619.github.io/itmo_conspects/dataanalysis/dataanalysis_2026_09_14.html)
     * Лекция №5 - в разработке
+    * Лекция №7 - в разработке
+    * Лекция №9 - в разработке
 
 ## [VI семестр](assets/meta/VI.md)
 

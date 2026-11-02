@@ -16,24 +16,11 @@ flowchart LR
     style present fill:#ecfdf5,stroke:#10b981
 ```
 
-db-to-excel 是嵌入 Windows  Excel / WPS 表格的插件，在表格内部直接执行 SQL，把数据库查询结果写入工作表。插件只负责【数据库到工作表的数据同步】，保留原有的 Excel 生态：公式、透视表、图表、看板不需重构。定期报表更新不再依靠手工搬运数据。
-
-## 🤖 AI 助手：自然语言生成 SQL
-
-内置 AI 对话助手，使用自然语言描述业务需求，即可生成只读 SQL 语句。
-
-- 自定义模型接入：支持配置任意兼容 API 协议的大模型，无厂商锁定。
-- Skill 知识库注入：将表结构、字段释义、业务统计口径录入 Skill，显著提升 SQL 生成准确度。
-- ASK 只读交互模式：AI 仅返回文本，不会操作本地文件、自动执行 SQL，不会主动读取数据库连接信息。
-
-
-**🎬 批量更新功能演示**
+db-to-excel 是嵌入 Windows  Excel / WPS 表格的插件，在表格内部直接执行 SQL，把数据库查询结果写入工作表。插件只负责【数据库到工作表的数据同步】，保留原有的 Excel 生态：公式、透视表、图表、看板不需重构。定期报表更新不再依靠手工搬运数据。同时，该插件内置 AI 对话助手，使用自然语言描述业务需求，即可生成只读 SQL 语句。
 
 ![批量刷新](docs/images/批量刷新.gif)
 
 # 快速开始
-
-
 
 ## 1、安装
 
@@ -45,9 +32,8 @@ db-to-excel 是嵌入 Windows  Excel / WPS 表格的插件，在表格内部直�
 
 > 安装包未签名，Windows 可能提示不安全，请放心放行。（可以让AI审查代码安全性） 
 > 如果菜单栏没出现「db-to-excel」，设置下信任加载项： 
-<img src="docs/images/wps_信任加载项.png" width="500">
-
-
+>
+> ![](docs/images/wps_信任加载项.png)
 
 ## 2、新建连接
 
@@ -57,12 +43,10 @@ db-to-excel 是嵌入 Windows  Excel / WPS 表格的插件，在表格内部直�
 - 根据选中的数据源类型，依次填写服务地址、数据库（或文件路径）、账号密码等连接信息。
 - 点击「测试连接」验证连通性；测试成功后，填写显示名称（自定义备注，方便后续识别）。
 - 测试通过后点「保存」。
-<img src="docs/images/新建连接_holo.png" width="500">
 
+![](docs/images/新建连接_holo.png)
 
 ## 3、批量刷新（多 SQL 批量拉取数据）
-
-
 
 ### 3.1、 参数准备
 
@@ -72,9 +56,8 @@ db-to-excel 是嵌入 Windows  Excel / WPS 表格的插件，在表格内部直�
 
 > 效果：每一列的 SQL 执行完成后，查询结果自动写入对应Sheet。
 > SQL代码随工作簿一起保存和复用，适合需要定期更新的底稿或报表。
-<img src="docs/images/SQL页.png" width="500">
-
-
+>
+> ![](docs/images/SQL页.png)
 
 ### 3.2、 刷新步骤
 
@@ -86,10 +69,8 @@ db-to-excel 是嵌入 Windows  Excel / WPS 表格的插件，在表格内部直�
 - 点击顶部功能区「SQL 查询」，打开查询面板。
 - 输入 SQL 查询语句，支持先预览结果，确认无误后写入指定工作表。
   > 查询方案可保存复用
-  
+
 ![SQL 查询](docs/images/SQL查询.gif)
-
-
 
 ## 5、AI 助手（生成 SQL）
 
@@ -100,7 +81,7 @@ db-to-excel 是嵌入 Windows  Excel / WPS 表格的插件，在表格内部直�
 - 点击测试连通，测试通过后保存；可勾选「作为默认模型」。
 - 支持维护多套模型，在对话界面随时切换。
 
-<img src="docs/images/ai_model_add.png" width="500">
+![](docs/images/ai_model_add.png)
 
 ### 5.2、配置 Skill 知识库（推荐必配）
 
@@ -116,16 +97,15 @@ db-to-excel 是嵌入 Windows  Excel / WPS 表格的插件，在表格内部直�
 - 输入业务需求：回车发送消息；`Shift+Enter` 换行。
 - 将 AI 输出代码块中的 SQL 复制至编辑器。预览数据，或直接写入工作表。
 
-<img src="docs/images/ai_sql.png" width="500">
+![](docs/images/ai_sql.png)
 
 ### 5.4、关于数据安全
+
 - AI 为纯文本问答模式：仅返回文字与 SQL，不会自动执行 SQL、操作本地文件。
 - 数据库连接地址、账号密码**不会自动发送至大模型**；仅你手动使用`@`引用的内容，才会提交给配置的模型服务商。
 - 支持查看每一轮请求提交给大模型的完整报文，透明追踪交互内容，如图所示。
 
-<img src="docs/images/ai_查看请求详情.png" width="500">
-
-
+![](docs/images/ai_查看请求详情.png)
 
 ## 技术信息
 

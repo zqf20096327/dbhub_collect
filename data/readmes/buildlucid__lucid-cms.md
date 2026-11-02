@@ -41,7 +41,7 @@ AI features require a subscription with Lucid. This is planned to become publicl
 
 ## 🔌 First-Party Plugins
 
-- [Pages](https://github.com/buildlucid/lucid-cms/tree/master/packages/plugin-pages): adds hierarchical documents, slugs, parent pages, and computed full slugs for website page collections.
+- [Pages](https://github.com/buildlucid/lucid-cms/tree/master/packages/plugin-pages): adds hierarchical documents, slugs, parent pages, and computed paths for website page collections.
 - [Filesystem](https://github.com/buildlucid/lucid-cms/tree/master/packages/plugin-filesystem): stores uploaded media on the local filesystem.
 - [S3](https://github.com/buildlucid/lucid-cms/tree/master/packages/plugin-s3): stores media in AWS S3, Cloudflare R2, or another S3-compatible provider.
 - [Cloudflare R2](https://github.com/buildlucid/lucid-cms/tree/master/packages/plugin-cloudflare-r2): uses a Cloudflare R2 binding with optional S3-compatible HTTP fallback.
@@ -79,7 +79,7 @@ For a local Node.js project, the smallest useful setup is typically:
 npm install @lucidcms/core @lucidcms/runtime-node @lucidcms/db-sqlite @lucidcms/plugin-filesystem
 ```
 
-Then create a `lucid.config.ts` file with a runtime, database adapter, secrets, media settings, and collections. SQLite plus the filesystem plugin is the fastest way to explore Lucid locally without external infrastructure.
+Then create a `lucid.config.ts` file with a runtime, database adapter, the public `url`, secrets, media settings, and collections. SQLite plus the filesystem plugin is the fastest way to explore Lucid locally without external infrastructure.
 
 Or deploy our Cloudflare template by clicking the button below.
 

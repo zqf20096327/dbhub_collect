@@ -1,10 +1,10 @@
 {
  "JoeanAmier/XHS-Downloader": {
   "commit_7d": 0,
-  "commit_90d": 63,
+  "commit_90d": 52,
   "rel_ver": "2.8",
   "rel_pub": "2026-09-12",
-  "rel_days": 43,
+  "rel_days": 51,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 9,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "JavaScript": 42,
    "Python": 41,
@@ -23,26 +23,43 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "2.8",
+    "d": "2026-09-12",
+    "n": "**项目更新内容：**\n\n1. 修复 ParserError 导致应用崩溃的问题\n2. 参数 `headers` 重构为 `impersonate`\n3. 使用 `curl_cffi` 替代 `httpx`\n4. 修复模式切换后状态显示异常的问题\n5. 修复 CLI 模式 KeyError 异常\n6. 修复控制字符导致程序报错的问题\n7. 修复部分分享链接提取失败的问题\n8. 图文/图集作品支持下载指定文件\n9. 修复动态图片无法下载的问题\n10. 下载文件默认不使用网络代理\n11. 优化用户脚本与程序"
+   },
+   {
+    "t": "2.7",
+    "d": "2026-02-09",
+    "n": "**项目更新内容：**\n\n1. 修复 MCP 模式无法下载文件的问题\n2. 新增 `script_server` 配置参数\n3. 移除 `从浏览器读取 Cookie` 功能\n4. 新增连接用户脚本下载作品功能\n5. 优化 Cookie 处理逻辑\n6. 修复视频作品下载功能\n7. 新增视频下载偏好设置\n8. 新增作品处理统计功能\n9. 重构数据处理逻辑\n10. 调整内置延时机制\n\n*****\n\n**用户脚本更新内容：**\n\n**版本号：2.3.1**\n\n1. 新增链接提取/图片下载选择模式开关\n2"
+   },
+   {
+    "t": "2.6",
+    "d": "2025-08-11",
+    "n": "**项目更新内容：**\r\n\r\n1. 修复作品类型判断失败时异常退出的问题\r\n2. 修改服务器模式请求路径为 `/xhs/detail`\r\n3. 修改服务器模式默认端口为 `5556`\r\n4. 命令行模式支持传递多个作品链接\r\n5. 新增 `folder_name` 参数检查\r\n6. 服务器模式新增 MCP 模式\r\n7. 配置与文件归集到单文件夹\r\n8. 优化配置文件参数容错机制\r\n9. 优化提取链接的正则表达式\r\n10. 修改服务器模式启动命令\r\n11. 支持更多作品链接格式"
+   }
+  ]
  },
  "riverqueue/river": {
-  "commit_7d": 29,
-  "commit_90d": 170,
-  "rel_ver": "java/v0.1.0-alpha.1",
-  "rel_pub": "2026-10-25",
-  "rel_days": 0,
+  "commit_7d": 22,
+  "commit_90d": 187,
+  "rel_ver": "v0.51.0",
+  "rel_pub": "2026-11-01",
+  "rel_days": 1,
   "rel_n90": 12,
-  "rel_pre": true,
+  "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
   "sec_worst": null,
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 41,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Go": 99,
    "PLpgSQL": 1,
@@ -50,14 +67,31 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v0.51.0",
+    "d": "2026-11-01",
+    "n": "- Added `JobDeleteManyParams.Where`, an escape hatch for deleting jobs by an arbitrary SQL predicate, like `JobListParams.Where` does for lists. For example, it can select queued jobs whose args name a given customer. A `Where` predicate counts as a filter, so it doesn't need `UnsafeAll`, and each predicate is wrapped in parentheses so that an `OR` in it can't widen the deletion past other filters or to running jobs. The existing batch limit (100 jobs by default) and Postgres behavior of skipping locked job"
+   },
+   {
+    "t": "ruby/v0.15.0",
+    "d": "2026-10-30",
+    "n": "### Added\n\n- Add `river migrate-get` for offline Postgres/SQLite SQL export with version selection, exclusions, and schema substitution; `river validate` to check migration state without applying changes; and `river version` / `river --version` to report active core, Pro, and Ruby runtime versions. Export and validation support `--line pro`. [PR #1560](https://github.com/riverqueue/river/pull/1560)."
+   },
+   {
+    "t": "v0.50.0",
+    "d": "2026-10-27",
+    "n": "- Fixed SQLite metadata updates recursively merging nested objects and deleting keys set to JSON null. Updates now replace whole top-level values, matching Postgres and preventing completed resumable cursor steps from running again on later retries. [PR #1533](https://github.com/riverqueue/river/pull/1533)."
+   }
+  ]
  },
  "dbeaver/cloudbeaver": {
-  "commit_7d": 17,
-  "commit_90d": 238,
+  "commit_7d": 25,
+  "commit_90d": 241,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 5,
@@ -71,7 +105,7 @@
    "GHSA-8wwr-2cv6-q65q(-,medium)"
   ],
   "contrib_n": 65,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "TypeScript": 68,
    "Java": 28,
@@ -81,8 +115,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
   }
  },
@@ -277,11 +311,11 @@
   }
  },
  "mweibel/connect-session-sequelize": {
-  "commit_90d": 3,
+  "commit_90d": 2,
   "commit_7d": 0,
   "rel_ver": "v8.0.6",
   "rel_pub": "2026-03-11",
-  "rel_days": 200,
+  "rel_days": 236,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -293,7 +327,28 @@
   "lang": {
    "JavaScript": 100
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "rel_notes": [
+   {
+    "t": "v8.0.6",
+    "d": "2026-03-11",
+    "n": "## What's Changed\r\n* Bump sequelize from 6.37.7 to 6.37.8 by @dependabot[bot] in https://github.com/mweibel/connect-session-sequelize/pull/169\r\n\r\n\r\n**Full Changelog**: https://github.com/mweibel/connect-session-sequelize/compare/v8.0.5...v8.0.6"
+   },
+   {
+    "t": "v8.0.5",
+    "d": "2026-01-22",
+    "n": "## What's Changed\r\n* Bump lodash from 4.17.21 to 4.17.23 by @dependabot[bot] in https://github.com/mweibel/connect-session-sequelize/pull/166\r\n\r\n\r\n**Full Changelog**: https://github.com/mweibel/connect-session-sequelize/compare/v8.0.4...v8.0.5"
+   },
+   {
+    "t": "v8.0.4",
+    "d": "2025-12-03",
+    "n": "## What's Changed\r\n* Bump validator from 13.15.20 to 13.15.23 by @dependabot[bot] in https://github.com/mweibel/connect-session-sequelize/pull/165\r\n\r\n\r\n**Full Changelog**: https://github.com/mweibel/connect-session-sequelize/compare/v8.0.3...v8.0.4"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "wavezync/durable": {
   "commit_90d": 47,
@@ -485,7 +540,7 @@
   }
  },
  "DIYbiosphere/sphere": {
-  "commit_90d": 269,
+  "commit_90d": 48,
   "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
@@ -501,7 +556,11 @@
    "Ruby": 1,
    "SCSS": 1
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "maitree7/Fraud_Detection_SQL": {
   "commit_90d": 0,
@@ -2648,6 +2707,50 @@
    "security": "20261026",
    "contrib": "20261026",
    "lang": "20261026"
+  }
+ },
+ "orgFinishUP/finishup": {
+  "rel_ver": "v0.2.5",
+  "rel_pub": "2026-09-24",
+  "rel_days": 39,
+  "rel_n90": 6,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_notes": [
+   {
+    "t": "v0.2.5",
+    "d": "2026-09-24",
+    "n": "This patch in the 0.2 public-alpha line improves session recovery, setup, observation reporting,\nand completion checks across the existing Codex, Claude Code, and Cursor integrations. It includes\nthe fixes on `main` after v0.2.4; richer task interaction remains outside this release.\n\n## Changes\n\n- Reattach an exact known session even when independent tasks share the workspace. Automatic\n  recovery retains task identity, workspace fences, and admission checks (#811, #815).\n- Recover cold hook attachment with"
+   },
+   {
+    "t": "v0.2.4",
+    "d": "2026-09-20",
+    "n": "This patch in the 0.2 public-alpha line brings Codex, Claude Code, Cursor IDE and Cursor Agent\nCLI into the same guided installation and connection lifecycle. It targets macOS, Linux and\nWindows through WSL 2. Native Windows and mobile platforms remain unsupported.\n\n## Changes\n\n- Discover executable-backed installations, offer a host selection, and retain the exact selected\n  profile and project in the connection preview and continuation.\n- Connect Claude's plugin installation and enablement in one reviewed"
+   },
+   {
+    "t": "v0.2.3",
+    "d": "2026-09-19",
+    "n": "releases its runtime when optional final backlog feedback fails or is cancelled."
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 5,
+  "lang": {
+   "Python": 100,
+   "JavaScript": 0,
+   "Astro": 0,
+   "CSS": 0,
+   "Shell": 0
+  },
+  "enriched_at": "20261102",
+  "dim_ts": {
+   "release": "20261102",
+   "security": "20261102",
+   "contrib": "20261102",
+   "lang": "20261102"
   }
  }
 }

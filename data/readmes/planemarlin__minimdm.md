@@ -32,10 +32,12 @@ See [docs/quickstart.md](docs/quickstart.md) for a step-by-step guide, or [docs/
 ## Requirements
 
 - Python 3.11+
-- PostgreSQL 14+
+- PostgreSQL 15+
 - [uv](https://docs.astral.sh/uv/) (Python package manager)
 
 Or use Docker (no local Python or PostgreSQL installation required) — see [docs/docker-setup.md](docs/docker-setup.md).
+
+The exact Python and PostgreSQL versions that CI tests are listed under [Tested versions](docs/testing.md#tested-versions).
 
 ## Installation
 

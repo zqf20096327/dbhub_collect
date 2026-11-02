@@ -165,7 +165,7 @@ A Flask web app displays games and predictions. The Dash dashboard shows betting
 # Quick Start
 
 > [!WARNING]
-> **Project Status:** This project is on hiatus and not actively maintained. It may require minor bug fixes to run. Feel free to [open an issue](https://github.com/NBA-Betting/NBA_Betting/issues) if you encounter problems—I monitor issues periodically.
+> **Project Status:** This project is on hiatus and not actively maintained. It may require minor bug fixes to run. The repository is archived (read-only); active development continues in [NBA AI](https://github.com/NBA-Betting/NBA_AI).
 
 > [!CAUTION]
 > **API Rate Limits:** The data pipeline calls the NBA Stats API, which has rate limits. Daily updates are fine, but full season backfills can take hours and make many API requests. Please be respectful of the API. Check the [Releases](https://github.com/NBA-Betting/NBA_Betting/releases) page for pre-collected data to reduce API usage.
@@ -184,6 +184,11 @@ pip install -e ".[all]"    # Full install with ML, web app, and dev tools
 pip install -e "."         # Core only (data collection and ETL)
 pip install -e ".[ml]"     # Core + AutoGluon for modeling
 pip install -e ".[web]"    # Core + Flask/Dash web app
+
+# Download pre-collected data and trained models (recommended)
+# from https://github.com/NBA-Betting/NBA_Betting/releases/latest
+unzip nba_betting_database.zip -d data/
+unzip nba_betting_models.zip
 
 # Set up environment variables
 cp .env.example .env

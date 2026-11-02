@@ -1,10 +1,10 @@
 {
  "questdb/questdb": {
-  "commit_7d": 14,
-  "commit_90d": 142,
+  "commit_7d": 10,
+  "commit_90d": 149,
   "rel_ver": "10.1.0",
   "rel_pub": "2026-10-22",
-  "rel_days": 3,
+  "rel_days": 11,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 175,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Java": 93,
    "Rust": 4,
@@ -23,10 +23,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "10.1.0",
+    "d": "2026-10-22",
+    "n": "- **`HORIZON JOIN` without aggregates no longer de-duplicates its output.** Add `SELECT DISTINCT` or an explicit `GROUP BY` to get the old result. Materialized views over such queries need `REFRESH MATERIALIZED VIEW <name> FULL`. [#7682](https://github.com/questdb/questdb/pull/7682)\n- **`dateadd()` projections keep a designated timestamp only for fixed-duration units over the designated timestamp itself.** Time-series joins, `SAMPLE BY` and partitioned CTAS over other `dateadd()` projections, such as month "
+   },
+   {
+    "t": "10.0.1",
+    "d": "2026-08-24",
+    "n": "- **QWP table-update caching now follows table lifecycle and schema changes more closely**, including `DROP`/recreate, rename, and column-type changes. Durable acknowledgement accounting also covers transactions committed at the append-time row threshold. [#7383](https://github.com/questdb/questdb/pull/7383), [#7484](https://github.com/questdb/questdb/pull/7484)\n* fix(core): fix table suspension after a range replace removes its last partition by [@puzpuzpuz](https://github.com/puzpuzpuz) in [#7380](https:/"
+   },
+   {
+    "t": "10.0.0",
+    "d": "2026-08-06",
+    "n": "When writing rows to a QWP Sender, the data is no longer ephemeral. The new store-and-forward mechanism buffers up data locally before streaming it to QuestDB. In the event of a network disconnect, the data is retained and replayed later.\n- **`EXPLAIN` over HTTP and CSV returns plain text.** `/exec` and `/exp` no longer HTML-escape the plan. Clients that un-escape the plan need updating. [#7406](https://github.com/questdb/questdb/pull/7406)\n- **`SUSPEND WAL` no longer requires dev mode**, and `SUSPEND` / `R"
+   }
+  ]
  },
  "graphile/crystal": {
   "commit_7d": 52,

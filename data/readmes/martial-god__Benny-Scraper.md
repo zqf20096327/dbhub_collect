@@ -34,7 +34,7 @@ Benny-Scraper does not use a hosted scraping service. It runs on your computer a
 | [noveldrama](https://noveldrama.com) | Web novel | EPUB | None |
 | [novelfire](https://novelfire.net) | Web novel | EPUB | None |
 | [novelfull](https://novelfull.com) | Web novel | EPUB | FlareSolverr |
-| [Royalroad](https://royalroad.com) | Web novel | EPUB | None |
+| [Royalroad](https://royalroad.com) | Web novel | EPUB | FlareSolverr |
 | [Toonily](https://toonily.com) | Manga/comic | PDF or CBZ | FlareSolverr |
 | [wanderinginn](https://wanderinginn.com) | Web novel | EPUB | None |
 | [WebNovel](https://www.webnovel.com) | Web novel (text only) | EPUB | FlareSolverr |
@@ -70,7 +70,9 @@ See [release notes](RELEASE_NOTES.md) for the migration details and image-librar
 - Google Chrome or Firefox installed for sites and tests that require Selenium.
 - [FlareSolverr](https://github.com/FlareSolverr/FlareSolverr) is optional, but is required for some Cloudflare-protected sites. It runs as a separate application and is commonly installed using Docker.
 
-FlareSolverr can be enabled or disabled in `appsettings.json`:
+Each sites `requiresFlareSolverr` setting controls its use during downloads. The interactive site testing option will try FlareSolverr to discover whether a site needs it.
+
+Sites that require FlareSolverr also need it enabled in `appsettings.json`:
 
 ```json
 "FlareSolverrSettings": {

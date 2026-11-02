@@ -3,7 +3,7 @@
   <img src="https://img.shields.io/maven-central/last-update/io.github.spannm/jackcess?label=Updated&style=flat-square&color=blue" alt="Maven Central Last Update">
   <a href="https://github.com/spannm/jackcess/stargazers"><img src="https://img.shields.io/github/stars/spannm/jackcess?logo=github&label=&logoColor=white&labelColor=555555&color=007ec6&style=flat-square" alt="GitHub Stars"></a>
   <br>
-  <a href="https://github.com/spannm/jackcess/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/spannm/jackcess/ci.yml?label=Build%20(Linux%2FWin%2C%20JDK%208%2F17%2F21)&style=flat-square" alt="GitHub Actions Workflow Status"></a>
+  <a href="https://github.com/spannm/jackcess/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/spannm/jackcess/ci.yml?label=Build%20(Linux%2FWin%2C%20JDK%208%2F21)&style=flat-square" alt="GitHub Actions Workflow Status"></a>
   <a href="https://javadoc.io/doc/io.github.spannm/jackcess"><img src="https://javadoc.io/badge2/io.github.spannm/jackcess/javadoc.svg?style=flat-square" alt="Javadoc"></a>
   <a href="https://apidia.net/mvn/io.github.spannm/jackcess"><img src="https://apidia.net/mvn/io.github.spannm/jackcess/badge_flat_square.svg" alt="APIdia"></a>
 </div>
@@ -33,10 +33,10 @@ Jackcess is not an application. There is no GUI. It's a library, intended for ot
 
 ## 🛠 Tech Stack & Dependencies
 
-* **Java Version**: 8 or higher (LTS versions like Java 17 and 21 are fully supported and tested).
+* **Java Version**: 8 or higher. As of 5.2.0 Jackcess runs on Java 8 again (versions 5.0.0 to 5.1.7 required Java 11). LTS versions like Java 17 and 21 are fully supported, the tests run on Java 8 and 21.
 
 * **Optional Dependency**:
-  * [Apache POI](https://poi.apache.org/) — only needed for compound OLE attachment data; everything else has zero runtime dependencies.
+  * [Apache POI](https://poi.apache.org/): only needed for compound OLE attachment data; everything else has zero runtime dependencies.
 
 * **Build Tool**: [Maven](https://maven.apache.org/)
 
@@ -54,14 +54,14 @@ To use Jackcess in your project, add the following dependency.
 <dependency>
     <groupId>io.github.spannm</groupId>
     <artifactId>jackcess</artifactId>
-    <version>5.1.7</version>
+    <version>5.2.0</version>
 </dependency>
 ```
 
 ### Gradle (Groovy / `build.gradle`)
 
 ```groovy
-implementation 'io.github.spannm:jackcess:5.1.7'
+implementation 'io.github.spannm:jackcess:5.2.0'
 ```
 
 ## 🚦 Usage Example
@@ -88,7 +88,7 @@ Jackcess flushes every write to disk immediately by default (`autoSync=true`), s
 
 If your workload issues many individual row mutations, consider:
 
-* **Batching writes** — `Table.addRows(List<Object[]>)` wraps the whole batch in a single flush instead of one per row.
+* **Batching writes**: `Table.addRows(List<Object[]>)` wraps the whole batch in a single flush instead of one per row.
 * **Disabling auto-sync** for bulk operations, then flushing explicitly once you are done:
 
   ```java
@@ -112,6 +112,7 @@ specifically created to ensure compatibility with modern Java versions, minimize
 
 Beyond tracking the upstream project, this fork also offers:
 
+* Java 8 compatibility (upstream Jackcess 5.x requires Java 11)
 * Zero dependencies besides optional Apache POI
 * Ships with an **extensive test suite** (2,700+ tests, currently ~91% line coverage)
 * Complete Javadoc on the core public API

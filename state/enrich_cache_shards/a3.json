@@ -1,19 +1,19 @@
 {
  "beekeeper-studio/beekeeper-studio": {
-  "commit_7d": 184,
-  "commit_90d": 865,
-  "rel_ver": "v6.2.0-beta.3",
-  "rel_pub": "2026-10-23",
-  "rel_days": 2,
+  "commit_7d": 102,
+  "commit_90d": 931,
+  "rel_ver": "v6.2.0",
+  "rel_pub": "2026-10-28",
+  "rel_days": 5,
   "rel_n90": 12,
-  "rel_pre": true,
+  "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
   "sec_worst": null,
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 188,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "TypeScript": 59,
    "Vue": 24,
@@ -23,16 +23,33 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v6.2.0",
+    "d": "2026-10-28",
+    "n": "* Fix database file drag n drop by @bnquon in https://github.com/beekeeper-studio/beekeeper-studio/pull/4752\n* fix: restore SQLite file drops by @Ekko82 in https://github.com/beekeeper-studio/beekeeper-studio/pull/4906\n* Update supported databases in README files by @github-actions[bot] in https://github.com/beekeeper-studio/beekeeper-studio/pull/4765\n* Update supported databases in README files by @github-actions[bot] in https://github.com/beekeeper-studio/beekeeper-studio/pull/4841\n* Add wait strategy to "
+   },
+   {
+    "t": "v6.2.0-beta.3",
+    "d": "2026-10-23",
+    "n": "## What's Changed\r\n* fix modal background by @azmy60 in https://github.com/beekeeper-studio/beekeeper-studio/pull/4905\r\n\r\n\r\n**Full Changelog**: https://github.com/beekeeper-studio/beekeeper-studio/compare/v6.2.0-beta.2...v6.2.0-beta.3"
+   },
+   {
+    "t": "v6.2.0-beta.2",
+    "d": "2026-10-22",
+    "n": "* Fix database file drag n drop by @bnquon in https://github.com/beekeeper-studio/beekeeper-studio/pull/4752\n* Update supported databases in README files by @github-actions[bot] in https://github.com/beekeeper-studio/beekeeper-studio/pull/4765\n* Update supported databases in README files by @github-actions[bot] in https://github.com/beekeeper-studio/beekeeper-studio/pull/4841\n* Add wait strategy to PostgreSQL test container startup by @rathboma in https://github.com/beekeeper-studio/beekeeper-studio/pull/48"
+   }
+  ]
  },
  "TencentCloud/Octop": {
-  "commit_7d": 34,
-  "commit_90d": 807,
-  "rel_ver": "v1.0.3b1",
-  "rel_pub": "2026-10-25",
+  "commit_7d": 14,
+  "commit_90d": 771,
+  "rel_ver": "v1.0.3b2",
+  "rel_pub": "2026-11-02",
   "rel_days": 0,
   "rel_n90": 12,
   "rel_pre": false,
@@ -42,7 +59,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 42,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Python": 52,
    "TypeScript": 37,
@@ -52,10 +69,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v1.0.3b2",
+    "d": "2026-11-02",
+    "n": "### 新增\n- 账号支持 TOTP 与 Passkey：二次验证、无密码登录和恢复码\n- 新增 ragflow 知识库连接器\n\n### 修复\n- 记住登录会自动续期，改密码会退出其他设备。缺 MFA 表的旧库会自动补齐\n- 极简模式里，专家会话超过 10 条可以继续展开。长代码在气泡里换行，已结束的一轮不会在历史加载后再出现一次\n- 停用的会话模型回到 Auto。钉钉和微信切换时，草稿与二维码不再串台，登录回调会保留转"
+   },
+   {
+    "t": "v1.0.3b1",
+    "d": "2026-10-25",
+    "n": "### 新增\n- 建用户时可以同时创建一个默认专家。权限按页面 Tab 拆开，也可以按组折叠\n- 用户组可以限制技能包、知识库、连接器、模型、存储和专家谁能看见\n- 技能包可以共享，并用文件树编辑。创建专家、团队等资源时可以选头像\n- 表单和对话可以让 AI 润色。搜索增加 DeepSeek 与元宝，模型支持 OpenAI Responses API\n\n### 修复\n- 云端协同共享后可以直接对话。回复进行中不会被刷新冲掉，"
+   },
+   {
+    "t": "v1.0.2",
+    "d": "2026-10-18",
+    "n": "* docs(configuration): add password and url to database schema example by @Theater-ahyeon in https://github.com/TencentCloud/Octop/pull/896\n- 回复操作始终可见；无 PostgreSQL 驱动时仍用 SQLite 启动\n- 远程存储卡住堵住启动；S3 / Postgres 浏览；桌面 beta 覆盖安装；飞牛 8089 残留\n- SQLite 写事务改用 `BEGIN IMMEDIATE`：多 worker（`octop run --workers N`）或 CLI 与服务并发写入时，先读后写的事务不再因快照过期而立即报 `database is locked`"
+   }
+  ]
  },
  "phiresky/sqlite-zstd": {
   "commit_90d": 0,
@@ -130,12 +164,12 @@
   }
  },
  "percona/pmm": {
-  "commit_90d": 262,
-  "commit_7d": 23,
+  "commit_90d": 261,
+  "commit_7d": 17,
   "rel_ver": "v3.10.0",
   "rel_pub": "2026-10-22",
-  "rel_days": 3,
-  "rel_n90": 3,
+  "rel_days": 11,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -150,12 +184,29 @@
    "Makefile": 0,
    "Python": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v3.10.0",
+    "d": "2026-10-22",
+    "n": "- **Backups of MySQL 9.7** are no longer rejected with an incompatible-XtraBackup error. Use a Percona XtraBackup release from the same series as your server, for example PXB 9.7.x for MySQL 9.7.x.\n- On MySQL 5.7 and Percona Server 5.7, the redo log checkpoint age metric is no longer exported while the server reports a placeholder value. Panels and alerts that relied on the placeholder now see a gap instead.\n- [PMM-15189](https://perconadev.atlassian.net/browse/PMM-15189): Added documentation for starting a"
+   },
+   {
+    "t": "v3.9.1",
+    "d": "2026-08-19",
+    "n": "- [PMM-15198](https://perconadev.atlassian.net/browse/PMM-15198): When you monitored MongoDB router (mongos) nodes in a sharded cluster, the exporter kept index statistics from only one shard and dropped the rest, and flooded the system logs with duplicate mongodb_indexstats_accesses_ops metric errors. Collection statistics could also be attributed to the wrong shard. Index and collection statistics are now labeled with the shard they come from, so you get complete and correctly attributed data from every s"
+   },
+   {
+    "t": "v3.9.0",
+    "d": "2026-07-30",
+    "n": "This release also removes the provisioned PostgreSQL datasource as a security measure, adds Ubuntu 26.04 LTS support for PMM Client, and includes a large number of dashboard, UI, and stability fixes.\n### Removed provisioned PostgreSQL datasource\nPMM no longer includes a preconfigured PostgreSQL datasource for internal dashboard panels.\n- [PMM-14931](https://perconadev.atlassian.net/browse/PMM-14931): You can now set ClickHouse memory configuration using the `PMM_CLICKHOUSE_CONFIG` environment variable inste"
+   }
+  ]
  },
  "vercel/nextjs-postgres-auth-starter": {
   "commit_90d": 0,
@@ -2600,8 +2651,8 @@
   }
  },
  "Shiyuedong-Jade/DM-inspect": {
-  "commit_90d": 2,
-  "commit_7d": 2,
+  "commit_90d": 4,
+  "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2613,10 +2664,10 @@
    "JavaScript": 98,
    "Java": 2
   },
-  "enriched_at": "20261002",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261002",
-   "release": "20261002",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261002",
    "contrib": "20261002",
    "lang": "20261002"

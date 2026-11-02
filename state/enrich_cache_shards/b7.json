@@ -1,10 +1,10 @@
 {
  "paradedb/paradedb": {
-  "commit_7d": 54,
-  "commit_90d": 571,
-  "rel_ver": "v0.26.3",
-  "rel_pub": "2026-10-22",
-  "rel_days": 3,
+  "commit_7d": 59,
+  "commit_90d": 568,
+  "rel_ver": "v0.26.4",
+  "rel_pub": "2026-10-29",
+  "rel_days": 4,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 137,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Rust": 86,
    "PLpgSQL": 14,
@@ -23,10 +23,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v0.26.4",
+    "d": "2026-10-29",
+    "n": "* chore: remove Docker Scout policy checks from 0.26.x by @philippemnoel in https://github.com/paradedb/paradedb/pull/6995\n* chore: Generate Dockerfiles for v0.26.3 by @paradedb-github-bot[bot] in https://github.com/paradedb/paradedb/pull/6992\n* fix: credit original PR authors in release notes by @philippemnoel in https://github.com/paradedb/paradedb/pull/7007\n* chore: extract regression test oid redaction into a shared helper by @barbarj in https://github.com/paradedb/paradedb/pull/6999\n* chore: Bump the `"
+   },
+   {
+    "t": "v0.26.3",
+    "d": "2026-10-22",
+    "n": "* fix: unicode_words only removes emojis when remove_emojis is set by @paradedb-github-bot[bot] in https://github.com/paradedb/paradedb/pull/6905\n* fix: register `true` variant of `unicode_words_removeemojis` tokenizer as fallback if `remove_emojis` is false by @paradedb-github-bot[bot] in https://github.com/paradedb/paradedb/pull/6961\n* fix: remove 1K document flush cap for vectors by @paradedb-github-bot[bot] in https://github.com/paradedb/paradedb/pull/6920\n* fix: Re-enable joinscan support for post-data"
+   },
+   {
+    "t": "v0.26.2",
+    "d": "2026-10-16",
+    "n": "* feat: support window functions with parameterized limits over join queries by @paradedb-github-bot[bot] in https://github.com/paradedb/paradedb/pull/6820\n* feat: Support for combining `GROUP BY` with `pdb.agg` in window functions by @paradedb-github-bot[bot] in https://github.com/paradedb/paradedb/pull/6845\n* feat: Support aggregate filters (e.g. `COUNT (*) FILTER (WHERE ..)` by @paradedb-github-bot[bot] in https://github.com/paradedb/paradedb/pull/6856\n* fix: install ICU headers in publish builds by @par"
+   }
+  ]
  },
  "patroni/patroni": {
   "commit_7d": 1,
@@ -58,11 +75,11 @@
   }
  },
  "lukevella/rallly": {
-  "commit_7d": 69,
-  "commit_90d": 789,
-  "rel_ver": "v4.16.2",
-  "rel_pub": "2026-10-23",
-  "rel_days": 2,
+  "commit_7d": 15,
+  "commit_90d": 740,
+  "rel_ver": "untagged-6490d7892bf741592dba",
+  "rel_pub": "2026-11-01",
+  "rel_days": 1,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -80,7 +97,7 @@
    "GHSA-pchc-v5hg-f5gp(CVE-2025-65028,medium)"
   ],
   "contrib_n": 34,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "TypeScript": 94,
    "MDX": 4,
@@ -90,10 +107,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "untagged-6490d7892bf741592dba",
+    "d": "2026-11-01",
+    "n": "## 🔒 ALLOWED_EMAILS not enforced when signing in with Google, Microsoft or OIDC\r\n\r\n**Who is affected.** Self-hosted instances that set `ALLOWED_EMAILS` and also offer Google, Microsoft or OIDC login. Instances that only use email login, or that don't set `ALLOWED_EMAILS`, are not affected.\r\n\r\n**The bug.** `ALLOWED_EMAILS` was only checked when someone signed in with an email code. Signing in through Google, Microsoft or OIDC skipped the check, so anyone with an account at one of those providers could reg"
+   },
+   {
+    "t": "v4.16.3",
+    "d": "2026-10-26",
+    "n": "## 🐛 Poll times saved an hour off around daylight saving changes\r\n\r\n**The bug.** When adding times to a poll, the time saved could be an hour later than the one you picked. It happened in two cases:\r\n\r\n- The week contained a daylight saving change. For example, in a Chicago week starting on the Nov 1 2026 clock change, clicking the 10:00 AM row on Tue Nov 3 created an 11:00 AM option.\r\n- Your browser's time zone was different from the poll's, and one of them changed its clocks on that day. You could pick"
+   },
+   {
+    "t": "v4.16.2",
+    "d": "2026-10-23",
+    "n": "## Node.js security update\n\nThis release rebuilds the image on Node.js 24.22.1, which fixes CVE-2026-111497, a remote code execution in the Brotli decoder, along with several high severity TLS and DNS issues from the [October 2026 Node.js security releases](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases). The 4.16.1 image and every earlier one run an affected Node.js version. Upgrade by pulling the new image and restarting the container.\n\nThe base image is now pinned to `node:24.22."
+   }
+  ]
  },
  "bytebase/dbhub": {
   "commit_7d": 1,
@@ -174,10 +208,10 @@
   ]
  },
  "EhTagTranslation/Database": {
-  "commit_90d": 3165,
-  "commit_7d": 429,
-  "rel_ver": "v7.28811.1",
-  "rel_pub": "2026-10-04",
+  "commit_90d": 2745,
+  "commit_7d": 180,
+  "rel_ver": "v7.29535.1",
+  "rel_pub": "2026-11-02",
   "rel_days": 0,
   "rel_n90": 3,
   "rel_pre": false,
@@ -191,11 +225,29 @@
    "PowerShell": 61,
    "Shell": 39
   },
-  "enriched_at": "20261004",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261004",
-   "release": "20261004"
-  }
+   "commit": "20261102",
+   "release": "20261102",
+   "security": "20261102"
+  },
+  "rel_notes": [
+   {
+    "t": "v7.29535.1",
+    "d": "2026-11-02",
+    "n": "上次发布以来的更改 https://github.com/EhTagTranslation/Database/compare/96e7225f8377cafb7664d5d8ccd1a5f8558dc3bb...fdce7645a0270f1650b0f86158f9d9c045e9b504\n也可以从 [`EhTagTranslation/Database@b746d00`](https://github.com/EhTagTranslation/Database/tree/b746d0058bbf463eb9c23b875e6e88d7870cdb5e) 获取\n\"mirror\": \"b746d0058bbf463eb9c23b875e6e88d7870cdb5e\""
+   },
+   {
+    "t": "v7.29534.1",
+    "d": "2026-11-02",
+    "n": "上次发布以来的更改 https://github.com/EhTagTranslation/Database/compare/7ca545e4ab73e1134524b2ed934bfcf8081a1401...96e7225f8377cafb7664d5d8ccd1a5f8558dc3bb\n也可以从 [`EhTagTranslation/Database@c2aa5fe`](https://github.com/EhTagTranslation/Database/tree/c2aa5fea9205a24dc5d3be742340e80196cef494) 获取"
+   },
+   {
+    "t": "v7.29533.1",
+    "d": "2026-11-02",
+    "n": "上次发布以来的更改 https://github.com/EhTagTranslation/Database/compare/ff7d71a8b4c8debd49858fcf6de5f9346e7cc991...7ca545e4ab73e1134524b2ed934bfcf8081a1401\n也可以从 [`EhTagTranslation/Database@80c2589`](https://github.com/EhTagTranslation/Database/tree/80c25897de16627060288ae8348d1ab154ee65b4) 获取"
+   }
+  ]
  },
  "PaulSonOfLars/tgbot": {
   "commit_90d": 0,
@@ -2911,6 +2963,32 @@
    "security": "20261025",
    "contrib": "20261025",
    "lang": "20261025"
+  }
+ },
+ "xeronsh/openOii": {
+  "commit_90d": 353,
+  "commit_7d": 223,
+  "rel_ver": null,
+  "rel_none": true,
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 2,
+  "lang": {
+   "TypeScript": 63,
+   "Python": 36,
+   "CSS": 1,
+   "Dockerfile": 0,
+   "JavaScript": 0
+  },
+  "enriched_at": "20261102",
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102",
+   "security": "20261102",
+   "contrib": "20261102",
+   "lang": "20261102"
   }
  }
 }

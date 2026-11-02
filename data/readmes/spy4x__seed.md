@@ -2,9 +2,10 @@
 
 # Seed
 
-**The groundwork of your SaaS, already built. A free, MIT-licensed starter: sign-in with a second
-factor, groups with roles, per-member Stripe billing, realtime, an offline app and an admin area.
-Deno, Postgres, Docker Compose. Usable today, built in public.**
+**Seed: the free SaaS starter built on web standards. Runs on Deno.** The groundwork of your SaaS,
+already built: sign-in with a second factor, groups with roles, per-member Stripe billing, realtime,
+an offline app and an admin area, on Postgres and Docker Compose. MIT-licensed, usable today, built
+in public.
 
 [![CI](https://ci.antonshubin.com/api/badges/15/status.svg)](https://ci.antonshubin.com/repos/15)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
@@ -32,7 +33,7 @@ stay out.
 **Status:** usable today, and still growing in public. On `main` now: passkeys, Google and
 GitHub sign-in, sign-in links, guest accounts, a second factor, groups with roles and invitations,
 Stripe billing per member, notes (the reference feature), the file store, notifications in the app,
-by web push and in Telegram, six languages, an offline SPA, the admin panel, and a public website
+by web push and in Telegram, nine languages, an offline SPA, the admin panel, and a public website
 with a blog and a newsletter. All of it is tested in CI, and most of it runs in the
 [live demo](https://app.seedsaas.com) with made-up people. Not built yet: the [Android](https://github.com/spy4x/seed/issues/202) and
 [desktop](https://github.com/spy4x/seed/issues/203) apps, and the rest of the
@@ -50,8 +51,9 @@ with a blog and a newsletter. All of it is tested in CI, and most of it runs in 
 - **Billing per member, through Stripe.** A free plan with limits, a 14-day trial, quantities that
   follow the member count and a grace period after a failed payment:
   [docs/billing.md](docs/billing.md).
-- **Six languages.** The SPA, the admin panel, the website and the mails speak English, German,
-  Spanish, Brazilian Portuguese, Russian and Arabic, which reads right to left.
+- **Nine languages.** The SPA, the admin panel, the website and the mails speak English, German,
+  Spanish, French, Brazilian Portuguese, Russian, Japanese, Simplified Chinese and Arabic, which
+  reads right to left.
 - **A file store.** Garage, a bundled S3 store, keeps images and PDFs on notes and profile
   pictures. Uploads go through signed links, and photos become small AVIF and WebP copies with
   their metadata removed: [docs/files.md](docs/files.md).
@@ -82,6 +84,19 @@ with a blog and a newsletter. All of it is tested in CI, and most of it runs in 
 **Use it if** you are starting a multi-user web product and want auth, tenancy and operations
 settled before the first feature. **Skip it if** you deploy to serverless functions rather than a
 server you run.
+
+## Runtime plan
+
+Seed runs on Deno today: the servers run on Deno 2 in Docker, and the tasks and tests use Deno.
+Seed is moving to run unchanged on Deno, Node and Bun
+([#623](https://github.com/spy4x/seed/issues/623)). There is no date yet.
+
+Most of the code is already independent of the runtime, because it is built on web standards: Fetch
+`Request` and `Response`, Web Crypto, WebSocket and ES modules. On 9 October 2026 the Deno team
+[announced](https://deno.com/blog/cloudflare) one more year of support for the runtime, with monthly
+bug-fix and security releases, after which it ends its own development; Deno stays open source.
+Running on all three runtimes keeps that choice with you. Seed never used Deno Deploy, so Deploy's
+shutdown does not affect a Seed product.
 
 ## Quick start
 
@@ -139,6 +154,9 @@ app, and [`docs/screenshots/admin-video.ts`](docs/screenshots/admin-video.ts)
 </details>
 
 ## Documentation
+
+> Also on the website: [seedsaas.com/docs](https://seedsaas.com/docs), every guide below that is
+> not internal, with the changelog at [seedsaas.com/changelog](https://seedsaas.com/changelog).
 
 - [The three apps](docs/apps.md): the SPA, the admin app and the public website.
 - [Deploy and operate](docs/deploy.md): certificates, the deploy, consoles, several projects on one

@@ -112,7 +112,10 @@
    "Cypher": 0,
    "Shell": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "dim_ts": {
+   "security": "20261102"
+  }
  },
  "oracle/mysql-operator": {
   "commit_90d": 0,
@@ -504,8 +507,8 @@
   }
  },
  "jiangzhe/doradb": {
-  "commit_90d": 200,
-  "commit_7d": 20,
+  "commit_90d": 138,
+  "commit_7d": 2,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -517,7 +520,11 @@
    "Rust": 100,
    "Shell": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "neondatabase/neonctl": {
   "commit_90d": 0,
@@ -626,11 +633,11 @@
   "enriched_at": "20260927"
  },
  "spannm/ucanaccess": {
-  "commit_90d": 39,
-  "commit_7d": 0,
-  "rel_ver": "ucanaccess-5.1.8",
-  "rel_pub": "2026-09-13",
-  "rel_days": 14,
+  "commit_90d": 114,
+  "commit_7d": 24,
+  "rel_ver": "ucanaccess-5.2.0",
+  "rel_pub": "2026-10-16",
+  "rel_days": 17,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -647,7 +654,28 @@
    "Batchfile": 0,
    "Shell": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "rel_notes": [
+   {
+    "t": "ucanaccess-5.2.0",
+    "d": "2026-10-16",
+    "n": "- [Standalone driver JAR (uber)](https://repo1.maven.org/maven2/io/github/spannm/ucanaccess/5.2.0/ucanaccess-5.2.0-uber.jar) - single self-contained jar, e.g. for LibreOffice Base / DBeaver / manual classpath setup\n- [LibreOffice Base - How to connect to a Microsoft Access database via JDBC](https://wiki.documentfoundation.org/Faq/Base/How_to_connect_to_a_Microsoft_Access_database#JDBC_Connections_%28Windows,_Linux_and_other_operating_systems%29)"
+   },
+   {
+    "t": "ucanaccess-5.1.8",
+    "d": "2026-09-13",
+    "n": "- [Standalone driver JAR (uber)](https://repo1.maven.org/maven2/io/github/spannm/ucanaccess/5.1.8/ucanaccess-5.1.8-uber.jar) — single self-contained jar, e.g. for LibreOffice Base / DBeaver / manual classpath setup\n- Fix: Harden UCanAccess's linked-database resolution"
+   },
+   {
+    "t": "ucanaccess-5.1.7",
+    "d": "2026-08-17",
+    "n": "- [Standalone driver JAR (uber)](https://repo1.maven.org/maven2/io/github/spannm/ucanaccess/5.1.7/ucanaccess-5.1.7-uber.jar) — single self-contained jar, e.g. for LibreOffice Base / DBeaver / manual classpath setup"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "bugdaryan/FoodStore": {
   "rel_ver": null,
@@ -995,7 +1023,7 @@
  "hugoj0s3/jobmaster-net": {
   "rel_ver": "v0.0.11-alpha.3",
   "rel_pub": "2026-09-25",
-  "rel_days": 2,
+  "rel_days": 38,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -1011,7 +1039,30 @@
    "TSQL": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "commit_90d": 71,
+  "commit_7d": 0,
+  "rel_notes": [
+   {
+    "t": "v0.0.11-alpha.3",
+    "d": "2026-09-25",
+    "n": "- ⚠️ **A host's timestamps could drift into the future over time on SQL providers (Postgres, MySQL, SQL Server), permanently hiding it from cleanup and making it look \"alive\" forever** — reading a `DateTime` back from a `timestamp`/`datetime` column returns it with an unspecified time-zone marker; converting that value (rather than simply re-labeling it as UTC, which is what it already was) treated it as local time and shifted it by the server's UTC offset. Because a host's periodic stats update reads"
+   },
+   {
+    "t": "dashboard-v0.0.6-alpha",
+    "d": "2026-09-25",
+    "n": "**Packages published**\n\n- **0.0.6-alpha**: `JobMaster.Dashboard`\n\n## JobMaster.Dashboard 0.0.6-alpha\n\n### Added\n\n- **Inline consent link** — wrap one word/phrase in a single pair of square brackets inside `WithConsentText`'s `checkboxLabel`, e.g. `\"I agree to how sign-in data is used. [Details]\"`, to turn it into the \"View details\" trigger sitting naturally inside the sentence, instead of as a separate line below the checkbox. Falls back to the original separate-line trigger if the label has no brackets, "
+   },
+   {
+    "t": "dashboard-v0.0.5-alpha",
+    "d": "2026-09-25",
+    "n": "- **The job/recurring-schedule \"Log Detail\" modal showed a truncated exception message** — clicking \"Details\" on a log row reused the row already fetched from the log list endpoint, which the API caps to 100 characters to keep list payloads small (e.g. `System.InvalidOperationException: Fake sandbox failure...` cut off mid-sentence as `System.Invali...`). The modal now fetches the full log via `GET {basePath}/logs/{id}` when opened, showing the complete message and stack trace."
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "ansin218/swift-airline-reservation-system": {
   "rel_ver": null,

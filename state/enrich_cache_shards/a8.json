@@ -1,11 +1,11 @@
 {
  "timescale/timescaledb": {
-  "commit_7d": 13,
-  "commit_90d": 291,
+  "commit_7d": 15,
+  "commit_90d": 272,
   "rel_ver": "2.31.0",
   "rel_pub": "2026-10-20",
-  "rel_days": 5,
-  "rel_n90": 7,
+  "rel_days": 13,
+  "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 4,
@@ -18,7 +18,7 @@
    "GHSA-fh8v-663w-79w9(CVE-2022-24128,high)"
   ],
   "contrib_n": 119,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "C": 65,
    "PLpgSQL": 27,
@@ -28,10 +28,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "2.31.0",
+    "d": "2026-10-20",
+    "n": "* [#10512](https://github.com/timescale/timescaledb/pull/10512) Block `ALTER` and `DROP` operations on a granular-refresh tracking column\n* [#10763](https://github.com/timescale/timescaledb/pull/10763) Fix a potential `ChunkAppend` segfault when parameterized clauses are removed from every chunk\n* [#10783](https://github.com/timescale/timescaledb/pull/10783) Fix missing continuous aggregate invalidation when dropping a chunk by unqualified name\n* [#10546](https://github.com/timescale/timescaledb/pull/10546)"
+   },
+   {
+    "t": "2.30.2",
+    "d": "2026-09-29",
+    "n": "* [#10668](https://github.com/timescale/timescaledb/pull/10668) Fix `DROP SCHEMA CASCADE` leaving orphaned compressed chunks\n* [#10636](https://github.com/timescale/timescaledb/pull/10636) Free the tenant tracker's shared memory when its hypertable is dropped\n* [#10665](https://github.com/timescale/timescaledb/pull/10665) Fix crash when merging chunks with different column layouts\n* [#10682](https://github.com/timescale/timescaledb/pull/10682) Fix vectorized text comparison ignoring a non-deterministic coll"
+   },
+   {
+    "t": "2.30.1",
+    "d": "2026-09-17",
+    "n": "* [#10580](https://github.com/timescale/timescaledb/pull/10580) Fix missing conflicts for `INSERT ... ON CONFLICT` with multiple unique constraints\n* [#10583](https://github.com/timescale/timescaledb/pull/10583) Fix `NULL` conflict resolution on single-column bloom filtering\n* [#10592](https://github.com/timescale/timescaledb/pull/10592) Fix duplicate rows from `DeferredChunkAppend` when `LIMIT` is not pushed down\n* [#10593](https://github.com/timescale/timescaledb/pull/10593) Fix `cannot cast type cstring`"
+   }
+  ]
  },
  "chartdb/chartdb": {
   "commit_7d": 0,
@@ -80,11 +97,11 @@
   ]
  },
  "cloudnative-pg/cloudnative-pg": {
-  "commit_7d": 31,
-  "commit_90d": 200,
+  "commit_7d": 28,
+  "commit_90d": 218,
   "rel_ver": "v1.30.1",
   "rel_pub": "2026-09-23",
-  "rel_days": 32,
+  "rel_days": 40,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -98,7 +115,7 @@
    "GHSA-423p-g724-fr39(CVE-2026-44477,critical)"
   ],
   "contrib_n": 236,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Go": 98,
    "Shell": 2,
@@ -108,10 +125,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v1.30.1",
+    "d": "2026-09-23",
+    "n": "- Fixed the designated-primary sort in `PostgresqlStatusList` so a tie on LSN no longer sorts it out of order. If the designated primary's Pod later disappeared from the status list, this could have led the operator to promote the wrong standby. ([\\#11494](https://github.com/cloudnative-pg/cloudnative-pg/pull/11494)) <!-- 1.29 1.28 -->\n- Demoted an unreachable old primary immediately during failover, instead of waiting on checkpoint and fast-shutdown attempts that could never complete. Previously, an old pr"
+   },
+   {
+    "t": "v1.29.3",
+    "d": "2026-09-23",
+    "n": "- Fixed the designated-primary sort in `PostgresqlStatusList` so a tie on LSN no longer sorts it out of order. If the designated primary's Pod later disappeared from the status list, this could have led the operator to promote the wrong standby. ([\\#11494](https://github.com/cloudnative-pg/cloudnative-pg/pull/11494)) <!-- 1.29 1.28 -->\n- Demoted an unreachable old primary immediately during failover, instead of waiting on checkpoint and fast-shutdown attempts that could never complete. Previously, an old pr"
+   },
+   {
+    "t": "v1.30.0",
+    "d": "2026-06-29",
+    "n": "- Fixed a conflicting duplicate `Database` or `Subscription` with a `delete` reclaim policy dropping the PostgreSQL object owned by the surviving CR; the drop is now gated on a recorded reconciliation. ([\\#10870](https://github.com/cloudnative-pg/cloudnative-pg/pull/10870)) <!-- 1.29 1.28 1.25 -->\n- Fixed resource leaks when concurrent `Backup` objects raced: backups now run in strict creation-time order, so an already-executing backup is never preempted by a newer one and its replication slot and PostgreSQ"
+   }
+  ]
  },
  "linhaojun857/aurora": {
   "commit_7d": 0,
@@ -137,11 +171,11 @@
   }
  },
  "xyproto/algernon": {
-  "commit_7d": 1,
-  "commit_90d": 73,
+  "commit_7d": 11,
+  "commit_90d": 81,
   "rel_ver": "v1.17.12",
   "rel_pub": "2026-10-12",
-  "rel_days": 13,
+  "rel_days": 21,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -159,7 +193,7 @@
    "GHSA-hw27-4v2q-5qff(CVE-2026-46431,medium)"
   ],
   "contrib_n": 16,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "JavaScript": 54,
    "Go": 30,
@@ -169,10 +203,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v1.17.12",
+    "d": "2026-10-12",
+    "n": "* Improve value conversions in Lua, ref #119.\r\n* Improve the experimental WebAuthn support.\r\n* Add the `--strict-symlinks` flag, for not following symlinks that lead out of the served directory.\r\n* Add `htmlescape` and use it in `serverconf.lua`.\r\n* Keep the server log and the access logs open, instead of opening and closing them for every line + improve log rotation abilities.\r\n* Rewrite the reverse proxy to use `httputil.ReverseProxy`.\r\n* Only look ahead at proxied responses that have a `Content-Length`.\r"
+   },
+   {
+    "t": "v1.17.11",
+    "d": "2026-07-26",
+    "n": "* Fix empty responses when served by reverse proxies, ref #175, thanks @Archie3d.\r\n* Fix a security issues related to paths like `/%2fadmin/`, thanks @arpitjain099.\r\n* Update dependencies.\r\n* Update documentation."
+   },
+   {
+    "t": "v1.17.10",
+    "d": "2026-07-04",
+    "n": "* Add an example that uses SQLite."
+   }
+  ]
  },
  "devflowinc/trieve": {
   "commit_7d": 0,
@@ -2434,11 +2485,11 @@
   }
  },
  "alibabacloud-sdk-cpp/polardb-20170801": {
-  "commit_90d": 22,
-  "commit_7d": 0,
-  "rel_ver": "7.3.3",
-  "rel_pub": "2026-09-23",
-  "rel_days": 9,
+  "commit_90d": 21,
+  "commit_7d": 1,
+  "rel_ver": "8.1.0",
+  "rel_pub": "2026-10-26",
+  "rel_days": 7,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2451,14 +2502,31 @@
    "C++": 100,
    "CMake": 0
   },
-  "enriched_at": "20261002",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261002",
-   "release": "20261002",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261002",
    "contrib": "20261002",
    "lang": "20261002"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "8.1.0",
+    "d": "2026-10-26",
+    "n": "- Support API CreateAgenticDBTenant.\n- Support API DeleteAgenticDBTenant.\n- Support API DescribeAgenticDBBranchRestoreWindow.\n- Support API DescribeAgenticDBProjectHistoryRetention.\n- Support API ModifyAgenticDBProjectHistoryRetention.\n- Update API CreateAgenticDBBranch: add request parameters ParentTimestamp.\n- Update API CreateAgenticDBBranch: add response parameters Body.ParentTimestamp.\n- Update API CreateAgenticDBProject: add request parameters HistoryRetentionSeconds.\n- Update API CreateAgenticDBProje"
+   },
+   {
+    "t": "8.0.2",
+    "d": "2026-10-21",
+    "n": "- Update API CreateApplication: add request parameters MemApplicationSpec.PolarAIEmbedderInstanceId.\n- Update API CreateApplication: add request parameters MemApplicationSpec.PolarAIGraphLlmInstanceId.\n- Update API CreateApplication: add request parameters MemApplicationSpec.PolarAILlmInstanceId.\n- Update API CreateApplication: add request parameters MemApplicationSpec.PolarAIRerankerInstanceId."
+   },
+   {
+    "t": "8.0.1",
+    "d": "2026-10-19",
+    "n": "- Update API DescribeKnowledgeBaseAnswer: add response parameters Body.Sources.$.SourceUri.\n- Update API DescribeKnowledgeBaseFileShards: add response parameters Body.Shards.$.SourceUri.\n- Update API RetrievalKnowledgeBase: add response parameters Body.Results.$.SourceUri."
+   }
+  ]
  },
  "Mary62442/dm88Angular": {
   "commit_90d": 0,

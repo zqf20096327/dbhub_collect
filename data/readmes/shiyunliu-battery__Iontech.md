@@ -533,6 +533,16 @@ This dataset provides equivalent circuit model (ECM) parameter sets and comprehe
 - **Related Articles**:
   - [An Industry-Standard Parameterisation of a Lithium-Ion Battery Equivalent Circuit Model for a High-Power Cylindrical Cell: Molicel P45B](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6861858)
     
+### 67. Diffusion-like overpotentials from non-diffusion mechanisms in battery particles
+
+This dataset provides experimental source data and modelling code accompanying the Nature Energy study on diffusion-like overpotentials in lithium-ion battery cathode particles. It includes electrochemical impedance spectroscopy (EIS) and galvanostatic intermittent titration technique (GITT) data used to investigate how electrolyte composition and electrolyte penetration into porous agglomerate particles affect electrochemical responses. The study shows that diffusion-like behaviour can arise from a transmission-line configuration without solid-state diffusion, making the resource useful for impedance interpretation, GITT analysis, and mechanistic model validation.
+
+The Harvard Dataverse V1 release contains eight files: four SQLite databases (`eis.db`, `gitt.db`, `eis_SC.db`, and `eis_NCM622.db`) covering Fig. 3, Extended Data Fig. 1, and Supplementary Fig. 15, plus four MATLAB scripts for reproducing model results in Figs. 4 and 5. The dataset is released under CC0 1.0.
+
+- **Link**: [Download Dataset](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/CIS2J4)
+- **Related Articles**:
+  - [Diffusion-like overpotentials from non-diffusion mechanisms in battery particles](https://www.nature.com/articles/s41560-026-02118-2)
+
 ---
 
 Links to external sites

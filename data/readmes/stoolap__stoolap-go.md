@@ -27,15 +27,7 @@ The native driver loads `libstoolap` at runtime via direct ABI calls. No C compi
 
 ### Requirements
 
-- Go 1.24+
-
-Go 1.27 and later reject the `runtime.asmcgocall` linkname the native driver uses. Until a linkname-free path ships, build with the linker check disabled:
-
-```bash
-go build -ldflags=-checklinkname=0 ./...
-# or set it once for every command
-export GOFLAGS=-ldflags=-checklinkname=0
-```
+- Go 1.25+
 
 ### Installation
 
@@ -269,6 +261,8 @@ func (db *DB) ExecNamed(ctx context.Context, query string, args []sql.NamedArg) 
 func (db *DB) Query(ctx context.Context, query string) (*Rows, error)
 func (db *DB) QueryParams(ctx context.Context, query string, args []any) (*Rows, error)
 func (db *DB) QueryNamed(ctx context.Context, query string, args []sql.NamedArg) (*Rows, error)
+func (db *DB) QueryAll(ctx context.Context, query string, args []any) (*ResultSet, error)
+func (db *DB) QueryNamedAll(ctx context.Context, query string, args []sql.NamedArg) (*ResultSet, error)
 func (db *DB) Prepare(ctx context.Context, query string) (*Stmt, error)
 func (db *DB) Begin(ctx context.Context) (*Tx, error)
 func (db *DB) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error)
@@ -279,9 +273,35 @@ func (db *DB) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error)
 ```go
 func (r *Rows) Next() bool
 func (r *Rows) Scan(dest ...any) error
+func (r *Rows) Err() error
 func (r *Rows) Columns() []string
 func (r *Rows) Close() error
 func (r *Rows) FetchAll() ([][]any, error)
+func (r *Rows) IsNull(i int) bool
+func (r *Rows) Int64(i int) int64
+func (r *Rows) Float64(i int) float64
+func (r *Rows) Bool(i int) bool
+func (r *Rows) Timestamp(i int) time.Time
+```
+
+`Rows` pulls results from the engine in packed chunks, starting at 32 rows and growing to 256, so a scan crosses the native boundary once per chunk rather than once per row and column. `Next` returns false at the end of the result or on an error; check `Err` afterwards. `FetchAll` returns every remaining row with one native call.
+
+### ResultSet
+
+```go
+type ResultSet struct {
+    Columns []string
+    Rows    [][]any
+}
+```
+
+`QueryAll` and `QueryNamedAll` on `DB`, `Tx` and `Stmt` run a query and decodes every row with a single native call. No rows handle is created, so a point lookup costs one crossing. The `database/sql` driver uses this path for every query. Use `Query` and `Rows` when a result is too large to hold in memory.
+
+```go
+rs, err := db.QueryAll(ctx, "SELECT id, name FROM users WHERE age > $1", []any{int64(18)})
+for _, row := range rs.Rows {
+    fmt.Println(row[0].(int64), row[1].(string))
+}
 ```
 
 ### Stmt
@@ -290,6 +310,10 @@ func (r *Rows) FetchAll() ([][]any, error)
 func (s *Stmt) ExecContext(ctx context.Context, args []any) (sql.Result, error)
 func (s *Stmt) ExecBatch(ctx context.Context, rows [][]any) (sql.Result, error)
 func (s *Stmt) QueryContext(ctx context.Context, args []any) (*Rows, error)
+func (s *Stmt) ExecNamed(ctx context.Context, args []sql.NamedArg) (sql.Result, error)
+func (s *Stmt) QueryNamed(ctx context.Context, args []sql.NamedArg) (*Rows, error)
+func (s *Stmt) QueryAll(ctx context.Context, args []any) (*ResultSet, error)
+func (s *Stmt) QueryNamedAll(ctx context.Context, args []sql.NamedArg) (*ResultSet, error)
 func (s *Stmt) Close() error
 ```
 
@@ -312,6 +336,8 @@ func (tx *Tx) ExecNamed(ctx context.Context, query string, args []sql.NamedArg) 
 func (tx *Tx) Query(ctx context.Context, query string) (*Rows, error)
 func (tx *Tx) QueryParams(ctx context.Context, query string, args []any) (*Rows, error)
 func (tx *Tx) QueryNamed(ctx context.Context, query string, args []sql.NamedArg) (*Rows, error)
+func (tx *Tx) QueryAll(ctx context.Context, query string, args []any) (*ResultSet, error)
+func (tx *Tx) QueryNamedAll(ctx context.Context, query string, args []sql.NamedArg) (*ResultSet, error)
 func (tx *Tx) Commit() error
 func (tx *Tx) Rollback() error
 ```
@@ -343,7 +369,7 @@ db.ExecNamed(ctx, "INSERT INTO users VALUES (:id, :name, :age)", []sql.NamedArg{
 rows, _ := db.QueryNamed(ctx, "SELECT * FROM users WHERE age > :min", []sql.NamedArg{sql.Named("min", int64(18))})
 ```
 
-With `database/sql`, pass `sql.Named` values. Named and positional arguments cannot be mixed in one call, and prepared statements accept positional arguments only.
+With `database/sql`, pass `sql.Named` values. Named and positional arguments cannot be mixed in one call. Prepared statements accept both, and a statement prepared on a transaction runs inside it.
 
 ```go
 db.ExecContext(ctx, "INSERT INTO users VALUES (:id, :name, :age)",
@@ -379,15 +405,17 @@ tx.Commit()
 
 ## Type Mapping
 
-| SQL Type | Go Type | Nullable Go Type |
-|----------|---------|------------------|
-| INTEGER | `int64`, `int`, `int32` | `sql.NullInt64` |
-| FLOAT | `float64`, `float32` | `sql.NullFloat64` |
-| TEXT | `string` | `sql.NullString` |
-| BOOLEAN | `bool` | `sql.NullBool` |
-| TIMESTAMP | `time.Time` | `sql.NullTime` |
-| JSON | `string` | `sql.NullString` |
+| SQL Type | Parameter Types | Scan Types |
+|----------|-----------------|------------|
+| INTEGER | `int64`, `int`, `int32` | `int64`, `sql.NullInt64` |
+| FLOAT | `float64`, `float32` | `float64`, `sql.NullFloat64` |
+| TEXT | `string` | `string`, `sql.NullString` |
+| BOOLEAN | `bool` | `bool`, `sql.NullBool` |
+| TIMESTAMP | `time.Time` | `time.Time`, `sql.NullTime` |
+| JSON | `string` | `string`, `sql.NullString` |
 | VECTOR/BLOB | `[]byte` | `[]byte` (nil for NULL) |
+
+A nil `[]byte` binds as NULL; an empty one binds as an empty value. Scanning any column into a `string` gives the engine's text form, the same as `CAST(x AS TEXT)` except that a float whose shortest representation ends in an exact decimal tie may round its last digit differently. Scanning TEXT into `time.Time` accepts RFC 3339 with Z or an offset, ISO and SQL style with an optional fraction, a bare date, and `YYYY/MM/DD HH:MM:SS`; text in another form is a Scan error.
 
 ## Error Handling
 

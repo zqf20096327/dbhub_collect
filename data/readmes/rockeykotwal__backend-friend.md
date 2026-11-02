@@ -9,7 +9,7 @@ AI-powered database query analyzer that finds N+1 problems, missing indexes, ove
 [![Built with Meta AI](https://img.shields.io/badge/Built%20with-Meta%20AI-0064e0)](https://dev.meta.ai)
 [![Meta Hackathon 2026](https://img.shields.io/badge/Meta%20Hackathon-2026-blueviolet)](https://dev.meta.ai)
 
-**[→ Try it live](https://backend-friend.rockeykotwal.in)** · Built for the [Meta Global AI Developer Hackathon 2026](https://dev.meta.ai) by [Rockey Kotwal](https://rockeykotwal.in)
+**<a href="https://backend-friend.rockeykotwal.in" target="_blank">→ Try it live</a>** · **<a href="https://youtu.be/03KrFQC5bB8" target="_blank">→ Watch Demo</a>** · Built for the [Meta Global AI Developer Hackathon 2026](https://dev.meta.ai) by [Rockey Kotwal](https://rockeykotwal.in)
 
 ---
 
@@ -224,25 +224,6 @@ vercel
 
 Set `META_MODEL_API_KEY` in your Vercel project environment variables. Vercel serves the frontend from CDN and routes `/api/*` to Express serverless — no other config needed.
 
-### Deploy with Docker
-
-```dockerfile
-FROM node:20-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
-ENV NODE_ENV=production
-EXPOSE 3000
-CMD ["npm", "start"]
-```
-
-```bash
-docker build -t backend-friend .
-docker run -p 3000:3000 -e META_MODEL_API_KEY=your_key_here backend-friend
-```
-
 ---
 
 ## Rate Limiting
@@ -264,149 +245,17 @@ All incoming JSON payloads are capped at 50kb before they reach the model. Overs
 
 To adjust any limit, edit the constants in `server/config/limits.ts` — no other file needs changing.
 
-A third layer using Cloudflare Turnstile (invisible bot challenge at the network edge) is planned post-launch.
+A third layer using Cloudflare Turnstile (invisible bot challenge at the network edge) is on the roadmap.
 
 ---
 
 ## Roadmap
 
-### `npx backend-friend` — CLI tool
-
-Run Backend Friend directly from your terminal without opening a browser:
-
-```bash
-# Scan a local project folder
-npx backend-friend scan ./src
-
-# Analyze a single file
-npx backend-friend check src/routes/orders.ts
-
-# Output formats
-npx backend-friend scan ./src --format json   # machine-readable, pipe into other tools
-npx backend-friend scan ./src --format table  # compact terminal summary
-npx backend-friend scan ./src --severity critical,high  # filter by severity
-```
-
-The CLI uses the same smart ORM extraction and Meta model analysis as the web app. Designed to be fast enough to run as a pre-commit hook or a pre-push check:
-
-```bash
-# .husky/pre-push
-npx backend-friend scan ./src --severity critical --fail-on-findings
-```
-
-If any CRITICAL issues are found, the push is blocked. Catches N+1s before they reach production.
-
----
-
-### GitHub Action — automated PR scanning
-
-Add Backend Friend to your CI pipeline with a single workflow file:
-
-```yaml
-# .github/workflows/backend-friend.yml
-name: Database Query Audit
-
-on: [pull_request]
-
-jobs:
-  scan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: rockeykotwal/backend-friend-action@v1
-        with:
-          api-key: ${{ secrets.META_MODEL_API_KEY }}
-          severity-threshold: high   # fail on HIGH or CRITICAL only
-          comment-on-pr: true        # posts findings as a PR comment
-```
-
-When a PR touches files with ORM queries, the action:
-1. Extracts all ORM blocks from changed files only (not the whole repo)
-2. Analyses each one with Muse Spark
-3. Posts findings as an inline PR comment — critical issues first
-4. Optionally fails the check if severity threshold is breached
-
-This makes Backend Friend part of the merge gate — database bugs get the same treatment as type errors or lint failures.
-
----
-
-### Cloudflare Turnstile — Layer 3 bot protection
-
-Invisible CAPTCHA challenge at the network edge before requests reach the server. Planned post-launch on top of the existing rate limiting layers.
-
----
-
-### Phase 2 — Extended Database Support
-
-The current version covers relational ORMs, MongoDB, and DynamoDB (all 8 languages) across the full modern data stack. Phase 2 expands to:
-
-#### Redis — cache misuse detection
-
-Redis problems are different from SQL problems — not N+1s, but architectural misuse that causes memory bloat, cache stampedes, and stale data.
-
-- Missing TTL on `SET` / `HSET` — unbounded key growth
-- Storing entire objects when only one field is needed — `GET user:123` returning 50KB when only `email` is used
-- N+1 cache misses — fetching cache keys one-by-one in a loop instead of `MGET`
-- No `SCAN` cursor usage — `KEYS *` in production blocks the event loop
-
-| Language | Libraries detected |
-|---|---|
-| **Node.js** | `ioredis`, `redis` (node-redis) |
-| **Python** | `redis-py` |
-| **Go** | `go-redis`, `redigo` |
-| **Java / Kotlin** | `Jedis`, `Lettuce`, Spring Data Redis |
-| **Ruby** | `redis-rb` |
-| **PHP** | `predis`, `phpredis` |
-| **C#** | `StackExchange.Redis` |
-| **Rust** | `redis-rs` |
-
----
-
-#### Elasticsearch — unbounded search queries
-
-- Missing `size` limit — default is 10 results but `search_after` / scroll misuse returns thousands
-- Expensive `wildcard` and `fuzzy` queries on unanalysed fields
-- Aggregations on high-cardinality `keyword` fields — memory-intensive at scale
-- `_source` returning full documents when only a few fields are needed
-
-| Language | Libraries detected |
-|---|---|
-| **Node.js** | `@elastic/elasticsearch` |
-| **Python** | `elasticsearch-py`, `elasticsearch-dsl` |
-| **Go** | `go-elasticsearch` |
-| **Java / Kotlin** | Java High Level REST Client, Spring Data Elasticsearch |
-| **Ruby** | `elasticsearch-ruby` |
-| **PHP** | `elasticsearch-php` |
-| **C#** | `NEST`, `Elasticsearch.Net` |
-| **Rust** | `elasticsearch-rs` |
-
----
-
-#### Firebase / Firestore
-
-- Collection group queries without composite indexes
-- Missing `.limit()` on queries — full collection reads
-- `onSnapshot` listeners without query scoping — streaming millions of docs
-- Real-time listeners on large collections without pagination
-
-Supported via Firebase SDK across Node.js, Python, Go, Java, and mobile (Swift/Dart planned).
-
----
-
-#### Vector Databases — AI-era query analysis
-
-With AI applications now a core part of most backends, vector database misuse is the next category of production incident. Backend Friend will detect:
-
-- **Missing metadata filters** — similarity search with no pre-filter reads every vector before ranking. Adding a metadata filter (namespace, user ID, date range) reduces the search space by orders of magnitude.
-- **Top-K too large** — `top_k=1000` when only 5 results are displayed. Wastes compute and network.
-- **No namespace scoping** — querying across all namespaces when the data is logically partitioned.
-
-| Database | Libraries detected |
-|---|---|
-| **Pinecone** | `@pinecone-database/pinecone` (Node.js), `pinecone-client` (Python) |
-| **Weaviate** | `weaviate-client` (Node.js, Python, Go, Java) |
-| **Qdrant** | `@qdrant/js-client-rest` (Node.js), `qdrant-client` (Python, Rust) |
-| **Chroma** | `chromadb` (Python, Node.js) |
+- **GitHub Action** — drop a single workflow file into any repo; the action scans only the changed files in a PR and posts findings as an inline comment, optionally failing the check at a severity threshold
+- **User's Meta Model API Key** – Users can provide their own Meta API key to track usage directly against their account. The API key is used only at runtime and is never stored on our servers, ensuring that all usage is billed and tracked by the user's Meta account.
+- **`npx backend-friend` CLI** — scan a local folder or single file from the terminal; pipe into pre-commit / pre-push hooks to block CRITICAL findings before they reach production
+- **Cloudflare Turnstile** — invisible bot challenge at the network edge, on top of the existing rate limiting layers
+- **Phase 2 databases** — Redis cache misuse, Elasticsearch unbounded queries, Firebase/Firestore, and vector databases (Pinecone, Weaviate, Qdrant, Chroma)
 
 ---
 

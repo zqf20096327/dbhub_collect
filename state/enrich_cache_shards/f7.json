@@ -50,8 +50,8 @@
   }
  },
  "supabase/etl": {
-  "commit_7d": 42,
-  "commit_90d": 200,
+  "commit_7d": 21,
+  "commit_90d": 210,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -59,7 +59,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 39,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Rust": 95,
    "MDX": 2,
@@ -69,18 +69,18 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
   }
  },
  "ytsaurus/ytsaurus": {
-  "commit_7d": 218,
-  "commit_90d": 3547,
+  "commit_7d": 287,
+  "commit_90d": 3537,
   "rel_ver": "python/ytsaurus-client/0.13.55",
   "rel_pub": "2026-10-02",
-  "rel_days": 23,
-  "rel_n90": 12,
+  "rel_days": 31,
+  "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -88,7 +88,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 170,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "C++": 50,
    "C": 25,
@@ -98,17 +98,34 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "python/ytsaurus-client/0.13.55",
+    "d": "2026-10-02",
+    "n": "### Features\r\n- Add the `job_binary_local_path` and `job_binary_cypress_path` methods to `UserJobSpecBuilder` to run Python function and C++ jobs with the specified executable instead of the current one [7e2aa2780fffded19b274df1db787b5576c75fd3]\r\n\r\n### Fixes\r\n- Retry `yt flow` commands when the flow controller has not built its flow view yet (error code `3302`) [c235cd45b50a94ef04adff99e0a4e3dd44ccc0a1]"
+   },
+   {
+    "t": "yt/go/v0.0.35",
+    "d": "2026-09-26",
+    "n": "- Support `date32`, `datetime64`, `timestamp64` and `interval64` in `schema` and `wire`, distinguishing `interval`, `interval64` and `int64` in type inference and encoding [a7c279f9d6f2a249dd47341eadb1dab37d3623e8]\n- Fixed `ReadTablePartition` with Skiff format for strongly typed complex values: the schema is passed through the new client-side option `ReadTablePartitionOptions.TableSchema`; `TableSchema` without Skiff format returns an error [f0cb9ef6f77fb93bb3b5ba4ea2e42fb9c43fdbb8]"
+   },
+   {
+    "t": "flow/0.3.0",
+    "d": "2026-10-02",
+    "n": "YTsaurus Flow is a framework for streaming cross-DC event processing with exactly-once guarantees within the YTsaurus ecosystem, with APIs for C++, Java and Kotlin, Python, and Go. Its closest external counterparts are Google Cloud Dataflow and Apache Flink.\n\nThis is the first Flow release with published artifacts. It includes the server, the SDKs, and the tools, all versioned 0.3.0 and built from a single commit.\n\n**Release date:** 2026-09-28\n\n**Docker image:** [ghcr.io/ytsaurus/flow:0.3.0](https://github."
+   }
+  ]
  },
  "Syngnat/GoNavi": {
-  "commit_90d": 2256,
-  "commit_7d": 134,
+  "commit_90d": 2349,
+  "commit_7d": 193,
   "rel_ver": "dev-latest",
-  "rel_pub": "2026-10-25",
-  "rel_days": 0,
+  "rel_pub": "2026-11-01",
+  "rel_days": 1,
   "rel_n90": 12,
   "rel_pre": true,
   "rel_none": false,
@@ -124,12 +141,29 @@
    "Python": 1,
    "Shell": 1
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "dev-latest",
+    "d": "2026-11-01",
+    "n": "**提交**: [`b6f49c2190f740fe514967b03b1db89c50c9dd91`](https://github.com/Syngnat/GoNavi/commit/b6f49c2190f740fe514967b03b1db89c50c9dd91)\n**完整变更**: [3ff9dca070e57047fcbcbd7a3f88ed4a58466e6e...b6f49c2190f740fe514967b03b1db89c50c9dd91](https://github.com/Syngnat/GoNavi/compare/3ff9dca070e57047fcbcbd7a3f88ed4a58466e6e...b6f49c2190f740fe514967b03b1db89c50c9dd91)"
+   },
+   {
+    "t": "v1.2.0",
+    "d": "2026-10-31",
+    "n": "- ✨ feat(db): 新增 Apache Hive (HiveServer2 Thrift) 驱动实现与单元测试 (contributed by **@lska367**)\n- 🐛 fix(kingbase): 修复查询结果字段注释回填 (contributed by **@AutumnNazi**)\n- 🐛 fix(kingbase): 作业视图引用统一带 kdb_schedule schema 前缀\n- 🐛 fix(kingbase): 用 pg_catalog 自行拼装建表语句\n- 🐛 fix(kingbase): 查询结果补上未限定表的字段类型和注释\n- 🐛 fix(query-editor): 修复达梦特殊字段解析与补全引用 (contributed by **"
+   },
+   {
+    "t": "v1.1.5",
+    "d": "2026-10-23",
+    "n": "- 🐛 fix(kingbase): 维护库全失败报错附填写库名自助引导\n- 🐛 fix(kingbase): 调度作业源探测改为验证关系可解析\n- 🐛 fix(database): 修复数据库加载失败后的重试\n- 🐛 test(db): 放宽插件数据源禁用耗时上界到 1s\n- 🐛 fix(table-overview): 修复消息队列与 Redis 表概览回落到 information_schema 导致报错 (contributed by **@AutumnNazi**)\n- 🐛 fix(chroma): 修复部分版本 v2 无 databases 列表端点导致连接打不开 (contributed"
+   }
+  ]
  },
  "hidu/mysql-schema-sync": {
   "commit_90d": 0,
@@ -1640,11 +1674,11 @@
   "enriched_at": "20260928"
  },
  "jiji262/douyin-downloader": {
-  "commit_90d": 65,
+  "commit_90d": 48,
   "commit_7d": 1,
   "rel_ver": "desktop-v0.12.5",
   "rel_pub": "2026-10-08",
-  "rel_days": 6,
+  "rel_days": 25,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -1657,14 +1691,26 @@
    "Python": 100,
    "Dockerfile": 0
   },
-  "enriched_at": "20261029",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261014",
-   "release": "20261014",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261029",
    "contrib": "20260929",
    "lang": "20260929"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "desktop-v0.12.5",
+    "d": "2026-10-08",
+    "n": "Douzy Desktop 0.12.5\n\n## Downloads\n\n- **macOS Apple Silicon:** `Douzy-0.12.5-arm64.dmg`\n- **macOS Intel:** `Douzy-0.12.5.dmg`\n- **Windows x64:** `Douzy-Setup-0.12.5.exe`\n\n## Installation\n\n- **本版未签名**，首次启动会被系统拦截，这是预期行为：\n  - **macOS**：右键点击 Douzy.app 选「打开」，或先执行\n    `xattr -cr /Applications/Douzy.app`。\n  - **macOS 钥匙串**：升级到 0.12.5 后 macOS 会询问是否允许 Douzy 访问「Douzy Safe Storage」，\n    请选「始"
+   },
+   {
+    "t": "desktop-v0.12.1",
+    "d": "2026-09-23",
+    "n": "Douzy Desktop 0.12.1\r\n\r\n## Downloads\r\n\r\n- **macOS Apple Silicon:** `Douzy-0.12.1-arm64.dmg`\r\n- **macOS Intel:** `Douzy-0.12.1.dmg`\r\n- **Windows x64:** `Douzy-Setup-0.12.1.exe`\r\n\r\n## Installation\r\n\r\n- **本版未签名**，首次启动会被系统拦截，这是预期行为：\r\n  - **macOS**：右键点击 Douzy.app 选「打开」，或先执行\r\n    `xattr -cr /Applications/Douzy.app`。\r\n  - **Windows**：SmartScreen 提示时选「更多信息 → 仍要运行」。\r\n- Windows 新版为 per-machine 安"
+   }
+  ]
  },
  "h0tak88r/subfalcon": {
   "rel_ver": "v2.0.1",

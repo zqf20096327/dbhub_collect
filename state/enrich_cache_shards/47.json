@@ -1,12 +1,12 @@
 {
  "t8y2/dbx": {
-  "commit_7d": 401,
-  "commit_90d": 4984,
-  "rel_ver": "v0.6.54",
-  "rel_pub": "2026-10-24",
-  "rel_days": 1,
+  "commit_7d": 273,
+  "commit_90d": 4876,
+  "rel_ver": "v0.6.64-beta.20261102.1",
+  "rel_pub": "2026-11-02",
+  "rel_days": 0,
   "rel_n90": 11,
-  "rel_pre": false,
+  "rel_pre": true,
   "rel_none": false,
   "sec_n": 1,
   "sec_worst": "critical",
@@ -15,7 +15,7 @@
    "GHSA-rqp4-8fxh-22vh(CVE-2026-55642,critical)"
   ],
   "contrib_n": 295,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Rust": 40,
    "TypeScript": 29,
@@ -25,17 +25,34 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v0.6.64-beta.20261102.1",
+    "d": "2026-11-02",
+    "n": "- 新增 Beta 与稳定版双更新渠道：可选择接收每日构建的 Beta 预览版更新，验证通过的 Beta 会晋升为稳定版 (contributed by @eryajf) (PR [#13821](https://github.com/t8y2/dbx/pull/13821))\n- 侧边栏折叠后，鼠标停留在窗口左边缘即可临时展开浮层，移开后自动收起，保留原有搜索和树节点状态 (contributed by @r9yn) (PR [#14040](https://github.com/t8y2/dbx/pull/14040))\n- MQTT 已保存的主题订阅支持设置别名，列表同时显示别"
+   },
+   {
+    "t": "v0.6.63-beta.20261101.3",
+    "d": "2026-11-01",
+    "n": "- 新增 Beta 与稳定版双更新渠道：可选择接收每日构建的 Beta 预览版更新，验证通过的 Beta 会晋升为稳定版 (contributed by @eryajf) (PR [#13821](https://github.com/t8y2/dbx/pull/13821))\n- 修复 MySQL `ALTER TABLE ... COMMENT` 语句被误报语法诊断的问题 (contributed by @imcman) (PR [#13961](https://github.com/t8y2/dbx/pull/13961))\n- 修复保存表结构后侧边栏中的列信息没有刷新的问题 (contributed by @heeeex100) (PR [#13850](https://github.com/t8y"
+   },
+   {
+    "t": "v0.6.63-beta.20261101.2",
+    "d": "2026-11-01",
+    "n": "* feat(sidebar): add optional exact object-name matching by @imcman in https://github.com/t8y2/dbx/pull/13884\n* feat(update): add beta and stable release channels by @eryajf in https://github.com/t8y2/dbx/pull/13821\n* docs(import): 记录表数据导入的「失败继续」选项 by @dienaso in https://github.com/t8y2/dbx/pull/14014\n* fix(ai): wrap composer context controls without squeezing icons by @khalil-shao in https://github.com/t8y2/dbx/pull/13957\n* fix: refresh sidebar columns after saving table str"
+   }
+  ]
  },
  "deeplethe/utopia": {
-  "commit_7d": 25,
+  "commit_7d": 0,
   "commit_90d": 927,
   "rel_ver": "v0.1.0-rc9",
   "rel_pub": "2026-10-11",
-  "rel_days": 14,
+  "rel_days": 22,
   "rel_n90": 9,
   "rel_pre": true,
   "rel_none": false,
@@ -44,7 +61,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 18,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Rust": 74,
    "TypeScript": 20,
@@ -54,10 +71,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v0.1.0-rc9",
+    "d": "2026-10-11",
+    "n": "Two days after rc8, this release is mostly what people running rc8 found: Gemini's OpenAI-compatible endpoint now works from embedding to tool calls, a deployment with a restricted database role gets its vector indexes, and a failing embedding model no longer silences chat memory. The first cut of regression cases for the ontology arrives, and the old ontology growth loop is retired.\n- Migrations 0109 and 0110, both forward-only, applied on startup. An rc8 database with data (two documents and a pushed stat"
+   },
+   {
+    "t": "v0.1.0-rc8",
+    "d": "2026-10-09",
+    "n": "- Migrations 0077 to 0079 and 0091 to 0106, all forward-only, applied on startup. An rc7 database with data (two documents and a pushed statement) was migrated by this build with no warnings and read back; a new document and a new push were then processed on it.\n- A ClickHouse warehouse can be mounted read-only, with slow queries stopped by the server timeout or `KILL QUERY` (#1094). Databricks and Snowflake results are read to the last chunk and partition (#1063, #1062)."
+   },
+   {
+    "t": "v0.1.0-rc7",
+    "d": "2026-09-25",
+    "n": "Login takes the same time whether the email or the password is wrong (#867). Worker concurrency falls back to the migration's default (#871). CI runs lint, test and build as parallel jobs behind one aggregator, database-backed tests included, and the store integration tests compile as one binary (#879, #872, #873, #869, #868, #886).\nMigrations 0070 to 0076, 0080 and 0090, all forward-only, applied on startup. An rc6 database with data was migrated and read back by this build without warnings."
+   }
+  ]
  },
  "jfcoz/postgresqltuner": {
   "commit_7d": 0,
@@ -84,12 +118,12 @@
   }
  },
  "fjall-rs/fjall": {
-  "commit_7d": 5,
-  "commit_90d": 43,
-  "rel_ver": "3.1.12",
-  "rel_pub": "2026-10-03",
-  "rel_days": 1,
-  "rel_n90": 6,
+  "commit_7d": 0,
+  "commit_90d": 34,
+  "rel_ver": "3.1.13",
+  "rel_pub": "2026-10-25",
+  "rel_days": 8,
+  "rel_n90": 5,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -97,7 +131,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 22,
-  "enriched_at": "20261004",
+  "enriched_at": "20261102",
   "lang": {
    "Rust": 99,
    "JavaScript": 0,
@@ -105,16 +139,34 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261004",
-   "release": "20261004"
-  }
+   "commit": "20261102",
+   "release": "20261102",
+   "security": "20261102"
+  },
+  "rel_notes": [
+   {
+    "t": "3.1.13",
+    "d": "2026-10-25",
+    "n": "- [fix] Journal replay #332 \r\n- [api] Export database builder types\r\n- [doc] Updated docs"
+   },
+   {
+    "t": "3.1.12",
+    "d": "2026-10-03",
+    "n": "- [fix] Keyspace deletion recovery (#328)"
+   },
+   {
+    "t": "3.1.11",
+    "d": "2026-10-02",
+    "n": "- [fix] Missing fsync before memtable flush (https://github.com/fjall-rs/fjall/issues/329)"
+   }
+  ]
  },
  "dineug/erd-editor": {
-  "commit_90d": 610,
-  "commit_7d": 158,
-  "rel_ver": "v4.2.0",
-  "rel_pub": "2026-10-23",
-  "rel_days": 2,
+  "commit_90d": 712,
+  "commit_7d": 80,
+  "rel_ver": "v5.0.1",
+  "rel_pub": "2026-10-29",
+  "rel_days": 4,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -130,12 +182,29 @@
    "HTML": 0,
    "CSS": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v5.0.1",
+    "d": "2026-10-29",
+    "n": "## What's Changed\r\n* fix(erd-editor): Read a double click on a stage inside a closed shadow root by @dineug in https://github.com/dineug/erd-editor/pull/531\r\n\r\n\r\n**Full Changelog**: https://github.com/dineug/erd-editor/compare/v5.0.0...v5.0.1"
+   },
+   {
+    "t": "v5.0.0",
+    "d": "2026-10-28",
+    "n": "## What's Changed\r\n* fix(erd-editor): Focus the first cell of a new column's row in every name view by @dineug in https://github.com/dineug/erd-editor/pull/520\r\n* fix(erd-editor-schema): Keep a saved column order whose entries a release does not all know by @dineug in https://github.com/dineug/erd-editor/pull/521\r\n* feat(erd-editor): Add <erd-viewer>, explicit registration and a tree-shakable package by @dineug in https://github.com/dineug/erd-editor/pull/522\r\n* fix: Pre-existing CI flakes, each fixed at it"
+   },
+   {
+    "t": "v4.2.0",
+    "d": "2026-10-23",
+    "n": "## What's Changed\r\n* feat(grid): A spreadsheet grid on a Konva canvas, and the Konva host as r-html-konva by @dineug in https://github.com/dineug/erd-editor/pull/514\r\n* feat: Logical names and the word, term and domain dictionaries, edited on a Dictionary tab by @dineug in https://github.com/dineug/erd-editor/pull/515\r\n* feat(erd-editor): Move column reordering to a handle beside the focused row by @dineug in https://github.com/dineug/erd-editor/pull/516\r\n* feat(erd-editor): Step the Flow view back and forw"
+   }
+  ]
  },
  "meteroid-oss/meteroid": {
   "commit_90d": 11,
@@ -207,12 +276,12 @@
   }
  },
  "sourcenetwork/defradb": {
-  "commit_90d": 91,
-  "commit_7d": 8,
-  "rel_ver": "v1.1.0",
-  "rel_pub": "2026-09-08",
-  "rel_days": 19,
-  "rel_n90": 2,
+  "commit_90d": 114,
+  "commit_7d": 13,
+  "rel_ver": "v1.2.0",
+  "rel_pub": "2026-10-31",
+  "rel_days": 2,
+  "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -227,7 +296,28 @@
    "Makefile": 0,
    "Rust": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "rel_notes": [
+   {
+    "t": "v1.2.0",
+    "d": "2026-10-31",
+    "n": "To get a full outline of the changes, we invite you to review the official changelog below. This release does not include a Breaking Change to existing v1.x databases. If you need help migrating an existing deployment, reach out at [hello@source.network](mailto:hello@source.network) or join our Discord at https://source.network/discord.\nDefraDB v1.2.0 is a minor release of our stable v1 line. It adds deferred maintenance for vector indexes, a docID filter on the truncate mutation, a configurable P2P block-s"
+   },
+   {
+    "t": "v1.1.1",
+    "d": "2026-10-31",
+    "n": "To get a full outline of the changes, we invite you to review the official changelog below. This release does not include a Breaking Change to existing v1.x databases. If you need help migrating an existing deployment, reach out at [hello@source.network](mailto:hello@source.network) or join our Discord at https://source.network/discord.\nDefraDB v1.1.1 is a patch release of v1.1.0 with security updates."
+   },
+   {
+    "t": "v1.1.0",
+    "d": "2026-09-08",
+    "n": "* fix: Prevent DB.Connect from panicking with P2P disabled (#5227)"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "IFTTT/polo": {
   "commit_90d": 0,

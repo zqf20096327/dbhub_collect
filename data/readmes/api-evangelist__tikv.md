@@ -1,4 +1,4 @@
-# TiKV (tikv)
+# TiKV
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,132 +66,165 @@
 
 TiKV is a CNCF-graduated distributed transactional key-value database built in Rust with Raft consensus. Originally created to complement TiDB, it provides horizontal scalability, strong consistency, and high availability with ACID transaction support. Client APIs are available for Java, Rust, Python, Go, and C++. An HTTP management API provides status, configuration, and monitoring endpoints.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/tikv/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/tikv/refs/heads/main/apis.yml)
+**Areas:** ACID · CNCF · Database · Distributed Systems · Key-Value Store · Open Source · Rust
 
-## Scope
+## TiKV on APIs.io
 
-- **Type:** Index
+Everything profiled for TiKV is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/tikv/](https://apis.io/providers/tikv/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (8)
 
-- ACID
-- CNCF
-- Database
-- Distributed Systems
-- Key-Value Store
-- Open Source
-- Rust
+- [TiKV Java Client](https://apis.io/apis/tikv/tikv-client-java/) — The official Java client for TiKV. Supports raw key-value operations and transactional operations via gRPC. Available on Maven Central.
+- [TiKV Rust Client](https://apis.io/apis/tikv/tikv-client-rust/) — The official Rust client for TiKV providing raw and transactional key-value access to TiKV clusters.
+- [TiKV Python Client](https://apis.io/apis/tikv/tikv-client-python/) — The official Python client for TiKV supporting raw and transactional key-value operations.
+- [TiKV Configuration API](https://apis.io/apis/tikv/tikv-configuration-api/) — TiKV node configuration management
+- [TiKV Debug API](https://apis.io/apis/tikv/tikv-debug-api/) — Debug and diagnostic endpoints
+- [TiKV Metrics API](https://apis.io/apis/tikv/tikv-metrics-api/) — Prometheus metrics endpoint
+- [TiKV Regions API](https://apis.io/apis/tikv/tikv-regions-api/) — Region management and inspection
+- [TiKV Status API](https://apis.io/apis/tikv/tikv-status-api/) — Node status and health
 
-## Timestamps
+### Published properties
 
-- **Created:** 2025-01-01
-- **Modified:** 2026-05-19
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### Agentic access (1)
 
-### TiKV HTTP Management API
+Which operations an agent can call, which act, and which need a human in the loop.
 
-TiKV exposes an HTTP API for cluster management, status monitoring, configuration retrieval and updates, and Prometheus metrics collection.
+- [Tikv Agentic Access](https://apis.io/agentic-access/tikv/tikv-agentic-access/)
 
-- **Human URL:** [https://tikv.org/docs/dev/deploy/monitor/api/](https://tikv.org/docs/dev/deploy/monitor/api/)
-- **Base URL:** `http://localhost:20160`
+#### JSON Schema (1)
 
-#### Tags
+The data models the API reads and writes.
 
-- Database
-- Distributed Systems
-- Monitoring
-- Operations
+- [TiKV Region](https://apis.io/schemas/tikv/tikv-region/)
 
-#### Properties
+#### JSON Structure (1)
 
-- [Documentation](https://tikv.org/docs/dev/deploy/monitor/api/)
-- [OpenAPI](https://raw.githubusercontent.com/api-evangelist/tikv/refs/heads/main/openapi/tikv-http-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/tikv-http-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/tikv-http-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Data models expressed in JSON Structure.
 
-### TiKV Java Client
+- [Tikv Region Structure](https://apis.io/json-structure/tikv/tikv-region-structure/)
 
-The official Java client for TiKV. Supports raw key-value operations and transactional operations via gRPC. Available on Maven Central.
+#### JSON-LD (1)
 
-- **Human URL:** [https://github.com/tikv/client-java](https://github.com/tikv/client-java)
+Linked-data contexts for the provider's vocabulary.
 
-#### Tags
+- [Tikv Context](https://apis.io/jsonld/tikv/tikv-context/)
 
-- Database
-- Java
-- Key-Value
-- SDK
+#### Vocabulary (1)
 
-#### Properties
+The provider's domain terms, defined.
 
-- [Documentation](https://github.com/tikv/client-java)
-- [Git Hub](https://github.com/tikv/client-java)
-- [Postman Collection](collections/tikv-http-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/tikv-http-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [TiKV Vocabulary](https://apis.io/vocabularies/tikv/tikv-vocabulary/)
 
-### TiKV Rust Client
+#### Examples (2)
 
-The official Rust client for TiKV providing raw and transactional key-value access to TiKV clusters.
+Example requests and responses.
 
-- **Human URL:** [https://github.com/tikv/client-rust](https://github.com/tikv/client-rust)
+- [Tikv Getregionbyid Example](https://apis.io/examples/tikv/tikv-getRegionById-example/)
+- [Tikv Getstatus Example](https://apis.io/examples/tikv/tikv-getStatus-example/)
 
-#### Tags
+#### Collections (6)
 
-- Database
-- Key-Value
-- Rust
-- SDK
+Postman and Open Collection request collections.
 
-#### Properties
+- [TiKV HTTP Management Configuration API](https://apis.io/collections/tikv/open-tikv-configuration-api/)
+- [TiKV HTTP Management Configuration Debug API](https://apis.io/collections/tikv/open-tikv-debug-api/)
+- [TiKV HTTP Management API](https://apis.io/collections/tikv/open-tikv-http-api/)
+- [TiKV HTTP Management Configuration Metrics API](https://apis.io/collections/tikv/open-tikv-metrics-api/)
+- [TiKV HTTP Management Configuration Regions API](https://apis.io/collections/tikv/open-tikv-regions-api/)
+- [TiKV HTTP Management Configuration Status API](https://apis.io/collections/tikv/open-tikv-status-api/)
 
-- [Documentation](https://github.com/tikv/client-rust)
-- [Git Hub](https://github.com/tikv/client-rust)
-- [Postman Collection](collections/tikv-http-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/tikv-http-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Governance rules (2)
 
-### TiKV Python Client
+Spectral rulesets for the provider's contracts.
 
-The official Python client for TiKV supporting raw and transactional key-value operations.
+- [TiKV — jsonschema rules](https://apis.io/rules/tikv/tikv-jsonschema-spectral-rules/)
+- [TiKV API Rules](https://apis.io/rules/tikv/tikv-rules/)
 
-- **Human URL:** [https://github.com/tikv/client-py](https://github.com/tikv/client-py)
+#### Security (1)
 
-#### Tags
+Authentication, trust centre, and vulnerability disclosure.
 
-- Database
-- Key-Value
-- Python
-- SDK
+- [Tikv Domain Security](https://apis.io/security/tikv/tikv-domain-security/)
 
-#### Properties
+#### Plans and pricing (1)
 
-- [Documentation](https://github.com/tikv/client-py)
-- [Git Hub](https://github.com/tikv/client-py)
-- [Postman Collection](collections/tikv-http-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/tikv-http-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Published plans, tiers and prices.
 
-## Common Properties
+- [Tikv Plans Pricing](https://apis.io/plans/tikv/tikv-plans-pricing/)
 
-- [LinkedIn](https://www.linkedin.com/company/pingcap)
+#### Rate limits (1)
+
+Published request limits.
+
+- [Tikv Rate Limits](https://apis.io/rate-limits/tikv/tikv-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Tikv Finops](https://apis.io/finops/tikv/tikv-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://tikv.org/)
 - [Documentation](https://tikv.org/docs/)
-- [Getting Started](https://tikv.org/docs/7.1/concepts/overview/)
-- [GitHub Organization](https://github.com/tikv)
-- [GitHub Repository](https://github.com/tikv/tikv)
-- [Governance](https://github.com/tikv/tikv/blob/master/GOVERNANCE.md)
-- [C N C F](https://www.cncf.io/projects/tikv/)
+- [Getting started](https://tikv.org/docs/7.1/concepts/overview/)
 - [Blog](https://tikv.org/blog/)
-- [Community](https://tikv.org/community/)
-- [Roadmap](https://github.com/tikv/tikv/blob/master/ROADMAP.md)
-- [License](https://github.com/tikv/tikv/blob/master/LICENSE)
-- [Slack](https://slack.tidb.io/invite?team=tikv-wg)
-- [Forum](https://internals.tidb.io/)
-- [SDK](https://github.com/tikv/client-java)
-- [SDK](https://github.com/tikv/client-rust)
-- [SDK](https://github.com/tikv/client-py)
-- [SDK](https://github.com/tikv/client-go)
+- [GitHub](https://github.com/tikv)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 38.2** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 57.1 |
+| Contract quality | 45.7 |
+| Contract governance | 13.6 |
+| Operational transparency | 34.2 |
+| Developer ergonomics | 42.9 |
+| Access clarity | 5.3 |
+
+**Agent readiness 15.4** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | — |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 10.8** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/tikv/](https://apis.io/providers/tikv/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for TiKV: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/tikv/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).

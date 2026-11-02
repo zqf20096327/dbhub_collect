@@ -12,6 +12,14 @@
 
 Bifract is an open source SIEM you run on your own infrastructure. Logs are stored and searched in ClickHouse and archived to your object storage as Parquet. On top of that it adds what generic log tools leave out: process provenance graphs, behavioral baselines, and collaborative investigation, all driven by a pipe-based query language built for analysts. There are no license keys or feature gates.
 
+## Try It
+
+Run Bifract in your browser with [Lab 001](https://labs.bifract.io/001/), a recorded intrusion, already loaded, nothing to install:
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/zaneGittins/bifract?quickstart=1)
+
+See [Try Bifract in Codespaces](https://docs.bifract.io/getting-started/codespaces/) for what is loaded and what to try.
+
 ## Quick Start
 
 The setup wizard installs Bifract on a single Linux host, handling SSL, passwords, Docker Compose, and database initialization:
@@ -20,7 +28,9 @@ The setup wizard installs Bifract on a single Linux host, handling SSL, password
 curl -sfL https://docs.bifract.io/install.sh | sh
 ```
 
-Read [the script](https://docs.bifract.io/install.sh) first if you'd rather. Upgrade an existing install with `sudo bifract --upgrade`. A single node covers most deployments; for multi-shard clusters see the [Kubernetes deployment guide](https://docs.bifract.io/getting-started/kubernetes/).
+Read [the script](https://docs.bifract.io/install.sh) first if you'd rather. Upgrade an existing install with `sudo bifract --upgrade`.
+
+It needs Linux (amd64 or arm64) with Docker Compose. 4 cores and 8 GB of RAM handle about 10 GB of logs a day; see [hardware by ingest volume](https://docs.bifract.io/getting-started/installation/#requirements). A single node covers most deployments; for multi-shard clusters see the [Kubernetes deployment guide](https://docs.bifract.io/getting-started/kubernetes/).
 
 ## Query
 
@@ -40,11 +50,14 @@ pgr(start="{63047898-ac75-6860-8a04-000000002502}") | pgraph()
 
 ## Features
 
-- **Provenance graph:** `pgr()` rebuilds a process tree and attaches the file writes, connections, DNS, and injection under it, scoring rare activity and propagating it along the chain ([NoDoze](https://www.ndss-symposium.org/ndss-paper/nodoze-combatting-threat-alert-fatigue-with-automated-provenance-triage/)). Works with Sysmon, Tracee, Tetragon, or any EDR telemetry you normalize.
+- **Provenance graph:** `pgr()` rebuilds a process tree and attaches the file writes, connections, DNS, and injection under it, scoring rare activity and propagating it along the chain ([NoDoze](https://www.ndss-symposium.org/ndss-paper/nodoze-combatting-threat-alert-fatigue-with-automated-provenance-triage/)). Works with Sysmon or any EDR telemetry you [normalize](https://docs.bifract.io/features/normalizers/) to the same fields.
 - **Models:** rarity, first/last seen, and volume baselines built from a BQL query and maintained at ingest, plus beacon and long-connection scoring for Zeek-style data (inspired by [RITA](https://github.com/activecm/rita)). Results join back into any search with `model_lookup()`.
 - **Alerting:** cursor-based evaluation so no logs are missed across restarts, with Sigma rules synced and converted from Git.
 - **Collaboration:** comment on individual logs, build investigation notebooks, publish dashboards to shared links.
+- **Exchange:** add shared datasets, detections, models, dashboards, lookups, and normalizers from inside Bifract, bundled by use case ([browse](https://docs.bifract.io/exchange/)).
 - **Archive:** every log written to object storage as Parquet with Iceberg metadata, searchable in place, restorable into ClickHouse.
+
+![Dashboard](docs/images/features/dashboard.png)
 
 ## Status
 

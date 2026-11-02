@@ -12,6 +12,7 @@
   <a href="LICENSE"><img alt="Licence: AGPL-3.0" src="https://img.shields.io/badge/licence-AGPL--3.0-b71c1c?style=flat-square"></a>
   <a href="https://github.com/pental-io/report/pkgs/container/report"><img alt="Docker image" src="https://img.shields.io/badge/image-ghcr.io%2Fpental--io%2Freport-1f2433?style=flat-square&logo=docker&logoColor=white"></a>
   <img alt="Runs on macOS, Linux and Windows" src="https://img.shields.io/badge/runs%20on-macOS%20%7C%20Linux%20%7C%20Windows-1f2433?style=flat-square">
+  <a href="https://www.linkedin.com/company/pental"><img alt="Follow Pental on LinkedIn" src="https://img.shields.io/badge/follow-Pental%20on%20LinkedIn-0a66c2?style=flat-square"></a>
 </p>
 
 <p align="center">
@@ -27,14 +28,15 @@
   <a href="#ai-on-your-own-key">AI</a>&nbsp;&nbsp;&nbsp;&nbsp;
   <a href="#your-reports">Your reports</a>&nbsp;&nbsp;&nbsp;&nbsp;
   <a href="#updating">Updating</a>&nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://pental.io/report">pental.io/report</a>
+  <a href="https://pental.io/report">pental.io/report</a>&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://www.linkedin.com/company/pental">LinkedIn</a>
 </p>
 
 <br>
 
 ## Install
 
-You need Docker: [Docker Desktop](https://www.docker.com/products/docker-desktop/) on a Mac or a Windows PC, or Docker Engine on Linux, which the installer offers to set up for you. Then run one command.
+You need Docker: [Docker Desktop](https://www.docker.com/products/docker-desktop/) on a Mac or a Windows PC, or Docker Engine on Linux, which the installer offers to set up for you. The first time Docker Desktop opens, accept its terms, then skip signing in or create an account: it starts only once its main screen shows. Then run one command.
 
 **macOS and Linux**
 
@@ -184,7 +186,7 @@ Every picture here is the app itself, with an invented firm's engagement in it. 
 - **A testing calendar.** Each tester's engagements week by week, and the ones still waiting for a lead, given one from there.
 - **Every engagement in one list**, with a reference code for each (numbered your way, or random), a type from your own list, its dates, test days, perspective and lead tester. Rename, duplicate, archive and restore, or delete. An engagement is open from the moment it is made, with no status to move along: its report downloads whenever you like.
 - **Phases.** External, internal, web, retest or whatever shape the work takes, each with its own type, scope, test days and retest setting.
-- **Checklists and runbooks on each phase.** A methodology library of 22 checklists and 21 runbooks to start from, searched by name and narrowed by category, each previewed before you add it. The checklists follow OSSTMM 3, PTES, NIST SP 800-115, OWASP (the WSTG test by test, ASVS 5.0 section by section, the MASVS, the API Security Top 10, the Top 10 2025, the LLM Top 10 2026 and the IoT Security Testing Guide), MITRE ATT&CK, PCI DSS 11.4, Active Directory, Kubernetes, thick clients, red team, social engineering and physical, each item saying what it establishes, what to check and what to record. The runbooks take an engagement from kick-off to close-out (credentials, third-party permissions, a testing day, a scope change, unexpected impact, a critical finding, client data, the report, the readout, retests) and run each kind of test step by step, an authorised phishing campaign, a physical assessment and a red team operation included. A phase of a default type is offered its checklist and its runbook: web application (OWASP WSTG), internal infrastructure, external infrastructure, cloud, mobile (OWASP MASVS) and wireless. Write your own too: tick items as you test, with who ticked each and when if you want it, and follow a runbook's steps with each command a click to copy. Bring them in or take them out as Excel, Word or JSON, in **Settings, Checklists & Runbooks**.
+- **Checklists and runbooks on each phase.** A methodology library of 22 checklists and 21 runbooks to start from, searched by name and narrowed by category, each previewed before you add it. The checklists follow OSSTMM 3, PTES, NIST SP 800-115, OWASP (the WSTG test by test, ASVS 5.0 section by section, the MASVS, the API Security Top 10, the Top 10 2025, the LLM Top 10 2026 and the IoT Security Testing Guide), MITRE ATT&CK, PCI DSS 11.4, Active Directory, Kubernetes, thick clients, red team, social engineering and physical, each item saying what it establishes, what to check and what to record. The runbooks take an engagement from kick-off to close-out (credentials, third-party permissions, a testing day, a scope change, unexpected impact, a critical finding, client data, the report, the readout, retests) and run each kind of test step by step, an authorised phishing campaign, a physical assessment and a red team operation included. Once you add them, a phase of a default type is offered its checklist and its runbook: web application (OWASP WSTG), internal infrastructure, external infrastructure, cloud, mobile (OWASP MASVS) and wireless. Write your own too: tick items as you test, with who ticked each and when if you want it, and follow a runbook's steps with each command a click to copy. Bring them in or take them out as Excel, Word or JSON, in **Settings, Checklists & Runbooks**.
 - **On each engagement:** its notes, scope, the artifacts left on the client's systems, caveats, appendices for the report (screenshots, tool output, scan results and the rest), files such as videos, and comments for your team.
 - **Sections your way.** Rename, reorder, give an icon to, switch off or leave out of the report any built-in section, and add your own in the ten field styles.
 
@@ -225,7 +227,7 @@ Every picture here is the app itself, with an invented firm's engagement in it. 
 **Your team**
 
 - **Roles.** Administrators, senior testers and testers, each able to see and do what their role allows, checked by the database on every read and write.
-- **People.** Add a colleague, change their address, send setup links, and reset a lost authenticator. Each person has a profile with a picture, job title and phone, for the reports that name them.
+- **People.** Add a colleague, change their address, send setup links, reset a lost authenticator, and see the devices each is signed in on and sign one out. Each person has a profile with a picture, job title and phone, for the reports that name them.
 - **A second factor for everyone**: an authenticator app, or a security key or passkey once it is served over HTTPS. Choose which are allowed or require both, when people prove it again and how long a session lasts, and see active sessions and sign the others out. See [Security](#security).
 - **Live together.** What a colleague saves appears for everyone at once, and two people saving the same finding are asked before one overwrites the other.
 
@@ -272,6 +274,8 @@ Every engagement becomes a report two ways, both in your own brand.
 
 **Your own Word template.** Upload a `.docx` under Settings, PDF & DOCX, and every report is your template filled in, as a Word document, with the PDF made from it in your browser if you like. Start from the **Draft**, a ready-made template in your colours with every placeholder in it, including your own fields, or let the **Document Builder** turn a report you already send into one. The **Placeholder Key** lists everything you can place.
 
+**A template from another reporting tool, brought across.** Upload the Word template you used elsewhere on the same Report row: Pental Report recognises it from its placeholders and turns each into its own, with the loops, conditions and table rows around them kept and everything else in the file as you made it. Before it is saved you see what each placeholder became, what has nothing here that means the same, and the finding fields it prints, which saving adds.
+
 **Edited in Word, brought back.** Download the report as your Word file, edit it in Word or send it round for review, and upload it back beside the report's button. Pental Report shows what changed before anything is written: plain edits and tracked changes (each one yours to accept), and Word comments, which join the engagement's Comments saying who wrote them and where. The file you upload can then be the report your team downloads, kept up to date with anything changed since.
 
 <p align="center">
@@ -288,6 +292,14 @@ Every engagement becomes a report two ways, both in your own brand.
     <img alt="Settings, PDF and DOCX: the firm's Word template, the Document Builder, the Draft and the Placeholder Key" src=".github/assets/screens/templates-light.png" width="100%">
   </picture>
   <br><sub>Where the template is kept</sub>
+</p>
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/screens/convert-dark.png">
+    <img alt="A Word template from another reporting tool, uploaded: each placeholder beside what it became, and what was left out, before it is saved" src=".github/assets/screens/convert-light.png" width="100%">
+  </picture>
+  <br><sub>A template from another tool, before it is saved</sub>
 </p>
 
 ## The API
@@ -391,3 +403,5 @@ Or without Docker, with Node.js 22 and PostgreSQL 16 or later: `node web/build.m
 ## Licence
 
 Pental Report is free software under the [GNU Affero General Public License v3.0](LICENSE). If you run a modified version for others to use over a network, you must offer them its source. Copyright Pental Limited.
+
+Releases and news from Pental are on [LinkedIn](https://www.linkedin.com/company/pental) and at [pental.io](https://pental.io).

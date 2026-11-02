@@ -3,6 +3,8 @@
 Red
 ===
 
+**Experimental migrations:** manage versioned schema and data changes with `red migration`. The API and migration formats may change. See [basic usage](#experimental-migrations). Read the [migration workflow](docs/migrations.md) or follow the [Docker workshop](examples/migrations/README.md).
+
 Take a look at our Documentation: [https://fco.github.io/Red/](https://fco.github.io/Red/)
 
 Red - A **WiP** ORM for Raku
@@ -30,6 +32,55 @@ Other recent highlights include:
   * **Performance and reliability:** faster hydration and projections, safer concurrent query/class initialization, and fixes for generated getters and formatter handling.
 
 See [Changes](Changes) for the complete list.
+
+EXPERIMENTAL MIGRATIONS
+-----------------------
+
+Configure your existing Red models and database in `red.rakuconf` at the project root. For example, with a model available as `lib/MyApp/Task.rakumod`:
+
+```raku
+use lib 'lib';
+use Red:api<2>;
+use Red::Migration::Configuration;
+
+config {
+    .models = ['MyApp::Task'];
+    .drivers = ['SQLite'];
+    .directory = 'migrations';
+    .connections = %(
+        default => { database 'SQLite', :database<development.sqlite> },
+    );
+}
+```
+
+Application queries also use `.connections<default> ` automatically, and `schema()` returns the configured models:
+
+```raku
+use lib 'lib';
+use Red:api<2>;
+use MyApp::Task;
+
+say schema().models.keys;
+MyApp::Task.^create(:title<Example>);
+```
+
+Run from the directory containing `red.rakuconf`. Loading a schema does not open the database; lazy connections are reused per thread on first database use. Explicit `$*RED-DB` and `red-defaults` take precedence. Tests can replace the configuration with `set-config` from `Red::Migration::Configuration`. Supplying models explicitly to `schema(...)` keeps the existing behavior.
+
+Run these commands from the project root:
+
+```sh
+red migration prepare initial  # Generate SQL and schema snapshots; do not change the database.
+red migration apply --test     # Validate the history in a disposable database.
+red migration apply            # Apply pending versions to the configured default connection.
+red migration status           # Show database initialization and migration states.
+red migration init-tests       # Create t/migrations.rakutest for your project's test suite.
+```
+
+Review the generated SQL before applying it and commit the `migrations/` directory. After changing your models, run `red migration prepare change-name`, validate and apply again. Preparation compares models with the last prepared snapshot, initially an empty schema; it does not automatically adopt an existing database. PostgreSQL and MySQL are also supported through their separate driver distributions.
+
+For changes requiring data preparation, use `red migration create change-name`, edit the generated `migration.raku`, then run `red migration prepare change-name`. Data updates and final constraints execute synchronously during apply. Rollback uses `red migration rollback` when the version has an available inverse; it cannot automatically recover overwritten data. Supported changes vary by driver, and SQLite table reconstruction requires manual SQL.
+
+See the [migration workflow](docs/migrations.md) for data transformations, production connections, rollback, driver backfill and parallel histories, or follow the [Docker workshop](examples/migrations/README.md) for a guided deployment exercise.
 
 INSTALL
 -------

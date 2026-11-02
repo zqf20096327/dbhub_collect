@@ -76,6 +76,8 @@ docker compose exec coding2api python scripts/create_user.py admin --role admin
 
 拉镜像：`docker compose pull`（或 `docker pull ghcr.io/robbsluo/coding2api:v0.10.1`）。tag `v*` 推 main → `.github/workflows/publish.yml` → 发 `<tag>` + `:latest`。
 
+容器跑在**有公网 IP 的 VPS** 上要 https 入口 → 见「[公网部署（Docker + Caddy 自动 HTTPS）](#公网部署docker--caddy-自动-https)」。
+
 ## 用户与角色
 
 账号存 SQLite `users` 表；「用户管理」页（仅管理员）增删改。
@@ -804,6 +806,60 @@ curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8000/api/users   # 期
 > **`web/.npmrc` 不能删**：它关掉 `auto-install-peers`（否则 `@lobehub/icons` 拖进 `@lobehub/ui` / `antd`）。该设置与 lockfile 的 `settings.autoInstallPeers` 强耦合；`Dockerfile` 必须 `COPY web/.npmrc`，否则 `--frozen-lockfile` 报 `ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`。
 
 > **部署操作见本地文档**：进程管理、路径、工具版本 → `docs/local-environment.md`（已 gitignore）。
+
+## 公网部署（Docker + Caddy 自动 HTTPS）
+
+有公网 IP 的 VPS 用这条：一条 compose 起「Caddy 入口 + 应用」，证书自动申请 / 续期，应用端口不外露。
+
+```
+客户端 ──443/TLS──> Caddy（终止 TLS）──compose 内网──> coding2api:8000
+```
+
+前提：Docker Compose ≥ 2.24（覆盖文件用了 `!override`）、站点地址（域名，或见下「只有公网 IP、没有域名」）的 A / AAAA 记录已指向本机、80 与 443（tcp + udp）空闲（80 要留给 ACME HTTP-01）。
+
+`.env` 补两项（其余同「快速开始」）：
+
+```bash
+PUBLIC_DOMAIN=ai-api.example.com     # 必填：证书按它签发；没有域名时填公网 IP（见下）
+ACME_EMAIL=ops@example.com           # 域名模式必填：Let's Encrypt 到期通知
+# TLS_MODE=                          # 留空 = 自动申请证书；公网 IP 自签填 internal（见下）
+# ALLOWED_HOSTS 留空即可：空 = 放行本地回环 + PUBLIC_BASE_URL 的主机名
+```
+
+启动并看证书签发：
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.public.yml up -d --build
+docker compose -f docker-compose.yml -f docker-compose.public.yml logs -f caddy
+curl -fsS https://ai-api.example.com/health
+```
+
+覆盖文件（`docker-compose.public.yml`）改了什么：
+
+| 改动 | 为什么 |
+|---|---|
+| 应用端口改绑 `127.0.0.1:${PORT}` | 不给明文 http 留旁路：入口只能走 Caddy |
+| `TRUST_PROXY=true` | 前面恰好一层 Caddy（且应用端口只在回环，无法直连绕过），Key 的 `allowed_ips` 才看得到真实来源 IP |
+| `ALLOWED_HOSTS` 补域名 + `127.0.0.1` | 非空即「完全替换」语义：.env 里已有的值会顶掉域名（全站 400）；漏掉回环会让容器 healthcheck 判 400 → 永远 unhealthy |
+| `HOST=0.0.0.0` | `.env.example` 里的 `HOST=127.0.0.1` 会让容器只监听回环，Caddy 连不上 |
+| 新增 Caddy 服务（`deploy/caddy/`） | 自动 HTTPS + HTTP→HTTPS 308；`flush_interval -1` 保流式逐帧；`X-Forwarded-For` 覆盖式写入，客户端自带伪造无效；反代不设超时上限（耗时口径交给应用自己的 `STREAM_*` / `UPSTREAM_COMPLETE_TIMEOUT_SECONDS`） |
+| `TLS_MODE` 选证书来源 | `acme`（默认，域名）自动申请 Let's Encrypt；`internal`（公网 IP）用 Caddy 自带 CA 自签 |
+| `/metrics` 返 404 | 该端点默认无鉴权（可设 `METRICS_TOKEN` 收紧），公网入口直接摘掉；需要时在宿主 `curl 127.0.0.1:${PORT}/metrics` |
+
+### 只有公网 IP、没有域名
+
+Caddy 的自动申请（ACME）只认域名，不给裸 IP 签发。两条路自选：
+
+1. **要浏览器直接认的证书** → 用 sslip.io / nip.io 这类公共通配 DNS 名当域名：`203-0-113-10.sslip.io`（或 `203.0.113.10.sslip.io`、`.nip.io` 两种写法）会自动解析到 `203.0.113.10`。`PUBLIC_DOMAIN` 填它、`ACME_EMAIL` 照填，走的就是常规 ACME。代价：证书按「注册域」限流，sslip.io / nip.io 是两个被**所有使用者共享**的域名（2026-02 被打满过一次，各自申请过配额上调）——签不出来就换另一个，或退回自签。
+2. **只给 API 客户端用、不介意证书不被信任** → `PUBLIC_DOMAIN=<公网 IP>` + `TLS_MODE=internal`。Caddy 用自带 CA 自签：链路照样加密，但证书不在公共信任库里——浏览器告警，`curl` 要 `-k`，或把根证书装进客户端信任（根证书在 `caddy_data` 卷里：`docker compose -f docker-compose.yml -f docker-compose.public.yml exec caddy cat /data/pki/authorities/local/root.crt`）。
+
+> 自签模式依赖 Caddyfile 里的 `default_sni {$PUBLIC_DOMAIN}`：浏览器与 curl 对 **IP 字面量不发 SNI**（RFC 6066 只允许主机名），没有这行 Caddy 选不出证书，客户端只看到 `tlsv1 alert internal error`。已默认写入，不用手改。
+
+注意：
+
+- **证书落具名卷 `caddy_data`**：别 `docker compose ... down -v` —— 会重新签发，撞 Let's Encrypt 每域名每周 5 次的下发限额。
+- **改 `src/` 后必须重建应用容器**：`... up -d --build`（或至少 `docker compose ... restart coding2api`）；只重启 Caddy 无效。
+- 家宽 CGNAT 无入站地址走不了这条 → 用下一节的 frp 隧道方案。
 
 ## 公网入口（VPS + frp 反向隧道）
 

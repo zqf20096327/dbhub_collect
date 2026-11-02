@@ -10,6 +10,7 @@ Use Maryk when you want:
 - One schema shared by clients, servers, tools, and tests.
 - Stable binary-compatible property indexes instead of reflection-heavy runtime mapping.
 - Version-aware storage: historic reads, change queries, update streams, and efficient sync.
+- Typed queries and mutations, atomic change sets, and serializable transaction scopes over the same models.
 - One request API across in-memory, browser IndexedDB, embedded RocksDB, distributed FoundationDB, and remote stores.
 - Portable JSON, YAML, and ProtoBuf serialization built from the same model definitions.
 
@@ -17,20 +18,12 @@ Maryk is a good fit for local-first apps, cross-platform products, Kotlin-heavy 
 
 Start with the [website](https://marykdb.github.io/maryk/) for the best reading path. Source docs live in this repository and the website is maintained in `website/`.
 
-## Platform Support
-
-Maryk is Kotlin Multiplatform. Platform support depends on the module:
-
-- Core modeling, validation, querying, JSON/YAML serialization, generator support, Memory Store, shared store logic, test models, and test helpers target JVM, Android, JS, WasmJS, Linux, Windows, iOS, macOS, watchOS, tvOS, and Android Native.
-- IndexedDB Store targets JS browser and WasmJS browser for persistent browser storage.
-- File IO targets JVM, Linux, Windows, iOS, macOS, watchOS, tvOS, and Android Native.
-- RocksDB Store targets JVM, Android, Linux, Windows, iOS, macOS, watchOS, tvOS, and Android Native through the `rocksdb-multiplatform` bindings.
-- FoundationDB Store targets JVM, Linux, and macOS where the FoundationDB client library (`libfdb_c`) is available.
-- Remote Store targets JVM, Linux, and macOS.
-- CLI native binaries target Linux and macOS, with JVM execution also available.
-- The desktop App runs on the JVM.
+Use the [typed request API](https://marykdb.github.io/maryk/querying/) as your main API for application reads, writes, history, and sync. [SQL](https://marykdb.github.io/maryk/querying/sql/) is an optional layer for reporting, ad hoc queries, and tabular integrations; it is not required to use Maryk stores.
 
 ## Getting Started
+
+These docs describe the current source branch. When using a published artifact,
+read the matching release tag and use the same version for every Maryk module.
 
 Add the core dependency:
 
@@ -50,7 +43,7 @@ Define a model:
 import maryk.core.models.RootDataModel
 import maryk.core.properties.definitions.date
 import maryk.core.properties.definitions.string
-import maryk.lib.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 object Person : RootDataModel<Person>() {
     val firstName by string(index = 1u)
@@ -82,11 +75,25 @@ For a complete model → store → query flow, read [Getting Started](website/sr
 
 See [store/README.md](store/README.md) for the decision guide.
 
+## Platform Support
+
+Maryk is Kotlin Multiplatform. Platform support depends on the module:
+
+- Core modeling, validation, querying, SQL, JSON/YAML serialization, generator support, Memory Store, shared store logic, test models, and test helpers target JVM, Android, JS, WasmJS, Linux x64 and ARM64, Windows, iOS, macOS, watchOS, tvOS, and Android Native.
+- IndexedDB Store targets JS browser and WasmJS browser for persistent browser storage.
+- File IO targets JVM, Linux x64 and ARM64, Windows, iOS, macOS, watchOS, tvOS, and Android Native.
+- RocksDB Store targets JVM, Android, Linux x64 and ARM64, Windows, iOS, macOS, watchOS, tvOS, and Android Native through the `rocksdb-multiplatform` bindings.
+- FoundationDB Store targets JVM, Linux x64 and ARM64, and macOS where the FoundationDB client library (`libfdb_c`) is available.
+- Remote Store targets JVM, Linux x64 and ARM64, and macOS.
+- CLI native binaries target Linux x64 and macOS, with JVM execution also available.
+- The desktop App runs on the JVM.
+
 ## Documentation Map
 
 - [Core](core/README.md) – Data models, property types, keys, queries, versioning, serialization.
 - [Library](lib/README.md) – Shared utilities for things like Strings and ByteArrays.
 - [File](file/README.md) – Minimal cross-platform file IO layer used by tooling and stores.
+- [SQL (optional)](sql/README.md) – Bounded SQL queries and mutations for reporting, ad hoc queries, and tabular integrations.
 - [JSON](json/README.md) & [YAML](yaml/README.md) – Streaming parsers and writers.
 - [Generator](generator/README.md) – Code generation from YAML and JSON models.
 - [Test Library](testlib/README.md) – Testing utilities and helpers.

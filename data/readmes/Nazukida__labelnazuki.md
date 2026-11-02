@@ -5,16 +5,16 @@
 - 主页：https://nazukida.github.io/labelnazuki/
 - 下载：https://github.com/Nazukida/labelnazuki/releases/latest
 
-## ver. 1.4.5
+## ver. 1.5.0
 
-- 修复未等自动保存完成就切换图片时，标注丢失或被写到下一张图的问题。
-- 修复 classes.txt 中存在空行时类别编号前移，导致标注对应到错误类别的问题。
-- 修复图片与标签分开存放时，文件列表把所有图片显示为未标注的问题。
-- 支持单独指定 classes.txt 位置，多个数据集可共用同一份类别表。
-- 新增关闭当前项目；切换数据集时不再残留上一个项目的类别。
-- 关键点标记大小与形状（圆形 / 实心点 / 方形 / 菱形 / 十字）可调。
-- 新增关键点连线，支持手动连接与按类别自动连线，四种格式均可无损保存。
-- 提供 Windows、macOS（Apple Silicon / Intel）和 Linux x64 安装包。
+- 新增 SAM 3 文字自动标注：输入英文目标名即可一次标出图中所有同类目标，支持当前图片或整个数据集。
+- SAM 3 模型与运行时一键下载，国内默认走镜像，无需配置环境。
+- 新增边缘吸附与共边：矩形框、旋转框自动贴合相邻的边，选中两个框按 G 一键共边。
+- 新增批量修改（Ctrl+B）：按类别、形状筛选，批量改类别、困难样本、转矩形框或删除。
+- 新增 Windows 免安装版（`_portable.zip`），解压即用，数据保存在程序旁的 data 文件夹。
+- 修复旋转框画好后无法调整大小的问题。
+- 修复多边形与 SAM 结果无法二次编辑的问题，支持拖动、添加、删除顶点。
+- 提供 Windows（安装版 / 免安装版）、macOS（Apple Silicon / Intel）和 Linux x64 安装包。
 
 感谢所有用户的反馈与建议。
 
@@ -40,7 +40,7 @@
 
 | 平台 | 架构 | 格式 |
 | --- | --- | --- |
-| Windows | x64 | `.exe`、`.msi` |
+| Windows | x64 | `.exe`、`.msi`、免安装 `.zip` |
 | macOS | Apple Silicon | `.dmg` |
 | macOS | Intel | `.dmg` |
 | Linux | x64 | `.deb`、`.AppImage` |

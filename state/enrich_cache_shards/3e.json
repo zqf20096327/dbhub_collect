@@ -1,10 +1,10 @@
 {
  "authzed/spicedb": {
-  "commit_7d": 5,
-  "commit_90d": 90,
+  "commit_7d": 24,
+  "commit_90d": 112,
   "rel_ver": "v1.57.0",
   "rel_pub": "2026-10-20",
-  "rel_days": 5,
+  "rel_days": 13,
   "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
@@ -22,7 +22,7 @@
    "GHSA-pm3x-jrhh-qcr7(CVE-2025-64529,low)"
   ],
   "contrib_n": 78,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Go": 100,
    "JavaScript": 0,
@@ -32,17 +32,34 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v1.57.0",
+    "d": "2026-10-20",
+    "n": "- The `DeleteRelationships` API now supports resumable, cursored batch deletion. When `optional_limit` and `optional_allow_partial_deletions` are set, the response returns an `after_result_cursor`; passing it back as `optional_cursor` on the next call resumes the deletion after the last relationship removed, which on CockroachDB avoids rescanning already-deleted relationships. Datastores that cannot resume a cursored deletion return an error when a cursor is supplied; without a cursor they transparently fal"
+   },
+   {
+    "t": "v1.56.2",
+    "d": "2026-09-11",
+    "n": "- Namespace cache: Fixed an issue where the cache was configured without a TTL, which meant that entries accumulated until the cache filled and new sets were rejected, reducing cache hit rate and increasing datastore load. (https://github.com/authzed/spicedb/pull/3112)\n- Increase the timeout for datastore readiness checks to account for the possibility of far away databases (https://github.com/authzed/spicedb/pull/3305)\n- Cache metrics: Fixed cache hit rate reporting by removing unnecessary reads from the `"
+   },
+   {
+    "t": "v1.56.1",
+    "d": "2026-08-26",
+    "n": "- Postgres: read replicas no longer intermittently return `object definition not found` under load. The strict read-replica guard now verifies that the replica's snapshot has caught up to the revision being read (snapshot domination) instead of checking a single transaction id, and raises from within the read itself rather than from a trailing assertion, so a replica that catches up mid-query can no longer let an incomplete read through. In both cases the read correctly falls back to the primary. (https://g"
+   }
+  ]
  },
  "trailbaseio/trailbase": {
-  "commit_7d": 15,
-  "commit_90d": 375,
-  "rel_ver": "v0.35.3",
-  "rel_pub": "2026-10-23",
-  "rel_days": 2,
+  "commit_7d": 38,
+  "commit_90d": 410,
+  "rel_ver": "v0.35.8",
+  "rel_pub": "2026-10-30",
+  "rel_days": 3,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -51,7 +68,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 28,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Rust": 60,
    "TypeScript": 28,
@@ -61,10 +78,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v0.35.8",
+    "d": "2026-10-30",
+    "n": "- This release mostly addresses Wasmtime security advisories.\n- Open multi-DB SQLite connections with in-memory \"main\".\n- Apply base+user migrations on non-default \"main\" SQLite databases.\n- Internal: share refinery implementations across `rusqlite` and `trailbase_sqlite`.\n- Update Dependencies.\n\n\n**Full Changelog**: https://github.com/trailbaseio/trailbase/compare/v0.35.7...v0.35.8"
+   },
+   {
+    "t": "v0.35.7",
+    "d": "2026-10-28",
+    "n": "- Enable HTTP2 negotiation to allow Browsers to multiplex more SSE streams.\n- Untangle WASM SQLite extension function runtime from WASM HTTP handlers and tidy up implementation. Properly wire binary version to SQLite function initialization.\n- Refine shutdown order: drop more sooner.\n- Update dependencies.\n\n\n**Full Changelog**: https://github.com/trailbaseio/trailbase/compare/v0.35.6...v0.35.7"
+   },
+   {
+    "t": "v0.35.6",
+    "d": "2026-10-27",
+    "n": "- Add explicit DB shutdown order to avoid an issues w/o implicit destruction even though it was working just fine.\n- Avoid truncating SQLite WALs on implicit connection closure. In multi-DBs setups, we don't want to interfere with other connections when a cached connection is evicted."
+   }
+  ]
  },
  "sqldef/sqldef": {
   "commit_7d": 12,

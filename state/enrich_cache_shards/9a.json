@@ -74,13 +74,13 @@
   }
  },
  "WGDashboard/WGDashboard": {
-  "commit_7d": 8,
+  "commit_7d": 2,
   "commit_90d": 8,
-  "rel_ver": "v4.3.4-rc0",
+  "rel_ver": "v4.3.4",
   "rel_pub": "2026-10-26",
-  "rel_days": 0,
+  "rel_days": 7,
   "rel_n90": 1,
-  "rel_pre": true,
+  "rel_pre": false,
   "rel_none": false,
   "sec_n": 1,
   "sec_worst": "critical",
@@ -89,7 +89,7 @@
    "GHSA-rrf5-q4fp-qvgm(CVE-2026-44343,critical)"
   ],
   "contrib_n": 56,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Vue": 58,
    "Python": 31,
@@ -99,10 +99,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261026",
-   "release": "20261026",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v4.3.4",
+    "d": "2026-10-26",
+    "n": "* Had errors on update to 4.3.3 because using double quotes in MySQL expressions triggers errors by @r3bers in https://github.com/WGDashboard/WGDashboard/pull/1237\n* fix: use database dialect for configuration backup and restore by @evgenyvolferts in https://github.com/WGDashboard/WGDashboard/pull/1370"
+   },
+   {
+    "t": "v4.3.3",
+    "d": "2026-04-10",
+    "n": "- Added database table integrity check, adding columns if it doesn’t exist\n- Database Type\n- Database Host\n- Database Username\n- Database Password"
+   },
+   {
+    "t": "v4.3.2",
+    "d": "2026-03-29",
+    "n": "# Security Advisory: March 2026 Update\r\n\r\n> [!WARNING]\r\n> All users running WGDashboard v4.2.x or later and hosted on the public internet are strongly advised to update to the latest release immediately.\r\n\r\n## Overview\r\n\r\nWe have recently been made aware of critical vulnerabilities affecting WGDashboard that, if exploited, could allow unauthorized parties to access the host file system without authentication. We take these issues extremely seriously and sincerely apologize for any concern or disruption this"
+   }
+  ]
  },
  "Snailclimb/interview-guide": {
   "commit_7d": 4,
@@ -169,11 +186,11 @@
   }
  },
  "Dicklesworthstone/beads_rust": {
-  "commit_90d": 1306,
-  "commit_7d": 33,
+  "commit_90d": 1320,
+  "commit_7d": 38,
   "rel_ver": "v0.7.6",
   "rel_pub": "2026-10-15",
-  "rel_days": 10,
+  "rel_days": 18,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -189,12 +206,29 @@
    "Python": 0,
    "Ruby": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v0.7.6",
+    "d": "2026-10-15",
+    "n": "- **A missing database rebuilds again past a header-only WAL** (#569). In v0.7.5, if `.beads/beads.db` was missing and an orphaned `beads.db-wal` held only its 32-byte header, every command failed with exit 6 and `SYNC_CONFLICT`: \"Automatic database recovery refused because unflushed-state preservation could not be established\". That includes moving `beads.db` aside during a doctor-style recovery. A header-only WAL is the normal state after a checkpoint, and an ordinary `br create` leaves one behind. A WAL "
+   },
+   {
+    "t": "v0.7.5",
+    "d": "2026-10-14",
+    "n": "- WAL-index recovery that meets a stock SQLite reader (bv, the `sqlite3` shell) fails that one command with a retry hint and no longer latches the workspace (#532). A valid empty index left by stock SQLite is admitted without any recovery (#555).\n- Stale-schema heal tries the lossless in-place migration first (#551), and `--discard-db-only` no longer drops recoverable unflushed issues (#550).\nSeven archives (Linux GNU and musl on amd64/arm64, macOS amd64/arm64, Windows amd64), each with a `.sha256` sidecar "
+   },
+   {
+    "t": "v0.7.4",
+    "d": "2026-10-01",
+    "n": "**Reads after bv or `sqlite3` no longer copy the database**\n- Every write after a SQLite reader used to copy the whole database twice into a new `.beads/.br_recovery/schema-migrations/` run, and nothing removed them. When the WAL holds no frames, the main database file is already the complete committed state, so recovery now sets aside only the old index plus its receipts. It still checks that the database and WAL come out byte-identical and that the integrity check is clean; if it finds older damage, it re"
+   }
+  ]
  },
  "goksan/statusnook": {
   "commit_90d": 0,
@@ -552,12 +586,12 @@
   "enriched_at": "20260927"
  },
  "kakao/actionbase": {
-  "commit_90d": 80,
+  "commit_90d": 32,
   "commit_7d": 0,
   "rel_ver": "v0.5.0",
   "rel_pub": "2026-09-01",
-  "rel_days": 26,
-  "rel_n90": 5,
+  "rel_days": 62,
+  "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -572,7 +606,28 @@
    "Scala": 2,
    "Makefile": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "rel_notes": [
+   {
+    "t": "v0.5.0",
+    "d": "2026-09-01",
+    "n": "* Drop HBase from spark-conventions (#309 regression) by @em3s in https://github.com/kakao/actionbase/pull/334\n* Address system storage by URI scheme, drop JDBC path (#398) by @em3s in https://github.com/kakao/actionbase/pull/410\n* Add database-level feature gate via application.yaml (INSERT_MERGE) by @em3s in https://github.com/kakao/actionbase/pull/430\n* In-memory metastore overlay over MySQL (Phase 1, #347) by @em3s in https://github.com/kakao/actionbase/pull/390\n* Test the HBase datastore controllers ov"
+   },
+   {
+    "t": "codec-java/v0.6.0",
+    "d": "2026-07-28",
+    "n": "<!-- Release notes generated using configuration in .github/release.yml at codec-java/v0.6.0 -->\r\n\r\n## What's Changed\r\n* Encode EdgeGroup records in the bulk-load path (BulkEdgeEncoder) by @eazyhozy in https://github.com/kakao/actionbase/pull/397\r\n\r\n\r\n**Full Changelog**: https://github.com/kakao/actionbase/compare/codec-java/v0.5.0...codec-java/v0.6.0"
+   },
+   {
+    "t": "v0.4.7",
+    "d": "2026-07-24",
+    "n": "## What's Changed\n* Backport datastore HASH label fixes to 0.4.x by @em3s in https://github.com/kakao/actionbase/pull/460\n\nThis patch release backports two fixes from `main`:\n* Back datastore HASH labels with an IndexedLabel on the V3 path (#459) — restores correct reads for datastore HASH labels on the V3 path\n* Clarify `getTableBinding` error message to cover the query path (#461)\n\n**Full Changelog**: https://github.com/kakao/actionbase/compare/v0.4.6...v0.4.7"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "McJackTang/MMPD_rPPG_dataset": {
   "commit_90d": 0,

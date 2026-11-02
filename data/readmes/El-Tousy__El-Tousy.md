@@ -1,9 +1,9 @@
 <div align="center">   
          
-# 𝑳𝒆𝒊𝒍𝒂          
-     
+# 𝑳𝒆𝒊𝒍𝒂       
+        
 ### Angehende Anwendungsentwicklerin · Python · Web · Android           
- 
+  
 Ich suche eine **Ausbildung als Fachinformatikerin für Anwendungsentwicklung** in Deutschland.  
 
 [![English](https://img.shields.io/badge/English_version-README.md-0A66C2?style=flat-square)](README.en.md)
@@ -14,14 +14,14 @@ Ich suche eine **Ausbildung als Fachinformatikerin für Anwendungsentwicklung** 
 Marokko 🇲🇦 · Bereit für einen Umzug nach Deutschland
   
 </div>
-      
+         
 --- 
  
 ## Über mich
 
 Ich bin Informatik-Absolventin aus Marokko und habe praktische Erfahrung mit Python, Webentwicklung, Datenbanken und Android. Ich habe vollständige Projekte umgesetzt — von einem Sprachassistenten über eine E-Commerce-Website bis zu einem Überwachungs-Dashboard — und suche eine Ausbildung, in der ich professionelle Softwareentwicklung im Team lernen kann.
 
-Ich löse gern reale Probleme, möchte verstehen, wie Software und IT-Systeme zusammenspielen, und lerne neue Technologien Schritt für Schritt.
+Ich löse gern reale Probleme, möchte verstehen, wie Software und IT-Systeme zusammenspielen, und lerne neue Technologien Schritt für Schritt. Meinen Bachelor in Künstlicher Intelligenz und Data Science schließe ich 2027 ab und möchte anschließend eine praxisnahe Ausbildung beginnen.
 
 ---
 
@@ -29,7 +29,8 @@ Ich löse gern reale Probleme, möchte verstehen, wie Software und IT-Systeme zu
 
 | Zeitraum | Abschluss | Einrichtung |
 |---|---|---|
-| 2024 – 2026 | **DUT Informatik** (Informatikingenieurwesen, Bac+2) — abgeschlossen | Hochschule für Technologie, Marokko |
+| 2026 – 2027 | **Bachelor Künstliche Intelligenz und Data Science** (dreijähriges Hochschulstudium nach dem Abitur, Abschluss 2027) | Fachhochschule für Technologie, Marokko |
+| 2024 – 2026 | **DUT Informatik** (Informatikingenieurwesen, zweijähriges Hochschulstudium nach dem Abitur) — abgeschlossen | Fachhochschule für Technologie, Marokko |
 | 2023 – 2024 | **Abitur**, Physikalische Wissenschaften | Marokko |
 
 ---

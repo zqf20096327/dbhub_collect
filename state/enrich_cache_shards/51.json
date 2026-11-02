@@ -1,10 +1,10 @@
 {
  "pubkey/rxdb": {
-  "commit_7d": 53,
-  "commit_90d": 425,
+  "commit_7d": 42,
+  "commit_90d": 424,
   "rel_ver": "17.6.0",
   "rel_pub": "2026-10-05",
-  "rel_days": 20,
+  "rel_days": 28,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 255,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "TypeScript": 93,
    "CSS": 4,
@@ -23,18 +23,35 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "17.6.0",
+    "d": "2026-10-05",
+    "n": "- FIX DenoKV [RxStorage](https://rxdb.info/rx-storage.html): a query without a `limit` passed `Infinity` to `Deno.Kv.list()`, which throws `Limit must be a positive integer` since Deno 2.9. Unlimited queries no longer pass a limit at all.\n- FIX `DocumentCache`: a document that is re-inserted after the cleanup purged its tombstone was no longer found by `findOne()` and by primary key queries, because the new revision chain starts at height `1` and the out-of-order protection kept the cached tombstone. [#8948"
+   },
+   {
+    "t": "17.5.0",
+    "d": "2026-08-20",
+    "n": "- FIX `deleteFolder()` of the [backup plugin](https://rxdb.info/backup.html) used the deprecated `fs.rmdirSync(path, { recursive: true })`, it now uses `fs.rmSync()`.\n- FIX `useLiveRxQuery` never unsubscribed from the live query because `useEffect` dropped the cleanup returned by the async `runQuery` callback. Added an unmount test in `test/react/react-hooks.test.tsx`. [#8964](https://github.com/pubkey/rxdb/issues/8964)\n- CHANGE Remove the `reconnecting-websocket` dependency, which was unmaintained since 20"
+   },
+   {
+    "t": "17.4.0",
+    "d": "2026-07-13",
+    "n": "Removed the appended `| RxDB - JavaScript Database` site-title suffix from SEO page titles by swizzling the `PageMetadata` theme component, so the `<title>` and `og:title` now contain only the page title. See https://github.com/pubkey/rxdb\n- FIX storage-sqlite: removed `console.dir` calls which are `undefined` in production React Native / Hermes runtimes and threw `TypeError: undefined is not a function` inside `openSqliteTransaction`, masking the real SQLite error and bypassing the `BEGIN;` retry loop. [#8"
+   }
+  ]
  },
  "bytebase/bytebase": {
-  "commit_7d": 44,
-  "commit_90d": 766,
+  "commit_7d": 143,
+  "commit_90d": 848,
   "rel_ver": "3.24.0",
   "rel_pub": "2026-10-22",
-  "rel_days": 3,
-  "rel_n90": 7,
+  "rel_days": 11,
+  "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 1,
@@ -44,7 +61,7 @@
    "GHSA-5r3p-6rj5-7937(-,medium)"
   ],
   "contrib_n": 105,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Go": 49,
    "TypeScript": 43,
@@ -54,10 +71,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "3.24.0",
+    "d": "2026-10-22",
+    "n": "- Oracle: **TLS mode** is turned off, and stored CA and client certificates are removed.\n- A create-database plan fails if a database with that name exists in another project, including one that project dropped; a project can still reuse its own names.\n- **Setup wizard for new workspaces** — A new workspace opens on four screens: name the workspace, choose what to do first, create a project with the sample instance or your own database, and set up your team. **Finish** creates everything at once and opens"
+   },
+   {
+    "t": "3.23.1",
+    "d": "2026-10-08",
+    "n": "- **Date and time display** — Issue and plan lists, comments, and other activity feeds now show a relative age (\"3 days ago\") for 30 days and the date after that (\"Jul 12\"), as GitHub does, instead of counting up to \"365 days ago\". Database changelog, revisions, and task run history always show the date and time. Scheduled rollout and expiration times show their timezone in the visible text. Hover a shortened time to see the full date, time, and timezone."
+   },
+   {
+    "t": "3.23.0",
+    "d": "2026-09-24",
+    "n": "- **PostgreSQL: data-modifying queries in SQL Editor need DML permission** — Some statements look like reads but write data: a `SELECT` whose `WITH` clause runs `INSERT`, `UPDATE`, or `DELETE`, and `EXPLAIN ANALYZE` of a write, which actually executes it. These now need DML permission; query permission (`bb.sql.select`) alone is no longer enough. See [change details](#postgresql-sql-editor-permissions).\n- The SQL Server plan view keeps working after Chrome drops XSLT support in November 2026.\n- The Visual"
+   }
+  ]
  },
  "dbcli/pgcli": {
   "commit_7d": 2,
@@ -88,8 +122,8 @@
   }
  },
  "mysql/mysql-server": {
-  "commit_7d": 1,
-  "commit_90d": 643,
+  "commit_7d": 2,
+  "commit_90d": 591,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -97,7 +131,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 128,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "C++": 85,
    "C": 7,
@@ -107,18 +141,18 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
   }
  },
  "manticoresoftware/manticoresearch": {
-  "commit_7d": 16,
-  "commit_90d": 218,
+  "commit_7d": 23,
+  "commit_90d": 224,
   "rel_ver": "release-29.9.0",
   "rel_pub": "2026-09-11",
-  "rel_days": 44,
-  "rel_n90": 3,
+  "rel_days": 52,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -126,7 +160,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 62,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "C++": 77,
    "HTML": 9,
@@ -136,10 +170,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "release-29.9.0",
+    "d": "2026-09-11",
+    "n": "* 🪲 [v29.2.4](https://github.com/manticoresoftware/manticoresearch/tree/29.2.4) [Issue #4828](https://github.com/manticoresoftware/manticoresearch/issues/4828) Restored Sequel Ace 5.3.1+ compatibility by supporting its `CAST(DATABASE() AS BINARY)` and `CAST(@@character_set_client AS BINARY)` probes, preventing every subsequent query from failing.\n* 🪲 [v29.8.1](https://github.com/manticoresoftware/manticoresearch/tree/29.8.1) [Issue #4884](https://github.com/manticoresoftware/manticoresearch/issues/488"
+   },
+   {
+    "t": "release-29.0.2",
+    "d": "2026-08-14",
+    "n": "This release adds sharded-table settings inspection, distributed and sharded table optimization, Unix-socket Buddy callbacks, more reliable conversational search, configurable file access, and faster columnar KNN rescoring, with fixes across backups, JDBC compatibility, highlighting, query inspection, KNN compaction, distributed-query memory use, template tables, and concurrent RT-table optimization.\n* 🪲 [v29.0.2](https://github.com/manticoresoftware/manticoresearch/tree/29.0.2) [Issue #4434](https://git"
+   },
+   {
+    "t": "release-28.6.6",
+    "d": "2026-07-31",
+    "n": "* 🪲 [v28.6.6](https://github.com/manticoresoftware/manticoresearch/releases/tag/28.6.6) [Issue #4741](https://github.com/manticoresoftware/manticoresearch/issues/4741) Fixed `USER()` parsing after authentication support made `USER` a keyword, restoring MySQL client `status` command compatibility."
+   }
+  ]
  },
  "tumobi/nideshop": {
   "commit_7d": 0,
@@ -161,11 +212,11 @@
   }
  },
  "filodb/FiloDB": {
-  "commit_90d": 24,
+  "commit_90d": 21,
   "commit_7d": 2,
   "rel_ver": "v0.9.17.2",
   "rel_pub": "2022-11-18",
-  "rel_days": 1416,
+  "rel_days": 1445,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -181,19 +232,27 @@
    "Shell": 0,
    "ANTLR": 0
   },
-  "enriched_at": "20261004",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261004",
-   "release": "20261004"
-  }
+   "commit": "20261102",
+   "release": "20261102",
+   "security": "20261102"
+  },
+  "rel_notes": [
+   {
+    "t": "v0.9.17.2",
+    "d": "2022-11-18",
+    "n": "* [TSDB] InternalError shard(s?) should have dropped into \"error\" state and been reassigned\n* [TSDB] Support for [present_over_time](https://prometheus.io/docs/prometheus/latest/querying/functions/#aggregation_over_time) , [group](https://prometheus.io/docs/prometheus/latest/querying/operators/#aggregation-operators) and [sgn](https://prometheus.io/docs/prometheus/latest/querying/functions/#sgn) functions PromQL function.\n* [TSDB] Support to enable partial results for metadata queries. This fixes all or not"
+   }
+  ]
  },
  "mariostoev/finviz": {
-  "commit_90d": 0,
-  "commit_7d": 0,
-  "rel_ver": "v2.0.0",
-  "rel_pub": "2026-01-18",
-  "rel_days": 252,
-  "rel_n90": 0,
+  "commit_90d": 3,
+  "commit_7d": 3,
+  "rel_ver": "v2.1.0",
+  "rel_pub": "2026-11-01",
+  "rel_days": 1,
+  "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -204,17 +263,36 @@
   "lang": {
    "Python": 100
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "security": "20261027"
-  }
+   "security": "20261027",
+   "commit": "20261102",
+   "release": "20261102"
+  },
+  "rel_notes": [
+   {
+    "t": "v2.1.0",
+    "d": "2026-11-01",
+    "n": "## What's Changed\n* fix: sector/industry/country missing from get_stock() after quote page redesign by @drienkop in https://github.com/mariostoev/finviz/pull/219\n* fix: restore Screener after Finviz screener redesign by @mariostoev in https://github.com/mariostoev/finviz/pull/220\n\n## New Contributors\n* @drienkop made their first contribution in https://github.com/mariostoev/finviz/pull/219\n\n**Full Changelog**: https://github.com/mariostoev/finviz/compare/v2.0.0...v2.1.0"
+   },
+   {
+    "t": "v2.0.0",
+    "d": "2026-01-18",
+    "n": "## v2.0.0 - Fixed scraping after Finviz DOM changes\n\n### Breaking Changes\n\n- **Python 3.10+ required** - Dropped support for Python 3.9 and earlier\n- Some internal APIs may have changed (scraper utilities, helper functions)\n\n### Fixed\n\n- **`get_stock()`** - Complete rewrite to handle FinViz DOM changes\n  - Now returns 90+ data points (was returning empty or partial data)\n  - Updated selectors for new header structure\n  - Fixed financial data extraction\n\n- **`Screener`** - Fixed table parsing and header extr"
+   },
+   {
+    "t": "1.4.6",
+    "d": "2023-04-08",
+    "n": "Closes #146, #149, #154, #155, #157, #158"
+   }
+  ]
  },
  "elliothux/open-compute": {
-  "commit_90d": 635,
-  "commit_7d": 36,
-  "rel_ver": "v0.3.0",
-  "rel_pub": "2026-10-10",
-  "rel_days": 16,
+  "commit_90d": 701,
+  "commit_7d": 66,
+  "rel_ver": "v0.4.0",
+  "rel_pub": "2026-10-31",
+  "rel_days": 2,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -230,12 +308,29 @@
    "Python": 1,
    "CSS": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261026",
-   "release": "20261026",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v0.4.0",
+    "d": "2026-10-31",
+    "n": "Do not remove migration rows or edit SQLite files to force a downgrade.\n| [cf3163dd0bd9](https://github.com/elliothux/workerd/commit/cf3163dd0bd96c4b03ea222ffdbb4ff1e0dab3ba) | test: add pinned HTTP/1.0 persistence regression inputs                       |\nThe local product cases exercise these paths with real workerd, Docker and SQLite.\n| [7b23dc995a01](https://github.com/elliothux/workerd/commit/7b23dc995a014adbe89ffb19ec14b6c6344d5814) | Allow fenced Container monitors to confirm exited executions       "
+   },
+   {
+    "t": "v0.3.0",
+    "d": "2026-10-10",
+    "n": "- Durable Object activations no longer occupy the shared 64-entry named WorkerLoader cache. The private facet manager no longer retains its own actor stub, allowing native idle release. Real-daemon regression covers 129 objects and simultaneous hibernatable WebSockets, alarm repair, unrelated Worker availability, version validation and restart with SQLite data preserved ([#146](https://github.com/elliothux/open-compute/issues/146), [#149](https://github.com/elliothux/open-compute/pull/149)).\n- Browser Run s"
+   },
+   {
+    "t": "v0.2.4",
+    "d": "2026-10-05",
+    "n": "- AI Search opens existing instance storage and validates its configuration in one SQLite snapshot. Concurrent metadata updates no longer cause a stale inspection to fail contract validation and mark an otherwise healthy instance unavailable. Identity, model and configuration corruption remain rejected.\n- **Breaking pre-1.0 deployment identity:** 0.2.4 changes the system Worker manifest bound into immutable deployment descriptors. An instance with retained pre-0.2.4 Worker versions cannot be upgraded in pla"
+   }
+  ]
  },
  "simov/express-admin": {
   "commit_90d": 0,
@@ -2709,11 +2804,11 @@
   }
  },
  "ghost0211/og_developer": {
-  "commit_90d": 1897,
-  "commit_7d": 36,
-  "rel_ver": "v0.2.37",
-  "rel_pub": "2026-09-30",
-  "rel_days": 2,
+  "commit_90d": 372,
+  "commit_7d": 0,
+  "rel_ver": "v0.2.59",
+  "rel_pub": "2026-10-20",
+  "rel_days": 13,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -2729,14 +2824,31 @@
    "Java": 2,
    "CSS": 1
   },
-  "enriched_at": "20261002",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261002",
-   "release": "20261002",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261002",
    "contrib": "20261002",
    "lang": "20261002"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v0.2.59",
+    "d": "2026-10-20",
+    "n": "**Full Changelog**: https://github.com/ghost0211/og_developer/compare/v0.2.58...v0.2.59"
+   },
+   {
+    "t": "v0.2.58",
+    "d": "2026-10-20",
+    "n": "**Full Changelog**: https://github.com/ghost0211/og_developer/compare/v0.2.57...v0.2.58"
+   },
+   {
+    "t": "v0.2.57",
+    "d": "2026-10-16",
+    "n": "**Full Changelog**: https://github.com/ghost0211/og_developer/compare/v0.2.56...v0.2.57"
+   }
+  ]
  },
  "Ronnieyzg/gaussdb": {
   "commit_90d": 0,

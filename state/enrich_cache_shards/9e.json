@@ -1,12 +1,12 @@
 {
  "makeplane/plane": {
-  "commit_7d": 9,
-  "commit_90d": 168,
-  "rel_ver": "v1.4.3-rc2",
-  "rel_pub": "2026-10-23",
-  "rel_days": 2,
-  "rel_n90": 10,
-  "rel_pre": true,
+  "commit_7d": 22,
+  "commit_90d": 202,
+  "rel_ver": "v1.4.3",
+  "rel_pub": "2026-10-28",
+  "rel_days": 5,
+  "rel_n90": 8,
+  "rel_pre": false,
   "rel_none": false,
   "sec_n": 30,
   "sec_worst": "critical",
@@ -22,7 +22,7 @@
    "GHSA-hpgm-9r34-c4x5(-,high)"
   ],
   "contrib_n": 173,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "TypeScript": 69,
    "Python": 27,
@@ -32,10 +32,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v1.4.3",
+    "d": "2026-10-28",
+    "n": "### 🐞  Bug fixes\r\n\r\n- Fixed voting on published work items that had no votes yet, which previously failed without registering the vote.\r\n- Fixed archiving a cycle that has no end date.\r\n- Fixed work item links being re-crawled on every update even when the URL had not changed.\r\n- The REST API now returns a validation error when a work item is created or updated with assignees or labels that do not belong to the project, instead of silently dropping them.\r\n- Fixed MinIO image pulls failing after the `mini"
+   },
+   {
+    "t": "v1.4.3-rc2",
+    "d": "2026-10-23",
+    "n": "## What's Changed\n* [INFRA-1089] chore(deps): switch MinIO image to pgsty/silo (v1.4.3) by @sriramveeraghanta in https://github.com/makeplane/plane/pull/9963\n* [SECUR-247] fix(security): require project membership to publish (v1.4.3) by @sriramveeraghanta in https://github.com/makeplane/plane/pull/10034\n\n\n**Full Changelog**: https://github.com/makeplane/plane/compare/v1.4.3-rc1...v1.4.3-rc2"
+   },
+   {
+    "t": "v1.4.3-rc1",
+    "d": "2026-10-06",
+    "n": "**Full Changelog**: https://github.com/makeplane/plane/compare/v1.4.2...v1.4.3-rc1"
+   }
+  ]
  },
  "plotly/falcon": {
   "commit_7d": 0,
@@ -65,11 +82,11 @@
   }
  },
  "pgbackrest/pgbackrest": {
-  "commit_7d": 0,
-  "commit_90d": 171,
+  "commit_7d": 4,
+  "commit_90d": 134,
   "rel_ver": "release/2.60.0",
   "rel_pub": "2026-10-18",
-  "rel_days": 7,
+  "rel_days": 15,
   "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
@@ -78,7 +95,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 66,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "C": 90,
    "Python": 10,
@@ -87,18 +104,35 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "release/2.60.0",
+    "d": "2026-10-18",
+    "n": "**IMPORTANT NOTE**: The restore command will now error and stop if any restored file contains an invalid page checksum, which leaves the cluster incomplete and unable to start, so the restore must be rerun. The expire command will now refuse to expire if the oldest retained backup would contain checksum errors, which also prevents archive from being expired in that repository. Set checksum-page-error=n to warn instead of erroring.\n\n**Features**:\n\n- Add checksum-page-error option to error on invalid page che"
+   },
+   {
+    "t": "release/2.59.3",
+    "d": "2026-10-04",
+    "n": "**IMPORTANT NOTE**: In prior versions it was possible for weak encryption subkeys and salts to be generated if there was an error accessing system random data. See [Weak Encryption Subkeys and Salts](https://pgbackrest.org/news.html#weak-encryption) for more information.\r\n\r\n**Bug Fixes**:\r\n\r\n- Fix possible checksum error loading encrypted info and manifest files. (Fixed by j0uinim. Reviewed by David Steele.)\r\n- Fix possible weak encryption subkeys/salts. (Fixed by j0uinim. Reviewed by David Steele, Stefan F"
+   },
+   {
+    "t": "release/2.59.2",
+    "d": "2026-09-27",
+    "n": "- PostgreSQL 19beta4 support."
+   }
+  ]
  },
  "dataplat/dbatools": {
-  "commit_7d": 12,
-  "commit_90d": 278,
+  "commit_7d": 7,
+  "commit_90d": 238,
   "rel_ver": "v2.9.1",
   "rel_pub": "2026-10-15",
-  "rel_days": 10,
-  "rel_n90": 3,
+  "rel_days": 18,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -106,7 +140,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 278,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "PowerShell": 85,
    "TSQL": 15,
@@ -115,10 +149,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v2.9.1",
+    "d": "2026-10-15",
+    "n": "* Remove-DbaComputerCertificate - Add -DeleteKey to delete the private key with the certificate by @andreasjordan in https://github.com/dataplat/dbatools/pull/10724\n* Remove-DbaPrivilege - Add a command to revoke Windows privileges by @andreasjordan in https://github.com/dataplat/dbatools/pull/10739\n* Remove-DbaAgentJobStep - Stop ending the calling script when a job or step is missing by @andreasjordan in https://github.com/dataplat/dbatools/pull/10750\n* Maintenance task tempcleanup - Remove only dbatools*"
+   },
+   {
+    "t": "v2.9.0",
+    "d": "2026-09-16",
+    "n": "* Pester 6 - Drop stale v4/v5 references and take the version out of names by @andreasjordan in https://github.com/dataplat/dbatools/pull/10520\n* Copy-DbaAgentSchedule - Make -Force actually drop and recreate existing schedules by @andreasjordan in https://github.com/dataplat/dbatools/pull/10596\n* Remove-DbaAgDatabase - Honor the AvailabilityGroup filter by @andreasjordan in https://github.com/dataplat/dbatools/pull/10608\n* Remove-DbaAgListener - Honor the AvailabilityGroup filter by @andreasjordan in https"
+   },
+   {
+    "t": "v2.8.4",
+    "d": "2026-07-31",
+    "n": "* Tests - Balance EnableException set/remove in four test files by @andreasjordan in https://github.com/dataplat/dbatools/pull/10470\n* Add Import-DbaParquet command by @jovanpop-msft in https://github.com/dataplat/dbatools/pull/10309\n* Export-DbaRegServer - Support local registered servers by @potatoqualitee in https://github.com/dataplat/dbatools/pull/10425\n* Find-DbaAgentJob - Add regex Pattern filtering by @potatoqualitee in https://github.com/dataplat/dbatools/pull/10426\n* Test-DbaDbCompression - Add Ex"
+   }
+  ]
  },
  "gaitco/quran-database": {
   "commit_90d": 28,
@@ -163,11 +214,11 @@
   }
  },
  "salsita/node-pg-migrate": {
-  "commit_90d": 116,
-  "commit_7d": 10,
+  "commit_90d": 118,
+  "commit_7d": 2,
   "rel_ver": "v10.0.0-alpha.7",
   "rel_pub": "2026-10-22",
-  "rel_days": 3,
+  "rel_days": 11,
   "rel_n90": 6,
   "rel_pre": true,
   "rel_none": false,
@@ -180,12 +231,29 @@
    "TypeScript": 94,
    "JavaScript": 6
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v10.0.0-alpha.7",
+    "d": "2026-10-22",
+    "n": "## What's Changed\r\n* fix(views)!: escape option names and values by @Creatixpy in https://github.com/salsita/node-pg-migrate/pull/1829\r\n* feat(tables): support child partitions by @Creatixpy in https://github.com/salsita/node-pg-migrate/pull/1830\r\n* fix(sequences)!: keep zero values in sequence options by @ujjawal-yadav in https://github.com/salsita/node-pg-migrate/pull/1833\r\n* chore(deps): update dependency pnpm to v12.14.0 by @renovate[bot] in https://github.com/salsita/node-pg-migrate/pull/1837\r\n* chore("
+   },
+   {
+    "t": "v10.0.0-alpha.6",
+    "d": "2026-10-17",
+    "n": "## What's Changed\r\n* feat(columns): support reusable check constraints in shorthands by @Creatixpy in https://github.com/salsita/node-pg-migrate/pull/1825\r\n* fix(operations): warn about ambiguous nullability options by @Creatixpy in https://github.com/salsita/node-pg-migrate/pull/1827\r\n* feat(defaults): support plain JSON objects by @Creatixpy in https://github.com/salsita/node-pg-migrate/pull/1824\r\n* feat(migrations): support queued row inserts by @Creatixpy in https://github.com/salsita/node-pg-migrate/pu"
+   },
+   {
+    "t": "v10.0.0-alpha.5",
+    "d": "2026-10-15",
+    "n": "## What's Changed\r\n* chore(deps): update dependency oxlint to v1.87.0 by @renovate[bot] in https://github.com/salsita/node-pg-migrate/pull/1788\r\n* docs: pass migration direction in TypeScript FAQ examples by @w3lld1 in https://github.com/salsita/node-pg-migrate/pull/1804\r\n* fix: use valid CommonJS exports in .cjs template by @Shinigami92 in https://github.com/salsita/node-pg-migrate/pull/1810\r\n* chore(deps): update dependency oxfmt to v0.72.0 by @renovate[bot] in https://github.com/salsita/node-pg-migrate/p"
+   }
+  ]
  },
  "tensorbase/tensorbase": {
   "commit_90d": 0,
@@ -2007,10 +2075,10 @@
   }
  },
  "dialog-db/dialog-db": {
-  "commit_90d": 123,
-  "commit_7d": 9,
-  "rel_ver": null,
-  "rel_none": true,
+  "commit_90d": 188,
+  "commit_7d": 16,
+  "rel_ver": "v0.4.0-rc.3",
+  "rel_none": false,
   "sec_n": 0,
   "sec_worst": null,
   "sec_last": null,
@@ -2023,14 +2091,35 @@
    "HTML": 0,
    "CSS": 0
   },
-  "enriched_at": "20260930",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20260930",
-   "release": "20260930",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20260930",
    "contrib": "20260930",
    "lang": "20260930"
-  }
+  },
+  "rel_pub": "2026-10-20",
+  "rel_days": 13,
+  "rel_n90": 9,
+  "rel_pre": true,
+  "rel_notes": [
+   {
+    "t": "v0.4.0-rc.3",
+    "d": "2026-10-20",
+    "n": "The facts a query folds in beside its lines, the injected `db:session` metadata and whatever `.with(..)` adds, were a `Changes` batch read as a store: filtered and sorted per selector, scanned for retracts and for rules on every read. A rule in that batch turned the assembled rule-set cache off for the whole query, and its bodies were decoded every time. The batch is now held as an `Ephemeral`, the store a branch's session overlay already uses. It is read by range, and its revision joins the key of every ru"
+   },
+   {
+    "t": "v0.4.0-rc.2",
+    "d": "2026-10-15",
+    "n": "[#605](https://github.com/dialog-db/dialog-db/pull/605), forward-ported from `release/0.3.x`\n[#601](https://github.com/dialog-db/dialog-db/pull/601)\n[#602](https://github.com/dialog-db/dialog-db/pull/602)\n[#598](https://github.com/dialog-db/dialog-db/pull/598)\n[#600](https://github.com/dialog-db/dialog-db/pull/600)\n[#569](https://github.com/dialog-db/dialog-db/pull/569) gave every `Entry` the cell the blake3 of its key is kept in. Only the boundary rules read that hash, on the edit path, but every entry a s"
+   },
+   {
+    "t": "v0.4.0-rc.1",
+    "d": "2026-10-15",
+    "n": "[#605](https://github.com/dialog-db/dialog-db/pull/605), forward-ported from `release/0.3.x`\n[#601](https://github.com/dialog-db/dialog-db/pull/601)\n[#602](https://github.com/dialog-db/dialog-db/pull/602)\n[#598](https://github.com/dialog-db/dialog-db/pull/598)\n[#600](https://github.com/dialog-db/dialog-db/pull/600)\n[#569](https://github.com/dialog-db/dialog-db/pull/569) gave every `Entry` the cell the blake3 of its key is kept in. Only the boundary rules read that hash, on the edit path, but every entry a s"
+   }
+  ]
  },
  "pingcap/sp500-insight-template": {
   "commit_90d": 0,
@@ -2367,8 +2456,8 @@
   }
  },
  "sqlrush/gh_agent_k8s": {
-  "commit_90d": 137,
-  "commit_7d": 0,
+  "commit_90d": 276,
+  "commit_7d": 12,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2383,10 +2472,10 @@
    "CSS": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261002",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261002",
-   "release": "20261002",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261002",
    "contrib": "20261002",
    "lang": "20261002"
@@ -2417,8 +2506,8 @@
   }
  },
  "kxiaoba/goldendb-architecture-designer": {
-  "commit_90d": 27,
-  "commit_7d": 3,
+  "commit_90d": 39,
+  "commit_7d": 7,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2432,10 +2521,10 @@
    "HTML": 6,
    "Python": 1
   },
-  "enriched_at": "20261002",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261002",
-   "release": "20261002",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261002",
    "contrib": "20261002",
    "lang": "20261002"

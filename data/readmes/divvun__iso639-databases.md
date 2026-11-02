@@ -4,17 +4,23 @@ This repository is borne out of a need for a singular database of languages mapp
 
 This database has been extended to include tables for resolving default ISO 15924 scripts for a given ISO 639 tag, and a table for resolving locales to LCIDs for Microsoft Windows and Microsoft Office-related localisation efforts.
 
-## ISO 639 Autonyms - iso639-autonyms.tsv
+## BCP 47 Autonyms - bcp47-autonyms.tsv
 
 While the data has initially been generated from standard sources, contributions are welcomed for any overly-anglicised names (those not using the native character set of the language) or those languages with name variants that have not been included.
 
 ### Interpretation
 
-`tag3` and `tag1` columns represent the ISO 639-3 (or -5) and -1 tags respectively. The `name` field is the "most recognisable" form of the language name, typically in English, to be used as a fallback where an autonym is not available.
+Each row is a BCP 47 language tag split into its parts. `tag3` and `tag1` columns represent the ISO 639-3 (or -5) and -1 tags respectively, `script` is an ISO 15924 script code, and `region` is an ISO 3166-1 alpha-2 or UN M.49 region code. To build the tag, use `tag1` if present, otherwise `tag3`, then append `script` and `region` if present, for example `se`, `se-FI` or `crk-Cans`.
 
-The `autonym` field is the name of the language *in* that language. If this field is blank, it means that there is no confirmed autonym for this language in this database and you may use the `name` field as a fallback.
+A blank `script` means the row is in the language's default script, as given by `iso639-default-script.tsv`, and a blank `region` means the row applies regardless of region. Look up the most specific tag first, then fall back by dropping the `region`, then the `script`. For example, `sr` gives `Српски` and `sr-Latn` gives `Srpski`.
 
-An `autonym` being blank does not necessarily indicate that the `name` field represents the autonym. In the case where they are the same, they should be listed in both columns.
+More tag columns may be added to the end in future, so read columns by their header name rather than by position.
+
+The `common_name` field is what the speakers call their language in English. This may differ from the ISO 639-3 reference name.
+
+The `autonym` field is what the speakers call their language *in* that language. Where the autonym is the same as the `common_name`, the `autonym` field is left blank.
+
+A blank `autonym` therefore means either that it is the same as the `common_name`, or that there is no confirmed autonym for this language in this database. In both cases, use the `common_name` field.
 
 ### Sources
 
@@ -24,7 +30,8 @@ Here are the currently utilised sources by this table:
 - `ethnologue` - [Ethnologue](https://www.ethnologue.com/), only autonyms where specified.
 - `iso639-3` - [ISO 639-3](http://www.sil.org/iso639-3/), reference language names only.
 - `iso639-5` - [ISO 639-5](https://www.loc.gov/standards/iso639-5/id.php), reference language family names only.
-- `github` - [This repository](https://github.com/bbqsrc/iso639-databases)
+- `giellalt` - [GiellaLT](https://github.com/giellalt)
+- `github` - [This repository](https://github.com/divvun/iso639-databases)
 
 ## ISO 639 Default Script (ISO 15924) - iso639-default-script.tsv
 
@@ -40,11 +47,11 @@ Here are the currently utilised sources by this table:
 
 - `cldr` - [Unicode Common Locale Data Repository](http://cldr.unicode.org/)
 - `giellalt` - [GiellaLT](https://github.com/giellalt)
-- `github` - [This repository](https://github.com/bbqsrc/iso639-databases)
+- `github` - [This repository](https://github.com/divvun/iso639-databases)
 
 ## ISO 639 Microsoft Office LCIDs - iso639-lcids.tsv
 
-The LCIDs used in this table are defined by [MS-OE376: 2.1.1906 Part 4 Section 7.6.2.39, LCID (Locale ID)](https://docs.microsoft.com/en-us/openspecs/office_standards/ms-oe376/6c085406-a698-4e12-9d4d-c3b0ee3dbc4a).
+The LCIDs used in this table are defined by [MS-LCID: Windows Language Code Identifier (LCID) Reference](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c), with Office-only LCIDs from [MS-OE376: 2.1.1907 Part 4 Section 7.6.2.39, LCID (Locale ID)](https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oe376/6c085406-a698-4e12-9d4d-c3b0ee3dbc4a). Where the two disagree, MS-LCID is used. Languages that Windows only identifies with the unassigned LCID `0x1000` are not included.
 
 ### Interpretation
 

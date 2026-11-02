@@ -8,22 +8,28 @@
 [![Deploy](https://github.com/haneoka-gakuen/haneoka/actions/workflows/deploy-cloudflare.yml/badge.svg)](https://github.com/haneoka-gakuen/haneoka/actions/workflows/deploy-cloudflare.yml)
 [![License: MPL-2.0](https://img.shields.io/badge/license-MPL--2.0-2f356f.svg)](LICENSE)
 
-Unofficial resource archive and browser viewer for _BanG Dream! Our Notes_.
+Unofficial database, tools and community for *BanG Dream! Our Notes*, at [haneoka.org](https://haneoka.org).
 
-The production UI is a root-level Astro application with small, route-scoped
-Lit workspaces. Shared shell and document components live in `src/components`,
-interactive workspaces in `src/lit`, and the Material Design 3 styles in
-`src/styles`.
+## Features
 
-- [Catalog](https://haneoka.org/catalog)
-- Searchable multilingual game data
-- Audio, video, comic, Live2D, story, and asset viewers
-- Interactive chart and story players
-- ADV story playback and authoring
-- Sonolus-compatible play, watch, preview, and tutorial engines
-- Accounts and community features
+- Searchable catalogue in five languages, for every server
+- Audio, video, comic, Live2D, Spine and story viewers
+- Chart and story players, with Sonolus-compatible engines
+- Team builder with separate server inventories, event planning and card import
+- Chart editor with cloud drafts, version history, publishing and remixes
+- Gekiso Arena schedule, rankings, song rules and team building
+- Event trackers, player lookup, song rankings and calendars
+- Community posts, playlists and accounts
+- Embeddable players and a [public API](https://docs.haneoka.org)
+- [Native app](https://github.com/haneoka-gakuen/haneoka-app) for Android, iOS, Windows, macOS and Linux
+
+The site is an Astro application with route-scoped Lit workspaces. `src/components` holds the shell, `src/lit` the workspaces, and `src/styles` the Material Design 3 styles.
 
 ## Development
+
+Start with the [repository map](L1.md) and [development guide](docs/DEV_GUIDE.md)
+to find the relevant source area and checks. Architecture maps and core file
+coordinates follow the [GEB maintenance guide](docs/GEB使用与维护指南.md).
 
 Requirements:
 

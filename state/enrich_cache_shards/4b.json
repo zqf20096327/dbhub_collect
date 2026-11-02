@@ -101,11 +101,11 @@
   }
  },
  "dbos-inc/dbos-transact-py": {
-  "commit_90d": 70,
-  "commit_7d": 8,
-  "rel_ver": "3.3.0",
-  "rel_pub": "2026-10-15",
-  "rel_days": 10,
+  "commit_90d": 75,
+  "commit_7d": 10,
+  "rel_ver": "3.4.0",
+  "rel_pub": "2026-10-28",
+  "rel_days": 5,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -117,12 +117,29 @@
   "lang": {
    "Python": 100
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "3.4.0",
+    "d": "2026-10-28",
+    "n": "* Serialize concurrent SQLite migrations by @tobocop2 in https://github.com/dbos-inc/dbos-transact-py/pull/923\n* Poll only the status column for preemptible step cancellation by @buftio in https://github.com/dbos-inc/dbos-transact-py/pull/898\n* fix: do not require *args and **kwargs in pydantic argument validation by @spicysharkco in https://github.com/dbos-inc/dbos-transact-py/pull/899\n* Exit with the failing command's code from dbos start by @warun7 in https://github.com/dbos-inc/dbos-transact-py/pull/902"
+   },
+   {
+    "t": "3.3.0",
+    "d": "2026-10-15",
+    "n": "* Add atomic merge option for workflow attributes by @MetalCloth in https://github.com/dbos-inc/dbos-transact-py/pull/877\nThis release moves the DBOS Conductor client to a separate Enterprise package. If you are using DBOS Conductor or Cloud, please install the Enterprise optional dependency when upgrading:\npip install dbos[enterprise]\n* Stop partition sweep once the queue-wide concurrency limit is spent by @buftio in https://github.com/dbos-inc/dbos-transact-py/pull/874\n* Allow workflows to be filtered by "
+   },
+   {
+    "t": "3.2.0",
+    "d": "2026-09-29",
+    "n": "* Datasource Migrations by @kraftp in https://github.com/dbos-inc/dbos-transact-py/pull/870\n* Improve Workflow Conflict Resolution by @kraftp in https://github.com/dbos-inc/dbos-transact-py/pull/862\n* publish preview releases when merging to main by @maxdml in https://github.com/dbos-inc/dbos-transact-py/pull/863\n* Keep the version build hook out of the wheel by @Kayvan-Zahiri in https://github.com/dbos-inc/dbos-transact-py/pull/868\n* Custom Sessionmaker by @kraftp in https://github.com/dbos-inc/dbos-transa"
+   }
+  ]
  },
  "Jzow/flow": {
   "commit_90d": 0,
@@ -621,10 +638,10 @@
   "enriched_at": "20260927"
  },
  "yaonieyo/doubao-account-pool": {
-  "rel_ver": "v0.1.72",
-  "rel_pub": "2026-09-24",
-  "rel_days": 3,
-  "rel_n90": 11,
+  "rel_ver": "v0.1.76",
+  "rel_pub": "2026-10-21",
+  "rel_days": 12,
+  "rel_n90": 10,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -639,7 +656,30 @@
    "JavaScript": 6,
    "HTML": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "commit_90d": 23,
+  "commit_7d": 0,
+  "rel_notes": [
+   {
+    "t": "v0.1.76",
+    "d": "2026-10-21",
+    "n": "# 0.1.76：小数扣点与去水印配置即时生效\n\n## 本次修复\n\n- Mini/Fast 单次消耗支持一位小数，例如 Fast 3.5 或 4；10 点扣 3.5 后准确剩 6.5。余额、任务扣点、换号、跨日和幂等退款保留相同精度，检测状态或修改备注不再截断小数。\n- 已预扣任务按原价格退款，不受之后修改价格影响；预计生成次数按每个账号余额向下取整，避免浮点误差。默认 Mini=2、Fast=3 不擅自改动，本地设置不代表豆包"
+   },
+   {
+    "t": "v0.1.74",
+    "d": "2026-10-20",
+    "n": "# 豆包账号池 0.1.74\n\n本地多账号视频接口工具，建议通过 AI、Codex 等客户端连接无限画布。画布原有提交、轮询、回调和 MP4 成功结果格式保持兼容。\n\n## 本次更新\n\n- 北京时间每日 00:00 自动更新本地豆包额度，启动、唤醒和生成请求时补检查；同日不重复补额，不强制唤醒电脑，付费去水印次数不重置。\n- 单账号默认最多 3 条独立任务同时准备和发送，总并发默认 5，保留已有总并发配"
+   },
+   {
+    "t": "v0.1.73",
+    "d": "2026-10-19",
+    "n": "## 豆包账号池 0.1.73\n\n### 本次更新\n\n- 修复普通回复“正在渲染”“已提交任务”“已生成代码”造成的假等待：回复稳定后先等 60 秒补发“确认生成”，第二次等 120 秒，最多两次。正式启动、正在输出回复或有手动输入时不补发。\n- 正式视频受理后再计算生成等待时间；已生成视频的分享恢复不再在两分钟处提前退出。\n- 首页使用紧凑账号概览和两条额度栏，分别展示豆包本地点数、"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "nicolaspearson/node.api.gateway": {
   "rel_ver": null,

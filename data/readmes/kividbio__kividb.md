@@ -4,10 +4,33 @@
   <img src="assets/kiwi.png" alt="KiviDB" width="180">
 </p>
 
-**KiviDB** is a fast, Redis-compatible in-memory store written in Rust. It speaks the Redis
-RESP protocol, uses a sharded in-memory key-value design, and supports persistence via
-snapshots and an optional append-only file, aimed at workloads where throughput and
-predictable latency matter.
+<p align="center">
+  <a href="https://github.com/kividbio/kividb/actions/workflows/ci.yml"><img src="https://github.com/kividbio/kividb/actions/workflows/ci.yml/badge.svg?branch=master" alt="CI"></a>
+  <a href="https://github.com/kividbio/kividb/releases/latest"><img src="https://img.shields.io/github/v/release/kividbio/kividb?sort=semver" alt="Latest release"></a>
+  <a href="https://hub.docker.com/r/kividb/kividb"><img src="https://img.shields.io/docker/pulls/kividb/kividb" alt="Docker pulls"></a>
+  <a href="https://artifacthub.io/packages/helm/kividb-operator/kividb-operator-chart"><img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/kividb-operator" alt="Artifact Hub"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/kividbio/kividb" alt="License: AGPL-3.0"></a>
+  <a href="https://github.com/kividbio/kividb/discussions"><img src="https://img.shields.io/github/discussions/kividbio/kividb" alt="Discussions"></a>
+  <a href="https://discord.com/invite/ZcMxFeSAPA"><img src="https://img.shields.io/badge/chat-Discord-5865F2?logo=discord&logoColor=white" alt="Discord"></a>
+  <a href="https://github.com/kividbio/kividb/stargazers"><img src="https://img.shields.io/github/stars/kividbio/kividb?style=flat" alt="GitHub stars"></a>
+</p>
+
+**KiviDB** is a fast, multi-threaded alternative to Redis® and Valkey, written in Rust. It
+speaks the Redis protocol (RESP2 and RESP3), so existing Redis clients, `redis-cli` and
+libraries work unchanged, and it has full-text and vector search built in. It runs every
+core on a sharded in-memory key-value design, and persists to snapshots and an optional
+append-only file.
+
+On the same 32 cores, KiviDB serves **21 million pipelined GETs per second: about 9× Redis 8
+and 2.3× Dragonfly**, with under half Dragonfly's p99 latency ([benchmarks](#performance)).
+
+```bash
+docker run -d -p 6380:6380 kividb/kividb
+redis-cli -p 6380 PING        # PONG
+```
+
+KiviDB listens on **6380**, not Redis's 6379, so the two can run side by side; point your
+client at that port, or pass `--port 6379`.
 
 - **Protocol**: Redis-compatible command surface (see [COMMANDS.md](COMMANDS.md) for the supported commands)
 - **Search and vectors**: Redis Stack–style `FT.*` commands for full-text, tag, numeric and vector (FLAT / HNSW) search
@@ -17,6 +40,24 @@ predictable latency matter.
 - **License**: [GNU Affero General Public License v3](LICENSE) (AGPL-3.0-only), open source; using KiviDB does not put your application under the AGPL; see [License](#license)
 
 Repository: [github.com/kividbio/kividb](https://github.com/kividbio/kividb) · Website: [kividb.io](https://kividb.io)
+
+**Moving from Redis?** [Migration guide](docs/MIGRATING_FROM_REDIS.md) ·
+[Compatibility and differences](docs/COMPATIBILITY.md) · [Client examples](examples/clients/) ·
+[Benchmarks](#performance) ·
+[Releases](https://github.com/kividbio/kividb/releases) ·
+[Kubernetes operator](https://github.com/kividbio/kividb-operator)
+
+### How it compares
+
+| | KiviDB | Redis 8 | Valkey 8 | Dragonfly | KeyDB |
+|---|---|---|---|---|---|
+| License | AGPL-3.0 | RSALv2, SSPLv1 or AGPL-3.0 | BSD-3-Clause | BSL 1.1 | BSD-3-Clause |
+| Language | Rust | C | C | C++ | C++ |
+| Commands run on | every core (sharded) | one thread (I/O threads) | one thread (I/O threads) | every core (shared-nothing) | several threads |
+| Full-text and vector search (`FT.*`) | built in | built in (Query Engine) | separate module | built in | no |
+| Lua scripting | `lua` build | yes | yes | yes | yes |
+
+As of October 2026. Something out of date or wrong? Please [open an issue](https://github.com/kividbio/kividb/issues/new/choose).
 
 ## Performance
 
@@ -80,6 +121,35 @@ glove-25-angular (1.18M vectors, 25 dimensions): HNSW with M=16 and EF_CONSTRUCT
   <source media="(prefers-color-scheme: dark)" srcset="assets/benchmarks/vector-ingest-dark.png">
   <img src="assets/benchmarks/vector-ingest-light.png" alt="Vector ingest time" width="720">
 </picture>
+
+### Load rising to saturation
+
+A second setup, on Azure, in the manner of a latency/throughput/saturation test: rather
+than one fixed load, clients are added every 30 seconds, 40 to 1,600 per database, until
+each server can take no more. Each client sends 10 pipelined `SET`+`GET` pairs over 10
+million keys, then sleeps 10 ms. Every single server ran on its own 8 vCPU arm64 VM
+(D8ps_v5); the Redis Cluster had four 2 vCPU VMs, 8 vCPUs in all. KiviDB 1.1.2, October
+2026.
+
+<a href="https://github.com/kividbio/kivi-benchmark/blob/main/ramp-saturation/results/2026-10-24-pipelined/kividb-vs-dragonfly-vs-redis.mp4">
+  <img src="assets/benchmarks/ramp-saturation.webp" alt="KiviDB vs Dragonfly vs Redis vs Redis Cluster as the load rises: throughput, p50 and p99 latency, errors, CPU and memory" width="720">
+</a>
+
+*The whole run, 20 minutes at 60× speed. Click for the full-resolution video.*
+
+| | Peak throughput | p50 / p99 at 1,600 clients | Errors |
+|---|------:|------:|------:|
+| KiviDB 1.1.2 | **2.08M req/s** | **4.3 / 13.9 ms** | 0 |
+| Dragonfly 2.0.2 | 1.56M req/s | 10.1 / 33.9 ms | 0 |
+| Redis 8.10.2 Cluster (4 × 2 vCPU) | 0.97M req/s | 26.8 / 44.9 ms | 0 |
+| Redis 8.10.2 | 0.49M req/s | 55.2 / 72.1 ms | 0 |
+
+Latency is per pipelined batch. Without pipelining, KiviDB measured about 20% below
+Dragonfly on these machines (about 8% below on the bare-metal run above). The harness, the run's raw data and its
+video are in
+[kivi-benchmark/ramp-saturation](https://github.com/kividbio/kivi-benchmark/tree/main/ramp-saturation);
+the run's dashboard is a
+[Grafana snapshot](https://snapshots.raintank.io/dashboard/snapshot/AheJ35tyvNmMmRx3ExXOe2bbsebZIvWg).
 
 - Methodology and scripts: [kivi-benchmark](https://github.com/kividbio/kivi-benchmark)
 - The most recent automated run: [benchmarks/LATEST.md](benchmarks/LATEST.md)
@@ -183,6 +253,22 @@ To accept clients from other machines, do one of these:
 If you turn it off or bind to a public address, make sure the server cannot be reached from
 the internet without a password.
 
+### Linux packages
+
+The release page has `.deb` and `.rpm` packages for `amd64` and `arm64`. They
+install the binary, a systemd unit, a `kividb` system user, and a default
+`/etc/kividb/kividb.conf` that listens on loopback only. Installing enables and
+starts the unit, and an upgrade restarts it:
+
+```bash
+sudo apt install ./kividb_amd64.deb     # or: sudo rpm -i kividb.x86_64.rpm
+redis-cli -p 6380 PING
+```
+
+Data (the snapshot, the AOF, `nodes.conf`) lives in `/var/lib/kividb`, and logs
+go to the journal: `journalctl -u kividb`. To accept clients from other
+machines, set a password and change `bind` in `/etc/kividb/kividb.conf`.
+
 ### Docker
 
 Images are published to Docker Hub and the GitHub Container Registry, with
@@ -213,8 +299,8 @@ docker run -p 6380:6380 ghcr.io/kividbio/kividb \
   --loglevel debug
 ```
 
-**With AOF persistence** (mount a volume so data survives restarts; the server runs as user
-`kividb` in `/home/kividb`):
+**With AOF persistence** (mount a volume so data survives restarts; the server runs as UID
+1000 in `/home/kividb`):
 
 ```bash
 docker run -p 6380:6380 \
@@ -226,6 +312,9 @@ With `--aof`, every write is appended to `appendonly.aof` and the file is replay
 startup, so a crash loses at most about the last second of writes (the fsync interval)
 rather than everything since the last snapshot. When an AOF is present it is the source of
 truth and the snapshot is not loaded; see [docs/PERSISTENCE.md](docs/PERSISTENCE.md) for why.
+
+The image is distroless: it has no shell and no `redis-cli`. Connect from another container
+instead, for example `docker run --rm -it --network container:<name> redis redis-cli -p 6380`.
 
 **io_uring in containers:** Docker's default seccomp profile blocks io_uring on recent
 versions, and KiviDB then falls back to Tokio. To allow it on a Linux host, run with
@@ -265,6 +354,17 @@ curl -LO https://github.com/kividbio/kividb/releases/latest/download/kividb_amd6
 curl -LO https://github.com/kividbio/kividb/releases/latest/download/kividb.x86_64.rpm && sudo rpm -i kividb.x86_64.rpm
 ```
 
+From 1.2.0 on, every file in a release and every image carries signed build provenance: a
+[GitHub artifact attestation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations)
+that says it was built by this repository's release workflow, from the tagged commit. A
+checksum proves a download arrived whole; the attestation proves who built it. With the
+[GitHub CLI](https://cli.github.com):
+
+```bash
+gh attestation verify kividb-linux-x86_64.tar.gz --repo kividbio/kividb
+gh attestation verify oci://ghcr.io/kividbio/kividb:v1.2.0 --repo kividbio/kividb
+```
+
 ## Configuration
 
 KiviDB is configured with command-line flags, or with a Redis-style configuration file
@@ -275,7 +375,7 @@ list.
 
 | Flag | Default | Description |
 |------|---------|-------------|
-| `--port` | `6380` | Port to listen on |
+| `--port` | `6380` | Port to listen on; `0` for none (TLS only, with `--tls-port`) |
 | `--bind` | `0.0.0.0` | Address to listen on. Setting it explicitly turns off [protected mode](#protected-mode) |
 | `--protected-mode <yes\|no>` | `yes` | See [Protected mode](#protected-mode) |
 | `--threads` | `0` (auto) | Worker threads; auto is the number of cores minus 2 (all cores below 4) |
@@ -291,20 +391,31 @@ list.
 | `--requirepass <password>` | none | Password for the `default` user |
 | `--aclfile <path>` | none | ACL file to load users from |
 | `--replicaof <HOST> <PORT>` | none | Replicate from a primary |
-| `--replica-announced-port <port>` | server port | Port announced to the primary via `REPLCONF listening-port` |
+| `--replica-announced-port <port>` | server port (the TLS port with `--tls-replication yes` or `--port 0`) | Port announced to the primary via `REPLCONF listening-port` |
 | `--slowlog-log-slower-than <us>` | off | Slowlog threshold in microseconds (`0` logs every command) |
 | `--slowlog-max-len <n>` | `128` | Slowlog entries kept |
 | `--cluster-enabled <yes\|no>` | `no` | Cluster mode: a cluster bus on `<port> + 10000`, topology in `nodes.conf`, gossip, failure detection and failover |
 | `--cluster-node-timeout <ms>` | `15000` | Time without a reply before a peer is suspected to have failed |
-| `--tls-port <port>` | `0` (off) | TLS listener (TLS builds only) |
+| `--tls-port <port>` | `0` (off) | TLS listener (TLS builds only); with `--port 0`, the only one |
 | `--tls-cert-file`, `--tls-key-file` | none | Server certificate and key (PEM) |
 | `--tls-ca-cert-file` | none | CA that client certificates are checked against |
 | `--tls-auth-clients <yes\|optional\|no>` | `yes` | Whether clients must present a certificate (only with `--tls-ca-cert-file`) |
+| `--tls-auth-clients-allowed-names <names>` | none | Names a client certificate's CN or DNS name must match; `*.` is one label |
 | `--update-check <yes\|no>` | `yes` | The [startup update check](#startup-update-check) |
+
+`maxclients` (default `10000`, in the file or with `CONFIG SET`) counts plaintext and TLS
+clients, TLS ones from the start of their handshake. At startup KiviDB raises the soft
+open-file limit to `maxclients` plus what it keeps for itself (32 files, or on io_uring 40 and
+8 a worker thread) if the hard limit allows; if not, it lowers `maxclients` to fit and logs a
+warning. Cluster bus links, a replica's link to its master and files written while saving
+are not counted in that; leave room for them in a large cluster.
 
 ### TLS
 
-TLS clients connect on a separate port, `--tls-port`; plain traffic stays on `--port`.
+TLS clients connect on a separate port, `--tls-port`; plain traffic stays on `--port`. With
+`--port 0` there is no plaintext port, and the server is reached over TLS only (it needs a
+`--tls-port`; a cluster node needs `--tls-cluster yes` as well, and its bus is then
+`<tls-port> + 10000`). A replica of such a master connects with `--tls-replication yes`.
 
 ```bash
 cargo build --release --features tls
@@ -317,6 +428,23 @@ certificate signed by that CA; others are refused during the handshake.
 `--tls-auth-clients optional` accepts clients without a certificate but still refuses an
 invalid one, and `--tls-auth-clients no` does not ask for one. With `redis-cli`:
 `redis-cli --tls -p 6381 --cacert ca.pem --cert client.pem --key client.key`.
+
+**Pinning client certificates by name.** `--tls-auth-clients-allowed-names "*.db1.example
+admin.example"` (spaces or commas between names) accepts a client certificate only if its subject
+CN or one of its DNS names matches one of the names; others signed by the same CA fail the
+handshake, and the server logs the names they carried. `*` stands for exactly one label:
+`*.db1.example` takes `node-0.db1.example`, not `a.b.db1.example` or `db1.example`. Case does
+not matter. It applies to clients, replicas and, with `tls-cluster`, nodes on the cluster bus;
+empty (the default) is off. KiviDB's own setting: Redis has none.
+
+**Changed without a restart.** `CONFIG SET` of `tls-cert-file`, `tls-key-file`,
+`tls-ca-cert-file`, `tls-auth-clients`, `tls-client-cert-file` and `tls-client-key-file` loads the
+files again for every handshake from then on. `CONFIG SET tls-port <port>` opens the TLS port
+(also on a server that started without TLS: `CONFIG SET tls-cert-file cert.pem tls-key-file
+key.pem tls-port 6381`), moves it, or closes it with `0`; connections already open stay open.
+`CONFIG SET tls-replication yes` makes a replica's next connection to its master TLS. What cannot
+be loaded or listened on is refused, and nothing changes. `tls-cluster` needs a restart, and so
+does `tls-port` on a node with `tls-cluster yes`.
 
 **Clients must use TLS on the TLS port.** A plain connection to it (for example `redis-cli -p 6381`
 without `--tls`) fails the handshake, and the server logs `[TLS] handshake failed`. For
@@ -357,6 +485,8 @@ closed network. [docs/UPDATE_CHECK.md](docs/UPDATE_CHECK.md) has the details.
 Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to build, test
 and submit changes. Contributions are accepted under the
 [Contributor License Agreement](CLA.md), which you sign on your first pull request.
+
+Questions, ideas, or want to talk to the maintainers? Join us on [Discord](https://discord.com/invite/ZcMxFeSAPA), or open a [discussion](https://github.com/kividbio/kividb/discussions).
 
 Please follow the [Code of Conduct](CODE_OF_CONDUCT.md). The [Changelog](CHANGELOG.md)
 lists what changed in each release.

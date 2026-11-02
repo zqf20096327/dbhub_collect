@@ -12,17 +12,28 @@ The plugin
   needed [Kotlin extension functions](https://docs.objectbox.io/kotlin-support),
 - automatically adds database libraries for Android or the Java Virtual Machine (JVM) to run on the developer machine as
   a dependency,
-- adds and configures the annotation processor to generate the model JSON file and source code like the `MyObjectBox`
+- adds and configures the processor (for Java projects as annotation processor, for Kotlin projects with kapt or,
+  if the project applies the KSP plugin, with KSP) to generate the model JSON file and source code like the `MyObjectBox`
   and underscore classes (like `Example_`) used for [queries](https://docs.objectbox.io/queries),
 - for Android and Java JVM projects, registers a byte code transformer to 
   [make relations easier to use](https://docs.objectbox.io/relations#initialization-magic)
 
 ## Minimum requirements to apply the plugin
 
-- Gradle `7.0` (see [GradleCompat](objectbox-gradle-plugin/src/main/kotlin/io/objectbox/gradle/util/GradleCompat.kt))
+- Gradle `8.3` (see [GradleCompat](objectbox-gradle-plugin/src/main/kotlin/io/objectbox/gradle/util/GradleCompat.kt))
 - Android Plugin `8.1` (see [AndroidCompat](objectbox-gradle-plugin/src/main/kotlin/io/objectbox/gradle/util/AndroidCompat.kt))
+  - For projects that use the built-in Kotlin support of Android Plugin `9.0` or newer, this plugin applies the
+    `com.android.legacy-kapt` plugin so the annotation processor can process `@Entity` classes written in Kotlin.
+    For this to work, the build must declare that plugin so it is on the classpath (for example in the plugins block
+    of the top-level build script with `apply false`).
 - JDK 11
-                   
+
+For Kotlin projects, the plugin by default runs the processor with the
+[kapt plugin](https://kotlinlang.org/docs/kapt.html) (and applies it, if the project has not).
+To use [KSP](https://kotlinlang.org/docs/ksp-overview.html) instead, apply the KSP plugin before this plugin, like
+`id("com.google.devtools.ksp") version "2.3.9"` (the version tested with this plugin). This requires for Android
+projects at least Android Plugin `8.10` (the minimum supported by KSP).
+
 For JVM projects, the Java byte code transformer supports `@Entity` classes using up to Java 11 byte code. 
 
 ## Development
@@ -32,9 +43,9 @@ This project is known to build with JDK 21.
 This repository contains a collection of Gradle subprojects:
 - `objectbox-gradle-plugin` provides the actual Gradle plugins (`io.objectbox` and `io.objectbox.sync`),
 - `objectbox-processor` provides an annotation processor,
-- `objectbox-generator` provides a source code generator used by the annotation processor,
-- `objectbox-code-modifier` provides model file ("IdSync") generation used by the annotation processor,
-  and byte-code transformers for Android and Java projects.
+- `objectbox-generator` provides a source code generator and model file ("IdSync") generation used by the
+  annotation processor,
+- `objectbox-code-modifier` provides byte-code transformers for Android and Java projects.
   - Multiple `agp-wrapper-x-y` projects provide a compatibility layer for specific versions
     of the Android Plugin API, currently for byte-code transforms only.
 

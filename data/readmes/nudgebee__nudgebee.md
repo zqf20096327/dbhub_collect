@@ -1,0 +1,487 @@
+# Nudgebee
+
+The open-source agentic ops platform for cloud, SRE, DevOps, support and FinOps teams: self-hosted, on your own models.
+
+[![License: BSL 1.1](https://img.shields.io/badge/License-BSL_1.1-blue.svg)](./LICENSE)
+[![Go](https://img.shields.io/badge/Go-1.26+-00ADD8?logo=go&logoColor=white)](https://go.dev/dl/)
+[![Node](https://img.shields.io/badge/Node-25+-339933?logo=node.js&logoColor=white)](https://nodejs.org/en/download)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
+[![Discord](https://img.shields.io/discord/1514262994152980622?logo=discord&logoColor=white&label=Discord&color=5865F2)](https://discord.gg/C5d27ceTEv)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/nudgebee/nudgebee/badge)](https://securityscorecards.dev/viewer/?uri=github.com/nudgebee/nudgebee)
+
+## What is Nudgebee?
+
+Nudgebee puts AI agents to work on your team's repeatable ops work, across incidents, cost, Kubernetes, cloud and databases, with guardrails that make them safe to run in production.
+
+- **Investigate incidents** — Nubi, the AI assistant, triages alerts and works to an evidence-backed root cause from logs, metrics, traces, recent changes and the live cluster.
+- **Cut waste** — finds unused and oversized resources across cloud and Kubernetes and recommends right-sizing.
+- **Run Kubernetes and cloud ops** — a Kubernetes agent with kubectl, Helm and Argo CD tools, plus AWS, Azure and GCP agents.
+- **Diagnose databases** — agents for Postgres, MySQL, SQL Server, Oracle and ClickHouse, plus a Redis tool.
+- **Automate runbooks** — turns recurring fixes into durable runbooks on Temporal, triggered by alert, schedule or chat, with approval gates.
+- **Work where your team works** — Slack, Teams and Google Chat, plus bidirectional ticketing with Jira, ServiceNow, PagerDuty and Zenduty.
+
+### Built to run in production
+
+- **Approvals** — remediations and runbook steps can require human approval before they run.
+- **Audit log** — configuration changes, manual runs and approvals are recorded.
+- **Self-hosted, no usage telemetry** — runs in your cluster or VPC, with the LLM provider you choose.
+
+> _Dashboard screenshot — to be added. Track [discussion thread](https://github.com/nudgebee/nudgebee/discussions) or contribute via a PR._
+
+## Related repositories
+
+This repo is the platform. Agents, docs, tooling and content live in their own repos:
+
+| Repo                                                                                                                                   | Purpose                                                                                         |
+| -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| [nudgebee-docs](https://github.com/nudgebee/nudgebee-docs)                                                                             | Public documentation, published at [docs.nudgebee.com](https://docs.nudgebee.com)               |
+| [nbctl](https://github.com/nudgebee/nbctl)                                                                                             | Command-line interface; also runs as an MCP server                                              |
+| [k8s-agent](https://github.com/nudgebee/k8s-agent)                                                                                     | In-cluster Kubernetes agent: state, events, metrics, logs and traces                            |
+| [node-agent](https://github.com/nudgebee/node-agent)                                                                                   | Per-node eBPF agent for container and host metrics, logs and L7 traffic                         |
+| [kubewatch](https://github.com/nudgebee/kubewatch)                                                                                     | Kubernetes resource watcher with workload sync                                                  |
+| [application-profiler](https://github.com/nudgebee/application-profiler)                                                               | On-demand profiling (flamegraphs, heap/thread dumps, pprof) without restarting pods             |
+| [forager](https://github.com/nudgebee/forager)                                                                                         | Lightweight agent that relays data from databases, HTTP APIs and MCP servers                    |
+| [automation-templates](https://github.com/nudgebee/automation-templates)                                                               | System runbook templates synced into the runbook server                                         |
+| [nudgebee-playbooks](https://github.com/nudgebee/nudgebee-playbooks)                                                                   | Workflow definitions for cross-platform service restart and diagnosis                           |
+| [nudgebee-scenario-lab](https://github.com/nudgebee/nudgebee-scenario-lab)                                                             | Disposable AWS lab that injects real incidents for Nudgebee to detect and explain               |
+| [kubepug](https://github.com/nudgebee/kubepug), [nova](https://github.com/nudgebee/nova), [popeye](https://github.com/nudgebee/popeye) | Nudgebee forks of Kubernetes checkers: deprecated APIs, outdated Helm charts, cluster sanitizer |
+
+## Quick Start (Local Development)
+
+This is the fastest way to run Nudgebee from source. **Infra in containers, backend and frontend from source on the host.** This is the path contributors should use.
+
+### Prerequisites
+
+- [Docker](https://www.docker.com/products/docker-desktop/) with Docker Compose v2.24+ (the compose file uses optional `env_file` entries), or [Podman Desktop](https://podman-desktop.io/) with a `podman-compose` release that supports `env_file.required`
+- [Go 1.26+](https://go.dev/dl/)
+- [Node 25+ and npm](https://nodejs.org/en/download)
+
+### 1. Clone
+
+```bash
+git clone https://github.com/nudgebee/nudgebee.git
+cd nudgebee
+```
+
+### 2. Bring up infra + apply migrations
+
+```bash
+docker compose up -d
+```
+
+The default compose profile starts Postgres, Redis, RabbitMQ, Qdrant, Temporal, and a one-shot `migrations` container that applies the Postgres + RabbitMQ schema and then exits. Re-runs are safe — golang-migrate is idempotent against an up-to-date tracker. To also run the backend and frontend in containers (instead of from source), use `docker compose --profile full up -d`. The full profile mounts the host Docker socket into `llm-server` so it can launch an isolated code-analysis workspace container per account; access to that socket is equivalent to host-level Docker control. Workspace containers join the internal `nudgebee-workspace` network and do not publish host ports.
+
+To connect a Kubernetes agent to the Compose relay and K8s collector, use the
+[local agent configuration](docs/QUICKSTART.md#connect-a-kubernetes-agent-to-the-docker-services).
+
+See [api-server/migrations/README.md](api-server/migrations/README.md) for how migration tracking works and how to add a new migration.
+
+### 3. Configure backend env
+
+```bash
+# macOS / Linux / WSL
+cp api-server/services/.env.example api-server/services/.env
+
+# Windows PowerShell
+Copy-Item api-server\services\.env.example api-server\services\.env
+```
+
+Then generate the encryption key and replace the `__REPLACE__` placeholder for
+`NUDGEBEE_ENCRYPTION_KEY` in the new `.env`:
+
+```bash
+openssl rand -hex 32
+```
+
+Keep this value — you'll paste the **same** key into `app/.env` in step 5, and
+into every other service's `.env` if you later run more from source (see
+**Local Stack Bootstrap** below). Rotating it after data is written makes
+previously-encrypted DB rows unreadable, so treat it like a database master
+password.
+
+Other defaults work as-is against the compose stack from step 2. Read the
+inline comments before any non-local deploy — a few other values (private keys)
+also need rotation.
+
+### 4. Run the backend
+
+```bash
+# macOS / Linux / WSL (requires make)
+cd api-server/services
+make run
+
+# Windows (no make required — runs the same command directly)
+cd api-server\services
+go run ./cmd
+```
+
+Listens on <http://localhost:8000>. Leave it running.
+
+### 5. Configure frontend env
+
+In a new terminal:
+
+```bash
+# macOS / Linux / WSL
+cp app/.env.example app/.env
+
+# Windows PowerShell
+Copy-Item app\.env.example app\.env
+```
+
+Replace `__REPLACE__` for `NUDGEBEE_ENCRYPTION_KEY` with the **same value** you
+generated in step 3. The app can't decrypt what services-server writes unless
+these match.
+
+The `NEXTAUTH_SECRET` in the example is a dev-only sample; rotate it for any
+non-local deploy.
+
+### 6. Run the frontend
+
+```bash
+cd app
+npm install --legacy-peer-deps
+npm run dev
+```
+
+Open <http://localhost:3000>.
+
+### 7. Sign in
+
+On the sign-in page, click **Admin Login**. Then:
+
+- **Email**: any address (e.g. `dev@example.com`) — a tenant and an admin user are created automatically on first sign-in.
+- **Password**: literally `Test!24#5` — the value of `NEXTAUTH_DUMMY_CREDS_PASSWORD` shipped in `app/.env.example`. Type it exactly; this is the dummy-credentials provider, not your own password.
+
+### Secrets & required env vars
+
+The sample values in steps 3 and 5 above are fine for local dev. For any
+non-local deployment, generate fresh values and review the notes below.
+
+| Var                                                    | Used by                     | How to generate           | Notes                                                                                                                                                                                                                 |
+| ------------------------------------------------------ | --------------------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `APP_DATABASE_URL`                                     | services-server             | —                         | Compose default: `postgres://postgres:postgrespassword@localhost:5432/nudgebee?sslmode=disable`. Use `localhost` from the host, `postgres` hostname from inside the compose network.                                  |
+| `NUDGEBEE_ENCRYPTION_KEY`                              | services-server **and** app | `openssl rand -hex 32`    | Encrypts integration credentials and other sensitive columns. **Must match between services-server and app.** Rotating it makes previously-encrypted rows unreadable — there is no automatic re-encryption migration. |
+| `ACTION_API_SERVER_TOKEN`                              | services-server **and** app | `openssl rand -hex 32`    | **Optional.** Shared secret for internal app↔services-server action calls. Defaults to empty on both sides, which disables the check (fine for local dev). If you set it, the value must match in both files.         |
+| `NEXTAUTH_SECRET`                                      | app                         | `openssl rand -base64 32` | Signs both NextAuth session cookies and the inner HS256 session JWT the gateway mints for API-token callers and forwards upstream. Rotating it logs everyone out.                                   |
+| `NEXTAUTH_DUMMY_CREDS_ENABLED` / `_PASSWORD`           | app                         | —                         | Enables the any-email/password provider. Use for local development only; turn it off in any deployment exposed beyond your laptop.                                                                                    |
+| `RABBIT_MQ_USERNAME` / `_PASSWORD` / `_HOST` / `_PORT` | services-server             | —                         | Compose defaults: `guest` / `guest` / `localhost` / `5672`.                                                                                                                                                           |
+
+### Troubleshooting
+
+- **`error pinging postgres: lookup postgres: no such host`** from backend → `APP_DATABASE_URL` in `api-server/services/.env` still uses the container hostname. Replace `@postgres:5432` with `@localhost:5432`.
+- **`migrate: error: pq: relation "..." already exists`** → the tracker schema drifted from actual tables. Inspect `SELECT version, dirty FROM nudgebee.schema_migrations;` and use `migrate force <version>` to align. See [api-server/migrations/README.md](api-server/migrations/README.md#troubleshooting).
+- **Action call from frontend returns 502 `RPC gateway could not handle the operation`** → the requested action isn't registered in `app/src/lib/actions.yaml`, or it's a subscription / fragment / parse error. Check the frontend dev-server console for the unhandled reason.
+
+---
+
+## Deploy to Kubernetes (Helm)
+
+The umbrella chart is published as a public OCI artifact at `oci://ghcr.io/nudgebee/charts/nudgebee` and bundles Postgres, RabbitMQ, Redis, Qdrant, and Temporal as subcharts.
+
+```bash
+# 1. Generate a permanent encryption key — store this securely.
+#    Losing it makes previously-encrypted DB rows unreadable.
+export NUDGEBEE_ENC_KEY=$(openssl rand -hex 32)
+echo "Save this key: $NUDGEBEE_ENC_KEY"
+
+# 2. Install
+helm install nudgebee oci://ghcr.io/nudgebee/charts/nudgebee \
+  --namespace nudgebee --create-namespace \
+  --set nudgebee_secret.NUDGEBEE_ENCRYPTION_KEY="$NUDGEBEE_ENC_KEY" \
+  --set admin.email="you@example.com" \
+  --set agent.enabled=true \
+  --wait --timeout 20m
+```
+
+`admin.email` creates the admin and its organisation during install, so the first
+login has nothing to set up. `agent.enabled` installs the NudgeBee agent alongside
+the server and connects the cluster hosting it — without it, that first cluster
+needs a separate agent install and an auth key copied out of the UI. Both are
+optional; leave them out and the deployment provisions itself when you first sign
+in, exactly as before. Additional clusters always use the normal agent install.
+
+Two caveats for `agent.enabled`. The agent shares this Helm release, so
+`helm uninstall` removes it too. And if you render offline (Argo CD, Flux), set
+`agent.accessKey` and `agent.accessSecret` explicitly — the chart cannot read the
+existing credential back and refuses to re-issue it on upgrade rather than
+silently breaking the agent.
+
+To pin a specific version, pass `--version <X.Y.Z>` (latest is used by default). To install from source instead — useful when iterating on chart changes — clone the repo, run `helm dep update deploy/kubernetes/nudgebee`, and point `helm install` at the local path.
+
+The post-install hook applies database migrations automatically. Once the pods are ready:
+
+```bash
+kubectl -n nudgebee port-forward svc/app 3000:80
+
+# Retrieve the bootstrap admin password
+kubectl -n nudgebee get secret nudgebee \
+  -o jsonpath='{.data.NEXTAUTH_DUMMY_CREDS_PASSWORD}' | base64 -d
+```
+
+Open <http://localhost:3000> and sign in as your `admin.email` with that password — the shared password works for that address only (or the licence address on a licensed install). See [deploy/kubernetes/README.md](deploy/kubernetes/README.md) for production-grade configuration (ingress, TLS, external Postgres, ClickHouse, observability sidecars).
+
+### First Run — what to do after you sign in
+
+The platform is live but empty. A quick tour that takes ~10 minutes:
+
+1. **Connect a cloud account or a Kubernetes cluster** — _Settings → Integrations_. Onboarding a real cluster lets the K8s collector populate the knowledge graph; an AWS / GCP / Azure account lights up the spend + recommendations surfaces. Without at least one of these, most of the dashboard is intentionally empty.
+2. **Wire up a notification channel** — _Settings → Integrations → Slack / Teams / Email_. Without one, you can still try the product, but notifications + ChatOps flows won't reach you.
+3. **Run a sample runbook** — _Runbooks → Library_. The bundled library has runnable examples (health-check loops, K8s investigation, cost spotlights). Run one manually to see end-to-end orchestration.
+4. **Ask the AI assistant something** — bottom-right corner of the dashboard. It can answer questions about your connected clusters, walk you through a recommendation, or kick off an investigation.
+
+### Stuck? Want to help?
+
+- **Want to chat?** Join us on [Discord](https://discord.gg/C5d27ceTEv) — async help, design discussions, contributor coordination.
+- **Hit a bug?** Open an issue using the [bug template](.github/ISSUE_TEMPLATE/BUG-REPORT.yml).
+- **Idea for a feature?** Use the [feature template](.github/ISSUE_TEMPLATE/FEATURE-REQUEST.yml).
+- **Want to contribute code?** Read [CONTRIBUTING.md](./CONTRIBUTING.md) — covers CLA, branch model, PR conventions, and local-dev debugging tips. Look for issues tagged [`good first issue`](https://github.com/nudgebee/nudgebee/labels/good%20first%20issue).
+- **Question that doesn't fit a template?** Email `dev@nudgebee.com` or use the contact links on the [new-issue page](https://github.com/nudgebee/nudgebee/issues/new).
+
+## Architecture
+
+Nudgebee is a Kubernetes-native monorepo of Go, Python, and TypeScript services. The high-level flow:
+
+```
+                ┌─────────────────────────────────────────────────┐
+                │  Browser (Next.js dashboard — `app/`)           │
+                └────────────────────┬────────────────────────────┘
+                                     │ HTTP / WebSocket
+                                     ▼
+                ┌─────────────────────────────────────────────────┐
+                │  app (Next.js server) — RPC gateway + NextAuth  │
+                └──┬─────────────┬──────────────┬────────────┬────┘
+                   │             │              │            │
+                   ▼             ▼              ▼            ▼
+       ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+       │ api-server   │ │ llm-server   │ │ ticket-server│ │ ml-k8s-      │
+       │ services     │◀│ + rag-server │ │ notifications│ │  server      │
+       │ (Go / Gin)   │ │ + code-      │ │ runbook      │ │ (right-      │
+       │              │ │  analysis    │ │              │ │  sizing ML)  │
+       └─┬──────┬─────┘ └──────┬───────┘ └──────┬───────┘ └──────┬───────┘
+         │      │              │                │                │
+         │      └──────┬───────┴────────────────┴────────────────┘
+         │             ▼          ▼              ▼              ▼
+         │         Postgres  RabbitMQ events  Qdrant       Temporal
+         │         (state)   (cross-service)  (vectors)    (workflows)
+         │                        ▲
+         │ proxy /                │ publish + consume
+         │ control                │
+         ▼                  ┌─────┴──────────────────────┐
+    ┌──────────────┐        │ cloud-collector            │
+    │ relay-server │        │ k8s-collector              │
+    │ (in-cluster  │        └────────────────────────────┘
+    │  agent gw)   │
+    └──────┬───────┘
+           │ wss tunnels (also used by api-server / runbook to command agents)
+           ▼
+    in-cluster agents
+```
+
+- **`app/`** — Next.js dashboard; in-process RPC gateway at `/api/graphql` forwards client calls to backend `/rpc/*` handlers.
+- **`api-server/services/`** — core Go backend (Gin) for tenants, accounts, recommendations, integrations.
+- **`llm/llm-server` + `llm/rag-server` + `llm/code-analysis`** — LLM session state, retrieval-augmented context, on-demand code analysis.
+- **`ticket-server/`** — bidirectional sync with external ticketing (Jira, ServiceNow, PagerDuty, Zenduty).
+- **`runbook-server/`** — runbook orchestration via Temporal workflows. See [runbook-server/README.md](runbook-server/README.md) for architecture, env reference, API, and task framework.
+- **`notifications-server/`** — Slack/Teams/email alert delivery.
+- **`collector-server/`** — cloud-scan + Kubernetes metrics pipelines; `relay-server` bridges in-cluster agents back to the central plane.
+- **`ml-k8s-server/`** — Python ML pipelines for workload right-sizing.
+
+For per-service detail, see the **Project Structure** table below or each module's `README.md`.
+
+## Local Stack Bootstrap
+
+The repo ships a `docker-compose.yaml` that wires every service against the public container registry. You rarely need to bring all 18 containers up — start only the services that match what you're working on. The table below lists each service and the minimum set of upstream services required for it to boot successfully.
+
+### Infra (no deps)
+
+| Service       | Image                        | Notes                                                                                                                                |
+| ------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `postgres`    | postgres:16                  | Primary RDBMS. App schema applied by golang-migrate on deploy.                                                                       |
+| `rabbitmq`    | rabbitmq:3-management        | Message bus. UI at `:15672`.                                                                                                         |
+| `redis`       | redis:7-alpine               | Cache.                                                                                                                               |
+| `qdrant`      | qdrant/qdrant:v1.19.2        | Vector store for RAG / LLM.                                                                                                          |
+| `temporal`    | temporalio/auto-setup:1.29.1 | Workflow engine. Backed by `postgres` (creates `temporal` + `temporal_visibility` DBs on first boot). Required by `workflow-server`. |
+| `temporal-ui` | temporalio/ui:2.44.0         | Optional Temporal Web UI at `:8233`.                                                                                                 |
+
+### Application services
+
+| Service                            | Min upstream deps                  | Why                                                                                                                                                                   |
+| ---------------------------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `api-server-services`              | `postgres`, `rabbitmq`, `redis`    | Core backend. Won't bootstrap RabbitMQ consumers without RabbitMQ; queries fail without Postgres; cache pulls hit Redis.                                              |
+| `ticket-server`                    | `postgres`, `rabbitmq`             | DB writes + async ticketing sync.                                                                                                                                     |
+| `workflow-server` (runbook-server) | `postgres`, `rabbitmq`, `temporal` | Workflow state in PG; events on RMQ; Temporal SDK calls `Dial(7233)` at startup and crashes if unreachable.                                                           |
+| `notifications-server`             | `postgres`, `rabbitmq`             | Persists messages, consumes RMQ events.                                                                                                                               |
+| `cloud-collector`                  | `rabbitmq`                         | Publishes scrape events to RMQ.                                                                                                                                       |
+| `relay-server`                     | `postgres`, `rabbitmq`             | K8s gateway; tunnel state in PG, events on RMQ.                                                                                                                       |
+| `k8s-collector-app`                | `rabbitmq`                         | Publishes K8s metrics to RMQ.                                                                                                                                         |
+| `ml-k8s-server`                    | `postgres`                         | Reads/writes scaling features.                                                                                                                                        |
+| `llm-server`                       | `postgres`, `qdrant`               | LLM session state + vector lookups. Spawns `code-analysis` per account on demand (not a long-running compose service).                                                |
+| `rag-server`                       | `postgres`, `qdrant`               | RAG retrieval against Qdrant; metadata in PG.                                                                                                                         |
+| `llm-gateway`                      | `postgres`, `api-server-services`  | **Not in `docker-compose.yaml`** — run from source (`llm/gateway`, default port 8000). Backs the AI Gateway tab and Admin → AI & Tools → Gateway. Redis is optional (`cache_provider` defaults to in-memory). |
+| `vulnerability-server`             | none                               | **Not in `docker-compose.yaml`** — run from source (`vulnerability-server`, default port 8080). Stateless matcher; needs a local vulnerability DB on disk (~1.8 GB unpacked). `api-server-services` calls it to produce VM vulnerability findings. |
+
+### Frontend
+
+| Service         | Min upstream deps     | Why                                                                                                                                                                                                                                    |
+| --------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app` (Next.js) | `api-server-services` | Client calls are served by the in-process RPC gateway in the Next.js server (`/api/graphql`), which fans out to **six** upstreams — `api-server-services`, `llm-server`, `workflow-server`, `llm-gateway`, `ticket-server`, `notifications-server` — plus a direct proxy to `relay-server`. Only `api-server-services` is needed to boot and sign in; the rest gate individual tabs (see the next section). RabbitMQ/Redis come in transitively via api-server-services' own deps. |
+
+### Which services does each tab need?
+
+**Baseline — every tab needs these three:** `postgres`, `api-server-services`, `app`. They carry sign-in, tenant/account context, the left nav, and the RPC gateway itself. `rabbitmq` and `redis` come along transitively (`api-server-services` won't boot without them). The table lists only what a tab needs **on top of** that baseline.
+
+| Nav section     | Tab / surface                                                              | Extra services beyond the baseline                                | Notes                                                                                                              |
+| --------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| **Home**        | Home, Account Overview                                                     | —                                                                 |                                                                                                                    |
+| **Dashboards**  | Dashboard List, Application Grouping                                       | —                                                                 |                                                                                                                    |
+| **Troubleshoot**| All Events (Triage Inbox, Events, group-by-type / -app, Triage Rules, Alert Tuning) | —                                                        | The **Create ticket** action on an event needs `ticket-server`; the **Investigate** button needs `llm-server`.     |
+|                 | Investigations (Auto / Manual Investigated), `/investigate`                | `llm-server`                                                      | Add `relay-server` when an investigation pulls live cluster evidence (pod logs, live resources).                   |
+|                 | Event Resolutions                                                          | `ticket-server`                                                   | Resolution rows create and comment on tickets.                                                                     |
+|                 | Knowledge Graph, Analytics                                                 | —                                                                 |                                                                                                                    |
+|                 | Agent Health (`/agentHealth`)                                              | —                                                                 | Agent connectivity is read from Postgres, so the page works with the collectors down — it just reports them down.  |
+| **Automations** | Automations, Executions, Task Runner                                       | `workflow-server` + `temporal`                                    | `workflow-server` dials Temporal on `:7233` at startup and exits if it's unreachable.                              |
+| **Optimize**    | Summary, Cost, Configuration, Security, Resolutions                        | —                                                                 | Reading is baseline-only. **Generating** the findings needs `ml-k8s-server` (right-sizing) and `vulnerability-server` (VM vulnerabilities) — see below. |
+|                 | Auto Optimize (Optimizations, Approvals)                                   | `workflow-server` + `temporal`                                    |                                                                                                                    |
+|                 | LLM Analyser                                                               | `llm-server`                                                      | Also gated by the per-tenant `LLM_ANALYSER` feature flag (Tenant Settings → Feature Flags).                        |
+|                 | AI Gateway                                                                 | `llm-gateway`                                                     | Also gated by `UI_ENABLE_LLM_GATEWAY=true` in `app/.env`.                                                          |
+| **Infra**       | K8s, Cloud, VM (list + detail)                                             | —                                                                 | VM → Vulnerabilities / Packages read stored matches; producing them needs `vulnerability-server`.                  |
+|                 | K8s detail: live resources, pod logs, pod shell, embedded Grafana          | `relay-server`                                                    | These proxy through `/api/proxy/relay` and `/api/proxy/grafana`, not the RPC gateway.                              |
+| **Tickets**     | All Tickets, Assigned to me                                                | `ticket-server`                                                   |                                                                                                                    |
+| **Admin**       | Access & Users, Tenant Settings                                            | —                                                                 |                                                                                                                    |
+|                 | Notification Rules                                                         | `notifications-server`                                            | Channel pickers and delivery-mode checks call it directly.                                                         |
+|                 | Integrations                                                               | —                                                                 | **Test connection** needs the owning service: `notifications-server` for Slack / Teams / Google Chat, `ticket-server` for Jira / ServiceNow / PagerDuty / Zenduty. |
+|                 | AI & Tools → Agents, Tools & MCP, Providers, Egress Filter, Memory Policy, RCA Format | `llm-server`                                       |                                                                                                                    |
+|                 | AI & Tools → Gateway, Budgets & Limits                                     | `llm-gateway` (Gateway), `llm-server` (Budgets & Limits)          |                                                                                                                    |
+| **Nubi**        | Assistant panel (header) and `/ask-nudgebee`                               | `llm-server`                                                      | Knowledge-base answers additionally need `rag-server` + `qdrant`; `llm-server` spawns `code-analysis` on demand.   |
+
+**What a missing service looks like.** `app` never crashes on an unreachable upstream — the page renders and only the calls that need that service fail:
+
+- Service down, env var set → GraphQL response carries `Upstream unreachable for <action>`; `/api/rpc` answers **502**.
+- Env var unset (e.g. no `LLM_GATEWAY_URL`) → `Handler URL unresolved for <action>` and a **500**. The dev-server console logs the missing variable name.
+
+Both come out of [app/src/lib/rpcGateway.ts](app/src/lib/rpcGateway.ts) and [app/src/pages/api/rpc.ts](app/src/pages/api/rpc.ts). `/status` in the running app probes API, Data Ingest (relay), Nubi AI, Automation (workflow-server + Temporal) and Notifications, which is the fastest way to see what's actually up.
+
+**Services that supply data rather than gate a tab.** `cloud-collector`, `k8s-collector-app`, `relay-server`, `ml-k8s-server` and `vulnerability-server` don't sit on the request path for most tabs — they populate the tables those tabs read. Without them the tabs render **empty**, not broken. `ml-k8s-server` owns right-sizing (`krr_scan`), unused-volume analysis and anomaly detection, so Optimize → Cost stays empty until it has run; `vulnerability-server` matches VM package inventories against the vulnerability database, and `api-server-services` calls it via `VULN_MATCHER_SERVER_ENDPOINT`.
+
+**Deriving this yourself.** [`app/src/lib/actions.yaml`](app/src/lib/actions.yaml) is the source of truth: each action's `handler:` names the upstream via a `{{SERVICE_URL}}` placeholder. The six the gateway can route to are `SERVICE_API_SERVER_URL`, `LLM_SERVER_URL`, `WORKFLOW_SERVER_URL`, `LLM_GATEWAY_URL`, `TICKET_SERVICE_URL` and `NOTIFICATION_SERVICE_URL`. A tab's calls live under `app/src/api1/<domain>/` — cross-reference the action names in that directory against `actions.yaml` to get the tab's service set.
+
+### Port gotcha: compose vs `app/.env.example`
+
+`docker compose` publishes several services on **different host ports** than `app/.env.example` defaults to. Running the frontend from source against the compose stack means overriding these in `app/.env`:
+
+| Service                | Compose host port | `app/.env.example` default                 |
+| ---------------------- | ----------------- | ------------------------------------------ |
+| `api-server-services`  | 8000              | `SERVICE_API_SERVER_URL` — 8000 ✅         |
+| `llm-server`           | 8005              | `LLM_SERVER_URL` — 8005 ✅                 |
+| `ticket-server`        | 8001              | `TICKET_SERVICE_URL` — 8004 ❌             |
+| `cloud-collector`      | 8002              | `CLOUD_COLLECTOR_SERVER_URL` — 8001 ❌     |
+| `relay-server`         | 8004              | `RELAY_SERVER_ENDPOINT` — 8006 ❌          |
+| `workflow-server`      | 8007              | `WORKFLOW_SERVER_URL` — 8002 ❌            |
+| `notifications-server` | 8090              | `NOTIFICATION_SERVICE_URL` — 8003 ❌       |
+| `llm-gateway`          | not in compose    | `LLM_GATEWAY_URL` — 8007 (collides with compose `workflow-server`) |
+
+Inside compose this doesn't bite — the `full` profile wires every upstream by service name through the `x-app-common` anchor at the top of `docker-compose.yaml`. The one exception is `LLM_GATEWAY_URL`: `llm-gateway` has no compose service, so the AI Gateway tab has no upstream in a pure-compose stack.
+
+### Common minimal stacks
+
+- **DB exploration:** `postgres` (connect with `psql` / DBeaver).
+- **Login + dashboard render:** `postgres` + `api-server-services` + `app` (pulls RabbitMQ/Redis transitively). This is the baseline every tab needs.
+- **Cloud findings pipeline:** add `rabbitmq` + `cloud-collector`.
+- **Recommendation generation (Optimize → Cost):** add `ml-k8s-server`.
+- **LLM/RAG flows + Nubi:** add `qdrant` + `llm-server` + `rag-server`.
+- **Automations / Auto Optimize:** add `temporal` + `workflow-server`.
+- **Tickets:** add `ticket-server`. **Notification Rules:** add `notifications-server`.
+- **Live K8s (pod logs, pod shell, embedded Grafana):** add `relay-server`.
+
+Start a subset with `docker compose up -d <service> [<service> ...]` (or `podman-compose up -d ...`); transitive deps are pulled in automatically via `depends_on`.
+
+## Project Structure
+
+Each module has its own README with setup and development instructions.
+
+### Frontend
+
+| Module | Description                                    | README                         |
+| ------ | ---------------------------------------------- | ------------------------------ |
+| `app/` | Frontend dashboard (Next.js + React, NextAuth) | [app/README.md](app/README.md) |
+
+### API & GraphQL Layer
+
+| Module                   | Description                                                       | README                                                             |
+| ------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `api-server/`            | GraphQL API layer overview                                        | [api-server/README.md](api-server/README.md)                       |
+| `api-server/services/`   | Core backend Go services (Gin)                                    | [api-server/services/README.md](api-server/services/README.md)     |
+| `api-server/migrations/` | DB migrations (Postgres via golang-migrate, ClickHouse, RabbitMQ) | [api-server/migrations/README.md](api-server/migrations/README.md) |
+
+### Data Collection
+
+| Module                                         | Description                      | README                                                                                                         |
+| ---------------------------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `collector-server/cloud-collector/`            | Cloud data collection (AWS / Azure / GCP) | [collector-server/cloud-collector/README.md](collector-server/cloud-collector/README.md)                       |
+| `collector-server/k8s-collector/app/`          | K8s metrics aggregation (Python) | [collector-server/k8s-collector/app/README.md](collector-server/k8s-collector/app/README.md)                   |
+| `collector-server/k8s-collector/relay-server/` | K8s relay gateway (WebSocket)    | [collector-server/k8s-collector/relay-server/README.md](collector-server/k8s-collector/relay-server/README.md) |
+
+### ML & LLM
+
+| Module               | Description                          | README                                                     |
+| -------------------- | ------------------------------------ | ---------------------------------------------------------- |
+| `ml-k8s-server/`     | ML models & K8s autoscaling          | [ml-k8s-server/README.md](ml-k8s-server/README.md)         |
+| `llm/llm-server/`    | LLM inference service                | [llm/llm-server/README.md](llm/llm-server/README.md)       |
+| `llm/code-analysis/` | Code analysis engine                 | [llm/code-analysis/README.md](llm/code-analysis/README.md) |
+| `llm/rag-server/`    | RAG (Retrieval Augmented Generation) | [llm/rag-server/README.md](llm/rag-server/README.md)       |
+| `llm/benchmark/`     | LLM benchmarking                     | [llm/benchmark/README.md](llm/benchmark/README.md)         |
+
+### Automation & Operations
+
+| Module                  | Description                                                           | README                                                           |
+| ----------------------- | --------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `runbook-server/`       | Runbook orchestration + automation engine (Temporal)                  | [runbook-server/README.md](runbook-server/README.md)             |
+| `ticket-server/`        | External ticketing integration (Jira, ServiceNow, PagerDuty, Zenduty) | [ticket-server/README.md](ticket-server/README.md)               |
+| `notifications-server/` | Notification delivery (Slack, Teams, email)                           | [notifications-server/README.md](notifications-server/README.md) |
+
+### Deploy & Infrastructure
+
+| Module               | Description                           | README                                                     |
+| -------------------- | ------------------------------------- | ---------------------------------------------------------- |
+| `deploy/kubernetes/` | Helm charts & Kubernetes config files | [deploy/kubernetes/README.md](deploy/kubernetes/README.md) |
+
+### Tests
+
+| Module           | Description                  |
+| ---------------- | ---------------------------- |
+| `app-e2e-tests/` | End-to-end integration tests |
+
+## Contributing
+
+We welcome contributions! Before opening your first PR:
+
+1. Read [CONTRIBUTING.md](./CONTRIBUTING.md) for the development workflow, conventional-commit format, and PR guidelines.
+2. Review the [Code of Conduct](./CODE_OF_CONDUCT.md).
+3. Browse [open issues](https://github.com/nudgebee/nudgebee/issues) — look for `good first issue` and `help wanted` labels if you're getting started.
+
+By contributing, you agree that your contributions are licensed under the [Business Source License 1.1](./LICENSE) (and its Change License, Apache 2.0). On your first PR, the [CLA Assistant](https://cla-assistant.io/) bot will post a one-click sign link — subsequent PRs need no further action.
+
+## Security
+
+If you believe you have found a security vulnerability in Nudgebee, **please do not open a public GitHub issue**. Instead, follow the responsible disclosure process in [SECURITY.md](./SECURITY.md).
+
+## Telemetry
+
+Nudgebee ships with **no telemetry or product analytics**. No data leaves your cluster except what you explicitly configure — notification webhooks, ticket-system sync, LLM provider calls, and any outbound integrations you wire up.
+
+## Community & Support
+
+- **Chat / questions / contributor coordination** — [Discord](https://discord.gg/C5d27ceTEv)
+- **Bugs and feature requests** — [GitHub Issues](https://github.com/nudgebee/nudgebee/issues)
+- **Security reports** — [SECURITY.md](./SECURITY.md)
+- **Commercial license, support or the full platform** — [Nudgebee Enterprise](https://www.nudgebee.com/pricing?utm_source=github&utm_medium=readme&utm_campaign=oss). Please don't open issues for Enterprise features here.
+
+## License
+
+Nudgebee is source-available under the [Business Source License 1.1](./LICENSE).
+You can self-host and run it in production for your own internal purposes for
+free; offering it to third parties as a hosted/managed service, or using it to
+deliver services to your customers, requires a commercial license. Each version
+converts to Apache 2.0 four years after release. See [LICENSING.md](./LICENSING.md)
+for a plain-language summary, or contact **licensing@nudgebee.com**.

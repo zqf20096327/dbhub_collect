@@ -6,12 +6,12 @@ Frontend Developer | UI/UX Focused | Building Modern Web Experiences
 
 <p align="center">
 I'm a Frontend Developer focused on building modern, premium, responsive UI/UX designs
-and interactive web experiences using <b>HTML, Modern CSS, JavaScript(ES6+) and API Integration</b>.
+and interactive web experiences using <b>React.js, Tailwind CSS, TypeScript, Next.js and API Integration and AI Assistant Development</b>.
 </p>
 
 <p align="center">
 I enjoy turning ideas into clean, functional, and user-friendly websites — and I enjoy
-debugging, building logic, solving problems, and finding better solutions while working
+debugging, solving problems, and finding better solutions while working
 on real projects.
 </p>
 
@@ -23,64 +23,48 @@ Continuously learning new technologies, exploring modern web development practic
 
 ---
 
-### 📌 Featured Projects
-
-**🚀 Nova AI Automation SaaS Landing Page**
-
-A modern and fully responsive AI SaaS landing page built with HTML5, Modern CSS3,
-and JavaScript (ES6+).
-
-🔗 Live Demo:  
-[View Nova Ai Automation](https://nova-ai-automation.netlify.app/)
-
-**🎮 Naxvy Gaming E-commerce**
-
-A modern gaming e-commerce frontend built with HTML, Modern CSS, and JavaScript (ES6+), featuring product browsing, search, cart, wishlist, and a custom gaming setup builder.
-
-🔗 Live Demo:  
-[view Naxvy Gaming E-commerce](https://naxvy-gaming.netlify.app/)
-
-**☀️ SkyPulse Weather App**
-
-A modern sky pulse weather app frontend bulit with HTML, Modern CSS, JavaScript (ES6) and Fetch Api.
-
-🔗 Live Demo:  
-[View SkyPulse Weather App](https://sky-pulse-weather-app.netlify.app/)
-
-**🎬 CineVerse Movie Discovery**
-
-A modern movie discovery frontend built with HTML, Modern CSS, JavaScript (ES6+),  Fetch API and TMDB API for movie data.
-
-🔗 Live Demo:  
-[View CineVerse Movie Discovery](https://cineverse-movie-discovery.netlify.app/)
-
----
 ### 🌐 Connect With Me
 
-<p>
-<a href="https://www.linkedin.com/in/syedfurqanullah">
-<img src="https://img.shields.io/badge/LinkedIn-7AA2F7?style=for-the-badge&logo=linkedin&logoColor=white">
+<p align="center">
+
+<a href="https://syedfurqanullah.netlify.app/">
+  <img src="https://img.shields.io/badge/Portfolio-7DCFFF?style=for-the-badge&logo=googlechrome&logoColor=black" alt="Portfolio">
 </a>
 <a href="mailto:syedfurqanullahh@gmail.com">
-<img src="https://img.shields.io/badge/Email-BB9AF7?style=for-the-badge&logo=gmail&logoColor=white">
+  <img src="https://img.shields.io/badge/Email-BB9AF7?style=for-the-badge&logo=gmail&logoColor=white">
 </a>
+<a href="https://www.linkedin.com/in/syedfurqanullah">
+  <img src="https://img.shields.io/badge/LinkedIn-7AA2F7?style=for-the-badge&logo=linkedin&logoColor=white">
+</a>
+<a href="https://github.com/syedfurqanullah">
+  <img src="https://img.shields.io/badge/GitHub-24283B?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
+</a>
+<a href="https://www.facebook.com/syed.furqanullahh">
+  <img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook">
+</a>
+<a href="https://x.com/syedfurqanullah">
+  <img src="https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white" alt="X">
+</a>
+
 </p>
 
 ---
 
 ### 🛠️ Tech Stack
 
-<p>
-<img src="https://img.shields.io/badge/HTML5-F7768E?style=for-the-badge&logo=html5&logoColor=white">
-<img src="https://img.shields.io/badge/CSS3-7AA2F7?style=for-the-badge&logo=css3&logoColor=white">
-<img src="https://img.shields.io/badge/Bootstrap-BB9AF7?style=for-the-badge&logo=bootstrap&logoColor=white">
-<img src="https://img.shields.io/badge/JavaScript-E0AF68?style=for-the-badge&logo=javascript&logoColor=black">
-<img src="https://img.shields.io/badge/React-7DCFFF?style=for-the-badge&logo=react&logoColor=black">
-<img src="https://img.shields.io/badge/Next.js-24283B?style=for-the-badge&logo=nextdotjs&logoColor=white">
-<img src="https://img.shields.io/badge/Git-F7768E?style=for-the-badge&logo=git&logoColor=white">
-<img src="https://img.shields.io/badge/GitHub-24283B?style=for-the-badge&logo=github&logoColor=white">
-<img src="https://img.shields.io/badge/Netlify-7DCFFF?style=for-the-badge&logo=netlify&logoColor=white">
-<img src="https://img.shields.io/badge/Vercel-24283B?style=for-the-badge&logo=vercel&logoColor=white">
+<p align="center">
+  <img src="https://img.shields.io/badge/HTML5-F7768E?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
+  <img src="https://img.shields.io/badge/CSS3-7AA2F7?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
+  <img src="https://img.shields.io/badge/Bootstrap-BB9AF7?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap">
+  <img src="https://img.shields.io/badge/JavaScript-E0AF68?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript">
+  <img src="https://img.shields.io/badge/React-7DCFFF?style=for-the-badge&logo=react&logoColor=black" alt="React">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Next.js-24283B?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=black" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/Git-F7768E?style=for-the-badge&logo=git&logoColor=white" alt="Git">
+  <img src="https://img.shields.io/badge/GitHub-24283B?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
+  <img src="https://img.shields.io/badge/Netlify-7DCFFF?style=for-the-badge&logo=netlify&logoColor=black" alt="Netlify">
+  <img src="https://img.shields.io/badge/Vercel-24283B?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel">
 </p>
 
 ---
@@ -88,13 +72,17 @@ A modern movie discovery frontend built with HTML, Modern CSS, JavaScript (ES6+)
 # 📊 GitHub Stats
 
 <p>
-  <img src="https://github-readme-stats.shion.dev/api?username=syedfurqanullah&theme=tokyonight&hide_border=false&include_all_commits=true&count_private=true">
+ <img src="https://github-readme-stats.vercel.app/api?username=syedfurqanullah&theme=tokyonight&hide_border=true&include_all_commits=true&show_icons=true" alt="GitHub Stats">
 </p>
 
 <p>
-<img src="https://streak-stats.demolab.com/?user=syedfurqanullah&theme=tokyonight&hide_border=false">
+  <img src="https://streak-stats.demolab.com/?user=syedfurqanullah&theme=tokyonight&hide_border=true" alt="GitHub Streak">
 </p>
 
 <p>
-<img src="https://komarev.com/ghpvc/?username=syedfurqanullah&color=7AA2F7&style=for-the-badge">
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=syedfurqanullah&theme=tokyonight&hide_border=true&layout=compact&langs_count=6" alt="Top Languages">
+</p>
+
+<p>
+  <img src="https://komarev.com/ghpvc/?username=syedfurqanullah&color=7AA2F7&style=for-the-badge">
 </p>

@@ -6,7 +6,7 @@
 
   _Since Nut supports same format as Bolt there are known issues:_
 
-  - Bolt uses Memmap to operate, there is no LRU or other cache, so if database doesn't fit in memory, then it's end of game, Nut will inevitably crash.
+  - Nut memory-maps the database file and lets the OS cache pages, like Bolt, so the database doesn't need to fit in RAM. The memory map has to fit in the process address space though, which limits databases to 2GB on 32-bit systems.
   - Data structures are written directly onto disk. No serialization takes place, so Nut doesn't understand db file from computer with different Endianness, for example.
 
 - **Transaction based**. In case of error transaction will be rolled back.
@@ -17,7 +17,7 @@
 
 Package available at crates.io: https://crates.io/crates/nut
 
-Documentation available at https://docs.rs/nut/0.1.2/nut/
+Documentation available at https://docs.rs/nut/0.1.6/nut/
 
 Usual way is to `cargo build --release` in console. Docs available via `cargo doc --no-deps --open`. Api is very similar to Bolt if you are familiar with it.
 
@@ -80,7 +80,7 @@ let mut tx = db.begin_tx().unwrap();
 
 // getting bucket
 let flowers = tx.bucket(b"flowers").unwrap();
-let data = flowers.get(b"iris").unwrap();
+let data = flowers.try_get(b"iris").unwrap().unwrap();
 assert_eq!(
 	data,
 	&b"song by American alternative rock band Goo Goo Dolls"[..]
@@ -96,8 +96,8 @@ let mut db = DBBuilder::new("test.db").build().unwrap();
 let mut tx = db.begin_tx().unwrap();
 
 {
-	// .buckets() available to conveniently retrieve all buckets keys
-	let bucket_names = tx.buckets(); // returns Vec<Vec<u8>>
+	// .try_buckets() available to conveniently retrieve all buckets keys
+	let bucket_names = tx.try_buckets().unwrap(); // returns Vec<Vec<u8>>
 
 	// bucket key is any binary data, not only string
 	assert_eq!(bucket_names, vec!["flowers".as_bytes().to_vec()]);
@@ -119,6 +119,13 @@ let mut tx = db.begin_tx().unwrap();
 # Nut Bin
 
 Crate also provides `nut` binary which is helpful to inspect database file in various ways. It can be found after `cargo build --release` in `./target/release/nut`.
+
+The binary and its dependencies are behind the `cli` feature, which is enabled by default. To use Nut as a library only, disable default features:
+
+```toml
+[dependencies]
+nut = { version = "0.1", default-features = false }
+```
 
 Excerpt from man:
 

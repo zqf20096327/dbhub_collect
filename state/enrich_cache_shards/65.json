@@ -1,10 +1,10 @@
 {
  "encoredev/encore": {
-  "commit_7d": 7,
+  "commit_7d": 3,
   "commit_90d": 68,
   "rel_ver": "v1.58.8",
   "rel_pub": "2026-10-20",
-  "rel_days": 5,
+  "rel_days": 13,
   "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
@@ -20,7 +20,7 @@
    "GHSA-j97h-57vg-4vcc(-,critical)"
   ],
   "contrib_n": 112,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Go": 58,
    "Rust": 40,
@@ -30,10 +30,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v1.58.8",
+    "d": "2026-10-20",
+    "n": "## What's Changed\n* Add a deploy section to the TS and Go LLM instructions by @marcuskohlberg in https://github.com/encoredev/encore/pull/2615\n* metascrub: include cookie fields by @eandre in https://github.com/encoredev/encore/pull/2616\n* Remove the broken quick-reference link from the LLM instructions by @marcuskohlberg in https://github.com/encoredev/encore/pull/2617\n* cli/daemon: fail encore check commands on HTTP errors by @marcuskohlberg in https://github.com/encoredev/encore/pull/2618\n\n\n**Full Change"
+   },
+   {
+    "t": "v1.58.7",
+    "d": "2026-10-19",
+    "n": "* runtimes/js: handle empty buffers in bucket uploads and sqldb params by @eandre in https://github.com/encoredev/encore/pull/2583\n* cli: report pending database changes on reload by @marcuskohlberg in https://github.com/encoredev/encore/pull/2603"
+   },
+   {
+    "t": "v1.58.6",
+    "d": "2026-10-01",
+    "n": "## What's Changed\r\n* cli/daemon: paginate and filter traces, budget trace data by size not count  by @lennartp in https://github.com/encoredev/encore/pull/2582\r\n\r\n## New Contributors\r\n* @lennartp made their first contribution in https://github.com/encoredev/encore/pull/2582\r\n\r\n**Full Changelog**: https://github.com/encoredev/encore/compare/v1.58.5...v1.58.6"
+   }
+  ]
  },
  "turbot/steampipe": {
   "commit_7d": 0,
@@ -65,12 +82,12 @@
   }
  },
  "readysettech/readyset": {
-  "commit_7d": 51,
-  "commit_90d": 337,
+  "commit_7d": 34,
+  "commit_90d": 342,
   "rel_ver": "stable-261022",
   "rel_pub": "2026-10-22",
-  "rel_days": 3,
-  "rel_n90": 4,
+  "rel_days": 11,
+  "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -78,7 +95,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 77,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Rust": 99,
    "Shell": 0,
@@ -88,10 +105,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "stable-261022",
+    "d": "2026-10-22",
+    "n": "- 4a231cf: Added dual-password support for MySQL deployments. `ALTER READYSET MODIFY USER ... RETAIN CURRENT PASSWORD` keeps the old password valid alongside the new one, and `... DISCARD OLD PASSWORD` retires it. Naming a user twice in `--allowed-users` starts a deployment mid-rotation. The `readyset.users` view reports rotations in progress in a new `has_old_password` column.\n- 3f31159: Removed a query to the upstream MySQL database that was issued for every new client connection.\n- bc400d2: PostgreSQL `C"
+   },
+   {
+    "t": "stable-260924",
+    "d": "2026-09-24",
+    "n": "- a9a1b47: Added support for replicating `DROP DATABASE` statements from a MySQL upstream.\n- 012ab5e: Added support for `SHOW WARNINGS` in MySQL deployments.\n- 4464db7: Fixed a race condition in which an adapter reconnecting during DDL could briefly use an outdated schema, causing `CREATE CACHE` to fail during a window of a few milliseconds.\n- 141b8be: Fixed an issue in MySQL deployments where row comparisons converted their operands as whole rows, causing a number and a numeric string to compare as unequal"
+   },
+   {
+    "t": "stable-260827",
+    "d": "2026-08-27",
+    "n": "- 456d93c: Fixed dropped client connections when the client's handshake collation is not supported by the upstream, such as when MySQL 8.x clients connect through Readyset to a MySQL 5.7 server. Readyset now falls back to a collation supported by the upstream.\n- ce2355c: Fixed the session collation for proxied queries to follow the collation advertised by the client in its connection handshake, matching a direct MySQL connection.\n- 835d153: Users can now connect to the `readyset` schema (`USE readyset` on M"
+   }
+  ]
  },
  "alextselegidis/easyappointments": {
   "commit_7d": 2,
@@ -132,11 +166,11 @@
   }
  },
  "apache/hugegraph": {
-  "commit_7d": 7,
-  "commit_90d": 59,
+  "commit_7d": 27,
+  "commit_90d": 221,
   "rel_ver": "1.7.0",
   "rel_pub": "2025-11-16",
-  "rel_days": 322,
+  "rel_days": 351,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -145,7 +179,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 104,
-  "enriched_at": "20261004",
+  "enriched_at": "20261102",
   "lang": {
    "Java": 97,
    "Shell": 3,
@@ -155,16 +189,34 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261004",
-   "release": "20261004"
-  }
+   "commit": "20261102",
+   "release": "20261102",
+   "security": "20261102"
+  },
+  "rel_notes": [
+   {
+    "t": "1.7.0",
+    "d": "2025-11-16",
+    "n": "* BREAKING CHANGE(server): disable legacy backends include `MySQL/PG/c*`(.etc) by @Pengzna in https://github.com/apache/incubator-hugegraph/pull/2746\n* perf(rocksdb): RocksDBStore remove redundant checkOpened() call by @javeme in https://github.com/apache/incubator-hugegraph/pull/2863\n* fix(server): fix the support for graphsapi in rocksdb and add testing for graphsapi by @Tsukilc in https://github.com/apache/incubator-hugegraph/pull/2900\n* chore(server): bump rocksdb version from 7.2.2 to 8.10.2 by @gy-den"
+   },
+   {
+    "t": "1.5.0",
+    "d": "2024-12-10",
+    "n": "* feat: support disable RocksDB auto-compaction by configuration by @haohao0103 in https://github.com/apache/incubator-hugegraph/pull/2586\n* feat(store): integrate `store-rocksdb` submodule by @Pengzna in https://github.com/apache/incubator-hugegraph/pull/2513\n* fix(server): switch rocksdb backend to memory when executing gremlin example by @VGalaxies in https://github.com/apache/incubator-hugegraph/pull/2518\n* chore(store): translate CJK comments to English for store-dist, store-grpc, store-node, store-roc"
+   },
+   {
+    "t": "1.3.0",
+    "d": "2024-03-29",
+    "n": "* refact(server): enhance the storage path in RocksDB & clean code by @imbajin in https://github.com/apache/incubator-hugegraph/pull/2491"
+   }
+  ]
  },
  "metasfresh/metasfresh": {
-  "commit_7d": 193,
-  "commit_90d": 1484,
+  "commit_7d": 401,
+  "commit_90d": 1854,
   "rel_ver": "5.175",
   "rel_pub": "2023-06-27",
-  "rel_days": 1216,
+  "rel_days": 1224,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -173,7 +225,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 67,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Java": 83,
    "PLpgSQL": 7,
@@ -183,10 +235,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "5.175",
+    "d": "2023-06-27",
+    "n": "* [#11937](https://github.com/metasfresh/metasfresh/pull/11937) Allow filtering Elasticsearch index by user role's orgs"
+   },
+   {
+    "t": "5.174",
+    "d": "2022-03-28",
+    "n": "* [#11777](https://github.com/metasfresh/metasfresh/pull/11777) Add DB function to reindex bpartners into elastic search"
+   },
+   {
+    "t": "5.173",
+    "d": "2021-11-04",
+    "n": "## Features\r\n* metasfresh\r\n  * [#11607](https://github.com/metasfresh/metasfresh/issues/11607) FE package updates - chunk 3 mid August\r\n  * [#11624](https://github.com/metasfresh/metasfresh/issues/11624) FE: option to always display \"New BPartner\" in order\r\n  * [#11654](https://github.com/metasfresh/metasfresh/issues/11654) Create Occupation Hierarchy tables and Validation Rules\r\n  * [#11665](https://github.com/metasfresh/metasfresh/issues/11665) C&E User / BPartner Synchronisation metasfresh => RabbitMQ\r\n "
+   }
+  ]
  },
  "chinnonsantos/sql-paises-estados-cidades": {
   "commit_90d": 0,
@@ -430,11 +499,11 @@
   "enriched_at": "20260927"
  },
  "RayforceDB/rayforce": {
-  "commit_90d": 744,
-  "commit_7d": 35,
-  "rel_ver": "v2.9.1",
-  "rel_pub": "2026-09-26",
-  "rel_days": 1,
+  "commit_90d": 672,
+  "commit_7d": 36,
+  "rel_ver": "v3.0.1",
+  "rel_pub": "2026-10-24",
+  "rel_days": 9,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -450,7 +519,28 @@
    "Python": 0,
    "Makefile": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "rel_notes": [
+   {
+    "t": "v3.0.1",
+    "d": "2026-10-24",
+    "n": "- test(mem): replace caller-heap fallback peak proxy with scoped oracles (#915)\n**Full changelog**: https://github.com/RayforceDB/rayforce/compare/v2.11.5...v3.0.1"
+   },
+   {
+    "t": "v2.11.5",
+    "d": "2026-10-12",
+    "n": "<details>\n<summary>🔧 Maintenance &amp; internal</summary>\n\n- v2.11.5 (#791)\n\n</details>\n\n**Full changelog**: https://github.com/RayforceDB/rayforce/compare/v2.11.0...v2.11.5"
+   },
+   {
+    "t": "v2.11.0",
+    "d": "2026-10-04",
+    "n": "**Full changelog**: https://github.com/RayforceDB/rayforce/compare/v2.10.0...v2.11.0"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "rictom/cnpj-sqlite": {
   "commit_90d": 8,

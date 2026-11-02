@@ -34,11 +34,13 @@ the debezium connector that stopped reading the slot, and
 ## try it
 
 ```sh
-go install github.com/Dem1241/slotwatch@latest
+brew install Dem1241/tap/slotwatch
 slotwatch --demo
 ```
 
-or grab a binary for linux, macos or windows from the
+or `go install github.com/Dem1241/slotwatch@latest`, or
+`docker run --rm -it ghcr.io/dem1241/slotwatch --demo`, or grab a binary for
+linux, macos or windows from the
 [releases](https://github.com/Dem1241/slotwatch/releases).
 
 `--demo` watches a pretend server with a debezium slot that stopped being
@@ -70,6 +72,12 @@ slotwatch --inactive 30m                     # how long a slot may sit unused
 ```sh
 slotwatch --check            # a table, and an exit code
 slotwatch --check --json     # the same for scripts
+```
+
+or from the image, with the connection in `DATABASE_URL`:
+
+```sh
+docker run --rm -e DATABASE_URL ghcr.io/dem1241/slotwatch --check
 ```
 
 `--check` looks at the slots once and exits with `0` when everything is fine,

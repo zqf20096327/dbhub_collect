@@ -110,7 +110,7 @@ Run [mail-tester.com](https://www.mail-tester.com) to get a deliverability score
 - **Webhooks**: HMAC-signed events with timestamp-bound replay protection: `email.queued`, `email.sent`, `email.failed`, `email.bounced`, `email.complained` (feedback-loop spam complaints, #191), `email.received`, `email.unsubscribed`, `domain.verification_failed`, `domain.verified`
 - **Inbound SMTP**: receive and store incoming mail with DNSBL, recipient validation, and per-IP rate limiting; reply from the dashboard with RFC 5322 threading headers, and see which of your emails a received reply answers
 - **Inbound notifications**: per-domain "you have new mail" email on receive, DKIM-signed from the recipient domain, with no content of the inbound message by default, automatic mail skipped and per-address and per-domain throttles; opt-in via each domain's `notify_email`
-- **API key auth**: SHA-256 hashed Bearer tokens with per-key rate limiting
+- **API key auth**: SHA-256 hashed Bearer tokens with per-key rate limiting, shared across replicas with the optional `REDIS_URL`
 - **Trash + auto-purge**: Gmail-style soft delete on outbound and inbound, restorable until purged after `TRASH_RETENTION_DAYS` (default 7)
 - **Suppression list**: per-API-key list of addresses we refuse to send to; gate runs at `POST /emails/send` so bounced/unsubscribed recipients can't re-tank IP reputation; a mailbox still full (`4.2.2`) when retries run out is suppressed for 24 h, and `SUPPRESSIONS_SHARED_HARD=true` also refuses addresses any key hard-bounced on or got a complaint for
 - **Sender display name and send category**: an optional `fromName` (checked so it cannot pose as an address) and `category` (`transactional` mail goes out without `List-Unsubscribe`, `marketing` mail is refused unless it can carry the one-click link); HTML-only mail gets a derived text part and fragments a document wrapper at send time
@@ -120,11 +120,12 @@ Run [mail-tester.com](https://www.mail-tester.com) to get a deliverability score
 - **DMARC aggregate report ingest**: daily `rua` reports from Microsoft / Google / Yahoo are auto-parsed (gzip / zip / raw XML) and surfaced in the dashboard so misaligned source IPs are visible at a glance
 - **Web dashboard**: server-rendered (Elysia JSX), bulk operations, real-time stats (24h sent, success rate, bounce rate with a warning above 2%, queue depth), a per-MX delivery table on each email with a badge for sessions sent without TLS; owner account login with revocable server-side sessions, invite-only teammate accounts (admin or member), a Users page to change roles, deactivate or remove accounts, issue one-time password reset links and transfer ownership, a Change password page for every account (signs out every other device), an Active sessions page for every account (device, IP, optional approximate location from an offline GeoIP database; sign out one device or all others), an email alert on sign-in from a new device (no links), optional TOTP two-factor authentication with recovery codes for every account (`REQUIRE_2FA` makes it mandatory for the owner or admins), passkeys (WebAuthn) for a phishing-resistant passwordless sign-in or second factor (#223), an append-only audit log of security-relevant actions (sign-ins, account, two-factor, API key, domain, webhook and suppression changes, with actor, IP and user agent) for admins, and per-user API keys (members manage their own restricted keys; deactivating an account disables its keys)
 - **OpenAPI 3.0**: interactive docs at `/api/docs`
+- **Observability**: structured JSON logs with request, job and SMTP-session IDs ([docs/logging.md](docs/logging.md)), and Prometheus metrics at `/metrics` behind a scrape token: queue depth and overdue age, sends by final status, delivery latency, MX deliveries by TLS, SMTP refusals by reason, webhook backlog, HTTP rate and latency, readable by Prometheus, the OpenTelemetry Collector and the Datadog Agent ([docs/metrics.md](docs/metrics.md)); admins also see a System health card on the dashboard home; optional OpenTelemetry traces over OTLP for HTTP requests, send attempts and MX deliveries, webhook deliveries (with `traceparent`) and SMTP sessions, off by default ([docs/tracing.md](docs/tracing.md))
 - **Type-safe**: strict TypeScript, Drizzle ORM, no `any`
 
 ## API Endpoints
 
-All endpoints (except `/health` and the public unsubscribe pages at `/u/:token`) require `Authorization: Bearer <api-key>`. Full reference: [docs/api.md](docs/api.md).
+All endpoints (except `/health`, the public unsubscribe pages at `/u/:token`, and `/metrics`, which takes its own `METRICS_TOKEN`) require `Authorization: Bearer <api-key>`. Full reference: [docs/api.md](docs/api.md).
 
 ### Emails
 
@@ -212,6 +213,7 @@ curl -X POST http://localhost:3000/api/v1/emails/send \
 | Framework | [Elysia](https://elysiajs.com) |
 | ORM | [Drizzle ORM](https://orm.drizzle.team) (`drizzle-orm/bun-sql`) |
 | Database | PostgreSQL 16+ |
+| Shared state (optional) | Redis or Valkey via Bun's built-in client, only to run several replicas (`REDIS_URL`, #185) |
 | SMTP outbound | Nodemailer (one transport per recipient MX on port 25 + DKIM) |
 | SMTP inbound | smtp-server + mailparser |
 | Dashboard | Elysia JSX (`@elysiajs/html` + `@kitajs/html`) |

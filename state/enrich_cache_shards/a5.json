@@ -43,10 +43,10 @@
  },
  "Altinity/clickhouse-operator": {
   "commit_7d": 0,
-  "commit_90d": 216,
+  "commit_90d": 200,
   "rel_ver": "release-0.27.4",
   "rel_pub": "2026-09-24",
-  "rel_days": 31,
+  "rel_days": 39,
   "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
@@ -55,7 +55,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 131,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Go": 64,
    "Python": 29,
@@ -65,10 +65,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "release-0.27.4",
+    "d": "2026-09-24",
+    "n": "* **A pod that will not terminate is force-deleted so StatefulSet Recreate finishes in one pass.** A wedged shutdown previously aborted Recreate with the host left at `Replicas=0`. The operator now deletes that pod after a full wait timeout, emits `HostPodForceDeleted`, and completes Delete+Create in the same pass. A terminating pod is no longer treated as a healthy shard peer. by [@alex-zaitsev](https://github.com/alex-zaitsev) in [#2080](https://github.com/Altinity/clickhouse-operator/pull/2080). Fixes [#"
+   },
+   {
+    "t": "release-0.27.3",
+    "d": "2026-08-12",
+    "n": "* Helm: scrape native ClickHouse Keeper Prometheus metrics when `serviceMonitor.enabled` is set, by @Slach in #2048. Closes #2038. Opt out with `serviceMonitor.keeperMetrics.enabled: false`. Keeper must expose a `metrics` port; clusters without Keeper are unaffected.\n**Full Changelog**: https://github.com/Altinity/clickhouse-operator/compare/release-0.27.2...release-0.27.3"
+   },
+   {
+    "t": "release-0.27.2",
+    "d": "2026-07-23",
+    "n": "* **Backward-incompatible config rename** in `ClickHouseOperatorConfiguration`: `reconcile.recovery.from.{aborted,completed}` → `reconcile.recovery.onStatus.{aborted,completed}` (the `from` grouping level is removed; per-status action keys are unchanged, and the obsolete `from` key is silently ignored on load). If you set `reconcile.recovery.from.aborted.onPodReady: none` on 0.27.0/0.27.1 to disable Aborted auto-recovery, re-apply it as `reconcile.recovery.onStatus.aborted.onPodReady: none` — otherwise "
+   }
+  ]
  },
  "psycopg/psycopg": {
   "commit_7d": 1,
@@ -231,12 +248,12 @@
   "enriched_at": "20260927"
  },
  "linuxwacom/libwacom": {
-  "commit_90d": 17,
+  "commit_90d": 7,
   "commit_7d": 0,
   "rel_ver": "libwacom-2.20.0",
   "rel_pub": "2026-09-07",
-  "rel_days": 20,
-  "rel_n90": 2,
+  "rel_days": 56,
+  "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -251,7 +268,28 @@
    "Roff": 1,
    "Shell": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "rel_notes": [
+   {
+    "t": "libwacom-2.20.0",
+    "d": "2026-09-07",
+    "n": "## Tag\n\ngit tag: `libwacom-2.20.0`\n\n## Downloads\n\nhttps://github.com/linuxwacom/libwacom/releases/download/libwacom-2.20.0/libwacom-2.20.0.tar.xz\n\nChecksums:\n\n- **MD5**:  `4ddf6476047a10c8fbaaba6b30a672e6  libwacom-2.20.0.tar.xz`\n- **SHA1**: `f8a6b1df3a24406fd4be26e6420c6bca0e153afe  libwacom-2.20.0.tar.xz`\n- **SHA256**: `370b45b5e05a91960df0aeb9c9481ae05846aab92ab2d4ec66945a0da4216888  libwacom-2.20.0.tar.xz`\n- **PGP**: https://github.com/linuxwacom/libwacom/releases/download/libwacom-2.20.0/libwacom-2.20."
+   },
+   {
+    "t": "libwacom-2.19.1",
+    "d": "2026-07-20",
+    "n": "## Tag\n\ngit tag: `libwacom-2.19.1`\n\n## Downloads\n\nhttps://github.com/linuxwacom/libwacom/releases/download/libwacom-2.19.1/libwacom-2.19.1.tar.xz\n\nChecksums:\n\n- **MD5**:  `83baa1eb388d506b670d13a8a18ff224  libwacom-2.19.1.tar.xz`\n- **SHA1**: `7b827d3cf44aa1a2aec313c43ff5a142d412def3  libwacom-2.19.1.tar.xz`\n- **SHA256**: `a1e5b1e7ef60fa70ed05b55d888d980ec7e86bd15594857f3c48c529b661bf32  libwacom-2.19.1.tar.xz`\n- **PGP**: https://github.com/linuxwacom/libwacom/releases/download/libwacom-2.19.1/libwacom-2.19."
+   },
+   {
+    "t": "libwacom-2.19.0",
+    "d": "2026-05-29",
+    "n": "Add libwacom_database_ref/unref\ntools: harden subprocess and temp file handling in libwacom-update-db.py\ntest/dbverify: don't allow path separators in libwacom_get_match()\nAllow NULL for libwacom_database_destroy()\ndatabase: skip any entries with an unknown bus type\nExport libwacom_list_styli_from_database()"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "1yefuwang1/vectorlite": {
   "commit_90d": 2,

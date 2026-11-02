@@ -1,10 +1,10 @@
 {
  "ClickHouse/ClickHouse": {
-  "commit_7d": 1760,
-  "commit_90d": 46569,
+  "commit_7d": 880,
+  "commit_90d": 44798,
   "rel_ver": "v26.10.2.103-stable",
   "rel_pub": "2026-10-24",
-  "rel_days": 1,
+  "rel_days": 9,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -21,7 +21,7 @@
    "GHSA-g22g-p6q2-x39v(CVE-2023-47118,high)"
   ],
   "contrib_n": 311,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "C++": 68,
    "Python": 13,
@@ -31,8 +31,8 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
   }
  },
@@ -132,12 +132,12 @@
   }
  },
  "dolthub/doltgresql": {
-  "commit_7d": 62,
-  "commit_90d": 1002,
+  "commit_7d": 34,
+  "commit_90d": 951,
   "rel_ver": "v1.4.0",
   "rel_pub": "2026-10-01",
-  "rel_days": 24,
-  "rel_n90": 11,
+  "rel_days": 32,
+  "rel_n90": 9,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -145,7 +145,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 24,
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "lang": {
    "Go": 93,
    "PLpgSQL": 7,
@@ -155,10 +155,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v1.4.0",
+    "d": "2026-10-01",
+    "n": "Row constructors compared against subqueries now follow Postgres' NULL rules, `<`-style row comparisons evaluate each field only once, and CHECK constraints containing `ROW(...)` no longer fail on every insert. These were issues found in https://github.com/dolthub/doltgresql/pull/3424 that are being fixed in a separate PR.\n* [3907](https://github.com/dolthub/go-mysql-server/pull/3907): Optimize aggregate functions and remove sort nodes on multi-column indexes provided that any columns before the aggregated/"
+   },
+   {
+    "t": "v1.3.3",
+    "d": "2026-09-15",
+    "n": "Sanitize orphaned role references while loading authorization data and persist the sanitized state on cluster standbys, protecting installations upgraded from affected releases. Add SQL, persistence, and legacy-serialization regressions.\n* [8325](https://github.com/dolthub/dolt/issues/8325): panic during `dolt dump`if db contains a (non-empty) table with virtual columns"
+   },
+   {
+    "t": "v1.3.2",
+    "d": "2026-09-12",
+    "n": "* [11743](https://github.com/dolthub/dolt/pull/11743): integration-tests/mysql-client-tests/Dockerfile: Bump java_clients_build off EOL Debian bullseye to maven:3.9-eclipse-temurin-17-noble.\n* [3343](https://github.com/dolthub/doltgresql/pull/3343): Enforce authorization for CREATE DATABASE and DROP DATABASE\nRequires SUPERUSER or CREATEDB for CREATE DATABASE and SUPERUSER for DROP DATABASE, with Go and Bats regression tests.\nSET now renders a list-quote parameter like search_path with Postgres's identifier "
+   }
+  ]
  },
  "kristijanhusak/vim-dadbod-ui": {
   "commit_7d": 0,
@@ -181,12 +198,12 @@
   }
  },
  "pg-sharding/spqr": {
-  "commit_90d": 257,
-  "commit_7d": 15,
-  "rel_ver": "3.1.0",
-  "rel_pub": "2026-08-28",
-  "rel_days": 58,
-  "rel_n90": 1,
+  "commit_90d": 253,
+  "commit_7d": 33,
+  "rel_ver": "3.2.0",
+  "rel_pub": "2026-10-26",
+  "rel_days": 7,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -201,12 +218,29 @@
    "Yacc": 1,
    "Python": 1
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "3.2.0",
+    "d": "2026-10-26",
+    "n": "* Introduce **`spqrmigrate`**, a new tool for managing database migrations in SPQR.\n* Add connection acquisition and reuse metrics to the virtual database by @reshke #3040"
+   },
+   {
+    "t": "3.1.0",
+    "d": "2026-08-28",
+    "n": "* Add `DROP REDISTRIBUTE TASK ALL` command by @EinKrebs #2786\n* Drop key range move status from QDB by @diPhantxm #2830\nThis release focuses on production operations and reliability: improved redistribution tooling and recovery, connection pinning and PostgreSQL advisory lock support, stronger two-phase commit recovery, new key range management commands, extended protocol improvements, and better observability.\n* Add `spqr-redistributor` by @EinKrebs #2648\n* Add checks to `spqr-redistributor` by @EinKrebs #"
+   },
+   {
+    "t": "3.0.0",
+    "d": "2026-06-19",
+    "n": "* Support client feedback for 2pc commit flow by @reshke #2531\n* Add a check for an exact key match in qdb/etcd by @Pavloxes #2552\n* Fix memqdb rebootstrap losing shards by @diPhantxm #2441\n* Bump PostgreSQL version by @reshke #2546"
+   }
+  ]
  },
  "redwood/redwood": {
   "commit_90d": 0,
@@ -368,7 +402,7 @@
   "enriched_at": "20260927"
  },
  "bucanero/apollo-saves": {
-  "commit_90d": 6,
+  "commit_90d": 10,
   "commit_7d": 0,
   "rel_ver": null,
   "rel_none": true,
@@ -380,7 +414,11 @@
   "lang": {
    "C": 100
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261102",
+  "dim_ts": {
+   "commit": "20261102",
+   "release": "20261102"
+  }
  },
  "illuminatech/config": {
   "commit_90d": 0,
@@ -2293,8 +2331,8 @@
   }
  },
  "alex-tw-lam/csb-brokerpak-hcs": {
-  "commit_90d": 13,
-  "commit_7d": 13,
+  "commit_90d": 42,
+  "commit_7d": 2,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2308,10 +2346,10 @@
    "Shell": 6,
    "Makefile": 3
   },
-  "enriched_at": "20261002",
+  "enriched_at": "20261102",
   "dim_ts": {
-   "commit": "20261002",
-   "release": "20261002",
+   "commit": "20261102",
+   "release": "20261102",
    "security": "20261002",
    "contrib": "20261002",
    "lang": "20261002"
