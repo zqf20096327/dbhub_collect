@@ -751,18 +751,19 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T11:23:00Z",
+  "collected_at": "2026-11-02T09:37:46Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-31",
+  "pushed_at": "2026-11-02",
   "stars": 1736,
   "tree": {
-   "sha": "e814185ce959339abbb86ec38d8d09f55494138f",
-   "etag": "W/\"315624514193b1c71dc19c7f4b02bf6ef347f747685755f2f2213cbca0337b57\"",
+   "sha": "5e764982039ecc7d0602b8ec14de4ea53dbb7190",
+   "etag": "W/\"58468e7bee7d1c3d9084a277ca55a8774f4c275f483831c42c94a223f1209cf6\"",
    "truncated": false,
-   "path_count": 1479,
+   "path_count": 1616,
    "matched": [
     "composer.json",
     "package.json",
+    "tools/manifest/composer.json",
     "src/themes/default/admin/package.json",
     "src/themes/default/client/package.json",
     "Dockerfile",
@@ -779,16 +780,17 @@
     ".github/workflows/playwright-tests.yml",
     ".github/workflows/preview-build.yml",
     ".github/workflows/release-docker.yml",
-    ".github/workflows/release-sentry.yml"
+    ".github/workflows/release-sentry.yml",
+    ".github/workflows/validate-manifests.yml"
    ]
   },
   "files": [
    {
     "path": "composer.json",
     "kind": "dep",
-    "blob_sha": "649af25949175b3b9e4e1ee0399ff7c8700e3684",
+    "blob_sha": "ddc6df52729f90e60b35d4a569de00285a3072ce",
     "ecosystem": "composer",
-    "bytes": 4963,
+    "bytes": 4989,
     "names": [
      "php",
      "php-64bit",
@@ -797,6 +799,7 @@
      "ext-mbstring",
      "ext-pdo",
      "ext-zlib",
+     "composer/semver",
      "dicebear/core",
      "dicebear/styles",
      "doctrine/dbal",
@@ -871,6 +874,19 @@
     ]
    },
    {
+    "path": "tools/manifest/composer.json",
+    "kind": "dep",
+    "blob_sha": "8eeea5a6654c5da9ba70c83db89aadbe93d89cc1",
+    "ecosystem": "composer",
+    "bytes": 380,
+    "names": [
+     "php",
+     "composer/semver",
+     "composer/spdx-licenses",
+     "justinrainbow/json-schema"
+    ]
+   },
+   {
     "path": "src/themes/default/admin/package.json",
     "kind": "dep",
     "blob_sha": "4462b6da82cc6ee18db3e07c11ffab8419886bbd",
@@ -907,8 +923,8 @@
    {
     "path": "Dockerfile",
     "kind": "image",
-    "blob_sha": "30e6223dcffdced87111952b009c092cd342a460",
-    "bytes": 7461,
+    "blob_sha": "1df5bf30a80fefd8f3bf6c311d7c941dbc9311c6",
+    "bytes": 8097,
     "images": [
      "php:${PHP_VERSION}-apache",
      "php-base",
@@ -926,8 +942,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "5c44575ae33f72c07d1302db5c8462777ce07f4e",
-    "bytes": 8915
+    "blob_sha": "a33c0d2d3ee79734705381e429e24bc129f122cd",
+    "bytes": 9211
    },
    {
     "path": ".github/workflows/code-quality-check.yml",
@@ -944,8 +960,8 @@
    {
     "path": ".github/workflows/create-release.yml",
     "kind": "ci",
-    "blob_sha": "df652eb6b1a5d81895ff8b39cfd6682dacffc335",
-    "bytes": 12830
+    "blob_sha": "c68059b6b4d5b8573f282f6eb426ee73dc06dee1",
+    "bytes": 13881
    },
    {
     "path": ".github/workflows/docker-build.yml",
@@ -1000,6 +1016,12 @@
     "kind": "ci",
     "blob_sha": "89df36791d8bfe4095ac8a1bde188cc527ff89a5",
     "bytes": 1628
+   },
+   {
+    "path": ".github/workflows/validate-manifests.yml",
+    "kind": "ci",
+    "blob_sha": "7cd52cf76a1b13ad6996fac9a49f6d78855e35bf",
+    "bytes": 693
    }
   ],
   "clues": {
@@ -1007,10 +1029,12 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": [
+    "src/core/Cache/Driver.php",
+    "src/core/Doctrine/Driver.php",
+    "src/core/Doctrine/DriverManagerFactory.php",
+    "src/core/Twig/AdapterPolicy.php",
     "src/library/Payment/AdapterAbstract.php",
     "src/library/Registrar/AdapterAbstract.php",
-    "src/library/FOSSBilling/Doctrine/DriverManagerFactory.php",
-    "src/library/FOSSBilling/Twig/AdapterPolicy.php",
     "src/library/Payment/Adapter/ClientBalance.php",
     "src/library/Payment/Adapter/Custom.php",
     "src/library/Payment/Adapter/PayPalEmail.php",
@@ -1024,7 +1048,6 @@
     "src/library/Registrar/Adapter/Resellerclub.php",
     "src/library/Registrar/Adapter/Resellerid.php",
     "src/modules/Servicelicense/Plugin/Simple.php",
-    "tests/Unit/FOSSBilling/Doctrine/DriverManagerFactoryTest.php",
     "tests/Unit/Payment/Adapter/ClientBalanceTest.php",
     "tests/Unit/Payment/Adapter/CustomTest.php",
     "tests/Unit/Payment/Adapter/PayPalEmailTest.php",
@@ -1033,7 +1056,8 @@
     "tests/Unit/Registrar/Adapter/EmailTest.php",
     "tests/Unit/Registrar/Adapter/InternetbsTest.php",
     "tests/Unit/Registrar/Adapter/ResellerclubTest.php",
-    "src/themes/default/admin/custom-icons/iPlugin.svg"
+    "src/themes/default/admin/custom-icons/iPlugin.svg",
+    "tests/Unit/FOSSBilling/Core/Doctrine/DriverManagerFactoryTest.php"
    ]
   },
   "fail_count": 0
@@ -3205,15 +3229,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T12:30:20Z",
+  "collected_at": "2026-11-02T09:38:36Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-31",
-  "stars": 1472,
+  "pushed_at": "2026-11-01",
+  "stars": 1476,
   "tree": {
-   "sha": "0fee75b3424ecb81a62c4d2df0fffa0c82195625",
-   "etag": "W/\"b6481809ffd333068c86dbeca952fb0679919a9b72b542937b222f2cb91c115a\"",
+   "sha": "ab89608451762922c091a8082406988eed14bebc",
+   "etag": "W/\"7a3f93a92883746be62feb94c7593e65843c73204fd1d00c0d16082656fedb49\"",
    "truncated": false,
-   "path_count": 2054,
+   "path_count": 2059,
    "matched": [
     "composer.json",
     "package.json",
@@ -3240,9 +3264,9 @@
    {
     "path": "composer.json",
     "kind": "dep",
-    "blob_sha": "147dbb61a1d9c4fc667957f0aff9e965f1371f34",
+    "blob_sha": "5a8c9ed462336e5ba8215d5ee90022bd76e89849",
     "ecosystem": "composer",
-    "bytes": 2951,
+    "bytes": 3074,
     "names": [
      "php",
      "ext-ctype",
@@ -3445,7 +3469,7 @@
    {
     "path": "containers/elabimg/helpers/go.mod",
     "kind": "dep",
-    "blob_sha": "703b35605a1a901d6d61e7e4769007e5eb6d8716",
+    "blob_sha": "726efc25193a01ab8a40ce5f8c36ee7c92e30298",
     "ecosystem": "go",
     "bytes": 45
    },
@@ -3485,8 +3509,8 @@
    {
     "path": "containers/elabimg/Dockerfile",
     "kind": "image",
-    "blob_sha": "c21db68a377576f3f7ce49549098b76b8f71ef7f",
-    "bytes": 28366,
+    "blob_sha": "8e9a6f7d8fa32f137da35e876e9f7ccf8de306d2",
+    "bytes": 31005,
     "images": [
      "golang@sha256:d200d2dd76b03a99b52651fd1325aff7dcd35422c35c01bac56571b0507f3deb",
      "alpine@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a",
@@ -12633,6 +12657,846 @@
    "changelog": [
     "CHANGELOG.md"
    ],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "insightglacier/Dictionary-Of-Pentesting": {
+  "fn": "insightglacier/Dictionary-Of-Pentesting",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-02T08:15:52Z",
+  "default_branch": "master",
+  "pushed_at": "2023-07-21",
+  "stars": 2082,
+  "tree": {
+   "sha": "af06e8a8f2391c7e280e2cfb515cce961079a7fb",
+   "etag": "W/\"d2eafcbc2b1370a1e5aba2a60cae6077db5245659ed558bda81a259b2a0ff6fd\"",
+   "truncated": false,
+   "path_count": 4991,
+   "matched": []
+  },
+  "files": [],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": [
+    "BugBounty/Bug-Bounty-Wordlists/wp-plugins.txt",
+    "CMS/Fingerprinter/wordpress_plugin/.ignore.json"
+   ]
+  },
+  "fail_count": 0
+ },
+ "LadybugDB/ladybug": {
+  "fn": "LadybugDB/ladybug",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-02T08:16:02Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-02",
+  "stars": 1895,
+  "tree": {
+   "sha": "f90add1aaec53ae2822e3191b98440fe1f3ad9a0",
+   "etag": "W/\"59610f0fc35750d10a55e77ff9d47fb5e5878d8d447403316146b0917accbf06\"",
+   "truncated": false,
+   "path_count": 3723,
+   "matched": [
+    "scripts/pip-package/setup.py",
+    "third_party/pybind11/tools/pyproject.toml",
+    "scripts/extension/Dockerfile",
+    ".github/docker/ubuntu-22.04-gcc13/Dockerfile",
+    ".github/workflows/benchmark-workflow.yml",
+    ".github/workflows/build-and-deploy-extension.yml",
+    ".github/workflows/build-and-deploy.yml",
+    ".github/workflows/build-extensions.yml",
+    ".github/workflows/ci-musl-test-workflow.yml",
+    ".github/workflows/ci-workflow.yml",
+    ".github/workflows/codeql.yml",
+    ".github/workflows/deploy-extension.yml",
+    ".github/workflows/gen-docs.yml",
+    ".github/workflows/get-extensions-from-ghcr.yml",
+    ".github/workflows/java-workflow.yml",
+    ".github/workflows/lsqb-benchmark-workflow.yml",
+    ".github/workflows/nightly-sanitizers.yml",
+    ".github/workflows/nodejs-workflow.yml",
+    ".github/workflows/precompiled-bin-workflow.yml",
+    ".github/workflows/purge-extension.yml",
+    ".github/workflows/python-wheel-workflow.yml",
+    ".github/workflows/release-artifacts.yml",
+    ".github/workflows/wasm-workflow.yml",
+    ".github/workflows/zizmor.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "scripts/pip-package/setup.py",
+    "kind": "dep",
+    "blob_sha": "a61ebc3afadd0113c503cfc813c12564e6035eaf",
+    "ecosystem": "setup_py",
+    "bytes": 6462
+   },
+   {
+    "path": "third_party/pybind11/tools/pyproject.toml",
+    "kind": "dep",
+    "blob_sha": "8fe2f47af9a18ad9f272357023d09f78aefebe2d",
+    "ecosystem": "pyproject",
+    "bytes": 94
+   },
+   {
+    "path": "scripts/extension/Dockerfile",
+    "kind": "image",
+    "blob_sha": "9b95aabf98c2723198a20804644561178c14429c",
+    "bytes": 250,
+    "images": [
+     "nginx:stable"
+    ]
+   },
+   {
+    "path": ".github/docker/ubuntu-22.04-gcc13/Dockerfile",
+    "kind": "image",
+    "blob_sha": "6e8f57ea615e33b3e07b1922e2cf293e04ff3021",
+    "bytes": 1209,
+    "images": [
+     "ubuntu:22.04"
+    ]
+   },
+   {
+    "path": ".github/workflows/benchmark-workflow.yml",
+    "kind": "ci",
+    "blob_sha": "480a9616f1b3a7d030d7992e454bb3599830effa",
+    "bytes": 1093
+   },
+   {
+    "path": ".github/workflows/build-and-deploy-extension.yml",
+    "kind": "ci",
+    "blob_sha": "bf915d4605b8a763b563373c882061a4e4c65381",
+    "bytes": 3887
+   },
+   {
+    "path": ".github/workflows/build-and-deploy.yml",
+    "kind": "ci",
+    "blob_sha": "09212923da44cb2a43dc531016f846712859b0fd",
+    "bytes": 24897,
+    "images": [
+     "${{"
+    ]
+   },
+   {
+    "path": ".github/workflows/build-extensions.yml",
+    "kind": "ci",
+    "blob_sha": "534ac508960f85823d66582d2a5563c74e0b4c6b",
+    "bytes": 15488
+   },
+   {
+    "path": ".github/workflows/ci-musl-test-workflow.yml",
+    "kind": "ci",
+    "blob_sha": "3cefe139cbe376f2ccbddca4da740d44d41426d5",
+    "bytes": 15843,
+    "images": [
+     "alpine:latest"
+    ]
+   },
+   {
+    "path": ".github/workflows/ci-workflow.yml",
+    "kind": "ci",
+    "blob_sha": "5cfe8209fa68e0b9b9d635de24ddab4a8d843835",
+    "bytes": 23114,
+    "images": [
+     "alpine:3.20"
+    ]
+   },
+   {
+    "path": ".github/workflows/codeql.yml",
+    "kind": "ci",
+    "blob_sha": "d95370803b51a41fcfab60c50549c03cb773fc97",
+    "bytes": 1874
+   },
+   {
+    "path": ".github/workflows/deploy-extension.yml",
+    "kind": "ci",
+    "blob_sha": "1c57f192ea8e133cafc94d6f19895a53bd87a903",
+    "bytes": 1229
+   },
+   {
+    "path": ".github/workflows/gen-docs.yml",
+    "kind": "ci",
+    "blob_sha": "c40abecd54959295839079acdab282963e2fcde6",
+    "bytes": 6968
+   },
+   {
+    "path": ".github/workflows/get-extensions-from-ghcr.yml",
+    "kind": "ci",
+    "blob_sha": "063c7ea5ee81a9fc988148ee73f1e9164a1a0c7f",
+    "bytes": 1200
+   },
+   {
+    "path": ".github/workflows/java-workflow.yml",
+    "kind": "ci",
+    "blob_sha": "ee2fe398e4669e9dfb5cb594cc24f4d68ffa06d9",
+    "bytes": 9590,
+    "images": [
+     "${{"
+    ]
+   },
+   {
+    "path": ".github/workflows/lsqb-benchmark-workflow.yml",
+    "kind": "ci",
+    "blob_sha": "b20ae3b9d580d561e6bf3eab26d1d1de713f26d9",
+    "bytes": 2235
+   },
+   {
+    "path": ".github/workflows/nightly-sanitizers.yml",
+    "kind": "ci",
+    "blob_sha": "96f92037a489e2238c15be34d05e73476266670f",
+    "bytes": 2954
+   },
+   {
+    "path": ".github/workflows/nodejs-workflow.yml",
+    "kind": "ci",
+    "blob_sha": "80e17d3b428a79cad273af98617bd372abcadba7",
+    "bytes": 14409
+   },
+   {
+    "path": ".github/workflows/precompiled-bin-workflow.yml",
+    "kind": "ci",
+    "blob_sha": "ce20756e1ecc977e5deba11e35f4589ebf6b75c7",
+    "bytes": 16616
+   },
+   {
+    "path": ".github/workflows/purge-extension.yml",
+    "kind": "ci",
+    "blob_sha": "8af0abe133fbbd9838c86aedd8b24a5ee4eb0e5a",
+    "bytes": 1182
+   },
+   {
+    "path": ".github/workflows/python-wheel-workflow.yml",
+    "kind": "ci",
+    "blob_sha": "1cde2c27edc7ab3c7dbb91b129ad1cbaaba4d301",
+    "bytes": 13763
+   },
+   {
+    "path": ".github/workflows/release-artifacts.yml",
+    "kind": "ci",
+    "blob_sha": "8bf232d8c5ab76e9da9329125e760174f93e554e",
+    "bytes": 1335
+   },
+   {
+    "path": ".github/workflows/wasm-workflow.yml",
+    "kind": "ci",
+    "blob_sha": "d7b6dab71cba057da4975d6f0243bc01c1f5f96c",
+    "bytes": 5809
+   },
+   {
+    "path": ".github/workflows/zizmor.yml",
+    "kind": "ci",
+    "blob_sha": "51e03ab49be12c88d5c8c0eb1b55bddfe579b9e7",
+    "bytes": 718
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "third_party/brotli/CHANGELOG.md",
+    "third_party/cppjieba/deps/limonp/CHANGELOG.md"
+   ],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": [
+    "src/main/storage_driver.cpp",
+    "test/api/storage_driver_test.cpp",
+    "src/include/main/storage_driver.h",
+    "test/test_files/csv/dialect_detection.test",
+    "src/processor/operator/persistent/reader/csv/dialect_detection.cpp",
+    "src/processor/operator/persistent/reader/csv/driver.cpp",
+    "src/include/processor/operator/persistent/reader/csv/dialect_detection.h",
+    "src/include/processor/operator/persistent/reader/csv/driver.h"
+   ]
+  },
+  "fail_count": 0
+ },
+ "Sammyjo20/laravel-haystack": {
+  "fn": "Sammyjo20/laravel-haystack",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-02T08:20:14Z",
+  "default_branch": "main",
+  "pushed_at": "2024-05-14",
+  "stars": 601,
+  "tree": {
+   "sha": "7c62353bf56f37ecdb4f3b171bc1b6d9b66b29a6",
+   "etag": "W/\"132a66e4c687a004ea414a411b7f941170a01a65ad9a73758a922cc7019ae2ee\"",
+   "truncated": false,
+   "path_count": 121,
+   "matched": [
+    "composer.json",
+    "docker-compose.yml",
+    ".github/workflows/fix-php-code-style-issues.yml",
+    ".github/workflows/tests.yml",
+    ".github/workflows/update-changelog.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "composer.json",
+    "kind": "dep",
+    "blob_sha": "aa09e0219303f08dd8635df08efd290bb96cd4f0",
+    "ecosystem": "composer",
+    "bytes": 2187,
+    "names": [
+     "php",
+     "illuminate/console",
+     "illuminate/contracts",
+     "illuminate/database",
+     "illuminate/queue",
+     "illuminate/support",
+     "laravel/serializable-closure"
+    ],
+    "dev": [
+     "friendsofphp/php-cs-fixer",
+     "orchestra/testbench",
+     "pestphp/pest",
+     "pestphp/pest-plugin-laravel",
+     "sammyjo20/laravel-chunkable-jobs",
+     "spatie/laravel-ray"
+    ]
+   },
+   {
+    "path": "docker-compose.yml",
+    "kind": "image",
+    "blob_sha": "60643ebd5ad0ef4fabfc60d4cb7015ff78efa932",
+    "bytes": 468,
+    "images": [
+     "mysql:8.0.33",
+     "postgres:15.4"
+    ]
+   },
+   {
+    "path": ".github/workflows/fix-php-code-style-issues.yml",
+    "kind": "ci",
+    "blob_sha": "634914ba6930c071eb613dcba21eec0bb35304ce",
+    "bytes": 563
+   },
+   {
+    "path": ".github/workflows/tests.yml",
+    "kind": "ci",
+    "blob_sha": "44b94233756a80612ed64af08b512da855e36042",
+    "bytes": 2549,
+    "images": [
+     "postgres",
+     "mysql:8.0"
+    ]
+   },
+   {
+    "path": ".github/workflows/update-changelog.yml",
+    "kind": "ci",
+    "blob_sha": "1ab2138ce1a17548cc51af5f701ae15e50fa72c2",
+    "bytes": 690
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "CHANGELOG.md"
+   ],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "JoelGMSec/LeakSearch": {
+  "fn": "JoelGMSec/LeakSearch",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-02T08:21:24Z",
+  "default_branch": "main",
+  "pushed_at": "2024-09-27",
+  "stars": 450,
+  "tree": {
+   "sha": "d84828eaf48132668271c0377b813a69910a2945",
+   "etag": "W/\"603024758d1a98190ae6265f61614e2f802e64ade2f9c3584d7c3c36d7c414e9\"",
+   "truncated": false,
+   "path_count": 6,
+   "matched": [
+    "requirements.txt"
+   ]
+  },
+  "files": [
+   {
+    "path": "requirements.txt",
+    "kind": "dep",
+    "blob_sha": "ed06c627c5f94730a9700ca5fad10ff51b0adaa9",
+    "ecosystem": "pypi",
+    "bytes": 48,
+    "names": [
+     "urllib3",
+     "argparse",
+     "tabulate",
+     "neotermcolor",
+     "requests"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "scRNA-tools/scRNA-tools": {
+  "fn": "scRNA-tools/scRNA-tools",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-02T08:22:56Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-01",
+  "stars": 344,
+  "tree": {
+   "sha": "28edc07db90393018dfbfa522a3b892e4c3f52c4",
+   "etag": "W/\"e1c07e2c305c8a0244a21ca9b00b23b17b27440fafbc4967159f20fb4f956e8f\"",
+   "truncated": false,
+   "path_count": 182,
+   "matched": [
+    ".github/workflows/build_site.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": ".github/workflows/build_site.yml",
+    "kind": "ci",
+    "blob_sha": "8cd595c0c2c433a9bbca7320155f85b765e22146",
+    "bytes": 1105
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "rahul-jha98/sheets-database": {
+  "fn": "rahul-jha98/sheets-database",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-02T08:36:16Z",
+  "default_branch": "main",
+  "pushed_at": "2023-04-20",
+  "stars": 76,
+  "tree": {
+   "sha": "168ca2b543860bb4af727d46d7378065bd39243d",
+   "etag": "W/\"02a33f302db95b48c07460c8685ce7e623d66c1df2fb9a0ed6b84a2b9665adad\"",
+   "truncated": false,
+   "path_count": 27,
+   "matched": [
+    "package.json"
+   ]
+  },
+  "files": [
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "195981f4c426b8e3f02f78f2630708980e70d549",
+    "ecosystem": "npm",
+    "bytes": 1677,
+    "names": [
+     "axios",
+     "google-auth-library"
+    ],
+    "dev": [
+     "@types/jest",
+     "@typescript-eslint/eslint-plugin",
+     "@typescript-eslint/parser",
+     "eslint",
+     "eslint-config-google",
+     "eslint-plugin-jsdoc",
+     "jest",
+     "ts-jest",
+     "typescript"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [
+    "docs/classdocs/sheetdatabase.md"
+   ],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "jwolski/papers": {
+  "fn": "jwolski/papers",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-02T08:37:52Z",
+  "default_branch": "master",
+  "pushed_at": "2017-02-03",
+  "stars": 65,
+  "tree": {
+   "sha": "89a4378b8807aa4cff45de4bb0a486622780b61b",
+   "etag": "W/\"72222ecbe6d441460be5c1148a71b7cc0487cdfc7c736fec4f977e3ae2e77e36\"",
+   "truncated": false,
+   "path_count": 61,
+   "matched": []
+  },
+  "files": [],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "sfu-dis/mosaicdb": {
+  "fn": "sfu-dis/mosaicdb",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-02T08:37:57Z",
+  "default_branch": "master",
+  "pushed_at": "2025-04-19",
+  "stars": 65,
+  "tree": {
+   "sha": "b9b4c588a910005cc97cc8335c9ccfd3aa8dd15b",
+   "etag": "W/\"ec9d58e363893a7c372bb455f4ec8cc33248d42d028ef9c4609d6c84b557df52\"",
+   "truncated": false,
+   "path_count": 457,
+   "matched": []
+  },
+  "files": [],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": [
+    "benchmarks/egen/DriverParamSettings.h",
+    "benchmarks/egen/DriverTypes.h"
+   ]
+  },
+  "fail_count": 0
+ },
+ "tablelandnetwork/js-tableland": {
+  "fn": "tablelandnetwork/js-tableland",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-02T08:47:33Z",
+  "default_branch": "main",
+  "pushed_at": "2023-10-16",
+  "stars": 37,
+  "tree": {
+   "sha": "eb10ec9d401592050c55c9761339fb956c4e9b71",
+   "etag": "W/\"87a528e4cab717552f4bad209ddeee7a4c4130ac10fe314be9cfcb3d5cc32549\"",
+   "truncated": false,
+   "path_count": 89,
+   "matched": [
+    "package.json",
+    "test/browser/server/package.json",
+    ".github/workflows/combine-prs.yml",
+    ".github/workflows/docs.yml",
+    ".github/workflows/publish.yml",
+    ".github/workflows/review.yml",
+    ".github/workflows/test.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "5dc8a39678efda708c4dfc482b99c770ad14f09a",
+    "ecosystem": "npm",
+    "bytes": 3817,
+    "names": [
+     "@async-generators/from-emitter",
+     "@tableland/evm",
+     "@tableland/sqlparser",
+     "ethers"
+    ],
+    "dev": [
+     "@databases/escape-identifier",
+     "@databases/sql",
+     "@ethersproject/experimental",
+     "@playwright/test",
+     "@tableland/local",
+     "@types/assert",
+     "@types/mocha",
+     "@types/node",
+     "@typescript-eslint/eslint-plugin",
+     "@typescript-eslint/parser",
+     "assert",
+     "c8",
+     "d1-orm",
+     "eslint",
+     "eslint-config-prettier",
+     "eslint-config-standard",
+     "eslint-config-standard-with-typescript",
+     "eslint-plugin-import",
+     "eslint-plugin-n",
+     "eslint-plugin-promise",
+     "mocha",
+     "openapi-typescript",
+     "prettier",
+     "ts-node",
+     "typedoc",
+     "typescript"
+    ]
+   },
+   {
+    "path": "test/browser/server/package.json",
+    "kind": "dep",
+    "blob_sha": "3cd59114cfe6b86bf961088522274a9f7aa1c85b",
+    "ecosystem": "npm",
+    "bytes": 413,
+    "names": [
+     "vue"
+    ],
+    "dev": [
+     "@tableland/local",
+     "@types/node",
+     "@vitejs/plugin-vue",
+     "@vue/tsconfig",
+     "npm-run-all",
+     "typescript",
+     "vite",
+     "vue-tsc"
+    ]
+   },
+   {
+    "path": ".github/workflows/combine-prs.yml",
+    "kind": "ci",
+    "blob_sha": "d978c668d3a084d14195d5f30b44fff0942c1a2f",
+    "bytes": 5715
+   },
+   {
+    "path": ".github/workflows/docs.yml",
+    "kind": "ci",
+    "blob_sha": "2296d3b5110fec8076f3ef072a759a6823b32e70",
+    "bytes": 1180
+   },
+   {
+    "path": ".github/workflows/publish.yml",
+    "kind": "ci",
+    "blob_sha": "2245d2be4b2f3ac8bfd350e5ff1c9e71eefbeea2",
+    "bytes": 2244
+   },
+   {
+    "path": ".github/workflows/review.yml",
+    "kind": "ci",
+    "blob_sha": "4d869f1e258eae495fbc71f2d72751eec3b85c4e",
+    "bytes": 1077
+   },
+   {
+    "path": ".github/workflows/test.yml",
+    "kind": "ci",
+    "blob_sha": "528916d635ea17a0e6698b88658bcc9ab2702ece",
+    "bytes": 1388
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": [],
+   "matrix_urls": [
+    "https://vitejs.dev"
+   ]
+  },
+  "fail_count": 0
+ },
+ "gise88/yt2audiobot": {
+  "fn": "gise88/yt2audiobot",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-02T08:54:00Z",
+  "default_branch": "master",
+  "pushed_at": "2022-08-21",
+  "stars": 28,
+  "tree": {
+   "sha": "8c188e6f5db8be6e5e4e99146a119b6563fd57d9",
+   "etag": "W/\"f315fd4be51ae3af8b9c647e2c7c88bffb2e2ce80a95d00b72c7cc932b33d7d6\"",
+   "truncated": false,
+   "path_count": 23,
+   "matched": [
+    "requirements.txt"
+   ]
+  },
+  "files": [
+   {
+    "path": "requirements.txt",
+    "kind": "dep",
+    "blob_sha": "53889ab09b4bd13cac0e36726ed30c27be29d694",
+    "ecosystem": "pypi",
+    "bytes": 194,
+    "names": [
+     "appdirs",
+     "emoji",
+     "future",
+     "mutagen",
+     "packaging",
+     "peewee",
+     "pyparsing",
+     "pytelegrambotapi",
+     "requests",
+     "six",
+     "spotipy",
+     "youtube-dl"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "opset/openset": {
+  "fn": "opset/openset",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-02T09:00:14Z",
+  "default_branch": "master",
+  "pushed_at": "2019-12-13",
+  "stars": 21,
+  "tree": {
+   "sha": "201ee4a6247b6cce369885e05794e7dd3e8b8508",
+   "etag": "W/\"454c4df0ae8794c5ce349541574621f69e14066895d90670d866746d7e9e5098\"",
+   "truncated": false,
+   "path_count": 181,
+   "matched": [
+    "tools/package.json"
+   ]
+  },
+  "files": [
+   {
+    "path": "tools/package.json",
+    "kind": "dep",
+    "blob_sha": "5c411bb52ce8b3b2a32f1c4332109fed25d1a0fd",
+    "ecosystem": "npm",
+    "bytes": 322,
+    "names": [
+     "async",
+     "command-line-args",
+     "openset",
+     "readline"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": [],
+   "matrix_urls": [
+    "https://github.com/martinus/robin-hood-hashing"
+   ]
+  },
+  "fail_count": 0
+ },
+ "thederickff/jloquent": {
+  "fn": "thederickff/jloquent",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-02T09:01:54Z",
+  "default_branch": "master",
+  "pushed_at": "2018-12-16",
+  "stars": 20,
+  "tree": {
+   "sha": "a1858c171bf4e634ff038d615c63d0ca3f44aa70",
+   "etag": "W/\"3a20b32267557fbb5df82dd35e76de29e9739feae2750a9a2d27f451c1934c09\"",
+   "truncated": false,
+   "path_count": 14,
+   "matched": [
+    "pom.xml"
+   ]
+  },
+  "files": [
+   {
+    "path": "pom.xml",
+    "kind": "dep",
+    "blob_sha": "7ee5fc07aee399703935407f0c531e65e3ab2528",
+    "ecosystem": "maven",
+    "bytes": 662
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": [
+    "src/main/java/org/jloquent/Connector.java"
+   ]
+  },
+  "fail_count": 0
+ },
+ "code-cse/Face-Detection-SSD": {
+  "fn": "code-cse/Face-Detection-SSD",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-02T09:15:42Z",
+  "default_branch": "master",
+  "pushed_at": "2020-06-10",
+  "stars": 12,
+  "tree": {
+   "sha": "ecfa432229b4cb87928291899096d2f01bd09284",
+   "etag": "W/\"15d70226b294d9cac2af329d8ff4cc83ebd011e2379712ac1361912331a3ed6d\"",
+   "truncated": false,
+   "path_count": 29,
+   "matched": [
+    "requirements.txt"
+   ]
+  },
+  "files": [
+   {
+    "path": "requirements.txt",
+    "kind": "dep",
+    "blob_sha": "592c37b6c9b8c0c602ff91ce01779b2a62c65120",
+    "ecosystem": "pypi",
+    "bytes": 68,
+    "names": [
+     "tensorflow",
+     "opencv-python",
+     "numpy",
+     "pillow",
+     "opencv-contrib-python",
+     "imutils"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": []
