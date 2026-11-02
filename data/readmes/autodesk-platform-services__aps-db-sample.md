@@ -1,3 +1,6 @@
+<!-- archived-notice -->
+> **This repository is archived.** Archived repositories are not maintained or supported.
+
 ﻿# aps-db-sample
 
 ![.NET](https://img.shields.io/badge/.NET-6-blue.svg)

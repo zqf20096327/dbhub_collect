@@ -9,6 +9,8 @@ Conflict-free replicated store.
 > BREAKING (v0.19.0): Updated `cr-sqlite` from v13 to v16. See [changelog](https://github.com/vlcn-io/cr-sqlite/releases)
 > 
 > BREAKING (v0.18.0): If you want to support [older browsers](https://caniuse.com/mdn-api_navigator_locks) consider adding [navigator.locks polyfill](https://www.npmjs.com/package/navigator.locks) to your project. CRStore does **not** ship it since `0.18.0`!
+>
+> BREAKING (v0.25.0): Bun SQLite runtime now requires minimal version of Bun 1.4.4
 
 - ✨ Elegance of [Svelte](https://svelte.dev/) / [SolidJS](https://www.solidjs.com/) / [React](https://react.dev/)
 - 💪 Power of [SQLite](https://www.sqlite.org/index.html)

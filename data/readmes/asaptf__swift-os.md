@@ -233,6 +233,10 @@ networking, AI hosting, and on-disk formats</summary>
   known limits, and upgrade notes for the current checked-in snapshot.
 - [Update And Rollback Guide](docs/UPDATE_GUIDE.md): rebuild immutable
   artifacts, update boot profiles, verify candidates, and roll back safely.
+- [System Disk](docs/SYSTEM_DISK.md): single GPT hosting image, coordinated
+  kernel/base updates, and persistent `/data`.
+- [Automatic TLS Renewal](docs/AUTOMATIC_TLS.md): native certificate renewal,
+  durable state, nginx rotation, and recovery checks.
 - [Update Store](docs/UPDATE_STORE.md): A/B update-store image layout, target
   commands, and rollback behavior.
 - [User Guide](docs/USER_GUIDE.md): accounts, capabilities, filesystem,

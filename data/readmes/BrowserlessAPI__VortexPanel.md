@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://img.shields.io/badge/VortexPanel-v3.9.0-6c7fff?style=for-the-badge&logo=lightning&logoColor=white" alt="VortexPanel v3.9.0">
+<img src="https://img.shields.io/badge/VortexPanel-v3.10.0-6c7fff?style=for-the-badge&logo=lightning&logoColor=white" alt="VortexPanel v3.10.0">
 <img src="https://img.shields.io/badge/Python-3.8+-3776ab?style=for-the-badge&logo=python&logoColor=white">
 <img src="https://img.shields.io/badge/Flask-3.x-000000?style=for-the-badge&logo=flask">
 <img src="https://img.shields.io/badge/Alpine.js-3.15-8bc0d0?style=for-the-badge">
@@ -131,6 +131,14 @@ Full WordPress lifecycle management — install, manage, secure, stage, back up 
 - **Live installation terminal** — every install, uninstall, and version switch streams real-time output line-by-line (like aaPanel's task terminal)
 - Automatic conflict detection, RHEL-family package manager support — **all 5 previously-broken RHEL install paths (nginx, MySQL, Caddy, MongoDB, PostgreSQL) fixed**, tested on both x86_64 and arm64
 - **Safe database version policy** — databases (MariaDB/MySQL/PostgreSQL/MongoDB) require uninstall-first to prevent data corruption; version switching kept for non-data modules
+
+### 🧩 Panel Apps *(new in 3.10)*
+Optional modules installed from the App Store, each with its own page. Every App runs separately from the panel core (own data folder, own firewall table, own service), so installing, updating or removing one never touches your websites or other Apps.
+- **Website Statistics** — page views, unique visitors, IPs, traffic, spiders and AI crawlers, regions, pages, referrers, status codes, browsers and devices per site, with hourly trends, comparison and a live requests-per-minute view, read from the server's own access logs (no tracking script)
+- **Network Scan Detection** — counts probes to closed ports in the kernel (nftables) and blocks port scanners automatically, with block records, real-time probe log and whitelist
+- **Network Threat Detection** — live threat-intelligence lists (FireHOL/Spamhaus, blocklist.de, Emerging Threats, GreenSnow, abuse.ch Feodo) in monitor or block mode, plus outbound botnet detection and optional Suricata IDS
+- **System Hardening** — monitor or lock users, SSH keys, cron, services, start-up files and your own folders; process guard for miners and reverse shells; compliance check with one-click fixes; sign-in and sudo audit
+- **PHP Security** — Snuffleupagus runtime protection per PHP version: blocks webshells in upload folders, command injection, PHP uploads and remote inclusion, with log-only testing and trusted folders
 
 ### ⚙ Settings — redesigned card-based control center
 - **Network & Access** — panel port (auto-updates firewall), custom domain, webroot
