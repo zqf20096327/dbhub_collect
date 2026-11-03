@@ -305,7 +305,7 @@ def run(args):
             stop_reason = f"{round_stop}（连续 {stuck_rounds} 轮无进展，收尾防空转）"
             break
         log.info("本窗停止：%s（断点已存，续跑）", round_stop)
-        targets = pick_targets(args, pool, items)
+        targets = pick_targets(args, pool, items, cycle)
 
     remaining = len(pick_targets(args, pool, items, cycle)) if args.mode == "monthly" else None
     summary = {"mode": args.mode, "cycle": cycle, "targets": targets0, "counts": counts,

@@ -1,81 +1,91 @@
-<div align="center">
-  <img alt="logo" src="assets/logo.png"/>
-</div>
+# Incredible.dev
 
-<br/>
+Developer content made from the material you already have. Bring a repository, docs, a blog post,
+a talk or your notes, and a team of AI agents researches it, storyboards it and makes the film, the
+thumbnails, the cards and the posts, in channels you can steer and on a canvas you can review.
 
 <p align="center">
-  <a aria-label="Explore documentation" href="https://github.com/IncredibleDevHQ/Incredible/wiki" target="_blank">
-    <img alt="" src="https://img.shields.io/badge/Docs-383b40.svg?style=for-the-badge&logo=readthedocs&logoColor=white">
-  </a>
-  <a aria-label="Report an issue" href="https://github.com/IncredibleDevHQ/Incredible/issues/new/choose" target="_blank">
-      <img alt="" src="https://img.shields.io/badge/Report%20bug-383b40.svg?style=for-the-badge&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADMSURBVHgBjVILDcIwEL0uCJiESsAB4AAHWBgOcEKQgIKBg03B5mBzcLwjd9mlaZu95OWa9r32PiUqgJkj2NJeqKHnDZPs7TF6k6FPdQcVXxGGEMKs+3Oiay0bhAjdJ+jGA+EEvqiOGzjC2PkUO3DhMhZ9IFvf5OvipEm5Gjlzz1fjWWM0HVINjS0EmaZ4zE5HjUszknavgNbPs3EmmdVaMcpZb7/JXjyCI3gpmFc9E43MnGyO/1uQ/oq1XPIE32qS+d5xNngd1cCVT/4DeYu5iXz7pyIAAAAASUVORK5CYII=&logoColor=white">
-  </a>
-  <a aria-label="Request a feature" href="https://github.com/IncredibleDevHQ/Incredible/issues/new?assignees=&labels=feature+request&template=feature_request.yml" target="_blank">
-    <img alt="" src="https://img.shields.io/badge/Request%20Feature-383b40.svg?style=for-the-badge&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACTSURBVHgBlZJtDYYwDIRvKHglTAISJgEJrwQcIAUrOAAH4AAclDYZ4avdxpP0T9dbL7cBBkTkuX4ohYf/XCOdzNLLiTqyaVPWUqxX69VFG5BGRI0m9MjjNeGCPNOrI/5jghazeR0f1jEELZgaKXigUYThOVcp2g0FOGNruA05N6AEFvYxKKn+y0Z57OOXbLzxZX8HqsTUEzggWlEAAAAASUVORK5CYII=&logoColor=white">
-  </a>
-  <a aria-label="Join our community on Discord" href="https://discord.gg/jJQWQs8Fh2" target="_blank">
-      <img alt="" src="https://img.shields.io/badge/Join%20our%20community-16a34a.svg?style=for-the-badge&logo=Discord&logoColor=white">
-  </a>
-  <br/>
+  <img src="docs/images/flow.png" alt="The Incredible.dev canvas: a launch kit made from notes, a storyboard frame under review, and the finished film, above the five steps from material to cards and posts" width="880">
 </p>
 
-## 👋 &nbsp;Introduction
+> **A new beginning.** This is the new Incredible.dev. The earlier video creator lives on the
+> [`archive/dev-video-creator`](https://github.com/IncredibleDevHQ/Incredible.dev/tree/archive/dev-video-creator)
+> branch.
 
-Incredible drastically simplifies creation of developer video content. It offers a unified workflow to storyboard, record, collaborate and produce the video.
+## How it flows
 
-👉 &nbsp;For those who are new to Incredible, here's the tour of the core experience.<br/>
-🚀 &nbsp;[Product Tour](https://www.loom.com/share/d5fd69a0d70f4dfd921bd4798bdb938c)
+### 1. Start from your material
 
-👉 &nbsp;To get a glimpse of what Incredible is capable of here's a playlist of videos on Rust produced using Incredible.<br/>
-🦀 &nbsp;[Rust series made using Incredible](https://bit.ly/rust-series)
+Ask in a channel and attach what you have, or place a template: Launch kit, Explainer, Post to
+social, Ad set, Pitch pack, Social pack or Talk to clips.
 
-👉 &nbsp;Here's an example with Replit integration where you can watch the video and even run the code snippet<br/>
-👩🏻‍💻 &nbsp;[Rust tutorial with Repl.it integration](https://incredible.dev/watch/enm-qyp-zks)
+![Seven templates, each a set of linked assets for a common job](docs/images/templates.png)
 
-👉 &nbsp;For portrait fans, here's a list of Youtube shorts, and Instagram reels produced using Incredible<br/>
-📺 &nbsp;[Youtube shorts made using Incredible](https://bit.ly/yt-ml-shorts)
-🎞 &nbsp;[Instagram Reels made using Incredible](https://www.instagram.com/incredibledevhq/)
+### 2. Research your code
 
-👉 &nbsp;One of the top videos made using Incredible<br/>
-📺 &nbsp;[Next.JS 12.2 release video](https://youtu.be/bQqN0fK3Gjg)
+A research frame asks local coding agents (Claude Code, Codex, Kimi Code) about your repository.
+Keep any passage of an answer as a note: each note records where it came from, and notes feed what
+gets made.
 
-## ᛘ Branches
+![A research frame: the repository, an agent's answer citing files, and the notes kept from it](docs/images/research.png)
 
-The main branch is hosted at [oss.incredible.dev](https://oss.incredible.dev). Do give it a try and please report the issues [here](https://github.com/IncredibleDevHQ/Incredible/issues).
+### 3. Storyboard, then sign off
 
-The [legacy branch](https://github.com/IncredibleDevHQ/Incredible/tree/legacy) is hosted at [https://incredible.dev](https://incredible.dev) and it'll be deprecated soon!
+Films start as a storyboard. Pin a note to a frame and the next version answers it; approve when
+it's right.
 
-![Studio Main Page](assets/main.png)
+![A storyboard frame under review, with a note answered in the second version and the frame approved](docs/images/storyboard.png)
 
-## ✨ &nbsp;Features
+### 4. The film and everything around it
 
-1. Storyboarding to preview with markdown support
-2. Huddle and collaborative editing
-3. Support for high-quality screen recordings
-4. Support for portraits
-5. Themes
-6. Transitions
-7. Watch page you can share
-8. Series
+The film is built in code with [HyperFrames](https://hyperframes.heygen.com), then thumbnails,
+social cards and GIFs, each linked on the canvas to what it was made from.
 
-## 🏃🏽‍♂️ Instructions to Run
+![A launch kit on the canvas: the source note, the storyboard, the teaser, thumbnails, social cards and a GIF](docs/images/canvas.png)
 
-Due to the proprietary components, it'll be hard to run Incredible unless you create an account in each of them.
-Refer to the [wiki](https://github.com/IncredibleDevHQ/Incredible/wiki) for the full list of third-party proprietary services and instructions to run.
+### 5. Steer it in a thread
 
-We are committed to the complete OSS porting of Incredible without the third-party proprietary services. We'll be announcing a roadmap soon!
+Every task is a thread with its own lead agent and computer. Reply to steer the work, approve a
+preview, or stop it.
 
-## 📚 &nbsp;Tech stack
+![A channel and a task's thread: the storyboard approved, then the film passing its checks](docs/images/thread.png)
 
-|                  Basic Blocks                  |                Collaboration                 |                 Hosting                  |                ENV                 |
-| :--------------------------------------------: | :------------------------------------------: | :--------------------------------------: | :--------------------------------: |
-|  [Nextjs](https://github.com/vercel/next.js)   | [Hocuspocus](https://tiptap.dev/hocuspocus/) |         [Mux](https://mux.com/)          |  [Doppler](https://doppler.com/)   |
-|   [Prisma](https://github.com/prisma/prisma)   |     [Liveblocks](https://liveblocks.io/)     |      [Vercel](https://vercel.com/)       | [KMS](https://aws.amazon.com/kms/) |
-|      [Trpc](https://github.com/trpc/trpc)      |          [Agora](https://agora.io/)          | [Planetscale](https://planetscale.com/)  |                                    |
-| [Tiptap](https://github.com/ueberdosis/tiptap) |                                              |      [AWS](https://aws.amazon.com/)      |                                    |
-|  [Konvajs](https://github.com/konvajs/konva)   |                                              | [Firebase](https://firebase.google.com/) |                                    |
+## Your brand on everything
 
-## ✏️ &nbsp;License
+Read a brand from a website, or keep a brand pack, and choose which one each channel uses.
 
-[Apache-2.0 license](https://github.com/IncredibleDevHQ/Incredible/blob/main/LICENSE)
+![The brand page: read a brand from a website, and the sample pack's colours and type](docs/images/brands.png)
+
+## Run it locally
+
+You need Docker, [uv](https://docs.astral.sh/uv/) and Node.js.
+
+```bash
+uv sync --all-extras --dev
+uv run design-agent sandbox build                    # the agents' computer
+(cd web && npm install && npm run build)             # the app
+uv run python -m design_agent.surfaces.web --demo    # a scripted lead, no API keys
+uv run python -m design_agent.surfaces.web           # a real model (a provider key in .env)
+```
+
+Then open http://127.0.0.1:8765. For app development, run `npm run dev` in `web/` (port 5178); it
+passes `/api` through to the server. [Models](docs/models.md) lists the providers and their keys.
+
+The app has no sign-in yet. It serves 127.0.0.1 only and takes the person from a request header,
+so don't expose it on a network.
+
+## How it's built
+
+- **The agents.** Each task gets a lead agent that plans and hands work to helper agents, a Docker
+  sandbox of its own, skills for each kind of work, and checks it runs on its renders (brand,
+  motion, output). A cost meter tracks every run.
+- **The app.** The server in `src/design_agent/surfaces/web/` (API, live events, store, canvas
+  tools, research, brands) and the web app in `web/` (React, Vite, TypeScript), plugged in through
+  one presenter hook, `src/design_agent/surfaces/presenter.py`.
+
+More: [architecture](docs/architecture/README.md) · [instructions.md](instructions.md) ·
+[skills/](skills/) · [customization](docs/customization.md) · [changelog](CHANGELOG.md).
+
+## License
+
+[Apache 2.0](LICENSE). Third-party notices are in [NOTICE.md](NOTICE.md).

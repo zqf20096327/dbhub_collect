@@ -1,15 +1,15 @@
 # Wera
 
-[![CI](https://github.com/jessechumo/Wera/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jessechumo/Wera/actions/workflows/ci.yml)
-[![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jessechumo/Wera/badges/coverage.json)](https://github.com/jessechumo/Wera/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/jessechumo/Wera?sort=semver&display_name=tag)](https://github.com/jessechumo/Wera/releases)
-[![Go](https://img.shields.io/github/go-mod/go-version/jessechumo/Wera?logo=go)](go.mod)
+[![CI](https://github.com/wera-jobs/Wera/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/wera-jobs/Wera/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wera-jobs/Wera/badges/coverage.json)](https://github.com/wera-jobs/Wera/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/wera-jobs/Wera?sort=semver&display_name=tag)](https://github.com/wera-jobs/Wera/releases)
+[![Go](https://img.shields.io/github/go-mod/go-version/wera-jobs/Wera?logo=go)](go.mod)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-fe5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org)
-[![License](https://img.shields.io/github/license/jessechumo/Wera)](LICENSE)
+[![License](https://img.shields.io/github/license/wera-jobs/Wera)](LICENSE)
 
-**Wera** (Swahili slang for a job or gig) is a self-hosted job radar. It collects postings from public job-board feeds (Greenhouse, Lever, Ashby, Workday, SmartRecruiters, Oracle Recruiting Cloud, Workable, Rippling, Eightfold, and amazon.jobs) for 5,100+ companies across 30 industries (tech firms, but also hospitals, schools, retailers, restaurants and nonprofits), filters them with configurable rules, scores each one against your resume with an LLM from any OpenAI-compatible provider (presets for [Coral Bricks](https://www.coralbricks.ai) and [DeepInfra](https://deepinfra.com)), and serves the results through a REST API. Wera does not apply on your behalf. You review the matches and apply yourself.
+**Wera** (Swahili slang for a job or gig) is a job search service at [wera-jobs.com](https://www.wera-jobs.com), and this repository is its backend. It collects postings from public job-board feeds (Greenhouse, Lever, Ashby, Workday, SmartRecruiters, Oracle Recruiting Cloud, Workable, Rippling, Eightfold, and amazon.jobs) for 5,100+ companies across 30 industries (tech firms, but also hospitals, schools, retailers, restaurants and nonprofits), filters them with configurable rules, ranks them for each person, scores the best against their resume with an LLM from any OpenAI-compatible provider (presets for [Coral Bricks](https://www.coralbricks.ai) and [DeepInfra](https://deepinfra.com)), and serves the results through a REST API. Wera does not apply on your behalf. You review the matches and apply yourself.
 
-The dashboard lives in [wera-frontend](https://github.com/jessechumo/Wera-Frontend), and the Chrome extension (save jobs from any page, cover letters, tailored resumes, filling applications) in [wera-extension](https://github.com/jessechumo/wera-extension).
+The dashboard lives in [wera-frontend](https://github.com/wera-jobs/Wera-Frontend), and the Chrome extension (save jobs from any page, cover letters, tailored resumes, filling applications) in [wera-extension](https://github.com/wera-jobs/wera-extension).
 
 ## Architecture
 
@@ -20,7 +20,7 @@ The dashboard lives in [wera-frontend](https://github.com/jessechumo/Wera-Fronte
 
 Everything runs with Docker Compose on one host. The diagram shows a server with a domain (see [deploy/hetzner](deploy/hetzner)): Caddy is the only public service, it terminates TLS and sends `/api/*` to `wera-api` and everything else to `wera-web` (nginx serving the dashboard). `wera-api` and `wera-worker` are the same Go binary: the API serves requests and sends queued email, the worker runs the matching pipeline on a schedule. Both rank jobs with `wera-embed`, a small local embedding model, and keep everything in PostgreSQL. `wera-admin` listens on 127.0.0.1 only and is reached through an SSH tunnel.
 
-Without a domain the same services run on a home server: the public dashboard is on Vercel and reaches the API through a Cloudflare quick tunnel, and the LAN uses `wera-web` directly (see [deploy/home](deploy/home)).
+The same services also run on a home server, which is how Wera runs today: the public dashboard is on Vercel and reaches the API through a Cloudflare Tunnel, and the LAN uses `wera-web` directly (see [deploy/home](deploy/home)).
 
 ## How matching works
 
@@ -29,16 +29,18 @@ Without a domain the same services run on a home server: the public dashboard is
   <img alt="The matching funnel, to scale: 88k open jobs are fetched once for everyone, rules leave 2,900 per user, shared LLM facts and fact rules leave 1,800, a local model ranks them, and at most 100 a day get an LLM fit score at $0.0001 each" src="docs/pipeline.svg">
 </picture>
 
+The figures in the diagram are from an early snapshot, before the company list grew. The funnel's shape still holds: Wera now tracks over 500,000 open postings, and the daily limit on scores is the same.
+
 1. **Fetch** each company's board once, for everyone. Boards that support ETags answer `304 Not Modified` when nothing changed; Workday boards list only new postings, with a full sweep once a day. A shared throttle keeps requests few and spaced out.
 2. **Store** only new or changed postings (by content hash). A board that fails, for any reason, changes nothing: postings close only after a listing that succeeded.
 3. **Filter** per user with `config/roles.yaml` and their preferences: role families, seniority, US-only, and explicit sponsorship refusals. No LLM cost; a new user's 40,000 jobs take about 4 seconds.
 4. **Rank locally** with TF-IDF against the user's profile. These estimates show a new user ranked matches within seconds of signing up.
 5. **Extract shared facts** once per posting with the LLM: seniority, years required, sponsorship (the quote must appear verbatim in the posting), work mode, skills and a short digest. Every user reuses them.
 6. **Exclude on facts** at no cost: jobs needing too many years, refusing sponsorship, outside the US or too senior never reach a per-user call.
-7. **Rank without AI**: each posting's facts and each profile are embedded once by a local model (the `wera-embed` container, no API cost). Every remaining job is ranked by a blend of that embedding similarity (counted double), word matching between the facts and the profile's roles and skills, and the share of required skills the profile names, minus a penalty when the posting asks for more years than the user accepts. Postings without facts yet are ranked by word matching on their text.
+7. **Rank without AI**: each posting's facts and each profile are embedded once by a local model (the `wera-embed` container, no API cost). Every remaining job is ranked on what the fit score weighs: that embedding similarity (counted double), word matching between the facts and the profile's roles and skills, how much of the required skills the profile shows, how close the posting asks to the user's years limit, how far its level is from the ones they accept, and remote work, minus a penalty for a clearance or citizenship the user cannot meet. Once the AI has scored jobs for a user, a small model fit to those scores estimates the rest from their embeddings, and it counts for more as the scores grow: from a tenth of the blend at 10 scores to nearly double at 3,000. Postings without facts yet are ranked by word matching on their text.
 8. **Score fit** per user, for the best-ranked jobs only: at most `SCORES_PER_DAY` per user (default 100, at most `SCORES_PER_RUN` per run once their profile has scores; users away for a week get just enough for their digest). The call sends a compact job card plus the cached profile and returns only a score, a verdict and one sentence; matched and missing skills are worked out in code. Jobs below the cut keep their estimate, and opening one scores it immediately.
 
-Measured on the development data: a new account is ready in about 5 seconds. On 903 AI-scored jobs from six profiles, the blend puts 60% of the jobs the AI rates 70+ in a user's top fifth (bge-small embeddings alone: 43%), and its order agrees with the AI's (Spearman 0.66, against 0.45). The blend weights were chosen by leave-one-user-out validation. A fit call costs about $0.00018 (it was $0.00057 before the shorter reply and cache warm-up), and with the limit a user's scoring costs roughly a tenth of scoring every candidate.
+Measured on the development data: a new account is ready in about 5 seconds. Of the 40 best-ranked pending jobs in each of seven users' real queues, the AI rates 69% good or better (it was 57% when ranking used only the embedding, words and skills) and finds a blocker in 10% (it was 21%); of the 10 best, it rates 74% good or better (it was 64%). The blend weights were fit to 27,000 AI scores, holding each user out in turn. A fit call costs about $0.00018 (it was $0.00057 before the shorter reply and cache warm-up), and with the limit a user's scoring costs roughly a tenth of scoring every candidate.
 
 ## Features
 
@@ -49,7 +51,7 @@ Measured on the development data: a new account is ready in about 5 seconds. On 
 - **Interview prep:** multiple-choice questions by domain (algorithms, system design, databases, OS and networking, ML, behavioral) and difficulty, with explanations and progress
 - **Sponsorship:** what each company's postings say about visa sponsorship (from data already extracted while scoring), beside its certified H-1B applications from the US Department of Labor's LCA disclosure files: counts, new hires, offered wages by job title, place and wage level, a lookup for any employer, and in each job view what the company offered for similar titles at that job's level
 - **Chrome extension API:** revocable per-browser tokens, application details (filled into forms), jobs saved from any page or the dashboard (deduplicated across users, scored, added to the tracker, then rule-filtered and scored for every other user they suit; added postings close 45 days after they were last added), AI reading of job pages (the description is cut from the page text, never retyped), drafted answers to application questions, and the tailored resumes above (the extension attaches the tailored PDF)
-- **Admin API** (`/api/admin/*`, for the [wera-admin](https://github.com/jessechumo/wera-admin) app): service overview, accounts (budget, admin role, sign out everywhere, delete with the email as confirmation), pipeline runs and AI usage, company fetch health, moderation of community posts and comments (publish, hide, delete), email outbox and tests. Every change lands in an audit log; extension tokens never reach these routes.
+- **Admin API** (`/api/admin/*`, for the [wera-admin](https://github.com/wera-jobs/wera-admin) app): service overview, accounts (budget, admin role, sign out everywhere, delete with the email as confirmation), pipeline runs and AI usage, company fetch health, moderation of community posts and comments (publish, hide, delete), email outbox and tests. Every change lands in an audit log; extension tokens never reach these routes.
 - **Accounts:** sessions, profile pictures, resume viewing, settings (theme, default sort, notification preferences, hidden companies), CSV export, account deletion
 - **Operations:** Prometheus metrics, per-user and global monthly LLM budgets, maintenance-aware scheduling, version in `/healthz`. A batch stops after 12 AI calls fail in a row, so an outage at the provider leaves jobs pending instead of holding the pipeline for hours
 
@@ -66,11 +68,12 @@ A file covers one quarter or the fiscal year to date (up to 450,000 rows, 250 MB
 
 ## Email
 
-Email is built but off until a provider is set. With it on, Wera confirms new accounts' addresses, sends password reset links (single use, one hour, and every session ends), and can send daily digests and strong-match alerts from templates with HTML and plain-text versions. Mail is queued in the database and delivered with retries, so a slow provider never slows a request.
+Email is built but off until a provider is set. With it on, Wera confirms new accounts' addresses, sends password reset links (single use, one hour, and every session ends), welcomes each account once its address is confirmed, and sends confirmed addresses a daily or weekly digest of their best new matches after the day's first pipeline run. Strong-match alerts are not built yet. Templates have HTML and plain-text versions. Mail is queued in the database and delivered with retries, so a slow provider never slows a request.
 
 ```bash
 wera mail preview --out email-preview      # every template with sample data; open the .html files
 wera mail digest --email you@example.com    # your real digest, rendered to a file (sends nothing)
+wera mail digests                           # queue every digest that is due (the worker does this after a run)
 ```
 
 Admins can also preview each template, and send a test, from the admin app (wera-admin).
@@ -144,23 +147,19 @@ The dashboard is served at `http://<server-ip>:3000` (`WEB_PORT`). Migrations ru
 iptables -I DOCKER-USER -p tcp -m conntrack --ctdir ORIGINAL --ctorigdstport 3000 ! -s 192.168.1.0/24 -j DROP
 ```
 
-The admin console ([wera-admin](https://github.com/jessechumo/wera-admin), checked out beside this repository) is served at `http://<server-ip>:3001` (`ADMIN_PORT`); sign in with an admin account (`wera users admin --email you@example.com`). Its nginx answers private networks only; do not route it through a public tunnel.
+The admin console ([wera-admin](https://github.com/wera-jobs/wera-admin), checked out beside this repository) is served at `http://<server-ip>:3001` (`ADMIN_PORT`); sign in with an admin account (`wera users admin --email you@example.com`). Its nginx answers private networks only; do not route it through a public tunnel.
 
-Released images are published to `ghcr.io/jessechumo/wera:<version>`.
+Released images are published to `ghcr.io/wera-jobs/wera:<version>`.
 
 ### Public access
 
 To let people outside your network use Wera, give it a public HTTPS address without opening router ports, for example with a [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) to `http://localhost:3000` (or host the dashboard on Vercel and tunnel the API). Then set `COOKIE_SECURE=true`, `TRUST_PROXY=true`, and `PUBLIC_ORIGINS=https://<your-domain>` in `.env` and restart. Served over HTTPS, the dashboard's HSTS header stops downgrade attacks.
 
-Until there is a domain, the `public` compose profile does this with no account: a second API instance (`wera-api-public`, secure cookies, proxy headers trusted) behind a Cloudflare quick tunnel, while `wera-api` keeps serving the LAN over plain HTTP.
+On a home server the `public` compose profile does this: a second API instance (`wera-api-public`, secure cookies, proxy headers trusted) behind a named Cloudflare Tunnel, while `wera-api` keeps serving the LAN over plain HTTP. The tunnel keeps its address and reconnects by itself after an outage. [deploy/home](deploy/home) has the setup.
 
 ```sh
-PUBLIC_ORIGINS=https://<your-app>.vercel.app   # in .env
 docker compose --profile public up -d wera-api-public wera-tunnel
-docker logs wera-tunnel 2>&1 | grep -o 'https://[a-z0-9-]*\.trycloudflare\.com'
 ```
-
-Put that address in the frontend's `vercel.json`. It changes whenever `wera-tunnel` restarts, and a quick tunnel does not survive an outage of more than about 12 minutes, so on a home server install the [tunnel watch](deploy/home), which replaces a dead tunnel and updates `vercel.json` by itself. Switch to a named tunnel once a domain exists.
 
 ### Backups
 
@@ -186,7 +185,7 @@ docker compose --profile public start wera-api wera-api-public wera-worker
 
 | What you see | What it means | What to do |
 |---|---|---|
-| The public site says the server isn't answering, the LAN one works | The tunnel is down, usually after an outage | The [tunnel watch](deploy/home) fixes this by itself; see its log. Without it, `docker restart wera-tunnel` and put the new address in `vercel.json` |
+| The public site says the server isn't answering, the LAN one works | The tunnel is down, usually after an outage | It reconnects by itself when the network returns. If it stays down, check `docker logs wera-tunnel`, then `docker restart wera-tunnel` |
 | The LAN dashboard loads but every request fails | The API is down | `docker ps`, then `docker logs wera-api` |
 | A run says `partial` | Some boards failed; the rest are in | The admin console's Companies page lists each failure. They are tried again on the next run, and nothing closes because of them |
 | Jobs stay "estimated" | The user reached their daily score limit, or their budget | Opening a job scores it. See `SCORES_PER_DAY` and `wera users budget` |
@@ -244,8 +243,8 @@ Commits follow [Conventional Commits](https://www.conventionalcommits.org) (`fea
 | `wera deep --top N [--user E]` | Longer review of a user's top matches using background mode (Coral or OpenAI Responses API) |
 | `wera bench [--user E]` | Measure scoring throughput, cache hit rate, and cost per job |
 | `wera users list\|create\|passwd\|admin\|update\|budget\|import-profile\|export-profile` | Manage accounts and profiles from the server shell |
-| `wera mail preview \| test \| digest \| send` | Preview email templates, send a test, render a digest, deliver queued mail |
-| `wera h1b import FILE.xlsx... \| match \| status` | Load the Department of Labor's H-1B disclosure files (see below), match employers to companies |
+| `wera mail preview \| test \| digest \| digests \| send` | Preview email templates, send a test, render one digest, queue every digest that is due, deliver queued mail |
+| `wera h1b import FILE.xlsx... \| match \| status` | Load the Department of Labor's H-1B disclosure files (see [H-1B data](#h-1b-data)), match employers to companies |
 | `wera version` | Print the version and commit |
 
 ## Extending
@@ -288,4 +287,4 @@ docs/                 Architecture and pipeline diagrams (Excalidraw sources in 
 
 Go 1.27, chi, pgx, PostgreSQL 16, goose, any OpenAI-compatible LLM (default Coral Bricks `deepseek-v4.1-flash-fast`; DeepInfra `deepseek-ai/DeepSeek-V4.1-Flash`), a local embedding model (Snowflake Arctic Embed M v1.5), Prometheus, Docker Compose, GitHub Actions, release-please.
 
-See `PLAN.md` for the original design.
+See `PLAN.md` for the original design. Files shared across the Wera repositories, such as the code of conduct and issue templates, live in [wera-jobs/.github](https://github.com/wera-jobs/.github).

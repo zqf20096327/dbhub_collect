@@ -45,6 +45,9 @@ jobs:
 
       - run: pip install requests
 
+      - name: 接力自检（零网络，防续窗回归）
+        run: python collect/selftest_readme_relay.py
+
       - name: 衔接当日池（准备 snapshot_latest）
         run: |
           mkdir -p data/snapshot_latest
