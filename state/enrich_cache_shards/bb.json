@@ -3122,5 +3122,46 @@
    "contrib": "20261028",
    "lang": "20261028"
   }
+ },
+ "pardnchiu/ToriiDB": {
+  "rel_ver": "v0.7.0",
+  "rel_pub": "2026-09-07",
+  "rel_days": 57,
+  "rel_n90": 5,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_notes": [
+   {
+    "t": "v0.7.0",
+    "d": "2026-09-07",
+    "n": "Every write used to emit a second copy of the entry to `<db>/<xx>/<yy>/<zz>/<md5>.json`. Nothing ever read those files back, so they were a silent second source of truth that drifted from the snapshot and log. The mirror and its accessor `Entry.JSON()` are removed.\n2. Existing `<db>/<xx>/<yy>/<zz>/<md5>.json` files are left untouched and are safe to delete once the database loads correctly.\n每次寫入原本會額外輸出一份 `<db>/<xx>/<yy>/<zz>/<md5>.json`。這些檔案從來不被讀回，是一份"
+   },
+   {
+    "t": "v0.6.2",
+    "d": "2026-09-05",
+    "n": "> v0.6.1 -> v0.6.2\r\n\r\n## Summary\r\n\r\nIntroduces embedder readiness inspection and dedicated error routing for vector operations. Hardens daemon client communication with automatic connection retries.\r\n\r\n<details>\r\n<summary>翻譯</summary>\r\n\r\n提供嵌入器就緒狀態檢查與向量操作專用錯誤識別。強化常駐通訊機制，支援自動連線重試。\r\n\r\n</details>\r\n\r\n## Changes\r\n\r\n### FEAT\r\n\r\n- Add embedder readiness status checks, dedicated vector errors, and client connection retries (@pardnc"
+   },
+   {
+    "t": "v0.6.1",
+    "d": "2026-09-05",
+    "n": "Clarifies database initialization and adds application-controlled embedding credentials.\n- Require an explicit database directory and allow an OpenAI API key to be injected during daemon and store initialization (@pardnchiu) [aaef696]"
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Go": 100,
+   "Makefile": 0
+  },
+  "enriched_at": "20261103",
+  "dim_ts": {
+   "release": "20261103",
+   "security": "20261103",
+   "contrib": "20261103",
+   "lang": "20261103"
+  }
  }
 }

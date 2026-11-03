@@ -5,17 +5,15 @@
   <img src="docs/brand/wordmark-light.svg" alt="quireINK" width="360">
 </picture>
 
-`2.2.20`
+`2.2.21`
 
-**A blog you host yourself, and an AI agent can run it for you.**
-No algorithm, no ads, no platform standing between you and your readers.
-One process. Two SQLite files. No cloud account needed, and Cloudflare if you want one. Your name on it, not ours.
+**A blog you keep. An AI agent can run it for you.**
+No algorithm, no ads, no platform between you and your readers.
+Your writing is two files on your own disk, in one small process that needs no cloud account. Cloudflare is there if you would rather not rent a server.
 
 <br/>
 
 ![License: PolyForm Noncommercial plus paid hosting](https://img.shields.io/badge/License-PolyForm_NC_%2B_paid_hosting-22c55e) ![MCP](https://img.shields.io/badge/MCP-ready-7c3aed)
-
-**English** · [Tiếng Việt](./README.vi.md)
 
 [**quireink.com**](https://quireink.com) · [**Try it**](https://demo.quireink.com) · [**Install**](#install) · [**Docs**](#where-to-go-next) · [**In full**](./docs/overview.md) · [**Changelog**](./CHANGELOG.md) · [**License**](#license)
 
@@ -23,7 +21,7 @@ One process. Two SQLite files. No cloud account needed, and Cloudflare if you wa
 
 <br/>
 
-<img src="docs/demo.jpg" alt="A composed front page with a lead story and section rows, beside the same site's article page with a contents rail, pen marks and a mounted letter facsimile" width="960">
+<img src="docs/demo.jpg" alt="The Newspaper theme: a composed front page with a lead story, a Featured row of three illustrated pieces and a Typography row with Polish, Japanese and English headlines, beside a post opening on a drop cap, with pen marks in the text and a scanned Van Gogh letter below" width="960">
 
 <sub>**[demo.quireink.com](https://demo.quireink.com)** is the real thing. No sign-up, nothing to fill in. The bar at the bottom jumps between the front page, the list, an article, book mode, light and dark, and the admin. That bar is the only thing added, and it lives outside the code, so the demo is always the latest build.</sub>
 
@@ -31,55 +29,65 @@ One process. Two SQLite files. No cloud account needed, and Cloudflare if you wa
 
 ## What it is
 
-A blog you write in and publish from, on a server you rent. It has the usual furniture — a front page, posts, categories, search, comments, a newsletter that goes out when you publish — and none of an algorithm deciding who sees your writing, ads across the middle of it, or a company that can change the rules next year.
+Quire Ink is a blog for one person who means to keep writing for years. You write in the browser and press publish. The post goes to your site, your feed and your subscribers' inboxes, and to Mastodon if you switch that on.
 
-Colour, type, the shape of the front page and the menu are all settings in the admin, and all of it works from a phone. Setting it up once is a technical job — ask someone who knows servers, or hand it to an AI agent. After that you write, and only an upgrade sends you back to a terminal.
+Nobody decides who sees it, nothing runs ads across it, and nobody can change the rules next year. Your writing sits on a server you rent, and one button turns it into a folder of Markdown any editor can open.
+
+The first setup is a technical job, so ask someone who knows servers, or hand it to an AI agent. After that you write, from a laptop or a phone, and only an upgrade sends you back to a terminal.
 
 **Made for** one person, one server, one blog they mean to keep. **Not made for** a team that needs roles, approvals and an editorial queue.
 
-## Highlights
+## Why people pick it
 
-- **A real editor over Markdown**, with tables, footnotes, callouts, maths, galleries and video. It saves as you type, keeps versions, and schedules.
-- **Four built-in looks and any theme you install from a zip ([write your own](docs/themes.md)), six palettes, four reading fonts**, light and dark, and a book mode that sets a post in two columns like paper.
-- **A pen for you and for your readers**: highlight in five inks, underline, ring a word — drawn by hand, never the same stroke twice.
-- **Sign in with a passkey** (fingerprint, face or device PIN) beside the password and the code, never in place of them.
-- **Analytics without cookies**, per post and per site, and a newsletter on your own mail server.
-- **Moving in and out**: WordPress, Ghost, Substack or Medium in; a ZIP of Markdown out.
-- **An AI agent can run it.** A built-in MCP server lets an assistant draft, publish, read your numbers and tidy up, through the same rules the admin follows.
-- **Fast on a small box.** One Bun process, two SQLite files, no database server, no cloud account needed.
-- **Eleven languages**, in the admin and on the site.
+**The reading page is the product.** Plain paper, source code, a newspaper or a notebook, in six palettes, light and dark, with four reading fonts. Any post opens as a book, set in two columns like paper. Size, colour and spacing are settings, and the build fails if anyone writes one into the stylesheet by hand.
 
-Every part, in detail and against the alternatives: [**Quire Ink, in full**](./docs/overview.md).
+**A pen that looks drawn.** Highlight in five inks, underline in pencil, ring a word in ballpoint, and no two strokes share a shape. Your readers get the pen too, in their own browser, with no account, for 4.5 KB on a post.
+
+**An agent can run the blog, not just write in it.** The MCP server is built in. An assistant drafts, schedules and publishes, reads your numbers, sweeps spam, rearranges the front page, and can build and install a theme. It goes through the same checks the admin does, and a read-only token stays read-only.
+
+**Anyone can make a theme.** A theme is CSS, fonts and images in a zip, with no code in it. The kit checks yours, photographs it on every page at three widths, and tells you which line is wrong and what to write instead. [Start here](docs/themes.md).
+
+**You can always leave, and you can move in today.** WordPress, Ghost, Substack and Medium come across with their pictures, and old links keep working. Out is one button. Every release restores a real backup, table by table and file by file, before it ships, because a backup nobody has restored is not a backup.
+
+**Small enough to forget about.** One process and two SQLite files, with no database server. It runs in 256 MB of memory, and a reader downloads single-digit kilobytes of JavaScript. It really does run on the cheapest server you can rent.
+
+**Nothing watches your readers.** Analytics without cookies, comments with no account and no third party, a newsletter through your own mail server. Sign in with a passkey beside your password and code, never in place of them.
+
+**A real editor, in eleven languages.** Tables, footnotes, callouts, maths, galleries and video over plain Markdown. It saves as you type, keeps versions and schedules. The admin and the site speak eleven languages, and a single post can name its own.
+
+**Tested the hard way.** Nearly 6,000 tests and more than 300 flows in a real browser on every push. Each release is installed fresh and upgraded on every path in this page before it is published.
+
+Every part in detail, and against the alternatives: [**Quire Ink, in full**](./docs/overview.md).
 
 ## A look around
 
-<img src="docs/demo-looks.jpg" alt="The same post in the four looks: plain paper; source code, with the headline in a bold monospace and bracketed dates; newspaper, with a masthead, the sections under it and a drop cap; and notebook, on dot-grid paper beside an index card" width="960">
+<img src="docs/demo-looks.jpg" alt="The same post in the four themes: plain paper; source code, with the headline in a bold monospace and brackets round the dates; newspaper, with a masthead, the sections under it and a drop cap; and notebook, on a dot-grid sheet beside a square index card" width="960">
 
-<sub>**Four looks, one setting.** The same post as plain paper, source code, a newspaper and a notebook. A look sets shape, type and marks; the colour always comes from the palette.</sub>
+<sub>**Four themes, one click.** The same post as plain paper, source code, a newspaper and a notebook. A theme sets shape, type and marks, and the colour always comes from the palette.</sub>
 
-<img src="docs/demo-reading.jpg" alt="Book mode, opening on its title page with the category, headline, standfirst and byline, then the post set in two columns like a printed page with a drop cap, beside the same site in the dark theme scrolled to a four-painting gallery" width="960">
+<img src="docs/demo-reading.jpg" alt="Book mode on paper, a title page on the left and the post set as a printed page with a drop cap on the right, beside the dark theme with a two-by-two gallery of Van Gogh paintings and their captions" width="960">
 
 <sub>**Book mode and the dark theme.** Any post opens as a paginated book that starts on a title page; every palette is drawn twice, once for light and once for dark.</sub>
 
-<img src="docs/demo-code.jpg" alt="Three panels: a formula rendered as MathML in the reading face, a highlighted code block beside a table, and a paragraph marked with the pen in several inks" width="960">
+<img src="docs/demo-code.jpg" alt="Three panels: a sum set in MathML between paragraphs of serif text with a Tip callout below, a numbered highlighted shell command above a plain block, and a passage on the pen with a sentence in each of five inks" width="960">
 
 <sub>**Maths, code and the pen.** Formulas are real MathML, code is highlighted on the server, and the pen highlights, underlines and rings words by hand.</sub>
 
-<img src="docs/demo-reader-pen.jpg" alt="Left: a reader's highlight and pencil underline on a post, with the pen bar open over a selected sentence. Right: the card over a highlight, with a note box and a code that keeps the marks on every device" width="960">
+<img src="docs/demo-reader-pen.jpg" alt="Left: a reader's yellow highlight and pencil underline on a post, with the pen bar open over a selected phrase offering five inks, underline, ring, note and copy quote. Right: the card over the highlight, with a note box, Send to my notebook, Remove mark and a twenty-character code that keeps the marks on every device" width="960">
 
 <sub>**Readers get the pen too.** Their marks stay in their own browser, and travel between their devices only if they ask.</sub>
 
-<img src="docs/demo-mobile.jpg" alt="Four phone screens: the post list with the category above each headline and a thumbnail beside it, a post with its series box and progress bar, book mode on a phone, and the menu drawer with its search box on top" width="960">
+<img src="docs/demo-mobile.jpg" alt="Four phone screens: the post list with a thumbnail beside the headline and a Chinese post below it, a post with its series box, book mode opening on a title page, and the menu drawer with a search box, the site menu and the post's contents" width="960">
 
 <sub>**On a phone,** the list, a post with its series bar, book mode and the menu drawer with search on top.</sub>
 
-<img src="docs/demo-admin.jpg" alt="The admin: a post open in the editor with the toolbar, pen marks and the saved state in its header, beside the Appearance settings with the four looks drawn as tiles, the picked one marked, the fonts and the custom CSS box" width="960">
+<img src="docs/demo-admin.jpg" alt="Four admin screens: Home with what was last edited, traffic and the most viewed posts; Write with the list of pieces beside what was recently edited; the editor with a post open and its pen marks; and Settings, Appearance, with the four themes drawn as previews beside the reading and site fonts" width="960">
 
-<sub>**The admin.** The editor on the left, and on the right the settings that decide how the site looks: all of it a setting, none of it code.</sub>
+<sub>**The admin.** Home, the writing list, the editor and the settings that decide how the site looks. All of it a setting, none of it code.</sub>
 
-<img src="docs/demo-setup.jpg" alt="Three setup screens: claiming the blog with a language, username, email and password; naming the site with its time zone and address; and choosing the front page" width="960">
+<img src="docs/demo-setup.jpg" alt="Three setup screens: claiming the blog with a language, username, email and password; naming the site with its time zone and address; and the last step, choosing one of the four themes from small previews" width="960">
 
-<sub>**Setting up** is seven short screens in the browser, and the last one drops you in the editor.</sub>
+<sub>**Setting up** is seven short screens in the browser, ending on the theme, and then you are in the editor.</sub>
 
 ## Install
 
@@ -151,7 +159,7 @@ bun run dev                         # http://localhost:3000
 # the log prints a /setup link to claim it; or: bun run user create --username me --email me@example.com
 ```
 
-Nothing is finished until `bun run check:all` passes: two typechecks, seventeen static guards and the tests, all offline, with no credentials and no services. `bun run tour` then drives every screen in a real browser and opens the backup it built. Start at [`CONTRIBUTING.md`](./CONTRIBUTING.md), which points to the house rules in [`CLAUDE.md`](./CLAUDE.md).
+Nothing is finished until `bun run check:all` passes: two typechecks, the static guards and the tests, all offline, with no credentials and no services. `bun run tour` then drives every screen in a real browser and opens the backup it built. Start at [`CONTRIBUTING.md`](./CONTRIBUTING.md), which points to the house rules in [`CLAUDE.md`](./CLAUDE.md).
 
 <details>
 <summary><b>Where things live</b></summary>

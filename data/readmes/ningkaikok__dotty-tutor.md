@@ -1,0 +1,134 @@
+# Dotty Tutor
+
+[![CI](https://github.com/ningkaikok/dotty-tutor/actions/workflows/ci.yml/badge.svg)](https://github.com/ningkaikok/dotty-tutor/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/ningkaikok/dotty-tutor)](https://github.com/ningkaikok/dotty-tutor/releases)
+[![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
+[![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![React 19](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+
+面向中文教材与个人错题复习的 AI 学习平台。
+
+Dotty Tutor 将 PDF 或扫描教材制作成带来源与审校记录的互动课件，试卷保留原题处理与结构化题目生产；
+学生学习空间只负责互动练习、错题陪练、掌握验证和复习，不向学生暴露 OCR、模型或上传配置。
+
+> 当前项目处于 MVP 阶段，适合本地体验和受控内测，暂不建议将匿名 API 直接暴露到公网。
+
+![Dotty Tutor 教材练习界面](demo-verified.png)
+
+## 功能
+
+### 内容生产工作台（`/studio`）
+
+教材先确认学科和页段，再准备来源、确认教学大纲、逐页生成并审核发布课件；练习按教学需要插入。
+试卷沿用原题提取、审校和互动预览。复用大 PDF 分块上传、MinerU/pypdf 双路 OCR、
+多模型生成路径、质量门禁和不可变运行审计。英语与数学真实选定页段的本地试点见
+[课件验收记录](docs/textbook-courseware-acceptance.md)，系统细节见
+[系统架构](docs/architecture.md)。
+
+### 学生学习空间（`/learn`）
+
+只暴露学习本身，不暴露 OCR、模型和上传配置：互动课件、七种题型交互、分层 Help、可编程课程播放器，
+以及断网可恢复的学习会话与掌握度记录。
+
+### 教师工作台（`/teacher`）
+
+面向单机单库内的教师试用：创建班级、维护本地学生名单、基于班级掌握度和错因证据生成作业计划，
+审阅并确认作业指派，再查看单次作业的完成率和知识点掌握分布。登录、角色权限和多租户隔离仍未加入。
+
+### AI 错题陪练（`/mistakes`）
+
+拍照录题、错误原因归因、单题多轮陪练线程、变式掌握验证和版本化复习策略（旧数据兼容 1/3/7 天），形成完整闭环。
+产品设计见 [AI 错题陪练产品规划](docs/mistake-coach-plan.md)。
+
+### 平台
+
+- **语音三级回退**：Azure Speech → Qwen3-TTS → 浏览器 Web Speech。
+- **持久化**：PostgreSQL JSONB 存储题目、审校结果与学习证据；Job Store + 独立 Worker 执行长任务。
+
+## 工作流程
+
+```text
+产品首页
+  ├─ 学生学习空间：已发布互动试卷 / 错题陪练 / 掌握与复习
+  │    └─ AI 错题陪练：拍照错题 → 确认归类 → 多轮陪练 → 变式验证 → 复习计划
+  ├─ 教师工作台：班级 → 掌握度证据 → 作业计划审阅 → 确认指派 → 作业看板
+  └─ 内容生产工作台：材料 → 来源准备 → 教材大纲/课件或试卷原题 → 审校 → 发布预览
+```
+
+登录鉴权、微信内体验和更完整的数学判题属于后续生产化范围，按[产品规划](docs/mistake-coach-plan.md)逐步评估。
+
+## 技术栈
+
+| 层 | 技术 |
+| --- | --- |
+| 前端 | React 19、React Router、TypeScript、Vite、KaTeX |
+| API | FastAPI、Pydantic、Uvicorn |
+| 数据 | PostgreSQL、SQLAlchemy、JSONB、本地文件资源 |
+| OCR | MinerU、pypdf |
+| 模型 | Ollama、Codex CLI、Mock 回退 |
+| TTS | Azure Speech、Qwen3-TTS、Web Speech API |
+| 工程结构 | pnpm workspace monorepo（apps/web + apps/api）、uv 精确锁定 |
+| 测试与门禁 | Vitest、unittest、Playwright E2E、Ruff、ESLint、Pyright（basic）、OpenAPI 类型漂移检查 |
+
+## 快速开始
+
+本地开发推荐"本机服务 + Docker PostgreSQL"，可直接复用本机的 Codex 登录、MinerU 环境和
+Qwen3-TTS 缓存：
+
+下面的配置复制只适用于全新数据库。已有数据或切换 worktree 时，应复用原 checkout 的 `.env` 和 `.env.local`；
+PostgreSQL 初始化后，仅修改 `.env` 中的密码不会改变持久卷里已有的数据库密码。详情见[本地开发指南](docs/development.md)。
+
+```bash
+# 仅全新本地数据库执行
+cp .env.docker.example .env
+cp .env.local.example .env.local
+# 将 .env.local 的 POSTGRES_PASSWORD 改成 .env 中相同的值
+scripts/dev-local.sh
+```
+
+打开 <http://localhost:59174>，从首页选择入口。最简单的体验方式是 Docker Compose（默认使用 Mock 模型，
+不下载模型权重）：
+
+```bash
+git clone https://github.com/ningkaikok/dotty-tutor.git
+cd dotty-tutor
+
+cp .env.docker.example .env
+# 编辑 .env，为 POSTGRES_PASSWORD 设置一个长且只包含 URL 安全字符的随机密码
+docker compose up --build --detach
+```
+
+打开 <http://localhost:8080>；PostgreSQL 和教材文件保存在命名卷中。
+
+本机开发页（`59174`，走本机 FastAPI `8010` 和仓库内 `data/`）与 Docker 页面（`8080`，走容器内服务
+和命名卷）是两套独立环境，不要混用同一批教材。完整环境变量、模型与 OCR 配置、手动安装步骤见
+[本地开发指南](docs/development.md)；Docker 运维见[部署文档](docs/deployment.md)。
+
+## 文档
+
+完整分类、阅读顺序和文档维护职责见 [文档索引](docs/README.md)。常用入口：
+
+- [本地开发](docs/development.md)与[部署运维](docs/deployment.md)。
+- [代码地图](docs/codebase-guide.md)、[系统架构](docs/architecture.md)与[API](docs/api.md)。
+- [当前优先级](docs/roadmap.md)、[产品路线图](docs/product-roadmap.md)与[工程路线图](docs/engineering-roadmap.md)。
+- [参与贡献](CONTRIBUTING.md)、[安全策略](SECURITY.md)、[支持说明](SUPPORT.md)与[变更记录](CHANGELOG.md)。
+
+## 测试
+
+完整门禁命令见 [AGENTS.md](AGENTS.md#验证与交付)，环境与夹具见 [开发指南](docs/development.md#测试)。
+GitHub Actions 执行后端 Python 矩阵、前端静态检查与测试、API 类型漂移、E2E、Docker 健康检查及 CodeQL。
+工作流通过不等于已部署或已验证真实教学效果。
+
+## 参与开发
+
+请优先通过 Issue 讨论问题和方案，代码修改使用独立分支并通过 Pull Request 合并。提交前请
+按 AGENTS.md 执行相关门禁，不要提交 `.env`、模型权重、教材文件、`data/` 或构建产物。
+
+参与前请阅读[贡献指南](CONTRIBUTING.md)和[行为准则](CODE_OF_CONDUCT.md)。安全漏洞请按照
+[安全策略](SECURITY.md)私下报告，不要创建公开 Issue。
+
+## 许可证
+
+除非文件中另有声明，本项目的代码和原创文档使用
+[Apache License 2.0](LICENSE) 授权。第三方依赖、模型、教材和用户上传内容分别遵循其原始
+许可证或权利声明，不因本仓库许可证而自动获得授权。

@@ -491,7 +491,7 @@
   "commit_7d": 0,
   "rel_ver": "v2.7",
   "rel_pub": "2026-03-21",
-  "rel_days": 190,
+  "rel_days": 227,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -506,7 +506,28 @@
    "CSS": 3,
    "JavaScript": 1
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261103",
+  "rel_notes": [
+   {
+    "t": "v2.7",
+    "d": "2026-03-21",
+    "n": "**Bug Fixes**\r\n\r\n- Fixed parallel export not handling `Update` and `OnDuplicateKeyUpdate` export modes — these now produce correct output when `EnableParallelProcessing` is enabled\r\n- Fixed `StopAllProcess` potentially throwing exceptions during error cleanup by adding guard checks on `BlockingCollection` and wrapping cancel/stop calls in try-catch\r\n- Hardened `Dispose` to be safely callable multiple times — each resource cleanup is now individually wrapped in try-catch to prevent any single failure fro"
+   },
+   {
+    "t": "v2.6.5",
+    "d": "2025-08-04",
+    "n": "- New option for `ExportInfo.GetTotalRowsMode`: `GetTotalRowsMethod.Auto`, which is also the default mode. When there is no progress report events subscribed, it will use `GetTotalRowsMethod.Skip`. When there is progress reporting events subscribed, `GetTotalRowsMethod.SelectCount` will be used.<br> _Read more: [Understanding Rows Counting Before Export Process in MySqlBackup.NET](https://github.com/MySqlBackupNET/MySqlBackup.Net/wiki/Understanding-Rows-Counting-Before-Export-Process-in-MySqlBackup.NET)_\n* "
+   },
+   {
+    "t": "v2.3.9",
+    "d": "2025-03-12",
+    "n": "- Introducing the `AdjustColumnValue` feature in `ExportInformations`. This new delegate `(Func<ColumnWithValue, object>)` allows users to dynamically modify column values during export. Paired with the new `ColumnWithValue` class (in `MySqlConnector.InfoObjects`), it provides table name, column name, data type, and value details for custom transformations. Ideal for data masking, formatting, or conditional adjustments, this enhances flexibility while maintaining default behavior when unused.\n- Read more ab"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261103",
+   "release": "20261103"
+  }
  },
  "Imfdj/vue-beehive": {
   "commit_90d": 0,
@@ -2893,6 +2914,38 @@
    "security": "20261031",
    "contrib": "20261031",
    "lang": "20261031"
+  }
+ },
+ "atgreen/cl-jdbc": {
+  "rel_ver": "v1.0.0",
+  "rel_pub": "2026-11-01",
+  "rel_days": 2,
+  "rel_n90": 1,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_notes": [
+   {
+    "t": "v1.0.0",
+    "d": "2026-11-01",
+    "n": "code, so the driver runs in-process with no JVM. The JDBC API itself is part\nof the JDK OpenLDK reads; a database *driver* jar is fetched from Maven Central\n- A connection API driven by ordinary `jdbc:` URLs, with a registry of\nwell-known drivers (H2, PostgreSQL, MySQL, MariaDB, SQLite, SQL Server,\n- `dbd-jdbc`: a [cl-dbi](https://github.com/fukamachi/cl-dbi) (DBI) driver that\nreaches any of those databases through its JDBC driver.\n- Live-database integration tests against PostgreSQL are opt-in (see\nFirst r"
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Common Lisp": 73,
+   "Shell": 17,
+   "Python": 10
+  },
+  "enriched_at": "20261103",
+  "dim_ts": {
+   "release": "20261103",
+   "security": "20261103",
+   "contrib": "20261103",
+   "lang": "20261103"
   }
  }
 }

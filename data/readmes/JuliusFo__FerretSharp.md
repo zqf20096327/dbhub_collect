@@ -69,7 +69,8 @@ developer works with an Oracle database day to day:
   connection that fits or one you choose.
 - Names beside foreign keys: mark a display column per table (`KUNDEN.NAME`) and every reference to it reads
   `4711 · PetersPizza`; a name can join several columns (`Müller - Hans`) and follow one more foreign key; a value
-  without a referenced row says "not found". The display columns live in one file you
+  without a referenced row says "not found". The same in the results of the SQL editor and the LINQ console, for
+  columns read from a table. The display columns live in one file you
   can share with your team through your repository.
 - Object details per table: columns, constraints, indexes (with a hint for unindexed foreign keys), dependencies,
   synonyms, DDL.
@@ -120,7 +121,8 @@ developer works with an Oracle database day to day:
       Right-click a cell: jump to the referenced row, or to the rows that reference it – with counts, loaded lazily.
       Each jump opens a new tab with the filter already applied; <kbd>Alt</kbd>+<kbd>←</kbd> takes you back.
       Relationships that exist only as navigations in your DbContext are marked "from C# model". The same works in the
-      results of the SQL editor and the LINQ console, for columns read from a table.
+      results of the SQL editor and the LINQ console, for columns read from a table. In the "Constraints" view, "Create
+      constraint" turns such a relationship into a real foreign key: the table designer opens with it filled in.
     </td>
   </tr>
 </table>
@@ -184,7 +186,8 @@ developer works with an Oracle database day to day:
   <img src="docs/images/sql-editor-light.png" alt="SQL editor with bind variables and a result grid">
 </picture>
 
-- SQL editor (Monaco) per workspace: <kbd>Ctrl</kbd>+<kbd>Enter</kbd> runs the statement at the cursor,
+- SQL editor (Monaco) per workspace: <kbd>Ctrl</kbd>+<kbd>Enter</kbd> runs the statement at the cursor (statements end
+  at `;` or a line with only `/`),
   <kbd>Alt</kbd>+<kbd>X</kbd> the whole script, with progress and cancel; queries everywhere, `INSERT`/`UPDATE`/`DELETE`/
   `MERGE` only in writable workspaces, inside their transaction (and part of its undo history).
 - **What is it waiting for?** A statement that runs longer says when it waits for a lock – on which table, held by whom
@@ -196,8 +199,9 @@ developer works with an Oracle database day to day:
   compile errors are marked in the editor.
 - Bind variables (`:kundeId`) become typed input fields – values are bound, never pasted into the SQL.
 - Completion for tables, views, synonyms and columns (with their C# names), history per connection, export of results.
-- Results know where their columns come from: C# names, enum members and foreign-key jumps as in a table – also with the
-  quoted aliases EF Core writes and through synonyms.
+- Results know where their columns come from: C# names, enum members, names beside foreign keys and foreign-key jumps
+  as in a table – also with the quoted aliases EF Core writes and through synonyms. Columns of a result can be pinned;
+  the tab keeps them for every result it shows.
 - Execution plans: estimated (`EXPLAIN PLAN`) or actual, with row counts from the real execution and misestimates flagged.
 
 <picture>
@@ -227,8 +231,13 @@ changes, and a new build is picked up automatically:
 - **Names**: entity and property names next to tables and columns (or in front of them), searchable everywhere.
 - **Values**: enum members and converted values (`Gewerbe (2)`, `true` for `'J'`), also as dropdowns in filters and
   when editing – flags enums as a list of check boxes – including `[Display]` names from your resources.
-- **Drift**: the model page lists what does not fit the database – missing tables and columns, but also types, NULL,
-  lengths and precision (`DateTimeOffset` on `DATE`, `HasMaxLength(200)` on `VARCHAR2(100)`), each with what will fail.
+- **Report**: one page shows how your model and the database fit – tables without entity, columns without property,
+  entities and properties without counterpart, columns whose type, NULL, length or precision does not fit
+  (`DateTimeOffset` on `DATE`, `HasMaxLength(200)` on `VARCHAR2(100)`, each with what will fail), relationships only in
+  the model or only in the database, and columns no code uses. Tiles with the counts, sections that fold, and what to do
+  about each entry: create the entity or the constraint, copy the property or navigation code, or mark a table as meant
+  to have no entity – in a file you can share through your repository (audit tables are left out by themselves).
+  Computed from what is loaded: no query of its own.
 - **Relationships**: navigations without a foreign-key constraint become navigable relationships.
 - **LINQ console**: paste a query from your code – unknown variables become suggested declarations, your context and
   cancellation token are recognized. FerretSharp shows the SQL EF Core would send and runs it in the workspace's session,

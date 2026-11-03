@@ -634,12 +634,12 @@
   "enriched_at": "20260927"
  },
  "mailwatch/MailWatch": {
-  "commit_90d": 5,
-  "commit_7d": 0,
-  "rel_ver": "v1.2.27",
-  "rel_pub": "2026-07-30",
-  "rel_days": 59,
-  "rel_n90": 1,
+  "commit_90d": 46,
+  "commit_7d": 46,
+  "rel_ver": "v1.2.29",
+  "rel_pub": "2026-11-03",
+  "rel_days": 0,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 1,
@@ -656,7 +656,28 @@
    "CSS": 0,
    "Shell": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261103",
+  "rel_notes": [
+   {
+    "t": "v1.2.29",
+    "d": "2026-11-03",
+    "n": "- mailwatch_db_clean.php on Postfix deletes only expired mtalog rows, no longer removes recent NOQUEUE rejections and no longer loops forever on rows without a queue id\n- Fix SQL injection in message table sorting and report filters, enforce domain admin filter scope, allow/block list recipients and dangerous content rules on the server, and stop the own settings form from setting the password to \"xxxxxxxx\"; upgrade.php lists the users with that password; quote values and stop evaluating database output in "
+   },
+   {
+    "t": "v1.2.28",
+    "d": "2026-11-02",
+    "n": "# MailWatch 1.2.28\n\n### Security\n- Escape user management output to prevent stored XSS by domain administrators (GHSA-mr3r-q523-6cvf)\n- Escape untrusted e-mail, MTA and request data in message details, the message viewer, mail queues, reports, lists, the audit log and quarantine reports; serve message parts sandboxed and as downloads (GHSA-jcgr-2839-3jc7)\n\n### Fixed\n- Fixed daily MTA rejection counts on rep_total_mail_by_date.php being overwritten instead of summed, showing only the last row of each day"
+   },
+   {
+    "t": "v1.2.27",
+    "d": "2026-07-30",
+    "n": "# MailWatch 1.2.27\r\n\r\n### Security\r\n- Apply session filter consistently in quarantine operations\r\n- Check RPC client allow-list against the connecting client address\r\n\r\n### Fixed\r\n- Fix uninitialized string offset warning in mimeDecode (#1325)"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261103",
+   "release": "20261103"
+  }
  },
  "ClickHouse/pg_stat_ch": {
   "commit_90d": 13,

@@ -292,11 +292,11 @@
   "enriched_at": "20260927"
  },
  "cojen/TuplDB": {
-  "commit_90d": 2,
-  "commit_7d": 0,
+  "commit_90d": 3,
+  "commit_7d": 2,
   "rel_ver": "1.9.1",
   "rel_pub": "2026-05-24",
-  "rel_days": 126,
+  "rel_days": 163,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -308,7 +308,28 @@
   "lang": {
    "Java": 100
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261103",
+  "rel_notes": [
+   {
+    "t": "1.9.1",
+    "d": "2026-05-24",
+    "n": "* Reduce unbind spinning overhead when under high contention. ~1000 threads.\r\n* Truncate compressed pages when they shrink.\r\n* Added support for zstd compression.\r\n* Support compaction of compressed databases.\r\n* Internally uses LocalPool instead of ThreadLocal, to benefit virtual threads."
+   },
+   {
+    "t": "1.9.0",
+    "d": "2025-03-04",
+    "n": "* Depends on Java 22 and switched to the Java FFM API. Direct page access mode is now always enabled, and disabling it has no effect. This change isn't really expected to be \"breaking\", but it's a major change. The FFM API is slightly slower compared to using the Unsafe class directly, and so TuplDB will attempt to use one of the Unsafe classes automatically by default, falling back to the FFM API when necessary."
+   },
+   {
+    "t": "1.8.0",
+    "d": "2024-03-04",
+    "n": "Main changes:\r\n\r\n* The `Table.load`, `insert`, `replace`, `update`, `merge`, and `delete` methods now throw an exception instead of returning a boolean value. The original methods are supported in the form of newly added \"try\" variants: `tryLoad`, `tryInsert`, `tryReplace`, `tryUpdate`, `tryMerge`, and `tryDelete`.\r\n* Defined a new `Query` interface which directly represents a runnable query. It can be used as an alternative to passing query strings to the `Table` class all the time.\r\n* The `Table` methods "
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261103",
+   "release": "20261103"
+  }
  },
  "kontenbase/kontenbase": {
   "commit_90d": 0,

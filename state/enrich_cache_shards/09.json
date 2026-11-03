@@ -129,11 +129,11 @@
   }
  },
  "pgjdbc/pgjdbc": {
-  "commit_90d": 67,
-  "commit_7d": 2,
+  "commit_90d": 93,
+  "commit_7d": 27,
   "rel_ver": "REL42.7.14",
   "rel_pub": "2026-10-07",
-  "rel_days": 20,
+  "rel_days": 27,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -158,12 +158,29 @@
    "Kotlin": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261103",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027",
+   "commit": "20261103",
+   "release": "20261103",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "REL42.7.14",
+    "d": "2026-10-07",
+    "n": "If the `requireAuth` connection property excluded all six authentication methods the driver knows (for example `requireAuth=!password,!md5,!gss,!sspi,!scram-sha-256,!none`) or contained no method at all (for example `requireAuth=,`), the driver applied no restriction and accepted whatever method the server asked for, including cleartext `password`. An attacker positioned between the application and the server could use this to request cleartext password authentication and receive the database password.\n### "
+   },
+   {
+    "t": "REL42.7.13",
+    "d": "2026-07-06",
+    "n": "- test: add PostgreSQL 18 to the CI test matrix @vlsi (#4198)\n- test: add CI testing against PostgreSQL HEAD @vlsi (#3257)\n- Bump pgjdbc version from 42.7.12 to 42.7.13 @davecramer (#4269)\n- fix(jdbc): reject empty timestamp/date/time text with a clear error @vlsi (#4278)\n- fix(jdbc): classify updatable result set by search\\_path visibility @vlsi (#4214)\n- fix(jdbc): return null CHAR\\_OCTET\\_LENGTH for non-character columns @vlsi (#4231)\n- fix(jdbc): honor scale in ResultSet.getBigDecimal(int, int) @vlsi (#"
+   },
+   {
+    "t": "REL42.7.12",
+    "d": "2026-06-29",
+    "n": "pgJDBC does not enforce channelBinding=require where it matters. ScramAuthenticator checks only that the server advertised a -PLUS mechanism; it neither rejects the empty binding nor checks that the negotiated mechanism uses channel binding. The connection therefore downgrades silently."
+   }
+  ]
  },
  "paulfitz/daff": {
   "commit_90d": 0,
@@ -3128,6 +3145,63 @@
    "security": "20261030",
    "contrib": "20261030",
    "lang": "20261030"
+  }
+ },
+ "yuuki/shawk": {
+  "rel_ver": "v0.8.0",
+  "rel_pub": "2026-11-02",
+  "rel_days": 1,
+  "rel_n90": 1,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_notes": [
+   {
+    "t": "v0.6.0",
+    "d": "2020-04-15",
+    "n": "* shawk look:  --since and --until option [#37](https://github.com/yuuki/shawk/pull/37) ([yuuki](https://github.com/yuuki))"
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 3,
+  "lang": {
+   "C": 74,
+   "Go": 25,
+   "Shell": 1,
+   "Python": 0,
+   "Makefile": 0
+  },
+  "enriched_at": "20261103",
+  "dim_ts": {
+   "release": "20261103",
+   "security": "20261103",
+   "contrib": "20261103",
+   "lang": "20261103"
+  }
+ },
+ "kobaw23214/ThreatLens-API": {
+  "rel_ver": null,
+  "rel_none": true,
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Python": 56,
+   "Vue": 40,
+   "JavaScript": 3,
+   "Shell": 1,
+   "Dockerfile": 0
+  },
+  "enriched_at": "20261103",
+  "dim_ts": {
+   "release": "20261103",
+   "security": "20261103",
+   "contrib": "20261103",
+   "lang": "20261103"
   }
  }
 }

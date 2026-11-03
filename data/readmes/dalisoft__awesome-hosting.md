@@ -15,14 +15,8 @@ List of awesome hosting sorted by minimal plan price
 
 Donations to project with credits on LLM/AI inferences or such bonuses from providers.
 
-_**This project and project author [Qwen Ambassador](https://qwen.ai/ambassador) member.
-thank you Alibaba Qwen team**_
-
-> There amount are not real money, it is credits within sponsor platform.
-
 | Name                                          | Status   | Tier     |
 |-----------------------------------------------|----------|----------|
-| [Qwen Ambassador](https://qwen.ai/ambassador) | Active   | Platinum |
 | [KiloCode](https://kilo.ai)                   | One-time | Silver   |
 | [Prisma](https://www.prisma.io)               | One-time | Silver   |
 
@@ -276,6 +270,7 @@ List of all Virtual Private Server <sup>[1](#status)</sup>
 | [Contabo](https://contabo.com/en/vps)             | [See pricing](https://contabo.com/en/pricing) (€ 4.40/m)                      | No                 | No                    |                  |
 | [Serverspace](https://serverspace.io)             | [vStack](https://serverspace.io/pricing) (€ 4.63/m)                           | No                 | No                    |                  |
 | [aeza][aeza-ref]                                  | [Shared ALBs-1](https://aeza.net/virtual-servers) (€ 4.94/m)                  |                    |                       |                  |
+| [VMHeaven](https://vmheaven.io)                   | [Standard KVM 1](https://vmheaven.io/standard-kvm) (€ 4.99/m)                 | No                 | No                    |                  |
 | [alwaysdata](https://www.alwaysdata.com/en)       | [Plus](https://www.alwaysdata.com/en/offers) (€ 5/m)                          | No                 | Yes                   |                  |
 | [Evolution Host](https://evolution-host.com)      | [Starter](https://evolution-host.com/vps) (€ 5/m)                             | No                 | No                    |                  |
 | [AlfaHost](https://alfahost.io)                   | [Pricing](https://alfahost.io/?tab=vps) (6 \$/m)                              | No                 | No                    |                  |

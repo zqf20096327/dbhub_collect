@@ -34,9 +34,9 @@ go get -u github.com/doug-martin/goqu
 
 ### Supported Go versions
 
-The `go` directive in the root `go.mod` (currently Go 1.19) is the minimum Go version for using `goqu`. CI tests against that version and the latest Go release.
+The `go` directive in the root `go.mod` (currently Go 1.26) is the minimum Go version for using `goqu`. CI tests against that version and the latest Go release.
 
-Raising that minimum is treated as a notable change: it is made deliberately, not as a side effect of a dependency update, and is called out in the release notes. Test-only dependencies live in the separate `./integration` module (which needs a newer Go) so they never affect the Go version required of users of the library.
+Raising that minimum is treated as a notable change: it is made deliberately, not as a side effect of a dependency update, and is called out in the release notes.
 
 ### [Migrating Between Versions](./docs/version_migration.md)
 
@@ -300,17 +300,15 @@ The test suite requires a postgres, mysql and sqlserver databases. You can overr
 go test -v -race ./...
 ```
 
-The SQL Server integration tests live in their own module under `./integration`, so the root `go.mod` does not depend on a SQL Server driver. That module needs Go 1.25 or newer:
+You can also run the tests in a container using [Docker Compose](https://docs.docker.com/compose/) (v2, the `docker compose` command). These are the versions CI uses:
 
 ```sh
-cd integration && go test -v -race ./...
+MYSQL_VERSION=8 POSTGRES_VERSION=15 SQLSERVER_VERSION=2022-latest GO_VERSION=latest docker compose run --rm goqu
 ```
 
-You can also run the tests in a container using [docker-compose](https://docs.docker.com/compose/).
+When you are done, stop the databases with `docker compose down`.
 
-```sh
-MYSQL_VERSION=8 POSTGRES_VERSION=13.4 SQLSERVER_VERSION=2017-CU8-ubuntu GO_VERSION=latest docker-compose run goqu
-```
+**NOTE** The SQL Server image is only published for `amd64`. On Apple Silicon it runs under emulation, which can be slow to start or unstable; in that case run the SQL Server tests on an `amd64` machine or let CI run them.
 
 ## License
 

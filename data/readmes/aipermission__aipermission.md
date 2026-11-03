@@ -25,6 +25,17 @@
 
 ---
 
+## Built-In Connectors
+
+<!-- connector-overview:start -->
+<strong>ClickHouse</strong> &middot; <strong>Docker</strong> &middot; <strong>Kafka / Redpanda</strong> &middot; <strong>Kubernetes</strong> <br />
+<strong>Mail</strong> &middot; <strong>Postgres</strong> &middot; <strong>RabbitMQ</strong> &middot; <strong>Redis / Valkey</strong> <br />
+<strong>S3</strong> &middot; <strong>SQL Server</strong> &middot; <strong>SSH</strong>
+<!-- connector-overview:end -->
+
+Every connector uses the same scoped permissions, approvals, history, and audit.
+[Explore connector capabilities and setup](docs/connectors.md).
+
 ## What It Is
 
 AIPermission is a local, single-user developer gateway. You register connector
@@ -44,6 +55,13 @@ permission, approval, history, and audit pipeline. They are connector types
 rather than separate product modes. The generated
 [connector catalog](docs/connectors.md) is the canonical current list and owns
 their capability summaries.
+
+SQL Server targets support direct TCP SQL authentication, including databases
+running on Windows without SSH. They reuse the shared SQL console and bounded
+read-only action pipeline; see [SQL Server setup and TLS](docs/setup/sql-server.md).
+User queries require SQL Server 2012+ result-metadata inspection; unsupported
+XML/variant/CLR results need an explicit scalar CAST. Dedicated read-only
+database grants remain essential.
 
 History and audit are encrypted, local, retention-controlled records for the
 active database. They are not an immutable external audit archive: configured
@@ -107,7 +125,7 @@ through MCP or the normal REST API.
 Requirements:
 
 - Docker with Docker Compose
-- Patched Node.js 22.23.4+, 24.22.1+, or 26.12.1+ with npm/npx for the MCP bridge; Node.js 24.22.1 is the reviewed development toolchain
+- Patched Node.js 22.23.4+, 24.22.1+, or 26.12.1+ with npm/npx for the MCP bridge; Node.js 24.22.2 is the reviewed development toolchain
 
 Start from a full Git checkout so version pinning and repository verification
 metadata remain available:

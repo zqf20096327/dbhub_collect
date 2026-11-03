@@ -26,6 +26,7 @@
         * Лекция №7 - в разработке
         * Лекция №8 - в разработке
         * Лекция №9 - в разработке
+        * Лекция №10 - в разработке
 
 * Функциональное программирование
 
@@ -55,9 +56,9 @@
         * [Лекция №2](https://pelmesh619.github.io/itmo_conspects/softwareqa/softwareqa-yandex/softwareqa-yandex_2026_09_11.html)
         * [Лекция №3](https://pelmesh619.github.io/itmo_conspects/softwareqa/softwareqa-yandex/softwareqa-yandex_2026_09_18.html)
         * [Лекция №4](https://pelmesh619.github.io/itmo_conspects/softwareqa/softwareqa-yandex/softwareqa-yandex_2026_09_25.html)
-        * Лекция №5 - в разработке
+        * [Лекция №5](https://pelmesh619.github.io/itmo_conspects/softwareqa/softwareqa-yandex/softwareqa-yandex_2026_10_02.html)
         * Лекция №6 - перенесена
-        * Лекция №7.1 - в разработке
+        * [Лекция №7.1](https://pelmesh619.github.io/itmo_conspects/softwareqa/softwareqa-yandex/softwareqa-yandex_2026_10_14.html)
         * [Лекция №7.2](https://pelmesh619.github.io/itmo_conspects/softwareqa/softwareqa-yandex/softwareqa-yandex_2026_10_16.html)
         * [Лекция №8](https://pelmesh619.github.io/itmo_conspects/softwareqa/softwareqa-yandex/softwareqa-yandex_2026_10_23.html)
         * Лекция №9 - в разработке

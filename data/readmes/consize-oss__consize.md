@@ -47,6 +47,9 @@ The current alpha works end to end with Kubernetes Deployments and Prometheus. B
 
 ---
 
+For source development, start with [core model contracts](docs/reference/core-model.md)
+and [runtime data, empty startup and demo isolation](docs/engineering/runtime-data.md).
+
 ## Getting Started
 
 | 🧪 Try the Sandbox | 🚀 Install v0.2.0 |

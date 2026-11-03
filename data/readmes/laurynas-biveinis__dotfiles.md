@@ -52,7 +52,7 @@ Unfortunately, that is not always possible.
 [flycheck](https://www.flycheck.org)
 [company](https://github.com/company-mode/company-mode)
 [projectile](https://github.com/bbatsov/projectile)
-[m4e](https://djcbsoftware.nl/code/mu/)
+[mu4e](https://djcbsoftware.nl/code/mu/)
 
 #### Major
 
@@ -69,17 +69,14 @@ Unfortunately, that is not always possible.
 [dispwatch](https://github.com/mnp/dispwatch)
 [lsp-treemacs](https://github.com/emacs-lsp/lsp-treemacs)
 [calfw](https://github.com/kiwanami/emacs-calfw)
-[which-key](https://github.com/justbur/emacs-which-key)
 [iedit](https://github.com/victorhge/iedit)
 [eldoc-cmake](https://github.com/ikirill/eldoc-cmake)
 [aggressive-indent-mode](https://github.com/Malabarba/aggressive-indent-mode)
 [yaml-mode](https://github.com/yoshiki/yaml-mode)
 [markdown-mode](https://jblevins.org/projects/markdown-mode/)
-[ssh-config-mode](https://github.com/jhgorrell/ssh-config-mode-el)
 [bison-mode](https://github.com/Wilfred/bison-mode)
 [cmake-mode](https://github.com/Kitware/CMake/blob/master/Auxiliary/cmake-mode.el)
 [grab-mac-link](https://github.com/xuchunyang/grab-mac-link.el)
-[cheat-sh](https://github.com/davep/cheat-sh.el)
 [beginend](https://github.com/DamienCassou/beginend)
 [git-modes](https://github.com/magit/git-modes)
 [flycheck-google-cpplint](https://github.com/flycheck/flycheck-google-cpplint/)
@@ -90,7 +87,6 @@ Unfortunately, that is not always possible.
 
 [solarized-theme](https://github.com/bbatsov/solarized-emacs)
 [git-gutter-fringe](https://github.com/emacsorphanage/git-gutter-fringe)
-[company-box](https://github.com/sebastiencs/company-box)
 [page-break-lines](https://github.com/purcell/page-break-lines)
 [xterm-color](https://github.com/atomontage/xterm-color)
 [all-the-icons-dired](https://github.com/jtbm37/all-the-icons-dired)
@@ -100,12 +96,11 @@ Unfortunately, that is not always possible.
 [stripe-buffer](https://github.com/sabof/stripe-buffer)
 [prism.el](https://github.com/alphapapa/prism.el)
 [info-colors](https://github.com/ubolonton/info-colors)
-[topsy.el](https://github.com/alphapapa/topsy.el)
 [org-sticky-header](https://github.com/alphapapa/org-sticky-header)
 
 #### Packages bundled with Emacs
 
-tramp ts
+tramp ts which-key
 
 ### Improvements, fixed annoyances, and bug workarounds
 
@@ -113,23 +108,16 @@ tramp ts
 - [macOS: add the missing man page paths for woman](https://www.reddit.com/r/emacs/comments/ig7zzo/weekly_tipstricketc_thread/g34s8dl?utm_source=share&utm_medium=web2x&context=3)
 - [Re-enable Shellcheck if using lsp-mode with bash-language-server](https://www.reddit.com/r/emacs/comments/hqxm5v/weekly_tipstricketc_thread/fy4pvr8?utm_source=share&utm_medium=web2x&context=3)
 - [Clicking on URLs should open them instead of spell checking them](https://www.reddit.com/r/emacs/comments/it4m2w/weekly_tipstricketc_thread/g5pff92?utm_source=share&utm_medium=web2x&context=3)
-- Workaround the [projectile
-  issue](https://github.com/bbatsov/projectile/issues/347) of remote projects
-  not being added to Projectile project list.
-- [Automatically update Git gutter on Magit
-  actions](https://stackoverflow.com/questions/43236670/visual-studio-code-git-diff-over-git-gutter-indicator).
-- [Disable color-identifiers-mode under LSP with semantic
-  highlighting](https://github.com/laurynas-biveinis/dotfiles/blob/ce044dab576c525f418a5383180d06c888a33599/emacs/.emacs.d/setup.el#L1924)
+- [Enable the dynamic Projectile mode line for remote
+  projects](https://github.com/bbatsov/projectile/pull/1096)
 - [Reduce LSP info in the modeline](https://github.com/laurynas-biveinis/dotfiles/commit/be71cb57292e3cda3759a373a0b7c38688780ab0)
 - [Show Git ignored files in `dired-ignored` face](https://www.reddit.com/r/emacs/comments/u2lf9t/comment/i4n9aoa/?utm_source=share&utm_medium=web2x&context=3)
 
 ### Custom commands and functionality
 
 - [Set frame geometry after docking/undocking laptop automatically](https://www.reddit.com/r/emacs/comments/ev2q9q/weekly_tipstricketc_thread/fftpfj0?utm_source=share&utm_medium=web2x&context=3)
-- `my-recompile-packages`: force recompiling all the installed packages, after
-  a Emacs version upgrade or a borked package upgrade.
 - `kill-buffers-rm-worktree`: bound to `y` in the Projectile keymap, kills all
-  buffers and executes `gitrmworktree.`
+  buffers and executes `gitrmworktree`.
 
 ## Installation
 

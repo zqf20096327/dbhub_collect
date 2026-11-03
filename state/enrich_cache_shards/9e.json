@@ -2531,10 +2531,10 @@
   }
  },
  "arvarik/contrack": {
-  "rel_ver": "v1.5.5",
-  "rel_pub": "2026-08-10",
-  "rel_days": 55,
-  "rel_n90": 6,
+  "rel_ver": "v2.0.5",
+  "rel_pub": "2026-11-02",
+  "rel_days": 1,
+  "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -2549,13 +2549,33 @@
    "Dockerfile": 0,
    "HTML": 0
   },
-  "enriched_at": "20261004",
+  "enriched_at": "20261103",
   "dim_ts": {
-   "release": "20261004",
+   "release": "20261103",
    "security": "20261004",
    "contrib": "20261004",
-   "lang": "20261004"
-  }
+   "lang": "20261004",
+   "commit": "20261103"
+  },
+  "commit_90d": 264,
+  "commit_7d": 2,
+  "rel_notes": [
+   {
+    "t": "v2.0.5",
+    "d": "2026-11-02",
+    "n": "Contrack 2.0.5 moves the Docker image to Node.js 26.13.0, which fixes 10 vulnerabilities that the image scan found in Node.js 26.12.0. It also applies the open dependency updates (#271).\n\n### Security\n\n- **Docker image on Node.js 26.13.0** (#271). The 2.0.4 image runs Node.js 26.12.0. The Node.js 26.12.1 security release fixes these vulnerabilities in it:\n  - **Critical:** CVE-2026-111497, a buffer overflow in the Brotli decoder. Grype's vulnerability data puts it in the CISA Known Exploited Vulnerabilities"
+   },
+   {
+    "t": "v2.0.4",
+    "d": "2026-10-27",
+    "n": "Contrack 2.0.4 tightens account security around the single sign-on added in 2.0.3. A new email is confirmed by a link mailed to it, a change to a linked sign-in needs the current password, and email trust from the 2.0.3 upgrade is corrected (#264, #265).\n\n### Correction to the 2.0.3 notes\n\nThe 2.0.3 notes said that existing accounts start trusted for single sign-on email matching. 2.0.4 takes that trust back where nobody vouched for the address: an account from open registration, and one that accepted an in"
+   },
+   {
+    "t": "v2.0.3",
+    "d": "2026-10-27",
+    "n": "Contrack 2.0.3 adds sign-in with an OpenID Connect provider, and updates five dependencies that had published security advisories (#250, #261).\n\n### Added\n\n- **Single sign-on with OpenID Connect** (#250, #261):\n  - Members can sign in with one OIDC provider, such as Authentik, Keycloak, Pocket ID, Authelia or Google. An admin sets it up under **Settings → Administration → General → Sign-in**, or with the `OIDC_*` environment variables.\n  - A member links the provider under **Account → Sign-in method"
+   }
+  ]
  },
  "yilowoon/portfolio-rag-class": {
   "rel_ver": null,
@@ -2670,6 +2690,40 @@
    "security": "20261031",
    "contrib": "20261031",
    "lang": "20261031"
+  }
+ },
+ "leandronunes07/cnpj-rfb": {
+  "rel_ver": "v2.0.0",
+  "rel_pub": "2026-10-18",
+  "rel_days": 16,
+  "rel_n90": 1,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_notes": [
+   {
+    "t": "v2.0.0",
+    "d": "2026-10-18",
+    "n": "- **4 bancos**: MySQL, PostgreSQL, SQLite e ClickHouse.\n- **Histórico de mudanças entre competências** (MySQL e PostgreSQL): a Receita publica um snapshot completo todo mês, e em vez de descartar o que já existe, a carga compara campo a campo e grava só o que mudou. Consulta por `GET /api/v1/cnpj/{cnpj}/historico`.\n- **Busca por nome acelerada**: `FULLTEXT` no MySQL, `pg_trgm` no Postgres, `ngrambf_v1` no ClickHouse. Opcionalmente, **Meilisearch** para ranking e tolerância a erro de digitação.\n- **"
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Go": 91,
+   "CSS": 3,
+   "JavaScript": 3,
+   "HTML": 3,
+   "Dockerfile": 0
+  },
+  "enriched_at": "20261103",
+  "dim_ts": {
+   "release": "20261103",
+   "security": "20261103",
+   "contrib": "20261103",
+   "lang": "20261103"
   }
  }
 }

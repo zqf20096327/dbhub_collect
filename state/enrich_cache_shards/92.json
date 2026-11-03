@@ -169,10 +169,10 @@
  },
  "mariadb-operator/mariadb-operator": {
   "commit_90d": 208,
-  "commit_7d": 89,
+  "commit_7d": 0,
   "rel_ver": "26.10.2",
   "rel_pub": "2026-10-24",
-  "rel_days": 1,
+  "rel_days": 10,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -188,12 +188,29 @@
    "Go Template": 0,
    "Dockerfile": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261103",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261103",
+   "release": "20261103",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "26.10.2",
+    "d": "2026-10-24",
+    "n": "- The replication reconciliation now resolves the current primary from the MaxScale API, falling back to `status.currentPrimaryPodIndex`, so a primary just promoted by MaxScale is no longer configured as a replica ([#1975](https://github.com/mariadb-operator/mariadb-operator/pull/1975), [#2002](https://github.com/mariadb-operator/mariadb-operator/pull/2002))\n- Backup compression is now idempotent: a restarted backup container no longer compresses an already compressed file, which resulted in an archive that"
+   },
+   {
+    "t": "mariadb-operator-crds-26.10.2",
+    "d": "2026-10-24",
+    "n": "* chore(deps): bump github.com/go-sql-driver/mysql from 1.9.3 to 1.10.1 by @dependabot[bot] in https://github.com/mariadb-operator/mariadb-operator/pull/1928\nmariadb-operator CRDs\n* Set MASTER_USE_GTID=slave_pos when demoting a node to replica by @mariusleu in https://github.com/mariadb-operator/mariadb-operator/pull/1941\n* chore(deps): bump golang from 1.27.1-alpine3.23 to 1.27.2-alpine3.23 by @dependabot[bot] in https://github.com/mariadb-operator/mariadb-operator/pull/1967\n* chore(deps): bump helm/chart-"
+   },
+   {
+    "t": "mariadb-operator-26.10.2",
+    "d": "2026-10-24",
+    "n": "* chore(deps): bump github.com/go-sql-driver/mysql from 1.9.3 to 1.10.1 by @dependabot[bot] in https://github.com/mariadb-operator/mariadb-operator/pull/1928\nRun and operate MariaDB in a cloud native way\n* Set MASTER_USE_GTID=slave_pos when demoting a node to replica by @mariusleu in https://github.com/mariadb-operator/mariadb-operator/pull/1941\n* chore(deps): bump golang from 1.27.1-alpine3.23 to 1.27.2-alpine3.23 by @dependabot[bot] in https://github.com/mariadb-operator/mariadb-operator/pull/1967\n* chore"
+   }
+  ]
  },
  "infinum/android_dbinspector": {
   "commit_90d": 16,
@@ -521,12 +538,12 @@
   "enriched_at": "20260927"
  },
  "ahmadpiran/restoredrill": {
-  "commit_90d": 42,
-  "commit_7d": 0,
-  "rel_ver": "v0.4.0",
-  "rel_pub": "2026-09-03",
-  "rel_days": 24,
-  "rel_n90": 5,
+  "commit_90d": 50,
+  "commit_7d": 7,
+  "rel_ver": "v0.4.3",
+  "rel_pub": "2026-11-03",
+  "rel_days": 0,
+  "rel_n90": 8,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -537,7 +554,28 @@
   "lang": {
    "Go": 100
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261103",
+  "rel_notes": [
+   {
+    "t": "v0.4.3",
+    "d": "2026-11-03",
+    "n": "Security fix for `existing_connection`.\n\nIf your `connection_dsn` had the password in a URL query string (`?password=...`), in quotes, or written as `password = x`, restoredrill copied it into the report. Reports go to any webhook or Slack sink you configured. v0.4.3 removes it in all of these forms. The password also used to sit on the `psql` command line, where other users on the same machine could read it while a drill ran. It now goes to `psql` through `PGPASSWORD`.\n\nIf you used one of those forms, rota"
+   },
+   {
+    "t": "v0.4.2",
+    "d": "2026-11-02",
+    "n": "## Changelog\n* f4bea0fedc218f5b62d2b34eae72e7b4a6087104 fix: keep webhook URLs out of notify errors"
+   },
+   {
+    "t": "v0.4.1",
+    "d": "2026-11-02",
+    "n": "## Changelog\r\n* 12733a7981e06468740a4863836aae09610b5f47 fix: drop private-module setup from the action\r\n* dfd490ae297914c80a0f37f8bfcd0c4702cd57c1 fix: install the action from release binaries"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261103",
+   "release": "20261103"
+  }
  },
  "pinkpixel-dev/keyper": {
   "commit_90d": 28,
@@ -2853,6 +2891,85 @@
    "security": "20261026",
    "contrib": "20261026",
    "lang": "20261026"
+  }
+ },
+ "mocasus/telegram-auto-order-bot": {
+  "rel_ver": "v1.0.0",
+  "rel_pub": "2026-06-29",
+  "rel_days": 127,
+  "rel_n90": 0,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_notes": [
+   {
+    "t": "v1.0.0",
+    "d": "2026-06-29",
+    "n": "- 🗄️ **SQLite** — no DB server needed"
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Python": 100
+  },
+  "enriched_at": "20261103",
+  "dim_ts": {
+   "release": "20261103",
+   "security": "20261103",
+   "contrib": "20261103",
+   "lang": "20261103"
+  }
+ },
+ "lyonoyl/lyonoyl": {
+  "rel_ver": null,
+  "rel_none": true,
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Rust": 70,
+   "TypeScript": 24,
+   "Shell": 3,
+   "JavaScript": 1,
+   "Python": 1
+  },
+  "enriched_at": "20261103",
+  "dim_ts": {
+   "release": "20261103",
+   "security": "20261103",
+   "contrib": "20261103",
+   "lang": "20261103"
+  }
+ },
+ "SintaSobu45/TaskManager": {
+  "commit_90d": 4,
+  "commit_7d": 4,
+  "rel_ver": null,
+  "rel_none": true,
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "CSS": 42,
+   "JavaScript": 39,
+   "C#": 17,
+   "Dockerfile": 1,
+   "HTML": 1
+  },
+  "enriched_at": "20261103",
+  "dim_ts": {
+   "commit": "20261103",
+   "release": "20261103",
+   "security": "20261103",
+   "contrib": "20261103",
+   "lang": "20261103"
   }
  }
 }

@@ -4,11 +4,32 @@
 
 Relay accepts signed webhook events, persists them safely, delivers them asynchronously, retries transient failures with exponential backoff, and prevents duplicate business effects through idempotency.
 
+[![CI](https://github.com/Dieu-Merci-Ndenga/relay/actions/workflows/ci.yml/badge.svg)](https://github.com/Dieu-Merci-Ndenga/relay/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+<p align="center">
+  <a href="https://relay-landing-d0u6.onrender.com">
+    <img src="frontend/img/relay_OpenGraph_banner.png" alt="Relay - Event-Driven Webhook Engine" width="100%">
+  </a>
+</p>
+
 ## Live Deployment
+
+The demo runs on Render's free tier, so the first request after a period of inactivity can take a while.
 
 - **API:** [https://relay-api-brv0.onrender.com](https://relay-api-brv0.onrender.com)
 - **Health check:** [https://relay-api-brv0.onrender.com/health](https://relay-api-brv0.onrender.com/health)
 - **Console:** [https://relay-dashboard-nrqs.onrender.com](https://relay-dashboard-nrqs.onrender.com/)
+
+## Quick Start
+
+```bash
+npm ci
+docker compose up -d     # PostgreSQL and Redis
+npm run start:dev        # API on http://localhost:3000
+```
+
+Then send a signed event (see [Example Request](#example-request)) or run the [reliability demonstration](#reliability-demonstration).
 
 ## Why Relay Exists
 
@@ -25,10 +46,11 @@ Relay is designed around **at-least-once delivery** and explicit idempotency. Ex
 - Signed outbound deliveries (HMAC-SHA256) with timeout and no redirects.
 - Asynchronous delivery through Redis and BullMQ, with a dedicated retry queue.
 - Prometheus metrics on `/metrics`.
-- Exponential backoff with up to five delivery attempts.
-- Delivery history including status, HTTP status, error, duration, and timestamp.
+- Exponential backoff with configurable jitter and up to five delivery attempts.
+- Optional per-source event TTL with expired events routed to the DLQ.
+- Delivery history including status, HTTP status, error cause, duration, and timestamp.
 - Dead-letter queue after the retry policy is exhausted.
-- Manual retry for dead-lettered events.
+- Manual retry for retryable dead-lettered events.
 - Graceful recovery when the downstream receiver becomes available again.
 - Automated unit, end-to-end, and real-world failure/recovery demonstrations.
 
@@ -52,14 +74,14 @@ Redis / BullMQ ------> Delivery worker ------> Downstream receiver
 
 ### Project Stack
 
-| Technology | Role |
-| --- | --- |
-| TypeScript | Type-safe application and domain code |
-| NestJS | HTTP API, dependency injection, and application modules |
-| PostgreSQL | Durable event, attempt, and dead-letter storage |
-| Redis | Fast queue backend and distributed job coordination |
-| BullMQ | Asynchronous delivery, retries, and exponential backoff |
-| Docker | Reproducible local infrastructure with PostgreSQL and Redis |
+| Technology | Role                                                        |
+| ---------- | ----------------------------------------------------------- |
+| TypeScript | Type-safe application and domain code                       |
+| NestJS     | HTTP API, dependency injection, and application modules     |
+| PostgreSQL | Durable event, attempt, and dead-letter storage             |
+| Redis      | Fast queue backend and distributed job coordination         |
+| BullMQ     | Asynchronous delivery, retries, and exponential backoff     |
+| Docker     | Reproducible local infrastructure with PostgreSQL and Redis |
 
 The project is deployed through a Render Blueprint defined in [render.yaml](render.yaml).
 
@@ -128,10 +150,25 @@ x-relay-source: stripe
 - **Outbox:** events are stored in PostgreSQL before being queued and marked
   `enqueued_at` once queued. A sweeper re-enqueues events left unqueued (crash
   or Redis outage) after `OUTBOX_GRACE_MS`, every `OUTBOX_SWEEP_INTERVAL_MS`.
+  Multi-instance sweepers claim rows with `FOR UPDATE SKIP LOCKED` and a
+  60-second lease; enqueue failures release the claim immediately, while a
+  crashed sweeper's claim becomes available after the lease expires.
 - **Retry queue:** first attempts run on `relay-deliveries`, retries on a
   separate delayed `relay-retries` queue, so a failing receiver never delays
   new events. Tunables: `DELIVERY_MAX_ATTEMPTS` (5), `DELIVERY_BACKOFF_MS`
-  (1000), `DELIVERY_CONCURRENCY` (10), `RETRY_CONCURRENCY` (5).
+  (1000), `DELIVERY_BACKOFF_JITTER` (0.2, a symmetric 20% range),
+  `DELIVERY_CONCURRENCY` (10), `RETRY_CONCURRENCY` (5).
+- **Event expiry:** set `EVENT_TTL_MS_BY_SOURCE` to a JSON object mapping
+  source names to positive TTLs in milliseconds, for example
+  `{"stripe":3600000,"otp-service":300000}`. Expiry is fixed when an event
+  is first accepted, so duplicate requests cannot extend it. Sources not listed
+  in the object have no TTL. Delivery is bounded by the remaining TTL, including
+  while an HTTP request is in flight. If a successful response does not arrive
+  before expiry, the attempt and dead letter are marked `EXPIRED`; expired
+  events cannot be manually retried.
+- **Error diagnostics:** delivery attempts expose both `error` and
+  `errorCause`. For network errors, `errorCause` records the underlying code
+  when available (for example `ECONNREFUSED`, `ENOTFOUND`, or `ETIMEDOUT`).
 - **Schema migration:** existing databases are migrated automatically and
   idempotently at startup (composite `(source, event_id)` keys).
 
@@ -161,7 +198,7 @@ GET /health
   production (startup fails without it); when unset locally the routes stay
   open. The dashboard has an "Admin token" field (stored in `sessionStorage`,
   cleared when the tab closes). On Render, the value is generated by the Blueprint.
-- `npm audit --omit=dev` reports no known vulnerabilities.
+- `npm audit --omit=dev --audit-level=high` runs in CI. See [SECURITY.md](SECURITY.md) for the full security model and how to report a vulnerability.
 
 ## Frontend console
 
@@ -174,15 +211,15 @@ To preview it locally, start the API and then serve the directory with any stati
 
 ## Local Development
 
-Requirements: Node.js, npm, and Docker.
+Requirements: Node.js 24.9 or later, npm, and Docker.
 
 ```bash
-npm install
+npm ci
 docker compose up -d
 npm run start:dev
 ```
 
-The default local configuration is documented in [.env.example](.env.example). PostgreSQL creates the required tables when the first event is received.
+Configuration is read from environment variables; the defaults are listed in [.env.example](.env.example) (the application does not load `.env` files itself). The PostgreSQL schema is created automatically at startup.
 
 ## Example Request
 
@@ -235,19 +272,16 @@ The demo receiver is intentionally open for failure simulation and is not intend
 ```bash
 npm test -- --runInBand
 npm run test:e2e -- --runInBand
+npm run test:integration
 npm run build
 npm run lint
 ```
 
-Coverage at the time of writing: 22 unit tests (signatures, ids, secrets,
-admin guard, source-scoped events, outbox sweeper, delivery processor and
-retry scheduling, metrics auth, issue #5 regressions) and 2 end-to-end tests.
-The unit tests run against the in-memory store and queue
-(`NODE_ENV=test`); the PostgreSQL store, the schema migration and the BullMQ
-queues are not covered by automated tests. They were verified manually
-against PostgreSQL 16 and Redis 7: legacy-schema migration, outbox recovery,
-retry queue, dead letter and manual retry, outbound signature, `/metrics`
-and the admin token.
+The unit and end-to-end suites use the in-memory store and queue
+(`NODE_ENV=test`). `npm run test:integration` starts PostgreSQL 16 and Redis 7
+with Testcontainers and exercises persistence, queue retry scheduling, and
+concurrent outbox claims, Redis command pauses, and receiver timeout recovery;
+Docker must be available.
 
 ## Limitations
 
@@ -261,8 +295,8 @@ Relay is a single-tenant webhook relay, not a full webhook platform.
 - **At-least-once delivery:** the outbox and retries can deliver an event more
   than once in rare cases (for example a crash after the receiver answered).
   Receivers should deduplicate on `x-relay-event-id` and `x-relay-source`.
-- **Limited attempt history:** only status, HTTP status, error and duration are
-  stored, not the receiver's response body or headers.
+- **Limited attempt history:** status, HTTP status, error, cause and duration
+  are stored, not the receiver's response body or headers.
 - **One global retry policy:** no per-endpoint settings, no automatic
   disabling of an endpoint that keeps failing, and no alerting. Use the
   metrics for alerts.
@@ -282,7 +316,9 @@ Relay is a single-tenant webhook relay, not a full webhook platform.
 - **Reliability:** transactional outbox with sweeper, separate retry queue,
   source-scoped event ids (automatic schema migration), duplicate webhooks
   re-enqueued unless already delivered (issue #5).
-- **Delivery:** signed outbound requests, timeout, no redirects.
+- **Delivery:** signed outbound requests, timeout, no redirects, jittered
+  exponential retries, per-source TTL with `EXPIRED` dead letters, and fetch
+  error causes in attempt history.
 - **Observability:** Prometheus `/metrics`.
 - **Security:** production secrets enforced, id validation, security headers,
   `ADMIN_TOKEN` on operator routes.
@@ -291,9 +327,14 @@ Relay is a single-tenant webhook relay, not a full webhook platform.
 
 ## Deployment on Render
 
-[render.yaml](render.yaml) defines the API service, the frontend static site,
-the demo receiver, PostgreSQL, and Redis. Render provides `PORT`,
-`DATABASE_URL`, and `REDIS_URL` through the Blueprint.
+[render.yaml](render.yaml) defines the API service, the console static site,
+the landing page static site, the demo receiver, PostgreSQL, and Redis. Render
+provides `PORT`, `DATABASE_URL`, and `REDIS_URL` through the Blueprint.
+
+The landing page lives in [`landing/`](landing/): plain HTML, CSS and a small
+script, with no build step. Preview it locally with `npx serve landing`. Once
+deployed, update the `og:image` URL in `landing/index.html` if the repository
+or branch changes.
 
 Set these secret or service-specific values in Render:
 
@@ -314,11 +355,10 @@ https://<dashboard-service>.onrender.com/?api=https://<api-service>.onrender.com
 so that the browser can call the API. For a custom frontend domain, use that
 domain instead. The backend keeps CORS disabled when `FRONTEND_URL` is unset.
 
+## Contributing and Security
 
----
+Contributions are welcome; read [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md) first. Report vulnerabilities privately as described in [SECURITY.md](SECURITY.md).
 
-<p align="center">
-	<a href="https://relay-dashboard-nrqs.onrender.com/">
-    	<img src="/frontend/img/relay_OpenGraph_banner.png" alt="Relay - Event-Driven Webhook Engine" width="100%">
-	</a>
-</p>
+## License
+
+Released under the [MIT License](LICENSE).

@@ -15,7 +15,7 @@ ___________  |  | _____  |__|____
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/byte5ai/palaia?include_prereleases&label=release)](https://github.com/byte5ai/palaia/releases)
-[![v3 CI](https://github.com/byte5ai/palaia/actions/workflows/v3-ci.yml/badge.svg)](https://github.com/byte5ai/palaia/actions/workflows/v3-ci.yml)
+[![v3 CI](https://github.com/byte5ai/palaia/actions/workflows/v3-ci-batch.yml/badge.svg?branch=main)](https://github.com/byte5ai/palaia/actions/workflows/v3-ci-batch.yml)
 [![Container image](https://img.shields.io/badge/image-ghcr.io%2Fbyte5ai%2Fpalaia--hub-blue?logo=docker&logoColor=white)](v3/deploy/README.md)
 
 [Get started](#get-started-in-60-seconds) · [What it does](#what-it-does-for-you) · [Docs](v3/site/docs/src/content/docs/index.md) · [How it works](v3/docs/how-it-works.md) · [Coming from v2?](v3/docs/migrate-from-v2.md)
@@ -41,7 +41,7 @@ Think Home Assistant, for your AI tools.
 </p>
 
 > [!NOTE]
-> **palaia v3 is a release candidate (`3.0.0-rc6`).** Everything below works and is
+> **palaia v3 is a release candidate (`3.0.0-rc8`).** Everything below works and is
 > tested. Try it, keep backups, and [tell us what breaks](https://github.com/byte5ai/palaia/issues).
 > palaia v2 is [retired](#already-using-palaia-v2) and gets critical fixes only.
 
@@ -68,19 +68,22 @@ You need [Docker](https://docs.docker.com/get-started/get-docker/). That is the 
 prerequisite list.
 
 ```bash
-docker run -d --name palaia-hub \
-  -p 8420:8420 \
+docker run -d --name palaia \
+  --network host -e PALAIA_CLOUD_BIND=127.0.0.1 \
   -v palaia_home:/data \
   --restart unless-stopped \
   --security-opt no-new-privileges:true --cap-drop ALL \
   --read-only --tmpfs /tmp --tmpfs /run \
-  ghcr.io/byte5ai/palaia-hub:beta
+  ghcr.io/byte5ai/palaia:beta
 ```
 
-Then open **`http://<your-machine>:8420`** in a browser (on many home networks
-`http://palaia.local` works too). palaia's setup opens by itself and takes it from
-there: your first memory, your account, cloud access if you want it, your first AI
-app. No config files, no second command.
+Then open **`http://palaia.local:8420`** in a browser on any device on the same
+network (or `http://<your-machine>:8420` if your network blocks the name). That is
+the command for a Linux machine; with Docker Desktop on a Mac or Windows PC, replace
+the `--network host …` line with `-p 8420:8420` and open `http://localhost:8420`.
+palaia's setup opens by itself and takes it from there: your first memory, your
+account, cloud access if you want it, your first AI app. No config files, no second
+command.
 
 Once `3.0.0` is final, use `:stable` instead of `:beta`. Updating later is one click
 in the dashboard.
@@ -96,7 +99,7 @@ in the dashboard.
 | Docker Compose or Portainer | [`docker-compose.yml`](v3/deploy/docker-compose.yml) |
 
 <!-- rc-channel-note -->
-> **Release candidate:** the files and packages in this table pin `ghcr.io/byte5ai/palaia-hub:stable`,
+> **Release candidate:** the files and packages in this table pin `ghcr.io/byte5ai/palaia:stable`,
 > which does not exist until `3.0.0` is final. Until then, change `:stable` to `:beta` in whatever you use.
 
 Stuck? See [Your first shared memory](v3/site/docs/src/content/docs/first-shared-memory.md)

@@ -279,6 +279,8 @@ Now the new benchmark is easy to use and the results for any system can be repro
 
 We also introduced the [Hardware Benchmark](https://benchmark.clickhouse.com/hardware/) for testing servers and VMs.
 
+In 2026, [JSONBench](https://benchmark.clickhouse.com/json/), the benchmark of data analytics on JSON documents, moved into this repository as the [`json`](json/) directory, with the same automation as ClickBench.
+
 See the [changelog](CHANGELOG.md) for more details.
 
 ## Systems Included
@@ -340,7 +342,7 @@ Many alternative benchmarks are applicable to OLAP DBMS with their own advantage
 
 ### JSONBench
 
-https://github.com/ClickHouse/JSONBench
+https://benchmark.clickhouse.com/json/, in the [`json`](json/) directory of this repository.
 
 A benchmark for data analytics on JSON.
 

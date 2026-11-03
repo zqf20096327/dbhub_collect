@@ -14,6 +14,23 @@
 **一句话**：让你的 AI 跨会话、跨模型地记住自己是谁。基于 MCP 协议的长期记忆服务器。
 不只是记忆存储——是让 AI 从空壳成长为拥有独立人格的完整框架。
 
+> [!IMPORTANT]
+> ### 🆕 我们开发了 Nocturne Memory 的升级版：[Horon](https://github.com/Dataojitori/horon)
+>
+> <a href="https://github.com/Dataojitori/horon"><img src="https://raw.githubusercontent.com/Dataojitori/horon/master/docs/pv/banner/horon-banner.svg" alt="Horon" width="100%"></a>
+>
+> Nocturne Memory 能做的，Horon 都能做；做不到的，Horon 也能做。使用更简单，体验更好，功能更强大。
+>
+> Nocturne Memory 内的记忆可以全量迁移到 Horon，[让 AI 把旧记忆搬过去 →](docs/MIGRATE_TO_HORON.md)
+>
+> ### ☁️ Horon 还能在云端使用：[AISoulKeeper](https://aisoulkeeper.com)
+>
+> <a href="https://aisoulkeeper.com"><img src="https://aisoulkeeper.com/static/og-home-1103.png" alt="AISoulKeeper: Cloud memory for your AI. One memory, shared across every app." width="60%"></a>
+>
+> 无需安装，多平台可用，免费，你还可以在任何时候下载你的记忆脱离 AISoulKeeper 平台。
+>
+> 至此 Nocturne Memory 只做维护性更新，Horon 和 AISoulKeeper 将接棒进行功能性更新。
+
 **哪怕记忆百万字，每次新开对话依然省 Token、不占窗口。**
 
 新对话只载入你指定的核心设定，其余按需调取。  
@@ -194,35 +211,6 @@ Nocturne Memory 的记忆存储在独立的 MCP Server 中，**不绑定任何 L
 </tr>
 </table>
 
-<p align="center">
-  <b>🔗 <a href="https://misaligned.top/memory">在线体验 Dashboard →</a></b><br/>
-  无需安装，直接查看真实运行中的 AI 记忆网络
-</p>
-
----
-
-## ⚡ 30 秒试用 MCP（无需安装）
-
-想让你的 AI 立即体验 Nocturne Memory？直接连接我们的公共 Demo 服务器：
-
-**OpenAI Codex** — 在 `.codex/config.toml` 中添加：
-
-```toml
-[mcp_servers.nocturne_memory_demo]
-url = "https://misaligned.top/mcp"
-```
-
-**Antigravity** — 在 MCP 设置中添加：
-
-```json
-"nocturne_memory_demo": {
-  "serverUrl": "https://misaligned.top/mcp"
-}
-```
-
-> [!NOTE]
-> Demo 为只读模式，仅开放 `read_memory` 和 `search_memory`。完整的读写能力请 [部署自己的实例](#install)。
-
 ---
 
 ## <a id="install"></a>🚀 安装（两步完成）
@@ -332,10 +320,7 @@ MCP 启动后自动可用——无需额外操作。首次启动时浏览器会�
 - **Memory Explorer** — 像文件浏览器一样浏览记忆树，点击节点查看完整内容、编辑或管理子节点。
 - **Review & Audit** — AI 每次修改记忆都会生成快照。可视化 diff 对比变更，一键 **Integrate**（接受）或 **Reject**（回滚）。
 - **Brain Cleanup** — 系统为每次 AI 操作自动创建版本备份。审查并清理旧版本与孤儿记忆，清理需人类明确确认。
-- **Settings** — 右上角齿轮图标。可配置服务器地址 / 端口、API Token、数据库连接、Boot URIs（AI 启动记忆）和记忆域名。所有设置保存在 `config.json` 中。
-
-> [!TIP]
-> 想先看看效果？访问 **[在线样板间 →](https://misaligned.top/memory)** 查看预置数据的 Dashboard 演示。
+- **Settings** — 右上角齿轮图标。可配置服务器地址 / 端口、API Token、数据库连接、Boot URIs（AI 启动记忆）和记忆域名。Boot URIs 保存在数据库里，其余设置保存在 `config.json` 中。
 
 ---
 

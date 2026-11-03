@@ -56,10 +56,9 @@ Werbot is written in golang, runs in Docker containers, and works as microservic
 
 **Supported technology:**
 
-- _Protocols_ - SSH, Telnet, RDP, VNC
-- _Providers_ - all providers + fast import from AWS, Google, Amazon, Azure
-- _Containers_ - Docker, Kubernetes
-- _Databases_ - MySQL, Maria, PostgresQL, Redis, MongoDB, Elasticsearch, and other
+- _Protocols_ - SSH is fully proxied and recorded today. Access profiles for RDP, VNC, databases and cloud providers exist in the data model; their proxy connectors are not implemented yet.
+- _Containers_ - Docker, Kubernetes (access metadata)
+- _Databases_ - MySQL, Maria, PostgresQL, Redis, MongoDB, Elasticsearch, and other (access metadata)
 
 
 
@@ -110,7 +109,8 @@ Here is a list of modules that are included within the `Werbot`.
 | Component                                        | Description                                                                                                                                                         |
 | :------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [web](https://github.com/werbot/werbot.web)     | 🖥 Werbot web dashboard |
-| [ee](https://github.com/werbot/werbot.ee)       | 🏭 Werbot Enterprise functions |
+| [ee](https://github.com/werbot/werbot.ee)       | 🏭 Enterprise add-on placeholder (private; no backend code yet) |
+| [saas](https://github.com/werbot/werbot.saas)   | 💳 SaaS add-on: subscriptions, licenses, billing, updates |
 | [install](https://github.com/werbot/install.werbot.com) | 🚀 The script for installing Werbot |
 | [agent.windows](https://github.com/werbot/agent.windows) | 👮‍♂️ Windows agent |
 | [agent.unix](https://github.com/werbot/agent.unix) | 👮‍♂️ Unix agent |
@@ -207,6 +207,28 @@ Additional documentation is being actively developed. For the latest updates, pl
 - `make key` - Generate encryption keys
 - `make protos` - Generate protobuf files
 
+### Build editions
+
+The default build is the community core. Editions are compiled with a build tag:
+
+```bash
+TAGS=saas make build taco   # SaaS add-on
+TAGS=ee make build taco     # Enterprise skeleton (future commercial modules)
+```
+
+Release images for `taco` are built with `saas` enabled (see `.goreleaser.yaml`). Add-ons live in private git submodules under `add-on/`; initialize them with `git submodule update --init --recursive`.
+
+### Tests
+
+Integration tests need PostgreSQL 18 on port `5433`:
+
+```bash
+docker compose -f docker/docker-compose-test.yaml up -d testdb
+make test
+```
+
+The same database settings (`localhost:5433`, user `postgres`, password `password`) are used by `go test ./...` locally and in CI.
+
 ### Docker Services
 
 The project runs as microservices in Docker containers:
@@ -216,12 +238,14 @@ The project runs as microservices in Docker containers:
 - **avocado** - Authentication service
 - **ghost** - Background worker service
 - **app** - Web frontend
-- **postgres** - PostgreSQL database
+- **postgres** - PostgreSQL 18 database (`postgres:18-alpine`)
 - **redis** - Redis cache
 - **haproxy** - Load balancer and reverse proxy
 - **acme** - SSL certificate management (Let's Encrypt)
 
 For more details, see [`docker/docker-compose.yaml`](docker/docker-compose.yaml).
+
+> **Upgrading from PostgreSQL 16:** the `postgres_data` volume is now mounted at `/var/lib/postgresql` (PostgreSQL 18 stores data in `/var/lib/postgresql/18/docker`). A PostgreSQL 16 data directory is not compatible with PostgreSQL 18. Dump the database with `pg_dumpall` before upgrading, start PostgreSQL 18 on a fresh volume, then restore the dump.
 
 ## 👑&nbsp;&nbsp;Community
 

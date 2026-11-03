@@ -25,12 +25,12 @@
   }
  },
  "zalando/postgres-operator": {
-  "commit_7d": 2,
+  "commit_7d": 1,
   "commit_90d": 20,
   "rel_ver": "v2.0.3",
   "rel_pub": "2026-10-02",
-  "rel_days": 25,
-  "rel_n90": 3,
+  "rel_days": 32,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -38,7 +38,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 221,
-  "enriched_at": "20261027",
+  "enriched_at": "20261103",
   "lang": {
    "Go": 76,
    "Python": 14,
@@ -48,10 +48,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261027",
-   "release": "20261027",
+   "commit": "20261103",
+   "release": "20261103",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v2.0.3",
+    "d": "2026-10-02",
+    "n": "This is a bugfix release to the 2.0 version of the Postrges Operator. Thanks to everyone who gave feedback, raised issues or fixed bugs.\n* Pass CLONE_AWS_REGION and STANDBY_AWS_REGION when IRSA is configured (#3180)\nPostgres Operator: ghcr.io/zalando/postgres-operator:v2.0.3\nPooler: UI: ghcr.io/zalando/postgres-operator/pgbouncer:v2.0.3\nUI: ghcr.io/zalando/postgres-operator-ui:v2.0.3\nLogical Backup: ghcr.io/zalando/postgres-operator/logical-backup:v2.0.3\nghcr.io/zalando/charts/postgres-operator:2.0.3\nghcr.i"
+   },
+   {
+    "t": "v2.0.2",
+    "d": "2026-08-20",
+    "n": "* add major version v2 to go module path which was forgotten during the v2 release. If you're using the Postgres Operator as a library you need to update your go code! #3156\nThis is a bugfix release to the 2.0 version of the Postrges Operator. Thanks to everyone who gave feedback, raised issues or fixed bugs.\nPostgres Operator: ghcr.io/zalando/postgres-operator:v2.0.2\nPooler: UI: ghcr.io/zalando/postgres-operator/pgbouncer:v2.0.2\nUI: ghcr.io/zalando/postgres-operator-ui:v2.0.2\nLogical Backup: ghcr.io/zaland"
+   },
+   {
+    "t": "v2.0.1",
+    "d": "2026-07-29",
+    "n": "* Remove hardcoded Postgres version map from go code for more flexible use with newer releases (#3043)\n* Dropped support for Postgres 13 and helm chart 1.10.1 (#3035, #3134)\n* Dropped deprecated manifest fields `useLoadBalancer`, `replicaLoadBalancer` and `pod_priority_class_name` and `init_containers` (#3106)\nThis is a new major release. Please, read the instructions how to [migrate to v2.0](docs/migrate.md). Thanks to everyone who contributed with PRs, feedback, raising issues or providing ideas.\n* Suppor"
+   }
+  ]
  },
  "openeducat/openeducat_erp": {
   "commit_90d": 5,
@@ -3008,11 +3025,11 @@
   }
  },
  "nilsteampassnet/TeamPass": {
-  "commit_90d": 1000,
-  "commit_7d": 63,
-  "rel_ver": "3.2.3.3",
-  "rel_pub": "2026-10-26",
-  "rel_days": 1,
+  "commit_90d": 1017,
+  "commit_7d": 72,
+  "rel_ver": "3.2.4.1",
+  "rel_pub": "2026-11-03",
+  "rel_days": 0,
   "rel_n90": 12,
   "rel_pre": false,
   "rel_none": false,
@@ -3037,14 +3054,31 @@
    "SCSS": 1,
    "Shell": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261103",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027",
+   "commit": "20261103",
+   "release": "20261103",
    "security": "20261027",
    "contrib": "20261027",
    "lang": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "3.2.4.1",
+    "d": "2026-11-03",
+    "n": "* **Back up your database before upgrading**, as always."
+   },
+   {
+    "t": "3.2.4.0",
+    "d": "2026-11-01",
+    "n": "* **The installer no longer accepts a pre-install session after the setup** ([GHSA-6x8j-28p6-mmfm](https://github.com/nilsteampassnet/TeamPass/security/advisories/GHSA-6x8j-28p6-mmfm), High, reported by @kta1kri) - on instances *installed* with 3.2.3.1 to 3.2.3.3, a session opened on `install.php` before the setup finished kept every installer step usable after go-live, including the one that rewrites `app/config/settings.php`: someone holding such a session could point the instance at their own database or"
+   },
+   {
+    "t": "3.2.3.3",
+    "d": "2026-10-26",
+    "n": "* **An unusable TP account key silently left users without access (discussion [#5424](https://github.com/nilsteampassnet/TeamPass/discussions/5424))** — the internal TP account key can stop opening, typically after a database was imported into a new installation. Nothing noticed: items keep reaching existing users through public keys, while every key generation for a user wrote empty sharekeys and reported success. Key generation now refuses to run instead, and refuses to replace the key pair of a user wh"
+   }
+  ]
  },
  "swadhinbiswas/AegisVision": {
   "rel_ver": null,
@@ -3067,6 +3101,29 @@
    "security": "20261029",
    "contrib": "20261029",
    "lang": "20261029"
+  }
+ },
+ "zyy125/raftkv": {
+  "commit_90d": 3,
+  "commit_7d": 3,
+  "rel_ver": null,
+  "rel_none": true,
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Go": 99,
+   "Makefile": 1
+  },
+  "enriched_at": "20261103",
+  "dim_ts": {
+   "commit": "20261103",
+   "release": "20261103",
+   "security": "20261103",
+   "contrib": "20261103",
+   "lang": "20261103"
   }
  }
 }

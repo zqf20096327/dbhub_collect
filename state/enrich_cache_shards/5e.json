@@ -1692,11 +1692,11 @@
   }
  },
  "kenn-io/msgvault": {
-  "commit_90d": 559,
-  "commit_7d": 82,
+  "commit_90d": 652,
+  "commit_7d": 107,
   "rel_ver": "v0.22.0",
   "rel_pub": "2026-10-23",
-  "rel_days": 4,
+  "rel_days": 11,
   "rel_n90": 6,
   "rel_pre": false,
   "rel_none": false,
@@ -1712,14 +1712,31 @@
    "C": 2,
    "PLpgSQL": 0
   },
-  "enriched_at": "20261029",
+  "enriched_at": "20261103",
   "dim_ts": {
-   "commit": "20261027",
-   "release": "20261027",
+   "commit": "20261103",
+   "release": "20261103",
    "security": "20261029",
    "contrib": "20260929",
    "lang": "20260929"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v0.22.0",
+    "d": "2026-10-23",
+    "n": "- On SQLite archives, the CardDAV account upgrade added in 0.21.0 no longer stops `msgvault sync` at startup with \"CardDAV account upgrade left dangling references\" when unrelated rows have broken references.\n- On PostgreSQL, channel purge, account removal and exclusive maintenance no longer deadlock with another source's sync.\n- `msgvault backup create` no longer fails with `no active backup freeze with that token` when a cache reader delays SQLite checkpointing.\n- Rerunning `import-whatsapp` on an Apple `"
+   },
+   {
+    "t": "v0.21.0",
+    "d": "2026-10-02",
+    "n": "- Query archive analytics through the advanced MCP `query_sql` tool on supported SQLite daemons.\n- Accelerate SQLite semantic, hybrid, and similar-message searches with an approximate index and exact reranking. Run `msgvault embeddings optimize` to build or resume it from stored embeddings without provider calls. Set `[vector.search].sqlite_accelerator = \"exact\"` for exhaustive search.\n- Keep invalid Apple Messages dates from blocking analytics builds. Rerun `msgvault import-imessage` without date filters o"
+   },
+   {
+    "t": "v0.20.0",
+    "d": "2026-09-22",
+    "n": "- Reclaim SQLite space from messages deleted at their source with `msgvault gc`, which requires confirmation and creates a backup by default. Remove embeddings left by hard-deleted messages with `msgvault embeddings prune` without paying for a full embedding rebuild.\n- Import Apple WhatsApp `ChatStorage.sqlite` text conversations, including supported participant names. Media, reactions, and reply relationships remain outside this importer.\n- Build macOS analytics caches without repeated DuckDB extension cod"
+   }
+  ]
  },
  "akoutmos/litestream": {
   "commit_90d": 0,
@@ -2900,6 +2917,26 @@
    "security": "20261030",
    "contrib": "20261030",
    "lang": "20261030"
+  }
+ },
+ "4yk5/GhostBase": {
+  "rel_ver": null,
+  "rel_none": true,
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Python": 100,
+   "Batchfile": 0
+  },
+  "enriched_at": "20261103",
+  "dim_ts": {
+   "release": "20261103",
+   "security": "20261103",
+   "contrib": "20261103",
+   "lang": "20261103"
   }
  }
 }

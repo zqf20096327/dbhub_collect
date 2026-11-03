@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-d4a012.svg)](LICENSE)
 [![Docs](https://img.shields.io/badge/docs-boffincoders.github.io-d4a012.svg)](https://boffincoders.github.io/durable_queue/)
 
-**Persistent, retryable task execution for Dart and Flutter.**
+**A durable task queue for Flutter and Dart: persistent, retryable tasks that survive crashes, restarts, and going offline.**
 
 Work such as uploads, messages, and sync is described as data, stored through a pluggable storage interface, and run by a worker that owns retries with backoff, concurrency and rate limits, priorities, dependencies, deduplication, waiting for the network, and crash recovery.
 
@@ -13,7 +13,7 @@ Work such as uploads, messages, and sync is described as data, stored through a 
 
 Full videos on real phones: [iPhone](https://github.com/boffincoders/durable_queue/blob/main/docs/media/durable_queue_demo.mp4) (78 s) · [Android](https://github.com/boffincoders/durable_queue/blob/main/docs/media/durable_queue_demo_android.mp4) (103 s). Photos are queued, the app goes to the home screen, and every upload still reaches the server, including ones whose first try the server failed on purpose.
 
-**[▶ Watch the 10-minute explainer](https://youtu.be/6L7gFN60PmY)** on YouTube · **[Documentation site](https://boffincoders.github.io/durable_queue/)**: the guide, every package, the cookbook, guarantees, and benchmarks in one place.
+**[Quick start](docs/quickstart.md)**: a working offline outbox in five minutes · **[▶ Watch the 10-minute explainer](https://youtu.be/6L7gFN60PmY)** on YouTube · **[Documentation site](https://boffincoders.github.io/durable_queue/)**: the guide, every package, the cookbook, guarantees, and benchmarks in one place.
 
 ## Packages
 
@@ -92,12 +92,13 @@ Every package is optional. Start with the core and its built-in pieces, then swa
 * [Cookbook](docs/cookbook.md): offline forms, ordered chat messages, upload then notify, rate-limited sync, background jobs, progress in the UI, failed work, and testing. Every recipe is a file that CI compiles.
 * [Benchmarks](docs/benchmarks.md): what storing, running, and recovering tasks costs with each storage, measured on GitHub's runners, with the method.
 * [Security policy](SECURITY.md): how to report a vulnerability privately, and what is stored in plain text.
+* [Roadmap](ROADMAP.md): what is available, what comes next, and what is only considered.
 
 ## Get started
 
 ```yaml
 dependencies:
-  durable_queue: ^0.5.7
+  durable_queue: ^0.5.12
 ```
 
 The [documentation site](https://boffincoders.github.io/durable_queue/) and the [`durable_queue` README](packages/durable_queue/README.md) have the quick start, an architecture diagram, examples, and the full feature guide. Adapter authors should read the [storage contract](packages/durable_queue/STORAGE.md).
@@ -121,10 +122,12 @@ benchmark/                      benchmarks behind docs/benchmarks.md
 docs/                           guarantees, cookbook, benchmarks, and media
 examples/
   cookbook/                     the cookbook's recipes, checked by CI (not published)
+  cookbook_stacks/              recipes with Firebase, Supabase, Riverpod, and Bloc (not published)
   durable_queue_demo/           demo app and kill tests (not published)
 website/                        the documentation site (built by website/build.dart)
 pubspec.yaml                    Dart pub workspace root (not published)
 CONTRIBUTING.md                 how to contribute
+ROADMAP.md                      what comes next
 ```
 
 ## Contributing and feedback

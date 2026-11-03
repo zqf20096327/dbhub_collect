@@ -236,3 +236,21 @@ docker exec -t ferre_pos_web npm run test
 # O en local:
 cd ferre_pos_web && npm run test
 ```
+
+## Contribuciones
+
+¡Las contribuciones son bienvenidas! Si deseas colaborar con mejoras, corrección de errores o nuevas funcionalidades:
+
+1. Haz un **Fork** del repositorio.
+2. Crea una rama para tu feature o corrección (`git checkout -b feature/nueva-funcionalidad`).
+3. Realiza tus cambios y confirma que las pruebas pasen (`phpunit` y `npm run test`).
+4. Haz commit de tus cambios (`git commit -m 'feat: agregar nueva funcionalidad'`).
+5. Haz push a la rama (`git push origin feature/nueva-funcionalidad`).
+6. Abre un **Pull Request**.
+
+Para cambios o sugerencias importantes, por favor abre primero un *issue* para discutir la propuesta.
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+

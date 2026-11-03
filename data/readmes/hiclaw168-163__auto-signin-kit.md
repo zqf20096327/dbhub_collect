@@ -29,7 +29,6 @@
 ([上手](docs/guides/GUIDE-01-开发者上手.md) / [新增域](docs/guides/GUIDE-02-新增一个域.md) /
 [排错](docs/guides/GUIDE-03-排错手册.md))。
 
-> 关键词: workbuddy-auto-signin / trae-auto-signin / qoder-auto-signin /
 > Trae 签到 / Qoder 自动签到 / WorkBuddy CodeBuddy 签到 / AI 编程助手积分 /
 > check-in automation / daily rewards bot / auto signin script / scheduled task
 

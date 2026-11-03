@@ -69,7 +69,7 @@ Ask questions in plain language; get governed SQL, results, charts and an audita
 - **Analysis reports** — one click turns an answer into a persistent markdown report with charts.
 
 ### 2. Knowledge Graph (知识图谱)
-The semantic brain of the platform.
+The semantic brain of the platform — stored in the **Neo4j 5.26 (community) graph database** behind a domain store layer (`kg/store.py`), so multi-hop lineage and table-join traversal are native.
 
 - **Auto-built** from metadata scans: tables, columns, metrics, dimensions, sample-value profiling (distinct ratio → metric vs dimension classification).
 - **Human-curated semantics** — register business definitions, formulas, units, grains, aliases; human edits survive re-scans.
@@ -143,10 +143,11 @@ Codify your warehouse conventions (layer-prefix naming, partition & comment requ
 │  Scheduler engine (cron slots, dep gating, dual write gates)                          │
 │  Auth (JWT + argon2 + rate limit) · RBAC · Audit · AES-256-GCM vault                  │
 ├───────────────┬───────────────────┬─────────────────────┬─────────────────────────────┤
-│ SQLAlchemy    │ Qdrant (vectors)  │ LLM gateway         │ Connectors: MySQL / PG /    │
-│ (SQLite/PG)   │ (optional)        │ (OpenAI/Anthropic)  │ ClickHouse / Hive / Spark / │
-│               │                   │                     │ Doris / StarRocks / SQLite  │
-└───────────────┴───────────────────┴─────────────────────┴─────────────────────────────┘
+│ SQLAlchemy    │ Neo4j (knowledge  │ Qdrant (vectors)    │ LLM gateway                 │
+│ (SQLite/PG)   │  graph)           │ (optional)          │ (OpenAI/Anthropic)          │
+├───────────────┴───────────────────┴─────────────────────┴─────────────────────────────┤
+│ Connectors: MySQL / PG / ClickHouse / Hive / Spark / Doris / StarRocks / SQLite       │
+└───────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 **Security perimeter** (enforced server-side, not by prompt):
@@ -221,6 +222,7 @@ Done in recent iterations:
 - [x] Frontend unit tests (vitest) & ESLint
 - [x] Multi-stage, non-root Docker images + CI image builds
 - [x] Login rate limiting, stale scan-job reaping, scheduler catch-up window, alert webhook
+- [x] Knowledge graph migrated to the Neo4j graph database (domain store layer + migration CLI with rollback)
 
 Next:
 

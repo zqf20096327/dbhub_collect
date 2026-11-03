@@ -2797,5 +2797,82 @@
    "contrib": "20261026",
    "lang": "20261026"
   }
+ },
+ "Prog-LucasAlves/PUB_Dados_Financeiros_B3": {
+  "rel_ver": "REPO_NEW",
+  "rel_pub": "2023-08-09",
+  "rel_days": 1182,
+  "rel_n90": 0,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_notes": [
+   {
+    "t": "REPO_NEW",
+    "d": "2023-08-09",
+    "n": "Novo repositório para aplicação dos dados financeiros das empresas listadas na B3."
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 2,
+  "lang": {
+   "Python": 45,
+   "Jupyter Notebook": 38,
+   "HTML": 16,
+   "Dockerfile": 0,
+   "Shell": 0
+  },
+  "enriched_at": "20261103",
+  "dim_ts": {
+   "release": "20261103",
+   "security": "20261103",
+   "contrib": "20261103",
+   "lang": "20261103"
+  }
+ },
+ "SpeakerC/worddrill": {
+  "rel_ver": "v1.3.4",
+  "rel_pub": "2026-11-03",
+  "rel_days": 0,
+  "rel_n90": 10,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_notes": [
+   {
+    "t": "v1.3.4",
+    "d": "2026-11-03",
+    "n": "## 稳定性更新\n\n这一版没有新功能，主要是加了两层兜底和一份诊断手段。\n\n### 更新检查双源\n\n更新清单现在同时配了 Cloudflare 和 Vercel 两个地址，按顺序尝试，一个被墙就自动换另一个。\n\n起因是实测发现：`vercel.app` 在某些网络下会被解析到无关 IP（DNS 污染），而同一时间 `pages.dev` 反而正常。单个源会直接失效。\n\n### AI 接口双源\n\n智能解析和例句生成本来只连 Vercel，现在加了 Netlify 作"
+   },
+   {
+    "t": "v1.3.3",
+    "d": "2026-11-03",
+    "n": "## 修复\n\n**AI 智能解析总是超时——已彻底解决。**\n\n原因：Netlify 免费版函数有 10 秒硬上限，而商汤模型固定要 7±3 秒返回。实测 20 个词直接 502，\n连 3 个词都要 9.5 秒，分段缩小也救不回来。\n\n处理：接口整体迁到 **Vercel**，函数超时上限 60 秒。\n\n### 实测对比\n\n| 请求 | Netlify | Vercel |\n|---|---|---|\n| 2 个词 | 7.0s ✅ | 6.9s ✅ |\n| 20 个词 | **502 超时** ❌ | **5.8s，20 条全对** ✅ |\n| 生成例句 | 7.8s "
+   },
+   {
+    "t": "v1.3.2",
+    "d": "2026-11-03",
+    "n": "## 修复\n\n**AI 智能解析总是超时。**\n\n分段上限原本是 600 字（约 40 个词），而模型本身要 5～9 秒才返回，Netlify 函数 10 秒就掐断——正好卡在边界上，稍慢一点就必然失败，且失败后直接报错，整次导入作废。\n\n### 现在的处理\n\n- 分段上限降到 **300 字（约 20 个词）**，单段目标耗时 4～5 秒\n- 某段仍然超时，**按行对半拆开重试**，最多拆 3 层；词越少模型越快，最终能落进时限\n- **部分"
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Kotlin": 90,
+   "JavaScript": 8,
+   "Python": 1,
+   "HTML": 1
+  },
+  "enriched_at": "20261103",
+  "dim_ts": {
+   "release": "20261103",
+   "security": "20261103",
+   "contrib": "20261103",
+   "lang": "20261103"
+  }
  }
 }

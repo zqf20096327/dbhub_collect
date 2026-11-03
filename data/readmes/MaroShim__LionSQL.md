@@ -2,7 +2,7 @@
 
 Single-binary, high-concurrency OLTP database server supporting T-SQL and stored procedures
 
-[![Version](https://img.shields.io/badge/version-v0.90.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v0.90.1-blue.svg)](CHANGELOG.md)
 [![Go Version](https://img.shields.io/badge/Go-1.24%2B-00ADD8.svg?logo=go&logoColor=white)](go.mod)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](README.md)
@@ -547,13 +547,16 @@ LionSQL strictly adheres to a **3-Stage Verification Pipeline** for every change
      ```
 
    - **SQLLogicTest (SLT) 107-Suite Full Corpus (551,217 Queries) Oracle Verification (100% PASS)**:
-     Runs full black-box regression across official SQLite test suites (`select1~5.test`), specification clauses (`evidence/*`), B-Tree index paths (`index/*`), synthetic fuzzing expressions (`random/*`), and curated edge suites (see [Verification Report](notes/SLT_FULL_SUITE_100_PERCENT_REPORT.md) and [Guide](doc/SQLLOGICTEST_GUIDE.md)):
+     Runs full black-box regression across official SQLite test suites (`select1~5.test`), specification clauses (`evidence/*`), B-Tree index paths (`index/*`), synthetic fuzzing expressions (`random/*`), and curated edge suites (see [Verification Report](notes/SLT_FULL_SUITE_100_PERCENT_REPORT.md), [Guide](doc/SQLLOGICTEST_GUIDE.md), and [Babelfish T-SQL Integration Report](notes/BABELFISH_INTEGRATION_REPORT.ko.md)):
      ```bash
      # 1. Fetch 1.0 GA full suite (on-demand caching)
      ./scripts/fetch_slt.sh
 
      # 2. 8-core concurrent verification (107 files, 551,217 queries in 47.2s)
      ./bin/sqllogictest -dir test/slt -parallel 8
+
+     # 3. Procedural (T-SQL/Babelfish) verification (14 suites, 100% PASS)
+     go test -tags wiredtiger -v -race ./test/slt_proc/...
      ```
 3. **Commit Integrity**:
    - Conventional Commits format (`feat`, `fix`, `docs`, `refactor`, `test`).

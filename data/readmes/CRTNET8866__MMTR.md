@@ -226,3 +226,34 @@ const ctx = await mm.getContext({ text: '面试' });
 ## License
 
 MIT
+
+---
+
+## Use as a DeepSeek Harness (DSH) plugin
+
+MMTR ships a first-class DSH plugin: six agent tools over the same core.
+
+```jsonc
+// dsh config
+{ "plugins": ["dsh-plugin-mmtr"] }
+```
+
+| Tool | Purpose |
+|---|---|
+| `mmtr_remember` | store one durable fact/event |
+| `mmtr_recall` | search memory before answering about the past |
+| `mmtr_status` | clock + relation + live memories + open promises |
+| `mmtr_promise` | record a promise (due time validated in code, never model-computed) |
+| `mmtr_settle` | mark a promise kept/broken |
+| `mmtr_forget` | soft-invalidate a memory by id |
+
+The plugin is a thin cordis plugin (`export const name` / `export function apply(ctx)`) that calls
+`ctx.tools.register(defineTool({...}))` — no UI, no daemon, no network beyond the optional LLM pass.
+
+## Field report
+
+`docs/PRODUCTION-BUGS.md` — 31 bugs harvested from a long-running deployment (model-computed
+timestamps, proactive pipelines bypassing the normal turn path, event-feed replay, silent attachment
+failures, extraction refusal sentinels, entity hallucination, unbounded growth). Read it before
+building your own long-lived agent memory.
+

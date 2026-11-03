@@ -63,8 +63,8 @@
   }
  },
  "buqiyuan/nest-admin": {
-  "commit_7d": 7,
-  "commit_90d": 7,
+  "commit_7d": 1,
+  "commit_90d": 9,
   "rel_ver": "v1.0.1",
   "rel_none": false,
   "sec_n": 0,
@@ -72,7 +72,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 15,
-  "enriched_at": "20261027",
+  "enriched_at": "20261103",
   "lang": {
    "TypeScript": 81,
    "PLpgSQL": 17,
@@ -82,14 +82,21 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261026",
-   "release": "20261026",
+   "commit": "20261103",
+   "release": "20261103",
    "security": "20261027"
   },
   "rel_pub": "2026-10-26",
-  "rel_days": 0,
+  "rel_days": 8,
   "rel_n90": 1,
-  "rel_pre": false
+  "rel_pre": false,
+  "rel_notes": [
+   {
+    "t": "v1.0.1",
+    "d": "2026-10-26",
+    "n": "## 安全\n\n此版本修复公开仓库中硬编码 JWT 密钥的问题。\n\n- 移除硬编码的 `JWT_SECRET` / `REFRESH_TOKEN_SECRET`。仓库不再跟踪含真实密钥的环境文件，仅保留不含真实密钥的 example 文件。\n- 启动时拒绝弱密钥与默认密钥：缺失、空白、短于 32 位，或命中已知占位值时直接拒绝启动。\n- 角色从数据库加载，不再信任 JWT 载荷中的 `roles`。\n- 受保护的 HTTP 接口与 WebSocket 只接受服务端签发的 access toke"
+   }
+  ]
  },
  "treefrogframework/treefrog-framework": {
   "commit_90d": 23,
