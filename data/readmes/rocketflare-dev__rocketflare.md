@@ -46,7 +46,7 @@ git clone https://github.com/rocketflare-dev/rocketflare.git myapp && cd myapp
 rm -rf .git && git init && git add -A && git commit -m "Start from Rocketflare"   # your history starts here
 git remote add origin git@github.com:<you>/myapp.git                              # your own repo, when ready
 
-bash scripts/bootstrap.sh          # checks Node 24 / pnpm 10 / Docker, generates the local secret, starts
+bash scripts/bootstrap.sh          # checks Node 26 / pnpm 10 / Docker, generates the local secret, starts
                                    # Postgres, migrates, seeds demo data, starts the app and opens the
                                    # browser signed in as the demo owner. Re-runnable.
                                    #   --offline  skip the Cloudflare login by disabling Workers AI ([ai] off in both tomls)
@@ -87,7 +87,7 @@ you removed. [`CHANGELOG.md`](CHANGELOG.md) is what you would be catching up on.
 ### Tenancy and access
 - **Multi- or single-tenant from one schema** — `TENANCY_MODE=multi|single`. Every domain row carries a `tenant_id`; single mode auto-joins users to the one organisation and hides the org switcher. Flip later with no migration.
 - **Sign-up policy as configuration** — `SIGNUP_MODE=open|invite_only|approval`: personal tenants, invite-only, or an access-request queue that global admins approve into a new or existing tenant, with an optional email-domain allow-list.
-- **Roles and abilities** — `owner | admin | member` per tenant plus a platform `support` role and global admins; CASL abilities are computed server-side and shipped to the UI (`<Can>`, `RequireAbility`) so pages and nav use the same guard as the route.
+- **Roles and abilities** — `owner | admin | member` per tenant plus a platform `support` role and global admins; CASL abilities are computed server-side and shipped to the UI (`<IfCan>`, `RequireAbility`) so pages and nav use the same guard as the route.
 - **Invitations and members** — create, bulk-invite, resend, revoke, accept; change roles, remove members, transfer ownership; activity log of everything.
 - **Admin area** — `/admin` for global admins: tenants, users, access requests; "enter" a customer tenant as `support` with a real membership row, so the single "must be a member" invariant never bends.
 - **Isolation by predicate, RLS in reserve** — every query filters by the session's tenant; every tenant table also ships a row-level-security policy, inert until `TENANT_SCOPE_MODE=enforce` (`docs/RLS.md`), with a catalog test that fails CI if a table is missed.

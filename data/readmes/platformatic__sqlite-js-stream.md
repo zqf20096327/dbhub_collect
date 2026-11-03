@@ -242,16 +242,82 @@ Every file is written atomically (row + chunks in a single transaction), so a
 reader never sees a partially-written file. `created_at` preserves the LTX
 creation timestamp for point-in-time restore and retention.
 
-> **Fenced writes:** if the application itself elects the writer, call
-> `client.registerGeneration(n)` before writing. After registering, uploads from
-> an older generation are rejected with `ErrGenerationSuperseded`, so a paused
-> former writer that wakes up after losing its lease can never append to the
-> replica.
+> **Fenced writes:** see [Fenced writes](#fenced-writes).
 
 > **Distributed leasing:** `PgLeaser` acquires/renews/releases a lease on a
 > `ltx_leases` row using a compare-and-swap `version` column, with the same
 > semantics as `S3Leaser` (`LeaseExistsError`, `ErrLeaseNotHeld`). Pass it to a
 > `Replica` via the `leaser` option so only one host writes at a time.
+
+### Fenced writes
+
+When the application elects the writer of a database itself (with its own lease,
+or a `Leaser`), a former writer that was paused (GC, a stopped VM, a network
+partition) can wake up after losing the lease and keep uploading. The S3 and
+PostgreSQL clients can reject those uploads: give every writer a *generation*
+that only grows (for example a fencing token from your lease), and follow this
+order when a writer takes over a database:
+
+```ts
+import { Replica } from '@platformatic/sqlite-js-stream';
+import { S3ReplicaClient } from '@platformatic/sqlite-js-stream-s3';
+
+const client = new S3ReplicaClient({ bucket: 'my-bucket', prefix: 'app/db1' });
+
+// 1. Register: fails with ErrGenerationSuperseded if a higher generation is
+//    registered. From now on, older writers' uploads and deletions fail.
+await client.registerGeneration(token);
+
+// 2. Restore (or keep the local database if it is at the replica's latest TXID).
+const replica = new Replica('/data/app.db', client);
+await replica.restore({ outputPath: '/data/app.db' });
+
+// 3. Write and replicate.
+await replica.sync();
+```
+
+`registerGeneration(n)` sets the client's generation (the `generation` option
+does the same without registering). From then on:
+
+- An upload, compaction or retention deletion fails with
+  `ErrGenerationSuperseded` (`ERR_GENERATION_SUPERSEDED`) once a higher
+  generation is registered. The `Replica` then stops writing: every later
+  `sync()`, `snapshot()`, compaction and retention call fails with the same
+  error (also in `replica.superseded`), and `run()` stops and rejects with it
+  instead of retrying.
+- An LTX file of a given level and TXID range is written only once.
+
+**PostgreSQL** checks the generation in the transaction that writes or deletes
+the files (`SELECT … FOR SHARE` on the `ltx_generations` row), so registering
+waits for the uploads in flight and the following ones fail.
+
+**S3** can't check one object and write another in one request, so fencing is a
+protocol of conditional writes on a `generation.json` object next to the `ltx/`
+directory:
+
+- `registerGeneration(n)` raises the generation with `If-Match`/`If-None-Match`,
+  then reads the replica's latest TXID `T` and records the *fence* `(n, T)` in
+  the same object. It does both, so there is no separate step after the restore.
+- Fenced uploads use `If-None-Match: *` and store their generation in the
+  `ltx-generation` metadata. After each upload, the client reads
+  `generation.json` and fails if a higher generation is registered. An upload
+  that resolves was therefore made before any newer writer registered, and
+  every newer writer's restore sees it.
+- An upload of a superseded writer can still land if it was in flight. Listings
+  ignore a file whose generation is lower than a fence's and whose `maxTXID` is
+  above that fence's `T`. If such a file holds a key that the new writer needs,
+  the new writer replaces it (`If-Match` on its ETag).
+- Deletions check `generation.json` right before `DeleteObjects`. A deletion
+  sent just before a new generation registers still applies; this is the one
+  race the protocol leaves open, and it needs the old writer to pause between
+  the check and the request.
+- Once a fence exists, listing a file that ends above the lowest fence costs
+  one `HeadObject` request to read its generation (cached per key and ETag; a
+  writer knows its own files). Replicas that never registered a generation pay
+  one `GetObject` of `generation.json` per listing (a 404).
+- `deleteAll()` keeps `generation.json`, so a superseded writer stays fenced.
+
+The file backend does not implement fenced writes.
 
 ### Continuous sync
 
@@ -284,6 +350,68 @@ replica.run({ intervalMs: 1000, signal: ac.signal }).catch((err) => {
 
 `Store` also exposes `syncAll()`/`snapshotAll()` for one-shot operations; a continuous
 loop can be driven by calling `replica.run()` per database, or via your own scheduler.
+
+### Checkpoints without full snapshots
+
+When the WAL is reset by a checkpoint, the next `sync()` cannot resume from its previous position
+in the WAL, so it uploads a full snapshot of the database. An application that decides when
+checkpoints run can avoid that with `replica.checkpoint()`: it syncs, checkpoints the WAL, and
+records that the next WAL continues from the synced position, so the next `sync()` uploads only the
+changes.
+
+```ts
+import { DatabaseSync } from 'node:sqlite';
+
+const db = new DatabaseSync('/data/app.db');
+db.exec('PRAGMA journal_mode=WAL');
+db.exec('PRAGMA wal_autocheckpoint=0'); // checkpoints run only through replica.checkpoint()
+
+// ... write with db, and call replica.sync() as usual ...
+
+// Instead of db.exec('PRAGMA wal_checkpoint(TRUNCATE)'):
+const incremental = await replica.checkpoint(db, 'TRUNCATE');
+```
+
+`checkpoint(conn, mode = 'TRUNCATE')` takes the connection the application writes with (`mode` is
+`'RESTART'` or `'TRUNCATE'`):
+
+- Pass the **writing connection**, with no open transaction. SQLite gives the next WAL a predictable
+  salt only when the connection that starts it is the one that reset the WAL; that is how the next
+  `sync()` recognizes the WAL that directly followed the checkpoint.
+- Disable `wal_autocheckpoint` on every connection and never run `PRAGMA wal_checkpoint` yourself:
+  any other reset is detected and the next `sync()` falls back to a full snapshot (correct, but
+  not incremental).
+- Do not call it concurrently with `sync()` or `run()`.
+- The next WAL must be started by the same connection: a different connection that writes first
+  picks random salts, and the next `sync()` falls back to a snapshot.
+
+When replication runs on a different thread (or process) than the writing connection, which
+cannot cross threads, split the call in two. `replica.prepareCheckpoint()` syncs and returns a
+plain JSON token; send it to the writing thread and pass it to `runCheckpoint()` with the
+connection:
+
+```ts
+// Replication thread:
+const token = await replica.prepareCheckpoint(); // { path, txid, salt1, salt2, frames }
+port.postMessage({ type: 'checkpoint', token });
+
+// Writing thread (owns `db`), between transactions:
+import { runCheckpoint } from '@platformatic/sqlite-js-stream';
+const incremental = runCheckpoint(db, token, 'TRUNCATE'); // synchronous
+```
+
+`runCheckpoint()` writes the record into `<db>-litestream/` next to the database, and the
+replica's next `sync()` reads it from disk, so the two sides share nothing else. No `sync()` of
+the database may run between `prepareCheckpoint()` and `runCheckpoint()`, and the writing thread
+must not commit between receiving the token and calling `runCheckpoint()`; a commit makes the
+checkpoint return `false`, which is safe but not incremental. `replica.checkpoint(conn, mode)` is
+`prepareCheckpoint()` followed by `runCheckpoint()`.
+
+It returns `true` when the WAL was fully checkpointed right after the sync. It returns `false` when
+a commit landed between the sync and the checkpoint, or when a reader kept the checkpoint from
+completing: the next `sync()` then resumes in the old WAL if it was not reset, or uploads a
+snapshot if it was. Restoring across checkpoints works as usual: the incremental files form a
+contiguous TXID chain.
 
 ### Replication from a worker thread
 
@@ -379,8 +507,9 @@ Your application is free to use its own SQLite driver and connections (`node:sql
 >   transaction, and the library could read *uncommitted* rows or commit the app's writes), and
 > - if your app had a transaction open, the library could not `BEGIN` its snapshot pin at all.
 >
-> The library has no API to accept an app-owned writable connection, and it deliberately opens its
-> own read-only reader instead. Keep the library's reader and your app's writer on separate
+> The library deliberately opens its own read-only reader instead. The only API that takes your
+> writable connection is the checkpoint (`replica.checkpoint()` / `runCheckpoint()`), which runs
+> `PRAGMA wal_checkpoint` on it and never reads through it. Keep the library's reader and your app's writer on separate
 > connections to the same database file.
 
 ### Large databases & streaming

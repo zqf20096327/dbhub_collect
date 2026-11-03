@@ -143,6 +143,17 @@ php tools/update_schema.php -lLEAGUE_TAG
 Creates/restores backup.
 Backups are saved to `backups` folder.
 
+Table dumps are written as CSV parts: once a part grows past the chunk size
+limit it is packed into the archive as `<table>.<n>.csv` (e.g.
+`matches_ext.0.csv`) and a new part starts, so the disk only ever holds about
+one part's worth of data. Every backup contains a `tables.index` file mapping
+tables to their ordered CSV parts, and the restore uses it when present.
+Restoring older backups with plain `<table>.csv` files (no index) still works.
+
+The chunk size limit is 5 GiB by default and can be overridden with the
+`backup_chunk_max_size` value in `rg_settings.json` (size string, e.g.
+`"512M"` or `"5G"`), or per run with `-z`.
+
 Parameters:
 * `-R` - restore mode, requires following parameters:
   * `-l` - league tag
@@ -150,6 +161,7 @@ Parameters:
 * `-r` - generate report and add it to backup
 * `-F` - remove data after creating backup
 * `-o` - path for output file
+* `-z` - table CSV part size limit: plain number means MiB, or a size string like `512M` / `5G` (overrides `backup_chunk_max_size`)
 
 ### rg_fetcher
 
@@ -316,3 +328,31 @@ Tools are additional scripts that can be used for specific things. All of them s
 * `update_rosters` - updates official rosters for all teams in report. Args: `-l%LEAGUETAG%`
 * `update_playerids` - updates missing ranked playerids
 * `matchlist_intersect` - computes the intersection of two matchlist files and writes the result to a file. Args: `<A.list> <B.list> [-f output.list] [-R]`. By default writes matches present in both A and B back to A (or to `-f` if specified). With `-R` writes matches that are in A but not in B (set difference A \ B). Comment lines and blank lines are ignored; output order follows A. Example: `php tools/matchlist_intersect.php matchlists/a.list matchlists/b.list -f matchlists/common.list`
+## Connection resources
+
+MySQL connections are defined as named **resources** in `rg_settings.json`:
+
+```json
+{
+  "resources": {
+    "default": {
+      "driver": "mysql",
+      "host": "127.0.0.1",
+      "port": 3306,
+      "user": "lrg",
+      "pass": "...",
+      "prefix": "lrg"
+    },
+    "cache": {
+      "driver": "mysql",
+      "host": "127.0.0.1",
+      "database": "lrg_view_cache"
+    }
+  }
+}
+```
+
+* Every report (league) is assumed to use the **first** resource on the list unless its league config (`leagues/<tag>.json`) has a `"resource": "<name>"` key (optional plain string, not present in the default template).
+* If the specified resource does not exist, the default resource is used (with a warning).
+* League databases are named `<prefix>_<league_tag>`. A resource with `database` (and no `prefix`) addresses one fixed database instead — meant for services like the view cache daemon, which refers to a resource by name.
+* The legacy flat keys (`mysql_host`, `mysql_user`, `mysql_pass`, `mysql_port`, `mysql_prefix`) still work: they act as the last resource on the list with the key `_legacy`. An old configuration with a single resource and no `resource` keys in league configs behaves exactly as before.

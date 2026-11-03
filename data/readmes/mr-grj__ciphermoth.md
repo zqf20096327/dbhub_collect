@@ -71,13 +71,16 @@ Then open **[http://localhost:3000](http://localhost:3000)**. [CONTRIBUTING.md](
 ## What it does
 
 - one master password unlocks the vault, no account, no email, no recovery codes sent to a phone number you changed three years ago
+- optional biometric unlock: Touch ID in the macOS app, a passkey in the browser. It works on that device only, and it asks for your master password every couple of weeks so you never forget it
 - all entry contents encrypted at rest with a random vault key, stored only wrapped under a key derived from your master password
 - store a username, website, tags, folders, a two-factor (TOTP) secret, and your own custom fields alongside each entry, all encrypted, entry names included (see [Security](#security))
 - built-in two-factor: paste a 2FA secret, and CipherMoth shows the live rolling code, computed in the browser
 - secure notes for free-form secrets (recovery codes, Wi-Fi, passport details), encrypted just like passwords
 - attach files to any entry (recovery-code PDFs, license keys, key files), up to 5 MB each, encrypted with your vault key
 - search, favorites, folders, tags, and password history to keep a growing vault tidy
-- trash for deletions you can restore from or empty for good when you're sure
+- trash for deletions you can restore from or empty for good when you're sure, one entry or a whole selection at a time (with Undo)
+- quick actions: double-click to edit, right-click for copy username/password/2FA code, open website, duplicate, favorite and trash, plus keyboard shortcuts
+- a native macOS menu bar in the desktop app: new login or note, find, import, backup, trash, health, settings and lock, each with its usual shortcut
 - light and dark themes that flip across the whole app, toggled by a moth that flutters off as the colours fade (and remembers your pick)
 - vault health check that flags weak, reused, and old passwords, entirely on your device
 - cryptographically secure password generator (not the `Math.random()` kind) with a strength indicator on every entry
@@ -120,6 +123,9 @@ How it works (the full specification is [docs/VAULT_FORMAT.md](./docs/VAULT_FORM
   its trashed copies) and your timeout settings. This is encryption of each entry, not of the whole file;
 - changing the master password creates a new vault key and re-encrypts everything, so the old password and the old key
   open nothing in the vault afterwards (older snapshots and backups keep the password they were made with);
+- **biometric unlock** is off until you turn it on with your master password. The vault key is then also wrapped under a
+  secret only that device's Secure Enclave or passkey can produce after checking your fingerprint or face. Anyone that
+  device accepts can open the vault ([details](./SECURITY.md#biometric-unlock));
 - Python owns the keys and gives React only an **opaque session token**. Desktop sessions stay in memory, and the bundled Python core talks to Rust through private binary pipes: no backend TCP listener. Locking clears the owned clipboard and stops the process holding the keys. The Docker edition keeps keys in its server process and the browser's session token in `sessionStorage`;
 - a strict Content-Security-Policy restricts the UI. Desktop release checks run in Rust against the fixed GitHub release source; no vault contents, passwords, session tokens or entry metadata are sent;
 - **backups** (`.cmbackup`) are complete and authenticated: every entry including the trash and history, attachments

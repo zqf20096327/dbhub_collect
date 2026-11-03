@@ -645,6 +645,12 @@ await sql`select * from report()`.signal(AbortSignal.timeout(5000))
 
 A query waits for a connection when every connection is reserved, in a transaction or has `max_pipeline` queries in flight. `queue_timeout` (in seconds) rejects it with `QUEUE_TIMEOUT` if it waits longer, without ever sending it, and the same goes for `sql.begin` and `sql.reserve`. Once a query is sent, PostgreSQL's own `statement_timeout` is the limit.
 
+`query_timeout` (in seconds) limits each query, waiting for a connection and running together; inside `sql.begin` or a reserved connection the clock starts when the query is sent on it. A query that runs out of time is canceled as `.cancel()` would, and rejects with `QUERY_TIMEOUT`, with the `57014` it was canceled with as its `cause`. The `begin`, `commit` and savepoint queries of a transaction and `forEach` are limited too; cursors, streams and `sql.listen` are not.
+
+`statement_timeout` is the better limit while the server answers, since the server enforces it and the outcome is known. `query_timeout` is the backstop for when it does not: a server or network that goes silent leaves a query waiting for as long as TCP takes to notice, which is many minutes with default keepalive settings. When a cancel request, from `.cancel()`, `.signal()` or `query_timeout`, gets no answer within `cancel_timeout` (5 seconds by default), the connection is closed and the pool connects again for the next query. As nobody knows whether the queries on that connection ran, they reject with `CONNECTION_DESTROYED`, or a timed out one with `QUERY_TIMEOUT`, whose `cause` is `CANCEL_UNANSWERED`. `cancel_timeout: 0` waits for the answer as long as it takes.
+
+PostgreSQL cancels whatever the connection is running when the request arrives, so a cancel sent just as a query finishes can cancel the query pipelined after it instead. Postgres.js doesn't send it for a query whose result has already arrived, and a query that runs out of time while it waits behind another one on its connection gets its own `query_timeout` once its turn comes before it is canceled, so a quick query just finishes. If the server sends nothing for `cancel_timeout` while such a query waits, the connection is closed.
+
 ### Execute
 
 #### ```await sql``.execute()```
@@ -854,6 +860,38 @@ sql.begin('read write', async sql => {
 })
 ```
 
+## Batches
+
+### `await sql.batch([queries]) -> Result[]`
+
+`sql.batch` sends several queries in one round trip and ends them with a single Sync, so the server answers them all at once. It resolves with their results in order.
+
+```js
+const [, [{ count }]] = await sql.batch([
+  sql`update users set name = ${ name } where id = ${ id }`,
+  sql`select count(*)::int from users`
+])
+```
+
+Outside a transaction the queries are one implicit transaction, as PostgreSQL makes everything before a Sync: they commit together, and if one fails, none of them is committed and the ones after it are not run. The batch rejects with the error of the query that failed, with its position in `error.index`; the other queries in it reject with a copy marked `skipped`. A query that can not be built or written fails the batch the same way, and nothing of it is committed.
+
+```js
+try {
+  await sql.batch([
+    sql`insert into accounts ${ sql(account) }`,
+    sql`insert into audit ${ sql(entry) }`
+  ])
+} catch (error) {
+  error.index // -> 1 if the audit insert failed, and the account insert was rolled back
+}
+```
+
+Inside `sql.begin` a batch is part of the transaction, and a failure aborts the transaction as any failing query does. On a reserved connection it runs on that connection.
+
+The queries are sent without waiting for each other, so none of them can use another's result, and queries from elsewhere that share the connection keep their own Sync, outside the batch. Cursors, streams, `forEach` and `describe` can not be part of a batch.
+
+`Promise.all` pipelines queries as well, but gives each its own Sync, so each commits, or fails, on its own; with a batch the server finishes one transaction instead of one per query.
+
 ## Data Transformation
 
 Postgres.js allows for transformation of the data passed to or returned from a query by using the `transform` option.
@@ -879,7 +917,11 @@ const data = await sql`SELECT ${ sql('aTest', 'bTest') } FROM camel_case`
 console.log(data) // [ { aTest: 1, bTest: '1' } ]
 ```
 
+The built-in transforms also rename the keys of JSON values in results, but send JSON values as they are. Add `json: false` to leave JSON values as they are both ways, or `json: true` to rename their keys when sending as well: `postgres({ transform: { ...postgres.camel, json: false } })`.
+
 To only perform half of the transformation (eg. only the transformation **to** or **from** camel case), use the other transformation functions:
+
+> For historical reasons `postgres.toCamel`, `postgres.toPascal` and `postgres.toKebab` also transform the names given to helpers, as `camel`, `pascal` and `kebab` do. To transform only the column names of results, use `{ column: { from: postgres.toCamel } }`.
 
 ```js
 // Transform the column names only to camel case
@@ -1180,6 +1222,8 @@ const sql = postgres('postgres://username:password@host:port/database', {
   idle_timeout         : 0,             // Idle connection timeout in seconds
   connect_timeout      : 30,            // Connect timeout in seconds
   queue_timeout        : 0,             // Seconds a query may wait for a connection, 0 for no limit
+  query_timeout        : 0,             // Seconds a query may wait and run, 0 for no limit
+  cancel_timeout       : 5,             // Seconds to wait for a canceled query before closing its connection
   keep_alive           : 60,            // TCP keep-alive in seconds, 0 or null for none
   backoff              : fn,            // Seconds to wait before reconnecting, given the attempt
   prepare              : true,          // Automatic creation of prepared statements
@@ -1204,6 +1248,7 @@ const sql = postgres('postgres://username:password@host:port/database', {
   target_session_attrs : null,          // Use 'read-write' with multiple hosts to
                                         // ensure only connecting to primary
   fetch_types          : true,          // Fetches array types and other types it does not know
+  eager_types          : false,         // Fetches them when the pool starts instead of when first needed
   publications         : 'alltables',   // Publications for sql.subscribe
   slot                 : null,          // A permanent replication slot for sql.subscribe
   onread               : true,          // Read into one shared buffer per connection (Node.js, Bun, Deno)
@@ -1399,7 +1444,9 @@ A few things differ in Workers:
 
 ### Auto fetching of array types
 
-The built-in types and their arrays are known without asking the server. Before its first query a pool asks once for the array types and domains that the database has besides those, so an array of an enum or a domain over a built-in type is read and written like its base type. A type made after that, and any type that is neither, is read and written as text, as in v3.
+The built-in types and their arrays are known without asking the server. The first time a query meets a type the pool doesn't know, the pool asks once for the array types and domains that the database has besides those, so an array of an enum or a domain over a built-in type is read and written like its base type; that connection waits for the answer, which is read on another connection. A type made after that, and any type that is neither, is read and written as text, as in v3. With custom types by name, or `eager_types: true`, they are read when the pool starts instead.
+
+If the connection reading them fails, the read is tried again after `backoff`, and once `connect_timeout` has passed the connections waiting for it are closed and their queries reject.
 
 If you have revoked access to `pg_catalog` this feature will no longer work and will need to be disabled.
 
@@ -1805,6 +1852,16 @@ This error is thrown for any queries that were pending when the timeout to [`sql
 > Waited more than 5 seconds for a connection
 
 A query, transaction or reserve waited longer than `queue_timeout` for a connection. It was never sent.
+
+##### QUERY_TIMEOUT
+> The query did not finish within query_timeout (5 seconds)
+
+A query took longer than `query_timeout`, waiting and running together, and was canceled. Its `cause` is the `57014` it was canceled with, or `CANCEL_UNANSWERED` when the server didn't answer the cancel, in which case whether the query ran is unknown.
+
+##### CANCEL_UNANSWERED
+> The server did not answer within cancel_timeout (5 seconds) after a query was canceled, so whether it ran is unknown
+
+The `cause` of `CONNECTION_DESTROYED` or `QUERY_TIMEOUT` for the queries on a connection that was closed because a cancel request got no answer within `cancel_timeout`. Whether those queries ran is unknown, as when a connection is lost.
 
 ##### TYPE_NOT_FOUND
 > The type vector does not exist

@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> **GenDB is no longer maintained. Its successor is [GenDB-V](https://github.com/GenLang-V/GenDB-V).** In GenDB-V, AI agents write the engine, and Verus formally proves it correct. It synthesizes a verified package for each SQL template, or one verified general-purpose engine.
+>
+> **[Website](https://genlang-v.github.io/GenDB-V/)** &nbsp;|&nbsp; **[Paper](https://arxiv.org/pdf/2611.02779)** &nbsp;|&nbsp; **[GitHub](https://github.com/GenLang-V/GenDB-V)**
+
 # GenDB: An LLM-Powered Generative Query Engine
 
 **Instance-optimized query execution code generation tailored to your specific data, workloads, and hardware.**
@@ -14,7 +19,7 @@
 
 **Input:** database schema, SQL queries, data files, hardware specs, and user configurations (optimization targets, iteration budgets). **Pipeline:** five specialized LLM agents — Workload Analyzer, Storage/Index Designer, Query Planner, Code Generator, and Query Optimizer — each equipped with tools for file I/O, terminal access, and web search, collaborating through structured JSON. **Output:** optimized storage structures, indexes, and one standalone executable per query — all tailored to the specific data, workload, and hardware.
 
-> **Note:** This project is under active development. The stable version used for the [arxiv paper](https://arxiv.org/abs/2603.02081) is available in the [`arxiv-03-02-2026`](https://github.com/SolidLao/GenDB/tree/arxiv-03-02-2026) branch.
+> **Note:** The stable version used for the [arxiv paper](https://arxiv.org/abs/2603.02081) is available in the [`arxiv-03-02-2026`](https://github.com/SolidLao/GenDB/tree/arxiv-03-02-2026) branch.
 
 ## News
 

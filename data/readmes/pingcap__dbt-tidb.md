@@ -100,12 +100,13 @@ your_profile_name:
   outputs:
     dev:
       type: tidb
-      server: 127.0.0.1
+      server: tidb.example.com
       port: 4000
       schema: database_name
       username: tidb_username
       password: tidb_password
       retries: 2
+      # ssl_ca: /path/to/ca.pem  # if a custom CA is needed
 ```
 
 | Option           | Description                                           | Required? | Example                        |
@@ -117,8 +118,38 @@ your_profile_name:
 | username         | The username to use to connect to the server          | Required  | `dbt_admin`                    |
 | password         | The password to use for authenticating to the server  | Required  | `correct-horse-battery-staple` |
 | retries          | The retry times for connection to TiDB (1 in default) | Optional  | `2`                            |
+| ssl_ca | Path to the trusted CA certificate in PEM format | Optional | `/path/to/ca.pem` |
+| ssl_cert | Path to the client certificate in PEM format | Optional | `/path/to/client-cert.pem` |
+| ssl_key | Path to the client private key in PEM format | Optional | `/path/to/client-key.pem` |
+| ssl_verify_cert | Verify the server certificate (default: true) | Optional | `true` |
+| ssl_verify_identity | Verify the server hostname (default: true) | Optional | `true` |
+
+Connections require TLS with certificate and hostname verification by default.
+The `server` hostname must match the certificate. Set `ssl_ca` if the server's
+CA is not trusted by the system. Existing profiles using plaintext, self-signed
+certificates, or a mismatched hostname will now fail until configured correctly.
+For a trusted local development server without TLS, explicitly set both
+`ssl_verify_cert: false` and `ssl_verify_identity: false`. This weakens server
+authentication and allows fallback to plaintext.
+Client-side `LOAD DATA LOCAL INFILE` is disabled for all connections.
+
+When creating tables from query results, the adapter validates column types
+returned by TiDB. Unsupported type declarations, including `ENUM` or `SET`
+members containing backslashes, fail with an error rather than being inserted
+into SQL. This validation does not change existing tables.
+
+Table materializations use uniquely named staging views for column metadata.
+Failed runs can leave `__dbt_stage_` views behind; remove abandoned views only
+after confirming their builds are no longer running. Use separate schemas and
+database privileges to isolate tenants: a staging view is visible to other
+principals with access to its schema.
 
 ## Database User Privileges
+
+The `grants` config supports only `SELECT`, `INSERT`, `UPDATE`, and `DELETE`
+(case insensitive). Other privilege values fail before DCL execution. Grantees
+are quoted as individual user names; SQL fragments and `user@host` account
+expressions are not interpreted.
 
 Your database user would be able to have some abilities to read or write, such as `SELECT`, `CREATE`, and so on.
 You can find some help [here](https://docs.pingcap.com/tidb/v4.0/privilege-management) with TiDB privileges management.

@@ -113,7 +113,7 @@ pnpm dlx @rebasepro/cli init my-api --headless
 That scaffolds a headless backend: REST, auth, storage, realtime and backups over
 your database, with **no collection files and no UI**. Tables are served
 automatically, derived from your schema at boot — change the schema with a
-migration and the API follows. No React anywhere in the dependency tree.
+migration, restart, and the API follows. No React anywhere in the dependency tree.
 
 A fresh headless project has no tables yet, so `/api/data/*` answers
 `404 NO_COLLECTIONS` until you create some. Point it at a database that already
@@ -196,7 +196,7 @@ Opt in with `offline: true` and the client SDK keeps a local database of rows in
 
 ### ⚡ Extensible API & Edge Functions
 
-Drop custom Hono routes or scheduled tasks into the `functions/` and `crons/` directories. Rebase auto-loads them with database access and JWT authentication middleware injected automatically.
+Drop custom Hono routes or scheduled tasks into `backend/functions/` and `backend/crons/`. Rebase auto-loads them with database access. A function is public until you check the caller: authentication is not applied for you.
 
 ### 🧬 SDK Generator
 
@@ -289,10 +289,8 @@ Rebase is structured as a modular monorepo — install only the layers you need:
 
 Every `@rebasepro/*` package ships ES modules and nothing else — `"type":
 "module"`, no CommonJS build, no `require()` entry point. A CommonJS project
-reaches them with a dynamic `await import()`; `require("@rebasepro/client")`
-throws `ERR_REQUIRE_ESM`. This is stated here because the failure names the
-loader rather than the decision, and because it is not recoverable by
-configuration: there is no dual build to fall back to.
+reaches them with a dynamic `await import()`, or with `require()` on the Node
+floor, which loads ES modules. There is no dual build to fall back to.
 
 Node 22.22 is the floor, from [`.nvmrc`](.nvmrc) and enforced by
 `pnpm check:floors`.
@@ -347,8 +345,8 @@ Every project scaffolded with `rebase init` carries its agent rules in `ai-instr
 {
   "mcpServers": {
     "rebase": {
-      "command": "npx",
-      "args": ["-y", "@rebasepro/mcp"],
+      "command": "pnpm",
+      "args": ["exec", "rebase-mcp"],
       "env": {
         "REBASE_PROJECT_DIR": "."
       }

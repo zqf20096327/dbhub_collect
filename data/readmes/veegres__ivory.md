@@ -1,11 +1,15 @@
 <div style="text-align: center;" align="center">
+   <b><sub>Self-hosted Database Cluster Management System</sub></b>
+</div>
+<br>
+<div style="text-align: center;" align="center">
    <img src="app/shared/assets/ivory.png" alt="Ivory — open-source web UI and AI-ready MCP server for PostgreSQL Patroni, etcd, Redis, ClickHouse, MongoDB and ZooKeeper clusters" height="200" width="200" />
-
-# Ivory
-
-### DEPLOY. WATCH. FIX. ANYWHERE
-
-**Ivory is home for your database clusters — deploy, watch and fix them from anywhere.**
+   
+   # Ivory
+   
+   ### DEPLOY. WATCH. FIX. ANYWHERE
+   
+   **Ivory is home for your database clusters — deploy, watch and fix them from anywhere.**
 
    <img src="https://img.shields.io/docker/v/veegres/ivory/latest?label=stable&style=flat-square&link=https%3A%2F%2Fhub.docker.com%2Fr%2Fveegres%2Fivory" alt="stable version" />
    <img src="https://img.shields.io/docker/v/veegres/ivory?label=latest&style=flat-square&link=https%3A%2F%2Fhub.docker.com%2Fr%2Fveegres%2Fivory" alt="latest version" />
@@ -127,8 +131,8 @@ What Ivory does with each — operations, lag, warnings, console and deploy temp
 [About Ivory](.doc/about.md#why-these-databases).
 
 **Missing your database? You can add it.** Every engine is a self-contained plugin, so supporting a new one
-needs no change to Ivory's core. The repository ships an AI agent for exactly this,
-[`keeper-database-plugin`](.claude/agents/keeper-database-plugin.md): ask Claude Code to use it for your engine
+needs no change to Ivory's core. The repository ships a portable agent skill for exactly this,
+[`ivory-keeper-database-plugin`](.agents/skills/ivory-keeper-database-plugin/SKILL.md): ask your coding agent to use it for your engine
 and it writes the keeper and database plugins, their tests and the UI wiring by the project's checklist —
 then open a PR (see [Contribution](#contribution)).
 
@@ -142,7 +146,6 @@ for something to pick up, and [SECURITY.md](SECURITY.md) for supported versions 
 
 
 ## What Ivory is used for
-
 Ivory is a self-hosted, open-source GUI, web dashboard and MCP server for database cluster management,
 monitoring and troubleshooting. One tool, the same workflow for every engine:
 
@@ -160,3 +163,6 @@ monitoring and troubleshooting. One tool, the same workflow for every engine:
   so Claude, Cursor, Codex or any MCP client can diagnose and fix database clusters in plain language.
 - **On-call from your phone** — a mobile-friendly database dashboard for checking and fixing a cluster away
   from your laptop.
+  
+---
+<sup>Keywords: Database Management Systems (DBMS) Controllers | Multi-Database UI Consoles | Database Orchestration Platforms | Orchestrator | AI-Ready Database Copilot / Agent Layer</sup>

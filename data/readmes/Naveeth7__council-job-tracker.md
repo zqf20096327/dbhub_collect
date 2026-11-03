@@ -5,7 +5,7 @@ A public, read-only council vacancy dashboard with a Go checker, scheduled GitHu
 ## What is included
 
 - Searchable public dashboard; council and status filters; first-found/deadline sorting; CSV export.
-- The existing 206-entry council sponsor list and all 11 supplied careers links.
+- The existing 206-entry council sponsor list and the original 11 supplied careers links plus 20 researched links.
 - Collect all readable vacancies with selectable IT & Technology and Business & Administration keyword groups. No job-category filter. `IT` is uppercase, whole-word to avoid the everyday pronoun "it"; the other terms are case-insensitive whole words, and analyst also matches analysts. Broad matches such as scientific technical roles are intentionally included.
 - Go connectors for **MyJobScotland, Talentsoft, Jobtrain, Hireserve, iTrent and Oracle**, plus a WMJobs connector subject to runner access.
 - Pagination and missing-description checks. If the advertised vacancy count exceeds discovered URLs, coverage is marked partial. Limits are 20 listing pages and 300 detail pages per council per run.
@@ -16,7 +16,7 @@ A public, read-only council vacancy dashboard with a Go checker, scheduled GitHu
 
 ## Important current coverage limits
 
-This is a first release, **not full coverage of all 206 councils**. Only 11 have careers links. The other 195 show "No link yet".
+This is a first release, **not full coverage of all 206 councils**. 31 have careers links. The other 175 show "No link yet". The per-source checks show which linked sites were fully read.
 
 | Council/platform | Current connector |
 | --- | --- |
@@ -105,7 +105,7 @@ Edit `config/councils.csv` in GitHub or Excel (save as UTF-8 CSV). Columns:
 | --- | --- |
 | `name` | Registered council name; keep stable to preserve history |
 | `url` | HTTPS careers listing URL |
-| `adapter` | `myjobscotland`, `talentsoft`, `jobtrain`, `hireserve`, `itrent`, `oracle`, `wmjobs`, or `manual` |
+| `adapter` | `myjobscotland`, `talentsoft`, `jobtrain`, `hireserve`, `itrent`, `oracle`, `wmjobs`, `greater`, `tribepad`, `jgp`, `bucks`, `ceredigion`, `cardiff`, `engageats`, `oleeo`, `castlepoint`, or `manual` |
 | `confirmed` | `true` only after verifying the council/link association |
 | `notes` | Internal source-review notes; not published in dashboard output |
 | `routes` | Routes recorded in the sponsor register |
@@ -161,10 +161,22 @@ The scanner retains all collected vacancies, including those without keyword mat
 ## Additional recruitment platforms
 - Jobtrain: discover the HTML card endpoint from the listing page and follow Skip offsets until the advertised total is reached; read each full JobPosting. Bath's portal also advertises partner/school roles; the dashboard shows the advertised employer when supplied.
 - Hireserve: discover the public feed from the search form, validate its total, then read each advert. Invalid JSON-LD falls back to the advert container, with publication dates/deadlines/salary taken from the feed.
-- WMJobs: read all linked search result pages and job descriptions. Birmingham currently uses the supplied quoted keyword search, so this is not certified employer-wide coverage.
+- WMJobs: read all linked search result pages and job descriptions. Birmingham now uses the direct Oracle site; WMJobs is retained for other verified sources.
 - Aberdeenshire: verified council-only organisation 2603; Ashford's portal identity verified through the council website.
 - iTrent: initialise an anonymous public search session in memory, fetch the same public JSON search/profile endpoints used by the website, and retain every readable role. Session values are excluded from job links, IDs, reports and logs. Compare collected records with total_rec; additional unretrieved pages mark coverage partial. Security challenges remain blocked, with no bypass attempt. Some local/cloud environments are challenged while the scheduled GitHub runner can read these sites.
-- One retry for transient request failures or server errors; no retries for access/security challenges. Partial pagination preserves readable results and marks coverage incomplete.
+- Up to three page requests with increasing spacing for transient request failures or server errors; no retries for access/security challenges. Partial pagination preserves readable results and marks coverage incomplete.
 
 ### Birmingham direct careers source
 Birmingham uses its own Oracle Candidate Experience site (CX_1). The connector reads all categories with paginated public findReqs search, checks TotalJobsCount, then fetches full descriptions and dates using ById. Each detail ID must match the listing. Missing pages, repeated pages, missing descriptions and limits produce partial coverage. No credentials or applications are involved. The original WMJobs source remains available as a connector but is not used for this council.
+
+### Blackpool–Cherwell batch (2 November 2026)
+
+The next 20 sponsor-list entries, starting with Blackpool and ending with Cherwell, now have researched career URLs in `config/councils.csv`. The original registered sponsor names are retained, including the former Buckinghamshire county council name; its link is to the current Buckinghamshire Council careers portal. Official council reference URLs are recorded in each row's notes.
+
+Additional connectors cover Greater Jobs (Blackpool employer only), TribePad, JGP, Buckinghamshire, Ceredigion, Cardiff's public search endpoint and Cannock's shared engageATS portal. iTrent follows advertised record ranges. JGP and TribePad can read the visible advert where JobPosting data omits the description or is malformed. Buckinghamshire keyword matching uses the full advert rather than the short structured teaser. Cannock's connector excludes Stafford-branded cards on the shared portal. School and partner adverts may appear on council portals; check the advertised employer.
+
+`verify-next20.yml` provides a separate public-source verification run without database or email credentials. A configured URL does not establish complete coverage: each dashboard source check reports whether collection was complete, partial, blocked, failed or needs attention. Human-verification challenges are not bypassed. The 175 entries after this batch remain unconfigured pending review. Email remains optional and is not enabled by this change.
+
+Collection checks up to four independent recruitment hosts concurrently, keeping councils on the same host sequential. Jobs and coverage enter the saved report in configuration order, and only the main collector writes the TiDB state.
+
+Carmarthenshire uses Oleeo’s public candidate Atom feed (`/candidate/jobboard/vacancy/3/feed`). This is partial coverage: titles, short summaries and published dates are available, but full descriptions and application deadlines are not. Contract end dates are never used as application deadlines. The checker respects the provider’s ten-second crawl delay. Castle Point remains an access failure when its application server cannot be reached; a manual observation of no vacancies is not treated as an automated successful check.

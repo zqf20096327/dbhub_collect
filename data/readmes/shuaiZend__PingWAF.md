@@ -36,34 +36,7 @@ A single **control plane** defines sites, rules and policies; one or many **data
 
 ## 🏗️ Architecture
 
-```mermaid
-graph TB
-    Client[Client / Browser]
-
-    subgraph ControlPlane["Control Plane (pingwaf server)"]
-        Dashboard[Embedded Dashboard + REST API :9080]
-        GRPC[gRPC ControlPlane service :9090]
-        PG[(PostgreSQL 14+)]
-        ES[(Elasticsearch - optional)]
-    end
-
-    subgraph DataPlane["Data Plane (pingwaf agents)"]
-        AgentA[Edge Agent A :80 / :443]
-        AgentB[Edge Agent B :80 / :443]
-    end
-
-    Origin[Origin / Upstream servers]
-
-    Client -->|HTTP / HTTPS| AgentA
-    Client -->|HTTP / HTTPS| AgentB
-    AgentA <-->|gRPC bidi streams| GRPC
-    AgentB <-->|gRPC bidi streams| GRPC
-    Dashboard --> PG
-    GRPC --> PG
-    GRPC --> ES
-    AgentA -->|safe traffic| Origin
-    AgentB -->|safe traffic| Origin
-```
+<img src="./asset/readme-architecture.webp" alt="PingWAF architecture: clients reach edge agents over HTTP/HTTPS; each agent streams rules and telemetry with the control plane over a gRPC bidirectional stream; only clean traffic continues to the origin" width="1000">
 
 The control plane and the data plane talk over the `ControlPlane` gRPC service (defined in [`control_plane.proto`](./pingwaf-proto/proto/control_plane.proto)) with seven RPCs:
 
@@ -133,6 +106,61 @@ The control plane and the data plane talk over the `ControlPlane` gRPC service (
 
 ---
 
+## 📊 Measured effectiveness
+
+<img src="./asset/readme-effectiveness.webp" alt="Interception on the blazehttp corpus: PingWAF 93.8 % full-corpus (96.6 % effective, 0.06 % false positives) against ModSecurity PL4 94.61 %, SafeLine 76.17 %, ModSecurity PL1 69.74 % and Cloudflare 10.70 %" width="1000">
+
+Measured on the public [blazehttp](https://github.com/chaitin/blazehttp) corpus
+(33 877 raw HTTP requests: 658 malicious / 33 219 benign), replayed
+byte-for-byte against a release build. Interception counts the WAF verdict
+surface — the 403 block page and the 503 challenge page — and "benign affected"
+counts both, so a challenge is never hidden inside a "blocked" number.
+
+On the requests a reverse-proxy WAF can actually decide, **Strict + body
+inspection intercepts 96.6 % (616/638)**, with **0.06 % (19/33 219)** of benign
+traffic affected and **99.82 % accuracy**. Of the 658 malicious samples, 20
+never reach a detection surface and are excluded from that figure: 19 are
+`POST`/`PUT` requests without `Content-Length` or `Transfer-Encoding` (an empty
+body under RFC 7230), and 1 hides its payload in a URL fragment that the HTTP
+parser strips before the request line is built. Every reverse-proxy WAF passes
+those 20 by construction — counting them as misses understates detection.
+
+| Tier | Attack interception (full corpus) | Benign affected | p95 |
+| --- | --- | --- | --- |
+| Normal (default, no body inspection) | 60.2 % | 0.01 % | 1 ms |
+| Normal + body inspection | 71.9 % | 0.04 % | 1 ms |
+| Strict | 76.0 % | 0.01 % | 1 ms |
+| Strict + body inspection | **93.8 %** | **0.06 %** | 2 ms |
+
+The full-corpus figure (93.8 %, 617/658) is kept for direct comparison with
+other measurements; the effective figure is given above.
+
+### Cross-vendor comparison
+
+| Product / mode | Malicious | Interception | Benign | False positives | Accuracy |
+|---|---|---|---|---|---|
+| **PingWAF 0.32.4 · Strict + body** | 658 | **93.8 %** (617) | 33 219 | **0.06 %** (19) | **99.82 %** |
+| **PingWAF 0.32.4 · Normal** | 658 | **60.2 %** (396) | 33 219 | **0.01 %** (4) | **99.21 %** |
+| SafeLine free · strict | 575 | 76.17 % (438) | 33 094 | 0.22 % (73) | 99.38 % |
+| SafeLine free · balanced | 575 | 71.65 % (412) | 33 094 | 0.07 % (23) | 99.45 % |
+| ModSecurity PL4 | 575 | 94.61 % (544) | 33 094 | 52.46 % (17 362) | 48.34 % |
+| ModSecurity PL1 | 575 | 69.74 % (401) | 33 094 | 17.58 % (5 819) | 82.20 % |
+| Cloudflare free | 570 | 10.70 % (61) | 32 780 | 0.07 % (23) | 98.40 % |
+
+The PingWAF rows are this project's own replay (effective interception 96.6 %,
+see above); the other rows are quoted from the blazehttp project README and were
+not re-run here. The two datasets are close but not identical (33 877 vs
+33 669; 658 vs 570–575 malicious samples), and third-party latency includes
+public-network round trips while PingWAF's p95 is a loopback verdict latency —
+compare detection and false positives, not milliseconds.
+
+Every figure is reproducible: the suite definitions, the replay harness and the
+raw metrics live in [`tools/waf-bench/`](./tools/waf-bench). The
+**[test plan](./docs/waf-test-plan.md)** documents the methodology and the
+**[test report](./docs/waf-test-report.md)** the conclusions, per-category
+tables, the cross-vendor comparison with Cloudflare / SafeLine / ModSecurity
+(quoted from the blazehttp benchmark) and known limits.
+
 ## 🧱 Tech Stack
 
 | Layer | Technology |
@@ -159,107 +187,24 @@ The control plane and the data plane talk over the `ControlPlane` gRPC service (
 
 ## 🚀 Quick Start
 
-> **Note:** Prebuilt binaries are currently published for **Linux (amd64 / arm64)** only — see the [releases page](https://github.com/shuaiZend/PingWAF/releases). On macOS, build from source (Option B). The Docker image supports both architectures.
-
-### Option A — Docker Compose (recommended)
-
-The official installer downloads the bundled [`docker-compose.yml`](./docker-compose.yml),
-writes a private `.env` and starts PingWAF in `all-in-one` mode with PostgreSQL
-(GHCR image, named volumes for data and certificates). No clone and no root:
+Two typical paths: **Docker Compose** (one command, `all-in-one` mode with PostgreSQL; prebuilt binaries are published for Linux amd64/arm64 only — see the [releases page](https://github.com/shuaiZend/PingWAF/releases)), or **build from source** (Rust 1.96+, Node.js 26.12.1+, `protoc`).
 
 ```bash
+# Path A — Docker Compose (recommended; no clone, no root)
 curl -fsSL https://raw.githubusercontent.com/shuaiZend/PingWAF/main/deploy/compose/install.sh | bash
-```
+# …or, after cloning this repository:
+docker compose up -d
 
-It creates `./pingwaf`; customise the image tag, admin account or ports with
-flags (`--tag 0.32.3 --admin-email you@example.com --admin-port 9443`), or use
-the generator on the **[install page](https://www.pingwaf.com/install/)**. To inspect the files first,
-clone and run `docker compose up -d` instead — the same compose file is used.
-
-Then open the dashboard:
-
-- **URL:** https://localhost:9080
-- **Email:** `admin@pingwaf.local`
-- **Password:** `pingwaf123`
-
-> ⚠️ **Change the default admin password and `PINGWAF_JWT_SECRET` before any production use.**
-
-The dashboard is served over **HTTPS** with a self-signed certificate generated
-on first boot, so the browser warns until you either trust the downloaded
-certificate or upload a real one under **Settings → Control plane HTTPS**. Set
-`PINGWAF_TLS_SANS` to the hostname you use if it is not `localhost`.
-
-Health check: `GET http://localhost:9080/healthz` (answers on HTTP and HTTPS;
-everything else redirects to `https://`). Use a bounded probe, e.g.
-`curl --connect-timeout 2 --max-time 3 http://localhost:9080/healthz`; `9080`
-is the admin origin and should be bound privately or protected by a firewall,
-not published as a public API.
-
-### Option B — Build from source
-
-**Prerequisites**
-
-| Tool | Version | Notes |
-| --- | --- | --- |
-| Rust | 1.96+ (MSRV) | CI tracks stable; the Docker image and release binaries build with 1.98.1 |
-| Node.js | 26.12.1+ | Required to build the dashboard — lower versions fail `npm ci` (`engine-strict` pins the 2026-10 security fixes) |
-| `protoc` | any recent | **Required** — gRPC code generation |
-| `cmake` | any recent | Required to build the TLS backend (OpenSSL) |
-| PostgreSQL | 14+ (16 recommended) | Control-plane datastore |
-
-> ⚠️ **`protoc` is mandatory.** If it is missing, `pingwaf-proto` silently falls back to placeholder files and downstream crates fail to compile. Install it first:
->
-> ```bash
-> brew install protobuf                 # macOS
-> sudo apt install protobuf-compiler cmake   # Debian / Ubuntu
-> ```
-
-**Build & run**
-
-```bash
-git clone https://github.com/shuaiZend/PingWAF.git
-cd PingWAF
-
-# 1. Build the embedded dashboard
+# Path B — build from source
+git clone https://github.com/shuaiZend/PingWAF.git && cd PingWAF
 cd web && npm ci && npm run build && cd ..
-
-# 2. Build the pingwaf binary
 cargo build --release --bin pingwaf --features full
-
-# 3. Run in all-in-one mode
-./target/release/pingwaf all-in-one \
-  --db-url "postgres://pingwaf:pingwaf@localhost:5432/pingwaf"
+./target/release/pingwaf all-in-one --db-url "postgres://pingwaf:pingwaf@localhost:5432/pingwaf"
 ```
 
-### Option C — Install script (Linux)
+Then open the dashboard at **https://localhost:9080** (HTTPS with a self-signed certificate generated on first boot) and sign in with `admin@pingwaf.local` / `pingwaf123` — **change the default password and `PINGWAF_JWT_SECRET` before any production use**.
 
-The script downloads the prebuilt binary, installs it and (optionally) sets up
-a systemd service. It runs in two modes:
-
-```bash
-# Interactive: on a terminal it asks for the mode, admin credentials,
-# PostgreSQL URL, certificate SANs and version, then shows a plan
-curl -fsSL https://raw.githubusercontent.com/shuaiZend/PingWAF/main/install.sh -o install.sh
-bash install.sh
-
-# One line, unattended: defaults, no prompts (flags go after `-s --`)
-curl -fsSL https://raw.githubusercontent.com/shuaiZend/PingWAF/main/install.sh | sudo bash -s -- --mode all-in-one
-```
-
-> `curl | bash` cannot show interactive prompts — piping installs
-> non-interactively with the defaults. Pass admin/TLS settings as environment
-> variables (`PINGWAF_ADMIN_EMAIL`, `PINGWAF_ADMIN_PASSWORD`,
-> `PINGWAF_TLS_SANS`) or flags (`--admin-email`, `--admin-password`,
-> `--tls-sans`); `--dry-run` prints the resolved plan without installing.
-> Install walkthrough: <https://www.pingwaf.com/install/>.
->
-> Releases ship two archives per architecture: `pingwaf-linux-{amd64,arm64}.tar.xz` (primary, smaller) and `.tar.gz` (compatibility fallback), each with a `.sha256` sidecar. The script prefers `.tar.xz` and falls back to `.tar.gz` when `xz(1)` is missing locally or the download fails.
->
-> The binary also carries administrator maintenance subcommands (`user`,
-> `mode`, `security`, `config`) that talk straight to PostgreSQL when the
-> console is unreachable — see **[docs/cli.md](./docs/cli.md)**.
-
-👉 For a full walkthrough (database setup, first site, distributed agents, systemd), see **[docs/quick-start.md](./docs/quick-start.md)**.
+👉 Full install wizard, the interactive installer and TLS / port options: **<https://www.pingwaf.com/install/>** · step-by-step guide: **<https://www.pingwaf.com/quickstart/>** · in-repo walkthrough (database setup, first site, distributed agents, systemd): **[docs/quick-start.md](./docs/quick-start.md)**.
 
 ---
 
@@ -339,6 +284,9 @@ PINGWAF_CONFIG=/etc/pingwaf/pingwaf.toml pingwaf all-in-one   # equivalent
 | [docs/cli.md](./docs/cli.md) | Administrator binary CLI — run modes, break-glass maintenance commands, incident runbooks |
 | [docs/user-guide.md](./docs/user-guide.md) | Dashboard walkthrough, sites, rules, policies |
 | [docs/http-lifecycle.md](./docs/http-lifecycle.md) | Where every feature acts in the request pipeline (WAF check order, caching, error pages) and how to debug with it |
+| [docs/waf-test-plan.md](./docs/waf-test-plan.md) | WAF test plan — layers, blazehttp suite selection, calibres and acceptance gates |
+| [docs/waf-test-report.md](./docs/waf-test-report.md) | Measured WAF effectiveness (0.32.4) — interception, false positives, attribution, limits |
+| [docs/waf-benchmark-report.md](./docs/waf-benchmark-report.md) | Per-round benchmark appendix (P0 → P14 iteration history) |
 | [docs/api.md](./docs/api.md) | REST API reference (`https://<host>:9080/api/v1`) |
 | [docs/README.md](./docs/README.md) | Full documentation index |
 | [CONTRIBUTING.md](./CONTRIBUTING.md) | How to contribute |

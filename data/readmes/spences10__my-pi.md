@@ -60,8 +60,8 @@ Additional bundled extensions:
   portable nopeek, Omnisearch, and SQLite skills and reminders.
 
 Support libraries (dependencies, not for `pi install`):
-`pi-child-env`, `pi-project-trust`, `pi-settings`, `pi-sqlite-core`,
-`pi-tui-modal`. See [`docs/package-map.md`](./docs/package-map.md).
+`pi-project-trust`, `pi-settings`, `pi-sqlite-core`, `pi-tui-modal`.
+See [`docs/package-map.md`](./docs/package-map.md).
 
 ## Documentation
 
@@ -94,6 +94,7 @@ Requires Node.js `>=24.15.0` and pnpm.
 pnpm install
 pnpm run build
 pnpm start            # node packages/my-pi/dist/index.js
+pnpm run preview:generate # refresh the shared README image
 pnpm run check
 pnpm run test
 ```

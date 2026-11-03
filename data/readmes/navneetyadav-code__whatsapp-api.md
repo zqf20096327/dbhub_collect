@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://whatsapp-api-xepo.onrender.com" target="_blank" rel="noopener noreferrer">
+  <a href="https://whatsgateway.onrender.com" target="_blank" rel="noopener noreferrer">
     <img src="public/assets/logo_white.png" alt="WhatsGateway Logo" width="128" style="border-radius: 50%;">
   </a>
 </p>
@@ -13,10 +13,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/navneetyadav-code/whatsapp-api/stargazers"><img src="https://img.shields.io/github/stars/navneetyadav-code/whatsapp-api?style=for-the-badge&logo=github&color=gold" alt="GitHub Stars"></a>
-  <a href="https://github.com/navneetyadav-code/whatsapp-api/network/members"><img src="https://img.shields.io/github/forks/navneetyadav-code/whatsapp-api?style=for-the-badge&logo=github&color=blue" alt="GitHub Forks"></a>
-  <a href="https://github.com/navneetyadav-code/whatsapp-api/issues"><img src="https://img.shields.io/github/issues/navneetyadav-code/whatsapp-api?style=for-the-badge&color=brightgreen" alt="GitHub Issues"></a>
-  <a href="https://github.com/navneetyadav-code/whatsapp-api/discussions"><img src="https://img.shields.io/badge/Discussions-Join-purple?style=for-the-badge&logo=github" alt="GitHub Discussions"></a>
+  <a href="https://github.com/navneetyadav-code/WhatsGateway/stargazers"><img src="https://img.shields.io/github/stars/navneetyadav-code/WhatsGateway?style=for-the-badge&logo=github&color=gold" alt="GitHub Stars"></a>
+  <a href="https://github.com/navneetyadav-code/WhatsGateway/network/members"><img src="https://img.shields.io/github/forks/navneetyadav-code/WhatsGateway?style=for-the-badge&logo=github&color=blue" alt="GitHub Forks"></a>
+  <a href="https://github.com/navneetyadav-code/WhatsGateway/issues"><img src="https://img.shields.io/github/issues/navneetyadav-code/WhatsGateway?style=for-the-badge&color=brightgreen" alt="GitHub Issues"></a>
+  <a href="https://github.com/navneetyadav-code/WhatsGateway/discussions"><img src="https://img.shields.io/badge/Discussions-Join-purple?style=for-the-badge&logo=github" alt="GitHub Discussions"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License: MIT"></a>
 </p>
 
@@ -26,18 +26,18 @@
   <a href="https://github.com/WhiskeySockets/Baileys"><img src="https://img.shields.io/badge/Engine-Baileys%20v7-25D366.svg?style=flat-square&logo=whatsapp&logoColor=white" alt="Baileys Engine"></a>
   <a href="https://www.mysql.com/"><img src="https://img.shields.io/badge/Database-MySQL%20%7C%20MariaDB%20%7C%20TiDB-4479A1.svg?style=flat-square&logo=mysql&logoColor=white" alt="Database"></a>
   <a href="Dockerfile"><img src="https://img.shields.io/badge/Docker-Ready-2496ED.svg?style=flat-square&logo=docker&logoColor=white" alt="Docker Ready"></a>
-  <a href="https://whatsapp-api-xepo.onrender.com"><img src="https://img.shields.io/badge/Live%20Demo-Online-success?style=flat-square&logo=render" alt="Live Demo"></a>
+  <a href="https://whatsgateway.onrender.com"><img src="https://img.shields.io/badge/Live%20Demo-Online-success?style=flat-square&logo=render" alt="Live Demo"></a>
 </p>
 
 <p align="center">
   <a href="#quick-start"><b>🚀 Quick Start</b></a> •
   <a href="#api-quick-reference"><b>📖 API Reference</b></a> •
-  <a href="https://whatsapp-api-xepo.onrender.com" target="_blank"><b>⚡ Live Demo</b></a> •
+  <a href="https://whatsgateway.onrender.com" target="_blank"><b>⚡ Live Demo</b></a> •
   <a href="#system-architecture"><b>🏗️ Architecture</b></a> •
   <a href="#why-whatsgateway"><b>⚖️ Why WhatsGateway</b></a> •
   <a href="#client-sdks"><b>💻 SDKs</b></a> •
   <a href="#faq"><b>❓ FAQ</b></a> •
-  <a href="https://github.com/navneetyadav-code/whatsapp-api/stargazers"><b>⭐ Star on GitHub</b></a>
+  <a href="https://github.com/navneetyadav-code/WhatsGateway/stargazers"><b>⭐ Star on GitHub</b></a>
 </p>
 
 ---
@@ -113,7 +113,8 @@ The application decouples high-throughput API ingestion from persistent queueing
 
 ### 1. 📨 Universal Messaging Engine
 - **Text & Rich Markdown:** Send formatting (`*bold*`, `_italic_`, `~strike~`, ````monospace````) with full emoji support.
-- **Universal Media Handler:** Transmit documents (PDF, DOCX, XLSX, TXT, CSV), images (JPEG, PNG, WEBP, GIF), videos (MP4, MOV), and audio files (MP3, OGG, WAV, M4A).
+- **Universal Media Handler:** Transmit documents (PDF, DOCX, XLSX, PPT, PPTX, TXT, CSV), images (JPEG, PNG, WEBP, GIF), videos (MP4, MOV), and audio files (MP3, OGG, WAV, M4A).
+- **Multi-File Attachments:** Upload and send multiple files simultaneously, with optional caption text.
 - **Push-to-Talk (PTT) Voice Notes:** Deliver audio files as native WhatsApp green-waveform voice memos (`"ptt": true`).
 - **Flexible Ingestion:** Deliver media via direct public HTTP/HTTPS URLs (with SSRF protection), Base64 data strings / Data URIs, or standard `multipart/form-data` uploads up to 20MB.
 
@@ -123,14 +124,16 @@ The application decouples high-throughput API ingestion from persistent queueing
 - **Multi-Language Quickstarts:** Zero-dependency, copy-paste snippets in Python, Node.js, PHP, Go, and Java.
 - **Observability:** Dedicated health probe (`GET /api/health.php`) verifying PHP runtime, database schemas, and worker status.
 
-### 3. 🤖 Autonomous AI Agent Studio & Memory Engine
+### 3. 🤖 Autonomous AI Agent Studio & Custom Tools Hub
 - **Multi-Model LLM Orchestration:** Auto-cascade across Google Gemini (Flash 2.5 / 3.5), Groq LPU (Llama 3.3 70B, GPT-OSS 120B), and OpenRouter.
 - **Dual-Tier Cognitive Memory:** 
   - *Short-Term Working Memory:* Character-budgeted sliding window with 45-minute rolling TTL inactivity decay.
   - *Persistent Fact Notebook:* Contact-scoped durable memory (`ai_user_memory`) with conversational self-update (*"Remember that..."*, *"Forget my..."*).
 - **Token Governor (Top-K Relevance Matching):** Scores incoming queries against stored facts and injects only the Top-3 relevant facts (< 120 tokens) to prevent context bloat and minimize latency.
+- **Custom Tools & Function Calling:** Create custom REST API endpoints, webhooks, or built-in functions with RBAC role authorization.
+- **ZIP Export & Import:** Bundle, share, and backup custom tools with interactive card selection mode and full sandbox protection (Zip-Slip, Zip-Bomb, and SSRF prevention).
 - **Smart Few-Shot In-Context Training:** Define Golden Q&A pairs and strict negative guardrails (*"What NOT to do"*, such as discount caps) right from the web dashboard.
-- **Modular App Store & Function Calling:** 1-click tools for DuckDuckGo web search, exact math calculation, business hours clock, Open-Meteo weather, outbound CRM leads, and a **Two-Phase Action Protocol** (drafting emails with Boss WhatsApp confirmation).
+- **Modular App Store Presets:** 1-click tools for DuckDuckGo web search, exact math calculation, business hours clock, Open-Meteo weather, outbound CRM leads, and a **Two-Phase Action Protocol** (drafting emails with Boss WhatsApp confirmation).
 
 ### 4. 💬 Live Chat & Human Escalation Desk
 - **Real-Time Webchat Desk:** Intercept conversations directly from the browser (`/live-chat`).
@@ -140,6 +143,7 @@ The application decouples high-throughput API ingestion from persistent queueing
 
 ### 5. 📬 Queueing & Humanized Anti-Ban Delivery
 - **Asynchronous FIFO Queue:** Decouples API client responses from WhatsApp delivery latency.
+- **Offline Disconnection Resilience:** Automatically pauses retry counts when WhatsApp is disconnected, keeping messages safely queued and instantly waking the queue upon reconnection.
 - **Humanized Presence Emulation:** Simulates authentic user behavior with typing presence indicators (`composing` / `recording`) and configurable randomized jitter intervals.
 - **Retry Backoff & Dead-Letter Tracking:** Automatic backoff retries with queue visualizer and cancellation controls in the dashboard.
 
@@ -163,8 +167,8 @@ The fastest way to deploy WhatsGateway with PHP 8.2 Apache, Node.js 20, and MySQ
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/navneetyadav-code/whatsapp-api.git
-cd whatsapp-api
+git clone https://github.com/navneetyadav-code/WhatsGateway.git
+cd WhatsGateway
 
 # 2. Launch the full stack
 docker compose up -d
@@ -189,8 +193,8 @@ docker compose up -d
 
 ```bash
 # 1. Clone repository into your web root
-git clone https://github.com/navneetyadav-code/whatsapp-api.git
-cd whatsapp-api
+git clone https://github.com/navneetyadav-code/WhatsGateway.git
+cd WhatsGateway
 
 # 2. Configure environment
 cp .env.example .env
@@ -304,12 +308,12 @@ flowchart LR
         WA["Meta WhatsApp Servers<br/>(Noise Protocol WebSocket)"]
     end
 
-    Clients -->|HTTP POST / Auth| Gateway
-    Gateway -->|Validate & Enqueue| Storage
-    Gateway -.->|Fast Wakeup Notify| Worker
-    Worker -->|Claim Pending Batch| Storage
-    Worker <==|Encrypted WebSocket|=> WhatsApp
-    Worker -.->|HMAC-SHA256 Webhooks| Clients
+    Clients -->|"HTTP POST / Auth"| Gateway
+    Gateway -->|"Validate & Enqueue"| Storage
+    Gateway -.->|"Fast Wakeup Notify"| Worker
+    Worker -->|"Claim Pending Batch"| Storage
+    Worker <-->|"Encrypted WebSocket"| WA
+    Worker -.->|"HMAC-SHA256 Webhooks"| Clients
 ```
 
 ### Why This Architecture Works:
@@ -599,14 +603,20 @@ WhatsGateway features a built-in Autonomous AI Agent architecture running direct
 - Define 3–5 **Golden Q&A Pairs** in `/memory` to guide model style and tone without fine-tuning.
 - Define strict **Negative Constraints** (*"What NOT to do"*, such as *"NEVER quote discounts above 15%"*) to eliminate hallucinations.
 
-### 3. Modular App Store & Function Calling
-Pre-built tools enabled with 1 click:
-- `web_search`: Live DuckDuckGo internet searches.
-- `evaluate_math`: Exact financial math and formula calculation.
-- `get_current_time`: Live IST/UTC time and business operating hours verification.
-- `get_weather`: Open-Meteo real-time temperature and weather forecasts.
-- `send_crm_lead`: Outbound webhooks to Zapier, Make, n8n, or CRM.
-- `draft_email` & `confirm_action`: **Two-Phase Action Safety Protocol** — drafts formal emails and waits for explicit WhatsApp confirmation before sending.
+### 3. Custom Tools Engine & Modular App Store
+WhatsGateway allows creating, testing, and managing AI tools directly from the web dashboard:
+- **Custom REST & Webhook Tools:** Connect external APIs with custom HTTP methods, headers, auth tokens, timeout controls, and parameter schemas.
+- **cURL & AI Importer:** Paste any cURL command or prompt to automatically synthesize functional tool schemas in seconds.
+- **ZIP Package Export & Import:**
+  - Export any combination of custom tools into standard `.zip` archives with interactive card selection mode.
+  - Import `.zip` tool packages with drag-and-drop ingestion, conflict detection (*New Tool* vs. *Overwrites Existing*), and full security sandboxing against Zip-Slip, Zip-Bomb, and SSRF attacks.
+- **Pre-Built Presets (1-Click Install):**
+  - `web_search`: Live DuckDuckGo internet searches.
+  - `evaluate_math`: Exact financial math and formula calculation.
+  - `get_current_time`: Live IST/UTC time and business operating hours verification.
+  - `get_weather`: Open-Meteo real-time temperature and weather forecasts.
+  - `send_crm_lead`: Outbound webhooks to Zapier, Make, n8n, or CRM.
+  - `draft_email` & `confirm_action`: **Two-Phase Action Safety Protocol** — drafts formal emails and waits for explicit WhatsApp confirmation before sending.
 
 ---
 
@@ -635,7 +645,7 @@ The repository includes a production [`Dockerfile`](Dockerfile) with Supervisor 
 
 ### Linux VPS Service Management (PM2)
 ```bash
-cd /var/www/whatsapp-api/worker
+cd /var/www/whatsgateway/worker
 npm install --omit=dev
 npm install -g pm2
 pm2 start server.mjs --name "whatsapp-worker"
@@ -793,7 +803,7 @@ If WhatsGateway saves you development time or helps your project avoid expensive
 Your support helps more developers discover free open-source tools and motivates continued development.
 
 <p align="center">
-  <a href="https://github.com/navneetyadav-code/whatsapp-api/stargazers">
+  <a href="https://github.com/navneetyadav-code/WhatsGateway/stargazers">
     <img src="https://img.shields.io/badge/⭐%20Star%20WhatsGateway-on%20GitHub-gold?style=for-the-badge&logo=github" alt="Star on GitHub">
   </a>
 </p>
@@ -804,8 +814,8 @@ Your support helps more developers discover free open-source tools and motivates
 
 Contributions are welcomed! Whether reporting bugs, improving documentation, or submitting pull requests:
 
-1. **Discussions:** Have a question or idea? Join [GitHub Discussions](https://github.com/navneetyadav-code/whatsapp-api/discussions).
-2. **Issue Tracker:** Found a bug? Open a [GitHub Issue](https://github.com/navneetyadav-code/whatsapp-api/issues).
+1. **Discussions:** Have a question or idea? Join [GitHub Discussions](https://github.com/navneetyadav-code/WhatsGateway/discussions).
+2. **Issue Tracker:** Found a bug? Open a [GitHub Issue](https://github.com/navneetyadav-code/WhatsGateway/issues).
 3. **Pull Requests:** Check our [Contributing Guide](CONTRIBUTING.md) and run local quality checks:
 
 ```powershell
@@ -818,13 +828,16 @@ node --check worker/server.mjs
 
 ---
 
-## ⚖️ License & Trademark Disclaimer
+## ⚖️ License & Unofficial API / Trademark Disclaimer
 
 ### License
 This project is open-source software licensed under the [MIT License](LICENSE).
 
-### Trademark Disclaimer
-WhatsGateway is an independent open-source project and is **not affiliated with, associated with, authorized by, endorsed by, or in any way officially connected with Meta Platforms, Inc. or WhatsApp LLC.** WhatsApp is a registered trademark of WhatsApp LLC.
+### Unofficial API & Trademark Disclaimer
+* **Unofficial Implementation:** WhatsGateway is an independent open-source automation gateway powered by **[@whiskeysockets/baileys](https://github.com/WhiskeySockets/Baileys)**, connecting via the unofficial WhatsApp Web multi-device protocol.
+* **No Official Affiliation:** This project is **not affiliated with, associated with, authorized by, endorsed by, or in any way officially connected with Meta Platforms, Inc., WhatsApp LLC, or any of their subsidiaries or affiliates.** The official WhatsApp website is located at [https://whatsapp.com](https://whatsapp.com).
+* **Trademark Notice:** "WhatsApp" as well as related names, marks, emblems, and logos are registered trademarks of WhatsApp LLC / Meta Platforms, Inc.
+* **Usage Responsibility:** This software is intended for personal, educational, and authorized business automation in compliance with local regulations and applicable terms of service.
 
 ---
 

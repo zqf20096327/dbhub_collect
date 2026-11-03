@@ -6,6 +6,7 @@ MySQL → 达梦（DM8）表结构与数据迁移工具。单 jar 免安装，�
 
 - **大小写原样保留**：所有 DDL/DML 使用双引号包裹标识符（`"UserInfo"."Id"`），迁移后在大小写敏感的达梦库中保持 MySQL 原始表名/字段名不变。连接达梦后自动检测 `CASE_SENSITIVE()`，目标库不敏感时终止，避免静默转大写。
 - **结构与数据完整迁移**：三阶段执行——建表 → 数据装载 → 索引/外键（后置创建提速装载并规避依赖顺序），完成后逐表校验源/目标行数。
+- **视图迁移**：读取视图定义，自动做基础方言改写（去掉源库名前缀、反引号→双引号、`IFNULL→NVL`），支持嵌套视图依赖重试；含 MySQL 特有语法导致改写失败的视图会打印语句体到日志供人工修正，不影响表数据。
 - **全面的类型映射**：unsigned 自动扩宽（`int unsigned → BIGINT`、`bigint unsigned → DECIMAL(20,0)`）、`enum/set → VARCHAR`、`json → TEXT`、`bit/year/零值日期` 等特殊处理，内置 40+ 映射自测断言。
 - **自增主键无缝迁移**：`AUTO_INCREMENT → IDENTITY(种子,1)`，装载数据期间自动开关 `SET IDENTITY_INSERT`，自增值不丢。
 - **流式读 + 批量写**：MySQL 侧流式游标防 OOM，达梦侧批量提交；失败时自动逐行重放定位坏行，打印字段级诊断（列名/类型/值预览/字节长度）。
@@ -68,7 +69,7 @@ java -jar mysql2dm.jar --help                                # 查看全部配�
 | `tables` / `excludeTables` | 全部表 | 逗号分隔的表名白/黑名单 |
 | `createStrategy` | `skip` | 目标表已存在时：`skip` 跳过 / `recreate` 删了重建 / `fail` 报错 |
 | `varcharExpandFactor` | `1` | VARCHAR/CHAR 长度换算系数，见下方 FAQ |
-| `migrateComments` / `migrateIndexes` / `migrateForeignKeys` | `true` | 是否迁移注释/索引/外键 |
+| `migrateComments` / `migrateViews` / `migrateIndexes` / `migrateForeignKeys` | `true` | 是否迁移注释/视图/索引/外键 |
 | `batchSize` / `commitRows` | `1000` / `10000` | 批量写大小 / 提交行数 |
 | `truncateBeforeLoad` | `false` | 装载前清空目标表 |
 | `onInsertError` | `abort` | 坏行处理：`abort` 打印诊断后终止 / `continue` 跳过并计数 |
@@ -103,6 +104,9 @@ java -jar mysql2dm.jar --help                                # 查看全部配�
 
 **Q: 遇到个别坏行怎么办？**
 默认 `onInsertError=abort`：回滚当前批次、打印坏行的字段级诊断后终止。确认坏行可舍弃后改 `--onInsertError=continue` 跳过并计数，迁移汇总中会体现跳过行数。
+
+**Q: 视图、函数、存储过程会迁移吗？**
+视图会自动迁移（基础方言改写 + 嵌套依赖重试，失败的打印语句体供人工修正）。函数/存储过程/触发器不迁移——两者与达梦语法差异大，无法可靠自动转换，需人工重写。
 
 **Q: 二次执行会重复建表吗？**
 默认 `createStrategy=skip`：已存在的表跳过建表、数据照常装载（建议配合 `truncateBeforeLoad=true`）。需要推倒重来用 `recreate`。

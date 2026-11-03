@@ -14,11 +14,7 @@ Download the installer for your platform from the [latest release](https://githu
 
 The app checks for updates on startup. You can also check with the Updates button.
 
-macOS builds are not signed yet. After copying the app to Applications, remove the quarantine flag:
-
-```bash
-xattr -dr com.apple.quarantine /Applications/rsql.app
-```
+The latest macOS installers are signed with Developer ID and notarized by Apple. Open the DMG, drag RSQL into Applications and launch it normally. macOS may show its standard first-launch confirmation for a downloaded app; no quarantine command or security override is needed. See the [macOS release setup](docs/macos-release.md) for signing and verification details.
 
 ## Features
 
@@ -88,6 +84,8 @@ yarn tauri build --no-sign --config '{"bundle":{"createUpdaterArtifacts":false}}
 
 The installers end up in `src-tauri/target/release/bundle/`.
 
+The desktop icon source is `assets/app-icon.png`. Run `yarn icons:generate` to regenerate the platform icons; see [the icon notes](assets/README.md).
+
 ## Tests
 
 ```bash
@@ -111,6 +109,7 @@ Pushing a `v*` tag runs `.github/workflows/release.yml`. It builds every platfor
 Repository secrets:
 
 - Updater: `TAURI_UPDATER_PUBLIC_KEY`, `TAURI_SIGNING_PRIVATE_KEY`, `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` (optional)
+- macOS: `APPLE_CERTIFICATE`, `APPLE_CERTIFICATE_PASSWORD`, `APPLE_SIGNING_IDENTITY`, `APPLE_ID`, `APPLE_PASSWORD` (app-specific password), `APPLE_TEAM_ID`. Set the repository variable `MACOS_SIGNING_ENABLED` to `true` after configuring them. See [setup and verification](docs/macos-release.md).
 - Windows: `WINDOWS_CERTIFICATE` (base64 `.pfx`), `WINDOWS_CERTIFICATE_PASSWORD`, `WINDOWS_TIMESTAMP_URL` (optional, defaults to DigiCert)
 - Linux: `TAURI_SIGNING_RPM_KEY` (ASCII-armored GPG key), `TAURI_SIGNING_RPM_KEY_PASSPHRASE` (optional), `APPIMAGETOOL_SIGN_PASSPHRASE`, `SIGN_KEY` (optional, GPG key ID for the AppImage)
 

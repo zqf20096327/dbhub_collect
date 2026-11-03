@@ -12,7 +12,7 @@ and a tiny Docker image.
 </div>
 
 <div align="center">
-  <img src="https://github.com/vladkens/ghstats/blob/assets/preview.png?raw=true" alt="preview" />
+  <img src="https://github.com/vladkens/ghstats/blob/assets/preview-v0.11.png?raw=true" alt="preview" />
 </div>
 
 GitHub only keeps repository traffic data for 14 days. `ghstats` continuously
@@ -65,6 +65,8 @@ services:
       - ./data:/app/data
 ```
 
+The database is stored in `/app/data/ghstats.db` (`DB_PATH` changes it).
+
 ## Why ghstats?
 
 - **Own your history**: keep traffic data for months or years instead of losing it
@@ -111,9 +113,11 @@ The file is read before every GitHub API request, including every pagination req
 
 ## How it works?
 
-Every hour `ghstats` loads the list of public repositories and their statistics, and saves the data in SQLite. If at the first startup there is no repositories in the database, synchronization will happen immediately, if `ghstats` is restarted again, synchronization will be performed according to the scheduler. Data is stored per day, re-fetching data for the current day will update existing records in the database.
+Every hour `ghstats` loads the list of public repositories and their statistics, and saves the data in SQLite. If at the first startup there is no repositories in the database, synchronization will happen immediately, if `ghstats` is restarted again, synchronization will be performed according to the scheduler. Data is stored per day, re-fetching data for the current day will update existing records in the database. Release asset download counts are saved as a daily snapshot of GitHub's cumulative totals, refreshed on every sync (one extra request per repository, plus one per additional 100 releases), so download history starts from the first sync.
 
 All public repositories that can be accessed are saved. If you need more detailed configuration – open PR please.
+
+The web UI has no external dependencies at runtime: frontend libraries (Chart.js, Luxon, htmx) are committed to `assets/vendor` and embedded into the binary, so pages work offline and do not load anything from a CDN. `make vendor` refreshes them to the latest release of each library's major version.
 
 ## Configuration
 
@@ -138,6 +142,10 @@ If you plan to display your stats publicly, there is an option to add custom lin
 ```sh
 GHS_CUSTOM_LINKS="Blog|https://medium.com/@vladkens,Github|https://github.com/vladkens,Buy me a coffee|https://buymeacoffee.com/vladkens"
 ```
+
+### Version check
+
+By default, `ghstats` asks GitHub for the latest `ghstats` release on the metrics schedule (hourly by default) and shows a notice in the UI when a newer one is available. Set `GHS_DISABLE_VERSION_CHECK=true` to turn this request off.
 
 ### Filter repos
 
@@ -170,6 +178,17 @@ Filtering rules:
 - If at least one direct rule – all repos excluded by default (pass `*` explicitly to include all)
 - Meta-exclusion rules are: `!fork`, `!archived`
 - Wildcard rules do not work with meta-exclusion rules
+
+### Show repos
+
+`GHS_SHOW` hides repos from the home page list only: data is still collected, and repo pages, badges and the API are unchanged. It takes the `GHS_FILTER` rules plus conditions on the current counts: `stars`, `forks`, `issues` and `prs` with `>`, `>=`, `<`, `<=` or `=`. All conditions must hold (`!` negates one), an explicit `owner/repo` shows a repo anyway, and `owner/*` limits the conditions to that owner. The hidden repos can be shown with the link below the list.
+
+```sh
+GHS_SHOW=stars>=25 # show repos with at least 25 stars
+GHS_SHOW=stars>=25,vladkens/wavo # and always show `wavo`
+GHS_SHOW=stars>=25,!fork # repos with at least 25 stars, no forks
+GHS_SHOW=vladkens/*,!issues=0 # vladkens repos with open issues
+```
 
 ### API endpoint
 
@@ -270,3 +289,4 @@ All contributions are welcome! Feel free to open an issue or submit a pull reque
 ## 🔍 See also
 
 - [repohistory](https://github.com/repohistory/repohistory) – NodeJS application as a service.
+- [gghstats](https://github.com/hrodrig/gghstats) – self-hosted Go application with SQLite.

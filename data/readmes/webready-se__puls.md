@@ -69,7 +69,7 @@ A goal is a page or an event. Its tile shows the visitors who converted, their s
 
 - **Traffic:** channels (paid, campaign, organic, social, referral, direct), UTM campaigns with a link builder, Google Ads detection, entry and exit pages, bounce rate and session length
 - **Over time:** compare with the previous period, custom date ranges, chart notes for campaigns and mentions, release markers from your app version, a live visitor count
-- **Teams and clients:** one dashboard for many sites, users limited to their own sites, read-only share links, a [JSON and CSV API](docs/api.md)
+- **Teams and clients:** one dashboard for many sites, sites in groups, users limited to their own sites, read-only share links, a [JSON and CSV API](docs/api.md)
 - **Tracking without code:** phone and email clicks, downloads, form submissions, outbound links
 - **Keeping personal data out:** drop query strings or turn ids and tokens in URLs into `:id` and `:token` before anything leaves the browser
 - **Everyday use:** dark mode, a ⌘K command palette for sites and pages, installable as an app, white-label branding, an interactive CLI
@@ -107,7 +107,7 @@ A goal is a page or an event. Its tile shows the visitors who converted, their s
 **When to pick something else.** Puls is made for small and medium sites that you run yourself.
 
 - You would rather not run anything: Plausible and Umami have hosted plans, and GoatCounter has a free hosted service.
-- Millions of pageviews a month on one site: a database built for analytics, like Plausible's ClickHouse, stays fast at that size. Puls's dashboard slows down there; making it faster is [on the roadmap](ROADMAP.md).
+- Millions of pageviews a month on one site: a database built for analytics, like Plausible's ClickHouse, stays fast at that size. Puls's dashboard slows down there: a 30-day view of a site with 2 million pageviews a year takes about 3 s on a laptop (`scripts/benchmark.php`), and making it faster is [on the roadmap](ROADMAP.md).
 - E-commerce reports, heatmaps or session recordings: Matomo does that, Puls doesn't.
 
 ## Privacy

@@ -31,7 +31,7 @@ You publish typed events. Good Webhooks stores them in your PostgreSQL database,
   </picture>
 </p>
 
-> **Stable API.** From `0.1.0` the public API and upgrade path follow the [stability policy](https://good-webhooks.dev/docs/operations/compatibility#stability-policy). Throughput beyond the [measured profile](https://good-webhooks.dev/docs/operations/performance) is not yet verified.
+> **Stable API.** From `0.1.0` the public API and upgrade path follow the [stability policy](https://good-webhooks.dev/docs/operations/compatibility#stability-policy). Throughput beyond the [measured profile](https://good-webhooks.dev/docs/operations/performance) is not yet verified. `1.0.0-rc.1` is available on the `rc` tag: `npm install good-webhooks@rc`.
 
 ## Install
 
@@ -39,7 +39,7 @@ You publish typed events. Good Webhooks stores them in your PostgreSQL database,
 npm install good-webhooks pg zod
 ```
 
-Requires Node.js 24 or later. Built-in delivery and standalone management need PostgreSQL 16, 17, or 18. Better Auth management uses your existing Better Auth database adapter. See [installation](https://good-webhooks.dev/docs/installation) for each setup's dependencies and the [compatibility policy](https://good-webhooks.dev/docs/operations/compatibility) for tested versions.
+The worker, publishing, and management run on Node.js 24 or later. `parseWebhook()` is also verified on Bun, Deno, and Cloudflare Workers with Node.js compatibility. Built-in delivery and standalone management need PostgreSQL 16, 17, or 18. Better Auth management uses your existing Better Auth database adapter. See [installation](https://good-webhooks.dev/docs/installation) for each setup's dependencies and the [compatibility policy](https://good-webhooks.dev/docs/operations/compatibility) for tested versions.
 
 | You want                                          | Start with                                                                     |
 | ------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -64,7 +64,7 @@ Two interactive examples show the full path from a business action to a verified
 - [Order fulfillment](examples/order-fulfillment): place a shop order, send it to a warehouse, simulate an outage, and replay a delivery without creating a second shipment.
 - [Better Auth billing](examples/better-auth-billing): sign in, manage personal endpoints, publish invoice events, and inspect delivery attempts within the signed-in user's scope.
 
-Each example has its own npm lockfile, PostgreSQL setup, browser UI, receiver, and separate worker process. Both install `good-webhooks@0.6.0` from npm and can run together. Follow the [examples guide](examples/README.md) to get started.
+Each example has its own npm lockfile, PostgreSQL setup, browser UI, receiver, and separate worker process. Both install `good-webhooks@0.7.0` from npm and can run together. Follow the [examples guide](examples/README.md) to get started.
 
 ## Work on the repository
 
@@ -75,7 +75,7 @@ Each example has its own npm lockfile, PostgreSQL setup, browser UI, receiver, a
 | [`examples`](examples)                             | Complete applications that install the published npm package |
 | [`docs`](docs)                                     | Engineering plans and architecture decisions                 |
 
-Use Node.js 24 and the repository's pinned pnpm version, 12.10.1. If Corepack is available, enable its shims with `corepack enable`; otherwise install that pnpm version using the [pnpm installation instructions](https://pnpm.io/installation).
+Use Node.js 24 or 26 and the repository's pinned pnpm version, 12.10.1. If Corepack is available, enable its shims with `corepack enable`; otherwise install that pnpm version using the [pnpm installation instructions](https://pnpm.io/installation).
 
 ```sh
 pnpm install --frozen-lockfile
@@ -90,7 +90,7 @@ pnpm --filter @good-webhooks/docs check:links
 pnpm --filter @good-webhooks/docs preview
 ```
 
-Run `pnpm check`, `pnpm format:check`, and `pnpm test:unit` for checks without a PostgreSQL server. The [contribution guide](CONTRIBUTING.md) covers integration tests, adapter checks, and documentation verification.
+Run `pnpm check` and `pnpm format:check` for checks without a PostgreSQL server. The [contribution guide](CONTRIBUTING.md) covers integration tests, adapter checks, and documentation verification.
 
 ## Try the example
 
@@ -124,10 +124,14 @@ pnpm --dir packages/good-webhooks pack
 In your application, install the resulting archive using npm or your preferred package manager:
 
 ```sh
-npm install /absolute/path/to/packages/good-webhooks/good-webhooks-0.6.0.tgz
+npm install /absolute/path/to/packages/good-webhooks/good-webhooks-1.0.0-rc.1.tgz
 ```
 
 `pnpm test:package` verifies the archive with fresh npm consumers, both with and without Better Auth, including the published declarations and SQL exports. Registry publication is a separate release step.
+
+## Maintenance
+
+One maintainer works on Good Webhooks part time. Releases run in GitHub Actions and publish through npm trusted publishing, so a release never depends on one person's laptop or npm token. The [support windows](https://good-webhooks.dev/docs/operations/compatibility#support-windows) and the [security response targets](SECURITY.md#response-targets) are published. If maintenance stops, the last release stays installable, the repository stays public under MIT, and the [handover guide](docs/handover.md) says how to take over.
 
 ## Contributing
 

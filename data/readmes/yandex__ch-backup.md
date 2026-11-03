@@ -33,6 +33,22 @@ regardless of download completion order. Saved failure details survive restores
 of other tables; a part's error is removed after that part is successfully attached.
 Only failures from the current invocation affect its exit code.
 
+Local parts are downloaded into unique `.ch-backup-*` staging directories on
+the destination disk. Each part name must be a single directory name. Nested
+paths in per-file backups must stay inside staging. Restore accepts early TAR
+backups that omit all padding after the last complete file.
+After all files have been written, restore checks their
+file list, recorded size and the checksum of `checksums.txt`, replaces any
+existing destination directory and publishes the part with `rename` before
+recording `DOWNLOADED` or attaching it. This does not hash every data file.
+Local parts saved as `DOWNLOADED` are downloaded again on retry. Failed downloads
+leave the existing destination untouched. During replacement the previous part
+is moved aside until publication succeeds. If the publish rename fails, restore
+moves the old part back. If that rollback fails, the error log gives its path.
+An interruption between the two renames can leave the old part in a
+`.ch-backup-*.previous` directory. If transfer workers do not finish
+normally, staging directories are retained for manual cleanup after they stop.
+
 ## Restore without cloud storage
 
 `ch-backup restore --skip-cloud-storage BACKUP` restores local parts and skips
@@ -243,7 +259,8 @@ Behavior and limitations:
   set `backup.deduplication_start_time` to the beginning of the series when enabling the new format.
 - If both buckets belong to the same S3 service and are accessible with the same credentials, objects
   are copied on the server side. Otherwise, data is streamed through ch-backup. Server-side copy can be
-  disabled with `--no-server-side-copy`.
+  disabled with `--no-server-side-copy`. It is disabled automatically for cloud-storage objects
+  transformed by encryption or decryption.
 - The copy becomes valid (gets the state `created`) only after all its data is copied. If copying is
   interrupted, the copy remains in the state `creating` or `failed`, and the next run of the command
   resumes it. Confirmed copies are recorded in the copy context, a journal kept in the target storage
@@ -267,7 +284,11 @@ Behavior and limitations:
   the copied data. Backups without such data, including ones created with
   `--copy-cloud-storage-data`, are copied entirely by `files`, and their scope `cloud_storage` is
   completed right away. `--scope` (can be given multiple times) copies only the specified scopes,
-  all of them by default. Each run chooses its own copy mode with `--[no-]server-side-copy`. `files`
+  overriding `copy.scopes` in the configuration (default: `[files, cloud_storage]`). For example,
+  `copy: {scopes: [cloud_storage]}` selects only object storage copying. The list must be non-empty.
+  The setting is read from the merged target configuration, so it can be set in the main config,
+  `--target-config` or `--target-config-parameter copy.scopes '["files"]'`.
+  Each run chooses its own copy mode with `--[no-]server-side-copy`. `files`
   also copies the original disk metadata into
   `<backup>/copy_context/<id>/source/` and saves the list of its objects in
   `<backup>/copy_context/<id>/manifest/files.jsonl.gz` (locations and sizes, without credentials). A
@@ -282,16 +303,27 @@ Behavior and limitations:
   while `cloud_storage` is not completed. Statuses of the scopes (`pending`, `completed`, `failed`)
   are saved in `meta.copy` of the copy, for example `state: creating, copy: {scopes: {files:
   completed, cloud_storage: pending}, updated_at: ...}`, where `updated_at` is when copying was last
-  saved. The copy becomes `created` once every scope is completed. Until then the report shows the
+  saved. `list -av` shows these values in the `copy` column; `list -av --format json` includes
+  the same `copy` object. Backups without `meta.copy` have an empty cell or JSON `null`.
+  The listing reads light metadata, including the saved copy scopes and timestamp.
+  The copy becomes `created` once every scope is completed. Until then the report shows the
   backup as `partial` with `backup_state: creating`, and the command exits with 0 if the copied
   scopes succeed. Saved statuses are not trusted: a scope that is not copied is completed only if
   the copy context and the target listing confirm all its objects, otherwise it becomes `pending`
   again, e.g. after a failed delete. `--no-resume` overwrites objects of the scopes that are copied
   and still checks the other scopes this way. Between scopes, the copy is in the state `creating`.
-  `purge` and `delete --purge-partial` on the target storage keep a copy in the state `creating` or
-  `failed` that was updated within `backup.retain_incomplete_copy_time` (7 days by default, empty to
-  disable) and treat older ones as any other incomplete backup; older versions of ch-backup do not
-  know this rule. With `--keep-going`, objects of a scope that failed to copy are listed in
+  Copies in `creating` or `failed` with `files: completed` and `cloud_storage: pending` or `failed`
+  follow `backup.retain_count` and `backup.retain_time` in `purge` just like `created` backups,
+  regardless of `updated_at`. If retained backups include partial copies but none is complete,
+  `purge` also keeps the newest complete backup.
+  `delete --purge-partial` keeps these copies; explicit deletion by
+  name is still available. Other incomplete copies retain the temporary protection from `purge`
+  and `delete --purge-partial` while their `updated_at` is within
+  `backup.retain_incomplete_copy_time` (7 days by default, empty to disable).
+  Before relying on these retention rules, upgrade every node and scheduled job that can run
+  `purge` or `delete --purge-partial` against the same storage to a version implementing them.
+  Older versions can still delete backups protected by these rules.
+  With `--keep-going`, objects of a scope that failed to copy are listed in
   `<backup>/copy_context/<id>/failed/<scope>.jsonl.gz` (source and target keys, size and error) and
   the scope becomes `failed`; the next run of the scope copies only unconfirmed objects. The list is
   rewritten by each run of the scope in which objects fail and removed once the scope completes.
@@ -351,7 +383,22 @@ Behavior and limitations:
   Each file is limited to 1 MiB, checked and archived from the same bounded memory buffer.
   Larger disk metadata files also require `cloud_storage.encryption=true`.
   Such files require `cloud_storage.encryption=true`, and copying that backup requires a key.
-  The flag only controls disk metadata: blobs retain the encryption applied by ClickHouse or S3.
+  The flag only controls disk metadata. By default, blobs retain the encryption applied by ClickHouse
+  or S3. Set `copy.cloud_storage.encrypt_data=true` to encrypt copied blobs in the streaming pipeline.
+  Encryption settings come from the top-level `encryption` section by default; values under
+  `cloud_storage.data_encryption` override them, allowing a dedicated key on keyless copy workers.
+  The copy metadata stores the encryption type and chunk size, but never the key. An already encrypted
+  cloud-data copy cannot be encrypted again. Encrypting data of backups created with
+  `cloud_storage.copy_data=true` is not supported.
+  Restore decrypts encrypted blobs into `restore.cloud_storage.decryption_staging` before
+  creating the temporary ClickHouse disk. By default staging uses the destination disk's
+  endpoint, bucket and credentials; disks without static credentials use the storage SDK's
+  normal environment/provider chain. Overriding the staging endpoint or bucket requires both
+  `access_key_id` and `secret_access_key`. The staging path is exclusive to one restore and must
+  not overlap the encrypted source prefix in the same bucket, because ch-backup removes everything
+  below it before and after restore. Reserve staging capacity for the full restored cloud-storage
+  data volume. Decryption and downloading disk metadata a second time make this restore slower than
+  an unencrypted cloud-data restore.
   To use a separate worker, provide source endpoint, bucket, path and credentials explicitly;
   neither a local ClickHouse configuration nor a connection to the source server is required.
   Without the original disk configuration, leave the source path unset for V5 metadata to

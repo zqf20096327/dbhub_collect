@@ -217,9 +217,9 @@ specific to Claude Code.
 |---|---|
 | `search_memory(query, limit)` | hybrid search; returns a context block ready to use |
 | `read_memory(name)` | the full memory, with its links in and out and similar memories |
-| `save_memory(name, description, body, type, project, status)` | create or update |
-| `mark_memory(name, status, note)` | change the status and append a dated note |
-| `list_pending(project)` | what is still open |
+| `save_memory(name, description, body, type, project, status)` | create or update; points to pending items that look alike |
+| `mark_memory(name, status, note)` | change the status and append a dated note; same hint |
+| `list_pending(project, limit, offset)` | what is still open, oldest first, paged |
 | `list_memories(project)` | browse by project |
 
 ## Memory format
@@ -291,6 +291,25 @@ hippocampus suggest-links         # compute "similar" edges for the constellatio
 hippocampus stats                 # counts, broken links, pending items
 hippocampus token                 # generate a random token
 ```
+
+Pending items pile up when the fix is written somewhere else. To review them,
+run the Claude Code client's reviewer (it uses `claude -p`, with no tools):
+
+```
+python ~/.hippocampus/hooks/review.py            # report: which pending items look done
+python ~/.hippocampus/hooks/review.py --apply ~/.hippocampus/review-<date>.json
+```
+
+It only marks what the report lists as resolved **with a quote as proof**, and
+you can veto any item by setting `"apply": false` in the .json first.
+
+On a server, the review can run by itself once a day
+([deploy/systemd/hippocampus-review.service](deploy/systemd/hippocampus-review.service)),
+with Claude Code under your subscription. It only looks at items that changed
+or got newer evidence since their last review, and `HIPPOCAMPUS_REVIEW` says
+what to do with the result: `off` (default), `report` (list_pending shows
+"looks done" with the quote, for a person to confirm) or `apply` (marks them
+resolved; undo by marking them pending again).
 
 ## Project status
 

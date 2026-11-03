@@ -60,7 +60,7 @@ Royal Tasks is designed for individuals, groups, or small organizations.
 
 You need PHP 8.4+ and a MySQL or MariaDB database. Shared hosting is fine.
 
-1.  Copy the app into the folder it should be served from, e.g. `public_html/kanban/` ([which files](docs/install.md#what-to-copy-to-the-server)).
+1.  Download `royal-tasks-<version>.zip` from the latest [release](https://github.com/RealRules/royal-tasks/releases/latest) and unzip it into the folder the app should be served from, e.g. `public_html/kanban/` (or copy [these files](docs/install.md#what-to-copy-to-the-server) from a clone).
 2.  Open `https://yoursite/kanban/install.php` and enter the database details. The installer creates the tables, the master account and `config.php`.
 3.  Sign in with the password it shows once, choose your own, and delete `install.php`.
 4.  Open Preferences → Administration once and save, so emailed links point to your site; then create accounts or invite people by email.

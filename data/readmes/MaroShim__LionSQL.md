@@ -2,7 +2,7 @@
 
 Single-binary, high-concurrency OLTP database server supporting T-SQL and stored procedures
 
-[![Version](https://img.shields.io/badge/version-v0.90.0--beta4-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v0.90.0-blue.svg)](CHANGELOG.md)
 [![Go Version](https://img.shields.io/badge/Go-1.24%2B-00ADD8.svg?logo=go&logoColor=white)](go.mod)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](README.md)
@@ -507,7 +507,7 @@ Step-by-step zero-modification deployment and integration guides for 10 producti
 - **[Production Deployment & Operations Runbook](doc/OPERATIONS.md)**: Systemd services, Docker deployment, 1-writer replication failover, and security hardening.
 - **[Performance Tuning & Benchmark Guide](doc/BENCHMARK.md)**: High-concurrency banking benchmark harness, TPS measurement, and memory tuning.
 - **[Local Testing & Regression Guide](doc/TESTING.md)**: Build and test pipeline, running single tests, build tags, regression test map, and TPC-C performance regression procedure.
-- **[Database Migration Guide](doc/DATABASE_MIGRATION_GUIDE.md)**: Procedures for migrating from PostgreSQL, MSSQL, SQLite, and MySQL.
+- **[Data Import & Migration Guide](doc/DATA_IMPORT_AND_MIGRATION.md)**: Procedures for migrating from PostgreSQL, MSSQL, SQLite, and MySQL.
 - **[Security Policy & Threat Model](doc/SECURITY.md)**: RBAC access control, SQL injection immunity, and vulnerability disclosure.
 - **[Engineering Roadmap & Milestones](ROADMAP.md)**: Versioned engineering milestones from single-node OLTP to Always On HA and decoupled HTAP.
 - **[Actionable Engineering Backlog (TODO.md)](TODO.md)**: Immediate, daily task backlog and prioritized operational execution tracker.
@@ -546,13 +546,13 @@ LionSQL strictly adheres to a **3-Stage Verification Pipeline** for every change
      ./scripts/verify_report.sh --engine=wiredtiger
      ```
 
-   - **SQLLogicTest (SLT) 1.0 GA Full Suite (40,000+ Queries) Oracle Verification**:
-     Runs full regression across official SQLite test suites (`select1~5.test`), specification clauses (`evidence/*`), B-Tree index paths (`index/*`), synthetic fuzzing expressions (`random/*`), and curated edge suites (see [`doc/SQLLOGICTEST_GUIDE.md`](doc/SQLLOGICTEST_GUIDE.md)):
+   - **SQLLogicTest (SLT) 107-Suite Full Corpus (551,217 Queries) Oracle Verification (100% PASS)**:
+     Runs full black-box regression across official SQLite test suites (`select1~5.test`), specification clauses (`evidence/*`), B-Tree index paths (`index/*`), synthetic fuzzing expressions (`random/*`), and curated edge suites (see [Verification Report](notes/SLT_FULL_SUITE_100_PERCENT_REPORT.md) and [Guide](doc/SQLLOGICTEST_GUIDE.md)):
      ```bash
      # 1. Fetch 1.0 GA full suite (on-demand caching)
      ./scripts/fetch_slt.sh
 
-     # 2. 8-core concurrent verification (~15-20s completion)
+     # 2. 8-core concurrent verification (107 files, 551,217 queries in 47.2s)
      ./bin/sqllogictest -dir test/slt -parallel 8
      ```
 3. **Commit Integrity**:

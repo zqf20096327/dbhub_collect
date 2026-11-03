@@ -15,17 +15,13 @@ Hysteria2, VLESS and AmneziaWG. Two Go binaries, SQLite and systemd.</p>
 <a href="go.mod"><img alt="Go version" src="https://img.shields.io/github/go-mod/go-version/Mistgate/mistgate"></a>
 </p>
 
-<p><a href="https://mistgate.app/"><b>Docs</b></a> · <a href="#quick-start"><b>Install</b></a> · <a href="#protocols"><b>Protocols</b></a> · <a href="#is-it-stable"><b>Is it stable?</b></a> · <a href="#compared-with-other-panels"><b>Compare</b></a> · <a href="README.ru.md">Русский</a> · <a href="README.zh.md">简体中文</a></p>
+<p><a href="https://mistgate.app/"><b>Docs</b></a> · <a href="#quick-start"><b>Install</b></a> · <a href="#protocols"><b>Protocols</b></a> · <a href="#is-it-stable"><b>Is it stable?</b></a> · <a href="#compared-with-other-panels"><b>Compare</b></a> · <a href="README.ru.md">Русский</a> · <a href="README.zh.md">简体中文</a> · <a href="README.fa.md">فارسی</a> · <a href="README.tr.md">Türkçe</a></p>
 
 <p><sub><b>Beta.</b> Expect changes before 1.0. <a href="https://mistgate.app/roadmap/status/">Status and roadmap</a></sub></p>
 
 </div>
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme/overview-dark-en.webp">
-  <source media="(prefers-color-scheme: light)" srcset="docs/images/readme/overview-light-en.webp">
-  <img alt="The Mistgate admin: six nodes with their health and throughput, one open problem, recent events" src="docs/images/readme/overview-dark-en.webp" width="100%">
-</picture>
+<img alt="A Mistgate demo: a node is added over SSH from the browser, comes online with a profile and appears at once on a person's page" src="docs/images/video/hero-en.webp" width="100%">
 
 ## What it does
 
@@ -49,6 +45,7 @@ Not there yet: a Telegram bot beyond alerts, and the Cloudflare Workers edition 
 | [Hysteria2](docs/en/guide/hysteria2.md) | The official Hysteria2 core | UDP (QUIC). Salamander obfuscation (Gecko is experimental), port hopping, a Let's Encrypt or a pinned self-signed certificate. |
 | [VLESS](docs/en/guide/vless.md) | xray-core | REALITY over XHTTP or TCP (RAW + Vision); TLS over XHTTP or WebSocket, direct or behind a CDN. |
 | [AmneziaWG](docs/en/guide/amneziawg.md) | amneziawg-go in userspace, or the kernel module | Versions 3.1 (the default) and 2.0, a separate key per device. 1.5 and 1.0 are not offered. |
+| [MTProto](docs/en/guide/mtproto.md) | Mistgate's own MTProto core | Experimental. A proxy for the Telegram app only: Fake TLS with the node's own domain or another site as the name, a key per person, the decoy site for everyone else. |
 
 Hysteria2 and VLESS can share a node, TCP 443 included. Not every app format carries every profile: see [what works where](docs/en/guide/subscriptions.md#what-works-where).
 
@@ -82,6 +79,9 @@ Mistgate is written with AI coding agents. I review what they write and decide w
 ## Screenshots
 
 <table>
+<tr>
+<td colspan="2"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/readme/overview-dark-en.webp"><source media="(prefers-color-scheme: light)" srcset="docs/images/readme/overview-light-en.webp"><img alt="The Mistgate admin: six nodes with their health and throughput, one open problem, recent events" src="docs/images/readme/overview-dark-en.webp" width="100%"></picture><br><sub><b>The Overview.</b> The fleet's health and throughput, open problems and recent events.</sub></td>
+</tr>
 <tr>
 <td width="50%"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/readme/node-dark-en.webp"><source media="(prefers-color-scheme: light)" srcset="docs/images/readme/node-light-en.webp"><img alt="A node page: status, WARP exit, CPU, RAM, disk and 24 hours of traffic" src="docs/images/readme/node-dark-en.webp" width="100%"></picture><br><sub><b>A node.</b> Status, WARP exit, load and 24 hours of traffic.</sub></td>
 <td width="50%"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/readme/health-dark-en.webp"><source media="(prefers-color-scheme: light)" srcset="docs/images/readme/health-light-en.webp"><img alt="Client-eye checks: a table of nodes by protocols with the latency through each tunnel" src="docs/images/readme/health-dark-en.webp" width="100%"></picture><br><sub><b>Client-eye checks.</b> Every protocol on every node, latency through the tunnel.</sub></td>
