@@ -55,7 +55,8 @@
 - **防坑**：atomic_write 轮转三副本——写 audit 用同款机制勿裸写（[[atomic-write-rotation]]）
 - **依据**：方案 §2.5
 
-### T0b 历史出池回流候选（止血≠回血）
+### T0b 历史出池回流候选（止血≠回血） ｜✅ 2026-11-03 完成（__HASH__；只读历史产清单，不碰 pool）
+- **结果**：`tools/pool_return_candidates.py` → 出池 4,764 仓（readme_state 累积 36,708 − 现池 31,947）分四类：**有归属误杀 836**（解读 dbs 非空却出池，OtterMind/sqlx 13 库等，建议 overrides 签发；其中证据 gone 10 个维持）、**证据草案 44**（unattr draft，签发候选）、**有指纹可重扫 167**、**设计内剔除 3,717**（其中 3,424 按 10-09 桶剔口径重建注记：已解读且 db_verdicts 空——49767ea9 无名单留档，按口径近似重建非逐仓名单；verdict 分布 no_evidence 2,250/oos 819/edu 96 与设计吻合）。blocklist 核对过（db_profiles.exclude_repos+exclude_users.txt，非 overrides）：误杀组 0 屏蔽命中。清单 state/pool_return_candidates.json/.md，只建议不执行
 - **目标**：T0 只挡未来误杀；已出池的 sqlc 式仓要捞回——用快照历史差集生成回流候选清单
 - **输入**：`lib/pool_history.py`（快照历史查询）；`state/unattr_verdicts.json`（当时证据状态）；dbhub_page 卡片清单
 - **输出**：`state/pool_return_candidates.json`（fn/出池日期/当时状态/建议动作：overrides 签发 or 重扫 or 维持）
@@ -132,21 +133,23 @@
 - **输出**：`state/pilot_100.json` + markdown 复核表（每仓：证据卡+现判+建议判+留空人工栏）
 - **验收**：四段名单无重叠、star 降序、证据卡字段完整
 
-### T3b 人工复核+命中率报告（**人做，AI 不代填**）
+### T3b 人工复核+命中率报告（**人做，AI 不代填**）｜✅ 2026-11-01 完成（f51ca3cf 金标落盘 + 936f2b2e 金标正式化 50/50；用户全量确认）
 - **产出**：命中率报告 → **准确率 ≥90% 才准进第 4 批；<90% 调词表回 T1a 重来，不硬推**
+- **结果**：主张精度 79/79=100%（词表零误配）、库位召回 71.8%、完全一致 75.5%；漏配 31 全落设计内下游（T4a 定点 15/采样缺口 5〔sqlmap 已呈报闭环 936f2b2e〕/内容仓口径 5/recheck 签发 6）。**闸门口径拍板（11-01 用户）：按主张精度 100% ≥90% 过闸**——漏配属"少判"不属"误判"，回收走 T4a 定点裁决而非回 T1a 调词表（词表零误伤=无回调依据）
 - **防坑**：[[interp-task-redesign]] 金标独立性教训——LLM 永不预填人工复核栏
 
 ## 第 4 批 · 裁决回写（过闸后）
 
-### T4a 定点裁决
+### T4a 定点裁决 ｜⏸ 2026-11-03 用户裁定：停烧 AI，转纯程序（已烧 622 条裁决不浪费——supports 472 已由 T4b 裁决频道回写消费）
 - **目标**：只问"该仓是否实际支持库 X"+ 附证据包（不重新全文解读，省 90% AI 费）
 - **输入**：点名缺口 3,894 库位（README 提名差 3,283 + topics 差 611）
 - **输出**：裁决结果 NDJSON `state/adjudications.ndjson`（幂等、断点续跑）
 - **验收**：`python interpret/golden_eval.py --run --tag t4a` 对 base **不退步**（[[golden-eval-gate]] 金标 814 是一切 interpret 改动验收关）；烧完全量后**抽 50 条裁决人工过目**——golden_eval 管解读质量不管"是否支持库 X"的裁决对错，抽检过了才准进 T4b
 - **防坑**：BudgetOut 原样 raise、仓边界收尾 exit 0（09-29 铁律）；烧 API 前先 `--limit 20` 冒烟
 
-### T4b 回写器
+### T4b 回写器 ｜✅ 2026-11-03 完成（b3e081d2；selftest 31 断言绿+全 attribution/evidence 链 9/9 绿）
 - **目标**：quorum 立案结论写回 interp dbs；13,242 空适配全部打四类原因（真不涉及/范围外/证据不足/新仓未解读）
+- **结果**：`attribution/writeback.py`（零网络零 AI）判定优先级=已烧裁决 supports → 信号层（薄壳口径复用）→ 引擎 draft 质量门（≥2 票+工具类+非 topic 单通道）。全量 7.5s：入圈 12,028（fn 级）→ **fill 554**（engine 287/adjudicate 267）+ **tag 11,474**（真不涉及 3,398/范围外 1,391/证据不足 6,685）+ 池内未解读 1,727（台账记数）= **黑洞归零**；记录级 651 fill+12,379 tag 共 13,030 条，台账外零触碰、字段零越界（逐记录审计）。剩 212 条无原因记录=最新已有归属仓的老空记录（铁律设计内）。金标∩写动 212 条：171 打原因不动 dbs、41 回写眼验合理（liquibase/symmetric-ds 等）；金标文件零触碰。台账 `state/attribution_writes.json` 可 `--rollback`（自测含逐字节还原）；行号引证未证实 2,740 条不硬填（提名≠支持）。注：提交随行 287 条出池清理删除（动笔前已在工作区的本地收口工作，非本卡产物）
 - **输出**：回写函数 + 空白态四类标注 + `state/attribution_writes.json` 台账（可回滚）
 - **验收**：黑洞归零统计（13,242 → 100% 带原因）；golden_eval 对比不退；抽 20 条回写 diff 人工过
 - **防坑**：只补空缺不改历史结论（方案铁律）；写分片用 touch(fn) 惯例（[[interp-cache-sharding]]）
