@@ -15,7 +15,7 @@ For developers learning Agent engineering, and readers who want to check an arch
 <a id="reading"></a>
 **Latest module articles** (module order, not publication dates):
 
-[v0.14 · Read-only Memory](https://hpoenixf.com/eff-agent-article/en/articles/026-agent-memory-forget-durable-effects) · [v0.13 · Human interaction](https://hpoenixf.com/eff-agent-article/en/articles/agent-durable-human-interaction-response-adoption) · [v0.12 · Task time](https://hpoenixf.com/eff-agent-article/en/articles/agent-temporal-semantics-market-calendar)
+[v0.18 · Scheduled Research Beyond a Conversation](https://hpoenixf.com/eff-agent-article/en/articles/agent-autonomous-scheduled-research) · [v0.17 · Why the Next Model Request Still Queues After HTTP 200](https://hpoenixf.com/eff-agent-article/en/articles/agent-provider-admission-capacity-lease) · [v0.16 · RAG: Revocation and Historical Replay](https://hpoenixf.com/eff-agent-article/en/articles/027-rag-revocation-publish-replay)
 
 <p align="center">
   <a href="https://github.com/hpoenixf/open-etf-agent/actions/workflows/verify.yml?query=branch%3Amain"><img src="https://github.com/hpoenixf/open-etf-agent/actions/workflows/verify.yml/badge.svg?branch=main" alt="Verify (main)" height="20" /></a>
@@ -71,13 +71,15 @@ npm run demo -- --case document-compare
 <a id="versions"></a>
 ## Latest three modules
 
-`main` includes **v0.15.0 serial source-checking specialist Child**; the [v0.15.0 Release](https://github.com/hpoenixf/open-etf-agent/releases/tag/v0.15.0) fixes implementation `74bd5aa`. Main delegates to one bounded Child, then consumes its original results and derived advice—not a parallel expert platform. Offline full-suite and independent-process checks passed; the third real-mechanism batch passed, with the two earlier failures retained.
+**v0.18.0 adds one confirmed Schedule Occurrence**, with an explicit due-time wake through the original Worker, Admission and Publication. [Exact API qualification and fixture CLI boundaries](docs/verification/v018-release.md). No background daemon or recurring scheduler.
+
+**2026-11-02 foundation repair:** [Working-input admission, cancellation facts, Child settlement and no-saving summary precheck](docs/verification/foundation-repair-20261102.md). Provider-free regressions passed; this is not a new release or live qualification.
 
 | Module | What changes | Run and inspect |
 | --- | --- | --- |
-| v0.15 · Serial specialist Child | One bounded source-checking Child returns original results to Main; derived advice gains no source authority | [Commands](docs/module-guide.md#v015--serial-specialist-child) · [Contract and evidence](openspec/changes/serial-specialist-child/evidence.md) |
-| v0.14 · Read-only Memory | Select an existing library and consume current revisions; temporary mode takes effect before library access | [Commands](docs/module-guide.md#v014--read-only-existing-memory) · [Contract and evidence](openspec/changes/v014-memory-consumer/evidence.md) |
-| v0.13 · Ordinary reply | The CLI saves a question; submit your reply, then explicitly continue the original Run | [Commands](docs/module-guide.md#v013--one-durable-ordinary-reply) · [Contract and evidence](openspec/changes/ordinary-response/evidence.md) |
+| v0.18 · Schedule Occurrence | One confirmed, explicitly woken occurrence through original owners | [Commands and boundaries](docs/schedule-occurrence.md) · [Qualification](docs/verification/v018-release.md) |
+| v0.17 · Shared Admission | Two local callers share one capacity slot; original Runtime remains the only budget owner | [Commands and boundaries](docs/shared-admission.md) · [Qualification](docs/verification/v017-release.md) |
+| v0.16 · Document revocation | Current permission is rechecked before disclosure and later reads; previously delivered bytes cannot be recalled | [Commands](docs/module-guide.md#v016--revocable-documents) · [Contract and evidence](openspec/changes/v016-document-revocation/evidence.md) |
 
 [All fixed versions and commands](docs/module-guide.md#versions) · [Machine-readable version lineage](versions.json) · [GitHub Releases](https://github.com/hpoenixf/open-etf-agent/releases)
 

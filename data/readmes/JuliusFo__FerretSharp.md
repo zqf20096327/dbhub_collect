@@ -98,6 +98,10 @@ developer works with an Oracle database day to day:
 - Sort the results of the SQL editor and the LINQ console by a click on a header.
 - **Relationship diagram**: the "Relations" view of a table – parents left, children right, one or two levels, "+n"
   handles to go further, kinds of relationship to switch off, zoom, copy as Mermaid for a ticket.
+- **Build a query in the diagram**: click the relationships to its parents (and to children, of which one row is
+  chosen by condition and order), tick columns, add conditions – and get LINQ in the style of query extensions (an
+  expression per value, LinqKit, a DTO or your own mapping lines), the SQL with the right joins, a preview of the rows
+  or a view. LINQ and SQL find the same rows; the LINQ console runs it with its parameters.
 - **Record diagram**: marked rows with their parents and children over up to four levels, read relationship by
   relationship; a click opens a row filtered, marked rows go to another connection (below).
 - **Audit tables read like their base table**: its relationships, C# names and enums, the cells a version changed
@@ -138,9 +142,11 @@ developer works with an Oracle database day to day:
 - Lock conflicts are detected after a short wait (`SELECT … FOR UPDATE WAIT n`) and shown with the blocking session.
 - Optimistic concurrency check on the changed columns; insert and delete rows; edit CLOBs and BLOBs in a dialog
   (text in the code editor with line wrap, JSON/XML coloring and JSON indenting).
-- **One value for many cells**: type it into one of the marked cells and press <kbd>Ctrl</kbd>+<kbd>Enter</kbd>;
-  <kbd>Del</kbd> sets marked cells to NULL, <kbd>Ctrl</kbd>+<kbd>D</kbd> fills them down – checked per column, pending
-  like any edit, and one step for <kbd>Ctrl</kbd>+<kbd>Z</kbd>.
+- **One value for many cells**: type it into one of the marked cells and press <kbd>Ctrl</kbd>+<kbd>Enter</kbd>, or
+  paste a copied value with <kbd>Ctrl</kbd>+<kbd>V</kbd> – into the marked cells, the selected rows or just the focused
+  cell, no double click needed (a cell copied with <kbd>Ctrl</kbd>+<kbd>C</kbd> pastes back whole, line breaks and
+  NULL included); <kbd>Del</kbd> sets marked cells to NULL, <kbd>Ctrl</kbd>+<kbd>D</kbd> fills them down –
+  checked per column, pending like any edit, and one step for <kbd>Ctrl</kbd>+<kbd>Z</kbd>.
 - **Read-only connections** (default for production) run in `SET TRANSACTION READ ONLY` – Oracle rejects DML. Unlock a
   single workspace on purpose by typing the connection's name.
 - **Copy rows to another connection**: the marked rows with their parents and the children you choose into a workspace

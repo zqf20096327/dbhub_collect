@@ -13,11 +13,14 @@
 | **WorkBuddy / CodeBuddy 系** | 每日签到领积分;成长中心活跃保底(没对话就自动补一条,活跃天数不断);Buddy 旅行礼物、派 Buddy、开盲盒、领任务、连登兑换、断登补签等活动全覆盖 |
 | **Qoder CN** | 活动窗口内自动领取 Credits(幂等,重复跑不多领) |
 | **Trae CN** | 每日签到领 Credits(1024 活动限流期自动多轮重试) |
+| **豆包电脑版 / 豆包工作** | 签到领额度(每日 200、周一翻倍、30 天累计 8800);直接解密客户端本地会话,幂等可重跑(仅 Windows) |
 
 - **一次配置,每天自动跑** — 内置 `schedule` 域把签到命令注册成系统级定时任务
   (Windows 任务计划程序 / macOS launchd / Linux crontab),`schedule install` 之后无需再管
-- **结果看得见** — `history` 域提供 SQLite 签到台账: 每天/每域结果一目了然,
-  服务端历史(活跃日历、领取记录)一键回填,不必翻日志
+- **结果看得见** — SQLite 签到台账(`core/store`): 每天/每域结果一目了然,
+  Web 管理台或直接查库,不必翻日志
+- **可选 Web 管理台** — `ui serve` 起本地服务(只绑 127.0.0.1): 浏览器看板、
+  一键手动签到、调度任务管理、诊断展示;CLI 与定时任务不依赖 web 栈
 - **加一个签到目标很省事** — 多域 CLI 插件架构: 新增一个域不用碰组合根,
   新增一种外部系统支持不用改其他域
 
@@ -77,8 +80,7 @@ auto-signin-kit qoder auto                 # Qoder CN 每日 Credits 领取
 auto-signin-kit qoder auto --dry-run       # 只报告可领取项,不真领取
 auto-signin-kit trae auto                  # Trae CN 每日签到领取(幂等)
 auto-signin-kit trae doctor                # 离线检查登录态可读性与有效期
-auto-signin-kit history                    # 签到台账: 每天/每域结果一览,不必翻日志
-auto-signin-kit history import-server      # 把服务端的历史记录(活跃日历等)回填进台账
+auto-signin-kit ui serve                   # Web 管理台: 总览/台账/调度/配置/诊断(读 SQLite 台账)
 ```
 
 每个命令输出**一行 JSON 事件**(stdout 由机器读,过程日志走 stderr),字段
@@ -104,7 +106,8 @@ auto-signin-kit history import-server      # 把服务端的历史记录(活跃�
 事实,不跟可清理的日志放一起——目录优先级: `AUTO_SIGNIN_KIT_DATA_DIR` 环境变量
 > 项目的 `data/` 目录(`.gitignore` 已排除)> 平台目录
 `%LOCALAPPDATA%\auto-signin-kit\data`(Windows)/ macOS Application Support。
-用 `auto-signin-kit history` 看结果,不必翻日志。
+台账查询直接 `sqlite3 data/auto-signin-kit.db`(读 `ask_daily_checkins` 视图),
+或打开 Web 管理台的「签到台账」页,不必翻日志。
 
 退出码约定:
 
@@ -120,9 +123,11 @@ auto-signin-kit history import-server      # 把服务端的历史记录(活跃�
 
 - workbuddy 域: 桌面端登录后自动写出的凭据文件,`WORKBUDDY_AUTH_FILE`
   可覆盖;新版加密凭据(`sym-v1` 信封)自动调客户端运行时在隐藏子进程里解密。
-- qoder 域: 桌面端数据目录(`%APPDATA%\com.qodercn.app*`,`DPAPI+GCM` 双层
-  解密;**自动读取仅 Windows**,macOS/Linux 需设置 `QODER_TOKEN`),`QODER_TOKEN`
-  可覆盖。
+- qoder 域: 桌面端数据目录(Windows `%APPDATA%\com.qodercn.app*` DPAPI+GCM,
+  macOS `~/Library/Application Support/com.qoder.app*` Keychain+CBC,均需
+  客户端已登录;Linux 需设置 `QODER_TOKEN`),`QODER_TOKEN` 可覆盖。API 端点
+  按登录态自动匹配(CN 版→`openapi.qoder.com.cn`,国际版→`openapi.qoder.sh`,
+  两者协议同构),`QODER_BASE_URL` 可覆盖。
 - trae 域: 桌面端 storage.json(`%APPDATA%\Trae CN\User\globalStorage`,
   `SS_AES` 信封解密,无需 DPAPI 全平台可用),`TRAE_TOKEN` 可覆盖。
 - 敏感值(令牌)在一切输出前统一替换为 `[REDACTED]`。
@@ -280,8 +285,12 @@ src/auto_signin_kit/
     ├── workbuddy/               # 签到 + 成长中心(旅行/任务/补登/兑换/盲盒)
     ├── qoder/                   # 每日 Credits(活动查询/领取/设备风控头)
     ├── trae/                    # 每日签到(status/claim,SS_AES 凭据解锁)
-    ├── schedule/                # 定时调度: 注册/注销/查看每日自动任务
-    └── history/                 # 签到台账: 每日状态一览/运行明细/日志回填
+    ├── doubao/                  # 豆包签到领额度(Cookie 解密 + CDP 兜底,仅 Windows)
+    └── schedule/                # 定时调度: 注册/注销/查看每日自动任务
+
+src/auto_signin_kit/core/store.py  # SQLite 签到台账: 每日状态视图/运行明细/冗余清理
+src/auto_signin_kit/ui/          # Web 管理台 API 层(SPEC-09): /api 路由 + 托管前端产物
+frontend/                        # 管理台前端包(Vue 3 + Vite + Naive UI,与 src 同层)
 ```
 
 文档地图(逆向取证与实现文档分工):
@@ -289,7 +298,7 @@ src/auto_signin_kit/
 | 文档 | 性质 |
 |------|------|
 | `docs/notes/NOTE-01~03` | 逆向取证:端点、信封协议与证据链(索引见 `docs/notes/README.md`) |
-| `docs/superpowers/specs/SPEC-01~07` | as-built 实现:代码实际是什么样 |
+| `docs/superpowers/specs/SPEC-01~09` | as-built 实现:代码实际是什么样 |
 | `docs/adr/ADR-0001~0003` | 架构决策:为什么这样设计 |
 | `docs/guides/GUIDE-01~03` | 操作指南: 上手 / 新增域 / 排错(索引见 `docs/guides/README.md`) |
 
@@ -302,6 +311,15 @@ uv run ruff check && uv run lint-imports && uv run pytest -q
 ```
 
 **三个都要绿**。新增域时记得同步更新 `AGENTS.md`。
+
+---
+
+## 免责声明
+
+**本工具仅供个人学习与研究参考，严禁用于任何商业途径。** 使用者须遵守目标平台
+的服务条款与当地法律法规；因使用本工具产生的一切后果（包括账号限制/封禁等）
+由使用者自行承担。本项目与文中提及的各产品及其运营方无任何关联。完整声明见
+[DISCLAIMER.md](DISCLAIMER.md)。
 
 ---
 
