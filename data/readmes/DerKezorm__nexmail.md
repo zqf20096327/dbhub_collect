@@ -26,7 +26,7 @@ Roundcube is webmail bolted onto one mailbox. Thunderbird does not run in a
 browser. Commercial clients want to pull your mail onto their servers. nexmail
 is the third option — and if you can use Outlook, you should feel at home.
 
-> **Version 0.24.7.** It reads, writes, searches, sorts, labels, sends,
+> **Version 0.26.0.** It reads, writes, searches, sorts, labels, sends,
 > schedules, prints, answers for you while you are away, keeps a calendar and
 > your address books in sync with iCloud or Google, invites people to your own
 > appointments, rephrases a draft with an AI service of your choice, backs
@@ -45,7 +45,8 @@ Every address in them is under `example.com`, `example.org` or
 
 **Mail.** Several mailboxes side by side, plus a merged *All inboxes* view.
 Read, reply, reply-all, forward, move, archive, delete, mark, flag, undo. Drag
-and drop between folders. Keyboard: `Del` to trash, `E` to archive. Which
+and drop between folders. Keyboard: `Del` to trash, `E` to archive, and
+`Ctrl+K` opens a command palette that finds every action and folder. Which
 folder is the trash or the archive nexmail reads from the server's SPECIAL-USE
 flags and from the usual names; where a server has neither, right-click the
 folder and pick *Use as* (on a phone: the *…* next to the folder). Folders
@@ -81,8 +82,8 @@ chain first, subject only as a fallback and only when sender, subject and a
 30-day window all agree. Off by default: grouping wrongly *hides* a message, and
 you notice that at the worst possible moment.
 
-**Writing.** A real formatting toolbar (Tiptap), attachments, pasted images,
-drafts stored in the mailbox rather than in the browser, and an outbox that
+**Writing.** A real formatting toolbar (Tiptap), attachments you can drop onto
+the window, pasted or dropped images inside the text, drafts stored in the mailbox rather than in the browser, and an outbox that
 survives a restart. Recipients become address bubbles as you type; nonsense
 turns red instead of hiding inside a comma list. Set importance, get a
 question when the text mentions an attachment that is not there, and forward
@@ -105,7 +106,11 @@ reach lets you conclude a message does not exist.
 **Tasks.** Turn a message into a task, tick it off, drag it into order, give it
 a due date. The task survives its message: if the mail is moved from your phone,
 the task follows it by `Message-ID`; if the mail is deleted, the task stays and
-says so.
+says so. Each user can connect their own Todoist account under *Settings → Tasks*
+and send tasks to a Todoist list instead. Only the title, the due date, the
+sender and a link back to the mail go there, never the text of the mail. Ticking
+a task in nexmail closes it in Todoist, and what you complete, reschedule or
+delete in Todoist comes back within a few minutes.
 
 **Contacts, rules, signatures.** An address book with several numbers,
 addresses and postal addresses per contact, the card's photo, vCard import and
@@ -114,9 +119,9 @@ Google or any other CardDAV server) that are read and written back line by
 line, with a question instead of an overwrite when a card changed on both
 sides, and a vCard file can be imported straight into one of them;
 contact groups that expand into their members when picked as a recipient;
-rules that run after each sync and only on new mail, can be run once over a
-folder that is already full, and can be started from a message with a
-right-click (*Create rule*); signatures per mailbox.
+rules that run after each sync and only on new mail, can move, mark, flag and
+tag, can be run once over a folder that is already full, and can be started
+from a message with a right-click (*Create rule*); signatures per mailbox.
 
 **Housekeeping.** Trash and junk can empty themselves after a number of days —
 off by default, measured by how long a message has been in the folder, and
@@ -205,7 +210,7 @@ each operator registers their own. The administration page says so plainly
 rather than letting you guess why nothing works.
 
 **Rephrasing with AI, if you want it.** Every user can connect their own AI
-service under *Settings*: an address, a key and a model. nexmail knows no
+service on the *AI* page: an address, a key and a model. nexmail knows no
 provider; anything that speaks the common chat completions interface works,
 from Claude, Gemini or OpenAI to Ollama on a machine in your own network. In
 the editor it fixes spelling, translates, or rephrases in one of nine tones,
@@ -214,12 +219,41 @@ your signature are never sent, and the AI page lists verbatim what went out.
 Off by default, and the operator can block it for the whole installation or
 for single accounts.
 
-**Moving between mailboxes.** Right-click a message, *Move*, and pick a folder
-of another account. Dragging works within one account only. `MOVE` and `COPY`
-only work inside one connection, so this fetches, appends at the target,
-checks that it really arrived, and only then deletes at the source.
-That order is the whole safety: the worst case is a message that exists twice,
-which you can see and clean up.
+**Received mail, only if you allow it.** With the same service, a button in the
+reading pane summarises or translates a message you received, or answers a
+question about it, and a reply can start from a suggested draft. All of that
+sends text somebody else wrote to your AI provider, so it is a decision of its
+own: the operator has a separate switch for received mail, each user has one
+more, and nothing goes out until you click. What went out then appears verbatim
+in the same list as everything else. Answers are shown as plain text and
+labelled as what they are, because a message can try to talk the model into
+saying something else. A suggested reply is plain text too, leaves what it cannot
+know in square brackets, and only reaches your draft when you apply it.
+
+**Unsubscribing.** A message that names a way off its mailing list gets a button
+below the sender, and a question first that says who is about to hear from you.
+If the sender offers one-click unsubscribing (RFC 8058) and the message passed
+your provider's sender check, nexmail's server sends the request. Otherwise the
+sender's page opens in a new tab, or a prepared message waits in the compose
+window for you to send. In the junk folder there is no button: unsubscribing
+there tells a spammer the address is read. Messages opened before this feature
+existed keep what they had; the next one from the list has the button.
+
+**New mail right away.** An open window now follows what the server fetched, so
+the list updates by itself. By default that happens with the regular sync, every
+two minutes. Turn on *See new mail right away* for a mailbox and nexmail keeps a
+second connection open (IMAP IDLE), and a new message shows up within seconds.
+It is off by default because some providers limit connections; if the server
+cannot do IDLE, the form says so and the regular sync carries on.
+
+**Moving between mailboxes.** Drag a message onto a folder of another account,
+or right-click it, *Move*, and pick one. `MOVE` and `COPY` only work inside one
+connection, so this fetches, appends at the target, checks that it really
+arrived, and only then deletes at the source. That order is the whole safety:
+the worst case is a message that exists twice, which you can see and clean up.
+A selection may span mailboxes and folders, as in *All inboxes* or a search:
+`Del` puts every message into the trash of its own mailbox, *Archive* into its
+own archive, and undo brings them all back.
 
 **Moving in and out.** Import a Thunderbird `mbox`, or download a folder as
 `mbox` or as a ZIP of `.eml` files. What is already there is skipped by
@@ -361,6 +395,14 @@ no public address is set, and `Secure` on the session cookie with
 `NEXMAIL_COOKIE_SECURE=auto`. Left empty (the default) or `direct`, nexmail
 takes neither header from anyone. This is the setting the authentik card means
 when it warns that the server sees another scheme than your browser.
+
+**Notifications on the iPhone.** Apple's push key cannot ship in a public image,
+so the iPhone app gets its notifications through a small relay at
+`https://push.nexapps.dev`. Sender, subject and the start of the mail are
+encrypted for the device before they leave your server; the relay sees a
+ticket, that ciphertext and the number for the app icon. `NEXMAIL_PUSH_RELAY`
+points to another relay. Set it empty and nothing goes there, and the app
+offers no notifications.
 
 ## Signing in through an external provider
 

@@ -94,7 +94,7 @@ file named `.env` next to `docker-compose.yml` (see
 first), followed by `docker compose up -d`. A `BETTER_AUTH_SECRET` or `POSTGRES_PASSWORD` set there
 takes precedence over the generated one.
 
-- **Pin a version:** set `LEAFDESK_VERSION=0.7.0` in `.env`. The default is `latest`.
+- **Pin a version:** set `LEAFDESK_VERSION=0.7.1` in `.env`. The default is `latest`.
 - **Upgrade:** run `docker compose pull && docker compose up -d`. Read the *Upgrading* notes of
   each release in [CHANGELOG.md](CHANGELOG.md) first. Some migrations rewrite a large table, and
   pages can't be read or written until they finish; some releases have every page embedded again
@@ -217,6 +217,7 @@ not started. For a Supabase project, see [Use Supabase as the database](docs/sel
 - [Connections and MCP](docs/connections.md): connections to other services, and the MCP server for AI assistants.
 - [REST API](docs/rest-api.md): the REST API, tokens and scopes.
 - [Development](docs/development.md): running from source, tests, translations, architecture.
+- [Design](docs/design.md): text sizes, spacing, surfaces, and when something is a dialog or a page.
 
 ## Security
 

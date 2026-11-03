@@ -10,19 +10,20 @@
 [![npm version](https://img.shields.io/npm/v/%40equationalapplications%2Fcore-llm-tools?label=@equationalapplications/core-llm-tools)](https://www.npmjs.com/package/@equationalapplications/core-llm-tools) [![npm downloads](https://img.shields.io/npm/dm/%40equationalapplications%2Fcore-llm-tools?label=downloads)](https://www.npmjs.com/package/@equationalapplications/core-llm-tools)<br>
 [![npm version](https://img.shields.io/npm/v/%40equationalapplications%2Fcore-okf?label=@equationalapplications/core-okf)](https://www.npmjs.com/package/@equationalapplications/core-okf) [![npm downloads](https://img.shields.io/npm/dm/%40equationalapplications%2Fcore-okf?label=downloads)](https://www.npmjs.com/package/@equationalapplications/core-okf)<br>
 [![npm version](https://img.shields.io/npm/v/%40equationalapplications%2Fschema-org-llm-wiki?label=@equationalapplications/schema-org-llm-wiki)](https://www.npmjs.com/package/@equationalapplications/schema-org-llm-wiki) [![npm downloads](https://img.shields.io/npm/dm/%40equationalapplications%2Fschema-org-llm-wiki?label=downloads)](https://www.npmjs.com/package/@equationalapplications/schema-org-llm-wiki)<br>
-[![npm version](https://img.shields.io/npm/v/%40equationalapplications%2Fschema-software-org?label=@equationalapplications/schema-software-org)](https://www.npmjs.com/package/@equationalapplications/schema-software-org) [![npm downloads](https://img.shields.io/npm/dm/%40equationalapplications%2Fschema-software-org?label=downloads)](https://www.npmjs.com/package/@equationalapplications/schema-software-org)
+[![npm version](https://img.shields.io/npm/v/%40equationalapplications%2Fschema-software-org?label=@equationalapplications/schema-software-org)](https://www.npmjs.com/package/@equationalapplications/schema-software-org) [![npm downloads](https://img.shields.io/npm/dm/%40equationalapplications%2Fschema-software-org?label=downloads)](https://www.npmjs.com/package/@equationalapplications/schema-software-org)<br>
+[![npm version](https://img.shields.io/npm/v/%40equationalapplications%2Fmcp-server?label=@equationalapplications/mcp-server)](https://www.npmjs.com/package/@equationalapplications/mcp-server) [![npm downloads](https://img.shields.io/npm/dm/%40equationalapplications%2Fmcp-server?label=downloads)](https://www.npmjs.com/package/@equationalapplications/mcp-server)
 
 **[📖 Docs](https://equationalapplications.github.io/expo-llm-wiki/)** · **[GitHub](https://github.com/equationalapplications/expo-llm-wiki)** · **[ScopeLab](https://equationalapplications.github.io/expo-llm-wiki/scopelab/)** · **[WikiDemo](https://equationalapplications.github.io/expo-llm-wiki/wiki-demo/)** · **[Changelog](https://github.com/equationalapplications/expo-llm-wiki/blob/main/CHANGELOG.md)** · **[Issues](https://github.com/equationalapplications/expo-llm-wiki/issues)**
 
 ## Persistent, episodic memory for AI agents
 
-LLM Wiki is a cross-platform TypeScript and SQLite library for long-term LLM memory. It turns raw conversation logs and documents into a structured knowledge base of facts, tasks and graph edges, with background fact extraction, semantic search and memory pruning. It runs wherever your app runs: Expo, React Native, the browser, or Node.js.
+Core LLM Wiki is a family of cross-platform TypeScript packages for long-term LLM memory, built on SQLite. It turns raw conversation logs and documents into a structured knowledge base of facts, tasks and graph edges, with background fact extraction, semantic search and memory pruning. It runs wherever your app runs: Expo, React Native, the browser, or Node.js.
 
 > Inspired by [Andrej Karpathy's LLM Wiki memory spec](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f). Supports [Open Knowledge Format (OKF) v0.2](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf) import and export.
 
 **📖 Full documentation: [equationalapplications.github.io/expo-llm-wiki](https://equationalapplications.github.io/expo-llm-wiki/)**. It has quickstarts, guides, recipes and the complete API reference.
 
-## Why LLM Wiki?
+## Why Core LLM Wiki?
 
 - **Bring your own inference.** You provide one `generateText` function. The library builds the prompts, parses the JSON and writes to the database. Works with OpenAI, Gemini, Claude or a local model.
 - **Just SQLite.** Facts, vectors and graph edges live in prefixed tables (`llm_wiki_` by default) in your own database. No vector database, no Neo4j.
@@ -74,7 +75,7 @@ Follow the quickstart for your platform to create `wiki`: [Expo](https://equatio
 | [`@equationalapplications/schema-org-llm-wiki`](packages/schema-org) | Curated schema.org ontology manifest (data only) | [ontologies](https://equationalapplications.github.io/expo-llm-wiki/packages/ontologies/) |
 | [`@equationalapplications/schema-software-org`](packages/schema-software-org) | Software-organization ontology manifest (data only) | [ontologies](https://equationalapplications.github.io/expo-llm-wiki/packages/ontologies/) |
 | [`@equationalapplications/prisma-outbox`](packages/prisma-outbox) | Sync SQLite outbox events to a Prisma database | [guide](https://equationalapplications.github.io/expo-llm-wiki/guides/prisma-outbox/) |
-| [`@equationalapplications/mcp-server`](packages/mcp-server) | MCP server for SynapseTree memory (in development) | [mcp-server](https://equationalapplications.github.io/expo-llm-wiki/packages/mcp-server/) |
+| [`@equationalapplications/mcp-server`](packages/mcp-server) | MCP server giving coding agents a SynapseTree memory | [mcp-server](https://equationalapplications.github.io/expo-llm-wiki/packages/mcp-server/) |
 
 Not sure which one you need? See [Choose a package](https://equationalapplications.github.io/expo-llm-wiki/start/choose-a-package/).
 
@@ -95,12 +96,12 @@ Both run on sql.js with no backend. You bring your own LLM key.
 
 ## Ecosystem
 
-Built on LLM Wiki:
+Built on Core LLM Wiki:
 
 - **[Curated Thoughts](https://github.com/equationalapplications/curated-thoughts)**: a privacy-first desktop second brain (Tauri, React, Rust) with a built-in MCP server.
 - **[Curated Thoughts Integrations](https://github.com/equationalapplications/curated-thoughts-integrations)**: wires Curated Thoughts into Claude Code, OpenCode, Hermes, and other agent harnesses. A software agency in a box.
 - **[Curated Journal](https://github.com/equationalapplications/curated-journal)**: a fully offline Expo journal, and the reference app for `expo-llm-wiki`.
-- **[SynapseTree](https://synapsetree.dev)**: hosted cloud memory on the same engine. Its MCP server ([`packages/mcp-server`](packages/mcp-server)) is in development.
+- **[SynapseTree](https://synapsetree.dev)**: hosted cloud memory on the same engine. Its MCP server is [`@equationalapplications/mcp-server`](packages/mcp-server).
 
 ## License
 

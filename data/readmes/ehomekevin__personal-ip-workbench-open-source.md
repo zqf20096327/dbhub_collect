@@ -1,10 +1,10 @@
-# 创作者工作台 · Personal IP Workbench
+# 创作有数 · Personal IP Workbench
 
 给自己运营账号的创作者用的本地工作台。可以从一份资料起稿，分别维护公众号、小红书、X、抖音和 B 站版本，再按平台排期、记录反馈，把读者的问题带回下一篇。
 
-一段会议录音，准备写成一篇公众号文章，再拆成一条小红书笔记。两篇稿子用的是同一个例子，开头、配图和发布时间却各不相同。创作者工作台让你在一个主题里保留原始资料、自己的判断和各个平台的稿子。下次打开，就能接着改上次那一稿。
+一段会议录音，准备写成一篇公众号文章，再拆成一条小红书笔记。两篇稿子用的是同一个例子，开头、配图和发布时间却各不相同。创作有数让你在一个主题里保留原始资料、自己的判断和各个平台的稿子。下次打开，就能接着改上次那一稿。
 
-[个人站中文上手说明](https://ai.flowo.design/products/creator-workbench/) · [安装与升级指南](GETTING_STARTED.md) · [查看发行版本](https://github.com/ehomekevin/personal-ip-workbench-open-source/releases)
+[项目官网](https://ai.flowo.design/products/creator-workbench/) · [试做一份五平台稿](https://ai.flowo.design/products/creator-workbench/#trial) · [按系统下载](https://ai.flowo.design/products/creator-workbench/download/) · [安装与升级指南](GETTING_STARTED.md) · [查看发行版本](https://github.com/ehomekevin/personal-ip-workbench-open-source/releases)
 
 ![今日工作台，左侧可切换创作、排期与复盘，中间可继续上次的主题](docs/project-introduction/images/overview.png)
 
@@ -42,7 +42,11 @@ pnpm dev:web
 
 **开始保存自己的稿件**，按[安装与升级指南](GETTING_STARTED.md)创建 **real** 工作区。页面连接本机服务，配置、SQLite 数据库、笔记和媒体保存在你选择的数据目录。换用新版程序时，沿用这个工作区即可继续编辑。
 
-**Windows x64 用户**可在 [Releases](https://github.com/ehomekevin/personal-ip-workbench-open-source/releases) 查看正式提供的便携 ZIP 和校验清单。下载后按[便携版说明](GETTING_STARTED.md#windows-x64-便携版)核对文件，解压并双击 `Start.cmd`。若发行页还没有公开版本，可先使用上面的源码方式。
+**Mac Apple Silicon 用户**可直接下载 v0.1.0。最低 macOS 27.0，已在 27.0.1 实测。下载并校验 ZIP 后，双击解压，在 Finder 打开「创作有数.app」，浏览器会显示本机工作台。退出时在应用菜单选择「退出创作有数」或按 ⌘Q。应用已签名并通过 Apple 公证。稿件默认保存在 `~/Library/Application Support/PersonalIPWorkbench`。[下载 Mac 版](https://github.com/ehomekevin/personal-ip-workbench-open-source/releases/download/v0.1.0/chuangzuoyoushu-0.1.0-macos-arm64.zip) · [Mac 校验文件](https://github.com/ehomekevin/personal-ip-workbench-open-source/releases/download/v0.1.0/chuangzuoyoushu-0.1.0-macos-arm64.zip.sha256) · [Mac 包装源码](https://github.com/ehomekevin/personal-ip-workbench-open-source/releases/download/v0.1.0/chuangzuoyoushu-0.1.0-macos-packaging-source.zip)
+
+**Windows x64 用户**可[下载安装程序 v0.1.2](https://github.com/ehomekevin/personal-ip-workbench-open-source/releases/download/v0.1.2/chuangzuoyoushu-0.1.2-windows-x64-setup.exe)。安装后从开始菜单打开「创作有数」，在独立窗口编辑和保存。沿用原工作区即可接着改稿。安装包未签名，已在 Windows 11 Pro x64 和 Windows Server 2025 x64 实测；首次浏览器下载的 SmartScreen 和 UAC 提示未验证。[安装包校验清单](https://github.com/ehomekevin/personal-ip-workbench-open-source/releases/download/v0.1.2/SHA256SUMS) · [同版源码](https://github.com/ehomekevin/personal-ip-workbench-open-source/releases/download/v0.1.2/chuangzuoyoushu-0.1.2-source.tar.gz)
+
+需要便携版时，可[下载 v0.1.1 ZIP](https://github.com/ehomekevin/personal-ip-workbench-open-source/releases/download/v0.1.1/chuangzuoyoushu-0.1.1-windows-x64.zip)，按[同版清单](https://github.com/ehomekevin/personal-ip-workbench-open-source/releases/download/v0.1.1/SHA256SUMS)核对后解压，双击 `创作有数.cmd` 启动，用 `退出创作有数.cmd` 退出。
 
 ## 可选连接与开发说明
 

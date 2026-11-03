@@ -1,6 +1,8 @@
 # migrate
 
 SQL migration tool with PostgreSQL/MySQL/MariaDB/Oracle/SQLite/MSSQL/ClickHouse/TiDB/Redshift support.
+An optional full build adds standalone JavaScript and TypeScript migrations for PostgreSQL/MySQL/MariaDB/SQLite, plus experimental TiDB/Redshift/Oracle/ClickHouse/MSSQL support.
+Use `migrate capabilities` to inspect verification status and transaction limits.
 
 ## Documentation
 
@@ -16,6 +18,9 @@ SQL migration tool with PostgreSQL/MySQL/MariaDB/Oracle/SQLite/MSSQL/ClickHouse/
 - [User Guide (Русский)](docs/user-guide.ru.md)
 - [User Guide (العربية)](docs/user-guide.ar.md)
 - [User Guide (हिन्दी)](docs/user-guide.hi.md)
+- [SQL + JS/TS guide (中文)](docs/script-migrations.md)
+- [SQL + JS/TS guide (English)](docs/script-migrations.en.md)
+- [Migration API declarations](docs/migration-api.d.ts)
 - [Changelog](CHANGELOG.md)
 
 ## Install
@@ -23,6 +28,16 @@ SQL migration tool with PostgreSQL/MySQL/MariaDB/Oracle/SQLite/MSSQL/ClickHouse/
 ```bash
 go install github.com/exc-works/migrate/cmd/migrate@latest
 ```
+
+The default install supports SQL. Install the full build when scripts are needed:
+
+```bash
+go install -tags=full github.com/exc-works/migrate/cmd/migrate@latest
+migrate capabilities --output json
+```
+
+Release assets without a suffix remain SQL-only; `_full` assets include JS/TS.
+Neither build downloads an interpreter during execution.
 
 ## Quick Start
 
@@ -48,6 +63,18 @@ Run a specific integration dialect:
 INTEGRATION_DB=sqlite go test -tags=integration ./integrationtest/...
 INTEGRATION_DB=postgres,mysql,mariadb go test -tags=integration ./integrationtest/...
 ```
+
+Run ClickHouse/TiDB/MSSQL SQL and script integration in disposable containers (or set
+`INTEGRATION_CLICKHOUSE_DSN` / `INTEGRATION_TIDB_DSN` / `INTEGRATION_MSSQL_DSN` to use external test instances):
+
+```bash
+INTEGRATION_DB=clickhouse,tidb,mssql go test -tags=integration,full ./integrationtest/...
+```
+
+TiDB containers use Unistore; distributed TiKV behavior remains unverified.
+Oracle and Redshift tests require dedicated external instances and the corresponding
+`INTEGRATION_ORACLE_DSN` / `INTEGRATION_REDSHIFT_DSN`. Without these values, optional
+checks are skipped, which does not count as verification.
 
 Run Oracle integration (requires reachable Oracle DSN):
 
