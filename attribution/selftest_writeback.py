@@ -59,6 +59,7 @@ def _build_universe(base: Path):
         "k_judged": irec("u/judged", dv=["MySQL"]),                # 旧 verdicts 不再短路 → 证据不足
         "k_gated": irec("u/gated", cat="应用"),                    # 立案但应用类 → 真不涉及+dbs_raw
         "k_weak": irec("u/weak"),                                  # 单 dep 1 票 → v2 直通 fill
+        "k_weakpath": irec("u/weakpath"),                          # test 路径 0.5 票 → A 修不直通
         "k_topic": irec("u/topic"),                                # topic 单通道 → v2 直通 fill
         "k_dv": irec("u/dv", dv=["MySQL"]),                        # 旧 verdicts+引擎信号 → fill
         "k_adjmix": irec("u/adjmix"),                              # 裁决 MySQL+引擎 PG → 并集 fill
@@ -81,6 +82,7 @@ def _build_universe(base: Path):
         "u/gated": ev_ok("u/gated", [dep("requirements.txt", ["psycopg2"]),
                                      img("compose.yml", ["postgres:15"])]),
         "u/weak": ev_ok("u/weak", [dep("requirements.txt", ["psycopg2"])]),
+        "u/weakpath": ev_ok("u/weakpath", [dep("test/requirements.txt", ["psycopg2"])]),
         "u/dual": ev_ok("u/dual", [dep("go.mod", ["go-sql-driver/mysql"])]),
         "u/topic": ev_ok("u/topic"),                               # 空指纹：只剩 topic 证据
         "u/cited": ev_ok("u/cited"),
@@ -103,6 +105,7 @@ def _build_universe(base: Path):
         "u/oos": {"desc": "A redis GUI client", "stars": 300, "topics": []},
         "u/edu": {"desc": "awesome mysql list", "stars": 200, "topics": []},
         "u/topic": {"desc": "", "stars": 5, "topics": ["mysql"]},
+        "u/weakpath": {"desc": "", "stars": 8, "topics": []},
         "u/dual": {"desc": "", "stars": 400, "topics": ["mysql"]},
         "u/dv": {"desc": "", "stars": 30, "topics": []},
         "u/adjmix": {"desc": "", "stars": 20, "topics": []},
@@ -126,15 +129,15 @@ def main() -> int:
         ck({p.name: p.read_bytes() for p in ip.glob("*.json")} == snap, "dry-run 分片零变化")
         ck(not ledger.is_file(), "dry-run 不落台账")
 
-        # 2) 圈范围与分布：16 入圈（keeper 最新非空跳过 / nocls 无 classification 跳过）
-        ck(st["in_scope"] == 16, f"入圈 16（实测 {st['in_scope']}）")
+        # 2) 圈范围与分布：17 入圈（keeper 最新非空跳过 / nocls 无 classification 跳过）
+        ck(st["in_scope"] == 17, f"入圈 17（实测 {st['in_scope']}）")
         ck(st["fill"] == 8 and st["fill_engine"] == 7 and st["fill_adjudicate"] == 2,
            f"fill 8=engine7/adjudicate2（实测 {st['fill']}/{st['fill_engine']}/{st['fill_adjudicate']}）")
-        ck(st["tag"] == 8, f"tag 8（实测 {st['tag']}）")
+        ck(st["tag"] == 9, f"tag 9（实测 {st['tag']}）")
         ck(st["tag_reasons"].get(W.R_TRUE_UNRELATED) == 2
            and st["tag_reasons"].get(W.R_OUT_OF_SCOPE) == 1
-           and st["tag_reasons"].get(W.R_INSUFFICIENT) == 5,
-           f"四类分布 真不涉及2/范围外1/证据不足5（实测 {st['tag_reasons']}）")
+           and st["tag_reasons"].get(W.R_INSUFFICIENT) == 6,
+           f"四类分布 真不涉及2/范围外1/证据不足6（实测 {st['tag_reasons']}）")
         ck(st["pool_uninterpreted"] == 1, "池内未解读记数 1")
 
         # 3) 实写：落点正确（dbs/dbs_src/dbs_empty_reason）+ 铁律（非空/圈外零触碰）
@@ -160,6 +163,10 @@ def main() -> int:
         ck(aa["k_weak"]["classification"]["dbs"] == ["PostgreSQL"]
            and aa["k_weak"]["classification"]["dbs_src"]["kind"] == "engine",
            "单弱信号 v2 直通 fill")
+        ck(aa["k_weakpath"]["classification"]["dbs"] == []
+           and aa["k_weakpath"]["classification"]["dbs_empty_reason"]["reason"] == W.R_INSUFFICIENT
+           and "弱路径信号不直通" in aa["k_weakpath"]["classification"]["dbs_empty_reason"]["detail"],
+           "A 修：test 路径 0.5 票不直通（防测试夹具误配）")
         ck(aa["k_topic"]["classification"]["dbs"] == ["MySQL"]
            and aa["k_topic"]["classification"]["dbs_src"]["kind"] == "engine",
            "topic 单通道 v2 直通 fill")

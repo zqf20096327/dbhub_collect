@@ -179,8 +179,10 @@ def compute_op(fn: str, latest: dict, pool_rec: dict | None, evidence_rec: dict 
             dbs.append(d)
         srcs[d] = ("adjudicate", "t4a-1")
 
-    # ② 引擎直通（evidence ok 才跑；per_db 全部信号库进 fill——立案与单弱信号同权）
+    # ② 引擎直通（evidence ok 才跑；per_db 信号库进 fill——立案与单弱信号同权；
+    #    A 修：test/example/sample 弱路径 0.5 票不直通，防测试夹具误配）
     ev_note = ""
+    weak_only: list[str] = []
     if evidence_rec is None:
         ev_note = "无证据记录（待增量补采）"
     elif evidence_rec.get("status") == "partial":
@@ -190,6 +192,11 @@ def compute_op(fn: str, latest: dict, pool_rec: dict | None, evidence_rec: dict 
     else:
         verdict = judge(build_pack(fn, evidence_rec, {"topics": topics}))
         for db, e in sorted(verdict["per_db"].items(), key=lambda kv: -kv[1]["votes"]):
+            strong = sum(it["votes"] for it in e["chain"]
+                         if not ((it.get("detail") or {}).get("weak_path")))
+            if strong <= 0:
+                weak_only.append(db)
+                continue
             if db not in dbs:
                 dbs.append(db)
             votes[db] = e["votes"]
@@ -212,6 +219,8 @@ def compute_op(fn: str, latest: dict, pool_rec: dict | None, evidence_rec: dict 
     if oos_note and not _cited_libs(scan_rec):
         return {**base, "op": "tag", "reason": R_OUT_OF_SCOPE, "detail": oos_note}
     det = ev_note or "无信号"
+    if weak_only:
+        det += f"；弱路径信号不直通: {','.join(sorted(weak_only, key=DB_ORDER.index))}"
     if oos_note:
         det += "；范围外痕迹: " + oos_note
     desc_libs = _desc_libs(scan_rec)
