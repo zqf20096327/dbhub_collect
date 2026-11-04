@@ -53,13 +53,16 @@ def _build_universe(base: Path):
     ip.mkdir(), ev.mkdir()
     (ip / "aa.json").write_text(json.dumps({
         "k_fill": irec("u/fill"),                                  # dep+image 3 票 → engine fill
-        "k_adj": irec("u/adj", cat="其他"),                        # 裁决 supports → adjudicate fill
-        "k_oos": irec("u/oos"),                                    # desc redis → 范围外
-        "k_edu": irec("u/edu"),                                    # awesome → 真不涉及
-        "k_judged": irec("u/judged", dv=["MySQL"]),                # 问过判过 → 真不涉及
+        "k_adj": irec("u/adj", cat="开发库"),                      # 裁决 supports → adjudicate fill
+        "k_oos": irec("u/oos"),                                    # desc redis → 范围外（信号全无）
+        "k_edu": irec("u/edu"),                                    # awesome → 真不涉及（口径不变）
+        "k_judged": irec("u/judged", dv=["MySQL"]),                # 旧 verdicts 不再短路 → 证据不足
         "k_gated": irec("u/gated", cat="应用"),                    # 立案但应用类 → 真不涉及+dbs_raw
-        "k_weak": irec("u/weak"),                                  # 单 dep 1 票 → 证据不足
-        "k_topic": irec("u/topic"),                                # topic 2 票单通道 → 证据不足
+        "k_weak": irec("u/weak"),                                  # 单 dep 1 票 → v2 直通 fill
+        "k_topic": irec("u/topic"),                                # topic 单通道 → v2 直通 fill
+        "k_dv": irec("u/dv", dv=["MySQL"]),                        # 旧 verdicts+引擎信号 → fill
+        "k_adjmix": irec("u/adjmix"),                              # 裁决 MySQL+引擎 PG → 并集 fill
+        "k_adjcover": irec("u/adjcover"),                          # 裁决只补不覆盖引擎 PG
     }, ensure_ascii=False, indent=1), encoding="utf-8")
     (ip / "bb.json").write_text(json.dumps({
         "k_dual": irec("u/dual"),                                  # dep+topic 3 票 → engine fill
@@ -81,11 +84,17 @@ def _build_universe(base: Path):
         "u/dual": ev_ok("u/dual", [dep("go.mod", ["go-sql-driver/mysql"])]),
         "u/topic": ev_ok("u/topic"),                               # 空指纹：只剩 topic 证据
         "u/cited": ev_ok("u/cited"),
+        "u/dv": ev_ok("u/dv", [dep("requirements.txt", ["mysql-connector-java"])]),
+        "u/adjmix": ev_ok("u/adjmix", [dep("requirements.txt", ["psycopg2"])]),
+        "u/adjcover": ev_ok("u/adjcover", [dep("requirements.txt", ["mysql-connector-java",
+                                                                    "psycopg2"])]),
         "u/emptyrepo": {"fn": "u/emptyrepo", "status": "empty_repo", "collected_at": TS},
     }, ensure_ascii=False), encoding="utf-8")
     adj = base / "adjudications.ndjson"
     adj.write_text(json.dumps({"fn": "u/adj", "db": "MySQL", "verdict": "supports"}) + "\n"
                    + json.dumps({"fn": "u/adj", "db": "NotALib", "verdict": "supports"}) + "\n"
+                   + json.dumps({"fn": "u/adjmix", "db": "MySQL", "verdict": "supports"}) + "\n"
+                   + json.dumps({"fn": "u/adjcover", "db": "MySQL", "verdict": "supports"}) + "\n"
                    + json.dumps({"fn": "u/other", "db": "MySQL", "verdict": "unclear"}) + "\n",
                    encoding="utf-8")
     pool = {
@@ -95,6 +104,9 @@ def _build_universe(base: Path):
         "u/edu": {"desc": "awesome mysql list", "stars": 200, "topics": []},
         "u/topic": {"desc": "", "stars": 5, "topics": ["mysql"]},
         "u/dual": {"desc": "", "stars": 400, "topics": ["mysql"]},
+        "u/dv": {"desc": "", "stars": 30, "topics": []},
+        "u/adjmix": {"desc": "", "stars": 20, "topics": []},
+        "u/adjcover": {"desc": "", "stars": 15, "topics": []},
         "u/never": {"desc": "", "stars": 1, "topics": []},         # 池内未解读 → 台账记数
     }
     scan = {"u/cited": {"cands": {"MySQL": [{"line": 3}]}}}
@@ -114,15 +126,15 @@ def main() -> int:
         ck({p.name: p.read_bytes() for p in ip.glob("*.json")} == snap, "dry-run 分片零变化")
         ck(not ledger.is_file(), "dry-run 不落台账")
 
-        # 2) 圈范围与分布：13 入圈（keeper 最新非空跳过 / nocls 无 classification 跳过）
-        ck(st["in_scope"] == 13, f"入圈 13（实测 {st['in_scope']}）")
-        ck(st["fill"] == 3 and st["fill_engine"] == 2 and st["fill_adjudicate"] == 1,
-           f"fill 3=engine2+adj1（实测 {st['fill']}/{st['fill_engine']}/{st['fill_adjudicate']}）")
-        ck(st["tag"] == 10, f"tag 10（实测 {st['tag']}）")
-        ck(st["tag_reasons"].get(W.R_TRUE_UNRELATED) == 3
+        # 2) 圈范围与分布：16 入圈（keeper 最新非空跳过 / nocls 无 classification 跳过）
+        ck(st["in_scope"] == 16, f"入圈 16（实测 {st['in_scope']}）")
+        ck(st["fill"] == 8 and st["fill_engine"] == 7 and st["fill_adjudicate"] == 2,
+           f"fill 8=engine7/adjudicate2（实测 {st['fill']}/{st['fill_engine']}/{st['fill_adjudicate']}）")
+        ck(st["tag"] == 8, f"tag 8（实测 {st['tag']}）")
+        ck(st["tag_reasons"].get(W.R_TRUE_UNRELATED) == 2
            and st["tag_reasons"].get(W.R_OUT_OF_SCOPE) == 1
-           and st["tag_reasons"].get(W.R_INSUFFICIENT) == 6,
-           f"四类分布 真不涉及3/范围外1/证据不足6（实测 {st['tag_reasons']}）")
+           and st["tag_reasons"].get(W.R_INSUFFICIENT) == 5,
+           f"四类分布 真不涉及2/范围外1/证据不足5（实测 {st['tag_reasons']}）")
         ck(st["pool_uninterpreted"] == 1, "池内未解读记数 1")
 
         # 3) 实写：落点正确（dbs/dbs_src/dbs_empty_reason）+ 铁律（非空/圈外零触碰）
@@ -139,17 +151,27 @@ def main() -> int:
         ck(aa["k_oos"]["classification"]["dbs_empty_reason"]["reason"] == W.R_OUT_OF_SCOPE
            and aa["k_oos"]["classification"]["dbs"] == [], "范围外 tag")
         ck(aa["k_edu"]["classification"]["dbs_empty_reason"]["reason"] == W.R_TRUE_UNRELATED,
-           "教学 tag")
-        ck(aa["k_judged"]["classification"]["dbs_empty_reason"]["reason"] == W.R_TRUE_UNRELATED,
-           "AI 判过无 support tag")
+           "教学 tag（口径不变）")
+        ck(aa["k_judged"]["classification"]["dbs_empty_reason"]["reason"] == W.R_INSUFFICIENT,
+           "旧 verdicts 不短路 → 无信号归证据不足")
         g = aa["k_gated"]["classification"]
         ck(g["dbs_empty_reason"]["reason"] == W.R_TRUE_UNRELATED and g["dbs"] == []
-           and "PostgreSQL" in g["dbs_empty_reason"]["detail"], "应用类立案不回写（detail 留痕）")
-        ck(aa["k_weak"]["classification"]["dbs_empty_reason"]["reason"] == W.R_INSUFFICIENT,
-           "单弱信号 tag")
-        ck(aa["k_topic"]["classification"]["dbs_empty_reason"]["reason"] == W.R_INSUFFICIENT
-           and "topic" in aa["k_topic"]["classification"]["dbs_empty_reason"]["detail"],
-           "topic 单通道不放直通")
+           and "PostgreSQL" in g["dbs_empty_reason"]["detail"], "应用类立案不回写（质量门唯一保留）")
+        ck(aa["k_weak"]["classification"]["dbs"] == ["PostgreSQL"]
+           and aa["k_weak"]["classification"]["dbs_src"]["kind"] == "engine",
+           "单弱信号 v2 直通 fill")
+        ck(aa["k_topic"]["classification"]["dbs"] == ["MySQL"]
+           and aa["k_topic"]["classification"]["dbs_src"]["kind"] == "engine",
+           "topic 单通道 v2 直通 fill")
+        ck(aa["k_dv"]["classification"]["dbs"] == ["MySQL"]
+           and aa["k_dv"]["classification"]["dbs_src"]["kind"] == "engine",
+           "旧 verdicts 不挡引擎信号 fill")
+        c = aa["k_adjmix"]["classification"]
+        ck(c["dbs"] == ["PostgreSQL", "MySQL"] and c["dbs_src"]["kind"] == "adjudicate+engine"
+           and c["dbs_src"]["ver"] == W.ENGINE_VERSION, "裁决+引擎并集 fill（DB_ORDER 排序）")
+        c = aa["k_adjcover"]["classification"]
+        ck(c["dbs"] == ["PostgreSQL", "MySQL"] and "engine" in c["dbs_src"]["kind"],
+           "裁决只补不覆盖：引擎 PG 保留")
         ck(bb["k_dual"]["classification"]["dbs"] == ["MySQL"], "dep+topic 双源 fill")
         ck("无证据记录" in bb["k_noev"]["classification"]["dbs_empty_reason"]["detail"],
            "无证据记录 tag")

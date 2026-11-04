@@ -1,36 +1,39 @@
 {
- "in_scope": 13,
- "judged": 13,
- "fill": 3,
- "tag": 10,
- "fill_engine": 2,
- "fill_adjudicate": 1,
+ "in_scope": 16,
+ "judged": 16,
+ "fill": 8,
+ "tag": 8,
+ "fill_engine": 7,
+ "fill_adjudicate": 2,
  "tag_reasons": {
   "范围外": 1,
-  "真不涉及": 3,
-  "证据不足": 6
+  "真不涉及": 2,
+  "证据不足": 5
  },
  "pool_uninterpreted": 1
 }
-fill_dbs: {'MySQL': 3}
+fill_dbs: {'MySQL': 7, 'PostgreSQL': 3}
 [PASS] dry-run 分片零变化
 [PASS] dry-run 不落台账
-[PASS] 入圈 13（实测 13）
-[PASS] fill 3=engine2+adj1（实测 3/2/1）
-[PASS] tag 10（实测 10）
-[PASS] 四类分布 真不涉及3/范围外1/证据不足6（实测 {'范围外': 1, '真不涉及': 3, '证据不足': 6}）
+[PASS] 入圈 16（实测 16）
+[PASS] fill 8=engine7/adjudicate2（实测 8/7/2）
+[PASS] tag 8（实测 8）
+[PASS] 四类分布 真不涉及2/范围外1/证据不足5（实测 {'范围外': 1, '真不涉及': 2, '证据不足': 5}）
 [PASS] 池内未解读记数 1
-回写 3 · 打原因 10 · 脏分片 2
-台账 C:\Users\QIFANG~1.ZHO\AppData\Local\Temp\tmpoz7o7zf5\attribution_writes.json
-报告 C:\Users\QIFANG~1.ZHO\AppData\Local\Temp\tmpoz7o7zf5\attribution_writes.md
+回写 8 · 打原因 8 · 脏分片 2
+台账 C:\Users\QIFANG~1.ZHO\AppData\Local\Temp\tmpy84c4nc0\attribution_writes.json
+报告 C:\Users\QIFANG~1.ZHO\AppData\Local\Temp\tmpy84c4nc0\attribution_writes.md
 [PASS] engine fill 落点+溯源
 [PASS] adjudicate fill（NotALib 不入库）
 [PASS] 范围外 tag
-[PASS] 教学 tag
-[PASS] AI 判过无 support tag
-[PASS] 应用类立案不回写（detail 留痕）
-[PASS] 单弱信号 tag
-[PASS] topic 单通道不放直通
+[PASS] 教学 tag（口径不变）
+[PASS] 旧 verdicts 不短路 → 无信号归证据不足
+[PASS] 应用类立案不回写（质量门唯一保留）
+[PASS] 单弱信号 v2 直通 fill
+[PASS] topic 单通道 v2 直通 fill
+[PASS] 旧 verdicts 不挡引擎信号 fill
+[PASS] 裁决+引擎并集 fill（DB_ORDER 排序）
+[PASS] 裁决只补不覆盖：引擎 PG 保留
 [PASS] dep+topic 双源 fill
 [PASS] 无证据记录 tag
 [PASS] 行号提名未证实 tag（提名≠支持不硬填）
@@ -44,16 +47,14 @@ fill_dbs: {'MySQL': 3}
 [PASS] 回滚：tag 摘原因
 [PASS] 回滚：非本工具记录不受影响
 [PASS] 回滚：台账滚档
-[FAIL] 回滚后 aa 分片逐字节还原
-回写 3 · 打原因 10 · 脏分片 2
-台账 C:\Users\QIFANG~1.ZHO\AppData\Local\Temp\tmpoz7o7zf5\attribution_writes.json
-报告 C:\Users\QIFANG~1.ZHO\AppData\Local\Temp\tmpoz7o7zf5\attribution_writes.md
-回写 0 · 打原因 10 · 脏分片 2
-台账 C:\Users\QIFANG~1.ZHO\AppData\Local\Temp\tmpoz7o7zf5\attribution_writes.json
-报告 C:\Users\QIFANG~1.ZHO\AppData\Local\Temp\tmpoz7o7zf5\attribution_writes.md
+[PASS] 回滚后 aa 分片内容还原
+回写 8 · 打原因 8 · 脏分片 2
+台账 C:\Users\QIFANG~1.ZHO\AppData\Local\Temp\tmpy84c4nc0\attribution_writes.json
+报告 C:\Users\QIFANG~1.ZHO\AppData\Local\Temp\tmpy84c4nc0\attribution_writes.md
+回写 0 · 打原因 8 · 脏分片 2
+台账 C:\Users\QIFANG~1.ZHO\AppData\Local\Temp\tmpy84c4nc0\attribution_writes.json
+报告 C:\Users\QIFANG~1.ZHO\AppData\Local\Temp\tmpy84c4nc0\attribution_writes.md
 [PASS] 二次运行零脏写
-报告已重出 C:\Users\QIFANG~1.ZHO\AppData\Local\Temp\tmpoz7o7zf5\attribution_writes.md
-[FAIL] 报告四段齐全
-[FAIL] T4b 回写器：四类映射 + 铁律只补空缺 + 裁决频道 + 幂等 + 回滚逐字节还原 + dry-run 零副作用（2 失败）
-回滚后 aa 分片逐字节还原
-报告四段齐全
+报告已重出 C:\Users\QIFANG~1.ZHO\AppData\Local\Temp\tmpy84c4nc0\attribution_writes.md
+[PASS] 报告三段齐全
+[PASS] T4b 回写器：四类映射 + 铁律只补空缺 + 裁决频道 + 幂等 + 回滚内容还原 + dry-run 零副作用（0 失败）

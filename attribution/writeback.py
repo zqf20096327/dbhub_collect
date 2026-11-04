@@ -4,13 +4,15 @@
 11-01 用户裁定：db 归属整体移交程序判定（方案 v1.5，AI 定点停烧）——本模块是
 纯程序回写的唯一入口，零网络零 AI，全部结论可追溯、可回滚。
 
-判定优先级（与 T2e 薄壳/T3b 验证面同口径，只换落点）：
-  ① adjudicate：已烧的 T4a 定点裁决 supports（cite 强制、622 条已授权素材，不浪费）
-  ② 信号层（口径与 unattr_judge 逐字一致）：范围外词表/oos 正则 → oos；
-     教程正则 → edu；db_verdicts 非空（问过判过非 support）→ judged_no_support
-  ③ 证据层：分片无记录/partial → pending；empty_repo/gone/error → no_evidence
-  ④ 引擎层：build_pack × judge → case_opened 且 cat∈工具类 且非 topic 单通道
-     → 回写 dbs（draft 质量门 = T3b 实测 79/79=100% 精度那一个面）
+判定优先级（2026-11-03 v2：用户五刀修法，50 金标分层归因后定案）：
+  ① 裁决只补集不覆盖：622 条已烧裁决与引擎结果并集，不再整集压过引擎；
+     裁决不受证据预检影响（AliSQL 类无证据记录仓裁决照进）
+  ② 引擎结论直通：per_db 全部信号库（立案与非立案、topic 单通道、单弱信号）
+     都进 fill；质量门只剩 cat∈工具类 一道
+  ③ oos 让位：范围外词命中只在"17 库信号全无"（无裁决/引擎信号/行号提名）
+     时才打范围外，否则降为证据不足（带提名/范围外痕迹注记）
+  ④ AI 旧 db_verdicts 不采信：mention 等旧结论不再短路（v1.5 dbs 归程序落地）
+  ⑤ edu 口径不变（金标对内容仓的裁定走 v1.5 读时 dbs，本次不动）
 
 四类空白原因（方案 §3.5 产品语义，13,242 黑洞归零）：
   真不涉及 = edu / judged_no_support / gated_app_cat（应用类立案，dbs_raw 留痕）
@@ -19,9 +21,11 @@
              行号引证未证实（提名≠支持，不硬填——T4a 停烧后由引擎复核）
   新仓未解读 = 池内无解读记录（台账记数，无记录可写）
 
-铁律（ATTRIBUTION_TASKS T4b）：只补空缺不改历史——fn 的最新记录 dbs 非空即整仓
-跳过；记录级只动 dbs==[] 的记录，非空记录零触碰。写盘走 interp_store._write_shard
-同款格式（indent=1、tmp+replace、无轮转副本），逐分片读改写、勿全量载入。
+铁律（ATTRIBUTION_TASKS T4b + v2 修订）：非本工具产物（无 dbs_src/dbs_empty_reason）
+且 dbs 非空的记录零触碰（AI 时代历史结论不碰）；本工具写过的记录按新口径重写
+（fill→fill 更新、fill→tag 清空，溯源字段在即视为本工具产物）。写盘走
+interp_store._write_shard 同款格式（indent=1、tmp+replace、无轮转副本），
+逐分片读改写、勿全量载入。
 
 溯源与回滚：回写记录加 classification.dbs_src={kind,ver,at}；打原因记录加
 classification.dbs_empty_reason={reason,detail,at}。台账 state/attribution_writes.json
@@ -87,6 +91,8 @@ def load_interp_index(interp_dir: Path) -> dict[str, dict]:
                 latest[fn] = {"cat": cls.get("cat") or "其他",
                               "db_verdicts": cls.get("db_verdicts") or [],
                               "latest_empty": not (cls.get("dbs") or []),
+                              "latest_ours": bool(cls.get("dbs_src")),
+                              "latest_key": (name, key),
                               "keys": (cur or {}).get("keys", []), "_g": g}
             if not (cls.get("dbs") or []):
                 latest[fn]["keys"].append((name, key))
@@ -149,68 +155,70 @@ def _cite_note(scan_rec: dict | None) -> str:
 
 def compute_op(fn: str, latest: dict, pool_rec: dict | None, evidence_rec: dict | None,
                scan_rec: dict | None, adj_dbs: set[str], oos_tokens: set[str]) -> dict:
-    """单 fn 判定 → op（fill 打 dbs / tag 打原因）。
+    """单 fn 判定 → op（fill 打 dbs / tag 打原因）。v2 口径见模块 docstring。
 
-    与 unattr_judge.judge_one 同口径同顺序（adjudicate 频道插队最前——已授权素材），
-    区别只在落点：那里写台账等人工签发，这里按 11-01 裁定直接程序回写。
+    结构：edu 短路（口径不变）→ 裁决补集 → 引擎直通 → 质量门（只挡应用类）→
+    空信号终局（oos 让位：有提名就降证据不足）。
     """
     base = {"fn": fn, "stars": (pool_rec or {}).get("stars", 0)}
-    if adj_dbs:                                        # ① 已授权定点裁决
-        return {**base, "op": "fill", "dbs": [d for d in DB_ORDER if d in adj_dbs],
-                "src": "adjudicate", "ver": "t4a-1"}
-
     desc = (pool_rec or {}).get("desc") or ""
     topics = (pool_rec or {}).get("topics") or []
-
-    # ② 信号层（口径与薄壳逐字一致；出池仓无 desc/topics 只查仓名）
     oos_hit = sorted({t.lower() for t in topics} & oos_tokens)[:2]
-    if oos_hit or OOS_RE.search(fn + " " + desc):
-        return {**base, "op": "tag", "reason": R_OUT_OF_SCOPE,
-                "detail": ("生态命中: " + ",".join(oos_hit)) if oos_hit
-                          else "名称/简介命中范围外词"}
-    if EDU_RE.search(fn + " " + desc):
+    oos_note = ("生态命中: " + ",".join(oos_hit)) if oos_hit else \
+        ("名称/简介命中范围外词" if OOS_RE.search(fn + " " + desc) else "")
+
+    if EDU_RE.search(fn + " " + desc):                   # edu 口径不变（五刀未动）
         return {**base, "op": "tag", "reason": R_TRUE_UNRELATED, "detail": "教学/内容类"}
-    if latest["db_verdicts"]:
-        return {**base, "op": "tag", "reason": R_TRUE_UNRELATED,
-                "detail": "AI 判过非 support（db_verdicts 非空）"}
 
-    # ③ 证据层（无记录/partial → 补采队列；empty_repo/gone → 终局无证据）
+    # ① 裁决补集（先落裁决库位；不受证据预检影响——AliSQL 类无记录仓照进）
+    dbs: list[str] = []
+    votes: dict[str, float | None] = {}
+    srcs: dict[str, tuple[str, str]] = {}
+    for d in sorted(adj_dbs, key=DB_ORDER.index):
+        if d not in dbs:
+            dbs.append(d)
+        srcs[d] = ("adjudicate", "t4a-1")
+
+    # ② 引擎直通（evidence ok 才跑；per_db 全部信号库进 fill——立案与单弱信号同权）
+    ev_note = ""
     if evidence_rec is None:
-        return {**base, "op": "tag", "reason": R_INSUFFICIENT,
-                "detail": "无证据记录（待增量补采）" + _cite_note(scan_rec)}
-    st = evidence_rec.get("status")
-    if st == "partial":
-        return {**base, "op": "tag", "reason": R_INSUFFICIENT,
-                "detail": "证据 partial 树截断（待重采）" + _cite_note(scan_rec)}
-    if st != "ok":
-        return {**base, "op": "tag", "reason": R_INSUFFICIENT,
-                "detail": f"证据状态: {st}" + _cite_note(scan_rec)}
+        ev_note = "无证据记录（待增量补采）"
+    elif evidence_rec.get("status") == "partial":
+        ev_note = "证据 partial 树截断（待重采）"
+    elif evidence_rec.get("status") != "ok":
+        ev_note = f"证据状态: {evidence_rec.get('status')}"
+    else:
+        verdict = judge(build_pack(fn, evidence_rec, {"topics": topics}))
+        for db, e in sorted(verdict["per_db"].items(), key=lambda kv: -kv[1]["votes"]):
+            if db not in dbs:
+                dbs.append(db)
+            votes[db] = e["votes"]
+            srcs[db] = ("engine", ENGINE_VERSION)
+    dbs.sort(key=DB_ORDER.index)
 
-    # ④ 引擎层：draft 质量门（≥2 票立案 + 工具类 + 非 topic 单通道）才回写
-    verdict = judge(build_pack(fn, evidence_rec, {"topics": topics}))
-    if verdict["status"] == "no_evidence":
-        desc_libs = _desc_libs(scan_rec)
-        det = "无信号" + (f"；简介候选未证实: {','.join(desc_libs)}" if desc_libs else "")
-        return {**base, "op": "tag", "reason": R_INSUFFICIENT,
-                "detail": det + _cite_note(scan_rec)}
-    if verdict["status"] == "below_quorum":
-        dbs = sorted(verdict["per_db"], key=DB_ORDER.index)
-        return {**base, "op": "tag", "reason": R_INSUFFICIENT,
-                "detail": f"单弱信号未立案（{_recheck_strength(verdict)}: {','.join(dbs)}）"
-                          + _cite_note(scan_rec)}
-    chains = [it for e in verdict["per_db"].values() for it in e["chain"]]
-    if all(it["kind"] == "topic" for it in chains):
-        dbs = sorted(verdict["per_db"], key=DB_ORDER.index)
-        return {**base, "op": "tag", "reason": R_INSUFFICIENT,
-                "detail": f"topic 单通道不放直通（{','.join(dbs)}）" + _cite_note(scan_rec)}
-    if latest["cat"] not in TOOL_CATS:
-        return {**base, "op": "tag", "reason": R_TRUE_UNRELATED,
-                "detail": f"应用类（cat={latest['cat']}），引擎立案未采纳: "
-                          + ",".join(verdict["dbs"]),
-                "dbs_raw": verdict["dbs"]}
-    return {**base, "op": "fill", "dbs": verdict["dbs"],
-            "src": "engine", "ver": ENGINE_VERSION,
-            "votes": {db: e["votes"] for db, e in verdict["per_db"].items()}}
+    # ③ 决策：质量门只剩 cat∈工具类
+    if dbs:
+        if latest["cat"] not in TOOL_CATS:
+            return {**base, "op": "tag", "reason": R_TRUE_UNRELATED,
+                    "detail": f"应用类（cat={latest['cat']}），引擎立案未采纳: "
+                              + ",".join(dbs),
+                    "dbs_raw": dbs}
+        kinds = sorted({k for k, _ in srcs.values()})
+        return {**base, "op": "fill", "dbs": dbs, "src": "+".join(kinds),
+                "ver": ENGINE_VERSION if "engine" in kinds else "t4a-1",
+                "votes": votes or None, "ev_note": ev_note or None}
+
+    # ④ 空信号终局：oos 只在 17 库信号全无（含行号提名）时打范围外
+    if oos_note and not _cited_libs(scan_rec):
+        return {**base, "op": "tag", "reason": R_OUT_OF_SCOPE, "detail": oos_note}
+    det = ev_note or "无信号"
+    if oos_note:
+        det += "；范围外痕迹: " + oos_note
+    desc_libs = _desc_libs(scan_rec)
+    if desc_libs:
+        det += f"；简介候选未证实: {','.join(desc_libs)}"
+    return {**base, "op": "tag", "reason": R_INSUFFICIENT,
+            "detail": det + _cite_note(scan_rec)}
 
 
 # ── 写盘层（逐分片读改写）──────────────────────────────────────────────
@@ -227,8 +235,9 @@ def _write_shard_file(interp_dir: Path, bucket_file: str, entries: dict) -> None
 
 
 def apply_ops(interp_dir: Path, ops: dict[str, dict]) -> int:
-    """ops 落盘：只动 fn 名下 dbs==[] 的记录（铁律），值整体替换走 _write_shard。
-    已带同结论 dbs_src/dbs_empty_reason 的记录跳过（二次运行零脏分片=幂等）。"""
+    """ops 落盘：铁律=非本工具产物且 dbs 非空 → 零触碰（AI 时代历史结论不碰）；
+    本工具写过（带 dbs_src/dbs_empty_reason）的记录按新口径重写（含 fill→fill 更新、
+    fill→tag 清空）。同结论（dbs 内容+溯源）跳过=幂等。值整体替换走 _write_shard。"""
     by_shard: dict[str, dict] = {}
     for fn, op in ops.items():
         if op.get("op") not in ("fill", "tag"):
@@ -239,11 +248,16 @@ def apply_ops(interp_dir: Path, ops: dict[str, dict]) -> int:
         entries = json.loads((interp_dir / shard).read_text(encoding="utf-8"))
         for key, fn in keys.items():
             cls = (entries.get(key) or {}).get("classification")
-            if not isinstance(cls, dict) or (cls.get("dbs") or []):
-                continue                            # 铁律：非空零触碰
+            if not isinstance(cls, dict):
+                continue
+            ours = bool(cls.get("dbs_src") or cls.get("dbs_empty_reason"))
+            if not ours and (cls.get("dbs") or []):
+                continue                            # 铁律：历史结论零触碰
             op = ops[fn]
             if op["op"] == "fill":
-                if cls.get("dbs_src") == {"kind": op["src"], "ver": op["ver"], "at": TODAY}:
+                if cls.get("dbs") == list(op["dbs"]) and \
+                        cls.get("dbs_src") == {"kind": op["src"], "ver": op["ver"],
+                                               "at": TODAY}:
                     continue                        # 幂等：同结论已写
                 cls["dbs"] = list(op["dbs"])
                 cls["dbs_src"] = {"kind": op["src"], "ver": op["ver"], "at": TODAY}
@@ -252,6 +266,7 @@ def apply_ops(interp_dir: Path, ops: dict[str, dict]) -> int:
                 want = {"reason": op["reason"], "detail": op["detail"], "at": TODAY}
                 if cls.get("dbs_empty_reason") == want:
                     continue
+                cls["dbs"] = []                     # 本工具旧 fill 按新口径改 tag
                 cls["dbs_empty_reason"] = want
                 cls.pop("dbs_src", None)
         _write_shard_file(interp_dir, shard, entries)
@@ -336,8 +351,10 @@ def run(*, dry_run: bool = False, limit: int = 0, report_only: bool = False,
         return stats
 
     latest = load_interp_index(interp_dir)
+    # 圈范围：最新记录 dbs 空（补空缺）∪ 本工具旧 fill（带 dbs_src，按新口径重判；
+    # 旧 fill 单记录仓 keys 为空，落点靠 latest_key 补）
     in_scope = {fn: ip for fn, ip in latest.items()
-                if ip["latest_empty"] and ip["keys"]}
+                if (ip["latest_empty"] and ip["keys"]) or ip["latest_ours"]}
     if pool is None:
         pool = load_pool()
     if scan is None:
@@ -352,9 +369,15 @@ def run(*, dry_run: bool = False, limit: int = 0, report_only: bool = False,
 
     ops: dict[str, dict] = {}
     for fn in fns:
-        op = compute_op(fn, in_scope[fn], pool.get(fn), evidence.get(fn),
+        ip = in_scope[fn]
+        op = compute_op(fn, ip, pool.get(fn), evidence.get(fn),
                         scan.get(fn), adj.get(fn) or set(), oos_tokens)
-        op["keys"] = in_scope[fn]["keys"]
+        keys = list(ip["keys"])
+        # 旧 fill 重判：最新记录 dbs 非空，落点键不在空记录集里，补进去
+        if ip["latest_ours"] and not ip["latest_empty"] \
+                and ip["latest_key"] not in keys:
+            keys.append(ip["latest_key"])
+        op["keys"] = keys
         ops[fn] = op
 
     fill = [o for o in ops.values() if o["op"] == "fill"]
@@ -363,8 +386,8 @@ def run(*, dry_run: bool = False, limit: int = 0, report_only: bool = False,
     stats = {
         "in_scope": len(in_scope), "judged": len(fns),
         "fill": len(fill), "tag": len(tag),
-        "fill_engine": sum(1 for o in fill if o["src"] == "engine"),
-        "fill_adjudicate": sum(1 for o in fill if o["src"] == "adjudicate"),
+        "fill_engine": sum(1 for o in fill if "engine" in o["src"]),
+        "fill_adjudicate": sum(1 for o in fill if "adjudicate" in o["src"]),
         "tag_reasons": dict(Counter(o["reason"] for o in tag)),
         "fill_dbs": dict(Counter(db for o in fill for db in o["dbs"])),
         "pool_uninterpreted": len(set(pool) - set(latest)),
@@ -372,7 +395,7 @@ def run(*, dry_run: bool = False, limit: int = 0, report_only: bool = False,
     # 抽检 20 条：fill 优先 star 降序 12 条 + tag 各原因头牌 8 条
     samples = []
     for o in sorted(fill, key=lambda x: -x["stars"])[:12]:
-        v = " ".join(f"{d}={w:g}" for d, w in (o.get("votes") or {}).items())
+        v = " ".join(f"{d}={w:g}" for d, w in (o.get("votes") or {}).items() if w)
         samples.append(f"- {o['stars']:>6}★ {o['fn']} → {','.join(o['dbs'])}"
                        f"（{o['src']}{'；' + v if v else ''}）")
     for reason in (R_TRUE_UNRELATED, R_OUT_OF_SCOPE, R_INSUFFICIENT):
