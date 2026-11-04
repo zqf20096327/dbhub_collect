@@ -1,5 +1,7 @@
 # MMTR — Memorable Memory To Remember
 
+> 记忆核心 + DSH 插件 ｜ 实测缺陷报告：[中文](docs/PRODUCTION-BUGS.zh-CN.md) ｜ [English](docs/PRODUCTION-BUGS.md)
+
 [![test](https://github.com/CRTNET8866/MMTR/actions/workflows/test.yml/badge.svg)](https://github.com/CRTNET8866/MMTR/actions/workflows/test.yml)
 
 > 一个仿人脑的记忆层：**会忘，但忘得对。**
@@ -124,7 +126,7 @@ closeness 亲近 · trust 信任 · playfulness 俏皮 · warmth 温度 · tensi
 ## 八、快速开始
 
 ```bash
-git clone https://github.com/<you>/MMTR.git && cd MMTR
+git clone https://github.com/CRTNET8866/MMTR.git && cd MMTR
 node --experimental-strip-types src/cli.ts init          # 建库
 node --experimental-strip-types src/cli.ts ingest --user "今天面试砸了" --assistant "辛苦了。"
 node --experimental-strip-types src/cli.ts wake          # 看「醒来时她还记得什么」
@@ -227,33 +229,44 @@ const ctx = await mm.getContext({ text: '面试' });
 
 MIT
 
+
 ---
 
-## Use as a DeepSeek Harness (DSH) plugin
+## 作为 DeepSeek Harness（DSH）插件使用
 
-MMTR ships a first-class DSH plugin: six agent tools over the same core.
+MMTR 自带一个 DSH 插件，把同一套核心包成六个 agent 工具。
 
 ```jsonc
-// dsh config
+// dsh 配置
 { "plugins": ["dsh-plugin-mmtr"] }
 ```
 
-| Tool | Purpose |
+| 工具 | 作用 |
 |---|---|
-| `mmtr_remember` | store one durable fact/event |
-| `mmtr_recall` | search memory before answering about the past |
-| `mmtr_status` | clock + relation + live memories + open promises |
-| `mmtr_promise` | record a promise (due time validated in code, never model-computed) |
-| `mmtr_settle` | mark a promise kept/broken |
-| `mmtr_forget` | soft-invalidate a memory by id |
+| `mmtr_remember` | 存一条值得留下的事 |
+| `mmtr_recall` | 回答"过去的事"之前先翻记忆 |
+| `mmtr_status` | 现在几点 + 关系状态 + 还活着的记忆 + 没兑现的约定 |
+| `mmtr_promise` | 记一条约定（到期时间由代码校验，绝不交给模型算） |
+| `mmtr_settle` | 结算约定：做到 / 落空 |
+| `mmtr_forget` | 按 id 作废一条记忆（软删，留审计痕迹） |
 
-The plugin is a thin cordis plugin (`export const name` / `export function apply(ctx)`) that calls
-`ctx.tools.register(defineTool({...}))` — no UI, no daemon, no network beyond the optional LLM pass.
+插件本身是个很薄的 cordis 插件（`export const name` / `export function apply(ctx)`），
+内部就是 `ctx.tools.register(defineTool({...}))`——没有 UI、没有常驻进程，
+除了可选的 LLM 抽取以外不联网。
 
-## Field report
+### 为什么插件放在本仓库里
 
-`docs/PRODUCTION-BUGS.md` — 31 bugs harvested from a long-running deployment (model-computed
-timestamps, proactive pipelines bypassing the normal turn path, event-feed replay, silent attachment
-failures, extraction refusal sentinels, entity hallucination, unbounded growth). Read it before
-building your own long-lived agent memory.
+插件只有两百来行，但直接依赖核心内部 API（`MMTR.open`、`makePromise`、`getContext`、`wake`）。
+拆成独立仓库时，核心一改插件就会静默失效，而 CI 覆盖不到另一边；
+加上 MMTR 尚未发布到 npm（`src/*.ts` 直接跑 `node --experimental-strip-types`），
+独立包会写一个指向不存在版本的 peerDependency。
+所以现在做成**一个仓库、两个入口**：核心 `src/`，插件 `dsh-plugin/`。
+将来要拆，`git subtree split` 一句话的事。
 
+## 实测缺陷报告
+
+`docs/PRODUCTION-BUGS.zh-CN.md`（[中文](docs/PRODUCTION-BUGS.zh-CN.md) ｜ [English](docs/PRODUCTION-BUGS.md)）
+—— 31 条从长期真实部署里捞出来的缺陷：模型自算时间戳、主动消息绕过正常管线、
+事件流历史重放、附件静默失败、抽取拒绝哨兵、实体幻觉、无节制膨胀。
+
+在动手写自己的长期 agent 记忆之前，先看这份。

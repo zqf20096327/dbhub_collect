@@ -7,7 +7,7 @@
 > ⚠️ **仅限已获授权的攻防演练 / 渗透测试使用。** 本仓库是智能体编排与事实库的工程实现，
 > **不包含任何漏洞利用代码**；使用者须自行确保对目标拥有书面授权。
 
-**59 个 `redteam_*` 工具 · 38 个随 npm 包技能 · 5 个分区 / 9 个页面 · 22 张事实库表**
+**63 个 `redteam_*` 工具 · 41 个随 npm 包技能 · 5 个分区 / 9 个页面 · 25 张事实库表**
 
 ---
 
@@ -18,7 +18,7 @@ dsh plugin --profile web add dsh-redteam-mode
 ```
 
 装完**重启一次 `dsh web`**，在界面助手栏选预设 **红队模式**，直接发靶标单位名称即可开工。
-首次启动会自动装好预设与 38 个随 npm 包技能，不需要手动拷文件。
+首次启动会自动装好预设与 41 个随 npm 包技能，不需要手动拷文件。
 
 **环境准备**：本插件不提供工具下载、安装脚本、安装链接或安装教程；运行 `redteam_preflight` 查看缺什么，工具由你自行准备。
 
@@ -32,15 +32,15 @@ dsh plugin --profile web add dsh-redteam-mode
 
 ```sh
 dsh plugin --profile web add \
-  https://github.com/Jueze-2019/dsh-redteam-mode/releases/download/v0.15.4/dsh-redteam-mode-0.15.4.tgz
+  https://github.com/Jueze-2019/dsh-redteam-mode/releases/download/v0.15.8/dsh-redteam-mode-0.15.8.tgz
 # 装完重启一次 dsh web
 ```
 
 **下载 tarball 再装**（适合离线机器，附件同在同一下载页）：
 
 ```sh
-curl -LO https://github.com/Jueze-2019/dsh-redteam-mode/releases/download/v0.15.4/dsh-redteam-mode-0.15.4.tgz
-dsh plugin --profile web add ./dsh-redteam-mode-0.15.4.tgz
+curl -LO https://github.com/Jueze-2019/dsh-redteam-mode/releases/download/v0.15.8/dsh-redteam-mode-0.15.8.tgz
+dsh plugin --profile web add ./dsh-redteam-mode-0.15.8.tgz
 ```
 
 **从源码装**：
@@ -73,7 +73,7 @@ done
 ## 功能
 
 - **一套角色分工**：主会话只做指挥（计划、派活、核对落库、汇报），动手的活全部委派给信息收集 /
-  资产梳理 / 漏洞发现 / 漏洞利用 / 内网渗透五个执行角色，同一靶标**默认 3 个并发（可配置）**。
+  资产梳理 / 漏洞发现 / 漏洞利用 / 内网信息收集 / 内网渗透六个执行角色，同一靶标**默认 3 个并发（可配置）**。
 - **开工前预检**：`redteam_preflight` 逐个技能体检，缺 key、缺 VPS、缺工具一次性说清，补不齐就说降级方案。
 - **得分目标**：严格对齐《突破入侵类得分规则（合并版）》的 **8 类 25 项**；上限、权限取高只计一次、
   同一资产加端口只算一次全由服务端判定，自建账号不计分。凭据里说不清归属的 Web 站点
@@ -86,13 +86,13 @@ done
   缺项标「复现链不完整」，不是悄悄放过。
 - **资产准入**：只打 T0 直接归属 / T1 强相关；T2 旁站/同 C 段只作线索，T0/T1 穷尽并经用户同意后才评估；T3 不碰。
 - **作战优先级**：先进内网、再拿数据——**P0 能进内网的 RCE ＞ P1 ≥1 万条三要素数据 ＞ P2 其它**；角色提示词会按这个顺序分配预算。
-- **技能库 38 个随 npm 包**：FOFA 测绘、被动收集、作战规划、专项路径、netspy 内网网段发现、DeepSeek 公开情报检索、子域与端口流水线、nuclei、目录爆破、服务与 Web
+- **技能库 41 个随 npm 包**：FOFA 测绘、被动收集、作战规划、专项路径、netspy 内网网段发现、DeepSeek 公开情报检索、子域与端口流水线、nuclei、目录爆破、服务与 Web
   指纹识别等，按“规划 / 侦察 / 验证 / 访问 / 内网 / 隧道 / 得分 / 基础设施”分类筛选（默认只看红队，取消勾选显示 DSH 通用）；每个技能带**可用性判定**（缺什么直接点名）。工具由用户自行准备，本插件不提供下载、安装脚本、安装链接或教程。
 - **数据只在本机**：全部落在 `$DSH_HOME/redteam/`，无遥测、无上报、无云端同步。
 
 面板右上角常驻**版本号 + 一键更新**（检测到有智能体在跑会拦住）。
 
-完整说明、59 个工具清单、开发与发版流程见 [`docs/详细文档.md`](docs/详细文档.md)。
+完整说明、63 个工具清单、开发与发版流程见 [`docs/详细文档.md`](docs/详细文档.md)。
 
 ---
 

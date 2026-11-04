@@ -263,6 +263,14 @@ docker compose pull
 docker compose up -d --build
 ```
 
+**The Compose project name is fixed to `garagestack`.** Compose puts it in front of every volume (`garagestack_postgres_data`), and `docker-compose.yml` sets it, so the folder you run from no longer decides which database you get. An install that started in a folder with another name has its data under that name instead: before you update, run `docker compose ls`, and if the name there is not `garagestack`, add it to `.env`:
+
+```bash
+COMPOSE_PROJECT_NAME=mg   # the NAME column of docker compose ls
+```
+
+Without it, `docker compose up` stops with "The container name ... is already in use". Don't remove the old containers to get past that: GarageStack would start on new, empty volumes. If that already happened, see [My data is gone after switching](documentation/PREVIEW_BUILDS.md#my-data-is-gone-after-switching).
+
 **All-in-one container:**
 
 ```bash
@@ -676,6 +684,7 @@ For working on it:
 - [`ARCHITECTURE.md`](documentation/ARCHITECTURE.md): how the services fit together
 - [`DEMO.md`](documentation/DEMO.md): the app on sample data, without a car, and the API reference
 - [`RELEASING.md`](documentation/RELEASING.md): versions, tags and release notes
+- [`PREVIEW_BUILDS.md`](documentation/PREVIEW_BUILDS.md): throwaway `pr-<number>` images for testing a fix on someone else's car, and how to run one
 - [`ACCESSIBILITY.md`](.github/ACCESSIBILITY.md) and [`SECURITY.md`](.github/SECURITY.md), which also says how to report a vulnerability
 
 What changed in each version is on the [releases page](https://github.com/joszz/GarageStack/releases).

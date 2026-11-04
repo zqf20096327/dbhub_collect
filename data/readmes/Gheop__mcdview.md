@@ -330,9 +330,92 @@ file's header.
 
 | Version | Date       | Changes |
 |---------|------------|---------|
+| 1.0.4   | 2026-11-04 | Add the v0.34.7 changelog entry |
+| 1.0.3   | 2026-11-04 | Add the v0.34.6 changelog entry |
+| 1.0.2   | 2026-11-04 | Add the v0.34.5 changelog entry |
+| 1.0.1   | 2026-11-04 | Add the v0.34.3 and v0.34.4 changelog entries |
 | 1.0.0   | 2026-09-01 | Initialize; add a CI section (local flags + hosted GitHub/GitLab integrations), document `--to-dico`/`--to-preview`/`--lint`/`--fail-on`, add the blog link, reconcile the tested-at-scale figure |
 
 ## Changelog
+
+### v0.34.7 — Tables in /* */ comments are no longer read (2026-11-04)
+
+- The PostgreSQL parser no longer reads a `CREATE TABLE` or an `ALTER TABLE`
+  inside a `/* … */` block comment; a `/*` inside a string literal or after
+  `--` opens nothing. A file whose every table sits in a block comment, as
+  Drizzle's introspection migrations ship it ("uncomment this code before
+  executing"), is still read, so its schema shows instead of nothing.
+- A column definition that spans several lines (a comment or a line break
+  between the type and `REFERENCES`) keeps its foreign key.
+- Across 9,908 test `.sql` files: 24 files gain 413 tables, foreign keys go
+  from 59,788 to 59,941, and no file loses a foreign key or gets a new error.
+  The 7 tables and 6 columns no longer reported came from commented-out text.
+
+### v0.34.6 — Column types as declared in SQLite, Drizzle and Rails (2026-11-04)
+
+- SQLite columns keep their declared type: sqlglot rendered them by type
+  affinity (`VARCHAR(255)` → `text(255)`, `DECIMAL(10,2)` → `real(10, 2)`,
+  `BOOLEAN` → `integer`). A column declared without a type is no longer
+  dropped. Across the test corpus, 14,528 columns in 512 SQLite files change
+  type and 48 columns come back.
+- Drizzle schemas read the column options: `varchar(120)`, `numeric(10,2)`,
+  `timestamp(3) with time zone`, `vector(1536)`; `doublePrecision` becomes
+  `double precision`, and an enum column takes the enum's SQL name. The
+  `onDelete` / `onUpdate` actions of `.references()` are read, and so are
+  table-level `foreignKey({ columns, foreignColumns })` declarations, which
+  were ignored: 1,634 more foreign keys across 1,790 test schemas.
+- Rails schemas dumped before Rails 5.1 type the implicit `id` and
+  `t.references` as `integer`, not `bigint` (260 columns in 80 test schemas).
+- The PostgreSQL parser accepts several blanks between keywords
+  (`ALTER TABLE  t`, `REFERENCES  t`, as Dolibarr writes them), and reads
+  `ON DELETE` / `ON UPDATE` written on the line after the target, as
+  pgModeler writes them after `MATCH FULL`. Across the `.sql` test corpus,
+  5 files gain 41 tables and foreign keys go from 59,723 to 59,788.
+
+### v0.34.5 — Spatial columns and commented-out statements no longer cost tables (2026-11-04)
+
+- A MySQL table with a spatial column (`POINT`, `LINESTRING`, `POLYGON`, their
+  `MULTI` forms, `GEOMETRYCOLLECTION`) or an `SRID` attribute disappeared
+  without a warning: sqlglot rejects those types and dropped the whole
+  statement (Dolibarr lost `llx_societe`, `llx_socpeople` and `llx_ecm_files`,
+  and every foreign key pointing at them). The table is now read and the
+  column keeps its type as written.
+- The PostgreSQL parser read commented-out statements: a
+  `-- ALTER TABLE ... FOREIGN KEY ...` line added a relation, and a
+  commented-out `CREATE TABLE` an empty table. Whole comment lines are now
+  ignored.
+- A comma or a quote inside a `--` comment in a `CREATE TABLE` body
+  (`-- creator, if any`) no longer swallows the next column or constraint.
+- A table opened with `( ` and a trailing blank, and closed by
+  `) ENGINE=...;`, is now read by the PostgreSQL parser too.
+- `--dialect auto` no longer keeps the PostgreSQL reading alone when a
+  `CREATE TABLE` head is not in upper case (`create table a` next to
+  `CREATE TABLE b`): the sqlglot reading is tried and wins with more tables.
+  `--dialect postgres` still only reads upper-case DDL.
+- `--dialect mariadb` failed with "Unknown dialect"; it is now read as MySQL.
+- Across 9,908 test `.sql` files: 71 files gain 1,122 tables, foreign keys go
+  from 59,331 to 59,723, and no file gets a new error. The 25 tables no
+  longer reported were all declared in commented-out lines.
+
+### v0.34.4 — MySQL files without backticks keep all their tables (2026-11-04)
+
+- A MySQL file without backticks could be read as PostgreSQL and lose its
+  lower-case tables: the PostgreSQL parser only matches upper-case
+  `CREATE TABLE`, so a file mixing `CREATE TABLE` and `create table` kept only
+  the upper-case ones (Dolibarr: 141 of 418 tables). When a file carries
+  `AUTO_INCREMENT` or `ENGINE=`, `--dialect auto` now also tries the MySQL
+  reading and keeps it when it finds more tables, or as many tables and no
+  fewer foreign keys. Across the test corpus, 612 files are now read as MySQL,
+  25 regain 111 tables, and none loses a table or a foreign key.
+- Those files also lose the phantom columns the PostgreSQL parser made from
+  MySQL lines (`KEY ...`, `CHECK` clauses, `ON DELETE ...`), and their types
+  drop the `AUTO_INCREMENT` / `NULL` noise (`INT AUTO_INCREMENT` → `int`).
+- MySQL, SQLite and other non-PostgreSQL files now read columns added by
+  `ALTER TABLE ... ADD [COLUMN]`.
+- A column declared with an explicit `NULL` in a MySQL, SQLite or SQL Server
+  file was shown as `NOT NULL`. 29,551 columns of the corpus were affected.
+- Rails `t.check_constraint` and `t.exclusion_constraint` lines are no longer
+  shown as columns (348 phantom columns in the corpus).
 
 ### v0.34.3 — `--lint` sees the indexes it used to miss (2026-09-27)
 

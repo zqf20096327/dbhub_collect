@@ -37,3 +37,5 @@ Contributor compiler: <a href="https://github.com/vjivandro">vjivandro</a> (v0.7
 
 [![Star History Chart](https://api.star-history.com/svg?repos=andreiramani/pgvector_pgsql_windows&type=Date)](https://star-history.com/#andreiramani/pgvector_pgsql_windows&Date)
 -->
+
+[![Star History Chart](https://api.star-history.com/chart?repos=andreiramani/pgvector_pgsql_windows&type=date&legend=bottom-right)](https://www.star-history.com/?repos=andreiramani%2Fpgvector_pgsql_windows&type=date&legend=bottom-right)

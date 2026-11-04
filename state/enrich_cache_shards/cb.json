@@ -50,11 +50,11 @@
   }
  },
  "apache/age": {
-  "commit_7d": 7,
-  "commit_90d": 25,
+  "commit_7d": 3,
+  "commit_90d": 28,
   "rel_ver": "PG15/v1.8.0-rc0",
   "rel_pub": "2026-09-19",
-  "rel_days": 29,
+  "rel_days": 46,
   "rel_n90": 1,
   "rel_pre": true,
   "rel_none": false,
@@ -63,7 +63,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 101,
-  "enriched_at": "20261027",
+  "enriched_at": "20261104",
   "lang": {
    "C": 67,
    "PLpgSQL": 11,
@@ -73,10 +73,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261018",
-   "release": "20261018",
+   "commit": "20261104",
+   "release": "20261104",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "PG15/v1.8.0-rc0",
+    "d": "2026-09-19",
+    "n": "- Added PostgreSQL composite `vertex` and `edge` types so queries can access IDs and properties without constructing and decoding complete agtype entities. Returning these composite types also avoids the final conversion to `agtype`.\n- Added per-graph version counters so unrelated database activity does not invalidate cached graphs. On PostgreSQL 15, this requires `shared_preload_libraries = 'age';` otherwise, snapshot-based invalidation remains in use.\n- Supports loading AGE through `shared_preload_librari"
+   },
+   {
+    "t": "PG18/v1.8.0-rc0",
+    "d": "2026-07-09",
+    "n": "Add pg_upgrade support functions for PostgreSQL (#2326)\nFix JDBC driver CI test failures (#2333)\n**Always back up your database before executing any upgrade scripts**"
+   },
+   {
+    "t": "PG17/v1.7.0-rc0",
+    "d": "2026-02-11",
+    "n": "Release Notes for Apache AGE release 1.7.0 for PG17 branch\r\n\r\nWARNING!\r\n \r\nPlease note the upgrade script (age--1.6.0--1.7.0.sql) may take a while to\r\ncomplete for large graphs, due to creation of indexes for existing labels.\r\n \r\nWARNING!\r\n\r\n\r\nApache AGE 1.7.0 - Release Notes\r\n\r\nFix upgrade script for 1.6.0 to 1.7.0 (#2320)\r\nAdd RLS support and fix permission checks (#2309)\r\nReplace libcsv with pg COPY for csv loading (#2310)\r\nFix Issue 1884: Ambiguous column reference (#2306)\r\nUpgrade Jest to v29 for node:"
+   }
+  ]
  },
  "ByConity/ByConity": {
   "commit_7d": 0,

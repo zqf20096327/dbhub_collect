@@ -67,7 +67,7 @@ flowchart LR
 | Path | Purpose |
 | --- | --- |
 | `apps/` | API and worker, web app, Discord bot, Windows desktop overlay, and replay bridge |
-| `packages/contexts/` | Accounts, players, clans, rankings, discovery, refresh operations, replay analysis, and statistics capabilities |
+| `packages/modules/` | Accounts, players, clans, rankings, discovery, refresh operations, replay analysis, and statistics capabilities |
 | `packages/` | Database and Brawlhalla adapters, contracts, game data, and telemetry |
 | `infra/` | Application, observability, backup, storage, and host-service infrastructure with its checks |
 | `tooling/` | Cross-repository architecture policy and database migration commands |
@@ -112,9 +112,7 @@ The API listens on <http://localhost:3000> and the web app on <http://localhost:
 
 | Command | Purpose |
 | --- | --- |
-| `bun run db:generate` | Generate migration files while authoring schema changes |
 | `bun run db:migrate` | Apply committed database migrations |
-| `bun run db:push` | Push schema changes directly during local development |
 
 ## Discord Bot
 

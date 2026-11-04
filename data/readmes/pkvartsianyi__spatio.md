@@ -16,7 +16,10 @@
   <a href="https://pypi.org/project/spatio">
     <img src="https://img.shields.io/pypi/v/spatio.svg" alt="PyPI">
   </a>
-  <a href="https://pkvartsianyi.github.io/spatio/">
+  <a href="https://www.npmjs.com/package/spatio-db">
+    <img src="https://img.shields.io/npm/v/spatio-db.svg" alt="npm">
+  </a>
+  <a href="https://spatiodb.com/">
     <img src="https://img.shields.io/badge/Docs-Available-blue.svg" alt="Documentation">
   </a>
   <a href="https://docs.rs/spatio">
@@ -25,7 +28,9 @@
 </p>
 
 **Spatio** is a high-performance, **embedded spatio-temporal database** written in Rust.
-It's designed for **real-time tracking of moving objects**, with **hot/cold state separation**, **durable persistence**, and **native Python bindings**.
+It's designed for **real-time tracking of moving objects**, with **hot/cold state separation**, **durable persistence**, and **native Python, TypeScript and Go bindings**.
+
+[Website](https://spatiodb.com/) · [API docs](https://docs.rs/spatio) · [llms.txt](https://spatiodb.com/llms.txt)
 
 ## Quick Start
 
@@ -49,20 +54,41 @@ nearby = db.query_radius("cities", nyc, 100000, limit=10)
 # Returns: [(object_id, point, metadata, distance), ...]
 ```
 
+### TypeScript
+```bash
+npm install spatio-db
+```
+
+```ts
+import { Point, Spatio } from 'spatio-db'
+
+// Open or create a database
+const db = Spatio.memory()
+
+// Upsert an object's location (longitude, latitude)
+const nyc = new Point(-74.006, 40.7128)
+db.upsert('cities', 'nyc', nyc, { population: 8000000 })
+
+// Find objects nearby
+const nearby = db.queryRadius('cities', nyc, 100000, 10)
+// Returns: [{ objectId, point, metadata, distance }, ...]
+```
+
 ### Rust
 ```toml
 [dependencies]
-spatio = "0.3"
+spatio = "0.4"
+serde_json = "1"
 ```
 
 ```rust
-use spatio::prelude::*;
+use spatio::{prelude::*, Point3d};
 
 fn main() -> Result<()> {
     let db = Spatio::memory()?;
 
     let nyc = Point3d::new(-74.0060, 40.7128, 0.0);
-    db.upsert("cities", "nyc", nyc, serde_json::json!({}), None)?;
+    db.upsert("cities", "nyc", nyc.clone(), serde_json::json!({}), None)?;
 
     let nearby = db.query_radius("cities", &nyc, 100_000.0, 10)?;
     println!("Found {} cities", nearby.len());
@@ -73,9 +99,9 @@ fn main() -> Result<()> {
 
 ## Architecture: Hot/Cold State
 
-Spatio follows a specialized architecture for tracking millions of moving objects:
-- **Hot State**: Current locations are kept in-memory using a lock-free `DashMap` and a high-performance R*-tree spatial index.
-- **Cold State**: Historical movement (trajectories) is persisted to an append-only log on disk.
+Spatio follows a specialized architecture for tracking moving objects:
+- **Hot State**: Current locations are kept in-memory using a sharded concurrent `DashMap` and a high-performance R*-tree spatial index.
+- **Cold State**: Historical movement (trajectories) is persisted to an append-only log on disk. `:memory:` databases have no log: they keep the last `buffer_capacity` updates per object (default 100), and `delete` removes them.
 - **Recovery**: At startup, the Hot State is automatically rebuilt by scanning the latest entries in the Trajectory Log.
 
 ## Features
@@ -85,18 +111,39 @@ Spatio follows a specialized architecture for tracking millions of moving object
 - **Trajectories:** Optimized storage and querying of historical movement paths over time.
 - **Durable Persistence:** CRC-checked append-only trajectory log with configurable sync policy and checkpoint recovery.
 - **Lightweight:** No external services, no SQL overhead, and a zero-setup embedded engine.
-- **Cross-language:** Native high-performance Python bindings via PyO3.
+- **Cross-language:** Native high-performance Python bindings via PyO3, and Node.js/TypeScript bindings via napi-rs.
 - **Server Mode:** Includes an optional lightweight TCP server for remote access.
+
+## Use Cases
+
+Spatio fits applications that track things that move and ask where they are now and where they have been:
+
+- Delivery and logistics fleet tracking
+- Drones and airspace monitoring, using 3D and altitude-band queries
+- Geofencing with polygon queries
+- Nearby search around a moving object
+
+## How Spatio Compares
+
+| | Spatio | PostGIS | SpatiaLite | Redis GEO | Tile38 |
+|---|---|---|---|---|---|
+| Deployment | In-process library, optional server | Server | In-process library | Server | Server |
+| Query language | Native API | SQL | SQL | Commands | Commands |
+| Movement history | Built in | Model it yourself | Model it yourself | Model it yourself | Model it yourself |
+| Stored geometry | Points with metadata | Full geometry | Full geometry | Points | Full geometry |
+
+Choose PostGIS or SpatiaLite for general GIS work, such as joins, arbitrary geometries and hundreds of spatial functions.
 
 ## Configuration
 
 Spatio exposes a `Config` builder for tuning performance and persistence.
 
-```rust
+```rust,ignore
 use spatio::config::{Config, PersistenceConfig};
 
 let config = Config::default()
-    // Per-object in-memory history kept for fast recent-trajectory reads
+    // Updates kept in memory per object: a read cache for file databases,
+    // and the entire history of a `:memory:` database
     .with_buffer_capacity(100)
     .with_persistence(PersistenceConfig {
         // Records buffered before the log is flushed to the OS
@@ -106,10 +153,16 @@ let config = Config::default()
 let db = Spatio::open_with_config("path/to/db", config)?;
 ```
 
+`with_max_buffered_objects` caps how many objects keep that history in memory (default 100,000). The log is unaffected.
+
+`db.flush()` makes every acknowledged write durable. `db.compact(keep_since)` shrinks the log by dropping older history, keeping the latest update of each live object. Writes wait while it runs, and it needs free disk space for a second copy of what it keeps, so run it before the disk is full.
+
+Timestamps are seconds since the epoch. Writes stamped more than an hour ahead of the clock are rejected. An update older than an object's current one is added to its history without moving it.
+
 ## Examples
 
 ### Tracking Moving Objects
-```rust
+```rust,ignore
 // Update location (upsert)
 db.upsert("delivery", "truck_001", position, metadata, None)?;
 
@@ -121,7 +174,7 @@ let near_neighbors = db.query_near("drones", "drone_alpha", 500.0, 5)?;
 ```
 
 ### 3D Spatial
-```rust
+```rust,ignore
 // Track drones with altitude
 let drone_pos = Point3d::new(-74.006, 40.712, 100.0);
 db.upsert("drones", "drone_1", drone_pos, json!({}), None)?;
@@ -131,7 +184,7 @@ let in_airspace = db.query_within_bbox_3d("drones", min_x, min_y, min_z, max_x, 
 ```
 
 ### Historical Trajectories
-```rust
+```rust,ignore
 // Query movement history for a specific vehicle
 let start = SystemTime::now() - Duration::from_secs(3600);
 let history = db.query_trajectory("logistics", "truck_001", start, SystemTime::now(), 500)?;
@@ -167,10 +220,10 @@ cargo run -p spatio-server
 ```
 
 Connect using the native Rust client (`spatio-client`):
-```rust
+```rust,ignore
 use spatio_client::SpatioClient;
 
-let client = SpatioClient::new("127.0.0.1".to_string(), 3000);
+let client = SpatioClient::connect("127.0.0.1:3000".parse()?).await?;
 let stats = client.stats().await?;
 ```
 
@@ -179,6 +232,7 @@ let stats = client.stats().await?;
 - **Architecture:** [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - **Operation complexity:** [docs/COMPLEXITY.md](docs/COMPLEXITY.md)
 - **Python docs:** [bindings/python/README.md](bindings/python/README.md)
+- **TypeScript docs:** [bindings/typescript/README.md](bindings/typescript/README.md)
 - **Server docs:** [crates/server/README.md](crates/server/README.md)
 - **Client docs:** [crates/client/README.md](crates/client/README.md)
 - **API docs:** [docs.rs/spatio](https://docs.rs/spatio)

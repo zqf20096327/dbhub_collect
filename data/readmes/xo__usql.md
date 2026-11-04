@@ -455,6 +455,7 @@ Flags:
   -J, --json                                JSON output mode
   -C, --csv                                 CSV output mode
   -G, --vertical                            vertical output mode
+  -M, --markdown                            markdown output mode
   -q, --quiet                               run quietly (no messages, only query output)
       --config string                       config file
   -V, --version                             output version information, then exit
@@ -614,7 +615,8 @@ $ usql sq://path/to/dbname.sqlite3
 $ usql sqlite3://path/to/dbname.sqlite3
 $ usql file:/path/to/dbname.sqlite3
 
-# connect to a named connection in $HOME/.config/usql/config.yaml
+# connect to a named connection in config.yaml (see Configuration below for
+# where it is on each system)
 $ cat $HOME/.config/usql/config.yaml
 connections:
   my_named_connection: sqlserver://user:pass@localhost/
@@ -672,6 +674,31 @@ ms:sa@localhost=>
 
 A command takes one or more parameters. A parameter can be quoted with either
 `'` or `"`, and [can also be backticked][backticks].
+
+#### How input becomes statements
+
+`usql` reads input as `psql` does, on every database:
+
+- A statement ends at a `;` that is outside a string, a quoted name and a
+  comment, or at a meta command such as `\g`.
+- Write `\;` for a `;` that must not end the statement. `usql` sends it as `;`.
+- The body of a stored program between `BEGIN` and `END`, and on Oracle an
+  anonymous block, stays in one statement, so its `;` need no escape. Inside a
+  PL/SQL package, or in the declarations of a unit before its `BEGIN`, write
+  each `;` as `\;`.
+- A line with only `/` and SQL Server's `GO` are not separators. They are
+  text of the statement, as in `psql`.
+- Input that is not typed, from `-c`, `-f`, a pipe or `\i`, runs a last
+  statement that has no `;`.
+
+#### Line editing
+
+The interactive interpreter edits lines with [`rline`][rline], which reads
+`~/.inputrc` (or the file that `INPUTRC` names) as GNU Readline does. For
+example, `set editing-mode vi` turns on vi mode, and
+`"\e[A": history-search-backward` makes Up search the history for entries
+that start with what is typed. Settings inside `$if usql` ... `$endif` apply
+only to `usql`.
 
 ### Backslash Commands
 
@@ -732,6 +759,8 @@ Query Buffer
   \w [-raw|-exec] FILE              write the contents of the query buffer, raw
                                     (non-interpolated) buffer, or exec buffer to file
   \r                                reset (clear) the query buffer
+  \ef [FUNCNAME [LINE]]             edit function definition with external editor
+  \ev [VIEWNAME [LINE]]             edit view definition with external editor
 
 Informational
   \d[S+] [NAME]                     list tables, views, and sequences or describe table, view,
@@ -785,7 +814,7 @@ Informational
   \z[S] [PATTERN]                   same as \dp
   \sf[+] FUNCNAME                   show a function's definition
   \sv[+] VIEWNAME                   show a view's definition
-  \ss[+] [TABLE|QUERY] [k]          show stats for a table or a query
+  \ss[+] TABLE [k]                  show stats for the columns of a table
 
 Variables
   \set [NAME [VALUE]]               set script variable, or show all script variables if no
@@ -855,9 +884,17 @@ always appreciated][contributing]!
 #### Configuration
 
 During its initialization phase, `usql` reads a standard [YAML configuration][yaml]
-file [`config.yaml`](_samples/config.yaml). On Windows this is `%AppData%/usql/config.yaml`,
-on macOS this is `$HOME/Library/Application Support/usql/config.yaml`, and on
-Linux and other Unix systems this is normally `$HOME/.config/usql/config.yaml`.
+file [`config.yaml`](_samples/config.yaml). It reads the first of these:
+
+1. The file that `--config` names.
+2. The file that the `USQL_CONFIG` environment variable names.
+3. `usql/config.yaml` in the configuration directory of the system:
+   `%AppData%/usql/config.yaml` on Windows,
+   `$HOME/Library/Application Support/usql/config.yaml` on macOS, and
+   `$XDG_CONFIG_HOME/usql/config.yaml` on Linux and other Unix systems, which
+   is `$HOME/.config/usql/config.yaml` when `XDG_CONFIG_HOME` is not set.
+   macOS does not read `XDG_CONFIG_HOME`. Set `USQL_CONFIG` to use another
+   file there.
 
 ##### `connections:`
 
@@ -1054,6 +1091,7 @@ fieldsep                 "|"
 fieldsep_zero            off
 footer                   on
 format                   aligned
+header_align             center
 json_indent              0
 linestyle                ascii
 locale                   C
@@ -1092,6 +1130,7 @@ on_error_stop is on
 (not connected)=> \uset
 echo_hidden           off
 editor                ""
+fetch_count           0
 on_error_stop         on
 pager                 "less -R"
 prompt1               "%S%N%m%/%R%# "
@@ -1316,8 +1355,9 @@ When scripting, or when needing to perform multiple `\copy` operations from/to
 multiple sources/destinations, the best practice is to `\set` connection
 variables either in a script or in [the `$HOME/.usqlrc` RC script][usqlrc].
 
-Similarly, passwords can be stored for easy reuse (and kept out of scripts) by
-storing in [the `$HOME/.usqlpass` password file][usqlpass].
+Similarly, passwords can be kept out of scripts by defining [named
+connections][connection-vars] in [the `config.yaml` file][config]. The
+[`$HOME/.usqlpass` password file][usqlpass] also works, but it is deprecated.
 
 For example:
 
@@ -1392,9 +1432,9 @@ Connected with driver sqlserver (Microsoft SQL Server 2025 17.0.5005.3, RTM-CU9,
 Type "help" for help.
 
 ms:sa@localhost=> \g
- 1 \g        4 \gexec
- 2 \gx       5 \getenv
- 3 \gset
+ 1 \g        4 \gset
+ 2 \go       5 \gexec
+ 3 \gx       6 \getenv
 ```
 
 Not all commands, contexts, or databases support completion. To help improve
@@ -1597,9 +1637,9 @@ the same database, so a `postgres:` entry also covers `pg://`, `pgx://` and
 own, so CockroachDB, CrateDB and Redshift each need their own entry, and so do
 TiDB, SingleStore and Vitess. A `mysql:` entry does not cover `tidb://`.
 
-While the `.usqlpass` functionality will not be removed, it is recommended to
-[define named connections][connection-vars] preferably via [the `config.yaml`
-file][config].
+The `.usqlpass` file is deprecated, and `usql` prints a warning when it reads a
+password from it. [Define named connections][connection-vars] in [the
+`config.yaml` file][config] instead.
 
 <hr/>
 
@@ -1715,12 +1755,10 @@ $ usql "couchbase://user:pass@localhost/?txtimeout=2m"
 
 ## Contributing
 
-`usql` is currently a WIP, and is aiming towards a 1.0 release soon.
-Well-written PRs are always welcome -- and there is a clear backlog of issues
-marked `help wanted` on the GitHub issue tracker! For [technical details on
-contributing, see CONTRIBUTING.md](CONTRIBUTING.md).
-
-[_Pick up an issue today, and submit a PR tomorrow!_][help-wanted]
+`usql` is currently a WIP, and is aiming towards a 1.0 release soon. Report a
+bug, ask a question, or propose a feature in [GitHub
+Discussions][discussions]. The repository takes no issues and no pull
+requests. For [technical details, see CONTRIBUTING.md](CONTRIBUTING.md).
 
 <br/>
 
@@ -1742,7 +1780,7 @@ contributing, see CONTRIBUTING.md](CONTRIBUTING.md).
 [go-sql]: https://pkg.go.dev/database/sql
 [homebrew]: https://brew.sh/
 [xo-tap]: https://github.com/xo/homebrew-xo
-[help-wanted]: https://github.com/xo/usql/issues?q=is:open+is:issue+label:%22help+wanted%22
+[discussions]: https://github.com/xo/usql/discussions
 [aur]: https://aur.archlinux.org/packages/usql
 [aur-bin]: https://aur.archlinux.org/packages/usql-bin
 [yay]: https://github.com/Jguer/yay
@@ -1777,3 +1815,4 @@ contributing, see CONTRIBUTING.md](CONTRIBUTING.md).
 [arewesixelyet]: https://www.arewesixelyet.com
 [chart-command]: #chart-command "\\chart meta command"
 [yaml]: https://yaml.org
+[rline]: https://github.com/xo/rline

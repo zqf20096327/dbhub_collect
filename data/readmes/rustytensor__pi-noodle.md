@@ -18,7 +18,7 @@ pi-noodle: your Pi agent's inner voice and memory.
 pi install npm:pi-noodle
 ```
 
-<p><strong>Current version:</strong> 1.15.4</p>
+<p><strong>Current version:</strong> 1.15.6</p>
 
 [Editable SVG logo](docs/assets/noodle-logo-editable.svg) · [Releases](https://github.com/rustytensor/pi-noodle/releases) · [Issues](https://github.com/rustytensor/pi-noodle/issues)
 
@@ -52,7 +52,9 @@ Try a synthetic project note:
 /noodle-memory editor
 ```
 
-Memory is **reference material, not higher-priority instructions**. Recall is bounded, not perfect; do not store passwords or tokens in it. [Memory controls and privacy](docs/user-guide.md#shared-memory) · [Editor preview](docs/assets/noodle-memory-editor.svg)
+The editor has a padded border, named panes and a clear selection highlight. **Tab** switches sections; arrow keys choose controls and **Enter** uses them: **Search → Edit → Review and save**. Fullscreen mode also supports clicks and pane scrolling; regular mode stays keyboard-friendly. Review approvals remain keyboard-only.
+
+Memory is **reference material, not higher-priority instructions**. Recall is bounded, not perfect; do not store passwords or tokens in it. [Memory controls and privacy](docs/user-guide.md#shared-memory) · [Synthetic editor preview](docs/assets/noodle-memory-editor.svg)
 
 <a id="full-session-archive"></a>
 

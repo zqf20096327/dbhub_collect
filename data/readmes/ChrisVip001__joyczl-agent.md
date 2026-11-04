@@ -67,16 +67,18 @@ persisted with the conversation.
 | `search_web` | DuckDuckGo HTML, or Tavily with `TAVILY_API_KEY` |
 | `read_file` | read a text file: paginated (2000 lines / 50KB, never mid-line), line numbers, a continuation protocol, and a re-read short-circuit; **on by default** |
 | `list_dir` | list a directory: directories first, files with sizes, 500-entry cap; **on by default** |
-| `fetch_url` | fetch a page's text (HTML→plain, 50k cap); SSRF guard + external-content-is-data declaration |
-
-**Twelve LLM providers are pre-adapted in code** (`joyczl-provider`), switchable at will: `/model` lists configured profiles, `/model add ds deepseek deepseek-chat --env DEEPSEEK_API_KEY` adds one, `/model use ds` switches — no need to retype the key, effective immediately, no restart. The dashboard's "Model" panel is the same implementation. Keys go to the OS keychain first, falling back to `<home>/secrets.json` (0600, plaintext) when there is none — the save response says which one it was, honestly. **The old `JOY_API_KEY` / `JOY_BASE_URL` env vars are no longer read** — configuration has exactly one path: `models.json`.
 | `fetch_url` | fetch a page's text (HTML→plain, 50k cap); SSRF guard (blocks private/metadata targets, re-checks every redirect) + an external-content-is-data declaration |
 | `create_skill` | persist an agreed workflow as procedural memory |
 | `job_output` / `job_list` / `job_kill` | read, list and stop background jobs (started with `run_command`'s `background=true`) |
 | `todo_write` | keep a per-session todo list, re-injected every turn (whole-table replace; one `in_progress` at a time) |
 | `current_time` | local time with weekday and timezone |
+| `write_file` / `edit` | write a text file / one exact-match replacement with a change hunk — off unless `JOY_WRITE=1`; writable boundary = workdir + home + `JOY_EXEC_WRITABLE_ROOTS` |
 | `run_command` | shell commands — sandboxed, allowlisted, off unless `JOY_EXEC=1` ([SECURITY.md](SECURITY.md)) |
 | `delegate_task` | hand one self-contained job to a subagent — off unless `JOY_DELEGATE=1`, cannot delegate again; pass `result_schema` for a structured answer (retried once, then prose) |
+
+### Providers and keys
+
+**Twelve LLM providers are pre-adapted in code** (`joyczl-provider`), switchable at will — and extendable without code: `<home>/models-catalog.json` patches built-in defaults or adds a provider (see [docs/configuration.md](docs/configuration.md)). `/model` lists configured profiles, `/model add ds deepseek deepseek-chat --env DEEPSEEK_API_KEY` adds one, `/model use ds` switches — no need to retype the key, effective immediately, no restart. The dashboard's "Model" panel is the same implementation. Keys go to the OS keychain first, falling back to `<home>/secrets.json` (0600, plaintext) when there is none — the save response says which one it was, honestly. **The old `JOY_API_KEY` / `JOY_BASE_URL` env vars are no longer read** — configuration has exactly one path: `models.json`.
 
 Tool failures return to the model as text — the loop never crashes on one.
 
@@ -112,7 +114,7 @@ Tool failures return to the model as text — the loop never crashes on one.
 | P7 ✅ | hybrid retrieval (`JOY_EMBEDDINGS`, RRF), temporary-statement filter, skill updates (`joy skill update`) |
 | P8 ✅ | startup config validation, tool-argument schema checks, a stall guard, token budgets, sandboxed-and-offline execution, visible retries, output spilling, subagents, interactive approval, skill policy fields, memory kinds |
 | P9 ✅ | tool-result budgets (line-aware spilling + observed-prefill calibration), subagent report scanning and `result_schema`, MCP circuit breaking and name de-duplication, memory write de-duplication, twelve lifecycle hooks (`JOY_HOOKS`), a todo list, background jobs, and a goal loop (`/goal`) |
-| Next | distribution: PyPI wheel + npm shim; both unpublished |
+| P10 ✅ | file-writing tools (`write_file`/`edit`), image input, model catalog, HTTP hooks, declarative workflows, per-session write lock, Windows boundary (Unix-only), distribution materials (npm shim / brew / PyPI / release workflow) |
 
 ## Naming
 

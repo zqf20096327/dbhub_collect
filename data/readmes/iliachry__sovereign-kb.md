@@ -133,6 +133,9 @@ skb dashboard --export
 | Print your Tier-0 profile (`00-identity/README-me.md` + `01-now/now.md`) | `skb me` |
 | Print zero-context-tax Creative Mode Resumption Packet(s) (`all`, `math`, `compute`, `spatial`, `writing`) | `skb resume math` |
 | Show vault & index status | `skb status` |
+| Run Autonomous Human-Like Video Playback Audit (native `.mp4` stream to Bedrock Nova Pro + Triad keyframes) | `skb video audit artifacts/walkthrough_compressed.mp4` |
+| Run the Unified Sovereign Organon CLI (`organon status`, `organon showcase`, `organon task`, `organon finish`, `organon sync-state`, `organon chain`) | `organon status --all-nodes` |
+| Run Pistis On-Chain Bilateral Negotiation, RFC 6962 Merkle Anchor, PhD Tokenomics & Software Aristocracy (`skb chain` / `organon chain`) | `organon chain full-suite` |
 
 ---
 
@@ -143,7 +146,7 @@ Beyond everyday note capture and search, `sovereign-kb` ships four advanced engi
 1. **[Architecture: 4-Way Hybrid Retrieval & 6-Gate Vault Doctor](docs/ARCHITECTURE.md)**
    - How SQLite FTS5 BM25, optional [`hips`](https://github.com/jasonthird/high-performance-search-engine) Rust Block-Max WAND (`skb hips`), 768-d local Ollama embeddings, Reciprocal Rank Fusion (RRF), and 1-hop `[[Wikilink]]` graph propagation work together.
 2. **[Unified Goldwood Index (`G >= 9.0`), 8 Craft Lenses & 10 Subtractive Design Laws (`GWI+ v1.4.0`)](docs/GWI.md)**
-   - Non-linear quality gate (`skb gwi audit .`, `skb gwi status`, `skb gwi subprojects`, `--subprojects --incremental` / `gwi`) evaluating software apps (`app`), 3D simulations (`sim`), videos (`video`), LaTeX papers (`paper`), and Knowledge Base vaults (`kb`) across 8 Bi-Polar Specialist Craft Lenses, Laws `L0`–`L9`, and the persistent Sovereign Audit Provenance Registry (`~/.swm/audit_registry.json`).
+   - Non-linear quality gate (`skb gwi audit . --execute-gate`, `skb gwi status`, `skb gwi subprojects`, `--subprojects --incremental` / `gwi`) evaluating software apps (`app`), 3D simulations (`sim`), videos (`video`), LaTeX papers (`paper`), and Knowledge Base vaults (`kb`) across 8 Bi-Polar Specialist Craft Lenses, Laws `L0`–`L9`, run-bound behavioral gate receipts, and the persistent Sovereign Audit Provenance Registry (`~/.swm/audit_registry.json`).
 3. **[7-Archetype Project & Scientific Paper Factory (`skb scaffold`)](docs/SCAFFOLDING.md)**
    - One-command repository bootstrapping (`web-ts-3d-gis`, `python-uv-ai`, `rust-systems`, `spatial-xr-ble`, `paper-ieee-arxiv`, `game-sim-3d`, `metatopia-chameleon`) pre-wired with `AGENTS.md` and `./scripts/quality_gate.sh`.
 4. **[Recursive Self-Improvement (`skb rsi`), Soar 9.6 Kernel (`skb soar`), Rust Certification & FinOps](docs/RSI.md)**

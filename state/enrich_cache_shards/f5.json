@@ -1,11 +1,11 @@
 {
  "supabase/pg_graphql": {
-  "commit_7d": 4,
-  "commit_90d": 18,
-  "rel_ver": "v1.6.2",
-  "rel_pub": "2026-08-26",
-  "rel_days": 63,
-  "rel_n90": 1,
+  "commit_7d": 5,
+  "commit_90d": 20,
+  "rel_ver": "v1.6.3",
+  "rel_pub": "2026-11-02",
+  "rel_days": 2,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -13,7 +13,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 50,
-  "enriched_at": "20261028",
+  "enriched_at": "20261104",
   "lang": {
    "Rust": 58,
    "PLpgSQL": 42,
@@ -23,10 +23,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261028",
-   "release": "20261028",
+   "commit": "20261104",
+   "release": "20261104",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v1.6.3",
+    "d": "2026-11-02",
+    "n": "Changes in this Release\n- security: quote primary key column names when building `nodeId`. Primary key column names were interpolated into the generated SQL unquoted, so a name needing quoting broke `nodeId` selection, and a name carrying a SQL fragment was executed in the querying role's context. See the security advisory GHSA-3xwc-rjxj-m99h.\n\nFull changelog: https://github.com/supabase/pg_graphql/blob/master/docs/changelog.md"
+   },
+   {
+    "t": "v1.6.2",
+    "d": "2026-08-26",
+    "n": "## What's Changed\r\n* chore: pin actions to sha by @staaldraad in https://github.com/supabase/pg_graphql/pull/640\r\n* fix: bump rand to a minimum version of 0.8.6 to fix a dependabot alert by @imor in https://github.com/supabase/pg_graphql/pull/643\r\n* chore: bump pgrx to 0.19.2 and fix clippy warnings by @imor in https://github.com/supabase/pg_graphql/pull/645\r\n* chore: bump version to 1.6.2 by @imor in https://github.com/supabase/pg_graphql/pull/648\r\n* chore: use pgrx version 0.19.2 in release workflow by @i"
+   },
+   {
+    "t": "v1.6.1",
+    "d": "2026-05-07",
+    "n": "Changes in this Release\r\n- bugfix: Remove double NON_NULL wrapping on byPk argument types — fixes GraphiQL crashing with `Expected UUID! to be a GraphQL nullable type` when introspection is enabled (#635, closes #633)\r\n- bugfix: Mixed introspection and data fields in the same query now return correct partial results (#631) \r\n- docs: Fix typo in configuration.md (#632)                                                                                                                                            "
+   }
+  ]
  },
  "Ericsson/codechecker": {
   "commit_7d": 6,

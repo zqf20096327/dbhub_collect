@@ -7,7 +7,7 @@
 
 [![CI](https://img.shields.io/github/actions/workflow/status/hsuanshao/TeamAgentMemory/ci.yml?branch=main&label=CI)](https://github.com/hsuanshao/TeamAgentMemory/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/hsuanshao/TeamAgentMemory)](https://github.com/hsuanshao/TeamAgentMemory/releases/latest)
-[![License: BUSL-1.1](https://img.shields.io/badge/license-BUSL--1.1-blue)](COMMERCIAL.md)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 [![MSRV](https://img.shields.io/badge/MSRV-1.88-orange?logo=rust)](Cargo.toml)
 [![Docker image](https://img.shields.io/badge/ghcr.io-agentmemory--core-2496ED?logo=docker&logoColor=white)](https://github.com/hsuanshao/TeamAgentMemory/pkgs/container/agentmemory-core)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org)
@@ -323,7 +323,7 @@ Thanks to everyone who has contributed ([emoji key](https://allcontributors.org/
 
 ## License
 
-From 0.4.0 the server is licensed under the [Business Source License 1.1](LICENSE): free for evaluation, personal and non-profit use, and for an organization with up to 1 department and 10 members; larger production use needs a commercial license. Each version becomes Apache 2.0 four years after release. The `amem` client and the agent plugins stay MIT, and 0.3.2 and earlier remain MIT. See [COMMERCIAL.md](COMMERCIAL.md).
+From 0.5.3 the server is licensed under the [Apache License 2.0](LICENSE): you may use, modify and redistribute it, including in commercial products. The `amem` client and the agent plugins stay MIT. 0.4.0 to 0.5.2 were released under the Business Source License 1.1, and 0.3.2 and earlier under MIT; see [COMMERCIAL.md](COMMERCIAL.md).
 
 ## Acknowledgements
 

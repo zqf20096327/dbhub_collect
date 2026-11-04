@@ -19,7 +19,7 @@
 $ npm install postgres
 ```
 
-Postgres.js needs Node.js 20 or later, Bun, or Cloudflare Workers. Deno runs it through its Node.js compatibility. It is an ES module with no dependencies.
+Postgres.js needs Node.js 18 or later, Bun, or Cloudflare Workers. Deno runs it through its Node.js compatibility. It is an ES module with no dependencies.
 
 > **Upgrading from v3?** The API is the same apart from a short list of changes. Read [Upgrading from v3](#upgrading-from-v3) first: parameter types are now decided by the server, which changes how a `Date` is written to `timestamp` and `date` columns outside UTC.
 
@@ -454,6 +454,18 @@ await sql`
 select "id" from "users"
 ```
 
+A dot is read as a separator, so `sql('app.users')` gives `"app"."users"`. For a name that contains a dot, give its parts to `sql.identifier`, which quotes each part as it is, without the `transform`, and joins them with `.`:
+```js
+const schema = 'acme.inc'
+
+await sql`
+  select * from ${ sql.identifier(schema, 'users') }
+`
+
+// Which results in:
+select * from "acme.inc"."users"
+```
+
 ### Quick primer on interpolation
 
 Here's a quick oversight over all the ways to do interpolation in a query template string:
@@ -704,7 +716,7 @@ const table_name = 'friends'
 
 await sql`
   create or replace trigger ${sql(triggerName)}
-  after ${sql.unsafe(eventType)} on ${sql.unsafe(`${schema_name}.${table_name}`)}
+  after ${sql.unsafe(eventType)} on ${sql.identifier(schema_name, table_name)}
   for each row
   execute function ${sql(triggerFnName)}()
 `
@@ -1491,6 +1503,8 @@ With `max_prepared_statements`, PgBouncer keeps one prepared statement on each s
 
 PgBouncer refuses startup parameters it does not know, so a `connection` option like `{ 'some.var': 1 }` needs [`ignore_startup_parameters`](https://www.pgbouncer.org/config.html#ignore_startup_parameters) or `SET` inside a transaction instead. The pid in `state` is the pooler's, not the server's, so `pg_terminate_backend(state.pid)` does not end the session.
 
+Supavisor before 2.10, the pooler behind Supabase's port 6543, hangs on pipelined queries in transaction mode: the queries are sent but their answers never arrive. Use `max_pipeline: 1` there until you are on 2.10 or later. Setting `query_timeout` also keeps a pooler that stops answering from hanging the application: the queries reject with `QUERY_TIMEOUT` and the pool connects again.
+
 ## Custom Types
 
 You can add ergonomic support for custom types, or simply use `sql.typed(value, type)` inline, where type is the PostgreSQL `oid` for the type and the correctly serialized string. _(`oid` values for types can be found in the `pg_catalog.pg_type` table.)_
@@ -1883,6 +1897,11 @@ On Cloudflare Workers: the TLS handshake could not be completed, most often beca
 
 An insert or update helper was given an empty object or an empty list of columns, which would make invalid SQL.
 
+##### NO_PARTS
+> sql.identifier needs at least one part
+
+`sql.identifier()` was called with no parts, which would leave the name out of the query.
+
 ##### CONNECT_TIMEOUT
 > write CONNECT_TIMEOUT host:port
 
@@ -2003,7 +2022,7 @@ If it returns no columns, or the time zone is `UTC` and so is your Node.js proce
 
 ### Everything else
 
-- **Runtimes.** Node.js 20 or later, Bun and Cloudflare Workers; Deno runs the npm package. Postgres.js is an ES module; `require('postgres').default` works on Node.js 20.19 and 22.12 and later.
+- **Runtimes.** Node.js 18 or later, Bun and Cloudflare Workers; Deno runs the npm package. Postgres.js is an ES module; `require('postgres').default` works on Node.js 20.19 and 22.12 and later.
 - **`sql.array()` is removed.** Pass the array as it is, with a cast where the query doesn't decide its type: `${ ids }::int[]`.
 - **Transactions are stricter.** A `COMMIT` the server answers with `ROLLBACK` rejects with `TRANSACTION_ROLLED_BACK`, a query on a transaction or reserved connection after it ended rejects, a query that can't be built inside a transaction aborts it, and a `begin` sent outside `sql.begin`, a reserved connection or `max: 1` rejects with `UNSAFE_TRANSACTION` and is rolled back.
 - **Domains** are read and written as their base type, so a domain over `int[]` comes back as an array of numbers.

@@ -8,8 +8,9 @@
 [![CI](https://github.com/badhope/spark/actions/workflows/ci.yml/badge.svg)](https://github.com/badhope/spark/actions/workflows/ci.yml)
 [![Security](https://github.com/badhope/spark/actions/workflows/security.yml/badge.svg)](https://github.com/badhope/spark/actions/workflows/security.yml)
 [![Scoop](https://img.shields.io/badge/scoop-bucket-8A2BE2)](https://github.com/badhope/spark/tree/main/bucket)
+[![Homebrew](https://img.shields.io/badge/homebrew-tap-FBB042)](https://github.com/badhope/homebrew-spark)
 
-An AI coding agent where **approval, sandboxing, rollback and provider resilience are
+An AI coding agent where **approval, three-OS sandboxing (bwrap / Job Object / sandbox-exec), rollback and provider resilience are
 engineered, not bolted on** — the same brain runs as Web UI, desktop window, TUI,
 scriptable CLI, ACP (IDE) and MCP server. Bring your own OpenAI-compatible endpoint;
 no account, no telemetry, no vendor lock-in.
@@ -40,7 +41,7 @@ the next turn uses the real model — no restart.
 | **Task-as-branch** | `task_begin` / `task_step_commit` / `task_finish`: green tests gate each commit, failures abandon the branch. Not a demo — a first-class tool. |
 | **AI reviews AI** | `spark review` audits your uncommitted diff (or a commit range) in a forced read-only, sandbox-only turn and returns severity-ranked findings, with `--json` for CI. |
 | **Provider resilience, built-in** | A credential pool (multiple keys rotated on failure), a fallback model chain, and a `small_model` for compression/summary calls — one exhausted key or rate limit never blocks a turn. |
-| **Protocols at every boundary** | MCP *client + server* (stdio/SSE/HTTP, allowlists, OAuth), ACP for editors, and an **A2A server** (`spark a2a-serve`) so orchestrators can delegate tasks under the Linux Foundation agent-to-agent standard. |
+| **Protocols at every boundary** | MCP *client + server* (stdio/SSE/HTTP, allowlists, OAuth), ACP for editors, and an **A2A server** (`spark a2a-serve`, streaming + non-streaming) so orchestrators can delegate tasks under the Linux Foundation agent-to-agent standard. |
 | **`!cmd` inline shell** | Run any command inside a chat message — zero tokens, zero approval noise — rendered as a collapsible result card. |
 | **Memory with governance** | AGENTS.md hierarchy (global `~/.agents` + project + nested) plus vector long-term memory with auto-extraction, dedup merge (UPDATE/NOOP) and capacity eviction — all manageable from the web UI. |
 
@@ -141,7 +142,8 @@ horizontally, and the composer stays reachable.
 | Knowledge | Import docs, BM25 retrieval injected per turn as read-only reference — no extra vector store |
 | Persistence | Sessions, checkpoint rollback (works without git), hot config reload, token usage stats, full-text session search |
 | Models | Any OpenAI-compatible endpoint, Ollama, multi-profile switching, `small_model` for cheap auxiliary calls, `--probe` endpoint audit |
-| Extension | MCP client (stdio/SSE/HTTP + OAuth), MCP registry with one-click add, A2A server, skills `.spark/skills/`, slash commands, plugins, hooks, scoop bucket |
+| Extension | MCP client (stdio/SSE/HTTP + OAuth), MCP registry with one-click add, `spark mcp` CLI marketplace, A2A server, skills `.spark/skills/`, slash commands (`/plan` `/build` `/side` `/goal` `/test`), plugins, hooks, scoop bucket |
+| Long-range | `/goal` evidence-gated goal mode (goal contract injected each turn, `goal_update` tool with proof-required completion), `/side` side-channel Q&A that never touches main history, `/plan`↔`/build` mode toggle |
 | Interface | zh/en, light/dark, command palette, rebindable shortcuts, file viewer, terminal, web reader, execution graph, desktop notifications |
 | Workflow | `spark review` (AI diff audit), `spark exec --json`, `!cmd` inline shell, single-file HTML session sharing, session import, `spark update` |
 | Operations | `doctor --fix` self-healing, `doctor --backup` (VACUUM INTO), structured audit log, CSP + security headers, auto-update notify |
@@ -190,6 +192,7 @@ mock-mode agent eval suite.
 |----------|----------|
 | [docs/INSTALL.md](docs/INSTALL.md) | Install (script / scoop / source), packaging, desktop build, auto-update, uninstall |
 | [docs/A2A.md](docs/A2A.md) | A2A server: agent-to-agent delegation |
+| [vscode-spark/](vscode-spark/) | VS Code extension (open Web UI / TUI / ask about selection) |
 | [docs/CONFIG.md](docs/CONFIG.md) | Configuration reference (config.toml / env vars / limits) |
 | [docs/API.md](docs/API.md) | HTTP API and SSE event protocol |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Architecture notes |

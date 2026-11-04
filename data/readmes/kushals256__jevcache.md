@@ -1,0 +1,384 @@
+# MorrowCache
+
+[![npm](https://img.shields.io/npm/v/@kushalicious/jevcache.svg)](https://www.npmjs.com/package/@kushalicious/jevcache)
+[![npm downloads](https://img.shields.io/npm/dt/@kushalicious/jevcache.svg?label=downloads%20%28all%20time%29)](https://www.npmjs.com/package/@kushalicious/jevcache)
+[![Docker](https://img.shields.io/badge/ghcr.io-kushals256%2Fjevcache-blue)](https://github.com/kushals256/jevcache/pkgs/container/jevcache)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
+**MorrowCache** — routers pick a model. This proxy decides whether to call one.
+
+An open-source **semantic cache for OpenAI-compatible LLM APIs**: run it locally, change your client's `baseURL`, and repeated or rephrased questions (and AI agent retries) are answered from cache instead of calling the model again.
+
+npm package and CLI stay `@kushalicious/jevcache` / `jevcache` (download history unchanged). Site: [morrowcache.vercel.app](https://morrowcache.vercel.app). Agent summary: https://morrowcache.vercel.app/llms.txt
+
+A local OpenAI-compatible **chat response cache**. **2.0 (Agent Turn Cache)** skips the model in two cases: the same question in different words, and an agent retrying the **same job** (same prior conversation, same-intent latest ask). It stores **final assistant text** only. A later stream of that answer can HIT. A response that contains `tool_calls` is returned and **never stored**.
+
+**Default:** cloud [TypeSafe Jev](https://typesafe.ai) via OpenRouter.  
+**Also works locally:** point the same proxy at **Kev**, **Laya**, **Laya MLX**, or any **System One**-compatible server on your machine — no OpenRouter key required for admits.
+
+Not cosine similarity. Calibrated **same-intent** admits. If the adjudicator errors, it **fails open** and still calls the model. Same intent is only reused while **freshness** allows — stale “latest” refuses (see `/stats` `freshness_rejects` and `X-Jevcache-Reason`).
+
+<p align="center">
+  <img src="docs/demo.gif" alt="Demo: start → MISS → HIT → /stats" width="720" />
+</p>
+
+```
+call 1  "Explain mutexes simply please"     →  MISS   ~3.2s   (calls the model, stores answer)
+call 2  "Please explain mutexes simply"     →  HIT    ~0.4s   (same intent · same answer · saved $)
+```
+
+**Verified on a real app:** MISS `3244ms` → HIT (`jev`, intent `0.93`) `394ms`, same cached reply, est. saved `$0.000137`.
+
+**Docs:** [integrations](https://morrowcache.vercel.app/integrations) (OpenAI SDK, Vercel AI SDK, LangChain, Ollama) · [benchmark](https://morrowcache.vercel.app/benchmark) · [vs GPTCache](https://morrowcache.vercel.app/compare/gptcache) · [vs LiteLLM caching](https://morrowcache.vercel.app/compare/litellm-cache) · [vs gateway caches](https://morrowcache.vercel.app/compare/gateway-caches) · [semantic caching guide](https://morrowcache.vercel.app/guides/semantic-caching)
+
+**Want to try it in your project?** → [paste the agent prompt](#easiest-path-paste-into-cursor-or-any-coding-agent) into a new Cursor chat (or run `npx` below).
+
+Works with one script, one agent, or many — anything that speaks `/v1/chat/completions`.  
+**No native SQLite compile** — uses Node’s built-in `node:sqlite` (Node ≥ 22.5).
+
+---
+
+## Adjudicators: cloud Jev or local System One
+
+| Mode | Env | Needs OpenRouter for admit? |
+| --- | --- | --- |
+| **Jev** (default) | omit `ADJUDICATOR` | Yes — `OPENROUTER_API_KEY` |
+| **Kev** (local) | `ADJUDICATOR=kev` | No — default `http://127.0.0.1:8008` |
+| **Laya** (local) | `ADJUDICATOR=laya` | No — default `http://127.0.0.1:8000` |
+| **Laya MLX** | `ADJUDICATOR=laya-mlx` | No |
+| **Any System One** | `ADJUDICATOR=systemone` + URL + model | No (unless your server requires a key) |
+| **None** (exact-only) | `ADJUDICATOR=none` | No — only identical requests hit |
+
+```bash
+# Local Kev — semantic hits without OpenRouter
+ADJUDICATOR=kev npx @kushalicious/jevcache@latest start
+
+# Local Laya
+ADJUDICATOR=laya npx @kushalicious/jevcache@latest start
+```
+
+Upstream chat still needs a real model API key (or `MOCK_UPSTREAM=1` for a keyless demo). Details: [Advanced: adjudicator backends](#advanced-adjudicator-backends).
+
+---
+
+## Principles
+
+- **Drop-in proxy** — change `baseURL`; no SDK required.
+- **Precision-first** — prefer miss over a wrong HIT. Judge success by false-HIT rate, not raw hit rate.
+- **Fail-open** — adjudicator errors never invent answers; upstream still runs.
+- **Time in the loop** — same intent ≠ forever valid.
+- **Jev by default, local opt-in** — cloud Jev out of the box; `ADJUDICATOR=kev|laya|…` for on-machine System One. MorrowCache is the product name; the npm package remains `@kushalicious/jevcache`.
+
+### Claims we do **not** make (yet)
+
+- “Proven better than every cosine cache”
+- “Zero false positives”
+- Unmeasured dollar savings as a guarantee
+
+See [`results/eval.json`](./results/eval.json). **Published honest number:** on a live Jev run (n=100), false-positive rate was **0.00** vs Jaccard@0.35 baseline **~0.48** — precision-first, not a forever guarantee. Offline suite now has 103 pairs including negation/entity traps; re-run with `LIVE=1` to refresh.
+
+### Agent Turn Cache
+
+| | |
+| --- | --- |
+| Same prior + paraphrased last user message | HIT (`turn_exact` or `turn_jev`) |
+| Different tool history | no intent HIT across those priors |
+| `X-Jevcache-Job-Id` | optional label; does **not** cross priors unless `JOB_CROSS_PRIOR=on`; not a tenant |
+| Stream of a stored final answer | HIT as SSE (`data: [DONE]`). The first stream is still a MISS |
+| Model returns `tool_calls` | MISS, reason `tool_calls`, nothing stored |
+| `TURN_CACHE=off` | 1.x again: stream, tools schema, and tool history bypass |
+
+`GET /healthz` includes `turn_cache`. `GET /receipt` uses the same admin lock as `/stats`.
+
+### When **not** to use
+
+- Personalized / secret questions (“what’s my balance”)
+- Agents that must re-run every tool step (`tool_calls` are never stored or replayed)
+- Multi-tenant cloud without `X-Jevcache-Tenant` (`X-Jevcache-Job-Id` is not a tenant boundary)
+- Treating a stream miss as a hit (the first stream is MISS; the next identical final-text request can HIT)
+
+---
+
+## Claude Code plugin
+
+```
+/plugin marketplace add kushals256/jevcache
+/plugin install morrowcache@morrowcache
+```
+
+Then run `/morrowcache:setup` in your project: Claude inspects how your app calls a model, starts the proxy, wires the base URL with the smallest change and runs `jevcache verify` to show MISS then HIT. `/morrowcache:stats` explains hit rate and savings. It caches your app's model calls, not Claude Code's own. Source: [`plugins/morrowcache`](./plugins/morrowcache).
+
+## Easiest path: paste into Cursor (or any coding agent)
+
+**Open a new agent chat → copy the whole block below → send.**  
+The agent installs MorrowCache (`@kushalicious/jevcache`), wires `OPENAI_BASE_URL`, and proves **MISS → HIT**. The canonical prompt is [`AGENT_SETUP.md`](./AGENT_SETUP.md) (kept identical to the block below).
+
+```text
+You are setting up MorrowCache (npm: @kushalicious/jevcache) for me in this project.
+
+Goal: run MorrowCache 2.0, a local OpenAI-compatible proxy. It skips the model when a same-intent adjudicator admits a paraphrase (not cosine), and when an agent retries the same job (same prior + same-intent latest ask). It stores final text only, including a later stream of that answer. It never stores tool_calls. Default judge = cloud TypeSafe Jev; local Kev / Laya / Laya MLX / any System One also supported. Set TURN_CACHE=off to restore 1.x stream/tools bypass.
+
+Repo: https://github.com/kushals256/jevcache
+npm: npx @kushalicious/jevcache@latest
+Site: https://morrowcache.vercel.app/agent-setup
+
+Do ALL of the following without asking me to run terminal commands myself (you run them):
+
+1. Check Node.js >= 22.5. If missing, tell me how to install it in one step for my OS.
+2. Prefer the easiest install that works:
+   a) Try: npx --yes @kushalicious/jevcache@latest doctor
+      (fallback: npx --yes github:kushals256/jevcache doctor)
+   b) If that fails, use Docker with ghcr.io/kushals256/jevcache:latest on port 8080
+   c) Or clone into ../jevcache, npm install, npm run build.
+3. Ask me ONCE which adjudicator path I want:
+   A) Cloud Jev (default) — need OPENROUTER_API_KEY for same-intent admits
+   B) Local Kev / Laya / Laya MLX / System One — set ADJUDICATOR=kev|laya|laya-mlx|systemone;
+      no OpenRouter key required for admits. For systemone also set ADJUDICATOR_URL + ADJUDICATOR_MODEL.
+   If neither path is ready, warn that the proxy will run EXACT-ONLY (paraphrases will MISS).
+4. Ask for an upstream chat API key if needed for real completions, or use MOCK_UPSTREAM=1 for a synthetic demo.
+   Save secrets to .env (never commit; ensure .gitignore has .env).
+5. Run: npx @kushalicious/jevcache init  (writes OPENAI_BASE_URL into .env)
+6. Start MorrowCache in the background on http://127.0.0.1:8080 (or PORT if set). Verify GET /healthz.
+   Prefer: npx @kushalicious/jevcache doctor --live
+7. Wire THIS app so OpenAI-compatible clients use baseURL "http://127.0.0.1:8080/v1".
+8. Add SETUP_JEVCACHE.md with start command, ADJUDICATOR kind, baseURL, and /stats link.
+9. Optionally add .cursor/rules/jevcache.mdc so future agents keep that baseURL.
+10. Prove it: paraphrased prompts → expect MISS then HIT (or run start --demo). Show X-Jevcache headers or /stats.
+    Final text may HIT, including a later stream of the same answer. tool_calls are never stored. Optional header X-Jevcache-Job-Id groups a job without crossing priors unless JOB_CROSS_PRIOR=on. Chat Completions only; /v1/responses is 501.
+
+Do not commit secrets. If install fails, try the next method (npx → docker → clone).
+
+When done, tell me: start command, ADJUDICATOR kind, baseURL, key locations (not values), whether MISS → HIT passed, stats URL.
+```
+
+You’ll need an [OpenRouter](https://openrouter.ai/keys) key when the agent asks **if you want cloud Jev**. For local Kev/Laya instead, tell the agent to set `ADJUDICATOR=kev` (or `laya`) and skip the OpenRouter prompt for admits. Prefer this path if you’re already in Cursor / Claude Code / Windsurf.
+
+
+---
+
+## Or try it yourself in 30 seconds
+
+```bash
+npx @kushalicious/jevcache@latest start --demo
+```
+
+You’ll get a key prompt, wiring snippets (`OPENAI_BASE_URL` in `.env`), a live **MISS → HIT**, and green HIT lines in the terminal.
+
+| | |
+| --- | --- |
+| **Proxy** | `http://127.0.0.1:8080/v1` |
+| **Stats** | [http://127.0.0.1:8080/stats](http://127.0.0.1:8080/stats) · `jevcache open` / `jevcache status` |
+| **npm** | [`@kushalicious/jevcache`](https://www.npmjs.com/package/@kushalicious/jevcache) |
+| **Docker** | `ghcr.io/kushals256/jevcache:latest` |
+| **Agent setup** | [`AGENT_SETUP.md`](./AGENT_SETUP.md) ← paste into a new chat |
+
+**No OpenRouter key?** You still have options:
+
+```bash
+# A) Local System One (Kev/Laya) — real semantic admits on localhost
+ADJUDICATOR=kev MOCK_UPSTREAM=1 npx @kushalicious/jevcache@latest start --demo
+
+# B) Synthetic demo (no real adjudicator)
+MOCK_JEV=1 MOCK_UPSTREAM=1 npx @kushalicious/jevcache@latest start --demo
+```
+
+With neither a Jev key nor a local adjudicator, the proxy runs in **exact-only mode** (paraphrases miss; identical prompts can hit). You’ll see a clear banner on start.
+
+---
+
+## Wire your app (one line change)
+
+```bash
+npx @kushalicious/jevcache init   # writes OPENAI_BASE_URL=http://127.0.0.1:8080/v1 into ./.env
+```
+
+Or set it yourself:
+
+```js
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: process.env.OPENROUTER_API_KEY,
+  baseURL: "http://127.0.0.1:8080/v1", // ← was OpenAI / OpenRouter directly
+});
+```
+
+```bash
+export OPENAI_BASE_URL="http://127.0.0.1:8080/v1"
+export OPENAI_API_KEY="$OPENROUTER_API_KEY"
+```
+
+See [`examples/openai_sdk.mjs`](./examples/openai_sdk.mjs).
+
+---
+
+## How it works
+
+```text
+request → policy (bypass live / forced tool choice / audio / logprobs / …)
+       → turn namespace (same prior, optional Job-Id)
+       → exact SHA cache?
+       → propose candidates + IntentAdjudicator (default: Jev)?
+       → HIT  → return cached final text
+       → MISS → call upstream → store final text (never tool_calls) → return
+```
+
+**Why is the first call always a MISS?** The cache is empty for that question — pay once, store the answer, then paraphrases can HIT.
+
+### Headers
+
+| Header | Meaning |
+| --- | --- |
+| `X-Jevcache` | `HIT`, `MISS`, or `BYPASS` |
+| `X-Jevcache-Tier` | `exact`, `jev`, `turn_exact`, or `turn_jev`. FAQ (no prior) stays `exact` / `jev` |
+| `X-Jevcache-Reason` | Why it missed or bypassed: `tool_calls`, `freshness_stale`, `freshness_live`, `tool_choice_forced`, `logprobs`, `audio`, `stream` (only if `TURN_CACHE=off`), … |
+| `X-Jevcache-Job-Id` | Request header. Optional job label. Not authentication |
+| `X-Jevcache-Bypass: 1` | Skip the cache and call upstream |
+| `X-Jevcache-Tenant` | Isolate caches. Not replaced by Job-Id |
+
+`/v1/responses` returns **501**. Use `/v1/chat/completions`.
+
+Still bypassed even with turn cache on: live freshness, multimodal input, audio, `logprobs`, forced `tool_choice`, `n>1`, and requests with no user message.
+
+---
+
+## CLI
+
+```bash
+npx @kushalicious/jevcache init              # .env + OPENAI_BASE_URL
+npx @kushalicious/jevcache doctor            # check keys
+npx @kushalicious/jevcache doctor --live     # + /healthz, Jev, upstream
+npx @kushalicious/jevcache start             # run proxy
+npx @kushalicious/jevcache start --demo      # live MISS → HIT
+npx @kushalicious/jevcache status            # running? hit rate / $ saved
+npx @kushalicious/jevcache verify --model=openai/gpt-4o-mini   # MISS → reworded → exact HIT, key stays hidden
+npx @kushalicious/jevcache open              # open /stats
+npx @kushalicious/jevcache help
+```
+
+On a TTY: **green HIT**, **dim MISS**. Ctrl+C prints a session summary.
+
+| Env | Meaning |
+| --- | --- |
+| `JEVCACHE_DEMO=1` | Same as `--demo` |
+| `JEVCACHE_QUIET=1` | Hide per-request lines |
+| `JEVCACHE_NO_COLOR=1` | Disable colors |
+| `TURN_CACHE=off` | 1.x bypass for stream, tools schema, and tool history |
+| `JOB_CROSS_PRIOR=on` | Job-Id may intent-hit across different priors (off by default) |
+
+### Docker
+
+**One replica / one volume** — SQLite is single-process; do not scale compose replicas against the same DB file.
+
+```bash
+docker run --rm -p 8080:8080 \
+  -e OPENROUTER_API_KEY=$OPENROUTER_API_KEY \
+  -e UPSTREAM_API_KEY=$OPENROUTER_API_KEY \
+  ghcr.io/kushals256/jevcache:latest
+```
+
+Or: `docker compose up` (single service). `:latest` is 2.0. Pin `ghcr.io/kushals256/jevcache:2.0.0` or `@kushalicious/jevcache@2.0.0` if you do not want a later tag to move you. `TURN_CACHE=off` is the in-place rollback.
+
+---
+
+## FAQ
+
+**Do I need OpenRouter?**  
+For **default cloud Jev** admits: yes (`OPENROUTER_API_KEY`). For **local Kev/Laya/System One**: no OpenRouter key for admits — run your local server and set `ADJUDICATOR=kev|laya|…`. Upstream chat still needs a model API key (or `MOCK_UPSTREAM=1`). For a **fully keyless synthetic demo**: `MOCK_JEV=1 MOCK_UPSTREAM=1`.
+
+**Does it work fully offline / on my laptop?**  
+Yes for the **adjudicator** path: Kev, Laya, Laya MLX, or any System One HTTP server on `127.0.0.1`. The proxy itself always runs locally. Upstream generation is whatever you configure (`UPSTREAM_BASE_URL`) — OpenRouter, another cloud API, or mock.
+
+**Multi-agent only?** No. Any repeating chat client benefits. Agents benefit when they retry the same job: final text can hit; tool-call steps still run.
+
+**Stale answers / freshness?**  
+Precision-first classes: `live` (bypass), `short` (~15m), `stable` (`TTL_SECONDS`, default 24h), `durable` (same as stable unless `TTL_DURABLE_SECONDS`). Exact + Jev paths enforce hard age; older candidates also get a same-call `reuse_fresh` check (`admit-v2`). Refuses show on `/stats` (`freshness_rejects`) and often `X-Jevcache-Reason: freshness_stale` on the following MISS. Demos stay safe: `reuse_fresh` only if age ≥ 5m (`FRESHNESS_JEV_MIN_AGE_MS`). Rollback: `FRESHNESS_MODE=off`.
+
+**Native build tools?** No longer required for SQLite (Node built-in). Requires **Node ≥ 22.5**.
+
+**Secrets in this repo?** No. Local `.env` only (gitignored).
+
+**Privacy:** Cache on disk under `DATA_DIR`. Semantic tier sends truncated, redacted text to the adjudicator (OpenRouter Decisions for Jev, or your local System One URL). See [`SECURITY.md`](./SECURITY.md).
+
+---
+
+## Advanced: adjudicator backends
+
+Same story as [Adjudicators: cloud Jev or local System One](#adjudicators-cloud-jev-or-local-system-one) — defaults and env knobs in one place.
+
+Happy path: **omit** `ADJUDICATOR` — default is **Jev** via OpenRouter Decisions.
+
+| Value | What it does |
+| --- | --- |
+| `jev` (default) | TypeSafe Jev via OpenRouter Decisions (`OPENROUTER_API_KEY` required) |
+| `mock` | Synthetic same-intent (`MOCK_JEV=1` also selects this) |
+| `kev` | **Local** System One — default `http://127.0.0.1:8008`, model `kev-latest` |
+| `laya` | **Local** System One — default `http://127.0.0.1:8000`, model `laya-latest` |
+| `laya-mlx` | Like `laya`; optional `LAYA_MLX_URL` / `LAYA_MLX_MODEL` |
+| `systemone` / `local` | Any System One host — **requires** `ADJUDICATOR_URL` + `ADJUDICATOR_MODEL` |
+
+Works with **any System One–compatible model** you run (Kev, Laya, custom). There is no official local Jev binary in this path — local = System One.
+
+**Local example (Kev):**
+
+```bash
+# Start your Kev / System One server on :8008, then:
+ADJUDICATOR=kev MOCK_UPSTREAM=1 jevcache start
+# OpenRouter key not required for admit; still needed for real upstream chat unless MOCK_UPSTREAM.
+```
+
+Optional env:
+
+- `ADJUDICATOR_URL` — for `jev`: Decisions URL override (`JEV_DECISIONS_URL` alias). For System One kinds: base URL (normalized to `…/v1/systemone`).
+- `ADJUDICATOR_MODEL` — model id for System One kinds (defaults for kev/laya).
+- `ADJUDICATOR_API_KEY` — optional Bearer for System One (empty = no Auth header on localhost).
+- `ADJUDICATOR_TIMEOUT_MS` — admit timeout (alias of `JEV_TIMEOUT_MS`).
+
+Do not set `ADJUDICATOR=jev` and point `ADJUDICATOR_URL` at a System One host — **kind selects the client**.
+
+**Ops tips:** Unset `HTTP_PROXY` / `HTTPS_PROXY` when using localhost adjudicators (Node `fetch` can be hijacked). Kev is often single-request — expect higher latency under parallel paraphrases; the proxy still **fail-opens** on timeout. Keep `CANDIDATE_K` small (default 5; soft-capped to 7 for System One choice). `CANDIDATE_PROPOSE=hybrid` (default) shortlists over `RECENT_N` with a recency floor + Jaccard fill before the adjudicator; set `=recency` to restore newest-K only. A tools schema and tool history are eligible. A response that contains `tool_calls` is not stored. `TURN_CACHE=off` restores the 1.x stream/tools bypass. `/stats` reports overall `hit_rate` and `hit_rate_eligible` (excl. bypasses).
+
+`EMBEDDING_MODE` does **not** produce semantic HITs alone (only the adjudicator may admit).
+
+Maintainers: add a backend under `src/adjudicator/`, register in `factory.ts`, document when `jevcache doctor --live` passes.
+
+---
+
+## From source
+
+```bash
+git clone https://github.com/kushals256/jevcache
+cd jevcache && npm install && npm start
+```
+
+## Eval
+
+```bash
+npm run eval
+LIVE=1 OPENROUTER_API_KEY=... npm run eval
+```
+
+See [`results/eval.json`](./results/eval.json). Offline Jaccard baseline always runs in CI. **Published honest number:** prior live Jev run (n=100) false-positive rate **0.00** vs Jaccard@0.35 **~0.48** — not a forever guarantee; refresh with `LIVE=1`.
+
+## In 2.0 / still not
+
+**In 2.0:** same-prior final-text hits (exact and intent), optional `X-Jevcache-Job-Id`, tools schema and tool history on the request, streaming final-text hits, `TURN_CACHE=off` to restore 1.x bypasses.
+
+**Still not:** replaying `tool_calls`, `/v1/responses`, tool-result caches, guaranteed dollar savings, multi-replica SQLite, a per-user delete API.
+
+To debug a surprising hit: read `X-Jevcache`, `X-Jevcache-Tier`, `X-Jevcache-Reason`, and `X-Jevcache-Entry-Id`; check `/stats`; set `TURN_CACHE=off` or `X-Jevcache-Bypass: 1`; delete `DATA_DIR` for a cold cache.
+
+## Kill / park criteria
+
+After disambiguation + one Jev-channel post: if there is no meaningful engagement (issues, installs interest, or agent paste usage), stay in maintenance mode — no speculative backend farming.
+
+## Links
+
+- [Agent setup prompt](./AGENT_SETUP.md) · [Changelog](./CHANGELOG.md) · [Contributing](./CONTRIBUTING.md) · [Security](./SECURITY.md)
+- [npm](https://www.npmjs.com/package/@kushalicious/jevcache) · [Releases](https://github.com/kushals256/jevcache/releases)
+
+## License
+
+MIT
+
+<!-- Social preview: upload docs/og.png in GitHub Settings → General → Social preview -->

@@ -56,10 +56,10 @@
  },
  "github/gh-ost": {
   "commit_7d": 0,
-  "commit_90d": 43,
+  "commit_90d": 18,
   "rel_ver": "v1.1.11",
   "rel_pub": "2026-08-17",
-  "rel_days": 65,
+  "rel_days": 79,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -70,17 +70,34 @@
    "GHSA-rrp4-2xx3-mv29(CVE-2022-21687,low)"
   ],
   "contrib_n": 116,
-  "enriched_at": "20261027",
+  "enriched_at": "20261104",
   "lang": {
    "Go": 93,
    "Shell": 7
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261021",
-   "release": "20261021",
+   "commit": "20261104",
+   "release": "20261104",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v1.1.11",
+    "d": "2026-08-17",
+    "n": "gh-ost v1.1.11 includes MariaDB support, StatsD metrics, improved binlog processing, and several reliability and release/build improvements.\n- **MariaDB and MariaDB GTID support** ([#1724](https://github.com/github/gh-ost/pull/1724), [#1731](https://github.com/github/gh-ost/pull/1731)) by @conf: Adds automatic server-flavor detection, MariaDB-specific replication behavior and privileges, and MariaDB GTID migrations. CI covers MariaDB 10.5, 10.6, 10.11, 11.4, and 11.8.\n- **Multi-flavor replica-test harness**"
+   },
+   {
+    "t": "v1.1.10",
+    "d": "2026-06-04",
+    "n": "gh-ost v1.1.10 includes bug fixes, datadog stats integration, and support for in-process hook implementations.\r\nThanks to all the contributors! 🙇‍♂️ \r\n\r\n## What's Changed\r\n* Add Datadog/statsd with simple client emitting startup by @forge33 in https://github.com/github/gh-ost/pull/1689\r\n* Add Go runtime metrics to statsd reporting by @forge33 in https://github.com/github/gh-ost/pull/1690\r\n  *  gh-ost can emit runtime metrics to datadog by specifying `--statsd-addr`. Custom tags can be added with `-"
+   },
+   {
+    "t": "v1.1.9",
+    "d": "2026-05-01",
+    "n": "GA release v1.1.9 is a small release with some bug fixes. We are aiming to make smaller releases more regularly.\r\nThanks to all the contributors!\r\n\r\n## What's Changed\r\n* Add retry logic for instant DDL on lock wait timeout by @yosefbs in https://github.com/github/gh-ost/pull/1651\r\n* Retry attempt InstantDDL up to `--default-retries` by @meiji163 in https://github.com/github/gh-ost/pull/1667\r\n  - When `--attempt-instant-ddl` is enabled, it will retry on lock wait timeout up to `--default-retries` times. Retr"
+   }
+  ]
  },
  "supabase/supabase-js": {
   "commit_7d": 3,
@@ -175,11 +192,11 @@
   ]
  },
  "event-driven-io/Pongo": {
-  "commit_90d": 138,
+  "commit_90d": 143,
   "commit_7d": 3,
   "rel_ver": "0.16.11",
   "rel_pub": "2026-02-10",
-  "rel_days": 257,
+  "rel_days": 267,
   "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
@@ -195,12 +212,29 @@
    "PowerShell": 0,
    "Shell": 0
   },
-  "enriched_at": "20261027",
+  "enriched_at": "20261104",
   "dim_ts": {
-   "commit": "20261025",
-   "release": "20261025",
+   "commit": "20261104",
+   "release": "20261104",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "0.16.11",
+    "d": "2026-02-10",
+    "n": "## 📝 What's Changed\r\n* **Added timeout options when running migrations** by @oskardudycz in https://github.com/event-driven-io/Pongo/pull/160\r\n* **Fix short form flags in Pongo CLI** by @talyssonoc in https://github.com/event-driven-io/Pongo/pull/157\r\n\r\n**Full Changelog**: https://github.com/event-driven-io/Pongo/compare/0.16.10...0.16.11"
+   },
+   {
+    "t": "0.16.10",
+    "d": "2026-02-04",
+    "n": "## 📝 What's Changed\r\n\r\n**Added option to skip Pongo migration hash check.** This could cause some friction if someone (like me) accidentally changed whitespace in a migration script. Now you can pass `{ ignoreMigrationHashMismatch: true }` through migrate options, and the migration hash check will be disabled. What's more, it'll override the migration hash (if it existed).\r\n- **Added dmb prefix to the migration table**. It was a dmb move ( 🥁 ) to name it with a generic \"migrations\" name. Don't worry, "
+   },
+   {
+    "t": "0.16.5",
+    "d": "2026-01-02",
+    "n": "## 📝 What's Changed\r\n* **Fixed npm publish with tagging to avoid issues with automatic tagging prerelease as latest** It appeared that npm without that was marking prerelease packages automatically as `latest`. Which was causing issues like mentioned in #121. Fixed by @oskardudycz in #132 \r\n\r\n**Full Changelog**: https://github.com/event-driven-io/Pongo/compare/0.16.4...0.16.5"
+   }
+  ]
  },
  "eclipse-vertx/vertx-sql-client": {
   "commit_90d": 34,
@@ -2335,8 +2369,8 @@
   }
  },
  "tidbcloud/tidb2snowflake": {
-  "commit_90d": 98,
-  "commit_7d": 0,
+  "commit_90d": 13,
+  "commit_7d": 6,
   "rel_ver": null,
   "rel_none": true,
   "sec_n": 0,
@@ -2350,10 +2384,10 @@
    "Makefile": 1,
    "Dockerfile": 0
   },
-  "enriched_at": "20261001",
+  "enriched_at": "20261104",
   "dim_ts": {
-   "commit": "20261001",
-   "release": "20261001",
+   "commit": "20261104",
+   "release": "20261104",
    "security": "20261001",
    "contrib": "20261001",
    "lang": "20261001"

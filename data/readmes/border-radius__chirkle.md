@@ -99,7 +99,9 @@ android/         the Android app (docs/ANDROID.md): core/data (API, realtime, da
 ## Deploying
 
 Build once, then copy `bin/pocketbase`, `pb_public/`, `pb_migrations/` and `pb_hooks/` to the server.
-Migrations run automatically on start.
+Migrations run automatically on start, and nothing is served until they are done, so they change only the database.
+What stored files need moving (the shared files of DESIGN.md §37) the media worker does afterwards, while the server
+runs.
 
 ```sh
 npm ci && npm run setup && npm run build

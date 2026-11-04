@@ -1,0 +1,478 @@
+<div align="center">
+
+<img src="https://raw.githubusercontent.com/semlith/semlith/main/assets/semlith-logo.png"
+     alt="Semlith" width="96" height="96">
+
+# Semlith
+
+**Local search over your code and documents for AI agents.**
+
+[![ci](https://github.com/semlith/semlith/actions/workflows/ci.yml/badge.svg)](https://github.com/semlith/semlith/actions/workflows/ci.yml)
+[![crates.io](https://img.shields.io/crates/v/semlith.svg?logo=rust)](https://crates.io/crates/semlith)
+[![downloads](https://img.shields.io/crates/d/semlith.svg)](https://crates.io/crates/semlith)
+[![docs.rs](https://img.shields.io/docsrs/semlith?logo=docsdotrs&label=docs.rs)](https://docs.rs/semlith)
+[![msrv](https://img.shields.io/badge/rust-1.90%2B-orange.svg?logo=rust)](https://www.rust-lang.org)
+[![platform](https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-lightgrey.svg)](#install)
+[![mcp](https://img.shields.io/badge/MCP-server-6E56CF.svg)](https://modelcontextprotocol.io)
+[![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+
+[Website](https://semlith.com) · [Install](#install) · [Quick start](#quick-start) ·
+[Agents](#use-it-from-an-agent) · [Portal](#the-portal) · [Benchmarks](#benchmarks) · [Docs](#documentation)
+
+</div>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/home-dark.webp">
+  <img src="docs/images/home-light.webp" alt="The Semlith portal's Home page, with one store indexing BurntSushi/ripgrep">
+</picture>
+
+## Why Semlith
+
+An agent working in a large codebase either reads too much, which is slow and
+expensive, or guesses which file to open, which is often wrong. What it needs is
+the few spans that answer the question. Semlith finds them.
+
+- **Hybrid search.** Every query runs against a vector index (meaning) and a
+  keyword index (exact names), and the two rankings are fused. *How does retry
+  backoff work* and `EMBED_BATCH` both land on the right chunk.
+- **A code graph built on the same pass.** Definitions become nodes, and calls,
+  imports and re-exports become edges, each labelled with how well it is
+  supported. Ask what calls a function, what breaks if it changes, or how two
+  symbols connect.
+- **Always current.** A watcher re-embeds a file when you save it. There is no
+  build step and nothing to go stale against your working tree.
+- **Local by design.** No API keys, and no network at query time unless you
+  sign in to Semlith Cloud, a separate hosted service, with `semlith cloud login`.
+  The portal binds to `127.0.0.1` only. Model weights and acceleration packs are
+  the only downloads, each pinned by digest, and `--airgap` refuses every
+  outbound request before a connection opens.
+- **Made for agents.** An MCP server with eight tools listed by default and
+  sixteen in all, registered in your agent clients by `semlith setup`, and a
+  ledger of every retrieval with the tokens it saved.
+- **More than code.** PDFs, Office documents, notebooks and Markdown are read
+  as text, and images are searchable by what they show.
+
+## Install
+
+One command, no Rust toolchain needed.
+
+<!-- install-oneliners:start -->
+**macOS and Linux**
+
+```sh
+curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/semlith/semlith/main/install.sh | sh
+```
+
+**Windows**
+
+```powershell
+irm https://raw.githubusercontent.com/semlith/semlith/main/install.ps1 | iex
+```
+<!-- install-oneliners:end -->
+
+The installer picks the release for your machine, verifies the ed25519
+signature on the release's `SHA256SUMS`, checks the archive against it,
+unpacks it into `~/.semlith/bin` and runs `semlith setup`. Setup puts Semlith
+on your `PATH`, downloads the embedding model, registers Semlith with each agent
+client that has a registration CLI, and installs the daemon as a login service.
+Run `semlith setup` again at any time to repair an install, and `--yes` takes
+every default.
+
+| Variable | Effect |
+|---|---|
+| `SEMLITH_VERSION` | Install a specific release tag. |
+| `SEMLITH_HOME` | Install somewhere other than `~/.semlith`. |
+| `SEMLITH_NO_SERVICE=1` | Skip the login service. |
+
+You can also run `cargo install semlith`, or take an archive from
+[the releases page](https://github.com/semlith/semlith/releases).
+`semlith upgrade` replaces the binary with the newest release, and Semlith never
+checks for updates on its own.
+
+**Requirements.** A 64-bit machine running macOS on Apple silicon, Linux on
+x86_64 or aarch64, or Windows on x86_64 (Windows PowerShell 5.1 is enough).
+The Linux archives ship `libonnxruntime.so` beside the binary and need only
+glibc **2.34** or later and libstdc++ (GLIBCXX_3.4.22). Debian 12, Ubuntu 22.04,
+RHEL 9 and Amazon Linux 2023 all qualify. Intel macOS is not supported, because
+ONNX Runtime no longer ships for it.
+
+### Verifying the installer
+
+The installer writes the binary to `~/.semlith/bin` (mode 700 on macOS and
+Linux) and, on Linux, `libonnxruntime.so` beside it. Nothing is written until
+the archive passes three checks. `SHA256SUMS` must carry the project's ed25519
+signature, checked with `ssh-keygen -Y verify` (OpenSSH 8.1 or later, which
+macOS, current Linux distributions and Windows 10 and later have). The
+archive's SHA-256 must match it. When `gh` is on your `PATH`, its GitHub
+artifact attestation, signed by this repository's release workflow, is checked
+too. A missing or wrong signature stops the install, and `semlith upgrade` holds
+a release to the same key, built into the binary, which `semlith --version`
+names. curl is held to https and TLS 1.2 or later, and the script runs only
+once it has fully downloaded.
+Releases before v0.40.0 are not signed, so these installers do not install
+them.
+
+To read the installer before running it:
+
+```sh
+curl --proto '=https' --tlsv1.2 -fsSLO https://github.com/semlith/semlith/releases/latest/download/install.sh
+less install.sh
+gh attestation verify install.sh --repo semlith/semlith
+sh install.sh
+```
+
+On Windows, run `irm https://github.com/semlith/semlith/releases/latest/download/install.ps1 -OutFile install.ps1`,
+read it, then run `powershell -ExecutionPolicy Bypass -File install.ps1`.
+
+To verify an archive by hand:
+
+```sh
+echo 'semlith-release ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICMTHiHMzeSHzzc+8UDZHUzJcvb6XGUBb+TJdFes91xm' > allowed_signers
+ssh-keygen -Y verify -f allowed_signers -I semlith-release -n file -s SHA256SUMS.sig < SHA256SUMS
+grep "  semlith-<tag>-<target>.tar.gz$" SHA256SUMS | shasum -a 256 -c
+gh attestation verify semlith-<tag>-<target>.tar.gz --repo semlith/semlith
+```
+
+## Quick start
+
+```sh
+cd ~/src/ripgrep
+semlith index .                                   # one store, and the model (~52 MB) downloads once
+semlith search "where is a file detected as binary"
+semlith neighbors search_parallel                 # callers and callees
+semlith start                                     # the daemon and the portal
+```
+
+```console
+$ semlith search "where is a file detected as binary" -k 1
+1. 0.083 vf  GUIDE.md:735-746
+   binary files:
+
+   1. The default mode is to attempt to remove binary files from a search
+      completely. ...
+
+$ semlith neighbors search_parallel
+callers (2)
+  main via defines (extracted)  crates/core/main.rs:44  · call at line 166
+  run via calls (resolved)  crates/core/main.rs:78  · call at line 90
+callees (25)
+  matcher via calls (resolved)  crates/core/flags/hiargs.rs:379  · called at crates/core/main.rs:177
+  search_worker via calls (resolved)  crates/core/flags/hiargs.rs:705  · called at crates/core/main.rs:176
+  ...
+```
+
+Every hit is a `path:start-end` locator you can hand to an editor or an agent,
+and `vf` says the vector and keyword lists both found it. Documents answer the
+same way.
+
+<img src="docs/images/demo.gif" alt="semlith search answering one question from a PDF and one from a Word file, each with its file and line span" width="900">
+
+## Use it from an agent
+
+```sh
+semlith setup     # registers each agent client that has a registration CLI
+semlith doctor    # checks each client can actually reach it, and says how to fix it if not
+```
+
+`semlith setup` registers the MCP server at user scope in each installed client
+that has a registration CLI, which is six of the 12 documented clients. The
+other six are a config file, which `semlith setup --register-all` writes for
+you, and `semlith doctor` reports on every one. Each stanza is run against the
+binary in `tests/clients.rs`, and [docs/clients.md](docs/clients.md) has them
+all with the HTTP transport. Setup also installs the Semlith Agent Skill, a
+steering hook that suggests a Semlith call when an agent is about to grep, and
+a read-only research agent.
+
+`semlith mcp` serves MCP over stdio, and the daemon serves the same tools over
+HTTP at `/mcp`, behind an agent key (`semlith key show`). Eight tools are listed
+by default, because every definition costs tokens on every request, and
+`SEMLITH_MCP_TOOLS=all` lists all sixteen.
+
+| Tool | Answers |
+|---|---|
+| `semlith_search` | Where is the answer? Path, span, enclosing symbol and how it was found. |
+| `semlith_brief` | Everything one question needs in one call, with spans, text and one-hop callers and callees, under a token budget. |
+| `semlith_read` | One span or one symbol, nothing around it. |
+| `semlith_symbol` | Where is this defined? `history: true` gives what it used to be. |
+| `semlith_neighbors` | What calls it, and what it calls. |
+| `semlith_impact` | Everything that reaches it, and the files involved. |
+| `semlith_files` | Which files are indexed. |
+| `semlith_stats` | What each store holds. |
+| `semlith_path`, `semlith_trace` | How two symbols connect, as a chain or as evidence. |
+| `semlith_pattern` | A tree-sitter structural pattern over one language. |
+| `semlith_index`, `semlith_add`, `semlith_forget` | Change a store from inside a conversation. |
+| `semlith_report` | One of five reports from the ledger, index and graph. |
+| `semlith_languages` | The language names `lang` accepts. |
+
+A bare `semlith mcp` opens every registered store, so one question can span
+repositories. It speaks MCP `2026-07-28`, `2025-11-25`, `2025-06-18` and
+`2024-11-05`, each proven by a session in `tests/mcp.rs`. In the official
+[MCP registry](https://registry.modelcontextprotocol.io) it is listed as
+mcp-name: io.github.semlith/semlith
+
+## The portal
+
+`semlith start` runs one daemon that owns every store. It holds each store's
+write lock, watches its folders, re-embeds what you save, and serves a portal at
+`http://127.0.0.1:7365`. The URL with its session token is printed once, on
+stdout. [docs/portal.md](docs/portal.md) documents every page.
+
+<table>
+<tr>
+<td width="50%"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/search-dark.webp"><img src="docs/images/search-light.webp" alt="Search: ranked spans with the lists that found them"></picture><br><b>Search</b>. Hybrid results, each saying which list found it.</td>
+<td width="50%"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/graph-dark.webp"><img src="docs/images/graph-light.webp" alt="Graph: callers and callees of a symbol"></picture><br><b>Graph</b>. Callers, callees, blast radius and paths.</td>
+</tr>
+<tr>
+<td><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/indexing-dark.webp"><img src="docs/images/indexing-light.webp" alt="A live index run"></picture><br><b>Index runs</b>. Live rate per device, pause and stop.</td>
+<td><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/ledger-dark.webp"><img src="docs/images/ledger-light.webp" alt="Ledger: every retrieval an agent made"></picture><br><b>Ledger</b>. Every retrieval, and the tokens it saved.</td>
+</tr>
+</table>
+
+**It is not on the network.** The daemon binds `127.0.0.1` only, with no flag
+to change it. Every page and `/api/` route needs the per-run session token,
+sent in a `Semlith-Token` request header, and without it the answer is 401. The
+agent key opens `/mcp` and nothing else. Responses carry a
+`Content-Security-Policy` of `'self'`, no CORS header is sent, and every byte
+the portal loads is compiled into the binary. `--airgap` refuses every outbound
+request before a connection opens, which covers model and pack downloads that
+are not cached, `semlith upgrade`, the price table, Semlith Cloud and
+`semlith add`. The Privacy page checks these claims against the running daemon,
+and [docs/security.md](docs/security.md) is the full account. To run on a
+machine with no network, seed a model cache on a connected one as
+[docs/models.md](docs/models.md#air-gapped-machines) describes.
+
+## How it works
+
+```
+files ──chunk──> text ──embed──> vectors ──quantize──> index/*.tvim  (turbovec)
+                  │
+                  └──parse──> symbols, edges ─────────> store.db      (SQLite)
+
+query ──embed──> vector ──search shards──┐
+      ──keywords──> FTS5 ────────────────┴──fuse──> ranked spans ──> enclosing symbol
+```
+
+- **Reading.** Files are read as the text a person would see. Thirteen formats
+  have their own reader (PDF, Word, PowerPoint, Excel, notebooks and more).
+  Everything else is read as UTF-8 and cut into line-aligned chunks of up to
+  800 characters. A Markdown chunk is embedded with its heading path, a code chunk
+  with its enclosing definition.
+- **Embedding.** `granite-embedding-small-english-r2` (int8, 384 dimensions,
+  ~52 MB) through ONNX Runtime, fixed per store. The daemon also embeds on the
+  Neural Engine on Apple silicon and on the GPU (Core ML, WebGPU or CUDA), each
+  lane checked against known answers before its first batch. Images go through
+  CLIP ViT-B/32 into a second vector space and match by what an image shows,
+  not by OCR.
+- **Storing.** `index/` holds [turbovec](https://github.com/RyanCodrai/turbovec)
+  shards of 65 536 quantized vectors, and `store.db` holds chunk text, spans,
+  symbols, edges, the ledger and the content hashes that make re-indexing
+  incremental. A save rewrites one shard.
+- **Graph.** All 46 languages carry edges. Each edge is `extracted` (settled by
+  the file itself), `resolved` (one candidate), `ambiguous` (several, and it
+  says how many) or `inferred` (a bare name match). `semlith path` refuses to
+  cross a name it cannot pin down unless you pass `--all-edges`.
+
+[docs/architecture.md](docs/architecture.md) is the full account.
+
+## Commands
+
+| Command | Does |
+|---|---|
+| `semlith index [PATHS...]` | Index paths into a store; re-running embeds only what changed. `--each` gives each path its own store, `--projects <DIR>` one per repository. |
+| `semlith watch [PATHS...]` | Re-embed files as they are saved. |
+| `semlith start` | The daemon: every store kept current, the portal and `/mcp` on `127.0.0.1:7365`. |
+| `semlith search <QUERY>` | Hybrid search. `-k`, `--json`, `--path`/`--ext`/`--lang` (repeatable; a leading `!` excludes), `--prefer code\|docs`, `--exact` for regex lines with their definition. |
+| `semlith brief <QUESTION>` | Spans, their text and one-hop callers and callees, under `--budget` tokens (default 4000). |
+| `semlith read <TARGET>` | One span (`src/store.rs:1041-1080`) or one symbol. |
+| `semlith symbol`, `neighbors`, `impact`, `path`, `trace` | The graph: definitions, callers and callees, blast radius, chains, evidence. |
+| `semlith pattern <QUERY> --lang L` | A tree-sitter structural pattern. |
+| `semlith stats`, `files`, `languages`, `models` | What a store holds; `files --tree` shows what was not indexed and why. |
+| `semlith refused`, `scan` | Files not indexed and why; files held that today's rules would refuse. |
+| `semlith add <URL>` | Fetch one https URL into a store. No crawling, no credentials, no private addresses. |
+| `semlith forget`, `compact`, `drop` | Remove a file, reclaim dead bytes without re-embedding, delete a store. |
+| `semlith adopt`, `trust` | Move a store into the store home; allow one outside it. |
+| `semlith ledger`, `report`, `schedule`, `prices` | Retrieval history, five reports in five formats, scheduled reports, the price table. |
+| `semlith mcp`, `hook`, `key` | MCP over stdio, the steering hook, the HTTP agent key. |
+| `semlith setup`, `doctor`, `upgrade` | Install and repair, diagnose each client, replace the binary. |
+| `semlith accel` | Which devices embed: CPU (off only beside another lane, `SEMLITH_CPU_CAP` caps it), Neural Engine, GPU, and the experimental CUDA, TensorRT, OpenVINO and llama.cpp lanes. |
+| `semlith cloud` | Connects to Semlith Cloud, a separate hosted service. Nothing contacts the network until `semlith cloud login`. |
+
+`semlith <command> --help` documents every flag.
+
+**Where stores live.** Each store lives in `~/.semlith/stores/<name>` and is
+listed in `~/.semlith/registry.json`, so `semlith mcp` and `semlith start` find
+every store with no flags. A command picks its store from `--store` or
+`SEMLITH_STORE`, then a `.semlith` beside the corpus, then the registered store covering the current
+directory, and otherwise creates one.
+
+**What gets indexed.** Everything under the given paths except `.gitignore`d
+and hidden files, binaries, files over 8 MiB, archives that expand past 32 MiB,
+and generated or vendored directories. `node_modules` is always skipped, and
+`target`, `build`, `dist` and `vendor` are skipped beside their manifest unless
+`SEMLITH_DEFAULT_IGNORES=0` is set. Credentials are never indexed, and the grey
+zone is yours to decide.
+
+## The retrieval ledger
+
+Every retrieval is recorded in its store, whether it came from an agent over
+MCP, the CLI or the portal. A row holds the query, the client, the session, the
+hits and what was read.
+Each row carries the hash of the row before it, so `semlith ledger --verify`
+finds an edited or deleted row. It is local, on by default, and off with
+`--no-ledger` or `SEMLITH_LEDGER=0`.
+
+**What it saved on this repository.** Ask `semlith brief` all 107 questions of
+this repository's retrieval harness against a store of `src/`, then run
+`semlith ledger --verify`. An answered question sent **3 982 tokens** to the
+agent on average, against **105 132** for reading the 4.1 files those answers
+named, whole. That is 26× less, at 100 % coverage, counted with the store's own
+tokenizer. It is an upper bound, because a file named by two answers is counted
+twice.
+
+## Benchmarks
+
+Asked 127 questions about 53 public documents, an Opus agent with Grep, Glob and
+Read found the passage 63 % of the time, and 41 of its 127 top quotes appear
+nowhere in the document it named. It found the file by name, could not read it,
+and wrote something plausible. With Semlith installed it found 98 %, and 0 of
+127 quotes were made up. On single-repo code with a strong model it does not
+help, and Opus scores 92 % with or without it.
+
+Public code-retrieval benchmarks, run by [`bench/scorecard/`](bench/scorecard/README.md)
+on one M1 MacBook Air in October 2026 and published as measured, including where
+another tool wins. **Every table, every chart and the command that reproduces each
+number are on the [scorecard page](bench/scorecard/README.md).**
+
+| Benchmark | semlith | baseline | instances |
+|---|---|---|---|
+| SWE-bench Verified, right file in the top 10 | **76.8 %** | 47.0 % grep then read | 500 |
+| SWE-bench Lite, right file in the top 10 | **72.3 %** | 47.3 % grep then read | 300 |
+| SWE-bench Verified, median tokens to the first right file | **224** | 15 491 grep then read | 500 |
+| CodeRAG-Bench DS-1000, NDCG@10 | **0.260** | 0.158 BM25 | 513 |
+| Agents (Opus), cost per correct answer | **$0.065** | $0.072 grep only | 50 × 3 runs |
+| Documents (PDF, Office, EPUB, …), passage found within 4k tokens | **116/127** | 34/127 rga | 127 |
+| Agents (Opus) on those documents, passage found | **125/127** | 80/127 grep only | 127 |
+| Real sessions, tokens sent against whole files read | **75.2× fewer** | | 1,575 retrievals |
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/bench/swe-hit-dark.svg"><img src="docs/images/bench/swe-hit-light.svg" alt="SWE-bench: Semlith puts the right file in the top 10 for 72-77 % of instances, against 47 % for grep then read" width="760"></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/bench/swe-tokens-dark.svg"><img src="docs/images/bench/swe-tokens-light.svg" alt="SWE-bench: Semlith returns a median 224-225 tokens before the first right file, against 8 813-15 491 for grep then read" width="760"></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/bench/competitors-dark.svg"><img src="docs/images/bench/competitors-light.svg" alt="Nine tools on SWE-bench Lite. Semlith 55 % hit@5, semble 50 %, graphify and sourcebot 35 %, serena 25 %, rg and ugrep 15 %. grepai, colgrep and ck were not run" width="760"></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/bench/agents-cost-dark.svg"><img src="docs/images/bench/agents-cost-light.svg" alt="Agents, cost per correct answer, grep only against Semlith installed and Semlith first, on Opus and Haiku" width="760"></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/bench/coderag-dark.svg"><img src="docs/images/bench/coderag-light.svg" alt="CodeRAG-Bench NDCG@10 per task, Semlith against BM25" width="760"></picture>
+
+Semlith does not win everywhere. Semble edges it at hit@1 and hit@10 on the
+20-instance competitor sample, BM25 beats it on CodeRAG-Bench's RepoEval, and
+with Grep built in, Opus rarely reaches for Semlith on its own. The
+[scorecard page](bench/scorecard/README.md) has these rows and RepoBench-R.
+
+## The numbers
+
+**Coverage**, read out of the code. `tests/readme.rs` fails the build if any of
+these drifts from its source.
+
+| | |
+|---|---|
+| languages searchable and graphed | **46** |
+| edge kinds | **6** |
+| document formats with a reader | **13** |
+| image types | **5** |
+| MCP tools | **16** |
+| CLI commands | **36** |
+| agent clients, each setup stanza run against the binary in `tests/clients.rs` | **12** |
+| prebuilt targets | **4** |
+
+**Measured** on a 4P+4E Apple silicon laptop, with the command that reproduces
+each. [docs/performance.md](docs/performance.md) has the full tables.
+
+| | | |
+|---|---|---|
+| warm search at 700 / 7 000 / 70 000 chunks, peak RSS under 240 MB | **16.2 / 37.9 / 159.1 ms** | `cargo test --release --test measure -- --ignored --nocapture` |
+| edit on disk to searchable, watcher running | **1.24 s** | [docs/performance.md](docs/performance.md) |
+| indexing on an M1 Air: Neural Engine / CPU and GPU through Core ML | **229.8 / 62.7 chunks/s** p10 | [docs/performance.md](docs/performance.md) |
+| daemon memory 60 s after a run, seven stores open | **465 MB** | `footprint -p <pid>` |
+| idle watcher CPU over 60 s | **under 1.0 s** | the same |
+| one changed file | **1 shard rewritten** | `cargo test --release --test shards -- --ignored --nocapture` |
+| `tools/list` | **2 633 bytes**, eight tools; 1 323 tokens added to an Opus request | `cargo test --release --test retrieval -- --ignored` |
+| retrieval, 30 sealed questions of 107 | **hit@1 24/30, hit@3 27/30, hit@8 29/30**, zero spread; identifiers **11 of 11** in the top three | the same |
+| one search, rescoring off / on | **8.2 ms** / 132.2 ms on a 300-file store | the same |
+| one answered question, `brief` against search-then-read | **1.00 calls vs 2.54**, 1 112 tokens vs 725 | the same |
+| call-edge resolution | **62 %** settled | the same |
+| the macOS arm64 binary | **125 435 312 bytes** (119.6 MiB) | `ls -l target/release/semlith` |
+| the Linux glibc floor | **GLIBC_2.34** | `objdump -T semlith runtime/libonnxruntime.so` |
+
+Peak memory does not grow with the corpus, so plan for about 600 MB whatever you
+index. Query latency does, because the vector scan is linear.
+
+## Known limits
+
+- One writer per store. While the daemon or `semlith watch` holds a store, a
+  second `semlith index` against it exits and names the holder.
+- First indexing is bound by the model, at about 230 chunks/s on an M1's Neural
+  Engine, 63 on its CPU and GPU, 30 on the CPU alone. Later runs embed only what
+  changed. On macOS the CPU lane alone runs at about 60 % of a terminal's speed
+  inside the login service, because of how launchd schedules agent threads.
+- On a Mac the GPU does not embed beside the Neural Engine unless you run
+  `semlith accel on gpu-beside-ane`. CUDA runs on Linux x86_64 only, and an
+  NVIDIA card on Windows embeds through WebGPU.
+- A new binary on macOS asks again for access to folders such as Documents, and
+  a store there waits, showing `running`, until the prompt is answered.
+- A store larger than `SEMLITH_INDEX_MEMORY` reads shards from disk on every
+  query, so raise the budget if the store fits in memory.
+- The default model is English-only and fixed when a store is created. Image
+  search is not OCR.
+- Search filters are SQLite `GLOB` (no regex), and `--lang` maps extensions and
+  never reads contents. Multi-store search merges rankings rather than ranking
+  jointly. Cross-encoder rescoring (`SEMLITH_RERANK=on`) is off by default,
+  because it costs about 16× the search time for two more answers in 77 at k=1.
+- Binaries are not notarised by Apple or Authenticode-signed for Windows. Each
+  release carries an ed25519-signed `SHA256SUMS` and a GitHub artifact
+  attestation instead. There is no ARM64 Windows or Intel macOS build, and
+  `semlith upgrade` only replaces a binary in `~/.semlith/bin`.
+
+## Documentation
+
+| Document | Covers |
+|---|---|
+| [docs/portal.md](docs/portal.md) | Every page and control of the portal. |
+| [docs/clients.md](docs/clients.md) | Setup stanzas for 12 agent clients and the HTTP transport. |
+| [docs/architecture.md](docs/architecture.md) | How the pieces fit together, and why. |
+| [docs/performance.md](docs/performance.md) | Every measured number, with its command and date. |
+| [docs/models.md](docs/models.md) | The embedding models, and how to choose one. |
+| [docs/security.md](docs/security.md) | The threat model and what is on the wire. |
+| [docs/compatibility.md](docs/compatibility.md) | What is a contract, and what a 0.x version promises. |
+| [semlith.com/llms.txt](https://semlith.com/llms.txt) | The website as one text file, for agents. |
+| [CHANGELOG.md](CHANGELOG.md) | What changed in each release. |
+
+## Contributing
+
+Contributions are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) covers building,
+the checks CI runs and what is out of scope, and [AGENTS.md](AGENTS.md) is the
+same for a coding agent. Everyone follows the [Code of Conduct](CODE_OF_CONDUCT.md),
+and every release [credits its contributors](CONTRIBUTING.md#how-contributions-are-credited).
+To report a security problem, see [SECURITY.md](SECURITY.md) rather than opening
+an issue.
+
+## Prior art
+
+Semlith's vector index is [turbovec](https://github.com/RyanCodrai/turbovec) by
+Ryan Codrai (MIT), an implementation of TurboQuant from ["TurboQuant: Online
+Vector Quantization with Near-optimal Distortion
+Rate"](https://arxiv.org/abs/2504.19874) by Amir Zandieh, Majid Daliri, Majid
+Hadian and Vahab Mirrokni. TurboQuant is data-oblivious. It rotates each vector
+randomly and quantizes each coordinate on its own, with no training pass. That
+is what an index refreshed on every file save needs. There is nothing to gather
+before the first file and nothing to rebuild as the corpus grows, and a vector
+added is a vector searchable.
+
+## License
+
+Apache-2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+Model weights are downloaded at runtime under their own licenses. The default,
+ibm-granite/granite-embedding-small-english-r2, is Apache-2.0, and the CLIP
+ViT-B/32 pair, the WebGPU plugin (MIT) and the NVIDIA libraries the CUDA pack
+fetches carry theirs. See [docs/models.md](docs/models.md).

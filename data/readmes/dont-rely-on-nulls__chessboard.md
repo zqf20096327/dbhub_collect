@@ -1,0 +1,187 @@
+* Chessboard
+
+#+html: <a href="https://builtwithnix.org"><img alt="built with nix" src="https://builtwithnix.org/badge.svg" /></a><br>
+#+html: <a href="https://github.com/Dr-Nekoma/trashcan/actions/workflows/qemu_build.yml"><img alt="[QEMU] Build" src="https://github.com/Dr-Nekoma/trashcan/actions/workflows/qemu_build.yml/badge.svg" /></a>
+
+This repository contains the server configuration to host applications from
+[[https://github.com/Dr-Nekoma][Dr. Nekoma]] and [[https://github.com/dont-rely-on-nulls][Don't Rely on Nulls]]. Currently, the following projects are hosted
+here:
+
++ [[https://github.com/Dr-Nekoma/lyceum][Lyceum]]
+
+This setup is also an ongoing experiment that mixes multiple infrastructure and
+deployment tools, including [[https://nixos.org/][Nix/NixOS]] (with [[https://github.com/nix-community/disko][disko]] and [[https://github.com/nix-community/impermanence][impermanence]]), [[https://devenv.sh/][devenv]] (for
+local development environments), [[https://opentofu.org/][OpenTofu]], and [[https://github.com/terrateamio/terrateam][Terrateam]].
+
+** Development
+
+Enter the Nix shell via the CLI, or leverage *direnv* for automatic environment loading:
+
+#+begin_src shell
+  # Using the Nix CLI
+  nix develop --impure
+
+  # Or, if using direnv
+  direnv allow
+#+end_src
+
+*** Setting Up Local Keys
+
+If you don’t have SSH keys configured yet:
+
+#+begin_src shell
+  cd $HOME/.ssh
+  ssh-keygen -t ed25519 -C "your.email@gmail.com"
+#+end_src
+
+Then, return to this project's root directory and:
+
+1. Modify [[./keys/default.nix]] to add your user and public key following the existing format.
+2. If you want to add a new secret, edit [[./secrets/secrets.nix]] and include it there.  
+   Use ~everyone~ as the list of public keys.
+
+   #+begin_src shell
+     # If your SSH agent already has a key loaded
+     agenix -e "my_secret.age"
+
+     # Or, explicitly specify your private key
+     agenix -e "my_secret.age" -i ~/.ssh/your_private_key
+   #+end_src
+
+3. Finally, rekey all secrets:
+
+   #+begin_src shell
+     # With the agent
+     agenix --rekey
+
+     # Or manually
+     agenix --rekey -i $HOME/.ssh/your_private_key
+   #+end_src
+
+*** QEMU VM
+
+To build and run a local virtual machine for testing:
+
+#+begin_src shell
+  just build-qemu   # or: just bq, or simply: bq
+#+end_src
+
+Then:
+
+#+begin_src shell
+  just run-qemu     # or: just rq, or simply: rq
+#+end_src
+
+Inside the VM, verify services are running correctly:
+
+#+begin_src shell
+  systemctl status sshd.service
+  # or, if the configuration includes PostgreSQL
+  sudo --user postgres psql
+#+end_src
+
+You can also add a convenient SSH config entry (on ~$HOME/.ssh/config~):
+
+#+begin_src shell
+  Host nekoma_vm
+    HostName 127.0.0.1
+    Port 2222
+    User root 
+    IdentityFile /dev/null
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    CheckHostIP no
+
+  # Also useful when targeting the cloud providers
+  Host nekoma_vm
+    HostName <whatever-you-get-from-tofu>
+    Port 22
+    User your_user
+    IdentityFile your_key
+#+end_src
+
+Then connect with:
+
+#+begin_src shell
+  ssh nekoma_vm
+#+end_src
+
+Once the VM is up, you can run:
+
+#+begin_src shell
+  just deploy-qemu
+#+end_src
+
+*** Custom ISO
+
+To build a bootable ISO image (for testing or deployment bootstraps):
+
+#+begin_src shell
+  nix build .#iso
+#+end_src
+
+** Deployment
+
+Trashcan uses a two-stage deployment process that combines *OpenTofu* and
+*NixOS* for reproducible configuration management.
+
+1. *Bootstrap Infrastructure*
+
+   This stage provisions the minimal infrastructure required to get the system
+   running, including:
+
+   - Networking setup (VPCs, subnets).
+   - A static IP.
+   - Base compute instances.
+   - A *minimal NixOS configuration* that includes:
+
+     + SSH
+     + A couple base users
+     + Common packages and tools
+
+     and is deployed using the Terraform modules from [[https://github.com/nix-community/nixos-anywhere/tree/main/terraform][nixos-anywhere]].
+
+2. *Declarative Configuration (NixOS)*
+
+   Once the base system is up, NixOS takes over. This configuration then evolves
+   into a final one, which adds services like:
+
+   - PostgreSQL and PgBouncer
+   - Secrets management (via [[https://github.com/ryantm/agenix][agenix]])
+   - Application deployments (e.g., Lyceum's game server)
+
+*** Provisioning with OpenTofu
+
+We target two cloud providers as of now:
+
+- *AWS*
+- *Magalu Cloud*
+
+Make sure that each environment has their proper access tokens configured.
+
+**** AWS
+
+#+begin_src shell
+  just plan "aws"     # or 'pa'
+  just apply "aws"    # or 'aa'
+
+  # To destroy all infrastructure
+  just destroy "aws"  # or 'da'
+#+end_src
+
+**** Magalu Cloud
+
+#+begin_src shell
+  just plan "mgc"     # or 'pm'
+  just apply "mgc"    # or 'am'
+
+  # To destroy all infrastructure
+  just destroy "mgc"  # or 'dm'
+#+end_src
+
+* Acknowledgements
+
++ The initial Terraform-based (now OpenTofu) bootstrap is adapted from the excellent
+  [[https://github.com/Gabriella439/nixos-in-production][NixOS in Production]] book, later heavily customized.
++ The Magalu Cloud setup was inspired by
+  [[https://github.com/Misterio77/hackathon-mgc-factorio-terraform][the Declarative Factorio]] project.

@@ -4,7 +4,7 @@ openGauss **配置问答助手**：固定 RAG 链路 + 单 Agent（工具调用�
 
 语料来自开源实习中的 B 兼容 / Dolphin MySQL 协议 / Peewee 适配笔记，目标是让分散的配置说明变成**可检索、可引用、不足可拒答**的问答服务；在此基础上增加一个**单 Agent**，让模型自己决定用哪个工具，并用代码层门闩保证「没有证据不下结论」。
 
-> 小样本离线评测与 demo，**不是**生产级准确率，也未做生产部署。
+> 小样本评测与 demo，**不是**生产级准确率，也未做生产部署。（两套评测都要联网：RAG 评测调嵌入 API，Agent 评测还要调 LLM；只有单测是全离线的。）
 
 ## 背景
 
@@ -15,7 +15,7 @@ openGauss **配置问答助手**：固定 RAG 链路 + 单 Agent（工具调用�
 - 检索层代码拒答（相关度过低时不调用大模型）
 - **单 Agent + 3 个工具 + LangGraph 状态图 + 证据/拒答门闩**
 - FastAPI：`POST /ask`（RAG 基线）与 `POST /agent`（Agent）
-- 离线评测：RAG（检索/拒答/切片消融）与 Agent（工具选择/参数/任务成功/引用/拒答/延迟）
+- 小样本评测：RAG（检索/拒答/切片消融）与 Agent（工具选择/参数/任务成功/引用/拒答/延迟）
 
 ## 架构
 
@@ -78,11 +78,11 @@ flowchart LR
 | `src/hybrid_retrieve5.py` | BM25 + 向量，加权 RRF + snake_case 提权 |
 | `src/answer6.py` | 拒答判定 → Prompt → LLM → 引用校验 |
 | `src/api7.py` | FastAPI：`GET /health`、`POST /ask`、`POST /agent` |
-| `src/eval8.py` | RAG 离线评测：Recall@k + OOS 拒答 |
+| `src/eval8.py` | RAG 小样本评测：Recall@k + OOS 拒答（需嵌入 API） |
 | `src/chunk_ablate9.py` | 切片长度消融（临时集合 `opengauss_c*`） |
 | `src/peek_signals.py` | 打印 bm25_raw / vec_dist，用于阈值标定 |
 | `src/ask_smoke.py` | HTTP smoke（`httpx`，`trust_env=False`） |
-| `src/agent_eval.py` | Agent 离线评测：26 题 8 指标 |
+| `src/agent_eval.py` | Agent 小样本评测：26 题 8 指标（需 LLM + 嵌入 API） |
 | `src/agent_cli.py` | Agent 交互式命令行（`:help` / `:tools` / `:quit`） |
 
 ### Agent 扩展包（`src/agent/`）
@@ -192,7 +192,8 @@ Invoke-RestMethod http://127.0.0.1:8000/health
 ```
 
 - 密钥通过 `env_file` 注入，**不打进镜像**（`.env` 在 `.dockerignore` 中）
-- 向量库以只读卷挂载复用，容器内不重复嵌入；也可删掉 compose 里的 `volumes` 让容器首次启动自动入库
+- **没有发布到任何镜像仓库**（Docker Hub / ghcr.io 均无），必须本地 `docker compose up --build` 构建；镜像内不含密钥，需要填自己的两个 Key 才能跑通
+- 向量库以**可写**卷挂载复用（Chroma 打开 sqlite 需要写权限，不能 `:ro`）；也可删掉 compose 里的 `volumes` 让容器首次启动自动入库
 - 镜像内默认端口是 **8000**；compose 与 `docker run` 都用 `PORT` 环境变量覆盖
 - **已在 Windows 11 + Docker Desktop 4.97（WSL2）实测通过**：镜像构建成功、容器健康检查 200、`chunks=120`，`/ask` 与 `/agent` 的问答与拒答行为均验证（详见 `docs/DEPLOY.md`）
 
@@ -232,7 +233,7 @@ Invoke-RestMethod http://127.0.0.1:8000/health
 
 粗略成本参考：一次 `/ask` 通常 1~2k token，`/agent` 会多 1~2 次调用。按每日 200 次封顶，即使被刷也在**几元**量级，不会失控。
 
-### 离线评测与消融
+### 小样本评测与消融
 
 ```powershell
 python src\eval8.py            # RAG：纯向量 vs 混合 + 越界拒答
@@ -249,10 +250,21 @@ python src\agent_eval.py       # Agent：26 题 8 项指标（真实调用模型
 ### 单元测试
 
 ```powershell
-.\.venv\Scripts\python -m pytest tests -q     # 当前 59 passed
+.\.venv\Scripts\python -m pytest tests -q     # 当前 95 passed，1.5s
 ```
 
-覆盖：工具层返回契约、Tool Calling 消息序列、图的流转与步数收口、门闩三规则、工具/LLM 重试、API 出入参与 `/ask` 回归、CLI 入口。测试全部离线（注入假检索器 + monkeypatch 大模型出口），不消耗 API 额度（`--durations` 最长 0.05s）。
+覆盖：工具层返回契约、Tool Calling 消息序列、图的流转与步数收口、门闩三规则、工具/LLM 重试、API 出入参与 `/ask` 回归、CLI 入口。测试全部离线（注入假检索器 + monkeypatch 大模型出口），不消耗 API 额度（`--durations` 最长 0.03s）。
+
+| 文件 | 条数 | 覆盖 |
+|------|-----:|------|
+| `test_agent_graph.py` | 24 | 图流转、max_steps 收口、零证据拒答、工具重试、引用越界 |
+| `test_rate_limit.py` | 16 | 分钟窗口、每日预算、每 IP 总配额、主人密钥豁免、HTTP 429 |
+| `test_tools.py` | 14 | 三个工具的返回形状、参数校验、异常包装、注册表 |
+| `test_entrypoint.py` | 11 | PORT 优先级、只读目录回退、索引判定 |
+| `test_tool_calling.py` | 9 | OpenAI tools 消息序列、非法参数、未知工具 |
+| `test_auth.py` | 9 | API key 校验、常量时间比较、`/health` 公开 |
+| `test_agent_api.py` | 8 | `/agent` 字段映射、422 校验、`/ask` 回归 |
+| `test_agent_cli.py` | 4 | `--once`、拒答展示、`--max-steps` 夹紧、`:tools`/`:quit` |
 
 ## 拒答规则（当前实现）
 

@@ -2449,12 +2449,12 @@
   }
  },
  "swiftstream/SQL": {
-  "commit_90d": 101,
-  "commit_7d": 19,
-  "rel_ver": "2.0.0-beta.6.0.0",
-  "rel_pub": "2026-09-05",
-  "rel_days": 30,
-  "rel_n90": 2,
+  "commit_90d": 171,
+  "commit_7d": 0,
+  "rel_ver": "3.1.0",
+  "rel_pub": "2026-10-21",
+  "rel_days": 14,
+  "rel_n90": 7,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -2465,14 +2465,31 @@
   "lang": {
    "Swift": 100
   },
-  "enriched_at": "20261005",
+  "enriched_at": "20261104",
   "dim_ts": {
-   "commit": "20261005",
-   "release": "20261005",
+   "commit": "20261104",
+   "release": "20261104",
    "security": "20261005",
    "contrib": "20261005",
    "lang": "20261005"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "3.1.0",
+    "d": "2026-10-21",
+    "n": "If your database schema relied on the previous implicit type-name spelling, define `static var tableName` explicitly before upgrading. Explicit `tableName` overrides are unchanged."
+   },
+   {
+    "t": "3.0.0",
+    "d": "2026-10-17",
+    "n": "## Database qualification\nExplicit database structure now has a first-class `DB` namespace:\nlet userID = DB.Catalog(\"warehouse\")\n.schema(DB.Schema(\"analytics\"))\nFor PostgreSQL:\nIf a model owns a schema, move from the SQL 2.x schema-name convention to an explicit `DB.Schema`.\nstatic let schema = DB.Schema(\"analytics\")\nThe 3.0.0 `Schemable` contract requires a non-optional structural schema value. Catalog-aware models can adopt `Catalogable` and provide `DB.Catalog`.\nFor explicit structural identifiers, `DB.T"
+   },
+   {
+    "t": "2.2.0",
+    "d": "2026-10-13",
+    "n": "SQL 2.2.0 adds composable expression APIs, dialect-specific SQL/JSON owners, and PostgreSQL range helpers while preserving the existing query composition and binding model.\nThe binary expression is grouped. `Collate(...)` and `AtTimeZone(...)` are also available; PostgreSQL additionally supports `AtLocal()`. `AT TIME ZONE` is validated for PostgreSQL and DuckDB, and runtime zone values remain bindable.\nDuckDB supports bound paths for `JSONExists` and `JSONValue`. PostgreSQL SQL/JSON options and `JSONQuery` "
+   }
+  ]
  },
  "andy1924/UdyogSaarthi": {
   "rel_ver": null,

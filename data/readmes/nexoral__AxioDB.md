@@ -3,8 +3,18 @@
 </p>
 
 <h1 align="center">Embedded NoSQL Database for TypeScript & Agents</h1>
-<p align="center"><b>Zero-native document database with ACID transactions & in-memory cache — verified on Node.js, Bun & Deno.</b></p>
+<p align="center"><b>Zero-native embedded database with ACID transactions & in-memory cache — verified on Node.js & Bun.</b></p>
 
+<p align="center">
+  <a href="#quick-start"><img src="https://img.shields.io/badge/Install-npm%20i%20axiodb-cb3837?style=for-the-badge&logo=npm" alt="npm install axiodb" /></a>
+  <a href="https://axiodb.in"><img src="https://img.shields.io/badge/Docs-axiodb.in-4B0082?style=for-the-badge" alt="Official Docs" /></a>
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/nexoral/AxioDB/main/assets/demo.gif" alt="AxioDB Quick Demo" width="800" />
+</p>
+
+[![CI](https://github.com/nexoral/AxioDB/actions/workflows/Push.yml/badge.svg)](https://github.com/nexoral/AxioDB/actions/workflows/Push.yml)
 [![npm version](https://badge.fury.io/js/axiodb.svg)](https://badge.fury.io/js/axiodb)
 [![npm downloads total](https://img.shields.io/npm/dt/axiodb.svg)](https://www.npmjs.com/package/axiodb)
 [![npm downloads yearly](https://img.shields.io/npm/dy/axiodb.svg)](https://www.npmjs.com/package/axiodb)
@@ -15,11 +25,14 @@
 [![npm types](https://img.shields.io/npm/types/axiodb?label=types)](https://www.npmjs.com/package/axiodb)
 [![Zero native deps](https://img.shields.io/badge/dependencies-0%20native-success)](https://www.npmjs.com/package/axiodb)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen)](https://nodejs.org)
-[![Tested on Node.js](https://img.shields.io/badge/tested%20on-20%20%7C%2021%20%7C%2022%20%7C%2023%20%7C%2024%20%7C%2025%20%7C%2026-blue)](https://github.com/nexoral/AxioDB/actions/workflows/Push.yml)
-[![Bun tested](https://img.shields.io/badge/Bun%20tested-v1.4.0-black?logo=bun)](https://bun.sh)
-[![Deno tested](https://img.shields.io/badge/Deno%20tested-v2.9.6-black?logo=deno)](https://deno.com)
+[![Tested on Node.js](https://img.shields.io/badge/Node.js%20tested-20%20%7C%2021%20%7C%2022%20%7C%2023%20%7C%2024%20%7C%2025%20%7C%2026-339933?logo=node.js)](https://github.com/nexoral/AxioDB/actions/workflows/Push.yml)
+[![Bun tested](https://img.shields.io/badge/Bun%20tested-1.4.0%20%7C%201.4.1%20%7C%201.4.2%20%7C%201.4.3%20%7C%201.4.4%20%7C%20latest-black?logo=bun)](https://github.com/nexoral/AxioDB/actions/workflows/Push.yml)
+[![ACID Durability](https://img.shields.io/badge/ACID-WAL%20Durability-blueviolet)](https://axiodb.in)
+[![Sub-millisecond Read](https://img.shields.io/badge/p50%20read-0.6ms%20(1300%2B%20QPS)-8A2BE2)](https://axiodb.in/performance)
+[![AI Agent State](https://img.shields.io/badge/AI%20Agent-State%20%26%20Memory-4B0082)](https://axiodb.in)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-blue)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/nexoral/AxioDB/pulls)
 [![GitHub Stars](https://img.shields.io/github/stars/nexoral/AxioDB?style=social)](https://github.com/nexoral/AxioDB)
 [![GitHub Forks](https://img.shields.io/github/forks/nexoral/AxioDB?style=social)](https://github.com/nexoral/AxioDB/forks)
 [![Contributors](https://img.shields.io/github/contributors/nexoral/AxioDB)](https://github.com/nexoral/AxioDB/graphs/contributors)
@@ -44,7 +57,7 @@ const { data } = await users.query({ age: { $gt: 25 } }).Sort({ age: -1 }).Limit
 console.log(data.documents);
 ```
 
-No server to run, no `node-gyp`, no `electron-rebuild`. Requires Node.js ≥20 (also verified on Bun v1.4.0 and Deno v2.9.6).
+No server to run, no `node-gyp`, no `electron-rebuild`. Requires Node.js ≥20 (also verified on Bun v1.4.0).
 
 ### 🤖 AI Agent Skill
 
@@ -56,7 +69,7 @@ npx skills add nexoral/AxioDB --skill skill
 
 ## Why AxioDB?
 
-* 📦 **Zero Setup & Zero C++:** Pure JavaScript and TypeScript. No `node-gyp` errors, no build tools, and no native compilation issues on Node.js, Bun, Deno, or Electron.
+* 📦 **Zero Setup & Zero C++:** Pure JavaScript and TypeScript. No `node-gyp` errors, no build tools, and no native compilation issues on Node.js, Bun, or Electron.
 * 📄 **Native JSON (No SQL Migrations):** Store raw objects directly. Perfect for AI agents, chats, and apps where data structures change often and SQL schemas are painful.
 * 🛡️ **Safe from Crashes & Corruption:** Uses real ACID transactions and Write-Ahead Logging (WAL). Even if your app or server crashes mid-write, your data stays intact.
 * ⚡ **Fast In-Memory Caching:** Delivers sub-millisecond (<1ms) reads with a built-in memory cache and fast disk indexes.
@@ -68,37 +81,37 @@ npx skills add nexoral/AxioDB --skill skill
 * **AI Agent Memory** — Save conversation history, tool calls, and agent state locally.
 * **Desktop & Electron Apps** — An embedded database that never breaks on user machines during updates.
 * **CLI Tools & Local Apps** — Save and query data easily without running a database server.
-* **Fast Prototyping** — Build full features with MongoDB-like queries without setting up Docker or cloud DBs.
+* **Fast Prototyping** — Build full features with advanced queries without setting up Docker or cloud DBs.
 
 **Best fit:** 1,000 to 500,000 documents.
 
 **When NOT to use it:**
 * Millions of records, hundreds of concurrent web connections, or distributed clusters — use PostgreSQL or MongoDB instead. See [measured limits](https://axiodb.in/limitations).
 
-## Features
+## Features & Ecosystem
 
-**Core** — the embedded engine
+AxioDB is designed to be **fully functional out of the box** with zero setup, while offering dedicated companion tools for advanced workflows.
 
-* **MongoDB-style queries** — `{ age: { $gt: 25 } }`, 19 operators, plus `.hint()` and `.findByIds()`
-* **ACID transactions** — commit/rollback, savepoints, write-ahead log, crash recovery via `Transaction.recoverTransactions()`
-* **Aggregation** — 19 stages including `$lookup` joins, extensible through `OperatorRegistry`
-* **Indexes** — dual-write memory + disk index, served by a TTL-backed `IndexCache`
-* **InMemoryCache** — per-instance, invalidated on write, tunable via `{ Cache, minTTL, maxTTL, cacheClearUp }`
+### 📦 Built Directly Into the Core Package (`npm install axiodb`)
 
-**Self-hostable server** — the same engine, reachable remotely
+Everything below is included in the main zero-dependency package — no extra servers, no Docker, and no native C++ compilation:
 
-* **Embedded** — `new AxioDB({...})` in-process, no server, the default
-* **HTTP API** — port 27018, 41 documented endpoints, REST and OpenAPI
-* **AxioDBCloud (TCP)** — port 27019, 32 commands, optional `TCPAuth` and TLS
-* **MCP server** — port 27020, 43 tools for AI agents, bundled in the Docker image only
-* **Docker** — `theankansaha/axiodb`, every surface configurable by environment variable
+* 🚀 **Zero-Setup Embedded Database** — Runs directly inside your application with `new AxioDB()`. No background database processes to install or manage.
+* 🛡️ **Crash-Proof Data Safety** — Incomplete writes roll back automatically if your app, server, or power cuts out mid-operation, ensuring your data is never corrupted.
+* ⚡ **Sub-Millisecond Reads (<1ms)** — Delivers blazing-fast queries with automatic in-memory caching and disk indexing, without needing to configure a separate Redis layer.
+* 🔍 **Rich Querying & Data Joins** — Filter documents with intuitive operators (`$gt`, `$in`, `$regex`), paginate, sort, and join multiple collections with aggregation pipelines (`$lookup`).
+* 🤖 **Built-in AI Agent MCP Server** — Pass `{ MCP: true }` to instantly boot an official Model Context Protocol server on port 27020, giving Claude, Cursor, and autonomous AI agents 45 tools to manage database state.
+* 🖥️ **Built-in Web Dashboard** — Pass `{ GUI: true }` to launch a full visual dashboard at `http://localhost:27018` to inspect collections, view metrics, and run live queries.
+* 🌐 **Built-in HTTP REST & TCP Servers** — Turn on `{ HTTP: true }` (port 27018) or `{ TCP: true }` (port 27019) whenever you need remote microservices, worker processes, or client apps to talk to the same database.
 
-**Clients and apps**
+### 🛠️ Optional Companion Tools
 
-* **Dashboard** — browser UI served by the HTTP surface, for browsing collections and running queries
-* **AxioDBCloud client** — the TypeScript client for the TCP surface, with connection pooling and auto-reconnect
-* **CLI** — Go binary for 12 platforms: interactive REPL, TLS, export/import
-* **Desktop app** — Electron GUI for Linux, macOS, and Windows
+Install these only when you need dedicated standalone apps or command-line scripting:
+
+* 🖥️ **Desktop App (Electron GUI)** — A standalone desktop management application for Linux, macOS, and Windows to manage local and remote AxioDB instances without opening a web browser.
+* ⚡ **Terminal CLI (Go Binary)** — A lightweight, standalone CLI binary with an interactive REPL shell, TLS remote connections, and database backup/export/import tools.
+* 🤖 **AI Agent Skill** — Run `npx skills add nexoral/AxioDB --skill skill` to equip your AI coding assistant (Cursor, Claude Code, Windsurf, Copilot) with verified query syntax and schemas.
+* 🐳 **Official Docker Container** — Deploy `theankansaha/axiodb` in Kubernetes, cloud servers, or Docker Compose with all surfaces (HTTP, TCP, MCP, Dashboard) ready to run.
 
 ## Performance & Testing
 
@@ -122,11 +135,13 @@ Full performance charts, test suites, and methodology: [axiodb.in/performance](h
 
 AxioDB ships an interactive Go CLI and an Electron desktop app for Linux, macOS, and Windows:
 
+**Linux / macOS:**
 ```bash
-# Linux / macOS
 curl -fsSL https://raw.githubusercontent.com/nexoral/AxioDB/main/cli/Scripts/install.sh | bash
+```
 
-# Windows (PowerShell)
+**Windows (PowerShell):**
+```powershell
 irm https://raw.githubusercontent.com/nexoral/AxioDB/main/cli/Scripts/install.ps1 | iex
 ```
 

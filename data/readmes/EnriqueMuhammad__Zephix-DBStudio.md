@@ -69,12 +69,12 @@ Oracle connections need Oracle Instant Client (64-bit) on `PATH`.
 
 ## Install and download
 
-Current release: [v0.3.2](https://github.com/EnriqueMuhammad/Zephix-DBStudio/releases/tag/v0.3.2).
+Current release: [v0.4.0](https://github.com/EnriqueMuhammad/Zephix-DBStudio/releases/tag/v0.4.0).
 
 | Platform | What you get |
 | --- | --- |
-| Windows | `Zephix-0.3.2-x64.msi` (per-user, no administrator rights) or the portable `Zephix-0.3.2-x64.exe` |
-| macOS | `Zephix-0.3.2-arm64.pkg` (Apple silicon) |
+| Windows | `Zephix-0.4.0-x64.msi` (per-user, no administrator rights) or the portable `Zephix-0.4.0-x64.exe` |
+| macOS | `Zephix-0.4.0-arm64.pkg` (Apple silicon) |
 | Linux | Build from source (below). There is no Linux binary in the release. |
 
 Windows packaging notes are in [docs/RELEASING.md](docs/RELEASING.md). Checksums are in
@@ -159,8 +159,9 @@ text says Ctrl.
 | Ctrl+T | New query tab |
 | Ctrl+O | Open a `.sql` file |
 | Ctrl+S / Ctrl+Shift+S | Save the query / save it under a new name |
-| Ctrl+Enter or Ctrl+R | Run the query, or the selection if there is one |
+| Ctrl+Enter, Ctrl+R or F5 | Run the query, or the selection if there is one |
 | Ctrl+Space | Autocomplete |
+| Ctrl+/ | Comment the selected lines, or uncomment them when all are commented |
 | Ctrl+K, Ctrl+C / Ctrl+K, Ctrl+U | Comment / uncomment the selected lines |
 | Ctrl+E, Ctrl+W | Toggle word wrap |
 | Alt+Up / Alt+Down | Move the selected lines |
@@ -168,7 +169,7 @@ text says Ctrl.
 | Ctrl+Shift+W | Close all tabs |
 | Ctrl+B | Toggle the sidebar |
 | Ctrl+F | Filter the explorer |
-| F5 | Refresh the selected connection |
+| F5 (when no query tab is active) | Refresh the selected connection |
 
 Help → Keyboard Shortcuts opens the welcome page.
 

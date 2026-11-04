@@ -340,7 +340,7 @@ Useful resources and dependencies that are used in NewTube.
 - Thanks to CodeWithAntonio: https://codewithantonio.com/
 
 <!--- DEPENDENCIES_START --->
-- [@babel/eslint-parser](https://www.npmjs.com/package/@babel/eslint-parser): ^8.0.6
+- [@babel/eslint-parser](https://www.npmjs.com/package/@babel/eslint-parser): ^8.0.7
 - [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^7.9.7
 - [@eslint/compat](https://www.npmjs.com/package/@eslint/compat): ^2.1.1
 - [@eslint/eslintrc](https://www.npmjs.com/package/@eslint/eslintrc): ^3
@@ -366,12 +366,12 @@ Useful resources and dependencies that are used in NewTube.
 - [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
 - [client-only](https://www.npmjs.com/package/client-only): ^0.0.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
-- [cn](https://www.npmjs.com/package/cn): ^0.3.0
+- [cn](https://www.npmjs.com/package/cn): ^0.5.1
 - [concurrently](https://www.npmjs.com/package/concurrently): ^10.0.5
 - [date-fns](https://www.npmjs.com/package/date-fns): ^4.4.0
 - [dotenv](https://www.npmjs.com/package/dotenv): ^17.4.2
 - [drizzle-kit](https://www.npmjs.com/package/drizzle-kit): ^0.31.10
-- [drizzle-orm](https://www.npmjs.com/package/drizzle-orm): ^0.45.2
+- [drizzle-orm](https://www.npmjs.com/package/drizzle-orm): ^0.45.4
 - [drizzle-zod](https://www.npmjs.com/package/drizzle-zod): ^0.8.3
 - [embla-carousel-react](https://www.npmjs.com/package/embla-carousel-react): ^8.6.0
 - [eslint](https://www.npmjs.com/package/eslint): ^10
@@ -380,7 +380,7 @@ Useful resources and dependencies that are used in NewTube.
 - [eslint-plugin-prettier](https://www.npmjs.com/package/eslint-plugin-prettier): ^5.5.6
 - [eslint-plugin-tailwindcss](https://www.npmjs.com/package/eslint-plugin-tailwindcss): ^4.4.0
 - [jiti](https://www.npmjs.com/package/jiti): ^2.7.0
-- [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.61.0
+- [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.66.0
 - [next](https://www.npmjs.com/package/next): ^16.4.1
 - [openai](https://www.npmjs.com/package/openai): ^7.27.0
 - [player.style](https://www.npmjs.com/package/player.style): ^0.3.4

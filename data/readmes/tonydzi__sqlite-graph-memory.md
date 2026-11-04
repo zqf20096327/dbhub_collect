@@ -23,8 +23,12 @@ Already using your own agent rules and projects? The [Russian existing-setup gui
 Build the index once (any folder of markdown; [`uv`](https://docs.astral.sh/uv/) gives you `uvx`):
 
 ```bash
-BRAIN_INDEX_DIR=$HOME/.sgm-index uvx --from 'sqlite-graph-memory[lite]' sgm-index ~/notes
+BRAIN_INDEX_DIR=$HOME/.sgm-index uvx --python 3.12 --from 'sqlite-graph-memory[lite]' sgm-index ~/notes
 ```
+
+`--python 3.12` is deliberate. onnxruntime has no wheels for Python 3.14 on an Intel Mac, or on
+Apple Silicon below macOS 14. On such a machine an unpinned `uvx` falls back to release 0.3.5,
+which has no `[lite]`, and `sgm-index` then stops and asks for `[embeddings]`.
 
 Then point your client at the server. Use the absolute path of that index folder.
 
@@ -33,7 +37,7 @@ Then point your client at the server. Use the absolute path of that index folder
 **Claude Code**
 
 ```bash
-claude mcp add sqlite-graph-memory -e BRAIN_INDEX_DIR=$HOME/.sgm-index -- uvx --with 'sqlite-graph-memory[lite]' sqlite-graph-memory
+claude mcp add sqlite-graph-memory -e BRAIN_INDEX_DIR=$HOME/.sgm-index -- uvx --python 3.12 --with 'sqlite-graph-memory[lite]' sqlite-graph-memory
 ```
 
 **Cursor** (`~/.cursor/mcp.json`; Claude Desktop, Zed and Windsurf take the same `mcpServers` block)
@@ -43,7 +47,7 @@ claude mcp add sqlite-graph-memory -e BRAIN_INDEX_DIR=$HOME/.sgm-index -- uvx --
   "mcpServers": {
     "sqlite-graph-memory": {
       "command": "uvx",
-      "args": ["--with", "sqlite-graph-memory[lite]", "sqlite-graph-memory"],
+      "args": ["--python", "3.12", "--with", "sqlite-graph-memory[lite]", "sqlite-graph-memory"],
       "env": { "BRAIN_INDEX_DIR": "/absolute/path/to/.sgm-index" }
     }
   }
@@ -58,7 +62,7 @@ claude mcp add sqlite-graph-memory -e BRAIN_INDEX_DIR=$HOME/.sgm-index -- uvx --
     "sqlite-graph-memory": {
       "type": "stdio",
       "command": "uvx",
-      "args": ["--with", "sqlite-graph-memory[lite]", "sqlite-graph-memory"],
+      "args": ["--python", "3.12", "--with", "sqlite-graph-memory[lite]", "sqlite-graph-memory"],
       "env": { "BRAIN_INDEX_DIR": "/absolute/path/to/.sgm-index" }
     }
   }
@@ -70,7 +74,7 @@ claude mcp add sqlite-graph-memory -e BRAIN_INDEX_DIR=$HOME/.sgm-index -- uvx --
 ```toml
 [mcp_servers.sqlite-graph-memory]
 command = "uvx"
-args = ["--with", "sqlite-graph-memory[lite]", "sqlite-graph-memory"]
+args = ["--python", "3.12", "--with", "sqlite-graph-memory[lite]", "sqlite-graph-memory"]
 env = { BRAIN_INDEX_DIR = "/absolute/path/to/.sgm-index" }
 ```
 
@@ -82,7 +86,7 @@ the same two models on ONNX Runtime and no torch, it is 155 MB (Windows, Python 
 against 33.8 s through torch on the same machine, with the same top hits and scores.
 `[lite]` is picked automatically when installed; `SGM_BACKEND=torch` forces torch (for a GPU).
 An index built by either backend is searched correctly by the other.
-Already installed with pip? Replace `uvx --with ... sqlite-graph-memory` by `sgm-mcp`
+Already installed with pip? Replace `uvx --python 3.12 --with ... sqlite-graph-memory` by `sgm-mcp`
 ([`examples/mcp-config.json`](examples/mcp-config.json)). Agents that read files first:
 [`llms.txt`](llms.txt).
 
@@ -94,7 +98,13 @@ sgm-index ./notes
 sgm-ask --ab "In which programming language is the tool behind Project Ouzel written?"
 ```
 
-`./notes` is any folder of markdown notes. To get exactly the output below, use the
+On an Intel Mac, use Python 3.12 with `pip install`. On a newer Python it can quietly install 0.3.5, which has no `[lite]`.
+
+`./notes` is any folder of markdown notes. Re-running `sgm-index` only re-embeds notes
+that are new or changed since the last run (tracked by a manifest next to the index);
+pass `--full` to force a complete rebuild.
+
+To get exactly the output below, use the
 202-note synthetic vault from this repo (it is not inside the pip package):
 
 ```bash
@@ -217,7 +227,7 @@ an edge table only when hop depth or corpus size demands it.
 
 - No entity lane. The production setup has an extra retrieval lane over people/project
   cards; it is too entangled with personal data to publish.
-- No incremental indexing (tracked in the issues). Packaging exists since v0.3.0 (`pip install sqlite-graph-memory`). There IS an eval suite now — see
+- Packaging exists since v0.3.0 (`pip install sqlite-graph-memory`). There IS an eval suite now — see
   [Measure before you swap](#measure-before-you-swap--eval) — but it scores retrieval on
   wikilink-derived gold, which is weak supervision and says so out loud. Test coverage is uneven:
   `index_notes.py`, `brain_ask.py` and `mcp_server.py` have unit tests, and
@@ -356,6 +366,45 @@ vector-only and vector+graph, so "does the graph help?" stops being a matter of 
 is what runs. An eval that re-implements the pipeline measures the re-implementation.
 `--sqlite` appends one row per class and mode to a `gold_eval` table, which is how a run six
 weeks from now can be diffed against today's.
+
+### Sweeping the graph-expansion knobs — `eval/run_ablation.py`
+
+`run_eval.py` scores one configuration at a time (`vector` vs `graph`). `run_ablation.py`
+sweeps a grid of pipeline parameters — whether the 1-hop graph expansion runs at all
+(`hops`), how many top hits seed it (`ghops`), how many neighbours it admits (`gmax`), the
+dense-retrieve pool size (`topk`), and whether entity/name-shaped queries skip the hop
+(`entity_gate`) — against the **same gold file**, in one run, reusing `brain_ask.py` and
+`run_eval.py`'s own metrics so the sweep can't drift from what `sgm-ask` actually does:
+
+```bash
+python eval/run_ablation.py --list-grid                        # cells only, no model/index load
+python eval/run_ablation.py --gold eval/gold-<today>.jsonl      # the built-in 10-cell default grid
+```
+
+Each dense embedding is computed once per question and reused across every cell (a cell's
+candidate pool is a slice of the widest pool asked for, not a re-retrieve); only the
+cross-encoder rerank runs per `(question, cell)`, since the candidate set changes per cell.
+The report — printed as a Markdown table and written as both `<prefix>.md` and `<prefix>.csv`
+(`--out <prefix>`, or `--csv`/`--md` directly) — breaks down `n`, `Recall@12`, `MRR`, `nDCG@12`
+and `delta_nDCG@12` (vs the grid's `0-hop` baseline) per `(cell, class)` and `overall`, and
+warns explicitly whenever a class has fewer than 20 questions. The built-in `default`
+10-cell grid varies **one axis at a time** against `1-hop` (`ghops=15, gmax=40, topk=60,
+entity_gate=on`) rather than a full Cartesian product; `--grid` takes `default`, a
+`';'`-separated `key=val` cell list (e.g. `--grid "hops=0;hops=1,ghops=30,gmax=80"` to test
+multi-axis interactions), or a JSON array of cell dicts.
+
+Sample run (`intfloat/multilingual-e5-base` + `cross-encoder/mmarco-mMiniLMv2-L12-H384-v1` on CPU) over a 5-note synthetic mini-vault (`12` questions: `5` title, `5` body, `1` bridge, `1` temporal) with `--grid "hops=0,topk=3;hops=1,ghops=2,gmax=5,topk=3,entity_gate=on;hops=1,ghops=2,gmax=5,topk=3,entity_gate=off"`:
+
+| cell | class | n | Recall@12 | MRR | nDCG@12 | delta_nDCG@12 |
+|---|---|---:|---:|---:|---:|---:|
+| `cell-0` (`hops=0, topk=3`) | bridge | 1 | 0.500 | 0.500 | 0.387 | +0.000 |
+| `cell-0` (`hops=0, topk=3`) | overall | 12 | 0.958 | 0.903 | 0.907 | +0.000 |
+| `cell-1` (`hops=1, ghops=2, gmax=5, topk=3, gate=on`) | bridge | 1 | 1.000 | 0.500 | 0.693 | +0.307 |
+| `cell-1` (`hops=1, ghops=2, gmax=5, topk=3, gate=on`) | overall | 12 | 1.000 | 0.903 | 0.933 | +0.026 |
+| `cell-2` (`hops=1, ghops=2, gmax=5, topk=3, gate=off`) | bridge | 1 | 1.000 | 0.500 | 0.693 | +0.307 |
+| `cell-2` (`hops=1, ghops=2, gmax=5, topk=3, gate=off`) | overall | 12 | 1.000 | 0.903 | 0.933 | +0.026 |
+
+When `topk` is smaller than the vault (`topk=3 < 5` notes), 1-hop `[[wikilink]]` expansion (`cell-1`, `cell-2`) lifts `bridge` Recall@12 from `0.500` to `1.000` (`+0.307` nDCG@12, `+0.026` overall) without regressing `title`, `body`, or `temporal`. On the default 10-cell grid (`topk=20..80 > 5` notes), every cell scores identically (`overall` Recall@12 `1.000`, nDCG@12 `0.929`, `delta_nDCG@12 = +0.000`) because dense retrieval already admits the entire mini-vault before the graph hop runs.
 
 ### What it cost us to find out
 

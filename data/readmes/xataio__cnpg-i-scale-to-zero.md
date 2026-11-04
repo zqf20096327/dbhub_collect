@@ -8,34 +8,26 @@ A [CNPG-I](https://github.com/cloudnative-pg/cnpg-i) plugin that automatically h
 
 ## Overview
 
-This plugin monitors PostgreSQL database activity and automatically hibernates
-clusters after a configurable inactivity period.
+This plugin monitors PostgreSQL database activity and automatically scales clusters down to zero replicas when they've been inactive for a configurable period. It injects a monitoring sidecar into all pods of the PostgreSQL cluster. Only the primary pod actively monitors database connections and manages hibernation, while replica pods run the sidecar in passive mode until promoted to primary.
 
 ### How It Works
 
-1. The plugin injects a sidecar HTTP server into each PostgreSQL pod. The
-   server returns the number of open connections.
-2. The central plugin periodically requests the connection count from the
-   primary pod.
-3. Successful responses with open connections reset the inactivity period.
-   Errors or unavailable data do not count as inactivity.
-4. After consecutive zero-connection responses for the configured period, the
-   plugin hibernates the cluster and suspends its scheduled backup.
-
-### Architecture
-
-```mermaid
-flowchart LR
-    Plugin[Scale-to-zero plugin] -->|Request connection count| Sidecar[Primary pod sidecar]
-    Sidecar -->|Query connections| Postgres[PostgreSQL primary]
-    Sidecar -->|Return connection count| Plugin
-    Plugin -->|Hibernate cluster| Operator[CloudNativePG operator]
-```
+1. **Sidecar Injection**: Automatically adds a monitoring sidecar to all PostgreSQL pods in the cluster
+2. **Primary-Only Monitoring**: Only the primary pod actively monitors database connections and query activity
+3. **Passive Replicas**: Replica pods run the sidecar container but remain in passive mode (no monitoring)
+4. **Automatic Hibernation**: When the cluster is inactive for the configured duration, the primary sidecar sets the hibernation annotation
+5. **Scheduled Backup Management**: The primary pod automatically pauses scheduled backups when the cluster is hibernated to prevent backup failures
+6. **Switchover Handling**: During switchovers, the new primary automatically takes over monitoring duties while the old primary becomes passive
 
 ## Installation
 
-See the [installation guide](INSTALL.md) for prerequisites, deployment,
-configuration, verification, and troubleshooting.
+For detailed installation instructions, see [INSTALL.md](INSTALL.md).
+
+Quick start:
+
+```bash
+kubectl apply -f manifest.yaml
+```
 
 ## Container Images
 
@@ -66,22 +58,174 @@ We publish different image tags for different use cases:
 
 ## Usage
 
-Enable the plugin and scale-to-zero annotations on a CloudNativePG `Cluster`.
-See the [installation guide](INSTALL.md#enable-a-cluster) or the complete
-[cluster example](doc/examples/cluster-example.yaml).
+Enable scale-to-zero for a PostgreSQL cluster by adding the plugin and configuration annotations:
+
+```yaml
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: my-cluster
+  annotations:
+    xata.io/scale-to-zero-enabled: "true"
+    xata.io/scale-to-zero-inactivity-minutes: "10"
+spec:
+  instances: 3
+  enableSuperuserAccess: true
+  plugins:
+    - name: cnpg-i-scale-to-zero.xata.io
+  storage:
+    size: 1Gi
+```
+
+### Configuration
+
+The plugin behavior is configured through cluster annotations:
+
+- `xata.io/scale-to-zero-enabled`: Set to `"true"` to enable scale-to-zero functionality
+- `xata.io/scale-to-zero-inactivity-minutes`: Sets the inactivity threshold in minutes before hibernation (default: 30 minutes)
+
+The plugin automatically manages the `cnpg.io/hibernation` annotation to trigger cluster hibernation and pauses any associated scheduled backups to prevent backup failures on hibernated clusters.
+
+See the [cluster example](doc/examples/cluster-example.yaml) for a complete configuration.
+
+#### RBAC
+
+**Important**: Each cluster that uses scale-to-zero functionality requires specific RBAC permissions for the sidecar to update cluster resources and manage scheduled backups.
+
+Create the required RBAC using the template:
+
+```bash
+# Copy the RBAC template
+curl -O https://raw.githubusercontent.com/xataio/cnpg-i-scale-to-zero/main/doc/examples/rbac-template.yaml
+
+# Edit the template to replace CLUSTER_NAME and NAMESPACE
+sed -i 's/CLUSTER_NAME/my-cluster/g; s/NAMESPACE/default/g' rbac-template.yaml
+
+# Apply the RBAC configuration
+kubectl apply -f rbac-template.yaml
+```
+
+Or see the [RBAC template](doc/examples/rbac-template.yaml) for manual customization.
+
+#### Resource Configuration
+
+The plugin allows you to configure resource requests and limits for the injected sidecar containers through environment variables in the plugin deployment. This enables you to tune resource allocation based on your cluster requirements.
+
+**Default Sidecar Resources:**
+
+- CPU Request: `50m` (0.05 cores)
+- CPU Limit: `200m` (0.2 cores)
+- Memory Request: `64Mi`
+- Memory Limit: `64Mi`
+
+**Override via Environment Variables:**
+
+You can override these defaults by modifying the plugin deployment manifest before applying it:
+
+```yaml
+# In manifest.yaml, find the deployment and modify the env section:
+env:
+  - name: LOG_LEVEL
+    value: info
+  - name: SIDECAR_CPU_REQUEST
+    value: "100m"
+  - name: SIDECAR_CPU_LIMIT
+    value: "500m"
+  - name: SIDECAR_MEMORY_REQUEST
+    value: "128Mi"
+  - name: SIDECAR_MEMORY_LIMIT
+    value: "128Mi"
+```
+
+**Override at Runtime:**
+
+You can also update resource configuration after deployment using kubectl:
+
+```bash
+# Update sidecar resource configuration
+kubectl set env deployment/scale-to-zero -n cnpg-system \
+  SIDECAR_CPU_REQUEST=100m \
+  SIDECAR_CPU_LIMIT=500m \
+  SIDECAR_MEMORY_REQUEST=128Mi \
+  SIDECAR_MEMORY_LIMIT=128Mi
+
+# Restart the plugin to apply changes
+kubectl rollout restart deployment/scale-to-zero -n cnpg-system
+```
+
+**ConfigMap Override:**
+
+For environment-specific configurations, you can create a ConfigMap:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scale-to-zero-resource-overrides
+  namespace: cnpg-system
+data:
+  SIDECAR_CPU_REQUEST: "200m"
+  SIDECAR_MEMORY_LIMIT: "512Mi"
+---
+# Then reference it in the deployment by adding to envFrom:
+envFrom:
+  - configMapRef:
+      name: scale-to-zero-resource-overrides
+      optional: true
+```
+
+These resource configurations apply to all sidecar containers injected by the plugin across all clusters.
 
 ## Monitoring and Observability
 
-Prometheus metrics are exposed by the plugin on the service port named
-`metrics`. See the [troubleshooting guide](INSTALL.md#troubleshooting) for log
-and health checks.
+The plugin provides logging to help monitor its operation:
+
+- Sidecar injection events are logged during pod creation
+- Activity monitoring status is logged at each check interval (primary pod only)
+- Primary/replica role transitions are logged when pods change status
+- Hibernation events are logged when clusters are scaled down
+- Scheduled backup pause operations are logged
+
+You can view the plugin logs using:
+
+```shell
+kubectl logs -n cnpg-system deployment/cnpg-i-scale-to-zero-plugin
+```
+
+And monitor the sidecar logs in the PostgreSQL pods:
+
+```shell
+# View logs from the primary pod's sidecar (active monitoring)
+kubectl logs <primary-pod-name> -c scale-to-zero
+
+# View logs from replica pods' sidecars (passive mode)
+kubectl logs <replica-pod-name> -c scale-to-zero
+```
+
+**Note**: Primary pod sidecars will show active monitoring logs, while replica pod sidecars will show minimal passive mode logs.
 
 ## Development
 
+For local development and building from source:
+
+```bash
+# Build binaries
+make build
+
+# Build Docker images
+make docker-build-dev
+
+# Run tests and linting
+make test
+make lint
+
+# Local development with kind
+make kind-deploy-dev
+```
+
 This plugin uses the [pluginhelper](https://github.com/cloudnative-pg/cnpg-i-machinery/tree/main/pkg/pluginhelper) from [`cnpg-i-machinery`](https://github.com/cloudnative-pg/cnpg-i-machinery) to simplify the plugin's implementation.
 
-See the [development documentation](doc/development.md) for implementation
-details, build commands, and local testing with Tilt.
+For additional details on the plugin implementation, refer to the [development documentation](doc/development.md).
 
 ## Limitations
 

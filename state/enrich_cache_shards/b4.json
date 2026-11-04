@@ -706,12 +706,12 @@
   "enriched_at": "20260927"
  },
  "t1mmen/srtd": {
-  "commit_90d": 2,
-  "commit_7d": 0,
-  "rel_ver": "v1.0.0",
-  "rel_pub": "2025-12-31",
-  "rel_days": 270,
-  "rel_n90": 0,
+  "commit_90d": 7,
+  "commit_7d": 5,
+  "rel_ver": "v1.0.2",
+  "rel_pub": "2026-11-04",
+  "rel_days": 0,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -725,7 +725,28 @@
    "PLpgSQL": 1,
    "Shell": 1
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261104",
+  "rel_notes": [
+   {
+    "t": "v1.0.2",
+    "d": "2026-11-04",
+    "n": "### Patch Changes\n\n- 9d6d414: Honor `POSTGRES_URL` when `srtd.config.json` is not valid JSON. Before, that fallback returned the defaults before reading the variable, so `srtd apply` and `watch` connected to `:54322` instead of the database `POSTGRES_URL` names."
+   },
+   {
+    "t": "v1.0.1",
+    "d": "2026-11-04",
+    "n": "- 8eb6e6e: Honor `POSTGRES_URL`: when set, it overrides `pgConnection` from `srtd.config.json` and the default, as the default's own comment already promised."
+   },
+   {
+    "t": "v1.0.0",
+    "d": "2025-12-31",
+    "n": "-   Remove duplicate SIGINT/SIGTERM handlers from DatabaseService that caused race conditions during shutdown\n-   7387771: Add actionable hints for Postgres errors\n-   Tests database connectivity\nWhen SQL templates fail, cryptic Postgres error codes now get translated into actionable hints. Instead of just seeing `42P01`, users see: \"Table or view does not exist. Ensure the migration that creates it has run first.\"\n-   Actionable Postgres error hints\nThanks to everyone who starred and provided feedback!\n-  "
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261104",
+   "release": "20261104"
+  }
  },
  "AliAsadi/PowerPreference": {
   "commit_90d": 0,
@@ -2847,11 +2868,11 @@
   }
  },
  "Ephemeral-AI-Lab/layerfs": {
-  "commit_90d": 4233,
-  "commit_7d": 191,
+  "commit_90d": 4235,
+  "commit_7d": 2,
   "rel_ver": "v1.1.0",
   "rel_pub": "2026-10-24",
-  "rel_days": 4,
+  "rel_days": 11,
   "rel_n90": 11,
   "rel_pre": false,
   "rel_none": false,
@@ -2867,14 +2888,31 @@
    "Shell": 1,
    "TypeScript": 1
   },
-  "enriched_at": "20261028",
+  "enriched_at": "20261104",
   "dim_ts": {
-   "commit": "20261028",
-   "release": "20261028",
+   "commit": "20261104",
+   "release": "20261104",
    "security": "20261021",
    "contrib": "20261021",
    "lang": "20261021"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v1.1.0",
+    "d": "2026-10-24",
+    "n": "of `new LayerFS`, `sandbox.create` before `workspace.mount(sandbox, branch)`,\nkept through a merge, the daemon's first-connection admission, and Sandbox\ncommand for agents that only have Bash, and makes Sandboxes explicit. It runs\nBranches, files, Sandboxes, Workspaces, Exec and Commit), `@layerfs/backend`\nand `@layerfs/runtime` (Init and removal, the worker, Sandbox and volume\nresults: `layerfs sandbox create`, `layerfs workspace mount 1 main`,\n- **Explicit Sandboxes.** `sandbox.create()` starts a Sandbox "
+   },
+   {
+    "t": "v1.0.0",
+    "d": "2026-10-21",
+    "n": "the project's Store file directly; no Sandbox starts for them. This needs Linux\n- **Workspace API with numbered Sandboxes.** `workspace.mount(branch)` places the\nWorkspace in the project's Sandboxes on its own and starts another one when the\nrunning ones each hold 16 Workspaces. Each Sandbox runs one image and closes\nitself after 2 idle minutes. This replaces `sandbox.create`, `mount` and `close`.\neach project's History, Sandboxes and Files. It replaces the `sdk_sim` terminal\n- **SDK.** The `sandbox` method"
+   },
+   {
+    "t": "v0.1.7",
+    "d": "2026-10-15",
+    "n": "- every Sandbox daemon opens one shared Store directly;\n`branch` and `sandbox`, with:\n- Sandbox ids that another process can reuse."
+   }
+  ]
  },
  "jaredzimmerman/hookspool": {
   "rel_ver": "v0.2.0",

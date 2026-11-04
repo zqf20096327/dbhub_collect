@@ -206,10 +206,14 @@ remove them.
 LLMs typically output spaces, but many projects use tabs. AgentTool auto-converts indentation to match the file's existing style.
 
 - Inherits `indent_style`, `indent_size`, and `tab_width` per property from parent `.editorconfig` files, respecting `root = true`, `unset`, `indent_size=tab`, and common `**` path patterns
-- Falls back to a content sample of up to 8 MiB, without a fixed line-count cap. Long lines and LF, CRLF, or CR endings are supported; both indent and dedent transitions inform width detection, with deterministic ties
+- Falls back to a content sample of up to 8 MiB, without a fixed line-count cap. Long lines and LF, CRLF, or CR endings are supported. Lexical block-opening evidence takes priority over raw indent/dedent frequencies, reducing confusion with continuation alignment; inconclusive evidence retains the deterministic frequency fallback
+- When recovering unique anchors, new space-indented levels use the nearest block-width evidence within 32 lines and 16 KiB. Lexical state is scanned from the file start within the 8 MiB sample; anchors beyond it retain the previous fallback. Common comments, quoted/raw/triple-quoted literals, and parenthesized/bracketed continuations are excluded from structural evidence. This is a heuristic, not a language parser or semantic formatter
 - Preserves the detected space width when existing space indentation conflicts with a tab setting
 - Converts tabs/spaces and space widths such as 2 ↔ 4; converted matches stay at line boundaries, and tab-depth correction preserves relative nesting
 - Unique line and multiline block anchors use actual local indentation and prefix mappings, preserving minority styles, alignment, and indented blank lines. Block nesting must agree
+- C++/header and Python file edits lazily reuse the embedded Tree-sitter WASM engine to infer new space-indented levels from direct statements in the actual enclosing block, rather than nearby sibling blocks or argument alignment. No external compiler, Python installation, CGO, or index is required
+- For successfully parsed replacement snippets, continuation lines aligned to an actual inline token column follow the opener's indentation shift; hanging indentation retains level rescaling even when the first argument is inline, and multiline literal/comment interiors retain their supplied content. Exact matches and explicit style overrides keep their existing behavior
+- Syntax assistance falls back to the existing heuristic on unsupported files, inconclusive/error-bearing enclosing blocks, analysis failures/timeouts, or sources over 8 MiB. Each parse has a 2-second budget; replacement-snippet assistance is limited to 64 KiB/512 lines. Syntax recovery is not a guarantee of semantic equivalence
 - Rejects equally plausible tab-depth candidates instead of choosing one arbitrarily
 - Detection is heuristic, not a language formatter; use `dry_run=true` to review an automatic edit
 
@@ -228,10 +232,17 @@ Edits preserve the original file encoding instead of forcing UTF-8.
 ### Consistent reads and edit batches
 
 - `read`, `multiread`, `file_info`, `grep`, and `patch` agree on LF, CRLF, and CR line boundaries. A final terminator adds no phantom line; reading past EOF returns no lines.
-- Read hashes come from the same raw bytes as the text. `edit`, `multiedit`, `write`, and `patch` check their captured source hash before saving. `expected_hash` is available on `edit`, `multiedit`, and `patch`.
+- Read hashes come from the same raw bytes as the text. `edit`, `multiedit`, `write`, `patch`, `regexreplace`, and `convert_encoding` check their captured source hash before saving. `expected_hash` is available on `edit`, `multiedit`, and `patch`.
 - `multiedit` supports the same `encoding` and `indent_style` options as `edit`; each replacement sees the previous result, and a failed replacement leaves the whole file unchanged.
 - `multiread` accepts global or per-file `encoding`. Resume the original input list with `start_file_index=next_file_index` and `resume_offset=next_offset` (omit the offset when zero); the current file keeps its original window end, and later files keep their original ranges.
 - Read output budgets are 256–131072 characters. An oversized first line is visibly shortened so paging can advance; raise `max_output_chars` or `max_line_chars` to inspect it in full.
+
+### Conversion and bulk-operation results
+
+- Directory `regexreplace` reports `files_scanned`, `error_count`, `limit_reached`, and `truncated`. The matching-file cap is explicit. Successful files stay changed if another file fails; inspect the partial result and retry only failed files.
+- `diff` accepts `encoding_a`/`encoding_b` and `context_lines=0`. It distinguishes identical decoded text from identical bytes, reports CR/LF placement changes, and separates a missing final newline from other ending changes.
+- `convert_encoding` accepts `from_encoding` for source hints. GBK and GB18030 remain distinct targets; GB2312 is a GBK compatibility alias. Characters unsupported by the chosen target leave the original unchanged.
+- File writes stage a replacement beside the target. If staging or replacement fails, they return an error and do not fall back to truncating the original in place. Close programs locking the target or correct directory permissions before retrying.
 
 ### Token-safe directory listings
 `listdir` defaults to 500 entries per page and returns `next_cursor` when more

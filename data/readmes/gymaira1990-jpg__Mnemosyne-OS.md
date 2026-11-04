@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-9.0.3-brightgreen?style=flat-square" alt="version">
+  <img src="https://img.shields.io/badge/version-9.0.16-brightgreen?style=flat-square" alt="version">
   <img src="https://img.shields.io/github/actions/workflow/status/gymaira1990-jpg/Mnemosyne-OS/test.yml?style=flat-square&label=CI" alt="CI">
   <img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="license">
   <img src="https://img.shields.io/badge/python-3.11+-blue?style=flat-square" alt="python">
@@ -36,8 +36,8 @@
 
 | | |
 |---|---|
-| **Memories** | 31,953 (3,499 catalog cards, 100% embedded) |
-| **Recall** | 4 channels fused · 90% recall@10 on two independent eval sets |
+| **Memories** | 32,383 (3,524 catalog cards, 100% embedded) — snapshot 2026-11-04 |
+| **Recall** | 4 channels fused (server: E/C/T · client: S) · 90% recall@10 measured first-party |
 | **Trace** | archive no → card → `sid` → original transcript |
 | **Butler** | polish / dedupe / diary / gap-sweep — server-side, 7×24 |
 | **Diary** | one entry a day, written from real cards only — quiet days included |
@@ -82,14 +82,18 @@ version / path / URL / number-with-unit / date / project name), evidence by grad
 A model only improves the **wording** afterwards, and is forbidden from touching the archive number,
 evidence or entity lines. The card is a legal document, not a summary.
 
-### 2. Find it back — four channels, one call
+### 2. Find it back — four channels (server does E/C/T in one call, client adds S)
 
-| Channel | Mechanism | Weight |
-|---|---|---|
-| **E** exact | archive no / issue id / commit hash / path — anchored at line start first, full-text fallback | 100 |
-| **C** keyword | multi-term OR, scored by coverage (hits ÷ terms, denominator capped at 3) | 60 |
-| **T** time | hits inside a recent window, filtered by topic keywords | 45 |
-| **S** semantic | 1024-d pgvector HNSW | 40 |
+| Channel | Mechanism | Weight | Runs on |
+|---|---|---|---|
+| **E** exact | archive no / issue id / commit hash / path — anchored at line start first, full-text fallback | 100 | server |
+| **C** keyword | multi-term OR, scored by coverage (hits ÷ terms, denominator capped at 3) | 60 | server |
+| **T** time | hits inside a recent window, filtered by topic keywords | 45 | server |
+| **S** semantic | 1024-d pgvector HNSW | 40 | client |
+
+> **Straight answer**: `/api/v1/memory-os/recall` returns **E/C/T only** in one call — pure SQL, because embedding
+> inside the same request turns a measurable timeout into an uncontrollable one. **S is fetched by the client and
+> merged with the other three**, so the four-channel fusion happens client-side, not inside one REST call.
 
 Within each channel, score decays by rank (`K/(K+rank)`, K=10). This matters: flattening a channel into a
 single score destroys the ordering the ranking itself produced — we learned that the hard way (§Negative results).
@@ -215,7 +219,10 @@ The diary is a scheduled job, not a manual chore — it keeps running while your
 
 ## Quick Start
 
-**Prerequisites** — PostgreSQL 16 with `pgvector ≥ 0.7` (Apache AGE optional, for the entity graph),
+> **Handing this repo to an AI agent?** Give it [`DEPLOY-FOR-AI.md`](DEPLOY-FOR-AI.md) — step-by-step commands,
+> a pass criterion per step, and the boundaries. Then one command does the work: `bash scripts/bootstrap.sh`.
+
+**Prerequisites** — PostgreSQL 16+ with `pgvector ≥ 0.7` (no Apache AGE needed since v7.8),
 Python 3.11+, 8 GB RAM, one OpenAI-compatible LLM + embedding endpoint.
 
 ```bash
@@ -240,7 +247,26 @@ curl -s http://127.0.0.1:8010/api/v1/memory-os/health
 # → {"status":"ok","router":"memory-os","endpoints":5}
 ```
 
+**Two search paths — know which one you want:**
+
+- `POST /api/v1/memories/search` — searches your **raw memories** (vector + keyword). Works the moment you store something.
+- `POST /api/v1/memory-os/recall` — searches the **catalog cards** (`tome_cards`). A fresh install has no cards yet, so it returns `candidates: []` — that is expected, not a failure. Fill the cards with the jobs under `jobs/` (or just keep using `memories/search`).
+
 **Hermes users** get the shorter path: `hermes config set memory.provider mnemosyne` — 14 tools appear after `/reset`.
+
+**Something not working? Let the repo tell you what's missing:**
+
+```bash
+python3 scripts/doctor.py      # checks Python, deps, .env, PostgreSQL, pgvector, schema, model keys, port
+```
+
+It prints one line per check and the exact command to fix each failure, so you don't have to guess.
+
+```bash
+python3 scripts/seed_demo.py   # optional: write 5 demo memories and run a real search
+```
+
+`seed_demo` writes real embeddings, tags every row with `metadata.demo=true`, and `--clean` removes them.
 
 Full walkthrough (permissions, model backends, macOS/Windows, FAQ): [INSTALL.md](INSTALL.md).
 
@@ -306,15 +332,19 @@ One user, one modest cloud instance (4 vCPU), 7×24:
 
 | Metric | Value |
 |---|---|
-| Memories | **31,953** |
-| Catalog cards | **3,499** — 97.8% with archive no, 100% with vectors |
-| Average card length | 337 characters (from transcripts averaging ~33,000) |
+| Memories | **32,383** (snapshot: 2026-11-04) |
+| Catalog cards | **3,524** — 97.4% with archive no, 100% with vectors |
+| Average card length | 376 characters (from transcripts averaging ~33,000) |
 | Recall@10 — general set | **9/10 (90%)** |
 | Recall@10 — anti-overfit set | **9/10 (90%)** |
 | Recall latency | 100–400 ms (four channels, fused) |
+
+> Numbers above are a **snapshot** (date in the table). For live values: `GET /api/v1/memory-os/stats?user_id=default`.
 | Diary entries | every day, including days with no conversation |
 
-Both eval sets ship with the repo (`eval_recall.py`, `eval_recall_b.py`). The second one deliberately avoids the
+**Neither eval script ships with the repo** — the labels point at the author's real memories, so they can't be
+published. The 90% is a **first-party measurement**, not second-party evidence you can reproduce; verify it
+yourself with `scripts/seed_demo.py` and the same criterion (expected card within top 10). The second one deliberately avoids the
 domain lexicon, so tuning against the first cannot fake the second.
 
 ---
@@ -354,6 +384,10 @@ We publish the regressions, not just the wins:
 | [INSTALL.md](INSTALL.md) | Installation (Linux / macOS / WSL2), model backends, FAQ |
 | [AGENTS.md](AGENTS.md) | Manual for AI agents: API surface, env vars, Hermes/MCP |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Internals: layers, fusion, storage |
+| [docs/CARD-SPEC.md](docs/CARD-SPEC.md) | **Card Spec v1**: 7-line structure, archive numbers, evidence ranks, embedding rules |
+| [docs/VERIFICATION.md](docs/VERIFICATION.md) | **Verify it yourself**: `make demo && make eval` · two measured runs (92% / 100%) and the two traps |
+| [evals/](evals/) | 40 demo cards + 12 questions + raw outputs (reproducible) |
+| [integrations/card-builder/](integrations/card-builder/) | Reference implementation: dialogue → card (stdlib only) · [`evals/`](evals/) recall cases |
 | [docs/API.md](docs/API.md) · [docs/ENV.md](docs/ENV.md) | REST reference · every environment variable |
 | [docs/WHITEPAPER.md](docs/WHITEPAPER.md) · [docs/palace-architecture.md](docs/palace-architecture.md) | Design philosophy |
 | [docs/design/](docs/design/) · [docs/adr/](docs/adr/) | Design docs · architecture decision records |
@@ -363,6 +397,19 @@ We publish the regressions, not just the wins:
 
 | Version | Date | Ships |
 |---|---|---|
+| [v9.0.16](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.16) | 2026-11-04 | `make demo` now seeds 40 cards (old behaviour kept as `demo-basic`) |
+| [v9.0.15](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.15) | 2026-11-04 | Conflicts are flagged, not auto-invalidated · optional `constraints.txt` |
+| [v9.0.14](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.14) | 2026-11-04 | Front-page numbers are snapshots now · diary doc states its jobs are not in this repo |
+| [v9.0.13](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.13) | 2026-11-04 | Caught by CI: demo corpus de-identified + local privacy gate learns the internal-domain rule |
+| [v9.0.12](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.12) | 2026-11-04 | **Evidence in the repo**: 40 cards + 12 questions in `evals/`, two measured runs (92% / 100%), one command to reproduce |
+| [v9.0.11](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.11) | 2026-11-04 | **Card Spec v1** + spec checker + card-builder reference + `make eval` — the criteria ship with the repo |
+| [v9.0.10](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.10) | 2026-11-04 | External-review fixes: INSTALL no longer breaks on removed schemas · pluggable embedding backend · 12 version checkpoints · verifiable `backup.sh` |
+| [v9.0.9](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.9) | 2026-11-04 | AGENTS.md: pointer to DEPLOY-FOR-AI for deployment agents (docs only) |
+| [v9.0.8](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.8) | 2026-11-04 | Agent-first deployment: `DEPLOY-FOR-AI.md` + one-command `scripts/bootstrap.sh` |
+| [v9.0.7](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.7) | 2026-11-04 | `doctor` false-positive fixes (env-key comparison, self-port detection) |
+| [v9.0.6](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.6) | 2026-11-04 | Onboarding: `scripts/doctor.py` deployment self-check + `scripts/seed_demo.py` demo data |
+| [v9.0.5](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.5) | 2026-11-04 | Open-source usability: .env now actually loads, schema.sql rebuilt (23 tables / 51 indexes), AGE requirement removed |
+| [v9.0.4](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.4) | 2026-11-04 | Dependency batch upgrade (fastapi 0.162 / pydantic 2.14) + consistency gate C8 |
 | [v9.0.3](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.3) | 2026-11-04 | Private-deployment docs: passkey login wall, diary pipeline, ports & pages, secrets |
 | [v9.0.2](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.2) | 2026-11-03 | Doc consistency gate (`make consistency`) + stale-doc fixes |
 | [v9.0.1](https://github.com/gymaira1990-jpg/Mnemosyne-OS/releases/tag/v9.0.1) | 2026-11-03 | Docs revision: usage & remix guide, diary walkthrough with annotated UI, deploy shapes, issue templates |

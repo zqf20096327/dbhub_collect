@@ -16,6 +16,12 @@ this host in the last 90 days, and were we watching?*
   sample: a job that runs once a month is still seen.
 - Each host's observation periods and the periods its agent dropped flows
   are recorded, so "not used" can be told apart from "not observed".
+- Only TCP and UDP sockets are observed, so "not used" means "no TCP or
+  UDP". RDMA verbs (InfiniBand, RoCE) bypass the sockets: the RDMA
+  transports of MPI (UCX) and NCCL, Lustre o2ib, GPFS verbs and NFS over
+  RDMA are not seen, even when their control connections over TCP are; TCP
+  over IPoIB is. See [packaging/README.md](packaging/README.md#hpc-clusters)
+  for HPC clusters.
 - Agents send OTLP to an OpenTelemetry Collector. Services are named the
   way OBI (OpenTelemetry eBPF Instrumentation) names them, so shawk's
   dependencies and OBI's application metrics share the same `job`.
@@ -69,6 +75,11 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now shawk-agent
 ```
 
+The unit is `Type=notify`: it becomes active once the BPF programs are
+attached, and fails if they cannot be. Order the services whose first
+connections should be traced after it, e.g. slurmd
+([packaging/](packaging/README.md#agent)).
+
 `shawk agent -h` lists the flags. Most deployments set only
 `-otlp-endpoint` and the TLS files (`-otlp-ca-file`, `-otlp-cert-file`,
 `-otlp-key-file`). Services that share an executable on a host (`ruby`,
@@ -101,6 +112,8 @@ The Grafana dashboards:
 - **Dependency map**: services upstream and downstream of the selected ones.
 - **Dependency details**: traffic, failures by reason, RTT and connect time
   of each dependency, with its first and last seen times.
+- **Peer hosts**: with `peer_hosts` in the connector, the hosts towards
+  the selected services, and failures and connect time by peer host.
 - **Changes**: dependencies that appeared or disappeared.
 - **Application layer (OBI)**: OBI's RED metrics next to the dependencies of
   the same service.

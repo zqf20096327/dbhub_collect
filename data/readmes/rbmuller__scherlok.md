@@ -23,7 +23,7 @@ No YAML, no rules, no thresholds. Scherlok learns what "normal" looks like, then
 
 ```bash
 pip install scherlok
-scherlok ci postgres://user:pass@host/db   # profiles on the first run, detects anomalies on every run after
+scherlok ci postgres://user:pass@host/db   # first run: baseline + new-table checks; every run after: drift
 ```
 
 No database handy? The demo seeds one, learns it, breaks it, and catches it, in about a second:
@@ -63,8 +63,12 @@ Current tools (Great Expectations, Soda, dbt tests) require you to **define what
 | **NULL surge** | NULL rate jumped from 2% to 45% | CRITICAL |
 | **Distribution shift** | Column mean shifted 3+ standard deviations (Shewhart-style control limit) | INFO, WARNING above 5σ |
 | **Cardinality explosion** | Status column went from 5 values to 500 | CRITICAL |
+| **Broken new table** | First sighting, no baseline yet: the table is empty, a column is NULL in every row, or its `id` / `<table>_id` has duplicates | WARNING (CRITICAL under `verify --table`) |
+| **Constant column** | First sighting: one value in 100+ non-NULL rows | INFO |
 
 Every anomaly is auto-scored: **INFO**, **WARNING**, or **CRITICAL**. No thresholds to configure.
+
+A table seen for the first time has nothing to compare against, so it gets the new-table checks instead, from the profile already collected. They report WARNING (INFO for a constant column), so a legitimately empty table doesn't fail `ci` with the default `--fail-on critical`; once the table has a baseline they never run again. `scherlok verify --table` treats the tables it names as just built, so an empty table, an all-NULL column or a duplicate key in one of them is CRITICAL.
 
 ## How It Works
 
@@ -96,7 +100,7 @@ $ scherlok investigate
   Done. Profiles saved.
 ```
 
-Scherlok profiles every table: row counts, column types, NULL rates, value distributions, freshness cadence, cardinality. Stores everything locally in SQLite.
+Scherlok profiles every table: row counts, column types, NULL rates, value distributions, freshness cadence, cardinality. Stores everything locally in SQLite, as aggregates only: no value from your rows is saved ([what Scherlok stores](https://rbmuller.github.io/scherlok/getting-started/#what-scherlok-stores)).
 
 ### 2. `watch` — Detect anomalies
 
@@ -151,14 +155,26 @@ Use Scherlok as a data quality gate. The `ci` command does it in one line:
 
 If Scherlok detects a critical anomaly, the pipeline fails. Bad data never reaches production.
 
-`ci` saves every run, so after a failure the broken state becomes the baseline and a retry passes. When a retry must keep failing until the data is fixed, as with an AI agent or a CI job that retries, gate with `verify`. It compares against the stored baseline and saves nothing: no profiles, no anomalies, no config, and it never uploads a remote store.
+`ci` saves every run, so after a failure the broken state becomes the baseline and a retry passes. When a retry must keep failing until the data is fixed, as with an AI agent or a CI job that retries, gate with `verify`. It compares against the stored baseline and saves no profiles, no anomalies and no config, and it never uploads a remote store; it only records the run.
 
 ```bash
 scherlok verify --table orders --fail-on critical   # exit 1 while orders is still broken
 scherlok verify --output json                       # one JSON object on stdout
+scherlok verify --record scherlok-runs.jsonl        # append the run record, e.g. a CI artifact
 ```
 
-Tables without a baseline are listed under `tables_without_baseline`, never counted as verified. 📖 [CI/CD gate guide →](https://rbmuller.github.io/scherlok/ci-cd/)
+Tables without a baseline are listed under `tables_without_baseline`, never counted as verified. Those you name with `--table` count as just built: an empty table, a column NULL in every row or a duplicate key there is CRITICAL, so an agent can gate on a table it just created. Every `watch`, `ci`, `check` and `verify` run is recorded, passing or not: `scherlok history --runs` lists them. Every anomaly in the JSON also carries `column`, `metric`, `baseline`, `current`, `change_pct` and a fixed `hint`, so it can be acted on without parsing the message. 📖 [CI/CD gate guide →](https://rbmuller.github.io/scherlok/ci-cd/)
+
+## Reconcile output against input
+
+A table's own history can't catch a join that fans out on its first build, or a total that changes while the row count stays the same. `reconcile` compares a pipeline's output with its input, in the same database, and exits 1 when they don't add up:
+
+```bash
+scherlok reconcile --source raw.orders --target mart.orders \
+  --key order_id --sum amount --tolerance 0.001
+```
+
+It reports `row_count_mismatch`, `duplicate_keys` (a key repeated in the target: join fan-out), `missing_keys`, `extra_keys` and `sum_mismatch` (totals apart by more than the absolute `--tolerance`), all CRITICAL, with `--output json` for CI. It needs no baseline and saves nothing, and it reports counts and totals only, never a key value. On BigQuery and Snowflake every run scans both tables in full. 📖 [Reconcile guide →](https://rbmuller.github.io/scherlok/reconcile/)
 
 ## Works with dbt
 
@@ -283,7 +299,7 @@ pip install scherlok   # scherlok-mcp ships built-in since v0.7.0
 }
 ```
 
-The agent gets `list_tables`, `investigate`, `watch`, `status`, `history`, `check`, and `verify` as tools; `verify` is the read-only gate that saves nothing, so an agent that retries can't pass a broken table. Credentials are resolved server-side (never passed by the model), every operation is read-only on the warehouse, and there's no arbitrary-SQL tool.
+The agent gets `list_tables`, `investigate`, `watch`, `status`, `history`, `check`, `verify` and `reconcile` as tools; `verify` is the read-only gate that never changes the baseline, so an agent that retries can't pass a broken table, and `reconcile` checks a table it built against the table it built it from. Credentials are resolved server-side (never passed by the model), every operation is read-only on the warehouse, and there's no arbitrary-SQL tool.
 
 📖 Full docs: [MCP server guide →](src/scherlok/mcp/README.md)
 
@@ -371,6 +387,8 @@ scherlok config --store gs://my-bucket/scherlok/profiles.db
 scherlok config --store az://my-container/scherlok/profiles.db
 ```
 
+One store can hold several databases: baselines are kept per database (adapter, host, port and path of the connection, never credentials), so `orders` in staging never shares a baseline with `orders` in production. 📖 [Where things live →](https://rbmuller.github.io/scherlok/getting-started/#where-things-live)
+
 ## How it compares
 
 | | **Scherlok** | Elementary | Soda | Great Expectations | Monte Carlo |
@@ -391,11 +409,12 @@ scherlok connect <url>          Connect to a database
 scherlok investigate            Profile all tables (learn patterns)
 scherlok watch [-w <url>] [-e <email>]  Detect anomalies and alert
 scherlok ci <url> [opts]        All-in-one CI/CD command (connect + watch + exit code)
-scherlok verify [--table T] [--fail-on L] [--output json]  Read-only gate: compare, save nothing
+scherlok verify [--table T] [--fail-on L] [--output json] [--record PATH]  Read-only gate: compare, keep the baseline
+scherlok reconcile --source S --target T [--key K] [--sum C] [--tolerance X] [--output json]  Check an output table against its input
 scherlok dbt [--project-dir .] [--output json]  Profile dbt models from manifest
 scherlok dbt-run-and-watch [--build] [--output json]  Run dbt + profile in one step
 scherlok status [--output json] Quick health dashboard
-scherlok history [--days N] [--output json]  Timeline of past anomalies
+scherlok history [--days N] [--runs] [--output json]  Past anomalies, or every run with --runs
 scherlok report [--output json] Detailed profile summary
 scherlok dashboard [--out .html] Generate self-contained HTML report
 scherlok config --store <url>   Set remote storage

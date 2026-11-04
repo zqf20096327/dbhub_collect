@@ -76,7 +76,7 @@ That's the bar we're building to.
 
 ## Help & Guides
 
-The searchable [OpenVPM Guides](https://docs.openvpm.com) cover front desk, clinical, checkout, client care, and practice administration workflows. Their MDX source and publishing workflow are documented in [docs/help](docs/help/README.md). Before evaluating OpenVPM for live clinic use, read the [Clinic Pilot Readiness Guide](docs/clinic-pilot-readiness.md) for the current supported, configuration-dependent, and not-yet-supported boundaries. Switching from another PIMS? Start with [Migrating to OpenVPM](docs/migrating-to-openvpm.md).
+[OpenVPM Help](https://docs.openvpm.com) has step-by-step guides with real screens for the front desk, clinical team, and practice managers, a tour of every screen, and a training path for each role. The site lives in [apps/docs](apps/docs), and its screenshots are captured from the seeded demo clinic ([how](apps/docs/capture/README.md)). Self-hosting setup guides stay in [docs/help](docs/help/README.md). Before evaluating OpenVPM for live clinic use, read the [Clinic Pilot Readiness Guide](docs/clinic-pilot-readiness.md) for the current supported, configuration-dependent, and not-yet-supported boundaries. Switching from another PIMS? Start with [Migrating to OpenVPM](docs/migrating-to-openvpm.md).
 
 ## Features
 
@@ -200,8 +200,12 @@ cd openvpm
 # Copy environment config
 cp .env.example .env
 
+# Replace the placeholder NEXTAUTH_SECRET in .env with a generated one
+# (or paste the output of `openssl rand -base64 32` into .env yourself)
+sed -i.bak "s|^NEXTAUTH_SECRET=.*|NEXTAUTH_SECRET=\"$(openssl rand -base64 32)\"|" .env && rm .env.bak
+
 # Start the local PostgreSQL and MinIO dependencies
-docker compose -f docker/docker-compose.yml up -d postgres minio minio-bootstrap
+docker compose --env-file .env -f docker/docker-compose.yml up -d postgres minio minio-bootstrap
 
 # Install dependencies
 pnpm install --frozen-lockfile
@@ -244,10 +248,73 @@ local build is not, by itself, a production-readiness assessment.
 ### Deploy with Docker
 
 ```bash
-docker compose -f docker/docker-compose.yml up -d
+# One time: create .env with a unique session secret
+cp .env.example .env
+sed -i.bak "s|^NEXTAUTH_SECRET=.*|NEXTAUTH_SECRET=\"$(openssl rand -base64 32)\"|" .env && rm .env.bak
+
+docker compose --env-file .env -f docker/docker-compose.yml up -d
 ```
 
+`NEXTAUTH_SECRET` signs every staff session, so it must be unique to your
+installation. Compose refuses to start the app without it, and a production
+build refuses to sign anyone in while it is a placeholder published in this
+repository or shorter than 32 characters: every page shows a setup notice, API
+routes return `503`, and `/api/health` reports the `authSecret` check as
+failing. PostgreSQL and MinIO are published on `127.0.0.1` only; their default
+credentials are for this single-host setup and must not be exposed to a network.
+
+> **Upgrading an existing Docker install:** earlier versions of
+> `docker/docker-compose.yml` shipped a fixed `NEXTAUTH_SECRET`. Anyone who knows
+> that public value can forge a staff session on an install still using it.
+> Generate a new secret as above, put it in `.env`, and restart with
+> `docker compose --env-file .env -f docker/docker-compose.yml up -d`. Changing
+> the secret signs everyone out once; staff sign in again with their usual
+> password. Invoice payment links signed with the old secret also stop working
+> and should be re-sent. Patient-portal sign-in links are not affected.
+>
+> The same upgrade binds PostgreSQL (`5432`) and the MinIO API and console
+> (`9000`, `9001`) to `127.0.0.1` on the Docker host, so they are no longer
+> reachable from other machines. If you administered them remotely, use an SSH
+> tunnel instead, for example
+> `ssh -N -L 5432:127.0.0.1:5432 -L 9001:127.0.0.1:9001 you@your-server`, then
+> connect to `localhost:5432` or open `http://localhost:9001`.
+
 The Docker setup includes PostgreSQL 16 with health checks, MinIO for S3-compatible file storage, automatic MinIO bucket bootstrap, and a multi-stage production build of the web application. For production, run `pnpm db:migrate`, then `OPENPIMS_APP_DB_PASSWORD='<strong>' pnpm db:rls`, verify with `OPENPIMS_APP_DB_PASSWORD='<same>' pnpm db:rls:test`, and point the app at the generated least-privilege `openpims_app` database role before serving traffic.
+
+#### Reverse proxies and sign-in limits
+
+Sign-in is limited per account: 5 free failures, then a lock that doubles from 1 minute up to 1 hour. That applies the same way whether or not the account exists, and it is the main defense against password guessing.
+
+So that someone else's failed guesses can't keep staff out, each successful sign-in also sets a signed, HttpOnly "known device" cookie for 90 days. While an account is locked, a browser that has signed in to it before isn't held by that lock; it gets its own backoff (the same 5 failures, then 1 minute doubling to 1 hour). The correct password from a browser that has never signed in to the account still waits for the lock. Completing a password reset or accepting an invite proves control of the mailbox, so it lifts the account's lock and marks that browser as known too. One browser remembers up to 10 accounts; on a shared front-desk computer used by more staff than that, the accounts that signed in least recently drop off and wait for a lock like a new browser until they sign in again. The cookie is signed with a key derived from `NEXTAUTH_SECRET`, so changing that secret forgets every device. Password reset requests from a known device also skip the per-address daily cap.
+
+Per-IP limits apply only when OpenVPM can verify the client's address: 50 failed sign-ins per 15 minutes, plus 600 sign-in requests per 15 minutes, and never to a known device. An address OpenVPM can't verify could be forged by anyone, so limiting it would only let an attacker lock out the address they claim, such as your clinic's. Without a verified address, per-IP sign-in limits are off and per-account limits do the work. On Vercel the platform's client address is used automatically; nothing to configure. OpenVPM Cloud assumes nothing sits in front of Vercel.
+
+If you self-host behind a reverse proxy and want per-IP limits, set `OPENVPM_TRUSTED_PROXY_HOPS` to the number of proxies in front of the app (`1` for a single nginx, Caddy, or Traefik). A CDN or load balancer in front of your proxy (Cloudflare, an AWS ALB) is a hop too: Cloudflare in front of nginx is `2`. Three things must also be true, or a client can choose its own IP:
+
+1. **Each proxy writes `X-Forwarded-For`.** The client is read from the entry `OPENVPM_TRUSTED_PROXY_HOPS` places from the right.
+   - **nginx** doesn't send it by default. Add it to every `location` that proxies to OpenVPM:
+
+     ```nginx
+     proxy_set_header Host              $host;
+     proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+     proxy_set_header X-Forwarded-Proto $scheme;
+     ```
+
+     Without the `X-Forwarded-For` line, the app sees nginx's own address. OpenVPM then skips per-IP limits (see below) and shows administrators a Settings notice that the proxy isn't forwarding client addresses.
+   - **Caddy** (`reverse_proxy`) sends it by default. It replaces any client-supplied value unless the client is listed in the global `servers { trusted_proxies ... }` option, in which case it appends. Leave `trusted_proxies` unset when Caddy faces the internet directly. If Caddy sits behind a load balancer or CDN, list that hop's addresses in `trusted_proxies` and count both hops (`2`). Caddy behind Cloudflare without `trusted_proxies` is a common mistake: Caddy discards Cloudflare's entry and records the Cloudflare edge server as the client, so every visitor is limited under a handful of shared Cloudflare addresses and one person's failures can hold back everyone routed through the same edge. Those are public addresses, so OpenVPM can't tell anything is wrong and no Settings notice appears.
+   - **Traefik** sends it by default and drops client-supplied forwarded headers unless the entry point's `forwardedHeaders.trustedIPs` includes the client. Same rule as Caddy: leave it unset when Traefik faces the internet, or list the upstream hop and count it.
+2. **With a CDN or load balancer in front, your proxy accepts connections only from it.** Otherwise a client can skip the CDN, connect to your proxy directly, and put a forged entry exactly where OpenVPM expects the CDN's. Allow only the CDN's published address ranges to reach the proxy (a firewall or security group), or have nginx take the client address from the CDN with `set_real_ip_from <CDN ranges>;` and `real_ip_header CF-Connecting-IP;` (Cloudflare), forwarding `$remote_addr` and counting one hop.
+3. **The app port is reachable only through the proxy.** This is required whenever `OPENVPM_TRUSTED_PROXY_HOPS` is set. If the port is reachable directly, anyone can connect to it, forge `X-Forwarded-For`, and spend another network's sign-in limits, including your clinic's own public address. In `docker/docker-compose.yml`:
+   - If the proxy runs in a container, put it on the same Compose network as `web`, point it at `http://web:3000`, and remove the `ports:` entry from `web`. Inside a container, `127.0.0.1` is the container itself, not the host.
+   - If the proxy runs directly on the host, publish the app on loopback only: `"127.0.0.1:3000:3000"`.
+
+   Docker-published ports bypass host firewalls such as `ufw`, so a firewall rule alone is not enough.
+
+When OpenVPM sees signs of a proxy without `OPENVPM_TRUSTED_PROXY_HOPS`, administrators get a notice in Settings and the server logs a warning. Leave it unset if clients connect to OpenVPM directly.
+
+Per-IP limits never apply to loopback, private, carrier-grade NAT, or link-local addresses (for example `127.0.0.1`, `10.x`, `172.16-31.x`, `192.168.x`, `fd00::/8`). Requests appear to come from one of those when a proxy or container gateway isn't forwarding the client's address, and limiting it would let one client lock out everyone. Clinics whose staff sign in over a LAN are covered by per-account limits.
+
+Administrators can lift a staff member's lock, including any per-device backoff, from **Settings → Staff**; the action is recorded in the audit log. Expired limit records are pruned by the server itself at most once an hour, so self-hosts don't need to schedule `/api/cron/rate-limit-cleanup`.
 
 ## API
 
@@ -318,7 +385,7 @@ Hosted Stripe setup uses monthly and annual recurring per-location prices in `ST
 
 For hosted deployment details, see [docs/hosted-cloud-production.md](docs/hosted-cloud-production.md).
 
-For self-hosted clinic integrations, follow [Stripe payment setup](docs/help/self-hosted-payments.md) and [SMS setup](docs/help/self-hosted-sms.md). For a practice owner handling care and checkout alone, see [the solo veterinarian workflow](docs/help/solo-vet-workflow.md).
+For self-hosted clinic integrations, follow [Stripe payment setup](docs/help/self-hosted-payments.md) and [SMS setup](docs/help/self-hosted-sms.md). For a practice owner handling care and checkout alone, see [Run a solo practice](https://docs.openvpm.com/guides/run-a-solo-practice).
 
 ## Why Open Source Matters for Veterinary Medicine
 

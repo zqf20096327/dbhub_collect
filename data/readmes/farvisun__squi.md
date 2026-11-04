@@ -22,6 +22,9 @@ A DataGrip-style workflow without the weight: browse schemas, write SQL with
 completion, edit rows, and inspect plans — all from the terminal, locally or on a
 server you reached over SSH.
 
+- **Work with the mouse or without it**: click, drag, wheel and right-click on every
+  pane, tab, dialog and status bar item; resize panes and columns, freeze columns,
+  select cell ranges. Every action also has a key.
 - **Explore** databases, schemas, tables, views and routines; see columns, indexes,
   foreign keys, triggers, sizes and generated DDL.
 - **Query** in tabs with syntax highlighting, vim or standard keys, context-aware
@@ -53,6 +56,8 @@ server you reached over SSH.
 - **Compare schemas**: `squi diff staging prod` lists what differs in tables,
   columns, indexes and foreign keys, and writes the `ALTER` script to align them.
 - **Make it yours**: rebind any key, format SQL, open the query in `$EDITOR`.
+- **Stay current**: squi tells you when a new release is out and can update a
+  downloaded binary itself. Turn it off with `check_updates = false`.
 - **Pick up where you left off** — tabs and queries are restored on the next start.
 
 ## Install
@@ -85,7 +90,8 @@ Press `ctrl+n` to add a connection, `ctrl+t` to test it, `ctrl+s` to save, then
 | `ctrl+p` | Command palette |
 | `ctrl+enter` · `F5` | Run statement under cursor |
 | `ctrl+t` · `alt+1…9` | New tab · switch tab |
-| `tab` | Move between explorer, editor and results |
+| `tab` · `F2` | Move between explorer, editor and results |
+| `F10` · right-click | Context menu |
 | `ctrl+g` | Transaction menu |
 | `ctrl+q` | Quit |
 

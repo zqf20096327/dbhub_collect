@@ -1,25 +1,18 @@
 # migrate
 
 SQL migration tool with PostgreSQL/MySQL/MariaDB/Oracle/SQLite/MSSQL/ClickHouse/TiDB/Redshift support.
-An optional full build adds JavaScript and TypeScript migrations with local and npm imports for PostgreSQL/MySQL/MariaDB/SQLite, plus experimental TiDB/Redshift/Oracle/ClickHouse/MSSQL support.
+JavaScript, TypeScript and MJS migrations support local and npm imports for PostgreSQL/MySQL/MariaDB/SQLite, plus experimental TiDB/Redshift/Oracle/ClickHouse/MSSQL support.
 Use `migrate capabilities` to inspect verification status and transaction limits.
 
 ## Documentation
 
-- [User Guide (中文)](docs/user-guide.md)
-- [User Guide (English)](docs/user-guide.en.md)
-- [User Guide (繁體中文)](docs/user-guide.zh-Hant.md)
-- [User Guide (日本語)](docs/user-guide.ja.md)
-- [User Guide (한국어)](docs/user-guide.ko.md)
-- [User Guide (Español)](docs/user-guide.es.md)
-- [User Guide (Français)](docs/user-guide.fr.md)
-- [User Guide (Deutsch)](docs/user-guide.de.md)
-- [User Guide (Português do Brasil)](docs/user-guide.pt-BR.md)
-- [User Guide (Русский)](docs/user-guide.ru.md)
-- [User Guide (العربية)](docs/user-guide.ar.md)
-- [User Guide (हिन्दी)](docs/user-guide.hi.md)
-- [SQL + JS/TS guide (中文)](docs/script-migrations.md)
-- [SQL + JS/TS guide (English)](docs/script-migrations.en.md)
+- [Documentation website](https://exc-works.github.io/migrate/) / [中文文档站](https://exc-works.github.io/migrate/zh/)
+- [Quick start](https://exc-works.github.io/migrate/quick-start) / [快速开始](https://exc-works.github.io/migrate/zh/quick-start)
+- [CLI reference](https://exc-works.github.io/migrate/commands) / [命令行参考](https://exc-works.github.io/migrate/zh/commands)
+- [JavaScript and TypeScript](https://exc-works.github.io/migrate/scripting) / [JavaScript 与 TypeScript](https://exc-works.github.io/migrate/zh/scripting)
+- [Go integration](https://exc-works.github.io/migrate/go-library) / [Go 集成](https://exc-works.github.io/migrate/zh/go-library)
+- [SSH tunnels and proxies](https://exc-works.github.io/migrate/ssh-tunnels) / [SSH 隧道与代理](https://exc-works.github.io/migrate/zh/ssh-tunnels)
+- [Other language guides](https://exc-works.github.io/migrate/languages)
 - [Runnable script import examples](examples/script-imports/README.en.md) / [可运行示例](examples/script-imports/README.md)
 - [Migration API declarations](docs/migration-api.d.ts)
 - [Changelog](CHANGELOG.md)
@@ -30,26 +23,38 @@ Use `migrate capabilities` to inspect verification status and transaction limits
 go install github.com/exc-works/migrate/cmd/migrate@latest
 ```
 
-The default install supports SQL. Install the full build when scripts are needed:
+Inspect supported formats and database capabilities:
 
 ```bash
-go install -tags=full github.com/exc-works/migrate/cmd/migrate@latest
 migrate capabilities --output json
 ```
 
-Release assets without a suffix remain SQL-only; `_full` assets include JS/TS.
-Neither build downloads an interpreter during execution.
+The script engine is embedded; execution never downloads an interpreter.
 
 ## Quick Start
 
 ```bash
 migrate new config
+# Set DATABASE_DSN or edit migration_config.yml before database commands.
 migrate new version init_users
 migrate create
 migrate up
 migrate status
 migrate status --output json
 ```
+
+Generate commented YAML (or strict JSON with `--format json`), with optional
+multi-source, SSH and proxy settings:
+
+```bash
+migrate new config shards.yml --multi --shards 4 --ssh-tunnel --proxy socks5
+migrate --config shards.yml up --parallel 8
+```
+
+The multi-source configuration shares one migration directory and keeps separate
+history in each database. All sources run with bounded concurrency; failures are
+reported per source and do not stop the remaining sources. See the
+[configuration guide](docs/site/pages/configuration.md) for inheritance and output.
 
 ## Test
 
@@ -69,7 +74,7 @@ Run ClickHouse/TiDB/MSSQL SQL and script integration in disposable containers (o
 `INTEGRATION_CLICKHOUSE_DSN` / `INTEGRATION_TIDB_DSN` / `INTEGRATION_MSSQL_DSN` to use external test instances):
 
 ```bash
-INTEGRATION_DB=clickhouse,tidb,mssql go test -tags=integration,full ./integrationtest/...
+INTEGRATION_DB=clickhouse,tidb,mssql go test -tags=integration ./integrationtest/...
 ```
 
 TiDB containers use Unistore; distributed TiKV behavior remains unverified.

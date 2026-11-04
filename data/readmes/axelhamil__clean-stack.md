@@ -11,7 +11,7 @@ Auth, multi-tenant, email, storage already wired. You clone, you write business 
 
 ---
 
-> **Status: work in progress.** This boilerplate is under active iteration. No support, no SLA, no public issue queue.
+> **Status: work in progress.** This boilerplate is under active iteration. No support, no SLA. Issues and pull requests follow [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ---
 
@@ -24,7 +24,7 @@ Two ways to run it. Pick one.
 **Prerequisites**: [Bun 1.4+](https://bun.com/docs/installation), [Node 26.13+](https://nodejs.org), [pnpm 12](https://pnpm.io/installation), [Docker with Compose v2](https://docs.docker.com/compose/install/).
 
 ```bash
-git clone https://github.com/axelhamil/clean-stack my-saas
+git clone --branch main https://github.com/axelhamil/clean-stack my-saas
 cd my-saas
 pnpm install
 pnpm bootstrap          # copies .env.example → .env in each workspace
@@ -54,7 +54,7 @@ No Bun, no Node, no pnpm on your host. Everything runs in containers (api + app 
 > [v1 (`docker-compose`, hyphen) is EOL since June 2023](https://docs.docker.com/compose/migrate/): always use `docker compose` (space).
 
 ```bash
-git clone https://github.com/axelhamil/clean-stack my-saas
+git clone --branch main https://github.com/axelhamil/clean-stack my-saas
 cd my-saas
 bash scripts/bootstrap.sh              # copies .env.example → .env in each workspace
 docker compose up --watch              # api runs migrations on boot, then starts
@@ -82,7 +82,7 @@ Most SaaS templates ship a half-baked auth you'll rip out and zero opinion on wh
 | **Type safety** | Hono RPC end-to-end (`hcWithType`). No client to write, no schema to sync, refactor in API → red squiggle in App on save. |
 | **Performance** | Bun-native `Bun.serve()` (~7 ms cold). Route-level code-splitting on the front (initial bundle ~355 KB, route chunks 1 to 43 KB) + `defaultPreload: "intent"`: perceived latency near zero. |
 | **AI-pair ready** | `CLAUDE.md` at the root + one per app and per package. Your agent already knows the rules: Result/Option, no `throw` in domain, capability gates, vertical-slice modules. |
-| **Zero-warning pipeline** | Husky + lint-staged + commitlint + pre-push CI (Biome, knip, jscpd, type-check). Conventional Commits enforced; `dev`→`main` merge triggers semantic-release. No `--no-verify` shortcut. |
+| **Zero-warning pipeline** | Husky + lint-staged + commitlint + a pre-push chain (Biome, boundaries, build, type-check, tests, jscpd, knip) that CI replays on every PR. Conventional Commits enforced; `dev`→`main` merge triggers semantic-release. No `--no-verify` shortcut. |
 
 ---
 
@@ -221,9 +221,9 @@ Resend is **optional everywhere**: without `RESEND_API_KEY` (or with unconfigure
 | | |
 |---|---|
 | **SDK** | [`resend`](https://resend.com/docs) |
-| **Templates** | dashboard-managed, retry + idempotency, provider-side suppression |
+| **Templates** | dashboard-managed, a failed chunk is replayed with the same idempotency key, provider-side suppression |
 | **DNS prereq prod** | SPF + DKIM (3 CNAMEs) + DMARC: see [`docs/INTEGRATIONS.md`](docs/INTEGRATIONS.md#email) |
-| **EU region** | supported via `region: "eu-west-1"` in adapter config |
+| **Region** | chosen per sending domain in Resend (e.g. `eu-west-1`); it only changes where mail is sent from, account data and logs stay in the US; no adapter option |
 
 ### Billing: Stripe (opt-in)
 
@@ -358,6 +358,12 @@ pnpm db:push            # dev schema push
 pnpm db:migrate         # prod-style migration
 pnpm db:studio          # Drizzle Studio
 ```
+
+---
+
+## Contributing
+
+Contributions are welcome through an issue first. The flow, the checks and what we decline are in [`CONTRIBUTING.md`](CONTRIBUTING.md). Please follow the [Code of Conduct](CODE_OF_CONDUCT.md), and report vulnerabilities privately as described in [`SECURITY.md`](SECURITY.md).
 
 ---
 

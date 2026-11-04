@@ -1,6 +1,6 @@
 # Coding2API
 
-八个上游——**CodeBuddy**（国内 + 国际）、**TRAE SOLO**、**OpenCode Zen**、**Kilo**、**Qoder**、**CodeArts**、**OfficeAce**——封装成 OpenAI 兼容 API：公共凭证池、统一模型名与调度、按人用量统计。
+九个上游——**CodeBuddy**（国内 + 国际）、**TRAE SOLO**、**OpenCode Zen**、**Kilo**、**Qoder**、**CodeArts**、**OfficeAce**、**小浣熊**——封装成 OpenAI 兼容 API：公共凭证池、统一模型名与调度、按人用量统计。
 
 > [!WARNING]
 > 逆向接口，仅供学习研究，未做安全审计；公网部署需反向代理 + 鉴权 + IP 白名单。
@@ -74,7 +74,7 @@ docker compose up -d --build
 docker compose exec coding2api python scripts/create_user.py admin --role admin
 ```
 
-拉镜像：`docker compose pull`（或 `docker pull ghcr.io/robbsluo/coding2api:v0.10.1`）。tag `v*` 推 main → `.github/workflows/publish.yml` → 发 `<tag>` + `:latest`。
+拉镜像：`docker compose pull`（或 `docker pull ghcr.io/robbsluo/coding2api:v0.11.0`）。tag `v*` 推 main → `.github/workflows/publish.yml` → 发 `<tag>` + `:latest`。
 
 容器跑在**有公网 IP 的 VPS** 上要 https 入口 → 见「[公网部署（Docker + Caddy 自动 HTTPS）](#公网部署docker--caddy-自动-https)」。
 
@@ -178,7 +178,7 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 
 ## 渠道
 
-> CodeBuddy（含国际）/ TRAE / Qoder / CodeArts / OfficeAce 需凭证；**Zen 与 Kilo 无凭证免费层**——池里一条虚拟占位行（调度 / 冷却 / 统计照常），额度列「免费层（无额度接口）」，健康度恒「无探测」。删虚拟行重启复活；永久停用 →「暂停」。
+> CodeBuddy（含国际）/ TRAE / Qoder / CodeArts / OfficeAce / 小浣熊 需凭证；**Zen 与 Kilo 无凭证免费层**——池里一条虚拟占位行（调度 / 冷却 / 统计照常），额度列「免费层（无额度接口）」，健康度恒「无探测」。删虚拟行重启复活；永久停用 →「暂停」。
 
 ### OpenCode Zen（`zen`）
 
@@ -249,6 +249,24 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 
 **换账号**：登录按钮旁「换账号」（`force_login=true`），先清浏览器华为云会话再授权。
 
+### 小浣熊（`raccoon`）
+
+[商汤小浣熊](https://xiaohuanxiong.com)，需真实账号（网页端登录即可）。**没有登录按钮**：凭据是网页会话 JWT，只能手工导入——浏览器 DevTools → Application → Cookies → 复制 `xhx_token` 的值，在「JSON 导入」里粘 `{"access_token":"<值>"}`（也接受裸 JWT 或整段 cookie）。约 30 天到期，到期重新取一次。
+
+**协议**：标准 OpenAI 兼容（`/api/web/llm/v2/chat/completions`），无签名、无设备指纹。`tool_calls` 流式/非流式、`role=tool` 回传、`include_usage` 全部实测通过；411K token 输入 14.2 秒返回。
+
+**未知模型会静默回落默认模型**（实测）：写错模型名上游回 200 但换成默认模型。本服务两层拦截——发请求前按目录校验，回包首帧再比对 `model` 回显，不一致直接失败，不会「问 A 答 B」。
+
+**额度＝积分**：每笔请求扣 1 分（与 token 量无关），每日 00:00 发 300 分（7 天有效），账本记「积分」。模型目录里的 `billing_effective_multiplier` 直接当倍率，**0 = 限免**（如 `sn-sensenova-6-8-flash` 限免至 11-30），调度器会优先选。
+
+**额度明细**：上游把积分分成四个池（每日 / 奖励 / 月度 / 充值），各自可查；逐笔到期（每日积分 7 天有效期）从流水 `daily_grant` 的 `expire_at` 推导，参与「快过期先用」的选号排序。池（`quota_packages`）与到期阶梯（`expiry_ladder`）口径不同，分开存。
+
+**每日签到**：上游没有「点击领取」的签到接口——每日 300 积分由服务端**懒发放**：当天首次触达积分服务时补写一条流水。所以本服务的「签到」= 摸一次余额（触发补发）+ 读流水核对当日 `daily_grant` 是否真到账，**只认流水、不看 HTTP 200**。三天态：本次触发新增 / 今天早些时候已发 / 今日未发（可重试）。
+
+**活跃上报**：`POST /api/web/auth/v1/devices_current_heartbeat`（网页端真实设备心跳），补 `x-client-*` 头族即 200、幂等，`last_login_at` 随之刷新。默认关闭，与 CodeBuddy 共用 `ACTIVITY_REPORT_ENABLED` / `ACTIVITY_REPORT_HOUR`。设备 id 由 uid 稳定派生（随机值会被上游当成新设备）。
+
+**并发上限约 5**（第 6 个回 `429 user_model_rate_limited`）→ `RACCOON_MAX_CONCURRENCY` 默认 2，独立节流器。
+
 ### CodeBuddy 国际（`codebuddy_intl`）
 
 [www.codebuddy.ai](https://www.codebuddy.ai)，同国内站协议，但两套独立账号体系（各自注册、各自计费）→ 独立渠道。登录链路同国内版（设备码）。
@@ -309,7 +327,7 @@ claude
 - **`count_tokens`**：本地估算，不转发上游。
 - **图片**：`image` 块归一为 chat `image_url`；`tool_result.content` 内图片同样保留。
 - **不支持**：`document` 块、`source.type=file`、Anthropic 服务端工具 → 400。
-- **`cache_control` 透传**（默认开）：落点同 Anthropic——`system`、消息内容块、`tool_result` 顶层、`tool_calls` 顶层、`tools` 顶层。只校验结构，不解释取值。八渠道实测 6 接受（codebuddy / codebuddy_intl / trae / qoder / codearts / kilo）；zen 未验证、OfficeAce 未单测。脚本 `scripts/probe_cache_control.py`。
+- **`cache_control` 透传**（默认开）：落点同 Anthropic——`system`、消息内容块、`tool_result` 顶层、`tool_calls` 顶层、`tools` 顶层。只校验结构，不解释取值。九渠道实测 6 接受（codebuddy / codebuddy_intl / trae / qoder / codearts / kilo）；zen 与小浣熊未验证、OfficeAce 未单测。脚本 `scripts/probe_cache_control.py`。
 
 ### CC Switch 一键导入
 
@@ -375,6 +393,7 @@ claude
 
 - **端点**：`POST /api/credentials/batch`，body `{action: "probe"|"toggle"|"checkin"|"revive", ids: [...], enabled?, force?}`。一次 ≤200 条，重复 id 去重。`force` 只对 `revive` 有效（见下）。
 - **批量导入**：`POST /api/credentials/batch-import`，body `{items: [{provider, credential, nickname?, tags?}]}`。一次 ≤100 条；逐条校验，坏条目只进 `failed`（带 `index` 与原因）；同渠道解密后内容完全一致视为重复，进 `skipped`。管理台凭证页「批量导入」支持粘贴 JSON 数组 / JSONL 或选文件。
+- **单条导出**：`GET /api/credentials/{id}/export` 返回与批量导入**同形**的 JSON（`provider` / `credential` / `nickname` / `tags`），可原样再导入。响应带 `Content-Disposition` 附件头与 `no-store`，内容是**明文凭证**——只对 admin/operator 开放，且落 `credential.export` 审计。管理台入口：凭证行「更多操作 → 导出凭证」。
 - **逐条隔离**：单条失败不影响其余。响应 `{action, total, succeeded, failed, results: [{id, ok, error?, detail?}]}`。
 - **签到失败是结果不是故障**：上游拒绝（账号被禁用 / 登录过期 / 限流）回 `ok=false` + 可读 `message`，不 500——否则管理台只弹「签到失败」，看不出真实原因。
 - **暂停是显式状态而非取反**：`toggle` 的 `enabled` 由请求体给出 → 操作条拆「暂停」/「取消暂停」两按钮。
@@ -417,7 +436,7 @@ claude
 
 ## 模型列表加载
 
-`GET /v1/models` 与 Playground 下拉只合并**当前有可用凭证**的渠道（至少一条未暂停、未失效）；冷却中的仍算。顺序：CodeBuddy、TRAE、Qoder、CodeArts、OfficeAce 在前；组内按名字典序；多渠道模型归最高优先级渠道。
+`GET /v1/models` 与 Playground 下拉只合并**当前有可用凭证**的渠道（至少一条未暂停、未失效）；冷却中的仍算。顺序：CodeBuddy、TRAE、Qoder、CodeArts、OfficeAce、小浣熊 在前；组内按名字典序；多渠道模型归最高优先级渠道。
 
 **请求路由只认这份缓存**：目录能证明归属 → 候选只有那些渠道；全不可用 → 503，不逐渠道试。模型完全不在目录 → 仍按全部候选路由；直连指定与 Key 渠道绑定不受影响。
 
@@ -515,7 +534,7 @@ Playground 与 `/v1/models` 走 stale-while-revalidate：有缓存立刻回旧�
 
 额度数字后下箭头展开「变动流水」= **两次额度探测之间的净变化**，非动作归因：签到、成长、对话都改余额而上游不打日志 → 界面一律写「净变化」。首次探测只建基线；余额没变不记；变「未知」仍记但不填变化量；留 90 天。
 
-**按账本分流**：流水带 `ledger`（`pool` / `credits`）。CodeArts 记 `credits`，其余 `pool`。接口 `GET /api/credentials/{id}/credit-events?ledger=`（缺省 `pool`）。两本账量级 / 语义不同 → 分开读。
+**按账本分流**：流水带 `ledger`（`pool` / `credits`）。CodeArts 与小浣熊记 `credits`（两家额度都是积分），其余 `pool`。接口 `GET /api/credentials/{id}/credit-events?ledger=`（缺省 `pool`）。两本账量级 / 语义不同 → 分开读。
 
 **签到记录**：凭证行「更多操作 → 签到记录」展开**签到审计日志**（每轮签到落一行：时间 / 结果 / 领取积分 / 上游业务码 / 文案 / 触发方式，定时与手动都记；保留 90 天）。接口 `GET /api/credentials/{id}/checkin-events?limit=`。与「变动流水」不同，这是**动作的逐次结果**（签到自己回的 code / credit），不依赖余额 diff，故「显示成功却没加积分」这类问题能直接对着上游答复定位。
 
@@ -718,6 +737,10 @@ python3 scripts/restore_db.py data/backups/coding2api-20261014-030000.sqlite3 --
 | `CODEBUDDY_INTL_CHAT_MIN_INTERVAL` | `5` | CB 国际节流，独立 |
 | `ZEN_CHAT_MIN_INTERVAL` | `0` | Zen 节流 |
 | `KILO_CHAT_MIN_INTERVAL` | `0` | Kilo 节流 |
+| `RACCOON_API_ENDPOINT` | `https://xiaohuanxiong.com` | 小浣熊上游地址 |
+| `RACCOON_ALLOWED_ENDPOINTS` | `https://xiaohuanxiong.com` | 小浣熊白名单 |
+| `RACCOON_CHAT_MIN_INTERVAL` | `0` | 小浣熊聊天最小间隔 |
+| `RACCOON_MAX_CONCURRENCY` | `2` | 小浣熊每账号在途并发上限；`0` 关闭 |
 | `QODER_CHAT_MIN_INTERVAL` | `5` | Qoder 节流 |
 | `CODEARTS_CHAT_MIN_INTERVAL` | `5` | CodeArts 节流 |
 | `CODEARTS_MAX_CONCURRENCY` | `3` | CodeArts 每账号在途并发上限；`0` 关闭 |

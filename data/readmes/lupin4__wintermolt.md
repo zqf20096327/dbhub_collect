@@ -435,6 +435,27 @@ Uses Google's [A2UI protocol](https://github.com/anthropics/anthropic-cookbook) 
 
 ### Persistent Memory
 
+**Workspace files** — as in OpenClaw, Markdown files in
+`~/.wintermolt/workspace` (or `WINTERMOLT_WORKSPACE_DIR`) go into the
+system prompt on every turn, so an edit counts from the next one:
+
+| File | For |
+|:-----|:----|
+| `AGENTS.md` | How the agent should work |
+| `SOUL.md` | Persona, tone, boundaries |
+| `USER.md` | Who you are and what you want (first 4,000 characters) |
+| `IDENTITY.md` | The agent's name and manner |
+| `MEMORY.md` | What it should remember. Only in your own sessions: never a `--chat` group, nor a `per-peer` DM session |
+
+Create the folder and whichever files you want; a missing one is left out.
+Each is cut at 20,000 characters and all of them at 60,000, and the agent
+is told which were cut. Ask it to remember something and it writes it into
+`MEMORY.md` with its file tools; a small model may rewrite the whole file in
+its own words, so keep your own copy of anything you cannot lose. A
+`spawn_agent` child gets `AGENTS.md` only. On a
+local model, keep them short: they share its context window (8,192 tokens
+by default) with the conversation.
+
 **SQLite history** — Every conversation persists in `~/.wintermolt/history.db`. Resume any session.
 
 **Pinecone RAG** — Optional semantic memory via vector search. The AI automatically indexes conversations and recalls relevant context from past sessions.
@@ -497,10 +518,10 @@ the bot mentioned. The rules and their `WINTERMOLT_CHAT_*` settings are in
 ### Web UI
 
 ```bash
-wintermolt --web     # Serves http://localhost:3000
+wintermolt --web     # Serves http://127.0.0.1:3000 and opens it
 ```
 
-Real-time streaming via WebSocket. The AI's responses render token-by-token in the browser with tool execution previews.
+A chat page served by the binary itself: no Node, nothing to install. Replies stream in as they are written, each tool shows while it runs, and panels list past conversations, skills, the workspace files (editable) and which keys are set. Open the link it prints; the token in it keeps other sites and users out. Details and settings in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#web-ui).
 
 ### CLI-Anything — Wintermolt as a Tool for Other Agents
 
@@ -514,7 +535,14 @@ Wintermolt has no tool that generates harnesses for other software. The `cli_any
 
 ### Skills System
 
-Extensible skill catalog with built-in skills + runtime plugin discovery from `~/.wintermolt/plugins/`.
+`SKILL.md` skills, the format of OpenClaw, ClawHub and Anthropic's Agent
+Skills, from `./skills`, `./.agents/skills`, the workspace, `~/.agents/skills`
+and `~/.wintermolt/skills`: the model sees each skill's name and description
+every turn and loads the instructions when a task fits, and `/skill <name>`
+uses one on request. OpenClaw's `os`, `requires.bins` and `requires.env`
+gates hide a skill that cannot run here. Wintermolt's own `skill.json`
+manifests load as before, with runtime plugin discovery from
+`~/.wintermolt/plugins/`. See [docs/SKILLS.md](docs/SKILLS.md).
 
 ### forAgent — Persistent Agent Sessions
 
@@ -550,7 +578,7 @@ Wintermolt ships with [forLearn](https://github.com/forKernels/forLearn), which 
 | Single-shot | `wintermolt -e "prompt"` | Run one prompt, print result, exit; status 1 if no backend answered |
 | Setup | `wintermolt --setup` | Interactive API key + model wizard |
 | Chat | `wintermolt --chat` | Multi-platform messaging bot |
-| Web | `wintermolt --web` | Browser UI at localhost:3000 |
+| Web | `wintermolt --web` | Chat in a browser, served by wintermolt on 127.0.0.1:3000 |
 | Menu Bar | `wintermolt --menubar` | macOS native status bar app |
 | MCP Server | `wintermolt --mcp-server` | Expose tools via JSON-RPC 2.0 |
 
@@ -627,6 +655,7 @@ full-screen view use `/keys list`, or run `wintermolt --keys`.
 | `/screenshot [prompt]` | Screen capture + AI vision |
 | `/listen [seconds \| file]` | Speak a prompt (or give a recording); the reply is spoken ([voice](docs/TOOLS.md#voice)) |
 | `/tts <text>` | Speak text aloud |
+| `/skill [name] [input]` | List `SKILL.md` skills, or have the model use one ([skills](docs/SKILLS.md)) |
 | `/schedule` | Manage cron jobs (list, add, remove, enable, disable) |
 | `/tailscale` | Show Tailscale network peers and status |
 | `/mcp` | Show MCP client/server status |
@@ -646,6 +675,7 @@ full-screen view use `/keys list`, or run `wintermolt --keys`.
 | Page | Covers |
 | :--- | :--- |
 | [docs/BACKENDS.md](docs/BACKENDS.md) | All 8 backends, default models, env vars, `--keys` flow. |
+| [docs/OPENCLAW_PARITY.md](docs/OPENCLAW_PARITY.md) | What OpenClaw does that wintermolt does not yet, and the order it is being closed. |
 | [docs/TOOLS.md](docs/TOOLS.md) | The 20 built-in tools (9 core + 11 extended), triggers, safety. |
 | [docs/SKILLS.md](docs/SKILLS.md) | Skill manifest format, built-in catalog, custom skills. |
 | [docs/MCP.md](docs/MCP.md) | MCP client + server, `~/.wintermolt/mcp.json`, Claude Desktop / Zed wiring. |
@@ -708,7 +738,10 @@ wintermolt (one native binary, 1.6–14 MB)
 │   └── json_rpc.zig             JSON-RPC 2.0 protocol
 │
 ├── src/chat/bridge.zig          Chat platform bridge (JSON lines IPC)
-├── src/web/bridge.zig           Web UI bridge (WebSocket + JSON lines)
+├── src/web/                     Web UI (--web), compiled into the binary
+│   ├── server.zig               HTTP + WebSocket server, token check
+│   ├── bridge.zig               Page messages <-> the agent loop
+│   └── index.html, app.js       The page
 │
 ├── prebuilt/                    Prebuilt executables (committed to repo)
 │   ├── wintermolt-macos               macOS Apple Silicon
@@ -725,7 +758,7 @@ wintermolt (one native binary, 1.6–14 MB)
 
 **Prebuilt libraries:** `libforagent.a` and `libforlearn.a` are pure Zig static archives — no Fortran runtime, no gfortran needed. For kernel-accelerated inference and Fortran-backed compute, see [Wintermute](https://github.com/lupin4/Wintermute) (proprietary).
 
-**IPC pattern:** All sidecars (chat, web, menu bar) communicate via **JSON lines over stdin/stdout pipes**. The Zig binary spawns the sidecar as a child process. No sockets, no HTTP servers, no shared memory. Clean process boundaries.
+**IPC pattern:** The sidecars (chat, menu bar) communicate via **JSON lines over stdin/stdout pipes**. The Zig binary spawns the sidecar as a child process. The web UI is the exception: `--web` serves its page and WebSocket from the binary itself, on loopback by default.
 
 ---
 
@@ -737,7 +770,7 @@ wintermolt (one native binary, 1.6–14 MB)
 |:---------|:--------|:------------|
 | `WINTERMOLT_OLLAMA_URL` | `http://localhost:11434` | Ollama base URL |
 | `WINTERMOLT_OLLAMA_CTX` | `4096` | Context window cap (prevents OOM on small devices) |
-| `WINTERMOLT_OLLAMA_KEEP_ALIVE` | `5m` | Model unload timer (`0` = unload after each response) |
+| `WINTERMOLT_OLLAMA_KEEP_ALIVE` | `5m` (`30m` once `/listen` is used) | Model unload timer (`0` = unload after each response) |
 | `WINTERMOLT_BACKEND` | `ollama` | Backend a run starts on (`ollama`, `claude`, `openai`, `deepseek`, `qwen`, `gemini`, `kernel`, `forai`); a backend that cannot be built exits 1. `/model` and `wintermolt.json` routing also choose one — see `docs/BACKENDS.md` |
 | `WINTERMOLT_MODEL` | `qwen3:0.6b` | Default model |
 | `OPENAI_API_KEY` | — | OpenAI API key (GPT-4o, GPT-4.1) |
@@ -756,6 +789,13 @@ wintermolt (one native binary, 1.6–14 MB)
 | `WINTERMOLT_NO_TOOLS` | — | Set `1` to send no tool definitions, for models without function calling |
 | `WINTERMOLT_MAX_ITERATIONS` | `25` | Model requests one turn may make before the agent stops; raise it for long multi-step tasks |
 | `WINTERMOLT_STALL_TIMEOUT` | `180` | Seconds a model request may receive nothing before it is dropped; a stream that keeps arriving is never cut off (`0` = never) |
+| `WINTERMOLT_WORKSPACE_DIR` | `~/.wintermolt/workspace` | Where `AGENTS.md`, `SOUL.md`, `USER.md`, `IDENTITY.md` and `MEMORY.md` are read from, every turn (see [Persistent Memory](#persistent-memory)) |
+| `WINTERMOLT_WEB_PORT` | `3000` | `--web` port (`PORT` wins when both are set) |
+| `WINTERMOLT_WEB_HOST` | `127.0.0.1` | `--web` listen address; anything but loopback is reachable from other machines over plain HTTP |
+| `WINTERMOLT_WEB_TOKEN` | random each start | Fixed `--web` token (16+ characters), so a bookmarked link keeps working |
+| `WINTERMOLT_GATEWAY_PORT` | `8080` | `--gateway` port |
+| `WINTERMOLT_GATEWAY_HOST` | `127.0.0.1` | `--gateway` listen address; anything but loopback is reachable from other machines over plain HTTP |
+| `WINTERMOLT_GATEWAY_KEY` | random each start | Fixed `--gateway` API key (16+ characters), so clients keep working across restarts |
 | `TAILSCALE_API_KEY` | — | Tailscale REST API key (optional) |
 | `PINECONE_API_KEY` | — | Pinecone API key (enables RAG memory) |
 | `PINECONE_HOST` | — | Pinecone index host URL |

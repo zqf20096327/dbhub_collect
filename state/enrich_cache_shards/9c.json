@@ -64,10 +64,10 @@
  },
  "SeaQL/sea-query": {
   "commit_90d": 9,
-  "commit_7d": 1,
+  "commit_7d": 2,
   "rel_ver": "1.0.2",
   "rel_pub": "2026-08-12",
-  "rel_days": 77,
+  "rel_days": 84,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -80,12 +80,29 @@
    "Rust": 100,
    "Shell": 0
   },
-  "enriched_at": "20261028",
+  "enriched_at": "20261104",
   "dim_ts": {
-   "commit": "20261028",
-   "release": "20261028",
+   "commit": "20261104",
+   "release": "20261104",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "1.0.2",
+    "d": "2026-08-12",
+    "n": "## Release Notes: sea-query 1.0.2\n\n*(since 1.0.1)*\n\n### New Features\n\n**`clear_group_by()` and `clear_having()` on `SelectStatement`** (#1086)\n\n`SelectStatement` now has methods to clear a previously set `GROUP BY` or `HAVING` clause, which is useful when a query is being modified dynamically.\n\n- `clear_group_by()`: clears all group by expressions.\n- `clear_having()`: clears the having condition.\n\n```rust\nlet query = Query::select()\n    .from(Char::Table)\n    .column(Char::Character)\n    .add_group_by([Expr"
+   },
+   {
+    "t": "1.0.0",
+    "d": "2026-05-30",
+    "n": "* Added regression coverage for null PostgreSQL array elements.\n* Fixed PostgreSQL array handling for null array elements.\n* `sea-query-rusqlite 0.8.0`\n* `sea-query-postgres 0.6.0`\nsea-query-rusqlite = \"0.8\"\nsea-query-postgres = \"0.6\"\n* Fixed null element handling in PostgreSQL arrays https://github.com/SeaQL/sea-query/pull/1068\nPostgreSQL array values can now contain null elements without panicking during conversion. This fixes `Value::Array` conversion paths where arrays contain null values.\nThe tokenizer"
+   },
+   {
+    "t": "1.0.0-rc.34",
+    "d": "2026-05-07",
+    "n": "* Fixed MySQL `IndexCreateStatement::cond_where` behavior so partial index filters are no longer silently dropped.\n* MySQL index creation now emits `cond_where` filters instead of silently dropping them https://github.com/SeaQL/sea-query/pull/1067\n* Added `CREATE TABLE` partitioning support for PostgreSQL and MySQL.\n* Added SQLx and rusqlite binder support for Jiff values.\nMySQL does not support partial indexes. SeaQuery now keeps the `WHERE` clause when `IndexCreateStatement::cond_where` is used with `Mysq"
+   }
+  ]
  },
  "arpanghosh8453/open-dronelog": {
   "commit_90d": 13,
@@ -3018,6 +3035,50 @@
    "security": "20261102",
    "contrib": "20261102",
    "lang": "20261102"
+  }
+ },
+ "Ahaduzzamankhan/aicrawl": {
+  "rel_ver": "v1.0.0",
+  "rel_pub": "2026-11-04",
+  "rel_days": 0,
+  "rel_n90": 3,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_notes": [
+   {
+    "t": "v1.0.0",
+    "d": "2026-11-04",
+    "n": "**Full Changelog**: https://github.com/Ahaduzzamankhan/aicrawl/compare/v0.0.1-experimental.2...v1.0.0"
+   },
+   {
+    "t": "v0.0.1-experimental.2",
+    "d": "2026-11-04",
+    "n": "**Full Changelog**: https://github.com/Ahaduzzamankhan/aicrawl/compare/v0.0.1-experimental.1...v0.0.1-experimental.2"
+   },
+   {
+    "t": "v0.0.1-experimental.1",
+    "d": "2026-11-04",
+    "n": "- **Local-first storage.** SQLite with WAL, migrations, jobs, pages, results, caches and settings."
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Rust": 74,
+   "TypeScript": 25,
+   "CSS": 1,
+   "JavaScript": 0,
+   "HTML": 0
+  },
+  "enriched_at": "20261104",
+  "dim_ts": {
+   "release": "20261104",
+   "security": "20261104",
+   "contrib": "20261104",
+   "lang": "20261104"
   }
  }
 }
