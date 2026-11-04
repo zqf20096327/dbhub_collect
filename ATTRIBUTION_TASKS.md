@@ -164,9 +164,9 @@
 - **目标**：每日跟 evidence incremental 同步判定；归属补全率报表进 CI summary；**attribution 各卡单测并入采集前置 selftest 链**——现在每夜绿门只有 `evidence/selftest_evidence.py`，引擎坏了要等下次全池扫描才发现
 - **验收**：collect.yml 加一步，连续 3 晚报表落盘且不炸（CI 续跑教训 [[ci-resume-pitfalls]]）；attribution selftest 进 CI 后首晚绿
 
-### T5b release notes 复验
-- **目标**：release notes 命中 add/drop/support/deprecate+库名 → 触发该仓适配复验队列
-- **验收**：构造 5 条合成 release note 单测全绿；真实仓冒烟 1 晚
+### T5b release notes 复验 ｜✅ 2026-11-04 完成（1ccf3db1；触发器+单测+真实冒烟）
+- **结果**：`attribution/rel_notes.py`——行内动词×库名宽匹配（词表=readme_vocab 同源零新词表）+四动词强度排序 add>support>deprecate>drop+去模板头部（Keep a Changelog 样板不产出）+同库取最强；队列 state/relnotes_queue.json（atomic）。单测 10 断言全绿（合成 5 条+模板头+sqlite3 别名+mysqltool 词边界+强度排序+trigger 取最强）。真实冒烟：6 家头部仓最新 release——arrow-adbc 命中 PG add ✓、liquibase/metabase/sqlc/netdata/pop 无命中（纯补丁版无库名，零假阳性）。后续接线：evidence 采集 release 后调 trigger 进复验队列（T5a 挂钩的下一刀）
+- **验收**：构造 5 条合成 release note 单测全绿；真实仓冒烟 1 晚——达标（冒烟取 6 仓即时跑，非整晚）
 
 ### T5c Gitee MVP（可提前并行）
 - **目标**：GoldenDB/GBase/YashanDB/TDSQL 四库，Gitee API v5 独立 token，平行池 `state/gitee_pool.ndjson` 不并入主池
