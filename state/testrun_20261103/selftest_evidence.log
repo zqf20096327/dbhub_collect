@@ -1,0 +1,73 @@
+[PASS] go.mod 直接依赖
+[PASS] go.mod indirect 入 dev
+[PASS] go.mod replace 目标不算依赖
+[PASS] npm 三类依赖
+[PASS] pom 依赖
+[PASS] gradle 依赖
+[PASS] requirements
+[PASS] pyproject PEP621+poetry
+[PASS] setup.py
+[PASS] Cargo.toml
+[PASS] Gemfile
+[PASS] composer.json
+[PASS] csproj
+[PASS] mix.exs
+[PASS] compose 镜像
+[PASS] Dockerfile FROM（scratch 排除）
+[PASS] git blob sha 算法对齐 git
+[PASS] 选择表：dep 放宽后全收（23<60，11-01 试点校准）
+[PASS] 选择表：根级 package.json 优先
+[PASS] 选择表：image/ci
+[PASS] 线索：changelog/i18n/docs
+[PASS] 路径指纹：connector/dialect 捕获
+[PASS] 路径加权：深层含库路径优先于浅层无库
+[PASS] 路径加权：上限 200 生效
+[PASS] 自愈检测：打满旧上限任一命中
+[PASS] 版本戳：caps_v≥2 打满新上限也不重采
+[PASS] 清单余量：打满旧上限算没扫完（auto 继续走 sweep）
+[PASS] 跳过判定：终态+池未更新 → 跳过
+[PASS] 跳过判定：池 pushed_at 更新 → 不跳（变化仓重采，树没变走 304）
+[PASS] 跳过判定：记录比池新（回退路径写入 API 值）→ 跳过不反复采
+[PASS] 跳过判定：打满旧上限 → 不跳
+[PASS] 跳过判定：无记录（新仓）/error 记录 → 不跳
+[PASS] 跳过判定：仓已出池（pool_rec None）终态 → 跳过
+[PASS] sweep 清单：清单在前 + 新仓并入（国产优先再星降序）
+[PASS] 端到端：状态 ok
+[PASS] 端到端：分支解析 main
+[PASS] 端到端：树元数据
+[PASS] 端到端：go.mod 指纹
+[PASS] 端到端：compose 镜像
+[PASS] 端到端：CI 镜像
+[PASS] 端到端：blob sha 全对（无漂移）
+[PASS] 端到端：线索
+[PASS] 304 合并：保旧值刷新戳
+[PASS] 版本戳：新采/304 合并均打 caps_v
+[PASS] 自愈重采：打满旧记录不走 304、样本重抓并打版本戳
+[PASS] 空仓 409 → empty_repo
+[PASS] 全 404 → gone
+[PASS] gone 只花 3 调（main+master+repos）
+[PASS] 空壳仓 → empty_repo 终态
+[PASS] 空壳仓 5 调（main+master+repo+db递归+db非递归）
+[PASS] 超大树 → partial + root_only 标记
+[PASS] 超大树根级指纹仍采到（go.mod）
+[PASS] 超大树根级计数只算 blob（不含 src 目录）
+[PASS] 畸形 package.json 不炸仓（ok + parse_error + 无 names）
+[PASS] raw 全 404 → partial + errors
+[PASS] sha_mismatch 标记
+[PASS] README 离线扫矩阵 URL
+[PASS] 分片：写脏桶
+[PASS] 分片：upsert 覆盖
+[PASS] 分片：桶定位与三胞胎一致
+[PASS] 增量：新仓+变化仓、新仓优先
+[PASS] rel_notes：取前 3、跳过空正文
+[PASS] rel_notes：512 字节截断 + 日期日粒度
+[PASS] rel_notes：全空正文返回 None
+[PASS] rel_notes：命中行优先（超长正文末尾的 DB 变更、模板头部不占预算）
+[PASS] rel_notes：强度排序（弱信号占满预算时强信号优先）
+[PASS] rel_notes：强度分档（drop>support>compat、无库名 None）
+[PASS] rel_notes：超长正文里的纯库名行也收进摘要
+[PASS] rel_notes：中文按字节截断不劈字
+[PASS] rel_notes：17 库口径全部被 DB_WORDS 覆盖
+[PASS] rel_notes：国产库中文/别名可命中
+
+==== 自检全绿 ====
