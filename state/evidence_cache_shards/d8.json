@@ -2678,15 +2678,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T09:40:34Z",
+  "collected_at": "2026-11-04T02:59:50Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-02",
-  "stars": 955,
+  "pushed_at": "2026-11-03",
+  "stars": 956,
   "tree": {
-   "sha": "a93d858a8e9a6fd37bd7c73aee4f223d00c6d425",
-   "etag": "W/\"60e9b6842fa8afe71d589d6643c9134467b19e44dc09170fb409134c7c3cc70b\"",
+   "sha": "76ea5304a83b17eebb4496c6ba1a55b266d6b749",
+   "etag": "W/\"0880d85379d9e6ae90a73f1dcb255559df557f71dd05a4246dd7bcba5fd798a0\"",
    "truncated": false,
-   "path_count": 6792,
+   "path_count": 6866,
    "matched": [
     "apps/serene-docs-search/package.json",
     "apps/serene-ui/package.json",
@@ -3490,6 +3490,8 @@
     "server/connector/search_filter_printer.cpp",
     "server/connector/search_filter_printer.hpp",
     "server/connector/search_pk_lookup.h",
+    "server/connector/search_sink_rows.cpp",
+    "server/connector/search_sink_rows.h",
     "server/connector/search_sink_writer.cpp",
     "server/connector/search_sink_writer.hpp",
     "server/connector/search_table_backfill.cpp",
@@ -3503,6 +3505,8 @@
     "server/connector/functions/CMakeLists.txt",
     "server/connector/functions/array.cpp",
     "server/connector/functions/array.h",
+    "server/connector/functions/backup.cpp",
+    "server/connector/functions/backup.h",
     "server/connector/functions/catalog_introspect.cpp",
     "server/connector/functions/catalog_introspect.h",
     "server/connector/functions/duckdb_aliases.cpp",
@@ -3596,11 +3600,7 @@
     "server/connector/scan/scan_plan.cpp",
     "server/connector/scan/scan_plan.h",
     "server/connector/scan/scan_prepare.cpp",
-    "server/connector/scan/scan_pushdown.cpp",
-    "server/connector/scan/scan_state.h",
-    "server/connector/scan/scan_stats.cpp",
-    "server/connector/scan/scan_stream.cpp",
-    "server/connector/scan/scan_topk.cpp"
+    "server/connector/scan/scan_pushdown.cpp"
    ],
    "matrix_urls": [
     "https://www.serenedb.com/slack",
@@ -4058,13 +4058,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:43:58Z",
+  "collected_at": "2026-11-04T03:20:11Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-02",
+  "pushed_at": "2026-11-03",
   "stars": 80,
   "tree": {
-   "sha": "1b3cf4ec7336196b5f3566da4cc27680cc7ca8c4",
-   "etag": "W/\"97607e12738c7e47dc1794fc0fc7368c1aa7e1285c28235b1bd1c18148d6c1a1\"",
+   "sha": "a0956e3d9e337f08648ee96487c1b1d5032af613",
+   "etag": "W/\"4c3f72469eff34009d9fb430752bc4c205f9bacc654c1c2c334dc9f8d9aefd5c\"",
    "truncated": false,
    "path_count": 262,
    "matched": [
@@ -4468,13 +4468,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:49:39Z",
+  "collected_at": "2026-11-04T03:27:46Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-02",
+  "pushed_at": "2026-11-03",
   "stars": 41,
   "tree": {
-   "sha": "f55925eb1cf6b11db5ee1c07383ffe24980d0901",
-   "etag": "W/\"2130f84fe8df3c9791b4c21c4d153331df8a192c2b40ccf95ebaa21c5f1f95a4\"",
+   "sha": "bf2c031bba698705166974059e62405579c383d4",
+   "etag": "W/\"9c793265ad071555f620fabbe887675a2db840f3c2e71397609792ac0c73ff66\"",
    "truncated": false,
    "path_count": 93,
    "matched": [
@@ -4490,7 +4490,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "b947c6e24bbfaafa2ebeab2616b0df2dc9be1183",
+    "blob_sha": "2ff94d91ebc5306fb0d1858be2636ce76ab097a6",
     "ecosystem": "npm",
     "bytes": 6335,
     "names": [
@@ -4527,7 +4527,7 @@
    {
     "path": ".github/workflows/npm-version.yml",
     "kind": "ci",
-    "blob_sha": "d068519d0fdbc379ec2a4029cbaaa5ce37c7c163",
+    "blob_sha": "4abc8fc7eb016988067986c906963a7e685f90da",
     "bytes": 1322
    },
    {
@@ -6114,13 +6114,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T02:09:28Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-04T03:24:49Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-29",
-  "stars": 52,
+  "pushed_at": "2026-11-03",
+  "stars": 53,
   "tree": {
-   "sha": "15ef830e6b0d1a866a5f435427978e4930507d20",
-   "etag": "W/\"20c8b4b46ea4701bbd2c1c53fea981fdaf85b024097bf58958b819a70d166fdd\"",
+   "sha": "c95bfdadff158b921a2832eb745455a084b7c7dd",
+   "etag": "W/\"3f2ea52581371b657998f7db144fbd33baafedb7b8ac8088fe26825fd5456589\"",
    "truncated": false,
    "path_count": 2711,
    "matched": [
@@ -6270,7 +6271,7 @@
    {
     "path": "packages/cli/package.json",
     "kind": "dep",
-    "blob_sha": "910d4336ecc6c3b1a913f5cc685a1570b29f8af7",
+    "blob_sha": "b4d849f6ad676659ab8f486273c8d7068f097479",
     "ecosystem": "npm",
     "bytes": 865,
     "names": [
@@ -6315,7 +6316,7 @@
    {
     "path": "packages/design/package.json",
     "kind": "dep",
-    "blob_sha": "845d32ff9f96f940d429f8777785c88bbc5acf4c",
+    "blob_sha": "bdc8f0c7c3c2acba5bf44876e2fc61e2218500a3",
     "ecosystem": "npm",
     "bytes": 1758,
     "names": [
@@ -6366,9 +6367,9 @@
    {
     "path": "packages/ui/package.json",
     "kind": "dep",
-    "blob_sha": "319b33f80b9d8282880db764e75ddd20cec31e93",
+    "blob_sha": "563db0113280191e785eecf9af80f3ed0a18f54d",
     "ecosystem": "npm",
-    "bytes": 1838,
+    "bytes": 1873,
     "names": [
      "@ant-design/cssinjs",
      "@ant-design/pro-components",
@@ -6379,6 +6380,7 @@
      "@oceanbase/util",
      "ahooks",
      "classnames",
+     "copy-to-clipboard",
      "dayjs",
      "diff",
      "highlight.js",
@@ -8212,13 +8214,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:34:08Z",
+  "collected_at": "2026-11-04T03:06:26Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-01",
+  "pushed_at": "2026-11-02",
   "stars": 364,
   "tree": {
    "sha": "b8363194c803da58be6e31292246547e19d0f9af",
-   "etag": "W/\"54f63b1aac3fd1082248a7abdb5d98e1d9487dba019cb0fb142aa80609bf5ac2\"",
+   "etag": "W/\"72125943a7aa877a81aff020d001dda76680188bd4406c592b7f182a817110d7\"",
    "truncated": false,
    "path_count": 703,
    "matched": [
@@ -8458,13 +8460,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:35:14Z",
+  "collected_at": "2026-11-04T03:07:57Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-01",
-  "stars": 303,
+  "pushed_at": "2026-11-02",
+  "stars": 304,
   "tree": {
    "sha": "9768d3c3f1e18a997549ca6bc0d47d1502a1fa56",
-   "etag": "W/\"d0e958b12ce745e09e9fd190bff888569c61f2db920a965515f1fad6e6c61d39\"",
+   "etag": "W/\"6ac16f63bd954398fcac8a4ac680aa72172d25df9dcdef067099f120bced2290\"",
    "truncated": false,
    "path_count": 729,
    "matched": [
@@ -9219,13 +9221,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:39:57Z",
+  "collected_at": "2026-11-04T03:14:56Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-01",
-  "stars": 138,
+  "pushed_at": "2026-11-03",
+  "stars": 137,
   "tree": {
-   "sha": "614de26342642d9e2d34b19cacbec4efe1e407f9",
-   "etag": "W/\"ea6c3e7995a1ff62ea051422022b7fed8c2f47f73b422bd3a7dd479c2ece2f58\"",
+   "sha": "298dfdfaae414c9515c9b47f158d810c52e97625",
+   "etag": "W/\"f9a3c2572b07c5326b19a8941c31ffeff37878d958c7f484a69981c27c8528a7\"",
    "truncated": false,
    "path_count": 6190,
    "matched": [
@@ -9593,13 +9595,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:42:42Z",
+  "collected_at": "2026-11-04T03:18:23Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-01",
+  "pushed_at": "2026-11-03",
   "stars": 99,
   "tree": {
    "sha": "c1282e6d24e9753849b120ac07f7c66597093dda",
-   "etag": "W/\"1e1780c32715e827e00ce46751c3bcd6b0d4ae307636593d0c1c55ddb26ac310\"",
+   "etag": "W/\"7ae4c7753318e48d6b276b9863a18ddbdafefbc47396f2ad3b595740acc5798d\"",
    "truncated": false,
    "path_count": 52,
    "matched": [
@@ -10158,15 +10160,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:46:14Z",
+  "collected_at": "2026-11-04T03:22:45Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-01",
+  "pushed_at": "2026-11-03",
   "stars": 62,
   "tree": {
-   "sha": "f4273630aa2b87068220323dc65c1f7f3076fb9c",
-   "etag": "W/\"53a421de367f770fadeefbb415e9a3c6eb6ef42e3cbc43e03563311e746dd022\"",
+   "sha": "4457075f59e6c5ed5c0c03ebff63e29d1aa909cc",
+   "etag": "W/\"1d6f1fab0641dbee0992ff914b0b5c9b219aef681e69a04c453ee71a554f3764\"",
    "truncated": false,
-   "path_count": 3809,
+   "path_count": 3818,
    "matched": [
     "package.json",
     "apps/voice-relay/package.json",
@@ -11349,13 +11351,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T18:57:16Z",
+  "collected_at": "2026-11-04T03:26:55Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-31",
+  "pushed_at": "2026-11-03",
   "stars": 44,
   "tree": {
-   "sha": "a7cefa70815176525e55579c17910cabccac6e60",
-   "etag": "W/\"fb235c79ac12ddc3c41ede069509893246d66c69b434910806af4ba93c5a27bb\"",
+   "sha": "3f6b8b6f6a148e26093e8574cba24953c889be3d",
+   "etag": "W/\"b59c28f673cda6ccbce54f109f49163ce7315cb3c78c7d99157e8141530bd2cd\"",
    "truncated": false,
    "path_count": 429,
    "matched": [
@@ -11751,15 +11753,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T19:05:14Z",
+  "collected_at": "2026-11-04T03:31:42Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-31",
+  "pushed_at": "2026-11-03",
   "stars": 31,
   "tree": {
-   "sha": "2298f055820180fc870e9fbe5b1e07de54ceeaa6",
-   "etag": "W/\"f0d3ffba3b7cf7d6f8829e45180e8ac6bc7327396debee3387ecf26bd9a013d9\"",
+   "sha": "26a8b21c457ca05b6f4d3ceb40eff414bb588d71",
+   "etag": "W/\"dd1aec0510b243f7444c7924ac91db829b1d060b9540efba564db6dd597806fc\"",
    "truncated": false,
-   "path_count": 393,
+   "path_count": 394,
    "matched": [
     "composer.json",
     "package.json",
@@ -12307,13 +12309,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:54:19Z",
+  "collected_at": "2026-11-04T03:33:14Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-01",
+  "pushed_at": "2026-11-03",
   "stars": 28,
   "tree": {
    "sha": "a44608850f4958ae10df5fc6eae44141d2168d49",
-   "etag": "W/\"d1336f00e74bce999e9e4e0f2174b5a0fedc4f05659c13b53ae8a3a5832c1484\"",
+   "etag": "W/\"246abb95aac3a48d1d526441b2879643433cccb54c4ad3b1883729e54d21ae24\"",
    "truncated": false,
    "path_count": 1659,
    "matched": [
@@ -14719,13 +14721,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T08:14:09Z",
+  "collected_at": "2026-11-04T02:50:26Z",
   "default_branch": "main",
-  "pushed_at": "2026-02-10",
-  "stars": 4889,
+  "pushed_at": "2026-11-03",
+  "stars": 4890,
   "tree": {
-   "sha": "bcb43052ada686ec6d1345328e8299f502d3ef01",
-   "etag": "W/\"ef5b661e6e484bf5b9d67c5bbcd05ddbd8b6fcc20046c0730e64a57e32fe530f\"",
+   "sha": "25b4e504042f3c614aa88236de1ce8b48a0c0ac6",
+   "etag": "W/\"7ea6b16ba60991812201f6da1c0fac872b6b60fdd1ff832b06f55cfdebd67f5a\"",
    "truncated": false,
    "path_count": 40,
    "matched": [
@@ -15167,15 +15169,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T09:04:13Z",
+  "collected_at": "2026-11-04T03:38:57Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-11-03",
   "stars": 18,
   "tree": {
-   "sha": "5f6ddaaa43bc24bc2b74efc2eee5ff9544004534",
-   "etag": "W/\"41f4478d90998d31f656900d1f32d7b6b981e65f8a2680199e1c05bde9f63ad7\"",
+   "sha": "f364f8d481f10aa7ca3bdc50f2a043f3e8a5803f",
+   "etag": "W/\"539f192c6ad11d9f50ea1621788b4ebebeec43d45155795329589ed8d9834810\"",
    "truncated": false,
-   "path_count": 145,
+   "path_count": 146,
    "matched": [
     "pyproject.toml",
     "Dockerfile",
@@ -15204,9 +15206,9 @@
    {
     "path": "pyproject.toml",
     "kind": "dep",
-    "blob_sha": "25b74f3cd8e9e2a6aca166d28dfbc9467b4b0c64",
+    "blob_sha": "0a3a9603d0a40370e86af1152f8c497ea92a0bc5",
     "ecosystem": "pyproject",
-    "bytes": 2880,
+    "bytes": 2900,
     "names": [
      "fastmcp",
      "pyexasol",
@@ -15219,7 +15221,8 @@
      "exasol-bucketfs",
      "aiofile",
      "pathvalidate",
-     "exasol-telemetry-client"
+     "exasol-telemetry-client",
+     "httpx"
     ]
    },
    {
@@ -15406,6 +15409,32 @@
     "bytes": 1342
    }
   ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "matheusaribeirodev/Loja-Consulta.php": {
+  "fn": "matheusaribeirodev/Loja-Consulta.php",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-04T02:41:38Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-15",
+  "stars": 4,
+  "tree": {
+   "sha": "3edee34e787400aab488437915189e6411b709bc",
+   "etag": "W/\"c776e43ae489cacc02da9ea4144423cdead6f635185ac94fb4167e0bdfe0af74\"",
+   "truncated": false,
+   "path_count": 2,
+   "matched": []
+  },
+  "files": [],
   "clues": {
    "changelog": [],
    "readme_i18n": [],

@@ -5477,20 +5477,18 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T09:36:19Z",
+  "collected_at": "2026-11-04T02:54:32Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-02",
-  "stars": 2449,
+  "pushed_at": "2026-11-03",
+  "stars": 2453,
   "tree": {
-   "sha": "5afad870388552d0198087d27037da7ac745ba2b",
-   "etag": "W/\"580785cfa3fec66a6b95b9c79489625ace85ebaae5a7368438ae6cb0e6fe3120\"",
+   "sha": "c4ffa9cd6686077bbf7fa43d032e426c925f2671",
+   "etag": "W/\"6254387ecb4e14dec944011fbe9026384f7a07f10ee619e1ead74ce310a88d79\"",
    "truncated": false,
-   "path_count": 3748,
+   "path_count": 3636,
    "matched": [
     "package.json",
     "apps/cli-e2e/package.json",
-    "apps/cli-go/go.mod",
-    "apps/cli-go/package.json",
     "apps/cli/package.json",
     "apps/docs/package.json",
     "packages/api/package.json",
@@ -5505,9 +5503,6 @@
     "packages/cli-windows-x64/package.json",
     "packages/config/package.json",
     "packages/stack/package.json",
-    "apps/cli-go/fsevents/go.mod",
-    "apps/cli-go/pkg/go.mod",
-    "apps/cli-go/pkg/config/templates/Dockerfile",
     "apps/cli/src/shared/services/Dockerfile",
     "apps/cli/src/shared/compute/stacks/dockerfile/Dockerfile",
     ".github/workflows/ai-review.yml",
@@ -5518,15 +5513,10 @@
     ".github/workflows/branch-policy.yml",
     ".github/workflows/build-cli-artifacts.yml",
     ".github/workflows/cli-artifacts-infra.yml",
-    ".github/workflows/cli-go-api-sync.yml",
-    ".github/workflows/cli-go-ci.yml",
-    ".github/workflows/cli-go-codeql.yml",
-    ".github/workflows/cli-go-mirror-image.yml",
-    ".github/workflows/cli-go-mirror.yml",
-    ".github/workflows/cli-go-pg-prove.yml",
-    ".github/workflows/cli-go-publish-migra.yml",
-    ".github/workflows/cli-go-tag-pkg.yml",
+    ".github/workflows/cli-bench-full.yml",
+    ".github/workflows/cli-bench.yml",
     ".github/workflows/close-stale-issues-and-prs.yml",
+    ".github/workflows/codeql.yml",
     ".github/workflows/contribution-gate.yml",
     ".github/workflows/deploy-check.yml",
     ".github/workflows/deploy.yml",
@@ -5540,31 +5530,38 @@
     ".github/workflows/live-e2e-notify.yml",
     ".github/workflows/live-e2e-suite.yml",
     ".github/workflows/live-e2e.yml",
+    ".github/workflows/mirror-image.yml",
     ".github/workflows/mirror-slim-image.yml",
     ".github/workflows/mirror-template-images.yml",
     ".github/workflows/propose-release-notes.yml",
+    ".github/workflows/publish-migra.yml",
+    ".github/workflows/publish-pg-prove.yml",
     ".github/workflows/publish-preview-cli-packages.yml",
     ".github/workflows/release-config.yml",
     ".github/workflows/release-shared.yml",
     ".github/workflows/release-smoke-test.yml",
     ".github/workflows/release.yml",
     ".github/workflows/reopen-stale-issue.yml",
-    ".github/workflows/run-ci.yml"
+    ".github/workflows/run-ci.yml",
+    ".github/workflows/setup-cli-smoke-test.yml",
+    ".github/workflows/slack-notify.yml"
    ]
   },
   "files": [
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "80d08e474093d3bf16b00c67a71677385acd0bd1",
+    "blob_sha": "e0b88a787c8c707e4852ce23bbe3783fef804db9",
     "ecosystem": "npm",
-    "bytes": 2702,
+    "bytes": 2742,
     "dev": [
      "@commitlint/cli",
      "@commitlint/config-conventional",
+     "@effect/platform-bun",
      "@effect/tsgo",
      "@tsconfig/bun",
      "@types/bun",
+     "effect",
      "husky",
      "knip",
      "oxfmt",
@@ -5581,11 +5578,14 @@
    {
     "path": "apps/cli-e2e/package.json",
     "kind": "dep",
-    "blob_sha": "28e474eaa3b8143ad363364b2f2beb0c3e9c20a5",
+    "blob_sha": "616559a701847b1e1d3832fffd91bc7c1f42841a",
     "ecosystem": "npm",
-    "bytes": 614,
+    "bytes": 772,
     "names": [
-     "@supabase/cli-test-helpers"
+     "@effect/platform-bun",
+     "@effect/platform-node",
+     "@supabase/cli-test-helpers",
+     "effect"
     ],
     "dev": [
      "@tsconfig/bun",
@@ -5595,157 +5595,11 @@
     ]
    },
    {
-    "path": "apps/cli-go/go.mod",
-    "kind": "dep",
-    "blob_sha": "add818204bac63b85d4214365de6c40ae991abac",
-    "ecosystem": "go",
-    "bytes": 18877,
-    "names": [
-     "github.com/BurntSushi/toml",
-     "github.com/Netflix/go-env",
-     "github.com/andybalholm/brotli",
-     "github.com/cenkalti/backoff/v4",
-     "github.com/charmbracelet/bubbles",
-     "github.com/charmbracelet/bubbletea",
-     "github.com/charmbracelet/glamour",
-     "github.com/charmbracelet/lipgloss",
-     "github.com/compose-spec/compose-go/v2",
-     "github.com/containerd/errdefs",
-     "github.com/containers/common",
-     "github.com/docker/cli",
-     "github.com/docker/docker",
-     "github.com/docker/go-connections",
-     "github.com/docker/go-units",
-     "github.com/getsentry/sentry-go",
-     "github.com/go-errors/errors",
-     "github.com/go-git/go-git/v5",
-     "github.com/go-playground/validator/v10",
-     "github.com/go-viper/mapstructure/v2",
-     "github.com/google/go-github/v62",
-     "github.com/google/go-querystring",
-     "github.com/google/uuid",
-     "github.com/h2non/gock",
-     "github.com/jackc/pgconn",
-     "github.com/jackc/pgerrcode",
-     "github.com/jackc/pgproto3/v2",
-     "github.com/jackc/pgx/v4",
-     "github.com/joho/godotenv",
-     "github.com/muesli/reflow",
-     "github.com/oapi-codegen/nullable",
-     "github.com/olekukonko/tablewriter",
-     "github.com/posthog/posthog-go",
-     "github.com/spf13/afero",
-     "github.com/spf13/cobra",
-     "github.com/spf13/pflag",
-     "github.com/spf13/viper",
-     "github.com/stretchr/testify",
-     "github.com/stripe/pg-schema-diff",
-     "github.com/supabase/cli/pkg",
-     "github.com/zalando/go-keyring",
-     "go.opentelemetry.io/otel",
-     "golang.org/x/mod",
-     "golang.org/x/net",
-     "golang.org/x/oauth2",
-     "golang.org/x/term",
-     "google.golang.org/grpc",
-     "gopkg.in/yaml.v3"
-    ],
-    "dev": [
-     "4d63.com/gocheckcompilerdirectives",
-     "4d63.com/gochecknoglobals",
-     "charm.land/lipgloss/v2",
-     "codeberg.org/chavacava/garif",
-     "codeberg.org/polyfloyd/go-errorlint",
-     "dario.cat/mergo",
-     "dev.gaijin.team/go/exhaustruct/v4",
-     "dev.gaijin.team/go/golib",
-     "github.com/4meepo/tagalign",
-     "github.com/Abirdcfly/dupword",
-     "github.com/AdminBenni/iota-mixing",
-     "github.com/AlwxSin/noinlineerr",
-     "github.com/Antonboom/errname",
-     "github.com/Antonboom/nilnil",
-     "github.com/Antonboom/testifylint",
-     "github.com/Azure/go-ansiterm",
-     "github.com/ClickHouse/clickhouse-go-linter",
-     "github.com/Djarvur/go-err113",
-     "github.com/Masterminds/semver/v3",
-     "github.com/Microsoft/go-winio",
-     "github.com/MirrexOne/unqueryvet",
-     "github.com/OpenPeeDeeP/depguard/v2",
-     "github.com/ProtonMail/go-crypto",
-     "github.com/alecthomas/chroma/v2",
-     "github.com/alecthomas/go-check-sumtype",
-     "github.com/alexkohler/nakedret/v2",
-     "github.com/alexkohler/prealloc",
-     "github.com/alfatraining/structtag",
-     "github.com/alingse/asasalint",
-     "github.com/alingse/nilnesserr",
-     "github.com/apapsch/go-jsonmerge/v2",
-     "github.com/ashanbrown/forbidigo/v2",
-     "github.com/ashanbrown/makezero/v2",
-     "github.com/atotto/clipboard",
-     "github.com/aymanbagabas/go-osc52/v2",
-     "github.com/aymerick/douceur",
-     "github.com/beorn7/perks",
-     "github.com/bitfield/gotestdox",
-     "github.com/bkielbasa/cyclop",
-     "github.com/blizzy78/varnamelen",
-     "github.com/bombsimon/wsl/v4",
-     "github.com/bombsimon/wsl/v5",
-     "github.com/breml/bidichk",
-     "github.com/breml/errchkjson",
-     "github.com/butuzov/ireturn",
-     "github.com/butuzov/mirror",
-     "github.com/catenacyber/perfsprint",
-     "github.com/ccojocar/zxcvbn-go",
-     "github.com/cenkalti/backoff/v5",
-     "github.com/cespare/xxhash/v2",
-     "github.com/charithe/durationcheck",
-     "github.com/charmbracelet/colorprofile",
-     "github.com/charmbracelet/harmonica",
-     "github.com/charmbracelet/ultraviolet",
-     "github.com/charmbracelet/x/ansi",
-     "github.com/charmbracelet/x/cellbuf",
-     "github.com/charmbracelet/x/exp/slice",
-     "github.com/charmbracelet/x/term",
-     "github.com/charmbracelet/x/termios",
-     "github.com/charmbracelet/x/windows",
-     "github.com/ckaznocha/intrange",
-     "github.com/clipperhouse/displaywidth",
-     "github.com/clipperhouse/uax29/v2",
-     "github.com/cloudflare/circl",
-     "github.com/containerd/errdefs/pkg",
-     "github.com/containers/storage",
-     "github.com/creack/pty",
-     "github.com/curioswitch/go-reassign",
-     "github.com/cyphar/filepath-securejoin",
-     "github.com/daixiang0/gci",
-     "github.com/danieljoos/wincred",
-     "github.com/dave/dst",
-     "github.com/decred/dcrd/dcrec/secp256k1/v4",
-     "github.com/denis-tingaikin/go-header",
-     "github.com/distribution/reference",
-     "github.com/dlclark/regexp2",
-     "github.com/dnephin/pflag",
-     "github.com/docker/docker-credential-helpers",
-     "github.com/docker/go-metrics",
-     "github.com/dprotaso/go-yit"
-    ]
-   },
-   {
-    "path": "apps/cli-go/package.json",
-    "kind": "dep",
-    "blob_sha": "197015c9130adc2b7e5529c48897eb8a3b3502c5",
-    "ecosystem": "npm",
-    "bytes": 320
-   },
-   {
     "path": "apps/cli/package.json",
     "kind": "dep",
-    "blob_sha": "a9a6612162b90ff1605cf41639f4c219b643878a",
+    "blob_sha": "b4693fbbec23dd44ac9bf7e1b9cb03d436f0db68",
     "ecosystem": "npm",
-    "bytes": 4153,
+    "bytes": 4032,
     "names": [
      "eciesjs",
      "jose",
@@ -5840,51 +5694,55 @@
    {
     "path": "packages/cli-darwin-arm64/package.json",
     "kind": "dep",
-    "blob_sha": "9245b363b9fd85c24d58c9164f20b273d8222137",
+    "blob_sha": "f2dd3b6d52ccb8d6e09804e92522e1b0010052a6",
     "ecosystem": "npm",
-    "bytes": 641
+    "bytes": 616
    },
    {
     "path": "packages/cli-darwin-x64/package.json",
     "kind": "dep",
-    "blob_sha": "f14a3237708ae70a604b5f042abc8a543bf5aa02",
+    "blob_sha": "4c89d3d696ceaca28e4e4f5fabbc716a66c7f216",
     "ecosystem": "npm",
-    "bytes": 633
+    "bytes": 608
    },
    {
     "path": "packages/cli-linux-arm64-musl/package.json",
     "kind": "dep",
-    "blob_sha": "0b95049d4c50c2c32911c0c6bcec8bdfe02ba2e3",
+    "blob_sha": "03ed91112dc0c739a6f34af75326cd0081325390",
     "ecosystem": "npm",
-    "bytes": 680
+    "bytes": 655
    },
    {
     "path": "packages/cli-linux-arm64/package.json",
     "kind": "dep",
-    "blob_sha": "cef64df964d4aacdfe1d4c4df934ddb30a06f7e7",
+    "blob_sha": "a559fcc486124f74ed16c47f7696af10c82c91a5",
     "ecosystem": "npm",
-    "bytes": 666
+    "bytes": 641
    },
    {
     "path": "packages/cli-linux-x64-musl/package.json",
     "kind": "dep",
-    "blob_sha": "362f22edd1f5bb21f6ec53327d56497dc0c4880c",
+    "blob_sha": "8234394c7d615480ab4e06da7d03e6036ede684e",
     "ecosystem": "npm",
-    "bytes": 672
+    "bytes": 647
    },
    {
     "path": "packages/cli-linux-x64/package.json",
     "kind": "dep",
-    "blob_sha": "aef98178c0b22ecd5f20f8b278fce7157301b05a",
+    "blob_sha": "494867c9f2ad5744c725db120b34250f2ff9378a",
     "ecosystem": "npm",
-    "bytes": 658
+    "bytes": 633
    },
    {
     "path": "packages/cli-test-helpers/package.json",
     "kind": "dep",
-    "blob_sha": "d05111f6d5a6156e91f683709971c317b0444908",
+    "blob_sha": "31fc7574258e1c307f42d1a76a348d103dd560eb",
     "ecosystem": "npm",
-    "bytes": 611,
+    "bytes": 701,
+    "names": [
+     "@effect/platform-bun",
+     "effect"
+    ],
     "dev": [
      "@tsconfig/bun",
      "@types/bun",
@@ -5896,23 +5754,23 @@
    {
     "path": "packages/cli-windows-arm64/package.json",
     "kind": "dep",
-    "blob_sha": "b0a19b2e39235542d5c080431ad0e17a4a14d8b0",
+    "blob_sha": "f74cf42ce5e20ad238271a8396b51ba14857a0db",
     "ecosystem": "npm",
-    "bytes": 651
+    "bytes": 622
    },
    {
     "path": "packages/cli-windows-x64/package.json",
     "kind": "dep",
-    "blob_sha": "f04d2297117749fc2c15b540f15e0b3a5f6a9dac",
+    "blob_sha": "02be42f7978746c707bb2b08fae578b163fbedbf",
     "ecosystem": "npm",
-    "bytes": 643
+    "bytes": 614
    },
    {
     "path": "packages/config/package.json",
     "kind": "dep",
-    "blob_sha": "8302128046f2f30dfc8f92143de64a88e5d94590",
+    "blob_sha": "8fffa6469a64d3c3e6fd2f2c2f0f22e4b181512b",
     "ecosystem": "npm",
-    "bytes": 2810,
+    "bytes": 2832,
     "names": [
      "@standard-schema/spec",
      "dedent",
@@ -5929,6 +5787,7 @@
      "@tsconfig/bun",
      "@types/bun",
      "@vitest/coverage-v8",
+     "ajv",
      "effect",
      "semantic-release",
      "typescript",
@@ -5961,117 +5820,26 @@
     ]
    },
    {
-    "path": "apps/cli-go/fsevents/go.mod",
-    "kind": "dep",
-    "blob_sha": "41e670c56170d5b9981136a969834f9d719eb822",
-    "ecosystem": "go",
-    "bytes": 48
-   },
-   {
-    "path": "apps/cli-go/pkg/go.mod",
-    "kind": "dep",
-    "blob_sha": "44a3f2acfd657a6237b9a1e29b015d69d3db2b8f",
-    "ecosystem": "go",
-    "bytes": 2078,
-    "names": [
-     "github.com/BurntSushi/toml",
-     "github.com/andybalholm/brotli",
-     "github.com/cenkalti/backoff/v4",
-     "github.com/docker/go-units",
-     "github.com/ecies/go/v2",
-     "github.com/go-errors/errors",
-     "github.com/go-viper/mapstructure/v2",
-     "github.com/golang-jwt/jwt/v5",
-     "github.com/h2non/gock",
-     "github.com/jackc/pgconn",
-     "github.com/jackc/pgerrcode",
-     "github.com/jackc/pgmock",
-     "github.com/jackc/pgproto3/v2",
-     "github.com/jackc/pgtype",
-     "github.com/jackc/pgx/v4",
-     "github.com/joho/godotenv",
-     "github.com/oapi-codegen/nullable",
-     "github.com/oapi-codegen/runtime",
-     "github.com/spf13/afero",
-     "github.com/spf13/viper",
-     "github.com/stretchr/testify",
-     "github.com/tidwall/jsonc",
-     "golang.org/x/mod",
-     "google.golang.org/grpc"
-    ],
-    "dev": [
-     "github.com/apapsch/go-jsonmerge/v2",
-     "github.com/decred/dcrd/dcrec/secp256k1/v4",
-     "github.com/ethereum/go-ethereum",
-     "github.com/fsnotify/fsnotify",
-     "github.com/google/uuid",
-     "github.com/h2non/parth",
-     "github.com/jackc/chunkreader/v2",
-     "github.com/jackc/pgio",
-     "github.com/jackc/pgpassfile",
-     "github.com/jackc/pgservicefile",
-     "github.com/lib/pq",
-     "github.com/pelletier/go-toml/v2",
-     "github.com/sagikazarmark/locafero",
-     "github.com/sourcegraph/conc",
-     "github.com/spf13/cast",
-     "github.com/spf13/pflag",
-     "github.com/stretchr/objx",
-     "github.com/subosito/gotenv",
-     "go.yaml.in/yaml/v3",
-     "golang.org/x/crypto",
-     "golang.org/x/sys",
-     "golang.org/x/text"
-    ]
-   },
-   {
-    "path": "apps/cli-go/pkg/config/templates/Dockerfile",
-    "kind": "image",
-    "blob_sha": "74b0373f1d417b04f4ba4e65d01ad3c480d7fb2c",
-    "bytes": 1921,
-    "images": [
-     "supabase/postgres:17.11.0.006",
-     "supabase/postgres:15.19.0.007",
-     "supabase/postgres:14.1.0.89",
-     "library/kong:2.8.1",
-     "axllent/mailpit:v1.31.3",
-     "postgrest/postgrest:v16.5",
-     "supabase/postgres-meta:v0.100.0",
-     "supabase/studio:2026.10.19-sha-b375769",
-     "darthsim/imgproxy:v3.26.0",
-     "supabase/edge-runtime:v1.77.8",
-     "timberio/vector:0.58.0-alpine",
-     "supabase/supavisor:2.9.13",
-     "supabase/gotrue:v2.197.0",
-     "supabase/realtime:v2.147.1",
-     "supabase/storage-api:v1.84.19",
-     "supabase/logflare:1.50.15",
-     "supabase/pgadmin-schema-diff:cli-0.0.5",
-     "supabase/migra:3.0.1663481299",
-     "supabase/pg_prove:3.36"
-    ]
-   },
-   {
     "path": "apps/cli/src/shared/services/Dockerfile",
     "kind": "image",
-    "blob_sha": "74b0373f1d417b04f4ba4e65d01ad3c480d7fb2c",
-    "bytes": 1921,
+    "blob_sha": "0134b90fc6765cdcc01d82a2a21d0ec75a8ea0e2",
+    "bytes": 1920,
     "images": [
-     "supabase/postgres:17.11.0.006",
-     "supabase/postgres:15.19.0.007",
+     "supabase/postgres:17.11.0.011",
+     "supabase/postgres:15.19.0.016",
      "supabase/postgres:14.1.0.89",
      "library/kong:2.8.1",
      "axllent/mailpit:v1.31.3",
      "postgrest/postgrest:v16.5",
      "supabase/postgres-meta:v0.100.0",
-     "supabase/studio:2026.10.19-sha-b375769",
+     "supabase/studio:2026.11.02-sha-a05e7ec",
      "darthsim/imgproxy:v3.26.0",
-     "supabase/edge-runtime:v1.77.8",
+     "supabase/edge-runtime:v1.77.9",
      "timberio/vector:0.58.0-alpine",
      "supabase/supavisor:2.9.13",
      "supabase/gotrue:v2.197.0",
-     "supabase/realtime:v2.147.1",
-     "supabase/storage-api:v1.84.19",
+     "supabase/realtime:v2.151.3",
+     "supabase/storage-api:v1.88.0",
      "supabase/logflare:1.50.15",
      "supabase/pgadmin-schema-diff:cli-0.0.5",
      "supabase/migra:3.0.1663481299",
@@ -6090,8 +5858,8 @@
    {
     "path": ".github/workflows/ai-review.yml",
     "kind": "ci",
-    "blob_sha": "582874175f6a7e5da17a0f4f110c1bd42f1c8d29",
-    "bytes": 29018
+    "blob_sha": "56bbfb692658d954cae658834d926a94161caf74",
+    "bytes": 29422
    },
    {
     "path": ".github/workflows/api-package-sync.yml",
@@ -6102,20 +5870,20 @@
    {
     "path": ".github/workflows/apply-release-notes.yml",
     "kind": "ci",
-    "blob_sha": "b9858b3428c85507fd63bf8f969016cf86a11b0f",
-    "bytes": 4633
+    "blob_sha": "831ec66cf7498110f772d5606bc773c3e04f821f",
+    "bytes": 4989
    },
    {
     "path": ".github/workflows/backfill-release-notes.yml",
     "kind": "ci",
-    "blob_sha": "3fc78c04c813bc456cf6bf8791a23db52f6e9027",
-    "bytes": 1732
+    "blob_sha": "914e59ddef8207fb60439fe4de97e9f8f648af51",
+    "bytes": 1741
    },
    {
     "path": ".github/workflows/bot-pr-auto-merge.yml",
     "kind": "ci",
-    "blob_sha": "6745993567ad59840a9b1c6d2ec673033eec4e0c",
-    "bytes": 2788
+    "blob_sha": "3d1006bfdad99383b907e7d6aae8d1816f3ca26a",
+    "bytes": 3190
    },
    {
     "path": ".github/workflows/branch-policy.yml",
@@ -6126,8 +5894,8 @@
    {
     "path": ".github/workflows/build-cli-artifacts.yml",
     "kind": "ci",
-    "blob_sha": "2e8c2a32db0e9119212ebb129c6a41e4fe7f9b3a",
-    "bytes": 5084
+    "blob_sha": "a66ca86419f046c454ae2e9e47217629beca357f",
+    "bytes": 6268
    },
    {
     "path": ".github/workflows/cli-artifacts-infra.yml",
@@ -6136,77 +5904,34 @@
     "bytes": 4391
    },
    {
-    "path": ".github/workflows/cli-go-api-sync.yml",
+    "path": ".github/workflows/cli-bench-full.yml",
     "kind": "ci",
-    "blob_sha": "9ab33fd0021abcb986bda045307f2189dbe4d11e",
-    "bytes": 3687
+    "blob_sha": "7e5f14f244b9937928a48846c93094c50f2c401c",
+    "bytes": 22725
    },
    {
-    "path": ".github/workflows/cli-go-ci.yml",
+    "path": ".github/workflows/cli-bench.yml",
     "kind": "ci",
-    "blob_sha": "a4e60bfab4b25794f4b1a5c20b3cc44c94e49478",
-    "bytes": 4637
-   },
-   {
-    "path": ".github/workflows/cli-go-codeql.yml",
-    "kind": "ci",
-    "blob_sha": "3f1950731205f6247c84121e5759573fe0cb9afb",
-    "bytes": 2069
-   },
-   {
-    "path": ".github/workflows/cli-go-mirror-image.yml",
-    "kind": "ci",
-    "blob_sha": "889ecaf9ae8e374f6fb55f1e6c85c13c49b23b9f",
-    "bytes": 1788,
-    "images": [
-     "required:",
-     "description:"
-    ]
-   },
-   {
-    "path": ".github/workflows/cli-go-mirror.yml",
-    "kind": "ci",
-    "blob_sha": "a1f9f3a33afa61eef5dd759b27bb2f4fe36d4d8a",
-    "bytes": 2264,
-    "images": [
-     "${{"
-    ]
-   },
-   {
-    "path": ".github/workflows/cli-go-pg-prove.yml",
-    "kind": "ci",
-    "blob_sha": "6a4414ee3f7164d061ab150e5c2a8506a881c4ea",
-    "bytes": 3198,
-    "images": [
-     "${{"
-    ]
-   },
-   {
-    "path": ".github/workflows/cli-go-publish-migra.yml",
-    "kind": "ci",
-    "blob_sha": "c3b0a563338323d070d95f617f35127d5089986b",
-    "bytes": 3204,
-    "images": [
-     "${{"
-    ]
-   },
-   {
-    "path": ".github/workflows/cli-go-tag-pkg.yml",
-    "kind": "ci",
-    "blob_sha": "9185ad5771081c5cef59a7172caf7f56f2a3124d",
-    "bytes": 1102
+    "blob_sha": "39e4c94f18034044e36cedfeb825f8ea61882c24",
+    "bytes": 12534
    },
    {
     "path": ".github/workflows/close-stale-issues-and-prs.yml",
     "kind": "ci",
-    "blob_sha": "e6ecb519a358672d417f0e575afec28592a2a397",
-    "bytes": 10675
+    "blob_sha": "fb43466983f1979865ad13d67fc0605be05564fa",
+    "bytes": 10707
+   },
+   {
+    "path": ".github/workflows/codeql.yml",
+    "kind": "ci",
+    "blob_sha": "a25cab48b75771630111b3134c0260c1dc1ab0e6",
+    "bytes": 1325
    },
    {
     "path": ".github/workflows/contribution-gate.yml",
     "kind": "ci",
-    "blob_sha": "af7cab6ac56ff711240ca02298575f5514cb5a50",
-    "bytes": 2936
+    "blob_sha": "341bea8b290bdbb47263800fe3bf522a667c5065",
+    "bytes": 3350
    },
    {
     "path": ".github/workflows/deploy-check.yml",
@@ -6223,8 +5948,8 @@
    {
     "path": ".github/workflows/dispatch-cli-e2e-ci.yml",
     "kind": "ci",
-    "blob_sha": "ed5aa0f22aebf51cf5d92da6d7b44d11b0ed5e74",
-    "bytes": 2035
+    "blob_sha": "0fc4f0a9f93d059a7a1e29bd2f3976f08d199194",
+    "bytes": 2061
    },
    {
     "path": ".github/workflows/fast-forward.yml",
@@ -6235,26 +5960,26 @@
    {
     "path": ".github/workflows/fill-sticky-disks.yml",
     "kind": "ci",
-    "blob_sha": "2440f388d1d1c47359865f41e9c9f13848e7e7c3",
-    "bytes": 3211
+    "blob_sha": "cfa187f3f737cae2778da0da76c819be1509c992",
+    "bytes": 3181
    },
    {
     "path": ".github/workflows/flaky-check.yml",
     "kind": "ci",
-    "blob_sha": "73a547d9a183f21022fb074d6d0d6509b04d1793",
-    "bytes": 8730
+    "blob_sha": "7b8ae01850df0483d24126dbd1fb6330a75e14d8",
+    "bytes": 8549
    },
    {
     "path": ".github/workflows/github-scripts-ci.yml",
     "kind": "ci",
-    "blob_sha": "37a5c6cf43e8cf0d6b8407d8d0a3d79d5a681a22",
-    "bytes": 3556
+    "blob_sha": "55484ff381f086b3e38bad021029274ead338179",
+    "bytes": 3551
    },
    {
     "path": ".github/workflows/lint-pull-request.yml",
     "kind": "ci",
-    "blob_sha": "e69d6bd8141b3dea5c235e5d3b36a088441d24f0",
-    "bytes": 3093
+    "blob_sha": "e93acdf712ccb39017d195120a3c55d63ca84116",
+    "bytes": 3074
    },
    {
     "path": ".github/workflows/live-e2e-gate.yml",
@@ -6265,8 +5990,8 @@
    {
     "path": ".github/workflows/live-e2e-notify.yml",
     "kind": "ci",
-    "blob_sha": "66edf219b7d44295a3ece5814c989f3cfcaba5d7",
-    "bytes": 9693
+    "blob_sha": "441f130f159bd9b1939b1ee357371ff208db040b",
+    "bytes": 9816
    },
    {
     "path": ".github/workflows/live-e2e-suite.yml",
@@ -6281,6 +6006,16 @@
     "bytes": 1683
    },
    {
+    "path": ".github/workflows/mirror-image.yml",
+    "kind": "ci",
+    "blob_sha": "284118c964ffca70c44fd46247287a2e49af4d65",
+    "bytes": 1820,
+    "images": [
+     "required:",
+     "description:"
+    ]
+   },
+   {
     "path": ".github/workflows/mirror-slim-image.yml",
     "kind": "ci",
     "blob_sha": "05e829da1378597d8c74c196449a97242980581e",
@@ -6289,8 +6024,8 @@
    {
     "path": ".github/workflows/mirror-template-images.yml",
     "kind": "ci",
-    "blob_sha": "dabc95430e295500dce8af7d436a3683f85be60d",
-    "bytes": 3202,
+    "blob_sha": "06b044abae46097f5f864fc12187a919e72c0c73",
+    "bytes": 3750,
     "images": [
      "${{"
     ]
@@ -6298,50 +6033,83 @@
    {
     "path": ".github/workflows/propose-release-notes.yml",
     "kind": "ci",
-    "blob_sha": "c459fdcf8cec4eda5a708976b7cddb67a2e369d7",
-    "bytes": 3171
+    "blob_sha": "3ba3ad70fc6a44220146684ba4d497b5937b0120",
+    "bytes": 3274
+   },
+   {
+    "path": ".github/workflows/publish-migra.yml",
+    "kind": "ci",
+    "blob_sha": "ac061f0d3c26c23af6fd0108bf336fd01a4ed684",
+    "bytes": 3078,
+    "images": [
+     "${{"
+    ]
+   },
+   {
+    "path": ".github/workflows/publish-pg-prove.yml",
+    "kind": "ci",
+    "blob_sha": "f2b1ad1c07df9aa2cde18982e1dbe0a25fa74704",
+    "bytes": 3072,
+    "images": [
+     "${{"
+    ]
    },
    {
     "path": ".github/workflows/publish-preview-cli-packages.yml",
     "kind": "ci",
-    "blob_sha": "73e24772578eedc11ce3f69482bf16b464ca27f9",
-    "bytes": 6727
+    "blob_sha": "9f5ce2057fb1071536544ef8ae186c5fb0d4e120",
+    "bytes": 6717
    },
    {
     "path": ".github/workflows/release-config.yml",
     "kind": "ci",
-    "blob_sha": "3ab2d2ac0a169008381129d7c82c5ee829f461ce",
-    "bytes": 22827
+    "blob_sha": "87e6d5e57b27ddee95e62996ed94ea021ca50eb3",
+    "bytes": 22933
    },
    {
     "path": ".github/workflows/release-shared.yml",
     "kind": "ci",
-    "blob_sha": "50f3f57213a116c7444fcd67ddcfab8e0cf4c054",
-    "bytes": 25660
+    "blob_sha": "32bde58bebabf8dc740d379b19acca6a87634bad",
+    "bytes": 26195
    },
    {
     "path": ".github/workflows/release-smoke-test.yml",
     "kind": "ci",
-    "blob_sha": "27ca8a2ebc1c5e421752c15ad0b6a9a1759c3851",
-    "bytes": 1604
+    "blob_sha": "0aa4ff6b176886ddf4a9ec07d77b117ed8e79ece",
+    "bytes": 1644
    },
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "c49328b62900f57624e58acba0f9773cfcef972a",
-    "bytes": 15130
+    "blob_sha": "1a1ce8040a1dc2ee6f69290327be285f594a6179",
+    "bytes": 17494
    },
    {
     "path": ".github/workflows/reopen-stale-issue.yml",
     "kind": "ci",
-    "blob_sha": "dd7572b61766312c39213ca535df9a40c0116d18",
-    "bytes": 2624
+    "blob_sha": "1235ddbefe3d3cbc3c5ec8a5bd6696e0d66243c8",
+    "bytes": 2920
    },
    {
     "path": ".github/workflows/run-ci.yml",
     "kind": "ci",
     "blob_sha": "bf39a18cb642f101d5d029ada2b61edf3dc7b0c1",
     "bytes": 1848
+   },
+   {
+    "path": ".github/workflows/setup-cli-smoke-test.yml",
+    "kind": "ci",
+    "blob_sha": "5e00dad37b3cc7c95ec601ad89e0ae7d554d56e8",
+    "bytes": 5230,
+    "images": [
+     "node:20-alpine"
+    ]
+   },
+   {
+    "path": ".github/workflows/slack-notify.yml",
+    "kind": "ci",
+    "blob_sha": "6bfbf2c8006f65f819876319c7ae610b2b5fd6f3",
+    "bytes": 7306
    }
   ],
   "clues": {
@@ -7186,13 +6954,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:20:42Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-04T03:11:13Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-26",
+  "pushed_at": "2026-11-02",
   "stars": 201,
   "tree": {
    "sha": "ee082da45359c592b0eb6c1fbcb8e905ce15a7cc",
-   "etag": "W/\"8dc3fbe6abc5115e2e36c57570e70c2b9e7950dda7c60f1d62916b403192b510\"",
+   "etag": "W/\"22de9232f6c2d37dc852c7697740bba4f7c6f4b76968b1296f4f6d47294114ec\"",
    "truncated": false,
    "path_count": 15,
    "matched": [
@@ -7421,13 +7190,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:39:47Z",
+  "collected_at": "2026-11-04T03:14:32Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-01",
-  "stars": 143,
+  "pushed_at": "2026-11-03",
+  "stars": 142,
   "tree": {
-   "sha": "62aa8eab0df99e8d846b5feafa637d32cfa5eb78",
-   "etag": "W/\"86530b8ab6feb03634d37b3de7e08f5d415c57accf4cbd268bb7551b1debb7f8\"",
+   "sha": "3795a4f7eda545d98db0d1920458c41a6ceb3c0e",
+   "etag": "W/\"a3964af90b203c3603a551660b334c8d3ff60ea56938d630418be4d0863f874a\"",
    "truncated": false,
    "path_count": 108,
    "matched": [
@@ -9158,13 +8927,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T06:21:30Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-04T03:26:08Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-27",
+  "pushed_at": "2026-11-02",
   "stars": 47,
   "tree": {
    "sha": "977b29465bfe5a489a4a9596efa08a65742d47fb",
-   "etag": "W/\"add70d3461104183b856e7d4b9dcd592aa2c61e9f462f0dd2b92a769b984bb76\"",
+   "etag": "W/\"cf2f487ae08b8af3bef585084fe6d47a81d043c062890b419f3ffd3d3b20d94e\"",
    "truncated": false,
    "path_count": 313,
    "matched": [
@@ -10392,15 +10162,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:56:59Z",
+  "collected_at": "2026-11-04T03:36:11Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-02",
+  "pushed_at": "2026-11-03",
   "stars": 22,
   "tree": {
-   "sha": "9b3f1260b424fe992c98317861f0a740878dbd7b",
-   "etag": "W/\"76736a68aac6634441fde0c70c5359c3d759e7d92ec43c499fcd3eb09daaa265\"",
+   "sha": "92c94158bd886eee5e44a4525d2478dc217e40c3",
+   "etag": "W/\"f0407556a2e01e3333d8a9b8a7066d9ee24238bfe0bcc04c57494552132ab721\"",
    "truncated": false,
-   "path_count": 256,
+   "path_count": 260,
    "matched": [
     "go.mod",
     "ui/package.json",
@@ -10414,9 +10184,9 @@
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "c16c990ed0456dc0d8e7bacaa7a1cf0e87c6a98a",
+    "blob_sha": "238d9e9219e0b365bb9fe7ae635a05611d223b0c",
     "ecosystem": "go",
-    "bytes": 2595,
+    "bytes": 2692,
     "names": [
      "github.com/canonical/lxd",
      "github.com/getkin/kin-openapi",
@@ -10448,6 +10218,7 @@
      "github.com/go-openapi/jsonpointer",
      "github.com/gogo/protobuf",
      "github.com/grafana/regexp",
+     "github.com/hashicorp/go-uuid",
      "github.com/inconshreveable/mousetrap",
      "github.com/kr/fs",
      "github.com/mfridman/interpolate",
@@ -10455,6 +10226,7 @@
      "github.com/munnerz/goautoneg",
      "github.com/oasdiff/yaml",
      "github.com/oasdiff/yaml3",
+     "github.com/pandatix/go-abnf",
      "github.com/pkg/sftp",
      "github.com/pkg/xattr",
      "github.com/prometheus/client_model",
@@ -10560,13 +10332,13 @@
    {
     "path": ".github/workflows/security.yaml",
     "kind": "ci",
-    "blob_sha": "4c279044a7a73568c93efefad5c79cde84bec776",
+    "blob_sha": "9336a40a240c08aeeeb0ca90f090943beb2bccb3",
     "bytes": 3572
    },
    {
     "path": ".github/workflows/tics.yaml",
     "kind": "ci",
-    "blob_sha": "5d5dea6cceb45c955bee79e6c726fd3991eeeb00",
+    "blob_sha": "e0ad7a0e30e90ff327d0e2a5bb6c0e312b54627f",
     "bytes": 2064
    }
   ],
@@ -10787,13 +10559,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T08:36:47Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-04T03:37:55Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-26",
+  "pushed_at": "2026-11-02",
   "stars": 20,
   "tree": {
    "sha": "95965b766f889212495d2880e7f37db303bb7241",
-   "etag": "W/\"39036ddce0e1632b71ecb8cd40491c0436100df7f4e884e3165a5b1ea9c2da12\"",
+   "etag": "W/\"dde875e6a65f9ae400fa9604b2bb680501af1d65c2343fdec3cd44bf314e3c33\"",
    "truncated": false,
    "path_count": 165,
    "matched": [
@@ -10855,15 +10628,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:58:19Z",
+  "collected_at": "2026-11-04T03:38:09Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-02",
+  "pushed_at": "2026-11-03",
   "stars": 19,
   "tree": {
-   "sha": "940c3cfc524cc266b6c1a31a2850292e449f2f47",
-   "etag": "W/\"b2cff7a080503b7a248ba80eb8774d449b1900457e50180e64637bd643918f5f\"",
+   "sha": "77c885ef241a7fc91058a95469b6d1c817819201",
+   "etag": "W/\"a5d667b75aaa27bf82721319c814c4f071e4aed8b62024cd0ffebb23ec5ce6e7\"",
    "truncated": false,
-   "path_count": 8568,
+   "path_count": 8578,
    "matched": [
     "examples/embed_rust/Cargo.toml",
     "tests/playwright/package.json",
@@ -10931,7 +10704,7 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "156f9bd6f8add090cd40dbb2a8773be4953a521d",
+    "blob_sha": "21cecdfbe7c79a48ae3c851b7ebf46930b7a4bb9",
     "bytes": 139227
    },
    {
@@ -10943,8 +10716,8 @@
    {
     "path": ".github/workflows/cosmocc-windows-e2e.yml",
     "kind": "ci",
-    "blob_sha": "76c8d0fc17bf23e3192f9bd42a76f13ce13076c9",
-    "bytes": 22046
+    "blob_sha": "fd4563b6fd9a49483855ead816f726d4c5ba0332",
+    "bytes": 22068
    },
    {
     "path": ".github/workflows/dco.yml",
@@ -11006,20 +10779,20 @@
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "23d86b8f2fcff660638abc8b72f3f2f7240e5e31",
-    "bytes": 78897
+    "blob_sha": "d396c9b45a41329bc26fcdcaba9c1f942a5148ed",
+    "bytes": 79002
    },
    {
     "path": ".github/workflows/windows-cosmocc.yml",
     "kind": "ci",
-    "blob_sha": "2c7bcadc8d9297ff094ed9e62b5af3c2549f6f8f",
-    "bytes": 38117
+    "blob_sha": "5e6e0ebe94f6b2127effb95f419822c1386f08aa",
+    "bytes": 38161
    },
    {
     "path": ".github/workflows/windows-source-build.yml",
     "kind": "ci",
-    "blob_sha": "665823dba05287ce99789c76588aa06b96e596a3",
-    "bytes": 88777
+    "blob_sha": "17e640c0807413c09dd84f1424c75e225fa2a2ec",
+    "bytes": 88799
    }
   ],
   "clues": {
@@ -14490,15 +14263,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T21:06:48Z",
+  "collected_at": "2026-11-04T03:46:58Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-02",
-  "stars": 10,
+  "pushed_at": "2026-11-03",
+  "stars": 11,
   "tree": {
-   "sha": "6b9cd480aee7a5b873c8c96dc651ebddfa11e818",
-   "etag": "W/\"bf68d0afc4a52cb8d354d73ada052f8063d652c0a5598a047ec1010e94e42009\"",
+   "sha": "b75cf4a26c22a7dfdae1e6cadc5dc010d67665e5",
+   "etag": "W/\"809136beb687506f6e33e7a11e845d4ef5ef5b434399420c42aa1fd8c7caee39\"",
    "truncated": false,
-   "path_count": 13650,
+   "path_count": 13651,
    "matched": [
     "api/go.mod",
     "web/package.json",
@@ -15525,13 +15298,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T08:19:19Z",
+  "collected_at": "2026-11-04T03:01:39Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-02",
+  "pushed_at": "2026-11-03",
   "stars": 688,
   "tree": {
-   "sha": "d1258c6df5e04ade53c668d21b614575f7050184",
-   "etag": "W/\"bf2dd2fcd86d565e9313b45b9e7a88005a5055859e30ccaa4dc36ef75d89dc74\"",
+   "sha": "e6c66c8f94c4108f63fc0f394000d53f4da6a488",
+   "etag": "W/\"4d426b63831f6e3bf76a156da9cb356265f471eee1eaa42075fa0ab696daf62e\"",
    "truncated": false,
    "path_count": 570,
    "matched": [
@@ -15568,7 +15341,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "41a91945a1d70af975775bad8ca16a95232b0ba2",
+    "blob_sha": "347d4c50285a128d3454ab0cf2bb17ba15b71892",
     "ecosystem": "npm",
     "bytes": 2712,
     "dev": [
@@ -15616,7 +15389,7 @@
    {
     "path": "examples/package.json",
     "kind": "dep",
-    "blob_sha": "dad01742a87a5c63736157898c13efcfe9624f1a",
+    "blob_sha": "da4fed8a55487a148c0e307f5fca69682a9c8725",
     "ecosystem": "npm",
     "bytes": 884,
     "names": [

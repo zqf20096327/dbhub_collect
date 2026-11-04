@@ -10189,13 +10189,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T07:50:54Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-04T03:34:44Z",
   "default_branch": "dev",
-  "pushed_at": "2026-10-06",
+  "pushed_at": "2026-11-03",
   "stars": 25,
   "tree": {
    "sha": "e80c93dbd12b9fa783f6ba3a5192f68f14864ec2",
-   "etag": "W/\"8938efa1dd003541f1eb9b22d5f4cf3d27be44f51dc93d80aac9eca57e7b1472\"",
+   "etag": "W/\"d4c256bb175327ae641089003f6279c56152f19258f058f3574f13a464c2d556\"",
    "truncated": false,
    "path_count": 101,
    "matched": [
@@ -10962,15 +10963,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T19:18:29Z",
+  "collected_at": "2026-11-04T03:38:07Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-26",
+  "pushed_at": "2026-11-03",
   "stars": 19,
   "tree": {
-   "sha": "b88bb2884230e5b04fc6ddf919f11122ff107be5",
-   "etag": "W/\"1094f83f655aea7e427a8d98fc586d9579aaf66b6eb388fbf9d793828ebd76cd\"",
+   "sha": "cf3bf58c98b7d1b9eca9f4e217d60d1257130d0f",
+   "etag": "W/\"f7e358dfd8288fde47517f78eee50df682b7bf3e6bb4216ae41d00c324749d4a\"",
    "truncated": false,
-   "path_count": 3021,
+   "path_count": 3075,
    "matched": [
     "package.json",
     "backend/go.mod",
@@ -10985,6 +10986,7 @@
     "backend/testdata/connector-conformance/Dockerfile",
     "backend/testdata/connector-conformance/kubernetes/Dockerfile",
     "backend/testdata/connector-conformance/protocols/Dockerfile",
+    "backend/testdata/connector-conformance/sqlserver/Dockerfile",
     ".github/workflows/ci.yml",
     ".github/workflows/codeql.yml",
     ".github/workflows/connector-conformance.yml",
@@ -11005,12 +11007,14 @@
    {
     "path": "backend/go.mod",
     "kind": "dep",
-    "blob_sha": "fb9632b612bd2486d709d9126b4ddf5d38514fb9",
+    "blob_sha": "8f86a4db6a9d7c6637c48cb0fee511f98933bda3",
     "ecosystem": "go",
-    "bytes": 1885,
+    "bytes": 2218,
     "names": [
      "github.com/ClickHouse/clickhouse-go/v2",
      "github.com/SE-I-T-Digital/go-sqlcipher",
+     "github.com/antlr4-go/antlr/v4",
+     "github.com/bytebase/parser",
      "github.com/creack/pty",
      "github.com/emersion/go-imap",
      "github.com/emersion/go-message",
@@ -11020,6 +11024,7 @@
      "github.com/jackc/pgx/v5",
      "github.com/klauspost/compress",
      "github.com/microcosm-cc/bluemonday",
+     "github.com/microsoft/go-mssqldb",
      "github.com/pierrec/lz4/v4",
      "github.com/pkg/sftp",
      "github.com/twmb/franz-go",
@@ -11040,6 +11045,8 @@
      "github.com/cespare/xxhash/v2",
      "github.com/go-faster/city",
      "github.com/go-faster/errors",
+     "github.com/golang-sql/civil",
+     "github.com/golang-sql/sqlexp",
      "github.com/google/uuid",
      "github.com/gorilla/css",
      "github.com/jackc/pgpassfile",
@@ -11051,13 +11058,14 @@
      "github.com/xdg-go/pbkdf2",
      "github.com/xdg-go/stringprep",
      "go.opentelemetry.io/otel",
-     "go.opentelemetry.io/otel/trace"
+     "go.opentelemetry.io/otel/trace",
+     "golang.org/x/exp"
     ]
    },
    {
     "path": "frontend/package.json",
     "kind": "dep",
-    "blob_sha": "1e32faa84658b68bb072ed8230c57529a0a94465",
+    "blob_sha": "04c049742f1fdeb10e01430664f631144dccf186",
     "ecosystem": "npm",
     "bytes": 4888,
     "names": [
@@ -11119,7 +11127,7 @@
    {
     "path": "packages/mcp/package.json",
     "kind": "dep",
-    "blob_sha": "407d54c11ac917d2048c577b89727714e19383db",
+    "blob_sha": "0bc433099aa29b82393002593b263505f709fc1b",
     "ecosystem": "npm",
     "bytes": 1863,
     "names": [
@@ -11146,11 +11154,11 @@
    {
     "path": "docker-compose.release.yml",
     "kind": "image",
-    "blob_sha": "fd26139fde7d244ee589547e9f03916ae2346241",
+    "blob_sha": "55bbc4d36ad0cd2b23c4a2fddb928a06287ebc98",
     "bytes": 1944,
     "images": [
-     "ghcr.io/aipermission/aipermission-backend:${AIPERMISSION_VERSION:-0.2.74}",
-     "ghcr.io/aipermission/aipermission-frontend:${AIPERMISSION_VERSION:-0.2.74}"
+     "ghcr.io/aipermission/aipermission-backend:${AIPERMISSION_VERSION:-0.2.75}",
+     "ghcr.io/aipermission/aipermission-frontend:${AIPERMISSION_VERSION:-0.2.75}"
     ]
    },
    {
@@ -11173,10 +11181,10 @@
    {
     "path": "frontend/Dockerfile",
     "kind": "image",
-    "blob_sha": "7dac14923598f8c3aec20123223d663782ae7d04",
-    "bytes": 1077,
+    "blob_sha": "4d9ed0d9f92c369f9930bc25cc865a4f5ce88f3b",
+    "bytes": 1099,
     "images": [
-     "node:24.22.1-alpine@sha256:06d7adf3e0ef61a13f1d28682726366f97a15aa1888c934d3ecec86c33918b53",
+     "node:24.22.2-alpine@sha256:8a32c8cf649a49915a66e81e7a609223c708d0adabf288ee3f4077d765542f85",
      "nginxinc/nginx-unprivileged:1.30.6-alpine@sha256:f5116ed4606f3eb015dd4a8e28cb9b351476dc0ad4bc6e9f93b19cec130cdf03"
     ]
    },
@@ -11211,15 +11219,24 @@
     ]
    },
    {
+    "path": "backend/testdata/connector-conformance/sqlserver/Dockerfile",
+    "kind": "image",
+    "blob_sha": "f2d7633c2d8652f217b14f45a00a3d236ceeb5b1",
+    "bytes": 446,
+    "images": [
+     "mcr.microsoft.com/mssql/server:2022-latest@sha256:cf8f0ab2ebe61feec2eed2629061a07d247f791c2a8ddda74a4ac9f06a291718"
+    ]
+   },
+   {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "1a6c1f480977af847572db902a970b8ee0f4fd07",
+    "blob_sha": "1de7a1a2b90d8040f3924b55b4d148492241e611",
     "bytes": 13506
    },
    {
     "path": ".github/workflows/codeql.yml",
     "kind": "ci",
-    "blob_sha": "a73f77f647deb3651be69626efb95ba6066b754d",
+    "blob_sha": "80d76c8a0790527d2fac42d877f56f2f14dec5b5",
     "bytes": 2054
    },
    {
@@ -11231,25 +11248,25 @@
    {
     "path": ".github/workflows/dependency-major-report.yml",
     "kind": "ci",
-    "blob_sha": "85c0aa6915dfd009d27eaf2f19f4ade1e217d22c",
+    "blob_sha": "1b643915b3d6fd34201c7254c3ac9115f643d99d",
     "bytes": 1608
    },
    {
     "path": ".github/workflows/native-dependency-freshness.yml",
     "kind": "ci",
-    "blob_sha": "343607be8c22dde83168b2a4fd945c6687c863d2",
+    "blob_sha": "b3cd8a124573b5f73f6b994023e58c3ab287db54",
     "bytes": 748
    },
    {
     "path": ".github/workflows/publish-images.yml",
     "kind": "ci",
-    "blob_sha": "8e2f57a112c67e3328f13e72ad4f096f7f89e843",
+    "blob_sha": "79d4fe1bf8ecced7f91838d6525b01b76318a9a1",
     "bytes": 3604
    },
    {
     "path": ".github/workflows/publish-mcp.yml",
     "kind": "ci",
-    "blob_sha": "eb88d1d07496c4ffccd85ae39134b509b6c0ff4a",
+    "blob_sha": "7c3ae0c22efb26f7ab0d7530c69a176cbf83e5b1",
     "bytes": 2323
    }
   ],
@@ -11290,6 +11307,10 @@
     "backend/internal/connectors/conformance/postgres_shared_ownership_test.go",
     "backend/internal/connectors/conformance/postgres_test.go",
     "backend/internal/connectors/conformance/postgres_typed_literal_test.go",
+    "backend/internal/connectors/conformance/sqlserver_cancellation_test.go",
+    "backend/internal/connectors/conformance/sqlserver_policy_test.go",
+    "backend/internal/connectors/conformance/sqlserver_results_test.go",
+    "backend/internal/connectors/conformance/sqlserver_test.go",
     "backend/internal/connectors/postgres/README.md",
     "backend/internal/connectors/postgres/backup_client.go",
     "backend/internal/connectors/postgres/backup_client_test.go",
@@ -11329,6 +11350,31 @@
     "backend/internal/connectors/postgres/restore_restricted_test.go",
     "backend/internal/connectors/postgres/wire_budget_test.go",
     "backend/internal/connectors/sqlsafe/postgres_typed_literal_test.go",
+    "backend/internal/connectors/sqlserver/DEPENDENCIES.md",
+    "backend/internal/connectors/sqlserver/README.md",
+    "backend/internal/connectors/sqlserver/actions.go",
+    "backend/internal/connectors/sqlserver/actions_test.go",
+    "backend/internal/connectors/sqlserver/client.go",
+    "backend/internal/connectors/sqlserver/config.go",
+    "backend/internal/connectors/sqlserver/connection_test.go",
+    "backend/internal/connectors/sqlserver/credential_input_test.go",
+    "backend/internal/connectors/sqlserver/lifetime_test.go",
+    "backend/internal/connectors/sqlserver/metadata.go",
+    "backend/internal/connectors/sqlserver/metadata_limits_test.go",
+    "backend/internal/connectors/sqlserver/query.go",
+    "backend/internal/connectors/sqlserver/query_test.go",
+    "backend/internal/connectors/sqlserver/readonly.go",
+    "backend/internal/connectors/sqlserver/readonly_functions.go",
+    "backend/internal/connectors/sqlserver/readonly_lexical_input.go",
+    "backend/internal/connectors/sqlserver/readonly_regression_test.go",
+    "backend/internal/connectors/sqlserver/readonly_test.go",
+    "backend/internal/connectors/sqlserver/result_types.go",
+    "backend/internal/connectors/sqlserver/result_types_test.go",
+    "backend/internal/connectors/sqlserver/test_connection.go",
+    "backend/testdata/connector-conformance/sqlserver/Dockerfile",
+    "backend/testdata/connector-conformance/sqlserver/init.sql",
+    "backend/testdata/connector-conformance/sqlserver/mssql.conf",
+    "backend/testdata/connector-conformance/sqlserver/start.sh",
     "backend/internal/connectors/postgres/apiadapter/README.md",
     "backend/internal/connectors/postgres/apiadapter/cleanup_evidence_sqlcipher_fixture_test.go",
     "backend/internal/connectors/postgres/apiadapter/cleanup_evidence_sqlcipher_test.go",
@@ -11395,6 +11441,7 @@
     "backend/internal/connectors/postgres/rolejournal/test_helpers_test.go",
     "backend/internal/connectors/postgres/rolejournal/transitions.go",
     "backend/internal/connectors/postgres/rolejournal/transitions_test.go",
+    "backend/internal/connectors/sqlserver/testdata/readonly-attacks.json",
     "frontend/src/connectors/templates/clickhouse/connector-family.tsx",
     "frontend/src/connectors/templates/clickhouse/console-model.ts",
     "frontend/src/connectors/templates/clickhouse/console.component.test.tsx",
@@ -11432,37 +11479,7 @@
     "frontend/src/connectors/templates/postgres/postgres-restore-retry.component.test.tsx",
     "frontend/src/connectors/templates/postgres/provision-result-contract.ts",
     "frontend/src/connectors/templates/postgres/provision-scope-picker.component.test.tsx",
-    "frontend/src/connectors/templates/postgres/provision-scope-picker.tsx",
-    "frontend/src/connectors/templates/postgres/provision-user-dialog.component.test.tsx",
-    "frontend/src/connectors/templates/postgres/provision-user-dialog.tsx",
-    "frontend/src/connectors/templates/postgres/provisioning-types.d.ts",
-    "frontend/src/connectors/templates/postgres/provisioning.component.test.ts",
-    "frontend/src/connectors/templates/postgres/provisioning.test.ts",
-    "frontend/src/connectors/templates/postgres/provisioning.ts",
-    "frontend/src/connectors/templates/postgres/use-postgres-backup-restore.component.test.tsx",
-    "frontend/src/connectors/templates/postgres/use-postgres-backup-restore.ts",
-    "frontend/src/connectors/templates/postgres/use-postgres-provisioning.component.test.tsx",
-    "frontend/src/connectors/templates/postgres/use-postgres-provisioning.ts",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/README.md",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/role-decision-consent.component.test.tsx",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/role-history-contract.component.test.ts",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/role-history-contract.ts",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/role-history-decision-dialog.component.test.tsx",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/role-history-dialog.component.test.tsx",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/role-history-dialog.tsx",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/role-history-identity.ts",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/role-history-loader.component.test.tsx",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/role-history-loader.tsx",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/role-history-pagination.component.test.tsx",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/role-history-types.ts",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/role-reconciliation-contract.component.test.ts",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/role-reconciliation-contract.ts",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/role-reconciliation-form.component.test.tsx",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/role-reconciliation-form.tsx",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/use-role-history.component.test.tsx",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/use-role-history.ts",
-    "frontend/src/connectors/templates/postgres/role-lifecycle/use-role-reconciliation.component.test.tsx",
-    "docs/connectors.md"
+    "frontend/src/connectors/templates/postgres/provision-scope-picker.tsx"
    ]
   },
   "fail_count": 0
@@ -14410,6 +14427,153 @@
     "https://github.com/manami-project/anime-offline-database",
     "https://www.livechart.me/"
    ]
+  },
+  "fail_count": 0
+ },
+ "Ben05-sys/QuantPilot": {
+  "fn": "Ben05-sys/QuantPilot",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-04T02:40:38Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-02",
+  "stars": 10,
+  "tree": {
+   "sha": "4b95134149dce0ef3ba7a7432cda2f4df2446bc9",
+   "etag": "W/\"0e4d4b70ef353253576f8c77dbfeb0325cd34bea87d76aa364cf70d859450db4\"",
+   "truncated": false,
+   "path_count": 73,
+   "matched": [
+    "requirements.txt",
+    ".github/workflows/ci.yml",
+    ".github/workflows/codeql.yml",
+    ".github/workflows/pages.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "requirements.txt",
+    "kind": "dep",
+    "blob_sha": "8347e7126f641be3b1862ee2ec82dafaae8000b2",
+    "ecosystem": "pypi",
+    "bytes": 792,
+    "names": [
+     "requests",
+     "pandas",
+     "numpy",
+     "yfinance",
+     "websockets",
+     "protobuf"
+    ]
+   },
+   {
+    "path": ".github/workflows/ci.yml",
+    "kind": "ci",
+    "blob_sha": "d45702849c56b1e880bf580c9bf0806ee25fa530",
+    "bytes": 4005
+   },
+   {
+    "path": ".github/workflows/codeql.yml",
+    "kind": "ci",
+    "blob_sha": "bfeb79fd6427a882ffc9db903253b10ad3199c46",
+    "bytes": 1330
+   },
+   {
+    "path": ".github/workflows/pages.yml",
+    "kind": "ci",
+    "blob_sha": "3b4fe76adc48d7077ffa3f6fcc1c25c383c45fde",
+    "bytes": 1671
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "CHANGELOG.md"
+   ],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "1vannce/self-portrait-studio-system": {
+  "fn": "1vannce/self-portrait-studio-system",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-04T02:41:44Z",
+  "default_branch": "main",
+  "pushed_at": "2026-09-22",
+  "stars": 3,
+  "tree": {
+   "sha": "e9e7ee9053c3dd6e0f9bd0af1769e1b437849287",
+   "etag": "W/\"89582382df09e1e47330827b70378a10e536f9961e9835755fc35381ee8cb182\"",
+   "truncated": false,
+   "path_count": 176,
+   "matched": [
+    "package.json",
+    ".github/workflows/ci.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "ce852718af5fe93f732f002df6b3e75a3c3ec20a",
+    "ecosystem": "npm",
+    "bytes": 1310,
+    "names": [
+     "@base-ui/react",
+     "@supabase/ssr",
+     "@supabase/supabase-js",
+     "class-variance-authority",
+     "cn",
+     "drizzle-orm",
+     "drizzle-zod",
+     "lucide-react",
+     "next",
+     "postgres",
+     "react",
+     "react-dom",
+     "shadcn",
+     "tw-animate-css",
+     "zod"
+    ],
+    "dev": [
+     "@tailwindcss/postcss",
+     "@testing-library/jest-dom",
+     "@testing-library/react",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "babel-plugin-react-compiler",
+     "dotenv",
+     "drizzle-kit",
+     "eslint",
+     "eslint-config-next",
+     "jsdom",
+     "tailwindcss",
+     "typescript",
+     "vitest"
+    ]
+   },
+   {
+    "path": ".github/workflows/ci.yml",
+    "kind": "ci",
+    "blob_sha": "0581e53763bb2cf4f98d87551ffc4380feee00db",
+    "bytes": 754
+   }
+  ],
+  "clues": {
+   "changelog": [
+    ".agents/skills/supabase-postgres-best-practices/CHANGELOG.md",
+    ".agents/skills/supabase/CHANGELOG.md"
+   ],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
   },
   "fail_count": 0
  }

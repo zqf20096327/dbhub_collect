@@ -3811,13 +3811,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T09:31:42Z",
+  "collected_at": "2026-11-04T02:49:12Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-02",
+  "pushed_at": "2026-11-03",
   "stars": 6392,
   "tree": {
-   "sha": "01faeb823f3c2c1181922edf03b78def2ecccf6d",
-   "etag": "W/\"d0be10e326d6baef2a13a6bbbd3c80d4fd3094ce285f0ab9ae6e0f9d56494b88\"",
+   "sha": "f29b44ea6e7b2143a5c09c1a346aa9febc0fb2a8",
+   "etag": "W/\"2574b4eb88d6858ab5d9ce0d968eae3e4ecf30e5a6b464ad2c87121abcb8291e\"",
    "truncated": false,
    "path_count": 9669,
    "matched": [
@@ -3829,8 +3829,7 @@
     "misc/dbt-materialize/pyproject.toml",
     "misc/dbt-materialize/requirements.txt",
     "misc/dbt-materialize/setup.py",
-    "misc/mcp-materialize-agents/pyproject.toml",
-    "misc/mcp-materialize/pyproject.toml",
+    "misc/materialize-sdk/Cargo.toml",
     "misc/python/requirements.txt",
     "misc/vscode-ext/package.json",
     "misc/wasm/Cargo.toml",
@@ -3881,11 +3880,10 @@
     "src/fivetran-destination/Cargo.toml",
     "src/frontegg-auth/Cargo.toml",
     "src/frontegg-client/Cargo.toml",
+    "src/frontegg-mock/Cargo.toml",
     "console/Dockerfile",
     "ci/builder/Dockerfile",
     "misc/dbt-materialize/Dockerfile",
-    "misc/mcp-materialize-agents/Dockerfile",
-    "misc/mcp-materialize/Dockerfile",
     "test/azurite/Dockerfile",
     "test/dbbench/Dockerfile",
     "test/dnsmasq/Dockerfile",
@@ -3905,6 +3903,8 @@
     "misc/helm-charts/operator/values.yaml",
     "misc/images/cli/Dockerfile",
     "misc/images/debezium/Dockerfile",
+    "misc/images/debian-base/Dockerfile",
+    "misc/images/distroless-prod-base/Dockerfile",
     ".github/workflows/afdocs_report.yml",
     ".github/workflows/cla.yml",
     ".github/workflows/claude.yml",
@@ -3919,9 +3919,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "5a06bdfc75ecb15f38eedfebbe67f3ca4b8fb8eb",
+    "blob_sha": "302dbe78d21bb86add29489c9a2f81d5532c846b",
     "ecosystem": "cargo",
-    "bytes": 28870
+    "bytes": 28889
    },
    {
     "path": "pyproject.toml",
@@ -3933,7 +3933,7 @@
    {
     "path": "console/package.json",
     "kind": "dep",
-    "blob_sha": "8e57855670a9a7b54d0ab07b2665752c767aae34",
+    "blob_sha": "82a69a81e7383ec3754baf50d684dede1c699466",
     "ecosystem": "npm",
     "bytes": 7298,
     "names": [
@@ -4095,9 +4095,9 @@
    {
     "path": "ci/builder/requirements.txt",
     "kind": "dep",
-    "blob_sha": "b7d0d491b4839f5ff1611b2302fc9e81ba4c42ee",
+    "blob_sha": "b6f398048d6658e4daf73abdafa8ffe1bd96db65",
     "ecosystem": "pypi",
-    "bytes": 2732,
+    "bytes": 2789,
     "names": [
      "aiohttp",
      "black",
@@ -4260,7 +4260,7 @@
    {
     "path": "misc/dbt-materialize/setup.py",
     "kind": "dep",
-    "blob_sha": "de381303e9f47d5db5fa0ed9f72971192bd31a61",
+    "blob_sha": "b08617d7eb1cc879868e131df93c377c7c874afa",
     "ecosystem": "setup_py",
     "bytes": 2213,
     "names": [
@@ -4271,36 +4271,11 @@
     ]
    },
    {
-    "path": "misc/mcp-materialize-agents/pyproject.toml",
+    "path": "misc/materialize-sdk/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "0a00607e8f5b9f4138d7afda40e0ce33125b038f",
-    "ecosystem": "pyproject",
-    "bytes": 1670,
-    "names": [
-     "mcp",
-     "psycopg-pool",
-     "psycopg",
-     "pydantic"
-    ]
-   },
-   {
-    "path": "misc/mcp-materialize/pyproject.toml",
-    "kind": "dep",
-    "blob_sha": "3c54aaa3d3c280bef665dfc4233ad0169f25aa13",
-    "ecosystem": "pyproject",
-    "bytes": 1710,
-    "names": [
-     "aiohttp",
-     "aiorwlock",
-     "fastapi",
-     "mcp",
-     "psycopg-pool",
-     "psycopg",
-     "pytest",
-     "pytest-asyncio",
-     "pyyaml",
-     "requests"
-    ]
+    "blob_sha": "aadd8ed52af893122d80fc59b8171107a347408e",
+    "ecosystem": "cargo",
+    "bytes": 3333
    },
    {
     "path": "misc/python/requirements.txt",
@@ -5212,9 +5187,9 @@
    {
     "path": "src/compute/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "52bbb70719030d238c24fb51409b817e446a8fc3",
+    "blob_sha": "c419a1abff4c366fd7ddbf7a4fce4b62f94ec359",
     "ecosystem": "cargo",
-    "bytes": 2554,
+    "bytes": 2591,
     "names": [
      "anyhow.workspace",
      "async-stream.workspace",
@@ -5243,6 +5218,7 @@
      "mz-repr",
      "mz-row-spine",
      "mz-rocksdb",
+     "mz-service",
      "mz-storage",
      "mz-storage-client",
      "mz-storage-operators",
@@ -5752,13 +5728,43 @@
     ]
    },
    {
+    "path": "src/frontegg-mock/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "0a0e40eb309f67c09bbcd88e59cae643b7a8b542",
+    "ecosystem": "cargo",
+    "bytes": 830,
+    "names": [
+     "anyhow.workspace",
+     "axum.workspace",
+     "axum-extra.workspace",
+     "base64.workspace",
+     "chrono.workspace",
+     "clap",
+     "hyper.workspace",
+     "jsonwebtoken.workspace",
+     "mz-frontegg-auth",
+     "mz-ore",
+     "serde.workspace",
+     "serde_json.workspace",
+     "tokio.workspace",
+     "tracing.workspace",
+     "tracing-subscriber.workspace",
+     "uuid.workspace"
+    ],
+    "dev": [
+     "frontegg.workspace",
+     "reqwest.workspace",
+     "openssl.workspace"
+    ]
+   },
+   {
     "path": "console/Dockerfile",
     "kind": "image",
-    "blob_sha": "914dcb2893ea6acd25d4ab3ce8abdd1f6876193a",
+    "blob_sha": "c3724603c79fe0cd859092991cbe8df4f84d65c9",
     "bytes": 2371,
     "images": [
-     "node:26-alpine@sha256:40cd011b55415bc894e45b02fdd5a5dfde056921b7d23a64c74f80497af48797",
-     "nginxinc/nginx-unprivileged:alpine@sha256:c3fed6436b61d2bf2201ec032c35c000871f7ed062dea5d586bc6bf4d0fdd140"
+     "node:26-alpine@sha256:c6ad9e9c1d80f6eb607c26b4b0a132ff7a2344fad1c78ea3baa2a7d4c8de6d94",
+     "nginxinc/nginx-unprivileged:alpine@sha256:b5047b9b76845eac124358373c6852377c52e4b05834a47647e955dd91cb8f1e"
     ]
    },
    {
@@ -5779,24 +5785,6 @@
     "bytes": 988,
     "images": [
      "python:3.14.8@sha256:455fc8bf2552c51738d27fde570c22bb0146d22f2e16e32a9baff8d2da94daf6"
-    ]
-   },
-   {
-    "path": "misc/mcp-materialize-agents/Dockerfile",
-    "kind": "image",
-    "blob_sha": "70bc899576a64bb033d3c3cb290bd22f093af6cb",
-    "bytes": 659,
-    "images": [
-     "python:3.14-alpine@sha256:f6a589d43c42b9e7f7dc67a12d37132491f362859a5d750607710cc56da3bc72"
-    ]
-   },
-   {
-    "path": "misc/mcp-materialize/Dockerfile",
-    "kind": "image",
-    "blob_sha": "70bc899576a64bb033d3c3cb290bd22f093af6cb",
-    "bytes": 659,
-    "images": [
-     "python:3.14-alpine@sha256:f6a589d43c42b9e7f7dc67a12d37132491f362859a5d750607710cc56da3bc72"
     ]
    },
    {
@@ -5862,10 +5850,10 @@
    {
     "path": "test/playwright/Dockerfile",
     "kind": "image",
-    "blob_sha": "1cef3852e140d66f660dc4ad90b67b7735b72e7a",
-    "bytes": 1121,
+    "blob_sha": "387f4900a96897c59f6528995438ef7fcb0fc6e0",
+    "bytes": 1002,
     "images": [
-     "node:24-trixie-slim@sha256:43b9ba1142b8dcf33fa8f922ca1be85714adc444e0586c7cf7726daaeabc1bea"
+     "node:26-trixie-slim@sha256:e4db4c914bf8ad241bd24804fc25d272d89bad97e68cdc8a1414862790a02c39"
     ]
    },
    {
@@ -5919,18 +5907,18 @@
    {
     "path": "console/misc/docker/Dockerfile",
     "kind": "image",
-    "blob_sha": "58a598022d92140480205f513943bc1186187eef",
+    "blob_sha": "144b3b2d27295f885a0028e95d18a1881b454f00",
     "bytes": 2569,
     "images": [
-     "node:26-alpine@sha256:40cd011b55415bc894e45b02fdd5a5dfde056921b7d23a64c74f80497af48797",
-     "nginxinc/nginx-unprivileged:alpine@sha256:6a23acdfca2b9cfbcec61419e3f1426bcbedb91362f2f19306a8567423bb4612"
+     "node:26-alpine@sha256:c6ad9e9c1d80f6eb607c26b4b0a132ff7a2344fad1c78ea3baa2a7d4c8de6d94",
+     "nginxinc/nginx-unprivileged:alpine@sha256:b5047b9b76845eac124358373c6852377c52e4b05834a47647e955dd91cb8f1e"
     ]
    },
    {
     "path": "misc/helm-charts/operator/values.yaml",
     "kind": "image",
-    "blob_sha": "d2d50198e5fe0952c539524151e96dddf8946602",
-    "bytes": 19699
+    "blob_sha": "5884eea0fb3d3bb650f8844eca019adb92bc05dd",
+    "bytes": 20807
    },
    {
     "path": "misc/images/cli/Dockerfile",
@@ -5948,6 +5936,25 @@
     ]
    },
    {
+    "path": "misc/images/debian-base/Dockerfile",
+    "kind": "image",
+    "blob_sha": "8c1d259b9bb74d65c8967d5394b1c469f3508f5f",
+    "bytes": 1594,
+    "images": [
+     "debian:13-slim@sha256:a99cfc517144bc59b1978475ec53b46ecabec7e43635402ee5b77cc54cd1b20a"
+    ]
+   },
+   {
+    "path": "misc/images/distroless-prod-base/Dockerfile",
+    "kind": "image",
+    "blob_sha": "f6d9516340cf7a73f3da0b87e6c69fdb4b552412",
+    "bytes": 3758,
+    "images": [
+     "debian:13-slim@sha256:a99cfc517144bc59b1978475ec53b46ecabec7e43635402ee5b77cc54cd1b20a",
+     "gcr.io/distroless/cc-debian13:debug-nonroot@sha256:8b33d821344902366f6ac0fd2cabf4c39d5b98abe37ebc9eb8c35943f8ede923"
+    ]
+   },
+   {
     "path": ".github/workflows/afdocs_report.yml",
     "kind": "ci",
     "blob_sha": "0c9e3c399e0b0ab3f3d17070561a31e05db5bfcd",
@@ -5962,14 +5969,14 @@
    {
     "path": ".github/workflows/claude.yml",
     "kind": "ci",
-    "blob_sha": "f799ec304bd45cec6b80ce4c7e4a42ea055bbb36",
+    "blob_sha": "b9b14613e8aaff2355a297feb3543ce935960630",
     "bytes": 2221
    },
    {
     "path": ".github/workflows/linear_links.yml",
     "kind": "ci",
-    "blob_sha": "df1ff34089eadedb35b24e2ff6626c9f061243e0",
-    "bytes": 2365
+    "blob_sha": "17a99888310df59cf4e99842e65a923e25415a88",
+    "bytes": 2386
    },
    {
     "path": ".github/workflows/slack_notify_design_doc.yml",
@@ -7682,13 +7689,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T12:26:25Z",
+  "collected_at": "2026-11-04T02:54:07Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-11-03",
   "stars": 2551,
   "tree": {
    "sha": "72a25020ee0db2c671851788be22b0a47bcfa506",
-   "etag": "W/\"c654d6ff0002aae1674b354fd2180e75e1565d9ef77dba7ebe23b35520f4cc8d\"",
+   "etag": "W/\"7b2108147ec20fb6a0639008754eb68edb853a7e78e215785741da51648da777\"",
    "truncated": false,
    "path_count": 769,
    "matched": [
@@ -9416,15 +9423,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:35:50Z",
+  "collected_at": "2026-11-04T03:09:07Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-01",
-  "stars": 262,
+  "pushed_at": "2026-11-03",
+  "stars": 261,
   "tree": {
-   "sha": "24bcffdbe639183c45279b3e49f53be7b39a4c81",
-   "etag": "W/\"78885bf492c34e84b4c2be5f7df940cf86568f46878f16d62549faf860a14bad\"",
+   "sha": "c7baae64941d4d6b32f1a144fc5f2715c8d6c4c2",
+   "etag": "W/\"8c3332ba3ff025d8f10bebdefe65623bb02dee9fa25b8a3de32086ec45c866fb\"",
    "truncated": false,
-   "path_count": 618,
+   "path_count": 639,
    "matched": [
     "package.json",
     "Dockerfile",
@@ -9441,9 +9448,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "fc00a03233dd1a56f8c63d526ce0f72005394065",
+    "blob_sha": "ccafffb79fd23fc1ee21032b2e526bd2bb47b5a5",
     "ecosystem": "npm",
-    "bytes": 2252,
+    "bytes": 2341,
     "names": [
      "@base-ui/react",
      "@dnd-kit/core",
@@ -9468,7 +9475,8 @@
      "shadcn",
      "tailwind-merge",
      "tw-animate-css",
-     "zod"
+     "zod",
+     "domhandler"
     ],
     "dev": [
      "@axe-core/playwright",
@@ -9487,7 +9495,9 @@
      "sql.js",
      "tailwindcss",
      "typescript",
-     "vitest"
+     "vitest",
+     "axe-core",
+     "playwright-core"
     ]
    },
    {
@@ -9748,15 +9758,16 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:28:18Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-04T03:12:37Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-29",
-  "stars": 174,
+  "pushed_at": "2026-11-03",
+  "stars": 179,
   "tree": {
-   "sha": "591f3022ef43987878bff93d9f348d2b716d7ef4",
-   "etag": "W/\"6db9e204cfe957f2daef7523c5c05a5372e0afc37e2501ae3dfa8589290c16df\"",
+   "sha": "ddfd47467cae8d5e7ccda6364b5b3236ca2d389d",
+   "etag": "W/\"af180fdcae050b230e8dfad49ef91c49af837321f55e5f33580e6002f92836cd\"",
    "truncated": false,
-   "path_count": 453,
+   "path_count": 454,
    "matched": [
     "go.mod",
     "desktop/package.json",
@@ -10262,13 +10273,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T04:47:58Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-04T03:16:23Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-30",
-  "stars": 121,
+  "pushed_at": "2026-11-03",
+  "stars": 120,
   "tree": {
    "sha": "098c9d1948ecf768e4bb4d7653e279944e502b22",
-   "etag": "W/\"66e8ec36c00444dd52890671ee585cd3c8ee50399a6281b44b78e230dad7b899\"",
+   "etag": "W/\"0249c7b54a58923decd78a746abaf6974781e66b14ad6bc4092aedb25c2ce2cf\"",
    "truncated": false,
    "path_count": 605,
    "matched": [
@@ -10619,13 +10631,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T18:42:37Z",
+  "collected_at": "2026-11-04T03:18:11Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-26",
+  "pushed_at": "2026-11-02",
   "stars": 101,
   "tree": {
    "sha": "42b5f5e73ac66fa4b56002d49e50e38a753dd124",
-   "etag": "W/\"3259b7d6656a8dfc3e64d4c9a6633d68efb809b55e47446ec457d95c728aebc7\"",
+   "etag": "W/\"ac31e7f575038e231450924ca0fb1b3fb6ecfd8c53c94954122cf1de86ff8cde\"",
    "truncated": false,
    "path_count": 339,
    "matched": [
@@ -11955,15 +11967,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T18:56:28Z",
+  "collected_at": "2026-11-04T03:26:19Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-31",
+  "pushed_at": "2026-11-02",
   "stars": 47,
   "tree": {
-   "sha": "9aaa828660e71484edc47b4325f8c512a76743d1",
-   "etag": "W/\"18dfd03a437849c05f154509568c97cfc2871415c6c24320c6727f13735c22cd\"",
+   "sha": "7d3c1b568e7aa5a9ad6e2576d8f8f1c27a2bf046",
+   "etag": "W/\"1e2c4ca44f2e3afaaea9d4adca87f0b404f5ee2a09b2b4d3710a60500e01f95c\"",
    "truncated": false,
-   "path_count": 313,
+   "path_count": 314,
    "matched": [
     ".github/workflows/create-github-release.yml",
     ".github/workflows/main.yml"
@@ -11979,8 +11991,8 @@
    {
     "path": ".github/workflows/main.yml",
     "kind": "ci",
-    "blob_sha": "436621c37924b4b3b18aa6bd0d791aca0d90c990",
-    "bytes": 7369
+    "blob_sha": "8c40a6cbf252b50e8f64aee6c821b341064d5819",
+    "bytes": 7608
    }
   ],
   "clues": {
@@ -12506,15 +12518,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T20:52:56Z",
+  "collected_at": "2026-11-04T03:31:11Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-01",
-  "stars": 31,
+  "pushed_at": "2026-11-03",
+  "stars": 32,
   "tree": {
-   "sha": "461f4d4420d425ee6edcb0fd455ec8250aa49e35",
-   "etag": "W/\"fa9bdbdcaec0236692de802d876620468b93a35648fa7ff97f50fab815d48959\"",
+   "sha": "a2d5e0b5e37b7d34cc4d669bbd9b22dea8dcbcbc",
+   "etag": "W/\"21c4e6b8dc627f87921804fbc9179f0f584c4a82560edf6d8401ee2281b7275a\"",
    "truncated": false,
-   "path_count": 992,
+   "path_count": 997,
    "matched": [
     "pyproject.toml",
     "agentwatch-landing/package.json",
@@ -12539,7 +12551,7 @@
    {
     "path": "pyproject.toml",
     "kind": "dep",
-    "blob_sha": "8aee4806c1ccb0c32cc16b9c2a193fd706448800",
+    "blob_sha": "2297a6c165c6394d571ecb688b8d156aa780648d",
     "ecosystem": "pyproject",
     "bytes": 5665,
     "names": [
@@ -13054,20 +13066,22 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T08:41:26Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-04T03:38:15Z",
   "default_branch": "master",
-  "pushed_at": "2026-07-02",
+  "pushed_at": "2026-11-02",
   "stars": 19,
   "tree": {
-   "sha": "ea956a862dcd8687340d57fd2db3c86e8e2812cd",
-   "etag": "W/\"40b94b8a212a3d5db50cffd249b366f09ced85a7cfe09e514791114d064250e9\"",
+   "sha": "5038de67654a256afd564c596879b5c0a8e6d3cc",
+   "etag": "W/\"accf0bb1c0f26eafaa559742278548906cf44fe31eab670d5badc4f23ff284c1\"",
    "truncated": false,
-   "path_count": 408,
+   "path_count": 411,
    "matched": [
     "docker/Dockerfile",
     ".github/workflows/build-check.yml",
     ".github/workflows/docker-check.yml",
     ".github/workflows/format-check.yml",
+    ".github/workflows/pages.yml",
     ".github/workflows/test-check.yml"
    ]
   },
@@ -13100,6 +13114,12 @@
     "bytes": 2692
    },
    {
+    "path": ".github/workflows/pages.yml",
+    "kind": "ci",
+    "blob_sha": "944d1fa82faf10b14d2f3dcc80b34dc14dbf4d2e",
+    "bytes": 766
+   },
+   {
     "path": ".github/workflows/test-check.yml",
     "kind": "ci",
     "blob_sha": "a144b6ba520429bdcd6cf9e36169c02621b16451",
@@ -13119,13 +13139,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T08:44:42Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-04T03:38:30Z",
   "default_branch": "master",
-  "pushed_at": "2025-03-05",
+  "pushed_at": "2026-11-03",
   "stars": 19,
   "tree": {
    "sha": "ccf56df1095cac9f0bed4e95b4284eab4c5d37c3",
-   "etag": "W/\"1f797a0c8e3ee94a9590e9dfd3f3ec53a1862e61ff1d03ce777fa9730762c343\"",
+   "etag": "W/\"cd3ed1bfcb244b0b50b911d6940b620b9ab4f236d70146c31d56aed4ca7fbf1b\"",
    "truncated": false,
    "path_count": 41,
    "matched": [
@@ -14346,13 +14367,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T19:34:07Z",
+  "collected_at": "2026-11-04T03:45:40Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-31",
+  "pushed_at": "2026-11-02",
   "stars": 12,
   "tree": {
    "sha": "dbb433cef795b73127430d8e712202c3a6cd573d",
-   "etag": "W/\"ac4a8d2fc9e2954f6d12e0a78cb81c8dceadb1b96527f59219a5456c47d30e60\"",
+   "etag": "W/\"0ec92a64ceb04c59f80d188de8009fc1fc77abf544b2402beabfa935cfaab006\"",
    "truncated": false,
    "path_count": 478,
    "matched": [
@@ -14864,32 +14885,53 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:51:04Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-04T03:51:24Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-23",
+  "pushed_at": "2026-11-03",
   "stars": 4,
   "tree": {
-   "sha": "8fe76b5657617c5c6cf0ce02659c8cf521437899",
-   "etag": "W/\"6c9a191a65299a1b2191b90c67dc4c2f6c4668a8c83a87abf3b176d468cbde3d\"",
+   "sha": "724f630062d6be6b070d384e5851834d57c2c4b5",
+   "etag": "W/\"e41af71b5f8d971d1c14cc25431b47ed3e8ebf27fd5007a4324f06cece161aa6\"",
    "truncated": false,
-   "path_count": 144,
+   "path_count": 236,
    "matched": [
-    "pyproject.toml"
+    "pyproject.toml",
+    "frontend/package.json"
    ]
   },
   "files": [
    {
     "path": "pyproject.toml",
     "kind": "dep",
-    "blob_sha": "228a5c6aad9f0f886e060625bdf1638f9824503f",
+    "blob_sha": "de486b825a79a940578495ebe8e9971902a3da9a",
     "ecosystem": "pyproject",
-    "bytes": 5760,
+    "bytes": 6806,
     "names": [
      "typer",
      "pydantic",
      "pyyaml",
      "rich",
-     "cryptography"
+     "cryptography",
+     "websocket-client"
+    ]
+   },
+   {
+    "path": "frontend/package.json",
+    "kind": "dep",
+    "blob_sha": "01580dbbbf361f11244113c0adb14740db6ae7b4",
+    "ecosystem": "npm",
+    "bytes": 417,
+    "names": [
+     "@vicons/ionicons5",
+     "naive-ui",
+     "vue",
+     "vue-router"
+    ],
+    "dev": [
+     "@vitejs/plugin-vue",
+     "typescript",
+     "vite"
     ]
    }
   ],
@@ -14902,7 +14944,9 @@
     "tests/core/adapters/test_scheduler.py",
     "src/auto_signin_kit/core/adapters/__init__.py",
     "src/auto_signin_kit/core/adapters/client_discovery.py",
+    "src/auto_signin_kit/core/adapters/device_info.py",
     "src/auto_signin_kit/core/adapters/log_dir.py",
+    "src/auto_signin_kit/core/adapters/mac_keychain.py",
     "src/auto_signin_kit/core/adapters/native_helper.py",
     "src/auto_signin_kit/core/adapters/platform_info.py",
     "src/auto_signin_kit/core/adapters/win_dpapi.py",
@@ -15107,13 +15151,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T11:56:58Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-04T03:52:59Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-30",
+  "pushed_at": "2026-11-03",
   "stars": 3,
   "tree": {
    "sha": "4208db17e2b145e3677407eb8b5144fb61a7bf7f",
-   "etag": "W/\"8b29b098a59d9da9442d43ccfbb4215c00384c327bfe6c467124bf0da5317a71\"",
+   "etag": "W/\"0b04350c23204cf3be0777ae2ee85f528d9a0f2d61e738bd8c2ee91c3b8dd2ed\"",
    "truncated": false,
    "path_count": 432,
    "matched": [
@@ -16203,6 +16248,107 @@
     "apps/web/src/lib/changelog.ts"
    ],
    "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "GUYI-AI/gugu-supabase": {
+  "fn": "GUYI-AI/gugu-supabase",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-04T02:41:09Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-03",
+  "stars": 9,
+  "tree": {
+   "sha": "54d480d6962b88de6b4d486b5eda3bbc115f5633",
+   "etag": "W/\"2fe616b36eb4b605c34731dec83315e263a59aa51c7a231de72a3352bdc3b2a3\"",
+   "truncated": false,
+   "path_count": 305,
+   "matched": [
+    "package.json",
+    "packages/files-core/package.json",
+    "services/files/package.json",
+    "services/files/Dockerfile",
+    "services/files/Dockerfile.dockerignore",
+    ".github/workflows/ci.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "099f49ed132e8015ee314acf213e41abb09b0bc8",
+    "ecosystem": "npm",
+    "bytes": 978,
+    "dev": [
+     "@supabase/supabase-js",
+     "@hocuspocus/provider",
+     "@types/node",
+     "@types/pg",
+     "jose",
+     "pg",
+     "typescript",
+     "vitest",
+     "yjs",
+     "supabase"
+    ]
+   },
+   {
+    "path": "packages/files-core/package.json",
+    "kind": "dep",
+    "blob_sha": "ab954fde1a94754ac2ad73f9177edf4a2ebd68e8",
+    "ecosystem": "npm",
+    "bytes": 981,
+    "names": [
+     "yjs"
+    ]
+   },
+   {
+    "path": "services/files/package.json",
+    "kind": "dep",
+    "blob_sha": "42c6764146756245a398434ff4c5e08b31073ddf",
+    "ecosystem": "npm",
+    "bytes": 511,
+    "names": [
+     "@gugu/files-core",
+     "@hocuspocus/server",
+     "jose",
+     "pg",
+     "y-protocols",
+     "yjs"
+    ]
+   },
+   {
+    "path": "services/files/Dockerfile",
+    "kind": "image",
+    "blob_sha": "2b470a82f03575ab7ba54b62ef406cc9b3a5ebd9",
+    "bytes": 1316,
+    "images": [
+     "${NODE_IMAGE}"
+    ]
+   },
+   {
+    "path": "services/files/Dockerfile.dockerignore",
+    "kind": "image",
+    "blob_sha": "b0e2b2ecaf229f58ba4ec8a6356ff661f935f51e",
+    "bytes": 66
+   },
+   {
+    "path": ".github/workflows/ci.yml",
+    "kind": "ci",
+    "blob_sha": "086a36b752785468a95988fd6341ec9e030ac0cb",
+    "bytes": 2204
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [
+    "README.zh-CN.md"
+   ],
    "docs_matrix": [],
    "paths": []
   },
