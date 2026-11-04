@@ -55,7 +55,7 @@
 - **防坑**：atomic_write 轮转三副本——写 audit 用同款机制勿裸写（[[atomic-write-rotation]]）
 - **依据**：方案 §2.5
 
-### T0b 历史出池回流候选（止血≠回血） ｜✅ 2026-11-03 完成（__HASH__；只读历史产清单，不碰 pool）
+### T0b 历史出池回流候选（止血≠回血） ｜✅ 2026-11-03 完成（b4cef612；只读历史产清单，不碰 pool）
 - **结果**：`tools/pool_return_candidates.py` → 出池 4,764 仓（readme_state 累积 36,708 − 现池 31,947）分四类：**有归属误杀 836**（解读 dbs 非空却出池，OtterMind/sqlx 13 库等，建议 overrides 签发；其中证据 gone 10 个维持）、**证据草案 44**（unattr draft，签发候选）、**有指纹可重扫 167**、**设计内剔除 3,717**（其中 3,424 按 10-09 桶剔口径重建注记：已解读且 db_verdicts 空——49767ea9 无名单留档，按口径近似重建非逐仓名单；verdict 分布 no_evidence 2,250/oos 819/edu 96 与设计吻合）。blocklist 核对过（db_profiles.exclude_repos+exclude_users.txt，非 overrides）：误杀组 0 屏蔽命中。清单 state/pool_return_candidates.json/.md，只建议不执行
 - **目标**：T0 只挡未来误杀；已出池的 sqlc 式仓要捞回——用快照历史差集生成回流候选清单
 - **输入**：`lib/pool_history.py`（快照历史查询）；`state/unattr_verdicts.json`（当时证据状态）；dbhub_page 卡片清单
