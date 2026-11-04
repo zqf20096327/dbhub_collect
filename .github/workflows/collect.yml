@@ -34,6 +34,17 @@ jobs:
 
       - run: pip install requests
 
+      # T5a 绿门（2026-11-04）：attribution 引擎各卡单测并入采集前置自检链——
+      # 以前只有 evidence.yml 跑 evidence 自检，引擎坏了要等下次全池扫描才发现。
+      # 全部离线零 API（合成宇宙），~1 分钟；红了当晚采集停（绿门语义）。
+      - name: 离线自检绿门（evidence + attribution 全家 + collect 两闸，零 API）
+        run: |
+          for f in evidence/selftest_evidence.py attribution/selftest_*.py \
+                   collect/selftest_exit_gate.py collect/selftest_readme_relay.py; do
+            python "$f" >/dev/null || { echo "::error::自检失败：$f"; exit 1; }
+          done
+          echo "11 套自检全绿"
+
       - name: 池采集·国际（stars>=10 + 新项目窗口，断点续采）
         if: ${{ (github.event.inputs.limit || '0') == '0' }}
         env:
@@ -119,6 +130,17 @@ jobs:
           pip install zstandard >/dev/null
           python tools/release_archive.py rotate --apply || echo "::warning::滚动归档失败（次晚自动补漏）"
           rm -rf _archive_tmp
+
+      # T5a 增量挂钩（2026-11-04）：evidence 各班（3h 一班+打满自愈重采）落地后
+      # 当晚收口重判——新证据信号当天进回写结论；interpret 恢复后此步同时兜住
+      # 夜间新解读重开的空适配黑洞。零 API ~10s 幂等；失败只警告不损采集数据。
+      - name: 程序适配回写（evidence 增量后重判 + 补全率报表）
+        run: |
+          python attribution/writeback.py || echo "::warning::回写失败（不影响当晚采集数据）"
+          {
+            echo "## 归属补全率（T4b 程序适配回写）"
+            python -c "import json; c=json.load(open('state/attribution_writes.json',encoding='utf-8'))['counts']; print(f\"- 入圈 {c['in_scope']} · 回写 dbs {c['fill']} · 打原因 {c['tag']} · 池内未解读 {c['pool_uninterpreted']}\")"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: 提交并推送数据
         run: |
