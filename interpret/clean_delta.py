@@ -86,6 +86,9 @@ def save(key: str, delta: list, fn: str = "") -> bool:
     """增量写一个条目：键已存在跳过（返回 False）。失败不抛——B1 是旁路，
     任何异常只损失留档，不许影响判定主流程。"""
     try:
+        SHARD_DIR.mkdir(parents=True, exist_ok=True)   # 1104 修：漏建目录导致
+        # save 全程静默失败（CI 首验 30 条 delta 全丢，真因=照抄 interp_store
+        # _write_shard 时漏了 mkdir 这一行）
         p = shard_path(_bucket(key))
         shard = json.loads(p.read_text(encoding="utf-8")) if p.is_file() else {}
         if key in shard:
