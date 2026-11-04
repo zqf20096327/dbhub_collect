@@ -6,8 +6,10 @@ on:
   # 12,028 空适配黑洞清零，夜跑重解读会重新翻开空记录。恢复条件：v1.5 新 prompt
   # 上线后连跑 golden_eval（[[golden-eval-gate]] 以最近 v3 基线为准）不退再开。
   # 手动入口保留——金标回归/补解读急件可随时 dispatch。
-  # schedule:
-  #   - cron: '23 6,18 * * *'    # 一天两窗（UTC 06:23/18:23 = 北京 14:23/02:23）。
+  # 2026-11-04 定时恢复（用户指令）：v4 判定卷已上线为默认模式（E1 落地+双模型
+  # 验证 140 条零拒收；金标门槛按 11-03 退役口径=人工金标重建后回填）。
+  schedule:
+    - cron: '23 6,18 * * *'    # 一天两窗（UTC 06:23/18:23 = 北京 14:23/02:23）。
   #                           # 23 分错峰：整点 0 分是全网 cron 高峰会被 GitHub 丢弃
   #                           #（10-01/10-07 实测 12 窗只来 4-8 窗）。
   #                           # 语料空转稳态后 12 窗/天纯耗 Actions 分钟，10-30 降为 2 窗；
@@ -24,6 +26,11 @@ on:
         description: '本次最多解读条数'
         type: number
         default: 50000
+      mode:
+        description: '解析模式（v4=判定卷·最新，v4t=文本卷·头部，v3/v2=旧版回滚）'
+        type: choice
+        options: [v4, v4t, v3, v2]
+        default: v4
 permissions:
   contents: write
 concurrency:
@@ -51,7 +58,7 @@ jobs:
 
       # 断点续跑：sha 缓存命中自动跳过；额度耗尽（1113）脚本自带窗口等待。
       # 定时窗预算 100min（给 db_scan 和提交留余量）；手动触发吃满 6h
-      - name: AI 解读（v2：程序提名 + 逐候选裁决）
+      - name: AI 解读（v4 判定卷默认；dispatch 可切 v4t 文本卷 / v3 旧版回滚）
         env:
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
           AI_BASE_URL: https://open.bigmodel.cn/api/coding/paas/v4
@@ -66,8 +73,9 @@ jobs:
             [ "$REM" -lt 600 ] && REM=600
             BUDGET=$(( REM / 60 )); LIMIT="${{ github.event.inputs.max_items || 50000 }}"
           fi
-          echo "本窗解读预算 ${BUDGET} 分钟 · 上限 ${LIMIT} 条"
-          python interpret/interpret.py --concurrency 4 \
+          MODE="${{ github.event.inputs.mode || 'v4' }}"    # 1104 起：最新解析=v4 判定卷
+          echo "本窗解读预算 ${BUDGET} 分钟 · 上限 ${LIMIT} 条 · 模式 ${MODE}"
+          python interpret/interpret.py --mode "$MODE" --concurrency 4 \
             --max-items "$LIMIT" --max-minutes "$BUDGET" $EXTRA
 
       # 与采集并行时推送可能撞车：重试 + 变基，最多 5 轮
@@ -76,7 +84,8 @@ jobs:
           git config user.name "zqf20096327"
           git config user.email "zqf20096327@users.noreply.github.com"
           git add state/interp_cache_shards state/interp_state.json \
-                  state/db_scan.json state/manual_review.json
+                  state/db_scan.json state/manual_review.json \
+                  state/clean_delta_shards
           git diff --cached --quiet && { echo "无变更"; exit 0; }
           git commit -m "解读 $(date -u +%F\ %H:%M) · 缓存 $(python -c "import sys;sys.path.insert(0,'lib');import interp_store;print(len(interp_store.load_cache()))" 2>/dev/null || echo '?') 条" -q
           for i in 1 2 3 4 5; do

@@ -52,7 +52,8 @@ HERE = ROOT                      # 历史引用兼容：统一指向项目根
 import strategy                    # noqa: E402
 from gh import atomic_write_json, load_env  # noqa: E402
 from interp_store import InterpCacheStore  # noqa: E402  分片缓存（10-06 起，兼容读旧单文件）
-from rm_clean import clean_readme   # noqa: E402
+from rm_clean import clean_readme, CLEAN_VER   # noqa: E402
+from clean_delta import compute_delta as _cd_delta   # noqa: E402  B1 旁路：只算不落盘
 from db_scan import number_lines, _COMPILED as _DB_COMPILED  # noqa: E402  行号口径与 db_scan 严格一致
 import runlog                       # noqa: E402  条目级 jsonl（优化决策的数据燃料）
 
@@ -60,6 +61,108 @@ import runlog                       # noqa: E402  条目级 jsonl（优化决策
 # ver 只标记架构（2=引句子串，3=行号指认），prompt_ver 区分架构内部的提示词迭代。
 # 3.3：desc-only 候选标注「仅简介提及」；缺 quote 降级为丢该库裁决（见 check_verdicts*）。
 PROMPT_VER = "3.3"
+
+# v4 判定层（E1，工作包清单 v4 /《AI方案》v2）：判定卷与作文卷分离，判定卷
+# 零 db 字段（R6）、零 identity（作文卷另案 E2）、纯枚举+行号 ~100-130B/条。
+# 缓存键 v4 = "<sha>#v4"（sha+prompt_ver 键控，存量 v3 缓存原样保留）。
+PROMPT_VER_V4 = "4.0"
+
+# E2 文本层（作文卷）：仅头部项目（enrich head/mid 口径=star≥100），产 identity
+# 四件套；缓存键 sha+prompt_ver(text) 与判定键独立——文本提示词升级不作废判定缓存。
+PROMPT_VER_TEXT = "4.0"
+TEXT_STAR_MIN = 100            # enrich 分层：head=1000 / mid=100（head+mid ≈ 20% 池）
+
+
+def text_key(sha: str) -> str:
+    """作文卷缓存键（E2：《AI方案》§5 缓存键分层）。"""
+    return f"{sha}#txt{PROMPT_VER_TEXT}"
+
+
+SCHEMA_TEXT = """输出一个 JSON 对象（只输出 JSON，不要其他文字）。你做的是文本卷：为一篇 README 写中文解读四件套：
+{{
+ "identity": {{
+   "one_liner": "一句话定位（≤30字，它是什么+核心机制）",
+   "review": "中文解读（60-120字：做什么+给谁用+关键机制/限制；须包含描述之外的信息）",
+   "highlights": ["能力事实 2-3 条"],
+   "use_cases": ["适用场景 2-3 条"]
+ }}
+}}
+只输出上述四个字段，不输出任何分类/判定字段。"""
+
+PROMPT_TMPL_TEXT = """你是数据库开源生态的编目员，为周报项目库写中立的项目解读。
+{contract}
+{schema}
+
+仓库：{fn}
+描述：{desc}
+主题标签：{topics}
+--- README 开始（「L行号|原文」编号，可见行号范围 {line_range}）---
+{readme}
+--- README 结束 ---"""
+
+
+def build_text_prompt(fn: str, pool: dict) -> dict:
+    """E2 文本卷 prompt：与判定卷同输入（清理后 README，同行号口径）。"""
+    it = pool.get(fn) or {}
+    path = HERE / "data" / "readmes" / (fn.replace("/", "__") + ".md")
+    raw_text = path.read_text(encoding="utf-8", errors="ignore") if path.is_file() else ""
+    text = clean_readme(raw_text)
+    body, cum, numbered = [], 0, {}
+    for no, ln in number_lines(text):
+        if cum > 10000:
+            break
+        body.append(f"L{no}|{ln}")
+        numbered[no] = ln
+        cum += len(ln) + 1
+    prompt = PROMPT_TMPL_TEXT.format(
+        contract=NEUTRALITY_CONTRACT, schema=SCHEMA_TEXT, fn=fn,
+        desc=(it.get("description") or "")[:300],
+        topics=",".join((it.get("topics") or [])[:12]),
+        readme="\n".join(body) or "（无 README 正文）",
+        line_range=f"L1–L{max(numbered)}" if numbered else "无")
+    return {"prompt": prompt, "numbered": numbered, "desc": (it.get("description") or "")[:300],
+            "stats": {"in_raw_chars": len(raw_text), "in_clean_chars": len(text),
+                      "prompt_chars": len(prompt)}}
+
+
+def validate_text(obj: dict, desc: str) -> tuple[dict | None, list[str]]:
+    """E2 文本卷校验：四件套齐备、长度带、review 信息增量、禁词。
+    自由文本不设一致率门槛（验收=人工质量抽检）。"""
+    errs = []
+    if not isinstance(obj, dict):
+        return None, ["输出非对象"]
+    if set(obj) - {"identity"}:
+        errs.append("文本卷只允许 identity 键（判定字段属判定卷）")
+    ident = obj.get("identity") or {}
+    one = (ident.get("one_liner") or "").strip()
+    review = (ident.get("review") or "").strip()
+    hl = ident.get("highlights") or []
+    uc = ident.get("use_cases") or []
+    if not one or len(one) > 50:
+        # 真机实测（1104 文本卷首跑 20/20 拒收）：模型常态输出 31-40 字，30 字硬卡
+        # 全灭。30/60-120 是 v3 的【质量统计口径】（94.3% 合规）不是合规门槛——
+        # 校验只拒离谱值，常规超长靠提示词与人工抽检治理
+        errs.append(f"one_liner 非法（须 1-50 字）: {len(one)}")
+    if review and not (30 <= len(review) <= 300):
+        errs.append(f"review 长度越带（须 30-300 字）: {len(review)}")
+    # 1104 deepseek 实测：模型常态给 4 条（提示词说 2-3）——同 ai_kind 缺键形态，
+    # 属"提示词说了模型不做"，按容量放行 + 程序裁到 3 条，不整条拒
+    if not isinstance(hl, list) or not (1 <= len(hl) <= 5):
+        errs.append("highlights 非法（1-5 条）")
+    else:
+        hl = hl[:3]
+    if not isinstance(uc, list) or not (1 <= len(uc) <= 5):
+        errs.append("use_cases 非法（1-5 条）")
+    else:
+        uc = uc[:3]
+    if review and not info_gain(review, desc):
+        errs.append("review 无信息增量（须包含描述之外 ≥3 个实义信息点）")
+    errs += neutral_violations(obj)
+    if errs:
+        return None, errs
+    return {"identity": {"one_liner": one, "review": review,
+                         "highlights": hl, "use_cases": uc}}, []
+
 
 log = logging.getLogger("interpret")
 
@@ -245,6 +348,174 @@ PROMPT_TMPL_V3 = """你是数据库开源生态的编目员，为周报项目库
 --- README 结束 ---"""
 
 
+# ---------------- v4：判定卷（E1。零 db 字段、零 identity、纯枚举+行号） ----------------
+
+SCHEMA_V4 = """输出一个 JSON 对象（只输出 JSON，不要其他文字）。你做的是判定卷：纯枚举与行号指认，不写描述性文字（生态位备注除外）：
+{
+ "classification": {
+   "cat_primary": "备份|监控|高可用|迁移|连接/代理|管理|平台|开发库|安全/审计|测试/质量|建模/设计|内核/引擎|应用|其他 之一",
+   "cat_tags": ["1-3 个补充类别（同上 14 类内，含 primary 的近邻类；只有单一类别时直接省略本键；只给 README 有明确依据的类，宁缺勿编）"],
+   "persona": ["1-2 个：use=用库 | ops=管库 | build=造库（数组序为主次）",
+               "判例：用 ORM/驱动写应用的仓=use（用库不是 build）；写驱动/中间件/扩展/数据库本体的仓=build；备份/监控/管理工具的主受众=ops"],
+   "eco": "tool=为数据库生态服务的工具/组件 | app=只是使用数据库的应用 | unclear=证据不足",
+   "eco_why": "（仅 eco=unclear 时必填）生态位判断依据（一句话，事实性）",
+   "ai_kind": "mcp|rag|text2sql|dba-agent|other 之一（【必填，不许省略】——非 AI 项目也必须输出 other）"
+ },
+ "signals": {
+   "install": ["npm|pypi|docker|binary|source|helm 的子集"],
+   "status": "experimental|deprecated|discontinued 之一，或 null（项目无自弃用/实验声明时输出 null——活跃度不是你判的，不要猜）",
+   "license_note": "（仅当许可证结构无法用单一标准 SPDX 值表达时输出：双许可 / open-core / BSL·SSPL 类非标准条款，一句话写清结构事实；单一标准许可证【不要输出此字段】）"
+ },
+ "audit": {
+   "confidence": "high|mid|low",
+   "evidence_lines": [支撑 cat_primary/eco 判断的 1-3 个行号]
+ }
+}
+硬规则（违反即拒收）：
+- 只输出上述键。禁止输出任何数据库适配判定（db/dbs/db_verdicts/official 类键一律不许出现）——数据库归属由程序另行判定。
+- 禁止输出 similar_to / 同类项目点名——你只看这一篇 README，同类关系由程序计算。
+- evidence_lines 只填【行号数字数组】（如 [42]），禁止抄写原文、禁止输出预览。
+- status 只答「项目自称什么」：experimental/deprecated/discontinued 或 null。"""
+
+PROMPT_TMPL_V4 = """你是数据库开源生态的编目员，为周报项目库做中立的判定编目。
+{contract}
+{schema}
+
+仓库：{fn}
+描述：{desc}
+主题标签：{topics}
+采集归属：{chan}（仅提示，可推翻）
+类别关键词提示：{hint}（规则通道的关键词命中，仅供参考，可推翻）
+--- README 开始（「L行号|原文」编号，可见行号范围 {line_range}）---
+{readme}
+--- README 结束 ---"""
+
+# R6 键级黑名单：schema/prompt/输出三层都不许出现的 db 判定键（含五子键）。
+# README 正文本就含库名，断言按"键名"不按"库名"。
+_V4_DB_KEYS = {"db_verdicts", "official", "of", "dbs"}
+# R1：同类点名键（similar_to 及其变体）
+_V4_SIMILAR_KEYS = {"similar_to", "similar", "similar_projects"}
+# 禁用期键（H1 定死：schema 概念上含 domain_tags，运行时禁用——输出即拒收，
+# 拒收计数进 violations 文本供 G5 统计，启用随 C2）
+_V4_DISABLED_KEYS = {"domain_tags"}
+_STATUS_V4 = {"experimental", "deprecated", "discontinued", None}
+
+
+def cache_key(sha: str, mode: str) -> str:
+    """v4 起 sha+prompt_ver 键控（E1 第 10 条）；旧 mode 保持裸 sha 兼容存量。"""
+    return f"{sha}#v4" if mode == "v4" else sha
+
+
+def build_preview(evidence_lines: list, numbered: dict, limit: int = 80) -> str:
+    """E3：evidence_preview 程序提取——按行号从清理文逐字截取（R5：程序切片，
+    非 AI 产出）。行序拼接后截 limit 字；行号无效/无窗口数据返回空串（存量条目
+    无 numbered 场景不硬造）。"""
+    parts = [numbered[x] for x in (evidence_lines or []) if x in numbered]
+    if not parts:
+        return ""
+    return " ／ ".join(parts)[:limit]
+
+
+def validate_v4(obj: dict, numbered: dict, desc: str) -> tuple[dict | None, list[str]]:
+    """v4 判定卷校验（E1）。红线 R1/R3/R4/R5/R6 全部在此收口：
+    - R1 禁 similar_to 点名；R3 cat_tags 14 类内；R4 status 三值+null；
+    - R5 只收 evidence_lines（evidence 全文停写，预览由 E3 程序提取）；
+    - R6 键级扫描 db 判定键（拒收）；domain_tags 禁用期输出即拒收（计数信号）。
+    eco_why 条件化（仅 unclear 必填）；license_note 条件化（结构特殊才允许非空）。"""
+    errs = []
+    if not isinstance(obj, dict):
+        return None, ["输出非对象"]
+    cls = obj.get("classification") or {}
+    sig = obj.get("signals") or {}
+    aud = obj.get("audit") or {}
+
+    def _key_scan(d: dict, path: str) -> list[str]:
+        bad = []
+        for k, v in (d or {}).items():
+            if not isinstance(k, str):
+                continue
+            if k in _V4_DB_KEYS:
+                bad.append(f"{path}.{k}（R6 数据库判定键禁入判定层）")
+            elif k in _V4_SIMILAR_KEYS:
+                bad.append(f"{path}.{k}（R1 禁同类点名）")
+            elif k in _V4_DISABLED_KEYS:
+                bad.append(f"{path}.{k}（domain_tags 禁用期：词表未冻结，C2 后启用）")
+            if isinstance(v, dict):
+                bad += _key_scan(v, f"{path}.{k}")
+        return bad
+
+    errs += _key_scan(obj, "$")
+    # identity 属作文卷（E2），判定层出现即超集
+    if "identity" in obj:
+        errs.append("$.identity（判定卷不含作文卷字段，文本四件套属头部项目另案）")
+
+    cat_p = cls.get("cat_primary")
+    if cat_p not in _CAT_ENUM:
+        errs.append(f"cat_primary 非法: {cat_p}")
+    tags = cls.get("cat_tags")
+    if tags == []:                     # 空数组=无补充类（单一类别仓合法形态），视同省略
+        tags = None
+    if tags is not None:
+        if not isinstance(tags, list) or not (1 <= len(tags) <= 3) \
+                or any(t not in _CAT_ENUM for t in tags):
+            errs.append("cat_tags 非法（R3：1-3 个且须在 14 类内）")
+    persona = cls.get("persona")
+    if not isinstance(persona, list) or not (1 <= len(persona) <= 2) \
+            or any(p not in ("use", "ops", "build") for p in persona) \
+            or len(set(persona)) != len(persona):
+        errs.append("persona 非法（应为 1-2 个去重数组：use/ops/build）")
+    if cls.get("eco") not in ("tool", "app", "unclear"):
+        errs.append(f"eco 非法: {cls.get('eco')}")
+    why = (cls.get("eco_why") or "").strip()
+    if cls.get("eco") == "unclear" and not why:
+        errs.append("eco_why 缺失（eco=unclear 时必填）")
+    if cls.get("eco") != "unclear" and why:
+        errs.append("eco_why 越权（仅 eco=unclear 时输出）")
+    if cls.get("ai_kind") is None:
+        cls["ai_kind"] = "other"       # 真机冒烟：非 AI 仓模型普遍省略键（8 拒收中占 7）
+                                       # ——缺省=无 AI 能力=other，程序归一不拒收
+    if cls.get("ai_kind") not in _AI_KIND:
+        errs.append(f"ai_kind 非法: {cls.get('ai_kind')}")
+    install = [i for i in (sig.get("install") or []) if i in _INSTALL]
+    if len(install) != len(sig.get("install") or []):
+        errs.append("install 含白名单外值")
+    status = sig.get("status")
+    if status == "null":
+        status = None
+    if status not in _STATUS_V4:
+        errs.append(f"status 非法（R4：三值+null）: {status}")
+    ln = (sig.get("license_note") or "").strip()
+    ev_lines = aud.get("evidence_lines")
+    if not isinstance(ev_lines, list) or not ev_lines:
+        errs.append("evidence_lines 非法（应为行号数组，如 [42]）")
+    elif not all(isinstance(x, int) and not isinstance(x, bool) for x in ev_lines):
+        errs.append("evidence_lines 含非整数")
+    else:
+        good = [x for x in ev_lines if x in numbered]
+        if not good:
+            errs.append("evidence_lines 全部在可见窗口外")
+        ev_lines = good
+    conf = aud.get("confidence")
+    if conf not in ("high", "mid", "low"):
+        conf = "low"
+        errs.append("confidence 非法")
+    errs += neutral_violations({"eco_why": why, "license_note": ln})
+    if errs:
+        return None, errs
+    out_cls = {"cat_primary": cat_p, "persona": persona, "eco": cls["eco"],
+               "ai_kind": cls["ai_kind"]}
+    if tags:
+        out_cls["cat_tags"] = tags
+    if cls["eco"] == "unclear":
+        out_cls["eco_why"] = why
+    out_sig = {"install": install, "status": status}
+    if ln:
+        out_sig["license_note"] = ln          # 条件输出：常规单许可证模型不输出，空串归一为缺键
+    return {"classification": out_cls, "signals": out_sig,
+            "audit": {"confidence": conf, "evidence_lines": ev_lines}}, []
+
+
+
 # ---------------- AI 客户端（OpenAI 兼容 / DeepSeek 协议同旧管道） ----------------
 
 class AIClient:
@@ -378,6 +649,8 @@ _SOFT_RE = re.compile(
     r"|的行号无效（窗口外或该行不含库名）"
     r"|^evidence_lines 行号不在可见范围"
 )
+# 文本卷软放行：只放禁词类（字段可 scrub）；长度/条数/增量等硬伤仍拒
+_TEXT_SOFT_RE = re.compile(r"^(one_liner|review|highlights|use_cases):『")
 
 
 def neutral_scrub(obj: dict) -> list[str]:
@@ -705,8 +978,11 @@ def normalize_enums(obj) -> int:
     cls = obj.get("classification") or {}
     sig = obj.get("signals") or {}
     for key, section in (("cat", cls), ("eco", cls), ("persona", cls), ("status", sig)):
-        fixed = _ENUM_ALIAS[key].get(section.get(key))
-        if fixed and fixed != section.get(key):
+        cur = section.get(key)
+        if not isinstance(cur, str):        # v4 persona 是数组、status 可为 None——跳过归一
+            continue
+        fixed = _ENUM_ALIAS[key].get(cur)
+        if fixed and fixed != cur:
             section[key] = fixed
             n += 1
     inst = sig.get("install")
@@ -809,16 +1085,18 @@ def build_prompt(fn: str, degraded: bool, pool: dict, dbscan: dict,
             else "\n候选库清单：无（全文未出现任何目标库名，db_verdicts 应为空数组，dbs 即空）"
 
     numbered: dict[int, str] = {}
+    clean_delta: list = []                       # 仅 v3/v4 全文路径有值（desc 降级无原文）
     if degraded:
         prompt = PROMPT_DESC.format(contract=NEUTRALITY_CONTRACT, schema=schema,
                                     dbcands=_v2_cands(), chan=chan, hint=hint,
                                     fn=fn, desc=desc, topics=topics)
         src_norm = desc.lower()
         stats.update({"in_raw_chars": len(desc), "in_clean_chars": len(desc)})
-    elif use_v3:
+    elif use_v3 or mode == "v4":        # v3 行号路径与 v4 判定卷共用全文编号逻辑
         path = HERE / "data" / "readmes" / (fn.replace("/", "__") + ".md")
         raw_text = path.read_text(encoding="utf-8", errors="ignore") if path.is_file() else ""
         text = clean_readme(raw_text)
+        clean_delta = _cd_delta(raw_text, text)   # B1：顺手算行级 delta（worker 返回，主线程落盘）
         body, cum = [], 0
         for no, ln in number_lines(text):       # 与 db_scan 同口径：全文非空行编号
             if cum > 10000:                     # 显示窗口截断，编号保持全局一致
@@ -826,6 +1104,20 @@ def build_prompt(fn: str, degraded: bool, pool: dict, dbscan: dict,
             body.append(f"L{no}|{ln}")
             numbered[no] = ln
             cum += len(ln) + 1
+        if mode == "v4":
+            # 判定卷（E1）：零 db 字段——不投喂候选库清单（db_scan 结果不进本路径），
+            # 不含 DB_VOCAB；输入=清理后 README，与 v3 同行号口径
+            prompt = PROMPT_TMPL_V4.format(contract=NEUTRALITY_CONTRACT, schema=schema,
+                                           chan=chan, hint=hint, fn=fn, desc=desc,
+                                           topics=topics,
+                                           readme="\n".join(body) or "（无 README 正文）",
+                                           line_range=f"L1–L{max(numbered)}" if numbered else "无")
+            src_norm = ""
+            stats.update({"in_raw_chars": len(raw_text), "in_clean_chars": len(text),
+                          "visible_lines": len(numbered)})
+            stats["prompt_chars"] = len(prompt)
+            return {"prompt": prompt, "src_norm": src_norm, "desc": desc, "cands": {},
+                    "numbered": numbered, "stats": stats, "clean_delta": clean_delta}
         # 候选清单：窗口内行取前 3，窗口外行取前 2 给完整行文本并标注——
         # 三轮验证证实漏判主因是支持矩阵在窗口外（常为该库第 4+ 次提及），
         # db_scan 每库存 5 条 + 这里显式标注，模型看得见才判得了
@@ -867,7 +1159,7 @@ def build_prompt(fn: str, degraded: bool, pool: dict, dbscan: dict,
         stats.update({"in_raw_chars": len(raw_text), "in_clean_chars": len(text)})
     stats["prompt_chars"] = len(prompt)
     return {"prompt": prompt, "src_norm": src_norm, "desc": desc, "cands": cands,
-            "numbered": numbered, "stats": stats}
+            "numbered": numbered, "stats": stats, "clean_delta": clean_delta}
 
 
 def judge(fn: str, sha: str, degraded: bool, ctx: dict, ai, gen,
@@ -875,9 +1167,12 @@ def judge(fn: str, sha: str, degraded: bool, ctx: dict, ai, gen,
     """一次解读全流程：chat → 解析 → 程序裁决/校验 → 违规带原因重试一次。
     返回 {kind: done|rejected|failed, ...}（线程安全：只读入参，不落任何共享态）。
     mode=v3 且非 desc 降级时走行号指认（ver=3），否则走 v2 引句子串（desc 恒 v2）。
+    mode=v4 走判定卷（validate_v4，零 db 校验、R1-R6 红线收口；desc 降级项仍走 v2——
+    判定卷必须以 README 为输入，纯简介撑不起判定）。
     遥测字段（runlog 用）：t_total_s/t_api_s/api_tries/violations_all（逐次违规快照，
     重试自愈与救不回是两类问题）/raw（拒收全文不截断）/attempts=validate_attempts。"""
     use_v3 = mode == "v3" and not degraded
+    use_v4 = mode == "v4" and not degraded      # 判定卷（E1）：desc 降级项恒走 v2
     t0 = time.time()
     t_api = 0.0
     api_tries = 0
@@ -906,7 +1201,11 @@ def judge(fn: str, sha: str, degraded: bool, ctx: dict, ai, gen,
                 parsed = extract_json(out["reasoning"])   # 思考型模型：正文空时从推理流兜底
             if isinstance(parsed, dict):
                 enum_fixes += normalize_enums(parsed)     # 枚举别名归一（拒收前能修则修）
-            if use_v3:
+            if use_v4:
+                # 判定卷（E1）：无 db 裁决校验（R6 零 db），红线收口全在 validate_v4
+                verr = []                     # v4 无 verdicts 校验（下游软放行收口引用）
+                obj, violations = validate_v4(parsed or {}, ctx["numbered"], ctx["desc"])
+            elif use_v3:
                 verr = check_verdicts_v3(parsed or {}, ctx["cands"], ctx["numbered"])
                 obj, violations = validate_v3(parsed or {}, gen, ctx["numbered"], ctx["desc"])
             else:
@@ -924,10 +1223,18 @@ def judge(fn: str, sha: str, degraded: bool, ctx: dict, ai, gen,
             if (obj is None and attempt == 2 and isinstance(parsed, dict)
                     and violations and all(_SOFT_RE.search(v) for v in violations)):
                 soft = neutral_scrub(parsed)
-                verr2 = (check_verdicts_v3(parsed, ctx["cands"], ctx["numbered"], lenient=True)
-                         if use_v3 else check_verdicts(parsed, ctx["cands"]))
-                vobj, verrs2 = (validate_v3(parsed, gen, ctx["numbered"], ctx["desc"]) if use_v3
-                                else validate(parsed, gen, ctx["src_norm"], ctx["desc"]))
+                if use_v4:
+                    verr2 = []               # 判定卷无 verdicts 校验
+                elif use_v3:
+                    verr2 = check_verdicts_v3(parsed, ctx["cands"], ctx["numbered"], lenient=True)
+                else:
+                    verr2 = check_verdicts(parsed, ctx["cands"])
+                if use_v4:
+                    vobj, verrs2 = validate_v4(parsed, ctx["numbered"], ctx["desc"])
+                elif use_v3:
+                    vobj, verrs2 = validate_v3(parsed, gen, ctx["numbered"], ctx["desc"])
+                else:
+                    vobj, verrs2 = validate(parsed, gen, ctx["src_norm"], ctx["desc"])
                 if vobj is not None and not verr2 and not verrs2:
                     obj = vobj
                     obj.setdefault("audit", {})["softened"] = soft
@@ -941,16 +1248,17 @@ def judge(fn: str, sha: str, degraded: bool, ctx: dict, ai, gen,
                     "attempts": attempt, "out_chars": out_chars,
                     "t_total_s": round(time.time() - t0, 2), "t_api_s": round(t_api, 2),
                     "api_tries": api_tries, "violations_all": violations_all}
-        review = (obj["identity"].get("review") or "")
         review_cleared = False
-        if not degraded and not info_gain(review, ctx["desc"]):
-            obj["identity"]["review"] = ""          # 无增量则空置，不展示
-            review_cleared = True
-        xcheck(obj, ctx)                            # 程序对照：分歧降置信+备注，不覆盖
+        if not use_v4 and obj.get("identity"):      # 作文卷字段仅 v3 有（v4 判定卷无 identity）
+            review = (obj["identity"].get("review") or "")
+            if not degraded and not info_gain(review, ctx["desc"]):
+                obj["identity"]["review"] = ""      # 无增量则空置，不展示
+                review_cleared = True
+        xcheck(obj, ctx)                            # 程序对照：分歧降置信+备注，不覆盖（db 相关规则已随 v4 除名退役，本函数只剩 install/status）
         obj.update({"fn": fn, "sha": sha, "source": "desc" if degraded else "readme",
                     "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-                    "ver": 3 if use_v3 else 2,      # v3 = 行号指认（程序回填引句）
-                    "prompt_ver": PROMPT_VER})
+                    "ver": 4 if use_v4 else (3 if use_v3 else 2),
+                    "prompt_ver": PROMPT_VER_V4 if use_v4 else PROMPT_VER})
         return {"kind": "done", "fn": fn, "sha": sha, "obj": obj,
                 "attempts": attempt, "out_chars": out_chars, "review_cleared": review_cleared,
                 "enum_fixes": enum_fixes,
@@ -965,16 +1273,20 @@ def judge(fn: str, sha: str, degraded: bool, ctx: dict, ai, gen,
 # ---------------- 主流程 ----------------
 
 def format_schemas(gen) -> dict:
-    """两套 schema 各格式化一份：v3=行号指认（readme 路径），v2=引句（desc 降级路径恒用）。
-    interpret.run 与 golden_eval 共用本入口，保证评分器与生产接线一致。"""
-    dbs_enum = "、".join(gen["CANON_PATTERNS"])
-    return {"v3": SCHEMA_V3.format(dbs_enum=dbs_enum, cat_rule=_CAT_RULE),
+    """三套 schema 各格式化一份：v4=判定卷（E1），v3=行号指认，v2=引句（desc 降级路径恒用）。
+    interpret.run 与 golden_eval 共用本入口，保证评分器与生产接线一致。
+    v4 不引用 gen 的库名单（R6：词表/候选/枚举一律不进判定卷）。"""
+    dbs_enum = "、".join(gen["CANON_PATTERNS"]) if gen else ""   # gen=None 供 v4-only 自检调用
+    return {"v4": SCHEMA_V4,
+            "v3": SCHEMA_V3.format(dbs_enum=dbs_enum, cat_rule=_CAT_RULE),
             "v2": SCHEMA_DESC.format(dbs_enum=dbs_enum, cat_rule=_CAT_RULE)}
 
 
 def pick_schema(schemas: dict, degraded: bool, mode: str) -> str:
-    """schema 按条目选：v3 模式且非降级才用行号版，其余（含一切降级项）一律引句版。
-    判据与 judge() 的 use_v3 同一口径。"""
+    """schema 按条目选：v4/v3 模式且非降级才用各自版本，其余（含一切降级项）一律引句版。
+    判据与 judge() 的 use_v3/use_v4 同一口径。"""
+    if mode == "v4" and not degraded:
+        return schemas["v4"]
     return schemas["v3"] if (mode == "v3" and not degraded) else schemas["v2"]
 
 
@@ -1019,7 +1331,7 @@ def run(args):
         sha = rec.get("sha")
         prev = st["items"].get(fn) or {}
         if rec.get("status") in ("done", "oversized") and sha:
-            if sha in cache:
+            if cache_key(sha, args.mode) in cache:    # v4 起键控（sha#v4），v3/v2 保持裸 sha
                 # 镜像复用（10-10）：fork/搬家仓 readme 同 sha 已有解读，不重烧，
                 # 补 fn 状态条目让每个仓名都可查到解读（查询链 fn→sha→缓存）。
                 # rejected 不覆盖（人工队列语义）；failed 且镜像已有结果则升 done
@@ -1041,7 +1353,7 @@ def run(args):
             # 缓存丢失的 desc 项永远不重入队（清缓存/迁移丢档即永久卡死，实测 9 条）。
             # 改为缓存缺即入队，但 rejected/failed 同 sha 守卫与普通分支对齐（无守卫
             # 会把拒收/400 家族每窗重烧——复核阶段抓到，49 条里 15 条属于此类）
-            if dkey in cache:
+            if cache_key(dkey, args.mode) in cache:
                 # 降级项镜像复用（同描述）：同 10-10 口径补条目
                 if fn not in st["items"] or prev.get("status") == "failed":
                     st["items"][fn] = {"sha": dkey, "status": "done", "reused": True}
@@ -1074,6 +1386,11 @@ def run(args):
         r = judge(fn, sha, degraded, ctx, ai, gen, mode=args.mode)
         r["stats"] = ctx["stats"]
         r["degraded"] = degraded
+        r["clean_delta"] = ctx.get("clean_delta") or []
+        # E3：evidence_preview 程序逐字提取（仅 v4 判定卷——v3 已有 evidence 全文）
+        if r.get("kind") == "done" and args.mode == "v4" and not degraded:
+            r["obj"]["audit"]["evidence_preview"] = build_preview(
+                (r["obj"].get("audit") or {}).get("evidence_lines"), ctx.get("numbered") or {})
         return r
 
     def logrec(r: dict) -> dict:
@@ -1115,7 +1432,13 @@ def run(args):
                 recs.append(rec)
                 runlog.log_item(rec)            # 条目级 jsonl（拒收全文/违规轨迹都在这）
                 if r["kind"] == "done":
-                    cache[r["sha"]] = r["obj"]
+                    # B1 旁路：行级 delta 只增量落分片（键 sha+clean_ver，已存在即跳过），
+                    # 失败不抛——损失留档不损判定主流程；clean_ver 随条目元数据落盘
+                    if r.get("clean_delta"):
+                        from clean_delta import save as _cd_save
+                        _cd_save(f"{r['sha']}+{CLEAN_VER}", r["clean_delta"], fn=r["fn"])
+                        r["obj"]["clean_ver"] = CLEAN_VER
+                    cache[cache_key(r["sha"], args.mode)] = r["obj"]
                     st["items"][r["fn"]] = {"sha": r["sha"], "status": "done"}
                     if r["obj"]["audit"]["confidence"] == "low":
                         low_conf.append(r["fn"])
@@ -1151,13 +1474,125 @@ def run(args):
              done, len(rejected), len(low_conf), len(cache), n_reuse, (time.time() - t0) / 60)
 
 
+def run_text(args):
+    """E2 文本卷主流程（--mode v4t）：仅头部项目（star≥100，enrich head/mid 口径），
+    输入=清理后 README，缓存键 sha#txt<prompt_ver>——与判定卷（sha#v4）完全独立，
+    文本提示词升级不作废判定缓存（《AI方案》§5）。"""
+    st = json.loads(ISTATE.read_text(encoding="utf-8")) if ISTATE.is_file() else {"items": {}}
+    cache = InterpCacheStore()
+    rstate_p = HERE / "state" / "readme_state.json"
+    rstate = json.loads(rstate_p.read_text(encoding="utf-8")) if rstate_p.is_file() else {"items": {}}
+    pool_path = Path(args.pool) if args.pool else latest_pool()
+    import pool_store
+    pool = {it["full_name"]: it for it in pool_store.read_any(pool_path)}
+    _rb_p = HERE / "config" / "exclude_repos.txt"
+    repo_bl = set()
+    if _rb_p.is_file():
+        repo_bl = {ln.strip() for ln in _rb_p.read_text(encoding="utf-8-sig").splitlines()
+                   if ln.strip() and not ln.startswith("#")}
+    todo: list[tuple[str, str]] = []
+    n_skip = {"out_of_pool": 0, "below_star": 0, "no_readme": 0, "already": 0, "blacklist": 0}
+    for fn, rec in rstate.get("items", {}).items():
+        if fn not in pool:
+            n_skip["out_of_pool"] += 1
+            continue
+        if fn in repo_bl:
+            n_skip["blacklist"] += 1
+            continue
+        sha = rec.get("sha")
+        if rec.get("status") not in ("done", "oversized") or not sha or sha.startswith("desc::"):
+            n_skip["no_readme"] += 1            # 文本卷必须以 README 为输入
+            continue
+        if (pool[fn].get("stars") or 0) < TEXT_STAR_MIN:
+            n_skip["below_star"] += 1
+            continue
+        if text_key(sha) in cache:
+            n_skip["already"] += 1
+            continue
+        todo.append((fn, sha))
+    todo.sort(key=lambda x: -((pool.get(x[0]) or {}).get("stars") or 0))
+    total = len(todo)
+    todo = todo[:args.max_items]
+    log.info("文本卷待写 %d 项（头部池 star≥%d）｜截取 %d · 跳过 %s", total, TEXT_STAR_MIN, len(todo), n_skip)
+
+    t0 = time.time()
+    ai = AIClient(deadline=t0 + args.max_minutes * 60)
+    done, rejected, failed_n = 0, [], 0
+    run_id = f"{datetime.now().strftime('%m%d_%H%M')}_v4t_p{PROMPT_VER_TEXT}"
+
+    def work(job):
+        fn, sha = job
+        ctx = build_text_prompt(fn, pool)
+        t0w = time.time()
+        violations: list[str] = []
+        for attempt in (1, 2):
+            try:
+                out = ai.chat(ctx["prompt"] + ("" if attempt == 1 else
+                            f"\n\n【上次输出被拒收，原因：{'；'.join(violations)}。请修正后重新输出合规 JSON。】"))
+            except Exception as e:                       # noqa: BLE001
+                return {"kind": "failed", "fn": fn, "sha": sha, "error": str(e)[:150],
+                        "t_total_s": round(time.time() - t0w, 2), "stats": ctx["stats"]}
+            parsed = extract_json(out["content"]) or extract_json(out["reasoning"] or "")
+            ident, violations = validate_text(parsed or {}, ctx["desc"])
+            # 软放行（与 judge 的 10-09 定案同口径）：attempt 2 仍只剩禁词类时，
+            # 程序 scrub 掉含禁词的字段，条目保住（softened 留痕），不整条拒
+            if (ident is None and attempt == 2 and isinstance(parsed, dict)
+                    and violations and all(_TEXT_SOFT_RE.search(v) for v in violations)):
+                soft_parsed = json.loads(json.dumps(parsed))   # 深拷贝，勿污染原件
+                soft = neutral_scrub(soft_parsed)
+                ident2, verrs2 = validate_text(soft_parsed, ctx["desc"])
+                if ident2 is not None and not verrs2:
+                    ident = ident2
+                    violations = []
+                    ident["identity"]["softened"] = soft
+            if ident is not None:
+                # validate_text 返回的已是 {"identity": {...}}——勿再包一层
+                # （首跑 19 条双层包裹 bug，1104 修；缓存里这 19 条已手工修平）
+                obj = {"identity": ident["identity"], "fn": fn, "sha": sha, "source": "readme",
+                       "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                       "ver": 4, "prompt_ver": PROMPT_VER_TEXT, "layer": "text"}
+                return {"kind": "done", "fn": fn, "sha": sha, "obj": obj,
+                        "stats": ctx["stats"],
+                        "t_total_s": round(time.time() - t0w, 2)}
+        return {"kind": "rejected", "fn": fn, "sha": sha, "violations": violations[:5],
+                "stats": ctx["stats"], "t_total_s": round(time.time() - t0w, 2)}
+
+    recs: list[dict] = []
+    with ThreadPoolExecutor(max_workers=args.concurrency) as ex:
+        futs = [ex.submit(work, j) for j in todo]
+        for f in as_completed(futs):
+            r = f.result()
+            rec = {"run_id": run_id, "src": "interpret", "mode": "v4t",
+                   "prompt_ver": PROMPT_VER_TEXT, "model": ai.model, "fn": r["fn"],
+                   "sha": r["sha"], "kind": r["kind"], **(r.get("stats") or {}),
+                   "violations": r.get("violations"), "error": r.get("error")}
+            recs.append(rec)
+            runlog.log_item(rec)
+            if r["kind"] == "done":
+                cache[text_key(r["sha"])] = r["obj"]
+                done += 1
+            elif r["kind"] == "rejected":
+                rejected.append({"fn": r["fn"], "why": r["violations"][:3]})
+            else:
+                failed_n += 1
+            if (done + len(rejected) + failed_n) % 20 == 0:
+                cache.flush()
+                log.info("文本卷进度 %d/%d · 成功 %d · 拒收 %d · 失败 %d",
+                         done + len(rejected) + failed_n, len(todo), done, len(rejected), failed_n)
+    cache.flush()
+    runlog.log_summary({**runlog.summarize_items(recs), "run_id": run_id, "src": "interpret",
+                        "mode": "v4t", "prompt_ver": PROMPT_VER_TEXT, "model": ai.model})
+    log.info("==== 文本卷完成：成功 %d · 拒收 %d · 失败 %d · %.1f 分钟 ====",
+             done, len(rejected), failed_n, (time.time() - t0) / 60)
+
+
 def main():
     ap = argparse.ArgumentParser(description="AI 结构化解读（中立版）")
     ap.add_argument("--pool", default=None, help="池路径（默认活文件 data/live/pool.ndjson，回退最新快照）")
     ap.add_argument("--concurrency", type=int, default=6)
     ap.add_argument("--max-items", type=int, default=800)
     ap.add_argument("--max-minutes", type=float, default=90.0)
-    ap.add_argument("--mode", choices=["v3", "v2"], default="v3",
+    ap.add_argument("--mode", choices=["v3", "v2", "v4", "v4t"], default="v3",
                     help="v3=行号指认（程序回填引句，ver=3）；v2=引句子串（回退用）")
     ap.add_argument("--retry-rejected", action="store_true",
                     help="重试历史拒收项（同 sha 也重跑：用于解析修复后捞回 944 条）")
@@ -1166,7 +1601,10 @@ def main():
     logging.basicConfig(level=logging.DEBUG if args.v else logging.INFO,
                         format="%(asctime)s %(levelname)-6s %(name)s | %(message)s",
                         datefmt="%H:%M:%S")
-    run(args)
+    if args.mode == "v4t":
+        run_text(args)          # E2 文本卷：独立主流程（缓存键分层，不动判定缓存）
+    else:
+        run(args)
 
 
 if __name__ == "__main__":

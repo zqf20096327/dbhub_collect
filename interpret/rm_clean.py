@@ -27,6 +27,11 @@ v2 新增规则（逐条消融实测省量，占总残余 17%）：
 from __future__ import annotations
 import re
 
+# 清理器规则版本（B1，工作包清单 v4）：v2 规则集（⑦-⑭ 消融批）。规则再动必须
+# 升版——clean_delta 分片按 sha+clean_ver 键控，升版后新旧 delta 并存互不覆盖；
+# 存量解读条目无 clean_ver = 常态（不回填）。
+CLEAN_VER = "2"
+
 RE_COMMENT = re.compile(r"<!--.*?-->", re.S)
 # v1 曾有整行徽章正则，但 URL 前缀条件写错（要求以 badge|shield 开头）从未命中过
 # 真实 URL（https: 开头）——v2 改由 _inline 统一处理：徽章/图片行解包后只剩 alt 文本。
