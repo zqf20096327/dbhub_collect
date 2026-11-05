@@ -3262,5 +3262,1033 @@
    ]
   ],
   "at": "2026-11-05"
+ },
+ "d5a89b3b8667+2": {
+  "fn": "zerodha/dungbeetle",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    7,
+    1,
+    5
+   ],
+   [
+    "delete",
+    7,
+    8,
+    5,
+    5
+   ],
+   [
+    "equal",
+    8,
+    25,
+    5,
+    22
+   ],
+   [
+    "replace",
+    25,
+    26,
+    22,
+    23,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    29,
+    23,
+    26
+   ],
+   [
+    "replace",
+    29,
+    30,
+    26,
+    27,
+    [
+     "A task is a named SQL query that is loaded into the server on startup. Tasks are defined in .sql files in the simple goyesql format. Such queries are self-contained and produce the desired final output with neatly named columns. They can take arbitrary positional arguments for execution. A task can be attached to one or more specific databases defined in the configuration using the `-- db:` tag. In case of multiple databases, the query will be executed against a random one from the list, unless a specific database is specified in the API request (`db`). A `-- queue:` tag to always route the task to a particular queue, unless it's overriden by the `queue` param when making a job request. A `-- results:` tag specifies the results backend to which the results of a task will be written. If there are multiple result backends specified, the results are written a random one."
+    ]
+   ],
+   [
+    "equal",
+    30,
+    36,
+    27,
+    33
+   ],
+   [
+    "replace",
+    36,
+    51,
+    33,
+    34,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    63,
+    34,
+    46
+   ],
+   [
+    "delete",
+    63,
+    64,
+    46,
+    46
+   ],
+   [
+    "equal",
+    64,
+    65,
+    46,
+    47
+   ],
+   [
+    "replace",
+    65,
+    66,
+    47,
+    48,
+    [
+     "A pre-compiled binary can be downloaded from the releases page."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    72,
+    48,
+    54
+   ],
+   [
+    "replace",
+    72,
+    73,
+    54,
+    55,
+    [
+     "|type|dsn|"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    55,
+    56
+   ],
+   [
+    "replace",
+    74,
+    77,
+    56,
+    59,
+    [
+     "|`postgres`|`postgres://user:password@host:5432/dbname?sslmode=disable`|",
+     "|`mysql`|`user:password@tcp(host:3306)/dbname`|",
+     "|`clickhouse`|`tcp://host:9000?username=user&password=password&database=dbname`|"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    99,
+    59,
+    81
+   ],
+   [
+    "replace",
+    99,
+    100,
+    81,
+    82,
+    [
+     "|Method|URI||"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    82,
+    83
+   ],
+   [
+    "replace",
+    101,
+    110,
+    83,
+    92,
+    [
+     "|GET|/tasks|Returns the list of registered SQL tasks. Pass `?sql=false` to only get names and not SQL.|",
+     "|POST|/tasks/{taskName}/jobs|Schedules a job for a given task|",
+     "|GET|/jobs/{jobID}|Returns the status of a given job|",
+     "|GET|/jobs/queue/{queue}|Returns the list of all pending jobs in a queue|",
+     "|POST|/groups|Schedule a group of jobs|",
+     "|GET|/groups/{groupID}|Get the status of a job group and its jobs|",
+     "|DELETE|/jobs/{jobID}|Deletes a pending job from the queue and immediately cancels its execution and frees the thread. Send a query param \"purge=true\" to delete completed jobs. Only the Go PostgreSQL driver cancels queries mid execution. MySQL server will keep continuing to execute the query. For MySQL, it's important to set `max_execution_time`.|",
+     "|DELETE|/groups/{groupID}|Deletes a pending job from the queue and immediately cancels its execution and frees the thread. Send a query param \"purge=true\" to delete completed jobs. Only the Go PostgreSQL driver cancels queries mid execution. MySQL server will keep continuing to execute the query. For MySQL, it's important to set `max_execution_time`|",
+     "|GET|/metrics|Exposes Prometheus metrics for jobs and queues|"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    113,
+    92,
+    95
+   ],
+   [
+    "replace",
+    113,
+    114,
+    95,
+    96,
+    [
+     "|Job param|||"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    96,
+    97
+   ],
+   [
+    "replace",
+    115,
+    121,
+    97,
+    103,
+    [
+     "|`job_id` *string*|(Optional) Alphanumeric ID for the job. Can be non-unique. If this is not passed, the server generates and returns one||",
+     "|`queue` *string*|(Optional) Queue to send the job to. Only workers listening on this queue will receive the jobs.||",
+     "|`eta` *string*|(Optional) Timestamp (`yyyy-mm-dd hh:mm:ss`) at which the job should start. If this is not provided, the job is queued immediately.||",
+     "|`retries` *int*|(Optional) The number of times a failed job should be retried. Default is 0||",
+     "|~~`ttl`~~ *int*|(Optional) TTL for the results in the results backend for this particular job. This is NOT supported by the default SQL DB result backend||",
+     "|`args[]` *[]string*|(Optional) The positional argument to pass to the SQL query in the task being executed. This can be passed multiple times, one for each argument||"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    103,
+    104
+   ],
+   [
+    "replace",
+    122,
+    124,
+    104,
+    105,
+    [
+     "|Group param|||"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    125,
+    105,
+    106
+   ],
+   [
+    "replace",
+    125,
+    127,
+    106,
+    108,
+    [
+     "|`group_id` *string*|(Optional) Alphanumeric ID for the group of jobs. Can be non-unique. If this is not passed, the server generates and returns one||",
+     "| `concurrency` *int* | (Optional) Number of jobs to run concurrently in the group "
+    ]
+   ],
+   [
+    "equal",
+    127,
+    144,
+    108,
+    125
+   ],
+   [
+    "delete",
+    144,
+    145,
+    125,
+    125
+   ],
+   [
+    "equal",
+    145,
+    159,
+    125,
+    139
+   ],
+   [
+    "delete",
+    159,
+    160,
+    139,
+    139
+   ],
+   [
+    "equal",
+    160,
+    164,
+    139,
+    143
+   ],
+   [
+    "replace",
+    164,
+    179,
+    143,
+    144,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    185,
+    144,
+    150
+   ],
+   [
+    "replace",
+    185,
+    186,
+    150,
+    151,
+    [
+     "|Metric|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    187,
+    151,
+    152
+   ],
+   [
+    "replace",
+    187,
+    194,
+    152,
+    159,
+    [
+     "|`dbtl_jobs_enqueued_total{task_name}`|counter|Jobs enqueued by this instance, including jobs in groups.|",
+     "|`dbtl_jobs_running{task_name}`|gauge|Jobs currently executing on this instance.|",
+     "|`dbtl_job_attempts_total{task_name,outcome}`|counter|Job execution attempts, with `outcome` as `success`, `error` or `canceled`. Every retry is a separate attempt.|",
+     "|`dbtl_job_execution_duration_seconds{task_name}`|histogram|Time taken to run the query, read the rows, and write the results, including failed attempts.|",
+     "|`dbtl_job_queue_wait_duration_seconds{task_name,queue}`|histogram|Time a job waited in the queue before its first attempt. ETA delays are not counted.|",
+     "|`dbtl_queue_pending_jobs{queue}`|gauge|Runnable jobs waiting in the queue. Read from the broker on every scrape.|",
+     "|`dbtl_worker_concurrency{queue}`|gauge|Configured worker concurrency for the queue on this instance.|"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    199,
+    159,
+    164
+   ],
+   [
+    "replace",
+    199,
+    204,
+    164,
+    165,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    211,
+    165,
+    172
+   ],
+   [
+    "delete",
+    211,
+    212,
+    172,
+    172
+   ],
+   [
+    "equal",
+    212,
+    214,
+    172,
+    174
+   ]
+  ],
+  "at": "2026-11-05"
+ },
+ "36d5fbf9558d+2": {
+  "fn": "lb2281075105/Python-Spider",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    30,
+    1,
+    30,
+    [
+     "1、豆瓣电影top250 ",
+     "2、斗鱼爬取json数据以及爬取美女图片 ",
+     "3、CrawlSpider爬取红娘网相亲人的部分基本信息、红娘网分布式爬取、存储redis ",
+     "4、爬虫小demo ",
+     "5、Selenium的使用 ",
+     "6、PIL ",
+     "7、爬多点商品存储mysql数据库同时显示在djangoweb页面 ",
+     "8、django开发接口 ",
+     "9、python txt、csv、xml文件解析 ",
+     "10、Scrapy框架进行Spiders简单爬虫 ",
+     "11、抓取淘宝美女信息，下载本地并存储mysql数据库 ",
+     "12、爬取有缘网用户信息 ",
+     "13、模拟Github登陆 ",
+     "14、selenium动态模拟登录 ",
+     "15、模拟知乎登录 ",
+     "16、爬取tencent社招信息 ",
+     "17、爬取《多点》整站商品信息 ",
+     "18、模拟京东登录 ",
+     "19、下载网易云歌词 ",
+     "20、淘宝信息 ",
+     "21、京东商城商品详情页信息 ",
+     "22、模拟图虫网登录 ",
+     "23、itchat 获取微信群或者微信好友分享文章 ",
+     "24、爬取微信公众号历史文章 ",
+     "25、itchat监听指定微信公众号分享的文章 ",
+     "26、itchat微信群微信好友防撤回 ",
+     "27、在微信群之间转发消息 ",
+     "27、下载bilibili视频 也可以下载哔哩哔哩集合视频 ",
+     "28、爬取m3u8视频 "
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    30,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     "详细请移步简书Python文集"
+    ]
+   ]
+  ],
+  "at": "2026-11-05"
+ },
+ "2885b7f97564+2": {
+  "fn": "Humsen/web",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "点击加入：Java全栈开发学习交流"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    13,
+    8,
+    9,
+    [
+     "## 点击跳转至postgresql分支开箱即用版 "
+    ]
+   ],
+   [
+    "equal",
+    13,
+    21,
+    9,
+    17
+   ],
+   [
+    "delete",
+    21,
+    23,
+    17,
+    17
+   ],
+   [
+    "equal",
+    23,
+    28,
+    17,
+    22
+   ],
+   [
+    "replace",
+    28,
+    30,
+    22,
+    24,
+    [
+     " - 按照`docs/数据库部署文件夹`里面的步骤依次运行脚本即可",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    24,
+    25
+   ],
+   [
+    "replace",
+    31,
+    32,
+    25,
+    26,
+    [
+     " - 如果是下载的zip压缩包，则不用导入，直接解压，得到`config`文件夹和war包，并修改db_connect_info.properties数据库配置"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    42,
+    26,
+    36
+   ]
+  ],
+  "at": "2026-11-05"
+ },
+ "8bb4fce48704+2": {
+  "fn": "utelle/wxsqlite3",
+  "clean_ver": "2",
+  "raw_lines": 12,
+  "ops": [
+   [
+    "equal",
+    0,
+    12,
+    0,
+    12
+   ],
+   [
+    "replace",
+    12,
+    19,
+    12,
+    19,
+    [
+     "- AES 128 Bit CBC - No HMAC (wxSQLite3)",
+     "- AES 256 Bit CBC - No HMAC (wxSQLite3)",
+     "- ChaCha20 - Poly1305 HMAC (sqleet) (**default**)",
+     "- AES 256 Bit CBC - SHA1/SHA256/SHA512 HMAC (SQLCipher versions 1 - 4) ",
+     "- RC4 - No HMAC (System.Data.SQLite)",
+     "- Ascon 128 - Ascon Tag (Ascon) (since version 4.9.8)",
+     "- AEGIS - AEGIS Tag (AEGIS) (since version 4.10.0)"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    24,
+    19,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     "With the release of SQLite version 3.32.0 on May 22, 2020 critical changes to the public SQLite code finally took officially effect, although they weren't officially announced. They were introduced on Feb 7, 2020: \"Simplify the code by removing the unsupported and undocumented SQLITE_HAS_CODEC compile-time option\". As a consequence, updating the _wxSQLite3 encryption extension_ to support SQLite version 3.32.0 and later was no longer possible."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    25,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "Since August 2020 a new implementation of an encryption extension, capable of supporting SQLite version 3.32.0 and later, is available as a separate project, SQLite3 Multiple Ciphers. Starting with the release of **wxSQLite3 4.6.0** this new implementation is used."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    31,
+    27,
+    31
+   ],
+   [
+    "replace",
+    31,
+    40,
+    31,
+    33,
+    [
+     "（略）",
+     "## Version history"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    43,
+    33,
+    36
+   ],
+   [
+    "replace",
+    43,
+    44,
+    36,
+    37,
+    [
+     " - Upgrade to SQLite3 Multiple Ciphers version 2.6.1 (SQLite version 3.54.0)"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    37,
+    38
+   ],
+   [
+    "replace",
+    45,
+    46,
+    38,
+    39,
+    [
+     "For further version information please consult the CHANGELOG."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    60,
+    39,
+    53
+   ],
+   [
+    "replace",
+    60,
+    61,
+    53,
+    54,
+    [
+     "The documentation section Migrating from 4.x to 5.x details the steps required to migrate from prior _wxSQLite3_ versions. The documentation section Modern C++ Interface presents the new features."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    65,
+    54,
+    58
+   ],
+   [
+    "replace",
+    65,
+    66,
+    58,
+    59,
+    [
+     "Premake 5 (version Premake 5.0 beta 5)."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    120,
+    59,
+    113
+   ],
+   [
+    "replace",
+    120,
+    121,
+    113,
+    114,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    121,
+    127,
+    114,
+    120
+   ],
+   [
+    "replace",
+    127,
+    128,
+    120,
+    121,
+    [
+     "SQLite has many optional features and offers a number of optional extensions. The below table lists the features that are enabled for **wxSQLite3** as default. For details, please see SQLite Compile Time Options."
+    ]
+   ],
+   [
+    "equal",
+    128,
+    131,
+    121,
+    124
+   ],
+   [
+    "replace",
+    131,
+    159,
+    124,
+    152,
+    [
+     "|Symbol|Description|",
+     "|:---|:---|",
+     "|SQLITE_DQS|Setting for the double-quoted string literal misfeature (default: disabled)|",
+     "|SQLITE_ENABLE_CARRAY|C array extension|",
+     "|SQLITE_ENABLE_COLUMN_METADATA|Access to meta-data about tables and queries|",
+     "|SQLITE_ENABLE_CSV|CSV extension|",
+     "|SQLITE_ENABLE_DEBUG|Enable additional debug features (default: off)|",
+     "|SQLITE_ENABLE_DESERIALIZE|Option to enable the serialization interface|",
+     "|SQLITE_ENABLE_EXPLAIN_COMMENTS|Enable additional comments in EXPLAIN output|",
+     "|SQLITE_ENABLE_FTS3|Version 3 of the full-text search engine|",
+     "|SQLITE_ENABLE_FTS3_PARENTHESIS|Additional operators for query pattern parser|",
+     "|SQLITE_ENABLE_FTS4|Version 4 of the full-text search engine|",
+     "|SQLITE_ENABLE_FTS5|Version 5 of the full-text search engine|",
+     "|SQLITE_ENABLE_GEOPOLY|Geopoly extension|",
+     "|SQLITE_ENABLE_JSON1|JSON SQL functions|",
+     "|SQLITE_ENABLE_REGEXP|Regular expression extension|",
+     "|SQLITE_ENABLE_RTREE|R*Tree index extension|",
+     "|SQLITE_ENABLE_EXTFUNC|Extension with mathematical and string functions|",
+     "|SQLITE_ENABLE_FILEIO|Extension with file I/O SQL functions|",
+     "|SQLITE_ENABLE_SERIES|Series extension|",
+     "|SQLITE_ENABLE_SHA3|SHA3 extension|",
+     "|SQLITE_ENABLE_UUID|Extension for handling handling RFC-4122 UUIDs|",
+     "|SQLITE_MAX_ATTACHED=10|Maximum Number Of Attached Databases (max. 125)|",
+     "|SQLITE_SECURE_DELETE|Overwrite deleted content with zeros|",
+     "|SQLITE_SOUNDEX|Enable soundex SQL function|",
+     "|SQLITE_THREADSAFE|Setting the multithreading mode (default: serialized)|",
+     "|SQLITE_USE_URI|Enable URI file names|",
+     "|SQLITE_USER_AUTHENTICATION|User authentication extension|"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    164,
+    152,
+    157
+   ],
+   [
+    "replace",
+    164,
+    167,
+    157,
+    160,
+    [
+     "- SQLite Encryption Extension (SEE) (commercial) by the SQLite Team (D. Richard Hipp et al)",
+     "- SQLiteCrypt (commercial)",
+     "- SQLCipher (open-source / commercial)"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    180,
+    160,
+    173
+   ]
+  ],
+  "at": "2026-11-05"
+ },
+ "a5f8eb123aed+2": {
+  "fn": "Leafpub/leafpub",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# Leafpub"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    3,
+    1,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     "### Website &nbsp; Documentation &nbsp;"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    4,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "Gitter &nbsp; Twitter Follow"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    6,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "Created by Cory LaViska"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    8,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     "Maintained by Marc Apfelbaum"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    10,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "Screenshots"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    25,
+    12,
+    25
+   ],
+   [
+    "replace",
+    25,
+    36,
+    25,
+    26,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    50,
+    26,
+    40
+   ],
+   [
+    "replace",
+    50,
+    51,
+    40,
+    41,
+    [
+     "**Important:** You'll also need to add the default theme to `content/themes/range/` manually. This will happen automatically once Leafpub is out of beta."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    60,
+    41,
+    50
+   ],
+   [
+    "replace",
+    60,
+    78,
+    50,
+    51,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    96,
+    51,
+    69
+   ],
+   [
+    "replace",
+    96,
+    97,
+    69,
+    70,
+    [
+     "Leafpub is maintained under the Semantic Versioning guidelines and we adhere to them as closely as possible."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    106,
+    70,
+    79
+   ],
+   [
+    "delete",
+    106,
+    107,
+    79,
+    79
+   ],
+   [
+    "equal",
+    107,
+    108,
+    79,
+    80
+   ],
+   [
+    "delete",
+    108,
+    113,
+    80,
+    80
+   ],
+   [
+    "equal",
+    113,
+    118,
+    80,
+    85
+   ],
+   [
+    "replace",
+    118,
+    124,
+    85,
+    86,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-05"
  }
 }
