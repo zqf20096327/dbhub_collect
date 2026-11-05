@@ -1,15 +1,15 @@
 <div align="center">
 
-<img src="public/assets/logo.png" alt="PBuster" width="200">
+<img src="public/assets/logo.png" alt="Princess Buster" width="200">
 
-# PBuster
+# Princess Buster
 
 **Fais tomber toutes les technos !**
 Un jeu de tir en 2.5D où tu fais s'effondrer des piles de cubes de langages et de frameworks de programmation, avec un nombre de balles limité.
 
-[**▶ Jouer en ligne**](https://princess-buster.vercel.app/) · [**⬇ Télécharger l'APK**](https://github.com/princesse-aku/PBuster/releases/download/v0.1.0/PBuster-0.1.0-aarch64.apk) · [Installer sur mobile](#-installer-sur-mobile) · [Contribuer](CONTRIBUTING.md)
+[**▶ Jouer en ligne**](https://princess-buster.vercel.app/) · [**⬇ Télécharger l'APK**](https://github.com/princesse-aku/princess_buster/releases/download/v0.1.0/PrincessBuster-0.1.0-aarch64.apk) · [Installer sur mobile](#-installer-sur-mobile) · [Contribuer](CONTRIBUTING.md)
 
-[![CI](https://github.com/princesse-aku/PBuster/actions/workflows/ci.yml/badge.svg)](https://github.com/princesse-aku/PBuster/actions/workflows/ci.yml)
+[![CI](https://github.com/princesse-aku/princess_buster/actions/workflows/ci.yml/badge.svg)](https://github.com/princesse-aku/princess_buster/actions/workflows/ci.yml)
 [![Licence MIT](https://img.shields.io/badge/licence-MIT-ffd23f.svg)](LICENSE)
 ![Node](https://img.shields.io/badge/node-%E2%89%A5%2022.5-3a3fe0.svg)
 ![Sans dépendance npm](https://img.shields.io/badge/d%C3%A9pendances%20npm-0-ff3fa4.svg)
@@ -20,7 +20,7 @@ Un jeu de tir en 2.5D où tu fais s'effondrer des piles de cubes de langages et 
 </div>
 
 <p align="center">
-  <img src="docs/promo/princess-buster-promo.png?v=2" alt="PBuster : fais tomber toutes les technos" width="100%">
+  <img src="docs/promo/princess-buster-promo.png?v=2" alt="Princess Buster : fais tomber toutes les technos" width="100%">
 </p>
 
 <p align="center">
@@ -38,7 +38,7 @@ Un jeu de tir en 2.5D où tu fais s'effondrer des piles de cubes de langages et 
 - [Progression, score et classement](#progression-score-et-classement)
 - [Démarrage rapide (développeurs)](#démarrage-rapide-développeurs)
 - [Contrôles](#contrôles)
-- [Les 250 niveaux](#les-250-niveaux)
+- [Les 1000 niveaux](#les-1000-niveaux)
 - [Créer ou modifier un niveau](#créer-ou-modifier-un-niveau)
 - [Comment ça marche](#comment-ça-marche)
 - [Sauvegarde, comptes et Firebase](#sauvegarde-comptes-et-firebase)
@@ -63,18 +63,22 @@ Tu **gagnes** quand la table est vide, tu **perds** quand tu n'as plus de balles
 
 - ▶️ **En ligne** : <https://princess-buster.vercel.app/>, sur téléphone, tablette et ordinateur.
 - 📱 **<a id="-installer-sur-mobile"></a>Installer sur mobile (PWA)** : ouvre le jeu dans Chrome (Android) → menu ⋮ → **Installer l'application** ; sur iPhone (Safari) → Partager → **Sur l'écran d'accueil**. Le jeu s'ouvre alors en plein écran comme une vraie application, sans APK à télécharger.
-- 🤖 **APK Android** : [PBuster-0.1.0-aarch64.apk](https://github.com/princesse-aku/PBuster/releases/download/v0.1.0/PBuster-0.1.0-aarch64.apk) (téléphones arm64, depuis la page [Releases](https://github.com/princesse-aku/PBuster/releases)). Autorise l'installation depuis ton navigateur. La connexion Google n'y est pas disponible : pour le classement, utilise la version en ligne ou la PWA.
+- 🤖 **APK Android** : [PrincessBuster-0.1.0-aarch64.apk](https://github.com/princesse-aku/princess_buster/releases/download/v0.1.0/PrincessBuster-0.1.0-aarch64.apk) (téléphones arm64, depuis la page [Releases](https://github.com/princesse-aku/princess_buster/releases)). Autorise l'installation depuis ton navigateur. La connexion Google n'y est pas disponible : pour le classement, utilise la version en ligne ou la PWA.
 - 💻 **En local** : voir [Démarrage rapide](#démarrage-rapide-développeurs).
 
 Au premier lancement : écran de démarrage, conditions d'utilisation, puis **connexion avec Google** (pour sauvegarder ta progression dans le cloud et apparaître dans le classement) ou **« Jouer sans compte »**. Tu peux te connecter plus tard depuis ton profil.
 
 ## Fonctionnalités
 
-- 🎯 **250 niveaux** décrits en JSON, **50 technologies** (dont les logos des IA : ChatGPT, Claude, Gemini, Grok, Mistral…) débloquées pas à pas
+- 🎯 **1000 niveaux** décrits en JSON, **50 technologies** (dont les logos des IA : ChatGPT, Claude, Gemini, Grok, Mistral…) débloquées pas à pas
 - 🎨 **12 décors de jeu** qui changent de niveau en niveau : prairie, nuit, coucher de soleil, neige, désert, océan, bonbons, forêt, espace, automne, volcan, néon
 - 🏙️ **Accueil illustré** : une ville futuriste plein écran qui s'adapte à toutes les résolutions (portrait, paysage, tablette), avec la tasse du joueur et son tas de cubes au centre
 - 🧱 **Pièces de formats variés** : carrés, rectangles larges ou hauts, 2×2, 3×1, 3×2
 - 💥 **Effondrements physiques** : pièces éjectées sur le côté ou vers le fond, chaînes de chutes, éclats colorés au sol (moteur Matter.js)
+- 💥 **Impact explosif** : boule de feu et souffle qui repousse les pièces voisines ; les pièces envoyées derrière la table partent en arc, rapetissent et se brisent sur l'herbe
+- ⭐ **Pièces spéciales** : **pièce d'or** (+1 balle), **baril explosif** (souffle les pièces proches, en chaîne) et **bloc à flèche** (balaie toute la rangée dans le sens de la flèche)
+- 🔴 **Jauge de balles** agrandie sous le compteur (vert, orange, rouge) et une réserve de balles plus généreuse
+- 🛢️ **Tambours et tours** : pièces cylindriques (barils) et, à partir du niveau 251, des tours en piliers, châteaux et flèches
 - 🔒 **Aucun cube suspendu dans le vide** : chaque pièce repose sur une autre ou sur la table (vérifié par `npm test`)
 - 🎁 **Bonus** : **tir triple** (dès le niveau 3) et **super balle** (dès le niveau 10), un de chaque par niveau
 - 👤 **Profils** : 15 avatars illustrés, nom modifiable, statistiques ; un avatar par défaut est attribué à la première connexion
@@ -98,15 +102,15 @@ Au premier lancement : écran de démarrage, conditions d'utilisation, puis **co
 Prérequis : [Node.js](https://nodejs.org) **22.5 ou plus** (module `node:sqlite` intégré).
 
 ```bash
-git clone https://github.com/princesse-aku/PBuster.git
-cd PBuster
+git clone https://github.com/princesse-aku/princess_buster.git
+cd princess_buster
 npm start
 ```
 
 Ouvre <http://localhost:3000> (sur ton téléphone : `http://<ip-de-ton-pc>:3000`, même réseau Wi-Fi).
 
 ```bash
-npm test          # valide les 250 niveaux (formats, techs, thèmes, aucun cube suspendu)
+npm test          # valide les 1000 niveaux (formats, techs, thèmes, aucun cube suspendu)
 npm run levels    # régénère les niveaux (attention : écrase public/levels)
 ```
 
@@ -122,7 +126,7 @@ npm run levels    # régénère les niveaux (attention : écrase public/levels)
 | Bonus | Choisis-le sur la fiche du niveau | `1` (triple), `2` (super) |
 | Plein écran | Bouton ⛶ | n/a |
 
-## Les 250 niveaux
+## Les 1000 niveaux
 
 Les niveaux sont des fichiers `public/levels/levelNNN.json` produits par `tools/generate-levels.js` :
 
@@ -130,6 +134,8 @@ Les niveaux sont des fichiers `public/levels/levelNNN.json` produits par `tools/
 - une rangée cachée derrière celle de devant sur certains niveaux (à partir du niveau 9), jamais plus de 2 plans ;
 - un décor différent à chaque niveau (rotation des 12 thèmes) ;
 - un nombre de balles calculé d'après la difficulté de chaque niveau.
+- les 50 technologies sont toutes débloquées au niveau 240 ; au-delà, la taille des piles plafonne (9×8) et la difficulté se stabilise, avec des formes et des mélanges de pièces différents à chaque niveau.
+- le menu n'affiche que les niveaux déjà joués et les suivants, avec un bouton **Voir plus de niveaux**.
 
 ## Créer ou modifier un niveau
 
@@ -207,7 +213,7 @@ API du serveur local :
 ## Architecture du projet
 
 ```
-PBuster/
+princess_buster/
 ├── public/                    # le jeu (statique)
 │   ├── index.html             # écrans, SEO, accueil
 │   ├── css/                   # style.css, home.css, home2.css
@@ -217,7 +223,7 @@ PBuster/
 │   │   ├── audio.js           # musique + bruitages synthétisés (WebAudio)
 │   │   ├── storage.js         # sauvegarde : Firebase, SQLite, localStorage
 │   │   └── firebase-config.js # configuration Firebase (null = désactivé)
-│   ├── levels/                # index.json + level001..250.json
+│   ├── levels/                # index.json + level001..1000.json
 │   ├── assets/                # logo, avatars, podium, fond d'accueil, tech/*.svg (50 logos)
 │   └── vendor/matter.min.js
 ├── server/server.js           # serveur local : fichiers statiques + API SQLite (node:sqlite)
@@ -254,7 +260,7 @@ PBuster/
 - [ ] Traductions (le jeu est en français)
 - [ ] Éditeur de niveaux visuel
 
-Une idée ? Ouvre une [issue](https://github.com/princesse-aku/PBuster/issues/new/choose).
+Une idée ? Ouvre une [issue](https://github.com/princesse-aku/princess_buster/issues/new/choose).
 
 ## Contribuer
 
@@ -264,7 +270,7 @@ Lis le [guide de contribution](CONTRIBUTING.md) et le [code de conduite](CODE_OF
 ## Licence et crédits
 
 - Code : [licence MIT](LICENSE) © 2026 princesse-aku
-- Le **logo « PBuster »**, les **avatars** et l'**illustration d'accueil** ne sont **pas** couverts par la licence MIT : tous droits réservés à l'auteur du projet
+- Le **logo « Princess Buster »**, les **avatars** et l'**illustration d'accueil** ne sont **pas** couverts par la licence MIT : tous droits réservés à l'auteur du projet
 - Logos des technologies : [Devicon](https://devicon.dev) (MIT) et logos d'IA : [Simple Icons](https://simpleicons.org) (CC0) ; le logo de Grok est un dessin original évoquant la marque ; le logo de PHP est celui du projet PHP. Les marques appartiennent à leurs propriétaires respectifs
 - Physique : [Matter.js](https://brm.io/matter-js/) (MIT)
 - Inspiration de gameplay : les jeux de tir de cubes en piles pour mobile. Aucun asset de ces jeux n'est utilisé ici
