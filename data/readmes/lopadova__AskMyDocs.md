@@ -1,5 +1,9 @@
 # AskMyDocs — AI Hub & Intelligent Agentic Platform for the Enterprise
 
+**MCP project connections for Codex, Claude and Cursor:** OAuth sign-in, one
+tenant/project per connection, distinct URLs, and document ingestion with preview and progress. See the
+[connection guide](docs-site/codex-project-connection.mdx).
+
 > **Enterprise RAG + Knowledge Graph + Agentic Tool Use, self-hostable, MIT licensed.**
 
 AskMyDocs is a self-hostable AI hub for enterprise knowledge. It fuses
@@ -52,16 +56,16 @@ to Glean / Notion AI / ChatGPT Enterprise — without the per-seat lock-in.
 - [✨ Modern Chat Surface (Vercel AI SDK UI)](#modern-chat-surface-vercel-ai-sdk-ui)
 - [✨ KITT — Knowledge Interface Tour Toolkit](#kitt--knowledge-interface-tour-toolkit)
 - [✨ Institutional Memory — anti-repetition retrieval over a living knowledge graph](#-institutional-memory--anti-repetition-retrieval-over-a-living-knowledge-graph)
-- [✨ Auto-Wiki — self-compiling agentic knowledge tier](#-auto-wiki--self-compiling-agentic-knowledge-tier-v811)
+- [✨ Auto-Wiki — self-compiling agentic knowledge tier](#-auto-wiki--self-compiling-agentic
+
+[...截断...]
+
+-knowledge-tier-v811)
 - [Features by area](#features-by-area)
   - [Retrieval & Knowledge](#retrieval--knowledge)
   - [Chat & Conversation](#chat--conversation)
   - [Security & Compliance](#security--compliance)
-  - [Admin & Operations](#admin
-
-[...截断...]
-
---operations)
+  - [Admin & Operations](#admin--operations)
   - [Integrations & Extensibility](#integrations--extensibility)
   - [Quality & Observability](#quality--observability)
 - [Quick start (5 minutes)](#quick-start-5-minutes)
@@ -137,4 +141,4 @@ no other public RAG platform — open-source or SaaS — currently ships.
 | ★ | Moat | One-line |
 |:---:|---|---|
 | ★ | **Human-gated canonical promotion pipeline** (ADR 0003) | Three-stage API (`/suggest` → `/candidates` → `/promote`) holds the LLM at "draft"; only humans (git push → GH Action) and operators (`kb:promote` CLI) commit canonical storage. Immutable `kb_canonical_audit` trail. No public competitor splits "AI proposes" from "human writes" this way. |
-| ★ | **Retrieval-time knowledge graph + rejected-approach injection** | `GraphExpander` walks `kb_edges` 1-hop at every query and folds neighbours into the `SearchResult`. `RejectedApproachInjector` vector-correlates the query against `rejected-approach` canonical docs and surfaces them under a ⚠ marker so the LL
+| ★ | **Retrieval-time knowledge graph + rejected-approach injection** | 

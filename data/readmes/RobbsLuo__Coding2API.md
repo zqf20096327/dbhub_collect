@@ -1,5 +1,10 @@
 # Coding2API
 
+[![CI](https://github.com/RobbsLuo/Coding2API/actions/workflows/ci.yml/badge.svg)](https://github.com/RobbsLuo/Coding2API/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/RobbsLuo/Coding2API)](https://github.com/RobbsLuo/Coding2API/releases)
+[![License: MIT](https://img.shields.io/github/license/RobbsLuo/Coding2API)](LICENSE)
+[![Image](https://img.shields.io/badge/image-ghcr.io%2Frobbsluo%2Fcoding2api-blue)](https://github.com/RobbsLuo/Coding2API/pkgs/container/coding2api)
+
 九个上游——**CodeBuddy**（国内 + 国际）、**TRAE SOLO**、**OpenCode Zen**、**Kilo**、**Qoder**、**CodeArts**、**OfficeAce**、**小浣熊**——封装成 OpenAI 兼容 API：公共凭证池、统一模型名与调度、按人用量统计。
 
 > [!WARNING]
@@ -8,7 +13,7 @@
 ## 特性
 
 - **OpenAI 兼容出口**：`/v1/chat/completions`（流式 / 非流式）、`/v1/responses`（Codex CLI）、`/v1/messages`（Claude Code）、`/v1/models`（含单模型查询）、`/v1/user/balance`。
-- **统一调度**：扁平名按健康度选号；`模型@渠道` 强制。优先级：免费渠道 → 在途最少 → 到期额度 → 健康度 + 分级冷却 → 余额多者。模型级限流只避让该模型；多轮对话粘同一凭证，出错才轮换。
+- **统一调度**：扁平名按健康度选号；`模型@渠道` 强制。优先级：免费渠道 → 在途最少 → 到期额度 → 健康度 + 分级冷却 → 余额多者。目录里的 x0 会被最近 24h 的实测扣费校准（上游改计费不改目录时不至于永远占住免费档）。模型级限流只避让该模型；多轮对话粘同一凭证，出错才轮换。
 - **到期额度优先**：主窗口（默认 36h）先烧将过期额度；打平再比 7 天窗口。单位统一积分。
 - **模型列表按凭证加载**：只列有可用凭证的渠道 → 无幽灵模型。
 - **公共凭证池**：admin 维护、全员共享、加密入库（`APP_SECRET`）；设备码登录、多账号切换、额度探测、签到、token 预刷新。
@@ -210,7 +215,9 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 
 **令牌刷新刚性**：refresh_token 与 `client_id=codearts-agent`、DPoP 私钥三者绑定、一次性；刷新后必须回写新 refresh_token。预刷新任务自动完成（DPoP ES256/P-256）。窗口封顶 45 分钟，须宽于轮询周期。凭据作废 → 标「需重新登录」+ 停重试。
 
-**每日签到**：`GET /v1/ops/delivery` → `POST /v1/ops/claim` → `POST /v1/ops/confirm`，后台每日自动领。`CLAIMED` =「已领未确认」→ 两步一起做；**claim 成功但 confirm 失败按失败处理**（不回「签到成功」），下一轮补确认，避免「界面显示成功、积分未到账」（实测用户反馈）。
+**每日签到**：`GET /v1/ops/delivery` → `POST /v1/ops/claim` → `POST /v1/ops/confirm`，后台每日自动领。活动按 `type=USER_LOGIN` 挑，**`campaignId` 取当轮响应**（上游 2026-11 把签到活动从 ID 1 换成 34、面额 1000 → 100；写死 ID 会导致「签到显示成功、官网任务仍在、积分不涨」）。`CLAIMED` =「已领未确认」→ 两步一起做；**claim 成功但 confirm 失败按失败处理**（不回「签到成功」），下一轮补确认，避免「界面显示成功、积分未到账」（实测用户反馈）。
+
+**重新登录合并**：同一华为云账号（`uid`）再次登录时**就地更新既有凭证**（新 token / refresh_token / DPoP 私钥），同时解除「需重新登录」硬禁用与冷却；不会在池子里新增一条重复账号。`paused` / `pinned` / 标签 / 统计归属保持不变。不同账号仍新增。
 
 **额度＝积分余额**：探测 `GET {snap}/snap-manager/v1/statistics/plugin`（前缀必须带 `snap-manager`；头 `Agent-Type: PromptCenter`）。上游数值即积分，不折算。分项包走悬浮明细；登记套餐到期日（积分过期同废）。
 
@@ -221,6 +228,8 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 [华为云 OfficeAce](https://www.huaweicloud.com/product/agentarts.html)，需真实账号：点「登录 OfficeAce」完成华为云授权即可；回调由云端承接，不监听本地端口。后端 2.5s 轮询 `/v1/claw/auth/code` 取授权码。
 
 **开通前提**：账号必须先在 OfficeAce 客户端登录并兑换邀请码。未开通的账号登录「成功」但拿不到模型密钥 → 点名报「华为云账号 xxx 还没开通 OfficeAce 服务」。
+
+**重新登录合并**：同一账号（`account_id`）再次登录时就地更新既有凭证（模型密钥 + 临时 AK/SK + refresh_token + DPoP 私钥），并解除「需重新登录」/冷却，不新增重复账号；`paused` / `pinned` / 标签 / 统计归属保留。
 
 **两套凭据，寿命不同**：
 
@@ -511,7 +520,7 @@ Playground 与 `/v1/models` 走 stale-while-revalidate：有缓存立刻回旧�
 
 默认**最近 24 小时**（另有 7 / 30 天、全部、自定义）。自定义 = 两个 `datetime-local`（浏览器时区），可只填一边；起点不早于终点 → 整窗作废 + 提示。端点全收 `until`（epoch 秒，半开 `[since, until)`）。
 
-**失败类型** = 受控枚举（`CONTROLLED_ERROR_TYPES`）：收尾行取**最后一次错误的真实归因**——模型级冷却耗尽 → `model_unavailable`；上游限流（SOFT / 429）→ `rate_limit`；链路层瞬态（连接超时 / 读超时 / TLS 中断）→ `upstream_timeout`；上下文超限（CodeBuddy 11115）→ `context_overflow`；模型不支持该请求形态（CodeArts 001001020 not multimodal）→ `model_capability`；上游明确说「没这个模型」→ `model_not_found`（与「请求无效」分开：前者是模型下线，后者是请求写错）。只有**一次都没选中凭证**（候选全在冷却 / 池子为空）才回落 `no_healthy_credential`。对外码相同，仅统计口径不同。
+**失败类型** = 受控枚举（`CONTROLLED_ERROR_TYPES`）：收尾行取**最后一次错误的真实归因**——模型级冷却耗尽 → `model_unavailable`；上游限流（SOFT / 429）→ `rate_limit`；链路层瞬态（连接超时 / 读超时 / TLS 中断）→ `upstream_timeout`；本机 DNS/连接失败（`ConnectError` / `gaierror`，连上游之前就失败）→ `network_error`（不冷却凭证）；上下文超限（CodeBuddy 11115）→ `context_overflow`；模型不支持该请求形态（CodeArts 001001020 not multimodal）→ `model_capability`；上游明确说「没这个模型」→ `model_not_found`（与「请求无效」分开：前者是模型下线，后者是请求写错）。只有**一次都没选中凭证**（候选全在冷却 / 池子为空）才回落 `no_healthy_credential`。对外码相同，仅统计口径不同。
 
 **请求 ID**：响应带 `X-Request-ID`。入站合法沿用，否则自生成；字符集 `[A-Za-z0-9._:-]`、长 1–128。落 `usage_events.request_id`，明细时间列悬停可见。**不透传上游**——各渠道出站头语义不同。
 
@@ -986,6 +995,8 @@ pnpm exec vitest run
 pnpm build
 ```
 
+参与贡献（提 issue / PR 门槛 / schema 约束）见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。
+
 ## 文档
 
 | 文档 | 内容 |
@@ -999,6 +1010,9 @@ pnpm build
 | [`diagrams/coding2api-permission-matrix.html`](diagrams/coding2api-permission-matrix.html) | 三角色权限矩阵 |
 | [`diagrams/coding2api-request-sequence.html`](diagrams/coding2api-request-sequence.html) | 请求主链路时序图 |
 | [`diagrams/coding2api-credential-lifecycle.html`](diagrams/coding2api-credential-lifecycle.html) | 凭证调度状态机 |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | 提 issue / PR 的流程与门槛 |
+| [`SECURITY.md`](SECURITY.md) | 漏洞报告渠道与部署方信任边界 |
+| [`CITATION.cff`](CITATION.cff) | 引用信息（GitHub「Cite this repository」） |
 
 ## 授权协议
 

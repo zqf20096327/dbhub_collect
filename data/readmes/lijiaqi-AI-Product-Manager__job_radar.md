@@ -3,8 +3,8 @@
 ![机会与路径，一眼看清：校招、实习、社招、招聘日历，以及说需求、找机会、看来源。 / Opportunities and workflow: graduate roles, internships, experienced hires, calendars; ask, discover and verify.](https://raw.githubusercontent.com/lijiaqi-AI-Product-Manager/job_radar/main/docs/assets/readme/features-bilingual.jpg)
 
 <p align="center">
-  <a href="https://github.com/lijiaqi-AI-Product-Manager/job_radar/releases/tag/v2.3.1"><img src="https://img.shields.io/badge/release-v2.3.1-58bfa5" alt="Release 2.3.1"></a>
-  <a href="https://pypi.org/project/jobsearchradar/"><img src="https://img.shields.io/pypi/v/jobsearchradar?color=58bfa5&label=PyPI" alt="PyPI"></a>
+  <a href="https://github.com/lijiaqi-AI-Product-Manager/job_radar/releases/latest"><img src="https://img.shields.io/github/v/release/lijiaqi-AI-Product-Manager/job_radar?cacheSeconds=300&color=58bfa5" alt="Latest release"></a>
+  <a href="https://pypi.org/project/jobsearchradar/"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fpypi.org%2Fpypi%2Fjobsearchradar%2Fjson&query=%24.info.version&label=PyPI&prefix=v&color=58bfa5&cacheSeconds=300" alt="PyPI"></a>
   <a href="https://github.com/lijiaqi-AI-Product-Manager/job_radar/actions/workflows/ci.yml"><img src="https://github.com/lijiaqi-AI-Product-Manager/job_radar/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/lijiaqi-AI-Product-Manager/job_radar/releases/tag/data-latest"><img src="https://img.shields.io/badge/data-daily_snapshots-58bfa5" alt="Daily data snapshots"></a>
   <a href="https://github.com/lijiaqi-AI-Product-Manager/job_radar/blob/main/pyproject.toml"><img src="https://img.shields.io/badge/python-3.11%2B-7bb7ff" alt="Python 3.11+"></a>
@@ -79,7 +79,7 @@ Skill 是助手的求职查询说明，MCP 是它调用工具的连接方式，�
 需要 Python 3.11+，支持 Windows、macOS 和 Linux：
 
 ```bash
-python -m pip install --upgrade "jobsearchradar[mcp]==2.3.1"
+python -m pip install --upgrade "jobsearchradar[mcp]"
 jobradar update
 jobradar doctor
 ```
@@ -98,7 +98,7 @@ jobradar doctor
 
 客户端需能找到安装环境里的可执行文件，找不到时使用其绝对路径。自定义数据目录时，在服务 `env` 中设置同一 `JOBRADAR_HOME`。技能路径也可按[查询工作流](https://github.com/lijiaqi-AI-Product-Manager/job_radar/blob/main/skill/jobradar/SKILL.md)直接调用本地工具，无需同时配置 MCP。
 
-包名为 `jobsearchradar`，命令为 `jobradar` / `jobradar-mcp`。首次更新需联网下载岗位、正文与日历三库，需预留下载和解压空间；下载后本地查询可离线使用。后续让助手检查并更新快照；默认目录为 `~/.cache/jobradar`。只用终端可安装 `jobsearchradar==2.3.1`。
+包名为 `jobsearchradar`，命令为 `jobradar` / `jobradar-mcp`。首次更新需联网下载岗位、正文与日历三库，需预留下载和解压空间；下载后本地查询可离线使用。后续让助手检查并更新快照；默认目录为 `~/.cache/jobradar`。只用终端可安装 `jobsearchradar`。
 
 当前推荐默认的 GitHub 数据渠道；Gitee 与 npm 的核查状态见[安装渠道](https://github.com/lijiaqi-AI-Product-Manager/job_radar/blob/main/docs/DISTRIBUTION.md)。[安装与排错](https://github.com/lijiaqi-AI-Product-Manager/job_radar/blob/main/docs/INSTALLATION.md)提供环境检查和固定源码备用方式。
 
@@ -151,7 +151,7 @@ CLI / MCP 默认折叠相同展示分组，`variants` 保留原条数；查看�
 
 ## 数据与覆盖
 
-**配置统计 · 2026-11-04**
+**配置统计 · 2026-11-05**
 
 | 指标 | 当前值 | 含义 |
 | :--- | ---: | :--- |
@@ -161,9 +161,9 @@ CLI / MCP 默认折叠相同展示分组，`variants` 保留原条数；查看�
 | 核心目标覆盖 | **944 / 1,655 · 57.04%** | 固定目标池中的配置覆盖 |
 | 其中官方 / 聚合 | **598 / 346** | 优先按官方归类，不重复计数 |
 
-**已核验发布快照 · `2026-11-04T13:23:42Z`**
+**已核验发布快照 · `2026-11-05T08:58:42Z`**
 
-共 **331,440 条岗位记录**，其中 **306,924 条可见记录**；对应 JD 正文覆盖率 **97.5%**。招聘日历样本共 **5,529 条**，含 **2,078 条人工整理条目**。这是有日期的历史快照，实时规模以本地 `jobradar stats` 和最新 [数据 Release](https://github.com/lijiaqi-AI-Product-Manager/job_radar/releases/tag/data-latest) 为准。
+共 **346,273 条岗位记录**，其中 **320,353 条可见记录**；对应 JD 正文覆盖率 **97.6%**。招聘日历样本共 **5,612 条**，含 **2,078 条人工整理条目**。这是有日期的历史快照，实时规模以本地 `jobradar stats` 和最新 [数据 Release](https://github.com/lijiaqi-AI-Product-Manager/job_radar/releases/tag/data-latest) 为准。
 
 配置覆盖不等于当天在招；聚合招聘简章可能对应多个岗位，不能按单个职位理解。日期缺失保留为空，学校公告展示截止日与企业网申截止日分别处理。更多口径、可复算命令与已知限制见 [覆盖说明](https://github.com/lijiaqi-AI-Product-Manager/job_radar/blob/main/docs/COVERAGE.md)。
 

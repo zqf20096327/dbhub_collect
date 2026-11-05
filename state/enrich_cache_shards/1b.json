@@ -46,12 +46,12 @@
   ]
  },
  "porsager/postgres": {
-  "commit_7d": 3,
-  "commit_90d": 5,
-  "rel_ver": "v4.0.0",
-  "rel_pub": "2026-10-29",
+  "commit_7d": 63,
+  "commit_90d": 68,
+  "rel_ver": "v4.1.0",
+  "rel_pub": "2026-11-05",
   "rel_days": 0,
-  "rel_n90": 1,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -59,16 +59,33 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 77,
-  "enriched_at": "20261029",
+  "enriched_at": "20261105",
   "lang": {
    "JavaScript": 100
   },
   "dim_ts": {
    "lang": "20260929",
    "security": "20261027",
-   "commit": "20261029",
-   "release": "20261029"
-  }
+   "commit": "20261105",
+   "release": "20261105"
+  },
+  "rel_notes": [
+   {
+    "t": "v4.1.0",
+    "d": "2026-11-05",
+    "n": "- **Node.js 18** is supported again: `engines` is `>=18` and CI runs it. Nothing in Postgres.js needs 20; `using`, `await using` and tracing are used where the runtime has them. Loading it with `require` still needs Node.js 20.19 or 22.12.\n- **`PGSSLMODE` is read** (#1307). It was ignored, so `PGSSLMODE=verify-full` connected in plain text without an error. This may change how existing setups connect: `require` now uses TLS and fails against a server without it, and `verify-ca` and `verify-full` check the c"
+   },
+   {
+    "t": "v4.0.0",
+    "d": "2026-10-29",
+    "n": "- **A NUL character in a connection parameter can no longer add parameters** (also in v3). A `database`, `user` or `connection` value such as `'db\\0user\\0postgres'` was sent as further startup parameters, so an app that put untrusted input there, as with a database per tenant, could be made to log in as another user where that user needs no password, or with `replication` or `options` set. A NUL in any protocol string, also in query text and identifiers, now rejects with `NUL_CHARACTER`.\n- **TypeScript:** t"
+   },
+   {
+    "t": "v3.4.9",
+    "d": "2026-04-05",
+    "n": "- Fix https://github.com/porsager/postgres/issues/1143  1e92809\r\n\r\n---\r\n\r\nhttps://github.com/porsager/postgres/compare/v3.4.8...v3.4.9"
+   }
+  ]
  },
  "dunwu/db-tutorial": {
   "commit_7d": 0,

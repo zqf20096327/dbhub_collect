@@ -15,6 +15,7 @@ If you are a Joomla extension developer still supporting Joomla 3.x and you are 
 
 ## CONTENTS
 - [Changelog](#changelog)
+  - [Version 3.18 - released November 5th, 2026](#version-318---released-november-5th-2026)
   - [Version 3.17 - released October 10th, 2026](#version-317---released-october-10th-2026)
   - [Version 3.16 - released October 3rd, 2026](#version-316---released-october-3rd-2026)
   - [Version 3.15 - released July 18th, 2026](#version-315---released-july-18th-2026)
@@ -39,6 +40,141 @@ If you are a Joomla extension developer still supporting Joomla 3.x and you are 
 
 ## CHANGELOG
 
+A short overview of each release. Every change is described in detail in [CHANGELOG.md](CHANGELOG.md).
+
+## Version 3.18 - released November 5th, 2026
+Summary of changes:
+- **Much more of the core can be removed, cleanly:** Articles, Private Messages, Privacy, Redirect, Tags, Wrapper, the Breadcrumbs and Syndication Feeds modules and CodeMirror can be uninstalled (using K2 instead of Articles? uninstall Articles, the rest keeps working). A component takes its tables, modules, plugins, media, Smart Search entries and menu items along, and "Restore uninstalled core extensions" brings them back
+- **Prothero**, a new black and white administrator template with a dark mode, the default on new sites (Isis stays, and works with the same extensions)
+- **New editors:** Markdown (EasyMDE) and Blocks (Editor.js), next to TinyMCE 8, and an editor switcher in the administrator for moving between TinyMCE, TinyMCE (legacy), Markdown and Blocks without losing unsaved changes; PDF files shown on the site with a viewer & a new editor button to make attaching PDF documents with inline previews a breeze!
+- **A better Media Manager:** drag and drop uploads, cropping, renaming in place, large previews of images, audio, video and PDF files, and optimised uploads (upright, WebP, no metadata)
+- **Little WAF, on by default:** blocks scans, attack tools, executable uploads and object injection, sends safe security headers and cleans up the malformed addresses crawlers make up
+- **Faster, sturdier caching:** campaign and social links get cached pages, a page is rendered once however many visitors ask for it, stale pages keep a busy or failing site answering, and cache times are exact across Joomla, Varnish, CDNs and browsers, and the file cache reads about 30% faster
+- **Redirects** how you want them, not just for error pages: create custom redirects as you like
+- **Structured data, Open Graph and X cards** for every page
+- **CAPTCHA plugins:** Updated Google's reCAPTCHA to support all active versions & added new ones for Cloudflare Turnstile, hCaptcha, Akismet and IconCaptcha (fully self-hosted)
+- **No jQuery, jQuery UI, MooTools or Bootstrap in the core**: one shared plain JavaScript file (`global.js`) does the work, and old names keep working for extensions. Tested extensively on many popular large extensions (K2, VirtueMart, HikaShop, JEvents, JCE, Convert Forms, AcyMailing, Community Builder and others)
+- **Smart Search fixes** for large sites ([#9](https://github.com/joomlaworks/joomla-3.x/issues/9), [#21](https://github.com/joomlaworks/joomla-3.x/issues/21), [#23](https://github.com/joomlaworks/joomla-3.x/issues/23)), more PHP 8.2–8.5 fixes ([#20](https://github.com/joomlaworks/joomla-3.x/issues/20))
+- **An amazing new debug console:** a button at the bottom right opens a panel with tabs (time, memory, queries, errors), light and dark
+
+Every change is described in detail in [CHANGELOG.md](CHANGELOG.md).
+
+**New features:**
+- **Administrator:**
+  - Prothero: Isis' markup with a minimal black and white look, light and dark colour schemes (automatic by default), a choice of colours for the menu bar and a matching login page; the installer asks which administrator template to use
+  - Editor switcher: switch between TinyMCE, TinyMCE (legacy), Markdown and Blocks for the session, without losing unsaved changes; a Default Editor (Site) option for front-end editing
+  - The debug console opens from a button at the bottom right, as a panel with tabs (time, memory, queries, errors), light and dark
+  - System Information lists the bundled third-party software (version, licence, home page; outdated software marked), and a "System Information" module sits beside the Control Panel's quick icons
+- **Content:**
+  - "Editor - EasyMDE (Markdown)": write in Markdown, with preview, side by side and drag and drop uploads; content is still saved as HTML
+  - "Editor - Blocks (Editor.js)": write content as blocks (headings, lists, images, embeds, quotes, tables, code, notes, HTML, Read more), saved as HTML which the site template's block layouts decide; templates add blocks of their own (Rookwood: Hero, Testimonials, Services); a preview at desktop, tablet and phone widths; a "Custom Blocks" module
+  - "Custom Code" module (site and administrator): your own HTML, CSS, JavaScript or embeds, written in CodeMirror and output as it is
+  - PDF files: a viewer on the site (`{pdf images/file.pdf}`), a PDF button in the editors, previews in TinyMCE, the Blocks editor and the Media Manager; each sample data set shows one in an article
+- **Media Manager:** drag and drop uploads into the folder shown (also in the image picker), cropping (free or 21:9 to 1:1, as a new file or over the original), renaming files and folders in place, square thumbnails you can make smaller or larger, large previews of images (with the arrow keys), audio, video and PDF files. Images uploaded in the editors are turned upright, saved as WebP, stripped of their metadata (GPS included) and filed in dated folders; resizing and a copy for phones (with `srcset` written by the editors) are options, and `media:optimize` does the same for existing images
+- **Security:**
+  - Little WAF's generic protections (whatever extensions a site has), security headers (safe ones on by default) and URL Normalizations; an optional secret key in the administrator's address
+  - Four new CAPTCHA plugins: Cloudflare Turnstile, hCaptcha, Akismet (spam filtering without a challenge) and IconCaptcha (self-hosted, no keys, enabled); one Google reCAPTCHA plugin for the checkbox, invisible and score (v3, new) types
+- **Redirects:** any address can be redirected, on the site or elsewhere (301 or 302), with matching that ignores case, slashes and `index.php/`, query strings passed on, loops refused and chains warned about; errors (404 and others) collected into a list of their own (off by default) with a "Create Redirect" button; import that checks every line
+- **Search engines and social networks:** "System - Structured Data & Social Tags" writes Google structured data (JSON-LD), Open Graph and X card tags for every page, with any template; the type of articles (Article, News Article, Blog Post, Review, Recipe...) per site, category or tag
+- **Caching:** the page cache ignores tracking parameters (`utm_*`, `fbclid`, `gclid`... editable in Global Configuration), has its own times for the home page and other pages, serves stale pages while one request refreshes them (and instead of an error page), sends `Age`, `s-maxage`, `stale-while-revalidate`, `stale-if-error` and `X-Logged-In` for Varnish and CDNs, and the file cache reads about 30% faster
+- **For developers:** behaviour from markup (`data-validate`, `data-tooltip`, `data-searchable`... without a call in the view), `<jdoc:include type="footer" />` for the CMS's scripts at the end of the page, `addPreconnect()`/`addDnsPrefetch()`/`addPreload()` also sent as `Link:` headers (Early Hints), console plugins adding command line commands ([CLI-GUIDE.md](CLI-GUIDE.md)), and PostgreSQL understanding MySQL-style backticks; see [API-GUIDE.md](API-GUIDE.md)
+
+**Improvements:**
+- Clean Cache tells you how much it removed: how many items and how much data
+- The Clear Cache page shows one list on Memcached, Redis, APCu and WinCache, which keep one cache for the site and the administrator, instead of two identical tabs
+- Clear Expired Cache is now a button on the Clear Cache page, not a page of its own. Memcached and Redis remove expired items by themselves, so there the page says that instead
+- Memcached compression is on by default for new sites: cached pages take far less memory
+- Plain JavaScript instead of jQuery, jQuery UI, MooTools and Bootstrap's scripts throughout the core: modals, tooltips, tabs, searchable lists (Chosen rewritten, same look), search tools, subforms, drag and drop reordering (with touch), date fields (the browser's date input; Jalali for Persian), colour fields (the browser's colour picker), show-on fields, the Media Manager and Joomla Update; old names and jQuery plugin calls keep working for extensions, and MooTools stays available for those that ask for it
+- Bootstrap Icons replace IcoMoon (the `icon-*` classes keep working), core icons are SVGs in the text's colour, and the language flags are redrawn
+- Isis and Protostar are plain CSS (no more Less; Isis' stylesheets about a third of their former size), wider form fields in the administrator, and no files for old Internet Explorer anywhere
+- Hammond, Finch and Rookwood send resource hints (also as `Link:` headers for Early Hints), and every page's stylesheets and scripts are sent as preload headers
+- Hammond, Finch and Rookwood: give a module the class `wide` to take it from one side of the window to the other (e.g. a slideshow on the home page)
+- Updated libraries: PHPMailer 7.1.1 (was 5.2.28), CodeMirror 5.65.21 (with a dark theme), jQuery UI 1.14.2 (for extensions still requiring it), SimplePie 1.9.0 (for extensions still requiring it), Symfony Yaml 4.4, sodium_compat 1.24.2; removed: HTML5 Shiv, Google's reCAPTCHA client, unused web service libraries and polyfills for PHP below 7.1
+- Media Manager: current file types uploadable by default (WebP, AVIF, MP4, WebM, MP3, Opus, FLAC, Office...; SVG deliberately not), uploads up to 128 MB, a name already taken gets the time added instead of failing
+- The core system plugins run in a better order (Little WAF, Redirect, Language Filter, Remember Me and Page Cache first), so cached pages skip third-party plugins' work
+- Sites updating get TinyMCE 8 as default editor (when they used TinyMCE 4) and Prothero as administrator template (when they used Isis); the "What's New" message lists what to check after updating
+- PostgreSQL 9.5 is now the minimum (was 9.0); the distribution's PHP code follows PSR-12
+
+**Security fixes:**
+- TinyMCE updated to 8.10.1, which fixes a way to slip harmful code into content through its media plugin
+- Hammond, Finch and Rookwood no longer show the full text of restricted articles to visitors who aren't allowed to read them
+- Media Manager uploads can no longer end up in a folder outside the media folder, and dangerous file types are caught however their names are capitalised
+- Extensions can no longer accidentally open the page to harmful code through the links, scripts and styles they add
+- Command line: importing a database file can no longer run hidden commands, and an AI assistant given write access can no longer create administrators unless it was explicitly allowed to install code
+
+**Bug fixes:**
+- **Administrator:**
+  - Lists no longer make the page scroll sideways on tablets and narrow windows: the least important columns are hidden, only as many as needed to fit
+  - Modules dragged to a new place in the Modules list now stay there
+  - The windows opened by the editor's buttons and by image fields fit on phones and small tablets
+  - Checkboxes in lists line up with the text beside them
+  - Smaller fixes in Language Overrides, menu assignments, module ordering, Smart Search, Banners, the extension installer, two-factor authentication and Install from Web
+- **Site and templates:**
+  - Some third-party modules no longer lose their module container (title, classes and layout) once caching is on
+  - Hammond, Finch and Rookwood show an Edit link to users who may edit an article, as Joomla's own layouts do
+  - Hammond, Finch and Rookwood: subcategory lists expand, Smart Search's advanced options open, search suggestions no longer cover the Search button, the image picker for front-end editing looks right, and form lists follow the dark themes
+  - Rookwood's main menu and Protostar no longer make the page scroll sideways at some widths
+  - Pages without a menu item of their own (login, tags, search...) no longer get "Site - Site" as their title
+  - Error pages show the right error, and a site whose template was deleted shows another template instead of an error
+  - Deleting a menu item no longer hides modules shown "on all pages except" that item
+  - The password reset form checks the email address before sending
+- **Media Manager:** common file types the settings allow (icons, OpenDocument files, older Excel and PowerPoint files) upload again, refused files get a clear message, and videos in subfolders play
+- **Search and Smart Search:**
+  - Rebuilding the Smart Search index no longer stops partway on MySQL and MariaDB, nor from the command line
+  - Searching by date works with only a start or an end date, and the "All" results setting shows results
+  - Searches find words typed without accents, also in Greek and other alphabets, and search suggestions work on SQLite
+- **Caching** (bugs inherited from Joomla 3):
+  - If the cache server can't be reached, runs out of memory or asks for a password, the site keeps working without the cache. Before, some of these cases showed an error on every page, including the administrator, where the setting could have been changed. Administrators now see a warning.
+  - When several visitors ask for the same page at once, only one builds it on Redis and APCu too (it already worked this way on Memcached and the file cache), which matters most during traffic spikes.
+  - Clear Expired Cache now really removes expired items on APCu.
+  - The Clear Cache page and the command line now say when cleaning failed, instead of reporting success.
+  - Memcached works with very long cache times (over 30 days) and over a socket file.
+  - Clearing the cache works on large, busy sites with file or Memcached caching, Memcached no longer slows down as the cache grows, and Redis clears faster and shows true sizes
+  - Clear Expired Cache also cleans the site's cache (it only cleaned the administrator's)
+  - A damaged cache entry no longer shows visitors an empty page
+  - Browsers can reuse cached pages they already have, and forms on cached pages work for every visitor
+  - Visits from social media or newsletter links (with tracking codes) no longer change what cached pages show others
+  - Clearing the cache only clears this site's cache, also from the command line
+- **Databases:**
+  - Lists no longer show some items twice and skip others when going from one page to the next
+  - PostgreSQL: pages work with debugging or caching on, and new items save
+  - SQL Server: private messages and privacy consents save, and Smart Search indexes every item
+  - SQLite: searches work in every alphabet, and a few lists and options fill in correctly
+  - Moving a site from MySQL 8 to MariaDB or an older MySQL works
+- **Command line and MCP:** installing extensions such as VirtueMart, enabling plugins like Page Cache, editing articles (their formatting was lost) and changing settings through an AI assistant all work as expected
+- **Updates and extensions:**
+  - Uninstalling a core component also removes the extensions that only served it and the files it left behind, and nothing else breaks without it
+  - The plugin everyone needs to log in can no longer be uninstalled by mistake
+  - Updating an old site keeps the Beez 3 template if the site uses it, and updates remove files that are no longer part of Joomla
+  - Installing a new site no longer starts over when a step shows a warning
+  - Sample data no longer hides every module after an interrupted install
+- **PHP compatibility:** warnings that filled server logs on PHP 8.1–8.5 are gone, older extensions built on FOF work on PHP 8, two-factor logins set up in Joomla 3.2–3.6 work on PHP 8, and exporting the User Actions Log works on PHP 7
+- **Other:** small fixes in the code editor (CodeMirror), and missing texts that showed as codes were added
+
+**Joomla 3 bugs fixed:**
+
+Part of what this project does is fix what never got fixed in Joomla 3 itself. These are the ones site owners are most likely to have met, all already there in the Joomla 3.10 code this distribution started from, and also part of the list above. The [CHANGELOG](CHANGELOG.md) marks more than 70 fixes in this release as "stock Joomla 3".
+- **Caching:**
+  - An unreachable cache server, or a Redis server out of memory, took the whole site and its administrator down
+  - With Redis or APCu, a traffic spike rebuilt the same page once per visitor instead of once
+  - Cached pages could give a visitor someone else's form token
+  - A damaged cache entry showed an empty page until it expired
+  - Clearing the cache could fail on large, busy sites
+  - Clear Expired Cache left the site's own cache untouched
+  - Browser caching of cached pages never worked
+- **Modules:**
+  - Modules dragged to a new place in the Modules list went back on the next page load
+  - Deleting a menu item could make a module disappear from every page
+  - A module could lose its surrounding markup once caching was on
+- **Search and Smart Search:**
+  - Smart Search's full reindex stopped with "table is full" on MySQL and MariaDB with default settings
+  - Search dropped results when a word was typed without the accents of a non-Latin script, such as Greek
+- **Administrator:**
+  - Windows opened by the editor's buttons ran off the screen on phones
+  - Administrator lists scrolled sideways on tablets
+  - "User - Joomla!" could be uninstalled, after which nobody could log in
+- **Media Manager:** common file types the default settings allow (icons, OpenDocument files, older Excel and PowerPoint files) couldn't be uploaded
+
 ## Version 3.17 - released October 10th, 2026
 Summary of changes:
 - Full support for all major database vendors: MySQL/MariaDB (native & PDO), Postgres (native & PDO), SQLite, SQL Server & Azure SQL, spanning versions that were released even 15 or so years ago (excluding SQLite, which supports versions from late 2021 on, 3.37.0 and newer, for now). Our work made all databases simply work as they should with Joomla. And Joomla 3.x UTD works natively with the default user authentication method that ships with MySQL 8.0, 8.4 and 9.x (caching SHA-2) and it does not require switching MySQL to "native" authentication (the old way up to MySQL 5.7).
@@ -56,94 +192,44 @@ Summary of changes:
 - Fixed the administrator's Help buttons, which showed "not found" since v3.11.
 - Fixed a ton of long-standing bugs in the API and ironed out any PHP deprecations we could detect.
 
-**Security fixes:**
-- Installer: the ownership check for remote databases could be skipped by going straight to the step which writes the configuration (stock Joomla 3)
-- Installer: anyone could run the installer again on an installed site while the `installation` folder remained (stock Joomla 3); now only the browser which installed the site can go on
-- Installer: setting the Super User's group could put every user into the Super Users group when the mapping already existed
-- Module Manager: the ordering list of the module edit form could be read by anyone, listing the titles of the modules in any position
-- `{loadmoduleid}` showed any module to anyone, whatever its access level or publishing dates (since 3.12)
-- A crafted package could write files outside the site's folders, through Joomla Update's extraction, the extension installer or the archive code, and uninstalling one could delete a folder outside the extension (stock Joomla 3); such packages are now refused as a whole
-- FOF's download class read local files (`file://`) and could write outside the temporary folder (stock Joomla 3)
-- MySQL (PDO) driver: it ran several statements given at once (stock Joomla 3); now one, like the "mysqli" driver
-- PostgreSQL: the native driver ran several statements given at once, its connection settings weren't quoted, and usernames differing only in case could be registered (stock Joomla 3)
-- The configuration writer could put PHP code into `configuration.php` through a crafted setting name (stock Joomla 3)
-- Joomla Update showed the update feed's values unescaped; Install from URL and Install from Web accepted download addresses other than `http`/`https` (stock Joomla 3)
-- Little WAF now also checks form data and encoded spellings of the tags, and works on servers without `REQUEST_URI`; each filter only acts while its extension is installed
-- `database:convert` wrote its temporary copy of the database to an unprotected folder of `tmp/`; it now uses the protected backup folder, as `database:export` does when run inside the site
-- The PDO database drivers refuse connection settings which could add settings of their own (stock Joomla 3)
-
-**Bug fixes:**
-- Fixed intermittent "Serialization of 'PDOStatement' is not allowed" errors with the PDO database drivers when caching is enabled (any cache handler), typically right after the site wrote something to the database
-- Fixed the "MySQL (PDO)" database driver returning numbers as numeric types on PHP 8.1+, while the default "MySQL (mysqli)" driver returns them as strings. Code comparing database values strictly could behave differently depending on the driver.
-- Fixed a PHP warning when checking for extension updates while an installed extension's cached manifest data is empty or corrupted, and a potential crash at the start of a Joomla update in the same situation
-- Fixed the "Little WAF" plugin showing no version, date or author in Extensions: Manage on sites upgraded to 3.16 (fresh installs were fine)
-- Fixed Extensions: Install Languages permanently showing "The update table is not up to date" (with no languages listed) on sites missing the English language pack's database record, which some older upgrade paths never created; it's now restored automatically on update
-- Fixed PHP 8.5 deprecation warnings from non-canonical casts (e.g. `(boolean)`, `(integer)`, `(double)`) still present in parts of the code
-- Fixed thousands of PHP 8.5 deprecation warnings while Smart Search indexes content
-- Fixed a PHP warning in command line scripts given an empty argument
-- Fixed Global Configuration not saving on SQLite sites ("Invalid field: Host")
-- Fixed PHP 8.4/8.5 deprecation warnings when checking for updates, reading RSS feeds, sending mail with NTLM authentication, connecting to LDAP and using FTP
-- Fixed extension updates losing their download key when the package URL already had a query string
-- Update notification emails for a new Joomla version are now sent once a day, at a time you choose in the plugin's options (10:00 by default); they used to go out every 6 hours until the site was updated
-- Fixed a fatal error on PHP 8 when the "File" cache handler can't create a cache folder
-- Fixed Global Configuration requiring a database user name
-- Fixed exporting and importing database tables with Joomla's database exporter/importer (invalid XML for some column defaults, and a fatal error importing new tables with the "MySQL (PDO)" driver)
-- Fixed database errors on PHP 8.1+ with the default "MySQL (mysqli)" driver turning into fatal errors where Joomla and extensions expected to handle them, and lost database connections no longer being reconnected
-- Fixed the same with the "MySQL (PDO)" driver on every PHP version, plus an abrupt "Recursion trying to check if connected" stop when its connection was lost
-- Fixed the "MySQL (PDO)" driver ignoring a port or socket in the database host (e.g. `localhost:/path/to/mysql.sock`); the installer now also accepts a local socket without asking to verify the site's ownership
-- Fixed the "PostgreSQL" database driver not working at all on PHP 8.1+, System Information failing on PostgreSQL 16+, creating users failing with a duplicate key error on PostgreSQL after many users, and lost PostgreSQL connections never being reconnected. PostgreSQL support is now tested (PostgreSQL 18, both drivers)
-- Fixed the installer stopping after its first step on PHP 8.2+ when PHP is set to display errors
-- Fixed uninstalling Contacts or News Feeds failing (and leaving them half removed) on sites installed with sample data, after Banners had been uninstalled
-- Clear error messages when the database user's authentication method is the reason a connection fails (e.g. `mysql_native_password` on MySQL 8.4/9), saying what to change
-- Fixed several installer bugs: no sample data offered for SQLite, SQLite not hiding the server fields in the browser, unescaped values on the overview page, a path check on the chosen sample-data file, missing, empty, wrong and malformed translations (every installation language now has every string, including those of this version), and PHP 8.5 deprecation notices (one of them in every select list built from arrays, site-wide)
-- Fixed PHP 8.2+ deprecation warnings when editing tagged items and in forms with date, colour, captcha or module ordering fields, and PHP 8.1+/8.5 warnings with menu items linking to external URLs and on pages without a menu item
-- Fixed warnings when saving Login/Logout menu items created by code, and when saving Global Configuration from the command line on new sites
-- An uninstalled "Little WAF" plugin no longer comes back on Joomla updates
-- "Cancel" in a component's Options goes back to the page you came from, like "Save & Close" does
-- The Site Information/Statistics modules show the operating system's name (e.g. "Ubuntu 26.04.1 LTS", or "Linux" on the frontend) instead of a cut-off "Linux" plus the start of the server's host name, and the web server (e.g. "Apache 2.4.58"; only the name on the frontend)
-- Fixed "Access forbidden." showing in the Module Manager after saving a module, for users who may edit modules but not publish them (the module was saved)
-- The command line now shows the messages of older code (e.g. why a category can't be deleted), and a broken command file no longer stops the other commands
-- Fixed tags given by ID from the command line being created as new tags named after the number
-- Fixed date calculations with negative intervals failing on the SQLite database driver
-- The administrator login page always shows its gradient: upgraded sites got a flat blue panel from Isis' old "Login Background Colour" option, which is removed
+**New features:**
+- New SQLite database driver (experimental): the whole site in one file, with no database server. In the installer (PHP 7.4+), and for existing sites through `database:convert`, which moves sites between MySQL/MariaDB, PostgreSQL and SQLite in any direction. See [SQLite Support](#sqlite-support)
+- Three new frontend templates, each with its own sample data set: Hammond (news and magazines, News set), Finch (blogs, Blog set) and Rookwood (studios and companies, Studio set). Plain CSS and JavaScript without jQuery or Bootstrap, an `editor.css` so the editor shows the site's styling, print styles, lazy images, and a `css/custom.css` of your own that updates never touch. Installed but not activated on existing sites
+- TinyMCE 8 editor, the default of new sites; existing sites switch in Global Configuration, and TinyMCE 4 stays as "Editor - TinyMCE (legacy)"
+- "Install from Web" (the Joomla! Extensions Directory) included, as the first tab of Extensions: Install
+- New command line interface, `cli/joomla.php`, with the command names of Joomla 4 and later and many more: updates, configuration, users, extensions, database, cache, Smart Search, content (articles, categories, tags, modules, menu items), templates (files, options, backups), `extension:reinstall`, `site:health` and logs. JSON output, `--dry-run`, and changes recorded in the User Actions Log. The scripts in `cli/` keep working
+- Quick install from the command line: `php cli/joomla.php core:install` sets up a new SQLite site in seconds (see [Quick install from the command line](#quick-install-from-the-command-line-sqlite))
+- Built-in MCP server for AI assistants, read-only by default. See [AI Assistants (MCP)](#ai-assistants-mcp)
+- Clean Cache in the administrator's status bar for everyone with backend access, plus Clean Everything and Global Check-in for administrators
+- PostgreSQL in the command line database tools, and PostgreSQL install scripts for Banners, Contacts and News Feeds
+- New sites list 50 items per page in the managers, show the site's name after page titles, and get a taller editor
+- Clearer option groups in the administrator, and lists shown with a template's layout keep it on page 2 and later
 
 **Improvements:**
-- The "Joomla! Statistics" plugin and its request to send statistics are off on new and updated sites (joomla.org's statistics don't cover this distribution)
-- A modernised installer for new sites: new app-style design with a sidebar of steps (with dark mode and right-to-left support), well-formed XHTML-style HTML5, plain HTML/CSS/JavaScript without Bootstrap, jQuery or any other file from outside the `installation` folder, and the same steps as before
-- The installer removes the `installation` folder by itself when you continue to your site or its administrator (only after installing, and only its own folder), and no longer has FTP options
-- The installer offers three sample data sets, News, Blog and Studio; Brochure, Default and Learn (and the Learn set's images) are removed
-- The "Sample Data" plugin (formerly "Sample Data - Blog") and Control Panel module install either set, News first, with a button per set
-- The administrator's status bar names the distribution ("Joomla 3.x UTD v3.17.0"), and shows Visitors and Messages as icons and "Admins", so it stays on one line
-- `config:set` says which options it set, with their new and previous values (secrets and long values by name only)
+- A modernised installer: app-style design with dark mode and right-to-left support, plain HTML/CSS/JavaScript, removes its own folder when you're done, no FTP options
+- Three sample data sets, News, Blog and Studio, from the installer or the Control Panel's Sample Data module, replacing Brochure, Default and Learn
+- The status bar names the distribution ("Joomla 3.x UTD v3.17.0") and fits on one line; `config:set` says what it changed
+- The "Joomla! Statistics" plugin is off on new and updated sites (joomla.org's statistics don't cover this distribution)
 
-**New features:**
-- TinyMCE 8 editor ("Editor - TinyMCE"), next to the TinyMCE 4 one, now "Editor - TinyMCE (legacy)": the editor buttons below the editor as before, image uploads by dropping, pasting or the image dialog, templates, a toolbar builder per user group, 61 languages. New sites use it; existing sites switch in Global Configuration (and can switch back)
-- "Install from Web" (the Joomla! Extensions Directory browser) is included and enabled, as the first tab of Extensions: Install; it can't be installed from the JED any more, whose feed stops at Joomla 3.10
-- Quick install from the command line: `php cli/joomla.php core:install` sets up a new site on SQLite from just the site's name and the administrator's email address and username, with a generated password and, optionally, sample data (see [Quick install from the command line](#quick-install-from-the-command-line-sqlite))
-- Content management from the command line: list, show, create, change, publish, trash and delete articles, categories, tags, modules and menu items, saved as the administrator saves them, acting as an account whose permissions apply (`--as`); `--dry-run` on every command which changes something; `database:optimize`; `extension:reinstall` (overwrites an extension's files with its original package, from its update site or a given file, and lists or removes files the package doesn't have, e.g. on a hacked site); `site:health`; `log:list`/`log:tail` and `actionlog:list`. Changes made from the command line are recorded in the User Actions Log
-- Template management from the command line: a template's positions, options and design tokens (`template:info`), its options, and its files (list, read, write, delete), with every change undoable, syntax checks for PHP, and full template backups and restores (`template:backup`, `template:restore`)
-- Hammond, Finch and Rookwood load `css/custom.css` when it exists: the place for a site's own CSS, never touched by updates
-- Clearer option groups in the administrator: spacer headings are bands, spacer lines are visible rules
-- A taller editor by default (800px; the "HTML Height" option of the TinyMCE plugins sets it)
-- Hammond, Finch and Rookwood each have an `editor.css`: the editor shows articles with the site's fonts, colours and layout (Finch's and Rookwood's in light or dark, as the device is set)
-- New sites list 50 items per page in the administrator's managers (Global Configuration's Default List Limit) instead of 20
-- New sites show the site's name after page titles ("Home - My Site" instead of "Home")
-- Clean Cache in the administrator's status bar for everyone with backend access, plus Clean Everything (cache, cache and temporary folders) and Global Check-in for administrators
-- Hammond, Finch and Rookwood print articles on A4 with just the logo and the article, without splitting paragraphs between pages
-- Hammond, Finch and Rookwood: lean `index.php` files (the setup is in each template's helper), their own offline page and lazy images below the top of each page; Hammond and Finch also show their social links out of the box (`#` until set)
-- Built-in MCP server (`php cli/joomla.php mcp:serve`) for AI assistants, read-only by default. See [AI Assistants (MCP)](#ai-assistants-mcp)
-- New SQLite database driver (experimental): the whole site in one file, with no database server, for small to medium sites, development and testing. Core and extensions work unchanged, as it runs their MySQL SQL. Available on PHP 7.4+ in the installer, and for existing sites through the new `database:convert` command line command (which also moves a site back to MySQL). SQLite sites use PHP sessions, so browsing doesn't write to the database. See [SQLite Support](#sqlite-support)
-- PostgreSQL in the command line database tools: `database:export` and `database:import` work on PostgreSQL, and `database:convert` moves a site between MySQL/MariaDB, PostgreSQL and SQLite, in any direction. See [PostgreSQL Support](#postgresql-support)
-- PostgreSQL install scripts for Banners, Contacts and News Feeds, so they can be reinstalled after an uninstall (also through "Restore uninstalled core extensions")
-- New command line interface, `cli/joomla.php`, using the same command names and options as Joomla 4 and later to update Joomla and manage the configuration, users, extensions, database, cache, sessions and Smart Search (e.g. `php cli/joomla.php core:update`, `database:export`, `user:add`, `extension:install`, `config:set`, `site:down`). Every command can return JSON (`--format=json`), so scripts and AI agents can work with the site directly. Extensions can add their own commands. The existing scripts in `cli/` still work as before (cron jobs need no changes), but now run the new commands.
-- Hammond, a news and magazine template: a 12-column frontpage of modules (main story, latest news, sections, opinion, most read, ad slots), a sticky header with a combined menu and search panel, list, article and info page layouts, share popups, system fonts and SVG icons, sized for readability and Core Web Vitals, without jQuery or Bootstrap. The default template of new sites without sample data or with the News set; installed but not activated on existing sites
-- News sample data: 227 articles in ten sections with tags, menus and modules, and images, videos and posts matching each section. From the installer, `core:install --sample-data=news` or the Control Panel's Sample Data module (Super Users only; it also makes a Hammond style the site's default template, and replaces the sample data set installed before)
-- Finch, a colourful blog template: every topic in its own colour (chosen with a menu item's Page Class), a greeting set large on the home page, posts one after another with the newest on a band of colour, posts with a coloured header and a calm reading column, light, dark or as the device is set, system fonts and SVG icons, without jQuery or Bootstrap. The default template of new sites with the Blog set; installed but not activated on existing sites
-- Blog sample data: 20 essays by one author in four topics, with tags, pages and the sidebar's modules, using the News set's images. From the installer, `core:install --sample-data=blog` or the Control Panel's Sample Data module (Super Users only; it also makes a Finch style the site's default template, and replaces the sample data set installed before)
-- Rookwood, a template for studios, agencies and companies: full-width sections, a dark and a light theme with a switch for visitors, a search panel in the header, large type, bold colours, Showcase and Mosaic category layouts, case study and page layouts, system fonts and SVG icons, without jQuery or Bootstrap. The default template of new sites with the Studio set; installed but not activated on existing sites
-- Studio sample data: 9 case studies and 16 journal posts, studio and contact pages, and a home page of sections, with ten CC0 images of its own. From the installer, `core:install --sample-data=studio` or the Control Panel's Sample Data module (it also makes a Rookwood style the site's default template)
-- Hammond, Finch and Rookwood link "Joomla 3.x UTD" in their footer text to the distribution's site; the sample sets name Joomla 3.x UTD as what they demonstrate
-- Lists shown with a template's layout keep it on page 2 and later (stock Joomla 3 dropped it from the page links)
+**Security fixes:**
+- Installer: the ownership check for remote databases could be skipped, anyone could run the installer again while the `installation` folder remained, and setting the Super User's group could put every user into Super Users
+- Crafted packages could write files outside the site's folders (Joomla Update, the extension installer, the archive code) or delete a folder outside the extension on uninstall; FOF's download class read local files
+- The configuration writer could put PHP code into `configuration.php` through a crafted setting name
+- Database drivers: MySQL (PDO) and the native PostgreSQL driver ran several statements given at once, connection settings could add settings of their own, and PostgreSQL allowed usernames differing only in case
+- The Module Manager's ordering list could be read by anyone, and `{loadmoduleid}` ignored modules' access levels and publishing dates
+- Joomla Update showed the update feed's values unescaped; Install from URL and Install from Web accepted non-`http(s)` addresses
+- Little WAF also checks form data and encoded spellings; `database:convert` keeps its temporary copy in a protected folder
+
+**Bug fixes:**
+- Databases: MySQL (PDO) fixes (serialization errors with caching, numbers returned as strings like "mysqli" does, ports and sockets, lost connections), database errors handled again with "mysqli" on PHP 8.1+, the PostgreSQL driver working again on PHP 8.1+ (now tested with PostgreSQL 18), date calculations on SQLite, and clear messages when the authentication method blocks a connection
+- PHP 8.1–8.5 deprecation warnings fixed throughout: non-canonical casts, Smart Search indexing (thousands of them), update checks, feeds, mail, LDAP, FTP, forms, tags, menu items and command line scripts
+- Installer: no longer stopping after its first step on PHP 8.2+, sample data for SQLite, and complete translations in every installation language
+- Global Configuration saves on SQLite sites and no longer requires a database user name
+- Updates: download keys kept, no warning or crash with corrupted manifest caches, Install Languages no longer stuck on "The update table is not up to date", update notification emails once a day; an uninstalled Little WAF stays uninstalled
+- Uninstalling Contacts or News Feeds works after Banners was uninstalled
+- Database exporter/importer fixes, and no fatal error when the File cache handler can't create a folder
+- Administrator: the Help buttons work again, "Cancel" in Options returns to where you were, no "Access forbidden." after saving a module, the login page always shows its gradient, and Site Information shows the operating system and web server
+- Command line: older code's messages are shown, a broken command file no longer stops the others, and tags can be given by ID
 
 ## Version 3.16 - released October 3rd, 2026
 Summary of changes:
@@ -153,79 +239,53 @@ Summary of changes:
 - Raised the minimum database versions, and cleaned up cache, session and database drivers that can't work on PHP 7.1+
 - Fixed a long list of bugs and PHP 8.x deprecation warnings, several of them in stock Joomla 3.x itself
 
+**New features:**
+- "Little WAF" system plugin (opt-in): filters known attack signatures against abandoned or historically vulnerable third-party extensions, before any component runs, with a filter per extension (Sourcerer-style `{source}` injection, Modules Anywhere-style tags)
+- "Restore uninstalled core extensions" option in Joomla Update, bringing back core extensions you uninstalled, with their tables, menu items and settings
+- Joomla Update checks the site's database type and version before offering an update
+
+**Improvements:**
+- Joomla Update no longer brings back removable core extensions you've uninstalled (their files used to come back on every update)
+- Minimum database versions raised to MySQL 5.5.3, MariaDB 5.5 and PostgreSQL 9.0, and the update channel accepts any Joomla 3.x site
+- Removed drivers that can't work on PHP 7.1+: APC, Memcache, XCache, Cache_Lite and the legacy `mysql` database driver (sites configured with it keep working through "mysqli"); Memcached is no longer "Experimental"
+
 **Security fixes:**
-- Guest account creation via the frontend profile-save action, even with user registration disabled
-- Arbitrary directory deletion through a path traversal in the file cache's group handling
-- Two XSS-filter bypasses using HTML5 entities and unterminated numeric references (both confirmed against the real filter before fixing)
-- Tagged items in access-restricted categories leaking through tag views and the "Tags - Popular"/"Tags - Similar" modules
-- A missing access check on the second record of a content history comparison
-- XSS gaps in `JHtml::link()`/`JHtml::iframe()`, the module manager's position column, the toolbar link button and the generic image layout's attribute names
-- SSRF: feed, SEF-domain, user-profile website and custom update URL fields are now restricted to web URL schemes
-- HTTP header injection via an unescaped filename in the banner-tracking download and the contact vCard export
-- Missing per-item edit-permission checks in the category and custom-field batch-copy actions
-- A missing SHTML file extension in the Template Manager's upload blacklist
-- Stored XSS: contact name/position/category echoed unescaped into public-facing schema.org markup
-- Smaller hardening: traversal checks in the Template Manager's file/folder delete, CSV formula escaping in the banner tracks export, stricter internal-URL checks, a constant-time TOTP comparison in the bundled FOF library, and a few more blocked executable file extensions
-
-**New features & additions:**
-- "Little WAF" system plugin: filters known attack signatures against abandoned or historically vulnerable third-party extensions before any component runs. Ships with two filters, each named after and toggled per extension: Sourcerer-style `{source}...{/source}` URL injection, and, as a precaution, Modules Anywhere-style `{module}`/`{modulepos}` tags. The plugin is disabled by default; once enabled, its filters are on by default. More filters will be added over time as similar issues are identified.
-- "Restore uninstalled core extensions" option on Joomla Update's "Reinstall Joomla core files" and "Upload & Update" screens, to bring back core extensions you uninstalled earlier, with their database tables, menu items and default settings
-- Joomla Update now checks the site's database type and version before offering an update (from 3.16 onwards)
-- New "Database support" section in this README
-
-**Improvements to existing features:**
-- Joomla Update no longer brings back removable core extensions you've uninstalled (Banners, Contacts, News Feeds, Search, Smart Search, Content History, Multilingual Associations and Fields with their modules and plugins, as well as any other removable core module, plugin or template). Previously their files were restored on every update, showed up under Extensions > Discover, and could cause a "Refresh Manifest Cache failed" warning on every later update.
-- Raised the minimum database versions to MySQL 5.5.3, MariaDB 5.5 and PostgreSQL 9.0 (SQL Server stays at 2008 R2), enforced by the installer and, for sites already on 3.16 or newer, by Joomla Update
-- The update channel now accepts any Joomla 3.x installation, since database migrations go back to Joomla 2.5.0 and support a direct jump to the current version regardless of starting point
-- Removed cache/session drivers that can't work on PHP 7.1+: APC (not APCu), Memcache (not Memcached), XCache and Cache_Lite. WinCache was kept, since it still has genuine PHP 7.x support. Leftover files are cleaned up automatically on upgrade.
-- Removed the legacy `mysql` database driver, which hasn't worked since PHP 7; sites still configured with it keep working as before through the `mysqli` driver
-- The Memcached cache/session driver is no longer labelled "Experimental", after fixing its locking bugs (see below)
+- Guest account creation through the frontend profile save, even with registration disabled
+- Folder deletion through a path traversal in the file cache, and traversal checks in the Template Manager's delete actions
+- XSS: two filter bypasses (HTML5 entities, unterminated numeric references), `JHtml::link()`/`iframe()`, the module position column, the toolbar link button, the image layout, and contacts' schema.org markup
+- Access: tagged items of restricted categories leaking through tag views and modules, content history comparisons, and batch copies of categories and fields without per-item permission checks
+- SSRF through URL fields, and HTTP header injection in banner tracking downloads and vCards
+- Hardening: more blocked upload extensions (incl. SHTML), CSV formula escaping, stricter internal-URL checks, a constant-time TOTP comparison
 
 **Bug fixes:**
-- Fixed updates failing with "Table '…_banners' doesn't exist" on sites that had uninstalled Banners, Contacts, News Feeds or Smart Search; the same false errors are gone from Extensions > Manage > Database
-- Uninstalling Banners, Contacts or News Feeds no longer leaves a stray "com_..._categories" entry under Components in the backend menu; existing leftovers are cleaned up on update
-- Fixed updates leaving the cache stale on sites using the Redis, Memcached, APCu or WinCache cache handlers (the update's cache cleanup only worked with the File handler); the update now warns if the cache can't be cleared
-- Fixed the update system ignoring database requirements declared in an update feed (it would have refused every update instead)
-- Fixed a dormant bug in the update feed that would have silently stopped this distribution from offering updates once a site reached version 3.20.0
-- Fixed two bugs in the update-extraction engine behind "the archive file is corrupt" false positives when manually uploading an update package. A separate issue remains open for zips built with streaming tools (e.g. GNOME Files' "Compress" action, or Windows 11 24H2+'s native "Compress to ZIP"); a standard `zip`-created archive is unaffected.
-- Fixed the Memcached cache driver's internal locking, which could stall the entire site's cache for up to 30 seconds
-- Fixed restoring News Feeds and Smart Search creating outdated database tables, and Smart Search not installing at all on PostgreSQL
-- Fixed fatal errors on PHP 8 hosts that disable `php_uname()`
-- Silenced a large batch of PHP 8.1–8.5 deprecation warnings, from real production logs plus a curated, individually verified automated sweep of 805 files. Every fix keeps working on PHP 7.1 and up. Cosmetic fixes only, no behaviour change.
+- Updates no longer fail on sites which uninstalled Banners, Contacts, News Feeds or Smart Search, clear the cache with every cache handler, honour database requirements in update feeds, and won't stop at 3.20.0; fewer false "the archive file is corrupt" errors for uploaded packages
+- No stray "com_..._categories" menu entries after uninstalling Banners, Contacts or News Feeds
+- Memcached locking could stall the site's cache for up to 30 seconds
+- Restoring News Feeds and Smart Search created outdated tables, and Smart Search didn't install on PostgreSQL
+- PHP 8.1–8.5 deprecation warnings fixed in 805 files, and no fatal errors on hosts disabling `php_uname()`
 
 ## Version 3.15 - released July 18th, 2026
 Summary of changes:
 - Backported 13 CVEs from official Joomla security advisories, independently confirmed to also affect 3.x (several labelled "affects 4.0.0+ only" upstream, but the vulnerable code is present in 3.x regardless)
 - Resolved a number of functional/compatibility issues, some reported directly by the community
 
-**Security fixes (CVE backports), most to least severe:**
-- Local file inclusion (LFI) via the view layout parameter (CVE-2026-40383) — **High**
-- SQL injection in the com_tags "all tags" list ordering (CVE-2026-352212) — **Moderate, High impact**
-- Privilege-escalation XSS via language overrides, where a non-Super-User with delegated translation access could inject quote characters that break out of the many places Joomla renders language strings unescaped (CVE-2026-48954) — **Moderate**
-- XSS in the template manager's file/image/font editor, where a crafted (but filter-legal) request parameter could decode to a `<script>` tag on display — affecting three code paths in this codebase where the official fix only covered one (CVE-2026-48950) — **Moderate**
-- Unescaped attribute output in the generic image layout used by extensions (CVE-2026-48953) — **Moderate**
-- Reflected XSS in the com_installer update list view (CVE-2026-48952) — **Moderate**
-- Additional XSS gaps in com_associations left over from an earlier fix (CVE-2026-25901) — **Moderate**
-- Stored XSS in the content history preview screen (CVE-2026-30894) — **Moderate**
-- XSS in the feed modules, front and back end (CVE-2026-25900) — **Moderate**
-- XSS in article "read more" links via unescaped titles (CVE-2026-30895) — **Moderate**
-- Password/username reset links being sent over plain HTTP even on HTTPS-only sites (CVE-2026-48902) — **Low**
-- An instance-cache key bug in InputFilter that could serve a wrongly-configured filter instance (CVE-2026-48901) — **Low**
-- An access-control bypass allowing anyone to download restricted contacts' vCards in com_contact (CVE-2026-48948) — **Low**
-- Two further CVEs confirmed already covered by earlier hardening in this project, no new gap: CVE-2026-48905 and CVE-2026-48903 (both related to the core HTML attribute filter)
-- Two further CVEs confirmed not applicable, as the vulnerable code/feature doesn't exist in this version of Joomla: CVE-2026-48899 (sample data plugin permissions) and CVE-2026-48951 (a "modal return" screen XSS)
+**Improvements:**
+- A "Use custom cache time" caching option in all 26 cache-capable core modules (mod_whosonline can be cached for the first time)
+- "Sort by Author" in Extensions: Manage, to tell third-party extensions from core ones
 
-**Functional & compatibility fixes:**
-- Fixed modules set to "Use Global" caching (mod_menu and 25 other core modules) silently ignoring Global Configuration's Cache Time in favour of their own separate Cache Time field — which, due to a hardcoded/reverting default, almost always meant a fixed 15-minute refresh regardless of what Global Configuration was actually set to; affected sites are fixed automatically on upgrade, no manual database changes needed
-- Added an explicit "Use custom cache time" caching option to all 26 cache-capable core modules (including mod_whosonline, which now also supports Global/custom caching for the first time), so overriding a single module's cache TTL is now a clear, self-documenting choice instead of an unlabelled number field
-- Fixed modules set to "Use custom cache time" never actually being cached on real page loads — the site's per-module page renderer only attempted caching for "Use Global", so the new option silently fell through to always rendering live
-- Added "sort by Author" to "Extensions > Manage", so third-party extensions can be easily distinguished from Joomla core ones when auditing a large site for vulnerable or old/unmaintained extensions
-- Fixed a misleading "Refresh Manifest Cache failed: X Extension is not currently installed" warning shown on every Joomla Update run, for any stock core extension (e.g. the protostar template, or com_banners/mod_banners) a site admin has deliberately removed
-- Fixed the removed beez3/hathor templates not actually being deleted from the database on upgrade from an earlier Joomla 3.x release, which left stale entries in Template Manager that threw a PHP error when opened (see [issue #7](https://github.com/joomlaworks/joomla-3.x/issues/7)) — affected sites will self-heal automatically on their next update, no manual fix needed
-- Fixed a PHP 8.4 deprecation warning from the session garbage-collection plugin's use of `lcg_value()` (see [issue #12](https://github.com/joomlaworks/joomla-3.x/issues/12))
-- Fixed literal `"_QQ_"` text appearing instead of quotation marks in various admin messages (e.g. the "Add Install from Web tab" notice) — a legacy language-file placeholder that was never being converted back to a real quote mark; fixed across all 80 affected language files
-- Raised the hardcoded minimum-PHP-version check from a stale `5.3.10` to `7.1.0` (the actual floor this codebase can run on), and lowered the update feed's own PHP requirement to match — sites on PHP 7.1–7.3 now keep receiving updates and security patches instead of being silently skipped or hitting an unhandled error page. PHP 7.4+ remains our recommended production baseline, both for broader hosting support (e.g. AlmaLinux 8 with cPanel, or Ubuntu 22.04+ with Ondřej's PHP repos) and for the best experience overall
-- Housekeeping: removed the stock, unedited `README.txt` (superseded by this file) and renamed `LICENSE.txt` to `LICENSE.md`; sites upgrading from an older release get the old files cleaned up automatically
+**Security fixes (CVE backports):**
+- Local file inclusion via the view layout parameter (CVE-2026-40383) — **High**
+- SQL injection in the tags list ordering (CVE-2026-352212) — **Moderate, High impact**
+- XSS (all **Moderate**): language overrides (CVE-2026-48954), the template manager's editor, in three places where upstream fixed one (CVE-2026-48950), the image layout (CVE-2026-48953), the update list (CVE-2026-48952), Multilingual Associations (CVE-2026-25901), the content history preview (CVE-2026-30894), the feed modules (CVE-2026-25900) and "read more" links (CVE-2026-30895)
+- **Low:** reset links sent over plain HTTP (CVE-2026-48902), InputFilter's instance cache key (CVE-2026-48901), restricted contacts' vCards (CVE-2026-48948)
+- Already covered by earlier hardening: CVE-2026-48905 and CVE-2026-48903; not applicable to 3.x: CVE-2026-48899 and CVE-2026-48951
+
+**Bug fixes:**
+- Module caching: "Use Global" ignored Global Configuration's Cache Time (fixed automatically on upgrade)
+- Updates: no more "Refresh Manifest Cache failed" warnings for removed core extensions, and Beez 3/Hathor's leftover database entries are removed ([#7](https://github.com/joomlaworks/joomla-3.x/issues/7))
+- The minimum PHP check went from 5.3.10 to 7.1.0, so sites on PHP 7.1–7.3 keep receiving updates (PHP 7.4+ remains the recommended baseline)
+- Literal `"_QQ_"` text instead of quotation marks in admin messages, and a PHP 8.4 `lcg_value()` deprecation ([#12](https://github.com/joomlaworks/joomla-3.x/issues/12))
+- `README.txt` removed and `LICENSE.txt` renamed to `LICENSE.md`
 
 ## Version 3.14 - released July 4th, 2026
 Summary of changes:
@@ -299,6 +359,8 @@ wget -q https://github.com/joomlaworks/joomla-3.x/releases/download/rolling/joom
 
 Add `--sample-data=news`, `--sample-data=blog` or `--sample-data=studio` to start with one of the installer's sample data sets; the news set comes with the Hammond template as the site's template, the blog set with Finch, the studio set with Rookwood, 3 brand new, modern and Core Web Vitals friendly templates, (derived from years of experience building content-heavy sites by the project maintainers).
 
+The administrator's template is Prothero; add `--admin-template=isis` for Isis instead (the web installer offers the same choice on its last step).
+
 Installing sites like this needs PHP 7.4 or newer with the `pdo_sqlite` extension. If you also add the flag `--format=json`, you'll get installation details in JSON format (including the password), which is ideal for scripts (using jq) and LLMs.
 
 
@@ -321,7 +383,7 @@ Switching to this distribution will also allow you (or take you closer) to upgra
 |---|---|---|
 | MySQL | 5.5.3 | Tested and actively supported (5.7 or newer recommended, see notes below for 8.x & 9.x) |
 | MariaDB | 5.5 | Tested and actively supported |
-| PostgreSQL | 9.0 | Tested and supported with both drivers since 3.17 (16 or newer recommended, preferably 18, see notes below) |
+| PostgreSQL | 9.5 | Tested and supported with both drivers since 3.17 (16 or newer recommended, preferably 18, see notes below) |
 | Microsoft SQL Server / Azure SQL | 2008 R2 (10.50.1600.1) | Inherited from stock Joomla 3.x; tested since 3.17 on SQL Server 2022 with both drivers (core only: few extensions support it) |
 | SQLite (experimental) | 3.37.0, with PHP 7.4+ | New in 3.17: runs MySQL SQL through an emulation layer, so core and extensions work unchanged; tested on SQLite 3.37.2 (Ubuntu 22.04's) and 3.46.1, with core and common extensions |
 
@@ -352,12 +414,13 @@ sql_mode = ""
 ## POSTGRESQL SUPPORT
 Joomla 3 has always had PostgreSQL drivers, but they fell behind: the main one stopped working on PHP 8.1, and parts of Joomla broke on recent PostgreSQL versions. Since 3.17, PostgreSQL is fully supported again and tested against PostgreSQL 18, with both drivers: "PostgreSQL" (PHP's `pgsql` extension) and "PostgreSQL (PDO)" (`pdo_pgsql`).
 
-- **Versions:** PostgreSQL 9.0 is the minimum, but use a recent version: 16 or newer, preferably 18.
+- **Versions:** PostgreSQL 9.5 is the minimum (9.0 until 3.17), but use a recent version: 16 or newer, preferably 18.
 - **Installing and updating:** choose either PostgreSQL driver in the installer. Joomla Update, Extensions: Database and the "Restore uninstalled core extensions" option work as on MySQL.
 - **Command line:** `php cli/joomla.php database:export` and `database:import` work on PostgreSQL, and `database:convert` moves a site between MySQL/MariaDB, PostgreSQL and SQLite, in any direction (e.g. `php cli/joomla.php database:convert --to=postgresql --user=... --password=... --database=...`). Converting translates column types and Joomla's "no date" values, which differ between MySQL and PostgreSQL, checks that every table has all its rows, and fixes the new database's structure as Extensions: Database would. The site is offline while its database is copied, and the old database is left as it is. Tables of MySQL-only extensions get the defaults MySQL would apply, so their code keeps working on PostgreSQL.
 - **Core extensions:** we've gone the extra mile and added the PostgreSQL install scripts that Banners, Contacts and News Feeds never had, so these can be uninstalled and installed again on PostgreSQL too.
 - **Usernames:** checks that a username or email address isn't taken ignore case, as on MySQL, but not accents: `Àdmin` and `admin` are two users on PostgreSQL (and SQL Server), one on MySQL/MariaDB.
 - **Third-party extensions:** many only ship MySQL database scripts. Moving a site to PostgreSQL copies their tables and data, but check that the extensions themselves support PostgreSQL before relying on them.
+- **MySQL-style queries:** since 3.18, backtick-quoted names (`` `group` ``, `` c.`itemID` ``) are turned into PostgreSQL's quoted names, the most common reason extensions' queries failed on PostgreSQL. MySQL-only functions and syntax (e.g. `GROUP_CONCAT()`, `INSERT IGNORE`) still need the extension to support PostgreSQL.
 
 
 ## SQLITE SUPPORT
@@ -369,6 +432,7 @@ Joomla 3 has always shipped a basic SQLite database driver, but it was never usa
 - **Sessions:** with the "Database" session handler, every page view writes to the database file. A new SQLite site, or one moved with `database:convert`, therefore uses PHP sessions instead (Global Configuration → System → Session Handler → "PHP"), and writes only when content or settings change, or a new visitor arrives. If your server has an object cache such as Memcached, Redis or APCu enabled, prefer that for sessions: it's faster than PHP's session files and also keeps sessions out of the database. `database:convert` keeps those handlers as they are.
 - **Security:** keep the database file out of the web's reach: outside the site's public folder, or in a folder of its own, which Joomla protects for Apache and IIS (with nginx, keep the file's random name too). To move it, change "Path to Database Folder" in Global Configuration → Server → Database (shown for SQLite only): Joomla copies the database there, switches to it and removes the old file.
 - **Backups:** copy the database file while the site is offline (it's a complete copy of the site's data), or use `php cli/joomla.php database:export`.
+- **Copies of a site** (e.g. to try `database:convert` on): if the site caches in Memcached or Redis, give the copy a new `secret` (`php cli/joomla.php config:set secret=...`, any new random value) before using it. Cache entries are named after the `secret`, so a copy sharing the cache server with the original would read and overwrite its entries.
 
 
 ## AI ASSISTANTS (MCP)
@@ -421,9 +485,9 @@ A new fork is on the way, based on Joomla 3.x. This fork is WIP (but very, very 
 ## LEGAL
 Joomla 3.x UTD is an independent community project. It is not affiliated with, endorsed by, or supported by Open Source Matters, Inc. or The Joomla! Project™.
 
-The Joomla!® name and logo are trademarks of Open Source Matters, Inc. in the United States and other countries. This project does not use the Joomla! logo.
+The Joomla!® name and logo are trademarks of Open Source Matters, Inc. in the United States and other countries. The logo appears in this distribution only where Joomla 3 itself shows it (the installer and the administrator), kept unchanged for continuity, and in screenshots of the software. Joomla 3.x UTD does not use it to brand itself.
 
-This distribution is free software, released under the GNU General Public License version 2 or later. See LICENSE.md.
+This distribution is free software, released under the GNU General Public License version 2 or later. See LICENSE.txt.
 
 Original Joomla! code: Copyright &copy; 2005 - 2025 Open Source Matters, Inc.
 

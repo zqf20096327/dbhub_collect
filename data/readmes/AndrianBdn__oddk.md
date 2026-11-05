@@ -263,6 +263,12 @@ oddk instance delete-db-user app --username appuser
 changes in one transaction. A failed grant or ownership transfer rolls all of them
 back. Ownership transfer includes public-schema functions and stored procedures.
 
+A `--readonly` user can `SELECT` every table and sequence in schema `public`,
+including ones `postgres` or the database owner creates later, so it can take a
+`pg_dump` of that schema. Not covered: objects another user creates later, and
+schemas created later (PostgreSQL has no default privilege for them). A complete
+dump of such a database needs the `postgres` user.
+
 `delete-db-user` first reassigns everything the user owns to `postgres`, then
 revokes its grants and drops the role. If that reassignment fails the command
 aborts and leaves the user in place — it will not proceed to a step that would
@@ -297,6 +303,10 @@ one instance's data and none of the configuration needed to rebuild it.
 oddk snapshot make --comment "before major upgrade"
 oddk snapshot make --logical            # portable pg_dump-based format
 oddk snapshot list
+
+# Check stored copies for bit rot or replacement (exits non-zero on a problem)
+oddk snapshot verify <id>               # read the local copy in full; HEAD the S3 copy
+oddk snapshot verify --all --deep       # every snapshot, downloading the S3 copies too
 
 # Suspend a schedule without losing it (and put it back)
 oddk snapshot setup-cron --pause
@@ -408,6 +418,15 @@ What you need to know:
   performs — the trade you accept for their WAL-free write speed. If an
   unlogged table's contents must survive a restore, either make it a normal
   table or use `--logical`, which dumps its rows.
+- **A restore fits each instance to the host it lands on.** An instance
+  recorded with more CPU or RAM than this host has (typically because its host
+  was resized down under it) is restored at what this host provides, and
+  `oddk.db` records the smaller size; preflight says so (`qasphere: 8192 → 7762
+  MB to fit this host`). Memory-dependent parameters resolve against the fitted
+  RAM. A parameter group that sets memory explicitly and does not fit the
+  fitted RAM is refused before anything changes (when the archive carries the
+  group's definition, as it does unless the group was unreadable at capture).
+  `oddk checklist` flags an instance sized above its host.
 - **Back up `master.key` separately, off the host.** It is deliberately *not*
   in the archive, and every archive is encrypted with a key derived from it:
   **without `master.key` a snapshot cannot be restored, applied or even read.**
@@ -444,6 +463,10 @@ What you need to know:
   `backup download` and `restore-instance --id` refuse a copy whose digest
   differs, even when the archive is otherwise intact. That catches an object
   replaced in the bucket, which would otherwise restore somebody else's data.
+  `snapshot verify` runs the same checks on demand, so a damaged copy is found
+  while another copy still exists, not at restore time. It reads the local copy in
+  full and checks the S3 copy's size; `--deep` also downloads and verifies the S3
+  copy, without writing it to disk.
 - Restoring an instance sets its postgres password to the snapshot's, because the
   archive carries only the hash. Re-read it with `instance get-postgres-password`.
 - Retention keeps the newest snapshots regardless of age, so a run of failed

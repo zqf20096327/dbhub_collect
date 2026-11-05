@@ -22,7 +22,7 @@ bit-api 将多个上游模型服务统一为兼容 OpenAI 与 Anthropic 常用�
 
 项目采用 **FastAPI + SQLite**，无需 Redis 或 PostgreSQL；前端资源随仓库自托管，无需 Node.js 或前端构建即可运行。渠道适配、支付接入和活动策略分别通过 Adapter、Payment Provider 与事件插件扩展。
 
-**使用边界：**本项目是请求网关，不运行模型推理，也不附带上游账号、API Key 或免费额度。当前部署形态为单实例、单 worker；实际容量取决于上游延迟、请求类型、并发连接与运行环境，本仓库不提供未经压测的并发保证。
+**使用边界：**该项目是请求网关，不运行模型推理，也不附带上游账号、API Key 或免费额度。当前部署形态为单实例、单 worker；实际容量取决于上游延迟、请求类型、并发连接与运行环境，本仓库不提供未经压测的并发保证。
 
 ## 核心能力
 
@@ -35,25 +35,12 @@ bit-api 将多个上游模型服务统一为兼容 OpenAI 与 Anthropic 常用�
 | 模型与体验 | 公开模型广场、价格筛选、对话 Playground、可复制端点和接入示例；Playground 与 API 共用计费路径。 |
 | 定价与账务 | 按分组选择余额、配额或免费策略；支持模型通配、分组专属价、长上下文阶梯价、用量记录和余额流水。 |
 | 运营工具 | 每日签到与可配置赠额区间、站内公告、订阅时长卡、兑换码、易支付充值、返佣插件及日志导出。 |
-| Token 消耗榜 | 登录后查看累计、近 7 天或近 30 天的输入与输出 Token 排名；用户名脱敏，可查看自己的排名。缓存另列，不计入排名。 |
+| 账号池 | 号池面板按渠道、状态、分组与调度筛选；支持批量编辑、导入导出、并发与优先级、单号与定时测试、到期暂停。 |
+| Token 消耗榜 | 登录后查看累计、近 7 天或近 30 天的输入与输出 Token 排名；用户名脱敏，可查看自己的排名。 |
 | 邀请奖励 | 后台设置有效注册奖励金额、开关和每位邀请人的奖励人数上限；注册与发奖同一事务，重复注册或回调不重复发奖。 |
-| 日常维护 | 上游号池巡检、SQLite 在线备份、SMTP 邮件、Webhook 告警、用户及全站运营看板。 |
+| 日常维护 | 模型状态探测、SQLite 在线备份、SMTP 邮件、Webhook 告警、用户及全站运营看板。 |
 
 模型广场展示的是配置允许的模型与价格，不是上游可用性承诺；实际调用还取决于账号状态、密钥权限、余额、额度和上游服务。
-
-<details>
-<summary>开发中的扩展：订阅号池与增强账号面板</summary>
-
-以下内容对应尚未合入当前公开版本的开发工作，不属于上述基础功能的交付承诺：
-
-- ChatGPT 与 Anthropic 订阅账号 Adapter，以及对应的凭据刷新与渠道配置。
-- 账号表格的筛选、排序、分页、自定义列、可调度开关和自动刷新。
-- 批量启停、重置、删除与测试；账号导入导出、单账号统计和上游错误回显。
-- 上游返回数据时展示 5 小时 / 7 天用量窗口及重置时间。
-
-账号导出涉及凭据明文，应按密钥文件管理。相关能力发布后再更新此处的状态说明。
-
-</details>
 
 ## 快速开始
 
@@ -105,14 +92,14 @@ export BITAPI_SMTP_FROM='no-reply@example.com'
 Docker Compose 或 systemd 部署可在 `.env` 填写；直接运行 `main.py` 时必须设置进程环境变量，不能只编辑 `.env`。未配置 SMTP 时，发送注册验证码返回 `503`，不会建立未验证账号。
 
 1. **注册管理员。** 打开 `/portal#/register`，发送并填写邮件中的 6 位验证码；第一个验证成功的用户免邀请码并成为管理员。验证码 15 分钟有效、60 秒后可重发、最多允许 5 次错误。请在向公网开放前完成这一步。
-2. **接入上游。** 进入「管理控制台 → 渠道」，添加 OpenAI 兼容渠道，填写上游地址、模型清单和必要映射，导入自己的 API Key，再执行渠道测试。Grok 等专用 Adapter 的凭据格式见 [渠道开发文档](docs/adapters.md)。
+2. **接入上游。** 进入「管理控制台 → 渠道」，添加 OpenAI 兼容渠道，填写上游地址、模型清单和必要映射，导入自己的 API Key，再执行渠道测试。渠道凭据格式见 [渠道开发文档](docs/adapters.md)。
 3. **确认分组与价格。** 检查默认分组允许哪些模型、采用哪种计费策略，并配置模型价格。首次初始化的默认分组采用 **免费策略**；仅填写价格并不会自动开启余额扣费。
 4. **创建用户密钥。** 在「API 密钥」创建调用密钥，按需设置有效期、额度和模型范围。面向应用分发用户密钥，不分发内部主密钥或管理密钥。
 5. **发起一次请求。** 从「模型广场」复制准确模型名，按下一节调用，再到「使用记录」核对结果与用量。
 
 后续邮箱注册默认需要一次性邀请码，管理员可以调整注册策略。个人返佣码用于记录邀请关系，不能代替强制邀请制下的注册邀请码。
 
-邀请奖励默认关闭。管理员在「站点设置 → 注册邀请奖励」填写每人美元金额（最多四位小数）和每位邀请人的奖励人数上限（`0` 表示不限），通过预览确认后保存。规则只适用于后续有效注册，不补发历史邀请；达到上限后仍绑定邀请关系，但不再发奖。已配置 `affiliate_fixed` 的旧部署会沿用原规则，保存后台规则后替代该插件的邀请奖励和新用户见面礼，其他返佣插件不受影响。
+邀请奖励默认关闭。管理员在「站点设置 → 邀请奖励」填写每人美元金额和每位邀请人的奖励人数上限（`0` 表示不限），通过预览确认后保存。规则只适用于后续有效注册，不补发历史邀请；达到上限后仍绑定邀请关系，但不再发奖。
 
 ### 常用入口
 
@@ -123,7 +110,7 @@ Docker Compose 或 systemd 部署可在 `.env` 填写；直接运行 `main.py` �
 | `/portal` | 用户控制台与管理控制台 | 页面公开，用户及管理数据按身份鉴权。 |
 | `/portal#/leaderboard` | Token 消耗榜 | 需要登录；所有启用账号参与，无调用账号位于末尾。 |
 | `/portal#/invite` | 邀请链接、当前奖励规则与入账 | 需要登录；不公开被邀请人的邮箱和名单。 |
-| `/admin/ui` | 上游账号池面板 | 页面外壳公开，管理操作需要授权。 |
+| `/portal#/admin?tab=pool` | 上游账号池面板 | 页面外壳公开，管理操作需要授权。 |
 | `/v1/*` | 模型调用接口 | 使用用户 API Key 或内部网关主密钥。 |
 | `/health` | 服务健康检查 | 无需鉴权；不执行上游模型探测。 |
 
@@ -176,7 +163,7 @@ curl --fail-with-body --no-buffer "$BITAPI_BASE_URL/v1/chat/completions" \
 | `POST /v1/messages/count_tokens` | 请求 token 估算 | 使用本地估算，不是 Anthropic 官方计数服务。 |
 | `POST /v1/embeddings` | 文本向量化 | 需要配置具备向量能力的 OpenAI 兼容上游及模型。 |
 
-当前公开版本附带 Grok 与通用 OpenAI 兼容 Adapter。媒体生成路由是扩展入口，仓库并未附带可直接使用的图片或视频生成 Adapter。
+当前公开版本附带两个 Adapter：GPT 账号池（`gpt`）与通用 OpenAI 兼容渠道（`openai_compat`）。前者支持 OAuth / accessToken 账号导入与续期，后者在管理台填表即注册。媒体生成路由是扩展入口，仓库并未附带可直接使用的图片或视频生成 Adapter。
 
 ## 架构与请求流程
 
@@ -206,7 +193,15 @@ curl --fail-with-body --no-buffer "$BITAPI_BASE_URL/v1/chat/completions" \
 
 核心负责鉴权、路由、计量与账务约束；Adapter 负责上游差异；插件负责返佣、活动和通知等策略。扩展时应通过 `credit()` 修改余额，而不是直接修改 `users.balance`。插件事件不是持久消息队列，也不提供自动重试承诺。示例与事件载荷见 [插件文档](docs/plugins.md)。
 
-注册验证码只在 `registration_codes` 保存加盐哈希。验证、占用邀请码、创建用户与注册邀请奖励在同一 SQLite 写事务提交；提交后再通知余额事件和注册插件。社区授权流程在 `community_auth_flows.referral_code` 保存邀请来源，保留现有注册资格要求；已有账号登录或绑定不会重新归因。`GET /api/leaderboard` 在同一查询中统计启用账号、排名、分页和本人位置，只返回脱敏用户名与用量；`GET /api/invite` 返回当前奖励规则，管理员通过 `PATCH /api/admin/settings` 的 `invite_rewards` 保存整组规则。
+注册验证码只在 `registration_codes` 保存加盐哈希。验证、占用邀请码、创建用户与注册邀请奖励在同一 SQLite 写事务提交；提交后再通知余额事件和注册插件。社区授权流程在 `community_auth_flows.referral_code` 保存邀请来源，保留现有注册资格要求；已有账号登录或绑定不会重新归因。
+
+### 改 `routers/` 时的三条硬规矩
+
+**1. `/api` 的 router 只在 `portal_shared.py` 建一次。** 子模块一律 `from routers.portal_shared import router` 往同一个实例上注册。谁自己新建 `APIRouter`，谁的 `prefix="/api"` 和 `route_class=SessionRoute`（CSRF / Origin 校验）就都没了 —— 而且**不报错**，只是那条路由不再带会话鉴权。
+
+**2. 别在新模块里缓存 `USER_DB` / `BILLING`。** 换库有两条路径：`portal_state.rebind(db)` 和测试里直接 `mod.USER_DB = db`。模块级缓存一份自己的引用，第二条路径就会漏掉，表现是「写进去了但读不到」。用 `portal_shared._db()` 现取。
+
+**3. 按行号搬代码时，装饰器算在块内。** `@router.post(...)` 在 `def` 的上一行，只按 `def` 切会把装饰器留在原地，函数搬走了却不再注册成路由。
 
 ## 配置说明
 
@@ -222,11 +217,13 @@ curl --fail-with-body --no-buffer "$BITAPI_BASE_URL/v1/chat/completions" \
 | `BITAPI_DB` | SQLite 文件路径 | 指向持久、可写的位置；不要丢在临时容器层。 |
 | `BITAPI_REQUIRE_INVITE` | 邮箱注册是否强制邀请码 | 默认开启；可在管理台调整。 |
 | `BITAPI_DEFAULT_GROUP` | 新用户默认分组名称 | 同时检查该组的模型范围与计费策略。 |
+| `BITAPI_GPT_MODELS` | GPT 渠道的模型清单 | 号池无账号时决定广场展示什么；有账号时以上游目录为准。 |
 | `BITAPI_CHECKIN_MIN` / `BITAPI_CHECKIN_MAX` | 每日签到赠额区间，美元 | 默认 `0.01`–`0.10`，管理台「站点设置」可覆盖。 |
 | `BITAPI_TRUST_PROXY_HEADERS` | 是否信任代理传入的客户端地址 | 仅在受信任反代后使用；直接暴露应用时设为 `0`。 |
 | `BITAPI_PAYMENT_PROVIDERS` | 支付渠道 | 默认空；生产不要启用 `mock`。 |
 | `BITAPI_PLUGINS` | 启用的插件模块列表 | 逗号分隔；留空不启用插件。 |
 | `BITAPI_BACKUP_INTERVAL` / `BITAPI_BACKUP_KEEP` | 备份间隔秒数与保留份数 | 默认每天一次、保留 7 份，另做异机备份。 |
+| `BITAPI_MODEL_STATUS_INTERVAL` | 模型状态探测周期，秒 | 默认 `3600`；设为 `0` 关闭。 |
 
 三类密钥请分别生成，不要复用。例如运行下列命令三次，再将结果写入配置；**不要直接沿用样板中的占位文字**。
 
@@ -239,7 +236,7 @@ python -c "import secrets; print(secrets.token_urlsafe(32))"
 <details>
 <summary>可选服务：社区登录、邮件、支付与告警</summary>
 
-- **社区登录：**需自行部署支持 `community-connect` 的 Flarum 社区，设置 `BITAPI_COMMUNITY_BASE_URL`、`BITAPI_COMMUNITY_CLIENT_ID`、`BITAPI_COMMUNITY_CLIENT_SECRET` 和完全匹配的 `BITAPI_COMMUNITY_REDIRECT_URI`。并非任意 Flarum 站点都能直接接入。首次通过社区创建本站账号始终需要一次性注册邀请码；已有用户在「个人资料 → 登录方式绑定」操作，不按同邮箱自动合并。
+- **社区登录：**需自行部署支持 `community-connect` 的 Flarum 社区，设置 `BITAPI_COMMUNITY_BASE_URL`、`BITAPI_COMMUNITY_CLIENT_ID`、`BITAPI_COMMUNITY_CLIENT_SECRET` 和完全匹配的 `BITAPI_COMMUNITY_REDIRECT_URI`。并非任意 Flarum 站点都能直接接入。社区注册默认要求等级 Lv3 及以上，可在管理台调整；已有用户在「个人资料 → 登录方式绑定」操作，不按同邮箱自动合并。
 - **邮件：**SMTP 用于注册验证码、密码找回与邮箱验证。首个管理员注册前先按 [`.env.example`](.env.example) 配置进程环境变量；之后可在管理台「邮件设置」修改并发送测试邮件。未配置时相关发信功能不可用。
 - **支付：**配置易支付商户信息、站点回调地址与启用渠道；`mock` 会将打开支付链接视为付款成功，只允许用于隔离测试环境。详见 [支付接入](docs/payments.md)。
 - **告警：**启用 `BITAPI_PLUGINS=alert_webhook` 并设置 `BITAPI_ALERT_WEBHOOK_URL`，可对接 Telegram、Bark 或普通 Webhook。详见 [运维手册](docs/operations.md)。
@@ -264,7 +261,7 @@ docker compose logs -f bit-api
 
 - **持久化：**Compose 将 `./data` 挂载到 `/data`，包含数据库、默认备份目录与缓存价目表。Linux 宿主机须让容器 UID `10001` 能写入该目录；权限不足时先修正目录权限，不要用全目录 `777` 规避。
 - **公网入口：**宿主端口为 `127.0.0.1:8080`，通过 nginx 等反代提供 HTTPS；SSE 需关闭代理缓冲并配置合适的读取超时。
-- **进程模型：**保持单实例、单 worker，不使用 `--workers N` 或多副本扩容现有部署。
+- **进程模型：**保持单实例、单 worker，不使用 `--workers N` 或多副本扩容现有部署。限流、并发上限与告警去重都是进程内状态。
 - **升级与恢复：**升级前确认备份可恢复，使用 `git pull --ff-only` 后执行 `docker compose up -d --build`。启动会执行数据库迁移，不能把代码回退等同于数据库回退。
 
 裸机部署与故障处理见 [部署指南](docs/deploy.md) 和 [运维手册](docs/operations.md)。systemd 部署使用的 `.env` 也应设置 `BITAPI_HOST=127.0.0.1`，不要直接沿用 Docker 样板的监听地址。
@@ -283,7 +280,7 @@ docker compose logs -f bit-api
 
 ## 开发与测试
 
-本开源仓库当前未配置 CI。提交前由改动作者运行受影响的测试；涉及页面交互时还需浏览器回放。没有 CI 结果不应标为“CI 通过”。
+CI 见 [`.github/workflows/assurance.yml`](.github/workflows/assurance.yml)。提交前请自行运行受影响的测试；涉及页面交互时还需浏览器回放。
 
 ```bash
 python -m pip install -r requirements-dev.txt
@@ -293,6 +290,9 @@ python -m pytest tests/ -q
 
 # 独立端到端测试：启动真实服务，使用 127.0.0.1:8123
 python -m pytest tests/e2e -q
+
+# 死代码检查
+python scripts/check_dead_code.py
 ```
 
 首页改动的定向检查：
@@ -316,12 +316,13 @@ Node.js 仅用于上述开发校验，不是服务运行依赖。依赖文件固
 | [支付](docs/payments.md) | 易支付、回调、订单及模拟支付的使用边界。 |
 | [部署](docs/deploy.md) | Docker、systemd、反代与恢复操作。 |
 | [运维](docs/operations.md) | 备份、SMTP、告警、限速与运营指标。 |
+| [事故账](docs/incidents/) | 出过什么问题、哪个门禁守着它。 |
 
 ### 目录结构
 
 ```text
 bitapi/
-├── adapters/          # 上游适配器：Grok、通用 OpenAI 兼容渠道
+├── adapters/          # 上游适配器：GPT 账号池、通用 OpenAI 兼容渠道
 ├── core/              # 路由调度、计量计费、账务、安全与存储
 ├── routers/           # 用户与管理 REST API
 ├── payments/          # 支付 Provider
@@ -333,7 +334,6 @@ bitapi/
 ├── tests/             # 单元、集成与独立 e2e 测试
 ├── home.html          # 公开落地页
 ├── portal.html        # 用户 / 管理控制台
-├── dashboard.html     # 上游账号池面板
 ├── server.py          # FastAPI 应用与网关入口
 ├── config.py          # 环境配置
 └── main.py            # 安全预检与单 worker 启动入口
@@ -341,6 +341,6 @@ bitapi/
 
 ## 许可证与使用责任
 
-本项目基于 [MIT License](LICENSE) 发布。模型品牌图标来自 [LobeHub Icons](https://github.com/lobehub/lobe-icons) 项目，相关品牌与商标归其各自所有者。
+本项目基于 [MIT License](LICENSE) 发布。相关品牌与商标归其各自所有者。
 
 使用者需自行取得上游服务及凭据的合法使用权限，并遵守相应服务条款、数据处理和访问限制。开源许可不授予任何第三方模型、账号、商标或服务的使用权。

@@ -252,9 +252,9 @@ Useful resources and dependencies that are used in Lingo.
 <!--- DEPENDENCIES_START --->
 - [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^7.9.17
 - [@neondatabase/serverless](https://www.npmjs.com/package/@neondatabase/serverless): ^1.2.0
-- [@radix-ui/react-avatar](https://www.npmjs.com/package/@radix-ui/react-avatar): ^1.2.6
+- [@radix-ui/react-avatar](https://www.npmjs.com/package/@radix-ui/react-avatar): ^1.3.1
 - [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.3.0
-- [@radix-ui/react-progress](https://www.npmjs.com/package/@radix-ui/react-progress): ^1.1.16
+- [@radix-ui/react-progress](https://www.npmjs.com/package/@radix-ui/react-progress): ^1.2.1
 - [@radix-ui/react-separator](https://www.npmjs.com/package/@radix-ui/react-separator): ^1.2.0
 - [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.5.0
 - [@types/node](https://www.npmjs.com/package/@types/node): ^26.6.5
@@ -271,7 +271,7 @@ Useful resources and dependencies that are used in Lingo.
 - [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.3.6
 - [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier): ^10.1.8
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.52.0
-- [next](https://www.npmjs.com/package/next): ^16.4.1
+- [next](https://www.npmjs.com/package/next): ^16.4.3
 - [pg](https://www.npmjs.com/package/pg): ^8.23.1
 - [postcss](https://www.npmjs.com/package/postcss): ^8
 - [prettier](https://www.npmjs.com/package/prettier): ^3.9.10
@@ -284,7 +284,7 @@ Useful resources and dependencies that are used in Lingo.
 - [react-dom](https://www.npmjs.com/package/react-dom): ^19.3.0
 - [react-use](https://www.npmjs.com/package/react-use): ^17.6.1
 - [sonner](https://www.npmjs.com/package/sonner): ^2.0.8
-- [stripe](https://www.npmjs.com/package/stripe): ^22.6.2
+- [stripe](https://www.npmjs.com/package/stripe): ^23.1.0
 - [tailwind-merge](https://www.npmjs.com/package/tailwind-merge): ^3.7.0
 - [tailwindcss](https://www.npmjs.com/package/tailwindcss): ^3.4.19
 - [tailwindcss-animate](https://www.npmjs.com/package/tailwindcss-animate): ^1.0.7

@@ -163,6 +163,11 @@ Options:
                                     - basic: core route types in the GTFS spec
                                     - google-extended: Extended GTFS Route Types [1]
                                     - tpeg-pti: proposed TPEG-PTI-based route types [2]
+                                    - french-carpooling: Carpooling route types the
+                                      French National Access Point (NAP) decided on [3],
+                                      extending google-extended.
+                                    - otp-carpooling: OpenTripPlanner's carpooling route
+                                      types [4], extending google-extended.
                                     May also be a set of these schemes, separated by `,`.
                                     Default: google-extended
     --trips-without-shape-id      Don't require trips.txt items to have a shape_id.
@@ -225,6 +230,8 @@ Examples:
 
 [1] https://developers.google.com/transit/gtfs/reference/extended-route-types
 [2] https://groups.google.com/g/gtfs-changes/c/keT5rTPS7Y0/m/71uMz2l6ke0J
+[3] https://github.com/google/transit/issues/430#issuecomment-4432430607
+[4] https://github.com/opentripplanner/OpenTripPlanner/pull/4641
 ```
 
 Some notable limitations mentioned in the [PostgreSQL 14 documentation on date/time types](https://www.postgresql.org/docs/14/datatype-datetime.html):
@@ -415,7 +422,7 @@ There are some projects that are very similar to `gtfs-via-postgres`:
 
 [`gtfs-via-duckdb`](https://github.com/public-transport/gtfs-via-duckdb) is a fork of and the spiritual successor to `gtfs-via-postgres`, importing GTFS into a [*DuckDB*](https://duckdb.org/) database file. The two have the same features, shortcomings and conceptual design (runtime access to the GTFS happens using SQL only).
 
-`gtfs-via-duckdb`'s usage in production systems is much less complex: [`duckdb-gtfs-importer`](https://github.com/OpenDataVBB/duckdb-gtfs-importer) can enable the *robustness* and *atomicity* goals [explained in `postgis-gtfs-importer`'s readme](https://github.com/mobidata-bw/postgis-gtfs-importer/blob/v5/README.md) with a much simpler design (>1 DB files, symlink to the latest).
+`gtfs-via-duckdb`'s usage in production systems is much less complex: [`duckdb-gtfs-importer`](https://github.com/OpenDataVBB/duckdb-gtfs-importer) can enable the *robustness* and *atomicity* goals [explained in `postgis-gtfs-importer`'s readme](https://github.com/mobidata-bw/postgis-gtfs-importer/blob/v7/README.md) with a much simpler design (>1 DB files, symlink to the latest).
 
 Because DuckDB tends to be more efficient than PostgreSQL, with the mostly [OLAP](https://en.wikipedia.org/wiki/Online_analytical_processing)-like queries run for GTFS analysis, so `gtfs-via-duckdb` imports datasets faster and queries for common use cases usually run faster.
 

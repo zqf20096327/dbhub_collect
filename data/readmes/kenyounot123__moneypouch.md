@@ -36,7 +36,7 @@ https://github.com/user-attachments/assets/f27de21b-9cc6-419e-a645-7fa4d32d7968
   </tr>
 </table>
 
-**[Try the demo](https://demo.moneypouch.app)** in your browser, with nothing to install and no sign-up. You get a private sandbox with a year of sample spending, and it is deleted after 24 hours.
+**[Try the demo](https://demo.moneypouch.app)** in your browser, theres no installing anything or account creation.
 
 To run your own, use one command, then open [localhost:8080](http://localhost:8080). [Getting started](#getting-started) has the details.
 
@@ -66,7 +66,7 @@ I built MoneyPouch because every app I tried wanted me to budget first, and I on
 
 ## What MoneyPouch is not
 
-MoneyPouch is not a budgeting app. It has no envelopes, no "give every dollar a job", no net worth, and no investment tracking. Those features are good for some people, but most of us only want to know where the money went. MoneyPouch does that one job and stays fast.
+MoneyPouch is not a budgeting app. It has no envelopes, no "give every dollar a job", no net worth, and no investment tracking. Those features are good for some people, but for me I just want to know where my money went. MoneyPouch does that one job and stays fast.
 
 ## How it compares
 
@@ -153,16 +153,20 @@ volumes:
 
 ## Type it like you'd say it
 
+Press ⌘K (Ctrl+K) on any page and type one line. MoneyPouch colors each part as it reads it and shows what it will save. Press Enter to add it.
+
 <p align="center">
-  <img src="docs/images/composer.png" alt="The composer reads Chipotle 11.25 yesterday as $11.25 at Chipotle, in Food, yesterday">
+  <img src="docs/images/composer.png" width="672" alt="The composer reads Chipotle 11.25 yesterday #food as $11.25 in Food, yesterday">
 </p>
 
-| | You type | MoneyPouch reads |
+| Part | You type | If you leave it out |
 | :--- | :--- | :--- |
-| **Amount** | `6.25` `$6.25` `1,650` | this is an expense/spending |
-| **Money in** | `+2000` | income, not spending |
-| **Date** | `yesterday` `sep 26` `friday` | that day, or today if left out |
-| **Category** | `#food` | food, or if left out, the category you last used for that name |
+| **Name** | `Chipotle` | Required |
+| **Amount** | `11.25` `$11.25` `1,650` | Required |
+| **Date** | `yesterday` `friday` `sep 26` | Today |
+| **Category** | `#food` | The category you last used for that name |
+
+Parts can go in any order. Put a `+` on the amount for money in, like `Paycheck +2400`. Tab completes a name you have used, `#` lists your categories, and `@` opens a calendar.
 
 ## Bank sync with SimpleFIN
 

@@ -234,6 +234,25 @@ Monitoring, cloud, uptime, CI/CD, ChatOps, ticketing, notification and identity 
 
 ---
 
+## 🤖 AI assistants (MCP)
+
+OpsKnight ships a built-in [Model Context Protocol](https://modelcontextprotocol.io/) server, so Claude, ChatGPT, Cursor, VS Code and other MCP assistants can search incidents, check who is on call, explain escalations and draft postmortems from chat.
+
+- **One click to turn on.** An administrator enables read-only access in **Settings → Integrations & ChatOps → MCP (AI Assistants)**; people then paste the server URL into their assistant. No client IDs, secrets or callbacks to manage.
+- **Each person signs in.** Assistants act with that person's current role and teams, and only with the permissions they ticked on the consent page.
+- **Changes are reviewed.** Changes are off by default. When allowed, routine incident actions run directly, while configuration changes and runbook runs wait for a human to approve the exact, frozen request on an in-app review page.
+- **Administrators stay in control.** See every connection and what it can actually do, turn off individual tools or whole domains, and revoke one connection or all of them.
+
+| Client                                | Status                              |
+| :------------------------------------ | :---------------------------------- |
+| Claude Code                           | Tested (v2.1.2, 2026-11-03)         |
+| Claude apps, ChatGPT, Cursor, VS Code | Expected (2025 revisions supported) |
+| Codex CLI, Gemini CLI, Windsurf       | Expected (not verified)             |
+
+[MCP setup guide →](docs/v2.2.0/guides/mcp/self-hosted-setup.md) · [What to ask](docs/v2.2.0/guides/mcp/what-to-ask.md) · [Build an agent](docs/v2.2.0/guides/mcp/build-an-agent.md) · [Security and data](docs/v2.2.0/guides/mcp/security-and-data.md) · [Troubleshooting](docs/v2.2.0/guides/mcp/troubleshooting.md) · [Permissions and coverage](docs/v2.2.0/reference/mcp/permissions.md) · [Tool reference](docs/v2.2.0/reference/mcp/tools.md)
+
+---
+
 ## 🏗️ Deploy anywhere
 
 |                                                                                                              | Topology                         | Best for                    | Guide                                                                                |
@@ -257,13 +276,13 @@ Integrated mode runs Web and background work in one process. Split mode gives We
 
 ## 🤔 Why OpsKnight?
 
-|                   | **OpsKnight**                                                 | Typical per-seat SaaS   |
-| :---------------- | :------------------------------------------------------------ | :---------------------- |
-| **Where it runs** | Your infrastructure                                           | Vendor cloud            |
-| **Incident data** | Stays in your PostgreSQL                                      | Stored by the vendor    |
-| **Pricing**       | No seat meter, no software fee                                | Per-user plans          |
-| **Source**        | Open under AGPL-3.0-only                                      | Closed                  |
-| **Operations**    | Source-visible runtime, health, metrics and delivery evidence | Vendor-operated runtime |
+|                   | **OpsKnight**                                                                                                                                                                                | Typical per-seat SaaS   |
+| :---------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------- |
+| **Where it runs** | Your infrastructure                                                                                                                                                                          | Vendor cloud            |
+| **Incident data** | Stays in your PostgreSQL (if you enable MCP, results you request are sent to your AI assistant's vendor; see the [MCP security and data guide](docs/v2.2.0/guides/mcp/security-and-data.md)) | Stored by the vendor    |
+| **Pricing**       | No seat meter, no software fee                                                                                                                                                               | Per-user plans          |
+| **Source**        | Open under AGPL-3.0-only                                                                                                                                                                     | Closed                  |
+| **Operations**    | Source-visible runtime, health, metrics and delivery evidence                                                                                                                                | Vendor-operated runtime |
 
 OpsKnight is an independent project and is not affiliated with PagerDuty, Opsgenie or other vendors.
 

@@ -1,0 +1,255 @@
+# Pizza Marketplace – Monorepo
+
+An online, multi-tenant pizza marketplace connecting customers and restaurants: customers search nearby restaurants, build a cart, and check out with real payment processing; restaurant owners manage their menu, pricing, and incoming orders. Built as independent **Go (Gin)** microservices, each owning its own **PostgreSQL** database; search runs on **Elasticsearch**. Services communicate asynchronously via **RabbitMQ** using the **transactional outbox pattern**, except order-service's communication with payment-service, which is synchronous over **gRPC** (with a circuit breaker) for the few operations that genuinely need an immediate response (checkout, cancellation, and a payment-status recheck). **Traefik** fronts every service with **JWT-based authentication**.
+
+Follows **Domain-Driven Design** and **Clean Architecture** principles, structured as an **Event-Driven Architecture** throughout. **Docker Compose** runs the full stack locally; **Kubernetes** orchestration is a planned next step for production deployment.
+
+## Table of contents
+
+- [Architecture overview](#architecture-overview)
+- [Services](#services)
+- [Tech stack](#tech-stack)
+- [Getting started](#getting-started)
+- [Environment variables](#environment-variables)
+- [API routes](#api-routes)
+- [Service documentation](#service-documentation)
+- [Event flow](#event-flow)
+- [Project structure](#project-structure)
+- [Roadmap Ahead](#roadmap-ahead)
+
+
+## Architecture overview
+
+```
+Client (Web)
+        │
+        ▼
+Traefik API Gateway (:80)
+  ├── /auth, /users     ──► Identity Service
+  ├── /restaurants      ──► Restaurant Service  (JWT protected)
+  ├── /search           ──► Search Service      (no auth)
+  ├── /cart, /orders    ──► Order Service       (JWT protected)
+  ├── /customers        ──► Customer Service    (JWT protected)
+  └── /webhooks/mollie  ──► Payment Service     (no auth — Mollie's own callback)
+
+Order Service ──gRPC (synchronous)──► Payment Service
+
+RabbitMQ (async events, publish/consume — see Event flow below)
+  ├── Identity Service
+  ├── Restaurant Service
+  ├── Search Service
+  ├── Order Service
+  ├── Payment Service
+  ├── Customer Service
+  └── Notification Service (worker only — no HTTP route, reached only via RabbitMQ)
+```
+
+Each service owns its data store. There is no shared database. See the
+[Architecture diagram](docs/architecture.md) for the full picture.
+
+
+## Services
+
+| Service | Role | Exposure |
+|---|---|---|
+| `identity-service` | Auth, JWT, user management | mixed (public and JWT-protected) |
+| `restaurant-service` | Restaurant & menu CRUD | JWT-protected, owner, admin |
+| `search-service` | Search API + Elasticsearch indexing | public (no auth) |
+| `order-service` | Cart, checkout, and order tracking/lifecycle | JWT-protected, authenticated user, owner |
+| `payment-service` | Payment processing via Mollie | gRPC (internal only) + one public webhook route |
+| `customer-service` | Customer profile (phone) and saved delivery addresses | JWT-protected, authenticated user |
+| `notification-service` | Notifications via channel adapters — email today (background worker) | — |
+
+`identity-service`, `restaurant-service`, `search-service`, `order-service`, `payment-service`, and `customer-service` each also run a `cmd/worker` process (outbox relay / event consumer) alongside their API — not separate services. Each service's worker (`identity-worker`, `restaurant-worker`, `search-worker`, `order-worker`, `payment-worker`, `customer-worker`) gets its own container in `compose.yaml` and runs by default in dev — without them, no outbox event ever leaves identity-service/restaurant-service/order-service/payment-service/customer-service, and the search index stays permanently empty, respectively. Without `customer-worker`, no customer profile is ever created and no saved address is ever stored. `payment-worker` is the exception among these: it has no inbound consumer, it only relays payment-service's own outbox.
+
+All services are behind Traefik and not directly reachable from outside the Docker network.
+
+
+## Tech stack
+
+| Layer | Technology |
+|---|---|
+| Language | Go |
+| HTTP framework | Gin |
+| Message broker | RabbitMQ 3 |
+| Relational DB | PostgreSQL 17 |
+| Cache | Redis 7 |
+| Search engine | Elasticsearch 8.9 |
+| API gateway | Traefik v3 |
+| Containerisation | Docker · Docker Compose |
+
+
+## Getting started
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) ≥ 29.4
+- [Docker Compose](https://docs.docker.com/compose/) ≥ 2.34
+- [Go](https://go.dev/dl/) ≥ 1.24
+
+### Run with Docker Compose
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/tarique-iqbal/pizza-marketplace.git
+cd pizza-marketplace
+
+# 2. Copy env files and fill in values
+cp .env.example                      .env
+cp identity-service/.env.example     identity-service/.env
+cp restaurant-service/.env.example   restaurant-service/.env
+cp notification-service/.env.example notification-service/.env
+cp search-service/.env.example       search-service/.env
+cp order-service/.env.example        order-service/.env
+cp payment-service/.env.example      payment-service/.env
+cp customer-service/.env.example     customer-service/.env
+
+# 3. Start all services
+docker compose up --build
+```
+
+The gateway is available at `http://localhost:80`  
+The Traefik dashboard is at `http://localhost:8080`  
+The RabbitMQ management UI is at `http://localhost:15672`
+
+### Stop services
+
+```bash
+docker compose down
+```
+
+To also remove volumes (wipes all data):
+
+```bash
+docker compose down -v
+```
+
+
+## Environment variables
+
+Each service is configured via its own `.env` file. Copy the `.env.example` in each service directory and update the values. The root `.env` is separate: it only sets `COMPOSE_PROFILES`, which controls which service groups `docker compose up` starts. Leave it at the default (`all`) to start everything, or override per-run with `docker compose --profile <name> up` — profile names match each service's own name (`identity`, `restaurant`, `notification`, `search`, `order`, `payment`, `customer`).
+
+
+## API routes
+
+All routes are served through Traefik on port `80`. See each service's API reference for details:
+
+- [Identity service](docs/api/identity.md) — `/auth`, `/users`
+- [Restaurant service](docs/api/restaurant.md) — `/restaurants`
+- [Search service](docs/api/search.md) — `/search`
+- [Order service](docs/api/order.md) — `/cart`, `/orders`
+- [Payment service](docs/api/payment.md) — gRPC `PaymentService` + `/webhooks/mollie`
+- [Customer service](docs/api/customer.md) — `/customers`
+
+
+## Service documentation
+
+Architecture, domain model, and design decisions for each implemented service:
+
+- [Identity service](docs/services/identity.md)
+- [Restaurant service](docs/services/restaurant.md)
+- [Notification service](docs/services/notification.md)
+- [Search service](docs/services/search.md)
+- [Order service](docs/services/order.md)
+- [Payment service](docs/services/payment.md)
+- [Customer service](docs/services/customer.md)
+
+
+## Event flow
+
+Events are published to RabbitMQ and consumed asynchronously. `identity-service`, `restaurant-service`, `order-service`, `payment-service`, and `customer-service` all use the transactional outbox pattern for at-least-once delivery — each outboxes every event it raises, with no best-effort publish path left in any of them. Checkout and order cancellation are synchronous (order-service calls payment-service's `CreatePayment`/`CancelPayment`/`GetPaymentStatus` over gRPC directly), but the payment *outcome* is inherently async — Mollie's webhook lands on payment-service, not order-service, so `payment.succeeded`/`payment.failed` is the only way order-service learns whether a payment went through, and confirming/cancelling the order in response is what raises `order.confirmed`.
+
+```
+identity-service     ──publishes──► email.verification_created
+                                     user.registered
+                                     restaurant.initiated
+
+restaurant-service   ──publishes──► restaurant.ready_for_review
+                                     restaurant.approved
+                                     restaurant.launched
+                                     restaurant.updated
+                                     restaurant.pizza_updated
+                                     restaurant.topping_prices_updated
+
+payment-service      ──publishes──► payment.succeeded
+                                     payment.failed
+
+order-service        ──publishes──► order.confirmed
+                                     order.address_saved
+
+customer-service     ──publishes──► customer.phone_updated
+
+notification-service ◄──consumes──  email.verification_created
+                                     user.registered
+                                     restaurant.ready_for_review
+                                     restaurant.approved
+                                     order.confirmed
+
+restaurant-service   ◄──consumes──  restaurant.initiated
+
+customer-service     ◄──consumes──  user.registered
+                                     order.address_saved
+
+search-service       ◄──consumes──  restaurant.launched
+                                     restaurant.updated
+                                     restaurant.pizza_updated
+                                     restaurant.topping_prices_updated
+
+order-service        ◄──consumes──  restaurant.launched
+                                     restaurant.updated
+                                     restaurant.pizza_updated
+                                     restaurant.topping_prices_updated
+                                     user.registered
+                                     customer.phone_updated
+                                     payment.succeeded
+                                     payment.failed
+```
+
+`restaurant.approved` and `restaurant.ready_for_review` are the only restaurant-service events with no
+`search-service` consumer — they fire pre-launch, before there is anything to index.
+
+
+## Project structure
+
+```
+pizza-marketplace/
+├── identity-service/
+│   ├── cmd
+│   │   ├── api
+│   │   └── worker
+│   ├── internal
+│   │   ├── application
+│   │   ├── container
+│   │   ├── domain
+│   │   ├── infrastructure
+│   │   ├── interfaces
+│   │   └── shared
+│   ├── tests         # mirrors internal 1:1
+│   ├── Dockerfile
+│   └── .env.example
+├── customer-service/
+├── notification-service/
+├── order-service/
+├── payment-service/
+├── restaurant-service/
+├── search-service/
+├── compose/
+├── compose.yaml
+├── compose.test.yaml
+└── README.md
+```
+
+
+## Roadmap Ahead
+
+- [ ] Payment service — Stripe as a second payment gateway
+- [ ] Customer service — saved payment methods to reuse payment details at checkout
+- [ ] Notification service — SMS/web-push adapters
+- [ ] Analytics service — metrics, reporting, and audit logs
+- [ ] Zero-trust networking — trusted proxies, mTLS, and workload identity
+- [ ] Observability stack — centralized logs, metrics, distributed tracing, and monitoring
+- [ ] Orchestration — Kubernetes for auto-scaling, self-healing, and zero-downtime updates
+- [ ] CI/CD Pipeline — automated testing and secure Docker image builds
+- [ ] Cloud Deployment — GitOps with Argo CD for automated, safe cloud deployments
+- [ ] AI-assisted automation — deployment optimization and anomaly detection
+- [ ] Web user client — React frontend application (separate repo)

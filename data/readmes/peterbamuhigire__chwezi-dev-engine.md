@@ -1,6 +1,6 @@
 # Chwezi Dev Engine
 
-Chwezi Dev Engine is a catalogue of 167 routed `SKILL.md` files. They tell an AI coding agent, or the engineer directing one, how to design, build, review, secure and operate production software. The skills cover architecture, databases, security, languages, web and mobile clients, AI and agent systems, multi-tenant SaaS, DevOps, game development and GIS.
+Chwezi Dev Engine is a catalogue of 168 routed `SKILL.md` files. They tell an AI coding agent, or the engineer directing one, how to design, build, review, secure and operate production software. The skills cover architecture, databases, security, languages, web and mobile clients, AI and agent systems, multi-tenant SaaS, DevOps, game development and GIS.
 
 It is for software engineers, technical leads, architects, product owners, QA and delivery reviewers, and the consultants of Chwezi Core Systems. Use it through Claude Code, Codex or any agent that can read Markdown, when work should follow a written method and leave evidence a reviewer can check.
 
@@ -24,11 +24,11 @@ A root baseline, [`world-class-engineering`](skills/sdlc-meta/world-class-engine
 
 ## At a glance
 
-- **167 active skills** in 18 categories, plus 78 retired names kept as redirects.
-- **165 skills** ship in the Claude Code plugin. The two project-initialisation skills are read from a clone.
-- **239 routing fixtures.** Each pairs a sample task with the skill that should win it. The expected skill ranks first for 219 (91.6%) and in the top three for all 239. The test matches words in skill descriptions, so it is not live routing.
-- **273 tests pass and 3 are skipped** (pytest 9.0.3, Linux, 2026-10-31).
-- **72 dated source records** back volatile facts. A continuous-integration (CI) step fails when one passes its review date. The first failure date is 2026-11-04.
+- **168 active skills** in 18 categories, plus 78 retired names kept as redirects.
+- **166 skills** ship in the Claude Code plugin. The two project-initialisation skills are read from a clone.
+- **242 routing fixtures.** Each pairs a sample task with the skill that should win it. The expected skill ranks first for 222 (91.7%) and in the top three for all 242. The test matches words in skill descriptions, so it is not live routing.
+- **273 tests pass and 3 are skipped** (pytest 9.2.0, Python 3.14.10, Linux, 2026-11-05).
+- **72 dated source records** back volatile facts. A continuous-integration (CI) step fails when one passes its review date. It failed from 2026-11-04, when five Next.js records went overdue, until 2026-11-05, when the 14 overdue records were re-read; it exits 0 on 2026-11-06 (see [Date-triggered gates](#date-triggered-gates)).
 - **Latest published rating: 62.5/100.** It is a practitioner's judgement, not an external audit, and the 95/100 target is not reached.
 
 ## Start here
@@ -40,7 +40,7 @@ A root baseline, [`world-class-engineering`](skills/sdlc-meta/world-class-engine
    /plugin install engineering@chwezi-engineering
    ```
 
-2. **Check.** From a clone, run the catalogue check. It needs Python and PyYAML, reports `active SKILL.md files: 167` and exits 0 on the current tree.
+2. **Check.** From a clone, run the catalogue check. It needs Python and PyYAML, reports `active SKILL.md files: 168` and exits 0 on the current tree.
 
    ```sh
    python3 -X utf8 scripts/skill_catalog_guardrails.py
@@ -50,7 +50,7 @@ A root baseline, [`world-class-engineering`](skills/sdlc-meta/world-class-engine
 
 ## Capabilities
 
-The engine holds 167 active skills in 18 categories (165 ship in the Claude Code plugin), grouped under [What is inside](#what-is-inside). The [skill catalogue](docs/skill-catalogue.md) lists each one. The table under Find the right skill is the capability map: common tasks and the skill that handles each.
+The engine holds 168 active skills in 18 categories (166 ship in the Claude Code plugin), grouped under [What is inside](#what-is-inside). The [skill catalogue](docs/skill-catalogue.md) lists each one. The table under Find the right skill is the capability map: common tasks and the skill that handles each.
 
 ### Find the right skill
 
@@ -93,7 +93,7 @@ The file model and the policy behind it are in [`docs/overview/ARCHITECTURE.md`]
 
 ## What is inside
 
-[`SKILL.md`](SKILL.md) at the root is the router and is not counted. The 167 active skills sit in 18 categories. The [skill catalogue](docs/skill-catalogue.md) lists each skill with a one-line description. The 78 inactive `ALIAS.md` redirects are excluded.
+[`SKILL.md`](SKILL.md) at the root is the router and is not counted. The 168 active skills sit in 18 categories. The [skill catalogue](docs/skill-catalogue.md) lists each skill with a one-line description. The 78 inactive `ALIAS.md` redirects are excluded.
 
 | Category | Folder | Skills |
 |---|---|---:|
@@ -109,13 +109,13 @@ The file model and the policy behind it are in [`docs/overview/ARCHITECTURE.md`]
 | iOS | [`skills/ios/`](skills/ios/) | 4 |
 | Cross-platform mobile | [`skills/mobile-cross/`](skills/mobile-cross/) | 3 |
 | AI and agent systems | [`skills/ai/`](skills/ai/) | 26 |
-| SaaS platforms | [`skills/saas/`](skills/saas/) | 18 |
+| SaaS platforms | [`skills/saas/`](skills/saas/) | 19 |
 | Product and business | [`skills/product-business/`](skills/product-business/) | 15 |
 | Finance implementation | [`skills/finance-accounting/`](skills/finance-accounting/) | 4 |
 | DevOps and cloud | [`skills/devops-cloud/`](skills/devops-cloud/) | 8 |
 | Game development | [`skills/game-development/`](skills/game-development/) | 25 |
 | GIS | [`skills/gis/`](skills/gis/) | 2 |
-| **Total** | | **167** |
+| **Total** | | **168** |
 
 ### Catalogue size
 
@@ -123,11 +123,11 @@ The active count is a checked surface. `tests/test_engine_control_plane.py` comp
 
 | Measure | Value |
 |---|---:|
-| Active `SKILL.md` files | 167 |
+| Active `SKILL.md` files | 168 |
 | Guardrail maximum | 200 |
 | Inactive `ALIAS.md` redirects | 78 |
-| Skills shipped by the Claude plugin manifest | 165 |
-| Routing fixtures | 239 |
+| Skills shipped by the Claude plugin manifest | 166 |
+| Routing fixtures | 242 |
 
 ### What the skills produce
 
@@ -183,7 +183,7 @@ The repository is its own marketplace: `.claude-plugin/marketplace.json`, market
 /plugin install engineering@chwezi-engineering
 ```
 
-The plugin manifest (`.claude-plugin/plugin.json`) ships the 165 skills under `skills/`, plus `agents/`, `hooks/` and `rules/`. The two project-initialisation skills in `00-meta-initialization/` are read from a clone.
+The plugin manifest (`.claude-plugin/plugin.json`) ships the 166 skills under `skills/`, plus `agents/`, `hooks/` and `rules/`. The two project-initialisation skills in `00-meta-initialization/` are read from a clone.
 
 ### Codex
 
@@ -234,7 +234,7 @@ Clone the repository. Have the agent read [`CLAUDE.md`](CLAUDE.md), the [skill r
 
 ## Verify
 
-Run from the repository root. These are the steps of the CI workflow (`.github/workflows/skill-guardrails.yml`), in its order, plus `git diff --check` from [`CONTRIBUTING.md`](CONTRIBUTING.md). Each exited 0 on the current tree on Linux (Fedora, Python 3.14.8, Node 22.23.1) on 2026-10-31.
+Run from the repository root. These are the steps of the CI workflow (`.github/workflows/skill-guardrails.yml`), in its order, plus `git diff --check` from [`CONTRIBUTING.md`](CONTRIBUTING.md). On 2026-11-05 every step exited 0 on the current tree on Linux (Fedora, Python 3.14.10, Node 22.23.1) except the source-register check, which exited 1 until the 14 overdue records were re-read that evening. It exits 0 on 2026-11-06 (see the table and [Date-triggered gates](#date-triggered-gates)).
 
 ```sh
 python3 -m pip install -r requirements-ci.txt
@@ -251,18 +251,18 @@ python3 -X utf8 skills/sdlc-meta/skill-writing/scripts/contract_gate.py --all
 git diff --check
 ```
 
-| Check | Needs | Result, 2026-10-31 |
+| Check | Needs | Result, 2026-11-05 |
 |---|---|---|
-| Catalogue guardrails (the script also runs the host-path, duplicate-heading and broken-link ratchets) | Python, PyYAML | 167 active skills, 0 errors, 14 size warnings (warnings never change the exit status) |
+| Catalogue guardrails (the script also runs the host-path, duplicate-heading and broken-link ratchets) | Python, PyYAML | 168 active skills, 0 errors, 14 size warnings (warnings never change the exit status) |
 | Guardrail unit tests | Python | 10 tests OK |
 | Test suite | Python, pytest, PyYAML, Git | 273 passed, 3 skipped |
-| Routing smoke test (a lexical proxy, not live routing) | Python, PyYAML | 239 fixtures; precision@1 219/239 (91.6%), precision@3 239/239; 83 owned negatives, 4 `NOT_ASSESSED` |
-| Fixture coverage | Python, PyYAML | 166 of 167 skills have a positive fixture; `new-project` has none |
-| Description collisions | Python, PyYAML | 1 pair above 0.5 (`mysql-engineering` and `postgresql-engineering`), allow-listed |
+| Routing smoke test (a lexical proxy, not live routing) | Python, PyYAML | 242 fixtures; precision@1 222/242 (91.7%), precision@3 242/242; 86 owned negatives (82 pass, 4 `NOT_ASSESSED`) |
+| Fixture coverage | Python, PyYAML | 167 of 168 skills have a positive fixture; `new-project` has none |
+| Description collisions | Python, PyYAML | 1 pair above 0.5 (`mysql-engineering` and `postgresql-engineering`, 0.627), allow-listed |
 | Control-plane registry | Python | 12 registry entries; installed checkouts are `NOT ASSESSED` unless parent folders are given (below) |
-| Source registers | Python | 72 active sources, 0 findings, 15 review dates within 14 days; see the [calendar](#date-triggered-gates) |
+| Source registers | Python | Exit 0 on 2026-11-06: 73 active sources, 0 findings, 16 warnings for dates within 14 days. It exited 1 before the 14 overdue records were re-read; see the [calendar](#date-triggered-gates) |
 | Hook tests | Node | 61/61 and 7/7 |
-| Evidence-declaration contract gate | Python | 161 skills scanned, 0 errors, 6 exempt |
+| Evidence-declaration contract gate | Python | 162 skills scanned, 0 errors, 6 exempt |
 
 The 3 skipped tests are the opt-in installed-portfolio checks (`SKILL_ENGINE_LIVE_TESTS=1`). `NOT ASSESSED` means a check could not be run here. It is never reported as a pass.
 
@@ -301,6 +301,27 @@ Evidence for the October 2026 passes lives in two folders. Each holds a scope re
 
 Read the validation records before you treat an example as production proof.
 
+### Changes after the October kaizen (1 to 6 November 2026)
+
+- **Tenant document numbering (5 November, `13e4cc9` and `f9e7a46`).** The new skill [`tenant-document-numbering`](skills/saas/tenant-document-numbering/SKILL.md) sets one contiguous, never-resetting series per tenant and document type for every user-facing number, kept apart from the database id.
+  - Its references cover the schema and allocator (MySQL 8, PostgreSQL, PHP, retry, lifecycle, lock order), seeding and capacity, API and offline guardrails, and retrofit and rollout.
+  - The commit removed guidance that contradicted it: the `MAX+1` journal-number trigger, "gaps are acceptable" and id-derived reversal references.
+  - 17 related skills and the AI code review gate each gained a cross-reference. Three routing fixtures with three owned negatives cover the skill.
+  - `f9e7a46` warns that a bound integer inside `GREATEST()` compares as text and can lower a counter.
+  - Record: [`docs/updates/2026-11-05-tenant-document-numbering-standard.md`](docs/updates/2026-11-05-tenant-document-numbering-standard.md).
+- **Source register re-read (5 and 6 November).** The 14 records that had gone overdue were re-read from their primary pages and the check exits 0 again.
+  - Nine pages were unchanged and were renewed in place. Four had moved on and were superseded: Next.js 16.4.5 and its 3 November security release, the Android November bulletin, and AGP 9.5.0.
+  - One page, the MySQL 8.4.13 release notes, returned HTTP 403 to every attempt and is quarantined with a replacement source.
+  - Record: [`docs/updates/2026-11-06-source-register-reread.md`](docs/updates/2026-11-06-source-register-reread.md).
+- **MCP transport dating (6 November, `284b0f2`, `f44848c`, `6592901`).** Two statements presented MCP revision 2026-07-28 as the start of the HTTP+SSE deprecation. They now say it has been deprecated since protocol version 2025-03-26 and was reclassified as Deprecated under the lifecycle policy (SEP-2596) in 2026-07-28, as the changelog read on 2026-11-05 states.
+  - A third commit separates the changelog's removals (protocol sessions and the `initialize` handshake) from its additions in the same bullet.
+  - Record: [`docs/updates/2026-11-06-mcp-http-sse-dating.md`](docs/updates/2026-11-06-mcp-http-sse-dating.md). The SDK snippets and whether SEP-2596 has reached Final are `NOT_ASSESSED`.
+- **Signup bot controls (1 November, `74c9bda`).** A shared reference, [`signup-human-validation.md`](skills/security/vibe-security-skill/references/signup-human-validation.md), sets the defaults.
+  - Web: Cloudflare Turnstile Managed mode with server-side validation.
+  - Android: Firebase App Check with Play Integrity, with Turnstile in a WebView as the fallback.
+  - The provider claims were checked against official documentation on 1 November 2026. Review them by 1 February 2027. Record: [`docs/updates/2026-11-01-signup-human-validation-standard.md`](docs/updates/2026-11-01-signup-human-validation-standard.md).
+- **Verify figures re-measured (5 November).** Every figure in [Verify](#verify) was re-run on 2026-11-05. The one change in outcome was the source-register check, which exited 1; it was fixed the same evening (see the next item and [Date-triggered gates](#date-triggered-gates)). Record: [`docs/updates/2026-11-05-readme-measured-refresh.md`](docs/updates/2026-11-05-readme-measured-refresh.md).
+
 ### Latest published score
 
 Pass 2 rated the engine 62.5/100 raw, the mean of ten dimension ratings. The Portfolio Standard cap, `min(raw, 65)`, leaves 62.5/100. The 29 October pass published 59.5 raw and 59.5 capped.
@@ -314,7 +335,7 @@ The full list, with reasons, is the pass-2 [next-cycle handoff](docs/kaizen/2026
 - **Local settings file.** `.claude/settings.local.json` is a user-local settings file. It is tracked in this public repository and names Windows user-profile paths. It is escalated to the maintainer. Untracking keeps the file on disk but does not remove it from Git history. Do not copy it.
 - **Invoice slice gaps.** `examples/tenant-invoice-listing/` has known contract gaps: no pagination, errors not in RFC 9457 form, raw minor units shown to users, `LIKE` wildcards in search, no migration rollback, accessibility semantics and no evidence pack. Its README lists them. Do not copy the slice as a finished listing.
 - **Hygiene ratchets.** 24 skills still carry a duplicate `##` heading. 84 relative links in 52 files do not resolve. Ratchets in `docs/quality-gates/` hold both counts, and they may only shrink.
-- **Thin routing coverage.** 13 of 167 skills have three positive fixtures and two owned negatives. `new-project` has no fixture.
+- **Thin routing coverage.** 14 of 168 skills have three positive fixtures and two owned negatives (measured 2026-11-05). `new-project` has no fixture.
 - **Currency rows not re-read in pass 2.** These are the legacy hospitality register (review date 2026-10-14, now past), the Apple developer documentation row, the OpenAI Codex availability article (quarantined after an HTTP 403) and the Kubernetes latest version (inferred, not labelled by the source).
 - **Builds not repeated.** The 29 October validation record reports a Next.js build, a Compose build and a MySQL fixture run of the invoice slice. Each ran in a disposable environment outside this repository. Pass 2 and the documentation round that followed could not repeat them.
 - **Not established by any pass:** emulator or browser rendering, authenticated database integration, live-model routing, production behaviour and independent human review. These are `NOT_ASSESSED`, never a pass.
@@ -409,28 +430,39 @@ The [pass-2 log](docs/kaizen/2026-10-engine-kaizen-pass-2/03-experiment-log.md) 
 
 `scripts/check_source_register.py` fails when an active source record's `review_after` date is before the check date. The **Check source registers** CI step runs it. A pass proves dates and metadata only. It does not prove that a page supports a claim.
 
-Each row below was checked on 2026-10-31 by running the check with `--as-of` on that date and on the day before. On the first date of a row, it exits 1:
+Each row below was checked on 2026-11-06 by running the check with `--as-of` on its first failing date and on the day before, and comparing the number of findings. On the first date of a row, the check exits 1 with the total shown:
 
 ```sh
-python3 -X utf8 scripts/check_source_register.py --as-of 2026-11-04
+python3 -X utf8 scripts/check_source_register.py --as-of 2026-11-14
 ```
 
 | First failing `--as-of` date | Records lapsing that day | Failing in total | Topics |
 |---|---:|---:|---|
-| 2026-11-04 | 5 | 5 | Next.js release, support policy, upgrade guide, October and November security notices |
-| 2026-11-06 | 9 | 14 | Android 17, Android security bulletin, AGP and Compose notes, Kotlin and Compose migration, PHP security and Brotli, PostgreSQL and MySQL security |
-| 2026-11-12 | 1 | 15 | PowerShell support lifecycle |
-| 2026-11-30 | 6 | 21 | OpenAI changelog, model selection, skills context budget, plugin format and submission, Claude plugin marketplace |
-| 2026-12-01 | 34 | 55 | The main batch: Play target, Kotlin, PHP supported versions, PostgreSQL support, OpenAI, Anthropic, Gemini and Bedrock guidance, Windows, Intune, PowerShell, Cisco, BIND, Kubernetes, React, MySQL 8.4 |
-| 2026-12-02 | 6 | 61 | WCAG 2.2, ASVS, IFRS 18, Windows security baselines and server documentation |
-| 2026-12-17 | 1 | 62 | W3C validator user documentation |
-| 2026-12-18 | 1 | 63 | W3C validator user documentation (second record) |
-| 2026-12-30 | 1 | 64 | Impeccable slop catalogue |
-| 2027-01-01 | 5 | 69 | NIST AI RMF, OWASP Top 10 2025, ASVS 5.0.0, PCI DSS 4.0.1, SLSA 1.2 |
-| 2027-01-30 | 2 | 71 | Next.js authentication and data-security guides |
-| 2027-09-02 | 1 | 72 | IETF DNSSEC best practice |
+| 2026-11-12 | 1 | 1 | PowerShell support lifecycle |
+| 2026-11-14 | 8 | 9 | Next.js October advisory and November release post, PHP security, Brotli and upload-progress advisories, PostgreSQL security, Android November bulletin, Oracle MySQL alert |
+| 2026-11-21 | 7 | 16 | Android 17, Compose setup and compiler migration, AGP 9.5.0, Next.js 16.4.5 release, support policy and upgrade guide |
+| 2026-11-30 | 6 | 22 | OpenAI changelog, model selection, skills context budget, plugin format and submission, Claude plugin marketplace |
+| 2026-12-01 | 34 | 56 | The main batch: Play target, Kotlin, PHP supported versions, PostgreSQL support, OpenAI, Anthropic, Gemini and Bedrock guidance, Windows, Intune, PowerShell, Cisco, BIND, Kubernetes, React, MySQL 8.4 index |
+| 2026-12-02 | 6 | 62 | WCAG 2.2, ASVS, IFRS 18, Windows security baselines and server documentation |
+| 2026-12-17 | 1 | 63 | W3C validator user documentation |
+| 2026-12-18 | 1 | 64 | W3C validator user documentation (second record) |
+| 2026-12-30 | 1 | 65 | Impeccable slop catalogue |
+| 2027-01-01 | 5 | 70 | NIST AI RMF, OWASP Top 10 2025, ASVS 5.0.0, PCI DSS 4.0.1, SLSA 1.2 |
+| 2027-01-30 | 2 | 72 | Next.js authentication and data-security guides |
+| 2027-09-02 | 1 | 73 | IETF DNSSEC best practice |
 
-The cure is to re-read the primary page, add a dated record and move the old one to `superseded_sources`. Never extend a date unread. Also due: the next full re-audit on or before 2026-11-30, and the model comparison by 2026-12-28 (both from the handoff).
+**Status on 2026-11-06.** The check exits 0: 73 active sources and 0 findings. The 14 records that were overdue were re-read from their primary pages on 2026-11-05 between 22:11 and 22:13 UTC (01:11 to 01:13 on 6 November in East Africa). Record dates use the UTC date, so a CI run in UTC never sees a future date. No date was extended unread.
+
+- **Renewed in place, page unchanged (9):** `next16-upgrade-2026-10-29`, `nextjs-support-policy-2026-10-29`, `next-security-oct14-2026`, `android-17-release-2026-10-29`, `compose-setup-2026-10-29`, `kotlin-compose-migration-2026-10-29`, `php-security-oct21-2026`, `php-windows-brotli-2026` and `postgresql-security-2026-10-29`.
+- **Superseded by a new dated record (4):**
+  - `nextjs-release-2026-10-29` (v16.4.3) by `nextjs-release-2026-11-05` (v16.4.5, published 2026-11-03).
+  - `next-security-november-notice-2026` by `next-security-november-2026-release-2026-11-05`. The planned release shipped on 2026-11-03: one High and six Medium advisories, fixed in 16.4.5 and 15.5.29.
+  - `android-security-bulletin-october-2026` by `android-security-bulletin-november-2026` (patch level 2026-11-05 or later).
+  - `android-agp-9-1-notes-2026-10-29` by `android-agp-9-5-notes-2026-11-05` (AGP 9.5.0, October 2026).
+- **Quarantined, page unreadable (1):** `mysql-8413-security-2026-10-29`. The MySQL documentation site returned HTTP 403 ("Technical Difficulties") to every attempt, so the 8.4.13 release date and security notes are `NOT_ASSESSED` until it is read again, by 2026-11-13. `oracle-cpu-oct-2026-mysql-2026-11-05` records what the readable Oracle October 2026 alert says: MySQL Server 8.4.0 to 8.4.12 affected, 8.4.13 outside that range. It does not name 8.4.13 as the fix.
+- **Added (1):** `php-session-upload-progress-advisory-2026-11-05`, the PHP informational advisory of 2026-10-23 (CVE-2026-115560, full advisory to follow).
+
+The cure is to re-read the primary page, add a dated record and move the old one to `superseded_sources`. Never extend a date unread. The security records and the MySQL quarantine come due on 2026-11-13, and the release, setup and migration records on 2026-11-20. Also due: the next full re-audit on or before 2026-11-30, and the model comparison by 2026-12-28 (both from the handoff).
 
 ## References
 

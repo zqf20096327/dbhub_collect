@@ -144,7 +144,8 @@ install to sites that are running and backed up:
 - **Create in one step.** A type-first "Add a website" flow for WordPress, plain
   PHP, static sites and reverse proxies (Node.js, Python, Docker or any
   upstream). Linux user, PHP-FPM pool, database, vhost and certificate are
-  created in one transaction; a failure undoes the finished steps.
+  created in one transaction; a failure undoes the finished steps. A reverse
+  proxy can start from a stack the Docker module found, with its port filled in.
 - **PHP 8.1–8.4 side by side**, per-site PHP settings, static-to-PHP
   conversion, www / non-www canonical redirects, HSTS, FastCGI cache, a
   maintenance page, and a custom nginx snippet (raw nginx is admin-only).
@@ -189,8 +190,19 @@ install to sites that are running and backed up:
   offers to park it, which is the only fix once WordPress won't boot.
 - **Repair:** a file-permission check with a real write probe, core-file
   checksum repair, and a full reinstall that only runs after a backup succeeds.
-- **Integrity and malware scan** using wp-cli checksums and ClamAV, with repair
-  of core files and reinstall of tampered plugins from the findings.
+- **Integrity and malware scan** of a site's files, run by the agent with no
+  wp-cli and no site code executed. Core, plugins and themes are compared with
+  their release (wordpress.org, or the vendor's package for premium ones); every
+  other file is read for known malware patterns and watched for changes. Results
+  say what was and was not covered, and changes it cannot judge wait as "to
+  review" until someone trusts or quarantines them. Sites without WordPress are
+  scanned too. The database is not scanned. ClamAV is optional: one bounded
+  weekly pass for the node, only with 2 GiB of memory free. Findings alert
+  once, care reports and `hctl` carry the same verdict, and repair of core files
+  and reinstall of tampered plugins start from the findings. The new checks run
+  as a silent pilot until `[integrity] new_layers_live` is switched on. That
+  flag is per node: set it in each node's own `agent.toml` (the settings sync
+  doesn't carry `[integrity]`).
 - Staging copy with push to production (production is backed up first), Redis
   object cache, a `WP_DEBUG` switch, admin password reset, a sign-up spam
   guard, and a mail self-repair that sends WordPress mail through the local
@@ -257,6 +269,10 @@ install to sites that are running and backed up:
   sampled every 5 minutes, a realtime network graph, and per-site resource use
   with a period picker. Per-site CPU comes from a tracker fed every 10 seconds.
 - **HTTP uptime monitoring** per site, with every monitored site on one page.
+- An optional **Docker module** for the Compose stacks on your nodes: status,
+  logs, restart-loop and unhealthy alerts, image update notices and URL checks
+  that run from the master. It is read-only and Docker has to be installed
+  already. See [Docker monitoring](docs/RUNBOOK.md#docker-monitoring).
 - OOM kills, a read-only root filesystem, pending OS updates and a needed
   reboot are all reported.
 - A **Service health** page with the state of every system service across all

@@ -87,6 +87,12 @@ latest 30 profiles using robust historical baselines for volume, numeric mean
 shifts, NULL rates, and distinct counts. During cold start or when history is
 not usable, it keeps the conservative fixed defaults.
 
+Every run is learned, except one that finds a CRITICAL anomaly on a table:
+that table keeps its baseline, so the alert repeats on every run until the
+data recovers, and the broken state never becomes the new normal. WARNING and
+INFO findings are learned. When the change is intended, such as a planned
+backfill, a person makes it the new normal with `scherlok accept` (below).
+
 ### 1. `investigate` — Learn the patterns
 
 ```bash
@@ -140,28 +146,46 @@ Auto-detects Slack, Discord, and Teams from the URL and formats the payload acco
 
 ## CI/CD Integration
 
-Use Scherlok as a data quality gate. The `ci` command does it in one line:
+Use Scherlok as a data quality gate on pull requests. The GitHub Action checks the change against the stored baseline, fails the check on anomalies and keeps one comment on the pull request up to date with the table, column, metric, baseline, current value and severity of each:
 
 ```yaml
-# GitHub Actions
-- name: Data quality check
-  run: |
-    pip install scherlok
-    scherlok config --store s3://my-bucket/scherlok/profiles.db
-    scherlok ci ${{ secrets.DATABASE_URL }} \
-      --webhook ${{ secrets.SLACK_WEBHOOK }} \
-      --fail-on critical
+# .github/workflows/data-checks.yml
+on: pull_request
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  scherlok:
+    runs-on: ubuntu-latest
+    steps:
+      # build the change first, e.g. dbt run against a CI schema
+      - uses: rbmuller/scherlok@v1
+        with:
+          connection: ${{ secrets.DATABASE_URL }}
+          store: s3://my-bucket/scherlok/profiles.db
+          tables: orders,customers
+          fail-on: critical
 ```
 
-If Scherlok detects a critical anomaly, the pipeline fails. Bad data never reaches production.
+The connection is passed through the environment and masked, the comment never holds a value read from a row, and fork pull requests, which get no secrets, are skipped with a notice. 📖 [GitHub Action guide →](https://rbmuller.github.io/scherlok/ci-cd/#github-action)
 
-`ci` saves every run, so after a failure the broken state becomes the baseline and a retry passes. When a retry must keep failing until the data is fixed, as with an AI agent or a CI job that retries, gate with `verify`. It compares against the stored baseline and saves no profiles, no anomalies and no config, and it never uploads a remote store; it only records the run.
+Anywhere else, the `ci` command does it in one line. If Scherlok detects a critical anomaly, the pipeline fails:
+
+```bash
+scherlok config --store s3://my-bucket/scherlok/profiles.db
+scherlok ci "$DATABASE_URL" --webhook "$SLACK_WEBHOOK" --fail-on critical
+```
+
+`ci` learns every run without a CRITICAL anomaly, so after a failure on `--fail-on warning` the new state becomes the baseline and a retry passes. When a retry must keep failing until the data is fixed, as with an AI agent or a CI job that retries, gate with `verify`. It compares against the stored baseline and saves no profiles, no anomalies and no config, and it never uploads a remote store; it only records the run.
 
 ```bash
 scherlok verify --table orders --fail-on critical   # exit 1 while orders is still broken
 scherlok verify --output json                       # one JSON object on stdout
 scherlok verify --record scherlok-runs.jsonl        # append the run record, e.g. a CI artifact
+scherlok verify --against postgresql://db.example.com/shop --ignore volume  # a dev build vs production
 ```
+
+`--against` compares the connection's tables, such as a dev build, with another database's baseline in the same store, such as production's, and saves nothing under either: a dropped column fails before the change ships. `--ignore volume` is for builds on sampled data: row counts are not compared, and the column checks only flag what a sample can't explain.
 
 Tables without a baseline are listed under `tables_without_baseline`, never counted as verified. Those you name with `--table` count as just built: an empty table, a column NULL in every row or a duplicate key there is CRITICAL, so an agent can gate on a table it just created. Every `watch`, `ci`, `check` and `verify` run is recorded, passing or not: `scherlok history --runs` lists them. Every anomaly in the JSON also carries `column`, `metric`, `baseline`, `current`, `change_pct` and a fixed `hint`, so it can be acted on without parsing the message. 📖 [CI/CD gate guide →](https://rbmuller.github.io/scherlok/ci-cd/)
 
@@ -175,6 +199,22 @@ scherlok reconcile --source raw.orders --target mart.orders \
 ```
 
 It reports `row_count_mismatch`, `duplicate_keys` (a key repeated in the target: join fan-out), `missing_keys`, `extra_keys` and `sum_mismatch` (totals apart by more than the absolute `--tolerance`), all CRITICAL, with `--output json` for CI. It needs no baseline and saves nothing, and it reports counts and totals only, never a key value. On BigQuery and Snowflake every run scans both tables in full. 📖 [Reconcile guide →](https://rbmuller.github.io/scherlok/reconcile/)
+
+## Accepting a change
+
+A CRITICAL reading is never learned, so an intended change (a new column, a planned backfill) keeps alerting until a person accepts it:
+
+```bash
+scherlok accept --table orders --reason "Backfilled 2025 orders"   # shows before/after, asks to confirm
+scherlok accept --table orders --reason "..." --yes                # no prompt, for a workflow a person triggers
+scherlok history --approvals                                       # who accepted what, and why
+```
+
+`accept` re-profiles the table, shows its rows, columns and anomalies against the current baseline, and on confirmation saves the new state as the baseline with one row in an append-only approvals table: who approved (`git config user.email`, else `$USER`), the reason, and the before/after summary. `--reason` is required.
+
+To keep agents and scheduled runs from moving baselines at all, lock them: `scherlok config --baseline-locked` or `SCHERLOK_BASELINE_LOCKED=1`. Then only `accept` writes a baseline, including a new table's first one; `watch`, `ci`, `check`, `dbt` and the MCP tools compare without saving profiles, and `investigate` refuses. `accept` is deliberately not an MCP tool.
+
+**This is a guardrail, not a security boundary.** An agent with shell access can run `scherlok accept` or edit the SQLite file itself. Real enforcement means running `verify` in CI against a store the agent has no credentials for, with `accept` run from a workflow a person triggers. 📖 [Accepting a change →](https://rbmuller.github.io/scherlok/getting-started/#accepting-a-change)
 
 ## Works with dbt
 
@@ -233,7 +273,7 @@ Prefer staying inside dbt? Install Scherlok as a dbt package for native data qua
 # packages.yml
 packages:
   - git: https://github.com/rbmuller/scherlok.git
-    revision: v1.0.5
+    revision: v1.3.0
 ```
 
 Once the dbt Package Hub listing lands ([dbt-labs/hubcap#456](https://github.com/dbt-labs/hubcap/pull/456)), this becomes `package: rbmuller/scherlok` with `version: [">=1.0.0", "<2.0.0"]`.
@@ -299,9 +339,27 @@ pip install scherlok   # scherlok-mcp ships built-in since v0.7.0
 }
 ```
 
-The agent gets `list_tables`, `investigate`, `watch`, `status`, `history`, `check`, `verify` and `reconcile` as tools; `verify` is the read-only gate that never changes the baseline, so an agent that retries can't pass a broken table, and `reconcile` checks a table it built against the table it built it from. Credentials are resolved server-side (never passed by the model), every operation is read-only on the warehouse, and there's no arbitrary-SQL tool.
+The agent gets `list_tables`, `investigate`, `watch`, `status`, `history`, `check`, `verify` and `reconcile` as tools; `verify` is the read-only gate that never changes the baseline, so an agent that retries can't pass a broken table, and `reconcile` checks a table it built against the table it built it from. There is no `accept` tool: a person approves baseline changes, and with baselines locked no tool writes one. Credentials are resolved server-side (never passed by the model), every operation is read-only on the warehouse, and there's no arbitrary-SQL tool.
 
 📖 Full docs: [MCP server guide →](src/scherlok/mcp/README.md)
+
+## Check an agent's dbt changes (Claude Code)
+
+An agent that finishes `dbt run` reports success: the SQL ran. The Claude Code plugin makes it check the data. After every `dbt run` or `dbt build`, a hook runs `scherlok verify` on the models that run built and hands Claude the findings; the `verify-data-pipeline` skill has it fix the cause, verify again, and leave accepting a new baseline to a person.
+
+<!-- DEMO GIF PLACEHOLDER (#113): record it by following examples/claude_code_demo/README.md
+("Recording the README GIF"), save it as assets/claude-code-demo.gif, then replace this comment with:
+<div align="center"><img src="assets/claude-code-demo.gif" alt="Claude Code adds a join that fans out, Scherlok's hook reports it, Claude fixes the join and the check passes" width="700"></div>
+-->
+
+**Demo:** [a dbt project on DuckDB](examples/claude_code_demo/) where the agent adds a join that fans out, the hook fires, the agent fixes the join and the check passes.
+
+```text
+/plugin marketplace add rbmuller/scherlok
+/plugin install scherlok@scherlok
+```
+
+The hook stays silent until Scherlok is installed and has a connection, and it never fails the session. Lock the baselines for agent sessions with `SCHERLOK_BASELINE_LOCKED=1`. Other coding agents get the same instructions from an [`AGENTS.md` snippet](integrations/AGENTS.snippet.md), and `scherlok verify --dbt-project .` scopes a check to the last dbt run anywhere, CI included. 📖 [Coding agents guide →](https://rbmuller.github.io/scherlok/agents/)
 
 ## AI-explained alerts (`--explain`)
 
@@ -409,15 +467,18 @@ scherlok connect <url>          Connect to a database
 scherlok investigate            Profile all tables (learn patterns)
 scherlok watch [-w <url>] [-e <email>]  Detect anomalies and alert
 scherlok ci <url> [opts]        All-in-one CI/CD command (connect + watch + exit code)
-scherlok verify [--table T] [--fail-on L] [--output json] [--record PATH]  Read-only gate: compare, keep the baseline
+scherlok verify [--table T] [--dbt-project DIR] [--fail-on L] [--output json] [--record PATH] [--against SCOPE] [--ignore volume]  Read-only gate: compare, keep the baseline
 scherlok reconcile --source S --target T [--key K] [--sum C] [--tolerance X] [--output json]  Check an output table against its input
+scherlok accept --table T --reason "..." [--yes]  Make the current state the baseline, with a recorded approval
 scherlok dbt [--project-dir .] [--output json]  Profile dbt models from manifest
 scherlok dbt-run-and-watch [--build] [--output json]  Run dbt + profile in one step
 scherlok status [--output json] Quick health dashboard
-scherlok history [--days N] [--runs] [--output json]  Past anomalies, or every run with --runs
+scherlok history [--days N] [--runs | --approvals] [--output json]  Past anomalies, every run, or every approval
 scherlok report [--output json] Detailed profile summary
 scherlok dashboard [--out .html] Generate self-contained HTML report
 scherlok config --store <url>   Set remote storage
+scherlok config --baseline-locked  Only `accept` writes baselines (--no-baseline-locked to undo)
+scherlok config --output json   Is a connection configured (never printed), the store, the lock
 scherlok demo [--keep] [--output json]  Self-contained demo on a sample DuckDB (no database needed)
 scherlok version                Show version
 ```

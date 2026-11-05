@@ -1,217 +1,84 @@
 # <img src="assets/pgstack-logo.png" alt="PgStack" width="420">
 
-**PgStack** is Postgres read replicas for Search and Audit.
+The open-source CLI for [PgStack](https://pgstack.io/). PgStack Access provides temporary, recorded access to PostgreSQL. Start a session from your terminal, then connect with `psql` or your favorite database client.
 
-- **Search**: a search-optimized replica for semantic, keyword, and hybrid retrieval.
-- **Audit**: a history of row changes for automatic data change tracking.
+## Install
 
-PgStack replicates your data while your existing Postgres remains the source of truth. Indexing and queries run outside your application database through a separate Postgres-compatible endpoint.
-
-Run with one Docker command, or use [PgStack Cloud](https://pgstack.io/) for managed production workloads.
-
-## Contents
-
-- [Highlights](#highlights)
-- [Use Cases](#use-cases)
-- [Quickstart](#quickstart)
-- [Usage](#usage)
-  - [Audit](#audit)
-  - [Search](#search)
-  - [Configuration](#configuration)
-- [Architecture](#architecture)
-- [OSS vs Cloud](#oss-vs-cloud)
-- [License](#license)
-
-## Highlights
-
-- **Specialized Replicas**: continuously synchronized, with Search and Audit isolated from OLTP workloads.
-- **Easy Setup**: starts in a single container with your database URL.
-- **Postgres Compatibility**: integrates with clients and tools in the Postgres ecosystem.
-- **Open-Source**: released under the OSI-approved AGPL-3.0 license.
-
-## Use Cases
-
-- **Search**
-  - **Product Search**: find relevant information across operational records and knowledge bases.
-  - **AI and RAG Retrieval**: retrieve current application data as context for AI agents and assistants.
-  - **Duplicate Detection**: surface related tickets, issues, and requests expressed in different words.
-  - **Find Similar**: discover related companies, people, jobs, articles, and other application records.
-- **Audit**
-  - **Audit Trails and Compliance**: track record changes to support data audits and compliance reviews.
-  - **Troubleshooting**: investigate unexpected data issues and understand how your data changed.
-  - **Selective Data Recovery**: identify previous values to recover updated or deleted records.
-  - **Customer Activity Feeds**: turn data changes into activity feeds in your product.
-
-## Quickstart
-
-Use a development Postgres database and a superuser connection for automatic setup. Check logical replication with:
-
-```sql
-SHOW wal_level;
-```
-
-If the result is not `logical`, enable it and restart Postgres:
-
-```sql
-ALTER SYSTEM SET wal_level = 'logical';
-```
-
-Start PgStack with your database URL:
+On macOS or Linux:
 
 ```sh
-docker run --rm --name pgstack \
-  -p 54321:54321 \
-  -e DATABASE_URL='postgres://postgres:postgres@host.docker.internal:5432/postgres' \
-  ghcr.io/pgstack-io/pgstack:latest
+curl -fsSL https://pgstack.io/install.sh | bash
 ```
 
-On Docker Desktop, `host.docker.internal` points to your computer. On Linux Docker Engine, add `--add-host=host.docker.internal:host-gateway` to make that name resolve to the host gateway. For a remote database, use its reachable hostname. URL-encode reserved characters in the source password.
+The installer downloads a standalone executable from this repository's [GitHub Releases](https://github.com/pgstack-io/pgstack/releases), verifies its SHA-256 checksum, and installs it to `~/.local/bin/pgstack`. No Node.js or Bun installation is required. Add `~/.local/bin` to your `PATH` if needed. Re-run the installer to upgrade.
 
-The image supports Linux amd64 and arm64, including Apple Silicon. `latest` tracks stable [releases](https://github.com/pgstack-io/pgstack/releases).
+Windows users can download `pgstack-windows-x64.exe` from the release assets. Linux releases include glibc and musl builds for x64 and arm64; macOS supports Intel and Apple Silicon.
 
-## Usage
-
-### Audit
-
-Audit is enabled by default. It records changes made while PgStack is running. After changing a row in your source database, connect to the PgStack server running on port `54321` from another terminal on your host:
+To choose another installation directory:
 
 ```sh
-psql 'postgres://localhost:54321/pgstack'
+curl -fsSL https://pgstack.io/install.sh | PGSTACK_INSTALL_DIR="$HOME/bin" bash
 ```
 
-Query `audit.changes`:
+## Connect to Postgres
 
-```sql
--- Inspect changes to one table.
-SELECT operation, before, after, committed_at
-FROM audit.changes
-WHERE schema = 'public' AND "table" = 'products'
-ORDER BY committed_at DESC
-LIMIT 50;
-
--- Filter on values captured in the changed row.
-SELECT operation, after->>'name' AS name, committed_at
-FROM audit.changes
-WHERE after->>'name' ILIKE '%jacket%'
-ORDER BY committed_at DESC;
-```
-
-### Search
-
-Search works with tables that have primary keys. Save this as `pgstack.yaml`, changing the table and columns to match your database:
-
-```yaml
-# Search only. Set audit.enabled to true to also capture change history.
-audit:
-  enabled: false
-search:
-  enabled: true
-  tables:
-    - name: public.products
-      indexColumns: [name, description]
-      storeColumns: [id, name, description]
-```
-
-`indexColumns` provide the text to search. `storeColumns` are returned by queries and available for filtering; include primary-key columns to return them in results. Source names become Search names such as `public.products` → `search.public_products`.
-
-Mount your configuration when starting the container:
+Sign in through your browser, confirm the code from your terminal, and connect the CLI:
 
 ```sh
-docker run --rm --name pgstack \
-  -p 54321:54321 \
-  -e DATABASE_URL='postgres://postgres:postgres@host.docker.internal:5432/postgres' \
-  --mount type=bind,src="$PWD/pgstack.yaml",dst=/app/pgstack.yaml,readonly \
-  ghcr.io/pgstack-io/pgstack:latest
+pgstack auth login
+pgstack access start --env production --reason "Investigate delayed orders"
 ```
 
-Existing rows are indexed at startup, and subsequent changes keep the index current. Once indexing completes, connect to the PgStack server running on port `54321` from another terminal on your host:
+PgStack prints a temporary PostgreSQL connection URL. Use it with `psql`, a GUI, or another PostgreSQL client. You need a PgStack account and a project with Access configured; this CLI connects to the hosted PgStack API. Team admins and engineers can create, extend, and revoke their own sessions. Regular members can sign in and list their own active sessions.
+
+Use a project slug directly, or select an environment. Replace angle-bracketed placeholders with your own slugs:
 
 ```sh
-psql 'postgres://localhost:54321/pgstack'
+pgstack access start <project-slug> --duration 30m
+pgstack access start --env staging
 ```
 
-Search with BM25 keyword ranking:
+When several projects share an environment, the CLI shows `slug - project name` and asks which to use. Noninteractive commands require an unambiguous selection. Environment names are `testing`, `development`, `staging`, and `production`.
 
-```sql
-SELECT id, name FROM search.public_products
-ORDER BY keyword_rank('rain jacket') LIMIT 10;
+## Manage sessions
+
+```sh
+pgstack auth status
+pgstack access list
+pgstack access list <project-slug>
+pgstack access extend <session-slug> --duration 15m
+pgstack access revoke <session-slug> --reason "Investigation complete"
+pgstack auth logout
 ```
 
-For semantic and hybrid search, add `-e OPENAI_API_KEY` to `docker run`. Without a key, indexing stays keyword-only and makes no embedding API calls.
+Sessions last up to one hour. Extensions add time but cannot leave more than one hour remaining. Expired or revoked sessions cannot be extended. Revocation ends access within one minute.
 
-```sql
--- Find related meaning.
-SELECT id, name FROM search.public_products
-ORDER BY semantic_rank('something for wet weather') LIMIT 10;
+Use `--organization <slug-or-id>` when you belong to multiple organizations, `--role <name>` to select a configured database role, and `--json` for scripts. `--reason` is required when your project requires a reason. See `pgstack --help` and `pgstack access --help` for all commands.
 
--- Combine semantic and keyword relevance.
-SELECT id, name FROM search.public_products
-ORDER BY hybrid_rank('waterproof rain jacket') LIMIT 10;
+Login opens your browser; `pgstack auth login --no-browser` prints the URL instead. Credentials are stored in `~/.config/pgstack/credentials.json`. `PGSTACK_CONFIG_DIR` changes that location. Authentication renews during active CLI use and expires after 30 days of inactivity. Logout removes this computer's saved token; it does not invalidate copies or revoke Access sessions. Compiled releases always connect to `https://api.pgstack.io`.
+
+## Development
+
+The CLI is written in TypeScript and compiled with Bun. With [Devbox](https://www.jetify.com/devbox) installed:
+
+```sh
+make install
+cp .env.example .env
+make check
+make test
+make up auth
+make build
+./dist/pgstack --version
 ```
 
-Rankings sort best matches first. Use stored columns in `WHERE` filters. With semantic indexing enabled, indexed text and semantic/hybrid queries are sent to OpenAI's `text-embedding-3-small`, billed to your account. Restarting rebuilds the index and can incur embedding charges again.
+`make up` loads `.env`, which defaults to `https://api.pgstack.dev`. Pass flags after Make's `--`, for example `make up -- access start --env staging`. You can also use `make up ARGS="access start --env staging"`.
 
-### Configuration
+The public API contract is in `src/api.ts`. Match the backend's tRPC protocol version when updating dependencies. `bun run build:releases` creates platform binaries, SHA-256 files, and the version file in `dist/releases/`.
 
-Use an optional `pgstack.yaml` file, mounted as shown in the Search example. Without it, Audit is enabled and Search is disabled. Enable either feature or both; Search requires at least one configured table when enabled. Invalid configuration is rejected before source setup. See [pgstack.example.yaml](pgstack.example.yaml).
+## Repository history
 
-| Variable | Required | Purpose |
-| --- | --- | --- |
-| `DATABASE_URL` | Yes | Source Postgres connection URL |
-| `OPENAI_API_KEY` | No | Embedding generation for semantic and hybrid search |
-| `PGSTACK_PASSWORD` | No | SCRAM authentication for the SQL endpoint |
-
-## Architecture
-
-```text
-                     Your Postgres
-                           |
-                           | logical replication
-                           v
-+----------------- PgStack container -------------------+
-|                                                       |
-|               CDC  -->  NATS  -->  Processor          |
-|                          |                            |
-|                 +--------+--------+                   |
-|                 |                 |                   |
-|                 v                 v                   |
-|          Audit: Iceberg       Search: BM25            |
-|            + Parquet        + Lance vectors           |
-|                 |                 |                   |
-|                 +--------+--------+                   |
-|                          |                            |
-|                          v                            |
-|              Postgres-compatible server               |
-|                 with embedded DuckDB                  |
-|                                                       |
-+--------------------------+----------------------------+
-                           |
-                           | wire protocol
-                           v
-                   Postgres clients
-```
-
-Audit stores Parquet with Iceberg metadata. Search uses Lance for BM25 and optional vectors. DuckDB runs inside PgStack's Postgres-compatible server to execute SQL over this data.
-
-## OSS vs Cloud
-
-The open-source core provides the Search replica and Audit history through SQL. [PgStack Cloud](https://pgstack.io/) adds the managed platform:
-
-- **Web Control Panel**: database connections, projects, and product settings.
-- **Team Management**: organizations, team membership, and shared projects.
-- **Audit Trail UI**: change history, filters, and record inspection.
-- **Fine-Grained Configuration**: table and column selection for Search and Audit.
-- **Flexible Audit Retention**: configurable history for troubleshooting and compliance.
-- **Managed Embeddings**: included embedding generation without a separate model API account.
-- **Autoscaling**: managed capacity for Audit and Search workloads.
-- **Production Security**: encryption, tenant isolation, IP allow rules, and SSH and VPN tunneling.
-- **Automatic Updates**: service improvements, fixes, and infrastructure maintenance.
-- **Support**: priority response and escalation options, with dedicated Slack support.
-
-The bundled image is designed for local development and evaluation. For production workloads, PgStack Cloud provides a fully managed service.
+BemiDB history through `v1.8.0` remains available in Git. Version `2.0.0` starts the CLI distribution; it does not replace the old runtime or provide a self-hosted PgStack backend. PgStack's hosted backend and infrastructure are maintained separately.
 
 ## License
 
-This project is distributed under [AGPL-3.0](LICENSE).
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development. For vulnerability reports, see [SECURITY.md](SECURITY.md).
+[MIT](LICENSE). Previous versions retain their original licenses. See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).

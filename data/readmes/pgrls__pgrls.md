@@ -28,16 +28,16 @@
   </a>
 </p>
 
-> **Beta — actively maintained.** 68 lint rules, 19 mechanically auto-fixable, [semantic policy-diff command](#diff--pgrls-snapshot--pgrls-diff), pytest plugin for RLS isolation tests. Tested on PostgreSQL 15, 16, 17. Stable JSON / SARIF schema for CI integrations. The [CHANGELOG](CHANGELOG.md) records every release; current build is shown by the PyPI badge above.
+> **Beta — actively maintained.** 68 lint rules, 19 mechanically auto-fixable, [semantic policy-diff command](#diff--pgrls-snapshot--pgrls-diff), pytest plugin for RLS isolation tests. Tested on PostgreSQL 15, 16, 17, 18. Stable JSON / SARIF schema for CI integrations. The [CHANGELOG](CHANGELOG.md) records every release; current build is shown by the PyPI badge above.
 >
 > - **Lint & fix** — `pgrls lint` checks a live database against all sixty-eight rules and reports findings as text, JSON, SARIF, Markdown, HTML, GitHub-PR-comment (`--format pr-comment`), GitHub Actions annotations (`--format github`), JUnit XML (`--format junit`), or GitLab Code Quality (`--format gitlab`) for CI. `pgrls fix` auto-remediates the mechanically-fixable rules (SEC001, SEC002, SEC004, SEC010, SEC011, SEC015, SEC017, SEC019, SEC020, SEC030, SEC031, SEC032, SEC044, PERF001, PERF003, PERF004, HYG003, VIEW001, VIEW002) — to stdout or a migration-ready `.sql` file (`--output`). `pgrls lint --baseline` records existing findings so CI fails only on *new* ones, letting a team adopt pgrls on a legacy database without clearing the whole backlog first.
 > - **Generate** — `pgrls generate` scaffolds gold-standard RLS for tables that lack it — per-tenant (`tenant_id`) or per-user (`--model owner`, incl. the Supabase `auth.uid()` form): ENABLE + FORCE, an isolation policy, a restrictive floor, and the index, output designed to lint clean. Don't trust your ORM's RLS; generate correct RLS, then lint it. `--strict-binding` scaffolds the *loud* variant — see below.
 > - **Test** — the `pgrls.testing` pytest plugin for writing RLS tests: role switching, per-test transactions, and tenant-isolation assertions.
-> - **Snapshot & diff** — `pgrls snapshot` / `pgrls diff` is a semantic RLS-policy diff that classifies every change SAFE /
+> - **Snapshot & diff** — `pgrls snapshot` / `pgrls diff` is a semantic RLS-policy diff that classifies every change SA
 
 [...截断...]
 
- BREAKING / REQUIRES_REVIEW / DANGEROUS. Z3-based predicate analysis is built in, plus migration-as-input — apply a migration to an ephemeral Postgres and diff the result (`pip install pgrls[diff-apply]`), with `CREATE EXTENSION` auto-detection and a cached-baseline Docker image (managed with `pgrls cache`) for fast re-runs.
+FE / BREAKING / REQUIRES_REVIEW / DANGEROUS. Z3-based predicate analysis is built in, plus migration-as-input — apply a migration to an ephemeral Postgres and diff the result (`pip install pgrls[diff-apply]`), with `CREATE EXTENSION` auto-detection and a cached-baseline Docker image (managed with `pgrls cache`) for fast re-runs.
 > - **TypeScript port** — [`pgrls-test`](https://www.npmjs.com/package/pgrls-test) on npm implements the same RLS-testing contract for JS/TS — both `pg` and `postgres.js` driver adapters, vitest-friendly. See [`ts/`](ts/) in this repo.
 > - **VS Code extension** — [`pgrls/pgrls-vscode`](https://github.com/pgrls/pgrls-vscode) wraps the CLI; `pgrls: Lint database` surfaces findings as diagnostics in the Problems panel, with hover documentation per rule.
 
@@ -49,7 +49,7 @@ pgrls needs **Python 3.11+** (and Postgres 15+ to lint against) — check `pytho
 pip install pgrls   # requires Python 3.11+
 ```
 
-pgrls is tested in CI against PostgreSQL 15–17 (see [`.github/workflows/test.yml`](.github/workflows/test.yml) for the matrix).
+pgrls is tested in CI against PostgreSQL 15–18 (see [`.github/workflows/test.yml`](.github/workflows/test.yml) for the matrix).
 
 ## Lint without a live database
 
@@ -97,4 +97,4 @@ pgrls pr base.json head.json --fail-on dangerous --lint-fail-on error
 Offline analysis is **sound but partial**: rules that need live catalog state
 (BYPASSRLS roles, SECURITY DEFINER functions, triggers, …) can't fire, so
 pgrls *skips and lists them* (`skipped_rules` in `--format json`). **An offline
-exit 0
+ex

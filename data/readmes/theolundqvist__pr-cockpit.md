@@ -55,6 +55,8 @@ Diffs, threads, checks, and file history live in the same review workspace. Shor
 
 Syntax highlighting covers Shiki's bundled languages in diffs, file previews, editors, and Markdown code blocks, including Swift, C/C++ headers, Objective-C, Kotlin, and C#. Grammars load on demand; unrecognized formats remain plain text.
 
+Wide Markdown tables scroll horizontally without wrapping cells; smaller tables keep their natural width.
+
 PR images are prefetched into each machine's persistent cache. SSH replicas download through their source server, so private images require no separate GitHub login on the replica. The source uses the installed `gh-img` extension when direct GitHub access is unavailable. Sign-in HTML is rejected and old cached sign-in pages are replaced on the next request.
 
 SSH replicas forward the source's PR updates to an open conversation, including comment edits and PRs outside the inbox or already merged. Changed inbox snapshots also refresh the matching detail after import.
@@ -169,7 +171,7 @@ The PR detail’s Agents tab renders Markdown answers and expandable tool activi
 
 Enable **Agent conversations** in **Settings → Agents & merging** for a conversation-first **Agents** workspace beside the inbox tabs. Search sessions grouped into **Working**, **Needs attention**, and **Recent**, including closed PRs. Read **Conversation**, expand longer tasks in place, inspect **Log tail**, or open an older attempt from run history. Run links support Back/Forward; each run and view remembers its reading position. New output follows only when you’re at the end; otherwise **Jump to latest** signals unread output. Transcripts and logs contain the recent output available from the cache, not complete logs. PR filters and grouping sit below the inbox tabs.
 
-Enable **Quick Generate** in **Settings → Agents & merging** to draft text from anywhere with <kbd>⌥⌘J</kbd> on macOS or <kbd>Super+Alt+J</kbd> on Linux X11. Choose an API key and model, write a prompt, then press <kbd>⌘Enter</kbd> to generate. Results render Markdown with Cockpit’s syntax-highlighted code blocks; **Copy** keeps the original Markdown. Closing the prompt keeps its draft and result. Updating an older desktop shell requires a normal relaunch for the global shortcut.
+Enable **Quick Generate** in **Settings → Agents & merging** to draft text from anywhere with <kbd>⌥⌘J</kbd> on macOS or <kbd>Super+Alt+J</kbd> on Linux X11. Choose an API key and model, write a prompt, then press <kbd>⌘Enter</kbd> to generate. Results stream in as the model writes them and render Markdown with Cockpit’s syntax-highlighted code blocks; **Copy** keeps the original Markdown. Drag the panel’s edges to resize it; it keeps its size across restarts. Closing the prompt keeps its draft and result. Updating an older desktop shell requires a normal relaunch for the global shortcut and the resizable panel.
 
 Keys are detected from `$XDG_CONFIG_HOME/.env` (or `~/.config/.env`), then `~/.env`, then the Cockpit server's environment; the first nonempty value wins. **API key file** selects a different file and accepts absolute paths, `~/`, `$HOME`, or `$XDG_CONFIG_HOME`. A missing selected file shows an error instead of falling back. Supported names are `CEREBRAS_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, and `GROQ_API_KEY`; suffixes such as `CEREBRAS_API_KEY_WORK` provide additional choices. Credentials stay on the Cockpit host and go only to their provider, including in replica mode. Models come from the provider's catalog, with Cerebras Qwen preferred by default.
 
@@ -188,13 +190,13 @@ New Apps request write access for Actions, issues, pull requests, and code-scann
 Cockpit is a client for your existing GitHub workflow, not a second place to maintain pull requests.
 
 - **On your machine:** a Bun server caches PR state in SQLite and serves the desktop UI and CLI. In replica mode, cached lists stay local; GitHub searches, keyed PR titles, and embedded PR rows use the connected source.
-- **Embeds:** `/#/embed?keys=owner%2Frepo%23123&overlay=1` opts into compact Kitchen rows with an E hide control, in the review queue's sections under your grouping settings. The embedding host owns hiding, persistence, and Undo; GitHub and the review queue stay unchanged.
+- **Embeds:** `/#/embed?keys=owner%2Frepo%23123&overlay=1` shows compact PR rows with lifecycle, readiness, pin and Kitchen state, plus an E hide control, grouped like your review queue. The host owns hiding, persistence, and Undo; GitHub and the review queue stay unchanged.
 - **Mirror storage:** Git mirrors compact automatically and evict the oldest unprotected caches toward a 20 GiB target. Active reads, recent use, and linked worktrees are protected, so the target is not a hard limit.
 - **Back to GitHub:** comments, reviews, file edits, thread resolution, and merges use your GitHub CLI authentication. GitHub remains authoritative.
 - **Keeping it current:** the hosted relay is enabled by default. It receives GitHub webhooks and delivers compact change markers and Actions run/job state, including runner assignment—not full PR contents or job logs—to Cockpit. Cockpit never sends the relay your GitHub token; it proves read access to each repository with commit data only readers can look up, and that proof rotates daily. Branch pushes refresh open PRs whose head or base matches, including recently viewed PRs outside the inbox. A direct GitHub poller repairs missed events.
 - **Your relay, if you prefer:** you can configure a different relay URL. See [Self-hosting](docs/self-host-relay.md) for deployment and connection instructions.
 
-Local caching does **not** mean the app makes no external connections. Besides GitHub and the relay, the backend has [Sentry error reporting enabled by default](server/sentry.ts).
+Local caching does **not** mean the app makes no external connections. Besides GitHub and the relay, the backend has [Sentry error reporting enabled by default](server/sentry.ts) and sends [usage statistics](#usage-statistics).
 
 <details>
 <summary><strong>Updates, diagnostics, and configuration</strong></summary>
@@ -223,6 +225,18 @@ Use Settings for day-to-day configuration. Optional shell overrides live in `~/.
 | `COCKPIT_TAILSCALE_HTTPS_PORT` | Tailscale HTTPS port; defaults to `443` |
 
 </details>
+
+### Usage statistics
+
+Cockpit counts how it is found, installed, and used. These statistics are not anonymous: events carry a random install id, and the relay links that id to the GitHub account id and login of the install's live-update sessions.
+
+- **Sent:** names of the screens, controls, and keyboard shortcuts you use; named outcome steps such as first launch, GitHub sign-in state, repositories configured, PR opened, safe-merge approval and Marked ready changes, and the kind of each queued PR action (for example `comment` or `merge`) with whether it succeeded; `pr-cockpit` command names with whether they succeeded and a random per-run id; counts and timestamps; the install id, the install script's random run id, a short app version, and the OS family.
+- **Never sent:** PR titles or bodies, comment or other typed text, file paths, branch names, repository names in events, or tokens.
+- **Where:** about once a minute to the configured relay. Nothing is sent while the relay is off, and a replica sends nothing; its source install reports for it.
+- **Retention:** raw daily counts for 180 days and active days for 400 days. Separately, the relay already keeps, per account per day, the login, session count, and repositories of live-update sessions for 89 days.
+- **Turning it off:** **Settings → Usage**, or `COCKPIT_USAGE_STATS=0` or `DO_NOT_TRACK=1` in the server's environment, which keeps it off regardless of the setting.
+
+prcockpit.com counts visits, where they came from (`utm_source` or the referring site), the OS family, and which of its links and buttons are pressed and whether the install command is copied, per browser tab without cookies; it honours Do Not Track and Global Privacy Control. The install script reports when it starts, finishes, or fails, with the failed stage, under a random run id; `DO_NOT_TRACK=1` or `COCKPIT_USAGE_STATS=0` turns that off.
 
 ## Contribute
 

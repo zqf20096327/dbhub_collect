@@ -56,7 +56,7 @@ docker run -d --name tachyon-db --network tachyon \
 docker run --rm --network tachyon -p 127.0.0.1:3000:3000 \
   -e TACHYON_DATABASE_URL=postgres://tachyon:tachyon@tachyon-db:5432/tachyon \
   -e TACHYON_PUBLIC_URL=http://localhost:3000 \
-  ghcr.io/tachyon-cms/tachyoncms:v0.1.0
+  ghcr.io/tachyon-cms/tachyoncms:v0.2.0
 ```
 
 ### From a release
@@ -64,8 +64,8 @@ docker run --rm --network tachyon -p 127.0.0.1:3000:3000 \
 Download the archive for your platform from the [latest release](https://github.com/tachyon-cms/tachyoncms/releases). There are Linux builds (x86_64 and arm64, static) and macOS builds (Intel and Apple silicon). Then point it at a Postgres database:
 
 ```bash
-tar xzf tachyon_0.1.0_*.tar.gz
-TACHYON_DATABASE_URL=postgres://user:pass@localhost:5432/tachyon ./tachyon_0.1.0_*/tachyon serve
+tar xzf tachyon_0.2.0_*.tar.gz
+TACHYON_DATABASE_URL=postgres://user:pass@localhost:5432/tachyon ./tachyon_0.2.0_*/tachyon serve
 ```
 
 The release notes show how to check a download's signature with cosign.
@@ -342,7 +342,7 @@ Markdown can't say everything JSON can, so a few things change on the way throug
 
 A link to a document goes to its collection's `url`, here `/{slug}`; without one, it's the link text alone. Block fields become `data-*` attributes (`ctaLabel` is `data-cta-label`), and anything that isn't a plain value is written as JSON. A relationship node is a `<div data-relationship>` around the linked document's first text field. Text is escaped, every `href` is checked again on the way out, and `newTab` links get `target="_blank" rel="noopener noreferrer"`. As `text`, you get the words alone, the rich text inside block nodes included.
 
-What you can't read stays hidden in every format. A field you can't read isn't there, inside block nodes included. A link to a document you can't read is its text alone, and a relationship node pointing at one is left out entirely. In JSON that link stays a bare ID, whatever the `depth`.
+What you can't read stays hidden in every format. A field you can't read isn't there, inside block nodes included. A link to a document you can't read is its text alone, and a relationship node pointing at one is left out entirely. In JSON both stay as bare IDs, whatever the `depth`.
 
 ### Putting it online
 
@@ -372,16 +372,15 @@ cargo run -p tachyon -- schema apply schema.json --rename posts:title=headline
 
 ## Roadmap
 
-Done: content types, validation and REST CRUD; filters, sorting, relationships and globals; sign-in, sessions, API keys and access rules. v0.1.0 ships all of it as signed binaries and a Docker image.
+Done: content types, validation and REST CRUD; filters, sorting, relationships and globals; sign-in, sessions, API keys and access rules; rich text and blocks. v0.2.0 ships all of it as signed binaries and a Docker image.
 
 Next, in this order, with no dates:
 
-1. Rich text and blocks (in progress)
-2. Drafts, versions and scheduled publishing
-3. Media library and image processing
-4. Live preview
-5. Authoring tools: Markdown in and out, bulk import
-6. The admin, as easy as WordPress for the people who publish
+1. Drafts, versions and scheduled publishing (in progress)
+2. Media library and image processing
+3. Live preview
+4. Authoring tools: push and pull content as Markdown files, bulk import
+5. The admin, as easy as WordPress for the people who publish
 
 After that: localization and full-text search, GraphQL and OpenAPI, passkeys, two-factor and single sign-on, WebAssembly plugins and webhooks, a WordPress importer, a Helm chart and published benchmarks. [Discussion #35](https://github.com/tachyon-cms/tachyoncms/discussions/35) has the reasoning, and the polls in [#38](https://github.com/tachyon-cms/tachyoncms/discussions/38) and [#39](https://github.com/tachyon-cms/tachyoncms/discussions/39) can change the order.
 

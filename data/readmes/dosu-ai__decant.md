@@ -4,6 +4,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/%40dosu%2Fdecant?logo=npm)](https://www.npmjs.com/package/@dosu/decant)
 [![CI](https://github.com/dosu-ai/decant/actions/workflows/ci.yml/badge.svg)](https://github.com/dosu-ai/decant/actions/workflows/ci.yml)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/dosu-ai/decant/badge)](https://scorecard.dev/viewer/?uri=github.com/dosu-ai/decant)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/13840/badge)](https://www.bestpractices.dev/projects/13840)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
 Decant turns the Claude Code, Codex, Gemini CLI, OpenCode, Cursor CLI,
@@ -20,8 +21,9 @@ It does keep a copy of them. To make sessions searchable, Decant writes prompts,
 tool inputs, tool output, and canonicalized raw records for retained transcript
 messages into an **unencrypted** SQLite archive at `~/.decant/decant.db`, with a
 full-text index over the prompt and tool-argument text. Whatever your agents read
-is in there too — source code, file contents, local paths, and any credentials
-pasted into a session. Decant creates the archive owner-only (`0600`). If your
+is in there too, including source code, file contents, local paths, and any
+credentials pasted into a session. Decant creates the archive owner-only
+(`0600`). If your
 organization has a retention policy for agent transcripts, this archive is
 subject to it. See
 [What the archive stores](docs/data-lifecycle.md#what-the-archive-stores) to
@@ -54,7 +56,7 @@ in VS Code logs on your machine, and watches for changes.
 - Token, [estimated cost](docs/pricing.md), context, activity, tool, MCP, and
   file analytics.
 - Browsable sessions, projects, files, and ingest diagnostics.
-- Markdown, JSON, report, and trajectory exports.
+- Markdown, JSON, report, trajectory, and ATIF exports.
 - Deterministic scripts, replays, and agent instructions distilled from command
   history.
 
@@ -94,9 +96,11 @@ decant update           # install the newest release in place
 decant update --check   # only report whether one exists
 ```
 
-`decant update` uses the tool that installed Decant: `npm install --global` for
-npm, `brew upgrade` for Homebrew, and a checksum-verified download for the shell
-installer. Docker, `npx`, and source checkouts print the command to run instead.
+`decant update` uses the tool that installed Decant. It runs
+`npm install --global` for npm and `brew update` and `brew upgrade` for
+Homebrew, and makes a checksum-verified download for the shell installer.
+Docker, `npx`, source checkouts, and binaries Decant did not install print how
+to update instead.
 
 To hear about new releases, turn on **Check for updates** in Settings or set
 `DECANT_UPDATE_CHECK=1`. Decant then asks the npm registry for the newest
@@ -114,8 +118,12 @@ docker run --rm \
   -v "$HOME/.gemini/tmp:/sources/gemini:ro" \
   -v "$HOME/.cursor/chats:/sources/cursor:ro" \
   -v "$HOME/.copilot/session-state:/sources/copilot:ro" \
+  -v "$HOME/Library/Application Support/Code/User:/sources/vscode:ro" \
   ghcr.io/dosu-ai/decant:latest
 ```
+
+The VS Code mount shows the macOS path. On Linux, mount `$HOME/.config/Code/User`
+instead.
 
 Keep the `127.0.0.1:` prefix. Publishing `-p 3000:3000` exposes the
 unauthenticated archive API on every host interface. Custom container networks
@@ -140,6 +148,7 @@ decant files --group ext       # file hotspots
 decant tool stats              # tool usage
 decant mcp stats               # MCP server usage
 decant export 1 > session.md   # export a session
+decant export 1 --as atif      # also md, json, and trajectory
 decant db info                 # what the archive holds and where
 decant session rm 1 --yes      # delete a session and its descendants
 decant db vacuum               # release the freed pages after a delete
@@ -150,7 +159,8 @@ decant doctor                  # redacted environment report for bug reports
 
 Run `decant --help` or `decant <command> --help` for all commands and flags.
 Read commands support `--json`; global flags include `--db`, `--format`,
-`--quiet`, `--no-color`, and `--no-sync`.
+`--quiet`, `--no-color`, and `--no-sync`. `--db` or `DECANT_DB` sets the archive
+path.
 
 Decant reads `~/.claude/projects`, `~/.codex`, `~/.gemini/tmp`,
 `~/.local/share/opencode`, `~/.cursor/chats`, `~/.copilot/session-state`, and

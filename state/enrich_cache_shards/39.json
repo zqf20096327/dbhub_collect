@@ -28,12 +28,12 @@
   }
  },
  "remult/remult": {
-  "commit_7d": 0,
-  "commit_90d": 43,
-  "rel_ver": "v3.3.15",
-  "rel_pub": "2026-07-10",
-  "rel_days": 111,
-  "rel_n90": 0,
+  "commit_7d": 19,
+  "commit_90d": 62,
+  "rel_ver": "v3.4.1",
+  "rel_pub": "2026-10-30",
+  "rel_days": 6,
+  "rel_n90": 2,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 1,
@@ -43,7 +43,7 @@
    "GHSA-7hh3-3x64-v2g9(CVE-2023-35167,medium)"
   ],
   "contrib_n": 53,
-  "enriched_at": "20261029",
+  "enriched_at": "20261105",
   "lang": {
    "TypeScript": 92,
    "Svelte": 3,
@@ -53,10 +53,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261029",
-   "release": "20261029",
+   "commit": "20261105",
+   "release": "20261105",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v3.4.1",
+    "d": "2026-10-30",
+    "n": "- Typed `include` results ([#1053](https://github.com/remult/remult/pull/1053)) — `find`, `findFirst`, `findOne` and `findId` return the entity type again, and `Loaded` is no longer exported. The 3.4.0 types broke existing code: a variable holding an `include` result could no longer be reassigned from `insert`, and generic `repo(type)` helpers could no longer index results by `keyof T`. An included `toOne` with no target row is `undefined` again, as before 3.4.0.\r\n\r\n**Full Changelog**: https://github.com/"
+   },
+   {
+    "t": "v3.4.0",
+    "d": "2026-10-30",
+    "n": "- `DroppableDataProvider` (`dropDatabase` / `dropTable`) on `IndexedDbDataProvider` and `InMemoryDataProvider`. `dropTable(Task)` or metadata; store + indexes recreated on next use.\n- Native `IndexedDbDataProvider`: PK + declared indexes, filter prefetch, batch insert/delete in one IDB txn, optional `encrypt: true` (AES-GCM, non-extractable key in `__remult_keys`, PK+index fields plaintext, rest `_enc`+`_iv`). Docs: installation/database/indexeddb — see docs for threat model.\n- `@Entity({ bulkInsert: true"
+   },
+   {
+    "t": "v3.3.15",
+    "d": "2026-07-10",
+    "n": "* feat: add Node built-in SQLite data provider by @linoch512 in https://github.com/remult/remult/pull/1034\n* `groupBy` now ignores `orderBy` fields that are not part of the group by (previously they were passed through to the database, producing an invalid grouped query on SQL Server / Postgres). The rest api additionally ignores `orderBy` fields that are not included in the api."
+   }
+  ]
  },
  "linuxeye/lnmp": {
   "commit_7d": 2,
@@ -2937,6 +2954,28 @@
    "security": "20261026",
    "contrib": "20261026",
    "lang": "20261026"
+  }
+ },
+ "ClickHouse/quickstart-clickstack": {
+  "commit_90d": 2,
+  "commit_7d": 2,
+  "rel_ver": null,
+  "rel_none": true,
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 4,
+  "lang": {
+   "Shell": 100
+  },
+  "enriched_at": "20261105",
+  "dim_ts": {
+   "commit": "20261105",
+   "release": "20261105",
+   "security": "20261105",
+   "contrib": "20261105",
+   "lang": "20261105"
   }
  }
 }

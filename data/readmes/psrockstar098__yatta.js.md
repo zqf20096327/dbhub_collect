@@ -97,13 +97,13 @@ Bun's `smol` heap. Queued tasks are micro-batched — up to 32 per IPC message
 <!-- BENCHMARKS:START -->
 | Framework | Requests/sec | vs Yatta | Spread | p50 | p95 | p99 |
 |-----------|-------------:|---------:|-------:|----:|----:|----:|
-| Yatta     |      63,052 |     1.00x |     6% | 1.66ms | 2.65ms | 3.57ms |
-| Raw Bun   |      46,380 |     0.74x |     4% | 1.86ms | 3.90ms | 4.28ms |
-| Hono      |      52,432 |     0.83x |    14% | 1.76ms | 3.46ms | 3.92ms |
-| Elysia    |      47,897 |     0.76x |    10% | 1.75ms | 3.65ms | 3.99ms |
-| Express   |      26,351 |     0.42x |    16% | 3.52ms | 6.25ms | 7.51ms |
-| Fastify   |      35,615 |     0.56x |    12% | 2.70ms | 4.76ms | 6.19ms |
-| Koa       |      29,398 |     0.47x |    16% | 2.65ms | 5.53ms | 7.33ms |
+| Yatta     |      62,050 |     1.00x |     5% | 1.63ms | 2.55ms | 3.21ms |
+| Raw Bun   |      45,756 |     0.74x |    11% | 1.78ms | 3.81ms | 3.92ms |
+| Hono      |      60,241 |     0.97x |     7% | 1.55ms | 3.17ms | 3.69ms |
+| Elysia    |      48,286 |     0.78x |    25% | 1.55ms | 3.29ms | 3.48ms |
+| Express   |      23,682 |     0.38x |     9% | 4.14ms | 6.64ms | 7.69ms |
+| Fastify   |      36,254 |     0.58x |     7% | 2.43ms | 4.88ms | 5.77ms |
+| Koa       |      29,560 |     0.48x |     6% | 3.30ms | 6.09ms | 7.45ms |
 <!-- BENCHMARKS:END -->
 
 `GET /json` head-to-head, 20,000 requests at 100 concurrent connections.
@@ -119,6 +119,7 @@ persistent stores, and supports TypeScript module augmentation for typed keys.
 | `yatta/api` | Unified API: router with onion middleware, typed params, schema validation (Zod/Valibot/ArkType), CORS, cookies, streaming, typed client, universal routes (define once, call directly or over HTTP), path utilities, DataLoader batching |
 | `yatta/db` | `bun:sqlite` ORM — column builder, relations, transactions with savepoints, pagination, cursor pagination, schema sync, backup/restore |
 | `yatta/auth` | Argon2id, rotating access/refresh JWTs, AES-256-GCM sessions, TOTP 2FA, WebAuthn passkeys, hashed API keys, RBAC, rate-limit lockouts |
+| `yatta/jwt` | Fast stateless HS256 verification — `Bun.CryptoHasher` HMAC, no caching, reference-compatible error strings |
 | `yatta/jobs` | Job queue, worker pools, cron (Vixie semantics, tz-aware), event bus, atomic leases, DLQ, backoff + jitter |
 | `yatta/cache` | L1 LRU + SQLite L2, singleflight, stale-while-revalidate, tag invalidation; plus an O(1) priority queue |
 | `yatta/storage` | Local + S3 drivers, RFC 9110 range streaming, magic-byte inspection, HMAC signed URLs |

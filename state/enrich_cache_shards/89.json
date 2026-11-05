@@ -2981,5 +2981,45 @@
    "contrib": "20261104",
    "lang": "20261104"
   }
+ },
+ "mokevnin/dbcleaner": {
+  "rel_ver": "v1.0.0",
+  "rel_pub": "2026-10-20",
+  "rel_days": 16,
+  "rel_n90": 3,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_notes": [
+   {
+    "t": "v1.0.0",
+    "d": "2026-10-20",
+    "n": "* add SQLite and MySQL dialects ([1dc6e6c](https://github.com/mokevnin/dbcleaner/commit/1dc6e6c1e0afec7cd88a3b9dadf8f9d2192fe188))\n## [1.0.0](https://github.com/mokevnin/dbcleaner/compare/v0.2.0...v1.0.0) (2026-10-20)\n* import _ \"github.com/mokevnin/dbcleaner/postgres\"; ScratchDatabase is postgres.ScratchDatabase\n* import github.com/mokevnin/dbcleaner instead of github.com/mokevnin/pgcleaner\n* split the PostgreSQL parts into a Dialect ([d9bbf50](https://github.com/mokevnin/dbcleaner/commit/d9bbf5075dbf0a238"
+   },
+   {
+    "t": "v0.2.0",
+    "d": "2026-10-18",
+    "n": "`WithTemplate(version, build)` gives every test process (one per package under `go test ./...`) a database of its own, so `-p 1` is no longer needed.\n- `WithSetup` runs on the worker every time (fixtures with relative dates), and `Cleaner.URL(ctx)` is the database to hand to code that opens its own connection.\n- The schema is built once per version into a template database (`<name>_tpl_<hash>`), under an advisory lock, by whichever process comes first.\n- A process leases the lowest free worker database (`<n"
+   },
+   {
+    "t": "v0.1.0",
+    "d": "2026-10-18",
+    "n": "- `ScratchDatabase(t, adminURL)`: an empty, uniquely named database, dropped with the test.\n- Strategies: `Transaction()` (go-txdb, nested transactions become savepoints), `Truncation()`, `Deletion()` (children before parents) and `Null()`, with `Only(...)` / `Except(...)`; migration tables are never touched.\nFirst release: put a PostgreSQL database back to its baseline after each Go test, the way Ruby's DatabaseCleaner does.\n- `Cleaner.DB(t)`, `Start` / `Session.Clean`, `Cleaning`, `CleanWith`, and a setup"
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 3,
+  "lang": {
+   "Go": 100
+  },
+  "enriched_at": "20261105",
+  "dim_ts": {
+   "release": "20261105",
+   "security": "20261105",
+   "contrib": "20261105",
+   "lang": "20261105"
+  }
  }
 }

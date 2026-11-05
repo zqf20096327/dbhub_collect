@@ -36,6 +36,10 @@
 
 下文命令写作 `python3`。Windows 上如果提示找不到该命令，换成 `python`。
 
+> **Python 版本要求：3.10 或更高**（整个仓库统一按这个口径）。
+> macOS 自带的 3.9 不够用，另建一个独立虚拟环境即可，不动系统 Python ——
+> 完整命令见 [`INSTALL.md` 3.1](INSTALL.md#31-确认本机有-python-310-以上)。
+
 ### 一、接进 agent（不需装任何依赖）
 
 ```bash
@@ -45,7 +49,7 @@ python3 tools/fetch_data.py            # 下载数据包并校验
 python3 mcp/install.py --all --yes     # 写入本机 agent 配置
 ```
 
-MCP 服务器只用 Python 标准库，不需要 `pip install` 任何东西，macOS 自带的 Python 3.9 就能跑。
+MCP 服务器只用 Python 标准库，不需要 `pip install` 任何东西；Python 需要 3.10 以上。
 装完在 WorkBuddy 的连接器页点「信任」，Trae 和 Cursor 重启客户端即生效。
 四个工具怎么用见 [`mcp/README.md`](mcp/README.md)。
 
@@ -57,7 +61,7 @@ python3 mcp/server.py --selftest
 
 ### 二、本地查询界面
 
-要三个 Web 依赖（`fastapi`、`uvicorn`、`pydantic`）。装好数据后直接双击：
+要 **Python 3.10 以上**和三个 Web 依赖（`fastapi`、`uvicorn`、`pydantic`）。装好数据后直接双击：
 
 ```
 启动.command     # macOS
@@ -66,6 +70,9 @@ python3 mcp/server.py --selftest
 
 脚本会自己建虚拟环境、装依赖、等服务就绪再打开 `http://127.0.0.1:8001`，
 端口被占用就顺延，最远到 8010。命令行里 `./start.sh` 效果一样。
+
+首次启动前会检查 Python 版本。系统自带的 3.9 不够用时，它会给出装独立 3.12 的完整命令，
+不会抛栈，也不会去改系统 Python。项目自己建的虚拟环境在 `.venv/`，删掉它是安全的。
 
 也可以手动起：`python3 -m uvicorn server.law_search_service:app --port 8001`。
 
@@ -116,6 +123,24 @@ python3 tools/fetch_data.py --repo tlgzs/china-law-search
 ```
 
 自己 fork 过、想从上游取数据时，也用这个参数。
+
+### 国内下载慢或连不上 GitHub
+
+可以配置国内镜像。把多个源写进 `LAW_DATA_MIRRORS`（空格、逗号、分号都行），
+脚本按顺序尝试，任一源失败自动换下一个，每个文件都按 manifest 里的 `sha256` 校验，
+校验不过视为该源失败，最后仍回落 GitHub：
+
+```bash
+export LAW_DATA_MIRRORS="https://gitee.com/你的账号/china-law-search-data/raw/master"
+python3 tools/fetch_data.py
+```
+
+镜像目录里放 `manifest.json` 和全部资产文件，文件名与 manifest 的 `artifacts[].name` 一致。
+所有源都失败时，脚本会打印已尝试的源、官方 Release 地址和手动下载后的本地安装命令，
+不会只抛一段栈（`LAW_DATA_MIRROR` 单数形式也认）。
+
+将来想加源，只需把这个地址追加进 `LAW_DATA_MIRRORS`，无需改代码；
+不设置该变量时脚本只走 GitHub，不做额外的镜像探测，行为和没有镜像机制时完全一样。
 
 ## 数据从哪来
 
@@ -187,6 +212,9 @@ python3 tools/fetch_data.py --repo tlgzs/china-law-search
 - `law_data-<版本>.db.zst` / `.gz`：全量库，两种压缩格式内容一致
 - `delta-<版本>.json.zst` / `.gz`：增量变更集，只装变过的那几部法，外加整部废止的法规清单
 - `manifest.json`：版本号、条数、`db_sha256`，以及各资产的 sha256 与适用版本
+
+发布新数据版本时，Release 里保留上一版一个，更早的退役，不追求留存全部历史版本。
+退役只影响下载入口，已经装到本地的库不受影响，仍可照常使用。
 
 每个响应都带 `data_snapshot.corpus_version`，标明这批数据截至哪一版。
 数据是快照，不是实时库，涉及时效敏感的案件请以官方发布文本再复核一次。

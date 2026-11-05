@@ -60,7 +60,7 @@ SD card.
 - **PDF reports** for a date range, made for handing to your doctor
 - **Pulse oximetry**: Wellue O2Ring SpO2/HR overlay with ODI, imported by CSV upload
 - **Sleep Bridge Lite receiver**: a bridge on the SD card's wires sends every write to hms-cpap as the machine makes it, and the card's files are rebuilt here, live
-- **AirSense 11 over Bluetooth** (off by default): this computer pairs with the machine itself and reads its daily summary and its live night, no card involved; a Mule & Miner in the same mode can send the night here instead
+- **AirSense 11 over Bluetooth** (off by default): this computer pairs with the machine itself and reads its daily summary and its live night, no card involved, on macOS, Windows and Linux; a Mule & Miner in the same mode can send the night here instead
 - **Manual upload page**: drag in a CPAP `.zip` or O2Ring `.csv` from any browser, no shared network needed
 - **Home Assistant**: 47+ sensors via MQTT auto-discovery, or install it as an add-on and run it inside HA
 - **Equipment & supply reminders**: track mask, filters, tubing per profile; days-left sensors and due/overdue events for automations
@@ -212,6 +212,9 @@ never written with holes in it. The bridge keeps more than a night of writes
 in its own memory while hms-cpap is unreachable and sends them when it
 answers again.
 
+With MQTT on, the mask and each event go to the broker as the rebuilt card
+shows them (see [The night, live, on MQTT](#the-night-live-on-mqtt) below).
+
 The limit: the bridge forwards writes, so it only has what the machine wrote
 while it was powered and listening. Nothing already on the card from before
 is read through it. For the history already on the card, read the card once
@@ -221,8 +224,9 @@ The receiver is new in this version. The wire protocol is in
 [docs/SLEEP_BRIDGE_LOCAL_STREAM.md](docs/SLEEP_BRIDGE_LOCAL_STREAM.md); the
 part that rebuilds files from the stream is a prebuilt component under its
 own licence, linked only into builds made with `-DBUILD_WITH_SLEEPBRIDGE=ON`
-(off by default from source; the published Docker image, the add-on and the
-Raspberry Pi zip are built with it, from the asset pinned in
+(off by default from source; the published Docker image, the add-on, the
+Raspberry Pi zip, the macOS app and the Windows installer are built with it,
+from the asset pinned in
 `cmake/sleepbridge-pins.cmake`; a Docker build of your own takes
 `--build-arg SLEEPBRIDGE=ON`). A build without it still listens and refuses
 every bridge, so a bridge's setup test fails rather than leaving it pointed at
@@ -230,13 +234,28 @@ a receiver that cannot use what it sends.
 
 #### 2. AirSense 11 over Bluetooth from a computer
 
-If your PC has Bluetooth and you own an AirSense 11 or an AirCurve 11, you do
-not need a bridge at all: hms-cpap connects to the machine directly and shows
-your nights live. The machine has its own Bluetooth, and hms-cpap becomes the
-device it talks to. This needs Linux with BlueZ, a build made with
-`-DBUILD_WITH_BLE=ON` (the Docker image is; give the container the host's
-D-Bus, see the Docker section) and a Bluetooth adapter in range of the
-machine. New in this version.
+If your computer has Bluetooth and you own an AirSense 11 or an AirCurve 11,
+you do not need a bridge at all: hms-cpap connects to the machine directly and
+shows your nights live. The machine has its own Bluetooth, and hms-cpap
+becomes the device it talks to. The computer has to be in range of the
+machine. While a night streams, hms-cpap keeps the computer from going to
+sleep on its own (the screen can still turn off), and lets it sleep again when
+the night ends. A computer put to sleep by hand, or a closed laptop, drops the
+live night until it wakes; the day's summary is still read afterwards.
+
+Which downloads have it:
+
+| Download | Bluetooth |
+|---|---|
+| macOS (the `.dmg`) | Yes, through the Mac's own Bluetooth. The first time, macOS asks whether CpapDash may use Bluetooth: allow it (System Settings, Privacy & Security, Bluetooth, if you said no). If Bluetooth is off, switch it on: macOS does not let an app do that. |
+| Windows (installer or zip) | Yes, Windows 10 or 11 with Bluetooth LE. If Bluetooth is off, hms-cpap switches it on. Use the Bluetooth adapter maker's own driver: on some adapters (a Realtek combo, for one) Windows' generic driver finds the device but never connects to it. No Windows pairing is involved. |
+| Docker image, Home Assistant add-on | Yes, through the host's BlueZ: give the container the host's D-Bus, see the Docker section. |
+| Raspberry Pi zip | Yes, through BlueZ. |
+| Built from source on Linux | Only with `-DBUILD_WITH_BLE=ON` (needs libsdbus-c++). |
+
+`hms_cpap --ble-scan` lists what this computer's Bluetooth can see and exits,
+without connecting to anything: a quick way to check that the machine is in
+range.
 
 Turn it on in `config.json`:
 
@@ -296,7 +315,8 @@ It feeds the same writer as 2 above: the same files under
 `<data dir>/as11/<machine serial>/`, the same live night, imported as a
 session the same way when it ends. Every block and every event also wakes
 hms-cpap's sync at once, and with MQTT on, each event and each therapy start
-and end goes to the broker as it arrives (`cpap/<device_id>/live/...`), for
+and end goes to the broker as it arrives (see
+[The night, live, on MQTT](#the-night-live-on-mqtt) below), for
 automations during the night. When the night ends the unit is asked for the
 machine's identification, summary and settings history; the summary is what
 builds the folder's `STR.edf`. `GET /api/mule` lists the units seen. New in this version; the
@@ -347,6 +367,49 @@ full night.
 - **Upload page**: zip the card and drop it in the browser. A ResMed, Sefam,
   Löwenstein or Luna card is recognised by its files, and every night not yet
   stored is imported. No shared network needed.
+
+#### The night, live, on MQTT
+
+With MQTT on, every source above says the mask on the same topics, and Home
+Assistant discovers the same entities on the hms-cpap device:
+
+| Entity | Topic | What it holds |
+|---|---|---|
+| **Mask** (`binary_sensor`, Running / Not running) | `cpap/<device_id>/realtime/mask` | `ON` / `OFF`, retained |
+| its attributes | `cpap/<device_id>/realtime/mask_changed` | the change that set it, retained: `state`, `source`, `source_id`, `session`, `occurred_at`, `detected_at`, `delay_s` |
+| **Live events** (`sensor`) | `cpap/<device_id>/realtime/live_events` | events since the mask went on: `{"total":3,"OA":1,"H":2}`, retained; the per-type counts are its attributes |
+| (no entity) | `cpap/<device_id>/realtime/event` | one respiratory event as it lands, not retained |
+
+`occurred_at` is when the mask really went on or off, on the machine's clock
+read on the real one, and `detected_at` is when hms-cpap saw it (both UTC,
+ISO 8601 with `Z`, as the CpapDash cloud's `mask.on` and `mask.off` carry
+them); `delay_s` is the difference, so an automation can tell a live change
+from a late one. A mask goes on at its session's start and off at the end of
+its last record. The mask is on while any source says so.
+
+| Source (`source`) | Mask on | Mask off | Events | Typical `delay_s` |
+|---|---|---|---|---|
+| Sleep Bridge Lite (`sleep_bridge`) | the first therapy write streamed | the STR the machine writes at mask-off, or 5 min with no therapy write | yes | on: up to about a minute (the machine's first write); off: seconds after the STR, about 5 min on the fallback |
+| Mule & Miner, AirSense 11 Bluetooth mode (`mule_ble`) | the stream starts | the stream ends (the end of its last block) | yes | seconds |
+| AirSense 11 over this computer's Bluetooth (`as11_ble`) | the stream starts | the stream ends | yes | seconds |
+| ez Share (`ezshare`), FlashAir (`flashair`), local folder (`local`) | a burst finds the session's BRP grown | the BRP has not grown for 135 s | no | about 2 minutes, up to a burst interval more: a change needs the next burst to show |
+
+A local folder that a Sleep Bridge or an AirSense 11 stream writes is
+reported by that source, live, not again as a card. A Löwenstein, Sefam or
+Luna card has no BRP, so it has no live mask.
+
+After a restart of hms-cpap, a source that sees the mask says it again (a
+Mule & Miner on its first state, a Sleep Bridge on its next therapy write); if
+no source says anything for 5 minutes, `OFF` is published once with `source`
+`startup`, so a retained `ON` from a night that ended while hms-cpap was away
+does not stay.
+
+Kept for the automations already built on them: the Mule & Miner's own
+`cpap/<device_id>/live/*` topics (`therapy`, `therapy_changed`, `event`,
+`last_event`, `event_count`, `ahi`) and their entities (**Live therapy**,
+**Live event count**, **Live AHI**, **Live last event**), as
+[docs/MULE_LOCAL_STREAM.md](docs/MULE_LOCAL_STREAM.md) describes them. New
+automations should use the table above, which every source fills.
 
 Everything else (config keys, CLI flags, MQTT sensor list, myAir setup,
 architecture, development, cross-compiling) is in

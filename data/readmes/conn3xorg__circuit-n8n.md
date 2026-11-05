@@ -20,7 +20,7 @@ variable "owner_password" {
 }
 
 module "n8n" {
-  source = "github.com/conn3xorg/circuit-n8n?ref=v0.1.2"
+  source = "github.com/conn3xorg/circuit-n8n?ref=v0.1.3"
 
   hosts                = { automation = "192.168.1.50" }
   ssh_private_key_file = "~/.ssh/id_ed25519"
@@ -48,7 +48,7 @@ n8n speaks plain HTTP on `127.0.0.1:5678`. Put a proxy in front for TLS, such as
 
 ```hcl
 module "caddy" {
-  source = "github.com/conn3xorg/circuit-caddy?ref=v0.2.1"
+  source = "github.com/conn3xorg/circuit-caddy?ref=v0.3.0"
 
   hosts                = { automation = "192.168.1.50" }
   ssh_private_key_file = "~/.ssh/id_ed25519"
@@ -85,7 +85,7 @@ variable "db_password" {
 }
 
 module "postgres" {
-  source = "github.com/conn3xorg/circuit-postgres?ref=v0.2.0"
+  source = "github.com/conn3xorg/circuit-postgres?ref=v0.3.0"
 
   hosts                = { automation = "192.168.1.50" }
   ssh_private_key_file = "~/.ssh/id_ed25519"
@@ -96,7 +96,7 @@ module "postgres" {
 }
 
 module "n8n" {
-  source = "github.com/conn3xorg/circuit-n8n?ref=v0.1.2"
+  source = "github.com/conn3xorg/circuit-n8n?ref=v0.1.3"
 
   depends_on = [module.postgres]
 

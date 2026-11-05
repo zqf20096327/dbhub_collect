@@ -144,11 +144,11 @@
   }
  },
  "microsoft/msphpsql": {
-  "commit_90d": 3,
-  "commit_7d": 0,
+  "commit_90d": 4,
+  "commit_7d": 2,
   "rel_ver": "v5.13.3",
   "rel_pub": "2026-08-07",
-  "rel_days": 83,
+  "rel_days": 90,
   "rel_n90": 1,
   "rel_pre": false,
   "rel_none": false,
@@ -164,12 +164,29 @@
    "C": 0,
    "TSQL": 0
   },
-  "enriched_at": "20261029",
+  "enriched_at": "20261105",
   "dim_ts": {
-   "commit": "20261029",
-   "release": "20261029",
+   "commit": "20261105",
+   "release": "20261105",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v5.13.3",
+    "d": "2026-08-07",
+    "n": "- Always Encrypted requires [MS ODBC Driver 17+](https://docs.microsoft.com/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server)\n- Connection pooling on Linux or macOS is not recommended with [unixODBC](http://www.unixodbc.org/) < 2.3.7\n- unixODBC <= 2.3.4 (Linux and macOS) might not return proper diagnostic information, such as error messages, warnings and informative messages\n- due to this unixODBC bug, fetch large data (such as xml, binary) as streams as a workaround. See the e"
+   },
+   {
+    "t": "v5.13.2",
+    "d": "2026-07-29",
+    "n": "- Fixed SQL injection in `PDO::lastInsertId($name)` (CWE-89). The sequence-name lookup in `pdo_sqlsrv_dbh_last_id` previously interpolated the caller-supplied `$name` directly into the query text with `snprintf` (`WHERE name=N'%s'`), allowing a crafted name to break out of the string literal and inject arbitrary Transact-SQL. The name is now passed to a parameterized query (`WHERE name=?`) and bound with the connection encoding, so it is always treated as a literal value. This also fixes lookups for sequenc"
+   },
+   {
+    "t": "v5.13.1",
+    "d": "2026-04-30",
+    "n": "- Fixed sqlsrv_errors() returning null after a failed connection when ODBC provides no diagnostic records ([PR #1595](https://github.com/microsoft/msphpsql/pull/1595))\n- Always Encrypted requires [MS ODBC Driver 17+](https://docs.microsoft.com/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server)\n- Connection pooling on Linux or macOS is not recommended with [unixODBC](http://www.unixodbc.org/) < 2.3.7\n- unixODBC <= 2.3.4 (Linux and macOS) might not return proper diagnostic informa"
+   }
+  ]
  },
  "forwardemail/forwardemail.net": {
   "commit_90d": 245,

@@ -2,7 +2,7 @@
 
 **Untested backups aren't backups.** restoredrill proves your PostgreSQL and MySQL backups actually restore. It fetches the latest backup, restores it into a throwaway container, runs checks you define, and writes a JSON report with the restore time. Or, if something else already restored a copy for you, it can just connect and run the same checks against that instead.
 
-> Status: v0.4.3, early days. Postgres, plus MySQL 8 from `mysqldump` files. Things may still change.
+> Status: v0.4.4, early days. Postgres, plus MySQL 8 from `mysqldump` files. Things may still change.
 
 ## Why
 
@@ -69,6 +69,7 @@ Every field is always present in the report. A field is never absent because it 
 - `backup_timestamp`, `backup_age_seconds`, `rpo_target_seconds`, and `rpo_met`: the freshness and RPO evidence from tier 1.
 - `restore_initiated_at`, `restore_completed_at`, `restore_duration_seconds`, `rto_target_seconds`, and `rto_met`: the RTO evidence, measured against a target if you set one.
 - `restore_method`: the `backup.format` value that produced the checked database. Without this field, every report implied that restoredrill restored the backup and then checked it. For `existing_connection` mode (see below), this is not true. This field states the actual situation, so a reader does not mistake `restore_duration_seconds: 0` and an empty backup source for a defect.
+- `database`: the name of the database the backup came from, read from the backup itself. For `pg_dump_custom` and `mysqldump_sql` it comes from the dump header. For `existing_connection` it is the database in the connection string. For `pgbackrest` it is the stanza name. A plain SQL `pg_dump` file does not record a name, so the field is empty. Anything that reads many reports can use it to tell your databases apart without extra setup.
 - `validation_errors`: every failed check, in its own field, with the failure and the reason. When a run fails, you need to know what failed, not only that a failure occurred.
 - `notify_errors`: a broken Slack or webhook URL is a finding, not a silent no-op. If a notification fails to deliver, this field records the failure. The process then exits with a non-zero code, even when the drill itself passed.
 - Every timestamp uses the literal string format `"YYYY-MM-DD HH:MM:SS UTC"`, not an epoch value or RFC3339 format. Most auditor workflows end with a copy into a spreadsheet, and this format survives that copy.
@@ -99,7 +100,7 @@ The exit code makes restoredrill a good fit for a scheduled CI job. See [`.githu
 
 ```yaml
 - uses: actions/checkout@v4
-- uses: ahmadpiran/restoredrill@v0.4.3
+- uses: ahmadpiran/restoredrill@v0.4.4
   with:
     config: restoredrill.yml
 ```

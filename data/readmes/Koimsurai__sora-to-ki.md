@@ -55,7 +55,7 @@ first step walks you through creating the OAuth app it needs for sign-in.
   plus notes for Traefik and other reverse proxies
 - If `OWNER_EMAIL` is set in `.env.backend` there's no wizard: whoever signs in with that address is the owner
 - The admin is at `/admin` and only takes GitHub or Google sign-in (`ADMIN_USERNAME` / `ADMIN_PASSWORD` is a machine account for MCP, not for people)
-- Upgrading: `docker compose pull && docker compose up -d`. To pin a version, set `SORA_TO_KI_VERSION=0.2.2` in `.env`
+- Upgrading: `docker compose pull && docker compose up -d`. To pin a version, set `SORA_TO_KI_VERSION=0.3.0` in `.env`
 - The database is backed up to `./backups` every day
 
 ### Let an AI set it up
@@ -260,7 +260,7 @@ Only `DATABASE_URL` and `JWT_SECRET` are required (both are in the example file)
 | Basics | `DATABASE_URL` `BIND_ADDR` `JWT_SECRET` `SITE_URL` |
 | Sign-in (owner and readers) | `GITHUB_CLIENT_ID` `GITHUB_CLIENT_SECRET` `GOOGLE_CLIENT_ID` `GOOGLE_CLIENT_SECRET` `OWNER_EMAIL` |
 | MCP machine account | `ADMIN_USERNAME` `ADMIN_PASSWORD` |
-| Activity page | `GITHUB_TOKEN` `WAKATIME_API_KEY` `STEAM_API_KEY` `STEAM_ID` |
+| Activity page | `GITHUB_TOKEN` `WAKATIME_TOKEN` (personal OAuth token from wakatime.com/oauth) `STEAM_API_KEY` `STEAM_ID` |
 | Spotify | `SPOTIFY_CLIENT_ID` `SPOTIFY_CLIENT_SECRET` `SPOTIFY_REFRESH_TOKEN` `SPOTIFY_REDIRECT_URI` |
 | Film and TV | `TMDB_API_TOKEN` `SIMKL_CLIENT_ID` `SIMKL_ACCESS_TOKEN`; Taiwan's Bahamut Anime Crazy: `BAHAMUT_UID` `BAHAMUT_PASSWORD` |
 | Bookshelf | `GOOGLE_BOOKS_API_KEY`; Taiwan's National Central Library ISBN data: `ENABLE_TW_ISBN_SYNC` |

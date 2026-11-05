@@ -2898,5 +2898,49 @@
    "contrib": "20261104",
    "lang": "20261104"
   }
+ },
+ "tuvl-io/tuvl": {
+  "rel_ver": "v2.0.3",
+  "rel_pub": "2026-11-05",
+  "rel_days": 0,
+  "rel_n90": 4,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_notes": [
+   {
+    "t": "v2.0.3",
+    "d": "2026-11-05",
+    "n": "A security patch release of `tuvl` and `tuvl-insight`: patched dependencies for every open Dependabot advisory. Dependency updates only, no changes to tuvl's own code.\n\n### Security\n\n- **Python dependencies move to patched releases.** The lockfile was behind advisories published for `PyJWT`, `starlette`,\n  `python-multipart`, `mcp`, `cryptography`, `pypdf`, `anyio`, `certifi`, `idna`, `opentelemetry-api` and `pydantic-settings`.\n  `uv.lock` now resolves `PyJWT` 2.15.1, `starlette` 1.10.0, `python-multipart`"
+   },
+   {
+    "t": "v2.0.2",
+    "d": "2026-11-04",
+    "n": "- **A project that sets `llm.memory.retention` passes `tuvl run tests`.** The retention sweep used a PostgreSQL-only\nquery and crashed on the offline SQLite database; it now does nothing off PostgreSQL."
+   },
+   {
+    "t": "v2.0.1",
+    "d": "2026-11-02",
+    "n": "A patch release of `tuvl` and `tuvl-insight`: two small fixes found when CI first ran on freshly booted GitHub-hosted machines, the PyPI project descriptions, and the release workflow.\n\n### Fixed\n\n- **A token's `iat` is never ahead of the clock.** `mint_token` rounded `iat` to the millisecond with `round()`, which can round up by half a millisecond, and `jwt.decode` rejects an `iat` in the future. A token verified within that window of being minted failed with `ImmatureSignatureError`. `iat` is now floored "
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 2,
+  "lang": {
+   "Python": 79,
+   "TypeScript": 20,
+   "CSS": 0,
+   "Makefile": 0,
+   "Shell": 0
+  },
+  "enriched_at": "20261105",
+  "dim_ts": {
+   "release": "20261105",
+   "security": "20261105",
+   "contrib": "20261105",
+   "lang": "20261105"
+  }
  }
 }

@@ -78,7 +78,7 @@ Only pre-releases are published so far: ask for the newest.
 
     npm i -D rowstile@next         # the command with its own Python: a TypeScript app needs none
     pip install --pre rowstile     # the command and the Python SDK: rowstile[fastapi], [sqlalchemy], ...
-    docker run --rm -u "$(id -u):$(id -g)" -v "$PWD:/work" ghcr.io/rowstile/rowstile:0.1.0-beta.2 migrate
+    docker run --rm -u "$(id -u):$(id -g)" -v "$PWD:/work" ghcr.io/rowstile/rowstile:0.1.0-beta.3 migrate
 
 `npm` brings the Python for Linux (glibc and musl, x64 and arm64), macOS (x64 and arm64) and Windows x64. The
 image is for Linux on x64 and arm64, and runs as root unless told otherwise: `-u` makes the files it writes
@@ -117,7 +117,7 @@ adds the SDK's packages to `package.json` (for Python, names the one to add) and
 | [`core/`](core/README.md) | the compiler and the `rowstile` command, their tests and the benchmarks |
 | [`sdk/`](sdk/) | the SDKs: [Python](sdk/python/README.md) (FastAPI, Django, SQLAlchemy, psycopg, asyncpg) and [TypeScript](sdk/typescript/README.md) (Next.js, Prisma, Drizzle, pg, postgres.js, React); previews for [Go](sdk/go/README.md), [.NET](sdk/dotnet/README.md), [Ruby](sdk/ruby/README.md), [Java and Kotlin](sdk/java/README.md), [Rust](sdk/rust/README.md), [Elixir](sdk/elixir/README.md) and [PHP](sdk/php/README.md) |
 | [`integrations/`](integrations/README.md) | each SDK's conformance suite: a small app and the checks it must pass |
-| [`examples/`](examples/README.md) | complete apps built on rowstile: a file manager and a messenger |
+| [`examples/`](examples/README.md) | complete apps built on rowstile: a file manager, a messenger and a helpdesk |
 | [`editor/`](editor/README.md) | the VS Code and Zed extensions, a Tree-sitter grammar (Helix, Neovim); other editors start `rowstile lsp` |
 | [`review-ci/`](review-ci/) | the policy review for pull requests: a GitHub action and a GitLab CI template |
 | [`docs/`](docs/) | the guides and the reference, as Markdown |

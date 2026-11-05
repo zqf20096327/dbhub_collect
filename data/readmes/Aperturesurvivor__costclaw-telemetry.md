@@ -1,5 +1,7 @@
 # CostClaw
 
+> **Project status: no longer maintained.** No further updates, fixes, or support are planned.
+
 Local, cache-aware LLM usage and cost telemetry for OpenClaw.
 
 CostClaw records model usage, prompt-cache activity, normalized cost, session
@@ -47,8 +49,9 @@ openclaw gateway restart
 
 Then open <http://localhost:3333>.
 
-The npm registry still serves the original v0.1 package. Use the release
-artifact or source installation until v0.2 is published there.
+Check the npm package version before installing: version 0.1 does not include
+the fixes described above. Use version 0.2 or newer, the release artifact, or
+a source installation.
 
 OpenClaw requires `allowConversationAccess` for non-bundled `llm_output`
 hooks. That permission lets a plugin receive the model-output event, including
@@ -198,13 +201,7 @@ test/                        Unit and integration tests
 
 ## Contributing
 
-Bug reports and pull requests are welcome. Include:
-
-- OpenClaw and Node versions;
-- the provider/model identifier;
-- sanitized usage fields;
-- expected and observed totals;
-- a test when practical.
+This project is no longer maintained. Issues and pull requests may not receive a response.
 
 The Node 25, runtime-pricing, and subagent improvements in v0.2 incorporate
 work contributed by [MY-BOT-TARS](https://github.com/MY-BOT-TARS) in

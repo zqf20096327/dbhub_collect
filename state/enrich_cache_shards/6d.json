@@ -52,12 +52,12 @@
   }
  },
  "nalgeon/sqlean": {
-  "commit_7d": 0,
-  "commit_90d": 19,
-  "rel_ver": "0.28.5",
-  "rel_pub": "2026-10-14",
-  "rel_days": 15,
-  "rel_n90": 2,
+  "commit_7d": 51,
+  "commit_90d": 65,
+  "rel_ver": "0.29.0",
+  "rel_pub": "2026-10-31",
+  "rel_days": 5,
+  "rel_n90": 3,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -65,7 +65,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 26,
-  "enriched_at": "20261029",
+  "enriched_at": "20261105",
   "lang": {
    "C": 91,
    "C++": 9,
@@ -73,10 +73,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261029",
-   "release": "20261029",
+   "commit": "20261105",
+   "release": "20261105",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "0.29.0",
+    "d": "2026-10-31",
+    "n": "The aliases no longer replace SQLite's built-in functions. `ltrim` and `rtrim` are removed (use `text_ltrim` and `text_rtrim`). `concat` and `concat_ws` are only registered on SQLite older than 3.44, and `octet_length` on SQLite older than 3.43.\nThe extension is rewritten as SQLite's `csv` extension plus a field separator, column types and error reporting. The CSV reader is now a port of Go's `encoding/csv`, and the rarely used options are removed.\nCalling `define()` again on an existing function now replac"
+   },
+   {
+    "t": "0.28.5",
+    "d": "2026-10-14",
+    "n": "- IPv6 mask fixes in `ipaddr` (@ac1982).\r\n- Null handling fixes in `time` (@RogerHYang)."
+   },
+   {
+    "t": "0.28.4",
+    "d": "2026-08-14",
+    "n": "Memory safety fixes in `text` (@RogerHYang), `time` (@RogerHYang), and `crypto` (@LeMikaelF)."
+   }
+  ]
  },
  "ClickHouse/clickhouse-go": {
   "commit_7d": 6,
@@ -704,8 +721,8 @@
   "enriched_at": "20260927"
  },
  "diqierjia/StrataGate-AgentMemory": {
-  "rel_ver": "stratagate-dsh-v0.2.89",
-  "rel_pub": "2026-09-27",
+  "rel_ver": "stratagate-dsh-v0.3.41",
+  "rel_pub": "2026-11-05",
   "rel_days": 0,
   "rel_n90": 12,
   "rel_pre": false,
@@ -720,12 +737,30 @@
    "JavaScript": 3,
    "Python": 1
   },
-  "enriched_at": "20261001",
-  "commit_90d": 265,
-  "commit_7d": 52,
+  "enriched_at": "20261105",
+  "commit_90d": 394,
+  "commit_7d": 32,
   "dim_ts": {
-   "commit": "20261001"
-  }
+   "commit": "20261105",
+   "release": "20261105"
+  },
+  "rel_notes": [
+   {
+    "t": "stratagate-dsh-v0.3.41",
+    "d": "2026-11-05",
+    "n": "## What's Changed\n* chore: 同步 Gitee 0.3.40 源码并恢复 GitHub 发布流程 by @diqierjia in https://github.com/diqierjia/StrataGate-AgentMemory/pull/132\n* docs: 恢复 README 徽章、社区卡片与贡献者展示 by @diqierjia in https://github.com/diqierjia/StrataGate-AgentMemory/pull/133\n* fix(ci): 修复旧宿主依赖漂移与 Windows 测试夹具超时 by @diqierjia in https://github.com/diqierjia/StrataGate-AgentMemory/pull/134\n* fix: 保护上下文回写范围并限制无效重试 by @diqi"
+   },
+   {
+    "t": "stratagate-dsh-v0.3.7",
+    "d": "2026-10-09",
+    "n": "修复 Topic Projection 在合法长概要和重试场景下失败的问题，保留已有记忆、Event 归属与来源关系。\n\n- 概要正文硬上限统一为 1000 个 Unicode 字符，通常建议 300～600 字符，完整事件归类优先，概要按需生成。\n- 删除未成功保存的违规概要草稿的强制补写规则；模型可以舍弃草稿并返回合法空概要，已保存的有效概要由存储层继承。\n- 受影响且仍有效的旧失败任务可自动获得一次有界恢复"
+   },
+   {
+    "t": "stratagate-dsh-v0.3.6",
+    "d": "2026-10-08",
+    "n": "0.3.6 修复 Topic Projection 的校验反馈与升级恢复，以及 `memory_search_events` 对合法主动 Event 返回无效 JSON 的问题。\n\n- overview 文本校验区分空字符串、纯空白与超出 600 字符，并将安全的字段位置、实际长度与限制反馈给模型。错误段落必须提供合法替代；删除或复制段落不能冒充修复，实际去重后的持久化结果仍需通过完整性检查。\n- 升级时，为仍有效且未完成的历史终态失败任务自动开"
+   }
+  ]
  },
  "wangyan/lanmp": {
   "rel_ver": null,

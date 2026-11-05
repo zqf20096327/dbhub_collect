@@ -37,11 +37,11 @@
  },
  "oceanbase/oceanbase": {
   "commit_7d": 0,
-  "commit_90d": 498,
+  "commit_90d": 358,
   "rel_ver": "v4.2.5_CE_BP8",
   "rel_pub": "2026-10-21",
-  "rel_days": 8,
-  "rel_n90": 3,
+  "rel_days": 15,
+  "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -49,7 +49,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 373,
-  "enriched_at": "20261029",
+  "enriched_at": "20261105",
   "lang": {
    "C++": 97,
    "Python": 2,
@@ -59,10 +59,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261029",
-   "release": "20261029",
+   "commit": "20261105",
+   "release": "20261105",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v4.2.5_CE_BP8",
+    "d": "2026-10-21",
+    "n": "* **MySQL 模式支持 PL 异步化**\nMySQL 模式下支持 PL 执行异步化，将可异步执行的 PL 逻辑调度到后台执行，降低长耗时 PL 对会话与租户响应的影响。该能力默认关闭，需在租户级开启。\n`SELECT ... LIMIT n UNION ...` 不再报错，恢复支持，与 MySQL 行为一致，放宽了语法限制。\n由限制 standby 租户将日志恢复源设置为自身，变更为允许将日志恢复源配置回自身，便于故障恢复与重新同步场景的使用"
+   },
+   {
+    "t": "v4.4.2_CE_BP3",
+    "d": "2026-09-15",
+    "n": "| 备份管理 | `ALTER SYSTEM ADD RESTORE SOURCE '...'` / `RESTORE ... FROM 'data_set,log_dest,backup_archive_dest'` | MySQL | 存在归档备份时，恢复需通过 `add restore source` 提供 `BACKUP_ARCHIVE_DEST`，或在 `from` uri 中补充归档备份目的端 |\n* RPM 版本号：oceanbase-ce-4.4.2.3-103000052026090811\n* **MySQL 兼容增强**\n* **MySQL 模式支持 PL 异步化**：MySQL 模式下支持 PL 执行异步化，将可异步执行的 PL 逻辑调度到后台，降低长耗时 PL 对会"
+   },
+   {
+    "t": "v5.0.1_CE",
+    "d": "2026-08-10",
+    "n": "通过设置 `ob_compatibility_control = 'MYSQL8.0'`，当仅指定 `utf8mb4` 而未写 `collation` 时，默认 `collation` 为 `utf8mb4_0900_ai_ci`。在升级到 V5.0.1 版本前已创建的库表，默认 `collation` 仍为升级前规则；升级后新建租户指定 `MYSQL8.0` 才按 `MYSQL8.0` 默认。仅新建租户时指定，创建租户后不能修改。\n| Commit 号 | [071f4d9c82841d3ecb2d0004ef9213766308b714](https://github.com/oceanbase/oceanbase/releases/tag/v5.0.1_CE)|\n| RPM 版本号 | oce"
+   }
+  ]
  },
  "microsoft/azuredatastudio": {
   "commit_7d": 0,
@@ -92,11 +109,11 @@
   }
  },
  "apecloud/kubeblocks": {
-  "commit_7d": 2,
-  "commit_90d": 98,
-  "rel_ver": "v1.0.3-beta.19",
-  "rel_pub": "2026-10-20",
-  "rel_days": 9,
+  "commit_7d": 13,
+  "commit_90d": 102,
+  "rel_ver": "v1.0.3-beta.21",
+  "rel_pub": "2026-11-02",
+  "rel_days": 3,
   "rel_n90": 12,
   "rel_pre": true,
   "rel_none": false,
@@ -105,7 +122,7 @@
   "sec_last": null,
   "sec_ids": [],
   "contrib_n": 108,
-  "enriched_at": "20261029",
+  "enriched_at": "20261105",
   "lang": {
    "Go": 99,
    "Shell": 1,
@@ -115,10 +132,27 @@
   },
   "dim_ts": {
    "lang": "20260929",
-   "commit": "20261029",
-   "release": "20261029",
+   "commit": "20261105",
+   "release": "20261105",
    "security": "20261027"
-  }
+  },
+  "rel_notes": [
+   {
+    "t": "v1.0.3-beta.21",
+    "d": "2026-11-02",
+    "n": "## What's Changed\n* fix(operations): do not acquire the queue lock while a dependent opsRequest is in the queue by @wangyelei in https://github.com/apecloud/kubeblocks/pull/11056\n\n\n**Full Changelog**: https://github.com/apecloud/kubeblocks/compare/v1.0.3-beta.20...v1.0.3-beta.21"
+   },
+   {
+    "t": "v1.0.3-beta.20",
+    "d": "2026-11-02",
+    "n": "## What's Changed\n* fix(operations): release the queue lock when an opsRequest is swapped behind its dependents by @wangyelei in https://github.com/apecloud/kubeblocks/pull/11051\n* fix(dataprotection): delete the stale pre-delete job that can never be started by @wangyelei in https://github.com/apecloud/kubeblocks/pull/11052\n\n\n**Full Changelog**: https://github.com/apecloud/kubeblocks/compare/v1.0.3-beta.19...v1.0.3-beta.20"
+   },
+   {
+    "t": "v1.0.3-beta.19",
+    "d": "2026-10-20",
+    "n": "## What's Changed\n* fix(component): apply registry mappings to instance template images by @leon-ape in https://github.com/apecloud/kubeblocks/pull/10985\n* fix(apps): resolve instance template runtime images by @leon-ape in https://github.com/apecloud/kubeblocks/pull/10998\n* feat(operations): support instance template upgrades by @leon-ape in https://github.com/apecloud/kubeblocks/pull/10993\n* fix(apps): preserve inherited instance template images by @leon-ape in https://github.com/apecloud/kubeblocks/pull/"
+   }
+  ]
  },
  "pingcap/parser": {
   "commit_90d": 0,

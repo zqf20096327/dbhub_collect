@@ -49,7 +49,7 @@ That's it. Docker, Nginx, Laravel Forge and shared hosting without SSH are cover
 
 ### See who reads your site besides people
 
-Bots are counted apart from your visitors: AI crawlers such as GPTBot, ClaudeBot and PerplexityBot, search engines, SEO tools, social previews and uptime monitors, with the pages they read. Behind Nginx, Puls also logs 404s and redirects as **pages to fix**, with the pages that link to them. Both sections stay folded until you open them, and their headers say what is inside ("1,128 visits from 8 bots", "2 not found, 3 redirects"), so you can tell when one is worth a look.
+Bots are counted apart from your visitors: AI crawlers such as GPTBot, ClaudeBot and PerplexityBot, search engines, SEO tools, social previews, uptime monitors and browsers run by a program, with the pages they read. Behind Nginx, Puls also logs 404s and redirects as **pages to fix**, with the pages that link to them. Both sections stay folded until you open them, and their headers say what is inside ("1,128 visits from 8 bots", "2 not found, 3 redirects"), so you can tell when one is worth a look.
 
 ![Bots and crawlers, grouped as monitor, search engine, AI and social, with the most crawled pages, the latest bot activity and pages to fix](docs/screenshots/bots.png)
 
@@ -116,7 +116,7 @@ A goal is a page or an event. Its tile shows the visitors who converted, their s
 - **No IP addresses stored:** the visitor id is a hash of IP and user agent with a random salt that is deleted after the day
 - **No fingerprinting:** no canvas, font or WebGL tricks
 - **Collected:** page path, referrer domain, browser, device type, UTM parameters, language and country (from the `Accept-Language` header)
-- **Kept:** pageviews until you delete them, custom events for 400 days (`EVENTS_RETENTION_DAYS`), bot visits for 90 days and broken links for 30 days after the last hit
+- **Kept:** pageviews until you delete them, custom events for 400 days (`EVENTS_RETENTION_DAYS`), bot visits for 90 days (`BOT_RETENTION_DAYS`, the count per day stays) and broken links for 30 days after the last hit
 
 You decide what your sites send. [Keeping personal data out of URLs](docs/integrations.md#keeping-personal-data-out-of-urls) shows how to drop search terms, ids and personal links before they reach Puls.
 
@@ -127,6 +127,10 @@ You decide what your sites send. [Keeping personal data out of URLs](docs/integr
 - [Configuration and CLI](docs/configuration.md): `.env` settings, users and access, share links, excluding your own visits, white-label, every CLI command
 - [Read API](docs/api.md): JSON and CSV with a share token, also for [your AI assistant](docs/api.md#use-it-from-an-ai-assistant)
 - [Changelog](CHANGELOG.md) and [roadmap](ROADMAP.md)
+
+## Building with an AI agent?
+
+Give your assistant a read-only token, and it can see what your visitors do before it changes something, and whether the change made a difference. [`?api&format=md`](docs/api.md#use-it-from-an-ai-assistant) is a report written for it, where nothing a visitor's browser sent can pass itself off as an instruction. [`llms.txt`](llms.txt) tells an agent how to read an install. Puls itself never calls an AI service.
 
 ## License
 

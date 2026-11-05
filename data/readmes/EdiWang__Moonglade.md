@@ -105,7 +105,36 @@ Article saves, publication changes (including scheduled publishing), recycle-bin
 
 Settings become active only after a successful database save; related CDN/avatar settings are saved together. Updates are serialized within one process; other instances must reload or synchronize separately. See the [configuration write contract](docs/agent-reference.md#configuration).
 
-At startup, malformed ordinary settings JSON, incompatible JSON values, and null settings are restored to that setting's default in the existing database row. Missing settings are initialized, and valid settings retain their values and modification timestamps. Recovery warnings identify the configuration key without logging its JSON. Invalid `LocalAccountSettings` or `SystemManifestSettings` stop initialization with a restoration message to protect administrator credentials and installation/upgrade history; restore those values from a trusted database backup before restarting.
+If settings or an avatar have been saved but activity-log recording fails, the request retains its successful response and the failure is recorded at Error level. Authenticator reset still signs out the local-account sessions. Validation, settings persistence, cache invalidation, image storage, and sign-out failures are not treated as audit-only failures; they remain visible to the caller. This does not make avatar asset, image file, and settings writes one transaction.
+
+Successful changes invalidate affected server caches in the current process, including settings saved by internal avatar/CDN writers. Feed and theme caches use separate generations so an older request cannot refill the active cache after a change; settings changes do not flush unrelated article caches. Full-content RSS/Atom feeds use the article body, including Markdown formatting and configured CDN image URLs; summary feeds use the abstract.
+
+| Setting | When the change takes effect |
+| --- | --- |
+| Site information, feed count/full content, image CDN | Subsequent requests; affected RSS/Atom/category feeds and canonical sitemap outputs are refreshed after saving. |
+| Theme selection | Subsequent public, admin, and sign-in page renders. |
+| Custom CSS | The server reads the saved value; existing browser caching and ETag revalidation still apply. |
+| Watermarks and original-image retention | Future uploads; existing image files are not reprocessed. |
+| Notification switches | Future enqueue decisions; already queued email is retained. |
+| Notification sender display name | Application restart required, including when changing to/from the deployment fallback. |
+| FOAF and sitemap enable/disable | Application restart required in both directions. |
+| Scheduled publishing enable/disable | Saving wakes the worker and it rechecks before dispatching publication; publication already dispatched is not canceled. |
+
+Other rendering and operation settings apply to subsequent requests or operations. Server invalidation does not purge browser, CDN, proxy, or feed-reader caches; these can retain older responses under their existing cache rules.
+
+At startup, malformed ordinary settings JSON, incompatible JSON values, null settings, and semantically invalid settings are restored to that group's default in the existing database row. Recovery replaces the entire group, including its other valid fields. Missing settings are initialized, and valid settings retain their values and modification timestamps. Recovery warnings identify the configuration key without logging its JSON. Invalid `LocalAccountSettings` or `SystemManifestSettings` stop initialization before repair writes with a restoration message to protect administrator credentials and installation/upgrade history; restore those values from a trusted database backup before restarting.
+
+For ordinary settings, a field completely absent from saved JSON uses the group's current default when loaded. Explicitly saved `false`, `0`, `null`, and empty arrays are retained when they satisfy validation. Loading these defaults does not rewrite valid JSON or change its modification timestamp. Older partial settings can therefore acquire default comment review/Gravatar, watermarking, the About menu, or a 20-item feed limit when those fields were absent; an explicitly saved unlimited feed count of `0` stays unlimited. This rule does not fill missing credential or installation-history fields.
+
+Settings use the same model validation during loading and saving, including non-HTTP writes. Invalid submissions return validation errors without changing saved or runtime settings. Undefined enum values, negative feed counts, invalid nested menus, and invalid script/CSS conditions are rejected. Custom CSS is limited to 10,240 UTF-8 bytes. Disabled menus may have a null menu array; watermark font/text constraints still apply when watermarking is disabled. A blank notification display name uses the deployment-configured sender name, and unknown theme IDs retain the default-theme fallback.
+
+Protected account settings require nonblank username, password hash, and salt. A populated TOTP secret must be parseable; enabling TOTP requires a secret, while a generated secret awaiting activation is valid. Installation manifests require a non-minimum UTC installation timestamp; historical or empty version strings are preserved.
+
+First-install seeding is allowed only when every application table is empty, including when the current schema already exists. Seed data and all default settings are committed in one database transaction. If installation fails before commit, its data writes are rolled back; fix the dependency failure and restart to retry. A completed installation is not seeded again, including after a lost commit acknowledgment. Schema creation precedes this data transaction, and site-icon generation remains a separate, noncritical operation.
+
+An existing or partially populated database with no settings or a missing local-account row is preserved and cannot automatically receive a replacement default account. Startup reports the failure; restore from a trusted backup or resolve the incomplete installation manually before restarting. Moonglade does not automatically clear ambiguous data left by older installations. A missing installation manifest alone, with valid account settings, is reconstructed with a Warning: its version is unknown and its timestamp records reconstruction, not the original installation time.
+
+If initialization fails, Moonglade logs the error and exits with a nonzero process code before starting HTTP endpoints or business background services. It does not run a diagnostic-only 500 site with active workers. Correct the reported problem and restart; a rolled-back first installation can still be retried.
 
 ### Authentication
 

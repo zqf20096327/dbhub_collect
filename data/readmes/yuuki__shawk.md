@@ -113,7 +113,8 @@ The Grafana dashboards:
 - **Dependency details**: traffic, failures by reason, RTT and connect time
   of each dependency, with its first and last seen times.
 - **Peer hosts**: with `peer_hosts` in the connector, the hosts towards
-  the selected services, and failures and connect time by peer host.
+  the selected services, and failures and connect time by peer host; with
+  `networks`, the networks the connections use.
 - **Changes**: dependencies that appeared or disappeared.
 - **Application layer (OBI)**: OBI's RED metrics next to the dependencies of
   the same service.
@@ -166,6 +167,19 @@ make generate      # compile the BPF programs (clang, llvm-strip)
 make vet test      # BPF tests need root; PostgreSQL tests need SHAWK_TEST_POSTGRES_DSN
 make vm-test       # BPF tests in a VM: KERNEL=rocky9|5.14|5.15 ARCH=x86_64|aarch64
 make e2e           # multi-host test (sudo, SHAWK_E2E_POSTGRES_DSN)
+make complexity    # rank the most complex functions (needs cccc, see below)
+```
+
+The environments the tests need come up and go with one command each, on
+macOS and Linux, per checkout or worktree (see
+[test/harness](test/harness/README.md), which also lists the variables each
+test reads):
+
+```bash
+make pg-up         # a disposable PostgreSQL; prints SHAWK_TEST_POSTGRES_DSN and SHAWK_E2E_POSTGRES_DSN
+make pg-test       # the tests of the connector against it (make pg-down removes it)
+make slurm-up      # a Slurm cluster in a VM of Lima: SLURM_VERSION=26.05.5 SLURM_CGROUP_JOB_ID_PATHS=no ...
+make slurm-check   # run jobs and check the units of their processes (make slurm-down removes it)
 ```
 
 The other targets are described in the [Makefile](Makefile). The compiled
@@ -177,6 +191,23 @@ agent does not depend on the collector) and the tests of `packaging/`
 [docs/proposals/](docs/proposals/) holds designs not implemented yet, and
 [docs/research/](docs/research/README.md) background research that is not
 maintained.
+
+### Code complexity
+
+CI measures Cognitive and Cyclomatic Complexity with
+[cccc](https://github.com/moznion/cccc) on pull requests and pushes to `main`
+(`.github/workflows/complexity.yml`) and tracks them with
+[octocov](https://github.com/k1LoW/octocov) as custom metrics: the number of
+functions and the total, maximum, median and 90th percentile of each score. A
+pull request gets a comment comparing them with `main`, each push to `main`
+stores a report in the `octocov` branch, and the job summary ranks the 20 most
+complex functions. Nothing fails on a score: the numbers point at hotspots and
+show trends, such as a component taking on too much, instead of being a target.
+`cccc.toml` lists what is not analyzed, such as tests and generated or vendored
+code; the BPF programs are left out because the verifier constrains how they
+can be split. To check locally, install cccc (a [release
+binary](https://github.com/moznion/cccc/releases) or `cargo install cccc-cli`)
+and run `make complexity`, which ranks the most complex functions.
 
 ## History
 

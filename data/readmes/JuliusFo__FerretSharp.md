@@ -54,11 +54,15 @@ developer works with an Oracle database day to day:
   views on request in a section of their own. **Right-click an object** (or the head of its tab) to open it in a view,
   as `SELECT *` in the SQL editor, as its DbSet in the LINQ console, in the designer or on another connection, and to
   copy its name, `OWNER.NAME`, entity or link. A tab can be duplicated with its filters or shown in the explorer.
+- Drag the explorer wider or narrower (for every connection) and the SQL and LINQ editors taller or lower (each tab its
+  own height) – kept after a restart; a double click on the edge goes back to the default.
 - **Quick open and command palette**: one box at the top of the window – type a name to open a table, view or PL/SQL
   (also by its C# entity name), or ">" to find an action with its shortcut.
 - Fast grid for large tables (blocks of 500 rows, server-side sorting, deterministic paging), `NULL` shown as such,
   exact numbers beyond `decimal`, LOB previews, pinned columns, column search (Ctrl+F). The row selection follows the
   keyboard as in the Windows Explorer: Shift+↑/↓, Ctrl+A, Space.
+- A table opens on the view of your choice – the data or one of the detail views – and, if you like, without rows:
+  set the filters first, then load (*Settings › Data view*).
 - Composable filters in the style of TablePlus – column, operator, value – translated into bound SQL; see the generated
   statement (the grid's own or a short `SELECT t.*`) and its execution plan at any time. Combine rows with **OR** and **NOT** groups (NOT treats NULL as C# does,
   so the grid and a LINQ `Where` keep the same rows).
@@ -216,6 +220,9 @@ developer works with an Oracle database day to day:
   share a colour; names Oracle generated (`SYS_C…`) are matched by content.
 - "Forgot the ALTER on Test?": a DDL proposal aligns one side with another – drops and renames only as commented-out
   hints – and opens in the SQL editor of the target connection. Comparisons can be saved and copied as Markdown.
+- Single columns to another database: pick them in the "Columns" view (or mark their headers in the grid) and right-click
+  – `ALTER TABLE … ADD` with their comments and the foreign keys made only of them, to copy or to open in the SQL
+  editor of another connection.
 
 ### .NET and EF Core
 

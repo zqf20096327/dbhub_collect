@@ -63,8 +63,8 @@ MySQL 8 and MariaDB 10.11, and 5 CI workflows (measured on `4dfe404`; commands i
 Three things catch most first runs from source (`cp .env.example .env`, then `go run ./cmd` or
 `make run`):
 
-- **Replace the example `JWT_SECRET`.** The placeholder is long enough to start the app, so a copied
-  `.env.example` runs with a public secret (`internal/config/config.go:230-240`, #210).
+- **Replace the example `JWT_SECRET`.** The placeholder is refused at startup, so a copied
+  `.env.example` does not start until the secret is replaced (`internal/config/config.go:270-280`).
 - **Set `CORS_ALLOWED_ORIGINS`** for any cross-origin UI other than localhost on 5173, 3000 or 8080
   (`internal/middleware/cors.go:14-20`). An unlisted origin looks like a failed login.
 - **Public registration ships off** (`internal/models/configuration.go:323-330`). Create the first
@@ -190,7 +190,11 @@ Things to know before relying on it:
   The deals release adds the `deals` and `deal_stage_changes` tables only: it
   rebuilds no existing table, and the previous binary still opens the file.
   The quotes release does the same with `products`, `quotes`, `quote_lines` and
-  `quote_status_changes`: four new tables, no existing table touched.
+  `quote_status_changes`: four new tables, no existing table touched. The
+  task-to-deal link release rebuilds `tasks` (drop and copy) to add
+  `fk_tasks_deal`, so its first start needs free disk for a full copy of that
+  table; every existing task keeps `deal_id` NULL, and the previous binary still
+  opens the file, ignoring the extra column.
 - `DB_PATH` must not contain `?`; the connector appends its own pragma query
   string, so startup rejects a path that already carries one.
 
@@ -215,7 +219,7 @@ mysql -u root < scripts/create_database.sql
 cp .env.example .env
 
 # Edit .env file with your database credentials
-# JWT_SECRET is required and must be at least 32 characters
+# JWT_SECRET is required; the placeholder must be replaced with the output of openssl rand -base64 32
 ```
 
 #### Install Go Dependencies
@@ -734,6 +738,8 @@ authentication and live on the moderate tier:
 - `GET /api/v1/tasks/:id` - Get specific task
 - `PUT /api/v1/tasks/:id` - Update task *(only admins may reassign)*
 - `DELETE /api/v1/tasks/:id` - Delete task *(admin; ordinary soft delete)*
+- `GET /api/v1/deals/:id/tasks` - The deal's live tasks, paginated *(admin all of them; the sales
+  owner only those assigned to it; 403 for anybody else)*
 - `POST /api/v1/tasks/bulk/status` - Set the status of up to 100 tasks, all-or-nothing *(non-admins
   only their own assignments; completed tasks cannot change status)*
 
@@ -966,6 +972,11 @@ gophercrm/
   [DEVELOPMENT.md](docs/DEVELOPMENT.md) for details.
 - **Bulk operations are status-only.** Only `POST /leads|tickets|tasks/bulk/status` exist (see
   *Bulk operations* above); there is no bulk create, update or delete.
+- **Spam and unconfirmed form submissions are kept until you set a retention.** With
+  `FORM_RETENTION_DAYS` set (3 days at least, off by default), those with no linked lead are removed
+  permanently at that age, at boot and then every 24 hours, so the first boot removes the existing
+  backlog. Until a separate frontend task merges, the form-delete dialogs still say "Collected
+  submissions are retained", which is wrong for those rows.
 - **Erasure does not reach logs or issued tokens.** Service logs omit email, name, title and
   search fields; shared helpers omit argument/result/response payloads, and HTTP logs omit query
   strings. Quoted values in logged errors are redacted, and SMTP errors retain only the protocol

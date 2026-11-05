@@ -176,7 +176,7 @@ Each item below is implemented in the library and documented on its own page.
 **Application code**
 
 - Optional [ActiveRecord](documentation/05-advanced-features/16-active-record.md) with [relationships](documentation/05-advanced-features/17-active-record-relationships.md), eager and lazy loading, behaviors, transactional saves, and [relationship query diagnostics](documentation/05-advanced-features/16-active-record.md#diagnosing-relationship-queries)
-- [Transactional outbox](documentation/05-advanced-features/27-transactional-outbox.md) and a consumer [inbox](documentation/05-advanced-features/28-inbox.md) for at-least-once delivery
+- [Transactional outbox](documentation/05-advanced-features/27-transactional-outbox.md) and a consumer [inbox](documentation/05-advanced-features/28-inbox.md) for at-least-once delivery, with a [step-by-step guide](documentation/10-cookbook/06-reliable-events-outbox-inbox.md)
 - [Query scopes](documentation/05-advanced-features/19-query-scopes.md), [macros](documentation/05-advanced-features/18-query-macros.md), and [plugins](documentation/05-advanced-features/20-plugins.md)
 - [PSR-14 events](documentation/05-advanced-features/22-events.md)
 - [Typed exceptions](documentation/06-error-handling/01-exception-hierarchy.md) and [query diagnostics](documentation/06-error-handling/03-error-diagnostics.md) with sanitized parameters
@@ -280,7 +280,7 @@ Find methods in the [API reference](documentation/09-reference/01-api-reference.
 <a id="migration-guide"></a>
 <a id="troubleshooting"></a>
 
-Coming from raw PDO or Eloquent: [migration guide](documentation/10-cookbook/03-migration-guide.md). Upgrading from 2.x: [UPGRADE.md](UPGRADE.md). Common failures: [troubleshooting](documentation/10-cookbook/04-troubleshooting.md).
+Coming from raw PDO or Eloquent: [migration guide](documentation/10-cookbook/03-migration-guide.md). Upgrading (3.0 to 3.1 and 2.x to 3.0): [UPGRADE.md](UPGRADE.md). Common failures: [troubleshooting](documentation/10-cookbook/04-troubleshooting.md).
 
 The examples are included under `vendor/tommyknocker/pdo-database-class/examples/` in the Composer package and are also available in a repository checkout. [Example catalog](examples/README.md).
 
