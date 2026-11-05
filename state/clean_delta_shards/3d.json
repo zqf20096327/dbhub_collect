@@ -1549,5 +1549,183 @@
    ]
   ],
   "at": "2026-11-05"
+ },
+ "8cc54473dd7f+2": {
+  "fn": "AndrewPaglusch/FlashPaper",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     "Docker"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    9,
+    4,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     "Picture of Main Page"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    14,
+    10,
+    14
+   ],
+   [
+    "replace",
+    14,
+    19,
+    14,
+    19,
+    [
+     " The latest release of FlashPaper is available at `ghcr.io/andrewpaglusch/flashpaper`.",
+     " 1. Download docker-compose.yml from this repo",
+     " 2. Edit `docker-compose.yml` with your customizations",
+     " 3. Run `docker-compose up -d` to start FlashPaper",
+     " 4. Set up a reverse-proxy in front of FlashPaper that terminates SSL/TLS"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    21,
+    19,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     " You can build your own image using the provided Dockerfile in the `docker/` folder."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    22,
+    23
+   ],
+   [
+    "replace",
+    23,
+    26,
+    23,
+    26,
+    [
+     " In order to build FlashPaper, run `docker build . -t flashpaper -f docker/Dockerfile`. If you would like to build FlashPaper for a different CPU architecture, replace `docker/Dockerfile` with the appropriate Dockerfile.",
+     " You can also build via docker-compose by replacing the `image:` line in docker-compose.yml with the following (make sure to choose the Dockerfile for your architecture):",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    26,
+    33,
+    26,
+    33
+   ],
+   [
+    "replace",
+    33,
+    37,
+    33,
+    37,
+    [
+     " **Requirements:** PHP 7.0+ and a web server",
+     " 1. Download and extract the latest release of FlashPaper to the document root of your web server",
+     " 2. Copy `settings.example.php` to `settings.php` and make customizations to that file",
+     " 3. Disable access logging in your web server's configuration so nothing sensitive (IP addresses, user agent strings, timestamps, etc) are logged to disk"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    40,
+    37,
+    40
+   ],
+   [
+    "replace",
+    40,
+    52,
+    40,
+    52,
+    [
+     " 1. `<random>--secrets.sqlite` sqlite database created (if it doesn't already exist)",
+     " 2. `<random>--aes-static.key` randomized 256-bit AES static key created (if one doesn't exist already)",
+     " 3. Random 256-bit AES key created",
+     " 4. Random 128-bit IV created",
+     " 5. Random 64-bit ID created",
+     " 6. ID + AES key hashed with bcrypt ",
+     " 7. Submitted text encrypted with AES-256-CBC using AES key and random IV",
+     " 8. Ciphertext now encrypted with AES-256-CBC using static AES key and random IV",
+     " 9. ID and AES key joined (known as `k`)",
+     " 10. Random prune date/time generated using `prune`->`min_days`/`max_days`",
+     " 11. ID, IV, bcrypt hash, ciphertext, and prune epoch stored in DB",
+     " 12. `k` value returned to user in one-time URL"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    54,
+    52,
+    54
+   ],
+   [
+    "replace",
+    54,
+    62,
+    54,
+    62,
+    [
+     " 1. `k` value removed from URL",
+     " 2. `k` value split into two parts: ID and AES key",
+     " 3. IV, bcrypt hash, ciphertext looked up in DB with ID from `k`",
+     " 4. `k` bcrypt hash compared against bcrypt hash from DB (prevents tampering of URL)",
+     " 5. Ciphertext decrypted with static AES key and IV",
+     " 6. Ciphertext decrypted with AES key from `k` and IV",
+     " 7. Entry deleted from DB",
+     " 8. Decrypted text sent to user"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    97,
+    62,
+    97
+   ]
+  ],
+  "at": "2026-11-05"
  }
 }

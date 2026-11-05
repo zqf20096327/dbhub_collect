@@ -1962,5 +1962,1418 @@
    ]
   ],
   "at": "2026-11-05"
+ },
+ "69f3c6fca508+2": {
+  "fn": "xataio/pgzx",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "pgzx logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    11,
+    2,
+    6,
+    [
+     " License - Apache 2.0&nbsp;",
+     " CI Build &nbsp;",
+     " Discord &nbsp;",
+     " X (formerly Twitter) Follow "
+    ]
+   ],
+   [
+    "equal",
+    11,
+    18,
+    6,
+    13
+   ],
+   [
+    "replace",
+    18,
+    19,
+    13,
+    14,
+    [
+     "Zig is a small and simple language that aims to be a \"modern C\" and make system-level code bases easier to maintain. It provides safe memory management, compilation time code execution (comptime), and a rich standard library."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    28,
+    14,
+    23
+   ],
+   [
+    "replace",
+    28,
+    29,
+    23,
+    24,
+    [
+     "|Extension|Description|"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    24,
+    25
+   ],
+   [
+    "replace",
+    30,
+    33,
+    25,
+    28,
+    [
+     "|char_count_zig|Adds a function that counts how many times a particular character shows up in a string. Shows how to register a function and how to interpret the parameters.|",
+     "|pghostname_zig|Adds a function that returns the database server's host name.|",
+     "|pg_audit_zig|Inspired by the pgaudit C extension, this one registers callbacks to multiple hooks and uses more advanced error handling and memory allocation patterns.|"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    36,
+    28,
+    31
+   ],
+   [
+    "replace",
+    36,
+    38,
+    31,
+    32,
+    [
+     "The reference documentation is available at here."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    43,
+    32,
+    37
+   ],
+   [
+    "replace",
+    43,
+    44,
+    37,
+    38,
+    [
+     "This project uses Nix flakes to manage build dependencies and provide a development shell. We provide a template for you to initialize a new Zig based Postgres extension project which allows you to reuse some of the utilities we're using."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    38,
+    39
+   ],
+   [
+    "replace",
+    45,
+    46,
+    39,
+    40,
+    [
+     "Before getting started we would recommend you familiarize yourself with the projects setup first. To do so, please start with the Contributing section. "
+    ]
+   ],
+   [
+    "equal",
+    46,
+    57,
+    40,
+    51
+   ],
+   [
+    "replace",
+    57,
+    58,
+    51,
+    52,
+    [
+     "The templates README.md file already contains instructions on how to enter the development shell, build, and test the extension. You can follow the instructions and verify that your setup is functioning. Do not forget to use `pgstop` before quitting the development shell."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    52,
+    53
+   ],
+   [
+    "replace",
+    59,
+    60,
+    53,
+    54,
+    [
+     "The development shell declares a few environment variables used by the project (see devshell.nix):"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    54,
+    55
+   ],
+   [
+    "replace",
+    61,
+    62,
+    55,
+    56,
+    [
+     " ask `git` to find the projects folder. Some scripts use this environment variable to ensure that you can run the script from within any folder within your project."
+    ]
+   ],
+   [
+    "equal",
+    62,
+    64,
+    56,
+    58
+   ],
+   [
+    "delete",
+    64,
+    65,
+    58,
+    58
+   ],
+   [
+    "equal",
+    65,
+    70,
+    58,
+    63
+   ],
+   [
+    "replace",
+    70,
+    71,
+    63,
+    64,
+    [
+     "Postgres error reporting functions are used to report errors and log messages. They have typical logging functionality like log levels and formatting, but also Postgres specific functionality, like error reports that can be thrown and caught like exceptions. `pgzx` provides a wrapper around these functions that makes it easier to use from Zig."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    90,
+    64,
+    83
+   ],
+   [
+    "replace",
+    90,
+    91,
+    83,
+    84,
+    [
+     "If you browse through the Postgres source code, you'll see the PG_TRY / PG_CATCH / PG_FINALLY macros used as a form of \"exception handling\" in C, catching errors raised by the ereport family of functions. These macros make use of long jumps (i.e. jumps across function boundaries) to the \"catch/finally\" destination. This means we need to be careful when calling Postgres functions from Zig. For example, if the called C function raises an `ereport` error, the long jump might skip the Zig code that would have cleaned up resources (e.g. `errdefer`)."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    98,
+    84,
+    91
+   ],
+   [
+    "replace",
+    98,
+    102,
+    91,
+    92,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    114,
+    92,
+    104
+   ],
+   [
+    "replace",
+    114,
+    115,
+    104,
+    105,
+    [
+     "Postgres uses a memory context system to manage memory. Memory allocated in a context can be freed all at once (for example, when a query execution is finished), which simplifies memory management significantly, because you only need to track contexts, not individual allocations. Contexts are also hierarchical, so you can create a context that is a child of another context, and when the parent context is freed, all children are freed as well."
+    ]
+   ],
+   [
+    "equal",
+    115,
+    148,
+    105,
+    138
+   ],
+   [
+    "replace",
+    148,
+    149,
+    138,
+    139,
+    [
+     "pgzx provides two types of automatic tests: pg_regress tests and unit tests. The pg_regress tests work similar with the way they work for C extensions. You provide inputs in a `sql` folder and expected outputs in the `expected` folder, and then you can run them like this:"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    174,
+    139,
+    164
+   ],
+   [
+    "replace",
+    174,
+    178,
+    164,
+    165,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    190,
+    165,
+    177
+   ],
+   [
+    "replace",
+    190,
+    191,
+    177,
+    178,
+    [
+     "pgzx is currently under heavy development by the Xata team. If you want to try Zig for writing PostgreSQL extensions, it is easier with pgzx than without, but expect breaking changes and potential instability. If you need help, join us on the Xata discord."
+    ]
+   ],
+   [
+    "equal",
+    191,
+    193,
+    178,
+    180
+   ],
+   [
+    "replace",
+    193,
+    217,
+    180,
+    204,
+    [
+     " * [ ] Postgres versions (compile and test)",
+     " * [ ] Postgres 14",
+     " * [ ] Postgres 15",
+     " * [ ] Postgres 16",
+     " * [x] Postgres 17",
+     " * [x] Logging",
+     " * [x] Error handling",
+     " * [x] Memory context allocators",
+     " * [x] Function manager",
+     " * [x] Background worker process",
+     " * [x] LWLocks",
+     " * [x] Signals and interrupts",
+     " * [x] String formatting",
+     " * [ ] Shared memory",
+     " * [ ] SPI",
+     " * Postgres data structures wrappers:",
+     " * Array based list (List)",
+     " * [x] Pointer list",
+     " * [ ] int list",
+     " * [ ] oid list",
+     " * ...",
+     " * [ ] Single list",
+     " * [ ] Double list",
+     " * [x] Hash tables"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    218,
+    204,
+    205
+   ],
+   [
+    "replace",
+    218,
+    223,
+    205,
+    210,
+    [
+     " * [ ] Download and vendor Postgres source code",
+     " * [x] Compile example extensions against the Postgres source code",
+     " * [x] Build target to run Postgres regression tests",
+     " * [x] Run unit tests in the Postgres environment",
+     " * [ ] Provide a standard way to test extensions from separate repos"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    224,
+    210,
+    211
+   ],
+   [
+    "replace",
+    224,
+    227,
+    211,
+    212,
+    [
+     " * [x] Add support for Zig packaging"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    229,
+    212,
+    214
+   ],
+   [
+    "replace",
+    229,
+    230,
+    214,
+    215,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    243,
+    215,
+    228
+   ],
+   [
+    "replace",
+    243,
+    244,
+    228,
+    229,
+    [
+     "We would recommend the nix-installer from DeterminateSystems. The"
+    ]
+   ],
+   [
+    "equal",
+    244,
+    262,
+    229,
+    247
+   ],
+   [
+    "delete",
+    262,
+    263,
+    247,
+    247
+   ],
+   [
+    "equal",
+    263,
+    309,
+    247,
+    293
+   ],
+   [
+    "replace",
+    309,
+    321,
+    293,
+    294,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    321,
+    377,
+    294,
+    350
+   ],
+   [
+    "delete",
+    377,
+    378,
+    350,
+    350
+   ],
+   [
+    "equal",
+    378,
+    396,
+    350,
+    368
+   ],
+   [
+    "replace",
+    396,
+    397,
+    368,
+    369,
+    [
+     "This will checkout Postgres into the `out/postgresql_src` directory. The build files will be stored in `out/postgresql_src/build`. We use meson and Ninja to build Postgres. Ninja speeds up the compilation by parallelizing compilation tasks as much as possible. Compilation via Ninja also emits a `compile_commands.json` file that you can use with your editors LSP to improve navigating the Postgres source code if you wish to do so."
+    ]
+   ],
+   [
+    "equal",
+    397,
+    412,
+    369,
+    384
+   ],
+   [
+    "delete",
+    412,
+    413,
+    384,
+    384
+   ],
+   [
+    "equal",
+    413,
+    440,
+    384,
+    411
+   ],
+   [
+    "delete",
+    440,
+    441,
+    411,
+    411
+   ],
+   [
+    "equal",
+    441,
+    471,
+    411,
+    441
+   ],
+   [
+    "replace",
+    471,
+    472,
+    441,
+    442,
+    [
+     "The Zig toolchain, including the compiler, build system, and standard library, is still in development and breaking changes do happen every now and then. For this reason this project follows the Zig master branch."
+    ]
+   ],
+   [
+    "equal",
+    472,
+    473,
+    442,
+    443
+   ],
+   [
+    "replace",
+    473,
+    474,
+    443,
+    444,
+    [
+     "The Nix based development shell uses zig-overlay in conjunction with the `flake.lock` file to pin the zig toolchain version to a recent commit ID."
+    ]
+   ],
+   [
+    "equal",
+    474,
+    480,
+    444,
+    450
+   ],
+   [
+    "delete",
+    480,
+    481,
+    450,
+    450
+   ],
+   [
+    "equal",
+    481,
+    492,
+    450,
+    461
+   ],
+   [
+    "replace",
+    492,
+    500,
+    461,
+    462,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    500,
+    514,
+    462,
+    476
+   ],
+   [
+    "replace",
+    514,
+    516,
+    476,
+    478,
+    [
+     "* pgrx - Similar project but for Rust, it served as an inspiration for this project. ",
+     "* pg_tle - Trusted Language Extensions for PostgreSQL."
+    ]
+   ],
+   [
+    "equal",
+    516,
+    518,
+    478,
+    480
+   ],
+   [
+    "replace",
+    518,
+    521,
+    480,
+    481,
+    [
+     "This project is licensed under the Apache License 2.0 - see the LICENSE file for details."
+    ]
+   ],
+   [
+    "equal",
+    521,
+    522,
+    481,
+    482
+   ],
+   [
+    "replace",
+    522,
+    541,
+    482,
+    483,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-05"
+ },
+ "34a310b33823+2": {
+  "fn": "naw103/foremerge",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Foremerge "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     " Foremerge: Catch intent conflicts before code conflicts"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    9,
+    4,
+    7,
+    [
+     "CI",
+     "crates.io",
+     "License: Apache-2.0"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    15,
+    7,
+    13
+   ],
+   [
+    "replace",
+    15,
+    18,
+    13,
+    16,
+    [
+     "|**Tell your agent to install**|→|**Done**|→|**See collisions before they land**|",
+     "|:---:|:---:|:---:|:---:|:---:|",
+     "|Paste one line into Claude Code, Codex, or Cursor||It installs Foremerge and wires itself up||Every agent sees what the others are about to change, even in separate worktrees|"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    43,
+    16,
+    41
+   ],
+   [
+    "replace",
+    43,
+    44,
+    41,
+    42,
+    [
+     " target, like \"I am going to change the `sendEmail` function.\""
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    42,
+    43
+   ],
+   [
+    "replace",
+    45,
+    47,
+    43,
+    45,
+    [
+     " your project's `.git` folder, so every agent on your machine sees the same",
+     " picture, whether it is Claude, Codex, or Cursor."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    45,
+    46
+   ],
+   [
+    "replace",
+    48,
+    51,
+    46,
+    49,
+    [
+     " two agents, explains why their plans clash, and suggests how to split the",
+     " work. Both worktrees are still clean at that point, so no work has to be",
+     " thrown away."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    85,
+    49,
+    83
+   ],
+   [
+    "replace",
+    85,
+    86,
+    83,
+    84,
+    [
+     "Terminal rendering of an actual Foremerge release demo detecting the PaymentService conflict before either worktree changed"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    89,
+    84,
+    87
+   ],
+   [
+    "replace",
+    89,
+    90,
+    87,
+    88,
+    [
+     "`examples/terminal-session.txt`. The displayed"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    93,
+    88,
+    91
+   ],
+   [
+    "delete",
+    93,
+    94,
+    91,
+    91
+   ],
+   [
+    "equal",
+    94,
+    104,
+    91,
+    101
+   ],
+   [
+    "replace",
+    104,
+    113,
+    101,
+    102,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    145,
+    102,
+    134
+   ],
+   [
+    "replace",
+    145,
+    146,
+    134,
+    135,
+    [
+     "releases page. To update,"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    135,
+    136
+   ],
+   [
+    "replace",
+    147,
+    148,
+    136,
+    137,
+    [
+     "your agent clients; Upgrading Foremerge"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    193,
+    137,
+    182
+   ],
+   [
+    "replace",
+    193,
+    194,
+    182,
+    183,
+    [
+     "see agent client setup."
+    ]
+   ],
+   [
+    "equal",
+    194,
+    204,
+    183,
+    193
+   ],
+   [
+    "replace",
+    204,
+    238,
+    193,
+    194,
+    [
+     "…（34 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    245,
+    194,
+    201
+   ],
+   [
+    "replace",
+    245,
+    246,
+    201,
+    202,
+    [
+     "`examples/terminal-session.txt`."
+    ]
+   ],
+   [
+    "equal",
+    246,
+    253,
+    202,
+    209
+   ],
+   [
+    "replace",
+    253,
+    265,
+    209,
+    210,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    270,
+    210,
+    215
+   ],
+   [
+    "replace",
+    270,
+    271,
+    215,
+    216,
+    [
+     "Real terminal recording: two agents declare intents on symbol:PaymentService and Foremerge raises the HIGH destructive_vs_additive finding before either writes code"
+    ]
+   ],
+   [
+    "equal",
+    271,
+    280,
+    216,
+    225
+   ],
+   [
+    "replace",
+    280,
+    291,
+    225,
+    226,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    291,
+    320,
+    226,
+    255
+   ],
+   [
+    "replace",
+    320,
+    325,
+    255,
+    256,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    325,
+    356,
+    256,
+    287
+   ],
+   [
+    "replace",
+    356,
+    368,
+    287,
+    299,
+    [
+     "|Boundary|Command|",
+     "|---|---|",
+     "|Register provenance|`foremerge agent register --name NAME --model MODEL`|",
+     "|Publish intent|`foremerge intent publish --agent ID --task TASK --summary TEXT --scope KIND:KEY=OPERATION`|",
+     "|Claim scope|`foremerge work claim --agent ID --intent ID --scope KIND:KEY`|",
+     "|Start implementation|`foremerge work start INTENT_ID --agent AGENT_ID`|",
+     "|Ask who is changing it|`foremerge work query --scope KIND:KEY`|",
+     "|See what every agent is doing|`foremerge status`|",
+     "|Preflight a plan|`foremerge conflicts check --intent TEXT --scope KIND:KEY=OPERATION`|",
+     "|Record what you concluded|`foremerge assess record --agent ID --intent ID --related-intent-id ID --verdict V --rationale TEXT --action A`|",
+     "|Send coordination|`foremerge coordinate send --from ID --to ID --message TEXT`|",
+     "|Watch semantic events|`foremerge work watch --after-seq 0`|"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    395,
+    299,
+    326
+   ],
+   [
+    "replace",
+    395,
+    422,
+    326,
+    327,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    422,
+    442,
+    327,
+    347
+   ],
+   [
+    "replace",
+    442,
+    443,
+    347,
+    348,
+    [
+     "ADR 0001."
+    ]
+   ],
+   [
+    "equal",
+    443,
+    458,
+    348,
+    363
+   ],
+   [
+    "replace",
+    458,
+    478,
+    363,
+    383,
+    [
+     "|Tool|Purpose|",
+     "|---|---|",
+     "|`register_agent`|Record agent, model, capabilities, and worktree provenance|",
+     "|`publish_intent`|Announce planned work, declare what it does to each scope, and receive conflicts plus related work to assess|",
+     "|`record_assessment`|Record what you concluded about one related intent and what you will do|",
+     "|`claim_work`|Create leased advisory claims on semantic scopes|",
+     "|`query_work`|Find agents, intents, claims, ChangeSets, and conflicts|",
+     "|`check_conflicts`|Check a published or provisional intent before code changes|",
+     "|`publish_changeset`|Record implementation, tests, decisions, and Git provenance|",
+     "|`coordinate_with_agent`|Send a durable message linked to a conflict or ChangeSet|",
+     "|`start_work`|Advance claimed work into implementation|",
+     "|`resolve_conflict`|Record an audited resolution for a durable conflict|",
+     "|`run_verification`|Run a trusted repository check by name, never raw MCP argv|",
+     "|`accept_changeset`|Apply final conflict, dependency, validation, and Git gates|",
+     "|`record_commit`|Record the actual Git integration commit|",
+     "|`discard_work`|Close abandoned work, or work that landed without acceptance, releasing claims and blockers|",
+     "|`list_agents`|Read registered agent provenance|",
+     "|`get_intent`|Read one intent and current conflict snapshot|",
+     "|`get_changeset`|Read one ChangeSet and Git/provenance state|",
+     "|`status`|Read one consistent coordinator status snapshot|"
+    ]
+   ],
+   [
+    "equal",
+    478,
+    480,
+    383,
+    385
+   ],
+   [
+    "replace",
+    480,
+    481,
+    385,
+    386,
+    [
+     "`examples/mcp-config.json`. It assumes the client"
+    ]
+   ],
+   [
+    "equal",
+    481,
+    486,
+    386,
+    391
+   ],
+   [
+    "replace",
+    486,
+    487,
+    391,
+    392,
+    [
+     "See agent client setup for the installer, native skill"
+    ]
+   ],
+   [
+    "equal",
+    487,
+    488,
+    392,
+    393
+   ],
+   [
+    "replace",
+    488,
+    489,
+    393,
+    394,
+    [
+     "See MCP setup for transport behavior, schemas, named checks,"
+    ]
+   ],
+   [
+    "equal",
+    489,
+    516,
+    394,
+    421
+   ],
+   [
+    "replace",
+    516,
+    522,
+    421,
+    422,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    522,
+    532,
+    422,
+    432
+   ],
+   [
+    "replace",
+    532,
+    534,
+    432,
+    434,
+    [
+     "`examples/api-requests.sh`; the full route and error",
+     "reference is JSON API."
+    ]
+   ],
+   [
+    "equal",
+    534,
+    538,
+    434,
+    438
+   ],
+   [
+    "replace",
+    538,
+    539,
+    438,
+    439,
+    [
+     " miss synonymous concepts and warn on compatible work."
+    ]
+   ],
+   [
+    "equal",
+    539,
+    541,
+    439,
+    441
+   ],
+   [
+    "replace",
+    541,
+    542,
+    441,
+    442,
+    [
+     " recorded fingerprint, not that the test plan was complete."
+    ]
+   ],
+   [
+    "equal",
+    542,
+    543,
+    442,
+    443
+   ],
+   [
+    "replace",
+    543,
+    544,
+    443,
+    444,
+    [
+     " prompt, or test prose."
+    ]
+   ],
+   [
+    "equal",
+    544,
+    545,
+    444,
+    445
+   ],
+   [
+    "replace",
+    545,
+    546,
+    445,
+    446,
+    [
+     " signature, remote attestation, or external checkpoint."
+    ]
+   ],
+   [
+    "equal",
+    546,
+    547,
+    446,
+    447
+   ],
+   [
+    "replace",
+    547,
+    548,
+    447,
+    448,
+    [
+     " not a public deployment security model."
+    ]
+   ],
+   [
+    "equal",
+    548,
+    549,
+    448,
+    449
+   ],
+   [
+    "replace",
+    549,
+    551,
+    449,
+    451,
+    [
+     " benchmark plan, but no published",
+     " coordinated-vs-uncoordinated performance results yet."
+    ]
+   ],
+   [
+    "equal",
+    551,
+    552,
+    451,
+    452
+   ],
+   [
+    "replace",
+    552,
+    553,
+    452,
+    453,
+    [
+     " scanning, Git hosting rules, or backups."
+    ]
+   ],
+   [
+    "equal",
+    553,
+    554,
+    453,
+    454
+   ],
+   [
+    "replace",
+    554,
+    555,
+    454,
+    455,
+    [
+     "Read the complete limitations and trust model before"
+    ]
+   ],
+   [
+    "equal",
+    555,
+    559,
+    455,
+    459
+   ],
+   [
+    "replace",
+    559,
+    575,
+    459,
+    475,
+    [
+     "|Document|What it answers|",
+     "|---|---|",
+     "|Architecture|Why one Rust binary, SQLite, Git CLI, and shared common-dir state?|",
+     "|Protocol|What do agents publish and when?|",
+     "|State model|Which transitions and invariants gate work?|",
+     "|Conflict detection|Which deterministic rules produce findings and suggestions?|",
+     "|Git integration|How do fingerprints, worktrees, and accepted refs behave?|",
+     "|Agent clients|How do Codex, Claude Code, and Cursor discover the skill and MCP server?|",
+     "|MCP setup|How do clients configure and call the 18 lifecycle/read tools?|",
+     "|JSON API|Which routes, request bodies, auth, and errors are shipped?|",
+     "|OpenAPI schema|What is the machine-readable HTTP contract?|",
+     "|Benchmark plan|How will coordinated and uncoordinated runs be compared?|",
+     "|Validation exclusion ADR|Which generated paths may validation ignore, and why?|",
+     "|Roadmap|What is current, next, later, or a non-goal?|",
+     "|Limitations|What does the MVP not guarantee?|",
+     "|Brand|Which mark, colors, type, icons, and CLI output rules apply to any Foremerge surface?|"
+    ]
+   ],
+   [
+    "equal",
+    575,
+    576,
+    475,
+    476
+   ],
+   [
+    "replace",
+    576,
+    578,
+    476,
+    478,
+    [
+     "Also see the changelog, security policy, and",
+     "code of conduct."
+    ]
+   ],
+   [
+    "equal",
+    578,
+    581,
+    478,
+    481
+   ],
+   [
+    "replace",
+    581,
+    583,
+    481,
+    483,
+    [
+     "- Website: foremerge.com",
+     "- Crate: crates.io/crates/foremerge"
+    ]
+   ],
+   [
+    "equal",
+    583,
+    589,
+    483,
+    489
+   ],
+   [
+    "replace",
+    589,
+    590,
+    489,
+    490,
+    [
+     "CONTRIBUTING.md, then run the complete local gate:"
+    ]
+   ],
+   [
+    "equal",
+    590,
+    595,
+    490,
+    495
+   ],
+   [
+    "replace",
+    595,
+    596,
+    495,
+    496,
+    [
+     "Foremerge is licensed under the Apache License 2.0."
+    ]
+   ]
+  ],
+  "at": "2026-11-05"
  }
 }

@@ -3050,5 +3050,681 @@
    ]
   ],
   "at": "2026-11-05"
+ },
+ "10786c15d4d6+2": {
+  "fn": "nudgebee/nudgebee",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    10,
+    4,
+    10,
+    [
+     "License: BSL 1.1",
+     "Go",
+     "Node",
+     "PRs Welcome",
+     "Discord",
+     "OpenSSF Scorecard"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    28,
+    10,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "> _Dashboard screenshot — to be added. Track discussion thread or contribute via a PR._"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    34,
+    29,
+    34
+   ],
+   [
+    "replace",
+    34,
+    47,
+    34,
+    47,
+    [
+     "|Repo|Purpose|",
+     "|--------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|",
+     "|nudgebee-docs|Public documentation, published at docs.nudgebee.com|",
+     "|nbctl|Command-line interface; also runs as an MCP server|",
+     "|k8s-agent|In-cluster Kubernetes agent: state, events, metrics, logs and traces|",
+     "|node-agent|Per-node eBPF agent for container and host metrics, logs and L7 traffic|",
+     "|kubewatch|Kubernetes resource watcher with workload sync|",
+     "|application-profiler|On-demand profiling (flamegraphs, heap/thread dumps, pprof) without restarting pods|",
+     "|forager|Lightweight agent that relays data from databases, HTTP APIs and MCP servers|",
+     "|automation-templates|System runbook templates synced into the runbook server|",
+     "|nudgebee-playbooks|Workflow definitions for cross-platform service restart and diagnosis|",
+     "|nudgebee-scenario-lab|Disposable AWS lab that injects real incidents for Nudgebee to detect and explain|",
+     "|kubepug, nova, popeye|Nudgebee forks of Kubernetes checkers: deprecated APIs, outdated Helm charts, cluster sanitizer|"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    54,
+    47,
+    54
+   ],
+   [
+    "replace",
+    54,
+    57,
+    54,
+    57,
+    [
+     "- Docker with Docker Compose v2.24+ (the compose file uses optional `env_file` entries), or Podman Desktop with a `podman-compose` release that supports `env_file.required`",
+     "- Go 1.26+",
+     "- Node 25+ and npm"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    74,
+    57,
+    74
+   ],
+   [
+    "replace",
+    74,
+    75,
+    74,
+    75,
+    [
+     "local agent configuration."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    75,
+    76
+   ],
+   [
+    "replace",
+    76,
+    77,
+    76,
+    77,
+    [
+     "See api-server/migrations/README.md for how migration tracking works and how to add a new migration."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    111,
+    77,
+    111
+   ],
+   [
+    "replace",
+    111,
+    115,
+    111,
+    112,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    160,
+    112,
+    157
+   ],
+   [
+    "replace",
+    160,
+    168,
+    157,
+    165,
+    [
+     "|Var|Used by|How to generate|Notes|",
+     "|------------------------------------------------------|---------------------------|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`APP_DATABASE_URL`|services-server|—|Compose default: `postgres://postgres:postgrespassword@localhost:5432/nudgebee?sslmode=disable`. Use `localhost` from the host, `postgres` hostname from inside the compose network.|",
+     "|`NUDGEBEE_ENCRYPTION_KEY`|services-server **and** app|`openssl rand -hex 32`|Encrypts integration credentials and other sensitive columns. **Must match between services-server and app.** Rotating it makes previously-encrypted rows unreadable — there is no automatic re-encryption migration.|",
+     "|`ACTION_API_SERVER_TOKEN`|services-server **and** app|`openssl rand -hex 32`|**Optional.** Shared secret for internal app↔services-server action calls. Defaults to empty on both sides, which disables the check (fine for local dev). If you set it, the value must match in both files.|",
+     "|`NEXTAUTH_SECRET`|app|`openssl rand -base64 32`|Signs both NextAuth session cookies and the inner HS256 session JWT the gateway mints for API-token callers and forwards upstream. Rotating it logs everyone out.|",
+     "|`NEXTAUTH_DUMMY_CREDS_ENABLED` / `_PASSWORD`|app|—|Enables the any-email/password provider. Use for local development only; turn it off in any deployment exposed beyond your laptop.|",
+     "|`RABBIT_MQ_USERNAME` / `_PASSWORD` / `_HOST` / `_PORT`|services-server|—|Compose defaults: `guest` / `guest` / `localhost` / `5672`.|"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    172,
+    165,
+    169
+   ],
+   [
+    "replace",
+    172,
+    173,
+    169,
+    170,
+    [
+     "- **`migrate: error: pq: relation \"...\" already exists`** → the tracker schema drifted from actual tables. Inspect `SELECT version, dirty FROM nudgebee.schema_migrations;` and use `migrate force <version>` to align. See api-server/migrations/README.md."
+    ]
+   ],
+   [
+    "equal",
+    173,
+    174,
+    170,
+    171
+   ],
+   [
+    "delete",
+    174,
+    176,
+    171,
+    171
+   ],
+   [
+    "equal",
+    176,
+    185,
+    171,
+    180
+   ],
+   [
+    "replace",
+    185,
+    194,
+    180,
+    181,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    221,
+    181,
+    208
+   ],
+   [
+    "replace",
+    221,
+    222,
+    208,
+    209,
+    [
+     "Open <http://localhost:3000> and sign in as your `admin.email` with that password — the shared password works for that address only (or the licence address on a licensed install). See deploy/kubernetes/README.md for production-grade configuration (ingress, TLS, external Postgres, ClickHouse, observability sidecars)."
+    ]
+   ],
+   [
+    "equal",
+    222,
+    234,
+    209,
+    221
+   ],
+   [
+    "replace",
+    234,
+    239,
+    221,
+    226,
+    [
+     "- **Want to chat?** Join us on Discord — async help, design discussions, contributor coordination.",
+     "- **Hit a bug?** Open an issue using the bug template.",
+     "- **Idea for a feature?** Use the feature template.",
+     "- **Want to contribute code?** Read CONTRIBUTING.md — covers CLA, branch model, PR conventions, and local-dev debugging tips. Look for issues tagged `good first issue`.",
+     "- **Question that doesn't fit a template?** Email `dev@nudgebee.com` or use the contact links on the new-issue page."
+    ]
+   ],
+   [
+    "equal",
+    239,
+    248,
+    226,
+    235
+   ],
+   [
+    "replace",
+    248,
+    278,
+    235,
+    236,
+    [
+     "…（30 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    284,
+    236,
+    242
+   ],
+   [
+    "replace",
+    284,
+    285,
+    242,
+    243,
+    [
+     "- **`runbook-server/`** — runbook orchestration via Temporal workflows. See runbook-server/README.md for architecture, env reference, API, and task framework."
+    ]
+   ],
+   [
+    "equal",
+    285,
+    297,
+    243,
+    255
+   ],
+   [
+    "replace",
+    297,
+    305,
+    255,
+    263,
+    [
+     "|Service|Image|Notes|",
+     "|-------------|----------------------------|------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`postgres`|postgres:16|Primary RDBMS. App schema applied by golang-migrate on deploy.|",
+     "|`rabbitmq`|rabbitmq:3-management|Message bus. UI at `:15672`.|",
+     "|`redis`|redis:7-alpine|Cache.|",
+     "|`qdrant`|qdrant/qdrant:v1.19.2|Vector store for RAG / LLM.|",
+     "|`temporal`|temporalio/auto-setup:1.29.1|Workflow engine. Backed by `postgres` (creates `temporal` + `temporal_visibility` DBs on first boot). Required by `workflow-server`.|",
+     "|`temporal-ui`|temporalio/ui:2.44.0|Optional Temporal Web UI at `:8233`.|"
+    ]
+   ],
+   [
+    "equal",
+    305,
+    308,
+    263,
+    266
+   ],
+   [
+    "replace",
+    308,
+    322,
+    266,
+    280,
+    [
+     "|Service|Min upstream deps|Why|",
+     "|----------------------------------|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`api-server-services`|`postgres`, `rabbitmq`, `redis`|Core backend. Won't bootstrap RabbitMQ consumers without RabbitMQ; queries fail without Postgres; cache pulls hit Redis.|",
+     "|`ticket-server`|`postgres`, `rabbitmq`|DB writes + async ticketing sync.|",
+     "|`workflow-server` (runbook-server)|`postgres`, `rabbitmq`, `temporal`|Workflow state in PG; events on RMQ; Temporal SDK calls `Dial(7233)` at startup and crashes if unreachable.|",
+     "|`notifications-server`|`postgres`, `rabbitmq`|Persists messages, consumes RMQ events.|",
+     "|`cloud-collector`|`rabbitmq`|Publishes scrape events to RMQ.|",
+     "|`relay-server`|`postgres`, `rabbitmq`|K8s gateway; tunnel state in PG, events on RMQ.|",
+     "|`k8s-collector-app`|`rabbitmq`|Publishes K8s metrics to RMQ.|",
+     "|`ml-k8s-server`|`postgres`|Reads/writes scaling features.|",
+     "|`llm-server`|`postgres`, `qdrant`|LLM session state + vector lookups. Spawns `code-analysis` per account on demand (not a long-running compose service).|",
+     "|`rag-server`|`postgres`, `qdrant`|RAG retrieval against Qdrant; metadata in PG.|",
+     "|`llm-gateway`|`postgres`, `api-server-services`|**Not in `docker-compose.yaml`** — run from source (`llm/gateway`, default port 8000). Backs the AI Gateway tab and Admin → AI & Tools → Gateway. Redis is optional (`cache_provider` defaults to in-memory).|",
+     "|`vulnerability-server`|none|**Not in `docker-compose.yaml`** — run from source (`vulnerability-server`, default port 8080). Stateless matcher; needs a local vulnerability DB on disk (~1.8 GB unpacked). `api-server-services` calls it to produce VM vulnerability findings.|"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    325,
+    280,
+    283
+   ],
+   [
+    "replace",
+    325,
+    328,
+    283,
+    286,
+    [
+     "|Service|Min upstream deps|Why|",
+     "|---------------|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`app` (Next.js)|`api-server-services`|Client calls are served by the in-process RPC gateway in the Next.js server (`/api/graphql`), which fans out to **six** upstreams — `api-server-services`, `llm-server`, `workflow-server`, `llm-gateway`, `ticket-server`, `notifications-server` — plus a direct proxy to `relay-server`. Only `api-server-services` is needed to boot and sign in; the rest gate individual tabs (see the next section). RabbitMQ/Redis come in transitively via api-server-services' own deps.|"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    333,
+    286,
+    291
+   ],
+   [
+    "replace",
+    333,
+    356,
+    291,
+    314,
+    [
+     "|Nav section|Tab / surface|Extra services beyond the baseline|Notes|",
+     "|---------------|--------------------------------------------------------------------------|------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|",
+     "|**Home**|Home, Account Overview|—||",
+     "|**Dashboards**|Dashboard List, Application Grouping|—||",
+     "|**Troubleshoot**|All Events (Triage Inbox, Events, group-by-type / -app, Triage Rules, Alert Tuning)|—|The **Create ticket** action on an event needs `ticket-server`; the **Investigate** button needs `llm-server`.|",
+     "||Investigations (Auto / Manual Investigated), `/investigate`|`llm-server`|Add `relay-server` when an investigation pulls live cluster evidence (pod logs, live resources).|",
+     "||Event Resolutions|`ticket-server`|Resolution rows create and comment on tickets.|",
+     "||Knowledge Graph, Analytics|—||",
+     "||Agent Health (`/agentHealth`)|—|Agent connectivity is read from Postgres, so the page works with the collectors down — it just reports them down.|",
+     "|**Automations**|Automations, Executions, Task Runner|`workflow-server` + `temporal`|`workflow-server` dials Temporal on `:7233` at startup and exits if it's unreachable.|",
+     "|**Optimize**|Summary, Cost, Configuration, Security, Resolutions|—|Reading is baseline-only. **Generating** the findings needs `ml-k8s-server` (right-sizing) and `vulnerability-server` (VM vulnerabilities) — see below.|",
+     "||Auto Optimize (Optimizations, Approvals)|`workflow-server` + `temporal`||",
+     "||LLM Analyser|`llm-server`|Also gated by the per-tenant `LLM_ANALYSER` feature flag (Tenant Settings → Feature Flags).|",
+     "||AI Gateway|`llm-gateway`|Also gated by `UI_ENABLE_LLM_GATEWAY=true` in `app/.env`.|",
+     "|**Infra**|K8s, Cloud, VM (list + detail)|—|VM → Vulnerabilities / Packages read stored matches; producing them needs `vulnerability-server`.|",
+     "||K8s detail: live resources, pod logs, pod shell, embedded Grafana|`relay-server`|These proxy through `/api/proxy/relay` and `/api/proxy/grafana`, not the RPC gateway.|",
+     "|**Tickets**|All Tickets, Assigned to me|`ticket-server`||",
+     "|**Admin**|Access & Users, Tenant Settings|—||",
+     "||Notification Rules|`notifications-server`|Channel pickers and delivery-mode checks call it directly.|",
+     "||Integrations|—|**Test connection** needs the owning service: `notifications-server` for Slack / Teams / Google Chat, `ticket-server` for Jira / ServiceNow / PagerDuty / Zenduty.|",
+     "||AI & Tools → Agents, Tools & MCP, Providers, Egress Filter, Memory Policy, RCA Format|`llm-server`||",
+     "||AI & Tools → Gateway, Budgets & Limits|`llm-gateway` (Gateway), `llm-server` (Budgets & Limits)||",
+     "|**Nubi**|Assistant panel (header) and `/ask-nudgebee`|`llm-server`|Knowledge-base answers additionally need `rag-server` + `qdrant`; `llm-server` spawns `code-analysis` on demand.|"
+    ]
+   ],
+   [
+    "equal",
+    356,
+    362,
+    314,
+    320
+   ],
+   [
+    "replace",
+    362,
+    363,
+    320,
+    321,
+    [
+     "Both come out of app/src/lib/rpcGateway.ts and app/src/pages/api/rpc.ts. `/status` in the running app probes API, Data Ingest (relay), Nubi AI, Automation (workflow-server + Temporal) and Notifications, which is the fastest way to see what's actually up."
+    ]
+   ],
+   [
+    "equal",
+    363,
+    366,
+    321,
+    324
+   ],
+   [
+    "replace",
+    366,
+    367,
+    324,
+    325,
+    [
+     "**Deriving this yourself.** `app/src/lib/actions.yaml` is the source of truth: each action's `handler:` names the upstream via a `{{SERVICE_URL}}` placeholder. The six the gateway can route to are `SERVICE_API_SERVER_URL`, `LLM_SERVER_URL`, `WORKFLOW_SERVER_URL`, `LLM_GATEWAY_URL`, `TICKET_SERVICE_URL` and `NOTIFICATION_SERVICE_URL`. A tab's calls live under `app/src/api1/<domain>/` — cross-reference the action names in that directory against `actions.yaml` to get the tab's service set."
+    ]
+   ],
+   [
+    "equal",
+    367,
+    372,
+    325,
+    330
+   ],
+   [
+    "replace",
+    372,
+    382,
+    330,
+    340,
+    [
+     "|Service|Compose host port|`app/.env.example` default|",
+     "|----------------------|-----------------|------------------------------------------|",
+     "|`api-server-services`|8000|`SERVICE_API_SERVER_URL` — 8000 ✅|",
+     "|`llm-server`|8005|`LLM_SERVER_URL` — 8005 ✅|",
+     "|`ticket-server`|8001|`TICKET_SERVICE_URL` — 8004 ❌|",
+     "|`cloud-collector`|8002|`CLOUD_COLLECTOR_SERVER_URL` — 8001 ❌|",
+     "|`relay-server`|8004|`RELAY_SERVER_ENDPOINT` — 8006 ❌|",
+     "|`workflow-server`|8007|`WORKFLOW_SERVER_URL` — 8002 ❌|",
+     "|`notifications-server`|8090|`NOTIFICATION_SERVICE_URL` — 8003 ❌|",
+     "|`llm-gateway`|not in compose|`LLM_GATEWAY_URL` — 8007 (collides with compose `workflow-server`)|"
+    ]
+   ],
+   [
+    "equal",
+    382,
+    404,
+    340,
+    362
+   ],
+   [
+    "replace",
+    404,
+    407,
+    362,
+    365,
+    [
+     "|Module|Description|README|",
+     "|------|----------------------------------------------|------------------------------|",
+     "|`app/`|Frontend dashboard (Next.js + React, NextAuth)|app/README.md|"
+    ]
+   ],
+   [
+    "equal",
+    407,
+    410,
+    365,
+    368
+   ],
+   [
+    "replace",
+    410,
+    415,
+    368,
+    373,
+    [
+     "|Module|Description|README|",
+     "|------------------------|-----------------------------------------------------------------|------------------------------------------------------------------|",
+     "|`api-server/`|GraphQL API layer overview|api-server/README.md|",
+     "|`api-server/services/`|Core backend Go services (Gin)|api-server/services/README.md|",
+     "|`api-server/migrations/`|DB migrations (Postgres via golang-migrate, ClickHouse, RabbitMQ)|api-server/migrations/README.md|"
+    ]
+   ],
+   [
+    "equal",
+    415,
+    418,
+    373,
+    376
+   ],
+   [
+    "replace",
+    418,
+    423,
+    376,
+    381,
+    [
+     "|Module|Description|README|",
+     "|----------------------------------------------|--------------------------------|--------------------------------------------------------------------------------------------------------------|",
+     "|`collector-server/cloud-collector/`|Cloud data collection (AWS / Azure / GCP)|collector-server/cloud-collector/README.md|",
+     "|`collector-server/k8s-collector/app/`|K8s metrics aggregation (Python)|collector-server/k8s-collector/app/README.md|",
+     "|`collector-server/k8s-collector/relay-server/`|K8s relay gateway (WebSocket)|collector-server/k8s-collector/relay-server/README.md|"
+    ]
+   ],
+   [
+    "equal",
+    423,
+    426,
+    381,
+    384
+   ],
+   [
+    "replace",
+    426,
+    433,
+    384,
+    391,
+    [
+     "|Module|Description|README|",
+     "|--------------------|------------------------------------|----------------------------------------------------------|",
+     "|`ml-k8s-server/`|ML models & K8s autoscaling|ml-k8s-server/README.md|",
+     "|`llm/llm-server/`|LLM inference service|llm/llm-server/README.md|",
+     "|`llm/code-analysis/`|Code analysis engine|llm/code-analysis/README.md|",
+     "|`llm/rag-server/`|RAG (Retrieval Augmented Generation)|llm/rag-server/README.md|",
+     "|`llm/benchmark/`|LLM benchmarking|llm/benchmark/README.md|"
+    ]
+   ],
+   [
+    "equal",
+    433,
+    436,
+    391,
+    394
+   ],
+   [
+    "replace",
+    436,
+    441,
+    394,
+    399,
+    [
+     "|Module|Description|README|",
+     "|-----------------------|---------------------------------------------------------------------|----------------------------------------------------------------|",
+     "|`runbook-server/`|Runbook orchestration + automation engine (Temporal)|runbook-server/README.md|",
+     "|`ticket-server/`|External ticketing integration (Jira, ServiceNow, PagerDuty, Zenduty)|ticket-server/README.md|",
+     "|`notifications-server/`|Notification delivery (Slack, Teams, email)|notifications-server/README.md|"
+    ]
+   ],
+   [
+    "equal",
+    441,
+    444,
+    399,
+    402
+   ],
+   [
+    "replace",
+    444,
+    447,
+    402,
+    405,
+    [
+     "|Module|Description|README|",
+     "|--------------------|-------------------------------------|----------------------------------------------------------|",
+     "|`deploy/kubernetes/`|Helm charts & Kubernetes config files|deploy/kubernetes/README.md|"
+    ]
+   ],
+   [
+    "equal",
+    447,
+    450,
+    405,
+    408
+   ],
+   [
+    "replace",
+    450,
+    453,
+    408,
+    411,
+    [
+     "|Module|Description|",
+     "|----------------|----------------------------|",
+     "|`app-e2e-tests/`|End-to-end integration tests|"
+    ]
+   ],
+   [
+    "equal",
+    453,
+    455,
+    411,
+    413
+   ],
+   [
+    "replace",
+    455,
+    464,
+    413,
+    414,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    464,
+    466,
+    414,
+    416
+   ],
+   [
+    "replace",
+    466,
+    467,
+    416,
+    417,
+    [
+     "If you believe you have found a security vulnerability in Nudgebee, **please do not open a public GitHub issue**. Instead, follow the responsible disclosure process in SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    467,
+    474,
+    417,
+    424
+   ],
+   [
+    "replace",
+    474,
+    478,
+    424,
+    428,
+    [
+     "- **Chat / questions / contributor coordination** — Discord",
+     "- **Bugs and feature requests** — GitHub Issues",
+     "- **Security reports** — SECURITY.md",
+     "- **Commercial license, support or the full platform** — Nudgebee Enterprise. Please don't open issues for Enterprise features here."
+    ]
+   ],
+   [
+    "equal",
+    478,
+    480,
+    428,
+    430
+   ],
+   [
+    "replace",
+    480,
+    487,
+    430,
+    431,
+    [
+     "Nudgebee is source-available under the Business Source License 1.1."
+    ]
+   ]
+  ],
+  "at": "2026-11-05"
  }
 }

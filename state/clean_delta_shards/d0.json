@@ -3147,5 +3147,724 @@
    ]
   ],
   "at": "2026-11-05"
+ },
+ "b2ddbc3becb1+2": {
+  "fn": "albertodonato/query-exporter",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "delete",
+    3,
+    4,
+    3,
+    3
+   ],
+   [
+    "equal",
+    4,
+    5,
+    3,
+    4
+   ],
+   [
+    "replace",
+    5,
+    6,
+    4,
+    5,
+    [
+     "|Latest Version||Build Status||PyPI Downloads||Docker Pulls|"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    17,
+    5,
+    16
+   ],
+   [
+    "replace",
+    17,
+    18,
+    16,
+    17,
+    [
+     " query-exporter"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    21,
+    17,
+    20
+   ],
+   [
+    "replace",
+    21,
+    22,
+    20,
+    21,
+    [
+     "to perform to update metrics. The configuration file can be overridden by"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    21,
+    22
+   ],
+   [
+    "replace",
+    23,
+    24,
+    22,
+    23,
+    [
+     "variable). The option can be provided multiple times to pass partial"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    31,
+    23,
+    30
+   ],
+   [
+    "replace",
+    31,
+    45,
+    30,
+    44,
+    [
+     " databases:",
+     " db1:",
+     " dsn: sqlite://",
+     " connect-sql:",
+     " - PRAGMA application_id = 123",
+     " - PRAGMA auto_vacuum = 1",
+     " labels:",
+     " region: us1",
+     " app: app1",
+     " db2:",
+     " dsn: sqlite://",
+     " labels:",
+     " region: us2",
+     " app: app1"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    44,
+    45
+   ],
+   [
+    "replace",
+    46,
+    63,
+    45,
+    62,
+    [
+     " metrics:",
+     " metric1:",
+     " type: gauge",
+     " description: A sample gauge",
+     " metric2:",
+     " type: summary",
+     " description: A sample summary",
+     " labels: [l1, l2]",
+     " expiration: 24h",
+     " metric3:",
+     " type: histogram",
+     " description: A sample histogram",
+     " buckets: [10, 20, 50, 100, 1000]",
+     " metric4:",
+     " type: enum",
+     " description: A sample enum",
+     " states: [foo, bar, baz]"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    62,
+    63
+   ],
+   [
+    "replace",
+    64,
+    93,
+    63,
+    91,
+    [
+     " queries:",
+     " query1:",
+     " interval: 5",
+     " databases: [db1]",
+     " metrics: [metric1]",
+     " sql: SELECT random() / 1000000000000000 AS metric1",
+     " query2:",
+     " interval: 20",
+     " timeout: 0.5",
+     " databases: [db1, db2]",
+     " metrics: [metric2, metric3]",
+     " sql: |",
+     " SELECT abs(random() / 1000000000000000) AS metric2,",
+     " abs(random() / 10000000000000000) AS metric3,",
+     " \"value1\" AS l1,",
+     " \"value2\" AS l2",
+     " query3:",
+     " schedule: \"*/5 * * * *\"",
+     " databases: [db2]",
+     " metrics: [metric3, metric4]",
+     " sql: |",
+     " SELECT value FROM (",
+     " SELECT \"foo\" AS metric4 UNION",
+     " SELECT \"bar\" AS metric3 UNION",
+     " SELECT \"baz\" AS metric4",
+     " )",
+     " ORDER BY random()",
+     " LIMIT 1"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    97,
+    91,
+    95
+   ],
+   [
+    "delete",
+    97,
+    98,
+    95,
+    95
+   ],
+   [
+    "equal",
+    98,
+    99,
+    95,
+    96
+   ],
+   [
+    "delete",
+    99,
+    100,
+    96,
+    96
+   ],
+   [
+    "equal",
+    100,
+    105,
+    96,
+    101
+   ],
+   [
+    "replace",
+    105,
+    106,
+    101,
+    102,
+    [
+     " :widths: auto"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    102,
+    103
+   ],
+   [
+    "replace",
+    107,
+    137,
+    103,
+    132,
+    [
+     " +-------------------------+------------------------+-----------------+-------------------------------------------------------------------+",
+     "|Command-line option|Environment variable|Default|Description|",
+     " +=========================+========================+=================+===================================================================+",
+     "|``-H``, ``--host``|``QE_HOST``|``localhost``|Host addresses to bind. Multiple values can be provided.|",
+     " +-------------------------+------------------------+-----------------+-------------------------------------------------------------------+",
+     "|``-p``, ``--port``|``QE_PORT``|``9560``|Port to run the webserver on.|",
+     " +-------------------------+------------------------+-----------------+-------------------------------------------------------------------+",
+     "|``--metrics-path``|``QE_METRICS_PATH``|``/metrics``|Path under which metrics are exposed.|",
+     " +-------------------------+------------------------+-----------------+-------------------------------------------------------------------+",
+     "|``-L``, ``--log-level``|``QE_LOG_LEVEL``|``info``|Minimum level for log messages level.|",
+     "||||One of ``critical``, ``error``, ``warning``, ``info``, ``debug``.|",
+     " +-------------------------+------------------------+-----------------+-------------------------------------------------------------------+",
+     "|``--log-format``|``QE_LOG_FORMAT``|``plain``|Log output format. One of ``plain``, ``json``.|",
+     " +-------------------------+------------------------+-----------------+-------------------------------------------------------------------+",
+     "|``--process-stats``|``QE_PROCESS_STATS``|``false``|Include process stats in metrics.|",
+     " +-------------------------+------------------------+-----------------+-------------------------------------------------------------------+",
+     "|``--ssl-private-key``|``QE_SSL_PRIVATE_KEY``||Full path to the SSL private key.|",
+     " +-------------------------+------------------------+-----------------+-------------------------------------------------------------------+",
+     "|``--ssl-public-key``|``QE_SSL_PUBLIC_KEY``||Full path to the SSL public key.|",
+     " +-------------------------+------------------------+-----------------+-------------------------------------------------------------------+",
+     "|``--ssl-ca``|``QE_SSL_CA``||Full path to the SSL certificate authority (CA).|",
+     " +-------------------------+------------------------+-----------------+-------------------------------------------------------------------+",
+     "|``--check-only``|``QE_CHECK_ONLY``|``false``|Only check configuration, don't run the exporter.|",
+     " +-------------------------+------------------------+-----------------+-------------------------------------------------------------------+",
+     "|``--config``|``QE_CONFIG``|``config.yaml``|Configuration files. Multiple values can be provided.|",
+     " +-------------------------+------------------------+-----------------+-------------------------------------------------------------------+",
+     "||``QE_DOTENV``|``$PWD/.env``|Path for the dotenv file where environment variables can be|",
+     "||||provided.|",
+     " +-------------------------+------------------------+-----------------+-------------------------------------------------------------------+"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    139,
+    132,
+    134
+   ],
+   [
+    "delete",
+    139,
+    140,
+    134,
+    134
+   ],
+   [
+    "equal",
+    140,
+    147,
+    134,
+    141
+   ],
+   [
+    "delete",
+    147,
+    148,
+    141,
+    141
+   ],
+   [
+    "equal",
+    148,
+    149,
+    141,
+    142
+   ],
+   [
+    "delete",
+    149,
+    150,
+    142,
+    142
+   ],
+   [
+    "equal",
+    150,
+    154,
+    142,
+    146
+   ],
+   [
+    "replace",
+    154,
+    155,
+    146,
+    147,
+    [
+     " a counter used to report number of errors, per database."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    157,
+    147,
+    149
+   ],
+   [
+    "replace",
+    157,
+    158,
+    149,
+    150,
+    [
+     " a counter with number of executed queries, per database, query and status."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    160,
+    150,
+    152
+   ],
+   [
+    "replace",
+    160,
+    161,
+    152,
+    153,
+    [
+     " a gauge reporting the configured execution interval in seconds, if set, per query."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    163,
+    153,
+    155
+   ],
+   [
+    "replace",
+    163,
+    164,
+    155,
+    156,
+    [
+     " a histogram with query latencies, per database and query."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    166,
+    156,
+    158
+   ],
+   [
+    "replace",
+    166,
+    167,
+    158,
+    159,
+    [
+     " a gauge with query last execution timestamps, per database and query."
+    ]
+   ],
+   [
+    "equal",
+    167,
+    171,
+    159,
+    163
+   ],
+   [
+    "delete",
+    171,
+    172,
+    163,
+    163
+   ],
+   [
+    "equal",
+    172,
+    173,
+    163,
+    164
+   ],
+   [
+    "delete",
+    173,
+    174,
+    164,
+    164
+   ],
+   [
+    "equal",
+    174,
+    179,
+    164,
+    169
+   ],
+   [
+    "replace",
+    179,
+    180,
+    169,
+    170,
+    [
+     " uv pip install SQLAlchemy[postgresql] SQLAlchemy[mysql] ..."
+    ]
+   ],
+   [
+    "equal",
+    180,
+    185,
+    170,
+    175
+   ],
+   [
+    "delete",
+    185,
+    186,
+    175,
+    175
+   ],
+   [
+    "equal",
+    186,
+    187,
+    175,
+    176
+   ],
+   [
+    "delete",
+    187,
+    188,
+    176,
+    176
+   ],
+   [
+    "equal",
+    188,
+    192,
+    176,
+    180
+   ],
+   [
+    "replace",
+    192,
+    193,
+    180,
+    181,
+    [
+     " docker run --rm -it -p 9560:9560/tcp -v \"$CONFIG_DIR:/config\" adonato/query-exporter:latest"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    216,
+    181,
+    204
+   ],
+   [
+    "replace",
+    216,
+    217,
+    204,
+    205,
+    [
+     " docker pull ghcr.io/albertodonato/query-exporter:main"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    223,
+    205,
+    211
+   ],
+   [
+    "delete",
+    223,
+    224,
+    211,
+    211
+   ],
+   [
+    "equal",
+    224,
+    225,
+    211,
+    212
+   ],
+   [
+    "delete",
+    225,
+    226,
+    212,
+    212
+   ],
+   [
+    "equal",
+    226,
+    232,
+    212,
+    218
+   ],
+   [
+    "replace",
+    232,
+    233,
+    218,
+    219,
+    [
+     " FROM adonato/query-exporter:<version>-base"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    234,
+    219,
+    220
+   ],
+   [
+    "replace",
+    234,
+    238,
+    220,
+    223,
+    [
+     " RUN apt-get install -y <my database driver>",
+     " RUN uv pip install -r <my-requirements-file>",
+     " ..."
+    ]
+   ],
+   [
+    "equal",
+    238,
+    240,
+    223,
+    225
+   ],
+   [
+    "delete",
+    240,
+    241,
+    225,
+    225
+   ],
+   [
+    "equal",
+    241,
+    247,
+    225,
+    231
+   ],
+   [
+    "delete",
+    247,
+    248,
+    231,
+    231
+   ],
+   [
+    "equal",
+    248,
+    251,
+    231,
+    234
+   ],
+   [
+    "replace",
+    251,
+    252,
+    234,
+    235,
+    [
+     " http://docs.sqlalchemy.org/en/latest/core/engines.html#supported-databases"
+    ]
+   ],
+   [
+    "equal",
+    252,
+    260,
+    235,
+    243
+   ],
+   [
+    "replace",
+    260,
+    261,
+    243,
+    244,
+    [
+     " :alt: query-exporter logo"
+    ]
+   ],
+   [
+    "equal",
+    261,
+    262,
+    244,
+    245
+   ],
+   [
+    "replace",
+    262,
+    264,
+    245,
+    247,
+    [
+     " :alt: Latest Version",
+     " :target: https://pypi.python.org/pypi/query-exporter"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    247,
+    248
+   ],
+   [
+    "replace",
+    265,
+    267,
+    248,
+    250,
+    [
+     " :alt: Build Status",
+     " :target: https://github.com/albertodonato/query-exporter/actions?query=workflow%3ACI+branch%3Amain"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    268,
+    250,
+    251
+   ],
+   [
+    "replace",
+    268,
+    270,
+    251,
+    253,
+    [
+     " :alt: Docker Pulls",
+     " :target: https://hub.docker.com/r/adonato/query-exporter"
+    ]
+   ],
+   [
+    "equal",
+    270,
+    271,
+    253,
+    254
+   ],
+   [
+    "replace",
+    271,
+    273,
+    254,
+    256,
+    [
+     " :alt: PyPI Downloads",
+     " :target: https://pepy.tech/projects/query-exporter"
+    ]
+   ]
+  ],
+  "at": "2026-11-05"
  }
 }
