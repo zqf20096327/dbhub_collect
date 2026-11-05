@@ -402,15 +402,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T02:55:21Z",
+  "collected_at": "2026-11-05T02:56:51Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-03",
+  "pushed_at": "2026-11-04",
   "stars": 2061,
   "tree": {
-   "sha": "0f6c07639604c40d7ca880cb63d1d282239def08",
-   "etag": "W/\"69cbff87139226b9f593063b489b1838233d3a6b0a01c461259436c9e22cc896\"",
+   "sha": "80224b0314c6008ecb4de82d1e37b019d5e355df",
+   "etag": "W/\"4e70c93212a70875c3feb401681a95d56a4c1182d3ebc1235cd07134420b3924\"",
    "truncated": false,
-   "path_count": 13337,
+   "path_count": 13461,
    "matched": [
     "go.mod",
     "clients/python/pyproject.toml",
@@ -631,9 +631,9 @@
    {
     "path": "clients/python/pyproject.toml",
     "kind": "dep",
-    "blob_sha": "dd510cf82c430c91ced5e8f8f795acf44974bbeb",
+    "blob_sha": "cc83162101be69261ac8081e0b5148af44fa0228",
     "ecosystem": "pyproject",
-    "bytes": 5119,
+    "bytes": 5149,
     "names": [
      "PyMySQL",
      "aiomysql",
@@ -1118,6 +1118,7 @@
     "pkg/sql/parsers/dialect/mysql/asof_join_test.go",
     "pkg/sql/parsers/dialect/mysql/auto_id_cache_partition_test.go",
     "pkg/sql/parsers/dialect/mysql/binary_prefix_syntax_test.go",
+    "pkg/sql/parsers/dialect/mysql/charset_synonym_test.go",
     "pkg/sql/parsers/dialect/mysql/collate_test.go",
     "pkg/sql/parsers/dialect/mysql/ctas_conflict_test.go",
     "pkg/sql/parsers/dialect/mysql/datastream_sql_test.go",
@@ -1129,6 +1130,7 @@
     "pkg/sql/parsers/dialect/mysql/export_format_test.go",
     "pkg/sql/parsers/dialect/mysql/foreigntable_sql_test.go",
     "pkg/sql/parsers/dialect/mysql/grant_admin_option_test.go",
+    "pkg/sql/parsers/dialect/mysql/grant_bare_object_test.go",
     "pkg/sql/parsers/dialect/mysql/iceberg_sql_test.go",
     "pkg/sql/parsers/dialect/mysql/index_option_test.go",
     "pkg/sql/parsers/dialect/mysql/json_table_test.go",
@@ -1157,6 +1159,8 @@
     "pkg/sql/parsers/dialect/mysql/select_into_user_variables_test.go",
     "pkg/sql/parsers/dialect/mysql/sequence_option_order_test.go",
     "pkg/sql/parsers/dialect/mysql/sequence_options.go",
+    "pkg/sql/parsers/dialect/mysql/serial_function_test.go",
+    "pkg/sql/parsers/dialect/mysql/serial_type_test.go",
     "pkg/sql/parsers/dialect/mysql/sounds_like_test.go",
     "pkg/sql/parsers/dialect/mysql/spatial_type_test.go",
     "pkg/sql/parsers/dialect/mysql/sql_mode.go",
@@ -1220,6 +1224,8 @@
     "pkg/indexplugin/plan/viewdef.go",
     "pkg/indexplugin/plan/viewdef_test.go",
     "pkg/indexplugin/search/hooks.go",
+    "pkg/indexplugin/search/key_reader.go",
+    "pkg/indexplugin/search/key_reader_test.go",
     "pkg/pb/plugin/plugin.go",
     "pkg/pb/plugin/plugin.pb.go",
     "pkg/pb/plugin/plugin_test.go",
@@ -1305,13 +1311,7 @@
     "pkg/sql/colexec/table_function/plugin_test.go",
     "pkg/sql/parsers/dialect/dialect_type.go",
     "pkg/vectorindex/cagra/plugin/plugin.go",
-    "pkg/vectorindex/cagra/plugin/plugin_test.go",
-    "pkg/vectorindex/cagra/plugin/search_hooks_test.go",
-    "pkg/vectorindex/hnsw/plugin/plugin.go",
-    "pkg/vectorindex/ivfflat/plugin/plugin.go",
-    "pkg/vectorindex/ivfpq/plugin/plugin.go",
-    "pkg/vectorindex/ivfpq/plugin/plugin_test.go",
-    "pkg/vectorindex/ivfpq/plugin/search_hooks_test.go"
+    "pkg/vectorindex/cagra/plugin/plugin_test.go"
    ],
    "matrix_urls": [
     "https://github.com/matrixorigin/artwork/blob/main/docs/overview/logo.png?raw=true",
@@ -4035,13 +4035,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T02:51:14Z",
+  "collected_at": "2026-11-05T02:53:14Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-03",
+  "pushed_at": "2026-11-04",
   "stars": 4326,
   "tree": {
-   "sha": "1a538a68b90ac5ef54a4fdb6155b4d29ff20ce72",
-   "etag": "W/\"fb61e62521c3699ec6c3edb4c5377a9012775e1e3c6bd1a79a9e82fad3ea5457\"",
+   "sha": "d1c1b4aa4fbf8e459233eac5db26178b367b302a",
+   "etag": "W/\"cd7d513a0b558c407a5af5a781fb7a8775b25f5f5598498774accee8a5d98589\"",
    "truncated": false,
    "path_count": 1591,
    "matched": [
@@ -4090,7 +4090,7 @@
    {
     "path": "go.mod",
     "kind": "dep",
-    "blob_sha": "0d45ec500b60136b32c2bcdcfb85262a8ff93903",
+    "blob_sha": "a1e21d4b022814cea176c1c2c860509ec1c00a2d",
     "ecosystem": "go",
     "bytes": 10297,
     "names": [
@@ -4250,9 +4250,9 @@
    {
     "path": "cmd/pg/exporter/go.mod",
     "kind": "dep",
-    "blob_sha": "0456543100cf926c57c894d9789e4bac898a1f2a",
+    "blob_sha": "709c30ca75a151672a3418b0ad049cfe478fa495",
     "ecosystem": "go",
-    "bytes": 915,
+    "bytes": 963,
     "names": [
      "github.com/jackc/pglogrepl",
      "github.com/prometheus/client_golang",
@@ -4267,6 +4267,7 @@
      "github.com/jackc/pgservicefile",
      "github.com/jackc/pgx/v5",
      "github.com/munnerz/goautoneg",
+     "github.com/pandatix/go-abnf",
      "github.com/prometheus/client_model",
      "github.com/prometheus/procfs",
      "go.yaml.in/yaml/v3",
@@ -8768,13 +8769,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T03:34:03Z",
+  "collected_at": "2026-11-05T03:26:22Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-03",
-  "stars": 26,
+  "pushed_at": "2026-11-04",
+  "stars": 27,
   "tree": {
    "sha": "94317f8c079a5457832a64b4fb0e064ccda29f1f",
-   "etag": "W/\"5a99978cb4489a072b91947c5cbadfd92458fa61bf79e5f63fbbb48860ba3b85\"",
+   "etag": "W/\"adf85b6ec19ae1e577d95158a915a072d88d8a4389fd654bdaf523aae81ae269\"",
    "truncated": false,
    "path_count": 3598,
    "matched": [
@@ -11812,15 +11813,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T03:51:53Z",
+  "collected_at": "2026-11-05T03:40:02Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-03",
+  "pushed_at": "2026-11-04",
   "stars": 4,
   "tree": {
-   "sha": "3aba47043e12d2dceef8458c1c834796ad43f9dd",
-   "etag": "W/\"9720702219a047875bc9176f6dbff7c6ffe6761535873f800b2c262d42c637ff\"",
+   "sha": "5897013bd859f06901c8aca6fc5123492fbadd6a",
+   "etag": "W/\"c7005fb330d73b1bac9905cc41b45045e90e94c2396ad41dbc86d75b49392c87\"",
    "truncated": false,
-   "path_count": 610,
+   "path_count": 619,
    "matched": [
     "package.json",
     "Dockerfile",
@@ -13341,6 +13342,199 @@
    "readme_i18n": [],
    "docs_matrix": [],
    "paths": []
+  },
+  "fail_count": 0
+ },
+ "prod-forge/backend": {
+  "fn": "prod-forge/backend",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-05T02:44:18Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-04",
+  "stars": 523,
+  "tree": {
+   "sha": "9e3cb4a660074465ced049e5b8d1c010068dd41a",
+   "etag": "W/\"925327a9686a8cc4613f86fb49ceb081d9126d5e017b19487a4f022ba8633da8\"",
+   "truncated": false,
+   "path_count": 353,
+   "matched": [
+    "package.json",
+    "Dockerfile",
+    "docker-compose.yml",
+    ".github/workflows/cd.yml",
+    ".github/workflows/ci.yml",
+    ".github/workflows/codeql.yml",
+    ".github/workflows/rollback.yml",
+    ".github/workflows/show-ecs-revisions.yml"
+   ]
+  },
+  "files": [
+   {
+    "path": "package.json",
+    "kind": "dep",
+    "blob_sha": "b3924632e3b6b28b41c73bfbdc20c0cbcf231547",
+    "ecosystem": "npm",
+    "bytes": 6132,
+    "names": [
+     "@nest-lab/throttler-storage-redis",
+     "@nestjs/common",
+     "@nestjs/config",
+     "@nestjs/core",
+     "@nestjs/jwt",
+     "@nestjs/platform-express",
+     "@nestjs/swagger",
+     "@nestjs/terminus",
+     "@nestjs/throttler",
+     "@opentelemetry/api",
+     "@opentelemetry/auto-instrumentations-node",
+     "@opentelemetry/core",
+     "@opentelemetry/exporter-trace-otlp-http",
+     "@opentelemetry/sdk-node",
+     "@prisma/adapter-pg",
+     "@prisma/client",
+     "@scalar/nestjs-api-reference",
+     "@sentry/node",
+     "@sentry/opentelemetry",
+     "@sentry/profiling-node",
+     "@willsoto/nestjs-prometheus",
+     "class-transformer",
+     "class-validator",
+     "compression",
+     "dotenv",
+     "express",
+     "express-http-context",
+     "helmet",
+     "ioredis",
+     "pino",
+     "pino-pretty",
+     "prisma",
+     "prom-client",
+     "reflect-metadata",
+     "rxjs",
+     "tsx"
+    ],
+    "dev": [
+     "@commitlint/cli",
+     "@commitlint/config-conventional",
+     "@eslint/js",
+     "@eslint/json",
+     "@inquirer/checkbox",
+     "@inquirer/prompts",
+     "@nestjs/cli",
+     "@nestjs/schematics",
+     "@nestjs/testing",
+     "@release-it/conventional-changelog",
+     "@testcontainers/postgresql",
+     "@testcontainers/redis",
+     "@types/compression",
+     "@types/express",
+     "@types/jest",
+     "@types/node",
+     "@types/supertest",
+     "@typescript-eslint/eslint-plugin",
+     "@typescript-eslint/parser",
+     "cross-env",
+     "eslint",
+     "eslint-config-flat-gitignore",
+     "eslint-config-prettier",
+     "eslint-plugin-check-file",
+     "eslint-plugin-import-lite",
+     "eslint-plugin-jest",
+     "eslint-plugin-no-only-tests",
+     "eslint-plugin-package-json",
+     "eslint-plugin-perfectionist",
+     "eslint-plugin-prettier",
+     "eslint-plugin-regexp",
+     "eslint-plugin-sonarjs",
+     "eslint-plugin-unicorn",
+     "globals",
+     "husky",
+     "jest",
+     "knip",
+     "lint-staged",
+     "nestjs-doctor",
+     "prettier",
+     "release-it",
+     "supertest",
+     "ts-jest",
+     "ts-node",
+     "tsconfig-paths",
+     "typescript",
+     "typescript-eslint"
+    ]
+   },
+   {
+    "path": "Dockerfile",
+    "kind": "image",
+    "blob_sha": "7e5b9862c51b266a9029058e2411eb7a2a22ee10",
+    "bytes": 1861,
+    "images": [
+     "node:24.21.0-alpine"
+    ]
+   },
+   {
+    "path": "docker-compose.yml",
+    "kind": "image",
+    "blob_sha": "4348f6c0596b8a8912ca9cce0f0e0846c197a1e8",
+    "bytes": 4367,
+    "images": [
+     "postgres:18.3",
+     "redis:8.6-alpine",
+     "prom/prometheus:v3.5.0",
+     "grafana/promtail:3.5.0",
+     "grafana/grafana:12.2.0",
+     "grafana/loki:3.5.0",
+     "grafana/tempo:2.8.2"
+    ]
+   },
+   {
+    "path": ".github/workflows/cd.yml",
+    "kind": "ci",
+    "blob_sha": "61a24790de9e6094e28a2713165355ae8d4b47e4",
+    "bytes": 12211,
+    "images": [
+     "${{"
+    ]
+   },
+   {
+    "path": ".github/workflows/ci.yml",
+    "kind": "ci",
+    "blob_sha": "17ed81904ece503a4338d8246797907950a41c21",
+    "bytes": 2969
+   },
+   {
+    "path": ".github/workflows/codeql.yml",
+    "kind": "ci",
+    "blob_sha": "a75741a86cf12c7f308b026ecd471e957d32e9c9",
+    "bytes": 558
+   },
+   {
+    "path": ".github/workflows/rollback.yml",
+    "kind": "ci",
+    "blob_sha": "4c100832ef71c83b7e06ac26eaff0863662e77e5",
+    "bytes": 1476
+   },
+   {
+    "path": ".github/workflows/show-ecs-revisions.yml",
+    "kind": "ci",
+    "blob_sha": "f6a37279ae666e71ad6ec5c735d43cc1008a0f8f",
+    "bytes": 2101
+   }
+  ],
+  "clues": {
+   "changelog": [
+    "CHANGELOG.md"
+   ],
+   "readme_i18n": [],
+   "docs_matrix": [
+    "docs/database-management.md"
+   ],
+   "paths": [
+    "eslint-plugin.d.ts"
+   ]
   },
   "fail_count": 0
  }

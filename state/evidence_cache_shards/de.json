@@ -4035,13 +4035,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T03:21:19Z",
+  "collected_at": "2026-11-05T03:17:13Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-03",
+  "pushed_at": "2026-11-04",
   "stars": 71,
   "tree": {
    "sha": "c6b3e4178802d9745fdd2fda9377fbd77ca994a4",
-   "etag": "W/\"8ed9472ec33f724505a2db53c4ec2bd6d9ca7fc18202827ce7ef08ca625025c0\"",
+   "etag": "W/\"17341c18b7b781b4ce8caf1d0ebb62a2489ca4f9b00592b0f2d62df6fd24a64f\"",
    "truncated": false,
    "path_count": 14434,
    "matched": [
@@ -6823,23 +6823,25 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T02:49:17Z",
+  "collected_at": "2026-11-05T02:51:43Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-03",
-  "stars": 6363,
+  "pushed_at": "2026-11-04",
+  "stars": 6367,
   "tree": {
-   "sha": "4aa4a02bd8c3445b881283c3849e1d539fe8b8ff",
-   "etag": "W/\"f503c7576bde27decb42a73964a67c959ba192db490078b1f64bcafef57e1218\"",
+   "sha": "ea1eb4c2ad63633ae5177eda2b7a9e4bdc5843c1",
+   "etag": "W/\"f6f31bb26f505db92f00a538e1605039304c46db9fde1be03cd0b23421cda2ae\"",
    "truncated": false,
-   "path_count": 12261,
+   "path_count": 12554,
    "matched": [
     "Cargo.toml",
     "scripts/release/requirements.txt",
     "apple/Native/DamengBridge/Cargo.toml",
     "apple/Native/HanaBridge/go.mod",
     "core/crates/ai/Cargo.toml",
+    "core/crates/bindgen/Cargo.toml",
     "core/crates/core/Cargo.toml",
     "core/crates/ffi/Cargo.toml",
+    "core/crates/foreign-import/Cargo.toml",
     "core/crates/mcp/Cargo.toml",
     "core/crates/net/Cargo.toml",
     "core/crates/session/Cargo.toml",
@@ -6885,6 +6887,7 @@
     ".github/workflows/pr-title.yml",
     ".github/workflows/release-build.yml",
     ".github/workflows/release-linux.yml",
+    ".github/workflows/release-windows.yml",
     ".github/workflows/release.yml",
     ".github/workflows/repo-hygiene.yml",
     ".github/workflows/swiftlint.yml",
@@ -6897,9 +6900,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "9086e558f4e5bb5e27563ae1f80cde23fd495d38",
+    "blob_sha": "58484c4b03219962ce5dab24fdbb64580170e87f",
     "ecosystem": "cargo",
-    "bytes": 9323
+    "bytes": 10440
    },
    {
     "path": "scripts/release/requirements.txt",
@@ -6969,6 +6972,16 @@
     ]
    },
    {
+    "path": "core/crates/bindgen/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "27e346a5f1fc9e03ca66260683c1cc33357ffbea",
+    "ecosystem": "cargo",
+    "bytes": 452,
+    "names": [
+     "uniffi"
+    ]
+   },
+   {
     "path": "core/crates/core/Cargo.toml",
     "kind": "dep",
     "blob_sha": "687b37c42fd13a5d0753a540493a43f725be9b8e",
@@ -7002,22 +7015,22 @@
    {
     "path": "core/crates/ffi/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "7be03a23df0df64870025c2b83e6e75eda3f94f3",
+    "blob_sha": "e6ebfb18fcb70a5a5b04f3b1ad203ac8bac6d990",
     "ecosystem": "cargo",
-    "bytes": 1325,
+    "bytes": 2115,
     "names": [
      "tablepro-core.workspace",
-     "tablepro-driver-cassandra.workspace",
-     "tablepro-driver-clickhouse.workspace",
-     "tablepro-driver-duckdb.workspace",
-     "tablepro-driver-mongodb.workspace",
-     "tablepro-driver-mssql.workspace",
-     "tablepro-driver-mysql.workspace",
-     "tablepro-driver-postgres.workspace",
-     "tablepro-driver-redis.workspace",
-     "tablepro-driver-sqlite.workspace",
-     "tablepro-session.workspace",
-     "tablepro-ssh.workspace",
+     "tablepro-driver-cassandra",
+     "tablepro-driver-clickhouse",
+     "tablepro-driver-duckdb",
+     "tablepro-driver-mongodb",
+     "tablepro-driver-mssql",
+     "tablepro-driver-mysql",
+     "tablepro-driver-postgres",
+     "tablepro-driver-redis",
+     "tablepro-driver-sqlite",
+     "tablepro-session",
+     "tablepro-ssh",
      "tablepro-storage.workspace",
      "async-trait.workspace",
      "chrono.workspace",
@@ -7034,7 +7047,43 @@
     ],
     "dev": [
      "csbindgen.workspace",
+     "russh.workspace",
      "tempfile.workspace"
+    ]
+   },
+   {
+    "path": "core/crates/foreign-import/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "3dc33b858714566166c2a9d32ca0470c1c49b696",
+    "ecosystem": "cargo",
+    "bytes": 979,
+    "names": [
+     "tablepro-core.workspace",
+     "tablepro-storage.workspace",
+     "aes.workspace",
+     "base64.workspace",
+     "blowfish.workspace",
+     "cbc.workspace",
+     "chacha20.workspace",
+     "flate2.workspace",
+     "hex.workspace",
+     "libsqlite3-sys.workspace",
+     "plist.workspace",
+     "roxmltree.workspace",
+     "salsa20.workspace",
+     "secrecy.workspace",
+     "serde.workspace",
+     "serde_json.workspace",
+     "sha1.workspace",
+     "sha2.workspace",
+     "thiserror.workspace",
+     "tokio-util.workspace",
+     "tracing.workspace",
+     "uuid.workspace"
+    ],
+    "dev": [
+     "tempfile.workspace",
+     "tokio"
     ]
    },
    {
@@ -7076,9 +7125,9 @@
    {
     "path": "core/crates/net/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "d176f36486327fc4afaa3554d4d114f07b225dbf",
+    "blob_sha": "a059175a6650db322c276d4ce1a65d9efd52ade4",
     "ecosystem": "cargo",
-    "bytes": 823,
+    "bytes": 992,
     "names": [
      "tablepro-core.workspace",
      "async-trait.workspace",
@@ -7088,6 +7137,7 @@
      "rustls-pki-types.workspace",
      "rustls-platform-verifier.workspace",
      "socket2.workspace",
+     "tempfile.workspace",
      "thiserror.workspace",
      "tokio",
      "tracing.workspace"
@@ -7097,7 +7147,6 @@
      "hyper-rustls.workspace",
      "hyper-util.workspace",
      "rcgen.workspace",
-     "tempfile.workspace",
      "tokio",
      "tokio-rustls.workspace",
      "tower-service.workspace"
@@ -7106,9 +7155,9 @@
    {
     "path": "core/crates/session/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "aa7d00cfad99e1089b8f08e54c0e66475636301b",
+    "blob_sha": "191354b0571c7437fbfa9e29b3778baa479a5f0f",
     "ecosystem": "cargo",
-    "bytes": 1068,
+    "bytes": 1198,
     "names": [
      "tablepro-core.workspace",
      "tablepro-net.workspace",
@@ -7137,14 +7186,18 @@
    {
     "path": "core/crates/ssh/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "8923678eab742372d1cbffbd122f204bf09ab640",
+    "blob_sha": "6f4270afdcc8f532f7619beac503d4f62b05c895",
     "ecosystem": "cargo",
-    "bytes": 872,
+    "bytes": 1754,
     "names": [
      "tablepro-core.workspace",
+     "tablepro-net",
      "async-trait.workspace",
+     "aws-lc-rs",
      "futures.workspace",
+     "russh",
      "secrecy.workspace",
+     "tempfile",
      "thiserror.workspace",
      "tokio",
      "tokio-util.workspace",
@@ -7163,9 +7216,9 @@
    {
     "path": "core/crates/storage/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "5fbdb4fd675941d7bf6f85d0ca18cbae3a78afff",
+    "blob_sha": "9b95084fb4fc8714612aad74b37c50136a7bbc6b",
     "ecosystem": "cargo",
-    "bytes": 888,
+    "bytes": 973,
     "names": [
      "tablepro-core.workspace",
      "async-trait.workspace",
@@ -7173,11 +7226,15 @@
      "serde.workspace",
      "serde_json.workspace",
      "thiserror.workspace",
+     "unicode-normalization.workspace",
      "tokio",
      "uuid.workspace",
      "sqlx",
      "chrono.workspace",
      "tempfile.workspace"
+    ],
+    "dev": [
+     "proptest.workspace"
     ]
    },
    {
@@ -7227,9 +7284,9 @@
    {
     "path": "linux/crates/app/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "7136edc96ce622f07985af109d48bc7aff4b25da",
+    "blob_sha": "8316f6820284b9fc63b47c36d255aac7603738c1",
     "ecosystem": "cargo",
-    "bytes": 3610,
+    "bytes": 3651,
     "names": [
      "tablepro-ai.workspace",
      "tablepro-core.workspace",
@@ -7242,6 +7299,7 @@
      "tablepro-driver-postgres.workspace",
      "tablepro-driver-redis.workspace",
      "tablepro-driver-sqlite.workspace",
+     "tablepro-foreign-import.workspace",
      "tablepro-mcp.workspace",
      "tablepro-net.workspace",
      "tablepro-linux-platform.workspace",
@@ -7296,11 +7354,12 @@
    {
     "path": "linux/crates/platform/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "c6f542ae7aa1a3514ac6e3acebd8de2112558017",
+    "blob_sha": "209eae43982760b7816f3021c402d51c7bd7bd8d",
     "ecosystem": "cargo",
-    "bytes": 566,
+    "bytes": 607,
     "names": [
      "tablepro-core.workspace",
+     "tablepro-foreign-import.workspace",
      "tablepro-storage.workspace",
      "async-trait.workspace",
      "gio.workspace",
@@ -7326,9 +7385,9 @@
    {
     "path": "windows/src/TablePro.App/TablePro.App.csproj",
     "kind": "dep",
-    "blob_sha": "f357768360ce837bbd4d593f05c0750bfeb58be4",
+    "blob_sha": "82e26743e4d5fad82a7a2759c3b605b6b60f2f21",
     "ecosystem": "csproj",
-    "bytes": 2176,
+    "bytes": 2702,
     "names": [
      "CommunityToolkit.WinUI.Controls.SettingsControls",
      "CommunityToolkit.WinUI.Controls.Sizers",
@@ -7389,9 +7448,9 @@
    {
     "path": "windows/src/TablePro.Interop/TablePro.Interop.csproj",
     "kind": "dep",
-    "blob_sha": "6db9d170401253c0fbf572b97ce1bfd07463b306",
+    "blob_sha": "7534bef413bc4ac82f13f501845e5b657cb87e36",
     "ecosystem": "csproj",
-    "bytes": 4490
+    "bytes": 5076
    },
    {
     "path": "windows/tests/TablePro.App.Model.Tests/TablePro.App.Model.Tests.csproj",
@@ -7406,9 +7465,9 @@
    {
     "path": "windows/tests/TablePro.App.UITests/TablePro.App.UITests.csproj",
     "kind": "dep",
-    "blob_sha": "d80fadd4009913f150b712536278a8215a18f75d",
+    "blob_sha": "4d4ae5b3741d6023a8a9decbd888e2e9a39cbc6b",
     "ecosystem": "csproj",
-    "bytes": 706,
+    "bytes": 793,
     "names": [
      "FlaUI.UIA3",
      "xunit.v3"
@@ -7471,9 +7530,9 @@
    {
     "path": "windows/tests/TablePro.Interop.Tests/TablePro.Interop.Tests.csproj",
     "kind": "dep",
-    "blob_sha": "e24e66e48be805d1673fbf229a6835d91e55c246",
+    "blob_sha": "e95b80ca7fded961f8b909e58d5b928bae81d577",
     "ecosystem": "csproj",
-    "bytes": 547,
+    "bytes": 634,
     "names": [
      "xunit.v3"
     ]
@@ -7481,9 +7540,9 @@
    {
     "path": "core/crates/drivers/cassandra/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "df842b80569a6a729382abb6d4b9a9474224277f",
+    "blob_sha": "17b50d615b945b1442ad78f41c02244cc3a6eefc",
     "ecosystem": "cargo",
-    "bytes": 848,
+    "bytes": 759,
     "names": [
      "tablepro-core.workspace",
      "tablepro-net.workspace",
@@ -7595,9 +7654,9 @@
    {
     "path": "core/crates/drivers/mssql/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "f309a03ff1243e8920b699c35cda5065b80f11a1",
+    "blob_sha": "0ebe80833b7e59d0bf2cba4114c877d7dbd80d74",
     "ecosystem": "cargo",
-    "bytes": 1028,
+    "bytes": 1116,
     "names": [
      "tablepro-core.workspace",
      "tablepro-net.workspace",
@@ -7608,6 +7667,7 @@
      "secrecy.workspace",
      "tiberius.workspace",
      "tokio",
+     "tokio-rustls.workspace",
      "tokio-util",
      "tracing.workspace",
      "uuid.workspace"
@@ -7621,9 +7681,9 @@
    {
     "path": "core/crates/drivers/mysql/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "9d47ae179a00748fb4150c2714d0b7b87371641d",
+    "blob_sha": "11a12057f4658ffe8f72b573b43adbc3c43bde44",
     "ecosystem": "cargo",
-    "bytes": 814,
+    "bytes": 825,
     "names": [
      "tablepro-core.workspace",
      "tablepro-net.workspace",
@@ -7740,8 +7800,8 @@
    {
     "path": ".github/workflows/build-linux.yml",
     "kind": "ci",
-    "blob_sha": "ecf6dba8bdeac99fb2415b51cfd0b645f2615f63",
-    "bytes": 28975,
+    "blob_sha": "df1f71f35bf7634c648d26ebcff81fb8a3d92e82",
+    "bytes": 29340,
     "images": [
      "ubuntu:26.04",
      "ubuntu:26.10",
@@ -7757,8 +7817,8 @@
    {
     "path": ".github/workflows/core.yml",
     "kind": "ci",
-    "blob_sha": "8a0f67573271649f35ed72f36ac3b4bb14a82164",
-    "bytes": 2476
+    "blob_sha": "5e494adc08a5f66af4760543fd85a54d8822deef",
+    "bytes": 7311
    },
    {
     "path": ".github/workflows/ios-tests.yml",
@@ -7769,8 +7829,8 @@
    {
     "path": ".github/workflows/linux-packages.yml",
     "kind": "ci",
-    "blob_sha": "f66a3d6f1a66140efcbb6cd76b84a2fbe32aecac",
-    "bytes": 10503,
+    "blob_sha": "9ceadf37f043e3183fceabe3df07ff9c86bf2493",
+    "bytes": 10601,
     "images": [
      "ubuntu:26.04",
      "fedora:44"
@@ -7811,10 +7871,16 @@
     ]
    },
    {
+    "path": ".github/workflows/release-windows.yml",
+    "kind": "ci",
+    "blob_sha": "633cddaf2cf6463c4af230cfadbc98c358deab21",
+    "bytes": 23279
+   },
+   {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "2fbb9d5c6c3ed1c324b84e3eff4be4282b43dae2",
-    "bytes": 12938
+    "blob_sha": "10b29f0249020de44f61bfb4f25c7907786fdf05",
+    "bytes": 12930
    },
    {
     "path": ".github/workflows/repo-hygiene.yml",
@@ -7837,8 +7903,8 @@
    {
     "path": ".github/workflows/windows.yml",
     "kind": "ci",
-    "blob_sha": "7ef3eaa82c22c745a310f0c3069935b9688ae31c",
-    "bytes": 5325
+    "blob_sha": "a682d92f4e692b2ea5e878f0f10e4a9a4e00631e",
+    "bytes": 9171
    },
    {
     "path": ".github/workflows/withdraw.yml",
@@ -7936,6 +8002,7 @@
     "core/crates/drivers/mssql/src/mssql_manager.rs",
     "core/crates/drivers/mssql/src/mssql_pooled.rs",
     "core/crates/drivers/mssql/src/physical.rs",
+    "core/crates/drivers/mssql/src/probe.rs",
     "core/crates/drivers/mssql/src/read_only_guard.rs",
     "core/crates/drivers/mssql/src/standalone.rs",
     "core/crates/drivers/mssql/src/stream_read.rs",
@@ -7963,6 +8030,7 @@
     "core/crates/drivers/mysql/src/mysql_timestamp_mode.rs",
     "core/crates/drivers/mysql/src/mysql_wire_format.rs",
     "core/crates/drivers/mysql/src/physical.rs",
+    "core/crates/drivers/mysql/src/relay.rs",
     "core/crates/drivers/mysql/src/script_split.rs",
     "core/crates/drivers/mysql/src/server_zone.rs",
     "core/crates/drivers/mysql/src/session_statements.rs",
@@ -8056,9 +8124,7 @@
     "core/crates/drivers/mssql/tests/integration/main.rs",
     "core/crates/drivers/mssql/tests/integration/metadata.rs",
     "core/crates/drivers/mssql/tests/integration/read_only.rs",
-    "core/crates/drivers/mssql/tests/integration/round_trip.rs",
-    "core/crates/drivers/mssql/tests/integration/sessions.rs",
-    "core/crates/drivers/mssql/tests/integration/support.rs"
+    "core/crates/drivers/mssql/tests/integration/round_trip.rs"
    ],
    "matrix_urls": [
     "https://docs.tablepro.app/features/plugins",
@@ -8520,15 +8586,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T03:03:51Z",
+  "collected_at": "2026-11-05T03:03:52Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-03",
-  "stars": 523,
+  "pushed_at": "2026-11-04",
+  "stars": 527,
   "tree": {
-   "sha": "794890b16d5ca63bafda23c85210ad94cde987d1",
-   "etag": "W/\"d9bfda775359802144acd8dad76294614ead8df96b04d856c27f30c28db82f18\"",
+   "sha": "12683b12dfb0f44b3a9f7ffd8917f8a136c22ac9",
+   "etag": "W/\"bd0a9b0c10614aaef93b0b82b01ee60f4a9ffba248efeee25508f3bc0d6cbca4\"",
    "truncated": false,
-   "path_count": 1210,
+   "path_count": 1240,
    "matched": [
     "go.mod",
     "web/package.json",
@@ -8718,8 +8784,8 @@
    {
     "path": "freeswitch/Dockerfile",
     "kind": "image",
-    "blob_sha": "205be87634a82122e6c1012a55fd3a6495b19581",
-    "bytes": 18080,
+    "blob_sha": "ae4d3d925e5eacb3211e6f6f70e1f58692779769",
+    "bytes": 18736,
     "images": [
      "debian:bookworm-slim",
      "debian:bookworm"
@@ -9337,13 +9403,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T03:10:11Z",
+  "collected_at": "2026-11-05T03:09:17Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-03",
+  "pushed_at": "2026-11-04",
   "stars": 232,
   "tree": {
-   "sha": "acb9a1ba6ffc8ff23c4f5c380ec63c27993127bb",
-   "etag": "W/\"033a973add7b4afc449bcdeaf2c3c9dd82c457323c26c8d1c2364cd21fb5f06d\"",
+   "sha": "1852cb7eaaa05cf702c1df0b67128f8a8e4ce009",
+   "etag": "W/\"12a029d807aaee17656f1301f05508eb3f9e91e3fc50ea5677b890df793124e6\"",
    "truncated": false,
    "path_count": 193,
    "matched": [
@@ -10680,13 +10746,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T03:20:50Z",
+  "collected_at": "2026-11-05T03:16:54Z",
   "default_branch": "v6.x-master",
-  "pushed_at": "2026-11-03",
+  "pushed_at": "2026-11-04",
   "stars": 74,
   "tree": {
-   "sha": "8a510838f9b19e9cc9871149b228ed84aed045f7",
-   "etag": "W/\"4cb0ac76e68fa63cbf2a56e77e59de1b1c1d1b7760d8e98055df7c129b407383\"",
+   "sha": "1cd41e0d010da6ccbbe09bb913cc0f3d116d8f3d",
+   "etag": "W/\"5147ceab07ca9d016113af22d885483241b7db8a26319dedb626d1c409e25cc4\"",
    "truncated": false,
    "path_count": 4629,
    "matched": [
@@ -13351,15 +13417,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T03:35:46Z",
+  "collected_at": "2026-11-05T03:27:52Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-03",
+  "pushed_at": "2026-11-04",
   "stars": 23,
   "tree": {
-   "sha": "72b4a72a0a6180b4cd8b9897326b91677b6ba120",
-   "etag": "W/\"ea705f3da474cf2efa8339aabcc74266f8a855701d0cf7e123d68ea8e7701ec5\"",
+   "sha": "f3d7a149bc9f21d82843efca6e98daf2171dffbf",
+   "etag": "W/\"f896727481325c00f61785ffa9ec4b876a1793f180393d71149da6670132ef98\"",
    "truncated": false,
-   "path_count": 799,
+   "path_count": 872,
    "matched": [
     "backend/go.mod",
     "frontend/package.json",
@@ -13386,9 +13452,9 @@
    {
     "path": "backend/go.mod",
     "kind": "dep",
-    "blob_sha": "a39a02160e5b484e423a02e2e7887d025a5701d2",
+    "blob_sha": "f4c3c0bfa32930b6f43eec2ba88f5750039152e8",
     "ecosystem": "go",
-    "bytes": 2361,
+    "bytes": 2349,
     "names": [
      "github.com/abadojack/whatlanggo",
      "github.com/disintegration/imaging",
@@ -13396,6 +13462,7 @@
      "github.com/gen2brain/go-fitz",
      "github.com/golang-jwt/jwt/v4",
      "github.com/pocketbase/dbx",
+     "github.com/pocketbase/ozzo-validation/v4",
      "github.com/pocketbase/pocketbase",
      "github.com/pquerna/otp",
      "github.com/spf13/cobra",
@@ -13426,7 +13493,6 @@
      "github.com/mattn/go-colorable",
      "github.com/mattn/go-isatty",
      "github.com/ncruces/go-strftime",
-     "github.com/pocketbase/ozzo-validation/v4",
      "github.com/remyoudompheng/bigfft",
      "github.com/spf13/cast",
      "github.com/spf13/pflag",
@@ -13444,9 +13510,9 @@
    {
     "path": "frontend/package.json",
     "kind": "dep",
-    "blob_sha": "7aaefb9100a8d11cfd087d792d242cb2e3898514",
+    "blob_sha": "3e6ef8344d8d632ad439c2fc3e7d75b736571107",
     "ecosystem": "npm",
-    "bytes": 2810,
+    "bytes": 3639,
     "names": [
      "@tiptap/core",
      "@tiptap/extension-code-block-lowlight",
@@ -13468,7 +13534,27 @@
      "svelte-i18n"
     ],
     "dev": [
+     "@axe-core/playwright",
      "@eslint/js",
+     "@fontsource/dm-mono",
+     "@fontsource/dm-sans",
+     "@fontsource/fira-code",
+     "@fontsource/hanken-grotesk",
+     "@fontsource/ibm-plex-mono",
+     "@fontsource/ibm-plex-sans",
+     "@fontsource/inter",
+     "@fontsource/jetbrains-mono",
+     "@fontsource/lato",
+     "@fontsource/lora",
+     "@fontsource/merriweather",
+     "@fontsource/newsreader",
+     "@fontsource/nunito-sans",
+     "@fontsource/playfair-display",
+     "@fontsource/plus-jakarta-sans",
+     "@fontsource/sora",
+     "@fontsource/source-code-pro",
+     "@fontsource/source-sans-3",
+     "@fontsource/space-grotesk",
      "@playwright/test",
      "@sveltejs/adapter-node",
      "@sveltejs/kit",
@@ -13641,8 +13727,8 @@
    {
     "path": "docker/Dockerfile",
     "kind": "image",
-    "blob_sha": "9a27bde051df4697a20c11904945a8bb0c590c2f",
-    "bytes": 5707,
+    "blob_sha": "5017f220392085ceca827a77fe6b5e3cb9fb85d0",
+    "bytes": 5899,
     "images": [
      "golang:1.27.3-bookworm@sha256:972b4110ba0f47539a975c31e52c64765e1ff19f2d74469ae4a595c6676e80a5",
      "node:24-alpine@sha256:06d7adf3e0ef61a13f1d28682726366f97a15aa1888c934d3ecec86c33918b53",
@@ -13662,8 +13748,8 @@
    {
     "path": ".github/workflows/auto-tag.yml",
     "kind": "ci",
-    "blob_sha": "7d71157281c1d32da58e2b3199c4645d645e2f11",
-    "bytes": 19918
+    "blob_sha": "4592ba4dea23e98b65bc06dc1f5ca9fe9bce796b",
+    "bytes": 19551
    },
    {
     "path": ".github/workflows/codeql.yml",
@@ -13674,8 +13760,8 @@
    {
     "path": ".github/workflows/docker-publish.yml",
     "kind": "ci",
-    "blob_sha": "355f6211ba244bb3f85e609f8a99e62ee5c02515",
-    "bytes": 15204,
+    "blob_sha": "877a872224268b09e7c444b2b8b9617c601d938e",
+    "bytes": 16469,
     "images": [
      "${{"
     ]
@@ -13701,8 +13787,8 @@
    {
     "path": ".github/workflows/security-tests.yml",
     "kind": "ci",
-    "blob_sha": "dfed4b9155501425f14bcfdec98595223417092b",
-    "bytes": 2947
+    "blob_sha": "3fe354c7e8e7c5eecabda95de19e160fb424edf7",
+    "bytes": 3023
    },
    {
     "path": ".github/workflows/supply-chain.yml",
@@ -16482,13 +16568,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T03:54:05Z",
+  "collected_at": "2026-11-05T03:41:32Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-03",
+  "pushed_at": "2026-11-04",
   "stars": 0,
   "tree": {
-   "sha": "9c4e8d60c22a1448d8af38c72a26f5c2975e3836",
-   "etag": "W/\"fdc8edc1536d00a539d9885c1bb51dd9def87612e331ec5dc3d60f8c6771553c\"",
+   "sha": "3acb4278ba12ddac3dee206d6ff94800860e0eae",
+   "etag": "W/\"32b0a8d2e4e82c62e228458df41a96928c29603098206e4f2b7be53bb28f0ca6\"",
    "truncated": false,
    "path_count": 46,
    "matched": [
