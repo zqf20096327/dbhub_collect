@@ -476,9 +476,9 @@ def validate_v4(obj: dict, numbered: dict, desc: str) -> tuple[dict | None, list
                                        # ——缺省=无 AI 能力=other，程序归一不拒收
     if cls.get("ai_kind") not in _AI_KIND:
         errs.append(f"ai_kind 非法: {cls.get('ai_kind')}")
+    # install 白名单外值静默过滤（v3 先例同口径：C#/Swift 等生态的 nuget/swift
+    # 是合法形态只是不在 6 值枚举内——1104 存量清账抓到，拒收过严）
     install = [i for i in (sig.get("install") or []) if i in _INSTALL]
-    if len(install) != len(sig.get("install") or []):
-        errs.append("install 含白名单外值")
     status = sig.get("status")
     if status == "null":
         status = None
