@@ -9304,5 +9304,921 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "294431fcbb85+2": {
+  "fn": "diegoscarabelli/garmin-health-data",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "replace",
+    0,
+    5,
+    0,
+    5,
+    [
+     "PyPI version",
+     "Python versions",
+     "CI",
+     "License: Apache 2.0",
+     "Downloads"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    8,
+    5,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "**Adapted from the Garmin pipeline in OpenETL**, a comprehensive ETL framework with Apache Airflow and PostgreSQL/TimescaleDB. This standalone version of the OpenETL Garmin data pipeline provides the same data extraction and modeling scheme without requiring Airflow or PostgreSQL infrastructure."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "delete",
+    10,
+    11,
+    10,
+    10
+   ],
+   [
+    "equal",
+    11,
+    35,
+    10,
+    34
+   ],
+   [
+    "replace",
+    35,
+    36,
+    34,
+    35,
+    [
+     "If SQLite is below 3.35.0, install a newer Python via pyenv, conda, or python.org — they all bundle a recent SQLite."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    84,
+    35,
+    83
+   ],
+   [
+    "replace",
+    84,
+    85,
+    83,
+    84,
+    [
+     "A bug from 2.7.0 through 2.8.0 left the per-night detail tables (`sleep_level`, `sleep_movement`, `sleep_restless_moment`, `spo2`, `hrv`, `breathing_disruption`) **silently empty for every user** (#52, fixed in 2.9). The `sleep` summary table was always populated correctly. Once on 2.9, repopulate the detail tables with one of:"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    134,
+    84,
+    133
+   ],
+   [
+    "replace",
+    134,
+    135,
+    133,
+    134,
+    [
+     "> Login strategies, token rotation, and the 30-45s anti-rate-limit pause: see Reference."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    163,
+    134,
+    162
+   ],
+   [
+    "replace",
+    163,
+    183,
+    162,
+    163,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    185,
+    163,
+    165
+   ],
+   [
+    "replace",
+    185,
+    186,
+    165,
+    166,
+    [
+     "> Full flag table, file lifecycle, retries, and date-handling rules: see Reference."
+    ]
+   ],
+   [
+    "equal",
+    186,
+    256,
+    166,
+    236
+   ],
+   [
+    "replace",
+    256,
+    257,
+    236,
+    237,
+    [
+     "> Full flag tables, the per-metric strategy registry, bucket alignment rules: see Retention reference."
+    ]
+   ],
+   [
+    "equal",
+    257,
+    264,
+    237,
+    244
+   ],
+   [
+    "replace",
+    264,
+    279,
+    244,
+    245,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    281,
+    245,
+    247
+   ],
+   [
+    "replace",
+    281,
+    282,
+    247,
+    248,
+    [
+     "The data lives in a single SQLite file (default `./garmin_data.db`). Query it with `sqlite3`, DuckDB, pandas.read_sql, or any other SQLite-compatible tool. See Data Catalog for the table layout."
+    ]
+   ],
+   [
+    "equal",
+    282,
+    287,
+    248,
+    253
+   ],
+   [
+    "replace",
+    287,
+    288,
+    253,
+    254,
+    [
+     "|Command|What it does|Section|"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    289,
+    254,
+    255
+   ],
+   [
+    "replace",
+    289,
+    297,
+    255,
+    263,
+    [
+     "|`garmin auth`|Log into Garmin Connect and store OAuth tokens. Run once per account; falls back to a manual browser-ticket login when Cloudflare blocks the automated login.|auth|",
+     "|`garmin extract`|Download data from Garmin Connect and load it into the SQLite database. The default workflow. Supports rolling-window auto retention via opt-in flags.|extract|",
+     "|`garmin info`|Show row counts, last-update dates, and DB size. Read-only.|info|",
+     "|`garmin verify`|Check schema integrity and run SQLite's `PRAGMA integrity_check`. Read-only.|verify|",
+     "|`garmin downsample`|Aggregate `activity_ts_metric` into time-bucketed records in `activity_ts_metric_downsampled`. Source rows are not modified.|retention|",
+     "|`garmin prune`|Delete `activity_ts_metric` rows for activities in a date range. The disk-reclaim partner of `downsample`.|retention|",
+     "|`garmin migrate-cascade`|One-shot retrofit of `ON DELETE CASCADE` onto pre-2.9 databases. Run once after upgrading from 2.8.x or earlier.|retention|",
+     "|`garmin migrate-multisport`|Add `activity.parent_activity_id` and relax the `(user_id, start_ts)` uniqueness to a partial index (multi-sport support). Runs automatically on `extract`; available for explicit control (e.g. `--dry-run`).|—|"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    307,
+    263,
+    273
+   ],
+   [
+    "replace",
+    307,
+    308,
+    273,
+    274,
+    [
+     "Performs a fresh interactive login and stores OAuth tokens in `~/.garminconnect/<user_id>/`. Run once per Garmin Connect account; tokens auto-refresh as long as you extract at least once every 30 days. The `--email` / `--password` flags can also be supplied via the `GARMIN_EMAIL` / `GARMIN_PASSWORD` environment variables. If Garmin's Cloudflare protection blocks the automated login, `--manual` runs a browser-ticket fallback that prints step-by-step capture instructions, and `--ticket 'ST-...'` (a raw service ticket or the full redirect URL that carries it) performs the exchange non-interactively; see Manual login (Cloudflare fallback). See the Authentication internals collapsible below for the login-strategy waterfall and the 30-45s anti-rate-limit pause explanation."
+    ]
+   ],
+   [
+    "equal",
+    308,
+    311,
+    274,
+    277
+   ],
+   [
+    "replace",
+    311,
+    324,
+    277,
+    290,
+    [
+     "|Flag|Type|Purpose|",
+     "|---|---|---|",
+     "|`--start-date YYYY-MM-DD`|Inclusive|Auto-detected from the database if omitted (day after the latest stored data, or 30 days ago for an empty DB).|",
+     "|`--end-date YYYY-MM-DD`|Exclusive (except same-day = inclusive)|Defaults to today.|",
+     "|`--data-types NAME`|Repeatable, e.g. `--data-types SLEEP --data-types HEART_RATE`|Filter to specific data types. All types extracted if omitted. Mutually exclusive with `--exclude-data-types`.|",
+     "|`--exclude-data-types NAME`|Repeatable, e.g. `--exclude-data-types MENSTRUAL_CYCLE_DAY`|Extract every data type *except* these (forward-compatible: types added to the tool later are still extracted). Mutually exclusive with `--data-types`.|",
+     "|`--accounts ID`|Repeatable or comma-separated|Filter to specific Garmin user IDs (`--accounts 12345 --accounts 67890` or `--accounts 12345,67890`). All discovered accounts extracted if omitted.|",
+     "|`--db-path PATH`|File path|SQLite database file. Defaults to `./garmin_data.db`.|",
+     "|`--extract-only`|Flag|Download to `garmin_files/ingest/` and stop; do not load into the DB.|",
+     "|`--process-only`|Flag|Skip the API; load whatever is currently in `garmin_files/ingest/`. Does not require authentication. Mutually exclusive with `--extract-only`.|",
+     "|`--downsample-older-than DURATION`|Optional, requires `--downsample-grain`|Before extracting, downsample `activity_ts_metric` rows for activities with `start_ts < today - DURATION`. Accepts `90d`, `6m`, `1y`.|",
+     "|`--downsample-grain GRAIN`|Required when `--downsample-older-than` is set|Bucket grain for the auto downsample (e.g., `60s`, `5m`).|",
+     "|`--prune-older-than DURATION`|Optional|Before extracting (and after the auto downsample, if both are set), delete `activity_ts_metric` rows for activities with `start_ts < today - DURATION`.|"
+    ]
+   ],
+   [
+    "equal",
+    324,
+    325,
+    290,
+    291
+   ],
+   [
+    "replace",
+    325,
+    327,
+    291,
+    292,
+    [
+     " File lifecycle "
+    ]
+   ],
+   [
+    "equal",
+    327,
+    345,
+    292,
+    310
+   ],
+   [
+    "replace",
+    345,
+    349,
+    310,
+    311,
+    [
+     " Failure handling &amp; retries "
+    ]
+   ],
+   [
+    "equal",
+    349,
+    361,
+    311,
+    323
+   ],
+   [
+    "replace",
+    361,
+    365,
+    323,
+    324,
+    [
+     " Date range behavior &amp; auto-detection "
+    ]
+   ],
+   [
+    "equal",
+    365,
+    384,
+    324,
+    343
+   ],
+   [
+    "replace",
+    384,
+    388,
+    343,
+    344,
+    [
+     " Authentication internals "
+    ]
+   ],
+   [
+    "equal",
+    388,
+    408,
+    344,
+    364
+   ],
+   [
+    "replace",
+    408,
+    412,
+    364,
+    365,
+    [
+     " Duplicate prevention &amp; reprocessing "
+    ]
+   ],
+   [
+    "equal",
+    412,
+    426,
+    365,
+    379
+   ],
+   [
+    "delete",
+    426,
+    428,
+    379,
+    379
+   ],
+   [
+    "equal",
+    428,
+    437,
+    379,
+    388
+   ],
+   [
+    "replace",
+    437,
+    440,
+    388,
+    391,
+    [
+     "|Flag|Type|Purpose|",
+     "|---|---|---|",
+     "|`--db-path PATH`|File path|SQLite database file. Defaults to `./garmin_data.db`.|"
+    ]
+   ],
+   [
+    "equal",
+    440,
+    452,
+    391,
+    403
+   ],
+   [
+    "replace",
+    452,
+    455,
+    403,
+    406,
+    [
+     "|Flag|Type|Purpose|",
+     "|---|---|---|",
+     "|`--db-path PATH`|File path|SQLite database file. Defaults to `./garmin_data.db`.|"
+    ]
+   ],
+   [
+    "equal",
+    455,
+    476,
+    406,
+    427
+   ],
+   [
+    "replace",
+    476,
+    484,
+    427,
+    435,
+    [
+     "|Flag|Type|Purpose|",
+     "|---|---|---|",
+     "|`--end-date YYYY-MM-DD`|Required, exclusive|End of the range.|",
+     "|`--start-date YYYY-MM-DD`|Optional, inclusive|Omit for \"everything before `--end-date`\".|",
+     "|`--accounts ID`|Repeatable or comma-separated|Scope to specific Garmin user IDs.|",
+     "|`--db-path PATH`|File path|Defaults to `./garmin_data.db`.|",
+     "|`--dry-run`|Flag|Report row count without deleting.|",
+     "|`--yes` / `-y`|Flag|Skip the confirmation prompt.|"
+    ]
+   ],
+   [
+    "equal",
+    484,
+    493,
+    435,
+    444
+   ],
+   [
+    "replace",
+    493,
+    498,
+    444,
+    449,
+    [
+     "|Strategy|Applies to|Storage|",
+     "|---|---|---|",
+     "|`AGGREGATE` (default)|Instantaneous numeric metrics: `heart_rate`, `power`, `cadence`, `speed`, `enhanced_altitude`, `temperature`, all left/right pedal-balance metrics, etc.|avg in `value`, plus `min_value` / `max_value`|",
+     "|`LAST`|Cumulative metrics: `distance`, `accumulated_power`, plus future `accumulated_*` / `total_*` (heuristic).|last-in-bucket value; min/max NULL|",
+     "|`SKIP`|GPS coordinates: `position_lat`, `position_long` (already materialized in `activity_path`).|not downsampled|"
+    ]
+   ],
+   [
+    "equal",
+    498,
+    501,
+    449,
+    452
+   ],
+   [
+    "replace",
+    501,
+    510,
+    452,
+    461,
+    [
+     "|Flag|Type|Purpose|",
+     "|---|---|---|",
+     "|`--end-date YYYY-MM-DD`|Required, exclusive|End of the range.|",
+     "|`--start-date YYYY-MM-DD`|Optional, inclusive|Omit for \"everything before `--end-date`\".|",
+     "|`--time-grain GRAIN`|Required, format `^([1-9][0-9]*)(s\\|m)$`|Bucket width. Examples: `30s`, `60s`, `1m`, `5m`, `15m`, `60m`. Hours intentionally not supported (use minutes).|",
+     "|`--accounts ID`|Repeatable or comma-separated|Scope to specific Garmin user IDs.|",
+     "|`--db-path PATH`|File path|Defaults to `./garmin_data.db`.|",
+     "|`--dry-run`|Flag|Print the strategy table and counts without writing.|",
+     "|`--yes` / `-y`|Flag|Skip the confirmation prompt.|"
+    ]
+   ],
+   [
+    "equal",
+    510,
+    517,
+    461,
+    468
+   ],
+   [
+    "replace",
+    517,
+    522,
+    468,
+    473,
+    [
+     "|Flag|Type|Purpose|",
+     "|---|---|---|",
+     "|`--db-path PATH`|File path|Defaults to `./garmin_data.db`.|",
+     "|`--dry-run`|Flag|Plan the migration without modifying the database.|",
+     "|`--no-backup`|Flag|Skip the pre-migration backup. Default copies the DB to `<db>.bak.<timestamp>`.|"
+    ]
+   ],
+   [
+    "equal",
+    522,
+    531,
+    473,
+    482
+   ],
+   [
+    "replace",
+    531,
+    536,
+    482,
+    487,
+    [
+     "|Flag|Type|Purpose|",
+     "|---|---|---|",
+     "|`--db-path PATH`|File path|Defaults to `./garmin_data.db`.|",
+     "|`--dry-run`|Flag|Plan the migration without modifying the database.|",
+     "|`--no-backup`|Flag|Skip the pre-migration backup. Default copies the DB to `<db>.bak.<timestamp>`.|"
+    ]
+   ],
+   [
+    "equal",
+    536,
+    543,
+    487,
+    494
+   ],
+   [
+    "replace",
+    543,
+    544,
+    494,
+    495,
+    [
+     "|Data Type|Description|Frequency|"
+    ]
+   ],
+   [
+    "equal",
+    544,
+    545,
+    495,
+    496
+   ],
+   [
+    "replace",
+    545,
+    564,
+    496,
+    515,
+    [
+     "|**SLEEP**|Sleep stages, HRV, SpO2, restlessness, scores|Per session|",
+     "|**HEART_RATE**|Continuous heart rate measurements|2-min intervals|",
+     "|**STRESS**|Stress levels throughout the day|3-min intervals|",
+     "|**RESPIRATION**|Breathing rate measurements|2-min intervals|",
+     "|**TRAINING_READINESS**|Readiness scores and factors|Daily|",
+     "|**TRAINING_STATUS**|VO2 max, load balance, ACWR|Daily|",
+     "|**STEPS**|Step counts and activity levels|15-min intervals|",
+     "|**FLOORS**|Floors climbed and descended|15-min intervals|",
+     "|**INTENSITY_MINUTES**|Moderate/vigorous activity minutes|15-min intervals|",
+     "|**MENSTRUAL_CYCLE_DAY**|Per-day cycle state: phase, day-in-cycle, period length, plus the user's symptoms / moods / discharge tags, flow, sex drive, sexual activity, notes, ovulation flag on logged days|Per day inside any observed or predicted cycle window|",
+     "|**MENSTRUAL_CYCLE_SUMMARY**|Per-cycle summaries (observed + predicted): start date, period length|Per cycle|",
+     "|**BODY_COMPOSITION**|Scale weigh-ins: weight, BMI, body fat %, body water %, bone mass, muscle mass|Per weigh-in|",
+     "|**RUNNING_TOLERANCE**|Biomechanical running load: daily impact load, running distance, tolerated load ceiling (requires a compatible watch)|Daily|",
+     "|**ACTIVITIES_LIST**|Detailed activity summaries|Per activity|",
+     "|**EXERCISE_SETS**|Per-set strength training data: reps, weight, ML-classified exercise name|Per activity|",
+     "|**PERSONAL_RECORDS**|All-time bests across sports|As achieved|",
+     "|**RACE_PREDICTIONS**|Predicted race times|Periodic updates|",
+     "|**USER_PROFILE**|Demographics, fitness metrics|Periodic updates|",
+     "|**ACTIVITY**|FIT (binary) or TCX (XML) activity files with detailed time-series sensor data (plus laps, splits, pool-swim lengths, events, HRV, and session metrics from FIT)|Per activity|"
+    ]
+   ],
+   [
+    "equal",
+    564,
+    567,
+    515,
+    518
+   ],
+   [
+    "replace",
+    567,
+    568,
+    518,
+    519,
+    [
+     "The SQLite database contains 42 tables organized by category. The complete schema is defined in garmin_health_data/tables.ddl following the same pattern as the openetl project. The schema includes inline documentation comments for all tables and columns, which are preserved in the SQLite database itself:"
+    ]
+   ],
+   [
+    "equal",
+    568,
+    579,
+    519,
+    530
+   ],
+   [
+    "replace",
+    579,
+    581,
+    530,
+    531,
+    [
+     " SQLite adaptations "
+    ]
+   ],
+   [
+    "equal",
+    581,
+    582,
+    531,
+    532
+   ],
+   [
+    "replace",
+    582,
+    583,
+    532,
+    533,
+    [
+     "The database schema has been adapted from the original PostgreSQL/TimescaleDB schema in OpenETL to be fully compatible with SQLite, while preserving all relationships and data integrity. Key adaptations:"
+    ]
+   ],
+   [
+    "equal",
+    583,
+    588,
+    533,
+    538
+   ],
+   [
+    "replace",
+    588,
+    589,
+    538,
+    539,
+    [
+     "- **JSON over JSONB** — PostgreSQL `JSONB` columns (e.g., `activity_path.path_json`, `activity_hrv.rr_json`, `activity_event.data_json`) are stored in SQLite as `JSON`/TEXT. CHECK constraints rely on SQLite JSON functions (`json_valid`, `json_type`, `json_array_length`). The global SQLite >= 3.35 requirement under Requirements is necessary but not sufficient: JSON1 functions are enabled by default in modern CPython builds but can be omitted in some custom or stripped-down SQLite builds. If `CREATE TABLE` fails with errors about missing `json_valid` or `json_type`, verify JSON support:"
+    ]
+   ],
+   [
+    "equal",
+    589,
+    603,
+    539,
+    553
+   ],
+   [
+    "replace",
+    603,
+    607,
+    553,
+    554,
+    [
+     " Table structure "
+    ]
+   ],
+   [
+    "equal",
+    607,
+    623,
+    554,
+    570
+   ],
+   [
+    "replace",
+    623,
+    635,
+    570,
+    571,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    635,
+    649,
+    571,
+    585
+   ],
+   [
+    "replace",
+    649,
+    653,
+    585,
+    586,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    653,
+    663,
+    586,
+    596
+   ],
+   [
+    "replace",
+    663,
+    668,
+    596,
+    597,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    668,
+    703,
+    597,
+    632
+   ],
+   [
+    "delete",
+    703,
+    705,
+    632,
+    632
+   ],
+   [
+    "equal",
+    705,
+    714,
+    632,
+    641
+   ],
+   [
+    "replace",
+    714,
+    715,
+    641,
+    642,
+    [
+     "**garmin-health-data** is designed for comprehensive data extraction with a well-structured relational schema that supports both human-powered analytics and LLM-powered analysis via agents querying the locally created SQLite file. It extracts complete FIT file data with per-second activity metrics, 1-minute sleep intervals, and sport-specific tables for detailed analysis. The normalized 42-table schema with explicit SQL constraints ensures data integrity and makes it easy to understand relationships for complex queries, power zone analysis, running dynamics, and long-term trend studies."
+    ]
+   ],
+   [
+    "equal",
+    715,
+    716,
+    642,
+    643
+   ],
+   [
+    "replace",
+    716,
+    717,
+    643,
+    644,
+    [
+     "**garmy** is optimized for programmatic access to the Garmin Connect API, particularly useful for AI assistant integration via its built-in MCP (Model Context Protocol) server. It enables real-time interaction with Claude Desktop or custom chatbots for quick daily insights and summaries. However, it's limited to API-provided metrics (daily aggregates only, no FIT file access), making deep analytics or granular time-series analysis impossible. Best suited for lightweight health monitoring apps that prioritize AI integration over comprehensive data collection."
+    ]
+   ],
+   [
+    "equal",
+    717,
+    718,
+    644,
+    645
+   ],
+   [
+    "replace",
+    718,
+    719,
+    645,
+    646,
+    [
+     "**garmindb** is a mature and well-documented tool, but has been functionally superseded by garmin-health-data. While it pioneered local Garmin data extraction, it offers less comprehensive schemas (missing power meter data, limited FIT metrics) and uses implicit duplicate handling at the ORM level rather than explicit database constraints. For new projects requiring detailed data extraction and analysis, garmin-health-data is the recommended choice."
+    ]
+   ],
+   [
+    "equal",
+    719,
+    721,
+    646,
+    648
+   ],
+   [
+    "replace",
+    721,
+    722,
+    648,
+    649,
+    [
+     "Check out OpenETL's Garmin pipeline."
+    ]
+   ],
+   [
+    "equal",
+    722,
+    731,
+    649,
+    658
+   ],
+   [
+    "replace",
+    731,
+    745,
+    658,
+    672,
+    [
+     "|Feature|garmin-health-data|garmindb|garmy|garmin-givemydata|garmin-local-mcp|",
+     "|---|---|---|---|---|---|",
+     "|**Interface**|CLI|CLI|CLI + Python API + MCP|CLI + MCP|CLI + MCP|",
+     "|**Setup complexity**|✅ Single command|⚠️ Config file + 2 commands|✅ Single command|⚠️ Single command, requires Chrome|✅ Single command|",
+     "|**Storage**|SQLite database|SQLite database|SQLite (optional)|SQLite + raw FIT files|SQLite + raw JSON snapshots|",
+     "|**Cross-platform**|✅|✅|✅|✅|✅|",
+     "|**Health metrics (sleep, HRV, stress)**|✅ Comprehensive|⚠️ Basic coverage|⚠️ Basic coverage|✅ Comprehensive|✅ Comprehensive (~35+ daily metrics)|",
+     "|**Sleep data granularity**|✅ 7 tables, 1-min intervals|⚠️ 2 tables, less granular|⚠️ 1 table, daily aggregate|⚠️ Stage durations only, no per-minute table|⚠️ Daily/summary only|",
+     "|**FIT file time-series data**|✅ All metrics (EAV schema)|⚠️ Limited (~10 core fields)|❌ API-only (no FIT files)|⚠️ Fixed-column trackpoints, no running/cycling dynamics|❌ Summary only, no GPS/sample streams|",
+     "|**Power meter & advanced metrics**|✅ Full support|❌ Not captured|❌ API limitations|⚠️ Basic power value only|❌ Not captured|",
+     "|**Database schema quality**|✅ Normalized, 42 tables|⚠️ ~31 tables, mixed normalization|❌ Very simple|⚠️ 50 tables, fixed columns|⚠️ Simple, rebuildable from raw JSON|",
+     "|**Duplicate prevention**|✅ Explicit SQL ON CONFLICT|⚠️ ORM merge (undocumented)|✅ ORM merge + sync tracking|✅ Explicit upserts|✅ Idempotent sync|",
+     "|**Auto-resume**|✅|✅|✅|✅|✅|",
+     "|**Active maintenance**|✅|✅|✅|✅|✅|"
+    ]
+   ],
+   [
+    "equal",
+    745,
+    748,
+    672,
+    675
+   ],
+   [
+    "replace",
+    748,
+    758,
+    675,
+    685,
+    [
+     "|Feature|garmin-health-data|garminexport|garmin-fetch|Garmin Local Archive|",
+     "|---|---|---|---|---|",
+     "|**Interface**|CLI|CLI|GUI|GUI + MCP|",
+     "|**Setup complexity**|✅ Single command|✅ Single command|⚠️ Manual setup|✅ Standalone EXE, no setup|",
+     "|**Storage**|SQLite database|File export|Excel export|JSON + Excel + HTML (no DB)|",
+     "|**Cross-platform**|✅|✅|✅|❌ Windows only|",
+     "|**Health metrics (sleep, HRV, stress)**|✅ Comprehensive|❌ Activities only|❌ Activities only|✅ Comprehensive + weather/pollen context|",
+     "|**FIT / activity time-series data**|✅ All metrics (EAV schema)|❌|❌|❌ API-only, no FIT parsing|",
+     "|**Resumable / deduplicated sync**|✅ Explicit SQL ON CONFLICT, auto-resume|✅ Auto-resume|❌|✅ Per-day checkpointing|",
+     "|**Active maintenance**|✅|❌|⚠️ Limited|✅|"
+    ]
+   ],
+   [
+    "equal",
+    758,
+    759,
+    685,
+    686
+   ],
+   [
+    "replace",
+    759,
+    761,
+    686,
+    687,
+    [
+     " Schema deep-dive: garmin-health-data vs garmindb vs garmy "
+    ]
+   ],
+   [
+    "equal",
+    761,
+    869,
+    687,
+    795
+   ],
+   [
+    "delete",
+    869,
+    871,
+    795,
+    795
+   ],
+   [
+    "equal",
+    871,
+    872,
+    795,
+    796
+   ],
+   [
+    "replace",
+    872,
+    881,
+    796,
+    797,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    881,
+    882,
+    797,
+    798
+   ],
+   [
+    "replace",
+    882,
+    885,
+    798,
+    799,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

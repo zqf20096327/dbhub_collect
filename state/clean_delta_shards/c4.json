@@ -9454,5 +9454,2138 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "da68cc0f6777+2": {
+  "fn": "cybertec-postgresql/pg_permissions",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    6,
+    1,
+    5
+   ],
+   [
+    "delete",
+    6,
+    7,
+    5,
+    5
+   ],
+   [
+    "equal",
+    7,
+    10,
+    5,
+    8
+   ],
+   [
+    "replace",
+    10,
+    11,
+    8,
+    9,
+    [
+     " CREATE EXTENSION pg_permissions SCHEMA public;"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    19,
+    9,
+    17
+   ],
+   [
+    "replace",
+    19,
+    31,
+    17,
+    29,
+    [
+     " INSERT INTO public.permission_target",
+     " (role_name, permissions,",
+     " object_type, schema_name)",
+     " VALUES",
+     " ('appuser', '{SELECT,INSERT,UPDATE,DELETE}',",
+     " 'TABLE', 'appschema');",
+     " INSERT INTO public.permission_target",
+     " (role_name, permissions,",
+     " object_type, schema_name)",
+     " VALUES",
+     " ('appuser', '{SELECT,INSERT,UPDATE,DELETE}',",
+     " 'VIEW', 'appschema');"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    34,
+    29,
+    32
+   ],
+   [
+    "replace",
+    34,
+    40,
+    32,
+    38,
+    [
+     " INSERT INTO public.permission_target",
+     " (role_name, permissions,",
+     " object_type, schema_name)",
+     " VALUES",
+     " ('appuser', '{USAGE}',",
+     " 'SCHEMA', 'appschema');"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    44,
+    38,
+    42
+   ],
+   [
+    "replace",
+    44,
+    50,
+    42,
+    48,
+    [
+     " INSERT INTO public.permission_target",
+     " (role_name, permissions,",
+     " object_type, schema_name, object_name)",
+     " VALUES",
+     " ('appuser', '{USAGE}',",
+     " 'SEQUENCE', 'appschema', 'appseq');"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    54,
+    48,
+    52
+   ],
+   [
+    "replace",
+    54,
+    55,
+    52,
+    53,
+    [
+     " SELECT * FROM public.permission_diffs();"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    53,
+    54
+   ],
+   [
+    "replace",
+    56,
+    61,
+    54,
+    59,
+    [
+     " missing | role_name | object_type | schema_name | object_name | column_name | permission",
+     " ---------+-----------+-------------+-------------+-------------+-------------+------------",
+     " f | laurenz | VIEW | appschema | appview | | SELECT",
+     " t | appuser | TABLE | appschema | apptable | | DELETE",
+     " (2 rows)"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    70,
+    59,
+    68
+   ],
+   [
+    "replace",
+    70,
+    72,
+    68,
+    70,
+    [
+     " SELECT * FROM schema_permissions",
+     " WHERE role_name = 'appuser' AND schema_name = 'appschema';"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    70,
+    71
+   ],
+   [
+    "replace",
+    73,
+    78,
+    71,
+    76,
+    [
+     " object_type | role_name | schema_name | object_name | column_name | permission | granted",
+     " -------------+-----------+-------------+-------------+-------------+------------+---------",
+     " SCHEMA | appuser | appschema | | | USAGE | t",
+     " SCHEMA | appuser | appschema | | | CREATE | f",
+     " (2 rows)"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    80,
+    76,
+    78
+   ],
+   [
+    "delete",
+    80,
+    81,
+    78,
+    78
+   ],
+   [
+    "equal",
+    81,
+    105,
+    78,
+    102
+   ],
+   [
+    "replace",
+    105,
+    106,
+    102,
+    103,
+    [
+     " `FUNCTION`, `SCHEMA` or `DATABASE`)"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    134,
+    103,
+    131
+   ],
+   [
+    "replace",
+    134,
+    137,
+    131,
+    134,
+    [
+     " CREATE ROLE appuser LOGIN;",
+     " CREATE ROLE reporting LOGIN;",
+     " CREATE ROLE auditor LOGIN;"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    134,
+    135
+   ],
+   [
+    "replace",
+    138,
+    148,
+    135,
+    145,
+    [
+     " CREATE SCHEMA appschema;",
+     " CREATE TABLE appschema.invoice (",
+     " id integer PRIMARY KEY,",
+     " customer text NOT NULL,",
+     " amount numeric NOT NULL",
+     " );",
+     " CREATE VIEW appschema.invoice_v AS SELECT id, customer FROM appschema.invoice;",
+     " CREATE SEQUENCE appschema.invoice_id_seq;",
+     " CREATE FUNCTION appschema.total() RETURNS numeric LANGUAGE sql",
+     " AS 'SELECT sum(amount) FROM appschema.invoice';"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    145,
+    146
+   ],
+   [
+    "replace",
+    149,
+    157,
+    146,
+    154,
+    [
+     " GRANT USAGE ON SCHEMA appschema TO appuser, reporting, auditor;",
+     " GRANT SELECT, INSERT, UPDATE, DELETE ON appschema.invoice TO appuser;",
+     " GRANT SELECT ON appschema.invoice TO reporting;",
+     " GRANT SELECT ON appschema.invoice_v TO reporting;",
+     " GRANT SELECT (customer) ON appschema.invoice TO auditor;",
+     " GRANT USAGE ON SEQUENCE appschema.invoice_id_seq TO appuser;",
+     " REVOKE EXECUTE ON FUNCTION appschema.total() FROM PUBLIC;",
+     " GRANT EXECUTE ON FUNCTION appschema.total() TO reporting;"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    160,
+    154,
+    157
+   ],
+   [
+    "replace",
+    160,
+    163,
+    157,
+    160,
+    [
+     " SELECT object_type, role_name, schema_name, permission, granted",
+     " FROM schema_permissions",
+     " WHERE schema_name = 'appschema' AND role_name IN ('appuser', 'reporting');"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    164,
+    160,
+    161
+   ],
+   [
+    "replace",
+    164,
+    170,
+    161,
+    167,
+    [
+     " object_type | role_name | schema_name | permission | granted",
+     " -------------+-----------+-------------+------------+---------",
+     " SCHEMA | appuser | appschema | USAGE | t",
+     " SCHEMA | appuser | appschema | CREATE | f",
+     " SCHEMA | reporting | appschema | USAGE | t",
+     " SCHEMA | reporting | appschema | CREATE | f"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    174,
+    167,
+    171
+   ],
+   [
+    "replace",
+    174,
+    177,
+    171,
+    174,
+    [
+     " SELECT role_name, object_name, permission, granted",
+     " FROM table_permissions",
+     " WHERE schema_name = 'appschema' AND role_name IN ('appuser', 'reporting');"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    174,
+    175
+   ],
+   [
+    "replace",
+    178,
+    194,
+    175,
+    191,
+    [
+     " role_name | object_name | permission | granted",
+     " -----------+-------------+------------+---------",
+     " appuser | invoice | SELECT | t",
+     " appuser | invoice | INSERT | t",
+     " appuser | invoice | UPDATE | t",
+     " appuser | invoice | DELETE | t",
+     " appuser | invoice | TRUNCATE | f",
+     " appuser | invoice | REFERENCES | f",
+     " appuser | invoice | TRIGGER | f",
+     " reporting | invoice | SELECT | t",
+     " reporting | invoice | INSERT | f",
+     " reporting | invoice | UPDATE | f",
+     " reporting | invoice | DELETE | f",
+     " reporting | invoice | TRUNCATE | f",
+     " reporting | invoice | REFERENCES | f",
+     " reporting | invoice | TRIGGER | f"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    197,
+    191,
+    194
+   ],
+   [
+    "replace",
+    197,
+    200,
+    194,
+    197,
+    [
+     " SELECT role_name, object_name, permission, granted",
+     " FROM view_permissions",
+     " WHERE schema_name = 'appschema' AND role_name = 'reporting';"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    201,
+    197,
+    198
+   ],
+   [
+    "replace",
+    201,
+    210,
+    198,
+    207,
+    [
+     " role_name | object_name | permission | granted",
+     " -----------+-------------+------------+---------",
+     " reporting | invoice_v | SELECT | t",
+     " reporting | invoice_v | INSERT | f",
+     " reporting | invoice_v | UPDATE | f",
+     " reporting | invoice_v | DELETE | f",
+     " reporting | invoice_v | TRUNCATE | f",
+     " reporting | invoice_v | REFERENCES | f",
+     " reporting | invoice_v | TRIGGER | f"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    211,
+    207,
+    208
+   ],
+   [
+    "replace",
+    211,
+    212,
+    208,
+    209,
+    [
+     "`column_permissions` reports column level privileges. Note that `granted` is"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    216,
+    209,
+    213
+   ],
+   [
+    "replace",
+    216,
+    219,
+    213,
+    216,
+    [
+     " SELECT role_name, object_name, column_name, permission, granted",
+     " FROM column_permissions",
+     " WHERE schema_name = 'appschema' AND object_name = 'invoice' AND role_name = 'auditor';"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    220,
+    216,
+    217
+   ],
+   [
+    "replace",
+    220,
+    234,
+    217,
+    231,
+    [
+     " role_name | object_name | column_name | permission | granted",
+     " -----------+-------------+-------------+------------+---------",
+     " auditor | invoice | amount | SELECT | f",
+     " auditor | invoice | amount | INSERT | f",
+     " auditor | invoice | amount | UPDATE | f",
+     " auditor | invoice | amount | REFERENCES | f",
+     " auditor | invoice | customer | SELECT | t",
+     " auditor | invoice | customer | INSERT | f",
+     " auditor | invoice | customer | UPDATE | f",
+     " auditor | invoice | customer | REFERENCES | f",
+     " auditor | invoice | id | SELECT | f",
+     " auditor | invoice | id | INSERT | f",
+     " auditor | invoice | id | UPDATE | f",
+     " auditor | invoice | id | REFERENCES | f"
+    ]
+   ],
+   [
+    "equal",
+    234,
+    238,
+    231,
+    235
+   ],
+   [
+    "replace",
+    238,
+    241,
+    235,
+    238,
+    [
+     " SELECT role_name, object_name, permission, granted",
+     " FROM sequence_permissions",
+     " WHERE schema_name = 'appschema' AND role_name IN ('appuser', 'reporting');"
+    ]
+   ],
+   [
+    "equal",
+    241,
+    242,
+    238,
+    239
+   ],
+   [
+    "replace",
+    242,
+    250,
+    239,
+    247,
+    [
+     " role_name | object_name | permission | granted",
+     " -----------+----------------+------------+---------",
+     " appuser | invoice_id_seq | SELECT | f",
+     " appuser | invoice_id_seq | UPDATE | f",
+     " appuser | invoice_id_seq | USAGE | t",
+     " reporting | invoice_id_seq | SELECT | f",
+     " reporting | invoice_id_seq | UPDATE | f",
+     " reporting | invoice_id_seq | USAGE | f"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    251,
+    247,
+    248
+   ],
+   [
+    "replace",
+    251,
+    252,
+    248,
+    249,
+    [
+     "`function_permissions` reports the `EXECUTE` privilege on functions. Keep in"
+    ]
+   ],
+   [
+    "equal",
+    252,
+    255,
+    249,
+    252
+   ],
+   [
+    "replace",
+    255,
+    258,
+    252,
+    255,
+    [
+     " SELECT role_name, object_name, permission, granted",
+     " FROM function_permissions",
+     " WHERE schema_name = 'appschema' AND role_name IN ('appuser', 'reporting');"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    259,
+    255,
+    256
+   ],
+   [
+    "replace",
+    259,
+    263,
+    256,
+    260,
+    [
+     " role_name | object_name | permission | granted",
+     " -----------+-------------+------------+---------",
+     " appuser | total() | EXECUTE | f",
+     " reporting | total() | EXECUTE | t"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    268,
+    260,
+    265
+   ],
+   [
+    "replace",
+    268,
+    271,
+    265,
+    268,
+    [
+     " SELECT role_name, permission, granted",
+     " FROM database_permissions",
+     " WHERE role_name IN ('appuser', 'reporting');"
+    ]
+   ],
+   [
+    "equal",
+    271,
+    272,
+    268,
+    269
+   ],
+   [
+    "replace",
+    272,
+    280,
+    269,
+    277,
+    [
+     " role_name | permission | granted",
+     " -----------+------------+---------",
+     " appuser | CREATE | f",
+     " appuser | CONNECT | t",
+     " appuser | TEMPORARY | t",
+     " reporting | CREATE | f",
+     " reporting | CONNECT | t",
+     " reporting | TEMPORARY | t"
+    ]
+   ],
+   [
+    "equal",
+    280,
+    281,
+    277,
+    278
+   ],
+   [
+    "replace",
+    281,
+    282,
+    278,
+    279,
+    [
+     "`all_permissions` is the union of all of the above. Filtering on"
+    ]
+   ],
+   [
+    "equal",
+    282,
+    284,
+    279,
+    281
+   ],
+   [
+    "replace",
+    284,
+    289,
+    281,
+    286,
+    [
+     " SELECT object_type, role_name, object_name, column_name, permission",
+     " FROM all_permissions",
+     " WHERE granted AND role_name IN ('appuser', 'reporting', 'auditor')",
+     " AND coalesce(schema_name, 'appschema') = 'appschema'",
+     " ORDER BY object_type, role_name, object_name, column_name, permission;"
+    ]
+   ],
+   [
+    "equal",
+    289,
+    290,
+    286,
+    287
+   ],
+   [
+    "replace",
+    290,
+    310,
+    287,
+    307,
+    [
+     " object_type | role_name | object_name | column_name | permission",
+     " -------------+-----------+----------------+-------------+------------",
+     " TABLE | appuser | invoice | | SELECT",
+     " TABLE | appuser | invoice | | INSERT",
+     " TABLE | appuser | invoice | | UPDATE",
+     " TABLE | appuser | invoice | | DELETE",
+     " TABLE | reporting | invoice | | SELECT",
+     " VIEW | reporting | invoice_v | | SELECT",
+     " COLUMN | auditor | invoice | customer | SELECT",
+     " SEQUENCE | appuser | invoice_id_seq | | USAGE",
+     " FUNCTION | reporting | total() | | EXECUTE",
+     " SCHEMA | appuser | | | USAGE",
+     " SCHEMA | auditor | | | USAGE",
+     " SCHEMA | reporting | | | USAGE",
+     " DATABASE | appuser | | | CONNECT",
+     " DATABASE | appuser | | | TEMPORARY",
+     " DATABASE | auditor | | | CONNECT",
+     " DATABASE | auditor | | | TEMPORARY",
+     " DATABASE | reporting | | | CONNECT",
+     " DATABASE | reporting | | | TEMPORARY"
+    ]
+   ],
+   [
+    "equal",
+    310,
+    334,
+    307,
+    331
+   ],
+   [
+    "replace",
+    334,
+    335,
+    331,
+    332,
+    [
+     "scope described by the desired state, not the whole cluster. Privileges on"
+    ]
+   ],
+   [
+    "equal",
+    335,
+    341,
+    332,
+    338
+   ],
+   [
+    "replace",
+    341,
+    342,
+    338,
+    339,
+    [
+     "while `reporting` should only be allowed to read them. We record that as the"
+    ]
+   ],
+   [
+    "equal",
+    342,
+    344,
+    339,
+    341
+   ],
+   [
+    "replace",
+    344,
+    347,
+    341,
+    344,
+    [
+     " INSERT INTO permission_target (role_name, permissions, object_type, schema_name)",
+     " VALUES ('appuser', '{SELECT,INSERT,UPDATE,DELETE}', 'TABLE', 'appschema'),",
+     " ('reporting', '{SELECT}', 'TABLE', 'appschema');"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    351,
+    344,
+    348
+   ],
+   [
+    "replace",
+    351,
+    353,
+    348,
+    350,
+    [
+     " GRANT SELECT, INSERT, UPDATE ON appschema.invoice TO appuser;",
+     " GRANT SELECT, INSERT ON appschema.invoice TO reporting;"
+    ]
+   ],
+   [
+    "equal",
+    353,
+    356,
+    350,
+    353
+   ],
+   [
+    "replace",
+    356,
+    358,
+    353,
+    355,
+    [
+     " SELECT * FROM permission_diffs()",
+     " WHERE role_name IN ('appuser', 'reporting');"
+    ]
+   ],
+   [
+    "equal",
+    358,
+    359,
+    355,
+    356
+   ],
+   [
+    "replace",
+    359,
+    363,
+    356,
+    360,
+    [
+     " missing | role_name | object_type | schema_name | object_name | column_name | permission",
+     " ---------+-----------+-------------+-------------+-------------+-------------+------------",
+     " t | appuser | TABLE | appschema | invoice | | DELETE",
+     " f | reporting | TABLE | appschema | invoice | | INSERT"
+    ]
+   ],
+   [
+    "equal",
+    363,
+    365,
+    360,
+    362
+   ],
+   [
+    "replace",
+    365,
+    366,
+    362,
+    363,
+    [
+     "`reporting` holds a surplus `INSERT` privilege (`missing` is `f`). Because the"
+    ]
+   ],
+   [
+    "equal",
+    366,
+    369,
+    363,
+    366
+   ],
+   [
+    "replace",
+    369,
+    373,
+    366,
+    370,
+    [
+     " -- grant the missing privilege",
+     " UPDATE table_permissions SET granted = true",
+     " WHERE role_name = 'appuser' AND schema_name = 'appschema'",
+     " AND object_name = 'invoice' AND permission = 'DELETE';"
+    ]
+   ],
+   [
+    "equal",
+    373,
+    374,
+    370,
+    371
+   ],
+   [
+    "replace",
+    374,
+    378,
+    371,
+    375,
+    [
+     " -- revoke the surplus privilege",
+     " UPDATE table_permissions SET granted = false",
+     " WHERE role_name = 'reporting' AND schema_name = 'appschema'",
+     " AND object_name = 'invoice' AND permission = 'INSERT';"
+    ]
+   ],
+   [
+    "equal",
+    378,
+    383,
+    375,
+    380
+   ],
+   [
+    "delete",
+    383,
+    384,
+    380,
+    380
+   ],
+   [
+    "equal",
+    384,
+    389,
+    380,
+    385
+   ],
+   [
+    "replace",
+    389,
+    390,
+    385,
+    386,
+    [
+     "Make sure that `pg_config` is on your `PATH`. Then type"
+    ]
+   ],
+   [
+    "equal",
+    390,
+    391,
+    386,
+    387
+   ],
+   [
+    "replace",
+    391,
+    392,
+    387,
+    388,
+    [
+     " make install"
+    ]
+   ],
+   [
+    "equal",
+    392,
+    395,
+    388,
+    391
+   ],
+   [
+    "replace",
+    395,
+    396,
+    391,
+    392,
+    [
+     " CREATE EXTENSION pg_permissions;"
+    ]
+   ],
+   [
+    "equal",
+    396,
+    399,
+    392,
+    395
+   ],
+   [
+    "replace",
+    399,
+    400,
+    395,
+    396,
+    [
+     " ALTER EXTENSION pg_permissions UPDATE;"
+    ]
+   ],
+   [
+    "equal",
+    400,
+    405,
+    396,
+    401
+   ],
+   [
+    "replace",
+    405,
+    407,
+    401,
+    403,
+    [
+     "the `MAINTAIN` privilege). You will have to drop and re-create the extension",
+     "to upgrade to 1.3 or later from an earlier release. Don't forget to dump"
+    ]
+   ],
+   [
+    "equal",
+    407,
+    417,
+    403,
+    413
+   ],
+   [
+    "replace",
+    417,
+    418,
+    413,
+    414,
+    [
+     " pg_config --sharedir"
+    ]
+   ],
+   [
+    "equal",
+    418,
+    422,
+    414,
+    418
+   ],
+   [
+    "replace",
+    422,
+    423,
+    418,
+    419,
+    [
+     " copy pg_permissions.control *.sql \"C:\\Program Files\\PostgreSQL\\18\\share\\extension\""
+    ]
+   ],
+   [
+    "equal",
+    423,
+    427,
+    419,
+    423
+   ],
+   [
+    "delete",
+    427,
+    428,
+    423,
+    423
+   ],
+   [
+    "equal",
+    428,
+    440,
+    423,
+    435
+   ],
+   [
+    "replace",
+    440,
+    441,
+    435,
+    436,
+    [
+     " that access to financial data is restricted and periodically reviewed."
+    ]
+   ],
+   [
+    "equal",
+    441,
+    443,
+    436,
+    438
+   ],
+   [
+    "replace",
+    443,
+    444,
+    438,
+    439,
+    [
+     " cardholder data on a business need-to-know basis."
+    ]
+   ],
+   [
+    "equal",
+    444,
+    446,
+    439,
+    441
+   ],
+   [
+    "replace",
+    446,
+    447,
+    441,
+    442,
+    [
+     " personal data to be limited to what is necessary."
+    ]
+   ],
+   [
+    "equal",
+    447,
+    449,
+    442,
+    444
+   ],
+   [
+    "replace",
+    449,
+    450,
+    444,
+    445,
+    [
+     " (§ 164.312(a)) for electronic protected health information."
+    ]
+   ],
+   [
+    "equal",
+    450,
+    452,
+    445,
+    447
+   ],
+   [
+    "replace",
+    452,
+    453,
+    447,
+    448,
+    [
+     " control 5.15 and following) covering formal entitlement and periodic review."
+    ]
+   ],
+   [
+    "equal",
+    453,
+    455,
+    448,
+    450
+   ],
+   [
+    "replace",
+    455,
+    456,
+    450,
+    451,
+    [
+     " logical access."
+    ]
+   ],
+   [
+    "equal",
+    456,
+    458,
+    451,
+    453
+   ],
+   [
+    "replace",
+    458,
+    459,
+    453,
+    454,
+    [
+     " requirements for financial entities."
+    ]
+   ],
+   [
+    "equal",
+    459,
+    465,
+    454,
+    460
+   ],
+   [
+    "delete",
+    465,
+    466,
+    460,
+    460
+   ],
+   [
+    "equal",
+    466,
+    471,
+    460,
+    465
+   ],
+   [
+    "delete",
+    471,
+    475,
+    465,
+    465
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "1de6299cb3f5+2": {
+  "fn": "eiondb/eion",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    2,
+    [
+     "Eion Logo",
+     " Eion Logo"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    2,
+    3
+   ],
+   [
+    "replace",
+    8,
+    12,
+    3,
+    4,
+    [
+     " Eion "
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    4,
+    5
+   ],
+   [
+    "replace",
+    13,
+    14,
+    5,
+    6,
+    [
+     " *Connecting AI agents through shared memory and collaborative intelligence.*"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    6,
+    7
+   ],
+   [
+    "replace",
+    15,
+    16,
+    7,
+    9,
+    [
+     " Version",
+     " License: AGPL v3"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    9,
+    10
+   ],
+   [
+    "replace",
+    17,
+    18,
+    10,
+    11,
+    [
+     " Discord"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    11,
+    12
+   ],
+   [
+    "replace",
+    19,
+    20,
+    12,
+    13,
+    [
+     "Eion Demo"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    30,
+    13,
+    23
+   ],
+   [
+    "replace",
+    30,
+    31,
+    23,
+    24,
+    [
+     "### 2. AI Agent Application "
+    ]
+   ],
+   [
+    "equal",
+    31,
+    156,
+    24,
+    149
+   ],
+   [
+    "replace",
+    156,
+    160,
+    149,
+    153,
+    [
+     " - Go to \"Register Agents\" tab",
+     " - Fill in name, description, and permissions",
+     " - Click \"Register Agent\"",
+     " - Agent appears in the table below"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    162,
+    153,
+    155
+   ],
+   [
+    "replace",
+    162,
+    165,
+    155,
+    158,
+    [
+     " - Switch to \"Monitoring\" tab",
+     " - View agent status and system health",
+     " - Use refresh button for updates"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    167,
+    158,
+    160
+   ],
+   [
+    "replace",
+    167,
+    170,
+    160,
+    163,
+    [
+     " - Visit \"Resources\" tab",
+     " - Copy HTTP API examples with your server details",
+     " - Use MCP configuration if MCP is enabled"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    203,
+    163,
+    196
+   ],
+   [
+    "replace",
+    203,
+    204,
+    196,
+    197,
+    [
+     "- Perform semantic search across stored conversations "
+    ]
+   ],
+   [
+    "equal",
+    204,
+    228,
+    197,
+    221
+   ],
+   [
+    "replace",
+    228,
+    246,
+    221,
+    222,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    246,
+    253,
+    222,
+    229
+   ],
+   [
+    "replace",
+    253,
+    262,
+    229,
+    230,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    270,
+    230,
+    238
+   ],
+   [
+    "replace",
+    270,
+    277,
+    238,
+    239,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    315,
+    239,
+    277
+   ],
+   [
+    "replace",
+    315,
+    343,
+    277,
+    278,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    343,
+    358,
+    278,
+    293
+   ],
+   [
+    "replace",
+    358,
+    363,
+    293,
+    296,
+    [
+     "",
+     " Eion Logo",
+     " Eion Logo"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "aac7d9e1746d+2": {
+  "fn": "radimsem/remindb",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "remindb logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " remindb "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    11,
+    4,
+    5,
+    [
+     " Agentic memory in a single SQLite file."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    5,
+    6
+   ],
+   [
+    "replace",
+    12,
+    18,
+    6,
+    7,
+    [
+     " Stop letting your agent re-read the same notes every session."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    7,
+    8
+   ],
+   [
+    "replace",
+    19,
+    20,
+    8,
+    12,
+    [
+     " CI",
+     " Latest release",
+     " License",
+     " Go version"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    12,
+    13
+   ],
+   [
+    "replace",
+    21,
+    24,
+    13,
+    14,
+    [
+     " remindb architecture"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    33,
+    14,
+    23
+   ],
+   [
+    "replace",
+    33,
+    34,
+    23,
+    24,
+    [
+     "`remindb` is a single SQLite file your agent treats as long-term memory. It parses your notes (Markdown, HTML, JSON, YAML, TOON) into a structured tree, hashes every node, encodes repetitive structures compactly when it saves tokens, and surfaces the whole thing through a tight MCP tool suite."
+    ]
+   ],
+   [
+    "equal",
+    34,
+    37,
+    24,
+    27
+   ],
+   [
+    "replace",
+    37,
+    38,
+    27,
+    28,
+    [
+     "Each point is a summary — the full reasoning, with the tradeoffs, lives in `docs/`."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    28,
+    29
+   ],
+   [
+    "replace",
+    39,
+    40,
+    29,
+    30,
+    [
+     "**An ICR the agent can index, not skim.** `MemoryTree` returns the Intermediate Context Representation — typed, labeled, token-counted — in one call instead of a directory walk and a pile of file reads. → **The node tree**"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    30,
+    31
+   ],
+   [
+    "replace",
+    41,
+    42,
+    31,
+    32,
+    [
+     "**Hot vs. cold, like a real cache.** Every node has a temperature that rises when it's read and decays over time. Hot nodes rank higher in search; cold ones stop crowding the top without ever being deleted. → **Temperature**"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    32,
+    33
+   ],
+   [
+    "replace",
+    43,
+    44,
+    33,
+    34,
+    [
+     "**Summarization that happens when it should.** When a node crosses the cold threshold the server nudges the agent to compact it in place — same anchor, same history, fewer tokens. No cron, no worker; it's driven by how the memory actually gets used. → **Temperature**"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    34,
+    35
+   ],
+   [
+    "replace",
+    45,
+    46,
+    35,
+    36,
+    [
+     "**Git-style versioning, free.** Every compile or write lands a snapshot with per-node diffs. A returning agent resyncs with `MemoryDelta` — a tiny payload instead of a whole-file re-read. → **Versioning**"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    36,
+    37
+   ],
+   [
+    "replace",
+    47,
+    48,
+    37,
+    38,
+    [
+     "**TOON encoding where it pays off.** Arrays of uniform objects store ~40% smaller in TOON than YAML or JSON. The parser tries both per node and keeps the win only when it's real; irregular prose stays plain text. The same ≥15% rule converts MathML in HTML to compact LaTeX. → **TOON encoding** · **MathML → LaTeX**"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    38,
+    39
+   ],
+   [
+    "replace",
+    49,
+    50,
+    39,
+    40,
+    [
+     "**FTS5 search, not grep.** Ranked anchors in milliseconds over a porter-tokenized index — no file rescans, no regex timeouts — trimmed to exactly the token budget you pass. → **Search**"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    40,
+    41
+   ],
+   [
+    "replace",
+    51,
+    52,
+    41,
+    42,
+    [
+     "**Knowledge graph from lateral relations.** Author `[[Architecture; w=2.5]]` in any payload and the compiler resolves a directed weighted edge; `MemoryRelated` traverses it up to 5 hops, ranked by path weight. Forward references self-heal. → **Knowledge graph**"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    115,
+    42,
+    105
+   ],
+   [
+    "replace",
+    115,
+    116,
+    105,
+    106,
+    [
+     "The public skills live under `skills/`: `remember` (the plain-language front door), `remind` (read path), `memorize` (write path), and `remindb-setup` (connectivity/config). `remind` and `memorize` use progressive disclosure — a compact `SKILL.md` plus on-demand `references/`. They're refreshed by `vercel-labs/skills`."
+    ]
+   ],
+   [
+    "equal",
+    116,
+    138,
+    106,
+    128
+   ],
+   [
+    "replace",
+    138,
+    139,
+    128,
+    129,
+    [
+     "The README is the trailer. The manual is in `docs/` — each page opens with the problem it solves, in plain language."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    129,
+    130
+   ],
+   [
+    "replace",
+    140,
+    141,
+    130,
+    131,
+    [
+     "|Page|What's there|"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    131,
+    132
+   ],
+   [
+    "replace",
+    142,
+    146,
+    132,
+    136,
+    [
+     "|Architecture|The layer-by-layer map: parser → transformer → emitter → store, then query → mcp.|",
+     "|CLI reference|Every subcommand — `compile`, `serve`, `inspect`, `bench`, `doctor`, `update` — with flags.|",
+     "|Configuration|The `.remindb/` directory: `config.json` feature blocks, `ignore`, `temperatures.json`, `pinned`.|",
+     "|The node tree · Temperature · Versioning · Search · TOON · MathML → LaTeX · Knowledge graph|The feature deep-dives linked from *What you get*.|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    149,
+    136,
+    139
+   ],
+   [
+    "replace",
+    149,
+    150,
+    139,
+    140,
+    [
+     "A `Memory*` tool suite, registered once, surfaced to any MCP-capable agent (Claude Code, Codex, Gemini CLI, OpenCode, OpenClaw, Hermes Agent, …). The read path is documented in the `remind` skill, the write path in `memorize`."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    151,
+    140,
+    141
+   ],
+   [
+    "replace",
+    151,
+    152,
+    141,
+    142,
+    [
+     "|Tool|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    142,
+    143
+   ],
+   [
+    "replace",
+    153,
+    170,
+    143,
+    160,
+    [
+     "|**`MemoryTree`**|Renders the full node hierarchy with labels, types, IDs, temperatures, and token counts. The agent's cheap orientation call.|",
+     "|**`MemorySearch`**|FTS5 full-text search over labels and content. Returns ranked anchors within a token budget.|",
+     "|**`MemoryFetch`**|Returns one anchor plus its ancestors and children, trimmed to a token budget. The \"read just this region\" call.|",
+     "|**`MemoryFetchBatch`**|Fetches many anchors in one round-trip under a shared budget — the \"read every search hit at once\" call. No per-call framing tax.|",
+     "|**`MemoryDelta`**|Returns only the nodes that changed since a given snapshot cursor. Lets agents resync with a tiny payload instead of re-reading files.|",
+     "|**`MemoryDiff`**|Compares two arbitrary snapshots git-diff-style. Point-in-time forensic comparison; both ends fixed.|",
+     "|**`MemoryHistory`**|Browses the version history of a node — who/when/how it changed, rollback-capable via stored old content.|",
+     "|**`MemoryRelated`**|Traverses the relations graph from an anchor — outgoing/incoming/both, up to 5 hops, ranked by summed path weight. Surfaces what an authored `[[Label]]` wiki-link connects to.|",
+     "|**`MemoryStats`**|Reports DB health and shape: node/token totals with per-type breakdown, snapshot/cursor summary, temperature spread, relations, FTS row count. Read-only, single round-trip. Same data the `remindb inspect` CLI renders.|",
+     "|**`MemoryWrite`**|Writes or updates content at an anchor. Creates a new snapshot and a per-node diff.|",
+     "|**`MemorySummarize`**|Replaces a node's content with a shorter summary the agent provides. Used when the temperature tracker flags a cold node.|",
+     "|**`MemoryCompile`**|Compiles source files or a directory into the database from inside a session. Same engine as the `compile` CLI.|",
+     "|**`MemoryRelate`**|Creates a manual edge between two existing nodes. Resolves the target the same way parsed wiki-links do (id → source+label → label only). Does not create a snapshot — relations are a sideband.|",
+     "|**`MemoryForget`**|Explicitly removes a node. Three deletion modes (including `reparent`, which rewires children up to the deleted node's parent).|",
+     "|**`MemoryRollback`**|Walks the graph back to a prior snapshot, optionally pruning the history after it. Still produces exactly one snapshot.|",
+     "|**`MemoryPin`**|Protects a node from temperature decay and the cold-summarize loop — for reference material that must not age out.|",
+     "|**`MemoryUnpin`**|Releases a pin, returning the node to normal decay.|"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    175,
+    160,
+    165
+   ],
+   [
+    "replace",
+    175,
+    176,
+    165,
+    166,
+    [
+     "|Resource|Description|"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    177,
+    166,
+    167
+   ],
+   [
+    "replace",
+    177,
+    189,
+    167,
+    179,
+    [
+     "|`remindb://overview`|Database stats as JSON — the `MemoryStats` equivalent for renderers.|",
+     "|`remindb://files`|Compiled source files grouped by compile root, with per-file node and token counts.|",
+     "|`remindb://tree`|Full node hierarchy as nested JSON. `tree/{rootId}{?depth}` for a bounded subtree.|",
+     "|`remindb://graph`|Relations graph — resolved edges, pending wiki-link targets, and the node set they reference.|",
+     "|`remindb://snapshots`|Version history. `snapshots{?limit}` for the newest N; `snapshots/{id}/diffs` for one snapshot's diffs.|",
+     "|`remindb://temperature`|Per-node temperature heatmap, with the cut thresholds used to classify hot and cold.|",
+     "|`remindb://doctor`|Health-check report as JSON (same data as `remindb doctor --json`).|",
+     "|`remindb://logs`|Recent server log records from the in-memory ring buffer.|",
+     "|`remindb://sessions`|Active MCP client sessions on this process.|",
+     "|`remindb://sessions/history`|Durable per-client connection ledger across restarts. `sessions/history/{hash}` for one client.|",
+     "|`remindb://sessions/logs`|Per-session logfile index. `sessions/logs/{id}` for one session's structured tool-call trace.|",
+     "|`remindb://rescan`|Latest source-rescan tick result.|"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    190,
+    179,
+    180
+   ],
+   [
+    "replace",
+    190,
+    191,
+    180,
+    181,
+    [
+     "Several are subscribable — clients can receive push notifications on state changes instead of polling. The full resource contract, envelope shapes, and subscription events are in `docs/resources.md`."
+    ]
+   ],
+   [
+    "equal",
+    191,
+    196,
+    181,
+    186
+   ],
+   [
+    "replace",
+    196,
+    197,
+    186,
+    187,
+    [
+     "|Agent|Folder|Install docs|"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    198,
+    187,
+    188
+   ],
+   [
+    "replace",
+    198,
+    204,
+    188,
+    194,
+    [
+     "|Claude Code|`plugins/claude-code/`|plugins/claude-code/README.md|",
+     "|Gemini CLI|`plugins/gemini-cli/`|plugins/gemini-cli/README.md|",
+     "|Codex|`plugins/codex/`|plugins/codex/README.md|",
+     "|OpenCode|`plugins/opencode/`|plugins/opencode/README.md|",
+     "|OpenClaw|`plugins/openclaw/`|plugins/openclaw/README.md|",
+     "|Hermes Agent|`plugins/hermes-agent/memory/remindb/`|plugins/hermes-agent/memory/remindb/README.md|"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    206,
+    194,
+    196
+   ],
+   [
+    "replace",
+    206,
+    207,
+    196,
+    197,
+    [
+     "> **Pair the plugin with the two companion skills** — `remind` (read path) and `memorize` (write path). They teach the agent the MCP tool suite so you don't re-explain it each session. Per-agent install instructions live in `skills/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    207,
+    214,
+    197,
+    204
+   ],
+   [
+    "replace",
+    214,
+    224,
+    204,
+    205,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    224,
+    226,
+    205,
+    207
+   ],
+   [
+    "replace",
+    226,
+    227,
+    207,
+    208,
+    [
+     "Every `serve` flag has a `REMINDB_*` environment equivalent — `REMINDB_DB`, `REMINDB_SOURCE`, `REMINDB_RESCAN_INTERVAL`, `REMINDB_TRANSPORT`, `REMINDB_LISTEN`, `REMINDB_INSECURE_PUBLIC` — plus the env-only `REMINDB_AUTH_TOKEN` for HTTP bearer-token auth (see SECURITY.md). Pass them via `args`, the `env` block above, or a committed `.remindb/config.json`. Precedence is explicit flag → `.remindb/config.json` → env → built-in default; see Configuration."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    234,
+    208,
+    215
+   ],
+   [
+    "replace",
+    234,
+    239,
+    215,
+    216,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    250,
+    216,
+    227
+   ],
+   [
+    "replace",
+    250,
+    251,
+    227,
+    228,
+    [
+     "Codex, OpenCode, and Gemini CLI surface the same skill differently — the `/skills` picker, a `$remindb-setup` mention, or plain-language activation; each plugin README gives the exact invocation. Either way, it detects the host, authors `.remindb/` (`ignore`/`pinned`/`temperatures.json`/`config.json`) **before** compiling — so those settings apply at insert time, no reseed retrofit — runs the compile, offers to seed adjacent context (`CLAUDE.md`/`AGENTS.md`/`README`), and wires the MCP `env` for you using your host's durable mechanism. Then you enable the plugin and restart; re-running the wizard with the server attached is the verify pass (`MemoryStats` + `remindb://doctor`). Per-host invocation and env details live in `skills/remindb-setup/`. (Hermes Agent is a memory-provider bridge, not an MCP-config host — it uses `hermes memory setup` instead; see its plugin README.)"
+    ]
+   ],
+   [
+    "equal",
+    251,
+    275,
+    228,
+    252
+   ],
+   [
+    "replace",
+    275,
+    278,
+    252,
+    253,
+    [
+     " remindb token savings by scenario category"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    279,
+    253,
+    254
+   ],
+   [
+    "replace",
+    279,
+    280,
+    254,
+    255,
+    [
+     " The `obsidian vault` row is a real vault: ~450 markdown files, ~3.3M naive tokens. "
+    ]
+   ],
+   [
+    "equal",
+    280,
+    288,
+    255,
+    263
+   ],
+   [
+    "replace",
+    288,
+    291,
+    263,
+    264,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    291,
+    292,
+    264,
+    265
+   ],
+   [
+    "replace",
+    292,
+    295,
+    265,
+    266,
+    [
+     "MIT — see `LICENSE`."
+    ]
+   ],
+   [
+    "equal",
+    295,
+    296,
+    266,
+    267
+   ],
+   [
+    "replace",
+    296,
+    308,
+    267,
+    268,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

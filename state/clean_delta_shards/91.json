@@ -5977,5 +5977,2801 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "d2a2a7603d05+2": {
+  "fn": "dgilland/sqlservice",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    3,
+    1,
+    2
+   ],
+   [
+    "replace",
+    3,
+    5,
+    2,
+    3,
+    [
+     "|version||build||coveralls||license|"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    8,
+    3,
+    6
+   ],
+   [
+    "delete",
+    8,
+    9,
+    6,
+    6
+   ],
+   [
+    "equal",
+    9,
+    10,
+    6,
+    7
+   ],
+   [
+    "delete",
+    10,
+    11,
+    7,
+    7
+   ],
+   [
+    "equal",
+    11,
+    17,
+    7,
+    13
+   ],
+   [
+    "delete",
+    17,
+    18,
+    13,
+    13
+   ],
+   [
+    "equal",
+    18,
+    19,
+    13,
+    14
+   ],
+   [
+    "delete",
+    19,
+    20,
+    14,
+    14
+   ],
+   [
+    "equal",
+    20,
+    24,
+    14,
+    18
+   ],
+   [
+    "delete",
+    24,
+    25,
+    18,
+    18
+   ],
+   [
+    "equal",
+    25,
+    33,
+    18,
+    26
+   ],
+   [
+    "delete",
+    33,
+    34,
+    26,
+    26
+   ],
+   [
+    "equal",
+    34,
+    35,
+    26,
+    27
+   ],
+   [
+    "delete",
+    35,
+    36,
+    27,
+    27
+   ],
+   [
+    "equal",
+    36,
+    40,
+    27,
+    31
+   ],
+   [
+    "delete",
+    40,
+    41,
+    31,
+    31
+   ],
+   [
+    "equal",
+    41,
+    42,
+    31,
+    32
+   ],
+   [
+    "delete",
+    42,
+    43,
+    32,
+    32
+   ],
+   [
+    "equal",
+    43,
+    46,
+    32,
+    35
+   ],
+   [
+    "delete",
+    46,
+    47,
+    35,
+    35
+   ],
+   [
+    "equal",
+    47,
+    49,
+    35,
+    37
+   ],
+   [
+    "replace",
+    49,
+    51,
+    37,
+    38,
+    [
+     " pip install sqlservice"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    56,
+    38,
+    43
+   ],
+   [
+    "replace",
+    56,
+    58,
+    43,
+    45,
+    [
+     " import re",
+     " import typing as t"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    45,
+    46
+   ],
+   [
+    "replace",
+    59,
+    61,
+    46,
+    48,
+    [
+     " from sqlalchemy import ForeignKey, orm, types",
+     " from sqlalchemy.orm import Mapped, mapped_column"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    48,
+    49
+   ],
+   [
+    "replace",
+    62,
+    63,
+    49,
+    50,
+    [
+     " from sqlservice import declarative_base, event"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    50,
+    51
+   ],
+   [
+    "insert",
+    64,
+    64,
+    51,
+    52,
+    [
+     " Model = declarative_base()"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    52,
+    53
+   ],
+   [
+    "replace",
+    65,
+    66,
+    53,
+    55,
+    [
+     " class User(Model):",
+     " __tablename__ = \"user\""
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    55,
+    56
+   ],
+   [
+    "replace",
+    67,
+    69,
+    56,
+    60,
+    [
+     " id: Mapped[int] = mapped_column(types.Integer(), primary_key=True)",
+     " name: Mapped[t.Optional[str]] = mapped_column(types.String(100))",
+     " email: Mapped[t.Optional[str]] = mapped_column(types.String(100))",
+     " phone: Mapped[t.Optional[str]] = mapped_column(types.String(10))"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    60,
+    61
+   ],
+   [
+    "replace",
+    70,
+    74,
+    61,
+    62,
+    [
+     " roles: Mapped[t.List[\"UserRole\"]] = orm.relationshipship(\"UserRole\")"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    75,
+    62,
+    63
+   ],
+   [
+    "replace",
+    75,
+    76,
+    63,
+    67,
+    [
+     " @event.on_set(\"phone\", retval=True)",
+     " def on_set_phone(self, value):",
+     " # Strip non-numeric characters from phone number.",
+     " return re.sub(\"[^0-9]\", \"\", value)"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    67,
+    68
+   ],
+   [
+    "replace",
+    77,
+    81,
+    68,
+    70,
+    [
+     " class UserRole(Model):",
+     " __tablename__ = \"user_role\""
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    70,
+    71
+   ],
+   [
+    "replace",
+    82,
+    90,
+    71,
+    74,
+    [
+     " id: Mapped[int] = mapped_column(types.Integer(), primary_key=True)",
+     " user_id: Mapped[int] = mapped_column(types.Integer(), ForeignKey(\"user.id\"), nullable=False)",
+     " role: Mapped[str] = mapped_column(types.String(25), nullable=False)"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    95,
+    74,
+    79
+   ],
+   [
+    "replace",
+    95,
+    96,
+    79,
+    80,
+    [
+     " from sqlservice import AsyncDatabase, Database"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    80,
+    81
+   ],
+   [
+    "replace",
+    97,
+    109,
+    81,
+    93,
+    [
+     " db = Database(",
+     " \"sqlite:///db.sql\",",
+     " model_class=Model,",
+     " isolation_level=\"SERIALIZABLE\",",
+     " echo=True,",
+     " echo_pool=False,",
+     " pool_size=5,",
+     " pool_timeout=30,",
+     " pool_recycle=3600,",
+     " max_overflow=10,",
+     " autoflush=True,",
+     " )"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    93,
+    94
+   ],
+   [
+    "replace",
+    110,
+    113,
+    94,
+    96,
+    [
+     " # Same options as above are supported but will default to compatibility with SQLAlchemy asyncio mode.",
+     " async_db = AsyncDatabase(\"sqlite:///db.sql\", model_class=Model)"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    118,
+    96,
+    101
+   ],
+   [
+    "replace",
+    118,
+    121,
+    101,
+    103,
+    [
+     " db.create_all()",
+     " await async_db.create_all()"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    128,
+    103,
+    110
+   ],
+   [
+    "replace",
+    128,
+    131,
+    110,
+    113,
+    [
+     " user = User(name='Jenny', email=jenny@example.com, phone='555-867-5309')",
+     " with db.begin() as session:",
+     " session.save(user)"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    113,
+    114
+   ],
+   [
+    "replace",
+    132,
+    135,
+    114,
+    116,
+    [
+     " async with db.begin() as session:",
+     " await session.save(user)"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    140,
+    116,
+    121
+   ],
+   [
+    "replace",
+    140,
+    145,
+    121,
+    125,
+    [
+     " session = db.session()",
+     " assert user is session.get(User, user.id)",
+     " assert user is session.first(User.select())",
+     " assert user is session.all(User.select().where(User.id == user.id)[0]"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    150,
+    125,
+    130
+   ],
+   [
+    "replace",
+    150,
+    156,
+    130,
+    136,
+    [
+     " assert user.to_dict() == {",
+     " \"id\": 1,",
+     " \"name\": \"Jenny\",",
+     " \"email\": \"jenny@example.com\",",
+     " \"phone\": \"5558675309\"",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    157,
+    136,
+    137
+   ],
+   [
+    "replace",
+    157,
+    159,
+    137,
+    138,
+    [
+     " assert dict(user) == user.to_dict()"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    164,
+    138,
+    143
+   ],
+   [
+    "replace",
+    164,
+    167,
+    143,
+    146,
+    [
+     " user.phone = '222-867-5309'",
+     " with db.begin() as session:",
+     " session.save(user)"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    168,
+    146,
+    147
+   ],
+   [
+    "replace",
+    168,
+    171,
+    147,
+    149,
+    [
+     " async with async_db.begin() as session:",
+     " await session.save(user)"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    176,
+    149,
+    154
+   ],
+   [
+    "replace",
+    176,
+    180,
+    154,
+    158,
+    [
+     " other_user = User(id=1, name=\"Jenny\", email=\"jenny123@example.com\", phone=\"5558675309\")",
+     " with db.begin() as session:",
+     " session.save(other_user)",
+     " assert user is other_user"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    183,
+    158,
+    161
+   ],
+   [
+    "delete",
+    183,
+    185,
+    161,
+    161
+   ],
+   [
+    "equal",
+    185,
+    186,
+    161,
+    162
+   ],
+   [
+    "replace",
+    186,
+    187,
+    162,
+    163,
+    [
+     " :target: https://pypi.python.org/pypi/sqlservice/"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    189,
+    163,
+    165
+   ],
+   [
+    "replace",
+    189,
+    190,
+    165,
+    166,
+    [
+     " :target: https://github.com/dgilland/sqlservice/actions"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    192,
+    166,
+    168
+   ],
+   [
+    "replace",
+    192,
+    193,
+    168,
+    169,
+    [
+     " :target: https://coveralls.io/r/dgilland/sqlservice"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    195,
+    169,
+    171
+   ],
+   [
+    "replace",
+    195,
+    196,
+    171,
+    172,
+    [
+     " :target: https://pypi.python.org/pypi/sqlservice/"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a0e3e0f399c3+2": {
+  "fn": "petere/plsh",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    4,
+    1,
+    3
+   ],
+   [
+    "replace",
+    4,
+    5,
+    3,
+    4,
+    [
+     "to write stored procedures in a shell of your choice. For example,"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    4,
+    5
+   ],
+   [
+    "replace",
+    6,
+    10,
+    5,
+    9,
+    [
+     " CREATE FUNCTION concat(text, text) RETURNS text AS '",
+     " #!/bin/sh",
+     " echo \"$1$2\"",
+     " ' LANGUAGE plsh;"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    12,
+    9,
+    11
+   ],
+   [
+    "replace",
+    12,
+    16,
+    11,
+    15,
+    [
+     "use. The rest of the function body will be executed by that shell in",
+     "a separate process. The arguments are available as `$1`, `$2`, etc.,",
+     "as usual. (This is the shell's syntax. If your shell uses something",
+     "different then that's what you need to use.) The return value will"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    15,
+    16
+   ],
+   [
+    "replace",
+    17,
+    18,
+    16,
+    17,
+    [
+     "stripped. If nothing is printed, a null value is returned. If"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    17,
+    18
+   ],
+   [
+    "replace",
+    19,
+    20,
+    18,
+    19,
+    [
+     "with an error and the message is printed. If the script does not exit"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    23,
+    19,
+    22
+   ],
+   [
+    "replace",
+    23,
+    25,
+    22,
+    24,
+    [
+     "database directly. Trigger functions are also possible, but they",
+     "can't change the rows. Needless to say, this language should not be"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    35,
+    24,
+    34
+   ],
+   [
+    "delete",
+    35,
+    36,
+    34,
+    34
+   ],
+   [
+    "equal",
+    36,
+    41,
+    34,
+    39
+   ],
+   [
+    "replace",
+    41,
+    47,
+    39,
+    45,
+    [
+     " CREATE FUNCTION query (x int) RETURNS text",
+     " LANGUAGE plsh",
+     " AS $$",
+     " #!/bin/sh",
+     " psql -At -c \"select b from pbar where a = $1\"",
+     " $$;"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    51,
+    45,
+    49
+   ],
+   [
+    "delete",
+    51,
+    52,
+    49,
+    49
+   ],
+   [
+    "equal",
+    52,
+    64,
+    49,
+    61
+   ],
+   [
+    "delete",
+    64,
+    65,
+    61,
+    61
+   ],
+   [
+    "equal",
+    65,
+    73,
+    61,
+    69
+   ],
+   [
+    "delete",
+    73,
+    74,
+    69,
+    69
+   ],
+   [
+    "equal",
+    74,
+    75,
+    69,
+    70
+   ],
+   [
+    "replace",
+    75,
+    76,
+    70,
+    71,
+    [
+     "PL/sh supports the `DO` command. For example:"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    71,
+    72
+   ],
+   [
+    "replace",
+    77,
+    78,
+    72,
+    73,
+    [
+     " DO E'#!/bin/sh\\nrm -f /tmp/file' LANGUAGE plsh;"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    80,
+    73,
+    75
+   ],
+   [
+    "delete",
+    80,
+    81,
+    75,
+    75
+   ],
+   [
+    "equal",
+    81,
+    87,
+    75,
+    81
+   ],
+   [
+    "replace",
+    87,
+    89,
+    81,
+    83,
+    [
+     " make",
+     " make install"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    91,
+    83,
+    85
+   ],
+   [
+    "replace",
+    91,
+    92,
+    85,
+    86,
+    [
+     "included in the PostgreSQL installation. To use a different"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    95,
+    86,
+    89
+   ],
+   [
+    "replace",
+    95,
+    97,
+    89,
+    91,
+    [
+     " make PG_CONFIG=/else/where/pg_config",
+     " make install PG_CONFIG=/else/where/pg_config"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    103,
+    91,
+    97
+   ],
+   [
+    "replace",
+    103,
+    104,
+    97,
+    98,
+    [
+     "PostgreSQL version 9.1 or later. Run"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    98,
+    99
+   ],
+   [
+    "replace",
+    105,
+    106,
+    99,
+    100,
+    [
+     " CREATE EXTENSION plsh;"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    107,
+    100,
+    101
+   ],
+   [
+    "replace",
+    107,
+    108,
+    101,
+    102,
+    [
+     "inside the database of choice. To upgrade from a previous"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    110,
+    102,
+    104
+   ],
+   [
+    "replace",
+    110,
+    111,
+    104,
+    105,
+    [
+     " CREATE EXTENSION plsh FROM unpackaged;"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    116,
+    105,
+    110
+   ],
+   [
+    "replace",
+    116,
+    117,
+    110,
+    111,
+    [
+     " psql -d DBNAME -f .../share/contrib/plsh.sql"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    111,
+    112
+   ],
+   [
+    "replace",
+    118,
+    119,
+    112,
+    113,
+    [
+     "with a server running. To drop it, use `droplang plsh`, or `DROP"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    123,
+    113,
+    117
+   ],
+   [
+    "delete",
+    123,
+    124,
+    117,
+    117
+   ],
+   [
+    "equal",
+    124,
+    125,
+    117,
+    118
+   ],
+   [
+    "replace",
+    125,
+    126,
+    118,
+    119,
+    [
+     "Build Status"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    129,
+    119,
+    122
+   ],
+   [
+    "replace",
+    129,
+    130,
+    122,
+    123,
+    [
+     " make installcheck"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    132,
+    123,
+    125
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "57c19679d872+2": {
+  "fn": "aahl/tgnas",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "aahl/tgnas "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    57,
+    1,
+    57
+   ],
+   [
+    "replace",
+    57,
+    65,
+    57,
+    58,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    105,
+    58,
+    98
+   ],
+   [
+    "replace",
+    105,
+    115,
+    98,
+    99,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    127,
+    99,
+    111
+   ],
+   [
+    "replace",
+    127,
+    135,
+    111,
+    112,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    190,
+    112,
+    167
+   ],
+   [
+    "replace",
+    190,
+    193,
+    167,
+    168,
+    [
+     " Linux.do community"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "518044216621+2": {
+  "fn": "housamz/php-mysql-admin-panel-generator",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    2,
+    1,
+    2,
+    [
+     "Available for Python also: Python Mage"
+    ]
+   ],
+   [
+    "equal",
+    2,
+    18,
+    2,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "***Note: You need to make sure that you have `php-mysql` package that connects PHP with MySQL, and that you change the `generated` directory permissions to be 777.*** "
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    26,
+    20,
+    26,
+    [
+     "|Step|Thumb|Instructions|",
+     "|:--:|:----------------------------------------------------------------------:|:------------|",
+     "|1||Start by providing your MySQL Server Info, then click Next Step button.|",
+     "|2||The tool will scan the server for available databases and list them in a dropdown menu, select the database that you want, then check if you need full HTML editor or not, and then click \"Generate Admin Panel\" button|",
+     "|3||After a few seconds, you'll get a success message, with a link to the newly created admin panel, and a report of all the operations that were done.|",
+     "|4||Click the link to the admin panel. You have to sign in using \"admin\" as an email and a password.|"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    26,
+    27
+   ],
+   [
+    "replace",
+    27,
+    31,
+    27,
+    28,
+    [
+     "You'll get a clean bootstrap interface to control the website, check below screenshots: "
+    ]
+   ],
+   [
+    "equal",
+    31,
+    33,
+    28,
+    30
+   ],
+   [
+    "replace",
+    33,
+    35,
+    30,
+    32,
+    [
+     "MAGE handles data using `htmlentities` as well as `addslashes` to prevent XSS attacks. This means that any HTML tags, especially those generated by the CKEditor, will be encoded. ",
+     "If you want to display the original HTML code use `html_entity_decode()` around that specific field. "
+    ]
+   ],
+   [
+    "equal",
+    35,
+    50,
+    32,
+    47
+   ],
+   [
+    "delete",
+    50,
+    52,
+    47,
+    47
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "b0a5cd245269+2": {
+  "fn": "aaronpk/Compass",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Compass is a GPS tracking server that stores data in flat files."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "mapview"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    24,
+    5,
+    24
+   ],
+   [
+    "delete",
+    24,
+    25,
+    24,
+    24
+   ],
+   [
+    "equal",
+    25,
+    27,
+    24,
+    26
+   ],
+   [
+    "replace",
+    27,
+    28,
+    26,
+    27,
+    [
+     "Compass is built using the Lumen framework. If you have any trouble getting started, you can refer to the Lumen documentation for tips that may have been skipped or assumed in these instructions."
+    ]
+   ],
+   [
+    "equal",
+    28,
+    40,
+    27,
+    39
+   ],
+   [
+    "delete",
+    40,
+    41,
+    39,
+    39
+   ],
+   [
+    "equal",
+    41,
+    58,
+    39,
+    56
+   ],
+   [
+    "replace",
+    58,
+    59,
+    56,
+    57,
+    [
+     "You can find other supported options here"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    94,
+    57,
+    92
+   ],
+   [
+    "replace",
+    94,
+    95,
+    92,
+    93,
+    [
+     "The open source iOS Overland will send data in this format by default."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    100,
+    93,
+    98
+   ],
+   [
+    "replace",
+    100,
+    115,
+    98,
+    99,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    99,
+    100
+   ],
+   [
+    "delete",
+    116,
+    117,
+    100,
+    100
+   ],
+   [
+    "equal",
+    117,
+    140,
+    100,
+    123
+   ],
+   [
+    "replace",
+    140,
+    141,
+    123,
+    124,
+    [
+     "* geocode - (optional) if \"true\", then the location found will be reverse geocoded using Atlas to find the city and timezone at the location"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    155,
+    124,
+    138
+   ],
+   [
+    "delete",
+    155,
+    156,
+    138,
+    138
+   ],
+   [
+    "equal",
+    156,
+    163,
+    138,
+    145
+   ],
+   [
+    "delete",
+    163,
+    164,
+    145,
+    145
+   ],
+   [
+    "equal",
+    164,
+    165,
+    145,
+    146
+   ],
+   [
+    "delete",
+    165,
+    169,
+    146,
+    146
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "ce82c6cb1d92+2": {
+  "fn": "yehoshuadimarsky/bcpandas",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    12,
+    2,
+    12,
+    [
+     "PyPI version",
+     "Conda-Forge version",
+     "GitHub license",
+     "CI",
+     "codecov",
+     "Code style: black",
+     "PyPI pyversions",
+     "Awesome Badges",
+     "Downloads",
+     "pre-commit.ci status"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    16,
+    12,
+    16
+   ],
+   [
+    "replace",
+    16,
+    49,
+    16,
+    17,
+    [
+     "（目录 28 行略）"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    56,
+    17,
+    24
+   ],
+   [
+    "replace",
+    56,
+    101,
+    24,
+    25,
+    [
+     "…（45 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    128,
+    25,
+    52
+   ],
+   [
+    "replace",
+    128,
+    129,
+    52,
+    53,
+    [
+     "to_sql benchmark graph"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    53,
+    54
+   ],
+   [
+    "replace",
+    130,
+    131,
+    54,
+    55,
+    [
+     "#### Why not just use the new pandas `method='multi'`?"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    134,
+    55,
+    58
+   ],
+   [
+    "replace",
+    134,
+    140,
+    58,
+    64,
+    [
+     " generally a bit less then `2100/<number of columns>`. This is because SQL Server can only accept",
+     " up to 2100 parameters in a query. See",
+     " here",
+     " and here for more discussion on this, and",
+     " the recommendation to use a bulk insert tool such as BCP. It seems that SQL Server simply didn't",
+     " design the regular `INSERT` statement to support huge amounts of data."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    145,
+    64,
+    69
+   ],
+   [
+    "replace",
+    145,
+    146,
+    69,
+    70,
+    [
+     "read_sql benchmark graph"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    156,
+    70,
+    80
+   ],
+   [
+    "replace",
+    156,
+    157,
+    80,
+    81,
+    [
+     "- BCP Utility"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    158,
+    81,
+    82
+   ],
+   [
+    "replace",
+    158,
+    162,
+    82,
+    86,
+    [
+     " (Microsoft Docs)",
+     " See the",
+     " pyodbc docs",
+     " for more on different driver versions."
+    ]
+   ],
+   [
+    "equal",
+    162,
+    166,
+    86,
+    90
+   ],
+   [
+    "replace",
+    166,
+    167,
+    90,
+    91,
+    [
+     " supported DBAPI"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    170,
+    91,
+    94
+   ],
+   [
+    "replace",
+    170,
+    174,
+    94,
+    98,
+    [
+     "|Source|Command|",
+     "|:----:|:-------------------------------------:|",
+     "|PyPI|`pip install bcpandas`|",
+     "|Conda|`conda install -c conda-forge bcpandas`|"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    188,
+    98,
+    112
+   ],
+   [
+    "replace",
+    188,
+    191,
+    112,
+    115,
+    [
+     " username, password), and bcpandas will create a full `Engine` object from this. It will use",
+     " `pyodbc`, `sqlalchemy`, and the Microsoft ODBC Driver for SQL Server, and will store it in the",
+     " `.engine` attribute."
+    ]
+   ],
+   [
+    "equal",
+    191,
+    196,
+    115,
+    120
+   ],
+   [
+    "replace",
+    196,
+    200,
+    120,
+    121,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    203,
+    121,
+    124
+   ],
+   [
+    "replace",
+    203,
+    205,
+    124,
+    126,
+    [
+     " parse out the server, database, username, and password to pass to the command line utilities. If",
+     " a DSN is used, this will fail."
+    ]
+   ],
+   [
+    "equal",
+    205,
+    206,
+    126,
+    127
+   ],
+   [
+    "replace",
+    206,
+    207,
+    127,
+    128,
+    [
+     " (continuing example above)"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    212,
+    128,
+    133
+   ],
+   [
+    "replace",
+    212,
+    216,
+    133,
+    134,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    220,
+    134,
+    138
+   ],
+   [
+    "replace",
+    220,
+    225,
+    138,
+    143,
+    [
+     "|Feature|Pandas native|BCPandas|",
+     "|-------------------------------------------------|:----------------:|:----------------:|",
+     "|Super speed|:x:|:white_check_mark:|",
+     "|Good for simple data types like numbers and dates|:x:|:white_check_mark:|",
+     "|Handle messy string data|:white_check_mark:|:x:|"
+    ]
+   ],
+   [
+    "equal",
+    225,
+    234,
+    143,
+    152
+   ],
+   [
+    "replace",
+    234,
+    235,
+    152,
+    153,
+    [
+     " have not been tested."
+    ]
+   ],
+   [
+    "equal",
+    235,
+    236,
+    153,
+    154
+   ],
+   [
+    "replace",
+    236,
+    237,
+    154,
+    155,
+    [
+     " an empty string."
+    ]
+   ],
+   [
+    "equal",
+    237,
+    238,
+    155,
+    156
+   ],
+   [
+    "replace",
+    238,
+    246,
+    156,
+    164,
+    [
+     " CSV, including a _delimiter_ and a _quote character_. Bcpandas attempts to use characters that",
+     " are not present in the dataframe for this, going through the possilbe delimiters and quote",
+     " characters specified in `constants.py`. If all possible characters are present in the dataframe",
+     " and bcpandas cannot find both a delimiter and quote character to use, it will throw an error.",
+     " - The BCP utility does **not** ignore delimiter characters when surrounded by quotes, unlike",
+     " CSVs - see",
+     " here",
+     " in the Microsoft docs."
+    ]
+   ],
+   [
+    "equal",
+    246,
+    247,
+    164,
+    165
+   ],
+   [
+    "replace",
+    247,
+    250,
+    165,
+    168,
+    [
+     " to a BCP issue. See my issue with Microsoft about this",
+     " here.~~ This doesn't seem to be a",
+     " problem based on the tests."
+    ]
+   ],
+   [
+    "equal",
+    250,
+    262,
+    168,
+    180
+   ],
+   [
+    "replace",
+    262,
+    263,
+    180,
+    181,
+    [
+     "And want to still use BCPandas, you will need to pick a quote character and remove all instances of it from the dataframe. Note"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    265,
+    181,
+    183
+   ],
+   [
+    "replace",
+    265,
+    266,
+    183,
+    184,
+    [
+     "In this case we are looking to remove `~`, replacing it with `-`. Hunt for its presence in a column:"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    284,
+    184,
+    202
+   ],
+   [
+    "replace",
+    284,
+    286,
+    202,
+    204,
+    [
+     "Approach this as is described above for quote characters. If you target the `|` character for replacement, note that it",
+     "must be escaped in a regular expression with a backslash. So the relevant commands would be (here the pipe `|` is replaced with a front slash):"
+    ]
+   ],
+   [
+    "equal",
+    286,
+    297,
+    204,
+    215
+   ],
+   [
+    "replace",
+    297,
+    298,
+    215,
+    216,
+    [
+     "Try replacing any space characters in your column names, with a command like `my_df.columns = my_df.columns.str.replace(' ','_')` (source)."
+    ]
+   ],
+   [
+    "equal",
+    298,
+    303,
+    216,
+    221
+   ],
+   [
+    "replace",
+    303,
+    304,
+    221,
+    222,
+    [
+     "`execute_many`"
+    ]
+   ],
+   [
+    "equal",
+    304,
+    318,
+    222,
+    236
+   ],
+   [
+    "replace",
+    318,
+    320,
+    236,
+    237,
+    [
+     " bcpy "
+    ]
+   ],
+   [
+    "equal",
+    320,
+    321,
+    237,
+    238
+   ],
+   [
+    "replace",
+    321,
+    322,
+    238,
+    239,
+    [
+     "bcpy has several flaws:"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    327,
+    239,
+    244
+   ],
+   [
+    "delete",
+    327,
+    328,
+    244,
+    244
+   ],
+   [
+    "equal",
+    328,
+    360,
+    244,
+    276
+   ],
+   [
+    "replace",
+    360,
+    361,
+    276,
+    277,
+    [
+     " characters beyond that range have not been tested."
+    ]
+   ],
+   [
+    "equal",
+    361,
+    372,
+    277,
+    288
+   ],
+   [
+    "replace",
+    372,
+    373,
+    288,
+    289,
+    [
+     " up with every single case on our own."
+    ]
+   ],
+   [
+    "equal",
+    373,
+    374,
+    289,
+    290
+   ],
+   [
+    "replace",
+    374,
+    376,
+    290,
+    292,
+    [
+     " then uploaded to codecov.io as part of the",
+     " CI/CD process (see below)."
+    ]
+   ],
+   [
+    "equal",
+    376,
+    377,
+    292,
+    293
+   ],
+   [
+    "replace",
+    377,
+    384,
+    293,
+    300,
+    [
+     " the images that Microsoft provides that already have SQL Server fully installed, all we have to",
+     " do is use the image to run a container. Here are the links to the",
+     " Linux versions and the Windows versions -",
+     " Express and",
+     " Developer.",
+     " - When running the tests, we can specify a specific Docker image to use, by invoking the custom",
+     " command line option called `--mssql-docker-image`. For example:"
+    ]
+   ],
+   [
+    "equal",
+    384,
+    388,
+    300,
+    304
+   ],
+   [
+    "replace",
+    388,
+    393,
+    304,
+    309,
+    [
+     " `docker-py` library which works very nicely. A `DockerDB` Python class is defined in",
+     " `bcpandas/tests/utils.py` and it wraps up all the Docker commands and functionality needed to use",
+     " SQL Server into one class. This class is used in `conftest.py` in the core bcpandas tests, and in",
+     " the `benchmarks/` directory for both the benchmarks code as well as the legacy tests for",
+     " `read_sql`."
+    ]
+   ],
+   [
+    "equal",
+    393,
+    399,
+    309,
+    315
+   ],
+   [
+    "replace",
+    399,
+    405,
+    315,
+    316,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    405,
+    407,
+    316,
+    318
+   ],
+   [
+    "replace",
+    407,
+    408,
+    318,
+    319,
+    [
+     "Stargazers over time"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "b211d8344206+2": {
+  "fn": "janwilmake/dorm",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "janwilmake/dorm context "
+    ]
+   ],
+   [
+    "equal",
+    3,
+    8,
+    3,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "3. **Explore and manage your data** with built-in Outerbase integration"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    13,
+    9,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "Demo app: https://dorm.wilmake.com | Announcement post | v1 announcement post"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    17,
+    14,
+    17
+   ],
+   [
+    "replace",
+    17,
+    26,
+    17,
+    26,
+    [
+     "|Feature|Vanilla DOs|**DORM** 🛏️|D1|Turso|",
+     "|--------------------------------------------------------|-------------------|-----------------------|-----------|-------------------|",
+     "|**Multi-tenant**|✅ Unlimited|✅ Unlimited|❌ One DB|Pricey|",
+     "|**Run code where your DB is** _(Never >1 round-trip)_|✅|✅|❌|❌|",
+     "|**Query from worker**|❌ Only in DO|✅|✅|✅|",
+     "|**Data Explorer**|❌|✅ Outerbase|✅|✅|",
+     "|**Migrations**|❌|✅|✅|✅|",
+     "|**Edge Performance**|Closest to user|Closest to user|Global edge|Global edge|",
+     "|**Developer Experience**|❌ Verbose, complex|✅ Clean, low verbosity|✅ Good|Good, not CF native|"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    26,
+    27
+   ],
+   [
+    "replace",
+    27,
+    28,
+    27,
+    28,
+    [
+     "See Turso vs DORM and DORM vs D1 for a more in-depth comparison with these alternatives. Also, see the pricing comparison here"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    31,
+    28,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     "Check out the live demo showing multi-tenant capabilities."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    39,
+    32,
+    39
+   ],
+   [
+    "replace",
+    39,
+    45,
+    39,
+    45,
+    [
+     "|Summary|Prompt it|",
+     "|--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|Working example/template on how to use this||",
+     "|Entire implementation of the package||",
+     "|Create a customized guide for a particular usecase||",
+     "|General information||"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    65,
+    45,
+    65
+   ],
+   [
+    "replace",
+    65,
+    70,
+    65,
+    66,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    80,
+    66,
+    76
+   ],
+   [
+    "replace",
+    80,
+    84,
+    76,
+    77,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    94,
+    77,
+    87
+   ],
+   [
+    "replace",
+    94,
+    99,
+    87,
+    88,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    124,
+    88,
+    113
+   ],
+   [
+    "replace",
+    124,
+    142,
+    113,
+    114,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    150,
+    114,
+    122
+   ],
+   [
+    "replace",
+    150,
+    160,
+    122,
+    123,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    181,
+    123,
+    144
+   ],
+   [
+    "replace",
+    181,
+    205,
+    144,
+    145,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    218,
+    145,
+    158
+   ],
+   [
+    "replace",
+    218,
+    219,
+    158,
+    159,
+    [
+     "- ❓ Localhost isn't easily accessible YET in https://studio.outerbase.com so you need to deploy first, use a tunnel, or run the outerbase client on localhost."
+    ]
+   ],
+   [
+    "equal",
+    219,
+    222,
+    159,
+    162
+   ],
+   [
+    "replace",
+    222,
+    230,
+    162,
+    170,
+    [
+     "- X-OAuth Template using DORM",
+     "- Follow me on X for updates",
+     "- Original project: ORM-DO",
+     "- Inspiration/used work - The convention outerbase uses is reapplied to make the integration with outerbase work!",
+     "- Original idea for mirroring",
+     "- DORM uses a 'remote sql cursor' at its core - see repo+post here",
+     "- v1.0.0@next-25 - Breaking change - July 8, 2025",
+     "- v1.0.0 - Breaking changes - July 16, 2025"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    235,
+    170,
+    175
+   ],
+   [
+    "replace",
+    235,
+    236,
+    175,
+    176,
+    [
+     "Deploy to Cloudflare Workers"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "839d44c52124+2": {
+  "fn": "aethai/ro3emu-server",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "RO3Emu: play Ragnarok Online 3 on your own server"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    11,
+    2,
+    7,
+    [
+     " Download for Windows",
+     " &nbsp;",
+     " Play with friends",
+     " &nbsp;",
+     " What works today"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    7,
+    8
+   ],
+   [
+    "replace",
+    12,
+    19,
+    8,
+    13,
+    [
+     " Latest release",
+     " Tests",
+     " Works with the Genesis client 2026.10.30.1",
+     " GPL-3.0",
+     " Join the Discord"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    13,
+    14
+   ],
+   [
+    "replace",
+    20,
+    31,
+    14,
+    21,
+    [
+     " Prontera South Gate by the sea Explore the world: maps, monsters and MVPs ",
+     " The guild home Build a guild and its home ",
+     "",
+     " Izlude, a town full of NPCs and merchants Towns full of NPCs, merchants and quests ",
+     " Merging two guilds Every window of the original client works ",
+     "",
+     " Screenshots: the unmodified game client on an RO3Emu server. "
+    ]
+   ],
+   [
+    "equal",
+    31,
+    34,
+    21,
+    24
+   ],
+   [
+    "replace",
+    34,
+    44,
+    24,
+    29,
+    [
+     " The original game, faithfully The server answers the client the way the original did. Where nobody knows how something worked, it is a best guess, and marked as one. ",
+     " One click to play A single <code>RO3Emu.exe</code>, nothing to install. It finds your game, prepares it and starts both the server and the game. ",
+     "",
+     " Your own game files We never host the game. No game yet? RO3Emu downloads it from Genesis' update servers and checks every file's signature. ",
+     " Play together Host for your friends from Windows or a Linux box, with party voice chat. Built for hundreds of players on two cores. "
+    ]
+   ],
+   [
+    "equal",
+    44,
+    47,
+    29,
+    32
+   ],
+   [
+    "replace",
+    47,
+    48,
+    32,
+    33,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    33,
+    34
+   ],
+   [
+    "replace",
+    49,
+    52,
+    34,
+    37,
+    [
+     "|**1**|**Download** `RO3Emu-win-x64.zip` from the latest release and extract it anywhere.|",
+     "|**2**|**Run `RO3Emu.exe`.** It finds your Ragnarok 3: Genesis folder, or offers to download the game (about 24 GB).|",
+     "|**3**|**Log in and play** with any account name and password: the account is created on your first login.|"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    55,
+    37,
+    40
+   ],
+   [
+    "replace",
+    55,
+    56,
+    40,
+    41,
+    [
+     "> More in the full guide: every command, what RO3Emu changes in the game folder, and how to undo it."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    59,
+    41,
+    44
+   ],
+   [
+    "replace",
+    59,
+    60,
+    44,
+    45,
+    [
+     "|You host|Your friends join|"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    45,
+    46
+   ],
+   [
+    "replace",
+    61,
+    63,
+    46,
+    48,
+    [
+     "|`RO3Emu.exe host`|`RO3Emu.exe join <address>`|",
+     "|It prints the address to share. Outside your home network, forward TCP 5380, 20000 and 33100.|That's all: the game is patched for your server and starts.|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    48,
+    49
+   ],
+   [
+    "replace",
+    64,
+    65,
+    49,
+    50,
+    [
+     "Hosting on Linux, a VPS or a home server? One script, nothing to install: see hosting."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    68,
+    50,
+    53
+   ],
+   [
+    "replace",
+    68,
+    69,
+    53,
+    54,
+    [
+     " Progress: world, combat and bosses, story dungeons, character progress, guilds, Survivor Battle, War of Emperium and the web panel are done; the Tavern, the remaining client tables and a many-player test are next "
+    ]
+   ],
+   [
+    "equal",
+    69,
+    71,
+    54,
+    56
+   ],
+   [
+    "replace",
+    71,
+    72,
+    56,
+    57,
+    [
+     "What works, and each release lists what is new in its release notes."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    74,
+    57,
+    59
+   ],
+   [
+    "replace",
+    74,
+    117,
+    59,
+    60,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

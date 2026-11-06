@@ -4302,5 +4302,1236 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "65a5b20c3a5e+2": {
+  "fn": "lorinkoz/django-pgschemas",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    7,
+    2,
+    7,
+    [
+     "Build status",
+     "Documentation status",
+     "Code coverage",
+     "PyPi version",
+     "Downloads"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "This package uses Postgres schemas to support data multi-tenancy in a single Django project. It is a fork of django-tenants with some conceptual changes:"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    12,
+    9,
+    12
+   ],
+   [
+    "replace",
+    12,
+    15,
+    12,
+    15,
+    [
+     " - URL using subdomain or subfolder on shared subdomain",
+     " - Session",
+     " - Headers"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    23,
+    15,
+    23
+   ],
+   [
+    "replace",
+    23,
+    26,
+    23,
+    24,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    28,
+    24,
+    26
+   ],
+   [
+    "replace",
+    28,
+    31,
+    26,
+    29,
+    [
+     "- Tom Turner for django-tenants.",
+     "- Bernardo Pires for django-tenant-schemas.",
+     "- Denish Patel for pg-clone-schema"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "cd38e7aa35ca+2": {
+  "fn": "straps/node-dbmon",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "equal",
+    0,
+    10,
+    0,
+    10
+   ],
+   [
+    "delete",
+    10,
+    11,
+    10,
+    10
+   ],
+   [
+    "equal",
+    11,
+    19,
+    10,
+    18
+   ],
+   [
+    "replace",
+    19,
+    20,
+    18,
+    19,
+    [
+     " var pg=require('pg'), cli=new pg.Client('tcp://postgres@localhost/template1'), dbmon=require('dbmon');"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    19,
+    20
+   ],
+   [
+    "replace",
+    21,
+    24,
+    20,
+    23,
+    [
+     " cli.connect();",
+     " //uncomment if you want node to create the temporary table for you",
+     " //cli.query('drop table if exists testtable; create table testtable(id integer primary key, val varchar(10));');"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    23,
+    24
+   ],
+   [
+    "replace",
+    25,
+    38,
+    24,
+    37,
+    [
+     " var channel=dbmon.channel({",
+     " driver:'postgresql',",
+     " driverOpts:{",
+     " postgresql:{",
+     " cli:cli",
+     " }",
+     " },",
+     " table:'testtable',",
+     " monitor:'all',",
+     " keyfld:{",
+     " name:'id',type:'integer'",
+     " }",
+     " });"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    43,
+    37,
+    42
+   ],
+   [
+    "replace",
+    43,
+    44,
+    42,
+    43,
+    [
+     " Console Transport Notification: insert, row={\"op\":\"i\",\"k\":2,\"oldk\":2,\"id\":1}"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    49,
+    43,
+    48
+   ],
+   [
+    "replace",
+    49,
+    53,
+    48,
+    52,
+    [
+     " - *op* is the operation type; can be *i* for insert, *u* for update, *d* for delete and *t* for truncate",
+     " - *k* is the key inserted/updated/deleted based on what specified in `keyfld.name`",
+     " - *oldk* is the old key value, see what happens executing `update testtable set id=20, val='twenty' where id=2`",
+     " - *id* is an internal change sequence id, an ordered number useful to keep track of modifications"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    61,
+    52,
+    60
+   ],
+   [
+    "replace",
+    61,
+    62,
+    60,
+    61,
+    [
+     "To see the complete list of options see lib/channelDefaults.js"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    71,
+    61,
+    70
+   ],
+   [
+    "replace",
+    71,
+    72,
+    70,
+    71,
+    [
+     " dbmon --driver=postgresql --driverOpts-postgresql-connStr=tcp://user:pwd@127.0.0.1:5432/db --driverOpts-postgresql-baseObjectsName=test_dbmon_cli --table=mytable --keyfld-name=id --keyfld-type=integer --transports=console,socketio --transportsOpts-socketio-port=8888"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    77,
+    71,
+    76
+   ],
+   [
+    "replace",
+    77,
+    97,
+    76,
+    96,
+    [
+     " {",
+     " \"driver\": \"postgresql\",",
+     " \"driverOpts\": {",
+     " \"postgresql\": {",
+     " \"connStr\": \"tcp://user:pwd@127.0.0.1:5432/db\",",
+     " \"baseObjectsName\": \"test_dbmon_cli\"",
+     " }",
+     " },",
+     " \"table\": \"mytable\",",
+     " \"keyfld\": {",
+     " \"name\": \"id\",",
+     " \"type\": \"integer\"",
+     " },",
+     " \"transports\": \"console,socketio\",",
+     " \"transportsOpts\": {",
+     " \"socketio\": {",
+     " \"port\": 8888",
+     " }",
+     " }",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    99,
+    96,
+    98
+   ],
+   [
+    "delete",
+    99,
+    100,
+    98,
+    98
+   ],
+   [
+    "equal",
+    100,
+    106,
+    98,
+    104
+   ],
+   [
+    "replace",
+    106,
+    107,
+    104,
+    105,
+    [
+     " sudo apt-get install inotify-tools"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    105,
+    108
+   ],
+   [
+    "replace",
+    110,
+    116,
+    108,
+    114,
+    [
+     " require('dbmon').channel({",
+     " driver:'filesystem',",
+     " driverOpts:{filesystem:{root:'/home'}},",
+     " method:'inotifywait',",
+     " transports:'console'",
+     " });"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    123,
+    114,
+    121
+   ],
+   [
+    "replace",
+    123,
+    127,
+    121,
+    124,
+    [
+     " - **transports**, in lib/transports are the way dbmon notify events. You can use how many tranports you want separating them by comma. The name specified in the options object have to match the name of the file followed by `-tranport.js` in the `transports` foler, like the `console` transport in the example above.",
+     " - **providers**, in lib/providers, have to initialize their method to fetch data and notify transports whene something happen; in most cases (surely for postgresql case) they should only require the `generic-driver` that dynamiccaly instantiate the method and notify transports",
+     " - **methods**, in lib/methods, are the core of the system; their implementation depends upon the driver and the method specified in the configuration object and their name should respect `DRIVER-METHOD-method.js` convention (ie: postgresql-trigger-method.js). Methods init function return an `EventEmitter` inherited object that notify listeners where data changes firing the event notification chain"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    138,
+    124,
+    135
+   ],
+   [
+    "replace",
+    138,
+    150,
+    135,
+    147,
+    [
+     " //TCP Socket Tranport",
+     " var init=function init(opts){",
+     " console.log('TCP Socket Transport init');",
+     " var me={",
+     " notify:function(type, row){",
+     " opts.transportsOpts.tcpsocket.client.write(JSON.stringify(row));",
+     " return me;",
+     " }",
+     " };",
+     " return me;",
+     " };",
+     " module.exports={init:init};"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    153,
+    147,
+    150
+   ],
+   [
+    "replace",
+    153,
+    163,
+    150,
+    160,
+    [
+     " var net = require('net');",
+     " var server = net.createServer(function (c) {",
+     " c.on('data', function(data){",
+     " console.log('DATA FROM SOCKET HURRAAA --> '+data);",
+     " });",
+     " });",
+     " server.listen(8124, 'localhost', function(){",
+     " var client=new net.Socket();",
+     " client.connect(8124, 'localhost', function(){",
+     " console.log('connected');"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    164,
+    160,
+    161
+   ],
+   [
+    "replace",
+    164,
+    166,
+    161,
+    163,
+    [
+     " var pg=require('pg'), cli=new pg.Client('tcp://postgres@localhost/template1'), dbmon=require('dbmon');",
+     " cli.connect();"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    167,
+    163,
+    164
+   ],
+   [
+    "replace",
+    167,
+    186,
+    164,
+    183,
+    [
+     " dbmon.channel({",
+     " driver:'postgresql',",
+     " driverOpts:{",
+     " postgresql:{",
+     " cli:cli",
+     " }",
+     " },",
+     " table:'testtable',",
+     " method:'trigger',",
+     " transports:'tcpsocket',",
+     " transportsOpts:{",
+     " tcpsocket:{",
+     " client:client",
+     " }",
+     " },",
+     " keyfld:{ name:'id', type:'integer'}",
+     " });",
+     " });",
+     " });"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    192,
+    183,
+    189
+   ],
+   [
+    "delete",
+    192,
+    193,
+    189,
+    189
+   ],
+   [
+    "equal",
+    193,
+    198,
+    189,
+    194
+   ],
+   [
+    "delete",
+    198,
+    199,
+    194,
+    194
+   ],
+   [
+    "equal",
+    199,
+    208,
+    194,
+    203
+   ],
+   [
+    "delete",
+    208,
+    209,
+    203,
+    203
+   ],
+   [
+    "equal",
+    209,
+    211,
+    203,
+    205
+   ],
+   [
+    "replace",
+    211,
+    213,
+    205,
+    207,
+    [
+     " - Underscore.js (`npm install underscore`)",
+     " - Step (`npm install step`)"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    216,
+    207,
+    210
+   ],
+   [
+    "replace",
+    216,
+    218,
+    210,
+    212,
+    [
+     " - Pg (`npm install pg`)",
+     " - inotifywait (`sudo apt-get install inotify-tools`); required for `{driver:'filesystem',method:'inotifywait',...}`"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    221,
+    212,
+    215
+   ],
+   [
+    "replace",
+    221,
+    223,
+    215,
+    217,
+    [
+     " - Faye (`npm install faye`)",
+     " - Nowjs (`npm install now`)"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    226,
+    217,
+    220
+   ],
+   [
+    "replace",
+    226,
+    229,
+    220,
+    221,
+    [
+     " - Colors (`npm install colors`)"
+    ]
+   ],
+   [
+    "equal",
+    229,
+    231,
+    221,
+    223
+   ],
+   [
+    "replace",
+    231,
+    235,
+    223,
+    226,
+    [
+     " - Develop other drivers (MySQL, Oracle, MsSQL, etc...)",
+     " - Develop other transports (Hook.io, etc..)",
+     " - Write better unit tests"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    237,
+    226,
+    228
+   ],
+   [
+    "delete",
+    237,
+    238,
+    228,
+    228
+   ],
+   [
+    "equal",
+    238,
+    239,
+    228,
+    229
+   ],
+   [
+    "delete",
+    239,
+    260,
+    229,
+    229
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "fafb5ddef862+2": {
+  "fn": "django-postgres-metrics/django-postgres-metrics",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    9,
+    2,
+    9,
+    [
+     "GitHub Build Status",
+     "Codecov coverage",
+     "Read the Docs",
+     "Version",
+     "License: BSD",
+     "Python Versions: see setup.py",
+     "Django Versions: see setup.py"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    14,
+    9,
+    14
+   ],
+   [
+    "replace",
+    14,
+    16,
+    14,
+    16,
+    [
+     "At PyCon Canada 2017 Craig Kerstiens",
+     "gave a talk \"Postgres at any scale\". In his talk Craig"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    40,
+    16,
+    40
+   ],
+   [
+    "replace",
+    40,
+    46,
+    40,
+    41,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    55,
+    41,
+    50
+   ],
+   [
+    "replace",
+    55,
+    64,
+    50,
+    51,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    78,
+    51,
+    65
+   ],
+   [
+    "replace",
+    78,
+    79,
+    65,
+    66,
+    [
+     "Screenshot of the Detailed Index Usage metric, with help text, and a table with rows for each index"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    66,
+    67
+   ],
+   [
+    "replace",
+    80,
+    81,
+    67,
+    68,
+    [
+     "The same output but using the pgm_show_metric management command"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    92,
+    68,
+    79
+   ],
+   [
+    "replace",
+    92,
+    109,
+    79,
+    80,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "40c0c021972d+2": {
+  "fn": "LazZiya/XLocalizer",
+  "clean_ver": "2",
+  "raw_lines": 12,
+  "ops": [
+   [
+    "equal",
+    0,
+    12,
+    0,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "XLocalizer Simplified Workflow"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    25,
+    13,
+    25
+   ],
+   [
+    "replace",
+    25,
+    32,
+    25,
+    26,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    34,
+    26,
+    28
+   ],
+   [
+    "replace",
+    34,
+    35,
+    28,
+    29,
+    [
+     "### For more details goto DOCS.Ziya.info.tr"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    37,
+    29,
+    31
+   ],
+   [
+    "replace",
+    37,
+    38,
+    31,
+    32,
+    [
+     " * XLocalizer for Asp Net Core"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    40,
+    32,
+    34
+   ],
+   [
+    "replace",
+    40,
+    43,
+    34,
+    37,
+    [
+     " * XML based localization sample",
+     " * DB based localization sample",
+     " * Blazor localization sample"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    46,
+    37,
+    40
+   ],
+   [
+    "delete",
+    46,
+    47,
+    40,
+    40
+   ],
+   [
+    "equal",
+    47,
+    48,
+    40,
+    41
+   ],
+   [
+    "replace",
+    48,
+    52,
+    41,
+    42,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "e60ebaed4fef+2": {
+  "fn": "ketai/ketai",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "56af8b4ae025+2": {
+  "fn": "sumimakito/QuickKV",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    3,
+    [
+     "GitHub license"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    23,
+    3,
+    22
+   ],
+   [
+    "replace",
+    23,
+    38,
+    22,
+    23,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    46,
+    23,
+    31
+   ],
+   [
+    "replace",
+    46,
+    57,
+    31,
+    32,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    66,
+    32,
+    41
+   ],
+   [
+    "replace",
+    66,
+    67,
+    41,
+    42,
+    [
+     "Changelog / 更新说明 →"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    95,
+    42,
+    70
+   ],
+   [
+    "replace",
+    95,
+    96,
+    70,
+    71,
+    [
+     "Releases"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    99,
+    71,
+    74
+   ],
+   [
+    "replace",
+    99,
+    100,
+    74,
+    75,
+    [
+     "Dropbox"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    75,
+    76
+   ],
+   [
+    "replace",
+    101,
+    102,
+    76,
+    77,
+    [
+     "Google Drive"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    77,
+    78
+   ],
+   [
+    "replace",
+    103,
+    104,
+    78,
+    79,
+    [
+     "百度云"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    130,
+    79,
+    105
+   ],
+   [
+    "replace",
+    130,
+    135,
+    105,
+    106,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    147,
+    106,
+    118
+   ],
+   [
+    "replace",
+    147,
+    148,
+    118,
+    119,
+    [
+     "See also:Appendix1 参见:附录 1"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    201,
+    119,
+    172
+   ],
+   [
+    "replace",
+    201,
+    210,
+    172,
+    173,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    235,
+    173,
+    198
+   ],
+   [
+    "replace",
+    235,
+    268,
+    198,
+    199,
+    [
+     "…（33 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    268,
+    399,
+    199,
+    330
+   ],
+   [
+    "replace",
+    399,
+    400,
+    330,
+    331,
+    [
+     "SumiMakito"
+    ]
+   ],
+   [
+    "equal",
+    400,
+    411,
+    331,
+    342
+   ],
+   [
+    "delete",
+    411,
+    413,
+    342,
+    342
+   ],
+   [
+    "equal",
+    413,
+    414,
+    342,
+    343
+   ],
+   [
+    "delete",
+    414,
+    416,
+    343,
+    343
+   ],
+   [
+    "equal",
+    416,
+    420,
+    343,
+    347
+   ],
+   [
+    "delete",
+    420,
+    421,
+    347,
+    347
+   ],
+   [
+    "equal",
+    421,
+    432,
+    347,
+    358
+   ],
+   [
+    "replace",
+    432,
+    442,
+    358,
+    359,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    442,
+    444,
+    359,
+    361
+   ],
+   [
+    "replace",
+    444,
+    445,
+    361,
+    362,
+    [
+     "LICENSE 授权许可文件"
+    ]
+   ],
+   [
+    "equal",
+    445,
+    446,
+    362,
+    363
+   ],
+   [
+    "replace",
+    446,
+    447,
+    363,
+    364,
+    [
+     "NOTICE 授权声明"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

@@ -4091,5 +4091,2967 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "5160201420e8+2": {
+  "fn": "prasadus92/face-recognition",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Face Recognition "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     " A classical face-recognition library for the JVM — Eigenfaces, Fisherfaces, LBPH — wrapped in a Spring Boot REST API and a Picocli CLI. "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    22,
+    4,
+    18,
+    [
+     " <a href=\"https://github.com/prasadus92/face-recognition/actions/workflows/build.yml\">",
+     " Build Status",
+     " </a>",
+     " <a href=\"https://codecov.io/gh/prasadus92/face-recognition\">",
+     " Code Coverage",
+     " </a>",
+     " Java 17+",
+     " Spring Boot 3.2",
+     " <a href=\"License.txt\">",
+     " License",
+     " </a>",
+     " <a href=\"https://github.com/prasadus92/face-recognition/stargazers\">",
+     " Stars",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    18,
+    19
+   ],
+   [
+    "replace",
+    23,
+    34,
+    19,
+    26,
+    [
+     " Status ·",
+     " Quick Start ·",
+     " Algorithms ·",
+     " REST API ·",
+     " CLI ·",
+     " Benchmarks ·",
+     " Contributing"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    37,
+    26,
+    29
+   ],
+   [
+    "replace",
+    37,
+    38,
+    29,
+    30,
+    [
+     "> **Actively maintained.** Originally released in 2014 as a university project (`TSCD` + Swing GUI); fully rewritten for v2 as a service-shaped library with clean-architecture layering, a REST/CLI surface, and a classical-vision pipeline. v2 is **not yet** published to Maven Central — install from source (see below). See ROADMAP.md for what is landed vs. planned and CHANGELOG.md for recent changes."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    30,
+    31
+   ],
+   [
+    "replace",
+    39,
+    40,
+    31,
+    32,
+    [
+     "This repository is a learning-friendly reference implementation of the classical face-recognition pipeline — not a competitor to `dlib`, OpenCV DNN, or modern CNN-based libraries. If you need state-of-the-art accuracy, bring a real model via the Deep-learning backend."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    54,
+    32,
+    46
+   ],
+   [
+    "replace",
+    54,
+    55,
+    46,
+    47,
+    [
+     "|Capability|State|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    47,
+    48
+   ],
+   [
+    "replace",
+    56,
+    69,
+    48,
+    61,
+    [
+     "|Eigenfaces extractor|Stable|PCA via JAMA|",
+     "|Fisherfaces extractor|Stable|LDA on top of PCA|",
+     "|LBPH extractor|Stable|Uniform LBP histograms, configurable grid|",
+     "|KNN classifier|Stable|Euclidean / Cosine / Manhattan / Chi-square|",
+     "|Haar cascade face detector|Experimental|Vendored stub; real cascade data required for production|",
+     "|Face aligner (eye-centered affine)|Stable (opt-in)|Enabled via `facerecognition.image.face-alignment`|",
+     "|Model persistence|Stable|`FileModelRepository` + `TrainedModel`|",
+     "|REST + OpenAPI|Stable|`/api/v1/*` + `/swagger-ui.html`|",
+     "|Prometheus / health / metrics|Stable|Micrometer + custom `ModelReadyHealthIndicator`|",
+     "|Rate limiting|Stable|Per-IP token bucket (Bucket4j)|",
+     "|CLI (picocli)|Stable|`serve`, `recognize`, `enroll`, `train`, `benchmark`|",
+     "|ONNX deep-learning extractor|Experimental scaffold|Bring your own model weights|",
+     "|Published Maven artifact|Planned|Not yet on Central|"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    119,
+    61,
+    111
+   ],
+   [
+    "replace",
+    119,
+    137,
+    111,
+    112,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    141,
+    112,
+    116
+   ],
+   [
+    "replace",
+    141,
+    142,
+    116,
+    117,
+    [
+     "|Algorithm|Idea|Best for|Tradeoffs|"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    143,
+    117,
+    118
+   ],
+   [
+    "replace",
+    143,
+    146,
+    118,
+    121,
+    [
+     "|**Eigenfaces (PCA)**|Project faces onto principal components of training set.|Fast, controlled environments.|Sensitive to lighting and pose.|",
+     "|**Fisherfaces (LDA)**|Maximize between-class / within-class scatter.|Varied lighting with ≥2 samples/identity.|Requires multiple labelled samples per identity.|",
+     "|**LBPH**|Concatenate histograms of local binary patterns over a grid.|Texture-based matching under lighting changes.|Pose-sensitive; higher memory.|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    155,
+    121,
+    130
+   ],
+   [
+    "replace",
+    155,
+    156,
+    130,
+    131,
+    [
+     "|Endpoint|Method|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    157,
+    131,
+    132
+   ],
+   [
+    "replace",
+    157,
+    168,
+    132,
+    143,
+    [
+     "|`/api/v1/enroll`|POST multipart|Register a face sample for a name|",
+     "|`/api/v1/recognize`|POST multipart|Identify a face in an uploaded image|",
+     "|`/api/v1/train`|POST|Train / retrain on all enrolled samples|",
+     "|`/api/v1/identities`|GET|List enrolled identities (paginated)|",
+     "|`/api/v1/identities/{id}`|GET / PATCH / DELETE|Read, update, soft-delete an identity|",
+     "|`/api/v1/model/status`|GET|Model state, algorithm, identity counts|",
+     "|`/api/v1/model/export`|POST|Download a serialized `TrainedModel`|",
+     "|`/api/v1/model/import`|POST multipart|Load a previously exported model|",
+     "|`/actuator/health`|GET|Liveness + custom `model-ready` indicator|",
+     "|`/actuator/prometheus`|GET|Micrometer metrics in Prometheus format|",
+     "|`/swagger-ui.html`|GET|Interactive OpenAPI 3 docs|"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    169,
+    143,
+    144
+   ],
+   [
+    "replace",
+    169,
+    170,
+    144,
+    145,
+    [
+     "Every response that represents an error uses the `ErrorResponse` shape and carries a `traceId` (echoed from the `X-Request-ID` request header or generated if absent)."
+    ]
+   ],
+   [
+    "equal",
+    170,
+    184,
+    145,
+    159
+   ],
+   [
+    "replace",
+    184,
+    188,
+    159,
+    160,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    200,
+    160,
+    172
+   ],
+   [
+    "replace",
+    200,
+    225,
+    172,
+    173,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    225,
+    229,
+    173,
+    177
+   ],
+   [
+    "replace",
+    229,
+    230,
+    177,
+    178,
+    [
+     "> **Honest disclaimer.** The numbers currently checked into docs/benchmarks/ come from the bundled micro-dataset (`src/test/resources/datasets/mini/`) and are not directly comparable to LFW or Yale B. Classical algorithms on aligned frontal faces typically land in the 80–95% range depending on dataset; don't expect deep-learning-level accuracy."
+    ]
+   ],
+   [
+    "equal",
+    230,
+    257,
+    178,
+    205
+   ],
+   [
+    "replace",
+    257,
+    293,
+    205,
+    206,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    293,
+    296,
+    206,
+    209
+   ],
+   [
+    "replace",
+    296,
+    299,
+    209,
+    210,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    299,
+    301,
+    210,
+    212
+   ],
+   [
+    "replace",
+    301,
+    302,
+    212,
+    213,
+    [
+     "Report vulnerabilities privately — see SECURITY.md. Do **not** file public issues for security bugs."
+    ]
+   ],
+   [
+    "equal",
+    302,
+    314,
+    213,
+    225
+   ],
+   [
+    "replace",
+    314,
+    317,
+    225,
+    226,
+    [
+     "Licensed under the **Apache License, Version 2.0** — see License.txt. The project was originally released under the GNU General Public License v3.0 in 2014 and was relicensed to Apache 2.0 in April 2026; the `License.txt` file explains the transition in full."
+    ]
+   ],
+   [
+    "equal",
+    317,
+    319,
+    226,
+    228
+   ],
+   [
+    "replace",
+    319,
+    322,
+    228,
+    231,
+    [
+     "- JAMA for numerical linear algebra.",
+     "- Spring Boot, picocli, Micrometer, Bucket4j, springdoc-openapi.",
+     "- Maintainer: **Prasad Subrahmanya** · prasadus92@gmail.com"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "c08f6bae5f8f+2": {
+  "fn": "zhblue/crud",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    3,
+    1,
+    2,
+    [
+     "安装使用图文说明"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    12,
+    2,
+    11
+   ],
+   [
+    "delete",
+    12,
+    13,
+    11,
+    11
+   ],
+   [
+    "equal",
+    13,
+    19,
+    11,
+    17
+   ],
+   [
+    "replace",
+    19,
+    20,
+    17,
+    18,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    59,
+    18,
+    57
+   ],
+   [
+    "replace",
+    59,
+    65,
+    57,
+    61,
+    [
+     "image",
+     "image",
+     "image",
+     "image"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7c80b8d411c7+2": {
+  "fn": "kemiller/cdq",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    8,
+    6,
+    8,
+    [
+     "while using RubyMotion. It uses a data model file, which you can generate in",
+     "XCode, or you can use ruby-xcdm."
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    8,
+    9
+   ],
+   [
+    "replace",
+    9,
+    11,
+    9,
+    11,
+    [
+     "Build Status",
+     "Gem Version"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "CDQ was created by Ken Miller at Infinite Red, a React Native expert consulting company based the US."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    15,
+    13,
+    15
+   ],
+   [
+    "replace",
+    15,
+    19,
+    15,
+    19,
+    [
+     "1. Introducing CDQ",
+     "2. Greenfield Quick Start Tutorial",
+     "3. Cheat Sheet",
+     "4. API docs"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    23,
+    19,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "MotionData, but it became obvious I"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    24,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     "rewriting almost everything. If you pay attention, you can still find the"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    30,
+    26,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     "avoiding too much abstraction or method pollution on top of the SDK. While it"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    38,
+    31,
+    38
+   ],
+   [
+    "replace",
+    38,
+    39,
+    38,
+    39,
+    [
+     "schema as it grows, if you can follow a few simple rules."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    49,
+    39,
+    49
+   ],
+   [
+    "replace",
+    49,
+    50,
+    49,
+    50,
+    [
+     "This way assumes you want to use ruby-xcdm. Run `cdq -h` for list of more generators."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    65,
+    50,
+    65
+   ],
+   [
+    "replace",
+    65,
+    66,
+    65,
+    66,
+    [
+     "You will need a data model file. If you've created one in XCode, move or copy"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    66,
+    67
+   ],
+   [
+    "replace",
+    67,
+    68,
+    67,
+    68,
+    [
+     "project. If you're using `ruby-xcdm` (which I highly recommend) then it will"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    76,
+    68,
+    76
+   ],
+   [
+    "replace",
+    76,
+    81,
+    76,
+    77,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    83,
+    77,
+    79
+   ],
+   [
+    "replace",
+    83,
+    85,
+    79,
+    81,
+    [
+     "That's it! You can create specific implementation classes for your entities if",
+     "you want, but it's not required. You can start running queries on the console or"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    90,
+    81,
+    86
+   ],
+   [
+    "replace",
+    90,
+    92,
+    86,
+    88,
+    [
+     "dependency. For the full docs, see its github page,",
+     "but here's a taste. Schema files are found in the \"schemas\" directory within your"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    98,
+    88,
+    94
+   ],
+   [
+    "replace",
+    98,
+    116,
+    94,
+    95,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    132,
+    95,
+    111
+   ],
+   [
+    "replace",
+    132,
+    137,
+    111,
+    112,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    143,
+    112,
+    118
+   ],
+   [
+    "replace",
+    143,
+    145,
+    118,
+    120,
+    [
+     "behavior. One of the best parts of CDQ is that it handles contexts for you",
+     "relatively seamlessly. If you have a simple app, you may never need to worry"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    149,
+    120,
+    124
+   ],
+   [
+    "replace",
+    149,
+    150,
+    124,
+    125,
+    [
+     "For a great discussion of why you might want to use nested contexts, see here."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    152,
+    125,
+    127
+   ],
+   [
+    "replace",
+    152,
+    154,
+    127,
+    129,
+    [
+     "operations on objects use the topmost context. You just call `cdq.save`",
+     "and it saves the whole stack. Or you can get a list of all the contexts in"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    163,
+    129,
+    138
+   ],
+   [
+    "replace",
+    163,
+    173,
+    138,
+    139,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    175,
+    139,
+    141
+   ],
+   [
+    "replace",
+    175,
+    176,
+    141,
+    142,
+    [
+     "Settings things up the way you want is easy. Here's how you'd set it up for asynchronous"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    184,
+    142,
+    150
+   ],
+   [
+    "replace",
+    184,
+    185,
+    150,
+    151,
+    [
+     "Since the main queue is on top, all your data operations will use that. `cdq.save` then saves the"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    192,
+    151,
+    158
+   ],
+   [
+    "replace",
+    192,
+    193,
+    158,
+    159,
+    [
+     "From time to time, you may need to use a temporary context. For example, on"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    195,
+    159,
+    161
+   ],
+   [
+    "replace",
+    195,
+    196,
+    161,
+    162,
+    [
+     "all the data over to your main context all at once. CDQ makes that easy too:"
+    ]
+   ],
+   [
+    "equal",
+    196,
+    248,
+    162,
+    214
+   ],
+   [
+    "replace",
+    248,
+    256,
+    214,
+    215,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    271,
+    215,
+    230
+   ],
+   [
+    "replace",
+    271,
+    273,
+    230,
+    232,
+    [
+     "A quick aside about queries in Core Data. You should avoid them whenever",
+     "possible in your production code. Core Data is designed to work efficiently"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    274,
+    232,
+    233
+   ],
+   [
+    "replace",
+    274,
+    275,
+    233,
+    234,
+    [
+     "any in-memory object, letting Core Data handle your memory usage for you. If"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    276,
+    234,
+    235
+   ],
+   [
+    "replace",
+    276,
+    277,
+    235,
+    236,
+    [
+     "get used to, but this is a very different environment. So if you find yourself"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    285,
+    236,
+    244
+   ],
+   [
+    "replace",
+    285,
+    286,
+    244,
+    245,
+    [
+     "Here are some examples. **See the cheat sheet for a complete list.**"
+    ]
+   ],
+   [
+    "equal",
+    286,
+    333,
+    245,
+    292
+   ],
+   [
+    "replace",
+    333,
+    334,
+    292,
+    293,
+    [
+     "objects. There are several methods for getting at the data:"
+    ]
+   ],
+   [
+    "equal",
+    334,
+    380,
+    293,
+    339
+   ],
+   [
+    "replace",
+    380,
+    381,
+    339,
+    340,
+    [
+     "you'll need to use the master method, described below. If you have an"
+    ]
+   ],
+   [
+    "equal",
+    381,
+    382,
+    340,
+    341
+   ],
+   [
+    "replace",
+    382,
+    384,
+    341,
+    343,
+    [
+     "name, You'll need to use a <tt>cdq.yml</tt> config file. See",
+     "CDQConfig."
+    ]
+   ],
+   [
+    "equal",
+    384,
+    388,
+    343,
+    347
+   ],
+   [
+    "replace",
+    388,
+    390,
+    347,
+    349,
+    [
+     "you can use the `cdq()`master method. This is a \"magic\" method, like",
+     "`rmq()` in RubyMotionQuery or"
+    ]
+   ],
+   [
+    "equal",
+    390,
+    392,
+    349,
+    351
+   ],
+   [
+    "replace",
+    392,
+    394,
+    351,
+    353,
+    [
+     "controllers) as well as in the console. You can use it anywhere else by",
+     "including the model `CDQ` into your classes. To use an entity without a"
+    ]
+   ],
+   [
+    "equal",
+    394,
+    423,
+    353,
+    382
+   ],
+   [
+    "replace",
+    423,
+    428,
+    382,
+    383,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    428,
+    434,
+    383,
+    389
+   ],
+   [
+    "replace",
+    434,
+    470,
+    389,
+    390,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    470,
+    476,
+    390,
+    396
+   ],
+   [
+    "replace",
+    476,
+    477,
+    396,
+    397,
+    [
+     "**Removed as of version 2.0.0. If you still need this, pin cdq gem to before version 2.0.0**"
+    ]
+   ],
+   [
+    "equal",
+    477,
+    479,
+    397,
+    399
+   ],
+   [
+    "replace",
+    479,
+    480,
+    399,
+    400,
+    [
+     "@katsuyoshi. Please try it out and let us know how it's working for you. To"
+    ]
+   ],
+   [
+    "equal",
+    480,
+    490,
+    400,
+    410
+   ],
+   [
+    "replace",
+    490,
+    493,
+    410,
+    413,
+    [
+     "* API",
+     "* Cheat Sheet",
+     "* Tutorial"
+    ]
+   ],
+   [
+    "equal",
+    493,
+    509,
+    413,
+    429
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a7b4bdd28eb7+2": {
+  "fn": "waylau/RestDemo",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    3,
+    1,
+    2
+   ],
+   [
+    "replace",
+    3,
+    5,
+    2,
+    4,
+    [
+     " RESTful Web Service DemoS with Jersey ,Hibernate,Mysql,Spring,JQuery,AngularJS...Follow me to create a completed web app. Just go go go !",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    4,
+    5
+   ],
+   [
+    "replace",
+    6,
+    7,
+    5,
+    6,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    6,
+    7
+   ],
+   [
+    "replace",
+    8,
+    9,
+    7,
+    8,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    8,
+    9
+   ],
+   [
+    "replace",
+    10,
+    11,
+    9,
+    10,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    10,
+    11
+   ],
+   [
+    "replace",
+    12,
+    13,
+    11,
+    12,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    12,
+    13
+   ],
+   [
+    "replace",
+    14,
+    15,
+    13,
+    14,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    14,
+    15
+   ],
+   [
+    "replace",
+    16,
+    17,
+    15,
+    16,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    16,
+    17
+   ],
+   [
+    "replace",
+    18,
+    19,
+    17,
+    18,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    18,
+    19
+   ],
+   [
+    "replace",
+    20,
+    22,
+    19,
+    21,
+    [
+     "",
+     " http://www.waylau.com/jersey-client-curd/"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    24,
+    21,
+    23
+   ],
+   [
+    "replace",
+    24,
+    27,
+    23,
+    26,
+    [
+     "",
+     " http://www.waylau.com/jersey-mysql5-hibernate4/",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    26,
+    27
+   ],
+   [
+    "replace",
+    28,
+    31,
+    27,
+    30,
+    [
+     "",
+     " http://www.waylau.com/jersey-sqlserver-hibernate4/",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    30,
+    31
+   ],
+   [
+    "replace",
+    32,
+    35,
+    31,
+    34,
+    [
+     "",
+     " http://www.waylau.com/jersey-sqlserver-hibernate4-spring3/",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    35,
+    37,
+    34,
+    36
+   ],
+   [
+    "replace",
+    37,
+    39,
+    36,
+    38,
+    [
+     " http://www.waylau.com/jersey-sqlserver-hibernate4-spring3-jquery/",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    39,
+    41,
+    38,
+    40
+   ],
+   [
+    "replace",
+    41,
+    44,
+    40,
+    41,
+    [
+     " http://www.waylau.com/jersey-sqlserver-hibernate4-spring3-angular/"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    46,
+    41,
+    43
+   ],
+   [
+    "replace",
+    46,
+    47,
+    43,
+    44,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    47,
+    55,
+    44,
+    52
+   ],
+   [
+    "delete",
+    55,
+    57,
+    52,
+    52
+   ],
+   [
+    "equal",
+    57,
+    59,
+    52,
+    54
+   ],
+   [
+    "replace",
+    59,
+    60,
+    54,
+    55,
+    [
+     " http://www.waylau.com/jersey-2-spring-4-rest/"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    70,
+    55,
+    65
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "ab8673dea833+2": {
+  "fn": "kibaffo33/aws_transcribe_to_docx",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    5,
+    1,
+    4
+   ],
+   [
+    "replace",
+    5,
+    7,
+    4,
+    6,
+    [
+     "Build Status",
+     "Coverage Status"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    6,
+    7
+   ],
+   [
+    "replace",
+    8,
+    10,
+    7,
+    9,
+    [
+     "PyPI - Python Version",
+     "PyPI version"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    9,
+    10
+   ],
+   [
+    "replace",
+    11,
+    14,
+    10,
+    12,
+    [
+     "Downloads",
+     "Downloads"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    21,
+    12,
+    19
+   ],
+   [
+    "delete",
+    21,
+    22,
+    19,
+    19
+   ],
+   [
+    "equal",
+    22,
+    24,
+    19,
+    21
+   ],
+   [
+    "replace",
+    24,
+    30,
+    21,
+    26,
+    [
+     "|Time|Speaker|Comment|",
+     "|-------|-------|-----------|",
+     "|0:00:03|spk_0|Is this on?|",
+     "|0:00:05|spk_1|Yep.|",
+     "|0:00:06|spk_0|Great.|"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    91,
+    26,
+    87
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "1f91b84e51b4+2": {
+  "fn": "jgoerner/beyond-jupyter",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    2,
+    1,
+    2,
+    [
+     "All material from the PyCon.DE 2018 Talk \"Beyond Jupyter Notebooks - Building your own data science platform with Python &amp; Docker\""
+    ]
+   ],
+   [
+    "equal",
+    2,
+    3,
+    2,
+    3
+   ],
+   [
+    "replace",
+    3,
+    10,
+    3,
+    10,
+    [
+     "- Video of the PyCon Talk",
+     "- Slides of the PyCon Talk",
+     "- Cookiecutter for the Data-Science-Stack",
+     "- Beyond Jupyter Notebooks MOOC",
+     "- \"Data Science is Software\" (Talk)",
+     "- \"Docker for Data Science (Book)",
+     "- \"I don't like Notebooks\" (Slides)"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a050c7cbf509+2": {
+  "fn": "harish81/digidocu",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    7,
+    1,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "1. Download the latest release from here or clone repository."
+    ]
+   ],
+   [
+    "equal",
+    8,
+    17,
+    8,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "|Username|Password|"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "|super|123456|"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    22,
+    20,
+    22
+   ],
+   [
+    "replace",
+    22,
+    24,
+    22,
+    24,
+    [
+     "1. User Documentation",
+     "2. Developer Documentation"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    28,
+    24,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    29,
+    30
+   ],
+   [
+    "replace",
+    30,
+    33,
+    30,
+    31,
+    [
+     "- DigiDocu is primary licenced under GPLv3 license."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    31,
+    32
+   ],
+   [
+    "replace",
+    34,
+    35,
+    32,
+    33,
+    [
+     " - For Hosted Solutions contact us at nandoliyaharish@gmail.com"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "01a488e9716a+2": {
+  "fn": "sandydargoport/prism",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    8,
+    4,
+    8,
+    [
+     "License",
+     "Test Install",
+     "Docker",
+     "Platforms"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    13,
+    8,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     " Prism on a wall display, a tablet and a phone"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    14,
+    15
+   ],
+   [
+    "replace",
+    15,
+    25,
+    15,
+    16,
+    [
+     "**See the full screenshot gallery and feature tour →**"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    28,
+    16,
+    19
+   ],
+   [
+    "replace",
+    28,
+    30,
+    19,
+    20,
+    [
+     " Option 1: Clone and build (any platform) "
+    ]
+   ],
+   [
+    "equal",
+    30,
+    37,
+    20,
+    27
+   ],
+   [
+    "replace",
+    37,
+    41,
+    27,
+    28,
+    [
+     " Option 2: Pull pre-built image (includes Raspberry Pi / ARM64) "
+    ]
+   ],
+   [
+    "equal",
+    41,
+    49,
+    28,
+    36
+   ],
+   [
+    "replace",
+    49,
+    53,
+    36,
+    37,
+    [
+     " Option 3: Home Assistant add-on (no terminal, no certs) "
+    ]
+   ],
+   [
+    "equal",
+    53,
+    62,
+    37,
+    46
+   ],
+   [
+    "replace",
+    62,
+    65,
+    46,
+    47,
+    [
+     "Add-ons are not distributed through HACS, so the custom-repository flow above is the install path. Options, data layout and troubleshooting: `ha-app/README.md`."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    68,
+    47,
+    50
+   ],
+   [
+    "replace",
+    68,
+    71,
+    50,
+    51,
+    [
+     "Full installation notes (HTTPS / Nginx cert prerequisite, Raspberry Pi notes, troubleshooting) are in the install guide."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    74,
+    51,
+    54
+   ],
+   [
+    "replace",
+    74,
+    80,
+    54,
+    58,
+    [
+     "- **Get Started** — install, first-time setup, updating",
+     "- **User Guide** — calendar, shopping, recipes, tasks, goals, mobile PWA",
+     "- **Integrations** — Kroger / Mariano's cart push, Home Assistant, Voice API for Alexa",
+     "- **Changelog** — every release"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    87,
+    58,
+    65
+   ],
+   [
+    "replace",
+    87,
+    88,
+    65,
+    66,
+    [
+     "I'm not a software developer, but I work in a technical field where AI tools are increasingly central to how work gets done. This project was built entirely with Claude Code — I directed requirements, design, and product decisions; Claude Code handled the implementation. I've done what I can to make this solid (CI pipeline, E2E tests, security policy), but I can't make guarantees I'm not qualified to make. Use reasonable judgment about what you expose to the internet."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    92,
+    66,
+    70
+   ],
+   [
+    "replace",
+    92,
+    100,
+    70,
+    71,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    71,
+    72
+   ],
+   [
+    "replace",
+    101,
+    104,
+    72,
+    73,
+    [
+     "Prism is open-source under the PolyForm Noncommercial 1.0.0 license. Free for personal and non-commercial use."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    73,
+    74
+   ],
+   [
+    "replace",
+    105,
+    107,
+    74,
+    75,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "9d1349e6ef9b+2": {
+  "fn": "selectel/yawndb",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    3,
+    1,
+    2
+   ],
+   [
+    "replace",
+    3,
+    4,
+    2,
+    3,
+    [
+     "Build Status"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    3,
+    4
+   ],
+   [
+    "replace",
+    5,
+    6,
+    4,
+    5,
+    [
+     "YAWNDB is an in-memory circular array database written in Erlang. This language is"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    5,
+    6
+   ],
+   [
+    "replace",
+    7,
+    9,
+    6,
+    8,
+    [
+     "data without consuming extra system resources. In YAWNDB the data are stored",
+     "in a circular buffer named a conveyor in YAWNDB terminology. All the incoming"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    8,
+    9
+   ],
+   [
+    "replace",
+    10,
+    11,
+    9,
+    10,
+    [
+     "rules. A rule is a set of properties for a set of statistical data (i.e. data"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    25,
+    10,
+    24
+   ],
+   [
+    "delete",
+    25,
+    26,
+    24,
+    24
+   ],
+   [
+    "equal",
+    26,
+    34,
+    24,
+    32
+   ],
+   [
+    "delete",
+    34,
+    35,
+    32,
+    32
+   ],
+   [
+    "equal",
+    35,
+    64,
+    32,
+    61
+   ],
+   [
+    "delete",
+    64,
+    65,
+    61,
+    61
+   ],
+   [
+    "equal",
+    65,
+    70,
+    61,
+    66
+   ],
+   [
+    "replace",
+    70,
+    71,
+    66,
+    67,
+    [
+     "|Parameter|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    67,
+    68
+   ],
+   [
+    "replace",
+    72,
+    80,
+    68,
+    75,
+    [
+     "|flush_enabled|boolean|Enabling/disabling saving to disk|",
+     "|flush_dir|string|Directory to save data|",
+     "|flush_period|integer|Data saving frequency (in seconds)|",
+     "|flush_late_threshold|float|Write to log if saving takes more than flush_period * flush_late_threshold seconds|",
+     "|flush_cache|integer|Read cache|",
+     "|flush_write_buffer|integer|Write cache|",
+     "|flush_block_size|integer|Block size for saving to disk|"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    83,
+    75,
+    78
+   ],
+   [
+    "replace",
+    83,
+    84,
+    78,
+    79,
+    [
+     "|Parameter|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    85,
+    79,
+    80
+   ],
+   [
+    "replace",
+    85,
+    87,
+    80,
+    82,
+    [
+     "|cleanup_enabled|boolean|Enable/disable obsolete data deletion|",
+     "|cleanup_period|integer|Deletion frequency, in seconds|"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    90,
+    82,
+    85
+   ],
+   [
+    "replace",
+    90,
+    91,
+    85,
+    86,
+    [
+     "|Parameter|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    86,
+    87
+   ],
+   [
+    "replace",
+    92,
+    96,
+    87,
+    91,
+    [
+     "|listen_jsonapi_req|boolean|Enable/disable the user API|",
+     "|jsonapi_iface|string|Specify which network interface that will be used|",
+     "|jsonapi_port|integer|Specify which local port number to use|",
+     "|jsonapi_prespawned|integer|Number of workers previously created (can be increased)|"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    99,
+    91,
+    94
+   ],
+   [
+    "replace",
+    99,
+    100,
+    94,
+    95,
+    [
+     "|Parameter|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    95,
+    96
+   ],
+   [
+    "replace",
+    101,
+    105,
+    96,
+    100,
+    [
+     "|listen_tcpapi_req|boolean|Enabling/disabling the administrator API|",
+     "|tcpapi_iface|string|Specify which network interface that will be used|",
+     "|tcpapi_port|integer|Specify which local port number to use|",
+     "|tcpapi_prespawned|integer|Number of workers previously created (can be increased)|"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    108,
+    100,
+    103
+   ],
+   [
+    "replace",
+    108,
+    109,
+    103,
+    104,
+    [
+     "|Parameter|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    104,
+    105
+   ],
+   [
+    "replace",
+    110,
+    112,
+    105,
+    107,
+    [
+     "|max_slice|integer|Maximum size of the slice to choose|",
+     "|rules|list|Rules regulating data retention|"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    115,
+    107,
+    110
+   ],
+   [
+    "replace",
+    115,
+    116,
+    110,
+    111,
+    [
+     "|Parameter|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    117,
+    111,
+    112
+   ],
+   [
+    "replace",
+    117,
+    125,
+    112,
+    120,
+    [
+     "|name|string|The name of the rule|",
+     "|prefix|string|The prefix referred by the rule|",
+     "|limit|integer|Conveyor size|",
+     "|split|string|Define the way the value will be divided in case it does not match the bucket: proportional - the value will be proportionally divided between the two nearest buckets; equal - the value will be divided into halves between the two nearest buckets; forward/backward - the whole value wil be put into the previous (or the nearest) bucket|",
+     "|type|string|Define the value to be saved in buckets: last - only the last value will be saved; max - the maximal incoming value will be saved; min - the minimal incoming value will be saved; sum - the sum of the incoming values will be saved; avg - the average value will be saved|",
+     "| value_size | integer | Define the value size for a bucket (16, 32 и 64 bits), possible values: small, medium, large",
+     "|additional_values|list|A list of \"foobar: weak/strong\" pairs from 0 to 14 symbols in length. Sometimes it is necessary to save the additional values not being numbers ('timeout', for example). The list of additional values is used for this purpose. The values can be either strong or weak. The weak values are updated if the bucket is updated while the strong values are never updated.|",
+     "|autoremove|boolean|Enable/disable conveyor removal in case of data deterioration|"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    127,
+    120,
+    122
+   ],
+   [
+    "delete",
+    127,
+    128,
+    122,
+    122
+   ],
+   [
+    "equal",
+    128,
+    144,
+    122,
+    138
+   ],
+   [
+    "replace",
+    144,
+    145,
+    138,
+    139,
+    [
+     "The code field contains \"ok\" on success. The answer is displayed in the answer"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    170,
+    139,
+    164
+   ],
+   [
+    "replace",
+    170,
+    171,
+    164,
+    165,
+    [
+     "|Parameter|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    172,
+    165,
+    166
+   ],
+   [
+    "replace",
+    172,
+    174,
+    166,
+    168,
+    [
+     "|from|integer|Initial time, UTC timestamp|",
+     "|to|integer|End time, UTC timestamp|"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    181,
+    168,
+    175
+   ],
+   [
+    "replace",
+    181,
+    194,
+    175,
+    176,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    202,
+    176,
+    184
+   ],
+   [
+    "replace",
+    202,
+    203,
+    184,
+    185,
+    [
+     "|Parameter|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    204,
+    185,
+    186
+   ],
+   [
+    "replace",
+    204,
+    206,
+    186,
+    188,
+    [
+     "|from|integer|Initial time UTC timestamp|",
+     "|to|integer|End time, UTC timestamp|"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    213,
+    188,
+    195
+   ],
+   [
+    "replace",
+    213,
+    226,
+    195,
+    196,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    226,
+    235,
+    196,
+    205
+   ],
+   [
+    "replace",
+    235,
+    236,
+    205,
+    206,
+    [
+     "|Parameter|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    237,
+    206,
+    207
+   ],
+   [
+    "replace",
+    237,
+    238,
+    207,
+    208,
+    [
+     "|n|integer|The number of last values|"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    240,
+    208,
+    210
+   ],
+   [
+    "delete",
+    240,
+    241,
+    210,
+    210
+   ],
+   [
+    "equal",
+    241,
+    246,
+    210,
+    215
+   ],
+   [
+    "replace",
+    246,
+    259,
+    215,
+    216,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    264,
+    216,
+    221
+   ],
+   [
+    "delete",
+    264,
+    265,
+    221,
+    221
+   ],
+   [
+    "equal",
+    265,
+    276,
+    221,
+    232
+   ],
+   [
+    "replace",
+    276,
+    287,
+    232,
+    233,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    287,
+    291,
+    233,
+    237
+   ],
+   [
+    "replace",
+    291,
+    292,
+    237,
+    238,
+    [
+     "|Field|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    292,
+    293,
+    238,
+    239
+   ],
+   [
+    "replace",
+    293,
+    302,
+    239,
+    247,
+    [
+     "|read_rpm|integer|Read requests per minute|",
+     "|write_rpm|integer|Write requests per minute|",
+     "|read_rps|integer|Read requests per second|",
+     "|write_rps|integer|Write requests per second|",
+     "|processes_now|integer|Number of active processes|",
+     "|processes_max|integer|Maximal number of active processes permitted|",
+     "|paths_count|integer|Number of paths|",
+     "|dirty_paths_count|integer|Number of the unsaved paths|"
+    ]
+   ],
+   [
+    "equal",
+    302,
+    313,
+    247,
+    258
+   ],
+   [
+    "replace",
+    313,
+    318,
+    258,
+    259,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    318,
+    342,
+    259,
+    283
+   ],
+   [
+    "replace",
+    342,
+    343,
+    283,
+    284,
+    [
+     "|Parameter|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    343,
+    344,
+    284,
+    285
+   ],
+   [
+    "replace",
+    344,
+    348,
+    285,
+    289,
+    [
+     "|from|integer|Initial time, UTC timestamp|",
+     "|to|integer|Ending time, UTC timestamp|",
+     "|rule|string|The rule used|",
+     "|aggregate|string|Aggregation function (max, min, avg, sum)|"
+    ]
+   ],
+   [
+    "equal",
+    348,
+    355,
+    289,
+    296
+   ],
+   [
+    "replace",
+    355,
+    368,
+    296,
+    297,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    372,
+    297,
+    301
+   ],
+   [
+    "replace",
+    372,
+    373,
+    301,
+    302,
+    [
+     "|Error|HTTP-code|Description|"
+    ]
+   ],
+   [
+    "equal",
+    373,
+    374,
+    302,
+    303
+   ],
+   [
+    "replace",
+    374,
+    390,
+    303,
+    319,
+    [
+     "|no_aggregate|400|The aggregate request parameter is not indicated or improperly formulated|",
+     "|no_path|400|The path request parameter is not indicated or improperly formulated|",
+     "|no_rule|400|The rule request parameter is not indicated or improperly formulated|",
+     "|no_from|400|The from request parameter is not indicated or improperly formulated|",
+     "|no_to|400|The to request parameter is not indicated or improperly formulated|",
+     "|no_n|400|The n request parameter is not indicated or improperly formulated|",
+     "|no_paths|400|The paths request parameter is not indicated or improperly formulated|",
+     "|no_body|400|The request body is expected but absent|",
+     "|no_fun|400|Unknown request|",
+     "|from_to_order|400|The value of the from parameter is greater than that of the to parameter|",
+     "|page_not_found|404|Requested path not found|",
+     "|rule_not_found|404|The requested rule for the given path not found|",
+     "|slice_too_big|413|The number of request results is greater than the value of the max_slice parameter|",
+     "|process_limit|500|Limit of active processes achieved|",
+     "|memory_limit|500|Write limit achieved|",
+     "|internal|500|Internal error|"
+    ]
+   ],
+   [
+    "equal",
+    390,
+    392,
+    319,
+    321
+   ],
+   [
+    "delete",
+    392,
+    393,
+    321,
+    321
+   ],
+   [
+    "equal",
+    393,
+    400,
+    321,
+    328
+   ],
+   [
+    "replace",
+    400,
+    401,
+    328,
+    329,
+    [
+     "|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    401,
+    402,
+    329,
+    330
+   ],
+   [
+    "replace",
+    402,
+    406,
+    330,
+    334,
+    [
+     "|uint8|Unsigned 8-bit number|",
+     "|uint16|Unsigned 16-bit number in big-endian|",
+     "|uint64|Unsigned 64-bit number in big-endian|",
+     "|byte*|Byte sequence|"
+    ]
+   ],
+   [
+    "equal",
+    406,
+    409,
+    334,
+    337
+   ],
+   [
+    "replace",
+    409,
+    410,
+    337,
+    338,
+    [
+     "|Field|Value|"
+    ]
+   ],
+   [
+    "equal",
+    410,
+    411,
+    338,
+    339
+   ],
+   [
+    "replace",
+    411,
+    417,
+    339,
+    345,
+    [
+     "|uint16|Packet size (except this field)|",
+     "|uint8|Protocole version|",
+     "|uint8|Flag indicating special values (0 - the value is not special)|",
+     "|unit64|Number of seconds from the beginning of UNIX era|",
+     "|unit64|Value (or the number of the special value)|",
+     "|byte*|Byte sequence|"
+    ]
+   ],
+   [
+    "equal",
+    417,
+    424,
+    345,
+    352
+   ],
+   [
+    "replace",
+    424,
+    434,
+    352,
+    353,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    434,
+    442,
+    353,
+    361
+   ],
+   [
+    "replace",
+    442,
+    470,
+    361,
+    362,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    470,
+    473,
+    362,
+    365
+   ],
+   [
+    "delete",
+    473,
+    474,
+    365,
+    365
+   ],
+   [
+    "equal",
+    474,
+    475,
+    365,
+    366
+   ],
+   [
+    "replace",
+    475,
+    481,
+    366,
+    372,
+    [
+     "YAWNDB was written by Dmitry Groshev in 2012.",
+     "Alexander Neganov,",
+     "Kagami Hiiragi,",
+     "Maxim Mitroshin,",
+     "Pavel Abalikhin and",
+     "Fedor Gogolev have also contributed to the project."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }
