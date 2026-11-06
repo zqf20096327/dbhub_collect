@@ -3106,5 +3106,729 @@
    ]
   ],
   "at": "2026-11-05"
+ },
+ "f82c7824410f+2": {
+  "fn": "intaro/pinboard",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    11,
+    2,
+    11,
+    [
+     "CI",
+     "CodeQL",
+     "codecov",
+     "Release",
+     "Docker Pulls",
+     "Docker Image Size",
+     "PHP",
+     "Symfony",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    14,
+    11,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "Pinba was originally developed by @tony2001 for MySQL ≤ 5.6 and is no longer maintained. This project ships with the @XOlegator/pinba_engine fork, which adds support for MySQL 8.0 / 8.4 LTS and MariaDB 10.11 / 11.8 LTS. Pinboard itself is agnostic to which engine build you use."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "Pinboard screenshots"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    41,
+    17,
+    41
+   ],
+   [
+    "replace",
+    41,
+    49,
+    41,
+    42,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    87,
+    42,
+    80
+   ],
+   [
+    "replace",
+    87,
+    88,
+    80,
+    81,
+    [
+     "|Image|Description|"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    81,
+    82
+   ],
+   [
+    "replace",
+    89,
+    91,
+    82,
+    84,
+    [
+     "|`xolegator/pinba-engine:8.4`|MySQL 8.4 LTS with Pinba storage engine plugin|",
+     "|`xolegator/pinboard:latest`|Pinboard web UI + aggregate worker (pin a release via `PINBOARD_TAG` in `.env`)|"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    84,
+    85
+   ],
+   [
+    "replace",
+    92,
+    93,
+    85,
+    86,
+    [
+     "Aggregated history and login sessions are stored in named Docker volumes and survive restarts and upgrades; see data persistence & backups."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    86,
+    87
+   ],
+   [
+    "replace",
+    94,
+    95,
+    87,
+    88,
+    [
+     "The database image bundles the XOlegator/pinba_engine plugin — a fork of the original tony2001/pinba_engine with support for MySQL 8.0 / 8.4 LTS and MariaDB 10.11 / 11.8 LTS added from a single source tree."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    106,
+    88,
+    99
+   ],
+   [
+    "replace",
+    106,
+    122,
+    99,
+    100,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    132,
+    100,
+    110
+   ],
+   [
+    "replace",
+    132,
+    146,
+    110,
+    111,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    150,
+    111,
+    115
+   ],
+   [
+    "replace",
+    150,
+    151,
+    115,
+    116,
+    [
+     "See docs/docker.md for full details on both the dev stack and the public image stack."
+    ]
+   ],
+   [
+    "equal",
+    151,
+    154,
+    116,
+    119
+   ],
+   [
+    "replace",
+    154,
+    155,
+    119,
+    120,
+    [
+     "|Command|Description|"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    120,
+    121
+   ],
+   [
+    "replace",
+    156,
+    161,
+    121,
+    126,
+    [
+     "|`php bin/console aggregate`|Run the aggregation pipeline (normally runs via cron every 15 min)|",
+     "|`php bin/console add-user <email> <password> [ROLE] [hosts_regexp]`|Create or update a user|",
+     "|`php bin/console users:migrate-file-to-db`|Migrate users from file-based auth to DB|",
+     "|`php bin/console users:migrate-db-to-file`|Migrate users from DB auth to file|",
+     "|`php bin/console register-crontab`|Print a crontab entry for the aggregation job|"
+    ]
+   ],
+   [
+    "equal",
+    161,
+    166,
+    126,
+    131
+   ],
+   [
+    "replace",
+    166,
+    167,
+    131,
+    132,
+    [
+     "|Variable|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    168,
+    132,
+    133
+   ],
+   [
+    "replace",
+    168,
+    179,
+    133,
+    144,
+    [
+     "|`DB_HOST`|`127.0.0.1`|MySQL host|",
+     "|`DB_PORT`|`3306`|MySQL port|",
+     "|`DB_NAME`|`pinba`|Database name|",
+     "|`DB_USER`|—|Database user|",
+     "|`DB_PASSWORD`|—|Database password|",
+     "|`DB_SERVER_VERSION`|`8.4.0`|MySQL server version (for Doctrine)|",
+     "|`APP_AUTH_USER_SOURCE`|`file`|User storage: `file` or `db`|",
+     "|`APP_RECORDS_LIFETIME`|`P1M`|How long to keep raw data (ISO 8601 duration)|",
+     "|`APP_AGGREGATION_PERIOD`|`PT15M`|Aggregation window size|",
+     "|`APP_LOGGING_LONG_REQUEST_TIME_GLOBAL`|`1.5`|Slow request threshold (seconds)|",
+     "|`APP_NOTIFICATION_ENABLE`|`0`|Enable email notifications|"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    144,
+    145
+   ],
+   [
+    "replace",
+    180,
+    181,
+    145,
+    146,
+    [
+     "Full variable reference: docs/configuration.md"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    184,
+    146,
+    149
+   ],
+   [
+    "replace",
+    184,
+    186,
+    149,
+    151,
+    [
+     "- **XOlegator/pinba_engine** — actively maintained port of the Pinba storage engine with support for MySQL 8.0 / 8.4 LTS and MariaDB 10.11 / 11.8 LTS from a single source tree. A fork of the original tony2001/pinba_engine, which supported MySQL ≤ 5.6 and is no longer maintained (kept here for reference as the original project).",
+     "- **XOlegator/pinba_extension** — actively maintained PHP extension that sends the UDP packets, supporting modern PHP 8.2–8.5. A fork of the original tony2001/pinba_extension, which targeted older PHP versions and is no longer maintained (kept here for reference as the original project)."
+    ]
+   ],
+   [
+    "equal",
+    186,
+    189,
+    151,
+    154
+   ],
+   [
+    "replace",
+    189,
+    194,
+    154,
+    159,
+    [
+     "- Configuration reference",
+     "- Docker: quick-start & dev stack",
+     "- Deployment & operations",
+     "- Testing",
+     "- Code standards"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    205,
+    159,
+    170
+   ],
+   [
+    "replace",
+    205,
+    206,
+    170,
+    171,
+    [
+     "See docs/deployment.md for the full upgrade guide."
+    ]
+   ],
+   [
+    "equal",
+    206,
+    208,
+    171,
+    173
+   ],
+   [
+    "replace",
+    208,
+    210,
+    173,
+    174,
+    [
+     "MIT — see LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a8161004c34b+2": {
+  "fn": "suharev7/clickhouse-rs",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    7,
+    2,
+    7,
+    [
+     "Build Status",
+     "Crate info",
+     "Documentation",
+     "dependency status",
+     "Coverage Status"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "Asynchronous Yandex ClickHouse client library for rust programming language. "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    11,
+    9,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "Library hosted on crates.io."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    41,
+    12,
+    41
+   ],
+   [
+    "replace",
+    41,
+    43,
+    41,
+    43,
+    [
+     " * `none`",
+     " * `lz4`"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    50,
+    43,
+    50
+   ],
+   [
+    "replace",
+    50,
+    51,
+    50,
+    51,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    51,
+    58,
+    51,
+    58
+   ],
+   [
+    "delete",
+    58,
+    59,
+    58,
+    58
+   ],
+   [
+    "equal",
+    59,
+    72,
+    58,
+    71
+   ],
+   [
+    "replace",
+    72,
+    74,
+    71,
+    73,
+    [
+     "- `tokio_io` *(enabled by default)* — I/O based on Tokio.",
+     "- `async_std` — I/O based on async-std (doesn't work together with `tokio_io`)."
+    ]
+   ],
+   [
+    "equal",
+    74,
+    82,
+    73,
+    81
+   ],
+   [
+    "replace",
+    82,
+    112,
+    81,
+    82,
+    [
+     "…（30 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    113,
+    82,
+    83
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "d13b3f0cfcbb+2": {
+  "fn": "novoda/sqlite-provider",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "# sqlite-provider Download Apache 2.0 Licence"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    5,
+    3,
+    5
+   ],
+   [
+    "delete",
+    5,
+    6,
+    5,
+    5
+   ],
+   [
+    "equal",
+    6,
+    11,
+    5,
+    10
+   ],
+   [
+    "delete",
+    11,
+    12,
+    10,
+    10
+   ],
+   [
+    "equal",
+    12,
+    21,
+    10,
+    19
+   ],
+   [
+    "replace",
+    21,
+    25,
+    19,
+    20,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    30,
+    20,
+    25
+   ],
+   [
+    "delete",
+    30,
+    31,
+    25,
+    25
+   ],
+   [
+    "equal",
+    31,
+    38,
+    25,
+    32
+   ],
+   [
+    "delete",
+    38,
+    39,
+    32,
+    32
+   ],
+   [
+    "equal",
+    39,
+    43,
+    32,
+    36
+   ],
+   [
+    "replace",
+    43,
+    52,
+    36,
+    40,
+    [
+     " * We always welcome people to contribute new features or bug fixes, here is how",
+     " * If you have a problem check the Issues Page first to see if we are working on it",
+     " * For further usage or to delve more deeply checkout the Project Wiki",
+     " * Looking for community help, browse the already asked Stack Overflow Questions or use the tag: `support-sqlite-provider` when posting a new question"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "55fd2a3debb8+2": {
+  "fn": "t-tiger/gorm-bulk-insert",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "`Gorm Bulk Insert` is a library to implement bulk insert using gorm. Execute bulk insert just by passing a slice of struct, as if you were using a gorm regularly."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    41,
+    3,
+    41
+   ],
+   [
+    "replace",
+    41,
+    42,
+    41,
+    42,
+    [
+     " - **NOTE: passing value must be a slice of struct. Map or other values are not compatible.**"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    51,
+    42,
+    51
+   ],
+   [
+    "replace",
+    51,
+    96,
+    51,
+    52,
+    [
+     "…（45 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    99,
+    52,
+    55
+   ],
+   [
+    "replace",
+    99,
+    101,
+    55,
+    56,
+    [
+     "This project is under Apache 2.0 License. See the LICENSE file for the full license text."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

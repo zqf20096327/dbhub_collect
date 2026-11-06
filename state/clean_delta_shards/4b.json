@@ -3291,5 +3291,478 @@
    ]
   ],
   "at": "2026-11-05"
+ },
+ "50a6f5bda203+2": {
+  "fn": "liliang-cn/cortexdb",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Go Reference CI codecov License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    3,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "The CortexDB live view"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    20,
+    10,
+    20,
+    [
+     "|||",
+     "|---|---|",
+     "|Go library|`go get github.com/liliang-cn/cortexdb/v2`|",
+     "|Claude Code|`/plugin marketplace add liliang-cn/cortexdb`, then `/plugin install cortexdb@cortexdb`|",
+     "|Codex|`codex plugin marketplace add liliang-cn/cortexdb && codex plugin add cortexdb@cortexdb`|",
+     "|Claude Code mod (optional)|`/plugin install cortexdb-live@cortexdb`|",
+     "|DeepSeek Harness|`dsh plugin --profile web add \"github:liliang-cn/cortexdb#semver:^2&path:/plugins/dsh-cortexdb-memory\"` (guide)|",
+     "|Obsidian|unzip a release's `cortexdb-obsidian.zip` into `<vault>/.obsidian/plugins/` (guide)|",
+     "|Shared-brain server|`go install github.com/liliang-cn/cortexdb/v2/cmd/cortexdb-grpc@latest`|",
+     "|Clients|`cargo add cortexdb-client` · `pip install cortexdb-client` · `npm install cortexdb-client`|"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    35,
+    20,
+    35
+   ],
+   [
+    "replace",
+    35,
+    36,
+    35,
+    36,
+    [
+     "recall. See the plugin guide for setup and"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    40,
+    36,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     "`cortexdb-live` is an optional mod that runs inside Claude Code on top of the `cortexdb` plugin. Install it after the plugin:"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    52,
+    41,
+    52
+   ],
+   [
+    "replace",
+    52,
+    56,
+    52,
+    53,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    84,
+    53,
+    81
+   ],
+   [
+    "replace",
+    84,
+    107,
+    81,
+    104,
+    [
+     "|Variable|Meaning|",
+     "|---|---|",
+     "|`CORTEXDB_PATH`|Database file (default `~/.cortexdb/cortexdb.db`)|",
+     "|`CORTEXDB_REMOTE`|Use a shared `cortexdb-grpc` at `host:port` (plaintext) or `https://host` (TLS, behind a proxy) instead of a local file|",
+     "|`CORTEXDB_GRPC_TOKEN`|Bearer token for that server|",
+     "|`CORTEXDB_GRPC_ADDR`|Server listen address (default `127.0.0.1:47821`)|",
+     "|`CORTEXDB_EMBED_BASE_URL` / `CORTEXDB_EMBED_API_KEY`|`cortexdb-mcp-stdio`: OpenAI-compatible embeddings endpoint and its key (fall back to `OPENAI_BASE_URL` / `OPENAI_API_KEY`); unset = lexical mode|",
+     "|`OPENAI_BASE_URL` / `OPENAI_API_KEY`|Server: the embeddings endpoint and key (`cortexdb-grpc` reads only these, not `CORTEXDB_EMBED_BASE_URL`); unset = lexical mode|",
+     "|`CORTEXDB_EMBED_MODEL` / `CORTEXDB_EMBED_DIM`|Embedding model and dimension, for both (default `text-embedding-3-small` / `1536`)|",
+     "|`CORTEXDB_VECTOR_INDEX` / `CORTEXDB_BINARY_OVERSAMPLE`|Server: `hnsw` (default) or, on a SQLite store, `binary` (1-bit codes in memory, 1/32 of the vectors, each search rescored from the stored vectors, no snapshot); the oversample is the binary shortlist multiplier, from 1 to 1000 (default `8`)|",
+     "|`CORTEXDB_REVIEW_GATE`|Server and `cortexdb-mcp-stdio`: `1` leaves proposed and rejected documents and memories out of search and recall (default off; a curation filter, not access control)|",
+     "|`CORTEXDB_SLOW_MS`|Server: log calls slower than this, with the time each stage took (default `1000`, `0` = none)|",
+     "|`CORTEXDB_TRACE` / `CORTEXDB_TRACE_FILE`|Server: log every call; also append the records to a JSON-lines file|",
+     "|`CORTEXDB_LOG_FORMAT` / `CORTEXDB_LOG_LEVEL`|Server: `text` (logfmt, default) or `json`; `debug`, `info` (default), `warn`, `error`|",
+     "|`CORTEXDB_TRACE_MAX_MB` / `CORTEXDB_TRACE_KEEP` / `CORTEXDB_TRACE_MAX_AGE_DAYS`|Server: rotate the trace file at this size (`100`), keep this many old files (`5`) for at most this many days (`30`)|",
+     "|`CORTEXDB_EMBED_PROBE_SECONDS`|Server: probe the embedder this often, for `/healthz` and `/metrics` (default `60`, `0` = off)|",
+     "|`CORTEXDB_RECALL_LOG`|Server and `cortexdb-mcp-stdio`: `1` keeps a log of recalls — queries included — for the `/recalls` page and the `recall_log_*` tools (default off)|",
+     "|`CORTEXDB_RECALL_LOG_DAYS` / `CORTEXDB_RECALL_LOG_MAX_ROWS`|How long (`30` days) and how many (`100000`) recalls the log keeps|",
+     "|`CORTEXDB_MEDIA_VISION_URL` / `CORTEXDB_MEDIA_VISION_MODEL`|Server and `cortexdb-mcp-stdio`: an Ollama vision model that captions images and video frames for `ingest_media` (e.g. `http://localhost:11434` / `qwen3.5:4b`)|",
+     "|`CORTEXDB_MEDIA_TRANSCRIBE_URL` / `CORTEXDB_MEDIA_TRANSCRIBE_MODEL` / `CORTEXDB_MEDIA_TRANSCRIBE_API_KEY`|An OpenAI-compatible `…/v1` transcription endpoint for audio and the sound of videos (OpenAI, or whisper.cpp's `whisper-server --inference-path /v1/audio/transcriptions --convert`)|",
+     "|`CORTEXDB_MEDIA_EMBED_URL` / `CORTEXDB_MEDIA_EMBED_MODEL` / `CORTEXDB_MEDIA_EMBED_API_KEY`|A CLIP-style embedding endpoint (infinity's `/embeddings` with `modality`) that puts images, video frames and text in one space, so an image is found by what it shows and `search_media` takes an image as the query|",
+     "|`CORTEXDB_MEDIA_EMBED_AUDIO` / `CORTEXDB_MEDIA_EMBED_MIN_SCORE`|`1` when that model embeds sound too (CLAP); the cosine a media vector must reach to be a hit (`0.2`)|",
+     "|`CORTEXDB_MEDIA_FRAME_INTERVAL` / `CORTEXDB_MEDIA_MAX_BYTES`|Seconds between the video frames captioned (`10`, `0` = none; needs `ffmpeg`), and the size cap of one file (32 MiB)|"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    104,
+    107
+   ],
+   [
+    "replace",
+    110,
+    111,
+    107,
+    108,
+    [
+     "Website · Guide (full feature reference) · Examples · Changelog · 中文"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    113,
+    108,
+    110
+   ],
+   [
+    "delete",
+    113,
+    114,
+    110,
+    110
+   ],
+   [
+    "equal",
+    114,
+    115,
+    110,
+    111
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "804d3303ccd3+2": {
+  "fn": "joist-orm/joist-orm",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    3,
+    [
+     "npm",
+     "npm next",
+     "CircleCI"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    11,
+    3,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "- Guaranteed N+1 safe (pervasive use of Facebook's dataloader"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    19,
+    12,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "See joist-orm.io for documentation."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    39,
+    20,
+    39
+   ],
+   [
+    "delete",
+    39,
+    40,
+    39,
+    39
+   ],
+   [
+    "equal",
+    40,
+    41,
+    39,
+    40
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7c9b391cf112+2": {
+  "fn": "taniarascia/laconia",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    8,
+    3,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "Install a local copy with the instructions below, or follow the Docker instructions."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    12,
+    9,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "It is assumed you already know how to install a LAMP stack. For macOS and Windows local development, I would recommend downloading MAMP for a sandboxed environment. You can set up virtual hosts as well."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    22,
+    13,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "Composer is the standard in PHP for dependency management, class autoloading, and much more."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    81,
+    23,
+    81
+   ],
+   [
+    "replace",
+    81,
+    108,
+    81,
+    82,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    141,
+    82,
+    115
+   ],
+   [
+    "replace",
+    141,
+    142,
+    115,
+    116,
+    [
+     "Laconia runs on PHP 7.2 and MySQL. It uses Composer to autoload classes, configuration and utility files, as well as future tests through PHPUnit. Node.js is used to compile Sass to CSS via npm scripts. The CSS framework Primitive was used for the design."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    151,
+    116,
+    125
+   ],
+   [
+    "replace",
+    151,
+    152,
+    125,
+    126,
+    [
+     " Sessions and Users – how to easily deal with sessions, users, and authentication."
+    ]
+   ],
+   [
+    "equal",
+    152,
+    157,
+    126,
+    131
+   ],
+   [
+    "replace",
+    157,
+    165,
+    131,
+    139,
+    [
+     "- How to reset user password",
+     "- How to create a user login",
+     "- How to make a PDO class",
+     "- How to validate passwords",
+     "- General structure of a PHP application",
+     "- Directory structure example",
+     "- Promisify XHR",
+     "- MVC concepts and routing class"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    167,
+    139,
+    141
+   ],
+   [
+    "replace",
+    167,
+    170,
+    141,
+    142,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    172,
+    142,
+    144
+   ],
+   [
+    "replace",
+    172,
+    173,
+    144,
+    145,
+    [
+     "- Tania Rascia"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    175,
+    145,
+    147
+   ],
+   [
+    "replace",
+    175,
+    177,
+    147,
+    148,
+    [
+     "This project is open source and available under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

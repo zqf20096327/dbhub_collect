@@ -4733,5 +4733,571 @@
    ]
   ],
   "at": "2026-11-05"
+ },
+ "52bea3209477+2": {
+  "fn": "itinycheng/flink-connector-clickhouse",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "Flink SQL connector",
+     "for ClickHouse database, this project Powered",
+     "by ClickHouse JDBC."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "Currently, the project supports `Source/Sink Table` and `Flink Catalog`. "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    11,
+    7,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "|Option|Required|Default|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    12,
+    13
+   ],
+   [
+    "replace",
+    13,
+    41,
+    13,
+    41,
+    [
+     "|url|required|none|String|The ClickHouse jdbc url in format `jdbc:(ch|clickhouse)[:<protocol>]://endpoint1[,endpoint2,...][/<database>][?param1=value1&param2=value2]`.|",
+     "|username|optional|none|String|The 'username' and 'password' must both be specified if any of them is specified.|",
+     "|password|optional|none|String|The ClickHouse password.|",
+     "|database-name|optional|default|String|The ClickHouse database name.|",
+     "|table-name|required|none|String|The ClickHouse table name.|",
+     "|use-local|optional|false|Boolean|Directly read/write local tables in case of distributed table engine.|",
+     "|sink.batch-size|optional|1000|Integer|The max flush size, over this will flush data.|",
+     "|sink.flush-interval|optional|1s|Duration|Over this flush interval mills, asynchronous threads will flush data.|",
+     "|sink.max-retries|optional|3|Integer|The max retry times when writing records to the database failed.|",
+     "|~~sink.write-local~~|optional|false|Boolean|Removed from version 1.15, use `use-local` instead.|",
+     "|sink.update-strategy|optional|update|String|Convert a record of type UPDATE_AFTER to update/insert statement or just discard it, available: update, insert, discard.|",
+     "|sink.partition-strategy|optional|balanced|String|Partition strategy: balanced(round-robin), hash(partition key), shuffle(random).|",
+     "|sink.partition-key|optional|none|String|Partition key used for hash strategy.|",
+     "|sink.sharding.use-table-definition|optional|false|Boolean|Sharding strategy consistent with definition of distributed table, if set to true, the configuration of `sink.partition-strategy` and `sink.partition-key` will be overwritten.|",
+     "|sink.ignore-delete|optional|true|Boolean|Whether to ignore delete statements.|",
+     "|sink.parallelism|optional|none|Integer|Defines a custom parallelism for the sink.|",
+     "|scan.partition.column|optional|none|String|The column name used for partitioning the input.|",
+     "|scan.partition.num|optional|none|Integer|The number of partitions.|",
+     "|scan.partition.lower-bound|optional|none|Long|The smallest value of the first partition.|",
+     "|scan.partition.upper-bound|optional|none|Long|The largest value of the last partition.|",
+     "|catalog.ignore-primary-key|optional|true|Boolean|Whether to ignore primary keys when using ClickHouseCatalog to create table.|",
+     "|properties.*|optional|none|String|This can set and pass `clickhouse-jdbc` configurations.|",
+     "|lookup.cache|optional|NONE|String|The caching strategy for this lookup table, including NONE and PARTIAL(not support FULL yet)|",
+     "|lookup.partial-cache.expire-after-access|optional|none|Duration|Duration to expire an entry in the cache after accessing, over this time, the oldest rows will be expired.|",
+     "|lookup.partial-cache.expire-after-write|optional|none|Duration|Duration to expire an entry in the cache after writing, over this time, the oldest rows will be expired.|",
+     "|lookup.partial-cache.max-rows|optional|none|Long|The max number of rows of lookup cache, over this value, the oldest rows will be expired.|",
+     "|lookup.partial-cache.caching-missing-key|optional|true|Boolean|Flag to cache missing key, true by default|",
+     "|lookup.max-retries|optional|3|Integer|The max retry times if lookup database failed.|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    45,
+    41,
+    45
+   ],
+   [
+    "replace",
+    45,
+    47,
+    45,
+    47,
+    [
+     " update/delete statements, please be sure to write records to local table or set `use-local` to",
+     " true."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    47,
+    48
+   ],
+   [
+    "replace",
+    48,
+    49,
+    48,
+    49,
+    [
+     " partition table."
+    ]
+   ],
+   [
+    "equal",
+    49,
+    56,
+    49,
+    56
+   ],
+   [
+    "replace",
+    56,
+    57,
+    56,
+    57,
+    [
+     "|Flink Type|ClickHouse Type|"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    57,
+    58
+   ],
+   [
+    "replace",
+    58,
+    81,
+    58,
+    81,
+    [
+     "|CHAR|String|",
+     "|VARCHAR|String / IP / UUID|",
+     "|STRING|String / Enum|",
+     "|BOOLEAN|UInt8|",
+     "|BYTES|FixedString|",
+     "|DECIMAL|Decimal / Int128 / Int256 / UInt64 / UInt128 / UInt256|",
+     "|TINYINT|Int8|",
+     "|SMALLINT|Int16 / UInt8|",
+     "|INTEGER|Int32 / UInt16 / Interval|",
+     "|BIGINT|Int64 / UInt32|",
+     "|FLOAT|Float32|",
+     "|DOUBLE|Float64|",
+     "|DATE|Date|",
+     "|TIME|DateTime|",
+     "|TIMESTAMP|DateTime|",
+     "|TIMESTAMP_LTZ|DateTime|",
+     "|INTERVAL_YEAR_MONTH|Int32|",
+     "|INTERVAL_DAY_TIME|Int64|",
+     "|ARRAY|Array|",
+     "|MAP|Map|",
+     "|ROW|Not supported|",
+     "|MULTISET|Not supported|",
+     "|RAW|Not supported|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    91,
+    81,
+    91
+   ],
+   [
+    "replace",
+    91,
+    103,
+    91,
+    92,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    122,
+    92,
+    111
+   ],
+   [
+    "replace",
+    122,
+    148,
+    111,
+    112,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    158,
+    112,
+    122
+   ],
+   [
+    "replace",
+    158,
+    168,
+    122,
+    123,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    176,
+    123,
+    131
+   ],
+   [
+    "replace",
+    176,
+    186,
+    131,
+    132,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    194,
+    132,
+    140
+   ],
+   [
+    "replace",
+    194,
+    204,
+    140,
+    141,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    207,
+    141,
+    144
+   ],
+   [
+    "replace",
+    207,
+    212,
+    144,
+    145,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "70446b019d77+2": {
+  "fn": "HamedMasafi/Nut",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    5,
+    [
+     "CI build",
+     "GitLicense",
+     "Codacy Badge"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    15,
+    5,
+    14
+   ],
+   [
+    "replace",
+    15,
+    16,
+    14,
+    15,
+    [
+     "- Support common C++ and Qt-specific types (Full list)"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    26,
+    15,
+    25
+   ],
+   [
+    "replace",
+    26,
+    59,
+    25,
+    26,
+    [
+     "…（33 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    66,
+    26,
+    33
+   ],
+   [
+    "replace",
+    66,
+    102,
+    33,
+    34,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    110,
+    34,
+    42
+   ],
+   [
+    "replace",
+    110,
+    124,
+    42,
+    43,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    131,
+    43,
+    50
+   ],
+   [
+    "replace",
+    131,
+    137,
+    50,
+    51,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    144,
+    51,
+    58
+   ],
+   [
+    "replace",
+    144,
+    177,
+    58,
+    59,
+    [
+     "…（33 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    180,
+    59,
+    62
+   ],
+   [
+    "replace",
+    180,
+    186,
+    62,
+    68,
+    [
+     "- Sample codes",
+     "- Shared pointer and regular mode",
+     "- Create database class",
+     "- Create table class",
+     "- Using queries",
+     "- Supported data types"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    191,
+    68,
+    73
+   ],
+   [
+    "replace",
+    191,
+    192,
+    73,
+    74,
+    [
+     "Thanks to JetBrains to their useful IDEs."
+    ]
+   ],
+   [
+    "equal",
+    192,
+    193,
+    74,
+    75
+   ],
+   [
+    "replace",
+    193,
+    195,
+    75,
+    76,
+    [
+     "JetBrains Logo (Main) logoCLion logo"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "fbde5ea1b2e6+2": {
+  "fn": "duckdb/duckdb-sqlite",
+  "clean_ver": "2",
+  "raw_lines": 25,
+  "ops": [
+   [
+    "equal",
+    0,
+    25,
+    0,
+    25
+   ],
+   [
+    "replace",
+    25,
+    38,
+    25,
+    26,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    50,
+    26,
+    38
+   ],
+   [
+    "replace",
+    50,
+    78,
+    38,
+    39,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    124,
+    39,
+    85
+   ],
+   [
+    "replace",
+    124,
+    128,
+    85,
+    86,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    166,
+    86,
+    124
+   ],
+   [
+    "replace",
+    166,
+    181,
+    124,
+    125,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    272,
+    125,
+    216
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

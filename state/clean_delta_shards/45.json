@@ -3650,5 +3650,1988 @@
    ]
   ],
   "at": "2026-11-05"
+ },
+ "09288b754fe0+2": {
+  "fn": "russellromney/turbolite",
+  "clean_ver": "2",
+  "raw_lines": 12,
+  "ops": [
+   [
+    "equal",
+    0,
+    12,
+    0,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "Object storage is getting fast. S3 Express One Zone delivers single-digit millisecond GETs and Tigris is also extremely fast. The gap between local disk and cloud storage is shrinking, and turbolite exploits that."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    13,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "The design and name are inspired by turbopuffer's approach of ruthlessly architecting around cloud storage constraints. The project's initial goal was to beat Neon's 500ms+ cold starts. Goal achieved."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    18,
+    15,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "turbolite ships as a Rust library, a SQLite loadable extension (`.so`/`.dylib`), and language packages for Python and Node.js, plus Github deps for Go. Any S3-compatible storage works (AWS S3, Tigris, R2, MinIO, etc.). It's a standard SQLite VFS operating at the page level, so most SQLite features should work: FTS, R-tree, JSON, WAL mode, etc."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "turbolite is part of the broader `hadb` ecosystem. Standalone turbolite is a storage VFS with one safe writer; if you want HA leader election plus continuous WAL replication, use it through `haqlite-turbolite`, which layers HaQLite and `walrust` on top. That HA path is very experimental still. "
+    ]
+   ],
+   [
+    "equal",
+    21,
+    26,
+    21,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "|Query|Type|Cold (S3 Express)|Cold (Tigris)|"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    34,
+    28,
+    34,
+    [
+     "|Post + user|point lookup + join|86ms|172ms|",
+     "|Profile|multi-table join (5 JOINs)|251ms|479ms|",
+     "|Who-liked|index search + join|206ms|302ms|",
+     "|Mutual friends|multi-search join|19ms|49ms|",
+     "|Indexed filter|covered index scan|79ms|88ms|",
+     "|Full scan + filter|full table scan|476ms|532ms|"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    34,
+    35
+   ],
+   [
+    "replace",
+    35,
+    36,
+    35,
+    36,
+    [
+     "1M posts / 100K users (~1.5GB stored) with nothing cached, every byte from S3. EC2 c5.2xlarge + S3 Express One Zone (same AZ, ~4ms GET latency). Fly performance-8x + Tigris (~25ms GET latency). Both: 8 dedicated vCPU, 16GB RAM, 7 prefetch worker threads. See Benchmarking and Storage backend matters."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    39,
+    36,
+    39
+   ],
+   [
+    "replace",
+    39,
+    40,
+    39,
+    40,
+    [
+     "|Cache level|What's cached|What's fetched from S3|When this happens|"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    40,
+    41
+   ],
+   [
+    "replace",
+    41,
+    45,
+    41,
+    45,
+    [
+     "|**none**|nothing|everything|Fresh start, empty cache|",
+     "|**interior**|interior B-tree pages|index + data pages|First query after connection open|",
+     "|**index**|interior + index pages|data pages only|Normal turbolite operation|",
+     "|**data**|everything|nothing|Equivalent to local SQLite|"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    52,
+    45,
+    52
+   ],
+   [
+    "replace",
+    52,
+    53,
+    52,
+    53,
+    [
+     "|Operation|SQLite|turbolite|Overhead|"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    53,
+    54
+   ],
+   [
+    "replace",
+    54,
+    60,
+    54,
+    60,
+    [
+     "|Point lookup|145K/s|73K/s|2.0x|",
+     "|Range scan|8.8K/s|8.3K/s|**parity**|",
+     "|Full table scan|56/s|60/s|**parity**|",
+     "|INSERT|19K/s|23K/s|**parity**|",
+     "|UPDATE by PK|40K/s|27K/s|1.5x|",
+     "|Batch INSERT (in txn)|685K/s|740K/s|**parity**|"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    65,
+    60,
+    65
+   ],
+   [
+    "replace",
+    65,
+    66,
+    65,
+    66,
+    [
+     "|After|Local|S3 (same-region RustFS)|"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    66,
+    67
+   ],
+   [
+    "replace",
+    67,
+    70,
+    67,
+    70,
+    [
+     "|1K inserts|19ms|38ms|",
+     "|10K batch|17ms|114ms|",
+     "|1K updates|9ms|36ms|"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    85,
+    70,
+    85
+   ],
+   [
+    "replace",
+    85,
+    95,
+    85,
+    86,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    97,
+    86,
+    88
+   ],
+   [
+    "replace",
+    97,
+    99,
+    88,
+    89,
+    [
+     "See Installation for Node, Go, Rust, local-only mode, and using the `.so` loadable extension directly"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    104,
+    89,
+    94
+   ],
+   [
+    "replace",
+    104,
+    105,
+    94,
+    95,
+    [
+     "|S3 Constraint|Implication|"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    95,
+    96
+   ],
+   [
+    "replace",
+    106,
+    111,
+    96,
+    101,
+    [
+     "|**Round trips are slow**|Minimize request count. Batch writes, prefetch reads aggressively.|",
+     "|**Bandwidth is a bottleneck**|Maximize bandwidth utilization.|",
+     "|**PUTs and GETs charge per-operation**|A 64KB GET costs the same as a 16MB GET. Optimize request count, not byte efficiency.|",
+     "|**Objects are immutable**|Never update in place. Write new versions, swap a pointer. No partial-write corruption.|",
+     "|**Storage is cheap**|Don't optimize for space. Over-provision, keep old versions, let GC clean up later.|"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    150,
+    101,
+    140
+   ],
+   [
+    "replace",
+    150,
+    151,
+    140,
+    141,
+    [
+     "You can tune the prefetch schedule at open time by setting `prefetch.search` / `prefetch.lookup` on `TurboliteConfig` - you know the expected workload shape, so the VFS doesn't have to guess. See Configuring prefetch."
+    ]
+   ],
+   [
+    "equal",
+    151,
+    213,
+    141,
+    203
+   ],
+   [
+    "replace",
+    213,
+    214,
+    203,
+    204,
+    [
+     "- **WAL shipping is experimental.** Requires the `wal` feature flag + walrust. See Durability."
+    ]
+   ],
+   [
+    "equal",
+    214,
+    221,
+    204,
+    211
+   ],
+   [
+    "replace",
+    221,
+    222,
+    211,
+    212,
+    [
+     "|Parameter|What it controls|Default|"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    223,
+    212,
+    213
+   ],
+   [
+    "replace",
+    223,
+    227,
+    213,
+    217,
+    [
+     "|`prefetch.threads`|Worker threads for parallel S3 fetches|max(num_cpus - 1, 1)|",
+     "|`cache.pages_per_group`|Pages per S3 object, larger = fewer PUTs, more bytes per fetch|256|",
+     "|`cache.gc_enabled`|Delete old page group versions after checkpoint|true|",
+     "|`sync_mode`|Checkpoint durability: `Durable` (S3 upload in checkpoint) or `LocalThenFlush` (defer upload)|Durable|"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    232,
+    217,
+    222
+   ],
+   [
+    "replace",
+    232,
+    233,
+    222,
+    223,
+    [
+     "|Strategy|When|Default schedule|What happens|"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    234,
+    223,
+    224
+   ],
+   [
+    "replace",
+    234,
+    237,
+    224,
+    227,
+    [
+     "|**SCAN** (frontrun)|EQP says `SCAN table`|All groups upfront|Bulk prefetch of entire table before first read. No hop schedule needed.|",
+     "|**SEARCH** (reactive)|EQP says `SEARCH ... USING INDEX`|`[0.3, 0.3, 0.4]`|Aggressive prefetch from first miss; scans unknown index portions.|",
+     "|**Lookup** (reactive)|Point queries, no EQP info|`[0.0, 0.0, 0.0]`|Three free hops, zero prefetch. Point queries rarely benefit from prefetch.|"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    250,
+    227,
+    240
+   ],
+   [
+    "replace",
+    250,
+    258,
+    240,
+    241,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    289,
+    241,
+    272
+   ],
+   [
+    "replace",
+    289,
+    290,
+    272,
+    273,
+    [
+     "|Workload|Config|Why|"
+    ]
+   ],
+   [
+    "equal",
+    290,
+    291,
+    273,
+    274
+   ],
+   [
+    "replace",
+    291,
+    295,
+    274,
+    278,
+    [
+     "|Mixed OLTP|Defaults|Plan-aware handles scans, search schedule warms indexes, lookup schedule stays conservative.|",
+     "|Point-heavy (agent DBs)|`prefetch.lookup: vec![0.0, 0.0, 0.0]`|Lookups almost never need prefetch.|",
+     "|Scan-heavy analytics|`prefetch.search: vec![0.5, 0.5]`, `prefetch.query_plan: true`|Aggressive search warmup plus plan-aware bulk prefetch.|",
+     "|Conservative (bursty serverless)|`prefetch.search: vec![0.1, 0.2, 0.3]`, `prefetch.lookup: vec![0.0, 0.0, 0.1]`|Minimal prefetch noise.|"
+    ]
+   ],
+   [
+    "equal",
+    295,
+    302,
+    278,
+    285
+   ],
+   [
+    "replace",
+    302,
+    303,
+    285,
+    286,
+    [
+     "|Backend|GET latency|Best point lookup|Best profile|Tuning gain|"
+    ]
+   ],
+   [
+    "equal",
+    303,
+    304,
+    286,
+    287
+   ],
+   [
+    "replace",
+    304,
+    306,
+    287,
+    289,
+    [
+     "|**S3 Express**|~4ms|74ms (off/off: 96ms)|188ms (off/off: 212ms)|5-23% over no prefetch|",
+     "|**Tigris**|~25ms|192ms (off/off: 231ms)|524ms (off/off: 616ms)|8-34% over no prefetch|"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    321,
+    289,
+    304
+   ],
+   [
+    "replace",
+    321,
+    332,
+    304,
+    305,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    332,
+    360,
+    305,
+    333
+   ],
+   [
+    "replace",
+    360,
+    361,
+    333,
+    334,
+    [
+     "With the `wal` feature flag enabled, turbolite ships WAL frames to S3 via walrust, closing the durability gap between individual writes and checkpoints."
+    ]
+   ],
+   [
+    "equal",
+    361,
+    398,
+    334,
+    371
+   ],
+   [
+    "replace",
+    398,
+    399,
+    371,
+    372,
+    [
+     "**Python**: `pip install turbolite` — see turbolite-ffi/packages/python/"
+    ]
+   ],
+   [
+    "equal",
+    399,
+    404,
+    372,
+    377
+   ],
+   [
+    "replace",
+    404,
+    417,
+    377,
+    378,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    417,
+    419,
+    378,
+    380
+   ],
+   [
+    "replace",
+    419,
+    420,
+    380,
+    381,
+    [
+     "**Node.js**: `npm install turbolite` — see turbolite-ffi/packages/node/"
+    ]
+   ],
+   [
+    "equal",
+    420,
+    437,
+    381,
+    398
+   ],
+   [
+    "replace",
+    437,
+    442,
+    398,
+    399,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    442,
+    447,
+    399,
+    404
+   ],
+   [
+    "replace",
+    447,
+    448,
+    404,
+    405,
+    [
+     "examples/go/ for a full HTTP server example."
+    ]
+   ],
+   [
+    "equal",
+    448,
+    489,
+    405,
+    446
+   ],
+   [
+    "replace",
+    489,
+    497,
+    446,
+    447,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    497,
+    503,
+    447,
+    453
+   ],
+   [
+    "replace",
+    503,
+    504,
+    453,
+    454,
+    [
+     "turbolite-ffi/packages/node/ for full docs."
+    ]
+   ],
+   [
+    "equal",
+    504,
+    511,
+    454,
+    461
+   ],
+   [
+    "replace",
+    511,
+    521,
+    461,
+    462,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    521,
+    541,
+    462,
+    482
+   ],
+   [
+    "replace",
+    541,
+    551,
+    482,
+    483,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    551,
+    572,
+    483,
+    504
+   ],
+   [
+    "replace",
+    572,
+    585,
+    504,
+    505,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    585,
+    597,
+    505,
+    517
+   ],
+   [
+    "replace",
+    597,
+    603,
+    517,
+    523,
+    [
+     "- **sql.js-httpvfs**: The original. WASM SQLite with HTTP Range requests. Has virtual read heads with exponential prefetch for scans. Pioneered the idea that you don't need to download the whole database to query it.",
+     "- **sqlite_web_vfs**: Native C++ VFS extension with adaptive request consolidation and an optional `.dbi` index file that pre-collects B-tree interior nodes for prefetching - the same idea as turbolite's interior page bundles. Designed to compose with sqlite_zstd_vfs.",
+     "- **sqlite3vfshttp**: Clean, minimal Go VFS. Built for querying SQLite in S3 from Lambda without downloading the file.",
+     "- **sqlite-s3-query**: Python library using ctypes to intercept file I/O and translate reads to S3 Range GETs. Requires versioned buckets for consistency during database replacement.",
+     "- **sqlite-wasm-http**: Spiritual successor to sql.js-httpvfs using the official SQLite WASM build. Shared page cache via SharedArrayBuffer. Actively maintained.",
+     "- **s3sqlite**: Python, uses s3fs (FUSE) + APSW. Lets FUSE handle the range requests."
+    ]
+   ],
+   [
+    "equal",
+    603,
+    610,
+    523,
+    530
+   ],
+   [
+    "replace",
+    610,
+    612,
+    530,
+    532,
+    [
+     "- **Graft** (`orbitinghail/graft`): A transactional storage engine for lazy, partial, strongly consistent replication over S3. The `libgraft` SQLite extension implements a VFS that reads and writes 4KB pages through Graft volumes. Uses framed zstd compression and splinter-based changesets. Closest architectural cousin to turbolite in the \"replicate pages, not WAL frames\" space, with a focus on multi-writer edge sync rather than cold-read latency.",
+     "- **mvsqlite**: Pages stored in FoundationDB as content-addressed KV pairs. Full MVCC with time-travel to any snapshot, XOR+zstd delta encoding between page versions. The most sophisticated storage engine in this space, but requires FoundationDB, not S3."
+    ]
+   ],
+   [
+    "equal",
+    612,
+    617,
+    532,
+    537
+   ],
+   [
+    "replace",
+    617,
+    621,
+    537,
+    541,
+    [
+     "- **Litestream**: Continuously ships WAL frames to S3. The gold standard for SQLite backup. A newer Litestream VFS can serve reads from S3 using Range requests on LTX files with an LRU cache and page index — architecturally the closest thing to turbolite's read path, but read-only and tied to the Litestream replication format.",
+     "- **LiteFS**: Fly.io's FUSE-based primary/replica system. Captures page changesets and streams them to replicas. Solves availability, not storage.",
+     "- **Verneuil**: Splits the database into 64KB chunks with zstd compression and a manifest file, async-replicates to S3. The chunk+manifest model resembles turbolite's page groups + manifest, but Verneuil is a replication tool - you query local disk, not S3.",
+     "- **libSQL/sqld** (by Turso): Fork of SQLite with a Virtual WAL interface. \"Bottomless\" mode ships WAL frames to S3. Queries are local; S3 is for restore."
+    ]
+   ],
+   [
+    "equal",
+    621,
+    624,
+    541,
+    544
+   ],
+   [
+    "replace",
+    624,
+    626,
+    544,
+    546,
+    [
+     "- **sqlite-s3vfs**: Each SQLite page stored as a separate S3 object. Enables writes but at one PUT per page, costing \\$0.02 per 4096 pages vs turbolite's $0.000005 for the same batch (at 64KB page default). See the benchmark table above for cold-query latency comparison; turbolite is 7.5–263× faster on the same dataset.",
+     "- **wa-sqlite-s3vfs**: TypeScript / browser port of sqlite-s3vfs for `wa-sqlite`. Same one-object-per-page model, adapted to WASM / client-side use."
+    ]
+   ],
+   [
+    "equal",
+    626,
+    629,
+    546,
+    549
+   ],
+   [
+    "replace",
+    629,
+    631,
+    549,
+    551,
+    [
+     "- **sqlite_zstd_vfs**: Stores compressed pages as rows in an outer \"wrapper\" database. zstd with dictionary training. Composes with sqlite_web_vfs for compressed range-request reads over HTTP. The combination of sqlite_web_vfs + sqlite_zstd_vfs is probably the closest existing thing to turbolite's read path, but is read-only and doesn't batch pages into groups.",
+     "- **SQLCipher**: Page-level AES-256 encryption for local SQLite. No remote storage."
+    ]
+   ],
+   [
+    "equal",
+    631,
+    634,
+    551,
+    554
+   ],
+   [
+    "replace",
+    634,
+    635,
+    554,
+    555,
+    [
+     "||turbolite|Raw-file range GETs|Litestream VFS|sqlite_web_vfs + zstd_vfs|mvsqlite|Graft|sqlite-s3vfs|"
+    ]
+   ],
+   [
+    "equal",
+    635,
+    636,
+    555,
+    556
+   ],
+   [
+    "replace",
+    636,
+    644,
+    556,
+    564,
+    [
+     "|Reads from S3|seekable range GETs on compressed page groups|range GETs on raw pages|range GETs on LTX files|range GETs on compressed outer DB|KV lookups on FoundationDB|lazy fetch of 4KB pages / changesets|one GetObject per page|",
+     "|Writes to S3|checkpoint (one PUT per group)|no|no|no|yes (MVCC)|yes (async changeset replication)|one PUT per page|",
+     "|Compression|seekable multi-frame zstd|none|none|zstd (nested DB)|zstd delta encoding|framed zstd|none|",
+     "|Encryption|AES-256-GCM per page|none|none|none|none|none listed|none|",
+     "|Prefetch|look-ahead + hop schedule|none or basic readahead|LRU cache|adaptive consolidation|client buffers|lazy / on-demand|none|",
+     "|Interior page optimization|detected, pinned, bundled separately|none|page index from LTX trailers|optional .dbi file|none|none listed|none|",
+     "|Bytes per point lookup (cache: index)|~100KB (one compressed frame)|4-64KB (one raw page)|varies|varies|varies|4KB (one page)|4KB (one page)|",
+     "|Write cost per 4096 pages|~$0.000005 (one PUT)|n/a|n/a|n/a|FoundationDB ops|batched changesets|~$0.02 (4096 PUTs)|"
+    ]
+   ],
+   [
+    "equal",
+    644,
+    647,
+    564,
+    567
+   ],
+   [
+    "replace",
+    647,
+    648,
+    567,
+    568,
+    [
+     "All benchmarks live in `benchmark/`. See `benchmark/README.md` for deployment scenarios (local, Fly.io, EC2)."
+    ]
+   ],
+   [
+    "equal",
+    648,
+    651,
+    568,
+    571
+   ],
+   [
+    "replace",
+    651,
+    652,
+    571,
+    572,
+    [
+     "A separate `benchmark/bench_s3vfs.py` harness runs the same queries against sqlite-s3vfs for head-to-head comparison. It is deployed via `benchmark/fly-s3vfs.toml` and uses the same deterministic dataset generator as `tiered-bench`."
+    ]
+   ],
+   [
+    "equal",
+    652,
+    657,
+    572,
+    577
+   ],
+   [
+    "replace",
+    657,
+    665,
+    577,
+    578,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    665,
+    673,
+    578,
+    586
+   ],
+   [
+    "replace",
+    673,
+    679,
+    586,
+    587,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    679,
+    698,
+    587,
+    606
+   ],
+   [
+    "delete",
+    698,
+    699,
+    606,
+    606
+   ],
+   [
+    "equal",
+    699,
+    700,
+    606,
+    607
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "e910e3d9e655+2": {
+  "fn": "premAI-io/premsql",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    3,
+    [
+     "PyPI Downloads"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    7,
+    3,
+    6
+   ],
+   [
+    "replace",
+    7,
+    8,
+    6,
+    7,
+    [
+     "alt architecture"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    21,
+    7,
+    20
+   ],
+   [
+    "replace",
+    21,
+    23,
+    20,
+    22,
+    [
+     "- [Nov 18th 2024] Prem-1B-SQL reached 10K + downloads in HuggingFace ",
+     "- [Nov 7th 2024] Release of Prem-1B-SQL Ollama and Ollama support."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    25,
+    22,
+    24
+   ],
+   [
+    "replace",
+    25,
+    29,
+    24,
+    28,
+    [
+     "- [Sep 20th 2024] First release of Prem-1B-SQL (51.54% on BirdBench private dataset) | Blog post",
+     "- [Sep 10th 2024] First release of PremSQL | Blog Post",
+     "- [Blog post]: Using PremSQL to evaluate different open and closed source models",
+     "- [Blog post]: State of Text to SQL 2024"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    33,
+    28,
+    32
+   ],
+   [
+    "replace",
+    33,
+    34,
+    32,
+    33,
+    [
+     "- **Multiple connectors**: Supports PremAI, Ollama, HuggingFace, Apple MLX, OpenAI."
+    ]
+   ],
+   [
+    "equal",
+    34,
+    47,
+    33,
+    46
+   ],
+   [
+    "replace",
+    47,
+    64,
+    46,
+    47,
+    [
+     "（目录 17 行略）"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    81,
+    47,
+    64
+   ],
+   [
+    "replace",
+    81,
+    128,
+    64,
+    65,
+    [
+     "…（47 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    151,
+    65,
+    88
+   ],
+   [
+    "replace",
+    151,
+    152,
+    88,
+    89,
+    [
+     "### Datasets"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    157,
+    89,
+    94
+   ],
+   [
+    "replace",
+    157,
+    161,
+    94,
+    98,
+    [
+     "1. BirdBench Dataset",
+     "2. Spider Unified Datasets",
+     "3. Domains Dataset",
+     "4. Gretel AI Dataset"
+    ]
+   ],
+   [
+    "equal",
+    161,
+    168,
+    98,
+    105
+   ],
+   [
+    "replace",
+    168,
+    172,
+    105,
+    106,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    184,
+    106,
+    118
+   ],
+   [
+    "replace",
+    184,
+    206,
+    118,
+    119,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    212,
+    119,
+    125
+   ],
+   [
+    "replace",
+    212,
+    213,
+    125,
+    126,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    220,
+    126,
+    133
+   ],
+   [
+    "replace",
+    220,
+    228,
+    133,
+    134,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    228,
+    230,
+    134,
+    136
+   ],
+   [
+    "replace",
+    230,
+    231,
+    136,
+    137,
+    [
+     "### Executors"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    232,
+    137,
+    138
+   ],
+   [
+    "replace",
+    232,
+    233,
+    138,
+    139,
+    [
+     "An executor executes the generated SQL queries against the database and fetches the results. It is a crucial component in the Text-to-SQL pipeline, as it ensures that the generated SQL queries are valid and return the expected results. PremSQL supports a native executor for SQLite databases and also supports LangChain's SQLDatabase"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    241,
+    139,
+    147
+   ],
+   [
+    "replace",
+    241,
+    254,
+    147,
+    148,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    254,
+    262,
+    148,
+    156
+   ],
+   [
+    "replace",
+    262,
+    263,
+    156,
+    157,
+    [
+     "### Evaluators"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    272,
+    157,
+    166
+   ],
+   [
+    "replace",
+    272,
+    290,
+    166,
+    167,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    290,
+    294,
+    167,
+    171
+   ],
+   [
+    "replace",
+    294,
+    295,
+    171,
+    172,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    295,
+    296,
+    172,
+    173
+   ],
+   [
+    "replace",
+    296,
+    297,
+    173,
+    174,
+    [
+     "### Error Handling"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    306,
+    174,
+    183
+   ],
+   [
+    "replace",
+    306,
+    312,
+    183,
+    184,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    327,
+    184,
+    199
+   ],
+   [
+    "replace",
+    327,
+    350,
+    199,
+    200,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    350,
+    352,
+    200,
+    202
+   ],
+   [
+    "replace",
+    352,
+    353,
+    202,
+    203,
+    [
+     "### Tuner"
+    ]
+   ],
+   [
+    "equal",
+    353,
+    368,
+    203,
+    218
+   ],
+   [
+    "delete",
+    368,
+    370,
+    218,
+    218
+   ],
+   [
+    "equal",
+    370,
+    381,
+    218,
+    229
+   ],
+   [
+    "replace",
+    381,
+    428,
+    229,
+    230,
+    [
+     "…（47 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    428,
+    430,
+    230,
+    232
+   ],
+   [
+    "replace",
+    430,
+    431,
+    232,
+    233,
+    [
+     "You can learn more about PremSQL agents and their design patterns in details in the documentation."
+    ]
+   ],
+   [
+    "equal",
+    431,
+    451,
+    233,
+    253
+   ],
+   [
+    "replace",
+    451,
+    457,
+    253,
+    254,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    457,
+    467,
+    254,
+    264
+   ],
+   [
+    "delete",
+    467,
+    469,
+    264,
+    264
+   ],
+   [
+    "equal",
+    469,
+    475,
+    264,
+    270
+   ],
+   [
+    "replace",
+    475,
+    476,
+    270,
+    271,
+    [
+     "So, you can add as many such agents with different customization or your own PremSQL compatible agents and test them and use them with PremSQL Playground. You can learn about more technical details in the documentation."
+    ]
+   ],
+   [
+    "equal",
+    476,
+    490,
+    271,
+    285
+   ],
+   [
+    "replace",
+    490,
+    491,
+    285,
+    286,
+    [
+     "PremSQL is licensed under the MIT License. See the LICENSE file for more information."
+    ]
+   ],
+   [
+    "equal",
+    491,
+    498,
+    286,
+    293
+   ],
+   [
+    "replace",
+    498,
+    504,
+    293,
+    294,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    504,
+    505,
+    294,
+    295
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "3afa2a699ef7+2": {
+  "fn": "apache/age-viewer",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    4,
+    [
+     "PRs Welcome",
+     " <a href=\"https://github.com/apache/age/blob/master/LICENSE\">",
+     "",
+     " <a href=\"https://github.com/apache/age/stargazers\">"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    11,
+    4,
+    9
+   ],
+   [
+    "replace",
+    11,
+    12,
+    9,
+    10,
+    [
+     "This is a sub-project of the Apache AGE project."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    22,
+    10,
+    20
+   ],
+   [
+    "delete",
+    22,
+    23,
+    20,
+    20
+   ],
+   [
+    "equal",
+    23,
+    24,
+    20,
+    21
+   ],
+   [
+    "replace",
+    24,
+    28,
+    21,
+    22,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    34,
+    22,
+    28
+   ],
+   [
+    "replace",
+    34,
+    38,
+    28,
+    29,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    55,
+    29,
+    46
+   ],
+   [
+    "replace",
+    55,
+    63,
+    46,
+    47,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    47,
+    48
+   ],
+   [
+    "replace",
+    64,
+    65,
+    48,
+    49,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    65,
+    70,
+    49,
+    54
+   ],
+   [
+    "replace",
+    70,
+    77,
+    54,
+    61,
+    [
+     "",
+     "|Docker variables|Description|",
+     "|--|--|",
+     "|``--name``|Assign a name to the container|",
+     "|`-p`|Publish a container’s port(s) to the host|",
+     "|``-e``|Set environment variables|",
+     "|``-d``|Run container in background and print container ID|"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    81,
+    61,
+    65
+   ],
+   [
+    "replace",
+    81,
+    83,
+    65,
+    67,
+    [
+     " Then get into postgreSQL shell using - `` psql -U postgresUser postgresDB``",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    83,
+    84,
+    67,
+    68
+   ],
+   [
+    "replace",
+    84,
+    85,
+    68,
+    69,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    69,
+    70
+   ],
+   [
+    "replace",
+    86,
+    89,
+    70,
+    73,
+    [
+     " `` psql -U postgresUser -d postgresDB -p 5455 -h localhost``",
+     " and put in ``postgresPW`` when prompted for password.",
+     "- After logging into postgreSQL shell follow the Post-Installation instruction to create a graph in the database."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    91,
+    73,
+    75
+   ],
+   [
+    "replace",
+    91,
+    92,
+    75,
+    76,
+    [
+     "enter image description here"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    100,
+    76,
+    84
+   ],
+   [
+    "delete",
+    100,
+    102,
+    84,
+    84
+   ],
+   [
+    "equal",
+    102,
+    103,
+    84,
+    85
+   ],
+   [
+    "delete",
+    103,
+    104,
+    85,
+    85
+   ],
+   [
+    "equal",
+    104,
+    105,
+    85,
+    86
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "572bcbc0946c+2": {
+  "fn": "lich0821/WeChatDB",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "b03389edb226+2": {
+  "fn": "MQEnergy/chatcat",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "delete",
+    0,
+    4,
+    0,
+    0
+   ],
+   [
+    "equal",
+    4,
+    6,
+    0,
+    2
+   ],
+   [
+    "replace",
+    6,
+    10,
+    2,
+    6,
+    [
+     "GitHub license",
+     "Go Report Card",
+     "codebeat badge",
+     "GitHub stars"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    6,
+    7
+   ],
+   [
+    "replace",
+    11,
+    12,
+    7,
+    8,
+    [
+     "English | 中文文档"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    15,
+    8,
+    11
+   ],
+   [
+    "replace",
+    15,
+    18,
+    11,
+    14,
+    [
+     "- Chatcat Mac Intel v0.1.3.dmg (Intel CPU)",
+     "- Chatcat Mac M1/M2 v0.1.3.dmg (Apple CPU)",
+     "- Chatcat Win x64 v0.1.3.exe (Supports Windows7 64-bit and above)"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    31,
+    14,
+    27
+   ],
+   [
+    "delete",
+    31,
+    36,
+    27,
+    27
+   ],
+   [
+    "equal",
+    36,
+    41,
+    27,
+    32
+   ],
+   [
+    "replace",
+    41,
+    42,
+    32,
+    33,
+    [
+     "Install wails from the official source for packaging."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    33,
+    34
+   ],
+   [
+    "replace",
+    43,
+    44,
+    34,
+    35,
+    [
+     "Note: The official wails packaging cannot run on `win7`. To support `win7`, download MQEnergy/wails and compile it locally:"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    82,
+    35,
+    73
+   ],
+   [
+    "replace",
+    82,
+    87,
+    73,
+    74,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    74,
+    75
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "5111189f38bd+2": {
+  "fn": "MikeJinhua/UnitySocketProtobuf3Demo",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "delete",
+    0,
+    1,
+    0,
+    0
+   ],
+   [
+    "equal",
+    1,
+    43,
+    0,
+    42
+   ],
+   [
+    "delete",
+    43,
+    44,
+    42,
+    42
+   ],
+   [
+    "equal",
+    44,
+    52,
+    42,
+    50
+   ],
+   [
+    "delete",
+    52,
+    53,
+    50,
+    50
+   ],
+   [
+    "equal",
+    53,
+    54,
+    50,
+    51
+   ],
+   [
+    "replace",
+    54,
+    56,
+    51,
+    52,
+    [
+     "推荐个便宜的VPS给大家用https://www.vultr.com/?ref=6878962 $3.5一个月LosAngeles比较快，如果支持IP6那么可以$2.5一个月了。LA，LD比较快些，可以用的IP也比较多。#似乎也涨价了！！！"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "b463a8bd16a2+2": {
+  "fn": "1998lixin/WeChat-database",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    9,
+    1,
+    8,
+    [
+     " 破解微信数据库 获取想要的数据 必须要ROOT权限",
+     " 本项目只提供核心逻辑 ",
+     " SQL简单查询了下联系人总数量",
+     " 如果你想要获取聊天记录",
+     " 联系人姓名 星标好友等等 ",
+     " 请自行修改SQL 查询语句 ",
+     "详细信息请参考 我的博客"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

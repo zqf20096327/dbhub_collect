@@ -6723,5 +6723,2936 @@
    ]
   ],
   "at": "2026-11-05"
+ },
+ "a0586e5751fa+2": {
+  "fn": "bmoscon/cryptostore",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "License",
+     "Python",
+     "Container",
+     "PyPI"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    6,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "Cryptostore subscribes to cryptocurrency exchanges with cryptofeed,"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    15,
+    8,
+    15
+   ],
+   [
+    "replace",
+    15,
+    38,
+    15,
+    16,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    64,
+    16,
+    42
+   ],
+   [
+    "replace",
+    64,
+    65,
+    42,
+    43,
+    [
+     "examples/compose has ready to run docker compose set-ups: Postgres plus streaming,"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    84,
+    43,
+    62
+   ],
+   [
+    "replace",
+    84,
+    91,
+    62,
+    69,
+    [
+     "|command|purpose|",
+     "|---|---|",
+     "|`cryptostore run [config]`|run the collector|",
+     "|`cryptostore check [config]`|validate a config and print the worker plan without connecting to any backend or feed. Symbol patterns are expanded, which downloads those exchanges' symbol lists. `--symbols` also verifies every explicit symbol exists|",
+     "|`cryptostore exchanges [name]`|list exchanges and their channels, or one exchange with the options it accepts|",
+     "|`cryptostore backends`|list backend types and the channels each can store|",
+     "|`cryptostore health [config]`|exit 0 if the running collector's health file is fresh - the container `HEALTHCHECK`|"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    97,
+    69,
+    75
+   ],
+   [
+    "replace",
+    97,
+    98,
+    75,
+    76,
+    [
+     "examples/config.yaml shows every option with its default."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    110,
+    76,
+    88
+   ],
+   [
+    "replace",
+    110,
+    115,
+    88,
+    93,
+    [
+     "|key|purpose|",
+     "|---|---|",
+     "|`book`|extra arguments for the `l2_book`/`l3_book` writer: `snapshot_interval` (full book every N deltas, default 1000) and `snapshots_only` (never send deltas). The questdb backend takes `depth` instead|",
+     "|`queue`|cryptofeed `BackendQueue` tuning: `max_depth`, `overflow` (`drop_oldest`, `drop_new`, `block`), `batch_max`, `batch_interval`, `flush_deadline`, `retry: {max_attempts, base, jitter, max_delay}`|",
+     "|`numeric_type`|`decimal`, `float` or `str` - how prices and sizes are written. Each type has cryptofeed's default when omitted|"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    93,
+    94
+   ],
+   [
+    "replace",
+    116,
+    129,
+    94,
+    107,
+    [
+     "|type|what it does|options (aliases in parentheses)|",
+     "|---|---|---|",
+     "|`stream`|cryptostore's streaming server. Binds endpoints that your applications connect to. See Streaming|`tcp` (`host:port`), `uds` (socket path), `zmq` (PUB endpoint), `client_queue`, `zmq_hwm`|",
+     "|`postgres`|PostgreSQL, one table per data type. Tables must exist, see PostgreSQL tables|`host`, `port`, `db` (`database`), `user`, `pw` (`password`), `table`, `custom_columns`|",
+     "|`redis`|Redis sorted sets, one per exchange and symbol, scored by timestamp|`host`, `port`, `socket`, `key`, `score_key`|",
+     "|`redis_stream`|Redis Streams (`XADD`), one stream per exchange and symbol|`host`, `port`, `socket`, `key`|",
+     "|`mongo`|MongoDB, one collection per data type|`db` (`database`), `host`, `port`, `uri`, `key`, `client_options`|",
+     "|`influxdb`|InfluxDB 2.x write API|`addr` (`host`, `url`), `org`, `bucket`, `token`, `key`|",
+     "|`questdb`|QuestDB line protocol over HTTP. Books are stored as the top `depth` levels|`host`, `port`, `key`|",
+     "|`kafka`|Kafka. Every option other than `key`/`numeric_type`/`none_to` goes to `AIOKafkaProducer`|`bootstrap_servers`, `client_id`, `acks`, ...|",
+     "|`socket`|cryptofeed's client-mode socket backend: connects to a listener you run|`addr` (`host`, `url`) as `tcp://`, `udp://` or `uds://`, `port`, `mtu`|",
+     "|`zmq`|cryptofeed's client-mode ZeroMQ PUB: connects to a SUB you bind|`host`, `port`, `key`, `dynamic_key`|",
+     "|`tty`|prints every update to stdout, for debugging|none|"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    143,
+    107,
+    121
+   ],
+   [
+    "replace",
+    143,
+    152,
+    121,
+    122,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    171,
+    122,
+    141
+   ],
+   [
+    "replace",
+    171,
+    172,
+    141,
+    142,
+    [
+     "dropped. `cryptostore check` prints the plan. See Scaling for why and when."
+    ]
+   ],
+   [
+    "equal",
+    172,
+    177,
+    142,
+    147
+   ],
+   [
+    "replace",
+    177,
+    185,
+    147,
+    155,
+    [
+     "|key|default|purpose|",
+     "|---|---|---|",
+     "|`record`|off|record the raw exchange traffic to pcap files cryptofeed can replay. A path string, or `{path, rotate_size, compress}`. A directory gets timestamped files|",
+     "|`log`|`{level: INFO}`|`level` and an optional rotating `file` (stdout is always used)|",
+     "|`stats_interval`|`60`|seconds between stats reports. `0` disables them and the health file|",
+     "|`health_file`|off|a JSON file rewritten with every stats report, see Stats and health. `cryptostore health` exits 0 while it is fresh, which is what the container `HEALTHCHECK` runs|",
+     "|`on_feed_error`|`raise`|`raise`: a permanently failed feed stops cryptostore (exit non-zero, let the container restart). `remove_feed`: drop it and keep the rest running|",
+     "|`cryptofeed`|`{}`|passed to cryptofeed's `Config`: `uvloop`, `symbol_cache_ttl`, `ignore_invalid_instruments`, and per-exchange credentials. `log` is managed by cryptostore and not allowed here|"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    192,
+    155,
+    162
+   ],
+   [
+    "replace",
+    192,
+    197,
+    162,
+    167,
+    [
+     "|endpoint|option|wire format|",
+     "|---|---|---|",
+     "|TCP|`tcp: 0.0.0.0:8080`|newline-delimited JSON frames `{\"type\": \"<channel>\", \"data\": {...}}`|",
+     "|Unix socket|`uds: /data/cryptostore.sock`|the same frames|",
+     "|ZeroMQ PUB|`zmq: tcp://0.0.0.0:5555`|`<EXCHANGE>-<channel>-<SYMBOL> <json>`, so a SUB socket can subscribe by prefix|"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    214,
+    167,
+    184
+   ],
+   [
+    "replace",
+    214,
+    216,
+    184,
+    186,
+    [
+     "examples/clients/tcp_client.py and",
+     "examples/clients/zmq_client.py are complete readers. From another"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    245,
+    186,
+    215
+   ],
+   [
+    "replace",
+    245,
+    253,
+    215,
+    223,
+    [
+     "|field|content|",
+     "|---|---|",
+     "|`timestamp`, `version`, `python`, `free_threaded`, `gil_enabled`|when, and on what|",
+     "|`feeds`, `removed_feeds`|running feeds by shard label (`BINANCE[2/4]`), and feeds dropped by `on_feed_error: remove_feed`|",
+     "|`workers`|per worker: `feeds`, `symbols`, `alive`, `loop_lag` (seconds the loop is currently behind) and `loop_lag_max` (worst since the previous report)|",
+     "|`main_loop`|the same lag fields for the main loop (stream fan-out)|",
+     "|`backends`|per backend and channel, summed over the workers' writers: `written`, `qsize`, `batches`, `dropped_overflow`, `dropped_failed`, `retries`, `last_error`, `last_write_ts`. Stream backends add `clients`, `connections`, `published`, `kicked`|",
+     "|`connections`|per exchange websocket: `received`, `reconnects`, `watchdog_trips`, `open`|"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    260,
+    223,
+    230
+   ],
+   [
+    "replace",
+    260,
+    261,
+    230,
+    231,
+    [
+     "examples/compose/postgres/init.sql creates all of them and is what"
+    ]
+   ],
+   [
+    "equal",
+    261,
+    289,
+    231,
+    259
+   ],
+   [
+    "replace",
+    289,
+    290,
+    259,
+    260,
+    [
+     " through trusted publishing - no API token is stored."
+    ]
+   ],
+   [
+    "equal",
+    290,
+    291,
+    260,
+    261
+   ],
+   [
+    "replace",
+    291,
+    293,
+    261,
+    263,
+    [
+     " `<major.minor>` and `latest` to `ghcr.io/bmoscon/cryptostore`. The GIL interpreter is only",
+     " distributed through PyPI."
+    ]
+   ],
+   [
+    "equal",
+    293,
+    300,
+    263,
+    270
+   ],
+   [
+    "delete",
+    300,
+    301,
+    270,
+    270
+   ],
+   [
+    "equal",
+    301,
+    303,
+    270,
+    272
+   ],
+   [
+    "replace",
+    303,
+    304,
+    272,
+    273,
+    [
+     "More features are in the works! If you'd like to discuss ongoing development, please join the discord."
+    ]
+   ],
+   [
+    "equal",
+    304,
+    306,
+    273,
+    275
+   ],
+   [
+    "replace",
+    306,
+    311,
+    275,
+    276,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    311,
+    313,
+    276,
+    278
+   ],
+   [
+    "replace",
+    313,
+    314,
+    278,
+    279,
+    [
+     "Support and donations are appreciated but not required. You can donate via GitHub Sponsors, or via the addresses below:"
+    ]
+   ],
+   [
+    "equal",
+    314,
+    317,
+    279,
+    282
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "58bf4365fd82+2": {
+  "fn": "limelit-co/open",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Limelit Open "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     " Self-hosted AI visibility tracking. One binary, your keys, your data. "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    11,
+    4,
+    5,
+    [
+     " Track how ChatGPT, Claude, Perplexity, Gemini, Google AI Overview and Google AI Mode"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    5,
+    6
+   ],
+   [
+    "replace",
+    12,
+    19,
+    6,
+    13,
+    [
+     " mention and cite your brand against your competitors, with an MCP server for AI visibility tracking built in.",
+     "",
+     " License: Apache 2.0",
+     " Go 1.25+",
+     " Status: pre-release",
+     " Limelit Cloud",
+     " Discord"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    22,
+    13,
+    16
+   ],
+   [
+    "replace",
+    22,
+    25,
+    16,
+    17,
+    [
+     " The launch film, 44 seconds with sound. Also on limelit.co/open, or download the MP4. "
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    17,
+    18
+   ],
+   [
+    "replace",
+    26,
+    29,
+    18,
+    19,
+    [
+     " The race: every tracked brand"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    19,
+    20
+   ],
+   [
+    "replace",
+    30,
+    34,
+    20,
+    22,
+    [
+     " Visibility by engine: every brand as a dot on a shared 0 to 100 track, one row per engine",
+     " Share of voice donut with the seven leading brands named and the rest grouped"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    22,
+    23
+   ],
+   [
+    "replace",
+    35,
+    40,
+    23,
+    24,
+    [
+     " Live: demo.limelit.co runs this repository unmodified. Read-only; the banner names the commit."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    24,
+    25
+   ],
+   [
+    "replace",
+    41,
+    42,
+    25,
+    26,
+    [
+     " More screens below: the prompt by engine grid, the ranking, citations by source type, top cited sites, and visibility by question type. "
+    ]
+   ],
+   [
+    "equal",
+    42,
+    50,
+    26,
+    34
+   ],
+   [
+    "replace",
+    50,
+    51,
+    34,
+    35,
+    [
+     "Limelit, and it shares its tool names, engine ids and"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    54,
+    35,
+    38
+   ],
+   [
+    "replace",
+    54,
+    75,
+    38,
+    39,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    77,
+    39,
+    41
+   ],
+   [
+    "replace",
+    77,
+    78,
+    41,
+    42,
+    [
+     "**demo.limelit.co** is this repository, unmodified,"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    90,
+    42,
+    54
+   ],
+   [
+    "replace",
+    90,
+    92,
+    54,
+    56,
+    [
+     " own SQLite database on first start and serves the dashboard at",
+     " `localhost:1515`."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    56,
+    57
+   ],
+   [
+    "replace",
+    93,
+    97,
+    57,
+    61,
+    [
+     " vendor APIs with web search on; Google AI Overview, Google AI Mode and Bing",
+     " Copilot through scrapers, because those three have no API at all. Six",
+     " providers of eleven are implemented; Settings lists the rest with a link to",
+     " each key page."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    61,
+    62
+   ],
+   [
+    "replace",
+    98,
+    101,
+    62,
+    65,
+    [
+     " and every tracked competitor with the rank of the list item they appear in,",
+     " and every cited source is classified as your own, a competitor's, social,",
+     " informational or other."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    65,
+    66
+   ],
+   [
+    "replace",
+    102,
+    104,
+    66,
+    68,
+    [
+     " citation share, each with the sample it rests on; the competitor ranking; the",
+     " trend; visibility split by question type; and the prompt by engine grid."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    68,
+    69
+   ],
+   [
+    "replace",
+    105,
+    108,
+    69,
+    72,
+    [
+     " marked in the text at the matcher's own offsets, the searches the engine ran",
+     " on the way there, the brands it named with their ranks, and every source it",
+     " cited."
+    ]
+   ],
+   [
+    "equal",
+    108,
+    109,
+    72,
+    73
+   ],
+   [
+    "replace",
+    109,
+    113,
+    73,
+    77,
+    [
+     " Fourteen read tools on Limelit Cloud's names, so a conversation written",
+     " against this server keeps working after an upgrade. The first one an",
+     " assistant calls says where the instance stands (not set up, never run,",
+     " ready) and what to do next, so a new user is never handed a 0%."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    77,
+    78
+   ],
+   [
+    "replace",
+    114,
+    116,
+    78,
+    80,
+    [
+     " one pass on demand, with a hard `runs_per_day` ceiling checked before any",
+     " spend."
+    ]
+   ],
+   [
+    "equal",
+    116,
+    118,
+    80,
+    82
+   ],
+   [
+    "replace",
+    118,
+    121,
+    82,
+    85,
+    [
+     " or a directory of CSVs, streaming, with a `--since` filter that reaches the",
+     " rows hanging off each answer. `export_data` returns the same payload over",
+     " MCP."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    123,
+    85,
+    87
+   ],
+   [
+    "replace",
+    123,
+    126,
+    87,
+    90,
+    [
+     " Limelit Cloud workspace and hands back its MCP endpoint. Nothing is deleted",
+     " here, provider keys are never sent, and re-running after a dropped",
+     " connection imports nothing twice."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    131,
+    90,
+    95
+   ],
+   [
+    "replace",
+    131,
+    133,
+    95,
+    97,
+    [
+     "issues under the",
+     "v0.1 milestone. Watch"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    137,
+    97,
+    101
+   ],
+   [
+    "replace",
+    137,
+    138,
+    101,
+    102,
+    [
+     "All taken from demo.limelit.co. Every number"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    141,
+    102,
+    105
+   ],
+   [
+    "replace",
+    141,
+    167,
+    105,
+    122,
+    [
+     " Every prompt, every engine: a grid of fractions, worst prompts first, each cell a link to the answers behind it ",
+     " Where you stand: every tracked brand ranked by how often it is named, with share of voice and average position ",
+     "",
+     " Every prompt, every engine. A fraction per cell, worst first. A dash is a prompt never asked of that engine, not a zero. ",
+     " Where you stand. The ranking, with the mention and answer counts each rate rests on. ",
+     "",
+     " Who gets cited: one 100 percent stacked bar per measured day, split by source type, your share printed above each ",
+     " Top cited sites, each classified as own, competitor, social, informational or other ",
+     "",
+     " Who gets cited. Each bar is one measured day's citations by source type; the number on top is your share. ",
+     " Top cited sites. The pages the engines trust, classified. These are the pages you have to appear on or displace. ",
+     "",
+     " Visibility by question type: self-service, governed, GPU-first, sovereign-ready, multi-tenant, each with its own denominator ",
+     " The race with a hover card listing every brand ",
+     "",
+     " By question type. A question that names a rival lists rivals by construction, so each type is scored on its own. ",
+     " The race. Calendar-proportional: a span nobody measured is shaded, never curved across. Hollow dots rest on thin samples. "
+    ]
+   ],
+   [
+    "equal",
+    167,
+    177,
+    122,
+    132
+   ],
+   [
+    "replace",
+    177,
+    179,
+    132,
+    134,
+    [
+     " SQLite file you own. Nothing leaves the box except the calls to the engines",
+     " (made through Limelit Cloud when you use the free allowance)."
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    134,
+    135
+   ],
+   [
+    "replace",
+    180,
+    183,
+    135,
+    138,
+    [
+     " no credits and no markup anywhere in this project, and no per-seat tax on",
+     " looking at your own data. To try it first without buying any key, a free",
+     " Limelit Cloud account gives a monthly allowance (see below)."
+    ]
+   ],
+   [
+    "equal",
+    183,
+    184,
+    138,
+    139
+   ],
+   [
+    "replace",
+    184,
+    186,
+    139,
+    141,
+    [
+     " model deciding what it saw. Every metric is derived from stored rows and",
+     " can be recomputed. The formulas are below and the code is right here."
+    ]
+   ],
+   [
+    "equal",
+    186,
+    187,
+    141,
+    142
+   ],
+   [
+    "replace",
+    187,
+    189,
+    142,
+    144,
+    [
+     " search on is not the answer a person sees in ChatGPT. Both are useful, they",
+     " are different surfaces, and every number carries which one it came from."
+    ]
+   ],
+   [
+    "equal",
+    189,
+    192,
+    144,
+    147
+   ],
+   [
+    "replace",
+    192,
+    193,
+    147,
+    148,
+    [
+     "|Feature|Status|"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    148,
+    149
+   ],
+   [
+    "replace",
+    194,
+    208,
+    149,
+    163,
+    [
+     "|**Visibility tracking**: how often each engine mentions your brand, per prompt and over time|**working**|",
+     "|**Share of voice**: your mention rate next to every tracked competitor, on the same prompts|**working**|",
+     "|**Citation analysis**: every URL an answer cited, classified as your own, a competitor, social, informational or other|**working**|",
+     "|**Prompt by target grid**: one cell per prompt and engine, click through to the answers behind it|**working**|",
+     "|**Hybrid providers**: vendor APIs and consumer-surface scrapers behind one interface, labeled on every metric|**6 of 11, all seven engines**|",
+     "|**MCP server**: stdio and streamable HTTP, so Claude can read your visibility data and answer in plain language|**working**|",
+     "|**Dashboard**: embedded in the binary, no Node, no separate frontend to deploy|**working**|",
+     "|**Evaluation runner**: every active prompt against every enabled target, with usage counters and a hard `runs_per_day` ceiling|**working**|",
+     "|**Scheduler**: daily or hourly in `limelit serve`, or `limelit run` for one pass on demand|**working**|",
+     "|**Export**: JSON or CSV of everything, the same payload the Cloud upgrade sends|**working**|",
+     "|**One-command upgrade**: move your property, prompts and history to Limelit Cloud|**working**|",
+     "|**Query fan-out**: the searches an engine actually ran on the way to its answer, which are often not the question you asked|**working**|",
+     "|**Setup wizard**: brand, competitors, a starter prompt pack from your category, one key|**working**|",
+     "|**Single binary, SQLite**: no cgo, no Docker requirement, no Postgres|**working**|"
+    ]
+   ],
+   [
+    "equal",
+    208,
+    227,
+    163,
+    182
+   ],
+   [
+    "replace",
+    227,
+    228,
+    182,
+    183,
+    [
+     "checksums are on the releases page."
+    ]
+   ],
+   [
+    "equal",
+    228,
+    248,
+    183,
+    203
+   ],
+   [
+    "replace",
+    248,
+    254,
+    203,
+    209,
+    [
+     " press Create my key and paste it into the wizard. Or, in a second terminal,",
+     " run `limelit login` (from the same folder as `limelit serve`), which opens",
+     " that page and saves the key for you. It reaches ChatGPT, Gemini, Perplexity",
+     " and Google's AI Overviews and AI Mode inside a free monthly allowance. Your",
+     " prompts pass through Limelit Cloud to reach the engines; the answers are",
+     " stored here."
+    ]
+   ],
+   [
+    "equal",
+    254,
+    255,
+    209,
+    210
+   ],
+   [
+    "replace",
+    255,
+    257,
+    210,
+    212,
+    [
+     " lists every other provider with a link to where its key comes from. You pay",
+     " them directly, with no limit from us."
+    ]
+   ],
+   [
+    "equal",
+    257,
+    286,
+    212,
+    241
+   ],
+   [
+    "replace",
+    286,
+    291,
+    241,
+    242,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    291,
+    305,
+    242,
+    256
+   ],
+   [
+    "replace",
+    305,
+    308,
+    256,
+    259,
+    [
+     "From here, Configuration covers the file and the",
+     "environment, Connect Claude (MCP) the remote endpoint",
+     "and the tool catalog, and docs/methodology.md what"
+    ]
+   ],
+   [
+    "equal",
+    308,
+    316,
+    259,
+    267
+   ],
+   [
+    "replace",
+    316,
+    320,
+    267,
+    268,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    320,
+    330,
+    268,
+    278
+   ],
+   [
+    "replace",
+    330,
+    331,
+    278,
+    279,
+    [
+     "step 4 of the quick start. `limelit mcp` reads `./data`"
+    ]
+   ],
+   [
+    "equal",
+    331,
+    359,
+    279,
+    307
+   ],
+   [
+    "replace",
+    359,
+    360,
+    307,
+    308,
+    [
+     "docs/tools.md."
+    ]
+   ],
+   [
+    "equal",
+    360,
+    374,
+    308,
+    322
+   ],
+   [
+    "replace",
+    374,
+    375,
+    322,
+    323,
+    [
+     "|Plugin|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    375,
+    376,
+    323,
+    324
+   ],
+   [
+    "replace",
+    376,
+    379,
+    324,
+    327,
+    [
+     "|`limelit-open`|Connects this install over stdio, with the skill `limelit-open-visibility-report`. Claude asks for the binary path and the data directory.|",
+     "|`limelit-audit`|Two skills that need no install and no account: `ai-crawler-check` (which AI crawlers a robots.txt lets in, and what each block costs) and `llms-txt-check` (audits a site's llms.txt and drafts a better one).|",
+     "|`limelit`|Connects Limelit Cloud instead. You sign in through the browser from `/mcp`, with no key to paste. Adds skills, slash commands such as `/limelit:visibility` and `/limelit:next-post`, and a prompt before anything that spends credits or publishes. It lives in its own repo, limelit-co/limelit-plugin, and installs from here too.|"
+    ]
+   ],
+   [
+    "equal",
+    379,
+    380,
+    327,
+    328
+   ],
+   [
+    "replace",
+    380,
+    381,
+    328,
+    329,
+    [
+     "Details and privacy notes: plugins/README.md."
+    ]
+   ],
+   [
+    "equal",
+    381,
+    391,
+    329,
+    339
+   ],
+   [
+    "replace",
+    391,
+    396,
+    339,
+    340,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    396,
+    406,
+    340,
+    350
+   ],
+   [
+    "replace",
+    406,
+    407,
+    350,
+    351,
+    [
+     "|Access|Providers|What it measures|"
+    ]
+   ],
+   [
+    "equal",
+    407,
+    408,
+    351,
+    352
+   ],
+   [
+    "replace",
+    408,
+    410,
+    352,
+    354,
+    [
+     "|`api`|`openai`, `anthropic`, `perplexity`, `google`, `openrouter`|The vendor's model with web search enabled, billed per token|",
+     "|`scraped`|`dataforseo`, `searchapi`, `cloro`, `brightdata`, `oxylabs`, `olostep`|The consumer surface a person actually sees, billed per request|"
+    ]
+   ],
+   [
+    "equal",
+    410,
+    412,
+    354,
+    356
+   ],
+   [
+    "replace",
+    412,
+    413,
+    356,
+    357,
+    [
+     "a small Go interface. See docs/providers.md; the open"
+    ]
+   ],
+   [
+    "equal",
+    413,
+    414,
+    357,
+    358
+   ],
+   [
+    "replace",
+    414,
+    415,
+    358,
+    359,
+    [
+     "good first issue."
+    ]
+   ],
+   [
+    "equal",
+    415,
+    423,
+    359,
+    367
+   ],
+   [
+    "replace",
+    423,
+    424,
+    367,
+    368,
+    [
+     "demo is the open core and not a fork of it. deploy/ is how"
+    ]
+   ],
+   [
+    "equal",
+    424,
+    438,
+    368,
+    382
+   ],
+   [
+    "replace",
+    438,
+    454,
+    382,
+    383,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    454,
+    486,
+    383,
+    415
+   ],
+   [
+    "replace",
+    486,
+    487,
+    415,
+    416,
+    [
+     "docs/methodology.md."
+    ]
+   ],
+   [
+    "equal",
+    487,
+    489,
+    416,
+    418
+   ],
+   [
+    "replace",
+    489,
+    490,
+    418,
+    419,
+    [
+     " competitors (name and domain; the domain is the identity key)."
+    ]
+   ],
+   [
+    "equal",
+    490,
+    491,
+    419,
+    420
+   ],
+   [
+    "replace",
+    491,
+    492,
+    420,
+    421,
+    [
+     " a schedule. Each answer is stored as text with the sources it cited."
+    ]
+   ],
+   [
+    "equal",
+    492,
+    493,
+    421,
+    422
+   ],
+   [
+    "replace",
+    493,
+    496,
+    422,
+    425,
+    [
+     " text we stored. Rank comes from the enclosing list item when the answer is",
+     " a ranked list. No model decides what it saw, so nothing can be invented",
+     " and nothing is missed because a model stayed quiet."
+    ]
+   ],
+   [
+    "equal",
+    496,
+    497,
+    425,
+    426
+   ],
+   [
+    "replace",
+    497,
+    498,
+    426,
+    427,
+    [
+     " social, informational, or other."
+    ]
+   ],
+   [
+    "equal",
+    498,
+    500,
+    427,
+    429
+   ],
+   [
+    "replace",
+    500,
+    506,
+    429,
+    435,
+    [
+     "|Metric|Definition|",
+     "|---|---|",
+     "|Visibility|share of answers that mention the brand|",
+     "|Share of voice|the brand's mentions over all tracked brands' mentions in the same answers|",
+     "|Position|mean rank where the brand appears in a ranked list|",
+     "|Citation share|share of cited sources that are the brand's own site|"
+    ]
+   ],
+   [
+    "equal",
+    506,
+    511,
+    435,
+    440
+   ],
+   [
+    "replace",
+    511,
+    513,
+    440,
+    442,
+    [
+     " the headline number. Asking an engine about yourself and counting the answer",
+     " is the easiest way to inflate the metric."
+    ]
+   ],
+   [
+    "equal",
+    513,
+    514,
+    442,
+    443
+   ],
+   [
+    "replace",
+    514,
+    516,
+    443,
+    445,
+    [
+     " no Google AI Overview at all, that run is excluded from the denominator",
+     " rather than counted as an answer that ignored you."
+    ]
+   ],
+   [
+    "equal",
+    516,
+    528,
+    445,
+    457
+   ],
+   [
+    "replace",
+    528,
+    529,
+    457,
+    458,
+    [
+     " reconcile against your own provider bill."
+    ]
+   ],
+   [
+    "equal",
+    529,
+    530,
+    458,
+    459
+   ],
+   [
+    "replace",
+    530,
+    532,
+    459,
+    461,
+    [
+     " would exceed it is refused before anything is spent, and tells you by how",
+     " much."
+    ]
+   ],
+   [
+    "equal",
+    532,
+    533,
+    461,
+    462
+   ],
+   [
+    "replace",
+    533,
+    534,
+    462,
+    463,
+    [
+     " only thing you pay for is the answer itself."
+    ]
+   ],
+   [
+    "equal",
+    534,
+    542,
+    463,
+    471
+   ],
+   [
+    "replace",
+    542,
+    543,
+    471,
+    472,
+    [
+     "||Open source|Self-hostable|Auditable metrics|Data ownership|Keys|Pricing|"
+    ]
+   ],
+   [
+    "equal",
+    543,
+    544,
+    472,
+    473
+   ],
+   [
+    "replace",
+    544,
+    552,
+    473,
+    481,
+    [
+     "|**Limelit Open** (this repo)|Yes, Apache-2.0|Yes|Yes, the scoring code is this repo|Yours, a SQLite file|Bring your own|Free|",
+     "|**Limelit Cloud**|Open core, this repo|Yes, by self-hosting this repo|Yes, the same definitions, published here|Vendor-hosted, exportable|Included|Commercial|",
+     "|Profound|No|No|No|Vendor-hosted|Included|Commercial|",
+     "|Peec AI|No|No|No|Vendor-hosted|Included|Commercial|",
+     "|Otterly.AI|No|No|No|Vendor-hosted|Included|Commercial|",
+     "|Scrunch AI|No|No|No|Vendor-hosted|Included|Commercial|",
+     "|Ahrefs Brand Radar|No|No|No|Vendor-hosted|Included|Commercial, bundled with Ahrefs|",
+     "|Semrush AI Toolkit|No|No|No|Vendor-hosted|Included|Commercial, bundled with Semrush|"
+    ]
+   ],
+   [
+    "equal",
+    552,
+    564,
+    481,
+    493
+   ],
+   [
+    "replace",
+    564,
+    565,
+    493,
+    494,
+    [
+     "hosted only."
+    ]
+   ],
+   [
+    "equal",
+    565,
+    568,
+    494,
+    497
+   ],
+   [
+    "replace",
+    568,
+    569,
+    497,
+    498,
+    [
+     "These are Limelit Cloud features and are not in the open"
+    ]
+   ],
+   [
+    "equal",
+    569,
+    572,
+    498,
+    501
+   ],
+   [
+    "replace",
+    572,
+    573,
+    501,
+    502,
+    [
+     " every answer stores the searches the engine ran)"
+    ]
+   ],
+   [
+    "equal",
+    573,
+    592,
+    502,
+    521
+   ],
+   [
+    "replace",
+    592,
+    593,
+    521,
+    522,
+    [
+     " import is recoverable and leaving again is a command."
+    ]
+   ],
+   [
+    "equal",
+    593,
+    594,
+    522,
+    523
+   ],
+   [
+    "replace",
+    594,
+    595,
+    523,
+    524,
+    [
+     " Anthropic key that produced it stays on your machine."
+    ]
+   ],
+   [
+    "equal",
+    595,
+    596,
+    524,
+    525
+   ],
+   [
+    "replace",
+    596,
+    598,
+    525,
+    527,
+    [
+     " an upgrade interrupted halfway and re-run imports nothing twice. It reports",
+     " how many it skipped."
+    ]
+   ],
+   [
+    "equal",
+    598,
+    606,
+    527,
+    535
+   ],
+   [
+    "replace",
+    606,
+    607,
+    535,
+    536,
+    [
+     "docs/chatgpt.md."
+    ]
+   ],
+   [
+    "equal",
+    607,
+    611,
+    536,
+    540
+   ],
+   [
+    "replace",
+    611,
+    612,
+    540,
+    541,
+    [
+     " AI assistants, as distinct from ranking in a list of blue links."
+    ]
+   ],
+   [
+    "equal",
+    612,
+    617,
+    541,
+    546
+   ],
+   [
+    "replace",
+    617,
+    619,
+    546,
+    548,
+    [
+     " returning links. ChatGPT, Perplexity, Google AI Overviews and AI Mode,",
+     " Claude, Gemini, Copilot."
+    ]
+   ],
+   [
+    "equal",
+    619,
+    621,
+    548,
+    550
+   ],
+   [
+    "replace",
+    621,
+    622,
+    550,
+    551,
+    [
+     " the same set of answers."
+    ]
+   ],
+   [
+    "equal",
+    622,
+    623,
+    551,
+    552
+   ],
+   [
+    "replace",
+    623,
+    628,
+    552,
+    557,
+    [
+     " recommendation without naming anyone, comparison prompts name a rival, use",
+     " case prompts describe a job, brand prompts name you. Visibility is reported",
+     " per category as well as overall, because an answer to \"Rival alternatives\"",
+     " lists rivals by construction and reads as a loss if you score it the same",
+     " way as \"best tools for X\"."
+    ]
+   ],
+   [
+    "equal",
+    628,
+    629,
+    557,
+    558
+   ],
+   [
+    "replace",
+    629,
+    630,
+    558,
+    559,
+    [
+     " before writing it."
+    ]
+   ],
+   [
+    "equal",
+    630,
+    658,
+    559,
+    587
+   ],
+   [
+    "replace",
+    658,
+    666,
+    587,
+    588,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    666,
+    677,
+    588,
+    599
+   ],
+   [
+    "replace",
+    677,
+    678,
+    599,
+    600,
+    [
+     "The screenshots in docs/screenshots are taken from"
+    ]
+   ],
+   [
+    "equal",
+    678,
+    688,
+    600,
+    610
+   ],
+   [
+    "replace",
+    688,
+    705,
+    610,
+    611,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    705,
+    708,
+    611,
+    614
+   ],
+   [
+    "replace",
+    708,
+    727,
+    614,
+    615,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    727,
+    728,
+    615,
+    616
+   ],
+   [
+    "replace",
+    728,
+    737,
+    616,
+    617,
+    [
+     "Apache-2.0. See LICENSE and NOTICE."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "c04522d5f0c7+2": {
+  "fn": "RamblingCookieMonster/PSSQLite",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Build status"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    3,
+    1,
+    3
+   ],
+   [
+    "delete",
+    3,
+    4,
+    3,
+    3
+   ],
+   [
+    "equal",
+    4,
+    5,
+    3,
+    4
+   ],
+   [
+    "replace",
+    5,
+    6,
+    4,
+    5,
+    [
+     "This is a PowerShell module for working with SQLite. It uses similar syntax to the Invoke-Sqlcmd2 function from Chad Miller et al."
+    ]
+   ],
+   [
+    "equal",
+    6,
+    16,
+    5,
+    15
+   ],
+   [
+    "replace",
+    16,
+    17,
+    15,
+    16,
+    [
+     " * Create a SQLite database and table"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    19,
+    16,
+    18
+   ],
+   [
+    "replace",
+    19,
+    20,
+    18,
+    19,
+    [
+     " * Query a SQLite database"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    22,
+    19,
+    21
+   ],
+   [
+    "replace",
+    22,
+    23,
+    21,
+    22,
+    [
+     " * Create a SQLite connection, use it"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    22,
+    23
+   ],
+   [
+    "replace",
+    24,
+    26,
+    23,
+    25,
+    [
+     "Insert large quantities of data quickly with transactions (why?):",
+     " * Insert large quantities of data quickly"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    33,
+    25,
+    32
+   ],
+   [
+    "replace",
+    33,
+    82,
+    32,
+    33,
+    [
+     "…（49 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    88,
+    33,
+    39
+   ],
+   [
+    "replace",
+    88,
+    89,
+    39,
+    40,
+    [
+     "I'm planning to write about using SQL from a systems administrator or engineer standpoint. I personally stick to MSSQL and Invoke-Sqlcmd2, but want to provide an abstracted means to perform this without the prerequisite of an accessible MSSQL instance."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    40,
+    41
+   ],
+   [
+    "replace",
+    90,
+    91,
+    41,
+    42,
+    [
+     "Check out Jim Christopher's SQLite PowerShell Provider. It offers more functionality and flexibility than this repository."
+    ]
+   ],
+   [
+    "equal",
+    91,
+    93,
+    42,
+    44
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "0200117f0617+2": {
+  "fn": "azat/chdig",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Dig into ClickHouse with TUI interface."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    3,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "asciicast"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    17,
+    7,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "The latest unstable release can be found on GitHub."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "*See also the complete list of releases.*"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    20,
+    21
+   ],
+   [
+    "replace",
+    21,
+    24,
+    21,
+    22,
+    [
+     " Package repositories (AUR, Scoop, Homebrew) "
+    ]
+   ],
+   [
+    "equal",
+    24,
+    28,
+    22,
+    26
+   ],
+   [
+    "replace",
+    28,
+    31,
+    26,
+    29,
+    [
+     "- **chdig-latest-bin** - binary artifact of the upstream",
+     "- chdig-git - build from sources",
+     "- chdig-bin - binary of the latest stable version"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    47,
+    29,
+    45
+   ],
+   [
+    "delete",
+    47,
+    49,
+    45,
+    45
+   ],
+   [
+    "equal",
+    49,
+    62,
+    45,
+    58
+   ],
+   [
+    "replace",
+    62,
+    65,
+    58,
+    59,
+    [
+     " Know Your ClickHouse "
+    ]
+   ],
+   [
+    "equal",
+    65,
+    69,
+    59,
+    63
+   ],
+   [
+    "replace",
+    69,
+    70,
+    63,
+    64,
+    [
+     "Know Your ClickHouse"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    73,
+    64,
+    67
+   ],
+   [
+    "delete",
+    73,
+    75,
+    67,
+    67
+   ],
+   [
+    "equal",
+    75,
+    81,
+    67,
+    73
+   ],
+   [
+    "replace",
+    81,
+    87,
+    73,
+    79,
+    [
+     "- `top` like interface (or `csysdig` to be more precise)",
+     "- Flamegraphs (CPU/Real/Memory/Live) in TUI (thanks to flamelens), auto-refreshed while the query is running (with changes since the previous refresh highlighted; `P` pauses, `D` toggles the diff coloring)",
+     "- Perfetto support",
+     "- Share flamegraphs (using pastila.nl and speedscope)",
+     "- Share logs (via pastila.nl)",
+     "- Share query pipelines (using viz.js and pastila.nl)"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    79,
+    80
+   ],
+   [
+    "replace",
+    88,
+    89,
+    80,
+    81,
+    [
+     "- Views configuration - startup pane layout and per-view filter/interval/limit (like `tmuxinator`)"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    93,
+    81,
+    85
+   ],
+   [
+    "replace",
+    93,
+    94,
+    85,
+    86,
+    [
+     "See the **features tour with screenshots**."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    110,
+    86,
+    102
+   ],
+   [
+    "replace",
+    110,
+    111,
+    102,
+    103,
+    [
+     "For development, debugging and build troubleshooting, see Documentation/Developers.md."
+    ]
+   ],
+   [
+    "equal",
+    111,
+    114,
+    103,
+    106
+   ],
+   [
+    "replace",
+    114,
+    120,
+    106,
+    112,
+    [
+     "- **Features tour (with screenshots)**",
+     "- FAQ",
+     "- Bugs list",
+     "- Shortcuts",
+     "- Developers",
+     "- Know Your ClickHouse (presentation, 2022)"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "759cec259e4d+2": {
+  "fn": "lonng/db-papers",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "README autogen"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    12,
+    1,
+    10
+   ],
+   [
+    "replace",
+    12,
+    13,
+    10,
+    11,
+    [
+     "**In case you are reading this and making the effort to comprehend these papers, we would really like to have a conversation with you regarding opportunities at Tencent Cloud Database Team (@Henry L.).**"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    26,
+    11,
+    24
+   ],
+   [
+    "replace",
+    26,
+    61,
+    24,
+    25,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    65,
+    25,
+    29
+   ],
+   [
+    "replace",
+    65,
+    71,
+    29,
+    35,
+    [
+     "- A Relational Model Of Data For Large Shared Data Banks (1970) - Codd, Edgar F.",
+     "- Sequel: A Structured English Query Language (1974) - Chamberlin, Donald D., and Raymond F. Boyce.",
+     "- Ingres: A Relational Data Base System (1975) - Held, G. D., M. R. Stonebraker, and Eugene Wong.",
+     "- Extending The Database Relational Model To Capture More Meaning (1979) - Codd, Edgar F.",
+     "- A Critique Of The Sql Database Language (1984) - Date, C. J.",
+     "- A Critique Of Snapshot Isolation (2012) - Yabandeh M, Gómez Ferro D."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    74,
+    35,
+    38
+   ],
+   [
+    "replace",
+    74,
+    81,
+    38,
+    45,
+    [
+     "- The Part-Time Parliament (1998) - Lamport, Leslie.",
+     "- Paxos Made Simple (2001) - Lamport, Leslie.",
+     "- Consensus: Bridging Theory And Practice (2014) - Ongaro, Diego.",
+     "- In Search Of An Understandable Consensus Algorithm (Extended Version).pdf) (2014) - Ongaro, Diego, and John Ousterhout.",
+     "- Distributed Consensus Revised (2019) - Howard, Heidi.",
+     "- A Generalised Solution To Distributed Consensus (2019) - Howard, Heidi, and Richard Mortier.",
+     "- Paxos Vs Raft: Have We Reached Consensus On Distributed Consensus? (2020) - Howard, Heidi, and Richard Mortier."
+    ]
+   ],
+   [
+    "equal",
+    81,
+    84,
+    45,
+    48
+   ],
+   [
+    "replace",
+    84,
+    90,
+    48,
+    54,
+    [
+     "- Consistency Tradeoffs In Modern Distributed Database System Design (2012) - Abadi, Daniel.",
+     "- Logical Physical Clocks And Consistent Snapshots In Globally Distributed Databases (2014) - Kulkarni S S, Demirbas M, Madappa D, et al.",
+     "- Ark: A Real-World Consensus Implementation (2014) - Kasheff, Zardosht, and Leif Walsh.",
+     "- Polarfs: An Ultra-Low Latency And Failure Resilient Distributed File System For Shared Storage Cloud Database (2018) - Cao, Wei, et al.",
+     "- Anna: A Kvs For Any Scale (2018) - Wu, Chenggang, et al.",
+     "- Strong And Efficient Consistency With Consistency-Aware Durability (2021) - Ganesan, Aishwarya, et al."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    95,
+    54,
+    59
+   ],
+   [
+    "replace",
+    95,
+    96,
+    59,
+    60,
+    [
+     "- Architecture Of A Database System. Foundations And Trends In Databases (2007) - Hellerstein J M, Stonebraker M, Hamilton J."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    99,
+    60,
+    63
+   ],
+   [
+    "replace",
+    99,
+    112,
+    63,
+    76,
+    [
+     "- System R: Relational Approach To Database Management (1976) - Astrahan, Morton M., et al.",
+     "- The Design And Implementation Of Ingres (1976) - Stonebraker, Michael, et al.",
+     "- The Design Of Postgres (1986) - Stonebraker, Michael, and Lawrence A. Rowe.",
+     "- Query Processing In Main Memory Database Management Systems (1986) - Lehman, Tobin J., and Michael J. Carey.",
+     "- Megastore: Providing Scalable, Highly Available Storage For Interactive Services (2011) - Baker J, Bond C, Corbett J C, et al.",
+     "- Spanner: Google's Globally Distributed Database (2013) - Corbett, James C., et al.",
+     "- Online, Asynchronous Schema Change In F1 (2013) - Rae, Ian, et al.",
+     "- Amazon Aurora: Design Considerations For High Throughput Cloud-Native Relational Databases (2017) - Verbitski, Alexandre, et al.",
+     "- Looking Back At Postgres (2019) - Hellerstein, Joseph M.",
+     "- Cockroachdb: The Resilient Geo-Distributed Sql Database (2020) - Taft, Rebecca, et al.",
+     "- F1 Lightning: Htap As A Service (2020) - Yang, Jiacheng, et al.",
+     "- Tidb: A Raft-Based Htap Database (2020) - Huang, Dongxu, et al.",
+     "- Polardb Serverless: A Cloud Native Database For Disaggregated Data Centers (2021) - Cao, Wei, et al."
+    ]
+   ],
+   [
+    "equal",
+    112,
+    115,
+    76,
+    79
+   ],
+   [
+    "replace",
+    115,
+    122,
+    79,
+    86,
+    [
+     "- Bigtable: A Distributed Storage System For Structured Data (2006) - Chang, Fay, et al.",
+     "- Dynamo: Amazon’s Highly Available Key-Value Store (2007) - DeCandia, Giuseppe, et al.",
+     "- Pnuts: Yahoo!’S Hosted Data Serving Platform (2008) - Cooper, Brian F., et al.",
+     "- Cassandra - A Decentralized Structured Storage System (2010) - Lakshman, Avinash, and Prashant Malik.",
+     "- Windows Azure Storage: A Highly Available Cloud Storage Service With Strong Consistency (2011) - Calder, Brad, et al.",
+     "- Azure Data Lake Store: A Hyperscale Distributed File Service For Big Data Analytics (2017) - Ramakrishnan, Raghu, et al.",
+     "- Pnuts To Sherpa: Lessons From Yahoo!’S Cloud Database (2019) - Cooper, Brian F., et al."
+    ]
+   ],
+   [
+    "equal",
+    122,
+    127,
+    86,
+    91
+   ],
+   [
+    "replace",
+    127,
+    138,
+    91,
+    102,
+    [
+     "- Access Path Selection In A Relational Database Management System (1979) - Selinger, P. Griffiths, et al.",
+     "- Query Optimization By Simulated Annealing (1987) - Ioannidis, Yannis E., and Eugene Wong.",
+     "- The Exodus Optimizer Generator (1987) - Graefe, Goetz, and David J. DeWitt.",
+     "- Extensible/Rule Based Query Rewrite Optimization In Starburst (1992) - Pirahesh, Hamid, Joseph M. Hellerstein, and Waqar Hasan.",
+     "- The Volcano Optimizer Generator- Extensibility And Efficient Search (1993) - Graefe, Goetz, and William J. McKenna.",
+     "- The Cascades Framework For Query Optimization (1995) - Graefe, Goetz.",
+     "- An Overview Of Query Optimization In Relational Systems (1998) - Chaudhuri, Surajit.",
+     "- Robust Query Processing Through Progressive Optimization (2004) - Markl, Volker, et al.",
+     "- Orca: A Modular Query Optimizer Architecture For Big Data (2014) - Soliman, Mohamed A., et al.",
+     "- Parallelizing Query Optimization On Shared-Nothing Architectures (2015) - Trummer, Immanuel, and Christoph Koch.",
+     "- The Memsql Query Optimizer: A Modern Optimizer For Real-Time Analytics In A Distributed Database (2016) - Chen, Jack, et al."
+    ]
+   ],
+   [
+    "equal",
+    138,
+    141,
+    102,
+    105
+   ],
+   [
+    "replace",
+    141,
+    148,
+    105,
+    112,
+    [
+     "- Processing Queries With Quantifiers A Horticultural Approach (1983) - Dayal, Umeshwar.",
+     "- Translating Sql Into Relational Algebra: Optimization, Semantics, And Equivalence Of Sql Queries (1985) - Ceri, Stefano, and Georg Gottlob.",
+     "- Grammar-Like Functional Rules For Representing Query Optimization Alternatives, (1988) - Lohman, Guy M.",
+     "- Query Optimization By Predicate Move-Around (1994) - Levy, Alon Y., Inderpal Singh Mumick, and Yehoshua Sagiv.",
+     "- Eager Aggregation And Lazy Aggregation (1995) - Yan, Weipeng P., and Per-Bike Larson.",
+     "- Parameterized Queries And Nesting Equivalences (2000) - Galindo-Legaria, C. A.",
+     "- Cost-Based Query Transformation In Oracle (2006) - Ahmed, Rafi, et al."
+    ]
+   ],
+   [
+    "equal",
+    148,
+    151,
+    112,
+    115
+   ],
+   [
+    "replace",
+    151,
+    164,
+    115,
+    128,
+    [
+     "- Using Semi-Joins To Solve Relational Queries (1981) - Bernstein, Philip A., and Dah-Ming W. Chiu.",
+     "- On Optimizing An Sql-Like Nested Query (1982) - Kim, Won.",
+     "- Optimization Of Nested Queries In A Distributed Relational Database (1984) - L&man, Guy M., et al.",
+     "- Sql-Like And Quel-Like Correlation Queries With Aggregates Revisited (1984) - Kiessling, Werner.",
+     "- Translating Sql Into Relational Algebra: Optimization, Semantics, And Equivalence Of Sql Queries (1985) - Ceri, Stefano, and Georg Gottlob.",
+     "- Optimization Of Nested Sql Queries Revisited (1987) - Ganski, Richard A., and Harry KT Wong.",
+     "- A Unitied Approach To Processing Queries That Contain Nested Subqueries, Aggregates, And Quantifiers (1987) - Dayal, Umeshwar.",
+     "- Orthogonal Optimization Of Subqueries And Aggregation (2001) - Galindo-Legaria, César, and Milind Joshi.",
+     "- Winmagic : Subquery Elimination Using Window Aggregation (2003) - Zuzarte, Calisto, et al.",
+     "- Execution Strategies For Sql Subqueries (2007) - Elhemali, Mostafa, et al.",
+     "- Enhanced Subquery Optimizations In Oracle (2009) - Bellamkonda, Srikanth, et al.",
+     "- Unnesting Arbitrary Queries (2015) - Neumann, Thomas, and Alfons Kemper.",
+     "- The Complete Story Of Joins (2017) - Neumann, Thomas, Viktor Leis, and Alfons Kemper."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    167,
+    128,
+    131
+   ],
+   [
+    "replace",
+    167,
+    168,
+    131,
+    132,
+    [
+     "- Fundamental Techniques For Order Optimization (1996) - Simmen, David, Eugene Shekita, and Timothy Malkemus."
+    ]
+   ],
+   [
+    "equal",
+    168,
+    169,
+    132,
+    133
+   ],
+   [
+    "replace",
+    169,
+    172,
+    133,
+    136,
+    [
+     "- An Efficient Framework For Order Optimization (2004) - Neumann, Thomas, and Guido Moerkotte.",
+     "- Incorporating Partitioning And Parallel Plans Into The Scope Optimizer (2010) - Zhou, Jingren, Per-Ake Larson, and Ronnie Chaiken.",
+     "- Accelerating Queries With Groupby And Join By Group Join (2011) - Moerkotte, Guido, and Thomas Neumann."
+    ]
+   ],
+   [
+    "equal",
+    172,
+    175,
+    136,
+    139
+   ],
+   [
+    "replace",
+    175,
+    188,
+    139,
+    152,
+    [
+     "- Access Paths In The\" Abe\" Statistical Query Facility (1982) - Klug, Anthony.",
+     "- Extending The Algebraic Framework Of Query Processing To Handle Outerjoins (1984) - RosenthaI, A., and D. Reiner.",
+     "- Outerjoin Simplication And Reordering For Query Optimization (1993) - Galindo-Legaria C, Rosenthal A.",
+     "- Hypergraph Based Reorderings Of Outer Join Queries With Complex Predicates (1995) - Bhargava G, Goel P, Iyer B.",
+     "- Rapid Bushy Join-Order Optimization With Cartesian Products. (1996) - Vance B, Maier D.",
+     "- Using Eels, A Practical Approach To Outerjoin And Antijoin Reordering (2001) - Rao J, Lindsay B, Lohman G, et al.",
+     "- Analysis Of Two Existing And One New Dynamic Programming Algorithm For The Generation Of Optimal Bushy Join Trees Without Cross Products (2006) - Moerkotte, Guido, and Thomas Neumann.",
+     "- Optimal Top-Down Join Enumeration (2007) - DeHaan D, Tompa F W.",
+     "- Dynamic Programming Strikes Back (2008) - Moerkotte, Guido, and Thomas Neumann.",
+     "- On The Correct And Complete Enumeration Of The Core Search Space (2013) - Moerkotte, Guido, Pit Fender, and Marius Eich.",
+     "- How Good Are Query Optimizers, Really? (2015) - Leis, Viktor, et al.",
+     "- Improving Join Reorderability With Compensation Operators (2018) - Wang, TaiNing, and Chee-Yong Chan.",
+     "- Adaptive Optimization Of Very Large Join Queries (2018) - Neumann, Thomas, and Bernhard Radke."
+    ]
+   ],
+   [
+    "equal",
+    188,
+    191,
+    152,
+    155
+   ],
+   [
+    "replace",
+    191,
+    195,
+    155,
+    159,
+    [
+     "- Modelling Costs For A Mm-Dbms (1996) - Listgarten, Sherry, and Marie-Anne Neimat.",
+     "- Seeking The Truth About Ad Hoc Join Costs (1997) - Haas, Laura M., et al.",
+     "- Approximation Schemes For Many-Objective Query Optimization (2014) - Trummer, Immanuel, and Christoph Koch.",
+     "- Multi-Objective Parametric Query Optimization (2015) - Trummer, Immanuel, and Christoph Koch."
+    ]
+   ],
+   [
+    "equal",
+    195,
+    198,
+    159,
+    162
+   ],
+   [
+    "replace",
+    198,
+    211,
+    162,
+    175,
+    [
+     "- Accurate Estimation Of The Number Of Tuples Satisfying A Condition (1984) - Piatetsky-Shapiro, Gregory, and Charles Connell.",
+     "- Optimal Histograms For Limiting Worst-Case Error Propagation In The Size Of Join Results (1993) - Ioannidis, Yannis E., and Stavros Christodoulakis.",
+     "- Universality Of Serial Histograms (1993) - Ioannidis, Yannis E.",
+     "- Balancing Histogram Optimality And Practicality For Query Result Size Estimation (1995) - Ioannidis, Yannis E., and Viswanath Poosala.",
+     "- Improved Histograms For Selectivity Estimation Of Range Predicates (1996) - Poosala, Viswanath, et al.",
+     "- The History Of Histograms (2003) - Ioannidis, Yannis.",
+     "- Automated Statistics Collection In Db2 Udb (2004) - Aboulnaga, Ashraf, et al.",
+     "- Adaptive Query Processing In The Looking Glass (2005) - Babu, Shivnath, and Pedro Bizarro.",
+     "- Optimizer Plan Change Management: Improved Stability And Performance In Oracle 11G (2008) - Ziauddin, Mohamed, et al.",
+     "- Histograms Reloaded: The Merits Of Bucket Diversity (2010) - Kanne, Carl-Christian, and Guido Moerkotte.",
+     "- Synopses For Massive Data: Samples, Histograms, Wavelets, Sketches (2011) - Cormode, Graham, et al.",
+     "- Exploiting Ordered Dictionaries To Efficiently Construct Histograms With Q-Error Guarantees In Sap Hana (2014) - Moerkotte, Guido, et al.",
+     "- Adaptive Statistics In Oracle 12C (2017) - Chakkappen, Sunil, et al."
+    ]
+   ],
+   [
+    "equal",
+    211,
+    214,
+    175,
+    178
+   ],
+   [
+    "replace",
+    214,
+    224,
+    178,
+    188,
+    [
+     "- Probabilistic counting algorithms for data base applications (1985) - Flajolet, Philippe; Martin, G. Nigel.",
+     "- Towards Estimation Error Guarantees For Distinct Values (2000) - Charikar, Moses, et al.",
+     "- Distinct Sampling For Highly-Accurate Answers To Distinct Values Queries And Event Reports (2001) - Gibbons, Phillip B.",
+     "- Leo – Db2’s Learning Optimizer (2001) - Stillger, Michael, et al.",
+     "- An Improved Data Stream Summary: The Count-Min Sketch And Its Applications, Journal Of Algorithms (2005) - Cormode, Graham, and Shan Muthukrishnan.",
+     "- New Estimation Algorithms For Streaming Data: Count-Min Can Do More (2007) - Deng, Fan, and Davood Rafiei.",
+     "- Preventing Bad Plans By Bounding The Impact Of Cardinality Estimation Errors (2009) - Moerkotte, Guido, Thomas Neumann, and Gabriele Steidl.",
+     "- Pessimistic Cardinality Estimation: Tighter Upper Bounds For Intermediate Join Cardinalities (2019) - Cai, Walter, Magdalena Balazinska, and Dan Suciu.",
+     "- Deep Unsupervised Cardinality Estimation (2019) - Yang, Zongheng, et al.",
+     "- Neurocard: One Cardinality Estimator For All Tables (2020) - Yang, Zongheng, et al."
+    ]
+   ],
+   [
+    "equal",
+    224,
+    227,
+    188,
+    191
+   ],
+   [
+    "replace",
+    227,
+    238,
+    191,
+    202,
+    [
+     "- Querye Valuation Techniques For Large Databases (1993) - Graefe G.",
+     "- Volcano - An Extensible And Parallel Query Evaluation System (1994) - Graefe, Goetz.",
+     "- Monetdb/X100: Hyper-Pipelining Query Execution (2005) - Boncz, Peter A., Marcin Zukowski, and Niels Nes.",
+     "- Efficiently Compiling Efficient Query Plans For Modern Hardware (2011) - Neumann, Thomas.",
+     "- Multi-Core, Main-Memory Joins: Sort Vs. Hash Revisited (2013) - Balkesen, Cagri, et al.",
+     "- Main-Memory Hash Joins On Modern Processor Architectures (2014) - Balkesen Ç, Teubner J, Alonso G, et al.",
+     "- Morsel-Driven Parallelism: A Numa-Aware Query Evaluation Framework For The Many-Core Age (2014) - Leis, Viktor, et al.",
+     "- Relaxed Operator Fusion For In-Memory Databases: Making Compilation, Vectorization, And Prefetching Work Together At Last (2017) - Menon, Prashanth, Todd C. Mowry, and Andrew Pavlo.",
+     "- Looking Ahead Makes Query Plans Robust (2017) - Zhu, Jianqiao, et al.",
+     "- Everything You Always Wanted To Know About Compiled And Vectorized Queries But Were Afraid To Ask (2018) - Kersten, Timo, et al.",
+     "- Adaptive Execution Of Compiled Queries (2018) - Kohn, André, Viktor Leis, and Thomas Neumann."
+    ]
+   ],
+   [
+    "equal",
+    238,
+    241,
+    202,
+    205
+   ],
+   [
+    "replace",
+    241,
+    246,
+    205,
+    210,
+    [
+     "- Db2 Parallel Edition (1995) - Baru, Chaitanya K., et al.",
+     "- Parallel Sql Execution In Oracle 10G (2004) - Cruanes, Thierry, Benoit Dageville, and Bhaskar Ghosh.",
+     "- Query Optimization In Microsoft Sql Server Pdw (2012) - Shankar, Srinath, et al.",
+     "- Adaptive And Big Data Scale Parallel Execution In Oracle (2013) - Bellamkonda, Srikanth, et al.",
+     "- Optimizing Queries Over Partitioned Tables In Mpp Systems (2014) - Antova, Lyublena, et al."
+    ]
+   ],
+   [
+    "equal",
+    246,
+    251,
+    210,
+    215
+   ],
+   [
+    "replace",
+    251,
+    255,
+    215,
+    219,
+    [
+     "- The 5 Minute Rule For Trading Memory For Disc Accesses And The 5 Byte Rule For Trading Memory For Cpu Time (1987) - Gray, Jim, and Franco Putzolu.",
+     "- The Five-Minute Rule Ten Years Later, And Other Computer Storage Rules Of Thumb (1997) - Gray, Jim, and Goetz Graefe.",
+     "- The Five Minute Rule 20 Years Later And How Flash Memory Changes The Rules (2008) - Graefe, Goetz.",
+     "- The Five Minute Rule Thirty Years Later And Its Impact On The Storage Hierarchy (2017) - Appuswamy, Raja, et al."
+    ]
+   ],
+   [
+    "equal",
+    255,
+    258,
+    219,
+    222
+   ],
+   [
+    "replace",
+    258,
+    276,
+    222,
+    240,
+    [
+     "- The Ubiquitous B-Tree (1979) - Comer, Douglas.",
+     "- Principles Of Database Buffer Management (1984) - Effelsberg W, Haerder T.",
+     "- The Log-Structured Merge-Tree (Lsm-Tree).pdf) (1996) - O’Neil, Patrick, et al.",
+     "- A Comparison Of Fractal Trees To Log-Structured Merge (Lsm) Trees-trees.pdf) (2014) - Kuszmaul, Bradley C.",
+     "- Design Tradeoffs Of Data Access Methods (2016) - Athanassoulis, Manos, and Stratos Idreos.",
+     "- Designing Access Methods: The Rum Conjecture (2016) - Athanassoulis, Manos, et al.",
+     "- Wisckey: Separating Keys From Values In Ssd-Conscious Storage (2017) - Lu, Lanyue, et al.",
+     "- Managing Non-Volatile Memory In Database Systems (2018) - van Renen, Alexander, et al.",
+     "- Leanstore: In-Memory Data Management Beyond Main Memory (2018) - Leis, Viktor, et al.",
+     "- The Case For Learned Index Structures (2018) - Kraska, Tim, et al.",
+     "- SuRF: Practical Range Query Filtering With Fast Succinct Tries (2018) - Zhang, Huanchen, et al.",
+     "- Lsm-Based Storage Techniques: A Survey (2019) - Luo, Chen, and Michael J. Carey.",
+     "- Learning Multi-Dimensional Indexes (2019) - Nathan, Vikram, et al.",
+     "- Umbra: A Disk-Based System With In-Memory Performance (2020) - Neumann, Thomas, and Michael J. Freitag.",
+     "- Xindex: A Scalable Learned Index For Multicore Data Storage (2020) - Tang, Chuzhe, et al.",
+     "- The Pgm-Index: A Fully-Dynamic Compressed Learned Index With Provable Worst-Case Bounds (2020) - Ferragina, Paolo, and Giorgio Vinciguerra.",
+     "- From Wisckey To Bourbon: A Learned Index For Log-Structured Merge Trees (2020) - Dai, Yifan, et al.",
+     "- Caas-Lsm: Compaction-As-A-Service For Lsm-Based Key-Value Stores In Storage Disaggregated Infrastructure (2024) - Yu, Qiaolin et al."
+    ]
+   ],
+   [
+    "equal",
+    276,
+    279,
+    240,
+    243
+   ],
+   [
+    "replace",
+    279,
+    297,
+    243,
+    261,
+    [
+     "- The Notions Of Consistency And Predicate Locks In A Database System (1976) - Eswaran, Kapali P., et al.",
+     "- Concurrency Control In Distributed Database Systems (1981) - Bernstein, Philip A., and Nathan Goodman.",
+     "- On Optimistic Methods For Concurrency Control (1981) - Kung, Hsiang-Tsung, and John T. Robinson.",
+     "- Principles Of Transaction-Oriented Database Recovery (1983) - Haerder, Theo, and Andreas Reuter.",
+     "- Multiversion Concurrency Control - Theory And Algorithms (1983) - Bernstein, Philip A., and Nathan Goodman.",
+     "- Aries: A Transaction Recovery Method Supporting Fine-Granularity Locking And Partial Rollbacks Using Write-Ahead Logging (1992) - Mohan C, Haderle D, Lindsay B, et al.",
+     "- A Critique Of Ansi Sql Isolation Levels (1995) - Berenson, Hal, et al.",
+     "- Generalized Isolation Level Definitions (2000) - Adya, Atul, Barbara Liskov, and Patrick O'Neil.",
+     "- Large-Scale Incremental Processing Using Distributed Transactions And Notifications (2010) - Peng D, Dabek F.",
+     "- Serializable Snapshot Isolation In Postgresql (2012) - Ports, Dan RK, and Kevin Grittner.",
+     "- Calvin: Fast Distributed Transactions For Partitioned Database Systems (2012) - Thomson, Alexander, et al.",
+     "- Maat: Effective And Scalable Coordination Of Distributed Transactions In The Cloud (2014) - Mahmoud, Hatem A., et al.",
+     "- Staring Into The Abyss: An Evaluation Of Concurrency Control With One Thousand Cores (2014) - Yu, Xiangyao, et al.",
+     "- An Evaluation Of The Advantages And Disadvantages Of Deterministic Database Systems (2014) - Ren, Kun, Alexander Thomson, and Daniel J. Abadi.",
+     "- Fast Serializable Multi-Version Concurrency Control For Main-Memory Database Systems (2015) - Neumann, Thomas, Tobias Mühlbauer, and Alfons Kemper.",
+     "- An Empirical Evaluation Of In-Memory Multi-Version Concurrency Control (2017) - Wu, Yingjun, et al.",
+     "- An Evaluation Of Distributed Concurrency Control (2017) - Harding, Rachael, et al.",
+     "- Scalable Garbage Collection For In-Memory Mvcc Systems (2019) - Böttcher, Jan, et al."
+    ]
+   ],
+   [
+    "equal",
+    297,
+    300,
+    261,
+    264
+   ],
+   [
+    "replace",
+    300,
+    304,
+    264,
+    268,
+    [
+     "- Automated Demand-Driven Resource Scaling In Relational Database-As-A-Service (2016) - Das, Sudipto, et al.",
+     "- Autoscaling Tiered Cloud Storage In Anna (2019) - Wu, Chenggang, Vikram Sreekanti, and Joseph M. Hellerstein.",
+     "- Adaptive Htap Through Elastic Resource Scheduling (2020) - Raza, Aunn, et al.",
+     "- Morphosys: Automatic Physical Design Metamorphosis For Distributed Database Systems (2020) - Abebe, Michael, Brad Glasbergen, and Khuzaima Daudjee."
+    ]
+   ],
+   [
+    "equal",
+    304,
+    309,
+    268,
+    273
+   ],
+   [
+    "replace",
+    309,
+    311,
+    273,
+    275,
+    [
+     "- Tpc-H Analyzed: Hidden Messages And Lessons Learned From An Influential Benchmark (2013) - Boncz, Peter, Thomas Neumann, and Orri Erling.",
+     "- Quantifying Tpch Choke Points And Their Optimizations (2020) - Dreseler, Markus, et al."
+    ]
+   ],
+   [
+    "equal",
+    311,
+    314,
+    275,
+    278
+   ],
+   [
+    "replace",
+    314,
+    317,
+    278,
+    281,
+    [
+     "- The End Of Slow Networks: It's Time For A Redesign (2015) - Binnig, Carsten, et al.",
+     "- Accelerating Relational Databases By Leveraging Remote Memory And Rdma (2016) - Li, Feng, et al.",
+     "- Don't Hold My Data Hostage: A Case For Client Protocol Redesign (2017) - Raasveldt, Mark, and Hannes Mühleisen."
+    ]
+   ],
+   [
+    "equal",
+    317,
+    320,
+    281,
+    284
+   ],
+   [
+    "replace",
+    320,
+    321,
+    284,
+    285,
+    [
+     "- Testing The Accuracy Of Query Optimizers (2012) - Gu, Zhongxian, Mohamed A. Soliman, and Florian M."
+    ]
+   ],
+   [
+    "equal",
+    321,
+    324,
+    285,
+    288
+   ],
+   [
+    "replace",
+    324,
+    326,
+    288,
+    290,
+    [
+     "- Automatic Sql Tuning In Oracle 10G (2004) - Dageville B, Das D, Dias K, et al.",
+     "- Automatic Performance Diagnosis And Tuning In Oracle (2005) - Dias K, Ramacher M, Shaft U, et al."
+    ]
+   ],
+   [
+    "equal",
+    326,
+    329,
+    290,
+    293
+   ],
+   [
+    "replace",
+    329,
+    330,
+    293,
+    294,
+    [
+     "- A Deep Dive into Common Open Formats for Analytical DBMSs (2023) - Liu C, Pavlenko A, Interlandi M, et al."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

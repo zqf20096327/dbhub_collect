@@ -4985,5 +4985,512 @@
    ]
   ],
   "at": "2026-11-05"
+ },
+ "7812e779afd4+2": {
+  "fn": "NAlexPear/pg_branch",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "AI-generated logo that confers more legitimacy than this project deserves"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    4,
+    1,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Pre-release Checks"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "A Postgres extension for quickly creating \"branches\" of individual databases within a Postgres cluster using copy-on-write file systems like `BTRFS`."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    9,
+    7,
+    9
+   ],
+   [
+    "replace",
+    9,
+    15,
+    9,
+    10,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    20,
+    10,
+    15
+   ],
+   [
+    "replace",
+    20,
+    21,
+    15,
+    16,
+    [
+     "Postgres makes it easy to create new, empty databases with the `CREATE DATABASE` command. It's so easy, in fact, that one would think that creating new databases from existing databases would be easy, too. But it's not."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    27,
+    16,
+    22
+   ],
+   [
+    "replace",
+    27,
+    28,
+    22,
+    23,
+    [
+     "`pg_branch` is a Postgres extension that solves those problems by giving `CREATE DATABASE` the power of snapshots. If your `PGDATA` directory is on a copy-on-write file system like `BTRFS`, the `pg_branch` extension turns every `CREATE DATABASE` into an atomic file system snapshot that takes seconds instead of minutes (or hours). In addition, the copy-on-write strategy keeps disk usage low by only writing new segment data files to disk when they're modified (rather than read)."
+    ]
+   ],
+   [
+    "equal",
+    28,
+    39,
+    23,
+    34
+   ],
+   [
+    "replace",
+    39,
+    40,
+    34,
+    35,
+    [
+     " You'll need an installation of `btrfs` (usually packaged as `btrfs-progs`) as well as an up-to-date Rust toolchain and the `pgrx` subcommand for `cargo`."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    43,
+    35,
+    38
+   ],
+   [
+    "replace",
+    43,
+    44,
+    38,
+    39,
+    [
+     " The easiest thing to do here is plug in a USB and check which disk it is with `lsblk`. Once you've figure out which disk you'd like to reformat, you can do so with:"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    51,
+    39,
+    46
+   ],
+   [
+    "replace",
+    51,
+    52,
+    46,
+    47,
+    [
+     " You need a directory to mount this disk to, first. Something like:"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    57,
+    47,
+    52
+   ],
+   [
+    "replace",
+    57,
+    58,
+    52,
+    53,
+    [
+     " ...which you can then use as a mount point for your new `btrfs` drive with:"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    65,
+    53,
+    60
+   ],
+   [
+    "replace",
+    65,
+    66,
+    60,
+    61,
+    [
+     " `cargo pgrx` can take care of initialization as long as it knows where to initialize the data through the `PGRX_HOME` variable. Something like:"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    73,
+    61,
+    68
+   ],
+   [
+    "replace",
+    73,
+    74,
+    68,
+    69,
+    [
+     " The rest of these steps will be done from within this repo, so make sure you've run `git clone git@github.com:NAlexPear/pg_branch.git` and `cd pg_branch`."
+    ]
+   ],
+   [
+    "equal",
+    74,
+    77,
+    69,
+    72
+   ],
+   [
+    "replace",
+    77,
+    78,
+    72,
+    73,
+    [
+     " Before `pg_branch` can take over database creation, the subdirectories in the newly-initialized data directory of your database need to be converted to `btrfs` subvolumes. This repo provides an `init.sh` script for doing just this that, as long as it's provided a `PGDATA` variable that points to the data directory of your cluster."
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    73,
+    74
+   ],
+   [
+    "replace",
+    79,
+    80,
+    74,
+    75,
+    [
+     " `pgrx` data directories have a structure of `$PGRX_HOME/data-$PG_VERSION`. So if you initialized your project as instructed in step 3, you should be able to run the `init.sh` script in this repository like so:"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    85,
+    75,
+    80
+   ],
+   [
+    "replace",
+    85,
+    86,
+    80,
+    81,
+    [
+     " ...and you should have successfully converted all of the initial databases in your cluster to subvolumes."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    89,
+    81,
+    84
+   ],
+   [
+    "replace",
+    89,
+    90,
+    84,
+    85,
+    [
+     " The quickest way to jump into a `psql` session that recognizes `pg_branch` is to run the following:"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    99,
+    85,
+    94
+   ],
+   [
+    "replace",
+    99,
+    100,
+    94,
+    95,
+    [
+     " After creating the extension, you can run `CREATE DATABASE <dbname> WITH TEMPLATE <template_dbname>` commands to quickly and atomically copy databases without requiring an exclusive lock or dedicated connection. To use the default `CREATE DATABASE` behavior again, pick an explicit `STRATEGY` other than `SNAPSHOT` (i.e. `WAL_COPY` or `FILE_COPY`)."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    112,
+    95,
+    107
+   ],
+   [
+    "replace",
+    112,
+    114,
+    107,
+    108,
+    [
+     "This project's use of file system snapshots as a branching mechanism is heavily inspired by `pgcow` and Postgres.ai. And credit for the concept of \"forking\" Postgres clusters goes to Heroku's Database Fork feature."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "3594c807854e+2": {
+  "fn": "timakin/gopli",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    26,
+    1,
+    25
+   ],
+   [
+    "replace",
+    26,
+    61,
+    25,
+    26,
+    [
+     "…（35 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    66,
+    26,
+    31
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "66e9f942827f+2": {
+  "fn": "elixir-sqlite/ecto_sqlite3",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "Build Status",
+     "Hex Package",
+     "Hex Docs"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "An Ecto SQLite3 Adapter. Uses Exqlite"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    16,
+    10,
+    11,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    18,
+    11,
+    13
+   ],
+   [
+    "replace",
+    18,
+    19,
+    13,
+    14,
+    [
+     "See Limitations"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    43,
+    14,
+    38
+   ],
+   [
+    "replace",
+    43,
+    44,
+    38,
+    39,
+    [
+     "for `Ecto.Adapters.SQLite`. It will have"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    71,
+    39,
+    66
+   ],
+   [
+    "replace",
+    71,
+    73,
+    66,
+    68,
+    [
+     "This can be used to support database level encryption via alternate engines such as SQLCipher",
+     "or the Official SEE extension. Once you have either of those projects installed"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    79,
+    68,
+    74
+   ],
+   [
+    "replace",
+    79,
+    84,
+    74,
+    75,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    98,
+    75,
+    89
+   ],
+   [
+    "replace",
+    98,
+    99,
+    89,
+    90,
+    [
+     "You can read more about those at bench/README.md."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    113,
+    90,
+    104
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

@@ -3456,5 +3456,3279 @@
    ]
   ],
   "at": "2026-11-05"
+ },
+ "fc6ed461e811+2": {
+  "fn": "daydreamdev/seconds-kill",
+  "clean_ver": "2",
+  "raw_lines": 11,
+  "ops": [
+   [
+    "equal",
+    0,
+    11,
+    0,
+    11
+   ],
+   [
+    "replace",
+    11,
+    16,
+    11,
+    16,
+    [
+     " - 限流：屏蔽掉无用的流量，允许少部分流量走后端。假设现在库存为 10，有 1000 个购买请求，最终只有 10 个可以成功，99% 的请求都是无效请求",
+     " - 削峰：秒杀请求在时间上高度集中于某一个时间点，瞬时流量容易压垮系统，因此需要对流量进行削峰处理，缓冲瞬时流量，尽量让服务器对资源进行平缓处理",
+     " - 异步：将同步请求转换为异步请求，来提高并发量，本质也是削峰处理",
+     " - 利用缓存：创建订单时，每次都需要先查询判断库存，只有少部分成功的请求才会创建订单，因此可以将商品信息放在缓存中，减少数据库查询",
+     " - 负载均衡：利用 Nginx 等使用多个服务器并发处理请求，减少单个服务器压力"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    16,
+    17
+   ],
+   [
+    "replace",
+    17,
+    21,
+    17,
+    21,
+    [
+     " - 限流：前端答题或验证码，来分散用户的请求",
+     " - 禁止重复提交：限定每个用户发起一次秒杀后，需等待才可以发起另一次请求，从而减少用户的重复请求",
+     " - 本地标记：用户成功秒杀到商品后，将提交按钮置灰，禁止用户再次提交请求",
+     " - 动静分离：将前端静态数据直接缓存到离用户最近的地方，比如用户浏览器、CDN 或者服务端的缓存中"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    26,
+    22,
+    26,
+    [
+     " - 隐藏秒杀接口：如果秒杀地址直接暴露，在秒杀开始前可能会被恶意用户来刷接口，因此需要在没到秒杀开始时间不能获取秒杀接口，只有秒杀开始了，才返回秒杀地址 url 和验证 MD5，用户拿到这两个数据才可以进行秒杀",
+     " - 同一个账号多次发出请求：在前端优化的禁止重复提交可以进行优化；也可以使用 Redis 标志位，每个用户的所有请求都尝试在 Redis 中插入一个 `userId_secondsKill` 标志位，成功插入的才可以执行后续的秒杀逻辑，其他被过滤掉，执行完秒杀逻辑后，删除标志位",
+     " - 多个账号一次性发出多个请求：一般这种请求都来自同一个 IP 地址，可以检测 IP 的请求频率，如果过于频繁则弹出一个验证码",
+     " - 多个账号不同 IP 发起不同请求：这种一般都是僵尸账号，检测账号的活跃度或者等级等信息，来进行限制。比如微博抽奖，用 iphone 的年轻女性用户中奖几率更大。通过用户画像限制僵尸号无法参与秒杀或秒杀不能成功"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    29,
+    26,
+    29
+   ],
+   [
+    "replace",
+    29,
+    30,
+    29,
+    30,
+    [
+     "代码整体思路参考的 @crossoverJie，做了以下几点变动"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    32,
+    30,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     "2. 原项目中依赖了开发者自己的开源包 distributed-redis-tool，本项目将用到的限流部分直接集成到代码中"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    39,
+    33,
+    39
+   ],
+   [
+    "delete",
+    39,
+    41,
+    39,
+    39
+   ],
+   [
+    "equal",
+    41,
+    43,
+    39,
+    41
+   ],
+   [
+    "replace",
+    43,
+    44,
+    41,
+    42,
+    [
+     "首先下载 JMeter 安装包 可以去官网下载：http://jmeter.apache.org"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    51,
+    42,
+    49
+   ],
+   [
+    "delete",
+    51,
+    53,
+    49,
+    49
+   ],
+   [
+    "equal",
+    53,
+    54,
+    49,
+    50
+   ],
+   [
+    "delete",
+    54,
+    56,
+    50,
+    50
+   ],
+   [
+    "equal",
+    56,
+    59,
+    50,
+    53
+   ],
+   [
+    "delete",
+    59,
+    61,
+    53,
+    53
+   ],
+   [
+    "equal",
+    61,
+    62,
+    53,
+    54
+   ],
+   [
+    "delete",
+    62,
+    64,
+    54,
+    54
+   ],
+   [
+    "equal",
+    64,
+    67,
+    54,
+    57
+   ],
+   [
+    "delete",
+    67,
+    69,
+    57,
+    57
+   ],
+   [
+    "equal",
+    69,
+    70,
+    57,
+    58
+   ],
+   [
+    "delete",
+    70,
+    72,
+    58,
+    58
+   ],
+   [
+    "equal",
+    72,
+    81,
+    58,
+    67
+   ],
+   [
+    "replace",
+    81,
+    113,
+    67,
+    68,
+    [
+     "…（32 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    119,
+    68,
+    74
+   ],
+   [
+    "delete",
+    119,
+    121,
+    74,
+    74
+   ],
+   [
+    "equal",
+    121,
+    122,
+    74,
+    75
+   ],
+   [
+    "delete",
+    122,
+    124,
+    75,
+    75
+   ],
+   [
+    "equal",
+    124,
+    129,
+    75,
+    80
+   ],
+   [
+    "replace",
+    129,
+    139,
+    80,
+    81,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    145,
+    81,
+    87
+   ],
+   [
+    "replace",
+    145,
+    146,
+    87,
+    88,
+    [
+     "关于限流的方法，可以看这篇博客浅析限流算法，由于计数限流实现起来比较简单，因此采用计数限流，限流的实现可以直接使用 Guava 的 RateLimit 方法，但是由于后续需要将实例通过 Nginx 实现负载均衡，这里选用 Redis 实现分布式限流"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    151,
+    88,
+    93
+   ],
+   [
+    "delete",
+    151,
+    153,
+    93,
+    93
+   ],
+   [
+    "equal",
+    153,
+    157,
+    93,
+    97
+   ],
+   [
+    "replace",
+    157,
+    200,
+    97,
+    98,
+    [
+     "…（43 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    205,
+    98,
+    103
+   ],
+   [
+    "delete",
+    205,
+    207,
+    103,
+    103
+   ],
+   [
+    "equal",
+    207,
+    216,
+    103,
+    112
+   ],
+   [
+    "replace",
+    216,
+    234,
+    112,
+    113,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    234,
+    238,
+    113,
+    117
+   ],
+   [
+    "replace",
+    238,
+    241,
+    117,
+    118,
+    [
+     "缓存和 DB 的一致性是一个讨论很多的问题，推荐看参考中的 使用缓存的正确姿势，首先看下先更新数据库，再更新缓存策略，假设 A、B 两个线程，A 成功更新数据，在要更新缓存时，A 的时间片用完了，B 更新了数据库接着更新了缓存，这是 CPU 再分配给 A，则 A 又更新了缓存，这种情况下缓存中就是脏数据，具体逻辑如下图所示："
+    ]
+   ],
+   [
+    "equal",
+    241,
+    243,
+    118,
+    120
+   ],
+   [
+    "delete",
+    243,
+    245,
+    120,
+    120
+   ],
+   [
+    "equal",
+    245,
+    252,
+    120,
+    127
+   ],
+   [
+    "replace",
+    252,
+    301,
+    127,
+    128,
+    [
+     "…（49 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    301,
+    306,
+    128,
+    133
+   ],
+   [
+    "delete",
+    306,
+    308,
+    133,
+    133
+   ],
+   [
+    "equal",
+    308,
+    315,
+    133,
+    140
+   ],
+   [
+    "replace",
+    315,
+    369,
+    140,
+    141,
+    [
+     "…（54 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    369,
+    375,
+    141,
+    147
+   ],
+   [
+    "replace",
+    375,
+    376,
+    147,
+    148,
+    [
+     "静态热点数据就是能够提前预测的数据，比如约定商品 A、B、C 参与秒杀，则可以提前对商品进行标记处理。动态热点数据就是不能被提前预测的，比如在商家在抖音上投放广告，导致商品短时间内被大量购买，临时产生热点数据。对于动态热点数据，最主要的就是能够提前预测和发现，以便于及时处理，这里给出极客时间：许令波 - 如何设计一个秒杀系统中对于热点数据发现系统的实现："
+    ]
+   ],
+   [
+    "equal",
+    376,
+    380,
+    148,
+    152
+   ],
+   [
+    "delete",
+    380,
+    382,
+    152,
+    152
+   ],
+   [
+    "equal",
+    382,
+    393,
+    152,
+    163
+   ],
+   [
+    "replace",
+    393,
+    396,
+    163,
+    164,
+    [
+     "关于 Kafka 的学习，推荐朱小厮的博客和博主的书《深入理解 Kafka：核心设计与实践原理》，向 Kafka 发送消息和从 Kafka 拉取消息需要对消息进行序列化处理，这里采用的是`Gson`框架"
+    ]
+   ],
+   [
+    "equal",
+    396,
+    401,
+    164,
+    169
+   ],
+   [
+    "replace",
+    401,
+    438,
+    169,
+    170,
+    [
+     "…（37 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    438,
+    457,
+    170,
+    189
+   ],
+   [
+    "replace",
+    457,
+    502,
+    189,
+    190,
+    [
+     "…（45 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    502,
+    505,
+    190,
+    193
+   ],
+   [
+    "replace",
+    505,
+    506,
+    193,
+    194,
+    [
+     "## 数据库建表"
+    ]
+   ],
+   [
+    "equal",
+    506,
+    511,
+    194,
+    199
+   ],
+   [
+    "replace",
+    511,
+    523,
+    199,
+    200,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    523,
+    527,
+    200,
+    204
+   ],
+   [
+    "replace",
+    527,
+    533,
+    204,
+    210,
+    [
+     ">- 极客时间：许令波 - 如何设计一个秒杀系统",
+     ">- crossoverjie：SSM(十八)秒杀架构实践",
+     ">- 秒杀系统优化方案（下）吐血整理",
+     ">- 电商网站秒杀与抢购的系统架构",
+     ">- 使用缓存的正确姿势",
+     ">- SpringBoot Kafka 整合使用"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "072799713ee9+2": {
+  "fn": "hisabi-app/hisabi",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "replace",
+    0,
+    10,
+    0,
+    1,
+    [
+     "Hisabi is a simple yet powerful, self-hosted personal finance tracking web app with the ability to parse SMS transactions, and generate very useful insights about your money! "
+    ]
+   ],
+   [
+    "equal",
+    10,
+    20,
+    1,
+    11
+   ],
+   [
+    "delete",
+    20,
+    21,
+    11,
+    11
+   ],
+   [
+    "equal",
+    21,
+    23,
+    11,
+    13
+   ],
+   [
+    "replace",
+    23,
+    24,
+    13,
+    14,
+    [
+     "Try the app with live demo."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    28,
+    14,
+    18
+   ],
+   [
+    "replace",
+    28,
+    29,
+    18,
+    19,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    29,
+    33,
+    19,
+    23
+   ],
+   [
+    "replace",
+    33,
+    37,
+    23,
+    24,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    43,
+    24,
+    30
+   ],
+   [
+    "replace",
+    43,
+    44,
+    30,
+    31,
+    [
+     "This project is licensed under the MIT License - see the LICENSE.md file for details."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "4180d912a636+2": {
+  "fn": "acmenlei/next-blog",
+  "clean_ver": "2",
+  "raw_lines": 11,
+  "ops": [
+   [
+    "replace",
+    0,
+    11,
+    0,
+    8,
+    [
+     "next-ssr-blog ",
+     "",
+     " <a href=\"https://www.nextjs.cn\">",
+     " nextjs",
+     " </a>",
+     " <a href=\"https://www.tslang.cn/\" target=\"_blank\">",
+     " typescript",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    20,
+    8,
+    17
+   ],
+   [
+    "replace",
+    20,
+    21,
+    17,
+    18,
+    [
+     "基于nextjs的博客网站，自己练手玩的项目，配套后台管理系统和服务端，博客一些常规功能都有，感兴趣的可以自己部署试试"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    43,
+    18,
+    40
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "3f1a8b35f4a0+2": {
+  "fn": "saasyland/saasyland.com",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "This repository contains the website application. The SaaSy Land CLI and private generator templates are maintained separately and are not included here. See licensing for the distinction between the website source and the commercial product."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "SaaSy Land landing page: the headline \"The 300+ hour head start for builders who care about quality\", the install command, and the admin dashboard"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "The landing page in September 2026. View the full page."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    11,
+    9,
+    11
+   ],
+   [
+    "replace",
+    11,
+    25,
+    11,
+    12,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    29,
+    12,
+    16
+   ],
+   [
+    "replace",
+    29,
+    40,
+    16,
+    27,
+    [
+     "|Area|Current implementation|",
+     "|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|Public website|Landing page, pricing presentation, localized legal pages, responsive layouts, theme support, and reduced-motion presentations. Public pages are prerendered during builds.|",
+     "|Documentation and blog|Localized MDX content, navigation, and documentation search through Fumadocs. Published content is maintained in Git.|",
+     "|Authentication|Email/password registration with required email verification, GitHub and Google sign-in, password recovery, TOTP with backup codes, and session management.|",
+     "|Customer workspace|Protected `/app` area and `/app/license` for the customer's licence key, machine activations, and activation deactivation.|",
+     "|Billing|Authenticated Polar checkout for the Core, Complete, and Agency tiers, with webhook handling for purchases, refunds, and licence-key benefits. Requires configured provider products and credentials.|",
+     "|Newsletter|Subscription, confirmation, unsubscribe, and subscription-preference server functions with localized email delivery.|",
+     "|Admin users and security|Database-backed user listing, password reset, ban/unban, and deletion. The settings security tab connects password changes, TOTP, and session revocation.|",
+     "|Products and categories|D1 schemas, permission-checked CRUD use cases, and database-backed lists. Product creation/publishing controls are not fully connected.|",
+     "|Demo and unfinished screens|Analytics, payment administration, blog administration, invitations, and role-management views include demo data. General settings, course creation, and the landing-page editor include unconnected controls. `/premium` is a placeholder.|"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    45,
+    27,
+    32
+   ],
+   [
+    "replace",
+    45,
+    57,
+    32,
+    44,
+    [
+     "|Responsibility|Implementation|",
+     "|--------------------------------|------------------------------------------------------------------------------------------------------|",
+     "|Application and routing|React 19, TypeScript, TanStack Start and Router|",
+     "|Toolchain|Bun, Vite+, formatting, linting, and type checking configured in `vite.config.ts`|",
+     "|Hosting and storage|Cloudflare Workers, D1 (SQLite), KV, and static assets|",
+     "|Database access|Drizzle ORM and checked-in SQLite migrations|",
+     "|Authentication and authorization|Better Auth with module-level permissions and server-function middleware|",
+     "|Data and forms|TanStack Query, Form, and Table; Zod validation|",
+     "|UI|Tailwind CSS 4, shadcn-styled components with React Aria and Base UI, Motion, and locally served fonts|",
+     "|Localization and content|`use-intl`, ICU messages, Fumadocs, and MDX|",
+     "|External services|Resend for email; Polar for checkout, billing, and licence keys|",
+     "|Verification|Vite+/Vitest, Testing Library, jsdom, and Playwright|"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    44,
+    45
+   ],
+   [
+    "replace",
+    58,
+    59,
+    45,
+    46,
+    [
+     "`package.json` and `bun.lock` define the application toolchain. The separate Remotion project uses its own npm lockfile."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    87,
+    46,
+    74
+   ],
+   [
+    "replace",
+    87,
+    88,
+    74,
+    75,
+    [
+     "Open <http://127.0.0.1:3000>. Sign in with either account below; both use the password `WorkerTestPassword123!` from `e2e/data/accounts.ts`."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    75,
+    76
+   ],
+   [
+    "replace",
+    89,
+    93,
+    76,
+    80,
+    [
+     "|Role|Email|Workspace|",
+     "|--------|---------------------------------|---------|",
+     "|Admin|`admin@saasyland.example.test`|`/admin`|",
+     "|Customer|`customer@saasyland.example.test`|`/app`|"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    80,
+    81
+   ],
+   [
+    "replace",
+    94,
+    95,
+    81,
+    82,
+    [
+     "This serves a built test application; rebuild it to see source changes. It uses dummy values from `.env.test`, the `test` environment in `wrangler.jsonc`, and isolated state under `.wrangler/test`. Provider interception is intended for local verification, not for validating real OAuth, email delivery, or payments. Keep this test configuration local."
+    ]
+   ],
+   [
+    "equal",
+    95,
+    108,
+    82,
+    95
+   ],
+   [
+    "replace",
+    108,
+    110,
+    95,
+    97,
+    [
+     "2. Set the generated value as `AUTH_SECRET` in `.env.development`, then fill in the integration settings. Use `POLAR_SERVER=sandbox` for development.",
+     "3. If using your own Cloudflare account, provision D1 and KV and replace the development and preview binding IDs before continuing. The checked-in IDs belong to the existing deployment."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    125,
+    97,
+    112
+   ],
+   [
+    "replace",
+    125,
+    126,
+    112,
+    113,
+    [
+     "Use `.env.development`, `.env.preview`, and `.env.production` for their corresponding environments. These files are ignored by Git; `.env.example` lists the configuration keys. `.env.test` contains committed dummy values for isolated tests."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    129,
+    113,
+    116
+   ],
+   [
+    "replace",
+    129,
+    140,
+    116,
+    127,
+    [
+     "|Variables|Purpose|",
+     "|-------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|",
+     "|`AUTH_SECRET`|Long random secret used by Better Auth. Generate a separate value for each deployment environment.|",
+     "|`AUTH_GITHUB_CLIENT_ID`, `AUTH_GITHUB_CLIENT_SECRET`|GitHub OAuth application credentials.|",
+     "|`AUTH_GOOGLE_CLIENT_ID`, `AUTH_GOOGLE_CLIENT_SECRET`|Google OAuth application credentials.|",
+     "|`RESEND_API_KEY`, `RESEND_EMAIL_FROM`|Email API credentials and the sender accepted by your Resend account.|",
+     "|`POLAR_SERVER`|Polar environment: `sandbox` for development or `production` for live billing.|",
+     "|`POLAR_ACCESS_TOKEN`, `POLAR_ORGANIZATION_ID`|Polar API access and the organization used for discounts and licence operations.|",
+     "|`POLAR_WEBHOOK_SECRET`|Secret used to verify Polar webhook deliveries.|",
+     "|`POLAR_PRODUCT_ID_CORE`, `POLAR_PRODUCT_ID_COMPLETE`, `POLAR_PRODUCT_ID_AGENCY`|Product IDs mapped to the three checkout tiers. Use IDs from the selected Polar environment.|",
+     "|`CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_DATABASE_ID`, `CLOUDFLARE_ACCESS_TOKEN`|Credentials for Drizzle Studio and introspection over the D1 HTTP API. Application queries use the `DB` binding instead.|"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    127,
+    128
+   ],
+   [
+    "replace",
+    141,
+    142,
+    128,
+    129,
+    [
+     "The development, preview, and production environments currently declare **all of these keys** in `secrets.required`, including the Cloudflare credentials used by Drizzle tooling. Supply the required secrets for the selected environment; see `wrangler.jsonc` for the authoritative list."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    145,
+    129,
+    132
+   ],
+   [
+    "replace",
+    145,
+    146,
+    132,
+    133,
+    [
+     "The public URL is configured in source: `src/presentation/branding/index.ts` defines `APP_DOMAIN` and derives `APP_URL` as `https://${APP_DOMAIN}`, together with the contact addresses and GitHub URL. **`VITE_APP_URL` is not read by the application.**"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    149,
+    133,
+    136
+   ],
+   [
+    "replace",
+    149,
+    157,
+    136,
+    144,
+    [
+     "|Location|What to configure|",
+     "|----------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|",
+     "|`src/presentation/branding/index.ts`|Application name, canonical domain, contact addresses, and GitHub identity.|",
+     "|`src/modules/_core/constants/api.ts`|`appHostsForMode`, the allowed authentication hosts per mode, derived from `APP_DOMAIN`.|",
+     "|`src/modules/newsletter-subscriber/newsletter-subscriber.server.ts`|The allowed Workers hostname suffix for newsletter request origins. Custom-domain checks derive from `APP_URL`.|",
+     "|`wrangler.jsonc`|Worker names, custom-domain routes, D1 databases, and KV namespaces for each environment.|",
+     "|`src/data/marketing.ts`|Displayed tiers and prices (`TIERS`, `TIER_PRICES`); keep them aligned with the configured Polar products.|",
+     "|`src/presentation/styles/`|Theme, typography, fonts, and shared style definitions.|"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    163,
+    144,
+    150
+   ],
+   [
+    "replace",
+    163,
+    164,
+    150,
+    151,
+    [
+     "- Configure Resend credentials and the sender address before testing verification, password recovery, or newsletter delivery. Templates live in `src/presentation/emails/`."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    165,
+    151,
+    152
+   ],
+   [
+    "replace",
+    165,
+    167,
+    152,
+    154,
+    [
+     "- Configure Polar webhooks at `https://<your-host>/api/auth/polar/webhooks` with the matching webhook secret. The handlers process paid/refunded orders and licence-benefit creation/revocation.",
+     "- Regional checkout discounts require eligible percentage discounts without a discount code configured in Polar. The discount lookup uses the request country and the configured organization; synchronize provider discounts with the pricing rules."
+    ]
+   ],
+   [
+    "equal",
+    167,
+    176,
+    154,
+    163
+   ],
+   [
+    "replace",
+    176,
+    200,
+    163,
+    164,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    206,
+    164,
+    170
+   ],
+   [
+    "replace",
+    206,
+    207,
+    170,
+    171,
+    [
+     "Validate inputs at the server boundary and authorize protected functions themselves, in addition to page guards. Query and mutation keys are readonly tuples owned by the feature's `*.constants.ts`; include inputs that change the result in the query key. Reuse exported options for cache access, and invalidate only the data a mutation changes. Application documentation lives in `content/docs/`, including the architecture guides."
+    ]
+   ],
+   [
+    "equal",
+    207,
+    208,
+    171,
+    172
+   ],
+   [
+    "replace",
+    208,
+    209,
+    172,
+    173,
+    [
+     "Authentication entry points are in `src/integrations/better-auth/`:"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    210,
+    173,
+    174
+   ],
+   [
+    "replace",
+    210,
+    217,
+    174,
+    181,
+    [
+     "|File|Responsibility|",
+     "|--------------------|-----------------------------------------------------------------|",
+     "|`auth.server.ts`|Better Auth, providers, plugins, and allowed hosts.|",
+     "|`auth.access.ts`|Roles, permissions, and permission checks.|",
+     "|`auth.routes.ts`|Sign-in/admin guards and role-based redirects.|",
+     "|`auth.middleware.ts`|Server-function authorization, error handling, and rate limiting.|",
+     "|`auth.session.ts`|Request-scoped session lookup and UI query options.|"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    226,
+    181,
+    190
+   ],
+   [
+    "replace",
+    226,
+    245,
+    190,
+    209,
+    [
+     "|Command|Purpose|",
+     "|---------------------------------------------------------------------------|--------------------------------------------------------------------------------------|",
+     "|`bun run dev`|Generate content/class-name tables and start development with remote preview bindings.|",
+     "|`bun run typegen`|Generate Worker declarations, class-name tables, and Fumadocs content/types.|",
+     "|`bun run check`|Generate class-name tables; check localization/content, formatting, lint, and types.|",
+     "|`bun run check:fix`|Run checks and apply supported formatting/lint fixes.|",
+     "|`bun run check:i18n`|Validate message parity, scoped translation keys, ICU formats, and localized content.|",
+     "|`bun run test`|Run node, integration, and component test projects.|",
+     "|`bun run test:unit` / `bun run test:integration` / `bun run test:component`|Run one test project.|",
+     "|`bun run test:watch` / `bun run test:changed`|Watch tests or run tests affected by changes.|",
+     "|`bun run test:coverage`|Run tests with the configured coverage gate and reports.|",
+     "|`bun run test:e2e:install`|Install Chromium/WebKit and their Playwright dependencies.|",
+     "|`bun run test:e2e`|Run the browser suite in Chromium and WebKit.|",
+     "|`bun run test:e2e:smoke`|Run the Chromium smoke suite.|",
+     "|`bun run test:all`|Run the Vite+ tests followed by Chromium smoke tests.|",
+     "|`bun run build` / `bun run build:preview`|Build the preview Worker, prerender public pages, and verify/optimize output.|",
+     "|`bun run build:production`|Build and verify the production application.|",
+     "|`bun run build:test` / `bun run start:test`|Build or serve the isolated test application.|",
+     "|`bun run start`|Serve the most recently built application at `127.0.0.1:3000`.|"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    246,
+    209,
+    210
+   ],
+   [
+    "replace",
+    246,
+    247,
+    210,
+    211,
+    [
+     "Run the commands from the root package scripts; the Remotion commands run inside `remotion/`."
+    ]
+   ],
+   [
+    "equal",
+    247,
+    250,
+    211,
+    214
+   ],
+   [
+    "replace",
+    250,
+    251,
+    214,
+    215,
+    [
+     "Unit and integration tests run in Node; component tests run in jsdom. Tests are colocated in `src/**/__test__/`. The test RPC helper exercises TanStack validation and middleware, and the D1 adapter applies the checked-in SQLite migrations. External provider operations are mocked. See the testing guide for fixtures and ownership conventions."
+    ]
+   ],
+   [
+    "equal",
+    251,
+    265,
+    215,
+    229
+   ],
+   [
+    "replace",
+    265,
+    268,
+    229,
+    232,
+    [
+     "- Main CI runs checks, coverage, and Chromium E2E on pull requests and pushes to `main`. Successful eligible runs then deploy to Cloudflare.",
+     "- Full E2E adds WebKit on pushes to `main` and runs Chromium and WebKit weekly and on manual dispatch.",
+     "- Video CI separately checks and bundles affected Remotion source."
+    ]
+   ],
+   [
+    "equal",
+    268,
+    269,
+    232,
+    233
+   ],
+   [
+    "replace",
+    269,
+    270,
+    233,
+    234,
+    [
+     "The deployment workflow records actual deployment results in GitHub's `Preview` and `Production` environments. Configure its credentials as described below before enabling deployments."
+    ]
+   ],
+   [
+    "equal",
+    270,
+    289,
+    234,
+    253
+   ],
+   [
+    "replace",
+    289,
+    290,
+    253,
+    254,
+    [
+     "Module schemas are collected by `drizzle.schemas.ts`. Generate migrations with:"
+    ]
+   ],
+   [
+    "equal",
+    290,
+    297,
+    254,
+    261
+   ],
+   [
+    "replace",
+    297,
+    304,
+    261,
+    268,
+    [
+     "|Command|Database affected|",
+     "|--------------------------------|--------------------------------------------------------------------------------------|",
+     "|`bun run db:migrate:test`|Local test database in `.wrangler/test`.|",
+     "|`bun run db:migrate:local`|Local development database; the regular development server still uses remote bindings.|",
+     "|`bun run db:migrate:development`|Remote database configured for development, shared with preview by default.|",
+     "|`bun run db:migrate:preview`|Remote preview database.|",
+     "|`bun run db:migrate:production`|Remote production database.|"
+    ]
+   ],
+   [
+    "equal",
+    304,
+    313,
+    268,
+    277
+   ],
+   [
+    "replace",
+    313,
+    317,
+    277,
+    281,
+    [
+     "|Event|Cloudflare target|GitHub environment|URL|",
+     "|--------------------------------------------------------------------------|-------------------------------|------------------|-------------------------------|",
+     "|Pull request opened, reopened, or updated from a branch in this repository|`saasyland-preview` (`preview`)|`Preview`|<https://preview.saasyland.com>|",
+     "|Push to `main`, including merging a pull request|`saasyland` (`production`)|`Production`|<https://saasyland.com>|"
+    ]
+   ],
+   [
+    "equal",
+    317,
+    320,
+    281,
+    284
+   ],
+   [
+    "replace",
+    320,
+    321,
+    284,
+    285,
+    [
+     "In repository Settings → Environments, configure the existing `Preview` and `Production` environments with these secrets:"
+    ]
+   ],
+   [
+    "equal",
+    321,
+    322,
+    285,
+    286
+   ],
+   [
+    "replace",
+    322,
+    326,
+    286,
+    290,
+    [
+     "|Secret|Purpose|",
+     "|-----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|`CLOUDFLARE_API_TOKEN`|Wrangler authentication with permission to deploy the Worker, manage its configured bindings/routes, and apply D1 migrations. Scope the token to the intended account and zones.|",
+     "|`CLOUDFLARE_ACCOUNT_ID`|Cloudflare account containing the selected Worker, D1 database, and KV namespace.|"
+    ]
+   ],
+   [
+    "equal",
+    326,
+    327,
+    290,
+    291
+   ],
+   [
+    "replace",
+    327,
+    328,
+    291,
+    292,
+    [
+     "These are deployment credentials. `CLOUDFLARE_API_TOKEN` is separate from the `CLOUDFLARE_ACCESS_TOKEN` used by Drizzle Studio. Repository secrets with the same names can be used as a fallback; environment-specific secrets allow different credentials for preview and production. Follow Cloudflare's GitHub Actions authentication guide when creating the token."
+    ]
+   ],
+   [
+    "equal",
+    328,
+    333,
+    292,
+    297
+   ],
+   [
+    "replace",
+    333,
+    334,
+    297,
+    298,
+    [
+     "GitHub creates deployment records from the job's `environment` declaration and shows the job's real result. A successful Cloudflare deployment supersedes the old Vercel result for that environment; historical Vercel failures remain in deployment history. See GitHub's deployment tracking documentation."
+    ]
+   ],
+   [
+    "equal",
+    334,
+    363,
+    298,
+    327
+   ],
+   [
+    "replace",
+    363,
+    364,
+    327,
+    328,
+    [
+     "The supported locales are `en-US`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `ja-JP`, `pl-PL`, `pt-BR`, and `uk-UA`, defined in `i18n.config.ts`."
+    ]
+   ],
+   [
+    "equal",
+    364,
+    384,
+    328,
+    348
+   ],
+   [
+    "replace",
+    384,
+    385,
+    348,
+    349,
+    [
+     "PageSpeed Insights mobile scores: Performance 98, Accessibility 100, Best Practices 100, SEO 100, Agentic Browsing 3/3"
+    ]
+   ],
+   [
+    "equal",
+    385,
+    388,
+    349,
+    352
+   ],
+   [
+    "replace",
+    388,
+    389,
+    352,
+    353,
+    [
+     "PageSpeed Insights desktop scores: Performance 100, Accessibility 100, Best Practices 100, SEO 100, Agentic Browsing 3/3"
+    ]
+   ],
+   [
+    "equal",
+    389,
+    390,
+    353,
+    354
+   ],
+   [
+    "replace",
+    390,
+    397,
+    354,
+    361,
+    [
+     "|Metric|Mobile|Desktop|",
+     "|------------------------|------|-------|",
+     "|First Contentful Paint|1.2 s|0.4 s|",
+     "|Largest Contentful Paint|2.3 s|0.7 s|",
+     "|Total Blocking Time|0 ms|10 ms|",
+     "|Cumulative Layout Shift|0|0|",
+     "|Speed Index|2.4 s|0.6 s|"
+    ]
+   ],
+   [
+    "equal",
+    397,
+    398,
+    361,
+    362
+   ],
+   [
+    "replace",
+    398,
+    399,
+    362,
+    363,
+    [
+     "These are lab results. PageSpeed Insights runs on shared hardware, so scores vary between runs; compare several runs before judging a change. Run the analysis for current results."
+    ]
+   ],
+   [
+    "equal",
+    399,
+    402,
+    363,
+    366
+   ],
+   [
+    "replace",
+    402,
+    406,
+    366,
+    370,
+    [
+     "- Public pages are prerendered. `optimize-prerendered-html.ts` removes dependency `modulepreload` hints and keeps each page's entry hint at low priority, so the stylesheet and fonts load first.",
+     "- Providers whose value changes after hydration, such as the theme and Motion providers, wrap only their consumers and never a route `<Outlet />`. A change above a route's Suspense boundary forces that route to hydrate synchronously in one long task, or to render on the client and shift the layout.",
+     "- `robots.txt` and `llms.txt` are static files that bypass the Worker through `run_worker_first` in `wrangler.jsonc`. Lighthouse fails the SEO and Agentic Browsing audits for these files when the requests time out.",
+     "- `src/server.ts` serves prerendered pages from static assets and imports the TanStack Start handler only for other requests, so page requests do not load the full server bundle."
+    ]
+   ],
+   [
+    "equal",
+    406,
+    409,
+    370,
+    373
+   ],
+   [
+    "replace",
+    409,
+    410,
+    373,
+    374,
+    [
+     "`remotion/` contains editable video compositions with a separate npm toolchain. Install it only when editing videos:"
+    ]
+   ],
+   [
+    "equal",
+    410,
+    420,
+    374,
+    384
+   ],
+   [
+    "replace",
+    420,
+    421,
+    384,
+    385,
+    [
+     "Normal application builds serve the checked-in assets without installing Remotion or rendering videos. Follow the rendering instructions when updating a composition, and regenerate its video and posters together."
+    ]
+   ],
+   [
+    "equal",
+    421,
+    423,
+    385,
+    387
+   ],
+   [
+    "replace",
+    423,
+    441,
+    387,
+    388,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    441,
+    443,
+    388,
+    390
+   ],
+   [
+    "replace",
+    443,
+    444,
+    390,
+    391,
+    [
+     "The website source code and associated technical documentation, including account, checkout, and licence-management code, are covered by the MIT licence and scope statements in `LICENSE.md`. A commercial purchase is not required to reuse the MIT-covered website code."
+    ]
+   ],
+   [
+    "equal",
+    444,
+    448,
+    391,
+    395
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "1d2eb64c1d0e+2": {
+  "fn": "Kerr1Gan/Flesh",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "先上福利。Release1.1"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "fuli"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    11,
+    9,
+    11
+   ],
+   [
+    "delete",
+    11,
+    12,
+    11,
+    11
+   ],
+   [
+    "equal",
+    12,
+    15,
+    11,
+    14
+   ],
+   [
+    "delete",
+    15,
+    16,
+    14,
+    14
+   ],
+   [
+    "equal",
+    16,
+    23,
+    14,
+    21
+   ],
+   [
+    "delete",
+    23,
+    24,
+    21,
+    21
+   ],
+   [
+    "equal",
+    24,
+    31,
+    21,
+    28
+   ],
+   [
+    "delete",
+    31,
+    32,
+    28,
+    28
+   ],
+   [
+    "equal",
+    32,
+    40,
+    28,
+    36
+   ],
+   [
+    "replace",
+    40,
+    44,
+    36,
+    37,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    50,
+    37,
+    43
+   ],
+   [
+    "replace",
+    50,
+    54,
+    43,
+    44,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    62,
+    44,
+    52
+   ],
+   [
+    "replace",
+    62,
+    66,
+    52,
+    53,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    98,
+    53,
+    85
+   ],
+   [
+    "replace",
+    98,
+    99,
+    85,
+    86,
+    [
+     " 因为activity需要在Manifiest中注册，所以当有多个activity的时候，就需要编写很长的Manifiest文件，严重影响了Manifiest的可读性，界面的风格也比较笨重。所以一个新页面就注册一个activity不太合适，我们通过用activity做为容器添加不同的Fragment来达到注册一个activity启动多个不同页面的效果。生命周期由activity管理，更方便简洁。"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    103,
+    86,
+    90
+   ],
+   [
+    "replace",
+    103,
+    162,
+    90,
+    91,
+    [
+     "…（59 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    163,
+    91,
+    92
+   ],
+   [
+    "delete",
+    163,
+    164,
+    92,
+    92
+   ],
+   [
+    "equal",
+    164,
+    174,
+    92,
+    102
+   ],
+   [
+    "replace",
+    174,
+    207,
+    102,
+    103,
+    [
+     "…（33 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    213,
+    103,
+    109
+   ],
+   [
+    "replace",
+    213,
+    267,
+    109,
+    110,
+    [
+     "…（54 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    273,
+    110,
+    116
+   ],
+   [
+    "replace",
+    273,
+    277,
+    116,
+    117,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    288,
+    117,
+    128
+   ],
+   [
+    "replace",
+    288,
+    304,
+    128,
+    129,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    304,
+    310,
+    129,
+    135
+   ],
+   [
+    "delete",
+    310,
+    311,
+    135,
+    135
+   ],
+   [
+    "equal",
+    311,
+    315,
+    135,
+    139
+   ],
+   [
+    "replace",
+    315,
+    321,
+    139,
+    140,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    321,
+    324,
+    140,
+    143
+   ],
+   [
+    "delete",
+    324,
+    325,
+    143,
+    143
+   ],
+   [
+    "equal",
+    325,
+    328,
+    143,
+    146
+   ],
+   [
+    "delete",
+    328,
+    329,
+    146,
+    146
+   ],
+   [
+    "equal",
+    329,
+    334,
+    146,
+    151
+   ],
+   [
+    "delete",
+    334,
+    335,
+    151,
+    151
+   ],
+   [
+    "equal",
+    335,
+    338,
+    151,
+    154
+   ],
+   [
+    "delete",
+    338,
+    339,
+    154,
+    154
+   ],
+   [
+    "equal",
+    339,
+    342,
+    154,
+    157
+   ],
+   [
+    "delete",
+    342,
+    343,
+    157,
+    157
+   ],
+   [
+    "equal",
+    343,
+    344,
+    157,
+    158
+   ],
+   [
+    "delete",
+    344,
+    350,
+    158,
+    158
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a7e825a0c4d5+2": {
+  "fn": "Skyfay/DBackup",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "DBackup Logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " DBackup "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    9,
+    4,
+    5,
+    [
+     " Self-hosted backup automation for databases and files, with encryption, compression, and smart retention. "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    5,
+    6
+   ],
+   [
+    "replace",
+    10,
+    17,
+    6,
+    11,
+    [
+     " Release",
+     " Docker Pulls",
+     " Coverage",
+     " License",
+     " Discord"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    11,
+    12
+   ],
+   [
+    "replace",
+    18,
+    26,
+    12,
+    18,
+    [
+     " Website •",
+     " Documentation •",
+     " Quick Start •",
+     " API Reference •",
+     " Changelog •",
+     " Roadmap"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    18,
+    19
+   ],
+   [
+    "replace",
+    27,
+    39,
+    19,
+    20,
+    [
+     " The DBackup overview on a desktop and a phone, with the databases it backs up"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    59,
+    20,
+    40
+   ],
+   [
+    "replace",
+    59,
+    71,
+    40,
+    52,
+    [
+     "|Database|Versions|Connection|Restore|",
+     "|:---|:---|:---|:---|",
+     "|PostgreSQL|12 to 18|Direct, SSH|Yes|",
+     "|MySQL|5.7, 8.x, 9.x|Direct, SSH|Yes|",
+     "|MariaDB|10.x, 11.x|Direct, SSH|Yes|",
+     "|MongoDB|4.x to 8.x|Direct, SSH|Yes|",
+     "|Redis|2.8+|Direct, SSH|Guided|",
+     "|Valkey|7.2+|Direct, SSH|Guided|",
+     "|SQLite|3.x|Local, SSH|Yes|",
+     "|Microsoft SQL Server|2017, 2019, 2022, Azure SQL Edge|Direct, SSH|Yes|",
+     "|Azure SQL Database (beta)|Single database, elastic pool|Direct|Yes, drops the target first|",
+     "|Firebird (beta)|3.x, 4.x, 5.x|Direct, SSH|Yes, through configured aliases|"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    76,
+    52,
+    57
+   ],
+   [
+    "replace",
+    76,
+    77,
+    57,
+    58,
+    [
+     "Every one of them has a setup guide in the documentation."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    84,
+    58,
+    65
+   ],
+   [
+    "replace",
+    84,
+    96,
+    65,
+    66,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    102,
+    66,
+    72
+   ],
+   [
+    "replace",
+    102,
+    103,
+    72,
+    73,
+    [
+     "Open https://localhost:3000 and create the admin account. The first visit warns about the self-signed certificate. The installation guide covers every environment variable, reverse proxies and updates. Images are built for AMD64 and ARM64."
+    ]
+   ],
+   [
+    "equal",
+    103,
+    106,
+    73,
+    76
+   ],
+   [
+    "replace",
+    106,
+    107,
+    76,
+    77,
+    [
+     "DBackup is free and open source. Sponsoring it keeps it that way, and from $15 a month or $100 once your name shows up here by itself."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    108,
+    77,
+    78
+   ],
+   [
+    "replace",
+    108,
+    122,
+    78,
+    81,
+    [
+     " <a href=\"https://github.com/sponsors/Skyfay\">",
+     " The monthly sponsors of DBackup",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    125,
+    81,
+    84
+   ],
+   [
+    "replace",
+    125,
+    134,
+    84,
+    85,
+    [
+     " 🏆 Patrons · $500 once"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    85,
+    86
+   ],
+   [
+    "replace",
+    135,
+    140,
+    86,
+    93,
+    [
+     " ICT WebSolution",
+     "",
+     " Kay van Aarssen ",
+     "",
+     " <a href=\"https://github.com/sponsors/Skyfay\">",
+     " The one-time sponsors of DBackup",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    143,
+    93,
+    96
+   ],
+   [
+    "replace",
+    143,
+    144,
+    96,
+    97,
+    [
+     "Pull requests go into the `dev` branch, never into `main`. CONTRIBUTING.md explains the setup and the workflow, and the Developer Guide the architecture, the adapters and the tests."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    147,
+    97,
+    100
+   ],
+   [
+    "replace",
+    147,
+    151,
+    100,
+    104,
+    [
+     "- 💬 **Discord**: dc.skyfay.ch",
+     "- 🐛 **Issues**: bugs and feature requests on GitHub Issues",
+     "- 📧 **Support**: support@dbackup.app",
+     "- 🔒 **Security**: report vulnerabilities privately as described in SECURITY.md, never in a public issue"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    156,
+    104,
+    109
+   ],
+   [
+    "replace",
+    156,
+    157,
+    109,
+    110,
+    [
+     "A formal security audit by an external firm has not been done yet. Independent security researchers have reviewed parts of the code and reported vulnerabilities privately. Every report was fixed in a release and published as an advisory that credits the reporter, see Security Advisories. The encryption and the backup format are publicly documented to make a full review easy. If you review code or work in security, your findings are very welcome, see SECURITY.md for how to report them."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    160,
+    110,
+    113
+   ],
+   [
+    "replace",
+    160,
+    161,
+    113,
+    114,
+    [
+     "GNU General Public License v3.0"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "0d404b4c6abd+2": {
+  "fn": "Talento90/typescript-node",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "replace",
+    0,
+    2,
+    0,
+    1,
+    [
+     "# typescript-node Build Status codecov Codacy Badge"
+    ]
+   ],
+   [
+    "equal",
+    2,
+    7,
+    1,
+    6
+   ],
+   [
+    "replace",
+    7,
+    17,
+    6,
+    16,
+    [
+     "* Language - TypeScript",
+     "* REST API - koa2",
+     "* Graceful Shutdown - Pattern",
+     "* HealthCheck - Pattern /health",
+     "* SQL Database & Migrations - knex",
+     "* Authentication and Authorization - JWT",
+     "* Validation - Joi",
+     "* Testing - Mocha Chai + Sinon Coverage",
+     "* Code Style - Prettier",
+     "* Git Hooks - Husky"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    38,
+    16,
+    37
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "3fea12c48d20+2": {
+  "fn": "splitgraph/sgr",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    7,
+    2,
+    7,
+    [
+     "Build status",
+     "Coverage Status",
+     "PyPI version",
+     "Discord chat room",
+     "Follow"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "**`sgr`** is the CLI for **Splitgraph**, a"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    13,
+    11,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "With addition of the optional `sgr` Engine component, `sgr`"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    17,
+    14,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "PostgreSQL, so it works seamlessly with existing tools"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    20,
+    18,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "share with other `sgr` instances."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    23,
+    21,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "Installation section of this readme."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    27,
+    24,
+    27
+   ],
+   [
+    "replace",
+    27,
+    28,
+    27,
+    28,
+    [
+     "**Splitfiles** give you a"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    31,
+    28,
+    31
+   ],
+   [
+    "delete",
+    31,
+    33,
+    31,
+    31
+   ],
+   [
+    "equal",
+    33,
+    47,
+    31,
+    45
+   ],
+   [
+    "replace",
+    47,
+    48,
+    45,
+    46,
+    [
+     "foreign data wrappers."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    46,
+    47
+   ],
+   [
+    "replace",
+    49,
+    50,
+    47,
+    48,
+    [
+     "mounting. With mounting,"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    52,
+    48,
+    50
+   ],
+   [
+    "replace",
+    52,
+    53,
+    50,
+    51,
+    [
+     "Socrata) from your"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    55,
+    51,
+    53
+   ],
+   [
+    "delete",
+    55,
+    57,
+    53,
+    53
+   ],
+   [
+    "equal",
+    57,
+    62,
+    53,
+    58
+   ],
+   [
+    "replace",
+    62,
+    73,
+    58,
+    69,
+    [
+     "- **`sgr` CLI**:",
+     " `sgr` is the main command line tool used to work with Splitgraph \"images\"",
+     " (data snapshots). Use it to ingest data, work with Splitfiles, and push data",
+     " to Splitgraph.",
+     "- **`sgr` Engine**: a",
+     " Docker image of the latest",
+     " Postgres with `sgr` and other required extensions pre-installed.",
+     "- **Splitgraph Python library**:",
+     " All `sgr` functionality is available in the Python API, offering first-class",
+     " support for data science workflows including Jupyter notebooks and Pandas",
+     " dataframes."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    76,
+    69,
+    72
+   ],
+   [
+    "replace",
+    76,
+    80,
+    72,
+    76,
+    [
+     "- `sgr` documentation",
+     "- Advanced `sgr` documentation",
+     "- `sgr` command reference",
+     "- `splitgraph` package reference"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    83,
+    76,
+    79
+   ],
+   [
+    "replace",
+    83,
+    86,
+    79,
+    82,
+    [
+     "- Supercharging `dbt` with `sgr`: versioning, sharing, cross-DB joins",
+     "- Querying 40,000+ datasets with SQL",
+     "- Foreign data wrappers: PostgreSQL's secret weapon?"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    92,
+    82,
+    88
+   ],
+   [
+    "replace",
+    92,
+    94,
+    88,
+    90,
+    [
+     " You either need to install Docker locally",
+     " or have access to a remote Docker socket."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    96,
+    90,
+    92
+   ],
+   [
+    "replace",
+    96,
+    97,
+    92,
+    93,
+    [
+     "the releases page."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    93,
+    94
+   ],
+   [
+    "replace",
+    98,
+    99,
+    94,
+    95,
+    [
+     "`sgr engine add`"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    111,
+    95,
+    107
+   ],
+   [
+    "replace",
+    111,
+    112,
+    107,
+    108,
+    [
+     "installation guide for"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    117,
+    108,
+    113
+   ],
+   [
+    "replace",
+    117,
+    118,
+    113,
+    114,
+    [
+     "quick start guide"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    121,
+    114,
+    117
+   ],
+   [
+    "replace",
+    121,
+    122,
+    117,
+    118,
+    [
+     "Alternatively, `sgr` comes with plenty of examples to get you"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    125,
+    118,
+    121
+   ],
+   [
+    "replace",
+    125,
+    127,
+    121,
+    123,
+    [
+     "documentation",
+     "or join our Discord channel!"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    129,
+    123,
+    125
+   ],
+   [
+    "replace",
+    129,
+    130,
+    125,
+    126,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    133,
+    126,
+    129
+   ],
+   [
+    "replace",
+    133,
+    138,
+    129,
+    134,
+    [
+     "- Install Poetry:",
+     " `curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python`",
+     " to manage dependencies",
+     "- Install pre-commit hooks (we use Black to",
+     " format code)"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    141,
+    134,
+    137
+   ],
+   [
+    "replace",
+    141,
+    143,
+    137,
+    139,
+    [
+     " engine",
+     " Docker image: `cd engine && make`"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    146,
+    139,
+    142
+   ],
+   [
+    "replace",
+    146,
+    147,
+    142,
+    143,
+    [
+     "The test suite requires docker-compose. You"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    171,
+    143,
+    167
+   ],
+   [
+    "replace",
+    171,
+    172,
+    167,
+    168,
+    [
+     "example projects,"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    181,
+    168,
+    177
+   ],
+   [
+    "replace",
+    181,
+    182,
+    177,
+    178,
+    [
+     "CI."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "5bd6bbbc76ce+2": {
+  "fn": "DataPupOrg/DataPup",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    3,
+    [
+     "DataPup Logo",
+     "",
+     " # DataPup"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    7,
+    3,
+    6
+   ],
+   [
+    "replace",
+    7,
+    11,
+    6,
+    8,
+    [
+     "License: MIT",
+     "PRs Welcome"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    16,
+    8,
+    13
+   ],
+   [
+    "replace",
+    16,
+    19,
+    13,
+    14,
+    [
+     " DataPup Demo"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    65,
+    14,
+    60
+   ],
+   [
+    "replace",
+    65,
+    70,
+    60,
+    61,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    61,
+    62
+   ],
+   [
+    "replace",
+    71,
+    74,
+    62,
+    63,
+    [
+     "This project is MIT licensed - use it however you want! See the LICENSE file for details."
+    ]
+   ],
+   [
+    "equal",
+    74,
+    75,
+    63,
+    64
+   ],
+   [
+    "replace",
+    75,
+    81,
+    64,
+    65,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    65,
+    66
+   ],
+   [
+    "replace",
+    82,
+    88,
+    66,
+    67,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a0cf0cb27af2+2": {
+  "fn": "boostorg/mysql",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    6,
+    4,
+    6,
+    [
+     "`master` | Build Status | Build Status | codecov | Docs for master",
+     "`develop` | Build Status | Build Status | codecov | Docs for develop"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    19,
+    6,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "Please comment on this issue."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    24,
+    20,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     " library in the Boost.Asio ecosystem (like Boost.Beast)."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    25,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     " go asynchronous using callbacks, futures or coroutines (including C++20 coroutines)."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    46,
+    27,
+    46
+   ],
+   [
+    "replace",
+    46,
+    51,
+    46,
+    47,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    70,
+    47,
+    66
+   ],
+   [
+    "replace",
+    70,
+    72,
+    66,
+    68,
+    [
+     " MySQL refers to this as the \"text protocol\", as all information is passed using text",
+     " (as opposed to prepared statements, see below)."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    68,
+    69
+   ],
+   [
+    "replace",
+    73,
+    74,
+    69,
+    70,
+    [
+     " of executing a prepared statement is sent in binary format rather than in text."
+    ]
+   ],
+   [
+    "equal",
+    74,
+    76,
+    70,
+    72
+   ],
+   [
+    "replace",
+    76,
+    78,
+    72,
+    74,
+    [
+     " caching_sha2_password. These are the default methods in MySQL 5/MariaDB and MySQL 8,",
+     " respectively."
+    ]
+   ],
+   [
+    "equal",
+    78,
+    83,
+    74,
+    79
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "9ebf00b17886+2": {
+  "fn": "dblens/app",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    1,
+    [
+     "Get more insights from PostgreSQL"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    1,
+    4
+   ],
+   [
+    "replace",
+    10,
+    14,
+    4,
+    7,
+    [
+     "GitHub issues",
+     "GitHub stars",
+     "GitHub license"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    27,
+    7,
+    20
+   ],
+   [
+    "replace",
+    27,
+    28,
+    20,
+    21,
+    [
+     "1"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    21,
+    22
+   ],
+   [
+    "replace",
+    29,
+    30,
+    22,
+    23,
+    [
+     "3"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    23,
+    24
+   ],
+   [
+    "replace",
+    31,
+    32,
+    24,
+    25,
+    [
+     "5"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    25,
+    26
+   ],
+   [
+    "replace",
+    33,
+    34,
+    26,
+    27,
+    [
+     "4"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    27,
+    28
+   ],
+   [
+    "replace",
+    35,
+    36,
+    28,
+    29,
+    [
+     "2"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    69,
+    29,
+    62
+   ],
+   [
+    "replace",
+    69,
+    70,
+    62,
+    63,
+    [
+     "Pull requests are the best way to propose changes to the codebase (we use Github Flow). We actively welcome your pull requests:"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    77,
+    63,
+    70
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

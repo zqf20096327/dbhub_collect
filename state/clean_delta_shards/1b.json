@@ -3586,5 +3586,1315 @@
    ]
   ],
   "at": "2026-11-05"
+ },
+ "d42131491153+2": {
+  "fn": "SouravRoy-ETL/slothdb",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "SlothDB"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     " An experimental embedded SQL engine. "
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     " SlothDB is a from-scratch C++20 embedded SQL database in active development. Same model as DuckDB and SQLite: query Parquet, CSV, JSON, Arrow, Avro, SQLite, and Excel files directly with SQL, in-process. Early-stage; read the Status section below before treating any performance numbers as final. "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    9,
+    [
+     " <a href=\"https://discord.gg/XJWyGmX5G\">",
+     " Join the SlothDB Discord",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    9,
+    10
+   ],
+   [
+    "replace",
+    8,
+    13,
+    10,
+    18,
+    [
+     "PyPI",
+     "npm",
+     "PyPI downloads",
+     "npm downloads",
+     "CI",
+     "License",
+     "Stars",
+     "PeerPush"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    18,
+    19
+   ],
+   [
+    "replace",
+    14,
+    28,
+    19,
+    20,
+    [
+     "Website · **Playground** · **Discord** · Blog · Docs · Benchmarks · Python · SQL Guide"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    37,
+    20,
+    29
+   ],
+   [
+    "delete",
+    37,
+    39,
+    29,
+    29
+   ],
+   [
+    "equal",
+    39,
+    43,
+    29,
+    33
+   ],
+   [
+    "replace",
+    43,
+    46,
+    33,
+    34,
+    [
+     " .ask: rules-first, router, two local Qwens, [Y/n] gate"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    34,
+    35
+   ],
+   [
+    "replace",
+    47,
+    48,
+    35,
+    36,
+    [
+     "|tier|what|cost|covers|"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    36,
+    37
+   ],
+   [
+    "replace",
+    49,
+    52,
+    37,
+    40,
+    [
+     "|1|**Rules parser** (default)|sub-10 ms, no model|catalog, COUNT/SUM/AVG/GROUP BY/TOP-N, file-source|",
+     "|2|**Local Qwen 2.5-Coder 0.5B Q4_K_M**|~200 ms, ~310 MB|open-ended SELECT/GROUP BY/filter|",
+     "|3|**Local Qwen 2.5-Coder 1.5B Q4_K_M**|~500 ms, ~986 MB|window functions, ranking within groups, LAG/LEAD, joins|"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    40,
+    41
+   ],
+   [
+    "replace",
+    53,
+    54,
+    41,
+    42,
+    [
+     "Both model tiers download lazily in parallel on first `.ask` (total ~1.3 GB). Router is a pure function of the question: no LLM call involved in routing. Cumulative / running / moving aggregates refuse cleanly (engine gap, not model gap). Full spec, router signals, refusal policy: docs/ASK.md."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    57,
+    42,
+    45
+   ],
+   [
+    "replace",
+    57,
+    58,
+    45,
+    46,
+    [
+     "**In your browser** - no install, no account: **slothdb.org/playground**. Full SlothDB compiled to WebAssembly, with a pre-loaded 1,000-row demo CSV + matching Parquet to compare format performance. Files you add stay on your machine."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    46,
+    47
+   ],
+   [
+    "replace",
+    59,
+    60,
+    47,
+    48,
+    [
+     "**In Python** - CPython 3.8+ on Linux / macOS / Windows (see latest release for published wheel tags; falls back to source build if no wheel matches):"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    83,
+    48,
+    71
+   ],
+   [
+    "replace",
+    83,
+    86,
+    71,
+    72,
+    [
+     "**In the shell** - download or build from source; then `slothdb analytics.slothdb` for a persistent single-file DB."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    89,
+    72,
+    75
+   ],
+   [
+    "replace",
+    89,
+    90,
+    75,
+    76,
+    [
+     "- **Engine work for high-cardinality GROUP BY and parquet decode.** Radix-partitioned aggregators for high-cardinality `GROUP BY`, a bounded hash-table `COUNT` path, parquet decode improvements (zero-copy VARCHAR, batched RLE unpack), and `TopN` pushdown into the aggregate. See the Status section above for the context around the previous ClickBench framing."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    100,
+    76,
+    86
+   ],
+   [
+    "replace",
+    100,
+    101,
+    86,
+    87,
+    [
+     "- **`bench/` directory at the repo root.** All 43 ClickBench queries verbatim from `ClickHouse/ClickBench` plus a 16-query mixed suite, behind a generic Python runner. Reproducible side-by-side timing against DuckDB. See bench/README.md."
+    ]
+   ],
+   [
+    "equal",
+    101,
+    109,
+    87,
+    95
+   ],
+   [
+    "replace",
+    109,
+    111,
+    95,
+    97,
+    [
+     "- **HTTPS Parquet from the browser playground.** Tiny Cloudflare Worker proxy (cloudflare/cors-proxy/, 60 lines, free-tier-friendly) routes around CORS for buckets that don't set `Access-Control-Allow-Origin`. `FROM 'https://host/file.parquet'` works in the playground for any host.",
+     "- **Discord server.** discord.gg/XJWyGmX5G. Bug reports, weird query plans, perf threads, anything."
+    ]
+   ],
+   [
+    "equal",
+    111,
+    119,
+    97,
+    105
+   ],
+   [
+    "replace",
+    119,
+    120,
+    105,
+    106,
+    [
+     "- **`.ask` natural-language sub-REPL.** Rules parser in every build (sub-10 ms, no model). Optional local Qwen2.5-Coder GGUF fallback under `-DSLOTHDB_ASK_MODEL=ON`: 0.5B and 1.5B tiers picked by a deterministic keyword router. 29 languages. Generated SQL is shown before it runs. docs/ASK.md."
+    ]
+   ],
+   [
+    "equal",
+    120,
+    124,
+    106,
+    110
+   ],
+   [
+    "replace",
+    124,
+    127,
+    110,
+    111,
+    [
+     "Per-commit history with bench deltas in CHANGELOG.md."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    136,
+    111,
+    120
+   ],
+   [
+    "replace",
+    136,
+    143,
+    120,
+    121,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    156,
+    121,
+    134
+   ],
+   [
+    "replace",
+    156,
+    157,
+    134,
+    135,
+    [
+     "||SlothDB|DuckDB|"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    158,
+    135,
+    136
+   ],
+   [
+    "replace",
+    158,
+    166,
+    136,
+    144,
+    [
+     "|Live-refresh view on a growing CSV|`CREATE LIVE VIEW`, incremental append|re-execute the query|",
+     "|File-format readers in the core binary|7 (CSV, Parquet, JSON, Avro, Excel, Arrow, SQLite)|3 in core; Avro/Excel/SQLite via extensions|",
+     "|Remote file read from SQL|built in (HTTP(S), public S3)|`httpfs` extension|",
+     "|WASM bundle size|1.3 MB full / sub-1 MB edge|~18 MB|",
+     "|Extension ABI|stable C ABI, numeric error codes|internal C++ API|",
+     "|`VARCHAR(n)` length|enforced at INSERT|not enforced|",
+     "|Binary size (CLI)|~1-2 MB (Windows MSVC Release; Linux static ~2-4 MB)|~50 MB (latest release tarball)|",
+     "|License|MIT|MIT|"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    167,
+    144,
+    145
+   ],
+   [
+    "replace",
+    167,
+    168,
+    145,
+    146,
+    [
+     "This table is about feature surface (built-in formats, WASM size, error-code stability), not benchmark numbers. See the Status section above for the perf-claim context."
+    ]
+   ],
+   [
+    "equal",
+    168,
+    173,
+    146,
+    151
+   ],
+   [
+    "replace",
+    173,
+    174,
+    151,
+    152,
+    [
+     "||SlothDB|clickhouse-local|ClickHouse server|"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    175,
+    152,
+    153
+   ],
+   [
+    "replace",
+    175,
+    180,
+    153,
+    158,
+    [
+     "|Deployment|1-2 MB binary, embedded|~500 MB binary|server + Keeper + config|",
+     "|Cold start|< 10 ms on our bench|seconds (varies)|tens of seconds (varies)|",
+     "|Ops overhead|none|none|daemon, ports, upgrades|",
+     "|Embed in a desktop app|yes, one binary|awkward|no|",
+     "|Cluster / distributed query|no|no|yes|"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    192,
+    158,
+    170
+   ],
+   [
+    "replace",
+    192,
+    193,
+    170,
+    171,
+    [
+     "- **Window-function coverage is partial.** Plain OVER / PARTITION BY works; `ROWS BETWEEN ...` frames and `SUM OVER (ORDER BY)` cumulative shapes have known gaps (tracked in docs/ROADMAP.md)."
+    ]
+   ],
+   [
+    "equal",
+    193,
+    196,
+    171,
+    174
+   ],
+   [
+    "delete",
+    196,
+    198,
+    174,
+    174
+   ],
+   [
+    "equal",
+    198,
+    230,
+    174,
+    206
+   ],
+   [
+    "replace",
+    230,
+    232,
+    206,
+    207,
+    [
+     " More install methods (Debian, Fedora, Arch, Homebrew, build from source) "
+    ]
+   ],
+   [
+    "equal",
+    232,
+    233,
+    207,
+    208
+   ],
+   [
+    "replace",
+    233,
+    234,
+    208,
+    209,
+    [
+     "|Platform|Command|"
+    ]
+   ],
+   [
+    "equal",
+    234,
+    235,
+    209,
+    210
+   ],
+   [
+    "replace",
+    235,
+    242,
+    210,
+    215,
+    [
+     "|Ubuntu / Debian|grab the latest `.deb` from releases, then `sudo dpkg -i slothdb_*.deb`|",
+     "|Fedora / RHEL|grab the latest `.rpm` from releases, then `sudo rpm -i slothdb-*.rpm` (or build from spec)|",
+     "|Arch Linux|`makepkg -si` (PKGBUILD)|",
+     "|macOS (Homebrew)|`brew install --build-from-source packaging/homebrew/slothdb.rb`|",
+     "|Build from source|See below|"
+    ]
+   ],
+   [
+    "equal",
+    242,
+    245,
+    215,
+    218
+   ],
+   [
+    "replace",
+    245,
+    246,
+    218,
+    219,
+    [
+     "Any numbers you see in this README or in `bench/` are from one workstation against one DuckDB version. They are anecdotal, not from standardised benchmark hardware. The Status section above explains why some of the wins are query-shape-specific rather than general, and why the engine's generic path is slower than the per-query handler path it falls into for some workloads."
+    ]
+   ],
+   [
+    "equal",
+    246,
+    254,
+    219,
+    227
+   ],
+   [
+    "replace",
+    254,
+    255,
+    227,
+    228,
+    [
+     "Architectural decisions and per-commit deltas: CHANGELOG.md."
+    ]
+   ],
+   [
+    "equal",
+    255,
+    264,
+    228,
+    237
+   ],
+   [
+    "replace",
+    264,
+    277,
+    237,
+    238,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    296,
+    238,
+    257
+   ],
+   [
+    "replace",
+    296,
+    297,
+    257,
+    258,
+    [
+     "> **Full file format guide** - CSV, Parquet, JSON, Excel, Arrow, Avro, SQLite, virtual views"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    312,
+    258,
+    273
+   ],
+   [
+    "replace",
+    312,
+    313,
+    273,
+    274,
+    [
+     "> **Working with large datasets** - when to query directly vs. import vs. convert to Parquet"
+    ]
+   ],
+   [
+    "equal",
+    313,
+    320,
+    274,
+    281
+   ],
+   [
+    "replace",
+    320,
+    332,
+    281,
+    282,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    332,
+    334,
+    282,
+    284
+   ],
+   [
+    "replace",
+    334,
+    335,
+    284,
+    285,
+    [
+     "> **Full Python API reference** - connect, query, results, pandas integration, context manager"
+    ]
+   ],
+   [
+    "equal",
+    335,
+    342,
+    285,
+    292
+   ],
+   [
+    "replace",
+    342,
+    355,
+    292,
+    293,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    355,
+    357,
+    293,
+    295
+   ],
+   [
+    "replace",
+    357,
+    358,
+    295,
+    296,
+    [
+     "> **Full C/C++ API reference** - lifecycle, queries, results, error handling, CMake integration, RAII wrapper"
+    ]
+   ],
+   [
+    "equal",
+    358,
+    361,
+    296,
+    299
+   ],
+   [
+    "replace",
+    361,
+    362,
+    299,
+    300,
+    [
+     "|Category|Details|"
+    ]
+   ],
+   [
+    "equal",
+    362,
+    363,
+    300,
+    301
+   ],
+   [
+    "replace",
+    363,
+    377,
+    301,
+    315,
+    [
+     "|**SQL**|130+ features - JOINs, CTEs (recursive), window functions, QUALIFY, MERGE, subqueries, set operations|",
+     "|**Live file views**|`CREATE LIVE VIEW` caches the result and auto-refreshes on file change. Incremental CSV append path parses only new bytes on log-tail workloads|",
+     "|**Shell `.ask`**|Natural-language -> SQL in the CLI. Rules parser (default, ~50 KB, no network) handles COUNT / SUM / AVG / GROUP BY / TOP-N / year filters / load-file / count-rows-in-file / create-view-from-file. Builds with `-DSLOTHDB_ASK_MODEL=ON` fall back to a local Qwen2.5-Coder GGUF for open-ended NL. Every generated SQL is shown before it runs; set `SLOTHDB_ASK_CONFIRM=1` to require a `[Y/n]` keypress per statement.|",
+     "|**Metadata**|`DESCRIBE <query>`, `DESCRIBE `, `PRAGMA table_info('t')`, `PRAGMA database_list` - BI-tool introspection out of the box|",
+     "|**Type constraints**|`VARCHAR(n)` length enforced on INSERT (no silent truncation)|",
+     "|**File I/O**|CSV, Parquet, JSON, Arrow, Avro, Excel, SQLite - all built-in with auto-detection, glob patterns, virtual views|",
+     "|**Remote files**|`https://` and public-bucket `s3://` URLs work directly in any SQL path|",
+     "|**Functions**|70+ functions - string, math, date/time (including `DATE_TRUNC` with WEEK/QUARTER/DECADE + `MONTHNAME` / `DAYNAME` / `LAST_DAY` / `MAKE_DATE`), aggregate, regex, trigonometric|",
+     "|**Performance**|Vectorized columnar engine (2,048 values/batch), morsel-driven parallelism, fused scan+aggregate, typed int64 JOIN hash path, parallel CSV pre-parse, zero-copy VARCHAR|",
+     "|**Build flavours**|Default full build (~1-4 MB native binary depending on platform and linking) or `-DSLOTHDB_EDGE=ON` for sub-MB WASM bundles that fit under Cloudflare Workers' 1 MB cap|",
+     "|**Storage**|Single-file `.slothdb` persistence, RLE/dictionary/bitpacking compression, zone maps|",
+     "|**Optimizer**|Constant folding, filter pushdown, TopN optimization|",
+     "|**APIs**|CLI shell, Python (with pandas), C/C++ (stable ABI)|",
+     "|**Reliability**|403 tests, 131,513 assertions, bounds-checked parsing, DoS limits|"
+    ]
+   ],
+   [
+    "equal",
+    377,
+    380,
+    315,
+    318
+   ],
+   [
+    "replace",
+    380,
+    381,
+    318,
+    319,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    381,
+    382,
+    319,
+    320
+   ],
+   [
+    "replace",
+    382,
+    391,
+    320,
+    329,
+    [
+     "|**Full Documentation**|Complete guide - install, file queries, SQL, Python, C/C++, extensions|",
+     "|Query Your Files|CSV, Parquet, JSON, Excel, Arrow, Avro, SQLite|",
+     "|Large Datasets|Import strategies, Parquet conversion, persistence|",
+     "|SQL Guide|Joins, window functions, CTEs, QUALIFY, MERGE|",
+     "|All Functions|70+ built-in functions with examples|",
+     "|Python API|Connect, query, pandas, context manager|",
+     "|C/C++ API|Lifecycle, queries, results, CMake, RAII|",
+     "|SQL Quick Reference|One-page cheat sheet|",
+     "|Extension API|Build custom extensions|"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    411,
+    329,
+    349
+   ],
+   [
+    "replace",
+    411,
+    412,
+    349,
+    350,
+    [
+     "|Build Option|Description|"
+    ]
+   ],
+   [
+    "equal",
+    412,
+    413,
+    350,
+    351
+   ],
+   [
+    "replace",
+    413,
+    417,
+    351,
+    355,
+    [
+     "|`-DSLOTHDB_BUILD_SHELL=ON`|Build CLI shell|",
+     "|`-DSLOTHDB_BUILD_TESTS=ON`|Build test suite|",
+     "|`-DSLOTHDB_SANITIZERS=ON`|Enable ASan/UBSan|",
+     "|`-DSLOTHDB_EDGE=ON`|Edge / WASM minimal build - strips Excel / Avro / Arrow IPC / SQLite readers. Target: sub-1 MB WASM for Cloudflare Workers. See docs/EDGE_BUILD.md|"
+    ]
+   ],
+   [
+    "equal",
+    417,
+    419,
+    355,
+    357
+   ],
+   [
+    "replace",
+    419,
+    422,
+    357,
+    358,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    422,
+    423,
+    358,
+    359
+   ],
+   [
+    "replace",
+    423,
+    426,
+    359,
+    360,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    426,
+    427,
+    360,
+    361
+   ],
+   [
+    "replace",
+    427,
+    437,
+    361,
+    362,
+    [
+     "MIT - use it however you want."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "904b8ceb86c5+2": {
+  "fn": "LHolten/rust-query",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "replace",
+    0,
+    2,
+    0,
+    2,
+    [
+     "Latest Version",
+     "Documentation"
+    ]
+   ],
+   [
+    "equal",
+    2,
+    9,
+    2,
+    9
+   ],
+   [
+    "replace",
+    9,
+    80,
+    9,
+    10,
+    [
+     "…（71 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    101,
+    10,
+    31
+   ],
+   [
+    "replace",
+    101,
+    102,
+    31,
+    32,
+    [
+     " Query types are kept simple so that the required function signature is easy to write."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    119,
+    32,
+    49
+   ],
+   [
+    "delete",
+    119,
+    142,
+    49,
+    49
+   ],
+   [
+    "equal",
+    142,
+    143,
+    49,
+    50
+   ],
+   [
+    "replace",
+    143,
+    146,
+    50,
+    51,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "9195be96c293+2": {
+  "fn": "mattwright324/youtube-comment-suite",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "Github All Releases",
+     "GitHub release",
+     "Github Releases"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    10,
+    5,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "Examples"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    29,
+    11,
+    29
+   ],
+   [
+    "replace",
+    29,
+    30,
+    29,
+    30,
+    [
+     "GitHub Releases"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    36,
+    30,
+    36
+   ],
+   [
+    "replace",
+    36,
+    37,
+    36,
+    37,
+    [
+     " here from Oracle."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    37,
+    38
+   ],
+   [
+    "replace",
+    38,
+    39,
+    38,
+    39,
+    [
+     " Installation - Java 11+"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    44,
+    39,
+    44
+   ],
+   [
+    "replace",
+    44,
+    45,
+    44,
+    45,
+    [
+     "* Installation - Ubuntu 16 17 18 19 20"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    55,
+    45,
+    55
+   ],
+   [
+    "replace",
+    55,
+    56,
+    55,
+    56,
+    [
+     "program? Check out the Wiki!"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    59,
+    56,
+    59
+   ],
+   [
+    "replace",
+    59,
+    60,
+    59,
+    60,
+    [
+     "Refer to BUILD.md"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    63,
+    60,
+    63
+   ],
+   [
+    "replace",
+    63,
+    67,
+    63,
+    64,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "56cd66b6f5be+2": {
+  "fn": "PuneethReddyHC/event-management",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "replace",
+    0,
+    2,
+    0,
+    1,
+    [
+     "GitHub"
+    ]
+   ],
+   [
+    "equal",
+    2,
+    3,
+    1,
+    2
+   ],
+   [
+    "replace",
+    3,
+    4,
+    2,
+    3,
+    [
+     "Buy Me A Coffee"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    3,
+    4
+   ],
+   [
+    "replace",
+    5,
+    30,
+    4,
+    5,
+    [
+     " Things I code with "
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    5,
+    6
+   ],
+   [
+    "replace",
+    31,
+    41,
+    6,
+    37,
+    [
+     " npm",
+     " html5",
+     " vue.js",
+     " Django",
+     " Flutter",
+     " JavaScript",
+     " Mysql",
+     " postgresql",
+     " Amazon_AWS",
+     " Css",
+     " Sass",
+     " Styled Components",
+     " git",
+     " Heroku",
+     " Docker",
+     " angular",
+     " MongoDB",
+     " Nodejs",
+     " Google Cloud Platform",
+     " TypeScript",
+     "",
+     " Projects We develop ",
+     "",
+     " Vue JS ",
+     " Nuxt JS ",
+     " Python ",
+     " Django ",
+     " PHP and MYSQL ",
+     " Angular JS ",
+     " React JS ",
+     " AI/ML "
+    ]
+   ],
+   [
+    "equal",
+    41,
+    51,
+    37,
+    47
+   ],
+   [
+    "replace",
+    51,
+    58,
+    47,
+    54,
+    [
+     "3. Download project from github(https://github.com/PuneethReddyHC/event-management.git) ",
+     " OR follow gitbash commands",
+     "",
+     " i>cd C:\\\\xampp\\htdocs\\",
+     "",
+     " ii>git clone https://github.com/PuneethReddyHC/event-management.git",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    58,
+    76,
+    54,
+    72
+   ],
+   [
+    "replace",
+    76,
+    77,
+    72,
+    73,
+    [
+     "13. admin login details Email=admin@gmail.com and Password=123456789."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    80,
+    73,
+    76
+   ],
+   [
+    "delete",
+    80,
+    81,
+    76,
+    76
+   ],
+   [
+    "equal",
+    81,
+    88,
+    76,
+    83
+   ],
+   [
+    "replace",
+    88,
+    93,
+    83,
+    88,
+    [
+     "Image of adduser",
+     "Image of adduser",
+     "Image of adduser",
+     "Image of adduser",
+     "Image of adduser"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    88,
+    89
+   ],
+   [
+    "replace",
+    94,
+    95,
+    89,
+    90,
+    [
+     "## If you like my project hit a star button"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

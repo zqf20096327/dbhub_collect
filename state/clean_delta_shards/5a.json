@@ -3775,5 +3775,590 @@
    ]
   ],
   "at": "2026-11-05"
+ },
+ "8c3ec09f0c55+2": {
+  "fn": "moistrr/TGbot-D1",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "不会使用直接看教程"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    36,
+    10,
+    35,
+    [
+     "1. **双向中继与话题模式：**",
+     " * 将每个用户私聊会话转发到一个管理员群组的**独立话题**中。",
+     " * 话题名称动态显示用户昵称和 ID，方便管理员区分。",
+     " * 管理员在话题中回复即可自动转发回用户。",
+     "2. **D1 数据库支持：**",
+     " * 使用 Cloudflare D1 (SQLite) 存储用户状态、话题 ID 和所有配置，确保高并发写入和数据持久化。",
+     "3. **完整的管理员配置菜单：**",
+     " * 管理员私聊机器人发送 `/start` 即可进入菜单驱动的配置界面。",
+     " * 注意是私聊BOT，不是在群组内发送/start，而且变量必须设置管理员的ID（双重防护），否则无法唤醒指令",
+     " * 支持在线编辑**验证问答**、**屏蔽阈值**等配置。",
+     "4. **增强的规则管理（最新重构）：**",
+     " * 彻底重构**自动回复规则**和**关键词屏蔽**的管理方式。",
+     " * 新增**列表显示**、**新增**和**删除**功能，所有操作均通过内联按钮完成，无需手动修改代码或配置。",
+     "5. **内容过滤与安全：**",
+     " * **人机验证：** 在用户首次使用前进行验证。",
+     " * **关键词屏蔽：** 可配置关键词黑名单，超过设定的**屏蔽阈值**（如 5 次）自动屏蔽用户。",
+     " * **内容类型过滤：** 粒度控制是否转发**纯文本**、**媒体（图片/视频/文件）**、**链接**、**任何转发消息**、**音频/语音**、**贴纸/GIF** 等内容类型。",
+     "6. **用户管理操作：**",
+     " * 在每个用户话题的顶部资料卡中，提供**一键屏蔽/解禁**和**一键置顶资料卡**的内联按钮。",
+     "7. **已编辑消息处理：**",
+     " * 用户在私聊中修改已发送的消息时，机器人会在对应的管理员话题中发送**消息修改通知**，并附带修改前后的内容对比。",
+     "8. **消息备份功能：**",
+     " * 备份群组功能：配置一个群组，用于接收所有用户消息的副本，不参与回复。",
+     "9. **协同多账号处理功能：**",
+     " * 可以授权群组内的其他成员进行回复，未被授权的用户无法回复消息，使用方法，到配置里面绑定需要授权的账号ID即可"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    43,
+    35,
+    42
+   ],
+   [
+    "replace",
+    43,
+    44,
+    42,
+    43,
+    [
+     "1. 登录 Cloudflare Dashboard。"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    43,
+    44
+   ],
+   [
+    "replace",
+    45,
+    46,
+    44,
+    45,
+    [
+     "2. 导航到 **Workers 和 Pages** -\\> **D1**。"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    45,
+    46
+   ],
+   [
+    "replace",
+    47,
+    48,
+    46,
+    47,
+    [
+     "3. 点击 **创建数据库**，输入数据库名称（例如：`tg-bot-db`）。"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    47,
+    48
+   ],
+   [
+    "replace",
+    49,
+    50,
+    48,
+    49,
+    [
+     "4. 进入您创建的 D1 数据库，点击 **浏览数据**。"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    49,
+    50
+   ],
+   [
+    "replace",
+    51,
+    52,
+    50,
+    51,
+    [
+     "5. 点击 **D1的控制台界面，有一个执行步骤，将下面三段执行语句复制到执行窗口，点击执行即可，会弹出响应时间即为部署成功**："
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    51,
+    52
+   ],
+   [
+    "replace",
+    53,
+    58,
+    52,
+    57,
+    [
+     "|表名|字段 (Schema)|",
+     "|:---|:---|",
+     "|`users`|`user_id` (TEXT, PRIMARY KEY), `topic_id` (TEXT), `user_state` (TEXT), `is_blocked` (INTEGER), `block_count` (INTEGER), `user_info_json` (TEXT)|",
+     "|`config`|`key` (TEXT, PRIMARY KEY), `value` (TEXT)|",
+     "|`messages`|`user_id` (TEXT), `message_id` (TEXT), `text` (TEXT), `date` (INTEGER), PRIMARY KEY (`user_id`, `message_id`)|"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    62,
+    57,
+    61
+   ],
+   [
+    "replace",
+    62,
+    68,
+    61,
+    67,
+    [
+     " user_id TEXT PRIMARY KEY,",
+     " topic_id TEXT,",
+     " user_state TEXT,",
+     " is_blocked INTEGER,",
+     " block_count INTEGER,",
+     " user_info_json TEXT"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    73,
+    67,
+    72
+   ],
+   [
+    "replace",
+    73,
+    75,
+    72,
+    74,
+    [
+     " key TEXT PRIMARY KEY,",
+     " value TEXT"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    80,
+    74,
+    79
+   ],
+   [
+    "replace",
+    80,
+    85,
+    79,
+    84,
+    [
+     " user_id TEXT,",
+     " message_id TEXT,",
+     " text TEXT,",
+     " date INTEGER,",
+     " PRIMARY KEY (user_id, message_id)"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    91,
+    84,
+    90
+   ],
+   [
+    "replace",
+    91,
+    98,
+    90,
+    97,
+    [
+     "1. 导航到 **Workers 和 Pages**。",
+     "2. 点击 **创建应用程序** -\\> **创建 Worker**。",
+     "3. 输入服务名称（例如：`telegram-forwarder`）。",
+     "4. 点击 **部署**。",
+     "5. 部署完成后，点击 **编辑代码**。",
+     "6. 清空默认代码，将提供的**完整**代码复制并粘贴到编辑器中。",
+     "7. 点击 **部署 Worker**。"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    101,
+    97,
+    100
+   ],
+   [
+    "replace",
+    101,
+    107,
+    100,
+    106,
+    [
+     "1. 在 Worker 的代码编辑器界面，点击左侧导航栏的 **设置**。",
+     "2. 选择 **函数** -\\> **D1 数据库绑定**。",
+     "3. 点击 **添加 D1 数据库**。",
+     " * 在 **变量名称** 中，**必须** 填写 `TG_BOT_DB`。",
+     " * 在 **D1 数据库** 中，选择您在步骤一中创建的数据库（例如：`tg-bot-db`）。",
+     "4. 点击 **添加**。"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    106,
+    109
+   ],
+   [
+    "replace",
+    110,
+    112,
+    109,
+    111,
+    [
+     "1. 在 Worker 的设置页面，选择 **变量** -\\> **环境变量**。",
+     "2. 点击 **添加变量**，配置以下 **三个** 必填项："
+    ]
+   ],
+   [
+    "equal",
+    112,
+    113,
+    111,
+    112
+   ],
+   [
+    "replace",
+    113,
+    118,
+    112,
+    117,
+    [
+     "|变量名称|值（示例）|说明|",
+     "|:---|:---|:---|",
+     "|`BOT_TOKEN`|`123456:AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPP`|您的 Telegram Bot Token。|",
+     "|`ADMIN_IDS`|`12345678, 87654321`|管理员的 Telegram 用户 ID，**多个 ID 用英文逗号分隔！注意注意注意是用户的ID，不是用户名也不是昵称**。|",
+     "|`ADMIN_GROUP_ID`|`-1001234567890`|用于接收用户消息的**超级群组 ID**（注意：必须是超级群组，且已开启话题功能，普通群组和话题群组的ID不一样）。|"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    121,
+    117,
+    120
+   ],
+   [
+    "replace",
+    121,
+    123,
+    120,
+    121,
+    [
+     "3. 点击 **保存并部署**。"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    223,
+    121,
+    221
+   ],
+   [
+    "replace",
+    223,
+    225,
+    221,
+    222,
+    [
+     "👉 点击查看创新版 3.0.0 详细部署教程"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "8f1fcb6320b2+2": {
+  "fn": "Glitch-Cat-Club/graph-memory-starter",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "equal",
+    0,
+    8,
+    0,
+    8
+   ],
+   [
+    "replace",
+    8,
+    10,
+    8,
+    10,
+    [
+     " rag/ works on notes as they are, matches meaning when words differ",
+     " graph modelled docs, typed links, multi-hop answers walked by code"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    30,
+    10,
+    30
+   ],
+   [
+    "replace",
+    30,
+    34,
+    30,
+    31,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    51,
+    31,
+    48
+   ],
+   [
+    "replace",
+    51,
+    57,
+    48,
+    54,
+    [
+     " bge-small-en-v1.5 local, 67 MB, your CPU, no key. Turns text into a",
+     " 384-dim vector for the meaning leg of the search. Downloaded",
+     " once on the first index build, by fastembed.",
+     " Claude distils a note into questions, writes the session",
+     " entry, answers you. Through claude -p on your",
+     " subscription, so no API key here either."
+    ]
+   ],
+   [
+    "equal",
+    57,
+    64,
+    54,
+    61
+   ],
+   [
+    "replace",
+    64,
+    68,
+    61,
+    65,
+    [
+     " session the filtered text waits in digest/pending/. Your next session",
+     " hands it to a background sub-agent, so you carry on working.",
+     " headless the hook starts claude -p with no window. The entry lands about",
+     " a minute later, and your next session opens clean."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    77,
+    65,
+    74
+   ],
+   [
+    "replace",
+    77,
+    84,
+    74,
+    81,
+    [
+     " max_turns 30 how much of the session is read",
+     " max_chars 15000 the character budget, the end kept",
+     " min_turns 5 below this the session is not memory",
+     " model sonnet which Claude writes the entry",
+     " log_dir daily the folder inside your notes the entry lands in",
+     " distil true whether the entry feeds the index",
+     " mode session session or headless"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    104,
+    81,
+    101
+   ],
+   [
+    "replace",
+    104,
+    112,
+    101,
+    109,
+    [
+     " rag/ the semantic layer: index, search, recall hook, distil",
+     " digest/ the session write up: hooks, config, prompt",
+     " corpus/ 8 modelled docs (front matter)",
+     " corpus-before/ 12 unstructured docs (the A/B control)",
+     " extraction/ LLM output per doc: nodes, edges, aliases",
+     " src/ schema.sql, build_graph.py, recall.py, recall_hook.py",
+     " hooks.json the graph recall hook, copy into .claude/settings.json",
+     " extract-prompt.md the extraction prompt, for your own docs"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    125,
+    109,
+    122
+   ],
+   [
+    "replace",
+    125,
+    127,
+    122,
+    124,
+    [
+     " python src/build_graph.py",
+     " python src/recall.py \"A customer wants an £800 refund in March. Who signs it off?\""
+    ]
+   ],
+   [
+    "equal",
+    127,
+    132,
+    124,
+    129
+   ],
+   [
+    "replace",
+    132,
+    133,
+    129,
+    130,
+    [
+     "|Question|Expected|Why|"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    134,
+    130,
+    131
+   ],
+   [
+    "replace",
+    134,
+    139,
+    131,
+    136,
+    [
+     "|A customer wants an £800 refund in March. Who signs it off?|Marcus Webb|3 hops: policy, role, holder, delegate|",
+     "|Who approves supplier payments over £2,000?|Alex Doyle|2 hops: policy, role, holder|",
+     "|What is the onboarding process?|Ops Manager, day-one checklist|1 hop, several edges|",
+     "|What does Priya do?|Support Lead|alias seeding|",
+     "|Who is in charge when the boss is away?|no memory matches|outside the vocabulary; fails loudly, never guesses|"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    151,
+    136,
+    148
+   ],
+   [
+    "replace",
+    151,
+    152,
+    148,
+    149,
+    [
+     "|Model|Condition|Tooling|Result|Hops reached|Tool calls|Docs read|Context read|"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    149,
+    150
+   ],
+   [
+    "replace",
+    153,
+    159,
+    150,
+    156,
+    [
+     "|Fable 5|search|Grep+Read, model|correct|3 of 3|6|4|~780 tokens|",
+     "|Fable 5|graph|SQL walk, code|correct|3 of 3|0|0|~400 tokens|",
+     "|Sonnet|search|Grep+Read, model|correct|3 of 3|13|8|~1180 tokens|",
+     "|Sonnet|graph|SQL walk, code|correct|3 of 3|0|0|~400 tokens|",
+     "|Haiku|search|Grep+Read, model|wrong|1 of 3|5|3|~660 tokens|",
+     "|Haiku|graph|SQL walk, code|correct|3 of 3|0|0|~400 tokens|"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    171,
+    156,
+    168
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

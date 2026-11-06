@@ -2022,5 +2022,1390 @@
    ]
   ],
   "at": "2026-11-05"
+ },
+ "71219bd0a000+2": {
+  "fn": "pubkey/event-reduce",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Event-Reduce Algorithm "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    3,
+    [
+     " Update live query results from change events without re-running the query "
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    3,
+    4
+   ],
+   [
+    "replace",
+    7,
+    13,
+    4,
+    8,
+    [
+     " npm version",
+     " npm downloads",
+     " CI",
+     " MIT license"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    8,
+    9
+   ],
+   [
+    "replace",
+    14,
+    29,
+    9,
+    20,
+    [
+     " Live demo ·",
+     " JavaScript implementation ·",
+     " Rust implementation ·",
+     " Dart implementation ·",
+     " Kotlin implementation ·",
+     " Swift implementation ·",
+     " C# implementation ·",
+     " Python implementation ·",
+     " Go implementation ·",
+     " How it works ·",
+     " FAQ"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    32,
+    20,
+    23
+   ],
+   [
+    "delete",
+    32,
+    34,
+    23,
+    23
+   ],
+   [
+    "equal",
+    34,
+    36,
+    23,
+    25
+   ],
+   [
+    "replace",
+    36,
+    37,
+    25,
+    26,
+    [
+     "- **~94% of write events** in the browser demo are handled without re-running the query"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    39,
+    26,
+    28
+   ],
+   [
+    "replace",
+    39,
+    40,
+    28,
+    29,
+    [
+     "- **Proven in production** as the query engine behind the live queries of RxDB"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    51,
+    29,
+    40
+   ],
+   [
+    "replace",
+    51,
+    71,
+    40,
+    41,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    73,
+    41,
+    43
+   ],
+   [
+    "replace",
+    73,
+    75,
+    43,
+    45,
+    [
+     "See the JavaScript implementation for the full API and a MongoDB-style example.",
+     "Rust, Dart, Kotlin, Swift, C#, Python and Go implementations that use the same BDD are also available. All implementations run the same shared test suite."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    78,
+    45,
+    48
+   ],
+   [
+    "insert",
+    78,
+    78,
+    48,
+    51,
+    [
+     " 1. You make a query to the database which returns the result in 100 milliseconds ",
+     " 2. A write event occurs on the database and changes some data ",
+     " 3. To get the new version of the query's results you now have three options: "
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    51,
+    52
+   ],
+   [
+    "replace",
+    79,
+    93,
+    52,
+    53,
+    [
+     " a. Run the query over the database again which takes another 100 milliseconds "
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    53,
+    54
+   ],
+   [
+    "replace",
+    94,
+    95,
+    54,
+    55,
+    [
+     " b. Write complex code that somehow merges the incoming event with the old state"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    55,
+    56
+   ],
+   [
+    "replace",
+    96,
+    103,
+    56,
+    57,
+    [
+     " c. Use Event-Reduce to calculate the new results on the CPU without disc-IO nearly instant "
+    ]
+   ],
+   [
+    "equal",
+    103,
+    106,
+    57,
+    60
+   ],
+   [
+    "replace",
+    106,
+    107,
+    60,
+    61,
+    [
+     "In the browser demo you can see that for randomly generated events, about **94%** of them could be optimized by EventReduce. In real world usage, with non-random events, this can be even higher. For the different implementations in common browser databases, we can observe an up to **12 times** faster displaying of new query results after a write occurred."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    116,
+    61,
+    70
+   ],
+   [
+    "replace",
+    116,
+    117,
+    70,
+    71,
+    [
+     "From this state-action combinations we create a big truth table that is used to create a binary decision diagram. The BDD is then optimized to call as few `state functions` as possible to determine the correct action of an incoming event-results combination."
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    71,
+    72
+   ],
+   [
+    "replace",
+    118,
+    119,
+    72,
+    73,
+    [
+     "The resulting optimized BDD is then shipped as the EventReduce algorithm and can be used in different programming languages and implementations. The programmer does not need to know about all this optimisation stuff and can directly use three simple functions like shown in the JavaScript implementation"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    131,
+    73,
+    85
+   ],
+   [
+    "replace",
+    131,
+    132,
+    85,
+    86,
+    [
+     "RxDB, the local-first JavaScript database, uses EventReduce for its live queries since version 9.0.0, where it is enabled by default."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    139,
+    86,
+    93
+   ],
+   [
+    "replace",
+    139,
+    140,
+    93,
+    94,
+    [
+     "- EventReduce only works with queries that have a predictable sort-order for any given documents. (you can make any query predicable by adding the primary key as last sort parameter)"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    149,
+    94,
+    103
+   ],
+   [
+    "replace",
+    149,
+    150,
+    103,
+    104,
+    [
+     "See docs/result-window-buffer.md for how it works, how to use it and the measurements."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    153,
+    104,
+    107
+   ],
+   [
+    "replace",
+    153,
+    154,
+    107,
+    108,
+    [
+     "At the moment there is only the JavaScript implementation that you can use over npm. Pull requests for other languages are welcomed."
+    ]
+   ],
+   [
+    "equal",
+    154,
+    157,
+    108,
+    111
+   ],
+   [
+    "replace",
+    157,
+    158,
+    111,
+    112,
+    [
+     "- Meteor uses a feature called OplogDriver that is limited on queries that do not use `skip` or `sort`. Also watch this video to learn how OpLogDriver works."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    159,
+    112,
+    113
+   ],
+   [
+    "replace",
+    159,
+    160,
+    113,
+    114,
+    [
+     "- RxDB used the `QueryChangeDetection` which works by many handwritten if-else comparisons. RxDB switched to EventReduce since version 9.0.0."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    161,
+    114,
+    115
+   ],
+   [
+    "replace",
+    161,
+    163,
+    115,
+    116,
+    [
+     "- Baqend is creating a database that optimizes for realtime queries. Watch the video Real-Time Databases Explained: Why Meteor, RethinkDB, Parse & Firebase Don't Scale to learn more."
+    ]
+   ],
+   [
+    "equal",
+    163,
+    166,
+    116,
+    119
+   ],
+   [
+    "replace",
+    166,
+    170,
+    119,
+    121,
+    [
+     " Is this incremental view maintenance (IVM)? ",
+     " In a narrow sense, yes. EventReduce incrementally maintains the result of one query (filter, sort, skip, limit) over one table or collection. Unlike general IVM engines it needs no query planner or dataflow graph and does not run any work on writes. It is a pure function from <code>(old results, change event)</code> to <code>new results</code> that you call whenever you need fresh results."
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    121,
+    122
+   ],
+   [
+    "replace",
+    171,
+    175,
+    122,
+    124,
+    [
+     " Is this something like materialized views? ",
+     " Yes and no. Materialized views solve a similar problem but in a different way with different trade-offs. When you have many users, all subscribing to different queries , you cannot create that many views because they are all recalculated on each write access to the database. EventReduce however has better scalability because it does not affect write performance and the calculation is done when the fresh query results are requested, not beforehand."
+    ]
+   ],
+   [
+    "equal",
+    175,
+    176,
+    124,
+    125
+   ],
+   [
+    "replace",
+    176,
+    180,
+    125,
+    127,
+    [
+     " Is this something like event sourcing or CQRS? ",
+     " No, event sourcing is mostly used to calculate a current state by attaching the full event stream to the starting state. This allows for stuff like time travel and so on. EventReduce solves a completely different (performance-) problem and only shares some common keywords like event ."
+    ]
+   ],
+   [
+    "equal",
+    180,
+    181,
+    127,
+    128
+   ],
+   [
+    "replace",
+    181,
+    185,
+    128,
+    130,
+    [
+     " Isn't this optimization already done by database engines? ",
+     " No. I tested EventReduce with many common databases like MongoDB, MySQL and Postgres. Each of them had better performance with Event-Reduce than just observing the eventstream and running the queries again. If you understand what Event-Reduce exactly does, it becomes clear that this optimization cannot be done by pull-based databases because they have missing information."
+    ]
+   ],
+   [
+    "equal",
+    185,
+    186,
+    130,
+    131
+   ],
+   [
+    "replace",
+    186,
+    190,
+    131,
+    133,
+    [
+     " Isn't this the same as product XY? ",
+     " No. EventReduce is not a product, it is not comparable to any database or streaming backend out there. EventReduce is an algorithm with a specific input and output, nothing more, nothing less. You can use EventReduce without having to change your underlying data infrastructure."
+    ]
+   ]
+  ],
+  "at": "2026-11-05"
+ },
+ "027153b064e7+2": {
+  "fn": "ossc-db/pg_rman",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    10,
+    1,
+    9
+   ],
+   [
+    "delete",
+    10,
+    11,
+    9,
+    9
+   ],
+   [
+    "equal",
+    11,
+    13,
+    9,
+    11
+   ],
+   [
+    "replace",
+    13,
+    14,
+    11,
+    12,
+    [
+     "check code blocks. Please choose a branch to match the PostgreSQL version"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    16,
+    12,
+    14
+   ],
+   [
+    "replace",
+    16,
+    22,
+    14,
+    20,
+    [
+     "* master : branch for PostgreSQL 19 Test",
+     "* REL_18_STABLE : branch for PostgreSQL 18 Test",
+     "* REL_17_STABLE : branch for PostgreSQL 17 Test",
+     "* REL_16_STABLE : branch for PostgreSQL 16 Test",
+     "* REL_15_STABLE : branch for PostgreSQL 15 Test",
+     "* REL_14_STABLE : branch for PostgreSQL 14 Test"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    24,
+    20,
+    22
+   ],
+   [
+    "delete",
+    24,
+    25,
+    22,
+    22
+   ],
+   [
+    "equal",
+    25,
+    43,
+    22,
+    40
+   ],
+   [
+    "replace",
+    43,
+    52,
+    40,
+    41,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    54,
+    41,
+    43
+   ],
+   [
+    "replace",
+    54,
+    55,
+    43,
+    44,
+    [
+     "To restore from a backup, use the `restore` command. Up to PostgreSQL11, note that pg_rman itself generates the `recovery.conf` file required to perform PostgreSQL PITR."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    60,
+    44,
+    49
+   ],
+   [
+    "replace",
+    60,
+    66,
+    49,
+    50,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    77,
+    50,
+    61
+   ],
+   [
+    "delete",
+    77,
+    78,
+    61,
+    61
+   ],
+   [
+    "equal",
+    78,
+    89,
+    61,
+    72
+   ],
+   [
+    "delete",
+    89,
+    90,
+    72,
+    72
+   ],
+   [
+    "equal",
+    90,
+    91,
+    72,
+    73
+   ],
+   [
+    "delete",
+    91,
+    92,
+    73,
+    73
+   ],
+   [
+    "equal",
+    92,
+    97,
+    73,
+    78
+   ]
+  ],
+  "at": "2026-11-05"
+ },
+ "e1f2dbee8f00+2": {
+  "fn": "ueberauth/guardian_db",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "Hex.pm",
+     "Build Status",
+     "Codecov",
+     "Inline docs"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    45,
+    6,
+    45
+   ],
+   [
+    "replace",
+    45,
+    46,
+    45,
+    46,
+    [
+     "To use ETS instead"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    72,
+    46,
+    72
+   ],
+   [
+    "replace",
+    72,
+    98,
+    72,
+    73,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    118,
+    73,
+    93
+   ],
+   [
+    "replace",
+    118,
+    126,
+    93,
+    94,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    183,
+    94,
+    151
+   ],
+   [
+    "replace",
+    183,
+    184,
+    151,
+    152,
+    [
+     "1. Redis adapter - `guardian_redis`"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    186,
+    152,
+    154
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "0cc719a8b17c+2": {
+  "fn": "NyxFoundation/nyxis",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "English | 日本語"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    13,
+    4,
+    13,
+    [
+     "License: MIT",
+     "Version",
+     "Status",
+     "Lean",
+     "Cedar",
+     "Formally verified",
+     "PostgreSQL",
+     "Supabase Auth",
+     "GitHub stars"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    16,
+    13,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "Nyxis lets solo developers who ship web applications written by AI agents release them with confidence about authorization. The only things a developer writes and approves are a Cedar schema and policies. Handlers can be written as usual by Claude Code or similar tools, and the developer never has to write Lean."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    25,
+    17,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     "> Nyxis is under active development (v0.1.10). The scope of the guarantee and the assumptions trusted outside the proof are spelled out in ASSUMPTIONS.md. Read it before using Nyxis in production."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    50,
+    26,
+    50
+   ],
+   [
+    "replace",
+    50,
+    54,
+    50,
+    51,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    60,
+    51,
+    57
+   ],
+   [
+    "replace",
+    60,
+    61,
+    57,
+    58,
+    [
+     "- Lean 4 via elan (the version is pinned in `lean-toolchain`)"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    72,
+    58,
+    69
+   ],
+   [
+    "replace",
+    72,
+    73,
+    69,
+    70,
+    [
+     "See docs/dependencies.md for dependency preparation and docs/local-supabase.md for setting up a local Supabase."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    86,
+    70,
+    83
+   ],
+   [
+    "replace",
+    86,
+    88,
+    83,
+    85,
+    [
+     "- `examples/bulletin-board/`: a bulletin board with published and draft posts, Google OAuth login, and granting and revoking admin rights. It ships with a Next.js frontend, so you can watch the policies allow and deny requests as you use the UI.",
+     "- `examples/team-docs/`: document sharing within organizations, with memberships and roles, timestamps, filtered and paginated lists, attachments, email notifications, and external API calls. Backend only for now."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    91,
+    85,
+    88
+   ],
+   [
+    "replace",
+    91,
+    92,
+    88,
+    89,
+    [
+     "|Path|Contents|"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    89,
+    90
+   ],
+   [
+    "replace",
+    93,
+    99,
+    90,
+    96,
+    [
+     "|`Nyxis/`|The core (Cedar parsing, authorization layer, runtime, connection code) and proofs. The main theorem is `Nyxis.Runtime.authorization_safety`|",
+     "|`Test/`|Core tests. `Test/Axioms.lean` checks the axioms of every theorem|",
+     "|`scripts/`|Dependency preparation and integration check scripts|",
+     "|`examples/`|Official samples|",
+     "|`docs/`|Proof catalog, responsibilities of the connection code, design notes|",
+     "|`supabase/`|Local Supabase configuration|"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    102,
+    96,
+    99
+   ],
+   [
+    "replace",
+    102,
+    106,
+    99,
+    103,
+    [
+     "- ASSUMPTIONS.md: scope of the guarantee and the assumptions trusted outside the proof",
+     "- docs/proofs.md: catalog of proven theorems and what each one does not state",
+     "- docs/connection.md: how the connection code upholds the assumptions",
+     "- CONTRIBUTING.md: how pull requests are incorporated, the DCO sign-off, and what CI checks"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    108,
+    103,
+    105
+   ],
+   [
+    "replace",
+    108,
+    110,
+    105,
+    106,
+    [
+     "MIT License © 2026 Nyx Foundation"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "2c482e20b2e4+2": {
+  "fn": "khonsulabs/nebari",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    8,
+    [
+     "nebari forbids unsafe code",
+     "nebari is considered alpha",
+     "crate version",
+     "Live Build Status",
+     "HTML Coverage Report for `main` branch",
+     "Documentation for `main` branch"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    13,
+    8,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "`Couchstore`."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    29,
+    14,
+    29
+   ],
+   [
+    "replace",
+    29,
+    37,
+    29,
+    30,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    39,
+    30,
+    32
+   ],
+   [
+    "replace",
+    39,
+    40,
+    32,
+    33,
+    [
+     "For more examples, check out `nebari/examples/`."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    45,
+    33,
+    38
+   ],
+   [
+    "replace",
+    45,
+    46,
+    38,
+    39,
+    [
+     "`TreeFile`."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    50,
+    39,
+    43
+   ],
+   [
+    "replace",
+    50,
+    51,
+    43,
+    44,
+    [
+     "`Roots` enables"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    56,
+    44,
+    49
+   ],
+   [
+    "replace",
+    56,
+    58,
+    49,
+    51,
+    [
+     " bytes long. For efficiency, keys should be kept to smaller lengths. Values can",
+     " be up to 4 gigabytes (2^32 bytes) in size."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    51,
+    52
+   ],
+   [
+    "replace",
+    59,
+    60,
+    52,
+    53,
+    [
+     " once, or ranges of keys."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    53,
+    54
+   ],
+   [
+    "replace",
+    61,
+    65,
+    54,
+    58,
+    [
+     " data in a tree use",
+     " `TreeFile::modify()`",
+     " which allows operating on one or more keys and performing [various",
+     " operations](https://nebari.bonsaidb.io/main/nebari/tree/enum.Operation.html)."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    58,
+    59
+   ],
+   [
+    "replace",
+    66,
+    70,
+    59,
+    63,
+    [
+     " trait](https://nebari.bonsaidb.io/main/nebari/trait.Vault.html) allows you to",
+     " bring your own encryption, compression, or other functionality to this format.",
+     " Each independently-addressible chunk of data that is written to the file",
+     " passes through the vault."
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    63,
+    64
+   ],
+   [
+    "replace",
+    71,
+    94,
+    64,
+    87,
+    [
+     " data, you can use a",
+     " `VersionedTreeRoot`",
+     " to store information that allows scanning old revision information. Or, if you",
+     " want to avoid the extra IO, use the",
+     " `UnversionedTreeRoot`",
+     " which only stores the information needed to retrieve the latest data in the",
+     " file.",
+     "- **ACID-compliance**:",
+     " - **Atomicity**: Every operation on a `TreeFile` is done atomically.",
+     " `Operation::CompareSwap`",
+     " can be used to perform atomic operations that require evaluating the",
+     " currently stored value.",
+     " - **Consistency**: Atomic locking operations are used when publishing a new",
+     " transaction state. This ensures that readers can never operate on a partially",
+     " updated state.",
+     " - **Isolation**: Currently, each tree can only be accessed exclusively within",
+     " a transaction. This means that if two transactions request the same tree,",
+     " one will execute and complete before the second is allowed access to the",
+     " tree. This strategy could be modified in the future to allow for more",
+     " flexibility.",
+     " - **Durability**: The append-only file format is designed to only allow",
+     " reading data that has been fully flushed to disk. Any writes that were",
+     " interrupted will be truncated from the end of the file."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    87,
+    88
+   ],
+   [
+    "replace",
+    95,
+    100,
+    88,
+    93,
+    [
+     " Transaction IDs are recorded in the tree headers. When restoring from disk,",
+     " the transaction IDs are verified with the transaction log. Because of the",
+     " append-only format, if we encounter a transaction that wasn't recorded, we",
+     " can continue scanning the file to recover the previous state. We do this",
+     " until we find a successfluly commited transaction."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    93,
+    94
+   ],
+   [
+    "replace",
+    101,
+    103,
+    94,
+    96,
+    [
+     " This process is much simpler than most database implementations due to the",
+     " simple guarantees that append-only formats provide."
+    ]
+   ],
+   [
+    "equal",
+    103,
+    106,
+    96,
+    99
+   ],
+   [
+    "replace",
+    106,
+    107,
+    99,
+    100,
+    [
+     "@ecton wasn't a database engineer before starting"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    115,
+    100,
+    108
+   ],
+   [
+    "replace",
+    115,
+    116,
+    108,
+    109,
+    [
+     " write occurred?"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    117,
+    109,
+    110
+   ],
+   [
+    "replace",
+    117,
+    118,
+    110,
+    111,
+    [
+     " the file is fully flushed to disk."
+    ]
+   ],
+   [
+    "equal",
+    118,
+    130,
+    111,
+    123
+   ],
+   [
+    "delete",
+    130,
+    132,
+    123,
+    123
+   ],
+   [
+    "equal",
+    132,
+    134,
+    123,
+    125
+   ],
+   [
+    "replace",
+    134,
+    137,
+    125,
+    128,
+    [
+     "This project, like all projects from Khonsu Labs, are",
+     "open-source. This repository is available under the MIT License",
+     "or the Apache License 2.0."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    128,
+    129
+   ],
+   [
+    "replace",
+    138,
+    139,
+    129,
+    130,
+    [
+     "To learn more about contributing, please see CONTRIBUTING.md."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }
