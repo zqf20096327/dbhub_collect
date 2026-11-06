@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/cover.png" width="760" alt="ehentai-crawler: a geometric panda and two dashed clones of it, next to the pipeline crawl, parse, download, store">
+  <img src="docs/images/cover.webp" width="760" alt="ehentai-crawler — Clone a panda yourself. A panda archivist sorts gallery cards beside a laptop and wooden file drawers.">
 </p>
 
 # ehentai-crawler
@@ -89,20 +89,11 @@ From a clone, `pip install -e .` works too, and `python main.py …` is the same
 Just one gallery? `ehentai-crawler -cu https://exhentai.org/g/<id>/<token>/` saves it to
 `img/<id>/` without touching the database.
 
-Then the long part: leave it running overnight, blanket optional, panda on the desk recommended.
+Then the long part: leave it running overnight. The panda has the archive covered.
 
 <p align="center">
-  <a href="https://danbooru.donmai.us/posts/2188979">
-    <img src="https://cdn.donmai.us/sample/0a/f7/sample-0af7531ca7fc4bbf59ba794ad8ded22e.jpg" width="420"
-         alt="Anime illustration: a girl wrapped in a blanket at her laptop at night, with a cat, coffee, cookies, a stack of books and a small panda on the desk">
-  </a>
-  <br>
-  <sub>
-    Illustration by <a href="https://danbooru.donmai.us/posts?tags=kotikomori">kotikomori</a>
-    · <a href="https://danbooru.donmai.us/posts/2188979">Danbooru #2188979</a>
-    · original: <a href="https://www.pixiv.net/artworks/51148569">pixiv 51148569</a>.
-    Shown from Danbooru, not stored in this repository, and not covered by its MIT license.
-  </sub>
+  <img src="docs/images/overnight-archive.webp" width="640"
+       alt="A panda archivist watches progress bars on a laptop and files gallery cards under a warm desk lamp, with rain and moonlight outside.">
 </p>
 
 ## How it works

@@ -12,7 +12,7 @@
 |---|---|
 | 字头 | 57,917 |
 | 条目（原文、注、引文、反切） | 196,021 |
-| 关系 | 371,276 |
+| 关系 | 372,031 |
 | 部首 | 540（《說文》全部） |
 | 体积 | JSONL 176.8 MiB · SQLite 216 MiB |
 
@@ -32,7 +32,7 @@
 
 | 形式 | 位置 | 说明 |
 |---|---|---|
-| SQLite | `hanzi-relations.db` | 215 MiB，见 [Releases](https://github.com/zhouyongh/hanzi-relations/releases)（推荐） |
+| SQLite | `hanzi-relations.db` | 216 MiB，见 [Releases](https://github.com/zhouyongh/hanzi-relations/releases)（推荐） |
 | JSONL | `data/` | 全量事实，一来源一目录 |
 | 浏览页 | `viewer/index.html` | 单文件，离线可用 |
 
@@ -114,5 +114,5 @@ xiaoxue_尔雅        2
 
 ## 相关
 
-- [hanzi-glyphs-svg](https://github.com/zhouyongh/hanzi-glyphs-svg)：字形（篆书等）与逐字图片。
+- [hanzi-glyphs-svg](https://github.com/zhouyongh/hanzi-glyphs-svg)：字形（篆书等）与逐字图片；本库指针 `glyph:hanzi-glyphs-svg:uid:<unified_id>`（见 docs/glyph-pointer-contract.md）。
 - 本库自己的部分以 CC0 释出：引用、转载、改写都不需要署名；方便的话注明仓库地址即可。

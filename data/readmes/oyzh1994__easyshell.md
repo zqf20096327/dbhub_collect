@@ -6,7 +6,7 @@
 
 ## 功能特性
 
-- **多协议支持**：支持 SSH、FTP、SFTP、Redis、ZooKeeper、串口、VNC、Telnet、RLogin、S3、RDP、SMB、Webdav、Mysql、Mongodb、Mariadb、达梦、SQLite、Mosh、本地终端等多种连接方式。
+- **多协议支持**：支持 SSH、FTP、SFTP、Redis、ZooKeeper、串口、VNC、Telnet、RLogin、S3、RDP、SMB、Webdav、Mysql、Mongodb、Mariadb、达梦、PostgreSQL、SQLite、Mosh、本地终端等多种连接方式。
 - **连接管理**：支持连接的添加、编辑、删除、导入、导出等操作。
 - **密钥管理**：支持密钥的生成、导入、导出、编辑、复制到主机等操作。
 - **片段执行**：支持代码片段的保存和执行。
@@ -23,8 +23,9 @@
 - **RDP 客户端**：支持 RDP 协议的管理和连接，支持内建&原生连接方式。
 - **Redis 客户端**：支持 Redis 协议的增删改查、导出、导入、传输、终端等操作。
 - **ZooKeeper 客户端**：支持 ZooKeeper 协议的增删改查、权限管理、导入、导出、传输、终端等操作。
-- **Mysql 客户端**：支持 Mysql 协议的表、视图、函数、过程、事件管理、查询、导入、导出、传输、转储、终端等操作。
-- **Dameng 客户端**：支持 Dameng 协议的表、视图、函数、用户管理、查询、导入、导出、传输、转储、终端等操作。
+- **Mysql 客户端**：支持 Mysql 协议的库、表、视图、函数、过程、事件管理、查询、导入、导出、传输、转储、终端等操作。
+- **Dameng 客户端**：支持 Dameng 协议的模式、表、视图、函数、过程、序列、用户管理、查询、导入、导出、传输、转储、终端等操作。
+- **PostgreSQL 客户端**：支持 PostgreSQL 协议的模式、表、视图、函数、过程、序列、查询、导入、导出、传输、转储、终端等操作。
 - **SQLite 客户端**：支持 SQLite 协议的表、视图、函数、查询、导入、导出、传输、转储、终端等操作。
 - **Mongodb 客户端**：支持 Mongodb 协议的集合、存储桶、函数、用户管理、查询、导入、导出、传输、转储、终端等操作。
 - **Mosh 仿真终端**：支持 Mosh 协议的连接。
@@ -46,6 +47,19 @@
 ### 主页
 ![zhuye1.png](resource/screenshot/zhuye1.png)
 ![zhuye2.png](resource/screenshot/zhuye2.png)
+
+### ai
+![llm1.png](resource/screenshot/llm1.png)
+![llm2.png](resource/screenshot/llm2.png)
+![llm3.png](resource/screenshot/llm3.png)
+![llm4.png](resource/screenshot/llm4.png)
+![llm5.png](resource/screenshot/llm5.png)
+![llm6.png](resource/screenshot/llm6.png)
+![llm7.png](resource/screenshot/llm7.png)
+![llm8.png](resource/screenshot/llm8.png)
+![llm9.png](resource/screenshot/llm9.png)
+![llm10.png](resource/screenshot/llm10.png)
+![llm11.png](resource/screenshot/llm11.png)
 
 ### 设置
 ![shezhi1.png](resource/screenshot/shezhi1.png)
@@ -102,6 +116,7 @@
 ![zk15.png](resource/screenshot/zk15.png)
 ![zk16.png](resource/screenshot/zk16.png)
 ![zk17.png](resource/screenshot/zk17.png)
+![zk18.png](resource/screenshot/zk18.png)
 
 ### Redis
 ![redis1.png](resource/screenshot/redis1.png)
@@ -119,6 +134,8 @@
 ![redis13.png](resource/screenshot/redis13.png)
 ![redis14.png](resource/screenshot/redis14.png)
 ![redis15.png](resource/screenshot/redis15.png)
+![redis16.png](resource/screenshot/redis16.png)
+![redis17.png](resource/screenshot/redis17.png)
 
 ### SFTP
 ![sftp1.png](resource/screenshot/sftp1.png)
@@ -194,6 +211,7 @@
 ![mysql23.png](resource/screenshot/mysql23.png)
 ![mysql24.png](resource/screenshot/mysql24.png)
 ![mysql25.png](resource/screenshot/mysql25.png)
+![mysql26.png](resource/screenshot/mysql26.png)
 
 ### MongoDB
 ![mongo1.png](resource/screenshot/mongo1.png)

@@ -34,6 +34,7 @@
 <div align="center">
 
 🚀 **Meteroid 2.0 is out:** credits and wallets, e-invoicing, native webhooks, and a new open-source baseline.
+[Announcement](https://github.com/meteroid-oss/meteroid/discussions/1270) ·
 [Release notes](https://github.com/meteroid-oss/meteroid/releases/tag/v2.0.0) ·
 [Upgrade guide](https://docs.meteroid.com/self-hosting/upgrading-to-2-0)
 
@@ -75,8 +76,9 @@ reconciling spreadsheets.
   volume, package, matrix and capacity pricing, or any mix of them. Plans are versioned, so a price change
   never touches existing customers unless you want it to.
 - **Credits and wallets:** prepaid and promotional credit per currency, with grants, priorities, expiry
-  and a full ledger, applied at invoicing. With the Enterprise images: your own credit units, credit packs
-  in plans, self-serve top-ups, scoped credit, and usage beyond the balance billed as overage.
+  and a full ledger, applied at invoicing, and top-ups customers buy from the portal. With the Enterprise
+  images: your own credit units, credit packs in plans, scoped credit, and usage beyond the balance billed
+  as overage.
 - [**Subscriptions:**](https://docs.meteroid.com/subscriptions/what-is-a-subscription) trials, coupons,
   add-ons, upgrades and downgrades mid-cycle with proration, and cancellations that credit what was paid in
   advance.
@@ -84,8 +86,9 @@ reconciling spreadsheets.
   subscription starts and bills on its own. Several signers and purchase orders come with the
   Enterprise images.
 - [**Invoicing:**](https://docs.meteroid.com/invoices/managing-invoices) invoices and credit notes in eight
-  languages, tax-inclusive or exclusive prices, and, with the Enterprise images, e-invoicing as
-  Factur-X or XRechnung.
+  languages, tax-inclusive or exclusive prices, e-invoicing as Factur-X or XRechnung, and payment
+  reminders before and after the due date. Reminder sequences per customer group come with the
+  Enterprise images.
 - [**Payments:**](https://docs.meteroid.com/integrations/general-information) Stripe, GoCardless, Mollie and Stancer, with automatic retries, refunds, and a customer
   portal and hosted checkout. Customers change their own plan, add-ons and seats from the portal
   with the Enterprise images.
@@ -94,11 +97,13 @@ reconciling spreadsheets.
 - **API, webhooks and integrations:** a REST API with SDKs, signed webhooks with retries and a delivery
   log, and a growing list of connectors.
 
-Meteroid Enterprise adds many features such as [revenue reports and analytics](https://docs.meteroid.com/analytics/overview), live balances, limits, budgets, dunning, tax reports, SSO, audit log and more: see [Editions and images](#editions-and-images).
+Meteroid Enterprise adds many features such as [revenue reports and analytics](https://docs.meteroid.com/analytics/overview), live balances, limits, budgets, tax reports, SSO, audit log and more: see [Editions and images](#editions-and-images).
 
 ## Quick start
 
 Run Meteroid on your machine with Docker Compose:
+
+The default images are Meteroid Enterprise (free under 50 employees and €2M in annual revenue). For the AGPL images built from this repository, add [`-f docker-compose.oss.yml`](docker/deploy/docker-compose.oss.yml): `docker compose -f docker-compose.yml -f docker-compose.oss.yml up -d`.
 
 ```bash
 git clone https://github.com/meteroid-oss/meteroid.git
@@ -116,14 +121,18 @@ Upgrading from 0.19 or a 1.0.0 release candidate? Follow
 
 ## Editions and images
 
-This repository is the open-source edition, under the AGPL V3. To run it, build the images from this repository; both editions share the same database, so you can switch by changing the images.
+This repository is the open-source edition, under the AGPL V3. Its images are published on each release as
+`ghcr.io/meteroid-oss/meteroid-oss-api`, `meteroid-oss-worker`, `meteroid-oss-metering` and `meteroid-oss-web`:
+use them with the Compose override [`docker-compose.oss.yml`](docker/deploy/docker-compose.oss.yml) or the Helm
+chart's `edition: oss`. You can also build them from this repository. Both editions share the same database, so you
+can switch by changing the images.
 
-The official images (`ghcr.io/meteroid-oss/meteroid-api`, `meteroid-worker`, `metering-api` and
+The default images (`ghcr.io/meteroid-oss/meteroid-api`, `meteroid-worker`, `metering-api` and
 `meteroid-web`) are Meteroid Enterprise: the code of this repository plus the Enterprise modules. They are
 free for companies under 50 employees and €2M in annual revenue under the
 [Enterprise license](editions/enterprise/LICENSE), and some Enterprise features come free with
-them: dunning, tax reports, MRR and revenue reports, live balances and usage limits, credit units and packs,
-portal self-service, customer email customization and e-invoicing. Larger companies need a
+them: tax reports, MRR and revenue reports, live balances and usage limits, credit units and packs,
+portal self-service and customer email customization. Larger companies need a
 commercial license, and a license unlocks the rest. See
 [Editions](https://docs.meteroid.com/self-hosting/editions).
 
@@ -148,9 +157,9 @@ build Meteroid from source.
 
 Copyright 2026 Meteroid
 
-The code of this repository is licensed under the AGPL V3 License: see [LICENSE](LICENSE). The official
-images, Meteroid Enterprise, are licensed under the Meteroid Enterprise License: see
-[editions/enterprise/LICENSE](editions/enterprise/LICENSE).
+The code of this repository, and the `meteroid-oss-*` images built from it, are licensed under the AGPL V3
+License: see [LICENSE](LICENSE). The default images, Meteroid Enterprise, are licensed under the Meteroid
+Enterprise License: see [editions/enterprise/LICENSE](editions/enterprise/LICENSE).
 
 For enterprise support, licenses or custom licensing options, contact us at
 [hey@meteroid.com](mailto:hey@meteroid.com).

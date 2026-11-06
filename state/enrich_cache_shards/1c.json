@@ -2804,5 +2804,48 @@
    "contrib": "20261103",
    "lang": "20261103"
   }
+ },
+ "anudit/scan": {
+  "rel_ver": "v1.1.0",
+  "rel_pub": "2026-11-04",
+  "rel_days": 2,
+  "rel_n90": 6,
+  "rel_pre": false,
+  "rel_none": false,
+  "rel_notes": [
+   {
+    "t": "v1.1.0",
+    "d": "2026-11-04",
+    "n": "Scan v1.1.0 opens Parquet files straight from an HTTPS URL, including Hugging Face datasets, without downloading the whole file.\n\n- **Remote Parquet:** choose **File → Open URL…** (⇧⌘O) or run `scan https://…/file.parquet`. Hugging Face `/blob/` links are rewritten to `/resolve/`. Scan reads the footer and only the columns and row groups needed for the visible rows, using HTTP range requests.\n- **Fast open:** one request returns the file size, its validators and the footer. Neighbouring column chu"
+   },
+   {
+    "t": "v1.0.4",
+    "d": "2026-10-20",
+    "n": "Scan v1.0.4 reloads a file when it changes on disk, fixes NDJSON files whose fields appear late, and shows row counts with US-style commas.\n\n- **Auto-refresh:** while a file is open, Scan watches it and reopens it when it changes on disk, including when an editor replaces the file on save. Filters, sorts and grouping reset on refresh.\n- **Fix:** an NDJSON or JSON Lines file with a key that first appears after the first 2,048 rows, for example a nested `adType`, no longer fails to open with \"has unknown key\""
+   },
+   {
+    "t": "v1.0.3",
+    "d": "2026-10-07",
+    "n": "- **JSON tree in the inspector:** when a cell holds a JSON object or array, the Cell inspector shows it as a tree you can expand and collapse, with keys in the file's order. Right-click a row to copy its value, key or DuckDB JSON path (for example `$.maker.links[0]`). Switch between Tree and Text with the control beside the column name. Struct, list and map columns show as JSON too, and copying their cells now gives JSON.\n- **File type icons:** tabs and the sidebar show a different icon for each format: CSV"
+   }
+  ],
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Swift": 48,
+   "C": 47,
+   "Python": 4,
+   "Shell": 1
+  },
+  "enriched_at": "20261106",
+  "dim_ts": {
+   "release": "20261106",
+   "security": "20261106",
+   "contrib": "20261106",
+   "lang": "20261106"
+  }
  }
 }

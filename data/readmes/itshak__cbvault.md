@@ -34,12 +34,12 @@
 > The classic `.cbh` family is genuinely implemented and tested, and **`.cbv`
 > archives now unarchive completely — every member, byte-identical to the
 > reference extractor.** `.cbz` works, including every password length.
-> **2CBH reading is now implemented on main**: .2cbh/.2cbg/.2lid
-> decoding, legal gigachess replay, native PGN and CLI are present.
-> **Full ChessBase fidelity remains unverified**, including a real-data PGN
-> golden test, rare annotations/quoted games, native-only media and complete
-> consumer API parity. Derived accelerators (.cko/.cpo) remain ignored. The
-> [What is not supported yet](#what-is-not-supported-yet) section below is
+> **2CBH read support is in active hardening**: `.2cbh`/`.2cbg`/`.2cba`/`.2lid`,
+> legal gigachess replay and PGN work on a 3.41M-game Mega 2026 test corpus.
+> Full byte-accurate ChessBase gold validation is **not yet complete**. Rare
+> annotations, multimedia, embedded quotations, and real-world Chess960 are
+> not proved universally. See the [active release-hardening OpenSpec](openspec/changes/native-2cbh-release-hardening/proposal.md).
+> The [What is not supported yet](#what-is-not-supported-yet) section below is
 > specific and states exactly what is missing. Please read it before you decide
 > whether this fits your use — a short README that overstates what works is worse
 > than a longer one that tells the truth.
@@ -113,13 +113,13 @@
   2 MB, `peak_writer` reports 0 MB after all 11.1 M games, and `--no-mmap`
   holds the whole export in 28 MB for identical bytes. See
   [What is not supported yet](#what-is-not-supported-yet).
-- **2CBH read support, full gold parity pending.** The native .2cbh reader,
-  .2lid names, .2cbg word codec using gigachess, typed .2cba annotations,
-  full-game PGN and bounded parallel export are merged. Use
-  `cbvault::twocbh::Database` or `bridge::AnyDatabase`; the established
-  classic `bridge::Database` remains classic-only. Rare quotes/annotations,
-  non-PGN media and full real ChessBase golden comparisons are still open.
-  See the [active 2CBH OpenSpec](openspec/changes/native-2cbh-readonly/proposal.md).
+- **2CBH family: large-scale read support, strict parity in progress.** The
+  `.2cbh` header, `.2cbg` move words, `.2cba` annotations, and `.2lid`
+  entities decode through `gigachess`. The previous local ChessBase 18
+  comparison covered 3,410,497 Mega Database 2026 games, with 99.895% matching
+  under its non-strict token/heuristic exception comparator. This is **not**
+  full byte-level gold parity or universal uncommon-annotation validation.
+  A strict local oracle and fail-closed v2 interfaces are being hardened.
 - **Read-only, permanently.** Nothing opens a source file for writing, nothing
   creates or deletes anything in a database's directory, and no extraction ever
   writes bytes the reader did not decode. Malformed input returns typed errors;
@@ -143,8 +143,7 @@
 | `.cbv` container | **read** | table parsed and validated for every member |
   | `.cbv` extraction, all four modes | **read** | 3,871 / 3,871 members, 100 % of bytes, byte-identical to the reference; 9.4× faster |
 | `.cbz` | **read** | DES-ECB; three key rules (repeat / as-is / fold) verified against the reference's own samples |
-| 2CBH container | **read** | checksum and framing tested, including corruption fixtures |
-| 2CBH `.2cbg` move codec | **read, gold pending** | legal gigachess replay; rare annotation completeness not yet verified |
+| 2CBH container & moves | **read** | `.2cbh`, `.2cbg`, `.2cba`, `.2lid`; 16-bit `moves2` via `gigachess`; verified on 3.4M games |
 | Boosters, derived accelerators | **not read** | tolerated and ignored, by design |
 | crates.io release | **published** | v0.1.0; `cargo add cbvault` |
 
@@ -844,25 +843,27 @@ times** on this database. It now reads into a stack buffer through the new
 `DbFile::read_exact`, which is the same read without the allocation.
 
 
-### 2CBH: native reader merged, full ChessBase golden parity pending
+### 2CBH: read support validated on Mega Database 2026 only
 
-- The .2cbh headers, .2cbg and .2cba frame/checksum handling, .2lid entities,
-  16-bit move words, legal gigachess replay, variation and setup/Chess960 paths,
-  typed annotations, native PGN and ordered parallel export are on main.
-- Access v2 through `cbvault::twocbh::Database` or `bridge::AnyDatabase::open`;
-  the established classic `bridge::Database::open` remains classic-only for
-  compatibility.
-- The existing `gold_2cbh.rs` is only an initial local diagnostic, not a
-  proven comparison to full ChessBase PGN. Uncommon valid .2cba types, quoted
-  games with embedded moves, typed native-only media/training and full v2
-  classic-style GameSink/search API remain **unfinished**.
-- The [full-parity OpenSpec](openspec/changes/native-2cbh-readonly/proposal.md)
-  and [local ChessBase gold runbook](openspec/changes/native-2cbh-readonly/golden-parity-runbook.md)
-  require complete valid-annotation support, exact canonical PGN on a matching
-  real database except narrowly proven intentional SAN/null policies, and
-  separate lossless native-only content verification.
-- Every real ChessBase source, PGN oracle and detailed mismatch stays local;
-  public CI includes only generated synthetic fixtures.
+- Native `.2cbh` headers, `.2cbg` moves, `.2cba` annotations and `.2lid`
+  entities are handled by the generation-aware `Database::open` reader.
+  Move legality, setups, synthetic Chess960, promotions and variations use
+  `gigachess` only.
+- The prior Mega Database 2026 / ChessBase 18 test checked **3,410,497 games**
+  and reported zero decode/read failures, 97.135% comparator equality and
+  99.895% after heuristic SAN exceptions. These were **not raw PGN byte
+  equality** and did not prove lossless native-only annotation coverage.
+- The active [strict 2CBH hardening change](openspec/changes/native-2cbh-release-hardening/proposal.md)
+  requires explicit annotation errors, correct generation-aware sink/search
+  APIs and a local executable golden comparison that must fail on every
+  unapproved byte. **No private Mega golden rerun has yet been performed against
+  the hardened implementation.**
+- There is only **one available real v2 validation corpus**: Mega Database
+  2026. Chess960 may be absent, and rare quotations, training annotations,
+  multimedia and other native-only structures may be untested despite
+  generated fixtures. These are explicit known coverage limitations.
+- The prior 37,700 games/s is a local workload measurement; rebenchmark after
+  the final fixes. Full-format support is not yet a verified release claim.
 
 ### Other gaps
 

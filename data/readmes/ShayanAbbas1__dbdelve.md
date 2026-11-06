@@ -10,6 +10,9 @@ introduce limits.
 
 Ideas and discussion on [Discord](https://discord.gg/7PegWzwqCm).
 
+Like DBDelve? [Support its development](https://www.patreon.com/cw/ShayanAbbas1).
+Support is voluntary and does not provide any additional benefits.
+
 
 ![DBDelve in Gruvbox Dark Glass: a SELECT on the events table in the editor and its result grid below](assets/screenshots/query-dark.png)
 
@@ -74,7 +77,7 @@ statements you type run under the connection's mode. See
 - **Bring your connections with you.** Import every saved connection,
   passwords and SSH settings included, from DBeaver, or TablePlus on macOS.
 - **Organize your connections into projects,** and jump to any of them from
-  the palette.
+  the palette, or disconnect back to a home screen that lists them all.
 
   ![The palette scoped to connections, grouped into two projects, with the current connection marked](assets/screenshots/projects.png)
 

@@ -141,12 +141,12 @@
   }
  },
  "cybertec-postgresql/pg_squeeze": {
-  "commit_90d": 4,
-  "commit_7d": 0,
+  "commit_90d": 5,
+  "commit_7d": 2,
   "rel_ver": "REL1_9_4",
   "rel_pub": "2026-07-29",
-  "rel_days": 60,
-  "rel_n90": 1,
+  "rel_days": 100,
+  "rel_n90": 0,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -161,7 +161,28 @@
    "Makefile": 0,
    "Emacs Lisp": 0
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261106",
+  "rel_notes": [
+   {
+    "t": "REL1_9_4",
+    "d": "2026-07-29",
+    "n": "Properly quote schema and table names (#93, @CyberDem0n)\r\n\r\n    Replace manual double-quote and single-quote string concatenation with\r\n    quote_identifier()/quote_ident() and quote_literal_cstr() when building\r\n    dynamic SQL for ANALYZE statements and log/error inserts.\r\n\r\n    Since `squeeze.worker_role` is supposed to be a superuser, lack of\r\n    proper quoting allows executing arbitrary SQL with superuser privileges."
+   },
+   {
+    "t": "REL1_9_3",
+    "d": "2026-06-19",
+    "n": "Release 1.9.3\r\n=============\r\n\r\n1. Support PostgreSQL 19.\r\n\r\n2. Remove support for PostgreSQL 13."
+   },
+   {
+    "t": "REL1_9_2",
+    "d": "2026-06-19",
+    "n": "Release 1.9.2\r\n=============\r\n\r\nNote: To upgrade from 1.9.1 to 1.9.2, you only need to install the 1.9.2\r\nbinary. There's no need to run\r\n\r\n    ALTER EXTENSION pg_squeeze UPDATE;\r\n\r\nBug fixes\r\n---------\r\n\r\n1. Fix possible escalation of privileges\r\n\r\nOne problem this release fixes is that index functions used to run as the\r\nsuperuser. If they contained malicious code, it would have the superuser\r\nprivileges too. This is fixed by changing the current user to the table owner\r\nbefore any index function can be e"
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261106",
+   "release": "20261106"
+  }
  },
  "go-ozzo/ozzo-dbx": {
   "commit_90d": 30,
@@ -2866,6 +2887,29 @@
    "security": "20261103",
    "contrib": "20261103",
    "lang": "20261103"
+  }
+ },
+ "lol-beluga/honglou-agent": {
+  "rel_ver": null,
+  "rel_none": true,
+  "sec_n": 0,
+  "sec_worst": null,
+  "sec_last": null,
+  "sec_ids": [],
+  "contrib_n": 1,
+  "lang": {
+   "Python": 61,
+   "Java": 31,
+   "HTML": 5,
+   "CSS": 2,
+   "Batchfile": 0
+  },
+  "enriched_at": "20261106",
+  "dim_ts": {
+   "release": "20261106",
+   "security": "20261106",
+   "contrib": "20261106",
+   "lang": "20261106"
   }
  }
 }

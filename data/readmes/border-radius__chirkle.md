@@ -1,9 +1,9 @@
-# Chirkle
+# <img src="logo.svg" alt="" width="36" height="36" align="top"> Chirkle
 
 A small, fast, real-time group chat. One [PocketBase](https://pocketbase.io) binary is the whole backend
 (auth, data, realtime, static files); the frontend is vanilla TypeScript bundled by esbuild — no framework,
-~49 KB of JS and ~11 KB of CSS gzipped (`npm run build` fails over its budget: 49.10 KB of JS,
-11.05 KB of CSS; rarer screens such as the image viewer, search, room access and collections load on first use).
+~49 KB of JS and ~11 KB of CSS gzipped (`npm run build` fails over its budget: 49.75 KB of JS,
+11.25 KB of CSS; rarer screens such as the image viewer, search, room access and collections load on first use).
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshot-dark.png">
@@ -41,15 +41,42 @@ A small, fast, real-time group chat. One [PocketBase](https://pocketbase.io) bin
 - A native Android app (Kotlin, Jetpack Compose) with the same features, notifications and a 3 MB download — see
   [Android app](#android-app)
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/collections-dark.png">
+  <img alt="A collection in Chirkle: the private Moodboard's pictures by month, with Upload, Rename and Make public; the sidebar lists your collections with their counts and a followed one with 3 new" src="docs/collections-light.png">
+</picture>
+
 Design: [`docs/DESIGN.md`](docs/DESIGN.md) · Android app: [`docs/ANDROID.md`](docs/ANDROID.md) · QA: [`docs/QA.md`](docs/QA.md) · Refactoring plan: [`docs/REFACTOR.md`](docs/REFACTOR.md) · Archived plans: [MVP build](docs/history/BUILD_PLAN.md), [avatars, DMs, attachments](docs/history/NEXT_FEATURES_PLAN.md)
 
 ## Requirements
 
 - Node.js ≥ 22 and npm ≥ 11
-- Linux or macOS (x64/arm64) — `npm run setup` downloads the matching PocketBase binary
+- Linux or macOS (x64/arm64) — `npm start` and `npm run setup` download the matching PocketBase binary (Windows: WSL or Docker)
+- Optional, for the server's workers: `ffmpeg` (video posters) and `curl` (link previews) on the `PATH`
 - For e2e tests: Playwright's Chromium (`npx playwright install chromium`)
 
-## Getting started
+## Quick start
+
+```sh
+npm install
+npm start          # builds the web app, downloads PocketBase on the first run, serves http://127.0.0.1:8090
+```
+
+Or without a clone, from npm (the package ships the built web app and the server's hooks and migrations):
+
+```sh
+npx chirkle                     # data in ./pb_data
+npx chirkle chat.example.com    # HTTPS with Let's Encrypt on ports 80/443
+```
+
+Open the page and sign up. The first run prints a link to create the admin (superuser) account, or create one with
+`npx chirkle superuser upsert you@example.com <password>` (`npm start -- superuser upsert …` in a clone).
+`HOST` and `PORT` choose the address (default `127.0.0.1:8090`; `HOST=0.0.0.0` to reach it from other machines),
+`CHIRKLE_DATA` the data directory (default `./pb_data`), and any other `pocketbase serve` flags can follow
+(`npx chirkle --http=0.0.0.0:80`). The settings of [Deploying](#deploying) (`TRUSTED_PROXY` behind a reverse proxy, …)
+apply as they are. PocketBase is kept in the package's `bin/` (or `~/.cache/chirkle/` when that isn't writable).
+
+## Getting started (development)
 
 ```sh
 npm ci
@@ -65,6 +92,7 @@ The PocketBase admin UI is at http://127.0.0.1:8090/_/ (create a superuser with
 
 | Script | What it does |
 |---|---|
+| `npm start` | Production build, then the server (`scripts/start.mjs`, the package's `chirkle` command): PocketBase on http://127.0.0.1:8090 with `pb_data/` |
 | `npm run dev` | Unminified watch build into `pb_public/` + `pocketbase serve --dev` |
 | `npm run build` | Production build (hashed assets) into `pb_public/`; fails if over the size budget |
 | `npm run typecheck` | `tsc` (strict) for the frontend, tests and scripts, plus `pb_hooks/` + `pb_migrations/` against PocketBase's generated types (`types/pocketbase.d.ts`, written by `scripts/pb-types.sh`) |
@@ -75,7 +103,7 @@ The PocketBase admin UI is at http://127.0.0.1:8090/_/ (create a superuser with
 | `npm run test:int` | Integration tests: schema, API rules, hooks, realtime, pagination |
 | `npm run test:e2e` | Playwright end-to-end tests against the production build |
 | `npm run schema:snapshot` | Rewrite `docs/schema.snapshot.json` (every collection's API rules, fields and indexes, and the rate limits) after a migration changes them; `test:int` fails while it is out of date |
-| `npm run screenshots` | Rewrite the README screenshots (`docs/screenshot-*.png`): a throwaway server with made-up people and messages, photographed in Chromium after `npm run build` |
+| `npm run screenshots` | Rewrite the README screenshots (`docs/screenshot-*.png`, `docs/collections-*.png`): a throwaway server with made-up people, messages and collections, photographed in Chromium after `npm run build` |
 | `npm run check` | typecheck + lint + lint:sinks + test + test:int + build (what CI runs before e2e) |
 
 Every test run starts its own PocketBase on a free port with a temp data dir — nothing to clean up, and no fakes
@@ -91,6 +119,7 @@ pb_hooks/        server-side hooks: trimming, soft delete, edit/archive stamps, 
 web/src/         frontend: api.ts (the only module that talks to PocketBase, through pb.ts, a minimal client), router,
                  store, cache.ts (the room cache), sw.ts (the service worker), views/, lib/ (pure logic)
 web/styles/      app.css (bundles app/*.css, one file per part) and viewer.css
+web/public/      icons/: the logo (logo.svg) as icon.svg and the PNG app icons, served as they are
 scripts/         build, dev, fetch-pocketbase, pb-types (PocketBase's types for the hooks), html-sink check
 tests/           unit/, integration/, e2e/, perf/ (scale measurements), support/ (PocketBase harness, Telegram stub, helpers)
 android/         the Android app (docs/ANDROID.md): core/data (API, realtime, database, sync), core/ui, feature/*, app

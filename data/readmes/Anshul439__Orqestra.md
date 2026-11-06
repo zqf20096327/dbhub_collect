@@ -16,7 +16,7 @@ task docker:up
 task migrate:up
 
 # Generate an API key and add it to .env as ORQESTRA_API_KEY
-orq-keygen my-key
+task keygen -- my-key
 
 # Terminal 1
 task server
@@ -25,7 +25,7 @@ task server
 task worker
 
 # Submit a job
-orq submit --type=shell --command "echo hello world"
+task submit -- "echo hello world"
 ```
 
 The REST API listens on `localhost:8080` (CLI) and gRPC on `localhost:50051` (workers).
@@ -40,7 +40,7 @@ The REST API listens on `localhost:8080` (CLI) and gRPC on `localhost:50051` (wo
 - Per-step output chaining via `$PREVIOUS_OUTPUT`
 - API key authentication on all REST endpoints
 - Redis is used behind a queue interface, keeping orchestration decoupled from the queue backend
-- CLI (`orq`) for job submission, inspection, and workflow management
+- CLI for job submission, inspection, and workflow management
 
 ## Architecture
 
@@ -94,17 +94,17 @@ When a step has exactly one dependency, that dependency's stdout is injected as 
 
 ```bash
 # Jobs
-orq submit --type=shell --command "echo hello world"
-orq list
-orq status <job-id>
-orq cancel <job-id>
+task submit -- "echo hello world"
+task list
+task status -- <job-id>
+task cancel -- <job-id>
 
 # Workflows
-orq workflow list
-orq workflow trigger <name>
-orq workflow runs
-orq workflow status <run-id>
-orq workflow cancel <run-id>
+task workflow:list
+task trigger -- <name>
+task workflow:runs
+task workflow:status -- <run-id>
+task workflow:cancel -- <run-id>
 ```
 
 ## Testing

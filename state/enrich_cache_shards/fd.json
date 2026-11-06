@@ -435,12 +435,12 @@
   }
  },
  "mysticmind/mysticmind-postgresembed": {
-  "commit_90d": 0,
-  "commit_7d": 0,
-  "rel_ver": "4.0.0",
-  "rel_pub": "2023-12-14",
-  "rel_days": 1018,
-  "rel_n90": 0,
+  "commit_90d": 7,
+  "commit_7d": 7,
+  "rel_ver": "5.2.1",
+  "rel_pub": "2026-11-06",
+  "rel_days": 0,
+  "rel_n90": 4,
   "rel_pre": false,
   "rel_none": false,
   "sec_n": 0,
@@ -452,7 +452,28 @@
    "C#": 98,
    "JavaScript": 2
   },
-  "enriched_at": "20260927"
+  "enriched_at": "20261106",
+  "rel_notes": [
+   {
+    "t": "5.2.1",
+    "d": "2026-11-06",
+    "n": "- **Killing a server no longer leaks its shared memory (Linux and macOS).** `KillAsync`, the last-resort kill when a stop fails, and the kill when a test host exits without disposing the server now remove the server's System V shared memory segment once the process is gone. Before, each kill left a segment behind until reboot. macOS allows only 32 on the whole machine, so after enough kills no Postgres could start at all: `could not create shared memory segment: No space left on device`. Only the segment th"
+   },
+   {
+    "t": "5.2.0",
+    "d": "2026-11-06",
+    "n": "- A named instance lives in the shared cache (`instances/app`), unless you set `DbDir`, so every test run, app and tool on the machine finds the same one. Its data is kept when the server stops.\n- Data created by another Postgres major version is refused with a clear error, before anything downloads.\nStatus comes from Postgres's own `postmaster.pid` plus a check that the process is alive, so a server that crashed reads as stopped, including one left as a zombie in a container without an init process.\n- Sett"
+   },
+   {
+    "t": "5.1.0",
+    "d": "2026-11-06",
+    "n": "- Named instances (fixed `InstanceId`) should pin at least a major: Postgres cannot open data from another major version.\n- **`KeepRunningAfterExit`** keeps a server running when its process exits without stopping it. By default it is still killed on exit, so tests never leave Postgres behind."
+   }
+  ],
+  "dim_ts": {
+   "commit": "20261106",
+   "release": "20261106"
+  }
  },
  "tinspin/rupy": {
   "commit_90d": 0,

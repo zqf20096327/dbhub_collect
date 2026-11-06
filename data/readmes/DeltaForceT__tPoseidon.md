@@ -8,7 +8,7 @@
   <a href="https://github.com/DeltaForceT/tPoseidon/actions/workflows/ci.yml"><img alt="Build" src="https://github.com/DeltaForceT/tPoseidon/actions/workflows/ci.yml/badge.svg"></a>
   <a href="https://github.com/DeltaForceT/tPoseidon/releases"><img alt="Latest release" src="https://img.shields.io/github/v/release/DeltaForceT/tPoseidon?include_prereleases&label=release"></a>
   <a href="LICENSE"><img alt="License: beta license" src="https://img.shields.io/badge/license-beta%20license-blue"></a>
-  <img alt="Platform: Windows" src="https://img.shields.io/badge/platform-Windows-lightgrey">
+  <img alt="Platforms: Windows, Linux" src="https://img.shields.io/badge/platforms-Windows%20%7C%20Linux-lightgrey">
   <a href="https://discord.gg/RAfSMmBm7"><img alt="Discord" src="https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white"></a>
 </p>
 
@@ -33,11 +33,13 @@ tPoseidon is in beta. These are the rules that matter. The full text is in [BETA
 - **Forks only for pull requests, no redistribution of modified copies during the beta.** Download it, run it, host it for yourself and your community. You can fork the repository to prepare a pull request, but don't publish modified builds, forks or other emulators based on it, and don't re-upload the packages.
 - **No wipes.** Your accounts and characters live in your own database. Updates migrate it. Back up before every update.
 - **Bring your own KR 2014 client.** I don't ship it. Never share client or game files in this project's spaces.
-- **Put your version in every bug report**, for example `0.75.3-beta`. `tposeidon status` prints it.
+- **Put your version in every bug report**, for example `0.83.2-beta`. `tposeidon status` prints it.
 - **Report security problems privately.** See [SECURITY.md](SECURITY.md). Don't post them in issues or on the forum.
 - **Be respectful.** Everyone follows the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Where it stands
+
+**Latest release: [0.83.2-beta](https://github.com/DeltaForceT/tPoseidon/releases/tag/v0.83.2-beta)** (2026-11-06): almost 60 fixes from your reports (crashes on drilling treasure and after a job change, the party after a reconnect, monster chasing, Harcon Defence, item stats), Linux packages back, and the first code from an outside contributor. Every change is in the [CHANGELOG](CHANGELOG.md).
 
 You can make a character and play through a good part of the game, but you will hit bugs and missing systems. [docs/beta/SYSTEMS.md](docs/beta/SYSTEMS.md) lists what works, what is built but needs testing, and what isn't built yet. Read it before you start. When something breaks, [How to report a bug](docs/beta/how-to-report-a-bug.md) explains what I need from you.
 
@@ -45,7 +47,7 @@ You can make a character and play through a good part of the game, but you will 
 
 | You need | Notes |
 |---|---|
-| **Windows 10 or 11, 64-bit** | Linux and macOS packages come with version 1.0, once I have tested them. |
+| **Windows 10 or 11, 64-bit, or Linux x64** | The Linux package runs the servers and the `tposeidon` command; players confirmed it works. The control panel on Linux and the game client under Wine are less tested. macOS packages come with version 1.0. |
 | **PostgreSQL 14 or newer** | Installed by you, or run in Docker. It holds the accounts and characters. Steps: [Installing](https://github.com/DeltaForceT/tPoseidon/wiki/Installing). |
 | **Your own KR 2014 client (2014.01.28)** | Not included, and never shared here. Every player uses their own copy. |
 
@@ -63,8 +65,8 @@ The details are in the wiki: [Client check](https://github.com/DeltaForceT/tPose
 ## Getting started
 
 1. Install PostgreSQL if you don't have it yet. Note the admin login and its password.
-2. Download the Windows package from the [Releases](https://github.com/DeltaForceT/tPoseidon/releases) page and unpack it somewhere you can write to, like your home folder.
-3. Run setup in a terminal in that folder: `tposeidon setup`.
+2. Download the package for your system (Windows or Linux) from the [Releases](https://github.com/DeltaForceT/tPoseidon/releases) page and unpack it somewhere you can write to, like your home folder.
+3. Run setup in a terminal in that folder: `tposeidon setup` (`./tposeidon setup` on Linux).
 4. Setup asks where your client is, who is going to play (this PC, your LAN or the internet), how to reach PostgreSQL, a name and password for your game account, and which account Play logs in with (the one you just made, unless you pick another that already exists). It then reads the game data it needs from your client and creates the database tables. The PostgreSQL admin password is only used for that and isn't saved.
 5. Start the servers:
 
@@ -117,7 +119,7 @@ What your players get:
 
 - The installer needs no administrator rights. It installs to `%LOCALAPPDATA%\Programs\<Server name>`, adds Start menu and desktop shortcuts with your server's name and icon, and lists the launcher in Windows' installed apps with an uninstaller. It will not install over a launcher that is running.
 - The launcher is locked to your server. Players cannot add servers or change the look. They pick their game client folder, log in, and open **Options**.
-- **Options** are the settings the original client's setup tool offered: resolution (800 x 600 or 1024 x 768), full screen, effects and map effects, sound off, sample rate, bits, channels, screen shot format (BMP or JPG) and JPG quality. They are saved in the registry under the client's own profile (`Trickster_gsp` for the English mode, `Trickster_NT` for the Korean mode), the same place the original tool writes; the launcher reads where that is from the client itself, and apply the next time the game starts. They cannot be saved while the game is running.
+- The resolution and Full screen box above Play (and Game window (Play) in the panel menu) write the same two client values just before the game starts. **Options** are the settings the original client's setup tool offered: resolution (800 x 600 or 1024 x 768), full screen, effects and map effects, sound off, sample rate, bits, channels, screen shot format (BMP or JPG) and JPG quality. They are saved in the registry under the client's own profile (`Trickster_gsp` for the English mode, `Trickster_NT` for the Korean mode), the same place the original tool writes; the launcher reads where that is from the client itself, and apply the next time the game starts. They cannot be saved while the game is running.
 - After login the launcher downloads any update you published before Play unlocks. Updates are required.
 
 - The launcher and the setup program show your icon in Explorer and carry your server's name in their file details.
@@ -143,7 +145,7 @@ Opening your server to the internet? Read [Hosting securely](docs/install/hostin
 
 ## The control panel
 
-`tposeidon-panel` (`tposeidon-panel.cmd`) opens a control panel. It does what the commands do (setup, start, stop, backup), shows every server's log, and has a security window for the connection guard.
+`tposeidon-panel` (`tposeidon-panel.cmd` on Windows) opens a control panel. On Linux it is packaged but less tested; the `tposeidon` command works on both. It does what the commands do (setup, start, stop, backup), shows every server's log, and has a security window for the connection guard.
 
 ### The quick-access bubble
 
@@ -189,7 +191,7 @@ You need the .NET 8 SDK.
 dotnet build tPoseidon.sln
 ```
 
-During the beta the source is here to read and build, and to prepare bug reports; see [CONTRIBUTING.md](CONTRIBUTING.md).
+During the beta the source is here to read and build, to prepare bug reports and to prepare pull requests; see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## How it was made
 

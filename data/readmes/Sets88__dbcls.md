@@ -28,24 +28,19 @@ DbCls is a terminal database client in which a SQL editor and [visidata](https:/
 - Unix sockets (including ones forwarded over SSH), JSON config, inactivity screen lock
 - Plugin API: your own editor commands, pipeline commands, syntax highlighters, LLM tools and full-screen windows
 
-## Table of Contents
+## Documentation
 
-- [Demo](#demo)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Configuration](#configuration)
-- [Editor Commands](#editor-commands)
-- [VisiData Sheets](#visidata-sheets)
-- [Data Visualization (visidata)](#data-visualization-visidata)
-- [SQL Commands](#sql-commands)
-- [Pipelines](#pipelines)
-- [LLM Chat](#llm-chat)
-- [Plugins](#plugins)
-- [Supported Database Engines](#supported-database-engines)
-- [Unix Socket Connections](#unix-socket-connections)
-- [Screen Lock](#screen-lock)
-- [Logging](#logging)
-- [Password safety](#password-safety)
+This page is the short version. The details live in [`docs/`](docs/README.md):
+
+| Page | What is in it |
+|------|---------------|
+| [Configuration and connections](docs/configuration.md) | Command line options, the config file, several connections and tabs, describing a connection in the editor, Unix sockets and SSH tunnels, logging |
+| [Editor](docs/editor.md) | Hotkeys, fold blocks, syntax highlighting, key remapping and `Alt` on macOS, the `Ctrl+X` prefix, autocomplete, beautify, browsing and editing tables |
+| [Results in VisiData](docs/visidata.md) | Sheets, DB-aware hotkeys, JSON / URL / size column types, aggregators, charts, exporting, cross-sheet references, expression functions |
+| [Pipelines](docs/pipelines.md) | The language: steps, control flow, functions, live sheets (`.WATCH`), prompts, helpers, templates, examples |
+| [LLM chat](docs/llm.md) | Setup, the chat window, questions from the model, approving tool calls, how the answer arrives |
+| [Plugins](docs/plugins.md) | Writing a plugin, where plugins are loaded from, settings, the plugin API, the bundled plugins |
+| [Screen lock and password safety](docs/security.md) | Locking the terminal after inactivity, keeping passwords off disk |
 
 ## Demo
 
@@ -56,14 +51,14 @@ happening and which key was pressed.
 
 Syntax highlighting, `Ctrl+B` to beautify, schema-aware autocomplete, the
 database and table browsers, and editing table data with the SQL shown before
-anything is committed. See [Editor Commands](#editor-commands).
+anything is committed. See [Editor Commands](docs/editor.md).
 
 ![Editor](/data/editor.gif)
 
 ### The result
 
 Every query opens as a visidata sheet: sorting, a frequency table, key columns
-and an in-terminal chart. See [Data Visualization](#data-visualization-visidata).
+and an in-terminal chart. See [Data Visualization](docs/visidata.md).
 
 ![Data](/data/visidata.gif)
 
@@ -71,14 +66,14 @@ and an in-terminal chart. See [Data Visualization](#data-visualization-visidata)
 
 A chain of steps in the editor: a prompt in the middle of a run, a fan-out over
 shards, a live monitor, and a file of named blocks used as a menu. See
-[Pipelines](#pipelines).
+[Pipelines](docs/pipelines.md).
 
 ![Pipelines](/data/pipelines.gif)
 
 ### The model
 
 `Ctrl+L` — the model reads the schema through read-only tools and hands back a
-query, then a pipeline. See [LLM Chat](#llm-chat).
+query, then a pipeline. See [LLM Chat](docs/llm.md).
 
 ![LLM chat](/data/llm.gif)
 
@@ -88,18 +83,14 @@ query, then a pipeline. See [LLM Chat](#llm-chat).
 pip install dbcls
 ```
 
-Cassandra / ScyllaDB is not part of the package: it is a [driver plugin](#plugins) in this repository, loaded from a checkout.
+Cassandra / ScyllaDB is not part of the package: it is a [driver plugin](docs/plugins.md) in this repository, loaded from a checkout.
 
 ```bash
-pip install
-
-[...截断...]
-
- scylla-driver
+pip install scylla-driver
 dbcls --plugin-dir ./plugins -E cassandra -H node1 -P 9042 -u admin -d my_keyspace
 ```
 
-The [LLM chat](#llm-chat) needs nothing installed — it talks to the endpoint over the standard library and is switched on by configuration alone.
+The [LLM chat](docs/llm.md) needs nothing installed — it talks to the endpoint over the standard library and is switched on by configuration alone.
 
 ## Quick Start
 
@@ -115,46 +106,41 @@ Basic usage with command line arguments:
 dbcls -H 127.0.0.1 -u user -p mypasswd -E mysql -d mydb mydb.sql
 ```
 
-### Command Line Options
+A JSON config file does the same job as the options, and holds several
+connections at once — one tab each:
 
-| Option | Description |
-|--------|-------------|
-| `-H, --host` | Database host address |
-| `-u, --user` | Database username |
-| `-p, --password` | Database password |
-| `-E, --engine` | Database engine: `mysql`, `postgres`, `clickhouse`, `sqlite3`, plus whatever a [driver plugin](#plugins) added (`cassandra` with `--plugin-dir ./plugins`). Defaults to `sqlite3` |
-| `-d, --dbname` | Database name |
-| `-f, --filepath` | Database file path (SQLite only). Without it SQLite runs on an in-memory database that lives as long as dbcls does |
-| `-P, --port` | Port number (optional) |
-| `-S, --unix-socket` | Path to Unix socket file (optional, overrides host/port) |
-| `-c, --config` | Path to configuration file. Without it `~/.dbcls.json` is read when the command line names no connection of its own — see [Using a Config File](#using-a-config-file) |
-| `--no-config` | Read no config file at all, not even `~/.dbcls.json`. Cannot be combined with `-c` |
-| `--no-compress` | Disable compression for ClickHouse connections (can also be switched at runtime via the `Toggle connection compression` command in the command palette) |
-| `--key-remap` | Remap key codes, e.g. `"36:1412,1412:36"` to swap Tab and Shift+Tab |
-| `--fold` | Start with `>>>` ... `<<<` block folding enabled (see [Fold Blocks](#fold-blocks)) |
-| `--syntax` | What the editor highlights the text as: `sql` (the default) or `python`, plus whatever a [plugin](#plugins) added. Anything but `sql` leaves out the database engine's keywords. Also `DBCLS_SYNTAX` or `"syntax"` in the config file; `Set syntax…` in the command palette switches the tab on screen (see [Syntax Highlighting](#syntax-highlighting)) |
-| `-R, --readonly` | Open the editor in read-only mode: the document cannot be modified or saved (`[RO]` is shown next to the file name), and `Enter` runs the query under the cursor since there is no text to insert. Also `DBCLS_READONLY=1` or `"readonly": true` in the config file |
-| `--lock-init-command` | Shell command run at startup to initialise a lock session |
-| `--lock-timeout` | Seconds of inactivity before the screen locks |
-| `--lock-check-command` | Shell command run when the user attempts to unlock |
-| `--plugin-dir` | Directory of [plugin](#plugins) `.py` files or packages (several separated like `PATH`) |
-| `--plugin` | Comma-separated plugin names to load; by default every one found is loaded |
-| `--no-plugins` | Do not load any plugin |
+```bash
+dbcls -c config.json mydb.sql
+```
 
-Plugins add options of their own — they show up in `dbcls --help` alongside these. The bundled [LLM chat](#llm-chat) contributes:
+```json
+{
+    "connections": {
+        "mysql01": {"engine": "mysql", "host": "127.0.0.1", "username": "user",
+                    "ask_password": true, "dbname": "shop", "filename": "mysql.sql"},
+        "local":   {"engine": "sqlite3", "dbfilepath": "test.sqlite", "filename": "local.sql"}
+    }
+}
+```
 
-| Option | Description |
-|--------|-------------|
-| `--llm-base-url` | OpenAI-compatible API base URL; enables the chat |
-| `--llm-api-key` | API key sent as a Bearer token (omit for a local model) |
-| `--llm-model` | Model name, e.g. `qwen2.5-coder` or `anthropic/claude-sonnet-4` |
-| `--llm-max-tokens` | Maximum tokens in a reply (default `131072`) |
-| `--llm-timeout` | Seconds to wait for a reply (default `600`) |
-| `--llm-no-confirm-tools` | Run the model's lookups without asking first; does not cover `run_sql` (see [Approving tool calls](#approving-tool-calls)) |
-| `--llm-no-confirm-exec` | Run code the model writes (`run_sql`, a plugin's shell command) without asking first |
+Every option, the config file keys, tabs and the in-editor connection form are
+in [Configuration and connections](docs/configuration.md); `F1` inside dbcls
+opens the same help.
 
-## Configuration
+## Supported Database Engines
 
-### Using a Config File
+- MySQL
+- PostgreSQL
+- ClickHouse
+- SQLite
+- Cassandra / ScyllaDB — as a [driver plugin](docs/plugins.md): `pip install scylla-driver` and start with `--plugin-dir ./plugins`
 
-You can use a JSON configuration file instead of 
+A database not on this list is added from outside, without touching dbcls: a plugin registers its own engine with `setup.add_engine(...)`, and it is then a `--engine`, an `"engine"` in the config file and an entry in the connection form like any other. [`plugins/cassandra`](plugins/cassandra) is the worked example.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request or submit an issue on [GitHub Issues](https://github.com/Sets88/dbcls/issues)
+
+## License
+
+[here](https://github.com/Sets88/dbcls/blob/main/LICENSE)

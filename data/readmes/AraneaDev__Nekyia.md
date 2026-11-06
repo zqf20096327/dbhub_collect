@@ -23,7 +23,7 @@ Nekyia indexes and searches past CLI agent sessions locally in your terminal usi
 bun install -g nekyia
 ```
 
-Needs [Bun](https://bun.sh/) 1.1 or newer. Then run `nek`.
+Needs [Bun](https://bun.sh/) 1.4 or newer. Then run `nek`.
 
 > **Nekyia** (Νέκυια) is the rite in the _Odyssey_ through which Odysseus calls up
 > the dead and asks them what they know. This tool does something less dramatic
@@ -41,11 +41,11 @@ them. Everything stays local, with no model-written summaries or tool-output ind
 
 ## Features
 
-- **One Search Surface**: query Claude Code, Codex, Cursor, GitHub Copilot CLI, opencode, Kilo Code, Codebuff, Freebuff, goose, and Antigravity histories together
+- **One Search Surface**: query Claude Code, Codex, Cursor, GitHub Copilot CLI, opencode, Kilo Code, Codebuff, Freebuff, goose, and Antigravity histories together, including compressed `.jsonl.zst` transcripts
 - **Verified Resume**: attach to the selected session by ID only where that exact command was tested
 - **Deterministic Handovers**: start search-tier clients with every indexed user prompt, each message kept whole and in order, touched files, branch context, bounded assistant prose, and a note of whatever had to be left out
 - **Two-Phase Indexing**: discover cheap fingerprints first, then hydrate only sessions that changed
-- **Fast Local Search**: SQLite FTS5 combines weighted prompt relevance with recency decay
+- **Fast Local Search**: SQLite FTS5 ranks the best-matching passage of each conversation, blends in recency, and supports quoted phrases, while typing stays responsive on large indexes
 - **Exact File History**: ask which sessions touched one file, resolved against each session's own directory
 - **Directory Timelines**: see every file operation recorded under a directory, grouped by session, with each path marked against what git already has
 - **Interactive and Scriptable**: use the virtualized Ink picker or plain, JSON-capable CLI commands
@@ -55,7 +55,7 @@ them. Everything stays local, with no model-written summaries or tool-output ind
 
 ## Installation
 
-Nekyia requires [Bun](https://bun.sh/) 1.1 or newer. It runs on Bun, not on Node, and the
+Nekyia requires [Bun](https://bun.sh/) 1.4 or newer. It runs on Bun, not on Node, and the
 command says so plainly if Bun is missing rather than failing on an import.
 
 ### From npm
@@ -68,7 +68,7 @@ bun install -g nekyia
 
 <!-- x-release-please-start-version -->
 ```bash
-bun install -g github:AraneaDev/Nekyia#v1.2.0
+bun install -g github:AraneaDev/Nekyia#v1.4.1
 ```
 <!-- x-release-please-end -->
 
@@ -86,6 +86,23 @@ bun link
 
 All three install paths expose `nekyia` and the shorter `nek`, which do the same thing. The
 examples below use `nek`.
+
+### Upgrading to 1.4
+
+1.4 needs Bun 1.4 or newer, for its built-in zstd support. Run `bun upgrade` first if
+`bun --version` reports something older.
+
+1.4 searches conversation passages and needs a newer index format. The first index run
+after upgrading converts the existing index from the content it already holds, so sessions
+whose original files are gone are kept. That run is `nek index`, or the picker's own
+refresh when the index is older than `autoReindexAfterHours`. Until then search still
+works, with the older ranking. The conversion is one-way: 1.3 and earlier cannot open the
+converted index.
+
+The same run also re-reads every Claude Code and Codex session, because 1.4 keeps
+assistant replies that earlier versions dropped from long transcripts. Expect that first
+run to take longer than usual and the index to grow. See [How it works](#how-it-works)
+for details.
 
 ## Quick start
 
@@ -122,6 +139,31 @@ trust the indexed summary or inspect the source itself.
 exact; between sessions it is by end time, which the index knows coarsely, so events stay
 grouped by session rather than merged into one stream. A session whose own directory sits
 elsewhere and which named these files relatively is not found, the same limit `blame` has.
+
+Search, blame, and timeline accept `--since` and `--until` to select sessions whose
+activity overlaps a time window. The lower bound is inclusive: a session ending
+exactly at `--since` still matches. The upper bound is exclusive: a session starting
+exactly at `--until` does not. A long session that crosses the window matches even
+if it started earlier or ended later. Timeline filters whole session groups, so its
+operations are not necessarily all inside the requested window.
+
+Both bounds accept spans (`30m`, `12h`, `2d`, `3w`), calendar dates (`YYYY-MM-DD`),
+or ISO date-times with an explicit timezone (`Z` or a numeric offset). Spans count
+back from the same invocation time. Calendar dates mean midnight UTC; to include
+October 7, use `--until 2026-10-08`. Equal or reversed bounds are rejected.
+
+```bash
+nek search reconnect --since 7d
+nek search reconnect --since 2026-10-01 --until 2026-10-08
+nek search --since 2026-10-07T14:00:00+02:00 --until 2026-10-07T17:00:00+02:00
+nek blame src/server.ts --since 2w
+nek timeline --since 7d --until 2d
+```
+
+A session with only one known timestamp is treated as a point. Sessions with no
+known timestamps appear only when no time filter is active. Filtering uses the
+existing index and needs no reindex. Search JSON remains an array; timeline JSON
+adds `until` only when an upper bound is supplied.
 
 ```
 $ nek timeline --dir . --since 7d --limit 2
@@ -166,12 +208,51 @@ it opens on the whole index instead, because a scoped list there would be empty.
 row under the cursor, so you can start anywhere and end up in one project. The count
 beside the search line always names what is being searched.
 
+The picker starts with all time selected. `ctrl+d` cycles Today, Yesterday,
+Last 7 days, Last 30 days, then All time. Today and Yesterday follow local
+calendar days; the last 7 and 30 days are rolling 24-hour periods. All presets
+capture a new reference time when selected or refreshed. `ctrl+u` clears only the time
+filter, including when no sessions match, keeping your search text, project,
+and client. Changing the range resets the cursor and closes the history.
+
 ![The Nekyia picker: a list of sessions from several agent CLIs, and beneath it the selected session's directory, branch, prompts and touched files](https://raw.githubusercontent.com/AraneaDev/Nekyia/main/docs/media/picker.svg)
 
-Typing filters as you go, and the matching span is lit in every title, so the list
-answers each keystroke rather than only shortening.
+Typing filters as you go. The search runs once you pause for a moment, so the field
+keeps up however fast you type. The unfinished last word matches prefixes once it has
+three characters: `retry ten` finds `tenant`, while `ui` or `db` match only those
+words until you type more. Chinese, Japanese and Korean words match prefixes from the
+first character. A trailing space or punctuation completes the word. Words match from
+their start, not from the middle: `char` finds `characters`, `rac` does not.
+
+Wrap words in double quotes to require them next to each other: `"delivery id"`
+matches that phrase and not a session that mentions *delivery* and *id* apart. CLI
+searches keep their literal defaults. The selected preview shows native search evidence
+from the title, prompt, or reply, including matches in related sessions. Inspecting a
+verified match jumps to its retained turn; unavailable locations are labeled.
+
+`ctrl+g` opens Filters: project, client, time, sort, exact branch, file path
+(contains or exact), and bookmarks. Edit a draft and Apply with `ctrl+s` or the
+Apply button; Escape discards it. Tab/Shift+Tab select fields, arrows or Enter
+change choices, and `ctrl+r` resets the focused field. Individual reset controls
+and Clear all filters preserve the query and configured hidden clients.
+
+Custom time accepts open bounds, UTC dates such as `2026-10-01`, explicit-zone
+ISO timestamps such as `2026-10-08T12:00:00+02:00`, or relative values such as
+`7d`. Since is inclusive, until exclusive, and session intervals must overlap.
+Relative custom input resolves once on Apply; refreshing keeps those resolved
+bounds fixed.
+
+The quick preview prioritizes matching evidence, then the latest retained request
+and reply, branch, file count and launch capability. Older indexes use honest
+unordered-text labels. A compact quality badge links through Actions to Session
+details with the full source, completeness and availability explanations.
 
 ![Searching: the query is lit inside each matching title, and the row under the cursor is marked in the gutter](https://raw.githubusercontent.com/AraneaDev/Nekyia/main/docs/media/search.svg)
+
+A match does not have to be in the title. Search looks through the conversation itself,
+and the preview shows the passage that matched and where it came from:
+
+![A quoted search for "delivery id": one session whose title does not contain the phrase, with the preview showing the reply passage where it was said, highlighted](https://raw.githubusercontent.com/AraneaDev/Nekyia/main/docs/media/passage.svg)
 
 Narrowing to one project names it, so you always know what is being searched:
 
@@ -186,7 +267,11 @@ A query that matches nothing says what to try rather than leaving an empty scree
 `ctrl+o` opens the session under the cursor and gives it the screen: what you asked
 and what came back, in the order it was said, and which files moved. A long reply
 wraps rather than running off the right edge. Arrow keys scroll a line, the page keys
-scroll a screen, and `esc` closes it again.
+scroll a screen; Home/End reach the retained beginning/end. `ctrl+f` opens literal
+conversation find, and F3/Shift+F3 select next/previous hits. Position and hit
+counters show where you are; capped history labels the search scope. Escape closes
+find first, then returns to the same browse selection. Resizing preserves a turn
+anchor rather than resetting the reader.
 
 ![Reading a session's history: the pane fills the screen with the conversation in the order it happened, scrolled past the header](https://raw.githubusercontent.com/AraneaDev/Nekyia/main/docs/media/inspect.svg)
 
@@ -200,27 +285,56 @@ deterministic handover, and starts a new client session with that context.
 
 | Key | What it does |
 | --- | --- |
-| type | Filter as you go; the match is lit in each title |
+| type | Search as you go; the unfinished last word matches prefixes from three characters, and `"double quotes"` match a phrase |
+| `ctrl+k` / F1 | Searchable Actions menu / contextual help |
+| `ctrl+g` | Edit filters, individual resets, and custom time bounds |
+| `ctrl+b` | Bookmark or unbookmark the exact selected session |
+| `ctrl+e` | Inspect the full visible related-session chain |
 | `up` / `down` | Move the cursor, or scroll the history while it is open |
 | `enter` | Resume the session, or start a briefed one once you confirm it; on a row for a store two clients share, the first Enter asks which client instead, when both are installed |
 | `ctrl+o` | Open the session's history, and close it again |
 | `ctrl+t` | Choose another client and confirm a fresh session with this session's context (`r` for a review framing, `n` for a custom note) |
 | `ctrl+l` | Choose which client opens a store that Codebuff and Freebuff share |
 | `tab` | Widen to everywhere, or narrow to the project under the cursor |
-| `ctrl+f` | Cycle the clients your index actually holds |
+| `ctrl+f` | Cycle indexed clients in browse; find text in history |
+| F3 / Shift+F3 | Next / previous conversation hit |
+| Home / End | Beginning / end of retained history |
+| `ctrl+d` | Cycle All time, Today, Yesterday, Last 7 days, and Last 30 days |
+| `ctrl+u` | Clear only the time filter |
 | `ctrl+p` / `ctrl+y` | Copy the opening prompt, or the command that would run |
-| `ctrl+r` | Reindex now; offered once the index has gone stale |
+| `ctrl+r` | Refresh now, preserving query, filters, selection and reader position |
 | `esc` | Back out of a confirmation, or close the history, or quit |
 
-The status line always names the index's age, colored green, yellow, or red as it
-goes from fresh to stale to very stale. `ctrl+r` appears in the key hints, and works,
-only once it has gone stale: it exits the picker, reindexes on the normal screen where
-its progress can print, and reopens the picker on the result. Set `autoReindexAfterHours`
-in the config file to have this happen on its own once the index crosses that age;
-`0` reindexes on every open.
+The status line names the index age. Refresh closes the alternate screen for
+indexing progress, then restores the query, filters and selected UID. When that
+UID no longer matches, the nearest surviving result is selected with a notice.
+A failed refresh reopens the readable existing index, keeps its prior age, and
+shows the error. On startup, the picker automatically refreshes an index that
+is at least one hour old. Set `autoReindexAfterHours` in config to change that
+threshold; `0` refreshes on every open with a known index age.
 
-The picker lays itself out against the terminal it is drawn in, so a narrow window
-gets the same interface rather than a broken one:
+The preview spans the full terminal width below the session list. At 140+
+columns and 18+ rows, a compact stats panel shows counts, seven local days of
+activity, and client distribution for the current filtered results. When the
+result window is capped, charts explicitly describe shown results only.
+`ctrl+s` or Actions toggles the panel; it hides automatically in smaller
+terminals. Long selected titles wrap onto a second line. Under 12 rows the
+quick preview becomes a summary. Explicit
+history uses the full screen. Actions and Help expose shortcuts that cannot fit
+in the footer, and empty results offer deliberate filter-reset suggestions.
+
+`ctrl+e` shows all policy-visible chain members, including members outside the
+current filters. The collapsed `+N` counts additional matching members; the chain
+picker labels its full visible count. Inspect or launch the explicitly chosen
+member without changing the browse filters. Native actions say **Resume session**;
+synthesized briefs say **Start fresh with context**, with confirmation of command,
+directory and context transfer. Missing launchers have visible reasons.
+
+Bookmarks store only session UIDs in `$XDG_CONFIG_HOME/nekyia/ui-state.json`
+(default `~/.config/nekyia/ui-state.json`), with private permissions and a limit of
+256 entries. They do not change ranking. Use Bookmarked in Filters, or Manage
+bookmarks in Actions to remove indexed or unavailable saved UIDs. Failed writes
+retain the prior durable state; no query or conversation text is persisted.
 
 ![The picker on an eighty column terminal, with the same layout at a smaller size](https://raw.githubusercontent.com/AraneaDev/Nekyia/main/docs/media/narrow.svg)
 
@@ -326,6 +440,12 @@ With one of them installed it uses that one. With both, the first Enter on one o
 chats asks, and ctrl+l flips the choice afterwards. Freebuff takes no prompt argument, so
 it cannot receive a handover; Codebuff can.
 
+Claude Code and Codex transcripts are also read when compressed as `.jsonl.zst`, for
+example by an archiving script. A compressed session is searchable and can seed a
+handover, but it is listed as Search tier: the clients themselves cannot reopen an
+archive, so Nekyia never offers native resume for one. When a session exists both plain
+and compressed, the plain file wins.
+
 The goose adapter was written from goose's published source and CLI reference rather
 than from a local install, so it is derived rather than observed. Its documented resume
 flag, `goose session --resume --session-id <id>`, is deliberately not wired up: this
@@ -343,10 +463,41 @@ Nekyia separates indexing into two phases. Discovery reads bounded metadata and 
 fingerprints. Hydration runs only for new or changed sessions, streams or projects the
 relevant content, and commits metadata plus search facets atomically to SQLite.
 
-Search weights titles, user prompts, and selected assistant prose differently, then can
-blend relevance with recency. Fork chains collapse to one visible result. Tool output is
-excluded because command results and file dumps are noisy, large, and likely to contain
-private material that does not belong in search.
+Plain and `.jsonl.zst` transcripts stream through the same parser; discovery reads only
+a bounded decompressed prefix, and hydration rejects a source over 2 GiB decompressed. For
+JSONL, `maxFileBytes` budgets the assistant text that is kept, not the raw transcript
+size, so large tool output no longer crowds replies out of search. User prompts are always
+kept whole, oversized rows stay under the separate row safety limit, and anything left out
+is reported as truncated. If an archive turns out to be damaged past its prefix, the
+previously indexed copy is kept and the next index run tries again.
+
+Search ranks bounded passages within each conversation, then returns one result per
+session or fork chain with evidence from its strongest matching passage. Long sessions
+are not penalized for unrelated discussion, and repeated identical passages do not earn
+extra weight. Terms distributed across turns still match, below focused passages.
+Double quotes require adjacent words: `nek search '"app engine search"' --all`.
+
+Auto sorting gives recency a bounded preference (up to 15%); relevance sorting uses only
+text scores, and recent sorting remains newest-first. Recognized leading harness blocks
+are excluded from search while the original retained history stays intact. Passage
+windows overlap; individual tokens longer than 4096 characters are omitted from search
+and separate windows, so omission cannot manufacture phrase adjacency.
+
+The picker searches after a 120 ms pause in typing rather than on every key, and an
+unfinished word shorter than three characters is matched whole: a one- or two-letter
+prefix expands to nearly every term in a large index and costs a hundred milliseconds or
+more to rank, where the whole word costs about one. Searches, matching excerpts and
+empty-result suggestions then run in one read-only worker, so even a broad query cannot
+block keyboard input. Pending requests coalesce to the latest query and superseded
+results are discarded. A key that acts on the list, such as Enter or Ctrl+O, waits for
+the current result, so it never lands on rows from an older query. This adds a worker
+and a read-only database connection; broad queries can still take time to finish even
+though typing remains responsive.
+
+The next `nek index` upgrades older indexes from cached content, including sessions whose
+original files are unavailable. Search stays read-only and uses legacy ranking until
+that upgrade. The upgrade preserves session IDs, bookmarks, original text and launchers;
+older Nekyia versions cannot open the upgraded index. Tool output remains excluded.
 
 The index normally lives at `~/.local/share/nekyia/index.db`; configuration lives at
 `~/.config/nekyia/config.json`. Nekyia honours `XDG_DATA_HOME` and `XDG_CONFIG_HOME`.
@@ -437,6 +588,22 @@ bun pm pack --dry-run
 
 CI runs the frozen install, lint, typecheck, full suite, and package check on Linux and macOS.
 Releases use Conventional Commits and Release Please.
+
+Run `bun run test:coverage` for a terminal coverage report. To save an LCOV report
+outside the checkout, use:
+
+```bash
+bun run test:coverage --coverage-reporter=lcov --coverage-dir=/tmp/nekyia-coverage
+```
+
+Coverage measures code executed in the test process; CLI and concurrency tests
+also launch subprocesses whose execution is not included in that report. Use
+uncovered lines to find missing behavior checks, alongside those integration
+tests. Regression tests should verify observable results, including failed
+writes, hidden-client policy, Unicode offsets, and terminal size limits.
+
+Source docblocks explain intent, contracts, and limits. TypeScript already
+documents parameter and return types; avoid repeating those signatures in prose.
 
 ## Roadmap
 

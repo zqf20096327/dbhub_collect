@@ -4,7 +4,7 @@ A local MCP memory server: one SQLite file on your machine that Claude Code, Cur
 
 It is for handing a project over — to your next session, to another client, to the person after you — with the reasons attached. Every client can save and search the memory. In Claude Code, hooks also bring a recorded decision back at session start and before an edit. Drift detection shows which recorded decisions the code has since left.
 
-Needs Node.js 20 or later, and Claude Code or Codex to try it (either one is enough).
+Needs Node.js 22.16 or later (recommended: SQLite with FTS5 is built into Node, nothing is compiled), and Claude Code or Codex to try it (either one is enough). Node 20 and Node 22.0–22.15 still work through `better-sqlite3`, which then has to be built on install — on npm 12 that means allowing its install script (see [troubleshooting](docs/troubleshooting.md)).
 
 ## Install
 
@@ -40,6 +40,26 @@ A new install has an empty memory, so "how did we solve this before?" finds noth
 3. Two repos: record a decision in repo A, then in repo B (e.g. Codex) ask the same. It **does** come back — the memory is per machine, not per repo — labelled `entity: repo-a` and `by: <client>`; `entity_name` on the recall narrows by a part of the entity name (`repo-a` also matches `repo-a-backup`).
 4. Reverse it: `remember` the new decision with `supersedes: <old memory_id>`. `recall` then shows only the new one (`supersedes #<id>`); `include_superseded: true` shows both.
 
+## Works for me
+
+Where the [first round trip](#first-round-trip) is known to work. Most cells are empty because nobody has tried them yet, not because they fail.
+
+| Client | Windows | macOS | Linux |
+|---|---|---|---|
+| Claude Code | verified | reported | untested |
+| Codex | untested | untested | untested |
+| Cursor | untested | untested | untested |
+| Windsurf | untested | untested | untested |
+| Gemini CLI | untested | untested | untested |
+
+- **verified**: run by the maintainer with a record. Claude Code on Windows: remember in one session, recall in a new one, on 0.18.1 ([record](docs/works-for-me/claude-code-windows-2026-11-06.md)). The plugin install path connected on 2026-11-05; its round trip is not in the record.
+- **reported**: someone said it works, without a version or log. Claude Code on macOS: the maintainer on one Mac ([#16](https://github.com/michielinksee/linksee-memory/discussions/16)); the hooks there are not checked.
+- **untested**: nobody has reported it either way.
+
+If you fill one cell, your name goes in the weekly report under "Added by others". [Report your client and OS](https://github.com/michielinksee/linksee-memory/issues/new?template=works-for-me.yml) — five fields, no database contents.
+
+Weekly report: [Discussion #16](https://github.com/michielinksee/linksee-memory/discussions/16).
+
 ## What it does not do
 
 - Reminders and blocks before an edit are Claude Code hooks. Cursor, Windsurf, Codex and Gemini CLI share the memory but get no warning before an edit.
@@ -55,7 +75,12 @@ A new install has an empty memory, so "how did we solve this before?" finds noth
 Docs: [docs.linksee.app](https://docs.linksee.app) · Site: [linksee.app](https://linksee.app) (setup guides for non-developers) · Free, MIT, local only — there is no paid tier you need.
 
 <!-- releases: tag-driven, published from CI via npm trusted publishing (OIDC).
-     See .github/workflows/publish.yml — no token, no OTP, provenance attached automatically. -->
+     See .github/workflows/publish.yml — no token, no OTP, provenance attached automatically.
+     The same tag push also publishes server.json to the official MCP registry
+     (io.github.michielinksee/linksee-memory), after npm succeeds: a pinned, Sigstore-verified
+     mcp-publisher runs validate → login github-oidc → publish. A dry run stops at validate. If the
+     registry step fails, npm is already published and the job goes red with a notice — then publish
+     by hand from the tagged commit: `mcp-publisher login github` → `mcp-publisher publish`. -->
 
 <a id="what-setup-writes"></a>
 
@@ -248,6 +273,12 @@ We installed them and ran one scenario across all of them. Storing and recalling
 
 **How do I stop Claude Code from repeating the same mistake it made last week?**  
 Record it as a caveat (`remember({ content, layer: 'caveat' })`). Caveats are protected from forgetting and come back when `recall` touches the same ground again. To have Claude Code stop the repeat before it lands, record it as an anchor with a `violation_signal`, then harden it (`resolve_drift(action: "harden")`); without hardening, a match only warns.
+
+**Does Linksee delete old memories on its own?**
+Not since 0.18.1. Earlier versions had a "sleep" pass (`consolidate`) that folded cold memories into a short summary and deleted the originals — on the maintainer's own database it removed 1,360 rows on 2026-10-29 and 559 on 2026-11-05 without saying so. Now the only thing that removes a memory row is `remember({ memory_id, forget: true })`, by request — the Stop-hook re-import only adds rows (never touches ones it already wrote) and the start-up triage leaves caveats and protected rows alone. (Before importing, the normal schema migration runs; it can raise `protected` from 0 to 1 for rows with importance ≥ 0.9 and fill columns an older schema lacks, but it does not change a memory's text, relations or verdicts.) Consolidation still exists, by hand (`npx -y linksee-memory consolidate --dry-run` to see, `--apply` to fold) or opt-in at start-up (`LINKSEE_AUTO_CONSOLIDATE=1`); it writes one summary per cluster and marks the originals `consolidated_into`, which `recall` hides by default (`consolidated_hidden` says how many; `include_consolidated: true` shows them). Rows that an earlier version deleted come back only from a backup of `~/.linksee-memory/`.
+
+**Linksee は古い記憶を勝手に消しますか？**
+0.18.1 からは消しません。それ以前の版には「睡眠中の整理」（`consolidate`）があり、冷えた記憶を短い要約に畳んで原本を削除していました（開発者自身の DB で 2026-10-29 に 1,360 行、2026-11-05 に 559 行が、知らせも無く消えています）。いまは `remember({ memory_id, forget: true })` で頼んだ 1 行以外、記憶の行を消す処理はありません（Stop フックの再取り込みは追記だけで既存の行に触らず、起動時の整理は caveat と保護行に触りません。取り込みの前に通常の schema 移行が走り、保護フラグの補正（importance 0.9 以上の行の protected を 0→1 にする方向だけ）と旧 schema の列補完が起き得ますが、記憶の本文・関係・判定は変えません）。整理そのものは残っています。手で回す（`npx -y linksee-memory consolidate --dry-run` で中身を見て、`--apply` で畳む）か、起動時に走らせたい時だけ `LINKSEE_AUTO_CONSOLIDATE=1` を付けます。畳んだ原本には `consolidated_into` が付いて残り、`recall` は既定でそれを隠して件数（`consolidated_hidden`）だけ返します（`include_consolidated: true` で出ます）。前の版が消した行は、`~/.linksee-memory/` のバックアップからしか戻りません。
 
 **開発の意思決定履歴をMCPサーバーで残しておく定番のやり方はありますか？**  
 `remember({ content, anchor: {} })` の1回で、記録と決定の登録が同時に入ります（Claude Code では再注入も）。反する編集で警告を出すには `violation_signal` を足し、拒否まで行うにはさらに `resolve_drift(action: "harden")` で hard にします。`drift_status` がその台帳で、各決定が いま守られているか（🔵）・ずれているか（🔴）・誰も確かめていないか（⚫）を示します。

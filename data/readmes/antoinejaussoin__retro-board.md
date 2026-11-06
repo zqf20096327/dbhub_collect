@@ -57,7 +57,7 @@ It features the following technologies:
 - [React Beautiful DND](https://github.com/atlassian/react-beautiful-dnd) to allow re-ordering and grouping by drag-and-drop
 - [Vitest](https://vitest.dev), for Unit Testing
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro), for Integration Tests
-- [Yarn](https://yarnpkg.com/en/), replacing NPM
+- [npm](https://www.npmjs.com/)
 - [Docker](https://docker.com), for easy deployment
 - [Kubernetes](https://kubernetes.io/), to scale Retrospected for its 10M+ users (not)
 - [GitHub Actions](https://github.com/features/actions), for Continuous Integration and Deployment (CI/CD)
@@ -65,7 +65,7 @@ It features the following technologies:
 - [Stripe](https://stripe.com/), for our payment solution
 - [Docusaurus](http://docusaurus.io/), for our documentation
 - [NextJS](https://nextjs.org/), for our landing page
-- [ChatGPT](https://openai.com/blog/chatgpt), powering our AI agile coach
+- [Claude](https://www.anthropic.com/claude), powering our AI agile coach
 - [Biome](https://biomejs.dev), for linting and formatting, all in one beautiful package
 
 Previous versions featured the following libraries:

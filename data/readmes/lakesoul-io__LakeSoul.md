@@ -11,7 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![PG wire](https://img.shields.io/badge/PG%20wire-DDL%20%2B%20INSERT%20%2B%20query-green.svg)](#postgres-native)
 [![pgvector](https://img.shields.io/badge/pgvector-compatible%20SQL-purple.svg)](#vector-native)
-[![Python](https://img.shields.io/badge/Python-3.10%2B-yellow.svg)](#python-native)
+[![Python](https://img.shields.io/badge/Python-3.11%2B-yellow.svg)](#python-native)
 [![Daft](https://img.shields.io/badge/Daft-multimodal-orange.svg)](#python-native)
 [![Release](https://img.shields.io/github/v/release/lakesoul-io/LakeSoul?include_prereleases&sort=semver)](https://github.com/lakesoul-io/LakeSoul/releases)
 
@@ -53,6 +53,32 @@ The wire protocol, the extended query protocol, `pg_catalog` and `psql \d` all
 work. This is not a drop-in PostgreSQL: `UPDATE`, `DELETE`, `COPY`, `RETURNING`
 and non-`READ COMMITTED` isolation are refused with `0A000`, and writes must be
 autocommit.
+
+### PostgreSQL subscriptions
+
+The same endpoint can subscribe to a source PostgreSQL database and keep a
+LakeSoul CDC table in sync. Define the subscription with SQL; the endpoint
+validates the publication and target, takes a managed snapshot, and starts a
+supervised local subscriber process.
+
+```sql
+CREATE SUBSCRIPTION users_from_app
+CONNECTION 'postgresql://user:pass@source:5432/app'
+PUBLICATION app_pub
+WITH (
+  source_table = 'public.users',
+  target_table = 'users',
+  snapshot     = 'managed'
+);
+```
+
+The source needs logical WAL, a publication, and `REPLICA IDENTITY FULL`; the
+target is a pre-created, empty LakeSoul CDC table. The initial copy runs in
+parallel across CTID ranges (`snapshot_parallelism`, `snapshot_memory_bytes`).
+`ALTER SUBSCRIPTION ... DISABLE/ENABLE` and `DROP SUBSCRIPTION` control the
+process. See
+[PostgreSQL subscriptions](https://lakesoul-io.github.io/docs/engine/postgres/subscription)
+for the full setup and SQL reference.
 
 ## Incremental SQL
 
@@ -211,7 +237,7 @@ pg_mooncake, and Lakebase. The dated, sourced comparison lives in the docs.
 - [Discord](https://discord.gg/WJrHKq4BPf) for questions and design discussions
 - [GitHub issues](https://github.com/lakesoul-io/LakeSoul/issues) for bugs and
   feature requests — look for `good first issue` to start contributing
-- [Community guidelines](docs/community/guideline.md)
+- [Community guidelines](dev/community/guideline.md)
 - Mailing list: [lakesoul-technical-discuss@lists.lfaidata.foundation](mailto:lakesoul-technical-discuss@lists.lfaidata.foundation)
 - Roadmap: [ROADMAP.md](ROADMAP.md)
 

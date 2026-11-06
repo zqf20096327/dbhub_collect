@@ -6,7 +6,7 @@
 
 A desktop SQL learning workspace that brings local SQLite, an AI tutor, visual schemas, and hands-on practice together through a coordinated **AI harness**.
 
-<p align="center"><a href="#learn-sql-by-asking-questions">Ask the tutor</a> · <a href="#practise-the-structure-of-sql">Practice</a> · <a href="#take-a-complete-study-workbook-with-you">PDF workbooks</a> · <a href="#the-ai-harness-behind-the-conversation">AI harness</a> · <a href="#get-started">Get started</a></p>
+<p align="center"><a href="#learn-sql-by-asking-questions">Ask the tutor</a> · <a href="#practise-the-structure-of-sql">Practice</a> · <a href="#take-a-complete-study-workbook-with-you">PDF workbooks</a> · <a href="#the-ai-harness-behind-the-conversation">AI harness</a> · <a href="#more-screens-and-documentation">Screenshots</a> · <a href="#get-started">Get started</a></p>
 
 <p align="center"><a href="https://github.com/canyrtcn/PractiSQL/releases"><img src="docs/assets/download-windows.en.svg" width="328" height="64" alt="Download PractiSQL for Windows"></a></p>
 
@@ -40,7 +40,7 @@ The AI harness supplies the relevant schema, conversation and observations, then
 
 1. **Open an example or import a database.** Built-in learning workspaces give you tables and records to explore immediately.
 2. **Run a query and inspect the rows.** Keep the editor, results and visual schema together as you change the SQL.
-3. **Add a tutor when you want one.** Connect a ChatGPT account or an API provider, ask about the result and compare the explanation with the actual table.
+3. **Add a tutor when you want one.** Connect a ChatGPT account or an [API provider](#connect-the-ai-provider-you-prefer), ask about the result and compare the explanation with the actual table.
 
 ## Write SQL and inspect what it does
 

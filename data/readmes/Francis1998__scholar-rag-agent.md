@@ -16,6 +16,15 @@ The API/browser workflows below are integrated; [offline cue extractors](#offlin
 and most catalog extensions need explicit Python wiring. Keep this unauthenticated
 service on loopback for local, trusted use.
 
+
+**New:** `ColliderStratificationResidualCueExtractor` residual cue extractor (gap vs Elicit/Consensus/Connected Papers collider-stratification residual cue extractors; stack GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2). See `docs/guides/COLLIDER_STRATIFICATION_RESIDUAL_CUE_EXTRACTOR_GUIDE.md`.
+
+
+**New:** `HealthyWorkerResidualCueExtractor` residual cue extractor (gap vs Elicit/Consensus/Connected Papers healthy-worker residual cue extractors; stack GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2). See `docs/guides/HEALTHY_WORKER_RESIDUAL_CUE_EXTRACTOR_GUIDE.md`.
+
+
+**New:** `EValueResidualCueExtractor` residual cue extractor (gap vs Elicit/Consensus/Connected Papers E-value residual cue extractors; stack GPT-5.5 / Claude Sonnet 4.6 / Gemini 3.x / Kimi K2). See `docs/guides/E_VALUE_RESIDUAL_CUE_EXTRACTOR_GUIDE.md`.
+
 ## Start offline
 
 With Python 3.11+ and [uv](https://docs.astral.sh/uv/) installed:

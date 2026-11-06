@@ -56,6 +56,30 @@ need to pass a profile to `MoneywizApi`:
 from moneywiz_api import MoneywizApi
 
 api = MoneywizApi("<path_to_your_sqlite_file>")
+
+# Rows that fail conversion or validation do not stop the load.
+for failure in api.failed_records:
+    print(failure.model_type, failure.raw, failure.error)
+    # failure.record is the converted record, if conversion succeeded.
+
+# Raise on the first record conversion or validation error instead.
+strict_api = MoneywizApi("<path_to_your_sqlite_file>", strict=True)
+```
+
+For explicit loading, use `MoneyWiz`. Each call returns a new `LoadResult`:
+
+```python
+from moneywiz_api import MoneyWiz, RecordLoadError
+
+database = MoneyWiz("<path_to_your_sqlite_file>")
+result = database.load(on_error="collect")
+accounts = result.accounts.records()
+failures = result.failed_records
+
+try:
+    database.load(on_error="raise")
+except RecordLoadError as error:
+    print(error.failure.raw, error.failure.error)
 ```
 
 A `SchemaProfile` maps each `Record` field to one or more database column names

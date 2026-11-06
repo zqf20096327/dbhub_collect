@@ -18,6 +18,7 @@
 <a href="https://github.com/carbogninalberto"><img src="https://avatars.githubusercontent.com/u/17618905?v=4&amp;s=64" width="64" height="64" alt="@carbogninalberto" title="@carbogninalberto"></a>
 <a href="https://github.com/carbninai"><img src="https://avatars.githubusercontent.com/u/346896133?v=4&amp;s=64" width="64" height="64" alt="@carbninai" title="@carbninai"></a>
 <a href="https://github.com/uiYzzi"><img src="https://avatars.githubusercontent.com/u/40852301?v=4&amp;s=64" width="64" height="64" alt="@uiYzzi" title="@uiYzzi"></a>
+<a href="https://github.com/kasperhartwich"><img src="https://avatars.githubusercontent.com/u/616231?v=4&amp;s=64" width="64" height="64" alt="@kasperhartwich" title="@kasperhartwich"></a>
 <a href="https://github.com/MarioGK"><img src="https://avatars.githubusercontent.com/u/8379079?v=4&amp;s=64" width="64" height="64" alt="@MarioGK" title="@MarioGK"></a>
 <a href="https://github.com/manelpb"><img src="https://avatars.githubusercontent.com/u/1784206?v=4&amp;s=64" width="64" height="64" alt="@manelpb" title="@manelpb"></a>
 <!-- contributors:end -->
@@ -422,6 +423,15 @@ Members can dictate assistant messages and send Telegram voice notes; speech is 
 3. As the workspace owner open **Settings → Voice** and pick a model. It is downloaded from its official source (Hugging Face for faster-whisper, alphacephei.com for Vosk), verified against pinned checksums and then activated.
 
 The service is not published: only the backend reaches it on the internal `voice-control` network, and it needs outbound HTTPS only to download models into the `voice_models` volume (from 41 MB for Vosk small to about 1.6 GB for large-v3-turbo; unused models stay there until you remove the volume). `selfhosting/update.sh` does not rebuild optional profiles: after updating, run `docker compose --profile voice up -d --build voice`. See [voice transcription](TECHNICAL.md#voice-transcription) for limits and security.
+
+### Self-hosted web search (optional)
+
+The assistant's `web_search` tool can use a SearXNG instance on your server instead of a Brave or Tavily API key.
+
+1. Run `bash selfhosting/searxng.sh enable`. It generates `SEARXNG_SECRET` in `selfhosting/.env` (never printed or committed), sets `WEB_SEARCH_SEARXNG_URL=http://searxng:8080`, starts the `searxng` Compose profile and recreates the backend.
+2. A workspace owner or admin chooses **SearXNG (self-hosted)** in **Settings → Assistant → Research**. No key is needed.
+
+The service has no published port: only the backend reaches it on the internal `search-control` network, and it queries DuckDuckGo, Brave, Wikipedia and Bing through `search-egress`. Its configuration is [selfhosting/searxng/settings.yml](selfhosting/searxng/settings.yml) (JSON output on, limiter off because nothing else can reach it, moderate safe search). `selfhosting/update.sh` keeps the secret and refreshes the pinned image when SearXNG is running; `bash selfhosting/searxng.sh disable` turns it off. To use an existing instance, set `WEB_SEARCH_SEARXNG_URL` to its base URL instead; it must list `json` in `search.formats`. With the [release updater](selfhosting/RELEASE_UPDATER.md), add the `searxng` service and the backend's `WEB_SEARCH_SEARXNG_URL` to your production configuration. See [web search](BE/docs/conversations.md#research-tools) for the security model.
 
 ### Storage options
 

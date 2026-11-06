@@ -101,7 +101,7 @@ git clone https://github.com/observecraft/observecraft.git
 cd observecraft
 (cd web && npm install)
 
-make up        # ClickHouse, Postgres, Kafka, Valkey, Vector, OTel Collector, RustFS (S3), synthetic logs
+make up        # ClickHouse, Postgres, Kafka, Valkey, OTel Collector, RustFS (S3), synthetic logs
 make server    # API on :8080 (applies migrations on startup)
 make intake    # telemetry intake on :4318 (OTLP/HTTP + JSON logs, API-key authenticated)
 make tracegen  # demo traces, logs, metrics and CI pipelines, sent through the intake
@@ -205,7 +205,7 @@ The platform is one Helm chart, published with every release as an OCI artifact 
 [releases](https://github.com/observecraft/observecraft/releases):
 
 ```bash
-# Server (API + web app), intake, collector, Vector, and by default single-node ClickHouse, Postgres, Kafka, Valkey.
+# Server (API + web app, log ingester), intake, collector, and by default single-node ClickHouse, Postgres, Kafka, Valkey.
 helm install observecraft oci://ghcr.io/observecraft/charts/observecraft --version 0.1.0 -n observecraft --create-namespace \
   --set publicUrl=https://observecraft.example.com --set instanceAdminEmail=admin@example.com \
   --set ingress.enabled=true --set ingress.app.host=observecraft.example.com \
@@ -252,13 +252,10 @@ flowchart LR
   A & H & C -->|OTLP HTTP/gRPC + API key| IN[oc-intake<br/>auth · rate limits]
   D -->|Datadog logs / series API| IN
   IN -->|acks=all · keyed by org| K[[Kafka<br/>durable buffer · 72 h]]
-  K -->|OTLP| COL[OTel Collector]
-  K -->|JSON logs| VEC[Vector aggregator]
-  COL -->|logs| VEC
+  K -->|traces · metrics · signals| COL[OTel Collector]
+  K -->|logs| API[observecraft-server<br/>Rust · axum<br/>log ingester]
   COL --> CH[(ClickHouse<br/>logs · traces · metrics · CI<br/>per org)]
-  VEC --> CH
-  VEC -->|live tail| K
-  API[observecraft-server<br/>Rust · axum] --> CH
+  API --> CH
   API --> PG[(Postgres<br/>orgs · accounts · dashboards<br/>monitors · incidents)]
   API -->|live tail| K
   API <-->|shared results| VK[(Valkey<br/>cache)]
@@ -270,8 +267,9 @@ flowchart LR
 
 Every telemetry row carries its organization: the intake resolves the API key and writes the org as a Kafka record
 header, the Collector stamps the resource with `oc.org_id` (replacing anything a sender put there), and every query
-filters on it. The intake answers a sender once Kafka has its data on all in-sync replicas; the Collector and Vector
-commit their Kafka offsets only after storing (see [ADR-0004](docs/adr/0004-kafka-ingestion-buffer.md)).
+filters on it. The intake answers a sender once Kafka has its data on all in-sync replicas; the Collector and the
+server's log ingester move their Kafka offsets only after storing (see [ADR-0004](docs/adr/0004-kafka-ingestion-buffer.md)
+and [ADR-0005](docs/adr/0005-kafka-log-ingester.md)).
 
 | Path | What |
 |---|---|
@@ -301,7 +299,9 @@ most important ones:
 | `OC_ORG_QUERY_TIMEOUT_SECONDS` / `OC_ORG_QUERY_MAX_MEMORY_BYTES` / `OC_ORG_QUERY_MAX_ROWS_TO_READ` | `60` / `4294967296` / `0` (none) | Limits on each telemetry query of an organization (`OC_QUERY_TIMEOUT_SECONDS` / `OC_QUERY_MAX_MEMORY_BYTES` still work); queries also send the org as ClickHouse `quota_key` for per-org quotas. A query stopped at a limit gets 503 with what to change |
 | `OC_ORG_QUERY_CONCURRENCY` / `OC_ORG_QUERY_QUEUE_TIMEOUT_MS` | `16` / `10000` | ClickHouse queries of one organization running at once on each server replica (0 = no limit); more wait up to the timeout, then the API answers 429 ("retry shortly"). Background jobs (metric rollups, monitors, schedulers) are exempt |
 | `OC_POSTGRES_URL` | `postgres://observecraft:…@localhost:5432/observecraft` | Postgres connection string |
-| `OC_KAFKA_BROKERS` | `localhost:19092` | Kafka bootstrap brokers (`host:port,…`). The server reads live tail from it; the intake (`oc-intake`) writes telemetry to it, and forwards over HTTP to the Collector and Vector when it is unset |
+| `OC_KAFKA_BROKERS` | `localhost:19092` | Kafka bootstrap brokers (`host:port,…`). The server ingests logs and reads live tail from it; the intake (`oc-intake`) writes telemetry to it, and forwards over HTTP to the Collector and Vector when it is unset |
+| `OC_LOG_INGEST` | `kafka` | `kafka`: the server reads the log topics itself ([ADR-0005](docs/adr/0005-kafka-log-ingester.md); `OC_LOG_INGEST_CONCURRENCY` batches at once, by default the CPUs it may use, 4–16; switching from `vector`, it
+starts `OC_LOG_INGEST_HANDOVER_MINUTES`, 30, before the newest log Vector stored). `vector`: the earlier path through the Vector aggregator (Compose `--profile vector`), needed by an intake without Kafka |
 | `OC_CACHE_URL` | — | **Required.** Shared cache of all server replicas: Valkey (or another Redis-protocol server), `redis://[user:password@]host:6379/0` or `rediss://…` for TLS. The server exits at startup when it is unset or unreachable for 30 s; later outages only cost cache hits |
 | `OC_DATADOG_API_ALLOW_APP_KEY_CREATION` | `false` | Lets the Datadog-compatible API create application keys when the caller is itself an application key (Terraform's `datadog_application_key`). Off by default so a leaked key can't create keys that outlive its revocation; see [docs/datadog-api.md](docs/datadog-api.md) |
 | `OC_CACHE_MAX_VALUE_BYTES` / `OC_CACHE_LOAD_TIMEOUT_SECONDS` | `8388608` / `30` | Largest value stored (after compression); how long replicas wait for another replica's load of the same entry |
@@ -309,6 +309,8 @@ most important ones:
 | `OC_PUBLIC_URL` | `http://localhost:5173` | Origin users open the app on (SSO redirects, login links, notification links) |
 | `OC_AWS_PRINCIPAL_ARN` | unset | The AWS IAM role the server assumes customers' AWS integration roles with; their roles trust it (Integrations → Amazon Web Services) |
 | `OC_GCP_PRINCIPAL_EMAIL` | unset | The GCP service account the server impersonates customers' service accounts with (the STS delegate); they grant it Service Account Token Creator |
+| `OC_SLACK_CLIENT_ID`, `OC_SLACK_CLIENT_SECRET` | unset | This install's Slack app, for "Add to Slack" in Integrations → Slack (without them, workspaces connect with their own app's bot token) |
+| `OC_SLACK_SIGNING_SECRET` | unset | That app's signing secret: verifies the mute buttons of Slack alerts |
 | `OC_CLOUD_CRAWLERS` | `aws,azure,gcp` | The cloud integrations whose metrics the server crawls (CloudWatch, Azure Monitor, Cloud Monitoring); needs `OC_KAFKA_BROKERS` |
 | `OC_CLOUD_CRAWL_INTERVAL_SECS` | `600` | How often each account's region, subscription or project is read |
 | `OC_CLOUD_CRAWL_CONCURRENCY` | `8` | Crawl jobs one server runs at a time per cloud (add servers to crawl more) |
@@ -318,7 +320,7 @@ most important ones:
 | `OC_RETENTION_LOGS_MAX_DAYS` / `_TRACES_MAX_DAYS` | `365` / `90` | Most the instance admin can grant an org (*Instance Admin → Retention limits*) |
 | `OC_RETENTION_METRICS_DAYS` / `_CI_DAYS` | `30` / `30` | Install-wide metric and CI retention |
 | `OC_RAW_LOGS_HOURS` | `72` | Every log stays this long unindexed, as the source of archives |
-| `OC_LOGPROC_ADDR` / `OC_INTERNAL_TOKEN` | `0.0.0.0:8090` / — | Internal listener: the log indexer Vector posts to, and the server's own metrics (`GET /metrics`, Prometheus text: `oc_cache_*`). Keep it off the public network; the token is optional |
+| `OC_LOGPROC_ADDR` / `OC_INTERNAL_TOKEN` | `0.0.0.0:8090` / — | Internal listener: the log indexer Vector posts to (`OC_LOG_INGEST=vector`), and the server's own metrics (`GET /metrics`, Prometheus text: `oc_cache_*`). Keep it off the public network; the token is optional |
 | `OC_SMTP_URL` / `OC_SMTP_FROM` | — | SMTP server for monitor emails (`smtps://user:pass@host:465`) |
 | `OC_ASSIST_PROVIDER` | — | The install's default model for Assist: `anthropic` (the Messages API) or `openai` (any OpenAI-compatible chat completions endpoint: OpenAI, Azure OpenAI, vLLM, LiteLLM, Ollama). Each organization can set its own in Organization Settings → Assist AI (key sealed), which replaces this one for it. Unset and no organization provider: Assist says it isn't set up |
 | `OC_ASSIST_API_KEY` / `OC_ASSIST_MODEL` / `OC_ASSIST_BASE_URL` | — / `claude-opus-5` (anthropic) / `https://api.anthropic.com` | The provider's key (required for anthropic), model (required for openai) and URL (required for openai, e.g. `https://api.openai.com/v1`) |
@@ -335,8 +337,10 @@ most important ones:
 
 The intake (`oc-intake`) has its own settings: `OC_INTAKE_ADDR` (HTTP, `:4318`), `OC_INTAKE_GRPC_ADDR` (OTLP/gRPC,
 `:4317`), `OC_INTAKE_COLLECTOR_URL`, `OC_INTAKE_LOGS_URL`, `OC_INTAKE_AUTOSCALING_URL` (the server's internal listener for the
-Datadog Cluster Agent's external recommender calls), `OC_INTAKE_MAX_BODY_MB` (16), and per-organization limits
-`OC_INTAKE_ORG_RPS` (500 requests/s) and `OC_INTAKE_ORG_MBPS` (50 MB/s).
+Datadog Cluster Agent's external recommender calls), `OC_INTAKE_MAX_BODY_MB` (16), `OC_INTAKE_SERIES_CACHE` (6,000,000: series a replica remembers as forwarded in the
+hour, ~20 bytes each; keep it above the active series it sees), and per-organization limits
+`OC_INTAKE_ORG_RPS` (requests/s) and `OC_INTAKE_ORG_MBPS` (MiB/s), unlimited (`0`) by default; instance admins can
+also limit one organization (Instance → Organizations → Limits).
 
 ## Security
 

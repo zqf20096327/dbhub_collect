@@ -321,7 +321,7 @@ Verdicts, ingestion and batch runs are driven through the [MCP server](docs/MCP.
 
 **Session Management:**
 - Auto-save/resume interrupted reviews
-- Finding status: Unreviewed → In Progress → Done, moved with `[M]`; the Done list's `[M]` moves findings back to Unreviewed
+- Finding status: Unreviewed → In Progress → Done, moved with `[M]`; Done findings are hidden until `[D]`, where `[M]` moves them back to Unreviewed
 - Session statistics (duration, per-severity breakdown)
 
 **Database:** SQLite-backed persistence at `~/.cerno/cerno.db` tracks scans, findings, sessions, tool executions, and artifacts. Cross-scan tracking enables host history queries. See [docs/DATABASE.md](docs/DATABASE.md) for schema details.
@@ -341,11 +341,9 @@ cerno config set proxychains_host 127.0.0.1      # proxychains4 SOCKS5 proxy hos
 cerno config set proxychains_port 9000           # Matches: ssh -D 9000 user@host
 ```
 
-**Or override per session:**
-```bash
-cerno review --proxy      # Force-enable proxychains4 routing for this session
-cerno review --no-proxy   # Force-disable proxychains4 routing for this session
-```
+Proxy routing is config-only: the `--proxy` / `--no-proxy` session overrides
+were removed, since a pivot lasts an engagement rather than a single command.
+Toggle it with `cerno config set proxychains_enabled true|false`.
 
 **Behavior when active:**
 - `[PROXY]` badge (magenta) shown in the review session status line
@@ -376,25 +374,19 @@ cerno review --no-proxy   # Force-disable proxychains4 routing for this session
 cerno import nessus <scan.nessus>              # Import a single .nessus file
 cerno import nessus <directory>                # Recursively import all .nessus files in a directory
 cerno import nuclei <nuclei.json>              # Import nuclei results (-je array or -jle/-jsonl)
-cerno import nuclei <dir> --min-severity 2     # Recursive; drop Info/Low findings
 cerno import nuclei <f.json> --name webapp     # Override the scan name (defaults to the file stem)
 cerno demo [--overwrite] [--no-nxc]            # Import the bundled demo scans (Nessus + nuclei) + NetExec workspace
-cerno review [--custom-workflows PATH]         # Start interactive review (custom workflows merged over bundled)
-cerno review --custom-workflows-only PATH      # Use only this workflow YAML
-cerno review --no-tools                        # Review only, no tool prompts
-cerno review -q                                # Skip the banner
-cerno review --proxy                           # Force-enable proxychains4 routing for this session
-cerno review --no-proxy                        # Force-disable proxychains4 routing for this session
-cerno review --check                           # Check tool availability and exit
+cerno review                                   # Start interactive review (all behaviour from config.yaml)
+cerno check                                    # Check external tool availability and exit
 
 # Manage scans
-cerno scan list                                # Compact summary (use --wide for all severities, --json for scripting)
+cerno scan list                                # Compact summary (--json for scripting; scan_list_wide for all severities)
 cerno scan delete <scan_name>
 cerno scan compare <scan1> <scan2>             # Compare findings between two scans
 cerno scan history <host_ip>                   # View vulnerability timeline for a host
 
 # View workflows
-cerno workflow list [--custom-workflows PATH]
+cerno workflow list                            # Bundled + custom_workflows_path
 
 # NetExec credentials (local only)
 cerno creds list                               # Credential refs, usernames, domains (never secrets)
@@ -480,8 +472,9 @@ scopes, and management commands.
 - `[X]` - Clear group filter (when a comparison/overlap group is active)
 - `[E]` - Extract CVEs for all findings matching current filter
 - `[M]` - Move to next status: every filtered finding moves one step (Unreviewed → In Progress, In Progress → Done)
-- `[D]` - Done list; inside it, `[M]` moves selected findings back to Unreviewed
-- Status column: `○` Unreviewed, `◐` In Progress
+- `[D]` - Done only: show the Done findings in this same list, with every action available (sort, page, open, `[V]`/`[W]`/`[T]`/`[A]`). `[M]` there moves every shown finding back to Unreviewed
+- `[I]` - In Progress only; `[I]`/`[D]` switch between each other, and `[C]` clears both
+- Status column: `○` Unreviewed, `◐` In Progress, `✓` Done
 - `[A]` - Ask Claude — chat about the current filtered findings set
 - `[N]` / `[P]` - Next / previous page
 - `[B]` - Back to severity menu
@@ -503,10 +496,15 @@ scopes, and management commands.
 
 ## Custom Workflows
 
-Add finding-specific verification workflows with `--custom-workflows` (merged over the defaults; custom wins on conflict) or `--custom-workflows-only` (replaces defaults):
+Add finding-specific verification workflows by pointing `custom_workflows_path`
+at your YAML. By default it is merged over the bundled set (custom wins on
+conflict); set `custom_workflows_exclusive` to use only your file, which is how
+you test one in isolation:
 
 ```bash
-cerno review --custom-workflows my_workflows.yaml
+cerno config set custom_workflows_path my_workflows.yaml
+cerno workflow list                                  # confirm it loaded
+cerno config set custom_workflows_exclusive true     # bundled set off
 ```
 
 **Example workflow YAML:**

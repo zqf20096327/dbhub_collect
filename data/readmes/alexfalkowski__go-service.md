@@ -381,7 +381,7 @@ See [docs/sql.md](docs/sql.md) for the config shape, reader/writer pool settings
 
 Health checks are based on [go-health](https://github.com/alexfalkowski/go-health) and expose Kubernetes-style `/<name>/healthz`, `/<name>/livez`, and `/<name>/readyz` endpoints, plus the standard gRPC `grpc.health.v1.Health` service when gRPC transport is enabled.
 
-`module.Server` installs the HTTP/gRPC health transports, but services own the checks and observer mapping — see the executable [`Registrations` example](health/example_test.go).
+`module.Server` installs the HTTP/gRPC health transports, but services own the checks and observer mapping.
 
 See [docs/health.md](docs/health.md) for endpoint behavior, checker wiring, and the gRPC health protocol.
 
@@ -433,6 +433,14 @@ provider not found error. `address` is provider-specific and is used when the
 network time provider performs I/O. `timeout` bounds network operations for the
 selected provider; a zero value uses the upstream client's default timeout, and
 negative values are invalid.
+
+---
+
+## 🌍 Localization (i18n)
+
+`i18n` provides application-owned translation catalogs with named variables, plural forms, and fallback messages. Catalogs are independent of HTTP and can be shared by MVC views, workers, and CLI commands.
+
+See [docs/i18n.md](docs/i18n.md) for catalog formats, standalone use, language selection, Fx wiring, and MVC integration.
 
 ---
 

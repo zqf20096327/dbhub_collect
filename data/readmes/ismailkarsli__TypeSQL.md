@@ -7,11 +7,11 @@
 
 Write SQL in TypeScript and get exact types for rows and parameters. TypeSQL parses your SQL inside the type checker: no codegen, no database connection, no build step.
 
-TypeSQL supports PostgreSQL and SQLite. MySQL is planned.
+TypeSQL supports PostgreSQL, SQLite, MySQL and MariaDB. The `@typesql/core` runtime is tiny (under 3 kB minified and gzipped) and has no dependencies.
 
 <a href="https://www.npmjs.com/package/@typesql/core"><img src="https://img.shields.io/npm/v/@typesql/core" alt="npm version" height="20"></a>
 <a href="https://www.npmjs.com/package/@typesql/core"><img src="https://img.shields.io/npm/dm/@typesql/core" alt="npm downloads" height="20"></a>
-<a href="https://bundlejs.com/?q=@typesql/core"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdeno.bundlejs.com%2F%3Fq%3D%40typesql%2Fcore&amp;query=%24.size.size&amp;label=bundle%20size" alt="bundle size" height="20"></a>
+<a href="https://bundlephobia.com/package/@typesql/core"><img src="https://img.shields.io/bundlejs/size/@typesql/core?label=bundle%20size" alt="bundle size" height="20"></a>
 <a href="https://github.com/ismailkarsli/TypeSQL"><img src="https://img.shields.io/github/stars/ismailkarsli/TypeSQL" alt="GitHub stars" height="20"></a>
 <a href="LICENSE"><img src="https://img.shields.io/github/license/ismailkarsli/TypeSQL" alt="License" height="20"></a>
 
@@ -48,7 +48,7 @@ const rows = await sql(
 sql("SELECT emial FROM users");
 ```
 
-`@typesql/postgres` works the same way with postgres.js, and `@typesql/sqlite` with node:sqlite, better-sqlite3 and bun:sqlite; see [SQLite](https://typesql.karsli.net/adapters/sqlite).
+`@typesql/postgres` works the same way with postgres.js, `@typesql/sqlite` with node:sqlite, better-sqlite3 and bun:sqlite, and `@typesql/mysql` with mysql2, the mariadb connector, PlanetScale and TiDB Cloud; see [SQLite](https://typesql.karsli.net/adapters/sqlite) and [MySQL and MariaDB](https://typesql.karsli.net/adapters/mysql).
 
 ## Editor support
 

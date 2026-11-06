@@ -56,9 +56,18 @@ Werbot is written in golang, runs in Docker containers, and works as microservic
 
 **Supported technology:**
 
-- _Protocols_ - SSH is fully proxied and recorded today. Access profiles for RDP, VNC, databases and cloud providers exist in the data model; their proxy connectors are not implemented yet.
+- _Protocols_ - SSH and Telnet are proxied and recorded today. Access profiles for RDP, VNC, databases and cloud providers exist in the data model; their proxy connectors are not implemented yet.
 - _Containers_ - Docker, Kubernetes (access metadata)
 - _Databases_ - MySQL, Maria, PostgresQL, Redis, MongoDB, Elasticsearch, and other (access metadata)
+
+### Telnet access
+
+Telnet schemes can be reached in two ways:
+
+1. **SSH bridge** - connect to avocado over SSH, then select a `server_telnet` scheme from the shell or use its direct-access alias. Avocado logs in to the target automatically and records the session.
+2. **Telnet listener** - set `TELNETSERVER_BIND_ADDRESS` (for example `:2323`) and start avocado. Request a one-time token with `POST /v1/tokens/scheme/{scheme_id}/connect`, connect to the listener, and enter the token at the `Token:` prompt.
+
+The listener is disabled by default. The client-to-avocado leg of the listener and the avocado-to-target leg are plaintext because telnet has no encryption; the connection token is single-use and expires after 5 minutes. Prefer the SSH bridge when the network is untrusted.
 
 
 
@@ -224,6 +233,57 @@ TAGS=ee make build taco     # Enterprise skeleton (future commercial modules)
 ```
 
 Release images for `taco` are built with `saas` enabled (see `.goreleaser.yaml`). Add-ons live in private git submodules under `add-on/`; initialize them with `git submodule update --init --recursive`.
+
+### Submodules
+
+`web`, `add-on/ee`, and `add-on/saas` are git submodules. The parent `main` must pin each module's remote `main` tip.
+
+**Automatic synchronization**
+
+- **After a parent `main` merge**: job `Submodule reconcile` merges every pinned module commit into the module `main`, pushes it, updates the parent gitlinks, and commits them back to `main`. That commit triggers a normal CI run.
+- **Every six hours and on manual dispatch**: the same job catches a module `main` that advanced independently or a bypassed local hook.
+- The merge commit can show a red `Submodule synchronization` check for a short window before the reconcile commit lands. The reconcile commit restores green; no action is needed.
+- There is no pre-merge module merge and no automatic PR merge. Closing a parent PR cannot leak its code into a module `main`.
+
+The workflow needs the repository secret `SUBMODULE_TOKEN` with **Contents: Read and write** on the parent repository and on `werbot/werbot.ee`, `werbot/werbot.saas`, and `werbot/werbot.web`. It verifies push access before writing and fails with `SUBMODULE_TOKEN lacks push access to <repo>` otherwise. Parent and module `main` branches must allow the token to push directly; configure a ruleset bypass if protection is enabled.
+
+**What you do manually**
+
+1. Commit and push the module change. The commit must exist on the module remote.
+2. Commit the parent gitlink, push the branch, open the PR, and merge it when ready.
+
+Branch names do not need to match. The local hook and CI accept any pushed module branch tip, and the reconcile job works from the pinned SHA alone.
+
+**Local setup and diagnostics**
+
+```bash
+make hooks              # once per clone: install .githooks/pre-push
+make submodules status  # pin, remote main, state
+make submodules-check   # strict main check
+make submodules-test    # offline regression suite (33 cases)
+```
+
+`make submodules-sync` remains available for a manual repair from a feature branch. It pushes the branch, merges it into module `main`, pushes, and commits the pins.
+
+**What is enforced**
+
+- **Push to parent `main`**: every pin equals the module remote `main` tip. The reconcile job repairs a violation after the push.
+- **Push to a feature branch**: a changed pin equals the tip of any remote branch in the module. A module branch with unpushed commits blocks the push.
+- **Pull request**: if no gitlink changed, CI runs the strict `main` check; otherwise it checks that every changed pin is a pushed branch tip.
+- **CI**: job `Submodule synchronization` runs before `Build, test and lint`; the build job cannot start when the gate fails.
+- **Dirty module worktrees** produce a warning; uncommitted changes are never pushed.
+
+**Manual repair**
+
+If automation is unavailable, update pins or run the local sync:
+
+```bash
+git submodule update --remote --checkout add-on/ee add-on/saas web
+git add add-on/ee add-on/saas web
+git commit -m "🔧 chore(submodules): bump modules to main"
+```
+
+Bypass the local hook with `SKIP_SUBMODULE_CHECK=1 git push` only for emergencies; CI and the reconcile job still enforce the invariant.
 
 ### Tests
 

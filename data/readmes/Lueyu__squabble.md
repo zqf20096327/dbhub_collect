@@ -6,11 +6,11 @@ English | [简体中文](README.zh-CN.md)
 
 # Squabble
 
-**Let your AI argue. You decide.**
+**Research that remembers. Decisions you control.**
 
 An open-source investing workspace.
-A bull, a bear and a critic challenge your ideas.
-Then you make the call.
+Independent research and reverse checks produce a daily report.
+A sourced channel follows meaningful changes and keeps decisions in your hands.
 
 **US · HK · China A-shares** · **English / Chinese** · **Self-hosted** · **Zero telemetry**
 
@@ -24,10 +24,10 @@ Then you make the call.
 
 ## Why Squabble?
 
-Most portfolio trackers show numbers. Squabble argues about them.
+Understand your portfolio, what changed, and what needs your decision.
 
-- **AI research reports.** A bull and a bear debate your holdings. A critic removes weak arguments. Your risk rules run as hard gates. The result is a 14-section report with both sides preserved.
-- **AI paper trading.** Opt into daily team research, a dated trading plan, scheduled market checks and a fast model review before automatic simulated fills. Configure push notifications and hard risk limits. Manual and MCP agent orders remain available.
+- **Daily research and a quiet channel.** Independent investigations and a separate reverse check stay in readable reports. The channel publishes short, sourced updates, expandable evidence and one-fact follow-ups. [Channel guide](docs/channel-workbench.md).
+- **Strategy-driven paper trading.** Copy recorded holdings and cash, review the strategy, then explicitly apply it to the simulation. Current rules, proposed changes and actual fills remain distinct. Existing advanced tools remain available.
 - **Your data stays yours.** Self-hosted. Zero telemetry. Desktop and source local workspaces open without a Squabble login; account mode remains available.
 
 ## Install
@@ -84,11 +84,15 @@ Override `SERVER_PORT=3000` and `CLIENT_DEV_PORT=8080` in `.env.local` if needed
 
 ## Simplified experience (opt-in rollout)
 
-Set `SQUABBLE_SIMPLE_EXPERIENCE=true` on the server to use **Today**, **Research room** and **AI investment**. Today shows portfolio facts and current analysis; ask a question directly to bring connected agents into a discussion. Members submit this round's initial research before seeing each other's findings, then challenge specific evidence and retain unresolved disagreements. No report-version or strategy-publication workflow is required.
+Set `SQUABBLE_SIMPLE_EXPERIENCE=true` on the server to use **Today**, **Research room** and **AI investment**. Today combines position value and confirmed cash, separating daily P&L, asset changes and external net flows. Missing prices, previous closes or FX keep known values visible with an explanation. Record trades and cash flows manually or import CSV, Excel and screenshots for review before posting.
 
-AI investment starts from an explicitly confirmed holdings/cash snapshot and manages one independent paper account. The team can discover securities within your confirmed markets and limits. Clear rules use the fast path; ambiguous or material decisions receive additional research. New-stock purchases require two distinct execution sources. Chat restrictions take effect only after you confirm the impact card. **Pause automatic trading stops every automatic buy and sell, including protective exits.** Resume reassesses current conditions; it never replays missed orders.
+Today shows the latest complete report, with earlier reports available through a quiet history link. Full reports remain available by date and source, including each round's report in its original conversation. Current public work steps expand during research and collapse afterward unless you opened them yourself. Reports render as readable text; retained known JSON formats can be reformatted without another AI call.
 
-Existing ledgers and historical decision evidence are preserved. Existing automatic accounts require explicit adoption before switching to the new authorization. The default performance comparison is the same starting holdings held unchanged. Missing prices, FX, asset verification or source data remain visible gaps. See the [product specification](docs/squabble-simple-product.zh-CN.md) and [delivery notes](docs/simple-experience-delivery.md) for defaults, rollout and verification.
+New daily portfolio research includes a separate execution strategy proposal: security, condition, shares or target total position, validity and proposed risk limits. Copy its readable text or import the exact saved proposal into an editable strategy draft without another AI extraction call. Missing information and no-trade decisions remain explicit. Suggested parameters are not observed facts or prior user authority; applying a reviewed draft to simulation remains a separate confirmation. Historical reports are not silently given new trading proposals, and manually edited report revisions do not inherit hidden executable metadata.
+
+Write your investment strategy in Today or add report findings to an editable draft. Saving a draft keeps the previous strategy running; review its execution explanation and choose **Apply to simulation** to switch it as a whole. Observation-only review saves your intent without an AI call or automatic trade conditions. If AI preparation fails, its saved status and specific safe cause remain available; a confirmed failure permits an explicit retry, while pending requests are read without redispatch. Copy current positions and recorded cash into an independent paper account, optionally adding virtual cash. Missing trustworthy prices allow an observing ledger; simulation performance starts when a credible valuation is available.
+
+The simulation trades only under your confirmed strategy: deterministic rules use the fast path, ambiguous conditions receive AI review, and high-risk or large positions receive council review. New-stock purchases require two verified, distinct actual execution sources. Opportunities outside the strategy become discussion or drafts before confirmation. **Pause stops every automatic buy and sell, including protective exits.** Existing accounts and trades remain intact; legacy automatic accounts without a user strategy pause on upgrade until a strategy is confirmed. See the [assets, reports and strategy guide](docs/assets-reports-strategy.md).
 
 ## Connect native research agents
 
@@ -181,6 +185,7 @@ Self-hosted. Zero telemetry. The only outbound requests are the ones you make wi
 | Architecture | [docs/architecture.md](docs/architecture.md) |
 | Development guide | [docs/development.md](docs/development.md) |
 | Contributing | [CONTRIBUTING.md](CONTRIBUTING.md) |
+| AI development skill | [Squabble development and maintenance](.agents/skills/squabble-contributor/SKILL.md) |
 
 ---
 

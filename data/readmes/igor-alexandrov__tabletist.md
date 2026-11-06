@@ -27,6 +27,10 @@ The guide and the reference are on the website:
 **[igor.works/tabletist](https://igor.works/tabletist/)**.
 
 <p align="center">
+  <img src="assets/screenshots/macos-core-loop.webp" width="900" alt="A 15-second loop in the macOS look, on the Bookshop demo database: the books table opens, is filtered to titles that contain &quot;the&quot;, a price is edited, Review SQL shows the UPDATE that will run, and Save stops on a row someone else changed meanwhile, showing the loaded, server and new values side by side">
+</p>
+
+<p align="center">
   <img src="assets/screenshots/macos.png" width="900" alt="Tabletist 0.1.0, the macOS look: a table's data grid with the sidebar of tables on the left and the row panel on the right">
 </p>
 
@@ -99,9 +103,15 @@ The guide and the reference are on the website:
 - **Arch Linux / Omarchy:** the AUR packages (`tabletist-bin` and
   `tabletist`) are not published yet. Until they are, use the release
   AppImage or `.tar.gz` (see Other Linux below).
-- **macOS:** download `tabletist-v<version>-macos-universal.dmg` from the
+- **macOS:** `brew install --cask igor-alexandrov/tabletist/tabletist`, or
+  download `tabletist-v<version>-macos-universal.dmg` from the
   [releases](https://github.com/igor-alexandrov/tabletist/releases) and drag
   Tabletist to Applications.
+- **Homebrew, from source (macOS and Linux):**
+  `brew install igor-alexandrov/tabletist/tabletist`, without `--cask`,
+  builds the `tabletist` program from the release's source with Homebrew's
+  Rust. It installs no app bundle and no launcher entry: on macOS, the cask
+  above is the app.
 - **Windows:** run `tabletist-v<version>-x86_64-pc-windows-msvc-setup.exe`
   (or the `aarch64` one on ARM). No administrator rights needed.
 - **Other Linux:** to try it, download `tabletist-<version>-x86_64.AppImage`

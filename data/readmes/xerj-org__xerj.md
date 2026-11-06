@@ -400,7 +400,7 @@ Measurements and how to reproduce them:
 
 ## Ask over your own facts
 
-XERJ ships **XERJ-Query**, a model that answers questions over facts you give it.
+XERJ ships **XERJ Query-1**, a model that answers questions over facts you give it.
 It is off by default; start a node with `--facts-model-dir <DIR>` to turn it on.
 Write documents and facts to a namespace, then ask in plain language — the engine
 returns a *verified* answer with its cited evidence and the exact program that
@@ -425,7 +425,7 @@ Which to use: `_search` for keyword and text lookups over indexed documents;
 subject / relation / value facts. The model answers **only over the `facts[]`
 you wrote** (`kind` is `text`, `date`, `number` or `boolean`; `version` is a
 string; `quote` must equal `text[start:end]`) — documents alone answer `UNKNOWN`.
-XERJ-Query runs on CPU with no GPU and nothing leaving the machine. Counting
+XERJ Query-1 runs on CPU with no GPU and nothing leaving the machine. Counting
 questions ("how many people have office Berlin?") are served from an exact
 executor, and only when every fact of the counted subjects carries a stable
 `subject_id` (`"emp:1"`); without it the count is `INCOMPLETE` and the answer
@@ -618,7 +618,7 @@ the other direction: it hosts an MCP endpoint other agents connect to, and its s
 their servers from the harness underneath. Grok Bot has no documented local stdio registration; the
 Grok CLI does, which is the `grok` row above.
 
-Twenty-three tools are exposed when Hub tools are enabled. Eleven are thin proxies over an endpoint XERJ already serves:
+Twenty-four tools are exposed when Hub tools are enabled. Twelve are thin proxies over an endpoint XERJ already serves:
 
 | Tool | What it does |
 |---|---|
@@ -629,6 +629,7 @@ Twenty-three tools are exposed when Hub tools are enabled. Eleven are thin proxi
 | `xerj_memory_store` / `xerj_memory_recall` | durable agent memory in a namespace, recalled by text, meaning or vector |
 | `xerj_brain_overview` / `xerj_brain_ego` / `xerj_brain_link` / `xerj_brain_unlink` | the second-brain link index: orient, expand one node's evidence-backed neighborhood, assert and retire links |
 | `xerj_plan` | a plain-words filter in, validated query DSL out (`POST /_ask`; deterministic and rule-based, not an LLM) |
+| `xerj_sources` | list, inspect, connect or delete live database sources on the node (`/_xerj/sources`: Postgres snapshot, then logical replication) |
 
 For `xerj_search`, pass `{"prefix":"project","query":"retry policy"}` to search
 `project-*`, matching `xerj search --prefix project`. `prefix` is resolved by

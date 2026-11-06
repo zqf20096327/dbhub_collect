@@ -103,10 +103,14 @@ developer works with an Oracle database day to day:
 - Sort the results of the SQL editor and the LINQ console by a click on a header.
 - **Relationship diagram**: the "Relations" view of a table – parents left, children right, one or two levels, "+n"
   handles to go further, kinds of relationship to switch off, zoom, copy as Mermaid for a ticket.
+- **Every way between two tables**: "Path to …" lists each chain of relationships to another table, shortest first and
+  without a limit, in a diagram of all of them; leave out tables every way passes, and turn a way into a query. Drag the
+  list's right edge to make it wider or narrower.
 - **Build a query in the diagram**: click the relationships to its parents (and to children, of which one row is
   chosen by condition and order), tick columns, add conditions – and get LINQ in the style of query extensions (an
   expression per value, LinqKit, a DTO or your own mapping lines), the SQL with the right joins, a preview of the rows
-  or a view. LINQ and SQL find the same rows; the LINQ console runs it with its parameters.
+  or a view. LINQ and SQL find the same rows; the LINQ console runs it with its parameters. Drag the panel's left
+  edge to make it wider or narrower.
 - **Record diagram**: marked rows with their parents and children over up to four levels, read relationship by
   relationship; a click opens a row filtered, marked rows go to another connection (below).
 - **Audit tables read like their base table**: its relationships, C# names and enums, the cells a version changed
@@ -173,7 +177,8 @@ developer works with an Oracle database day to day:
       descending) or create a new table. Choose the tablespace of a new table, of a new index and of the indexes new keys
       and foreign keys bring along – suggested from where the table's or schema's others lie. Rename
       existing constraints (a key takes its index along), give a check a new condition – added before the old one goes –
-      or a foreign key another delete rule. You see the DDL before it runs – and the property and configuration lines
+      or a foreign key another delete rule. A new foreign key finds its table in a searchable list (also by C# name, each
+      table with its primary key) and suggests it from the column's name or a relationship of your C# model. You see the DDL before it runs – and the property and configuration lines
       for your entity – and what Oracle would refuse with the data at hand is reported up front. Run, Save and Close stay
       in view at the top, and a locked workspace shows as a bar across the designer.<br><br>
       <b>Audit tables</b> and their trigger come from a template file (your company's pattern, or a built-in one) and
@@ -340,6 +345,8 @@ dotnet run --project src/FerretSharp.App
   `artifacts/coverage/report`. The coverage badge counts unit and integration tests over `FerretSharp.Core` and
   `FerretSharp.UI` without generated code and Razor markup (`tests/coverage.config`); the report of each CI run is
   attached to it as an artifact.
+- `tools/linux/Test-Linux.ps1` builds and runs the unit tests under Linux in Docker, like the first CI job, on the
+  working tree including uncommitted changes – CI tests on Linux first, so platform differences show up before a push.
 - `tools/sample-db/New-SampleDb.ps1` creates a local sample database with the schema used in the screenshots;
   `samples/` contains a matching EF Core project.
 - A release build is a self-contained folder:

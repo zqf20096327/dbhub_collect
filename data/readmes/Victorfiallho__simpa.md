@@ -5,7 +5,7 @@
   </picture>
 </p>
 
-# SIMPA — Sistema Inteligente de Monitoramento e Predição Acadêmica
+# SIMPA ----- Sistema Inteligente de Monitoramento e Predição Acadêmica
 
 Projeto Integrador — 2º período de Inteligência Artificial — UniEVANGÉLICA.
 
@@ -49,7 +49,7 @@ flowchart LR
 | Interface | React + Vite + TypeScript, Recharts, Lucide, fonte Inter |
 | APIs | FastAPI + Pydantic |
 | Persistência | SQLAlchemy + Alembic + PostgreSQL |
-| Mensageria | RabbitMQ (pika) |
+| Mensageria | RabbitMQ |
 | Gateway | nginx |
 | Autenticação | JWT RS256 (PyJWT) |
 | Análise | `Decimal` (estatística e risco), numpy (regressão), openpyxl e reportlab (relatórios) |
@@ -182,11 +182,3 @@ docs/                        SRS, DER, decisões, UML, códigos de erro, roteiro
 - [Roteiro da apresentação da Entrega 2](docs/roteiro-apresentacao-entrega2.md) (falas e divisão entre os integrantes)
 - [Roadmap](ROADMAP.md)
 
-## Equipe
-
-| Integrante | Responsabilidades |
-|---|---|
-| _Nome_ | _ex.: serviço auth_ |
-| _Nome_ | _ex.: serviço acadêmico_ |
-| _Nome_ | _ex.: serviço analítico (estatística e risco)_ |
-| _Nome_ | _ex.: frontend_ |

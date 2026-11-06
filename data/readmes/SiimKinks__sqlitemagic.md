@@ -1,5 +1,9 @@
-SqliteMagic
-=======
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/logo-dark.svg">
+    <img alt="SqliteMagic" src=".github/assets/logo-light.svg" width="426">
+  </picture>
+</h1>
 
 Simple yet powerful SQLite database layer for Android that makes database handling feel like magic.
 
@@ -24,20 +28,21 @@ Simple yet powerful SQLite database layer for Android that makes database handli
 Getting Started
 -----------------
 
-SqliteMagic 2.x is built for Kotlin Android projects that use KSP. It supports Android API 24 and newer.
+SqliteMagic 3.x is built for Kotlin Android projects that use KSP. It supports Android API 24 and newer.
 
 #### Publish SqliteMagic:
 
-SqliteMagic 2.x is not published to a public repository. Build it from source and install it into your local Maven
-repository:
+SqliteMagic 3.x is not published to a public repository. Build a release from source and install it into your local
+Maven repository. Check out the release's tag, because the branch already carries the next `-SNAPSHOT` version:
 
 ```shell
+git checkout <latest version>
 ./gradlew publishToMavenLocal
 ```
 
-This publishes the Gradle plugin, runtime, annotations, KSP processor and migration testing artifacts as
-`com.siimkinks.sqlitemagic:*:<latest version>`. To share builds through a self-hosted Maven repository such as
-Artifactory or Nexus, add it to `publishing.repositories` in
+This publishes the Gradle plugin, runtime, annotations, KSP processor, migration testing, framework driver, coroutines,
+RxJava 3 and RxJava 2 artifacts as `com.siimkinks.sqlitemagic:*:<latest version>`. To share builds through a
+self-hosted Maven repository such as Artifactory or Nexus, add it to `publishing.repositories` in
 [buildsystem/maven-push.gradle](buildsystem/maven-push.gradle) and run `./gradlew publish`.
 
 #### Add SqliteMagic to Project:
@@ -110,6 +115,11 @@ sqlitemagic {
 #### Initialize Library:
 
 ```kotlin
+import com.siimkinks.sqlitemagic.SqliteMagic
+import com.siimkinks.sqlitemagic.SqliteMagicDatabase
+import com.siimkinks.sqlitemagic.annotation.Database
+import com.siimkinks.sqlitemagic.framework.FrameworkSQLiteDriver
+
 @Database(
   name = "library.db",
   version = 1
@@ -147,6 +157,9 @@ implementation(
   "com.siimkinks.sqlitemagic:sqlitemagic-framework-driver:<latest version>"
 )
 
+// Application.kt
+import com.siimkinks.sqlitemagic.framework.FrameworkSQLiteDriver
+
 // Application.onCreate
 SqliteMagic.builder(this)
   .database(SqliteMagicDatabase())
@@ -163,6 +176,8 @@ implementation(
   "androidx.sqlite:sqlite-bundled:<sqlite version>"
 )
 
+// Application.kt
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 
 // Application.onCreate
 SqliteMagic.builder(this)
@@ -185,8 +200,7 @@ of Android's database APIs remain:
   rows it returns, so keep its result small or use the bundled driver;
 * each connection takes the app's default locale when it opens. After the locale changes while the app runs, a
   connection that opens later sorts `LOCALIZED` text by the new locale and the earlier ones by the old locale until
-  the app restarts. Opening it rewrites the database's locale, which waits for a running transaction and fails with
-  `SQLiteDatabaseLockedException` after a few seconds.
+  the app restarts.
 
 `BundledSQLiteDriver` ships a recent SQLite inside the app, so newer SQL features work on every supported Android
 version. It costs:
@@ -204,9 +218,14 @@ File databases use one writer and up to four reader connections that open when n
 alongside writes and see the last committed data; the thread that runs a transaction reads its own changes. Reads of
 temporary tables and views and raw SELECTs that declare no tables run on the writer, so raw SQL such as `RETURNING` or
 `last_insert_rowid()` sees the connection that changes the data. A statement waits at most 30 seconds for a connection
-that other threads hold, then fails with `SQLException`. The builder tunes this:
+that other threads hold, then fails with `SQLException`. A connection waits up to 3 seconds for a file lock held by
+another connection or process (`PRAGMA busy_timeout = 3000`). In WAL mode, connections run with
+`PRAGMA synchronous = NORMAL`, so a transaction committed just before a power loss or system crash can be rolled back,
+while the database stays intact. The builder tunes this, and `configureConnection` runs after these defaults:
 
 ```kotlin
+import androidx.sqlite.execSQL
+
 SqliteMagic.builder(this)
   .database(SqliteMagicDatabase())
   .driver(BundledSQLiteDriver())
@@ -278,10 +297,14 @@ the collector only to deliver the result. The first change made while the collec
 query at once, and later changes are combined into one further query, so the earlier of the two results may miss them.
 
 Run suspending work in one transaction with `withTransaction`. It commits when the block and the coroutines it launched
-complete, and rolls back when they fail or are cancelled. Every call of the connection inside it takes part in it, on
-whatever thread it runs, and one-shot queries read the transaction's own changes:
+complete, and rolls back when they fail or are cancelled. A cancellation that arrives while the transaction commits
+still throws `CancellationException`, although the transaction committed. Every call of the connection inside it takes
+part in it, on whatever thread it runs, and one-shot queries read the transaction's own changes:
 
 ```kotlin
+import com.siimkinks.sqlitemagic.coroutines.await
+import com.siimkinks.sqlitemagic.coroutines.observe
+import com.siimkinks.sqlitemagic.coroutines.runQueryOnce
 import com.siimkinks.sqlitemagic.coroutines.withTransaction
 
 suspend fun renameAuthor(id: Long, lastName: String) = withTransaction {
@@ -297,9 +320,10 @@ suspend fun renameAuthor(id: Long, lastName: String) = withTransaction {
 ```
 
 Observers of the changed tables are notified after the commit. Collecting an observed query inside the transaction fails
-with `IllegalStateException`. A `runBlocking` inside the block starts a coroutine outside the transaction, whose calls
-wait for the transaction to end and fail after the pool timeout; give it the block's context with
-`runBlocking(coroutineContext) { … }` to take part in the transaction. A `withTransaction` inside another transaction,
+with `IllegalStateException`. Do not call `runBlocking` inside the block: its coroutine runs outside the transaction,
+so its calls wait for the transaction to end and fail after the pool timeout, and given the block's context it can wait
+forever for a dispatcher thread that it blocks. Code in the block that cannot suspend uses the blocking calls, such as
+`execute()`, which take part in the transaction. A `withTransaction` inside another transaction,
 including one that the calling thread started with `newTransaction()`, runs as its nested transaction; that thread
 waits for it with `runBlocking`. A long transaction can let waiting writers run with `yieldIfContended()`, which
 commits the work so far and continues; it does nothing in a nested transaction. Coroutine calls that wait for the writer
@@ -460,7 +484,7 @@ val bulkPersist: Completable = Authors
 </tr>
 </table>
 
-(All database operations trigger RxJava notifications on active queries that listen to table that is being modified)
+(All database operations notify the active observed queries, RxJava or coroutine `Flow`, that read the modified tables)
 
 #### Use Typesafe Operation Builders:
 
@@ -699,22 +723,25 @@ together.**
 #### Migrate Database:
 
 Debug databases migrate automatically when the schema changes. When releasing a new database version, raise
-`@Database(version)` and run `./gradlew migrateReleaseDb` (or `migrate<Variant>Db` for other release variants). It
-records the release schema in `db/releases` and generates its migration script into `src/release/assets`; commit both.
+`@Database(version)` and run `./gradlew migrateReleaseDb` (`migrateFreeReleaseDb` with flavors). In application
+modules only the selected migration release variant can run it: the first release variant, or the one set with
+`sqlitemagic { migrationTesting { releaseVariant = "paidRelease" } }`. It records the release schema in
+`db/releases` and generates its migration script into `src/release/assets`; commit both.
 
 To see what the next release would contain, run `./gradlew previewReleaseDbMigration` (or
 `preview<Variant>DbMigration`) at any time, without raising the version first. It prints the schema changes since the
 latest release, the migration warnings and the migration SQL, and saves them in
 `build/sqlitemagic/release/migration-preview` without publishing anything.
 
-Builds also keep the current schema in `db/` and write debug migration scripts into `src/debug/assets`. These are local
-build state, so keep them out of version control:
+Builds also keep the current schema in `db/` and write debug migration scripts into `src/debug/assets` (or the debug
+variant's directory, such as `src/freeDebug/assets`). These are local build state, so keep them out of version control:
 
 ```gitignore
 **/db/latest*.struct
 **/db/latest_*.version
 **/db/*.changed
 **/src/debug/assets/*.sql
+**/src/*Debug/assets/*.sql
 ```
 
 Application modules also get generated JVM migration test support. Add a JVM SQLite driver, such as
@@ -740,8 +767,15 @@ Documentation
 -----------------
 
 - [Sample app](sqlitemagic-sample) – a todo app with tables, a view, reactive queries and migration tests
-- [Migrating from 0.x](.agents/skills/sqlitemagic-dsl-migration/SKILL.md) – 2.x moves code generation to KSP and
-  rewrites the DSL; this guide maps legacy queries to the new DSL and lists behavior changes
+- [Using SqliteMagic](.agents/skills/sqlitemagic/SKILL.md) – a guide to every feature of 3.x and how to use it
+  idiomatically and efficiently: models, entity operations, the query DSL, raw SQL, views, coroutines and RxJava,
+  transactions, migrations and performance. It is also an agent skill: copy the `sqlitemagic` directory into your
+  project's skills directory, such as `.claude/skills/`, so a coding agent writes SqliteMagic code the way it is meant
+  to be written
+- [Upgrading from 2.x or 0.x](.agents/skills/sqlitemagic-upgrade/SKILL.md) – 3.x rewrites the query DSL and runs
+  on an androidx `SQLiteDriver`; this guide maps legacy setup and queries to 3.x, lists behavior changes and covers the
+  first database release on 3.x. It is also an agent skill: copy the `sqlitemagic-upgrade` directory into your
+  project's skills directory, such as `.claude/skills/`, to let a coding agent do the upgrade
 - [Wiki](https://github.com/SiimKinks/sqlitemagic/wiki) and [Javadoc](https://siimkinks.github.io/sqlitemagic/javadoc/)
   for 0.x
 

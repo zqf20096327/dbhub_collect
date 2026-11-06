@@ -36,7 +36,9 @@
 - Typed ORM with schema migration (`orm` feature), see [`src/orm/README.md`](src/orm/README.md)
 - WebAssembly and Python bindings
 
-👉 [More features](docs/features.md)
+👉 [More features](docs/features.md) · [Blog](https://kitesql.kould2333.org/)
+
+📝 [Zero-Copy SQL Computation on LMDB](https://kitesql.kould2333.org/blog/zero-copy-sql-on-lmdb.html) ([中文](https://kitesql.kould2333.org/blog/zero-copy-sql-on-lmdb.zh-CN.html)): how strings travel from the mmap'd file to your struct without a copy, benchmarked against SQLite.
 
 ## Example
 
@@ -135,9 +137,9 @@ print(list(db.run("select * from demo")))
 
 | Backend | TpmC | New-Order | Payment | Order-Status | Delivery | Stock-Level |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| KiteSQL LMDB | 209840 | 254 | 50 | 28 | 345 | 202 |
-| KiteSQL RocksDB | 48049 | 354 | 85 | 146 | 14511 | 562 |
-| SQLite (WAL, `synchronous=OFF`) | 192435 | 270 | 40 | 33 | 344 | 265 |
+| KiteSQL LMDB | 225720 | 240 | 44 | 25 | 326 | 179 |
+| KiteSQL RocksDB | 48746 | 343 | 78 | 140 | 14351 | 587 |
+| SQLite (WAL, `synchronous=OFF`) | 192110 | 270 | 40 | 33 | 342 | 231 |
 
 👉 [Details and how to reproduce](tpcc/README.md)
 

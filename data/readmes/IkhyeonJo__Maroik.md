@@ -72,7 +72,7 @@ does anything and lists whatever is missing:
 | Item | What it is |
 |---|---|
 | `.env.prod` | Passwords and settings: copy `.env.prod.example` and fill in the database, RabbitMQ and SMTP credentials, `TUNNEL_TOKEN` (Cloudflare Zero Trust > Networks > Tunnels > connector token; the tunnel only), `EXTERNAL_DRIVE_UUID` (`sudo blkid`) and `BACKUP_BASE_DIR`. |
-| `Maroik.DB/PostgreSQL/SQL_Init_Script/Production/Init.sql` | The database the stack starts from: a backup's `pg_dump`, or `Debugging/Init.sql` (same schema, demo data) on a new server. |
+| `Maroik.DB/PostgreSQL/SQL_Init_Script/Production/Init.sql` | The database the stack starts from: a backup's `pg_dump`, or `Debugging/Init.sql` (same schema, demo data) on a new server. `SQL_Init_Script/SeedDemo.sql` (tracked, shared by both compose files) runs right after it and puts the demo account back to its sample data; other accounts are not touched. |
 | `Maroik.FileStorage/upload/` | Uploaded attachments. Empty is allowed only on a new server: `Deploy.sh` asks first (`ALLOW_EMPTY_UPLOAD=1` skips the question). |
 
 Every backup `Maroik.Crontab/Backup.sh` makes (`Maroik-Backup-YYYY-MM-DD-HH-MM-SS.tar.xz`, daily at 04:00) holds exactly these
@@ -494,8 +494,27 @@ dotnet test --project Maroik.Core.Service.Tests            # any single project
 
 #### Linux/Mac
 1. Install JetBrains Rider
-2. Open Maroik.slnx
+2. Open Maroik.slnx and build the solution; restart Rider when it asks (see [Rider settings](#rider-settings))
 3. Start debug mode with docker-compose.debug.yml
+
+#### Rider settings
+
+Opening the solution brings what Rider reads from a solution: the run configurations (`.run`), the required plugins, the
+inspection profile and dictionary (`.idea`), and the code style (`.editorconfig`, `Maroik.slnx.DotSettings`).
+
+The keymap, color scheme, theme, editor options and tool-window layout are IDE-level: Rider reads them only from its own
+configuration folder, so a solution cannot apply them. `.config/rider/install.sh` copies them there, on Linux, macOS and
+Windows (Git Bash), into the newest installed Rider. It keeps what it replaces in `settings-backup-<time>` inside the
+configuration folder.
+
+Building the solution runs the script, except in CI and image builds. A build installs only settings the configuration has
+not received yet, so a setting changed in Rider stays until the repository's settings change; run the script by hand to
+install again. Rider writes its settings back when it exits, so while it runs, the script asks for a restart (a popup and
+the build output) and installs the moment Rider exits.
+
+`.config/rider/settings` mirrors the configuration folder. To share a changed setting, copy its file from
+`~/.config/JetBrains/Rider<version>/` to the same relative path. Copy single files, never the whole folder: it also holds
+the license key, the GitHub account and the recent solutions, which never belong in the repository.
 
 ## CI/CD
 

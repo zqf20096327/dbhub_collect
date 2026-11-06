@@ -409,6 +409,14 @@ The platform also includes 3D globe visualization (Cesium), property development
 
 ---
 
+### Capital plan
+
+Rank projects against a limited yearly budget and see what happens if one is delayed. Guide: [English](docs/capital-plan.md) · [Deutsch](docs/capital-plan.de.md) · [Русский](docs/capital-plan.ru.md).
+
+- **Yearly budget** - Funding per year and source, against the cost of each project spread over its years
+- **What-if scenarios** - Copy a scenario, move a start year, compare the two. The baseline is never changed
+- **Suggested funding** - Funds by priority, score and cost until a year runs out; you confirm before anything changes
+
 ## Quick Start
 
 > **Problem while installing or starting?** See the **[installation help page](https://openconstructionerp.com/install-help)** or the same guide in the repo: [English](docs/INSTALL_TROUBLESHOOTING.md), [Deutsch](docs/INSTALL_TROUBLESHOOTING.de.md), [Русский](docs/INSTALL_TROUBLESHOOTING.ru.md).
@@ -603,18 +611,18 @@ The right-hand side of the diagram is the **automatic data retrieval** layer tha
 
 ## Project growth
 
-<sub>Measured on 30 September 2026 from the GitHub API, PyPI and pypistats.org.</sub>
+<sub>Measured on 6 November 2026 from the GitHub API, PyPI and pypistats.org.</sub>
 
 <table>
 <tr>
-<td align="center" width="12.5%"><b>878</b><br/><sub>stars</sub></td>
-<td align="center" width="12.5%"><b>278</b><br/><sub>forks</sub></td>
+<td align="center" width="12.5%"><b>1,268</b><br/><sub>stars</sub></td>
+<td align="center" width="12.5%"><b>395</b><br/><sub>forks</sub></td>
 <td align="center" width="12.5%"><b>16</b><br/><sub>watchers</sub></td>
-<td align="center" width="12.5%"><b>76</b><br/><sub>contributors</sub></td>
-<td align="center" width="12.5%"><b>291</b><br/><sub>releases</sub></td>
-<td align="center" width="12.5%"><b>18.2.0</b><br/><sub>latest&nbsp;release</sub></td>
-<td align="center" width="12.5%"><b>212</b><br/><sub>issues&nbsp;closed</sub></td>
-<td align="center" width="12.5%"><b>45,583</b><br/><sub>PyPI&nbsp;downloads</sub></td>
+<td align="center" width="12.5%"><b>78</b><br/><sub>contributors</sub></td>
+<td align="center" width="12.5%"><b>305</b><br/><sub>releases</sub></td>
+<td align="center" width="12.5%"><b>19.1.0</b><br/><sub>latest&nbsp;release</sub></td>
+<td align="center" width="12.5%"><b>235</b><br/><sub>issues&nbsp;closed</sub></td>
+<td align="center" width="12.5%"><b>49,094</b><br/><sub>PyPI&nbsp;downloads</sub></td>
 </tr>
 </table>
 
@@ -628,7 +636,7 @@ The right-hand side of the diagram is the **automatic data retrieval** layer tha
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/readme-charts/download-history-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="docs/readme-charts/download-history-light.svg">
-    <img alt="OpenConstructionERP release downloads: 11,544 GitHub release asset downloads as of 30 September 2026, accumulated by release date" src="docs/readme-charts/download-history-light.svg" width="720">
+    <img alt="OpenConstructionERP release downloads: 17,498 GitHub release asset downloads as of 6 November 2026, accumulated by release date" src="docs/readme-charts/download-history-light.svg" width="720">
   </picture>
 </a>
 
@@ -640,7 +648,7 @@ The right-hand side of the diagram is the **automatic data retrieval** layer tha
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/readme-charts/star-history-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="docs/readme-charts/star-history-light.svg">
-    <img alt="OpenConstructionERP star history: 878 stars as of 30 September 2026, from 2 April 2026" src="docs/readme-charts/star-history-light.svg" width="720">
+    <img alt="OpenConstructionERP star history: 1,268 stars as of 6 November 2026, from 2 April 2026" src="docs/readme-charts/star-history-light.svg" width="720">
   </picture>
 </a>
 

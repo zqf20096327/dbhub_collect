@@ -99,7 +99,8 @@ The [`sample`](sample) module runs every scenario below on the JVM, the cache in
 
 A rekord is a class annotated with `@Rekord`, whose constructor properties are `@Field`s. The fields
 marked `id = true` identify a rekord: writing one with the same ids updates it instead of adding
-another. A field marked `searchable = true` may be indexed by the engine.
+another. A field marked `searchable = true` may be indexed by the engine, and one marked
+`fullText = true` is found by its words — see [full text search](#full-text-search).
 
 ```kotlin
 @Rekord(type = "note")
@@ -238,7 +239,7 @@ val dueThisWeek: List<NoteRekord> = store
     )
     .getOrThrow()
 
-val count: Int = store.count<NoteRekord>(Filter.Contains(NoteRekord.TITLE, "draft")).getOrThrow()
+val count: Int = store.count<NoteRekord>(Filter.Contains(NoteRekord.TITLE, "Draft")).getOrThrow()
 
 store.deleteRekord(note)
 store.delete<NoteRekord>(Filter.LessThan(NoteRekord.CREATED, cutoff))
@@ -257,6 +258,61 @@ lists with every item they hold. Nested filters look as deep as rekords are nest
 ```kotlin
 Filter.Nested(NoteRekord.FOLDER, Filter.Nested(FolderRekord.OWNER, Filter.Equals(UserRekord.ID, 42L)))
 ```
+
+`Filter.Contains` selects by a piece of text the field holds, every character looked for as itself.
+`Filter.Glob` selects by a pattern the field matches, the way SQLite's `GLOB` matches it in every
+engine: `*` matches any run of characters, `?` exactly one, `[abc]` or `[a-z]` one of a set and
+`[^abc]` one outside it, nothing escaping a character — `[*]` matches an asterisk. Case counts in
+both:
+
+```kotlin
+Filter.Glob(NoteRekord.TITLE, "Draft [0-9]*")
+```
+
+Either ignores the case of the Latin letters `A`–`Z` alone with `ignoreCase = true`: SQLite tells no
+other letter's case without ICU, so no engine does — `"doom"` finds `"Doom"`, while `"дум"` does not
+find `"Дум"`. A glob's pattern is lowered along with the text, its sets included, so `[A-Z]` takes
+in `a`–`z` as well:
+
+```kotlin
+Filter.Contains(NoteRekord.TITLE, "draft", ignoreCase = true)
+Filter.Glob(NoteRekord.TITLE, "release [0-9]*", ignoreCase = true)
+```
+
+A field holding null is selected by `Filter.Equals` to null and by `Filter.InList` holding null
+alone — nothing is less or more than null, it contains nothing and matches no pattern. `Filter.Not`
+selects every rekord the filter it holds does not, those holding null included.
+
+### Full text search
+
+A `String` field marked `fullText = true` is found by its words with `Filter.FullText`: every word
+of the query has to begin a word of one of the fields given, in any order — `"sup mar"` and
+`"mar sup"` alike find `"Super Mario"`.
+
+```kotlin
+@Field(name = TITLE, fullText = true) val title: String
+@Field(name = BODY, fullText = true) val body: String?
+
+Filter.FullText("sup mar", ArticleRekord.TITLE, ArticleRekord.BODY)
+```
+
+A word is a run of letters and digits, and the case of any letter is ignored — `"дум"` finds
+`"Дум"`. Nothing else is folded: a letter with a diacritic is not the letter without it, a text
+without spaces is one word, and a word is found by its beginning alone. A query of no words selects
+every rekord. `Filter.WordPrefix(field, word)` asks one word of one field, to be held in a
+`Filter.Not` or a `Filter.Nested`. Searching a field not marked fails with an
+`IllegalArgumentException`, and an encrypted field cannot be marked.
+
+The SQL engine keeps the words of a field as rekords are written, so a field already stored that
+the schema comes to mark is made one by a migration:
+
+```kotlin
+if (oldVersion < 4) {
+    enableFullText<NoteRekord>(NoteRekord.TITLE)
+}
+```
+
+A search reads through every rekord of the type, as `Filter.Contains` does.
 
 ### Transactions
 
@@ -333,9 +389,9 @@ val account = store
   value, so a field of a few values, such as a flag, is better encrypted randomized.
 - `Encryption.Randomized` encrypts the value anew each time. Rekords are selected by nothing but
   whether the field is null, so it can be neither an id nor searchable.
-- An encrypted field cannot be compared by a range, `Filter.Contains` or an order: the operation
-  fails with an `IllegalArgumentException`. A field holding a rekord is not encrypted itself — its
-  rekord's fields are, each as declared.
+- An encrypted field cannot be compared by a range, `Filter.Contains`, `Filter.Glob` or an order:
+  the operation fails with an `IllegalArgumentException`. A field holding a rekord is not encrypted
+  itself — its rekord's fields are, each as declared.
 - Encrypting a field already stored changes how it is kept: a migration removes and adds it again,
   rather than the declaration alone. A store whose schema encrypts a field fails without a cipher.
 

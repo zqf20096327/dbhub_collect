@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://www.compute-atlas.com"><img src="docs/media/banner.png" alt="Compute Atlas — data centers, crypto mines, and the power plants built to feed them, mapped, sourced, and open" /></a>
+  <a href="https://www.compute-atlas.com"><img src="docs/media/banner.png" alt="Compute Atlas — data centers, crypto mines, and the power plants built to feed them, mapped and sourced" /></a>
 </p>
 
 <p align="center">
@@ -9,25 +9,20 @@
 
 <p align="center">
   <a href="https://github.com/ek33450505/compute-atlas/actions/workflows/ci.yml"><img src="https://github.com/ek33450505/compute-atlas/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://www.compute-atlas.com/api/stats"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.compute-atlas.com%2Fapi%2Fstats&query=%24.count&label=facilities&color=3F5B43&style=flat" alt="Facilities tracked"></a>
-  <a href="https://www.compute-atlas.com/api/stats"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.compute-atlas.com%2Fapi%2Fstats&query=%24.states&label=states&color=3F5B43&style=flat" alt="States covered"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-MIT-informational?style=flat" alt="Code: MIT"></a>
   <a href="LICENSE-DATA"><img src="https://img.shields.io/badge/data-CC%20BY%204.0-informational?style=flat" alt="Data: CC BY 4.0"></a>
-  <a href="https://doi.org/10.5281/zenodo.22284476"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.22284476.svg" alt="DOI: 10.5281/zenodo.22284476"></a>
 </p>
 
 <p align="center">
   <a href="https://www.compute-atlas.com">Live site</a> ·
   <a href="https://www.compute-atlas.com/map">Map</a> ·
-  <a href="https://www.compute-atlas.com/api">API</a> ·
   <a href="docs/methodology.md">Methodology</a> ·
-  <a href="CONTRIBUTING.md">Contributing</a> ·
-  <a href="data/facilities.json">Raw data</a>
+  <a href="CONTRIBUTING.md">Contributing</a>
 </p>
 
 ---
 
-Compute Atlas is an open, source-cited dataset of **data centers, crypto-mining sites, and
+Compute Atlas is a source-cited dataset of **data centers, crypto-mining sites, and
 the dedicated power generation built to supply them** across the United States — from
 proposed and permitted through under construction and operational.
 
@@ -81,21 +76,6 @@ interactive map.
   ]
 }
 ```
-
-**The API** — public, CORS-open, no authentication.
-
-```console
-$ curl -s 'https://www.compute-atlas.com/api/stats'
-{"count":…,"states":…,"includesDc":…,"stateCodes":[…],
- "operationalMw":…,"plannedMw":…,"underConstructionMw":…,
- "activeCount":…,"operationalMwReportingCount":…,"plannedMwReportingCount":…,
- "underConstructionCount":…,"underConstructionMwReportingCount":…,
- "edition":{"version":…,"asOf":…,"schemaVersion":…}}
-```
-
-The shape is shown without values; the live endpoint is the authority. Each MW total sums only
-the records that disclose that capacity, so read it with its `*ReportingCount`, not as a
-national total.
 
 **Air permits** — where a permit exists, its permitted ceilings are recorded verbatim from
 the document, never derived, and always labelled as a regulatory ceiling rather than
@@ -151,42 +131,35 @@ graph LR
     C["/contribute form<br/>(public intake)"] --> P
     P --> G["Human review<br/>approve/reject"]
     G --> |approved| L["Live facility<br/>Neon Postgres"]
-    L --> D["Site · API · JSON export"]
+    L --> D["Site"]
 ```
 
 ---
 
 ## Using the data
 
-Three ways in, all free and all attributed under CC BY 4.0:
+Free to browse and cite under CC BY 4.0:
 
 | | |
 |---|---|
 | **Browse** | The [map](https://www.compute-atlas.com/map) and [table](https://www.compute-atlas.com/table), or [explore](https://www.compute-atlas.com/explore) by [state](https://www.compute-atlas.com/states), [operator](https://www.compute-atlas.com/operators), [metro](https://www.compute-atlas.com/metros), [county](https://www.compute-atlas.com/counties), [power](https://www.compute-atlas.com/power), [status](https://www.compute-atlas.com/status), [crypto](https://www.compute-atlas.com/crypto), [community opposition](https://www.compute-atlas.com/opposition), and [stakeholders](https://www.compute-atlas.com/stakeholders) |
-| **API** | `GET /api/facilities`, `/api/facilities/{id}`, `/api/search`, `/api/stats`, `/api/schema` — CORS-open, no auth, rate-limited by IP, served with `X-License: CC-BY-4.0`. Full contract at [`/api`](https://www.compute-atlas.com/api) |
-| **Bulk** | [`data/facilities.json`](data/facilities.json) — the complete dataset as one forkable file |
 
-Writes are moderated: `POST /api/contribute` stages a candidate for human review and
-`POST /api/leads` submits a URL tip-off. Submission management requires an admin token.
-
-The JSON snapshot lags the live site — it is regenerated once per data wave, and its `asOf`
-timestamp is recorded in [`data/facilities.meta.json`](data/facilities.meta.json). For
-always-current figures use the API or the
-[statistics page](https://www.compute-atlas.com/stats). **Counts are deliberately not
-hardcoded in this README** so they can never drift from the data; the badges above read
-live from `/api/stats`.
+To contribute, use the [contribute page](https://www.compute-atlas.com/contribute). Submissions
+are moderated: nothing goes live until a human reviews it.
 
 ### Citing it
 
 > Data from Compute Atlas by Edward Kubiak (https://www.compute-atlas.com), licensed under
 > CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
 
-Link **www.compute-atlas.com**, not this repository: the site is the dataset's home, and this
-repo is its source mirror. Say if you changed anything, for example "filtered to data
-centers" or "joined to counties". Keep your own commentary distinct from the records: Compute
-Atlas is non-partisan and takes no position on any facility, so present your conclusions as
-yours. For academic work, cite the DOI:
-`Kubiak, E. (n.d.). Compute Atlas [Data set]. https://doi.org/10.5281/zenodo.22284476`.
+For a single record, cite its facility page (`https://www.compute-atlas.com/facilities/<id>`)
+and the date you accessed it.
+
+Link **www.compute-atlas.com**, the dataset's home. Say if you changed anything, for example
+"filtered to data centers" or "joined to counties". Keep your own commentary distinct from the
+records: Compute Atlas is non-partisan and takes no position on any facility, so present your conclusions as
+yours. For academic work, cite the facility page you used and the date you accessed it, for example
+`"[Facility name]", Compute Atlas, https://www.compute-atlas.com/facilities/<id>, accessed [date]`.
 Full terms: [LICENSE-DATA](LICENSE-DATA).
 
 The data is free. If you or your organization rely on it, a monthly or institution membership on [Ko-fi](https://ko-fi.com/L2T725R7FV) helps cover its upkeep.
