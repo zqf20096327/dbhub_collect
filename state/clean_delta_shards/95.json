@@ -7821,5 +7821,251 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "7551f8c2dc7a+2": {
+  "fn": "fphilipe/psql2csv",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "equal",
+    0,
+    8,
+    0,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "psql2csv is available on Homebrew."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     " $ brew install psql2csv"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    17,
+    11,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     " $ curl https://raw.githubusercontent.com/fphilipe/psql2csv/master/psql2csv > /usr/local/bin/psql2csv && chmod +x /usr/local/bin/psql2csv"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    21,
+    18,
+    21
+   ],
+   [
+    "replace",
+    21,
+    23,
+    21,
+    23,
+    [
+     " psql2csv [OPTIONS] < QUERY",
+     " psql2csv [OPTIONS] QUERY"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    29,
+    23,
+    29
+   ],
+   [
+    "replace",
+    29,
+    40,
+    29,
+    40,
+    [
+     " -?, --help show this help, then exit",
+     " --delimiter=DELIMITER set the field delimiter (default: ,)",
+     " --quote=QUOTE set the quote delimiter (default: \")",
+     " --escape=ESCAPE set the escape character (default: QUOTE)",
+     " --null=NULL set the string representing NULL; printed without quotes (default: empty string)",
+     " --force-quote=FORCE_QUOTE set the columns to be force quoted; comma separated list of columns or * for all (default: none)",
+     " --encoding=ENCODING set the output encoding; Excel likes latin1 (default: UTF8)",
+     " --no-header do not output a header",
+     " --timezone=TIMEZONE set the timezone config before running the query",
+     " --search-path=SEARCH_PATH set the search_path config before running the query",
+     " --dry-run print the COPY statement that would be run without actually running it"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    43,
+    40,
+    43
+   ],
+   [
+    "replace",
+    43,
+    44,
+    43,
+    44,
+    [
+     " $ psql2csv dbname \"select * from table\" > data.csv"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    44,
+    45
+   ],
+   [
+    "replace",
+    45,
+    46,
+    45,
+    46,
+    [
+     " $ psql2csv dbname < query.sql > data.csv"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    46,
+    47
+   ],
+   [
+    "replace",
+    47,
+    53,
+    47,
+    53,
+    [
+     " $ psql2csv --no-header --delimiter=$'\\t' --encoding=latin1 dbname <<sql",
+     " > SELECT *",
+     " > FROM some_table",
+     " > WHERE some_condition",
+     " > LIMIT 10",
+     " > sql"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    59,
+    53,
+    59
+   ],
+   [
+    "replace",
+    59,
+    60,
+    59,
+    60,
+    [
+     " WHERE date_trunc('month', created_at) = '2019-01-01'"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    72,
+    60,
+    72
+   ],
+   [
+    "replace",
+    72,
+    73,
+    72,
+    73,
+    [
+     " WHERE date_trunc('month', created_at) = (:'MONTH' || '-01')::timestamptz"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    76,
+    73,
+    76
+   ],
+   [
+    "replace",
+    76,
+    79,
+    76,
+    77,
+    [
+     " $ psql2csv -v MONTH=2019-02 < monthly_report.sql > data.csv"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    82,
+    77,
+    80
+   ],
+   [
+    "replace",
+    82,
+    84,
+    80,
+    82,
+    [
+     "- PostgreSQL COPY documentation",
+     "- psql variables"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    87,
+    82,
+    85
+   ],
+   [
+    "replace",
+    87,
+    88,
+    85,
+    86,
+    [
+     "Philipe Fatio (@fphilipe)"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

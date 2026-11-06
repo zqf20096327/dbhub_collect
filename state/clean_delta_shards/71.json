@@ -4919,5 +4919,4390 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "9e8478023231+2": {
+  "fn": "ClickHouse/mcp-clickhouse",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     "PyPI - Version"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    8,
+    3,
+    6
+   ],
+   [
+    "replace",
+    8,
+    9,
+    6,
+    7,
+    [
+     "mcp-clickhouse MCP server"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    30,
+    7,
+    28
+   ],
+   [
+    "replace",
+    30,
+    35,
+    28,
+    33,
+    [
+     " * Execute SQL queries on your ClickHouse cluster.",
+     " * Input: `query` (string): The SQL query to execute.",
+     " * Optional input: `params` (object): Named values for ClickHouse `{name:Type}` placeholders. See Query parameters.",
+     " * Queries run in read-only mode by default (`CLICKHOUSE_ALLOW_WRITE_ACCESS=false`), but writes can be enabled explicitly if needed.",
+     " * `DESCRIBE (<query>)` and `EXPLAIN ESTIMATE <query>` run here too and are optional ways to inspect a query's result schema or its estimated reads. See Checking a query before running it."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    37,
+    33,
+    35
+   ],
+   [
+    "replace",
+    37,
+    38,
+    35,
+    36,
+    [
+     " * List all databases on your ClickHouse cluster."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    40,
+    36,
+    38
+   ],
+   [
+    "replace",
+    40,
+    51,
+    38,
+    49,
+    [
+     " * List tables in a database with pagination.",
+     " * Required input: `database` (string).",
+     " * Optional inputs:",
+     " * `like` / `not_like` (string): Apply `LIKE` or `NOT LIKE` filters to table names.",
+     " * `page_token` (string): Single-use token returned by a previous call. It is retained for up to one hour.",
+     " * `page_size` (int, default `50`): Number of tables returned per page; must be greater than `0`.",
+     " * `include_detailed_columns` (bool, default `true`): When `false`, omits column metadata for lighter responses while keeping the full `create_table_query`.",
+     " * Response shape:",
+     " * `tables`: Array of table objects for the current page.",
+     " * `next_page_token`: Pass this single-use value back before it expires to fetch the next page, or `null` when there are no more tables.",
+     " * `total_tables`: Total count of tables that match the supplied filters."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    54,
+    49,
+    52
+   ],
+   [
+    "replace",
+    54,
+    55,
+    52,
+    53,
+    [
+     "The server instructions suggest reading Agents Schema's"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    86,
+    53,
+    84
+   ],
+   [
+    "replace",
+    86,
+    88,
+    84,
+    86,
+    [
+     " example `\"18446744073709551615\"` with `{id:UInt64}`. Dates, timestamps, and exact",
+     " decimals can also be passed as strings with the corresponding ClickHouse type."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    86,
+    87
+   ],
+   [
+    "replace",
+    89,
+    90,
+    87,
+    88,
+    [
+     " `\"params\": {\"vector\": [0.25, 0.5, 0.75]}`."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    88,
+    89
+   ],
+   [
+    "replace",
+    91,
+    92,
+    89,
+    90,
+    [
+     " clickhouse-connect 1.8.0 but fail with the supported minimum 1.0.0."
+    ]
+   ],
+   [
+    "equal",
+    92,
+    141,
+    90,
+    139
+   ],
+   [
+    "replace",
+    141,
+    142,
+    139,
+    140,
+    [
+     "Those are estimated reads from MergeTree family tables, after primary key and partition pruning. They are not run time and not result size, and other table engines are not covered."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    143,
+    140,
+    141
+   ],
+   [
+    "replace",
+    143,
+    144,
+    141,
+    142,
+    [
+     "Neither statement runs the query body, but analysis is not always free: `DESCRIBE (SELECT (SELECT sleep(1)))` executes the scalar subquery while analyzing. Both are read-only and work under the default `CLICKHOUSE_ALLOW_WRITE_ACCESS=false`. See the ClickHouse documentation for EXPLAIN ESTIMATE and DESCRIBE."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    148,
+    142,
+    146
+   ],
+   [
+    "replace",
+    148,
+    153,
+    146,
+    151,
+    [
+     " * Execute SQL queries using chDB's embedded ClickHouse engine.",
+     " * Input: `query` (string): The SQL query to execute.",
+     " * Integers outside `[-9007199254740991, 9007199254740991]` are returned as decimal strings.",
+     " * Query data directly from various sources (files, URLs, databases) without ETL processes.",
+     " * Requires the optional `chdb` extra: `pip install 'mcp-clickhouse[chdb]'`"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    178,
+    151,
+    176
+   ],
+   [
+    "replace",
+    178,
+    179,
+    176,
+    177,
+    [
+     "|Mode|When to use|Env var|"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    177,
+    178
+   ],
+   [
+    "replace",
+    180,
+    183,
+    178,
+    181,
+    [
+     "|Static bearer token|Simple deployments, internal services|`CLICKHOUSE_MCP_AUTH_TOKEN`|",
+     "|OAuth / OIDC (via FastMCP)|Azure Entra, Google, GitHub, WorkOS, etc.|`FASTMCP_SERVER_AUTH=<provider-class-path>` (+ provider-specific `FASTMCP_SERVER_AUTH_*` vars)|",
+     "|Disabled|Local development only|`CLICKHOUSE_MCP_AUTH_DISABLED=true`|"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    204,
+    181,
+    202
+   ],
+   [
+    "replace",
+    204,
+    205,
+    202,
+    203,
+    [
+     " For Claude Desktop with HTTP/SSE transport:"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    209,
+    203,
+    207
+   ],
+   [
+    "replace",
+    209,
+    216,
+    207,
+    208,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    218,
+    208,
+    210
+   ],
+   [
+    "replace",
+    218,
+    219,
+    210,
+    211,
+    [
+     " Note: the `/health` endpoint is intentionally unauthenticated (see Health Check Endpoint above). To verify that bearer-token auth is actually rejecting unauthenticated requests, hit the MCP endpoint itself e.g. with the MCP Inspector, or by POSTing a JSON-RPC request to `/mcp` with and without the `Authorization` header and confirming the unauthenticated call returns `401`."
+    ]
+   ],
+   [
+    "equal",
+    219,
+    222,
+    211,
+    214
+   ],
+   [
+    "replace",
+    222,
+    223,
+    214,
+    215,
+    [
+     "For production deployments with identity providers (Azure Entra, Google, GitHub, WorkOS, etc.), delegate authentication to FastMCP's built-in auth providers instead of using a static token. Set `FASTMCP_SERVER_AUTH` to the **full class path** of a FastMCP auth provider, along with the provider-specific `FASTMCP_SERVER_AUTH_*` variables, and leave `CLICKHOUSE_MCP_AUTH_TOKEN` unset."
+    ]
+   ],
+   [
+    "equal",
+    223,
+    238,
+    215,
+    230
+   ],
+   [
+    "replace",
+    238,
+    239,
+    230,
+    231,
+    [
+     "|Provider class path|Provider variable prefix|"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    240,
+    231,
+    232
+   ],
+   [
+    "replace",
+    240,
+    254,
+    232,
+    246,
+    [
+     "|`fastmcp.server.auth.providers.auth0.Auth0Provider`|`FASTMCP_SERVER_AUTH_AUTH0_`|",
+     "|`fastmcp.server.auth.providers.aws.AWSCognitoProvider`|`FASTMCP_SERVER_AUTH_AWS_COGNITO_`|",
+     "|`fastmcp.server.auth.providers.azure.AzureProvider`|`FASTMCP_SERVER_AUTH_AZURE_`|",
+     "|`fastmcp.server.auth.providers.descope.DescopeProvider`|`FASTMCP_SERVER_AUTH_DESCOPEPROVIDER_`|",
+     "|`fastmcp.server.auth.providers.discord.DiscordProvider`|`FASTMCP_SERVER_AUTH_DISCORD_`|",
+     "|`fastmcp.server.auth.providers.github.GitHubProvider`|`FASTMCP_SERVER_AUTH_GITHUB_`|",
+     "|`fastmcp.server.auth.providers.google.GoogleProvider`|`FASTMCP_SERVER_AUTH_GOOGLE_`|",
+     "|`fastmcp.server.auth.providers.introspection.IntrospectionTokenVerifier`|`FASTMCP_SERVER_AUTH_INTROSPECTION_`|",
+     "|`fastmcp.server.auth.providers.jwt.JWTVerifier`|`FASTMCP_SERVER_AUTH_JWT_`|",
+     "|`fastmcp.server.auth.providers.oci.OCIProvider`|`FASTMCP_SERVER_AUTH_OCI_`|",
+     "|`fastmcp.server.auth.providers.scalekit.ScalekitProvider`|`FASTMCP_SERVER_AUTH_SCALEKITPROVIDER_`|",
+     "|`fastmcp.server.auth.providers.supabase.SupabaseProvider`|`FASTMCP_SERVER_AUTH_SUPABASE_`|",
+     "|`fastmcp.server.auth.providers.workos.WorkOSProvider`|`FASTMCP_SERVER_AUTH_WORKOS_`|",
+     "|`fastmcp.server.auth.providers.workos.AuthKitProvider`|`FASTMCP_SERVER_AUTH_AUTHKITPROVIDER_`|"
+    ]
+   ],
+   [
+    "equal",
+    254,
+    256,
+    246,
+    248
+   ],
+   [
+    "replace",
+    256,
+    257,
+    248,
+    249,
+    [
+     "FastMCP docs for each provider's configuration"
+    ]
+   ],
+   [
+    "equal",
+    257,
+    308,
+    249,
+    300
+   ],
+   [
+    "replace",
+    308,
+    310,
+    300,
+    302,
+    [
+     " * On macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`",
+     " * On Windows: `%APPDATA%/Claude/claude_desktop_config.json`"
+    ]
+   ],
+   [
+    "equal",
+    310,
+    317,
+    302,
+    309
+   ],
+   [
+    "replace",
+    317,
+    339,
+    309,
+    310,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    339,
+    343,
+    310,
+    314
+   ],
+   [
+    "replace",
+    343,
+    344,
+    314,
+    315,
+    [
+     "Or, if you'd like to try it out with the ClickHouse SQL Playground, you can use the following config:"
+    ]
+   ],
+   [
+    "equal",
+    344,
+    349,
+    315,
+    320
+   ],
+   [
+    "replace",
+    349,
+    370,
+    320,
+    321,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    370,
+    378,
+    321,
+    329
+   ],
+   [
+    "replace",
+    378,
+    395,
+    329,
+    330,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    395,
+    403,
+    330,
+    338
+   ],
+   [
+    "replace",
+    403,
+    426,
+    338,
+    339,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    426,
+    474,
+    339,
+    387
+   ],
+   [
+    "replace",
+    474,
+    475,
+    387,
+    388,
+    [
+     " To install chDB support as well:"
+    ]
+   ],
+   [
+    "equal",
+    475,
+    479,
+    388,
+    392
+   ],
+   [
+    "replace",
+    479,
+    480,
+    392,
+    393,
+    [
+     " To upgrade to the latest version:"
+    ]
+   ],
+   [
+    "equal",
+    480,
+    490,
+    393,
+    403
+   ],
+   [
+    "replace",
+    490,
+    507,
+    403,
+    404,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    507,
+    515,
+    404,
+    412
+   ],
+   [
+    "replace",
+    515,
+    528,
+    412,
+    413,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    528,
+    546,
+    413,
+    431
+   ],
+   [
+    "replace",
+    546,
+    562,
+    431,
+    432,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    562,
+    570,
+    432,
+    440
+   ],
+   [
+    "replace",
+    570,
+    581,
+    440,
+    441,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    581,
+    624,
+    441,
+    484
+   ],
+   [
+    "replace",
+    624,
+    638,
+    484,
+    485,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    638,
+    689,
+    485,
+    536
+   ],
+   [
+    "replace",
+    689,
+    690,
+    536,
+    537,
+    [
+     "3. Run `uv sync --locked --extra dev` to install the dependencies. On Python 3.10 through 3.14, add `--extra chdb` for chDB development. To install `uv` follow the instructions here. Then do `source .venv/bin/activate`."
+    ]
+   ],
+   [
+    "equal",
+    690,
+    698,
+    537,
+    545
+   ],
+   [
+    "replace",
+    698,
+    703,
+    545,
+    546,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    703,
+    707,
+    546,
+    550
+   ],
+   [
+    "replace",
+    707,
+    708,
+    550,
+    551,
+    [
+     "The package uses a flat module layout. Start with mcp_server.py"
+    ]
+   ],
+   [
+    "equal",
+    708,
+    710,
+    551,
+    553
+   ],
+   [
+    "replace",
+    710,
+    711,
+    553,
+    554,
+    [
+     "|Module|Responsibility|"
+    ]
+   ],
+   [
+    "equal",
+    711,
+    712,
+    554,
+    555
+   ],
+   [
+    "replace",
+    712,
+    721,
+    555,
+    564,
+    [
+     "|mcp_server.py, main.py|Startup assembly, tool and prompt registration, shutdown coordination, and CLI startup|",
+     "|clients.py|Request configuration, cached ClickHouse connections, and client leases|",
+     "|queries.py|Query execution, cancellation, and destructive-operation guards|",
+     "|metadata.py|Database and table discovery, metadata models, and pagination|",
+     "|chdb_backend.py, chdb_prompt.py|Optional chDB initialization, query execution, and prompt content|",
+     "|health.py, executors.py|Health probes and caching, and the worker pools used by server operations|",
+     "|auth.py, transport.py, http_security.py|Dotenv loading, authentication, HTTP/SSE app construction, and Host/Origin validation|",
+     "|mcp_env.py, serialization.py|Environment configuration and JSON result encoding|",
+     "|mcp_middleware_hook.py, skills_advisor.py|Custom middleware loading and server instructions|"
+    ]
+   ],
+   [
+    "equal",
+    721,
+    734,
+    564,
+    577
+   ],
+   [
+    "replace",
+    734,
+    735,
+    577,
+    578,
+    [
+     "|Group|Variables|Controls|"
+    ]
+   ],
+   [
+    "equal",
+    735,
+    736,
+    578,
+    579
+   ],
+   [
+    "replace",
+    736,
+    739,
+    579,
+    582,
+    [
+     "|**ClickHouse database connection**|`CLICKHOUSE_HOST`, `CLICKHOUSE_PORT`, `CLICKHOUSE_SECURE`, `CLICKHOUSE_VERIFY`, certificate variables|How **this MCP server** connects to your ClickHouse cluster over the **HTTP interface**|",
+     "|**MCP server / transport**|`CLICKHOUSE_MCP_*`, `FASTMCP_SERVER_AUTH`, `FASTMCP_SERVER_AUTH_*`, `FASTMCP_ENV_FILE`|MCP transport, authentication, and query-tool execution limits|",
+     "|**Middleware / chDB**|`MCP_MIDDLEWARE_MODULE`, `CHDB_*`|Optional extensions|"
+    ]
+   ],
+   [
+    "equal",
+    739,
+    747,
+    582,
+    590
+   ],
+   [
+    "replace",
+    747,
+    748,
+    590,
+    591,
+    [
+     "These variables configure the clickhouse-connect HTTP client and the behavior of ClickHouse-backed tools such as `run_query`, `list_databases`, and `list_tables`."
+    ]
+   ],
+   [
+    "equal",
+    748,
+    755,
+    591,
+    598
+   ],
+   [
+    "replace",
+    755,
+    757,
+    598,
+    600,
+    [
+     " * Required unless `CLICKHOUSE_CLIENT_CERT` uses the default or `\"mutual\"` TLS mode",
+     " * In default or `\"mutual\"` mode, certificate authentication is used and the password is not sent"
+    ]
+   ],
+   [
+    "equal",
+    757,
+    764,
+    600,
+    607
+   ],
+   [
+    "replace",
+    764,
+    771,
+    607,
+    614,
+    [
+     " * Default: `8443` if `CLICKHOUSE_SECURE=true`, `8123` if `CLICKHOUSE_SECURE=false`",
+     " * Usually doesn't need to be set unless using a non-standard port",
+     " * **Must be an HTTP interface port**, not the native TCP protocol port used by `clickhouse-client`",
+     " * Common values:",
+     " * HTTP: `8123` (plain) / `8443` (TLS) — used by this server and ClickHouse Cloud HTTPS",
+     " * Native TCP (not supported here): `9000` (plain) / `9440` (TLS) — used by `clickhouse-client`",
+     " * If the server responds with `Port 9000 is for clickhouse-client program`, you are pointed at the native protocol; switch to the HTTP port (`8123`/`8443` or your deployment's HTTP mapping)"
+    ]
+   ],
+   [
+    "equal",
+    771,
+    772,
+    614,
+    615
+   ],
+   [
+    "replace",
+    772,
+    774,
+    615,
+    617,
+    [
+     " * Default: None",
+     " * Set this if your user requires a specific role"
+    ]
+   ],
+   [
+    "equal",
+    774,
+    775,
+    617,
+    618
+   ],
+   [
+    "replace",
+    775,
+    779,
+    618,
+    622,
+    [
+     " * Default: `\"true\"`",
+     " * Set to `\"false\"` only when the MCP server reaches ClickHouse over plain HTTP (typical for local Docker Compose on port `8123`)",
+     " * Leave `\"true\"` for ClickHouse Cloud and any HTTPS database endpoint—even if the MCP server itself is exposed via HTTP, stdio, or an ingress that terminates TLS separately",
+     " * Mismatching this flag with the database port (e.g. `CLICKHOUSE_SECURE=false` against port `8443`) is a frequent setup mistake and usually surfaces as confusing HTTP client errors rather than a clear \"wrong scheme\" message"
+    ]
+   ],
+   [
+    "equal",
+    779,
+    780,
+    622,
+    623
+   ],
+   [
+    "replace",
+    780,
+    783,
+    623,
+    626,
+    [
+     " * Default: `\"true\"`",
+     " * Set to `\"false\"` to disable certificate verification (not recommended for production)",
+     " * TLS certificates: The package uses your operating system trust store via `truststore.inject_into_ssl()` at startup. Python's default SSL handling is used if injection is disabled with `MCP_CLICKHOUSE_TRUSTSTORE_DISABLE=1` or fails."
+    ]
+   ],
+   [
+    "equal",
+    783,
+    784,
+    626,
+    627
+   ],
+   [
+    "replace",
+    784,
+    787,
+    627,
+    630,
+    [
+     " * Default: unset (trust store integration is enabled)",
+     " * Set to exactly `\"1\"` before startup to skip `truststore.inject_into_ssl()` and use Python's default SSL certificate handling. Other values do not disable the integration.",
+     " * This does not disable certificate verification. `CLICKHOUSE_VERIFY` still controls verification for the ClickHouse HTTPS connection."
+    ]
+   ],
+   [
+    "equal",
+    787,
+    788,
+    630,
+    631
+   ],
+   [
+    "replace",
+    788,
+    791,
+    631,
+    634,
+    [
+     " * Default: None (uses the operating system trust store unless truststore injection is disabled or fails)",
+     " * Use this by itself when a ClickHouse server or private proxy presents a certificate signed by a private CA. This changes server certificate verification and does not enable client certificate authentication.",
+     " * Requires `CLICKHOUSE_SECURE=true` and `CLICKHOUSE_VERIFY=true`"
+    ]
+   ],
+   [
+    "equal",
+    791,
+    792,
+    634,
+    635
+   ],
+   [
+    "replace",
+    792,
+    795,
+    635,
+    638,
+    [
+     " * Default: None",
+     " * The file may also contain the private key. Otherwise set `CLICKHOUSE_CLIENT_CERT_KEY`.",
+     " * The ClickHouse user still comes from `CLICKHOUSE_USER`."
+    ]
+   ],
+   [
+    "equal",
+    795,
+    796,
+    638,
+    639
+   ],
+   [
+    "replace",
+    796,
+    799,
+    639,
+    642,
+    [
+     " * Default: None",
+     " * Optional when the private key is included in the client certificate file",
+     " * Cannot be used without `CLICKHOUSE_CLIENT_CERT`"
+    ]
+   ],
+   [
+    "equal",
+    799,
+    800,
+    642,
+    643
+   ],
+   [
+    "replace",
+    800,
+    807,
+    643,
+    650,
+    [
+     " * Default: None, which behaves as `\"mutual\"` when a client certificate is set",
+     " * `\"mutual\"`: Use the client certificate for ClickHouse X.509 user authentication. `CLICKHOUSE_PASSWORD` is optional and is not sent.",
+     " * `\"proxy\"`: Present the client certificate to a TLS-terminating proxy, then use ClickHouse Basic authentication. `CLICKHOUSE_PASSWORD` is required.",
+     " * `\"strict\"`: Present the client certificate because the ClickHouse server requires one at the TLS layer, then use ClickHouse Basic authentication. `CLICKHOUSE_PASSWORD` is required. This mode does not strengthen server certificate verification. `CLICKHOUSE_VERIFY` controls that verification.",
+     " * clickhouse-connect treats `\"proxy\"` and `\"strict\"` identically. The two names document intent.",
+     " * Values are trimmed and case-insensitive. A blank value is treated as unset. Other values are rejected before a ClickHouse client is created, on the first ClickHouse tool call or `/health` probe.",
+     " * Requires `CLICKHOUSE_CLIENT_CERT`. All client certificate options require `CLICKHOUSE_SECURE=true`."
+    ]
+   ],
+   [
+    "equal",
+    807,
+    808,
+    650,
+    651
+   ],
+   [
+    "replace",
+    808,
+    810,
+    651,
+    653,
+    [
+     " * Default: None (uses the connection hostname)",
+     " * This is useful when connecting through proxies or load balancers where the certificate hostname differs from the connection hostname. When set, this hostname will be used for both SNI (Server Name Indication) during the TLS handshake and for certificate hostname validation."
+    ]
+   ],
+   [
+    "equal",
+    810,
+    811,
+    653,
+    654
+   ],
+   [
+    "replace",
+    811,
+    813,
+    654,
+    656,
+    [
+     " * Default: None",
+     " * Set this when the ClickHouse HTTP interface is exposed behind a reverse proxy under a path prefix (for example, `/clickhouse`)"
+    ]
+   ],
+   [
+    "equal",
+    813,
+    814,
+    656,
+    657
+   ],
+   [
+    "replace",
+    814,
+    816,
+    657,
+    659,
+    [
+     " * Default: `\"30\"`",
+     " * Increase this value if you experience connection timeouts"
+    ]
+   ],
+   [
+    "equal",
+    816,
+    817,
+    659,
+    660
+   ],
+   [
+    "replace",
+    817,
+    819,
+    660,
+    662,
+    [
+     " * Default: the lower of `300` or `CLICKHOUSE_MCP_QUERY_TIMEOUT + 5`, so worker threads unblock shortly after a query timeout",
+     " * If explicitly set, the value is used as-is (e.g. `\"300\"` for long-running queries)"
+    ]
+   ],
+   [
+    "equal",
+    819,
+    820,
+    662,
+    663
+   ],
+   [
+    "replace",
+    820,
+    822,
+    663,
+    665,
+    [
+     " * Default: None (uses server default)",
+     " * Set this to automatically connect to a specific database"
+    ]
+   ],
+   [
+    "equal",
+    822,
+    823,
+    665,
+    666
+   ],
+   [
+    "replace",
+    823,
+    825,
+    666,
+    668,
+    [
+     " * Default: `\"true\"`",
+     " * Set to `\"false\"` to disable ClickHouse tools when using chDB only"
+    ]
+   ],
+   [
+    "equal",
+    825,
+    826,
+    668,
+    669
+   ],
+   [
+    "replace",
+    826,
+    829,
+    669,
+    672,
+    [
+     " * Default: `\"false\"`",
+     " * Set to `\"true\"` to allow non-destructive DDL and DML (CREATE, INSERT, ALTER ADD COLUMN). Destructive statements additionally need `CLICKHOUSE_ALLOW_DROP=true`",
+     " * When disabled (default), queries run with `readonly=1` setting to prevent data modifications"
+    ]
+   ],
+   [
+    "equal",
+    829,
+    830,
+    672,
+    673
+   ],
+   [
+    "replace",
+    830,
+    833,
+    673,
+    676,
+    [
+     " * Default: `\"false\"`",
+     " * Only takes effect when `CLICKHOUSE_ALLOW_WRITE_ACCESS=true` is also set",
+     " * This gate is a best-effort accident guard in the MCP server, not a security boundary. Restrict the ClickHouse user's grants for real enforcement (see Destructive Operation Protection)"
+    ]
+   ],
+   [
+    "equal",
+    833,
+    856,
+    676,
+    699
+   ],
+   [
+    "replace",
+    856,
+    857,
+    699,
+    700,
+    [
+     "These variables control the MCP process itself, including transport, authentication, and query-tool execution limits. They are independent of the ClickHouse database settings above. See also Authentication for HTTP/SSE Transports."
+    ]
+   ],
+   [
+    "equal",
+    857,
+    859,
+    700,
+    702
+   ],
+   [
+    "replace",
+    859,
+    863,
+    702,
+    706,
+    [
+     " * Default: `\"stdio\"`",
+     " * Valid options: `\"stdio\"`, `\"http\"`, `\"sse\"`. This is useful for local development with tools like MCP Inspector.",
+     " * `stdio` is typical for Claude Desktop; `http`/`sse` expose a network listener (bind host/port below)",
+     " * `\"sse\"` selects the deprecated standalone HTTP+SSE transport and logs a warning. Use `\"http\"` for Streamable HTTP in new deployments."
+    ]
+   ],
+   [
+    "equal",
+    863,
+    864,
+    706,
+    707
+   ],
+   [
+    "replace",
+    864,
+    867,
+    707,
+    710,
+    [
+     " * Default: `\"127.0.0.1\"`",
+     " * Set to `\"0.0.0.0\"` to bind to all network interfaces (useful for Docker or remote access)",
+     " * Only used when transport is `\"http\"` or `\"sse\"` — not related to `CLICKHOUSE_HOST`"
+    ]
+   ],
+   [
+    "equal",
+    867,
+    868,
+    710,
+    711
+   ],
+   [
+    "replace",
+    868,
+    870,
+    711,
+    713,
+    [
+     " * Default: `\"8000\"`",
+     " * Only used when transport is `\"http\"` or `\"sse\"` — not related to `CLICKHOUSE_PORT`"
+    ]
+   ],
+   [
+    "equal",
+    870,
+    871,
+    713,
+    714
+   ],
+   [
+    "replace",
+    871,
+    875,
+    714,
+    718,
+    [
+     " * Default: `\"30\"`",
+     " * Increase this if you see `Query timed out after ...` errors for heavy queries",
+     " * When a query times out, the server attempts to cancel it with `KILL QUERY`",
+     " * Unless `CLICKHOUSE_SEND_RECEIVE_TIMEOUT` is explicitly set, the HTTP read timeout is capped at this value plus five seconds"
+    ]
+   ],
+   [
+    "equal",
+    875,
+    876,
+    718,
+    719
+   ],
+   [
+    "replace",
+    876,
+    879,
+    719,
+    722,
+    [
+     " * Default: `\"10\"`",
+     " * Increase if your workload requires many concurrent tool calls",
+     " * Metadata tools use a separate pool with `min(4, CLICKHOUSE_MCP_MAX_WORKERS)` threads so schema discovery cannot delay queries"
+    ]
+   ],
+   [
+    "equal",
+    879,
+    880,
+    722,
+    723
+   ],
+   [
+    "replace",
+    880,
+    890,
+    723,
+    733,
+    [
+     " * Default: None",
+     " * One of `CLICKHOUSE_MCP_AUTH_TOKEN`, `FASTMCP_SERVER_AUTH`, or `CLICKHOUSE_MCP_AUTH_DISABLED=true` is **required** for HTTP/SSE transports",
+     " * Generate using `uuidgen` or `openssl rand -hex 32`",
+     " * Clients must send this token in the `Authorization: Bearer <token>` header",
+     "* `FASTMCP_SERVER_AUTH`: Delegate authentication to a FastMCP auth provider",
+     " * Default: None",
+     " * Value is the **full class path** of an AuthProvider subclass, e.g. `fastmcp.server.auth.providers.azure.AzureProvider` or `fastmcp.server.auth.providers.google.GoogleProvider`",
+     " * When set, mcp-clickhouse loads the provider from the existing `FASTMCP_SERVER_AUTH_*` environment variables; leave `CLICKHOUSE_MCP_AUTH_TOKEN` unset in this mode",
+     " * Custom providers receive no environment-derived constructor arguments and must support no-argument construction",
+     " * FastMCP 4 no longer supports Supabase HS256 verification. Supabase deployments must use RS256 or ES256."
+    ]
+   ],
+   [
+    "equal",
+    890,
+    891,
+    733,
+    734
+   ],
+   [
+    "replace",
+    891,
+    897,
+    734,
+    740,
+    [
+     " * Default: None. When unset, the compatibility loader reads missing provider fields from `.env` in the working directory. It does not read `FASTMCP_SERVER_AUTH` from that fallback",
+     " * Set it in the process environment before startup. A value loaded from the default `.env` cannot redirect the compatibility loader",
+     " * If process-set, this file may provide both `FASTMCP_SERVER_AUTH` and provider fields and replaces the working-directory fallback",
+     " * Process environment values take precedence case-insensitively",
+     " * The mcp-clickhouse compatibility loader reads this file only when building HTTP/SSE authentication and reads only `FASTMCP_SERVER_AUTH` and `FASTMCP_SERVER_AUTH_*` entries. FastMCP 4 may read the same file for its broader settings",
+     " * The default `.env` load is separate. It starts at the installed `mcp_clickhouse` package directory, resolves symlinks, walks upward to the filesystem root, and loads the first `.env` found or nothing. It never reads the working directory, regardless of launch method. That file may provide `FASTMCP_SERVER_AUTH` and provider fields along with other server settings. A source checkout normally finds the repository root `.env`"
+    ]
+   ],
+   [
+    "equal",
+    897,
+    898,
+    740,
+    741
+   ],
+   [
+    "replace",
+    898,
+    901,
+    741,
+    744,
+    [
+     " * Default: `\"false\"` (authentication is enabled)",
+     " * Set to `\"true\"` to disable authentication for local development/testing only",
+     " * **WARNING:** Only use for local development. Do not disable when exposed to networks"
+    ]
+   ],
+   [
+    "equal",
+    901,
+    902,
+    744,
+    745
+   ],
+   [
+    "replace",
+    902,
+    911,
+    745,
+    754,
+    [
+     " * Default for a loopback bind: bare and any-port forms of `127.0.0.1`, `localhost`, and `[::1]`",
+     " * If set, the value must contain at least one Host entry.",
+     " * A concrete non-loopback bind address defaults to that address and the configured port. A wildcard bind such as `0.0.0.0` or `::` requires an explicit non-empty value because the public Host cannot be inferred.",
+     " * Host validation is a defense in depth against DNS rebinding. Origin validation below is required separately by MCP.",
+     " * Entries are exact (`localhost:8000`) or accept any port (`localhost:*`). Example: `CLICKHOUSE_MCP_ALLOWED_HOSTS=127.0.0.1:8000,localhost:8000`",
+     " * The `host:*` form matches only values that carry a port. A port-less Host (a standard-port deployment where the client omits `:80`/`:443`) must be listed as a bare exact entry (`example.com`) as well.",
+     " * Requests with a non-matching or missing `Host` header get `421 Misdirected Request`. GET and HEAD requests to `/health` are exempt from Host and Origin validation so orchestrator probes keep working.",
+     " * Behind a reverse proxy, prefer preserving the original `Host` header. You can instead list the upstream `Host` value the proxy sends. Set an explicit list when a launcher such as `fastmcp run` overrides the bind address for remote access.",
+     " * mcp-clickhouse forces FastMCP's separate Host and Origin guard off. `FASTMCP_HTTP_HOST_ORIGIN_PROTECTION`, `FASTMCP_HTTP_ALLOWED_HOSTS`, and `FASTMCP_HTTP_ALLOWED_ORIGINS` do not apply. `CLICKHOUSE_MCP_ALLOWED_HOSTS` and `CLICKHOUSE_MCP_ALLOWED_ORIGINS` are authoritative."
+    ]
+   ],
+   [
+    "equal",
+    911,
+    912,
+    754,
+    755
+   ],
+   [
+    "replace",
+    912,
+    919,
+    755,
+    762,
+    [
+     " * Default: None. `X-Forwarded-Host` is ignored. Existing Uvicorn handling of `X-Forwarded-For` and `X-Forwarded-Proto` is unchanged.",
+     " * Entries must be IP addresses or CIDR networks, such as `127.0.0.1,10.20.0.0/24,2001:db8::1`. CIDRs must use their network address, so `10.20.0.1/24` is rejected. Host names, scoped IPv6 addresses, `*`, `0.0.0.0/0`, and `::/0` are also rejected.",
+     " * Trust is based on the immediate raw socket peer. A request from any other peer, or a request without a client address, ignores `X-Forwarded-Host` and validates `Host`.",
+     " * A trusted peer may send exactly one `X-Forwarded-Host` header containing one non-empty value. Duplicate fields, empty values, and comma separated lists get `421 Misdirected Request`. If the header is absent, `Host` is validated.",
+     " * Use the narrowest possible address or network. The MCP server must only be reachable through proxies in the configured ranges. Every trusted proxy must strip and overwrite client supplied `X-Forwarded-Host` and `X-Forwarded-Proto` values, and construct `X-Forwarded-For` from the verified connection peer.",
+     " * The built-in server and `fastmcp run` disable Uvicorn's outer proxy-header handling, validate Host from the raw peer, then apply `X-Forwarded-For` and `X-Forwarded-Proto`. Explicitly enabling `uvicorn_config[\"proxy_headers\"]` fails startup in this mode.",
+     " * Direct ASGI embedding must disable proxy-header handling in the outer ASGI server and call `mcp.http_app(raw_client_address_preserved=True)`. Without that explicit assertion, app construction fails when trusted proxies are configured."
+    ]
+   ],
+   [
+    "equal",
+    919,
+    920,
+    762,
+    763
+   ],
+   [
+    "replace",
+    920,
+    923,
+    763,
+    766,
+    [
+     " * Default: None, which rejects every request that carries an `Origin` header",
+     " * MCP requires Origin validation for HTTP/SSE transport connections. Requests without an Origin are accepted because non-browser MCP clients normally omit it. A non-matching Origin gets `403 Forbidden`. The `/health` endpoint is exempt as described above.",
+     " * Entries are exact (`http://localhost:3000`) or accept any port (`http://localhost:*`). As with hosts, the any-port form matches only origins that carry a port; a standard-port origin (`https://app.example.com`) must be listed exactly."
+    ]
+   ],
+   [
+    "equal",
+    923,
+    932,
+    766,
+    775
+   ],
+   [
+    "replace",
+    932,
+    936,
+    775,
+    776,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    936,
+    967,
+    776,
+    807
+   ],
+   [
+    "replace",
+    967,
+    971,
+    807,
+    811,
+    [
+     " * Default: None (no middleware loaded)",
+     " * Set to the module name (without `.py` extension) of your middleware module",
+     " * The module must provide a `setup_middleware(mcp)` function",
+     " * See Custom Middleware for details and examples"
+    ]
+   ],
+   [
+    "equal",
+    971,
+    975,
+    811,
+    815
+   ],
+   [
+    "replace",
+    975,
+    979,
+    815,
+    819,
+    [
+     " * Default: `\"false\"`",
+     " * Set to `\"true\"` to enable chDB tools",
+     " * Requires installing the optional extra: `mcp-clickhouse[chdb]`",
+     " * On Python 3.15, an independently installed chDB can terminate the process when `CHDB_ENABLED=true`."
+    ]
+   ],
+   [
+    "equal",
+    979,
+    980,
+    819,
+    820
+   ],
+   [
+    "replace",
+    980,
+    983,
+    820,
+    823,
+    [
+     " * Default: `\":memory:\"` (in-memory database)",
+     " * Use `:memory:` for in-memory database",
+     " * Use a file path for persistent storage (e.g., `/path/to/chdb/data`)"
+    ]
+   ],
+   [
+    "equal",
+    983,
+    998,
+    823,
+    838
+   ],
+   [
+    "replace",
+    998,
+    1003,
+    838,
+    839,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1003,
+    1011,
+    839,
+    847
+   ],
+   [
+    "replace",
+    1011,
+    1016,
+    847,
+    848,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1016,
+    1044,
+    848,
+    876
+   ],
+   [
+    "replace",
+    1044,
+    1048,
+    876,
+    877,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1048,
+    1057,
+    877,
+    886
+   ],
+   [
+    "replace",
+    1057,
+    1061,
+    886,
+    887,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1061,
+    1090,
+    887,
+    916
+   ],
+   [
+    "replace",
+    1090,
+    1095,
+    916,
+    917,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1095,
+    1118,
+    917,
+    940
+   ],
+   [
+    "replace",
+    1118,
+    1139,
+    940,
+    941,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1139,
+    1149,
+    941,
+    951
+   ],
+   [
+    "replace",
+    1149,
+    1154,
+    951,
+    952,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1154,
+    1158,
+    952,
+    956
+   ],
+   [
+    "replace",
+    1158,
+    1159,
+    956,
+    957,
+    [
+     "YouTube"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "9d09177c856a+2": {
+  "fn": "dolthub/dolt-workbench",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    5,
+    3,
+    5,
+    [
+     "compatible databases. Use Dolt or",
+     "Doltgres to unlock powerful version control"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    11,
+    5,
+    11
+   ],
+   [
+    "replace",
+    11,
+    15,
+    11,
+    15,
+    [
+     "- Download the desktop application for macOS or Windows",
+     "- Download the desktop application for macOS or Windows from Releases",
+     "- Pull the Docker Hub image",
+     "- Build from source"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    31,
+    15,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     "This sandbox restriction is due to Ubuntu's AppImage policies. Try one of these solutions:"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    72,
+    32,
+    72
+   ],
+   [
+    "replace",
+    72,
+    73,
+    72,
+    73,
+    [
+     "Modern, web based table-browser"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    80,
+    73,
+    80
+   ],
+   [
+    "replace",
+    80,
+    81,
+    80,
+    81,
+    [
+     "SQL queries"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    87,
+    81,
+    87
+   ],
+   [
+    "replace",
+    87,
+    88,
+    87,
+    88,
+    [
+     "Edit data"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    96,
+    88,
+    96
+   ],
+   [
+    "replace",
+    96,
+    97,
+    96,
+    97,
+    [
+     "Agent Mode"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    103,
+    97,
+    103
+   ],
+   [
+    "replace",
+    103,
+    104,
+    103,
+    104,
+    [
+     "ER diagrams"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    110,
+    104,
+    110
+   ],
+   [
+    "replace",
+    110,
+    111,
+    110,
+    111,
+    [
+     "File upload"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    111,
+    112
+   ],
+   [
+    "replace",
+    112,
+    113,
+    112,
+    113,
+    [
+     "## Version control features with Dolt and Doltgres"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    113,
+    114
+   ],
+   [
+    "replace",
+    114,
+    115,
+    114,
+    115,
+    [
+     "Dolt is a SQL database you can fork, clone, branch, merge, push and"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    125,
+    115,
+    125
+   ],
+   [
+    "replace",
+    125,
+    126,
+    125,
+    126,
+    [
+     "Commit graph"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    133,
+    126,
+    133
+   ],
+   [
+    "replace",
+    133,
+    134,
+    133,
+    134,
+    [
+     "Branch navigation"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    141,
+    134,
+    141
+   ],
+   [
+    "replace",
+    141,
+    142,
+    141,
+    142,
+    [
+     "Tags"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    151,
+    142,
+    151
+   ],
+   [
+    "replace",
+    151,
+    152,
+    151,
+    152,
+    [
+     "Pull requests"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    156,
+    152,
+    156
+   ],
+   [
+    "replace",
+    156,
+    158,
+    156,
+    158,
+    [
+     "installed and running, you can simply pull and run",
+     "the Docker image."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    165,
+    158,
+    165
+   ],
+   [
+    "replace",
+    165,
+    166,
+    165,
+    166,
+    [
+     "Docker Hub for connecting to local and"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    190,
+    166,
+    190
+   ],
+   [
+    "replace",
+    190,
+    199,
+    190,
+    191,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    251,
+    191,
+    243
+   ],
+   [
+    "replace",
+    251,
+    253,
+    243,
+    244,
+    [
+     "Open your browser to localhost:3002."
+    ]
+   ],
+   [
+    "equal",
+    253,
+    269,
+    244,
+    260
+   ],
+   [
+    "delete",
+    269,
+    270,
+    260,
+    260
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "1373ab22348e+2": {
+  "fn": "heybereket/oasis",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     " Docker Image CI"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    5,
+    3,
+    5
+   ],
+   [
+    "replace",
+    5,
+    14,
+    5,
+    13,
+    [
+     "- `packages/web` - Web App",
+     "- `packages/desktop` - Desktop App",
+     "- `packages/mobile` - Capacitor/Ionic Mobile App",
+     "- `packages/ui` - UI Components",
+     "- `packages/api` - Backend and GraphQL API",
+     "- `packages/react-gql` - React GraphQL Hooks",
+     "- `packages/sdk` - API Client",
+     "- `packages/cli` - CLI"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    16,
+    13,
+    15
+   ],
+   [
+    "replace",
+    16,
+    17,
+    15,
+    16,
+    [
+     "Oasis is open to contributions, but we recommend creating an issue or replying in a comment to let us know what you are working on first that way we don't overwrite each other or have many people adding the same feature/solving the same issue. "
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    16,
+    17
+   ],
+   [
+    "replace",
+    18,
+    20,
+    17,
+    19,
+    [
+     "**Interested in contributing?** ",
+     "Take a look at our documentation for more information on how to get started! 🎉"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    22,
+    19,
+    21
+   ],
+   [
+    "replace",
+    22,
+    24,
+    21,
+    22,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    22,
+    23
+   ],
+   [
+    "replace",
+    25,
+    26,
+    23,
+    24,
+    [
+     "Oasis is open-source and is under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "91388a7d9d2a+2": {
+  "fn": "ajayrandhawa/User-Management-PHP-MYSQL",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    3,
+    [
+     "𝚅𝚒𝚜𝚒𝚝𝚘𝚛𝚜"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    36,
+    3,
+    35
+   ],
+   [
+    "delete",
+    36,
+    38,
+    35,
+    35
+   ],
+   [
+    "equal",
+    38,
+    40,
+    35,
+    37
+   ],
+   [
+    "replace",
+    40,
+    45,
+    37,
+    42,
+    [
+     "|Screenshots|Screenshots|",
+     "|-------------|-------------|",
+     "|||",
+     "|||",
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    62,
+    42,
+    59
+   ],
+   [
+    "replace",
+    62,
+    66,
+    59,
+    60,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    60,
+    61
+   ],
+   [
+    "delete",
+    67,
+    69,
+    61,
+    61
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7bff906cba66+2": {
+  "fn": "StorageKit/StorageKit",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "replace",
+    0,
+    2,
+    0,
+    1,
+    [
+     "StorageKit"
+    ]
+   ],
+   [
+    "equal",
+    2,
+    3,
+    1,
+    2
+   ],
+   [
+    "replace",
+    3,
+    15,
+    2,
+    3,
+    [
+     " Your Data Storage Troubleshooter 🛠"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    31,
+    3,
+    19
+   ],
+   [
+    "replace",
+    31,
+    35,
+    19,
+    23,
+    [
+     "|Branch|Status|",
+     "|-------------|-------------|",
+     "|Master|BuddyBuild|",
+     "|Develop|BuddyBuild|"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    37,
+    23,
+    25
+   ],
+   [
+    "replace",
+    37,
+    48,
+    25,
+    26,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    77,
+    26,
+    55
+   ],
+   [
+    "replace",
+    77,
+    81,
+    55,
+    56,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    88,
+    56,
+    63
+   ],
+   [
+    "replace",
+    88,
+    89,
+    63,
+    64,
+    [
+     "Both Core Data and Realm relies on two base"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    91,
+    64,
+    66
+   ],
+   [
+    "replace",
+    91,
+    92,
+    66,
+    67,
+    [
+     "Code Data Entity"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    97,
+    67,
+    72
+   ],
+   [
+    "replace",
+    97,
+    104,
+    72,
+    73,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    137,
+    73,
+    106
+   ],
+   [
+    "delete",
+    137,
+    138,
+    106,
+    106
+   ],
+   [
+    "equal",
+    138,
+    186,
+    106,
+    154
+   ],
+   [
+    "replace",
+    186,
+    187,
+    154,
+    155,
+    [
+     "`Storage` exposes the following method:"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    192,
+    155,
+    160
+   ],
+   [
+    "replace",
+    192,
+    201,
+    160,
+    161,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    201,
+    209,
+    161,
+    169
+   ],
+   [
+    "replace",
+    209,
+    213,
+    169,
+    170,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    227,
+    170,
+    184
+   ],
+   [
+    "replace",
+    227,
+    239,
+    184,
+    185,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    274,
+    185,
+    220
+   ],
+   [
+    "replace",
+    274,
+    278,
+    220,
+    224,
+    [
+     "|Guardians||",
+     "|-------------|-------------|",
+     "|Ennio Masi|@ennioma|",
+     "|Marco Santarossa|@MarcoSantaDev|"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    292,
+    224,
+    238
+   ],
+   [
+    "replace",
+    292,
+    294,
+    238,
+    239,
+    [
+     "StorageKit is available under the MIT license. See the LICENSE file for more info."
+    ]
+   ],
+   [
+    "equal",
+    294,
+    295,
+    239,
+    240
+   ],
+   [
+    "replace",
+    295,
+    296,
+    240,
+    241,
+    [
+     "Boxes icon provided by `Nuon Project` (LLuisa Iborra). We have changed the boxes color."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "2e77f471fd4b+2": {
+  "fn": "WebReflection/sqlite-worker",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     " **Social Media Photo by Alexander Sinn on Unsplash** "
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    7,
+    4,
+    5,
+    [
+     "A simple, and persistent, SQLite database for Web and Workers, based on sql.js and sqlite-tag."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    5,
+    8
+   ],
+   [
+    "replace",
+    10,
+    11,
+    8,
+    9,
+    [
+     "The most important thing for this module to work, is being able to reach its pre-built, and pre-optimized files, via its own dist folder."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    9,
+    10
+   ],
+   [
+    "replace",
+    12,
+    15,
+    10,
+    11,
+    [
+     "The resolution is done automatically, whenever this modules is imported via native *ESM*, but due to a long standing bug that involves both *Web* and *Service* *Workers* across browsers, such `dist` folder *must* be specified manually, whenever this module is used directly within either a *Service Worker*, or a generic *Web Worker*."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    24,
+    11,
+    20
+   ],
+   [
+    "replace",
+    24,
+    40,
+    20,
+    21,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    42,
+    21,
+    23
+   ],
+   [
+    "replace",
+    42,
+    43,
+    23,
+    24,
+    [
+     "If the current dist folder is pre-installed though, `import {SQLiteWorker} from './js/sqlite-worker/dist/index.js';` would work too."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    50,
+    24,
+    31
+   ],
+   [
+    "replace",
+    50,
+    56,
+    31,
+    32,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    72,
+    32,
+    48
+   ],
+   [
+    "delete",
+    72,
+    74,
+    48,
+    48
+   ],
+   [
+    "equal",
+    74,
+    76,
+    48,
+    50
+   ],
+   [
+    "replace",
+    76,
+    77,
+    50,
+    51,
+    [
+     "Instead of `import`, we must use `importScripts` to have cross browser compatibility, but this is not an issue, as this module provides, through its dist folder, everything needed to do so, as long as such folder is reachable:"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    82,
+    51,
+    56
+   ],
+   [
+    "replace",
+    82,
+    100,
+    56,
+    57,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    103,
+    57,
+    60
+   ],
+   [
+    "delete",
+    103,
+    104,
+    60,
+    60
+   ],
+   [
+    "equal",
+    104,
+    109,
+    60,
+    65
+   ],
+   [
+    "replace",
+    109,
+    112,
+    65,
+    68,
+    [
+     " * all files are not also included in the bundle folder",
+     " * the bundler transform `import.meta.url` in a \"*too smart*\" way, breaking its native functionality",
+     " * something else some bundler might do"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    114,
+    68,
+    70
+   ],
+   [
+    "delete",
+    114,
+    116,
+    70,
+    70
+   ],
+   [
+    "equal",
+    116,
+    121,
+    70,
+    75
+   ],
+   [
+    "replace",
+    121,
+    126,
+    75,
+    79,
+    [
+     " * **name**: the persistent database name. By default it's the *string* `'sqlite-worker'`",
+     " * **dist**: the folder, as *string*, containing all distribution files of this module. This is resolved automatically on pages that are not workers, but it must be provided within workers when `importScripts` is used instead.",
+     " * **database**: an initial SQLite database, as `Uint8Array` instance. This is used only the very first time, and it fallbacks to `new Uint8Array(0)`.",
+     " * **timeout**: minimum interval, in milliseconds, between saves, to make storing, and exporting, the database, less greedy. By default it's the *number* `250`."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    131,
+    79,
+    84
+   ],
+   [
+    "replace",
+    131,
+    133,
+    84,
+    85,
+    [
+     " * **update**: a *function* that receives latest version of the database, as `Uint8Array`, whenever some query executed an `INSERT`, a `DELETE`, or an `UPDATE`."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    138,
+    85,
+    90
+   ],
+   [
+    "replace",
+    138,
+    142,
+    90,
+    92,
+    [
+     " * **worker**: the *string* path where the *JS* worker to use is located. By default, this is the dist/worker.js file, which is a pre-optimized version of this source.",
+     " * **credentials**: the optional credentials *string* between `omit`, `same-origin`, or `include`, defaulting to `omit`, or better, undefined credentials."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    145,
+    92,
+    95
+   ],
+   [
+    "replace",
+    145,
+    146,
+    95,
+    96,
+    [
+     "Both `init(...)` and `SQLiteWorker(...)` resolves with the sqlite-tag API."
+    ]
+   ],
+   [
+    "equal",
+    146,
+    149,
+    96,
+    99
+   ],
+   [
+    "replace",
+    149,
+    156,
+    99,
+    106,
+    [
+     " * **all**: a template literal tag to retrieve all rows that match the query",
+     " * **get**: a template literal tag to retrieve one row that matches the query",
+     " * **query**: a template literal tag to simply query the database (no result returned)",
+     " * **raw**: a template literal tag to represent static parts of the query (not values)",
+     " * **transaction**: a function that returns a template literal tag to perform any statement until `tag.commit()` is awaited and executed.",
+     " * **close**: a function to force save and close the db at any time.",
+     " * **create_function**: a function to register custom SQLite functions. **Please note** when used as *Worker* it requires a **pure function** (no outer scope access) and **Function** evaluation. No limitations when used directly through init."
+    ]
+   ],
+   [
+    "equal",
+    156,
+    158,
+    106,
+    108
+   ],
+   [
+    "delete",
+    158,
+    160,
+    108,
+    108
+   ],
+   [
+    "equal",
+    160,
+    165,
+    108,
+    113
+   ],
+   [
+    "replace",
+    165,
+    166,
+    113,
+    114,
+    [
+     "All it's needed, is a `tables` property that describe the table name and its fields, handled via sqlite-tables-handler, before returning all module helpers."
+    ]
+   ],
+   [
+    "equal",
+    166,
+    171,
+    114,
+    119
+   ],
+   [
+    "replace",
+    171,
+    189,
+    119,
+    120,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    197,
+    120,
+    128
+   ],
+   [
+    "replace",
+    197,
+    209,
+    128,
+    129,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    210,
+    129,
+    130
+   ],
+   [
+    "delete",
+    210,
+    211,
+    130,
+    130
+   ],
+   [
+    "equal",
+    211,
+    218,
+    130,
+    137
+   ],
+   [
+    "replace",
+    218,
+    219,
+    137,
+    138,
+    [
+     "**Live Demo** - please note if you read two *OK* after the list of expected errors (due code coverage) it means everything is fine and your browser works as expected."
+    ]
+   ],
+   [
+    "equal",
+    219,
+    220,
+    138,
+    139
+   ],
+   [
+    "replace",
+    220,
+    221,
+    139,
+    140,
+    [
+     "**CodePen** - will show the table result, as JSON, in the body."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "0602a7087edc+2": {
+  "fn": "Hywan/Database-to-PlantUML",
+  "clean_ver": "2",
+  "raw_lines": 9,
+  "ops": [
+   [
+    "equal",
+    0,
+    9,
+    0,
+    9
+   ],
+   [
+    "replace",
+    9,
+    19,
+    9,
+    19,
+    [
+     " * PNG,",
+     " * SVG,",
+     " * EPS,",
+     " * PDF,",
+     " * VDX,",
+     " * XMI,",
+     " * HTML,",
+     " * TXT,",
+     " * UTXT,",
+     " * LaTeX."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    22,
+    19,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "With Composer, simply run the following command:"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    51,
+    23,
+    51
+   ],
+   [
+    "replace",
+    51,
+    52,
+    51,
+    52,
+    [
+     "Output with PostgreSQL"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    66,
+    52,
+    66
+   ],
+   [
+    "replace",
+    66,
+    67,
+    66,
+    67,
+    [
+     "Output with MySQL"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    72,
+    67,
+    72
+   ],
+   [
+    "delete",
+    72,
+    73,
+    72,
+    72
+   ],
+   [
+    "equal",
+    73,
+    74,
+    72,
+    73
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "6eebb72584dc+2": {
+  "fn": "bezkoder/spring-boot-security-postgresql",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "spring-boot-spring-security-postgresql-jwt-authentication-flow"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    10,
+    6,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "spring-boot-spring-security-postgresql-jwt-authentication-architecture"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    19,
+    11,
+    19
+   ],
+   [
+    "replace",
+    19,
+    29,
+    19,
+    20,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    44,
+    20,
+    35
+   ],
+   [
+    "replace",
+    44,
+    45,
+    35,
+    36,
+    [
+     "> Spring Boot, Spring Security, PostgreSQL: JWT Authentication & Authorization example"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    36,
+    37
+   ],
+   [
+    "replace",
+    46,
+    47,
+    37,
+    38,
+    [
+     "> For MySQL"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    38,
+    39
+   ],
+   [
+    "replace",
+    48,
+    49,
+    39,
+    40,
+    [
+     "> For MongoDB"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    52,
+    40,
+    43
+   ],
+   [
+    "replace",
+    52,
+    53,
+    43,
+    44,
+    [
+     "spring-boot-refresh-token-jwt-example-flow"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    44,
+    45
+   ],
+   [
+    "replace",
+    54,
+    55,
+    45,
+    46,
+    [
+     "For instruction: Spring Boot Refresh Token with JWT example"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    57,
+    46,
+    48
+   ],
+   [
+    "replace",
+    57,
+    58,
+    48,
+    49,
+    [
+     "> Spring Boot File upload example with Multipart File"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    49,
+    50
+   ],
+   [
+    "replace",
+    59,
+    60,
+    50,
+    51,
+    [
+     "> Exception handling: @RestControllerAdvice example in Spring Boot"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    51,
+    52
+   ],
+   [
+    "replace",
+    61,
+    62,
+    52,
+    53,
+    [
+     "> Spring Boot Repository Unit Test with @DataJpaTest"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    53,
+    54
+   ],
+   [
+    "replace",
+    63,
+    64,
+    54,
+    55,
+    [
+     "> Spring Boot Rest Controller Unit Test with @WebMvcTest"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    55,
+    56
+   ],
+   [
+    "replace",
+    65,
+    66,
+    56,
+    57,
+    [
+     "> Spring Boot Pagination & Sorting example"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    57,
+    58
+   ],
+   [
+    "replace",
+    67,
+    68,
+    58,
+    59,
+    [
+     "> Validation: Spring Boot Validate Request Body"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    59,
+    60
+   ],
+   [
+    "replace",
+    69,
+    70,
+    60,
+    61,
+    [
+     "> Documentation: Spring Boot and Swagger 3 example"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    61,
+    62
+   ],
+   [
+    "replace",
+    71,
+    72,
+    62,
+    63,
+    [
+     "> Caching: Spring Boot Redis Cache example"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    74,
+    63,
+    65
+   ],
+   [
+    "replace",
+    74,
+    75,
+    65,
+    66,
+    [
+     "> Spring Boot One To Many example with Spring JPA, Hibernate"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    66,
+    67
+   ],
+   [
+    "replace",
+    76,
+    77,
+    67,
+    68,
+    [
+     "> Spring Boot Many To Many example with Spring JPA, Hibernate"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    68,
+    69
+   ],
+   [
+    "replace",
+    78,
+    79,
+    69,
+    70,
+    [
+     "> JPA One To One example with Spring Boot"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    82,
+    70,
+    73
+   ],
+   [
+    "replace",
+    82,
+    83,
+    73,
+    74,
+    [
+     "> Spring Boot + Vue.js JWT Authentication"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    84,
+    74,
+    75
+   ],
+   [
+    "replace",
+    84,
+    85,
+    75,
+    76,
+    [
+     "> Spring Boot + Angular 8 JWT Authentication"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    76,
+    77
+   ],
+   [
+    "replace",
+    86,
+    87,
+    77,
+    78,
+    [
+     "> Spring Boot + Angular 10 JWT Authentication"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    78,
+    79
+   ],
+   [
+    "replace",
+    88,
+    89,
+    79,
+    80,
+    [
+     "> Spring Boot + Angular 11 JWT Authentication"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    90,
+    80,
+    81
+   ],
+   [
+    "replace",
+    90,
+    91,
+    81,
+    82,
+    [
+     "> Spring Boot + Angular 12 JWT Authentication"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    82,
+    83
+   ],
+   [
+    "replace",
+    92,
+    93,
+    83,
+    84,
+    [
+     "> Spring Boot + Angular 13 JWT Authentication"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    84,
+    85
+   ],
+   [
+    "replace",
+    94,
+    95,
+    85,
+    86,
+    [
+     "> Spring Boot + Angular 14 JWT Authentication"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    86,
+    87
+   ],
+   [
+    "replace",
+    96,
+    97,
+    87,
+    88,
+    [
+     "> Spring Boot + Angular 15 JWT Authentication"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    88,
+    89
+   ],
+   [
+    "replace",
+    98,
+    99,
+    89,
+    90,
+    [
+     "> Spring Boot + Angular 16 JWT Authentication"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    90,
+    91
+   ],
+   [
+    "replace",
+    100,
+    101,
+    91,
+    92,
+    [
+     "> Spring Boot + Angular 17 JWT Authentication"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    92,
+    93
+   ],
+   [
+    "replace",
+    102,
+    103,
+    93,
+    94,
+    [
+     "> Spring Boot + React JWT Authentication"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    106,
+    94,
+    97
+   ],
+   [
+    "replace",
+    106,
+    107,
+    97,
+    98,
+    [
+     "> Vue.js + Spring Boot + PostgreSQL example"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    108,
+    98,
+    99
+   ],
+   [
+    "replace",
+    108,
+    109,
+    99,
+    100,
+    [
+     "> Angular 8 + Spring Boot + PostgreSQL example"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    100,
+    101
+   ],
+   [
+    "replace",
+    110,
+    111,
+    101,
+    102,
+    [
+     "> Angular 10 + Spring Boot + PostgreSQL example"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    102,
+    103
+   ],
+   [
+    "replace",
+    112,
+    113,
+    103,
+    104,
+    [
+     "> Angular 11 + Spring Boot + PostgreSQL example"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    104,
+    105
+   ],
+   [
+    "replace",
+    114,
+    115,
+    105,
+    106,
+    [
+     "> Angular 12 + Spring Boot + PostgreSQL example"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    106,
+    107
+   ],
+   [
+    "replace",
+    116,
+    117,
+    107,
+    108,
+    [
+     "> Angular 13 + Spring Boot + PostgreSQL example"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    108,
+    109
+   ],
+   [
+    "replace",
+    118,
+    119,
+    109,
+    110,
+    [
+     "> Angular 14 + Spring Boot + PostgreSQL example"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    110,
+    111
+   ],
+   [
+    "replace",
+    120,
+    121,
+    111,
+    112,
+    [
+     "> Angular 15 + Spring Boot + PostgreSQL example"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    112,
+    113
+   ],
+   [
+    "replace",
+    122,
+    123,
+    113,
+    114,
+    [
+     "> Angular 16 + Spring Boot + PostgreSQL example"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    114,
+    115
+   ],
+   [
+    "replace",
+    124,
+    125,
+    115,
+    116,
+    [
+     "> Angular 17 + Spring Boot + PostgreSQL example"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    126,
+    116,
+    117
+   ],
+   [
+    "replace",
+    126,
+    127,
+    117,
+    118,
+    [
+     "> React + Spring Boot + PostgreSQL example"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    129,
+    118,
+    120
+   ],
+   [
+    "replace",
+    129,
+    130,
+    120,
+    121,
+    [
+     "> Integrate Angular with Spring Boot Rest API"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    121,
+    122
+   ],
+   [
+    "replace",
+    131,
+    132,
+    122,
+    123,
+    [
+     "> Integrate React.js with Spring Boot Rest API"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    123,
+    124
+   ],
+   [
+    "replace",
+    133,
+    134,
+    124,
+    125,
+    [
+     "> Integrate Vue.js with Spring Boot Rest API"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "4e30e9aef8c9+2": {
+  "fn": "ElunaLuaEngine/ElunaTrinityWotlk",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# logo TrinityCore (3.3.5)"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Average time to resolve an issue Percentage of issues still open"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    18,
+    4,
+    5,
+    [
+     "（目录 9 行略）"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    23,
+    5,
+    10
+   ],
+   [
+    "replace",
+    23,
+    29,
+    10,
+    16,
+    [
+     "master Build Status | 3.3.5 Build Status | cata_classic Build Status",
+     "master Build status | Build status | Build status",
+     "master Windows Build status | 3.3.5 Windows Build status | cata_classic GCC Build status",
+     "master Ubuntu Build status | 3.3.5 Ubuntu Build status | cata_classic GCC Build status",
+     "master macOS arm64 Build status | 3.3.5 macOS arm64 Build status | cata_classic macOS arm64 Build status",
+     "Coverity Scan Build Status | Coverity Scan Build Status |"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    42,
+    16,
+    29
+   ],
+   [
+    "replace",
+    42,
+    43,
+    29,
+    30,
+    [
+     "make pull requests to our Github repository."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    45,
+    30,
+    32
+   ],
+   [
+    "replace",
+    45,
+    46,
+    32,
+    33,
+    [
+     "website at TrinityCore.org."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    49,
+    33,
+    36
+   ],
+   [
+    "replace",
+    49,
+    51,
+    36,
+    37,
+    [
+     "Software requirements are available in the wiki for"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    52,
+    37,
+    38
+   ],
+   [
+    "delete",
+    52,
+    53,
+    38,
+    38
+   ],
+   [
+    "equal",
+    53,
+    56,
+    38,
+    41
+   ],
+   [
+    "replace",
+    56,
+    57,
+    41,
+    42,
+    [
+     "Detailed installation guides are available in the wiki for"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    42,
+    43
+   ],
+   [
+    "delete",
+    58,
+    59,
+    43,
+    43
+   ],
+   [
+    "equal",
+    59,
+    62,
+    43,
+    46
+   ],
+   [
+    "replace",
+    62,
+    63,
+    46,
+    47,
+    [
+     "Issues can be reported via the Github issue tracker."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    67,
+    47,
+    51
+   ],
+   [
+    "replace",
+    67,
+    68,
+    51,
+    52,
+    [
+     "In addition, thoroughly read through the issue tracker guide to ensure"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    70,
+    52,
+    54
+   ],
+   [
+    "delete",
+    70,
+    71,
+    54,
+    54
+   ],
+   [
+    "equal",
+    71,
+    75,
+    54,
+    58
+   ],
+   [
+    "replace",
+    75,
+    76,
+    58,
+    59,
+    [
+     "properly submit a pull request, read the how-to: maintain a remote fork."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    59,
+    60
+   ],
+   [
+    "delete",
+    77,
+    78,
+    60,
+    60
+   ],
+   [
+    "equal",
+    78,
+    83,
+    60,
+    65
+   ],
+   [
+    "replace",
+    83,
+    85,
+    65,
+    66,
+    [
+     "Read file COPYING."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    88,
+    66,
+    69
+   ],
+   [
+    "replace",
+    88,
+    90,
+    69,
+    70,
+    [
+     "Read file AUTHORS."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    93,
+    70,
+    73
+   ],
+   [
+    "replace",
+    93,
+    97,
+    73,
+    77,
+    [
+     "* Website",
+     "* Wiki",
+     "* Forums",
+     "* Discord"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "e41a22a759bb+2": {
+  "fn": "glasskube/gitops-template",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "equal",
+    0,
+    10,
+    0,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "The easiest would be creating a new Minikube cluster with:"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    22,
+    11,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "Make sure to have at least Glasskube version 0.16.0 installed locally."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    39,
+    23,
+    39
+   ],
+   [
+    "replace",
+    39,
+    41,
+    39,
+    41,
+    [
+     "- Line 12 in: `bootstrap/glasskube-application.yaml`",
+     "- Lines 11, 16 and 26 in: `bootstrap/glasskube/applicationset.yaml`"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    64,
+    41,
+    64
+   ],
+   [
+    "replace",
+    64,
+    65,
+    64,
+    65,
+    [
+     "For private repositories, make sure to obtain a token from GitHub, "
+    ]
+   ],
+   [
+    "equal",
+    65,
+    75,
+    65,
+    75
+   ],
+   [
+    "replace",
+    75,
+    76,
+    75,
+    76,
+    [
+     "Follow the ArgoCD docs to get and reset the password to log in."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    80,
+    76,
+    80
+   ],
+   [
+    "replace",
+    80,
+    81,
+    80,
+    81,
+    [
+     "application (shiori), which is making use of `cloudnative-pg`. "
+    ]
+   ],
+   [
+    "equal",
+    81,
+    106,
+    81,
+    106
+   ],
+   [
+    "replace",
+    106,
+    107,
+    106,
+    107,
+    [
+     "* Integrating renovate into the cluster."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    117,
+    107,
+    117
+   ],
+   [
+    "replace",
+    117,
+    118,
+    117,
+    118,
+    [
+     "Therefore, install the Renovate GitHub App and enable it for your GitOps repo."
+    ]
+   ],
+   [
+    "equal",
+    118,
+    148,
+    118,
+    148
+   ],
+   [
+    "replace",
+    148,
+    149,
+    148,
+    149,
+    [
+     "This template also contains a demo application: a bookmark manager called shiori."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    152,
+    149,
+    152
+   ],
+   [
+    "replace",
+    152,
+    153,
+    152,
+    153,
+    [
+     "minikube docs):"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    156,
+    153,
+    156
+   ],
+   [
+    "replace",
+    156,
+    158,
+    156,
+    158,
+    [
+     "After that you will be able to access the application via http://my-shiori.example in your browser. ",
+     "The default login credentials are `shiori` / `gopher` – for more information check the shiori docs."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    170,
+    158,
+    170
+   ],
+   [
+    "replace",
+    170,
+    173,
+    170,
+    173,
+    [
+     "We are going to make use of the cloudnativepg dashboard.",
+     "Import it by opening the dashboard-import page, pasting",
+     "https://grafana.com/grafana/dashboards/20417-cloudnativepg/"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    175,
+    173,
+    175
+   ],
+   [
+    "replace",
+    175,
+    176,
+    175,
+    176,
+    [
+     "CloudNativePG dashboard"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    198,
+    176,
+    198
+   ],
+   [
+    "replace",
+    198,
+    199,
+    198,
+    199,
+    [
+     "The given username and token are stored in a secret by the bootstrap command."
+    ]
+   ],
+   [
+    "equal",
+    199,
+    201,
+    199,
+    201
+   ],
+   [
+    "replace",
+    201,
+    202,
+    201,
+    202,
+    [
+     "If you initially chose to use a public repository, or if you need to change the repo credentials (e.g. because the token expired), you can still do so by adding or updating this secret manually via ArgoCD."
+    ]
+   ],
+   [
+    "equal",
+    202,
+    208,
+    202,
+    208
+   ],
+   [
+    "replace",
+    208,
+    210,
+    208,
+    210,
+    [
+     "Consider this: To install a `ClusterPackage` ` ` that has a dependency on `D`, one would do `glasskube install --dry-run -o yaml`, which",
+     "would output the `ClusterPackage` custom resource for ` `. However, the dependency `D` will only be resolved at reconciliation time by"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    213,
+    210,
+    213
+   ],
+   [
+    "replace",
+    213,
+    214,
+    213,
+    214,
+    [
+     "user experience better, see glasskube/glasskube#430."
+    ]
+   ],
+   [
+    "equal",
+    214,
+    226,
+    214,
+    226
+   ],
+   [
+    "replace",
+    226,
+    228,
+    226,
+    228,
+    [
+     "regarding this starter template and corresponding guide here, in the glasskube/glasskube repo or on",
+     "our Discord. Thanks!"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "64d3584af8d7+2": {
+  "fn": "bytefish/PostgreSQLCopyHelper",
+  "clean_ver": "2",
+  "raw_lines": 40,
+  "ops": [
+   [
+    "equal",
+    0,
+    40,
+    0,
+    40
+   ],
+   [
+    "replace",
+    40,
+    44,
+    40,
+    41,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    55,
+    41,
+    52
+   ],
+   [
+    "replace",
+    55,
+    67,
+    52,
+    53,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    78,
+    53,
+    64
+   ],
+   [
+    "replace",
+    78,
+    82,
+    64,
+    65,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    137,
+    65,
+    120
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

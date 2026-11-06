@@ -2767,5 +2767,1059 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "f648e3675d53+2": {
+  "fn": "taovc/pr-cockpit",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    5,
+    [
+     "PR Cockpit",
+     " PR Cockpit ",
+     " Review a repo's whole PR queue with Claude or Codex — locally. ",
+     " Your code never leaves your machine, it runs on your own Claude/Codex subscription, ",
+     " and nothing gets posted to GitHub until you check the box. "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    5,
+    6
+   ],
+   [
+    "replace",
+    8,
+    16,
+    6,
+    12,
+    [
+     " Platform: macOS, Windows, Linux",
+     " Providers: Claude and Codex",
+     " Nuxt 4",
+     " TypeScript 5",
+     " Desktop build status",
+     " License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    12,
+    13
+   ],
+   [
+    "replace",
+    17,
+    18,
+    13,
+    14,
+    [
+     "**English** · 中文 · Français"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    14,
+    15
+   ],
+   [
+    "replace",
+    19,
+    26,
+    15,
+    16,
+    [
+     " Pull a repo"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    31,
+    16,
+    21
+   ],
+   [
+    "replace",
+    31,
+    32,
+    21,
+    22,
+    [
+     "**⬇ Download a build** — builds are currently published as a rolling `nightly` pre-release, rebuilt on every push to `main`."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    22,
+    23
+   ],
+   [
+    "replace",
+    33,
+    34,
+    23,
+    24,
+    [
+     "|Platform|File|"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    24,
+    25
+   ],
+   [
+    "replace",
+    35,
+    38,
+    25,
+    28,
+    [
+     "|macOS (Apple Silicon)|`pr-cockpit-<version>-arm64.dmg`|",
+     "|Windows (x64)|`pr-cockpit-<version>-x64.exe`|",
+     "|Linux (x86_64)|`pr-cockpit-<version>-x86_64.AppImage`|"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    28,
+    29
+   ],
+   [
+    "replace",
+    39,
+    40,
+    29,
+    30,
+    [
+     "Intel Macs are not covered by a prebuilt package yet — build from source instead."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    47,
+    30,
+    37
+   ],
+   [
+    "replace",
+    47,
+    48,
+    37,
+    38,
+    [
+     " Or right-click the app in Finder → **Open** → **Open** in the dialog."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    54,
+    38,
+    44
+   ],
+   [
+    "replace",
+    54,
+    55,
+    44,
+    45,
+    [
+     "You still need `gh auth login` and a Claude or Codex login before the app can do anything — see Prerequisites."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    113,
+    45,
+    103
+   ],
+   [
+    "replace",
+    113,
+    114,
+    103,
+    104,
+    [
+     "Step-by-step guide for a first run from source. If you only want to use the app, download a desktop build instead — it needs no toolchain. See \"Getting started\" below for the condensed version."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    141,
+    104,
+    131
+   ],
+   [
+    "replace",
+    141,
+    142,
+    131,
+    132,
+    [
+     "|Variable|When to change it|"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    143,
+    132,
+    133
+   ],
+   [
+    "replace",
+    143,
+    147,
+    133,
+    137,
+    [
+     "|`PORT`|If `3001` is already taken|",
+     "|`INFERENCE_PROVIDER`|`claude` (default) or `codex`|",
+     "|`ANTHROPIC_API_KEY`|Optional for the Claude path; use when local `claude` login is unavailable|",
+     "|`OPENAI_API_KEY`|When local Codex login is unavailable and you want to use an OpenAI API key|"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    148,
+    137,
+    138
+   ],
+   [
+    "replace",
+    148,
+    149,
+    138,
+    139,
+    [
+     "The full list of variables is in the Configuration (.env) section."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    200,
+    139,
+    190
+   ],
+   [
+    "replace",
+    200,
+    201,
+    190,
+    191,
+    [
+     "|Variable|Example|Description|"
+    ]
+   ],
+   [
+    "equal",
+    201,
+    202,
+    191,
+    192
+   ],
+   [
+    "replace",
+    202,
+    216,
+    192,
+    206,
+    [
+     "|`PORT`|`3001`|Port|",
+     "|`INFERENCE_PROVIDER`|`claude`|`claude` / `codex`|",
+     "|`ANTHROPIC_MODEL`|`sonnet`|Default review model (overridable per project)|",
+     "|`CODEX_MODEL`||Default model for Codex projects; empty uses the Codex default|",
+     "|`CODEX_SERVICE_TIER`||Optional global default Codex/OpenAI speed tier; the project-level Fast toggle overrides it. To disable global fast, leave/delete it and also remove `service_tier` from `~/.codex/config.toml` if set globally|",
+     "|`CODEX_PROJECT_DOC_FALLBACK_FILENAMES`|`CLAUDE.md,.claude/CLAUDE.md`|Project docs Codex reads when `AGENTS.md` is absent|",
+     "|`OPENAI_API_KEY`|`sk-...`|Optional when local Codex login is unavailable|",
+     "|`TRANSLATE_MODEL`|(empty)|Model for rewriting GitHub comments into English and for commit messages / titles; empty = the project's own model at low effort (Claude projects only)|",
+     "|`ANTHROPIC_API_KEY`|`sk-ant-...`|Optional for the Claude path when local login is unavailable|",
+     "|`DEFAULT_REPO`|`owner/repo`|Optional, default repo when pasting a bare PR number|",
+     "|`DB_PATH`|`./data/cockpit.db`|SQLite path|",
+     "|`WORKTREE_LOCATION`|`repo`|`repo` = IDE-visible `.pr-cockpit-worktrees/` inside each local clone; `central` = use `REPOS_DIR`|",
+     "|`REPOS_DIR`|`./data/worktrees`|Worktree root for `central` mode; legacy migration source in `repo` mode|",
+     "|`MAX_CONCURRENCY`|`3`|Maximum number of parallel reviews|"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    233,
+    206,
+    223
+   ],
+   [
+    "replace",
+    233,
+    234,
+    223,
+    224,
+    [
+     "Design goals, invariants and safety defenses are detailed in docs/ARCHITECTURE.en.md."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a5ffd3c23b7c+2": {
+  "fn": "mumuki/mumuki-laboratory",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "replace",
+    0,
+    2,
+    0,
+    2,
+    [
+     "Build status",
+     "Code Climate"
+    ]
+   ],
+   [
+    "equal",
+    2,
+    3,
+    2,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     " </img>"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    4,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "# Mumuki Laboratory btn_donate_lg"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    16,
+    6,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "> First, we need to install some software: PostgreSQL database, RabbitMQ queue, and some common Ruby on Rails native dependencies"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    23,
+    17,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "> rbenv is a ruby versions manager, similar to rvm, nvm, and so on."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    33,
+    24,
+    33
+   ],
+   [
+    "replace",
+    33,
+    34,
+    33,
+    34,
+    [
+     "> Now we have rbenv installed, we can install ruby and bundler"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    59,
+    34,
+    59
+   ],
+   [
+    "replace",
+    59,
+    68,
+    59,
+    60,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    60,
+    61
+   ],
+   [
+    "delete",
+    69,
+    70,
+    61,
+    61
+   ],
+   [
+    "equal",
+    70,
+    100,
+    61,
+    91
+   ],
+   [
+    "replace",
+    100,
+    108,
+    91,
+    92,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    116,
+    92,
+    100
+   ],
+   [
+    "replace",
+    116,
+    121,
+    100,
+    101,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    141,
+    101,
+    121
+   ],
+   [
+    "replace",
+    141,
+    142,
+    121,
+    122,
+    [
+     "The Capybara config of this project supports running tests on Firefox, Chrome and Safari via Selenium. The `webdrivers` gem automatically installs (and updates) all the necessary Selenium webdrivers."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    157,
+    122,
+    137
+   ],
+   [
+    "replace",
+    157,
+    158,
+    137,
+    138,
+    [
+     "The `webdrivers` gem also works with Teaspoon, no need to install anything manually. By default tests run on Firefox, but this behavior can be changed by setting `MUMUKI_SELENIUM_DRIVER` (see section above)."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    177,
+    138,
+    157
+   ],
+   [
+    "replace",
+    177,
+    181,
+    157,
+    158,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    191,
+    158,
+    168
+   ],
+   [
+    "replace",
+    191,
+    195,
+    168,
+    169,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    261,
+    169,
+    235
+   ],
+   [
+    "replace",
+    261,
+    262,
+    235,
+    236,
+    [
+     " * `.runTests`"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    263,
+    236,
+    237
+   ],
+   [
+    "replace",
+    263,
+    264,
+    237,
+    238,
+    [
+     " * `addSource`"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    238,
+    239
+   ],
+   [
+    "replace",
+    265,
+    268,
+    239,
+    242,
+    [
+     " * `formatContent`",
+     " * `reset`",
+     " * `toggleFullscreen`"
+    ]
+   ],
+   [
+    "equal",
+    268,
+    269,
+    242,
+    243
+   ],
+   [
+    "replace",
+    269,
+    270,
+    243,
+    244,
+    [
+     " * `replaceHtml`"
+    ]
+   ],
+   [
+    "equal",
+    270,
+    271,
+    244,
+    245
+   ],
+   [
+    "replace",
+    271,
+    278,
+    245,
+    252,
+    [
+     " * `registerBlocksAreaScaler`",
+     " * `registerStateScaler`",
+     " * `restart`",
+     " * `scaleBlocksArea`",
+     " * `scaleState`",
+     " * `showResult`",
+     " * `showContext`"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    279,
+    252,
+    253
+   ],
+   [
+    "replace",
+    279,
+    281,
+    253,
+    255,
+    [
+     " * `SpeechBubbleRenderer`",
+     " * `renderSpeechBubbleResultItem`"
+    ]
+   ],
+   [
+    "equal",
+    281,
+    283,
+    255,
+    257
+   ],
+   [
+    "replace",
+    283,
+    285,
+    257,
+    259,
+    [
+     " * `id`: the `id` of the currently loaded exercise, if any",
+     " * `layout`: the `layout` of the currently loaded exercise, if any"
+    ]
+   ],
+   [
+    "equal",
+    285,
+    287,
+    259,
+    261
+   ],
+   [
+    "replace",
+    287,
+    291,
+    261,
+    265,
+    [
+     " * `scenarios`",
+     " * `currentScenarioIndex`",
+     " * `resetIndicators`",
+     " * `updateIndicators`"
+    ]
+   ],
+   [
+    "equal",
+    291,
+    292,
+    265,
+    266
+   ],
+   [
+    "replace",
+    292,
+    296,
+    266,
+    270,
+    [
+     " * `setUpAddFile`",
+     " * `setUpDeleteFiles`",
+     " * `setUpDeleteFile`",
+     " * `updateButtonsVisibility`"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    297,
+    270,
+    271
+   ],
+   [
+    "replace",
+    297,
+    300,
+    271,
+    274,
+    [
+     " * `processSolution`",
+     " * `sendSolution`",
+     " * `registerContentSyncer`"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    308,
+    274,
+    282
+   ],
+   [
+    "replace",
+    308,
+    329,
+    282,
+    283,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    329,
+    348,
+    283,
+    302
+   ],
+   [
+    "replace",
+    348,
+    367,
+    302,
+    303,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    367,
+    368,
+    303,
+    304
+   ],
+   [
+    "delete",
+    368,
+    369,
+    304,
+    304
+   ],
+   [
+    "equal",
+    369,
+    400,
+    304,
+    335
+   ],
+   [
+    "replace",
+    400,
+    414,
+    335,
+    336,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    414,
+    432,
+    336,
+    354
+   ],
+   [
+    "replace",
+    432,
+    446,
+    354,
+    355,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    446,
+    483,
+    355,
+    392
+   ],
+   [
+    "replace",
+    483,
+    493,
+    392,
+    393,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    493,
+    543,
+    393,
+    443
+   ],
+   [
+    "replace",
+    543,
+    547,
+    443,
+    444,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    547,
+    572,
+    444,
+    469
+   ],
+   [
+    "replace",
+    572,
+    573,
+    469,
+    470,
+    [
+     "roles hierarchy."
+    ]
+   ],
+   [
+    "equal",
+    573,
+    576,
+    470,
+    473
+   ],
+   [
+    "replace",
+    576,
+    584,
+    473,
+    481,
+    [
+     " * ex_student: `organization/course`",
+     " * student: `organization/course`",
+     " * teacher and headmaster: `organization/course`",
+     " * writer and editor: `organization/content`",
+     " * janitor: `organization/_`",
+     " * moderator and forum_supervisor: `organization/_`",
+     " * admin: `_/_`",
+     " * owner: `_/_`"
+    ]
+   ],
+   [
+    "equal",
+    584,
+    603,
+    481,
+    500
+   ],
+   [
+    "replace",
+    603,
+    609,
+    500,
+    501,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    609,
+    679,
+    501,
+    571
+   ],
+   [
+    "delete",
+    679,
+    680,
+    571,
+    571
+   ],
+   [
+    "equal",
+    680,
+    706,
+    571,
+    597
+   ],
+   [
+    "delete",
+    706,
+    707,
+    597,
+    597
+   ],
+   [
+    "equal",
+    707,
+    741,
+    597,
+    631
+   ],
+   [
+    "replace",
+    741,
+    756,
+    631,
+    632,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    756,
+    814,
+    632,
+    690
+   ],
+   [
+    "delete",
+    814,
+    815,
+    690,
+    690
+   ],
+   [
+    "equal",
+    815,
+    824,
+    690,
+    699
+   ],
+   [
+    "replace",
+    824,
+    829,
+    699,
+    700,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    829,
+    836,
+    700,
+    707
+   ],
+   [
+    "replace",
+    836,
+    844,
+    707,
+    708,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    844,
+    849,
+    708,
+    713
+   ],
+   [
+    "delete",
+    849,
+    850,
+    713,
+    713
+   ],
+   [
+    "equal",
+    850,
+    908,
+    713,
+    771
+   ],
+   [
+    "delete",
+    908,
+    909,
+    771,
+    771
+   ],
+   [
+    "equal",
+    909,
+    911,
+    771,
+    773
+   ],
+   [
+    "replace",
+    911,
+    912,
+    773,
+    774,
+    [
+     "JWT Auth for open source projects"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

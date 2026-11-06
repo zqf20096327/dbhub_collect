@@ -8891,5 +8891,2282 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "7057180d19e1+2": {
+  "fn": "bwajtr/java-persistence-frameworks-comparison",
+  "clean_ver": "2",
+  "raw_lines": 27,
+  "ops": [
+   [
+    "equal",
+    0,
+    27,
+    0,
+    27
+   ],
+   [
+    "replace",
+    27,
+    28,
+    27,
+    28,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    28,
+    34,
+    28,
+    34
+   ],
+   [
+    "replace",
+    34,
+    39,
+    34,
+    39,
+    [
+     "* **Spring JDBCTemplate** (see implementation)",
+     "* **jOOQ** (see implementation)",
+     "* **MyBatis** (see implementation and mapper)",
+     "* **EBean** (see implementation) ",
+     "* **JDBI (version 2.77)** (see implementation)"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    43,
+    39,
+    43
+   ],
+   [
+    "replace",
+    43,
+    45,
+    43,
+    45,
+    [
+     "* Speedment - hides SQL language too much and tries to replace with stream operations; not all scenarios can be implemented in it; as of 11/30/2016 and version 3.0.1 the documentation on GitHub is very weak",
+     "* sql2o - it does not support Spring transaction management at all (tested version 1.6.0-RC3), that's a show stopper - tracking this in Issue #7 "
+    ]
+   ],
+   [
+    "equal",
+    45,
+    63,
+    45,
+    63
+   ],
+   [
+    "replace",
+    63,
+    64,
+    63,
+    64,
+    [
+     "Each scenario has it's implementation in the Scenarios class. See Javadoc of Scenarios methods for a more detailed description of each scenario."
+    ]
+   ],
+   [
+    "equal",
+    64,
+    67,
+    64,
+    67
+   ],
+   [
+    "replace",
+    67,
+    68,
+    67,
+    68,
+    [
+     "Simple company database model"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    72,
+    68,
+    72
+   ],
+   [
+    "replace",
+    72,
+    76,
+    72,
+    76,
+    [
+     "2. Configure PostgreSQL connection details in application.properties",
+     "3. Create tables and data by running create-script.sql",
+     "4. Create one stored procedure by running register_employee.sql",
+     "5. JUnit tests will pass when executed from a Gradle build. If you want tests to be passing even from your IDE, then setup EBean enhancer for your IDE "
+    ]
+   ],
+   [
+    "equal",
+    76,
+    83,
+    76,
+    83
+   ],
+   [
+    "replace",
+    83,
+    84,
+    83,
+    84,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    84,
+    86,
+    84,
+    86
+   ],
+   [
+    "replace",
+    86,
+    87,
+    86,
+    87,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    87,
+    91,
+    87,
+    91
+   ],
+   [
+    "replace",
+    91,
+    95,
+    91,
+    95,
+    [
+     " * Feels like you are very close to JDBC itself",
+     " * Implemented all of the scenarios without bigger issues - there were no hidden surprises",
+     " * Very easy batch operations",
+     " * Easy setup"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    95,
+    96
+   ],
+   [
+    "replace",
+    96,
+    98,
+    96,
+    98,
+    [
+     " * Methods in JDBCDataRepositoryImpl are not much readable - that's because you have to inline SQL in Java code. It would have been better if Java supported multiline strings.",
+     " * Debug logging could be better "
+    ]
+   ],
+   [
+    "equal",
+    98,
+    101,
+    98,
+    101
+   ],
+   [
+    "replace",
+    101,
+    104,
+    101,
+    104,
+    [
+     " * Very fluent, very easy to write new queries, code is very readable",
+     " * Once setup it's very easy to use, excellent for simple queries",
+     " * Awesome logger debug output"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    104,
+    105
+   ],
+   [
+    "replace",
+    105,
+    109,
+    105,
+    109,
+    [
+     " * Paid license for certain databases - it'll be difficult to persuade managers that it's worth it :)",
+     " * Not so much usable for big queries - it's better to use native SQL (see scenario 9.)",
+     " * Weird syntax of batch operations (in case that you do not use UpdatableRecord). But it's not a big deal... ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    109,
+    111,
+    109,
+    111
+   ],
+   [
+    "replace",
+    111,
+    112,
+    111,
+    112,
+    [
+     " * Writing SQL statements in XML mapper file feels good - it's easy to work with parameters."
+    ]
+   ],
+   [
+    "equal",
+    112,
+    113,
+    112,
+    113
+   ],
+   [
+    "replace",
+    113,
+    118,
+    113,
+    118,
+    [
+     " * quite a lot of files for single DAO implementation (MyBatisDataRepositoryImpl, DataRepositoryMapper and DataRepositoryMapper.xml), though navigation is not such a big deal",
+     " * at version 3.4.0 unable to work with Java8 DateTime types (LocalDate etc.), support possible through 3rd party library (mybatis-types), see build.gradle and <typeHandlers> configuration in mybatis-config.xml",
+     " * can't run batch and non-batch operations in single SqlSession, but have to create completely new SqlSession instead (see configuration in DbTestsApplication class). Surprisingly, this does not necessarily mean that the batch and non-batch operations will be executed in different transactions (as we would expect), so at the end this is not a total drawback, but just inconvenience",
+     " * expected that localCacheScope=STATEMENT is default MyBatis behavior, which is not... I know this is questionable drawback, but it was kind of surprise for me, see mybatis-config.xml",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    118,
+    120,
+    118,
+    120
+   ],
+   [
+    "replace",
+    120,
+    123,
+    120,
+    123,
+    [
+     " * Everything looks very nice - all the scenarios are implemented by very readable code",
+     " * Super simple batch operations (actually it's only about using right method :) ) ",
+     " * Although there are methods which make CRUD operations and Querying super simple, there are still means how to execute plain SQL and even a way how to get the basic JDBC Transaction object, which you can use for core JDBC stuff. That is really good. "
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    123,
+    124
+   ],
+   [
+    "replace",
+    124,
+    130,
+    124,
+    130,
+    [
+     " * Necessity to write the entities (I mean @Entity classes) - it would be cool to have some generator for it",
+     " * Necessity of \"enhancement\" of the entities - this was quite surprising to me - but actually it's basically only about right environment setup (IDE plugin and Gradle plugin) and then you don't have to think about it ",
+     " * Online documentation is quite weak (as of December 1, 2016). A lot of things are hidden in videos and you have to google for details or get into JavaDocs... However, JavaDoc is very good and I generally didn't have a problem to find what I needed in JavaDoc. Also, the API is quite understandable... to sum it up, that weak online documentation is not such a big deal.",
+     " * Logging could be better",
+     " * Allows JPA OneToMany and ManyToOne relations modeling and possibility to \"lazy fetch\" these relations - actually, I do not like this concept at all as it can lead to potentially very ineffective code. Per documentation and experiences of several people on internet EBean behaves better than full blown JPA implementation in this manner, but you can still be hit by the N+1 problem and all the performance traps, which lazy fetching brings... ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    130,
+    131
+   ],
+   [
+    "replace",
+    131,
+    139,
+    131,
+    139,
+    [
+     " * Pros",
+     " * I like the fluent style of creating statements and binding parameters - I'd like to see something like that in JDBC Template",
+     " * Code is generally more readable than jdbc template",
+     " * Quite easy and understandable batch operations ",
+     " * Cons",
+     " * Extremely weak logging :(",
+     " * Very weak documentation (as of 5.12.2016, version 2.77)",
+     " * I don't quite like the necessity to open&close handle for each DAO method -> it's little bit unclear for me if the handle should be opened for each method or if it's ok to open one handle per HTTP request... documentation is not much clear about this..."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "510b60a5710d+2": {
+  "fn": "a-type/verdant",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "## Read the documentation"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    37,
+    5,
+    37
+   ],
+   [
+    "replace",
+    37,
+    38,
+    37,
+    38,
+    [
+     " \\* I'm aware most of these are good! But they also add complexity or fundamental changes in model, and the goal of Verdant is to be simple and recognizable. "
+    ]
+   ],
+   [
+    "equal",
+    38,
+    43,
+    38,
+    43
+   ],
+   [
+    "replace",
+    43,
+    44,
+    43,
+    44,
+    [
+     "a graphic with the words \"local only\" and a graphic of a little plant with the package name \"@verdant-web/store\" underneath"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    51,
+    44,
+    51
+   ],
+   [
+    "replace",
+    51,
+    52,
+    51,
+    52,
+    [
+     "Read more about creating a schema and generating your client in the docs"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    52,
+    53
+   ],
+   [
+    "replace",
+    53,
+    54,
+    53,
+    54,
+    [
+     "You can also find React bindings to quickly connect a React app to Verdant data. If I may say so, Verdant makes React apps quick, easy, and refreshingly fun."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    54,
+    55
+   ],
+   [
+    "replace",
+    55,
+    56,
+    55,
+    56,
+    [
+     "a graphic with the words \"personal web app\" and two little identical plants labeled \"@verdant-web/store\" connected to a cloud with the label \"@verdant-web/server\""
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    56,
+    57
+   ],
+   [
+    "replace",
+    57,
+    58,
+    57,
+    58,
+    [
+     "An app that runs and stores data entirely on one device can be useful, but you probably want to sync some data between devices. For this you can set up server-side storage and sync with `@verdant-web/server`. You can run your server anywhere you can set up a Node server and a SQLite database. I use Fly.io."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    61,
+    58,
+    61
+   ],
+   [
+    "replace",
+    61,
+    62,
+    61,
+    62,
+    [
+     "Read more about setting up your server"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    62,
+    63
+   ],
+   [
+    "replace",
+    63,
+    64,
+    63,
+    64,
+    [
+     "a graphic with the words \"multiplayer web app\" and two pairs of different plants labeled \"@verdant-web/store\" all connected to one central cloud with the label \"@verdant-web/server\""
+    ]
+   ],
+   [
+    "equal",
+    64,
+    69,
+    64,
+    69
+   ],
+   [
+    "replace",
+    69,
+    70,
+    69,
+    70,
+    [
+     "Read more about sync transports"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    75,
+    70,
+    75
+   ],
+   [
+    "replace",
+    75,
+    76,
+    75,
+    76,
+    [
+     "To set up a development environment, you'll need pnpm. I use Volta to manage tooling, and I recommend installing that so it automatically picks up the right Node version for you."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    121,
+    76,
+    121
+   ],
+   [
+    "replace",
+    121,
+    140,
+    121,
+    122,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    169,
+    122,
+    151
+   ],
+   [
+    "delete",
+    169,
+    170,
+    151,
+    151
+   ],
+   [
+    "equal",
+    170,
+    171,
+    151,
+    152
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "1b284cf5c070+2": {
+  "fn": "modelscope/MCPBench",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    1,
+    [
+     "🦊 MCPBench: A Benchmark for Evaluating MCP Servers"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    11,
+    1,
+    5
+   ],
+   [
+    "replace",
+    11,
+    12,
+    5,
+    7,
+    [
+     "中文 |",
+     "English"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    7,
+    8
+   ],
+   [
+    "replace",
+    13,
+    15,
+    8,
+    9,
+    [
+     "MCPBench is an evaluation framework for MCP Servers. It supports the evaluation of three types of servers: Web Search, Database Query and GAIA, and is compatible with both local and remote MCP Servers. The framework primarily evaluates different MCP Servers (such as Brave Search, DuckDuckGo, etc.) in terms of task completion accuracy, latency, and token consumption under the same LLM and Agent configurations. Here is the evaluation report."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    9,
+    10
+   ],
+   [
+    "replace",
+    16,
+    18,
+    10,
+    11,
+    [
+     "MCPBench Overview"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    11,
+    12
+   ],
+   [
+    "replace",
+    19,
+    27,
+    12,
+    13,
+    [
+     "> The implementation refers to LangProBe: a Language Programs Benchmark.\\"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    31,
+    13,
+    17
+   ],
+   [
+    "delete",
+    31,
+    33,
+    17,
+    17
+   ],
+   [
+    "equal",
+    33,
+    35,
+    17,
+    19
+   ],
+   [
+    "replace",
+    35,
+    42,
+    19,
+    20,
+    [
+     "（目录 7 行略）"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    58,
+    20,
+    36
+   ],
+   [
+    "replace",
+    58,
+    59,
+    36,
+    37,
+    [
+     "- If it is a remote host (accessed via **SSE**, such as ModelScope, Smithery, or localhost), you can directly conduct the evaluation."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    67,
+    37,
+    45
+   ],
+   [
+    "replace",
+    67,
+    78,
+    45,
+    46,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    97,
+    46,
+    65
+   ],
+   [
+    "replace",
+    97,
+    112,
+    65,
+    66,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    136,
+    66,
+    90
+   ],
+   [
+    "replace",
+    136,
+    137,
+    90,
+    91,
+    [
+     "Our framework provides two datasets for evaluation. For the WebSearch task, the dataset is located at `MCPBench/langProBe/WebSearch/data/websearch_600.jsonl`, containing 200 QA pairs each from Frames, news, and technology domains. Our framework for automatically constructing evaluation datasets will be open-sourced later."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    148,
+    91,
+    102
+   ],
+   [
+    "replace",
+    148,
+    149,
+    102,
+    103,
+    [
+     "We have evaluated mainstream MCP Servers on both tasks. For detailed experimental results, please refer to Documentation"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    167,
+    103,
+    121
+   ],
+   [
+    "replace",
+    167,
+    172,
+    121,
+    122,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    122,
+    123
+   ],
+   [
+    "delete",
+    173,
+    179,
+    123,
+    123
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7be4a2ccff63+2": {
+  "fn": "pelmesh619/itmo_conspects",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Если нашли какую-то ошибку - напишите мне (t.me/pelmeshke) или сделайте форк с исправлением и пулл реквест"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "> Зеркало этого репозитория доступно на GitLab: <https://gitlab.com/pelmeshke/itmo_conspects> "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "delete",
+    8,
+    10,
+    8,
+    8
+   ],
+   [
+    "equal",
+    10,
+    15,
+    8,
+    13
+   ],
+   [
+    "replace",
+    15,
+    16,
+    13,
+    14,
+    [
+     " * Трек от Nexign (лектор Кравченко А. П.)"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    14,
+    15
+   ],
+   [
+    "replace",
+    17,
+    18,
+    15,
+    16,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    16,
+    17
+   ],
+   [
+    "replace",
+    19,
+    29,
+    17,
+    27,
+    [
+     " * Лекция №1",
+     " * Лекция №2",
+     " * Лекция №3 - в разработке",
+     " * Лекция №4 - в разработке",
+     " * Лекция №5 - в разработке",
+     " * Лекция №6 - в разработке",
+     " * Лекция №7 - в разработке",
+     " * Лекция №8 - в разработке",
+     " * Лекция №9 - в разработке",
+     " * Лекция №10 - в разработке"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    32,
+    27,
+    30
+   ],
+   [
+    "replace",
+    32,
+    33,
+    30,
+    31,
+    [
+     " * Трек от Холопова Д. С. (лектор Холопов Д. С.)"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    31,
+    32
+   ],
+   [
+    "replace",
+    34,
+    35,
+    32,
+    33,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    33,
+    34
+   ],
+   [
+    "replace",
+    36,
+    41,
+    34,
+    39,
+    [
+     " * Лекция №1",
+     " * Лекция №3",
+     " * Лекция №5",
+     " * Лекция №7",
+     " * Лекция №9"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    44,
+    39,
+    42
+   ],
+   [
+    "replace",
+    44,
+    45,
+    42,
+    43,
+    [
+     " Лекций по этому предмету нет, но возможно тут появится конспект теории"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    43,
+    44
+   ],
+   [
+    "replace",
+    46,
+    47,
+    44,
+    45,
+    [
+     " **Все заметки**"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    45,
+    46
+   ],
+   [
+    "replace",
+    48,
+    50,
+    46,
+    48,
+    [
+     " * Заметка №1. Введение",
+     " * Заметка №2. Ограничение нагрузки"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    53,
+    48,
+    51
+   ],
+   [
+    "replace",
+    53,
+    54,
+    51,
+    52,
+    [
+     " * Трек от Яндекса (лектор Гилёва В. С.)"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    52,
+    53
+   ],
+   [
+    "replace",
+    55,
+    56,
+    53,
+    54,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    54,
+    55
+   ],
+   [
+    "replace",
+    57,
+    68,
+    55,
+    66,
+    [
+     " * Лекция №1",
+     " * Лекция №2",
+     " * Лекция №3",
+     " * Лекция №4",
+     " * Лекция №5",
+     " * Лекция №6 - перенесена",
+     " * Лекция №7.1",
+     " * Лекция №7.2",
+     " * Лекция №8",
+     " * Лекция №9 - в разработке",
+     " * Лекция №10 - в разработке"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    71,
+    66,
+    69
+   ],
+   [
+    "replace",
+    71,
+    72,
+    69,
+    70,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    70,
+    71
+   ],
+   [
+    "replace",
+    73,
+    78,
+    71,
+    76,
+    [
+     " * Лекция №1",
+     " * Лекция №3",
+     " * Лекция №5",
+     " * Лекция №7",
+     " * Лекция №9"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    81,
+    76,
+    79
+   ],
+   [
+    "replace",
+    81,
+    82,
+    79,
+    80,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    80,
+    81
+   ],
+   [
+    "replace",
+    83,
+    88,
+    81,
+    86,
+    [
+     " * Лекция №2",
+     " * Лекция №4",
+     " * Лекция №6",
+     " * Лекция №8 - перенесена",
+     " * Лекция №10 - в разработке"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    91,
+    86,
+    89
+   ],
+   [
+    "replace",
+    91,
+    95,
+    89,
+    93,
+    [
+     " * Лекция №3",
+     " * Лекция №5 - в разработке",
+     " * Лекция №7 - в разработке",
+     " * Лекция №9 - в разработке"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    93,
+    94
+   ],
+   [
+    "replace",
+    96,
+    97,
+    94,
+    95,
+    [
+     "## VI семестр"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    100,
+    95,
+    98
+   ],
+   [
+    "replace",
+    100,
+    101,
+    98,
+    99,
+    [
+     " * Вычислительная геометрия (лектор Далевская О. П.)"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    99,
+    100
+   ],
+   [
+    "replace",
+    102,
+    103,
+    100,
+    101,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    104,
+    101,
+    102
+   ],
+   [
+    "replace",
+    104,
+    105,
+    102,
+    103,
+    [
+     " * Теория игр (лектор Блаженов А. В.)"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    103,
+    104
+   ],
+   [
+    "replace",
+    106,
+    107,
+    104,
+    105,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    108,
+    105,
+    106
+   ],
+   [
+    "replace",
+    108,
+    109,
+    106,
+    107,
+    [
+     " * Методы машинного обучения в компьютерном зрении (лекторы Селин Н. В., Насибуллина К. Ф.)"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    107,
+    108
+   ],
+   [
+    "replace",
+    110,
+    111,
+    108,
+    109,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    114,
+    109,
+    112
+   ],
+   [
+    "replace",
+    114,
+    115,
+    112,
+    113,
+    [
+     " * Программирование на C++ с элементами многопоточности (лектор Демин А. Д.)"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    113,
+    114
+   ],
+   [
+    "replace",
+    116,
+    117,
+    114,
+    115,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    120,
+    115,
+    118
+   ],
+   [
+    "replace",
+    120,
+    121,
+    118,
+    119,
+    [
+     " * Backend-driven UI на Android (лектор Шуст И. В.)"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    119,
+    120
+   ],
+   [
+    "replace",
+    122,
+    123,
+    120,
+    121,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    126,
+    121,
+    124
+   ],
+   [
+    "replace",
+    126,
+    127,
+    124,
+    125,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    130,
+    125,
+    128
+   ],
+   [
+    "replace",
+    130,
+    131,
+    128,
+    129,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    129,
+    130
+   ],
+   [
+    "replace",
+    132,
+    133,
+    130,
+    131,
+    [
+     "## V семестр"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    136,
+    131,
+    134
+   ],
+   [
+    "replace",
+    136,
+    137,
+    134,
+    135,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    140,
+    135,
+    138
+   ],
+   [
+    "replace",
+    140,
+    141,
+    138,
+    139,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    144,
+    139,
+    142
+   ],
+   [
+    "replace",
+    144,
+    145,
+    142,
+    143,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    148,
+    143,
+    146
+   ],
+   [
+    "replace",
+    148,
+    149,
+    146,
+    147,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    152,
+    147,
+    150
+   ],
+   [
+    "replace",
+    152,
+    153,
+    150,
+    151,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    156,
+    151,
+    154
+   ],
+   [
+    "replace",
+    156,
+    157,
+    154,
+    155,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    158,
+    155,
+    156
+   ],
+   [
+    "replace",
+    158,
+    159,
+    156,
+    157,
+    [
+     "## IV семестр"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    162,
+    157,
+    160
+   ],
+   [
+    "replace",
+    162,
+    163,
+    160,
+    161,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    166,
+    161,
+    164
+   ],
+   [
+    "replace",
+    166,
+    167,
+    164,
+    165,
+    [
+     " **Весь курс с программой экзамена**"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    170,
+    165,
+    168
+   ],
+   [
+    "replace",
+    170,
+    171,
+    168,
+    169,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    174,
+    169,
+    172
+   ],
+   [
+    "replace",
+    174,
+    175,
+    172,
+    173,
+    [
+     " **Весь курс с программой экзамена** [🥇Gold]"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    178,
+    173,
+    176
+   ],
+   [
+    "replace",
+    178,
+    179,
+    176,
+    177,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    182,
+    177,
+    180
+   ],
+   [
+    "replace",
+    182,
+    183,
+    180,
+    181,
+    [
+     " **Весь курс с программой экзамена**"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    186,
+    181,
+    184
+   ],
+   [
+    "replace",
+    186,
+    187,
+    184,
+    185,
+    [
+     " **Весь курс** [🥇Gold]"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    188,
+    185,
+    186
+   ],
+   [
+    "replace",
+    188,
+    189,
+    186,
+    187,
+    [
+     "## III семестр"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    192,
+    187,
+    190
+   ],
+   [
+    "replace",
+    192,
+    193,
+    190,
+    191,
+    [
+     " **Весь курс**"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    191,
+    192
+   ],
+   [
+    "replace",
+    194,
+    195,
+    192,
+    193,
+    [
+     " Решение задач: Решение задач №6, Решение задач №7, Решение задач №8, Решение задач №9"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    198,
+    193,
+    196
+   ],
+   [
+    "replace",
+    198,
+    199,
+    196,
+    197,
+    [
+     " **Весь курс с программой экзамена**"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    202,
+    197,
+    200
+   ],
+   [
+    "replace",
+    202,
+    203,
+    200,
+    201,
+    [
+     " **Весь курс с программой экзамена**"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    206,
+    201,
+    204
+   ],
+   [
+    "replace",
+    206,
+    207,
+    204,
+    205,
+    [
+     " **Весь курс с программой экзамена** [🥇Gold]"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    208,
+    205,
+    206
+   ],
+   [
+    "replace",
+    208,
+    209,
+    206,
+    207,
+    [
+     " Карточки для Anki"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    212,
+    207,
+    210
+   ],
+   [
+    "replace",
+    212,
+    213,
+    210,
+    211,
+    [
+     " **Весь курс** [✨Remastered]"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    214,
+    211,
+    212
+   ],
+   [
+    "replace",
+    214,
+    215,
+    212,
+    213,
+    [
+     "## II семестр"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    218,
+    213,
+    216
+   ],
+   [
+    "replace",
+    218,
+    219,
+    216,
+    217,
+    [
+     " **Весь курс с программой экзамена** [✨Remastered]"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    222,
+    217,
+    220
+   ],
+   [
+    "replace",
+    222,
+    223,
+    220,
+    221,
+    [
+     " **Весь курс с программой экзамена** [✨Remastered]"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    226,
+    221,
+    224
+   ],
+   [
+    "replace",
+    226,
+    227,
+    224,
+    225,
+    [
+     " **Почти весь курс с программой экзамена** [✨Remastered]"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    228,
+    225,
+    226
+   ],
+   [
+    "replace",
+    228,
+    229,
+    226,
+    227,
+    [
+     " **Шпаргалка по Комбинаторике**"
+    ]
+   ],
+   [
+    "equal",
+    229,
+    230,
+    227,
+    228
+   ],
+   [
+    "replace",
+    230,
+    231,
+    228,
+    229,
+    [
+     " **Шпаргалка по Рекуррентностям и Производящим функциям**"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    236,
+    229,
+    234
+   ],
+   [
+    "replace",
+    236,
+    237,
+    234,
+    235,
+    [
+     " Почти все алгоритмы из курса и некоторые пояснения к ним есть в моем другом репозитории: <https://github.com/pelmesh619/algorithm_archives>"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    242,
+    235,
+    240
+   ],
+   [
+    "replace",
+    242,
+    243,
+    240,
+    241,
+    [
+     " **Конспект**"
+    ]
+   ],
+   [
+    "equal",
+    243,
+    246,
+    241,
+    244
+   ],
+   [
+    "replace",
+    246,
+    247,
+    244,
+    245,
+    [
+     "Текстовые материалы, программный код и изображения в этом репозитории распространяются по лицензии **Unlicense license** или альтернативной лицензии **CC0 1.0 Universal**, если не указано другое. Это означает, что:"
+    ]
+   ],
+   [
+    "equal",
+    247,
+    254,
+    245,
+    252
+   ],
+   [
+    "replace",
+    254,
+    255,
+    252,
+    253,
+    [
+     "Изображения, взятые из сторонних источников, не входят в лицензию данного репозитория и сохраняют лицензию и права своих авторов. Информация об источниках и лицензиях этих материалов опубликована в файле `CREDITS.md`"
+    ]
+   ],
+   [
+    "equal",
+    255,
+    260,
+    253,
+    258
+   ],
+   [
+    "replace",
+    260,
+    300,
+    258,
+    298,
+    [
+     "* isagila/tesc - очень хорошие конспекты y26, а именно:",
+     " * Линейная алгебра (I)",
+     " * Математический анализ (I и II)",
+     " * Дискретная математика (II)",
+     " * Специальные разделы высшей математики (II)",
+     " * Дополнительные главы высшей математики (III и IV)",
+     " * Теория вероятности (III)",
+     " * Базы данных (III)",
+     " * Физические основы компьютерных и сетевых технологий (III)",
+     " * Математическая статистика (IV)",
+     " * Операционные системы (IV)",
+     "* neerc.ifmo.ru/wiki - конспекты курса КТ, очень подробно расписаны \"Алгоритмы и структуры данных\" (I и II)",
+     "* Lipen/discrete-math-course - репозиторий лектора Чухарева К. И. по \"Дискретной математике\" (I и II) с шпаргалками и презентациями к лекциям",
+     "* ronimizy.notion.site/Lecturing-Notes-a02925fcb3574c2a8f6e2048ba8bdc11 - ноушн лектора Круглова Г. Н. по \"Объектно-ориентированному программированию и проектированию\" (III)",
+     "* itmo-synopses/academy - расписанные билеты по \"Базам данных\" (III) и введение в \"Архитектуру информационных систем\" (VI на 2-ой спец.)",
+     "* litmo.notion.site/676367343d784a13ac0f04d12c947367 - расписанные билеты по \"Теории вероятности\" (III)",
+     "* shining-giver-0ad.notion.site/e598d7b42452466986620c07412c3d4e - расписанные билеты по \"Физическим основам компьютерных и сетевых технологий\" (III)",
+     "* sashafromlibertalia.github.io/itmo-db-course/exam/ - расписанные билеты по \"Базам данных\" (III)",
+     "* www.notion.so/pypka/ITMO-University-c78a9ec0ce0a4b5ea181b2cccd33b527 - ноушн с расписанными билетами по:",
+     " * Математическому анализу (II)",
+     " * Физическим основам компьютерных и сетевых технологий (III и IV)",
+     " * Дополнительным главам высшей математики (III и IV)",
+     " * Объектно-ориентированному программированию и проектированию (III)",
+     " * Операционным системам (IV)",
+     " * Технологиям программирования на Java (IV)",
+     " * и кучей всего другого",
+     "* jolly-smoke-775.notion.site/Exams-1ce7bdf95e324af4a7a67822b7c797ad - ноушн с расписанными билетами по:",
+     " * Дополнительным главам высшей математики (III и IV)",
+     " * Теории вероятности (III)",
+     " * Базам данных (III)",
+     " * Объектно-ориентированному программированию и проектированию (III)",
+     " * Физическим основам компьютерных и сетевых технологий (III и V)",
+     " * Проектированию баз данных (IV)",
+     " * Математической статистике (IV)",
+     " * Операционным системам (IV)",
+     " * Технологиям программирования на Java (IV)",
+     " * Машинному обучению (V)",
+     " * Web-разработке: Frontend (V)",
+     " * Технологии нагруженных систем обработки данных (V)",
+     "* right-deposit-4a7.notion.site/CV-EXAM-1ec7df7668cf806480dcde9580634eff - расписанные билеты по \"Компьютерному зрению\" (VI)"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    301,
+    298,
+    299
+   ],
+   [
+    "replace",
+    301,
+    302,
+    299,
+    300,
+    [
+     "Если хотите сюда добавить что-то полезное (или убрать свое отсюда), не стесняйтесь писать: @pelmeshke"
+    ]
+   ],
+   [
+    "equal",
+    302,
+    320,
+    300,
+    318
+   ],
+   [
+    "replace",
+    320,
+    321,
+    318,
+    319,
+    [
+     "* Для TeX-конспектов утилита `latexmk`, поставляемая дистрибутивами (например, MikTeX или TeXLive)"
+    ]
+   ],
+   [
+    "equal",
+    321,
+    331,
+    319,
+    329
+   ],
+   [
+    "replace",
+    331,
+    332,
+    329,
+    330,
+    [
+     " Для TeX-конспектов:"
+    ]
+   ],
+   [
+    "equal",
+    332,
+    333,
+    330,
+    331
+   ],
+   [
+    "replace",
+    333,
+    337,
+    331,
+    335,
+    [
+     " * автоматически добавляет во всех $-выражения `\\displaystyle` там, где есть дроби, суммы, интегралы для лучшего отображения (область применения можно регулировать, после `%nodisplay` вставка не производится; после `%yesdisplay` вставка производится)",
+     " * добавляет в начало специфичную для предмета преамбулу из файла `<имя_предмета>/__preamble.sty`",
+     " * сохраняет промежуточный tex-файл в `./linted/<имя_предмета>/<название_файла>.tex`",
+     " * выполняет команду `latexmk -time -pdf ./linted/<имя_предмета>/<название_файла>.tex -file-line-error` (см. флаги утилиты для больших возможностей)"
+    ]
+   ],
+   [
+    "equal",
+    337,
+    338,
+    335,
+    336
+   ],
+   [
+    "replace",
+    338,
+    339,
+    336,
+    337,
+    [
+     " Также для сборки возможен упрощенный формат TeX-файлов:"
+    ]
+   ],
+   [
+    "equal",
+    339,
+    348,
+    337,
+    346
+   ],
+   [
+    "replace",
+    348,
+    349,
+    346,
+    347,
+    [
+     " Скрипт автоматически добавит содержимое в шаблон, подставит нужные колонтитулы"
+    ]
+   ],
+   [
+    "equal",
+    349,
+    350,
+    347,
+    348
+   ],
+   [
+    "replace",
+    350,
+    351,
+    348,
+    349,
+    [
+     " Для Typst-конспектов выполняется команда `typst compile <имя_предмета>/<название_файла>.typ`"
+    ]
+   ],
+   [
+    "equal",
+    351,
+    352,
+    349,
+    350
+   ],
+   [
+    "replace",
+    352,
+    353,
+    350,
+    351,
+    [
+     " По умолчанию, PDF-файл сохранится как `conspects/<имя_предмета>/<название_файла>.pdf`"
+    ]
+   ],
+   [
+    "equal",
+    353,
+    354,
+    351,
+    352
+   ],
+   [
+    "replace",
+    354,
+    355,
+    352,
+    353,
+    [
+     " Для Markdown-файлов такая сборка не нужна (по желанию, можете воспользоваться сторонними программами для конвертации в HTML или PDF)"
+    ]
+   ],
+   [
+    "equal",
+    355,
+    362,
+    353,
+    360
+   ],
+   [
+    "replace",
+    362,
+    363,
+    360,
+    361,
+    [
+     " Для TeX- и Typst-конспектов:"
+    ]
+   ],
+   [
+    "equal",
+    363,
+    364,
+    361,
+    362
+   ],
+   [
+    "replace",
+    364,
+    367,
+    362,
+    365,
+    [
+     " * Объединяет содержимое и заносит в шаблон",
+     " * Добавляет содержание",
+     " * PDF-файл, по умолчанию, сохраняется как `conspects/<имя_предмета>/<имя_предмета>_superconspect.pdf`"
+    ]
+   ],
+   [
+    "equal",
+    367,
+    368,
+    365,
+    366
+   ],
+   [
+    "replace",
+    368,
+    369,
+    366,
+    367,
+    [
+     " Для Markdown-конспектов скрипт добавляет содержание в итоговый файл и сохраняет его как `<имя_предмета>/<имя_предмета>_superconspect.md`"
+    ]
+   ],
+   [
+    "equal",
+    369,
+    382,
+    367,
+    380
+   ],
+   [
+    "replace",
+    382,
+    383,
+    380,
+    381,
+    [
+     "Anki - приложение для запоминания материала с помощью карточек. Гайд установки - *тык*"
+    ]
+   ],
+   [
+    "equal",
+    383,
+    384,
+    381,
+    382
+   ],
+   [
+    "replace",
+    384,
+    385,
+    382,
+    383,
+    [
+     "Пока что доступны карточки по дополнительным главам высшей математики (числовые, функциональные ряды, ряды Фурье, интеграл Фурье)"
+    ]
+   ],
+   [
+    "equal",
+    385,
+    392,
+    383,
+    390
+   ],
+   [
+    "replace",
+    392,
+    393,
+    390,
+    391,
+    [
+     "**A Playful Production Process** (закончен на ~25%)"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

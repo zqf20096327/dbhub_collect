@@ -6872,5 +6872,395 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "b60d4a22c0d3+2": {
+  "fn": "mkabilov/pg2ch",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "equal",
+    0,
+    7,
+    0,
+    7
+   ],
+   [
+    "delete",
+    7,
+    8,
+    7,
+    7
+   ],
+   [
+    "equal",
+    8,
+    21,
+    7,
+    20
+   ],
+   [
+    "delete",
+    21,
+    22,
+    20,
+    20
+   ],
+   [
+    "equal",
+    22,
+    27,
+    20,
+    25
+   ],
+   [
+    "replace",
+    27,
+    64,
+    25,
+    26,
+    [
+     "…（37 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    69,
+    26,
+    31
+   ],
+   [
+    "replace",
+    69,
+    72,
+    31,
+    34,
+    [
+     " - set `wal_level` in the postgresql config file to `logical`",
+     " - set `max_replication_slots` to at least `2`",
+     "- make sure you have ClickHouse server running on `localhost:9000` e.g. in the docker"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    74,
+    34,
+    36
+   ],
+   [
+    "replace",
+    74,
+    75,
+    36,
+    37,
+    [
+     "- change replica identity"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    91,
+    37,
+    53
+   ],
+   [
+    "replace",
+    91,
+    117,
+    53,
+    54,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    130,
+    54,
+    67
+   ],
+   [
+    "replace",
+    130,
+    132,
+    67,
+    69,
+    [
+     " - ClickHouse: `SELECT SUM(abalance * sign), SUM(sign) FROM pgbench_accounts` (why multiply by `sign` column?) ",
+     " - PostgreSQL: `SELECT SUM(abalance), COUNT(*) FROM pgbench_accounts`"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    69,
+    70
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "1c209120fd3a+2": {
+  "fn": "Blackdread/sql-to-jdl",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "replace",
+    0,
+    2,
+    0,
+    2,
+    [
+     "build",
+     "StackShare"
+    ]
+   ],
+   [
+    "equal",
+    2,
+    12,
+    2,
+    12
+   ],
+   [
+    "replace",
+    12,
+    19,
+    12,
+    13,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    21,
+    13,
+    15
+   ],
+   [
+    "replace",
+    21,
+    22,
+    15,
+    16,
+    [
+     "Direct link to application.yml"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    27,
+    16,
+    21
+   ],
+   [
+    "replace",
+    27,
+    32,
+    21,
+    26,
+    [
+     " - mysql 5.7.x, 8.x, 9.x",
+     " - mariadb 10.x",
+     " - postgresql 9.x+",
+     " - oracle 21",
+     " - MsSQL 2019"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    26,
+    27
+   ],
+   [
+    "replace",
+    33,
+    34,
+    27,
+    28,
+    [
+     "Help is requested on MsSQL and Oracle support. This will require implementation of SqlJdlTypeService and creating the raw SQL files. See the MySQL, MariaDB, and PosrgreSQL implemtaitons for examples."
+    ]
+   ],
+   [
+    "equal",
+    34,
+    36,
+    28,
+    30
+   ],
+   [
+    "replace",
+    36,
+    37,
+    30,
+    31,
+    [
+     "Setting up tests for new databases types or versions is easy. Have a look existing tests. "
+    ]
+   ],
+   [
+    "equal",
+    37,
+    39,
+    31,
+    33
+   ],
+   [
+    "replace",
+    39,
+    40,
+    33,
+    34,
+    [
+     "Tests use liquibase so that most of the setup for tests is database agnostic. The main exception is for the all types test that is different for each database type."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    42,
+    34,
+    36
+   ],
+   [
+    "replace",
+    42,
+    45,
+    36,
+    39,
+    [
+     " - {{test.name}}-liquibase-changeset.yaml",
+     " - {{test.name}}-expected.jdl",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    39,
+    40
+   ],
+   [
+    "replace",
+    46,
+    48,
+    40,
+    42,
+    [
+     " - {{test.name}}-liquibase-changeset-{{db.typ}}.yaml",
+     " - {{test.name}}-expected-{{db.type}}.jdl"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    53,
+    42,
+    47
+   ],
+   [
+    "replace",
+    53,
+    54,
+    47,
+    48,
+    [
+     "In order to avoid starting a new database and spring boot container for every test, liquibase is used to roll back the database to an empty state. This can be done by just rolling back the transaction with Spring, but MySQL does not support rollback of DDL changes. This works great with PostgreSQL, but liquibase is used to roll back the changes for all database types currently."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    48,
+    49
+   ],
+   [
+    "replace",
+    55,
+    57,
+    49,
+    51,
+    [
+     "Currently the full test suite runs 11 test per database version which total nearly 80 tests. ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    57,
+    60,
+    51,
+    54
+   ],
+   [
+    "replace",
+    60,
+    62,
+    54,
+    56,
+    [
+     " - already many databases in production to be exported in JDL (faster to generate the JDL from it)",
+     " - already working UML design with MySQL Workbench"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    78,
+    56,
+    72
+   ],
+   [
+    "replace",
+    78,
+    82,
+    72,
+    76,
+    [
+     " - ManyToMany",
+     " - Owner side display field",
+     " - Inverse side field name and display field",
+     " - Bidirectional or not"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    91,
+    76,
+    85
+   ],
+   [
+    "replace",
+    91,
+    92,
+    85,
+    86,
+    [
+     "jHipster JDL"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    97,
+    86,
+    91
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

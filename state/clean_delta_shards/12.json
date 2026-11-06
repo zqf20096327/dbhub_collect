@@ -6877,5 +6877,1458 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "930066c77f34+2": {
+  "fn": "joeseesun/qmreader",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "**中文** | English"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    8,
+    3,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "网站代码已纳入 GitHub 发布流程；匿名可直接阅读，登录用于同步与贡献。部署、回滚及数据恢复边界见 恢复手册。"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "在线体验 · 产品巡游 · 快速开始 · 部署 · API · License"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "QMReader 正式站首页：信息源、文章列表、阅读器和 AI 伴读工作区"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    26,
+    13,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "生产站点运行在 rss.qiaomu.ai，代码可以自托管。站点服务端需要自己的 DeepSeek 或 OpenAI-compatible API key；示例配置只包含空值，不包含任何真实密钥。"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    45,
+    27,
+    45
+   ],
+   [
+    "replace",
+    45,
+    46,
+    45,
+    46,
+    [
+     "QMReader 信息源与文章列表"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    51,
+    46,
+    51
+   ],
+   [
+    "replace",
+    51,
+    52,
+    51,
+    52,
+    [
+     "QMReader 文章详情、中文改写和 AI 伴读"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    68,
+    52,
+    68
+   ],
+   [
+    "replace",
+    68,
+    69,
+    68,
+    69,
+    [
+     "|能力|用户得到什么|"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    69,
+    70
+   ],
+   [
+    "replace",
+    70,
+    82,
+    70,
+    82,
+    [
+     "|多源 RSS 抓取|聚合 RSSHub、直接 RSS、sitemap、Hacker News、Product Hunt、GitHub Trending、Hugging Face Papers 等技术源|",
+     "|首页工作台|源列表、文章列表、阅读器、Article Agent 四区同屏，适合连续阅读和快速切换上下文|",
+     "|文章列表|支持最新、热门、未读、搜索、源筛选、收藏、历史和贡献榜视图|",
+     "|双语阅读|英文标题自动补中文，正文可生成中文译文，并保留原文上下文|",
+     "|乔木风格改写|对文章、论文、Hacker News 讨论、Product Hunt 官网材料做中文改写|",
+     "|Hacker News 增强|使用 HNRSS 组合高价值 HN feed，并把讨论摘录和作者回复纳入阅读材料|",
+     "|公开阅读资产|翻译、改写、点评、划线、对话都有稳定深链、贡献者页和 RSS|",
+     "|贡献者体系|公开贡献者页按资产、改写、点评、对话和有用反馈聚合，不暴露邮箱|",
+     "|AI 伴读|当前文章右侧可做总结要点、结构拆解、事实清单、待验证点等上下文对话|",
+     "|快速刷新|RSS fetch 先落盘并通知 Web 进程，标题翻译和自动改写后置到 AI worker|",
+     "|安全的用户 AI 配置|用户 API key 存在浏览器 localStorage，不写入服务器数据库|",
+     "|自托管部署|支持 Node + systemd，也支持 Docker Compose；SQLite 存储运行数据|"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    103,
+    82,
+    103
+   ],
+   [
+    "replace",
+    103,
+    104,
+    103,
+    104,
+    [
+     "|变量|默认值|说明|"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    104,
+    105
+   ],
+   [
+    "replace",
+    105,
+    138,
+    105,
+    138,
+    [
+     "|`DEEPSEEK_API_KEY`|空|服务端 DeepSeek API key，用于标题翻译和默认改写|",
+     "|`DEEPSEEK_MODEL`|`deepseek-flash`|服务端默认标题翻译和中文改写模型，关闭思考|",
+     "|`DEEPSEEK_BASE_URL`|`https://api.deepseek.com/v1`|DeepSeek OpenAI-compatible API 地址|",
+     "|`AI_OAUTH_ENABLED`|空（关闭）|设为 `1` 开启 AI 账号登录（ChatGPT / Codex 套餐额度，OpenRouter / 词元跳动一步授权）|",
+     "|`QMREADER_SECRET_KEY`|空|至少 16 位的随机串，用于 AES-256-GCM 加密保存 ChatGPT / Codex 登录凭证；未配置时这两项登录不可用，不会明文落库|",
+     "|`AI_OAUTH_PUBLIC_URL`|空|站点公开地址（如 `https://rss.example.com`），OpenRouter / 词元跳动授权回调用；默认取请求域名|",
+     "|`AI_PROVIDER`|`deepseek`|备用服务端 provider 名称|",
+     "|`AI_API_KEY`|空|非 DeepSeek provider 的服务端 key|",
+     "|`AI_BASE_URL`|空|非 DeepSeek provider 的 OpenAI/Anthropic-compatible base URL|",
+     "|`AI_MODEL`|空|非 DeepSeek provider 的模型名|",
+     "|`ADMIN_EMAIL`|空|管理员登录邮箱|",
+     "|`ADMIN_PASSWORD`|空|管理员登录密码，重启时会同步更新|",
+     "|`ADMIN_NAME`|`向阳乔木`|管理员公开显示名|",
+     "|`COOKIE_SECURE`|空|设为 `1` 时强制 session cookie 使用 Secure|",
+     "|`HOST`|`0.0.0.0`|Node 监听地址|",
+     "|`PORT`|`8080`|Node 监听端口|",
+     "|`STARTUP_REFRESH_DELAY_MS`|`30000`|启动后延迟多少毫秒触发首次全量刷新；`-1` 表示禁用|",
+     "|`FRESHNESS_SWEEP_INTERVAL_MS`|`300000`|轻量增量检查轮询间隔|",
+     "|`FRESHNESS_STARTUP_DELAY_MS`|`120000`|启动多久后开始第一次轻量增量检查|",
+     "|`FRESHNESS_SWEEP_BATCH_SIZE`|`3`|每次 freshness sweep 最多刷新几个过期源|",
+     "|`FRESHNESS_SWEEP_MAX_COST`|`6`|每次 freshness sweep 的源成本上限|",
+     "|`NEWS_REFRESH_INTERVAL_MS`|`1800000`|`news` 分类源默认检查间隔|",
+     "|`ARTICLE_REFRESH_INTERVAL_MS`|`7200000`|`article` 分类源默认检查间隔|",
+     "|`PODCAST_REFRESH_INTERVAL_MS`|`21600000`|`podcast` 分类源默认检查间隔|",
+     "|`SOURCE_INTERACTION_REFRESH_COOLDOWN_MS`|`300000`|打开文章或切换频道触发后台刷新时的同源冷却时间|",
+     "|`FETCH_SOURCE_CONCURRENCY`|`6`|批量刷新时并发抓取的信息源数量，范围 1–8|",
+     "|`TITLE_TRANSLATION_LIMIT`|`80`|单轮标题翻译上限|",
+     "|`AUTO_REWRITE_SOURCE_IDS`|空|限定自动改写源；空值表示启用源中可改写的内容|",
+     "|`AUTO_REWRITE_LIMIT_PER_SOURCE`|`3`|每个源默认自动改写条数|",
+     "|`AUTO_REWRITE_LIMIT_HACKERNEWS`|`10`|Hacker News 自动改写条数|",
+     "|`AUTO_REWRITE_MODEL`|`deepseek-flash`|自动改写模型|",
+     "|`UMAMI_WEBSITE_ID`|空|可选 Umami 站点 ID|",
+     "|`UMAMI_SRC`|`https://umami.qiaomu.ai/script.js`|可选 Umami 脚本地址|"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    141,
+    138,
+    141
+   ],
+   [
+    "replace",
+    141,
+    142,
+    141,
+    142,
+    [
+     "|角色|权限|"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    143,
+    142,
+    143
+   ],
+   [
+    "replace",
+    143,
+    146,
+    143,
+    146,
+    [
+     "|游客|浏览文章、公开翻译、公开改写、公开点评和公开文章对话|",
+     "|注册用户|提交链接、发布点评，生成并保存翻译/改写，围绕当前文章对话，管理自己的公开资产|",
+     "|管理员|手动刷新、启用/禁用信息源、触发标题补翻译、管理源状态，以及清理投稿、封禁/恢复违规用户|"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    184,
+    146,
+    184
+   ],
+   [
+    "replace",
+    184,
+    194,
+    184,
+    185,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    198,
+    185,
+    189
+   ],
+   [
+    "replace",
+    198,
+    199,
+    189,
+    190,
+    [
+     "|写法|说明|"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    200,
+    190,
+    191
+   ],
+   [
+    "replace",
+    200,
+    203,
+    191,
+    194,
+    [
+     "|普通 URL|直接按 RSS/Atom 解析|",
+     "|`{rsshub}/route`|依次尝试内置 RSSHub 实例|",
+     "|`sitemap:URL`|抓 sitemap.xml 取最新文章页，再解析页面 og 标签|"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    208,
+    194,
+    199
+   ],
+   [
+    "replace",
+    208,
+    209,
+    199,
+    200,
+    [
+     "|方法|路径|说明|"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    210,
+    200,
+    201
+   ],
+   [
+    "replace",
+    210,
+    223,
+    201,
+    214,
+    [
+     "|GET|`/api/sources`|全部源及抓取状态、刷新进度、fetch/AI 后台状态|",
+     "|GET|`/api/entries?source=&category=&q=&limit=`|文章列表|",
+     "|GET|`/api/entry/:id`|单篇全文|",
+     "|GET|`/api/entry/:id/translation`|读取双语翻译缓存|",
+     "|GET|`/api/entry/:id/rewrite`|读取乔木风格改写|",
+     "|GET|`/api/entry/:id/comments`|读取公开人工点评|",
+     "|GET|`/api/entry/:id/chat`|读取公开文章对话|",
+     "|GET|`/assets`|公开资产网页目录|",
+     "|GET|`/assets.xml`|公开资产 RSS|",
+     "|GET|`/contributors`|公开贡献者目录|",
+     "|GET|`/contributors/:id.xml`|贡献者公开资产 RSS|",
+     "|GET|`/llms.txt`|站点定位、公开目录、RSS 和 sitemap 汇总|",
+     "|POST|`/api/submit-link`|注册用户提交链接到隔离审核队列，成功返回 202|"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    240,
+    214,
+    231
+   ],
+   [
+    "replace",
+    240,
+    245,
+    231,
+    232,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    272,
+    232,
+    259
+   ],
+   [
+    "replace",
+    272,
+    279,
+    259,
+    260,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    287,
+    260,
+    268
+   ],
+   [
+    "replace",
+    287,
+    294,
+    268,
+    269,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    294,
+    314,
+    269,
+    289
+   ],
+   [
+    "replace",
+    314,
+    315,
+    289,
+    290,
+    [
+     "这个项目目前首先服务向阳乔木自己的阅读工作流，也欢迎围绕 RSS 源、部署文档、隐私边界和 bug 修复提交 PR。请先阅读 CONTRIBUTING.md 和 SECURITY.md。"
+    ]
+   ],
+   [
+    "equal",
+    315,
+    318,
+    290,
+    293
+   ],
+   [
+    "replace",
+    318,
+    323,
+    293,
+    298,
+    [
+     "- 官网：qiaomu.ai",
+     "- 博客：blog.qiaomu.ai",
+     "- 推荐：tuijian.qiaomu.ai",
+     "- X：@vista8",
+     "- GitHub：@joeseesun"
+    ]
+   ],
+   [
+    "equal",
+    323,
+    326,
+    298,
+    301
+   ],
+   [
+    "replace",
+    326,
+    333,
+    301,
+    302,
+    [
+     "MIT License. See LICENSE."
+    ]
+   ],
+   [
+    "equal",
+    333,
+    337,
+    302,
+    306
+   ],
+   [
+    "replace",
+    337,
+    338,
+    306,
+    307,
+    [
+     "QMReader live homepage: sources, article list, reader, and article agent"
+    ]
+   ],
+   [
+    "equal",
+    338,
+    353,
+    307,
+    322
+   ],
+   [
+    "replace",
+    353,
+    354,
+    322,
+    323,
+    [
+     "QMReader source and article list"
+    ]
+   ],
+   [
+    "equal",
+    354,
+    359,
+    323,
+    328
+   ],
+   [
+    "replace",
+    359,
+    360,
+    328,
+    329,
+    [
+     "QMReader reader with Chinese rewrite and article agent"
+    ]
+   ],
+   [
+    "equal",
+    360,
+    367,
+    329,
+    336
+   ],
+   [
+    "replace",
+    367,
+    368,
+    336,
+    337,
+    [
+     "|Feature|Result|"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    369,
+    337,
+    338
+   ],
+   [
+    "replace",
+    369,
+    377,
+    338,
+    346,
+    [
+     "|Multi-source feed fetching|Aggregate RSSHub routes, direct feeds, sitemap pages, Hacker News, Product Hunt, GitHub Trending, and more|",
+     "|Reader workbench|Keep source list, article list, reader, and Article Agent in one screen|",
+     "|Bilingual reading|Translate English titles and generate Chinese article translations|",
+     "|Qiaomu-style rewrites|Rewrite articles, papers, HN discussion material, and Product Hunt product context into readable Chinese|",
+     "|Public reading assets|Turn translations, rewrites, comments, annotations, and chats into stable public links and RSS|",
+     "|Split refresh pipeline|Show new RSS entries first, then run AI title translation/rewrite in a separate worker|",
+     "|User AI profiles|Store user-provided API keys in browser localStorage instead of the server database|",
+     "|Self-hosting|Run with Node/systemd or Docker Compose; store runtime data in SQLite|"
+    ]
+   ],
+   [
+    "equal",
+    377,
+    380,
+    346,
+    349
+   ],
+   [
+    "replace",
+    380,
+    381,
+    349,
+    350,
+    [
+     "Live demo: rss.qiaomu.ai"
+    ]
+   ],
+   [
+    "equal",
+    381,
+    420,
+    350,
+    389
+   ],
+   [
+    "replace",
+    420,
+    421,
+    389,
+    390,
+    [
+     "- Report vulnerabilities through the process in SECURITY.md."
+    ]
+   ],
+   [
+    "equal",
+    421,
+    434,
+    390,
+    403
+   ],
+   [
+    "replace",
+    434,
+    439,
+    403,
+    404,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    439,
+    472,
+    404,
+    437
+   ],
+   [
+    "replace",
+    472,
+    477,
+    437,
+    442,
+    [
+     "- qiaomu.ai",
+     "- blog.qiaomu.ai",
+     "- tuijian.qiaomu.ai",
+     "- X @vista8",
+     "- GitHub @joeseesun"
+    ]
+   ],
+   [
+    "equal",
+    477,
+    479,
+    442,
+    444
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7c3ff501770a+2": {
+  "fn": "go-gorm/sqlite",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "CI"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "The official SQLite driver for GORM, based on go-sqlite3 (requires CGO)."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    17,
+    5,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "> For full documentation, visit https://gorm.io."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    23,
+    18,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "|Driver|Repository|"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    24,
+    25
+   ],
+   [
+    "replace",
+    25,
+    28,
+    25,
+    28,
+    [
+     "|github.com/glebarez/sqlite|github.com/glebarez/sqlite|",
+     "|github.com/libtnb/sqlite|github.com/libtnb/sqlite|",
+     "|github.com/ncruces/go-sqlite3/gormlite|github.com/ncruces/go-sqlite3|"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    39,
+    28,
+    39
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "5cb9c57159d6+2": {
+  "fn": "yasserf/schemats",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Before anything, I would like to give a massive thank you to sweetiq and their contributors for giving me a huge head start."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "The reason I have created a new repo instead of a fork is because I don't support mysql and have some breaking changes due to how this library is consumed by postgres-typed and vramework."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    19,
+    5,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "also provide the meta-data to help with libraries like postgres-typed. "
+    ]
+   ],
+   [
+    "equal",
+    20,
+    37,
+    20,
+    37
+   ],
+   [
+    "replace",
+    37,
+    57,
+    37,
+    38,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    73,
+    38,
+    54
+   ],
+   [
+    "replace",
+    73,
+    109,
+    54,
+    55,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    117,
+    55,
+    63
+   ],
+   [
+    "replace",
+    117,
+    131,
+    63,
+    64,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    137,
+    64,
+    70
+   ],
+   [
+    "replace",
+    137,
+    149,
+    70,
+    71,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    214,
+    71,
+    136
+   ],
+   [
+    "replace",
+    214,
+    219,
+    136,
+    137,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    220,
+    137,
+    138
+   ],
+   [
+    "delete",
+    220,
+    221,
+    138,
+    138
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "962e78bf7cd9+2": {
+  "fn": "voidDB/voidDB",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    4,
+    5
+   ],
+   [
+    "delete",
+    5,
+    8,
+    5,
+    5
+   ],
+   [
+    "equal",
+    8,
+    9,
+    5,
+    6
+   ],
+   [
+    "replace",
+    9,
+    10,
+    6,
+    7,
+    [
+     "voidDB is a memory-mapped"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    41,
+    7,
+    38
+   ],
+   [
+    "replace",
+    41,
+    42,
+    38,
+    39,
+    [
+     "(LevelDB, BadgerDB), in preliminary performance tests"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    53,
+    39,
+    50
+   ],
+   [
+    "replace",
+    53,
+    59,
+    50,
+    51,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    67,
+    51,
+    59
+   ],
+   [
+    "replace",
+    67,
+    73,
+    59,
+    60,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    81,
+    60,
+    68
+   ],
+   [
+    "replace",
+    81,
+    87,
+    68,
+    69,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    97,
+    69,
+    79
+   ],
+   [
+    "replace",
+    97,
+    103,
+    79,
+    80,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    111,
+    80,
+    88
+   ],
+   [
+    "replace",
+    111,
+    117,
+    88,
+    89,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    125,
+    89,
+    97
+   ],
+   [
+    "replace",
+    125,
+    131,
+    97,
+    98,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    141,
+    98,
+    108
+   ],
+   [
+    "replace",
+    141,
+    147,
+    108,
+    109,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    155,
+    109,
+    117
+   ],
+   [
+    "replace",
+    155,
+    161,
+    117,
+    118,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    161,
+    169,
+    118,
+    126
+   ],
+   [
+    "replace",
+    169,
+    175,
+    126,
+    127,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    179,
+    127,
+    131
+   ],
+   [
+    "replace",
+    179,
+    180,
+    131,
+    132,
+    [
+     "Install Go to begin developing with voidDB."
+    ]
+   ],
+   [
+    "equal",
+    180,
+    196,
+    132,
+    148
+   ],
+   [
+    "replace",
+    196,
+    220,
+    148,
+    149,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    230,
+    149,
+    159
+   ],
+   [
+    "replace",
+    230,
+    240,
+    159,
+    160,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    250,
+    160,
+    170
+   ],
+   [
+    "replace",
+    250,
+    266,
+    170,
+    171,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    275,
+    171,
+    180
+   ],
+   [
+    "replace",
+    275,
+    281,
+    180,
+    181,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    281,
+    298,
+    181,
+    198
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "97a5ba7f1acd+2": {
+  "fn": "a7urag/node-express-mysql-typescript-api-boilerplate",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Build Status"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    7,
+    1,
+    7
+   ],
+   [
+    "insert",
+    7,
+    7,
+    7,
+    8,
+    [
+     " NODE EXPRESS TYPESCRIPT boilerplate (+ typeorm) "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    8,
+    9
+   ],
+   [
+    "replace",
+    8,
+    12,
+    9,
+    10,
+    [
+     " A boilerplate for Node.js web applications."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    10,
+    11
+   ],
+   [
+    "replace",
+    13,
+    23,
+    11,
+    14,
+    [
+     " Report Bug",
+     " ·",
+     " Request Feature"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    25,
+    14,
+    16
+   ],
+   [
+    "replace",
+    25,
+    38,
+    16,
+    17,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    55,
+    17,
+    34
+   ],
+   [
+    "replace",
+    55,
+    59,
+    34,
+    38,
+    [
+     "* Express",
+     "* Typeorm",
+     "* Typescript",
+     "* Express JWT"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    82,
+    38,
+    61
+   ],
+   [
+    "replace",
+    82,
+    84,
+    61,
+    62,
+    [
+     " yarn watch-ts "
+    ]
+   ],
+   [
+    "equal",
+    84,
+    89,
+    62,
+    67
+   ],
+   [
+    "replace",
+    89,
+    90,
+    67,
+    68,
+    [
+     " yarn migration:generate -- -n \"<migration name>\""
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    68,
+    69
+   ],
+   [
+    "replace",
+    91,
+    92,
+    69,
+    70,
+    [
+     " yarn migration:run"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    94,
+    70,
+    72
+   ],
+   [
+    "replace",
+    94,
+    95,
+    72,
+    73,
+    [
+     " yarn build"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    73,
+    74
+   ],
+   [
+    "replace",
+    96,
+    98,
+    74,
+    76,
+    [
+     " yarn start ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    98,
+    100,
+    76,
+    78
+   ],
+   [
+    "replace",
+    100,
+    101,
+    78,
+    79,
+    [
+     " yarn test"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    108,
+    79,
+    86
+   ],
+   [
+    "delete",
+    108,
+    122,
+    86,
+    86
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

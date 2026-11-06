@@ -5218,5 +5218,472 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "70547c566ab8+2": {
+  "fn": "pgr0ss/pgledger",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "A double entry ledger implementation in PostgreSQL."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    14,
+    3,
+    14
+   ],
+   [
+    "replace",
+    14,
+    17,
+    14,
+    17,
+    [
+     "- Ledger Implementation in PostgreSQL",
+     "- A Ledger In PostgreSQL Is Fast!",
+     "- Double-Entry Ledgers: The Missing Primitive in Modern Software"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    20,
+    17,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "The ledger implementation is currently in a single file: pgledger.sql. But it also relies on some helper ULID/UUID functions from scoville/pgsql-ulid (see #IDS for more information). I vendored the helpers in this repository for simplicity and compatibility (in case the pgsql-ulid library changes)."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    23,
+    21,
+    23
+   ],
+   [
+    "replace",
+    23,
+    27,
+    23,
+    27,
+    [
+     "1. First run the SQL files from the vendored scoville/pgsql-ulid:",
+     " - vendor/scoville-pgsql-ulid/ulid-to-uuid.sql",
+     " - vendor/scoville-pgsql-ulid/uuid-to-ulid.sql",
+     "3. Then, run pgledger.sql"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "You can see an example in the `justfile` using `docker` and `psql`: justfile#L13-L20"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    34,
+    29,
+    34
+   ],
+   [
+    "replace",
+    34,
+    35,
+    34,
+    35,
+    [
+     "For more detailed usage guides, check out the examples directory. Each sql file is executable, and its output is stored in the corresponding `.sql.out` file. This file allows you to read the comments, the sql commands, and the output of those commands in one place."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    66,
+    35,
+    66
+   ],
+   [
+    "replace",
+    66,
+    70,
+    66,
+    67,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    129,
+    67,
+    126
+   ],
+   [
+    "replace",
+    129,
+    142,
+    126,
+    127,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    150,
+    127,
+    135
+   ],
+   [
+    "replace",
+    150,
+    157,
+    135,
+    136,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    165,
+    136,
+    144
+   ],
+   [
+    "replace",
+    165,
+    180,
+    144,
+    145,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    192,
+    145,
+    157
+   ],
+   [
+    "replace",
+    192,
+    205,
+    157,
+    158,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    231,
+    158,
+    184
+   ],
+   [
+    "replace",
+    231,
+    243,
+    184,
+    185,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    243,
+    245,
+    185,
+    187
+   ],
+   [
+    "replace",
+    245,
+    246,
+    187,
+    188,
+    [
+     "A retry with the same `idempotency_key` must use the same arguments, with `pgledger_create_transfers` requests in the same order (see Batch Ordering), or an error will be returned:"
+    ]
+   ],
+   [
+    "equal",
+    246,
+    253,
+    188,
+    195
+   ],
+   [
+    "replace",
+    253,
+    254,
+    195,
+    196,
+    [
+     "PostgreSQL has several transaction isolation levels. Under Read Committed (the default), concurrent calls with the same `idempotency_key` will wait for each other, and the later ones will return the transfers created from the first call if the requests match. Under Repeatable Read or Serializable, the later calls cannot see transfers created after the start of their own transaction snapshot. So instead of returning the existing transfers, the call will fail and should be re-tried in a new transaction."
+    ]
+   ],
+   [
+    "equal",
+    254,
+    255,
+    196,
+    197
+   ],
+   [
+    "replace",
+    255,
+    256,
+    197,
+    198,
+    [
+     "For more examples, see: examples/idempotency.sql.out"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    281,
+    198,
+    223
+   ],
+   [
+    "replace",
+    281,
+    282,
+    223,
+    224,
+    [
+     "For a more detailed example, see: examples/multi-currency.sql.out"
+    ]
+   ],
+   [
+    "equal",
+    282,
+    285,
+    224,
+    227
+   ],
+   [
+    "replace",
+    285,
+    286,
+    227,
+    228,
+    [
+     "IDs for all tables are represented as prefixed ULIDs, such as `pgla_01JTVST7XAES5BXHWZN4KR4VEZ` for a ledger account and `pglt_01JTVR1WKXEKCRG7N6YD7XCZA6` for a ledger transfer."
+    ]
+   ],
+   [
+    "equal",
+    286,
+    294,
+    228,
+    236
+   ],
+   [
+    "replace",
+    294,
+    295,
+    236,
+    237,
+    [
+     "For more info about prefixed ULIDs as IDs, check out this blog post: ULID Identifiers and ULID Tools Website."
+    ]
+   ],
+   [
+    "equal",
+    295,
+    296,
+    237,
+    238
+   ],
+   [
+    "replace",
+    296,
+    297,
+    238,
+    239,
+    [
+     "ULIDs are generated by first generating a UUIDv7>) (time-based, ordered UUID) and then converting that to a ULID via the SQL functions from https://github.com/scoville/pgsql-ulid (included in the vendor directory)."
+    ]
+   ],
+   [
+    "equal",
+    297,
+    308,
+    239,
+    250
+   ],
+   [
+    "replace",
+    308,
+    309,
+    250,
+    251,
+    [
+     "Performance is a notoriously hard thing to measure, since different usage patterns and different hardware can yield very different results. I have been iterating on a script in this repository to help measure performance: performance_check.go, so this may be a good starting point if you want to measure performance in your own setup. The numbers included below are only a guideline."
+    ]
+   ],
+   [
+    "equal",
+    309,
+    323,
+    251,
+    265
+   ],
+   [
+    "replace",
+    323,
+    330,
+    265,
+    266,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    330,
+    338,
+    266,
+    274
+   ],
+   [
+    "replace",
+    338,
+    345,
+    274,
+    275,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    345,
+    353,
+    275,
+    283
+   ],
+   [
+    "replace",
+    353,
+    360,
+    283,
+    284,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    360,
+    365,
+    284,
+    289
+   ],
+   [
+    "replace",
+    365,
+    370,
+    289,
+    294,
+    [
+     "- Mise for managing tools and dependencies",
+     "- Go for writing tests",
+     "- just for running tasks (e.g. `just check` to run the full suite of tests and linters)",
+     "- uv for running sqlfluff, the SQL formatter/linter written in Python",
+     "- Docker Compose for running PostgreSQL"
+    ]
+   ],
+   [
+    "equal",
+    370,
+    371,
+    294,
+    295
+   ],
+   [
+    "replace",
+    371,
+    372,
+    295,
+    296,
+    [
+     "If you're on MacOS, these tools can all be installed via Homebrew:"
+    ]
+   ],
+   [
+    "equal",
+    372,
+    386,
+    296,
+    310
+   ],
+   [
+    "replace",
+    386,
+    388,
+    310,
+    312,
+    [
+     "separate git worktrees or",
+     "jj workspaces) against their own databases, set"
+    ]
+   ],
+   [
+    "equal",
+    388,
+    400,
+    312,
+    324
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

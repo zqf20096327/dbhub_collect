@@ -5154,5 +5154,1191 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "a01206dddf25+2": {
+  "fn": "seart-group/ghs",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# GitHub Search &middot; Status MIT license Latest Dump DOI "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    5,
+    1,
+    5
+   ],
+   [
+    "replace",
+    5,
+    9,
+    5,
+    9,
+    [
+     " 1. Continuously crawling GitHub API endpoints for repository information, and storing it in a central database;",
+     " 2. Acting as an API for providing access to the stored data.",
+     "2. A Bootstrap-styled and jQuery-powered web user interface, serving as an accessible",
+     " front for the API."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    14,
+    9,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "|Dependency|Version Requirement|"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    24,
+    16,
+    22,
+    [
+     "|Java|17|",
+     "|Maven|3.9|",
+     "|MySQL|8.3|",
+     "|Flyway|10.13|",
+     "|cloc[^1]|2.00|",
+     "|Git[^1]|2.43|"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    65,
+    22,
+    63
+   ],
+   [
+    "replace",
+    65,
+    66,
+    63,
+    64,
+    [
+     "on Dropbox."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    100,
+    64,
+    98
+   ],
+   [
+    "replace",
+    100,
+    101,
+    98,
+    99,
+    [
+     "|Variable Name|Type|Default Value|Description|"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    99,
+    100
+   ],
+   [
+    "replace",
+    102,
+    122,
+    100,
+    120,
+    [
+     "|`ghs.github.tokens`|List&lt;String&gt;||List of GitHub personal access tokens (PATs) that will be used for mining the GitHub API. Must not contain blank strings.|",
+     "|`ghs.github.api-version`|String|2022-11-28|GitHub API version used across various operations.|",
+     "|`ghs.git.username`|String||Git account login used to interact with the version control system.|",
+     "|`ghs.git.password`|String||Password used to authenticate the specified Git account.|",
+     "|`ghs.git.config`|Map&lt;String,String&gt;|See application.properties|Git configurations specific to the application[^2].|",
+     "|`ghs.git.folder-prefix`|String|ghs-clone-|Prefix used for the temporary directories into which analyzed repositories are cloned. Must not be blank.|",
+     "|`ghs.git.ls-remote-timeout-duration`|Duration|1m|Maximum time allowed for listing remotes of Git repositories.|",
+     "|`ghs.git.clone-timeout-duration`|Duration|5m|Maximum time allowed for cloning Git repositories.|",
+     "|`ghs.cloc.max-file-size`|DataSize|25MB|Maximum file size threshold for analysis with `cloc`.|",
+     "|`ghs.cloc.timeout-duration`|Duration|5m|Maximum time allowed for a `cloc` command to execute.|",
+     "|`ghs.crawler.enabled`|Boolean|true|Specifies if the repository crawling job is enabled.|",
+     "|`ghs.crawler.minimum-stars`|int|10|Inclusive lower bound for the number of stars a project needs to have in order to be picked up by the crawler. Must not be negative.|",
+     "|`ghs.crawler.languages`|List&lt;String&gt;|See application.properties|List of language names that will be targeted during crawling. Must not contain blank strings. To ensure proper operations, the names must match those specified in linguist.|",
+     "|`ghs.crawler.start-date`|Date|2008-01-01T00:00:00Z|Default crawler start date: the earliest date for repository crawling in the absence of prior crawl jobs. Value format: `yyyy-MM-ddTHH:MM:SSZ`.|",
+     "|`ghs.crawler.delay-between-runs`|Duration|PT6H|Delay between successive crawler runs, expressed as a duration string.|",
+     "|`ghs.analysis.enabled`|Boolean|true|Specifies if the analysis job is enabled.|",
+     "|`ghs.analysis.delay-between-runs`|Duration|PT6H|Delay between successive analysis runs, expressed as a duration string.|",
+     "|`ghs.analysis.max-pool-threads`|int|3|Maximum amount of live threads dedicated to concurrently analyzing repositories. Must be positive.|",
+     "|`ghs.clean-up.enabled`|Boolean|true|Specifies if the job responsible for removing unavailable repositories (clean-up) is enabled.|",
+     "|`ghs.clean-up.cron`|CronTrigger|0 0 0 \\* \\* 1|Delay between successive repository clean-up runs, expressed as a Spring CRON expression.|"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    124,
+    120,
+    122
+   ],
+   [
+    "replace",
+    124,
+    128,
+    122,
+    126,
+    [
+     " We separate the application-level Git configurations from the ones used by the user to avoid any potential",
+     " conflicts or confusion. As such, an application-specific configuration file is created in the temporary directory on",
+     " startup. Settings added to the file depend on the `ghs.git.config` entries in the `application.properties`.",
+     " Note that configuration subsections are currently not supported."
+    ]
+   ],
+   [
+    "equal",
+    128,
+    144,
+    126,
+    142
+   ],
+   [
+    "replace",
+    144,
+    145,
+    142,
+    143,
+    [
+     "|Service/Container name|Image|Description|Enabled by Default|"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    146,
+    143,
+    144
+   ],
+   [
+    "replace",
+    146,
+    152,
+    144,
+    150,
+    [
+     "|`gse-database`|mysql|Platform database|:white_check_mark:|",
+     "|`gse-migration`|flyway|Database schema migration executions|:white_check_mark:|",
+     "|`gse-backup`|tiredofit/db-backup|Automated database backups|:negative_squared_cross_mark:|",
+     "|`gse-server`|seart/ghs-server|Spring Boot server application|:white_check_mark:|",
+     "|`gse-website`|seart/ghs-website|NGINX web server acting as HTML supplier|:white_check_mark:|",
+     "|`gse-watchtower`|containrrr/watchtower|Automatic Docker image updates|:negative_squared_cross_mark:|"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    164,
+    150,
+    162
+   ],
+   [
+    "replace",
+    164,
+    165,
+    162,
+    163,
+    [
+     "Deploying is as simple as, in the docker-compose directory, run:"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    187,
+    163,
+    185
+   ],
+   [
+    "replace",
+    187,
+    188,
+    185,
+    186,
+    [
+     "For a more specific database version, refer to the Docker Hub page."
+    ]
+   ],
+   [
+    "equal",
+    188,
+    194,
+    186,
+    192
+   ],
+   [
+    "replace",
+    194,
+    195,
+    192,
+    193,
+    [
+     "The database data itself is kept in the `gse-data` volume, while detailed back-end logs are kept in a local mount called logs."
+    ]
+   ],
+   [
+    "equal",
+    195,
+    202,
+    193,
+    200
+   ],
+   [
+    "replace",
+    202,
+    209,
+    200,
+    201,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    221,
+    201,
+    213
+   ],
+   [
+    "replace",
+    221,
+    227,
+    213,
+    214,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    234,
+    214,
+    221
+   ],
+   [
+    "replace",
+    234,
+    235,
+    221,
+    222,
+    [
+     "create a new discussion. By initiating a discussion, you can engage"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    239,
+    222,
+    226
+   ],
+   [
+    "replace",
+    239,
+    240,
+    226,
+    227,
+    [
+     "To report any issues or bugs you encounter, create a new issue."
+    ]
+   ],
+   [
+    "equal",
+    240,
+    246,
+    227,
+    233
+   ],
+   [
+    "replace",
+    246,
+    247,
+    233,
+    234,
+    [
+     "Refer to CONTRIBUTING.md for more information."
+    ]
+   ],
+   [
+    "equal",
+    247,
+    251,
+    234,
+    238
+   ],
+   [
+    "replace",
+    251,
+    252,
+    238,
+    239,
+    [
+     "This project uses Flyway by Redgate."
+    ]
+   ],
+   [
+    "equal",
+    252,
+    253,
+    239,
+    240
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "801d1515a9c5+2": {
+  "fn": "korchasa/awesome-clickhouse",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "delete",
+    6,
+    7,
+    6,
+    6
+   ],
+   [
+    "equal",
+    7,
+    8,
+    6,
+    7
+   ],
+   [
+    "replace",
+    8,
+    37,
+    7,
+    34,
+    [
+     "- Language bindings",
+     " - C/C++ (6)",
+     " - Elixir (1)",
+     " - JavaScript/Typescript (5)",
+     " - Golang (13)",
+     " - Java (8)",
+     " - .Net (3)",
+     " - ODBC (1)",
+     " - PHP (4)",
+     " - Python (17)",
+     " - Ruby (2)",
+     " - Rust (9)",
+     " - Scala (3)",
+     " - Other sdk/libraries (3)",
+     "- UIs",
+     " - GUI (20)",
+     " - CLI (6)",
+     " - CHUI(Chat-based User Interface) or CHUBACA(Chat-Based Client:)-or-chubaca(chat-based-client:)) (6)",
+     "- Integrations",
+     " - Data Transfer and Synchronization (12)",
+     " - Metrics and Monitoring (17)",
+     " - Deployment and Management Tools (4)",
+     " - Data Visualization and Analysis (14)",
+     " - ETL and Data Processing (19)",
+     "- Ops (4)",
+     "- Documentation (5)",
+     "- Examples (2)"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    42,
+    34,
+    39
+   ],
+   [
+    "replace",
+    42,
+    48,
+    39,
+    45,
+    [
+     "- ada-url/ada (1789 C++) - Ada is a fast, WHATWG-compliant URL parser written in modern C++ and used by major systems including Clickhouse, Node.js, and Cloudflare Workers.",
+     "- ClickHouse/ai-sdk-cpp (180 C++) - AI SDK CPP is a modern C++ toolkit from ClickHouse engineers that provides a unified API to build AI-powered applications using models from OpenAI, Anthropic, and other providers.",
+     "- ClickHouse/clickhouse-cpp (377 C) - clickhouse-cpp is a C++ client library for ClickHouse that supports a wide range of data types and features including asynchronous inserts and retry logic.",
+     "- ClickHouse/pg_clickhouse (260 C) - pg_clickhouse is a PostgreSQL extension that enables running analytics queries on ClickHouse databases directly from PostgreSQL without rewriting SQL, improving query performance through pushdown optimization.",
+     "- RoaringBitmap/CRoaring (1869 C) - CRoaring is a high-performance C/C++ library for Roaring bitmaps with SIMD optimizations, widely used in big data systems including ClickHouse for efficient compressed bitmap operations.",
+     "- simdjson/simdjson (24108 C++) - simdjson is a high-performance JSON parsing library that uses SIMD instructions to parse gigabytes of JSON data per second, widely used in projects including ClickHouse."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    51,
+    45,
+    48
+   ],
+   [
+    "replace",
+    51,
+    52,
+    48,
+    49,
+    [
+     "- plausible/ecto_ch (124 Elixir) - ecto_ch is an Elixir Ecto adapter that enables integration with the ClickHouse database, supporting ClickHouse-specific features and data types for efficient analytics applications."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    55,
+    49,
+    52
+   ],
+   [
+    "replace",
+    55,
+    60,
+    52,
+    57,
+    [
+     "- 514-labs/moose (587 Rust) - Moose is an open-source developer framework for building scalable analytical backends on Clickhouse, Redpanda, and other high-performance data infrastructures using TypeScript or Python.",
+     "- apla/node-clickhouse (215 JavaScript) - A Node.js driver providing a simple and powerful interface to interact with the ClickHouse database, supporting efficient query execution and bulk data loading.",
+     "- Canner/vulcan-sql (793 TypeScript) - VulcanSQL is an Analytical Data API Framework that simplifies and accelerates the creation of secure, scalable RESTful APIs from databases and data warehouses for AI agents and data applications.",
+     "- ClickHouse/clickhouse-js (326 TypeScript) - Official JavaScript client for ClickHouse database providing streaming support and compatibility across Node.js and web environments.",
+     "- TimonKK/clickhouse (222 JavaScript) - A NodeJS client for ClickHouse enabling query execution, streaming, session management, and data insertion over HTTP interface."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    63,
+    57,
+    60
+   ],
+   [
+    "replace",
+    63,
+    76,
+    60,
+    73,
+    [
+     "- AfterShip/clickhouse-sql-parser (242 Go) - AfterShip/clickhouse-sql-parser is a Go-based SQL parser designed to parse and beautify ClickHouse SQL queries by converting them into an Abstract Syntax Tree (AST) and back, available as both a library and CLI tool.",
+     "- chdb-io/chdb-go (142 Go) - chdb-go provides Go bindings and a CLI for chDB, an in-process SQL OLAP engine powered by ClickHouse, enabling SQL query execution and database management within Go applications.",
+     "- ClickHouse/ch-go (426 Go) - ch-go is a low-level Go client for ClickHouse designed for high-performance data block streaming with minimal overhead and direct protocol implementation.",
+     "- ClickHouse/clickhouse-go (3323 Go) - clickhouse-go is a Golang SQL database client providing a native and database/sql interface for efficient and feature-rich interaction with ClickHouse.",
+     "- ContentSquare/chproxy (1472 Go) - Chproxy is an open-source HTTP proxy and load balancer designed to optimize and manage HTTP traffic for the ClickHouse database, enhancing scalability and fault tolerance.",
+     "- korchasa/awesome-clickhouse (192 HTML) - A curated repository compiling an extensive list of software, tools, and resources related to ClickHouse to support developers and data engineers in working with the ClickHouse database.",
+     "- mailru/go-clickhouse (437 Go) - A Golang SQL database driver for Yandex ClickHouse using the official HTTP interface, supporting extensive ClickHouse features and integration with tracing tools.",
+     "- roistat/go-clickhouse (190 Go) - A Golang connector for Yandex ClickHouse enabling efficient querying, data insertion, and cluster management for large-scale data processing.",
+     "- runreveal/pql (707 Go) - pql is a Go library and CLI tool that compiles a pipelined query language inspired by Kusto Query Language into SQL, with specific compatibility for the Clickhouse SQL dialect but designed to be database agnostic.",
+     "- trickstercache/trickster (2085 Go) - Trickster is an open-source HTTP reverse proxy cache and time series dashboard accelerator that improves performance and scalability for time series databases including ClickHouse, Prometheus, and InfluxDB.",
+     "- uptrace/go-clickhouse (285 Go) - A high-performance Go client library for ClickHouse using its native protocol, supporting modern Go features and efficient database operations.",
+     "- vahid-sohrabloo/chconn (160 Go) - chconn is a high-performance, low-level Go driver for ClickHouse that supports all ClickHouse data types, batch operations, TLS, and compression protocols, optimized for speed and efficiency.",
+     "- zerodha/dungbeetle (1261 Go) - DungBeetle is a distributed job server for asynchronously queuing and executing heavy SQL read jobs on MySQL, PostgreSQL, and ClickHouse databases, designed to offload report generation and improve application performance."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    79,
+    73,
+    76
+   ],
+   [
+    "replace",
+    79,
+    87,
+    76,
+    84,
+    [
+     "- apache/gluten (1579 Scala) - Gluten is a middle layer that offloads JVM-based SQL engines' execution, such as Spark SQL, to high-performance native engines like ClickHouse and Velox, leveraging vectorized processing for accele...",
+     "- Blynk-Technologies/clickhouse4j (215 Java) - clickhouse4j is a lightweight and faster alternative to the official ClickHouse JDBC driver, offering reduced dependencies, smaller size, and enhanced performance for Java applications.",
+     "- ClickHouse/clickhouse-java (1610 Java) - ClickHouse/clickhouse-java is a repository providing Java clients and a JDBC driver for efficient interaction with the ClickHouse database, supporting modern features and compatibility with active ClickHouse versions.",
+     "- ClickHouse/clickhouse-jdbc-bridge (176 Java) - ClickHouse JDBC Bridge is an experimental JDBC proxy that enables real-time distributed querying from ClickHouse to external databases, simplifying data integration and pipeline construction.",
+     "- ClickHouse/metabase-clickhouse-driver (509 Clojure) - A ClickHouse database driver enabling integration with the Metabase business intelligence front-end for data visualization and querying.",
+     "- housepower/ClickHouse-Native-JDBC (541 Java) - ClickHouse Native JDBC is a high-performance native protocol JDBC driver for accessing ClickHouse databases in Java and integrating with Apache Spark.",
+     "- itinycheng/flink-connector-clickhouse (411 Java) - A Flink SQL connector enabling efficient integration with ClickHouse for reading and writing data, supporting advanced features like partitioning, sharding, and caching.",
+     "- ivi-ru/flink-clickhouse-sink (380 Java) - A high-performance Apache Flink sink connector for efficiently loading streaming data into the ClickHouse database using asynchronous HTTP requests."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    90,
+    84,
+    87
+   ],
+   [
+    "replace",
+    90,
+    93,
+    87,
+    90,
+    [
+     "- DarkWanderer/ClickHouse.Client (367 C#) - .NET client library for ClickHouse providing high-throughput, broad type support, and ADO.NET compliance for efficient big data processing.",
+     "- DotNetNext/SqlSugar (5825 C#) - SqlSugar is a high-performance, easy-to-use .NET ORM framework supporting multiple databases including ClickHouse, designed for big data and SaaS applications.",
+     "- Octonica/ClickHouseClient (166 C#) - Octonica/ClickHouseClient is a .NET Core ADO.NET driver providing efficient and comprehensive support for interacting with ClickHouse databases, including async operations and bulk data manipulation."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    96,
+    90,
+    93
+   ],
+   [
+    "replace",
+    96,
+    97,
+    93,
+    94,
+    [
+     "- ClickHouse/clickhouse-odbc (285 C) - Official ODBC driver for ClickHouse enabling cross-platform database connectivity through standard ODBC interfaces."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    100,
+    94,
+    97
+   ],
+   [
+    "replace",
+    100,
+    104,
+    97,
+    101,
+    [
+     "- cybercog/laravel-clickhouse (166 PHP) - Laravel ClickHouse is a package that integrates ClickHouse database client and migration support into Laravel applications, enabling efficient management of ClickHouse databases within the Laravel framework.",
+     "- FriendsOfDoctrine/dbal-clickhouse (118 PHP) - Doctrine DBAL driver for ClickHouse database enabling seamless integration with Symfony and other frameworks using Doctrine, supporting advanced database operations and custom types.",
+     "- smi2/phpClickHouse (851 PHP) - A PHP wrapper for ClickHouse providing asynchronous queries, bulk inserts, cluster management, and performance optimizations for efficient database interaction.",
+     "- the-tinderbox/ClickhouseBuilder (201 PHP) - ClickhouseBuilder is a PHP fluent query builder designed to simplify the construction and execution of complex SQL queries for Clickhouse databases, with integration support for Laravel and Lumen frameworks."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    107,
+    101,
+    104
+   ],
+   [
+    "replace",
+    107,
+    124,
+    104,
+    121,
+    [
+     "- 514-labs/moosestack (587 Rust) - MooseStack is a developer framework for building real-time analytical backends using ClickHouse, Redpanda, Temporal, and Redis with a code-first, modular approach in TypeScript and Python.",
+     "- beenuar/AiSOC (1717 Python) - AiSOC is an open-source, self-hostable AI-powered Security Operations Center that leverages ClickHouse and Neo4j for event ingestion, correlation, and AI-driven investigation.",
+     "- bryzgaloff/airflow-clickhouse-plugin (184 Python) - Airflow ClickHouse Plugin is a top-ranked Apache Airflow plugin that integrates ClickHouse database functionality into Airflow workflows, providing versatile operators for efficient SQL execution and pipeline management.",
+     "- Canner/WrenAI (16785 Python) - WrenAI is an open-source GenBI engine that empowers AI agents to generate, deploy, and govern trustworthy business intelligence dashboards and SQL across various data sources, including ClickHouse.",
+     "- carrotquest/django-clickhouse (105 Python) - django-clickhouse integrates the Yandex ClickHouse database into Django projects, enabling high-performance analytical queries and real-time data processing within Django applications.",
+     "- chdb-io/chdb (2853 C++) - chDB is an in-process OLAP SQL engine powered by ClickHouse that enables efficient analytical queries on various data formats directly within Python environments.",
+     "- ClickHouse/clickhouse-connect (511 Python) - ClickHouse Connect is a high-performance Python driver that enables seamless integration of ClickHouse with Python data tools like Pandas, SQLAlchemy, and Apache Superset for efficient data access and visualization.",
+     "- ClickHouse/dbt-clickhouse (356 Python) - dbt-clickhouse is a plugin that integrates dbt functionality with ClickHouse, enabling advanced data transformation, modeling, and testing capabilities on ClickHouse databases.",
+     "- cloudflare/sqlalchemy-clickhouse (324 Python) - sqlalchemy-clickhouse is a SQLAlchemy dialect that enables seamless integration with the ClickHouse database for efficient data querying and manipulation.",
+     "- Infinidat/infi.clickhouse_orm (421 Python) - infi.clickhouse_orm is a Python ORM library that simplifies working with the ClickHouse database by enabling easy model definition, data insertion, and querying.",
+     "- jayvynl/django-clickhouse-backend (198 Python) - Django-clickhouse-backend is a Django database backend that enables seamless interaction with ClickHouse using Django ORM, supporting ClickHouse-specific features and efficient connection pooling.",
+     "- kszucs/pandahouse (239 Python) - Pandahouse is a Python library providing a Pandas interface to interact with ClickHouse databases via HTTP API for efficient data reading and writing.",
+     "- long2ice/asynch (243 Python) - An asynchronous Python driver for ClickHouse with native TCP interface support, enabling efficient database interactions using asyncio.",
+     "- maximdanilchenko/aiochclient (258 Python) - aiochclient is a lightweight asynchronous HTTP client for Python that provides efficient and type-safe interaction with ClickHouse databases, supporting streaming, lazy decoding, and high performance through optional speedups.",
+     "- mymarilyn/aioch (169 Python) - aioch is an asynchronous Python library that provides native interface access to ClickHouse databases using asyncio, enabling efficient and non-blocking query execution with progress tracking.",
+     "- mymarilyn/clickhouse-driver (1302 Python) - A Python driver providing native TCP interface support for efficient and secure interaction with ClickHouse databases, featuring extensive data type support and compliance with Python DB API 2.0.",
+     "- xzkostyan/clickhouse-sqlalchemy (483 Python) - Clickhouse-sqlalchemy is a SQLAlchemy dialect that enables seamless interaction with ClickHouse databases, supporting multiple connection interfaces and providing ORM capabilities for efficient data analytics."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    127,
+    121,
+    124
+   ],
+   [
+    "replace",
+    127,
+    129,
+    124,
+    126,
+    [
+     "- PNixx/clickhouse-activerecord (262 Ruby) - A Ruby ActiveRecord driver enabling seamless integration and management of ClickHouse databases within Ruby on Rails applications.",
+     "- shlima/click_house (193 Ruby) - A modern Ruby database driver providing a comprehensive and efficient interface to interact with ClickHouse databases via the HTTP protocol."
+    ]
+   ],
+   [
+    "equal",
+    129,
+    132,
+    126,
+    129
+   ],
+   [
+    "replace",
+    132,
+    141,
+    129,
+    138,
+    [
+     "- ClaugeHQ/Clauge (739 Svelte) - Clauge is an AI-powered super-app for developers, integrating coding agents, API clients, SQL (including ClickHouse) and NoSQL editors, SSH, and file explorers into a single, unified workspace.",
+     "- ClickHouse/clickhouse-rs (548 Rust) - clickhouse-rs is the official pure Rust typed client for ClickHouse DB, providing efficient, secure, and feature-rich database interaction capabilities.",
+     "- langdb/ai-gateway (812 Rust) - LangDB AI Gateway is an open-source enterprise AI gateway built in Rust that provides a unified interface to multiple LLMs using the OpenAI API format, focusing on performance, reliability, and enterprise-grade features including cost control, routing, and data security.",
+     "- malisper/pgrust (3958 Rust) - pgrust is a Rust rewrite of PostgreSQL, aiming to be faster than both PostgreSQL and ClickHouse by incorporating modern architectural choices and passing the full Postgres regression suite.",
+     "- Protryon/klickhouse (128 Rust) - Klickhouse is a high-performance Rust SDK for accessing Clickhouse databases asynchronously with minimal boilerplate and extensive feature support.",
+     "- quarylabs/sqruff (1361 Rust) - sqruff is a fast and customizable SQL formatter and linter supporting multiple SQL dialects including Clickhouse, designed to ensure SQL code quality and consistency across development workflows.",
+     "- subzerocloud/showcase (162 TypeScript) - subZero is a Rust-based library with JS/TS bindings that enables customizable, PostgREST-compatible REST APIs on multiple databases including ClickHouse, supporting advanced queries and authentication out of the box.",
+     "- suharev7/clickhouse-rs (341 Rust) - An asynchronous Rust client library for efficient and feature-rich interaction with Yandex ClickHouse databases.",
+     "- t8y2/dbx (13015 TypeScript) - DBX is a lightweight, cross-platform desktop and Docker-deployable database client that offers management capabilities for over 40 databases, including ClickHouse, and features a built-in AI assist..."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    144,
+    138,
+    141
+   ],
+   [
+    "replace",
+    144,
+    147,
+    141,
+    144,
+    [
+     "- apache/incubator-gluten (1579 Scala) - Apache Gluten is an incubating project that accelerates JVM-based SQL engines like Spark SQL by offloading compute-intensive tasks to native engines such as ClickHouse and Velox, enhancing performance while maintaining Spark's scalability and API compatibility.",
+     "- ClickHouse/spark-clickhouse-connector (217 Scala) - Spark ClickHouse Connector is a project that integrates Apache Spark with ClickHouse using the DataSourceV2 API to enable efficient data processing and analytics.",
+     "- crobox/clickhouse-scala-client (118 Scala) - A reactive Scala client for Clickhouse database providing streaming query execution, load balancing, health checks, and cluster-aware connection support."
+    ]
+   ],
+   [
+    "equal",
+    147,
+    150,
+    144,
+    147
+   ],
+   [
+    "replace",
+    150,
+    153,
+    147,
+    150,
+    [
+     "- googleapis/mcp-toolbox (16107 Go) - MCP Toolbox is an open-source Model Context Protocol server that connects AI agents, IDEs, and applications directly to various enterprise databases, including ClickHouse, for data interaction and ...",
+     "- ildus/clickhouse_fdw (275 C++) - clickhouse_fdw is an open-source Foreign Data Wrapper that enables seamless integration and querying of ClickHouse column-oriented database data within PostgreSQL.",
+     "- Percona-Lab/clickhousedb_fdw (207 C) - clickhousedb_fdw is an open-source Foreign Data Wrapper that enables seamless querying and data manipulation between PostgreSQL and the high-performance ClickHouse column-store database."
+    ]
+   ],
+   [
+    "equal",
+    153,
+    158,
+    150,
+    155
+   ],
+   [
+    "replace",
+    158,
+    178,
+    155,
+    175,
+    [
+     "- agnosticeng/agx (257 Svelte) - agx is an AI-powered integrated analytics desktop application that enables interactive data exploration and querying using ClickHouse's embedded database or a remote ClickHouse server.",
+     "- ansxuman/Clauge (728 Svelte) - Clauge is a superapp for developers, integrating coding agents, API clients, SQL/NoSQL editors, SSH, and file explorers into a single environment, designed for multi-database management including C...",
+     "- caioricciuti/ch-ui (698 TypeScript) - CH-UI is a modern, feature-rich web interface designed for seamless management, querying, and visualization of ClickHouse databases with advanced SQL editing and performance monitoring capabilities.",
+     "- ClickHouse/click-ui (131 TypeScript) - Click UI is the early-stage design system and component library for building ClickHouse-themed user interfaces with support for popular frameworks and theming.",
+     "- CodePhiliaX/Chat2DB (27612 Java) - Chat2DB is an AI-driven, intelligent, and versatile SQL client and database management tool supporting multiple databases including ClickHouse, designed to enhance SQL development and data reporting with integrated AI capabilities.",
+     "- DataflareApp/Dataflare (587 ) - Dataflare is a simple, easy-to-use database manager supporting multiple databases including ClickHouse, designed for efficient database connection, management, and querying.",
+     "- DataflareApp/dataflare (587 TypeScript) - Dataflare is a comprehensive, cross-platform database manager designed to simplify database interactions, offering robust features for various databases including ClickHouse.",
+     "- DataPupOrg/DataPup (310 TypeScript) - DataPup is a modern, AI-assisted, cross-platform database client with full support for ClickHouse and plans to support other major databases, designed to make database management intuitive and enjoyable.",
+     "- dbgate/dbgate (7183 Svelte) - DbGate is a cross-platform, open-source database management tool supporting multiple databases including ClickHouse, offering advanced features like visual query design, schema comparison, and data visualization.",
+     "- devlive-community/dbm (404 TypeScript) - DBM is an open-source, full-platform database management tool supporting multiple SQL-speaking databases including ClickHouse, offering comprehensive features for query, table, column, and database management along with monitoring and data migration capabilities.",
+     "- flant/loghouse (932 Ruby) - Loghouse is an open-source log management solution for Kubernetes that uses ClickHouse for efficient log storage and provides a web UI for querying and monitoring logs.",
+     "- frectonz/sql-studio (3575 Rust) - SQL Studio is a single binary SQL database explorer supporting multiple databases including SQLite, PostgreSQL, MySQL, ClickHouse, and Microsoft SQL Server, offering rich features like metadata overview, query execution with IntelliSense, and infinite scrolling.",
+     "- HouseOps/HouseOps (344 JavaScript) - HouseOps is an enterprise ClickHouse client that provides a graphical interface for querying, monitoring, and managing ClickHouse database clusters.",
+     "- l1xnan/duckling (576 TypeScript) - Duckling is a lightweight desktop application built with Tauri for fast browsing of CSV/Parquet files and various databases including Clickhouse.",
+     "- metrico/clickhouse-mate (103 TypeScript) - ClickHouse-Mate is an advanced web-based user interface and client for efficiently managing and querying ClickHouse databases with features like SQL autocompletion, fast navigation, and inline documentation.",
+     "- OtterMind/Chat2DB (27612 Java) - Chat2DB is an AI-powered database client and SQL workspace supporting various databases, including ClickHouse, for developers, DBAs, analysts, and data teams.",
+     "- smi2/clickhouse-frontend (162 JavaScript) - This repository is the deprecated frontend project TABIX for ClickHouse, now replaced by the updated tabix.ui repository.",
+     "- tabixio/tabix (2297 TypeScript) - Tabix.io UI is an open-source business intelligence and SQL editor tool designed for efficient interaction with ClickHouse databases.",
+     "- TabularisDB/tabularis (4000 TypeScript) - Tabularis is an open-source, cross-platform desktop SQL workspace supporting a wide array of databases, including ClickHouse, with built-in AI agent integration and advanced SQL features.",
+     "- timestored/qstudio (1082 Java) - qStudio is a free, cross-platform SQL client and notebook that supports numerous databases including ClickHouse, offering features like query execution, data visualization, and AI-powered SQL assistance."
+    ]
+   ],
+   [
+    "equal",
+    178,
+    181,
+    175,
+    178
+   ],
+   [
+    "replace",
+    181,
+    187,
+    178,
+    184,
+    [
+     "- amacneil/dbmate (7028 Go) - Dbmate is a lightweight, framework-agnostic database migration tool that supports multiple databases including ClickHouse, enabling consistent schema management across diverse development environments.",
+     "- azat/chdig (289 Rust) - Chdig is a terminal user interface tool designed to provide interactive introspection, monitoring, and debugging capabilities for ClickHouse database systems.",
+     "- ClickHouse/JSONBench (182 Shell) - JSONBench is a benchmarking project that evaluates and compares the native JSON support of popular analytical databases including ClickHouse using a large real-world dataset of Bluesky events.",
+     "- hatarist/clickhouse-cli (265 Python) - An unofficial command-line client for the ClickHouse DBMS server offering enhanced features like autocompletion, syntax highlighting, multiquery support, and user-defined functions over HTTP.",
+     "- Slach/clickhouse-flamegraph (221 Go) - clickhouse-flamegraph is a command-line utility for visualizing ClickHouse system.trace_log data as flamegraphs to analyze query performance and resource usage.",
+     "- sqitchers/sqitch (3147 Perl) - Sqitch is a versatile and framework-agnostic database change management tool supporting multiple database engines including ClickHouse, emphasizing native scripting, dependency resolution, and deployment integrity."
+    ]
+   ],
+   [
+    "equal",
+    187,
+    190,
+    184,
+    187
+   ],
+   [
+    "replace",
+    190,
+    196,
+    187,
+    193,
+    [
+     "- centralmind/gateway (541 Go) - CentralMind Gateway is a universal MCP-Server that automatically generates secure, LLM-optimized APIs for multiple structured databases including ClickHouse, enabling AI agents to access data efficiently and compliantly.",
+     "- clidey/whodb (4940 TypeScript) - WhoDB is a lightweight, high-performance database management tool supporting multiple databases including Clickhouse, featuring a natural language chat interface for intuitive data interaction.",
+     "- googleapis/genai-toolbox (16107 Go) - MCP Toolbox for Databases is an open-source MCP server that simplifies and secures the development of AI-powered database tools by handling backend complexities and enabling natural language interaction with databases.",
+     "- Guepard-Corp/qwery-core (134 TypeScript) - Qwery is a versatile data querying and visualization platform that enables natural language queries across multiple databases including ClickHouse, supported by AI agents and available as both desktop and cloud applications.",
+     "- sqlchat/sqlchat (5842 TypeScript) - SQL Chat is a chat-based SQL client that uses natural language to interact with databases, supporting multiple database types and offering both hosted and self-hosted options for intuitive database management.",
+     "- wannabespace/conar (1414 TypeScript) - Conar is an AI-powered open-source tool that simplifies and secures interactions with multiple databases including PostgreSQL, MySQL, MSSQL, and Clickhouse by providing intelligent SQL query assistance and optimization."
+    ]
+   ],
+   [
+    "equal",
+    196,
+    201,
+    193,
+    198
+   ],
+   [
+    "replace",
+    201,
+    213,
+    198,
+    210,
+    [
+     "- Altinity/clickhouse-sink-connector (343 Python) - Altinity Sink Connector is a scalable tool for replicating data from MySQL, PostgreSQL, and MongoDB to ClickHouse for efficient analytical processing.",
+     "- apecloud/ape-dts (587 Rust) - Ape Data Transfer Suite (ape-dts) is a high-performance, lightweight data migration and replication tool supporting ultra-fast transfers between MySQL, PostgreSQL, Redis, MongoDB, Kafka, and ClickHouse, ideal for disaster recovery and migration scenarios.",
+     "- ClickHouse/clickhouse-kafka-connect (208 Java) - ClickHouse Kafka Connect Sink is the official Kafka Connect sink connector that enables efficient and reliable data transfer from Kafka topics to ClickHouse tables with exactly-once delivery semantics.",
+     "- getdozer/dozer (1578 Rust) - Dozer is a high-performance real-time data movement tool leveraging CDC to transfer and transform data efficiently into multiple sinks including Clickhouse.",
+     "- housepower/clickhouse_sinker (534 Go) - clickhouse_sinker is a sinker program that efficiently transfers Kafka messages into ClickHouse for real-time data analytics and storage.",
+     "- jitsucom/jitsu (4831 TypeScript) - Jitsu is an open-source, self-hosted data ingestion platform that enables real-time event data collection and streaming to data warehouses, including ClickHouse, as an alternative to Segment.",
+     "- long2ice/synch (357 Python) - Synch is a data synchronization tool that enables full and incremental ETL from PostgreSQL and MySQL databases to ClickHouse, supporting real-time data integration and multiple broker options.",
+     "- mintance/nginx-clickhouse (159 Go) - nginx-clickhouse is a tool that parses NGINX logs and transports them into a ClickHouse database for efficient storage and analysis.",
+     "- nikepan/clickhouse-bulk (511 Go) - ClickHouse-Bulk is a tool that collects many small insert requests and sends them as larger bulk inserts to Yandex ClickHouse servers to improve data ingestion efficiency.",
+     "- QuesmaOrg/quesma (184 Go) - Quesma is a programmable database gateway that enables seamless query translation and migration between modern database platforms, currently supporting integration of Kibana/OpenSearch Dashboards with Clickhouse.",
+     "- uber/storagetapper (363 Go) - StorageTapper is a scalable real-time MySQL change data streaming, logical backup, and replication service supporting multiple data destinations including experimental Clickhouse integration.",
+     "- zeromicro/cds (980 Go) - Zeromicro/cds is a Go-based tool for real-time data synchronization from MySQL and MongoDB to ClickHouse, supporting both full and incremental sync with a user-friendly web interface."
+    ]
+   ],
+   [
+    "equal",
+    213,
+    216,
+    210,
+    213
+   ],
+   [
+    "replace",
+    216,
+    233,
+    213,
+    230,
+    [
+     "- burningalchemist/sql_exporter (575 Go) - SQL Exporter for Prometheus is a configuration-driven tool that collects and exposes metrics from various databases, including Clickhouse, for monitoring with Prometheus.",
+     "- ClickHouse/clickhouse_exporter (402 Go) - ClickHouse Exporter for Prometheus is a server that scrapes metrics from older ClickHouse versions and exports them via HTTP for Prometheus monitoring.",
+     "- ClickHouse/graphouse (260 Java) - Graphouse enables the use of ClickHouse as a high-performance storage backend for Graphite metrics, providing TCP and HTTP APIs for metric ingestion, search, and management.",
+     "- ClickHouse/kubenetmon (184 Go) - kubenetmon is an open source Kubernetes network metering solution by ClickHouse that collects and analyzes network traffic data across major cloud providers using ClickHouse as the backend analytics engine.",
+     "- go-graphite/carbon-clickhouse (198 Go) - carbon-clickhouse is a Graphite metrics receiver that uses ClickHouse as a high-performance storage backend, supporting multiple ingestion protocols and flexible configuration for efficient metrics management.",
+     "- go-graphite/graphite-clickhouse (222 Go) - Graphite-clickhouse is a backend solution that integrates Graphite clusters with ClickHouse to enhance time-series data storage and query performance.",
+     "- hyperdxio/hyperdx (9791 TypeScript) - HyperDX is an open source observability platform powered by Clickhouse and OpenTelemetry that centralizes and correlates logs, metrics, traces, errors, and session replays to help engineers quickly resolve production issues.",
+     "- jaegertracing/jaeger-clickhouse (269 Go) - Jaeger ClickHouse is an experimental gRPC storage plugin that integrates Jaeger distributed tracing with ClickHouse for efficient trace data storage and querying.",
+     "- justwatchcom/sql_exporter (501 Go) - A flexible SQL Exporter for Prometheus that runs user-defined SQL queries on multiple databases including ClickHouse and exports the results as metrics for monitoring.",
+     "- metrico/gigapipe (1692 Go) - Gigapipe is a lightweight, polyglot observability stack that supports logs, metrics, traces, and profiling with compatibility for Loki, Prometheus, Tempo, Pyroscope, and OpenTelemetry, powered by ClickHouse and Bun for efficient data ingestion and querying.",
+     "- mindis/prom2click (167 Go) - Prom2click is an experimental Prometheus remote storage adapter that enables scalable and high-performance metric storage and querying using Clickhouse's column-oriented database optimized for time series data.",
+     "- openlit/openlit (2666 Python) - OpenLIT is an open-source AI engineering platform providing OpenTelemetry-native observability, monitoring, and management tools for large language models, GPUs, and vector databases, with data stored in ClickHouse for efficient telemetry analysis.",
+     "- openmeterio/openmeter (2169 Go) - OpenMeter is a flexible metering and billing platform for AI, API, and DevOps companies that collects and aggregates usage events in real-time to enable usage-based billing and real-time insights.",
+     "- Percona-Lab/PromHouse (267 Go) - PromHouse is a long-term remote storage solution for Prometheus 2.x metrics built on ClickHouse, featuring clustering and downsampling capabilities for efficient time series data management.",
+     "- Swetrix/swetrix (1107 TypeScript) - Swetrix is an open source, privacy-focused, cookie-less web analytics platform that uses Clickhouse for efficient statistical data management and offers self-hosting or cloud deployment options.",
+     "- uptrace/uptrace (4251 Go) - Uptrace is an open source APM platform that uses OpenTelemetry for data collection and ClickHouse for storage, providing unified monitoring of traces, metrics, and logs with powerful querying, dashboards, and alerting capabilities.",
+     "- vmxdev/xenoeye (146 C++) - Xenoeye is a lightweight and efficient Netflow/IPFIX/sFlow collector and analyzer designed for medium to large networks, supporting traffic monitoring, anomaly detection, and integration with Grafana, PostgreSQL, and ClickHouse."
+    ]
+   ],
+   [
+    "equal",
+    233,
+    236,
+    230,
+    233
+   ],
+   [
+    "replace",
+    236,
+    240,
+    233,
+    237,
+    [
+     "- Altinity/clickhouse-operator (2548 Go) - Altinity Kubernetes Operator for ClickHouse automates the creation, configuration, and management of ClickHouse clusters on Kubernetes, providing scalable and customizable cluster operations with integrated monitoring.",
+     "- Altinity/clickhouse-rpm-install (135 ) - Altinity/clickhouse-rpm-install provides detailed instructions and scripts for installing ClickHouse RPM packages from Altinity's repositories on CentOS and Amazon Linux systems.",
+     "- housepower/ckman (485 Go) - ckman is a web-based tool for managing and monitoring ClickHouse database clusters, offering deployment, upgrade, node management, and monitoring features.",
+     "- tetafro/clickhouse-cluster (226 Makefile) - A simple ClickHouse cluster setup with 2 shards and 2 replicas using docker-compose for local development and testing."
+    ]
+   ],
+   [
+    "equal",
+    240,
+    243,
+    237,
+    240
+   ],
+   [
+    "replace",
+    243,
+    257,
+    240,
+    254,
+    [
+     "- akvorado/akvorado (2296 Go) - Akvorado is a flow collector, enricher, and visualizer that processes network flow data, enriches it with interface and geolocation information, and stores it in ClickHouse for real-time analysis and visualization.",
+     "- Altinity/clickhouse-grafana (774 Python) - Altinity/clickhouse-grafana is a Grafana datasource plugin that enables seamless integration and visualization of ClickHouse data within Grafana dashboards.",
+     "- benawad/voidpulse (102 TypeScript) - Voidpulse is an open-source AI-powered analytics platform serving as a cost-effective alternative to Mixpanel, utilizing Clickhouse for event data storage and querying.",
+     "- ClickHouse/adsb.exposed (451 HTML) - An interactive platform for visualizing and analyzing massive ADS-B air traffic data using ClickHouse with real-time querying and detailed visualizations.",
+     "- ClickHouse/clickpy (153 JavaScript) - ClickPy is an open-source real-time Python package analytics service powered by ClickHouse, providing fast, detailed insights into PyPI package downloads and trends.",
+     "- ClickHouse/github-explorer (176 HTML) - ClickHouse/github-explorer is a comprehensive dataset and analysis platform using ClickHouse to explore and understand GitHub repository events and trends since 2011.",
+     "- clickvisual/clickvisual (1640 Go) - ClickVisual is a lightweight log analytics and data visualization platform built on ClickHouse, designed for efficient log querying, analysis, and monitoring.",
+     "- datainsider-co/rocket-bi (122 TypeScript) - Rocket BI is a free, open-source, web-based self-service business intelligence tool tailored for analytical databases including ClickHouse, enabling users to analyze, visualize, and collaborate on data through interactive dashboards and drag-and-drop interfaces.",
+     "- grafana/clickhouse-datasource (219 TypeScript) - Official Grafana plugin enabling querying and visualization of ClickHouse data within Grafana dashboards.",
+     "- iamtelescope/telescope (708 Vue) - Telescope is a web-based log viewer UI that enables intuitive exploration and analysis of log data stored primarily in ClickHouse, with support for Docker logs and advanced querying features.",
+     "- mprove-io/mprove (338 TypeScript) - Mprove is an open-source self-service Business Intelligence platform with version control, leveraging ClickHouse for high-performance data analytics and flexible deployment options.",
+     "- mr-karan/logchef (766 Vue) - Logchef is a lightweight, high-performance log analytics platform built on ClickHouse, offering schema-agnostic querying, team-based access control, and easy deployment as a single binary.",
+     "- serenedb/serenedb (662 C++) - SereneDB is a distributed real-time search analytics database that unifies Elasticsearch-like search and ClickHouse-like analytics in a single, Postgres-compatible platform for high performance and ease of use.",
+     "- TongchengOpenSource/ckibana (315 Java) - CKibana is a ClickHouse adapter and proxy for Kibana that enables seamless visualization and analysis of ClickHouse data using native Kibana interfaces."
+    ]
+   ],
+   [
+    "equal",
+    257,
+    260,
+    254,
+    257
+   ],
+   [
+    "replace",
+    260,
+    279,
+    257,
+    276,
+    [
+     "- ByConity/ByConity (2237 C++) - ByConity is an open-source cloud data warehouse derived from ClickHouse, designed with a cloud-native architecture to provide high-performance querying and unified management of batch and streaming data at large scale.",
+     "- ClickHouse/ClickBench (1049 HTML) - ClickBench is a comprehensive and reproducible benchmark designed to evaluate the performance of analytical databases, including ClickHouse, using realistic workloads derived from real-world web analytics data.",
+     "- cloudflare/flow-pipeline (192 Go) - Flow-pipeline is a Cloudflare project providing tools and examples to build scalable network flow data collection and processing pipelines using GoFlow, Kafka, and databases like Postgres and Clickhouse.",
+     "- devlive-community/datacap (1046 Java) - DataCap is an integrated software platform for data transformation, integration, and visualization, supporting a wide range of data sources including ClickHouse and other major databases.",
+     "- droher/boxball (131 Python) - Boxball provides prebuilt Docker images with Retrosheet's complete baseball history data for multiple analytical database frameworks including Clickhouse, enabling easy access and analysis of comprehensive baseball datasets.",
+     "- easysql/easy_sql (135 Python) - Easy SQL is a versatile library that simplifies ETL development by enabling imperative SQL workflows across multiple backend SQL engines including Clickhouse.",
+     "- fortiql/data-forge (180 Jupyter Notebook) - Data Forge is a modern data stack playground that integrates tools like Spark, Trino, Kafka, ClickHouse, and Airflow to enable data engineers to practice end-to-end workflows locally using Docker Compose.",
+     "- FrigadeHQ/trench (1649 TypeScript) - Trench is an open-source, production-ready analytics infrastructure built on ClickHouse and Kafka for scalable, real-time event tracking and analytics with GDPR compliance.",
+     "- glassflow/clickhouse-etl (493 TypeScript) - GlassFlow is an open-source ETL tool for real-time data processing from Kafka to ClickHouse with features like deduplication and temporal joins.",
+     "- jitsucom/bulker (224 Go) - Bulker is a scalable and reliable service for bulk-loading semi-structured JSON data into multiple databases including ClickHouse, with automatic schema management and support for streaming and batching modes.",
+     "- LimeJourney/limeJourney (130 TypeScript) - LimeJourney is an open-source customer engagement platform that leverages ClickHouse for real-time segmentation and high-volume event data management to create personalized, data-driven user journeys at scale.",
+     "- myscale/MyScaleDB (1037 C++) - MyScaleDB is a high-performance SQL vector database built on ClickHouse, enabling scalable AI applications with advanced vector and full-text search capabilities using familiar SQL.",
+     "- ozontech/file.d (496 Go) - file.d is a high-performance, versatile tool for building data pipelines that read, process, and output events with support for ClickHouse and other output plugins, optimized for speed and reliability in modern infrastructure environments.",
+     "- PeerDB-io/peerdb (3215 Go) - PeerDB is a high-performance, PostgreSQL-optimized ETL tool that enables fast, reliable, and cost-effective streaming of data from Postgres to data warehouses, queues, and storage engines, with native integration in ClickHouse Cloud.",
+     "- timeplus-io/proton (2234 C++) - Timeplus Proton is a high-performance, lightweight streaming SQL engine powered by ClickHouse, designed for real-time analytics and ETL on streaming data from Kafka, Pulsar, Iceberg, and ClickHouse with advanced features like CDC, UPSERT, and multi-stream JOINs.",
+     "- toddwschneider/nyc-taxi-data (2080 R) - A comprehensive project for importing, processing, and analyzing over 3 billion NYC taxi and for-hire vehicle trip records using PostgreSQL or ClickHouse databases.",
+     "- transferia/transferia (189 Go) - Transferia is an open-source cloud-native ingestion engine that enables scalable, high-performance data transfer and transformation across diverse sources and destinations, with strong support for ClickHouse as a key target database.",
+     "- wgzhao/Addax (1421 Java) - Addax is a versatile and extensible open-source ETL tool that supports seamless data transfer between over 20 SQL and NoSQL data sources, including ClickHouse, with easy configuration and deployment options.",
+     "- ytsaurus/ytsaurus (2198 C++) - YTsaurus is a scalable, fault-tolerant open-source big data platform featuring MapReduce, SQL engine, NoSQL store, and integration with ClickHouse for fast analytics."
+    ]
+   ],
+   [
+    "equal",
+    279,
+    282,
+    276,
+    279
+   ],
+   [
+    "replace",
+    282,
+    286,
+    279,
+    283,
+    [
+     "- Altinity/clickhouse-backup (1632 Go) - Altinity/clickhouse-backup is a tool for easy backup and restore of ClickHouse databases using various cloud and local object storage systems.",
+     "- ClickHouse/mcp-clickhouse (839 Python) - ClickHouse MCP Server is a secure MCP server enabling read-only SQL query execution and database management operations on ClickHouse clusters.",
+     "- duyet/clickhouse-monitoring (254 TypeScript) - ClickHouse Monitoring Dashboard is a Next.js-based UI tool that leverages system tables to provide comprehensive monitoring and visualization of ClickHouse clusters, including query, cluster, and table metrics.",
+     "- PostHog/HouseWatch (625 TypeScript) - HouseWatch is an open-source tool by PostHog for monitoring and managing ClickHouse clusters, providing detailed insights into query performance, cluster load, logs, and disk usage with operational controls."
+    ]
+   ],
+   [
+    "equal",
+    286,
+    289,
+    283,
+    286
+   ],
+   [
+    "replace",
+    289,
+    294,
+    286,
+    291,
+    [
+     "- ClickHouse/ClickHouse (49013 C++) - ClickHouse is an open-source, column-oriented database management system designed for real-time analytics and high-performance data processing.",
+     "- ClickHouse/clickhouse-academy (148 Python) - ClickHouse Academy offers free, on-demand training and certification for database professionals to effectively learn and use the ClickHouse analytical database system.",
+     "- ClickHouse/clickhouse-docs (211 MDX) - Official documentation repository for ClickHouse, providing comprehensive guides and resources for using the ClickHouse column-oriented database management system.",
+     "- ClickHouse/clickhouse-presentations (1079 HTML) - A repository hosting presentations, meetups, and talks about ClickHouse, an open-source column-oriented database for real-time analytical data reporting.",
+     "- jneo8/clickhouse-setup (153 Makefile) - A comprehensive tutorial for setting up and configuring ClickHouse servers and clusters using Docker, emphasizing replication and data consistency with ZooKeeper."
+    ]
+   ],
+   [
+    "equal",
+    294,
+    297,
+    291,
+    294
+   ],
+   [
+    "replace",
+    297,
+    300,
+    294,
+    296,
+    [
+     "- AlexeyKupershtokh/clickhouse-maxmind-geoip (123 Dockerfile) - A demonstration project showcasing the integration of ClickHouse with MaxMind GeoIP2 databases for geolocation, including dictionary definitions, table schemas, query examples, and Docker setup for easy experimentation.",
+     "- ClickHouse/examples (226 Jupyter Notebook) - ClickHouse/examples is a repository providing a collection of data, SQL queries, and Docker Compose recipes to help users quickly deploy, experiment with, and integrate ClickHouse in various environments."
+    ]
+   ],
+   [
+    "equal",
+    300,
+    302,
+    296,
+    298
+   ],
+   [
+    "delete",
+    302,
+    304,
+    298,
+    298
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "43dedfa41bdd+2": {
+  "fn": "leoantony72/twitter-backend",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "Article explaining the internals:"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    17,
+    6,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     " Only the logs of services are outputed rest are disabled in docker-compose file "
+    ]
+   ],
+   [
+    "equal",
+    18,
+    24,
+    18,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     "Asymmetric JWT key"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    36,
+    25,
+    36
+   ],
+   [
+    "replace",
+    36,
+    42,
+    36,
+    42,
+    [
+     "|Method|Url|Description|",
+     "|------|-------------------|-------------------------|",
+     "|POST|/auth/signup|Creates a new user.|",
+     "|POST|/auth/login|Login a user|",
+     "|POST|/auth/logout|Logout a user|",
+     "|POST|/auth/refresh-token|Generate new access Token|"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    51,
+    42,
+    51
+   ],
+   [
+    "replace",
+    51,
+    58,
+    51,
+    58,
+    [
+     "|Method|Url|Description|",
+     "|------|------------------------|-----------------|",
+     "|GET|/user/data/:username|Gets User Details|",
+     "|DELETE|/|Delete User|",
+     "|UPDATE|/|Update User|",
+     "|POST|/user/follow?username=|Follows User|",
+     "|POST|/user/unfollow?username=|Unfollows User|"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    67,
+    58,
+    67
+   ],
+   [
+    "replace",
+    67,
+    76,
+    67,
+    76,
+    [
+     "|Method|Url|Description|",
+     "|------|---------------------|---------------------|",
+     "|POST|/tweet/create|Create Tweet|",
+     "|GET|/tweet/id/:id|Get Tweet By ID|",
+     "|DELETE|/tweet/id/:id/delete|Del Tweet by ID|",
+     "|POST|/tweet/id/:id/like|Like a Tweet by ID|",
+     "|POST|/tweet/id/:id/dislike|DisLike a Tweet by ID|",
+     "|POST|/tweet/id/:id/retweet|Retweet a tweet|",
+     "|DELETE|/tweet/id/:id/retweet|del a Retweet|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    85,
+    76,
+    85
+   ],
+   [
+    "replace",
+    85,
+    89,
+    85,
+    89,
+    [
+     "|Method|Url|Description|",
+     "|------|-------------------------------|-----------------------------------------|",
+     "|GET|/timeline/home?start=|Gets User's Home timeline|",
+     "|GET|/timeline/user?username=&start=|Gets User Timeline by specifying username|"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    95,
+    89,
+    95
+   ],
+   [
+    "replace",
+    95,
+    96,
+    95,
+    96,
+    [
+     "Tweet-Timleine link by Mq"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    104,
+    96,
+    104
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

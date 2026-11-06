@@ -1626,5 +1626,1455 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "f2e400dd251f+2": {
+  "fn": "garutilorenzo/k3s-oci-cluster",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "replace",
+    0,
+    5,
+    0,
+    5,
+    [
+     "Wordpress CI",
+     "GitHub issues",
+     "GitHub",
+     "GitHub forks",
+     "GitHub stars"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    9,
+    6,
+    7,
+    [
+     " k3s Logo"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    12,
+    7,
+    10
+   ],
+   [
+    "replace",
+    12,
+    13,
+    10,
+    11,
+    [
+     "Deploy a Kubernetes cluster for free, using K3s and Oracle always free resources."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    15,
+    11,
+    13
+   ],
+   [
+    "replace",
+    15,
+    46,
+    13,
+    14,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    56,
+    14,
+    24
+   ],
+   [
+    "replace",
+    56,
+    57,
+    24,
+    25,
+    [
+     "* an Oracle Cloud account. You can register here"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    25,
+    26
+   ],
+   [
+    "replace",
+    58,
+    59,
+    26,
+    27,
+    [
+     "Once you get the account, follow the *Before you begin* and *1. Prepare* step in this document."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    70,
+    27,
+    38
+   ],
+   [
+    "replace",
+    70,
+    72,
+    38,
+    40,
+    [
+     "Is always recommended to create a separate user and group in your preferred domain to use with Terraform.",
+     "This user must have less privileges possible (Zero trust policy). Below is an example policy that you can create (using the \"Advanced\" mode in Policy Builder) to allow `terraform-group` to manage all the resources needed by this module:"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    77,
+    40,
+    45
+   ],
+   [
+    "replace",
+    77,
+    84,
+    45,
+    46,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    86,
+    46,
+    48
+   ],
+   [
+    "replace",
+    86,
+    87,
+    48,
+    49,
+    [
+     "See how to find the compartment ocid. The user and the group have to be manually created before using this module."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    113,
+    49,
+    75
+   ],
+   [
+    "replace",
+    113,
+    114,
+    75,
+    76,
+    [
+     "Now you have to edit the `main.tf` file and you have to create the `terraform.tfvars` file. For more detail see Oracle provider setup and Pre flight checklist."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    119,
+    76,
+    81
+   ],
+   [
+    "replace",
+    119,
+    120,
+    81,
+    82,
+    [
+     "* `terraform.tfvars` - More details in Oracle provider setup"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    129,
+    82,
+    91
+   ],
+   [
+    "replace",
+    129,
+    175,
+    91,
+    92,
+    [
+     "…（46 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    177,
+    92,
+    94
+   ],
+   [
+    "replace",
+    177,
+    178,
+    94,
+    95,
+    [
+     "For all the possible variables see Pre flight checklist"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    185,
+    95,
+    102
+   ],
+   [
+    "replace",
+    185,
+    189,
+    102,
+    103,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    199,
+    103,
+    113
+   ],
+   [
+    "replace",
+    199,
+    220,
+    113,
+    114,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    246,
+    114,
+    140
+   ],
+   [
+    "replace",
+    246,
+    295,
+    140,
+    188,
+    [
+     "|Var|Required|Desc|",
+     "|-------|-------|-----------|",
+     "|`region`|`yes`|set the correct region based on your needs (note that this requires the name, not the OCID. Example: `eu-frankfurt-1`)|",
+     "|`availability_domain`|`yes`|Set the correct availability domain. See how to find the availability domain (note that this requires the name, not the OCID. Example: `TYPo:EU-FRANKFURT-1-AD-2`)|",
+     "|`compartment_ocid`|`yes`|Set the correct compartment ocid. See how to find the compartment ocid|",
+     "|`cluster_name`|`yes`|the name of your K3s cluster. Default: k3s-cluster|",
+     "|`my_public_ip_cidr`|`yes`|your local public IP in CIDR format (Example: `195.102.xxx.xxx/32`)|",
+     "|`private_key_path`|`yes`|Path to your private **OCI RSA key**|",
+     "|`environment`|`yes`|Current work environment (Example: staging/dev/prod). This value is used for tag all the deployed resources|",
+     "|`os_image_id`|`yes`|Image id to use. See how to list all available OS images|",
+     "|`public_key_path`|`no`|Path to your public **workstation SSH key**|",
+     "|`k3s_version`|`no`|K3s version. Default: latest|",
+     "|`k3s_subnet`|`no`|Subnet where K3s will be exposed. Rquired if the subnet is different from the default gw subnet (Eg. 192.168.1.0/24). Default: default_route_table|",
+     "|`compute_shape`|`no`|Compute shape to use. Default VM.Standard.A1.Flex. **NOTE** Is mandatory to use this compute shape for provision 4 always free VMs|",
+     "|`oci_core_vcn_dns_label`|`no`|VCN DNS label. Default: defaultvcn|",
+     "|`oci_core_subnet_dns_label10`|`no`|First subnet DNS label. Default: defaultsubnet10|",
+     "|`oci_core_subnet_dns_label11`|`no`|Second subnet DNS label. Default: defaultsubnet11|",
+     "|`oci_core_vcn_cidr`|`no`|VCN CIDR. Default: oci_core_vcn_cidr|",
+     "|`oci_core_subnet_cidr10`|`no`|First subnet CIDR. Default: 10.0.0.0/24|",
+     "|`oci_core_subnet_cidr11`|`no`|Second subnet CIDR. Default: 10.0.1.0/24|",
+     "|`oci_identity_dynamic_group_name`|`no`|Dynamic group name. This dynamic group will contains all the instances of this specific compartment. Default: Compute_Dynamic_Group|",
+     "|`oci_identity_policy_name`|`no`|Policy name. This policy will allow dynamic group 'oci_identity_dynamic_group_name' to read OCI api without auth. Default: Compute_To_Oci_Api_Policy|",
+     "|`k3s_load_balancer_name`|`no`|Internal LB name. Default: k3s internal load balancer|",
+     "|`public_load_balancer_name`|`no`|Public LB name. Default: K3s public LB|",
+     "|`kube_api_port`|`no`|Kube api default port Default: 6443|",
+     "|`public_lb_shape`|`no`|LB shape for the public LB. Default: flexible. **NOTE** is mandatory to use this kind of shape to provision two always free LB (public and private)|",
+     "|`http_lb_port`|`no`|http port used by the public LB. Default: 80|",
+     "|`https_lb_port`|`no`|http port used by the public LB. Default: 443|",
+     "|`k3s_server_pool_size`|`no`|Number of k3s servers deployed. Default 1|",
+     "|`k3s_worker_pool_size`|`no`|Number of k3s workers deployed. Default 2|",
+     "|`k3s_extra_worker_node`|`no`|Boolean value, default true. Deploy the third worker nodes. The node will be deployed outside the worker instance pools. Using OCI always free account you can't create instance pools with more than two servers. This workaround solve this problem.|",
+     "|`ingress_controller`|`no`|Define the ingress controller to use. Valid values are: default, nginx, traefik2 or istio|",
+     "|`disable_ingress`|`no`|Boolean value, disable all ingress controllers. Default: false|",
+     "|`ingress_controller_http_nodeport`|`no`|NodePort where nginx ingress will listen for http traffic. Default 30080|",
+     "|`ingress_controller_https_nodeport`|`no`|NodePort where nginx ingress will listen for https traffic. Default 30443|",
+     "|`install_longhorn`|`no`|Boolean value, install longhorn \"Cloud native distributed block storage for Kubernetes\". Default: true.|",
+     "|`longhorn_release`|`no`|Longhorn release. Default: v1.8.1|",
+     "|`install_certmanager`|`no`|Boolean value, install cert manager \"Cloud native certificate management\". Default: true|",
+     "|`nginx_ingress_release`|`no`|Longhorn release. Default: v1.12.1|",
+     "|`certmanager_release`|`no`|Cert manager release. Default: v1.12.16|",
+     "|`certmanager_email_address`|`no`|Email address used for signing https certificates. Default: changeme@example.com|",
+     "|`install_argocd`|`no`|Boolean value, install Argo CD \"a declarative, GitOps continuous delivery tool for Kubernetes.\". Default: true|",
+     "|`argocd_release`|`no`|Argo CD release. Default: v2.14.9|",
+     "|`install_argocd_image_updater`|`no`|Boolean value, install Argo CD Image Updater \"A tool to automatically update the container images of Kubernetes workloads that are managed by Argo CD.\". Default: true|",
+     "|`argocd_image_updater_release`|`no`|Argo CD release Image Updater. Default: v0.16.0|",
+     "|`unique_tag_key`|`no`|Unique tag name used for tagging all the deployed resources. Default: k3s-provisioner|",
+     "|`unique_tag_value`|`no`|Unique value used with unique_tag_key. Default: https://github.com/garutilorenzo/k3s-oci-cluster|",
+     "|`expose_kubeapi`|`no`|Boolean value, default false. Expose or not the kubeapi server to the internet. Access is granted only from *my_public_ip_cidr* for security reasons.|"
+    ]
+   ],
+   [
+    "equal",
+    295,
+    304,
+    188,
+    197
+   ],
+   [
+    "replace",
+    304,
+    311,
+    197,
+    198,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    311,
+    321,
+    198,
+    208
+   ],
+   [
+    "replace",
+    321,
+    347,
+    208,
+    209,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    353,
+    209,
+    215
+   ],
+   [
+    "replace",
+    353,
+    354,
+    215,
+    216,
+    [
+     "In this setup we use two LB, one internal LB and one public LB (Layer 7). In order to use two LB using the always free resources, one lb must be a network load balancer an the other must be a load balancer. The public LB **must** use the `flexible` shape (`public_lb_shape` variable)."
+    ]
+   ],
+   [
+    "equal",
+    354,
+    357,
+    216,
+    219
+   ],
+   [
+    "replace",
+    357,
+    358,
+    219,
+    220,
+    [
+     "In this environment the High Availability of the K3s cluster is provided using the Embedded DB. More details here"
+    ]
+   ],
+   [
+    "equal",
+    358,
+    359,
+    220,
+    221
+   ],
+   [
+    "replace",
+    359,
+    361,
+    221,
+    223,
+    [
+     "The default installation of K3s install Traefik as ingress the controller. In this environment Traefik is replaced by Nginx ingress controller. To install Traefik as the ingress controller set the variable `ingress_controller` to `default`.",
+     "For more details on Nginx ingress controller see the Nginx ingress controller section."
+    ]
+   ],
+   [
+    "equal",
+    361,
+    367,
+    223,
+    229
+   ],
+   [
+    "replace",
+    367,
+    369,
+    229,
+    231,
+    [
+     " * one instance pool for the server nodes named `k3s-servers`",
+     " * one instance pool for the worker nodes named `k3s-workers`"
+    ]
+   ],
+   [
+    "equal",
+    369,
+    381,
+    231,
+    243
+   ],
+   [
+    "replace",
+    381,
+    382,
+    243,
+    244,
+    [
+     "k3s infra"
+    ]
+   ],
+   [
+    "equal",
+    382,
+    385,
+    244,
+    247
+   ],
+   [
+    "replace",
+    385,
+    386,
+    247,
+    248,
+    [
+     "This setup will automatically install longhorn. Longhorn is a *Cloud native distributed block storage for Kubernetes*. To disable the longhorn deployment set `install_longhorn` variable to `false`."
+    ]
+   ],
+   [
+    "equal",
+    386,
+    389,
+    248,
+    251
+   ],
+   [
+    "replace",
+    389,
+    390,
+    251,
+    252,
+    [
+     "In this environment Nginx ingress controller is used instead of the standard Traefik ingress controller."
+    ]
+   ],
+   [
+    "equal",
+    390,
+    391,
+    252,
+    253
+   ],
+   [
+    "replace",
+    391,
+    392,
+    253,
+    254,
+    [
+     "The installation is the bare metal installation, the ingress controller then is exposed via a NodePort Service."
+    ]
+   ],
+   [
+    "equal",
+    392,
+    397,
+    254,
+    259
+   ],
+   [
+    "replace",
+    397,
+    417,
+    259,
+    260,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    417,
+    425,
+    260,
+    268
+   ],
+   [
+    "replace",
+    425,
+    442,
+    268,
+    269,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    442,
+    456,
+    269,
+    283
+   ],
+   [
+    "replace",
+    456,
+    457,
+    283,
+    284,
+    [
+     "cert-manager is used to issue certificates from a variety of supported source. To use cert-manager take a look at nginx-ingress-cert-manager.yml and nginx-configmap-cert-manager.yml example. To use cert-manager and get the certificate you **need** set on your DNS configuration the public ip address of the load balancer."
+    ]
+   ],
+   [
+    "equal",
+    457,
+    466,
+    284,
+    293
+   ],
+   [
+    "replace",
+    466,
+    500,
+    293,
+    294,
+    [
+     "…（34 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    500,
+    508,
+    294,
+    302
+   ],
+   [
+    "replace",
+    508,
+    564,
+    302,
+    303,
+    [
+     "…（56 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    564,
+    572,
+    303,
+    311
+   ],
+   [
+    "replace",
+    572,
+    579,
+    311,
+    312,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    579,
+    589,
+    312,
+    322
+   ],
+   [
+    "replace",
+    589,
+    611,
+    322,
+    323,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    611,
+    619,
+    323,
+    331
+   ],
+   [
+    "replace",
+    619,
+    663,
+    331,
+    332,
+    [
+     "…（44 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    663,
+    673,
+    332,
+    342
+   ],
+   [
+    "replace",
+    673,
+    715,
+    342,
+    343,
+    [
+     "…（42 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    715,
+    724,
+    343,
+    352
+   ],
+   [
+    "replace",
+    724,
+    730,
+    352,
+    353,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    730,
+    747,
+    353,
+    370
+   ],
+   [
+    "delete",
+    747,
+    748,
+    370,
+    370
+   ],
+   [
+    "equal",
+    748,
+    757,
+    370,
+    379
+   ],
+   [
+    "replace",
+    757,
+    758,
+    379,
+    380,
+    [
+     "Wordpress and nginx share the same persistent volume (ReadWriteMany with longhorn storage class). The nginx configuration is stored in four ConfigMaps and the nginx service is exposed by the nginx ingress controller."
+    ]
+   ],
+   [
+    "equal",
+    758,
+    766,
+    380,
+    388
+   ],
+   [
+    "replace",
+    766,
+    767,
+    388,
+    389,
+    [
+     "**NOTE** The Wordpress installation is **secured**. To allow external traffic to `/wp-admin`, `/xmlrpc.php` and `wp-login.php` you have to edit the deployments/nginx/all-resources.yml and change this line:"
+    ]
+   ],
+   [
+    "equal",
+    767,
+    779,
+    389,
+    401
+   ],
+   [
+    "replace",
+    779,
+    783,
+    401,
+    402,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    783,
+    791,
+    402,
+    410
+   ],
+   [
+    "replace",
+    791,
+    800,
+    410,
+    411,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    800,
+    804,
+    411,
+    415
+   ],
+   [
+    "replace",
+    804,
+    805,
+    415,
+    416,
+    [
+     "k3s wp install"
+    ]
+   ],
+   [
+    "equal",
+    805,
+    837,
+    416,
+    448
+   ],
+   [
+    "replace",
+    837,
+    838,
+    448,
+    449,
+    [
+     "The runc version in k3s containerd version 1.6.6 contains a regression that prevents anyone from executing a command and attaching to the container's TTY (exec -it) whenever someone runs systemctl daemon-reload. Alternatively, the user may run into this issue on SELinux-enforced systems. Ref."
+    ]
+   ],
+   [
+    "equal",
+    838,
+    846,
+    449,
+    457
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "6681bc61653b+2": {
+  "fn": "yuanwenq/dailyfresh",
+  "clean_ver": "2",
+  "raw_lines": 11,
+  "ops": [
+   [
+    "equal",
+    0,
+    11,
+    0,
+    11
+   ],
+   [
+    "delete",
+    11,
+    12,
+    11,
+    11
+   ],
+   [
+    "equal",
+    12,
+    14,
+    11,
+    13
+   ],
+   [
+    "replace",
+    14,
+    37,
+    13,
+    36,
+    [
+     " - [x] 用户模块",
+     " - [x] 注册",
+     " - [x] 登录",
+     " - [x] 激活(celery)",
+     " - [x] 退出",
+     " - [x] 个人中心",
+     " - [x] 地址管理",
+     " - [x] 商品模块",
+     " - [x] 首页(celery)",
+     " - [x] 商品详情",
+     " - [x] 商品列表",
+     " - [x] 搜索功能(haystack+whoose)",
+     " - [x] 购物车模块(redis)",
+     " - [x] 增加",
+     " - [x] 删除",
+     " - [x] 修改",
+     " - [x] 查询",
+     " - [x] 订单模块",
+     " - [x] 确认订单页面",
+     " - [x] 订单创建",
+     " - [x] 请求支付(支付宝)",
+     " - [x] 查询支付结果",
+     " - [x] 评论"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    40,
+    36,
+    39
+   ],
+   [
+    "replace",
+    40,
+    41,
+    39,
+    40,
+    [
+     "配置环境文件"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    40,
+    41
+   ],
+   [
+    "replace",
+    42,
+    43,
+    41,
+    42,
+    [
+     "虚拟环境安装和启动方式"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    42,
+    43
+   ],
+   [
+    "replace",
+    44,
+    45,
+    43,
+    44,
+    [
+     "celery分布式任务队列"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    44,
+    45
+   ],
+   [
+    "replace",
+    46,
+    47,
+    45,
+    46,
+    [
+     "redis环境安装"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    46,
+    47
+   ],
+   [
+    "replace",
+    48,
+    49,
+    47,
+    48,
+    [
+     "FastDFS安装和配置"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    50,
+    48,
+    49
+   ],
+   [
+    "replace",
+    50,
+    51,
+    49,
+    50,
+    [
+     "Nginx及fastdfs-nginx-module安装"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    52,
+    50,
+    51
+   ],
+   [
+    "replace",
+    52,
+    53,
+    51,
+    52,
+    [
+     "全文检索引擎-生成jieba分词引擎步骤"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    52,
+    53
+   ],
+   [
+    "replace",
+    54,
+    55,
+    53,
+    54,
+    [
+     "支付宝支付配置"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    54,
+    55
+   ],
+   [
+    "replace",
+    56,
+    60,
+    55,
+    59,
+    [
+     "软件安装-云盘",
+     "",
+     "- 项目启动： ",
+     " - **注意: 项目启动前请先查看项目配置环境文件,配置你相应的设置,并安装好各个环境,mysql+redis+nginx+fastDFS+celery等**"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    67,
+    59,
+    66
+   ],
+   [
+    "replace",
+    67,
+    69,
+    66,
+    68,
+    [
+     "- uwsgi web服务器启动： ",
+     " - **注意: uwsgi开启需要修改配置文件中的DEBUG和ALLOWED_HOSTS**"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    73,
+    68,
+    72
+   ],
+   [
+    "replace",
+    73,
+    74,
+    72,
+    73,
+    [
+     "- celery分布式任务队列启动 "
+    ]
+   ],
+   [
+    "equal",
+    74,
+    77,
+    73,
+    76
+   ],
+   [
+    "replace",
+    77,
+    78,
+    76,
+    77,
+    [
+     "- redis服务端启动 "
+    ]
+   ],
+   [
+    "equal",
+    78,
+    96,
+    77,
+    95
+   ],
+   [
+    "replace",
+    96,
+    98,
+    95,
+    97,
+    [
+     "- 建立索引文件--搜索引擎 ",
+     " 新环境需要配置jieba分词,生成whoose_cn_backend文件"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    111,
+    97,
+    110
+   ],
+   [
+    "replace",
+    111,
+    142,
+    110,
+    111,
+    [
+     "…（31 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    144,
+    111,
+    113
+   ],
+   [
+    "replace",
+    144,
+    146,
+    113,
+    115,
+    [
+     "pip install fdfs_client-py-master 存在bug，需要下载特定版本 ",
+     "redis版本需要2.10.6 否则会报错,因为使用django的版本过低问题 "
+    ]
+   ],
+   [
+    "equal",
+    146,
+    157,
+    115,
+    126
+   ],
+   [
+    "replace",
+    157,
+    307,
+    126,
+    127,
+    [
+     "…（150 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    307,
+    308,
+    127,
+    128
+   ],
+   [
+    "delete",
+    308,
+    309,
+    128,
+    128
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "08a2de15f66f+2": {
+  "fn": "pgrwl/pgrwl",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    12,
+    4,
+    12,
+    [
+     "License",
+     "Go Report Card",
+     "Go Reference",
+     "Workflow Status",
+     "GitHub Issues",
+     "Go Version",
+     "Latest Release",
+     "Start contributing"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    24,
+    12,
+    24
+   ],
+   [
+    "delete",
+    24,
+    26,
+    24,
+    24
+   ],
+   [
+    "equal",
+    26,
+    27,
+    24,
+    25
+   ],
+   [
+    "replace",
+    27,
+    44,
+    25,
+    26,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    59,
+    26,
+    41
+   ],
+   [
+    "replace",
+    59,
+    60,
+    41,
+    42,
+    [
+     "UI"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    63,
+    42,
+    45
+   ],
+   [
+    "replace",
+    63,
+    66,
+    45,
+    46,
+    [
+     "Receive Mode"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    73,
+    46,
+    53
+   ],
+   [
+    "replace",
+    73,
+    118,
+    53,
+    54,
+    [
+     "…（45 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    122,
+    54,
+    58
+   ],
+   [
+    "replace",
+    122,
+    127,
+    58,
+    61,
+    [
+     "- Kubernetes (S3, UI, metrics)",
+     "- Download docker-compose.yml",
+     " (it includes S3, UI, metrics), then run: `docker compose up -d`"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    133,
+    61,
+    67
+   ],
+   [
+    "replace",
+    133,
+    136,
+    67,
+    70,
+    [
+     " and renames them to their final WAL filenames once complete.",
+     " Completed WAL files are then archived by the archive supervisor: optionally compressed,",
+     " encrypted, uploaded to the configured backend, and removed locally after a successful upload."
+    ]
+   ],
+   [
+    "equal",
+    136,
+    138,
+    70,
+    72
+   ],
+   [
+    "replace",
+    138,
+    141,
+    72,
+    75,
+    [
+     " Base backups can also be triggered manually through the HTTP API.",
+     " Backup failures are logged and reported, but they do not stop WAL streaming,",
+     " because WAL capture is the critical path."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    143,
+    75,
+    77
+   ],
+   [
+    "replace",
+    143,
+    144,
+    77,
+    78,
+    [
+     " or local storage, but under separate logical prefixes."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    146,
+    78,
+    80
+   ],
+   [
+    "replace",
+    146,
+    149,
+    80,
+    83,
+    [
+     " the newest successful base backup that started before the recovery window begins.",
+     " It keeps that backup, all newer successful backups, and all WAL files",
+     " required to restore forward from the anchor backup."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    151,
+    83,
+    85
+   ],
+   [
+    "replace",
+    151,
+    152,
+    85,
+    86,
+    [
+     " base backup and WAL history to recover to any point in the last three days."
+    ]
+   ],
+   [
+    "equal",
+    152,
+    154,
+    86,
+    88
+   ],
+   [
+    "replace",
+    154,
+    159,
+    88,
+    93,
+    [
+     " from `restore_command`; the helper fetches requested WAL files from the restore daemon",
+     " and writes them to the path expected by PostgreSQL.",
+     " **Serve mode** exposes local `*.partial` WAL files from the receiver's `ReadWriteOnce` PVC.",
+     " This follows the main design rule: **always stream WAL to the local filesystem first**, so recovery",
+     " can use the latest committed WAL records even if they have not been archived yet."
+    ]
+   ],
+   [
+    "equal",
+    159,
+    166,
+    93,
+    100
+   ],
+   [
+    "delete",
+    166,
+    168,
+    100,
+    100
+   ],
+   [
+    "equal",
+    168,
+    183,
+    100,
+    115
+   ],
+   [
+    "replace",
+    183,
+    184,
+    115,
+    116,
+    [
+     " backend (e.g., S3, SFTP)."
+    ]
+   ],
+   [
+    "equal",
+    184,
+    219,
+    116,
+    151
+   ],
+   [
+    "delete",
+    219,
+    221,
+    151,
+    151
+   ],
+   [
+    "equal",
+    221,
+    222,
+    151,
+    152
+   ],
+   [
+    "replace",
+    222,
+    224,
+    152,
+    153,
+    [
+     "MIT. See LICENSE for details."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

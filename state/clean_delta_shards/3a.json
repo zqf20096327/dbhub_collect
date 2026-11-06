@@ -9673,5 +9673,1012 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "d256386df7c6+2": {
+  "fn": "milen-denev/rasterizeddb",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "delete",
+    0,
+    1,
+    0,
+    0
+   ],
+   [
+    "equal",
+    1,
+    4,
+    0,
+    3
+   ],
+   [
+    "replace",
+    4,
+    5,
+    3,
+    4,
+    [
+     "rdb_studio connected to a RasterizedDB server"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    4,
+    5
+   ],
+   [
+    "replace",
+    6,
+    7,
+    5,
+    6,
+    [
+     "*rdb_studio, the desktop console, watching a"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    18,
+    6,
+    17
+   ],
+   [
+    "replace",
+    18,
+    19,
+    17,
+    18,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    18,
+    19
+   ],
+   [
+    "replace",
+    20,
+    31,
+    19,
+    30,
+    [
+     "|**PostgreSQL wire protocol**|Simple and extended query protocols, bound parameters, SCRAM-SHA-256, TLS. Drivers and ORMs work as-is — see SQL surface|",
+     "|**Transactions**|MVCC snapshots, `READ COMMITTED` / `REPEATABLE READ`, savepoints, first-updater-wins conflicts|",
+     "|**Durability**|Write-ahead log with checkpoints, and a `synchronous_commit` knob with the trade stated exactly|",
+     "|**Filter index**|Bit-sliced fingerprints, 512 rows per SIMD register, plus zone maps for ranges. Adaptive and runtime-tunable|",
+     "|**Space reclamation**|Background vacuum publishing a free list the write path allocates from; `VACUUM` and `VACUUM FULL`|",
+     "|**JSON**|Documents stored as binary values, with path indexing|",
+     "|**Replication**|Multi-primary, statement-shipping, HLC-ordered, over TLS 1.3|",
+     "|**Backup**|Snapshot and point-in-time recovery to any S3-compatible store|",
+     "|**Storage pools**|One database across several directories, with a placement policy and mirrored backups|",
+     "|**PostgreSQL import**|One-shot migration of a live PostgreSQL database|",
+     "|**rdb_studio**|A desktop console that also speaks to PostgreSQL|"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    30,
+    31
+   ],
+   [
+    "replace",
+    32,
+    33,
+    31,
+    32,
+    [
+     "Design notes for each subsystem live in docs/ — they cover the"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    54,
+    32,
+    53
+   ],
+   [
+    "replace",
+    54,
+    55,
+    53,
+    54,
+    [
+     "|Feature|Default|What it adds|"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    54,
+    55
+   ],
+   [
+    "replace",
+    56,
+    63,
+    55,
+    62,
+    [
+     "|`s3_backup`|on|Backup, restore and PITR to an object store, and the `BACKUP`/`RESTORE` statements|",
+     "|`pg_import`|on|The PostgreSQL frontend client and `IMPORT DATABASE FROM POSTGRES`|",
+     "|`storage_pools`|on|Multi-directory placement, mirroring, and the `STORAGE` statements|",
+     "|`replication_compression`|on|Zstd on replication links; a node without it still interoperates, uncompressed|",
+     "|`memory_pool_reuse`|on|Thread-local free lists in the buffer pool|",
+     "|`enable_long_row`|off|Rows above the standard width cap|",
+     "|`enable_data_verification`|off|Extra checksums on the read path|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    91,
+    62,
+    90
+   ],
+   [
+    "replace",
+    91,
+    94,
+    90,
+    93,
+    [
+     " location directory holds (`postgres` by default); others are created with",
+     " `CREATE DATABASE` and live in subdirectories of it. A name that does not exist",
+     " is refused rather than silently served the default."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    93,
+    94
+   ],
+   [
+    "replace",
+    95,
+    97,
+    94,
+    96,
+    [
+     " `require`, which refuses a cleartext connection instead of downgrading it. With",
+     " no certificate given, a self-signed one is generated at start-up."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    96,
+    97
+   ],
+   [
+    "replace",
+    98,
+    100,
+    97,
+    99,
+    [
+     " time a database's role catalogue is empty; after that, use `CREATE USER`.",
+     " Roles are per database."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    99,
+    100
+   ],
+   [
+    "replace",
+    101,
+    102,
+    100,
+    101,
+    [
+     " host."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    112,
+    101,
+    111
+   ],
+   [
+    "replace",
+    112,
+    113,
+    111,
+    112,
+    [
+     " case-insensitive resolution, arithmetic, `SELECT DISTINCT`."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    112,
+    113
+   ],
+   [
+    "replace",
+    114,
+    116,
+    113,
+    115,
+    [
+     " with parentheses, `IN`, `NOT IN`, `BETWEEN`, `LIKE` and `ILIKE` with the full",
+     " pattern language."
+    ]
+   ],
+   [
+    "equal",
+    116,
+    117,
+    115,
+    116
+   ],
+   [
+    "replace",
+    117,
+    121,
+    116,
+    120,
+    [
+     " **composite keys** (`ON a.x = b.x AND a.y = b.y`), which every junction table",
+     " needs. Executed as a hash join over materialised rows, each relation scanned",
+     " once with its own share of the `WHERE` pushed down, so filter pruning still",
+     " applies per relation."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    120,
+    121
+   ],
+   [
+    "replace",
+    122,
+    124,
+    121,
+    123,
+    [
+     " `HAVING`, over a single table or a join. `SUM` and `AVG` over an exact type",
+     " stay exact, so a money column keeps its cents."
+    ]
+   ],
+   [
+    "equal",
+    124,
+    125,
+    123,
+    124
+   ],
+   [
+    "replace",
+    125,
+    127,
+    124,
+    126,
+    [
+     " aggregate: every row survives and gains a column computed from the rows",
+     " around it."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    128,
+    126,
+    127
+   ],
+   [
+    "replace",
+    128,
+    130,
+    127,
+    129,
+    [
+     " pre-12 semantics: an optimisation fence, evaluated once however many times it",
+     " is referenced."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    129,
+    130
+   ],
+   [
+    "replace",
+    131,
+    132,
+    130,
+    131,
+    [
+     " as a literal list so filter pruning still applies."
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    131,
+    132
+   ],
+   [
+    "replace",
+    133,
+    135,
+    132,
+    134,
+    [
+     " direction, including expressions and keys that are not selected; `LIMIT`,",
+     " `OFFSET`, and the `FETCH FIRST … ROWS ONLY` spellings."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    134,
+    135
+   ],
+   [
+    "replace",
+    136,
+    138,
+    135,
+    137,
+    [
+     " `DELETE`, `DELETE … USING`, `ON CONFLICT DO UPDATE`, and `RETURNING` on all of",
+     " them — where a returned item may be an expression, not only a column."
+    ]
+   ],
+   [
+    "equal",
+    138,
+    139,
+    137,
+    138
+   ],
+   [
+    "replace",
+    139,
+    140,
+    138,
+    139,
+    [
+     " `MOD`, and `::` casts, in projections, predicates and `RETURNING`."
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    139,
+    140
+   ],
+   [
+    "replace",
+    141,
+    144,
+    140,
+    143,
+    [
+     " `DEFAULT CURRENT_TIMESTAMP` means the time of the insert), primary keys,",
+     " single- and multi-column `UNIQUE`, and foreign keys, which are **enforced**",
+     " rather than merely accepted."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    145,
+    143,
+    144
+   ],
+   [
+    "replace",
+    145,
+    146,
+    144,
+    145,
+    [
+     " `ADD`/`DROP`/`RENAME COLUMN` and `ALTER … TYPE … USING`."
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    145,
+    146
+   ],
+   [
+    "replace",
+    147,
+    148,
+    146,
+    147,
+    [
+     " statement names one, so tools that introspect `pg_catalog` work."
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    147,
+    148
+   ],
+   [
+    "replace",
+    149,
+    150,
+    148,
+    149,
+    [
+     "See docs/postgres-compatibility.md for the"
+    ]
+   ],
+   [
+    "equal",
+    150,
+    175,
+    149,
+    174
+   ],
+   [
+    "replace",
+    175,
+    176,
+    174,
+    175,
+    [
+     "See docs/mvcc.md."
+    ]
+   ],
+   [
+    "equal",
+    176,
+    231,
+    175,
+    230
+   ],
+   [
+    "replace",
+    231,
+    232,
+    230,
+    231,
+    [
+     "See docs/bit-bloom-filter-design.md for the"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    254,
+    231,
+    253
+   ],
+   [
+    "replace",
+    254,
+    255,
+    253,
+    254,
+    [
+     "See docs/space-reclamation.md."
+    ]
+   ],
+   [
+    "equal",
+    255,
+    292,
+    254,
+    291
+   ],
+   [
+    "replace",
+    292,
+    295,
+    291,
+    294,
+    [
+     " there is no legacy peer to accommodate and no reason to keep TLS 1.2's",
+     " negotiable ciphers and downgrade dances. 0-RTT early data is off, because a",
+     " replayed request here is a repeated write."
+    ]
+   ],
+   [
+    "equal",
+    295,
+    296,
+    294,
+    295
+   ],
+   [
+    "replace",
+    296,
+    298,
+    295,
+    297,
+    [
+     " for drivers that speak nothing else; `--rdb-auth` takes `scram-sha-256`",
+     " (default) or `trust` and refuses the other two."
+    ]
+   ],
+   [
+    "equal",
+    298,
+    299,
+    297,
+    298
+   ],
+   [
+    "replace",
+    299,
+    303,
+    298,
+    302,
+    [
+     " the exchange safe even though the client does not verify the server's",
+     " self-signed certificate by default: an attacker who intercepts the connection",
+     " cannot relay the exchange onto their own connection to the real server,",
+     " because the proof is bound to the connection it was made on."
+    ]
+   ],
+   [
+    "equal",
+    303,
+    304,
+    302,
+    303
+   ],
+   [
+    "replace",
+    304,
+    305,
+    303,
+    304,
+    [
+     " through without a challenge."
+    ]
+   ],
+   [
+    "equal",
+    305,
+    306,
+    304,
+    305
+   ],
+   [
+    "replace",
+    306,
+    307,
+    305,
+    306,
+    [
+     " to the log in full — their text contains a password."
+    ]
+   ],
+   [
+    "equal",
+    307,
+    315,
+    306,
+    314
+   ],
+   [
+    "replace",
+    315,
+    316,
+    314,
+    315,
+    [
+     "A pgAdmin-style console for RasterizedDB, written in iced."
+    ]
+   ],
+   [
+    "equal",
+    316,
+    327,
+    315,
+    326
+   ],
+   [
+    "replace",
+    327,
+    328,
+    326,
+    327,
+    [
+     "change. See rdb_studio/README.md."
+    ]
+   ],
+   [
+    "equal",
+    328,
+    337,
+    327,
+    336
+   ],
+   [
+    "replace",
+    337,
+    348,
+    336,
+    337,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    348,
+    350,
+    337,
+    339
+   ],
+   [
+    "replace",
+    350,
+    351,
+    339,
+    340,
+    [
+     "See docs/introspection.md for what each figure means"
+    ]
+   ],
+   [
+    "equal",
+    351,
+    363,
+    340,
+    352
+   ],
+   [
+    "replace",
+    363,
+    367,
+    352,
+    353,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    367,
+    389,
+    353,
+    375
+   ],
+   [
+    "replace",
+    389,
+    397,
+    375,
+    376,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    397,
+    403,
+    376,
+    382
+   ],
+   [
+    "replace",
+    403,
+    404,
+    382,
+    383,
+    [
+     "See docs/replication.md for the wire format, the"
+    ]
+   ],
+   [
+    "equal",
+    404,
+    433,
+    383,
+    412
+   ],
+   [
+    "replace",
+    433,
+    438,
+    412,
+    417,
+    [
+     "|policy|what it does|",
+     "|---|---|",
+     "|`primary` (default)|always the first enabled primary|",
+     "|`round-robin`|the enabled primary holding the fewest tables|",
+     "|`free-space`|the enabled primary with the most available bytes, weighted|"
+    ]
+   ],
+   [
+    "equal",
+    438,
+    450,
+    417,
+    429
+   ],
+   [
+    "replace",
+    450,
+    464,
+    429,
+    430,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    464,
+    477,
+    430,
+    443
+   ],
+   [
+    "replace",
+    477,
+    478,
+    443,
+    444,
+    [
+     "The STORAGE tab in rdb_studio is the same"
+    ]
+   ],
+   [
+    "equal",
+    478,
+    485,
+    444,
+    451
+   ],
+   [
+    "replace",
+    485,
+    486,
+    451,
+    452,
+    [
+     "See docs/storage-pools.md for the on-disk format, what"
+    ]
+   ],
+   [
+    "equal",
+    486,
+    525,
+    452,
+    491
+   ],
+   [
+    "replace",
+    525,
+    526,
+    491,
+    492,
+    [
+     "it. See docs/s3-backup.md for the design, the full flag"
+    ]
+   ],
+   [
+    "equal",
+    526,
+    539,
+    492,
+    505
+   ],
+   [
+    "replace",
+    539,
+    544,
+    505,
+    506,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    544,
+    586,
+    506,
+    548
+   ],
+   [
+    "replace",
+    586,
+    587,
+    548,
+    549,
+    [
+     "See docs/postgres-import.md for the type mapping, the"
+    ]
+   ],
+   [
+    "equal",
+    587,
+    649,
+    549,
+    611
+   ],
+   [
+    "replace",
+    649,
+    652,
+    611,
+    612,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    652,
+    654,
+    612,
+    614
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "ee4d48e27448+2": {
+  "fn": "tikv/minstant",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    6,
+    1,
+    6,
+    [
+     "Actions Status",
+     "Build Status",
+     "Documentation",
+     "Crates.io",
+     "LICENSE"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    6,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "A drop-in replacement for `std::time::Instant` that measures time with high performance and high accuracy powered by TSC."
+    ]
+   ],
+   [
+    "equal",
+    8,
+    24,
+    8,
+    24
+   ],
+   [
+    "delete",
+    24,
+    25,
+    24,
+    24
+   ],
+   [
+    "equal",
+    25,
+    27,
+    24,
+    26
+   ],
+   [
+    "replace",
+    27,
+    28,
+    26,
+    27,
+    [
+     "This library is used by a high performance tracing library `minitrace-rust`. The main purpose is to use TSC on x86 processors to measure time at high speed without losing much accuracy."
+    ]
+   ],
+   [
+    "equal",
+    28,
+    31,
+    27,
+    30
+   ],
+   [
+    "replace",
+    31,
+    32,
+    30,
+    31,
+    [
+     "Currently, only the Linux on `x86` or `x86_64` is backed by TSC. On other platforms, `minstant` falls back to `std::time`. If TSC is unstable, it will also fall back to `std::time`."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    48,
+    31,
+    47
+   ],
+   [
+    "replace",
+    48,
+    52,
+    47,
+    48,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    54,
+    48,
+    50
+   ],
+   [
+    "replace",
+    54,
+    55,
+    50,
+    51,
+    [
+     "Benchmark"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }
