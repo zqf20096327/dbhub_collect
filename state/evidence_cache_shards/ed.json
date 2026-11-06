@@ -2003,13 +2003,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T03:48:10Z",
+  "collected_at": "2026-11-06T03:45:34Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-03",
+  "pushed_at": "2026-11-05",
   "stars": 10,
   "tree": {
    "sha": "ff532e65b551a471bf88a66d9f83362074286387",
-   "etag": "W/\"45bcff8c42c438e76c74650d2f64f35d9aca6c8b87d2d43efdd543f55e0dd1d1\"",
+   "etag": "W/\"64f5263c21234b0b206f0aa48bc76b641d7d462ba3919d637e0117df3a73c360\"",
    "truncated": false,
    "path_count": 243,
    "matched": [
@@ -4507,15 +4507,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-05T03:07:00Z",
+  "collected_at": "2026-11-06T03:14:10Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-04",
-  "stars": 316,
+  "pushed_at": "2026-11-05",
+  "stars": 238,
   "tree": {
-   "sha": "187705f0e03b7faf934ab88b28637df3eccc9cfb",
-   "etag": "W/\"c3b5eeff9bed7749a2471eac7f0285ec2277a734746887a80418995b25c68ff7\"",
+   "sha": "ce077d647073b4c0de8aa47cacbdf9e5cf152e88",
+   "etag": "W/\"402cc7a91656238431c49377ae6e06fbf2bbb03233b2e01ffff64b9e0e136302\"",
    "truncated": false,
-   "path_count": 22117,
+   "path_count": 22779,
    "matched": [
     "client/package.json",
     "services/Cargo.toml",
@@ -4525,6 +4525,7 @@
     "dev/samsara-sim/go.mod",
     "i18n/tools/package.json",
     "services/imaging/Cargo.toml",
+    "services/operator/go.mod",
     "services/tms/go.mod",
     "tools/pkgsplit/go.mod",
     "client/apps/dash/package.json",
@@ -4565,13 +4566,20 @@
     "deploy/Dockerfile.client",
     "deploy/Dockerfile.imaging",
     "deploy/Dockerfile.imaging.dockerignore",
+    "deploy/Dockerfile.operator",
     "deploy/Dockerfile.postgres",
     "deploy/Dockerfile.tms",
     "dev/samsara-sim/Dockerfile",
+    "deploy/helm/trenova-operator/values.yaml",
+    "deploy/helm/trenova/values.yaml",
     ".github/workflows/agent-evals.yml",
     ".github/workflows/assay-index.yml",
     ".github/workflows/assay-select.yml",
+    ".github/workflows/capture-manifest.yml",
+    ".github/workflows/dependency-scan.yml",
+    ".github/workflows/helm.yml",
     ".github/workflows/native-capture.yml",
+    ".github/workflows/operator.yml",
     ".github/workflows/release.yml",
     ".github/workflows/rust.yml",
     ".github/workflows/test-client.yml",
@@ -4583,9 +4591,9 @@
    {
     "path": "client/package.json",
     "kind": "dep",
-    "blob_sha": "93d50aad9d696e26c1e33a8e51a51e872332b794",
+    "blob_sha": "18cd5b5aa994b91f55af177152fc76a3d21d8d02",
     "ecosystem": "npm",
-    "bytes": 969,
+    "bytes": 971,
     "dev": [
      "@tanstack/eslint-plugin-query",
      "eslint-plugin-better-tailwindcss",
@@ -4605,9 +4613,9 @@
    {
     "path": "shared/go.mod",
     "kind": "dep",
-    "blob_sha": "559570acca13896fe888f6efef9504756b020b2f",
+    "blob_sha": "bd418d23075a72039591e4c21d3516d0e218d5c4",
     "ecosystem": "go",
-    "bytes": 5246,
+    "bytes": 5293,
     "names": [
      "github.com/bytedance/sonic",
      "github.com/gin-gonic/gin",
@@ -4633,6 +4641,7 @@
     ],
     "dev": [
      "github.com/kr/fs",
+     "github.com/stretchr/objx",
      "go.opentelemetry.io/otel/log",
      "gopkg.in/ini.v1",
      "dario.cat/mergo",
@@ -4710,8 +4719,7 @@
      "go.opentelemetry.io/otel",
      "go.opentelemetry.io/otel/metric",
      "go.opentelemetry.io/otel/trace",
-     "go.uber.org/atomic",
-     "go.yaml.in/yaml/v3"
+     "go.uber.org/atomic"
     ]
    },
    {
@@ -4724,9 +4732,9 @@
    {
     "path": "dev/edi-partner-sim/go.mod",
     "kind": "dep",
-    "blob_sha": "8de9796593108e2bda55a5aedc5c789b67d4ce1d",
+    "blob_sha": "e5831310cdfd78d2aae1a3ad5c3588a01bac3a7e",
     "ecosystem": "go",
-    "bytes": 703,
+    "bytes": 704,
     "names": [
      "github.com/bytedance/sonic",
      "github.com/emoss08/trenova/shared",
@@ -4748,9 +4756,9 @@
    {
     "path": "dev/samsara-sim/go.mod",
     "kind": "dep",
-    "blob_sha": "60082cdeae6e467b3825df5df94c9be2ced0c6b0",
+    "blob_sha": "6c9a73534064e2026e6de93a93daf3146440e597",
     "ecosystem": "go",
-    "bytes": 741,
+    "bytes": 742,
     "names": [
      "github.com/bytedance/sonic",
      "github.com/emoss08/trenova/shared",
@@ -4782,9 +4790,9 @@
    {
     "path": "services/imaging/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "9840bec361eea026542c4466c7652d575797c555",
+    "blob_sha": "bcf907bd5a7f3f09c9fd31858a6b1f520fcc8e25",
     "ecosystem": "cargo",
-    "bytes": 1339,
+    "bytes": 1395,
     "names": [
      "bytes.workspace",
      "clap.workspace",
@@ -4822,11 +4830,114 @@
     ]
    },
    {
+    "path": "services/operator/go.mod",
+    "kind": "dep",
+    "blob_sha": "889f9a21b808797120aba260cc336611dcd4dd12",
+    "ecosystem": "go",
+    "bytes": 9068,
+    "names": [
+     "github.com/bytedance/sonic",
+     "github.com/google/go-containerregistry",
+     "github.com/google/uuid",
+     "github.com/oapi-codegen/runtime",
+     "github.com/sigstore/sigstore-go",
+     "github.com/stretchr/testify",
+     "helm.sh/helm/v3",
+     "k8s.io/api",
+     "k8s.io/apimachinery",
+     "k8s.io/cli-runtime",
+     "k8s.io/client-go",
+     "sigs.k8s.io/yaml"
+    ],
+    "dev": [
+     "dario.cat/mergo",
+     "github.com/Azure/go-ansiterm",
+     "github.com/BurntSushi/toml",
+     "github.com/MakeNowJust/heredoc",
+     "github.com/Masterminds/goutils",
+     "github.com/Masterminds/semver/v3",
+     "github.com/Masterminds/sprig/v3",
+     "github.com/Masterminds/squirrel",
+     "github.com/ProtonMail/go-crypto",
+     "github.com/apapsch/go-jsonmerge/v2",
+     "github.com/asaskevich/govalidator",
+     "github.com/blang/semver",
+     "github.com/blang/semver/v4",
+     "github.com/bytedance/gopkg",
+     "github.com/bytedance/sonic/loader",
+     "github.com/cenkalti/backoff/v5",
+     "github.com/cespare/xxhash/v2",
+     "github.com/chai2010/gettext-go",
+     "github.com/cloudflare/circl",
+     "github.com/cloudwego/base64x",
+     "github.com/cyberphone/json-canonicalization",
+     "github.com/cyphar/filepath-securejoin",
+     "github.com/davecgh/go-spew",
+     "github.com/digitorus/pkcs7",
+     "github.com/digitorus/timestamp",
+     "github.com/emicklei/go-restful/v3",
+     "github.com/evanphx/json-patch",
+     "github.com/exponent-io/jsonpath",
+     "github.com/fatih/color",
+     "github.com/fxamacker/cbor/v2",
+     "github.com/go-errors/errors",
+     "github.com/go-gorp/gorp/v3",
+     "github.com/go-jose/go-jose/v4",
+     "github.com/go-logr/logr",
+     "github.com/go-logr/stdr",
+     "github.com/go-openapi/analysis",
+     "github.com/go-openapi/errors",
+     "github.com/go-openapi/jsonpointer",
+     "github.com/go-openapi/jsonreference",
+     "github.com/go-openapi/loads",
+     "github.com/go-openapi/runtime",
+     "github.com/go-openapi/runtime/server-middleware",
+     "github.com/go-openapi/spec",
+     "github.com/go-openapi/strfmt",
+     "github.com/go-openapi/swag",
+     "github.com/go-openapi/swag/cmdutils",
+     "github.com/go-openapi/swag/conv",
+     "github.com/go-openapi/swag/fileutils",
+     "github.com/go-openapi/swag/jsonutils",
+     "github.com/go-openapi/swag/loading",
+     "github.com/go-openapi/swag/mangling",
+     "github.com/go-openapi/swag/netutils",
+     "github.com/go-openapi/swag/pools",
+     "github.com/go-openapi/swag/stringutils",
+     "github.com/go-openapi/swag/typeutils",
+     "github.com/go-openapi/swag/yamlutils",
+     "github.com/go-openapi/validate",
+     "github.com/go-viper/mapstructure/v2",
+     "github.com/gobwas/glob",
+     "github.com/google/btree",
+     "github.com/google/certificate-transparency-go",
+     "github.com/google/gnostic-models",
+     "github.com/gosuri/uitable",
+     "github.com/grpc-ecosystem/grpc-gateway/v2",
+     "github.com/hashicorp/errwrap",
+     "github.com/hashicorp/go-multierror",
+     "github.com/huandu/xstrings",
+     "github.com/in-toto/attestation",
+     "github.com/in-toto/in-toto-golang",
+     "github.com/inconshreveable/mousetrap",
+     "github.com/jedisct1/go-minisign",
+     "github.com/jmoiron/sqlx",
+     "github.com/json-iterator/go",
+     "github.com/klauspost/cpuid/v2",
+     "github.com/lann/builder",
+     "github.com/lann/ps",
+     "github.com/letsencrypt/boulder",
+     "github.com/lib/pq",
+     "github.com/liggitt/tabwriter",
+     "github.com/mattn/go-colorable"
+    ]
+   },
+   {
     "path": "services/tms/go.mod",
     "kind": "dep",
-    "blob_sha": "b950edeccd411f463108030a157a331ee8fdc1f0",
+    "blob_sha": "e115c380aa68b620e4a487ee5c60caa327948800",
     "ecosystem": "go",
-    "bytes": 15159,
+    "bytes": 15406,
     "names": [
      "github.com/SherClockHolmes/webpush-go",
      "github.com/anthropics/anthropic-sdk-go",
@@ -4936,9 +5047,10 @@
      "github.com/aws/aws-sdk-go-v2/feature/ec2/imds",
      "github.com/aws/aws-sdk-go-v2/internal/configsources",
      "github.com/aws/aws-sdk-go-v2/internal/endpoints/v2",
-     "github.com/aws/aws-sdk-go-v2/internal/ini",
+     "github.com/aws/aws-sdk-go-v2/internal/v4a",
      "github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding",
      "github.com/aws/aws-sdk-go-v2/service/internal/presigned-url",
+     "github.com/aws/aws-sdk-go-v2/service/signin",
      "github.com/aws/aws-sdk-go-v2/service/sso",
      "github.com/aws/aws-sdk-go-v2/service/ssooidc",
      "github.com/aws/aws-sdk-go-v2/service/sts",
@@ -4958,6 +5070,7 @@
      "github.com/clipperhouse/displaywidth",
      "github.com/clipperhouse/uax29/v2",
      "github.com/dlclark/regexp2",
+     "github.com/dlclark/regexp2/v2",
      "github.com/dop251/goja",
      "github.com/fe3dback/go-arch-lint",
      "github.com/fe3dback/go-yaml",
@@ -4978,18 +5091,16 @@
      "github.com/mitchellh/hashstructure/v2",
      "github.com/muesli/cancelreader",
      "github.com/nexus-rpc/nexus-proto-annotations",
+     "github.com/pandatix/go-abnf",
+     "github.com/pb33f/go-yaml",
      "github.com/pb33f/ordered-map/v2",
+     "github.com/pmezard/go-difflib",
      "github.com/prometheus/otlptranslator",
      "github.com/richardlehane/mscfb",
      "github.com/richardlehane/msoleps",
      "github.com/rivo/uniseg",
      "github.com/robfig/cron/v3",
-     "github.com/sergi/go-diff",
-     "github.com/sosodev/duration",
-     "github.com/standard-webhooks/standard-webhooks/libraries",
-     "github.com/tidwall/match",
-     "github.com/tidwall/pretty",
-     "github.com/tiendc/go-deepcopy"
+     "github.com/sergi/go-diff"
     ]
    },
    {
@@ -5483,9 +5594,9 @@
    {
     "path": "desktop/capture/bins/trenova-capture-svc/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "a3cd09f2a4cb66e70c2736c105b5120f9cfa3034",
+    "blob_sha": "f127d8abdc4639c419dfa94564e03859e3e8273a",
     "ecosystem": "cargo",
-    "bytes": 1517,
+    "bytes": 1589,
     "names": [
      "bytes.workspace",
      "capture-imaging.workspace",
@@ -5762,49 +5873,60 @@
    {
     "path": "deploy/Dockerfile.client",
     "kind": "image",
-    "blob_sha": "c24fb1845ff404268c104f4dc946bccac81f8b39",
-    "bytes": 1850,
+    "blob_sha": "a61f27c7b75dc7614a1c9f26f0aa093166b18e86",
+    "bytes": 2024,
     "images": [
-     "node:${NODE_VERSION}-alpine",
-     "caddy:2-alpine"
+     "node:${NODE_VERSION}-alpine@sha256:c6ad9e9c1d80f6eb607c26b4b0a132ff7a2344fad1c78ea3baa2a7d4c8de6d94",
+     "caddy:2-alpine@sha256:f6228111e5fafa1a5238258d0858e103f10599b8d1659a146e7726681a002bb9"
     ]
    },
    {
     "path": "deploy/Dockerfile.imaging",
     "kind": "image",
-    "blob_sha": "c0fae516477334aa76594cd4f6e6194343c73aa4",
-    "bytes": 5814,
+    "blob_sha": "4eac03acb6afd9958fa4d0803debe94ff7b252e8",
+    "bytes": 6030,
     "images": [
-     "rust:${RUST_VERSION}-slim-${DEBIAN_RELEASE}",
+     "rust:${RUST_VERSION}-slim-${DEBIAN_RELEASE}@sha256:31ee7fc65186be7e0e0ccb3f2ca305f14e4739e7642a1ae65753aa5d7b874523",
      "chef",
-     "debian:${DEBIAN_RELEASE}-slim",
+     "debian:${DEBIAN_RELEASE}-slim@sha256:a72b4433de1cf7d6bae0c4cee74d0547f58601a643b3375f070c51600d63b6b2",
      "runtime-base"
     ]
    },
    {
     "path": "deploy/Dockerfile.imaging.dockerignore",
     "kind": "image",
-    "blob_sha": "10db3c46cd48c8abf177d2de0bc3725fe3bd742b",
-    "bytes": 152
+    "blob_sha": "bb43ff4c6cd8564c7a4c68552a1aab3a7ca690b6",
+    "bytes": 172
+   },
+   {
+    "path": "deploy/Dockerfile.operator",
+    "kind": "image",
+    "blob_sha": "4e23032e17b03adcde4e5c10ea064b9939e71dee",
+    "bytes": 1471,
+    "images": [
+     "golang:1.26-alpine@sha256:a2012b4a1d1f9f7e9f44e0d39b805a901e856b1dd80b4e6ee4338db547050308",
+     "source",
+     "gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab"
+    ]
    },
    {
     "path": "deploy/Dockerfile.postgres",
     "kind": "image",
-    "blob_sha": "b02f3cecd1d8acade14d4c3e8559c57e654a3b3e",
-    "bytes": 1299,
+    "blob_sha": "6573f2bad47fb7aa21f33bc1bbf198c8c3e410d1",
+    "bytes": 1316,
     "images": [
-     "postgis/postgis:18-3.6-alpine"
+     "postgis/postgis:18-3.6-alpine@sha256:c53a483fc274072dfa02cd491efa79f3c8ae0a10774a0ece6c9c53b6a632cdef"
     ]
    },
    {
     "path": "deploy/Dockerfile.tms",
     "kind": "image",
-    "blob_sha": "003efed71d10db9253e82a132c110589d862b15d",
-    "bytes": 1428,
+    "blob_sha": "7922c08f8d4bce36f70cdf02de15782664c8a9d5",
+    "bytes": 1669,
     "images": [
-     "golang:1.26-alpine",
+     "golang:1.26-alpine@sha256:a2012b4a1d1f9f7e9f44e0d39b805a901e856b1dd80b4e6ee4338db547050308",
      "source",
-     "alpine:3.21",
+     "alpine:3.21@sha256:ee16d92f96db08d9d2d07da48555a27f3a69d8f0759021dbc601195ed0d2b5bd",
      "runtime"
     ]
    },
@@ -5816,6 +5938,24 @@
     "images": [
      "golang:1.26-alpine",
      "alpine:3.21"
+    ]
+   },
+   {
+    "path": "deploy/helm/trenova-operator/values.yaml",
+    "kind": "image",
+    "blob_sha": "737a90f9513e54c154f6cabc9b44000b2457e382",
+    "bytes": 2244,
+    "images": [
+     "repository:"
+    ]
+   },
+   {
+    "path": "deploy/helm/trenova/values.yaml",
+    "kind": "image",
+    "blob_sha": "cd537293bc87238dd7f680169ec990310228ed6f",
+    "bytes": 18512,
+    "images": [
+     "repository:"
     ]
    },
    {
@@ -5837,16 +5977,40 @@
     "bytes": 3482
    },
    {
+    "path": ".github/workflows/capture-manifest.yml",
+    "kind": "ci",
+    "blob_sha": "6410be59a57724ce8acb9aba5fd59f3eff1aa4d0",
+    "bytes": 4498
+   },
+   {
+    "path": ".github/workflows/dependency-scan.yml",
+    "kind": "ci",
+    "blob_sha": "be709aed226b9eee13fa770fdfef392de34272dc",
+    "bytes": 2059
+   },
+   {
+    "path": ".github/workflows/helm.yml",
+    "kind": "ci",
+    "blob_sha": "eae698c796a40c7aa74f7036bf9ed2fbceaa6275",
+    "bytes": 10697
+   },
+   {
     "path": ".github/workflows/native-capture.yml",
     "kind": "ci",
-    "blob_sha": "d0aefe083fcadae61a064a9af2a616f93a7fb8a2",
-    "bytes": 18692
+    "blob_sha": "b7df5097adca838b39b055070d2fed6adb4d16a2",
+    "bytes": 21511
+   },
+   {
+    "path": ".github/workflows/operator.yml",
+    "kind": "ci",
+    "blob_sha": "d2f60640b4b292b1eb1e57a55a69132a1b80788e",
+    "bytes": 10380
    },
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "56ba83b8b39a6ac58a78b7f985bdeec2f40121af",
-    "bytes": 8436
+    "blob_sha": "8632f7aa57768bedf89d611c2f9954f5cf30bf08",
+    "bytes": 18703
    },
    {
     "path": ".github/workflows/rust.yml",
@@ -5872,8 +6036,8 @@
    {
     "path": ".github/workflows/test-tms.yml",
     "kind": "ci",
-    "blob_sha": "ea7a76e53adf63fa64b1c322e41b62fe8baf4218",
-    "bytes": 25540,
+    "blob_sha": "4e183ad38756c2024a823958084e630887c76051",
+    "bytes": 25764,
     "images": [
      "redis:8",
      "postgis/postgis:18-3.6-alpine"
@@ -5973,6 +6137,7 @@
     "services/tms/internal/modules/agent/adapters/postgres/agentproposalrepository/money_test.go",
     "services/tms/internal/modules/agent/adapters/postgres/agentproposalrepository/pendingmodifications.go",
     "services/tms/internal/modules/agent/adapters/postgres/agentproposalrepository/pendingmodifications_test.go",
+    "services/tms/internal/modules/agent/adapters/postgres/agentproposalrepository/targeted_integration_test.go",
     "services/tms/internal/modules/agent/adapters/postgres/agentproposalrepository/withdraw_test.go",
     "services/tms/internal/modules/agent/adapters/postgres/agentqualityrepository/control.go",
     "services/tms/internal/modules/agent/adapters/postgres/agentqualityrepository/control_integration_test.go",
@@ -6066,7 +6231,6 @@
     "services/tms/internal/modules/agent/adapters/postgres/conversationrepository/pagethreads.go",
     "services/tms/internal/modules/agent/adapters/postgres/conversationrepository/threadcursor.go",
     "services/tms/internal/modules/agent/adapters/postgres/conversationrepository/threadcursor_test.go",
-    "services/tms/internal/modules/agent/adapters/postgres/conversationrepository/threadowners.go",
     "services/tms/internal/modules/agent/adapters/postgres/conversationschedulerepository/render_test.go",
     "services/tms/internal/modules/agent/adapters/postgres/conversationschedulerepository/repository.go",
     "services/tms/internal/modules/agent/adapters/postgres/conversationschedulerepository/repository_integration_test.go",
@@ -6132,15 +6296,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-05T03:09:54Z",
+  "collected_at": "2026-11-06T03:15:06Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-04",
+  "pushed_at": "2026-11-05",
   "stars": 208,
   "tree": {
-   "sha": "952f307756d75500bfe4113444964ecfb0e54777",
-   "etag": "W/\"43d94a504a96ef3fd0bc9e55cd267fc638ace63b0939edc883c8075af4bcc68d\"",
+   "sha": "0d612cb7a3657315d7a1b72f829ddda37cc9165a",
+   "etag": "W/\"3277c209378681ef127722819a8c66cf2f492c0561208a95e48921be88f689fb\"",
    "truncated": false,
-   "path_count": 497,
+   "path_count": 508,
    "matched": [
     "package.json",
     "dsh-mneme/package.json",
@@ -6163,7 +6327,7 @@
    {
     "path": "dsh-mneme/package.json",
     "kind": "dep",
-    "blob_sha": "d50e08ef10b1b40e40e731fbbe9c4dfea0cbbadc",
+    "blob_sha": "740a181aec641e3f6a1adbfeb7fb5780751eef53",
     "ecosystem": "npm",
     "bytes": 3355,
     "names": [
@@ -8955,13 +9119,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T03:34:43Z",
+  "collected_at": "2026-11-06T03:34:38Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-03",
+  "pushed_at": "2026-11-04",
   "stars": 25,
   "tree": {
-   "sha": "58528d534bd93b84a9a77ba7308dc9c487c3233b",
-   "etag": "W/\"ac282ea332a6e244157c0ccfafd601d4ce76947686f65d2f68be80a06c374092\"",
+   "sha": "708f87686a8350cdca3968d57e236e73681319ac",
+   "etag": "W/\"6674c4aec3230b6c20320c3ab75a25c7dfc1d474e8ab6a5deaac1758da840863\"",
    "truncated": false,
    "path_count": 97,
    "matched": [
@@ -12614,15 +12778,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-05T03:40:14Z",
+  "collected_at": "2026-11-06T03:48:51Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-04",
+  "pushed_at": "2026-11-05",
   "stars": 3,
   "tree": {
-   "sha": "591f9efd6b0cdca6a199198bfc064318959b6176",
-   "etag": "W/\"2e98147545ea0166718aa17631f5df77d503fb67c1aea6172e9a4e83b65c130f\"",
+   "sha": "b5203849581463c702f14b6f31a8ea726127c0c1",
+   "etag": "W/\"0f3456c62be199eb354d7df741b5ce740b906158127503dc09b4434d629f6be2\"",
    "truncated": false,
-   "path_count": 244,
+   "path_count": 260,
    "matched": [
     "DB2Sheet.csproj"
    ]
@@ -12631,9 +12795,9 @@
    {
     "path": "DB2Sheet.csproj",
     "kind": "dep",
-    "blob_sha": "30734de570530b218647891d92bf96178adf3df8",
+    "blob_sha": "60f60140846b9d6b0c29a98e3b44bd5026f5d605",
     "ecosystem": "csproj",
-    "bytes": 24129,
+    "bytes": 24700,
     "names": [
      "AvalonEdit",
      "MySqlConnector",
@@ -13019,13 +13183,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-02T08:40:11Z",
+  "collected_at": "2026-11-06T03:26:16Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-21",
+  "pushed_at": "2026-11-05",
   "stars": 55,
   "tree": {
-   "sha": "af21bafd6c4f52479f95b1432c3a54ec446dd3eb",
-   "etag": "W/\"434f26e40d148460a42f213af7a2d081126aaaf1d06759a9b08e14426b509583\"",
+   "sha": "925ae70ed8cc81a753f2f93714f69cf8a7eee47b",
+   "etag": "W/\"701394185d7e16caed123fa58188ced45c93e0b5be713cb0e801c42aa15274ef\"",
    "truncated": false,
    "path_count": 6,
    "matched": [
@@ -13080,13 +13244,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-05T03:27:51Z",
+  "collected_at": "2026-11-06T03:35:39Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-04",
+  "pushed_at": "2026-11-05",
   "stars": 23,
   "tree": {
-   "sha": "afc62254a07e3727506727624b98ed5954e6a4a3",
-   "etag": "W/\"cd4323884859e5c6f914395d6020267c9dcb06a7fc5803712cceb849f85b6883\"",
+   "sha": "d1806685edb80200076375bbd02bacbdd2dbe50a",
+   "etag": "W/\"cb9ef9903ffc229cfaa949c70964258d97be16c9ee3d849d332cd58e4e99110f\"",
    "truncated": false,
    "path_count": 461,
    "matched": [
@@ -13111,8 +13275,8 @@
    {
     "path": ".github/workflows/swift-build-testing.yml",
     "kind": "ci",
-    "blob_sha": "ae4791074d67bf59acd90be31301561c0086545f",
-    "bytes": 14097,
+    "blob_sha": "15f175c0e1550fe3e99957c9e3f17fb6fb495024",
+    "bytes": 18794,
     "images": [
      "-"
     ]
@@ -13761,6 +13925,32 @@
     "bytes": 926
    }
   ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "TyrantShadowfellangel/repdix-rpocket-team": {
+  "fn": "TyrantShadowfellangel/repdix-rpocket-team",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-06T02:48:12Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-05",
+  "stars": 37,
+  "tree": {
+   "sha": "ab209ef393ca99bc678c48fb1492e27e726209d0",
+   "etag": "W/\"688b7f6e1b2d30c07a41a622c1a61df84b83bccd42ca203c596203f290aaaeb3\"",
+   "truncated": false,
+   "path_count": 2,
+   "matched": []
+  },
+  "files": [],
   "clues": {
    "changelog": [],
    "readme_i18n": [],

@@ -1075,21 +1075,22 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-05T03:06:46Z",
+  "collected_at": "2026-11-06T03:12:12Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-04",
+  "pushed_at": "2026-11-05",
   "stars": 333,
   "tree": {
-   "sha": "839a81c39a91ab576cb6787005e1d12ff3b20f9b",
-   "etag": "W/\"1005cf7948a42e087cd3e28bfc44d109e6bde27ba2b0439f483eb3f10ad381b1\"",
+   "sha": "2ece768fa46d772a8a736b96e18aa540de63e69a",
+   "etag": "W/\"33c5024c8d33859e464c7110cfdec5c3a4f73784c807207600f00929d4cc77ff\"",
    "truncated": false,
-   "path_count": 816,
+   "path_count": 847,
    "matched": [
     "Cargo.toml",
     "package.json",
     "pyproject.toml",
     "sdk-python/pyproject.toml",
     "sdk/package.json",
+    "collector/redisliveexporter/go.mod",
     "examples/ai-chat/package.json",
     "examples/bank-python/package.json",
     "examples/bank-python/pyproject.toml",
@@ -1123,9 +1124,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "ed161a06bc36a340a7b5ba2a7064059e6c1a67bd",
+    "blob_sha": "4135299e7116d2bc7de378533dae6c0fb777a076",
     "ecosystem": "cargo",
-    "bytes": 3963,
+    "bytes": 4525,
     "names": [
      "clickhouse",
      "terse-modal",
@@ -1146,6 +1147,10 @@
      "tokio",
      "tokio-stream",
      "tokio-util",
+     "opentelemetry",
+     "opentelemetry_sdk",
+     "opentelemetry-otlp",
+     "opentelemetry-proto",
      "tower-http",
      "tonic",
      "tonic-prost",
@@ -1185,6 +1190,7 @@
      "protoc-bin-vendored",
      "tonic-prost-build",
      "crc32c",
+     "opentelemetry_sdk",
      "http",
      "tokio"
     ]
@@ -1206,14 +1212,14 @@
    {
     "path": "pyproject.toml",
     "kind": "dep",
-    "blob_sha": "881779c8706f54b2e02bae672335a68cb628c546",
+    "blob_sha": "0e83a1133ab64327f8bf42aaef389b91f52dceeb",
     "ecosystem": "pyproject",
     "bytes": 778
    },
    {
     "path": "sdk-python/pyproject.toml",
     "kind": "dep",
-    "blob_sha": "a97a9bb1bcc5c12d6d7196304698fa31d58cb1c0",
+    "blob_sha": "f65d9fe3249c8ced961946e54f9c955ba4871eeb",
     "ecosystem": "pyproject",
     "bytes": 1824,
     "names": [
@@ -1228,7 +1234,7 @@
    {
     "path": "sdk/package.json",
     "kind": "dep",
-    "blob_sha": "e721b2c404e8ba9d56c8943ea67293615b5c1fe0",
+    "blob_sha": "858cc877b8a9d0fc7a3fb831e233fdca6a9f68b6",
     "ecosystem": "npm",
     "bytes": 4984,
     "names": [
@@ -1257,6 +1263,65 @@
      "dts-bundle-generator",
      "typedoc",
      "typedoc-plugin-missing-exports"
+    ]
+   },
+   {
+    "path": "collector/redisliveexporter/go.mod",
+    "kind": "dep",
+    "blob_sha": "65d427dbb3c5bc20dae74efd5cda99c34dd637ad",
+    "ecosystem": "go",
+    "bytes": 2815,
+    "names": [
+     "github.com/redis/go-redis/v9",
+     "go.opentelemetry.io/collector/component",
+     "go.opentelemetry.io/collector/config/configopaque",
+     "go.opentelemetry.io/collector/exporter",
+     "go.opentelemetry.io/collector/exporter/exporterhelper",
+     "go.opentelemetry.io/collector/pdata"
+    ],
+    "dev": [
+     "github.com/cenkalti/backoff/v7",
+     "github.com/cespare/xxhash/v2",
+     "github.com/dgryski/go-rendezvous",
+     "github.com/go-viper/mapstructure/v2",
+     "github.com/gobwas/glob",
+     "github.com/hashicorp/go-version",
+     "github.com/hashicorp/golang-lru/v2",
+     "github.com/json-iterator/go",
+     "github.com/knadh/koanf/maps",
+     "github.com/knadh/koanf/providers/confmap",
+     "github.com/knadh/koanf/v2",
+     "github.com/mitchellh/copystructure",
+     "github.com/mitchellh/reflectwalk",
+     "github.com/modern-go/concurrent",
+     "github.com/modern-go/reflect2",
+     "github.com/stretchr/testify",
+     "go.opentelemetry.io/collector/client",
+     "go.opentelemetry.io/collector/config/configoptional",
+     "go.opentelemetry.io/collector/config/configretry",
+     "go.opentelemetry.io/collector/confmap",
+     "go.opentelemetry.io/collector/consumer",
+     "go.opentelemetry.io/collector/consumer/consumererror",
+     "go.opentelemetry.io/collector/extension",
+     "go.opentelemetry.io/collector/extension/xextension",
+     "go.opentelemetry.io/collector/featuregate",
+     "go.opentelemetry.io/collector/internal/componentalias",
+     "go.opentelemetry.io/collector/pdata/pprofile",
+     "go.opentelemetry.io/collector/pdata/xpdata",
+     "go.opentelemetry.io/collector/pipeline",
+     "go.opentelemetry.io/collector/pipeline/xpipeline",
+     "go.opentelemetry.io/otel",
+     "go.opentelemetry.io/otel/metric",
+     "go.opentelemetry.io/otel/trace",
+     "go.uber.org/multierr",
+     "go.uber.org/zap",
+     "go.yaml.in/yaml/v3",
+     "golang.org/x/net",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "google.golang.org/genproto/googleapis/rpc",
+     "google.golang.org/grpc",
+     "google.golang.org/protobuf"
     ]
    },
    {
@@ -1396,9 +1461,9 @@
    {
     "path": "packages/observer-ui/package.json",
     "kind": "dep",
-    "blob_sha": "2b3fac9ecc963eec4d94e3f847e4437233b2eafe",
+    "blob_sha": "86988853385ddcf2009420aab34231374d6bad20",
     "ecosystem": "npm",
-    "bytes": 2403,
+    "bytes": 2284,
     "names": [
      "@radix-ui/react-dialog",
      "@radix-ui/react-popover",
@@ -1571,12 +1636,13 @@
    {
     "path": "Dockerfile",
     "kind": "image",
-    "blob_sha": "49a6ff212fc0d549a8d23374ea1cd95a75f2c234",
-    "bytes": 2961,
+    "blob_sha": "f2e54b7731da78ce3d161da185741ebbd41f8b7a",
+    "bytes": 3610,
     "images": [
      "rust:1.91.0-bookworm",
      "oven/bun:1.4.2",
      "python:3.13-slim-bookworm",
+     "golang:1.26.0-bookworm",
      "debian:bookworm-slim",
      "runtime-base"
     ]
@@ -1584,20 +1650,20 @@
    {
     "path": "charts/durable-actors/values.yaml",
     "kind": "image",
-    "blob_sha": "ec0b78745ebf1ca48e20be63a578dc01efc0ad82",
-    "bytes": 1897
+    "blob_sha": "f8d6c816471d9ea0f36e13680318bed403520e19",
+    "bytes": 2240
    },
    {
     "path": "charts/durable-actors/tests/values.yaml",
     "kind": "image",
-    "blob_sha": "a69f908f81d0523d42fbc772fac28fe2890eb28f",
-    "bytes": 461
+    "blob_sha": "63a8bf26a0d4d2bab866edd0db5b22e7fa27969e",
+    "bytes": 551
    },
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "ce9112fe491b7424159b87d7109f24734700025f",
-    "bytes": 8839,
+    "blob_sha": "c982b9eff24a172d44674330111b22dd4b90ca9d",
+    "bytes": 9701,
     "images": [
      "name:",
      "clickhouse/clickhouse-server:26.6",
@@ -1632,8 +1698,8 @@
    {
     "path": ".github/workflows/release.yml",
     "kind": "ci",
-    "blob_sha": "92bfaa0896c6b91b1afea170592ab0f90bd59044",
-    "bytes": 34076,
+    "blob_sha": "638e6acb86a1c80b4ae45541d9d2b661e0e5a97c",
+    "bytes": 35691,
     "images": [
      "us-central1-docker.pkg.dev/fluid-analogy-473415-c2/public/durable-actors",
      "clickhouse/clickhouse-server:26.6",
@@ -1684,13 +1750,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T03:17:26Z",
+  "collected_at": "2026-11-06T03:20:06Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-03",
+  "pushed_at": "2026-11-05",
   "stars": 107,
   "tree": {
    "sha": "89425ec98e508f363c25492e020d077cd7dfeb81",
-   "etag": "W/\"154440d6971506fbc97f3fcf6e635bcb427515505ea1d3b59a97fe755311fabd\"",
+   "etag": "W/\"2f1fb8149845e8dd3c1bfb948e60473d8f9ff3ff3a00c6e095d24b0a99151962\"",
    "truncated": false,
    "path_count": 1415,
    "matched": [
@@ -2783,15 +2849,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-05T03:35:58Z",
+  "collected_at": "2026-11-06T03:44:04Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-04",
+  "pushed_at": "2026-11-05",
   "stars": 11,
   "tree": {
-   "sha": "622c9b5a32140ac41238a706a0184317ef727809",
-   "etag": "W/\"0157156437713b1663a9ee207da9d2ac368313159ec230f07f404dd0242f1480\"",
+   "sha": "084b5fecdf0471fe18d16151adaf4f9f2d3c77c2",
+   "etag": "W/\"d6d824d075c2fd408166c4c52ff8a6b9a285f50577077bc14022de265e0c9fb4\"",
    "truncated": false,
-   "path_count": 1079,
+   "path_count": 1081,
    "matched": [
     "book/package.json",
     "D-云原生/容器技术/Docker/Dockerfile与镜像分层.md",
@@ -4363,13 +4429,14 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-31T03:29:49Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-06T03:04:51Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-22",
-  "stars": 1179,
+  "pushed_at": "2026-11-05",
+  "stars": 1180,
   "tree": {
-   "sha": "c968c8c93d4532caa6cab82ae56df10fbbdef9c6",
-   "etag": "W/\"52af0f161737f267c6759085c711ecd24ed2239a3b534586e4b42f1fac63c0d3\"",
+   "sha": "beddc0e586bb9ceadd238bab1c18930bf02a0968",
+   "etag": "W/\"48903220958007656ec018fa12728270e73251c6f8d8d7d4a43c01df92d3f080\"",
    "truncated": false,
    "path_count": 42,
    "matched": [
@@ -4384,9 +4451,9 @@
    {
     "path": "composer.json",
     "kind": "dep",
-    "blob_sha": "fddde8062302c755ef11a9f244d3c79ad1f43542",
+    "blob_sha": "f727edff9ddf05f1fbcd3f32e22b3dd468f90c0c",
     "ecosystem": "composer",
-    "bytes": 1012,
+    "bytes": 1014,
     "names": [
      "php",
      "symfony/process"
@@ -4411,8 +4478,8 @@
    {
     "path": ".github/workflows/run-tests.yml",
     "kind": "ci",
-    "blob_sha": "1f61cacf9c2596f93b876e573cde9fcd31d226e6",
-    "bytes": 1101
+    "blob_sha": "1f1720bd8b611713ac12c6a533c42d08035ba361",
+    "bytes": 1434
    },
    {
     "path": ".github/workflows/update-changelog.yml",
@@ -4584,15 +4651,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-05T03:03:47Z",
+  "collected_at": "2026-11-06T03:09:00Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-04",
-  "stars": 528,
+  "pushed_at": "2026-11-05",
+  "stars": 531,
   "tree": {
-   "sha": "7b0ba919f80952c1f1c854352d2bd9176574d06d",
-   "etag": "W/\"412133ecc8a164a819f30462f78d5bd6e8d820aa377be816fa40a42c0f438ae7\"",
+   "sha": "baa8e103843789ff8c760853bb52f5436ea4dde4",
+   "etag": "W/\"2bfaeb01f2b4497665901f8881a26f4aba0462befe040cf65aa858beec90a9f9\"",
    "truncated": false,
-   "path_count": 912,
+   "path_count": 915,
    "matched": [
     "pyproject.toml",
     "maintenance/setup.py",
@@ -4744,13 +4811,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-05T03:05:28Z",
+  "collected_at": "2026-11-06T03:10:40Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-04",
-  "stars": 414,
+  "pushed_at": "2026-11-05",
+  "stars": 415,
   "tree": {
-   "sha": "87f87e53b1176067aa65a27cdb522e8c24eddbe1",
-   "etag": "W/\"10ec596b32ab720dc7c682f78f7dcb9691f888c2188fdf2e8bd291d399257529\"",
+   "sha": "f50fdb74c4e95337ab002c8f4b5006a100032ed7",
+   "etag": "W/\"23f9457ff2c6afc99d00362c80d86a65afc48079c95ce80fc52871e67fb77d79\"",
    "truncated": false,
    "path_count": 11693,
    "matched": [
@@ -5023,10 +5090,11 @@
    {
     "path": "utils/indigo-service/backend/service/requirements.txt",
     "kind": "dep",
-    "blob_sha": "cab0bf01641b767c13a09cad6ae03d2f3d6b08b6",
+    "blob_sha": "8d4ea8a8db87e1fde39f09bc6ad1407ccad60846",
     "ecosystem": "pypi",
-    "bytes": 195,
+    "bytes": 208,
     "names": [
+     "kombu",
      "celery",
      "epam.indigo",
      "flasgger",
@@ -11622,15 +11690,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-05T03:38:49Z",
+  "collected_at": "2026-11-06T03:47:05Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-04",
+  "pushed_at": "2026-11-05",
   "stars": 6,
   "tree": {
-   "sha": "a3a25c401fd31f184582136adcfbc5777cc7fcfc",
-   "etag": "W/\"543f9d28f8b7d842270846f23746c8cbf6fd92bc5567e0b4f5328a9d44eb50f6\"",
+   "sha": "fff2e5f6c21d59c30fda28dbeca43cf75a454317",
+   "etag": "W/\"c6bf5bec0d9d4548eb926bf88691c1403f56fc9a658c5858327edb2c4275340a\"",
    "truncated": false,
-   "path_count": 3294,
+   "path_count": 3422,
    "matched": [
     "Cargo.toml",
     "crates/moqui-browser/Cargo.toml",
@@ -11654,6 +11722,7 @@
     "crates/moqui-report/Cargo.toml",
     "crates/moqui-rtc/Cargo.toml",
     "crates/moqui-sip/Cargo.toml",
+    "crates/moqui-tools/Cargo.toml",
     "crates/moqui-tui/Cargo.toml",
     "crates/moqui-xmpp/Cargo.toml",
     "crates/moqui/Cargo.toml",
@@ -11669,9 +11738,9 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "a20ae9c3126818cf335f172ecede0a0596a179ab",
+    "blob_sha": "36dae39f596dbfd7fe89a697a148f51b35f11310",
     "ecosystem": "cargo",
-    "bytes": 24596
+    "bytes": 24932
    },
    {
     "path": "crates/moqui-browser/Cargo.toml",
@@ -11696,9 +11765,9 @@
    {
     "path": "crates/moqui-channels/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "3970b11befead121b997c683db0c0509667f4810",
+    "blob_sha": "95d0a5b5a34891220aefb67e369399443f90b778",
     "ecosystem": "cargo",
-    "bytes": 1398,
+    "bytes": 1408,
     "names": [
      "moqui-core",
      "moqui-lib",
@@ -11730,9 +11799,9 @@
    {
     "path": "crates/moqui-client/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "7bb49841902e883e6d4f9453698e580cb9d964f7",
+    "blob_sha": "4ac3f4596e958b7c229cbdeae5639344d690ce55",
     "ecosystem": "cargo",
-    "bytes": 1204,
+    "bytes": 1337,
     "names": [
      "base64",
      "getrandom",
@@ -11753,9 +11822,9 @@
    {
     "path": "crates/moqui-collab/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "1a59ece7a0b9281bc2776032cb81544a25a2dc1f",
+    "blob_sha": "242996e21cf08faefb2bcaadeaec77d38a25a7c2",
     "ecosystem": "cargo",
-    "bytes": 1020,
+    "bytes": 1028,
     "names": [
      "moqui-core",
      "moqui-lib",
@@ -11771,9 +11840,9 @@
    {
     "path": "crates/moqui-core/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "73f67c1f8c1250fddfbd667e78a162900bb28cab",
+    "blob_sha": "a6456f30a0df4ba5848c6ad46ed768e53daaddc1",
     "ecosystem": "cargo",
-    "bytes": 4677,
+    "bytes": 4685,
     "names": [
      "bytes",
      "inventory",
@@ -11831,9 +11900,9 @@
    {
     "path": "crates/moqui-dav/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "bb6db302f56b1b965989502ae146496c8a2cfda8",
+    "blob_sha": "17d7466494746d141febb4a0ebc04801e55fabdc",
     "ecosystem": "cargo",
-    "bytes": 1126,
+    "bytes": 1134,
     "names": [
      "moqui-core",
      "moqui-lib",
@@ -11864,9 +11933,9 @@
    {
     "path": "crates/moqui-desktop/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "f4f4f597eb60d498563c61c4e8185e456665b8c3",
+    "blob_sha": "8cf35e7de7e3a32de013c0cd11acc0924d3c5533",
     "ecosystem": "cargo",
-    "bytes": 4976,
+    "bytes": 5038,
     "names": [
      "moqui-app",
      "moqui-host",
@@ -11893,9 +11962,9 @@
    {
     "path": "crates/moqui-devkit/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "821b37a17b431e05fa1ebb9bf2a4de83806df124",
+    "blob_sha": "f36648234adf6a271470a90f5e66a7e31869761d",
     "ecosystem": "cargo",
-    "bytes": 1966,
+    "bytes": 1974,
     "names": [
      "moqui-core",
      "moqui-lib",
@@ -11921,9 +11990,9 @@
    {
     "path": "crates/moqui-drivers/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "1aec97e5bc2332c720ea05c844c00ec85455da87",
+    "blob_sha": "9bd1b372671d29c80ccc4123826588af13dbe90f",
     "ecosystem": "cargo",
-    "bytes": 2263,
+    "bytes": 2377,
     "names": [
      "moqui-core",
      "moqui-lib",
@@ -11946,15 +12015,16 @@
      "tar",
      "flate2",
      "moqui-core",
+     "moqui-db",
      "rcgen"
     ]
    },
    {
     "path": "crates/moqui-entity/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "957dd89a313565f04b6ed5226d1c7e74a8c966ea",
+    "blob_sha": "5356a3a1b2935c89e262fe7f6148aeee871e9eea",
     "ecosystem": "cargo",
-    "bytes": 1485,
+    "bytes": 1493,
     "names": [
      "moqui-lib",
      "moqui-db",
@@ -11980,9 +12050,9 @@
    {
     "path": "crates/moqui-git/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "f74b5ceb816af4ab33c70c4c95f37e9166f23071",
+    "blob_sha": "33a0b6c0fe4123336d050c0adcdfa9b2ea8e0233",
     "ecosystem": "cargo",
-    "bytes": 1924,
+    "bytes": 1932,
     "names": [
      "moqui-core",
      "moqui-lib",
@@ -12013,9 +12083,9 @@
    {
     "path": "crates/moqui-host/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "db9642bc51249b8e21082793d13e5ef1e3af926e",
+    "blob_sha": "90c7f1caee35c0cfc03fa2e59498b986f457abe2",
     "ecosystem": "cargo",
-    "bytes": 17218,
+    "bytes": 17644,
     "names": [
      "moqui-core",
      "moqui-lib",
@@ -12024,6 +12094,7 @@
      "moqui-mail",
      "moqui-report",
      "moqui-collab",
+     "moqui-tools",
      "moqui-rtc",
      "turn-client-proto",
      "moqui-sip",
@@ -12095,9 +12166,9 @@
    {
     "path": "crates/moqui-lib/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "e66389e73369f3bafbf81dd4408a2a821569935c",
+    "blob_sha": "637240f78bcb8c3ae4a0a8086436da7f69e89e70",
     "ecosystem": "cargo",
-    "bytes": 1055,
+    "bytes": 1129,
     "names": [
      "qrcodegen",
      "datamatrix",
@@ -12116,15 +12187,16 @@
      "bytes",
      "pulldown-cmark",
      "ammonia",
+     "csv",
      "tracing"
     ]
    },
    {
     "path": "crates/moqui-llm/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "7fee15869be3e7909f840316ef21a8fe58af93aa",
+    "blob_sha": "f1177cfd9b9e3a2b429f09f5965b4dced3551aaf",
     "ecosystem": "cargo",
-    "bytes": 1598,
+    "bytes": 1606,
     "names": [
      "moqui-core",
      "moqui-devkit",
@@ -12151,9 +12223,9 @@
    {
     "path": "crates/moqui-mail/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "ad91b8d6a251fa680c5805544f113444910c2e1b",
+    "blob_sha": "8570c416e8ffe8f097608b0f01f73db1d116c4e0",
     "ecosystem": "cargo",
-    "bytes": 3268,
+    "bytes": 3276,
     "names": [
      "moqui-core",
      "moqui-lib",
@@ -12207,9 +12279,9 @@
    {
     "path": "crates/moqui-report/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "b6b2c26f07a7d1b33178858a65d4ea06eb50a454",
+    "blob_sha": "935f14b9f961b6c634814bebf654a658cf0d7ad1",
     "ecosystem": "cargo",
-    "bytes": 1579,
+    "bytes": 1587,
     "names": [
      "moqui-core",
      "moqui-lib",
@@ -12284,15 +12356,40 @@
     ]
    },
    {
+    "path": "crates/moqui-tools/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "963f2788d1539e6f77a5c4c0898cec9dd696a7a6",
+    "ecosystem": "cargo",
+    "bytes": 1529,
+    "names": [
+     "moqui-core",
+     "moqui-lib",
+     "moqui-db",
+     "indexmap",
+     "jiff",
+     "serde_json",
+     "sha2",
+     "csv",
+     "rust_decimal",
+     "tracing"
+    ],
+    "dev": [
+     "moqui-core",
+     "moqui-drivers",
+     "rust_xlsxwriter"
+    ]
+   },
+   {
     "path": "crates/moqui-tui/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "c526c0d081dd42ccba44064272b8866e78b3e29b",
+    "blob_sha": "4b97989ff996877284325bf0aa34475e35b83e52",
     "ecosystem": "cargo",
-    "bytes": 1238,
+    "bytes": 1385,
     "names": [
      "base64",
      "inventory",
      "jiff",
+     "moqui-lib",
      "pulldown-cmark",
      "regex",
      "serde",
@@ -12345,9 +12442,9 @@
    {
     "path": "runtime/dev-component/dev-aide/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "60890cde6d32ec232a66f07578e1ebf33b0088be",
+    "blob_sha": "a5de72fa950c5006a231b966105060bde724735c",
     "ecosystem": "cargo",
-    "bytes": 1091,
+    "bytes": 1099,
     "names": [
      "moqui-core",
      "moqui-devkit",
@@ -12404,10 +12501,13 @@
   "clues": {
    "changelog": [],
    "readme_i18n": [],
-   "docs_matrix": [],
+   "docs_matrix": [
+    "docs/tools/Database.md"
+   ],
    "paths": [
     "crates/moqui-drivers/src/mysql.rs",
     "crates/moqui-drivers/src/postgres.rs",
+    "crates/moqui-drivers/src/mysql/driver/network_tests.rs",
     "crates/moqui-drivers/src/mysql/driver/tests.rs",
     "crates/moqui-drivers/Cargo.toml",
     "crates/moqui-drivers/build.rs",
@@ -12427,6 +12527,7 @@
     "crates/moqui-drivers/src/pgwire_tests.rs",
     "crates/moqui-drivers/src/sim.rs",
     "crates/moqui-drivers/src/statement_lru.rs",
+    "crates/moqui-drivers/src/tools_db_tests.rs",
     "crates/moqui-drivers/src/xmlshim.rs",
     "crates/moqui-entity/src/driver.rs",
     "crates/moqui-host/src/rtc/driver.rs",
@@ -13889,13 +13990,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-05T02:44:51Z",
+  "collected_at": "2026-11-06T03:46:27Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-04",
-  "stars": 7,
+  "pushed_at": "2026-11-05",
+  "stars": 8,
   "tree": {
    "sha": "0f3e0a3bf30ea23c139f634a9cc416501f878d25",
-   "etag": "W/\"92d66a907a0a92a8d039dcbaf23f287968c70fa91b634d07261427dfce8d310e\"",
+   "etag": "W/\"59d551de8b576ed22cf77b9e237743ba9d1f932e809005dbd7c6c07591abaecc\"",
    "truncated": false,
    "path_count": 520,
    "matched": [
@@ -14029,10 +14130,7 @@
    ],
    "readme_i18n": [],
    "docs_matrix": [],
-   "paths": [],
-   "matrix_urls": [
-    "https://sourcebound.io"
-   ]
+   "paths": []
   },
   "fail_count": 0
  }
