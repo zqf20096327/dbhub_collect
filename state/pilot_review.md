@@ -8,25 +8,25 @@
 
 | # | 仓 | star | 现判 dbs | 提名/证据摘要 | 引擎建议 | 人工栏 |
 |---|---|---|---|---|---|---|
-| 1 | Snailclimb/JavaGuide | 159,351 | ∅ | MySQL | MySQL | 　 |
-| 2 | macrozheng/mall | 84,990 | MySQL | Oracle | MySQL | 　 |
-| 3 | netdata/netdata | 81,226 | ∅ | PostgreSQL | MySQL+PostgreSQL | 　 |
-| 4 | prisma/orm | 47,664 | PostgreSQL | MySQL+SQLite | PostgreSQL+SQL Server+MySQL+MariaDB+SQLite | 　 |
-| 5 | LeCoupa/awesome-cheatsheets | 46,600 | ∅ | MySQL | no_evidence | 　 |
-| 6 | pingcap/tidb | 40,690 | TiDB | MySQL | TiDB+MySQL | 　 |
-| 7 | The-Vibe-Company/quivr | 39,617 | ∅ | PostgreSQL | PostgreSQL | 　 |
-| 8 | 0voice/interview_internal_reference | 37,262 | ∅ | MySQL | MySQL | 　 |
-| 9 | AobingJava/JavaFamily | 36,980 | ∅ | MySQL | MySQL | 　 |
-| 10 | cockroachdb/cockroach | 32,596 | ∅ | PostgreSQL | PostgreSQL | 　 |
-| 11 | forthespada/CS-Books | 27,787 | ∅ | ClickHouse+MySQL+SQL Server+SQLite | no_evidence | 　 |
-| 12 | taosdata/TDengine | 25,179 | ∅ | SQLite | below_quorum | 　 |
-| 13 | tursodatabase/turso | 25,095 | ∅ | PostgreSQL+SQLite | SQLite | 　 |
-| 14 | dolthub/dolt | 24,775 | ∅ | MySQL+PostgreSQL+SQL Server | MySQL+MariaDB | 　 |
-| 15 | Vonng/ddia | 23,885 | ∅ | PostgreSQL | no_evidence | 　 |
-| 16 | typicode/lowdb | 22,582 | ∅ | PostgreSQL | no_evidence | 　 |
-| 17 | amark/gun | 19,159 | ∅ | SQLite | no_evidence | 　 |
-| 18 | windmill-labs/windmill | 18,327 | PostgreSQL | MySQL | PostgreSQL | 　 |
-| 19 | itwanger/toBeBetterJavaer | 17,802 | ∅ | MySQL | MySQL | 　 |
+| 1 | Snailclimb/JavaGuide | 159,351 | ∅ | MySQL | MySQL | 同意提名 |
+| 2 | macrozheng/mall | 84,990 | MySQL | Oracle | MySQL | 　同意提名 |
+| 3 | netdata/netdata | 81,226 | ∅ | PostgreSQL | MySQL+PostgreSQL | 同意提名　 |
+| 4 | prisma/orm | 47,664 | PostgreSQL | MySQL+SQLite | PostgreSQL+SQL Server+MySQL+MariaDB+SQLite | 　 同意提名|
+| 5 | LeCoupa/awesome-cheatsheets | 46,600 | ∅ | MySQL | no_evidence | MySQL　 |
+| 6 | pingcap/tidb | 40,690 | TiDB | MySQL | TiDB+MySQL | 同意提名　 |
+| 7 | The-Vibe-Company/quivr | 39,617 | ∅ | PostgreSQL | PostgreSQL | 同意提名　 |
+| 8 | 0voice/interview_internal_reference | 37,262 | ∅ | MySQL | MySQL |同意提名 　 |
+| 9 | AobingJava/JavaFamily | 36,980 | ∅ | MySQL | MySQL | 　同意提名 |
+| 10 | cockroachdb/cockroach | 32,596 | ∅ | PostgreSQL | PostgreSQL | 同意提名　 |
+| 11 | forthespada/CS-Books | 27,787 | ∅ | ClickHouse+MySQL+SQL Server+SQLite | no_evidence | ClickHouse+MySQL+SQL Server+SQLite　 |
+| 12 | taosdata/TDengine | 25,179 | ∅ | SQLite | below_quorum | SQLite+oracle　 |
+| 13 | tursodatabase/turso | 25,095 | ∅ | PostgreSQL+SQLite | SQLite | 　PostgreSQL+SQLite |
+| 14 | dolthub/dolt | 24,775 | ∅ | MySQL+PostgreSQL+SQL Server | MySQL+MariaDB | MySQL+PostgreSQL+SQL Server　 |
+| 15 | Vonng/ddia | 23,885 | ∅ | PostgreSQL | no_evidence | 　no_evidence |
+| 16 | typicode/lowdb | 22,582 | ∅ | PostgreSQL | no_evidence | no_evidence　 |
+| 17 | amark/gun | 19,159 | ∅ | SQLite | no_evidence | SQLite　 |
+| 18 | windmill-labs/windmill | 18,327 | PostgreSQL | MySQL | PostgreSQL | 　PostgreSQL+MySQL |
+| 19 | itwanger/toBeBetterJavaer | 17,802 | ∅ | MySQL | MySQL | 同意提名　 |
 | 20 | xerj-org/xerj | 17,698 | ∅ | SQLite | below_quorum | 　 |
 | 21 | transact-rs/sqlx | 17,612 | PostgreSQL+MySQL+SQLite+MariaDB | SQL Server | PostgreSQL+MySQL+SQLite+MariaDB | 　 |
 | 22 | questdb/questdb | 17,486 | ∅ | ClickHouse+PostgreSQL | PostgreSQL | 　 |
