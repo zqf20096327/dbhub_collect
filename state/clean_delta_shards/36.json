@@ -7641,5 +7641,5163 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "14815e4da671+2": {
+  "fn": "xstevens/decoderbufs",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    2,
+    1,
+    2,
+    [
+     "I worked on this code as a PoC 4 years ago. I have not actively maintained it and I've moved on to other projects. You're still free to use it, but keep this in mind. If you're looking for something more actively maintained check out Debezium's fork."
+    ]
+   ],
+   [
+    "equal",
+    2,
+    4,
+    2,
+    4
+   ],
+   [
+    "delete",
+    4,
+    5,
+    4,
+    4
+   ],
+   [
+    "equal",
+    5,
+    17,
+    4,
+    16
+   ],
+   [
+    "replace",
+    17,
+    19,
+    16,
+    18,
+    [
+     "- The PostgreSQL Team for adding logical decoding support. This is a immensely useful feature.",
+     "- Michael Paquier for his decoder_raw "
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    18,
+    19
+   ],
+   [
+    "replace",
+    20,
+    22,
+    19,
+    21,
+    [
+     "- Martin Kleppmann for making me aware that PostgreSQL was working on logical decoding.",
+     "- Magnus Edenhill for letting me know that protobuf-c existed and just in general for writing librdkafka."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    24,
+    21,
+    23
+   ],
+   [
+    "replace",
+    24,
+    25,
+    23,
+    24,
+    [
+     "This code is built with the following assumptions. You may get mixed results if you deviate from these versions."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    24,
+    25
+   ],
+   [
+    "replace",
+    26,
+    30,
+    25,
+    29,
+    [
+     "* PostgreSQL 9.4+",
+     "* Protocol Buffers 3.x",
+     "* protobuf-c 1.2.x",
+     "* PostGIS 2.1.x"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    42,
+    29,
+    41
+   ],
+   [
+    "replace",
+    42,
+    44,
+    41,
+    43,
+    [
+     " apt-get install -y postgresql postgresql-server-dev-9.6",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    44,
+    49,
+    43,
+    48
+   ],
+   [
+    "replace",
+    49,
+    50,
+    48,
+    49,
+    [
+     " make && make install"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    53,
+    49,
+    52
+   ],
+   [
+    "replace",
+    53,
+    62,
+    52,
+    61,
+    [
+     " # MODULES",
+     " shared_preload_libraries = 'decoderbufs'",
+     "",
+     " # REPLICATION",
+     " wal_level = logical # minimal, archive, hot_standby, or logical (change requires restart)",
+     " max_wal_senders = 8 # max number of walsender processes (change requires restart)",
+     " wal_keep_segments = 4 # in logfile segments, 16MB each; 0 disables",
+     " #wal_sender_timeout = 60s # in milliseconds; 0 disables",
+     " max_replication_slots = 4 # max number of replication slots (change requires restart)"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    65,
+    61,
+    64
+   ],
+   [
+    "replace",
+    65,
+    69,
+    64,
+    68,
+    [
+     " local replication <youruser> trust",
+     " host replication <youruser> 127.0.0.1/32 trust",
+     " host replication <youruser> ::1/128 trust",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    69,
+    72,
+    68,
+    71
+   ],
+   [
+    "replace",
+    72,
+    84,
+    71,
+    73,
+    [
+     " -- can use SQL for demo purposes",
+     " select * from pg_create_logical_replication_slot('decoderbufs_demo', 'decoderbufs');"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    85,
+    73,
+    74
+   ],
+   [
+    "replace",
+    85,
+    87,
+    74,
+    86,
+    [
+     " -- DO SOME TABLE MODIFICATIONS (see below about UPDATE/DELETE)",
+     "",
+     " -- peek at WAL changes using decoderbufs debug mode for SQL console",
+     " select data from pg_logical_slot_peek_changes('decoderbufs_demo', NULL, NULL, 'debug-mode', '1');",
+     " -- get WAL changes using decoderbufs to update the WAL position",
+     " select data from pg_logical_slot_get_changes('decoderbufs_demo', NULL, NULL, 'debug-mode', '1');",
+     "",
+     " -- check the WAL position of logical replicators",
+     " select * from pg_replication_slots where slot_type = 'logical';",
+     "",
+     "If you're performing an UPDATE/DELETE on your table and you don't see results for those operations from logical decoding, make sure you have set REPLICA IDENTITY appropriately for your use case.",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    86,
+    87
+   ],
+   [
+    "replace",
+    88,
+    89,
+    87,
+    88,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    89,
+    93,
+    88,
+    92
+   ],
+   [
+    "replace",
+    93,
+    94,
+    92,
+    93,
+    [
+     "|PostgreSQL Type OID|Decoderbuf Field|"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    93,
+    94
+   ],
+   [
+    "replace",
+    95,
+    116,
+    94,
+    115,
+    [
+     "|BOOLOID|datum_boolean|",
+     "|INT2OID|datum_int32|",
+     "|INT4OID|datum_int32|",
+     "|INT8OID|datum_int64|",
+     "|OIDOID|datum_int64|",
+     "|FLOAT4OID|datum_float|",
+     "|FLOAT8OID|datum_double|",
+     "|NUMERICOID|datum_double|",
+     "|CHAROID|datum_string|",
+     "|VARCHAROID|datum_string|",
+     "|BPCHAROID|datum_string|",
+     "|TEXTOID|datum_string|",
+     "|JSONOID|datum_string|",
+     "|XMLOID|datum_string|",
+     "|UUIDOID|datum_string|",
+     "|TIMESTAMPOID|datum_string|",
+     "|TIMESTAMPTZOID|datum_string|",
+     "|BYTEAOID|datum_bytes|",
+     "|POINTOID|datum_point|",
+     "|PostGIS geometry|datum_point|",
+     "|PostGIS geography|datum_point|"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    118,
+    115,
+    117
+   ],
+   [
+    "replace",
+    118,
+    122,
+    117,
+    118,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    130,
+    118,
+    126
+   ],
+   [
+    "delete",
+    130,
+    131,
+    126,
+    126
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "45d7619224fc+2": {
+  "fn": "waldemarnt/testable-nodejs-api",
+  "clean_ver": "2",
+  "raw_lines": 9,
+  "ops": [
+   [
+    "equal",
+    0,
+    9,
+    0,
+    9
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "bf6c079ef9c2+2": {
+  "fn": "0xHexE/keycloak-hasura-connector",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Recommended alternative https://github.com/hasura/graphql-engine/issues/1779#issuecomment-673875091 "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     " <a href=\"https://github.com/httpsOmkar/keycloak-hasura-connector\">",
+     " Keycloak Hasura Connector",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    17,
+    6,
+    8,
+    [
+     " .:. Keycloak Hasura Connector .:. ",
+     " Production Ready Authentication solution for Hasura "
+    ]
+   ],
+   [
+    "equal",
+    17,
+    28,
+    8,
+    19
+   ],
+   [
+    "replace",
+    28,
+    29,
+    19,
+    20,
+    [
+     "docs"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    32,
+    20,
+    23
+   ],
+   [
+    "replace",
+    32,
+    33,
+    23,
+    24,
+    [
+     "Angular"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    39,
+    24,
+    30
+   ],
+   [
+    "replace",
+    39,
+    45,
+    30,
+    31,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a5bf82f5d659+2": {
+  "fn": "sulabhdubey/rta-smriti-brain",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "equal",
+    0,
+    7,
+    0,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "Concept illustration of Rta-Smriti's local evidence lattice"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    8,
+    9
+   ],
+   [
+    "replace",
+    9,
+    13,
+    9,
+    13,
+    [
+     "CI",
+     "Cross-platform binaries",
+     "Release",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    13,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "**Install** | **Current release** | **Live website** | **Documentation** | **Discussions**"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "> **Independent coverage:** Harness Institute research: Rta-Smriti keeps agent memory local | Featured on The Next New Thing"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    20,
+    17,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "**Current release: v1.1.0-alpha.12.** Unified Agent Setup"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    30,
+    21,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     "Explainable Change Impact retains bounded graph/list"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    31,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     "Cross-Agent Continuity supplies selected memory"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    33,
+    34
+   ],
+   [
+    "replace",
+    34,
+    36,
+    34,
+    36,
+    [
+     "Project Passport supports reviewed handoffs, while",
+     "Verified Source Lens expands revision-bound Python source."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    36,
+    37
+   ],
+   [
+    "replace",
+    37,
+    38,
+    37,
+    38,
+    [
+     "Start with the isolated Windows pilot guide."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    42,
+    38,
+    42
+   ],
+   [
+    "replace",
+    42,
+    43,
+    42,
+    43,
+    [
+     "> release verification record."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    56,
+    43,
+    56
+   ],
+   [
+    "replace",
+    56,
+    62,
+    56,
+    57,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    66,
+    57,
+    61
+   ],
+   [
+    "replace",
+    66,
+    81,
+    61,
+    76,
+    [
+     "|Need|Rta-Smriti capability|",
+     "|---|---|",
+     "|Return to a project or prepare a reviewed handoff|Project Passport: Resume, Changes, Decisions, and Handoff|",
+     "|Start a new agent task without retelling everything|Bounded context packs and structured continuation checkpoints|",
+     "|Connect capture and recall with explicit consent|Unified Codex/Claude Code setup; native Codex pilot verified, native Claude handoff unverified|",
+     "|Know whether recalled context deserves trust|Evidence provenance, hashes, freshness, and `pramana` labels|",
+     "|Understand a repository beyond keyword search|Files, symbols, imports, calls, tests, memories, and evidence graph|",
+     "|Read the exact current Python definition|Verified Source Lens: find, outline, then revision-bound expansion through CLI/MCP|",
+     "|Inspect what may be affected by a change|Explainable Change Impact: bounded indexed paths, graph/list views and reviewed evidence export|",
+     "|Detect drift and contradiction|Canonical project identity, bitemporal truth, conflict and decision-debt views|",
+     "|Preserve long-running agent work|Incremental, redacted, resumable session capture and immutable event history|",
+     "|Operate local services without guesswork|Preview-confirmed lifecycle plans, independent health axes, repair, and receipts|",
+     "|Collaborate without uploading a whole project brain|Optional encrypted scopes, peer permissions, offline sync, review bundles, and audit history|",
+     "|Use multiple AI coding hosts|Local stdio MCP plus recipes for Codex, Claude Code, Cursor, Zed, OpenCode, and Gemini CLI|",
+     "|Keep project data private|Local SQLite, no telemetry, no cloud database, explicit capture grants|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    84,
+    76,
+    79
+   ],
+   [
+    "replace",
+    84,
+    85,
+    79,
+    80,
+    [
+     "Project Passport Resume view with a fictional project's checkpoint and next action"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    89,
+    80,
+    84
+   ],
+   [
+    "replace",
+    89,
+    90,
+    84,
+    85,
+    [
+     "Rta-Smriti v1.1 Project Reality cockpit showing readiness, evidence coverage, and current release state"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    85,
+    86
+   ],
+   [
+    "replace",
+    91,
+    101,
+    86,
+    88,
+    [
+     " Rta-Smriti v1.1 repository and evidence graph ",
+     " Rta-Smriti v1.1 Trusted Lifecycle Supervisor controls and independent health axes "
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    88,
+    89
+   ],
+   [
+    "replace",
+    102,
+    103,
+    89,
+    93,
+    [
+     " Inspectable project graph Navigate code, memories, evidence, and their relationships. ",
+     " Trusted lifecycle Inspect, preview, apply, verify, repair, and retain a sealed receipt. ",
+     "",
+     "Rta-Smriti v1.1B synthetic Atlas federation fixture showing scoped peers, independent health axes, quarantine, and an offline relay recovery state"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    109,
+    93,
+    99
+   ],
+   [
+    "replace",
+    109,
+    110,
+    99,
+    100,
+    [
+     "The 60-second v1 product demo"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    127,
+    100,
+    117
+   ],
+   [
+    "replace",
+    127,
+    131,
+    117,
+    118,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    175,
+    118,
+    162
+   ],
+   [
+    "replace",
+    175,
+    181,
+    162,
+    163,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    214,
+    163,
+    196
+   ],
+   [
+    "replace",
+    214,
+    219,
+    196,
+    197,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    221,
+    197,
+    199
+   ],
+   [
+    "replace",
+    221,
+    223,
+    199,
+    200,
+    [
+     " macOS or Linux "
+    ]
+   ],
+   [
+    "equal",
+    223,
+    228,
+    200,
+    205
+   ],
+   [
+    "replace",
+    228,
+    233,
+    205,
+    206,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    234,
+    206,
+    207
+   ],
+   [
+    "delete",
+    234,
+    236,
+    207,
+    207
+   ],
+   [
+    "equal",
+    236,
+    243,
+    207,
+    214
+   ],
+   [
+    "replace",
+    243,
+    244,
+    214,
+    215,
+    [
+     "from the `v1.1.0-alpha.12` release,"
+    ]
+   ],
+   [
+    "equal",
+    244,
+    252,
+    215,
+    223
+   ],
+   [
+    "replace",
+    252,
+    258,
+    223,
+    224,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    264,
+    224,
+    230
+   ],
+   [
+    "replace",
+    264,
+    265,
+    230,
+    231,
+    [
+     " published. Public diagnostics use bounded counts and fingerprints."
+    ]
+   ],
+   [
+    "equal",
+    265,
+    267,
+    231,
+    233
+   ],
+   [
+    "replace",
+    267,
+    268,
+    233,
+    234,
+    [
+     "Read the complete security and privacy policy before handling sensitive"
+    ]
+   ],
+   [
+    "equal",
+    268,
+    276,
+    234,
+    242
+   ],
+   [
+    "replace",
+    276,
+    288,
+    242,
+    243,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    307,
+    243,
+    262
+   ],
+   [
+    "replace",
+    307,
+    308,
+    262,
+    263,
+    [
+     "Release Verification."
+    ]
+   ],
+   [
+    "equal",
+    308,
+    311,
+    263,
+    266
+   ],
+   [
+    "replace",
+    311,
+    327,
+    266,
+    282,
+    [
+     "|Start here|What it covers|",
+     "|---|---|",
+     "|Installation|Source install, native binaries, upgrades, troubleshooting, uninstall|",
+     "|10-minute Atlas path|Small end-to-end trial on a synthetic project|",
+     "|Usage guide|CLI workflows, capture, checkpoints, context, snapshots, workspaces|",
+     "|Governed federation|Identity, scopes, invitations, encrypted sync, review bundles, recovery|",
+     "|Architecture|Identity, event journal, truth model, graph, compiler, lifecycle|",
+     "|MCP host matrix|Host recipes, capability profiles, and live-proof status|",
+     "|Public benchmark|Reproducible retrieval harness and honest interpretation|",
+     "|Verified Source Lens|Bounded Python outlines and revision-bound source expansion|",
+     "|Cross-Agent Continuity|Opt-in Codex and Claude Code handoffs, consent, and revocation|",
+     "|Explainable Change Impact|Indexed relationship traces and a reviewed evidence handoff|",
+     "|Unified Agent Setup|Consented capture-to-recall setup, pause/removal and native-host limits|",
+     "|Release notes|Unified setup, Codex pilot evidence and unverified Claude handoff|",
+     "|Release verification|Tests, artifacts, checksums, security evidence, and limits|",
+     "|Contributing|A practical first contribution path|"
+    ]
+   ],
+   [
+    "equal",
+    327,
+    329,
+    282,
+    284
+   ],
+   [
+    "replace",
+    329,
+    330,
+    284,
+    285,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    330,
+    334,
+    285,
+    289
+   ],
+   [
+    "replace",
+    334,
+    339,
+    289,
+    294,
+    [
+     "- Share your experience",
+     "- Ask for installation help",
+     "- Report a bug",
+     "- Pick a first contribution",
+     "- Star the repository if it saved you from repeating project context"
+    ]
+   ],
+   [
+    "equal",
+    339,
+    342,
+    294,
+    297
+   ],
+   [
+    "replace",
+    342,
+    344,
+    297,
+    299,
+    [
+     "- Harness Institute: Rta-Smriti keeps agent memory local",
+     "- The Next New Thing: Rta-Smriti segment"
+    ]
+   ],
+   [
+    "equal",
+    344,
+    347,
+    299,
+    302
+   ],
+   [
+    "replace",
+    347,
+    349,
+    302,
+    304,
+    [
+     "Conceived and researched by Sulabh Dubey.",
+     "Built with OpenAI Codex as the primary design,"
+    ]
+   ],
+   [
+    "equal",
+    349,
+    350,
+    304,
+    305
+   ],
+   [
+    "replace",
+    350,
+    351,
+    305,
+    306,
+    [
+     "release approval. See Contributors for the full provenance statement."
+    ]
+   ],
+   [
+    "equal",
+    351,
+    352,
+    306,
+    307
+   ],
+   [
+    "replace",
+    352,
+    353,
+    307,
+    308,
+    [
+     "Released under the MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a547e866b9ae+2": {
+  "fn": "dockette/adminer",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Dockette / Adminer "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     " 🎁 Tiniest boxed dockerized Adminer (MySQL, PostgreSQL, SQLite, Mongo, Oracle, MSSQL) Dockerfiles. Database management in a single PHP file."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    9,
+    4,
+    5,
+    [
+     "🕹 f3l1x.io | 💻 f3l1x | 🐦 @xf3l1x"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    5,
+    6
+   ],
+   [
+    "replace",
+    10,
+    16,
+    6,
+    10,
+    [
+     " GitHub Actions",
+     " Docker Hub pulls",
+     " GitHub Sponsors",
+     " Support/Discussions"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    10,
+    11
+   ],
+   [
+    "replace",
+    17,
+    20,
+    11,
+    12,
+    [
+     "Adminer"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    59,
+    12,
+    51
+   ],
+   [
+    "replace",
+    59,
+    63,
+    51,
+    52,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    67,
+    52,
+    56
+   ],
+   [
+    "replace",
+    67,
+    68,
+    56,
+    57,
+    [
+     "|Image|Technologies|Size|Docker Hub|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    57,
+    58
+   ],
+   [
+    "replace",
+    69,
+    76,
+    58,
+    65,
+    [
+     "|dockette/adminer|MySQL / PostgreSQL / MongoDB / Sqlite|12mb|link|",
+     "|dockette/adminer:full|MySQL / PostgreSQL / MongoDB / Sqlite|12mb|link|",
+     "|dockette/adminer:mysql|MySQL|9mb|link|",
+     "|dockette/adminer:pgsql|PostgreSQL|8mb|link|",
+     "|dockette/adminer:mongo|MongoDB|9mb|link|",
+     "|dockette/adminer:mssql|MS SQL Server|-|link|",
+     "|dockette/adminer:dg|MySQL / PostgreSQL / MongoDB / Sqlite|16mb|link|"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    90,
+    65,
+    79
+   ],
+   [
+    "replace",
+    90,
+    91,
+    79,
+    80,
+    [
+     "|Variable|Description|Default|"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    80,
+    81
+   ],
+   [
+    "replace",
+    92,
+    95,
+    81,
+    84,
+    [
+     "|`ADMINER_PLUGIN_MSSQL_ENCRYPT`|Set to `0` to disable the encryption plugin|enabled|",
+     "|`ADMINER_MSSQL_ENCRYPT`|`yes`, `no`, or `strict`|not set|",
+     "|`ADMINER_MSSQL_TRUST_CERT`|`yes` or `no`|`yes`|"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    102,
+    84,
+    91
+   ],
+   [
+    "replace",
+    102,
+    103,
+    91,
+    92,
+    [
+     "Adminer DG"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    112,
+    92,
+    101
+   ],
+   [
+    "replace",
+    112,
+    113,
+    101,
+    102,
+    [
+     "|Variable|Description|"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    102,
+    103
+   ],
+   [
+    "replace",
+    114,
+    116,
+    103,
+    105,
+    [
+     "|`ADMINER_PLUGIN_AUTOLOGIN=1`|Enable the autologin plugin|",
+     "|`ADMINER_AUTOLOGIN_SERVER`|DSN connection string|"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    134,
+    105,
+    123
+   ],
+   [
+    "replace",
+    134,
+    135,
+    123,
+    124,
+    [
+     "|Variable|Description|"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    124,
+    125
+   ],
+   [
+    "replace",
+    136,
+    138,
+    125,
+    127,
+    [
+     "|`ADMINER_PLUGIN_SERVER_LIST=1`|Enable the server list plugin|",
+     "|`ADMINER_SERVERS_<Name>`|DSN for each server (suffix becomes the display name)|"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    143,
+    127,
+    132
+   ],
+   [
+    "replace",
+    143,
+    148,
+    132,
+    133,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    170,
+    133,
+    155
+   ],
+   [
+    "replace",
+    170,
+    214,
+    155,
+    187,
+    [
+     " default ",
+     " adminer-dark ",
+     " brade ",
+     " bueltge ",
+     " dracula ",
+     "",
+     " esterka ",
+     " flat ",
+     " galkaev ",
+     " haeckel ",
+     " hever ",
+     "",
+     " konya ",
+     " lavender-light ",
+     " lucas-sandery ",
+     " mancave ",
+     " mvt ",
+     "",
+     " nette ",
+     " ng9 ",
+     " nicu ",
+     " pappu687 ",
+     " paranoiq ",
+     "",
+     " pepa-linha ",
+     " pokorny ",
+     " price ",
+     " rmsoft ",
+     " rmsoft_blue ",
+     "",
+     " rmsoft_blue-dark ",
+     " win98 "
+    ]
+   ],
+   [
+    "equal",
+    214,
+    225,
+    187,
+    198
+   ],
+   [
+    "replace",
+    225,
+    226,
+    198,
+    199,
+    [
+     "The release version is the date in `VERSION`. CI pushes `latest` also as `dockette/adminer:<VERSION>`."
+    ]
+   ],
+   [
+    "equal",
+    226,
+    230,
+    199,
+    203
+   ],
+   [
+    "replace",
+    230,
+    231,
+    203,
+    204,
+    [
+     "See how to contribute to this package. Consider to support **f3l1x**. Thank you for using this package."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "e4d18dcddabd+2": {
+  "fn": "tuxmonk/pupdb",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "PupDB Logo"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Build Status codecov PyPI version fury.io Supported Python Versions"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    65,
+    3,
+    65
+   ],
+   [
+    "replace",
+    65,
+    66,
+    65,
+    66,
+    [
+     "4. `keys()`: Returns the keys present in the database file. Return type is `list` in Python 2 and Dictionary view object (similar to `dict.keys()`) in Python 3."
+    ]
+   ],
+   [
+    "equal",
+    66,
+    73,
+    66,
+    73
+   ],
+   [
+    "replace",
+    73,
+    74,
+    73,
+    74,
+    [
+     "5. `values()`: Returns the values of all keys present in the database file. Return type is `list` for Python 2 and Dictionary view object (similar to `dict.values()`) in Python 3."
+    ]
+   ],
+   [
+    "equal",
+    74,
+    81,
+    74,
+    81
+   ],
+   [
+    "replace",
+    81,
+    82,
+    81,
+    82,
+    [
+     "6. `items()`: Returns the values of all keys present in the database file. Return type is `list` for Python 2 and Dictionary view object (similar to `dict.items()`) in Python 3."
+    ]
+   ],
+   [
+    "equal",
+    82,
+    182,
+    82,
+    182
+   ],
+   [
+    "replace",
+    182,
+    183,
+    182,
+    183,
+    [
+     "We use SemVer for versioning. For the versions available,"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    184,
+    183,
+    184
+   ],
+   [
+    "replace",
+    184,
+    185,
+    184,
+    185,
+    [
+     "tags on this repository."
+    ]
+   ],
+   [
+    "equal",
+    185,
+    187,
+    185,
+    187
+   ],
+   [
+    "delete",
+    187,
+    188,
+    187,
+    187
+   ],
+   [
+    "equal",
+    188,
+    189,
+    187,
+    188
+   ],
+   [
+    "delete",
+    189,
+    190,
+    188,
+    188
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "21006d29c25f+2": {
+  "fn": "theanshsonkar/carto",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Docs · Quickstart · Tools · ANCI Spec · Benchmarks · Changelog"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    10,
+    6,
+    10,
+    [
+     "CI",
+     "npm version",
+     "MIT License",
+     "npm downloads"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    10,
+    11
+   ],
+   [
+    "replace",
+    11,
+    13,
+    11,
+    12,
+    [
+     "Carto boarding pass"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    26,
+    12,
+    25
+   ],
+   [
+    "replace",
+    26,
+    27,
+    25,
+    26,
+    [
+     "Carto answering a blast-radius query on the supabase repo, inside an MCP client (Kiro CLI, running Claude)"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    26,
+    27
+   ],
+   [
+    "replace",
+    28,
+    29,
+    27,
+    28,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    28,
+    29
+   ],
+   [
+    "replace",
+    30,
+    39,
+    29,
+    36,
+    [
+     "|🗺️ **Architecture**|Import graph, routes, models, and auto-detected domains - the whole shape of the repo, mapped once.|",
+     "|💥 **Blast Radius**|\"Touch this file and 22 things break.\" Transitive impact of any change, in microseconds.|",
+     "|🧠 **Memory**|Every decision and validated diff is remembered across sessions. Ask *\"did we agree on snake_case here?\"* six weeks later and get the actual verdict.|",
+     "|⏳ **History**|Snapshots every commit. Tracks drift, churn, and architectural events. The container gets smarter the longer the repo lives.|",
+     "|🎯 **Predictive Risk**|Every file scored 0–1: *P(this causes the next incident)*. High-risk files surface before the PR is opened.|",
+     "|📦 **Portable (ANCI)**|The **structural core** is an open format - `.carto/anci.{yaml,bin}`, stamped with its source commit + a content digest so it's versioned and verifiable. Any AI tool can read it without re-indexing.|",
+     "|🔐 **Verifiable**|Every container is stamped with its source commit, grammar versions, and a sha256 content digest. Same repo → same digest. Integrity is checked on load.|"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    42,
+    36,
+    39
+   ],
+   [
+    "replace",
+    42,
+    43,
+    39,
+    40,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    40,
+    41
+   ],
+   [
+    "replace",
+    44,
+    46,
+    41,
+    43,
+    [
+     "|### 🧑‍💻 I use AI coding tools|### 🔧 I'm building AI dev tools|",
+     "|Install once and Carto auto-wires into every AI tool on your machine. Your assistant instantly knows your architecture, remembers past decisions, and gets blocked from risky edits. **→ Quick start**|Consume the portable container directly via the ANCI format, or query it live through a compact MCP surface (a core-10 plus parameterized families). Stop building your own index. **→ Build on Carto**|"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    48,
+    43,
+    45
+   ],
+   [
+    "delete",
+    48,
+    50,
+    45,
+    45
+   ],
+   [
+    "equal",
+    50,
+    69,
+    45,
+    64
+   ],
+   [
+    "replace",
+    69,
+    74,
+    64,
+    65,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    78,
+    65,
+    69
+   ],
+   [
+    "replace",
+    78,
+    80,
+    69,
+    70,
+    [
+     " Manual MCP wiring for every other tool (if it wasn't auto-detected) "
+    ]
+   ],
+   [
+    "equal",
+    80,
+    122,
+    70,
+    112
+   ],
+   [
+    "delete",
+    122,
+    124,
+    112,
+    112
+   ],
+   [
+    "equal",
+    124,
+    130,
+    112,
+    118
+   ],
+   [
+    "delete",
+    130,
+    132,
+    118,
+    118
+   ],
+   [
+    "equal",
+    132,
+    145,
+    118,
+    131
+   ],
+   [
+    "replace",
+    145,
+    146,
+    131,
+    132,
+    [
+     "All five run live in the engine - one SQLite file (`.carto/carto.db`), queried over MCP. The **portable container file** - the open ANCI export any tool can read *without* Carto's runtime - today carries the **structural core** (import graph, domains, routes, models, blast radius), stamped with its source commit + a content digest so it's versioned and verifiable. Making the other four memories portable *in the file* is on the roadmap."
+    ]
+   ],
+   [
+    "equal",
+    146,
+    148,
+    132,
+    134
+   ],
+   [
+    "delete",
+    148,
+    150,
+    134,
+    134
+   ],
+   [
+    "equal",
+    150,
+    155,
+    134,
+    139
+   ],
+   [
+    "replace",
+    155,
+    158,
+    139,
+    140,
+    [
+     "There's no daemon, no image pull, no virtual network. A Carto container is just a lightweight `.carto/` folder: a local SQLite database plus an open ANCI map. It costs nothing while idle, answers a blast-radius query in microseconds on a 7,500-file repo, and never touches the cloud. Any AI agent - Claude Code, Cursor, or your CI pipeline - taps into it instantly instead of re-indexing from scratch."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    167,
+    140,
+    149
+   ],
+   [
+    "replace",
+    167,
+    171,
+    149,
+    150,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    171,
+    174,
+    150,
+    153
+   ],
+   [
+    "delete",
+    174,
+    176,
+    153,
+    153
+   ],
+   [
+    "equal",
+    176,
+    183,
+    153,
+    160
+   ],
+   [
+    "replace",
+    183,
+    196,
+    160,
+    161,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    196,
+    199,
+    161,
+    164
+   ],
+   [
+    "delete",
+    199,
+    201,
+    164,
+    164
+   ],
+   [
+    "equal",
+    201,
+    217,
+    164,
+    180
+   ],
+   [
+    "delete",
+    217,
+    219,
+    180,
+    180
+   ],
+   [
+    "equal",
+    219,
+    224,
+    180,
+    185
+   ],
+   [
+    "replace",
+    224,
+    225,
+    185,
+    186,
+    [
+     "|Core tool|What it's for|"
+    ]
+   ],
+   [
+    "equal",
+    225,
+    226,
+    186,
+    187
+   ],
+   [
+    "replace",
+    226,
+    234,
+    187,
+    195,
+    [
+     "|`get_architecture` · `get_context`|Orient in the repo; full context for one file|",
+     "|`impact`|Blast radius / multi-file simulate / neighbors / data flow - *what breaks if I touch this?* (`mode=`)|",
+     "|`validate_diff`|Grade a proposed diff (risk + violations)|",
+     "|`get_change_plan`|Natural-language intent → files to touch|",
+     "|`memory`|Episodic memory - search past decisions, logs, sessions, interventions (`kind=`)|",
+     "|`history`|Temporal history - drift, hotspots, evolution, churn, health (`view=`)|",
+     "|`patterns`|Mined invariants / conventions / canonical exemplar / co-change patterns (`kind=`)|",
+     "|`get_predictive_risk` · `get_minimal_context_for_intent`|Risk score per file; token-budgeted context picker|"
+    ]
+   ],
+   [
+    "equal",
+    234,
+    241,
+    195,
+    202
+   ],
+   [
+    "replace",
+    241,
+    244,
+    202,
+    203,
+    [
+     "Full reference at `docs/api/`. You don't need to memorize any of these - your AI picks the right one mid-task."
+    ]
+   ],
+   [
+    "equal",
+    244,
+    249,
+    203,
+    208
+   ],
+   [
+    "replace",
+    249,
+    250,
+    208,
+    209,
+    [
+     "|Repo|Files|First index|Re-index|Container size|"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    251,
+    209,
+    210
+   ],
+   [
+    "replace",
+    251,
+    255,
+    210,
+    214,
+    [
+     "|cal.com|4,352|3.9s|805ms|3.1 MB|",
+     "|supabase/supabase|6,358|5.9s|967ms|4.8 MB|",
+     "|vercel/next.js|6,193|6.9s|978ms|15.1 MB|",
+     "|microsoft/vscode|7,567|8.6s|1.1s|14.3 MB|"
+    ]
+   ],
+   [
+    "equal",
+    255,
+    256,
+    214,
+    215
+   ],
+   [
+    "replace",
+    256,
+    259,
+    215,
+    216,
+    [
+     "Query latency on vscode (7,567 files): `validate_diff` p50 **84 µs** · `get_blast_radius` p50 **2.7 µs** · `get_high_impact_files` p50 **750 ns**. Full table in `docs/scale.md`."
+    ]
+   ],
+   [
+    "equal",
+    259,
+    270,
+    216,
+    227
+   ],
+   [
+    "delete",
+    270,
+    272,
+    227,
+    227
+   ],
+   [
+    "equal",
+    272,
+    274,
+    227,
+    229
+   ],
+   [
+    "replace",
+    274,
+    275,
+    229,
+    230,
+    [
+     "|Command|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    276,
+    230,
+    231
+   ],
+   [
+    "replace",
+    276,
+    290,
+    231,
+    243,
+    [
+     "|`carto init`|Build the container, generate AGENTS.md, install git hooks, wire every AI tool found|",
+     "|`carto sync`|Re-build changed files (auto-runs on commit / checkout / merge / rebase)|",
+     "|`carto export`|Pack the container into one portable, verifiable `.anci` file|",
+     "|`carto load <file>`|Load an `.anci` container into a queryable `.carto/` - no re-index, digest verified|",
+     "|`carto serve`|Start the MCP server (your AI tool runs this)|",
+     "|`carto impact <file>`|Blast radius of one file|",
+     "|`carto pr-impact`|Diff-shaped impact report between two refs|",
+     "|`carto check`|Domain health, cross-domain violations, drift|",
+     "|`carto status`|One-screen project health|",
+     "|`carto doctor`|9-check setup diagnostic|",
+     "|`carto why <file>`|3-line file summary|",
+     "|`carto explain <intent>`|Natural-language intent → architectural plan|"
+    ]
+   ],
+   [
+    "equal",
+    290,
+    295,
+    243,
+    248
+   ],
+   [
+    "replace",
+    295,
+    296,
+    248,
+    249,
+    [
+     "- **Touches your manual notes.** Only writes between ` ` markers."
+    ]
+   ],
+   [
+    "equal",
+    296,
+    297,
+    249,
+    250
+   ],
+   [
+    "delete",
+    297,
+    299,
+    250,
+    250
+   ],
+   [
+    "equal",
+    299,
+    302,
+    250,
+    253
+   ],
+   [
+    "replace",
+    302,
+    303,
+    253,
+    254,
+    [
+     "I was building Emfirge - a cloud security agent that maps AWS infrastructure into a graph and simulates the blast radius of every change. The AI inside it kept hallucinating about resources it had only half-seen, so I wrote a module that mapped every account into a structured graph the AI could query directly. The hallucinations stopped."
+    ]
+   ],
+   [
+    "equal",
+    303,
+    306,
+    254,
+    257
+   ],
+   [
+    "delete",
+    306,
+    308,
+    257,
+    257
+   ],
+   [
+    "equal",
+    308,
+    309,
+    257,
+    258
+   ],
+   [
+    "delete",
+    309,
+    310,
+    258,
+    258
+   ],
+   [
+    "equal",
+    310,
+    311,
+    258,
+    259
+   ],
+   [
+    "delete",
+    311,
+    315,
+    259,
+    259
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "242a9e409728+2": {
+  "fn": "mugli/go-kill-mysql-query",
+  "clean_ver": "2",
+  "raw_lines": 16,
+  "ops": [
+   [
+    "equal",
+    0,
+    16,
+    0,
+    16
+   ],
+   [
+    "replace",
+    16,
+    19,
+    16,
+    17,
+    [
+     "screenshot"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    22,
+    17,
+    20
+   ],
+   [
+    "replace",
+    22,
+    25,
+    20,
+    21,
+    [
+     "Download binary from release tab."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    32,
+    21,
+    28
+   ],
+   [
+    "replace",
+    32,
+    45,
+    28,
+    29,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    29,
+    30
+   ],
+   [
+    "delete",
+    46,
+    48,
+    30,
+    30
+   ],
+   [
+    "equal",
+    48,
+    57,
+    30,
+    39
+   ],
+   [
+    "replace",
+    57,
+    94,
+    39,
+    40,
+    [
+     "…（37 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    40,
+    41
+   ],
+   [
+    "delete",
+    95,
+    97,
+    41,
+    41
+   ],
+   [
+    "equal",
+    97,
+    109,
+    41,
+    53
+   ],
+   [
+    "delete",
+    109,
+    111,
+    53,
+    53
+   ],
+   [
+    "equal",
+    111,
+    112,
+    53,
+    54
+   ],
+   [
+    "delete",
+    112,
+    113,
+    54,
+    54
+   ],
+   [
+    "equal",
+    113,
+    114,
+    54,
+    55
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "71eefb9ef23b+2": {
+  "fn": "oceanbase/ocp-express",
+  "clean_ver": "2",
+  "raw_lines": 12,
+  "ops": [
+   [
+    "equal",
+    0,
+    12,
+    0,
+    12
+   ],
+   [
+    "replace",
+    12,
+    14,
+    12,
+    14,
+    [
+     " * 最新文档 LTS 版本 Node.js 16.x",
+     " * `可选`最新稳定版本 cnpm，也可以使用 Node.js 内置的 npm"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    14,
+    15
+   ],
+   [
+    "replace",
+    15,
+    18,
+    15,
+    18,
+    [
+     " * 最新的稳定版 OpenJDK 8",
+     " * 最新的稳定版 Apache Maven",
+     " * rpmbuild 需要此依赖打包 rpm"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "依赖安装完成后可以执行 `sh build/script/package.sh jar` 来编译、打包前后端代码，也可以参考 编译 来手动进行打包编译。"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    23,
+    20,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "项目整体使用分层架构，各个模块说明参考 项目结构。"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    28,
+    24,
+    28
+   ],
+   [
+    "replace",
+    28,
+    30,
+    28,
+    30,
+    [
+     "Express，相关步骤参考命令行部署 OCP Express",
+     "，详细启动说明参考 启动"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    32,
+    30,
+    32
+   ],
+   [
+    "replace",
+    32,
+    34,
+    32,
+    33,
+    [
+     "木兰宽松许可证, 第2版"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "fc61afeb286f+2": {
+  "fn": "dineshgowda24/bitcask-rb",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    8,
+    [
+     "Ruby",
+     "BDD",
+     "Ruby Style Guide",
+     "CircleCI",
+     "codecov",
+     "DeepSource"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    8,
+    9
+   ],
+   [
+    "replace",
+    9,
+    12,
+    9,
+    10,
+    [
+     "Fast, Persistent key/value store based on bitcask paper written in Ruby."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    31,
+    10,
+    29
+   ],
+   [
+    "replace",
+    31,
+    47,
+    29,
+    30,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    67,
+    30,
+    50
+   ],
+   [
+    "replace",
+    67,
+    68,
+    50,
+    51,
+    [
+     "|Feature|Support|"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    69,
+    51,
+    52
+   ],
+   [
+    "replace",
+    69,
+    77,
+    52,
+    60,
+    [
+     "|Persisted in disk|:white_check_mark:|",
+     "|Get API|:white_check_mark:|",
+     "|Put API|:white_check_mark:|",
+     "|Int, Float and String for k/v|:white_check_mark:|",
+     "|CRC|:white_check_mark:|",
+     "|Directory Support|:x:|",
+     "|Delete API|:x:|",
+     "|Files Merge and LSM Trees|:x:|"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    86,
+    60,
+    69
+   ],
+   [
+    "replace",
+    86,
+    93,
+    69,
+    70,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    101,
+    70,
+    78
+   ],
+   [
+    "replace",
+    101,
+    124,
+    78,
+    79,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    127,
+    79,
+    82
+   ],
+   [
+    "replace",
+    127,
+    131,
+    82,
+    83,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "3fdcdfc8bb7a+2": {
+  "fn": "JustVugg/tools-factory",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    3,
+    [
+     " gutenberg-cli_logo"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    11,
+    3,
+    8
+   ],
+   [
+    "delete",
+    11,
+    14,
+    8,
+    8
+   ],
+   [
+    "equal",
+    14,
+    18,
+    8,
+    12
+   ],
+   [
+    "replace",
+    18,
+    31,
+    12,
+    13,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    53,
+    13,
+    35
+   ],
+   [
+    "delete",
+    53,
+    55,
+    35,
+    35
+   ],
+   [
+    "equal",
+    55,
+    59,
+    35,
+    39
+   ],
+   [
+    "replace",
+    59,
+    60,
+    39,
+    40,
+    [
+     "|Primitive|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    40,
+    41
+   ],
+   [
+    "replace",
+    61,
+    71,
+    41,
+    51,
+    [
+     "|**`forge` / `generate`**|OpenAPI / GraphQL / HAR / OpenAPI-from-Postman/Insomnia/curl → Go CLI + MCP server + Claude/OpenClaw skill|",
+     "|**`verify`**|Runs `go build`, CLI smoke test, MCP handshake, `go test` — writes `proofs/verification.json`. **No proof = no Grade A.**|",
+     "|**`try <url>`**|Autopilot: classifies the site (`openapi-published / json-endpoint / html-content / spa / lazy-rendered / anti-bot-challenge / http-error`) and tells you the exact next command|",
+     "|**`extract` / `scrape`**|LLM-powered structured extraction (JSON-Schema validated, cache TTL, Anthropic/OpenAI/Ollama provider) + Firecrawl-style markdown scraping|",
+     "|**`snapshot/replay`**|Generated tools support deterministic record + offline replay for tests and CI|",
+     "|**`vault`**|Shared, AES-GCM-encrypted token vault across all generated tools|",
+     "|**`lockfile` + `diff` + `upgrade` + `watch`**|Pin spec hashes, diff semantically, regenerate while preserving `// gutenberg:keep` blocks, poll upstream for drift|",
+     "|**`compare`**|Call N tools on the same intent, see results side by side|",
+     "|**`aggregator` kind**|One recipe → a fan-out Go CLI over N JSON sources with `merge.go` + `rank.go`|",
+     "|**`heroes`**|Zero-friction aliases auto-detected (or curated via `x-gutenberg-hero`) — e.g. `espn nba`, `github meta`, `tvmaze shows`|"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    135,
+    51,
+    115
+   ],
+   [
+    "replace",
+    135,
+    140,
+    115,
+    116,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    152,
+    116,
+    128
+   ],
+   [
+    "replace",
+    152,
+    153,
+    128,
+    129,
+    [
+     "|Site shape|Recommended path|Success rate|Examples we've shipped|"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    154,
+    129,
+    130
+   ],
+   [
+    "replace",
+    154,
+    159,
+    130,
+    135,
+    [
+     "|**API with public OpenAPI**|`generate` directly|✅ ~95%|GitHub (1183 ops), Stripe (587), Sentry (209)|",
+     "|**API without spec but JSON endpoints**|`seed-har` → `import-har` → `generate`|✅ ~90%|ESPN, TVMaze, Wikipedia REST, public JSON APIs|",
+     "|**Plain HTML content site**|`scrape` (+ `--structured`) or `extract` with schema|✅ ~80%|Wikipedia and content/documentation pages|",
+     "|**SPA with reachable XHR**|`record` (Playwright) → `import-har`|⚠️ ~40%|needs interactive triggering|",
+     "|**SPA + Cloudflare Turnstile / strong anti-bot**|`record --backend browserbase` (paid) — or use an official partner API|❌ ~5% with free tooling|thetrainline, lastminute, OpenTable, Subito.it|"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    173,
+    135,
+    149
+   ],
+   [
+    "replace",
+    173,
+    198,
+    149,
+    150,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    206,
+    150,
+    158
+   ],
+   [
+    "replace",
+    206,
+    216,
+    158,
+    159,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    222,
+    159,
+    165
+   ],
+   [
+    "replace",
+    222,
+    223,
+    165,
+    166,
+    [
+     "|Tool|Ops|Source|Verified checks|"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    224,
+    166,
+    167
+   ],
+   [
+    "replace",
+    224,
+    232,
+    167,
+    175,
+    [
+     "|github|1183|GitHub OpenAPI official|build • cli • mcp • tests|",
+     "|stripe|587|Stripe OpenAPI official|build • cli • mcp • tests|",
+     "|sentry|209|Sentry OpenAPI official|build • cli • mcp • tests|",
+     "|espn|4|HAR-seeded|build • cli • mcp • tests|",
+     "|wikipedia-it|5|HAR-seeded (User-Agent default)|build • cli • mcp • tests|",
+     "|tvmaze|5|HAR-seeded|build • cli • mcp • tests|",
+     "|multi-demo|2 sources|aggregator (ESPN + Open-Meteo)|build • cli • tests|",
+     "|dev-pulse|2 sources|aggregator (GitHub + ESPN)|build • cli • tests|"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    272,
+    175,
+    215
+   ],
+   [
+    "replace",
+    272,
+    273,
+    215,
+    216,
+    [
+     "|Var|What|"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    274,
+    216,
+    217
+   ],
+   [
+    "replace",
+    274,
+    282,
+    217,
+    225,
+    [
+     "|`ANTHROPIC_API_KEY`|Use Anthropic for `extract` / `run`|",
+     "|`OPENAI_API_KEY`|Use OpenAI for `extract` / `run`|",
+     "|`OLLAMA_HOST` (default `http://localhost:11434`) + `GUTENBERG_LLM_PROVIDER=ollama`|Use local or remote Ollama for `extract`|",
+     "|`BROWSERBASE_API_KEY` + `BROWSERBASE_PROJECT_ID`|Required for `record --backend browserbase`|",
+     "|`GUTENBERG_VAULT_KEY` (32-byte hex)|Encrypt the shared OAuth vault with AES-GCM|",
+     "|`GUTENBERG_TELEMETRY=1` + `GUTENBERG_TELEMETRY_FILE`|Opt-in local JSONL log of operation calls (never sent anywhere)|",
+     "|`<TOOL_ENV>_SNAPSHOT_MODE=record\\|replay` + `<TOOL_ENV>_SNAPSHOT_DIR`|Deterministic HTTP record/replay per tool|",
+     "|`<TOOL_ENV>_AUTO_REFRESH=0`|Disable automatic OAuth refresh in a generated tool|"
+    ]
+   ],
+   [
+    "equal",
+    282,
+    284,
+    225,
+    227
+   ],
+   [
+    "delete",
+    284,
+    285,
+    227,
+    227
+   ],
+   [
+    "equal",
+    285,
+    286,
+    227,
+    228
+   ],
+   [
+    "delete",
+    286,
+    287,
+    228,
+    228
+   ],
+   [
+    "equal",
+    287,
+    294,
+    228,
+    235
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "857e35aa3017+2": {
+  "fn": "xyproto/permissionsql",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# PermissionSQL GoDoc"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    6,
+    1,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "godoc.org"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    16,
+    7,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "* Supports Negroni, Martini, Gin and Macaron."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    31,
+    17,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     "### Example for Gin"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    37,
+    32,
+    37
+   ],
+   [
+    "replace",
+    37,
+    41,
+    37,
+    41,
+    [
+     " \"fmt\"",
+     " \"log\"",
+     " \"net/http\"",
+     " \"strings\""
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    41,
+    42
+   ],
+   [
+    "replace",
+    42,
+    44,
+    42,
+    44,
+    [
+     " \"github.com/gin-gonic/gin\"",
+     " \"github.com/xyproto/permissionsql/v2\""
+    ]
+   ],
+   [
+    "equal",
+    44,
+    47,
+    44,
+    47
+   ],
+   [
+    "replace",
+    47,
+    48,
+    47,
+    48,
+    [
+     " g := gin.New()"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    48,
+    49
+   ],
+   [
+    "replace",
+    49,
+    54,
+    49,
+    54,
+    [
+     " // New permissionsql middleware",
+     " perm, err := permissionsql.New()",
+     " if err != nil {",
+     " log.Fatalln(err)",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    54,
+    55
+   ],
+   [
+    "replace",
+    55,
+    57,
+    55,
+    57,
+    [
+     " // Blank slate, no default permissions",
+     " //perm.Clear()"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    57,
+    58
+   ],
+   [
+    "replace",
+    58,
+    70,
+    58,
+    70,
+    [
+     " // Set up a middleware handler for Gin, with a custom \"permission denied\" message.",
+     " permissionHandler := func(c *gin.Context) {",
+     " // Check if the user has the right admin/user rights",
+     " if perm.Rejected(c.Writer, c.Request) {",
+     " // Deny the request, don't call other middleware handlers",
+     " c.AbortWithStatus(http.StatusForbidden)",
+     " fmt.Fprint(c.Writer, \"Permission denied!\")",
+     " return",
+     " }",
+     " // Call the next middleware handler",
+     " c.Next()",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    70,
+    71
+   ],
+   [
+    "replace",
+    71,
+    73,
+    71,
+    73,
+    [
+     " // Logging middleware",
+     " g.Use(gin.Logger())"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    73,
+    74
+   ],
+   [
+    "replace",
+    74,
+    76,
+    74,
+    76,
+    [
+     " // Enable the permissionsql middleware, must come before recovery",
+     " g.Use(permissionHandler)"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    76,
+    77
+   ],
+   [
+    "replace",
+    77,
+    79,
+    77,
+    79,
+    [
+     " // Recovery middleware",
+     " g.Use(gin.Recovery())"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    79,
+    80
+   ],
+   [
+    "replace",
+    80,
+    82,
+    80,
+    82,
+    [
+     " // Get the userstate, used in the handlers below",
+     " userstate := perm.UserState()"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    82,
+    83
+   ],
+   [
+    "replace",
+    83,
+    94,
+    83,
+    94,
+    [
+     " g.GET(\"/\", func(c *gin.Context) {",
+     " msg := \"\"",
+     " msg += fmt.Sprintf(\"Has user bob: %v\\n\", userstate.HasUser(\"bob\"))",
+     " msg += fmt.Sprintf(\"Logged in on server: %v\\n\", userstate.IsLoggedIn(\"bob\"))",
+     " msg += fmt.Sprintf(\"Is confirmed: %v\\n\", userstate.IsConfirmed(\"bob\"))",
+     " msg += fmt.Sprintf(\"Username stored in cookies (or blank): %v\\n\", userstate.Username(c.Request))",
+     " msg += fmt.Sprintf(\"Current user is logged in, has a valid cookie and *user rights*: %v\\n\", userstate.UserRights(c.Request))",
+     " msg += fmt.Sprintf(\"Current user is logged in, has a valid cookie and *admin rights*: %v\\n\", userstate.AdminRights(c.Request))",
+     " msg += fmt.Sprintln(\"\\nTry: /register, /confirm, /remove, /login, /logout, /makeadmin, /clear, /data and /admin\")",
+     " c.String(http.StatusOK, msg)",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    94,
+    95
+   ],
+   [
+    "replace",
+    95,
+    99,
+    95,
+    99,
+    [
+     " g.GET(\"/register\", func(c *gin.Context) {",
+     " userstate.AddUser(\"bob\", \"hunter1\", \"bob@zombo.com\")",
+     " c.String(http.StatusOK, fmt.Sprintf(\"User bob was created: %v\\n\", userstate.HasUser(\"bob\")))",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    99,
+    100
+   ],
+   [
+    "replace",
+    100,
+    104,
+    100,
+    104,
+    [
+     " g.GET(\"/confirm\", func(c *gin.Context) {",
+     " userstate.MarkConfirmed(\"bob\")",
+     " c.String(http.StatusOK, fmt.Sprintf(\"User bob was confirmed: %v\\n\", userstate.IsConfirmed(\"bob\")))",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    104,
+    105
+   ],
+   [
+    "replace",
+    105,
+    109,
+    105,
+    109,
+    [
+     " g.GET(\"/remove\", func(c *gin.Context) {",
+     " userstate.RemoveUser(\"bob\")",
+     " c.String(http.StatusOK, fmt.Sprintf(\"User bob was removed: %v\\n\", !userstate.HasUser(\"bob\")))",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    109,
+    110
+   ],
+   [
+    "replace",
+    110,
+    115,
+    110,
+    115,
+    [
+     " g.GET(\"/login\", func(c *gin.Context) {",
+     " // Headers will be written, for storing a cookie",
+     " userstate.Login(c.Writer, \"bob\")",
+     " c.String(http.StatusOK, fmt.Sprintf(\"bob is now logged in: %v\\n\", userstate.IsLoggedIn(\"bob\")))",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    115,
+    116
+   ],
+   [
+    "replace",
+    116,
+    120,
+    116,
+    120,
+    [
+     " g.GET(\"/logout\", func(c *gin.Context) {",
+     " userstate.Logout(\"bob\")",
+     " c.String(http.StatusOK, fmt.Sprintf(\"bob is now logged out: %v\\n\", !userstate.IsLoggedIn(\"bob\")))",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    121,
+    120,
+    121
+   ],
+   [
+    "replace",
+    121,
+    125,
+    121,
+    125,
+    [
+     " g.GET(\"/makeadmin\", func(c *gin.Context) {",
+     " userstate.SetAdminStatus(\"bob\")",
+     " c.String(http.StatusOK, fmt.Sprintf(\"bob is now administrator: %v\\n\", userstate.IsAdmin(\"bob\")))",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    126,
+    125,
+    126
+   ],
+   [
+    "replace",
+    126,
+    130,
+    126,
+    130,
+    [
+     " g.GET(\"/clear\", func(c *gin.Context) {",
+     " userstate.ClearCookie(c.Writer)",
+     " c.String(http.StatusOK, \"Clearing cookie\")",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    130,
+    131
+   ],
+   [
+    "replace",
+    131,
+    134,
+    131,
+    134,
+    [
+     " g.GET(\"/data\", func(c *gin.Context) {",
+     " c.String(http.StatusOK, \"user page that only logged in users must see!\")",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    134,
+    135
+   ],
+   [
+    "replace",
+    135,
+    141,
+    135,
+    141,
+    [
+     " g.GET(\"/admin\", func(c *gin.Context) {",
+     " c.String(http.StatusOK, \"super secret information that only logged in administrators must see!\\n\\n\")",
+     " if usernames, err := userstate.AllUsernames(); err == nil {",
+     " c.String(http.StatusOK, \"list of all users: \"+strings.Join(usernames, \", \"))",
+     " }",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    141,
+    142
+   ],
+   [
+    "replace",
+    142,
+    144,
+    142,
+    144,
+    [
+     " // Serve",
+     " g.Run(\":3000\")"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    153,
+    144,
+    153
+   ],
+   [
+    "replace",
+    153,
+    158,
+    153,
+    158,
+    [
+     " \"fmt\"",
+     " \"log\"",
+     " \"net/http\"",
+     " \"strings\"",
+     " \"time\""
+    ]
+   ],
+   [
+    "equal",
+    158,
+    159,
+    158,
+    159
+   ],
+   [
+    "replace",
+    159,
+    161,
+    159,
+    161,
+    [
+     " \"github.com/xyproto/permissionsql/v2\"",
+     " \"github.com/xyproto/pinterface\""
+    ]
+   ],
+   [
+    "equal",
+    161,
+    164,
+    161,
+    164
+   ],
+   [
+    "replace",
+    164,
+    170,
+    164,
+    170,
+    [
+     " // perm is a Permissions structure that can be used to deny requests",
+     " // and acquire the UserState. By using `pinterface.IPermissions` instead",
+     " // of `*permissions.Permissions`, the code is compatible with not only",
+     " // `permissions2`, but also other modules that uses other database",
+     " // backends, like `permissionbolt` which uses Bolt.",
+     " perm pinterface.IPermissions"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    170,
+    171
+   ],
+   [
+    "replace",
+    171,
+    173,
+    171,
+    173,
+    [
+     " // The HTTP multiplexer",
+     " mux *http.ServeMux"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    177,
+    173,
+    177
+   ],
+   [
+    "replace",
+    177,
+    186,
+    177,
+    186,
+    [
+     " // Check if the user has the right admin/user rights",
+     " if ph.perm.Rejected(w, req) {",
+     " // Let the user know, by calling the custom \"permission denied\" function",
+     " ph.perm.DenyFunction()(w, req)",
+     " // Reject the request",
+     " return",
+     " }",
+     " // Serve the requested page if permissions were granted",
+     " ph.mux.ServeHTTP(w, req)"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    189,
+    186,
+    189
+   ],
+   [
+    "replace",
+    189,
+    190,
+    189,
+    190,
+    [
+     " mux := http.NewServeMux()"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    191,
+    190,
+    191
+   ],
+   [
+    "replace",
+    191,
+    196,
+    191,
+    196,
+    [
+     " // New permissions middleware",
+     " perm, err := permissionsql.New()",
+     " if err != nil {",
+     " log.Fatalln(err)",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    196,
+    197,
+    196,
+    197
+   ],
+   [
+    "replace",
+    197,
+    199,
+    197,
+    199,
+    [
+     " // Blank slate, no default permissions",
+     " //perm.Clear()"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    200,
+    199,
+    200
+   ],
+   [
+    "replace",
+    200,
+    202,
+    200,
+    202,
+    [
+     " // Get the userstate, used in the handlers below",
+     " userstate := perm.UserState()"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    203,
+    202,
+    203
+   ],
+   [
+    "replace",
+    203,
+    212,
+    203,
+    212,
+    [
+     " mux.HandleFunc(\"/\", func(w http.ResponseWriter, req *http.Request) {",
+     " fmt.Fprintf(w, \"Has user bob: %v\\n\", userstate.HasUser(\"bob\"))",
+     " fmt.Fprintf(w, \"Logged in on server: %v\\n\", userstate.IsLoggedIn(\"bob\"))",
+     " fmt.Fprintf(w, \"Is confirmed: %v\\n\", userstate.IsConfirmed(\"bob\"))",
+     " fmt.Fprintf(w, \"Username stored in cookies (or blank): %v\\n\", userstate.Username(req))",
+     " fmt.Fprintf(w, \"Current user is logged in, has a valid cookie and *user rights*: %v\\n\", userstate.UserRights(req))",
+     " fmt.Fprintf(w, \"Current user is logged in, has a valid cookie and *admin rights*: %v\\n\", userstate.AdminRights(req))",
+     " fmt.Fprintf(w, \"\\nTry: /register, /confirm, /remove, /login, /logout, /makeadmin, /clear, /data and /admin\")",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    213,
+    212,
+    213
+   ],
+   [
+    "replace",
+    213,
+    217,
+    213,
+    217,
+    [
+     " mux.HandleFunc(\"/register\", func(w http.ResponseWriter, req *http.Request) {",
+     " userstate.AddUser(\"bob\", \"hunter1\", \"bob@zombo.com\")",
+     " fmt.Fprintf(w, \"User bob was created: %v\\n\", userstate.HasUser(\"bob\"))",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    218,
+    217,
+    218
+   ],
+   [
+    "replace",
+    218,
+    222,
+    218,
+    222,
+    [
+     " mux.HandleFunc(\"/confirm\", func(w http.ResponseWriter, req *http.Request) {",
+     " userstate.MarkConfirmed(\"bob\")",
+     " fmt.Fprintf(w, \"User bob was confirmed: %v\\n\", userstate.IsConfirmed(\"bob\"))",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    223,
+    222,
+    223
+   ],
+   [
+    "replace",
+    223,
+    227,
+    223,
+    227,
+    [
+     " mux.HandleFunc(\"/remove\", func(w http.ResponseWriter, req *http.Request) {",
+     " userstate.RemoveUser(\"bob\")",
+     " fmt.Fprintf(w, \"User bob was removed: %v\\n\", !userstate.HasUser(\"bob\"))",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    228,
+    227,
+    228
+   ],
+   [
+    "replace",
+    228,
+    232,
+    228,
+    232,
+    [
+     " mux.HandleFunc(\"/login\", func(w http.ResponseWriter, req *http.Request) {",
+     " userstate.Login(w, \"bob\")",
+     " fmt.Fprintf(w, \"bob is now logged in: %v\\n\", userstate.IsLoggedIn(\"bob\"))",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    233,
+    232,
+    233
+   ],
+   [
+    "replace",
+    233,
+    237,
+    233,
+    237,
+    [
+     " mux.HandleFunc(\"/logout\", func(w http.ResponseWriter, req *http.Request) {",
+     " userstate.Logout(\"bob\")",
+     " fmt.Fprintf(w, \"bob is now logged out: %v\\n\", !userstate.IsLoggedIn(\"bob\"))",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    238,
+    237,
+    238
+   ],
+   [
+    "replace",
+    238,
+    242,
+    238,
+    242,
+    [
+     " mux.HandleFunc(\"/makeadmin\", func(w http.ResponseWriter, req *http.Request) {",
+     " userstate.SetAdminStatus(\"bob\")",
+     " fmt.Fprintf(w, \"bob is now administrator: %v\\n\", userstate.IsAdmin(\"bob\"))",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    242,
+    243,
+    242,
+    243
+   ],
+   [
+    "replace",
+    243,
+    247,
+    243,
+    247,
+    [
+     " mux.HandleFunc(\"/clear\", func(w http.ResponseWriter, req *http.Request) {",
+     " userstate.ClearCookie(w)",
+     " fmt.Fprintf(w, \"Clearing cookie\")",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    247,
+    248,
+    247,
+    248
+   ],
+   [
+    "replace",
+    248,
+    251,
+    248,
+    251,
+    [
+     " mux.HandleFunc(\"/data\", func(w http.ResponseWriter, req *http.Request) {",
+     " fmt.Fprintf(w, \"user page that only logged in users must see!\")",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    251,
+    252,
+    251,
+    252
+   ],
+   [
+    "replace",
+    252,
+    258,
+    252,
+    258,
+    [
+     " mux.HandleFunc(\"/admin\", func(w http.ResponseWriter, req *http.Request) {",
+     " fmt.Fprintf(w, \"super secret information that only logged in administrators must see!\\n\\n\")",
+     " if usernames, err := userstate.AllUsernames(); err == nil {",
+     " fmt.Fprintf(w, \"list of all users: \"+strings.Join(usernames, \", \"))",
+     " }",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    259,
+    258,
+    259
+   ],
+   [
+    "replace",
+    259,
+    263,
+    259,
+    263,
+    [
+     " // Custom handler for when permissions are denied",
+     " perm.SetDenyFunction(func(w http.ResponseWriter, req *http.Request) {",
+     " http.Error(w, \"Permission denied!\", http.StatusForbidden)",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    264,
+    263,
+    264
+   ],
+   [
+    "replace",
+    264,
+    272,
+    264,
+    272,
+    [
+     " // Configure the HTTP server and permissionHandler struct",
+     " s := &http.Server{",
+     " Addr: \":3000\",",
+     " Handler: &permissionHandler{perm, mux},",
+     " ReadTimeout: 10 * time.Second,",
+     " WriteTimeout: 10 * time.Second,",
+     " MaxHeaderBytes: 1 << 20,",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    273,
+    272,
+    273
+   ],
+   [
+    "replace",
+    273,
+    274,
+    273,
+    274,
+    [
+     " log.Println(\"Listening for requests on port 3000\")"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    275,
+    274,
+    275
+   ],
+   [
+    "replace",
+    275,
+    277,
+    275,
+    277,
+    [
+     " // Start listening",
+     " log.Fatal(s.ListenAndServe())"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    316,
+    277,
+    316
+   ],
+   [
+    "replace",
+    316,
+    321,
+    316,
+    317,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    321,
+    325,
+    317,
+    321
+   ],
+   [
+    "replace",
+    325,
+    326,
+    321,
+    322,
+    [
+     "Using the `*pinterface.IUserState` type (from the pinterface package) makes it possible to pass UserState structs between functions, also in other packages. By using this interface, it is possible to seamlessly change the database backend from, for instance, PostgreSQL (pstore) to BoltDB (permissionbolt) or Redis (permissions2)."
+    ]
+   ],
+   [
+    "equal",
+    326,
+    327,
+    322,
+    323
+   ],
+   [
+    "replace",
+    327,
+    329,
+    323,
+    324,
+    [
+     "pstore, permissionsql, permissionbolt and permissions2 are interchangeable."
+    ]
+   ],
+   [
+    "equal",
+    329,
+    335,
+    324,
+    330
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "f656e894defe+2": {
+  "fn": "dogsheep/hacker-news-to-sqlite",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "PyPI",
+     "Changelog",
+     "Tests",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    6,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "Create a SQLite database containing data fetched from Hacker News."
+    ]
+   ],
+   [
+    "equal",
+    8,
+    11,
+    8,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     " $ pip install hacker-news-to-sqlite"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    15,
+    12,
+    15
+   ],
+   [
+    "replace",
+    15,
+    17,
+    15,
+    17,
+    [
+     " $ hacker-news-to-sqlite user hacker-news.db your-username",
+     " Importing items: 37%|███████████ | 845/2297 [05:09<11:02, 2.19it/s]"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    20,
+    17,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     " $ hacker-news-to-sqlite trees hacker-news.db 22640038 22643218"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    26,
+    21,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "You can use Datasette to browse your data. Install Datasette like this:"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     " $ pip install datasette"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    32,
+    29,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     " $ datasette hacker-news.db"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    36,
+    33,
+    36
+   ],
+   [
+    "replace",
+    36,
+    37,
+    36,
+    37,
+    [
+     "You can improve the display of your data usinng the datasette-render-timestamps and datasette-render-html plugins. Install them like this:"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    37,
+    38
+   ],
+   [
+    "replace",
+    38,
+    39,
+    38,
+    39,
+    [
+     " $ pip install datasette-render-timestamps datasette-render-html"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    46,
+    39,
+    46
+   ],
+   [
+    "replace",
+    46,
+    74,
+    46,
+    47,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    77,
+    47,
+    50
+   ],
+   [
+    "replace",
+    77,
+    78,
+    50,
+    51,
+    [
+     " $ datasette -m metadata.json hacker-news.db"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    80,
+    51,
+    53
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "e8d0a877773e+2": {
+  "fn": "ITHit/WebDAVServerSamplesJava",
+  "clean_ver": "2",
+  "raw_lines": 0,
+  "ops": [
+   [
+    "insert",
+    0,
+    0,
+    0,
+    7,
+    [
+     "WebDAV Server Examples, Java ",
+     " IT Hit WebDAV Server Library for Java is provided with several examples that demonstrate how to build a WebDAV server with SQL back-end or with file system storage. You can adapt these samples to utilize almost any back-end storage including storing data in CMS/DMS/CRM, Azure or Amazon storage. ",
+     " A sample HTML page included with samples demonstrates how to use IT Hit WebDAV Ajax Libray&nbsp;to open documents from a web page for editing, list documents and navigate folder structure as well as build search capabilities. ",
+     " Online Demo Server ",
+     " https://www.WebDAVServer.com ",
+     " &nbsp;Requirements ",
+     " The samples are tested with Java 1.8 in the following environments: "
+    ]
+   ],
+   [
+    "equal",
+    0,
+    1,
+    7,
+    8
+   ],
+   [
+    "replace",
+    1,
+    21,
+    8,
+    19,
+    [
+     " Tomcat 7 or later ",
+     " Glassfish 4.1.1 or later ",
+     " JBoss Wildfly 9 or later or respective EAP ",
+     " WebLogic 12c or later ",
+     " WebSphere 8.5.5.11 or later ",
+     " Jetty 9.3.13 or later ",
+     "",
+     " Full-text Search and indexing ",
+     " The samples are provided with full-text search and indexing based on use Apache Lucene as indexing engine and Apache Tika as content analysis toolkit. ",
+     " The server implementation searches both file names and file content including content of Microsoft Office documents as well as any other documents which format is supported by Apache Tika, such as LibreOffice, OpenOffice, PDF, etc. ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    19,
+    20
+   ],
+   [
+    "replace",
+    22,
+    23,
+    20,
+    21,
+    [
+     " Spring Boot WebDAV Server Example with File System Back-end, Java "
+    ]
+   ],
+   [
+    "equal",
+    23,
+    26,
+    21,
+    24
+   ],
+   [
+    "replace",
+    26,
+    29,
+    24,
+    27,
+    [
+     "",
+     "This sample provides a WebDAV server running on the Spring Boot framework with files being stored in the file system. The WebDAV requests are processed in a dedicated context, while the rest of the website processes regular HTTP requests, serving web ... ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    27,
+    28
+   ],
+   [
+    "replace",
+    30,
+    32,
+    28,
+    29,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    29,
+    30
+   ],
+   [
+    "replace",
+    33,
+    34,
+    30,
+    31,
+    [
+     " Spring Boot WebDAV Server Example with Oracle Back-end, Java "
+    ]
+   ],
+   [
+    "equal",
+    34,
+    37,
+    31,
+    34
+   ],
+   [
+    "replace",
+    37,
+    40,
+    34,
+    37,
+    [
+     "",
+     "This sample provides a WebDAV server running on the Spring Boot framework.&nbsp;All data including file content, document structure, and custom attributes are stored in the Oracle database.&nbsp;The&nbsp;IT Hit WebDAV Ajax Library&nbsp;is used to display and browse serv ... ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    37,
+    38
+   ],
+   [
+    "replace",
+    41,
+    43,
+    38,
+    39,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    39,
+    40
+   ],
+   [
+    "replace",
+    44,
+    45,
+    40,
+    41,
+    [
+     " Spring Boot WebDAV Server Example with Amazon S3 Back-end, Java "
+    ]
+   ],
+   [
+    "equal",
+    45,
+    48,
+    41,
+    44
+   ],
+   [
+    "replace",
+    48,
+    51,
+    44,
+    47,
+    [
+     "",
+     "This sample&nbsp;is a fully functional Class 2 WebDAV server that runs on the Spring Boot framework and stores all data in the Amazon S3 bucket.&nbsp;The WebDAV requests are processed on a /DAV/ context, while the rest of the website processes regular HTTP req ... ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    51,
+    52,
+    47,
+    48
+   ],
+   [
+    "replace",
+    52,
+    54,
+    48,
+    49,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    49,
+    50
+   ],
+   [
+    "replace",
+    55,
+    56,
+    50,
+    51,
+    [
+     " WebDAV Server Example with Oracle Back-end, Java "
+    ]
+   ],
+   [
+    "equal",
+    56,
+    59,
+    51,
+    54
+   ],
+   [
+    "replace",
+    59,
+    62,
+    54,
+    57,
+    [
+     "",
+     "The sample provides Class 2 WebDAV server implementation that can be hosted in Apache Tomcat, GlassFish, JBoss,&nbsp;WebLogic,&nbsp;WebSphere or other compliant application server. All data including file content, documents structure and custom attributes is s ... ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    57,
+    58
+   ],
+   [
+    "replace",
+    63,
+    65,
+    58,
+    59,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    59,
+    60
+   ],
+   [
+    "replace",
+    66,
+    67,
+    60,
+    61,
+    [
+     " WebDAV Server Example with File System Back-end, Java and Kotlin "
+    ]
+   ],
+   [
+    "equal",
+    67,
+    70,
+    61,
+    64
+   ],
+   [
+    "replace",
+    70,
+    73,
+    64,
+    67,
+    [
+     "",
+     "This sample&nbsp;is a fully functional Class 2 WebDAV server that stores all data in the file system. It utilizes file system Extended Attributes (in case of Linux and macOS) or Alternate Data&nbsp;Streams (in case of Windows/NTFS) to store locks and custom pr ... ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    67,
+    68
+   ],
+   [
+    "replace",
+    74,
+    76,
+    68,
+    69,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    69,
+    70
+   ],
+   [
+    "replace",
+    77,
+    78,
+    70,
+    71,
+    [
+     " WebDAV Server Example with Collection Synchronization Support "
+    ]
+   ],
+   [
+    "equal",
+    78,
+    81,
+    71,
+    74
+   ],
+   [
+    "replace",
+    81,
+    84,
+    74,
+    77,
+    [
+     "",
+     "This sample&nbsp;is a fully functional Class 2 WebDAV server with&nbsp;collection synchronization support (RFC 6578) that stores all data in the file system.&nbsp;This sample is similar to what is provided by the Java demo WebDAV server at: https://webdavserver.com ... ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    84,
+    85,
+    77,
+    78
+   ],
+   [
+    "replace",
+    85,
+    87,
+    78,
+    79,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    79,
+    80
+   ],
+   [
+    "replace",
+    88,
+    89,
+    80,
+    81,
+    [
+     " Java WebDAV Server Example for Android "
+    ]
+   ],
+   [
+    "equal",
+    89,
+    92,
+    81,
+    84
+   ],
+   [
+    "replace",
+    92,
+    93,
+    84,
+    85,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    85,
+    86
+   ],
+   [
+    "replace",
+    94,
+    96,
+    86,
+    88,
+    [
+     "To see the documents ... ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    88,
+    89
+   ],
+   [
+    "replace",
+    97,
+    99,
+    89,
+    90,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    90,
+    91
+   ],
+   [
+    "replace",
+    100,
+    101,
+    91,
+    92,
+    [
+     " WebDAV Server Example with Versioning, Java "
+    ]
+   ],
+   [
+    "equal",
+    101,
+    104,
+    92,
+    95
+   ],
+   [
+    "replace",
+    104,
+    107,
+    95,
+    98,
+    [
+     "",
+     "The sample provides&nbsp;DeltaV WebDAV server implementation that can be hosted in Apache Tomcat, GlassFish, JBoss,&nbsp;WebLogic or&nbsp;WebSphere. The data is stored in Oracle database.&nbsp;The IT Hit WebDAV Ajax Library is used to display and browse server content o ... ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    107,
+    108,
+    98,
+    99
+   ],
+   [
+    "replace",
+    108,
+    110,
+    99,
+    100,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    100,
+    101
+   ],
+   [
+    "replace",
+    111,
+    112,
+    101,
+    102,
+    [
+     " Running the WebDAV Samples "
+    ]
+   ],
+   [
+    "equal",
+    112,
+    115,
+    102,
+    105
+   ],
+   [
+    "replace",
+    115,
+    116,
+    105,
+    106,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    116,
+    118,
+    106,
+    108
+   ],
+   [
+    "replace",
+    118,
+    120,
+    108,
+    110,
+    [
+     "This web page is a MyCustomHandlerPage.html&nbsp;included in&nbsp;each sample&nbsp;and ... ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    120,
+    121,
+    110,
+    111
+   ],
+   [
+    "replace",
+    121,
+    123,
+    111,
+    112,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    112,
+    113
+   ],
+   [
+    "replace",
+    124,
+    125,
+    113,
+    114,
+    [
+     " Configuring Full-Text Search for Files Stored in File System or in Oracle Database "
+    ]
+   ],
+   [
+    "equal",
+    125,
+    128,
+    114,
+    117
+   ],
+   [
+    "replace",
+    128,
+    129,
+    117,
+    118,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    118,
+    119
+   ],
+   [
+    "replace",
+    130,
+    132,
+    119,
+    121,
+    [
+     "The server implementation searches both file names and file content including content of Microsoft Office documents as well as any other ... ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    121,
+    122
+   ],
+   [
+    "replace",
+    133,
+    135,
+    122,
+    123,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    123,
+    124
+   ],
+   [
+    "replace",
+    136,
+    137,
+    124,
+    125,
+    [
+     " WebDAV Server Samples Problems and Troubleshooting "
+    ]
+   ],
+   [
+    "equal",
+    137,
+    140,
+    125,
+    128
+   ],
+   [
+    "replace",
+    140,
+    141,
+    128,
+    129,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    129,
+    130
+   ],
+   [
+    "replace",
+    142,
+    144,
+    130,
+    132,
+    [
+     "If things are not going as planned and you run into issues the first place to look would be the log file&nbsp;&amp;lt;Your Tomcat location&amp;gt;\\Tomcat x.x\\logs\\localhost.xxxx-xx-xx.log&nbsp;. The logs will reflect as to what is going on and it will ... ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    144,
+    145,
+    132,
+    133
+   ],
+   [
+    "delete",
+    145,
+    148,
+    133,
+    133
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "0b83ebffaf9a+2": {
+  "fn": "ianmcook/queryparser",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    1,
+    [
+     "# queryparser "
+    ]
+   ],
+   [
+    "equal",
+    6,
+    15,
+    1,
+    10
+   ],
+   [
+    "delete",
+    15,
+    16,
+    10,
+    10
+   ],
+   [
+    "equal",
+    16,
+    20,
+    10,
+    14
+   ],
+   [
+    "replace",
+    20,
+    21,
+    14,
+    15,
+    [
+     "|⚠️ Most R users should not directly use queryparser. Instead, use it through tidyquery.|"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    31,
+    15,
+    25
+   ],
+   [
+    "replace",
+    31,
+    32,
+    25,
+    26,
+    [
+     "CRAN with:"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    38,
+    26,
+    32
+   ],
+   [
+    "replace",
+    38,
+    39,
+    32,
+    33,
+    [
+     "GitHub with:"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    54,
+    33,
+    48
+   ],
+   [
+    "replace",
+    54,
+    69,
+    48,
+    49,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    78,
+    49,
+    58
+   ],
+   [
+    "replace",
+    78,
+    158,
+    58,
+    59,
+    [
+     "…（80 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    161,
+    59,
+    62
+   ],
+   [
+    "replace",
+    161,
+    165,
+    62,
+    66,
+    [
+     "tidyverse packages including",
+     "dplyr,",
+     "stringr, and",
+     "lubridate in the R expressions:"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    170,
+    66,
+    71
+   ],
+   [
+    "replace",
+    170,
+    195,
+    71,
+    72,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    209,
+    72,
+    86
+   ],
+   [
+    "replace",
+    209,
+    215,
+    86,
+    92,
+    [
+     "- Subqueries",
+     "- Unions",
+     "- SQL-89-style (implicit) join notation",
+     "- The `WITH` clause (common table expressions)",
+     "- `OVER` expressions (window or analytic functions)",
+     "- Some SQL functions and operators"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    218,
+    92,
+    95
+   ],
+   [
+    "replace",
+    218,
+    228,
+    95,
+    105,
+    [
+     "- Some SQL expressions will translate only when `tidyverse` is set to",
+     " `TRUE`. An example of this is `COUNT(DISTINCT ...)` expressions with",
+     " multiple arguments.",
+     "- When logical operators (such as `IS NULL`) have unparenthesized",
+     " expressions as their operands, R will interpret the resulting code",
+     " using a different order of operations than a SQL engine would. When",
+     " using an expression as the operand to a logical operator, always",
+     " enclose the expression in parentheses.",
+     "- The error messages that occur when attempting to parse invalid or",
+     " unrecognized SQL are often non-informative."
+    ]
+   ],
+   [
+    "equal",
+    228,
+    233,
+    105,
+    110
+   ],
+   [
+    "replace",
+    233,
+    240,
+    110,
+    117,
+    [
+     "- Translate other types of SQL statements (such as `INSERT` or",
+     " `UPDATE`)",
+     "- Customize translations for specific SQL dialects",
+     "- Fully validate the syntax of the `SELECT` statements passed to it",
+     "- Efficiently process large batches of queries",
+     "- Facilitate the analysis of queries (for example, to identify",
+     " patterns)"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    244,
+    117,
+    121
+   ],
+   [
+    "replace",
+    244,
+    245,
+    121,
+    122,
+    [
+     "(CRAN) provides a"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    246,
+    122,
+    123
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

@@ -7546,5 +7546,2804 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "7bb988b6ea73+2": {
+  "fn": "danthegoodman1/gRPSQLite",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "equal",
+    0,
+    10,
+    0,
+    10
+   ],
+   [
+    "replace",
+    10,
+    31,
+    10,
+    11,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    33,
+    11,
+    13
+   ],
+   [
+    "replace",
+    33,
+    38,
+    13,
+    18,
+    [
+     "- **Your storage, stock SQLite.** The server is a plain gRPC service in any language, over any store. SQLite needs no patches: link the VFS in, or load it at runtime. See Writing a server.",
+     "- **One request per commit.** The VFS buffers a transaction's pages, including those SQLite spills mid-transaction, and sends them as one `Commit`. A crash at any point leaves the last committed state. See Transactions.",
+     "- **Consistent replicas.** On a store that reads as of a version, any number of read-only clients each read one committed version per transaction. See Replicas.",
+     "- **Caches that never change an answer.** A writer's cache serves reads without requests while it holds the lease, and survives restarts. A replica's cache follows commits with one `ChangedPages` call. Every cached page is checked against its checksum before use. See Page cache.",
+     "- **Checked by simulation.** A deterministic simulator drives SQLite, the VFS and the reference server through crashes, lost responses, lease takeovers and damaged caches, and checks every answer against a model. 100,000 seeds run in under three minutes. See Simulator."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    43,
+    18,
+    23
+   ],
+   [
+    "replace",
+    43,
+    44,
+    23,
+    24,
+    [
+     "|Requests|Writer|Writer, page cache|Replica|Replica, page cache|"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    24,
+    25
+   ],
+   [
+    "replace",
+    45,
+    50,
+    25,
+    30,
+    [
+     "|Insert 20,000 rows in one transaction|3||||",
+     "|500 point lookups|478|0|978|500|",
+     "|50 range scans of 1,000 rows|398|0|448|50|",
+     "|Full scan|36|0|37|1|",
+     "|500 point lookups while a writer commits 50 times|||1,245|619|"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    51,
+    30,
+    31
+   ],
+   [
+    "replace",
+    51,
+    52,
+    31,
+    32,
+    [
+     "|Seconds at 1 ms a request|Writer|Writer, page cache|Replica|Replica, page cache|"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    32,
+    33
+   ],
+   [
+    "replace",
+    53,
+    57,
+    33,
+    37,
+    [
+     "|Insert 20,000 rows in one transaction|0.018||||",
+     "|500 point lookups|1.041|0.001|2.122|1.077|",
+     "|50 range scans of 1,000 rows|0.879|0.006|0.987|0.115|",
+     "|Full scan|0.087|0.002|0.088|0.005|"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    110,
+    37,
+    90
+   ],
+   [
+    "replace",
+    110,
+    126,
+    90,
+    91,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    180,
+    91,
+    145
+   ],
+   [
+    "replace",
+    180,
+    181,
+    145,
+    146,
+    [
+     "**Linked into SQLite.** `cargo build --release -p grpsqlite --features static` builds `target/release/libgrpsqlite.a`. Compile SQLite with `-DSQLITE_EXTRA_INIT=grpsqlite_extra_init` and link the library: SQLite then registers gRPSQLite as its default VFS while it initializes. `scripts/build-sqlite` does this for the shell."
+    ]
+   ],
+   [
+    "equal",
+    181,
+    192,
+    146,
+    157
+   ],
+   [
+    "replace",
+    192,
+    193,
+    157,
+    158,
+    [
+     "|Variable|Default|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    158,
+    159
+   ],
+   [
+    "replace",
+    194,
+    203,
+    159,
+    168,
+    [
+     "|`GRPSQLITE_URL`|`http://localhost:50051`|The server.|",
+     "|`GRPSQLITE_CLIENT_TOKEN`|empty|Sent with every `Open`.|",
+     "|`GRPSQLITE_CONNECT_TIMEOUT_MS`|`10000`|Connection timeout.|",
+     "|`GRPSQLITE_RPC_TIMEOUT_MS`|`30000`|Deadline for each request.|",
+     "|`GRPSQLITE_KEEPALIVE_INTERVAL_MS`|`10000`|HTTP/2 keepalive interval.|",
+     "|`GRPSQLITE_KEEPALIVE_TIMEOUT_MS`|`20000`|HTTP/2 keepalive timeout.|",
+     "|`GRPSQLITE_CACHE_DIR`|unset|Local page cache directory; set with `GRPSQLITE_CACHE_MAX_BYTES`.|",
+     "|`GRPSQLITE_CACHE_MAX_BYTES`|unset|Most bytes each open database may cache.|",
+     "|`GRPSQLITE_LOG`|`warn`|`off`, `error`, `warn`, `info`, `debug` or `trace`, sent to `sqlite3_log`.|"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    210,
+    168,
+    175
+   ],
+   [
+    "replace",
+    210,
+    211,
+    175,
+    176,
+    [
+     "|Capability|Set it when your store can|What clients get|"
+    ]
+   ],
+   [
+    "equal",
+    211,
+    212,
+    176,
+    177
+   ],
+   [
+    "replace",
+    212,
+    216,
+    177,
+    181,
+    [
+     "|`atomic_commit`|apply many writes in one transaction: FoundationDB, Postgres, DynamoDB, most databases|One `Commit` per transaction. The server stores only the main file. Every rollback-journal mode works, and `memory` is cheapest; WAL is refused.|",
+     "|`point_in_time_reads`|read as of a version: FoundationDB, CockroachDB's `AS OF SYSTEM TIME`, RocksDB with user-defined timestamps, an object store behind a versioned index|Read-only replicas. Needs `atomic_commit`.|",
+     "|`changed_pages`|list what changed between two versions|Replica caches that follow commits in one request.|",
+     "|none of these|only write bytes: a filesystem, Redis|SQLite's journal or WAL on the server, and its own crash recovery.|"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    219,
+    181,
+    184
+   ],
+   [
+    "replace",
+    219,
+    220,
+    184,
+    185,
+    [
+     "You are writing a block device with leases. `proto/grpsqlite.proto` is the contract, and `crates/memory` is the reference implementation that the simulator tests. A server with atomic commits implements `Open`, `Close`, `Heartbeat`, `Read`, `Commit` and `GetFileSize`; `Pragma` and `ChangedPages` are optional."
+    ]
+   ],
+   [
+    "equal",
+    220,
+    241,
+    185,
+    206
+   ],
+   [
+    "replace",
+    241,
+    242,
+    206,
+    207,
+    [
+     "|Option|Choose it when|"
+    ]
+   ],
+   [
+    "equal",
+    242,
+    243,
+    207,
+    208
+   ],
+   [
+    "replace",
+    243,
+    250,
+    208,
+    215,
+    [
+     "|**mvsqlite**|You run FoundationDB and need several concurrent writers per database, with page-level optimistic concurrency.|",
+     "|**Graft**|You want lazy, partial replication of SQLite to edge and mobile clients, with its own storage engine and sync protocol.|",
+     "|**LiteFS**|You want a FUSE filesystem that replicates SQLite from one primary to read replicas across a cluster.|",
+     "|**Litestream**|You want continuous backup of a local SQLite database to object storage, with point-in-time restore.|",
+     "|**libSQL and Turso**|You want a fork of SQLite with a server mode, embedded replicas and a hosted service.|",
+     "|**rqlite or dqlite**|You want SQLite replicated by Raft across a few nodes you run, and can use their APIs instead of opening files with SQLite.|",
+     "|**Cloud Backed SQLite**|Your databases live in Azure Blob Storage or Google Cloud Storage and a block-based VFS from the SQLite project fits.|"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    266,
+    215,
+    231
+   ],
+   [
+    "replace",
+    266,
+    267,
+    231,
+    232,
+    [
+     "PLAN.md is the phased build plan, with evidence for each item."
+    ]
+   ],
+   [
+    "equal",
+    267,
+    268,
+    232,
+    233
+   ],
+   [
+    "replace",
+    268,
+    269,
+    233,
+    234,
+    [
+     "|Path|What it is|"
+    ]
+   ],
+   [
+    "equal",
+    269,
+    270,
+    234,
+    235
+   ],
+   [
+    "replace",
+    270,
+    278,
+    235,
+    243,
+    [
+     "|`crates/vfs`|The `grpsqlite` VFS: per-database state, transactions, leases, replicas and the page cache, over a `Backend` trait.|",
+     "|`crates/proto`|The generated protocol, built with `protox`, so no `protoc` is needed.|",
+     "|`crates/memory`|The reference server: a deterministic `Store` with versions and leases, and the `memory-server` binary.|",
+     "|`crates/sim`|The simulator (`vopr`), the benchmark (`bench`), the rusqlite harness, and the repro, end-to-end and seed tests.|",
+     "|`vendor/sqlite-plugin`|`sqlite-plugin` 0.11.0 with two patches, described in its `PATCHES.md`.|",
+     "|`scripts/build-sqlite`|Builds SQLite 3.54.1 shells with the VFS linked in and as a loadable extension.|",
+     "|`scripts/smoke`|Runs `examples/*.sql` through the shell against the memory server.|",
+     "|`scripts/mutants`|Plants known bugs and checks that the simulator catches each.|"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    304,
+    243,
+    269
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "03aca1ead733+2": {
+  "fn": "gnacho/netpulse",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    4,
+    [
+     " English |",
+     " Español"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    4,
+    5
+   ],
+   [
+    "replace",
+    7,
+    14,
+    5,
+    10,
+    [
+     " Website",
+     " Live demo",
+     " Release",
+     " CI",
+     " License"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    10,
+    11
+   ],
+   [
+    "replace",
+    15,
+    20,
+    11,
+    14,
+    [
+     " The pulse of your home network. Real time. No cloud. ",
+     " Watch your routers, draw your topology, score your network's health and get",
+     " alerted, from a single self-hosted binary. Nothing ever leaves your LAN."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    14,
+    15
+   ],
+   [
+    "replace",
+    21,
+    25,
+    15,
+    17,
+    [
+     " Try the live demo ·",
+     " Full feature tour "
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    17,
+    18
+   ],
+   [
+    "replace",
+    26,
+    33,
+    18,
+    19,
+    [
+     " NetPulse overview with a network health score, live traffic chart, AdGuard Home stats, WireGuard peers and the alerts feed"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    38,
+    19,
+    24
+   ],
+   [
+    "replace",
+    38,
+    44,
+    24,
+    30,
+    [
+     "- **demo.netpulse.cloudless.club** is the real app",
+     " with a full sample network loaded, read-only, no sign-up. Click around, change",
+     " the theme, switch languages, watch the live updates.",
+     "- **netpulse.cloudless.club/features**",
+     " is the complete feature inventory: every screen and feature, with the",
+     " technical decisions and the honest scope of each one."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    61,
+    30,
+    47
+   ],
+   [
+    "replace",
+    61,
+    68,
+    47,
+    48,
+    [
+     " Topology map with the gateway in the center, three access points, wired and wireless clients, an inferred switch and the WireGuard tunnel to Internet"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    76,
+    48,
+    56
+   ],
+   [
+    "replace",
+    76,
+    83,
+    56,
+    57,
+    [
+     " Device list with type icons, hostname, IP, band, signal strength and the router each client is attached to"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    90,
+    57,
+    64
+   ],
+   [
+    "replace",
+    90,
+    97,
+    64,
+    65,
+    [
+     " Routers view with per-router cards showing model, firmware, CPU, memory, temperature and uptime"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    109,
+    65,
+    77
+   ],
+   [
+    "replace",
+    109,
+    110,
+    77,
+    78,
+    [
+     "|Platform|How the agent runs|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    78,
+    79
+   ],
+   [
+    "replace",
+    111,
+    118,
+    79,
+    86,
+    [
+     "|OpenWrt (incl. GL.iNet)|Native `netpulse-agent` package (`.ipk`/`.apk`)|procd, UCI config, `luci-app-netpulse`, in-app install and upgrade|",
+     "|MikroTik (RouterOS)|External `routeros-pusher` in netpulse-integrations|Read-only over the binary API (REST fallback): system, ports, DHCP, ARP, FDB, temperature, firmware and WAN traffic. Deployed and managed from the Integrations section|",
+     "|Asuswrt / Asuswrt-Merlin|External `asuswrt-pusher` in netpulse-integrations|Static binary under `/jffs/netpulse` (Merlin layout), using `/proc`, `iw` and `lldpd`. Deployed over SSH from the Integrations section, key or password sign-in|",
+     "|UniFi (self-hosted controller)|External `unifi-pusher` in netpulse-integrations|Read-only, one site: gateways, switches and APs with ports and uplinks, clients with band and signal, gateway uptime. Deployed from the Integrations section|",
+     "|External router families|Separate Go pusher in netpulse-integrations|See the external integrations guide|",
+     "|Managed switches|SNMP|Port states, speeds and LLDP-MIB neighbours|",
+     "|Realtek switches (RTL8372/8373)|Embedded beacon in the RTLPlayground fork|Port state, byte rates and FDB over UDP. Advanced firmware setup, see the Realtek switch beacon guide|"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    129,
+    86,
+    97
+   ],
+   [
+    "replace",
+    129,
+    130,
+    97,
+    98,
+    [
+     " utilization, persistent roaming events."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    98,
+    99
+   ],
+   [
+    "replace",
+    131,
+    133,
+    99,
+    101,
+    [
+     " the frequency axis with a congestion score for every channel. It reads the",
+     " air and advises; it never writes to your routers."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    134,
+    101,
+    102
+   ],
+   [
+    "replace",
+    134,
+    135,
+    102,
+    103,
+    [
+     " OpenWrt only (device list filtered, with an explanatory note)."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    103,
+    104
+   ],
+   [
+    "replace",
+    136,
+    137,
+    104,
+    105,
+    [
+     " let NetPulse propose the cabling from the detected topology. Off by default."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    105,
+    106
+   ],
+   [
+    "replace",
+    138,
+    142,
+    106,
+    110,
+    [
+     " down, agent issues; bell feed plus notification channels (native Web Push,",
+     " ntfy, Telegram and outgoing webhook). Notification channels only carry",
+     " alerts marked as urgent; the feed level (none / urgent / all) is configured",
+     " separately in Alerts."
+    ]
+   ],
+   [
+    "equal",
+    142,
+    143,
+    110,
+    111
+   ],
+   [
+    "replace",
+    143,
+    144,
+    111,
+    112,
+    [
+     " (ES/EN)."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    146,
+    112,
+    114
+   ],
+   [
+    "replace",
+    146,
+    148,
+    114,
+    116,
+    [
+     " a `luci-app-netpulse` page, UCI config, procd init with self-heal. Or run the",
+     " whole server on-box."
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    116,
+    117
+   ],
+   [
+    "replace",
+    149,
+    150,
+    117,
+    118,
+    [
+     " with an atomic swap."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    151,
+    118,
+    119
+   ],
+   [
+    "replace",
+    151,
+    157,
+    119,
+    125,
+    [
+     " per-router vitals and alerts) to an MQTT broker; Home Assistant discovers the",
+     " entities on its own. Routers that expose themselves with NetGrip are not",
+     " duplicated. Off by default and cloud-free: configured from the MQTT card in",
+     " Settings (or with the `NETPULSE_MQTT_*` environment variables, or the",
+     " equivalent `mqtt_*` UCI options on-box). Topics, entities and limits in the",
+     " manual."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    159,
+    125,
+    127
+   ],
+   [
+    "replace",
+    159,
+    160,
+    127,
+    128,
+    [
+     "MCP server (streamable HTTP at `/mcp`) so"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    167,
+    128,
+    135
+   ],
+   [
+    "replace",
+    167,
+    169,
+    135,
+    137,
+    [
+     "That is still a selection: **every feature is on the website**,",
+     "one by one, and everything above is clickable in the **live demo**."
+    ]
+   ],
+   [
+    "equal",
+    169,
+    183,
+    137,
+    151
+   ],
+   [
+    "replace",
+    183,
+    184,
+    151,
+    152,
+    [
+     "The installer is plain, readable shell (inspect it first): it"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    219,
+    152,
+    187
+   ],
+   [
+    "replace",
+    219,
+    221,
+    187,
+    188,
+    [
+     " Other install paths "
+    ]
+   ],
+   [
+    "equal",
+    221,
+    225,
+    188,
+    192
+   ],
+   [
+    "replace",
+    225,
+    226,
+    192,
+    193,
+    [
+     "latest release:"
+    ]
+   ],
+   [
+    "equal",
+    226,
+    255,
+    193,
+    222
+   ],
+   [
+    "replace",
+    255,
+    256,
+    222,
+    223,
+    [
+     "`asuswrt-pusher`"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    281,
+    223,
+    248
+   ],
+   [
+    "delete",
+    281,
+    283,
+    248,
+    248
+   ],
+   [
+    "equal",
+    283,
+    288,
+    248,
+    253
+   ],
+   [
+    "replace",
+    288,
+    291,
+    253,
+    256,
+    [
+     "CHANGELOG.md and on the",
+     "releases page; the plan ahead",
+     "is in docs/ROADMAP.md."
+    ]
+   ],
+   [
+    "equal",
+    291,
+    294,
+    256,
+    259
+   ],
+   [
+    "replace",
+    294,
+    303,
+    259,
+    268,
+    [
+     "- **User manual** (also in",
+     " Spanish): every screen explained, menu by menu, with",
+     " step-by-step procedures.",
+     "- **Website**: the project in five",
+     " minutes, with a feature tour,",
+     " FAQ and screenshots.",
+     "- **Roadmap**: what's done, what's next.",
+     "- **Discussions**: questions,",
+     " ideas and shape-the-future talk."
+    ]
+   ],
+   [
+    "equal",
+    303,
+    306,
+    268,
+    271
+   ],
+   [
+    "replace",
+    306,
+    307,
+    271,
+    272,
+    [
+     "NetPulse wouldn't exist without OpenWrt. The whole"
+    ]
+   ],
+   [
+    "equal",
+    307,
+    315,
+    272,
+    280
+   ],
+   [
+    "replace",
+    315,
+    316,
+    280,
+    281,
+    [
+     "CHANGELOG and in every release's notes."
+    ]
+   ],
+   [
+    "equal",
+    316,
+    317,
+    281,
+    282
+   ],
+   [
+    "replace",
+    317,
+    318,
+    282,
+    283,
+    [
+     "If you want to send code, read CONTRIBUTING.md first: every"
+    ]
+   ],
+   [
+    "equal",
+    318,
+    322,
+    283,
+    287
+   ],
+   [
+    "replace",
+    322,
+    325,
+    287,
+    288,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    325,
+    326,
+    288,
+    289
+   ],
+   [
+    "replace",
+    326,
+    328,
+    289,
+    290,
+    [
+     "AGPL-3.0"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "d0f5873a1565+2": {
+  "fn": "gc-victor/query",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# Query"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    68,
+    1,
+    68
+   ],
+   [
+    "replace",
+    68,
+    71,
+    68,
+    69,
+    [
+     "Query is licensed under the MIT License."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    69,
+    70
+   ],
+   [
+    "replace",
+    72,
+    75,
+    70,
+    71,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "cbd0f5221f56+2": {
+  "fn": "hellosagar/Quiz-App",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "delete",
+    2,
+    3,
+    2,
+    2
+   ],
+   [
+    "equal",
+    3,
+    8,
+    2,
+    7
+   ],
+   [
+    "replace",
+    8,
+    11,
+    7,
+    8,
+    [
+     "### Get Apk Download here"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    29,
+    8,
+    26
+   ],
+   [
+    "replace",
+    29,
+    34,
+    26,
+    31,
+    [
+     "|:----------------------------------------:|:-----------------------------------------:|:-----------------------------------------:|",
+     "|Imgur|Imgur|Imgur|",
+     "|Imgur|Imgur|Imgur|",
+     "|Imgur|Imgur|Imgur|",
+     "|Imgur|Imgur|Imgur|"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    43,
+    31,
+    40
+   ],
+   [
+    "delete",
+    43,
+    65,
+    40,
+    40
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "74e3344affac+2": {
+  "fn": "jooksoft/jookdb",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Website"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    5,
+    3,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    8,
+    6,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    11,
+    9,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    12,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    17,
+    15,
+    17
+   ],
+   [
+    "replace",
+    17,
+    19,
+    17,
+    18,
+    [
+     "image"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "f9251f07c997+2": {
+  "fn": "robinjoseph08/go-pg-migrations",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    7,
+    2,
+    7,
+    [
+     "Version",
+     "GoDoc",
+     "Build Status",
+     "Coverage Status",
+     "Go Report Card"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "A Go package to help write migrations with `go-pg/pg`."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    44,
+    9,
+    44
+   ],
+   [
+    "replace",
+    44,
+    76,
+    44,
+    45,
+    [
+     "…（32 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    92,
+    45,
+    61
+   ],
+   [
+    "replace",
+    92,
+    109,
+    61,
+    62,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    123,
+    62,
+    76
+   ],
+   [
+    "replace",
+    123,
+    126,
+    76,
+    79,
+    [
+     " Since `go-pg/migrations` checks the current version of migrations and runs any",
+     " migrations after that, some migrations can be missed, especially when several",
+     " people are working on the same project."
+    ]
+   ],
+   [
+    "equal",
+    126,
+    127,
+    79,
+    80
+   ],
+   [
+    "replace",
+    127,
+    130,
+    80,
+    83,
+    [
+     " same version on two separate branches. If the current version is 3, and more",
+     " than one person branches off and creates a new migration, all of them will be",
+     " version 4."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    83,
+    84
+   ],
+   [
+    "replace",
+    131,
+    136,
+    84,
+    89,
+    [
+     " of the time, running migrations within a transaction is desirable, so that if",
+     " it errs out within the \"up\" function, the whole migration is reverted. But",
+     " since some long-running migrations might have a statement with a relatively",
+     " exclusive lock, you might opt out of running that specific migration within a",
+     " transaction."
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    89,
+    90
+   ],
+   [
+    "replace",
+    137,
+    139,
+    90,
+    92,
+    [
+     " deployment system) attempting to run migrations at the same time against the",
+     " same database, which could lead to undesired behavior."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    92,
+    93
+   ],
+   [
+    "replace",
+    140,
+    143,
+    93,
+    96,
+    [
+     " While `go-pg/migrations` has some recommendations and examples, this package",
+     " takes a more opinionated approach which makes it so you don't have to think",
+     " about it as much, and there's less code for you to write and maintain."
+    ]
+   ],
+   [
+    "equal",
+    143,
+    144,
+    96,
+    97
+   ],
+   [
+    "replace",
+    144,
+    149,
+    97,
+    102,
+    [
+     " same migration invocation, they are all grouped together into a \"batch\".",
+     " During rollbacks, each batch gets rolled back together. This tends to be more",
+     " desireable since this usually means the application is reverting back to a",
+     " previous release, so the database should be in the state expected for that",
+     " release."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    192,
+    102,
+    145
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "ffe40ddf0a50+2": {
+  "fn": "alexsergivan/kwant",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    7,
+    4,
+    7,
+    [
+     "CI",
+     "License: AGPL-3.0",
+     "Docs"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    12,
+    7,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "A kwant channel: Designer answers a question about empty states, then @mentions QA, and QA checks it on a 360 pixel screen."
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    13,
+    14
+   ],
+   [
+    "replace",
+    14,
+    17,
+    14,
+    15,
+    [
+     "**Website and docs: kwant.si** · **Download for Mac** · **Linux (beta): .deb or AppImage**"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    20,
+    15,
+    18
+   ],
+   [
+    "replace",
+    20,
+    21,
+    18,
+    19,
+    [
+     "- **The right bot answers, and says why** (0.6.4). kwant picks the bot by its rules: a name or @mention, small talk to the last speaker, what you taught it, then the words in your message. In `#general`, a question no bot fits goes to the Concierge. One line under the reply says why that bot answers. **Wrong bot?** sends your message to the bot you pick, and kwant remembers it for next time. On a close call between two bots, you choose."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    28,
+    19,
+    26
+   ],
+   [
+    "replace",
+    28,
+    31,
+    26,
+    27,
+    [
+     "Every change is in the CHANGELOG."
+    ]
+   ],
+   [
+    "equal",
+    31,
+    34,
+    27,
+    30
+   ],
+   [
+    "replace",
+    34,
+    36,
+    30,
+    32,
+    [
+     "- **A team, not a chat tab.** Each bot has its own role, voice (\"soul\") and model. Bots @mention each other to hand work on, and a team lead runs short discussions and posts one summary. In a channel, kwant picks the bot that fits each message and shows why. The Laya router picks the model and effort for bots set to `auto`.",
+     "- **\"Done\" means checked.** The Mission board turns work into cards, one per hand-off. A card turns **Verified** only when kwant runs the check itself, such as a test or a file check, and the card keeps the receipt. Files a bot attaches are evidence to look at, never proof on their own."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    44,
+    32,
+    40
+   ],
+   [
+    "replace",
+    44,
+    45,
+    40,
+    41,
+    [
+     "- **No telemetry.** kwant sends nothing to us, and its interface loads nothing from other servers. The one download you don't set up yourself is the Laya router on first start: its Python packages and its model from PyPI and Hugging Face (`--no-laya` turns it off). Everything else goes only to the AI providers and services you add."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    47,
+    41,
+    43
+   ],
+   [
+    "replace",
+    47,
+    48,
+    43,
+    44,
+    [
+     "See every feature, with screenshots, on kwant.si/features."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    44,
+    45
+   ],
+   [
+    "replace",
+    49,
+    71,
+    45,
+    59,
+    [
+     " In #general, a customer wore her new boots on one muddy trail and wants to return them. Support answers, with a Matched skills chip next to its name that shows why it was picked, from 7 bots. Wrong bot? is open, listing Lead, Frontend, Backend, QA, Researcher and Marketer. Who answers : the bot that fits, and why. Wrong bot? teaches it. ",
+     " The Mission board: 8 verified this week, 0 false successes, 2 needing you, a cost of $0.30 per verified result and a chart of verified results per active week. Below, two facts disagree (16 GB and 4 GB of RAM) with a Keep this one button on each, and QA asks for the Act tier on release notes, with Grant and Decline. Mission board : verified results, their cost and what needs you (with Truth Ledger and Flight School on). ",
+     "",
+     " A task, Weekly load-test report, with its Evidence receipt: Verified: file contains passed, checked by kwant. The check: load-test/report.md has p95. Below are the files the team attached, which never mark a task verified on their own, and the activity log. Verified : only when kwant runs the check, with a receipt. ",
+     " TechLead wants to run a curl command to api.stripe.com to pay a domain renewal. The approval card says: This looks like a payment. Payments always ask you, even with approvals off. Deny and Allow Once. Payments always ask , in every approval mode. ",
+     "",
+     " A bot Rules per bot : Good for, Not for and Browser sites. ",
+     " The Inbox, with New and Loose ends tabs. Waiting on you: Designer asks which hero image should ship on the landing page, with two answer buttons. Finished: a handoff and a Monday metrics digest. Failed or stuck: a competitor price scan and a smoke test. Inbox : what's waiting on you, what finished and what failed. ",
+     "",
+     " The space rail with three spaces, Trailhead, Pixel Quest and Home, each with its own icon and colour. Trailhead is open on #general with a weekly digest posted by a routine. Spaces : each with its own bots, channels and routines. ",
+     " Settings, This space, Accounts: the Order to use list. Work, a Claude login, is out until Thu 03:00; Personal, Codex and a Team gateway are ready. Under Not in the order, This machine Accounts : several per engine, with a default and fallbacks. ",
+     "",
+     " QA set up a routine when asked to check overnight checkout errors every morning: weekdays at 08:30, posting in the direct chat, with Undo, Edit and Pause buttons. Routines : ask for \"every morning\" and get one, with Undo. ",
+     " Loose ends with Open, Waiting and Snoozed tabs. The top case is a letter from a water company, with the quote it Loose ends , the Inbox's second tab: evidence and a draft. It never sends. "
+    ]
+   ],
+   [
+    "equal",
+    71,
+    73,
+    59,
+    61
+   ],
+   [
+    "delete",
+    73,
+    75,
+    61,
+    61
+   ],
+   [
+    "equal",
+    75,
+    80,
+    61,
+    66
+   ],
+   [
+    "replace",
+    80,
+    81,
+    66,
+    67,
+    [
+     "- **Rust** (stable), installed with rustup."
+    ]
+   ],
+   [
+    "equal",
+    81,
+    83,
+    67,
+    69
+   ],
+   [
+    "replace",
+    83,
+    87,
+    69,
+    73,
+    [
+     " - the `claude` CLI, installed. You don't need to sign it in first: kwant has a **Sign in with Claude** button;",
+     " - the `codex` or `grok` CLI, signed in on the same machine (`codex login`, `grok login`);",
+     " - an Anthropic, OpenAI or xAI API key, which you add in the app under **Settings → This space → Accounts**.",
+     "- Optional: **Docker** for VM mode and the bots' shared browser, and `uv` or `python3` for the Laya router."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    73,
+    74
+   ],
+   [
+    "replace",
+    88,
+    89,
+    74,
+    75,
+    [
+     "`kwnt doctor` (`cargo run -- doctor` from a clone) checks all of these and prints the install command for whatever is missing on your machine; `kwnt setup` installs it (see Without Docker)."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    113,
+    75,
+    99
+   ],
+   [
+    "replace",
+    113,
+    114,
+    99,
+    100,
+    [
+     "Download the Mac app (a universal `.dmg` for Apple silicon and Intel) and drag kwant to Applications. It runs its own kwant on your Mac, with the same `~/.kwnt` data folder as `kwnt serve`, and stays in the menu bar when you close the window. Build it yourself from `apps/mac`."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    121,
+    100,
+    107
+   ],
+   [
+    "replace",
+    121,
+    123,
+    107,
+    109,
+    [
+     "- **Ubuntu 22.04 or newer, Debian 12 or newer:** download `kwant_amd64.deb`, then run `sudo apt install ./kwant_amd64.deb`.",
+     "- **Other distributions:** download `kwant_x86_64.AppImage`, then `chmod +x kwant_x86_64.AppImage` and run it. It needs a normal GTK desktop and FUSE."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    132,
+    109,
+    118
+   ],
+   [
+    "replace",
+    132,
+    135,
+    118,
+    119,
+    [
+     "More in the quickstart and install docs."
+    ]
+   ],
+   [
+    "equal",
+    135,
+    147,
+    119,
+    131
+   ],
+   [
+    "replace",
+    147,
+    148,
+    131,
+    132,
+    [
+     "On your own computer there is nothing to sign in to. From another machine, open the one-time link `kwnt serve` prints at startup (it works once, for 15 minutes; with `KWNT_ALLOWED_ORIGINS` set it is ready to open and comes with a QR code), or make a new one with `kwnt signin-link`. The browser stays signed in for a year. To add your phone or another browser later, open **Settings → Signed-in devices → Add a phone or browser** in a signed-in browser and scan the one-time QR code (it also works once, for 15 minutes); the same list lets you sign those browsers out. A new browser can also choose **Sign in from another device** on the sign-in screen: it shows a code for 10 minutes, and a signed-in browser shows **New device wants access** with Approve or Deny. Approve only a code that is on a screen you are holding. Prefer the token? On the server, as the user that runs kwnt, `cat ~/.kwnt/api-token` (or `$KWNT_DATA_DIR/api-token`, e.g. `sudo cat /var/lib/kwnt/api-token` with the systemd unit below) prints the token to paste (`kwnt token --raw` does the same; `./target/release/kwnt` if kwnt isn't on your PATH), and `kwnt token` prints a new one-time link like `kwnt signin-link`. Run them as the same user: as another user they fail, because that user can't read the token file (for the systemd unit use `sudo cat` as above). Each install has its own token, so one copied from your laptop won't open kwnt on the server. Or skip sign-in: `ssh -N -L 8799:127.0.0.1:8799 user@your-vps`, then open http://127.0.0.1:8799 on your computer (not with Docker, where requests always count as remote). A one-time link signs in as you, so keep it private until you've used it; the token never appears in the server's output. Put a TLS reverse proxy in front: see browser service and VPS hosting."
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    132,
+    133
+   ],
+   [
+    "replace",
+    149,
+    151,
+    133,
+    134,
+    [
+     " A systemd unit "
+    ]
+   ],
+   [
+    "equal",
+    151,
+    156,
+    134,
+    139
+   ],
+   [
+    "replace",
+    156,
+    169,
+    139,
+    140,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    175,
+    140,
+    146
+   ],
+   [
+    "delete",
+    175,
+    177,
+    146,
+    146
+   ],
+   [
+    "equal",
+    177,
+    192,
+    146,
+    161
+   ],
+   [
+    "replace",
+    192,
+    193,
+    161,
+    162,
+    [
+     "**HTTPS:** the UI is published on `127.0.0.1:8799` only. Put a TLS proxy in front, e.g. Caddy with this `Caddyfile`, and tell kwnt its address:"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    216,
+    162,
+    185
+   ],
+   [
+    "replace",
+    216,
+    217,
+    185,
+    186,
+    [
+     "|Platform|Install|Then|"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    218,
+    186,
+    187
+   ],
+   [
+    "replace",
+    218,
+    223,
+    187,
+    192,
+    [
+     "|Mac app|Download the `.dmg` from Releases and open it|Run `kwnt doctor`|",
+     "|Linux app (beta, x86_64)|Download the `.deb` or the AppImage from Releases and install it|Open **Setup** in the app|",
+     "|Mac, command line|`git clone https://github.com/alexsergivan/kwant.git && cd kwant && make build && ./target/release/kwnt setup` (uses Homebrew when you have it)|Run `kwnt doctor`|",
+     "|Linux desktop or server|The same clone and `make build`, then `kwnt setup`, or `sh scripts/install-linux-deps.sh --clis claude` on Debian/Ubuntu|Run `kwnt doctor`|",
+     "|VPS with Docker|Docker Compose|Run `docker compose exec kwnt kwnt doctor`|"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    226,
+    192,
+    195
+   ],
+   [
+    "delete",
+    226,
+    228,
+    195,
+    195
+   ],
+   [
+    "equal",
+    228,
+    230,
+    195,
+    197
+   ],
+   [
+    "replace",
+    230,
+    231,
+    197,
+    198,
+    [
+     "Laya picks which model and effort a bot uses when its model is `auto`. When kwant picks which bot answers in a channel, Laya adds its own guess from the bots' titles, but it never picks a bot on its own: kwant's routing rules do. It runs as a small Python service, and **`kwnt serve` manages it for you**: on first run it installs `laya[serve]` into `~/.kwnt/laya/venv` (with `uv` when present, else `python3 -m venv`), starts it, and restarts it if it exits. The header shows its status. While Laya is unavailable, the rules still pick the bot, the model and effort come from a keyword estimate, and the reason line under a reply says it was a keyword match."
+    ]
+   ],
+   [
+    "equal",
+    231,
+    232,
+    198,
+    199
+   ],
+   [
+    "replace",
+    232,
+    233,
+    199,
+    200,
+    [
+     "|Setting|`config.toml`|Environment|Default|"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    234,
+    200,
+    201
+   ],
+   [
+    "replace",
+    234,
+    238,
+    201,
+    205,
+    [
+     "|Laya URL|`laya_url`|`LAYA_URL`|`http://127.0.0.1:8000`|",
+     "|Manage a local Laya|`laya_managed`|`KWNT_LAYA_MANAGED=0` to disable, or `kwnt serve --no-laya`|`true`|",
+     "|Checkpoints to preload|`laya_models`|`KWNT_LAYA_MODELS`|`english`|",
+     "|Use an existing `laya-serve` binary||`KWNT_LAYA_SERVE_BIN`||"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    241,
+    205,
+    208
+   ],
+   [
+    "delete",
+    241,
+    243,
+    208,
+    208
+   ],
+   [
+    "equal",
+    243,
+    245,
+    208,
+    210
+   ],
+   [
+    "replace",
+    245,
+    247,
+    210,
+    212,
+    [
+     "- What changed in each release: CHANGELOG.md",
+     "- Website docs: kwant.si/docs: quickstart, install, spaces, bots and teams, Mission board, Flight School, Truth Ledger, models and routing, accounts, routines, approvals, the bots' browser, loose ends, Parallel Universe, memory and skills, MCP."
+    ]
+   ],
+   [
+    "equal",
+    247,
+    248,
+    212,
+    213
+   ],
+   [
+    "replace",
+    248,
+    267,
+    213,
+    230,
+    [
+     " - Channel routing: who answers",
+     " - Mission Control and verified outcomes",
+     " - Approvals",
+     " - Payments always ask",
+     " - How bots use their browser",
+     " - Bot actions",
+     " - Browser service and VPS hosting",
+     " - LLM profiles (accounts) and API access",
+     " - Connections API",
+     " - Live activity and human steps API",
+     " - MCP API",
+     " - Saved passwords",
+     " - Loose ends (zombie hunter)",
+     " - Letters (camera to completed)",
+     " - Parallel Universe",
+     " - Dev mode",
+     " - Idea jar"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    269,
+    230,
+    232
+   ],
+   [
+    "replace",
+    269,
+    278,
+    232,
+    233,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    280,
+    233,
+    235
+   ],
+   [
+    "replace",
+    280,
+    281,
+    235,
+    236,
+    [
+     "kwant runs commands and holds API keys and passwords, so please report vulnerabilities privately. See SECURITY.md. Don't open a public issue for a security problem."
+    ]
+   ],
+   [
+    "equal",
+    281,
+    283,
+    236,
+    238
+   ],
+   [
+    "replace",
+    283,
+    293,
+    238,
+    239,
+    [
+     "kwant is open source under the GNU Affero General Public License v3.0 (AGPL-3.0-only)."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "8573f9bbc128+2": {
+  "fn": "yetone/olo",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "delete",
+    0,
+    4,
+    0,
+    0
+   ],
+   [
+    "equal",
+    4,
+    6,
+    0,
+    2
+   ],
+   [
+    "replace",
+    6,
+    25,
+    2,
+    8,
+    [
+     " <a href=\"https://github.com/yetone/olo/actions/workflows/test.yml\">",
+     " Build Status",
+     " </a>",
+     " <a href=\"https://codecov.io/gh/yetone/olo\">",
+     " Coverage Status",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    8,
+    9
+   ],
+   [
+    "replace",
+    26,
+    29,
+    9,
+    18,
+    [
+     " <a href=\"https://pypi.org/project/olo\">",
+     " PyPI Package latest release",
+     " </a>",
+     " <a href=\"https://pypi.org/project/olo\">",
+     " PyPI Wheel",
+     " </a>",
+     " <a href=\"https://www.python.org\">",
+     " Support Python Version",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    18,
+    19
+   ],
+   [
+    "replace",
+    30,
+    33,
+    19,
+    20,
+    [
+     " ORM with intelligent and elegant cache manager."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    20,
+    21
+   ],
+   [
+    "replace",
+    34,
+    37,
+    21,
+    22,
+    [
+     " If you like static type checking for Python, you can referring to Mypy plugin and stubs for OLO"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    22,
+    23
+   ],
+   [
+    "replace",
+    38,
+    42,
+    23,
+    24,
+    [
+     " 查看文档 📖"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    24,
+    25
+   ],
+   [
+    "replace",
+    43,
+    49,
+    25,
+    32,
+    [
+     " TL;DR ",
+     "",
+     " License ",
+     "",
+     " <a href=\"https://app.fossa.io/projects/git%2Bgithub.com%2Fyetone%2Folo?ref=badge_large\">",
+     " FOSSA Status",
+     " </a>"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "aadc4fbe8134+2": {
+  "fn": "phuchoang2603/payment-gateway-fraud-detection",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "A payment gateway for a refurbished-electronics marketplace, built to connect reliable checkout with real-time fraud decisions and explainable investigations. Payment events feed streaming and historical data pipelines for model training, scoring and analyst agents, using synthetic cards and fraud labels. See the project wiki for the architecture and implementation."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    3,
+    6
+   ],
+   [
+    "replace",
+    6,
+    11,
+    6,
+    11,
+    [
+     "- **Gateway:** Go services, Postgres, Kafka CDC, idempotent payment attempts, timeout recovery and signed webhooks. Integrates with the marketplace. Architecture.",
+     "- **Lakehouse:** Spark Bronze → Silver → Gold, audited publication and OpenMetadata lineage. **133.5 GB** synthetic v19 source dataset (AWS run). Offline data.",
+     "- **Warehouse:** ClickHouse marts and skip indexes. Same-query GCP plan: **5,541 → 156 granules, 97.18% fewer**, with query-condition cache disabled. Storage.",
+     "- **Streaming:** shared Java Flink operators for live traffic and historical replay; Feast/Redis for online features. Parity tests compare **2,498 snapshots from 503 deliveries**. Replay · Feature store.",
+     "- **ML:** Kubeflow/Katib, GPU XGBoost, Triton and drift-triggered retraining. Dev synthetic test set: **PR-AUC 0.9370**, **91.1% recall at 1% FPR**. Training · Pipeline."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "Payment gateway, lakehouse, streaming features and ML pipeline"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    16,
+    13,
+    16
+   ],
+   [
+    "replace",
+    16,
+    19,
+    16,
+    19,
+    [
+     "- **Agents:** coordinator, evidence and risk agents; read-only tools, cited knowledge retrieval and Langfuse prompts/traces. Agents.",
+     "- **Model access:** agentgateway API keys, rate limits, PII masking and request screening; vLLM/KServe inference. Gateway · Inference.",
+     "- **Knowledge API:** dev load test, 60 users over 5 minutes: **140.31 requests/s**, **p95 310 ms**, **0 failures across 41,945 requests**. RAG."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "Agents, model gateway, inference and knowledge tools"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    24,
+    21,
+    24
+   ],
+   [
+    "replace",
+    24,
+    27,
+    24,
+    27,
+    [
+     "- **Platform:** Talos on Proxmox (dev) and GCP (prod), OpenTofu, Argo CD and shared operators, owned by talos-proxmox.",
+     "- **Delivery:** GitHub Actions → GHCR → Argo CD; Istio checkout canary stages at **10%, 25%, 50%**. CI · Delivery.",
+     "- **Access:** Cloudflare Tunnel/HTTPS, Istio ambient mTLS, service-account policies and Doppler/External Secrets. Networking · Security."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    27,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "Application delivery, infrastructure, secrets and service mesh"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    32,
+    29,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     "|Path|Contents|"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    33,
+    34
+   ],
+   [
+    "replace",
+    34,
+    43,
+    34,
+    43,
+    [
+     "|`src/payment-gateway/`|Go payment services and synthetic vault/processor|",
+     "|`src/data-pipeline/`|Java Flink, Python simulators, Spark, Feast and catalog jobs|",
+     "|`src/ml/`|Training, evaluation, registry, serving and drift|",
+     "|`src/llm/`|Agents, RAG pipeline and knowledge API/MCP tools|",
+     "|`contracts/`|Protobuf, data-product contracts and feature definitions|",
+     "|`infra/`|Application Dockerfiles, Helm charts and Argo CD releases|",
+     "|`openspec/`|Specifications and changes|",
+     "|`docs/`|Project wiki sources|",
+     "|`scripts/`|CI, generation, releases and wiki publication|"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    47,
+    43,
+    47
+   ],
+   [
+    "replace",
+    47,
+    48,
+    47,
+    48,
+    [
+     "- See CONTRIBUTING.md for setup and local checks."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "f34de5514824+2": {
+  "fn": "yahuian/Go-bjut",
+  "clean_ver": "2",
+  "raw_lines": 18,
+  "ops": [
+   [
+    "equal",
+    0,
+    18,
+    0,
+    18
+   ],
+   [
+    "replace",
+    18,
+    23,
+    18,
+    19,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "86b482100068+2": {
+  "fn": "luisaveiro/localhost-databases",
+  "clean_ver": "2",
+  "raw_lines": 11,
+  "ops": [
+   [
+    "replace",
+    0,
+    11,
+    0,
+    3,
+    [
+     "<a href=\"https://supportukrainenow.org\" target=\"_blank\">",
+     " #StandWithUkraine",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    3,
+    4
+   ],
+   [
+    "replace",
+    12,
+    15,
+    4,
+    7,
+    [
+     " <a href=\"http://github.com/luisaveiro/localhost-databases\">",
+     " databases",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    7,
+    8
+   ],
+   [
+    "replace",
+    16,
+    36,
+    8,
+    9,
+    [
+     " Collection of Database Docker compose files for local development"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    9,
+    10
+   ],
+   [
+    "replace",
+    37,
+    38,
+    10,
+    29,
+    [
+     " TL;DR •",
+     " About •",
+     " Disclaimer •",
+     " Getting Started •",
+     " Download •",
+     " How To Use •",
+     " Databases •",
+     " Docker Network",
+     "",
+     " FAQ •",
+     " Useful Tips •",
+     " Changelog •",
+     " Contributing •",
+     " Security Vulnerabilities •",
+     " Credits •",
+     " Sponsor •",
+     " License",
+     "",
+     "## TL;DR"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    63,
+    29,
+    54
+   ],
+   [
+    "replace",
+    63,
+    64,
+    54,
+    55,
+    [
+     "**What is the purpose of the database collection?** "
+    ]
+   ],
+   [
+    "equal",
+    64,
+    80,
+    55,
+    71
+   ],
+   [
+    "replace",
+    80,
+    81,
+    71,
+    72,
+    [
+     "> [!IMPORTANT] "
+    ]
+   ],
+   [
+    "equal",
+    81,
+    94,
+    72,
+    85
+   ],
+   [
+    "replace",
+    94,
+    95,
+    85,
+    86,
+    [
+     "This repository utilizes Docker to run Databases, "
+    ]
+   ],
+   [
+    "equal",
+    95,
+    139,
+    86,
+    130
+   ],
+   [
+    "replace",
+    139,
+    155,
+    130,
+    131,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    189,
+    131,
+    165
+   ],
+   [
+    "replace",
+    189,
+    199,
+    165,
+    166,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    206,
+    166,
+    173
+   ],
+   [
+    "replace",
+    206,
+    220,
+    173,
+    187,
+    [
+     "- Cassandra",
+     "- CockroachDB",
+     "- CouchDB",
+     "- DynamoDB Local",
+     "- EdgeDB",
+     "- MariaDB",
+     "- MongoDB",
+     "- Microsoft SQL Server (MSSQL)",
+     "- MySQL",
+     "- Neo4j",
+     "- PostgreSQL",
+     "- Redis",
+     "- SurrealDB",
+     "- YugabyteDB"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    224,
+    187,
+    191
+   ],
+   [
+    "delete",
+    224,
+    226,
+    191,
+    191
+   ],
+   [
+    "equal",
+    226,
+    248,
+    191,
+    213
+   ],
+   [
+    "replace",
+    248,
+    265,
+    213,
+    214,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    278,
+    214,
+    227
+   ],
+   [
+    "replace",
+    278,
+    279,
+    227,
+    228,
+    [
+     "**Q:** Are you planning to add additional databases, e.g., CouchDB & Cassandra? "
+    ]
+   ],
+   [
+    "equal",
+    279,
+    281,
+    228,
+    230
+   ],
+   [
+    "replace",
+    281,
+    282,
+    230,
+    231,
+    [
+     "Discussion section "
+    ]
+   ],
+   [
+    "equal",
+    282,
+    287,
+    231,
+    236
+   ],
+   [
+    "replace",
+    287,
+    288,
+    236,
+    237,
+    [
+     "NoSQL Workbench"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    291,
+    237,
+    240
+   ],
+   [
+    "replace",
+    291,
+    292,
+    240,
+    241,
+    [
+     "TablePlus is a modern, native tool for database "
+    ]
+   ],
+   [
+    "equal",
+    292,
+    294,
+    241,
+    243
+   ],
+   [
+    "replace",
+    294,
+    295,
+    243,
+    244,
+    [
+     "Postman enables you to easily explore, debug, and "
+    ]
+   ],
+   [
+    "equal",
+    295,
+    299,
+    244,
+    248
+   ],
+   [
+    "replace",
+    299,
+    302,
+    248,
+    249,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    302,
+    303,
+    249,
+    250
+   ],
+   [
+    "replace",
+    303,
+    311,
+    250,
+    251,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    311,
+    314,
+    251,
+    254
+   ],
+   [
+    "replace",
+    314,
+    315,
+    254,
+    255,
+    [
+     "Please check out our security policy for guidelines "
+    ]
+   ],
+   [
+    "equal",
+    315,
+    319,
+    255,
+    259
+   ],
+   [
+    "replace",
+    319,
+    320,
+    259,
+    260,
+    [
+     "The illustration used in the project is from unDraw (created by Katerina Limpitsouni). "
+    ]
+   ],
+   [
+    "equal",
+    320,
+    324,
+    260,
+    264
+   ],
+   [
+    "replace",
+    324,
+    331,
+    264,
+    265,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    331,
+    332,
+    265,
+    266
+   ],
+   [
+    "replace",
+    332,
+    342,
+    266,
+    267,
+    [
+     "The MIT License (MIT). Please see License File for more information."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

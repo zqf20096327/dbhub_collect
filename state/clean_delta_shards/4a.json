@@ -8506,5 +8506,9559 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "c3fb5445f1d9+2": {
+  "fn": "tlhhup/litemall-dw",
+  "clean_ver": "2",
+  "raw_lines": 32,
+  "ops": [
+   [
+    "equal",
+    0,
+    32,
+    0,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     "\t2. Kafka：2.13-2.6.0 "
+    ]
+   ],
+   [
+    "equal",
+    33,
+    42,
+    33,
+    42
+   ],
+   [
+    "replace",
+    42,
+    43,
+    42,
+    43,
+    [
+     " kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 2 --partitions 3 --topic litemall-action "
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    43,
+    44
+   ],
+   [
+    "replace",
+    44,
+    45,
+    44,
+    45,
+    [
+     " 1. 生成工作目录"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    45,
+    46
+   ],
+   [
+    "replace",
+    46,
+    48,
+    46,
+    48,
+    [
+     " mkdir -p {litemall/logs,litemall/conf,litemall/luas}",
+     " 2. 配置nginx"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    48,
+    49
+   ],
+   [
+    "replace",
+    49,
+    78,
+    49,
+    54,
+    [
+     " worker_processes 1;",
+     " error_log logs/error.log;",
+     " events {",
+     " worker_connections 1024;",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    54,
+    55
+   ],
+   [
+    "replace",
+    79,
+    108,
+    55,
+    108,
+    [
+     " user root root; # 定义用户名、用户组，防止权限问题",
+     "",
+     " http {",
+     " # 设置共享字典",
+     " lua_shared_dict kafka_data 10m;",
+     " resolver 192.168.241.20; #使用能解析kafka域名的dns",
+     " server {",
+     " listen 80;",
+     " location / {",
+     " default_type text/html;",
+     " content_by_lua_block {",
+     " ngx.say(\" hello, world \")",
+     " }",
+     " }",
+     "",
+     " location /process{",
+     " default_type application/json;",
+     " content_by_lua_file /root/project/litemall/luas/kafka_test.lua;",
+     " }",
+     "",
+     " }",
+     " }",
+     " 3. 发送到kafka ",
+     "",
+     " local cjson=require \"cjson\"",
+     " local producer = require \"resty.kafka.producer\"",
+     "",
+     " local broker_list = {",
+     " { host = \"192.168.241.180\", port = 9092 },",
+     " { host = \"192.168.241.181\", port = 9092 },",
+     " { host = \"192.168.241.182\", port = 9092 },",
+     " }",
+     "",
+     " local topic=\"litemall-action\"",
+     " local partitions=3",
+     "",
+     " local shared_data = ngx.shared.kafka_data",
+     " local partitionNum=shared_data:get(\"count\")",
+     " if not partitionNum then",
+     " shared_data:set(\"count\",1)",
+     " partitionNum=shared_data:get(\"count\")",
+     " end",
+     " local key = \"\"..(partitionNum%partitions)",
+     " shared_data:incr(\"count\",1)",
+     "",
+     " ngx.req.read_body()",
+     " local request_body = ngx.req.get_body_data()",
+     " if request_body then",
+     " local p = producer:new(broker_list)",
+     " local offset, err = p:send(topic, key, request_body)",
+     " end",
+     "",
+     " ngx.say(cjson.encode{code = 200, msg = request_body})"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    110,
+    108,
+    110
+   ],
+   [
+    "replace",
+    110,
+    115,
+    110,
+    115,
+    [
+     " 1. 启动日志：在`main.js`通过绑定`vue`对象的`mounted`事件来处理，保证只有一次请求",
+     " 2. 事件日志",
+     " 1. 在`main.js`通过绑定`vue`对象的`mounted`和`beforeDestory`来启动或清除定时器",
+     " 2. 在定时器中发送事件日志，消除频繁请求日志服务器",
+     " 3. 采用数组来记录事件，并在发送之后清空"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    115,
+    116
+   ],
+   [
+    "replace",
+    116,
+    117,
+    116,
+    117,
+    [
+     " 1. 前端通过代理处理(修改`vue.config.js`配置文件,`vue cli 3.0+`)"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    117,
+    118
+   ],
+   [
+    "replace",
+    118,
+    134,
+    118,
+    134,
+    [
+     " devServer: {",
+     " port:6255,",
+     " proxy:{",
+     " '/process': {",
+     " target: process.env.VUE_LOG_BASE_API,",
+     " ws: true,",
+     " changeOrigin: true //允许跨域",
+     " },",
+     " '/wx': {",
+     " target: process.env.VUE_APP_BASE_API,",
+     " ws: true,",
+     " changeOrigin: true",
+     " }",
+     " }",
+     " },",
+     " 2. 后端通过nginx处理"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    134,
+    135
+   ],
+   [
+    "replace",
+    135,
+    143,
+    135,
+    143,
+    [
+     " location /process{",
+     " default_type application/json;",
+     " # 添加响应头，在opthons请求返回的响应中，从而在下个请求中携带",
+     " add_header Access-Control-Allow-Credentials true;",
+     " add_header Access-Control-Allow-Headers *;",
+     " add_header Access-Control-Allow-Origin *;",
+     " content_by_lua_file /root/project/litemall/luas/kafka_test.lua;",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    152,
+    143,
+    152
+   ],
+   [
+    "replace",
+    152,
+    153,
+    152,
+    153,
+    [
+     " 1. `plugins.d`文件夹用于集成第三方的`plugin`"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    154,
+    153,
+    154
+   ],
+   [
+    "replace",
+    154,
+    156,
+    154,
+    156,
+    [
+     " 1. 原因：启动配置参数`-c`设置不正确",
+     " 2. 解决："
+    ]
+   ],
+   [
+    "equal",
+    156,
+    157,
+    156,
+    157
+   ],
+   [
+    "replace",
+    157,
+    160,
+    157,
+    160,
+    [
+     " FLUME_HOME=/opt/apache-flume-1.9.0-bin",
+     " # 需要配置到flume安装路径下的conf文件夹",
+     " nohup $FLUME_HOME/bin/flume-ng agent -c $FLUME_HOME/conf -f $FLUME_HOME/conf/litemall_kafka_to_hdfs.conf --name a1 -Dflume.root.logger=INFO,console >$FLUME_HOME/logs/litemall 2>&1 &"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    161,
+    160,
+    161
+   ],
+   [
+    "replace",
+    161,
+    164,
+    161,
+    164,
+    [
+     " 1. 在跑Azkaban任务的时候出现以上错误，其原因是：文件处于`openforwrite`的状态，没有关闭",
+     " 2. 解决：",
+     " 1. 查看文件状态"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    165,
+    164,
+    165
+   ],
+   [
+    "replace",
+    165,
+    167,
+    165,
+    167,
+    [
+     " hdfs fsck dir -files",
+     " 2. 查看路径下是否有`openforwrite的文件`"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    168,
+    167,
+    168
+   ],
+   [
+    "replace",
+    168,
+    170,
+    168,
+    170,
+    [
+     " hdfs fsck dir -openforwrite",
+     " 3. 释放租约 "
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    170,
+    171
+   ],
+   [
+    "replace",
+    171,
+    174,
+    171,
+    174,
+    [
+     " hdfs debug recoverLease -path filepath [-retries retry-num]",
+     " 3. 分析：",
+     " 1. 没有关闭flume重启了hdfs "
+    ]
+   ],
+   [
+    "equal",
+    174,
+    176,
+    174,
+    176
+   ],
+   [
+    "replace",
+    176,
+    178,
+    176,
+    178,
+    [
+     " 1. 原因：jdbc会把tinyint 认为是`java.sql.Types.BIT`",
+     " 2. 解决：`jdbc:mysql://localhost/test?tinyInt1isBit=false`"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    179,
+    178,
+    179
+   ],
+   [
+    "replace",
+    179,
+    180,
+    179,
+    180,
+    [
+     " 1. 解决：import添加参数"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    181,
+    180,
+    181
+   ],
+   [
+    "replace",
+    181,
+    183,
+    181,
+    183,
+    [
+     " # Drops \\n, \\r, and \\01 from string fields when importing to Hive.",
+     " --hive-drop-import-delims"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    184,
+    183,
+    184
+   ],
+   [
+    "replace",
+    184,
+    187,
+    184,
+    187,
+    [
+     " 1. 因该数据都存在于订单表中，所以进行特殊处理",
+     " 1. 支付：除了分区数据以外，同时添加`pay_time`作为过滤条件",
+     " 2. 退款：除了分区数据以外，同时添加`refund_time`作为过滤条件"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    189,
+    187,
+    189
+   ],
+   [
+    "replace",
+    189,
+    190,
+    189,
+    190,
+    [
+     " 1. 将打包后的jar包上传到hdfs"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    191,
+    190,
+    191
+   ],
+   [
+    "replace",
+    191,
+    192,
+    191,
+    192,
+    [
+     " hdfs dfs -put hive-function.jar /user/hive/jars"
+    ]
+   ],
+   [
+    "equal",
+    192,
+    194,
+    192,
+    194
+   ],
+   [
+    "replace",
+    194,
+    198,
+    194,
+    198,
+    [
+     " # udf",
+     " create function litemall.parse_json_object as 'org.tlh.litemall.udf.ParseJsonObject' using jar 'hdfs:///user/hive/jars/hive-function.jar'\t",
+     " # udtf",
+     " create function litemall.extract_event_type as 'org.tlh.litemall.udtf.ExtractEventType' using jar 'hdfs:///user/hive/jars/hive-function.jar'"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    202,
+    198,
+    202
+   ],
+   [
+    "replace",
+    202,
+    203,
+    202,
+    203,
+    [
+     " alter table dwd_fact_cart_info partition(dt = '2020-12-04') add columns(add_time string comment '加购时间');\t"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    205,
+    203,
+    205
+   ],
+   [
+    "replace",
+    205,
+    206,
+    205,
+    206,
+    [
+     " LOAD DATA INPATH '/date_info.txt' OVERWRITE INTO TABLE dwd_dim_date_info;"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    210,
+    206,
+    210
+   ],
+   [
+    "replace",
+    210,
+    212,
+    210,
+    212,
+    [
+     " 1. 如果只有一条，则mysql中日期列设置为主键",
+     " 2. 如果是多条，则hive中需要以日期进行分区"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    219,
+    212,
+    219
+   ],
+   [
+    "replace",
+    219,
+    220,
+    219,
+    220,
+    [
+     " hive --service hiveserver2"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    222,
+    220,
+    222
+   ],
+   [
+    "replace",
+    222,
+    223,
+    222,
+    223,
+    [
+     " conf.set(\"dfs.client.use.datanode.hostname\", \"true\")"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    225,
+    223,
+    225
+   ],
+   [
+    "replace",
+    225,
+    226,
+    225,
+    226,
+    [
+     " 1. 使用homebrew安装lzo、lzop"
+    ]
+   ],
+   [
+    "equal",
+    226,
+    227,
+    226,
+    227
+   ],
+   [
+    "replace",
+    227,
+    229,
+    227,
+    229,
+    [
+     " brew install lzop lzo",
+     " 2. 编译安装hadoop-lzo "
+    ]
+   ],
+   [
+    "equal",
+    229,
+    230,
+    229,
+    230
+   ],
+   [
+    "replace",
+    230,
+    233,
+    230,
+    233,
+    [
+     " git clone git@github.com:twitter/hadoop-lzo.git",
+     " mvn clean package install -DskipTests",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    233,
+    237,
+    233,
+    237
+   ],
+   [
+    "replace",
+    237,
+    238,
+    237,
+    238,
+    [
+     " create_namespace 'litemall_profile'\t"
+    ]
+   ],
+   [
+    "equal",
+    238,
+    240,
+    238,
+    240
+   ],
+   [
+    "replace",
+    240,
+    241,
+    240,
+    241,
+    [
+     "1. 开启hbase表的复制功能"
+    ]
+   ],
+   [
+    "equal",
+    241,
+    242,
+    241,
+    242
+   ],
+   [
+    "replace",
+    242,
+    248,
+    242,
+    248,
+    [
+     " # 禁用表",
+     " disable 'litemall_profile:user_profile'",
+     " # 开启表复制",
+     " alter 'litemall_profile:user_profile',{NAME=>'cf',REPLICATION_SCOPE =>1}",
+     " # 启用表",
+     " enable 'litemall_profile:user_profile'"
+    ]
+   ],
+   [
+    "equal",
+    248,
+    251,
+    248,
+    251
+   ],
+   [
+    "replace",
+    251,
+    252,
+    251,
+    252,
+    [
+     " solrctl instancedir --generate $HOME/hbase_indexer/litemall"
+    ]
+   ],
+   [
+    "equal",
+    252,
+    254,
+    252,
+    254
+   ],
+   [
+    "replace",
+    254,
+    271,
+    254,
+    271,
+    [
+     " cd $HOME/hbase_indexer/litemall/conf",
+     " # 修改managed-schema配置,添加如下内容",
+     " vim managed-schema",
+     "",
+     " <field name=\"gender\" type=\"string\" indexed=\"true\" stored=\"true\"/>",
+     " <field name=\"age\" type=\"string\" indexed=\"true\" stored=\"true\"/>",
+     " <field name=\"consumptionAbility\" type=\"string\" indexed=\"true\" stored=\"true\"/>",
+     " <field name=\"consumption\" type=\"string\" indexed=\"true\" stored=\"true\"/>",
+     " <field name=\"coupon\" type=\"string\" indexed=\"true\" stored=\"true\"/>",
+     " <field name=\"discountRate\" type=\"string\" indexed=\"true\" stored=\"true\"/>",
+     " <field name=\"singleOrderMax\" type=\"string\" indexed=\"true\" stored=\"true\"/>",
+     " <field name=\"orderFrequency\" type=\"string\" indexed=\"true\" stored=\"true\"/>",
+     " <field name=\"pct\" type=\"string\" indexed=\"true\" stored=\"true\"/>",
+     " <field name=\"refundRate\" type=\"string\" indexed=\"true\" stored=\"true\"/>",
+     " <field name=\"rfm\" type=\"string\" indexed=\"true\" stored=\"true\"/>",
+     " <field name=\"psm\" type=\"string\" indexed=\"true\" stored=\"true\"/>",
+     " <field name=\"brandFavor\" type=\"string\" indexed=\"true\" stored=\"true\"/>"
+    ]
+   ],
+   [
+    "equal",
+    271,
+    273,
+    271,
+    273
+   ],
+   [
+    "replace",
+    273,
+    277,
+    273,
+    277,
+    [
+     " # 上传配置",
+     " solrctl instancedir --create litemall $HOME/hbase_indexer/litemall",
+     " # 创建collection",
+     " solrctl collection --create litemall -s 3 -r 3 -m 9"
+    ]
+   ],
+   [
+    "equal",
+    277,
+    280,
+    277,
+    280
+   ],
+   [
+    "replace",
+    280,
+    294,
+    280,
+    291,
+    [
+     " cd $HOME/hbase_indexer/litemall",
+     " vim morphline-hbase-mapper.xml",
+     "",
+     " <?xml version=\"1.0\"?>",
+     "",
+     " <indexer table=\"litemall_profile:user_profile\" mapper=\"com.ngdata.hbaseindexer.morphline.MorphlineResultToSolrMapper\">",
+     "",
+     " <param name=\"morphlineFile\" value=\"morphlines.conf\"/>",
+     "",
+     " <param name=\"morphlineId\" value=\"userProfile\"/>",
+     " </indexer>"
+    ]
+   ],
+   [
+    "equal",
+    294,
+    296,
+    291,
+    293
+   ],
+   [
+    "replace",
+    296,
+    405,
+    293,
+    400,
+    [
+     " cd $HOME/hbase_indexer/litemall",
+     " vim morphlines.conf",
+     "",
+     " # 内容如下",
+     " SOLR_LOCATOR : {",
+     " # Name of solr collection",
+     " collection : collection",
+     "",
+     " # ZooKeeper ensemble",
+     " zkHost : \"$ZK_HOST\"",
+     " }",
+     "",
+     " morphlines : [",
+     " {",
+     " id : userProfile",
+     " importCommands : [\"org.kitesdk.**\", \"com.ngdata.**\"]",
+     "",
+     " commands : [",
+     " {",
+     " extractHBaseCells {",
+     " mappings : [",
+     " {",
+     " inputColumn : \"cf:gender\"",
+     " outputField : \"gender\"",
+     " type : string",
+     " source : value",
+     " }",
+     " {",
+     " inputColumn : \"cf:age\"",
+     " outputField : \"age\"",
+     " type : string",
+     " source : value",
+     " }",
+     " {",
+     " inputColumn : \"cf:consumptionAbility\"",
+     " outputField : \"consumptionAbility\"",
+     " type : string",
+     " source : value",
+     " }",
+     " {",
+     " inputColumn : \"cf:consumption\"",
+     " outputField : \"consumption\"",
+     " type : string",
+     " source : value",
+     " }",
+     " {",
+     " inputColumn : \"cf:coupon\"",
+     " outputField : \"coupon\"",
+     " type : string",
+     " source : value",
+     " }",
+     " {",
+     " inputColumn : \"cf:discountRate\"",
+     " outputField : \"discountRate\"",
+     " type : string",
+     " source : value",
+     " }",
+     " {",
+     " inputColumn : \"cf:singleOrderMax\"",
+     " outputField : \"singleOrderMax\"",
+     " type : string",
+     " source : value",
+     " }",
+     " {",
+     " inputColumn : \"cf:orderFrequency\"",
+     " outputField : \"orderFrequency\"",
+     " type : string",
+     " source : value",
+     " }",
+     " {",
+     " inputColumn : \"cf:pct\"",
+     " outputField : \"pct\"",
+     " type : string",
+     " source : value",
+     " }",
+     " {",
+     " inputColumn : \"cf:refundRate\"",
+     " outputField : \"refundRate\"",
+     " type : string",
+     " source : value",
+     " }",
+     " {",
+     " inputColumn : \"cf:rfm\"",
+     " outputField : \"rfm\"",
+     " type : string",
+     " source : value",
+     " }",
+     " {",
+     " inputColumn : \"cf:psm\"",
+     " outputField : \"psm\"",
+     " type : string",
+     " source : value",
+     " }",
+     " {",
+     " inputColumn : \"cf:brandFavor\"",
+     " outputField : \"brandFavor\"",
+     " type : string",
+     " source : value",
+     " }",
+     " ]",
+     " }",
+     " }",
+     "",
+     " { logDebug { format : \"output record: {}\", args : [\"@{}\"] } }",
+     " ]",
+     " }",
+     " ]"
+    ]
+   ],
+   [
+    "equal",
+    405,
+    407,
+    400,
+    402
+   ],
+   [
+    "replace",
+    407,
+    413,
+    402,
+    408,
+    [
+     " hbase-indexer add-indexer \\",
+     " --name litemallIndexer \\",
+     " --indexer-conf $HOME/hbase_indexer/litemall/morphline-hbase-mapper.xml \\",
+     " --connection-param solr.zk=cdh-master:2181,cdh-slave-3:2181,cdh-slave-2:2181/solr \\",
+     " --connection-param solr.collection=litemall \\",
+     " --zookeeper cdh-master:2181,cdh-slave-3:2181,cdh-slave-2:2181"
+    ]
+   ],
+   [
+    "equal",
+    413,
+    415,
+    408,
+    410
+   ],
+   [
+    "replace",
+    415,
+    416,
+    410,
+    411,
+    [
+     " hbase-indexer list-indexers"
+    ]
+   ],
+   [
+    "equal",
+    416,
+    418,
+    411,
+    413
+   ],
+   [
+    "replace",
+    418,
+    431,
+    413,
+    422,
+    [
+     " hadoop --config /etc/hadoop/conf \\",
+     " jar /opt/cloudera/parcels/CDH/lib/hbase-solr/tools/hbase-indexer-mr-*-job.jar \\",
+     " --conf /etc/hbase/conf/hbase-site.xml -Dmapreduce.map.java.opts=\"-Xmx512m\" \\",
+     " -Dmapreduce.reduce.java.opts=\"-Xmx512m\" \\",
+     " --morphline-file $HOME/hbase_indexer/litemall/morphlines.conf \\",
+     " --hbase-indexer-file $HOME/hbase_indexer/litemall/morphline-hbase-mapper.xml \\",
+     " --zk-host cdh-master:2181,cdh-slave-3:2181,cdh-slave-2:2181/solr \\",
+     " --collection litemall \\",
+     " --go-live"
+    ]
+   ],
+   [
+    "equal",
+    431,
+    432,
+    422,
+    423
+   ],
+   [
+    "replace",
+    432,
+    434,
+    423,
+    426,
+    [
+     "5. solr数据备份与恢复(将其他集群中的数据导入)",
+     "\t1. 备份其他集群的数据",
+     " 1. 创建快照"
+    ]
+   ],
+   [
+    "equal",
+    434,
+    435,
+    426,
+    427
+   ],
+   [
+    "replace",
+    435,
+    439,
+    427,
+    429,
+    [
+     " solrctl collection --create-snapshot litemall_bk -c litemall",
+     " 2. 创建备份目录"
+    ]
+   ],
+   [
+    "equal",
+    439,
+    440,
+    429,
+    430
+   ],
+   [
+    "replace",
+    440,
+    442,
+    430,
+    434,
+    [
+     " hdfs dfs -mkdir -p /backup/litemall_16",
+     " # 修改权限",
+     " sudo -u hdfs hdfs dfs -chown solr:solr /backup/litemall_16",
+     " 3. 准备导出(目的导出元数据合索引数据)"
+    ]
+   ],
+   [
+    "equal",
+    442,
+    443,
+    434,
+    435
+   ],
+   [
+    "replace",
+    443,
+    445,
+    435,
+    437,
+    [
+     " solrctl collection --prepare-snapshot-export litemall_bk -c litemall -d /backup/litemall_16",
+     " 4. 导出"
+    ]
+   ],
+   [
+    "equal",
+    445,
+    446,
+    437,
+    438
+   ],
+   [
+    "replace",
+    446,
+    449,
+    438,
+    444,
+    [
+     " solrctl collection --export-snapshot litemall_bk -s /backup/litemall_16 -d hdfs://cdh-master:8020/backup/bk",
+     " 5. 复制到本地 ",
+     "",
+     " hdfs dfs -copyToLocal /backup/bk litemall",
+     " tar -zcvf litemall.tar.gz litemall/",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    449,
+    450,
+    444,
+    445
+   ],
+   [
+    "replace",
+    450,
+    451,
+    445,
+    446,
+    [
+     " 1. 创建目录上传到出的数据"
+    ]
+   ],
+   [
+    "equal",
+    451,
+    452,
+    446,
+    447
+   ],
+   [
+    "replace",
+    452,
+    455,
+    447,
+    450,
+    [
+     " hdfs dfs -mkdir -p /path/to/restore-staging",
+     " hdfs dfs -copyFromLocal litemall /path/to/restore-staging",
+     " 2. 数据恢复"
+    ]
+   ],
+   [
+    "equal",
+    455,
+    456,
+    450,
+    451
+   ],
+   [
+    "replace",
+    456,
+    458,
+    451,
+    453,
+    [
+     " solrctl collection --restore litemall -l /path/to/restore-staging/litemall -b litemall_bk -i restore-litemall",
+     " 3. 查看状态"
+    ]
+   ],
+   [
+    "equal",
+    458,
+    459,
+    453,
+    454
+   ],
+   [
+    "replace",
+    459,
+    461,
+    454,
+    456,
+    [
+     " solrctl collection --request-status restore-litemall",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    461,
+    466,
+    456,
+    461
+   ],
+   [
+    "replace",
+    466,
+    482,
+    461,
+    477,
+    [
+     " <?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+     " <configuration>",
+     " <property>",
+     " <name>io.compression.codecs</name>",
+     " <value>",
+     " org.apache.hadoop.io.compress.DefaultCodec,",
+     " org.apache.hadoop.io.compress.GzipCodec,",
+     " org.apache.hadoop.io.compress.BZip2Codec,",
+     " org.apache.hadoop.io.compress.DeflateCodec,",
+     " org.apache.hadoop.io.compress.SnappyCodec,",
+     " org.apache.hadoop.io.compress.Lz4Codec,",
+     " com.hadoop.compression.lzo.LzoCodec,",
+     " com.hadoop.compression.lzo.LzopCodec",
+     " </value>",
+     " </property>",
+     " </configuration> "
+    ]
+   ],
+   [
+    "equal",
+    482,
+    486,
+    477,
+    481
+   ],
+   [
+    "replace",
+    486,
+    487,
+    481,
+    482,
+    [
+     " 支付转换率={支付买家数 \\over 访客数}"
+    ]
+   ],
+   [
+    "equal",
+    487,
+    490,
+    482,
+    485
+   ],
+   [
+    "replace",
+    490,
+    491,
+    485,
+    486,
+    [
+     " 客单价={销售额 \\over 成交顾客数}"
+    ]
+   ],
+   [
+    "equal",
+    491,
+    494,
+    486,
+    489
+   ],
+   [
+    "replace",
+    494,
+    498,
+    489,
+    490,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "43bdddbddb8e+2": {
+  "fn": "aditya43/golang-101",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Aditya Hajare (Linkedin)."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    10,
+    5,
+    10
+   ],
+   [
+    "replace",
+    10,
+    14,
+    10,
+    11,
+    [
+     "Open-sourced software licensed under the MIT license."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    11,
+    12
+   ],
+   [
+    "replace",
+    15,
+    22,
+    12,
+    19,
+    [
+     "- Uber Go Style Guide",
+     "- Concurrency Using Golang",
+     "- Protocol Buffers Using Golang",
+     "- REST Microservice | DDD | Gin Gonic | Testing",
+     "- REST Microservice | DDD | Gorilla/Mux",
+     "- REST Microservice | MVC | Bad Practices",
+     "- Go Configurations"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    26,
+    19,
+    23
+   ],
+   [
+    "replace",
+    26,
+    27,
+    23,
+    24,
+    [
+     "- Basics"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    31,
+    24,
+    28
+   ],
+   [
+    "replace",
+    31,
+    49,
+    28,
+    29,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    50,
+    29,
+    30
+   ],
+   [
+    "replace",
+    50,
+    52,
+    30,
+    32,
+    [
+     "- Naming Conventions In Go :arrow_upper_right:",
+     "- Type System In Go"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    58,
+    32,
+    38
+   ],
+   [
+    "replace",
+    58,
+    59,
+    38,
+    39,
+    [
+     "- Constants"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    63,
+    39,
+    43
+   ],
+   [
+    "replace",
+    63,
+    67,
+    43,
+    44,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    68,
+    44,
+    45
+   ],
+   [
+    "replace",
+    68,
+    69,
+    45,
+    46,
+    [
+     "- Error Handling"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    72,
+    46,
+    49
+   ],
+   [
+    "replace",
+    72,
+    73,
+    49,
+    50,
+    [
+     "- Strings Runes And Bytes"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    77,
+    50,
+    54
+   ],
+   [
+    "replace",
+    77,
+    78,
+    54,
+    55,
+    [
+     "- Maps In Go"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    81,
+    55,
+    58
+   ],
+   [
+    "replace",
+    81,
+    82,
+    58,
+    59,
+    [
+     "- Structs In Go"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    86,
+    59,
+    63
+   ],
+   [
+    "replace",
+    86,
+    87,
+    63,
+    64,
+    [
+     "- OOP In Go With Methods And Interfaces"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    91,
+    64,
+    68
+   ],
+   [
+    "replace",
+    91,
+    95,
+    68,
+    69,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    69,
+    70
+   ],
+   [
+    "replace",
+    96,
+    97,
+    70,
+    71,
+    [
+     "- Concurrency And Parallelism"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    102,
+    71,
+    76
+   ],
+   [
+    "replace",
+    102,
+    103,
+    76,
+    77,
+    [
+     "- Goroutines"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    106,
+    77,
+    80
+   ],
+   [
+    "replace",
+    106,
+    107,
+    80,
+    81,
+    [
+     "- Channels"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    81,
+    84
+   ],
+   [
+    "replace",
+    110,
+    111,
+    84,
+    85,
+    [
+     "- Mutexes And Wait Groups From GoSync Package"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    115,
+    85,
+    89
+   ],
+   [
+    "replace",
+    115,
+    119,
+    89,
+    91,
+    [
+     "- Go Vet",
+     "- Go Documentation Server On Local Machine"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    129,
+    91,
+    101
+   ],
+   [
+    "replace",
+    129,
+    143,
+    101,
+    102,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    148,
+    102,
+    107
+   ],
+   [
+    "delete",
+    148,
+    150,
+    107,
+    107
+   ],
+   [
+    "equal",
+    150,
+    159,
+    107,
+    116
+   ],
+   [
+    "replace",
+    159,
+    167,
+    116,
+    117,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    168,
+    117,
+    118
+   ],
+   [
+    "delete",
+    168,
+    170,
+    118,
+    118
+   ],
+   [
+    "equal",
+    170,
+    189,
+    118,
+    137
+   ],
+   [
+    "replace",
+    189,
+    193,
+    137,
+    138,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    138,
+    139
+   ],
+   [
+    "delete",
+    194,
+    196,
+    139,
+    139
+   ],
+   [
+    "equal",
+    196,
+    205,
+    139,
+    148
+   ],
+   [
+    "delete",
+    205,
+    207,
+    148,
+    148
+   ],
+   [
+    "equal",
+    207,
+    219,
+    148,
+    160
+   ],
+   [
+    "delete",
+    219,
+    221,
+    160,
+    160
+   ],
+   [
+    "equal",
+    221,
+    227,
+    160,
+    166
+   ],
+   [
+    "delete",
+    227,
+    229,
+    166,
+    166
+   ],
+   [
+    "equal",
+    229,
+    234,
+    166,
+    171
+   ],
+   [
+    "replace",
+    234,
+    240,
+    171,
+    175,
+    [
+     " 1. `package`: Each Go package has it's own `scope`. For e.g. declared `funcs` are only `visible` to the files belonging to same `package`.",
+     " 2. `file`: Imported packages are only visible to the importing file. Each file has to import external packages on it's own.",
+     " 3. `func`.",
+     " 4. `block`."
+    ]
+   ],
+   [
+    "equal",
+    240,
+    249,
+    175,
+    184
+   ],
+   [
+    "replace",
+    249,
+    254,
+    184,
+    185,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    254,
+    256,
+    185,
+    187
+   ],
+   [
+    "delete",
+    256,
+    258,
+    187,
+    187
+   ],
+   [
+    "equal",
+    258,
+    268,
+    187,
+    197
+   ],
+   [
+    "replace",
+    268,
+    274,
+    197,
+    198,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    275,
+    198,
+    199
+   ],
+   [
+    "delete",
+    275,
+    277,
+    199,
+    199
+   ],
+   [
+    "equal",
+    277,
+    283,
+    199,
+    205
+   ],
+   [
+    "replace",
+    283,
+    289,
+    205,
+    209,
+    [
+     " * **Basic type**: Numbers, strings, and booleans come under this category.",
+     " * **Aggregate type**: Array and structs come under this category.",
+     " * **Reference type**: Pointers, slices, maps, functions, and channels come under this * category.",
+     " * **Interface type**"
+    ]
+   ],
+   [
+    "equal",
+    289,
+    294,
+    209,
+    214
+   ],
+   [
+    "replace",
+    294,
+    295,
+    214,
+    215,
+    [
+     " * **Numeric**:"
+    ]
+   ],
+   [
+    "equal",
+    295,
+    299,
+    215,
+    219
+   ],
+   [
+    "replace",
+    299,
+    322,
+    219,
+    220,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    323,
+    220,
+    221
+   ],
+   [
+    "replace",
+    323,
+    324,
+    221,
+    222,
+    [
+     " * **Boolean**:"
+    ]
+   ],
+   [
+    "equal",
+    324,
+    327,
+    222,
+    225
+   ],
+   [
+    "replace",
+    327,
+    338,
+    225,
+    234,
+    [
+     " * **String**:",
+     " - In Go language, strings are different from other languages like Java, C++, Python, etc.",
+     " - Strings can't be `null` in Go.",
+     " - It is a sequence of variable-width characters where each and every character is represented by one or more bytes using UTF-8 Encoding.",
+     " - In Go, a `string` is in effect is a read-only slice of bytes (immutable).",
+     " - Or in other words, strings are the immutable chain of arbitrary bytes (including bytes with zero value) and the bytes of the strings can be represented in the Unicode text using UTF-8 encoding.",
+     " - String literals can be created in 2 ways:",
+     " * **Using double quotes**",
+     " * **Using backticks**"
+    ]
+   ],
+   [
+    "equal",
+    338,
+    342,
+    234,
+    238
+   ],
+   [
+    "replace",
+    342,
+    343,
+    238,
+    239,
+    [
+     "- Variables in Go Lang"
+    ]
+   ],
+   [
+    "equal",
+    343,
+    347,
+    239,
+    243
+   ],
+   [
+    "delete",
+    347,
+    349,
+    243,
+    243
+   ],
+   [
+    "equal",
+    349,
+    364,
+    243,
+    258
+   ],
+   [
+    "delete",
+    364,
+    366,
+    258,
+    258
+   ],
+   [
+    "equal",
+    366,
+    371,
+    258,
+    263
+   ],
+   [
+    "delete",
+    371,
+    373,
+    263,
+    263
+   ],
+   [
+    "equal",
+    373,
+    383,
+    263,
+    273
+   ],
+   [
+    "replace",
+    383,
+    391,
+    273,
+    274,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    400,
+    274,
+    283
+   ],
+   [
+    "delete",
+    400,
+    402,
+    283,
+    283
+   ],
+   [
+    "equal",
+    402,
+    416,
+    283,
+    297
+   ],
+   [
+    "delete",
+    416,
+    418,
+    297,
+    297
+   ],
+   [
+    "equal",
+    418,
+    436,
+    297,
+    315
+   ],
+   [
+    "delete",
+    436,
+    438,
+    315,
+    315
+   ],
+   [
+    "equal",
+    438,
+    451,
+    315,
+    328
+   ],
+   [
+    "delete",
+    451,
+    453,
+    328,
+    328
+   ],
+   [
+    "equal",
+    453,
+    463,
+    328,
+    338
+   ],
+   [
+    "replace",
+    463,
+    468,
+    338,
+    339,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    468,
+    469,
+    339,
+    340
+   ],
+   [
+    "delete",
+    469,
+    471,
+    340,
+    340
+   ],
+   [
+    "equal",
+    471,
+    481,
+    340,
+    350
+   ],
+   [
+    "replace",
+    481,
+    484,
+    350,
+    351,
+    [
+     "- Detailed information and usage of Blank Identifier"
+    ]
+   ],
+   [
+    "equal",
+    484,
+    493,
+    351,
+    360
+   ],
+   [
+    "replace",
+    493,
+    565,
+    360,
+    361,
+    [
+     "…（72 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    565,
+    566,
+    361,
+    362
+   ],
+   [
+    "delete",
+    566,
+    568,
+    362,
+    362
+   ],
+   [
+    "equal",
+    568,
+    579,
+    362,
+    373
+   ],
+   [
+    "delete",
+    579,
+    581,
+    373,
+    373
+   ],
+   [
+    "equal",
+    581,
+    585,
+    373,
+    377
+   ],
+   [
+    "replace",
+    585,
+    592,
+    377,
+    382,
+    [
+     " * **Arrays**: Collection of elements. `Indexable` and `Fixed Length`.",
+     " * **Slices**: Collection of elements. `Indexable` and `Dynamic Length`.",
+     " * **Strings**: Byte Slices. ASCII and UNICODE.",
+     " * **Maps**: Collection of `Indexable Key-Value Pairs`.",
+     " * **Structs**: Groups different types of variables together."
+    ]
+   ],
+   [
+    "equal",
+    592,
+    596,
+    382,
+    386
+   ],
+   [
+    "replace",
+    596,
+    600,
+    386,
+    388,
+    [
+     " * `integer` wrap arounds and go to their minimum and maximum values.",
+     " * `float` wrap arounds to `positive infinity` or `negative infinity`."
+    ]
+   ],
+   [
+    "equal",
+    600,
+    604,
+    388,
+    392
+   ],
+   [
+    "replace",
+    604,
+    613,
+    392,
+    399,
+    [
+     "- What is Binary?",
+     "- What's a Bit",
+     "- What's a Byte",
+     "- How old school graphics worked? PART 1",
+     "- How old school graphics worked? PART 2",
+     "- Stackoverflow: What actually is a Byte Stream?",
+     "- Why Byte but not uint8?"
+    ]
+   ],
+   [
+    "equal",
+    613,
+    630,
+    399,
+    416
+   ],
+   [
+    "replace",
+    630,
+    636,
+    416,
+    417,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    636,
+    637,
+    417,
+    418
+   ],
+   [
+    "delete",
+    637,
+    639,
+    418,
+    418
+   ],
+   [
+    "equal",
+    639,
+    654,
+    418,
+    433
+   ],
+   [
+    "replace",
+    654,
+    662,
+    433,
+    434,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    662,
+    663,
+    434,
+    435
+   ],
+   [
+    "delete",
+    663,
+    665,
+    435,
+    435
+   ],
+   [
+    "equal",
+    665,
+    672,
+    435,
+    442
+   ],
+   [
+    "delete",
+    672,
+    674,
+    442,
+    442
+   ],
+   [
+    "equal",
+    674,
+    694,
+    442,
+    462
+   ],
+   [
+    "delete",
+    694,
+    696,
+    462,
+    462
+   ],
+   [
+    "equal",
+    696,
+    699,
+    462,
+    465
+   ],
+   [
+    "replace",
+    699,
+    703,
+    465,
+    467,
+    [
+     "- Go’s typed and untyped constants",
+     "- Go enums and iota — Full of tips and tricks with runnable code examples"
+    ]
+   ],
+   [
+    "equal",
+    703,
+    715,
+    467,
+    479
+   ],
+   [
+    "replace",
+    715,
+    731,
+    479,
+    480,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    731,
+    732,
+    480,
+    481
+   ],
+   [
+    "delete",
+    732,
+    734,
+    481,
+    481
+   ],
+   [
+    "equal",
+    734,
+    744,
+    481,
+    491
+   ],
+   [
+    "replace",
+    744,
+    757,
+    491,
+    492,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    757,
+    758,
+    492,
+    493
+   ],
+   [
+    "delete",
+    758,
+    760,
+    493,
+    493
+   ],
+   [
+    "equal",
+    760,
+    773,
+    493,
+    506
+   ],
+   [
+    "replace",
+    773,
+    779,
+    506,
+    507,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    779,
+    780,
+    507,
+    508
+   ],
+   [
+    "delete",
+    780,
+    782,
+    508,
+    508
+   ],
+   [
+    "equal",
+    782,
+    810,
+    508,
+    536
+   ],
+   [
+    "delete",
+    810,
+    812,
+    536,
+    536
+   ],
+   [
+    "equal",
+    812,
+    824,
+    536,
+    548
+   ],
+   [
+    "replace",
+    824,
+    829,
+    548,
+    549,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    829,
+    830,
+    549,
+    550
+   ],
+   [
+    "delete",
+    830,
+    832,
+    550,
+    550
+   ],
+   [
+    "equal",
+    832,
+    841,
+    550,
+    559
+   ],
+   [
+    "replace",
+    841,
+    867,
+    559,
+    560,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    867,
+    872,
+    560,
+    565
+   ],
+   [
+    "delete",
+    872,
+    874,
+    565,
+    565
+   ],
+   [
+    "equal",
+    874,
+    882,
+    565,
+    573
+   ],
+   [
+    "replace",
+    882,
+    889,
+    573,
+    574,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    889,
+    890,
+    574,
+    575
+   ],
+   [
+    "delete",
+    890,
+    892,
+    575,
+    575
+   ],
+   [
+    "equal",
+    892,
+    916,
+    575,
+    599
+   ],
+   [
+    "delete",
+    916,
+    918,
+    599,
+    599
+   ],
+   [
+    "equal",
+    918,
+    922,
+    599,
+    603
+   ],
+   [
+    "replace",
+    922,
+    929,
+    603,
+    608,
+    [
+     "- Representing letters with numbers - Overview of ASCII and Unicode",
+     "- Characters in a computer - Advanced technical videos about the underlyings of ASCII and Unicode",
+     " * **The 3rd video is especially important because it talks about UTF-8 encoding and decoding.**",
+     "- Hexadecimal Number System - Hexadecimal numbers are important when working with bytes",
+     "- Go Blog: Strings"
+    ]
+   ],
+   [
+    "equal",
+    929,
+    971,
+    608,
+    650
+   ],
+   [
+    "delete",
+    971,
+    973,
+    650,
+    650
+   ],
+   [
+    "equal",
+    973,
+    985,
+    650,
+    662
+   ],
+   [
+    "delete",
+    985,
+    987,
+    662,
+    662
+   ],
+   [
+    "equal",
+    987,
+    991,
+    662,
+    666
+   ],
+   [
+    "replace",
+    991,
+    994,
+    666,
+    667,
+    [
+     "Inheritance vs. Composition"
+    ]
+   ],
+   [
+    "equal",
+    994,
+    1016,
+    667,
+    689
+   ],
+   [
+    "delete",
+    1016,
+    1018,
+    689,
+    689
+   ],
+   [
+    "equal",
+    1018,
+    1029,
+    689,
+    700
+   ],
+   [
+    "replace",
+    1029,
+    1037,
+    700,
+    701,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1037,
+    1049,
+    701,
+    713
+   ],
+   [
+    "delete",
+    1049,
+    1051,
+    713,
+    713
+   ],
+   [
+    "equal",
+    1051,
+    1058,
+    713,
+    720
+   ],
+   [
+    "delete",
+    1058,
+    1060,
+    720,
+    720
+   ],
+   [
+    "equal",
+    1060,
+    1069,
+    720,
+    729
+   ],
+   [
+    "replace",
+    1069,
+    1086,
+    729,
+    730,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1086,
+    1087,
+    730,
+    731
+   ],
+   [
+    "delete",
+    1087,
+    1089,
+    731,
+    731
+   ],
+   [
+    "equal",
+    1089,
+    1105,
+    731,
+    747
+   ],
+   [
+    "replace",
+    1105,
+    1112,
+    747,
+    748,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1112,
+    1127,
+    748,
+    763
+   ],
+   [
+    "delete",
+    1127,
+    1129,
+    763,
+    763
+   ],
+   [
+    "equal",
+    1129,
+    1134,
+    763,
+    768
+   ],
+   [
+    "delete",
+    1134,
+    1136,
+    768,
+    768
+   ],
+   [
+    "equal",
+    1136,
+    1143,
+    768,
+    775
+   ],
+   [
+    "replace",
+    1143,
+    1145,
+    775,
+    777,
+    [
+     " * A dynamic `Value`.",
+     " * A dynamic `Type`."
+    ]
+   ],
+   [
+    "equal",
+    1145,
+    1158,
+    777,
+    790
+   ],
+   [
+    "replace",
+    1158,
+    1162,
+    790,
+    792,
+    [
+     " * A function that returns a value of `interface{}` can return **any** `type`.",
+     " * We can store heterogeneous values in an `array`, `slice`, or `map` using the empty `interface{} type`."
+    ]
+   ],
+   [
+    "equal",
+    1162,
+    1173,
+    792,
+    803
+   ],
+   [
+    "replace",
+    1173,
+    1181,
+    803,
+    804,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1181,
+    1183,
+    804,
+    806
+   ],
+   [
+    "delete",
+    1183,
+    1185,
+    806,
+    806
+   ],
+   [
+    "equal",
+    1185,
+    1196,
+    806,
+    817
+   ],
+   [
+    "replace",
+    1196,
+    1199,
+    817,
+    820,
+    [
+     " * concurrent execution (`goroutines`).",
+     " * synchronization and messaging (`channels`).",
+     " * multi-way concurrent control (`select`)."
+    ]
+   ],
+   [
+    "equal",
+    1199,
+    1200,
+    820,
+    821
+   ],
+   [
+    "replace",
+    1200,
+    1206,
+    821,
+    825,
+    [
+     " * `Concurrency` is powerful.",
+     " * `Concurrency` is not `parallelism`.",
+     " * `Concurrency` enables `parallelism`.",
+     " * `Concurrency` makes `parallelism` (and scaling and everything else) easy."
+    ]
+   ],
+   [
+    "equal",
+    1206,
+    1214,
+    825,
+    833
+   ],
+   [
+    "delete",
+    1214,
+    1216,
+    833,
+    833
+   ],
+   [
+    "equal",
+    1216,
+    1220,
+    833,
+    837
+   ],
+   [
+    "replace",
+    1220,
+    1221,
+    837,
+    838,
+    [
+     " * **Concurrency is a property of a program where two or more tasks can be in progress simultaneously. Parallelism is a run-time property where two or more tasks are being executed simultaneously. Through concurrency you want to define a proper structure to your program. Concurrency can use parallelism for getting its job done but remember parallelism is not the ultimate goal of concurrency.**"
+    ]
+   ],
+   [
+    "equal",
+    1221,
+    1227,
+    838,
+    844
+   ],
+   [
+    "replace",
+    1227,
+    1231,
+    844,
+    846,
+    [
+     " * `Concurrent`: Mouse, keyboard, display, and disk drivers.",
+     " * `Parallel`: Vector dot product."
+    ]
+   ],
+   [
+    "equal",
+    1231,
+    1245,
+    846,
+    860
+   ],
+   [
+    "replace",
+    1245,
+    1259,
+    860,
+    861,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1259,
+    1269,
+    861,
+    871
+   ],
+   [
+    "delete",
+    1269,
+    1271,
+    871,
+    871
+   ],
+   [
+    "equal",
+    1271,
+    1278,
+    871,
+    878
+   ],
+   [
+    "delete",
+    1278,
+    1280,
+    878,
+    878
+   ],
+   [
+    "equal",
+    1280,
+    1285,
+    878,
+    883
+   ],
+   [
+    "replace",
+    1285,
+    1286,
+    883,
+    884,
+    [
+     " * **NOTE:** The data flows in the direction of the `arrow`."
+    ]
+   ],
+   [
+    "equal",
+    1286,
+    1291,
+    884,
+    889
+   ],
+   [
+    "delete",
+    1291,
+    1293,
+    889,
+    889
+   ],
+   [
+    "equal",
+    1293,
+    1305,
+    889,
+    901
+   ],
+   [
+    "delete",
+    1305,
+    1307,
+    901,
+    901
+   ],
+   [
+    "equal",
+    1307,
+    1310,
+    901,
+    904
+   ],
+   [
+    "delete",
+    1310,
+    1312,
+    904,
+    904
+   ],
+   [
+    "equal",
+    1312,
+    1321,
+    904,
+    913
+   ],
+   [
+    "delete",
+    1321,
+    1323,
+    913,
+    913
+   ],
+   [
+    "equal",
+    1323,
+    1329,
+    913,
+    919
+   ],
+   [
+    "delete",
+    1329,
+    1331,
+    919,
+    919
+   ],
+   [
+    "equal",
+    1331,
+    1334,
+    919,
+    922
+   ],
+   [
+    "replace",
+    1334,
+    1336,
+    922,
+    924,
+    [
+     " * Go to directory: `62-Go-Vet-To-Catch-Errors`",
+     " * Execute file with below command:"
+    ]
+   ],
+   [
+    "equal",
+    1336,
+    1339,
+    924,
+    927
+   ],
+   [
+    "replace",
+    1339,
+    1342,
+    927,
+    928,
+    [
+     " * It will catch the error where `int` is supplied to `fmt.Printf()` whereas `string` value should've been supplied. This error isn't caught by Go Compiler since the program is still syntactically correct."
+    ]
+   ],
+   [
+    "equal",
+    1342,
+    1356,
+    928,
+    942
+   ],
+   [
+    "delete",
+    1356,
+    1358,
+    942,
+    942
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "83668113f430+2": {
+  "fn": "caiya/eggjs-oAuth2-server",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "delete",
+    5,
+    7,
+    5,
+    5
+   ],
+   [
+    "equal",
+    7,
+    29,
+    5,
+    27
+   ],
+   [
+    "replace",
+    29,
+    30,
+    27,
+    28,
+    [
+     "- Use `npm run autod` to auto detect dependencies upgrade, see autod for more detail."
+    ]
+   ],
+   [
+    "equal",
+    30,
+    35,
+    28,
+    33
+   ],
+   [
+    "delete",
+    35,
+    37,
+    33,
+    33
+   ],
+   [
+    "equal",
+    37,
+    38,
+    33,
+    34
+   ],
+   [
+    "delete",
+    38,
+    40,
+    34,
+    34
+   ],
+   [
+    "equal",
+    40,
+    43,
+    34,
+    37
+   ],
+   [
+    "delete",
+    43,
+    45,
+    37,
+    37
+   ],
+   [
+    "equal",
+    45,
+    46,
+    37,
+    38
+   ],
+   [
+    "delete",
+    46,
+    67,
+    38,
+    38
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "ae76d112ce88+2": {
+  "fn": "andreagiassi/microservice-rbac-user-management",
+  "clean_ver": "2",
+  "raw_lines": 17,
+  "ops": [
+   [
+    "equal",
+    0,
+    17,
+    0,
+    17
+   ],
+   [
+    "delete",
+    17,
+    18,
+    17,
+    17
+   ],
+   [
+    "equal",
+    18,
+    20,
+    17,
+    19
+   ],
+   [
+    "replace",
+    20,
+    21,
+    19,
+    20,
+    [
+     "Buy Me A Coffee"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    65,
+    20,
+    64
+   ],
+   [
+    "replace",
+    65,
+    66,
+    64,
+    65,
+    [
+     "Swagger"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    71,
+    65,
+    70
+   ],
+   [
+    "replace",
+    71,
+    72,
+    70,
+    71,
+    [
+     "Swagger"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    84,
+    71,
+    83
+   ],
+   [
+    "replace",
+    84,
+    85,
+    83,
+    84,
+    [
+     "Proceed the setup for the Docker environment: Get Docker"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    97,
+    84,
+    96
+   ],
+   [
+    "replace",
+    97,
+    98,
+    96,
+    97,
+    [
+     " docker network create dev-network"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    101,
+    97,
+    100
+   ],
+   [
+    "replace",
+    101,
+    102,
+    100,
+    101,
+    [
+     " docker network ls"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    107,
+    101,
+    106
+   ],
+   [
+    "replace",
+    107,
+    108,
+    106,
+    107,
+    [
+     " ./db.cmd"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    111,
+    107,
+    110
+   ],
+   [
+    "replace",
+    111,
+    112,
+    110,
+    111,
+    [
+     " ./run.cmd"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    130,
+    111,
+    129
+   ],
+   [
+    "replace",
+    130,
+    131,
+    129,
+    130,
+    [
+     " CREATE DATABASE IF NOT EXISTS users;"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    138,
+    130,
+    137
+   ],
+   [
+    "replace",
+    138,
+    139,
+    137,
+    138,
+    [
+     " spring.datasource.url=jdbc:mysql://localhost:3306/users?useSSL=false&allowPublicKeyRetrieval=true"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    142,
+    138,
+    141
+   ],
+   [
+    "replace",
+    142,
+    144,
+    141,
+    143,
+    [
+     " spring.datasource.username=yourMySqlUser",
+     " spring.datasource.password=yourMySqlUserStrongPassword"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    147,
+    143,
+    146
+   ],
+   [
+    "replace",
+    147,
+    149,
+    146,
+    148,
+    [
+     " ./mvnw spring-boot:run",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    149,
+    166,
+    148,
+    165
+   ],
+   [
+    "replace",
+    166,
+    167,
+    165,
+    166,
+    [
+     " CREATE DATABASE IF NOT EXISTS users;"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    174,
+    166,
+    173
+   ],
+   [
+    "replace",
+    174,
+    176,
+    173,
+    175,
+    [
+     " spring.datasource.username=yourMySqlUser",
+     " spring.datasource.password=yourMySqlUserStrongPassword"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    182,
+    175,
+    181
+   ],
+   [
+    "replace",
+    182,
+    186,
+    181,
+    185,
+    [
+     " # enable initialization using schema.sql and data.sql",
+     " spring.datasource.initialize=false",
+     " spring.jpa.hibernate.ddl-auto=update",
+     " spring.datasource.initialization-mode=never"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    189,
+    185,
+    188
+   ],
+   [
+    "replace",
+    189,
+    191,
+    188,
+    190,
+    [
+     " # password encryption",
+     " microservice.security.salt=WZeBXmCI9cAz3LyY9Sdllj9l5iPsXC"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    199,
+    190,
+    198
+   ],
+   [
+    "replace",
+    199,
+    200,
+    198,
+    199,
+    [
+     " ./run.cmd"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    224,
+    199,
+    223
+   ],
+   [
+    "delete",
+    224,
+    225,
+    223,
+    223
+   ],
+   [
+    "equal",
+    225,
+    227,
+    223,
+    225
+   ],
+   [
+    "replace",
+    227,
+    229,
+    225,
+    226,
+    [
+     "Buy Me A Coffee"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "cff24ebcb0db+2": {
+  "fn": "woblerr/docker-pgbackrest",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Actions Status"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "pgBackRest inside Docker can be useful for refusing to install pgBackRest as a system package (using yum or apt, for example) on your Dedicated Repository Host or inside CI/CD systems. You can just run pgBackRest in Docker. At the same time, the PostgreSQL server side must be configured according to the pgBackRest documentation."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "The repository contains information for the last 5 releases of pgBackRest. If necessary to use an older version - do a manual build."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    21,
+    7,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "The repository also contains information for releases of pgBackRest fork with Greenplum support (see pgbackrest/pull/1833). Details - build with Greenplum support."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    22,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "The repository contains information for the last 2 releases of pgBackRest fork with Greenplum support. If necessary to use an older version - do a manual build."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    33,
+    24,
+    33
+   ],
+   [
+    "replace",
+    33,
+    34,
+    33,
+    34,
+    [
+     "Starting with pgBackRest `2.59.0`, the default Dockerfile and Dockerfile.alpine build from the upstream release distribution tarball. Versions `>= 2.51` and `< 2.59.0` build from the GitHub source archive using Dockerfile_source_archive or Dockerfile_source_archive.alpine. Older versions use the make-based Dockerfiles."
+    ]
+   ],
+   [
+    "equal",
+    34,
+    37,
+    34,
+    37
+   ],
+   [
+    "replace",
+    37,
+    38,
+    37,
+    38,
+    [
+     "The image contains pgbackrest-bash-completion script. You can complete `pgbackrest` commands by pressing tab key."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    103,
+    38,
+    103
+   ],
+   [
+    "replace",
+    103,
+    108,
+    103,
+    104,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    116,
+    104,
+    112
+   ],
+   [
+    "replace",
+    116,
+    121,
+    112,
+    113,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    129,
+    113,
+    121
+   ],
+   [
+    "replace",
+    129,
+    135,
+    121,
+    122,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    143,
+    122,
+    130
+   ],
+   [
+    "delete",
+    143,
+    145,
+    130,
+    130
+   ],
+   [
+    "equal",
+    145,
+    146,
+    130,
+    131
+   ],
+   [
+    "replace",
+    146,
+    147,
+    131,
+    134,
+    [
+     " You need to set `BACKREST_TLS_SERVER=enable`.",
+     "",
+     " The variables `BACKREST_HOST_TYPE` and `BACKREST_TLS_WAIT` do not affect this startup mode."
+    ]
+   ],
+   [
+    "equal",
+    147,
+    149,
+    134,
+    136
+   ],
+   [
+    "delete",
+    149,
+    151,
+    136,
+    136
+   ],
+   [
+    "equal",
+    151,
+    152,
+    136,
+    137
+   ],
+   [
+    "replace",
+    152,
+    153,
+    137,
+    138,
+    [
+     " You need to set `BACKREST_HOST_TYPE=tls`."
+    ]
+   ],
+   [
+    "equal",
+    153,
+    154,
+    138,
+    139
+   ],
+   [
+    "replace",
+    154,
+    155,
+    139,
+    140,
+    [
+     " Using `BACKREST_TLS_WAIT`, you can change the TLS server startup waiting. By default, checking that the TLS server is running will be performed after `15 seconds`."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    140,
+    141
+   ],
+   [
+    "replace",
+    156,
+    157,
+    141,
+    144,
+    [
+     " The variable should be `BACKREST_TLS_SERVER=disable`.",
+     "",
+     "TLS server configuration is described in the pgBackRest documentation."
+    ]
+   ],
+   [
+    "equal",
+    157,
+    164,
+    144,
+    151
+   ],
+   [
+    "replace",
+    164,
+    170,
+    151,
+    152,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    178,
+    152,
+    160
+   ],
+   [
+    "replace",
+    178,
+    183,
+    160,
+    161,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    193,
+    161,
+    171
+   ],
+   [
+    "replace",
+    193,
+    202,
+    171,
+    172,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    214,
+    172,
+    184
+   ],
+   [
+    "replace",
+    214,
+    221,
+    184,
+    185,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    221,
+    229,
+    185,
+    193
+   ],
+   [
+    "replace",
+    229,
+    235,
+    193,
+    194,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    281,
+    194,
+    240
+   ],
+   [
+    "replace",
+    281,
+    282,
+    240,
+    241,
+    [
+     "Since version `v2.51`, the build system for pgBackRest is `meson`. The `autoconf/make` build will not receive any new features and will be removed in future. If you need to build pgBackRest lower than `v2.51`, use the files Dockerfile_make or Dockerfile_make.alpine."
+    ]
+   ],
+   [
+    "equal",
+    282,
+    303,
+    241,
+    262
+   ],
+   [
+    "replace",
+    303,
+    304,
+    262,
+    263,
+    [
+     "PR pgbackrest/pull/1833 is still not merged into pgBackRest. The separate tags `*-gpdb` are used for pgBackRest images with Greenplum support. When the PR is accepted, separate tags will no longer be needed."
+    ]
+   ],
+   [
+    "equal",
+    304,
+    339,
+    263,
+    298
+   ],
+   [
+    "replace",
+    339,
+    340,
+    298,
+    299,
+    [
+     "If you need to build pgBackRest with Greenplum support lower than `v2.51`, use the files Dockerfile_make or Dockerfile_make.alpine."
+    ]
+   ],
+   [
+    "equal",
+    340,
+    349,
+    299,
+    308
+   ],
+   [
+    "replace",
+    349,
+    350,
+    308,
+    309,
+    [
+     "See tests description."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7743b52bd974+2": {
+  "fn": "VirtuBox/ubuntu-nginx-web-server",
+  "clean_ver": "2",
+  "raw_lines": 14,
+  "ops": [
+   [
+    "equal",
+    0,
+    14,
+    0,
+    14
+   ],
+   [
+    "replace",
+    14,
+    17,
+    14,
+    15,
+    [
+     " last-commit stars"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    20,
+    15,
+    18
+   ],
+   [
+    "replace",
+    20,
+    21,
+    18,
+    19,
+    [
+     "**As EasyEngine v3 will no longer receive any updates, configurations available in this repository are being updated for WordOps (EEv3 fork).**"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    24,
+    19,
+    22
+   ],
+   [
+    "replace",
+    24,
+    25,
+    22,
+    23,
+    [
+     "All previous configurations are still available in the branch easyengine-v3."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    23,
+    24
+   ],
+   [
+    "replace",
+    26,
+    27,
+    24,
+    25,
+    [
+     "- Initial configuration"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    28,
+    25,
+    26
+   ],
+   [
+    "replace",
+    28,
+    29,
+    26,
+    27,
+    [
+     "（目录 6 行略）"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    27,
+    28
+   ],
+   [
+    "replace",
+    30,
+    36,
+    28,
+    29,
+    [
+     "- WordOps Setup"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    29,
+    30
+   ],
+   [
+    "replace",
+    37,
+    38,
+    30,
+    31,
+    [
+     "（目录 4 行略）"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    31,
+    32
+   ],
+   [
+    "replace",
+    39,
+    43,
+    32,
+    33,
+    [
+     "- Install WordOps"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    33,
+    34
+   ],
+   [
+    "replace",
+    44,
+    45,
+    34,
+    35,
+    [
+     "（目录 6 行略）"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    35,
+    36
+   ],
+   [
+    "replace",
+    46,
+    52,
+    36,
+    37,
+    [
+     "- NGINX Configuration"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    37,
+    38
+   ],
+   [
+    "replace",
+    53,
+    54,
+    38,
+    39,
+    [
+     "（目录 5 行略）"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    39,
+    40
+   ],
+   [
+    "replace",
+    55,
+    60,
+    40,
+    41,
+    [
+     "- Security"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    41,
+    42
+   ],
+   [
+    "replace",
+    61,
+    62,
+    42,
+    43,
+    [
+     "（目录 4 行略）"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    43,
+    44
+   ],
+   [
+    "replace",
+    63,
+    67,
+    44,
+    45,
+    [
+     "- Optional"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    68,
+    45,
+    46
+   ],
+   [
+    "replace",
+    68,
+    69,
+    46,
+    47,
+    [
+     " - proftpd"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    47,
+    48
+   ],
+   [
+    "replace",
+    70,
+    71,
+    48,
+    50,
+    [
+     " - Install proftpd",
+     " - Adding FTP users"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    50,
+    51
+   ],
+   [
+    "replace",
+    72,
+    74,
+    51,
+    52,
+    [
+     " - ee-acme-sh"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    75,
+    52,
+    53
+   ],
+   [
+    "replace",
+    75,
+    76,
+    53,
+    54,
+    [
+     " - netdata"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    77,
+    54,
+    55
+   ],
+   [
+    "replace",
+    77,
+    78,
+    55,
+    56,
+    [
+     " - cht.sh (cheat)"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    56,
+    57
+   ],
+   [
+    "replace",
+    79,
+    80,
+    57,
+    59,
+    [
+     " - nanorc - Improved Nano Syntax Highlighting Files",
+     " - Add WP-CLI & bash-completion for user www-data"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    81,
+    59,
+    60
+   ],
+   [
+    "replace",
+    81,
+    83,
+    60,
+    61,
+    [
+     "- Cleanup previous EasyEngine v3"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    84,
+    61,
+    62
+   ],
+   [
+    "replace",
+    84,
+    89,
+    62,
+    63,
+    [
+     " - Removing previous php versions"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    120,
+    63,
+    94
+   ],
+   [
+    "replace",
+    120,
+    121,
+    94,
+    95,
+    [
+     " Included by default in WordOps - this may not be needed anymore "
+    ]
+   ],
+   [
+    "equal",
+    121,
+    122,
+    95,
+    96
+   ],
+   [
+    "replace",
+    122,
+    123,
+    96,
+    97,
+    [
+     "source sysctl.conf - limits.conf source"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    134,
+    97,
+    108
+   ],
+   [
+    "replace",
+    134,
+    138,
+    108,
+    109,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    158,
+    109,
+    129
+   ],
+   [
+    "delete",
+    158,
+    160,
+    129,
+    129
+   ],
+   [
+    "equal",
+    160,
+    164,
+    129,
+    133
+   ],
+   [
+    "replace",
+    164,
+    165,
+    133,
+    134,
+    [
+     " Included by default in WordOps - this may not be needed anymore "
+    ]
+   ],
+   [
+    "equal",
+    165,
+    166,
+    134,
+    135
+   ],
+   [
+    "replace",
+    166,
+    167,
+    135,
+    136,
+    [
+     "Instructions available in VirtuBox Knowledgebase"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    181,
+    136,
+    150
+   ],
+   [
+    "replace",
+    181,
+    182,
+    150,
+    151,
+    [
+     "You can download my example of my.cnf, optimized for VPS with 4GB RAM. my.cnf source"
+    ]
+   ],
+   [
+    "equal",
+    182,
+    252,
+    151,
+    221
+   ],
+   [
+    "replace",
+    252,
+    253,
+    221,
+    222,
+    [
+     " Included by default in WordOps - this may not be needed anymore "
+    ]
+   ],
+   [
+    "equal",
+    253,
+    281,
+    222,
+    250
+   ],
+   [
+    "replace",
+    281,
+    292,
+    250,
+    251,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    292,
+    300,
+    251,
+    259
+   ],
+   [
+    "replace",
+    300,
+    301,
+    259,
+    260,
+    [
+     " Included by default in WordOps - this may not be needed anymore "
+    ]
+   ],
+   [
+    "equal",
+    301,
+    314,
+    260,
+    273
+   ],
+   [
+    "replace",
+    314,
+    315,
+    273,
+    274,
+    [
+     "### Compile the latest Nginx release with nginx-ee"
+    ]
+   ],
+   [
+    "equal",
+    315,
+    319,
+    274,
+    278
+   ],
+   [
+    "delete",
+    319,
+    321,
+    278,
+    278
+   ],
+   [
+    "equal",
+    321,
+    343,
+    278,
+    300
+   ],
+   [
+    "replace",
+    343,
+    344,
+    300,
+    301,
+    [
+     " Included by default in WordOps - this may not be needed anymore "
+    ]
+   ],
+   [
+    "equal",
+    344,
+    363,
+    301,
+    320
+   ],
+   [
+    "delete",
+    363,
+    365,
+    320,
+    320
+   ],
+   [
+    "equal",
+    365,
+    369,
+    320,
+    324
+   ],
+   [
+    "replace",
+    369,
+    370,
+    324,
+    325,
+    [
+     "WARNING : SSH Configuration with root login allowed using SSH keys only source"
+    ]
+   ],
+   [
+    "equal",
+    370,
+    377,
+    325,
+    332
+   ],
+   [
+    "replace",
+    377,
+    378,
+    332,
+    333,
+    [
+     "Instructions available in VirtuBox Knowledgebase"
+    ]
+   ],
+   [
+    "equal",
+    378,
+    383,
+    333,
+    338
+   ],
+   [
+    "replace",
+    383,
+    403,
+    338,
+    339,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    403,
+    433,
+    339,
+    369
+   ],
+   [
+    "delete",
+    433,
+    435,
+    369,
+    369
+   ],
+   [
+    "equal",
+    435,
+    488,
+    369,
+    422
+   ],
+   [
+    "delete",
+    488,
+    490,
+    422,
+    422
+   ],
+   [
+    "equal",
+    490,
+    492,
+    422,
+    424
+   ],
+   [
+    "replace",
+    492,
+    493,
+    424,
+    425,
+    [
+     " Included by default in WordOps - this may not be needed anymore "
+    ]
+   ],
+   [
+    "equal",
+    493,
+    494,
+    425,
+    426
+   ],
+   [
+    "replace",
+    494,
+    495,
+    426,
+    427,
+    [
+     "Github repository - Script to setup letsencrypt certificates using acme.sh on EasyEngine servers"
+    ]
+   ],
+   [
+    "equal",
+    495,
+    509,
+    427,
+    441
+   ],
+   [
+    "delete",
+    509,
+    511,
+    441,
+    441
+   ],
+   [
+    "equal",
+    511,
+    513,
+    441,
+    443
+   ],
+   [
+    "replace",
+    513,
+    514,
+    443,
+    444,
+    [
+     " Included by default in WordOps - this may not be needed anymore "
+    ]
+   ],
+   [
+    "equal",
+    514,
+    515,
+    444,
+    445
+   ],
+   [
+    "replace",
+    515,
+    516,
+    445,
+    446,
+    [
+     "Github repository"
+    ]
+   ],
+   [
+    "equal",
+    516,
+    521,
+    446,
+    451
+   ],
+   [
+    "replace",
+    521,
+    535,
+    451,
+    452,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    535,
+    536,
+    452,
+    453
+   ],
+   [
+    "delete",
+    536,
+    538,
+    453,
+    453
+   ],
+   [
+    "equal",
+    538,
+    541,
+    453,
+    456
+   ],
+   [
+    "replace",
+    541,
+    542,
+    456,
+    457,
+    [
+     "Github repository"
+    ]
+   ],
+   [
+    "equal",
+    542,
+    546,
+    457,
+    461
+   ],
+   [
+    "delete",
+    546,
+    547,
+    461,
+    461
+   ],
+   [
+    "equal",
+    547,
+    558,
+    461,
+    472
+   ],
+   [
+    "replace",
+    558,
+    571,
+    472,
+    473,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    571,
+    572,
+    473,
+    474
+   ],
+   [
+    "delete",
+    572,
+    574,
+    474,
+    474
+   ],
+   [
+    "equal",
+    574,
+    577,
+    474,
+    477
+   ],
+   [
+    "replace",
+    577,
+    578,
+    477,
+    478,
+    [
+     "Github repository"
+    ]
+   ],
+   [
+    "equal",
+    578,
+    583,
+    478,
+    483
+   ],
+   [
+    "delete",
+    583,
+    585,
+    483,
+    483
+   ],
+   [
+    "equal",
+    585,
+    587,
+    483,
+    485
+   ],
+   [
+    "replace",
+    587,
+    588,
+    485,
+    486,
+    [
+     " Included by default in WordOps - this may not be needed anymore "
+    ]
+   ],
+   [
+    "equal",
+    588,
+    593,
+    486,
+    491
+   ],
+   [
+    "replace",
+    593,
+    601,
+    491,
+    492,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    601,
+    605,
+    492,
+    496
+   ],
+   [
+    "replace",
+    605,
+    606,
+    496,
+    497,
+    [
+     " Included by default in WordOps - this may not be needed anymore "
+    ]
+   ],
+   [
+    "equal",
+    606,
+    619,
+    497,
+    510
+   ],
+   [
+    "replace",
+    619,
+    620,
+    510,
+    511,
+    [
+     "Published & maintained by VirtuBox"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "d9b43cddf0d1+2": {
+  "fn": "dotnize/chessu",
+  "clean_ver": "2",
+  "raw_lines": 9,
+  "ops": [
+   [
+    "replace",
+    0,
+    9,
+    0,
+    1,
+    [
+     "chessu"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    1,
+    2
+   ],
+   [
+    "replace",
+    10,
+    11,
+    2,
+    6,
+    [
+     " <a href=\"https://ches.su\">",
+     " ches.su",
+     " </a>",
+     " Last commit"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    6,
+    7
+   ],
+   [
+    "replace",
+    12,
+    15,
+    7,
+    10,
+    [
+     " Yet another Chess web app.",
+     "",
+     " chessu"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    21,
+    10,
+    16
+   ],
+   [
+    "replace",
+    21,
+    22,
+    16,
+    17,
+    [
+     "- ... and more (view roadmap)"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    37,
+    17,
+    32
+   ],
+   [
+    "replace",
+    37,
+    38,
+    32,
+    33,
+    [
+     "1. Install pnpm."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    33,
+    34
+   ],
+   [
+    "replace",
+    39,
+    40,
+    34,
+    35,
+    [
+     "3. In the `server` directory, create a `.env` file for your PostgreSQL database. You can try ElephantSQL or Aiven for a free hosted database."
+    ]
+   ],
+   [
+    "equal",
+    40,
+    47,
+    35,
+    42
+   ],
+   [
+    "replace",
+    47,
+    48,
+    42,
+    43,
+    [
+     " - To run the frontend and backend servers separately, use `pnpm dev:client` and `pnpm dev:server`, respectively."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    77,
+    43,
+    72
+   ],
+   [
+    "replace",
+    77,
+    80,
+    72,
+    73,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    81,
+    73,
+    74
+   ],
+   [
+    "replace",
+    81,
+    83,
+    74,
+    75,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "47fe90e910b6+2": {
+  "fn": "sunilvijayan7/GetDoctor",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     " :blush: :blush: :blush: https://www.izi.health - IZI Health is an advanced version the getdoctor. Please have a look. "
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    74,
+    4,
+    6,
+    [
+     " GetDoctor is a complete app developed in Flutter, Firebase and Blazor,DotNet Core API and SQL Server ",
+     " GetDoctor is a complete package of Online Doctor Appointment and Scheduler.It is a very simple process to manage everything, getting appointed with the doctors, and a very easy login process for doctors,patients, assistants, and staff. Additionally, this system is the perfect package for the doctor side, they can set up their own schedule and manage the serial from this site and app "
+    ]
+   ],
+   [
+    "equal",
+    74,
+    75,
+    6,
+    7
+   ],
+   [
+    "insert",
+    75,
+    75,
+    7,
+    9,
+    [
+     " Features ",
+     " Other Features "
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    9,
+    10
+   ],
+   [
+    "replace",
+    76,
+    91,
+    10,
+    30,
+    [
+     " ✓ Get appointment ",
+     " ✓ Appointment Management ",
+     " ✓ Doctors Selection ",
+     " ✓ Doctors Management ",
+     " ✓ Staff Management ",
+     " ✓ Assistant Management ",
+     " ✓ and An Attractive Frontend and Backend Features ",
+     " - Getting the doctor appoinment from everywhere. ",
+     " - A clean and modern user interface. ",
+     " - Dynamic Doctor interface. ",
+     " - Dynamic Staff interface. ",
+     " - Dynamic Assistant interface. ",
+     " - Various Payment Gateway. ",
+     " - Latest and Updated news and Blog ",
+     " - Functionality is Simple and all Dynamic Features. ",
+     " - Multi Language Support. ",
+     " - Fully Responsive. ",
+     " - Easy Documentation. ",
+     " - Support modern browser and cross-browser compatibility. ",
+     " - Regular updates facilities. "
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    30,
+    31
+   ],
+   [
+    "replace",
+    92,
+    96,
+    31,
+    47,
+    [
+     " Login ",
+     " Register ",
+     " Forgot password ",
+     " Mobile verification ",
+     " Home ",
+     " Bookings ",
+     " Specialities ",
+     " Profile ",
+     " Doctors By Speciality ",
+     " Doctor Detail ",
+     " Doctor Ratings ",
+     " Clinic Detail ",
+     " Clinic Ratings ",
+     " Favorites Grid & List ",
+     " Chat ",
+     " Filters "
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    47,
+    48
+   ],
+   [
+    "replace",
+    97,
+    105,
+    48,
+    60,
+    [
+     " Search ",
+     " Settings ",
+     " Checkout ",
+     " Scheduled Booking ",
+     " Payment ",
+     " Notifications ",
+     " Alarms ",
+     " User Account ",
+     " App Settings ",
+     " App Languages ",
+     " Light & Dark Themes ",
+     " Help & Supports "
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    60,
+    61
+   ],
+   [
+    "replace",
+    106,
+    115,
+    61,
+    62,
+    [
+     " Mobile Screens "
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    62,
+    63
+   ],
+   [
+    "replace",
+    116,
+    124,
+    63,
+    64,
+    [
+     " Flow "
+    ]
+   ],
+   [
+    "equal",
+    124,
+    125,
+    64,
+    65
+   ],
+   [
+    "replace",
+    125,
+    126,
+    65,
+    72,
+    [
+     " Ideation ",
+     "",
+     " Wireframes ",
+     "",
+     " Desktop Screens ",
+     "",
+     "- 💻 All of my projects are available at http://www.sunilvijayan.com/"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    128,
+    72,
+    74
+   ],
+   [
+    "delete",
+    128,
+    129,
+    74,
+    74
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7907ea458d6d+2": {
+  "fn": "ropensci/bikedata",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    4,
+    0,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     "codecov"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    7,
+    3,
+    5
+   ],
+   [
+    "replace",
+    7,
+    8,
+    5,
+    6,
+    [
+     "CRAN_Status_Badge"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    10,
+    6,
+    8
+   ],
+   [
+    "replace",
+    10,
+    12,
+    8,
+    10,
+    [
+     "",
+     "status"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    18,
+    10,
+    16
+   ],
+   [
+    "replace",
+    18,
+    19,
+    16,
+    17,
+    [
+     "wikipedia),"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    21,
+    17,
+    19
+   ],
+   [
+    "replace",
+    21,
+    22,
+    19,
+    20,
+    [
+     "|City|Hire Bicycle System|Number of Bicycles|Number of Docking Stations|"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    20,
+    21
+   ],
+   [
+    "replace",
+    23,
+    34,
+    21,
+    32,
+    [
+     "|London, U.K.|Santander Cycles|13,600|839|",
+     "|San Francisco Bay Area, U.S.A.|Ford GoBike|7,000|540|",
+     "|New York City NY, U.S.A.|citibike|7,000|458|",
+     "|Chicago IL, U.S.A.|Divvy|5,837|576|",
+     "|Montreal, Canada|Bixi|5,220|452|",
+     "|Washingon DC, U.S.A.|Capital BikeShare|4,457|406|",
+     "|Guadalajara, Mexico|mibici|2,116|242|",
+     "|Minneapolis/St Paul MN, U.S.A.|Nice Ride|1,833|171|",
+     "|Boston MA, U.S.A.|Hubway|1,461|158|",
+     "|Philadelphia PA, U.S.A.|Indego|1,000|105|",
+     "|Los Angeles CA, U.S.A.|Metro|1,000|65|"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    43,
+    32,
+    41
+   ],
+   [
+    "replace",
+    43,
+    46,
+    41,
+    42,
+    [
+     "vignette."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    86,
+    42,
+    82
+   ],
+   [
+    "replace",
+    86,
+    88,
+    82,
+    84,
+    [
+     " #> [1] 518 518",
+     " #> [1] \"2,019,513\""
+    ]
+   ],
+   [
+    "equal",
+    88,
+    100,
+    84,
+    96
+   ],
+   [
+    "replace",
+    100,
+    114,
+    96,
+    110,
+    [
+     " #> # A tibble: 87 × 2",
+     " #> date numtrips",
+     " #> <chr> <dbl>",
+     " #> 1 2016-01-01 11172",
+     " #> 2 2016-01-02 14794",
+     " #> 3 2016-01-03 15775",
+     " #> 4 2016-01-04 19879",
+     " #> 5 2016-01-05 18326",
+     " #> 6 2016-01-06 24922",
+     " #> 7 2016-01-07 28215",
+     " #> 8 2016-01-08 29131",
+     " #> 9 2016-01-08 21140",
+     " #> 10 2016-01-10 14481",
+     " #> # ℹ 77 more rows"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    137,
+    110,
+    133
+   ],
+   [
+    "replace",
+    137,
+    139,
+    133,
+    135,
+    [
+     " #> first last ",
+     " #> \"2016-01-01 00:00\" \"2016-03-31 23:59\""
+    ]
+   ],
+   [
+    "equal",
+    139,
+    152,
+    135,
+    148
+   ],
+   [
+    "replace",
+    152,
+    162,
+    148,
+    149,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    162,
+    188,
+    149,
+    175
+   ],
+   [
+    "replace",
+    188,
+    205,
+    175,
+    176,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    213,
+    176,
+    184
+   ],
+   [
+    "replace",
+    213,
+    214,
+    184,
+    185,
+    [
+     "ropensci_footer"
+    ]
+   ],
+   [
+    "equal",
+    214,
+    216,
+    185,
+    187
+   ],
+   [
+    "replace",
+    216,
+    228,
+    187,
+    188,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    228,
+    230,
+    188,
+    190
+   ],
+   [
+    "replace",
+    230,
+    231,
+    190,
+    191,
+    [
+     "<a href=\"https://github.com/mpadge\">"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    232,
+    191,
+    192
+   ],
+   [
+    "replace",
+    232,
+    243,
+    192,
+    194,
+    [
+     "</a> ",
+     "mpadge"
+    ]
+   ],
+   [
+    "equal",
+    243,
+    245,
+    194,
+    196
+   ],
+   [
+    "delete",
+    245,
+    249,
+    196,
+    196
+   ],
+   [
+    "equal",
+    249,
+    250,
+    196,
+    197
+   ],
+   [
+    "replace",
+    250,
+    251,
+    197,
+    199,
+    [
+     "</a> ",
+     "richardellison"
+    ]
+   ],
+   [
+    "equal",
+    251,
+    253,
+    199,
+    201
+   ],
+   [
+    "delete",
+    253,
+    257,
+    201,
+    201
+   ],
+   [
+    "equal",
+    257,
+    258,
+    201,
+    202
+   ],
+   [
+    "replace",
+    258,
+    259,
+    202,
+    204,
+    [
+     "</a> ",
+     "tbuckl"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    261,
+    204,
+    206
+   ],
+   [
+    "delete",
+    261,
+    265,
+    206,
+    206
+   ],
+   [
+    "equal",
+    265,
+    266,
+    206,
+    207
+   ],
+   [
+    "replace",
+    266,
+    267,
+    207,
+    209,
+    [
+     "</a> ",
+     "szymanskir"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    269,
+    209,
+    211
+   ],
+   [
+    "delete",
+    269,
+    273,
+    211,
+    211
+   ],
+   [
+    "equal",
+    273,
+    274,
+    211,
+    212
+   ],
+   [
+    "replace",
+    274,
+    275,
+    212,
+    214,
+    [
+     "</a> ",
+     "arfon"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    277,
+    214,
+    216
+   ],
+   [
+    "delete",
+    277,
+    281,
+    216,
+    216
+   ],
+   [
+    "equal",
+    281,
+    282,
+    216,
+    217
+   ],
+   [
+    "replace",
+    282,
+    283,
+    217,
+    219,
+    [
+     "</a> ",
+     "graceli8"
+    ]
+   ],
+   [
+    "equal",
+    283,
+    285,
+    219,
+    221
+   ],
+   [
+    "delete",
+    285,
+    289,
+    221,
+    221
+   ],
+   [
+    "equal",
+    289,
+    290,
+    221,
+    222
+   ],
+   [
+    "replace",
+    290,
+    295,
+    222,
+    224,
+    [
+     "</a> ",
+     "jimhester"
+    ]
+   ],
+   [
+    "equal",
+    295,
+    297,
+    224,
+    226
+   ],
+   [
+    "delete",
+    297,
+    301,
+    226,
+    226
+   ],
+   [
+    "equal",
+    301,
+    302,
+    226,
+    227
+   ],
+   [
+    "replace",
+    302,
+    303,
+    227,
+    229,
+    [
+     "</a> ",
+     "maelle"
+    ]
+   ],
+   [
+    "equal",
+    303,
+    305,
+    229,
+    231
+   ],
+   [
+    "delete",
+    305,
+    309,
+    231,
+    231
+   ],
+   [
+    "equal",
+    309,
+    310,
+    231,
+    232
+   ],
+   [
+    "replace",
+    310,
+    313,
+    232,
+    234,
+    [
+     "</a> ",
+     "sckott"
+    ]
+   ],
+   [
+    "equal",
+    313,
+    316,
+    234,
+    237
+   ],
+   [
+    "replace",
+    316,
+    317,
+    237,
+    238,
+    [
+     "<a href=\"https://github.com/krlmlr\">"
+    ]
+   ],
+   [
+    "equal",
+    317,
+    318,
+    238,
+    239
+   ],
+   [
+    "replace",
+    318,
+    329,
+    239,
+    241,
+    [
+     "</a> ",
+     "krlmlr"
+    ]
+   ],
+   [
+    "equal",
+    329,
+    331,
+    241,
+    243
+   ],
+   [
+    "delete",
+    331,
+    335,
+    243,
+    243
+   ],
+   [
+    "equal",
+    335,
+    336,
+    243,
+    244
+   ],
+   [
+    "replace",
+    336,
+    337,
+    244,
+    246,
+    [
+     "</a> ",
+     "dpprdan"
+    ]
+   ],
+   [
+    "equal",
+    337,
+    339,
+    246,
+    248
+   ],
+   [
+    "delete",
+    339,
+    343,
+    248,
+    248
+   ],
+   [
+    "equal",
+    343,
+    344,
+    248,
+    249
+   ],
+   [
+    "replace",
+    344,
+    345,
+    249,
+    251,
+    [
+     "</a> ",
+     "MathieuMarauri"
+    ]
+   ],
+   [
+    "equal",
+    345,
+    347,
+    251,
+    253
+   ],
+   [
+    "delete",
+    347,
+    351,
+    253,
+    253
+   ],
+   [
+    "equal",
+    351,
+    352,
+    253,
+    254
+   ],
+   [
+    "replace",
+    352,
+    353,
+    254,
+    256,
+    [
+     "</a> ",
+     "JorisKlingen"
+    ]
+   ],
+   [
+    "equal",
+    353,
+    355,
+    256,
+    258
+   ],
+   [
+    "delete",
+    355,
+    359,
+    258,
+    258
+   ],
+   [
+    "equal",
+    359,
+    360,
+    258,
+    259
+   ],
+   [
+    "replace",
+    360,
+    361,
+    259,
+    261,
+    [
+     "</a> ",
+     "Robinlovelace"
+    ]
+   ],
+   [
+    "equal",
+    361,
+    363,
+    261,
+    263
+   ],
+   [
+    "delete",
+    363,
+    367,
+    263,
+    263
+   ],
+   [
+    "equal",
+    367,
+    368,
+    263,
+    264
+   ],
+   [
+    "replace",
+    368,
+    369,
+    264,
+    266,
+    [
+     "</a> ",
+     "tbdv"
+    ]
+   ],
+   [
+    "equal",
+    369,
+    371,
+    266,
+    268
+   ],
+   [
+    "delete",
+    371,
+    375,
+    268,
+    268
+   ],
+   [
+    "equal",
+    375,
+    376,
+    268,
+    269
+   ],
+   [
+    "replace",
+    376,
+    381,
+    269,
+    271,
+    [
+     "</a> ",
+     "geospatialmik"
+    ]
+   ],
+   [
+    "equal",
+    381,
+    383,
+    271,
+    273
+   ],
+   [
+    "delete",
+    383,
+    387,
+    273,
+    273
+   ],
+   [
+    "equal",
+    387,
+    388,
+    273,
+    274
+   ],
+   [
+    "replace",
+    388,
+    391,
+    274,
+    276,
+    [
+     "</a> ",
+     "RichardBean"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    394,
+    276,
+    279
+   ],
+   [
+    "replace",
+    394,
+    395,
+    279,
+    280,
+    [
+     "<a href=\"https://github.com/pstraforelli\">"
+    ]
+   ],
+   [
+    "equal",
+    395,
+    396,
+    280,
+    281
+   ],
+   [
+    "replace",
+    396,
+    407,
+    281,
+    283,
+    [
+     "</a> ",
+     "pstraforelli"
+    ]
+   ],
+   [
+    "equal",
+    407,
+    409,
+    283,
+    285
+   ],
+   [
+    "delete",
+    409,
+    413,
+    285,
+    285
+   ],
+   [
+    "equal",
+    413,
+    414,
+    285,
+    286
+   ],
+   [
+    "replace",
+    414,
+    423,
+    286,
+    288,
+    [
+     "</a> ",
+     "complexgenome"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "19b1dcc746dc+2": {
+  "fn": "chuongmep/aps-toolkit",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Platform License: GNU v3"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "ReSharper Rider Visual Studio 2022 .NET Framework"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    7,
+    4,
+    7,
+    [
+     "Publish",
+     "Nuget Version",
+     "NuGet Downloads"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    10,
+    8,
+    10,
+    [
+     "PyPI",
+     "PyPI - Downloads"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    17,
+    10,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "APS Toolkit (Former is Forge) is powerful tool for developer,software enginner, AI engineer to explore `Autodesk Platform Services`(APS). It's built on top of Autodesk.Forge and Newtonsoft.Json. Forge Toolkit includes some features allow you to read, download and write data from `Autodesk Platform Services` and export to CSV, Excel, JSON, XML, etc."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "APSToolkit"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    39,
+    20,
+    39
+   ],
+   [
+    "replace",
+    39,
+    40,
+    39,
+    40,
+    [
+     "Please follow latest update at APSToolkit Nuget"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    47,
+    40,
+    47
+   ],
+   [
+    "replace",
+    47,
+    48,
+    47,
+    48,
+    [
+     "Please follow latest update at APSToolkit Python"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    77,
+    48,
+    77
+   ],
+   [
+    "replace",
+    77,
+    82,
+    77,
+    78,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    90,
+    78,
+    86
+   ],
+   [
+    "replace",
+    90,
+    95,
+    86,
+    87,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    101,
+    87,
+    93
+   ],
+   [
+    "replace",
+    101,
+    102,
+    93,
+    94,
+    [
+     "All Tutorials are available under Jupyter Notebook at .NET Tutorials"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    94,
+    95
+   ],
+   [
+    "replace",
+    103,
+    119,
+    95,
+    110,
+    [
+     "- 00. Jupyter Notebook And .NET Interactive",
+     "- 01. Setup And Authentication",
+     "- 02. Explore Hubs - Projects - Items - URN",
+     "- 03. Explore Versions Item and Derivative Urn",
+     "- 04. Explore General Metdadata With APSToolkit",
+     "- 04.01. Explore Revit Data With APSToolkit",
+     "- 05. Explore Access APS Database And Execute Query",
+     "- 06. Explore SVF Format - Export SVF Viewer",
+     "- 07. Explore Update Revit Data Back To ACC",
+     "- 08. Explore Pull Data From ACC BIM360 API",
+     "- 09. Explore Data Knowledge Use LLM Agent",
+     "- 10. Build Pipeline Data Process with APSToolkit",
+     "- 11. Visualization Data - Data Analyst",
+     "- 12. Custom Python In .NET Interactive",
+     "- 13. Custom Metadata Export "
+    ]
+   ],
+   [
+    "equal",
+    119,
+    122,
+    110,
+    113
+   ],
+   [
+    "replace",
+    122,
+    123,
+    113,
+    114,
+    [
+     "All Tutorials are available under Jupyter Notebook at Python Tutorials"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    114,
+    115
+   ],
+   [
+    "replace",
+    124,
+    139,
+    115,
+    130,
+    [
+     "- 00. Jupyter Notebook And Python",
+     " - 00.01. Jupyter Notebook And Google Colab",
+     "- 01. Setup And Authentication",
+     "- 02. Explore Hubs - Projects - Items - URN",
+     "- 03. Explore Versions Item and Derivative Urn",
+     "- 04. Explore General Metdadata With APSToolkit",
+     " - 04.01. Explore Revit Data With APSToolkit",
+     " - 04.02. Explore Compare Revit Data Versions",
+     " - 04.03. Explore Acad Data With APSToolkit",
+     " - 04.04. Explore Navisworks Data With APSToolkit",
+     "- 05. Explore Access Database And Query Items",
+     "- 06. Data Visualization - Analyst BIM Model",
+     "- 07. Explore Big Data Format Storage",
+     "- 08. Explore URL ACC Extract",
+     "- 09. Explore SVF - Export SVF Viewer"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    141,
+    130,
+    132
+   ],
+   [
+    "delete",
+    141,
+    142,
+    132,
+    132
+   ],
+   [
+    "equal",
+    142,
+    143,
+    132,
+    133
+   ],
+   [
+    "delete",
+    143,
+    151,
+    133,
+    133
+   ],
+   [
+    "equal",
+    151,
+    153,
+    133,
+    135
+   ],
+   [
+    "replace",
+    153,
+    161,
+    135,
+    143,
+    [
+     "- Autodesk.Forge - The .NET SDK for Autodesk Forge.",
+     "- Newtonsoft.Json - Json.NET is a popular high-performance JSON framework for .NET.",
+     "- CsvHelper - Library to help reading and writing CSV files.",
+     "- EPPlus - EPPlus is a .NET library that reads and writes Excel files using the Office Open XML format (xlsx).",
+     "- ChoETL - Cinchoo ETL is a code-based ETL framework for extracting data from multiple sources, transforming, and loading into your very own data warehouse in .NET environment. You can have data in your data warehouse in no time.",
+     "- SharpZipLib - SharpZipLib (#ziplib, formerly NZipLib) is a compression library for Zip, GZip, BZip2. ",
+     "- Pandas - Pandas is a fast, powerful, flexible and easy to use open source data analysis and data manipulation library built on top of the Python programming language.",
+     "- Nuke - Nuke is a cross-platform build automation system with C# DSL for tasks such as compiling code, copying files and folders, running unit tests, compressing files and building NuGet packages."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    164,
+    143,
+    146
+   ],
+   [
+    "replace",
+    164,
+    165,
+    146,
+    147,
+    [
+     "Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests to us."
+    ]
+   ],
+   [
+    "equal",
+    165,
+    168,
+    147,
+    150
+   ],
+   [
+    "replace",
+    168,
+    173,
+    150,
+    151,
+    [
+     "Thanks JetBrains for providing a free All product IDE for this project."
+    ]
+   ],
+   [
+    "equal",
+    173,
+    178,
+    151,
+    156
+   ],
+   [
+    "replace",
+    178,
+    179,
+    156,
+    157,
+    [
+     "I'm not responsible for any data loss or any other issues caused by using this library, some features need require cost for using. Please read carefully the Autodesk Forge and Autodesk Platform Services terms of use. I'm just doing, testing , maintaining in free time, so feel free to contribute and make it better. "
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    157,
+    158
+   ],
+   [
+    "replace",
+    180,
+    181,
+    158,
+    159,
+    [
+     "Update : There is a new, official Node.js/TypeScript SDK that's currently in beta but will be stabilized soon. That SDK will offer various benefits over forge-server-utils, for example, it will be easier to maintain and extend in the future as it's being auto-generated from OpenAPI specs. As soon as it's ready to use (which should be really soon), I would archive this project and point to the official SDK instead."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "101ca690b690+2": {
+  "fn": "bytedance/rdbStore",
+  "clean_ver": "2",
+  "raw_lines": 29,
+  "ops": [
+   [
+    "equal",
+    0,
+    29,
+    0,
+    29
+   ],
+   [
+    "replace",
+    29,
+    38,
+    29,
+    30,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    44,
+    30,
+    36
+   ],
+   [
+    "replace",
+    44,
+    46,
+    36,
+    38,
+    [
+     "RdbDao#batchInsert 批量插入数据（默认为insert or replace） ",
+     "RdbDao#insert 插入数据 "
+    ]
+   ],
+   [
+    "equal",
+    46,
+    54,
+    38,
+    46
+   ],
+   [
+    "replace",
+    54,
+    68,
+    46,
+    47,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    72,
+    47,
+    51
+   ],
+   [
+    "replace",
+    72,
+    77,
+    51,
+    56,
+    [
+     "RdbDao#delete 删除数据 ",
+     "RdbDao#deleteSync 同步主线程删除 ",
+     "RdbDao#batchDelete 批量通过谓词删除 ",
+     "RdbDao#batchDeleteSync 批量通过谓词删除同步 ",
+     "RdbDao#deleteAll 删除所有 "
+    ]
+   ],
+   [
+    "equal",
+    77,
+    85,
+    56,
+    64
+   ],
+   [
+    "replace",
+    85,
+    107,
+    64,
+    65,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    111,
+    65,
+    69
+   ],
+   [
+    "replace",
+    111,
+    114,
+    69,
+    72,
+    [
+     "RdbDao#update 完整更新数据 ",
+     "RdbDao#updatePartial 局部更新数据列 ",
+     "RdbDao#updateSync 同步更新数据 "
+    ]
+   ],
+   [
+    "equal",
+    114,
+    120,
+    72,
+    78
+   ],
+   [
+    "replace",
+    120,
+    139,
+    78,
+    79,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    143,
+    79,
+    83
+   ],
+   [
+    "replace",
+    143,
+    146,
+    83,
+    86,
+    [
+     "RdbDao#predicatesBuilder 复杂查询通过 builder 构建 ",
+     "RdbDao#queryPredicate 通过传入谓词来查询且解析为对应 model ",
+     "RdbDao#querySync 同步进行查询且解析为对应 model "
+    ]
+   ],
+   [
+    "equal",
+    146,
+    155,
+    86,
+    95
+   ],
+   [
+    "replace",
+    155,
+    167,
+    95,
+    96,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    167,
+    171,
+    96,
+    100
+   ],
+   [
+    "replace",
+    171,
+    176,
+    100,
+    105,
+    [
+     "RdbDao#getAllColumns 获取表中所有列 ",
+     "RdbDao#getTableCreateSql 获取表创建语句 ",
+     "RdbDao#getAllIndex 获取所有表索引 ",
+     "RdbDao#getCount 查询数据库中行数量 ",
+     "RdbDao#getPredicatesByKey 获取对应 model 主键的谓词 "
+    ]
+   ],
+   [
+    "equal",
+    176,
+    180,
+    105,
+    109
+   ],
+   [
+    "replace",
+    180,
+    181,
+    109,
+    110,
+    [
+     "TuneDbParamPlugin#setJournalMode "
+    ]
+   ],
+   [
+    "equal",
+    181,
+    191,
+    110,
+    120
+   ],
+   [
+    "replace",
+    191,
+    192,
+    120,
+    121,
+    [
+     "TuneDbParamPlugin#setSynchronous "
+    ]
+   ],
+   [
+    "equal",
+    192,
+    194,
+    121,
+    123
+   ],
+   [
+    "replace",
+    194,
+    195,
+    123,
+    124,
+    [
+     "TuneDbParamPlugin#setJournalSizeLimit "
+    ]
+   ],
+   [
+    "equal",
+    195,
+    207,
+    124,
+    136
+   ],
+   [
+    "replace",
+    207,
+    218,
+    136,
+    137,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    221,
+    137,
+    140
+   ],
+   [
+    "delete",
+    221,
+    222,
+    140,
+    140
+   ],
+   [
+    "equal",
+    222,
+    223,
+    140,
+    141
+   ],
+   [
+    "delete",
+    223,
+    237,
+    141,
+    141
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "aff3102f53fb+2": {
+  "fn": "SolidLao/GenDB",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    2,
+    1,
+    2,
+    [
+     "> **GenDB is no longer maintained. Its successor is GenDB-V.** In GenDB-V, AI agents write the engine, and Verus formally proves it correct. It synthesizes a verified package for each SQL template, or one verified general-purpose engine."
+    ]
+   ],
+   [
+    "equal",
+    2,
+    3,
+    2,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     "> **Website** &nbsp;|&nbsp; **Paper** &nbsp;|&nbsp; **GitHub**"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    11,
+    4,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "**Website** &nbsp;|&nbsp; **Paper** &nbsp;|&nbsp; **GitHub**"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    12,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "> **Try the Interactive Demo, VLDB 2026** — explore GenDB's full pipeline with a guided audio walkthrough. See how six AI agents analyze data, design storage, plan execution, generate code, and optimize it step by step. Browse pre-computed results, write your own queries, or upload your own data."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    14,
+    15
+   ],
+   [
+    "replace",
+    15,
+    18,
+    15,
+    16,
+    [
+     " GenDB System Overview"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    21,
+    16,
+    19
+   ],
+   [
+    "replace",
+    21,
+    22,
+    19,
+    20,
+    [
+     "> **Note:** The stable version used for the arxiv paper is available in the `arxiv-03-02-2026` branch."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    25,
+    20,
+    23
+   ],
+   [
+    "replace",
+    25,
+    26,
+    23,
+    24,
+    [
+     "- **2026-05-31** - GenDB Demo has been accepted to **VLDB 2026!**"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    24,
+    25
+   ],
+   [
+    "replace",
+    27,
+    28,
+    25,
+    26,
+    [
+     "- **2026-03-25** — **Interactive Demo** :sparkles: — The best way to understand GenDB. A guided audio walkthrough takes you through the full pipeline on TPC-H Q3: from SQL parameterization, data and hardware profiling, storage design, query planning, code generation, to iterative optimization (593ms → 27ms, 22× speedup). The GitHub Pages deployment includes pre-computed results for TPC-H and SEC-EDGAR. For real-time code generation on new queries or your own data, deploy the demo server with GenDB on your machine (`node src/demo/server.mjs`)."
+    ]
+   ],
+   [
+    "equal",
+    28,
+    30,
+    26,
+    28
+   ],
+   [
+    "replace",
+    30,
+    33,
+    28,
+    31,
+    [
+     "- **2026-03-09** — **Language comparison.** Compared GenDB's C++ output with Optimized C++ and Rust rewrites by Claude Code. See results.",
+     "- **2026-03-08** — **Multi-model support.** Added Opus 4.6, GPT-5.4, GPT-5.3-Codex as backbone models with comparison results.",
+     "- **2026-03-08** — **Website** launched."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    31,
+    32
+   ],
+   [
+    "replace",
+    34,
+    35,
+    32,
+    33,
+    [
+     "- **2026-03-02** — **Paper** released on arXiv."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    38,
+    33,
+    36
+   ],
+   [
+    "replace",
+    38,
+    39,
+    36,
+    37,
+    [
+     "Consider PostgreSQL. Since its origins as an OLTP database, the community has built extensions for nearly every emerging use case: PostGIS for geospatial, TimescaleDB for time-series, pgvector for embeddings, Citus for distributed analytics, pg_duckdb for OLAP, AGE for graph queries, and hundreds more. In parallel, entirely new systems were purpose-built for each domain: DuckDB, ClickHouse, and Umbra for OLAP; Milvus and Pinecone for vector search; InfluxDB for time-series; Neo4j for graph; Snowflake and BigQuery for cloud analytics."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    37,
+    38
+   ],
+   [
+    "replace",
+    40,
+    41,
+    38,
+    39,
+    [
+     "Each extension is difficult and fights the host system's architectural constraints :weary:. Each new system requires years of engineering :wrench: and significant monetary costs :moneybag:. And with every emerging technique — multimodal AI operators, GPU-native analytics, learned indexes — the cycle repeats :tired_face:."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    45,
+    39,
+    43
+   ],
+   [
+    "replace",
+    45,
+    47,
+    43,
+    45,
+    [
+     "- **Extensibility** — Integrating new techniques requires *prompting*, not re-engineering a complex codebase. Semantic queries, GPU-native code — all reachable through prompt updates.",
+     "- **Economics** — In production, 80% of queries repeat in 50% of clusters, and long-running queries almost always recur as they correspond to regular transformation or analytical tasks. Generation cost is amortized over many executions."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    50,
+    45,
+    48
+   ],
+   [
+    "replace",
+    50,
+    51,
+    48,
+    49,
+    [
+     "Paper"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    74,
+    49,
+    72
+   ],
+   [
+    "replace",
+    74,
+    75,
+    72,
+    73,
+    [
+     "> **Note:** The `storage/` (and legacy `gendb/`) data folders within each run directory are excluded from this repository due to their large size (12GB for TPC-H, 3.3GB for SEC-EDGAR). As a result, the output runs cannot be directly executed from a fresh clone. To reproduce or re-run, download the storage folders from Google Drive and place them in the corresponding run directories (e.g., `output/tpc-h-sf10-3.19/storage/`)."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    78,
+    73,
+    76
+   ],
+   [
+    "replace",
+    78,
+    79,
+    76,
+    77,
+    [
+     "||GenDB|DuckDB|Umbra|ClickHouse|MonetDB|PostgreSQL|"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    77,
+    78
+   ],
+   [
+    "replace",
+    80,
+    82,
+    78,
+    80,
+    [
+     "|**TPC-H**|**214 ms**|594 ms|590 ms|2,289 ms|1,416 ms|52,473 ms|",
+     "|**SEC-EDGAR**|**328 ms**|1,549 ms|1,280 ms|2,047 ms|28,096 ms|41,634 ms|"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    88,
+    80,
+    86
+   ],
+   [
+    "replace",
+    88,
+    89,
+    86,
+    87,
+    [
+     "TPC-H SF10 Benchmark Results"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    91,
+    87,
+    89
+   ],
+   [
+    "replace",
+    91,
+    92,
+    89,
+    90,
+    [
+     "SEC-EDGAR Benchmark Results"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    90,
+    91
+   ],
+   [
+    "replace",
+    93,
+    94,
+    91,
+    92,
+    [
+     "**More results:** Ablation: Multi-Agent vs Single-Agent &nbsp;|&nbsp; Model Comparison &nbsp;|&nbsp; Language Comparison: C++ vs Optimized C++ vs Rust"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    135,
+    92,
+    133
+   ],
+   [
+    "replace",
+    135,
+    137,
+    133,
+    135,
+    [
+     " - **Claude** — `export ANTHROPIC_API_KEY=your_key`, or log in to Claude Code with a Pro/Max/Team/Enterprise subscription plan",
+     " - **Codex** — `export CODEX_API_KEY=your_key` (or `OPENAI_API_KEY`)"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    172,
+    135,
+    170
+   ],
+   [
+    "replace",
+    172,
+    189,
+    170,
+    171,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    197,
+    171,
+    179
+   ],
+   [
+    "replace",
+    197,
+    252,
+    179,
+    180,
+    [
+     "…（55 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    252,
+    260,
+    180,
+    188
+   ],
+   [
+    "replace",
+    260,
+    266,
+    188,
+    189,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    189,
+    190
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a461549ff1c2+2": {
+  "fn": "jatindotdev/express-drizzle-postgres-starter",
+  "clean_ver": "2",
+  "raw_lines": 28,
+  "ops": [
+   [
+    "equal",
+    0,
+    28,
+    0,
+    28
+   ],
+   [
+    "delete",
+    28,
+    32,
+    28,
+    28
+   ],
+   [
+    "equal",
+    32,
+    76,
+    28,
+    72
+   ],
+   [
+    "replace",
+    76,
+    84,
+    72,
+    80,
+    [
+     "- Express",
+     "- PostgreSQL",
+     "- drizzle-orm",
+     "- Zod",
+     "- drizzle-zod",
+     "- TypeScript",
+     "- react-email",
+     "- AWS SDK"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "29406efc5649+2": {
+  "fn": "Ysgrathe/SQLiteGameDb",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "delete",
+    0,
+    1,
+    0,
+    0
+   ],
+   [
+    "equal",
+    1,
+    8,
+    0,
+    7
+   ],
+   [
+    "replace",
+    8,
+    9,
+    7,
+    8,
+    [
+     "+ Use this plugin to quickly connect to SQLite database files and query them. "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    13,
+    8,
+    12
+   ],
+   [
+    "replace",
+    13,
+    15,
+    12,
+    14,
+    [
+     ">The plugin and its framework are explained in this **YouTube** video: ",
+     "https://youtu.be/yYn7L6e99D8 "
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    14,
+    15
+   ],
+   [
+    "replace",
+    16,
+    17,
+    15,
+    16,
+    [
+     ">Join the **Discord** for general game dev chat, help with unreal, and specific SqliteGameDB questions: "
+    ]
+   ],
+   [
+    "equal",
+    17,
+    20,
+    16,
+    19
+   ],
+   [
+    "replace",
+    20,
+    21,
+    19,
+    20,
+    [
+     "The plugin has been compiled and tested with UE5.0 and UE5.1 "
+    ]
+   ],
+   [
+    "equal",
+    21,
+    26,
+    20,
+    25
+   ],
+   [
+    "replace",
+    26,
+    27,
+    25,
+    26,
+    [
+     "The project, and the documentation, are both works-in-progress. "
+    ]
+   ],
+   [
+    "equal",
+    27,
+    33,
+    26,
+    32
+   ],
+   [
+    "replace",
+    33,
+    34,
+    32,
+    33,
+    [
+     "**Unreal & SQLite Databases - Part 2 - Standard SQLite Plugins** "
+    ]
+   ],
+   [
+    "equal",
+    34,
+    36,
+    33,
+    35
+   ],
+   [
+    "replace",
+    36,
+    37,
+    35,
+    36,
+    [
+     "However, that will only give you very simple, low-level access. "
+    ]
+   ],
+   [
+    "equal",
+    37,
+    42,
+    36,
+    41
+   ],
+   [
+    "replace",
+    42,
+    43,
+    41,
+    42,
+    [
+     "It simplifies some common database tasks, allowing you to concentrate on making your game. "
+    ]
+   ],
+   [
+    "equal",
+    43,
+    48,
+    42,
+    47
+   ],
+   [
+    "replace",
+    48,
+    49,
+    47,
+    48,
+    [
+     "however, they probably wont be updating it, at least not regularly. "
+    ]
+   ],
+   [
+    "equal",
+    49,
+    52,
+    48,
+    51
+   ],
+   [
+    "replace",
+    52,
+    53,
+    51,
+    52,
+    [
+     "Epic were forward thinking enough to include instructions in their plugin on how to update the SQLite library yourself though. "
+    ]
+   ],
+   [
+    "equal",
+    53,
+    57,
+    52,
+    56
+   ],
+   [
+    "replace",
+    57,
+    58,
+    56,
+    57,
+    [
+     "SQLite is an actively developed project, and more recent versions contain some very useful and powerful features that make using it much simpler. "
+    ]
+   ],
+   [
+    "equal",
+    58,
+    62,
+    57,
+    61
+   ],
+   [
+    "replace",
+    62,
+    63,
+    61,
+    62,
+    [
+     "needing to run a separate SELECT query. "
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    62,
+    63
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "04357e397e1f+2": {
+  "fn": "pouchdb-community/pouchdb-adapter-cordova-sqlite",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    5,
+    1,
+    4
+   ],
+   [
+    "replace",
+    5,
+    8,
+    4,
+    7,
+    [
+     "- Cordova-sqlite-storage",
+     "- cordova-plugin-sqlite-2",
+     "- cordova-plugin-websql"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    32,
+    7,
+    31
+   ],
+   [
+    "replace",
+    32,
+    33,
+    31,
+    32,
+    [
+     "If you're not using npm/Browserify/Webpack/etc., just download the JavaScript file from unpkg, then include it after PouchDB:"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    47,
+    32,
+    46
+   ],
+   [
+    "replace",
+    47,
+    48,
+    46,
+    47,
+    [
+     "**Note that you will need to do this within the `deviceready` Cordova event**. If you are stuck trying to get this to work, then please refer to the pouchdb-adapter-cordova-sqlite-demo project which contains a fully working demo that you can try out yourself to see how it should work. The code it adds is simply:"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    53,
+    47,
+    52
+   ],
+   [
+    "replace",
+    53,
+    62,
+    52,
+    53,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    97,
+    53,
+    88
+   ],
+   [
+    "replace",
+    97,
+    98,
+    88,
+    89,
+    [
+     "to be confusing, error-prone, and difficult to configure, which is why it was extracted into a separate plugin. You can read details in PouchDB's list of breaking changes."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    100,
+    89,
+    91
+   ],
+   [
+    "replace",
+    100,
+    105,
+    91,
+    92,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "55e1d7139868+2": {
+  "fn": "GoogleCloudPlatform/gke-cloud-sql-postgres-demo",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    24,
+    3,
+    4,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    28,
+    4,
+    8
+   ],
+   [
+    "replace",
+    28,
+    31,
+    8,
+    11,
+    [
+     "You will deploy a Kubernetes Engine (Kubernetes Engine)",
+     "cluster and a Cloud SQL Postgres instance",
+     "and use the Cloud SQL Proxy container"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    97,
+    11,
+    77
+   ],
+   [
+    "replace",
+    97,
+    98,
+    77,
+    78,
+    [
+     "A Google Cloud account and project is required for this. Access to an existing Google Cloud"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    78,
+    79
+   ],
+   [
+    "replace",
+    99,
+    100,
+    79,
+    80,
+    [
+     "please signup for a free trial here."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    103,
+    80,
+    83
+   ],
+   [
+    "replace",
+    103,
+    104,
+    83,
+    84,
+    [
+     "Click the button below to run the demo in a Google Cloud Shell."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    84,
+    85
+   ],
+   [
+    "replace",
+    105,
+    106,
+    85,
+    86,
+    [
+     "Open in Cloud Shell"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    117,
+    86,
+    97
+   ],
+   [
+    "replace",
+    117,
+    118,
+    97,
+    98,
+    [
+     "This project will run on macOS, Linux, or in a Google Cloud Shell."
+    ]
+   ],
+   [
+    "equal",
+    118,
+    123,
+    98,
+    103
+   ],
+   [
+    "replace",
+    123,
+    125,
+    103,
+    105,
+    [
+     "1. Google Cloud SDK (200.0.0 or later)",
+     "2. kubectl >= 1.8.6"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    133,
+    105,
+    113
+   ],
+   [
+    "replace",
+    133,
+    134,
+    113,
+    114,
+    [
+     "Installation instructions for multiple platforms are available online."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    138,
+    114,
+    118
+   ],
+   [
+    "replace",
+    138,
+    139,
+    118,
+    119,
+    [
+     "Installation instructions"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    149,
+    119,
+    129
+   ],
+   [
+    "replace",
+    149,
+    150,
+    129,
+    130,
+    [
+     "If you don't have a Google Cloud account you can sign up for a free account."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    169,
+    130,
+    149
+   ],
+   [
+    "replace",
+    169,
+    185,
+    149,
+    150,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    242,
+    150,
+    207
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "1e59e9356f81+2": {
+  "fn": "Azure-Samples/smartbulkcopy",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "delete",
+    0,
+    1,
+    0,
+    0
+   ],
+   [
+    "equal",
+    1,
+    15,
+    0,
+    14
+   ],
+   [
+    "delete",
+    15,
+    16,
+    14,
+    14
+   ],
+   [
+    "equal",
+    16,
+    19,
+    14,
+    17
+   ],
+   [
+    "replace",
+    19,
+    28,
+    17,
+    18,
+    [
+     "License Run Tests "
+    ]
+   ],
+   [
+    "equal",
+    28,
+    35,
+    18,
+    25
+   ],
+   [
+    "replace",
+    35,
+    36,
+    25,
+    26,
+    [
+     "Smart Bulk Copy is also available as a Docker Image. To run Smart Bulk Copy via docker, you have to map a volume where the desired .config file can be found. For example (on Windows):"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    41,
+    26,
+    31
+   ],
+   [
+    "replace",
+    41,
+    42,
+    31,
+    32,
+    [
+     "You can also run Smart Bulk Copy using Azure Container Instances. Use the provided `azure-deploy.sh` script to create an ACI and execute Smart Bulk Copy. Make sure you have created the `smartbulkcopy.config.json` file in the `client/configs` folder before running the `.sh` script."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    45,
+    32,
+    35
+   ],
+   [
+    "replace",
+    45,
+    46,
+    35,
+    36,
+    [
+     "Smart Bulk Copy uses Bulk Copy API with parallel tasks. A source table is split in partitions, and each partition is copied in parallel with others, up to a defined maximum, in order to use all the available network bandwidth and all the cloud or server resources available to minimize the load times."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    61,
+    36,
+    51
+   ],
+   [
+    "replace",
+    61,
+    62,
+    51,
+    52,
+    [
+     "Where is a record really located?"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    80,
+    52,
+    70
+   ],
+   [
+    "replace",
+    80,
+    81,
+    70,
+    71,
+    [
+     "- Smart Bulk Copy will always use a Batch Size of a minimum of 102400 rows, no matter what specified in the configuration as per best practices. If you have columnstore it is generally recommended to increase the value to 1048576 in order to maximize compression and reduce number of rowgroups."
+    ]
+   ],
+   [
+    "equal",
+    81,
+    93,
+    71,
+    83
+   ],
+   [
+    "replace",
+    93,
+    94,
+    83,
+    84,
+    [
+     "Create a Database Snapshot"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    97,
+    84,
+    87
+   ],
+   [
+    "replace",
+    97,
+    98,
+    87,
+    88,
+    [
+     "Setting the database to READ_ONLY"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    106,
+    88,
+    96
+   ],
+   [
+    "replace",
+    106,
+    107,
+    96,
+    97,
+    [
+     "and Smart Bulk Copy will start to copy data from source database to destination database. Please keep in mind that *all destination tables will be truncated by default*. This means that Foreign key constraints must be dropped in the destination database before copying. Read more about `TRUNCATE TABLE` restrictions here: TRUNCATE TABLE"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    143,
+    97,
+    133
+   ],
+   [
+    "replace",
+    143,
+    144,
+    133,
+    134,
+    [
+     "Smart Bulk Copy is highly configurable. Read more in the dedicated document: Smart Bulk Copy Configuration Options"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    147,
+    134,
+    137
+   ],
+   [
+    "replace",
+    147,
+    148,
+    137,
+    138,
+    [
+     "Azure SQL is log-rated as described in Transaction Log Rate Governance and it can do 96 MB/sec of log flushing. Smart Bulk Load will report the detected log flush speed every 5 seconds so that you can check if you can actually increase the number of parallel task to go faster or you're already at the limit. Please remember that 96 MB/Sec are done with higher SKU, so if you're already using 7 parallel tasks and you're not seeing something close to 96 MB/Sec please check that"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    150,
+    138,
+    140
+   ],
+   [
+    "replace",
+    150,
+    151,
+    140,
+    141,
+    [
+     "2. You're not using some very low SKU (like P1 or lower or just 2 vCPU). In this case move to an higher SKU for the bulk load duration. "
+    ]
+   ],
+   [
+    "equal",
+    151,
+    153,
+    141,
+    143
+   ],
+   [
+    "replace",
+    153,
+    155,
+    143,
+    145,
+    [
+     "- Azure SQL Hyperscale always provides 100 MB/Sec of maximum log throughput, no matter the number of vCores. Of course, if using a small number of cores on Hyperscale, other factors (for example: sorting when inserting into a table with indexes) could come into play and prevent you to reach the mentioned 100 Mb/Sec. ",
+     "- M-series that can do up to 256 MB/sec of log throughput."
+    ]
+   ],
+   [
+    "equal",
+    155,
+    171,
+    145,
+    161
+   ],
+   [
+    "replace",
+    171,
+    172,
+    161,
+    162,
+    [
+     "|HEAP|135|"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    174,
+    162,
+    164
+   ],
+   [
+    "replace",
+    174,
+    175,
+    164,
+    165,
+    [
+     "|CLUSTERED ROWSTORE, PARTITIONED|207|"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    176,
+    165,
+    166
+   ],
+   [
+    "replace",
+    176,
+    177,
+    166,
+    167,
+    [
+     "|CLUSTERED COLUMNSTORE, PARTITIONED|196|"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    180,
+    167,
+    170
+   ],
+   [
+    "replace",
+    180,
+    181,
+    170,
+    171,
+    [
+     "As the document was getting longer and longer, it has been moved here: Smart Bulk Copy FAQ"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    203,
+    171,
+    193
+   ],
+   [
+    "delete",
+    203,
+    204,
+    193,
+    193
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "90b1bf50d76d+2": {
+  "fn": "hmake98/nestjs-starter",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    8,
+    0,
+    6
+   ],
+   [
+    "replace",
+    8,
+    9,
+    6,
+    7,
+    [
+     "CodeQL"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    7,
+    8
+   ],
+   [
+    "replace",
+    10,
+    11,
+    8,
+    9,
+    [
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    9,
+    10
+   ],
+   [
+    "replace",
+    12,
+    13,
+    10,
+    11,
+    [
+     "Node.js"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    11,
+    12
+   ],
+   [
+    "replace",
+    14,
+    19,
+    12,
+    13,
+    [
+     "Statements"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    26,
+    13,
+    20
+   ],
+   [
+    "replace",
+    26,
+    37,
+    20,
+    21,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    21,
+    22
+   ],
+   [
+    "delete",
+    38,
+    40,
+    22,
+    22
+   ],
+   [
+    "equal",
+    40,
+    49,
+    22,
+    31
+   ],
+   [
+    "replace",
+    49,
+    64,
+    31,
+    32,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    65,
+    32,
+    33
+   ],
+   [
+    "delete",
+    65,
+    67,
+    33,
+    33
+   ],
+   [
+    "equal",
+    67,
+    74,
+    33,
+    40
+   ],
+   [
+    "replace",
+    74,
+    90,
+    40,
+    41,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    94,
+    41,
+    45
+   ],
+   [
+    "delete",
+    94,
+    96,
+    45,
+    45
+   ],
+   [
+    "equal",
+    96,
+    98,
+    45,
+    47
+   ],
+   [
+    "replace",
+    98,
+    99,
+    47,
+    48,
+    [
+     "|Method|Route|Auth|Description|"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    48,
+    49
+   ],
+   [
+    "replace",
+    100,
+    107,
+    49,
+    56,
+    [
+     "|`GET`|`/health`|public|Health check|",
+     "|`POST`|`/v1/auth/signup`|public|Register|",
+     "|`POST`|`/v1/auth/login`|public|Login — returns access + refresh tokens|",
+     "|`GET`|`/v1/auth/refresh-token`|refresh token|Renew token pair|",
+     "|`GET`|`/v1/user/profile`|JWT|Authenticated user's profile|",
+     "|`PUT`|`/v1/user`|JWT|Update own profile|",
+     "|`DELETE`|`/v1/admin/user/:id`|JWT + ADMIN|Soft-delete a user|"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    110,
+    56,
+    59
+   ],
+   [
+    "delete",
+    110,
+    112,
+    59,
+    59
+   ],
+   [
+    "equal",
+    112,
+    114,
+    59,
+    61
+   ],
+   [
+    "replace",
+    114,
+    115,
+    61,
+    62,
+    [
+     "|Variable|Required|Default||"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    62,
+    63
+   ],
+   [
+    "replace",
+    116,
+    128,
+    63,
+    73,
+    [
+     "|`DATABASE_URL`|✅|—|PostgreSQL connection string|",
+     "|`REDIS_URL`|✅|—|Redis URL|",
+     "|`AUTH_ACCESS_TOKEN_SECRET`|✅|—|JWT signing secret|",
+     "|`AUTH_REFRESH_TOKEN_SECRET`|✅|—|JWT refresh secret|",
+     "|`APP_ENV`||`local`|`local` · `development` · `staging` · `production`|",
+     "|`HTTP_PORT`||`3000`||",
+     "|`HTTP_HOST`||`localhost`|Use `0.0.0.0` inside Docker|",
+     "|`AUTH_ACCESS_TOKEN_EXP`||`1d`||",
+     "|`AUTH_REFRESH_TOKEN_EXP`||`7d`||",
+     "|`SENTRY_DSN`||—|Enables error tracking|"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    131,
+    73,
+    76
+   ],
+   [
+    "replace",
+    131,
+    132,
+    76,
+    77,
+    [
+     "|Command|Description|"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    77,
+    78
+   ],
+   [
+    "replace",
+    133,
+    145,
+    78,
+    88,
+    [
+     "|`npm run dev`|Start with hot reload|",
+     "|`npm run build`|Compile to `dist/`|",
+     "|`npm start`|Run compiled app|",
+     "|`npm test`|Run tests with coverage|",
+     "|`npm run db:generate`|Generate Prisma client|",
+     "|`npm run db:migrate`|Run migrations (dev)|",
+     "|`npm run db:migrate-prod`|Run migrations (production)|",
+     "|`npm run seed:admin`|Create default admin user|",
+     "|`npm run lint:fix`|Lint and auto-fix|",
+     "|`npm run format`|Format all source files|"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    155,
+    88,
+    98
+   ],
+   [
+    "replace",
+    155,
+    162,
+    98,
+    99,
+    [
+     "MIT License · Built with NestJS"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "50be36d72dd3+2": {
+  "fn": "adorabled4/TurboAPI",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "equal",
+    0,
+    10,
+    0,
+    10
+   ],
+   [
+    "replace",
+    10,
+    22,
+    10,
+    22,
+    [
+     "|**item**|**version**|",
+     "|----------------|--------------|",
+     "|**JDK**|**17**|",
+     "|**SpringBoot**|**2.7.9**|",
+     "|**SpringCloud**|**2021.0.7.0**|",
+     "|**Apache Dubbo**|**3.1.6**|",
+     "|**OpenAPI**|**3**|",
+     "|**MySQL**|**5.7**|",
+     "|**Redis**|**6.2**|",
+     "|**Mybatis-Plus**|**3.5.2**|",
+     "|**Nacos**|**2.2.1**|",
+     "|**FreeMarker**|**2.3.2**|"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    28,
+    22,
+    28
+   ],
+   [
+    "delete",
+    28,
+    30,
+    28,
+    28
+   ],
+   [
+    "equal",
+    30,
+    39,
+    28,
+    37
+   ],
+   [
+    "replace",
+    39,
+    40,
+    37,
+    38,
+    [
+     "前者主要是接口的基本信息, 后者主要包含 **示例** , **请求元信息** 以及SDK生成需要的信息。 "
+    ]
+   ],
+   [
+    "equal",
+    40,
+    45,
+    38,
+    43
+   ],
+   [
+    "replace",
+    45,
+    84,
+    43,
+    44,
+    [
+     "…（39 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    101,
+    44,
+    61
+   ],
+   [
+    "replace",
+    101,
+    118,
+    61,
+    62,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    122,
+    62,
+    66
+   ],
+   [
+    "replace",
+    122,
+    123,
+    66,
+    67,
+    [
+     "> 详细内容可以参考 : TurboAPI-SDK自动生成技术与代码实践"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    145,
+    67,
+    89
+   ],
+   [
+    "replace",
+    145,
+    166,
+    89,
+    90,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    174,
+    90,
+    98
+   ],
+   [
+    "replace",
+    174,
+    195,
+    98,
+    99,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    225,
+    99,
+    129
+   ],
+   [
+    "replace",
+    225,
+    241,
+    129,
+    145,
+    [
+     " - name",
+     " - description",
+     " - callPath",
+     " - serviceAddress",
+     " - requestParam",
+     " - requestMethod",
+     " - requestHeaders",
+     " - sdkMethodName",
+     " - sdkParamName",
+     " - imageUrl",
+     " - version",
+     " - requestExample",
+     " - responseExample",
+     " - docUrl",
+     " - status",
+     " - categories"
+    ]
+   ],
+   [
+    "equal",
+    241,
+    256,
+    145,
+    160
+   ],
+   [
+    "replace",
+    256,
+    257,
+    160,
+    161,
+    [
+     "- 对于请求 : 从网关路由到某个模块, 此时需要网关创建`trace_id`, 然后通过配置日志文件打印相关内容"
+    ]
+   ],
+   [
+    "equal",
+    257,
+    260,
+    161,
+    164
+   ],
+   [
+    "replace",
+    260,
+    263,
+    164,
+    167,
+    [
+     " 1. 实现接口 `org.apache.dubbo.rpc.Filter`",
+     " 2. 在resource下添加 `META-INF/dubbo` 目录下添加 `org.apache.dubbo.rpc.Filter` 文件 ",
+     " 3. 在文件中 输入 `traceId=com.dhx.apicore.aop.RemoteTraceIdFilter `的配置内容"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    264,
+    167,
+    168
+   ],
+   [
+    "replace",
+    264,
+    265,
+    168,
+    169,
+    [
+     " 假设我们有A , B , C三个服务, 完全会出现 A调用B , B接着调用C, C反过来需要调用A的场景 , 如果是三体项目, 这里的ABC可能就是三个模块, 调用的关系就是 xxxService 互相调用, 不考虑异步的问题, 日志中打印的线程信息即可满足我们查找日志的需求。"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    266,
+    169,
+    170
+   ],
+   [
+    "replace",
+    266,
+    267,
+    170,
+    171,
+    [
+     " 但是如果是微服务项目， 就需要我们手动去设置Filter ，在服务调用前/后 进行相应的处理(这里就是`MDC.out(TRACE_ID, traceId))`"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    274,
+    171,
+    178
+   ],
+   [
+    "replace",
+    274,
+    295,
+    178,
+    179,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    295,
+    303,
+    179,
+    187
+   ],
+   [
+    "replace",
+    303,
+    333,
+    187,
+    188,
+    [
+     "…（30 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    333,
+    347,
+    188,
+    202
+   ],
+   [
+    "replace",
+    347,
+    348,
+    202,
+    203,
+    [
+     "核心流程图"
+    ]
+   ],
+   [
+    "equal",
+    348,
+    353,
+    203,
+    208
+   ],
+   [
+    "replace",
+    353,
+    363,
+    208,
+    218,
+    [
+     "|column|type|comment|",
+     "|------------|------------|----------------------------|",
+     "|id|bigint|主键, 自增|",
+     "|interface_id|bigint|接口ID|",
+     "|user_id|bigint|用户ID|",
+     "|trace_id|varchar(128)|trace_id, 用来标记每次的请求|",
+     "|is_async|tinyint|是否是异步调用|",
+     "|status|tinyint|本次调用执行状态|",
+     "|create_time|timestamp|创建时间|",
+     "|is_delete|tinyint|逻辑删除, 默认0|"
+    ]
+   ],
+   [
+    "equal",
+    363,
+    366,
+    218,
+    221
+   ],
+   [
+    "replace",
+    366,
+    375,
+    221,
+    230,
+    [
+     "|column|type|comment|",
+     "|-------------|------------|----------------------|",
+     "|id|bigint|主键, 自增|",
+     "|interface_id|bigint|接口ID|",
+     "|user_id|bigint|用户ID|",
+     "|call_back_url|varchar(512)|用户绑定的回调接口地址|",
+     "|create_time|timestamp|创建时间|",
+     "|update_time|timestamp|更新时间|",
+     "|is_delete|tinyint|逻辑删除, 默认0|"
+    ]
+   ],
+   [
+    "equal",
+    375,
+    376,
+    230,
+    231
+   ],
+   [
+    "replace",
+    376,
+    377,
+    231,
+    232,
+    [
+     "上面的流程已经非常清晰, 这里简单陈述RPC与MQ的区别以及主要的场景"
+    ]
+   ],
+   [
+    "equal",
+    377,
+    400,
+    232,
+    255
+   ],
+   [
+    "replace",
+    400,
+    401,
+    255,
+    256,
+    [
+     "**对于这里异步调用接口的场景, 对于实时性的要求并不高, 相反接口服务需要承受较高的并发, 因此MQ的特性更加适合我们的场景**"
+    ]
+   ],
+   [
+    "equal",
+    401,
+    412,
+    256,
+    267
+   ],
+   [
+    "replace",
+    412,
+    413,
+    267,
+    268,
+    [
+     "效果预览: https://turboapi-doc.dhx.icu/"
+    ]
+   ],
+   [
+    "equal",
+    413,
+    426,
+    268,
+    281
+   ],
+   [
+    "delete",
+    426,
+    430,
+    281,
+    281
+   ],
+   [
+    "equal",
+    430,
+    434,
+    281,
+    285
+   ],
+   [
+    "replace",
+    434,
+    435,
+    285,
+    286,
+    [
+     "在微服务架构下，每个后台应用都接入swagger 在线文档，在服务特别多的情况下，就需要做聚合文档处理，也就是将所有服务的文档聚合在一起。"
+    ]
+   ],
+   [
+    "equal",
+    435,
+    444,
+    286,
+    295
+   ],
+   [
+    "replace",
+    444,
+    452,
+    295,
+    296,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    452,
+    460,
+    296,
+    304
+   ],
+   [
+    "replace",
+    460,
+    472,
+    304,
+    305,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    472,
+    480,
+    305,
+    313
+   ],
+   [
+    "replace",
+    480,
+    487,
+    313,
+    314,
+    [
+     "jwt+redis"
+    ]
+   ],
+   [
+    "equal",
+    487,
+    502,
+    314,
+    329
+   ],
+   [
+    "replace",
+    502,
+    515,
+    329,
+    330,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    515,
+    516,
+    330,
+    331
+   ],
+   [
+    "delete",
+    516,
+    520,
+    331,
+    331
+   ],
+   [
+    "equal",
+    520,
+    531,
+    331,
+    342
+   ],
+   [
+    "replace",
+    531,
+    545,
+    342,
+    343,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    545,
+    546,
+    343,
+    344
+   ],
+   [
+    "delete",
+    546,
+    552,
+    344,
+    344
+   ],
+   [
+    "equal",
+    552,
+    565,
+    344,
+    357
+   ],
+   [
+    "replace",
+    565,
+    566,
+    357,
+    358,
+    [
+     "DIST目录示例"
+    ]
+   ],
+   [
+    "equal",
+    566,
+    573,
+    358,
+    365
+   ],
+   [
+    "replace",
+    573,
+    574,
+    365,
+    366,
+    [
+     "前端Dockerfile示例"
+    ]
+   ],
+   [
+    "equal",
+    574,
+    579,
+    366,
+    371
+   ],
+   [
+    "replace",
+    579,
+    580,
+    371,
+    372,
+    [
+     "前端镜像构建示例"
+    ]
+   ],
+   [
+    "equal",
+    580,
+    595,
+    372,
+    387
+   ],
+   [
+    "replace",
+    595,
+    596,
+    387,
+    388,
+    [
+     "后端项目打包"
+    ]
+   ],
+   [
+    "equal",
+    596,
+    603,
+    388,
+    395
+   ],
+   [
+    "replace",
+    603,
+    604,
+    395,
+    396,
+    [
+     "后端打包结果展示"
+    ]
+   ],
+   [
+    "equal",
+    604,
+    609,
+    396,
+    401
+   ],
+   [
+    "replace",
+    609,
+    610,
+    401,
+    402,
+    [
+     "后端api-gateway模块Dockerfile"
+    ]
+   ],
+   [
+    "equal",
+    610,
+    615,
+    402,
+    407
+   ],
+   [
+    "replace",
+    615,
+    616,
+    407,
+    408,
+    [
+     "项目部署文件结构"
+    ]
+   ],
+   [
+    "equal",
+    616,
+    625,
+    408,
+    417
+   ],
+   [
+    "replace",
+    625,
+    626,
+    417,
+    418,
+    [
+     "后端服务镜像"
+    ]
+   ],
+   [
+    "equal",
+    626,
+    636,
+    418,
+    428
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a29900f2dd90+2": {
+  "fn": "gocom/danpu",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    3,
+    1,
+    2
+   ],
+   [
+    "replace",
+    3,
+    4,
+    2,
+    3,
+    [
+     "Build Status Coverage Status Packagist"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    10,
+    3,
+    9
+   ],
+   [
+    "delete",
+    10,
+    11,
+    9,
+    9
+   ],
+   [
+    "equal",
+    11,
+    16,
+    9,
+    14
+   ],
+   [
+    "replace",
+    16,
+    17,
+    14,
+    15,
+    [
+     "* PDO"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    22,
+    15,
+    20
+   ],
+   [
+    "replace",
+    22,
+    23,
+    20,
+    21,
+    [
+     "* zlib"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    27,
+    21,
+    25
+   ],
+   [
+    "delete",
+    27,
+    28,
+    25,
+    25
+   ],
+   [
+    "equal",
+    28,
+    29,
+    25,
+    26
+   ],
+   [
+    "replace",
+    29,
+    30,
+    26,
+    27,
+    [
+     "Using Composer:"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    27,
+    28
+   ],
+   [
+    "replace",
+    31,
+    32,
+    28,
+    29,
+    [
+     " $ composer require rah/danpu"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    34,
+    29,
+    31
+   ],
+   [
+    "delete",
+    34,
+    35,
+    31,
+    31
+   ],
+   [
+    "equal",
+    35,
+    42,
+    31,
+    38
+   ],
+   [
+    "replace",
+    42,
+    43,
+    38,
+    39,
+    [
+     "If you are already using other Composer packages, or a modern Composer-managed framework, this should be taken care of already. If not, merely add the autoloader to your base bootstrap includes. See Composer's documentation for more information."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    52,
+    39,
+    48
+   ],
+   [
+    "replace",
+    52,
+    65,
+    48,
+    49,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    79,
+    49,
+    63
+   ],
+   [
+    "replace",
+    79,
+    92,
+    63,
+    64,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    96,
+    64,
+    68
+   ],
+   [
+    "replace",
+    96,
+    97,
+    68,
+    69,
+    [
+     "In addition to the mandatory connection and file location, Danpu accepts various optional configuration options. These include filtering tables and views by prefix, ignoring tables and creating dumps without row data. See the src/Rah/Danpu/Config.php for full list of options. The source file contains detailed documentation blocks, outlining each option."
+    ]
+   ],
+   [
+    "equal",
+    97,
+    99,
+    69,
+    71
+   ],
+   [
+    "delete",
+    99,
+    100,
+    71,
+    71
+   ],
+   [
+    "equal",
+    100,
+    105,
+    71,
+    76
+   ],
+   [
+    "replace",
+    105,
+    106,
+    76,
+    77,
+    [
+     "PHP lets you to change these limits with its configuration options, which can be modified temporarily during script execution, or in global configuration files. The configuration options you will be the most interested in, are memory_limit and max_execution_time, and possibly ignore_user_abort. You can change these values in your script before running a backup with Danpu:"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    114,
+    77,
+    85
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "02fa8b82746b+2": {
+  "fn": "lendylongli/android-sqlite-encrypt",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    6,
+    1,
+    5
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "99c98282077c+2": {
+  "fn": "filippoengidashet/Retrofit2-RestApiDemo",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

@@ -10148,5 +10148,3651 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "9a9882fd5e06+2": {
+  "fn": "ossc-db/pg_plan_advsr",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    7,
+    1,
+    6
+   ],
+   [
+    "replace",
+    7,
+    8,
+    6,
+    7,
+    [
+     "* master branch for PostgreSQL 12 or above CI"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    10,
+    7,
+    9
+   ],
+   [
+    "delete",
+    10,
+    11,
+    9,
+    9
+   ],
+   [
+    "equal",
+    11,
+    14,
+    9,
+    12
+   ],
+   [
+    "replace",
+    14,
+    25,
+    12,
+    23,
+    [
+     "1. Cookbook",
+     "2. Objects created by the extension",
+     "3. Options",
+     "4. Usage",
+     "5. Installation Requirements",
+     "6. Installation",
+     "7. Internals",
+     "8. Limitations",
+     "9. Support",
+     "10. Author",
+     "11. Acknowledgments"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    28,
+    23,
+    26
+   ],
+   [
+    "delete",
+    28,
+    29,
+    26,
+    26
+   ],
+   [
+    "equal",
+    29,
+    30,
+    26,
+    27
+   ],
+   [
+    "delete",
+    30,
+    31,
+    27,
+    27
+   ],
+   [
+    "equal",
+    31,
+    34,
+    27,
+    30
+   ],
+   [
+    "replace",
+    34,
+    35,
+    30,
+    31,
+    [
+     "Options and Usage."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    50,
+    31,
+    46
+   ],
+   [
+    "replace",
+    50,
+    64,
+    46,
+    59,
+    [
+     " QUERY PLAN",
+     " Nested Loop (cost=295.29..515.35 rows=1 width=16) (actual time=24.591..164.421 rows=9991 loops=1)",
+     " -> Hash Join (cost=295.00..515.01 rows=1 width=16) (actual time=24.500..46.584 rows=10000 loops=1)",
+     " Hash Cond: ((a.c1 = b.c1) AND (a.c2 = b.c2))",
+     " -> Seq Scan on table_a a (cost=0.00..145.00 rows=10000 width=8) (actual time=0.032..3.899 rows=10000 loops=1)",
+     " -> Hash (cost=145.00..145.00 rows=10000 width=8) (actual time=24.359..24.359 rows=10000 loops=1)",
+     " Buckets: 16384 Batches: 1 Memory Usage: 519kB",
+     " -> Seq Scan on table_b b (cost=0.00..145.00 rows=10000 width=8) (actual time=0.026..5.771 rows=10000 loops=1)",
+     " -> Index Scan using ind_c_c2 on table_c c (cost=0.29..0.33 rows=1 width=8) (actual time=0.009..0.010 rows=1 loops=10000)",
+     " Index Cond: ((c2 = a.c2) AND (c2 >= 10))",
+     " Filter: ((c1 > 1) AND (c1 = a.c1))",
+     " Planning Time: 3.952 ms",
+     " Execution Time: 168.867 ms"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    67,
+    59,
+    62
+   ],
+   [
+    "replace",
+    67,
+    84,
+    62,
+    78,
+    [
+     " QUERY PLAN",
+     " Hash Join (cost=590.00..934.88 rows=9991 width=16) (actual time=37.030..74.904 rows=9991 loops=1)",
+     " Hash Cond: ((a.c1 = b.c1) AND (a.c2 = b.c2))",
+     " -> Hash Join (cost=295.00..564.93 rows=9991 width=16) (actual time=17.751..40.944 rows=9991 loops=1)",
+     " Hash Cond: ((c.c1 = a.c1) AND (c.c2 = a.c2))",
+     " -> Seq Scan on table_c c (cost=0.00..195.00 rows=9990 width=8) (actual time=0.060..7.318 rows=9991 loops=1)",
+     " Filter: ((c1 > 1) AND (c2 >= 10))",
+     " Rows Removed by Filter: 9",
+     " -> Hash (cost=145.00..145.00 rows=10000 width=8) (actual time=17.658..17.660 rows=10000 loops=1)",
+     " Buckets: 16384 Batches: 1 Memory Usage: 519kB",
+     " -> Seq Scan on table_a a (cost=0.00..145.00 rows=10000 width=8) (actual time=0.019..4.141 rows=10000 loops=1)",
+     " -> Hash (cost=145.00..145.00 rows=10000 width=8) (actual time=19.249..19.250 rows=10000 loops=1)",
+     " Buckets: 16384 Batches: 1 Memory Usage: 519kB",
+     " -> Seq Scan on table_b b (cost=0.00..145.00 rows=10000 width=8) (actual time=0.022..4.799 rows=10000 loops=1)",
+     " Planning Time: 3.961 ms",
+     " Execution Time: 78.294 ms"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    86,
+    78,
+    80
+   ],
+   [
+    "replace",
+    86,
+    88,
+    80,
+    81,
+    [
+     "See: Usage for more details."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    90,
+    81,
+    83
+   ],
+   [
+    "delete",
+    90,
+    91,
+    83,
+    83
+   ],
+   [
+    "equal",
+    91,
+    93,
+    83,
+    85
+   ],
+   [
+    "delete",
+    93,
+    94,
+    85,
+    85
+   ],
+   [
+    "equal",
+    94,
+    102,
+    85,
+    93
+   ],
+   [
+    "delete",
+    102,
+    103,
+    93,
+    93
+   ],
+   [
+    "equal",
+    103,
+    109,
+    93,
+    99
+   ],
+   [
+    "replace",
+    109,
+    110,
+    99,
+    100,
+    [
+     " Column | Type | Description"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    100,
+    101
+   ],
+   [
+    "replace",
+    111,
+    128,
+    101,
+    118,
+    [
+     " id | integer | Sequence as a primary key: nextval('plan_repo.plan_history_id_seq'::regclass)",
+     " norm_query_hash | text | MD5 based on normalized query text",
+     " pgsp_queryid | bigint | Queryid of pg_store_plans",
+     " pgsp_planid | bigint | Planid of pg_sotre_plans",
+     " execution_time | numeric | Execution time (ms) of this planid",
+     " rows_hint | text | Rows hint of this plan",
+     " scan_hint | text | Scan hint of this plan",
+     " join_hint | text | Join hint of this plan",
+     " lead_hint | text | Leading hint of this plan",
+     " scan_rows_err | numeric | Sum of estimation row error of scans",
+     " scan_err_ratio | numeric | Maximum estimation row error ratio of scans",
+     " join_rows_err | numeric | Sum of estimation row error of joins",
+     " join_err_ratio | numeric | Maximum estimation row error ratio of joins",
+     " scan_cnt | integer | Number of scan nodes in this plan",
+     " join_cnt | integer | Number of Join nodes in this plan",
+     " application_name | text | Application name of client tool such as \"psql\"",
+     " timestamp | timestamp without time zone | Timestamp of this record inserted"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    131,
+    118,
+    121
+   ],
+   [
+    "replace",
+    131,
+    132,
+    121,
+    122,
+    [
+     " Column | Type | Description"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    133,
+    122,
+    123
+   ],
+   [
+    "replace",
+    133,
+    135,
+    123,
+    125,
+    [
+     " norm_query_hash | text | MD5 based on normalized query text",
+     " norm_query_string | text | Normalized query text"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    138,
+    125,
+    128
+   ],
+   [
+    "replace",
+    138,
+    139,
+    128,
+    129,
+    [
+     " Column | Type | Description"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    129,
+    130
+   ],
+   [
+    "replace",
+    140,
+    145,
+    130,
+    134,
+    [
+     " norm_query_hash | text | MD5 based on normalized query text",
+     " raw_query_id | integer | Sequence of raw query text: nextval('plan_repo.raw_queries_raw_query_id_seq'::regclass)",
+     " raw_query_string | text | Raw query text (not normalized)",
+     " timestamp | timestamp without time zone | Timestamp of this record inserted"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    147,
+    134,
+    136
+   ],
+   [
+    "delete",
+    147,
+    148,
+    136,
+    136
+   ],
+   [
+    "equal",
+    148,
+    152,
+    136,
+    140
+   ],
+   [
+    "delete",
+    152,
+    153,
+    140,
+    140
+   ],
+   [
+    "equal",
+    153,
+    154,
+    140,
+    141
+   ],
+   [
+    "delete",
+    154,
+    155,
+    141,
+    141
+   ],
+   [
+    "equal",
+    155,
+    168,
+    141,
+    154
+   ],
+   [
+    "replace",
+    168,
+    174,
+    154,
+    160,
+    [
+     " pgsp_queryid",
+     " pgsp_planid",
+     " Execution time",
+     " Hints for current plan",
+     " Rows hint (feedback info)",
+     " and so on"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    189,
+    160,
+    175
+   ],
+   [
+    "replace",
+    189,
+    193,
+    175,
+    179,
+    [
+     " set pg_plan_advsr.enabled to on;",
+     " set pg_hint_plan.enable_hint_table to on;",
+     " set pg_hint_plan.debug_print to on;",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    193,
+    197,
+    179,
+    183
+   ],
+   [
+    "replace",
+    197,
+    200,
+    183,
+    186,
+    [
+     " set pg_plan_advsr.enabled to on;",
+     " set pg_hint_plan.enable_hint_table to off;",
+     " set pg_hint_plan.debug_print to off;"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    202,
+    186,
+    188
+   ],
+   [
+    "delete",
+    202,
+    203,
+    188,
+    188
+   ],
+   [
+    "equal",
+    203,
+    223,
+    188,
+    208
+   ],
+   [
+    "replace",
+    223,
+    234,
+    208,
+    209,
+    [
+     " explain (analyze, verbose) select * from t where a = 1 and b = 1;"
+    ]
+   ],
+   [
+    "equal",
+    234,
+    235,
+    209,
+    210
+   ],
+   [
+    "replace",
+    235,
+    251,
+    210,
+    234,
+    [
+     " QUERY PLAN",
+     " Seq Scan on public.t (cost=0.00..195.00 rows=100 width=8) (actual time=0.052..6.269 rows=100 loops=1)",
+     " Output: a, b",
+     " Filter: ((t.a = 1) AND (t.b = 1))",
+     " Rows Removed by Filter: 9900",
+     " Query Identifier: -3455024416178978571",
+     " Planning Time: 0.930 ms",
+     " Execution Time: 9.136 ms",
+     "",
+     " DESCRIBE",
+     " application: psql",
+     " pgsp_queryid: -3455024416178978571",
+     " pgsp_planid: 3455841613",
+     " join_cnt: 0",
+     " join_rows_err: 0",
+     " join_err_ratio: 0.00",
+     " scan_cnt: 1",
+     " scan_rows_err: 0",
+     " scan_err_ratio: 0.00",
+     " lead hint: LEADING( t )",
+     " join hint:",
+     " scan hint: SEQSCAN(t)",
+     " rows hint:",
+     " (23 rows)"
+    ]
+   ],
+   [
+    "equal",
+    251,
+    258,
+    234,
+    241
+   ],
+   [
+    "replace",
+    258,
+    263,
+    241,
+    246,
+    [
+     " select pgsp_queryid, pgsp_planid, execution_time, scan_hint, join_hint, lead_hint from plan_repo.plan_history order by id;",
+     "",
+     " select queryid, planid, plan from pg_store_plans where queryid='your pgsp_queryid in plan_history' order by first_call;",
+     "",
+     "\tSee shell script file as an example: JOB/auto_tune_31c.sh"
+    ]
+   ],
+   [
+    "equal",
+    263,
+    265,
+    246,
+    248
+   ],
+   [
+    "replace",
+    265,
+    266,
+    248,
+    249,
+    [
+     "\tdemo of auto tune"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    269,
+    249,
+    252
+   ],
+   [
+    "insert",
+    269,
+    269,
+    252,
+    253,
+    [
+     "\tNote:"
+    ]
+   ],
+   [
+    "equal",
+    269,
+    270,
+    253,
+    254
+   ],
+   [
+    "delete",
+    270,
+    272,
+    254,
+    254
+   ],
+   [
+    "equal",
+    272,
+    281,
+    254,
+    263
+   ],
+   [
+    "replace",
+    281,
+    282,
+    263,
+    264,
+    [
+     " select pgsp_queryid, pgsp_planid, execution_time, scan_hint, join_hint, lead_hint from plan_repo.plan_history order by id;"
+    ]
+   ],
+   [
+    "equal",
+    282,
+    284,
+    264,
+    266
+   ],
+   [
+    "delete",
+    284,
+    291,
+    266,
+    266
+   ],
+   [
+    "equal",
+    291,
+    292,
+    266,
+    267
+   ],
+   [
+    "replace",
+    292,
+    307,
+    267,
+    289,
+    [
+     " pgsp_queryid | pgsp_planid | execution_time | scan_hint | join_hint | lead_hint",
+     " --------------+-------------+----------------+-----------------------------------------+--------------------+-------------------------",
+     " 4173287301 | 3707748199 | 265.179 | SEQSCAN(t2) SEQSCAN(x) INDEXSCAN(t1) | HASHJOIN(t2 t1 x) +| LEADING( (t2 (x t1 )) )",
+     "||||NESTLOOP(t1 x)|",
+     " 4173287301 | 1101439786 | 2.149 | SEQSCAN(x) INDEXSCAN(t1) INDEXSCAN(t2) | NESTLOOP(t2 t1 x) +| LEADING( ((x t1 )t2 ) )",
+     "||||NESTLOOP(t1 x)|",
+     "",
+     " # \\a",
+     " Output format is unaligned.",
+     " # \\t",
+     " Tuples only is on.",
+     "",
+     " select plan_repo.get_hint(1101439786);",
+     "",
+     " /*+",
+     " LEADING( ((x t1 )t2 ) )",
+     " NESTLOOP(t2 t1 x)",
+     " NESTLOOP(t1 x)",
+     " SEQSCAN(x) INDEXSCAN(t1) INDEXSCAN(t2)",
+     " */",
+     " --1101439786",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    307,
+    316,
+    289,
+    298
+   ],
+   [
+    "replace",
+    316,
+    317,
+    298,
+    299,
+    [
+     " select * from plan_repo.get_extstat(queryid);"
+    ]
+   ],
+   [
+    "equal",
+    317,
+    320,
+    299,
+    302
+   ],
+   [
+    "replace",
+    320,
+    325,
+    302,
+    306,
+    [
+     " # select * from plan_repo.get_extstat(-3455024416178978571);",
+     " suggest",
+     " CREATE STATISTICS ON a, b FROM public.t;",
+     " (1 row)"
+    ]
+   ],
+   [
+    "equal",
+    325,
+    326,
+    306,
+    307
+   ],
+   [
+    "delete",
+    326,
+    327,
+    307,
+    307
+   ],
+   [
+    "equal",
+    327,
+    328,
+    307,
+    308
+   ],
+   [
+    "delete",
+    328,
+    329,
+    308,
+    308
+   ],
+   [
+    "equal",
+    329,
+    339,
+    308,
+    318
+   ],
+   [
+    "delete",
+    339,
+    340,
+    318,
+    318
+   ],
+   [
+    "equal",
+    340,
+    341,
+    318,
+    319
+   ],
+   [
+    "delete",
+    341,
+    342,
+    319,
+    319
+   ],
+   [
+    "equal",
+    342,
+    350,
+    319,
+    327
+   ],
+   [
+    "replace",
+    350,
+    353,
+    327,
+    330,
+    [
+     " - Install postgresql-devel package if you installed PostgreSQL by rpm files",
+     " - Set the PATH environment variable to pg_config of your PostgreSQL",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    353,
+    354,
+    330,
+    331
+   ],
+   [
+    "replace",
+    354,
+    355,
+    331,
+    332,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    355,
+    361,
+    332,
+    338
+   ],
+   [
+    "replace",
+    361,
+    365,
+    338,
+    339,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    365,
+    368,
+    339,
+    342
+   ],
+   [
+    "replace",
+    368,
+    370,
+    342,
+    344,
+    [
+     "",
+     " ##### Set the appropriate version of PostgreSQL for the VERSION variable. For example, If you use PG12, see below:"
+    ]
+   ],
+   [
+    "equal",
+    370,
+    377,
+    344,
+    351
+   ],
+   [
+    "replace",
+    377,
+    378,
+    351,
+    352,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    378,
+    384,
+    352,
+    358
+   ],
+   [
+    "replace",
+    384,
+    400,
+    358,
+    359,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    400,
+    408,
+    359,
+    367
+   ],
+   [
+    "replace",
+    408,
+    413,
+    367,
+    371,
+    [
+     "…（29 行代码略）",
+     "\t\t```",
+     " pg_ctl start",
+     " psql"
+    ]
+   ],
+   [
+    "equal",
+    413,
+    414,
+    371,
+    372
+   ],
+   [
+    "replace",
+    414,
+    415,
+    372,
+    376,
+    [
+     " -- Required",
+     " create extension pg_hint_plan;",
+     " create extension pg_store_plans;",
+     " create extension pg_plan_advsr;"
+    ]
+   ],
+   [
+    "equal",
+    415,
+    416,
+    376,
+    377
+   ],
+   [
+    "replace",
+    416,
+    448,
+    377,
+    379,
+    [
+     " -- Optional",
+     " create extension pg_qualstats;"
+    ]
+   ],
+   [
+    "equal",
+    448,
+    452,
+    379,
+    383
+   ],
+   [
+    "replace",
+    452,
+    546,
+    383,
+    384,
+    [
+     "…（94 行代码略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "efab70c3e4d8+2": {
+  "fn": "leandroercoli/SaasterKit",
+  "clean_ver": "2",
+  "raw_lines": 16,
+  "ops": [
+   [
+    "equal",
+    0,
+    16,
+    0,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "Find the full documentation here"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "23b7fd78bde2+2": {
+  "fn": "rocambille/start-express-react",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    1,
+    [
+     "en français ?"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    12,
+    1,
+    6
+   ],
+   [
+    "replace",
+    12,
+    16,
+    6,
+    10,
+    [
+     "GitHub tag",
+     "License",
+     "Issues - start-express-react",
+     "GitHub Stars"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    10,
+    11
+   ],
+   [
+    "replace",
+    17,
+    19,
+    11,
+    13,
+    [
+     "Use this template",
+     "Read the manual"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    21,
+    13,
+    15
+   ],
+   [
+    "delete",
+    21,
+    23,
+    15,
+    15
+   ],
+   [
+    "equal",
+    23,
+    40,
+    15,
+    32
+   ],
+   [
+    "delete",
+    40,
+    42,
+    32,
+    32
+   ],
+   [
+    "equal",
+    42,
+    48,
+    32,
+    38
+   ],
+   [
+    "replace",
+    48,
+    56,
+    38,
+    39,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    71,
+    39,
+    54
+   ],
+   [
+    "replace",
+    71,
+    74,
+    54,
+    57,
+    [
+     "- **For you:** clear, living documentation.",
+     "- **For AI:** a strict \"contract\" it must follow when generating endpoints.",
+     "- **For the app:** instant verification that the AI didn't miss a scenario."
+    ]
+   ],
+   [
+    "equal",
+    74,
+    77,
+    57,
+    60
+   ],
+   [
+    "replace",
+    77,
+    80,
+    60,
+    63,
+    [
+     "- **Sync SQLite:** direct data access that AI can read and write without `async`/`await` confusion.",
+     "- **Single Source of Truth Schemas:** Zod schemas in `*Schemas.ts` validate HTTP inputs at the edge and parse database entity outputs. This prevents silent runtime bugs.",
+     "- **Transparent stack:** Express 5 + React 19. No black boxes. You understand every line."
+    ]
+   ],
+   [
+    "equal",
+    80,
+    83,
+    63,
+    66
+   ],
+   [
+    "replace",
+    83,
+    87,
+    66,
+    70,
+    [
+     "- **Backend**: Node.js, Express 5, Zod (validation)",
+     "- **Frontend**: React 19, React Router, Vite, Pico CSS",
+     "- **Database**: SQLite (zero-config, sync API)",
+     "- **Tooling**: TypeScript, Biome, Vitest, Docker"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    92,
+    70,
+    75
+   ],
+   [
+    "replace",
+    92,
+    93,
+    75,
+    76,
+    [
+     "👉 **Read the wiki**"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    96,
+    76,
+    79
+   ],
+   [
+    "replace",
+    96,
+    97,
+    79,
+    80,
+    [
+     "Distributed under the MIT license. You are free to use, modify, and redistribute it for educational or professional purposes."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7cb73ccb87d7+2": {
+  "fn": "allysonsilva/laravel-docker",
+  "clean_ver": "2",
+  "raw_lines": 11,
+  "ops": [
+   [
+    "replace",
+    0,
+    11,
+    0,
+    5,
+    [
+     "Laravel",
+     " &nbsp;&nbsp;",
+     " <a href=\"https://www.docker.com/\">Docker</>",
+     " &nbsp;",
+     " Traefik Proxy"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    5,
+    6
+   ],
+   [
+    "replace",
+    12,
+    13,
+    6,
+    7,
+    [
+     " Laravel Dockerized"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    7,
+    8
+   ],
+   [
+    "replace",
+    14,
+    15,
+    8,
+    11,
+    [
+     "> Use this repository to get started with developing your Laravel application in a Docker container. ",
+     "",
+     "This is a personal collection of Docker images and services(**Nginx**, **PHP-FPM**, **Traefik**, **Authelia**, **Netdata**, **New Relic**, **Portainer**, **MySQL**, **Redis**, **MongoDB**, **Queue**, **Scheduler**, and **GoAccess**) for applications in Laravel."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    18,
+    11,
+    14
+   ],
+   [
+    "replace",
+    18,
+    52,
+    14,
+    15,
+    [
+     "（目录 34 行略）"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    63,
+    15,
+    26
+   ],
+   [
+    "replace",
+    63,
+    262,
+    26,
+    27,
+    [
+     "…（199 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    278,
+    27,
+    43
+   ],
+   [
+    "replace",
+    278,
+    279,
+    43,
+    44,
+    [
+     "**Installed PHP extensions**)"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    297,
+    44,
+    62
+   ],
+   [
+    "replace",
+    297,
+    298,
+    62,
+    63,
+    [
+     " - The folder name is configurable via the `LOCAL_DOCKER_FOLDER` variable of the `.env` environment file"
+    ]
+   ],
+   [
+    "equal",
+    298,
+    299,
+    63,
+    64
+   ],
+   [
+    "replace",
+    299,
+    300,
+    64,
+    65,
+    [
+     " - The folder name is configurable via the `APP_LOCAL_FOLDER` variable of the `.env` environment file"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    325,
+    65,
+    90
+   ],
+   [
+    "replace",
+    325,
+    326,
+    90,
+    91,
+    [
+     " - The value of the `DOMAIN` variable from the *scripts/envs/deploy.env* file must match the same value as the same variable from the `.env` file"
+    ]
+   ],
+   [
+    "equal",
+    326,
+    327,
+    91,
+    92
+   ],
+   [
+    "replace",
+    327,
+    330,
+    92,
+    95,
+    [
+     "- Copy *scripts/envs/docker.env* file to root `docker` folder",
+     " - Use the command to make the copy: `cp scripts/envs/docker.env .`",
+     " - ***Edit the variable `COMPOSE_PROJECT_NAME`, where it should have the same value as the variable `PROJECT_NAME` in the `.env` file***"
+    ]
+   ],
+   [
+    "equal",
+    330,
+    333,
+    95,
+    98
+   ],
+   [
+    "replace",
+    333,
+    334,
+    98,
+    99,
+    [
+     "1. Copy the contents of the *services/app/.env.compose* file and place at the end of the `.env` file"
+    ]
+   ],
+   [
+    "equal",
+    334,
+    336,
+    99,
+    101
+   ],
+   [
+    "replace",
+    336,
+    338,
+    101,
+    103,
+    [
+     " - `APP_IMAGE`: Docker image tag that will be used in its creation through the `docker-build-app` command and also used in the execution of PHP/Laravel containers",
+     " - `APP_LOCAL_FOLDER`: Name of the folder where the Laravel application is located. It should be `./folder-name-project-laravel`"
+    ]
+   ],
+   [
+    "equal",
+    338,
+    340,
+    103,
+    105
+   ],
+   [
+    "replace",
+    340,
+    342,
+    105,
+    107,
+    [
+     " - Download the Laravel application: `git clone --branch 8.x --single-branch https://github.com/laravel/laravel.git app`",
+     " - Return to Docker folder: `cd docker`"
+    ]
+   ],
+   [
+    "equal",
+    342,
+    344,
+    107,
+    109
+   ],
+   [
+    "replace",
+    344,
+    346,
+    109,
+    111,
+    [
+     " - It is not necessary in the image building process, only if using volumes/bind in Docker",
+     " - After installing the composer dependencies, the `vendor` folder will be with `root` permission. To change the permission of the Laravel application folder to the machine user, use the command: `sudo chown -R $USER:$USER ../app/`"
+    ]
+   ],
+   [
+    "equal",
+    346,
+    347,
+    111,
+    112
+   ],
+   [
+    "replace",
+    347,
+    349,
+    112,
+    114,
+    [
+     " - `make -f Makefile -f services/app/Makefile npm-handle`",
+     " - `make -f Makefile -f services/app/Makefile npm-handle npm_command=\"npm run prod\"`"
+    ]
+   ],
+   [
+    "equal",
+    349,
+    350,
+    114,
+    115
+   ],
+   [
+    "delete",
+    350,
+    351,
+    115,
+    115
+   ],
+   [
+    "equal",
+    351,
+    352,
+    115,
+    116
+   ],
+   [
+    "delete",
+    352,
+    353,
+    116,
+    116
+   ],
+   [
+    "equal",
+    353,
+    358,
+    116,
+    121
+   ],
+   [
+    "replace",
+    358,
+    359,
+    121,
+    122,
+    [
+     "1. Copy the contents of the *services/nginx/.env.compose* file and place at the end of the `.env` file"
+    ]
+   ],
+   [
+    "equal",
+    359,
+    360,
+    122,
+    123
+   ],
+   [
+    "replace",
+    360,
+    361,
+    123,
+    124,
+    [
+     " - `WEBSERVER_IMAGE`: Docker image tag that will be used in its creation through the `docker-build-webserver` command and also used in the execution of the NGINX/Webserver containers"
+    ]
+   ],
+   [
+    "equal",
+    361,
+    362,
+    124,
+    125
+   ],
+   [
+    "delete",
+    362,
+    363,
+    125,
+    125
+   ],
+   [
+    "equal",
+    363,
+    364,
+    125,
+    126
+   ],
+   [
+    "delete",
+    364,
+    365,
+    126,
+    126
+   ],
+   [
+    "equal",
+    365,
+    370,
+    126,
+    131
+   ],
+   [
+    "replace",
+    370,
+    372,
+    131,
+    133,
+    [
+     "1. Copy the *scripts/envs/renew.env* file to the docker root folder(same value as the `DOCKER_PATH` variable in the `.env` file)",
+     " - Use the command to make the copy: `cp scripts/envs/renew.env .`"
+    ]
+   ],
+   [
+    "equal",
+    372,
+    373,
+    133,
+    134
+   ],
+   [
+    "replace",
+    373,
+    384,
+    134,
+    145,
+    [
+     " - `RENEW_CERT_DOMAINS`: Domains/subdomains that will be in the certificate (separated by comma)",
+     " - *Some CAs (such as Let's Encrypt) require that domain validation for wildcard domains be done through DNS record modifications, which means that the DNS-01 challenge type must be used. According to Let's Encrypt policy, wildcard identifiers must be validated by DNS-01 challenge, therefore, authorizations corresponding to wildcard identifiers will only offer DNS-01 challenge*",
+     " - `RENEW_CERT_COMMAND_TARGET`: Command that will be executed on the file in the `services/nginx/Makefile` file, which can be:",
+     " - `gen-certs-cloudflare`: It uses the cloudflare DNS API to automatically insert the DNS TXTs records and thus generate the certificates",
+     " - To use this challenge, you must create a file in the `services/nginx/certs` folder named `cloudflare.ini` containing `dns_cloudflare_api_token = YOUR_TOKEN_AQUI`",
+     " - `gen-certs`: Used for both HTTP and DNS validation",
+     " - `Webroot/HTTP`:",
+     " - Used for HTTP challenge",
+     " - It should be used after first generating the certificates through DNS challenge, as the domain is not active on the internet so that the challenge can be successfully performed",
+     " - Need to set variable `RENEW_CERT_IS_CHALLENGE_WEBROOT` to `true` and variable `RENEW_CERT_COMMAND_OPTIONS` to `webroot=yes preferred_challenge=http-01`",
+     " - `DNS`: Use this validation to generate DNS TXT records and enter manually. The value of the variable `RENEW_CERT_COMMAND_OPTIONS` should be `manual=yes preferred_challenge=dns-01`"
+    ]
+   ],
+   [
+    "equal",
+    384,
+    407,
+    145,
+    168
+   ],
+   [
+    "replace",
+    407,
+    414,
+    168,
+    169,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    414,
+    418,
+    169,
+    173
+   ],
+   [
+    "replace",
+    418,
+    419,
+    173,
+    174,
+    [
+     "After, update the variable `WEBSERVER_CERTBOT_IMAGE` with the name of the newly created image, **then run the script *./scripts/renew-certs.sh* and follow the steps to create the first certificates for the application**."
+    ]
+   ],
+   [
+    "equal",
+    419,
+    428,
+    174,
+    183
+   ],
+   [
+    "replace",
+    428,
+    429,
+    183,
+    184,
+    [
+     "- Two networks are created by default. One for all containers(`compose_network`) and one for connecting `traefik` to containers for proxy(`traefik_network`), in the file *docker-compose.yml*"
+    ]
+   ],
+   [
+    "equal",
+    429,
+    430,
+    184,
+    185
+   ],
+   [
+    "replace",
+    430,
+    431,
+    185,
+    186,
+    [
+     "- To run the `docker-compose --compatibility up` command to create the networks and then the application containers, `traefik`, `nginx` and others to connect, it is necessary first to copy the contents of the file *services/traefik/.env.compose* and place at the end of the `.env` file"
+    ]
+   ],
+   [
+    "equal",
+    431,
+    433,
+    186,
+    188
+   ],
+   [
+    "replace",
+    433,
+    434,
+    188,
+    189,
+    [
+     " - Run the command `docker network ls` and see if there are two networks with the name: `${VARIABLE_VALUE_PROJECT_NAME}_network` e `${VARIABLE_VALUE_PROJECT_NAME}_traefik_network`"
+    ]
+   ],
+   [
+    "equal",
+    434,
+    435,
+    189,
+    190
+   ],
+   [
+    "replace",
+    435,
+    437,
+    190,
+    192,
+    [
+     "- The `traefik` network name, must be updated in the *traefik/traefik.yml* file in the `providers.docker.network` directive. Replacing `company_traefik_network` with the value `${VARIABLE_VALUE_PROJECT_NAME}_traefik_network`",
+     " - The `providers.docker.network` directive of the *traefik/traefik.yml* file, must have the same value as the `TRAEFIK_DOCKER_NETWORK` variable in the `.env` file"
+    ]
+   ],
+   [
+    "equal",
+    437,
+    454,
+    192,
+    209
+   ],
+   [
+    "replace",
+    454,
+    456,
+    209,
+    211,
+    [
+     " - Use the command to create the folder: `mkdir ./../app/storage/logs/logrotate`",
+     " - Change the `app` folder to the name of the correct folder where the Laravel application is located"
+    ]
+   ],
+   [
+    "equal",
+    456,
+    457,
+    211,
+    212
+   ],
+   [
+    "replace",
+    457,
+    460,
+    212,
+    215,
+    [
+     "- Copy *scripts/envs/deploy.env* file to docker root folder",
+     " - Use the command to make the copy: `cp scripts/envs/deploy.env .`",
+     " - Edit the variable `DOMAIN` with the same value of the same variable in the `.env` file"
+    ]
+   ],
+   [
+    "equal",
+    460,
+    461,
+    215,
+    216
+   ],
+   [
+    "replace",
+    461,
+    465,
+    216,
+    220,
+    [
+     "- Edit the *services/app/.env.container* file, setting the variables for the laravel project, mainly `APP_KEY` and `APP_ENV`, which are mandatory in the `entrypoint` docker of the application container",
+     " - `APP_KEY`: If the application key is not set, user sessions and other encrypted data will not be secure!",
+     " - Use `APP_ENV=production` and `APP_DEBUG=false` for production, and `APP_ENV=local` `APP_DEBUG=true` for development",
+     " - Configure the variables `PHPFPM_MAX_CHILDREN`, `PHPFPM_START_SERVERS`, `PHPFPM_MIN_SPARE_SERVERS` and `PHPFPM_MAX_SPARE_SERVERS` according to the capacity of the machine/server"
+    ]
+   ],
+   [
+    "equal",
+    465,
+    466,
+    220,
+    221
+   ],
+   [
+    "replace",
+    466,
+    467,
+    221,
+    222,
+    [
+     "- See if the domain is correct in the `server_name` directive in the *services/nginx/servers/app.conf* file"
+    ]
+   ],
+   [
+    "equal",
+    467,
+    468,
+    222,
+    223
+   ],
+   [
+    "replace",
+    468,
+    470,
+    223,
+    225,
+    [
+     "- **Run the *scripts/deploy-version.sh* script to create the Laravel/PHP-FPM and Webserver/NGINX containers**",
+     " - The script uses `git checkout ./services/nginx/servers`, so any changes to the NGINX virtualhost must be committed so that they cannot be lost"
+    ]
+   ],
+   [
+    "equal",
+    470,
+    477,
+    225,
+    232
+   ],
+   [
+    "replace",
+    477,
+    482,
+    232,
+    237,
+    [
+     "- Access the address https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/#license-key-create so i can generate a new license",
+     "- Open the file *services/app/.env.container* and edit the section `# # NEW RELIC ENVs`",
+     " - Edit the variable `NEW_RELIC_ENABLED` to `true`",
+     " - Edit the variable `NEW_RELIC_APPNAME` which represents the name of the application that will be rendered in the New Relic panel",
+     " - Update `NEW_RELIC_LICENSE_KEY` variable with the license value generated previously. 40-character New Relic User Account Key"
+    ]
+   ],
+   [
+    "equal",
+    482,
+    486,
+    237,
+    241
+   ],
+   [
+    "replace",
+    486,
+    488,
+    241,
+    243,
+    [
+     "- Access your user account on the website www.maxmind.com",
+     " - If you don't have a registered account, you need to create a new account"
+    ]
+   ],
+   [
+    "equal",
+    488,
+    493,
+    243,
+    248
+   ],
+   [
+    "replace",
+    493,
+    497,
+    248,
+    252,
+    [
+     " - Open file *services/nginx/.env.container*",
+     " - Set the value of the `WITH_GEOIP2` variable to `true`",
+     " - Set the value of the `GEOIPUPDATE_ACCOUNT_ID` variable to the value that appears in *Account/User ID*",
+     " - Set the value of the `GEOIPUPDATE_LICENSE_KEY` variable to the value that appears in *License key*"
+    ]
+   ],
+   [
+    "equal",
+    497,
+    502,
+    252,
+    257
+   ],
+   [
+    "replace",
+    502,
+    503,
+    257,
+    258,
+    [
+     "- Change the redis password in the **`requirepass`** directive in the *services/redis/redis.conf* file"
+    ]
+   ],
+   [
+    "equal",
+    503,
+    514,
+    258,
+    269
+   ],
+   [
+    "replace",
+    514,
+    516,
+    269,
+    271,
+    [
+     " - Add `127.0.0.1 redis.yourdomain.tld` to `/etc/hosts`",
+     " - Change the value of the `tls-key-file-pass` directive in the *services/redis/redis.conf* file to the value of the `--cert-server- pass`"
+    ]
+   ],
+   [
+    "equal",
+    516,
+    527,
+    271,
+    282
+   ],
+   [
+    "replace",
+    527,
+    537,
+    282,
+    292,
+    [
+     "- Uncomment the line containing `authelia-forwardAuth@docker` in the *traefik/dynamic/middlewares.yml* file",
+     " - *`traefik` dynamic settings are updated in real time. No need to restart the `traefik` container*",
+     "- Open the file *services/authelia/configs/configuration.yml* and configure the following points:",
+     " - Search and replace the example domain `yourdomain.tld` to the real domain of the company",
+     " - Change the name of the redis container `v1_company_redis_1`",
+     "- Edit the passwords in the *services/authelia/secrets* folder",
+     " - `jwt`: Defines the secret used to craft JWT tokens leveraged by the identity verification process",
+     " - `session`: Authelia relies on session cookies to authenticate users",
+     " - `redis`: This is a session provider. Must be the same as the `requirepass` directive in the file *services/redis/redis.conf*",
+     "- Edit the user and password in the *services/authelia/configs/users.yml* file. See documentation"
+    ]
+   ],
+   [
+    "equal",
+    537,
+    544,
+    292,
+    299
+   ],
+   [
+    "replace",
+    544,
+    546,
+    299,
+    301,
+    [
+     "- The settings applied to the *Netdata* container are found in *services/netdata/configs/netdata.conf*",
+     " - See the settings at https://learn.netdata.cloud/docs/agent/daemon/config"
+    ]
+   ],
+   [
+    "equal",
+    546,
+    548,
+    301,
+    303
+   ],
+   [
+    "replace",
+    548,
+    549,
+    303,
+    304,
+    [
+     " - Update the new changes with `sudo systemctl daemon-reload` and `sudo services restart docker`"
+    ]
+   ],
+   [
+    "equal",
+    549,
+    570,
+    304,
+    325
+   ],
+   [
+    "replace",
+    570,
+    572,
+    325,
+    327,
+    [
+     " - **Obs:** *The mongo shell verifies that the hostname (specified in --host option or the connection string) matches the SAN (or, if SAN is not present, the CN) in the certificate presented by the mongod or mongos. If SAN is present, mongo does not match against the CN. If the hostname does not match the SAN (or CN), the mongo shell will fail to connect.*",
+     " - Add `127.0.0.1 mongodb.yourdomain.tld` to `/etc/hosts`"
+    ]
+   ],
+   [
+    "equal",
+    572,
+    573,
+    327,
+    328
+   ],
+   [
+    "replace",
+    573,
+    574,
+    328,
+    329,
+    [
+     "- Open the *services/mongodb/mongod.conf* file and edit the `certificateKeyFilePassword` setting which should match the `--cert-server-pass` argument of the above script"
+    ]
+   ],
+   [
+    "equal",
+    574,
+    575,
+    329,
+    330
+   ],
+   [
+    "replace",
+    575,
+    576,
+    330,
+    331,
+    [
+     "- Open the file *services/mongodb/.env.container* and edit the password, replacing `YOUR_MONGODB_ROOT_PASSWORD` with the new password"
+    ]
+   ],
+   [
+    "equal",
+    576,
+    592,
+    331,
+    347
+   ],
+   [
+    "replace",
+    592,
+    593,
+    347,
+    348,
+    [
+     " - To verify that the connection supports TLS in version 1.3, run the command: `openssl s_client -connect 127.0.0.1:OUTSIDE_PORT -tls1_3`"
+    ]
+   ],
+   [
+    "equal",
+    593,
+    603,
+    348,
+    358
+   ],
+   [
+    "replace",
+    603,
+    604,
+    358,
+    359,
+    [
+     " - To create a user, use the following command:"
+    ]
+   ],
+   [
+    "equal",
+    604,
+    617,
+    359,
+    372
+   ],
+   [
+    "replace",
+    617,
+    622,
+    372,
+    373,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    622,
+    633,
+    373,
+    384
+   ],
+   [
+    "replace",
+    633,
+    634,
+    384,
+    385,
+    [
+     " - Add `127.0.0.1 mysql.yourdomain.tld` to `/etc/hosts`"
+    ]
+   ],
+   [
+    "equal",
+    634,
+    635,
+    385,
+    386
+   ],
+   [
+    "replace",
+    635,
+    636,
+    386,
+    387,
+    [
+     "- Open the file *services/mysql/my.cnf* and edit the MySQL settings"
+    ]
+   ],
+   [
+    "equal",
+    636,
+    637,
+    387,
+    388
+   ],
+   [
+    "replace",
+    637,
+    638,
+    388,
+    389,
+    [
+     "- Open the *services/mysql/.env.container* file and edit the environment variable credentials"
+    ]
+   ],
+   [
+    "equal",
+    638,
+    655,
+    389,
+    406
+   ],
+   [
+    "replace",
+    655,
+    656,
+    406,
+    407,
+    [
+     "### Run Queue Container"
+    ]
+   ],
+   [
+    "equal",
+    656,
+    657,
+    407,
+    408
+   ],
+   [
+    "replace",
+    657,
+    664,
+    408,
+    415,
+    [
+     "- Open *`.env.container`* file and edit as desired:",
+     " - Set the `CONTAINER_ROLE` environment variable when running the PHP container so that its value is `queue`",
+     " - **`LARAVEL_QUEUE_MANAGER`**: This environment variable defines the container context, and can have the following values:",
+     " - **worker**: Configure the supervisor to run many processes in the Laravel command `artisan queue:work`",
+     " - Many processes running in the Laravel artisan `queue:work` for queue management",
+     " - **horizon**: Configure the supervisor to run a single Horizon process `artisan horizon`",
+     " - Used for debugging and development, the *Horizon* is a robust and simplistic queue management panel. A single process in a supervisor configuration by running the artisan horizon command"
+    ]
+   ],
+   [
+    "equal",
+    664,
+    670,
+    415,
+    421
+   ],
+   [
+    "replace",
+    670,
+    671,
+    421,
+    422,
+    [
+     "### Run Scheduler Container"
+    ]
+   ],
+   [
+    "equal",
+    671,
+    672,
+    422,
+    423
+   ],
+   [
+    "replace",
+    672,
+    674,
+    423,
+    425,
+    [
+     "- Open *`.env.container`* file and edit as desired:",
+     " - Set the `CONTAINER_ROLE` environment variable when running the PHP container so that its value is `scheduler`"
+    ]
+   ],
+   [
+    "equal",
+    674,
+    694,
+    425,
+    445
+   ],
+   [
+    "replace",
+    694,
+    695,
+    445,
+    446,
+    [
+     "- Open file deploy.env(if it exists), and edit the variable `DOCKER_COMPOSE_WEBSERVER_OPTIONS`, adding the value of: `-f services/goaccess/docker-compose.webserver.yml`"
+    ]
+   ],
+   [
+    "equal",
+    695,
+    696,
+    446,
+    447
+   ],
+   [
+    "replace",
+    696,
+    698,
+    447,
+    449,
+    [
+     "- Copy the file *services/nginx/servers/additional/goaccess.conf* to a folder level, it should be in `services/nginx/servers/goaccess.conf`",
+     " - Edit the `server_name goaccess.yourdomain.tld` line, replacing `yourdomain.tld` with the correct company domain"
+    ]
+   ],
+   [
+    "equal",
+    698,
+    699,
+    449,
+    450
+   ],
+   [
+    "replace",
+    699,
+    700,
+    450,
+    451,
+    [
+     "- Copy the contents of the *services/goaccess/.env.compose* file and place at the end of the `.env` file"
+    ]
+   ],
+   [
+    "equal",
+    700,
+    703,
+    451,
+    454
+   ],
+   [
+    "replace",
+    703,
+    704,
+    454,
+    455,
+    [
+     "- Check and edit the GoAccess configuration file as preferred *services/goaccess/goaccess.conf*"
+    ]
+   ],
+   [
+    "equal",
+    704,
+    741,
+    455,
+    492
+   ],
+   [
+    "replace",
+    741,
+    742,
+    492,
+    493,
+    [
+     " - After passing these options, it is necessary to run the command `./scripts/loadbalancer-nginx.sh` so that you can update the `app.conf` file of NGINX with the names/version of the new containers"
+    ]
+   ],
+   [
+    "equal",
+    742,
+    771,
+    493,
+    522
+   ],
+   [
+    "replace",
+    771,
+    772,
+    522,
+    523,
+    [
+     "### `./scripts/cron-renew-certs.sh`"
+    ]
+   ],
+   [
+    "equal",
+    772,
+    785,
+    523,
+    536
+   ],
+   [
+    "replace",
+    785,
+    786,
+    536,
+    537,
+    [
+     "- `-add`: *Add a command that will execute ./scripts/renew-certs.sh to CRON which will be executed every time set in the `--timer` option*"
+    ]
+   ],
+   [
+    "equal",
+    786,
+    793,
+    537,
+    544
+   ],
+   [
+    "replace",
+    793,
+    794,
+    544,
+    545,
+    [
+     "### `./scripts/deploy-version.sh`"
+    ]
+   ],
+   [
+    "equal",
+    794,
+    808,
+    545,
+    559
+   ],
+   [
+    "replace",
+    808,
+    810,
+    559,
+    561,
+    [
+     "- `--num-nginx-scale=`: Value that is in the variable `DOCKER_COMPOSE_WEBSERVER_SCALE` of the file *services/nginx/.env.compose*",
+     "- `--num-php-scale=`: Value that is in the variable `DOCKER_COMPOSE_APP_SCALE` of the file *services/app/.env.compose*"
+    ]
+   ],
+   [
+    "equal",
+    810,
+    811,
+    561,
+    562
+   ],
+   [
+    "replace",
+    811,
+    812,
+    562,
+    563,
+    [
+     "### `./scripts/loadbalancer-nginx.sh`"
+    ]
+   ],
+   [
+    "equal",
+    812,
+    813,
+    563,
+    564
+   ],
+   [
+    "replace",
+    813,
+    814,
+    564,
+    565,
+    [
+     "> Use this command to update the `services/nginx/servers/app.conf` file or any other (web server, server blocks) in NGINX, with the names of the APP/Laravel containers that will be used in the NGINX `upstream` directive used in HTTP load balancer handling"
+    ]
+   ],
+   [
+    "equal",
+    814,
+    820,
+    565,
+    571
+   ],
+   [
+    "replace",
+    820,
+    822,
+    571,
+    573,
+    [
+     " - By default the name of PHP/Laravel containers filtered by the docker will be: `^/v([0-9]+)${COMPOSE_PROJECT_NAME}_app_\\d+`",
+     " - This option is only needed when containers are not generated by the *./scripts/deploy-version.sh* script or `docker-up-app` command"
+    ]
+   ],
+   [
+    "equal",
+    822,
+    824,
+    573,
+    575
+   ],
+   [
+    "replace",
+    824,
+    827,
+    575,
+    578,
+    [
+     " - By default the name of the NGINX/Webserver containers filtered by the docker will be: `^v\\d+${COMPOSE_PROJECT_NAME}_webserver`",
+     " - This option should only be used in the script if the `--not-reload-nginx` option is not passed. Because NGINX containers will have to be retrieved to be updated",
+     " - This option is only needed when containers are not generated by the *./scripts/deploy-version.sh* script or `docker-up-webserver` command"
+    ]
+   ],
+   [
+    "equal",
+    827,
+    831,
+    578,
+    582
+   ],
+   [
+    "replace",
+    831,
+    833,
+    582,
+    584,
+    [
+     " - It is only necessary the name of the `.conf` file found in the `services/nginx/servers` folder",
+     " - Before the `server` directive, it must have the following content so that the file can be updated and the information will be added between the lines"
+    ]
+   ],
+   [
+    "equal",
+    833,
+    844,
+    584,
+    595
+   ],
+   [
+    "replace",
+    844,
+    845,
+    595,
+    596,
+    [
+     "### `./scripts/update-app.sh`"
+    ]
+   ],
+   [
+    "equal",
+    845,
+    857,
+    596,
+    608
+   ],
+   [
+    "replace",
+    857,
+    859,
+    608,
+    610,
+    [
+     " - By default the name of PHP/Laravel containers filtered by the docker will be: `^/v([0-9]+)${COMPOSE_PROJECT_NAME}_app_\\d+`",
+     " - This option is only needed when containers are not generated by the *./scripts/deploy-version.sh* script or `docker-up-app` command"
+    ]
+   ],
+   [
+    "equal",
+    859,
+    877,
+    610,
+    628
+   ],
+   [
+    "replace",
+    877,
+    879,
+    628,
+    630,
+    [
+     " - Edit the variable `RENEW_CERT_DOMAINS`, adding the domains, subdomain, separated by comma that will be generated/renewed",
+     " - Edit `RENEW_CERT_EMAIL` variable for the email that should be sent certificate expiration notification by Let's Encrypt"
+    ]
+   ],
+   [
+    "equal",
+    879,
+    881,
+    630,
+    632
+   ],
+   [
+    "replace",
+    881,
+    882,
+    632,
+    633,
+    [
+     " - Use the following command to generate this file: `openssl dhparam -out ./services/nginx/certs/dhparam.pem 4096`"
+    ]
+   ],
+   [
+    "equal",
+    882,
+    885,
+    633,
+    636
+   ],
+   [
+    "replace",
+    885,
+    886,
+    636,
+    637,
+    [
+     "#### Configure `renew.env` to generate certificates via HTTP challenge"
+    ]
+   ],
+   [
+    "equal",
+    886,
+    894,
+    637,
+    645
+   ],
+   [
+    "replace",
+    894,
+    895,
+    645,
+    646,
+    [
+     "- Run the **`./scripts/renew-certs.sh`** script and follow the steps of *certbot* certificate generation"
+    ]
+   ],
+   [
+    "equal",
+    895,
+    896,
+    646,
+    647
+   ],
+   [
+    "replace",
+    896,
+    897,
+    647,
+    648,
+    [
+     "#### Configure `renew.env` to generate certificates via DNS challenge"
+    ]
+   ],
+   [
+    "equal",
+    897,
+    903,
+    648,
+    654
+   ],
+   [
+    "replace",
+    903,
+    904,
+    654,
+    655,
+    [
+     "- Run the **`./scripts/renew-certs.sh`** script and follow the steps of *certbot* certificate generation"
+    ]
+   ],
+   [
+    "equal",
+    904,
+    905,
+    655,
+    656
+   ],
+   [
+    "replace",
+    905,
+    906,
+    656,
+    657,
+    [
+     "#### Configure `renew.env` to generate the certificates via the DNS plugin certbot-dns-cloudflare"
+    ]
+   ],
+   [
+    "equal",
+    906,
+    912,
+    657,
+    663
+   ],
+   [
+    "replace",
+    912,
+    913,
+    663,
+    664,
+    [
+     "- To use this challenge, you must create a file in the `services/nginx/certs` folder named `cloudflare.ini` containing `dns_cloudflare_api_token = YOUR_TOKEN_AQUI`"
+    ]
+   ],
+   [
+    "equal",
+    913,
+    914,
+    664,
+    665
+   ],
+   [
+    "replace",
+    914,
+    915,
+    665,
+    666,
+    [
+     "- Run the **`./scripts/renew-certs.sh`** script and follow the steps of *certbot* certificate generation"
+    ]
+   ],
+   [
+    "equal",
+    915,
+    918,
+    666,
+    669
+   ],
+   [
+    "replace",
+    918,
+    920,
+    669,
+    671,
+    [
+     "- Configure `renew.env` file with one of the three modes in the above menu",
+     "- Configure CRON to generate certificates every time according to the scheduling expression through the command *`./scripts/cron-renew-certs.sh`*"
+    ]
+   ],
+   [
+    "equal",
+    920,
+    922,
+    671,
+    673
+   ],
+   [
+    "replace",
+    922,
+    927,
+    673,
+    674,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    927,
+    928,
+    674,
+    675
+   ],
+   [
+    "replace",
+    928,
+    930,
+    675,
+    676,
+    [
+     "MIT License"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "bef906c9db95+2": {
+  "fn": "expaso/hassos-addon-timescaledb",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# Home Assistant Add-on: PostgreSQL TimescaleDB"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "## PostgreSql & Postgis & TimescaleDB & TimescaleDB Toolkit & pgAgent & pgVector"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Buy Me A Coffee"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    32,
+    5,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     "Say, you want put all those nice Home Assistant measurements from your smarthome to good use, and for example, use something like Grafana for your dashboards, and maybe Prometheus for monitoring.."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    36,
+    33,
+    36
+   ],
+   [
+    "replace",
+    36,
+    37,
+    36,
+    37,
+    [
+     "You could use InfluxDB for this."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    51,
+    37,
+    51
+   ],
+   [
+    "replace",
+    51,
+    52,
+    51,
+    52,
+    [
+     "As a bonus, I also added a Geospatial extention: Postgis."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    61,
+    52,
+    61
+   ],
+   [
+    "replace",
+    61,
+    62,
+    61,
+    62,
+    [
+     "Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled."
+    ]
+   ],
+   [
+    "equal",
+    62,
+    158,
+    62,
+    158
+   ],
+   [
+    "replace",
+    158,
+    163,
+    158,
+    159,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    165,
+    159,
+    161
+   ],
+   [
+    "replace",
+    165,
+    166,
+    161,
+    162,
+    [
+     "See the PostgreSQL documentation for all available parameters and their meanings."
+    ]
+   ],
+   [
+    "equal",
+    166,
+    212,
+    162,
+    208
+   ],
+   [
+    "replace",
+    212,
+    236,
+    208,
+    209,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    247,
+    209,
+    220
+   ],
+   [
+    "replace",
+    247,
+    248,
+    220,
+    221,
+    [
+     "See the PostgreSQL documentation for complete details on authentication methods."
+    ]
+   ],
+   [
+    "equal",
+    248,
+    267,
+    221,
+    240
+   ],
+   [
+    "replace",
+    267,
+    275,
+    240,
+    241,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    275,
+    283,
+    241,
+    249
+   ],
+   [
+    "replace",
+    283,
+    291,
+    249,
+    250,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    291,
+    350,
+    250,
+    309
+   ],
+   [
+    "replace",
+    350,
+    353,
+    309,
+    312,
+    [
+     " - Initializes a fresh PostgreSQL database",
+     " - Automatically restores all data from the SQL dump",
+     " - Removes the SQL dump after successful restoration"
+    ]
+   ],
+   [
+    "equal",
+    353,
+    408,
+    312,
+    367
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "901dc867085f+2": {
+  "fn": "pwrdrvr/ghcrawl",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "CI",
+     "npm version",
+     "npm downloads",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    9,
+    6,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     "ghcrawl TUI demo"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    21,
+    10,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "If you are working from source or maintaining the repo, use CONTRIBUTING.md."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    118,
+    22,
+    118
+   ],
+   [
+    "replace",
+    118,
+    119,
+    118,
+    119,
+    [
+     "ghcrawl refresh demo"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    122,
+    119,
+    122
+   ],
+   [
+    "replace",
+    122,
+    126,
+    122,
+    126,
+    [
+     "|User open issue/PR list modal|Refresh modal|",
+     "|---|---|",
+     "|User open issue and PR list modal|GitHub, embed, and cluster refresh modal|",
+     "|Press `u` to open the current user's issue and PR list modal.|Press `g` to open the GitHub/embed/cluster refresh modal.|"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    127,
+    126,
+    127
+   ],
+   [
+    "replace",
+    127,
+    131,
+    127,
+    131,
+    [
+     "|Closed members in a cluster|Fully closed cluster|",
+     "|---|---|",
+     "|Closed cluster members grayed out|Completely closed cluster grayed out|",
+     "|Closed members stay visible in gray so overlap is still easy to inspect.|A cluster with no open members is grayed out as a whole until you hide closed items.|"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    131,
+    132
+   ],
+   [
+    "replace",
+    132,
+    133,
+    132,
+    133,
+    [
+     "Stacked TUI layout"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    163,
+    133,
+    163
+   ],
+   [
+    "replace",
+    163,
+    165,
+    163,
+    165,
+    [
+     " - `plaintext`: saves both keys to `~/.config/ghcrawl/config.json`",
+     " - `1Password CLI`: stores only vault and item metadata and tells you how to run `ghcrawl` through `op`"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    167,
+    165,
+    167
+   ],
+   [
+    "replace",
+    167,
+    169,
+    167,
+    169,
+    [
+     " - `GITHUB_TOKEN`",
+     " - `OPENAI_API_KEY`"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    174,
+    169,
+    174
+   ],
+   [
+    "replace",
+    174,
+    177,
+    174,
+    177,
+    [
+     " - `Metadata: Read-only`",
+     " - `Issues: Read-only`",
+     " - `Pull requests: Read-only`"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    241,
+    177,
+    241
+   ],
+   [
+    "replace",
+    241,
+    248,
+    241,
+    242,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    248,
+    262,
+    242,
+    256
+   ],
+   [
+    "replace",
+    262,
+    263,
+    256,
+    257,
+    [
+     "The main variable costs are summarization and embeddings. Embedding pricing is published by OpenAI here: OpenAI API pricing."
+    ]
+   ],
+   [
+    "equal",
+    263,
+    264,
+    257,
+    258
+   ],
+   [
+    "replace",
+    264,
+    265,
+    258,
+    259,
+    [
+     "On a real local run against roughly `12k` issues plus about `1.2x` related PR and issue inputs, `text-embedding-3-large` came out to about **$0.65 USD** total to embed the repo. Treat that as an approximate data point for something like `~14k` issue and PR inputs, not a hard guarantee."
+    ]
+   ],
+   [
+    "equal",
+    265,
+    275,
+    259,
+    269
+   ],
+   [
+    "replace",
+    275,
+    276,
+    269,
+    270,
+    [
+     "OpenAI embeddings cost for a 12k-issue repo"
+    ]
+   ],
+   [
+    "equal",
+    276,
+    279,
+    270,
+    273
+   ],
+   [
+    "replace",
+    279,
+    280,
+    273,
+    274,
+    [
+     "This repo ships an installable skill at skills/ghcrawl/SKILL.md."
+    ]
+   ],
+   [
+    "equal",
+    280,
+    281,
+    274,
+    275
+   ],
+   [
+    "replace",
+    281,
+    282,
+    275,
+    276,
+    [
+     "For installation and usage conventions, point users at vercel-labs/skills."
+    ]
+   ],
+   [
+    "equal",
+    282,
+    307,
+    276,
+    301
+   ],
+   [
+    "replace",
+    307,
+    308,
+    301,
+    302,
+    [
+     "ghcrawl skill walkthrough"
+    ]
+   ],
+   [
+    "equal",
+    308,
+    311,
+    302,
+    305
+   ],
+   [
+    "replace",
+    311,
+    312,
+    305,
+    306,
+    [
+     "The agent and build contract for this repo lives in SPEC.md."
+    ]
+   ],
+   [
+    "equal",
+    312,
+    342,
+    306,
+    336
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "79e43353192a+2": {
+  "fn": "mlaanderson/database-js",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "Build Status",
+     "npm version",
+     "Mentioned in Awesome Node.js",
+     "downloads"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    14,
+    6,
+    14
+   ],
+   [
+    "replace",
+    14,
+    22,
+    14,
+    15,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    30,
+    15,
+    23
+   ],
+   [
+    "replace",
+    30,
+    44,
+    23,
+    37,
+    [
+     "|Driver (wrapper)|Note|Installation|",
+     "|----------------|----|------------|",
+     "|ActiveX Data Objects|*Windows only*|`npm i database-js-adodb`|",
+     "|CSV files||`npm i database-js-csv`|",
+     "|Excel files||`npm i database-js-xlsx`|",
+     "|Firebase||`npm i database-js-firebase`|",
+     "|INI files||`npm i database-js-ini`|",
+     "|JSON files||`npm i database-js-json`|",
+     "|MySQL|prior to MySQL v8|`npm i database-js-mysql`|",
+     "|MySQL2|MySQL v8+|`npm i database-js-mysql2`|",
+     "|MS SQL Server||`npm i database-js-mssql`|",
+     "|PostgreSQL||`npm i database-js-postgres`|",
+     "|SQLite3||`npm i database-js-sqlite3`|",
+     "|SQLite||`npm i database-js-sqlite`|"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    37,
+    38
+   ],
+   [
+    "replace",
+    45,
+    46,
+    38,
+    39,
+    [
+     "See here how to add a new driver."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    55,
+    39,
+    48
+   ],
+   [
+    "replace",
+    55,
+    86,
+    48,
+    49,
+    [
+     "…（31 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    96,
+    49,
+    59
+   ],
+   [
+    "replace",
+    96,
+    123,
+    59,
+    60,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    131,
+    60,
+    68
+   ],
+   [
+    "replace",
+    131,
+    166,
+    68,
+    69,
+    [
+     "…（35 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    172,
+    69,
+    75
+   ],
+   [
+    "replace",
+    172,
+    179,
+    75,
+    76,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    180,
+    76,
+    77
+   ],
+   [
+    "delete",
+    180,
+    181,
+    77,
+    77
+   ],
+   [
+    "equal",
+    181,
+    184,
+    77,
+    80
+   ],
+   [
+    "replace",
+    184,
+    185,
+    80,
+    81,
+    [
+     "- Wiki for more examples and how to use a connection pool."
+    ]
+   ],
+   [
+    "equal",
+    185,
+    186,
+    81,
+    82
+   ],
+   [
+    "replace",
+    186,
+    188,
+    82,
+    83,
+    [
+     "- codeceptjs-dbhelper - Allows to use database-js inside CodeceptJS tests (as a helper)."
+    ]
+   ],
+   [
+    "equal",
+    188,
+    190,
+    83,
+    85
+   ],
+   [
+    "replace",
+    190,
+    192,
+    85,
+    86,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "e26c3d7c6ebd+2": {
+  "fn": "SevdanurGENC/Database-Management-Systems-Lecture-Notes",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    6,
+    4,
+    6
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "c8fa96994e65+2": {
+  "fn": "gitbucket/blocking-slick",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "replace",
+    0,
+    2,
+    0,
+    1,
+    [
+     "blocking-slick Scala CI blocking-slick Scala version support License"
+    ]
+   ],
+   [
+    "equal",
+    2,
+    6,
+    1,
+    5
+   ],
+   [
+    "delete",
+    6,
+    7,
+    5,
+    5
+   ],
+   [
+    "equal",
+    7,
+    14,
+    5,
+    12
+   ],
+   [
+    "replace",
+    14,
+    25,
+    12,
+    13,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    34,
+    13,
+    22
+   ],
+   [
+    "delete",
+    34,
+    35,
+    22,
+    22
+   ],
+   [
+    "equal",
+    35,
+    42,
+    22,
+    29
+   ],
+   [
+    "replace",
+    42,
+    69,
+    29,
+    30,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    90,
+    30,
+    51
+   ],
+   [
+    "delete",
+    90,
+    91,
+    51,
+    51
+   ],
+   [
+    "equal",
+    91,
+    98,
+    51,
+    58
+   ],
+   [
+    "replace",
+    98,
+    112,
+    58,
+    59,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    117,
+    59,
+    64
+   ],
+   [
+    "delete",
+    117,
+    118,
+    64,
+    64
+   ],
+   [
+    "equal",
+    118,
+    119,
+    64,
+    65
+   ],
+   [
+    "replace",
+    119,
+    120,
+    65,
+    66,
+    [
+     "You can see actual codes in the testcase, and also a blocking-slick with Play2 and play-slick example is available at here."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "46b9fe14a544+2": {
+  "fn": "jhubert/javascript-sqlite",
+  "clean_ver": "2",
+  "raw_lines": 17,
+  "ops": [
+   [
+    "equal",
+    0,
+    17,
+    0,
+    17
+   ],
+   [
+    "replace",
+    17,
+    21,
+    17,
+    21,
+    [
+     " * a number: defaults to 'WHERE id=number'",
+     " * a string: generates 'WHERE string'",
+     " * an array: generates 'WHERE val1 AND val2'",
+     " * a hash: generates 'WHERE key=hash[key] AND key2=hash[key2]'"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

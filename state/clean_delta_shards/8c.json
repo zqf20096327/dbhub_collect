@@ -17050,5 +17050,1450 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "d06440dd15af+2": {
+  "fn": "lemed99/nightowl-agent",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "NightOwl"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " NightOwl Agent "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    9,
+    4,
+    5,
+    [
+     " Open-source Laravel monitoring agent. Captures telemetry from <code>laravel/nightwatch</code> and drains it into a PostgreSQL database you control. "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    5,
+    6
+   ],
+   [
+    "replace",
+    10,
+    18,
+    6,
+    10,
+    [
+     " Packagist Version",
+     " PHP 8.2+",
+     " MIT License",
+     " Tests"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    23,
+    10,
+    15
+   ],
+   [
+    "replace",
+    23,
+    25,
+    15,
+    17,
+    [
+     "1. **Sits in front of `laravel/nightwatch`** — Laravel's official observability SDK. Nightwatch already does the hard part: instrumenting all 12 record types — requests, queries, jobs, exceptions, commands, cache events, mail, notifications, outgoing HTTP, scheduled tasks, logs, users. The agent receives those payloads over a local TCP socket.",
+     "2. **Buffers them in a local SQLite WAL** with non-blocking ReactPHP ingest. An ingest-only benchmark accepted 13,400 payloads/s on a single instance; see the throughput guide for drain numbers."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    50,
+    17,
+    42
+   ],
+   [
+    "replace",
+    50,
+    51,
+    42,
+    43,
+    [
+     "You don't need to wire up Nightwatch's transport — the service provider automatically redirects its ingest to the local agent on `127.0.0.1:2407`. For a local-only setup you also don't need any token; the agent only enforces one if you set `NIGHTOWL_TOKEN` (useful when the agent listens on something other than loopback). Without a token the agent also sends nothing to NightOwl's platform (see Data ownership & privacy)."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    102,
+    43,
+    94
+   ],
+   [
+    "replace",
+    102,
+    103,
+    94,
+    95,
+    [
+     " "
+    ]
+   ],
+   [
+    "equal",
+    103,
+    131,
+    95,
+    123
+   ],
+   [
+    "replace",
+    131,
+    132,
+    123,
+    124,
+    [
+     " Verify that path with:"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    138,
+    124,
+    130
+   ],
+   [
+    "replace",
+    138,
+    139,
+    130,
+    131,
+    [
+     " This matters more than it sounds. New-issue and reopened-issue alerts, and agent health alerts, are sent **by the agent, from your server**, over its own SMTP and HTTP. If you use the hosted dashboard, its \"Send test\" button and its status-change alerts are sent by NightOwl's API from NightOwl's infrastructure. Two different senders reading the same channel row — so a green test in the dashboard does not prove your server can reach your SMTP relay. `nightowl:test-alert` is the one that does, and it prints the actual failure per channel rather than leaving it in the log."
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    131,
+    132
+   ],
+   [
+    "replace",
+    140,
+    141,
+    132,
+    133,
+    [
+     " It ignores each channel's event filter on purpose, so a transport problem can't hide behind one, and tells you afterwards if a channel that passed has new-issue alerts switched off."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    133,
+    134
+   ],
+   [
+    "replace",
+    142,
+    143,
+    134,
+    135,
+    [
+     " SMTP settings, if your relay is fussy or far away. The credentials themselves stay in the dashboard:"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    159,
+    135,
+    151
+   ],
+   [
+    "replace",
+    159,
+    173,
+    151,
+    152,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    175,
+    152,
+    154
+   ],
+   [
+    "replace",
+    175,
+    176,
+    154,
+    155,
+    [
+     "> ReactPHP non-blocking TCP ingest, SQLite WAL buffering, PostgreSQL `COPY` drain with `synchronous_commit = off`. An ingest-only benchmark accepted **13,400 payloads/s** on a single instance. In a July 2026 load test, one drain worker wrote about **2,500 payloads/s** to PostgreSQL. Details in the throughput guide."
+    ]
+   ],
+   [
+    "equal",
+    176,
+    214,
+    155,
+    193
+   ],
+   [
+    "replace",
+    214,
+    215,
+    193,
+    194,
+    [
+     "If you'd rather not build and maintain a UI, usenightowl.com is a managed service that connects to your Postgres with credentials you supply (and can rotate or revoke at any time). It adds an issue lifecycle UI (resolve / ignore / reopen, assignees, comments, activity timeline), alerts for those state transitions, teams, and an MCP server for AI tools. The agent itself stays MIT and works the same with or without it."
+    ]
+   ],
+   [
+    "equal",
+    215,
+    216,
+    194,
+    195
+   ],
+   [
+    "replace",
+    216,
+    217,
+    195,
+    196,
+    [
+     "Full guide: docs.usenightowl.com"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    219,
+    196,
+    198
+   ],
+   [
+    "replace",
+    219,
+    222,
+    198,
+    199,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    223,
+    199,
+    200
+   ],
+   [
+    "replace",
+    223,
+    226,
+    200,
+    201,
+    [
+     "MIT."
+    ]
+   ],
+   [
+    "equal",
+    226,
+    228,
+    201,
+    203
+   ],
+   [
+    "replace",
+    228,
+    229,
+    203,
+    204,
+    [
+     "- **Docs** — docs.usenightowl.com"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7e0cfa69d304+2": {
+  "fn": "umbrellio/laravel-pg-extensions",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    10,
+    2,
+    10,
+    [
+     "Github Status",
+     "Coverage Status",
+     "Latest Stable Version",
+     "Total Downloads",
+     "Code Intelligence Status",
+     "Build Status",
+     "Code Coverage",
+     "Scrutinizer Code Quality"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    22,
+    10,
+    22
+   ],
+   [
+    "replace",
+    22,
+    32,
+    22,
+    23,
+    [
+     "（目录 10 行略）"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    50,
+    23,
+    41
+   ],
+   [
+    "replace",
+    50,
+    59,
+    41,
+    42,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    68,
+    42,
+    51
+   ],
+   [
+    "replace",
+    68,
+    75,
+    51,
+    52,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    84,
+    52,
+    61
+   ],
+   [
+    "replace",
+    84,
+    90,
+    61,
+    62,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    131,
+    62,
+    103
+   ],
+   [
+    "replace",
+    131,
+    142,
+    103,
+    104,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    160,
+    104,
+    122
+   ],
+   [
+    "replace",
+    160,
+    166,
+    122,
+    123,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    195,
+    123,
+    152
+   ],
+   [
+    "replace",
+    195,
+    199,
+    152,
+    153,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    202,
+    153,
+    156
+   ],
+   [
+    "replace",
+    202,
+    203,
+    156,
+    157,
+    [
+     "Unlike standard laravel `decimal` type, this type can be with variable precision "
+    ]
+   ],
+   [
+    "equal",
+    203,
+    225,
+    157,
+    179
+   ],
+   [
+    "replace",
+    225,
+    232,
+    179,
+    180,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    240,
+    180,
+    188
+   ],
+   [
+    "replace",
+    240,
+    267,
+    188,
+    189,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    275,
+    189,
+    197
+   ],
+   [
+    "replace",
+    275,
+    282,
+    197,
+    198,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    282,
+    292,
+    198,
+    208
+   ],
+   [
+    "replace",
+    292,
+    293,
+    208,
+    209,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    293,
+    294,
+    209,
+    210
+   ],
+   [
+    "delete",
+    294,
+    295,
+    210,
+    210
+   ],
+   [
+    "equal",
+    295,
+    296,
+    210,
+    211
+   ],
+   [
+    "delete",
+    296,
+    297,
+    211,
+    211
+   ],
+   [
+    "equal",
+    297,
+    302,
+    211,
+    216
+   ],
+   [
+    "replace",
+    302,
+    312,
+    216,
+    217,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "6bd21d8f7ba2+2": {
+  "fn": "profmaddo/Curso-Desenvolvimento-Android",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    17,
+    1,
+    16
+   ],
+   [
+    "delete",
+    17,
+    18,
+    16,
+    16
+   ],
+   [
+    "equal",
+    18,
+    20,
+    16,
+    18
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "6046119c50a0+2": {
+  "fn": "imanuelcostigan/RSQLServer",
+  "clean_ver": "2",
+  "raw_lines": 0,
+  "ops": [
+   [
+    "insert",
+    0,
+    0,
+    0,
+    1,
+    [
+     "RSQLServer"
+    ]
+   ],
+   [
+    "equal",
+    0,
+    1,
+    1,
+    2
+   ],
+   [
+    "replace",
+    1,
+    6,
+    2,
+    3,
+    [
+     "This package is archived as there is now an excellent, much better supported package odbc."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "8dd721179037+2": {
+  "fn": "jiayouzl/ntwlyz",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    16,
+    0,
+    14
+   ],
+   [
+    "replace",
+    16,
+    17,
+    14,
+    15,
+    [
+     " * 近期有空就会加入这个，对于网络验证而言数据交互之间的加密还是必须要有滴。"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    76,
+    15,
+    74
+   ],
+   [
+    "replace",
+    76,
+    144,
+    74,
+    75,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    151,
+    75,
+    82
+   ],
+   [
+    "replace",
+    151,
+    153,
+    82,
+    84,
+    [
+     "* QQ群：20051836",
+     "* Telegram：https://t.me/hzleilei"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "6fe31b6b3548+2": {
+  "fn": "RekGRpth/pg_task",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "It runs entirely inside the database as a set of background workers — no external daemon, no client library, nothing to babysit outside PostgreSQL itself. You enable it with a single GUC, and from then on scheduling a job is just an `INSERT` into a plain table: `pg_task` polls that table, runs `input`, and writes the result back into the same row (see Task state machine for exactly how)."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    7,
+    5,
+    7
+   ],
+   [
+    "replace",
+    7,
+    18,
+    7,
+    8,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    24,
+    8,
+    14
+   ],
+   [
+    "replace",
+    24,
+    25,
+    14,
+    15,
+    [
+     "On startup, `pg_task` sets up everything it needs by itself — role, database, schema and the `task` table — using built-in defaults (database `postgres`, user `postgres`, schema `public`, table `task`; see Configuration (GUCs) to point it elsewhere, and Self-provisioning and the helper triggers for how)."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    31,
+    15,
+    21
+   ],
+   [
+    "replace",
+    31,
+    37,
+    21,
+    22,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    22,
+    23
+   ],
+   [
+    "replace",
+    38,
+    39,
+    23,
+    24,
+    [
+     "`pg_task` notices a new or changed row almost immediately — no polling delay to wait out (see Wake-up and crash recovery) — executes `input`, and writes the outcome straight back into that row: the result goes to `output`, any error to `error`, and `state` tracks progress along the way (`PLAN → TAKE → WORK → DONE`/`FAIL`). There's no separate status API — just query the table: `SELECT * FROM task WHERE id = ...`."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    42,
+    24,
+    27
+   ],
+   [
+    "replace",
+    42,
+    43,
+    27,
+    28,
+    [
+     "`pg_task` is a standard PGXS extension, built against an installed PostgreSQL, Greenplum or Greengage server."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    60,
+    28,
+    45
+   ],
+   [
+    "replace",
+    60,
+    61,
+    45,
+    46,
+    [
+     "`pg_task` creates the following GUCs. `Level` lists where each one can be set; when a GUC is settable at more than one level, the most specific value wins — a per-session `SET` beats a per-role/database default, which beats the config file. Several `task` columns (see Task table below) default to the matching GUC's current value at insert time, so setting the GUC once is often enough without repeating it on every row. The settings of an entry of `pg_task.json` (`pg_task.sleep`, `run`, `reset`, `limit` and the like, by its keys, its role in its database, its role, its database, or the server) are read by `pg_conf` and `pg_work`: a setting given on the postmaster command line rather than in the configuration files is lost for the other entries when the database or role of `pg_conf`, or of a `pg_work`, sets it too, as PostgreSQL keeps no trace of it then — set it in `postgresql.conf` or with `ALTER SYSTEM` instead."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    46,
+    47
+   ],
+   [
+    "replace",
+    62,
+    79,
+    47,
+    64,
+    [
+     "|Name|Type|Default|Level|Description|",
+     "|---|---|---|---|---|",
+     "|pg_task.delete|bool|true|config, database, user, session|Auto delete task when both output and error are nulls|",
+     "|pg_task.drift|bool|false|config, database, user, session|Compute next repeat time by stop time instead by plan time|",
+     "|pg_task.header|bool|true|config, database, user, session|Show columns headers in output (only when the query returns at least one row and more than one column)|",
+     "|pg_task.save|bool|false|config, database, user, session|Save session state between tasks|",
+     "|pg_task.spi|bool|false|config, database, user|SPI (or local) execution? Also affects `input` containing multiple `;`-separated statements: SPI mode runs each statement separately and appends all results, same as local mode; taken by a task worker on its start, one going on with the next tasks of its group by `count`/`live` keeping the mode it started in|",
+     "|pg_task.string|bool|true|config, database, user, session|Quote only strings|",
+     "|pg_conf.fetch|int|10|config, database, superuser|Fetch conf rows at once|",
+     "|pg_conf.max|int|max_worker_processes|config|Maximum task and work workers|",
+     "|pg_conf.restart|int|60|config|Restart pg_conf after it crashed in that many seconds (read once, at server start)|",
+     "|pg_task.count|int|0|config, database, user, session|Non-negative maximum count of tasks, are executed by current background worker process before exit|",
+     "|pg_task.fetch|int|100|config, database, user|Fetch task rows at once|",
+     "|pg_task.id|bigint||session|Current task id, to be read, not set: nothing keeps `input` from changing it with `SET`, which changes the `parent` that the tasks it inserts after that get by default, and nothing else, `pg_task` going by its own id of the task, not by this setting, and setting it anew for the next task; empty out of a task, as a task may have id 0|",
+     "|pg_task.limit|int|1000|config, database, user|Limit task rows at once: the most tasks `pg_work` takes in a pass; `0` takes none, holding every task of the entry back|",
+     "|pg_task.max|int|0|config, database, user, session|Maximum count of additional concurrently executing tasks in group (total concurrency = max + 1), negative value means pause between tasks in milliseconds|",
+     "| pg_task.run | int | 2147483647 | config, database, user | Maximum count of concurrently"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "79abe80ae6a9+2": {
+  "fn": "rochejul/sequelize-mocking",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "Build StatusDependency Status",
+     "devDependency Status"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    4,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "Known Vulnerabilities"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    6,
+    7
+   ],
+   [
+    "replace",
+    7,
+    10,
+    7,
+    9,
+    [
+     "NPM",
+     "NPM"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    16,
+    9,
+    15
+   ],
+   [
+    "replace",
+    16,
+    17,
+    15,
+    16,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    17,
+    29,
+    16,
+    28
+   ],
+   [
+    "replace",
+    29,
+    126,
+    28,
+    29,
+    [
+     "…（97 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    134,
+    29,
+    37
+   ],
+   [
+    "replace",
+    134,
+    143,
+    37,
+    38,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    144,
+    38,
+    39
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "80137eac6153+2": {
+  "fn": "omnilib/aql",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    5,
+    1,
+    4
+   ],
+   [
+    "replace",
+    5,
+    10,
+    4,
+    9,
+    [
+     "build status",
+     "code coverage",
+     "version",
+     "license",
+     "code style"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    12,
+    9,
+    11
+   ],
+   [
+    "delete",
+    12,
+    13,
+    11,
+    11
+   ],
+   [
+    "equal",
+    13,
+    37,
+    11,
+    35
+   ],
+   [
+    "replace",
+    37,
+    43,
+    35,
+    36,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    65,
+    36,
+    58
+   ],
+   [
+    "delete",
+    65,
+    66,
+    58,
+    58
+   ],
+   [
+    "equal",
+    66,
+    67,
+    58,
+    59
+   ],
+   [
+    "replace",
+    67,
+    70,
+    59,
+    62,
+    [
+     "aql is copyright Amethyst Reese, and licensed under",
+     "the MIT license. I am providing code in this repository to you under an open",
+     "source license. This is my personal repository; the license you receive to"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    62,
+    63
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "53cec9119332+2": {
+  "fn": "oxogenesis/oxo-chat-client",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     "**使用教程** "
+    ]
+   ],
+   [
+    "equal",
+    4,
+    6,
+    4,
+    6
+   ],
+   [
+    "replace",
+    6,
+    9,
+    6,
+    9,
+    [
+     "**客户端** ",
+     "**路由器** ",
+     "**服务端** "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    11,
+    9,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "**安装包** "
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    12,
+    14
+   ],
+   [
+    "replace",
+    14,
+    19,
+    14,
+    18,
+    [
+     "**1.关于密码学** ",
+     "**2.系统描述** ",
+     "**3.业务消息** ",
+     "**4.数据存储** "
+    ]
+   ],
+   [
+    "equal",
+    19,
+    22,
+    18,
+    21
+   ],
+   [
+    "replace",
+    22,
+    23,
+    21,
+    22,
+    [
+     "* **https://oxo-chat-server.com** "
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    22,
+    23
+   ],
+   [
+    "replace",
+    24,
+    25,
+    23,
+    24,
+    [
+     "* **wss://ru.oxo-chat-server.com** "
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    24,
+    25
+   ],
+   [
+    "replace",
+    26,
+    30,
+    25,
+    29,
+    [
+     "I would like to point a subdomain to your ip, if you want to provide service for the public. ",
+     "You could create a issue to submit your ip and other info of your server. ",
+     "You could use servers other people provided to contact you friends. ",
+     "Or you could setup your own server just for your friends. "
+    ]
+   ],
+   [
+    "equal",
+    30,
+    32,
+    29,
+    31
+   ],
+   [
+    "replace",
+    32,
+    35,
+    31,
+    34,
+    [
+     "* install node environment, must be v10.11.0 ",
+     "$ node -v ",
+     "v10.11.0 "
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    34,
+    35
+   ],
+   [
+    "replace",
+    36,
+    42,
+    35,
+    41,
+    [
+     "* install dependencies, compile sqlite for electron ",
+     "$ npm install ",
+     "$ npm run sqlite3 ",
+     "$ cd dist ",
+     "$ npm install ",
+     "$ npm run sqlite3 "
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    41,
+    42
+   ],
+   [
+    "replace",
+    43,
+    45,
+    42,
+    44,
+    [
+     "* test ",
+     "$ npm run test "
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    44,
+    45
+   ],
+   [
+    "replace",
+    46,
+    48,
+    45,
+    47,
+    [
+     "* build ",
+     "$ npm run build"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "5b0bee2175f1+2": {
+  "fn": "hartmut-co-uk/pg-repack-docker",
+  "clean_ver": "2",
+  "raw_lines": 11,
+  "ops": [
+   [
+    "equal",
+    0,
+    11,
+    0,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "|postgres|pg_repack|"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    12,
+    13
+   ],
+   [
+    "replace",
+    13,
+    24,
+    13,
+    23,
+    [
+     "|18|1.5.3|",
+     "|17|1.5.2|",
+     "|17|1.5.1|",
+     "|16|1.5.0|",
+     "|15|1.4.8|",
+     "|14|1.4.7|",
+     "|13|1.4.6|",
+     "|12|1.4.5|",
+     "|11|1.4.4|",
+     "|10|1.4.3|"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    28,
+    23,
+    27
+   ],
+   [
+    "delete",
+    28,
+    29,
+    27,
+    27
+   ],
+   [
+    "equal",
+    29,
+    38,
+    27,
+    36
+   ],
+   [
+    "replace",
+    38,
+    39,
+    36,
+    37,
+    [
+     "This image extends the official postgres docker image - so you can start a container with postgres following the official image."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    55,
+    37,
+    53
+   ],
+   [
+    "delete",
+    55,
+    56,
+    53,
+    53
+   ],
+   [
+    "equal",
+    56,
+    65,
+    53,
+    62
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

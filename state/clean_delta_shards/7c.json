@@ -10939,5 +10939,8657 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "bf049e826767+2": {
+  "fn": "sysadminmike/couch-to-postgres",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "replace",
+    0,
+    2,
+    0,
+    1,
+    [
+     "couch-to-postgres / pgcouch / couchpg / couchgres / postcouch"
+    ]
+   ],
+   [
+    "equal",
+    2,
+    3,
+    1,
+    2
+   ],
+   [
+    "replace",
+    3,
+    4,
+    2,
+    3,
+    [
+     "Node libary to stream CouchDB changes into PostgreSQL with a simple client example. Based on https://github.com/orchestrate-io/orchestrate-couchdb."
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    3,
+    4
+   ],
+   [
+    "replace",
+    5,
+    6,
+    4,
+    5,
+    [
+     "By adding a few some extra bits allows not only for SELECT queries on the data but also UPDATE/INSERT/DELETE on your couchdb docs within Postgres. It is also possible to use your couch views as tables. "
+    ]
+   ],
+   [
+    "equal",
+    6,
+    13,
+    5,
+    12
+   ],
+   [
+    "replace",
+    13,
+    16,
+    12,
+    14,
+    [
+     " curl -X PUT http://192.168.3.21:5984/example/1234567 -d '{\"myvar\":\"foo\"}'",
+     " {\"ok\":true,\"id\":\"1234567\",\"rev\":\"1-d3747a58baa817834a21ceeaf3084c41\"} "
+    ]
+   ],
+   [
+    "equal",
+    16,
+    19,
+    14,
+    17
+   ],
+   [
+    "replace",
+    19,
+    20,
+    17,
+    18,
+    [
+     " postgresdb=> SELECT id, doc FROM example WHERE id='1234567';"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    18,
+    19
+   ],
+   [
+    "replace",
+    21,
+    27,
+    19,
+    23,
+    [
+     " id | doc ",
+     " ---------+----------------------------------------------------------------------------------",
+     " 1234567 | {\"_id\": \"1234567\", \"_rev\": \"1-d3747a58baa817834a21ceeaf3084c41\", \"myvar\": \"foo\"}",
+     " (1 row)"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    30,
+    23,
+    26
+   ],
+   [
+    "replace",
+    30,
+    37,
+    26,
+    33,
+    [
+     " postgresdb=> UPDATE example ",
+     " postgresdb-> SET doc=json_object_set_key(doc::json, 'myvar'::text, 'bar'::text)::jsonb, from_pg=true ",
+     " postgresdb-> WHERE id='1234567';",
+     " DEBUG: pgsql-http: queried http://192.168.3.21:5984/example/1234567",
+     " CONTEXT: SQL statement \"SELECT headers FROM http_post('http://192.168.3.21:5984/' || TG_TABLE_NAME || '/' || NEW.id::text, '', NEW.doc::text, 'application/json'::text)\"",
+     " PL/pgSQL function couchdb_put() line 9 at SQL statement",
+     " UPDATE 0"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    42,
+    33,
+    38
+   ],
+   [
+    "replace",
+    42,
+    44,
+    38,
+    40,
+    [
+     " curl -X GET http://192.168.3.21:5984/example/1234567 ",
+     " {\"_id\":\"1234567\",\"_rev\":\"2-b9f4c54fc36bdeb78c31590920c9751b\",\"myvar\":\"bar\"}"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    47,
+    40,
+    43
+   ],
+   [
+    "replace",
+    47,
+    54,
+    43,
+    48,
+    [
+     " postgresdb=> SELECT id, doc FROM example WHERE id='1234567';",
+     " id | doc ",
+     " ---------+----------------------------------------------------------------------------------",
+     " 1234567 | {\"_id\": \"1234567\", \"_rev\": \"2-b9f4c54fc36bdeb78c31590920c9751b\", \"myvar\": \"bar\"}",
+     " (1 row)"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    57,
+    48,
+    51
+   ],
+   [
+    "replace",
+    57,
+    63,
+    51,
+    56,
+    [
+     " postgresdb=> INSERT INTO example (id, doc, from_pg) VALUES ('7654321', json_object('{_id,myvar}','{7654321, 100}')::jsonb, true);",
+     " DEBUG: pgsql-http: queried http://192.168.3.21:5984/example/7654321",
+     " CONTEXT: SQL statement \"SELECT headers FROM http_post('http://192.168.3.21:5984/' || TG_TABLE_NAME || '/' || NEW.id::text, '', NEW.doc::text, 'application/json'::text)\"",
+     " PL/pgSQL function couchdb_put() line 9 at SQL statement",
+     " INSERT 0 0"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    66,
+    56,
+    59
+   ],
+   [
+    "replace",
+    66,
+    69,
+    59,
+    61,
+    [
+     " curl -X GET http://192.168.3.21:5984/example/7654321 ",
+     " {\"_id\":\"7654321\",\"_rev\":\"1-08343cb32bb0903348c0903e574cfbd0\",\"myvar\":\"100\"}"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    72,
+    61,
+    64
+   ],
+   [
+    "replace",
+    72,
+    75,
+    64,
+    66,
+    [
+     " curl -X PUT http://192.168.3.21:5984/example/7654321 -d '{\"_id\":\"7654321\",\"_rev\":\"1-08343cb32bb0903348c0903e574cfbd0\",\"myvar\":\"50\"}'",
+     " {\"ok\":true,\"id\":\"7654321\",\"rev\":\"2-5057c4942c6b92f8a9e2c3e5a75fd0b9\""
+    ]
+   ],
+   [
+    "equal",
+    75,
+    78,
+    66,
+    69
+   ],
+   [
+    "replace",
+    78,
+    84,
+    69,
+    74,
+    [
+     " SELECT id, doc FROM example WHERE id='1234567';",
+     " id | doc ",
+     " ---------+----------------------------------------------------------------------------------",
+     " 1234567 | {\"_id\": \"1234567\", \"_rev\": \"2-b9f4c54fc36bdeb78c31590920c9751b\", \"myvar\": \"bar\"}",
+     " (1 row)"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    87,
+    74,
+    77
+   ],
+   [
+    "insert",
+    87,
+    87,
+    77,
+    79,
+    [
+     " INSERT INTO example (id, doc, from_pg) VALUES ('test1', json_object('{_id,myvar}','{test1, 100}')::jsonb, true);",
+     " INSERT INTO example (id, doc, from_pg) VALUES ('test2', json_object('{_id,myvar}','{test2, 50}')::jsonb, true);"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    79,
+    80
+   ],
+   [
+    "delete",
+    88,
+    91,
+    80,
+    80
+   ],
+   [
+    "equal",
+    91,
+    93,
+    80,
+    82
+   ],
+   [
+    "replace",
+    93,
+    98,
+    82,
+    87,
+    [
+     " curl -X PUT http://192.168.3.21:5984/example/test3 -d '{\"_id\":\"test3\", \"myvar\":\"100\"}'",
+     " curl -X PUT http://192.168.3.21:5984/example/test4 -d '{\"_id\":\"test4\", \"myvar\":\"50\"}'",
+     " curl -X PUT http://192.168.3.21:5984/example/test5 -d '{\"_id\":\"test5\", \"myvar\":\"70\"}'",
+     " curl -X PUT http://192.168.3.21:5984/example/test6 -d '{\"_id\":\"test6\", \"myvar\":\"20\"}'",
+     " curl -X PUT http://192.168.3.21:5984/example/test7 -d '{\"_id\":\"test7\", \"myvar\":\"10\"}'"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    101,
+    87,
+    90
+   ],
+   [
+    "replace",
+    101,
+    111,
+    90,
+    93,
+    [
+     " SELECT id, doc->'myvar' AS myvar FROM example ",
+     " WHERE id LIKE 'test%' AND CAST(doc->>'myvar' AS numeric) > 50",
+     " ORDER BY myvar"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    93,
+    94
+   ],
+   [
+    "insert",
+    112,
+    112,
+    94,
+    100,
+    [
+     " id | myvar ",
+     " -------+-------",
+     " test3 | \"100\"",
+     " test1 | \"100\"",
+     " test5 | \"70\"",
+     " (3 rows)"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    115,
+    100,
+    103
+   ],
+   [
+    "replace",
+    115,
+    122,
+    103,
+    110,
+    [
+     " UPDATE example ",
+     " SET doc=json_object_set_key(",
+     " doc::json, 'myvar'::text, (CAST(doc->>'myvar'::text AS numeric) + 50)::text",
+     " )::jsonb,",
+     " from_pg=true ",
+     " WHERE id LIKE 'test%' AND CAST(doc->>'myvar' AS numeric) < 60",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    110,
+    111
+   ],
+   [
+    "delete",
+    123,
+    127,
+    111,
+    111
+   ],
+   [
+    "equal",
+    127,
+    128,
+    111,
+    112
+   ],
+   [
+    "replace",
+    128,
+    138,
+    112,
+    126,
+    [
+     " SELECT id, doc->'myvar' AS myvar FROM example ",
+     " WHERE id LIKE 'test%' AND CAST(doc->>'myvar' AS numeric) > 50",
+     " ORDER BY myvar",
+     "",
+     " id | myvar ",
+     " -------+-------",
+     " test4 | \"100\"",
+     " test2 | \"100\"",
+     " test3 | \"100\"",
+     " test1 | \"100\"",
+     " test7 | \"60\"",
+     " test5 | \"70\"",
+     " test6 | \"70\"",
+     " (7 rows)"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    141,
+    126,
+    129
+   ],
+   [
+    "replace",
+    141,
+    144,
+    129,
+    132,
+    [
+     " SELECT id, CAST(doc->>'myvar' AS numeric) as myvar FROM example ",
+     " WHERE id LIKE 'test%' AND CAST(doc->>'myvar' AS numeric) > 50",
+     " ORDER BY myvar, doc->>'_id'"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    145,
+    132,
+    133
+   ],
+   [
+    "replace",
+    145,
+    156,
+    133,
+    144,
+    [
+     " id | myvar ",
+     " -------+-------",
+     " test7 | \"60\"",
+     " test5 | \"70\"",
+     " test6 | \"70\"",
+     " test1 | \"100\"",
+     " test2 | \"100\"",
+     " test3 | \"100\"",
+     " test4 | \"100\"",
+     " (7 rows)",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    156,
+    157,
+    144,
+    145
+   ],
+   [
+    "delete",
+    157,
+    158,
+    145,
+    145
+   ],
+   [
+    "equal",
+    158,
+    161,
+    145,
+    148
+   ],
+   [
+    "replace",
+    161,
+    173,
+    148,
+    160,
+    [
+     " curl -s -X POST '192.168.3.21:5984/example/_temp_view?include_docs=false' -H 'Content-Type: application/json' \\",
+     " -d '{\"map\":\"function(doc) { emit(doc._id, doc.myvar) };\"}' ",
+     " {\"total_rows\":7,\"offset\":0,\"rows\":[",
+     " {\"id\":\"test1\",\"key\":\"test1\",\"value\":\"100\"},",
+     " {\"id\":\"test2\",\"key\":\"test2\",\"value\":\"100\"},",
+     " {\"id\":\"test3\",\"key\":\"test3\",\"value\":\"100\"},",
+     " {\"id\":\"test4\",\"key\":\"test4\",\"value\":\"100\"},",
+     " {\"id\":\"test5\",\"key\":\"test5\",\"value\":\"70\"},",
+     " {\"id\":\"test6\",\"key\":\"test6\",\"value\":\"70\"},",
+     " {\"id\":\"test7\",\"key\":\"test7\",\"value\":\"60\"}",
+     " ]}",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    173,
+    175,
+    160,
+    162
+   ],
+   [
+    "replace",
+    175,
+    176,
+    162,
+    163,
+    [
+     "The couch design doc: "
+    ]
+   ],
+   [
+    "equal",
+    176,
+    177,
+    163,
+    164
+   ],
+   [
+    "replace",
+    177,
+    200,
+    164,
+    178,
+    [
+     " {",
+     " \"_id\": \"_design/mw_views\",",
+     " \"language\": \"javascript\",",
+     " \"views\": {",
+     " \"by_feedName\": {",
+     " \"map\": \"function(doc) { emit(doc.feedName,null); }\",",
+     " \"reduce\": \"_count\"",
+     " },",
+     " \"by_tags\": {",
+     " \"map\": \"function(doc) { for(var i in doc.tags) { emit (doc.tags[i],null); } }\",",
+     " \"reduce\": \"_count\"",
+     " }",
+     " }",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    201,
+    178,
+    179
+   ],
+   [
+    "replace",
+    201,
+    203,
+    179,
+    189,
+    [
+     " WITH by_feedname_reduced AS (",
+     " SELECT * FROM json_to_recordset(",
+     " (",
+     " SELECT (content::json->>'rows')::json ",
+     " FROM http_get('http://192.168.3.23:5984/articles/_design/mw_views/_view/by_feedName?group=true'))",
+     " ) AS x (key text, value text)",
+     " )",
+     "",
+     " SELECT * FROM by_feedname_reduced WHERE value::numeric > 6000 ORDER BY key ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    203,
+    204,
+    189,
+    190
+   ],
+   [
+    "replace",
+    204,
+    205,
+    190,
+    191,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    205,
+    206,
+    191,
+    192
+   ],
+   [
+    "replace",
+    206,
+    214,
+    192,
+    200,
+    [
+     "",
+     " WITH tbl AS (",
+     " SELECT DISTINCT doc->>'feedName' as key, COUNT(doc->>'feedName') AS value ",
+     " FROM articles",
+     " GROUP BY doc->>'feedName'",
+     " )",
+     " SELECT key, value FROM tbl WHERE value > 6000 ORDER BY key;",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    214,
+    215,
+    200,
+    201
+   ],
+   [
+    "replace",
+    215,
+    219,
+    201,
+    202,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    219,
+    220,
+    202,
+    203
+   ],
+   [
+    "replace",
+    220,
+    227,
+    203,
+    209,
+    [
+     "",
+     " curl -X GET http://localhost:5984/articles",
+     " {\"db_name\":\"articles\",\"doc_count\":63759,\"doc_del_count\":2,\"update_seq\":92467,\"purge_seq\":0,\"compact_running\":false,\"disk_size\":151752824,\"data_size\":121586165,\"instance_start_time\":\"1418686121041424\",\"disk_format_version\":6,\"committed_update_seq\":92467}",
+     "",
+     " SELECT DISTINCT jsonb_object_keys(doc) AS myfields",
+     " FROM articles ORDER BY myfields"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    232,
+    209,
+    214
+   ],
+   [
+    "replace",
+    232,
+    234,
+    214,
+    216,
+    [
+     " SELECT DISTINCT doc->>'type' as doctype, count(doc->>'type')",
+     " FROM mytable GROUP BY doctype ORDER BY doctype "
+    ]
+   ],
+   [
+    "equal",
+    234,
+    237,
+    216,
+    219
+   ],
+   [
+    "replace",
+    237,
+    242,
+    219,
+    222,
+    [
+     " SELECT DISTINCT doc->>'type' as doctype, jsonb_object_keys(doc) AS myfields",
+     " FROM mytable",
+     " ORDER BY doctype , myfields;"
+    ]
+   ],
+   [
+    "equal",
+    242,
+    243,
+    222,
+    223
+   ],
+   [
+    "replace",
+    243,
+    245,
+    223,
+    224,
+    [
+     "With no indexes the above query takes just over 10 secs. I have made no indexes or adjustments to the default FreeBSD postgresql94-server-9.4.r1 port."
+    ]
+   ],
+   [
+    "equal",
+    245,
+    247,
+    224,
+    226
+   ],
+   [
+    "replace",
+    247,
+    250,
+    226,
+    228,
+    [
+     "",
+     " git clone git@github.com:sysadminmike/couch-to-postgres.git"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    253,
+    228,
+    231
+   ],
+   [
+    "replace",
+    253,
+    255,
+    231,
+    232,
+    [
+     " npm install "
+    ]
+   ],
+   [
+    "equal",
+    255,
+    258,
+    232,
+    235
+   ],
+   [
+    "replace",
+    258,
+    266,
+    235,
+    243,
+    [
+     " var settings =",
+     " {",
+     " couchdb: {",
+     " url: 'http://192.168.3.21:5984',",
+     " pgtable: 'example',",
+     " database: 'example'",
+     " }",
+     " };"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    243,
+    244
+   ],
+   [
+    "replace",
+    267,
+    269,
+    244,
+    245,
+    [
+     " pgclient = new pg.Client(\"postgres://mike@localhost/pgdatabase\");"
+    ]
+   ],
+   [
+    "equal",
+    269,
+    274,
+    245,
+    250
+   ],
+   [
+    "replace",
+    274,
+    278,
+    250,
+    254,
+    [
+     " pgtable text NOT NULL,",
+     " since numeric DEFAULT 0,",
+     " enabled boolean DEFAULT false, --not used in the simple client example",
+     " CONSTRAINT since_checkpoint_pkey PRIMARY KEY (pgtable)"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    284,
+    254,
+    260
+   ],
+   [
+    "replace",
+    284,
+    290,
+    260,
+    266,
+    [
+     " CREATE TABLE example",
+     " (",
+     " id text NOT NULL,",
+     " doc jsonb,",
+     " CONSTRAINT example_pkey PRIMARY KEY (id)",
+     " )"
+    ]
+   ],
+   [
+    "equal",
+    290,
+    293,
+    266,
+    269
+   ],
+   [
+    "replace",
+    293,
+    294,
+    269,
+    270,
+    [
+     " ./bin/index.js"
+    ]
+   ],
+   [
+    "equal",
+    294,
+    297,
+    270,
+    273
+   ],
+   [
+    "replace",
+    297,
+    298,
+    273,
+    274,
+    [
+     "At this point you can now perform SELECT queries the docs within postgres as in the above example. This should be fine to use against a production couchdb as it makes no changes to and is performing the same tasks as the elastic search river plugin. With a bit of copy/pasting it is possible to use sql to create simple scripts or one liners to run in a shell with curl."
+    ]
+   ],
+   [
+    "equal",
+    298,
+    301,
+    274,
+    277
+   ],
+   [
+    "replace",
+    301,
+    302,
+    277,
+    278,
+    [
+     "To handle UPDATE/INSERT/DELETE more configuration is required. Note this is still experimental so I wouldnt point this at any production data."
+    ]
+   ],
+   [
+    "equal",
+    302,
+    303,
+    278,
+    279
+   ],
+   [
+    "replace",
+    303,
+    306,
+    279,
+    280,
+    [
+     "First install the postgres extension pgsql-http at https://github.com/pramsey/pgsql-http "
+    ]
+   ],
+   [
+    "equal",
+    306,
+    310,
+    280,
+    284
+   ],
+   [
+    "replace",
+    310,
+    311,
+    284,
+    285,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    311,
+    314,
+    285,
+    288
+   ],
+   [
+    "replace",
+    314,
+    315,
+    288,
+    289,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    315,
+    319,
+    289,
+    293
+   ],
+   [
+    "replace",
+    319,
+    321,
+    293,
+    294,
+    [
+     " CREATE EXTENSION http"
+    ]
+   ],
+   [
+    "equal",
+    321,
+    324,
+    294,
+    297
+   ],
+   [
+    "replace",
+    324,
+    332,
+    297,
+    304,
+    [
+     " CREATE TABLE since_checkpoints ",
+     " (",
+     " pgtable text NOT NULL,",
+     " since numeric DEFAULT 0,",
+     " enabled boolean DEFAULT false,",
+     " CONSTRAINT since_checkpoint_pkey PRIMARY KEY (pgtable)",
+     " );"
+    ]
+   ],
+   [
+    "equal",
+    332,
+    335,
+    304,
+    307
+   ],
+   [
+    "replace",
+    335,
+    344,
+    307,
+    314,
+    [
+     " CREATE OR REPLACE FUNCTION couchdb_put() RETURNS trigger AS $BODY$",
+     " DECLARE",
+     " RES RECORD;",
+     " BEGIN",
+     " IF (NEW.from_pg) IS NULL THEN",
+     " RETURN NEW;",
+     " ELSE "
+    ]
+   ],
+   [
+    "equal",
+    344,
+    345,
+    314,
+    315
+   ],
+   [
+    "replace",
+    345,
+    352,
+    315,
+    324,
+    [
+     " SELECT status FROM http_post('http://192.168.3.21:5984/' || TG_TABLE_NAME || '/' || NEW.id::text, '', NEW.doc::text, 'application/json'::text) INTO RES; ",
+     "",
+     " --Need to check RES for response code",
+     " --RAISE EXCEPTION 'Result: %', RES;",
+     " RETURN null;",
+     " END IF;",
+     " END;",
+     " $BODY$",
+     " LANGUAGE plpgsql VOLATILE "
+    ]
+   ],
+   [
+    "equal",
+    352,
+    355,
+    324,
+    327
+   ],
+   [
+    "replace",
+    355,
+    372,
+    327,
+    341,
+    [
+     " CREATE OR REPLACE FUNCTION json_object_set_key(json json, key_to_set text, value_to_set anyelement)",
+     " RETURNS json AS",
+     " $BODY$",
+     " SELECT COALESCE(",
+     " (SELECT ('{' || string_agg(to_json(\"key\") || ':' || \"value\", ',') || '}')",
+     " FROM (SELECT *",
+     " FROM json_each(\"json\")",
+     " WHERE \"key\" <> \"key_to_set\"",
+     " UNION ALL",
+     " SELECT \"key_to_set\", to_json(\"value_to_set\")) AS \"fields\"),",
+     " '{}'",
+     " )::json",
+     " $BODY$",
+     " LANGUAGE sql IMMUTABLE STRICT;"
+    ]
+   ],
+   [
+    "equal",
+    372,
+    375,
+    341,
+    344
+   ],
+   [
+    "replace",
+    375,
+    383,
+    344,
+    351,
+    [
+     " CREATE TABLE example",
+     " (",
+     " id text NOT NULL,",
+     " doc jsonb,",
+     " from_pg boolean, -- for trigger nothing stored here",
+     " CONSTRAINT example_pkey PRIMARY KEY (id)",
+     " );"
+    ]
+   ],
+   [
+    "equal",
+    383,
+    386,
+    351,
+    354
+   ],
+   [
+    "replace",
+    386,
+    389,
+    354,
+    357,
+    [
+     " CREATE TRIGGER add_doc_to_couch ",
+     " BEFORE INSERT OR UPDATE ",
+     " ON example FOR EACH ROW EXECUTE PROCEDURE couchdb_put();"
+    ]
+   ],
+   [
+    "equal",
+    389,
+    390,
+    357,
+    358
+   ],
+   [
+    "replace",
+    390,
+    392,
+    358,
+    359,
+    [
+     "Note: All queries in postgres must have \"from_pg=true\" for inserts and updates or the postgres will send the data to the table and not send it to couch. "
+    ]
+   ],
+   [
+    "equal",
+    392,
+    397,
+    359,
+    364
+   ],
+   [
+    "delete",
+    397,
+    399,
+    364,
+    364
+   ],
+   [
+    "equal",
+    399,
+    403,
+    364,
+    368
+   ],
+   [
+    "replace",
+    403,
+    404,
+    368,
+    369,
+    [
+     " ckwait = 3 * 1000; "
+    ]
+   ],
+   [
+    "equal",
+    404,
+    405,
+    369,
+    370
+   ],
+   [
+    "replace",
+    405,
+    406,
+    370,
+    371,
+    [
+     "This is how often the stream is checkpointed when the stream is active. I would adjust this depending on how busy you couchdb is. When the stream is idle this increases to 10 secs. "
+    ]
+   ],
+   [
+    "equal",
+    406,
+    408,
+    371,
+    373
+   ],
+   [
+    "replace",
+    408,
+    411,
+    373,
+    376,
+    [
+     " // The inactivity timer is for time between *changes*, or time between the",
+     " // initial connection and the first change. Therefore it goes here.",
+     " stream.inactivity_ms = 30000;"
+    ]
+   ],
+   [
+    "equal",
+    411,
+    413,
+    376,
+    378
+   ],
+   [
+    "delete",
+    413,
+    416,
+    378,
+    378
+   ],
+   [
+    "equal",
+    416,
+    425,
+    378,
+    387
+   ],
+   [
+    "replace",
+    425,
+    427,
+    387,
+    389,
+    [
+     " {\"session_id\":\"661411f2137c64efc940f55b802dc35b\",\"start_time\":\"Tue, 16 Dec 2014 17:00:05 GMT\",\"end_time\":\"Tue, 16 Dec 2014 17:08:10 GMT\",\"start_last_seq\":0,\"end_last_seq\":92862,\"recorded_seq\":92862,\"missing_checked\":63840,\"missing_found\":63840,\"docs_read\":63840,\"docs_written\":63840,\"doc_write_failures\":0}",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    427,
+    431,
+    389,
+    393
+   ],
+   [
+    "replace",
+    431,
+    434,
+    393,
+    396,
+    [
+     " fsync = off",
+     " synchronous_commit = off",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    434,
+    449,
+    396,
+    411
+   ],
+   [
+    "replace",
+    449,
+    450,
+    411,
+    412,
+    [
+     "\t^C45.919u 3.226s 1:42.10 48.1% 10864+321k 158+0io 0pf+0w"
+    ]
+   ],
+   [
+    "equal",
+    450,
+    452,
+    412,
+    414
+   ],
+   [
+    "replace",
+    452,
+    453,
+    414,
+    415,
+    [
+     "So down to well under 2 minutes now todo the initial sync of the same test db - so 4 times faster than a native couch to couch sync. I think this is faster than Elastic search river doing a similar task."
+    ]
+   ],
+   [
+    "equal",
+    453,
+    456,
+    415,
+    418
+   ],
+   [
+    "replace",
+    456,
+    466,
+    418,
+    425,
+    [
+     " PID USERNAME THR PRI NICE SIZE RES STATE C TIME WCPU COMMAND",
+     "\t57635 mike 6 45 0 621M 66064K uwait 1 0:25 50.78% node",
+     "\t57636 70 1 36 0 186M 97816K sbwait 1 0:11 22.75% postgres",
+     "\t44831 919 11 24 0 181M 30048K uwait 0 67:28 20.51% beam.smp",
+     "\t23891 919 11 20 0 232M 69168K uwait 0 26:22 0.39% beam.smp",
+     "\t57624 70 1 20 0 180M 17840K select 0 0:00 0.29% postgres",
+     "\t57622 70 1 21 0 180M 65556K select 1 0:00 0.20% postgres"
+    ]
+   ],
+   [
+    "equal",
+    466,
+    469,
+    425,
+    428
+   ],
+   [
+    "replace",
+    469,
+    483,
+    428,
+    439,
+    [
+     " Location 1 Location 2",
+     " Postgres == CouchDB ---------- CouchDB == Postgres",
+     " \\ /",
+     " \\ /",
+     " \\ /",
+     " \\ /",
+     " \\/ ",
+     " Location 3",
+     " CouchDB",
+     "||",
+     " Postgres "
+    ]
+   ],
+   [
+    "equal",
+    483,
+    484,
+    439,
+    440
+   ],
+   [
+    "replace",
+    484,
+    485,
+    440,
+    442,
+    [
+     " Where === is the node client keeping the paired postgres up to date",
+     " And ----- is couchdb performing replication "
+    ]
+   ],
+   [
+    "equal",
+    485,
+    490,
+    442,
+    447
+   ],
+   [
+    "replace",
+    490,
+    497,
+    447,
+    454,
+    [
+     " WITH new_docs AS (",
+     " SELECT json_object_set_key(doc::json, 'test'::text, 'Couch & Postgres are scool'::text)::jsonb AS docs",
+     " FROM articlespg",
+     " ),",
+     " agg_docs AS (",
+     " SELECT json_agg(docs) AS aggjson FROM new_docs",
+     " )"
+    ]
+   ],
+   [
+    "equal",
+    497,
+    498,
+    454,
+    455
+   ],
+   [
+    "replace",
+    498,
+    502,
+    455,
+    459,
+    [
+     " SELECT headers FROM ",
+     " http_post('http://192.168.3.21:5984/articlespg/_bulk_docs', '',",
+     " '{\"all_or_nothing\":true, \"docs\":' || (SELECT * FROM agg_docs) || '}',",
+     " 'application/json'::text) ; "
+    ]
+   ],
+   [
+    "equal",
+    502,
+    506,
+    459,
+    463
+   ],
+   [
+    "replace",
+    506,
+    510,
+    463,
+    467,
+    [
+     " DEBUG: pgsql-http: queried http://192.168.3.21:5984/articlespg/_bulk_docs",
+     " ERROR: Failed to connect to 192.168.3.21 port 5984: Connection refused",
+     " couchplay=> ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    510,
+    512,
+    467,
+    469
+   ],
+   [
+    "replace",
+    512,
+    518,
+    469,
+    475,
+    [
+     " WITH newdocs AS ( -- Make chage to json here ",
+     " SELECT id, json_object_set_key(doc::json, 'test'::text, 'Couch & Postgres are scool'::text)::jsonb AS docs",
+     " FROM articlespg ",
+     " ),",
+     " chunked AS ( -- get in chunks ",
+     "\tSELECT docs, ((ROW_NUMBER() OVER (ORDER BY id) - 1) / 50) +1 AS chunk_no "
+    ]
+   ],
+   [
+    "equal",
+    518,
+    519,
+    475,
+    476
+   ],
+   [
+    "replace",
+    519,
+    523,
+    476,
+    480,
+    [
+     " ),",
+     " chunked_newdocs AS ( -- Bulk up bulk_docs chunks to send ",
+     " SELECT json_agg(docs) AS bulk_docs, chunk_no FROM chunked GROUP BY chunk_no ORDER BY chunk_no",
+     " )"
+    ]
+   ],
+   [
+    "equal",
+    523,
+    524,
+    480,
+    481
+   ],
+   [
+    "replace",
+    524,
+    529,
+    481,
+    486,
+    [
+     " SELECT chunk_no, status FROM chunked_newdocs,",
+     " http_post('http://192.168.3.21:5984/articlespg/_bulk_docs', '',",
+     " '{\"all_or_nothing\":true, \"docs\":' || (bulk_docs) || '}',",
+     " 'application/json'::text); ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    529,
+    535,
+    486,
+    492
+   ],
+   [
+    "replace",
+    535,
+    536,
+    492,
+    493,
+    [
+     " post_docs(docs,chunk_size) - returning recordset of status codes? or just true/false?"
+    ]
+   ],
+   [
+    "equal",
+    536,
+    543,
+    493,
+    500
+   ],
+   [
+    "replace",
+    543,
+    548,
+    500,
+    503,
+    [
+     " SELECT post_docs(json_object_set_key(doc::json, 'test'::text, 'Couch & Postgres are scool'::text)::jsonb,100)",
+     " AS results",
+     " FROM articlespg"
+    ]
+   ],
+   [
+    "equal",
+    548,
+    551,
+    503,
+    506
+   ],
+   [
+    "replace",
+    551,
+    561,
+    506,
+    516,
+    [
+     " chunked AS (",
+     " SELECT docs, ((ROW_NUMBER() OVER (ORDER BY id) - 1) / 500) +1 AS chunk_no ",
+     " FROM articlespg",
+     " ),",
+     " chunked_newdocs AS (",
+     " SELECT json_agg(docs) AS bulk_docs, chunk_no FROM chunked GROUP BY chunk_no ORDER BY chunk_no",
+     " )",
+     " SELECT chunk_no, status FROM chunked_newdocs,",
+     " http_post('http://192.168.3.21:5984/NEW_articlespg_COPY/_bulk_docs', '',",
+     " '{\"all_or_nothing\":true, \"docs\":' || (bulk_docs) || '}', 'application/json'::text); "
+    ]
+   ],
+   [
+    "equal",
+    561,
+    563,
+    516,
+    518
+   ],
+   [
+    "delete",
+    563,
+    567,
+    518,
+    518
+   ],
+   [
+    "equal",
+    567,
+    574,
+    518,
+    525
+   ],
+   [
+    "replace",
+    574,
+    582,
+    525,
+    533,
+    [
+     " # gmake PG_CONFIG=/usr/local/bin/pg_config",
+     " cc -O2 -pipe -fstack-protector -fno-strict-aliasing -Wall -Wmissing-prototypes -Wpointer-arith -Wdeclaration-after-statement -Wendif-labels -Wmissing-format-attribute -Wformat-security -fno-strict-aliasing -fwrapv -fPIC -DPIC -I. -I./ -I/usr/local/include/postgresql/server -I/usr/local/include/postgresql/internal -I/usr/local/include/libxml2 -I/usr/include -I/usr/local/include -I/usr/local/include -c -o http.o http.c",
+     " http.c:89:1: warning: unused function 'header_value' [-Wunused-function]",
+     " header_value(const char* header_str, const char* header_name)",
+     " ^",
+     " 1 warning generated.",
+     " cc -O2 -pipe -fstack-protector -fno-strict-aliasing -Wall -Wmissing-prototypes -Wpointer-arith -Wdeclaration-after-statement -Wendif-labels -Wmissing-format-attribute -Wformat-security -fno-strict-aliasing -fwrapv -fPIC -DPIC -I. -I./ -I/usr/local/include/postgresql/server -I/usr/local/include/postgresql/internal -I/usr/local/include/libxml2 -I/usr/include -I/usr/local/include -I/usr/local/include -c -o stringbuffer.o stringbuffer.c",
+     " cc -O2 -pipe -fstack-protector -fno-strict-aliasing -Wall -Wmissing-prototypes -Wpointer-arith -Wdeclaration-after-statement -Wendif-labels -Wmissing-format-attribute -Wformat-security -fno-strict-aliasing -fwrapv -fPIC -DPIC -shared -o http.so http.o stringbuffer.o -L/usr/local/lib -L/usr/local/lib -pthread -Wl,-rpath,/usr/lib:/usr/local/lib -fstack-protector -L/usr/local/lib -L/usr/lib -L/usr/local/lib -Wl,--as-needed -Wl,-R'/usr/local/lib' -L/usr/local/lib -lcurl"
+    ]
+   ],
+   [
+    "equal",
+    582,
+    583,
+    533,
+    534
+   ],
+   [
+    "insert",
+    583,
+    583,
+    534,
+    541,
+    [
+     " # gmake PG_CONFIG=/usr/local/bin/pg_config install",
+     " /bin/mkdir -p '/usr/local/lib/postgresql'",
+     " /bin/mkdir -p '/usr/local/share/postgresql/extension'",
+     " /bin/mkdir -p '/usr/local/share/postgresql/extension'",
+     " /usr/bin/install -c -o root -g wheel -m 755 http.so '/usr/local/lib/postgresql/http.so'",
+     " /usr/bin/install -c -o root -g wheel -m 644 http.control '/usr/local/share/postgresql/extension/'",
+     " /usr/bin/install -c -o root -g wheel -m 644 http--1.0.sql '/usr/local/share/postgresql/extension/'"
+    ]
+   ],
+   [
+    "equal",
+    583,
+    584,
+    541,
+    542
+   ],
+   [
+    "replace",
+    584,
+    598,
+    542,
+    543,
+    [
+     "Futher thoughts and ideas/questions or want to help? https://github.com/sysadminmike/couch-to-postgres/issues"
+    ]
+   ],
+   [
+    "equal",
+    598,
+    608,
+    543,
+    553
+   ],
+   [
+    "replace",
+    608,
+    609,
+    553,
+    554,
+    [
+     " id | ?column? "
+    ]
+   ],
+   [
+    "equal",
+    609,
+    610,
+    554,
+    555
+   ],
+   [
+    "replace",
+    610,
+    611,
+    555,
+    556,
+    [
+     " _design/mw_views | false"
+    ]
+   ],
+   [
+    "equal",
+    611,
+    612,
+    556,
+    557
+   ],
+   [
+    "delete",
+    612,
+    613,
+    557,
+    557
+   ],
+   [
+    "equal",
+    613,
+    616,
+    557,
+    560
+   ],
+   [
+    "delete",
+    616,
+    617,
+    560,
+    560
+   ],
+   [
+    "equal",
+    617,
+    619,
+    560,
+    562
+   ],
+   [
+    "replace",
+    619,
+    621,
+    562,
+    564,
+    [
+     " UPDATE articlespg ",
+     " SET doc = json_object_set_key(doc::json, 'read'::text, true)::jsonb, from_pg=true ;"
+    ]
+   ],
+   [
+    "equal",
+    621,
+    636,
+    564,
+    579
+   ],
+   [
+    "delete",
+    636,
+    637,
+    579,
+    579
+   ],
+   [
+    "equal",
+    637,
+    641,
+    579,
+    583
+   ],
+   [
+    "replace",
+    641,
+    643,
+    583,
+    585,
+    [
+     "I need to look at the bulk updates as i do now think it is possible to do all or nothing update and possible do in a transaction - i think if 2 updates to couch were issued and the second failed then the first would have still taken place as far as couch is concerned. ",
+     "At the moment if a single PUT were to fail postgres assume no data has been updated but all of the docs up to then would have been updated - in a bulk this would not be a problem i think. Note so far not one insert or update has failed but i havent killed couch 1/2 way through."
+    ]
+   ],
+   [
+    "equal",
+    643,
+    644,
+    585,
+    586
+   ],
+   [
+    "insert",
+    644,
+    644,
+    586,
+    587,
+    [
+     "This did give me an idea for another use for this. Populate a new couchdb from a subset of the couchdb tables in postgres by simply updating the put_function to temporarly submit updates to a different ip or db eg:"
+    ]
+   ],
+   [
+    "equal",
+    644,
+    645,
+    587,
+    588
+   ],
+   [
+    "replace",
+    645,
+    651,
+    588,
+    590,
+    [
+     " --SELECT headers FROM http_post('http://192.168.3.21:5984/' || TG_TABLE_NAME || '/' || NEW.id::text, '', NEW.doc::text, 'application/json'::text) INTO RES; ",
+     " SELECT headers FROM http_post('http://192.168.3.21:5984/articlespg-subset' || '/' || NEW.id::text, '', NEW.doc::text, 'application/json'::text) INTO RES; "
+    ]
+   ],
+   [
+    "equal",
+    651,
+    654,
+    590,
+    593
+   ],
+   [
+    "replace",
+    654,
+    657,
+    593,
+    596,
+    [
+     " UPDATE articlespg ",
+     " SET doc = json_object_set_key(doc::json, 'read'::text, true)::jsonb, from_pg=true ",
+     " WHERE doc ->>'feedName' ='::Planet PostgreSQL::';"
+    ]
+   ],
+   [
+    "equal",
+    657,
+    660,
+    596,
+    599
+   ],
+   [
+    "replace",
+    660,
+    661,
+    599,
+    600,
+    [
+     " {\"db_name\":\"articlespg-subset\",\"doc_count\":761,\"doc_del_count\":0,\"update_seq\":761,\"purge_seq\":0,\"compact_running\":false,\"disk_size\":6107249,\"data_size\":3380130,\"instance_start_time\":\"1418770153501066\",\"disk_format_version\":6,\"committed_update_seq\":761}"
+    ]
+   ],
+   [
+    "equal",
+    661,
+    669,
+    600,
+    608
+   ],
+   [
+    "replace",
+    669,
+    670,
+    608,
+    609,
+    [
+     "(I think a good idea to also also give option to do PUTS)"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "d24694e5b990+2": {
+  "fn": "akarzazi/SSMSPlus",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    9,
+    5,
+    8,
+    [
+     " Query Execution History",
+     " Schema Object Search",
+     " Document Export for binary columns"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    11,
+    8,
+    10
+   ],
+   [
+    "replace",
+    11,
+    33,
+    10,
+    11,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    40,
+    11,
+    18
+   ],
+   [
+    "replace",
+    40,
+    41,
+    18,
+    19,
+    [
+     "Get the latest build from the Releases page."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    63,
+    19,
+    41
+   ],
+   [
+    "replace",
+    63,
+    64,
+    41,
+    42,
+    [
+     "SSMS Plus Extension dlls"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    68,
+    42,
+    46
+   ],
+   [
+    "replace",
+    68,
+    69,
+    46,
+    47,
+    [
+     "SSMS Plus Extension dlls"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    83,
+    47,
+    61
+   ],
+   [
+    "replace",
+    83,
+    84,
+    61,
+    62,
+    [
+     "SSMS Plus Menu"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    93,
+    62,
+    71
+   ],
+   [
+    "replace",
+    93,
+    94,
+    71,
+    72,
+    [
+     "SSMS Plus Query History"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    99,
+    72,
+    77
+   ],
+   [
+    "replace",
+    99,
+    100,
+    77,
+    78,
+    [
+     "SSMS Plus Schema Object Search"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    107,
+    78,
+    85
+   ],
+   [
+    "replace",
+    107,
+    108,
+    85,
+    86,
+    [
+     "SSMS Plus Documents Export"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    110,
+    86,
+    88
+   ],
+   [
+    "replace",
+    110,
+    115,
+    88,
+    89,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    126,
+    89,
+    100
+   ],
+   [
+    "replace",
+    126,
+    127,
+    100,
+    101,
+    [
+     "* Minimal: Focus on **handy** features that matter for the community."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    135,
+    101,
+    109
+   ],
+   [
+    "delete",
+    135,
+    136,
+    109,
+    109
+   ],
+   [
+    "equal",
+    136,
+    142,
+    109,
+    115
+   ],
+   [
+    "replace",
+    142,
+    143,
+    115,
+    116,
+    [
+     "1. In the Debug section of the main project \"SSMSPlus\", setup your SSMS path as the startup program."
+    ]
+   ],
+   [
+    "equal",
+    143,
+    146,
+    116,
+    119
+   ],
+   [
+    "replace",
+    146,
+    147,
+    119,
+    120,
+    [
+     "SSMS Plus Debug Startup"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    148,
+    120,
+    121
+   ],
+   [
+    "replace",
+    148,
+    149,
+    121,
+    122,
+    [
+     "2. In the VSIX section of the main project \"SSMSPlus\", configure the deployment path for the plugin. "
+    ]
+   ],
+   [
+    "equal",
+    149,
+    151,
+    122,
+    124
+   ],
+   [
+    "replace",
+    151,
+    152,
+    124,
+    125,
+    [
+     "SSMS Plus Documents Export"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    157,
+    125,
+    130
+   ],
+   [
+    "replace",
+    157,
+    158,
+    130,
+    131,
+    [
+     "A Demo project is available in the sources."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    166,
+    131,
+    139
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "af5dbf10a497+2": {
+  "fn": "freenandes/actuallyexplain",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "actuallyEXPLAIN is a visualizer that helps you understand complex PostgreSQL queries in a diagram and dictionarized form."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    13,
+    3,
+    13
+   ],
+   [
+    "replace",
+    13,
+    19,
+    13,
+    14,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    32,
+    14,
+    27
+   ],
+   [
+    "replace",
+    32,
+    41,
+    27,
+    36,
+    [
+     "|File|Role|",
+     "|-----------------------|---------------------------------------------------------------|",
+     "|`App.tsx`|Root component — wires together the editor, diagram, and panels|",
+     "|`buildFlowFromAST.ts`|Converts the parsed SQL AST into React Flow nodes and edges|",
+     "|`SqlNode.tsx`|Custom React Flow node component|",
+     "|`RecursiveEdge.tsx`|Custom edge for recursive/CTE references|",
+     "|`NodeDetailsPanel.tsx`|Side panel that shows details when a node is selected|",
+     "|`AboutModal.tsx`|About dialog|",
+     "|`NodeActionsContext.ts`|React context for node interaction callbacks|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    58,
+    36,
+    53
+   ],
+   [
+    "replace",
+    58,
+    60,
+    53,
+    55,
+    [
+     "- Fix slow queries and visualize your actual Postgres execution plans with explain.dalibo.com or explain.depesz.com.",
+     "- Track data across 100s of tables with a tool like SQLFlow."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a723b76422e5+2": {
+  "fn": "powersync-ja/sqlite_async.dart",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "|package|build|pub|likes|pub points|"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    8,
+    6,
+    8,
+    [
+     "|sqlite_async|build|pub package|likes|pub points|",
+     "|drift_sqlite_async|build|pub package|likes|pub points|"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    11,
+    8,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "For detailed usage, check out the inner sqlite_async and drift_sqlite_async packages."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "cfbcdce5577f+2": {
+  "fn": "pro7tech/sveltekit-blog-app",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "SvelteKitBlogApp"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    8,
+    1,
+    8
+   ],
+   [
+    "replace",
+    8,
+    11,
+    8,
+    11,
+    [
+     "- **SvelteKit:** A top framework for developer retention in the 2021 and 2022 State of JS Survey (Source)",
+     "- **Tailwind:** Consistently the most popular CSS Framework in the annual State of CSS Survey (Source)",
+     "- **EdgeDB:** Open Source Database with 10 Years of Development providing the best of both worlds between SQL and an ORM (Source)"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    24,
+    11,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     "frontend"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    28,
+    25,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "profile"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    31,
+    29,
+    31
+   ],
+   [
+    "replace",
+    31,
+    33,
+    31,
+    33,
+    [
+     "Only users with role of ‘admin’ can access these pages. CRUD pages for users, posts, comments, tags. ",
+     "admin"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    35,
+    33,
+    35
+   ],
+   [
+    "replace",
+    35,
+    36,
+    35,
+    36,
+    [
+     "mobile"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    40,
+    36,
+    40
+   ],
+   [
+    "replace",
+    40,
+    43,
+    40,
+    42,
+    [
+     "Screenshot 2023-03-15 at 9 54 05 PM",
+     "Screenshot 2023-03-15 at 9 54 45 PM"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    46,
+    42,
+    45
+   ],
+   [
+    "replace",
+    46,
+    47,
+    45,
+    46,
+    [
+     "Screenshot 2023-03-15 at 4 26 31 PM"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    50,
+    46,
+    49
+   ],
+   [
+    "replace",
+    50,
+    52,
+    49,
+    51,
+    [
+     "Screenshot 2023-03-15 at 10 05 34 PM",
+     "ezgif-1-c611e45007"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    87,
+    51,
+    86
+   ],
+   [
+    "replace",
+    87,
+    88,
+    86,
+    87,
+    [
+     "2. Copy your Database Connection String (DSN) from step 1. It has the format edgedb://username:password@hostname:port"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    103,
+    87,
+    102
+   ],
+   [
+    "delete",
+    103,
+    104,
+    102,
+    102
+   ],
+   [
+    "equal",
+    104,
+    105,
+    102,
+    103
+   ],
+   [
+    "delete",
+    105,
+    106,
+    103,
+    103
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "e0752046feb2+2": {
+  "fn": "youufis/SmartKBS",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "> **🌐 中文 | English**"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    17,
+    3,
+    17
+   ],
+   [
+    "replace",
+    17,
+    26,
+    17,
+    22,
+    [
+     "版本",
+     "后端",
+     "前端",
+     "AI",
+     "许可证"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    28,
+    22,
+    24
+   ],
+   [
+    "replace",
+    28,
+    69,
+    24,
+    25,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    83,
+    25,
+    39
+   ],
+   [
+    "replace",
+    83,
+    86,
+    39,
+    40,
+    [
+     "> 📦 **三种部署方式**：Windows 桌面版一键安装（零环境，不需要 Python / Node.js）· 源码包部署 · Git 克隆部署（支持在线增量升级）。详见部署安装指引。"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    90,
+    40,
+    44
+   ],
+   [
+    "replace",
+    90,
+    91,
+    44,
+    45,
+    [
+     " AI 嵌在出题、批改、答疑、分析、板书的具体环节里，而不是外挂一个聊天框；同时能靠已有数据解决的绝不重复调用模型——出题与组卷一律「题库优先 → 缺口交 AI → AI 生成的题必须入库留用」，让每一次算力消耗都沉淀成可复用的资产。"
+    ]
+   ],
+   [
+    "equal",
+    91,
+    92,
+    45,
+    46
+   ],
+   [
+    "replace",
+    92,
+    93,
+    46,
+    47,
+    [
+     " 学生端 AI 学伴按自选人格（鼓励型 / 严谨型 / 幽默型）、连续出错的薄弱知识点与学习画像调整回答风格和推荐内容；教师端 AI 助手按任教范围与学科给出备课辅助与学情洞察。"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    47,
+    48
+   ],
+   [
+    "replace",
+    94,
+    95,
+    48,
+    49,
+    [
+     " 学习行为采集 → AI 分析 → 个性化反馈 → 行为改善构成闭环：考试、练习、对话、点名与抽问的数据回流成学生画像，画像再反哺下一轮的 AI 决策与推荐。"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    49,
+    50
+   ],
+   [
+    "replace",
+    96,
+    97,
+    50,
+    51,
+    [
+     " 所有 AI 调用按需触发：精选池用完才补、热点新闻缓存懒加载、AI 摘要不访问不生成、语音合成关闭即零计费。不为闲置算力付费。"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    100,
+    51,
+    54
+   ],
+   [
+    "replace",
+    100,
+    111,
+    54,
+    63,
+    [
+     "|特性|落地方式|",
+     "|---|---|",
+     "|👥 三层角色，各配其 AI|学生用 AI 学伴陪伴式学习，教师用 AI 助手减负增效，管理员掌握配置与督导，互不干扰|",
+     "|🏆 游戏化激励|12 级称号 + 成就徽章 + 自动积分奖励引擎，把外部压力换成持续正反馈|",
+     "|🌐 配置驱动 · 学科无关|换学科只改配置与提示词模板，无需修改代码|",
+     "|🔒 本地化优先|双 SQLite 库 + 本地目录存数据，可完全离线部署；AI 走国内可达通道，pip 有镜像方案，学生数据不出校|",
+     "|📱 零安装多端|手机浏览器直接访问，无需 App、无需额外部署|",
+     "|🖥️ 桌面版一键装|Electron 壳 + 内置后端与前端产物，目标机器不需要 Python / Node.js|",
+     "|⬆️ 在线增量升级|Git 部署可站内完成拉取、迁移、依赖安装、重启，失败自动回滚|"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    114,
+    63,
+    66
+   ],
+   [
+    "replace",
+    114,
+    118,
+    66,
+    70,
+    [
+     "|用途|地址|",
+     "|---|---|",
+     "|开发环境|http://youufis.oicp.net:8086 · https://youufis.oicp.net:8085|",
+     "|部署环境|http://183.239.51.37:8086 · https://183.239.51.37:8085|"
+    ]
+   ],
+   [
+    "equal",
+    118,
+    121,
+    70,
+    73
+   ],
+   [
+    "replace",
+    121,
+    126,
+    73,
+    78,
+    [
+     "|角色|用户名|密码|",
+     "|---|---|---|",
+     "|教师|`youufis`|`ultraultra`|",
+     "|学生|`s11001` ~ `s11009`|`123456`|",
+     "|学生|`s18001` ~ `s19009`|`123456`|"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    128,
+    78,
+    80
+   ],
+   [
+    "delete",
+    128,
+    130,
+    80,
+    80
+   ],
+   [
+    "equal",
+    130,
+    135,
+    80,
+    85
+   ],
+   [
+    "replace",
+    135,
+    143,
+    85,
+    93,
+    [
+     "|主线|章|覆盖的分区|数量|",
+     "|---|---|---|:---:|",
+     "|🏠 入口|首页与待办|智能仪表盘、学生待办清单|2|",
+     "|🧑‍🏫 教|教学与资源|课程大纲、AI 讲演、AI 播客、AI 教学助手、试题管理、考试发布、智能组卷与 Word 导出、AI 教学资源推荐、AI 生成 HTML 资源、资源中心、资源管理、文件中心|12|",
+     "|🎓 学|学习与练习|AI 对话、AI 学伴、课程练习、同步练习、错题巩固、每日精选与热点新闻、编程实践|7|",
+     "|🎪 练|课堂活动|课堂互动工具（随堂测验、投票、提问）、课堂抽问、课堂闯关、知识抢答、分组讨论、协作白板、考勤与点名、作业中心（对话/文件）、知识闯关|9|",
+     "|📊 评|学情分析与激励|AI 学情分析、AI 课堂总结、进度详情、活动监控、资源浏览统计、数据导出、积分奖励、课堂积分、荣耀殿堂、成长档案、我的画像|11|",
+     "|⚙️ 管|系统管理|用户管理、系统公告、系统配置、技能管理、通知中心、在线升级、关于系统、其他系统服务|8|"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    144,
+    93,
+    94
+   ],
+   [
+    "replace",
+    144,
+    145,
+    94,
+    95,
+    [
+     "> 各节末尾的 **权限提示**（如「所有用户可用」）标出该功能的可访问角色；完整的角色矩阵见权限总览。"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    152,
+    95,
+    102
+   ],
+   [
+    "replace",
+    152,
+    156,
+    102,
+    106,
+    [
+     "|角色|数量|页面|",
+     "|---|---|---|",
+     "|学生|27|首页、AI 学伴、错题巩固、每日精选、热点新闻、通知中心、系统公告、课堂提问、知识抢答、待办清单、作业中心、积分称号、考试与成绩、我的画像、学伴设置、知识闯关、同步练习、课堂互动、课堂投票、分组讨论与讨论室、文件中心、成长档案、风采展示、我的资源、资源中心、关于系统|",
+     "|教师 / 管理员|22|首页、AI 助手、通知中心、系统公告、提问管理、AI 课堂总结、学情分析、作业批改确认、课堂积分、我的画像、分组讨论与讨论监控、闯关记录查看、汇总统计导出、文件中心、成长档案、风采展示、我的资源、资源中心、资源管理、关于系统|"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    167,
+    106,
+    117
+   ],
+   [
+    "delete",
+    167,
+    169,
+    117,
+    117
+   ],
+   [
+    "equal",
+    169,
+    203,
+    117,
+    151
+   ],
+   [
+    "delete",
+    203,
+    205,
+    151,
+    151
+   ],
+   [
+    "equal",
+    205,
+    215,
+    151,
+    161
+   ],
+   [
+    "delete",
+    215,
+    219,
+    161,
+    161
+   ],
+   [
+    "equal",
+    219,
+    238,
+    161,
+    180
+   ],
+   [
+    "delete",
+    238,
+    240,
+    180,
+    180
+   ],
+   [
+    "equal",
+    240,
+    253,
+    180,
+    193
+   ],
+   [
+    "delete",
+    253,
+    255,
+    193,
+    193
+   ],
+   [
+    "equal",
+    255,
+    265,
+    193,
+    203
+   ],
+   [
+    "replace",
+    265,
+    269,
+    203,
+    207,
+    [
+     " - SVG 绘制技术图示",
+     " - 通义万相生成实物图片",
+     " - 支持图片生成、预览、删除，并发生成优化",
+     " - 图片占位符管理"
+    ]
+   ],
+   [
+    "equal",
+    269,
+    274,
+    207,
+    212
+   ],
+   [
+    "delete",
+    274,
+    276,
+    212,
+    212
+   ],
+   [
+    "equal",
+    276,
+    283,
+    212,
+    219
+   ],
+   [
+    "replace",
+    283,
+    285,
+    219,
+    221,
+    [
+     " - **智能选题**：按题型/难度/知识点等条件组合筛选，AI 辅助",
+     " - **手动选题**：从题库逐题挑选"
+    ]
+   ],
+   [
+    "equal",
+    285,
+    291,
+    221,
+    227
+   ],
+   [
+    "delete",
+    291,
+    293,
+    227,
+    227
+   ],
+   [
+    "equal",
+    293,
+    304,
+    227,
+    238
+   ],
+   [
+    "replace",
+    304,
+    307,
+    238,
+    241,
+    [
+     " - **试卷**：学生用，含答题线",
+     " - **答案卷**：红色标注答案 + 蓝色解析",
+     " - **答题卡**：标准答题卡格式"
+    ]
+   ],
+   [
+    "equal",
+    307,
+    312,
+    241,
+    246
+   ],
+   [
+    "delete",
+    312,
+    314,
+    246,
+    246
+   ],
+   [
+    "equal",
+    314,
+    325,
+    246,
+    257
+   ],
+   [
+    "delete",
+    325,
+    327,
+    257,
+    257
+   ],
+   [
+    "equal",
+    327,
+    344,
+    257,
+    274
+   ],
+   [
+    "delete",
+    344,
+    346,
+    274,
+    274
+   ],
+   [
+    "equal",
+    346,
+    362,
+    274,
+    290
+   ],
+   [
+    "delete",
+    362,
+    364,
+    290,
+    290
+   ],
+   [
+    "equal",
+    364,
+    369,
+    290,
+    295
+   ],
+   [
+    "replace",
+    369,
+    374,
+    295,
+    300,
+    [
+     " - 🎬 **动画讲解**：3D 视差、粒子动画等技术生动讲解知识",
+     " - ✍️ **互动答题**：卡片式答题与即时反馈；抽人走后端点名接口，与智能点名共用权重并计入「抽人记录」",
+     " - 📝 **章节练习**：结构化习题，含题号导航和提交按钮",
+     " - 🧪 **实验交互**：算法可视化、数理化实验、AI 交互仿真",
+     " - 🎨 **自定义 HTML**：自由输入主题，按需生成任意 HTML"
+    ]
+   ],
+   [
+    "equal",
+    374,
+    375,
+    300,
+    301
+   ],
+   [
+    "replace",
+    375,
+    376,
+    301,
+    302,
+    [
+     " - 动画 17 种、答题 20 种、练习 10 种、实验 12 种"
+    ]
+   ],
+   [
+    "equal",
+    376,
+    400,
+    302,
+    326
+   ],
+   [
+    "delete",
+    400,
+    402,
+    326,
+    326
+   ],
+   [
+    "equal",
+    402,
+    408,
+    326,
+    332
+   ],
+   [
+    "replace",
+    408,
+    410,
+    332,
+    334,
+    [
+     " - **管理员共享**：可选择「所有人」「指定教师」「指定年级/班级」",
+     " - **教师共享**：选择「管理员和教师」+「自己的班级」"
+    ]
+   ],
+   [
+    "equal",
+    410,
+    417,
+    334,
+    341
+   ],
+   [
+    "delete",
+    417,
+    419,
+    341,
+    341
+   ],
+   [
+    "equal",
+    419,
+    432,
+    341,
+    354
+   ],
+   [
+    "delete",
+    432,
+    434,
+    354,
+    354
+   ],
+   [
+    "equal",
+    434,
+    446,
+    354,
+    366
+   ],
+   [
+    "delete",
+    446,
+    450,
+    366,
+    366
+   ],
+   [
+    "equal",
+    450,
+    474,
+    366,
+    390
+   ],
+   [
+    "delete",
+    474,
+    476,
+    390,
+    390
+   ],
+   [
+    "equal",
+    476,
+    482,
+    390,
+    396
+   ],
+   [
+    "replace",
+    482,
+    485,
+    396,
+    399,
+    [
+     " - 🌟 **鼓励型**：温暖热情，充满正能量，多用鼓励用语",
+     " - 📐 **严谨型**：严谨细致，注重分析「为什么错」「怎么改」，举一反三",
+     " - 😄 **幽默型**：风趣幽默，适度用梗和调侃让学习不枯燥"
+    ]
+   ],
+   [
+    "equal",
+    485,
+    493,
+    399,
+    407
+   ],
+   [
+    "delete",
+    493,
+    495,
+    407,
+    407
+   ],
+   [
+    "equal",
+    495,
+    500,
+    407,
+    412
+   ],
+   [
+    "replace",
+    500,
+    503,
+    412,
+    415,
+    [
+     " - AI 从题库智能搜索合并匹配题目",
+     " - 差额由 AI 补全新题",
+     " - 新题自动入库"
+    ]
+   ],
+   [
+    "equal",
+    503,
+    505,
+    415,
+    417
+   ],
+   [
+    "replace",
+    505,
+    509,
+    417,
+    421,
+    [
+     " - 参与基础分：2 分",
+     " - 优秀（≥90%）：+15 分",
+     " - 良好（≥75%）：+10 分",
+     " - 及格（≥60%）：+5 分"
+    ]
+   ],
+   [
+    "equal",
+    509,
+    513,
+    421,
+    425
+   ],
+   [
+    "delete",
+    513,
+    515,
+    425,
+    425
+   ],
+   [
+    "equal",
+    515,
+    529,
+    425,
+    439
+   ],
+   [
+    "delete",
+    529,
+    531,
+    439,
+    439
+   ],
+   [
+    "equal",
+    531,
+    544,
+    439,
+    452
+   ],
+   [
+    "delete",
+    544,
+    546,
+    452,
+    452
+   ],
+   [
+    "equal",
+    546,
+    551,
+    452,
+    457
+   ],
+   [
+    "replace",
+    551,
+    553,
+    457,
+    459,
+    [
+     " 7 天去重窗口，支持收藏与手动刷新。智能知识池按需补充，",
+     " 无人用时不消耗 AI，浏览可获积分与徽章。"
+    ]
+   ],
+   [
+    "equal",
+    553,
+    554,
+    459,
+    460
+   ],
+   [
+    "replace",
+    554,
+    556,
+    460,
+    462,
+    [
+     " AI 按需摘要 + 学科关联，支持今日简报、收藏与分页浏览（不再只能看到前 20 条）。",
+     " 2h 缓存懒加载，72h 滚动清理，无人访问零抓取；源清单可在系统配置中修改，单源失效自动熔断并切备用源。"
+    ]
+   ],
+   [
+    "equal",
+    556,
+    558,
+    462,
+    464
+   ],
+   [
+    "delete",
+    558,
+    560,
+    464,
+    464
+   ],
+   [
+    "equal",
+    560,
+    566,
+    464,
+    470
+   ],
+   [
+    "replace",
+    566,
+    569,
+    470,
+    473,
+    [
+     " - 创建编程题目（题目描述、测试用例、示例代码）",
+     " - AI 代码审查",
+     " - 查看提交统计和学生代码"
+    ]
+   ],
+   [
+    "equal",
+    569,
+    570,
+    473,
+    474
+   ],
+   [
+    "replace",
+    570,
+    573,
+    474,
+    477,
+    [
+     " - 在线编码（语法高亮，支持 Python）",
+     " - 运行调试（自定义输入）",
+     " - 提交评分"
+    ]
+   ],
+   [
+    "equal",
+    573,
+    574,
+    477,
+    478
+   ],
+   [
+    "replace",
+    574,
+    578,
+    478,
+    482,
+    [
+     " - AST 静态分析 + 沙箱执行",
+     " - 逐用例比较输出",
+     " - 支持 Python",
+     " - 超时控制（10秒）"
+    ]
+   ],
+   [
+    "equal",
+    578,
+    579,
+    482,
+    483
+   ],
+   [
+    "replace",
+    579,
+    582,
+    483,
+    486,
+    [
+     " - 危险模块黑名单",
+     " - 危险函数拦截",
+     " - 临时目录隔离"
+    ]
+   ],
+   [
+    "equal",
+    582,
+    584,
+    486,
+    488
+   ],
+   [
+    "delete",
+    584,
+    588,
+    488,
+    488
+   ],
+   [
+    "equal",
+    588,
+    626,
+    488,
+    526
+   ],
+   [
+    "delete",
+    626,
+    628,
+    526,
+    526
+   ],
+   [
+    "equal",
+    628,
+    633,
+    526,
+    531
+   ],
+   [
+    "replace",
+    633,
+    637,
+    531,
+    535,
+    [
+     " - 创建抢答房间（设置限时、题目数量、科目）",
+     " - 题目来源：题库优先，缺口由 AI 补题并入库；AI 也拿不到题时才用内置题，且不重复凑数",
+     " - 控制抢答进程（开始/下一题/结束）",
+     " - 查看实时排行榜"
+    ]
+   ],
+   [
+    "equal",
+    637,
+    638,
+    535,
+    536
+   ],
+   [
+    "replace",
+    638,
+    642,
+    536,
+    540,
+    [
+     " - 输入 6 位房间码加入",
+     " - 限时作答（速度递减计分）",
+     " - 连击加分（连对 5 题 2 倍得分）",
+     " - 实时排名"
+    ]
+   ],
+   [
+    "equal",
+    642,
+    643,
+    540,
+    541
+   ],
+   [
+    "replace",
+    643,
+    647,
+    541,
+    545,
+    [
+     " - 速度计分：0-3 秒 100 分，3-7 秒 70 分，7-11 秒 40 分，11+ 秒 20 分",
+     " - 连击倍率：连对 2 题 1.2x，3 题 1.5x，4 题 1.8x，5+ 题 2.0x",
+     " - 连续答错 3 题扣 10 分",
+     " - 全对额外 1.2x 奖励"
+    ]
+   ],
+   [
+    "equal",
+    647,
+    650,
+    545,
+    548
+   ],
+   [
+    "delete",
+    650,
+    652,
+    548,
+    548
+   ],
+   [
+    "equal",
+    652,
+    658,
+    548,
+    554
+   ],
+   [
+    "replace",
+    658,
+    661,
+    554,
+    557,
+    [
+     " - 分组模式：不分组（自由讨论区）/ 自动分组 / 随机分组",
+     " - AI 助教角色：旁观者 / 引导者 / 主动参与 / 辩论裁判 / **综合角色（智能切换）**",
+     " - AI 智能生成讨论方案（支持 Markdown 格式标题与说明）"
+    ]
+   ],
+   [
+    "equal",
+    661,
+    662,
+    557,
+    558
+   ],
+   [
+    "replace",
+    662,
+    665,
+    558,
+    561,
+    [
+     " - 学生进入讨论室实时聊天，可展开查看讨论主题说明",
+     " - AI 助教根据角色自动参与",
+     " - 实时消息推送（WebSocket）"
+    ]
+   ],
+   [
+    "equal",
+    665,
+    666,
+    561,
+    562
+   ],
+   [
+    "replace",
+    666,
+    670,
+    562,
+    566,
+    [
+     " - 👁️ **监控面板**：教师实时查看所有分组动态",
+     " - 🛡️ **内容审核**：自动检测不当发言，违规扣分",
+     " - ⏹️ **结束讨论**：AI 自动生成结构化总结报告",
+     " - 📄 **Word 导出**：AI 总结可导出为 Word 文档"
+    ]
+   ],
+   [
+    "equal",
+    670,
+    673,
+    566,
+    569
+   ],
+   [
+    "delete",
+    673,
+    675,
+    569,
+    569
+   ],
+   [
+    "equal",
+    675,
+    681,
+    569,
+    575
+   ],
+   [
+    "replace",
+    681,
+    684,
+    575,
+    578,
+    [
+     " - 📺 **演示模式**：教师展示，学生仅观看",
+     " - 🤝 **互动模式**：教师授权后学生可操作",
+     " - 📝 **自习模式**：学生独立操作"
+    ]
+   ],
+   [
+    "equal",
+    684,
+    689,
+    578,
+    583
+   ],
+   [
+    "replace",
+    689,
+    701,
+    583,
+    595,
+    [
+     " - 💬 **流式对话**：AI 结合白板当前内容进行上下文问答，支持视觉增强理解",
+     " - 🖼️ **生成图示**：根据描述自动生成教学图示（SVG 优先）",
+     " - 📝 **一键板书**：根据知识点自动生成结构化板书内容",
+     " - ✨ **美化排版**：对白板上杂乱内容重新排版为清晰美观的板书",
+     " - 🏷️ **智能批注**：对选中内容自动分析并给出标注建议",
+     " - 🌳 **思维导图**：根据板书内容自动生成结构化思维导图",
+     " - 🌐 **中英双语**：将板书内容一键转换为中英对照双语版",
+     " - 💡 **教学建议**：根据当前白板内容推荐下一步教学思路",
+     " - ❓ **随堂提问**：根据板书自动生成课堂练习题",
+     " - 🔍 **解答题目**：识别白板中图片上的题目并进行解析",
+     " - 👁️ **视觉理解**：切换视觉模式，通过多模态模型看懂白板图片内容",
+     " - 📄 **导出总结**：AI 生成结构化课堂总结并导出为 Word 文档"
+    ]
+   ],
+   [
+    "equal",
+    701,
+    703,
+    595,
+    597
+   ],
+   [
+    "delete",
+    703,
+    705,
+    597,
+    597
+   ],
+   [
+    "equal",
+    705,
+    711,
+    597,
+    603
+   ],
+   [
+    "replace",
+    711,
+    712,
+    603,
+    604,
+    [
+     " 与课堂抽问 / 课堂闯关 / AI 互动答题共用同一份"
+    ]
+   ],
+   [
+    "equal",
+    712,
+    721,
+    604,
+    613
+   ],
+   [
+    "delete",
+    721,
+    723,
+    613,
+    613
+   ],
+   [
+    "equal",
+    723,
+    738,
+    613,
+    628
+   ],
+   [
+    "delete",
+    738,
+    740,
+    628,
+    628
+   ],
+   [
+    "equal",
+    740,
+    759,
+    628,
+    647
+   ],
+   [
+    "delete",
+    759,
+    761,
+    647,
+    647
+   ],
+   [
+    "equal",
+    761,
+    766,
+    647,
+    652
+   ],
+   [
+    "replace",
+    766,
+    772,
+    652,
+    658,
+    [
+     " - 创建作业时选「提交方式」；文件作业可设截止时间、文件类型/数量/大小、可提交次数、满分与评分维度",
+     " - 作业要求即批改依据：AI 先拆成 3-5 条要求点，再逐条对照内容找证据评分，维度分与总分自动对齐",
+     " - AI 智能批改：对话作业一次批完全班；文件作业走后台任务（图片先由视觉模型识别，再合成一份「全班批改包」一次评完），带进度与失败清单",
+     " - 批改台按学生逐份呈现提交文件、抽取正文、维度分、要求点核对表与原文引用，可就地改分改评语（AI 原分保留）",
+     " - 「发布成绩」后学生才可见，并按得分率补发等级奖；支持查重一览、重新识别、全班原件打包下载",
+     " - 每个作业标出待批改份数，可一键「只看待批改」（首页待办徽标直达此筛选）"
+    ]
+   ],
+   [
+    "equal",
+    772,
+    773,
+    658,
+    659
+   ],
+   [
+    "replace",
+    773,
+    776,
+    659,
+    662,
+    [
+     " - 查看进行中的作业、截止时间与剩余提交次数",
+     " - 对话作业一键提交当前对话；文件作业支持拖拽上传、手机端拍照，截止前可重交（以最后一次为准，迟交只标记不扣分）",
+     " - 查看分数、评分维度、要求点达成情况与评语建议，可下载自己交的原件"
+    ]
+   ],
+   [
+    "equal",
+    776,
+    782,
+    662,
+    668
+   ],
+   [
+    "replace",
+    782,
+    787,
+    668,
+    673,
+    [
+     " - 创建作业（名称/要求/面向范围），或点「AI 创建作业」把一句话想法变成可编辑草稿",
+     " - 作业要求即批改依据：AI 先拆成 3-5 条要求点，再逐条对照对话找证据评分",
+     " - AI 智能批改（三维度：完成度、理解深度、表达质量）：可一次批完全班（含全班总结与各要求点达成情况），也可在学生行上只批某一个人",
+     " - 每个作业标出待批改份数，可一键「只看待批改」（首页待办徽标直达此筛选）",
+     " - 查看详情逐个阅读学生提交的对话与要求原文，撤销提交、结束作业"
+    ]
+   ],
+   [
+    "equal",
+    787,
+    788,
+    673,
+    674
+   ],
+   [
+    "replace",
+    788,
+    791,
+    674,
+    677,
+    [
+     " - 查看进行中的作业与完整作业要求",
+     " - 在「知识问答」里聊完后一键提交当前对话",
+     " - 查看 AI 评分、要求点达成情况与评语建议"
+    ]
+   ],
+   [
+    "equal",
+    791,
+    795,
+    677,
+    681
+   ],
+   [
+    "delete",
+    795,
+    797,
+    681,
+    681
+   ],
+   [
+    "equal",
+    797,
+    805,
+    681,
+    689
+   ],
+   [
+    "replace",
+    805,
+    808,
+    689,
+    692,
+    [
+     " - 🎯 去伪存真：排除一个错误选项",
+     " - 📞 远程连线：AI 给出提示",
+     " - 👥 群策群力：AI 模拟投票结果"
+    ]
+   ],
+   [
+    "equal",
+    808,
+    814,
+    692,
+    698
+   ],
+   [
+    "delete",
+    814,
+    818,
+    698,
+    698
+   ],
+   [
+    "equal",
+    818,
+    828,
+    698,
+    708
+   ],
+   [
+    "replace",
+    828,
+    833,
+    708,
+    713,
+    [
+     " - 整体评价",
+     " - 学习亮点",
+     " - 薄弱环节分析",
+     " - 教学改进建议",
+     " - 支持 Word 导出"
+    ]
+   ],
+   [
+    "equal",
+    833,
+    834,
+    713,
+    714
+   ],
+   [
+    "replace",
+    834,
+    838,
+    714,
+    718,
+    [
+     " - 分数分布统计",
+     " - 逐题正确率分析",
+     " - 班级对比",
+     " - 教学改进建议"
+    ]
+   ],
+   [
+    "equal",
+    838,
+    841,
+    718,
+    721
+   ],
+   [
+    "delete",
+    841,
+    843,
+    721,
+    721
+   ],
+   [
+    "equal",
+    843,
+    855,
+    721,
+    733
+   ],
+   [
+    "delete",
+    855,
+    857,
+    733,
+    733
+   ],
+   [
+    "equal",
+    857,
+    866,
+    733,
+    742
+   ],
+   [
+    "delete",
+    866,
+    868,
+    742,
+    742
+   ],
+   [
+    "equal",
+    868,
+    895,
+    742,
+    769
+   ],
+   [
+    "delete",
+    895,
+    897,
+    769,
+    769
+   ],
+   [
+    "equal",
+    897,
+    908,
+    769,
+    780
+   ],
+   [
+    "delete",
+    908,
+    910,
+    780,
+    780
+   ],
+   [
+    "equal",
+    910,
+    924,
+    780,
+    794
+   ],
+   [
+    "delete",
+    924,
+    926,
+    794,
+    794
+   ],
+   [
+    "equal",
+    926,
+    933,
+    794,
+    801
+   ],
+   [
+    "replace",
+    933,
+    934,
+    801,
+    802,
+    [
+     " （得分率 ≥90% / ≥75% / ≥60%，同一场活动每档只发一次）"
+    ]
+   ],
+   [
+    "equal",
+    934,
+    935,
+    802,
+    803
+   ],
+   [
+    "replace",
+    935,
+    953,
+    803,
+    821,
+    [
+     "|活动|参与分|等级奖（优 / 良 / 及）|每日额度|",
+     "|---|:---:|:---:|:---:|",
+     "|考试|3|15 / 10 / 5|学术池 80|",
+     "|随堂测验|2|9 / 6 / 3|学术池 80|",
+     "|同步练习 · 课程练习|2|9 / 6 / 3|学术池 80|",
+     "|任务（含文件作业）|3|9 / 6 / 3|学术池 80|",
+     "|代码练习|2|9 / 6 / 3|学术池 80|",
+     "|知识闯关|1|6 / 4 / 2|学术池 80|",
+     "|点名签到|1|答对另加「良好」4|课堂池 40|",
+     "|课堂抽问|1|答对另加「良好」4|课堂池 40|",
+     "|课堂闯关（大屏）|2|6 / 4 / 2（按**阶梯得分率** = 实得 / 415）|课堂池 40|",
+     "|课堂提问（回答被批通过另发认可奖）|2|6 / 4 / 2|课堂池 40|",
+     "|分组讨论（加入 + 每条发言）|2|6 / 4 / 2|每天 10，且计课堂池|",
+     "|快速投票 · 学习进度 · 每日登录|2 / 2 / 1|—|课堂池 40|",
+     "|错题订正|1|—|每天 5|",
+     "|知识抢答|2|名次奖 第 1 名 +6 / 第 2 名 +5 / 第 3 名 +4 / 第 4~5 名 +3 / 6 名后答对 +1|每天 3 场|",
+     "|AI 对话（含学伴）|2|—|每天 10|",
+     "|资源浏览 · 每日精选 · 热点新闻|1|—|每天 5 / 5 / 3|"
+    ]
+   ],
+   [
+    "equal",
+    953,
+    955,
+    821,
+    823
+   ],
+   [
+    "replace",
+    955,
+    956,
+    823,
+    824,
+    [
+     " 抢答与 AI 对话刷得再狠也只冲得满娱乐池，不会再吞掉认真考试的等级奖"
+    ]
+   ],
+   [
+    "equal",
+    956,
+    957,
+    824,
+    825
+   ],
+   [
+    "replace",
+    957,
+    958,
+    825,
+    826,
+    [
+     " 明细里按正负分着色显示，不再把\"花钱\"显示成\"挨罚\""
+    ]
+   ],
+   [
+    "equal",
+    958,
+    960,
+    826,
+    828
+   ],
+   [
+    "replace",
+    960,
+    962,
+    828,
+    830,
+    [
+     " → 学业先锋 → 班级学霸 → 创新领袖 → 全能学神 → 传奇大师 → 至高贤者",
+     " （阈值 0 / 10 / 30 / 60 / 110 / 170 / 240 / 330 / 450 / 600 / 780 / 1000，按\"一学期正常参与\"标定）"
+    ]
+   ],
+   [
+    "equal",
+    962,
+    963,
+    830,
+    831
+   ],
+   [
+    "replace",
+    963,
+    964,
+    831,
+    832,
+    [
+     " 乱答刷不出高段；等级只升不降，统计每日夜间兜底更新"
+    ]
+   ],
+   [
+    "equal",
+    964,
+    965,
+    832,
+    833
+   ],
+   [
+    "replace",
+    965,
+    967,
+    833,
+    835,
+    [
+     " 点名达人、月度坚持、闯关系列、知识探险家、百科达人、收藏家、时事新人 / 时事通 / 百晓生；",
+     " 未解锁的徽章显示\"还差多少\""
+    ]
+   ],
+   [
+    "equal",
+    967,
+    971,
+    835,
+    839
+   ],
+   [
+    "delete",
+    971,
+    973,
+    839,
+    839
+   ],
+   [
+    "equal",
+    973,
+    985,
+    839,
+    851
+   ],
+   [
+    "delete",
+    985,
+    987,
+    851,
+    851
+   ],
+   [
+    "equal",
+    987,
+    1001,
+    851,
+    865
+   ],
+   [
+    "delete",
+    1001,
+    1003,
+    865,
+    865
+   ],
+   [
+    "equal",
+    1003,
+    1019,
+    865,
+    881
+   ],
+   [
+    "delete",
+    1019,
+    1021,
+    881,
+    881
+   ],
+   [
+    "equal",
+    1021,
+    1027,
+    881,
+    887
+   ],
+   [
+    "replace",
+    1027,
+    1030,
+    887,
+    890,
+    [
+     " 🔮 魔法学院 | 💻 赛博学霸 | 🖌️ 国风墨韵 | 🚀 星际探险 | 💥 热血漫画",
+     " 🧚 童话精灵 | ⚙️ 蒸汽朋克 | 🎮 像素世界 | 🎭 敦煌飞天 | 🌌 极光幻境",
+     " 🦸 超级英雄 | ⚔️ 圣殿骑士 | 🦋 赛博精灵 | 🐚 海洋探险 | ⏳ 时光旅者"
+    ]
+   ],
+   [
+    "equal",
+    1030,
+    1036,
+    890,
+    896
+   ],
+   [
+    "replace",
+    1036,
+    1039,
+    896,
+    899,
+    [
+     " - 全校画廊 / 本班画廊 / 热门推荐",
+     " - 点赞互动",
+     " - 三种隐私范围：公开 / 本班可见 / 私密"
+    ]
+   ],
+   [
+    "equal",
+    1039,
+    1044,
+    899,
+    904
+   ],
+   [
+    "delete",
+    1044,
+    1048,
+    904,
+    904
+   ],
+   [
+    "equal",
+    1048,
+    1071,
+    904,
+    927
+   ],
+   [
+    "delete",
+    1071,
+    1073,
+    927,
+    927
+   ],
+   [
+    "equal",
+    1073,
+    1084,
+    927,
+    938
+   ],
+   [
+    "delete",
+    1084,
+    1086,
+    938,
+    938
+   ],
+   [
+    "equal",
+    1086,
+    1105,
+    938,
+    957
+   ],
+   [
+    "delete",
+    1105,
+    1107,
+    957,
+    957
+   ],
+   [
+    "equal",
+    1107,
+    1120,
+    957,
+    970
+   ],
+   [
+    "delete",
+    1120,
+    1122,
+    970,
+    970
+   ],
+   [
+    "equal",
+    1122,
+    1131,
+    970,
+    979
+   ],
+   [
+    "replace",
+    1131,
+    1135,
+    979,
+    983,
+    [
+     " - 考试发布/变更/结束",
+     " - 资源共享",
+     " - 版本更新通知",
+     " - 提交批改完成"
+    ]
+   ],
+   [
+    "equal",
+    1135,
+    1138,
+    983,
+    986
+   ],
+   [
+    "delete",
+    1138,
+    1140,
+    986,
+    986
+   ],
+   [
+    "equal",
+    1140,
+    1156,
+    986,
+    1002
+   ],
+   [
+    "delete",
+    1156,
+    1158,
+    1002,
+    1002
+   ],
+   [
+    "equal",
+    1158,
+    1160,
+    1002,
+    1004
+   ],
+   [
+    "replace",
+    1160,
+    1165,
+    1004,
+    1007,
+    [
+     "|功能|说明|",
+     "|---|---|",
+     "|❓ **关于系统**|查看说明文档|"
+    ]
+   ],
+   [
+    "equal",
+    1165,
+    1168,
+    1007,
+    1010
+   ],
+   [
+    "replace",
+    1168,
+    1176,
+    1010,
+    1016,
+    [
+     "|功能|说明|",
+     "|---|---|",
+     "|🔑 **修改密码**|所有用户可修改自己的密码|",
+     "|🔐 **忘记密码**|通过密保问题自助找回密码|",
+     "|🗑️ **临时文件清理**|自动清理超过 24 小时的临时上传文件|",
+     "|🎨 **多主题外观**|顶栏主题切换：默认蓝白 / 森林绿意 / 日落暖橙 / 暗夜星空 / 薰衣草紫；选择记在本地，登录页也能切|"
+    ]
+   ],
+   [
+    "equal",
+    1176,
+    1178,
+    1016,
+    1018
+   ],
+   [
+    "replace",
+    1178,
+    1181,
+    1018,
+    1019,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1181,
+    1250,
+    1019,
+    1088
+   ],
+   [
+    "delete",
+    1250,
+    1252,
+    1088,
+    1088
+   ],
+   [
+    "equal",
+    1252,
+    1258,
+    1088,
+    1094
+   ],
+   [
+    "replace",
+    1258,
+    1260,
+    1094,
+    1096,
+    [
+     "1. 下载最新安装包：SmartKBS 最新版下载（自动跳最新 Release）",
+     " （安装包命名形如 `SmartKBS-Setup-版本号.exe`，约 120 MB，**仅 Windows x64**）"
+    ]
+   ],
+   [
+    "equal",
+    1260,
+    1263,
+    1096,
+    1099
+   ],
+   [
+    "replace",
+    1263,
+    1264,
+    1099,
+    1100,
+    [
+     " （首次启动请在 Windows 防火墙弹窗中选「允许访问」，否则其他设备连不上）"
+    ]
+   ],
+   [
+    "equal",
+    1264,
+    1265,
+    1100,
+    1101
+   ],
+   [
+    "replace",
+    1265,
+    1272,
+    1101,
+    1108,
+    [
+     "|项目|说明|",
+     "|---|---|",
+     "|运行依赖|无。目标机器不需要 Python / Node.js（Electron 壳 + PyInstaller 后端 + Vite 前端）|",
+     "|数据存放|`%APPDATA%\\smartkbs-desktop\\`（两个数据库、`system_config.json`、`root/`、`stu/`、`question_media/`、`LogFiles/` 都在此），**卸载重装不丢数据**|",
+     "|升级方式|站内「系统配置 → 版本管理 → 检测更新」发现新版本后，下载新安装包**直接覆盖安装**（数据不丢）；升级前可在「系统配置 → 备份与恢复」先备一份。⚠️ 9.0.0 及更早的老版本请把数据留在安装目录，**务必直接覆盖安装、不要先卸载**（先卸载会把旧数据一起删掉，救不回来）；桌面版不走 Git 方式的在线增量升级|",
+     "|端口|固定 `8086`。若这台机器已用 IIS 跑着 Web 版，先停掉，否则桌面版起不来|",
+     "|支持平台|目前只发布 Windows x64 安装包；macOS / Linux 的打包配置已就绪但暂未出包|"
+    ]
+   ],
+   [
+    "equal",
+    1272,
+    1275,
+    1108,
+    1111
+   ],
+   [
+    "replace",
+    1275,
+    1276,
+    1111,
+    1112,
+    [
+     "1. 从 GitHub 下载最新源码 ZIP：youufis/SmartKBS"
+    ]
+   ],
+   [
+    "equal",
+    1276,
+    1290,
+    1112,
+    1126
+   ],
+   [
+    "replace",
+    1290,
+    1292,
+    1126,
+    1128,
+    [
+     " 按上文替换（数据库、配置、上传文件都在原目录，不受影响）；若本机已装 Git，还可以点",
+     " 「一键转 Git 部署并升级」，把目录转成 Git 部署，之后即可站内一键增量升级。"
+    ]
+   ],
+   [
+    "equal",
+    1292,
+    1304,
+    1128,
+    1140
+   ],
+   [
+    "replace",
+    1304,
+    1309,
+    1140,
+    1145,
+    [
+     "|部署方式|升级方式|",
+     "|---|---|",
+     "|桌面版|站内「检测更新」→ 发现新版本 → 下载新安装包覆盖安装（数据在 `%APPDATA%\\smartkbs-desktop`，不会丢）；升级前可在「备份与恢复」整站备份一次|",
+     "|源码包部署|站内「检测更新」→ 发现新版本 → 下载新源码包替换（数据库/配置/上传在原目录，不受影响）；本机已装 Git 时可「一键转 Git 部署」，之后享受站内增量升级|",
+     "|Git 克隆部署|站内「检测更新」+「增量升级」全自动：fetch → reset → 数据库迁移 → pip 增量安装 → 重启，失败自动回滚|"
+    ]
+   ],
+   [
+    "equal",
+    1309,
+    1332,
+    1145,
+    1168
+   ],
+   [
+    "delete",
+    1332,
+    1336,
+    1168,
+    1168
+   ],
+   [
+    "equal",
+    1336,
+    1368,
+    1168,
+    1200
+   ],
+   [
+    "replace",
+    1368,
+    1371,
+    1200,
+    1203,
+    [
+     "|用户名|密码|",
+     "|---|---|",
+     "|`root`|`root`|"
+    ]
+   ],
+   [
+    "equal",
+    1371,
+    1380,
+    1203,
+    1212
+   ],
+   [
+    "delete",
+    1380,
+    1384,
+    1212,
+    1212
+   ],
+   [
+    "equal",
+    1384,
+    1392,
+    1212,
+    1220
+   ],
+   [
+    "replace",
+    1392,
+    1440,
+    1220,
+    1221,
+    [
+     "…（48 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1440,
+    1444,
+    1221,
+    1225
+   ],
+   [
+    "replace",
+    1444,
+    1454,
+    1225,
+    1235,
+    [
+     "|目录 / 文件|内容|",
+     "|---|---|",
+     "|`backend/smartkb.db`|用户、积分、点名、任务、通知等业务数据|",
+     "|`backend/questions.db`|试题库与考试数据|",
+     "|`backend/system_config.json`|运行时配置（学科、模型、API Key 等），含密钥故不入版本库|",
+     "|`root/`、`stu/`|管理员与各学生的数据目录（对话历史、教学资源 HTML、画像等）|",
+     "|`question_media/`|试题配图，按题目 ID 分目录|",
+     "|`temp_uploads/`|临时上传文件，超 24 小时自动清理|",
+     "|`LogFiles/`、`backend/logs/`|运行日志|",
+     "|`db_backups/`、`.upgrade_backups/`|数据库备份与升级回滚快照|"
+    ]
+   ],
+   [
+    "equal",
+    1454,
+    1457,
+    1235,
+    1238
+   ],
+   [
+    "delete",
+    1457,
+    1461,
+    1238,
+    1238
+   ],
+   [
+    "equal",
+    1461,
+    1463,
+    1238,
+    1240
+   ],
+   [
+    "replace",
+    1463,
+    1477,
+    1240,
+    1252,
+    [
+     "|数据类型|存储位置|",
+     "|---|---|",
+     "|用户/积分/点名/任务/通知等核心业务数据|`backend/smartkb.db`（SQLite）|",
+     "|试题库与考试数据|`backend/questions.db`（SQLite）|",
+     "|对话历史|`<用户目录>/ChatHistory/` 按日期分目录|",
+     "|教学资源|`<用户目录>/html/` 各账号独立|",
+     "|系统配置|`backend/system_config.json`|",
+     "|用户 API Key|环境变量 `DASHSCOPE_API_KEY` / 系统配置|",
+     "|试题配图|`question_media/` 按题目 ID 分目录|",
+     "|临时上传文件|`temp_uploads/`（自动清理超 24 小时）|",
+     "|我的画像|`<用户目录>/portraits/`|",
+     "|白板快照|数据库 `whiteboard_pages` 表|"
+    ]
+   ],
+   [
+    "equal",
+    1477,
+    1480,
+    1252,
+    1255
+   ],
+   [
+    "delete",
+    1480,
+    1484,
+    1255,
+    1255
+   ],
+   [
+    "equal",
+    1484,
+    1486,
+    1255,
+    1257
+   ],
+   [
+    "replace",
+    1486,
+    1547,
+    1257,
+    1314,
+    [
+     "|页面/功能|学生|教师|管理员|",
+     "|---|:---:|:---:|:---:|",
+     "|系统首页仪表盘|✅|✅|✅|",
+     "|AI 对话（智答模式）|✅|✅|✅|",
+     "|AI 学伴模式|✅|❌|❌|",
+     "|AI 教学助手模式|❌|✅|✅|",
+     "|课程大纲（学习）|✅ 查看/练习|✅ 管理|✅ 管理|",
+     "|课程进度追踪|❌|✅ 自己班级|✅ 全部|",
+     "|试题管理|❌|✅|✅|",
+     "|考试中心（参加）|✅|✅ 管理|✅ 管理|",
+     "|智能组卷 & Word 导出|❌|✅|✅|",
+     "|同步练习|✅ 参与|✅ 出题|✅ 出题|",
+     "|课程练习|✅ 练习|✅ 出题|✅ 出题|",
+     "|每日精选|✅|✅|✅|",
+     "|热点新闻|✅|✅|✅|",
+     "|作业中心（对话 / 文件）|✅ 提交|✅ 管理|✅ 管理|",
+     "|待办事项|✅|❌|❌|",
+     "|资源中心（浏览共享）|✅|✅|✅|",
+     "|资源管理|❌|✅|✅|",
+     "|资源分类导航|✅|✅|✅|",
+     "|文件中心|✅ 共享文件|✅|✅|",
+     "|课堂积分|✅ 查看|✅ 自己班级|✅ 全部|",
+     "|积分奖励体系|✅ 查看|✅ 自己班级|✅ 全部|",
+     "|点名管理|❌|✅ 自己班级|✅ 全部|",
+     "|考勤统计|❌|✅ 自己班级|✅ 全部|",
+     "|课堂抽问|❌|✅ 自己班级|✅ 全部|",
+     "|课堂闯关|❌|✅ 自己班级|✅ 全部|",
+     "|随堂测验|✅ 答题|✅ 创建|✅ 创建|",
+     "|课堂投票|✅ 投票|✅ 创建|✅ 创建|",
+     "|提问管理|✅ 提问|✅ 审批|✅ 管理|",
+     "|分组讨论|✅ 参与|✅ 管理|✅ 管理|",
+     "|知识抢答|✅ 参与|✅ 管理|✅ 管理|",
+     "|知识闯关|✅ 闯关|✅ 管理|✅ 管理|",
+     "|代码练习|✅|✅|✅|",
+     "|错题巩固|✅ 自己|✅ 全班|✅ 全班|",
+     "|学情分析|❌|✅ 自己班级|✅ 全部|",
+     "|进度详情|❌|✅ 自己班级|✅ 全部|",
+     "|成长档案|✅ 自己|✅ 全班|✅ 全班|",
+     "|AI 课堂总结|❌|✅|✅|",
+     "|我的画像|✅|✅|✅|",
+     "|协作白板|✅ 参与|✅ 创建|✅ 创建|",
+     "|活动监控|❌|✅|✅|",
+     "|活动数据重置|❌|✅（仅本人活动）|✅（全部活动）|",
+     "|资源浏览统计|❌|✅|✅|",
+     "|AI 资源推荐|❌|✅|✅|",
+     "|AI 生成 HTML 资源|❌|✅|✅|",
+     "|AI 播客（生成）|❌|✅|✅|",
+     "|AI 讲演（生成）|❌|✅|✅|",
+     "|AI 讲演（观看）|✅|✅|✅|",
+     "|数据导出|❌|✅|✅|",
+     "|用户管理|仅改密|✅ 部分|✅ 全部|",
+     "|系统公告|✅ 查看|✅ 发布|✅ 发布|",
+     "|通知中心|✅|✅|✅|",
+     "|系统配置|❌|❌|✅|",
+     "|在线升级（版本管理）|❌|❌|✅|",
+     "|多主题系统|✅|✅|✅|",
+     "|关于系统|✅|✅|✅|"
+    ]
+   ],
+   [
+    "equal",
+    1547,
+    1550,
+    1314,
+    1317
+   ],
+   [
+    "replace",
+    1550,
+    1576,
+    1317,
+    1339,
+    [
+     "|层级|技术|",
+     "|---|---|",
+     "|后端框架|Python 3.11+ · FastAPI · Uvicorn|",
+     "|前端框架|React 19 · TypeScript · Vite 8|",
+     "|UI 组件库|Ant Design 6|",
+     "|图表|Recharts|",
+     "|Markdown 与公式|react-markdown · KaTeX|",
+     "|代码编辑器|Monaco Editor（代码练习页）|",
+     "|白板引擎|tldraw 5|",
+     "|状态管理 · 路由|Zustand · React Router 7|",
+     "|国际化|i18next（全站中英切换，前后端各有文案包）|",
+     "|数据库|SQLite 双库（业务库 + 试题库），无外部数据库依赖|",
+     "|认证|JWT（bcrypt 哈希 + PyJWT），Token 版本实现单点登录|",
+     "|AI 模型|通义千问 DashScope（Qwen）· DeepSeek|",
+     "|AI 调用模式|知识库检索增强 / 百炼智能体应用 / 直接调用大模型，按优先级自动接管并逐级降级|",
+     "|图片生成|通义万相（wanx2.1 / wanx2.2）|",
+     "|语音合成|DashScope TTS（点名播报，可选）|",
+     "|流式与实时|Server-Sent Events（AI 流式）· WebSocket（白板 / 分组讨论 / 抢答）|",
+     "|文档导出|python-docx（Word）· openpyxl（Excel）|",
+     "|公式出图|matplotlib（可选增强，缺失时降级为 Unicode 文本）|",
+     "|代码沙箱|AST 静态分析 + subprocess 隔离|",
+     "|桌面版|Electron + PyInstaller + Vite 产物（仅发布 Windows x64 安装包）|"
+    ]
+   ],
+   [
+    "equal",
+    1576,
+    1578,
+    1339,
+    1341
+   ],
+   [
+    "replace",
+    1578,
+    1591,
+    1341,
+    1342,
+    [
+     "本项目以 **AGPL-3.0** 开源，完整条款见 LICENSE。"
+    ]
+   ],
+   [
+    "equal",
+    1591,
+    1594,
+    1342,
+    1345
+   ],
+   [
+    "replace",
+    1594,
+    1595,
+    1345,
+    1346,
+    [
+     " 设置了密保问题的账号，可在登录页点「忘记密码」自助找回；否则联系管理员在「用户管理」中重置。"
+    ]
+   ],
+   [
+    "equal",
+    1595,
+    1596,
+    1346,
+    1347
+   ],
+   [
+    "replace",
+    1596,
+    1597,
+    1347,
+    1348,
+    [
+     " 先在「系统配置」确认 API Key 已填写且余额充足，再用配置页的连通性自检按钮验证；自检报错会指明是模型、知识库还是智能体应用的问题。"
+    ]
+   ],
+   [
+    "equal",
+    1597,
+    1598,
+    1348,
+    1349
+   ],
+   [
+    "replace",
+    1598,
+    1599,
+    1349,
+    1350,
+    [
+     " 文档上限 10 MB、图片上限 5 MB（图片上限可在系统配置中调整），并需符合扩展名与内容白名单。"
+    ]
+   ],
+   [
+    "equal",
+    1599,
+    1600,
+    1350,
+    1351
+   ],
+   [
+    "replace",
+    1600,
+    1601,
+    1351,
+    1352,
+    [
+     " 学伴仅学生可用，助手仅教师与管理员可用，先确认登录角色；教师还需在「用户管理」里配置任教年级与班级，否则AI 助手取不到教学范围。"
+    ]
+   ],
+   [
+    "equal",
+    1601,
+    1602,
+    1352,
+    1353
+   ],
+   [
+    "replace",
+    1602,
+    1603,
+    1353,
+    1354,
+    [
+     " 检查当前时间是否在考试有效期内、答题次数是否已用完；卷面处于「有人在作答」状态时教师改题会被拒绝，这是锁卷保护。"
+    ]
+   ],
+   [
+    "equal",
+    1603,
+    1604,
+    1354,
+    1355
+   ],
+   [
+    "replace",
+    1604,
+    1605,
+    1355,
+    1356,
+    [
+     " 只有支持积分的活动类型会在完成后自动发放，且设有每日封顶（可在系统配置调整）；教师与管理员不参与积分与榜单。等级奖励需要达到相应成绩百分比。"
+    ]
+   ],
+   [
+    "equal",
+    1605,
+    1606,
+    1356,
+    1357
+   ],
+   [
+    "replace",
+    1606,
+    1607,
+    1357,
+    1358,
+    [
+     " 先硬刷新（Ctrl+F5）；涉及 WebSocket、语音合成、AI 超时策略的改动需要**重启后端**才生效。"
+    ]
+   ],
+   [
+    "equal",
+    1607,
+    1608,
+    1358,
+    1359
+   ],
+   [
+    "replace",
+    1608,
+    1611,
+    1359,
+    1362,
+    [
+     " 1. Git 部署：管理员登录后进入「系统配置 → 版本管理」，点「检测更新」再「增量升级」，失败会自动回滚；",
+     " 2. 源码包部署：下载最新 ZIP 覆盖原目录，保留 `backend/system_config.json` 与两个 `.db` 文件后重启；",
+     " 3. 桌面版：下载新版安装包直接覆盖安装，数据在 `%APPDATA%\\smartkbs-desktop\\` 不会丢；**不要先卸载旧版再装**（≤9.0.0 的数据在安装目录里，先卸载即丢失）。"
+    ]
+   ],
+   [
+    "equal",
+    1611,
+    1612,
+    1362,
+    1363
+   ],
+   [
+    "replace",
+    1612,
+    1617,
+    1363,
+    1364,
+    [
+     " 先确认 Python 为 3.11+，再核对依赖是否装全（`pip install -r requirements.txt`）；报错提示缺少模块时，优先检查该模块是否已在 requirements.txt 中。"
+    ]
+   ],
+   [
+    "equal",
+    1617,
+    1623,
+    1364,
+    1370
+   ],
+   [
+    "replace",
+    1623,
+    1624,
+    1370,
+    1371,
+    [
+     "- 📧 **联系：** youufis@sina.com"
+    ]
+   ],
+   [
+    "equal",
+    1624,
+    1625,
+    1371,
+    1372
+   ],
+   [
+    "replace",
+    1625,
+    1626,
+    1372,
+    1373,
+    [
+     "- 📄 **许可证：** AGPL-3.0"
+    ]
+   ],
+   [
+    "equal",
+    1626,
+    1628,
+    1373,
+    1375
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "df69728642a5+2": {
+  "fn": "mvanduijker/laravel-transactional-model-events",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    5,
+    [
+     "Latest Version on Packagist",
+     "Build Status",
+     "Total Downloads"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    9,
+    5,
+    8
+   ],
+   [
+    "replace",
+    9,
+    10,
+    8,
+    9,
+    [
+     "transactional callbacks in Ruby on "
+    ]
+   ],
+   [
+    "equal",
+    10,
+    13,
+    9,
+    12
+   ],
+   [
+    "delete",
+    13,
+    14,
+    12,
+    12
+   ],
+   [
+    "equal",
+    14,
+    57,
+    12,
+    55
+   ],
+   [
+    "replace",
+    57,
+    67,
+    55,
+    56,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    75,
+    56,
+    64
+   ],
+   [
+    "replace",
+    75,
+    89,
+    64,
+    65,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    97,
+    65,
+    73
+   ],
+   [
+    "replace",
+    97,
+    105,
+    73,
+    74,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    128,
+    74,
+    97
+   ],
+   [
+    "replace",
+    128,
+    136,
+    97,
+    98,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    144,
+    98,
+    106
+   ],
+   [
+    "replace",
+    144,
+    169,
+    106,
+    107,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    171,
+    107,
+    109
+   ],
+   [
+    "replace",
+    171,
+    172,
+    109,
+    110,
+    [
+     "Since Laravel version 10.44"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    178,
+    110,
+    116
+   ],
+   [
+    "replace",
+    178,
+    184,
+    116,
+    117,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    184,
+    196,
+    117,
+    129
+   ],
+   [
+    "replace",
+    196,
+    199,
+    129,
+    130,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    200,
+    130,
+    131
+   ],
+   [
+    "replace",
+    200,
+    204,
+    131,
+    132,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    206,
+    132,
+    134
+   ],
+   [
+    "replace",
+    206,
+    208,
+    134,
+    136,
+    [
+     "- Mark van Duijker",
+     "- All Contributors"
+    ]
+   ],
+   [
+    "equal",
+    208,
+    210,
+    136,
+    138
+   ],
+   [
+    "replace",
+    210,
+    212,
+    138,
+    139,
+    [
+     "The MIT License (MIT). Please see License File for more information."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "276d0ae8c3a1+2": {
+  "fn": "tapoooooty/hypergrad",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "HyperGrad logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    7,
+    2,
+    3,
+    [
+     " HyperGrad: perps for the memecoins that made it"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    3,
+    4
+   ],
+   [
+    "replace",
+    8,
+    15,
+    4,
+    9,
+    [
+     " Hyperliquid HIP-3",
+     " Python 3.10+",
+     " Docker",
+     " Status: testnet",
+     " License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    9,
+    10
+   ],
+   [
+    "replace",
+    16,
+    17,
+    10,
+    11,
+    [
+     "**HyperGrad** is a builder-deployed perpetuals DEX on Hyperliquid for Solana memecoins that graduate from pump.fun."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    26,
+    11,
+    20
+   ],
+   [
+    "replace",
+    26,
+    30,
+    20,
+    22,
+    [
+     " HyperGrad dashboard",
+     " The dashboard, shown here with demo data. "
+    ]
+   ],
+   [
+    "equal",
+    30,
+    32,
+    22,
+    24
+   ],
+   [
+    "replace",
+    32,
+    49,
+    24,
+    25,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    51,
+    25,
+    27
+   ],
+   [
+    "replace",
+    51,
+    52,
+    27,
+    28,
+    [
+     "HIP-3 lets anyone who stakes 500,000 HYPE run their own perp DEX on Hyperliquid's matching engine. The deployer brings the markets and the oracle; Hyperliquid handles order books, margin and liquidations. trade.xyz used this to build stock and commodity perps, and on October 29, 2026 ICE, the owner of the NYSE, signed with it to bring those markets to the US."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    57,
+    28,
+    33
+   ],
+   [
+    "replace",
+    57,
+    58,
+    33,
+    34,
+    [
+     " Architecture "
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    34,
+    35
+   ],
+   [
+    "replace",
+    59,
+    60,
+    35,
+    36,
+    [
+     "|Process|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    36,
+    37
+   ],
+   [
+    "replace",
+    61,
+    65,
+    37,
+    41,
+    [
+     "|**Manager**|Every 10 minutes: pulls graduated coins from pump.fun and DexScreener, checks holders over Solana RPC, assigns tiers, rebalances GRAD daily, halts markets that fall below their tier, flags coins ready for their own perp, and watches the oracle.|",
+     "|**Oracle**|Every ~3 seconds: one price per source, median across sources, EMA for the mark, one `setOracle` for every live market. Freezes on bad data, halts a market that stays frozen.|",
+     "|**Market maker**|Post-only bid and ask ladders around the oracle price, skewed against its own position, widened when volatility rises, pulled when a market halts or the oracle freezes.|",
+     "|**Dashboard**|Read-only view of everything above, plus `/api/health` for the standby oracle.|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    68,
+    41,
+    44
+   ],
+   [
+    "replace",
+    68,
+    69,
+    44,
+    45,
+    [
+     " Tiers "
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    45,
+    46
+   ],
+   [
+    "replace",
+    70,
+    71,
+    46,
+    47,
+    [
+     "A coin gets its own perp at the same **$500K** that brings it into the index, but only once it has held that cap for 24 hours, has at least **$100K** of pool liquidity and $500K of daily volume, and is two days old. Leverage on these young markets is capped at **2x**. Hyperliquid will not accept an open interest cap below **$1M**, so a small pool can still be pushed against perp traders; the hold time, the liquidity floor, low leverage and the oracle freeze are there to make that expensive. The full policy is in docs/03_LISTING_POLICY.md."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    74,
+    47,
+    50
+   ],
+   [
+    "replace",
+    74,
+    75,
+    50,
+    51,
+    [
+     " Oracle pipeline "
+    ]
+   ],
+   [
+    "equal",
+    75,
+    78,
+    51,
+    54
+   ],
+   [
+    "replace",
+    78,
+    79,
+    54,
+    55,
+    [
+     " Oracle log "
+    ]
+   ],
+   [
+    "equal",
+    79,
+    106,
+    55,
+    82
+   ],
+   [
+    "replace",
+    106,
+    113,
+    82,
+    83,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    115,
+    83,
+    85
+   ],
+   [
+    "replace",
+    115,
+    116,
+    85,
+    86,
+    [
+     " Scanner output "
+    ]
+   ],
+   [
+    "equal",
+    116,
+    121,
+    86,
+    91
+   ],
+   [
+    "replace",
+    121,
+    122,
+    91,
+    92,
+    [
+     "|Area|What it checks|"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    92,
+    93
+   ],
+   [
+    "replace",
+    123,
+    130,
+    93,
+    100,
+    [
+     "|Environment|Python version, installed packages, `.env` present|",
+     "|Config|DEX code format, tier order, OI caps above the protocol minimum, leverage range, oracle interval|",
+     "|Hyperliquid|API reachable and latency, whether the DEX name is free or yours, slot auction price|",
+     "|Keys and stake|Deployer address, staked HYPE against the 500k requirement, spot HYPE and USDC, oracle updater matches config, market maker uses a separate account|",
+     "|Sources|DexScreener, pump.fun, Solana RPC health (and whether it is the slow public one), Jupiter|",
+     "|Alerts|Telegram bot token and chat id|",
+     "|State|Candidates, index size, how long ago the oracle last pushed|"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    137,
+    100,
+    107
+   ],
+   [
+    "replace",
+    137,
+    138,
+    107,
+    108,
+    [
+     "|Behaviour|Setting|"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    139,
+    108,
+    109
+   ],
+   [
+    "replace",
+    139,
+    145,
+    109,
+    115,
+    [
+     "|Levels per side and their spacing|`levels`, `level_spacing_bps`|",
+     "|Base spread, widened by one-minute volatility|`base_spread_bps`, `vol_spread_mult`|",
+     "|Size per order|`order_size_usd`|",
+     "|Position limit: no new bids above it, no new asks below minus it|`max_position_usd`|",
+     "|Ladder shift against the position at the limit|`skew_bps_at_max`|",
+     "|Requote when fair moves this much, or after this long|`requote_bps`, `requote_sec`|"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    154,
+    115,
+    124
+   ],
+   [
+    "replace",
+    154,
+    155,
+    124,
+    125,
+    [
+     "|Source|What it reads|Setting|"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    156,
+    125,
+    126
+   ],
+   [
+    "replace",
+    156,
+    159,
+    126,
+    129,
+    [
+     "|`dexscreener`|Every Solana pool for the coin, liquidity-weighted median|on by default|",
+     "|`jupiter`|Jupiter Price API v3, aggregated across routes|on by default; `JUPITER_API_KEY` raises limits|",
+     "|`onchain`|Reserves of the coin's largest PumpSwap pool, read over Solana RPC|needs a private RPC|"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    176,
+    129,
+    146
+   ],
+   [
+    "replace",
+    176,
+    177,
+    146,
+    147,
+    [
+     "It replays the coin's one-minute history from GeckoTerminal through HIP-3's mark rule (1% per update, one update every 3 s) and reports how far and how long the mark would have trailed the real price."
+    ]
+   ],
+   [
+    "equal",
+    177,
+    186,
+    147,
+    156
+   ],
+   [
+    "replace",
+    186,
+    190,
+    156,
+    157,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    192,
+    157,
+    159
+   ],
+   [
+    "replace",
+    192,
+    193,
+    159,
+    160,
+    [
+     "|File|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    160,
+    161
+   ],
+   [
+    "replace",
+    194,
+    198,
+    161,
+    165,
+    [
+     "|`Dockerfile`|Python 3.12 slim image, non-root user|",
+     "|`docker-compose.yml`|`oracle`, `manager`, `dashboard`, and `mm` behind a profile; restart unless stopped; state on a volume; rotated logs|",
+     "|`deploy/vps-setup.sh`|Fresh Ubuntu: Docker, SSH-only firewall, time sync, unattended upgrades, `.env` permissions|",
+     "|`deploy/systemd/`|Unit files if you prefer a virtualenv to Docker|"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    201,
+    165,
+    168
+   ],
+   [
+    "replace",
+    201,
+    202,
+    168,
+    169,
+    [
+     "Where to rent a server, which Solana RPC to pick and how to lay out primary and standby are in docs/06_OPERATIONS.md."
+    ]
+   ],
+   [
+    "equal",
+    202,
+    205,
+    169,
+    172
+   ],
+   [
+    "replace",
+    205,
+    206,
+    172,
+    173,
+    [
+     "Telegram alerts"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    207,
+    173,
+    174
+   ],
+   [
+    "replace",
+    207,
+    208,
+    174,
+    175,
+    [
+     "1. Create a bot with @BotFather and copy its token into `TELEGRAM_BOT_TOKEN`."
+    ]
+   ],
+   [
+    "equal",
+    208,
+    212,
+    175,
+    179
+   ],
+   [
+    "replace",
+    212,
+    213,
+    179,
+    180,
+    [
+     "|Alert|When|"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    214,
+    180,
+    181
+   ],
+   [
+    "replace",
+    214,
+    222,
+    181,
+    189,
+    [
+     "|⚠️ Alert|A price freezes, or moves more than 40% in a minute|",
+     "|⛔ Halt|A market is halted and settled|",
+     "|🐕 Watchdog|The oracle has not pushed for 30 s, the standby takes over, or either recovers|",
+     "|🎯 Candidate|A coin qualifies for its own perp|",
+     "|🚀 Listing|A market is listed or resumed|",
+     "|💱 Mm|The market maker starts, pulls quotes or gets orders rejected|",
+     "|🔥 Error|An oracle tick, manager cycle or market maker tick fails|",
+     "|💚 Heartbeat|Every 12 h: live markets and their prices|"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    225,
+    189,
+    192
+   ],
+   [
+    "delete",
+    225,
+    227,
+    192,
+    192
+   ],
+   [
+    "equal",
+    227,
+    229,
+    192,
+    194
+   ],
+   [
+    "replace",
+    229,
+    230,
+    194,
+    195,
+    [
+     "|Command|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    230,
+    231,
+    195,
+    196
+   ],
+   [
+    "replace",
+    231,
+    250,
+    196,
+    215,
+    [
+     "|`python -m hip3 doctor`|Preflight checks|",
+     "|`python -m hip3 scan`|Find graduates, compute metrics and tiers|",
+     "|`python -m hip3 index [--force]`|Show or recompute the GRAD composition|",
+     "|`python -m hip3 init-dex [--max-gas N]`|Create the `grad` DEX and list `GRAD`|",
+     "|`python -m hip3 list <mint> [--force]`|List a single perp for a tier 1+ coin|",
+     "|`python -m hip3 halt <COIN> [reason]`|Halt a market; positions settle at mark|",
+     "|`python -m hip3 resume <COIN>`|Resume a halted market|",
+     "|`python -m hip3 oracle [--dry-run]`|Run the oracle (primary or standby, from config)|",
+     "|`python -m hip3 add-oracle-signer <address> [--revoke]`|Allow or revoke a standby oracle key|",
+     "|`python -m hip3 apply-funding`|Re-apply funding settings to live markets|",
+     "|`python -m hip3 mm [--dry-run]`|Run the market maker|",
+     "|`python -m hip3 mm-cancel`|Pull every market maker order|",
+     "|`python -m hip3 manager [--once]`|Scan, rebalance, delist, watch the oracle|",
+     "|`python -m hip3 backtest <mint>`|Replay a coin's history through the HIP-3 mark rule|",
+     "|`python -m hip3 serve [--port N]`|Dashboard|",
+     "|`python -m hip3 status` / `auction`|The DEX and the slot auction as Hyperliquid sees them|",
+     "|`python -m hip3 economics`|Stake return calculator|",
+     "|`python -m hip3 tg-chatid` / `tg-test`|Set up and test Telegram|",
+     "|`python -m hip3 watchdog`|Oracle watchdog as its own process|"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    253,
+    215,
+    218
+   ],
+   [
+    "replace",
+    253,
+    254,
+    218,
+    219,
+    [
+     "Settings live in `config.json`, secrets in `.env`. Restart the processes after changes."
+    ]
+   ],
+   [
+    "equal",
+    254,
+    255,
+    219,
+    220
+   ],
+   [
+    "replace",
+    255,
+    256,
+    220,
+    221,
+    [
+     "|Section|Key settings|Default|"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    257,
+    221,
+    222
+   ],
+   [
+    "replace",
+    257,
+    269,
+    222,
+    234,
+    [
+     "|`dex`|`code`, `full_name`, `collateral_token`, `oracle_updater`, `fee_recipient`|`grad`, USDC (token 0)|",
+     "|`tiers.tier0/1/2`|market cap, liquidity, age, volume, hold time, leverage, OI cap|$500K / $500K / $5M|",
+     "|`safety`|pump.fun origin, top-10 holders, dev wallet, 1h pump filter|on, 30%, 5%, 300%|",
+     "|`index`|components, weight cap, rebalance period, base level|50, 10%, 24 h, 1000|",
+     "|`oracle`|`sources`, `min_sources`, interval, EMA, deviation limit, auto-halt, `standby_primary_url`, `failover_after_sec`|dexscreener + jupiter, 1, 3 s, 0.3, 15%, 120 s|",
+     "|`funding`|`multiplier`, `clamp_8h`|1.0, 0.0006|",
+     "|`fees`|`scale`, `growth_mode`|1.0, off|",
+     "|`market_maker`|`enabled`, `markets`, levels, spreads, size, position limit, skew, requote|off, GRAD, 3 levels, 40 bps, $250, $5,000|",
+     "|`delisting`|threshold ratio, hours, liquidity ratio, auto-halt|50%, 24 h, 50%, on|",
+     "|`manager`|scan interval, auto-list tier 1, max single perps|10 min, off, 10|",
+     "|`dashboard`|`host`, `port`|127.0.0.1, 8787|",
+     "|`telegram`|`kinds`, `dedup_sec`, `watchdog_stale_sec`, `heartbeat_hours`|all, 300 s, 30 s, 12 h|"
+    ]
+   ],
+   [
+    "equal",
+    269,
+    270,
+    234,
+    235
+   ],
+   [
+    "replace",
+    270,
+    271,
+    235,
+    236,
+    [
+     "|`.env` variable|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    271,
+    272,
+    236,
+    237
+   ],
+   [
+    "replace",
+    272,
+    278,
+    237,
+    243,
+    [
+     "|`HL_NETWORK` / `HL_ALLOW_MAINNET`|`testnet` by default; mainnet also needs `HL_ALLOW_MAINNET=yes`|",
+     "|`HL_PRIVATE_KEY` / `HL_ACCOUNT_ADDRESS`|Deployer key, and the main account if the key is an agent wallet|",
+     "|`HL_ORACLE_PRIVATE_KEY`|Oracle updater key|",
+     "|`HL_MM_PRIVATE_KEY` / `HL_MM_ACCOUNT_ADDRESS`|Market maker account|",
+     "|`JUPITER_API_KEY`|Optional, higher Jupiter limits|",
+     "|`TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID`|Alerts|"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    281,
+    243,
+    246
+   ],
+   [
+    "replace",
+    281,
+    282,
+    246,
+    247,
+    [
+     "Some steps need money, an account, a signature or a lawyer. Each one is explained with links in docs/06_OPERATIONS.md."
+    ]
+   ],
+   [
+    "equal",
+    282,
+    283,
+    247,
+    248
+   ],
+   [
+    "replace",
+    283,
+    287,
+    248,
+    252,
+    [
+     "- [ ] **Testnet funds.** Deposit once on mainnet, then claim from the testnet faucet.",
+     "- [ ] **The 500,000 HYPE stake** (~$45M). Crowdfund it through Kinetiq Launch, bring in a partner, or stake your own.",
+     "- [ ] **A server near Hyperliquid.** Tokyo has the lowest latency: AWS Lightsail, Vultr. A second provider for the standby: Hetzner, DigitalOcean.",
+     "- [ ] **A private Solana RPC**: Helius, QuickNode, Triton."
+    ]
+   ],
+   [
+    "equal",
+    287,
+    288,
+    252,
+    253
+   ],
+   [
+    "replace",
+    288,
+    290,
+    253,
+    255,
+    [
+     "- [ ] **A trading front end** with a builder code, built on @nktkas/hyperliquid.",
+     "- [ ] **Legal advice** on where to operate, terms of use, and HIP-3\\* allowlists if KYC is needed."
+    ]
+   ],
+   [
+    "equal",
+    290,
+    298,
+    255,
+    263
+   ],
+   [
+    "replace",
+    298,
+    321,
+    263,
+    264,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    321,
+    334,
+    264,
+    277
+   ],
+   [
+    "replace",
+    334,
+    335,
+    277,
+    278,
+    [
+     "|Document|Contents|"
+    ]
+   ],
+   [
+    "equal",
+    335,
+    336,
+    278,
+    279
+   ],
+   [
+    "replace",
+    336,
+    342,
+    279,
+    285,
+    [
+     "|01 Concept|The idea, the niche, the main problem and its answer|",
+     "|02 HIP-3 rules|Stake, auction, oracle, margin, fees and slashing, with sources|",
+     "|03 Listing policy|Tier criteria, index rules, delisting and oracle stops|",
+     "|04 Economics|Fee model, scenarios and break-even|",
+     "|05 Roadmap|What is done, what is next, risk register|",
+     "|06 Operations|Funds, stake, servers, RPC, liquidity, front end, legal|"
+    ]
+   ],
+   [
+    "equal",
+    342,
+    345,
+    285,
+    288
+   ],
+   [
+    "replace",
+    345,
+    351,
+    288,
+    294,
+    [
+     "- Hyperliquid: HIP-3, deployer actions, fees, API wallets, builder codes, testnet faucet",
+     "- SDKs: hyperliquid-python-sdk, @nktkas/hyperliquid",
+     "- Data: DexScreener API, Jupiter Price API, GeckoTerminal API",
+     "- Capital: Kinetiq Launch",
+     "- Infrastructure: AWS Lightsail, Vultr, Hetzner, Helius, QuickNode",
+     "- Telegram Bot API"
+    ]
+   ],
+   [
+    "equal",
+    351,
+    353,
+    294,
+    296
+   ],
+   [
+    "replace",
+    353,
+    355,
+    296,
+    297,
+    [
+     "MIT. HyperGrad is an independent project and is not affiliated with Hyperliquid, pump.fun or trade.xyz."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "5fe5063fb38e+2": {
+  "fn": "tychozzz/killbug",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "delete",
+    0,
+    6,
+    0,
+    0
+   ],
+   [
+    "equal",
+    6,
+    8,
+    0,
+    2
+   ],
+   [
+    "delete",
+    8,
+    10,
+    2,
+    2
+   ],
+   [
+    "equal",
+    10,
+    11,
+    2,
+    3
+   ],
+   [
+    "delete",
+    11,
+    20,
+    3,
+    3
+   ],
+   [
+    "equal",
+    20,
+    21,
+    3,
+    4
+   ],
+   [
+    "replace",
+    21,
+    22,
+    4,
+    5,
+    [
+     "English Doc"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    29,
+    5,
+    12
+   ],
+   [
+    "replace",
+    29,
+    30,
+    12,
+    13,
+    [
+     "image-20230424203013147"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    33,
+    13,
+    16
+   ],
+   [
+    "replace",
+    33,
+    34,
+    16,
+    17,
+    [
+     "image-20230425223113959"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    17,
+    18
+   ],
+   [
+    "replace",
+    35,
+    36,
+    18,
+    19,
+    [
+     "image-20230425225042834"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    37,
+    19,
+    20
+   ],
+   [
+    "replace",
+    37,
+    38,
+    20,
+    21,
+    [
+     "image-20230425225150480"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    21,
+    22
+   ],
+   [
+    "replace",
+    39,
+    40,
+    22,
+    23,
+    [
+     "image-20230425225131549"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    23,
+    24
+   ],
+   [
+    "replace",
+    41,
+    43,
+    24,
+    25,
+    [
+     "image-20230425225214302"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    48,
+    25,
+    30
+   ],
+   [
+    "replace",
+    48,
+    49,
+    30,
+    31,
+    [
+     "- **问题模块**"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    50,
+    31,
+    32
+   ],
+   [
+    "replace",
+    50,
+    51,
+    32,
+    33,
+    [
+     " Kill Bug 用户可以自由发布与开发和编程相关的带有不同标签的问题。他们还可以回答问题以帮助其他用户。每个问题都有相应的点赞和回答数量，这意味着用户可以根据这些评估指标选择问题或答案。"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    52,
+    33,
+    34
+   ],
+   [
+    "replace",
+    52,
+    53,
+    34,
+    35,
+    [
+     "- **悬赏模块**"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    35,
+    36
+   ],
+   [
+    "replace",
+    54,
+    55,
+    36,
+    37,
+    [
+     " Kill Bug 用户可以通过花费一定的金额来发布悬赏，以吸引其他编程高手。这意味着您更有可能获得更高质量的解决方案。用户也可以通过抢单来赚钱。在被抢单后，Kill-Bug平台会为发布者和抢单者创建一个聊天室。他们可以进入自己的聊天室进行协商，解决悬赏任务。此外，Kill Bug 平台还为他们提供了丰富的文本协同编辑器，方便分享代码或文档。"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    37,
+    38
+   ],
+   [
+    "replace",
+    56,
+    57,
+    38,
+    39,
+    [
+     "- **聊天模块**"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    39,
+    40
+   ],
+   [
+    "replace",
+    58,
+    59,
+    40,
+    41,
+    [
+     " 如前所述，发布赏金和抢单者可以在聊天室中进行交流。然而，这并不仅限于这些用户。所有用户只需点击“消息”按钮就可以相互聊天，这也是其他主流社交网络应用的常见功能。"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    41,
+    42
+   ],
+   [
+    "replace",
+    60,
+    61,
+    42,
+    43,
+    [
+     "- **用户模块**"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    62,
+    43,
+    44
+   ],
+   [
+    "replace",
+    62,
+    63,
+    44,
+    45,
+    [
+     " 这是各类网站的常见模块。用户可以登录、注册、退出、查看个人信息和修改个人信息。此外，结合 Kill Bug 的主要功能，用户还可以查看他们发布的问题、发布的赏金以及领取的赏金。还有一个有趣的功能：成就。用户可以查看自己发布的问题数量、发布的赏金数量、获得的点赞数等等。"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    68,
+    45,
+    50
+   ],
+   [
+    "replace",
+    68,
+    80,
+    50,
+    62,
+    [
+     "|Technology|Feature|",
+     "|:----------:|:----------------------------------------------------------:|",
+     "|React|基本 Web 框架|",
+     "|Next.js|SSR 框架|",
+     "|Ant Design|UI 组件库|",
+     "|Mobx|全局状态管理库|",
+     "|Axios|HTTP 请求库|",
+     "|Router|路由组件|",
+     "|Mock|HTTP 请求 mock|",
+     "|Quill Editor|富文本编辑器|",
+     "|Socket|即时通信 / 协同编辑|",
+     "|Js-Cookie|Cookie 管理工具|"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    83,
+    62,
+    65
+   ],
+   [
+    "replace",
+    83,
+    98,
+    65,
+    80,
+    [
+     "|Technology|Feature|",
+     "|:---------------:|:-----------------------------------------------------------|",
+     "|Spring Boot|后端主体框架|",
+     "|Spring Cloud|微服务框架|",
+     "|Sentinel|流量控制组件|",
+     "|Dubbo|分布式 RPC 框架|",
+     "|MySQL|表数据存储|",
+     "|Redis|缓存数据库|",
+     "|Sa-Token|轻量级登录鉴权框架|",
+     "|Mybatis|ORM 框架|",
+     "|Redisson|封装 Redis 操作|",
+     "|Websocket|通信技术|",
+     "|Hutool|Java 工具库|",
+     "|Alibaba Cloud OSS|对象存储|",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    98,
+    100,
+    80,
+    82
+   ],
+   [
+    "replace",
+    100,
+    101,
+    82,
+    83,
+    [
+     "software architecture"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    114,
+    83,
+    96
+   ],
+   [
+    "replace",
+    114,
+    135,
+    96,
+    97,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    141,
+    97,
+    103
+   ],
+   [
+    "replace",
+    141,
+    142,
+    103,
+    104,
+    [
+     "1. 进入 `killbug-frontend` 目录"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    147,
+    104,
+    109
+   ],
+   [
+    "replace",
+    147,
+    148,
+    109,
+    110,
+    [
+     "2. 安装前端依赖"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    154,
+    110,
+    116
+   ],
+   [
+    "replace",
+    154,
+    155,
+    116,
+    117,
+    [
+     "3. 如果你想要体验协同编程功能，你需要启动 Websocket 服务"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    160,
+    117,
+    122
+   ],
+   [
+    "replace",
+    160,
+    161,
+    122,
+    123,
+    [
+     "4. 启动前端"
+    ]
+   ],
+   [
+    "equal",
+    161,
+    173,
+    123,
+    135
+   ],
+   [
+    "replace",
+    173,
+    174,
+    135,
+    136,
+    [
+     "1. **配置基础运行环境**"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    175,
+    136,
+    137
+   ],
+   [
+    "replace",
+    175,
+    176,
+    137,
+    138,
+    [
+     " 你需要确保如下环境已配置正确"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    177,
+    138,
+    139
+   ],
+   [
+    "replace",
+    177,
+    187,
+    139,
+    149,
+    [
+     " - JDK1.8",
+     " - Maven 3.6+",
+     " - Nacos 2.1.2: https://github.com/alibaba/nacos",
+     " - 8848 端口",
+     " - Redis 7.x",
+     " - 6379 端口",
+     " - MySQL 8.x",
+     " - 3306 端口",
+     " - username: root",
+     " - password: root"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    188,
+    149,
+    150
+   ],
+   [
+    "replace",
+    188,
+    189,
+    150,
+    151,
+    [
+     "2. **导入数据库数据**"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    190,
+    151,
+    152
+   ],
+   [
+    "replace",
+    190,
+    191,
+    152,
+    153,
+    [
+     " 在Kill-Bug根目录中，您可以看到data文件夹。该文件夹中有4个SQL文件，分别对应着4个数据库。"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    192,
+    153,
+    154
+   ],
+   [
+    "replace",
+    192,
+    195,
+    154,
+    155,
+    [
+     " 首先，您需要在您的MySQL中创建4个数据库：killbug_bounty，killbug_chat，killbug_question 和 killbug_user。字符集和校对规则分别为 utf8mb4 和 utf8mb4_0900_ai_ci。"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    196,
+    155,
+    156
+   ],
+   [
+    "replace",
+    196,
+    197,
+    156,
+    157,
+    [
+     " 然后，您需要将这 4 个 SQL 文件导入到您的 MySQL 中。"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    198,
+    157,
+    158
+   ],
+   [
+    "replace",
+    198,
+    199,
+    158,
+    161,
+    [
+     "3. **运行各个微服务模块**",
+     "",
+     " 运行8个模块：killbug-gateway，killbug-auth，killbug-bounty，killbug-chat，killbug-index，killbug-user，killbug-question，killbug-websocket。"
+    ]
+   ],
+   [
+    "equal",
+    199,
+    206,
+    161,
+    168
+   ],
+   [
+    "replace",
+    206,
+    207,
+    168,
+    169,
+    [
+     "1. **通过 Docker Compose 运行各个中间件**"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    208,
+    169,
+    170
+   ],
+   [
+    "replace",
+    208,
+    209,
+    170,
+    171,
+    [
+     " image-20230425155147619"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    214,
+    171,
+    176
+   ],
+   [
+    "replace",
+    214,
+    215,
+    176,
+    177,
+    [
+     "2. **打包微服务镜像**"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    216,
+    177,
+    178
+   ],
+   [
+    "replace",
+    216,
+    217,
+    178,
+    179,
+    [
+     " image-20230425155923062"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    222,
+    179,
+    184
+   ],
+   [
+    "replace",
+    222,
+    223,
+    184,
+    185,
+    [
+     "3. **通过 Docker Compose 运行各个微服务模块**"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    230,
+    185,
+    192
+   ],
+   [
+    "replace",
+    230,
+    231,
+    192,
+    193,
+    [
+     "1. 进入 killbug-frontend/util 目录，并打开 request.ts 文件。"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    232,
+    193,
+    194
+   ],
+   [
+    "replace",
+    232,
+    233,
+    194,
+    195,
+    [
+     "2. 将 BASE_URL 中的 localhost 更改为您的虚拟机的地址。"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    234,
+    195,
+    196
+   ],
+   [
+    "replace",
+    234,
+    236,
+    196,
+    197,
+    [
+     " image-20230425162444400"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    241,
+    197,
+    202
+   ],
+   [
+    "replace",
+    241,
+    242,
+    202,
+    203,
+    [
+     " - 企业级项目的鉴权认证一般都是通过单点登录的方式来实现，用户登录后的认证信息都保存在Token中，前端也会保留这个Token。 以后用户再次请求后端时，不需要再次登录，而是在Request的Header中携带Token。 后端可以通过验证Token来实现认证。"
+    ]
+   ],
+   [
+    "equal",
+    242,
+    243,
+    203,
+    204
+   ],
+   [
+    "replace",
+    243,
+    244,
+    204,
+    205,
+    [
+     " - 在Kill-Bug项目中，我们也采用了这个想法。 我们选择将Token存储在Redis中，即服务器而不是客户端。 这是因为虽然**客户端存储**具有更好的性能，但其功能有限。 这意味着当用户的权限发生变化时，比如因为做了非法的事情而被禁止，但是客户端仍然可以通过旧的Token访问服务器，这与我们的初衷相悖。 因此，我们选择**服务器端存储**。 这样的话，我们就可以轻松地在服务器端控制用户的认证和授权。"
+    ]
+   ],
+   [
+    "equal",
+    244,
+    245,
+    205,
+    206
+   ],
+   [
+    "replace",
+    245,
+    246,
+    206,
+    207,
+    [
+     " 此外，我们使用过滤器来验证每个需要验证的请求，例如获取敏感用户信息的请求。 当然，我们可以动态配置需要验证的请求路径。 该功能由**网关**实现。"
+    ]
+   ],
+   [
+    "equal",
+    246,
+    249,
+    207,
+    210
+   ],
+   [
+    "replace",
+    249,
+    250,
+    210,
+    211,
+    [
+     " - 规格"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    251,
+    211,
+    212
+   ],
+   [
+    "replace",
+    251,
+    252,
+    212,
+    213,
+    [
+     " 在Kill-Bug项目中，我们只使用了两种请求方法：Get和Post。 为什么我们不采用**Restful API**风格，引入Delete、Put等请求呢？ 这是因为我们认为Restful API有点死板，不能灵活定义接口，而是根据其需求来定义。 因此，我们在请求路径中定义请求类型，而不是请求本身，这使得开发更加容易。 例如，如果我们想创建一个问题，我们可以定义一个请求路径，如“/question/createQuestion”。 在 Kill-Bug 项目中，请求路径以微服务名称开头。"
+    ]
+   ],
+   [
+    "equal",
+    252,
+    253,
+    213,
+    214
+   ],
+   [
+    "replace",
+    253,
+    254,
+    214,
+    215,
+    [
+     " - 重定向"
+    ]
+   ],
+   [
+    "equal",
+    254,
+    255,
+    215,
+    216
+   ],
+   [
+    "replace",
+    255,
+    256,
+    216,
+    217,
+    [
+     " 对于微服务项目来说，每个模块都是一个应用程序，有自己的运行地址和端口。 前端如何确定后端的地址和端口呢？ 无需知道。 前端只需要将请求发送到指定的地址和端口即可。 处理请求的角色是**Gateway**和**Nacos**。"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    257,
+    217,
+    218
+   ],
+   [
+    "replace",
+    257,
+    258,
+    218,
+    219,
+    [
+     " 微服务运行时，告知Nacos其地址和端口信息。 当请求到达Gateway时，Gateway通过请求路径名称获取对应的微服务名称。 然后，Gateway请求Nacos并获取微服务地址。 这就是Kill-Bug项目中发送请求的整个过程。"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    261,
+    219,
+    222
+   ],
+   [
+    "replace",
+    261,
+    262,
+    222,
+    223,
+    [
+     " 在Kill-Bug项目中，我们使用Dubbo作为RPC框架。 我们还需要Nacos作为服务发现和注册中心的帮助。 与前端向后端发送请求的过程类似，但源和目的地不同。 而且，Dubbo使用TCP而不是HTTP协议进行通信。"
+    ]
+   ],
+   [
+    "equal",
+    262,
+    265,
+    223,
+    226
+   ],
+   [
+    "replace",
+    265,
+    266,
+    226,
+    227,
+    [
+     " 项目可能会由于代码本身的错误或开发人员在特定情况下抛出的异常而被迫终止。 遇到这样的情况该如何判断呢？ 我们需要实现一个全局的异常处理程序，捕获相应的异常，并向前端返回错误信息，防止没有响应。"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    267,
+    227,
+    228
+   ],
+   [
+    "replace",
+    267,
+    268,
+    228,
+    229,
+    [
+     " 在 Kill-Bug 项目中，我们使用 **Spring MVC** 提供的 **RestControllerAdvice** 注解来实现此功能。"
+    ]
+   ],
+   [
+    "equal",
+    268,
+    271,
+    229,
+    232
+   ],
+   [
+    "replace",
+    271,
+    272,
+    232,
+    233,
+    [
+     " 在企业级项目中，需要防止高并发场景下的流量高峰。 所以，我们需要通过限流、**服务降级**、**服务熔断**等机制来保护我们的服务，防止服务崩溃。 在Kill-Bug项目中，我们选择阿里巴巴开源的Sentinel框架来实现该功能。"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    275,
+    233,
+    236
+   ],
+   [
+    "replace",
+    275,
+    276,
+    236,
+    237,
+    [
+     " 常见的网络攻击包括SQL注入、XSS攻击、DDoS攻击等。"
+    ]
+   ],
+   [
+    "equal",
+    276,
+    277,
+    237,
+    238
+   ],
+   [
+    "replace",
+    277,
+    278,
+    238,
+    239,
+    [
+     " 我们通过过滤请求路径和请求正文中的可疑字符串来防止此类攻击。 但对于DDoS攻击，此方法无法生效。 我们只能购买高级防火墙来预防部署到云服务器时的情况。"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    281,
+    239,
+    242
+   ],
+   [
+    "replace",
+    281,
+    282,
+    242,
+    243,
+    [
+     " 在Kill-Bug项目中，我们使用MVC三层架构。 同时，我们采用了Mybatis作为ORM框架，简化了SQL语句的编写，极大地提高了开发效率。"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "5dccf5f33422+2": {
+  "fn": "LebToki/Laragon-Dashboard",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "A modern, feature-rich web-based dashboard for managing local development environments. Born on Windows, now evolved for Linux through Nucleus."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    5,
+    3,
+    5
+   ],
+   [
+    "delete",
+    5,
+    7,
+    5,
+    5
+   ],
+   [
+    "equal",
+    7,
+    14,
+    5,
+    12
+   ],
+   [
+    "replace",
+    14,
+    15,
+    12,
+    13,
+    [
+     "Rather than abandon this project, I built **Nucleus** — the spiritual successor. Nucleus takes everything learned from Laragon Dashboard and rebuilds it from the ground up for Linux (ZorinOS, Ubuntu, Mint) using systemd, native service management, and a modular architecture."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    17,
+    13,
+    15
+   ],
+   [
+    "delete",
+    17,
+    19,
+    15,
+    15
+   ],
+   [
+    "equal",
+    19,
+    30,
+    15,
+    26
+   ],
+   [
+    "delete",
+    30,
+    32,
+    26,
+    26
+   ],
+   [
+    "equal",
+    32,
+    34,
+    26,
+    28
+   ],
+   [
+    "replace",
+    34,
+    35,
+    28,
+    29,
+    [
+     "|Platform|Status|Project|"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    29,
+    30
+   ],
+   [
+    "replace",
+    36,
+    39,
+    30,
+    33,
+    [
+     "|**Windows**|✅ Fully supported|This repo (Laragon Dashboard)|",
+     "|**Linux**|✅ Native|Nucleus — the spiritual successor|",
+     "|**macOS**|🔜 Beta interest?|Open an issue if you'd like to beta-test a macOS port|"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    42,
+    33,
+    36
+   ],
+   [
+    "replace",
+    42,
+    43,
+    36,
+    43,
+    [
+     "Version",
+     "PHP",
+     "Bootstrap",
+     "Windows",
+     "Linux",
+     "License",
+     "GitHub"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    43,
+    44
+   ],
+   [
+    "replace",
+    44,
+    51,
+    44,
+    47,
+    [
+     " Stars",
+     " Forks",
+     " PRs Welcome"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    52,
+    47,
+    48
+   ],
+   [
+    "replace",
+    52,
+    61,
+    48,
+    49,
+    [
+     "Laragon Dashboard"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    64,
+    49,
+    52
+   ],
+   [
+    "replace",
+    64,
+    71,
+    52,
+    57,
+    [
+     "Dashboard",
+     "Projects",
+     "Databases",
+     "Services",
+     "Server Vitals"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    74,
+    57,
+    60
+   ],
+   [
+    "replace",
+    74,
+    75,
+    60,
+    61,
+    [
+     "Nucleus is the Linux-native evolution of Laragon Dashboard. It's built from the ground up for Linux environments and addresses architectural limitations found in the Windows version."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    85,
+    61,
+    71
+   ],
+   [
+    "delete",
+    85,
+    87,
+    71,
+    71
+   ],
+   [
+    "equal",
+    87,
+    100,
+    71,
+    84
+   ],
+   [
+    "delete",
+    100,
+    102,
+    84,
+    84
+   ],
+   [
+    "equal",
+    102,
+    112,
+    84,
+    94
+   ],
+   [
+    "delete",
+    112,
+    114,
+    94,
+    94
+   ],
+   [
+    "equal",
+    114,
+    193,
+    94,
+    173
+   ],
+   [
+    "delete",
+    193,
+    195,
+    173,
+    173
+   ],
+   [
+    "equal",
+    195,
+    206,
+    173,
+    184
+   ],
+   [
+    "replace",
+    206,
+    207,
+    184,
+    185,
+    [
+     "1. Download from Releases page"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    229,
+    185,
+    207
+   ],
+   [
+    "replace",
+    229,
+    233,
+    207,
+    208,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    234,
+    208,
+    209
+   ],
+   [
+    "delete",
+    234,
+    236,
+    209,
+    209
+   ],
+   [
+    "equal",
+    236,
+    243,
+    209,
+    216
+   ],
+   [
+    "replace",
+    243,
+    251,
+    216,
+    217,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    251,
+    252,
+    217,
+    218
+   ],
+   [
+    "delete",
+    252,
+    254,
+    218,
+    218
+   ],
+   [
+    "equal",
+    254,
+    266,
+    218,
+    230
+   ],
+   [
+    "delete",
+    266,
+    268,
+    230,
+    230
+   ],
+   [
+    "equal",
+    268,
+    274,
+    230,
+    236
+   ],
+   [
+    "replace",
+    274,
+    299,
+    236,
+    237,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    299,
+    300,
+    237,
+    238
+   ],
+   [
+    "delete",
+    300,
+    302,
+    238,
+    238
+   ],
+   [
+    "equal",
+    302,
+    316,
+    238,
+    252
+   ],
+   [
+    "replace",
+    316,
+    317,
+    252,
+    253,
+    [
+     "|Variable|Description|Default|"
+    ]
+   ],
+   [
+    "equal",
+    317,
+    318,
+    253,
+    254
+   ],
+   [
+    "replace",
+    318,
+    322,
+    254,
+    256,
+    [
+     "|`LARAGON_DASHBOARD_PASSWORD`|Admin password|(must be set)|",
+     "|`LARAGON_ROOT`|Laragon installation path|Auto-detected|"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    339,
+    256,
+    273
+   ],
+   [
+    "delete",
+    339,
+    341,
+    273,
+    273
+   ],
+   [
+    "equal",
+    341,
+    343,
+    273,
+    275
+   ],
+   [
+    "replace",
+    343,
+    344,
+    275,
+    276,
+    [
+     "Contributions welcome! See CONTRIBUTING.md."
+    ]
+   ],
+   [
+    "equal",
+    344,
+    346,
+    276,
+    278
+   ],
+   [
+    "replace",
+    346,
+    349,
+    278,
+    279,
+    [
+     "**For new features:** Consider contributing to Nucleus instead — that's where active development happens."
+    ]
+   ],
+   [
+    "equal",
+    349,
+    352,
+    279,
+    282
+   ],
+   [
+    "replace",
+    352,
+    353,
+    282,
+    283,
+    [
+     "MIT License — see LICENSE."
+    ]
+   ],
+   [
+    "equal",
+    353,
+    361,
+    283,
+    291
+   ],
+   [
+    "delete",
+    361,
+    363,
+    291,
+    291
+   ],
+   [
+    "equal",
+    363,
+    365,
+    291,
+    293
+   ],
+   [
+    "replace",
+    365,
+    371,
+    293,
+    297,
+    [
+     "- **Documentation**: This README + Knowledge Base",
+     "- **Issues**: GitHub Issues",
+     "- **Discussions**: GitHub Discussions",
+     "- **Linux version**: Nucleus"
+    ]
+   ],
+   [
+    "equal",
+    371,
+    374,
+    297,
+    300
+   ],
+   [
+    "replace",
+    374,
+    377,
+    300,
+    301,
+    [
+     "See CHANGELOG.md for detailed version history."
+    ]
+   ],
+   [
+    "equal",
+    377,
+    382,
+    301,
+    306
+   ],
+   [
+    "delete",
+    382,
+    384,
+    306,
+    306
+   ],
+   [
+    "equal",
+    384,
+    386,
+    306,
+    308
+   ],
+   [
+    "replace",
+    386,
+    390,
+    308,
+    310,
+    [
+     "Buy Me A Coffee",
+     "Donate via Paypal"
+    ]
+   ],
+   [
+    "equal",
+    390,
+    397,
+    310,
+    317
+   ],
+   [
+    "delete",
+    397,
+    399,
+    317,
+    317
+   ],
+   [
+    "equal",
+    399,
+    400,
+    317,
+    318
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "bc2110633846+2": {
+  "fn": "Dominaezzz/kotlin-sqlite",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    3,
+    [
+     "Download"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    3,
+    4
+   ],
+   [
+    "replace",
+    5,
+    7,
+    4,
+    6,
+    [
+     "Kotlin/Native bindings to the",
+     "sqlite C library."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    6,
+    9
+   ],
+   [
+    "replace",
+    10,
+    11,
+    9,
+    10,
+    [
+     "This library allows for 'kotlinified' use of SQLite and is based on the kotlinconf-spinner SQLite example."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    19,
+    10,
+    18
+   ],
+   [
+    "replace",
+    19,
+    64,
+    18,
+    19,
+    [
+     "…（45 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    74,
+    19,
+    29
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "b510683b8d65+2": {
+  "fn": "FrancoisCapon/LoginToASqlite3DatabaseWithoutCredentialsWithAdminer",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "This plugin for the Web application Adminer allows you to \"connect to a database server SQLite3\" without the need to provide credentials **(no username and no password)**."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    12,
+    3,
+    12
+   ],
+   [
+    "replace",
+    12,
+    15,
+    12,
+    15,
+    [
+     "5.4.2| 2.0 | 5.4.2--2.0",
+     "5.4.1| 2.0 | 5.4.1--2.0",
+     "5.3.0 | 2.0 | 5.3.0--2.0 | "
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    22,
+    16,
+    22,
+    [
+     "||||Adminer v4.x.x are in 4.x--1.x branch",
+     "4.17.1 | 1.1 | 4.17.1--1.1",
+     "4.8.1 | 1.1 | 4.8.1--1.1 | Bug with PHP 8.0 and the SQL command page: vrana/adminer/pull/429",
+     "4.7.8 | 1.1 | 4.7.8--1.1",
+     "4.7.7 | 1.1 | 4.7.7--1.1",
+     "4.7.6 | 1.0 | 4.7.6--1.0"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    26,
+    22,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "The plugin is used like any other Adminer plugins, that is to say that it requires the following files:"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    33,
+    27,
+    33
+   ],
+   [
+    "replace",
+    33,
+    34,
+    33,
+    34,
+    [
+     "### :arrow_forward: Use the latest compiled releases based on Adminer 5.4.2 :robot:"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    58,
+    34,
+    58
+   ],
+   [
+    "replace",
+    58,
+    109,
+    58,
+    59,
+    [
+     "…（51 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    117,
+    59,
+    67
+   ],
+   [
+    "replace",
+    117,
+    132,
+    67,
+    68,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    141,
+    68,
+    77
+   ],
+   [
+    "replace",
+    141,
+    142,
+    77,
+    78,
+    [
+     "adminer for sqlite3 witout credentials new database"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    145,
+    78,
+    81
+   ],
+   [
+    "replace",
+    145,
+    146,
+    81,
+    82,
+    [
+     "adminer for sqlite3 witout credentials existing database"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "ff175da64a78+2": {
+  "fn": "aliyun/alibabacloud-dms-mcp-server",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    1,
+    [
+     "English | 中文 "
+    ]
+   ],
+   [
+    "equal",
+    4,
+    8,
+    1,
+    5
+   ],
+   [
+    "delete",
+    8,
+    10,
+    5,
+    5
+   ],
+   [
+    "equal",
+    10,
+    21,
+    5,
+    16
+   ],
+   [
+    "replace",
+    21,
+    22,
+    16,
+    17,
+    [
+     "- **Personalized Knowledge Base**: Built-in metadata and knowledge base for data inquiry, supports custom business knowledge and query patterns to build tailored intelligent data inquiry capabilities aligned with business scenarios."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    28,
+    17,
+    23
+   ],
+   [
+    "delete",
+    28,
+    30,
+    23,
+    23
+   ],
+   [
+    "equal",
+    30,
+    33,
+    23,
+    26
+   ],
+   [
+    "delete",
+    33,
+    34,
+    26,
+    26
+   ],
+   [
+    "equal",
+    34,
+    36,
+    26,
+    28
+   ],
+   [
+    "replace",
+    36,
+    37,
+    28,
+    29,
+    [
+     "Architecture"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    29,
+    30
+   ],
+   [
+    "replace",
+    38,
+    44,
+    30,
+    31,
+    [
+     "## Usage Methods "
+    ]
+   ],
+   [
+    "equal",
+    44,
+    46,
+    31,
+    33
+   ],
+   [
+    "replace",
+    46,
+    51,
+    33,
+    38,
+    [
+     "### Mode One: Multi-instance Mode ",
+     "- Supports adding instances to DMS, allowing access to multiple database instances. ",
+     "- Suitable for scenarios where managing and accessing multiple database instances is required. ",
+     "#### Scenario Example: ",
+     "You are a company DBA who needs to manage and access various types of database instances (e.g., MySQL, Oracle, PostgreSQL) in production, test, and development environments. With DMS MCP Server, you can achieve unified access and centralized management of these heterogeneous databases. "
+    ]
+   ],
+   [
+    "equal",
+    51,
+    52,
+    38,
+    39
+   ],
+   [
+    "replace",
+    52,
+    53,
+    39,
+    40,
+    [
+     "**Typical Question Examples:** "
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    40,
+    41
+   ],
+   [
+    "replace",
+    54,
+    57,
+    41,
+    44,
+    [
+     "- Get a list of all databases named `test`. ",
+     "- Retrieve details of the `test_db` database from the `myHost:myPort` instance. ",
+     "- What tables are in the `test_db` database? "
+    ]
+   ],
+   [
+    "equal",
+    57,
+    59,
+    44,
+    46
+   ],
+   [
+    "replace",
+    59,
+    64,
+    46,
+    51,
+    [
+     "### Mode Two: Single Database Mode ",
+     "- Directly specify the target database by configuring the `CONNECTION_STRING` parameter in the server (format: `dbName@host:port`). ",
+     "- Suitable for scenarios that focus on accessing a single database. ",
+     "#### Scenario Example 1: ",
+     "You are a developer who frequently accesses a fixed database (e.g., `mydb@192.168.1.100:3306`) for development and testing. Set the `CONNECTION_STRING` parameter in the DMS MCP Server configuration as follows: "
+    ]
+   ],
+   [
+    "equal",
+    64,
+    69,
+    51,
+    56
+   ],
+   [
+    "replace",
+    69,
+    73,
+    56,
+    60,
+    [
+     "**Typical Question Examples:** ",
+     "- What tables do I have? ",
+     "- Show the field structure of the `test_table` table. ",
+     "- Retrieve the first 20 rows from the `test_table` table. "
+    ]
+   ],
+   [
+    "equal",
+    73,
+    90,
+    60,
+    77
+   ],
+   [
+    "replace",
+    90,
+    93,
+    77,
+    79,
+    [
+     "## Tool List ",
+     "|Tool Name|Description|Applicable Mode|"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    94,
+    79,
+    80
+   ],
+   [
+    "replace",
+    94,
+    111,
+    80,
+    97,
+    [
+     "|addInstance|Adds an instance to DMS. Only Aliyun instances are supported.|Multi-instance Mode|",
+     "|listInstances|Search for instances from DMS.|Multi-instance Mode|",
+     "|getInstance|Retrieves detailed information about an instance based on host and port.|Multi-instance Mode|",
+     "|searchDatabase|Searches databases based on schemaName.|Multi-instance Mode|",
+     "|getDatabase|Retrieves detailed information about a specific database.|Multi-instance Mode|",
+     "|listTables|Lists tables under a specified database.|Multi-instance Mode & Single Database Mode|",
+     "|getTableDetailInfo|Retrieves detailed information about a specific table.|Multi-instance Mode & Single Database Mode|",
+     "|executeScript|Executes an SQL script and returns the result.|Multi-instance Mode & Single Database Mode|",
+     "|createDataChangeOrder|Creates a data change order in DMS.|Multi-instance Mode & Single Database Mode|",
+     "|getOrderInfo|Retrieves order information from DMS.|Multi-instance Mode & Single Database Mode|",
+     "|submitOrderApproval|Submits the order for approval in DMS.|Multi-instance Mode & Single Database Mode|",
+     "|approveOrder|Approves or rejects an order in DMS.|Multi-instance Mode & Single Database Mode|",
+     "|generateSql|Converts natural language questions into SQL queries.|Multi-instance Mode|",
+     "|askDatabase|Natural language querying of a database (NL2SQL + execute SQL).|Single Database Mode|",
+     "|fixSql|Analyzes and fixes SQL errors.|Multi-instance Mode & Single Database Mode|",
+     "|answerSqlSyntax|Answers SQL syntax-related questions.|Multi-instance Mode & Single Database Mode|",
+     "|optimizeSql|Analyzes and optimizes SQL performance.|Multi-instance Mode & Single Database Mode|"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    112,
+    97,
+    98
+   ],
+   [
+    "replace",
+    112,
+    117,
+    98,
+    99,
+    [
+     " For a full list of tools, please refer to: Tool List "
+    ]
+   ],
+   [
+    "equal",
+    117,
+    119,
+    99,
+    101
+   ],
+   [
+    "replace",
+    119,
+    120,
+    101,
+    102,
+    [
+     "|DataSource/Tool|**NL2SQL** *nlsql*|**Execute script** *executeScript*|**Show schema** *getTableDetailInfo*|**Access control** *default*|**Audit log** *default*|"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    121,
+    102,
+    103
+   ],
+   [
+    "replace",
+    121,
+    142,
+    103,
+    124,
+    [
+     "|MySQL|✅|✅|✅|✅|✅|",
+     "|MariaDB|✅|✅|✅|✅|✅|",
+     "|PostgreSQL|✅|✅|✅|✅|✅|",
+     "|Oracle|✅|✅|✅|✅|✅|",
+     "|SQLServer|✅|✅|✅|✅|✅|",
+     "|Redis|❌|❌|✅|✅|✅|",
+     "|MongoDB|❌|❌|✅|✅|✅|",
+     "|StarRocks|✅|✅|✅|✅|✅|",
+     "|Clickhouse|✅|✅|✅|✅|✅|",
+     "|SelectDB|✅|✅|✅|✅|✅|",
+     "|DB2|✅|✅|✅|✅|✅|",
+     "|OceanBase|✅|✅|✅|✅|✅|",
+     "|Gauss|✅|✅|✅|✅|✅|",
+     "|BigQuery|✅|✅|✅|✅|✅|",
+     "|PolarDB|✅|✅|✅|✅|✅|",
+     "|PolarDB-X|✅|✅|✅|✅|✅|",
+     "|AnalyticDB|✅|✅|✅|✅|✅|",
+     "|Lindorm|✅|✅|✅|✅|✅|",
+     "|TableStore|❌|❌|✅|✅|✅|",
+     "|Maxcompute|✅|✅|✅|✅|✅|",
+     "|Hologres|✅|✅|✅|✅|✅|"
+    ]
+   ],
+   [
+    "equal",
+    142,
+    143,
+    124,
+    125
+   ],
+   [
+    "replace",
+    143,
+    148,
+    125,
+    129,
+    [
+     "## Prerequisites ",
+     "- uv is installed ",
+     "- Python 3.10+ is installed ",
+     "- An AK/SK or STS Token with access rights to Alibaba Cloud DMS(AliyunDMSFullAccess).Add permission operations, see Authorization Management."
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    129,
+    130
+   ],
+   [
+    "replace",
+    149,
+    152,
+    130,
+    132,
+    [
+     "## Pre-configuration ",
+     "Before accessing a database instance via DMS, you must first add the instance to DMS. "
+    ]
+   ],
+   [
+    "equal",
+    152,
+    155,
+    132,
+    135
+   ],
+   [
+    "replace",
+    155,
+    158,
+    135,
+    138,
+    [
+     "**Method One: Use the `addInstance` tool provided by DMS MCP to add an instance** ",
+     "The DMS MCP Server provides the `addInstance` tool for quickly adding an instance to DMS. ",
+     "For more details, see the description of the `addInstance` tool in the \"Tool List.\" "
+    ]
+   ],
+   [
+    "equal",
+    158,
+    159,
+    138,
+    139
+   ],
+   [
+    "replace",
+    159,
+    167,
+    139,
+    144,
+    [
+     "**Method Two: Add an instance via the DMS console** ",
+     "1. Log in to the DMS Console. ",
+     "2. On the home page of the console, click the **Add Instance** icon in the database instance area on the left. ",
+     "3. On the Add Instance page, enter the instance information (e.g., instance address, port, username, password). ",
+     "4. Click **Submit** to complete the instance addition. "
+    ]
+   ],
+   [
+    "equal",
+    167,
+    183,
+    144,
+    160
+   ],
+   [
+    "replace",
+    183,
+    198,
+    160,
+    161,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    205,
+    161,
+    168
+   ],
+   [
+    "replace",
+    205,
+    221,
+    168,
+    169,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    221,
+    228,
+    169,
+    176
+   ],
+   [
+    "replace",
+    228,
+    240,
+    176,
+    177,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    240,
+    246,
+    177,
+    183
+   ],
+   [
+    "replace",
+    246,
+    259,
+    183,
+    184,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    261,
+    184,
+    186
+   ],
+   [
+    "delete",
+    261,
+    263,
+    186,
+    186
+   ],
+   [
+    "equal",
+    263,
+    264,
+    186,
+    187
+   ],
+   [
+    "replace",
+    264,
+    272,
+    187,
+    188,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    285,
+    188,
+    201
+   ],
+   [
+    "replace",
+    285,
+    286,
+    201,
+    202,
+    [
+     "2. **It is strongly recommended** to enable DMS Safe Hosting Mode for your database instances, which provides built-in SQL review, risk identification, and approval workflows."
+    ]
+   ],
+   [
+    "equal",
+    286,
+    288,
+    202,
+    204
+   ],
+   [
+    "replace",
+    288,
+    292,
+    204,
+    208,
+    [
+     " - Use read-only AK/SK for query-only scenarios",
+     " - Enable DMS fine-grained permission control",
+     " - Enable SQL audit logging for compliance",
+     " - Regularly review and rotate access credentials"
+    ]
+   ],
+   [
+    "equal",
+    292,
+    299,
+    208,
+    215
+   ],
+   [
+    "delete",
+    299,
+    301,
+    215,
+    215
+   ],
+   [
+    "equal",
+    301,
+    303,
+    215,
+    217
+   ],
+   [
+    "delete",
+    303,
+    306,
+    217,
+    217
+   ],
+   [
+    "equal",
+    306,
+    312,
+    217,
+    223
+   ],
+   [
+    "replace",
+    312,
+    314,
+    223,
+    225,
+    [
+     "1. Read the skill definition: ",
+     " `skills/database/dms/alicloud-database-dms-enterprise/SKILL.md`"
+    ]
+   ],
+   [
+    "equal",
+    314,
+    329,
+    225,
+    240
+   ],
+   [
+    "replace",
+    329,
+    330,
+    240,
+    241,
+    [
+     "|Category|Operations|"
+    ]
+   ],
+   [
+    "equal",
+    330,
+    331,
+    241,
+    242
+   ],
+   [
+    "replace",
+    331,
+    337,
+    242,
+    248,
+    [
+     "|Instance Management|Register, list, update, delete database instances|",
+     "|SQL Execution & Audit|Execute scripts, NL2SQL, SQL review & optimization|",
+     "|Permission Management|Create permission orders, grant/revoke user permissions|",
+     "|Data Security|Sensitive column identification, data masking, audit logs|",
+     "|Task Orchestration|Create, execute, monitor task flows (DAG)|",
+     "|Metadata Knowledge|Get/edit table business knowledge|"
+    ]
+   ],
+   [
+    "equal",
+    337,
+    340,
+    248,
+    251
+   ],
+   [
+    "replace",
+    340,
+    341,
+    251,
+    252,
+    [
+     "See `skills/examples/prompts/` for DMS scenario-based prompt templates:"
+    ]
+   ],
+   [
+    "equal",
+    341,
+    349,
+    252,
+    260
+   ],
+   [
+    "replace",
+    349,
+    354,
+    260,
+    263,
+    [
+     "|Category|Skill|Description|Path|",
+     "|---|---|---|---|",
+     "|database/dms|alicloud-database-dms-enterprise|Manage Alibaba Cloud Data Management Service (DMS Enterprise) via OpenAPI. Use for database instance management, SQL audit, data security, task orchestration, sensitive data protection, permission management, and database operation workflows.|`skills/database/dms/alicloud-database-dms-enterprise`|"
+    ]
+   ],
+   [
+    "equal",
+    354,
+    355,
+    263,
+    264
+   ],
+   [
+    "replace",
+    355,
+    356,
+    264,
+    265,
+    [
+     "For agent-specific guidelines, see `AGENTS.md`."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "8685ea37d92d+2": {
+  "fn": "casdoor/casbin-oa",
+  "clean_ver": "2",
+  "raw_lines": 17,
+  "ops": [
+   [
+    "equal",
+    0,
+    17,
+    0,
+    17
+   ],
+   [
+    "delete",
+    17,
+    18,
+    17,
+    17
+   ],
+   [
+    "equal",
+    18,
+    31,
+    17,
+    30
+   ],
+   [
+    "replace",
+    31,
+    32,
+    30,
+    31,
+    [
+     " or"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    39,
+    31,
+    38
+   ],
+   [
+    "replace",
+    39,
+    41,
+    38,
+    40,
+    [
+     " Casbin-oa will store its student, report and topics informations in a MySQL database named: `casbin_oa`, will create",
+     " it if not existed. The DB connection string can be specified at: https://github.com/casbin/casbin-oa/tree/master/conf"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    46,
+    40,
+    45
+   ],
+   [
+    "replace",
+    46,
+    47,
+    45,
+    46,
+    [
+     " Casbin-oa uses XORM to connect to DB, so all DBs supported by XORM can also be used."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    60,
+    46,
+    59
+   ],
+   [
+    "replace",
+    60,
+    64,
+    59,
+    60,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    68,
+    60,
+    64
+   ],
+   [
+    "replace",
+    68,
+    69,
+    64,
+    65,
+    [
+     " http://localhost:9000/"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    75,
+    65,
+    71
+   ],
+   [
+    "replace",
+    75,
+    76,
+    71,
+    72,
+    [
+     "see casdoor oauth configuration."
+    ]
+   ],
+   [
+    "equal",
+    76,
+    93,
+    72,
+    89
+   ],
+   [
+    "delete",
+    93,
+    94,
+    89,
+    89
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

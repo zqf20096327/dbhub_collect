@@ -9656,5 +9656,5760 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "aa4c38aa573e+2": {
+  "fn": "AppachiTech/suvadu",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "replace",
+    0,
+    10,
+    0,
+    1,
+    [
+     "Suvadu"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    1,
+    2
+   ],
+   [
+    "replace",
+    11,
+    14,
+    2,
+    10,
+    [
+     " Total recall for your terminal. Shared memory for your AI agents. ",
+     "",
+     " CI",
+     " crates.io",
+     " License: MIT",
+     " Latest Release",
+     "",
+     " Suvadu 0.5.0 — Ctrl+R search with fictional command history"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    17,
+    10,
+    13
+   ],
+   [
+    "replace",
+    17,
+    19,
+    13,
+    15,
+    [
+     "- **Measured, not asserted** — at 100,000 entries on one M4 Max: **207 µs** p95 to record a command, **0.05–15 ms** p95 for a judged search over the whole history. One machine, one run — the harness, the corpus and what is still unmeasured are in BENCHMARKS.md",
+     "- **AI agent tracking** — full session capture for Claude Code, Codex, OpenCode and Cursor (Cursor without token usage); commands and prompts for pi.dev; commands for Antigravity's agent; command tagging alone for Windsurf, Aider, Continue and Copilot (what each tier means)"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    23,
+    15,
+    19
+   ],
+   [
+    "replace",
+    23,
+    26,
+    19,
+    20,
+    [
+     "> **Website & Docs:** suvadu.sh &middot; **CLI Reference:** suvadu.sh/cli &middot; **Blog:** suvadu.sh/blog &middot; **What's new:** CHANGELOG"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    33,
+    20,
+    27
+   ],
+   [
+    "replace",
+    33,
+    41,
+    27,
+    28,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    95,
+    28,
+    82
+   ],
+   [
+    "replace",
+    95,
+    98,
+    82,
+    85,
+    [
+     " `suv settings`, or `[shell] enable_arrow_navigation = false` in",
+     " `config.toml`. It takes effect in new shells (or `exec zsh`), which keep",
+     " zsh's own Up/Down and leave `Alt+A` alone."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    85,
+    86
+   ],
+   [
+    "replace",
+    99,
+    100,
+    86,
+    87,
+    [
+     " keep Bash's own history."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    101,
+    87,
+    88
+   ],
+   [
+    "replace",
+    101,
+    102,
+    88,
+    89,
+    [
+     " `bindkey '^[OA'` (the sequence many terminals send) `\"^[OA\" suvadu-up-arrow`."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    89,
+    90
+   ],
+   [
+    "replace",
+    103,
+    110,
+    90,
+    97,
+    [
+     " `eval \"$(suv init zsh)\"` rebound it — oh-my-zsh's key bindings,",
+     " zsh-history-substring-search, zsh-vi-mode, fzf's key bindings, atuin and",
+     " mcfly all bind Up. Put the `eval \"$(suv init zsh)\"` line last in",
+     " `~/.zshrc`, after your plugin manager and plugins, then `exec zsh`; a",
+     " plain setting such as `ZSH_AUTOSUGGEST_STRATEGY` can still follow it.",
+     " zsh-vi-mode binds its keys at the first prompt instead, so also set",
+     " `ZVM_INIT_MODE=sourcing` before it loads."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    97,
+    98
+   ],
+   [
+    "replace",
+    111,
+    116,
+    98,
+    103,
+    [
+     " of `~/.zshrc` has run — the hook checks whether Up is still Suvadu's and",
+     " notes what took it over; doctor's *Up-arrow* line names that widget and the",
+     " fix, and the note is removed when a later zsh finds Up is Suvadu's again. The",
+     " check prints nothing, costs about 0.8 ms per shell start (BENCHMARKS.md),",
+     " and is skipped when arrow navigation is off."
+    ]
+   ],
+   [
+    "equal",
+    116,
+    118,
+    103,
+    105
+   ],
+   [
+    "replace",
+    118,
+    120,
+    105,
+    107,
+    [
+     "zsh-autosuggestions that",
+     "suggests what Up-arrow would recall — the newest command"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    132,
+    107,
+    119
+   ],
+   [
+    "delete",
+    132,
+    134,
+    119,
+    119
+   ],
+   [
+    "equal",
+    134,
+    144,
+    119,
+    129
+   ],
+   [
+    "replace",
+    144,
+    145,
+    129,
+    130,
+    [
+     "**Up-arrow shows zsh's own history, not Suvadu's** — Check: `bindkey '^[A'` or `bindkey '^[OA'` prints a widget other than `suvadu-up-arrow` (such as `up-line-or-beginning-search` or `history-substring-search-up`), and `suv doctor`'s *Up-arrow* line says what took it over. Cause: a plugin loaded after the hook rebound the key, arrow navigation is off (*Enable Arrow Key Navigation* in `suv settings`), or the shell is Bash, whose Up keeps Bash's own history. Repair: move `eval \"$(suv init zsh)\"` to the end of `~/.zshrc` and run `exec zsh`, or turn the setting back on. See [Up-arrow recall."
+    ]
+   ],
+   [
+    "equal",
+    145,
+    146,
+    130,
+    131
+   ],
+   [
+    "replace",
+    146,
+    149,
+    131,
+    132,
+    [
+     "More at suvadu.sh/cli/shell-integration."
+    ]
+   ],
+   [
+    "equal",
+    149,
+    156,
+    132,
+    139
+   ],
+   [
+    "replace",
+    156,
+    169,
+    139,
+    140,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    180,
+    140,
+    151
+   ],
+   [
+    "replace",
+    180,
+    186,
+    151,
+    152,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    200,
+    152,
+    166
+   ],
+   [
+    "replace",
+    200,
+    203,
+    166,
+    169,
+    [
+     " looking up from where you are but never above the git repository's root.",
+     " Repo skills sync from that directory, into its `.claude/skills/`,",
+     " `.cursor/rules/` and `AGENTS.md`, exactly where a project skill would go."
+    ]
+   ],
+   [
+    "equal",
+    203,
+    204,
+    169,
+    170
+   ],
+   [
+    "replace",
+    204,
+    208,
+    170,
+    174,
+    [
+     " --repo PATH` for another checkout). When the file changes — after a pull,",
+     " say — it is *changed since trusted*: the next sync stops writing it and",
+     " removes the copy it wrote, until you trust it again. `suv skills untrust`",
+     " takes trust back, and the next sync removes the copies."
+    ]
+   ],
+   [
+    "equal",
+    208,
+    209,
+    174,
+    175
+   ],
+   [
+    "replace",
+    209,
+    211,
+    175,
+    177,
+    [
+     " `suv skills` they are read-only and show their path; `edit`, `rm` and",
+     " `disable` refuse them and say which file to change."
+    ]
+   ],
+   [
+    "equal",
+    211,
+    212,
+    177,
+    178
+   ],
+   [
+    "replace",
+    212,
+    214,
+    178,
+    180,
+    [
+     " same project with the same name (and shadows a global one there), and the",
+     " sync says so. An untrusted one changes nothing."
+    ]
+   ],
+   [
+    "equal",
+    214,
+    215,
+    180,
+    181
+   ],
+   [
+    "replace",
+    215,
+    216,
+    181,
+    182,
+    [
+     " copies Suvadu wrote and nobody edited since."
+    ]
+   ],
+   [
+    "equal",
+    216,
+    217,
+    182,
+    183
+   ],
+   [
+    "replace",
+    217,
+    221,
+    183,
+    187,
+    [
+     " repo skills of the project the agent names (`scope`) or the server runs",
+     " in, with `source repo`, the file path and the trust state. An untrusted",
+     " or changed one is listed by name and path only: its description and body",
+     " are not served until you trust it."
+    ]
+   ],
+   [
+    "equal",
+    221,
+    222,
+    187,
+    188
+   ],
+   [
+    "replace",
+    222,
+    224,
+    188,
+    190,
+    [
+     " letters, digits, `-` and `_`, it is a symlink, it is over 256 KB or not",
+     " UTF-8, it has no body, or its `targets` names an unknown agent."
+    ]
+   ],
+   [
+    "equal",
+    224,
+    236,
+    190,
+    202
+   ],
+   [
+    "replace",
+    236,
+    238,
+    202,
+    204,
+    [
+     " (everything after the first `:`, verbatim). Names start with a letter or",
+     " `_` and continue with letters, digits, `_` or `-`; `{{ name }}` is fine."
+    ]
+   ],
+   [
+    "equal",
+    238,
+    240,
+    204,
+    206
+   ],
+   [
+    "replace",
+    240,
+    242,
+    206,
+    208,
+    [
+     " placeholder — `{{.State.Status}}` in a `docker inspect -f`, a `{{` with",
+     " no `}}` — is left exactly as typed."
+    ]
+   ],
+   [
+    "equal",
+    242,
+    243,
+    208,
+    209
+   ],
+   [
+    "replace",
+    243,
+    244,
+    209,
+    210,
+    [
+     " value with spaces or `$` the way the shell needs."
+    ]
+   ],
+   [
+    "equal",
+    244,
+    245,
+    210,
+    211
+   ],
+   [
+    "replace",
+    245,
+    248,
+    211,
+    214,
+    [
+     " the last puts the filled command on your prompt (it is never run), and",
+     " `Esc` goes back to the list. `suv bookmarks get` fails with the names of",
+     " any placeholders left without a value or default."
+    ]
+   ],
+   [
+    "equal",
+    248,
+    250,
+    214,
+    216
+   ],
+   [
+    "replace",
+    250,
+    254,
+    216,
+    218,
+    [
+     " placeholders and defaults (read-only), so an agent can fill one with",
+     " `suv bookmarks get … --set …` rather than retyping it."
+    ]
+   ],
+   [
+    "equal",
+    254,
+    268,
+    218,
+    232
+   ],
+   [
+    "replace",
+    268,
+    269,
+    232,
+    233,
+    [
+     " they would from the shell; Esc brings you back to the same place."
+    ]
+   ],
+   [
+    "equal",
+    269,
+    270,
+    233,
+    234
+   ],
+   [
+    "replace",
+    270,
+    272,
+    234,
+    236,
+    [
+     " *Copy command* button. It has not been run — `Ctrl+R` from your shell is",
+     " still the way to put a command on your prompt."
+    ]
+   ],
+   [
+    "equal",
+    272,
+    273,
+    236,
+    237
+   ],
+   [
+    "replace",
+    273,
+    274,
+    237,
+    238,
+    [
+     " are shown inside Home."
+    ]
+   ],
+   [
+    "equal",
+    274,
+    275,
+    238,
+    239
+   ],
+   [
+    "replace",
+    275,
+    276,
+    239,
+    240,
+    [
+     " pausing, shell setup — opens **instructions** with copyable examples."
+    ]
+   ],
+   [
+    "equal",
+    276,
+    295,
+    240,
+    259
+   ],
+   [
+    "delete",
+    295,
+    297,
+    259,
+    259
+   ],
+   [
+    "equal",
+    297,
+    305,
+    259,
+    267
+   ],
+   [
+    "replace",
+    305,
+    306,
+    267,
+    268,
+    [
+     "|Mode|Rule|"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    307,
+    268,
+    269
+   ],
+   [
+    "replace",
+    307,
+    311,
+    269,
+    273,
+    [
+     "|`terms` (default)|every whitespace-separated word must appear as a substring, in any order — and if nothing does, the same words with separators ignored (below)|",
+     "|`literal`|the whole query must appear exactly as typed, spaces and punctuation included|",
+     "|`prefix`|the command must start with the query|",
+     "|`fuzzy`|the query's letters must appear in order, gaps allowed (`gco` finds `git checkout`)|"
+    ]
+   ],
+   [
+    "equal",
+    311,
+    340,
+    273,
+    302
+   ],
+   [
+    "replace",
+    340,
+    341,
+    302,
+    303,
+    [
+     "|Scope|Looks at|"
+    ]
+   ],
+   [
+    "equal",
+    341,
+    342,
+    303,
+    304
+   ],
+   [
+    "replace",
+    342,
+    346,
+    304,
+    308,
+    [
+     "|`all` (default)|everything recorded|",
+     "|`directory`|commands run in **exactly** the current directory — not its subdirectories. `--here` is the same thing|",
+     "|`workspace`|commands run anywhere under the nearest enclosing Git repository. A linked worktree is its own workspace, and a nested repository wins over its parent|",
+     "|`session`|commands from the current shell session|"
+    ]
+   ],
+   [
+    "equal",
+    346,
+    359,
+    308,
+    321
+   ],
+   [
+    "replace",
+    359,
+    360,
+    321,
+    322,
+    [
+     " (`search.cwd_boost_percent`);"
+    ]
+   ],
+   [
+    "equal",
+    360,
+    361,
+    322,
+    323
+   ],
+   [
+    "replace",
+    361,
+    366,
+    323,
+    328,
+    [
+     " command. Each run counts 16 in its first hour, 8 that day, 4 for three",
+     " days, 1 for a week, 0.5 for a month and 0.25 after that; the boost is the",
+     " fourth root of one plus the sum, so twenty runs a day or two ago (×3.0)",
+     " beat one run five minutes ago (×2.0) without burying it. It is the same",
+     " definition the MCP `suggest_next` tool ranks by;"
+    ]
+   ],
+   [
+    "equal",
+    366,
+    367,
+    328,
+    329
+   ],
+   [
+    "replace",
+    367,
+    370,
+    329,
+    332,
+    [
+     " three runs with a known exit status — is scaled down, to a quarter when it",
+     " has never succeeded. One failure among many successes changes nothing, and",
+     " a run stopped with Ctrl+C (exit 130) is not a failure;"
+    ]
+   ],
+   [
+    "equal",
+    370,
+    371,
+    332,
+    333
+   ],
+   [
+    "replace",
+    371,
+    379,
+    333,
+    341,
+    [
+     " in this shell. Recall looks at the newest 500 runs of that command in",
+     " your history and, for each, at the next command recorded in the",
+     " same session within 10 minutes. A command seen there at least twice is",
+     " boosted by up to ×3, in proportion to how often it was the one that came",
+     " next — so after `git add -A`, `git commit` comes before the `git status`",
+     " you run far more often. It needs the shell session (`$SUVADU_SESSION_ID`,",
+     " set by the shell hook), and `search.sequence_boost = false` (*Sequence",
+     " Boost* in `suv settings`) turns off this boost alone."
+    ]
+   ],
+   [
+    "equal",
+    379,
+    431,
+    341,
+    393
+   ],
+   [
+    "replace",
+    431,
+    432,
+    393,
+    394,
+    [
+     "Up-arrow recall."
+    ]
+   ],
+   [
+    "equal",
+    432,
+    440,
+    394,
+    402
+   ],
+   [
+    "replace",
+    440,
+    441,
+    402,
+    403,
+    [
+     "under Data Storage. Saving from `suv settings`"
+    ]
+   ],
+   [
+    "equal",
+    441,
+    443,
+    403,
+    405
+   ],
+   [
+    "delete",
+    443,
+    445,
+    405,
+    405
+   ],
+   [
+    "equal",
+    445,
+    463,
+    405,
+    423
+   ],
+   [
+    "replace",
+    463,
+    464,
+    423,
+    424,
+    [
+     "|Field|Imported|"
+    ]
+   ],
+   [
+    "equal",
+    464,
+    465,
+    424,
+    425
+   ],
+   [
+    "replace",
+    465,
+    469,
+    425,
+    429,
+    [
+     "|Command text|Yes — redaction and your exclusion patterns apply, exactly as for live recording|",
+     "|Timestamp|Only if `HISTTIMEFORMAT` was set when the command ran (`#<epoch>` lines). Otherwise an explicitly synthetic 1970-01-01 placeholder — never an invented time|",
+     "|Multi-line commands|Reconstructed in timestamped files (the `#<epoch>` line is the record boundary). A plain file has no boundaries, so each line is imported as its own command|",
+     "|Directory, exit code, duration, executor|Not in the file — stored as unknown, never guessed, and never recorded as a successful exit|"
+    ]
+   ],
+   [
+    "equal",
+    469,
+    487,
+    429,
+    447
+   ],
+   [
+    "replace",
+    487,
+    488,
+    447,
+    448,
+    [
+     "binary wrote, with `scripts/test-atuin-import.sh`. A database carrying a migration this release has not been"
+    ]
+   ],
+   [
+    "equal",
+    488,
+    491,
+    448,
+    451
+   ],
+   [
+    "replace",
+    491,
+    492,
+    451,
+    452,
+    [
+     "|Atuin field|Imported as|"
+    ]
+   ],
+   [
+    "equal",
+    492,
+    493,
+    452,
+    453
+   ],
+   [
+    "replace",
+    493,
+    506,
+    453,
+    464,
+    [
+     "|`command`|Command text, verbatim (multi-line and Unicode preserved). Redaction and your exclusion patterns apply, exactly as for live recording — resolved from the directory Atuin recorded the row in, so a project `.suvadu.toml` governs imported history too|",
+     "|`timestamp` (nanoseconds)|`started_at`, truncated to milliseconds, and nothing else. Two runs inside one millisecond keep the same `started_at` and stay separate entries: a row is identified by its Atuin `id`, never by its time|",
+     "|`duration` (nanoseconds)|`duration_ms` / `ended_at`, truncated to milliseconds. Atuin's `-1` (\"never finished\") is stored as unknown, not as zero work|",
+     "|`exit`|`exit_code`. Atuin's `-1` becomes `NULL` — never a fabricated success|",
+     "|`cwd`|Directory. Empty or Atuin's literal `\"unknown\"` becomes unknown|",
+     "|`session`|A Suvadu session per Atuin session, id `atuin-<session>`|",
+     "|`hostname` (`host:user`)|Session hostname, plus `atuin_user` in the entry's context|",
+     "|`author`, `author_kind`|`executor` and `executor_type` (`1`→human, `2`→agent). An unstated kind stays `unknown`: Atuin guesses \"agent\" from known author names, Suvadu records only what was stated|",
+     "|`id`, `intent`, `shell`|Kept in the entry's `context` (`atuin_id`, `atuin_intent`, `atuin_shell`) — Suvadu has no columns for them. `atuin_id` is also what makes a re-import a no-op. The free-text ones go through the same redaction and exclusions as the command; a field an exclusion matched is withheld and named in `context.withheld_fields`|",
+     "|`deleted_at`|Rows you deleted in Atuin are skipped and counted, never resurrected|",
+     "|—|Sub-millisecond precision is lost (the rows are kept; only their ordering inside a millisecond is). Atuin has no tags, notes or command output to carry over, and Suvadu keeps no Atuin sync/record-store state|"
+    ]
+   ],
+   [
+    "equal",
+    506,
+    524,
+    464,
+    482
+   ],
+   [
+    "replace",
+    524,
+    525,
+    482,
+    483,
+    [
+     "|Agent|`suv init`|Commands|Prompts|Native session timeline|Tested against|"
+    ]
+   ],
+   [
+    "equal",
+    525,
+    526,
+    483,
+    484
+   ],
+   [
+    "replace",
+    526,
+    533,
+    484,
+    491,
+    [
+     "|Claude Code|`claude-code`|yes (hooks)|yes|**yes**|not pinned to a version — see the caveat below|",
+     "|Codex|`codex`|yes (hooks)|yes|**yes**|CLI 0.153.4|",
+     "|OpenCode|`opencode`|yes (plugin)|yes|**yes**|CLI 1.18.30|",
+     "|Cursor|`cursor`|yes (hooks)|yes|**yes** — prompts, final responses and turn ends; no token usage|not pinned|",
+     "|pi.dev|`pi`|yes (extension)|yes (capped at 500 characters by the extension)|no|not pinned|",
+     "|Antigravity|`antigravity`|yes (`~/.zshenv` capture script)|no|no|Antigravity IDE 2.5.5 with zsh 5.9|",
+     "|Windsurf, Aider, Continue, Copilot|—|via the shell hook|no|no|—|"
+    ]
+   ],
+   [
+    "equal",
+    533,
+    566,
+    491,
+    524
+   ],
+   [
+    "replace",
+    566,
+    567,
+    524,
+    525,
+    [
+     "|Path|Output kept|"
+    ]
+   ],
+   [
+    "equal",
+    567,
+    568,
+    525,
+    526
+   ],
+   [
+    "replace",
+    568,
+    574,
+    526,
+    532,
+    [
+     "|Claude Code|the `PostToolUseFailure` error text, without its `Exit code N` line|",
+     "|Cursor|`afterShellExecution`'s `output`|",
+     "|Codex|the `PostToolUse` response's `output`, `aggregated_output` or `stdout`/`stderr` text, when it also carries an exit code|",
+     "|OpenCode|the bash tool's output, sent by the plugin (rerun `suv init opencode`)|",
+     "|`suv wrap -- cmd`|the command's stderr, passed through to your terminal unchanged as it runs|",
+     "|zsh and Bash hooks|**nothing** — capturing a terminal's output means standing between the program and the terminal, which breaks interactive programs|"
+    ]
+   ],
+   [
+    "equal",
+    574,
+    604,
+    532,
+    562
+   ],
+   [
+    "replace",
+    604,
+    607,
+    562,
+    565,
+    [
+     " program with the same first non-flag argument (`cargo build` →",
+     " `cargo build --release`), or a small edit of the line (`gti status` →",
+     " `git status`, at most one change per eight characters);"
+    ]
+   ],
+   [
+    "equal",
+    607,
+    608,
+    565,
+    566
+   ],
+   [
+    "replace",
+    608,
+    612,
+    566,
+    570,
+    [
+     " that passed before it — the same program (`npm install` before",
+     " `npm test`) or a package install — is the fix (`you fixed it with: npm",
+     " install, then reran it`); with no setup step it *passed when you reran it",
+     " unchanged*;"
+    ]
+   ],
+   [
+    "equal",
+    612,
+    613,
+    570,
+    571
+   ],
+   [
+    "replace",
+    613,
+    615,
+    571,
+    573,
+    [
+     " `show`, an editor) is skipped, and any other successful command ends the",
+     " search without a fix."
+    ]
+   ],
+   [
+    "equal",
+    615,
+    633,
+    573,
+    591
+   ],
+   [
+    "replace",
+    633,
+    641,
+    591,
+    599,
+    [
+     " `git --no-optional-locks status --porcelain=v2 --branch -z` with",
+     " `core.fsmonitor` off, so it never takes the index lock from under the agent",
+     " and a repository's own config cannot make it run a program. It gets 2",
+     " seconds; if it is slower, missing from `PATH` or the directory is not in a",
+     " repository, nothing is recorded and the agent's hook carries on. Outside a",
+     " repository no `git` process starts. In a 10,000-file repository a snapshot",
+     " adds about 30–35 ms to the hook that takes it, nearly all of it `git status`",
+     " (Apple M4 Max; see BENCHMARKS.md); later prompts add under 1 ms."
+    ]
+   ],
+   [
+    "equal",
+    641,
+    642,
+    599,
+    600
+   ],
+   [
+    "replace",
+    642,
+    644,
+    600,
+    602,
+    [
+     " the branch name are redacted like command text, and at most 500 paths are",
+     " kept — a snapshot says when more changed."
+    ]
+   ],
+   [
+    "equal",
+    644,
+    645,
+    602,
+    603
+   ],
+   [
+    "replace",
+    645,
+    647,
+    603,
+    605,
+    [
+     " `[agent] record_git_snapshots = false`; a project's `.suvadu.toml` can turn",
+     " it off but not back on. Paused capture records none."
+    ]
+   ],
+   [
+    "equal",
+    647,
+    648,
+    605,
+    606
+   ],
+   [
+    "replace",
+    648,
+    650,
+    606,
+    608,
+    [
+     " removes those a day old whose session left no other record. They are not",
+     " exported, like the agent sessions they belong to."
+    ]
+   ],
+   [
+    "equal",
+    650,
+    677,
+    608,
+    635
+   ],
+   [
+    "replace",
+    677,
+    681,
+    635,
+    639,
+    [
+     " how it exited, how long it took and where — never what it printed or what",
+     " it changed — except the opt-in failure output above, the end of what a",
+     " failed agent or `suv wrap` command printed. Agent git snapshots name the",
+     " paths that changed, never their contents."
+    ]
+   ],
+   [
+    "equal",
+    681,
+    682,
+    639,
+    640
+   ],
+   [
+    "replace",
+    682,
+    684,
+    640,
+    642,
+    [
+     " contents and raw tool results. Codex commentary and reasoning, injected",
+     " AGENTS/environment context and developer instructions are excluded too."
+    ]
+   ],
+   [
+    "equal",
+    684,
+    685,
+    642,
+    643
+   ],
+   [
+    "replace",
+    685,
+    686,
+    643,
+    644,
+    [
+     " session — stated on every session header as `capture.unverifiable`."
+    ]
+   ],
+   [
+    "equal",
+    686,
+    687,
+    644,
+    645
+   ],
+   [
+    "replace",
+    687,
+    693,
+    645,
+    651,
+    [
+     " Suvadu records, so a large tool output never costs the command; past",
+     " 16 MiB the command is still recorded when it arrived before the cut, and",
+     " the hook fails with a named error otherwise. A single native transcript",
+     " record is capped at 16 MiB; an oversize record is rejected with a named",
+     " error rather than silently truncated. Prompt text is capped at",
+     " `agent.prompt_capture_max_chars` (default 4000)."
+    ]
+   ],
+   [
+    "equal",
+    693,
+    694,
+    651,
+    652
+   ],
+   [
+    "replace",
+    694,
+    699,
+    652,
+    657,
+    [
+     " Claude Code hook timestamps are *receipt* time, not execution time (Codex",
+     " records `timing_source = hook_received`). Codex leaves the exit code",
+     " unknown when it does not supply a structured one; Claude Code and Cursor",
+     " infer 0 from a success hook; pi.dev's bash tool does not expose one, so its",
+     " extension guesses."
+    ]
+   ],
+   [
+    "equal",
+    699,
+    727,
+    657,
+    685
+   ],
+   [
+    "replace",
+    727,
+    733,
+    685,
+    691,
+    [
+     " commands**. It groups them by the prompt that was live when they ran and",
+     " reports that turn's command count, successes, failures and total time. A",
+     " prompt that produced no recorded command never appears — there is nothing",
+     " to group. It works for every agent whose prompt is captured, including",
+     " pi.dev, which has no session timeline, and it browses across",
+     " sessions with a time window and an executor filter."
+    ]
+   ],
+   [
+    "equal",
+    733,
+    734,
+    691,
+    692
+   ],
+   [
+    "replace",
+    734,
+    740,
+    692,
+    698,
+    [
+     " non-interactive view) are built from the agent's **own transcript**,",
+     " imported incrementally. They show prompts, assistant responses,",
+     " interrupted turns, every observed model and provider-reported token",
+     " totals — including sessions with no commands at all — plus capture",
+     " completeness, saved summaries (`s`) and the handoff scaffold (`h`). Only",
+     " Claude Code, Codex, OpenCode and Cursor have one."
+    ]
+   ],
+   [
+    "equal",
+    740,
+    747,
+    698,
+    705
+   ],
+   [
+    "replace",
+    747,
+    748,
+    705,
+    706,
+    [
+     "|Write tool|Opt-in|What it can do|"
+    ]
+   ],
+   [
+    "equal",
+    748,
+    749,
+    706,
+    707
+   ],
+   [
+    "replace",
+    749,
+    751,
+    707,
+    709,
+    [
+     "|`save_session_summary`|`mcp.allow_session_summaries`|store a summary the calling agent generated, when you ask it to|",
+     "|`propose_skill`|`mcp.allow_skill_proposals`|propose a skill, always as **pending review**, never active until you approve it in `suv skills` (`Ctrl+P`)|"
+    ]
+   ],
+   [
+    "equal",
+    751,
+    792,
+    709,
+    750
+   ],
+   [
+    "replace",
+    792,
+    793,
+    750,
+    751,
+    [
+     "See the full integration guide and MCP server docs."
+    ]
+   ],
+   [
+    "equal",
+    793,
+    798,
+    751,
+    756
+   ],
+   [
+    "delete",
+    798,
+    800,
+    756,
+    756
+   ],
+   [
+    "equal",
+    800,
+    802,
+    756,
+    758
+   ],
+   [
+    "replace",
+    802,
+    803,
+    758,
+    759,
+    [
+     "|Feature|Details|"
+    ]
+   ],
+   [
+    "equal",
+    803,
+    804,
+    759,
+    760
+   ],
+   [
+    "replace",
+    804,
+    819,
+    760,
+    775,
+    [
+     "|**Home**|A bare `suv` (or `suv home`) — search Suvadu's features by task, see the real command behind each, open screens, pickers and reports, or read copyable instructions for anything that changes data; *Startup Screen* in `suv settings` brings back the classic overview|",
+     "|**Search**|Full-history search TUI with four matching modes (`^X`) and four scopes (`^P`), matches highlighted in each row, every run or identical commands grouped with last-used and run counts (`^U`), your own commands by default (`Ctrl+A` shows agents, `Ctrl+E` failures only), filters, Smart rank, detail pane, a raw inspector for exact text (`^V`), bookmarks, and `--compact` inline recall|",
+     "|**History**|Non-interactive `suv history` with filters, `--json`, pipeable to other tools|",
+     "|**Agent Dashboard**|Timeline, risk assessment, per-agent analytics, exportable reports; `suv agent report --fail-on <low\\|medium\\|high\\|critical>` for local CI / git-hook gating|",
+     "|**MCP Server**|22 read-only tools, 8 resources and 6 prompts, plus two opt-in write tools that are off by default — agent session replay and incremental cross-agent summary checkpoints, project context, failure learning; one response convention with explicit provenance|",
+     "|**Skills Library**|`suv skills` — interactive TUI to browse, add, edit, delete, sync, and review shared skills any MCP-capable agent can read instead of each tool keeping its own copy. `sync --dry-run` diffs the managed region of each generated file; a region edited outside Suvadu is reported as a conflict and skipped, not overwritten (`--force` overrides), and the files of skills since removed or disabled are removed. Team skills committed in `.suvadu/skills/*.md` sync once you trust them — see Team skills in the repository. `add/list/show/edit/rm/disable/enable/sync/cleanup/trust/untrust` also work as scriptable subcommands|",
+     "|**Prompt Explorer**|`suv agent prompts` groups **recorded commands** by the prompt that triggered them, with that turn's successes, failures and duration. A prompt that ran no recorded command does not appear — for the agent's own transcript, use a session timeline|",
+     "|**Unified Sessions**|`suv sessions` browses human and AI sessions together, with a **Capture** column that reports `full` or `gaps: N` from recorded gaps alone — never inferred from exit codes. Native Codex, Claude Code and OpenCode sessions show prompts, responses, commands, every observed model and provider-reported token totals; `s` opens saved summaries (badged CURRENT / NEW ACTIVITY / EVIDENCE CHANGED; `Tab` toggles rendered/raw, `Ctrl+Y` copies) and `h` builds a handoff scaffold from captured records only|",
+     "|**Stats**|Heatmap, hourly distribution, top commands, executor breakdown; `--human` (or `Ctrl+H` in the TUI) excludes AI-agent activity|",
+     "|**Doctor**|`suv doctor` separates what blocks shell-history capture from optional integrations, gives each check its own repair, reports what the stored data actually proves, and lists storage by category next to the retention rule that changes it|",
+     "|**Organization**|Tags, bookmarks (`suv bookmarks` opens an interactive picker that recalls one into your prompt; a bookmark with `{{name}}`/`{{name:default}}` placeholders asks for each value first, and `suv bookmarks get <label> --set name=value` prints it filled — see Bookmarks with placeholders), notes, and `suv aliases` — an interactive manager (add/edit/delete) for shell aliases, plus suggestions for your frequently-typed long commands|",
+     "|**Privacy & Safety**|Space-prefix exclusion, regex patterns, secret redaction (extend via `redaction.extra_patterns`), local-only — applied to every ingestion path, imports and saved summaries included. `suv backup`, an automatic snapshot before any `suv delete`, and `suv delete --dry-run` to see the matched commands and what a delete leaves behind. See SECURITY.md.|",
+     "|**Arrow Keys**|Recency-first Up/Down recall — your most recent commands surface first, prefix-matched, with the current directory used only to separate commands recorded at the same millisecond. Agent commands are hidden by default; reveal them with `Alt+A` (per shell) or `--include-agents`. Zsh only (Bash keeps its own Up/Down), and `suv doctor` warns when a plugin loaded later takes Up over — see Up-arrow recall. The same lookup drives a zsh-autosuggestions strategy: `ZSH_AUTOSUGGEST_STRATEGY=(suvadu history)`.|",
+     "|**Git Branch**|Every command recorded inside a git repository keeps the branch it started on, read from `.git` with no `git` process, shown in recall's detail pane and in detailed MCP rows. Worktrees and submodules are followed; a detached HEAD is kept as its short hash.|",
+     "|**Vim Bindings**|Optional vim-style `j`/`k`/`Ctrl+U`/`Ctrl+D` navigation in search TUI|"
+    ]
+   ],
+   [
+    "equal",
+    819,
+    820,
+    775,
+    776
+   ],
+   [
+    "replace",
+    820,
+    821,
+    776,
+    777,
+    [
+     "Full feature documentation at suvadu.sh/cli."
+    ]
+   ],
+   [
+    "equal",
+    821,
+    822,
+    777,
+    778
+   ],
+   [
+    "replace",
+    822,
+    823,
+    778,
+    779,
+    [
+     " More demos "
+    ]
+   ],
+   [
+    "equal",
+    823,
+    824,
+    779,
+    780
+   ],
+   [
+    "replace",
+    824,
+    826,
+    780,
+    783,
+    [
+     " Recorded in Suvadu 0.5.0 with fictional data. The search demo above",
+     "shows Ctrl+R recall; the demos below cover feature discovery and AI sessions.",
+     "The AI example uses staged records, not a live agent run. "
+    ]
+   ],
+   [
+    "equal",
+    826,
+    827,
+    783,
+    784
+   ],
+   [
+    "replace",
+    827,
+    830,
+    784,
+    785,
+    [
+     " Suvadu Home — browse features, find failed commands, and open filtered history"
+    ]
+   ],
+   [
+    "equal",
+    830,
+    831,
+    785,
+    786
+   ],
+   [
+    "replace",
+    831,
+    836,
+    786,
+    787,
+    [
+     " Discover features — run suv, search by task, and open a tool "
+    ]
+   ],
+   [
+    "equal",
+    836,
+    837,
+    787,
+    788
+   ],
+   [
+    "replace",
+    837,
+    842,
+    788,
+    789,
+    [
+     " Suvadu AI session — read a prompt, inspect a failed test and successful retry, then read the recorded response"
+    ]
+   ],
+   [
+    "equal",
+    842,
+    843,
+    789,
+    790
+   ],
+   [
+    "replace",
+    843,
+    846,
+    790,
+    791,
+    [
+     " AI activity — follow the prompt, commands, exit status, and response in one timeline "
+    ]
+   ],
+   [
+    "equal",
+    846,
+    847,
+    791,
+    792
+   ],
+   [
+    "replace",
+    847,
+    850,
+    792,
+    795,
+    [
+     "Watch the video versions, or read the",
+     "Home guide and",
+     "session guide."
+    ]
+   ],
+   [
+    "equal",
+    850,
+    861,
+    795,
+    806
+   ],
+   [
+    "replace",
+    861,
+    863,
+    806,
+    808,
+    [
+     "See CONTRIBUTING.md for guidelines and the release",
+     "checklist, and BENCHMARKS.md for how search is measured."
+    ]
+   ],
+   [
+    "equal",
+    863,
+    866,
+    808,
+    811
+   ],
+   [
+    "replace",
+    866,
+    867,
+    811,
+    812,
+    [
+     "See SECURITY.md for vulnerability reporting, data storage design, and privacy details."
+    ]
+   ],
+   [
+    "equal",
+    867,
+    869,
+    812,
+    814
+   ],
+   [
+    "replace",
+    869,
+    871,
+    814,
+    815,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "abe559843ed2+2": {
+  "fn": "XNAL/don-blog-backManage",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "delete",
+    3,
+    5,
+    3,
+    3
+   ],
+   [
+    "equal",
+    5,
+    12,
+    3,
+    10
+   ],
+   [
+    "replace",
+    12,
+    25,
+    10,
+    11,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    11,
+    12
+   ],
+   [
+    "delete",
+    26,
+    28,
+    12,
+    12
+   ],
+   [
+    "equal",
+    28,
+    33,
+    12,
+    17
+   ],
+   [
+    "replace",
+    33,
+    34,
+    17,
+    18,
+    [
+     " 登录页面"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    37,
+    18,
+    21
+   ],
+   [
+    "replace",
+    37,
+    38,
+    21,
+    22,
+    [
+     " 文章列表"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    41,
+    22,
+    25
+   ],
+   [
+    "replace",
+    41,
+    42,
+    25,
+    26,
+    [
+     " 新增文章"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    45,
+    26,
+    29
+   ],
+   [
+    "replace",
+    45,
+    46,
+    29,
+    30,
+    [
+     " 分类列表"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    49,
+    30,
+    33
+   ],
+   [
+    "replace",
+    49,
+    50,
+    33,
+    34,
+    [
+     " 标签列表"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    53,
+    34,
+    37
+   ],
+   [
+    "replace",
+    53,
+    54,
+    37,
+    38,
+    [
+     " 项目列表"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    38,
+    39
+   ],
+   [
+    "replace",
+    55,
+    56,
+    39,
+    40,
+    [
+     " 添加项目"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    63,
+    40,
+    47
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "2c5f77eb918a+2": {
+  "fn": "itning/shw_server",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "**点我查看主分支完成版本**"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "**主分支使用Spring Boot编写，请点击查看**"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "**前后端分离项目，前端：shw_client**"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    14,
+    10,
+    14,
+    [
+     "GitHub stars",
+     "GitHub forks",
+     "GitHub watchers",
+     "GitHub followers"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    14,
+    15
+   ],
+   [
+    "replace",
+    15,
+    22,
+    15,
+    22,
+    [
+     "GitHub issues",
+     "GitHub license",
+     "GitHub last commit",
+     "GitHub release",
+     "GitHub repo size in bytes",
+     "HitCount",
+     "language"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    27,
+    22,
+    27
+   ],
+   [
+    "replace",
+    27,
+    28,
+    27,
+    28,
+    [
+     "项目采用微服务开发，采用JWT技术作为身份验证手段，前后端分离。目前前后端交互使用JSON方式，GraphQL和protobuf通信方式正在开发中。"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    29,
+    28,
+    29
+   ],
+   [
+    "replace",
+    29,
+    30,
+    29,
+    30,
+    [
+     "jiagou"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    30,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     "jiagou"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    43,
+    32,
+    43
+   ],
+   [
+    "replace",
+    43,
+    55,
+    43,
+    55,
+    [
+     "|技术栈|描述|",
+     "|-------|------------------------------------------------------------|",
+     "|Eureka|Eureka用于服务的注册与发现。Eureka是Netflix开源的一款提供服务注册和发现的产品，它提供了完整的Service Registry和Service Discovery实现。也是spring Cloud体系中最重要最核心的组件之一。|",
+     "|Ribbon|Ribbon是Netflix发布的云中间层服务开源项目，其主要功能是提供客户端实现负载均衡算法。|",
+     "|Feign|Feign支持服务的调用以及均衡负载。Feign是从Netflix中分离出来的轻量级项目，能够在类接口上添加注释，成为一个REST API 客户端。|",
+     "|Config|Spring Cloud Config为分布式系统中的外部配置提供服务器和客户端支持。|",
+     "|Bus|Spring Cloud Bus通过轻量消息代理连接各个分布的节点。|",
+     "|Stream|Spring Cloud Stream 是一个构建消息驱动微服务的框架。|",
+     "|Zuul|微服务网关|",
+     "|Hystrix|Hystrix处理服务的熔断防止故障扩散。Hystrix-dashboard 是一款针对Hystrix进行实时监控的工具，通过Hystrix Dashboard我们可以在直观地看到各Hystrix Command的请求响应时间, 请求成功率等数据。|",
+     "|Sleuth|Spring Cloud Sleuth为服务之间调用提供链路追踪。通过Sleuth可以很清楚的了解到一个服务请求经过了哪些服务，每个服务处理花费了多长。从而让我们可以很方便的理清各微服务间的调用关系。|",
+     "|WebFlux|异步非阻塞，函数式编程风格Web框架|"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    60,
+    55,
+    60
+   ],
+   [
+    "replace",
+    60,
+    61,
+    60,
+    61,
+    [
+     " 网关服务。使用zuul框架实现的微服务网关，该网关拦截未经认证的请求并将请求转发到`shw-security`服务。"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    64,
+    61,
+    64
+   ],
+   [
+    "replace",
+    64,
+    65,
+    64,
+    65,
+    [
+     " 微服务发现与注册服务。"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    68,
+    65,
+    68
+   ],
+   [
+    "replace",
+    68,
+    69,
+    68,
+    69,
+    [
+     " 安全服务。使用CAS实现SSO进行统一登陆，发放token。token使用JWT技术实现。"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    72,
+    69,
+    72
+   ],
+   [
+    "replace",
+    72,
+    73,
+    72,
+    73,
+    [
+     " 群组服务。教师所创建的群组CRUD的业务逻辑实现。"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    76,
+    73,
+    76
+   ],
+   [
+    "replace",
+    76,
+    77,
+    76,
+    77,
+    [
+     " 学生群组服务。管理学生加入的群组。"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    80,
+    77,
+    80
+   ],
+   [
+    "replace",
+    80,
+    81,
+    80,
+    81,
+    [
+     " 上传服务。学生上传作业文件，教师下载文件的业务逻辑服务。"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    84,
+    81,
+    84
+   ],
+   [
+    "replace",
+    84,
+    85,
+    84,
+    85,
+    [
+     " 作业服务。管理教师创建的作业，作业数据的CRUD。"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    88,
+    85,
+    88
+   ],
+   [
+    "replace",
+    88,
+    89,
+    88,
+    89,
+    [
+     " 通知服务。管理教师发布的通知。"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    92,
+    89,
+    92
+   ],
+   [
+    "replace",
+    92,
+    93,
+    92,
+    93,
+    [
+     " 文件服务。文件的持久化服务。"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    96,
+    93,
+    96
+   ],
+   [
+    "replace",
+    96,
+    98,
+    96,
+    98,
+    [
+     " 公共模块。包括一些异常，工具类等等",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    98,
+    100,
+    98,
+    100
+   ],
+   [
+    "replace",
+    100,
+    101,
+    100,
+    101,
+    [
+     " hystrix监控信息服务"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    104,
+    101,
+    104
+   ],
+   [
+    "replace",
+    104,
+    105,
+    104,
+    105,
+    [
+     "msg"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    110,
+    105,
+    110
+   ],
+   [
+    "replace",
+    110,
+    111,
+    110,
+    111,
+    [
+     " 教师与学生的一些操作在异步的环境下进行，增加了系统承载QPS。"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    114,
+    111,
+    114
+   ],
+   [
+    "replace",
+    114,
+    115,
+    114,
+    115,
+    [
+     " 服务与服务之间耦合度降低。"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    118,
+    115,
+    118
+   ],
+   [
+    "replace",
+    118,
+    119,
+    118,
+    119,
+    [
+     " 减轻高峰时间数据库压力。"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    122,
+    119,
+    122
+   ],
+   [
+    "replace",
+    122,
+    123,
+    122,
+    123,
+    [
+     "er"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    126,
+    123,
+    126
+   ],
+   [
+    "replace",
+    126,
+    127,
+    126,
+    127,
+    [
+     "shw_login"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    130,
+    127,
+    130
+   ],
+   [
+    "replace",
+    130,
+    131,
+    130,
+    131,
+    [
+     "yanzheng"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    144,
+    131,
+    144
+   ],
+   [
+    "replace",
+    144,
+    145,
+    144,
+    145,
+    [
+     "HTML版本"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    146,
+    145,
+    146
+   ],
+   [
+    "replace",
+    146,
+    147,
+    146,
+    147,
+    [
+     "Markdown版本"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    152,
+    147,
+    152
+   ],
+   [
+    "replace",
+    152,
+    163,
+    152,
+    163,
+    [
+     "|属性名|类型|说明|约束|",
+     "|:------------:|:----:|:--------------------:|:--------:|",
+     "|id|string|唯一标识群组|非空，主键|",
+     "|name|string|群组名称|非空|",
+     "|teacher_name|string|教师名|非空|",
+     "|teacher_number|string|教师序号|非空，索引|",
+     "|code|string|邀请码（暂时和ID相同）|非空，索引|",
+     "|create_time|data|创建时间|非空|",
+     "|update_time|data|更新时间|非空|",
+     "|||||",
+     "|||||"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    166,
+    163,
+    166
+   ],
+   [
+    "replace",
+    166,
+    177,
+    166,
+    177,
+    [
+     "|属性名|类型|说明|约束|",
+     "|:------------:|:----:|:------:|:--------:|",
+     "|student_number|string|学生ID|非空，主键|",
+     "|group_id|string|群组ID|非空，主键|",
+     "|create_time|date|创建时间|非空|",
+     "|update_time|date|更新时间|非空|",
+     "|||||",
+     "|||||",
+     "|||||",
+     "|||||",
+     "|||||"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    180,
+    177,
+    180
+   ],
+   [
+    "replace",
+    180,
+    191,
+    180,
+    191,
+    [
+     "|属性名|类型|说明|约束|",
+     "|:--------------:|:----:|:------------------:|:------------:|",
+     "|id|string|作业ID，标识唯一作业|非空，主键|",
+     "|group_id|string|群组ID，该作业所属群|非空，索引|",
+     "|enabled|bit|作业启用状态|非空，默认启用|",
+     "|name|string|作业名|非空|",
+     "|create_time|date|创建时间|非空|",
+     "|update_time|date|更新时间|非空|",
+     "|file_name_format|string|文件名规范|非空|",
+     "|||||",
+     "|||||"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    194,
+    191,
+    194
+   ],
+   [
+    "replace",
+    194,
+    205,
+    194,
+    205,
+    [
+     "|属性名|类型|说明|约束|",
+     "|:------------:|:----:|:------:|:--------:|",
+     "|student_number|string|学生ID|非空，主键|",
+     "|work_id|string|作业ID|非空，主键|",
+     "|mime|string|文件类型|非空|",
+     "|size|double|文件大小|非空|",
+     "|create_time|date|上传时间|非空|",
+     "|update_time|date|修改时间|非空|",
+     "|||||",
+     "|||||",
+     "|||||"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    208,
+    205,
+    208
+   ],
+   [
+    "replace",
+    208,
+    219,
+    208,
+    219,
+    [
+     "|属性名|类型|说明|约束|",
+     "|:----------------:|:----:|:--------------:|:--------:|",
+     "|id|string|通知ID，唯一标识|非空，主键|",
+     "|invite_people_name|string|邀请人|非空|",
+     "|invite_group_id|string|邀请加入的群组ID|非空|",
+     "|student_number|string|被邀请人学号|非空，索引|",
+     "|create_time|date|创建时间|非空|",
+     "|update_time|date|修改时间|非空|",
+     "|||||",
+     "|||||",
+     "|||||"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    247,
+    219,
+    247
+   ],
+   [
+    "replace",
+    247,
+    250,
+    247,
+    250,
+    [
+     "> \"code\": -1,",
+     "> \"msg\": \"该活动不存在\",",
+     "> \"data\":\"响应数据\""
+    ]
+   ],
+   [
+    "equal",
+    250,
+    277,
+    250,
+    277
+   ],
+   [
+    "replace",
+    277,
+    283,
+    277,
+    278,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    283,
+    284,
+    278,
+    279
+   ],
+   [
+    "delete",
+    284,
+    286,
+    279,
+    279
+   ],
+   [
+    "equal",
+    286,
+    295,
+    279,
+    288
+   ],
+   [
+    "replace",
+    295,
+    300,
+    288,
+    291,
+    [
+     "|请求参数|说明|",
+     "|:------:|:--------:|",
+     "|code|群组邀请码|"
+    ]
+   ],
+   [
+    "equal",
+    300,
+    309,
+    291,
+    300
+   ],
+   [
+    "replace",
+    309,
+    314,
+    300,
+    303,
+    [
+     "|请求参数|说明|",
+     "|:------:|:----:|",
+     "|id|群组id|"
+    ]
+   ],
+   [
+    "equal",
+    314,
+    331,
+    303,
+    320
+   ],
+   [
+    "replace",
+    331,
+    336,
+    320,
+    323,
+    [
+     "|请求参数|说明|",
+     "|:------:|:------:|",
+     "|name|群组名称|"
+    ]
+   ],
+   [
+    "equal",
+    336,
+    345,
+    323,
+    332
+   ],
+   [
+    "replace",
+    345,
+    350,
+    332,
+    335,
+    [
+     "|请求参数|说明|",
+     "|:------:|:----:|",
+     "|id|群组ID|"
+    ]
+   ],
+   [
+    "equal",
+    350,
+    359,
+    335,
+    344
+   ],
+   [
+    "replace",
+    359,
+    365,
+    344,
+    348,
+    [
+     "|请求参数|说明|",
+     "|:------:|:------:|",
+     "|id|群组ID|",
+     "|name|新群名称|"
+    ]
+   ],
+   [
+    "equal",
+    365,
+    374,
+    348,
+    357
+   ],
+   [
+    "replace",
+    374,
+    380,
+    357,
+    361,
+    [
+     "|请求参数|说明|",
+     "|:------:|:------------------:|",
+     "|limit|指定返回结果数量 0~n|",
+     "|page|指定返回页码1~n|"
+    ]
+   ],
+   [
+    "equal",
+    380,
+    389,
+    361,
+    370
+   ],
+   [
+    "replace",
+    389,
+    394,
+    370,
+    373,
+    [
+     "|请求参数|说明|",
+     "|:------:|:--------:|",
+     "|name|模糊群名称|"
+    ]
+   ],
+   [
+    "equal",
+    394,
+    415,
+    373,
+    394
+   ],
+   [
+    "replace",
+    415,
+    421,
+    394,
+    398,
+    [
+     "|请求参数|说明|",
+     "|:------:|:--------------------------------:|",
+     "|id|消息ID|",
+     "|enabled|处理状态 1-> 同意加入 0-> 拒绝加入|"
+    ]
+   ],
+   [
+    "equal",
+    421,
+    432,
+    398,
+    409
+   ],
+   [
+    "replace",
+    432,
+    438,
+    409,
+    413,
+    [
+     "|请求参数|说明|",
+     "|:------:|:--------------:|",
+     "|name|作业名|",
+     "|group_id|该作业所属群组ID|"
+    ]
+   ],
+   [
+    "equal",
+    438,
+    447,
+    413,
+    422
+   ],
+   [
+    "replace",
+    447,
+    452,
+    422,
+    425,
+    [
+     "|请求参数|说明|",
+     "|:------:|:----:|",
+     "|group_id|群组ID|"
+    ]
+   ],
+   [
+    "equal",
+    452,
+    461,
+    425,
+    434
+   ],
+   [
+    "replace",
+    461,
+    468,
+    434,
+    439,
+    [
+     "|请求参数|说明|",
+     "|:------:|:------------:|",
+     "|id|作业ID|",
+     "|name|修改后的作业名|",
+     "|enabled|作业启用状态|"
+    ]
+   ],
+   [
+    "equal",
+    468,
+    477,
+    439,
+    448
+   ],
+   [
+    "replace",
+    477,
+    482,
+    448,
+    451,
+    [
+     "|请求参数|说明|",
+     "|:------:|:----:|",
+     "|id|作业ID|"
+    ]
+   ],
+   [
+    "equal",
+    482,
+    491,
+    451,
+    460
+   ],
+   [
+    "replace",
+    491,
+    498,
+    460,
+    465,
+    [
+     "|请求参数|说明|",
+     "|:------:|:----:|",
+     "|id|作业ID|",
+     "|file|文件|",
+     "|filename|文件名|"
+    ]
+   ],
+   [
+    "equal",
+    498,
+    507,
+    465,
+    474
+   ],
+   [
+    "replace",
+    507,
+    511,
+    474,
+    478,
+    [
+     "|请求参数|说明|",
+     "|:--------:|:----:|",
+     "|student_id|学生ID|",
+     "|work_id|作业ID|"
+    ]
+   ],
+   [
+    "equal",
+    511,
+    534,
+    478,
+    501
+   ],
+   [
+    "replace",
+    534,
+    537,
+    501,
+    504,
+    [
+     "|请求参数|说明|",
+     "|:------:|:----:|",
+     "|work_id|作业ID|"
+    ]
+   ],
+   [
+    "equal",
+    537,
+    548,
+    504,
+    515
+   ],
+   [
+    "replace",
+    548,
+    551,
+    515,
+    518,
+    [
+     "|请求参数|说明|",
+     "|:------:|:----:|",
+     "|work_id|作业ID|"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7337a7ead486+2": {
+  "fn": "dipanjal/mysql-replication-poc",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    4,
+    5
+   ],
+   [
+    "replace",
+    5,
+    9,
+    5,
+    9,
+    [
+     " - Common Database problems and solutions.",
+     " - What is Database Replication?",
+     " - When do you need this?",
+     " 2. MySQL DB Replication (1 master and 2 slaves) on Docker"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    28,
+    9,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "After any Write Query (Insert. Update, Delete) executed in the Master, the DB somehow Replicate the changes to the Slaves. The Master triggers a change event and the Slaves pull the Changes from the Event and Update themselves. Let's generate some ideas on this."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    46,
+    29,
+    46
+   ],
+   [
+    "replace",
+    46,
+    47,
+    46,
+    47,
+    [
+     "Idea 2: How about Transfering Bin Log files?"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    54,
+    47,
+    54
+   ],
+   [
+    "replace",
+    54,
+    56,
+    54,
+    56,
+    [
+     "- DB connection information can change on the way",
+     "- It is troublesome (but complicated) to use DB properly in the Read/Write logic of the application."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    61,
+    56,
+    61
+   ],
+   [
+    "replace",
+    61,
+    62,
+    61,
+    62,
+    [
+     "Blank Diagram"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    65,
+    62,
+    65
+   ],
+   [
+    "replace",
+    65,
+    68,
+    65,
+    68,
+    [
+     "- Automatic Proxify to the Master/Slave depending on query",
+     "- Load Distribution",
+     "- Change seamless connection settings"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    71,
+    68,
+    71
+   ],
+   [
+    "replace",
+    71,
+    72,
+    71,
+    72,
+    [
+     "Here is a good read to get the insight of Mysql Replica Configuration. I used MySQL 5.7 to prepare one master and two slaves, and set up replication settings. Here is the `docker-compose.yml` file I'm using"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    77,
+    72,
+    77
+   ],
+   [
+    "replace",
+    77,
+    129,
+    77,
+    78,
+    [
+     "…（52 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    155,
+    78,
+    104
+   ],
+   [
+    "replace",
+    155,
+    182,
+    104,
+    105,
+    [
+     "…（27 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    182,
+    196,
+    105,
+    119
+   ],
+   [
+    "replace",
+    196,
+    222,
+    119,
+    120,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    232,
+    120,
+    130
+   ],
+   [
+    "replace",
+    232,
+    314,
+    130,
+    131,
+    [
+     "…（82 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    314,
+    321,
+    131,
+    138
+   ],
+   [
+    "replace",
+    321,
+    338,
+    138,
+    139,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    338,
+    342,
+    139,
+    143
+   ],
+   [
+    "replace",
+    342,
+    344,
+    143,
+    145,
+    [
+     "\t- `:6032` (admin, `user`: admin2, `pass`: pass2)",
+     "\t- `:6033` (MySQL endpoint, `user`: root, `pass`: password)"
+    ]
+   ],
+   [
+    "equal",
+    344,
+    347,
+    145,
+    148
+   ],
+   [
+    "replace",
+    347,
+    348,
+    148,
+    149,
+    [
+     "\t- `user`: root, `pass`: password"
+    ]
+   ],
+   [
+    "equal",
+    348,
+    360,
+    149,
+    161
+   ],
+   [
+    "replace",
+    360,
+    368,
+    161,
+    162,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    388,
+    162,
+    182
+   ],
+   [
+    "replace",
+    388,
+    392,
+    182,
+    183,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    392,
+    413,
+    183,
+    204
+   ],
+   [
+    "replace",
+    413,
+    419,
+    204,
+    205,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    419,
+    430,
+    205,
+    216
+   ],
+   [
+    "replace",
+    430,
+    438,
+    216,
+    217,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    438,
+    482,
+    217,
+    261
+   ],
+   [
+    "replace",
+    482,
+    483,
+    261,
+    262,
+    [
+     "1. Download the Postman Collection"
+    ]
+   ],
+   [
+    "equal",
+    483,
+    505,
+    262,
+    284
+   ],
+   [
+    "replace",
+    505,
+    507,
+    284,
+    286,
+    [
+     " - https://proxysql.com/documentation/backend-monitoring/",
+     " - https://proxysql.com/documentation/backend-server-configuration/"
+    ]
+   ],
+   [
+    "equal",
+    507,
+    508,
+    286,
+    287
+   ],
+   [
+    "replace",
+    508,
+    509,
+    287,
+    288,
+    [
+     " - https://proxysql.com/documentation/proxysql-configuration/"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "c040ebfc1308+2": {
+  "fn": "Airsequel/SQLiteDAV",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    9,
+    6,
+    8,
+    [
+     "Database Schema | SQL Schema Code",
+     "File View | Screenshot of macOS Finder"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    25,
+    8,
+    24
+   ],
+   [
+    "delete",
+    25,
+    26,
+    24,
+    24
+   ],
+   [
+    "equal",
+    26,
+    29,
+    24,
+    27
+   ],
+   [
+    "replace",
+    29,
+    30,
+    27,
+    28,
+    [
+     "Install Stack"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    36,
+    28,
+    34
+   ],
+   [
+    "delete",
+    36,
+    37,
+    34,
+    34
+   ],
+   [
+    "equal",
+    37,
+    45,
+    34,
+    42
+   ],
+   [
+    "replace",
+    45,
+    47,
+    42,
+    43,
+    [
+     " (E.g. with macOS Finder by executing `cmd + k`)"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    64,
+    43,
+    60
+   ],
+   [
+    "delete",
+    64,
+    65,
+    60,
+    60
+   ],
+   [
+    "equal",
+    65,
+    66,
+    60,
+    61
+   ],
+   [
+    "replace",
+    66,
+    72,
+    61,
+    62,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    79,
+    62,
+    69
+   ],
+   [
+    "delete",
+    79,
+    86,
+    69,
+    69
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "6166b3eb0ae6+2": {
+  "fn": "atrigo/APCSharp",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     "Screenshot"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    14,
+    4,
+    14
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "55774d940224+2": {
+  "fn": "db-operator/db-operator",
+  "clean_ver": "2",
+  "raw_lines": 14,
+  "ops": [
+   [
+    "equal",
+    0,
+    14,
+    0,
+    14
+   ],
+   [
+    "replace",
+    14,
+    19,
+    14,
+    19,
+    [
+     "* Get Started",
+     "* Configure instances",
+     "* Manage databases",
+     "* Manage users",
+     "* A deeper look at templates"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    29,
+    19,
+    29
+   ],
+   [
+    "replace",
+    29,
+    30,
+    29,
+    30,
+    [
+     "To see more options of helm values, see the chart repo"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "6e2bd3507e0a+2": {
+  "fn": "ZeroWdd/seckill_parent",
+  "clean_ver": "2",
+  "raw_lines": 14,
+  "ops": [
+   [
+    "equal",
+    0,
+    14,
+    0,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "## 开发环境 "
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    19,
+    16,
+    19,
+    [
+     "|JDK|Maven|Mysql|SpringBoot|springcloud|Redis|RabbitMQ|",
+     "|----|-----|-----|-------------|-----------|-----|--------|",
+     "|1.8|3.5.2|5.7|2.0.4.RELEASE|Finchley.M9|3.2|3.7.14|"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    40,
+    19,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     "sign.png"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    60,
+    41,
+    60
+   ],
+   [
+    "replace",
+    60,
+    61,
+    60,
+    61,
+    [
+     "架构"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    84,
+    61,
+    84
+   ],
+   [
+    "delete",
+    84,
+    86,
+    84,
+    84
+   ],
+   [
+    "equal",
+    86,
+    88,
+    84,
+    86
+   ],
+   [
+    "replace",
+    88,
+    89,
+    86,
+    87,
+    [
+     "redis"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    95,
+    87,
+    93
+   ],
+   [
+    "delete",
+    95,
+    97,
+    93,
+    93
+   ],
+   [
+    "equal",
+    97,
+    106,
+    93,
+    102
+   ],
+   [
+    "delete",
+    106,
+    108,
+    102,
+    102
+   ],
+   [
+    "equal",
+    108,
+    110,
+    102,
+    104
+   ],
+   [
+    "replace",
+    110,
+    111,
+    104,
+    105,
+    [
+     "RabbitMQ"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    122,
+    105,
+    116
+   ],
+   [
+    "replace",
+    122,
+    123,
+    116,
+    117,
+    [
+     "databaseTable.png"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    134,
+    117,
+    128
+   ],
+   [
+    "replace",
+    134,
+    139,
+    128,
+    133,
+    [
+     "",
+     "\tlimitpolicyPage.png选择商品，输入秒杀价格、秒杀库存、开始时间、结束时间，点保存。",
+     "",
+     "\tlimitPolicypage2.png",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    133,
+    134
+   ],
+   [
+    "replace",
+    140,
+    141,
+    134,
+    135,
+    [
+     " 地址：http://localhost/seckillClient/page/loginPage.html"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    135,
+    136
+   ],
+   [
+    "replace",
+    142,
+    143,
+    136,
+    137,
+    [
+     " limitPolicypage2.png"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    145,
+    137,
+    139
+   ],
+   [
+    "replace",
+    145,
+    146,
+    139,
+    140,
+    [
+     " 地址：<http://localhost/seckillClient/page/stockListPage.html>"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    140,
+    141
+   ],
+   [
+    "replace",
+    147,
+    148,
+    141,
+    142,
+    [
+     " stocklist.png"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    150,
+    142,
+    144
+   ],
+   [
+    "replace",
+    150,
+    151,
+    144,
+    145,
+    [
+     " 地址：<http://localhost/seckillClient/page/stockDetailPage.html?sku_id=27359021557>"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    152,
+    145,
+    146
+   ],
+   [
+    "replace",
+    152,
+    153,
+    146,
+    147,
+    [
+     " stockpage.png"
+    ]
+   ],
+   [
+    "equal",
+    153,
+    155,
+    147,
+    149
+   ],
+   [
+    "replace",
+    155,
+    157,
+    149,
+    151,
+    [
+     " 在商品详情页中点击【立即抢购】",
+     " 地址：<http://localhost/seckillClient/page/createOrderPage.html?sku_id=27359021557>"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    158,
+    151,
+    152
+   ],
+   [
+    "replace",
+    158,
+    159,
+    152,
+    153,
+    [
+     " createorderpage.png"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    161,
+    153,
+    155
+   ],
+   [
+    "replace",
+    161,
+    163,
+    155,
+    157,
+    [
+     " 在提交订单页面点击【提交订单】",
+     " 地址：<http://localhost/seckillClient/page/payPage.html?order_id=1565061554849>"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    164,
+    157,
+    158
+   ],
+   [
+    "replace",
+    164,
+    165,
+    158,
+    159,
+    [
+     " createorderpage.png点击【微信支付】，提示“支付成功”"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    166,
+    159,
+    160
+   ],
+   [
+    "replace",
+    166,
+    169,
+    160,
+    161,
+    [
+     " paysuccess.png"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "f17b5e8f2a75+2": {
+  "fn": "rust-dd/rsql",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "RSQL screenshot"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    8,
+    5,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "Download the installer for your platform from the latest release:"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    16,
+    9,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "The latest macOS installers are signed with Developer ID and notarized by Apple. Open the DMG, drag RSQL into Applications and launch it normally. macOS may show its standard first-launch confirmation for a downloaded app; no quarantine command or security override is needed. See the macOS release setup for signing and verification details."
+    ]
+   ],
+   [
+    "equal",
+    17,
+    31,
+    17,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     "- Canvas-based grid (Glide Data Grid)"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    71,
+    32,
+    71
+   ],
+   [
+    "replace",
+    71,
+    72,
+    71,
+    72,
+    [
+     "You need Node.js 24.21.0 (`.node-version`), Yarn 1, Rust 1.95.0 (pinned in `src-tauri/rust-toolchain.toml`) and the Tauri prerequisites for your OS."
+    ]
+   ],
+   [
+    "equal",
+    72,
+    86,
+    72,
+    86
+   ],
+   [
+    "replace",
+    86,
+    87,
+    86,
+    87,
+    [
+     "The desktop icon source is `assets/app-icon.png`. Run `yarn icons:generate` to regenerate the platform icons; see the icon notes."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    111,
+    87,
+    111
+   ],
+   [
+    "replace",
+    111,
+    112,
+    111,
+    112,
+    [
+     "- macOS: `APPLE_CERTIFICATE`, `APPLE_CERTIFICATE_PASSWORD`, `APPLE_SIGNING_IDENTITY`, `APPLE_ID`, `APPLE_PASSWORD` (app-specific password), `APPLE_TEAM_ID`. Set the repository variable `MACOS_SIGNING_ENABLED` to `true` after configuring them. See setup and verification."
+    ]
+   ],
+   [
+    "equal",
+    112,
+    116,
+    112,
+    116
+   ],
+   [
+    "replace",
+    116,
+    118,
+    116,
+    117,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "e06dc45be816+2": {
+  "fn": "hash-anu/snkv",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "SNKV Logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    6,
+    2,
+    4,
+    [
+     " SNKV ",
+     " A simple, crash-safe embedded key-value store "
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    4,
+    5
+   ],
+   [
+    "replace",
+    7,
+    12,
+    5,
+    10,
+    [
+     "Build",
+     "Memory Leaks",
+     "Tests",
+     "Discord",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    21,
+    10,
+    19
+   ],
+   [
+    "replace",
+    21,
+    24,
+    19,
+    20,
+    [
+     "> Use the `python_bindings` branch."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    33,
+    20,
+    29
+   ],
+   [
+    "replace",
+    33,
+    46,
+    29,
+    30,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    48,
+    30,
+    32
+   ],
+   [
+    "replace",
+    48,
+    52,
+    32,
+    34,
+    [
+     "- **API reference:** hash-anu.github.io/snkv/api.html",
+     "- **Examples:** examples/ · hash-anu.github.io/snkv/examples.html"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    60,
+    34,
+    42
+   ],
+   [
+    "replace",
+    60,
+    61,
+    42,
+    43,
+    [
+     "- **Vector search**: HNSW index via usearch (`make vector`), stored in the same `.db` file. See examples/vector.c."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    69,
+    43,
+    51
+   ],
+   [
+    "replace",
+    69,
+    78,
+    51,
+    52,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    52,
+    53
+   ],
+   [
+    "delete",
+    79,
+    81,
+    53,
+    53
+   ],
+   [
+    "equal",
+    81,
+    102,
+    53,
+    74
+   ],
+   [
+    "delete",
+    102,
+    104,
+    74,
+    74
+   ],
+   [
+    "equal",
+    104,
+    107,
+    74,
+    77
+   ],
+   [
+    "replace",
+    107,
+    108,
+    77,
+    78,
+    [
+     "Source: SNKV · SQLite · details in docs/benchmark.html"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    109,
+    78,
+    79
+   ],
+   [
+    "replace",
+    109,
+    119,
+    79,
+    89,
+    [
+     "|Benchmark|SQLite|SNKV|Speedup|",
+     "|-----------------|-----------|-----------|-------|",
+     "|Sequential writes|1.30M ops/s|1.51M ops/s|1.16x|",
+     "|Random reads|254K ops/s|588K ops/s|2.32x|",
+     "|Sequential scan|11.1M ops/s|13.5M ops/s|1.22x|",
+     "|Random updates|108K ops/s|120K ops/s|1.11x|",
+     "|Random deletes|124K ops/s|126K ops/s|1.01x|",
+     "|Exists checks|262K ops/s|653K ops/s|2.49x|",
+     "|Mixed workload|254K ops/s|317K ops/s|1.25x|",
+     "|Bulk insert|1.50M ops/s|1.75M ops/s|1.17x|"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    89,
+    90
+   ],
+   [
+    "replace",
+    120,
+    121,
+    90,
+    91,
+    [
+     "Comparisons against LMDB and RocksDB are available too."
+    ]
+   ],
+   [
+    "equal",
+    121,
+    125,
+    91,
+    95
+   ],
+   [
+    "delete",
+    125,
+    127,
+    95,
+    95
+   ],
+   [
+    "equal",
+    127,
+    129,
+    95,
+    97
+   ],
+   [
+    "replace",
+    129,
+    130,
+    97,
+    98,
+    [
+     "|Library|License|Use|"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    98,
+    99
+   ],
+   [
+    "replace",
+    131,
+    134,
+    99,
+    102,
+    [
+     "|SQLite|Public Domain|B-tree, pager, WAL, OS layer (bundled)|",
+     "|Monocypher|CC0-1.0|XChaCha20-Poly1305 + Argon2id (bundled)|",
+     "|usearch|Apache 2.0|HNSW vector index (optional, `make vector`)|"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    136,
+    102,
+    104
+   ],
+   [
+    "delete",
+    136,
+    137,
+    104,
+    104
+   ],
+   [
+    "equal",
+    137,
+    138,
+    104,
+    105
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "5122c15db49d+2": {
+  "fn": "OmenApps/django-model-info",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    7,
+    2,
+    7,
+    [
+     "PyPI",
+     "Python versions",
+     "Django versions",
+     "Documentation",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    20,
+    7,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "- **Useful Output**: Leverages tools like rich, Markdown, MermaidJS, and Graphviz for beautiful output."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    39,
+    21,
+    39
+   ],
+   [
+    "replace",
+    39,
+    43,
+    39,
+    43,
+    [
+     "- `modelinfo`: Display detailed information about your models",
+     "- `modelgraph`: Generate a graph of your models and their relationships",
+     "- `modelfilters`: Understand how to filter queries for complex Django model relationships",
+     "- `migrationgraph`: Visualize and understand the dependencies between migrations"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    54,
+    43,
+    54
+   ],
+   [
+    "replace",
+    54,
+    55,
+    54,
+    55,
+    [
+     "Rendered, Raw"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    62,
+    55,
+    62
+   ],
+   [
+    "replace",
+    62,
+    64,
+    62,
+    63,
+    [
+     "Rendered, Raw"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    73,
+    63,
+    72
+   ],
+   [
+    "replace",
+    73,
+    74,
+    72,
+    73,
+    [
+     "Rendered, Raw"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    81,
+    73,
+    80
+   ],
+   [
+    "replace",
+    81,
+    82,
+    80,
+    81,
+    [
+     "Rendered, Raw"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    97,
+    81,
+    96
+   ],
+   [
+    "replace",
+    97,
+    120,
+    96,
+    97,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    133,
+    97,
+    110
+   ],
+   [
+    "replace",
+    133,
+    169,
+    110,
+    146,
+    [
+     " common_customer-. \"ManyToOneRel reverse: sales_creditcards\" .->sales_creditcard",
+     " common_customer[\"common.customer\"]",
+     " sales_creditcard[\"sales.creditcard\"]",
+     " common_customer-. \"ManyToOneRel reverse: sales_bankaccounts\" .->sales_bankaccount",
+     " common_customer[\"common.customer\"]",
+     " sales_bankaccount[\"sales.bankaccount\"]",
+     " common_customer-. \"ManyToOneRel reverse: shipping_addresses\" .->sales_shippingaddress",
+     " common_customer[\"common.customer\"]",
+     " sales_shippingaddress[\"sales.shippingaddress\"]",
+     " common_customer-. \"ManyToOneRel reverse: orders\" .->sales_order",
+     " common_customer[\"common.customer\"]",
+     " sales_order[\"sales.order\"]",
+     " sales_bankaccount== \"ForeignKey customer\" ===common_customer",
+     " sales_bankaccount[\"sales.bankaccount\"]",
+     " common_customer[\"common.customer\"]",
+     " sales_creditcard== \"ForeignKey customer\" ===common_customer",
+     " sales_creditcard[\"sales.creditcard\"]",
+     " common_customer[\"common.customer\"]",
+     " sales_order-. \"ManyToOneRel reverse: items\" .->sales_orderitem",
+     " sales_order[\"sales.order\"]",
+     " sales_orderitem[\"sales.orderitem\"]",
+     " sales_order== \"ForeignKey customer\" ===common_customer",
+     " sales_order[\"sales.order\"]",
+     " common_customer[\"common.customer\"]",
+     " sales_order== \"ForeignKey shipping_address\" ===sales_shippingaddress",
+     " sales_order[\"sales.order\"]",
+     " sales_shippingaddress[\"sales.shippingaddress\"]",
+     " sales_orderitem== \"ForeignKey order\" ===sales_order",
+     " sales_orderitem[\"sales.orderitem\"]",
+     " sales_order[\"sales.order\"]",
+     " sales_shippingaddress-. \"ManyToOneRel reverse: order\" .->sales_order",
+     " sales_shippingaddress[\"sales.shippingaddress\"]",
+     " sales_order[\"sales.order\"]",
+     " sales_shippingaddress== \"ForeignKey customer\" ===common_customer",
+     " sales_shippingaddress[\"sales.shippingaddress\"]",
+     " common_customer[\"common.customer\"]"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    171,
+    146,
+    148
+   ],
+   [
+    "delete",
+    171,
+    173,
+    148,
+    148
+   ],
+   [
+    "equal",
+    173,
+    180,
+    148,
+    155
+   ],
+   [
+    "replace",
+    180,
+    181,
+    155,
+    156,
+    [
+     "Dot File"
+    ]
+   ],
+   [
+    "equal",
+    181,
+    182,
+    156,
+    157
+   ],
+   [
+    "replace",
+    182,
+    183,
+    157,
+    158,
+    [
+     "Rendered%22%2C%0A%09%09lp%3D%221009.5%2C175%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C1176.4%2C163.57%20795.18%2C260.11%20812.45%2C232.48%20849.91%2C180.49%20897.95%2C160%20944.48%2C140.16%201074.4%2C151.15%201166.2%2C162.31%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22auth.permission%22%09%5Bheight%3D0.5%2C%0A%09%09model%3D%3Cclass%20'django.contrib.auth.models.Permission'%3E%2C%0A%09%09pos%3D%221735.7%2C224%22%2C%0A%09%09width%3D2.3831%5D%3B%0A%09%22auth.group%22%20-%3E%20%22auth.permission%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dred%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dpermissions%2C%0A%09%09label%3D%22ManyToManyField%5Cnpermissions%22%2C%0A%09%09lp%3D%221265%2C274%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C1656.8%2C231.12%20844.38%2C274.2%20861.66%2C273.13%20880.56%2C271.99%20897.95%2C271%201224.1%2C252.47%201306.1%2C255.69%201632%2C233%201636.7%2C232.67%201641.6%2C232.31%20%5C%0A1646.6%2C231.93%22%2C%0A%09%09relationship_type%3DManyToManyField%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22auth.group%22%20-%3E%20%22auth.user%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dred%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Duser%2C%0A%09%09label%3D%22ManyToManyRel%5Cn(reverse%3A%20user)%22%2C%0A%09%09lp%3D%22599.07%2C343%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C467.79%2C387.13%20736.67%2C289.79%20716.19%2C294.83%20691.75%2C300.55%20669.57%2C305%20607.31%2C317.49%20584.61%2C298.15%20528.57%2C328%20506.25%2C339.89%20487.01%2C%5C%0A361.33%20474.01%2C378.57%22%2C%0A%09%09relationship_type%3DManyToManyRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22auth.user_groups%22%09%5Bheight%3D0.5%2C%0A%09%09model%3D%3Cclass%20'django.contrib.auth.models.User_groups'%3E%2C%0A%09%09pos%3D%221265%2C396%22%2C%0A%09%09width%3D2.5456%5D%3B%0A%09%22auth.group%22%20-%3E%20%22auth.user_groups%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3D%22User_groups%2B%22%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20User_groups%2B)%22%2C%0A%09%09lp%3D%221009.5%2C331%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C1205.8%2C382.14%20839.99%2C285.64%20858.41%2C288.11%20879.05%2C290.77%20897.95%2C293%20947.43%2C298.83%201079.1%2C288.96%201121%2C316%201134.3%2C324.65%201126.9%2C336.63%20%5C%0A1139%2C347%201155.3%2C361.02%201176.1%2C371.31%201196.1%2C378.72%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22auth.group_permissions%22%20-%3E%20%22auth.group%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dgroup%2C%0A%09%09label%3D%22ForeignKey%5Cngroup%22%2C%0A%09%09lp%3D%221009.5%2C228%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C807.26%2C261.24%201162.7%2C185.98%201055.4%2C196.59%20901.12%2C211.98%20897.95%2C213%20868.18%2C222.57%20837.62%2C240.71%20815.77%2C255.4%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22auth.group_permissions%22%20-%3E%20%22auth.permission%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dpermission%2C%0A%09%09label%3D%22ForeignKey%5Cnpermission%22%2C%0A%09%09lp%3D%221520.5%2C165%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C1717.4%2C206.15%201319.6%2C159.89%201392.3%2C140.78%201525.2%2C115.59%201632%2C150%201661.9%2C159.67%201690.6%2C181.69%201709.9%2C199.21%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22auth.permission%22%20-%3E%20%22auth.group%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dred%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dgroup%2C%0A%09%09label%3D%22ManyToManyRel%5Cn(reverse%3A%20group)%22%2C%0A%09%09lp%3D%221265%2C309%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C844.91%2C280.88%201688%2C239.05%201670.5%2C244.3%201650.5%2C249.9%201632%2C254%201417.4%2C301.55%201358.6%2C295.03%201139%2C291%201040.4%2C289.19%20926.59%2C284.56%20%5C%0A855.13%2C281.34%22%2C%0A%09%09relationship_type%3DManyToManyRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22auth.permission%22%20-%3E%20%22auth.group_permissions%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3D%22Group_permissions%2B%22%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20Group_permissions%2B)%22%2C%0A%09%09lp%3D%221520.5%2C218%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C1383%2C180.82%201676.8%2C210.81%201662.2%2C207.87%201646.6%2C205.02%201632%2C203%201553%2C192.07%201463.8%2C185.37%201393.2%2C181.38%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22auth.permission%22%20-%3E%20%22auth.user%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dred%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Duser%2C%0A%09%09label%3D%22ManyToManyRel%5Cn(reverse%3A%20user)%22%2C%0A%09%09lp%3D%221009.5%2C131%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C459.49%2C386.91%201721.9%2C205.9%201704.5%2C183.08%201671.1%2C144.91%201632%2C129%201543.6%2C93.118%201043.5%2C91.685%20897.95%2C116%20726.72%2C144.61%20656.63%2C125.78%20%5C%0A528.57%2C243%20488.98%2C279.24%20469.81%2C341.23%20461.61%2C377.1%22%2C%0A%09%09relationship_type%3DManyToManyRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22auth.user_user_permissions%22%09%5Bheight%3D0.5%2C%0A%09%09model%3D%3Cclass%20'django.contrib.auth.models.User_user_permissions'%3E%2C%0A%09%09pos%3D%222249.9%2C451%22%2C%0A%09%09width%3D3.8997%5D%3B%0A%09%22auth.permission%22%20-%3E%20%22auth.user_user_permissions%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3D%22User_user_permissions%2B%22%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20User_user_permissions%2B)%22%2C%0A%09%09lp%3D%221965.5%2C421%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C2186.4%2C434.91%201755.9%2C241.7%201775.7%2C259.17%201808%2C285.7%201839.5%2C303%201951%2C364.03%202092.6%2C408.72%202176.7%2C432.22%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22auth.permission%22%20-%3E%20%22contenttypes.contenttype%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dcontent_type%2C%0A%09%09label%3D%22ForeignKey%5Cncontent_type%22%2C%0A%09%09lp%3D%221965.5%2C206%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C2194.6%2C86.335%201785.9%2C209.23%201879%2C181.23%202081.2%2C120.42%202184.9%2C89.256%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22auth.user%22%20-%3E%20%22admin.logentry%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dlogentry%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20logentry)%22%2C%0A%09%09lp%3D%22315.08%2C176%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C187.06%2C71.402%20454.21%2C386.7%20452.94%2C342.09%20443.55%2C226.61%20382.08%2C161%20333.8%2C109.47%20256.09%2C84.922%20197.1%2C73.293%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22auth.user%22%20-%3E%20%22auth.group%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dred%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dgroups%2C%0A%09%09label%3D%22ManyToManyField%5Cngroups%22%2C%0A%09%09lp%3D%22599.07%2C286%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C742.45%2C264.45%20459.88%2C387.05%20466.94%2C356.8%20485.91%2C296.47%20528.57%2C271%20591.02%2C233.72%20678.36%2C247.32%20732.7%2C261.76%22%2C%0A%09%09relationship_type%3DManyToManyField%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22auth.user%22%20-%3E%20%22auth.permission%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dred%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Duser_permissions%2C%0A%09%09label%3D%22ManyToManyField%5Cnuser_permissions%22%2C%0A%09%09lp%3D%221009.5%2C487%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C1712.7%2C241.65%20489.74%2C419.28%20501.82%2C424.08%20515.67%2C429.19%20528.57%2C433%20597.79%2C453.44%20615.77%2C458.63%20687.57%2C466%20843.35%2C482%201241.3%2C469.11%20%5C%0A1391%2C423%201517.3%2C384.08%201647.1%2C291.9%201704.5%2C248.02%22%2C%0A%09%09relationship_type%3DManyToManyField%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22auth.user%22%20-%3E%20%22auth.user_groups%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3D%22User_groups%2B%22%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20User_groups%2B)%22%2C%0A%09%09lp%3D%22783.76%2C447%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C1206.2%2C409.94%20507.76%2C410.84%20619.6%2C422.57%20893.17%2C446.09%201121%2C424%201145.7%2C421.6%201172.6%2C416.9%201196.3%2C412.03%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22auth.user%22%20-%3E%20%22auth.user_user_permissions%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3D%22User_user_permissions%2B%22%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20User_user_permissions%2B)%22%2C%0A%09%09lp%3D%221265%2C615%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C2226.7%2C468.8%20492.65%2C418.37%20499.52%2C422.42%20505.99%2C427.56%20510.57%2C434%20540.3%2C475.8%20493.13%2C510.92%20528.57%2C548%20608.25%2C631.36%20667.45%2C600%20%5C%0A782.76%2C600%20782.76%2C600%20782.76%2C600%201736.7%2C600%201896.1%2C600%201941.8%2C602.49%202091.5%2C548%202139.4%2C530.6%202188.3%2C497.53%202218.7%2C474.89%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22common.customer%22%09%5Bheight%3D0.5%2C%0A%09%09model%3D%3Cclass%20'example_project.common.models.Customer'%3E%2C%0A%09%09pos%3D%22783.76%2C765%22%2C%0A%09%09width%3D2.672%5D%3B%0A%09%22auth.user%22%20-%3E%20%22common.customer%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dchartreuse4%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dcustomer%2C%0A%09%09label%3D%22OneToOneRel%5Cn(reverse%3A%20customer)%22%2C%0A%09%09lp%3D%22599.07%2C775%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C687.54%2C763.66%20493.36%2C418.24%20500.1%2C422.29%20506.33%2C427.46%20510.57%2C434%20541.93%2C482.43%20492.2%2C648.21%20528.57%2C693%20564.22%2C736.9%20624.5%2C755.22%20%5C%0A677.41%2C762.41%22%2C%0A%09%09relationship_type%3DOneToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22auth.user_groups%22%20-%3E%20%22auth.group%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dgroup%2C%0A%09%09label%3D%22ForeignKey%5Cngroup%22%2C%0A%09%09lp%3D%221009.5%2C384%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C806.31%2C294.92%201201.1%2C382.96%201176.3%2C378.1%201147.3%2C372.84%201121%2C369%201022.4%2C354.63%20992.47%2C377.52%20897.95%2C346%20867.43%2C335.82%20836.35%2C316.36%20%5C%0A814.5%2C300.86%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22auth.user_groups%22%20-%3E%20%22auth.user%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Duser%2C%0A%09%09label%3D%22ForeignKey%5Cnuser%22%2C%0A%09%09lp%3D%22783.76%2C408%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C509.57%2C401.45%201173.9%2C398.18%201156.4%2C398.52%201138.1%2C398.82%201121%2C399%201021.8%2C400.04%20995.78%2C414.88%20897.95%2C399%20889.63%2C397.65%20888.28%2C394.35%20%5C%0A879.95%2C393%20795.55%2C379.3%20773.04%2C390.78%20687.57%2C393%20630.78%2C394.47%20566.22%2C397.98%20519.78%2C400.82%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22auth.user_user_permissions%22%20-%3E%20%22auth.permission%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dpermission%2C%0A%09%09label%3D%22ForeignKey%5Cnpermission%22%2C%0A%09%09lp%3D%221965.5%2C284%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C1819.8%2C227.7%202239.4%2C432.94%202218.4%2C395.14%202164.3%2C307.97%202091.5%2C269%202047.7%2C245.49%201919.6%2C233.78%201830%2C228.31%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22auth.user_user_permissions%22%20-%3E%20%22auth.user%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Duser%2C%0A%09%09label%3D%22ForeignKey%5Cnuser%22%2C%0A%09%09lp%3D%221265%2C549%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C489.37%2C419.22%202188.7%2C467.2%202093.5%2C491.35%201902%2C534%201736.7%2C534%20782.76%2C534%20782.76%2C534%20782.76%2C534%20665.34%2C534%20622.91%2C531.91%20528.57%2C%5C%0A462%20516.68%2C453.19%20521.44%2C444.03%20510.57%2C434%20506.79%2C430.51%20502.52%2C427.31%20498.06%2C424.41%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22common.customer%22%20-%3E%20%22auth.user%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dchartreuse4%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Duser%2C%0A%09%09label%3D%22OneToOneField%5Cnuser%22%2C%0A%09%09lp%3D%22599.07%2C674%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C493.21%2C418.34%20768.14%2C747.04%20748.18%2C723.63%20710.2%2C682.85%20669.57%2C659%20612.84%2C625.7%20569.97%2C665.12%20528.57%2C614%20477.97%2C551.52%20555.28%2C500.82%20%5C%0A510.57%2C434%20508.13%2C430.36%20505.08%2C427.13%20501.67%2C424.29%22%2C%0A%09%09relationship_type%3DOneToOneField%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22sales.bankaccount%22%09%5Bheight%3D0.5%2C%0A%09%09model%3D%3Cclass%20'example_project.sales.models.BankAccount'%3E%2C%0A%09%09pos%3D%221265%2C762%22%2C%0A%09%09width%3D2.6539%5D%3B%0A%09%22common.customer%22%20-%3E%20%22sales.bankaccount%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dsales_bankaccounts%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20sales_bankaccounts)%22%2C%0A%09%09lp%3D%221009.5%2C755%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C1196.2%2C749.41%20839.92%2C750.3%20858.24%2C746.09%20878.85%2C742.08%20897.95%2C740%20996.48%2C729.25%201022.1%2C732.44%201121%2C740%201142.2%2C741.63%201165.2%2C744.6%20%5C%0A1186.3%2C747.85%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22sales.creditcard%22%09%5Bheight%3D0.5%2C%0A%09%09model%3D%3Cclass%20'example_project.sales.models.CreditCard'%3E%2C%0A%09%09pos%3D%221265%2C676%22%2C%0A%09%09width%3D2.3651%5D%3B%0A%09%22common.customer%22%20-%3E%20%22sales.creditcard%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dsales_creditcards%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20sales_creditcards)%22%2C%0A%09%09lp%3D%221009.5%2C649%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C1222.4%2C660.38%20793.86%2C746.68%20810%2C716.51%20846.84%2C657.38%20897.95%2C634%20988.08%2C592.76%201022.9%2C619.89%201121%2C634%201152.1%2C638.48%201185.9%2C648.17%20%5C%0A1212.8%2C657.12%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22sales.order%22%09%5Bheight%3D0.5%2C%0A%09%09model%3D%3Cclass%20'example_project.sales.models.Order'%3E%2C%0A%09%09pos%3D%221735.7%2C919%22%2C%0A%09%09width%3D1.7332%5D%3B%0A%09%22common.customer%22%20-%3E%20%22sales.order%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dorders%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20orders)%22%2C%0A%09%09lp%3D%221265%2C915%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C1673.9%2C916.04%20801.6%2C782.87%20822.15%2C803.37%20859.01%2C836.06%20897.95%2C851%20968.57%2C878.09%201474.7%2C905.95%201663.8%2C915.53%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22sales.shippingaddress%22%09%5Bheight%3D0.5%2C%0A%09%09model%3D%3Cclass%20'example_project.sales.models.ShippingAddress'%3E%2C%0A%09%09pos%3D%221265%2C979%22%2C%0A%09%09width%3D3.1594%5D%3B%0A%09%22common.customer%22%20-%3E%20%22sales.shippingaddress%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dshipping_addresses%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20shipping_addresses)%22%2C%0A%09%09lp%3D%221009.5%2C1022%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C1202.8%2C994.12%20788.63%2C783.15%20798.51%2C824.43%20828.92%2C925.01%20897.95%2C967%20987.76%2C1021.6%201114.2%2C1010.7%201192.5%2C996.11%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22contenttypes.contenttype%22%20-%3E%20%22admin.logentry%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dlogentry%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20logentry)%22%2C%0A%09%09lp%3D%221009.5%2C15%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C163.42%2C48.467%202181%2C54.725%202083.3%2C34.128%201897.2%2C0%201736.7%2C0%20454.32%2C0%20454.32%2C0%20454.32%2C0%20354.17%2C0%20240.12%2C27.017%20173.32%2C45.666%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22contenttypes.contenttype%22%20-%3E%20%22auth.permission%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dpermission%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20permission)%22%2C%0A%09%09lp%3D%221965.5%2C101%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C1743.9%2C206%202120%2C69.506%202009.3%2C69.988%201864%2C73.134%201839.5%2C86%201794.3%2C109.85%201763.6%2C163.56%201748.2%2C196.5%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22inventory.category%22%09%5Bheight%3D0.5%2C%0A%09%09model%3D%3Cclass%20'example_project.inventory.models.Category'%3E%2C%0A%09%09pos%3D%223169.3%2C967%22%2C%0A%09%09width%3D2.69%5D%3B%0A%09%22inventory.category%22%20-%3E%20%22inventory.category%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dchildren%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20children)%22%2C%0A%09%09lp%3D%223169.3%2C1018%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C3192.9%2C984.78%203145.8%2C984.78%203141.8%2C994.31%203149.6%2C1003%203169.3%2C1003%203181.3%2C1003%203188.9%2C999.77%203192.1%2C995.1%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22inventory.category%22%20-%3E%20%22inventory.category%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dparent%2C%0A%09%09label%3D%22ForeignKey%5Cnparent%22%2C%0A%09%09lp%3D%223169.3%2C1048%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C3205%2C983.92%203133.7%2C983.92%203107.6%2C1005.1%203119.4%2C1033%203169.3%2C1033%203213.8%2C1033%203228.1%2C1010.9%203212.2%2C991.08%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22inventory.category%22%20-%3E%20%22inventory.product%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dproduct%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20product)%22%2C%0A%09%09lp%3D%222888.2%2C950%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C2757.2%2C918.57%203106.7%2C953.14%203075.3%2C946.59%203036.4%2C939.29%203001.2%2C935%202923%2C925.47%202834%2C920.98%202767.3%2C918.87%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22inventory.product%22%20-%3E%20%22analytics.productperformance%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dperformance_metrics%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20performance_metrics)%22%2C%0A%09%09lp%3D%222888.2%2C1152%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C3083.2%2C1131.8%202670.7%2C935.06%202682.8%2C971.53%202715.5%2C1053.5%202775.2%2C1089%202865.5%2C1142.7%202988.8%2C1142.1%203073.2%2C1132.9%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22inventory.product%22%20-%3E%20%22inventory.category%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dcategory%2C%0A%09%09label%3D%22ForeignKey%5Cncategory%22%2C%0A%09%09lp%3D%222888.2%2C996%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C3085.6%2C976.18%202695.4%2C934.16%202716.9%2C945.37%202746.9%2C959.01%202775.2%2C965%202876.2%2C986.36%202995.1%2C983.17%203075.5%2C976.99%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22inventory.productsupplier%22%09%5Bheight%3D0.5%2C%0A%09%09model%3D%3Cclass%20'example_project.inventory.models.ProductSupplier'%3E%2C%0A%09%09pos%3D%223169.3%2C842%22%2C%0A%09%09width%3D3.6288%5D%3B%0A%09%22inventory.product%22%20-%3E%20%22inventory.productsupplier%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dproductsupplier%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20productsupplier)%22%2C%0A%09%09lp%3D%222888.2%2C872%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C3039.1%2C840.59%202689.6%2C899.4%202711%2C885.03%202743.5%2C865.72%202775.2%2C857%202821.5%2C844.24%202935.6%2C840.98%203029%2C840.62%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22inventory.supplier%22%09%5Bheight%3D0.5%2C%0A%09%09model%3D%3Cclass%20'example_project.inventory.models.Supplier'%3E%2C%0A%09%09pos%3D%223638.4%2C829%22%2C%0A%09%09width%3D2.6359%5D%3B%0A%09%22inventory.product%22%20-%3E%20%22inventory.supplier%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dred%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dsuppliers%2C%0A%09%09label%3D%22ManyToManyField%5Cnsuppliers%22%2C%0A%09%09lp%3D%223169.3%2C918%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C3602.5%2C845.69%202756%2C913.87%202961.8%2C906.53%203451.8%2C887.66%203525.5%2C872%203548.5%2C867.1%203573%2C858.14%203593.2%2C849.66%22%2C%0A%09%09relationship_type%3DManyToManyField%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22sales.orderitem%22%09%5Bheight%3D0.5%2C%0A%09%09model%3D%3Cclass%20'example_project.sales.models.OrderItem'%3E%2C%0A%09%09pos%3D%222249.9%2C918%22%2C%0A%09%09width%3D2.3109%5D%3B%0A%09%22inventory.product%22%20-%3E%20%22sales.orderitem%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dorderitem%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20orderitem)%22%2C%0A%09%09lp%3D%222480.8%2C907%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C2311.2%2C905.67%202610%2C902.37%202592.1%2C898.14%202572%2C894.1%202553.3%2C892%202489.3%2C884.81%202472.5%2C886.73%202408.3%2C892%202379.7%2C894.35%202348.4%2C899.06%20%5C%0A2321.3%2C903.84%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22inventory.productsupplier%22%20-%3E%20%22inventory.product%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dproduct%2C%0A%09%09label%3D%22ForeignKey%5Cnproduct%22%2C%0A%09%09lp%3D%222888.2%2C821%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C2676.4%2C898.87%203108.9%2C825.98%203077.2%2C818.26%203037.4%2C809.85%203001.2%2C806%202901.3%2C795.37%202867.9%2C767.34%202775.2%2C806%202734.5%2C822.98%202701.1%2C%5C%0A863.17%202682.2%2C890.24%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22inventory.productsupplier%22%20-%3E%20%22inventory.supplier%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dsupplier%2C%0A%09%09label%3D%22ForeignKey%5Cnsupplier%22%2C%0A%09%09lp%3D%223431.5%2C853%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C3546.1%2C833.25%203299%2C839.79%203366.4%2C838.45%203450.4%2C836.52%203525.5%2C834%203528.9%2C833.88%203532.4%2C833.76%203536%2C833.63%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22inventory.supplier%22%20-%3E%20%22inventory.product%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dred%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dproducts%2C%0A%09%09label%3D%22ManyToManyRel%5Cn(reverse%3A%20products)%22%2C%0A%09%09lp%3D%223169.3%2C757%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C2673.6%2C898.91%203601.4%2C812.32%203579.9%2C803.23%203551.7%2C792.85%203525.5%2C788%203197.6%2C727.35%203076.9%2C641.96%202775.2%2C784%202729%2C805.74%202695.6%2C857.45%20%5C%0A2678.4%2C889.61%22%2C%0A%09%09relationship_type%3DManyToManyRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22inventory.supplier%22%20-%3E%20%22inventory.productsupplier%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dproductsupplier%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20productsupplier)%22%2C%0A%09%09lp%3D%223431.5%2C815%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C3232%2C826.13%203588.9%2C813.57%203569.4%2C808.12%203546.6%2C802.69%203525.5%2C800%203442.6%2C789.43%203420.4%2C789.74%203337.5%2C800%203332.4%2C800.63%203285%2C812.59%20%5C%0A3242%2C823.58%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22sales.bankaccount%22%20-%3E%20%22common.customer%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dcustomer%2C%0A%09%09label%3D%22ForeignKey%5Cncustomer%22%2C%0A%09%09lp%3D%221009.5%2C786%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C877.1%2C769.42%201174.4%2C767.78%201156.7%2C768.71%201138.2%2C769.52%201121%2C770%201021.9%2C772.77%20997.04%2C772.19%20897.95%2C770%20894.45%2C769.92%20890.9%2C769.83%20%5C%0A887.3%2C769.73%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22sales.creditcard%22%20-%3E%20%22common.customer%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dcustomer%2C%0A%09%09label%3D%22ForeignKey%5Cncustomer%22%2C%0A%09%09lp%3D%221009.5%2C714%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C807.54%2C747.38%201183.5%2C670.55%201108.1%2C667.88%20992.97%2C670.09%20897.95%2C699%20867.98%2C708.12%20837.5%2C726.53%20815.73%2C741.59%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22sales.order%22%20-%3E%20%22common.customer%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dcustomer%2C%0A%09%09label%3D%22ForeignKey%5Cncustomer%22%2C%0A%09%09lp%3D%221265%2C863%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C823.6%2C781.47%201685.4%2C908.32%201668.4%2C904.69%201649.4%2C900.63%201632%2C897%201525%2C874.67%201499.1%2C863.66%201391%2C848%201173.3%2C816.48%201112.9%2C851.57%20%5C%0A897.95%2C805%20876.16%2C800.28%20852.81%2C792.52%20833.01%2C785.08%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22sales.order%22%20-%3E%20%22sales.orderitem%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Ditems%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20items)%22%2C%0A%09%09lp%3D%221965.5%2C939%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C2167.7%2C921.07%201797.6%2C921.76%201811.4%2C922.28%201826%2C922.74%201839.5%2C923%201951.5%2C925.18%201979.6%2C924.78%202091.5%2C923%202112.9%2C922.66%202135.9%2C922.06%20%5C%0A2157.5%2C921.4%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22sales.order%22%20-%3E%20%22sales.shippingaddress%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dshipping_address%2C%0A%09%09label%3D%22ForeignKey%5Cnshipping_address%22%2C%0A%09%09lp%3D%221520.5%2C952%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C1312%2C962.53%201673.3%2C918.2%201607.5%2C918.31%201500.1%2C921.32%201409%2C937%201379.7%2C942.04%201347.9%2C951.01%201321.7%2C959.37%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22sales.orderitem%22%20-%3E%20%22inventory.product%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dproduct%2C%0A%09%09label%3D%22ForeignKey%5Cnproduct%22%2C%0A%09%09lp%3D%222480.8%2C937%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C2573.9%2C921.41%202332.4%2C920.66%202393.3%2C922.27%202478.5%2C923.7%202553.3%2C922%202556.8%2C921.92%202560.3%2C921.83%202563.8%2C921.73%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22sales.orderitem%22%20-%3E%20%22sales.order%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dorder%2C%0A%09%09label%3D%22ForeignKey%5Cnorder%22%2C%0A%09%09lp%3D%221965.5%2C904%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C1775.2%2C904.95%202192.1%2C904.94%202162.3%2C898.76%202125.2%2C892.07%202091.5%2C889%201980%2C878.81%201950.4%2C873.15%201839.5%2C889%201821.4%2C891.59%201802%2C896.64%20%5C%0A1784.9%2C901.87%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22sales.shippingaddress%22%20-%3E%20%22common.customer%22%09%5Bkey%3Dforward%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dforward%2C%0A%09%09field_name%3Dcustomer%2C%0A%09%09label%3D%22ForeignKey%5Cncustomer%22%2C%0A%09%09lp%3D%221009.5%2C948%22%2C%0A%09%09penwidth%3D2.0%2C%0A%09%09pos%3D%22e%2C792.43%2C783.15%201220.8%2C962.3%201192.8%2C952.16%201155.2%2C939.88%201121%2C933%201072.2%2C923.21%20941.53%2C937.98%20897.95%2C914%20848.26%2C886.66%20813.7%2C827.31%20%5C%0A796.75%2C792.33%22%2C%0A%09%09relationship_type%3DForeignKey%2C%0A%09%09style%3Dsolid%5D%3B%0A%09%22sales.shippingaddress%22%20-%3E%20%22sales.order%22%09%5Bkey%3Dreverse%2C%0A%09%09arrowhead%3Dnormal%2C%0A%09%09color%3Dblue%2C%0A%09%09direction%3Dback%2C%0A%09%09field_name%3Dorder%2C%0A%09%09label%3D%22ManyToOneRel%5Cn(reverse%3A%20order)%22%2C%0A%09%09lp%3D%221520.5%2C1002%22%2C%0A%09%09penwidth%3D1.0%2C%0A%09%09pos%3D%22e%2C1707.9%2C935.21%201368.4%2C986.54%201442.6%2C989.38%201544.8%2C987.86%201632%2C967%201655.3%2C961.41%201679.8%2C950.24%201699%2C940.08%22%2C%0A%09%09relationship_type%3DManyToOneRel%2C%0A%09%09style%3Ddashed%5D%3B%0A%09%22sessions.session%22%09%5Bheight%3D0.5%2C%0A%09%09model%3D%3Cclass%20'django.contrib.sessions.models.Session'%3E%2C%0A%09%09pos%3D%22115.04%2C362%22%2C%0A%09%09width%3D2.4192%5D%3B%0A%7D%0A)"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    196,
+    158,
+    171
+   ],
+   [
+    "replace",
+    196,
+    226,
+    171,
+    172,
+    [
+     "…（30 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    226,
+    228,
+    172,
+    174
+   ],
+   [
+    "replace",
+    228,
+    243,
+    174,
+    189,
+    [
+     " sales_0001_initial[\"sales/0001\"]",
+     " inventory_0001_initial[\"inventory/0001\"]",
+     " auth_0001_initial[\"auth/0001\"]",
+     " contenttypes_0001_initial[\"contenttypes/0001\"]",
+     " common_0001_initial[\"common/0001\"]",
+     " admin_0001_initial[\"admin/0001\"]",
+     " admin_0002_logentry_remove_auto_add[\"admin/0002\"]",
+     " admin_0003_logentry_add_action_flag_choices[\"admin/0003\"]",
+     " admin_0001_initial --> admin_0002_logentry_remove_auto_add",
+     " admin_0002_logentry_remove_auto_add --> admin_0003_logentry_add_action_flag_choices",
+     " inventory_0001_initial --> sales_0001_initial",
+     " auth_0001_initial --> admin_0001_initial",
+     " common_0001_initial --> sales_0001_initial",
+     " contenttypes_0001_initial --> admin_0001_initial",
+     " auth_0001_initial --> common_0001_initial"
+    ]
+   ],
+   [
+    "equal",
+    243,
+    246,
+    189,
+    192
+   ],
+   [
+    "delete",
+    246,
+    248,
+    192,
+    192
+   ],
+   [
+    "equal",
+    248,
+    250,
+    192,
+    194
+   ],
+   [
+    "replace",
+    250,
+    251,
+    194,
+    195,
+    [
+     "For detailed usage and examples, visit our full documentation."
+    ]
+   ],
+   [
+    "equal",
+    251,
+    253,
+    195,
+    197
+   ],
+   [
+    "replace",
+    253,
+    258,
+    197,
+    198,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    259,
+    198,
+    199
+   ],
+   [
+    "replace",
+    259,
+    270,
+    199,
+    200,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    270,
+    272,
+    200,
+    202
+   ],
+   [
+    "replace",
+    272,
+    273,
+    202,
+    203,
+    [
+     "The `modelinfo` command has been something I have slowly been working on and improving for several years. The original idea behind `modelfilters` came from observing the underlying functionality in the `django-drip-campaigns` package and realizing that having a way to list potential filter paths could help developers with building complex queries, though my implementation of those ideas is quite different. The `modelgraph` command was loosely inspired by existing tools like the `graph_models` command in `django-extensions`, but I wanted to provide a more detailed, filterable, and customizable output. The `migrationgraph` command was inspired by recent discussions I read online about migration graphs and dependencies, but I cannot recall the specific thread/post that sparked the idea."
+    ]
+   ],
+   [
+    "equal",
+    273,
+    275,
+    203,
+    205
+   ],
+   [
+    "delete",
+    275,
+    276,
+    205,
+    205
+   ],
+   [
+    "equal",
+    276,
+    277,
+    205,
+    206
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "bdb16318fcb8+2": {
+  "fn": "mpdroog/radiusd",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    2,
+    1,
+    2,
+    [
+     " Buy me a coffee"
+    ]
+   ],
+   [
+    "equal",
+    2,
+    5,
+    2,
+    5
+   ],
+   [
+    "delete",
+    5,
+    6,
+    5,
+    5
+   ],
+   [
+    "equal",
+    6,
+    27,
+    5,
+    26
+   ],
+   [
+    "replace",
+    27,
+    28,
+    26,
+    27,
+    [
+     "ERD"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    30,
+    27,
+    29
+   ],
+   [
+    "delete",
+    30,
+    31,
+    29,
+    29
+   ],
+   [
+    "equal",
+    31,
+    38,
+    29,
+    36
+   ],
+   [
+    "delete",
+    38,
+    39,
+    36,
+    36
+   ],
+   [
+    "equal",
+    39,
+    45,
+    36,
+    42
+   ],
+   [
+    "delete",
+    45,
+    46,
+    42,
+    42
+   ],
+   [
+    "equal",
+    46,
+    50,
+    42,
+    46
+   ],
+   [
+    "delete",
+    50,
+    51,
+    46,
+    46
+   ],
+   [
+    "equal",
+    51,
+    56,
+    46,
+    51
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "0528b9b272c1+2": {
+  "fn": "zombiezen/postgrestest",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "Reference",
+     "Contributor Covenant"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    4,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "**This package is no longer maintained. See `github.com/stapelberg/postgrestest` for a better replacement.**"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    13,
+    6,
+    13
+   ],
+   [
+    "delete",
+    13,
+    15,
+    13,
+    13
+   ],
+   [
+    "equal",
+    15,
+    21,
+    13,
+    19
+   ],
+   [
+    "replace",
+    21,
+    51,
+    19,
+    20,
+    [
+     "…（30 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    65,
+    20,
+    34
+   ],
+   [
+    "delete",
+    65,
+    67,
+    34,
+    34
+   ],
+   [
+    "equal",
+    67,
+    68,
+    34,
+    35
+   ],
+   [
+    "replace",
+    68,
+    70,
+    35,
+    36,
+    [
+     "Apache 2.0"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "61f7d24a1dd0+2": {
+  "fn": "bytesfly/blog",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "delete",
+    0,
+    1,
+    0,
+    0
+   ],
+   [
+    "equal",
+    1,
+    3,
+    0,
+    2
+   ],
+   [
+    "replace",
+    3,
+    10,
+    2,
+    9,
+    [
+     "- MyBatis-Plus中如何使用ResultMap",
+     "- 换种思路写Mock，让单元测试更简单",
+     "- 一文读懂Java中的动态代理",
+     "- 云原生时代的Java",
+     "",
+     "- 阿里巴巴Java开发手册——编程规约",
+     "- 阿里巴巴Java开发手册——异常处理、MySQL 数据库"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    13,
+    9,
+    12
+   ],
+   [
+    "replace",
+    13,
+    15,
+    12,
+    14,
+    [
+     "- Flink流处理基础",
+     "- Flink把数据sink到kafka多个topic"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    14,
+    15
+   ],
+   [
+    "replace",
+    16,
+    18,
+    15,
+    17,
+    [
+     "- centos7安装部署opentsdb2.4.0",
+     "- opentsdb探索之路——部分设计与实现"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    21,
+    17,
+    20
+   ],
+   [
+    "replace",
+    21,
+    23,
+    20,
+    22,
+    [
+     "- Python开发环境搭建",
+     "- 一文上手Python3"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    27,
+    22,
+    26
+   ],
+   [
+    "replace",
+    27,
+    31,
+    26,
+    29,
+    [
+     "- 快速上手NumPy",
+     "- 快速上手pandas(上)",
+     "- 快速上手pandas(下)"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    33,
+    29,
+    31
+   ],
+   [
+    "replace",
+    33,
+    35,
+    31,
+    33,
+    [
+     "- 从线性回归走进机器学习",
+     "- 最大似然估计"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    37,
+    33,
+    35
+   ],
+   [
+    "replace",
+    37,
+    39,
+    35,
+    36,
+    [
+     "- PyTorch中backward()函数的gradient参数作用"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    42,
+    36,
+    39
+   ],
+   [
+    "replace",
+    42,
+    45,
+    39,
+    42,
+    [
+     "- 一文学会MySQL的explain工具",
+     "- 一文读懂MySQL的索引结构及查询优化",
+     "- 一文读懂MySQL的事务隔离级别及MVCC机制"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    48,
+    42,
+    45
+   ],
+   [
+    "replace",
+    48,
+    49,
+    45,
+    46,
+    [
+     "- 不识Netty真面目，只缘未读此真经"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    52,
+    46,
+    49
+   ],
+   [
+    "replace",
+    52,
+    54,
+    49,
+    51,
+    [
+     "- 设计模式概述",
+     "- 面向对象设计原则"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    56,
+    51,
+    53
+   ],
+   [
+    "replace",
+    56,
+    60,
+    53,
+    57,
+    [
+     "- 工厂模式三兄弟(Factory Pattern)",
+     "- 单例模式(Singleton Pattern)——确保对象的唯一性",
+     "- 原型模式(Prototype Pattern)——对象的克隆",
+     "- 建造者模式(Builder Pattern)——复杂对象的组装与创建"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    62,
+    57,
+    59
+   ],
+   [
+    "replace",
+    62,
+    70,
+    59,
+    67,
+    [
+     "- 适配器模式(Adapter Pattern)——不兼容结构的协调",
+     "- 桥接模式(Bridge Pattern)——处理多维度变化",
+     "- 组合模式(Composite Pattern)——树形结构的处理",
+     "- 装饰模式(Decorator Pattern)——扩展系统功能",
+     "- 外观模式(Facade Pattern)——提供统一的入口",
+     "- 享元模式(Flyweight Pattern)——实现对象的复用",
+     "- 代理模式(Proxy Pattern)——对象的间接访问",
+     "- 一文读懂Java中的动态代理"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    72,
+    67,
+    69
+   ],
+   [
+    "replace",
+    72,
+    84,
+    69,
+    80,
+    [
+     "- 职责链模式(Chain of Responsibility Pattern)——请求的链式处理",
+     "- 命令模式(Command Pattern)——请求发送者与接收者解耦",
+     "- 解释器模式(Interpreter Pattern)——自定义语言的实现",
+     "- 迭代器模式(Iterator Pattern)——遍历聚合对象中的元素",
+     "- 中介者模式(Mediator Pattern)——协调多个对象之间的交互",
+     "- 备忘录模式(Memento Pattern)——撤销功能的实现",
+     "- 观察者模式(Observer Pattern)——对象间的联动",
+     "- 状态模式(State Pattern)——处理对象的多种状态及其相互转换",
+     "- 策略模式(Strategy Pattern)——算法的封装与切换",
+     "- 模板方法模式(Template Method Pattern)——复杂流程步骤的设计",
+     "- 访问者模式(Visitor Pattern)——操作复杂对象结构"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    88,
+    80,
+    84
+   ],
+   [
+    "replace",
+    88,
+    90,
+    84,
+    85,
+    [
+     "- MongoDB -> kafka 高性能实时同步方案"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    92,
+    85,
+    87
+   ],
+   [
+    "replace",
+    92,
+    96,
+    87,
+    89,
+    [
+     "- kafka启动报错\"A broker is already registered on the path /brokers/ids/1\"排查",
+     "- 使用ClouderaManager管理的HBase的RegionServer无法启动排查"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    99,
+    89,
+    92
+   ],
+   [
+    "replace",
+    99,
+    105,
+    92,
+    95,
+    [
+     "- 使用GitHub Pages + docsify快速搭建一个站点",
+     "- 一文学会在Markdown中编辑数学符号与公式",
+     "- 百闻不如一试——公式图片转Latex代码"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    95,
+    96
+   ],
+   [
+    "replace",
+    106,
+    108,
+    96,
+    98,
+    [
+     "- Linux工作环境搭建——deepin系统的使用",
+     "- Git使用汇总"
+    ]
+   ],
+   [
+    "equal",
+    108,
+    109,
+    98,
+    99
+   ],
+   [
+    "replace",
+    109,
+    110,
+    99,
+    101,
+    [
+     "- Kafka常用topic操作命令",
+     "- 使用脚本+kafka自带命令行工具 统计数据写入kafka速率"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    101,
+    102
+   ],
+   [
+    "replace",
+    111,
+    112,
+    102,
+    105,
+    [
+     "- MacOS如何调整JD-GUI反编译工具字体大小",
+     "",
+     "- 实用网站与工具"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    115,
+    105,
+    108
+   ],
+   [
+    "replace",
+    115,
+    119,
+    108,
+    112,
+    [
+     "- 请用一句话证明你是程序员",
+     "- 工作中如何做好技术积累",
+     "- 程序员的谎言",
+     "- 程序员的酒后真言"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    122,
+    112,
+    115
+   ],
+   [
+    "replace",
+    122,
+    123,
+    115,
+    116,
+    [
+     "- 非技术面试题汇总"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    127,
+    116,
+    120
+   ],
+   [
+    "replace",
+    127,
+    130,
+    120,
+    123,
+    [
+     "- 爬楼梯",
+     "- 使用最小花费爬楼梯",
+     "- 买卖股票的最佳时机"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    132,
+    123,
+    125
+   ],
+   [
+    "replace",
+    132,
+    135,
+    125,
+    128,
+    [
+     "- 跳跃游戏",
+     "- 跳跃游戏 II",
+     "- 买卖股票的最佳时机 II"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    137,
+    128,
+    130
+   ],
+   [
+    "replace",
+    137,
+    138,
+    130,
+    131,
+    [
+     "- 反转链表"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    140,
+    131,
+    133
+   ],
+   [
+    "replace",
+    140,
+    145,
+    133,
+    138,
+    [
+     "- 二叉树的层序遍历",
+     "- 对称二叉树",
+     "- 二叉树的前序遍历",
+     "- 二叉树的中序遍历",
+     "- 二叉树的后序遍历"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    147,
+    138,
+    140
+   ],
+   [
+    "replace",
+    147,
+    148,
+    140,
+    141,
+    [
+     "- 有效的括号"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    150,
+    141,
+    143
+   ],
+   [
+    "replace",
+    150,
+    151,
+    143,
+    144,
+    [
+     "- 移除元素"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    153,
+    144,
+    146
+   ],
+   [
+    "replace",
+    153,
+    155,
+    146,
+    147,
+    [
+     "- 只出现一次的数字"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "17f671e5a02f+2": {
+  "fn": "r-spatial/sfdbi",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "replace",
+    0,
+    6,
+    0,
+    1,
+    [
+     "# sfdbi "
+    ]
+   ],
+   [
+    "equal",
+    6,
+    11,
+    1,
+    6
+   ],
+   [
+    "delete",
+    11,
+    12,
+    6,
+    6
+   ],
+   [
+    "equal",
+    12,
+    16,
+    6,
+    10
+   ],
+   [
+    "replace",
+    16,
+    17,
+    10,
+    11,
+    [
+     "was in-memory with standard sf and dplyr"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    19,
+    11,
+    13
+   ],
+   [
+    "replace",
+    19,
+    20,
+    13,
+    14,
+    [
+     "`postgis`, but feel free to open an issue for"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    25,
+    14,
+    19
+   ],
+   [
+    "replace",
+    25,
+    26,
+    19,
+    20,
+    [
+     "GitHub with:"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    43,
+    20,
+    37
+   ],
+   [
+    "replace",
+    43,
+    103,
+    37,
+    38,
+    [
+     "…（60 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    104,
+    38,
+    39
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "22ed0e9d0c5e+2": {
+  "fn": "erfanansari/kharji",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "Kharji logo"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    11,
+    1,
+    9
+   ],
+   [
+    "replace",
+    11,
+    12,
+    9,
+    10,
+    [
+     "**Live App** · Try the Demo · Report a Bug"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    10,
+    11
+   ],
+   [
+    "replace",
+    13,
+    18,
+    11,
+    16,
+    [
+     "Next.js",
+     "React",
+     "TypeScript",
+     "Tailwind CSS",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    16,
+    17
+   ],
+   [
+    "replace",
+    19,
+    26,
+    17,
+    18,
+    [
+     "Kharji Overview"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    52,
+    18,
+    44
+   ],
+   [
+    "replace",
+    52,
+    59,
+    44,
+    51,
+    [
+     "|Expenses|Reports|",
+     "|:---------------------------------------------------:|:-----------------------------------------:|",
+     "|Expenses|Reports|",
+     "|**Assets**|**Income**|",
+     "|Assets|Income|",
+     "|**Light Mode**|**Landing Page**|",
+     "|Light Mode|Landing|"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    64,
+    51,
+    56
+   ],
+   [
+    "replace",
+    64,
+    69,
+    56,
+    61,
+    [
+     "|داشبورد|هزینه‌ها|",
+     "|:---------------------------------------------:|:-----------------------------------------------:|",
+     "|داشبورد|هزینه‌ها|",
+     "|**گزارش‌ها**|**صفحهٔ اصلی**|",
+     "|گزارش‌ها|صفحهٔ اصلی|"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    72,
+    61,
+    64
+   ],
+   [
+    "replace",
+    72,
+    85,
+    64,
+    77,
+    [
+     "|Layer|Choice|",
+     "|--------------------|----------------------------------------------------------------------------|",
+     "|Framework|Next.js 16 (App Router, React 19)|",
+     "|Language|TypeScript (strict)|",
+     "|Database|Turso (libSQL / SQLite)|",
+     "|Styling|Tailwind CSS v4|",
+     "|Charts|Recharts|",
+     "|Tables & data|TanStack Table v8 · TanStack Query v5|",
+     "|Auth|Better Auth (self-hosted, session cookies)|",
+     "|Internationalization|next-intl — English + Persian, RTL, Jalali calendar|",
+     "|Email|Resend + React Email|",
+     "|Validation|Zod|",
+     "|PWA|Serwist|"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    92,
+    77,
+    84
+   ],
+   [
+    "replace",
+    92,
+    93,
+    84,
+    85,
+    [
+     "- A free Turso database"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    100,
+    85,
+    92
+   ],
+   [
+    "replace",
+    100,
+    113,
+    92,
+    93,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    119,
+    93,
+    99
+   ],
+   [
+    "replace",
+    119,
+    132,
+    99,
+    112,
+    [
+     "|Variable|Required|Description|",
+     "|--------------------------------------------------------------------------------|:------:|--------------------------------------------------------------------------------------------------------------------|",
+     "|`TURSO_DATABASE_URL`|✅|Turso database connection URL|",
+     "|`TURSO_AUTH_TOKEN`|✅|Turso authentication token|",
+     "|`BETTER_AUTH_SECRET`|✅|Long random string used to sign session cookies (`openssl rand -base64 32`)|",
+     "|`BETTER_AUTH_URL`|✅|Base URL Better Auth runs on (e.g. `http://localhost:3000`)|",
+     "|`APP_URL`|✅|Public URL of the app, used for absolute links in emails|",
+     "|`GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`|—|Google sign-in (Cloud Console); Google login is hidden if unset|",
+     "|`NAVASAN_API_KEY`|—|Live exchange rates (Navasan); falls back to the free tier|",
+     "|`RESEND_API_KEY`|—|Transactional email (Resend); emails are skipped if unset|",
+     "|`CRON_SECRET`|—|Authenticates scheduled jobs (reports, backups, rate refresh)|",
+     "|`NEXT_PUBLIC_SENTRY_DSN` / `SENTRY_AUTH_TOKEN` / `SENTRY_ORG` / `SENTRY_PROJECT`|—|Error monitoring (Sentry); provided automatically on Vercel|",
+     "|`B2_KEY_ID` / `B2_APPLICATION_KEY` / `B2_BUCKET_NAME` / `B2_ENDPOINT`|—|Daily database backups to Backblaze B2|"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    149,
+    112,
+    129
+   ],
+   [
+    "replace",
+    149,
+    157,
+    129,
+    130,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    161,
+    130,
+    134
+   ],
+   [
+    "replace",
+    161,
+    162,
+    134,
+    135,
+    [
+     "Kharji follows Semantic Versioning. See CHANGELOG.md for the full history, kharji.app/changelog for the user-facing version, and RELEASING.md for the release process."
+    ]
+   ],
+   [
+    "equal",
+    162,
+    164,
+    135,
+    137
+   ],
+   [
+    "replace",
+    164,
+    169,
+    137,
+    138,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    170,
+    138,
+    139
+   ],
+   [
+    "replace",
+    170,
+    185,
+    139,
+    140,
+    [
+     "Kharji is published under the **Kharji Source-Available License (View-Only) v1.0** — see LICENSE for the full text."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

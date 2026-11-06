@@ -10281,5 +10281,3646 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "a2b384dc5b09+2": {
+  "fn": "nambok/mentedb",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Crates.io docs.rs CI dependency status License npm PyPI"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    14,
+    5,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    18,
+    16,
+    18,
+    [
+     "|**Cloud**|Managed. Get an API key, set `MENTEDB_API_KEY`, connect. The overnight maintenance runs for you.|",
+     "|**Self-host**|Run the engine yourself with `cargo install mentedb-server` or Docker. Nightly maintenance is built in.|"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "Building your own agent? **Build an agent** has a"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    23,
+    20,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "**Cloud in 30 seconds** (full guide):"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    30,
+    24,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     "**Self-host in 30 seconds** (full guide):"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    97,
+    31,
+    97
+   ],
+   [
+    "replace",
+    97,
+    102,
+    97,
+    98,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    109,
+    98,
+    105
+   ],
+   [
+    "replace",
+    109,
+    110,
+    105,
+    106,
+    [
+     "self-hosted, Python / Node / Rust) is in **Build an agent**."
+    ]
+   ],
+   [
+    "equal",
+    110,
+    117,
+    106,
+    113
+   ],
+   [
+    "replace",
+    117,
+    132,
+    113,
+    114,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    139,
+    114,
+    121
+   ],
+   [
+    "replace",
+    139,
+    140,
+    121,
+    122,
+    [
+     "`MENTEDB_LLM_PROVIDER` and `MENTEDB_LLM_API_KEY` (or use cloud,"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    143,
+    122,
+    125
+   ],
+   [
+    "replace",
+    143,
+    144,
+    125,
+    126,
+    [
+     "> user profile from accumulated turns. On cloud it runs in the"
+    ]
+   ],
+   [
+    "equal",
+    144,
+    171,
+    126,
+    153
+   ],
+   [
+    "replace",
+    171,
+    183,
+    153,
+    154,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    206,
+    154,
+    177
+   ],
+   [
+    "replace",
+    206,
+    207,
+    177,
+    178,
+    [
+     "|Feature|Traditional DBs|Vector DBs|MenteDB|"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    208,
+    178,
+    179
+   ],
+   [
+    "replace",
+    208,
+    217,
+    179,
+    188,
+    [
+     "|Storage model|Tables/Documents|Embeddings|Memory nodes (embeddings + graph + bi-temporal)|",
+     "|Entity understanding|Manual schemas|None|**Auto-extracted typed entities with graph edges**|",
+     "|Query result|Raw data|Similarity scores|**Token budget optimized context**|",
+     "|Memory quality|Manual|None|**LLM extract + quality filter + dedup + contradiction**|",
+     "|Retrieval strategy|Index scan|Single-pass kNN|**Hybrid vector + BM25 + graph traversal**|",
+     "|Understands AI attention?|No|No|**Yes, U curve ordering**|",
+     "|Tracks what AI knows?|No|No|**Epistemic state tracking**|",
+     "|Multi-agent isolation?|Schema level|Collection level|**Memory spaces with ACLs**|",
+     "|Updates cascade?|Foreign keys|No|**Belief propagation**|"
+    ]
+   ],
+   [
+    "equal",
+    217,
+    231,
+    188,
+    202
+   ],
+   [
+    "replace",
+    231,
+    232,
+    202,
+    203,
+    [
+     "- **Delta Aware Serving** Only sends what changed since last turn (80 to 91 percent fewer memory retrieval tokens over 20 turns in the bundled benchmarks, see Token Efficiency)"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    240,
+    203,
+    211
+   ],
+   [
+    "replace",
+    240,
+    241,
+    211,
+    212,
+    [
+     "- **Self-Hosted Server** One process serves many databases (`/v1/db/{name}/...`, one directory and lock per tenant, dotted names such as `tenant.alice.notes` as a stable contract), tokens scoped to databases by name or glob with `read`, `write` or `maintenance` scopes (verifiable with a public key, so no shared secret on the server, with `dbs` required and optionally bound to the token's subject), native HTTPS, Bedrock embeddings and extraction through the task role, and REST endpoints for hybrid search (with per request MMR, reranking and relevance first ranking), heads-up context, batch search across databases, paged memory lists, in place updates and supersession, recall for an action, pins, history, graph neighbors, conflicts, documents, consolidation, maintenance and backups. Operations: SIGTERM drain and clean close, per caller rate limits, request deadlines, liveness and readiness probes, and enrichment on its own bounded worker pool. See the server API reference and self-hosting guide"
+    ]
+   ],
+   [
+    "equal",
+    241,
+    264,
+    212,
+    235
+   ],
+   [
+    "replace",
+    264,
+    265,
+    235,
+    236,
+    [
+     "|Operation|Target|"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    266,
+    236,
+    237
+   ],
+   [
+    "replace",
+    266,
+    271,
+    237,
+    242,
+    [
+     "|Point lookup|~50ns|",
+     "|Multi-tag filter|~10us|",
+     "|k-NN similarity search|~5ms|",
+     "|Full context assembly|<50ms|",
+     "|Startup (mmap)|<1ms|"
+    ]
+   ],
+   [
+    "equal",
+    271,
+    301,
+    242,
+    272
+   ],
+   [
+    "replace",
+    301,
+    302,
+    272,
+    273,
+    [
+     "See mentedb-mcp for setup and configuration."
+    ]
+   ],
+   [
+    "equal",
+    302,
+    311,
+    273,
+    282
+   ],
+   [
+    "replace",
+    311,
+    325,
+    282,
+    283,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    325,
+    329,
+    283,
+    287
+   ],
+   [
+    "replace",
+    329,
+    330,
+    287,
+    288,
+    [
+     "server API reference."
+    ]
+   ],
+   [
+    "equal",
+    330,
+    342,
+    288,
+    300
+   ],
+   [
+    "replace",
+    342,
+    348,
+    300,
+    301,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    348,
+    381,
+    301,
+    334
+   ],
+   [
+    "replace",
+    381,
+    479,
+    334,
+    335,
+    [
+     "…（98 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    479,
+    483,
+    335,
+    339
+   ],
+   [
+    "replace",
+    483,
+    484,
+    339,
+    340,
+    [
+     "`ingest_agent_file` (deterministic) and `ingest_agent_file_llm` (any format, any language, via an extraction provider) break an agent instruction file into atomic, self contained memories: open vocabulary action triggers (`trigger:git-commit`, `trigger:order-refund`), section tags for cluster completion, and exemplar turns that anchor mode activation for standing directives (\"longterm fixes only\", \"use the t function for user visible text\"). Delivery runs through four channels: relevance injection, action rules at the tool moment, mode activation by activity, and cluster completion for dense rule sections. Measured on real public agent files (openai/codex, kiali, temporal, freerouting; results in the write up), two pass delivery (retrieve at the prompt, review against the draft) reached 100 percent rule compliance at 2 to 8 times fewer tokens than carrying the file in context, including a held out file never used during development. Re ingesting keeps memory in sync with the file, so the file stays the source of truth and the normal workflow does not change: edit it as always and ingest again, new rules are stored, unchanged rules deduplicate, edited rules replace their old version, and rules deleted from the file are forgotten (report field `removed`; opt out with `sync: false`; give each file its own `source_tag` when several files share one agent scope). The benchmark lives in this repository under benchmarks/agent_file."
+    ]
+   ],
+   [
+    "equal",
+    484,
+    493,
+    340,
+    349
+   ],
+   [
+    "replace",
+    493,
+    494,
+    349,
+    350,
+    [
+     "|Cosine Similarity|Action|What happens|"
+    ]
+   ],
+   [
+    "equal",
+    494,
+    495,
+    350,
+    351
+   ],
+   [
+    "replace",
+    495,
+    499,
+    351,
+    355,
+    [
+     "|**> 0.95**|Contradiction detected|Creates `Contradicts` edge, flags conflict for review (both memories stay valid; a byte-identical duplicate is superseded instead)|",
+     "|**0.85 – 0.95**|Supersedes old memory|Invalidates older memory (`valid_until` set), creates `Supersedes` edge|",
+     "|**0.6 – 0.85**|Related|Creates `Related` edge with similarity as weight|",
+     "|**< 0.6**|No action|Memories are independent|"
+    ]
+   ],
+   [
+    "equal",
+    499,
+    542,
+    355,
+    398
+   ],
+   [
+    "replace",
+    542,
+    552,
+    398,
+    399,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    552,
+    619,
+    399,
+    466
+   ],
+   [
+    "replace",
+    619,
+    624,
+    466,
+    467,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    624,
+    630,
+    467,
+    473
+   ],
+   [
+    "replace",
+    630,
+    631,
+    473,
+    474,
+    [
+     "|Phase|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    631,
+    632,
+    474,
+    475
+   ],
+   [
+    "replace",
+    632,
+    636,
+    475,
+    479,
+    [
+     "|**Batch LLM Extraction**|Converts episodic memories into semantic facts and entity nodes|",
+     "|**Entity Linking**|Resolves duplicates and aliases (e.g., \"JS\" ↔ \"JavaScript\") via rules + LLM|",
+     "|**Community Detection**|Groups related entities by category and generates LLM summaries|",
+     "|**User Model**|Builds an always-available user profile from accumulated knowledge|"
+    ]
+   ],
+   [
+    "equal",
+    636,
+    639,
+    479,
+    482
+   ],
+   [
+    "replace",
+    639,
+    640,
+    482,
+    483,
+    [
+     "**Requires an LLM provider** (OpenAI, Anthropic, Ollama, or AWS Bedrock). Without one, the rest of the engine works as usual and enrichment does not run. See LLM Extraction Config for setup."
+    ]
+   ],
+   [
+    "equal",
+    640,
+    645,
+    483,
+    488
+   ],
+   [
+    "replace",
+    645,
+    650,
+    488,
+    489,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    650,
+    662,
+    489,
+    501
+   ],
+   [
+    "replace",
+    662,
+    665,
+    501,
+    504,
+    [
+     " live set, with no external store and no coordinator process. A node that stops",
+     " heartbeating drops out; a new one is picked up from a seed address or a headless",
+     " service DNS name. This is the Cassandra/Dynamo model, not a consensus leader."
+    ]
+   ],
+   [
+    "equal",
+    665,
+    666,
+    504,
+    505
+   ],
+   [
+    "replace",
+    666,
+    669,
+    505,
+    508,
+    [
+     " (highest-random-weight) hashing, computed identically everywhere, so a request",
+     " reaches the same owner from any node. Adding or removing a node re-homes only",
+     " about 1/N of users, not the full reshuffle a `hash % N` ring forces."
+    ]
+   ],
+   [
+    "equal",
+    669,
+    670,
+    508,
+    509
+   ],
+   [
+    "replace",
+    670,
+    672,
+    509,
+    511,
+    [
+     " the old owner releases the lock and the new owner takes it, so a user's database",
+     " is only ever written by one node and handoff moves the lock, not the data."
+    ]
+   ],
+   [
+    "equal",
+    672,
+    689,
+    511,
+    528
+   ],
+   [
+    "replace",
+    689,
+    690,
+    528,
+    529,
+    [
+     "For a full stack, `observability/` has a one-command Prometheus +"
+    ]
+   ],
+   [
+    "equal",
+    690,
+    697,
+    529,
+    536
+   ],
+   [
+    "replace",
+    697,
+    699,
+    536,
+    538,
+    [
+     "Point `observability/prometheus.yml` at your nodes,",
+     "or import `crates/mentedb-server/grafana-dashboard.json`"
+    ]
+   ],
+   [
+    "equal",
+    699,
+    705,
+    538,
+    544
+   ],
+   [
+    "replace",
+    705,
+    706,
+    544,
+    545,
+    [
+     "|Crate|Description|"
+    ]
+   ],
+   [
+    "equal",
+    706,
+    707,
+    545,
+    546
+   ],
+   [
+    "replace",
+    707,
+    721,
+    546,
+    560,
+    [
+     "|`mentedb`|Facade crate with full cognitive engine (12 subsystems wired in)|",
+     "|`mentedb-core`|Types (MemoryNode, MemoryEdge), newtype IDs, errors, config|",
+     "|`mentedb-storage`|Compact record storage engine with crash safe WAL, record cache, LZ4|",
+     "|`mentedb-index`|HNSW vector index (bounded, concurrent), roaring bitmaps, temporal index|",
+     "|`mentedb-graph`|CSR/CSC knowledge graph with BFS/DFS and contradiction detection|",
+     "|`mentedb-query`|MQL parser with AND/OR/NOT, grouping, and ORDER BY|",
+     "|`mentedb-context`|Attention aware context assembly, U curve ordering, delta tracking|",
+     "|`mentedb-cognitive`|Write inference, belief propagation, pain signals, phantom memories, speculative cache|",
+     "|`mentedb-consolidation`|Temporal decay, memory consolidation, salience management, archival|",
+     "|`mentedb-embedding`|Embedding providers: local Candle, OpenAI, Cohere, and Voyage over HTTP, AWS Bedrock Cohere and Titan, hash|",
+     "|`mentedb-extraction`|LLM powered memory extraction pipeline|",
+     "|`mentedb-server`|REST + gRPC server with named databases, scoped JWT auth, HTTPS, space ACLs, rate limiting|",
+     "|`mentedb-cli`|`mentedb` command line client: run MQL against a local data directory or a running server|",
+     "|`mentedb-replication`|Raft based replication (experimental)|"
+    ]
+   ],
+   [
+    "equal",
+    721,
+    734,
+    560,
+    573
+   ],
+   [
+    "replace",
+    734,
+    735,
+    573,
+    574,
+    [
+     "- **Verified Erase** `erase` removes a memory and every memory derived from it (facts, consolidations, entity and community nodes), overwrites every copy of their bytes in the database directory, and returns a receipt; see Verified erase"
+    ]
+   ],
+   [
+    "equal",
+    735,
+    740,
+    574,
+    579
+   ],
+   [
+    "replace",
+    740,
+    744,
+    579,
+    580,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    744,
+    771,
+    580,
+    607
+   ],
+   [
+    "replace",
+    771,
+    772,
+    607,
+    608,
+    [
+     "Python and TypeScript SDKs. docs/FORGETTING.md covers"
+    ]
+   ],
+   [
+    "equal",
+    772,
+    779,
+    608,
+    615
+   ],
+   [
+    "replace",
+    779,
+    780,
+    615,
+    616,
+    [
+     "|Variable|Description|Default|"
+    ]
+   ],
+   [
+    "equal",
+    780,
+    781,
+    616,
+    617
+   ],
+   [
+    "replace",
+    781,
+    791,
+    617,
+    627,
+    [
+     "|`MENTEDB_LLM_PROVIDER`|openai, anthropic, ollama, bedrock (server built with the `bedrock` feature, as the Docker image is), none|none|",
+     "|`MENTEDB_LLM_API_KEY`|API key for the provider (not used by ollama or bedrock)||",
+     "|`MENTEDB_LLM_MODEL`|Model name|Provider default|",
+     "|`MENTEDB_LLM_BASE_URL`|Custom base URL (Ollama, proxies)|Provider default|",
+     "|`MENTEDB_LLM_REGION`|AWS region for bedrock (falls back to `AWS_REGION`)||",
+     "|`MENTEDB_AUTO_EXTRACT`|`true` to queue LLM extraction for conversation shaped `POST /v1/memories` bodies (same as `--auto-extract`)|off|",
+     "|`MENTEDB_EXTRACTION_QUALITY_THRESHOLD`|Min confidence to store (0.0 to 1.0)|0.7|",
+     "|`MENTEDB_EXTRACTION_DEDUP_THRESHOLD`|Similarity threshold for dedup (0.0 to 1.0)|0.85|",
+     "|`MENTEDB_EMBEDDING_PROVIDER`|Server embeddings: candle, bedrock, hash, none|candle when built with `local-embeddings`, else hash|",
+     "|`MENTEDB_EMBEDDING_MODEL`|Bedrock embedding model|`cohere.embed-english-v3`|"
+    ]
+   ],
+   [
+    "equal",
+    791,
+    792,
+    627,
+    628
+   ],
+   [
+    "replace",
+    792,
+    793,
+    628,
+    629,
+    [
+     "Every server variable (auth, databases, TLS, Bedrock, backups) is listed in Self-hosting."
+    ]
+   ],
+   [
+    "equal",
+    793,
+    802,
+    629,
+    638
+   ],
+   [
+    "replace",
+    802,
+    819,
+    638,
+    639,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    819,
+    824,
+    639,
+    644
+   ],
+   [
+    "replace",
+    824,
+    828,
+    644,
+    648,
+    [
+     " (`=`, and `IN [...]` lists) is answered from the bitmap index, so only",
+     " matching memories are loaded, and without `ORDER BY` loading stops once",
+     " `LIMIT` results are found. `RECALL memories WHERE type = episodic LIMIT 10`",
+     " loads 10 memories whatever the database size."
+    ]
+   ],
+   [
+    "equal",
+    828,
+    829,
+    648,
+    649
+   ],
+   [
+    "replace",
+    829,
+    832,
+    649,
+    652,
+    [
+     " temporal index. Every other condition in the `WHERE` still applies, and so",
+     " do `LIMIT` and `ORDER BY`: `RECALL memories WHERE created > 1700000000000000",
+     " AND type = episodic LIMIT 10` returns at most 10 episodic memories."
+    ]
+   ],
+   [
+    "equal",
+    832,
+    833,
+    652,
+    653
+   ],
+   [
+    "replace",
+    833,
+    836,
+    653,
+    656,
+    [
+     " `AS OF`, and any `!=` are checked after a memory is loaded. Combine them",
+     " with a `type`, `tag`, `agent`, or `created` filter to keep the set of",
+     " loaded memories small."
+    ]
+   ],
+   [
+    "equal",
+    836,
+    837,
+    656,
+    657
+   ],
+   [
+    "replace",
+    837,
+    851,
+    657,
+    671,
+    [
+     " reach the top results. The inputs to each memory's decayed salience (base",
+     " salience, last access, access count, decay exemption) are cached and",
+     " persisted with the snapshots, so candidates are visited from the highest",
+     " current salience down and the scan stops once the next one cannot beat the",
+     " `LIMIT`th result. `RECALL memories WHERE type = episodic ORDER BY salience",
+     " DESC LIMIT 5` loads 5 memories once the cache is warm, more only when",
+     " several tie at the cutoff. The first such query on a cold cache (after an",
+     " upgrade, or with the cache file lost) loads every candidate once to fill",
+     " it, unless `MenteDb::warm_salience_bounds` filled it in the background",
+     " after open (see SELF_HOSTING.md), and a memory",
+     " written since the last query loads once again. Results, ties included (broken by storage",
+     " order), are identical to sorting every candidate. Set",
+     " `CognitiveConfig::mql_salience_top_k` to false to always sort every",
+     " candidate."
+    ]
+   ],
+   [
+    "equal",
+    851,
+    852,
+    671,
+    672
+   ],
+   [
+    "replace",
+    852,
+    855,
+    672,
+    675,
+    [
+     " before it can sort, so it loads every memory that passes the indexed",
+     " filters. Leave it out when any `LIMIT` matches will do; unordered results",
+     " come back in storage order."
+    ]
+   ],
+   [
+    "equal",
+    855,
+    856,
+    675,
+    676
+   ],
+   [
+    "replace",
+    856,
+    858,
+    676,
+    678,
+    [
+     " visits every memory (still stopping at `LIMIT` when there is no",
+     " `ORDER BY`)."
+    ]
+   ],
+   [
+    "equal",
+    858,
+    861,
+    678,
+    681
+   ],
+   [
+    "replace",
+    861,
+    862,
+    681,
+    682,
+    [
+     "|Field|Compares|Operators|Value|"
+    ]
+   ],
+   [
+    "equal",
+    862,
+    863,
+    682,
+    683
+   ],
+   [
+    "replace",
+    863,
+    867,
+    683,
+    687,
+    [
+     "|`agent`|the memory's owner agent id|`=`, `!=`, `IN`|a UUID, bare or quoted|",
+     "|`space`|the memory's space id|`=`, `!=`, `IN`|a UUID, bare or quoted|",
+     "|`salience`|the memory's current decayed salience|`=`, `!=`, `<`, `<=`, `>`, `>=`, `IN`|a number|",
+     "|`confidence`|the stored confidence (it does not decay)|`=`, `!=`, `<`, `<=`, `>`, `>=`, `IN`|a number|"
+    ]
+   ],
+   [
+    "equal",
+    867,
+    886,
+    687,
+    706
+   ],
+   [
+    "replace",
+    886,
+    897,
+    706,
+    707,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    897,
+    912,
+    707,
+    722
+   ],
+   [
+    "replace",
+    912,
+    913,
+    722,
+    723,
+    [
+     "|Test|Result|Key Metric|"
+    ]
+   ],
+   [
+    "equal",
+    913,
+    914,
+    723,
+    724
+   ],
+   [
+    "replace",
+    914,
+    919,
+    724,
+    729,
+    [
+     "|Stale Belief|PASS|Superseded memories correctly excluded via graph edges|",
+     "|Delta Savings|PASS|90.7% reduction in memory retrieval tokens over 20 turns|",
+     "|Sustained Conversation|FAIL|100 turns, 3 projects, 0% stale returns, but average insert is 12 to 28ms across runs, over the test's 5ms gate (the full write pipeline grew; see the 10K scale test)|",
+     "|Attention Budget|PASS (earlier run)|U-curve ordering maintains 100% LLM compliance|",
+     "|Noise Ratio|PASS (earlier run)|100% useful vs 80% naive, +20pp improvement|"
+    ]
+   ],
+   [
+    "equal",
+    919,
+    927,
+    729,
+    737
+   ],
+   [
+    "replace",
+    927,
+    928,
+    737,
+    738,
+    [
+     "|Provider|Invalidation (23)|Contradiction (24)|Topic (15)|**Total**|"
+    ]
+   ],
+   [
+    "equal",
+    928,
+    929,
+    738,
+    739
+   ],
+   [
+    "replace",
+    929,
+    932,
+    739,
+    742,
+    [
+     "|Anthropic Claude Sonnet 4|100%|100%|100%|**100% (62/62)**|",
+     "|Ollama llama3.1 8b|87%|66.7%|93.3%|**80.6% (50/62)**|",
+     "|Ollama llama3.2 3B|78.3%|58.3%|80%|**71% (44/62)**|"
+    ]
+   ],
+   [
+    "equal",
+    932,
+    943,
+    742,
+    753
+   ],
+   [
+    "replace",
+    943,
+    944,
+    753,
+    754,
+    [
+     "LongMemEval (ICLR 2025) is the standard benchmark for long-term conversational memory: 500 questions across six reasoning types, over long multi-session histories (~115K tokens per question)."
+    ]
+   ],
+   [
+    "equal",
+    944,
+    947,
+    754,
+    757
+   ],
+   [
+    "replace",
+    947,
+    948,
+    757,
+    758,
+    [
+     "|Category|Accuracy|"
+    ]
+   ],
+   [
+    "equal",
+    948,
+    949,
+    758,
+    759
+   ],
+   [
+    "replace",
+    949,
+    956,
+    759,
+    766,
+    [
+     "|Single-session (assistant)|100.0% (56/56)|",
+     "|Single-session (user)|97.1% (68/70)|",
+     "|Single-session (preference)|93.3% (28/30)|",
+     "|Temporal reasoning|92.5% (123/133)|",
+     "|Knowledge update|91.0% (71/78)|",
+     "|Multi-session reasoning|85.7% (114/133)|",
+     "|**Overall (500 questions)**|**92.0% (460/500)**|"
+    ]
+   ],
+   [
+    "equal",
+    956,
+    965,
+    766,
+    775
+   ],
+   [
+    "replace",
+    965,
+    966,
+    775,
+    776,
+    [
+     "|Metric|Value|"
+    ]
+   ],
+   [
+    "equal",
+    966,
+    967,
+    776,
+    777
+   ],
+   [
+    "replace",
+    967,
+    974,
+    777,
+    784,
+    [
+     "|Total memories|10,006|",
+     "|Engine search at 10K (no embed)|1.05ms|",
+     "|Engine insert, full write pipeline (no embed)|13.9ms/mem|",
+     "|Query embed (local Candle, per query)|40ms|",
+     "|Batch embed (amortized, one provider call per 512 inputs)|30ms/mem|",
+     "|Belief supersessions tracked|6/6|",
+     "|Stale beliefs returned|0|"
+    ]
+   ],
+   [
+    "equal",
+    974,
+    979,
+    784,
+    789
+   ],
+   [
+    "replace",
+    979,
+    980,
+    789,
+    790,
+    [
+     "|Metric|Candle (all-MiniLM-L6-v2)|OpenAI (text-embedding-3-small)|"
+    ]
+   ],
+   [
+    "equal",
+    980,
+    981,
+    790,
+    791
+   ],
+   [
+    "replace",
+    981,
+    986,
+    791,
+    796,
+    [
+     "|Retrieval accuracy (8 queries)|62% (5/8)|Requires API key to compare|",
+     "|Engine search (identical code path)|0.3ms|0.3ms|",
+     "|Query embed|39ms (local, no network)|network round trip (hundreds of ms)|",
+     "|Setup required|None (auto-downloads model)|OPENAI_API_KEY|",
+     "|Cost|Free|~$0.02 per 1M tokens|"
+    ]
+   ],
+   [
+    "equal",
+    986,
+    991,
+    796,
+    801
+   ],
+   [
+    "replace",
+    991,
+    992,
+    801,
+    802,
+    [
+     "|Benchmark|100|1,000|10,000|"
+    ]
+   ],
+   [
+    "equal",
+    992,
+    993,
+    802,
+    803
+   ],
+   [
+    "replace",
+    993,
+    995,
+    803,
+    805,
+    [
+     "|Insert throughput|13ms|243ms|2.65s|",
+     "|Context assembly|218us|342us|696us|"
+    ]
+   ],
+   [
+    "equal",
+    995,
+    1000,
+    805,
+    810
+   ],
+   [
+    "replace",
+    1000,
+    1001,
+    810,
+    811,
+    [
+     "MenteDB's context assembler uses purpose-built serialization formats instead of dumping raw JSON into context windows. Measured by `token_efficiency`:"
+    ]
+   ],
+   [
+    "equal",
+    1001,
+    1004,
+    811,
+    814
+   ],
+   [
+    "replace",
+    1004,
+    1005,
+    814,
+    815,
+    [
+     "|Format|Tokens|vs Raw JSON|"
+    ]
+   ],
+   [
+    "equal",
+    1005,
+    1006,
+    815,
+    816
+   ],
+   [
+    "replace",
+    1006,
+    1009,
+    816,
+    819,
+    [
+     "|Raw JSON|947|—|",
+     "|Structured (markdown)|576|1.6x fewer|",
+     "|**Compact (pipe-delimited)**|**414**|**2.3x fewer**|"
+    ]
+   ],
+   [
+    "equal",
+    1009,
+    1012,
+    819,
+    822
+   ],
+   [
+    "replace",
+    1012,
+    1013,
+    822,
+    823,
+    [
+     "|Metric|Tokens|"
+    ]
+   ],
+   [
+    "equal",
+    1013,
+    1014,
+    823,
+    824
+   ],
+   [
+    "replace",
+    1014,
+    1017,
+    824,
+    827,
+    [
+     "|Full retrieval (cumulative)|9,863|",
+     "|Delta serving (cumulative)|2,004|",
+     "|**Savings**|**79.7%**|"
+    ]
+   ],
+   [
+    "equal",
+    1017,
+    1022,
+    827,
+    832
+   ],
+   [
+    "replace",
+    1022,
+    1023,
+    832,
+    833,
+    [
+     "|Budget|Compact|Structured|Raw JSON|"
+    ]
+   ],
+   [
+    "equal",
+    1023,
+    1024,
+    833,
+    834
+   ],
+   [
+    "replace",
+    1024,
+    1026,
+    834,
+    836,
+    [
+     "|4,096|223|166|218|",
+     "|8,192|448|333|436|"
+    ]
+   ],
+   [
+    "equal",
+    1026,
+    1038,
+    836,
+    848
+   ],
+   [
+    "replace",
+    1038,
+    1043,
+    848,
+    849,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1043,
+    1056,
+    849,
+    862
+   ],
+   [
+    "replace",
+    1056,
+    1061,
+    862,
+    863,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    1061,
+    1062,
+    863,
+    864
+   ],
+   [
+    "replace",
+    1062,
+    1064,
+    864,
+    865,
+    [
+     "Apache 2.0, see LICENSE for details."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7591dbbc75b0+2": {
+  "fn": "phlx0/snip",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "delete",
+    0,
+    4,
+    0,
+    0
+   ],
+   [
+    "equal",
+    4,
+    8,
+    0,
+    4
+   ],
+   [
+    "replace",
+    8,
+    9,
+    4,
+    5,
+    [
+     "Stop Googling the same one-liners. Stop losing clever commands to closed tabs. "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    11,
+    5,
+    7
+   ],
+   [
+    "replace",
+    11,
+    12,
+    7,
+    14,
+    [
+     "CI",
+     "GitHub release",
+     "GitHub stars",
+     "Python",
+     "License",
+     "Built with Textual",
+     "Platform"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    14,
+    15
+   ],
+   [
+    "replace",
+    13,
+    30,
+    15,
+    16,
+    [
+     "snip terminal interface"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    38,
+    16,
+    24
+   ],
+   [
+    "delete",
+    38,
+    40,
+    24,
+    24
+   ],
+   [
+    "equal",
+    40,
+    60,
+    24,
+    44
+   ],
+   [
+    "delete",
+    60,
+    62,
+    44,
+    44
+   ],
+   [
+    "equal",
+    62,
+    68,
+    44,
+    50
+   ],
+   [
+    "replace",
+    68,
+    83,
+    50,
+    51,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    105,
+    51,
+    73
+   ],
+   [
+    "delete",
+    105,
+    107,
+    73,
+    73
+   ],
+   [
+    "equal",
+    107,
+    109,
+    73,
+    75
+   ],
+   [
+    "replace",
+    109,
+    110,
+    75,
+    76,
+    [
+     "|||"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    111,
+    76,
+    77
+   ],
+   [
+    "replace",
+    111,
+    131,
+    77,
+    95,
+    [
+     "|**Instant CLI lookup**|`snip <query>` copies a snippet without opening the TUI|",
+     "|**Run as command**|`snip run <query>` runs a snippet directly in your shell|",
+     "|**Import from file**|`snip --add script.sh` saves any file as a snippet, language auto-detected|",
+     "|**Export / import**|`snip --export` / `snip --import` — JSON backup, perfect for dotfiles|",
+     "|**Shell history mining**|`snip --from-history` — pick a command from your history and save it|",
+     "|**Tag filtering**|`snip --list docker` — filter titles by tag from the CLI|",
+     "|**JSON output**|`snip --json <query>` — full snippet metadata as JSON for scripting|",
+     "|**Shell completion**|`eval \"$(snip init zsh)\"` — tab-complete snippet titles and flags|",
+     "|**fzf-friendly**|`snip --list` prints titles one per line — pipe into anything|",
+     "|**Themes**|Built-in Tokyo Night and Dracula; import any custom theme via a JSON file|",
+     "|**Syntax highlighting**|Syntax colors adapt to the active theme across 20+ languages|",
+     "|**Live search**|Filters across title, description, tags, and language as you type|",
+     "|**Clipboard copy**|Press `y` to yank a snippet straight to your clipboard|",
+     "|**Pin snippets**|Keep your most-used snippets pinned at the top|",
+     "|**Tags**|Organise freely — `#docker #devops #git` etc.|",
+     "|**Vim-style navigation**|`j`/`k` or arrow keys, `/` to search, `q` to quit|",
+     "|**Git-friendly storage**|Snippets are plain Markdown files in `~/.config/snip/snippets/` — track with git, diff, merge, sync across machines|",
+     "|**Fully offline**|No server, no account, your data stays local|"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    134,
+    95,
+    98
+   ],
+   [
+    "replace",
+    134,
+    135,
+    98,
+    99,
+    [
+     "|Key|Action|"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    99,
+    100
+   ],
+   [
+    "replace",
+    136,
+    147,
+    100,
+    109,
+    [
+     "|`n`|New snippet|",
+     "|`e`|Edit selected snippet|",
+     "|`d`|Delete selected snippet|",
+     "|`y`|Copy content to clipboard|",
+     "|`p`|Toggle pin|",
+     "|`/`|Focus search bar|",
+     "|`Esc`|Clear search / return to list|",
+     "|`↑` `↓` or `j` `k`|Navigate list|",
+     "|`q`|Quit|"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    154,
+    109,
+    116
+   ],
+   [
+    "replace",
+    154,
+    177,
+    116,
+    117,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    117,
+    118
+   ],
+   [
+    "delete",
+    178,
+    180,
+    118,
+    118
+   ],
+   [
+    "equal",
+    180,
+    191,
+    118,
+    129
+   ],
+   [
+    "delete",
+    191,
+    193,
+    129,
+    129
+   ],
+   [
+    "equal",
+    193,
+    195,
+    129,
+    131
+   ],
+   [
+    "replace",
+    195,
+    196,
+    131,
+    132,
+    [
+     "Full documentation is available on the **wiki**."
+    ]
+   ],
+   [
+    "equal",
+    196,
+    197,
+    132,
+    133
+   ],
+   [
+    "replace",
+    197,
+    208,
+    133,
+    142,
+    [
+     "- CLI reference",
+     "- Themes",
+     "- Keybindings",
+     "- fzf integration",
+     "- tmux integration",
+     "- Shell completion",
+     "- Scripting with snip",
+     "- Dotfile sync",
+     "- Tips & tricks"
+    ]
+   ],
+   [
+    "equal",
+    208,
+    211,
+    142,
+    145
+   ],
+   [
+    "replace",
+    211,
+    212,
+    145,
+    146,
+    [
+     "There's an unofficial Neovim plugin for snip: **phlx0/snip.nvim**"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    215,
+    146,
+    149
+   ],
+   [
+    "delete",
+    215,
+    217,
+    149,
+    149
+   ],
+   [
+    "equal",
+    217,
+    218,
+    149,
+    150
+   ],
+   [
+    "replace",
+    218,
+    228,
+    150,
+    151,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    228,
+    229,
+    151,
+    152
+   ],
+   [
+    "replace",
+    229,
+    231,
+    152,
+    153,
+    [
+     "MIT — see LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "b45b814ceb81+2": {
+  "fn": "Percona-Lab/query-playback",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    4,
+    1,
+    3
+   ],
+   [
+    "replace",
+    4,
+    5,
+    3,
+    4,
+    [
+     "See LICENSE for full text of the GPL."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    11,
+    4,
+    10
+   ],
+   [
+    "delete",
+    11,
+    12,
+    10,
+    10
+   ],
+   [
+    "equal",
+    12,
+    30,
+    10,
+    28
+   ],
+   [
+    "delete",
+    30,
+    31,
+    28,
+    28
+   ],
+   [
+    "equal",
+    31,
+    32,
+    28,
+    29
+   ],
+   [
+    "replace",
+    32,
+    33,
+    29,
+    30,
+    [
+     " yum -y install tbb tbb-devel cmake boost boost-devel"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    35,
+    30,
+    32
+   ],
+   [
+    "delete",
+    35,
+    36,
+    32,
+    32
+   ],
+   [
+    "equal",
+    36,
+    37,
+    32,
+    33
+   ],
+   [
+    "replace",
+    37,
+    41,
+    33,
+    37,
+    [
+     " $ mkdir build_dir",
+     " $ cd build_dir",
+     " $ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..",
+     " $ make"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    43,
+    37,
+    39
+   ],
+   [
+    "delete",
+    43,
+    44,
+    39,
+    39
+   ],
+   [
+    "equal",
+    44,
+    46,
+    39,
+    41
+   ],
+   [
+    "replace",
+    46,
+    47,
+    41,
+    42,
+    [
+     " $ make check"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    49,
+    42,
+    44
+   ],
+   [
+    "delete",
+    49,
+    50,
+    44,
+    44
+   ],
+   [
+    "equal",
+    50,
+    51,
+    44,
+    45
+   ],
+   [
+    "replace",
+    51,
+    52,
+    45,
+    46,
+    [
+     " $ cpack .."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    54,
+    46,
+    48
+   ],
+   [
+    "delete",
+    54,
+    55,
+    48,
+    48
+   ],
+   [
+    "equal",
+    55,
+    56,
+    48,
+    49
+   ],
+   [
+    "replace",
+    56,
+    57,
+    49,
+    50,
+    [
+     " $ cpack -G DEB .."
+    ]
+   ],
+   [
+    "equal",
+    57,
+    59,
+    50,
+    52
+   ],
+   [
+    "delete",
+    59,
+    60,
+    52,
+    52
+   ],
+   [
+    "equal",
+    60,
+    62,
+    52,
+    54
+   ],
+   [
+    "replace",
+    62,
+    63,
+    54,
+    55,
+    [
+     " --slow-query-log --log-slow-admin-statements --log-slow-verbosity=microtime --long-query-time=0"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    65,
+    55,
+    57
+   ],
+   [
+    "delete",
+    65,
+    66,
+    57,
+    57
+   ],
+   [
+    "equal",
+    66,
+    68,
+    57,
+    59
+   ],
+   [
+    "delete",
+    68,
+    69,
+    59,
+    59
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "da25599d7ec4+2": {
+  "fn": "benjamin-maynard/kubernetes-cloud-mysql-backup",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "equal",
+    0,
+    8,
+    0,
+    8
+   ],
+   [
+    "replace",
+    8,
+    10,
+    8,
+    9,
+    [
+     "All changes are captured in the changelog, which adheres to Semantic Versioning."
+    ]
+   ],
+   [
+    "equal",
+    10,
+    15,
+    9,
+    14
+   ],
+   [
+    "replace",
+    15,
+    45,
+    14,
+    43,
+    [
+     "|Environment Variable|Purpose|",
+     "|--------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|",
+     "|BACKUP_CREATE_DATABASE_STATEMENT|**(Optional - default `false`)** Adds the `CREATE DATABASE` and `USE` statements to the MySQL backup by explicitly specifying the `--databases` flag (see here).|",
+     "|BACKUP_ADDITIONAL_PARAMS|**(Optional)** Additional parameters to add to the `mysqldump` command.|",
+     "|BACKUP_PROVIDER|**(Optional)** The backend to use for storing the MySQL backups. Supported options are `aws` (default) or `gcp`|",
+     "|AWS_ACCESS_KEY_ID|**(Required for AWS Backend)** AWS IAM Access Key ID.|",
+     "|AWS_SECRET_ACCESS_KEY|**(Required for AWS Backend)** AWS IAM Secret Access Key. Should have very limited IAM permissions (see below for example) and should be configured using a Secret in Kubernetes.|",
+     "|AWS_DEFAULT_REGION|**(Required for AWS Backend)** Region of the S3 Bucket (e.g. eu-west-2).|",
+     "|AWS_BUCKET_NAME|**(Required for AWS Backend)** The name of the S3 bucket.|",
+     "|AWS_BUCKET_BACKUP_PATH|**(Required for AWS Backend)** Path the backup file should be saved to in S3. E.g. `/database/myblog/backups`. **Do not put a trailing / or specify the filename.**|",
+     "|AWS_S3_ENDPOINT|**(Optional)** The S3-compatible storage endpoint (for MinIO/other cloud storage) bucket.|",
+     "|GCP_GCLOUD_AUTH|**(Required for GCP Backend)** Base64 encoded service account key exported as JSON. Example of how to generate: `base64 ~/service-key.json`|",
+     "|GCP_BUCKET_NAME|**(Required for GCP Backend)** The name of GCP GCS bucket.|",
+     "|GCP_BUCKET_BACKUP_PATH|**(Required for GCP Backend)** Path the backup file should be saved to in GCS. E.g. `/database/myblog/backups`. **Do not put a trailing / or specify the filename.**|",
+     "|TARGET_DATABASE_HOST|**(Required)** Hostname or IP address of the MySQL Host.|",
+     "|TARGET_DATABASE_PORT|**(Optional)** Port MySQL is listening on (Default: 3306).|",
+     "|TARGET_DATABASE_NAMES|**(Required unless TARGET_ALL_DATABASES is true)** Name of the databases to dump. This should be comma seperated (e.g. `database1,database2`).|",
+     "|TARGET_ALL_DATABASES|**(Optional - default `false`)** Set to `true` to ignore `TARGET_DATABASE_NAMES` and dump all non-system databases.|",
+     "|TARGET_DATABASE_USER|**(Required)** Username to authenticate to the database with.|",
+     "|TARGET_DATABASE_PASSWORD|**(Required)** Password to authenticate to the database with. Should be configured using a Secret in Kubernetes.|",
+     "|BACKUP_TIMESTAMP|**(Optional)** Date string to append to the backup filename (date format). Leave unset if using S3 Versioning and date stamp is not required.|",
+     "|BACKUP_COMPRESS|**(Optional)** (true/false) Enable or disable gzip backup compression - (Default False).|",
+     "|BACKUP_COMPRESS_LEVEL|**(Optional - default `9`)** Set the gzip level used for compression.|",
+     "|AGE_PUBLIC_KEY|**(Optional)** Public key used to encrypt backup with FiloSottile/age. Leave blank to disable backup encryption.|",
+     "|SLACK_ENABLED|**(Optional)** (true/false) Enable or disable the Slack Integration (Default False).|",
+     "|SLACK_USERNAME|**(Optional)** (true/false) Username to use for the Slack Integration (Default: kubernetes-cloud-mysql-backup).|",
+     "|SLACK_CHANNEL|**(Required if Slack enabled)** Slack Channel the WebHook is configured for.|",
+     "|SLACK_PROXY|**(Optional)** Proxy URL if Slack is behind proxy.|",
+     "|SLACK_WEBHOOK_URL|**(Required if Slack enabled)** What is the Slack WebHook URL to post to? Should be configured using a Secret in Kubernetes.|"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    53,
+    43,
+    51
+   ],
+   [
+    "replace",
+    53,
+    54,
+    51,
+    52,
+    [
+     "In order to configure kubernetes-cloud-mysql-backup to post messages into Slack, you need to create an Incoming WebHook. Once generated, you can configure kubernetes-cloud-mysql-backup using the environment variables detailed above."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    71,
+    52,
+    69
+   ],
+   [
+    "replace",
+    71,
+    87,
+    69,
+    70,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    70,
+    71
+   ],
+   [
+    "delete",
+    88,
+    89,
+    71,
+    71
+   ],
+   [
+    "equal",
+    89,
+    98,
+    71,
+    80
+   ],
+   [
+    "replace",
+    98,
+    158,
+    80,
+    81,
+    [
+     "…（60 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    174,
+    81,
+    97
+   ],
+   [
+    "delete",
+    174,
+    175,
+    97,
+    97
+   ],
+   [
+    "equal",
+    175,
+    183,
+    97,
+    105
+   ],
+   [
+    "replace",
+    183,
+    241,
+    105,
+    106,
+    [
+     "…（58 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    241,
+    242,
+    106,
+    107
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "ce2b2fcb45b4+2": {
+  "fn": "nadav867/postgres-nest-react-typescript-boilerplate",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    4,
+    [
+     "docker compose build",
+     "License: GPL v3"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    34,
+    4,
+    33
+   ],
+   [
+    "replace",
+    34,
+    69,
+    33,
+    34,
+    [
+     "…（35 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    75,
+    34,
+    40
+   ],
+   [
+    "delete",
+    75,
+    77,
+    40,
+    40
+   ],
+   [
+    "equal",
+    77,
+    93,
+    40,
+    56
+   ],
+   [
+    "replace",
+    93,
+    97,
+    56,
+    57,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    144,
+    57,
+    104
+   ],
+   [
+    "replace",
+    144,
+    145,
+    104,
+    105,
+    [
+     "> Production volume is located in `./server/data/prod` "
+    ]
+   ],
+   [
+    "equal",
+    145,
+    180,
+    105,
+    140
+   ],
+   [
+    "delete",
+    180,
+    181,
+    140,
+    140
+   ],
+   [
+    "equal",
+    181,
+    203,
+    140,
+    162
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "e5036243a68b+2": {
+  "fn": "Fricciolosa-Red-Team/evildork",
+  "clean_ver": "2",
+  "raw_lines": 19,
+  "ops": [
+   [
+    "equal",
+    0,
+    19,
+    0,
+    19
+   ],
+   [
+    "replace",
+    19,
+    28,
+    19,
+    20,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    38,
+    20,
+    30
+   ],
+   [
+    "replace",
+    38,
+    39,
+    30,
+    31,
+    [
+     "If you want to submit new dorks, just open an issue / pull request."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    42,
+    31,
+    34
+   ],
+   [
+    "replace",
+    42,
+    43,
+    34,
+    35,
+    [
+     "This repository is under MIT License."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "99d4dc1bdae2+2": {
+  "fn": "DOSNetwork/core",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "replace",
+    0,
+    5,
+    0,
+    4,
+    [
+     "# DOS Client and Core Libraries",
+     "Go Report Card",
+     "Maintainability",
+     "GoDoc"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    8,
+    4,
+    7
+   ],
+   [
+    "replace",
+    8,
+    13,
+    7,
+    12,
+    [
+     "- AWS Lightsail - Linux virtual server (1 cpu, 1GB memory, 40GB ssd, 2TB bandwidth)",
+     "- Google Cloud Platform - Compute Engine General purpose (N2)",
+     "- Vultr - Cloud Compute (1 cpu, 1GB memory, 25GB ssd, 1TB bandwidth)",
+     "- Digital Ocean - Droplet (1 cpu, 25GB ssd, 1TB bandwidth)",
+     "- Linode - Shared virtual Instances (1 cpu, 1GB memory, 25GB ssd, 1TB bandwidth)"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    18,
+    12,
+    17
+   ],
+   [
+    "replace",
+    18,
+    20,
+    17,
+    19,
+    [
+     " - Run `$ dig +short myip.opendns.com @resolver1.opendns.com`",
+     " - Or get it from cloud server providers. Most vps / cloud server "
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    19,
+    20
+   ],
+   [
+    "replace",
+    21,
+    23,
+    20,
+    22,
+    [
+     " - **udp** port `7946`",
+     " - **tcp** port `7946`,`9501`"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    22,
+    23
+   ],
+   [
+    "replace",
+    24,
+    26,
+    23,
+    24,
+    [
+     " - Learn how to setup SSH public key authentication on Ubuntu 18.04 and disable password logins."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    28,
+    24,
+    26
+   ],
+   [
+    "replace",
+    28,
+    30,
+    26,
+    28,
+    [
+     "- Acquire at least 800,000 DOS tokens, (and optional - acquire several DropBurn token to reduce (up to 30%) the amount of DOS tokens needed to start a node, distribution plan be out later).",
+     "- Replace your node ip address in config.json"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    32,
+    28,
+    30
+   ],
+   [
+    "delete",
+    32,
+    33,
+    30,
+    30
+   ],
+   [
+    "equal",
+    33,
+    34,
+    30,
+    31
+   ],
+   [
+    "replace",
+    34,
+    38,
+    31,
+    33,
+    [
+     "- Register and get Infura api key",
+     "- Replace your infura api key in config.json"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    42,
+    33,
+    37
+   ],
+   [
+    "delete",
+    42,
+    43,
+    37,
+    37
+   ],
+   [
+    "equal",
+    43,
+    44,
+    37,
+    38
+   ],
+   [
+    "replace",
+    44,
+    45,
+    38,
+    39,
+    [
+     "- Install **go1.11 or higher** and setup golang workingspace like below:"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    49,
+    39,
+    43
+   ],
+   [
+    "replace",
+    49,
+    50,
+    43,
+    44,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    50,
+    67,
+    44,
+    61
+   ],
+   [
+    "replace",
+    67,
+    70,
+    61,
+    64,
+    [
+     " - `$ GO111MODULE=on go mod download` - to download building dependencies",
+     " - Dev dependencies: solc-v0.5.17, abigen-v1.9.18-stable",
+     " - `$ make` - to build release version client"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    77,
+    64,
+    71
+   ],
+   [
+    "replace",
+    77,
+    84,
+    71,
+    78,
+    [
+     " - `$ go fmt ./...` to reformat go source code.",
+     " - `$ golint` to fix style mistakes conflicting with effective go. (golint tool for vim users.)",
+     " - `$ make devClient` to build develoment version client.",
+     " - `$ make updateSubmodule` to fetch latest system contracts from repo, instead of making contract modifications locally.",
+     " - `$ make gen` to generate binding files for system contracts.",
+     " - `$ make clean` to remove built binaries or unnecessary generated files.",
+     " - Use solc-select tool to select / pin to specific solidity compiler version."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "c3e2fe3d051d+2": {
+  "fn": "vitabaks/pgbackrest_auto",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "This is a simple script to automate the process of restore PostgreSQL databases from backup using pgbackrest. With the possibility **validate for physical and logical database corruption**, and (optional) sending the final report to DBA an e-mail address."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    3,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     ">PostgreSQL has supported page-level checksums since 9.3. **If page checksums are enabled** pgbackrest will validate the checksums for every file that is copied during a backup. All page checksums are validated during a full backup and checksums in files that have changed are validated during differential and incremental backups."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "Databases that successfully passed the stage of physical validation additionally pass the stage of logical validation using the amcheck extension. Tthe logical integrity of the structure of the B-Tree indexes and tables related to the target index relation is checked (used `bt_index_parent_check` with `heapallindexed` argument is `true`)."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "pgbackrest_auto_scheme"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    23,
+    13,
+    23
+   ],
+   [
+    "replace",
+    23,
+    66,
+    23,
+    24,
+    [
+     "…（43 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    24,
+    25
+   ],
+   [
+    "delete",
+    67,
+    68,
+    25,
+    25
+   ],
+   [
+    "equal",
+    68,
+    74,
+    25,
+    31
+   ],
+   [
+    "replace",
+    74,
+    174,
+    31,
+    32,
+    [
+     "…（100 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    175,
+    32,
+    33
+   ],
+   [
+    "delete",
+    175,
+    177,
+    33,
+    33
+   ],
+   [
+    "equal",
+    177,
+    186,
+    33,
+    42
+   ],
+   [
+    "replace",
+    186,
+    195,
+    42,
+    43,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    207,
+    43,
+    55
+   ],
+   [
+    "replace",
+    207,
+    208,
+    55,
+    56,
+    [
+     " - `postgresql-<version>-pg-checksums` package (if PostgreSQL version <= 11)"
+    ]
+   ],
+   [
+    "equal",
+    208,
+    210,
+    56,
+    58
+   ],
+   [
+    "replace",
+    210,
+    212,
+    58,
+    60,
+    [
+     " - `postgresql-<version>-amcheck` package (if PostgreSQL version <= 10)",
+     " (_the amcheck extension will be automatically installed to the restored databases_)"
+    ]
+   ],
+   [
+    "equal",
+    212,
+    214,
+    60,
+    62
+   ],
+   [
+    "replace",
+    214,
+    216,
+    62,
+    64,
+    [
+     " - `sendemail` package",
+     " - specify smtp parameters `smtp_server`, `mail_from`, `mail_to` in the pgbackrest_auto script file."
+    ]
+   ],
+   [
+    "equal",
+    216,
+    233,
+    64,
+    81
+   ],
+   [
+    "delete",
+    233,
+    234,
+    81,
+    81
+   ],
+   [
+    "equal",
+    234,
+    243,
+    81,
+    90
+   ],
+   [
+    "replace",
+    243,
+    245,
+    90,
+    91,
+    [
+     "Licensed under the MIT License. See the LICENSE file for details."
+    ]
+   ],
+   [
+    "equal",
+    245,
+    249,
+    91,
+    95
+   ],
+   [
+    "replace",
+    249,
+    250,
+    95,
+    96,
+    [
+     "Are welcome!"
+    ]
+   ],
+   [
+    "equal",
+    250,
+    251,
+    96,
+    97
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "b37221426145+2": {
+  "fn": "zblesk/csv-to-sqlite",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "This is a simple, **datatype-guessing** script that takes CSV files as input and copies their contents into a SQLite database. "
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    9,
+    4,
+    5,
+    [
+     "(Column names are taken from the headers (first row) in the csv file.) "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    12,
+    5,
+    8
+   ],
+   [
+    "delete",
+    12,
+    14,
+    8,
+    8
+   ],
+   [
+    "equal",
+    14,
+    16,
+    8,
+    10
+   ],
+   [
+    "insert",
+    16,
+    16,
+    10,
+    11,
+    [
+     "* Source on GitHub "
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    11,
+    12
+   ],
+   [
+    "insert",
+    17,
+    17,
+    12,
+    13,
+    [
+     "* PyPI page "
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    13,
+    14
+   ],
+   [
+    "replace",
+    18,
+    19,
+    14,
+    15,
+    [
+     "* Introductory blog post with basic intro + a how-to"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    15,
+    16
+   ],
+   [
+    "replace",
+    20,
+    27,
+    16,
+    17,
+    [
+     "* Other related blog posts "
+    ]
+   ],
+   [
+    "equal",
+    27,
+    30,
+    17,
+    20
+   ],
+   [
+    "delete",
+    30,
+    32,
+    20,
+    20
+   ],
+   [
+    "equal",
+    32,
+    33,
+    20,
+    21
+   ],
+   [
+    "delete",
+    33,
+    35,
+    21,
+    21
+   ],
+   [
+    "equal",
+    35,
+    42,
+    21,
+    28
+   ],
+   [
+    "delete",
+    42,
+    44,
+    28,
+    28
+   ],
+   [
+    "equal",
+    44,
+    45,
+    28,
+    29
+   ],
+   [
+    "delete",
+    45,
+    47,
+    29,
+    29
+   ],
+   [
+    "equal",
+    47,
+    54,
+    29,
+    36
+   ],
+   [
+    "delete",
+    54,
+    56,
+    36,
+    36
+   ],
+   [
+    "equal",
+    56,
+    57,
+    36,
+    37
+   ],
+   [
+    "delete",
+    57,
+    59,
+    37,
+    37
+   ],
+   [
+    "equal",
+    59,
+    64,
+    37,
+    42
+   ],
+   [
+    "replace",
+    64,
+    74,
+    42,
+    43,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    75,
+    43,
+    44
+   ],
+   [
+    "delete",
+    75,
+    78,
+    44,
+    44
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "af43b10733e2+2": {
+  "fn": "mysql/mysql-for-excel",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    36,
+    1,
+    35
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "87173b0459aa+2": {
+  "fn": "korolr/CMS-Django-blog",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    3,
+    0,
+    1
+   ],
+   [
+    "delete",
+    3,
+    5,
+    1,
+    1
+   ],
+   [
+    "equal",
+    5,
+    12,
+    1,
+    8
+   ],
+   [
+    "delete",
+    12,
+    14,
+    8,
+    8
+   ],
+   [
+    "equal",
+    14,
+    18,
+    8,
+    12
+   ],
+   [
+    "replace",
+    18,
+    19,
+    12,
+    13,
+    [
+     " - Search"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    13,
+    14
+   ],
+   [
+    "replace",
+    20,
+    21,
+    14,
+    15,
+    [
+     " - Adaptive design"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    15,
+    16
+   ],
+   [
+    "replace",
+    22,
+    23,
+    16,
+    17,
+    [
+     " - Categories"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    32,
+    17,
+    26
+   ],
+   [
+    "delete",
+    32,
+    34,
+    26,
+    26
+   ],
+   [
+    "equal",
+    34,
+    40,
+    26,
+    32
+   ],
+   [
+    "replace",
+    40,
+    50,
+    32,
+    33,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    54,
+    33,
+    37
+   ],
+   [
+    "replace",
+    54,
+    55,
+    37,
+    38,
+    [
+     "Main"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    38,
+    39
+   ],
+   [
+    "replace",
+    56,
+    57,
+    39,
+    40,
+    [
+     "Main blog"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    40,
+    41
+   ],
+   [
+    "replace",
+    58,
+    67,
+    41,
+    42,
+    [
+     "Post"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    70,
+    42,
+    45
+   ],
+   [
+    "replace",
+    70,
+    71,
+    45,
+    46,
+    [
+     "Admin main"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    46,
+    47
+   ],
+   [
+    "replace",
+    72,
+    73,
+    47,
+    48,
+    [
+     "Editor"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    48,
+    49
+   ],
+   [
+    "replace",
+    74,
+    82,
+    49,
+    50,
+    [
+     "Admin preview"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "05c844be2909+2": {
+  "fn": "zorantica/plsql-qr-code",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "equal",
+    0,
+    8,
+    0,
+    8
+   ],
+   [
+    "replace",
+    8,
+    20,
+    8,
+    9,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    64,
+    9,
+    53
+   ],
+   [
+    "delete",
+    64,
+    66,
+    53,
+    53
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "d410206a081f+2": {
+  "fn": "MariaDB/mariadb.org-tools",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a9df65d7003e+2": {
+  "fn": "readablesystems/sto",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Build Status"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    22,
+    1,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "known issue"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    29,
+    23,
+    29
+   ],
+   [
+    "replace",
+    29,
+    30,
+    29,
+    30,
+    [
+     " - If you use GNU C Compiler (`g++`), version 7.2+ is recommended."
+    ]
+   ],
+   [
+    "equal",
+    30,
+    92,
+    30,
+    92
+   ],
+   [
+    "replace",
+    92,
+    93,
+    92,
+    93,
+    [
+     "See Wiki for advanced buid options."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    97,
+    93,
+    97
+   ],
+   [
+    "replace",
+    97,
+    98,
+    97,
+    98,
+    [
+     "JetBrains CLion. You can potentially"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    105,
+    98,
+    105
+   ],
+   [
+    "replace",
+    105,
+    106,
+    105,
+    106,
+    [
+     "data type library. Please see the Wiki on how to implement a STO"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    114,
+    106,
+    114
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "5b041a1c2fac+2": {
+  "fn": "apache/phoenix-queryserver",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "replace",
+    0,
+    7,
+    0,
+    1,
+    [
+     "logo"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    1,
+    2
+   ],
+   [
+    "replace",
+    8,
+    9,
+    2,
+    3,
+    [
+     " Apache Phoenix enables OLTP and operational analytics in Hadoop for low latency applications. Visit the Apache Phoenix website here . This is the repo for the Phoenix Query Server (PQS)."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    3,
+    4
+   ],
+   [
+    "replace",
+    10,
+    22,
+    4,
+    5,
+    [
+     "Copyright ©2020 Apache Software Foundation. All Rights Reserved."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    34,
+    5,
+    17
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

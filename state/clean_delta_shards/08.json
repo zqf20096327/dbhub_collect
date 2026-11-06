@@ -8566,5 +8566,3990 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "9ab154929cca+2": {
+  "fn": "kayak/fireant",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    5,
+    1,
+    4
+   ],
+   [
+    "replace",
+    5,
+    7,
+    4,
+    5,
+    [
+     "|BuildStatus||CoverageStatus||Codacy||Docs||PyPi||License|"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    15,
+    5,
+    13
+   ],
+   [
+    "delete",
+    15,
+    16,
+    13,
+    13
+   ],
+   [
+    "equal",
+    16,
+    23,
+    13,
+    20
+   ],
+   [
+    "replace",
+    23,
+    25,
+    20,
+    21,
+    [
+     " pip install fireant"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    29,
+    21,
+    25
+   ],
+   [
+    "delete",
+    29,
+    30,
+    25,
+    25
+   ],
+   [
+    "equal",
+    30,
+    38,
+    25,
+    33
+   ],
+   [
+    "delete",
+    38,
+    39,
+    33,
+    33
+   ],
+   [
+    "equal",
+    39,
+    51,
+    33,
+    45
+   ],
+   [
+    "replace",
+    51,
+    54,
+    45,
+    48,
+    [
+     " from fireant.dataset import *",
+     " from fireant.database import VerticaDatabase",
+     " from pypika import Tables, functions as fn"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    48,
+    49
+   ],
+   [
+    "replace",
+    55,
+    57,
+    49,
+    51,
+    [
+     " vertica_database = VerticaDatabase(user='myuser', password='mypassword')",
+     " analytics, customers = Tables('analytics', 'customers')"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    51,
+    52
+   ],
+   [
+    "replace",
+    58,
+    99,
+    52,
+    93,
+    [
+     " my_dataset = DataSet(",
+     " database=vertica_database,",
+     " table=analytics,",
+     " fields=[",
+     " Field(",
+     " # Non-aggregate definition",
+     " alias='customer',",
+     " definition=customers.id,",
+     " label='Customer'",
+     " ),",
+     " Field(",
+     " # Date/Time type, also non-aggregate",
+     " alias='date',",
+     " definition=analytics.timestamp,",
+     " type=DataType.date,",
+     " label='Date'",
+     " ),",
+     " Field(",
+     " # Text type, also non-aggregate",
+     " alias='device_type',",
+     " definition=analytics.device_type,",
+     " type=DataType.text,",
+     " label='Device_type'",
+     " ),",
+     " Field(",
+     " # Aggregate definition (The SUM function aggregates a group of values into a single value)",
+     " alias='clicks',",
+     " definition=fn.Sum(analytics.clicks),",
+     " label='Clicks'",
+     " ),",
+     " Field(",
+     " # Aggregate definition (The SUM function aggregates a group of values into a single value)",
+     " alias='customer-spend-per-clicks',",
+     " definition=fn.Sum(analytics.customer_spend / analytics.clicks),",
+     " type=DataType.number,",
+     " label='Spend / Clicks'",
+     " )",
+     " ],",
+     " joins=[",
+     " Join(customers, analytics.customer_id == customers.id),",
+     " ],"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    113,
+    93,
+    107
+   ],
+   [
+    "replace",
+    113,
+    114,
+    107,
+    108,
+    [
+     " from fireant import Matplotlib, Pandas, day"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    108,
+    109
+   ],
+   [
+    "replace",
+    115,
+    120,
+    109,
+    114,
+    [
+     " matplotlib_chart, pandas_df = my_dataset.data \\",
+     " .dimension(",
+     " # Select the date dimension with a daily interval to group the data by the day applies to",
+     " # dimensions are referenced by `dataset.fields.{alias}`",
+     " day(my_dataset.fields.date),"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    121,
+    114,
+    115
+   ],
+   [
+    "replace",
+    121,
+    135,
+    115,
+    129,
+    [
+     " # Select the device_type dimension to break the data down further by which device it applies to",
+     " my_dataset.fields.device_type,",
+     " ) \\",
+     " .filter(",
+     " # Filter the result set to data to the year of 2018",
+     " my_dataset.fields.date.between(date(2018, 1, 1), date(2018, 12, 31))",
+     " ) \\",
+     " # Add a week over week reference to compare data to values from the week prior",
+     " .reference(WeekOverWeek(dataset.fields.date))",
+     " .widget(",
+     " # Add a matpotlib chart widget",
+     " Matplotlib()",
+     " # Add axes with series to the chart",
+     " .axis(Matplotlib.LineSeries(dataset.fields.clicks))"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    129,
+    130
+   ],
+   [
+    "replace",
+    136,
+    149,
+    130,
+    143,
+    [
+     " # metrics are referenced by `dataset.metrics.{alias}`",
+     " .axis(Matplotlib.ColumnSeries(",
+     " my_dataset.fields['customer-spend-per-clicks']",
+     " ))",
+     " ) \\",
+     " .widget(",
+     " # Add a pandas data frame table widget",
+     " Pandas(",
+     " my_dataset.fields.clicks,",
+     " my_dataset.fields['customer-spend-per-clicks']",
+     " )",
+     " ) \\",
+     " .fetch()"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    150,
+    143,
+    144
+   ],
+   [
+    "replace",
+    150,
+    152,
+    144,
+    146,
+    [
+     " # Display the chart",
+     " matplotlib_chart.plot()"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    153,
+    146,
+    147
+   ],
+   [
+    "replace",
+    153,
+    155,
+    147,
+    149,
+    [
+     " # Display the chart",
+     " print(pandas_df)"
+    ]
+   ],
+   [
+    "equal",
+    155,
+    159,
+    149,
+    153
+   ],
+   [
+    "delete",
+    159,
+    160,
+    153,
+    153
+   ],
+   [
+    "equal",
+    160,
+    167,
+    153,
+    160
+   ],
+   [
+    "replace",
+    167,
+    168,
+    160,
+    161,
+    [
+     " http://www.apache.org/licenses/LICENSE-2.0"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    175,
+    161,
+    168
+   ],
+   [
+    "delete",
+    175,
+    176,
+    168,
+    168
+   ],
+   [
+    "equal",
+    176,
+    180,
+    168,
+    172
+   ],
+   [
+    "delete",
+    180,
+    181,
+    172,
+    172
+   ],
+   [
+    "equal",
+    181,
+    184,
+    172,
+    175
+   ],
+   [
+    "replace",
+    184,
+    185,
+    175,
+    176,
+    [
+     " :target: https://travis-ci.org/kayak/fireant"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    186,
+    176,
+    177
+   ],
+   [
+    "replace",
+    186,
+    187,
+    177,
+    178,
+    [
+     " :target: https://coveralls.io/github/kayak/fireant?branch=master"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    188,
+    178,
+    179
+   ],
+   [
+    "replace",
+    188,
+    189,
+    179,
+    180,
+    [
+     " :target: https://www.codacy.com/app/twheys/fireant"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    190,
+    180,
+    181
+   ],
+   [
+    "replace",
+    190,
+    191,
+    181,
+    182,
+    [
+     " :target: http://fireant.readthedocs.io/en/latest/"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    192,
+    182,
+    183
+   ],
+   [
+    "replace",
+    192,
+    193,
+    183,
+    184,
+    [
+     " :target: https://pypi.python.org/pypi/fireant"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    184,
+    185
+   ],
+   [
+    "replace",
+    194,
+    195,
+    185,
+    186,
+    [
+     " :target: http://www.apache.org/licenses/LICENSE-2.0"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    258,
+    186,
+    249
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "0966cee45b3e+2": {
+  "fn": "radar/twist-v2",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "This is a rewrite of my Rails-based book review app in rom-rb, dry-rb, (some parts of) Hanami, Sidekiq, GraphQL, React, Reach Router, Apollo, TypeScript, GraphQL Code Generator, Tailwind, and whatever other Cool Hipster Tech™ I can get my grubby hands on."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    3,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "Preview"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    23,
+    7,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "I want to also demonstrate that it's possible to build a backend app that is data-store agnostic. With the use of the Repository Pattern, the backend application knows only that it can talk to the repositories to collect the data. The backend application knows _nothing_ about how that data is collected. Today, the repositories talk to a PostgreSQL database, but tomorrow it could just as easily be a Redis store and (assuming the data returned is the same), the backend app wouldn't know the difference."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    27,
+    24,
+    27
+   ],
+   [
+    "replace",
+    27,
+    28,
+    27,
+    28,
+    [
+     "The READMEs for the backend and the frontend can be found in their respective apps."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "656ad943acf7+2": {
+  "fn": "vivaladav/BitsOfBytes",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    2,
+    1,
+    2,
+    [
+     "In this repository you can find source code and projects from my blog posts."
+    ]
+   ],
+   [
+    "equal",
+    2,
+    8,
+    2,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "blog post - source code"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    11,
+    9,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "blog post - source code"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    12,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "blog post - source code"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    17,
+    15,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "blog post - source code"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    20,
+    18,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "blog post - source code"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    23,
+    21,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "blog post - source code"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    26,
+    24,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "blog post - source code"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    29,
+    27,
+    29
+   ],
+   [
+    "replace",
+    29,
+    30,
+    29,
+    30,
+    [
+     "blog post - source code"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    32,
+    30,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     "blog post - source code"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    35,
+    33,
+    35
+   ],
+   [
+    "replace",
+    35,
+    36,
+    35,
+    36,
+    [
+     "blog post - source code"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "d0a0f4599f2c+2": {
+  "fn": "ToucanToco/weaverbird",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# GitHub Logo Weaverbird"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "\"Weaverbird Screenshot"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Weaverbird is Toucan Toco's data pipelines toolkit, it contains :"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    8,
+    5,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     " made with TypeScript, VueJS & VueX"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    13,
+    10,
+    13,
+    [
+     " - the MongoDB Translator that generate Mongo Queries, written in TypeScript",
+     " - the Pandas Executor that compute the result using Pandas dataframes, written in Python",
+     " - the Snowflake SQL translator, written in Python"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    13,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "For in depth user & technical documentation, have a look at weaverbird.toucantoco.dev"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    18,
+    15,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    21,
+    19,
+    21
+   ],
+   [
+    "replace",
+    21,
+    28,
+    21,
+    26,
+    [
+     "npm",
+     "CI UI",
+     "Coverage",
+     "Maintainability Rating",
+     "Lines of Code"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    31,
+    26,
+    29
+   ],
+   [
+    "replace",
+    31,
+    33,
+    29,
+    31,
+    [
+     "pypi",
+     "CI server"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    50,
+    31,
+    48
+   ],
+   [
+    "replace",
+    50,
+    51,
+    48,
+    49,
+    [
+     "**Important note**: While we do our best to embrace semantic versioning,"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    74,
+    49,
+    72
+   ],
+   [
+    "replace",
+    74,
+    75,
+    72,
+    73,
+    [
+     "This will run typedoc on the `src/` directory and"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    79,
+    73,
+    77
+   ],
+   [
+    "replace",
+    79,
+    80,
+    77,
+    78,
+    [
+     "The web documentation is powered by Jekyll."
+    ]
+   ],
+   [
+    "equal",
+    80,
+    125,
+    78,
+    123
+   ],
+   [
+    "replace",
+    125,
+    126,
+    123,
+    124,
+    [
+     "This will run storybook, displaying the stories"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    136,
+    124,
+    134
+   ],
+   [
+    "replace",
+    136,
+    137,
+    134,
+    135,
+    [
+     "- Define new version using semantic versioning"
+    ]
+   ],
+   [
+    "equal",
+    137,
+    140,
+    135,
+    138
+   ],
+   [
+    "replace",
+    140,
+    141,
+    138,
+    139,
+    [
+     " ex: `release/0.20.0`"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    146,
+    139,
+    144
+   ],
+   [
+    "replace",
+    146,
+    148,
+    144,
+    146,
+    [
+     " - Delete the `##changes` title at start of the `CHANGELOG.md` if provided",
+     " - Add the date and version at start of `CHANGELOG.md` following this convention"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    153,
+    146,
+    151
+   ],
+   [
+    "replace",
+    153,
+    154,
+    151,
+    152,
+    [
+     " ex: `[0.20.0] - 2020-08-03`"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    157,
+    152,
+    155
+   ],
+   [
+    "replace",
+    157,
+    158,
+    155,
+    156,
+    [
+     " ex: `v0.20.0`"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    163,
+    156,
+    161
+   ],
+   [
+    "replace",
+    163,
+    164,
+    161,
+    162,
+    [
+     "- When pull request is merged, create a release with the version number in tag version and title (no description needed)"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    165,
+    162,
+    163
+   ],
+   [
+    "replace",
+    165,
+    166,
+    163,
+    164,
+    [
+     " ex: `v0.20.0`"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    167,
+    164,
+    165
+   ],
+   [
+    "replace",
+    167,
+    168,
+    165,
+    166,
+    [
+     "- Hit the release \"publish release\" button (this will automatically create a tag and trigger the package publication )"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    186,
+    166,
+    184
+   ],
+   [
+    "replace",
+    186,
+    187,
+    184,
+    185,
+    [
+     " "
+    ]
+   ],
+   [
+    "equal",
+    187,
+    189,
+    185,
+    187
+   ],
+   [
+    "replace",
+    189,
+    190,
+    187,
+    188,
+    [
+     " "
+    ]
+   ],
+   [
+    "equal",
+    190,
+    208,
+    188,
+    206
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "47b4a401d6ad+2": {
+  "fn": "viaduck/mariadbpp",
+  "clean_ver": "2",
+  "raw_lines": 43,
+  "ops": [
+   [
+    "equal",
+    0,
+    43,
+    0,
+    43
+   ],
+   [
+    "replace",
+    43,
+    44,
+    43,
+    44,
+    [
+     "test/CMakeLists.txt or adjust these values."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    44,
+    45
+   ],
+   [
+    "delete",
+    45,
+    46,
+    45,
+    45
+   ],
+   [
+    "equal",
+    46,
+    52,
+    45,
+    51
+   ],
+   [
+    "replace",
+    52,
+    81,
+    51,
+    52,
+    [
+     "…（29 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    85,
+    52,
+    56
+   ],
+   [
+    "replace",
+    85,
+    87,
+    56,
+    58,
+    [
+     "This library was originally developed on Launchpad.",
+     "It has since been forked and is now being actively maintained here."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    90,
+    58,
+    61
+   ],
+   [
+    "delete",
+    90,
+    91,
+    61,
+    61
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "13903e0e365a+2": {
+  "fn": "martinandersen84/gui-recorder",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "hacs_badge",
+     "GitHub release"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    7,
+    4,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "GUI Recorder overview"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    20,
+    8,
+    20
+   ],
+   [
+    "replace",
+    20,
+    25,
+    20,
+    25,
+    [
+     " - Purge the database (uses global retention setting).",
+     " - Purge excluded entities (full history, ignores retention).",
+     " - Auto-update stats after each purge (optional).",
+     " - Repack after manual purge (optional).",
+     " - Restart Home Assistant."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    33,
+    25,
+    33
+   ],
+   [
+    "replace",
+    33,
+    34,
+    33,
+    34,
+    [
+     "Devices view"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    37,
+    34,
+    37
+   ],
+   [
+    "replace",
+    37,
+    38,
+    37,
+    38,
+    [
+     "Unmatched exclusions and obsolete records"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    45,
+    38,
+    45
+   ],
+   [
+    "replace",
+    45,
+    46,
+    45,
+    46,
+    [
+     "Open your Home Assistant instance and open this repository inside HACS."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    85,
+    46,
+    85
+   ],
+   [
+    "replace",
+    85,
+    86,
+    85,
+    86,
+    [
+     " with `recorder:` followed by that copied content, indented one level underneath, e.g.:"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    90,
+    86,
+    90
+   ],
+   [
+    "replace",
+    90,
+    95,
+    90,
+    91,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    106,
+    91,
+    102
+   ],
+   [
+    "replace",
+    106,
+    109,
+    102,
+    103,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    103,
+    104
+   ],
+   [
+    "replace",
+    110,
+    112,
+    104,
+    105,
+    [
+     "MIT"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "48a0ebfed6ea+2": {
+  "fn": "apache/shardingsphere-on-cloud",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "GitHub release",
+     "Quality Gate Status",
+     "codecov",
+     "GoReport"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    6,
+    7
+   ],
+   [
+    "replace",
+    7,
+    10,
+    7,
+    10,
+    [
+     "License",
+     "Twitter",
+     "Slack"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    10,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "This repository collects scripts, tools, manifests and documentations, and provides a home for Apache ShardingSphere on cloud solutions."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    17,
+    12,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "The community encourage users to try out ShardingSphere on Cloud and provide feedback on their experience. Your input is valuable for the ongoing development and enhancement of the project. Please feel free to report any issues, suggestions, or feature requests on our GitHub Issue Tracker."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    18,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "## 🚀🚀 Spinning up a ShardingSphere cluster on Kubernetes in one minute !"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    23,
+    20,
+    23
+   ],
+   [
+    "delete",
+    23,
+    27,
+    23,
+    23
+   ],
+   [
+    "equal",
+    27,
+    28,
+    23,
+    24
+   ],
+   [
+    "delete",
+    28,
+    32,
+    24,
+    24
+   ],
+   [
+    "equal",
+    32,
+    38,
+    24,
+    30
+   ],
+   [
+    "replace",
+    38,
+    41,
+    30,
+    33,
+    [
+     " * The ShardingSphere Helm Charts: Deploy a ShardingSphere cluster on any Kubernetes distro.",
+     " * AWS CloudFormation Stack Template for ShardingSphere: Deploy a ShardingSphere cluster on AWS resources with predefined CloudFormation.",
+     " * Terraform Configuration For ShardingSphere: Using Terraform to implement IaC of ShardingSphere on any clouds."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    43,
+    33,
+    35
+   ],
+   [
+    "replace",
+    43,
+    44,
+    35,
+    36,
+    [
+     " * The ShardingSphere Operator: Deploy a ShardingSphere Operator on any Kubernetes distro, which provides advanced operation features."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    46,
+    36,
+    38
+   ],
+   [
+    "replace",
+    46,
+    49,
+    38,
+    41,
+    [
+     " * Grafana template For ShardingSphere: A configured Grafana template for ShardingSphere Proxy",
+     " * WebAssembly extension demo For ShardingSphere: Write ShardingSphere extensions using any languages with help of WebAssembly",
+     " * Point-in-Time-Recovery demo For ShardingSphere: Point-in-Time recovery with openGauss"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    52,
+    41,
+    44
+   ],
+   [
+    "replace",
+    52,
+    53,
+    44,
+    45,
+    [
+     "**Apache ShardingSphere Official Website:** https://shardingsphere.apache.org/"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    45,
+    46
+   ],
+   [
+    "replace",
+    54,
+    55,
+    46,
+    47,
+    [
+     "**Apache ShardingSphere-on-Cloud Official Website:** https://shardingsphere.apache.org/oncloud/"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    57,
+    47,
+    49
+   ],
+   [
+    "replace",
+    57,
+    60,
+    49,
+    50,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    64,
+    50,
+    54
+   ],
+   [
+    "replace",
+    64,
+    65,
+    54,
+    55,
+    [
+     "Contributors"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    68,
+    55,
+    58
+   ],
+   [
+    "replace",
+    68,
+    69,
+    58,
+    59,
+    [
+     ":link: ShardingSphere on Cloud Docs. Best for: Manuals and best practices."
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    59,
+    60
+   ],
+   [
+    "replace",
+    70,
+    71,
+    60,
+    61,
+    [
+     ":link: Mailing List. Best for: Apache community updates, releases, changes."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    61,
+    62
+   ],
+   [
+    "replace",
+    72,
+    73,
+    62,
+    63,
+    [
+     ":link: GitHub Issues. Best for: larger systemic questions/bug reports or anything development related."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    63,
+    64
+   ],
+   [
+    "replace",
+    74,
+    75,
+    64,
+    65,
+    [
+     ":link: GitHub Discussions. Best for: technical questions & support, requesting new features, proposing new features."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    65,
+    66
+   ],
+   [
+    "replace",
+    76,
+    77,
+    66,
+    67,
+    [
+     ":link: Slack channel. Best for: instant communications and online meetings, sharing your applications."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    67,
+    68
+   ],
+   [
+    "replace",
+    78,
+    80,
+    68,
+    69,
+    [
+     ":link: Twitter. Best for: keeping up to date on everything ShardingSphere."
+    ]
+   ],
+   [
+    "equal",
+    80,
+    82,
+    69,
+    71
+   ],
+   [
+    "replace",
+    82,
+    84,
+    71,
+    72,
+    [
+     "Apache License 2.0, see LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "968ffb8c4d3d+2": {
+  "fn": "mvparakhin/ml-tidbits",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "delete",
+    6,
+    8,
+    6,
+    6
+   ],
+   [
+    "equal",
+    8,
+    10,
+    6,
+    8
+   ],
+   [
+    "replace",
+    10,
+    11,
+    8,
+    9,
+    [
+     "|File|What it provides|"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    9,
+    10
+   ],
+   [
+    "replace",
+    12,
+    22,
+    10,
+    18,
+    [
+     "|`LRSplines.py`|`UnifiedMonotonicSpline` — invertible monotone rational linear spline layer · docs|",
+     "|`EmbedModels.py`|Learnable Euclidean attention, auto-compressing networks, invertible flows, and the **Wristband Gaussian Loss** for deterministic Gaussian autoencoders · docs|",
+     "|`RankingLoss.py`|`C_RankingLoss` — configurable pairwise **learning-to-rank** loss (RankNet surrogate + optional LambdaRank/DCG weighting) in one stateless tensor expression, with `1 - weighted Kendall tau` semantics · docs · source|",
+     "|`TestLRSplines.py`|Tests and training examples for `LRSplines.py` · source|",
+     "|`TestRankingLoss.py`|Tests and a training example for `RankingLoss.py` · source|",
+     "|`DeterministicGAE.py`|End-to-end example: **Deterministic Gaussian Autoencoder** built from the modules in `EmbedModels.py` · source|",
+     "|`GAECondSample.py`|**Deterministic Conditional Sampling** on MNIST: trains a split-encoder GAE to inpaint missing image halves, demonstrating conditional generation by sampling from the learned Gaussian latent space · docs · source|",
+     "|`Schedulers.py`|`C_CosineAnnealingWarmRestartsDecay` — cosine annealing with warm restarts, fractional cycle growth, exponential peak decay, and linear warmup|"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    27,
+    18,
+    23
+   ],
+   [
+    "replace",
+    27,
+    28,
+    23,
+    24,
+    [
+     "> 📖 Full documentation · 🧪 Tests & examples"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    30,
+    24,
+    26
+   ],
+   [
+    "delete",
+    30,
+    32,
+    26,
+    26
+   ],
+   [
+    "equal",
+    32,
+    37,
+    26,
+    31
+   ],
+   [
+    "replace",
+    37,
+    38,
+    31,
+    32,
+    [
+     "> 📖 Full documentation · 🧪 Source · 🧪 Tests & training example"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    53,
+    32,
+    47
+   ],
+   [
+    "replace",
+    53,
+    66,
+    47,
+    48,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    48,
+    49
+   ],
+   [
+    "delete",
+    67,
+    69,
+    49,
+    49
+   ],
+   [
+    "equal",
+    69,
+    72,
+    49,
+    52
+   ],
+   [
+    "replace",
+    72,
+    73,
+    52,
+    53,
+    [
+     "> 📖 Full documentation · 🧪 GAE example · 🧪 Conditional sampling example"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    92,
+    53,
+    72
+   ],
+   [
+    "replace",
+    92,
+    93,
+    72,
+    73,
+    [
+     "A residual MLP based on the **Auto-Compressing Network** architecture from Dorovatas et al., 2025."
+    ]
+   ],
+   [
+    "equal",
+    93,
+    129,
+    73,
+    109
+   ],
+   [
+    "replace",
+    129,
+    149,
+    109,
+    110,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    150,
+    110,
+    111
+   ],
+   [
+    "delete",
+    150,
+    152,
+    111,
+    111
+   ],
+   [
+    "equal",
+    152,
+    171,
+    111,
+    130
+   ],
+   [
+    "replace",
+    171,
+    172,
+    130,
+    131,
+    [
+     "> 📖 Full documentation"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    181,
+    131,
+    140
+   ],
+   [
+    "replace",
+    181,
+    182,
+    140,
+    141,
+    [
+     "**Conceptual origin:** The wristband loss can be understood as an extension of Wang & Isola's Uniform loss from the hypersphere to the Gaussian distribution. Wang & Isola showed that a pairwise repulsive kernel on the unit sphere encourages uniform angular distribution of embeddings, and that this is equivalent to optimizing alignment and uniformity in contrastive learning. The wristband loss takes the same core idea — pairwise soft repulsion via a log-mean-exp kernel — but applies it to the full `(u, t)` wristband space so that both the angular *and* radial components are pushed toward the distributions implied by N(0,I). Generally, repulsive component is all you need - uniform on a Wristband implies Gaussian in the original space. However we also add a radial W2 term and moment penalty - they speed up convergence and improve robustness (can be turned off for a pure Wang&Isola-style loss function)."
+    ]
+   ],
+   [
+    "equal",
+    182,
+    213,
+    141,
+    172
+   ],
+   [
+    "delete",
+    213,
+    215,
+    172,
+    172
+   ],
+   [
+    "equal",
+    215,
+    217,
+    172,
+    174
+   ],
+   [
+    "replace",
+    217,
+    218,
+    174,
+    175,
+    [
+     "> 🧪 Basic GAE example · 🧪 Conditional sampling on MNIST · 📖 Conditional sampling docs"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    225,
+    175,
+    182
+   ],
+   [
+    "replace",
+    225,
+    241,
+    182,
+    183,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    241,
+    245,
+    183,
+    187
+   ],
+   [
+    "replace",
+    245,
+    246,
+    187,
+    188,
+    [
+     "See `DeterministicGAE.py` for a complete, runnable training script that generates non-Gaussian synthetic data, trains this architecture, and verifies that the latent space converges to N(0,I)."
+    ]
+   ],
+   [
+    "equal",
+    246,
+    249,
+    188,
+    191
+   ],
+   [
+    "replace",
+    249,
+    252,
+    191,
+    192,
+    [
+     "`GAECondSample.py` demonstrates **deterministic conditional generation** on MNIST. The model splits each digit into top and bottom halves, encodes each through separate encoder+flow paths into a joint Gaussian latent space, and reconstructs the full image from both latents. At inference time, only the bottom half is needed: its latent `z_b` is computed deterministically, while the top-half latent `z_t` is sampled from N(0,I) — each draw produces a different plausible completion. The training combines exact reconstruction, expected conditional reconstruction (averaged over K random `z_t` samples), and the wristband loss on the joint latent. See the full write-up for details."
+    ]
+   ],
+   [
+    "equal",
+    252,
+    259,
+    192,
+    199
+   ],
+   [
+    "replace",
+    259,
+    287,
+    199,
+    200,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    287,
+    288,
+    200,
+    201
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "af9026816605+2": {
+  "fn": "PacktWorkshops/The-Applied-SQL-Data-Analytics-Workshop",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    6,
+    1,
+    6,
+    [
+     "GitHub issues",
+     "GitHub forks",
+     "GitHub stars",
+     "PRs Welcome",
+     "versions"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    6,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "This is the repository for The Applied SQL Data Analytics Workshop, published by Packt. It contains all the supporting project files necessary to work through the course from start to finish."
+    ]
+   ],
+   [
+    "equal",
+    8,
+    10,
+    8,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "The Applied SQL Data Analytics Workshop"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    13,
+    11,
+    13
+   ],
+   [
+    "replace",
+    13,
+    15,
+    13,
+    15,
+    [
+     "1. Install PostgreSQL 12 on Windows, Mac, Linux",
+     "2. Install Anaconda on Windows, Mac, Linux"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    17,
+    15,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "The Applied SQL Data Analytics Workshop is the ideal companion on your journey to extracting information from raw business data. Whether it's importing data, analyzing complex data types, or optimizing your queries, this book equips you with the skills you need to build your knowledge in data analysis with SQL.\t"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    29,
+    18,
+    29
+   ],
+   [
+    "replace",
+    29,
+    34,
+    29,
+    32,
+    [
+     "* The Data Analysis Workshop",
+     "* The SQL Workshop",
+     "* The Applied Aritificial Intelligence Workshop"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "aeacf8d0fcd1+2": {
+  "fn": "thgreasi/localForage-cordovaSQLiteDriver",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    3,
+    1,
+    3,
+    [
+     "npm ",
+     "SQLite driver for Cordova apps using localForage."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    6,
+    3,
+    6
+   ],
+   [
+    "replace",
+    6,
+    12,
+    6,
+    11,
+    [
+     "* Cordova/ionic",
+     "* Cordova SQLite storage plugin or Cordova SQLite Plugin 2 or Cordova SQLCipher adapter plugin",
+     "* localForage v1.5.0+",
+     " * for localforage 1.4.x, please use the v1.5.0 release of this package",
+     " * for even older versions of localforage, please use the v1.2.x releases"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    24,
+    11,
+    23
+   ],
+   [
+    "replace",
+    24,
+    25,
+    23,
+    24,
+    [
+     "Pass the key required by the database to localforage by passing a `dbKey` property to the `.config()` or `.createInstance()` methods, or if using ionic-storage by passing `dbKey` via IonicStorageModule in your NgModule."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    27,
+    24,
+    26
+   ],
+   [
+    "replace",
+    27,
+    28,
+    26,
+    27,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    47,
+    27,
+    46
+   ],
+   [
+    "replace",
+    47,
+    48,
+    46,
+    47,
+    [
+     "Add support for newer versions of Cordova SQLite storage plugin (v0.8.x & v1.2.x)."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    47,
+    48
+   ],
+   [
+    "replace",
+    49,
+    50,
+    48,
+    49,
+    [
+     "*UPGRADE WARNING*: The default storage location for SQLite has changed in newer versions of Cordova SQLite storage plugin. The new \"`default`\" location value is NOT the same as the old \"`default`\" location and will break an upgrade for an app that was using the old default value (0) on iOS. If you are upgrading to a newer version of `localForage-cordovaSQLiteDriver` you need to verify where your previous storage location was and update the `location` property of the localForage database. Otherwise the default is `'default'`. This is to avoid breaking the iCloud Design Guide. See here for further details."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    63,
+    49,
+    62
+   ],
+   [
+    "replace",
+    63,
+    88,
+    62,
+    63,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    88,
+    91,
+    63,
+    66
+   ],
+   [
+    "replace",
+    91,
+    93,
+    66,
+    68,
+    [
+     "* Example Cordova/Ionic project",
+     "* Example Ionic2/Angular2/Typescript project"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7700d6db1c30+2": {
+  "fn": "kibae/pg_onnx",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "ONNX Runtime",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    4,
+    5
+   ],
+   [
+    "replace",
+    5,
+    8,
+    5,
+    6,
+    [
+     "- ONNX: Open Neural Network Exchange"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    10,
+    6,
+    8
+   ],
+   [
+    "replace",
+    10,
+    12,
+    8,
+    10,
+    [
+     " run out of memory. pg_onnx runs **onnxruntime-server** as a background",
+     " worker and creates and recycles one onnx runtime session per ONNX file."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    17,
+    10,
+    15
+   ],
+   [
+    "replace",
+    17,
+    35,
+    15,
+    16,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    37,
+    16,
+    18
+   ],
+   [
+    "replace",
+    37,
+    65,
+    18,
+    31,
+    [
+     "（目录 7 行略）",
+     " - ONNX Model Functions",
+     " - pg_onnx_import_model(TEXT, TEXT, BYTEA, JSONB, TEXT)",
+     " - pg_onnx_drop_model(TEXT, TEXT)",
+     " - pg_onnx_list_model()",
+     " - pg_onnx_inspect_model_bin(BYTEA, JSONB)",
+     " - ONNX Session Functions",
+     " - pg_onnx_create_session(TEXT, TEXT)",
+     " - pg_onnx_describe_session(TEXT, TEXT)",
+     " - pg_onnx_execute_session(TEXT, TEXT, JSONB)",
+     " - pg_onnx_destroy_session(TEXT, TEXT, JSONB)",
+     " - pg_onnx_list_session()",
+     "（目录 4 行略）"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    68,
+    31,
+    34
+   ],
+   [
+    "replace",
+    68,
+    69,
+    34,
+    35,
+    [
+     "|Platform|Ubuntu|MacOS|"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    35,
+    36
+   ],
+   [
+    "replace",
+    70,
+    78,
+    36,
+    42,
+    [
+     "|PostgreSQL 13|Ubuntu PG13|Not tested (Homebrew no longer provides PG13)|",
+     "|PostgreSQL 14|Ubuntu PG14|MacOS PG14|",
+     "|PostgreSQL 15|Ubuntu PG15|MacOS PG15|",
+     "|PostgreSQL 16|Ubuntu PG16|MacOS PG16|",
+     "|PostgreSQL 17|Ubuntu PG17|MacOS PG17|",
+     "|PostgreSQL 18|Ubuntu PG18|MacOS PG18|"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    83,
+    42,
+    47
+   ],
+   [
+    "replace",
+    83,
+    87,
+    47,
+    51,
+    [
+     "- PostgreSQL >= 13",
+     "- ONNX Runtime",
+     "- Boost",
+     "- CMake"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    51,
+    52
+   ],
+   [
+    "delete",
+    88,
+    90,
+    52,
+    52
+   ],
+   [
+    "equal",
+    90,
+    96,
+    52,
+    58
+   ],
+   [
+    "replace",
+    96,
+    99,
+    58,
+    61,
+    [
+     " - This script downloads the latest version of the binary and install to `/usr/local/onnxruntime`.",
+     " - Also, add `/usr/local/onnxruntime/lib` to `/etc/ld.so.conf.d/onnxruntime.conf` and run `ldconfig`.",
+     "- Or manually download binary from ONNX Runtime Releases."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    105,
+    61,
+    67
+   ],
+   [
+    "delete",
+    105,
+    107,
+    67,
+    67
+   ],
+   [
+    "equal",
+    107,
+    119,
+    67,
+    79
+   ],
+   [
+    "replace",
+    119,
+    121,
+    79,
+    81,
+    [
+     " - CUDA Toolkit Installation Guide",
+     " - CUDA Download for Ubuntu"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    135,
+    81,
+    95
+   ],
+   [
+    "delete",
+    135,
+    137,
+    95,
+    95
+   ],
+   [
+    "equal",
+    137,
+    142,
+    95,
+    100
+   ],
+   [
+    "replace",
+    142,
+    144,
+    100,
+    102,
+    [
+     " - ONNX Runtime Server is included as a submodule.",
+     " - If you already cloned the repository, run `git submodule update --init --recursive` to update submodules."
+    ]
+   ],
+   [
+    "equal",
+    144,
+    155,
+    102,
+    113
+   ],
+   [
+    "delete",
+    155,
+    157,
+    113,
+    113
+   ],
+   [
+    "equal",
+    157,
+    160,
+    113,
+    116
+   ],
+   [
+    "replace",
+    160,
+    173,
+    116,
+    127,
+    [
+     "- ONNX Model Functions",
+     " - pg_onnx_import_model(TEXT, TEXT, BYTEA, JSONB, TEXT)",
+     " - pg_onnx_drop_model(TEXT, TEXT)",
+     " - pg_onnx_list_model()",
+     " - pg_onnx_inspect_model_bin(BYTEA, JSONB)",
+     "- ONNX Session Functions",
+     " - pg_onnx_create_session(TEXT, TEXT)",
+     " - pg_onnx_describe_session(TEXT, TEXT)",
+     " - pg_onnx_execute_session(TEXT, TEXT, JSONB)",
+     " - pg_onnx_destroy_session(TEXT, TEXT, JSONB)",
+     " - pg_onnx_list_session()"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    191,
+    127,
+    145
+   ],
+   [
+    "replace",
+    191,
+    205,
+    145,
+    146,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    208,
+    146,
+    149
+   ],
+   [
+    "replace",
+    208,
+    209,
+    149,
+    150,
+    [
+     " example of the result."
+    ]
+   ],
+   [
+    "equal",
+    209,
+    220,
+    150,
+    161
+   ],
+   [
+    "replace",
+    220,
+    221,
+    161,
+    162,
+    [
+     "- Example"
+    ]
+   ],
+   [
+    "equal",
+    221,
+    226,
+    162,
+    167
+   ],
+   [
+    "replace",
+    226,
+    264,
+    167,
+    168,
+    [
+     "…（38 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    275,
+    168,
+    179
+   ],
+   [
+    "replace",
+    275,
+    279,
+    179,
+    180,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    279,
+    282,
+    180,
+    183
+   ],
+   [
+    "replace",
+    282,
+    283,
+    183,
+    184,
+    [
+     "into the `extensions` array on input and on echo. See docs/functions.md → Model Options"
+    ]
+   ],
+   [
+    "equal",
+    283,
+    286,
+    184,
+    187
+   ],
+   [
+    "replace",
+    286,
+    290,
+    187,
+    188,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "c6a1abb4724f+2": {
+  "fn": "mrafayaleem/gdx-sqlite",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "*Note: This project is no more actively maintained. Please check out the various forks here to follow up with active developments around this repository.*"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    10,
+    3,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "A small portion of code has been adapted from the tutorial located at: http://www.vogella.com/articles/AndroidSQLite/article.html "
+    ]
+   ],
+   [
+    "equal",
+    11,
+    47,
+    11,
+    47
+   ],
+   [
+    "replace",
+    47,
+    111,
+    47,
+    48,
+    [
+     "…（64 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    126,
+    48,
+    63
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a9f14d7574aa+2": {
+  "fn": "rjuju/pg_track_settings",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    15,
+    1,
+    14
+   ],
+   [
+    "delete",
+    15,
+    16,
+    14,
+    14
+   ],
+   [
+    "equal",
+    16,
+    19,
+    14,
+    17
+   ],
+   [
+    "replace",
+    19,
+    20,
+    17,
+    18,
+    [
+     " CREATE EXTENSION pg_track_settings;"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    25,
+    18,
+    23
+   ],
+   [
+    "delete",
+    25,
+    26,
+    23,
+    23
+   ],
+   [
+    "equal",
+    26,
+    36,
+    23,
+    33
+   ],
+   [
+    "delete",
+    36,
+    37,
+    33,
+    33
+   ],
+   [
+    "equal",
+    37,
+    39,
+    33,
+    35
+   ],
+   [
+    "replace",
+    39,
+    43,
+    35,
+    38,
+    [
+     " postgres=# select pg_track_settings_snapshot()",
+     " t",
+     " (1 row)"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    46,
+    38,
+    41
+   ],
+   [
+    "replace",
+    46,
+    51,
+    41,
+    45,
+    [
+     " postgres=# select DISTINCT ts FROM pg_track_settings_history ;",
+     " ts",
+     " 2015-01-25 01:00:37.449846+01",
+     " (1 row)"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    54,
+    45,
+    48
+   ],
+   [
+    "replace",
+    54,
+    59,
+    48,
+    52,
+    [
+     " postgres=# select pg_reload_conf();",
+     " pg_reload_conf",
+     " t",
+     " (1 row)"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    62,
+    52,
+    55
+   ],
+   [
+    "replace",
+    62,
+    67,
+    55,
+    59,
+    [
+     " postgres=# select * from pg_track_settings_snapshot();",
+     " pg_track_settings_snapshot",
+     " t",
+     " (1 row)"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    70,
+    59,
+    62
+   ],
+   [
+    "replace",
+    70,
+    75,
+    62,
+    67,
+    [
+     " postgres=# SELECT * FROM pg_track_settings_diff(now() - interval '2 minutes', now());",
+     " name | from_setting | from_exists | to_setting | to_exists",
+     " ---------------------+--------------|-------------|------------|----------",
+     " checkpoint_segments | 30 | t | 35 | t",
+     " (1 row)"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    78,
+    67,
+    70
+   ],
+   [
+    "replace",
+    78,
+    84,
+    70,
+    76,
+    [
+     " postgres=# SELECT * FROM pg_track_settings_log('checkpoint_segments');",
+     " ts | name | setting_exists | setting",
+     " -------------------------------+---------------------+----------------+---------",
+     " 2015-01-25 01:01:42.581682+01 | checkpoint_segments | t | 35",
+     " 2015-01-25 01:00:37.449846+01 | checkpoint_segments | t | 30",
+     " (2 rows)"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    87,
+    76,
+    79
+   ],
+   [
+    "replace",
+    87,
+    96,
+    79,
+    87,
+    [
+     " postgres=# SELECT * FROM pg_track_settings('2015-01-25 01:01:00');",
+     " name | setting",
+     " ------------------------------+---------",
+     " [...]",
+     " checkpoint_completion_target | 0.9",
+     " checkpoint_segments | 30",
+     " checkpoint_timeout | 300",
+     " [...]"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    101,
+    87,
+    92
+   ],
+   [
+    "replace",
+    101,
+    104,
+    92,
+    95,
+    [
+     " - pg\\_track\\_db\\_role\\_settings\\_diff()",
+     " - pg\\_track\\_db\\_role\\_settings\\_log()",
+     " - pg\\_track\\_db\\_role\\_settings()"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    107,
+    95,
+    98
+   ],
+   [
+    "replace",
+    107,
+    112,
+    98,
+    102,
+    [
+     " postgres=# SELECT * FROM pg_reboot;",
+     " ts",
+     " 2015-01-25 00:39:43.609195+01",
+     " (1 row)"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    114,
+    102,
+    104
+   ],
+   [
+    "replace",
+    114,
+    115,
+    104,
+    105,
+    [
+     "backup. If you need the clear this history, the function"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    105,
+    106
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "d6bf2c85909a+2": {
+  "fn": "kokizzu/gotro",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     "This Framework is rewrite of gokil, that previously use httprouter but rewritten using fasthttprouter (`W` framework, deprecated), latest framework `W2` are now using fiber."
+    ]
+   ],
+   [
+    "equal",
+    4,
+    11,
+    4,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "- As similar as possible to gokil that still used by my old company (2014-now)."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    14,
+    12,
+    14
+   ],
+   [
+    "replace",
+    14,
+    28,
+    14,
+    28,
+    [
+     " - A - Array",
+     " - B - Boolean",
+     " - C - Character (or Rune)",
+     " - D - Database",
+     " - F - Floating Point",
+     " - L - Logging",
+     " - M - Map",
+     " - I - Integer",
+     " - S - String",
+     " - T - Time (and Date)",
+     " - W - Web (the old \"web framework\") usable since 2017-03-08 **DEPRECATED**",
+     " - W2 - Web (the new codegen-based \"web-framework\") **STATUS**: usable since 2021-08-30, see W2/internal/example",
+     " - X - Anything (aka `any`)",
+     " - Z - Z-Template Engine, that has syntax similar to ruby string interpolation `#{foo}` or any other that javascript friendly `{/* foo */}`, `[/* bar */]`, `/*! bar */`"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    33,
+    28,
+    33
+   ],
+   [
+    "replace",
+    33,
+    43,
+    33,
+    43,
+    [
+     " - Ch = Clickhouse (OLAP, have migration tool) -- recommended",
+     " - Es = ElasticSearch (full text search, query only)",
+     " - Ms = Meilisearch (full text search)",
+     " - Pg = PostgreSQL (OLTP, using JSONB)",
+     " - Ql = QLDB (please use better database -_-)",
+     " - Rc = BigCache",
+     " - Rd = Redis works also for KvRocks, KeyDB, etc",
+     " - Tt = Tarantool (OLTP and cache, have migration tool) -- recommended",
+     "",
+     "Other than above, you must use officially provided database adapter from respective vendors. For docker compose example. you can see local-docker-db"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    46,
+    43,
+    46
+   ],
+   [
+    "replace",
+    46,
+    47,
+    46,
+    47,
+    [
+     "Benchmarked using hey `-c 255 -n 255000 http://localhost:3001` on i7-4720HQ gotro almost 2x faster than gokil (`12K` rps vs `23K` rps, thanks to `fasthttp`),"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    49,
+    47,
+    49
+   ],
+   [
+    "replace",
+    49,
+    50,
+    49,
+    50,
+    [
+     "For newer framework `W2` can achieve `20K` rps on Ryzen3 3100 without session loading and template rendering (only renders JSON), but with debug logging turned on (development mode), `33K` to `144K` rps on newer 32-core 128GB RAM NVMe server, see BENCHMARK.md for detailed result."
+    ]
+   ],
+   [
+    "equal",
+    50,
+    56,
+    50,
+    56
+   ],
+   [
+    "replace",
+    56,
+    67,
+    56,
+    57,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    69,
+    57,
+    59
+   ],
+   [
+    "replace",
+    69,
+    71,
+    59,
+    61,
+    [
+     "- add kardios/service for W2",
+     "- fix mysql adapter so it becomes usable (currently copied from Postgres'), probably wait until mysql has indexable json column, or do alters like scylladb and sqlite, or just remove and rewrite one for TiDB"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    74,
+    61,
+    64
+   ],
+   [
+    "replace",
+    74,
+    92,
+    64,
+    82,
+    [
+     "- Review and benchmark which other databases we must support primarily for `D`, that can be silver bullet for extreme cases (high-write: sharding/partitioning and multi-master replication or auto-failover; full-text-search) ",
+     " - Aerospike <-- KV use case",
+     " - ActorDB <-- high-write",
+     " - CockroachDB <-- high-write (postgresql-compatible)",
+     " - Couchbase <-- high-write",
+     " - DGraph ",
+     " - CrateDB <-- high-write",
+     " - GridDB <-- high-write",
+     " - GunDB",
+     " - IceFireDB <-- high-write (redis-compatible)",
+     " - LocustDB <-- OLAP use-cases",
+     " - NebulaGraph",
+     " - OrientDB",
+     " - PostgreXL <-- high-write (postgresql-compatible)",
+     " - SingleStore <-- high-write (mysql-compatible)",
+     " - TiDB <-- high-write (mysql-compatible)",
+     " - TypeSense",
+     " - YugaByteDB <-- high-write (postgresql/redis/cassandra-compatible)"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    96,
+    82,
+    86
+   ],
+   [
+    "replace",
+    96,
+    99,
+    86,
+    89,
+    [
+     "- Add ephemeral and/or persisted queuing/pub-sub service we're gonna use (NATS -- at most once delivery, RedPanda -- at least once delivery), see hugedbbench",
+     "- Add ExampleXxx function, getting started and more documentation ",
+     "- Try other alternate graceful restart (zero downtime deployment): grace or endless instead of just overseer"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    101,
+    89,
+    91
+   ],
+   [
+    "replace",
+    101,
+    103,
+    91,
+    93,
+    [
+     "- Make sure all `D/*/*` docker-compose and dockertest works, volumes commented, have note on how to connect client and documentation URL, add from hugedbbench",
+     "- Create NBIO codegen for websocket presentation/transport layer."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "74c8da1a414c+2": {
+  "fn": "sunny-udhani/Online_Travel_Reservation",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    4,
+    1,
+    1
+   ],
+   [
+    "equal",
+    4,
+    19,
+    1,
+    16
+   ],
+   [
+    "replace",
+    19,
+    20,
+    16,
+    18,
+    [
+     " Area ",
+     " Technology "
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    18,
+    19
+   ],
+   [
+    "replace",
+    21,
+    77,
+    19,
+    51,
+    [
+     " Front-End ",
+     " React, Redux, React Router, Bootstrap, HTML5, CSS3, Javascript ( ES6 ) ",
+     "",
+     " Analytics Graphs ",
+     " D3.js ",
+     "",
+     " Message-oriented middleware ",
+     " Apache Kafka ",
+     "",
+     " Authentication Middleware ",
+     " Passport.js ",
+     "",
+     " Back-End ",
+     " Express, Node.js ",
+     "",
+     " In-Memory Caching / Datastore ",
+     " Redis ",
+     "",
+     " Search and Analytics Engine ",
+     " Elasticsearch ",
+     "",
+     " API Testing ",
+     " Mocha, Postman ",
+     "",
+     " Performance Testing ",
+     " JMeter ",
+     "",
+     " Database ",
+     " MySQL (Google Cloud Platform), MongoDB (Mongo Atlas on AWS) ",
+     "",
+     " Deployment ",
+     " Google Compute Engine "
+    ]
+   ],
+   [
+    "equal",
+    77,
+    86,
+    51,
+    60
+   ],
+   [
+    "delete",
+    86,
+    88,
+    60,
+    60
+   ],
+   [
+    "equal",
+    88,
+    92,
+    60,
+    64
+   ],
+   [
+    "delete",
+    92,
+    94,
+    64,
+    64
+   ],
+   [
+    "equal",
+    94,
+    95,
+    64,
+    65
+   ],
+   [
+    "delete",
+    95,
+    97,
+    65,
+    65
+   ],
+   [
+    "equal",
+    97,
+    100,
+    65,
+    68
+   ],
+   [
+    "delete",
+    100,
+    102,
+    68,
+    68
+   ],
+   [
+    "equal",
+    102,
+    103,
+    68,
+    69
+   ],
+   [
+    "delete",
+    103,
+    105,
+    69,
+    69
+   ],
+   [
+    "equal",
+    105,
+    108,
+    69,
+    72
+   ],
+   [
+    "delete",
+    108,
+    110,
+    72,
+    72
+   ],
+   [
+    "equal",
+    110,
+    111,
+    72,
+    73
+   ],
+   [
+    "delete",
+    111,
+    113,
+    73,
+    73
+   ],
+   [
+    "equal",
+    113,
+    116,
+    73,
+    76
+   ],
+   [
+    "delete",
+    116,
+    118,
+    76,
+    76
+   ],
+   [
+    "equal",
+    118,
+    119,
+    76,
+    77
+   ],
+   [
+    "delete",
+    119,
+    121,
+    77,
+    77
+   ],
+   [
+    "equal",
+    121,
+    124,
+    77,
+    80
+   ],
+   [
+    "delete",
+    124,
+    126,
+    80,
+    80
+   ],
+   [
+    "equal",
+    126,
+    127,
+    80,
+    81
+   ],
+   [
+    "delete",
+    127,
+    129,
+    81,
+    81
+   ],
+   [
+    "equal",
+    129,
+    132,
+    81,
+    84
+   ],
+   [
+    "delete",
+    132,
+    134,
+    84,
+    84
+   ],
+   [
+    "equal",
+    134,
+    135,
+    84,
+    85
+   ],
+   [
+    "delete",
+    135,
+    137,
+    85,
+    85
+   ],
+   [
+    "equal",
+    137,
+    140,
+    85,
+    88
+   ],
+   [
+    "delete",
+    140,
+    143,
+    88,
+    88
+   ],
+   [
+    "equal",
+    143,
+    144,
+    88,
+    89
+   ],
+   [
+    "delete",
+    144,
+    148,
+    89,
+    89
+   ],
+   [
+    "equal",
+    148,
+    154,
+    89,
+    95
+   ],
+   [
+    "replace",
+    154,
+    155,
+    95,
+    96,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    155,
+    157,
+    96,
+    98
+   ],
+   [
+    "replace",
+    157,
+    158,
+    98,
+    99,
+    [
+     "> We tested the performance of api called list cars which serves the functionality of getting all cars from our mongodb for the specific city and for each of these cars makes a search in mysql database to verify from booking table that the car is available on those dates."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    161,
+    99,
+    102
+   ],
+   [
+    "replace",
+    161,
+    162,
+    102,
+    103,
+    [
+     "> In our kafka implementation strategy we tried to minimize the bottleneck for performance, so we had two topics for each api , one for request and other for response so there where multiple consumers listening to these topics simultaneously for request and response instead of single consumer with single topic serving all the requests serially eventually resulting into dropping of messages."
+    ]
+   ],
+   [
+    "equal",
+    162,
+    163,
+    103,
+    104
+   ],
+   [
+    "replace",
+    163,
+    164,
+    104,
+    105,
+    [
+     "> Our approach to redis implementation was simple and effective. We used it at places which were database and read intensive like flight search car search. So when a user searches for a listing we create a search string with all criterias for search and use it for listing which is very similar to how kayak does it.we use this search string as key to store entries in redis. So when a user searches for a listing with a search string we see if the search exist in redis, if it does then use it else send a message over kafka, get data from db, set it in the cache and show it to user. Here the user will get the data from cache on subsequent search. On our exploration for redis features we found that we can invalidate the cache after a fixed timeout, so we included that feature and set a time out of 3 sec. Also we invalidate cache entries when user adds a listing so that latest data is available for user. This boosted the application performance so much that i have even seen response times of 1ms. So in a hypothetical situation, when 1000 users search for a car in the same city for same from to date within a frame of 3 sec, they will get the response in 1ms."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    166,
+    105,
+    107
+   ],
+   [
+    "delete",
+    166,
+    169,
+    107,
+    107
+   ],
+   [
+    "equal",
+    169,
+    177,
+    107,
+    115
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "ddaa3acf867c+2": {
+  "fn": "clarisma/geodesk-py",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "PyPI"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    5,
+    1,
+    3
+   ],
+   [
+    "replace",
+    5,
+    6,
+    3,
+    4,
+    [
+     "Also available for C++ and for Java."
+    ]
+   ],
+   [
+    "equal",
+    6,
+    18,
+    4,
+    16
+   ],
+   [
+    "replace",
+    18,
+    19,
+    16,
+    17,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    19,
+    24,
+    17,
+    22
+   ],
+   [
+    "replace",
+    24,
+    25,
+    22,
+    23,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    25,
+    30,
+    23,
+    28
+   ],
+   [
+    "replace",
+    30,
+    32,
+    28,
+    30,
+    [
+     "- GeoDesk GOL Tool 2.0 or above",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    32,
+    40,
+    30,
+    38
+   ],
+   [
+    "replace",
+    40,
+    41,
+    38,
+    39,
+    [
+     "Create a Geo-Object Library based on any `.osm.pbf` file, using the GOL Tool."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    56,
+    39,
+    54
+   ],
+   [
+    "replace",
+    56,
+    68,
+    54,
+    55,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    96,
+    55,
+    83
+   ],
+   [
+    "replace",
+    96,
+    97,
+    83,
+    84,
+    [
+     "GeoDesk Developer's Guide"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    100,
+    84,
+    87
+   ],
+   [
+    "replace",
+    100,
+    103,
+    87,
+    90,
+    [
+     "- geodesk &mdash; GeoDesk for Java",
+     "- libgeodesk &mdash; GeoDesk for C++",
+     "- geodesk-gol &mdash; command-line utility for building, maintaining and querying GOL files"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

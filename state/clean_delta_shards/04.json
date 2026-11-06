@@ -7687,5 +7687,3970 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "8ccb578f2385+2": {
+  "fn": "ClickHouse/agentic-data-stack",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "The open-source stack for ClickHouse's suite of agentic analytic tools — your chat, your models, your data. ",
+     "Powered by ClickHouse, LibreChat, and Langfuse."
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    4,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "Learn more at clickhouse.ai and the Agentic Data Stack blog."
+    ]
+   ],
+   [
+    "equal",
+    6,
+    11,
+    6,
+    11
+   ],
+   [
+    "replace",
+    11,
+    29,
+    11,
+    13,
+    [
+     " Langfuse OSS ",
+     " Langfuse Cloud "
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    13,
+    14
+   ],
+   [
+    "replace",
+    30,
+    31,
+    14,
+    23,
+    [
+     " <a href=\"https://railway.com/deploy/agentic-data-stack-lite\">",
+     " Deploy on Railway",
+     " </a>",
+     "",
+     " <a href=\"https://railway.com/deploy/agentic-data-stack-lite-langfuse-cloud\">",
+     " Deploy on Railway (Langfuse Cloud)",
+     " </a>",
+     "",
+     "More details available in the Deploy on Railway section."
+    ]
+   ],
+   [
+    "equal",
+    31,
+    38,
+    23,
+    30
+   ],
+   [
+    "replace",
+    38,
+    39,
+    30,
+    31,
+    [
+     "|Component|Purpose|Port|"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    31,
+    32
+   ],
+   [
+    "replace",
+    40,
+    52,
+    32,
+    44,
+    [
+     "|**LibreChat**|Modern Chat UI with multi-model / provider support (OpenAI, Anthropic, Google)|`3080`|",
+     "|**Admin Panel**|Browser-based configuration UI for LibreChat|`3081`|",
+     "|**ClickHouse MCP**|MCP server that gives agents access to ClickHouse|`8000`|",
+     "|**Langfuse**|LLM observability — traces, evals, prompt management|`3000`|",
+     "|**ClickHouse**|World's fastest analytical database|`8123`|",
+     "|**PostgreSQL**|Transactional database for Langfuse|`5432`|",
+     "|**MongoDB**|Transactional database for LibreChat|`27017`|",
+     "|**MinIO**|S3-compatible object storage|`9090`|",
+     "|**Redis**|Caching and queue|`6379`|",
+     "|**Meilisearch**|Full-text search for LibreChat|`7700`|",
+     "|**pgvector**|Vector database for RAG|`5433`|",
+     "|**RAG API**|Retrieval-augmented generation service for LibreChat|`8001`|"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    60,
+    44,
+    52
+   ],
+   [
+    "replace",
+    60,
+    61,
+    52,
+    53,
+    [
+     "Both Railway templates skip Meilisearch, pgvector, and the RAG API for simplicity. The ClickHouse MCP server ships pointed at `sql-clickhouse.clickhouse.com` so you can chat with the public demo data immediately; the ClickHouse Cloud MCP is also wired up if you want to OAuth into your own Cloud account post-deploy. Prefer to self-host? See Quick Start below."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    66,
+    53,
+    58
+   ],
+   [
+    "replace",
+    66,
+    67,
+    58,
+    59,
+    [
+     "- Docker and Docker Compose v2+"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    86,
+    59,
+    78
+   ],
+   [
+    "replace",
+    86,
+    87,
+    78,
+    79,
+    [
+     "> **Note:** To use LibreChat's **file search / RAG** features, the RAG API needs a real API key for embeddings — `user_provided` won't work because the RAG API calls the embeddings endpoint directly. If `OPENAI_API_KEY` is set to `user_provided`, set `RAG_OPENAI_API_KEY` to a valid OpenAI key (it overrides `OPENAI_API_KEY` for RAG only). You can also switch embedding providers via `EMBEDDINGS_PROVIDER` (`openai`, `azure`, `huggingface`, `huggingfacetei`, `ollama`). See the RAG API docs for details."
+    ]
+   ],
+   [
+    "equal",
+    87,
+    96,
+    79,
+    88
+   ],
+   [
+    "replace",
+    96,
+    100,
+    88,
+    92,
+    [
+     "- **LibreChat** — http://localhost:3080",
+     "- **Admin Panel** — http://localhost:3081",
+     "- **Langfuse** — http://localhost:3000",
+     "- **MinIO Console** — http://localhost:9091 (Find credentials in `.env` under MINIO_ROOT_* fields)"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    105,
+    92,
+    97
+   ],
+   [
+    "replace",
+    105,
+    106,
+    97,
+    98,
+    [
+     "Architecture"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    111,
+    98,
+    103
+   ],
+   [
+    "replace",
+    111,
+    112,
+    103,
+    104,
+    [
+     "|Script|Description|"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    113,
+    104,
+    105
+   ],
+   [
+    "replace",
+    113,
+    119,
+    105,
+    111,
+    [
+     "|`scripts/prepare-demo.sh`|Generate `.env` and interactively configure API keys|",
+     "|`scripts/generate-env.sh`|Generate `.env` with random credentials|",
+     "|`scripts/reconcile-demo-runtime.sh`|Apply `.env` changes to a running LibreChat container and verify its Langfuse target|",
+     "|`scripts/reset-all.sh`|Stop all containers and wipe all data/volumes|",
+     "|`scripts/create-librechat-user.sh`|Manually create a LibreChat admin user|",
+     "|`scripts/init-librechat-user.sh`|Auto-init user on container startup (used internally)|"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    122,
+    111,
+    114
+   ],
+   [
+    "replace",
+    122,
+    123,
+    114,
+    115,
+    [
+     "- **LibreChat** — `librechat.yaml` configures endpoints, MCP servers, and agent capabilities. The Admin Panel (http://localhost:3081) offers a browser-based alternative for most of these settings."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    126,
+    115,
+    118
+   ],
+   [
+    "replace",
+    126,
+    130,
+    118,
+    122,
+    [
+     " - `langfuse-compose.yml` — Langfuse, ClickHouse, PostgreSQL, Redis, MinIO",
+     " - `clickhouse-mcp-compose.yml` — ClickHouse MCP server",
+     " - `librechat-compose.yml` — LibreChat, MongoDB, Meilisearch, pgvector, RAG API",
+     " - `admin-panel-compose.yml` — LibreChat Admin Panel"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    148,
+    122,
+    140
+   ],
+   [
+    "replace",
+    148,
+    154,
+    140,
+    146,
+    [
+     "- clickhouse.ai — Project homepage",
+     "- Documentation — Full setup guide for adding ClickHouse MCP to LibreChat",
+     "- ClickHouse MCP — MCP server for ClickHouse",
+     "- LibreChat — Chat UI",
+     "- LibreChat Admin Panel — Browser-based configuration UI for LibreChat",
+     "- Langfuse — LLM observability"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "945d341cc429+2": {
+  "fn": "tomoncle/Python-notes",
+  "clean_ver": "2",
+  "raw_lines": 9,
+  "ops": [
+   [
+    "equal",
+    0,
+    9,
+    0,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     "## Windows Python 依赖库 **PythonLibs**"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    13,
+    10,
+    13
+   ],
+   [
+    "replace",
+    13,
+    16,
+    13,
+    16,
+    [
+     "## Python 中文翻译文档集合",
+     "## Python 官方文档",
+     "## Top Python APIs"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    25,
+    16,
+    25
+   ],
+   [
+    "replace",
+    25,
+    30,
+    25,
+    26,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    53,
+    26,
+    49
+   ],
+   [
+    "replace",
+    53,
+    58,
+    49,
+    54,
+    [
+     " * Python2.x",
+     " * `$ python -m SimpleHttpServer` 默认端口8000",
+     " * `$ py -2 -m SimpleHTTPServer` 默认端口8000",
+     " * `$ py -2 -m SimpleHTTPServer 9090` 指定端口9090",
+     " * 使用代码："
+    ]
+   ],
+   [
+    "equal",
+    58,
+    63,
+    54,
+    59
+   ],
+   [
+    "replace",
+    63,
+    66,
+    59,
+    62,
+    [
+     " * Python3.x",
+     " * `$ python -m http.server`",
+     " * `$ py -3 -m http.server`"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    72,
+    62,
+    68
+   ],
+   [
+    "replace",
+    72,
+    76,
+    68,
+    71,
+    [
+     " * 创建zip包：`$ python -m zipfile -c tom.zip tom.txt`",
+     " * 解压zip包：`$ python -m zipfile -e tom.zip .`",
+     " * 查看zip包：`$ python -m zipfile -l tom.zip`"
+    ]
+   ],
+   [
+    "equal",
+    76,
+    84,
+    71,
+    79
+   ],
+   [
+    "delete",
+    84,
+    85,
+    79,
+    79
+   ],
+   [
+    "equal",
+    85,
+    87,
+    79,
+    81
+   ],
+   [
+    "replace",
+    87,
+    101,
+    81,
+    94,
+    [
+     "* 爬虫",
+     "* RPC",
+     "* 定时任务",
+     "* mysql",
+     "* mongodb",
+     "* redis",
+     "* 数据分析：`maptplotlib`, `malb` , `numpy`, `tesseract`",
+     "* 页面解析技术: `bs4`, `xpath`",
+     "* openstack开源模块",
+     "* Python 装饰器",
+     "* Python 多线程/多进程",
+     "* Python 内置模块",
+     "* Python 使用技巧"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "b4eeed70b6f7+2": {
+  "fn": "hashicorp/terraform-provider-postgresql",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    4,
+    1,
+    3
+   ],
+   [
+    "replace",
+    4,
+    8,
+    3,
+    5,
+    [
+     "- Gitter chat",
+     "- Mailing list: Google Groups"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    10,
+    5,
+    7
+   ],
+   [
+    "delete",
+    10,
+    11,
+    7,
+    7
+   ],
+   [
+    "equal",
+    11,
+    12,
+    7,
+    8
+   ],
+   [
+    "replace",
+    12,
+    14,
+    8,
+    10,
+    [
+     "-\tTerraform 0.10.x",
+     "-\tGo 1.11 (to build the provider plugin)"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    16,
+    10,
+    12
+   ],
+   [
+    "delete",
+    16,
+    17,
+    12,
+    12
+   ],
+   [
+    "equal",
+    17,
+    33,
+    12,
+    28
+   ],
+   [
+    "delete",
+    33,
+    34,
+    28,
+    28
+   ],
+   [
+    "equal",
+    34,
+    35,
+    28,
+    29
+   ],
+   [
+    "replace",
+    35,
+    36,
+    29,
+    30,
+    [
+     "Usage examples can be found in the Terraform provider documentation"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    38,
+    30,
+    32
+   ],
+   [
+    "delete",
+    38,
+    39,
+    32,
+    32
+   ],
+   [
+    "equal",
+    39,
+    40,
+    32,
+    33
+   ],
+   [
+    "replace",
+    40,
+    41,
+    33,
+    34,
+    [
+     "If you wish to work on the provider, you'll first need Go installed on your machine (version 1.11+ is *required*). You'll also need to correctly setup a GOPATH, as well as adding `$GOPATH/bin` to your `$PATH`."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    72,
+    34,
+    65
+   ],
+   [
+    "replace",
+    72,
+    80,
+    65,
+    66,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    81,
+    66,
+    67
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "d5979d226cb0+2": {
+  "fn": "marcua/ayb",
+  "clean_ver": "2",
+  "raw_lines": 9,
+  "ops": [
+   [
+    "equal",
+    0,
+    9,
+    0,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     "Build status"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    15,
+    10,
+    15
+   ],
+   [
+    "replace",
+    15,
+    16,
+    15,
+    16,
+    [
+     "To learn more about why `ayb` matters, how it works, or who it's for, read this introductory blog post."
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    16,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "*alpha warning*: `ayb` is neither feature complete nor production-ready. Functionality like authentication, permissions, collaboration, isolation, high availability, and transaction support are on the Roadmap but not available today. I work on `ayb` as a hobbyist side project."
+    ]
+   ],
+   [
+    "equal",
+    18,
+    22,
+    18,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "`ayb` is written in Rust, and is available as the `ayb` crate. Assuming you have installed Rust on your machine, installing `ayb` takes a single command:"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    28,
+    23,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "Alternatively, you can run `ayb` using Docker - see the Docker section for details."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    31,
+    29,
+    31
+   ],
+   [
+    "replace",
+    31,
+    32,
+    31,
+    32,
+    [
+     "An `ayb` server stores its metadata in SQLite or PostgreSQL, and stores the databases it's hosting on a local disk. An `ayb.toml` file tells the server what host/port to listen for connections on, how to connect to the database, and the data path for the hosted databases. You can generate a starter file with `ayb default_server_config`."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    37,
+    32,
+    37
+   ],
+   [
+    "replace",
+    37,
+    65,
+    37,
+    38,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    67,
+    38,
+    40
+   ],
+   [
+    "replace",
+    67,
+    68,
+    40,
+    41,
+    [
+     "You can also set environment variables for any `ayb.toml` setting."
+    ]
+   ],
+   [
+    "equal",
+    68,
+    73,
+    41,
+    46
+   ],
+   [
+    "delete",
+    73,
+    74,
+    46,
+    46
+   ],
+   [
+    "equal",
+    74,
+    82,
+    46,
+    54
+   ],
+   [
+    "replace",
+    82,
+    133,
+    54,
+    55,
+    [
+     "…（51 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    150,
+    55,
+    72
+   ],
+   [
+    "replace",
+    150,
+    186,
+    72,
+    73,
+    [
+     "…（36 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    189,
+    73,
+    76
+   ],
+   [
+    "replace",
+    189,
+    190,
+    76,
+    77,
+    [
+     "`ayb` comes with a fully functional web interface. With the server configuration shown above, visit http://localhost:5433/register to get started. The web interface allows you to register, log in, create databases, and run queries through your browser without needing to use the command line client."
+    ]
+   ],
+   [
+    "equal",
+    190,
+    198,
+    77,
+    85
+   ],
+   [
+    "replace",
+    198,
+    199,
+    85,
+    86,
+    [
+     " "
+    ]
+   ],
+   [
+    "equal",
+    199,
+    201,
+    86,
+    88
+   ],
+   [
+    "replace",
+    201,
+    202,
+    88,
+    89,
+    [
+     " "
+    ]
+   ],
+   [
+    "equal",
+    202,
+    219,
+    89,
+    106
+   ],
+   [
+    "replace",
+    219,
+    232,
+    106,
+    107,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    232,
+    268,
+    107,
+    143
+   ],
+   [
+    "replace",
+    268,
+    272,
+    143,
+    144,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    285,
+    144,
+    157
+   ],
+   [
+    "replace",
+    285,
+    286,
+    157,
+    158,
+    [
+     "database to S3-compatible storage to"
+    ]
+   ],
+   [
+    "equal",
+    286,
+    288,
+    158,
+    160
+   ],
+   [
+    "replace",
+    288,
+    289,
+    160,
+    161,
+    [
+     "zstd) and only uploaded if the database changed"
+    ]
+   ],
+   [
+    "equal",
+    289,
+    296,
+    161,
+    168
+   ],
+   [
+    "replace",
+    296,
+    305,
+    168,
+    169,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    305,
+    313,
+    169,
+    177
+   ],
+   [
+    "replace",
+    313,
+    315,
+    177,
+    179,
+    [
+     "* `force_path_style`: (Optional, legacy) If included and `true`, will use the legacy path-style method of referencing buckets. Used in `ayb`'s end-to-end tests and might be helpful beyond, but start without it.",
+     "* `interval`: How frequently to take a snapshot of your data in human-readable format (e.g., every 30 minutes = `30m`, every hour = `1h`, every hour and 30 minutes = `1h30m`, with more examples here)."
+    ]
+   ],
+   [
+    "equal",
+    315,
+    323,
+    179,
+    187
+   ],
+   [
+    "replace",
+    323,
+    358,
+    187,
+    188,
+    [
+     "…（35 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    358,
+    362,
+    188,
+    192
+   ],
+   [
+    "replace",
+    362,
+    363,
+    192,
+    193,
+    [
+     "rqlite. Thank"
+    ]
+   ],
+   [
+    "equal",
+    363,
+    377,
+    193,
+    207
+   ],
+   [
+    "replace",
+    377,
+    391,
+    207,
+    208,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    398,
+    208,
+    215
+   ],
+   [
+    "replace",
+    398,
+    411,
+    215,
+    216,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    411,
+    430,
+    216,
+    235
+   ],
+   [
+    "replace",
+    430,
+    431,
+    235,
+    236,
+    [
+     "SQLITE_DBCONFIG_DEFENSIVE"
+    ]
+   ],
+   [
+    "equal",
+    431,
+    432,
+    236,
+    237
+   ],
+   [
+    "replace",
+    432,
+    433,
+    237,
+    238,
+    [
+     "SQLITE_LIMIT_ATTACHED"
+    ]
+   ],
+   [
+    "equal",
+    433,
+    437,
+    238,
+    242
+   ],
+   [
+    "replace",
+    437,
+    438,
+    242,
+    243,
+    [
+     "Landlock security module along with resource"
+    ]
+   ],
+   [
+    "equal",
+    438,
+    446,
+    243,
+    251
+   ],
+   [
+    "replace",
+    446,
+    448,
+    251,
+    253,
+    [
+     " directory (read-write) and system shared libraries (read-only)",
+     " are accessible. All other filesystem paths are denied."
+    ]
+   ],
+   [
+    "equal",
+    448,
+    449,
+    253,
+    254
+   ],
+   [
+    "replace",
+    449,
+    450,
+    254,
+    255,
+    [
+     " connect operations are denied."
+    ]
+   ],
+   [
+    "equal",
+    450,
+    470,
+    255,
+    275
+   ],
+   [
+    "replace",
+    470,
+    471,
+    275,
+    276,
+    [
+     "this issue."
+    ]
+   ],
+   [
+    "equal",
+    471,
+    483,
+    276,
+    288
+   ],
+   [
+    "replace",
+    483,
+    484,
+    288,
+    289,
+    [
+     "file (see Running a server),"
+    ]
+   ],
+   [
+    "equal",
+    484,
+    542,
+    289,
+    347
+   ],
+   [
+    "replace",
+    542,
+    544,
+    347,
+    349,
+    [
+     "* Installs moto's S3 server and then runs it in the background in order to test database snapshotting functionality that stores snapshots in S3-compatible storage.",
+     "* Tests `ayb`'s isolation functionality using the kernel's Landlock security module."
+    ]
+   ],
+   [
+    "equal",
+    544,
+    548,
+    349,
+    353
+   ],
+   [
+    "replace",
+    548,
+    549,
+    353,
+    354,
+    [
+     "The introductory blog post has a section describing each group that stands to benefit from `ayb`'s aim to make it easier to create a database, interact with it, and share it with relevant people/organizations. Students would benefit from encountering less operational impediments to writing their first SQL query or sharing their in-progress database with a mentor or teacher for help. Sharers like scientists and journalists would benefit from an easy way to post a dataset and share it with collaborators. Finally, anyone concerned about the sovereignty of their data would benefit from a world where it's so easy to spin up a database that more of their data can live in databases they control."
+    ]
+   ],
+   [
+    "equal",
+    549,
+    551,
+    354,
+    356
+   ],
+   [
+    "replace",
+    551,
+    552,
+    356,
+    357,
+    [
+     "Thank you for asking. I hope the answer elicits some nostalgia! Shout out to Meelap Shah and Eugene Wu for convincing me to not call this project `stacks`, to Andrew Lange-Abramowitz for making the connection to the storied meme, and to Meredith Blumenstock for listening to me fret over it all."
+    ]
+   ],
+   [
+    "equal",
+    552,
+    554,
+    357,
+    359
+   ],
+   [
+    "replace",
+    554,
+    575,
+    359,
+    360,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    575,
+    576,
+    360,
+    361
+   ],
+   [
+    "replace",
+    576,
+    585,
+    361,
+    362,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    585,
+    588,
+    362,
+    365
+   ],
+   [
+    "replace",
+    588,
+    589,
+    365,
+    366,
+    [
+     "As we are in the early days of `ayb`, we largely do patch releases (e.g., v0.1.7 -> v0.1.8). We use cargo-release for this."
+    ]
+   ],
+   [
+    "equal",
+    589,
+    604,
+    366,
+    381
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "f6ce26976688+2": {
+  "fn": "clement-tourriere/dbcrust",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    8,
+    4,
+    8,
+    [
+     "CI",
+     "PyPI",
+     "Documentation",
+     "License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    16,
+    8,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "Documentation · Quick start · AI/privacy · Django analyzer · Python API"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    26,
+    17,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "- **Agent-safe connections** — a credential broker (`dbcrust broker`, `dbcrust-agent`, MCP) keeps database passwords out of AI agents' reach: enrolled aliases, forced read-only, row/time limits and an audit log; it can run as its own OS user. See Agent connections."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    35,
+    27,
+    35
+   ],
+   [
+    "replace",
+    35,
+    44,
+    35,
+    36,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    64,
+    36,
+    56
+   ],
+   [
+    "replace",
+    64,
+    65,
+    56,
+    57,
+    [
+     "|Scheme|Example|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    66,
+    57,
+    58
+   ],
+   [
+    "replace",
+    66,
+    87,
+    58,
+    79,
+    [
+     "|PostgreSQL|`postgres://user:pass@localhost:5432/mydb?sslmode=require`|",
+     "|MySQL|`mysql://root:pass@localhost:3306/mydb`|",
+     "|SQLite|`sqlite:///path/to/db.sqlite` or `./path/to/db.sqlite`|",
+     "|ClickHouse|`clickhouse://user:pass@localhost:8123/default`|",
+     "|MongoDB|`mongodb://user:pass@localhost:27017/mydb`|",
+     "|Elasticsearch|`elasticsearch://localhost:9200`|",
+     "|White Dragon|`white-dragon://localhost:7700`|",
+     "|Redis / Valkey|`redis://localhost:6379/0` · `rediss://user:pass@host:6380` (TLS)|",
+     "|SQL Server / Azure SQL|`mssql://user:pass@localhost:1433/mydb` (TLS verified by default) · `mssql://user:pass@host%5CINSTANCE/mydb`|",
+     "|Amazon Redshift|`redshift://user:pass@cluster.abc.eu-west-1.redshift.amazonaws.com:5439/dev` (TLS required by default)|",
+     "|libSQL / Turso|`libsql://my-db-org.turso.io?authToken=…` (HTTPS) · `libsql+http://localhost:8080` (local sqld)|",
+     "|InfluxDB|`influxdb://localhost:8086/db` (v1, InfluxQL) · `influxdb2://:TOKEN@localhost/bucket?org=acme` (v2, Flux) · `influxdb3://:TOKEN@localhost/db` (v3, SQL) · `influxdbs://…` (TLS)|",
+     "|Amazon DynamoDB *(opt-in: `--features aws`, Rust ≥ 1.94.1)*|`dynamodb://eu-west-1/Orders?profile=prod` · `dynamodb+http://localhost:8000?region=local` — PartiQL `SELECT` and `tables`, `describe`, `scan`, `get`, `query`; bounded reads, capacity reported, no writes|",
+     "|Amazon CloudWatch Logs *(opt-in: `--features aws`, Rust ≥ 1.94.1)*|`cloudwatch://eu-west-1/aws/lambda/orders?profile=prod` — Logs Insights over a mandatory time window (`since 30m fields @message \\|filter …`), `groups`, `streams`, `tail`; queries are stopped on Ctrl-C and timeout, scanned bytes reported|",
+     "|Amazon S3 / R2 / MinIO *(opt-in: `--features aws`, Rust ≥ 1.94.1)*|`s3://my-bucket/logs/?region=eu-west-1` · `s3://KEY:SECRET@bucket?endpoint=https://host:9000` · `r2://account/bucket` · `minio://host:9000/bucket` — typed read-only commands: `ls`, `head`, `get`, `buckets`|",
+     "|DuckDB / DuckLake (opt-in: `--features duckdb`)|`duckdb:///data/warehouse.duckdb` · `duckdb://:memory:` · `warehouse.duckdb` · `--read-only` is enforced by the engine|",
+     "|Parquet / CSV / JSON|`./data.parquet` · `./logs/app.csv` · `file://` picker · `json:///events.json`|",
+     "|Docker container|`docker://` (interactive picker) · `docker://my-postgres/mydb`|",
+     "|Saved session|`session://production_db`|",
+     "|Recent connections|`recent://`|",
+     "|Vault credentials|`vault://readonly@database/postgres-prod`|"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    79,
+    80
+   ],
+   [
+    "replace",
+    88,
+    89,
+    80,
+    81,
+    [
+     "Full details: URL schemes reference."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    101,
+    81,
+    93
+   ],
+   [
+    "replace",
+    101,
+    102,
+    93,
+    94,
+    [
+     "The contract is built for programmatic callers: results-only stdout (status goes to stderr, the pager never engages), JSON errors on stderr under `-o json`, stable exit codes (`0` ok · `1` SQL error · `2` usage · `3` connection · `4` blocked by `--read-only`), `--timeout`/`--max-rows` limits, and `--no-input` so no prompt can ever hang an agent. The binary documents itself: run **`dbcrust agents`** for the full ~130-line contract, and paste the ready-made snippet into your project's `CLAUDE.md`/`AGENTS.md` from the agent quickstart."
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    94,
+    95
+   ],
+   [
+    "replace",
+    103,
+    104,
+    95,
+    96,
+    [
+     "`--read-only` is a best-effort statement guard backed by connect-level hardening (SQLite `query_only`, PostgreSQL `default_transaction_read_only`); for hard guarantees use a read-only database role — details in safety & guardrails."
+    ]
+   ],
+   [
+    "equal",
+    104,
+    105,
+    96,
+    97
+   ],
+   [
+    "replace",
+    105,
+    106,
+    97,
+    98,
+    [
+     "For databases that matter, don't hand the agent a password at all: enroll the connection with the **credential broker** (`sudo dbcrust broker install-service`, then `dbcrust broker enroll …`) and give the agent the credential-free `dbcrust-agent` client (CLI or MCP server). See Agent connections."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    126,
+    98,
+    118
+   ],
+   [
+    "replace",
+    126,
+    127,
+    118,
+    119,
+    [
+     "DBCrust registers matching files as SQL tables and lets DataFusion handle filtering, aggregations, joins, nested JSON fields, and glob patterns. See the file formats guide."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    132,
+    119,
+    124
+   ],
+   [
+    "replace",
+    132,
+    133,
+    124,
+    125,
+    [
+     "||Commands|"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    134,
+    125,
+    126
+   ],
+   [
+    "replace",
+    134,
+    141,
+    126,
+    133,
+    [
+     "|**Explore**|`\\l` databases · `\\c <db>` switch · `\\dt` tables · `\\d ` describe · `\\ddl` schema dump|",
+     "|**Display**|`\\x` expanded · `\\cs` column selection · `\\e` EXPLAIN mode · `\\ev` interactive EXPLAIN TUI|",
+     "|**Edit & run**|`\\ed` open `$EDITOR` · `\\i <file>` run SQL file · `\\w <file>` write last query|",
+     "|**Named queries**|`\\n` list · `\\ns <name> <sql>` save · `\\nd <name>` delete|",
+     "|**Connections**|`\\ss <name>` save session · `\\s` list sessions · `\\r` recent · `\\docker` containers|",
+     "|**Credentials**|`\\savepass` store password · `\\vc` Vault cache status|",
+     "|**Meta**|`\\ai` AI assistant · `\\config` settings editor · `\\h` help · `\\q` quit|"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    144,
+    133,
+    136
+   ],
+   [
+    "replace",
+    144,
+    145,
+    136,
+    137,
+    [
+     "See the full command reference."
+    ]
+   ],
+   [
+    "equal",
+    145,
+    157,
+    137,
+    149
+   ],
+   [
+    "replace",
+    157,
+    158,
+    149,
+    150,
+    [
+     "- **Providers**: Anthropic, OpenAI, Gemini, Ollama, Groq, DeepSeek, xAI, OpenRouter, and more — 25+ via genai, including any OpenAI-compatible endpoint for self-hosted models."
+    ]
+   ],
+   [
+    "equal",
+    158,
+    160,
+    150,
+    152
+   ],
+   [
+    "replace",
+    160,
+    161,
+    152,
+    153,
+    [
+     "More in the AI assistant guide and privacy notes."
+    ]
+   ],
+   [
+    "equal",
+    161,
+    188,
+    153,
+    180
+   ],
+   [
+    "replace",
+    188,
+    193,
+    180,
+    181,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    201,
+    181,
+    189
+   ],
+   [
+    "replace",
+    201,
+    207,
+    189,
+    190,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    213,
+    190,
+    196
+   ],
+   [
+    "replace",
+    213,
+    214,
+    196,
+    197,
+    [
+     "Guides: Python API · Django analyzer."
+    ]
+   ],
+   [
+    "equal",
+    214,
+    217,
+    197,
+    200
+   ],
+   [
+    "replace",
+    217,
+    218,
+    200,
+    201,
+    [
+     "A native, GPU-accelerated desktop app built with GPUI Kit, pure Rust on the same core as the CLI (built from source for now). See the GUI guide."
+    ]
+   ],
+   [
+    "equal",
+    218,
+    219,
+    201,
+    202
+   ],
+   [
+    "replace",
+    219,
+    220,
+    202,
+    203,
+    [
+     "DBCrust desktop app"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    229,
+    203,
+    212
+   ],
+   [
+    "replace",
+    229,
+    233,
+    212,
+    214,
+    [
+     " Connect page",
+     " EXPLAIN visualizer"
+    ]
+   ],
+   [
+    "equal",
+    233,
+    244,
+    214,
+    225
+   ],
+   [
+    "replace",
+    244,
+    245,
+    225,
+    226,
+    [
+     "|File|Contents|"
+    ]
+   ],
+   [
+    "equal",
+    245,
+    246,
+    226,
+    227
+   ],
+   [
+    "replace",
+    246,
+    252,
+    227,
+    233,
+    [
+     "|`config.toml`|App settings (display, limits, SSH patterns, AI, logging, ...)|",
+     "|`sessions.toml`|Saved sessions|",
+     "|`recent.toml`|Recent connections|",
+     "|`named_queries.toml`|Named queries|",
+     "|`vault_credentials.enc`|Encrypted Vault credential cache|",
+     "|`~/.dbcrust`|Stored passwords (pgpass-style)|"
+    ]
+   ],
+   [
+    "equal",
+    252,
+    262,
+    233,
+    243
+   ],
+   [
+    "replace",
+    262,
+    263,
+    243,
+    244,
+    [
+     "Full list of options: configuration reference."
+    ]
+   ],
+   [
+    "equal",
+    263,
+    266,
+    244,
+    247
+   ],
+   [
+    "replace",
+    266,
+    267,
+    247,
+    248,
+    [
+     "DBCrust uses mise 2026.8.16+ for toolchain and task management. `mise install` installs Bun (docs site), Commitizen, and Mr Boxington, which puts a shared, self-pruning cache behind Cargo commands run through mise. No mise? Run `./bin/mise` instead of `mise`: the committed wrapper downloads a pinned mise on first use."
+    ]
+   ],
+   [
+    "equal",
+    267,
+    283,
+    248,
+    264
+   ],
+   [
+    "replace",
+    283,
+    287,
+    264,
+    265,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    287,
+    289,
+    265,
+    267
+   ],
+   [
+    "replace",
+    289,
+    290,
+    267,
+    268,
+    [
+     "More in the development guide."
+    ]
+   ],
+   [
+    "equal",
+    290,
+    292,
+    268,
+    270
+   ],
+   [
+    "replace",
+    292,
+    294,
+    270,
+    271,
+    [
+     "MIT — see LICENSE."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "c6be0375b84b+2": {
+  "fn": "aliyun/aliyun-tablestore-go-sdk",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "GitHub version",
+     "Build Status",
+     "Coverage Status"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    33,
+    5,
+    33
+   ],
+   [
+    "replace",
+    33,
+    39,
+    33,
+    34,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    45,
+    34,
+    40
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7bfe55c7ff1e+2": {
+  "fn": "dipjyotimetia/MobileTestFramework",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    4,
+    1,
+    4,
+    [
+     "Codacy Badge",
+     "CI ",
+     "Testing Powered By SauceLabs"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    4,
+    5
+   ],
+   [
+    "delete",
+    5,
+    7,
+    5,
+    5
+   ],
+   [
+    "equal",
+    7,
+    15,
+    5,
+    13
+   ],
+   [
+    "replace",
+    15,
+    16,
+    13,
+    14,
+    [
+     " * The UiAutomator2 Driver"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    14,
+    15
+   ],
+   [
+    "replace",
+    17,
+    18,
+    15,
+    16,
+    [
+     " * The XCUITest"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    16,
+    17
+   ],
+   [
+    "replace",
+    19,
+    20,
+    17,
+    18,
+    [
+     "### Why Appium?"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    22,
+    18,
+    20
+   ],
+   [
+    "replace",
+    22,
+    25,
+    20,
+    23,
+    [
+     " both the platforms IOS and Android. Its capability for testing all kinds of tools under one platform, makes it a",
+     " multipurpose and convenient testing tool.Appium is called as a cross platform testing tool because it uses JSON wire",
+     " protocol internally to interact with native apps of IOS and Android using Selenium Webdriver."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    28,
+    23,
+    26
+   ],
+   [
+    "replace",
+    28,
+    41,
+    26,
+    39,
+    [
+     "* Download and install Nodejs ",
+     " ``",
+     " npm install -g appium",
+     " `` ",
+     " ``",
+     " npm install -g appium-doctor",
+     " ``",
+     " verify all appium dependencies",
+     "* Download Appium Desktop download the latest release",
+     "* Install InteliJ Community Edition",
+     "* Java JDK_11 install jdk_11 version",
+     "* Gradle",
+     "* Allure"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    51,
+    39,
+    49
+   ],
+   [
+    "replace",
+    51,
+    52,
+    49,
+    50,
+    [
+     "* For more details navigate to the above Wiki Page"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    65,
+    50,
+    63
+   ],
+   [
+    "replace",
+    65,
+    70,
+    63,
+    64,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    83,
+    64,
+    77
+   ],
+   [
+    "replace",
+    83,
+    84,
+    77,
+    78,
+    [
+     "browserstack"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    86,
+    78,
+    80
+   ],
+   [
+    "replace",
+    86,
+    88,
+    80,
+    81,
+    [
+     "browserstack"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "01b9586fb881+2": {
+  "fn": "Dani3lSun/apex-plugin-dropzone",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "APEX Community APEX Plugin",
+     "APEX Built with Love"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    12,
+    4,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    56,
+    13,
+    56
+   ],
+   [
+    "replace",
+    56,
+    57,
+    56,
+    57,
+    [
+     "- If you customized the PL/SQL Code of Version 1.XX to insert additional information, please see Inserting uploaded files into your own tables for information on conveting to the Plugin's default upload method to an APEX Collection, with a PL/SQL dynamic action to perform your custom insert. "
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    57,
+    58
+   ],
+   [
+    "replace",
+    58,
+    62,
+    58,
+    59,
+    [
+     " Changelog Version 1.XX "
+    ]
+   ],
+   [
+    "equal",
+    62,
+    99,
+    59,
+    96
+   ],
+   [
+    "delete",
+    99,
+    101,
+    96,
+    96
+   ],
+   [
+    "equal",
+    101,
+    110,
+    96,
+    105
+   ],
+   [
+    "replace",
+    110,
+    111,
+    105,
+    106,
+    [
+     " - Choose where the uploaded Files are saved. You can either save your Files to a APEX Collection or to a Custom Table."
+    ]
+   ],
+   [
+    "equal",
+    111,
+    114,
+    106,
+    109
+   ],
+   [
+    "replace",
+    114,
+    116,
+    109,
+    111,
+    [
+     " - Name of the APEX Collection or of your Custom Table. Default APEX Collection: **DROPZONE_UPLOAD**.",
+     " - *Note: \"Custom Table\" setting is limited to storing the filename, mime type, and upload date, in addition to the file content itself. To store additional information, please use **APEX Collection** and see the Inserting uploaded files into your own tables section below.*"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    119,
+    111,
+    114
+   ],
+   [
+    "replace",
+    119,
+    120,
+    114,
+    115,
+    [
+     " - Column of your custom Table which holds the information for the Filename. Only if **Storage Type** is set to **Custom Table**"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    123,
+    115,
+    118
+   ],
+   [
+    "replace",
+    123,
+    124,
+    118,
+    119,
+    [
+     " - Column of your custom Table which holds the information for the File Mime-Type. Only if **Storage Type** is set to **Custom Table**"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    127,
+    119,
+    122
+   ],
+   [
+    "replace",
+    127,
+    128,
+    122,
+    123,
+    [
+     " - Column of your custom Table which holds the information for the File Content (BLOB). Only if **Storage Type** is set to **Custom Table**"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    129,
+    123,
+    124
+   ],
+   [
+    "replace",
+    129,
+    130,
+    124,
+    125,
+    [
+     " - **PK Column**"
+    ]
+   ],
+   [
+    "equal",
+    130,
+    131,
+    125,
+    126
+   ],
+   [
+    "replace",
+    131,
+    132,
+    126,
+    127,
+    [
+     " - Primary Key (PK) Column of your custom file Table. Only if **Storage Type** is set to **Custom Table**"
+    ]
+   ],
+   [
+    "equal",
+    132,
+    135,
+    127,
+    130
+   ],
+   [
+    "replace",
+    135,
+    136,
+    130,
+    131,
+    [
+     " - Column of your custom Table which holds the information for the File Upload Date. Only if **Storage Type** is set to **Custom Table**"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    139,
+    131,
+    134
+   ],
+   [
+    "replace",
+    139,
+    141,
+    134,
+    136,
+    [
+     " - **Normal**",
+     " - **AJAX:** Async Method"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    136,
+    137
+   ],
+   [
+    "replace",
+    142,
+    143,
+    137,
+    138,
+    [
+     " - This Upload Method encodes the File into a Base64 String. This String is then split into an 30kb Array which sends the encoded/splitted File in **1 Request** to the Server. This Method works on all Web Servers including Oracle OHS, Oracle WebTier, Oracle Database EPG, Oracle ORDS, Apache, Tomcat. But for large Files the **maxPostSize** Parameter have to be increased on Tomcat Servers (Default 2MB). **Max. File size should not exceed ~50MB.**"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    144,
+    138,
+    139
+   ],
+   [
+    "replace",
+    144,
+    146,
+    139,
+    141,
+    [
+     " - **Chunked**",
+     " - **AJAX:** Async Method"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    141,
+    142
+   ],
+   [
+    "replace",
+    147,
+    148,
+    142,
+    143,
+    [
+     " - This Upload Method splits a File into 1MB Pieces *(Default / Please Change Component Setting \"Chunk Size (in KB))\")*. Then this 1MB Chunks are base64 encoded and sent via **Multiple Requests** (For every MB 1 Request) to the Server. This Method works best on modern Web Servers like ORDS, Tomcat or Apache, but not on Oracle OHS, Oracle WebTier or Oracle Database EPG! This Method is good, when you don´t have the possibility to configure Parameters of the Web Server like **maxPostSize** or want to Upload **large Files (> 50MB)**. If you can edit the Web Servers Config you should go with the *Normal* Mechanism. But if you expect a lot of big files that get uploaded this Method should be fine for that!"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    151,
+    143,
+    146
+   ],
+   [
+    "replace",
+    151,
+    152,
+    146,
+    147,
+    [
+     " - Possibility for end users to delete each file that was uploaded to the server. Only if no Page Refresh has occurred."
+    ]
+   ],
+   [
+    "equal",
+    152,
+    155,
+    147,
+    150
+   ],
+   [
+    "replace",
+    155,
+    156,
+    150,
+    151,
+    [
+     " - UI Style of your Dropzone Region. You can choose either *Grey Border, Blue Dashed Border or Red Dashed Border*"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    159,
+    151,
+    154
+   ],
+   [
+    "replace",
+    159,
+    160,
+    154,
+    155,
+    [
+     " - Enter the default width of your Dropzone Region. Valid values are px and % data. E.g. 700px or 100%"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    163,
+    155,
+    158
+   ],
+   [
+    "replace",
+    163,
+    164,
+    158,
+    159,
+    [
+     " - Enter the default height of Dropzone Region. Valid values in px. E.g. 400px or 500px"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    167,
+    159,
+    162
+   ],
+   [
+    "replace",
+    167,
+    168,
+    162,
+    163,
+    [
+     " - max. File Size (Float Number) that is allowed per File. If a File is larger, it will be removed."
+    ]
+   ],
+   [
+    "equal",
+    168,
+    171,
+    163,
+    166
+   ],
+   [
+    "replace",
+    171,
+    173,
+    166,
+    167,
+    [
+     " - Maximum number of allowed files that can be uploaded at once."
+    ]
+   ],
+   [
+    "equal",
+    173,
+    176,
+    167,
+    170
+   ],
+   [
+    "replace",
+    176,
+    178,
+    170,
+    171,
+    [
+     " - If you only want that users can upload Files of declared types. Valid values: comma separated list of Mime-Types (with Wildcard support) or File endings: image/\\*,application/pdf,.psd"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    181,
+    171,
+    174
+   ],
+   [
+    "replace",
+    181,
+    182,
+    174,
+    175,
+    [
+     " - If true, the Dropzone Region will be clickable, if false nothing will be clickable and only Drag & Drop is possible."
+    ]
+   ],
+   [
+    "equal",
+    182,
+    185,
+    175,
+    178
+   ],
+   [
+    "replace",
+    185,
+    186,
+    178,
+    179,
+    [
+     " - Show Preview Images for common File types when adding files. Image-Files got displayed with real content. If you want to add more images or others just Copy/Upload the PNG Files to *img* directory. Naming: **\\<file-extension\\>.png**"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    189,
+    179,
+    182
+   ],
+   [
+    "replace",
+    189,
+    190,
+    182,
+    183,
+    [
+     " - Adds support for Copy & Paste of Images in modern Browsers (like Chrome or Firefox > 50)."
+    ]
+   ],
+   [
+    "equal",
+    190,
+    193,
+    183,
+    186
+   ],
+   [
+    "replace",
+    193,
+    194,
+    186,
+    187,
+    [
+     " - If true, images are resized to a specified size. This happens on client side before uploading the file to server. Saving upload bandwidth and reducing upload time. Please set at least one resize attribute, e.g. Resize Width or Resize Height."
+    ]
+   ],
+   [
+    "equal",
+    194,
+    197,
+    187,
+    190
+   ],
+   [
+    "replace",
+    197,
+    198,
+    190,
+    191,
+    [
+     " - If set, images will be resized to these dimensions before being uploaded. If only one, resize Width or resize Height is provided, the original aspect ratio of the file will be preserved. Please provide a width in pixels."
+    ]
+   ],
+   [
+    "equal",
+    198,
+    201,
+    191,
+    194
+   ],
+   [
+    "replace",
+    201,
+    202,
+    194,
+    195,
+    [
+     " - If set, images will be resized to these dimensions before being uploaded. If only one, resize Width or resize Height is provided, the original aspect ratio of the file will be preserved. Please provide a height in pixels."
+    ]
+   ],
+   [
+    "equal",
+    202,
+    205,
+    195,
+    198
+   ],
+   [
+    "replace",
+    205,
+    206,
+    198,
+    199,
+    [
+     " - If true, clears all Files from Dropzone Region after uploading has finished."
+    ]
+   ],
+   [
+    "equal",
+    206,
+    209,
+    199,
+    202
+   ],
+   [
+    "replace",
+    209,
+    210,
+    202,
+    203,
+    [
+     " - This is the default chunk size if you choose the Chunked upload mechanism. The file is split into pieces of that size. Each piece is sent to the server separately. Thus the files are base64 encoded, there is a little overhead in the file size, so please consider a plus of about 10-15% in file size. Default is 1MB = 1048576 KB."
+    ]
+   ],
+   [
+    "equal",
+    210,
+    213,
+    203,
+    206
+   ],
+   [
+    "replace",
+    213,
+    214,
+    206,
+    207,
+    [
+     " - Message that is displayed inside of the Dropzone Region"
+    ]
+   ],
+   [
+    "equal",
+    214,
+    217,
+    207,
+    210
+   ],
+   [
+    "replace",
+    217,
+    218,
+    210,
+    211,
+    [
+     " - Message that is displayed when your Browser doesn´t support HTML5 Drag & Drop File Uploads"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    221,
+    211,
+    214
+   ],
+   [
+    "replace",
+    221,
+    222,
+    214,
+    215,
+    [
+     " - Message that is displayed per File, if the File is bigger than you allowed in the settings. You can use Placeholders like: **{{filesize}}** or **{{maxFilesize}}**"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    225,
+    215,
+    218
+   ],
+   [
+    "replace",
+    225,
+    226,
+    218,
+    219,
+    [
+     " - Message that is displayed per File, if the uploaded Files exceed the max. Files settings. You can use Placeholders like: **{{maxFiles}}**"
+    ]
+   ],
+   [
+    "equal",
+    226,
+    229,
+    219,
+    222
+   ],
+   [
+    "replace",
+    229,
+    230,
+    222,
+    223,
+    [
+     " - Message that is displayed below a single File to remove the File. Only when **Delete Files** is set."
+    ]
+   ],
+   [
+    "equal",
+    230,
+    233,
+    223,
+    226
+   ],
+   [
+    "replace",
+    233,
+    234,
+    226,
+    227,
+    [
+     " - Message that is displayed below a single File to Cancel Uploading during the actual Upload Process. Only when **Delete Files** is set."
+    ]
+   ],
+   [
+    "equal",
+    234,
+    237,
+    227,
+    230
+   ],
+   [
+    "replace",
+    237,
+    238,
+    230,
+    231,
+    [
+     " - Message that is displayed in the Confirm Dialog if you clicked the Upload Cancel Link. Only when **Delete Files** is set."
+    ]
+   ],
+   [
+    "equal",
+    238,
+    241,
+    231,
+    234
+   ],
+   [
+    "replace",
+    241,
+    243,
+    234,
+    235,
+    [
+     " - Message that is displayed per File, if the File´s Mime-Type is in the Exclude List."
+    ]
+   ],
+   [
+    "equal",
+    243,
+    247,
+    235,
+    239
+   ],
+   [
+    "replace",
+    247,
+    249,
+    239,
+    241,
+    [
+     " - DA event that fires when a single file was added to the Dropzone Region (Client Side)",
+     " - this.data holds the file element, e.g file.name or file.size"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    252,
+    241,
+    244
+   ],
+   [
+    "replace",
+    252,
+    254,
+    244,
+    246,
+    [
+     " - DA event that fires when uploading 1 Chunk of a File was successful (Server Side) (Upload Mechanism **Chunked**)",
+     " - this.data holds the Server response object"
+    ]
+   ],
+   [
+    "equal",
+    254,
+    257,
+    246,
+    249
+   ],
+   [
+    "replace",
+    257,
+    259,
+    249,
+    251,
+    [
+     " - DA event that fires when uploading 1 Chunk of a File has an error (Server Side) (Upload Mechanism **Chunked**)",
+     " - this.data holds the Server response object"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    262,
+    251,
+    254
+   ],
+   [
+    "replace",
+    262,
+    264,
+    254,
+    256,
+    [
+     " - DA event that fires when uploading a File was successful (Server Side) (Upload Mechanism **Normal**)",
+     " - this.data holds the Server response object"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    267,
+    256,
+    259
+   ],
+   [
+    "replace",
+    267,
+    269,
+    259,
+    261,
+    [
+     " - DA event that fires when uploading a File has an error (Server Side) (Upload Mechanism **Normal**)",
+     " - this.data holds the Server response object"
+    ]
+   ],
+   [
+    "equal",
+    269,
+    272,
+    261,
+    264
+   ],
+   [
+    "replace",
+    272,
+    273,
+    264,
+    265,
+    [
+     " - DA event that fires when uploading all files completed (Client Side)"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    276,
+    265,
+    268
+   ],
+   [
+    "replace",
+    276,
+    278,
+    268,
+    270,
+    [
+     " - DA event that fires if the Remove File Link of a File is pressed (Client Side)",
+     " - this.data holds the file element, e.g file.name or file.size"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    281,
+    270,
+    273
+   ],
+   [
+    "replace",
+    281,
+    283,
+    273,
+    275,
+    [
+     " - DA event that fires when deleting a single files was successful (Server Side)",
+     " - this.data holds the Server response object"
+    ]
+   ],
+   [
+    "equal",
+    283,
+    286,
+    275,
+    278
+   ],
+   [
+    "replace",
+    286,
+    288,
+    278,
+    280,
+    [
+     " - DA event that fires when deleting a single files has an error (Server Side)",
+     " - this.data holds the Server response object"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    291,
+    280,
+    283
+   ],
+   [
+    "replace",
+    291,
+    293,
+    283,
+    285,
+    [
+     " - DA event that fires per file when more files are added to the Dropzone than allowed (Client Side)",
+     " - this.data holds the file element, e.g file.name or file.size"
+    ]
+   ],
+   [
+    "equal",
+    293,
+    296,
+    285,
+    288
+   ],
+   [
+    "replace",
+    296,
+    298,
+    288,
+    290,
+    [
+     " - DA that fires from time to time during upload of all files and return the Total Upload Progress (Client Side)",
+     " - this.data holds the totalPercentage element"
+    ]
+   ],
+   [
+    "equal",
+    298,
+    300,
+    290,
+    292
+   ],
+   [
+    "replace",
+    300,
+    302,
+    292,
+    294,
+    [
+     " - DA that fires when processing a file has an error (Client Side)",
+     " - this.data holds the file element, e.g file.name, file.size or file.errorMessage"
+    ]
+   ],
+   [
+    "equal",
+    302,
+    304,
+    294,
+    296
+   ],
+   [
+    "replace",
+    304,
+    306,
+    296,
+    297,
+    [
+     " - DA that fires when dragging a file over the Dropzone Region (Client Side)"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    318,
+    297,
+    309
+   ],
+   [
+    "replace",
+    318,
+    322,
+    309,
+    310,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    337,
+    310,
+    325
+   ],
+   [
+    "replace",
+    337,
+    367,
+    325,
+    326,
+    [
+     "…（30 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    367,
+    368,
+    326,
+    327
+   ],
+   [
+    "delete",
+    368,
+    370,
+    327,
+    327
+   ],
+   [
+    "equal",
+    370,
+    385,
+    327,
+    342
+   ],
+   [
+    "replace",
+    385,
+    387,
+    342,
+    343,
+    [
+     "More about it in the Tomcat 8 Documentation"
+    ]
+   ],
+   [
+    "equal",
+    387,
+    389,
+    343,
+    345
+   ],
+   [
+    "delete",
+    389,
+    390,
+    345,
+    345
+   ],
+   [
+    "equal",
+    390,
+    392,
+    345,
+    347
+   ],
+   [
+    "delete",
+    392,
+    394,
+    347,
+    347
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "61b07872d065+2": {
+  "fn": "witnet/witnet-solidity-bridge",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Ask DeepWiki"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    105,
+    5,
+    105
+   ],
+   [
+    "replace",
+    105,
+    109,
+    105,
+    109,
+    [
+     "- Operator deep dive: docs/operator-guide.md",
+     "- Solidity deep dive: docs/solidity-guide.md",
+     "- JavaScript deep dive: docs/javascript-guide.md",
+     "- CLI appendix (examples, output shape, failures): docs/cli-appendix.md"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    305,
+    109,
+    305
+   ],
+   [
+    "replace",
+    305,
+    355,
+    305,
+    306,
+    [
+     "…（50 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    355,
+    363,
+    306,
+    314
+   ],
+   [
+    "replace",
+    363,
+    388,
+    314,
+    315,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    388,
+    490,
+    315,
+    417
+   ],
+   [
+    "replace",
+    490,
+    495,
+    417,
+    418,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    495,
+    531,
+    418,
+    454
+   ],
+   [
+    "delete",
+    531,
+    532,
+    454,
+    454
+   ],
+   [
+    "equal",
+    532,
+    533,
+    454,
+    455
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "e0fc869fac2d+2": {
+  "fn": "damienzeng73/shopping-cart",
+  "clean_ver": "2",
+  "raw_lines": 12,
+  "ops": [
+   [
+    "equal",
+    0,
+    12,
+    0,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     " git clone https://github.com/damnee562/shopping-cart.git"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    16,
+    13,
+    16
+   ],
+   [
+    "replace",
+    16,
+    20,
+    16,
+    20,
+    [
+     " cd shopping-cart/backend/",
+     " python3 -m venv venv_name",
+     " source venv_name/bin/activate",
+     " pip install -r requirements.txt"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    23,
+    20,
+    23
+   ],
+   [
+    "replace",
+    23,
+    25,
+    23,
+    25,
+    [
+     " cd shopping-cart/frontend/",
+     " yarn install"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    28,
+    25,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     " npm install"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    32,
+    29,
+    32
+   ],
+   [
+    "replace",
+    32,
+    34,
+    32,
+    34,
+    [
+     " sudo -u postgres psql",
+     " CREATE DATABASE shopping_cart; # Don't forget the semicolon in the end"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    35,
+    34,
+    35
+   ],
+   [
+    "replace",
+    35,
+    37,
+    35,
+    37,
+    [
+     " # Quit postgresql shell",
+     " \\q"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    40,
+    37,
+    40
+   ],
+   [
+    "replace",
+    40,
+    50,
+    40,
+    50,
+    [
+     " DATABASES = {",
+     " 'default': {",
+     " 'ENGINE': 'django.db.backends.postgresql_psycopg2',",
+     " 'NAME': 'shopping_cart',",
+     " 'USER': 'YOUR_USERNAME', # replace with your own username",
+     " 'PASSWORD': 'YOUR_PASSWORD', # replace with your own password",
+     " 'HOST': 'localhost',",
+     " 'PORT': ''",
+     " }",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    53,
+    50,
+    53
+   ],
+   [
+    "replace",
+    53,
+    56,
+    53,
+    56,
+    [
+     " cd shopping-cart/backend/",
+     " python manage.py migrate",
+     " python manage.py runserver"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    59,
+    56,
+    59
+   ],
+   [
+    "replace",
+    59,
+    61,
+    59,
+    61,
+    [
+     " cd shopping-cart/frontend/",
+     " yarn start"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    64,
+    61,
+    64
+   ],
+   [
+    "replace",
+    64,
+    65,
+    64,
+    65,
+    [
+     " npm start"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    68,
+    65,
+    68
+   ],
+   [
+    "replace",
+    68,
+    69,
+    68,
+    69,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    71,
+    69,
+    71
+   ],
+   [
+    "replace",
+    71,
+    72,
+    71,
+    72,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    74,
+    72,
+    74
+   ],
+   [
+    "replace",
+    74,
+    75,
+    74,
+    75,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    75,
+    76
+   ],
+   [
+    "replace",
+    76,
+    77,
+    76,
+    77,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    79,
+    77,
+    79
+   ],
+   [
+    "replace",
+    79,
+    80,
+    79,
+    80,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    81,
+    80,
+    81
+   ],
+   [
+    "replace",
+    81,
+    82,
+    81,
+    82,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    82,
+    83
+   ],
+   [
+    "replace",
+    83,
+    84,
+    83,
+    84,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    85,
+    84,
+    85
+   ],
+   [
+    "replace",
+    85,
+    86,
+    85,
+    86,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    88,
+    86,
+    88
+   ],
+   [
+    "replace",
+    88,
+    89,
+    88,
+    89,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    91,
+    89,
+    91
+   ],
+   [
+    "replace",
+    91,
+    92,
+    91,
+    92,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    92,
+    93
+   ],
+   [
+    "replace",
+    93,
+    94,
+    93,
+    94,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    94,
+    96,
+    94,
+    96
+   ],
+   [
+    "replace",
+    96,
+    97,
+    96,
+    97,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    97,
+    98
+   ],
+   [
+    "replace",
+    98,
+    99,
+    98,
+    99,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    99,
+    100
+   ],
+   [
+    "replace",
+    100,
+    101,
+    100,
+    101,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    103,
+    101,
+    103
+   ],
+   [
+    "replace",
+    103,
+    110,
+    103,
+    110,
+    [
+     "* React - A JavaScript library for building UI",
+     "* Semantic UI React - A React UI framework",
+     "* Redux - A predictable state container for JavaScript apps",
+     "* Django REST framework - A powerful and flexible toolkit for building Web APIs",
+     "* django-rest-framework-jwt - JSON Web Token Authentication support for Django REST framework",
+     "* axios - A Promised based HTTP client",
+     "* toastr - Simple javascript toast notifications"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    112,
+    110,
+    112
+   ],
+   [
+    "replace",
+    112,
+    113,
+    112,
+    113,
+    [
+     "This project is licensed under the MIT License - see the LICENSE file for details."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7683866b65c1+2": {
+  "fn": "samanthaming/code-tidbits",
+  "clean_ver": "2",
+  "raw_lines": 14,
+  "ops": [
+   [
+    "equal",
+    0,
+    14,
+    0,
+    14
+   ],
+   [
+    "replace",
+    14,
+    19,
+    14,
+    19,
+    [
+     "Twitter: @samantha_ming",
+     "Instagram: @samanthaming",
+     "Facebook: @hi.samanthaming",
+     "Medium: @samanthaming",
+     "Dev.to: @samanthaming"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "Official: www.samanthaming.com"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    30,
+    21,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     "You can view all the markdown code notes in this repo, located in the articles directory."
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    31,
+    32
+   ],
+   [
+    "replace",
+    32,
+    33,
+    32,
+    33,
+    [
+     "These code notes are also hosted on my website, www.samanthaming.com/tidbits."
+    ]
+   ],
+   [
+    "equal",
+    33,
+    40,
+    33,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     "Yes! If you'd like to translate my articles, please do it! You can also add your translated copy to this repo, simply create a Pull Request. Here's the translation contribution guide"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    41,
+    42
+   ],
+   [
+    "replace",
+    42,
+    43,
+    42,
+    43,
+    [
+     "- Português"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    52,
+    43,
+    52
+   ],
+   [
+    "replace",
+    52,
+    53,
+    52,
+    53,
+    [
+     "Creative Commons License This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "3d74a6a20c83+2": {
+  "fn": "wilfredinni/django-starter-template",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "delete",
+    0,
+    3,
+    0,
+    0
+   ],
+   [
+    "equal",
+    3,
+    7,
+    0,
+    4
+   ],
+   [
+    "replace",
+    7,
+    11,
+    4,
+    7,
+    [
+     "Test Status",
+     "CodeQL Status",
+     "MIT License"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    16,
+    7,
+    12
+   ],
+   [
+    "replace",
+    16,
+    24,
+    12,
+    20,
+    [
+     "- **User Authentication:** Secure token-based authentication with `django-rest-knox`.",
+     "- **Background Tasks:** Asynchronous task processing with `Celery` and `Redis`.",
+     "- **API Documentation:** Automatic OpenAPI 3 schema generation with `drf-spectacular`.",
+     "- **Ready-to-use API Collection:** Test every endpoint from your terminal with the bundled Noodle collection — no Postman needed.",
+     "- **Centralized Logging:** Structured JSON logging for easy monitoring.",
+     "- **Custom User Model:** Email-based authentication for a modern user experience.",
+     "- **AI-Assisted Development:** Includes `AGENTS.md` and curated AI skills (Django, Celery) to help AI coding agents produce idiomatic code.",
+     "- **And much more!** Explore the documentation to discover all the features."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    35,
+    20,
+    31
+   ],
+   [
+    "replace",
+    35,
+    36,
+    31,
+    32,
+    [
+     "1. Use GitHub's template feature (recommended) or clone repository"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    64,
+    32,
+    60
+   ],
+   [
+    "replace",
+    64,
+    65,
+    60,
+    61,
+    [
+     "The repo includes a Noodle collection (`api-collection/`) covering all `v1` endpoints. Install the CLI, start the stack, and run requests:"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    72,
+    61,
+    68
+   ],
+   [
+    "replace",
+    72,
+    73,
+    68,
+    69,
+    [
+     "See API Collection (Noodle) for authentication and environment setup."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    90,
+    69,
+    86
+   ],
+   [
+    "replace",
+    90,
+    103,
+    86,
+    99,
+    [
+     "- **Development:** Learn about the development workflow, including how to run tests, and use the scripts.",
+     "- **Project Structure:** Get an overview of the project's directory structure.",
+     "- **Project Settings:** Understand the available settings and how to configure your project.",
+     "- **Dependencies:** See a list of all the project's dependencies.",
+     "- **Authentication:** Learn how to use the authentication and user management endpoints.",
+     "- **Core App:** Discover the core functionalities and API endpoints.",
+     "- **Logging:** Understand the logging system and how to use it.",
+     "- **Celery Tasks:** Learn how to create and manage background tasks.",
+     "- **Rate Limiting:** Configure rate limiting to protect your API.",
+     "- **Database Seeding:** Learn how to seed your database with initial data.",
+     "- **Testing:** Understand how to run and write tests for your project.",
+     "- **Environment Setup:** Learn how to set up your development environment.",
+     "- **AI-Assisted Development:** Learn how the project helps AI coding agents work with your codebase."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }
