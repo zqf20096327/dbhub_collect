@@ -10098,5 +10098,2516 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "98de0afed66d+2": {
+  "fn": "erik/squabble",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    3,
+    1,
+    2
+   ],
+   [
+    "replace",
+    3,
+    4,
+    2,
+    3,
+    [
+     "|build-status||docs||pypi|"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    9,
+    3,
+    8
+   ],
+   [
+    "replace",
+    9,
+    20,
+    8,
+    19,
+    [
+     " $ squabble sql/migration.sql",
+     " sql/migration.sql:4:46 ERROR: column \"uh_oh\" has a disallowed constraint [1004]",
+     " ALTER TABLE big_table ADD COLUMN uh_oh integer DEFAULT 0;",
+     " ^",
+     " # Use --explain to get more information on a lint violation",
+     " $ squabble --explain 1004",
+     " ConstraintNotAllowed",
+     " When adding a column to an existing table, certain constraints can have",
+     " unintentional side effects, like locking the table or introducing",
+     " performance issues.",
+     " ..."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    27,
+    19,
+    26
+   ],
+   [
+    "replace",
+    27,
+    29,
+    26,
+    28,
+    [
+     " $ echo 'SELECT * FROM WHERE x = y;' | squabble --reporter=plain",
+     " stdin:1:15 CRITICAL: syntax error at or near \"WHERE\""
+    ]
+   ],
+   [
+    "equal",
+    29,
+    35,
+    28,
+    34
+   ],
+   [
+    "delete",
+    35,
+    36,
+    34,
+    34
+   ],
+   [
+    "equal",
+    36,
+    39,
+    34,
+    37
+   ],
+   [
+    "replace",
+    39,
+    41,
+    37,
+    39,
+    [
+     " $ pip3 install squabble",
+     " $ squabble --help"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    44,
+    39,
+    42
+   ],
+   [
+    "replace",
+    44,
+    45,
+    42,
+    43,
+    [
+     " Squabble is only supported on Python 3.5+"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    50,
+    43,
+    48
+   ],
+   [
+    "replace",
+    50,
+    54,
+    48,
+    52,
+    [
+     " $ git clone https://github.com/erik/squabble.git && cd squabble",
+     " $ python3 -m venv ve && source ve/bin/activate",
+     " $ python setup.py install",
+     " $ squabble --help"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    56,
+    52,
+    54
+   ],
+   [
+    "delete",
+    56,
+    57,
+    54,
+    54
+   ],
+   [
+    "equal",
+    57,
+    62,
+    54,
+    59
+   ],
+   [
+    "replace",
+    62,
+    63,
+    59,
+    60,
+    [
+     " $ squabble --list-rules"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    69,
+    60,
+    66
+   ],
+   [
+    "replace",
+    69,
+    70,
+    66,
+    67,
+    [
+     " $ squabble --show-rule AddColumnDisallowConstraints"
+    ]
+   ],
+   [
+    "equal",
+    70,
+    76,
+    67,
+    73
+   ],
+   [
+    "replace",
+    76,
+    77,
+    73,
+    74,
+    [
+     " $ squabble -c path/to/config ..."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    81,
+    74,
+    78
+   ],
+   [
+    "replace",
+    81,
+    84,
+    78,
+    81,
+    [
+     "- ``./.squabblerc``",
+     "- ``(git_repo_root)/.squabblerc``",
+     "- ``~/.squabblerc``"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    96,
+    81,
+    93
+   ],
+   [
+    "replace",
+    96,
+    99,
+    93,
+    96,
+    [
+     " -- squabble-disable:RuleA",
+     " -- squabble-enable:RuleB config=value array=1,2,3",
+     " SELECT email FROM users WHERE ...;"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    105,
+    96,
+    102
+   ],
+   [
+    "delete",
+    105,
+    106,
+    102,
+    102
+   ],
+   [
+    "equal",
+    106,
+    111,
+    102,
+    107
+   ],
+   [
+    "replace",
+    111,
+    113,
+    107,
+    109,
+    [
+     " {",
+     " \"reporter\": \"color\","
+    ]
+   ],
+   [
+    "equal",
+    113,
+    114,
+    109,
+    110
+   ],
+   [
+    "replace",
+    114,
+    117,
+    110,
+    113,
+    [
+     " \"plugins\": [",
+     " \"/some/directory/with/custom/rules\"",
+     " ],"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    113,
+    114
+   ],
+   [
+    "replace",
+    118,
+    124,
+    114,
+    120,
+    [
+     " \"rules\": {",
+     " \"AddColumnsDisallowConstraints\": {",
+     " \"disallowed\": [\"DEFAULT\", \"FOREIGN\", \"NOT NULL\"]",
+     " }",
+     " }",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    126,
+    120,
+    122
+   ],
+   [
+    "delete",
+    126,
+    127,
+    122,
+    122
+   ],
+   [
+    "equal",
+    127,
+    132,
+    122,
+    127
+   ],
+   [
+    "replace",
+    132,
+    134,
+    127,
+    129,
+    [
+     " expression based (rather than parsing), focuses more on ``SELECT``",
+     " statements than migrations."
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    129,
+    130
+   ],
+   [
+    "replace",
+    135,
+    137,
+    130,
+    132,
+    [
+     " syntax of a file is valid. Uses the same parsing library as",
+     " squabble."
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    132,
+    133
+   ],
+   [
+    "replace",
+    138,
+    141,
+    133,
+    135,
+    [
+     " focused more on style and formatting, seems to still be a work in",
+     " progress."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    143,
+    135,
+    137
+   ],
+   [
+    "delete",
+    143,
+    144,
+    137,
+    137
+   ],
+   [
+    "equal",
+    144,
+    147,
+    137,
+    140
+   ],
+   [
+    "replace",
+    147,
+    152,
+    140,
+    145,
+    [
+     "- `libpg_query <https://github.com/lfittl/libpg_query>`__ - Postgres",
+     " query parser",
+     "- `pglast <https://github.com/lelit/pglast>`__ - Python bindings to",
+     " libpg_query",
+     "- Postgres - …obviously"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    158,
+    145,
+    151
+   ],
+   [
+    "replace",
+    158,
+    160,
+    151,
+    153,
+    [
+     " :alt: build status",
+     " :target: https://travis-ci.org/erik/squabble"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    162,
+    153,
+    155
+   ],
+   [
+    "replace",
+    162,
+    164,
+    155,
+    157,
+    [
+     " :alt: Documentation Status",
+     " :target: https://squabble.readthedocs.io/en/stable/?badge=stable"
+    ]
+   ],
+   [
+    "equal",
+    164,
+    166,
+    157,
+    159
+   ],
+   [
+    "replace",
+    166,
+    168,
+    159,
+    161,
+    [
+     " :alt: PyPI version",
+     " :target: https://pypi.org/project/squabble"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "92d2b43ab49b+2": {
+  "fn": "ctkqiang/boss_zhipin_pachong",
+  "clean_ver": "2",
+  "raw_lines": 17,
+  "ops": [
+   [
+    "replace",
+    0,
+    17,
+    0,
+    13,
+    [
+     "2D05 Logo",
+     " BOSS 直聘数据分析工具 ",
+     "",
+     " version",
+     " license",
+     " platform",
+     " language",
+     "",
+     " 功能 •",
+     " 安装 •",
+     " 使用 •",
+     " 架构 •",
+     " 免责声明"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    38,
+    13,
+    34
+   ],
+   [
+    "replace",
+    38,
+    44,
+    34,
+    40,
+    [
+     "|组件|版本要求|",
+     "|-----------|--------|",
+     "|Java|11+|",
+     "|Maven|3.9.6+|",
+     "|Spring Boot|2.7.18|",
+     "|SQLite|3.x|"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    76,
+    40,
+    72
+   ],
+   [
+    "replace",
+    76,
+    77,
+    72,
+    73,
+    [
+     "index"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    89,
+    73,
+    85
+   ],
+   [
+    "replace",
+    89,
+    90,
+    85,
+    86,
+    [
+     "analysis"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    108,
+    86,
+    104
+   ],
+   [
+    "replace",
+    108,
+    109,
+    104,
+    105,
+    [
+     "|参数名|类型|必填|说明|示例|"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    105,
+    106
+   ],
+   [
+    "replace",
+    110,
+    111,
+    106,
+    107,
+    [
+     "|keyword|String|是|职位搜索关键词|\"Java 开发\"|"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    118,
+    107,
+    114
+   ],
+   [
+    "replace",
+    118,
+    129,
+    114,
+    115,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    133,
+    115,
+    119
+   ],
+   [
+    "replace",
+    133,
+    135,
+    119,
+    120,
+    [
+     " 🚀 点击查看运行日志 "
+    ]
+   ],
+   [
+    "equal",
+    135,
+    140,
+    120,
+    125
+   ],
+   [
+    "replace",
+    140,
+    297,
+    125,
+    126,
+    [
+     "…（157 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    298,
+    126,
+    127
+   ],
+   [
+    "delete",
+    298,
+    300,
+    127,
+    127
+   ],
+   [
+    "equal",
+    300,
+    305,
+    127,
+    132
+   ],
+   [
+    "replace",
+    305,
+    315,
+    132,
+    142,
+    [
+     "|字段名|类型|说明|约束|",
+     "|----------|---------|--------|-------------------------|",
+     "|id|INTEGER|自增主键|PRIMARY KEY AUTOINCREMENT|",
+     "|title|TEXT|职位名称|NOT NULL|",
+     "|company|TEXT|公司名称|NOT NULL|",
+     "|salary|TEXT|薪资范围|-|",
+     "|location|TEXT|工作地点|-|",
+     "|experience|TEXT|经验要求|-|",
+     "|skills|TEXT|技能要求|-|",
+     "|created_at|TIMESTAMP|创建时间|DEFAULT CURRENT_TIMESTAMP|"
+    ]
+   ],
+   [
+    "equal",
+    315,
+    318,
+    142,
+    145
+   ],
+   [
+    "replace",
+    318,
+    319,
+    145,
+    146,
+    [
+     "流程图"
+    ]
+   ],
+   [
+    "equal",
+    319,
+    327,
+    146,
+    154
+   ],
+   [
+    "replace",
+    327,
+    333,
+    154,
+    155,
+    [
+     "本项目采用 **木兰宽松许可证 (Mulan PSL)** 进行许可。"
+    ]
+   ],
+   [
+    "equal",
+    333,
+    337,
+    155,
+    159
+   ],
+   [
+    "replace",
+    337,
+    341,
+    159,
+    163,
+    [
+     "感谢您使用本项目！您的支持是开源持续发展的核心动力。 ",
+     "每一份捐赠都将直接用于： ",
+     "✅ 服务器与基础设施维护 ",
+     "✅ 新功能开发与版本迭代 "
+    ]
+   ],
+   [
+    "equal",
+    341,
+    344,
+    163,
+    166
+   ],
+   [
+    "delete",
+    344,
+    346,
+    166,
+    166
+   ],
+   [
+    "equal",
+    346,
+    351,
+    166,
+    171
+   ],
+   [
+    "replace",
+    351,
+    353,
+    171,
+    173,
+    [
+     "- **GitHub**：https://github.com/ctkqiang",
+     "- **Email**：johnmelodymel@qq.com"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "2b5adfe649df+2": {
+  "fn": "EmakinaFR/docker-magento2",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# Docker for Magento2 CircleCI License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Magento 2 requirements."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    5,
+    3,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "Architecture overview"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    8,
+    6,
+    8
+   ],
+   [
+    "replace",
+    8,
+    15,
+    8,
+    15,
+    [
+     "* `blackfire`: blackfire/blackfire:2 image (application profiling).",
+     "* `elasticsearch`: ajardin/magento2-elasticsearch custom image with some plugins (search engine).",
+     "* `maildev`: maildev/maildev image (emails debugging).",
+     "* `mysql`: mysql image (Magento database).",
+     "* `nginx`: ajardin/magento2-nginx custom image with HTTPS (web server).",
+     "* `php` : ajardin/php custom image with additional extensions and Composer.",
+     "* `redis`: redis image (Magento session and caches)."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    18,
+    15,
+    18
+   ],
+   [
+    "replace",
+    18,
+    21,
+    18,
+    20,
+    [
+     "the repository Wiki. Where you will find all details about the ",
+     "installation process along the available instructions for the day-to-day work."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "f186b931a04a+2": {
+  "fn": "rushfive/FFDB",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    4,
+    1,
+    4
+   ],
+   [
+    "delete",
+    4,
+    6,
+    4,
+    4
+   ],
+   [
+    "equal",
+    6,
+    8,
+    4,
+    6
+   ],
+   [
+    "replace",
+    8,
+    10,
+    6,
+    8,
+    [
+     "Nuget",
+     "Build status"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    13,
+    8,
+    11
+   ],
+   [
+    "replace",
+    13,
+    16,
+    11,
+    12,
+    [
+     "Nuget"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    28,
+    12,
+    24
+   ],
+   [
+    "delete",
+    28,
+    30,
+    24,
+    24
+   ],
+   [
+    "equal",
+    30,
+    44,
+    24,
+    38
+   ],
+   [
+    "delete",
+    44,
+    46,
+    38,
+    38
+   ],
+   [
+    "equal",
+    46,
+    50,
+    38,
+    42
+   ],
+   [
+    "replace",
+    50,
+    52,
+    42,
+    44,
+    [
+     "- PostgreSql",
+     "- Mongo"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    54,
+    44,
+    46
+   ],
+   [
+    "delete",
+    54,
+    56,
+    46,
+    46
+   ],
+   [
+    "equal",
+    56,
+    69,
+    46,
+    59
+   ],
+   [
+    "replace",
+    69,
+    73,
+    59,
+    63,
+    [
+     "Windows x64 | win-x64.zip - 30.5MB | | 2628E4D69E0575244B7896EB6B42091050BF260C41EA1992EE5859249B0C4083",
+     "Windows x86 | win-x86.zip - 27.6MB | | 58BD545E2ED494EB37A4D0C081D3A45FEBE31D8F56E81F15DCC247E923B3193A",
+     "OSX x64 | osx-x64.tar - 72.5MB | Minimum OS version is macOS 10.12 Sierra | FAD3BADCB9CE539F628C8B7B72BDCDAC3DA3D875D2EAE789D167C204447AFE43",
+     "Linux x64 | linux-x64.tar - 78MB | Most desktop distributions like CentOS, Debian, Fedora, Ubuntu and derivatives | 26FCA6EEB6552860DB90AC33030E3965AE2EAC7F400E71DABD7C2F0CF16E2BFC"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    77,
+    63,
+    67
+   ],
+   [
+    "replace",
+    77,
+    79,
+    67,
+    69,
+    [
+     " - Simple Walkthrough of Build/Publishing",
+     " - Supported Environments for DotNet Publish"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    69,
+    70
+   ],
+   [
+    "delete",
+    80,
+    82,
+    70,
+    70
+   ],
+   [
+    "equal",
+    82,
+    85,
+    70,
+    73
+   ],
+   [
+    "replace",
+    85,
+    104,
+    73,
+    74,
+    [
+     "（目录 17 行略）"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    122,
+    74,
+    92
+   ],
+   [
+    "replace",
+    122,
+    146,
+    92,
+    93,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    216,
+    93,
+    163
+   ],
+   [
+    "delete",
+    216,
+    218,
+    163,
+    163
+   ],
+   [
+    "equal",
+    218,
+    228,
+    163,
+    173
+   ],
+   [
+    "replace",
+    228,
+    229,
+    173,
+    174,
+    [
+     "alt text"
+    ]
+   ],
+   [
+    "equal",
+    229,
+    253,
+    174,
+    198
+   ],
+   [
+    "replace",
+    253,
+    261,
+    198,
+    199,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    261,
+    277,
+    199,
+    215
+   ],
+   [
+    "replace",
+    277,
+    281,
+    215,
+    216,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    281,
+    384,
+    216,
+    319
+   ],
+   [
+    "delete",
+    384,
+    386,
+    319,
+    319
+   ],
+   [
+    "equal",
+    386,
+    397,
+    319,
+    330
+   ],
+   [
+    "delete",
+    397,
+    399,
+    330,
+    330
+   ],
+   [
+    "equal",
+    399,
+    419,
+    330,
+    350
+   ],
+   [
+    "replace",
+    419,
+    428,
+    350,
+    351,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    428,
+    499,
+    351,
+    422
+   ],
+   [
+    "delete",
+    499,
+    501,
+    422,
+    422
+   ],
+   [
+    "equal",
+    501,
+    502,
+    422,
+    423
+   ],
+   [
+    "replace",
+    502,
+    520,
+    423,
+    424,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    520,
+    527,
+    424,
+    431
+   ],
+   [
+    "delete",
+    527,
+    529,
+    431,
+    431
+   ],
+   [
+    "equal",
+    529,
+    546,
+    431,
+    448
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "423d68c22598+2": {
+  "fn": "MingyanZHU/DataBase_2019_Spring",
+  "clean_ver": "2",
+  "raw_lines": 21,
+  "ops": [
+   [
+    "equal",
+    0,
+    21,
+    0,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "选择的论文为Siqiang Luo, Ben Kao, Guoliang Li, Jiafeng Hu, Reynold Cheng, and Yudian Zheng. 2018. TOAIN: a throughput optimizing adaptive index for answering dynamic kNN queries on road networks. Proc. VLDB Endow. 11, 5 (January 2018), 594-606.。"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "4d1327aab5fe+2": {
+  "fn": "dev-cloverlab/carpenter",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "GitHub release",
+     "license"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    4,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "carpenter is a tool to manage DB schema and data inspired by naoina/migu. "
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    6,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "carpenter can restore the database structure and data from text, or can export them to text in easy. "
+    ]
+   ],
+   [
+    "equal",
+    8,
+    38,
+    8,
+    38
+   ],
+   [
+    "replace",
+    38,
+    39,
+    38,
+    39,
+    [
+     "When you want to separate files for each tables, you can set `-s` option. "
+    ]
+   ],
+   [
+    "equal",
+    39,
+    86,
+    39,
+    86
+   ],
+   [
+    "replace",
+    86,
+    87,
+    86,
+    87,
+    [
+     "Explain how carpenter syncronizes text and database. "
+    ]
+   ],
+   [
+    "equal",
+    87,
+    96,
+    87,
+    96
+   ],
+   [
+    "replace",
+    96,
+    111,
+    96,
+    97,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    132,
+    97,
+    118
+   ],
+   [
+    "replace",
+    132,
+    133,
+    118,
+    119,
+    [
+     "1. Fork (https://github.com/dev-cloverlab/carpenter/fork)"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    142,
+    119,
+    128
+   ],
+   [
+    "replace",
+    142,
+    143,
+    128,
+    129,
+    [
+     "@hatajoe"
+    ]
+   ],
+   [
+    "equal",
+    143,
+    145,
+    129,
+    131
+   ],
+   [
+    "delete",
+    145,
+    146,
+    131,
+    131
+   ],
+   [
+    "equal",
+    146,
+    147,
+    131,
+    132
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "3cacb1ebc93e+2": {
+  "fn": "skecskes/vagrant-centos7-ansible-lamp",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    3,
+    1,
+    2
+   ],
+   [
+    "replace",
+    3,
+    8,
+    2,
+    6,
+    [
+     "Issues ",
+     "Forks ",
+     "Stars ",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    15,
+    6,
+    13
+   ],
+   [
+    "replace",
+    15,
+    16,
+    13,
+    14,
+    [
+     "I am using the lastest CentOS 7 x64 image from official Hashicorp (thanks)"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    19,
+    14,
+    17
+   ],
+   [
+    "replace",
+    19,
+    21,
+    17,
+    19,
+    [
+     "- Virtualbox platform",
+     "- Vagrant"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    19,
+    20
+   ],
+   [
+    "replace",
+    22,
+    24,
+    20,
+    22,
+    [
+     "- Git",
+     "- Ansible"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    43,
+    22,
+    41
+   ],
+   [
+    "replace",
+    43,
+    44,
+    41,
+    42,
+    [
+     "installation"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    46,
+    42,
+    44
+   ],
+   [
+    "replace",
+    46,
+    49,
+    44,
+    45,
+    [
+     "GNU GENERAL PUBLIC LICENSE"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    59,
+    45,
+    55
+   ],
+   [
+    "delete",
+    59,
+    60,
+    55,
+    55
+   ],
+   [
+    "equal",
+    60,
+    64,
+    55,
+    59
+   ],
+   [
+    "replace",
+    64,
+    65,
+    59,
+    60,
+    [
+     "php7"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "4dcacd77aceb+2": {
+  "fn": "atilatech/atila-core-service",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     "Open in Gitpod"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    7,
+    4,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "To see how Atlas works, see: Atlas: Find Anything on Youtube, atlas app inside this repo, Atlas Notebooks and atlas-ui."
+    ]
+   ],
+   [
+    "equal",
+    8,
+    28,
+    8,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "1. Atlas: Find Anything on Youtube"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    38,
+    29,
+    38
+   ],
+   [
+    "replace",
+    38,
+    46,
+    38,
+    39,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    59,
+    39,
+    52
+   ],
+   [
+    "replace",
+    59,
+    61,
+    52,
+    54,
+    [
+     "Follow this tutorial ",
+     "(tutorial on Github)"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    64,
+    54,
+    57
+   ],
+   [
+    "replace",
+    64,
+    65,
+    57,
+    58,
+    [
+     "See this tutorial "
+    ]
+   ],
+   [
+    "equal",
+    65,
+    67,
+    58,
+    60
+   ],
+   [
+    "replace",
+    67,
+    68,
+    60,
+    61,
+    [
+     "1. Mac: Install Postgres.app. "
+    ]
+   ],
+   [
+    "equal",
+    68,
+    91,
+    61,
+    84
+   ],
+   [
+    "replace",
+    91,
+    105,
+    84,
+    85,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    119,
+    85,
+    99
+   ],
+   [
+    "delete",
+    119,
+    120,
+    99,
+    99
+   ],
+   [
+    "equal",
+    120,
+    138,
+    99,
+    117
+   ],
+   [
+    "replace",
+    138,
+    139,
+    117,
+    118,
+    [
+     "See Stack Overflow answer for more context"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    180,
+    118,
+    159
+   ],
+   [
+    "replace",
+    180,
+    185,
+    159,
+    160,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    206,
+    160,
+    181
+   ],
+   [
+    "replace",
+    206,
+    207,
+    181,
+    182,
+    [
+     "see: PostgreSQL: Modify OWNER on all tables simultaneously in PostgreSQL"
+    ]
+   ],
+   [
+    "equal",
+    207,
+    214,
+    182,
+    189
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "1810afa48f15+2": {
+  "fn": "aialok/flashify",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    6,
+    1,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "Live Demo"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    40,
+    7,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    47,
+    41,
+    47
+   ],
+   [
+    "replace",
+    47,
+    63,
+    47,
+    48,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    81,
+    48,
+    66
+   ],
+   [
+    "replace",
+    81,
+    89,
+    66,
+    67,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    103,
+    67,
+    81
+   ],
+   [
+    "replace",
+    103,
+    104,
+    81,
+    82,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    106,
+    82,
+    84
+   ],
+   [
+    "replace",
+    106,
+    107,
+    84,
+    85,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    109,
+    85,
+    87
+   ],
+   [
+    "replace",
+    109,
+    112,
+    87,
+    88,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    114,
+    88,
+    90
+   ],
+   [
+    "replace",
+    114,
+    116,
+    90,
+    92,
+    [
+     " - cd to backend `pnpm run dev`",
+     " - cd to frontend `pnpm run dev`"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    117,
+    92,
+    93
+   ],
+   [
+    "replace",
+    117,
+    119,
+    93,
+    95,
+    [
+     "### Wohoo ! congrats you are done with setup :)",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    119,
+    121,
+    95,
+    97
+   ],
+   [
+    "replace",
+    121,
+    122,
+    97,
+    98,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    98,
+    99
+   ],
+   [
+    "replace",
+    123,
+    124,
+    99,
+    100,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    125,
+    100,
+    101
+   ],
+   [
+    "replace",
+    125,
+    126,
+    101,
+    102,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    127,
+    102,
+    103
+   ],
+   [
+    "replace",
+    127,
+    128,
+    103,
+    104,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    129,
+    104,
+    105
+   ],
+   [
+    "replace",
+    129,
+    137,
+    105,
+    106,
+    [
+     "image"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "ed36eed35a14+2": {
+  "fn": "Ghostff/Session",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    2,
+    1,
+    2,
+    [
+     "PHP Session Manager (non-blocking, flash, segment, session encryption). Uses PHP open_ssl for **optional** encrypt/decryption of session data."
+    ]
+   ],
+   [
+    "equal",
+    2,
+    4,
+    2,
+    4
+   ],
+   [
+    "replace",
+    4,
+    12,
+    4,
+    12,
+    [
+     "file&nbsp;&nbsp;&nbsp;",
+     "cookie&nbsp;&nbsp;&nbsp;",
+     "mysql&nbsp;&nbsp;&nbsp;",
+     "sqlite&nbsp;&nbsp;&nbsp;",
+     "memcached&nbsp;&nbsp;&nbsp;",
+     "redis&nbsp;&nbsp;&nbsp;",
+     "license&nbsp;&nbsp;&nbsp;",
+     "Minimum PHP Version"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    12,
+    13
+   ],
+   [
+    "replace",
+    13,
+    15,
+    13,
+    15,
+    [
+     "# Installation ",
+     "You can download the Latest release version as a standalone, alternatively you can use Composer "
+    ]
+   ],
+   [
+    "equal",
+    15,
+    34,
+    15,
+    34
+   ],
+   [
+    "replace",
+    34,
+    44,
+    34,
+    35,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    60,
+    35,
+    51
+   ],
+   [
+    "replace",
+    60,
+    61,
+    51,
+    52,
+    [
+     "## Retrieving Session ID *:string*"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    76,
+    52,
+    67
+   ],
+   [
+    "replace",
+    76,
+    83,
+    67,
+    68,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    90,
+    68,
+    75
+   ],
+   [
+    "replace",
+    90,
+    99,
+    75,
+    76,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    106,
+    76,
+    83
+   ],
+   [
+    "replace",
+    106,
+    111,
+    83,
+    84,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    167,
+    84,
+    140
+   ],
+   [
+    "replace",
+    167,
+    173,
+    140,
+    141,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    179,
+    141,
+    147
+   ],
+   [
+    "delete",
+    179,
+    181,
+    147,
+    147
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "cdb88fdb4282+2": {
+  "fn": "BjoernKW/Schematic",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    4,
+    2,
+    4,
+    [
+     "License: MIT",
+     "Maven Central"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    4,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "logo"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    45,
+    6,
+    45
+   ],
+   [
+    "replace",
+    45,
+    57,
+    45,
+    46,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    74,
+    46,
+    63
+   ],
+   [
+    "replace",
+    74,
+    77,
+    63,
+    66,
+    [
+     "Schematic-screenshot-1.png",
+     "Schematic-screenshot-2.png",
+     "Schematic-screenshot-3.png"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    79,
+    66,
+    68
+   ],
+   [
+    "replace",
+    79,
+    80,
+    68,
+    69,
+    [
+     "Open in Gitpod"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    83,
+    69,
+    72
+   ],
+   [
+    "replace",
+    83,
+    86,
+    72,
+    75,
+    [
+     "* Java 21",
+     "* Maven",
+     "* a Spring Boot application to install **Schematic** into"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    89,
+    75,
+    78
+   ],
+   [
+    "replace",
+    89,
+    95,
+    78,
+    84,
+    [
+     "* Spring Boot",
+     "* Maven",
+     "* Thymeleaf",
+     "* Bootstrap",
+     "* Font Awesome",
+     "* Mermaid"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    97,
+    84,
+    86
+   ],
+   [
+    "replace",
+    97,
+    100,
+    86,
+    87,
+    [
+     "MIT License"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    102,
+    87,
+    89
+   ],
+   [
+    "replace",
+    102,
+    103,
+    89,
+    90,
+    [
+     "* **Björn Wilmsmann**"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "bc095124a6ab+2": {
+  "fn": "RCJansonVTFL/SeekingAlphaWebScrape",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "equal",
+    0,
+    8,
+    0,
+    8
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "c5a51d92ed67+2": {
+  "fn": "thatsabhishek/Coding_Ninjas_DBMS",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    11,
+    4,
+    11,
+    [
+     " - Filtering and Sorting Data",
+     " - Grouping Data",
+     " - Queries with Tables Constraints",
+     " - Modifying Data",
+     " - Joining Tables",
+     " - Set Operations",
+     " - Sub Queries"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    12,
+    11,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     " - SQL queries Assessment"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    17,
+    13,
+    17
+   ],
+   [
+    "replace",
+    17,
+    18,
+    17,
+    18,
+    [
+     "Buy Me A Coffee"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

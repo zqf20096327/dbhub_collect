@@ -16819,5 +16819,4646 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "d4d6a42c172d+2": {
+  "fn": "thyeem/monotree",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    2,
+    [
+     "Build Status",
+     "Crates.io"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    6,
+    2,
+    4
+   ],
+   [
+    "replace",
+    6,
+    9,
+    4,
+    7,
+    [
+     "Rust implementation of an optimized Sparse Merkle Tree. ",
+     "This is a kind of binary-radix tree based on bitwise branching, _currently_, no nibble of bit. ",
+     "For now, branching unit is just ___a single bit___, _neither a 4-bit nor a byte nibble_. "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    7,
+    8
+   ],
+   [
+    "replace",
+    10,
+    11,
+    8,
+    9,
+    [
+     "See `monotree.py` for a pure _Python_ implementation of `monotree`."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    22,
+    9,
+    20
+   ],
+   [
+    "replace",
+    22,
+    25,
+    20,
+    23,
+    [
+     "- `HashMap`",
+     "- `RocksDB`",
+     "- `Sled`"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    27,
+    23,
+    25
+   ],
+   [
+    "replace",
+    27,
+    31,
+    25,
+    29,
+    [
+     "- `Blake3`",
+     "- `Blake2s` and `Blake2b`",
+     "- `SHA-2`",
+     "- `SHA-3 (Keccak)`"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    54,
+    29,
+    52
+   ],
+   [
+    "replace",
+    54,
+    55,
+    52,
+    53,
+    [
+     "> Regarding __non-inclusion proof__ and __inclusion proof__, See _Merkle proof_ section in More Examples below."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    67,
+    53,
+    65
+   ],
+   [
+    "replace",
+    67,
+    75,
+    65,
+    66,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    92,
+    66,
+    83
+   ],
+   [
+    "replace",
+    92,
+    94,
+    83,
+    85,
+    [
+     "Instead of executing each operation one by one, write them in a batch and then commit them all at once. ",
+     "One can do the same thing above using batch operation for ___performance gain___ and ___atomicity___. In short, "
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    85,
+    86
+   ],
+   [
+    "replace",
+    95,
+    96,
+    86,
+    87,
+    [
+     "`prepare` → many of {`insert`, `get`, `remove`} → `commit` "
+    ]
+   ],
+   [
+    "equal",
+    96,
+    107,
+    87,
+    98
+   ],
+   [
+    "replace",
+    107,
+    117,
+    98,
+    99,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    134,
+    99,
+    116
+   ],
+   [
+    "replace",
+    134,
+    163,
+    116,
+    143,
+    [
+     "|Op.|DB used|#Entries|Time Measured|Std Error|per Op.|",
+     "|:----:|:-----:|-------:|:-----------:|:-------:|:------:|",
+     "|Insert|HashMap|10|8.50 us|0.01 us|0.85 us|",
+     "|Insert|HashMap|100|165.71 us|0.14 us|1.66 us|",
+     "|Insert|HashMap|1000|2.32 ms|0.01 ms|2.32 us|",
+     "|Insert|HashMap|10000|37.39 ms|0.02 ms|3.74 us|",
+     "|Get|HashMap|10|7.82 us|0.01 us|0.78 us|",
+     "|Get|HashMap|100|114.51 us|0.14 us|1.15 us|",
+     "|Get|HashMap|1000|1.52 ms|0.01 ms|1.52 us|",
+     "|Get|HashMap|10000|20.40 ms|0.01 ms|2.40 us|",
+     "|Remove|HashMap|10|15.65 us|0.01 us|1.57 us|",
+     "|Remove|HashMap|100|282.68 us|0.09 us|2.83 us|",
+     "|Remove|HashMap|1000|4.23 ms|0.01 ms|4.23 us|",
+     "|Remove|HashMap|10000|69.15 ms|0.07 ms|6.92 us|",
+     "|||||||",
+     "|Insert|RocksDB|10|34.80 us|0.27 us|3.48 us|",
+     "|Insert|RocksDB|100|602.55 us|2.72 us|6.03 us|",
+     "|Insert|RocksDB|1000|10.35 ms|0.06 ms|10.35 us|",
+     "|Insert|RocksDB|10000|145.83 ms|0.20 ms|14.58 us|",
+     "|Get|RocksDB|10|10.20 us|0.06 us|1.02 us|",
+     "|Get|RocksDB|100|142.20 us|0.79 us|1.42 us|",
+     "|Get|RocksDB|1000|1.74 ms|0.01 ms|1.74 us|",
+     "|Get|RocksDB|10000|22.94 ms|0.03 ms|2.29 us|",
+     "|Remove|RocksDB|10|58.33 us|0.50 us|5.83 us|",
+     "|Remove|RocksDB|100|1.02 ms|6.40 us|10.20 us|",
+     "|Remove|RocksDB|1000|20.22 ms|0.10 ms|20.22 us|",
+     "|Remove|RocksDB|10000|394.95 ms|1.46 ms|39.50 us|"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    173,
+    143,
+    153
+   ],
+   [
+    "replace",
+    173,
+    174,
+    153,
+    154,
+    [
+     "performs a micro-benchmark based on `Criterion`, with full combinations of operations and tree types consisting of _Databases_ and _Hashers_ included."
+    ]
+   ],
+   [
+    "equal",
+    174,
+    207,
+    154,
+    187
+   ],
+   [
+    "replace",
+    207,
+    208,
+    187,
+    188,
+    [
+     "As shown in Quick Start above, __operations executed between__ `tree.prepare()` __and__ `tree.commit()` can be viewed as _a single batch operation_. By default, they are automatically cached and are written together in a batch unit."
+    ]
+   ],
+   [
+    "equal",
+    208,
+    219,
+    188,
+    199
+   ],
+   [
+    "replace",
+    219,
+    227,
+    199,
+    200,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    227,
+    240,
+    200,
+    213
+   ],
+   [
+    "replace",
+    240,
+    243,
+    213,
+    216,
+    [
+     "`monotree` has compressed representations, but it fully retains the core property of the ___Sparse Merkle Trie___. ",
+     "_non-inclusion proof_ is quite straightforward: Just go walk down the tree with a key (or a path) given. ",
+     "If we ___cannot successfully get a leaf___, we can assure that ___the leaf is not a part of the tree___. "
+    ]
+   ],
+   [
+    "equal",
+    243,
+    280,
+    216,
+    253
+   ],
+   [
+    "replace",
+    280,
+    281,
+    253,
+    254,
+    [
+     "___Sparse Merkle Trie___ is a space where ___multiple states (roots) coexist simultaneously___. "
+    ]
+   ],
+   [
+    "equal",
+    281,
+    283,
+    254,
+    256
+   ],
+   [
+    "replace",
+    283,
+    284,
+    256,
+    257,
+    [
+     "`monotree` has a minimal design. It __does not automatically update or track the latest root__. "
+    ]
+   ],
+   [
+    "equal",
+    284,
+    302,
+    257,
+    275
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "c66904097eeb+2": {
+  "fn": "geange/lucene-go",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "GoDoc",
+     "Go",
+     "CodeQL",
+     "codecov"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    6,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "**中文**"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    45,
+    8,
+    45
+   ],
+   [
+    "replace",
+    45,
+    46,
+    45,
+    46,
+    [
+     " data)"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    63,
+    46,
+    63
+   ],
+   [
+    "replace",
+    63,
+    139,
+    63,
+    64,
+    [
+     "…（76 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    147,
+    64,
+    72
+   ],
+   [
+    "replace",
+    147,
+    202,
+    72,
+    73,
+    [
+     "…（55 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    203,
+    73,
+    74
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "085879c3ce98+2": {
+  "fn": "junelsolis/freeradius-admin",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    4,
+    0,
+    2
+   ],
+   [
+    "delete",
+    4,
+    5,
+    2,
+    2
+   ],
+   [
+    "equal",
+    5,
+    6,
+    2,
+    3
+   ],
+   [
+    "replace",
+    6,
+    7,
+    3,
+    4,
+    [
+     "https://fradmin-demo.junelsolis.com"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    18,
+    4,
+    15
+   ],
+   [
+    "replace",
+    18,
+    21,
+    15,
+    18,
+    [
+     "3. Using your browser go to http://localhost:80. The login credentials are **admin** and **password**.",
+     "4. *phpmyadmin* is included as a service for testing and evaluation. It is accessible at http://localhost:9200.",
+     "5. To test the RADIUS server, login to the shell of the radtest container using ```docker container exec -it fradmin-radtest /bin/sh```. Run ```radtest testuser password fradmin-radius:1812 0 testing123```."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    24,
+    18,
+    21
+   ],
+   [
+    "replace",
+    24,
+    27,
+    21,
+    24,
+    [
+     "2. Edit docker-compose.yml. Change the ```MYSQL_ROOT_PASSWORD``` entry to your own password.",
+     "3. Edit ./web/src/.env by changing the database settings to match the above.",
+     "3. Edit ./freeradius/config/freeradius/mods-enabled/sql with the correct database root password."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    33,
+    24,
+    30
+   ],
+   [
+    "delete",
+    33,
+    34,
+    30,
+    30
+   ],
+   [
+    "equal",
+    34,
+    36,
+    30,
+    32
+   ],
+   [
+    "replace",
+    36,
+    37,
+    32,
+    33,
+    [
+     "The **fradmin-mysql** container is configured with a generic username and password. This should be changed in the docker-compose.yml file for production setups. The file radius.sql is a modified version of the radius MySQL schema included with freeRADIUS distributions. It is loaded by the container on startup if the database and tables do not already exist."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    42,
+    33,
+    38
+   ],
+   [
+    "replace",
+    42,
+    43,
+    38,
+    39,
+    [
+     "The FreeRADIUS 3 server is the service around which the rest of the services in this app are built. You will need some knowledge about configuring it in order to make it work according to your requirements. The configuration files are located in the folder *./freeradius/config/freeradius*. This folder is volume-mapped to As is, these files are ready to be deployed and will instantiate one virtual server called **server01** listening on the default auth and acct ports 1812 and 1813. Depending on your use case, you may wish to edit the *Simultaneous-Use* section of the queries.conf file."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    48,
+    39,
+    44
+   ],
+   [
+    "delete",
+    48,
+    51,
+    44,
+    44
+   ],
+   [
+    "equal",
+    51,
+    52,
+    44,
+    45
+   ],
+   [
+    "replace",
+    52,
+    53,
+    45,
+    46,
+    [
+     "Contributors are welcome. Fork the project and create a pull request. Please have a look at CONTRIBUTING.md for some guidelines."
+    ]
+   ],
+   [
+    "equal",
+    53,
+    55,
+    46,
+    48
+   ],
+   [
+    "replace",
+    55,
+    56,
+    48,
+    49,
+    [
+     "I originally started this project as a way to automate and simplify network user management at Maxwell Adventist Academy, a secondary school outside Nairobi, Kenya where I worked both as a physician and network administrator. I saw an interest in it because there was an opportunity to learn PHP/Laravel and configure FreeRADIUS at the same time. This was a challenge because the FreeRADIUS documentation does not seem very clear to beginners to the technology like me."
+    ]
+   ],
+   [
+    "equal",
+    56,
+    58,
+    49,
+    51
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "0408d3c04d7a+2": {
+  "fn": "GeorgeLeePatterson/clickhouse-arrow",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "### `clickhouse-arrow`"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "- Arrow integration across most types. For divergences, see the library's README"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    15,
+    11,
+    15
+   ],
+   [
+    "replace",
+    15,
+    16,
+    15,
+    16,
+    [
+     "### `clickhouse-arrow-derive`"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    23,
+    16,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "- ClickHouse Arrow Client Documentation"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    31,
+    24,
+    31
+   ],
+   [
+    "replace",
+    31,
+    54,
+    31,
+    32,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    56,
+    32,
+    34
+   ],
+   [
+    "replace",
+    56,
+    57,
+    34,
+    35,
+    [
+     "Refer to the e2e tests in clickhouse-arrow"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    66,
+    35,
+    44
+   ],
+   [
+    "replace",
+    66,
+    71,
+    44,
+    45,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    105,
+    45,
+    79
+   ],
+   [
+    "replace",
+    105,
+    108,
+    79,
+    80,
+    [
+     "Licensed under the Apache License, Version 2.0. See LICENSE for details."
+    ]
+   ],
+   [
+    "equal",
+    108,
+    109,
+    80,
+    81
+   ],
+   [
+    "replace",
+    109,
+    112,
+    81,
+    82,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    112,
+    134,
+    82,
+    104
+   ],
+   [
+    "replace",
+    134,
+    136,
+    104,
+    105,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "8fec5007f639+2": {
+  "fn": "arthurgeek/vaultwarden-fly-template",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    6,
+    3,
+    6,
+    [
+     "Caddy and supercronic",
+     "for hourly restic backups with e-mail failure notification",
+     "via msmtp."
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    6,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "This uses a single fly machine, within Fly's free allowance."
+    ]
+   ],
+   [
+    "equal",
+    8,
+    18,
+    8,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     "1. Install go-task:"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    23,
+    20,
+    23,
+    [
+     " We use go-task to automate some steps, you can check the task",
+     " code under .taskfiles. to see which commands each",
+     " task run."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    28,
+    23,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "1. Install flyctl:"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    40,
+    29,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     " the environment variables. **All uncommented variables are required**."
+    ]
+   ],
+   [
+    "equal",
+    41,
+    51,
+    41,
+    51
+   ],
+   [
+    "replace",
+    51,
+    52,
+    51,
+    52,
+    [
+     " If you already have a Fly account, use `flyctl auth login` instead."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    59,
+    52,
+    59
+   ],
+   [
+    "replace",
+    59,
+    61,
+    59,
+    61,
+    [
+     " If this is your first app, you'll be asked to add credit card",
+     " information, but, don't worry, you'll not be charged by this app."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    68,
+    61,
+    68
+   ],
+   [
+    "replace",
+    68,
+    71,
+    68,
+    71,
+    [
+     " This will show you a warning about invididual volumes.",
+     " It's ok to have a single volume because we're not",
+     " concerned about downtime for our Vaultwarden instance."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    84,
+    71,
+    84
+   ],
+   [
+    "replace",
+    84,
+    85,
+    84,
+    85,
+    [
+     " After your app is deployed, follow the steps here to setup your custom domain."
+    ]
+   ],
+   [
+    "equal",
+    85,
+    88,
+    85,
+    88
+   ],
+   [
+    "replace",
+    88,
+    90,
+    88,
+    90,
+    [
+     " That's all! Now you can open your custom domain and Vaultwarden should",
+     " work."
+    ]
+   ],
+   [
+    "equal",
+    90,
+    93,
+    90,
+    93
+   ],
+   [
+    "replace",
+    93,
+    94,
+    93,
+    94,
+    [
+     "This template uses Renovatebot to scan and open new PRs when dependencies are out of date."
+    ]
+   ],
+   [
+    "equal",
+    94,
+    95,
+    94,
+    95
+   ],
+   [
+    "replace",
+    95,
+    96,
+    95,
+    96,
+    [
+     "To enable this, open their Github app page, click the \"Configure\" button, then choose your repo. The template already provides Renovate configs and there's no need for further action."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    119,
+    96,
+    119
+   ],
+   [
+    "replace",
+    119,
+    120,
+    119,
+    120,
+    [
+     "and check individual logs using overmind:"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    137,
+    120,
+    137
+   ],
+   [
+    "replace",
+    137,
+    138,
+    137,
+    138,
+    [
+     "1. Install Github CLI"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    168,
+    138,
+    168
+   ],
+   [
+    "replace",
+    168,
+    170,
+    168,
+    170,
+    [
+     " For security reasons the app name is not sdaved in the [fly.toml] file.",
+     " In that case, you have to add `-a your-app-name` to all `fly` commands."
+    ]
+   ],
+   [
+    "equal",
+    170,
+    171,
+    170,
+    171
+   ],
+   [
+    "replace",
+    171,
+    172,
+    171,
+    172,
+    [
+     " Your app name is found in your `.config.env` file."
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    172,
+    173
+   ],
+   [
+    "replace",
+    173,
+    174,
+    173,
+    174,
+    [
+     " Example:"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    179,
+    174,
+    179
+   ],
+   [
+    "replace",
+    179,
+    180,
+    179,
+    180,
+    [
+     " Or you can add:"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    185,
+    180,
+    185
+   ],
+   [
+    "replace",
+    185,
+    186,
+    185,
+    186,
+    [
+     " to the beginning of your [fly.toml] file."
+    ]
+   ],
+   [
+    "equal",
+    186,
+    189,
+    186,
+    189
+   ],
+   [
+    "replace",
+    189,
+    190,
+    189,
+    190,
+    [
+     " After updating the `.config.env` file, you can update your environment variables in two different ways:"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    195,
+    190,
+    195
+   ],
+   [
+    "replace",
+    195,
+    196,
+    195,
+    196,
+    [
+     " will read your `.config.env` file and import every defined variable to your fly app, Or you can just do a new deployment:"
+    ]
+   ],
+   [
+    "equal",
+    196,
+    201,
+    196,
+    201
+   ],
+   [
+    "replace",
+    201,
+    206,
+    201,
+    202,
+    [
+     " which will run the command above and do a new deployment afterwards."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "2a7efffa1b0f+2": {
+  "fn": "rmqtt/rmqtt-raft",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "GitHub Release",
+     "crates.io",
+     "Documentation"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    7,
+    5,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "tikv/raft-rs, that is easier to use and implement. This is not supposed to be the"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    10,
+    8,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "The interface is strongly inspired by the one used by canonical/raft."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    31,
+    11,
+    31
+   ],
+   [
+    "replace",
+    31,
+    89,
+    31,
+    32,
+    [
+     "…（58 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    94,
+    32,
+    37
+   ],
+   [
+    "replace",
+    94,
+    95,
+    37,
+    38,
+    [
+     "- `Store::query` query a entry from the store;"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    104,
+    38,
+    47
+   ],
+   [
+    "replace",
+    104,
+    152,
+    47,
+    48,
+    [
+     "…（48 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    152,
+    158,
+    48,
+    54
+   ],
+   [
+    "replace",
+    158,
+    159,
+    54,
+    55,
+    [
+     "This work is based on riteraft, but more adjustments and improvements have been"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    162,
+    55,
+    58
+   ],
+   [
+    "delete",
+    162,
+    163,
+    58,
+    58
+   ],
+   [
+    "equal",
+    163,
+    164,
+    58,
+    59
+   ],
+   [
+    "delete",
+    164,
+    170,
+    59,
+    59
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "8e93c8ef45e3+2": {
+  "fn": "joelwembo/django-multitenant-saas-ecommerce-kubernetes",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "equal",
+    0,
+    3,
+    0,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    4,
+    5
+   ],
+   [
+    "replace",
+    5,
+    10,
+    5,
+    8,
+    [
+     "- @Joel O. Wembo",
+     "- @twitter",
+     "- @linkedin"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    13,
+    8,
+    11
+   ],
+   [
+    "delete",
+    13,
+    14,
+    11,
+    11
+   ],
+   [
+    "equal",
+    14,
+    95,
+    11,
+    92
+   ],
+   [
+    "replace",
+    95,
+    96,
+    92,
+    93,
+    [
+     "## Step 9: create admin user"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    115,
+    93,
+    112
+   ],
+   [
+    "replace",
+    115,
+    116,
+    112,
+    113,
+    [
+     " @Swagger"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    120,
+    113,
+    117
+   ],
+   [
+    "replace",
+    120,
+    122,
+    117,
+    118,
+    [
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    124,
+    118,
+    120
+   ],
+   [
+    "replace",
+    124,
+    125,
+    120,
+    121,
+    [
+     "Alt text"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    145,
+    121,
+    141
+   ],
+   [
+    "delete",
+    145,
+    146,
+    141,
+    141
+   ],
+   [
+    "equal",
+    146,
+    169,
+    141,
+    164
+   ],
+   [
+    "delete",
+    169,
+    170,
+    164,
+    164
+   ],
+   [
+    "equal",
+    170,
+    174,
+    164,
+    168
+   ],
+   [
+    "replace",
+    174,
+    180,
+    168,
+    171,
+    [
+     "- @Joel O. Wembo",
+     "- @twitter",
+     "- @linkedin"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "cd806b5dbb34+2": {
+  "fn": "datazip-inc/olake-ui",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    6,
+    [
+     " <a href=\"https://datazip.io/olake\" target=\"_blank\">",
+     " olake",
+     " </a>",
+     " OLake"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    6,
+    7
+   ],
+   [
+    "replace",
+    9,
+    10,
+    7,
+    8,
+    [
+     " OLake Go enables real-time data ingestion from databases, S3, and Kafka into Apache Iceberg. OLake Fusion is a table management system for Apache Iceberg, helping teams to optimize performance and reduce storage costs. Visit olake.io/docs for the full documentation, and benchmarks "
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    8,
+    9
+   ],
+   [
+    "replace",
+    11,
+    16,
+    9,
+    11,
+    [
+     " GitHub issues Documentation",
+     " slack"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    21,
+    11,
+    16
+   ],
+   [
+    "replace",
+    21,
+    24,
+    16,
+    19,
+    [
+     "- UI Readme",
+     "- Server Readme",
+     "- API Contracts"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    31,
+    19,
+    26
+   ],
+   [
+    "replace",
+    31,
+    33,
+    26,
+    28,
+    [
+     "- Docker installed and running (Docker Desktop recommended for Mac/Windows)",
+     "- Docker Compose (comes with Docker Desktop)"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    39,
+    28,
+    34
+   ],
+   [
+    "replace",
+    39,
+    40,
+    34,
+    35,
+    [
+     " Choose the setup that matches your use case:"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    35,
+    36
+   ],
+   [
+    "replace",
+    41,
+    42,
+    36,
+    37,
+    [
+     " **Ingestion only**"
+    ]
+   ],
+   [
+    "equal",
+    42,
+    47,
+    37,
+    42
+   ],
+   [
+    "replace",
+    47,
+    48,
+    42,
+    43,
+    [
+     " **Ingestion and Maintenance**"
+    ]
+   ],
+   [
+    "equal",
+    48,
+    55,
+    43,
+    50
+   ],
+   [
+    "replace",
+    55,
+    57,
+    50,
+    52,
+    [
+     " - **OLake UI:** http://localhost:8000",
+     " - **Default login:** Username: `admin`, Password: `password`"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    90,
+    52,
+    85
+   ],
+   [
+    "replace",
+    90,
+    96,
+    85,
+    86,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    96,
+    148,
+    86,
+    138
+   ],
+   [
+    "replace",
+    148,
+    155,
+    138,
+    139,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a750df8dac40+2": {
+  "fn": "Azure-Samples/data-api-builder",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Samples on how to use Data API builder for Azure Databases"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    15,
+    3,
+    15
+   ],
+   [
+    "replace",
+    15,
+    16,
+    15,
+    16,
+    [
+     "If this is the very first time you'll be using Data API builder for Azure Databases, you may want to start from the Getting Started in the engine repository document"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    23,
+    16,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "The well-known ToDo MVC sample using Vue, Azure Static Web Apps and Data API builder:"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    41,
+    24,
+    41
+   ],
+   [
+    "replace",
+    41,
+    42,
+    41,
+    42,
+    [
+     "Absolutely! If you have a sample using Data API builder, make sure to take a look at the Code of Conduct and then please submit a PR to this repo."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "8eccf0b3ded1+2": {
+  "fn": "chaynHQ/bloom-backend",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Bloom Backend CI Pipeline"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Bloom is a free, secure, and web-based trauma healing support service from Chayn. Since 2013, Chayn has reached over 500,000 survivors worldwide with our trauma-informed, survivor-centred, and intersectional approaches in utilizing open-source tech for positive social impact. Bloom is our flagship product — providing tailored video-based courses, anonymous interaction, 1:1 chat, self-led healing guidance, everyday tools, and comfort to cope with traumatic events."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "Explore Chayn's website, research, resources, projects, impact, and support services directory. 💖"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    23,
+    7,
+    23
+   ],
+   [
+    "replace",
+    23,
+    37,
+    23,
+    37,
+    [
+     "- NestJS - NodeJs framework for building scalable and reliable server-side applications",
+     "- PostgreSQL - Object-relational SQL database system",
+     "- TypeORM - Object Relational Mapper library",
+     "- Firebase - User authentication",
+     "- Storyblok - Headless CMS for pages and courses content",
+     "- Simplybook - Appointment booking system used for therapy",
+     "- Slack - Slack webhooks to send messages to the team",
+     "- Rollbar - Error reporting",
+     "- Front - User messaging",
+     "- Mailchimp - Transactional email",
+     "- Docker - Containers for api and db",
+     "- Render - Build, deploy and operate staging and production apps",
+     "- GitHub Actions - CI pipeline",
+     "- ESLint and Prettier for linting and formatting."
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    37,
+    38
+   ],
+   [
+    "replace",
+    38,
+    39,
+    38,
+    39,
+    [
+     "Read our Bloom Backend Tech Wiki Docs for overviews of key concepts and data & database architecture."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    42,
+    39,
+    42
+   ],
+   [
+    "replace",
+    42,
+    43,
+    42,
+    43,
+    [
+     "Making an open-source contribution you have agreed to our Code of Conduct."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    43,
+    44
+   ],
+   [
+    "replace",
+    44,
+    47,
+    44,
+    47,
+    [
+     "- See docs/local-development.md to get started.",
+     "- New contributors should start with our Contribution Guidelines.",
+     "- See docs/courses-sessions-and-resources.md for how courses, sessions and resources are synced and tracked."
+    ]
+   ],
+   [
+    "equal",
+    47,
+    56,
+    47,
+    56
+   ],
+   [
+    "replace",
+    56,
+    57,
+    56,
+    57,
+    [
+     "Support our mission further by sponsoring us on GitHub, exploring our volunteer programs, and following us on social media."
+    ]
+   ],
+   [
+    "equal",
+    57,
+    59,
+    57,
+    59
+   ],
+   [
+    "delete",
+    59,
+    60,
+    59,
+    59
+   ],
+   [
+    "equal",
+    60,
+    61,
+    59,
+    60
+   ],
+   [
+    "delete",
+    61,
+    62,
+    60,
+    60
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "1c3316024436+2": {
+  "fn": "tylerbarker/sql_kit",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "Hex | GitHub | Documentation"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    15,
+    3,
+    15
+   ],
+   [
+    "replace",
+    15,
+    49,
+    15,
+    16,
+    [
+     "…（34 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    70,
+    16,
+    37
+   ],
+   [
+    "replace",
+    70,
+    71,
+    37,
+    38,
+    [
+     "|Database|Ecto Adapter|Driver|"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    72,
+    38,
+    39
+   ],
+   [
+    "replace",
+    72,
+    79,
+    39,
+    46,
+    [
+     "|PostgreSQL|Ecto.Adapters.Postgres|Postgrex|",
+     "|SQLite|Ecto.Adapters.SQLite3|Exqlite|",
+     "|MySQL|Ecto.Adapters.MyXQL|MyXQL|",
+     "|MariaDB|Ecto.Adapters.MyXQL|MyXQL|",
+     "|SQL Server|Ecto.Adapters.Tds|Tds|",
+     "|ClickHouse|Ecto.Adapters.ClickHouse|Ch|",
+     "|DuckDB|N/A (direct driver)|Duckdbex|"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    109,
+    46,
+    76
+   ],
+   [
+    "replace",
+    109,
+    117,
+    76,
+    77,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    129,
+    77,
+    89
+   ],
+   [
+    "replace",
+    129,
+    148,
+    89,
+    90,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    148,
+    171,
+    90,
+    113
+   ],
+   [
+    "replace",
+    171,
+    175,
+    113,
+    114,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    183,
+    114,
+    122
+   ],
+   [
+    "replace",
+    183,
+    203,
+    122,
+    123,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    203,
+    217,
+    123,
+    137
+   ],
+   [
+    "replace",
+    217,
+    228,
+    137,
+    138,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    228,
+    238,
+    138,
+    148
+   ],
+   [
+    "replace",
+    238,
+    247,
+    148,
+    149,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    247,
+    271,
+    149,
+    173
+   ],
+   [
+    "replace",
+    271,
+    278,
+    173,
+    174,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    278,
+    299,
+    174,
+    195
+   ],
+   [
+    "replace",
+    299,
+    311,
+    195,
+    196,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    311,
+    336,
+    196,
+    221
+   ],
+   [
+    "replace",
+    336,
+    337,
+    221,
+    222,
+    [
+     "|Database|Syntax|Example|"
+    ]
+   ],
+   [
+    "equal",
+    337,
+    338,
+    222,
+    223
+   ],
+   [
+    "replace",
+    338,
+    344,
+    223,
+    229,
+    [
+     "|PostgreSQL|`$1`, `$2`, ...|`WHERE id = $1 AND age > $2`|",
+     "|MySQL|`?`|`WHERE id = ? AND age > ?`|",
+     "|SQLite|`?`|`WHERE id = ? AND age > ?`|",
+     "|SQL Server|`@1`, `@2`, ...|`WHERE id = @1 AND age > @2`|",
+     "|ClickHouse|`{name:Type}`|`WHERE id = {id:UInt32} AND age > {age:UInt32}`|",
+     "|DuckDB|`$1`, `$2`, ...|`WHERE id = $1 AND age > $2`|"
+    ]
+   ],
+   [
+    "equal",
+    344,
+    364,
+    229,
+    249
+   ],
+   [
+    "replace",
+    364,
+    390,
+    249,
+    250,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    390,
+    413,
+    250,
+    273
+   ],
+   [
+    "replace",
+    413,
+    414,
+    273,
+    274,
+    [
+     "Matches `Ecto.Repo.all/2` semantics."
+    ]
+   ],
+   [
+    "equal",
+    414,
+    419,
+    274,
+    279
+   ],
+   [
+    "replace",
+    419,
+    425,
+    279,
+    280,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    425,
+    434,
+    280,
+    289
+   ],
+   [
+    "replace",
+    434,
+    435,
+    289,
+    290,
+    [
+     "Matches `Ecto.Repo.one!/2` semantics."
+    ]
+   ],
+   [
+    "equal",
+    435,
+    440,
+    290,
+    295
+   ],
+   [
+    "replace",
+    440,
+    446,
+    295,
+    296,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    446,
+    455,
+    296,
+    305
+   ],
+   [
+    "replace",
+    455,
+    456,
+    305,
+    306,
+    [
+     "Matches `Ecto.Repo.one/2` semantics."
+    ]
+   ],
+   [
+    "equal",
+    456,
+    465,
+    306,
+    315
+   ],
+   [
+    "replace",
+    465,
+    471,
+    315,
+    316,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    471,
+    484,
+    316,
+    329
+   ],
+   [
+    "replace",
+    484,
+    485,
+    329,
+    330,
+    [
+     "Matches `Ecto.Repo.all/2` semantics."
+    ]
+   ],
+   [
+    "equal",
+    485,
+    490,
+    330,
+    335
+   ],
+   [
+    "replace",
+    490,
+    496,
+    335,
+    336,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    496,
+    509,
+    336,
+    349
+   ],
+   [
+    "replace",
+    509,
+    515,
+    349,
+    350,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    515,
+    524,
+    350,
+    359
+   ],
+   [
+    "replace",
+    524,
+    525,
+    359,
+    360,
+    [
+     "Matches `Ecto.Repo.one/2` semantics."
+    ]
+   ],
+   [
+    "equal",
+    525,
+    530,
+    360,
+    365
+   ],
+   [
+    "replace",
+    530,
+    539,
+    365,
+    366,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    539,
+    568,
+    366,
+    395
+   ],
+   [
+    "replace",
+    568,
+    569,
+    395,
+    396,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    569,
+    571,
+    396,
+    398
+   ],
+   [
+    "replace",
+    571,
+    574,
+    398,
+    401,
+    [
+     "- ASDF (Elixir + Erlang version management)",
+     "- Docker (for database containers via `docker compose up`)",
+     "- SQLite3 (installed locally)"
+    ]
+   ],
+   [
+    "equal",
+    574,
+    610,
+    401,
+    437
+   ],
+   [
+    "delete",
+    610,
+    611,
+    437,
+    437
+   ],
+   [
+    "equal",
+    611,
+    612,
+    437,
+    438
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "c361967d04d1+2": {
+  "fn": "YuKitAs/rails-rest-api",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "example workflow"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    38,
+    1,
+    38
+   ],
+   [
+    "replace",
+    38,
+    52,
+    38,
+    52,
+    [
+     "|HTTP verbs|Paths|Used for|",
+     "|----------|------|--------:|",
+     "|POST|/register|Create a user|",
+     "|POST|/login|Authenticate a user|",
+     "|GET|/posts|List all posts|",
+     "|GET|/posts/:post_id|Show a single post|",
+     "|POST|/posts|Create a post|",
+     "|PUT|/posts/:post_id|Update a post|",
+     "|DELETE|/posts/:post_id|Delete a post|",
+     "|GET|/posts/:post_id/comments|List all comments of a post|",
+     "|GET|/posts/:post_id/comments/:comment_id|Show a single comment|",
+     "|POST|/posts/:post_id/comments|Create a comment|",
+     "|PUT|/posts/:post_id/comments/:comment_id|Update a comment|",
+     "|DELETE|/posts/:post_id/comments/:comment_id|Delete a comment|"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    116,
+    52,
+    116
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "b9a4977c9281+2": {
+  "fn": "TsukumoHQ/WRAI.TH",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    8,
+    0,
+    6
+   ],
+   [
+    "replace",
+    8,
+    9,
+    6,
+    12,
+    [
+     "Release",
+     "Go",
+     "MCP",
+     "SQLite",
+     "License",
+     "Discord"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    12,
+    13
+   ],
+   [
+    "replace",
+    10,
+    16,
+    13,
+    14,
+    [
+     "Why · One-prompt setup · Install · First Project · The Dashboard · How It Works · Agents · Messaging · Memory · Tasks · MCP Tools"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    14,
+    15
+   ],
+   [
+    "replace",
+    17,
+    22,
+    15,
+    16,
+    [
+     "wrai.th mission control -- live overview of a project: tasks, agent load, and activity feed"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    25,
+    16,
+    19
+   ],
+   [
+    "replace",
+    25,
+    26,
+    19,
+    20,
+    [
+     "**v1.6 -- stable.** Battle-tested on real multi-agent projects, API stable. Breaking changes are documented in CHANGELOG.md."
+    ]
+   ],
+   [
+    "equal",
+    26,
+    28,
+    20,
+    22
+   ],
+   [
+    "delete",
+    28,
+    32,
+    22,
+    22
+   ],
+   [
+    "equal",
+    32,
+    50,
+    22,
+    40
+   ],
+   [
+    "replace",
+    50,
+    53,
+    40,
+    41,
+    [
+     "And you're never flying blind: the **mission-control dashboard** (below) shows every project, every agent, and every task in real time -- who's shipping, who's blocked, and what just landed."
+    ]
+   ],
+   [
+    "equal",
+    53,
+    62,
+    41,
+    50
+   ],
+   [
+    "replace",
+    62,
+    73,
+    50,
+    51,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    76,
+    51,
+    54
+   ],
+   [
+    "delete",
+    76,
+    78,
+    54,
+    54
+   ],
+   [
+    "equal",
+    78,
+    87,
+    54,
+    63
+   ],
+   [
+    "replace",
+    87,
+    89,
+    63,
+    64,
+    [
+     " Build from source "
+    ]
+   ],
+   [
+    "equal",
+    89,
+    97,
+    64,
+    72
+   ],
+   [
+    "delete",
+    97,
+    99,
+    72,
+    72
+   ],
+   [
+    "equal",
+    99,
+    121,
+    72,
+    94
+   ],
+   [
+    "replace",
+    121,
+    126,
+    94,
+    95,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    126,
+    130,
+    95,
+    99
+   ],
+   [
+    "replace",
+    130,
+    132,
+    99,
+    100,
+    [
+     " Where to put the MCP config "
+    ]
+   ],
+   [
+    "equal",
+    132,
+    135,
+    100,
+    103
+   ],
+   [
+    "replace",
+    135,
+    136,
+    103,
+    104,
+    [
+     "|Level|File|Scope|"
+    ]
+   ],
+   [
+    "equal",
+    136,
+    137,
+    104,
+    105
+   ],
+   [
+    "replace",
+    137,
+    140,
+    105,
+    108,
+    [
+     "|**Project**|`.mcp.json` in repo root|Only this repo. Committed = shared with your team.|",
+     "|**User-global**|`~/.claude/.mcp.json`|Every repo on your machine.|",
+     "|**CLAUDE.md**|Project or global `CLAUDE.md`|Can document the expected config, but doesn't auto-connect.|"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    155,
+    108,
+    123
+   ],
+   [
+    "replace",
+    155,
+    160,
+    123,
+    124,
+    [
+     "> **Team/server deployment?** See docs/deployment.md -- API key auth, reverse proxy (Traefik/nginx/Caddy), TLS, platform notes."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    173,
+    124,
+    137
+   ],
+   [
+    "delete",
+    173,
+    175,
+    137,
+    137
+   ],
+   [
+    "equal",
+    175,
+    203,
+    137,
+    165
+   ],
+   [
+    "delete",
+    203,
+    205,
+    165,
+    165
+   ],
+   [
+    "equal",
+    205,
+    207,
+    165,
+    167
+   ],
+   [
+    "replace",
+    207,
+    212,
+    167,
+    168,
+    [
+     "Most of the 58 MCP tools weren't designed by a human. Multiple teams of agents at TsukumoHQ ran Q&A sessions directly on the wrai.th codebase -- identifying what they needed to work better as a team. Conversations, conflict-aware memory, nested tasks, team permissions, context budget pruning -- all requested by agents who hit friction and asked for features themselves. The relay is shaped by its own users."
+    ]
+   ],
+   [
+    "equal",
+    212,
+    214,
+    168,
+    170
+   ],
+   [
+    "replace",
+    214,
+    215,
+    170,
+    171,
+    [
+     "Persistent identity -- respawn across sessions with full context restore. One Claude session can run multiple agents via the `as` parameter. Details below."
+    ]
+   ],
+   [
+    "equal",
+    215,
+    217,
+    171,
+    173
+   ],
+   [
+    "replace",
+    217,
+    218,
+    173,
+    174,
+    [
+     "5 addressing modes: direct, broadcast, team channels, group conversations, user questions. Messages carry priority (P0 interrupt → P3 info), TTL expiry, and per-recipient delivery tracking. Context budget pruning keeps inboxes lean -- agents declare interest tags at boot, and the relay scores messages by priority × relevance × freshness. Details below."
+    ]
+   ],
+   [
+    "equal",
+    218,
+    220,
+    174,
+    176
+   ],
+   [
+    "replace",
+    220,
+    224,
+    176,
+    177,
+    [
+     "Scoped memory (agent / project / global), conflict-aware and FTS5-indexed, plus `query_context` RAG that fuses memories with past task results. Survives `/clear`, context resets, session restarts. An agent that reboots picks up where it left off. Details below."
+    ]
+   ],
+   [
+    "equal",
+    224,
+    226,
+    177,
+    179
+   ],
+   [
+    "replace",
+    226,
+    227,
+    179,
+    180,
+    [
+     "Nested tasks (subtasks via `parent_task_id`, 3 levels deep), strict state machine with an `in-review` stage, P0-P3 priorities, dispatch by profile archetype. Progress rolls up through the subtask tree. The kanban is the real-time view. Details below."
+    ]
+   ],
+   [
+    "equal",
+    227,
+    232,
+    180,
+    185
+   ],
+   [
+    "replace",
+    232,
+    237,
+    185,
+    186,
+    [
+     "Open `localhost:8090/v2/`. Every project, agent, and task live on one dashboard (tour below) -- the board fills, messages stream, the activity feed never stops. Drop directives into an agent's `loop.md` to steer without breaking its loop."
+    ]
+   ],
+   [
+    "equal",
+    237,
+    242,
+    186,
+    191
+   ],
+   [
+    "replace",
+    242,
+    264,
+    191,
+    192,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    192,
+    193
+   ],
+   [
+    "delete",
+    265,
+    267,
+    193,
+    193
+   ],
+   [
+    "equal",
+    267,
+    317,
+    193,
+    243
+   ],
+   [
+    "replace",
+    317,
+    326,
+    243,
+    244,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    326,
+    332,
+    244,
+    250
+   ],
+   [
+    "replace",
+    332,
+    333,
+    250,
+    251,
+    [
+     "|State|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    333,
+    334,
+    251,
+    252
+   ],
+   [
+    "replace",
+    334,
+    337,
+    252,
+    255,
+    [
+     "|`active`|Online, processing|",
+     "|`sleeping`|Idle -- messages still queue in inbox|",
+     "|`deactivated`|Offline -- can be reactivated|"
+    ]
+   ],
+   [
+    "equal",
+    337,
+    339,
+    255,
+    257
+   ],
+   [
+    "delete",
+    339,
+    341,
+    257,
+    257
+   ],
+   [
+    "equal",
+    341,
+    362,
+    257,
+    278
+   ],
+   [
+    "replace",
+    362,
+    363,
+    278,
+    279,
+    [
+     "|Priority|Alias|Meaning|"
+    ]
+   ],
+   [
+    "equal",
+    363,
+    364,
+    279,
+    280
+   ],
+   [
+    "replace",
+    364,
+    368,
+    280,
+    284,
+    [
+     "|`P0`|`interrupt`|Critical -- drop everything|",
+     "|`P1`|`steering`|Important -- do next|",
+     "|`P2`|`advisory`|Normal (default)|",
+     "|`P3`|`info`|Low -- when you get to it|"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    409,
+    284,
+    325
+   ],
+   [
+    "replace",
+    409,
+    410,
+    325,
+    326,
+    [
+     "|Component|Formula|Range|"
+    ]
+   ],
+   [
+    "equal",
+    410,
+    411,
+    326,
+    327
+   ],
+   [
+    "replace",
+    411,
+    414,
+    327,
+    330,
+    [
+     "|**priorityScore**|`1 - priorityIndex / 3` -- P1=0.67, P2=0.33, P3=0|0–1|",
+     "|**tagScore**|Jaccard similarity between message `metadata.tags` and agent `interest_tags`: `len(A & B) / len(A \\|B)`|0–1|",
+     "|**freshnessScore**|Exponential decay: `1 / (1 + ageSeconds / 3600)` --1h-old = 0.5, 2h-old = 0.33|0–1|"
+    ]
+   ],
+   [
+    "equal",
+    414,
+    449,
+    330,
+    365
+   ],
+   [
+    "replace",
+    449,
+    453,
+    365,
+    366,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    453,
+    456,
+    366,
+    369
+   ],
+   [
+    "delete",
+    456,
+    458,
+    369,
+    369
+   ],
+   [
+    "equal",
+    458,
+    467,
+    369,
+    378
+   ],
+   [
+    "replace",
+    467,
+    468,
+    378,
+    379,
+    [
+     "Kanban board -- tasks across todo / in progress / in review / done, with P0-P3 priorities and blocked flags"
+    ]
+   ],
+   [
+    "equal",
+    468,
+    473,
+    379,
+    384
+   ],
+   [
+    "replace",
+    473,
+    474,
+    384,
+    385,
+    [
+     "Messages view -- per-agent channels, threaded conversation, priorities, send box"
+    ]
+   ],
+   [
+    "equal",
+    474,
+    479,
+    385,
+    390
+   ],
+   [
+    "replace",
+    479,
+    480,
+    390,
+    391,
+    [
+     "Memory view -- card grid of scoped, layered, versioned memories with search"
+    ]
+   ],
+   [
+    "equal",
+    480,
+    485,
+    391,
+    396
+   ],
+   [
+    "replace",
+    485,
+    495,
+    396,
+    401,
+    [
+     " Team view -- org hierarchy graph with live activity transcript ",
+     " Stats view -- cycle time, throughput, burndown, bottleneck ",
+     "",
+     " Team -- org tree + live transcript ",
+     " Stats -- delivery metrics "
+    ]
+   ],
+   [
+    "equal",
+    495,
+    497,
+    401,
+    403
+   ],
+   [
+    "delete",
+    497,
+    499,
+    403,
+    403
+   ],
+   [
+    "equal",
+    499,
+    533,
+    403,
+    437
+   ],
+   [
+    "delete",
+    533,
+    535,
+    437,
+    437
+   ],
+   [
+    "equal",
+    535,
+    537,
+    437,
+    439
+   ],
+   [
+    "replace",
+    537,
+    538,
+    439,
+    440,
+    [
+     "The other half of the system. Memory is what agents know -- this is what they do. (See the board above.)"
+    ]
+   ],
+   [
+    "equal",
+    538,
+    588,
+    440,
+    490
+   ],
+   [
+    "delete",
+    588,
+    590,
+    490,
+    490
+   ],
+   [
+    "equal",
+    590,
+    597,
+    490,
+    497
+   ],
+   [
+    "delete",
+    597,
+    599,
+    497,
+    497
+   ],
+   [
+    "equal",
+    599,
+    614,
+    497,
+    512
+   ],
+   [
+    "replace",
+    614,
+    622,
+    512,
+    513,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    622,
+    623,
+    513,
+    514
+   ],
+   [
+    "delete",
+    623,
+    625,
+    514,
+    514
+   ],
+   [
+    "equal",
+    625,
+    634,
+    514,
+    523
+   ],
+   [
+    "delete",
+    634,
+    636,
+    523,
+    523
+   ],
+   [
+    "equal",
+    636,
+    642,
+    523,
+    529
+   ],
+   [
+    "delete",
+    642,
+    644,
+    529,
+    529
+   ],
+   [
+    "equal",
+    644,
+    657,
+    529,
+    542
+   ],
+   [
+    "replace",
+    657,
+    669,
+    542,
+    543,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    669,
+    681,
+    543,
+    555
+   ],
+   [
+    "replace",
+    681,
+    685,
+    555,
+    556,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    685,
+    714,
+    556,
+    585
+   ],
+   [
+    "replace",
+    714,
+    715,
+    585,
+    586,
+    [
+     "|Frequency|Actions|"
+    ]
+   ],
+   [
+    "equal",
+    715,
+    716,
+    586,
+    587
+   ],
+   [
+    "replace",
+    716,
+    721,
+    587,
+    592,
+    [
+     "|**1m**|`get_inbox` → reply to urgent questions, `mark_read`|",
+     "|**5m**|`list_tasks({ status: \"blocked\" })` → unblock or escalate|",
+     "|**15m**|`set_memory` with current architecture decisions, check the task board|",
+     "|**30m**|Post sync to `team:engineering`, review in-progress tasks|",
+     "|**60m**|Memory sync of architecture decisions, team health check, dispatch new tasks from backlog|"
+    ]
+   ],
+   [
+    "equal",
+    721,
+    724,
+    592,
+    595
+   ],
+   [
+    "delete",
+    724,
+    726,
+    595,
+    595
+   ],
+   [
+    "equal",
+    726,
+    728,
+    595,
+    597
+   ],
+   [
+    "replace",
+    728,
+    729,
+    597,
+    598,
+    [
+     "wrai.th speaks MCP -- the open Model Context Protocol. **Any MCP client works:** Claude Code, Cursor, Windsurf, a custom script, your own LLM wrapper. A Claude agent and a GPT agent can share the same task board."
+    ]
+   ],
+   [
+    "equal",
+    729,
+    736,
+    598,
+    605
+   ],
+   [
+    "delete",
+    736,
+    738,
+    605,
+    605
+   ],
+   [
+    "equal",
+    738,
+    742,
+    605,
+    609
+   ],
+   [
+    "replace",
+    742,
+    744,
+    609,
+    610,
+    [
+     " Session --4 tools "
+    ]
+   ],
+   [
+    "equal",
+    744,
+    747,
+    610,
+    613
+   ],
+   [
+    "replace",
+    747,
+    748,
+    613,
+    614,
+    [
+     "|Tool|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    748,
+    749,
+    614,
+    615
+   ],
+   [
+    "replace",
+    749,
+    753,
+    615,
+    619,
+    [
+     "|`whoami`|Identify session via transcript salt|",
+     "|`register_agent`|Announce presence, receive compact context (respawn-aware)|",
+     "|`get_session_context`|Compact boot index: profile, tasks, message/memory indexes (~4.5K tokens)|",
+     "|`query_context`|RAG: ranked memories + past task results|"
+    ]
+   ],
+   [
+    "equal",
+    753,
+    754,
+    619,
+    620
+   ],
+   [
+    "replace",
+    754,
+    755,
+    620,
+    621,
+    [
+     " Agents --4 tools "
+    ]
+   ],
+   [
+    "equal",
+    755,
+    756,
+    621,
+    622
+   ],
+   [
+    "replace",
+    756,
+    758,
+    622,
+    628,
+    [
+     "|Tool|What it does|",
+     "|---|---|",
+     "|`list_agents`|All agents with status and roles|",
+     "|`sleep_agent`|Go idle (messages still queue)|",
+     "|`deactivate_agent`|Leave the roster (reactivatable)|",
+     "|`delete_agent`|Soft-delete|"
+    ]
+   ],
+   [
+    "equal",
+    758,
+    759,
+    628,
+    629
+   ],
+   [
+    "replace",
+    759,
+    760,
+    629,
+    632,
+    [
+     " Messaging --6 tools ",
+     "",
+     "|Tool|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    760,
+    761,
+    632,
+    633
+   ],
+   [
+    "replace",
+    761,
+    765,
+    633,
+    639,
+    [
+     "|`send_message`|Direct, broadcast `*`, team `team:slug`, user, or conversation. Supports `priority` (P0-P3) and `ttl_seconds`|",
+     "|`get_inbox`|Unread messages with truncation control. `apply_budget: true` for context-budget pruning|",
+     "|`ack_delivery`|Acknowledge receipt (transitions delivery: surfaced → acknowledged)|",
+     "|`get_thread`|Full reply chain from any message|",
+     "|`mark_read`|Mark messages or conversations as read|",
+     "|`get_team_inbox`|Messages sent to `team:slug`|"
+    ]
+   ],
+   [
+    "equal",
+    765,
+    766,
+    639,
+    640
+   ],
+   [
+    "replace",
+    766,
+    767,
+    640,
+    641,
+    [
+     " Conversations --6 tools "
+    ]
+   ],
+   [
+    "equal",
+    767,
+    768,
+    641,
+    642
+   ],
+   [
+    "replace",
+    768,
+    770,
+    642,
+    650,
+    [
+     "|Tool|What it does|",
+     "|---|---|",
+     "|`create_conversation`|Group thread with members|",
+     "|`list_conversations`|Browse with unread counts|",
+     "|`get_conversation_messages`|Paginated (`full` / `compact` / `digest`)|",
+     "|`invite_to_conversation`|Add agent mid-thread|",
+     "|`leave_conversation`|Leave a conversation|",
+     "|`archive_conversation`|Archive a conversation|"
+    ]
+   ],
+   [
+    "equal",
+    770,
+    771,
+    650,
+    651
+   ],
+   [
+    "replace",
+    771,
+    798,
+    651,
+    652,
+    [
+     " Memory --6 tools "
+    ]
+   ],
+   [
+    "equal",
+    798,
+    801,
+    652,
+    655
+   ],
+   [
+    "replace",
+    801,
+    802,
+    655,
+    656,
+    [
+     "|Tool|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    802,
+    803,
+    656,
+    657
+   ],
+   [
+    "replace",
+    803,
+    809,
+    657,
+    663,
+    [
+     "|`set_memory`|Store with scope (`agent` / `project` / `global`), tags, confidence|",
+     "|`get_memory`|Cascade lookup: agent > project > global|",
+     "|`search_memory`|Full-text search with tag filters (FTS5)|",
+     "|`list_memories`|Browse collective knowledge|",
+     "|`delete_memory`|Soft-delete|",
+     "|`resolve_conflict`|Two agents disagreed -- pick the winner|"
+    ]
+   ],
+   [
+    "equal",
+    809,
+    810,
+    663,
+    664
+   ],
+   [
+    "replace",
+    810,
+    814,
+    664,
+    665,
+    [
+     " Tasks --15 tools "
+    ]
+   ],
+   [
+    "equal",
+    814,
+    821,
+    665,
+    672
+   ],
+   [
+    "replace",
+    821,
+    822,
+    672,
+    673,
+    [
+     "|Tool|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    822,
+    823,
+    673,
+    674
+   ],
+   [
+    "replace",
+    823,
+    833,
+    674,
+    684,
+    [
+     "|`dispatch_task`|Assign to a profile archetype|",
+     "|`claim_task` / `start_task`|Lifecycle transitions|",
+     "|`review_task`|Mark a task in-review -- the \"PR up\" signal|",
+     "|`complete_task` / `block_task` / `cancel_task`|Finish, flag, or cancel|",
+     "|`resume_task`|Resume a blocked task|",
+     "|`get_task` / `list_tasks`|Filter by status, priority (P0-P3), board|",
+     "|`update_task`|Update task fields|",
+     "|`move_task`|Move task to a different board or parent|",
+     "|`batch_complete_tasks` / `batch_dispatch_tasks`|Bulk complete / dispatch in one call|",
+     "|`archive_tasks`|Clean up done/cancelled|"
+    ]
+   ],
+   [
+    "equal",
+    833,
+    834,
+    684,
+    685
+   ],
+   [
+    "replace",
+    834,
+    835,
+    685,
+    686,
+    [
+     " Boards --4 tools "
+    ]
+   ],
+   [
+    "equal",
+    835,
+    836,
+    686,
+    687
+   ],
+   [
+    "replace",
+    836,
+    838,
+    687,
+    691,
+    [
+     "|Tool|What it does|",
+     "|---|---|",
+     "|`create_board` / `list_boards`|Sprint containers|",
+     "|`archive_board` / `delete_board`|Retire a board|"
+    ]
+   ],
+   [
+    "equal",
+    838,
+    839,
+    691,
+    692
+   ],
+   [
+    "replace",
+    839,
+    848,
+    692,
+    693,
+    [
+     " Profiles --4 tools "
+    ]
+   ],
+   [
+    "equal",
+    848,
+    851,
+    693,
+    696
+   ],
+   [
+    "replace",
+    851,
+    852,
+    696,
+    697,
+    [
+     "|Tool|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    852,
+    853,
+    697,
+    698
+   ],
+   [
+    "replace",
+    853,
+    856,
+    698,
+    701,
+    [
+     "|`register_profile`|Define archetype with skills and context keys|",
+     "|`get_profile` / `list_profiles`|Retrieve profiles|",
+     "|`find_profiles`|Search by skill tag|"
+    ]
+   ],
+   [
+    "equal",
+    856,
+    857,
+    701,
+    702
+   ],
+   [
+    "replace",
+    857,
+    858,
+    702,
+    703,
+    [
+     " Teams --7 tools "
+    ]
+   ],
+   [
+    "equal",
+    858,
+    859,
+    703,
+    704
+   ],
+   [
+    "replace",
+    859,
+    861,
+    704,
+    710,
+    [
+     "|Tool|What it does|",
+     "|---|---|",
+     "|`create_org` / `list_orgs`|Organization structure|",
+     "|`create_team` / `list_teams`|Team types: `admin`, `regular`, `bot`|",
+     "|`add_team_member` / `remove_team_member`|Roles: admin, lead, member, observer|",
+     "|`add_notify_channel`|Cross-team direct channel allowlist|"
+    ]
+   ],
+   [
+    "equal",
+    861,
+    862,
+    710,
+    711
+   ],
+   [
+    "replace",
+    862,
+    863,
+    711,
+    714,
+    [
+     " Projects --2 tools ",
+     "",
+     "|Tool|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    863,
+    864,
+    714,
+    715
+   ],
+   [
+    "replace",
+    864,
+    882,
+    715,
+    717,
+    [
+     "|`create_project`|Bootstrap a project + return the autonomous onboarding plan|",
+     "|`delete_project`|Remove a project and its data|"
+    ]
+   ],
+   [
+    "equal",
+    882,
+    889,
+    717,
+    724
+   ],
+   [
+    "replace",
+    889,
+    899,
+    724,
+    725,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    899,
+    901,
+    725,
+    727
+   ],
+   [
+    "replace",
+    901,
+    902,
+    727,
+    728,
+    [
+     "Single binary. SQLite on disk. No required external services. The web UI is embedded via `go:embed`. An optional Linear connector mirrors tasks when `RELAY_LINEAR_MODE` is enabled."
+    ]
+   ],
+   [
+    "equal",
+    902,
+    907,
+    728,
+    733
+   ],
+   [
+    "replace",
+    907,
+    909,
+    733,
+    734,
+    [
+     " Full endpoint list "
+    ]
+   ],
+   [
+    "equal",
+    909,
+    910,
+    734,
+    735
+   ],
+   [
+    "replace",
+    910,
+    911,
+    735,
+    736,
+    [
+     "|Method|Endpoint|Description|"
+    ]
+   ],
+   [
+    "equal",
+    911,
+    912,
+    736,
+    737
+   ],
+   [
+    "replace",
+    912,
+    959,
+    737,
+    782,
+    [
+     "|`GET`|`/api/projects`|List all projects with agent/task/message stats|",
+     "|`GET`|`/api/projects/:name`|Single project details|",
+     "|`PATCH`|`/api/projects/:name`|Update project (planet_type, description)|",
+     "|`GET`|`/api/agents?project=X`|Agents for a project|",
+     "|`GET`|`/api/agents/all`|All agents across projects|",
+     "|`GET`|`/api/org?project=X`|Full org tree (hierarchy)|",
+     "|`GET`|`/api/messages/latest?project=X`|Latest messages|",
+     "|`GET`|`/api/messages/all?project=X`|All messages for a project|",
+     "|`GET`|`/api/conversations?project=X`|Conversations with unread counts|",
+     "|`GET`|`/api/conversations/:id/messages`|Messages in a conversation|",
+     "|`GET`|`/api/memories?project=X`|List memories|",
+     "|`GET`|`/api/memories/search?project=X&q=...`|FTS5 search|",
+     "|`POST`|`/api/memories`|Create/update memory|",
+     "|`POST`|`/api/memories/:id/resolve`|Resolve conflict|",
+     "|`DELETE`|`/api/memories/:id`|Soft-delete memory|",
+     "|`GET`|`/api/tasks?project=X`|List tasks (filter by status, priority, board)|",
+     "|`POST`|`/api/tasks`|Dispatch task|",
+     "|`POST`|`/api/tasks/:id/transition`|State transition (claim, start, complete, block)|",
+     "|`PUT`|`/api/tasks/:id`|Update task fields|",
+     "|`GET`|`/api/boards?project=X`|List boards|",
+     "|`GET`|`/api/profiles?project=X`|List profiles|",
+     "|`GET`|`/api/teams?project=X`|List teams|",
+     "|`PUT`|`/api/agents/avatar`|Set/clear an agent's avatar image|",
+     "|`GET`|`/api/file-locks?project=X`|Active advisory file locks|",
+     "|`GET`|`/api/notification-rules?project=X`|List notification rules|",
+     "|`POST`|`/api/notification-rules`|Create a notification rule|",
+     "|`PATCH`|`/api/notification-rules/:id`|Update a rule|",
+     "|`DELETE`|`/api/notification-rules/:id`|Delete a rule|",
+     "|`POST`|`/api/notification-rules/:id/test-fire`|Test-fire a rule|",
+     "|`GET`|`/api/notification-events?project=X`|Notification event log|",
+     "|`GET`|`/api/notification-deliveries?project=X`|Per-channel delivery log|",
+     "|`GET`|`/api/token-usage?project=X`|Per-project token usage|",
+     "|`GET`|`/api/token-usage/project` / `/agent` / `/timeseries`|Per-agent, per-tool, bucketed usage|",
+     "|`GET`|`/api/cycles?project=X`|Linear cycles (mirror mode)|",
+     "|`GET`|`/api/linear/teams`|Linear teams (mirror mode)|",
+     "|`POST`|`/api/connectors/linear/webhook`|Inbound Linear webhook (HMAC)|",
+     "|`GET`|`/api/stats?project=X`|Aggregate project stats|",
+     "|`GET`|`/api/activity`|Current agent activity states|",
+     "|`GET`|`/api/activity/stream`|SSE -- real-time agent activity|",
+     "|`GET`|`/api/events/stream`|SSE -- MCP tool events|",
+     "|`GET`|`/api/events/recent?project=X`|Recent MCP events (ring buffer)|",
+     "|`POST`|`/api/user-response`|Reply to a user_question from the web UI|",
+     "|`GET`|`/api/health`|Uptime, version, DB stats|",
+     "|`GET`|`/api/settings`|Relay settings|",
+     "|`PUT`|`/api/settings`|Update an allowlisted setting|"
+    ]
+   ],
+   [
+    "equal",
+    959,
+    962,
+    782,
+    785
+   ],
+   [
+    "replace",
+    962,
+    964,
+    785,
+    786,
+    [
+     " Package layout "
+    ]
+   ],
+   [
+    "equal",
+    964,
+    969,
+    786,
+    791
+   ],
+   [
+    "replace",
+    969,
+    994,
+    791,
+    792,
+    [
+     "…（25 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    994,
+    995,
+    792,
+    793
+   ],
+   [
+    "delete",
+    995,
+    999,
+    793,
+    793
+   ],
+   [
+    "equal",
+    999,
+    1013,
+    793,
+    807
+   ],
+   [
+    "replace",
+    1013,
+    1014,
+    807,
+    808,
+    [
+     "|View|What you see|"
+    ]
+   ],
+   [
+    "equal",
+    1014,
+    1015,
+    808,
+    809
+   ],
+   [
+    "replace",
+    1015,
+    1018,
+    809,
+    812,
+    [
+     "|**Overview**|24h token count per project in the KPI cards|",
+     "|**Stats**|Throughput-by-agent, per-tool breakdown, time-series sparklines|",
+     "|**Agent detail**|24h/7d stats grid (tokens, calls, avg/call, % of project), top 8 tools|"
+    ]
+   ],
+   [
+    "equal",
+    1018,
+    1021,
+    812,
+    815
+   ],
+   [
+    "delete",
+    1021,
+    1023,
+    815,
+    815
+   ],
+   [
+    "equal",
+    1023,
+    1025,
+    815,
+    817
+   ],
+   [
+    "replace",
+    1025,
+    1026,
+    817,
+    818,
+    [
+     "wrai.th is built and run by the team behind **tsukumo** -- we help engineering teams run fleets of AI coding agents in production. wrai.th is the orchestration layer we run ourselves; free and open source (AGPL)."
+    ]
+   ],
+   [
+    "equal",
+    1026,
+    1029,
+    818,
+    821
+   ],
+   [
+    "replace",
+    1029,
+    1032,
+    821,
+    822,
+    [
+     "> Standing up an agent fleet across a team? We do that hands-on -- talk to us."
+    ]
+   ],
+   [
+    "equal",
+    1032,
+    1037,
+    822,
+    827
+   ],
+   [
+    "replace",
+    1037,
+    1038,
+    827,
+    828,
+    [
+     "Something breaks? Open an issue. Want to contribute? Open a PR."
+    ]
+   ],
+   [
+    "equal",
+    1038,
+    1048,
+    828,
+    838
+   ],
+   [
+    "delete",
+    1048,
+    1052,
+    838,
+    838
+   ],
+   [
+    "equal",
+    1052,
+    1054,
+    838,
+    840
+   ],
+   [
+    "replace",
+    1054,
+    1055,
+    840,
+    841,
+    [
+     "wrai.th is the **orchestration** layer of a four-part suite for running AI coding agents in production, built by tsukumo:"
+    ]
+   ],
+   [
+    "equal",
+    1055,
+    1057,
+    841,
+    843
+   ],
+   [
+    "replace",
+    1057,
+    1060,
+    843,
+    846,
+    [
+     "- **trovex** — context: serve agents the one canonical doc per query instead of rereading the repo (~60% fewer tokens per lookup).",
+     "- **yoru** — observability: session receipts of what each agent actually did.",
+     "- **dokan** — deterministic execution: run the agent's settled, repeatable work as scripts in clean containers, no model in the loop, no token burn."
+    ]
+   ],
+   [
+    "equal",
+    1060,
+    1061,
+    846,
+    847
+   ],
+   [
+    "replace",
+    1061,
+    1062,
+    847,
+    848,
+    [
+     "Built and run in production by tsukumo, a developer studio and AI consultancy."
+    ]
+   ],
+   [
+    "equal",
+    1062,
+    1063,
+    848,
+    849
+   ],
+   [
+    "replace",
+    1063,
+    1064,
+    849,
+    850,
+    [
+     "Built at TsukumoHQ · AGPL-3.0 License"
+    ]
+   ],
+   [
+    "equal",
+    1064,
+    1065,
+    850,
+    851
+   ],
+   [
+    "replace",
+    1065,
+    1076,
+    851,
+    852,
+    [
+     "Built by the team behind tsukumo -- consulting for teams running AI agent fleets."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "0304c23ad1b4+2": {
+  "fn": "jiandanhuoduanqiao95/Rosub",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    3,
+    [
+     " Rosub"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    12,
+    4,
+    8,
+    [
+     " MIT License",
+     " 平台",
+     " 协议 v1.0.0",
+     " 测试"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    15,
+    8,
+    11
+   ],
+   [
+    "delete",
+    15,
+    18,
+    11,
+    11
+   ],
+   [
+    "equal",
+    18,
+    19,
+    11,
+    12
+   ],
+   [
+    "delete",
+    19,
+    20,
+    12,
+    12
+   ],
+   [
+    "equal",
+    20,
+    23,
+    12,
+    15
+   ],
+   [
+    "replace",
+    23,
+    24,
+    15,
+    16,
+    [
+     "|即时通讯|媒体与文件|群组治理|体验细节|"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    25,
+    16,
+    17
+   ],
+   [
+    "replace",
+    25,
+    31,
+    17,
+    23,
+    [
+     "|私聊 / 群聊（多人多端在线）|图片粘贴直发 + 拖拽发送|群主权限（踢人/转让/改名）|多公告 / 多置顶 / 点击定位|",
+     "|离线消息补发 + 重连同步|小图片自动接收内联展示|入群审批 + 邀请制|引用回复 / 转发 / 表情回应|",
+     "|会话置顶 / 草稿 / 静音免打扰|5GB 大文件 + SHA-256 校验 + 断点续传|新成员历史可见性|定时消息 / 快捷回复|",
+     "|在线状态 presence|文件收发管理页 + 传输进度|群公告（多公告并存）|高级消息搜索（条件复合）|",
+     "|好友分组 / 备注名 / 黑名单|富媒体气泡 + 文档预览|审计日志|主题色 / 深色模式 / 中英双语|",
+     "|**1:1 与 6 人群音视频通话**（WebRTC P2P 直连，音视频不经服务器）|表情包体系 / 图片标注|多账号切换|消息记录导出（TXT/JSON）|"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    34,
+    23,
+    26
+   ],
+   [
+    "replace",
+    34,
+    35,
+    26,
+    27,
+    [
+     "|登录|私聊|群聊|"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    27,
+    28
+   ],
+   [
+    "replace",
+    36,
+    37,
+    28,
+    29,
+    [
+     "|登录|私聊|群聊|"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    40,
+    29,
+    32
+   ],
+   [
+    "replace",
+    40,
+    41,
+    32,
+    33,
+    [
+     "完整 5 分钟路径见 QUICKSTART.md。最短路径："
+    ]
+   ],
+   [
+    "equal",
+    41,
+    46,
+    33,
+    38
+   ],
+   [
+    "replace",
+    46,
+    53,
+    38,
+    39,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    53,
+    55,
+    39,
+    41
+   ],
+   [
+    "replace",
+    55,
+    56,
+    41,
+    42,
+    [
+     "生产部署（systemd、公网安全加固、备份恢复、存储治理）：见 部署指南.md。"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    65,
+    42,
+    51
+   ],
+   [
+    "replace",
+    65,
+    73,
+    51,
+    52,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    73,
+    90,
+    52,
+    69
+   ],
+   [
+    "replace",
+    90,
+    95,
+    69,
+    70,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    113,
+    70,
+    88
+   ],
+   [
+    "replace",
+    113,
+    114,
+    88,
+    89,
+    [
+     "- 本项目仅供学习与技术研究使用，按「现状」提供，完整免责声明见 LICENSE。"
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    89,
+    90
+   ],
+   [
+    "replace",
+    115,
+    122,
+    90,
+    97,
+    [
+     " 1. **ICP 备案**：非经营性互联网信息服务建议依法办理 ICP 备案（《互联网信息服务管理办法》）。",
+     " 2. **日志留存**：网络日志依法应留存不少于 6 个月（《网络安全法》第 21 条）；本项目默认日志仅输出控制台与内存环形缓冲，部署时请自行配置持久化。",
+     " 3. **用户实名**：提供即时通信服务应要求用户提供真实身份信息（《网络安全法》第 24 条）；本项目未内置实名机制，仅适合熟人小范围部署。",
+     " 4. **个人信息保护**：处理个人信息应遵循合法、正当、必要原则并取得同意（《个人信息保护法》）；本项目存储账号资料、消息与审计日志于部署者自控的数据库，运营者应自行承担告知与保护义务。",
+     " 5. **内容管理**：发现违法信息应立即停止传输、保存记录并报告（《网络安全法》第 47 条）；服务端内置踢人/删号/公告/审计等治理工具。",
+     " 6. **用途边界**：请勿用于经营性服务或向不特定公众提供服务，勿用于代理、绕行网络接入管制等用途。",
+     " 7. **注册准入**：注册接口无门槛（知道 IP + 端口即可注册），公网部署请自行限制准入（防火墙来源白名单等）。"
+    ]
+   ],
+   [
+    "equal",
+    122,
+    123,
+    97,
+    98
+   ],
+   [
+    "replace",
+    123,
+    124,
+    98,
+    99,
+    [
+     "第三方组件许可见 THIRD-PARTY-NOTICES.md。"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    126,
+    99,
+    101
+   ],
+   [
+    "replace",
+    126,
+    128,
+    101,
+    102,
+    [
+     "MIT © 2026 Rosub Contributors"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

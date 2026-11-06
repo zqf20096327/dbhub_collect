@@ -13461,5 +13461,1882 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "87db6994c356+2": {
+  "fn": "SJTU-IPADS/HEDB",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "replace",
+    0,
+    5,
+    0,
+    1,
+    [
+     "Status License"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    31,
+    1,
+    27
+   ],
+   [
+    "replace",
+    31,
+    35,
+    27,
+    28,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    42,
+    28,
+    35
+   ],
+   [
+    "replace",
+    42,
+    51,
+    35,
+    36,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    53,
+    36,
+    38
+   ],
+   [
+    "replace",
+    53,
+    54,
+    38,
+    39,
+    [
+     "There are 4 encrypted datatypes to protect the data you select in PostgreSQL. To learn more about their usage, see tests/unit-test."
+    ]
+   ],
+   [
+    "equal",
+    54,
+    55,
+    39,
+    40
+   ],
+   [
+    "replace",
+    55,
+    56,
+    40,
+    41,
+    [
+     "|data type|encrypted data type|"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    41,
+    42
+   ],
+   [
+    "replace",
+    57,
+    61,
+    42,
+    46,
+    [
+     "|int|enc_int4|",
+     "|float|enc_float4|",
+     "|text|enc_text|",
+     "|timestamp|enc_timestamp|"
+    ]
+   ],
+   [
+    "equal",
+    61,
+    72,
+    46,
+    57
+   ],
+   [
+    "replace",
+    72,
+    75,
+    57,
+    59,
+    [
+     "+ **Type-I EDB**: To build an EDB, one can place an entire database inside an isolated domain, or confidential computing unit (as in Intel SGX, AMD SEV, Intel TDX, ARM Realm, IBM PEF, AWS Nitro, Ant HyperEnclave, or whatever you name it). However, Type-I EDB should prevent database admins (or DBAs in short) from managing the database. If DBAs were able to log into the DBMS, they would inspect user data.",
+     "+ **Type-II EDB**: Cloud DBaaS vendors such as Azure, Alibaba, Huawei and others provision operator-based EDBs. You can dive into the source code to navigate how to build such an EDB using PostgreSQL's user-defined types (UDTs) and user-defined functions (UDFs). Type-II EDB allows DBAs to log into the database, but keeps data always in ciphertext (at rest on disk, in transit over network, and in use in memory) to avoid potential leakage."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    59,
+    60
+   ],
+   [
+    "replace",
+    76,
+    80,
+    60,
+    61,
+    [
+     "However, for Type-II, we have discovered a type of attack named \"Smuggle\". You can learn how it works in tools/smuggle.py, which recovers an integer column in TPC-H. The reason why Smuggle exists is that the Type-II EDB exposes sufficient expression operators for admins to construct oracles."
+    ]
+   ],
+   [
+    "equal",
+    80,
+    86,
+    61,
+    67
+   ],
+   [
+    "replace",
+    86,
+    88,
+    67,
+    69,
+    [
+     " 1. With ÷, DBAs obtain the ciphertext of '1' by dividing a number by itself.",
+     " 2. With '1', DBAs construct all encrypted integers by iteratively + the cipher '1' to a counter."
+    ]
+   ],
+   [
+    "equal",
+    88,
+    92,
+    69,
+    73
+   ],
+   [
+    "delete",
+    92,
+    96,
+    73,
+    73
+   ],
+   [
+    "equal",
+    96,
+    104,
+    73,
+    81
+   ],
+   [
+    "replace",
+    104,
+    105,
+    81,
+    82,
+    [
+     "To launch HEDB, you need to use two confidential address spaces (e.g., secure enclaves, confidential processes or virtual machines) as the setting, one as Integrity Zone and the other as Privacy Zone. In fact, HEDB executes these two zones using two cross-VM OS processes, and leverages inter-zone shared memory for fast communication."
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    82,
+    83
+   ],
+   [
+    "replace",
+    106,
+    107,
+    83,
+    84,
+    [
+     "We recommend you to use two confidential VMs (CVMs), as evaluated in the paper. For those who do not have CVMs computers (e.g., ARM CCA, AMD SEV, Intel TDX), you can use 2 QEMU-KVM VMs to simulate CVMs. Depending on your computer architecture, either choose vm-setup-aarch64.md or vm-setup-x86_64.md. These tutorials will guide you on how to create 2 VMs that host DBMS and operators, separately, and how to perform a mode switch using QEMU-based VM snapshotting."
+    ]
+   ],
+   [
+    "equal",
+    107,
+    112,
+    84,
+    89
+   ],
+   [
+    "replace",
+    112,
+    113,
+    89,
+    90,
+    [
+     "HEDB record/replay is meant for reproducing bugs. It logs all ops invocations, including parameters and results, for later replays. We use TPC-H as the demonstrative benchmark."
+    ]
+   ],
+   [
+    "equal",
+    113,
+    120,
+    90,
+    97
+   ],
+   [
+    "replace",
+    120,
+    138,
+    97,
+    98,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    145,
+    98,
+    105
+   ],
+   [
+    "replace",
+    145,
+    146,
+    105,
+    106,
+    [
+     "HEDB runs a hotfix server inside the DBMS CVM, and allows a skillful DBA to instruct the server as a maintenance agent. Please read details in tools/hotfix."
+    ]
+   ],
+   [
+    "equal",
+    146,
+    153,
+    106,
+    113
+   ],
+   [
+    "replace",
+    153,
+    170,
+    113,
+    114,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    174,
+    114,
+    118
+   ],
+   [
+    "replace",
+    174,
+    175,
+    118,
+    119,
+    [
+     "* Encrypted Databases Made Secure Yet Maintainable, USENIX OSDI 2023 "
+    ]
+   ],
+   [
+    "equal",
+    175,
+    180,
+    119,
+    124
+   ],
+   [
+    "replace",
+    180,
+    189,
+    124,
+    125,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    189,
+    201,
+    125,
+    137
+   ],
+   [
+    "replace",
+    201,
+    202,
+    137,
+    138,
+    [
+     "Our prototype assumes an ARM server that supports S-EL2, a hardware virtualization technology present in ARMv8.4. Twinvisor is an S-EL2 hypervisor developed by IPADS@SJTU. We plan to commit the Twinvisor patch, but no guarantee (for intellectual property reasons). You may also run two VMs atop Linux/KVM to implement two modes, as described in the vm-setup.md."
+    ]
+   ],
+   [
+    "equal",
+    202,
+    213,
+    138,
+    149
+   ],
+   [
+    "replace",
+    213,
+    214,
+    149,
+    150,
+    [
+     "HE, short for Helium, is the lightest neutral gas, known for its lacking reactivity and low density. The analogy to Helium highlights HEDB's ability to achieve isolation from the rest while maintaining simplicity in usage. The reference to Helium being the 2nd element also alludes to HEDB's dual modes."
+    ]
+   ],
+   [
+    "equal",
+    214,
+    232,
+    150,
+    168
+   ],
+   [
+    "replace",
+    232,
+    233,
+    168,
+    169,
+    [
+     "- StealthDB, who provides the initial version of EDB extensions for PostgreSQL."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a236cd31fdb0+2": {
+  "fn": "mzattahri/pgfs",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "GoDoc reference",
+     "CI",
+     "Coverage Status",
+     "Go Report Card"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    6,
+    7
+   ],
+   [
+    "replace",
+    7,
+    9,
+    7,
+    9,
+    [
+     "`pgfs` is a Go library that implements fs.FS using",
+     "Large Objects on"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    13,
+    9,
+    13
+   ],
+   [
+    "replace",
+    13,
+    14,
+    13,
+    14,
+    [
+     "See documentation for more details."
+    ]
+   ],
+   [
+    "equal",
+    14,
+    32,
+    14,
+    32
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "b3945aca6835+2": {
+  "fn": "ceciliachenguo/simplebank",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Welcome to Simple Bank! "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "> 😋 This repository hosts my Backend Project for A Simple Bank, a Golang-based web service to create and manage money transfers between available accounts. 😋"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    28,
+    3,
+    28
+   ],
+   [
+    "delete",
+    28,
+    32,
+    28,
+    28
+   ],
+   [
+    "equal",
+    32,
+    33,
+    28,
+    29
+   ],
+   [
+    "replace",
+    33,
+    39,
+    29,
+    31,
+    [
+     " I designed DB schema and generated SQL code with dbdiagram.io ",
+     " Simple Bank Schema"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    40,
+    31,
+    32
+   ],
+   [
+    "replace",
+    40,
+    46,
+    32,
+    35,
+    [
+     " Docker + Postgres + TablePlus ",
+     " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ",
+     " I used Docker to run containers and chose Postgres 12 as my relational database. For easier look up to the actual data in the local database, I used the TablePlus GUI. When using Docker, I use terminal command extentively, such as docker ps -a, docker start, and docker exec."
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    35,
+    36
+   ],
+   [
+    "replace",
+    47,
+    53,
+    36,
+    39,
+    [
+     " Database Migration ",
+     " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ",
+     " When working with a database, schema migration is often necessary to adapt to new business requirements. I ran and managed these database schema migrations using the Golang Migrate library. This library offers various customized commands for migrating schemas up and down. The SQL code for schema migration is stored in the 'db/migration' folder. "
+    ]
+   ],
+   [
+    "equal",
+    53,
+    54,
+    39,
+    40
+   ],
+   [
+    "replace",
+    54,
+    60,
+    40,
+    43,
+    [
+     " Makefile and .Phony list ",
+     " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ",
+     " Remembering and entering various lengthy terminal commands can be exhausting, so I defined those commonly used commands in my Makefile and listed them under .PHONY targets for easy execution."
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    43,
+    44
+   ],
+   [
+    "replace",
+    61,
+    70,
+    44,
+    47,
+    [
+     " Generate CRUD Golang code from SQL ",
+     " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ",
+     " After comparing various libraries for converting SQL queries into type-safe Go code, such as database/sql, Gorm, sqlx, and sqlc, I decided to use sqlc for interacting (Create, Read, Update, and Delete operations) with my database. After executing sqlc, it automatically generates struct definitions for models, function definitions with parameters, and the dbtx interface(this allows me to use either a database or a transaction to execute a query)."
+    ]
+   ],
+   [
+    "equal",
+    70,
+    71,
+    47,
+    48
+   ],
+   [
+    "replace",
+    71,
+    79,
+    48,
+    54,
+    [
+     " Unit Tests for database CRUD & Github Actions CI/CD ",
+     " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ",
+     " Using Go's testing package and Testify library(require package), I wrote various unit tests for the database CRUD operations. The files are named ending with \"_test.go\". ",
+     " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ",
+     " I used Github Action for running automated tests, I defined test and deployment workflow in .yaml files.",
+     " image"
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    54,
+    55
+   ],
+   [
+    "replace",
+    80,
+    86,
+    55,
+    60,
+    [
+     " DB Transaction lock, and handle Deadlock ",
+     " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ",
+     " In order to show deadlock, I used TDD (test driven development) to create multiple go routine to execute transfer transactions concurrrently, then iterate through the list of results to check the created transfer and entry objects, and finally check the balances of those accounts accordingly. ",
+     " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ",
+     " A deadlock occurs when multiple processes try to access or modify the same data, with each of them waiting for the others to release the data while continuing to hold onto it themselves. This leads to a situation where none of the processes can actually control the data. A simple solution to prevent deadlocks is to include the 'FOR NO KEY UPDATE' clause in the SQL code. This informs PostgreSQL that the current operation will not modify the foreign key (account id), even though the main purpose of the SQL statement is to change the balance. As a result, the transaction lock does not hold onto the accounts table (where the account id is the primary key), thus reducing the risk of deadlocks. Deadlocks can also occur due to the order in which transactions update shared resources. For example, if Transaction T1 locks Account A first and then tries to lock Account B, while simultaneously Transaction T2 locks Account B and then tries to lock Account A, a deadlock ensues. To resolve this, I implemented a solution that enforces a consistent ordering: always locking the account with the smaller ID before locking the account with a larger ID."
+    ]
+   ],
+   [
+    "equal",
+    86,
+    87,
+    60,
+    61
+   ],
+   [
+    "replace",
+    87,
+    88,
+    61,
+    65,
+    [
+     " ACID Property ",
+     " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ",
+     " The default isolation level for my PostgreSQL database is 'Repeatable Read'.",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    88,
+    90,
+    65,
+    67
+   ],
+   [
+    "replace",
+    90,
+    96,
+    67,
+    70,
+    [
+     " RESTFul HTTP API ",
+     " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ",
+     " I implemented HTTP API in Go using Gin web framework, there are many popular frameworks out there such as Beego, Echo, Revel, Martini, FastHttp, Gorilla Mux, but I chose Gin to do it. Furthermore, I used Postman to test the requests."
+    ]
+   ],
+   [
+    "equal",
+    96,
+    97,
+    70,
+    71
+   ],
+   [
+    "replace",
+    97,
+    98,
+    71,
+    72,
+    [
+     " image"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    99,
+    72,
+    73
+   ],
+   [
+    "replace",
+    99,
+    105,
+    73,
+    76,
+    [
+     " Load Config from files & environment variables ",
+     " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ",
+     " I used Viper to load Config from files & environment variables."
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    76,
+    77
+   ],
+   [
+    "replace",
+    106,
+    114,
+    77,
+    80,
+    [
+     " Security ",
+     " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ",
+     " I used Bcrypt package to hash user passwords, and upgraded JWT into PASETO token for authentication for login user API. Also, I added bearer-token based authentication layer to the API using Gin so that only the account owner can see the returned list of accounts owned by the corresponding user."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    116,
+    80,
+    82
+   ],
+   [
+    "replace",
+    116,
+    117,
+    82,
+    83,
+    [
+     " I learned"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    120,
+    83,
+    86
+   ],
+   [
+    "replace",
+    120,
+    123,
+    86,
+    89,
+    [
+     "4. Auto build & push docker image to AWS ECR(Amazon Elastic Container Registry) with Github Actions.",
+     "5. How to create a production database on AWS RDS(Amazon Relational Database Service).",
+     "6. Store & retrieve production secrets with AWS secrets manager."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    89,
+    90
+   ],
+   [
+    "replace",
+    124,
+    125,
+    90,
+    91,
+    [
+     "8. How to use kubectl to connect to a kubernetes cluster on AWS EKS(Elastic Kubernetes Service)."
+    ]
+   ],
+   [
+    "equal",
+    125,
+    126,
+    91,
+    92
+   ],
+   [
+    "replace",
+    126,
+    127,
+    92,
+    93,
+    [
+     "10. Register a domain & set up A-record using AWS Route53(DNS Service)."
+    ]
+   ],
+   [
+    "equal",
+    127,
+    128,
+    93,
+    94
+   ],
+   [
+    "replace",
+    128,
+    129,
+    94,
+    95,
+    [
+     "12. Auto issue & renew TSL certificates with cert-manager and Let's Encrypt."
+    ]
+   ],
+   [
+    "equal",
+    129,
+    130,
+    95,
+    96
+   ],
+   [
+    "replace",
+    130,
+    133,
+    96,
+    98,
+    [
+     "image",
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    135,
+    98,
+    100
+   ],
+   [
+    "replace",
+    135,
+    141,
+    100,
+    106,
+    [
+     " ✨ See my iOS Work Portfolio ",
+     " ✨ See my Task Management mini iOS App with CoreData ",
+     " ✨ See my Add, Delete, & Draggable Capsule Tags iOS Project ",
+     " ✨ See my iOS Boomerang Cards 3D Animation Project ",
+     " ✨ See my iOS Realtime Messaging App using Stream SKD ",
+     " ✨ See my iOS Book/Reading App Page Flipping 3D Animation Project "
+    ]
+   ],
+   [
+    "equal",
+    141,
+    152,
+    106,
+    117
+   ],
+   [
+    "replace",
+    152,
+    153,
+    117,
+    118,
+    [
+     "* Github: @ceciliachenguo"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "d69ce0cae6c8+2": {
+  "fn": "flutterings/sqflite_migration",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "replace",
+    0,
+    2,
+    0,
+    2,
+    [
+     "Build Status",
+     "codecov"
+    ]
+   ],
+   [
+    "equal",
+    2,
+    5,
+    2,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "Library to manage sqlite db migrations using sqflite plugin."
+    ]
+   ],
+   [
+    "equal",
+    6,
+    13,
+    6,
+    13
+   ],
+   [
+    "replace",
+    13,
+    47,
+    13,
+    14,
+    [
+     "…（34 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    14,
+    15
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "9b3f76a3b561+2": {
+  "fn": "FloatingOctothorpe/python-kanban",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    7,
+    4,
+    5,
+    [
+     "Kanban Board screenshot"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    9,
+    5,
+    7
+   ],
+   [
+    "replace",
+    9,
+    21,
+    7,
+    8,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    31,
+    8,
+    18
+   ],
+   [
+    "replace",
+    31,
+    32,
+    18,
+    19,
+    [
+     " > **Note**: this will install packages globally. To avoid changing the system packages, the [venv module][venv-docs] can be used to set up a virtual environment."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    39,
+    19,
+    26
+   ],
+   [
+    "replace",
+    39,
+    42,
+    26,
+    27,
+    [
+     "3. Finally, connect to http://127.0.0.1:5000/ in a web browser."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    46,
+    27,
+    31
+   ],
+   [
+    "delete",
+    46,
+    48,
+    31,
+    31
+   ],
+   [
+    "equal",
+    48,
+    57,
+    31,
+    40
+   ],
+   [
+    "delete",
+    57,
+    59,
+    40,
+    40
+   ],
+   [
+    "equal",
+    59,
+    66,
+    40,
+    47
+   ],
+   [
+    "replace",
+    66,
+    73,
+    47,
+    54,
+    [
+     " - `/`: Return Kanban board index page",
+     " - `/static/<file:path>`: Return static files from the `static` directory (CSS, JS etc)",
+     " - `/cards`: Returns all cards in JSON format.",
+     " - `/columns`: Returns available columns.",
+     " - `/card`: POST endpoint to create a new card.",
+     " - `/card/<int:card_id>`: PUT to update or DELETE to delete a card.",
+     " - `/card/reorder`: POST to reorder cards within the board."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    79,
+    54,
+    60
+   ],
+   [
+    "replace",
+    79,
+    84,
+    60,
+    65,
+    [
+     " - `all_cards()`: Fetch all cards, sorted by `sort_order`.",
+     " - `create_card()`: Create a new card with optional fields like color and column.",
+     " - `update_card()`: Update an existing card's attributes.",
+     " - `delete_card()`: Delete a card.",
+     " - `order_cards()`: Reorder a card in the list."
+    ]
+   ],
+   [
+    "equal",
+    84,
+    90,
+    65,
+    71
+   ],
+   [
+    "delete",
+    90,
+    92,
+    71,
+    71
+   ],
+   [
+    "equal",
+    92,
+    110,
+    71,
+    89
+   ],
+   [
+    "delete",
+    110,
+    112,
+    89,
+    89
+   ],
+   [
+    "equal",
+    112,
+    116,
+    89,
+    93
+   ],
+   [
+    "replace",
+    116,
+    117,
+    93,
+    94,
+    [
+     "|Column|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    94,
+    95
+   ],
+   [
+    "replace",
+    118,
+    127,
+    95,
+    102,
+    [
+     "|id|Integer (PK)|Primary key for each card|",
+     "|text|String(120)|The card's content|",
+     "|column|String(120)|The card's column (e.g., \"To Do\", \"Done\")|",
+     "|color|String(7)|Color code in `#RRGGBB` format|",
+     "|modified|DateTime|Last modification timestamp|",
+     "|archived|Boolean|Indicates if the card is archived|",
+     "|sort_order|Integer|Order of the card within the column|"
+    ]
+   ],
+   [
+    "equal",
+    127,
+    152,
+    102,
+    127
+   ],
+   [
+    "delete",
+    152,
+    154,
+    127,
+    127
+   ],
+   [
+    "equal",
+    154,
+    155,
+    127,
+    128
+   ],
+   [
+    "delete",
+    155,
+    156,
+    128,
+    128
+   ],
+   [
+    "equal",
+    156,
+    157,
+    128,
+    129
+   ],
+   [
+    "delete",
+    157,
+    174,
+    129,
+    129
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "9958d11c46f0+2": {
+  "fn": "gurupratap-matharu/django-rest-booking-api",
+  "clean_ver": "2",
+  "raw_lines": 0,
+  "ops": [
+   [
+    "insert",
+    0,
+    0,
+    0,
+    1,
+    [
+     "Django RestApi Nested Serializers "
+    ]
+   ],
+   [
+    "equal",
+    0,
+    1,
+    1,
+    2
+   ],
+   [
+    "replace",
+    1,
+    4,
+    2,
+    3,
+    [
+     "drawing"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    11,
+    3,
+    10
+   ],
+   [
+    "replace",
+    11,
+    12,
+    10,
+    11,
+    [
+     "drawing"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    49,
+    11,
+    48
+   ],
+   [
+    "replace",
+    49,
+    51,
+    48,
+    50,
+    [
+     " - Markets are unique per Sport",
+     " - Selections are unique per Market"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    53,
+    50,
+    52
+   ],
+   [
+    "replace",
+    53,
+    55,
+    52,
+    54,
+    [
+     " - For our purposes we can assume this API will be used by a single provider, so no need to keep track of which provider is sending the",
+     " message."
+    ]
+   ],
+   [
+    "equal",
+    55,
+    118,
+    54,
+    117
+   ],
+   [
+    "replace",
+    118,
+    124,
+    117,
+    118,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    127,
+    118,
+    121
+   ],
+   [
+    "delete",
+    127,
+    128,
+    121,
+    121
+   ],
+   [
+    "equal",
+    128,
+    147,
+    121,
+    140
+   ],
+   [
+    "replace",
+    147,
+    151,
+    140,
+    141,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    161,
+    141,
+    151
+   ],
+   [
+    "replace",
+    161,
+    170,
+    151,
+    152,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    175,
+    152,
+    157
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "ba4db8432d71+2": {
+  "fn": "sanagama/mssql-restapi",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "This is a *prototype* of a simple ASP.NET Core 2.0 REST API web app that uses SQL Server Management Objects (SMO) under the covers to provide a RESTful interface for SQL Server running anywhere."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "You can run this REST API web app on Linux, macOS, Windows or Docker and optionally use environment variables to connect to a local or remote SQL Server instance, Azure SQL Database and Azure SQL Data Warehouse."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    27,
+    5,
+    27
+   ],
+   [
+    "replace",
+    27,
+    28,
+    27,
+    28,
+    [
+     "- Increase Docker memory to 4 GB to run SQL Server 2017 as documented here"
+    ]
+   ],
+   [
+    "equal",
+    28,
+    35,
+    28,
+    35
+   ],
+   [
+    "replace",
+    35,
+    40,
+    35,
+    36,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    54,
+    36,
+    50
+   ],
+   [
+    "replace",
+    54,
+    55,
+    50,
+    51,
+    [
+     ">*NOTE:* With the above command, the REST API web app uses default values for *port*, *database*, *username* and *password* as described in environment variables"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    58,
+    51,
+    54
+   ],
+   [
+    "replace",
+    58,
+    59,
+    54,
+    55,
+    [
+     "> *TIP:* Google Chrome with the JSON Formatter extension is a great way to play with REST APIs."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    132,
+    55,
+    128
+   ],
+   [
+    "replace",
+    132,
+    133,
+    128,
+    129,
+    [
+     ">*TIP:* Follow instructions at Configure a server-level firewall rule to allow the computer running the REST API web app to connect to your Azure SQL Database or Azure SQL Data Warehouse."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    157,
+    129,
+    153
+   ],
+   [
+    "replace",
+    157,
+    158,
+    153,
+    154,
+    [
+     "My main motivation for creating this prototype was to try out the SQL Server Management Objects (SMO) APIs that recently became available on .NET Core 2.0. "
+    ]
+   ],
+   [
+    "equal",
+    158,
+    159,
+    154,
+    155
+   ],
+   [
+    "replace",
+    159,
+    160,
+    155,
+    156,
+    [
+     "See this Tweet from @sqltoolsguy for the announcement."
+    ]
+   ],
+   [
+    "equal",
+    160,
+    163,
+    156,
+    159
+   ],
+   [
+    "replace",
+    163,
+    164,
+    159,
+    160,
+    [
+     "Take a look at the SQL Server Management Objects (SMO) Programming Guide for samples and API reference documentation."
+    ]
+   ],
+   [
+    "equal",
+    164,
+    166,
+    160,
+    162
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "2f9b6c9bc634+2": {
+  "fn": "codefilarete/stalactite",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    10,
+    2,
+    7,
+    [
+     "Build Status",
+     "Quality Gate Status",
+     "Coverage",
+     "Vulnerabilities",
+     "\"Buy Me A Coffee\""
+    ]
+   ],
+   [
+    "equal",
+    10,
+    18,
+    7,
+    15
+   ],
+   [
+    "replace",
+    18,
+    37,
+    15,
+    16,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    16,
+    17
+   ],
+   [
+    "delete",
+    38,
+    40,
+    17,
+    17
+   ],
+   [
+    "equal",
+    40,
+    43,
+    17,
+    20
+   ],
+   [
+    "replace",
+    43,
+    51,
+    20,
+    24,
+    [
+     "* **Zero Annotations/XML**: Mapping is defined via a Fluent API and method references. No bytecode manipulation (CGLib/AspectJ) is performed on your beans.",
+     "* **Clean/Hexagonal Architecture**: Keep your domain model pure. Persistence logic remains entirely external to your business entities.",
+     "* **Promotes Domain Aggregates**: No lazy-loading magic. Eager fetching promotes a better understanding of query complexity and performance.",
+     "* **No \"Session\" Complexity**: Simplifies the programming model by avoiding \"merge/attach\" states typical in JPA."
+    ]
+   ],
+   [
+    "equal",
+    51,
+    56,
+    24,
+    29
+   ],
+   [
+    "replace",
+    56,
+    61,
+    29,
+    32,
+    [
+     "* 📦 **SQL**: Low-level JDBC helper and statement builders.",
+     "* 📦 **Core**: Basic persistence and mapping logic.",
+     "* 📦 **ORM**: High-level entity mapping and relationship management."
+    ]
+   ],
+   [
+    "equal",
+    61,
+    85,
+    32,
+    56
+   ],
+   [
+    "replace",
+    85,
+    86,
+    56,
+    57,
+    [
+     "|Database|Artifact ID|"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    87,
+    57,
+    58
+   ],
+   [
+    "replace",
+    87,
+    93,
+    58,
+    63,
+    [
+     "|MariaDB|`core-mariadb-adapter`|",
+     "|MySQL|`core-mysql-adapter`|",
+     "|PostgreSQL|`core-postgresql-adapter`|",
+     "|HSQLDB|`core-hsqldb-adapter`|",
+     "|H2|`core-h2-adapter`|"
+    ]
+   ],
+   [
+    "equal",
+    93,
+    111,
+    63,
+    81
+   ],
+   [
+    "replace",
+    111,
+    114,
+    81,
+    82,
+    [
+     "And then use one of the subclasses of PlatformTransactionManagerConnectionProvider as the datasource of your Stalactite `PersistenceContext` by giving it your Spring `PlatformTransactionManger`."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    117,
+    82,
+    85
+   ],
+   [
+    "replace",
+    117,
+    118,
+    85,
+    86,
+    [
+     "Detailed guides and API references are available at the **Codefilarete Official Site**."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7700814162cf+2": {
+  "fn": "umbrellio/laravel-ltree",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    10,
+    2,
+    10,
+    [
+     "Github Status",
+     "Coverage Status",
+     "Latest Stable Version",
+     "Total Downloads",
+     "Code Intelligence Status",
+     "Build Status",
+     "Code Coverage",
+     "Scrutinizer Code Quality"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    40,
+    10,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     "Supported by Umbrellio"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    41,
+    42
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "cb0518597b0f+2": {
+  "fn": "imsanjoykb/ETL-Project",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "This will be done by extracting the CSV data and migrating it to a PostgreSQL Database. "
+    ]
+   ],
+   [
+    "equal",
+    6,
+    8,
+    6,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "I found data from `data.data.org` that had been compiled from John Hopkins University. I filtered the data for March 2020 and evaluated the number of cases with respect to the deaths, recovery, and the confirmed cases. "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    11,
+    9,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "All of the data that we used were from `https://data.humdata.org/dataset/novel-coronavirus-2019-ncov-cases` where they compiled by the John Hopkins University Center for Systems Science and Engineering (JHU CSSE) from various sources that include the World Health Organisations, Hong Kong Department of Health, European Centre for Disease Prevention and Control, etc. This data is always being updated so we are narrowing the scope to the month of March."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    16,
+    12,
+    16
+   ],
+   [
+    "replace",
+    16,
+    20,
+    16,
+    20,
+    [
+     "My transformation steps I needed to clean the data to be readable, presentable, and easy for me to query in the later stages. This was done by:",
+     " * Developing a cleaning function in python that would select the data in the month of March 2020. This was applied to all datasets that I have.",
+     " * All of the dates that have in the data sets we treated as values through the `pd.melt` function in Pandas.",
+     " * Found a way of finding the daily increase with respect to each table. This value was converted from a float to an integer"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    22,
+    20,
+    22
+   ],
+   [
+    "replace",
+    22,
+    25,
+    22,
+    25,
+    [
+     " * I established a connection to a local PostgreSQL server in our desktop to store the data",
+     " * I have a schema that just makes the tables and we can confirm it throught `engine.table_names()`",
+     " * I pushed the Pandas DataFrame to the local PostgreSQL server so I can retrieve and query the data in our Jupyter Notebook"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    28,
+    25,
+    28
+   ],
+   [
+    "replace",
+    28,
+    32,
+    28,
+    32,
+    [
+     " * Top 5 countries with the most/least confirmed cases",
+     " * Top 5 countries with the most/least deaths",
+     " * Top 5 countries with the most/least recovered",
+     " * Date in March with the most confirmed/deaths/recovered"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "179f4a939733+2": {
+  "fn": "abhisheks008/Medical-Store-Management-System",
+  "clean_ver": "2",
+  "raw_lines": 29,
+  "ops": [
+   [
+    "equal",
+    0,
+    29,
+    0,
+    29
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

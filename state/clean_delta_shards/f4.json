@@ -13427,5 +13427,3057 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "392a8239a246+2": {
+  "fn": "optave/ops-codegraph-tool",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "codegraph"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " codegraph "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    9,
+    4,
+    5,
+    [
+     " Give your AI the map before it starts exploring. "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    5,
+    6
+   ],
+   [
+    "replace",
+    10,
+    16,
+    6,
+    10,
+    [
+     " npm version",
+     " Apache-2.0 License",
+     " CI",
+     " = 22.12.0\" />"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    17,
+    10,
+    11
+   ],
+   [
+    "replace",
+    17,
+    30,
+    11,
+    20,
+    [
+     " The Problem &middot;",
+     " What It Does &middot;",
+     " Quick Start &middot;",
+     " Commands &middot;",
+     " Languages &middot;",
+     " AI Integration &middot;",
+     " How It Works &middot;",
+     " Practices &middot;",
+     " Roadmap"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    43,
+    20,
+    33
+   ],
+   [
+    "replace",
+    43,
+    44,
+    33,
+    34,
+    [
+     "It parses your code with tree-sitter (native Rust or WASM), stores the graph in SQLite, and exposes it where it matters most:"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    66,
+    34,
+    56
+   ],
+   [
+    "replace",
+    66,
+    67,
+    56,
+    57,
+    [
+     "||Without codegraph|With codegraph|"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    68,
+    57,
+    58
+   ],
+   [
+    "replace",
+    68,
+    75,
+    58,
+    65,
+    [
+     "|**Code review**|Reviewers flag broken callers, dead code, and boundary violations round after round|Structural issues are caught during development — PRs pass review with fewer rounds|",
+     "|**AI agents**|Modify `parseConfig()` without knowing 9 files import it — reviewer catches it|`fn-impact parseConfig` shows every caller before the edit — agent fixes it proactively|",
+     "|**AI agents**|Leave dead exports and duplicate helpers behind after refactors|Dead code, cycles, and duplicates surface in real time via hooks and MCP queries|",
+     "|**AI agents**|Produce code that works but doesn't fit the codebase structure|`context <name> -T` returns source, deps, callers, and tests — the agent writes code that fits|",
+     "|**CI pipelines**|Catch test failures but miss structural degradation|`check --staged` fails the build when blast radius or complexity thresholds are exceeded|",
+     "|**Developers**|Inherit a codebase and grep for hours to understand what calls what|`context handleAuth -T` gives the same structured view agents use|",
+     "|**Architects**|Draw boundary rules that erode within weeks|`manifesto` and `boundaries` enforce architecture rules on every commit|"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    78,
+    65,
+    68
+   ],
+   [
+    "replace",
+    78,
+    79,
+    68,
+    69,
+    [
+     " Comparison last verified: August 2026 (full re-verification of every linked repo's live README + GitHub API on 2026-08-09). Full analysis: COMPETITIVE_ANALYSIS.md "
+    ]
+   ],
+   [
+    "equal",
+    79,
+    80,
+    69,
+    70
+   ],
+   [
+    "replace",
+    80,
+    81,
+    70,
+    71,
+    [
+     "|Capability|codegraph (this repo)|code-review-graph|narsil-mcp|codegraph (other)¹|claude-context|GitNexus|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    82,
+    71,
+    72
+   ],
+   [
+    "replace",
+    82,
+    99,
+    72,
+    89,
+    [
+     "|GitHub stars|||||||",
+     "|Languages|**34**|30+|**32**|20+ (34 named)²|17³|14|",
+     "|CLI tool|**Yes** (44 commands)|**Yes**|Partial (config/serve only)⁴|**Yes**|— (MCP + library only)|**Yes**|",
+     "|API functionality (embeddable library)|**Yes**|—|—|**Yes**|**Yes**|Partial (HTTP API only)⁵|",
+     "|Dataflow + CFG + AST querying|**Yes**|Call graph only|**Yes**|—|—|PDG opt-in, TS/JS only|",
+     "|Interprocedural dataflow (cross-function)|**Yes**⁶|—|Partial (taint-only)⁷|—|—|Partial (taint-only, opt-in)⁸|",
+     "|Hybrid search (BM25 + semantic)|**Yes**|**Yes**|**Yes** (local ONNX, no key needed)|Keyword only|**Yes**|**Yes**|",
+     "|Git-aware (diff impact, co-change, branch diff)|**All 3**|Partial (co-change unreliable)⁹|Partial (no co-change/branch-diff)|—|—|Partial (no co-change)|",
+     "|Dead code / role classification|**Yes**|**Yes**|**Yes**|—|—|—|",
+     "|Code health (complexity metrics)|**Yes** (cognitive, cyclomatic, Halstead, MI)|—|Partial (cyclomatic + cognitive)¹⁰|—|—|—|",
+     "|Incremental rebuilds|**O(changed)**|**O(changed)**|**O(changed)**¹¹|**O(changed)**¹²|**O(changed)**¹³|Partial (chunk cache-key)¹⁴|",
+     "|Architecture rules + CI gate|**Yes**|Partial (risk-gate, no boundary rules)|Partial (layer model, no CI gate)|—|—|—|",
+     "|Security scanning (SAST / vuln detection)|Intentionally out of scope¹⁵|—|**Yes**|—|—|Partial (opt-in taint, `--pdg` only)|",
+     "|Zero config, `npm install`|**Yes**|— (pip)|**Yes**|**Yes**|No¹⁶|**Yes**|",
+     "|Runtime dependencies (direct packages)¹⁷|**4**|7|**0**¹⁸|10|23¹⁹|36|",
+     "|Graph export (GraphML / Neo4j / DOT)|**Yes**|**Yes**²⁰|Partial²¹|—|—|—|",
+     "|Open source + commercial use|**Yes** (Apache-2.0)|**Yes** (MIT)|**Yes** (Apache-2.0/MIT)|**Yes** (MIT)|**Yes** (MIT)|Non-commercial²²|"
+    ]
+   ],
+   [
+    "equal",
+    99,
+    100,
+    89,
+    90
+   ],
+   [
+    "replace",
+    100,
+    101,
+    90,
+    91,
+    [
+     " ¹ Unrelated tool sharing the name; focuses on AI token reduction via pre-indexed context, not structural analysis or CI gates. ² README says \"20+ languages\"; architecture docs list 34 across native + fallback grammar tiers. ³ Indexes 17 file extensions by default; AST-aware chunking covers ~10 — the rest fall back to plain text splitting. ⁴ narsil-mcp's CLI only manages config, lists tools, and serves the visualization frontend — no query commands; all graph queries require an MCP client. ⁵ GitNexus's local HTTP API (`gitnexus serve`, port 4747) only serves its own web UI — no importable library package. ⁶ Variable-level vertex model (`arg_in`/`return_out`/`def_use`) stitched across call edges — general-purpose, not just security, across all 34 languages. ⁷ `trace_taint`/`get_typed_taint_flow` cross function calls for security; general dataflow tools (`get_data_flow`, `get_reaching_definitions`) are per-function only. ⁸ Optional `--pdg` index (TS/JS only) adds taint source→sink tracking — security-scoped, not general cross-function flow. ⁹ Per its own README benchmark (2026-08-02), co-change eval returns 0 predicted files on every graded commit — \"not yet a usable measurement.\" ¹⁰ `get_complexity` covers cyclomatic + cognitive complexity only — no Halstead metrics or maintainability index. ¹¹ Added Merkle-tree incremental indexing + watch mode (previously full re-index). ¹² OS-native file watcher reprocesses only changed files (debounced auto-sync); `--force` forces a full rebuild. ¹³ Merkle DAG + per-file MD5 hashing skips unchanged files, but each changed file still round-trips to the embedding provider + vector DB. ¹⁴ Cache-keyed, byte-budgeted chunk dispatch with incremental per-branch updates on checkout — finer than a full reprocess, but not per-file hashing. ¹⁵ Structural understanding, not vulnerability detection — use dedicated SAST tools (Semgrep, CodeQL, Snyk). ¹⁶ Requires an external Milvus vector DB + an embedding provider. A local keyless path exists (self-hosted Milvus + Ollama) but needs two running services; the managed path (Zilliz Cloud + OpenAI/VoyageAI/Gemini) trades that for cost. ¹⁷ Direct runtime deps declared in each project's own manifest (`package.json`/`pyproject.toml`), excluding dev/optional/transitive deps. ¹⁸ Single compiled binary — no separate packages to install. ¹⁹ `mcp` + `core` packages combined — plus the external vector DB + embedding provider noted above. ²⁰ Added GraphML, Neo4j Cypher, Obsidian vault, and SVG export. ²¹ Visualization frontend graph views, plus JSON-LD/N-Quads export for its Code Context Graph — but not GraphML or Neo4j specifically (a repo-wide code search found zero matches for either string); an internal DOT exporter exists (`to_dot()`) but isn't exposed via CLI or MCP. ²² PolyForm Noncommercial 1.0.0 license; separate commercial/enterprise licensing available. "
+    ]
+   ],
+   [
+    "equal",
+    101,
+    104,
+    91,
+    94
+   ],
+   [
+    "replace",
+    104,
+    105,
+    94,
+    95,
+    [
+     "||Differentiator|In practice|"
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    95,
+    96
+   ],
+   [
+    "replace",
+    106,
+    117,
+    96,
+    105,
+    [
+     "|**🤖**|**AI-first architecture**|34-tool MCP server — agents query the graph directly instead of scraping the filesystem. One call replaces 20+ grep/find/cat invocations|",
+     "|**🏷️**|**Role classification**|Every symbol auto-tagged as `entry`/`core`/`utility`/`adapter`/`dead`/`leaf` — agents understand a symbol's architectural role without reading surrounding code|",
+     "|**🔬**|**Function-level, not just files**|Traces `handleAuth()` → `validateToken()` → `decryptJWT()` and shows 14 callers across 9 files break if `decryptJWT` changes|",
+     "|**⚡**|**Always-fresh graph**|Three-tier change detection: journal (O(changed)) → mtime+size (O(n) stats) → hash (O(changed) reads). Sub-second rebuilds — agents work with current data|",
+     "|**💥**|**Git diff impact**|`codegraph diff-impact` shows changed functions, their callers, and full blast radius — enriched with historically coupled files from git co-change analysis. Ships with a GitHub Actions workflow|",
+     "|**🌐**|**Multi-language, one graph**|34 languages in a single graph — JS/TS, Python, Go, Rust, Java, C#, PHP, Ruby, C/C++, Kotlin, Swift, Scala, Bash, HCL, Elixir, Lua, Dart, Zig, Haskell, OCaml, F#, Gleam, Clojure, Julia, R, Erlang, Solidity, Objective-C, CUDA, Groovy, Verilog — agents don't need per-language tools|",
+     "|**🧠**|**Hybrid search**|BM25 keyword + semantic embeddings fused via RRF — `hybrid` (default), `semantic`, or `keyword` mode; multi-query via `\"auth; token; JWT\"`|",
+     "|**🔬**|**Dataflow + CFG**|Track how data flows through and between functions — function-level edges (`flows_to`, `returns`, `mutates`), interprocedural variable-level edges (`arg_in`, `return_out`, `def_use`), and intraprocedural control flow graphs — all 34 languages|",
+     "|**🔓**|**Fully local, zero cost**|No API keys, no accounts, no network calls. Optionally bring your own LLM provider — your code only goes where you choose|"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    142,
+    105,
+    130
+   ],
+   [
+    "replace",
+    142,
+    146,
+    130,
+    131,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    148,
+    131,
+    133
+   ],
+   [
+    "replace",
+    148,
+    149,
+    133,
+    134,
+    [
+     "Full agent setup: AI Agent Guide &middot; CLAUDE.md template"
+    ]
+   ],
+   [
+    "equal",
+    149,
+    167,
+    134,
+    152
+   ],
+   [
+    "replace",
+    167,
+    170,
+    152,
+    153,
+    [
+     "> **Dev builds:** Pre-release tarballs are attached to GitHub Releases. Install with `npm install -g <path-to-tarball>`. Note that `npm install -g <tarball-url>` does not work because npm cannot resolve optional platform-specific dependencies from a URL — download the `.tgz` first, then install from the local file."
+    ]
+   ],
+   [
+    "equal",
+    170,
+    173,
+    153,
+    156
+   ],
+   [
+    "replace",
+    173,
+    174,
+    156,
+    157,
+    [
+     "||Feature|Description|"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    175,
+    157,
+    158
+   ],
+   [
+    "replace",
+    175,
+    213,
+    158,
+    196,
+    [
+     "|🤖|**MCP server**|34-tool MCP server for AI assistants; single-repo by default, opt-in multi-repo|",
+     "|🎯|**Deep context**|`context` gives agents source, deps, callers, signature, and tests for a function in one call; `audit --quick` gives structural summaries|",
+     "|🏷️|**Node role classification**|Every symbol auto-tagged as `entry`/`core`/`utility`/`adapter`/`dead`/`leaf` based on connectivity — agents instantly know architectural role|",
+     "|📦|**Batch querying**|Accept a list of targets and return all results in one JSON payload — enables multi-agent parallel dispatch|",
+     "|💥|**Impact analysis**|Trace every file affected by a change (transitive)|",
+     "|🧬|**Function-level tracing**|Call chains, caller trees, function-level impact, and A→B pathfinding with qualified call resolution|",
+     "|📍|**Fast lookup**|`where` shows exactly where a symbol is defined and used — minimal, fast|",
+     "|🔍|**Symbol search**|Find any function, class, or method by name — exact match priority, relevance scoring, `--file` and `--kind` filters|",
+     "|📁|**File dependencies**|See what a file imports and what imports it|",
+     "|📊|**Diff impact**|Parse `git diff`, find overlapping functions, trace their callers|",
+     "|🔗|**Co-change analysis**|Analyze git history for files that always change together — surfaces hidden coupling the static graph can't see; enriches `diff-impact` with historically coupled files|",
+     "|🗺️|**Module map**|Bird's-eye view of your most-connected files|",
+     "|🏗️|**Structure & hotspots**|Directory cohesion scores, fan-in/fan-out hotspot detection, module boundaries|",
+     "|🔄|**Cycle detection**|Find circular dependencies at file or function level|",
+     "|📤|**Export**|DOT, Mermaid, JSON, GraphML, GraphSON, and Neo4j CSV graph export|",
+     "|🧠|**Semantic search**|Embeddings-powered natural language search with multi-query RRF ranking|",
+     "|👀|**Watch mode**|Incrementally update the graph as files change|",
+     "|⚡|**Always fresh**|Three-tier incremental detection — sub-second rebuilds even on large codebases|",
+     "|🔬|**Data flow analysis**|Intraprocedural parameter tracking, return consumers, argument flows, and mutation detection — all 34 languages|",
+     "|🧮|**Complexity metrics**|Cognitive, cyclomatic, nesting depth, Halstead, and Maintainability Index per function|",
+     "|🏘️|**Community detection**|Leiden clustering to discover natural module boundaries and architectural drift|",
+     "|📜|**Manifesto rule engine**|Configurable pass/fail rules with warn/fail thresholds for CI gates via `check` (exit code 1 on fail)|",
+     "|👥|**CODEOWNERS integration**|Map graph nodes to CODEOWNERS entries — see who owns each function, ownership boundaries in `diff-impact`|",
+     "|💾|**Graph snapshots**|`snapshot save`/`restore` for instant DB backup and rollback — checkpoint before refactoring, restore without rebuilding|",
+     "|🔎|**Hybrid BM25 + semantic search**|FTS5 keyword search + embedding-based semantic search fused via Reciprocal Rank Fusion — `hybrid`, `semantic`, or `keyword` modes|",
+     "|📄|**Pagination & NDJSON streaming**|Universal `--limit`/`--offset` pagination on all MCP tools and CLI commands; `--ndjson` for newline-delimited JSON streaming|",
+     "|🔀|**Branch structural diff**|Compare code structure between two git refs — added/removed/changed symbols with transitive caller impact|",
+     "|🛡️|**Architecture boundaries**|User-defined dependency rules between modules with onion architecture preset — violations flagged in manifesto and CI|",
+     "|✅|**CI validation predicates**|`check` command with configurable gates: complexity, blast radius, cycles, boundary violations — exit code 0/1 for CI|",
+     "|📋|**Composite audit**|Single `audit` command combining explain + impact + health metrics per function — one call instead of 3-4|",
+     "|🚦|**Triage queue**|`triage` merges connectivity, hotspots, roles, and complexity into a ranked audit priority queue|",
+     "|🔬|**Dataflow analysis**|Track how data moves through and between functions — function-level (`flows_to`, `returns`, `mutates`) and interprocedural variable-level edges (`arg_in`, `return_out`, `def_use`) — all 34 languages, included by default, skip with `--no-dataflow`|",
+     "|🧩|**Control flow graph**|Intraprocedural CFG construction for all 34 languages — `cfg` command with text/DOT/Mermaid output, included by default, skip with `--no-cfg`|",
+     "|🔎|**AST node querying**|Stored queryable AST nodes (calls, `new`, string, regex, throw, await) — `ast` command with SQL GLOB pattern matching|",
+     "|🧬|**Expanded node/edge types**|`parameter`, `property`, `constant` node kinds with `parent_id` for sub-declaration queries; `contains`, `parameter_of`, `receiver` edge kinds|",
+     "|📊|**Exports analysis**|`exports <file>` shows all exported symbols with per-symbol consumers, re-export detection, and counts|",
+     "|📈|**Interactive viewer**|`codegraph plot` generates an interactive HTML graph viewer with hierarchical/force/radial layouts, complexity overlays, and drill-down|",
+     "|🏷️|**Stable JSON schema**|`normalizeSymbol` utility ensures consistent 7-field output (name, kind, file, line, endLine, role, fileHash) across all commands|"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    214,
+    196,
+    197
+   ],
+   [
+    "replace",
+    214,
+    215,
+    197,
+    198,
+    [
+     "See docs/examples for real-world CLI and MCP usage examples."
+    ]
+   ],
+   [
+    "equal",
+    215,
+    234,
+    198,
+    217
+   ],
+   [
+    "replace",
+    234,
+    244,
+    217,
+    218,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    244,
+    262,
+    218,
+    236
+   ],
+   [
+    "replace",
+    262,
+    274,
+    236,
+    237,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    274,
+    284,
+    237,
+    247
+   ],
+   [
+    "replace",
+    284,
+    288,
+    247,
+    248,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    288,
+    306,
+    248,
+    266
+   ],
+   [
+    "replace",
+    306,
+    312,
+    266,
+    267,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    312,
+    320,
+    267,
+    275
+   ],
+   [
+    "replace",
+    320,
+    326,
+    275,
+    276,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    326,
+    329,
+    276,
+    279
+   ],
+   [
+    "delete",
+    329,
+    330,
+    279,
+    279
+   ],
+   [
+    "equal",
+    330,
+    339,
+    279,
+    288
+   ],
+   [
+    "replace",
+    339,
+    346,
+    288,
+    289,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    346,
+    356,
+    289,
+    299
+   ],
+   [
+    "replace",
+    356,
+    361,
+    299,
+    300,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    361,
+    393,
+    300,
+    332
+   ],
+   [
+    "replace",
+    393,
+    400,
+    332,
+    333,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    400,
+    404,
+    333,
+    337
+   ],
+   [
+    "replace",
+    404,
+    405,
+    337,
+    338,
+    [
+     "Local embeddings for every function, method, and class — search by natural language. Everything runs locally using @huggingface/transformers — no API keys needed. Prefer a remote or self-hosted model instead? Set `embeddings.provider: \"openai\"` and `llm.baseUrl` in your config to call any OpenAI-compatible `/embeddings` endpoint — see configuration.md."
+    ]
+   ],
+   [
+    "equal",
+    405,
+    410,
+    338,
+    343
+   ],
+   [
+    "replace",
+    410,
+    415,
+    343,
+    344,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    415,
+    419,
+    344,
+    348
+   ],
+   [
+    "replace",
+    419,
+    420,
+    348,
+    349,
+    [
+     "Separate queries with `;` to search from multiple angles at once. Results are ranked using Reciprocal Rank Fusion (RRF) — items that rank highly across multiple queries rise to the top."
+    ]
+   ],
+   [
+    "equal",
+    420,
+    432,
+    349,
+    361
+   ],
+   [
+    "replace",
+    432,
+    433,
+    361,
+    362,
+    [
+     "Per-model retrieval quality (Hit@N) and timing are measured on every release — see EMBEDDING-BENCHMARKS.md."
+    ]
+   ],
+   [
+    "equal",
+    433,
+    434,
+    362,
+    363
+   ],
+   [
+    "replace",
+    434,
+    435,
+    363,
+    364,
+    [
+     "|Flag|Model|Dimensions|Size|License|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    435,
+    436,
+    364,
+    365
+   ],
+   [
+    "replace",
+    436,
+    447,
+    365,
+    376,
+    [
+     "|`minilm`|all-MiniLM-L6-v2|384|~23 MB|Apache-2.0|Fastest, good for quick iteration|",
+     "|`jina-small`|jina-embeddings-v2-small-en|512|~33 MB|Apache-2.0|Better quality, still small|",
+     "|`jina-base`|jina-embeddings-v2-base-en|768|~137 MB|Apache-2.0|High quality, 8192 token context|",
+     "|`jina-code`|jina-embeddings-v2-base-code|768|~137 MB|Apache-2.0|Best for code search, trained on code+text|",
+     "|`nomic` (default)|nomic-embed-text-v1|768|~137 MB|Apache-2.0|Good quality, 8192 context|",
+     "|`nomic-v1.5`|nomic-embed-text-v1.5|768|~137 MB|Apache-2.0|Matryoshka MRL training (unused — codegraph stores full 768d); v1 scores higher on our benchmark|",
+     "|`bge-large`|bge-large-en-v1.5|1024|~335 MB|MIT|Best general retrieval, top MTEB scores|",
+     "|`mxbai-xsmall`|mxbai-embed-xsmall-v1|384|~50 MB|Apache-2.0|Tiny + long context (4096)|",
+     "|`mxbai-large`|mxbai-embed-large-v1|1024|~400 MB|Apache-2.0|Top MTEB BERT-large|",
+     "|`bge-m3`|bge-m3|1024|~600 MB|MIT|**Multilingual** (100+ languages), 8192 context|",
+     "|`modernbert`|modernbert-embed-base|768|~150 MB|Apache-2.0|ModernBERT architecture, 8192 ctx, English|"
+    ]
+   ],
+   [
+    "equal",
+    447,
+    472,
+    376,
+    401
+   ],
+   [
+    "replace",
+    472,
+    476,
+    401,
+    402,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    476,
+    478,
+    402,
+    404
+   ],
+   [
+    "replace",
+    478,
+    479,
+    404,
+    405,
+    [
+     "A user-level config file at `~/.config/codegraph/config.json` (XDG) or `~/.codegraph/config.json` lets you set personal defaults once and apply them to opted-in repos. The merge order is: DEFAULTS → global (if consented) → project → env. Non-interactive contexts (CI, MCP) never apply the global config without explicit consent. See docs/guides/configuration.md for full details."
+    ]
+   ],
+   [
+    "equal",
+    479,
+    482,
+    405,
+    408
+   ],
+   [
+    "replace",
+    482,
+    483,
+    408,
+    409,
+    [
+     "|Flag|Description|"
+    ]
+   ],
+   [
+    "equal",
+    483,
+    484,
+    409,
+    410
+   ],
+   [
+    "replace",
+    484,
+    501,
+    410,
+    427,
+    [
+     "|`-d, --db <path>`|Custom path to `graph.db`|",
+     "|`-T, --no-tests`|Exclude `.test.`, `.spec.`, `__test__` files (available on most query commands including `query`, `fn-impact`, `path`, `context`, `where`, `diff-impact`, `search`, `map`, `roles`, `co-change`, `deps`, `impact`, `complexity`, `communities`, `branch-compare`, `audit`, `triage`, `check`, `dataflow`, `cfg`, `ast`, `exports`, `children`)|",
+     "|`--depth <n>`|Transitive trace depth (default varies by command)|",
+     "|`-j, --json`|Output as JSON|",
+     "|`-v, --verbose`|Enable debug output|",
+     "|`--engine <engine>`|Parser engine: `native`, `wasm`, or `auto` (default: `auto`)|",
+     "|`-k, --kind <kind>`|Filter by kind: `function`, `method`, `class`, `interface`, `type`, `struct`, `enum`, `trait`, `record`, `module`, `parameter`, `property`, `constant`|",
+     "|`-f, --file <path>`|Scope to a specific file (`fn`, `context`, `where`)|",
+     "|`--mode <mode>`|Search mode: `hybrid` (default), `semantic`, or `keyword` (`search`)|",
+     "|`--ndjson`|Output as newline-delimited JSON (one object per line)|",
+     "|`--table`|Output as auto-column aligned table|",
+     "|`--csv`|Output as CSV (RFC 4180, nested objects flattened)|",
+     "|`--limit <n>`|Limit number of results|",
+     "|`--offset <n>`|Skip first N results (pagination)|",
+     "|`--rrf-k <n>`|RRF smoothing constant for multi-query search (default 60)|",
+     "|`--user-config [path]`|Apply global user config for this run; optionally specify a custom path instead of the XDG default (`~/.config/codegraph/config.json`)|",
+     "|`--no-user-config`|Skip global user config for this run (CI/non-interactive safe)|"
+    ]
+   ],
+   [
+    "equal",
+    501,
+    504,
+    427,
+    430
+   ],
+   [
+    "replace",
+    504,
+    505,
+    430,
+    431,
+    [
+     "|Language|Extensions|Imports|Exports|Call Sites|Heritage¹|Type Inference²|Dataflow|"
+    ]
+   ],
+   [
+    "equal",
+    505,
+    506,
+    431,
+    432
+   ],
+   [
+    "replace",
+    506,
+    539,
+    432,
+    465,
+    [
+     "|JavaScript|`.js`, `.jsx`, `.mjs`, `.cjs`|✓|✓|✓|✓|✓|✓|",
+     "|TypeScript|`.ts`, `.tsx`, `.mts`, `.cts`|✓|✓|✓|✓|✓|✓|",
+     "|Python|`.py`, `.pyi`|✓|✓|✓|✓|✓|✓|",
+     "|Go|`.go`|✓|✓|✓|✓|✓|✓|",
+     "|Rust|`.rs`|✓|✓|✓|✓|✓|✓|",
+     "|Java|`.java`|✓|✓|✓|✓|✓|✓|",
+     "|C#|`.cs`|✓|✓|✓|✓|✓|✓|",
+     "|PHP|`.php`, `.phtml`|✓|✓|✓|✓|✓|✓|",
+     "|Ruby|`.rb`, `.rake`, `.gemspec`|✓|✓|✓|✓|—³|✓|",
+     "|C|`.c`, `.h`|✓|✓|✓|—⁴|—⁴|✓|",
+     "|C++|`.cpp`, `.hpp`, `.cc`, `.cxx`|✓|✓|✓|✓|—|✓|",
+     "|Kotlin|`.kt`, `.kts`|✓|✓|✓|✓|—|✓|",
+     "|Swift|`.swift`|✓|✓|✓|✓|—|✓|",
+     "|Scala|`.scala`, `.sc`|✓|✓|✓|✓|—|✓|",
+     "|Bash|`.sh`, `.bash`|✓|✓|✓|—⁴|—⁴|✓|",
+     "|Elixir|`.ex`, `.exs`|✓|✓|✓|—|—|✓|",
+     "|Lua|`.lua`|✓|✓|✓|—|—|✓|",
+     "|Dart|`.dart`|✓|✓|✓|✓|—|✓|",
+     "|Zig|`.zig`|✓|✓|✓|—|—|✓|",
+     "|Haskell|`.hs`|✓|✓|✓|—|—|✓|",
+     "|OCaml|`.ml`, `.mli`|✓|✓|✓|—|—|✓|",
+     "|F#|`.fs`, `.fsx`, `.fsi`|✓|✓|✓|—|—|✓|",
+     "|Gleam|`.gleam`|✓|✓|✓|—|—|✓|",
+     "|Clojure|`.clj`, `.cljs`, `.cljc`|✓|✓|✓|—|—|✓|",
+     "|Julia|`.jl`|✓|✓|✓|—|—|✓|",
+     "|R|`.r`, `.R`|✓|✓|✓|—|—|✓|",
+     "|Erlang|`.erl`, `.hrl`|✓|✓|✓|—|—|✓|",
+     "|Solidity|`.sol`|✓|✓|✓|✓|—|✓|",
+     "|Objective-C|`.m`|✓|✓|✓|✓|—|✓|",
+     "|CUDA|`.cu`, `.cuh`|✓|✓|✓|✓|—|✓|",
+     "|Groovy|`.groovy`, `.gvy`|✓|✓|✓|✓|—|✓|",
+     "|Verilog|`.v`, `.sv`|✓|✓|✓|—|—|✓|",
+     "|Terraform|`.tf`, `.hcl`|✓|—³|—³|—³|—³|—³|"
+    ]
+   ],
+   [
+    "equal",
+    539,
+    552,
+    465,
+    478
+   ],
+   [
+    "replace",
+    552,
+    558,
+    478,
+    479,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    558,
+    581,
+    479,
+    502
+   ],
+   [
+    "replace",
+    581,
+    582,
+    502,
+    503,
+    [
+     "|Data|Incremental|Full rebuild|"
+    ]
+   ],
+   [
+    "equal",
+    582,
+    583,
+    503,
+    504
+   ],
+   [
+    "replace",
+    583,
+    590,
+    504,
+    511,
+    [
+     "|Symbols & edges for changed files|Yes|Yes|",
+     "|Reverse-dependency cascade (importers of changed files)|Yes|Yes|",
+     "|AST nodes, complexity, CFG, dataflow for changed files|Yes|Yes|",
+     "|Directory-level cohesion metrics|Partial (skipped for ≤5 files)|Yes|",
+     "|Advisory checks (orphaned embeddings, stale embeddings, unused exports)|Skipped|Yes|",
+     "|Build metadata persistence|Skipped for ≤3 files|Yes|",
+     "|Incremental drift detection|Skipped|Yes|"
+    ]
+   ],
+   [
+    "equal",
+    590,
+    599,
+    511,
+    520
+   ],
+   [
+    "replace",
+    599,
+    600,
+    520,
+    521,
+    [
+     "- **If `codegraph info` nudges you** — it flags when an interface gained its first instantiated implementor since the last full build, a narrow CHA/RTA dispatch-edge gap incremental rebuilds can't self-heal (see incremental-builds.md)"
+    ]
+   ],
+   [
+    "equal",
+    600,
+    605,
+    521,
+    526
+   ],
+   [
+    "replace",
+    605,
+    606,
+    526,
+    527,
+    [
+     "> **Detailed guide:** See docs/guides/incremental-builds.md for a complete breakdown of what each build mode refreshes and recommended rebuild schedules."
+    ]
+   ],
+   [
+    "equal",
+    606,
+    611,
+    527,
+    532
+   ],
+   [
+    "replace",
+    611,
+    612,
+    532,
+    533,
+    [
+     "|Engine|How it works|When it's used|"
+    ]
+   ],
+   [
+    "equal",
+    612,
+    613,
+    533,
+    534
+   ],
+   [
+    "replace",
+    613,
+    615,
+    534,
+    536,
+    [
+     "|**Native** (Rust)|napi-rs addon built from `crates/codegraph-core/` — parallel multi-core parsing via rayon|Auto-selected when the prebuilt binary is available|",
+     "|**WASM**|`web-tree-sitter` with pre-built `.wasm` grammars in `grammars/`|Fallback when the native addon isn't installed|"
+    ]
+   ],
+   [
+    "equal",
+    615,
+    620,
+    536,
+    541
+   ],
+   [
+    "replace",
+    620,
+    621,
+    541,
+    542,
+    [
+     "|Phase|What Rust does|"
+    ]
+   ],
+   [
+    "equal",
+    621,
+    622,
+    542,
+    543
+   ],
+   [
+    "replace",
+    622,
+    628,
+    543,
+    549,
+    [
+     "|**Parse**|Parallel multi-file tree-sitter parsing via rayon (3.5× faster than WASM)|",
+     "|**Extract**|Symbols, imports, calls, classes, type maps, AST nodes — all in one pass|",
+     "|**Analyze**|Complexity (cognitive, cyclomatic, Halstead), CFG, and dataflow pre-computed per function during parse|",
+     "|**Resolve**|Import resolution with 6-level priority system and confidence scoring|",
+     "|**Edges**|Call, receiver, extends, and implements edge inference|",
+     "|**DB writes**|All inserts (nodes, edges, AST nodes, complexity, CFG, dataflow) via rusqlite — `better-sqlite3` is lazy-loaded only for the WASM fallback path|"
+    ]
+   ],
+   [
+    "equal",
+    628,
+    635,
+    549,
+    556
+   ],
+   [
+    "replace",
+    635,
+    636,
+    556,
+    557,
+    [
+     "|Priority|Source|Confidence|"
+    ]
+   ],
+   [
+    "equal",
+    636,
+    637,
+    557,
+    558
+   ],
+   [
+    "replace",
+    637,
+    642,
+    558,
+    563,
+    [
+     "|1|**Import-aware** — `import { foo } from './bar'` → link to `bar`|`1.0`|",
+     "|2|**Same-file** — definitions in the current file|`1.0`|",
+     "|3|**Same directory** — definitions in sibling files (standalone calls only)|`0.7`|",
+     "|4|**Same parent directory** — definitions in sibling dirs (standalone calls only)|`0.5`|",
+     "|5|**Method hierarchy** — resolved through `extends`/`implements`|varies|"
+    ]
+   ],
+   [
+    "equal",
+    642,
+    643,
+    563,
+    564
+   ],
+   [
+    "replace",
+    643,
+    644,
+    564,
+    565,
+    [
+     "Method calls on unknown receivers skip global fallback entirely — `stmt.run()` will never resolve to a standalone `run` function in another file. Duplicate caller/callee edges are deduplicated automatically. Dynamic patterns like `fn.call()`, `fn.apply()`, `fn.bind()`, and `obj\"method\"` are also detected on a best-effort basis."
+    ]
+   ],
+   [
+    "equal",
+    644,
+    649,
+    565,
+    570
+   ],
+   [
+    "replace",
+    649,
+    650,
+    570,
+    571,
+    [
+     "Self-measured on every release via CI (build benchmarks | embedding benchmarks | query benchmarks | incremental benchmarks | resolution precision/recall):"
+    ]
+   ],
+   [
+    "equal",
+    650,
+    653,
+    571,
+    574
+   ],
+   [
+    "replace",
+    653,
+    654,
+    574,
+    575,
+    [
+     "|Metric|Native|WASM|"
+    ]
+   ],
+   [
+    "equal",
+    654,
+    655,
+    575,
+    576
+   ],
+   [
+    "replace",
+    655,
+    664,
+    576,
+    585,
+    [
+     "|Build speed|**8.2 ms/file**|**26.8 ms/file**|",
+     "|Query time|**10ms**|**14ms**|",
+     "|No-op rebuild|**30ms**|**30ms**|",
+     "|1-file rebuild|**254ms**|**171ms**|",
+     "|Query: fn-deps|**10.1ms**|**13.7ms**|",
+     "|Query: path|**14.7ms**|**14.3ms**|",
+     "|~50,000 files (est.)|**~410.0s build**|**~1340.0s build**|",
+     "|Resolution precision|**95.2%**|—|",
+     "|Resolution recall|**70.3%**|—|"
+    ]
+   ],
+   [
+    "equal",
+    664,
+    667,
+    585,
+    588
+   ],
+   [
+    "replace",
+    667,
+    668,
+    588,
+    589,
+    [
+     " Per-language resolution precision/recall "
+    ]
+   ],
+   [
+    "equal",
+    668,
+    669,
+    589,
+    590
+   ],
+   [
+    "replace",
+    669,
+    670,
+    590,
+    591,
+    [
+     "|Language|Precision|Recall|TP|FP|FN|Edges|Dynamic|"
+    ]
+   ],
+   [
+    "equal",
+    670,
+    671,
+    591,
+    592
+   ],
+   [
+    "replace",
+    671,
+    712,
+    592,
+    633,
+    [
+     "|javascript|100.0%|100.0%|47|0|0|47|17/32|",
+     "|typescript|100.0%|100.0%|55|0|0|55|—|",
+     "|bash|100.0%|100.0%|12|0|0|12|0/1|",
+     "|c|100.0%|100.0%|9|0|0|9|9/9|",
+     "|clojure|80.0%|26.7%|4|1|11|15|—|",
+     "|cpp|100.0%|57.1%|8|0|6|14|13/14|",
+     "|csharp|100.0%|100.0%|25|0|0|25|—|",
+     "|cuda|50.0%|33.3%|4|4|8|12|—|",
+     "|dart|100.0%|81.0%|17|0|4|21|—|",
+     "|dynamic-groovy|100.0%|100.0%|1|0|0|1|—|",
+     "|dynamic-java|100.0%|100.0%|1|0|0|1|—|",
+     "|dynamic-javascript|100.0%|100.0%|4|0|0|4|—|",
+     "|dynamic-kotlin|100.0%|100.0%|3|0|0|3|—|",
+     "|dynamic-scala|100.0%|100.0%|1|0|0|1|—|",
+     "|dynamic-typescript|100.0%|100.0%|4|0|0|4|—|",
+     "|elixir|100.0%|81.0%|17|0|4|21|—|",
+     "|erlang|100.0%|100.0%|12|0|0|12|—|",
+     "|fsharp|0.0%|0.0%|0|11|12|12|—|",
+     "|gleam|100.0%|26.7%|4|0|11|15|—|",
+     "|go|100.0%|69.2%|9|0|4|13|13/14|",
+     "|groovy|100.0%|7.7%|1|0|12|13|—|",
+     "|haskell|100.0%|33.3%|4|0|8|12|—|",
+     "|hcl|0.0%|0.0%|0|0|2|2|—|",
+     "|java|100.0%|81.0%|17|0|4|21|—|",
+     "|julia|100.0%|73.3%|11|0|4|15|—|",
+     "|kotlin|92.3%|63.2%|12|1|7|19|—|",
+     "|lua|100.0%|15.4%|2|0|11|13|—|",
+     "|objc|100.0%|46.2%|6|0|7|13|—|",
+     "|ocaml|100.0%|8.3%|1|0|11|12|—|",
+     "|php|100.0%|65.2%|15|0|8|23|—|",
+     "|pts-javascript|100.0%|100.0%|15|0|0|15|—|",
+     "|python|100.0%|68.4%|13|0|6|19|15/15|",
+     "|r|100.0%|100.0%|11|0|0|11|—|",
+     "|ruby|100.0%|100.0%|11|0|0|11|11/11|",
+     "|rust|100.0%|100.0%|24|0|0|24|23/23|",
+     "|scala|100.0%|100.0%|7|0|0|7|—|",
+     "|solidity|33.3%|7.7%|1|2|12|13|—|",
+     "|swift|81.8%|64.3%|9|2|5|14|9/9|",
+     "|tsx|100.0%|100.0%|13|0|0|13|—|",
+     "|verilog|0.0%|0.0%|0|0|4|4|—|",
+     "|zig|100.0%|13.3%|2|0|13|15|—|"
+    ]
+   ],
+   [
+    "equal",
+    712,
+    715,
+    633,
+    636
+   ],
+   [
+    "replace",
+    715,
+    716,
+    636,
+    637,
+    [
+     "|Mode|Resolved|Expected|Recall|"
+    ]
+   ],
+   [
+    "equal",
+    716,
+    717,
+    637,
+    638
+   ],
+   [
+    "replace",
+    717,
+    740,
+    638,
+    659,
+    [
+     "|receiver-typed|47|117|40.2%|",
+     "|module-function|49|115|42.6%|",
+     "|static|86|97|88.7%|",
+     "|same-file|71|91|78.0%|",
+     "|interface-dispatched|24|24|100.0%|",
+     "|dynamic|17|17|100.0%|",
+     "|class-inheritance|12|16|75.0%|",
+     "|callback|7|7|100.0%|",
+     "|pts-spread|4|4|100.0%|",
+     "|pts-define-property|3|3|100.0%|",
+     "|pts-create-prototype|2|2|100.0%|",
+     "|points-to|2|2|100.0%|",
+     "|re-export|2|2|100.0%|",
+     "|pts-for-of|2|2|100.0%|",
+     "|pts-set|2|2|100.0%|",
+     "|pts-array-from|2|2|100.0%|",
+     "|pts-dispatch-table|2|2|100.0%|",
+     "|trait-dispatch|2|2|100.0%|",
+     "|define-property|1|1|100.0%|",
+     "|defineProperty-accessor|1|1|100.0%|",
+     "|package-function|1|1|100.0%|"
+    ]
+   ],
+   [
+    "equal",
+    740,
+    743,
+    659,
+    662
+   ],
+   [
+    "replace",
+    743,
+    744,
+    662,
+    663,
+    [
+     "npm unpacked size"
+    ]
+   ],
+   [
+    "equal",
+    744,
+    747,
+    663,
+    666
+   ],
+   [
+    "replace",
+    747,
+    748,
+    666,
+    667,
+    [
+     "|Dependency|What it does|||"
+    ]
+   ],
+   [
+    "equal",
+    748,
+    749,
+    667,
+    668
+   ],
+   [
+    "replace",
+    749,
+    753,
+    668,
+    672,
+    [
+     "|better-sqlite3|SQLite driver (WASM engine; lazy-loaded, not used for native-engine reads)|GitHub stars|npm downloads|",
+     "|commander|CLI argument parsing|GitHub stars|npm downloads|",
+     "|smol-toml|TOML parsing — reads `Cargo.toml` for Rust `crate::` target overrides and `pyproject.toml` for Python import roots|GitHub stars|npm downloads|",
+     "|web-tree-sitter|WASM tree-sitter bindings|GitHub stars|npm downloads|"
+    ]
+   ],
+   [
+    "equal",
+    753,
+    760,
+    672,
+    679
+   ],
+   [
+    "replace",
+    760,
+    761,
+    679,
+    680,
+    [
+     "Codegraph is built around a Model Context Protocol server with 34 tools (35 in multi-repo mode) — the primary way agents consume the graph:"
+    ]
+   ],
+   [
+    "equal",
+    761,
+    774,
+    680,
+    693
+   ],
+   [
+    "replace",
+    774,
+    775,
+    693,
+    694,
+    [
+     "Add this to your project's `CLAUDE.md` to help AI agents use codegraph. Full template with all commands in the AI Agent Guide."
+    ]
+   ],
+   [
+    "equal",
+    775,
+    780,
+    694,
+    699
+   ],
+   [
+    "replace",
+    780,
+    804,
+    699,
+    700,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    804,
+    808,
+    700,
+    704
+   ],
+   [
+    "replace",
+    808,
+    809,
+    704,
+    705,
+    [
+     "See **docs/guides/recommended-practices.md** for integration guides:"
+    ]
+   ],
+   [
+    "equal",
+    809,
+    816,
+    705,
+    712
+   ],
+   [
+    "replace",
+    816,
+    817,
+    712,
+    713,
+    [
+     "For AI-specific integration, see the **AI Agent Guide** — a comprehensive reference covering the 6-step agent workflow, complete command-to-MCP mapping, Claude Code hooks, and token-saving patterns."
+    ]
+   ],
+   [
+    "equal",
+    817,
+    828,
+    713,
+    724
+   ],
+   [
+    "replace",
+    828,
+    829,
+    724,
+    725,
+    [
+     "Create a `.codegraphrc.json` in your project root to customize behavior. The snippets below cover the most-used keys — see **docs/guides/configuration.md** for the full reference (every group, every key, every default)."
+    ]
+   ],
+   [
+    "equal",
+    829,
+    830,
+    725,
+    726
+   ],
+   [
+    "replace",
+    830,
+    831,
+    726,
+    727,
+    [
+     "**Global (user-level) config:** you can also define personal defaults once at `~/.config/codegraph/config.json` and opt individual repos into it with `codegraph config --enable-global`. The global layer merges below the project config so repos always win, and non-interactive contexts (CI, MCP) never apply it without explicit consent. See docs/guides/configuration.md#user-level-global-configuration."
+    ]
+   ],
+   [
+    "equal",
+    831,
+    836,
+    727,
+    732
+   ],
+   [
+    "replace",
+    836,
+    850,
+    732,
+    733,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    850,
+    862,
+    733,
+    745
+   ],
+   [
+    "replace",
+    862,
+    870,
+    745,
+    746,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    870,
+    903,
+    746,
+    779
+   ],
+   [
+    "replace",
+    903,
+    904,
+    779,
+    780,
+    [
+     "Names are matched case-insensitively and a leading `codegraph<digits>_` prefix (e.g. `codegraph2_module_map`) is stripped before comparison. Disabled tools are removed from `tools/list` and any `tools/call` invocation returns `Unknown tool: <name>`. See **docs/guides/configuration.md#mcp-tool-filtering** for the full tool catalog, and the rest of that guide for every other config option."
+    ]
+   ],
+   [
+    "equal",
+    904,
+    913,
+    780,
+    789
+   ],
+   [
+    "replace",
+    913,
+    918,
+    789,
+    790,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    918,
+    924,
+    790,
+    796
+   ],
+   [
+    "replace",
+    924,
+    929,
+    796,
+    797,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    929,
+    935,
+    797,
+    803
+   ],
+   [
+    "replace",
+    935,
+    947,
+    803,
+    804,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    947,
+    959,
+    804,
+    816
+   ],
+   [
+    "replace",
+    959,
+    960,
+    816,
+    817,
+    [
+     "See **ROADMAP.md** for the full development roadmap and **STABILITY.md** for the stability policy and versioning guarantees. Current plan:"
+    ]
+   ],
+   [
+    "equal",
+    960,
+    981,
+    817,
+    838
+   ],
+   [
+    "replace",
+    981,
+    982,
+    838,
+    839,
+    [
+     "Contributions are welcome! See **CONTRIBUTING.md** for the full guide — setup, workflow, commit convention, testing, and architecture notes."
+    ]
+   ],
+   [
+    "equal",
+    982,
+    990,
+    839,
+    847
+   ],
+   [
+    "replace",
+    990,
+    991,
+    847,
+    848,
+    [
+     "Looking to add a new language? Check out **Adding a New Language**."
+    ]
+   ],
+   [
+    "equal",
+    991,
+    994,
+    848,
+    851
+   ],
+   [
+    "replace",
+    994,
+    995,
+    851,
+    852,
+    [
+     "Apache-2.0"
+    ]
+   ],
+   [
+    "equal",
+    995,
+    996,
+    852,
+    853
+   ],
+   [
+    "replace",
+    996,
+    1001,
+    853,
+    854,
+    [
+     " Built with tree-sitter and better-sqlite3. Your code stays on your machine."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "1a1c76d0baa6+2": {
+  "fn": "zhichkin/dajet-metadata",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# DaJet Metadata DaJet Metadata at NuGet"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    6,
+    1,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "Примеры использования"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    30,
+    7,
+    30
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "598fae781f1e+2": {
+  "fn": "rebus-org/Rebus.SqlServer",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "install from nuget"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Provides Microsoft SQL Server implementations for Rebus for"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    12,
+    5,
+    12
+   ],
+   [
+    "delete",
+    12,
+    17,
+    12,
+    12
+   ],
+   [
+    "equal",
+    17,
+    20,
+    12,
+    15
+   ],
+   [
+    "delete",
+    20,
+    21,
+    15,
+    15
+   ],
+   [
+    "equal",
+    21,
+    29,
+    15,
+    23
+   ],
+   [
+    "delete",
+    29,
+    30,
+    23,
+    23
+   ],
+   [
+    "equal",
+    30,
+    48,
+    23,
+    41
+   ],
+   [
+    "delete",
+    48,
+    49,
+    41,
+    41
+   ],
+   [
+    "equal",
+    49,
+    63,
+    41,
+    55
+   ],
+   [
+    "delete",
+    63,
+    64,
+    55,
+    55
+   ],
+   [
+    "equal",
+    64,
+    75,
+    55,
+    66
+   ],
+   [
+    "delete",
+    75,
+    76,
+    66,
+    66
+   ],
+   [
+    "equal",
+    76,
+    94,
+    66,
+    84
+   ],
+   [
+    "delete",
+    94,
+    95,
+    84,
+    84
+   ],
+   [
+    "equal",
+    95,
+    155,
+    84,
+    144
+   ],
+   [
+    "replace",
+    155,
+    178,
+    144,
+    145,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    181,
+    145,
+    148
+   ],
+   [
+    "replace",
+    181,
+    186,
+    148,
+    153,
+    [
+     " - You create and open a `SqlConnection` and begin a `SqlTransaction`.",
+     " - Use `scope.UseOutbox(connection, transaction)` to inform Rebus to use your connection and transaction.",
+     " - Perform your business logic and database operations within the transaction.",
+     " - Send messages using Rebus; the messages will be stored in the outbox table within the same transaction.",
+     " - After calling `scope.CompleteAsync()`, commit the transaction to ensure both your data changes and messages are persisted atomically."
+    ]
+   ],
+   [
+    "equal",
+    186,
+    195,
+    153,
+    162
+   ],
+   [
+    "replace",
+    195,
+    211,
+    162,
+    163,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    211,
+    214,
+    163,
+    166
+   ],
+   [
+    "replace",
+    214,
+    218,
+    166,
+    170,
+    [
+     " - Retrieve the current `MessageContext`.",
+     " - Access the `OutboxConnection` from the transaction context.",
+     " - Use `outboxConnection.SqlConnection` and `outboxConnection.SqlTransaction` to perform your database operations.",
+     " - Any messages you send will be stored in the outbox table within the same transaction."
+    ]
+   ],
+   [
+    "equal",
+    218,
+    224,
+    170,
+    176
+   ],
+   [
+    "replace",
+    224,
+    228,
+    176,
+    180,
+    [
+     " - The message remains in the outbox table until it is successfully dispatched.",
+     " - Rebus periodically scans the outbox table for pending messages.",
+     " - Upon successful delivery, messages are marked appropriately to prevent re-sending.",
+     " - This mechanism ensures **at-least-once** delivery; your application should be designed to handle potential duplicate messages."
+    ]
+   ],
+   [
+    "equal",
+    228,
+    233,
+    180,
+    185
+   ],
+   [
+    "replace",
+    233,
+    235,
+    185,
+    187,
+    [
+     "- RebusOutboxWebApp",
+     "- RebusOutboxWebAppEfCore"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    237,
+    187,
+    189
+   ],
+   [
+    "delete",
+    237,
+    238,
+    189,
+    189
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "4f943086131a+2": {
+  "fn": "GeniusesGroup/memar-go",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    6,
+    4,
+    6,
+    [
+     "GoDoc",
+     "Go Report"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    6,
+    7
+   ],
+   [
+    "replace",
+    7,
+    9,
+    7,
+    9,
+    [
+     "`Memar` as a `Go language library` is a repository wrapper to store all implementation of Memar and others protocols and algorithms to make a digital software more easily in better performance.",
+     "You can use all packages exported APIs, go generator mechanism or by library commands to access some useful APIs from command line easily."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "If you want to get insight about memar, You MUST start reading interfaces in protocol package."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    30,
+    11,
+    30
+   ],
+   [
+    "replace",
+    30,
+    34,
+    30,
+    31,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    37,
+    31,
+    34
+   ],
+   [
+    "replace",
+    37,
+    38,
+    34,
+    35,
+    [
+     "memar has a the command-line client for the some generator APIs implement in modules. It provides simple access to all APIs functions to make an application, a GUI app, ...."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    50,
+    35,
+    47
+   ],
+   [
+    "replace",
+    50,
+    51,
+    47,
+    48,
+    [
+     "Read more here"
+    ]
+   ],
+   [
+    "equal",
+    51,
+    53,
+    48,
+    50
+   ],
+   [
+    "replace",
+    53,
+    55,
+    50,
+    51,
+    [
+     "- Referencing issues"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    58,
+    51,
+    54
+   ],
+   [
+    "replace",
+    58,
+    59,
+    54,
+    55,
+    [
+     "- django"
+    ]
+   ],
+   [
+    "equal",
+    59,
+    61,
+    55,
+    57
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "1fcd4451418f+2": {
+  "fn": "SirAppSec/vuln-node.js-express.js-app",
+  "clean_ver": "2",
+  "raw_lines": 95,
+  "ops": [
+   [
+    "equal",
+    0,
+    95,
+    0,
+    95
+   ],
+   [
+    "replace",
+    95,
+    98,
+    95,
+    97,
+    [
+     "image",
+     "image"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    106,
+    97,
+    105
+   ],
+   [
+    "delete",
+    106,
+    107,
+    105,
+    105
+   ],
+   [
+    "equal",
+    107,
+    109,
+    105,
+    107
+   ],
+   [
+    "delete",
+    109,
+    112,
+    107,
+    107
+   ],
+   [
+    "equal",
+    112,
+    140,
+    107,
+    135
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "eb3dbad6bb3c+2": {
+  "fn": "mattn/cagliostr",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "cagliostr"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    12,
+    5,
+    12
+   ],
+   [
+    "replace",
+    12,
+    18,
+    12,
+    13,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    32,
+    13,
+    27
+   ],
+   [
+    "replace",
+    32,
+    33,
+    27,
+    28,
+    [
+     "The URL follows redis-plus-plus"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    36,
+    28,
+    31
+   ],
+   [
+    "replace",
+    36,
+    37,
+    31,
+    32,
+    [
+     "nostr-relay publishes too, so both can"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    68,
+    32,
+    63
+   ],
+   [
+    "delete",
+    68,
+    69,
+    63,
+    63
+   ],
+   [
+    "equal",
+    69,
+    70,
+    63,
+    64
+   ],
+   [
+    "delete",
+    70,
+    71,
+    64,
+    64
+   ],
+   [
+    "equal",
+    71,
+    74,
+    64,
+    67
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "71479db5eabc+2": {
+  "fn": "quantmind/aio-openapi",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    8,
+    2,
+    8,
+    [
+     "PyPI version",
+     "Python versions",
+     "Build",
+     "codecov",
+     "Documentation Status",
+     "Downloads"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    12,
+    8,
+    12
+   ],
+   [
+    "replace",
+    12,
+    22,
+    12,
+    13,
+    [
+     "See the tutorial for a quick introduction."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "65be2e7be1a6+2": {
+  "fn": "davidjguru/summerhouse",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "summerhouse_main_image"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    3,
+    1,
+    3
+   ],
+   [
+    "replace",
+    3,
+    4,
+    3,
+    4,
+    [
+     "Welcome to Summer House, a fully-dockerized environment for onboarding processes based in Decoupled / Headless Drupal. "
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    4,
+    5
+   ],
+   [
+    "replace",
+    5,
+    15,
+    5,
+    6,
+    [
+     "（目录 8 行略）"
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    6,
+    7
+   ],
+   [
+    "replace",
+    16,
+    18,
+    7,
+    9,
+    [
+     "Summer House is a sandbox for Drupal Decoupled projects, generating **boilerplate code**, built for **training** purposes and focused on **learning-by-doing**. The project is **self-contained** and host environment **agnostic**.",
+     "This project deploys a whole Decoupled Drupal platform on-the-fly with a lot of extra-resources, tools and configurations, but **only for local development**. You can use Summer House for **Onboarding processes**, workshops and training sessions. **Or just for fun**. "
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    9,
+    10
+   ],
+   [
+    "replace",
+    19,
+    20,
+    10,
+    11,
+    [
+     "* See the wiki section for more detailed info: summerhouse/wiki. "
+    ]
+   ],
+   [
+    "equal",
+    20,
+    22,
+    11,
+    13
+   ],
+   [
+    "replace",
+    22,
+    23,
+    13,
+    14,
+    [
+     "You can use SummerHouse in Linux environments and specifically in Debian / Ubuntu. SummerHouse requires the next resources: Git, Docker, Docker-Compose and DDEV. "
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    14,
+    15
+   ],
+   [
+    "replace",
+    24,
+    25,
+    15,
+    16,
+    [
+     "**If you don't have the prerequisites installed in your host system** you can install the resources from a installer script created and committed to the repository. The installer script is here."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    16,
+    17
+   ],
+   [
+    "replace",
+    26,
+    27,
+    17,
+    18,
+    [
+     "Just download the script in your system, give it permissions and execute the installer. This will install Docker, Docker-Compose and DDEV in your Linux system (Ubuntu, Debian). Also it will install some basic resources like git, jq, curl and basic packages. "
+    ]
+   ],
+   [
+    "equal",
+    27,
+    33,
+    18,
+    24
+   ],
+   [
+    "replace",
+    33,
+    36,
+    24,
+    27,
+    [
+     "* How to Install Docker ",
+     "* How To Install Docker Compose ",
+     "* How to Install DDEV "
+    ]
+   ],
+   [
+    "equal",
+    36,
+    38,
+    27,
+    29
+   ],
+   [
+    "replace",
+    38,
+    40,
+    29,
+    31,
+    [
+     "#### Installating and deploy ",
+     "You can install Summer House in just three steps, just by doing: "
+    ]
+   ],
+   [
+    "equal",
+    40,
+    46,
+    31,
+    37
+   ],
+   [
+    "replace",
+    46,
+    48,
+    37,
+    39,
+    [
+     "And the project will be loaded, configured, enabled and deployed in your local environment. You will see the main URLs opening in your browser. ",
+     "Please, **remember:** Summer House is **only** for local development. It can contain some configs that can be unsecure in other environments. "
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    39,
+    40
+   ],
+   [
+    "replace",
+    49,
+    50,
+    40,
+    41,
+    [
+     "You can also download the project from the releases / tags area of the Github repository, selecting the version and downloading the compressed folder. Then you only have to unpack the project and launch DDEV: "
+    ]
+   ],
+   [
+    "equal",
+    50,
+    57,
+    41,
+    48
+   ],
+   [
+    "replace",
+    57,
+    58,
+    48,
+    49,
+    [
+     "And the platform will be mounted and deployed. "
+    ]
+   ],
+   [
+    "equal",
+    58,
+    61,
+    49,
+    52
+   ],
+   [
+    "replace",
+    61,
+    62,
+    52,
+    53,
+    [
+     "In order to execute a complete cleaning of your Summer House installation you can do the next steps. "
+    ]
+   ],
+   [
+    "equal",
+    62,
+    70,
+    53,
+    61
+   ],
+   [
+    "delete",
+    70,
+    71,
+    61,
+    61
+   ],
+   [
+    "equal",
+    71,
+    85,
+    61,
+    75
+   ],
+   [
+    "replace",
+    85,
+    87,
+    75,
+    77,
+    [
+     "Some common problems have been identified. Check this section for quick interventions. ",
+     "For more extended information on known bugs and their solutions, visit the related wiki section. "
+    ]
+   ],
+   [
+    "equal",
+    87,
+    89,
+    77,
+    79
+   ],
+   [
+    "replace",
+    89,
+    90,
+    79,
+    80,
+    [
+     "Problems have been detected due to port blocking by other applications. This can cause DDEV start-up problems and lead to others problems during the installation process of the main website, you can get errors just like: "
+    ]
+   ],
+   [
+    "equal",
+    90,
+    95,
+    80,
+    85
+   ],
+   [
+    "replace",
+    95,
+    96,
+    85,
+    86,
+    [
+     "DDEV operates with ports used by other resources, such as 80 or 443. Check that they are not in use (you do not have Apache running on your system). "
+    ]
+   ],
+   [
+    "equal",
+    96,
+    98,
+    86,
+    88
+   ],
+   [
+    "replace",
+    98,
+    99,
+    88,
+    89,
+    [
+     "Summer House obtains a lot of resources through the Internet, so sometimes you can get errors when trying to get external resources: "
+    ]
+   ],
+   [
+    "equal",
+    99,
+    116,
+    89,
+    106
+   ],
+   [
+    "replace",
+    116,
+    117,
+    106,
+    107,
+    [
+     "The equivalent command in macOS would be just `open`, so you can try to change this command in `.ddev/config.yaml', lines 34 to 38. "
+    ]
+   ],
+   [
+    "equal",
+    117,
+    122,
+    107,
+    112
+   ],
+   [
+    "replace",
+    122,
+    123,
+    112,
+    113,
+    [
+     "...When we're altering the restarting policies for the Portainer Container by using the `sed` command. "
+    ]
+   ],
+   [
+    "equal",
+    123,
+    124,
+    113,
+    114
+   ],
+   [
+    "replace",
+    124,
+    128,
+    114,
+    116,
+    [
+     "**Remember**, more information on how to deal with more specific errors can be found here: ",
+     "summerhouse/wiki/troubleshooting. "
+    ]
+   ],
+   [
+    "equal",
+    128,
+    131,
+    116,
+    119
+   ],
+   [
+    "replace",
+    131,
+    135,
+    119,
+    123,
+    [
+     "* See the Issue Queue: summerhouse/issues ",
+     "* See the Work In Progress: summerhouse/project ",
+     "* See the related Milestones: summerhouse/milestones ",
+     "* See the Documentation pages: summerhouse/wiki "
+    ]
+   ],
+   [
+    "equal",
+    135,
+    136,
+    123,
+    124
+   ],
+   [
+    "replace",
+    136,
+    137,
+    124,
+    125,
+    [
+     "### 7. Other projects with similar natura "
+    ]
+   ],
+   [
+    "equal",
+    137,
+    138,
+    125,
+    126
+   ],
+   [
+    "replace",
+    138,
+    139,
+    126,
+    127,
+    [
+     "Summer House may not be exactly what you're looking for, but it comes close. If you want to check out other projects that might be closer to your needs, you can try the cases in the following list: "
+    ]
+   ],
+   [
+    "equal",
+    139,
+    140,
+    127,
+    128
+   ],
+   [
+    "replace",
+    140,
+    145,
+    128,
+    132,
+    [
+     "* Decoupled Drupal 8 with GatsbyJS Frontend built over Docksal ",
+     "* Metadrop's Drupal Boilerplate built over Docker4Drupal ",
+     "* Systemseed's Drupal ReactJS Boilerplate, built over Docker4Drupal ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    145,
+    147,
+    132,
+    134
+   ],
+   [
+    "replace",
+    147,
+    152,
+    134,
+    138,
+    [
+     "* Thanks to Digitalist Sweden for the opportunity to improve the onboarding processes. ",
+     "* Thanks to Helena Nordenfelt for giving me the chance to focusing on this idea. ",
+     "* Thanks to Randy Fay for the amazing work in DDEV and its community. ",
+     "* Thanks to Pedro Cambra from Cambrico, for being a true mentor."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a6828cfbcc59+2": {
+  "fn": "yagikota/clean-architecture-with-go",
+  "clean_ver": "2",
+  "raw_lines": 12,
+  "ops": [
+   [
+    "equal",
+    0,
+    12,
+    0,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "#### SQLBoiler"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    19,
+    13,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "#### golang-migrate"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    29,
+    20,
+    29
+   ],
+   [
+    "replace",
+    29,
+    34,
+    29,
+    30,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    34,
+    58,
+    30,
+    54
+   ],
+   [
+    "replace",
+    58,
+    59,
+    54,
+    55,
+    [
+     "* Please copy and paste this file on https://editor.swagger.io/ ."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    61,
+    55,
+    57
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "2a98c5e86c0d+2": {
+  "fn": "SuperiorServers/gm_tmysql4",
+  "clean_ver": "2",
+  "raw_lines": 7,
+  "ops": [
+   [
+    "equal",
+    0,
+    7,
+    0,
+    7
+   ],
+   [
+    "replace",
+    7,
+    8,
+    7,
+    8,
+    [
+     "1. Pull the asio and MariaDB Connector/C submodules using `git submodule update --init`"
+    ]
+   ],
+   [
+    "equal",
+    8,
+    44,
+    8,
+    44
+   ],
+   [
+    "replace",
+    44,
+    49,
+    44,
+    45,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    63,
+    45,
+    59
+   ],
+   [
+    "replace",
+    63,
+    67,
+    59,
+    60,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    67,
+    73,
+    60,
+    66
+   ],
+   [
+    "replace",
+    73,
+    84,
+    66,
+    67,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    90,
+    67,
+    73
+   ],
+   [
+    "replace",
+    90,
+    97,
+    73,
+    74,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    97,
+    104,
+    74,
+    81
+   ],
+   [
+    "replace",
+    104,
+    116,
+    81,
+    82,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    163,
+    82,
+    129
+   ],
+   [
+    "replace",
+    163,
+    179,
+    129,
+    130,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    179,
+    188,
+    130,
+    139
+   ],
+   [
+    "replace",
+    188,
+    204,
+    139,
+    140,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    211,
+    140,
+    147
+   ],
+   [
+    "replace",
+    211,
+    218,
+    147,
+    148,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    225,
+    148,
+    155
+   ],
+   [
+    "replace",
+    225,
+    231,
+    155,
+    156,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    239,
+    156,
+    164
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "ba54b5a31454+2": {
+  "fn": "ThanlonSmith/epidemic_situation_monitor",
+  "clean_ver": "2",
+  "raw_lines": 25,
+  "ops": [
+   [
+    "equal",
+    0,
+    25,
+    0,
+    25
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

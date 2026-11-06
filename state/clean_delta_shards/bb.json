@@ -14036,5 +14036,6006 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "ed754b2aa7a5+2": {
+  "fn": "morozovsk/php-arrays-in-memory-comparison",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "equal",
+    0,
+    10,
+    0,
+    10
+   ],
+   [
+    "replace",
+    10,
+    12,
+    10,
+    12,
+    [
+     "Example: ",
+     "{\"visits\": \\[{\"user\": 34, \"location\": 6, \"visited_at\": 1330898799, \"id\": 1, \"mark\": 4}, ...\\]} "
+    ]
+   ],
+   [
+    "equal",
+    12,
+    16,
+    12,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "|||memory, Mb|initializing|filling|"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    19,
+    17,
+    19
+   ],
+   [
+    "replace",
+    19,
+    21,
+    19,
+    21,
+    [
+     "|php|array (hash)|6057|$visits = \\[\\];|$visits\\[$row\\['id'\\]\\] = $row;|",
+     "|php|SplFixedArray|5696|$visits = new SplFixedArray(11000000);|$visits\\[$row\\['id'\\]\\] = $row;|"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    26,
+    22,
+    26,
+    [
+     "|redis|mset|3354||MSet(\\[\"u{$row\\['id'\\]}\" => $row\\['user'\\], \"l{$row\\['id'\\]}\" => $row\\['location'\\], ...\\])|",
+     "|php|SplFixedArray|2790|$visits = new SplFixedArray(11000000);|$visits\\[$row\\['id'\\]\\] = new SplFixedArray(4);|",
+     "|php|swoole_table|2200|$visits = new swoole_table(11000000);|$visits->set($row\\['id'\\], $row);|",
+     "|php|arrays|2147|$user = $location = ... = \\[\\];|$user\\[$row\\['id'\\]\\] = $row\\['user'\\];$location\\[$row\\['id'\\]\\] = $row\\['location'\\];...|"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    27,
+    26,
+    27
+   ],
+   [
+    "replace",
+    27,
+    31,
+    27,
+    31,
+    [
+     "|redis|hmset|1409||hMSet(\"v{$row\\['id'\\]}\", \\['user' => $row\\['user'\\], 'location' => $row\\['location'\\], ...\\]);|",
+     "|redis|hmset|1225||hMSet(\"v{$row\\['id'\\]}\", \\['u' => $row\\['user'\\], 'l' => $row\\['location'\\], ...\\]);|",
+     "|memsql|insert|842|create table|insert into|",
+     "|node.js|array|780|visits = \\[\\];|visits\\[visitsData.visits\\[y\\]\\['id'\\]\\] = {user:visitsData.visits\\[y\\].user,...}|"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    32,
+    31,
+    32
+   ],
+   [
+    "replace",
+    32,
+    41,
+    32,
+    41,
+    [
+     "|php|SplFixedArrays|704|$user = new SplFixedArray(11000000);...|$user\\[$row\\['id'\\]\\] = $row\\['user'\\];$location\\[$row\\['id'\\]\\] = $row\\['location'\\];...|",
+     "|sqlite|insert|623|create table|insert into|",
+     "|php|swoole_pack|539|shmop_open($k, \"c\", 0644, 49*11000000);|swoole_pack(\\['user' => $row\\['user'\\], 'location' => $row\\['location'\\], ...\\])|",
+     "|tarantool|insert|530|create_index('primary', ...)|insert($row\\['id'\\], $row\\['user'\\], $row\\['location'\\], ...\\]);|",
+     "|mysql|insert|515|create table|insert into|",
+     "|node.js|arrays|514|visits_user = \\[\\]; visits_location = \\[\\];...|visits_user\\[visitsData.visits\\[y\\]\\['id'\\]\\] = visitsData.visits\\[y\\].user;...|",
+     "|php|swoole_pack|341|shmop_open($k, \"c\", 0644, 31*11000000);|swoole_pack(\\['u' => $row\\['user'\\], 'l' => $row\\['location'\\], ...\\])|",
+     "|php|swoole_pack|209|shmop_open($k, \"c\", 0644, 19*11000000);|swoole_pack(\\[$row\\['user'\\], $row\\['location'\\], $row\\['visited_at'\\], $row\\['mark'\\]\\]);|",
+     "|php|pack|143|shmop_open($k, \"c\", 0644, 13*11000000);|pack('LLLc', $row\\['user'\\], $row\\['location'\\], $row\\['visited_at'\\], $row\\['mark'\\]);|"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    41,
+    42
+   ],
+   [
+    "replace",
+    42,
+    43,
+    42,
+    43,
+    [
+     "### See also comparison swoole vs workerman vs roadrunner vs node.js vs fasthttp"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "56365859dd9b+2": {
+  "fn": "vivekanand-vr/javaFullStack-codebase",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    7,
+    5,
+    7,
+    [
+     "#### ▶️ Detailed Handwritten Notes: Drive Link ",
+     "#### ▶️ Course Details: Link "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    12,
+    7,
+    12
+   ],
+   [
+    "delete",
+    12,
+    13,
+    12,
+    12
+   ],
+   [
+    "equal",
+    13,
+    20,
+    12,
+    19
+   ],
+   [
+    "delete",
+    20,
+    28,
+    19,
+    19
+   ],
+   [
+    "equal",
+    28,
+    29,
+    19,
+    20
+   ],
+   [
+    "replace",
+    29,
+    32,
+    20,
+    31,
+    [
+     " ### `Step 1` : Choose \"import projects\" on the left panel of eclipse or in File dropdown",
+     "",
+     " Import",
+     "",
+     " ### `Step 2` : Choose General > Existing projects as shown",
+     "",
+     " Import Options",
+     "",
+     " ### `Step 3` : Select the Chapter folder and select all the sub folders/programs and click on next",
+     "",
+     " Root project"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    35,
+    31,
+    34
+   ],
+   [
+    "delete",
+    35,
+    36,
+    34,
+    34
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "d53e7691c6bd+2": {
+  "fn": "Pietracoops/yugioh_cardlist_scraper",
+  "clean_ver": "2",
+  "raw_lines": 17,
+  "ops": [
+   [
+    "equal",
+    0,
+    17,
+    0,
+    17
+   ],
+   [
+    "delete",
+    17,
+    19,
+    17,
+    17
+   ],
+   [
+    "equal",
+    19,
+    27,
+    17,
+    25
+   ],
+   [
+    "delete",
+    27,
+    29,
+    25,
+    25
+   ],
+   [
+    "equal",
+    29,
+    36,
+    25,
+    32
+   ],
+   [
+    "delete",
+    36,
+    39,
+    32,
+    32
+   ],
+   [
+    "equal",
+    39,
+    66,
+    32,
+    59
+   ],
+   [
+    "delete",
+    66,
+    67,
+    59,
+    59
+   ],
+   [
+    "equal",
+    67,
+    70,
+    59,
+    62
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "5dfd86d0732a+2": {
+  "fn": "Gerato25/Electronics-eCommerce-Shop-With-Admin-Dashboard-NextJS-NodeJS",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "Electronics eCommerce Shop With Admin Dashboard in Next.js and Node.js "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     " Electronics eCommerce shop with admin dashboard in Next.js and Node.js is a free eCommerce store developed using Next.js, Node.js and MySQL. The application is completely built from scratch(custom design) and completely responsive.",
+     "Singitronic is a modern online shop that specializes in selling all types of electronic products. The goal of the project is to create a modern web application by following key stages in software engineering . ",
+     "Originally created by me and my friend Bojan Cesnak (@cesnak02) as part of our college exam in Software Engineering, this project has now evolved into an open-source community project . Together with the application, we created detailed 40 pages software engineering documentation . We will describe the main parts of the documentaion in the repository description. Main resource for the software engineering documentation is the book „Razvoj aplikativnog softvera“ by Singidunum University professor Violeta Tomašević. Also, college lectures by Violeta Tomašević and Petar Kresoja helped us a lot with the implementation of the application. "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    8,
+    6,
+    8,
+    [
+     " 2. Software engineering process ",
+     " During the design and modeling of the software, we decided to use the cascade model(waterfall model). We decided on it considering its simplicity, easy project monitoring and easy application of the model. The cascade model is probably the oldest published model. It was first published in 1970 and represents a high level of abstraction. The stages in the model are connected in cascade, and the model itself is organized so that the next level is passed only after the completion of the previous level. "
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    8,
+    9
+   ],
+   [
+    "replace",
+    9,
+    10,
+    9,
+    10,
+    [
+     "cascade model photo"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    10,
+    11
+   ],
+   [
+    "replace",
+    11,
+    15,
+    11,
+    15,
+    [
+     " 2.1. Defining milestones ",
+     " Milestones are key events in the project that show us by what date something must be finished. At this stage, we defined our milestones for every stage in our software engineering process. ",
+     " 2.2. Plaky - Project management application ",
+     " The Plaky application was used for project management and project tracking. It is a free application that facilitates collaboration between team members and enables easy export of project reports in one click. "
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "plaky image"
+    ]
+   ],
+   [
+    "equal",
+    17,
+    18,
+    17,
+    18
+   ],
+   [
+    "replace",
+    18,
+    23,
+    18,
+    23,
+    [
+     " 3. Requirements analysis ",
+     " 3.1. Software requirements specification ",
+     " At this stage we defined all our functional and non-functional software requirements regarding to the whole application. Also we defined requirements that define the connections of the system with the environment and performance requirements that the system should meet. ",
+     " 3.2. Modeling the system with a use case diagram ",
+     " The Use Case Diagram represents a detailed description of the functionality of the system in different situations. It describes the steps and actors involved in each situation. The use case diagram is used as a basis for further design, implementation and testing of the software. "
+    ]
+   ],
+   [
+    "equal",
+    23,
+    24,
+    23,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     "use case diagram github"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    25,
+    26
+   ],
+   [
+    "replace",
+    26,
+    29,
+    26,
+    29,
+    [
+     " The image above represents our ecommerce website use case diagram . Here we have also defined main success scenarios and alternative scenarios for admin and users. ",
+     " 4. System design ",
+     " System design is the software engineering stage that transforms concepts and requirements into tangible software structures. It is the strategic process of defining the architecture, components, and interactions of a software system to fulfill specific functional and non-functional requirements. In this stage we wrote about the type of system architecture. We defined our front-end and back-end and we wrote about structure of front-end and back-end in our application. We defined our data structures, database structures and important types in our application. "
+    ]
+   ],
+   [
+    "equal",
+    29,
+    30,
+    29,
+    30
+   ],
+   [
+    "replace",
+    30,
+    33,
+    30,
+    33,
+    [
+     " 5. Software implementation ",
+     " Software implementation is the process of converting a software design into a functional software system. This is where all programming should begin.",
+     "When you are in the software implementation stage, it is important to take care of the internal documentation. This documentation includes headers and comments that provide basic information about the component and explanations of specific parts of code. Thanks to these elements, we are easier to manage in code and we better understand what we have done, which contributes to more efficient work and maintaining software projects. "
+    ]
+   ],
+   [
+    "equal",
+    33,
+    34,
+    33,
+    34
+   ],
+   [
+    "replace",
+    34,
+    35,
+    34,
+    35,
+    [
+     "products component comments"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    35,
+    36
+   ],
+   [
+    "replace",
+    36,
+    38,
+    36,
+    38,
+    [
+     " 6. Testing ",
+     " Testing is a formal process that is performed by the testing team with the aim of determining the logical correctness and purposefulness of the tested program. The importance of testing is great because it significantly reduces the losses that software companies have due to errors and failure of software incurred after its delivery to the customer. We have done the entire testing process manually and documented everything in detail. "
+    ]
+   ],
+   [
+    "equal",
+    38,
+    39,
+    38,
+    39
+   ],
+   [
+    "replace",
+    39,
+    40,
+    39,
+    40,
+    [
+     "testing script"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    40,
+    41
+   ],
+   [
+    "replace",
+    41,
+    43,
+    41,
+    43,
+    [
+     " The test scripts represent the instructions from which it is clearly seen as a step by step how the testing was performed. They provide full control over testing, so, if some errors or cancellation occurs, testing conditions can be repeated and the system again lead to that error or cancellation. This is necessary to establish the cause of the problem.",
+     "As the above image shows, we documented each our test example in terms of test ID, input data, instruction, expected result, actual result, additional comment, component, method and testing technique. Currently, our test script has over 350 manually tested examples. "
+    ]
+   ],
+   [
+    "equal",
+    43,
+    44,
+    43,
+    44
+   ],
+   [
+    "replace",
+    44,
+    45,
+    44,
+    45,
+    [
+     "errors in testing script"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    45,
+    46
+   ],
+   [
+    "insert",
+    46,
+    46,
+    46,
+    47,
+    [
+     " During the software testing process, we documented each error found in the error report form. As shown in the image above, each error has its own unique error ID and a detailed description of the error containing: date of identifying an error, date of troubleshooting an error, error priority, type of error, file name, testing phase. "
+    ]
+   ],
+   [
+    "equal",
+    46,
+    47,
+    47,
+    48
+   ],
+   [
+    "replace",
+    47,
+    48,
+    48,
+    51,
+    [
+     " 6.1. Ad hoc testing ",
+     " The first step in software testing after each new added functionality in our application was ad hoc testing. The ad hoc testing takes place in an unofficial atmosphere. The developer presents the code to the rest of the group and then the discussion occurs. The members of the group ask questions, the developer corresponds to them, together analyze individual implementation aspects that they consider significant and try to find mistakes.",
+     "We have applied this method by examining the code after each new added functionality and had long discussions about it and the potential problems that may occur. "
+    ]
+   ],
+   [
+    "equal",
+    48,
+    49,
+    51,
+    52
+   ],
+   [
+    "replace",
+    49,
+    52,
+    52,
+    54,
+    [
+     " 6.2. Component system hierarchy ",
+     " The component system hierarchy of the application components is a complete sketch of all components in our application created in Figma design tool. This sketch is very important to us when testing, because it represents an insight into the order of the component testing. The below image represents our component system hierarchy from the bird eye view: "
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    54,
+    55
+   ],
+   [
+    "replace",
+    53,
+    55,
+    55,
+    56,
+    [
+     "application component system"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    56,
+    56,
+    57
+   ],
+   [
+    "replace",
+    56,
+    57,
+    57,
+    59,
+    [
+     " 6.3. Unit testing ",
+     " Unit testing for our application includes the process of testing individual functionalities or application components, to ensure each of them work properly independently. The goal of unit testing is to identify and correct errors in the early stages of development, increase the reliability of code and facilitating future application maintenance. "
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    59,
+    60
+   ],
+   [
+    "replace",
+    58,
+    60,
+    60,
+    61,
+    [
+     "unit testing stats english"
+    ]
+   ],
+   [
+    "equal",
+    60,
+    61,
+    61,
+    62
+   ],
+   [
+    "replace",
+    61,
+    62,
+    62,
+    64,
+    [
+     " As the image above shows we found a total of 75 errors in unit test of 103 total errors found, which in our testing unit testing had the highest efficiency with 72.8%. During unit testing, we used the black box and the white box method. The techniques we used for testing were: ",
+     " The black box method: "
+    ]
+   ],
+   [
+    "equal",
+    62,
+    63,
+    64,
+    65
+   ],
+   [
+    "replace",
+    63,
+    75,
+    65,
+    67,
+    [
+     " Equivalence partitioning ",
+     " Boundary Value Analysis – BVA "
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    67,
+    68
+   ],
+   [
+    "replace",
+    76,
+    78,
+    68,
+    69,
+    [
+     " The white box method: "
+    ]
+   ],
+   [
+    "equal",
+    78,
+    79,
+    69,
+    70
+   ],
+   [
+    "replace",
+    79,
+    80,
+    70,
+    73,
+    [
+     " Statement coverage ",
+     " Decision coverage ",
+     " Condition coverage "
+    ]
+   ],
+   [
+    "equal",
+    80,
+    81,
+    73,
+    74
+   ],
+   [
+    "replace",
+    81,
+    82,
+    74,
+    76,
+    [
+     " 6.4. Integration testing ",
+     " In integration testing, we used the approach \"Integration from the bottom to top\". This is very used approach in integration testing. This method starts from the components of the system organized in the hierarchy on which the main program is located. Testing starts by unit testing all components located at the lowest level in hierarchy. The components are then tested at the next level that calls previously tested components. "
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    76,
+    77
+   ],
+   [
+    "replace",
+    83,
+    85,
+    77,
+    78,
+    [
+     "integration testing stats eng"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    86,
+    78,
+    79
+   ],
+   [
+    "replace",
+    86,
+    88,
+    79,
+    80,
+    [
+     " As the image above shows we found a total of 28 errors in integration testing of 103 total errors found, which in our testing, integration testing has efficiency with 27.2%. "
+    ]
+   ],
+   [
+    "equal",
+    88,
+    89,
+    80,
+    81
+   ],
+   [
+    "replace",
+    89,
+    90,
+    81,
+    83,
+    [
+     " 6.5. End-to-end testing ",
+     " End-to-end testing is the highest, final level of testing. It is checks whether the system, as a whole, acts in accordance with the specification of the requests set by the customer. Since most functional requirements have already been verified at lower levels of testing, now emphasis is on non-functional requirements, such as speed, reliability, efficiency… "
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    83,
+    84
+   ],
+   [
+    "replace",
+    91,
+    92,
+    84,
+    86,
+    [
+     " 6.6. Error records at a specified time interval ",
+     " During testing, we recorded the found mistakes by days. The next diagram helped us know how to know how our testing progresses. "
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    86,
+    87
+   ],
+   [
+    "replace",
+    93,
+    95,
+    87,
+    88,
+    [
+     "diagram about erros by days"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    96,
+    88,
+    89
+   ],
+   [
+    "replace",
+    96,
+    97,
+    89,
+    90,
+    [
+     " As the image above shows, the number of errors increases day by day, so testing must continue. Throughout 4 days of testing, we managed to find a total of 103 errors. "
+    ]
+   ],
+   [
+    "equal",
+    97,
+    98,
+    90,
+    91
+   ],
+   [
+    "replace",
+    98,
+    102,
+    91,
+    93,
+    [
+     " 6.7. Analysis of errors found ",
+     " During testing, we also conducted the error report form that we have already mentioned in the introductory chapter on testing. This document has helped us significantly in order to document all the most common types of mistakes in our application, which shows the image below. "
+    ]
+   ],
+   [
+    "equal",
+    102,
+    103,
+    93,
+    94
+   ],
+   [
+    "insert",
+    103,
+    103,
+    94,
+    95,
+    [
+     "error frequency"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    104,
+    95,
+    96
+   ],
+   [
+    "replace",
+    104,
+    105,
+    96,
+    100,
+    [
+     " Singitronic – Key features ",
+     " Singitronic is Next.js and Node.js full-stack e-commerce website with a free source code . Our application comes with the fully functional admin panel and it is fully open-source. Our free online store website is completely responsive and manually tested. You can use our e-commerce project as a template or boilerplate for you next project. Our ecommerce shop template and Next.js ecommerce theme is fully customized for all your needs. It is available for free download and can be used as an ecommerce example for all your future projects. ",
+     " Is Next.js good for eCommerce? ",
+     " Next.js is currently one of the best ways for developing custom eCommerce solutions. It’s benefits include improved performance, SEO-friendliness, easy development and deployment, excellent developer experience, and the ability to handle versatile and scalable projects. By leveraging Next.js, developers can create compelling web applications that deliver an exceptional user experience while maintaining optimal performance. "
+    ]
+   ],
+   [
+    "equal",
+    105,
+    106,
+    100,
+    101
+   ],
+   [
+    "replace",
+    106,
+    107,
+    101,
+    102,
+    [
+     " Step-by-step video instructions for running the app "
+    ]
+   ],
+   [
+    "equal",
+    107,
+    108,
+    102,
+    103
+   ],
+   [
+    "replace",
+    108,
+    117,
+    103,
+    113,
+    [
+     "https://www.youtube.com/watch?v=Ry0aOMws0gE",
+     "",
+     " Instructions ",
+     "",
+     " To run the app you first need to download and install Node.js and npm on your computer. Here is a link to the tutorial that explains how to install them: https://www.youtube.com/watch?v=4FAtFwKVhn0. Also here is the link where you can download them: https://nodejs.org/en ",
+     " When you install Node.js and npm on your computer you need to download and install MySQL on your computer. Here is another link to the tutorial which explains how you can download and install MySQL on your computer: https://www.youtube.com/watch?v=BxdSUGBs0gM&t=212s. Here is a link where you can download MySQL: https://dev.mysql.com/downloads/installer/ ",
+     " This step is optional, but highly recommended if you don't have a database management app. Because HeidiSQL is beginner-friendly and very easy to use than other database management options. Here is a link to the tutorial which explains how to download and install HeidiSQL: https://www.youtube.com/watch?v=oJ24MyLeiPs and here is a link where you can download it: https://www.heidisql.com ",
+     " When you install all the programs you need on your computer you need to download the project. When you download the project, you need to extract it. ",
+     " After you extract the project you need to open the project folder in your code editor and in the root create a file with the name .env. ",
+     " You need to put the following code in the .env file and instead of username and password put your MySQL username and password: "
+    ]
+   ],
+   [
+    "equal",
+    117,
+    126,
+    113,
+    122
+   ],
+   [
+    "replace",
+    126,
+    127,
+    122,
+    123,
+    [
+     " 7. After you do it, you need to create another .env file in the server folder and put the same DATABASE_URL you used in the previous .env file: "
+    ]
+   ],
+   [
+    "equal",
+    127,
+    133,
+    123,
+    129
+   ],
+   [
+    "replace",
+    133,
+    135,
+    129,
+    130,
+    [
+     " 8. Now you need to open your terminal of choice in the root folder of the project and write: "
+    ]
+   ],
+   [
+    "equal",
+    135,
+    140,
+    130,
+    135
+   ],
+   [
+    "replace",
+    140,
+    141,
+    135,
+    136,
+    [
+     " 9. Now you need to navigate with the terminal in the server folder and install everything: "
+    ]
+   ],
+   [
+    "equal",
+    141,
+    147,
+    136,
+    142
+   ],
+   [
+    "replace",
+    147,
+    148,
+    142,
+    143,
+    [
+     " 10. You will need to run the Prisma migration now. Make sure you are in the server folder and write: "
+    ]
+   ],
+   [
+    "equal",
+    148,
+    153,
+    143,
+    148
+   ],
+   [
+    "replace",
+    153,
+    154,
+    148,
+    149,
+    [
+     " 11. Next is to insert demo data. To do it you need to go to the server/utills folder and call insertDemoData.js: "
+    ]
+   ],
+   [
+    "equal",
+    154,
+    160,
+    149,
+    155
+   ],
+   [
+    "replace",
+    160,
+    161,
+    155,
+    156,
+    [
+     " 12. Now you can go back to the server folder and run the backend: "
+    ]
+   ],
+   [
+    "equal",
+    161,
+    167,
+    156,
+    162
+   ],
+   [
+    "replace",
+    167,
+    168,
+    162,
+    163,
+    [
+     " 13. While your backend is running you need to open another terminal(don't stop the backend). In the second terminal, you need to make sure you are in your root project folder and write the following: "
+    ]
+   ],
+   [
+    "equal",
+    168,
+    173,
+    163,
+    168
+   ],
+   [
+    "replace",
+    173,
+    174,
+    168,
+    169,
+    [
+     " 14. Open http://localhost:3000 and see it live! "
+    ]
+   ],
+   [
+    "equal",
+    174,
+    175,
+    169,
+    170
+   ],
+   [
+    "insert",
+    175,
+    175,
+    170,
+    171,
+    [
+     " Project screenshots "
+    ]
+   ],
+   [
+    "equal",
+    175,
+    176,
+    171,
+    172
+   ],
+   [
+    "insert",
+    176,
+    176,
+    172,
+    173,
+    [
+     " Home page "
+    ]
+   ],
+   [
+    "equal",
+    176,
+    177,
+    173,
+    174
+   ],
+   [
+    "replace",
+    177,
+    178,
+    174,
+    175,
+    [
+     "singitronic home page"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    179,
+    175,
+    176
+   ],
+   [
+    "replace",
+    179,
+    180,
+    176,
+    177,
+    [
+     " Shop page "
+    ]
+   ],
+   [
+    "equal",
+    180,
+    181,
+    177,
+    178
+   ],
+   [
+    "replace",
+    181,
+    182,
+    178,
+    179,
+    [
+     "singitronic shop page"
+    ]
+   ],
+   [
+    "equal",
+    182,
+    183,
+    179,
+    180
+   ],
+   [
+    "replace",
+    183,
+    184,
+    180,
+    181,
+    [
+     " Single product page "
+    ]
+   ],
+   [
+    "equal",
+    184,
+    185,
+    181,
+    182
+   ],
+   [
+    "replace",
+    185,
+    186,
+    182,
+    183,
+    [
+     "singitronic single product page"
+    ]
+   ],
+   [
+    "equal",
+    186,
+    187,
+    183,
+    184
+   ],
+   [
+    "replace",
+    187,
+    188,
+    184,
+    185,
+    [
+     " Register page "
+    ]
+   ],
+   [
+    "equal",
+    188,
+    189,
+    185,
+    186
+   ],
+   [
+    "replace",
+    189,
+    190,
+    186,
+    187,
+    [
+     "singitronic register page"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    191,
+    187,
+    188
+   ],
+   [
+    "replace",
+    191,
+    192,
+    188,
+    189,
+    [
+     " Login page "
+    ]
+   ],
+   [
+    "equal",
+    192,
+    193,
+    189,
+    190
+   ],
+   [
+    "replace",
+    193,
+    194,
+    190,
+    191,
+    [
+     "singitronic logic page"
+    ]
+   ],
+   [
+    "equal",
+    194,
+    195,
+    191,
+    192
+   ],
+   [
+    "replace",
+    195,
+    196,
+    192,
+    193,
+    [
+     " Search page "
+    ]
+   ],
+   [
+    "equal",
+    196,
+    197,
+    193,
+    194
+   ],
+   [
+    "replace",
+    197,
+    198,
+    194,
+    195,
+    [
+     "singitronic search page"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    199,
+    195,
+    196
+   ],
+   [
+    "replace",
+    199,
+    200,
+    196,
+    197,
+    [
+     " Wishlist page "
+    ]
+   ],
+   [
+    "equal",
+    200,
+    201,
+    197,
+    198
+   ],
+   [
+    "replace",
+    201,
+    202,
+    198,
+    199,
+    [
+     "singitronic wishlist page"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    203,
+    199,
+    200
+   ],
+   [
+    "replace",
+    203,
+    204,
+    200,
+    201,
+    [
+     " Cart page "
+    ]
+   ],
+   [
+    "equal",
+    204,
+    205,
+    201,
+    202
+   ],
+   [
+    "replace",
+    205,
+    206,
+    202,
+    203,
+    [
+     "singitronic cart page"
+    ]
+   ],
+   [
+    "equal",
+    206,
+    207,
+    203,
+    204
+   ],
+   [
+    "replace",
+    207,
+    208,
+    204,
+    205,
+    [
+     " Checkout page "
+    ]
+   ],
+   [
+    "equal",
+    208,
+    209,
+    205,
+    206
+   ],
+   [
+    "replace",
+    209,
+    210,
+    206,
+    207,
+    [
+     "singitronic checkout page"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    211,
+    207,
+    208
+   ],
+   [
+    "replace",
+    211,
+    212,
+    208,
+    209,
+    [
+     " Admin dashboard - All orders page "
+    ]
+   ],
+   [
+    "equal",
+    212,
+    213,
+    209,
+    210
+   ],
+   [
+    "replace",
+    213,
+    214,
+    210,
+    211,
+    [
+     "singitronic admin orders page"
+    ]
+   ],
+   [
+    "equal",
+    214,
+    215,
+    211,
+    212
+   ],
+   [
+    "replace",
+    215,
+    216,
+    212,
+    213,
+    [
+     " Admin dashboard - All products page "
+    ]
+   ],
+   [
+    "equal",
+    216,
+    217,
+    213,
+    214
+   ],
+   [
+    "replace",
+    217,
+    218,
+    214,
+    215,
+    [
+     "singitronic admin products page"
+    ]
+   ],
+   [
+    "equal",
+    218,
+    219,
+    215,
+    216
+   ],
+   [
+    "replace",
+    219,
+    220,
+    216,
+    217,
+    [
+     " Admin dashboard - All categories page "
+    ]
+   ],
+   [
+    "equal",
+    220,
+    221,
+    217,
+    218
+   ],
+   [
+    "replace",
+    221,
+    222,
+    218,
+    219,
+    [
+     "singitronic admin categories page"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    223,
+    219,
+    220
+   ],
+   [
+    "replace",
+    223,
+    224,
+    220,
+    221,
+    [
+     " Admin dashboard - All users page "
+    ]
+   ],
+   [
+    "equal",
+    224,
+    225,
+    221,
+    222
+   ],
+   [
+    "replace",
+    225,
+    230,
+    222,
+    223,
+    [
+     "singitronic admin users page"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "83ceac5852db+2": {
+  "fn": "Quantrail-Data/CH-Ops",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    8,
+    0,
+    6
+   ],
+   [
+    "replace",
+    8,
+    10,
+    6,
+    8,
+    [
+     "Homepage",
+     "License: Apache 2.0"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    8,
+    9
+   ],
+   [
+    "replace",
+    11,
+    12,
+    9,
+    10,
+    [
+     "**Homepage** · **Documentation** · **Report a Bug**"
+    ]
+   ],
+   [
+    "equal",
+    12,
+    15,
+    10,
+    13
+   ],
+   [
+    "replace",
+    15,
+    20,
+    13,
+    14,
+    [
+     "CHOps"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    43,
+    14,
+    37
+   ],
+   [
+    "replace",
+    43,
+    44,
+    37,
+    38,
+    [
+     "The Feature Overview covers all of it in more detail."
+    ]
+   ],
+   [
+    "equal",
+    44,
+    55,
+    38,
+    49
+   ],
+   [
+    "replace",
+    55,
+    56,
+    49,
+    50,
+    [
+     "|Your ClickHouse® runs on|Connect via|Kubernetes Insights|"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    50,
+    51
+   ],
+   [
+    "replace",
+    57,
+    63,
+    51,
+    57,
+    [
+     "|Bare metal or a VM|Direct connection|no|",
+     "|Docker or Docker Compose|Direct connection|no|",
+     "|Kubernetes with the Altinity® operator (AKOC)|Kubernetes tab|yes|",
+     "|Kubernetes with the official ClickHouse® operator (OCKO)|Kubernetes tab|yes, early access|",
+     "|Kubernetes with no operator|Direct connection|no|",
+     "|ClickHouse® Cloud, Altinity.Cloud®, other managed services|Direct connection|no|"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    57,
+    58
+   ],
+   [
+    "replace",
+    64,
+    65,
+    58,
+    59,
+    [
+     "Clusters that run under a Kubernetes operator get more than a connection. You pick the installation instead of typing host names, and the host list stays correct as the cluster scales up or down. You also get eleven extra screens for health, topology, storage, networking, events, logs, and more. See ClickHouse® Running in Kubernetes."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    68,
+    59,
+    62
+   ],
+   [
+    "replace",
+    68,
+    71,
+    62,
+    63,
+    [
+     "CHOps is built on Bun, with a React frontend and an Express backend. It compiles to a single self-contained binary with no runtime dependencies, so deploying means copying one file to a server."
+    ]
+   ],
+   [
+    "equal",
+    71,
+    74,
+    63,
+    66
+   ],
+   [
+    "replace",
+    74,
+    75,
+    66,
+    67,
+    [
+     "CHOps groups its features into ten sidebar sections. Each item below is a page or a toolset. The list here is short, and the full documentation covers every feature in depth."
+    ]
+   ],
+   [
+    "equal",
+    75,
+    100,
+    67,
+    92
+   ],
+   [
+    "delete",
+    100,
+    102,
+    92,
+    92
+   ],
+   [
+    "equal",
+    102,
+    121,
+    92,
+    111
+   ],
+   [
+    "replace",
+    121,
+    129,
+    111,
+    112,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    129,
+    143,
+    112,
+    126
+   ],
+   [
+    "replace",
+    143,
+    157,
+    126,
+    127,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    169,
+    127,
+    139
+   ],
+   [
+    "replace",
+    169,
+    170,
+    139,
+    140,
+    [
+     "Prebuilt binaries for Linux, macOS, and Windows are on the Releases page. Download the file for your platform (`chops-linux-x64`, `chops-darwin-arm64`, or `chops-windows-x64.exe`). Then run it with the required variables:"
+    ]
+   ],
+   [
+    "equal",
+    170,
+    184,
+    140,
+    154
+   ],
+   [
+    "replace",
+    184,
+    185,
+    154,
+    155,
+    [
+     "|Variable|Required|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    186,
+    155,
+    156
+   ],
+   [
+    "replace",
+    186,
+    190,
+    156,
+    160,
+    [
+     "|`ENCRYPTION_SECRET`|Yes|Derives the key that encrypts stored passwords and keys. Use 32 characters or more. Keep it, and do not change it later, or stored ClickHouse&reg; passwords become unreadable.|",
+     "|`SUPER_ADMIN_1`|Yes|The first admin user name.|",
+     "|`SUPER_ADMIN_1_PASSWORD`|Yes|The first admin password. Change it.|",
+     "|`SUPER_ADMIN_1_EMAIL`|Yes|The first admin email.|"
+    ]
+   ],
+   [
+    "equal",
+    190,
+    216,
+    160,
+    186
+   ],
+   [
+    "delete",
+    216,
+    218,
+    186,
+    186
+   ],
+   [
+    "equal",
+    218,
+    238,
+    186,
+    206
+   ],
+   [
+    "replace",
+    238,
+    239,
+    206,
+    207,
+    [
+     "**2. A ClickHouse&reg; server** you can reach, as described in Run CHOps."
+    ]
+   ],
+   [
+    "equal",
+    239,
+    317,
+    207,
+    285
+   ],
+   [
+    "replace",
+    317,
+    322,
+    285,
+    286,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    334,
+    286,
+    298
+   ],
+   [
+    "replace",
+    334,
+    338,
+    298,
+    299,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    338,
+    340,
+    299,
+    301
+   ],
+   [
+    "replace",
+    340,
+    343,
+    301,
+    302,
+    [
+     "During the build, `vite build` compiles the React frontend into `dist/`, `bun run embed` writes `dist/` and `docs/` into `src/backend/embeddedAssets.js`, and `bun build --compile` bundles the backend, all dependencies, and the embedded files into one binary. Run the binary with the same variables shown in Run a prebuilt binary."
+    ]
+   ],
+   [
+    "equal",
+    343,
+    347,
+    302,
+    306
+   ],
+   [
+    "delete",
+    347,
+    349,
+    306,
+    306
+   ],
+   [
+    "equal",
+    349,
+    368,
+    306,
+    325
+   ],
+   [
+    "replace",
+    368,
+    369,
+    325,
+    326,
+    [
+     "|Operator|Abbreviation|CRD group|Status|"
+    ]
+   ],
+   [
+    "equal",
+    369,
+    370,
+    326,
+    327
+   ],
+   [
+    "replace",
+    370,
+    372,
+    327,
+    329,
+    [
+     "|Altinity® Kubernetes Operator for ClickHouse®|AKOC|`clickhouse.altinity.com`|Supported|",
+     "|Official ClickHouse® Kubernetes Operator|OCKO|`clickhouse.com`|Early access|"
+    ]
+   ],
+   [
+    "equal",
+    372,
+    383,
+    329,
+    340
+   ],
+   [
+    "replace",
+    383,
+    386,
+    340,
+    343,
+    [
+     "- Connecting a Kubernetes Cluster for AKOC",
+     "- Connecting a Cluster Managed by OCKO",
+     "- The Kubernetes Page for the eleven insight screens"
+    ]
+   ],
+   [
+    "equal",
+    386,
+    392,
+    343,
+    349
+   ],
+   [
+    "replace",
+    392,
+    393,
+    349,
+    350,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    393,
+    394,
+    350,
+    351
+   ],
+   [
+    "replace",
+    394,
+    395,
+    351,
+    352,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    395,
+    396,
+    352,
+    353
+   ],
+   [
+    "replace",
+    396,
+    397,
+    353,
+    354,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    397,
+    401,
+    354,
+    358
+   ],
+   [
+    "replace",
+    401,
+    415,
+    358,
+    359,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    415,
+    417,
+    359,
+    361
+   ],
+   [
+    "replace",
+    417,
+    420,
+    361,
+    362,
+    [
+     "The same script ships as `clickhouse-user-setup.sql` in the project root."
+    ]
+   ],
+   [
+    "equal",
+    420,
+    425,
+    362,
+    367
+   ],
+   [
+    "replace",
+    425,
+    431,
+    367,
+    373,
+    [
+     "|Role|Capabilities|",
+     "|---|---|",
+     "|**Super Admin**|Full access. Can be seeded from `.env` for first-time setup or recovery, or created in the UI. Maximum of 3.|",
+     "|**Admin**|Day-to-day administration: clusters, storage profiles, alert rules and channels, trusted CAs, App Config, AI API keys, and editor and readonly users. UI-created only. Cannot open System Email or App Data Backup, and cannot change or delete super admins or other admins.|",
+     "|**Editor**|All sections except user and cluster management. Can create and arrange dashboards and use the SQL editor. The Chart Builder page is for admins. Cannot manage alerts, backups, indexes, projections, or users.|",
+     "|**Readonly**|View-only across overview, dashboards, logs, and monitoring. Can run read-only queries in the SQL editor and sees the alert marquee, but cannot open Alert Rules. Cannot create, edit, or delete anything.|"
+    ]
+   ],
+   [
+    "equal",
+    431,
+    433,
+    373,
+    375
+   ],
+   [
+    "delete",
+    433,
+    435,
+    375,
+    375
+   ],
+   [
+    "equal",
+    435,
+    460,
+    375,
+    400
+   ],
+   [
+    "delete",
+    460,
+    462,
+    400,
+    400
+   ],
+   [
+    "equal",
+    462,
+    470,
+    400,
+    408
+   ],
+   [
+    "replace",
+    470,
+    478,
+    408,
+    409,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    478,
+    498,
+    409,
+    429
+   ],
+   [
+    "delete",
+    498,
+    500,
+    429,
+    429
+   ],
+   [
+    "equal",
+    500,
+    510,
+    429,
+    439
+   ],
+   [
+    "delete",
+    510,
+    512,
+    439,
+    439
+   ],
+   [
+    "equal",
+    512,
+    514,
+    439,
+    441
+   ],
+   [
+    "replace",
+    514,
+    515,
+    441,
+    442,
+    [
+     "For production, run CHOps behind Caddy for automatic HTTPS, and as a systemd service for automatic startup and crash recovery."
+    ]
+   ],
+   [
+    "equal",
+    515,
+    524,
+    442,
+    451
+   ],
+   [
+    "replace",
+    524,
+    538,
+    451,
+    452,
+    [
+     "…（14 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    538,
+    555,
+    452,
+    469
+   ],
+   [
+    "replace",
+    555,
+    558,
+    469,
+    470,
+    [
+     "Caddy obtains and renews Let's Encrypt certificates automatically. The full guide, with security hardening, IP allowlisting, and automated backups, is at ch-ops.io/docs."
+    ]
+   ],
+   [
+    "equal",
+    558,
+    569,
+    470,
+    481
+   ],
+   [
+    "replace",
+    569,
+    570,
+    481,
+    482,
+    [
+     "**Empty monitoring charts**: Click \"Load Charts\" after you select a time range. Charts load only for the active tab. If charts fail instead of staying empty, check the grants of the `chops` user (see Setting Up a Dedicated ClickHouse User)."
+    ]
+   ],
+   [
+    "equal",
+    570,
+    583,
+    482,
+    495
+   ],
+   [
+    "delete",
+    583,
+    585,
+    495,
+    495
+   ],
+   [
+    "equal",
+    585,
+    586,
+    495,
+    496
+   ],
+   [
+    "replace",
+    586,
+    599,
+    496,
+    497,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    599,
+    605,
+    497,
+    503
+   ],
+   [
+    "delete",
+    605,
+    607,
+    503,
+    503
+   ],
+   [
+    "equal",
+    607,
+    611,
+    503,
+    507
+   ],
+   [
+    "delete",
+    611,
+    613,
+    507,
+    507
+   ],
+   [
+    "equal",
+    613,
+    614,
+    507,
+    508
+   ],
+   [
+    "delete",
+    614,
+    615,
+    508,
+    508
+   ],
+   [
+    "equal",
+    615,
+    616,
+    508,
+    509
+   ],
+   [
+    "delete",
+    616,
+    628,
+    509,
+    509
+   ],
+   [
+    "equal",
+    628,
+    632,
+    509,
+    513
+   ],
+   [
+    "replace",
+    632,
+    633,
+    513,
+    514,
+    [
+     "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at https://www.apache.org/licenses/LICENSE-2.0."
+    ]
+   ],
+   [
+    "equal",
+    633,
+    636,
+    514,
+    517
+   ],
+   [
+    "replace",
+    636,
+    641,
+    517,
+    518,
+    [
+     "**ch-ops.io**"
+    ]
+   ],
+   [
+    "equal",
+    641,
+    643,
+    518,
+    520
+   ],
+   [
+    "delete",
+    643,
+    645,
+    520,
+    520
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "2f23bf5fa14a+2": {
+  "fn": "cbecerrae/aws-restart-labs",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    2,
+    1,
+    2,
+    [
+     "Labs Report"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "a753ef1621e6+2": {
+  "fn": "rocketlaunchr/mysql-go",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# Canceling MySQL in Go GoDoc Go Report Card"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    4,
+    1,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "See Article for details of the behind-the-scenes magic."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "The API is designed to resemble the standard library. It is fully compatible with the dbq package which allows for zero boilerplate database operations in Go."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    12,
+    7,
+    12
+   ],
+   [
+    "replace",
+    12,
+    13,
+    12,
+    13,
+    [
+     "- Go MySQL Driver"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    26,
+    13,
+    26
+   ],
+   [
+    "replace",
+    26,
+    30,
+    26,
+    27,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    38,
+    27,
+    35
+   ],
+   [
+    "replace",
+    38,
+    46,
+    35,
+    36,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    46,
+    54,
+    36,
+    44
+   ],
+   [
+    "replace",
+    54,
+    65,
+    44,
+    45,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    81,
+    45,
+    61
+   ],
+   [
+    "replace",
+    81,
+    86,
+    61,
+    66,
+    [
+     "- dataframe-go - Statistics and data manipulation",
+     "- dbq - Zero boilerplate database operations for Go",
+     "- igo - A Go transpiler with cool new syntax such as fordefer (defer for for-loops)",
+     "- react - Build front end applications using Go",
+     "- remember-go - Cache slow database queries"
+    ]
+   ],
+   [
+    "equal",
+    86,
+    98,
+    66,
+    78
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "c6ebce7bbf34+2": {
+  "fn": "brakmic/BiB",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "**BiB** is OpenSource and OS-independent because it runs completely in a browser. "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    8,
+    5,
+    8
+   ],
+   [
+    "replace",
+    8,
+    11,
+    8,
+    11,
+    [
+     "* A client-side UI based on Angular 4",
+     "* A backend based on HapiJS",
+     "* An SQL-database (MariaDB by default, or similar databases)"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    14,
+    11,
+    14
+   ],
+   [
+    "replace",
+    14,
+    15,
+    14,
+    15,
+    [
+     "**BiB** supports retrieval of library content via WorldCat, Google Books API and ISBN-DB API."
+    ]
+   ],
+   [
+    "equal",
+    15,
+    16,
+    15,
+    16
+   ],
+   [
+    "replace",
+    16,
+    17,
+    16,
+    17,
+    [
+     "To use them you have to register first and enter your account data in config.json. "
+    ]
+   ],
+   [
+    "equal",
+    17,
+    20,
+    17,
+    20
+   ],
+   [
+    "replace",
+    20,
+    21,
+    20,
+    21,
+    [
+     "For a visual representation of BiB's features check out this manual."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "The user manuals are available in German and English."
+    ]
+   ],
+   [
+    "equal",
+    23,
+    36,
+    23,
+    36
+   ],
+   [
+    "replace",
+    36,
+    40,
+    36,
+    40,
+    [
+     " datatables.net",
+     " jquery.contextmenu",
+     " jquery.confirm ",
+     " jquery.select2"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    55,
+    40,
+    55
+   ],
+   [
+    "replace",
+    55,
+    57,
+    55,
+    57,
+    [
+     " First, you'll have to provide a properly defined database. ",
+     " The script for automatic database creation is located in the config-folder. "
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    57,
+    58
+   ],
+   [
+    "replace",
+    58,
+    59,
+    58,
+    59,
+    [
+     " To setup a valid administrative account use this sql script."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    61,
+    59,
+    61
+   ],
+   [
+    "delete",
+    61,
+    73,
+    61,
+    61
+   ],
+   [
+    "equal",
+    73,
+    74,
+    61,
+    62
+   ],
+   [
+    "replace",
+    74,
+    77,
+    62,
+    63,
+    [
+     " A working NodeJS 7.x environment is needed to compile the application. "
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    63,
+    64
+   ],
+   [
+    "replace",
+    78,
+    79,
+    64,
+    79,
+    [
+     " Therefore, before you execute the following command make sure you have one. ",
+     "",
+     " Then use ",
+     "",
+     " `npm install` ",
+     "",
+     " to install the packages for the app. ",
+     "",
+     " *Notice for Windows Users*:",
+     "",
+     " If you're using a Windows machine you'll have to provide a complete *Visual Studio Build Environment* because the NodeJS installation ",
+     " procedure will try to build a Windows-compatible binary of the MariaDB package. If you experience problems with building *node-gyp*, ",
+     " please, consult this tutorial. ",
+     "",
+     " For setting up NodeJS under Windows 10 I'd recommend this blog post."
+    ]
+   ],
+   [
+    "equal",
+    79,
+    97,
+    79,
+    97
+   ],
+   [
+    "replace",
+    97,
+    98,
+    97,
+    98,
+    [
+     "You can also create an AOT-build:"
+    ]
+   ],
+   [
+    "equal",
+    98,
+    105,
+    98,
+    105
+   ],
+   [
+    "replace",
+    105,
+    106,
+    105,
+    106,
+    [
+     "Because the server-side scripts are written in TypeScript too you'll need a Node version called ts-node that understands this JavaScript dialect."
+    ]
+   ],
+   [
+    "equal",
+    106,
+    116,
+    106,
+    116
+   ],
+   [
+    "replace",
+    116,
+    124,
+    116,
+    124,
+    [
+     "* Media ",
+     "* Lending",
+     "* Readers",
+     "* Users",
+     "* Statistics ",
+     "* Translations",
+     "* Access Control Lists",
+     "* Library Data Retrieval"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    125,
+    124,
+    125
+   ],
+   [
+    "replace",
+    125,
+    126,
+    125,
+    126,
+    [
+     "The opposite of it is the *BibAPI* that's located in app/apis/bib.api.ts. "
+    ]
+   ],
+   [
+    "equal",
+    126,
+    129,
+    126,
+    129
+   ],
+   [
+    "replace",
+    129,
+    130,
+    129,
+    130,
+    [
+     "The complete list of all available API calls is located here."
+    ]
+   ],
+   [
+    "equal",
+    130,
+    133,
+    130,
+    133
+   ],
+   [
+    "replace",
+    133,
+    134,
+    133,
+    134,
+    [
+     "user_management_picture"
+    ]
+   ],
+   [
+    "equal",
+    134,
+    135,
+    134,
+    135
+   ],
+   [
+    "replace",
+    135,
+    136,
+    135,
+    136,
+    [
+     "**BiB** supports user- and group-based Access Control Lists. Currenty, only group-based ACLs are active but the technical capability to enforce more fine-grained access control is "
+    ]
+   ],
+   [
+    "equal",
+    136,
+    139,
+    136,
+    139
+   ],
+   [
+    "replace",
+    139,
+    140,
+    139,
+    140,
+    [
+     "user_management"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    143,
+    140,
+    143
+   ],
+   [
+    "replace",
+    143,
+    144,
+    143,
+    144,
+    [
+     "**BiB** utilizes **ngrx** for state management. Although the most important parts of the application state live in the database itself there are several areas that should be controlled by the UI. "
+    ]
+   ],
+   [
+    "equal",
+    144,
+    145,
+    144,
+    145
+   ],
+   [
+    "replace",
+    145,
+    146,
+    145,
+    146,
+    [
+     "All important parts like actions, effects and reducers are available but it will take some time until everything becomes fully functional. "
+    ]
+   ],
+   [
+    "equal",
+    146,
+    149,
+    146,
+    149
+   ],
+   [
+    "replace",
+    149,
+    150,
+    149,
+    150,
+    [
+     "Both the server and client use a file called config.json to (de)activate certain behaviors. This file is quite complex as it includes many different entries that deal with important aspects on both sides of the system."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    154,
+    150,
+    154
+   ],
+   [
+    "replace",
+    154,
+    166,
+    154,
+    166,
+    [
+     "|Option|Type|Description|Example|",
+     "|-------------|:----|:-------------|-----:|",
+     "|bib_server|string|DNS-entry of the backend|\"localhost\"|",
+     "|bib_server_port|number|Port number of the backend|10000|",
+     "|bib_server_baseUrl|string|web app base path|\"/bib\"|",
+     "|bib_overdue_days|number|Maximum loan period in days|14|",
+     "|bib_localstorage|string|Name of localStorage object|\"bib-app\"|",
+     "|bib_logon_mask_logo|string|b64-encoded image for login|string with prepended `data:image/TYPE;base64,`|",
+     "|bib_use_fake_isbn_server|boolean|Fake WorldCat access|false|",
+     "|bib_datetime_format|string|Date format|\"DD.MM.YYYY\"|",
+     "|bib_googlebooks_api_key|string|Google Books API-Key|any string|",
+     "|bib_isbndb_api_key|string|ISBN-DB API-Key|any string|"
+    ]
+   ],
+   [
+    "equal",
+    166,
+    171,
+    166,
+    171
+   ],
+   [
+    "replace",
+    171,
+    172,
+    171,
+    172,
+    [
+     "German"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    172,
+    173
+   ],
+   [
+    "replace",
+    173,
+    174,
+    173,
+    174,
+    [
+     "English"
+    ]
+   ],
+   [
+    "equal",
+    174,
+    175,
+    174,
+    175
+   ],
+   [
+    "replace",
+    175,
+    176,
+    175,
+    176,
+    [
+     "French"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    177,
+    176,
+    177
+   ],
+   [
+    "replace",
+    177,
+    178,
+    177,
+    178,
+    [
+     "Italian"
+    ]
+   ],
+   [
+    "equal",
+    178,
+    179,
+    178,
+    179
+   ],
+   [
+    "replace",
+    179,
+    180,
+    179,
+    180,
+    [
+     "Russian"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    181,
+    180,
+    181
+   ],
+   [
+    "replace",
+    181,
+    183,
+    181,
+    182,
+    [
+     "Turkish"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    186,
+    182,
+    185
+   ],
+   [
+    "delete",
+    186,
+    189,
+    185,
+    185
+   ],
+   [
+    "equal",
+    189,
+    190,
+    185,
+    186
+   ],
+   [
+    "replace",
+    190,
+    193,
+    186,
+    187,
+    [
+     "MIT"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    195,
+    187,
+    189
+   ],
+   [
+    "replace",
+    195,
+    196,
+    189,
+    190,
+    [
+     "All images are from Pixabay and CC0 Public Domain licensed. "
+    ]
+   ],
+   [
+    "equal",
+    196,
+    199,
+    190,
+    193
+   ],
+   [
+    "replace",
+    199,
+    205,
+    193,
+    199,
+    [
+     "* Penguin",
+     "* Owl",
+     "* Kids",
+     "* Books",
+     "* Shelf",
+     "* Hourglass"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "b20cebfdd3f1+2": {
+  "fn": "andersinno/python-database-sanitizer",
+  "clean_ver": "2",
+  "raw_lines": 6,
+  "ops": [
+   [
+    "equal",
+    0,
+    6,
+    0,
+    6
+   ],
+   [
+    "delete",
+    6,
+    13,
+    6,
+    6
+   ],
+   [
+    "equal",
+    13,
+    17,
+    6,
+    10
+   ],
+   [
+    "delete",
+    17,
+    20,
+    10,
+    10
+   ],
+   [
+    "equal",
+    20,
+    35,
+    10,
+    25
+   ],
+   [
+    "delete",
+    35,
+    38,
+    25,
+    25
+   ],
+   [
+    "equal",
+    38,
+    66,
+    25,
+    53
+   ],
+   [
+    "delete",
+    66,
+    68,
+    53,
+    53
+   ],
+   [
+    "equal",
+    68,
+    78,
+    53,
+    63
+   ],
+   [
+    "replace",
+    78,
+    90,
+    63,
+    64,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    117,
+    64,
+    91
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "899ca9ce4644+2": {
+  "fn": "hscspring/Web-Full-Stack-Practice",
+  "clean_ver": "2",
+  "raw_lines": 18,
+  "ops": [
+   [
+    "equal",
+    0,
+    18,
+    0,
+    18
+   ],
+   [
+    "replace",
+    18,
+    20,
+    18,
+    20,
+    [
+     " - Engine：18.09.1",
+     " - Compose：1.23.2"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    25,
+    20,
+    25
+   ],
+   [
+    "replace",
+    25,
+    26,
+    25,
+    26,
+    [
+     "模型参考：递归神经网络 | TensorFlow，使用张爱玲作品集的句子作为训练集，800 个句子，52750 字，跑了 150 个 epoch。"
+    ]
+   ],
+   [
+    "equal",
+    26,
+    31,
+    26,
+    31
+   ],
+   [
+    "replace",
+    31,
+    35,
+    31,
+    35,
+    [
+     "- uWSGI：The uWSGI project — uWSGI 2.0 documentation，Web 服务器，针对后端服务。",
+     "- Celery：Celery - Distributed Task Queue — Celery 4.2.0 documentation，分布式任务队列服务，针对后端耗时较长的执行任务，也可以让 Django 异步。",
+     "- Django：The Web framework for perfectionists with deadlines | Django，Python 的 Web 开发框架。",
+     "- Supervisor：Supervisor: A Process Control System — Supervisor 3.3.5 documentation，进程管理工具，主要用于在一个容器启动多个服务。"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    55,
+    35,
+    55
+   ],
+   [
+    "replace",
+    55,
+    56,
+    55,
+    56,
+    [
+     "当然，你也可以直接使用 `docker run -it --rm --name mypsql -e POSTGRES_PASSWORD=password4superuser -p 5432:5432 -v ~/docker_volume/pg9.5:/var/lib/postgresql/data postgres:9.5` 启动 db，启动后可以更改 postgres 用户的密码。"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    74,
+    56,
+    74
+   ],
+   [
+    "replace",
+    74,
+    78,
+    74,
+    78,
+    [
+     "- Python 环境及开发包管理：pypa/pipenv: Python Development Workflow for Humans.",
+     " - 创建虚拟环境：`pipenv --python 3.6.5 # 我的本地环境是 python 3.6.5` ",
+     " - `pipenv shell` 可以进入虚拟环境，或使用 `pipenv run python xxx.py` 等于直接在虚拟环境中运行 `python xxx.py`，`pipenv install xx` 可以安装需要的依赖，或安装指定版本，比如本例：`pipenv install tensorflow==1.12.0`",
+     " - **使用之前，将 Pipfile 中的 url 改成 https://pypi.douban.com/simple 或其他速度快的源**，Pipfile 能看到所有已安装的包"
+    ]
+   ],
+   [
+    "equal",
+    78,
+    80,
+    78,
+    80
+   ],
+   [
+    "replace",
+    80,
+    82,
+    80,
+    82,
+    [
+     " - 将 setting 分为 prod 和 dev 两个文件，分别设置开发和正式环境的参数，需要修改 `wsgi.py, manage.py` 以便 Django 能够找到配置文件",
+     " - 一般每个 APP 下面都可能有配置文件，编写代码时最好改成可以统一在项目的 settings 这里覆盖。比如训练好的模型文件（详见配置文件 `settings/base.py`）可以映射出来，这样不但可以方便我们随时更新模型，而且也能减小 image 的大小。"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    82,
+    83
+   ],
+   [
+    "replace",
+    83,
+    85,
+    83,
+    85,
+    [
+     " - 使用配置文件，这样本地开发完部署时只要在服务器用正式的配置文件即可",
+     " - 如果使用 docker-compose，数据库的 host 是：192.168.65.2，而不是 127.0.0.1 或本机地址"
+    ]
+   ],
+   [
+    "equal",
+    85,
+    101,
+    85,
+    101
+   ],
+   [
+    "replace",
+    101,
+    102,
+    101,
+    102,
+    [
+     " 需要说明的是：这两个文件可以放在任何地方，因为它们最终都是要放到 `/etc/` 下面的。"
+    ]
+   ],
+   [
+    "equal",
+    102,
+    105,
+    102,
+    105
+   ],
+   [
+    "replace",
+    105,
+    106,
+    105,
+    106,
+    [
+     " 这里的原因是，root 用户出错时可能会对系统造成一些意想不到的错误，如果系统有其他服务可能会出问题，但我们的 docker 服务是隔离和相对独立的，所以个人觉得使用 root 问题不大；同样的问题在 uWSGI 那里也有。"
+    ]
+   ],
+   [
+    "equal",
+    106,
+    117,
+    106,
+    117
+   ],
+   [
+    "replace",
+    117,
+    120,
+    117,
+    120,
+    [
+     "- How to use Django with uWSGI | Django documentation | Django ",
+     "- Things to know (best practices and “issues”) READ IT !!! — uWSGI 2.0 documentation",
+     "- How to create a Django server running uWSGI, NGINX and PostgreSQL on AWS EC2 with Python 3.6"
+    ]
+   ],
+   [
+    "equal",
+    120,
+    123,
+    120,
+    123
+   ],
+   [
+    "replace",
+    123,
+    124,
+    123,
+    124,
+    [
+     "主要目的是把多个服务放在一个容器内启动，官方文档 Run multiple services in a container | Docker Documentation 也有相应的介绍。关于 stopsignal 参数的说明，可以参考：How to use supervisor fo start/stop uWSGI application? - Stack Overflow"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    135,
+    124,
+    135
+   ],
+   [
+    "replace",
+    135,
+    139,
+    135,
+    139,
+    [
+     " - `python manage.py makemigrations` 生成 db 相关数据",
+     " - `python manage.py migrate` 将生成的数据 migrate 到 db",
+     " - `python manage.py createsuperuser` 可以创建管理后台的管理员",
+     " - `python manage.py collectstatic ` 自动输出静态文件到项目根目录"
+    ]
+   ],
+   [
+    "equal",
+    139,
+    149,
+    139,
+    149
+   ],
+   [
+    "replace",
+    149,
+    150,
+    149,
+    150,
+    [
+     "前端我们使用 Facebook 的 Create React App · Set up a modern web app by running one command."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    166,
+    150,
+    166
+   ],
+   [
+    "replace",
+    166,
+    167,
+    166,
+    167,
+    [
+     "生成证书相关文件需要借助：dakshshah96/local-cert-generator: 🚀 A set of scripts to quickly generate a HTTPS certificate for your local development environment."
+    ]
+   ],
+   [
+    "equal",
+    167,
+    170,
+    167,
+    170
+   ],
+   [
+    "delete",
+    170,
+    172,
+    170,
+    170
+   ],
+   [
+    "equal",
+    172,
+    174,
+    170,
+    172
+   ],
+   [
+    "replace",
+    174,
+    176,
+    172,
+    174,
+    [
+     " - `Enter pass phrase for rootCA.key:` 输入一个自己定义的密码（要输三次），要记住，以后每次为域名生成证书时都需要输入",
+     " - 后面的除了 `Common Name` 都可以回车跳过，这个是证书颁发机构的名称，输入 `Local Cert` 或 `My PC Cert` 之类的都可以"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    179,
+    174,
+    177
+   ],
+   [
+    "replace",
+    179,
+    180,
+    177,
+    178,
+    [
+     "然后要配置 React，这里我们需要安装 timarney/react-app-rewired: Override create-react-app webpack configs without ejecting：`npm i react-app-rewired --save-dev`。"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    188,
+    178,
+    186
+   ],
+   [
+    "delete",
+    188,
+    190,
+    186,
+    186
+   ],
+   [
+    "equal",
+    190,
+    191,
+    186,
+    187
+   ],
+   [
+    "delete",
+    191,
+    193,
+    187,
+    187
+   ],
+   [
+    "equal",
+    193,
+    198,
+    187,
+    192
+   ],
+   [
+    "replace",
+    198,
+    199,
+    192,
+    193,
+    [
+     "NGINX | High Performance Load Balancer, Web Server, & Reverse Proxy 一般会用在产品部署上，作为代理和静态资源服务器，接下来我们主要介绍如何在本地调试 Nginx。主要有以下几步："
+    ]
+   ],
+   [
+    "equal",
+    199,
+    213,
+    193,
+    207
+   ],
+   [
+    "replace",
+    213,
+    219,
+    207,
+    208,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    225,
+    208,
+    214
+   ],
+   [
+    "replace",
+    225,
+    226,
+    214,
+    215,
+    [
+     "- 正式部署时，一般需要先在服务器上放一个验证文件，能点击下载后才能获得 `server.key` 和 `server.crt`，比如 SSL For Free - Free SSL Certificates in Minutes，但我们本地因为是自己电脑给的证书，所以这一步不需要。当然如果你采用其他的证书授予商，也可能有不同的要求。除了上面那个免费的 SSl 外，还有很多，大家可以上网搜一搜，比如：Getting Started - Let's Encrypt - Free SSL/TLS Certificates。"
+    ]
+   ],
+   [
+    "equal",
+    226,
+    228,
+    215,
+    217
+   ],
+   [
+    "replace",
+    228,
+    239,
+    217,
+    228,
+    [
+     " - 注释掉共享的目录，重新启动运行；",
+     "",
+     " - 本地生成；",
+     "",
+     " - 找到文件的实际位置然后复制出来，关于 volume 的详细情况可以通过 `docker volume inspect demo_app_static` 查看，运行 `screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty` 然后进入 inspect 的目录就可以看到了。注意需要运行一个 docker 才能复制，步骤如下:",
+     "",
+     " - `docker run -it --rm -v volume_name:/home_or_other_dir container /bin/bash`",
+     " - `docker cp container_name:/home_or_other_dir /your_local_path`",
+     "",
+     " 因为这里的 volume 并没有在你 `docker-compose up` 起来的容器里，所以我们需要先将它映射到一个容器里再复制。",
+     "- 关于 Dockerfile 中 ENV 替换到 nginx 配置文件需要特别注意，可以参考这里：configuration - nginx 'invalid number of arguments in \"map\" directive' - Stack Overflow"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    246,
+    228,
+    235
+   ],
+   [
+    "delete",
+    246,
+    248,
+    235,
+    235
+   ],
+   [
+    "equal",
+    248,
+    250,
+    235,
+    237
+   ],
+   [
+    "delete",
+    250,
+    252,
+    237,
+    237
+   ],
+   [
+    "equal",
+    252,
+    253,
+    237,
+    238
+   ],
+   [
+    "delete",
+    253,
+    255,
+    238,
+    238
+   ],
+   [
+    "equal",
+    255,
+    265,
+    238,
+    248
+   ],
+   [
+    "replace",
+    265,
+    266,
+    248,
+    249,
+    [
+     "- 关于 Docker 操作的，台湾省一个同胞写的 twtrubiks/docker-tutorial: Docker 基本教學 - 從無到有 Docker-Beginners-Guide 教你用 Docker 建立 Django + PostgreSQL 📝 还不错，另外官方文档也非常赞，所以我就没有废话了。我在他另一个项目里也学到了一些（第一个参考文献），推荐新手看看。"
+    ]
+   ],
+   [
+    "equal",
+    266,
+    276,
+    249,
+    259
+   ],
+   [
+    "replace",
+    276,
+    306,
+    259,
+    260,
+    [
+     "…（30 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    306,
+    320,
+    260,
+    274
+   ],
+   [
+    "replace",
+    320,
+    341,
+    274,
+    275,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    341,
+    351,
+    275,
+    285
+   ],
+   [
+    "replace",
+    351,
+    352,
+    285,
+    286,
+    [
+     "- twtrubiks/docker-django-nginx-uwsgi-postgres-tutorial: Docker + Django + Nginx + uWSGI + Postgres 基本教學 - 從無到有 (Docker + Django + Nginx + uWSGI + Postgres Tutorial)"
+    ]
+   ],
+   [
+    "equal",
+    352,
+    354,
+    286,
+    288
+   ],
+   [
+    "replace",
+    354,
+    357,
+    288,
+    291,
+    [
+     " - Django+uWsgi+nginx+https 完全配置 | Sunrise 博客",
+     " - Django + uWSGI + Nginx + SSL - request for working configuration (emphasis on SSL) - Stack Overflow",
+     " - Nginx 配置 HTTPS 服务器 | Aotu.io「凹凸实验室」"
+    ]
+   ],
+   [
+    "equal",
+    357,
+    360,
+    291,
+    294
+   ],
+   [
+    "replace",
+    360,
+    364,
+    294,
+    298,
+    [
+     " - JrCs/docker-letsencrypt-nginx-proxy-companion: LetsEncrypt companion container for nginx-proxy",
+     " - How to Set Up Free SSL Certificates from Let's Encrypt using Docker and Nginx",
+     " - 那些证书相关的玩意儿 (SSL,X.509,PEM,DER,CRT,CER,KEY,CSR,P12 等) - guogangj - 博客园",
+     " - 细说 CA 和证书 | 小胡子哥的个人网站"
+    ]
+   ],
+   [
+    "equal",
+    364,
+    366,
+    298,
+    300
+   ],
+   [
+    "replace",
+    366,
+    371,
+    300,
+    305,
+    [
+     " - How to run celery as a daemon?",
+     " - 5. 任务状态追踪 on_message - 疯哥哥带你飞 - CSDN 博客",
+     " - Asynchronous Tasks With Django and Celery – Real Python",
+     " - 分布式队列神器 Celery - python web 学习轨迹 - SegmentFault 思否",
+     " - Daemonization — Celery 4.2.0 documentation"
+    ]
+   ],
+   [
+    "equal",
+    371,
+    373,
+    305,
+    307
+   ],
+   [
+    "replace",
+    373,
+    377,
+    307,
+    311,
+    [
+     " - Supervisor with Docker: Lessons learned - Advanced Web Machinery",
+     " - Python, UWSGI, Supervisor & Nginx",
+     " - dorianpula/ansible-nginx-uwsgi-supervisor: An Ansible role to setup and manage a UWSGI app via supervisor, and served up on a NGINX web server.",
+     " - Supervisor: A Process Control System — Supervisor 3.3.5 documentation"
+    ]
+   ],
+   [
+    "equal",
+    377,
+    378,
+    311,
+    312
+   ],
+   [
+    "replace",
+    378,
+    379,
+    312,
+    313,
+    [
+     " - Setting up Django and your web server with uWSGI and nginx — uWSGI 2.0 documentation"
+    ]
+   ],
+   [
+    "equal",
+    379,
+    380,
+    313,
+    314
+   ],
+   [
+    "replace",
+    380,
+    381,
+    314,
+    315,
+    [
+     " - How to use Django with uWSGI | Django documentation | Django"
+    ]
+   ],
+   [
+    "equal",
+    381,
+    384,
+    315,
+    318
+   ],
+   [
+    "replace",
+    384,
+    385,
+    318,
+    319,
+    [
+     "这篇文章包括这个项目花了一天时间才完成，这还是在已经对各模块都有一些经验的情况下。很多地方都踩过坑，说这篇文章的内容 “坑坑洼洼” 也不夸张，尤其是我提到要注意或者特别强调的点。在解决这些坑的过程中得到不少同事的帮助，尤其是 scottming (Scott Ming) 在本地 Https 和 Dockerfile 相关的配置中给予了很多启发和提示。最后，希望这个 demo 项目和文章能对大家有所帮助，如果有 Google、Stackoverflow 没有找到答案且与此项目相关的问题或本项目疏漏的地方，欢迎大家 Issue。"
+    ]
+   ],
+   [
+    "equal",
+    385,
+    387,
+    319,
+    321
+   ],
+   [
+    "replace",
+    387,
+    389,
+    321,
+    322,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "920fe21f66c2+2": {
+  "fn": "eliornl/rolemule",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "RoleMule"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    1,
+    2
+   ],
+   [
+    "replace",
+    4,
+    5,
+    2,
+    3,
+    [
+     " One mule for every role. "
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    3,
+    4
+   ],
+   [
+    "replace",
+    6,
+    7,
+    4,
+    5,
+    [
+     " https://eliornl.github.io/rolemule/ "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    5,
+    6
+   ],
+   [
+    "replace",
+    8,
+    21,
+    6,
+    19,
+    [
+     "Python",
+     "FastAPI",
+     "LangGraph",
+     "PostgreSQL",
+     "Redis",
+     "TypeScript",
+     "Chrome Extension",
+     "Gemini",
+     "OpenAI",
+     "Anthropic",
+     "Ollama",
+     "Claude",
+     "Cursor"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    19,
+    20
+   ],
+   [
+    "replace",
+    22,
+    25,
+    20,
+    21,
+    [
+     " License: MIT"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    21,
+    22
+   ],
+   [
+    "replace",
+    26,
+    30,
+    22,
+    24,
+    [
+     " GitHub Stars",
+     " GitHub Clones"
+    ]
+   ],
+   [
+    "equal",
+    30,
+    43,
+    24,
+    37
+   ],
+   [
+    "replace",
+    43,
+    44,
+    37,
+    38,
+    [
+     "RoleMule demo"
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    38,
+    39
+   ],
+   [
+    "replace",
+    45,
+    50,
+    39,
+    40,
+    [
+     "AI Agents · Career Tools · Quick Start · CLI · AI Provider / API Key · Chrome Extension · Highlights · Optional Features · Developer Setup · Environment Variables · How It Works · Project Structure · Contributing · License"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    55,
+    40,
+    45
+   ],
+   [
+    "replace",
+    55,
+    56,
+    45,
+    46,
+    [
+     "|Agent|What it produces|"
+    ]
+   ],
+   [
+    "equal",
+    56,
+    57,
+    46,
+    47
+   ],
+   [
+    "replace",
+    57,
+    62,
+    47,
+    52,
+    [
+     "|**Job Analyzer**|Structured breakdown of requirements, skills, and ATS keywords|",
+     "|**Profile Matcher**|Fit score, strengths to highlight, gaps to address, application strategy|",
+     "|**Company Research**|Culture, leadership style, interview approach, watch-out notes|",
+     "|**Resume Advisor**|Per-bullet rewrites, ATS alignment score, before-you-submit checklist|",
+     "|**Cover Letter Writer**|Personalized cover letter, regenerate with one click|"
+    ]
+   ],
+   [
+    "equal",
+    62,
+    65,
+    52,
+    55
+   ],
+   [
+    "replace",
+    65,
+    66,
+    55,
+    56,
+    [
+     "|Agent|What it produces|"
+    ]
+   ],
+   [
+    "equal",
+    66,
+    67,
+    56,
+    57
+   ],
+   [
+    "replace",
+    67,
+    71,
+    57,
+    61,
+    [
+     "|**Interview Prep**|Role-specific questions, model answers, STAR frameworks, and process tips (static guide on the Interview tab)|",
+     "|**CV Optimizer**|Iterative evaluate→revise loop: AI hiring manager scores your CV, AI applicant rewrites it, repeats until score threshold or max iterations. Outputs an optimized CV, cover letter, and **Download CV** (`.odt` via LibreOffice + HTML normalizer on server when available, else `.docx`; see USER_GUIDE.md).|",
+     "|**Mock Session**|Timed conversational mock session (HR / Pro / Manager; 10/15/20 min) with browser voice or typed answers and a scored debrief — see USER_GUIDE.md|",
+     "|**Hiring Outreach**|Public web contact suggestions and copy-ready outreach drafts on the Outreach tab (you send them yourself — no send integration) — see USER_GUIDE.md|"
+    ]
+   ],
+   [
+    "equal",
+    71,
+    76,
+    61,
+    66
+   ],
+   [
+    "replace",
+    76,
+    77,
+    66,
+    67,
+    [
+     "|Tool|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    67,
+    68
+   ],
+   [
+    "replace",
+    78,
+    84,
+    68,
+    74,
+    [
+     "|**Follow-up Email**|Post-application and post-interview follow-ups|",
+     "|**Thank You Note**|Interviewer thank you note, ready to send|",
+     "|**Salary Coach**|Negotiation script based on your offer and market data|",
+     "|**Rejection Analyzer**|Lessons learned and re-application strategy from a rejection email|",
+     "|**Reference Request**|Professional reference request for a specific contact|",
+     "|**Job Comparison**|Side-by-side comparison of 2–3 open roles|"
+    ]
+   ],
+   [
+    "equal",
+    84,
+    89,
+    74,
+    79
+   ],
+   [
+    "replace",
+    89,
+    90,
+    79,
+    80,
+    [
+     "||Docker (all platforms)|No Docker (macOS)|Manual|"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    80,
+    81
+   ],
+   [
+    "replace",
+    91,
+    95,
+    81,
+    85,
+    [
+     "|**Command**|`make start`|`make start-local`|`make dev`|",
+     "|**Requires**|Docker Desktop|macOS only|PostgreSQL + Redis running yourself|",
+     "|**First run**|~2 min (builds Docker image)|~3 min (installs Postgres + Redis)|Depends on your setup|",
+     "|**Subsequent runs**|~5 sec|~5 sec|~5 sec|"
+    ]
+   ],
+   [
+    "equal",
+    95,
+    98,
+    85,
+    88
+   ],
+   [
+    "replace",
+    98,
+    99,
+    88,
+    89,
+    [
+     "**What you need:** Docker Desktop installed and running (installs WSL2 automatically on Windows). `make start` will tell you if it isn't running."
+    ]
+   ],
+   [
+    "equal",
+    99,
+    108,
+    89,
+    98
+   ],
+   [
+    "replace",
+    108,
+    109,
+    98,
+    99,
+    [
+     "**Windows** — install just (`winget install Casey.Just`) instead of `make`. It works natively in PowerShell and cmd — no WSL2 needed, and **no Git for Windows / `cygpath` required** for `just start` (only Docker Desktop + `just`)."
+    ]
+   ],
+   [
+    "equal",
+    109,
+    130,
+    99,
+    120
+   ],
+   [
+    "delete",
+    130,
+    132,
+    120,
+    120
+   ],
+   [
+    "equal",
+    132,
+    159,
+    120,
+    147
+   ],
+   [
+    "delete",
+    159,
+    161,
+    147,
+    147
+   ],
+   [
+    "equal",
+    161,
+    175,
+    147,
+    161
+   ],
+   [
+    "replace",
+    175,
+    176,
+    161,
+    162,
+    [
+     "Windows — install just (`winget install Casey.Just`) first:"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    216,
+    162,
+    202
+   ],
+   [
+    "delete",
+    216,
+    218,
+    202,
+    202
+   ],
+   [
+    "equal",
+    218,
+    226,
+    202,
+    210
+   ],
+   [
+    "delete",
+    226,
+    228,
+    210,
+    210
+   ],
+   [
+    "equal",
+    228,
+    267,
+    210,
+    249
+   ],
+   [
+    "replace",
+    267,
+    270,
+    249,
+    250,
+    [
+     "Full command reference: **docs/cli-reference.md** (shell aliases included) · Tests: `make cli-test`"
+    ]
+   ],
+   [
+    "equal",
+    270,
+    284,
+    250,
+    264
+   ],
+   [
+    "replace",
+    284,
+    287,
+    264,
+    265,
+    [
+     "See `.env.local.example` and `.cursor/rules/llm-integration.mdc`."
+    ]
+   ],
+   [
+    "equal",
+    287,
+    299,
+    265,
+    277
+   ],
+   [
+    "delete",
+    299,
+    301,
+    277,
+    277
+   ],
+   [
+    "equal",
+    301,
+    310,
+    277,
+    286
+   ],
+   [
+    "delete",
+    310,
+    312,
+    286,
+    286
+   ],
+   [
+    "equal",
+    312,
+    323,
+    286,
+    297
+   ],
+   [
+    "replace",
+    323,
+    328,
+    297,
+    298,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    328,
+    332,
+    298,
+    302
+   ],
+   [
+    "replace",
+    332,
+    333,
+    302,
+    303,
+    [
+     "1. Google Cloud Console → APIs & Services → Credentials"
+    ]
+   ],
+   [
+    "equal",
+    333,
+    346,
+    303,
+    316
+   ],
+   [
+    "replace",
+    346,
+    347,
+    316,
+    317,
+    [
+     "1. Create a free project at posthog.com"
+    ]
+   ],
+   [
+    "equal",
+    347,
+    365,
+    317,
+    335
+   ],
+   [
+    "replace",
+    365,
+    368,
+    335,
+    336,
+    [
+     "Requires Application Default Credentials (`gcloud auth application-default login`) or a service account in the environment."
+    ]
+   ],
+   [
+    "equal",
+    368,
+    371,
+    336,
+    339
+   ],
+   [
+    "replace",
+    371,
+    372,
+    339,
+    340,
+    [
+     "**macOS (no Docker)** — see Option B in Quick Start. After the first run, restarting the app is just:"
+    ]
+   ],
+   [
+    "equal",
+    372,
+    384,
+    340,
+    352
+   ],
+   [
+    "replace",
+    384,
+    385,
+    352,
+    353,
+    [
+     "**Linux / custom setup** — see Option C in Quick Start."
+    ]
+   ],
+   [
+    "equal",
+    385,
+    388,
+    353,
+    356
+   ],
+   [
+    "replace",
+    388,
+    389,
+    356,
+    357,
+    [
+     "|Command|What it does|"
+    ]
+   ],
+   [
+    "equal",
+    389,
+    390,
+    357,
+    358
+   ],
+   [
+    "replace",
+    390,
+    407,
+    358,
+    373,
+    [
+     "|`make start-local`|No Docker: install services + setup + migrate + start app (macOS)|",
+     "|`make stop-local`|Stop PostgreSQL and Redis Homebrew services|",
+     "|`make start` / `just start`|Docker: generate `.env` + start all services (foreground)|",
+     "|`make start-d` / `just start-d`|Docker: generate `.env` + start all services (background)|",
+     "|`make docker-down` / `just docker-down`|Stop Docker services, keep data|",
+     "|`make docker-reset` / `just docker-reset`|Stop Docker services, wipe data volumes|",
+     "|`make docker-logs` / `just docker-logs`|Tail the Docker app log|",
+     "|`make setup` / `just setup`|Dev setup: venv + Python/Node deps + **CLI** + frontend build|",
+     "|`make dev` / `just dev`|Start FastAPI dev server with auto-reload (services must be running)|",
+     "|`make migrate` / `just migrate`|Run Alembic database migrations|",
+     "|`make build-frontend` / `just build-frontend`|Compile and content-hash JS/CSS assets|",
+     "|`make test` / `just test`|Run the test suite|",
+     "|`make cli-test` / `just cli-test`|Run CLI tests (`tests/test_cli/`)|",
+     "|`make lint` / `just lint`|Run ruff linter|",
+     "|`make clean`|Remove venv and compiled artefacts|"
+    ]
+   ],
+   [
+    "equal",
+    407,
+    412,
+    373,
+    378
+   ],
+   [
+    "replace",
+    412,
+    413,
+    378,
+    379,
+    [
+     "|Variable|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    413,
+    414,
+    379,
+    380
+   ],
+   [
+    "replace",
+    414,
+    433,
+    380,
+    399,
+    [
+     "|`JWT_SECRET`|Auto-generated|Signs auth tokens|",
+     "|`ENCRYPTION_KEY`|Auto-generated|Encrypts stored API keys|",
+     "|`DATABASE_URL`|Set automatically|PostgreSQL connection (user/db name stays `applypilot`)|",
+     "|`REDIS_URL`|Set automatically|Redis connection|",
+     "|`LLM_PROVIDER`|`gemini`|Health/admin fallback provider only (`gemini` \\|`openai` \\|`anthropic` \\|`ollama`) — users pick via **Settings → AI Setup**|",
+     "|`GEMINI_API_KEY`|_(empty)_|Server Gemini key for health/admin; users add BYOK in Settings|",
+     "|`GEMINI_MODEL`|`gemini-3.5-flash`|Default Gemini model (overridable per user when BYOK)|",
+     "|`OPENAI_API_KEY`|_(empty)_|Server OpenAI key for health/admin; users add BYOK in Settings|",
+     "|`OPENAI_MODEL`|`gpt-5.6-luna`|Default OpenAI model|",
+     "|`ANTHROPIC_API_KEY`|_(empty)_|Server Anthropic key for health/admin; users add BYOK in Settings|",
+     "|`ANTHROPIC_MODEL`|`claude-sonnet-5`|Default Anthropic model|",
+     "|`OLLAMA_BASE_URL`|`http://127.0.0.1:11434`|Ollama host when user selects Ollama|",
+     "|`OLLAMA_MODEL`|`qwen3.6`|Default Ollama model|",
+     "|`BASE_URL`|`http://localhost:8000`|Used in password-reset and verification email links|",
+     "|`DISABLE_EMAIL_VERIFICATION`|`true`|Set `false` when SMTP is configured|",
+     "|`GOOGLE_CLIENT_ID`|_(empty)_|Enables \"Continue with Google\"|",
+     "|`SMTP_HOST`|_(empty)_|Enables password-reset emails|",
+     "|`DEBUG`|`true`|Set `false` in any shared or public environment|",
+     "|`USE_VERTEX_AI`|`false`|Server-admin: use Google Cloud Vertex AI instead of a direct API key|"
+    ]
+   ],
+   [
+    "equal",
+    433,
+    434,
+    399,
+    400
+   ],
+   [
+    "replace",
+    434,
+    437,
+    400,
+    401,
+    [
+     "Full reference with comments: `.env.local.example`"
+    ]
+   ],
+   [
+    "equal",
+    437,
+    444,
+    401,
+    408
+   ],
+   [
+    "replace",
+    444,
+    466,
+    408,
+    409,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    466,
+    469,
+    409,
+    412
+   ],
+   [
+    "delete",
+    469,
+    471,
+    412,
+    412
+   ],
+   [
+    "equal",
+    471,
+    478,
+    412,
+    419
+   ],
+   [
+    "replace",
+    478,
+    516,
+    419,
+    420,
+    [
+     "…（38 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    516,
+    518,
+    420,
+    422
+   ],
+   [
+    "delete",
+    518,
+    520,
+    422,
+    422
+   ],
+   [
+    "equal",
+    520,
+    521,
+    422,
+    423
+   ],
+   [
+    "replace",
+    521,
+    533,
+    423,
+    424,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    533,
+    534,
+    424,
+    425
+   ],
+   [
+    "replace",
+    534,
+    536,
+    425,
+    426,
+    [
+     "MIT — use it, fork it, modify it, self-host it."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "5d16d8d3a70d+2": {
+  "fn": "mikeadolan/claude-brain",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "CI Tests"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    8,
+    3,
+    8
+   ],
+   [
+    "replace",
+    8,
+    11,
+    8,
+    9,
+    [
+     "**Watch the explainer video:** claude-brain in 85 seconds | **Roadmap**"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    25,
+    9,
+    23
+   ],
+   [
+    "delete",
+    25,
+    27,
+    23,
+    23
+   ],
+   [
+    "equal",
+    27,
+    31,
+    23,
+    27
+   ],
+   [
+    "replace",
+    31,
+    32,
+    27,
+    28,
+    [
+     "|What|How|"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    33,
+    28,
+    29
+   ],
+   [
+    "replace",
+    33,
+    40,
+    29,
+    36,
+    [
+     "|**RAG (context injection)**|Every prompt gets relevant memories injected automatically - hooks search your history before Claude sees your message|",
+     "|**Full lossless capture**|Other tools extract \"memories\" and throw away the raw data. We keep every word. Nothing summarized away, nothing lost.|",
+     "|**Cross-project search**|Ask about a decision from your API project while working on your frontend. No silos - one brain across everything.|",
+     "|**Three search modes**|Keyword (exact), semantic (meaning-based), and fuzzy (typo-correcting). \"sesion\" auto-corrects to \"session\" before the query runs.|",
+     "|**Structured knowledge**|Numbered decisions, project facts, session quality scores, project health tracking - not just unstructured text blobs|",
+     "|**Proactive intelligence**|The brain emails YOU. Daily standups, weekly portfolios, dormant project alerts. RAG waits for you to ask. This doesn't.|",
+     "|**100% local**|SQLite on your machine. No API calls for search. No cloud. No cost. No one sees your data. Zero token burn.|"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    42,
+    36,
+    38
+   ],
+   [
+    "delete",
+    42,
+    44,
+    38,
+    38
+   ],
+   [
+    "equal",
+    44,
+    53,
+    38,
+    47
+   ],
+   [
+    "replace",
+    53,
+    65,
+    47,
+    48,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    73,
+    48,
+    56
+   ],
+   [
+    "replace",
+    73,
+    83,
+    56,
+    57,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    83,
+    87,
+    57,
+    61
+   ],
+   [
+    "delete",
+    87,
+    89,
+    61,
+    61
+   ],
+   [
+    "equal",
+    89,
+    91,
+    61,
+    63
+   ],
+   [
+    "replace",
+    91,
+    92,
+    63,
+    64,
+    [
+     "Install Demo"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    139,
+    64,
+    111
+   ],
+   [
+    "delete",
+    139,
+    141,
+    111,
+    111
+   ],
+   [
+    "equal",
+    141,
+    151,
+    111,
+    121
+   ],
+   [
+    "replace",
+    151,
+    161,
+    121,
+    122,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    161,
+    182,
+    122,
+    143
+   ],
+   [
+    "replace",
+    182,
+    183,
+    143,
+    144,
+    [
+     "|Template|Command|What You Get|"
+    ]
+   ],
+   [
+    "equal",
+    183,
+    184,
+    144,
+    145
+   ],
+   [
+    "replace",
+    184,
+    187,
+    145,
+    148,
+    [
+     "|**Daily Standup**|`--daily`|Per-project \"Pick Up Here\" with next steps, blockers, accomplishments, 7-day trend|",
+     "|**Weekly Digest**|(default)|Executive summary, week-over-week trends, health portfolio, top accomplishments, dormant alerts|",
+     "|**Project Deep Dive**|`--project mb`|Full status: health metrics, in-progress, risks, decisions, architecture|"
+    ]
+   ],
+   [
+    "equal",
+    187,
+    190,
+    148,
+    151
+   ],
+   [
+    "replace",
+    190,
+    191,
+    151,
+    152,
+    [
+     "|Use Case|What It Does|"
+    ]
+   ],
+   [
+    "equal",
+    191,
+    192,
+    152,
+    153
+   ],
+   [
+    "replace",
+    192,
+    204,
+    153,
+    163,
+    [
+     "|**Morning Kickoff**|Daily standup at 8am - know exactly where you left off|",
+     "|**Stakeholder Update**|Forward the weekly digest to a manager or collaborator|",
+     "|**Dormant Project Rescue**|Alerts when a project goes quiet|",
+     "|**Decision Audit Trail**|Weekly record of every decision made|",
+     "|**Sprint Retrospective**|End-of-sprint deep dive - what got done, what's blocked|",
+     "|**Onboarding a Collaborator**|Forward the project deep dive - instant context|",
+     "|**Accountability Partner**|Auto-send weekly digest to a friend or mentor|",
+     "|**Personal Changelog**|Monthly digest archived to email|",
+     "|**Context Resume**|After 48+ hours away - here's where everything stands|",
+     "|**Portfolio View**|One email, all projects at a glance|"
+    ]
+   ],
+   [
+    "equal",
+    204,
+    209,
+    163,
+    168
+   ],
+   [
+    "replace",
+    209,
+    210,
+    168,
+    169,
+    [
+     "|Source|How|Format|"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    211,
+    169,
+    170
+   ],
+   [
+    "replace",
+    211,
+    215,
+    170,
+    174,
+    [
+     "|**Claude Code**|Automatic (hooks)|Real-time, every exchange captured|",
+     "|**Claude.ai**|`/brain-import` + Chrome extension|JSON export per conversation|",
+     "|**ChatGPT**|`import_chatgpt.py` + data export|Full account export from OpenAI|",
+     "|**Gemini**|`import_gemini.py` + Google Takeout|HTML export from Google|"
+    ]
+   ],
+   [
+    "equal",
+    215,
+    229,
+    174,
+    188
+   ],
+   [
+    "delete",
+    229,
+    231,
+    188,
+    188
+   ],
+   [
+    "equal",
+    231,
+    235,
+    188,
+    192
+   ],
+   [
+    "replace",
+    235,
+    236,
+    192,
+    193,
+    [
+     "|Command|What It Does|"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    237,
+    193,
+    194
+   ],
+   [
+    "replace",
+    237,
+    253,
+    194,
+    208,
+    [
+     "|`/brain-health`|Full 9-point diagnostic|",
+     "|`/brain-status`|Quick stats - sessions, messages, projects|",
+     "|`/brain-question`|Natural language question across the brain|",
+     "|`/brain-search`|Raw transcript search with timestamps|",
+     "|`/brain-history`|Session timeline - one line per session|",
+     "|`/brain-recap`|Progress report for a time range|",
+     "|`/brain-decide`|Decision lookup by number or keyword|",
+     "|`/brain-export`|Export brain data to text files|",
+     "|`/brain-import`|Import conversations (Claude.ai, ChatGPT, Gemini)|",
+     "|`/brain-topics`|Browse sessions by tag -- drill into any topic|",
+     "|`/brain-tag-review`|Batch tag review -- generate spreadsheet, edit, update|",
+     "|`/brain-questionnaire`|Fill out or update your profile|",
+     "|`/brain-setup`|Re-run setup to add projects|",
+     "|`/brain-consistency`|Automated doc/data consistency check|"
+    ]
+   ],
+   [
+    "equal",
+    253,
+    258,
+    208,
+    213
+   ],
+   [
+    "replace",
+    258,
+    259,
+    213,
+    214,
+    [
+     "|Tool|What It Does|"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    260,
+    214,
+    215
+   ],
+   [
+    "replace",
+    260,
+    273,
+    215,
+    226,
+    [
+     "|`get_profile`|Your complete profile - facts, preferences, working style|",
+     "|`get_project_state`|Recent decisions + key facts for a project|",
+     "|`search_transcripts`|Keyword search across all conversations|",
+     "|`search_semantic`|Meaning-based search using vector embeddings|",
+     "|`get_session`|Full transcript of a specific session|",
+     "|`get_recent_sessions`|List recent sessions with metadata|",
+     "|`get_recent_summaries`|Auto-generated session recaps|",
+     "|`lookup_decision`|Search locked decisions by keyword|",
+     "|`lookup_fact`|Project-specific facts by category|",
+     "|`get_status`|Database health check|",
+     "|`get_schema`|Full database schema and row counts|"
+    ]
+   ],
+   [
+    "equal",
+    273,
+    280,
+    226,
+    233
+   ],
+   [
+    "replace",
+    280,
+    297,
+    233,
+    234,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    298,
+    234,
+    235
+   ],
+   [
+    "delete",
+    298,
+    300,
+    235,
+    235
+   ],
+   [
+    "equal",
+    300,
+    314,
+    235,
+    249
+   ],
+   [
+    "delete",
+    314,
+    316,
+    249,
+    249
+   ],
+   [
+    "equal",
+    316,
+    318,
+    249,
+    251
+   ],
+   [
+    "replace",
+    318,
+    319,
+    251,
+    252,
+    [
+     "claude-brain handles local memory. For web search (current docs, error messages, best practices), add a web search MCP server alongside brain-server. Any MCP-compatible web search tool works. For example, Exa provides semantic web search with 2,000 free queries/month:"
+    ]
+   ],
+   [
+    "equal",
+    319,
+    325,
+    252,
+    258
+   ],
+   [
+    "delete",
+    325,
+    327,
+    258,
+    258
+   ],
+   [
+    "equal",
+    327,
+    339,
+    258,
+    270
+   ],
+   [
+    "delete",
+    339,
+    341,
+    270,
+    270
+   ],
+   [
+    "equal",
+    341,
+    345,
+    270,
+    274
+   ],
+   [
+    "replace",
+    345,
+    346,
+    274,
+    275,
+    [
+     "1. Install the AI Chat Exporter Chrome extension"
+    ]
+   ],
+   [
+    "equal",
+    346,
+    369,
+    275,
+    298
+   ],
+   [
+    "replace",
+    369,
+    370,
+    298,
+    299,
+    [
+     "1. Go to takeout.google.com"
+    ]
+   ],
+   [
+    "equal",
+    370,
+    386,
+    299,
+    315
+   ],
+   [
+    "delete",
+    386,
+    388,
+    315,
+    315
+   ],
+   [
+    "equal",
+    388,
+    390,
+    315,
+    317
+   ],
+   [
+    "replace",
+    390,
+    391,
+    317,
+    318,
+    [
+     "|Dependency|Version|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    391,
+    392,
+    318,
+    319
+   ],
+   [
+    "replace",
+    392,
+    396,
+    319,
+    323,
+    [
+     "|Python|3.10+|Tested on 3.13 and 3.14|",
+     "|Claude Code|2.0+|Must be installed and working|",
+     "|Node.js|18+|Required by Claude Code|",
+     "|pip3|any|For installing Python packages|"
+    ]
+   ],
+   [
+    "equal",
+    396,
+    403,
+    323,
+    330
+   ],
+   [
+    "delete",
+    403,
+    405,
+    330,
+    330
+   ],
+   [
+    "equal",
+    405,
+    407,
+    330,
+    332
+   ],
+   [
+    "replace",
+    407,
+    408,
+    332,
+    333,
+    [
+     "|Limitation|Detail|"
+    ]
+   ],
+   [
+    "equal",
+    408,
+    409,
+    333,
+    334
+   ],
+   [
+    "replace",
+    409,
+    413,
+    334,
+    338,
+    [
+     "|**Single-user**|One person, one database. No multi-user support.|",
+     "|**No auto-capture from claude.ai**|Manual export + `/brain-import` required.|",
+     "|**Semantic search cold-start**|First query takes ~4-5s to load the model. Fast after that.|",
+     "|**No cross-machine real-time DB sync**|DB is local. Project files sync; database doesn't.|"
+    ]
+   ],
+   [
+    "equal",
+    413,
+    414,
+    338,
+    339
+   ],
+   [
+    "replace",
+    414,
+    417,
+    339,
+    340,
+    [
+     "See the Roadmap for planned features and fixes."
+    ]
+   ],
+   [
+    "equal",
+    417,
+    424,
+    340,
+    347
+   ],
+   [
+    "delete",
+    424,
+    426,
+    347,
+    347
+   ],
+   [
+    "equal",
+    426,
+    442,
+    347,
+    363
+   ],
+   [
+    "delete",
+    442,
+    444,
+    363,
+    363
+   ],
+   [
+    "equal",
+    444,
+    445,
+    363,
+    364
+   ],
+   [
+    "delete",
+    445,
+    446,
+    364,
+    364
+   ],
+   [
+    "equal",
+    446,
+    447,
+    364,
+    365
+   ],
+   [
+    "delete",
+    447,
+    450,
+    365,
+    365
+   ],
+   [
+    "equal",
+    450,
+    452,
+    365,
+    367
+   ],
+   [
+    "replace",
+    452,
+    453,
+    367,
+    368,
+    [
+     "Created by Mike Dolan."
+    ]
+   ],
+   [
+    "equal",
+    453,
+    454,
+    368,
+    369
+   ],
+   [
+    "replace",
+    454,
+    456,
+    369,
+    371,
+    [
+     "- **Bug reports and feature requests:** GitHub Issues",
+     "- **Questions and discussion:** GitHub Discussions"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "f767b5c2ae54+2": {
+  "fn": "ricomariani/CG-SQL-author",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "equal",
+    0,
+    5,
+    0,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     "operations. CG/SQL enables engineers to create highly complex stored"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    22,
+    6,
+    22
+   ],
+   [
+    "replace",
+    22,
+    31,
+    22,
+    31,
+    [
+     "- Introduction",
+     "- User FAQ - **Quick answers to common questions**",
+     "- Developer FAQ - **For contributors**",
+     "- CG/SQL User Guide (HTML version)",
+     "- CG/SQL Developer Guide (HTML version)",
+     "- Getting Started with CG/SQL",
+     "- Writing a Hello World Program",
+     "- Playground",
+     "- Examples"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    33,
+    31,
+    33
+   ],
+   [
+    "replace",
+    33,
+    36,
+    33,
+    36,
+    [
+     "- Language Railroad Diagrams",
+     "- JSON Output Diagrams",
+     "- Query Plan Output Diagram"
+    ]
+   ],
+   [
+    "equal",
+    36,
+    38,
+    36,
+    38
+   ],
+   [
+    "replace",
+    38,
+    39,
+    38,
+    39,
+    [
+     "- Wiki Home"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    41,
+    39,
+    41
+   ],
+   [
+    "replace",
+    41,
+    45,
+    41,
+    45,
+    [
+     "- Contributing",
+     "- Typical Dev Cycle",
+     "- Testing CG/SQL",
+     "- Code Coverage"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    47,
+    45,
+    47
+   ],
+   [
+    "replace",
+    47,
+    50,
+    47,
+    50,
+    [
+     "- Latest Updates Blog",
+     "- Why an Author's Cut",
+     "- All the old Blogs"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    53,
+    50,
+    53
+   ],
+   [
+    "replace",
+    53,
+    54,
+    53,
+    54,
+    [
+     "CG/SQL is MIT-licensed."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "d9da096fb8ef+2": {
+  "fn": "guzba/waterpark",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Github Actions"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "API reference"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    19,
+    7,
+    19
+   ],
+   [
+    "replace",
+    19,
+    20,
+    19,
+    20,
+    [
+     "a multithreaded HTTP server like Mummy."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    21,
+    20,
+    21
+   ],
+   [
+    "replace",
+    21,
+    22,
+    21,
+    22,
+    [
+     "Using Waterpark connection pools for multiple different databases is no problem. You can create one or more pools for each database without any trouble. See this example to get an idea of how this works."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    31,
+    22,
+    31
+   ],
+   [
+    "replace",
+    31,
+    55,
+    31,
+    32,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    55,
+    57,
+    32,
+    34
+   ],
+   [
+    "replace",
+    57,
+    58,
+    34,
+    35,
+    [
+     "There are more examples in the examples/ directory of this repo."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    68,
+    35,
+    45
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "06578ee568c8+2": {
+  "fn": "bloomberg/sable",
+  "clean_ver": "2",
+  "raw_lines": 5,
+  "ops": [
+   [
+    "replace",
+    0,
+    5,
+    0,
+    3,
+    [
+     "<a href=\"https://bloomberg.github.io/sable/\" target=\"_blank\" rel=\"noopener noreferrer\">",
+     " Sable logo",
+     " </a>"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    8,
+    3,
+    6
+   ],
+   [
+    "replace",
+    8,
+    9,
+    6,
+    7,
+    [
+     "Database Migration Management Tool for Marten"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    7,
+    8
+   ],
+   [
+    "replace",
+    10,
+    11,
+    8,
+    9,
+    [
+     "Sable (*Martes zibellina*) is a species of marten."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    14,
+    9,
+    12
+   ],
+   [
+    "replace",
+    14,
+    20,
+    12,
+    13,
+    [
+     "（目录 6 行略）"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    26,
+    13,
+    19
+   ],
+   [
+    "replace",
+    26,
+    27,
+    19,
+    20,
+    [
+     "- Docker is installed."
+    ]
+   ],
+   [
+    "equal",
+    27,
+    33,
+    20,
+    26
+   ],
+   [
+    "replace",
+    33,
+    34,
+    26,
+    27,
+    [
+     "See .NET tools to learn more about how .NET tools work."
+    ]
+   ],
+   [
+    "equal",
+    34,
+    38,
+    27,
+    31
+   ],
+   [
+    "replace",
+    38,
+    40,
+    31,
+    33,
+    [
+     "- Getting Started with Marten",
+     "- Command Line Tooling in Marten"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    60,
+    33,
+    53
+   ],
+   [
+    "replace",
+    60,
+    80,
+    53,
+    54,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    132,
+    54,
+    106
+   ],
+   [
+    "replace",
+    132,
+    133,
+    106,
+    107,
+    [
+     "To learn more, check out the documentation."
+    ]
+   ],
+   [
+    "equal",
+    133,
+    140,
+    107,
+    114
+   ],
+   [
+    "replace",
+    140,
+    141,
+    114,
+    115,
+    [
+     "We welcome issue reports here; be sure to choose the proper issue template for your issue, so that we can be sure you're providing the necessary information."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    115,
+    116
+   ],
+   [
+    "replace",
+    142,
+    143,
+    116,
+    117,
+    [
+     "Before sending a Pull Request, please make sure you read our Contribution Guidelines."
+    ]
+   ],
+   [
+    "equal",
+    143,
+    145,
+    117,
+    119
+   ],
+   [
+    "replace",
+    145,
+    148,
+    119,
+    120,
+    [
+     "Please read the LICENSE file."
+    ]
+   ],
+   [
+    "equal",
+    148,
+    149,
+    120,
+    121
+   ],
+   [
+    "replace",
+    149,
+    154,
+    121,
+    122,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    154,
+    156,
+    122,
+    124
+   ],
+   [
+    "replace",
+    156,
+    157,
+    124,
+    125,
+    [
+     "- Security Policy"
+    ]
+   ],
+   [
+    "equal",
+    157,
+    163,
+    125,
+    131
+   ],
+   [
+    "delete",
+    163,
+    165,
+    131,
+    131
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

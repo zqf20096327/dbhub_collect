@@ -13966,5 +13966,1739 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "e5edae508524+2": {
+  "fn": "zv/Artifact",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    3,
+    1,
+    3,
+    [
+     " Artifact is a distributed key-value datastore, which is inspired",
+     " by the [[http://www.cs.ucsb.edu/~agrawal/fall2009/dynamo.pdf][Amazon's Dynamo Paper]]."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    8,
+    4,
+    8,
+    [
+     " I've benchmarked artifact at 1,200 querys-per-second for a 16 node system with",
+     " 1GB assigned to each container (single machine). At peak load, 99% of requests",
+     " fell under 300ms.",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    8,
+    9,
+    8,
+    9
+   ],
+   [
+    "replace",
+    9,
+    16,
+    9,
+    16,
+    [
+     " + Consistently hashing load distribution",
+     " + Fair Load balancing",
+     " + Secondary Indexes",
+     " + Custom storage backends (ETS, DETS are standard)",
+     " + Quorum coordinator",
+     " + Memcache and TLL interfaces",
+     " + Gossip protocol membership"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    18,
+    16,
+    18
+   ],
+   [
+    "replace",
+    18,
+    19,
+    18,
+    19,
+    [
+     " This is an Elixir rewrite of my original Erlang project and is *not* guaranteed to work the same way."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    19,
+    20
+   ],
+   [
+    "replace",
+    20,
+    23,
+    20,
+    23,
+    [
+     " This database could have major problems, I've never submitted it to any sort",
+     " of substantial peer review or audit. I've been working on it for some time and",
+     " I'm still hashing things out. If you find any such problems please file an issue!"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    26,
+    23,
+    26
+   ],
+   [
+    "replace",
+    26,
+    29,
+    26,
+    29,
+    [
+     " The easiest way to get up and running with Artifact is to boot a standalone",
+     " instance. Artifacts configuration (=config/config.exs=) is configured for this",
+     " use-case by default."
+    ]
+   ],
+   [
+    "equal",
+    29,
+    31,
+    29,
+    31
+   ],
+   [
+    "replace",
+    31,
+    49,
+    31,
+    39,
+    [
+     " #+BEGIN_EXAMPLE",
+     " iex(1)> Application.start(:artifact)",
+     " :ok",
+     " iex(2)> Artifact.RPC.check('kai2.local': 11011, 'kai1.local': 11012)",
+     " :ok",
+     " iex(3)> Artifact.RPC.check('kai2.local': 11011, 'kai1.local': 11012)",
+     " :ok",
+     " #+END_EXAMPLE"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    50,
+    39,
+    40
+   ],
+   [
+    "replace",
+    50,
+    54,
+    40,
+    54,
+    [
+     " Artifat maintains a node manifest, including the members of it's own cluster.",
+     " When invoking =check=, it's asking to retrieve the manifest manually from",
+     " another node. Calling this function twice can bootstrap the process by ",
+     " mutually ensuring that each node has been added to the other's manifest.",
+     "",
+     " Synchronization will need to synchronize =log2(STORAGE_CNT)*32= + overhead",
+     " bytes, so give it some time if you've built up a large entry count.",
+     "",
+     " To verify that a node has been added to the node manifest:",
+     "",
+     " #+BEGIN_EXAMPLE",
+     " iex(5)> Artifact.RPC.node_manifest('kai1.local')",
+     " {:node_manifest, [{{'10.0.0.53', 11011}}, {{'10.0.0.80', 11011}}]",
+     " #+END_EXAMPLE"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    56,
+    54,
+    56
+   ],
+   [
+    "replace",
+    56,
+    58,
+    56,
+    58,
+    [
+     " Once you have a server started, you can read and write to it just as if it",
+     " were a memcached daemon."
+    ]
+   ],
+   [
+    "equal",
+    58,
+    59,
+    58,
+    59
+   ],
+   [
+    "replace",
+    59,
+    68,
+    59,
+    68,
+    [
+     " #+BEGIN_EXAMPLE",
+     " % nc localhost 11211",
+     " set foo 0 0 3",
+     " bar",
+     " STORED",
+     " get foo",
+     " VALUE foo 0 3",
+     " bar",
+     " #+END_EXAMPLE"
+    ]
+   ],
+   [
+    "equal",
+    68,
+    70,
+    68,
+    70
+   ],
+   [
+    "replace",
+    70,
+    72,
+    70,
+    72,
+    [
+     " All configuration values are loaded at startup from =config/config.exs=. If you'd like to know what configuration",
+     " a system is running, you can query it with"
+    ]
+   ],
+   [
+    "equal",
+    72,
+    73,
+    72,
+    73
+   ],
+   [
+    "replace",
+    73,
+    77,
+    73,
+    77,
+    [
+     " #+BEGIN_EXAMPLE",
+     " iex> Artifact.config.node_info",
+     " {:node_info, {{127,0,0,1}, 10070}, [{:vnodes, 256}]}",
+     " #+END_EXAMPLE"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    79,
+    77,
+    79
+   ],
+   [
+    "replace",
+    79,
+    80,
+    79,
+    80,
+    [
+     " #+BEGIN_SRC elixir"
+    ]
+   ],
+   [
+    "equal",
+    80,
+    81,
+    80,
+    81
+   ],
+   [
+    "replace",
+    81,
+    87,
+    81,
+    87,
+    [
+     " # Number of Participants",
+     " 1,",
+     " # Reader workers",
+     " 1,",
+     " # Writer workers",
+     " 1"
+    ]
+   ],
+   [
+    "equal",
+    87,
+    88,
+    87,
+    88
+   ],
+   [
+    "replace",
+    88,
+    100,
+    88,
+    100,
+    [
+     " #+END_SRC",
+     " Artifact doesn't keep a strict quorum system and so the values used in",
+     " quorum refer to the minimum number of nodes to participate in some operation",
+     " for it to be successful. =N=, the first parameter, is the number of",
+     " participants in the 'preference list' and although there can be more nodes",
+     " added to the system than =N=, those excess nodes won't verify replicas. =R=,",
+     " the second, is the minimum number of nodes that must participate in a",
+     " successful read operation. =W= is the minimum number of nodes that must",
+     " participate in a successful write operation. The latency of a get (or put)",
+     " operation is dictated by the slowest of the =R= (or =W=) replicas. For this",
+     " reason, =R= and =W= are usually configured to be less than N, to provide",
+     " better latency."
+    ]
+   ],
+   [
+    "equal",
+    100,
+    102,
+    100,
+    102
+   ],
+   [
+    "replace",
+    102,
+    103,
+    102,
+    103,
+    [
+     " #+BEGIN_SRC elixir"
+    ]
+   ],
+   [
+    "equal",
+    103,
+    115,
+    103,
+    115
+   ],
+   [
+    "replace",
+    115,
+    116,
+    115,
+    116,
+    [
+     " #+END_SRC"
+    ]
+   ],
+   [
+    "equal",
+    116,
+    117,
+    116,
+    117
+   ],
+   [
+    "replace",
+    117,
+    124,
+    117,
+    124,
+    [
+     " Instead of mapping nodes to a single point in the ring, each node gets",
+     " assigned to multiple points. To this end, Artifact uses the Dynamo concept",
+     " of \"virtual nodes\". A virtual node looks like a single node in the system,",
+     " but each node can be responsible for more than one virtual node.",
+     " Effectively, when a new node is added to the system, it is assigned multiple",
+     " positions (\"tokens\") in the ring. Using virtual nodes has the following",
+     " advantages:"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    125,
+    124,
+    125
+   ],
+   [
+    "replace",
+    125,
+    128,
+    125,
+    128,
+    [
+     " - If a node becomes unavailable (due to failures or routine maintenance), the load handled by this node is evenly dispersed across the remaining available nodes.",
+     " - When a node becomes available again, or a new node is added to the system, the newly available node accepts a roughly equivalent amount of load from each of the other available nodes.",
+     " - The number of virtual nodes that a node is responsible can decided based on its capacity, accounting for heterogeneity in the physical infrastructure."
+    ]
+   ],
+   [
+    "equal",
+    128,
+    130,
+    128,
+    130
+   ],
+   [
+    "replace",
+    130,
+    131,
+    130,
+    131,
+    [
+     " #+BEGIN_SRC elixir"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    131,
+    132
+   ],
+   [
+    "replace",
+    132,
+    136,
+    132,
+    136,
+    [
+     " #+END_SRC",
+     "",
+     " I haven't ported DETS over from my original Erlang implementation yet and so",
+     " you are stuck with ETS for now."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "94efabcaee3e+2": {
+  "fn": "mk6i/mkdb",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "mkdb console "
+    ]
+   ],
+   [
+    "equal",
+    1,
+    6,
+    1,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "The goal of this project is largely inspired by SerenityOS."
+    ]
+   ],
+   [
+    "equal",
+    7,
+    10,
+    7,
+    10
+   ],
+   [
+    "replace",
+    10,
+    12,
+    10,
+    12,
+    [
+     "- Recursive-descent SQL parser that loosely follows",
+     " the SQL-92 grammar."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    13,
+    12,
+    13
+   ],
+   [
+    "replace",
+    13,
+    21,
+    13,
+    21,
+    [
+     " - DQL & DML: `SELECT`, `DELETE`, `INSERT`, `UPDATE`",
+     " - DDL: `CREATE DATABASE`, `CREATE TABLE`, `SHOW DATABASE`",
+     " - Joining: `LEFT JOIN`, `RIGHT JOIN`, `INNER JOIN`",
+     " - Aggregation: `GROUP BY`, `COUNT(...)`, `AVG(...)`",
+     " - Ordering & Limiting: `ORDER BY`, `LIMIT`",
+     " - Conditional clauses and boolean expressions: `WHERE`, `AND`, `OR`",
+     "- On-disk B+ tree.",
+     " - Table rows are limited to 409 bytes in size."
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    21,
+    22
+   ],
+   [
+    "replace",
+    22,
+    27,
+    22,
+    27,
+    [
+     " - Write-ahead logging (WAL).",
+     " - Page cache",
+     " with `NO FORCE`, `NO STEAL`",
+     " semantics.",
+     " - By design, the database terminates on `INSERT` when the page cache is completely full of dirty pages. 🙃"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    38,
+    27,
+    38
+   ],
+   [
+    "replace",
+    38,
+    39,
+    38,
+    39,
+    [
+     "> To run mkdb, you'll need to install golang."
+    ]
+   ],
+   [
+    "equal",
+    39,
+    52,
+    39,
+    52
+   ],
+   [
+    "replace",
+    52,
+    75,
+    52,
+    53,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    110,
+    53,
+    88
+   ],
+   [
+    "replace",
+    110,
+    114,
+    88,
+    92,
+    [
+     "- *Database Internals*, Alex Petrov, 2019",
+     " - An excellent resource for learning about how datastore storage engines work at high-level. The B+ Tree is based on the descriptions in the book.",
+     "- *Crafting Interpreters*, Robert Nystrom, 2021",
+     " - The recursive-descent SQL parser is based on the techniques described in this free book."
+    ]
+   ],
+   [
+    "equal",
+    114,
+    115,
+    92,
+    93
+   ],
+   [
+    "replace",
+    115,
+    116,
+    93,
+    94,
+    [
+     " - Accessible literature on the inner workers in SQLite. Currently out of print, but can be found on the high seas."
+    ]
+   ],
+   [
+    "equal",
+    116,
+    119,
+    94,
+    97
+   ],
+   [
+    "replace",
+    119,
+    120,
+    97,
+    98,
+    [
+     "- Do not introduce any 3rd-party dependencies. (`golang.org/x` packages are welcome, however.) Re-inventing the wheel is encouraged in the name of learning."
+    ]
+   ],
+   [
+    "equal",
+    120,
+    122,
+    98,
+    100
+   ],
+   [
+    "replace",
+    122,
+    123,
+    100,
+    101,
+    [
+     "## 📄 License"
+    ]
+   ],
+   [
+    "equal",
+    123,
+    125,
+    101,
+    103
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "3c58cf107034+2": {
+  "fn": "metrico/otel-collector",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "delete",
+    0,
+    2,
+    0,
+    0
+   ],
+   [
+    "equal",
+    2,
+    4,
+    0,
+    2
+   ],
+   [
+    "replace",
+    4,
+    6,
+    2,
+    3,
+    [
+     "Open Telemetry distribution for Gigapipe > formerly known as _qryn_"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    8,
+    3,
+    5
+   ],
+   [
+    "replace",
+    8,
+    12,
+    5,
+    6,
+    [
+     "The **gigapipe-otel-collector** is designed to store observability data _(Traces, Logs, Metrics)_ from multiple vendors/platforms into ClickHouse using Gigapipe _fingerprinting and table formats_ transparently accessible through Gigapipe via _LogQL, PromQL, Tempo and Pyroscope queries_."
+    ]
+   ],
+   [
+    "equal",
+    12,
+    16,
+    6,
+    10
+   ],
+   [
+    "replace",
+    16,
+    21,
+    10,
+    15,
+    [
+     " - Loki",
+     " - Splunk",
+     " - Fluentd",
+     " - Cloudwatch",
+     " - Syslog"
+    ]
+   ],
+   [
+    "equal",
+    21,
+    22,
+    15,
+    16
+   ],
+   [
+    "replace",
+    22,
+    25,
+    16,
+    19,
+    [
+     " - Prometheus",
+     " - InfluxDB",
+     " - OTLP"
+    ]
+   ],
+   [
+    "equal",
+    25,
+    26,
+    19,
+    20
+   ],
+   [
+    "replace",
+    26,
+    32,
+    20,
+    24,
+    [
+     " - Zipkin",
+     " - Jaeger",
+     " - Skywalking",
+     " - OTLP"
+    ]
+   ],
+   [
+    "equal",
+    32,
+    38,
+    24,
+    30
+   ],
+   [
+    "replace",
+    38,
+    57,
+    30,
+    31,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    63,
+    31,
+    37
+   ],
+   [
+    "replace",
+    63,
+    64,
+    37,
+    38,
+    [
+     "GitHub Release with the"
+    ]
+   ],
+   [
+    "equal",
+    64,
+    76,
+    38,
+    50
+   ],
+   [
+    "replace",
+    76,
+    77,
+    50,
+    51,
+    [
+     "### Config Template view"
+    ]
+   ],
+   [
+    "equal",
+    77,
+    83,
+    51,
+    57
+   ],
+   [
+    "replace",
+    83,
+    209,
+    57,
+    58,
+    [
+     "…（126 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    210,
+    58,
+    59
+   ],
+   [
+    "delete",
+    210,
+    212,
+    59,
+    59
+   ],
+   [
+    "equal",
+    212,
+    244,
+    59,
+    91
+   ],
+   [
+    "replace",
+    244,
+    248,
+    91,
+    92,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    248,
+    252,
+    92,
+    96
+   ],
+   [
+    "replace",
+    252,
+    253,
+    96,
+    97,
+    [
+     "Wraps `open-telemetry/opentelemetry-collector` **v0.154.0** and `opentelemetry-collector-contrib` **v0.153.0**. Building from source requires **Go 1.26**."
+    ]
+   ],
+   [
+    "equal",
+    253,
+    260,
+    97,
+    104
+   ],
+   [
+    "replace",
+    260,
+    261,
+    104,
+    105,
+    [
+     "|Removed|Replacement|"
+    ]
+   ],
+   [
+    "equal",
+    261,
+    262,
+    105,
+    106
+   ],
+   [
+    "replace",
+    262,
+    267,
+    106,
+    111,
+    [
+     "|`loki` exporter|`otlphttp` to Loki's OTLP endpoint — Loki accepts OTLP natively, see Grafana docs. The `lokireceiver` is **not** affected — receiving the legacy Loki HTTP push protocol is still supported.|",
+     "|`opencensus` exporter & receiver|`otlp`|",
+     "|`sapm` receiver|`otlp` or `signalfx`|",
+     "|`carbon` exporter|`prometheusremotewrite`|",
+     "|`bigip` receiver, `ecstaskobserver`, `routingprocessor`|— (see upstream contrib for status)|"
+    ]
+   ],
+   [
+    "equal",
+    267,
+    282,
+    111,
+    126
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "782b13138414+2": {
+  "fn": "zgramming/Flutter-Combo-Laravel",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "delete",
+    0,
+    4,
+    0,
+    0
+   ],
+   [
+    "equal",
+    4,
+    6,
+    0,
+    2
+   ],
+   [
+    "replace",
+    6,
+    11,
+    2,
+    5,
+    [
+     " Databay showcase gif",
+     " Databay showcase gif",
+     " Databay showcase gif"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    18,
+    5,
+    12
+   ],
+   [
+    "replace",
+    18,
+    19,
+    12,
+    13,
+    [
+     "If you are interested in this REST API and want to customize it, you can follow this link. This application used REST API in that link."
+    ]
+   ],
+   [
+    "equal",
+    19,
+    32,
+    13,
+    26
+   ],
+   [
+    "replace",
+    32,
+    33,
+    26,
+    27,
+    [
+     "If you interested with this, you can follow this link"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    35,
+    27,
+    29
+   ],
+   [
+    "replace",
+    35,
+    36,
+    29,
+    30,
+    [
+     "State management in this application used Flutter Riverpod . If you familiar with Provider ,i think you might will like it because riverpod author is same and have improvement from provider."
+    ]
+   ],
+   [
+    "equal",
+    36,
+    39,
+    30,
+    33
+   ],
+   [
+    "replace",
+    39,
+    40,
+    33,
+    34,
+    [
+     "This application have some screen inside it :"
+    ]
+   ],
+   [
+    "equal",
+    40,
+    41,
+    34,
+    35
+   ],
+   [
+    "replace",
+    41,
+    75,
+    35,
+    43,
+    [
+     " Splash ",
+     " Login ",
+     " Register ",
+     "",
+     " Welcome ",
+     " Form Product ",
+     " Detail Product ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    43,
+    44
+   ],
+   [
+    "replace",
+    76,
+    77,
+    44,
+    45,
+    [
+     "* Login "
+    ]
+   ],
+   [
+    "equal",
+    77,
+    78,
+    45,
+    46
+   ],
+   [
+    "replace",
+    78,
+    79,
+    46,
+    47,
+    [
+     "* Welcome "
+    ]
+   ],
+   [
+    "equal",
+    79,
+    99,
+    47,
+    67
+   ],
+   [
+    "replace",
+    99,
+    100,
+    67,
+    68,
+    [
+     "||||"
+    ]
+   ],
+   [
+    "equal",
+    100,
+    104,
+    68,
+    72
+   ],
+   [
+    "replace",
+    104,
+    105,
+    72,
+    73,
+    [
+     "Please file any issues, bugs or feature request as an issue on Github "
+    ]
+   ],
+   [
+    "equal",
+    105,
+    107,
+    73,
+    75
+   ],
+   [
+    "replace",
+    107,
+    109,
+    75,
+    76,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "faa7e9851b42+2": {
+  "fn": "leafac/sqlite",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "6c183d6132c4+2": {
+  "fn": "stidges/laravel-fk-migration",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "delete",
+    1,
+    2,
+    1,
+    1
+   ],
+   [
+    "equal",
+    2,
+    3,
+    1,
+    2
+   ],
+   [
+    "replace",
+    3,
+    4,
+    2,
+    3,
+    [
+     "Latest Stable Version Total Downloads Build Status License"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    5,
+    3,
+    4
+   ],
+   [
+    "replace",
+    5,
+    6,
+    4,
+    5,
+    [
+     "This Laravel package provides a base migration for you to extend to easily create all your foreign keys. If you ever ran into the problem where you had to reorganize all your migrations due to failing foreign key constraints, this is the package for you!"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    9,
+    5,
+    8
+   ],
+   [
+    "replace",
+    9,
+    10,
+    8,
+    9,
+    [
+     "This package can be installed through Composer, just add it to your composer.json file:"
+    ]
+   ],
+   [
+    "equal",
+    10,
+    36,
+    9,
+    35
+   ],
+   [
+    "replace",
+    36,
+    47,
+    35,
+    36,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    51,
+    36,
+    40
+   ],
+   [
+    "replace",
+    51,
+    52,
+    40,
+    41,
+    [
+     "|Key|Default|Description|"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    41,
+    42
+   ],
+   [
+    "replace",
+    53,
+    58,
+    42,
+    47,
+    [
+     "|`column`|*none*|The column on which to create the foreign key.|",
+     "|`references`|`'id'`|The referenced column in the foreign table.|",
+     "|`on`|*none*|The referenced table. If this option is not passed then it will create the name from the passed `column` (e.g. `'user_id'` becomes `'users'`)|",
+     "|`onUpdate`|`'cascade'`|The referential action to execute when the referenced column is updated.|",
+     "|`onDelete`|`'restrict'`|The referential action to execute when the referenced column is deleted.|"
+    ]
+   ],
+   [
+    "equal",
+    58,
+    69,
+    47,
+    58
+   ],
+   [
+    "replace",
+    69,
+    81,
+    58,
+    59,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    91,
+    59,
+    69
+   ],
+   [
+    "replace",
+    91,
+    111,
+    69,
+    70,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    111,
+    116,
+    70,
+    75
+   ],
+   [
+    "replace",
+    116,
+    119,
+    75,
+    76,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    76,
+    77
+   ],
+   [
+    "replace",
+    120,
+    122,
+    77,
+    78,
+    [
+     "Copyright (c) 2014 Stidges - Released under the MIT license."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "f1932f41a5e1+2": {
+  "fn": "xiaoxiaoranxxx/POT-ZHIYUN",
+  "clean_ver": "2",
+  "raw_lines": 22,
+  "ops": [
+   [
+    "equal",
+    0,
+    22,
+    0,
+    22
+   ],
+   [
+    "replace",
+    22,
+    23,
+    22,
+    23,
+    [
+     "1723079013134"
+    ]
+   ],
+   [
+    "equal",
+    23,
+    26,
+    23,
+    26
+   ],
+   [
+    "replace",
+    26,
+    27,
+    26,
+    27,
+    [
+     "1723079091563"
+    ]
+   ],
+   [
+    "equal",
+    27,
+    30,
+    27,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     "1723079289560"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    34,
+    31,
+    34
+   ],
+   [
+    "replace",
+    34,
+    35,
+    34,
+    35,
+    [
+     "1723904266922"
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    35,
+    36
+   ],
+   [
+    "replace",
+    36,
+    37,
+    36,
+    37,
+    [
+     "1723904576201"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    40,
+    37,
+    40
+   ],
+   [
+    "replace",
+    40,
+    41,
+    40,
+    41,
+    [
+     "## 见 /软件安装详情.md"
+    ]
+   ],
+   [
+    "equal",
+    41,
+    42,
+    41,
+    42
+   ],
+   [
+    "replace",
+    42,
+    43,
+    42,
+    43,
+    [
+     "## 见 /软件使用说明.md"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "3966acf6e256+2": {
+  "fn": "GLOBUS-studio/SypexGeoRS",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    5,
+    2,
+    5,
+    [
+     "Crates.io",
+     "License",
+     "Rust"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    10,
+    5,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "Port of GLOBUS-studio/SypexGeo (PHP)."
+    ]
+   ],
+   [
+    "equal",
+    11,
+    24,
+    11,
+    24
+   ],
+   [
+    "replace",
+    24,
+    25,
+    24,
+    25,
+    [
+     "- A SypexGeo binary database file — download from sypexgeo.net."
+    ]
+   ],
+   [
+    "equal",
+    25,
+    28,
+    25,
+    28
+   ],
+   [
+    "replace",
+    28,
+    29,
+    28,
+    29,
+    [
+     "Published on crates.io:"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    47,
+    29,
+    47
+   ],
+   [
+    "replace",
+    47,
+    54,
+    47,
+    48,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    54,
+    60,
+    48,
+    54
+   ],
+   [
+    "replace",
+    60,
+    65,
+    54,
+    59,
+    [
+     "|Constant|Value|Behaviour|",
+     "|---------------|-----|--------------------------------------------------|",
+     "|`mode::FILE`|0|Read from disk on every lookup. Lowest memory.|",
+     "|`mode::MEMORY`|1|Load the whole database into RAM. Fastest reads.|",
+     "|`mode::BATCH`|2|Pre-decode indices for faster repeated lookups.|"
+    ]
+   ],
+   [
+    "equal",
+    65,
+    72,
+    59,
+    66
+   ],
+   [
+    "replace",
+    72,
+    81,
+    66,
+    75,
+    [
+     "|Method|Returns|",
+     "|------|-------|",
+     "|`open(path, flags)`|`Result<SxGeo, Error>`|",
+     "|`get(ip)`|`Option<LookupResult>` — City for City DB, Country otherwise|",
+     "|`get_country(ip)`|`String` — ISO 3166-1 alpha-2 code, empty for invalid IPs|",
+     "|`get_country_id(ip)`|`u32` — Internal numeric country ID, `0` for invalid IPs|",
+     "|`get_city(ip)`|`Option<GeoCity>` — `{ city, country }`|",
+     "|`get_city_full(ip)`|`Option<GeoCityFull>` — `{ city, region, country }`|",
+     "|`about()`|`About` — Database metadata|"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    88,
+    75,
+    82
+   ],
+   [
+    "replace",
+    88,
+    89,
+    82,
+    83,
+    [
+     "See `examples/lookup.rs` for the full example."
+    ]
+   ],
+   [
+    "equal",
+    89,
+    100,
+    83,
+    94
+   ],
+   [
+    "replace",
+    100,
+    104,
+    94,
+    95,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    112,
+    95,
+    103
+   ],
+   [
+    "replace",
+    112,
+    113,
+    103,
+    104,
+    [
+     "Unit tests run without a database. To test against a real `.dat` file, place one in `tests/fixtures/` (see tests/fixtures/README.md) and run:"
+    ]
+   ],
+   [
+    "equal",
+    113,
+    119,
+    104,
+    110
+   ],
+   [
+    "replace",
+    119,
+    122,
+    110,
+    111,
+    [
+     "MIT, see LICENSE."
+    ]
+   ],
+   [
+    "equal",
+    122,
+    124,
+    111,
+    113
+   ],
+   [
+    "replace",
+    124,
+    125,
+    113,
+    114,
+    [
+     "Ported from the PHP library maintained by GLOBUS.studio and Yevhen Leonidov, based on the original SypexGeo by zapimir and BINOVATOR."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "bd4600fa3329+2": {
+  "fn": "archatas/django_docker",
+  "clean_ver": "2",
+  "raw_lines": 117,
+  "ops": [
+   [
+    "equal",
+    0,
+    117,
+    0,
+    117
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "7d845cbc9b29+2": {
+  "fn": "ZettelGeist/zettelgeist",
+  "clean_ver": "2",
+  "raw_lines": 10,
+  "ops": [
+   [
+    "equal",
+    0,
+    10,
+    0,
+    10
+   ],
+   [
+    "replace",
+    10,
+    12,
+    10,
+    11,
+    [
+     "Please see the ZettelGeist Wiki for detailed installation and usage instructions."
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }

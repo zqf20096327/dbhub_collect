@@ -12525,5 +12525,7782 @@
    ]
   ],
   "at": "2026-11-06"
+ },
+ "e5b4b1a740ae+2": {
+  "fn": "oxpull/django-ox",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "django-ox"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    2,
+    1,
+    2
+   ],
+   [
+    "replace",
+    2,
+    6,
+    2,
+    6,
+    [
+     "PyPI",
+     "CI",
+     "Python versions",
+     "License"
+    ]
+   ],
+   [
+    "equal",
+    6,
+    26,
+    6,
+    26
+   ],
+   [
+    "replace",
+    26,
+    33,
+    26,
+    27,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    42,
+    27,
+    36
+   ],
+   [
+    "replace",
+    42,
+    43,
+    36,
+    37,
+    [
+     "**Follow the step-by-step guide** to build a working queue."
+    ]
+   ],
+   [
+    "equal",
+    43,
+    48,
+    37,
+    42
+   ],
+   [
+    "replace",
+    48,
+    49,
+    42,
+    43,
+    [
+     "On Django 6.1 or Django 5.2 with django-tasks 0.12+, each task can declare its own `max_attempts`, `backoff` callback and `timeout`. The budget counts claims including the first; backend settings supply the defaults. See Per-task policy."
+    ]
+   ],
+   [
+    "equal",
+    49,
+    58,
+    43,
+    52
+   ],
+   [
+    "replace",
+    58,
+    59,
+    52,
+    53,
+    [
+     "With pooled or persistent connections, django-ox delivered 1.4 to 1.7× django-tasks-db's throughput at matched Django connection settings. See the published benchmarks."
+    ]
+   ],
+   [
+    "equal",
+    59,
+    60,
+    53,
+    54
+   ],
+   [
+    "replace",
+    60,
+    61,
+    54,
+    55,
+    [
+     " PostgreSQL 16; no-op tasks; django-ox 1.9.0 vs django-tasks-db 0.13.0; medians of five runs. "
+    ]
+   ],
+   [
+    "equal",
+    61,
+    64,
+    55,
+    58
+   ],
+   [
+    "replace",
+    64,
+    65,
+    58,
+    59,
+    [
+     "django-ox includes the optional `oxpull` app for unique tasks, batches, rate limiting, concurrency limits and workflows. The app, part of django-ox since 1.9.0, requires Django 6.0+. Projects that do not enable it can continue using django-ox on Django 5.2."
+    ]
+   ],
+   [
+    "equal",
+    65,
+    76,
+    59,
+    70
+   ],
+   [
+    "replace",
+    76,
+    77,
+    70,
+    71,
+    [
+     "See the feature setup and, for an existing installation, Earlier `oxpull` installs."
+    ]
+   ],
+   [
+    "equal",
+    77,
+    106,
+    71,
+    100
+   ],
+   [
+    "replace",
+    106,
+    107,
+    100,
+    101,
+    [
+     "The benchmarks page compares"
+    ]
+   ],
+   [
+    "equal",
+    107,
+    124,
+    101,
+    118
+   ],
+   [
+    "replace",
+    124,
+    125,
+    118,
+    119,
+    [
+     "Choosing a task backend page."
+    ]
+   ],
+   [
+    "equal",
+    125,
+    126,
+    119,
+    120
+   ],
+   [
+    "replace",
+    126,
+    138,
+    120,
+    132,
+    [
+     "||django-ox|django-tasks-db|Celery|huey|",
+     "|---|---|---|---|---|",
+     "|`django.tasks` backend|**Yes**, native|**Yes**, native|**No**|**Yes**, in `huey.contrib.djhuey`|",
+     "|Broker to run|**None.** The queue is a table in the database you already run|**None.** Django ORM|RabbitMQ, Redis or SQS|Redis, SQLite, PostgreSQL, file or memory|",
+     "|Transactional enqueue|**Yes.** Enqueue is one INSERT on your default database; a task written inside `atomic()` commits or rolls back with the rows beside it|Not claimed|**No.** Django's own docs name this as the case for `on_commit()`|Not claimed|",
+     "|Worker killed mid-task|**Retried.** The lease expires and the task goes back on the queue|**Stuck.** The task stays `RUNNING`, never retried and never failed. Issue #5 has been open since 2024-06-11.|**Lost** when the child process is killed, even with `acks_late`|**Lost.** \"will not be retried automatically\"|",
+     "|Retries and backoff|**Exponential by default**, keeping every attempt's traceback. Per-task budget and backoff on Django 6.1 or Django 5.2 with django-tasks 0.12+|**None**|Yes|Yes|",
+     "|Recurring schedules|**Cron or a fixed interval, and no scheduler process.** Editable in the Django admin, limited to the tasks your code exposes|**None**|`celery beat`, a separate process you must run exactly one of|Yes|",
+     "|Unique tasks / deduplicated enqueue|**Yes.** `@unique` returns the existing result while a match is READY or RUNNING. All four features below require the optional `oxpull` app and `OxpullBackend` on Django 6.0+|**Business logic.** Issue #164 closed as a duplicate; maintainer: \"handled by your business logic\"|**No general built-in.** The cookbook's custom lock prevents concurrent runs, not duplicate enqueues|**Not enqueue dedup.** huey's own `lock_task()` prevents concurrent runs|",
+     "|Batch completion callback|**Yes.** `on_complete` is enqueued once all member rows are settled or gone, whatever the outcome; `on_success` requires all to succeed. Callback execution is at least once|**None.** \"Task Groups\" discussion #58 open since 2024-06-20, with 0 comments|**Success callback; failure errback.** `chord` needs a supported result backend; a failed member produces `ChordError`, and an errback attached to the callback runs instead|**Includes failures.** huey's own `chord()` includes permanent failures; a member lost to abrupt shutdown prevents the callback|",
+     "|Rate limits shared across workers|**Yes.** Database-backed start windows shared by `OxpullWorker` instances, with bounded overshoot; concurrency limits are a separate option|Not claimed|**Per-worker only.** `Task.rate_limit` is not a shared budget|**Yes.** huey's own `rate_limit()` uses a counter in shared storage, checked when the task runs|",
+     "|Dependency workflows|**Yes, provisional.** `depends_on` lets a node run only after every upstream succeeds|Not claimed|**Yes.** `chain` / `link` run the next task after success|**Yes.** huey's own pipelines with `.then()` skip the remaining success pipeline after a failure|"
+    ]
+   ],
+   [
+    "equal",
+    138,
+    140,
+    132,
+    134
+   ],
+   [
+    "replace",
+    140,
+    141,
+    134,
+    135,
+    [
+     "and a section on when django-ox is the wrong choice."
+    ]
+   ],
+   [
+    "equal",
+    141,
+    150,
+    135,
+    144
+   ],
+   [
+    "replace",
+    150,
+    159,
+    144,
+    145,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    159,
+    167,
+    145,
+    153
+   ],
+   [
+    "replace",
+    167,
+    175,
+    153,
+    154,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    175,
+    185,
+    154,
+    164
+   ],
+   [
+    "replace",
+    185,
+    197,
+    164,
+    176,
+    [
+     "|Flag|Default|Meaning|",
+     "|---|---|---|",
+     "|`--backend`|`default`|Backend alias from the `TASKS` setting.|",
+     "|`--queues`|all configured queues|Comma-separated queue names to process.|",
+     "|`--concurrency`|`1`|Tasks executed concurrently (thread pool). With Django's PostgreSQL pool, check pool sizing.|",
+     "|`--processes`|`1`|Worker processes under one supervisor. Each is a full worker with its own connections, reaper and `--concurrency` thread pool; budget database connections per process. A process that dies is restarted. POSIX only.|",
+     "|`--interval`|`1.0`|Polling interval in seconds when idle.|",
+     "|`--lock-timeout`|backend `LOCK_TIMEOUT`|Seconds a RUNNING task's lock may go unrefreshed before the task is reclaimed.|",
+     "|`--database`|the alias `OxTask` writes to|Database alias to run against. Every `--processes` child is given the same one. It is not checked against the router.|",
+     "|`--heartbeat-file PATH`|off|Update a local file at the head of every poll and drain pass. Above one process, write `PATH.supervisor` and `PATH.i` for each slot, not `PATH`. Requires an existing, writable directory private to the container. See heartbeat liveness.|",
+     "|`--batch`|off|Exit once an error-free poll pass finds nothing to claim and began with none of its own tasks in flight. Schedule-scoped failures do not hold a batch open. For cron and job runners. Single process only.|",
+     "|`--max-tasks N`|none|Exit after claiming N task attempts, failed attempts and retries included. Single process only.|"
+    ]
+   ],
+   [
+    "equal",
+    197,
+    214,
+    176,
+    193
+   ],
+   [
+    "replace",
+    214,
+    223,
+    193,
+    202,
+    [
+     "|Flag|Default|Meaning|",
+     "|---|---|---|",
+     "|`--queue`|all queues|Delete only this queue's task rows, so queues with different retention needs can be pruned separately.|",
+     "|`--older-than`|`7d`|Minimum time since the task finished. Accepts `7d`, `24h`, `90m`, `45s`, or a plain number of seconds.|",
+     "|`--include-failed`|off|Also delete FAILED and LOST rows. By default they are kept: they hold the per-attempt tracebacks and can be retried.|",
+     "|`--batch-size`|`1000`|Rows per DELETE statement, so pruning a large table never takes a long lock or builds a giant IN clause.|",
+     "|`--dry-run`|off|Report how many rows would be deleted without deleting any.|",
+     "|`--format`|`text`|`json` prints one object on stdout; warnings stay on stderr. Ordinary keys: `queue`, `cutoff`, `statuses`, `task_rows`, `tick_rows`, `dry_run`, `unreadable_tick_rows`, `anchor_tick_rows`, `unreadable_ticks`. `queue` is `null` without `--queue`; `cutoff` is ISO 8601; `statuses` is a list. `unreadable_ticks` lists at most 100 `{pk, schedule_name, reason}` entries; counts cover all encountered unreadable rows, not a census. Purge keys: `purge_unreadable_ticks`, `schedule_keys`, `tick_pks`, `tick_rows`, `unreadable_ticks`, `kept_ticks`, `missing_tick_pks`, `dry_run`. Database errors during deletion still print committed-batch results before non-zero exit.|",
+     "|`--database`|the alias `OxTask` writes to|Database alias to prune. The rows it reads and the rows it deletes are on that one alias.|"
+    ]
+   ],
+   [
+    "equal",
+    223,
+    246,
+    202,
+    225
+   ],
+   [
+    "replace",
+    246,
+    258,
+    225,
+    237,
+    [
+     "|Flag|Default|Meaning|",
+     "|---|---|---|",
+     "|`--queue`|all queues|Restrict the database checks to one queue.|",
+     "|`--format`|`text`|`json` prints one object on stdout instead of the `OK:` line, on success and failure. Database mode includes `ok`, `queue`, `backlog`, `oldest_age_seconds`, `last_claim_age_seconds`, `unknown_task_paths` and `problems`. `queue` is `null` when no queue is selected; `unknown_task_paths` is `null` unless `--task-paths` ran; figures are `null` when there is nothing to measure or the check cannot run. File mode includes `ok`, `heartbeat_file`, `processes`, `max_heartbeat_age_seconds`, `files` and `problems`. See the JSON reference.|",
+     "|`--max-backlog`|off|Fail when more than this many READY tasks are eligible to run.|",
+     "|`--max-age`|off|Fail when a READY task has been eligible to run for longer than this. Accepts `7d`, `24h`, `90m`, `45s`, or a plain number of seconds.|",
+     "|`--worker-timeout`|off|Fail when no worker has claimed a task within this long, or no claim was ever recorded. Accepts `7d`, `24h`, `90m`, `45s`, or a plain number of seconds. Measures fleet claim activity, not one worker's liveness.|",
+     "|`--task-paths`|off|Fail when a READY or WAITING row's `task_path` no longer imports to a django.tasks Task, the rule a worker applies before running it. Reports each failing path with its row count and exception class. Run it after `migrate` and before rolling workers.|",
+     "|`--database`|the alias `OxTask` writes to|Database alias to check. The figures come from that alias, so the check reports the queue your workers are running.|",
+     "|`--heartbeat-file PATH`|off|Check the worker's local heartbeat files instead of the database. Cannot be combined with database or queue health options.|",
+     "|`--max-heartbeat-age SECONDS`|`60`|Maximum file age, inclusive. Accepts duration suffixes or seconds, including fractions; must be finite and positive. Requires `--heartbeat-file`.|",
+     "|`--processes N`|`1`|Expected worker process count. At 1, check `PATH`; above 1, require `PATH.supervisor` and every slot file from `PATH.0` through `PATH.(N-1)` to pass. Requires `--heartbeat-file`.|"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    264,
+    237,
+    243
+   ],
+   [
+    "replace",
+    264,
+    265,
+    243,
+    244,
+    [
+     "probe guidance"
+    ]
+   ],
+   [
+    "equal",
+    265,
+    306,
+    244,
+    285
+   ],
+   [
+    "replace",
+    306,
+    322,
+    285,
+    286,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    322,
+    330,
+    286,
+    294
+   ],
+   [
+    "replace",
+    330,
+    339,
+    294,
+    303,
+    [
+     "|Key|Required|Meaning|",
+     "|---|---|---|",
+     "|`task`|yes|Dotted path to a `@task` callable, e.g. `\"reports.tasks.build_report\"`.|",
+     "|`cron`|one of|Five-field cron expression.|",
+     "|`every`|one of|A fixed interval, as a `timedelta` or seconds, counted from a fixed instant rather than from the last run.|",
+     "|`phase`|no|Shifts an `every` sequence.|",
+     "|`args`, `kwargs`|no|JSON-serializable arguments passed to each enqueue. The database must also accept the values; serialization alone does not establish that.|",
+     "|`queue_name`|no|Queue override; defaults to the task's own queue.|",
+     "|`priority`|no|Priority override (-100 to 100).|"
+    ]
+   ],
+   [
+    "equal",
+    339,
+    364,
+    303,
+    328
+   ],
+   [
+    "replace",
+    364,
+    365,
+    328,
+    329,
+    [
+     "See Schedules in the database."
+    ]
+   ],
+   [
+    "equal",
+    365,
+    369,
+    329,
+    333
+   ],
+   [
+    "replace",
+    369,
+    372,
+    333,
+    336,
+    [
+     " `get_result()` and the async variants are all supported; the backend",
+     " declares `supports_defer`, `supports_priority`, `supports_get_result` and",
+     " `supports_async_task` accordingly."
+    ]
+   ],
+   [
+    "equal",
+    372,
+    373,
+    336,
+    337
+   ],
+   [
+    "replace",
+    373,
+    374,
+    337,
+    338,
+    [
+     " and the next scheduled run (`run_after`)."
+    ]
+   ],
+   [
+    "equal",
+    374,
+    375,
+    338,
+    339
+   ],
+   [
+    "replace",
+    375,
+    379,
+    339,
+    343,
+    [
+     " retried both when it raises and when its worker dies mid-run. The lease",
+     " number stops two workers writing the same row; it does not stop two threads",
+     " running the same task body, which is a property of every at-least-once",
+     " queue. What the lease guarantees, precisely."
+    ]
+   ],
+   [
+    "equal",
+    379,
+    380,
+    343,
+    344
+   ],
+   [
+    "replace",
+    380,
+    382,
+    344,
+    346,
+    [
+     " ORM); for CPU-bound work, run `--processes N --concurrency 1`, which is N",
+     " worker processes under one supervisor."
+    ]
+   ],
+   [
+    "equal",
+    382,
+    391,
+    346,
+    355
+   ],
+   [
+    "replace",
+    391,
+    392,
+    355,
+    356,
+    [
+     "See Task timeouts"
+    ]
+   ],
+   [
+    "equal",
+    392,
+    404,
+    356,
+    368
+   ],
+   [
+    "replace",
+    404,
+    405,
+    368,
+    369,
+    [
+     "Read replicas."
+    ]
+   ],
+   [
+    "equal",
+    405,
+    414,
+    369,
+    378
+   ],
+   [
+    "replace",
+    414,
+    415,
+    378,
+    379,
+    [
+     "`OxpullBackend`, its unique-task and rate-limit options, `OxpullWorker`, the unique-task decorator and the documented batches API are stable. Workflow APIs, the `WORKFLOWS` option and `workflow_*` log events are provisional. The stability policy lists the public surfaces in each tier."
+    ]
+   ],
+   [
+    "equal",
+    415,
+    416,
+    379,
+    380
+   ],
+   [
+    "replace",
+    416,
+    417,
+    380,
+    381,
+    [
+     "What counts as public API, the versioning and deprecation policy, and the guarantees attached to each tier are covered by the stability policy."
+    ]
+   ],
+   [
+    "equal",
+    417,
+    419,
+    381,
+    383
+   ],
+   [
+    "delete",
+    419,
+    420,
+    383,
+    383
+   ],
+   [
+    "equal",
+    420,
+    421,
+    383,
+    384
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "0e9397bad8aa+2": {
+  "fn": "liukelin/bubod",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "delete",
+    2,
+    6,
+    2,
+    2
+   ],
+   [
+    "equal",
+    6,
+    7,
+    2,
+    3
+   ],
+   [
+    "delete",
+    7,
+    9,
+    3,
+    3
+   ],
+   [
+    "equal",
+    9,
+    20,
+    3,
+    14
+   ],
+   [
+    "delete",
+    20,
+    24,
+    14,
+    14
+   ],
+   [
+    "equal",
+    24,
+    25,
+    14,
+    15
+   ],
+   [
+    "delete",
+    25,
+    27,
+    15,
+    15
+   ],
+   [
+    "equal",
+    27,
+    30,
+    15,
+    18
+   ],
+   [
+    "delete",
+    30,
+    32,
+    18,
+    18
+   ],
+   [
+    "equal",
+    32,
+    33,
+    18,
+    19
+   ],
+   [
+    "delete",
+    33,
+    35,
+    19,
+    19
+   ],
+   [
+    "equal",
+    35,
+    38,
+    19,
+    22
+   ],
+   [
+    "delete",
+    38,
+    40,
+    22,
+    22
+   ],
+   [
+    "equal",
+    40,
+    41,
+    22,
+    23
+   ],
+   [
+    "delete",
+    41,
+    43,
+    23,
+    23
+   ],
+   [
+    "equal",
+    43,
+    46,
+    23,
+    26
+   ],
+   [
+    "delete",
+    46,
+    50,
+    26,
+    26
+   ],
+   [
+    "equal",
+    50,
+    51,
+    26,
+    27
+   ],
+   [
+    "delete",
+    51,
+    53,
+    27,
+    27
+   ],
+   [
+    "equal",
+    53,
+    56,
+    27,
+    30
+   ],
+   [
+    "delete",
+    56,
+    58,
+    30,
+    30
+   ],
+   [
+    "equal",
+    58,
+    60,
+    30,
+    32
+   ],
+   [
+    "replace",
+    60,
+    90,
+    32,
+    33,
+    [
+     "…（28 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    90,
+    91,
+    33,
+    34
+   ],
+   [
+    "delete",
+    91,
+    93,
+    34,
+    34
+   ],
+   [
+    "equal",
+    93,
+    98,
+    34,
+    39
+   ],
+   [
+    "replace",
+    98,
+    208,
+    39,
+    40,
+    [
+     "…（108 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    208,
+    209,
+    40,
+    41
+   ],
+   [
+    "delete",
+    209,
+    211,
+    41,
+    41
+   ],
+   [
+    "equal",
+    211,
+    218,
+    41,
+    48
+   ],
+   [
+    "delete",
+    218,
+    220,
+    48,
+    48
+   ],
+   [
+    "equal",
+    220,
+    221,
+    48,
+    49
+   ],
+   [
+    "delete",
+    221,
+    223,
+    49,
+    49
+   ],
+   [
+    "equal",
+    223,
+    230,
+    49,
+    56
+   ],
+   [
+    "replace",
+    230,
+    248,
+    56,
+    57,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    248,
+    249,
+    57,
+    58
+   ],
+   [
+    "delete",
+    249,
+    251,
+    58,
+    58
+   ],
+   [
+    "equal",
+    251,
+    258,
+    58,
+    65
+   ],
+   [
+    "replace",
+    258,
+    264,
+    65,
+    66,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    265,
+    66,
+    67
+   ],
+   [
+    "delete",
+    265,
+    270,
+    67,
+    67
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "b2e2a09f0953+2": {
+  "fn": "sochdb/sochdb",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "replace",
+    0,
+    4,
+    0,
+    1,
+    [
+     "SochDB icon"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    21,
+    1,
+    18
+   ],
+   [
+    "replace",
+    21,
+    22,
+    18,
+    19,
+    [
+     "|Feature|SochDB|SQLite + vec|Postgres + pgvector|Chroma|LanceDB|"
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    19,
+    20
+   ],
+   [
+    "replace",
+    23,
+    33,
+    20,
+    29,
+    [
+     "|Embedded|✅|✅|❌|✅|✅|",
+     "|Vector search|✅ HNSW|⚠️ (via extension)|✅ (HNSW / IVFFlat)|✅|✅|",
+     "|Full SQL (user-facing)|✅ SQL-92|✅|✅|❌|✅|",
+     "|Hybrid search (vector + keyword)|✅|⚠️ (DIY)|⚠️ (DIY)|⚠️ (limited)|✅|",
+     "|Context builder|✅|❌|❌|❌|❌|",
+     "|Token budgeting|✅|❌|❌|❌|❌|",
+     "|Graph overlay|✅|❌|❌|❌|❌|",
+     "|ACID transactions|✅|✅|✅|⚠️ (limited)|❌|",
+     "|Columnar storage|✅|❌|❌|❌|✅|"
+    ]
+   ],
+   [
+    "equal",
+    33,
+    36,
+    29,
+    32
+   ],
+   [
+    "replace",
+    36,
+    37,
+    32,
+    33,
+    [
+     "|Feature|SochDB|Mem0|Letta|Graphiti|"
+    ]
+   ],
+   [
+    "equal",
+    37,
+    38,
+    33,
+    34
+   ],
+   [
+    "replace",
+    38,
+    45,
+    34,
+    41,
+    [
+     "|Primary focus|DB + retrieval + context|Memory layer|Agent framework + memory|Temporal knowledge-graph memory|",
+     "|Long-term memory primitives|✅|✅|✅|✅|",
+     "|Token-aware context budgeting|✅|❌|❌|❌|",
+     "|Graph-based memory|✅|❌|❌|✅|",
+     "|Built-in vector store|✅|❌ (BYO)|❌ (BYO)|❌ (BYO)|",
+     "|Built-in agent runtime|❌|❌|✅|❌|",
+     "|Drop-in “memory add-on” to existing apps|✅|✅|⚠️|✅|"
+    ]
+   ],
+   [
+    "equal",
+    45,
+    46,
+    41,
+    42
+   ],
+   [
+    "replace",
+    46,
+    50,
+    42,
+    43,
+    [
+     "**Quick links:** 📚 Documentation • Quick Start • Architecture • TOON Format • Benchmarks • RFD"
+    ]
+   ],
+   [
+    "equal",
+    50,
+    59,
+    43,
+    52
+   ],
+   [
+    "replace",
+    59,
+    81,
+    52,
+    53,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    81,
+    89,
+    53,
+    61
+   ],
+   [
+    "replace",
+    89,
+    110,
+    61,
+    62,
+    [
+     "…（21 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    110,
+    114,
+    62,
+    66
+   ],
+   [
+    "replace",
+    114,
+    115,
+    66,
+    67,
+    [
+     "|Challenge|Traditional Stack|SochDB|"
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    67,
+    68
+   ],
+   [
+    "replace",
+    116,
+    124,
+    68,
+    74,
+    [
+     "|**Token waste**|JSON/SQL bloat in prompts|TOON format for dense output|",
+     "|**RAG plumbing**|Separate vector DB + glue code|Built-in HNSW with hybrid search|",
+     "|**Context assembly**|Custom packer per use case|One query with token budget|",
+     "|**I/O overhead**|Multiple DB round-trips|Single columnar read|",
+     "|**Consistency**|Distributed transaction headaches|Local ACID guarantees|",
+     "|**Deployment**|Manage 4 services|Single binary, embed anywhere|"
+    ]
+   ],
+   [
+    "equal",
+    124,
+    127,
+    74,
+    77
+   ],
+   [
+    "replace",
+    127,
+    136,
+    77,
+    84,
+    [
+     "🗃️ **Real SQL** — SQL-92-compatible engine with `JOIN`s, aggregates (`GROUP BY`/`SUM`/`AVG`/`HAVING`), and MySQL/PostgreSQL/SQLite dialect normalization ",
+     "🧠 **Context Query Builder** — Assemble system + user + history + retrieval under a token budget ",
+     "🔍 **Hybrid Search** — HNSW vectors + BM25 keywords with reciprocal rank fusion ",
+     "🕸️ **Graph + Time-Travel** — Property graph with bi-temporal, point-in-time recall ",
+     "⚡ **Embedded-First** — single ~2.5 MB native library, no runtime dependencies, SQLite-style simplicity ",
+     "🔒 **Full ACID** — MVCC + WAL + Serializable Snapshot Isolation ",
+     "📊 **Columnar Storage** — Read only the columns you need "
+    ]
+   ],
+   [
+    "equal",
+    136,
+    153,
+    84,
+    101
+   ],
+   [
+    "replace",
+    153,
+    156,
+    101,
+    104,
+    [
+     " - **AST-based query executor**: unified SQL processing with dialect normalization",
+     " - **Multi-dialect compatibility**: MySQL, PostgreSQL, SQLite",
+     " - **Idempotent DDL**: `CREATE TABLE IF NOT EXISTS`, `DROP TABLE IF EXISTS`"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    161,
+    104,
+    109
+   ],
+   [
+    "replace",
+    161,
+    163,
+    109,
+    111,
+    [
+     " - ~500KB smaller binaries for embedded use cases",
+     " - Follows SQLite-style design for maximum compatibility"
+    ]
+   ],
+   [
+    "equal",
+    163,
+    168,
+    111,
+    116
+   ],
+   [
+    "replace",
+    168,
+    172,
+    116,
+    120,
+    [
+     " - **Embedded mode (FFI)** for lowest latency",
+     " - **IPC mode (Unix sockets)** for multi-process / service deployments",
+     " - **Namespace isolation** for multi-tenant apps",
+     " - **Typed error taxonomy** with remediation hints"
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    120,
+    121
+   ],
+   [
+    "replace",
+    173,
+    176,
+    121,
+    122,
+    [
+     " - **BatchAccumulator**: deferred graph construction — 4–5× faster inserts via zero-FFI numpy accumulation + single bulk Rayon-parallel HNSW build"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    192,
+    122,
+    138
+   ],
+   [
+    "replace",
+    192,
+    193,
+    138,
+    139,
+    [
+     "|Language|Repository|Installation|"
+    ]
+   ],
+   [
+    "equal",
+    193,
+    194,
+    139,
+    140
+   ],
+   [
+    "replace",
+    194,
+    198,
+    140,
+    144,
+    [
+     "|**Rust**|This repository|`cargo add sochdb`|",
+     "|**Python**|sochdb-python-sdk|`pip install sochdb`|",
+     "|**Node.js/TypeScript**|sochdb-nodejs-sdk|`npm install @sochdb/sochdb`|",
+     "|**Go**|sochdb-go|`go get github.com/sochdb/sochdb-go@latest`|"
+    ]
+   ],
+   [
+    "equal",
+    198,
+    207,
+    144,
+    153
+   ],
+   [
+    "replace",
+    207,
+    211,
+    153,
+    154,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    211,
+    213,
+    154,
+    156
+   ],
+   [
+    "replace",
+    213,
+    214,
+    156,
+    157,
+    [
+     "**Docker Hub:** `sochdb/sochdb`"
+    ]
+   ],
+   [
+    "equal",
+    214,
+    224,
+    157,
+    167
+   ],
+   [
+    "replace",
+    224,
+    225,
+    167,
+    168,
+    [
+     "- Concurrent (10 threads): ~10.5K ops/sec "
+    ]
+   ],
+   [
+    "equal",
+    225,
+    227,
+    168,
+    170
+   ],
+   [
+    "replace",
+    227,
+    231,
+    170,
+    174,
+    [
+     "See docker/README.md for full documentation.",
+     "|**Node.js/TypeScript**|sochdb-nodejs-sdk|`npm install @sochdb/sochdb`|",
+     "|**Go**|sochdb-go|`go get github.com/sochdb/sochdb-go@latest`|",
+     "|**Rust**|This repository|`cargo add sochdb`|"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    234,
+    174,
+    177
+   ],
+   [
+    "replace",
+    234,
+    237,
+    177,
+    180,
+    [
+     "- **Python Examples**: sochdb-python-examples",
+     "- **Node.js Examples**: sochdb-nodejs-examples",
+     "- **Go Examples**: sochdb-golang-examples"
+    ]
+   ],
+   [
+    "equal",
+    237,
+    240,
+    180,
+    183
+   ],
+   [
+    "replace",
+    240,
+    241,
+    183,
+    184,
+    [
+     "For performance comparisons and benchmarks, see sochdb-benchmarks."
+    ]
+   ],
+   [
+    "equal",
+    241,
+    244,
+    184,
+    187
+   ],
+   [
+    "replace",
+    244,
+    247,
+    187,
+    188,
+    [
+     " SochDB vs ChromaDB vs LanceDB benchmark comparison"
+    ]
+   ],
+   [
+    "equal",
+    247,
+    248,
+    188,
+    189
+   ],
+   [
+    "replace",
+    248,
+    249,
+    189,
+    190,
+    [
+     "|Metric|SochDB|ChromaDB|LanceDB (IVF_PQ)|"
+    ]
+   ],
+   [
+    "equal",
+    249,
+    250,
+    190,
+    191
+   ],
+   [
+    "replace",
+    250,
+    256,
+    191,
+    197,
+    [
+     "|Recall@100|0.9899|0.9966|0.6574 *|",
+     "|Avg Latency|**3.3 ms**|15.4 ms|5.6 ms|",
+     "|P95 Latency|**4.2 ms**|18.4 ms|5.9 ms|",
+     "|P99 Latency|**5.9 ms**|22.3 ms|12.2 ms|",
+     "|Insert (50K vecs)|**0.1 s**|76.9 s|0.4 s|",
+     "|Total Load|**13.7 s**|76.9 s|21.0 s|"
+    ]
+   ],
+   [
+    "equal",
+    256,
+    261,
+    197,
+    202
+   ],
+   [
+    "replace",
+    261,
+    262,
+    202,
+    203,
+    [
+     "> See full benchmark details for methodology and analysis."
+    ]
+   ],
+   [
+    "equal",
+    262,
+    267,
+    203,
+    208
+   ],
+   [
+    "replace",
+    267,
+    270,
+    208,
+    209,
+    [
+     " SochDB vs RAG competitors head-to-head benchmark"
+    ]
+   ],
+   [
+    "equal",
+    270,
+    271,
+    209,
+    210
+   ],
+   [
+    "replace",
+    271,
+    272,
+    210,
+    211,
+    [
+     "|Rank|System|EM%|F1%|Correct|Build|Query|Queries|Type|"
+    ]
+   ],
+   [
+    "equal",
+    272,
+    273,
+    211,
+    212
+   ],
+   [
+    "replace",
+    273,
+    283,
+    212,
+    222,
+    [
+     "|🥇|**SochDB V2**|**60.0**|**61.7**|**12/20**|1.9s|**2.1s**|20/20|Multi-Perspective RRF|",
+     "|🥈|SochDB + HyDE|30.0|42.6|6/20|3.3s|37.0s|20/20|Embedded Vector DB|",
+     "|🥉|GraphRAG|25.0|40.6|5/20|16.2s|11.9s|20/20|Knowledge Graph|",
+     "|3|SochDB + Rerank|25.0|40.2|5/20|3.2s|27.9s|20/20|Embedded Vector DB|",
+     "|5|SochDB + Advanced|25.0|37.8|5/20|3.3s|14.0s|20/20|Embedded Vector DB|",
+     "|6|SochDB Hybrid|20.0|23.4|4/20|**0.01s**|0.8s|20/20|Embedded Vector DB|",
+     "|7|Self-RAG|15.0|18.6|3/20|12.9s|0.9s|20/20|Self-Reflection RAG|",
+     "|8|BM25|10.0|31.4|2/20|0.06s|27.4s|20/20|Lexical Search|",
+     "|9|Embedding RAG|5.0|18.9|1/20|0.3s|37.8s|20/20|FAISS + Embedding|",
+     "|10|Mem0|5.0|18.5|1/20|51.7s|1.0s|20/20|Memory-as-a-Service|"
+    ]
+   ],
+   [
+    "equal",
+    283,
+    288,
+    222,
+    227
+   ],
+   [
+    "replace",
+    288,
+    289,
+    227,
+    228,
+    [
+     "> All systems use the same LLM (gpt-4.1-mini), dataset (Ruler QA1 197K), and evaluation framework (MemoryAgentBench, UCSD)."
+    ]
+   ],
+   [
+    "equal",
+    289,
+    292,
+    228,
+    231
+   ],
+   [
+    "replace",
+    292,
+    295,
+    231,
+    232,
+    [
+     " SochDB search modes detail benchmark"
+    ]
+   ],
+   [
+    "equal",
+    295,
+    296,
+    232,
+    233
+   ],
+   [
+    "replace",
+    296,
+    297,
+    233,
+    234,
+    [
+     "|Metric|SochDB + HyDE|SochDB + Rerank|SochDB (baseline)|Mem0|"
+    ]
+   ],
+   [
+    "equal",
+    297,
+    298,
+    234,
+    235
+   ],
+   [
+    "replace",
+    298,
+    305,
+    235,
+    242,
+    [
+     "|Exact Match|**30.0%**|25.0%|20.0%|5.0%|",
+     "|F1 Score|**42.6%**|40.2%|30.3%|18.5%|",
+     "|Substring Match|45.0%|**50.0%**|20.0%|30.0%|",
+     "|ROUGE-L F1|**44.0%**|42.9%|29.5%|17.9%|",
+     "|Memory Build|3.3 s|3.2 s|**0.01 s**|51.7 s|",
+     "|Query Time|37.0 s|27.9 s|**6.6 s**|1.0 s|",
+     "|**Best For**|🎯 Max Accuracy|🏆 **Recommended**|⚡ Max Speed|—|"
+    ]
+   ],
+   [
+    "equal",
+    305,
+    308,
+    242,
+    245
+   ],
+   [
+    "replace",
+    308,
+    309,
+    245,
+    246,
+    [
+     "> See full benchmark details for developer configuration guide, substring match analysis, and learnings."
+    ]
+   ],
+   [
+    "equal",
+    309,
+    340,
+    246,
+    277
+   ],
+   [
+    "replace",
+    340,
+    352,
+    277,
+    278,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    352,
+    360,
+    278,
+    286
+   ],
+   [
+    "replace",
+    360,
+    368,
+    286,
+    287,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    368,
+    380,
+    287,
+    299
+   ],
+   [
+    "replace",
+    380,
+    402,
+    299,
+    300,
+    [
+     "…（22 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    402,
+    410,
+    300,
+    308
+   ],
+   [
+    "replace",
+    410,
+    436,
+    308,
+    309,
+    [
+     "…（26 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    436,
+    444,
+    309,
+    317
+   ],
+   [
+    "replace",
+    444,
+    459,
+    317,
+    318,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    459,
+    475,
+    318,
+    334
+   ],
+   [
+    "replace",
+    475,
+    507,
+    334,
+    335,
+    [
+     "…（32 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    507,
+    517,
+    335,
+    345
+   ],
+   [
+    "replace",
+    517,
+    540,
+    345,
+    346,
+    [
+     "…（23 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    540,
+    550,
+    346,
+    356
+   ],
+   [
+    "replace",
+    550,
+    569,
+    356,
+    357,
+    [
+     "…（19 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    569,
+    577,
+    357,
+    365
+   ],
+   [
+    "replace",
+    577,
+    590,
+    365,
+    366,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    590,
+    594,
+    366,
+    370
+   ],
+   [
+    "replace",
+    594,
+    595,
+    370,
+    371,
+    [
+     "|Feature|Python|Node.js|Go|Rust|"
+    ]
+   ],
+   [
+    "equal",
+    595,
+    596,
+    371,
+    372
+   ],
+   [
+    "replace",
+    596,
+    603,
+    372,
+    379,
+    [
+     "|Basic KV|✅|✅|✅|✅|",
+     "|Transactions|✅|✅|✅|✅|",
+     "|SQL Operations|✅|✅|✅|✅|",
+     "|Vector Search|✅|✅|✅|✅|",
+     "|Path API|✅|✅|✅|✅|",
+     "|Prefix Scanning|✅|✅|✅|✅|",
+     "|Query Builder|✅|✅|✅|✅|"
+    ]
+   ],
+   [
+    "equal",
+    603,
+    605,
+    379,
+    381
+   ],
+   [
+    "delete",
+    605,
+    607,
+    381,
+    381
+   ],
+   [
+    "equal",
+    607,
+    614,
+    381,
+    388
+   ],
+   [
+    "replace",
+    614,
+    619,
+    388,
+    389,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    619,
+    623,
+    389,
+    393
+   ],
+   [
+    "replace",
+    623,
+    624,
+    393,
+    394,
+    [
+     "|Crate|Description|Key Components|"
+    ]
+   ],
+   [
+    "equal",
+    624,
+    625,
+    394,
+    395
+   ],
+   [
+    "replace",
+    625,
+    634,
+    395,
+    402,
+    [
+     "|`sochdb-core`|Core types and TOON format|`SochValue`, `SochSchema`, `SochTable`, codec|",
+     "|`sochdb-kernel`|Database kernel|WAL, MVCC, transactions, catalog|",
+     "|`sochdb-storage`|Storage engine|LSCS columnar, mmap, block checksums|",
+     "|`sochdb-index`|Index structures|B-Tree, HNSW vector index|",
+     "|`sochdb-query`|Query execution|Cost optimizer, context builder, SOCH-QL|",
+     "|`sochdb-client`|Client SDK|`SochConnection`, `PathQuery`, `BatchWriter`|",
+     "|`sochdb-plugin-logging`|Logging plugin|Structured logging, tracing|"
+    ]
+   ],
+   [
+    "equal",
+    634,
+    645,
+    402,
+    413
+   ],
+   [
+    "replace",
+    645,
+    650,
+    413,
+    414,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    650,
+    658,
+    414,
+    422
+   ],
+   [
+    "replace",
+    658,
+    673,
+    422,
+    423,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    673,
+    677,
+    423,
+    427
+   ],
+   [
+    "replace",
+    677,
+    678,
+    427,
+    428,
+    [
+     "|Type|TOON Syntax|Example|"
+    ]
+   ],
+   [
+    "equal",
+    678,
+    679,
+    428,
+    429
+   ],
+   [
+    "replace",
+    679,
+    689,
+    429,
+    437,
+    [
+     "|Null|`∅`|`∅`|",
+     "|Boolean|`T` / `F`|`T`|",
+     "|Integer|number|`42`, `-17`|",
+     "|Float|decimal|`3.14159`|",
+     "|String|text or `\"quoted\"`|`Alice`, `\"hello, world\"`|",
+     "|Array|`[items]`|`[1,2,3]`|",
+     "|Reference|`ref(table,id)`|`ref(users,42)`|",
+     "|Binary|`b64:data`|`b64:SGVsbG8=`|"
+    ]
+   ],
+   [
+    "equal",
+    689,
+    700,
+    437,
+    448
+   ],
+   [
+    "replace",
+    700,
+    710,
+    448,
+    449,
+    [
+     "…（10 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    710,
+    718,
+    449,
+    457
+   ],
+   [
+    "replace",
+    718,
+    730,
+    457,
+    458,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    730,
+    734,
+    458,
+    462
+   ],
+   [
+    "replace",
+    734,
+    735,
+    462,
+    463,
+    [
+     "|Metric|Use Case|Formula|"
+    ]
+   ],
+   [
+    "equal",
+    735,
+    736,
+    463,
+    464
+   ],
+   [
+    "replace",
+    736,
+    739,
+    464,
+    467,
+    [
+     "|`Cosine`|Text embeddings, normalized vectors|`1 - (a·b)/(‖a‖‖b‖)`|",
+     "|`Euclidean`|Spatial data, unnormalized|`√Σ(aᵢ-bᵢ)²`|",
+     "|`DotProduct`|When vectors are pre-normalized|`-a·b`|"
+    ]
+   ],
+   [
+    "equal",
+    739,
+    748,
+    467,
+    476
+   ],
+   [
+    "replace",
+    748,
+    766,
+    476,
+    477,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    766,
+    772,
+    477,
+    483
+   ],
+   [
+    "replace",
+    772,
+    773,
+    483,
+    484,
+    [
+     "|Precision|Memory|Search Latency|Use Case|"
+    ]
+   ],
+   [
+    "equal",
+    773,
+    774,
+    484,
+    485
+   ],
+   [
+    "replace",
+    774,
+    777,
+    485,
+    488,
+    [
+     "|`F32`|100% (baseline)|Baseline|Maximum precision|",
+     "|`F16`|50%|~Same|General embeddings|",
+     "|`BF16`|50%|~Same|ML model compatibility|"
+    ]
+   ],
+   [
+    "equal",
+    777,
+    779,
+    488,
+    490
+   ],
+   [
+    "delete",
+    779,
+    781,
+    490,
+    490
+   ],
+   [
+    "equal",
+    781,
+    788,
+    490,
+    497
+   ],
+   [
+    "replace",
+    788,
+    789,
+    497,
+    498,
+    [
+     "|Property|Implementation|"
+    ]
+   ],
+   [
+    "equal",
+    789,
+    790,
+    498,
+    499
+   ],
+   [
+    "replace",
+    790,
+    794,
+    499,
+    503,
+    [
+     "|**Atomicity**|Buffered writes with all-or-nothing commit|",
+     "|**Consistency**|Schema validation before commit|",
+     "|**Isolation**|MVCC snapshots with read/write set tracking|",
+     "|**Durability**|WAL with fsync, group commit support|"
+    ]
+   ],
+   [
+    "equal",
+    794,
+    801,
+    503,
+    510
+   ],
+   [
+    "replace",
+    801,
+    816,
+    510,
+    511,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    816,
+    820,
+    511,
+    515
+   ],
+   [
+    "replace",
+    820,
+    821,
+    515,
+    516,
+    [
+     "|Level|Description|Status|"
+    ]
+   ],
+   [
+    "equal",
+    821,
+    822,
+    516,
+    517
+   ],
+   [
+    "replace",
+    822,
+    825,
+    517,
+    520,
+    [
+     "|`ReadCommitted`|Sees committed data at statement start|✅ Implemented|",
+     "|`SnapshotIsolation`|Reads see consistent point-in-time view|✅ Implemented|",
+     "|`Serializable`|SSI with rw-antidependency cycle detection|✅ Implemented|"
+    ]
+   ],
+   [
+    "equal",
+    825,
+    832,
+    520,
+    527
+   ],
+   [
+    "replace",
+    832,
+    837,
+    527,
+    528,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    837,
+    843,
+    528,
+    534
+   ],
+   [
+    "replace",
+    843,
+    844,
+    534,
+    535,
+    [
+     "|Preset|Sync Mode|Group Commit|Best For|"
+    ]
+   ],
+   [
+    "equal",
+    844,
+    845,
+    535,
+    536
+   ],
+   [
+    "replace",
+    845,
+    848,
+    536,
+    539,
+    [
+     "|`throughput_optimized()`|Normal|Large batches|High-volume ingestion|",
+     "|`latency_optimized()`|Full|Small batches|Real-time applications|",
+     "|`max_durability()`|Full|Disabled|Financial/critical data|"
+    ]
+   ],
+   [
+    "equal",
+    848,
+    853,
+    539,
+    544
+   ],
+   [
+    "replace",
+    853,
+    860,
+    544,
+    545,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    860,
+    861,
+    545,
+    546
+   ],
+   [
+    "delete",
+    861,
+    863,
+    546,
+    546
+   ],
+   [
+    "equal",
+    863,
+    881,
+    546,
+    564
+   ],
+   [
+    "replace",
+    881,
+    905,
+    564,
+    565,
+    [
+     "…（24 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    905,
+    913,
+    565,
+    573
+   ],
+   [
+    "replace",
+    913,
+    925,
+    573,
+    574,
+    [
+     "…（12 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    925,
+    935,
+    574,
+    584
+   ],
+   [
+    "replace",
+    935,
+    941,
+    584,
+    585,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    941,
+    943,
+    585,
+    587
+   ],
+   [
+    "replace",
+    943,
+    944,
+    587,
+    588,
+    [
+     "|Mode|Write Speed|Prefix Scan|Use Case|"
+    ]
+   ],
+   [
+    "equal",
+    944,
+    945,
+    588,
+    589
+   ],
+   [
+    "replace",
+    945,
+    949,
+    589,
+    591,
+    [
+     "|Ordered index **on**|Baseline|O(log N + K)|Read-heavy, prefix queries|",
+     "|Ordered index **off**|~20% faster|O(N)|Write-heavy, point lookups|"
+    ]
+   ],
+   [
+    "equal",
+    949,
+    958,
+    591,
+    600
+   ],
+   [
+    "replace",
+    958,
+    988,
+    600,
+    601,
+    [
+     "…（30 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    988,
+    989,
+    601,
+    602
+   ],
+   [
+    "delete",
+    989,
+    991,
+    602,
+    602
+   ],
+   [
+    "equal",
+    991,
+    998,
+    602,
+    609
+   ],
+   [
+    "replace",
+    998,
+    999,
+    609,
+    610,
+    [
+     "|Extension|Purpose|Example|"
+    ]
+   ],
+   [
+    "equal",
+    999,
+    1000,
+    610,
+    611
+   ],
+   [
+    "replace",
+    1000,
+    1004,
+    611,
+    615,
+    [
+     "|`StorageExtension`|Alternative backends|RocksDB, LSCS|",
+     "|`IndexExtension`|Custom indexes|Learned index, full-text|",
+     "|`ObservabilityExtension`|Metrics/tracing|Prometheus, DataDog|",
+     "|`CompressionExtension`|Compression algos|LZ4, Zstd|"
+    ]
+   ],
+   [
+    "equal",
+    1004,
+    1011,
+    615,
+    622
+   ],
+   [
+    "replace",
+    1011,
+    1045,
+    622,
+    623,
+    [
+     "…（34 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1045,
+    1046,
+    623,
+    624
+   ],
+   [
+    "delete",
+    1046,
+    1048,
+    624,
+    624
+   ],
+   [
+    "equal",
+    1048,
+    1057,
+    624,
+    633
+   ],
+   [
+    "replace",
+    1057,
+    1073,
+    633,
+    634,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1073,
+    1088,
+    634,
+    649
+   ],
+   [
+    "delete",
+    1088,
+    1090,
+    649,
+    649
+   ],
+   [
+    "equal",
+    1090,
+    1093,
+    649,
+    652
+   ],
+   [
+    "replace",
+    1093,
+    1094,
+    652,
+    653,
+    [
+     "> **Vector Search**: VectorDBBench (Zilliz) | **Memory Agent**: MemoryAgentBench (UCSD)"
+    ]
+   ],
+   [
+    "equal",
+    1094,
+    1097,
+    653,
+    656
+   ],
+   [
+    "replace",
+    1097,
+    1098,
+    656,
+    657,
+    [
+     "We benchmarked SochDB against ChromaDB and LanceDB using **VectorDBBench** — the industry-standard open-source benchmark from Zilliz. All databases ran on the same hardware in embedded mode. SochDB and ChromaDB use HNSW indexes; LanceDB uses IVF_PQ."
+    ]
+   ],
+   [
+    "equal",
+    1098,
+    1099,
+    657,
+    658
+   ],
+   [
+    "replace",
+    1099,
+    1102,
+    658,
+    659,
+    [
+     " SochDB vs ChromaDB vs LanceDB benchmark comparison"
+    ]
+   ],
+   [
+    "equal",
+    1102,
+    1112,
+    659,
+    669
+   ],
+   [
+    "replace",
+    1112,
+    1113,
+    669,
+    670,
+    [
+     "|Parameter|SochDB|ChromaDB|LanceDB|"
+    ]
+   ],
+   [
+    "equal",
+    1113,
+    1114,
+    670,
+    671
+   ],
+   [
+    "replace",
+    1114,
+    1119,
+    671,
+    676,
+    [
+     "|Index Type|HNSW|HNSW|IVF_PQ|",
+     "|M|16|16|—|",
+     "|ef_construction|200|200|—|",
+     "|ef_search|500|500|—|",
+     "|Version|0.5.3 (SDK)|0.4.22|0.19.0|"
+    ]
+   ],
+   [
+    "equal",
+    1119,
+    1122,
+    676,
+    679
+   ],
+   [
+    "replace",
+    1122,
+    1123,
+    679,
+    680,
+    [
+     "|Metric|SochDB|ChromaDB|LanceDB (IVF_PQ)|"
+    ]
+   ],
+   [
+    "equal",
+    1123,
+    1124,
+    680,
+    681
+   ],
+   [
+    "replace",
+    1124,
+    1130,
+    681,
+    687,
+    [
+     "|**Recall@100**|0.9899|0.9966|0.6574 *|",
+     "|**Avg Latency**|**3.3 ms** ✅|15.4 ms|5.6 ms|",
+     "|**P95 Latency**|**4.2 ms** ✅|18.4 ms|5.9 ms|",
+     "|**P99 Latency**|**5.9 ms** ✅|22.3 ms|12.2 ms|",
+     "|**Insert (50K vecs)**|**0.1 s** ✅|76.9 s|0.4 s|",
+     "|**Total Load**|**13.7 s** ✅|76.9 s|21.0 s|"
+    ]
+   ],
+   [
+    "equal",
+    1130,
+    1150,
+    687,
+    707
+   ],
+   [
+    "replace",
+    1150,
+    1158,
+    707,
+    708,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1158,
+    1164,
+    708,
+    714
+   ],
+   [
+    "replace",
+    1164,
+    1170,
+    714,
+    715,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1170,
+    1174,
+    715,
+    719
+   ],
+   [
+    "replace",
+    1174,
+    1175,
+    719,
+    720,
+    [
+     "|Component|Time|% of Total|"
+    ]
+   ],
+   [
+    "equal",
+    1175,
+    1176,
+    720,
+    721
+   ],
+   [
+    "replace",
+    1176,
+    1179,
+    721,
+    724,
+    [
+     "|**Embedding API (Azure OpenAI)**|59.5s|**99.7%**|",
+     "|SochDB Insert (1K vectors)|0.133s|0.2%|",
+     "|SochDB Search (100 queries)|0.046s|0.1%|"
+    ]
+   ],
+   [
+    "equal",
+    1179,
+    1182,
+    724,
+    727
+   ],
+   [
+    "delete",
+    1182,
+    1184,
+    727,
+    727
+   ],
+   [
+    "equal",
+    1184,
+    1186,
+    727,
+    729
+   ],
+   [
+    "replace",
+    1186,
+    1187,
+    729,
+    730,
+    [
+     "> **Version**: 2.0.0 | **Benchmark Date**: February 2026 | **LLM**: Azure OpenAI gpt-4.1-mini | **Framework**: MemoryAgentBench (UCSD)"
+    ]
+   ],
+   [
+    "equal",
+    1187,
+    1190,
+    730,
+    733
+   ],
+   [
+    "replace",
+    1190,
+    1193,
+    733,
+    734,
+    [
+     " SochDB vs RAG competitors head-to-head benchmark"
+    ]
+   ],
+   [
+    "equal",
+    1193,
+    1196,
+    734,
+    737
+   ],
+   [
+    "replace",
+    1196,
+    1197,
+    737,
+    738,
+    [
+     "|Rank|System|EM %|F1 %|Correct|Build (s)|Query (s)|Queries|Type|"
+    ]
+   ],
+   [
+    "equal",
+    1197,
+    1198,
+    738,
+    739
+   ],
+   [
+    "replace",
+    1198,
+    1209,
+    739,
+    750,
+    [
+     "|🥇|**SochDB V2**|**60.0**|**61.7**|**12/20**|1.9|**2.1**|✅ 20/20|Multi-Perspective RRF|",
+     "|🥈|SochDB + HyDE|30.0|42.6|6/20|3.3|37.0|✅ 20/20|Embedded HNSW|",
+     "|🥉|GraphRAG|25.0|40.6|5/20|16.2|11.9|✅ 20/20|Knowledge Graph + NER|",
+     "|3|SochDB + Rerank|25.0|40.2|5/20|3.2|27.9|✅ 20/20|Embedded HNSW|",
+     "|5|SochDB + Advanced|25.0|37.8|5/20|3.3|14.0|✅ 20/20|Embedded HNSW|",
+     "|6|SochDB Hybrid|20.0|23.4|4/20|**0.01**|0.8|✅ 20/20|Embedded HNSW|",
+     "|7|Self-RAG|15.0|18.6|3/20|12.9|0.9|✅ 20/20|Adaptive Retrieval|",
+     "|8|BM25|10.0|31.4|2/20|0.06|27.4|✅ 20/20|Lexical Search|",
+     "|9|Embedding RAG|5.0|18.9|1/20|0.3|37.8|✅ 20/20|FAISS + Embedding|",
+     "|10|Mem0|5.0|18.5|1/20|51.7|1.0|✅ 20/20|Memory-as-a-Service|",
+     "|—|RAPTOR|—|—|—|—|—|0/20|Tree Summarization|"
+    ]
+   ],
+   [
+    "equal",
+    1209,
+    1236,
+    750,
+    777
+   ],
+   [
+    "replace",
+    1236,
+    1237,
+    777,
+    778,
+    [
+     "|Configuration|EM %|F1 %|Sub-EM %|ROUGE-L|Build (s)|Query (s)|Best For|"
+    ]
+   ],
+   [
+    "equal",
+    1237,
+    1238,
+    778,
+    779
+   ],
+   [
+    "replace",
+    1238,
+    1243,
+    779,
+    784,
+    [
+     "|**SochDB + HyDE**|**30.0**|**42.6**|45.0|**44.0**|3.29|37.0|🎯 Max Accuracy|",
+     "|**SochDB + Rerank**|25.0|40.2|**50.0**|42.9|3.24|27.9|🏆 **Recommended**|",
+     "|**SochDB + Advanced**|25.0|37.8|35.0|37.5|3.25|14.0|⚠️ Don't stack|",
+     "|**SochDB (gpt-4.1)**|20.0|30.3|20.0|29.5|**0.01**|**6.6**|⚡ Max Speed|",
+     "|**Mem0**|5.0|18.5|30.0|17.9|51.7|1.0|—|"
+    ]
+   ],
+   [
+    "equal",
+    1243,
+    1248,
+    784,
+    789
+   ],
+   [
+    "replace",
+    1248,
+    1249,
+    789,
+    790,
+    [
+     "|Your Priority|Recommended Config|Why|"
+    ]
+   ],
+   [
+    "equal",
+    1249,
+    1250,
+    790,
+    791
+   ],
+   [
+    "replace",
+    1250,
+    1254,
+    791,
+    795,
+    [
+     "|**Best overall balance**|SochDB + Rerank|Highest substring match (50%), strong F1 (40.2%), 27% faster than HyDE|",
+     "|**Maximum exact accuracy**|SochDB + HyDE|Best EM (30%) and F1 (42.6%) — HyDE bridges question↔document vocabulary gap|",
+     "|**Lowest latency / real-time**|SochDB baseline|0.01s build, 6.6s query — no extra LLM calls during retrieval|",
+     "|**Fuzzy/partial matching**|SochDB + Rerank|50% substring match — cross-encoder reranker surfaces relevant context even on partial matches|"
+    ]
+   ],
+   [
+    "equal",
+    1254,
+    1269,
+    795,
+    810
+   ],
+   [
+    "replace",
+    1269,
+    1270,
+    810,
+    811,
+    [
+     "|Config|EM %|Sub-EM %|Gap|Explanation|"
+    ]
+   ],
+   [
+    "equal",
+    1270,
+    1271,
+    811,
+    812
+   ],
+   [
+    "replace",
+    1271,
+    1275,
+    812,
+    816,
+    [
+     "|**SochDB (baseline)**|20|20|0|Short precise answers (~4 tokens). When wrong, no overlap at all.|",
+     "|**SochDB + HyDE**|30|45|+15|Slightly longer answers. Wrong predictions still contain gold keywords.|",
+     "|**SochDB + Rerank**|25|50|+25|Reranker surfaces better context → predictions contain gold as substring.|",
+     "|**Mem0**|5|30|+25|Very verbose answers (~13 tokens). Gold words appear by chance in long text.|"
+    ]
+   ],
+   [
+    "equal",
+    1275,
+    1294,
+    816,
+    835
+   ],
+   [
+    "replace",
+    1294,
+    1295,
+    835,
+    836,
+    [
+     "|Dataset|Context|EM %|F1 %|Sub-EM %|"
+    ]
+   ],
+   [
+    "equal",
+    1295,
+    1296,
+    836,
+    837
+   ],
+   [
+    "replace",
+    1296,
+    1299,
+    837,
+    840,
+    [
+     "|Ruler QA1 197K|197K tokens|13.0|27.0|38.0|",
+     "|Ruler QA2 421K|421K tokens|**31.0**|**42.7**|**49.0**|",
+     "|LongMemEval|400K tokens|3.3|9.7|4.0|"
+    ]
+   ],
+   [
+    "equal",
+    1299,
+    1314,
+    840,
+    855
+   ],
+   [
+    "delete",
+    1314,
+    1316,
+    855,
+    855
+   ],
+   [
+    "equal",
+    1316,
+    1327,
+    855,
+    866
+   ],
+   [
+    "replace",
+    1327,
+    1328,
+    866,
+    867,
+    [
+     "|Configuration|Search (ms)|R@1|R@5|R@10|R@20|R@50|"
+    ]
+   ],
+   [
+    "equal",
+    1328,
+    1329,
+    867,
+    868
+   ],
+   [
+    "replace",
+    1329,
+    1334,
+    868,
+    873,
+    [
+     "|**M=8, ef_c=50**|**0.42**|0.990|**0.994**|**0.991**|0.994|0.991|",
+     "|M=16, ef_c=100|0.47|0.980|0.986|0.982|0.984|0.986|",
+     "|M=16, ef_c=200|0.44|0.970|0.984|0.988|0.990|0.986|",
+     "|M=32, ef_c=200|0.47|0.980|0.982|0.981|0.984|0.985|",
+     "|M=32, ef_c=400|0.52|0.990|0.986|0.983|0.979|0.981|"
+    ]
+   ],
+   [
+    "equal",
+    1334,
+    1343,
+    873,
+    882
+   ],
+   [
+    "replace",
+    1343,
+    1344,
+    882,
+    883,
+    [
+     "|Use Case|M|ef_construction|Expected Recall@10|Latency|"
+    ]
+   ],
+   [
+    "equal",
+    1344,
+    1345,
+    883,
+    884
+   ],
+   [
+    "replace",
+    1345,
+    1351,
+    884,
+    888,
+    [
+     "|**Real-time RAG**|8|50|~99%|<0.5ms|",
+     "|**Balanced**|16|100|~98%|<0.5ms|",
+     "|**Maximum Quality**|16|200|~99%|<0.5ms|",
+     "|**Large-scale (10M+)**|32|200|~97%|<1ms|"
+    ]
+   ],
+   [
+    "equal",
+    1351,
+    1354,
+    888,
+    891
+   ],
+   [
+    "replace",
+    1354,
+    1355,
+    891,
+    892,
+    [
+     "|Dataset|JSON Tokens|TOON Tokens|Reduction|"
+    ]
+   ],
+   [
+    "equal",
+    1355,
+    1356,
+    892,
+    893
+   ],
+   [
+    "replace",
+    1356,
+    1361,
+    893,
+    896,
+    [
+     "|Users (100 rows, 5 cols)|2,340|782|**66.6%**|",
+     "|Events (1000 rows, 3 cols)|18,200|7,650|**58.0%**|",
+     "|Products (500 rows, 8 cols)|15,600|5,980|**61.7%**|"
+    ]
+   ],
+   [
+    "equal",
+    1361,
+    1364,
+    896,
+    899
+   ],
+   [
+    "replace",
+    1364,
+    1370,
+    899,
+    903,
+    [
+     "|Query|Row Store|SochDB Columnar|Reduction|",
+     "|-------|-----------|-----------------|-----------|",
+     "|SELECT 2 of 10 cols|100%|20%|**80%**|",
+     "|SELECT 1 of 20 cols|100%|5%|**95%**|"
+    ]
+   ],
+   [
+    "equal",
+    1370,
+    1375,
+    903,
+    908
+   ],
+   [
+    "replace",
+    1375,
+    1376,
+    908,
+    909,
+    [
+     "|Database|Mode|Insert Rate|Notes|"
+    ]
+   ],
+   [
+    "equal",
+    1376,
+    1377,
+    909,
+    910
+   ],
+   [
+    "replace",
+    1377,
+    1383,
+    910,
+    914,
+    [
+     "|**SQLite**|File (WAL)|~1.16M ops/sec|Industry standard|",
+     "|**SochDB**|Embedded (WAL)|~760k ops/sec|Group commit disabled|",
+     "|**SochDB**|put_raw|~1.30M ops/sec|Direct storage layer|",
+     "|**SochDB**|insert_row_slice|~1.29M ops/sec|Zero-allocation API|"
+    ]
+   ],
+   [
+    "equal",
+    1383,
+    1390,
+    914,
+    921
+   ],
+   [
+    "replace",
+    1390,
+    1407,
+    921,
+    922,
+    [
+     "…（17 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1407,
+    1410,
+    922,
+    925
+   ],
+   [
+    "delete",
+    1410,
+    1412,
+    925,
+    925
+   ],
+   [
+    "equal",
+    1412,
+    1421,
+    925,
+    934
+   ],
+   [
+    "replace",
+    1421,
+    1437,
+    934,
+    935,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1437,
+    1445,
+    935,
+    943
+   ],
+   [
+    "replace",
+    1445,
+    1461,
+    943,
+    944,
+    [
+     "…（16 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1461,
+    1462,
+    944,
+    945
+   ],
+   [
+    "delete",
+    1462,
+    1464,
+    945,
+    945
+   ],
+   [
+    "equal",
+    1464,
+    1469,
+    945,
+    950
+   ],
+   [
+    "replace",
+    1469,
+    1470,
+    950,
+    951,
+    [
+     "|Method|Description|Returns|"
+    ]
+   ],
+   [
+    "equal",
+    1470,
+    1471,
+    951,
+    952
+   ],
+   [
+    "replace",
+    1471,
+    1487,
+    952,
+    968,
+    [
+     "|`open(path)`|Open/create database|`Result<SochConnection>`|",
+     "|`create_table(schema)`|Create a new table|`Result<CreateResult>`|",
+     "|`drop_table(name)`|Drop a table|`Result<DropResult>`|",
+     "|`batch()`|Start a batch writer|`BatchWriter`|",
+     "|`put(path, value)`|Put value at path|`Result<()>`|",
+     "|`get(path)`|Get value at path|`Result<Option<Vec<u8>>>`|",
+     "|`delete(path)`|Delete at path|`Result<()>`|",
+     "|`scan(prefix)`|Scan path prefix|`Result<Vec<(String, Vec<u8>)>>`|",
+     "|`begin()`|Begin transaction|`Result<TxnHandle>`|",
+     "|`commit(txn)`|Commit transaction|`Result<()>`|",
+     "|`rollback(txn)`|Rollback transaction|`Result<()>`|",
+     "|`vector_insert(...)`|Insert vector|`Result<()>`|",
+     "|`vector_search(...)`|Search similar vectors|`Result<Vec<SearchResult>>`|",
+     "|`fsync()`|Force sync to disk|`Result<()>`|",
+     "|`checkpoint()`|Create checkpoint|`Result<u64>`|",
+     "|`stats()`|Get statistics|`ClientStats`|"
+    ]
+   ],
+   [
+    "equal",
+    1487,
+    1490,
+    968,
+    971
+   ],
+   [
+    "replace",
+    1490,
+    1491,
+    971,
+    972,
+    [
+     "|Method|Description|Returns|"
+    ]
+   ],
+   [
+    "equal",
+    1491,
+    1492,
+    972,
+    973
+   ],
+   [
+    "replace",
+    1492,
+    1503,
+    973,
+    984,
+    [
+     "|`from_path(conn, path)`|Create query from path|`PathQuery`|",
+     "|`select(cols)`|Select columns|`Self`|",
+     "|`project(cols)`|Alias for select|`Self`|",
+     "|`where_eq(field, val)`|Equality filter|`Self`|",
+     "|`where_gt(field, val)`|Greater than filter|`Self`|",
+     "|`where_like(field, pat)`|Pattern match|`Self`|",
+     "|`order_by(field, dir)`|Sort results|`Self`|",
+     "|`limit(n)`|Limit results|`Self`|",
+     "|`offset(n)`|Skip results|`Self`|",
+     "|`execute()`|Execute query|`Result<QueryResult>`|",
+     "|`execute_toon()`|Execute and return TOON|`Result<String>`|"
+    ]
+   ],
+   [
+    "equal",
+    1503,
+    1506,
+    984,
+    987
+   ],
+   [
+    "replace",
+    1506,
+    1507,
+    987,
+    988,
+    [
+     "|Variant|Rust Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1507,
+    1508,
+    988,
+    989
+   ],
+   [
+    "replace",
+    1508,
+    1518,
+    989,
+    999,
+    [
+     "|`Null`|—|Null value|",
+     "|`Bool(bool)`|`bool`|Boolean|",
+     "|`Int(i64)`|`i64`|Signed integer|",
+     "|`UInt(u64)`|`u64`|Unsigned integer|",
+     "|`Float(f64)`|`f64`|64-bit float|",
+     "|`Text(String)`|`String`|UTF-8 string|",
+     "|`Binary(Vec<u8>)`|`Vec<u8>`|Binary data|",
+     "|`Array(Vec<SochValue>)`|`Vec<SochValue>`|Array of values|",
+     "|`Object(HashMap<String, SochValue>)`|`HashMap`|Key-value object|",
+     "|`Ref { table, id }`|—|Foreign key reference|"
+    ]
+   ],
+   [
+    "equal",
+    1518,
+    1521,
+    999,
+    1002
+   ],
+   [
+    "replace",
+    1521,
+    1522,
+    1002,
+    1003,
+    [
+     "|Type|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1522,
+    1523,
+    1003,
+    1004
+   ],
+   [
+    "replace",
+    1523,
+    1535,
+    1004,
+    1014,
+    [
+     "|`Int`|64-bit signed integer|",
+     "|`UInt`|64-bit unsigned integer|",
+     "|`Float`|64-bit float|",
+     "|`Text`|UTF-8 string|",
+     "|`Bool`|Boolean|",
+     "|`Bytes`|Binary data|",
+     "|`Vector(dim)`|Float vector with dimension|",
+     "|`Array(inner)`|Array of inner type|",
+     "|`Optional(inner)`|Nullable type|",
+     "|`Ref(table)`|Foreign key to table|"
+    ]
+   ],
+   [
+    "equal",
+    1535,
+    1549,
+    1014,
+    1028
+   ],
+   [
+    "replace",
+    1549,
+    1558,
+    1028,
+    1029,
+    [
+     "…（9 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1558,
+    1562,
+    1029,
+    1033
+   ],
+   [
+    "replace",
+    1562,
+    1563,
+    1033,
+    1034,
+    [
+     "|Feature|Crate|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1563,
+    1564,
+    1034,
+    1035
+   ],
+   [
+    "replace",
+    1564,
+    1569,
+    1035,
+    1038,
+    [
+     "|`simd`|sochdb-client|SIMD optimizations for column access|",
+     "|`embedded`|sochdb-client|Use kernel directly (no IPC)|",
+     "|`full`|sochdb-kernel|All kernel features|"
+    ]
+   ],
+   [
+    "equal",
+    1569,
+    1572,
+    1038,
+    1041
+   ],
+   [
+    "replace",
+    1572,
+    1573,
+    1041,
+    1042,
+    [
+     "SochDB runs as a **single-node embedded engine** today (distributed replication/clustering is on the roadmap) — ideal for local-first, edge, and per-service deployments. A couple of knobs let you tune it to your workload:"
+    ]
+   ],
+   [
+    "equal",
+    1573,
+    1576,
+    1042,
+    1045
+   ],
+   [
+    "delete",
+    1576,
+    1578,
+    1045,
+    1045
+   ],
+   [
+    "equal",
+    1578,
+    1586,
+    1045,
+    1053
+   ],
+   [
+    "delete",
+    1586,
+    1588,
+    1053,
+    1053
+   ],
+   [
+    "equal",
+    1588,
+    1599,
+    1053,
+    1064
+   ],
+   [
+    "replace",
+    1599,
+    1612,
+    1064,
+    1065,
+    [
+     "…（13 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1612,
+    1616,
+    1065,
+    1069
+   ],
+   [
+    "replace",
+    1616,
+    1617,
+    1069,
+    1070,
+    [
+     "|Table|Purpose|"
+    ]
+   ],
+   [
+    "equal",
+    1617,
+    1618,
+    1070,
+    1071
+   ],
+   [
+    "replace",
+    1618,
+    1623,
+    1071,
+    1076,
+    [
+     "|`agent_flows`|Flow definitions: name, entry node, version|",
+     "|`agent_nodes`|Nodes: LLM steps, tool calls, decisions, loops, reflections|",
+     "|`agent_edges`|Edges with conditions for routing|",
+     "|`agent_sessions`|Runtime state per user/conversation|",
+     "|`agent_reflections`|Feedback and learning data|"
+    ]
+   ],
+   [
+    "equal",
+    1623,
+    1641,
+    1076,
+    1094
+   ],
+   [
+    "replace",
+    1641,
+    1647,
+    1094,
+    1095,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1647,
+    1655,
+    1095,
+    1103
+   ],
+   [
+    "replace",
+    1655,
+    1660,
+    1103,
+    1104,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1660,
+    1666,
+    1104,
+    1110
+   ],
+   [
+    "replace",
+    1666,
+    1667,
+    1110,
+    1111,
+    [
+     "|Benefit|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1667,
+    1668,
+    1111,
+    1112
+   ],
+   [
+    "replace",
+    1668,
+    1673,
+    1112,
+    1117,
+    [
+     "|**Separation of concerns**|SochDB = data, Runtime = execution, LLM = reasoning|",
+     "|**Language-agnostic**|Rust, Python, TypeScript runtimes share the same flows|",
+     "|**Debuggable**|Every step, state change, and decision is in the DB|",
+     "|**Learnable**|Reflection nodes + stored feedback enable continuous improvement|",
+     "|**No prompt injection risk**|LLM never sees \"execute this code\"—just structured tasks|"
+    ]
+   ],
+   [
+    "equal",
+    1673,
+    1685,
+    1117,
+    1129
+   ],
+   [
+    "delete",
+    1685,
+    1687,
+    1129,
+    1129
+   ],
+   [
+    "equal",
+    1687,
+    1693,
+    1129,
+    1135
+   ],
+   [
+    "replace",
+    1693,
+    1694,
+    1135,
+    1136,
+    [
+     "|Phase|Status|Description|"
+    ]
+   ],
+   [
+    "equal",
+    1694,
+    1695,
+    1136,
+    1137
+   ],
+   [
+    "replace",
+    1695,
+    1697,
+    1137,
+    1139,
+    [
+     "|**Local MVP**|✅ Live|Embedded + IPC modes, full ACID, vector search|",
+     "|**Cloud (SochDB Cloud)**|🚧 On the way|Hosted, managed SochDB with sync|"
+    ]
+   ],
+   [
+    "equal",
+    1697,
+    1699,
+    1139,
+    1141
+   ],
+   [
+    "delete",
+    1699,
+    1701,
+    1141,
+    1141
+   ],
+   [
+    "equal",
+    1701,
+    1722,
+    1141,
+    1162
+   ],
+   [
+    "delete",
+    1722,
+    1724,
+    1162,
+    1162
+   ],
+   [
+    "equal",
+    1724,
+    1726,
+    1162,
+    1164
+   ],
+   [
+    "replace",
+    1726,
+    1727,
+    1164,
+    1165,
+    [
+     "Contributions are welcome! Please see CONTRIBUTING.md for guidelines."
+    ]
+   ],
+   [
+    "equal",
+    1727,
+    1734,
+    1165,
+    1172
+   ],
+   [
+    "replace",
+    1734,
+    1739,
+    1172,
+    1173,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    1739,
+    1740,
+    1173,
+    1174
+   ],
+   [
+    "delete",
+    1740,
+    1742,
+    1174,
+    1174
+   ],
+   [
+    "equal",
+    1742,
+    1745,
+    1174,
+    1177
+   ],
+   [
+    "replace",
+    1745,
+    1746,
+    1177,
+    1178,
+    [
+     "**SochDB (sochdb)** "
+    ]
+   ],
+   [
+    "equal",
+    1746,
+    1748,
+    1178,
+    1180
+   ],
+   [
+    "replace",
+    1748,
+    1750,
+    1180,
+    1182,
+    [
+     "This project is licensed under the **GNU Affero General Public License v3.0 or later** (AGPL-3.0-or-later). ",
+     "See the LICENSE file for the full text."
+    ]
+   ],
+   [
+    "equal",
+    1750,
+    1759,
+    1182,
+    1191
+   ],
+   [
+    "delete",
+    1759,
+    1761,
+    1191,
+    1191
+   ],
+   [
+    "equal",
+    1761,
+    1763,
+    1191,
+    1193
+   ],
+   [
+    "replace",
+    1763,
+    1764,
+    1193,
+    1194,
+    [
+     "- HNSW algorithm: Malkov & Yashunin, 2018"
+    ]
+   ],
+   [
+    "equal",
+    1764,
+    1775,
+    1194,
+    1205
+   ],
+   [
+    "delete",
+    1775,
+    1777,
+    1205,
+    1205
+   ],
+   [
+    "equal",
+    1777,
+    1779,
+    1205,
+    1207
+   ],
+   [
+    "replace",
+    1779,
+    1780,
+    1207,
+    1208,
+    [
+     "GitHub • Documentation"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "5460694be189+2": {
+  "fn": "didinj/ionic3-angular4-cordova-sqlite-example",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    3,
+    2,
+    3,
+    [
+     "This source code is part of Ionic 3, Angular 4 and SQLite CRUD Offline Mobile App tutorial."
+    ]
+   ],
+   [
+    "equal",
+    3,
+    4,
+    3,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "If you think this source code is useful, it will be great if you just give it star or just buy me a cup of cofee Donate"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    14,
+    5,
+    14
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "70c1745592e2+2": {
+  "fn": "hellojebus/go-mux-jwt-boilerplate",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "equal",
+    0,
+    8,
+    0,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "Basic CRUD routes for user management "
+    ]
+   ],
+   [
+    "equal",
+    9,
+    43,
+    9,
+    43
+   ],
+   [
+    "replace",
+    43,
+    44,
+    43,
+    44,
+    [
+     ""
+    ]
+   ],
+   [
+    "equal",
+    44,
+    45,
+    44,
+    45
+   ],
+   [
+    "replace",
+    45,
+    48,
+    45,
+    48,
+    [
+     "",
+     "[] Detach userHandlers DB functions from http for testing purposes ",
+     "[] Add User Role to illustrate how relationships work with Gorm"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "68124bb7032f+2": {
+  "fn": "Gurupatil0003/Mysql-and-MongoDB",
+  "clean_ver": "2",
+  "raw_lines": 24,
+  "ops": [
+   [
+    "equal",
+    0,
+    24,
+    0,
+    24
+   ],
+   [
+    "delete",
+    24,
+    25,
+    24,
+    24
+   ],
+   [
+    "equal",
+    25,
+    31,
+    24,
+    30
+   ],
+   [
+    "delete",
+    31,
+    34,
+    30,
+    30
+   ],
+   [
+    "equal",
+    34,
+    35,
+    30,
+    31
+   ],
+   [
+    "delete",
+    35,
+    36,
+    31,
+    31
+   ],
+   [
+    "equal",
+    36,
+    72,
+    31,
+    67
+   ],
+   [
+    "replace",
+    72,
+    74,
+    67,
+    69,
+    [
+     " name VARCHAR(255),",
+     " age INT"
+    ]
+   ],
+   [
+    "equal",
+    74,
+    75,
+    69,
+    70
+   ],
+   [
+    "delete",
+    75,
+    76,
+    70,
+    70
+   ],
+   [
+    "equal",
+    76,
+    79,
+    70,
+    73
+   ],
+   [
+    "delete",
+    79,
+    80,
+    73,
+    73
+   ],
+   [
+    "equal",
+    80,
+    88,
+    73,
+    81
+   ],
+   [
+    "replace",
+    88,
+    89,
+    81,
+    82,
+    [
+     " import mysql.connector"
+    ]
+   ],
+   [
+    "equal",
+    89,
+    92,
+    82,
+    85
+   ],
+   [
+    "replace",
+    92,
+    96,
+    85,
+    89,
+    [
+     " host=\"localhost\",",
+     " user=\"root\",",
+     " password=\"mgpatils\",",
+     " database=\"patils\""
+    ]
+   ],
+   [
+    "equal",
+    96,
+    99,
+    89,
+    92
+   ],
+   [
+    "replace",
+    99,
+    101,
+    92,
+    94,
+    [
+     " print(\"Connected to MySQL database\")",
+     " cursor = conn.cursor()"
+    ]
+   ],
+   [
+    "equal",
+    101,
+    102,
+    94,
+    95
+   ],
+   [
+    "replace",
+    102,
+    109,
+    95,
+    102,
+    [
+     " # Create function to insert data",
+     " def insert_data(name, age):",
+     " sql_insert = \"INSERT INTO routess (name, age) VALUES (%s, %s)\"",
+     " values = (name, age)",
+     " cursor.execute(sql_insert, values)",
+     " conn.commit()",
+     " print(cursor.rowcount, \"record inserted.\")"
+    ]
+   ],
+   [
+    "equal",
+    109,
+    110,
+    102,
+    103
+   ],
+   [
+    "replace",
+    110,
+    117,
+    103,
+    110,
+    [
+     " # Read function to retrieve data",
+     " def fetch_data():",
+     " cursor.execute(\"SELECT * FROM routess\")",
+     " rows = cursor.fetchall()",
+     " print(\"Fetched data:\")",
+     " for row in rows:",
+     " print(row)"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    118,
+    110,
+    111
+   ],
+   [
+    "replace",
+    118,
+    125,
+    111,
+    118,
+    [
+     " # Update function to modify existing data",
+     " def update_data(name, new_age):",
+     " sql_update = \"UPDATE routess SET age = %s WHERE name = %s\"",
+     " values = (new_age, name)",
+     " cursor.execute(sql_update, values)",
+     " conn.commit()",
+     " print(cursor.rowcount, \"record(s) updated.\")"
+    ]
+   ],
+   [
+    "equal",
+    125,
+    126,
+    118,
+    119
+   ],
+   [
+    "replace",
+    126,
+    133,
+    119,
+    126,
+    [
+     " # Delete function to remove data",
+     " def delete_data(name):",
+     " sql_delete = \"DELETE FROM routess WHERE name = %s\"",
+     " values = (name,)",
+     " cursor.execute(sql_delete, values)",
+     " conn.commit()",
+     " print(cursor.rowcount, \"record(s) deleted.\")"
+    ]
+   ],
+   [
+    "equal",
+    133,
+    134,
+    126,
+    127
+   ],
+   [
+    "replace",
+    134,
+    141,
+    127,
+    134,
+    [
+     " # Testing CRUD operations",
+     " insert_data(\"Bob\", 35) # Create",
+     " fetch_data() # Read",
+     " update_data(\"John\", 40) # Update",
+     " fetch_data() # Read",
+     " delete_data(\"Alice\") # Delete",
+     " fetch_data() # Read"
+    ]
+   ],
+   [
+    "equal",
+    141,
+    142,
+    134,
+    135
+   ],
+   [
+    "replace",
+    142,
+    146,
+    135,
+    139,
+    [
+     " # Close cursor and connection",
+     " cursor.close()",
+     " conn.close()",
+     " print(\"MySQL connection closed.\")"
+    ]
+   ],
+   [
+    "equal",
+    146,
+    147,
+    139,
+    140
+   ],
+   [
+    "replace",
+    147,
+    151,
+    140,
+    141,
+    [
+     " print(\"Failed to connect to MySQL database\")"
+    ]
+   ],
+   [
+    "equal",
+    151,
+    156,
+    141,
+    146
+   ],
+   [
+    "replace",
+    156,
+    176,
+    146,
+    147,
+    [
+     "…（20 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    186,
+    147,
+    157
+   ],
+   [
+    "replace",
+    186,
+    188,
+    157,
+    159,
+    [
+     " result = collection.insert_one(data)",
+     " print(\"Inserted document id:\", result.inserted_id)"
+    ]
+   ],
+   [
+    "equal",
+    188,
+    191,
+    159,
+    162
+   ],
+   [
+    "replace",
+    191,
+    195,
+    162,
+    166,
+    [
+     " cursor = collection.find()",
+     " print(\"Fetched data:\")",
+     " for document in cursor:",
+     " print(document)"
+    ]
+   ],
+   [
+    "equal",
+    195,
+    198,
+    166,
+    169
+   ],
+   [
+    "replace",
+    198,
+    200,
+    169,
+    171,
+    [
+     " result = db.command(\"update\", \"mycollection\", updates=[{\"q\": filter, \"u\": update}])",
+     " print(result)"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    203,
+    171,
+    174
+   ],
+   [
+    "replace",
+    203,
+    205,
+    174,
+    176,
+    [
+     " result = db.command(\"delete\", \"mycollection\", deletes=[{\"q\": filter, \"limit\": 1}])",
+     " print(result)"
+    ]
+   ],
+   [
+    "equal",
+    205,
+    208,
+    176,
+    179
+   ],
+   [
+    "replace",
+    208,
+    210,
+    179,
+    181,
+    [
+     " # Create document",
+     " create_document({\"name\": \"John\", \"age\": 30})"
+    ]
+   ],
+   [
+    "equal",
+    210,
+    211,
+    181,
+    182
+   ],
+   [
+    "replace",
+    211,
+    213,
+    182,
+    184,
+    [
+     " # Read documents",
+     " read_documents()"
+    ]
+   ],
+   [
+    "equal",
+    213,
+    214,
+    184,
+    185
+   ],
+   [
+    "replace",
+    214,
+    216,
+    185,
+    187,
+    [
+     " # Update document",
+     " update_document({\"name\": \"John\"}, {\"$set\": {\"age\": 35}})"
+    ]
+   ],
+   [
+    "equal",
+    216,
+    217,
+    187,
+    188
+   ],
+   [
+    "replace",
+    217,
+    219,
+    188,
+    190,
+    [
+     " # Read documents after update",
+     " read_documents()"
+    ]
+   ],
+   [
+    "equal",
+    219,
+    220,
+    190,
+    191
+   ],
+   [
+    "replace",
+    220,
+    222,
+    191,
+    193,
+    [
+     " # Delete document",
+     " delete_document({\"name\": \"John\"})"
+    ]
+   ],
+   [
+    "equal",
+    222,
+    223,
+    193,
+    194
+   ],
+   [
+    "replace",
+    223,
+    225,
+    194,
+    196,
+    [
+     " # Read documents after deletion",
+     " read_documents()"
+    ]
+   ],
+   [
+    "equal",
+    225,
+    245,
+    196,
+    216
+   ],
+   [
+    "replace",
+    245,
+    247,
+    216,
+    218,
+    [
+     " result = collection.insert_one(data)",
+     " print(\"Inserted document id:\", result.inserted_id)"
+    ]
+   ],
+   [
+    "equal",
+    247,
+    250,
+    218,
+    221
+   ],
+   [
+    "replace",
+    250,
+    254,
+    221,
+    225,
+    [
+     " cursor = collection.find()",
+     " print(\"Fetched data:\")",
+     " for document in cursor:",
+     " print(document)"
+    ]
+   ],
+   [
+    "equal",
+    254,
+    257,
+    225,
+    228
+   ],
+   [
+    "replace",
+    257,
+    259,
+    228,
+    230,
+    [
+     " result = collection.update_one(filter, update)",
+     " print(result.modified_count, \"document(s) updated.\")"
+    ]
+   ],
+   [
+    "equal",
+    259,
+    262,
+    230,
+    233
+   ],
+   [
+    "replace",
+    262,
+    264,
+    233,
+    235,
+    [
+     " result = collection.delete_one(filter)",
+     " print(result.deleted_count, \"document(s) deleted.\")"
+    ]
+   ],
+   [
+    "equal",
+    264,
+    267,
+    235,
+    238
+   ],
+   [
+    "replace",
+    267,
+    270,
+    238,
+    241,
+    [
+     " with open(image_path, \"rb\") as image_file:",
+     " encoded_image = base64.b64encode(image_file.read()).decode('utf-8')",
+     " return encoded_image"
+    ]
+   ],
+   [
+    "equal",
+    270,
+    273,
+    241,
+    244
+   ],
+   [
+    "replace",
+    273,
+    284,
+    244,
+    247,
+    [
+     " # Create documents",
+     " image_path = \"C:\\\\Users\\\\LENOVO\\\\hh\\\\immg.jpeg\" # Path to your image file",
+     " image_data = insert_image(image_path)"
+    ]
+   ],
+   [
+    "equal",
+    284,
+    285,
+    247,
+    248
+   ],
+   [
+    "replace",
+    285,
+    287,
+    248,
+    255,
+    [
+     " create_document({",
+     " \"name\": \"John\",",
+     " \"rollnumber\": 12345,",
+     " \"div\": \"A\",",
+     " \"semester\": 1,",
+     " \"image\": image_data",
+     " })"
+    ]
+   ],
+   [
+    "equal",
+    287,
+    288,
+    255,
+    256
+   ],
+   [
+    "replace",
+    288,
+    290,
+    256,
+    258,
+    [
+     " # Read documents",
+     " read_documents()"
+    ]
+   ],
+   [
+    "equal",
+    290,
+    291,
+    258,
+    259
+   ],
+   [
+    "replace",
+    291,
+    293,
+    259,
+    261,
+    [
+     " # Update document",
+     " update_document({\"name\": \"John\"}, {\"$set\": {\"semester\": 2}})"
+    ]
+   ],
+   [
+    "equal",
+    293,
+    294,
+    261,
+    262
+   ],
+   [
+    "replace",
+    294,
+    296,
+    262,
+    264,
+    [
+     " # Read documents after update",
+     " read_documents()"
+    ]
+   ],
+   [
+    "equal",
+    296,
+    297,
+    264,
+    265
+   ],
+   [
+    "replace",
+    297,
+    299,
+    265,
+    270,
+    [
+     " # Delete document",
+     " delete_document({\"name\": \"John\"})",
+     "",
+     " # Read documents after deletion",
+     " read_documents()"
+    ]
+   ],
+   [
+    "equal",
+    299,
+    307,
+    270,
+    278
+   ],
+   [
+    "replace",
+    307,
+    316,
+    278,
+    279,
+    [
+     "…（9 行代码略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "665703b83474+2": {
+  "fn": "objectbox/objectbox-generator",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "replace",
+    0,
+    2,
+    0,
+    1,
+    [
+     "ObjectBox Logo"
+    ]
+   ],
+   [
+    "equal",
+    2,
+    3,
+    1,
+    2
+   ],
+   [
+    "replace",
+    3,
+    4,
+    2,
+    3,
+    [
+     "Follow ObjectBox on Twitter"
+    ]
+   ],
+   [
+    "equal",
+    4,
+    15,
+    3,
+    14
+   ],
+   [
+    "replace",
+    15,
+    16,
+    14,
+    15,
+    [
+     " for now, you need to run the generator manually."
+    ]
+   ],
+   [
+    "equal",
+    16,
+    19,
+    15,
+    18
+   ],
+   [
+    "replace",
+    19,
+    20,
+    18,
+    19,
+    [
+     "Install the objectbox-generator by downloading the latest binary for your OS from releases."
+    ]
+   ],
+   [
+    "equal",
+    20,
+    23,
+    19,
+    22
+   ],
+   [
+    "replace",
+    23,
+    24,
+    22,
+    23,
+    [
+     "(link)."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    41,
+    23,
+    40
+   ],
+   [
+    "replace",
+    41,
+    48,
+    40,
+    47,
+    [
+     "* C and C++ repository and docs.",
+     " * CMake users use `add_obx_schema()` task to configure and invoke the generator at build time.",
+     " * Non-CMake users can run the generator directly.",
+     " In summary, you define a FlatBuffers schema file, and the ObjectBox Generator will create plain C++ data classes",
+     " and helper classes that \"glue\" the data classes to the ObjectBox runtime library.",
+     "* Go repository and docs.",
+     " Here, you start with Go data structs, for which the Generator generates the glue code directly."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    56,
+    47,
+    55
+   ],
+   [
+    "delete",
+    56,
+    57,
+    55,
+    55
+   ],
+   [
+    "equal",
+    57,
+    58,
+    55,
+    56
+   ],
+   [
+    "delete",
+    58,
+    79,
+    56,
+    56
+   ],
+   [
+    "equal",
+    79,
+    81,
+    56,
+    58
+   ],
+   [
+    "replace",
+    81,
+    82,
+    58,
+    59,
+    [
+     "We want to hear about your project!"
+    ]
+   ],
+   [
+    "equal",
+    82,
+    83,
+    59,
+    60
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "20d6bed7b095+2": {
+  "fn": "Yashmerino/student-management-system",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    3,
+    [
+     "Student Management System ",
+     " sms logo ",
+     ""
+    ]
+   ],
+   [
+    "equal",
+    3,
+    5,
+    3,
+    5
+   ],
+   [
+    "replace",
+    5,
+    6,
+    5,
+    6,
+    [
+     " To run this application: "
+    ]
+   ],
+   [
+    "equal",
+    6,
+    7,
+    6,
+    7
+   ],
+   [
+    "replace",
+    7,
+    9,
+    7,
+    9,
+    [
+     "* You have to have Java installed. You can download it here: Link",
+     "* After that accees the Releases section and download the last version of the application."
+    ]
+   ],
+   [
+    "equal",
+    9,
+    11,
+    9,
+    11
+   ],
+   [
+    "replace",
+    11,
+    13,
+    11,
+    12,
+    [
+     " Demonstration "
+    ]
+   ],
+   [
+    "equal",
+    13,
+    16,
+    12,
+    15
+   ],
+   [
+    "replace",
+    16,
+    19,
+    15,
+    16,
+    [
+     " In order to change the language, click this button and select out of 3 languages your preferred language(English will be set by default): "
+    ]
+   ],
+   [
+    "equal",
+    19,
+    20,
+    16,
+    17
+   ],
+   [
+    "replace",
+    20,
+    22,
+    17,
+    18,
+    [
+     " Russian "
+    ]
+   ],
+   [
+    "equal",
+    22,
+    23,
+    18,
+    19
+   ],
+   [
+    "replace",
+    23,
+    25,
+    19,
+    20,
+    [
+     " Romanian "
+    ]
+   ],
+   [
+    "equal",
+    25,
+    28,
+    20,
+    23
+   ],
+   [
+    "replace",
+    28,
+    30,
+    23,
+    24,
+    [
+     " To connect to the desired database, you have to type your database url, login and password(if you don't have one, just leave the field blank) "
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    24,
+    25
+   ],
+   [
+    "replace",
+    31,
+    33,
+    25,
+    26,
+    [
+     " If the connection was successfully established, this window will show up where you can start adding faculties/courses/students!"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "bcea093c75ed+2": {
+  "fn": "Lloople/phpunit-extensions",
+  "clean_ver": "2",
+  "raw_lines": 2,
+  "ops": [
+   [
+    "equal",
+    0,
+    2,
+    0,
+    2
+   ],
+   [
+    "replace",
+    2,
+    7,
+    2,
+    7,
+    [
+     "Latest Version on Packagist",
+     "Build Status",
+     "Quality Score",
+     "Total Downloads",
+     "Buy us a tree"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    117,
+    7,
+    117
+   ],
+   [
+    "replace",
+    117,
+    121,
+    117,
+    118,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    121,
+    129,
+    118,
+    126
+   ],
+   [
+    "replace",
+    129,
+    147,
+    126,
+    127,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    147,
+    153,
+    127,
+    133
+   ],
+   [
+    "replace",
+    153,
+    156,
+    133,
+    134,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    156,
+    157,
+    134,
+    135
+   ],
+   [
+    "replace",
+    157,
+    160,
+    135,
+    136,
+    [
+     "（略）"
+    ]
+   ],
+   [
+    "equal",
+    160,
+    166,
+    136,
+    142
+   ],
+   [
+    "replace",
+    166,
+    168,
+    142,
+    144,
+    [
+     "- David Llop",
+     "- All Contributors"
+    ]
+   ],
+   [
+    "equal",
+    168,
+    171,
+    144,
+    147
+   ],
+   [
+    "replace",
+    171,
+    172,
+    147,
+    148,
+    [
+     "You're free to use this package, but if it is really useful for you I would highly appreciate you buying the world a tree."
+    ]
+   ],
+   [
+    "equal",
+    172,
+    173,
+    148,
+    149
+   ],
+   [
+    "replace",
+    173,
+    174,
+    149,
+    150,
+    [
+     "It’s now common knowledge that one of the best tools to tackle the climate crisis and keep our temperatures from rising above 1.5C is to plant trees. If you contribute to Treeware's forest you’ll be creating employment for local families and restoring wildlife habitats."
+    ]
+   ],
+   [
+    "equal",
+    174,
+    175,
+    150,
+    151
+   ],
+   [
+    "replace",
+    175,
+    176,
+    151,
+    152,
+    [
+     "You can buy trees here offset.earth/treeware"
+    ]
+   ],
+   [
+    "equal",
+    176,
+    177,
+    152,
+    153
+   ],
+   [
+    "replace",
+    177,
+    179,
+    153,
+    154,
+    [
+     "Read more about Treeware at treeware.earth"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "3529c587565a+2": {
+  "fn": "jackfoxy/obelisk",
+  "clean_ver": "2",
+  "raw_lines": 19,
+  "ops": [
+   [
+    "equal",
+    0,
+    19,
+    0,
+    19
+   ],
+   [
+    "replace",
+    19,
+    22,
+    19,
+    22,
+    [
+     "Reference/Preliminaries, the",
+     "Users Guide, and the USTJ article",
+     "Obelisk: Reinventing SQL for Modern Computing."
+    ]
+   ],
+   [
+    "equal",
+    22,
+    30,
+    22,
+    30
+   ],
+   [
+    "replace",
+    30,
+    31,
+    30,
+    31,
+    [
+     "exports. See the Users Guide for the interface"
+    ]
+   ],
+   [
+    "equal",
+    31,
+    71,
+    31,
+    71
+   ],
+   [
+    "replace",
+    71,
+    75,
+    71,
+    72,
+    [
+     "（略）"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "769557f47d2f+2": {
+  "fn": "CollatzConjecture/nestjs-clean-architecture-postgres",
+  "clean_ver": "2",
+  "raw_lines": 4,
+  "ops": [
+   [
+    "equal",
+    0,
+    4,
+    0,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "If you want more documentation about NestJS, click here Nest"
+    ]
+   ],
+   [
+    "equal",
+    5,
+    6,
+    5,
+    6
+   ],
+   [
+    "replace",
+    6,
+    7,
+    6,
+    7,
+    [
+     "> **📝 Note:** This version uses **PostgreSQL** with **TypeORM**. If you prefer the **MongoDB** version with **Mongoose**, you can find it at the original repository: https://github.com/CollatzConjecture/nestjs-clean-architecture"
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "A quick introduction to clean architecture"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    11,
+    10,
+    11,
+    [
+     "Clean Architecture"
+    ]
+   ],
+   [
+    "equal",
+    11,
+    74,
+    11,
+    74
+   ],
+   [
+    "replace",
+    74,
+    158,
+    74,
+    75,
+    [
+     "…（84 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    260,
+    75,
+    177
+   ],
+   [
+    "replace",
+    260,
+    271,
+    177,
+    178,
+    [
+     "…（11 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    271,
+    293,
+    178,
+    200
+   ],
+   [
+    "replace",
+    293,
+    301,
+    200,
+    201,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    301,
+    309,
+    201,
+    209
+   ],
+   [
+    "replace",
+    309,
+    317,
+    209,
+    210,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    317,
+    327,
+    210,
+    220
+   ],
+   [
+    "replace",
+    327,
+    335,
+    220,
+    221,
+    [
+     "…（8 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    335,
+    362,
+    221,
+    248
+   ],
+   [
+    "replace",
+    362,
+    377,
+    248,
+    249,
+    [
+     "…（15 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    377,
+    399,
+    249,
+    271
+   ],
+   [
+    "replace",
+    399,
+    404,
+    271,
+    272,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    404,
+    412,
+    272,
+    280
+   ],
+   [
+    "replace",
+    412,
+    417,
+    280,
+    281,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    417,
+    425,
+    281,
+    289
+   ],
+   [
+    "replace",
+    425,
+    431,
+    289,
+    290,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    431,
+    439,
+    290,
+    298
+   ],
+   [
+    "replace",
+    439,
+    443,
+    298,
+    299,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    443,
+    449,
+    299,
+    305
+   ],
+   [
+    "replace",
+    449,
+    451,
+    305,
+    307,
+    [
+     "- **NestJS** - Progressive Node.js framework",
+     "- **TypeScript** - Type-safe JavaScript"
+    ]
+   ],
+   [
+    "equal",
+    451,
+    454,
+    307,
+    310
+   ],
+   [
+    "replace",
+    454,
+    456,
+    310,
+    312,
+    [
+     "- **@nestjs/cqrs** - CQRS implementation",
+     "- **@nestjs/event-emitter** - Event handling"
+    ]
+   ],
+   [
+    "equal",
+    456,
+    459,
+    312,
+    315
+   ],
+   [
+    "replace",
+    459,
+    464,
+    315,
+    320,
+    [
+     "- **@nestjs/jwt** - JWT implementation",
+     "- **@nestjs/passport** - Authentication strategies",
+     "- **@nestjs/throttler** - Rate limiting",
+     "- **bcrypt** - Password hashing",
+     "- **cookie-parser** - Cookie handling for OAuth state"
+    ]
+   ],
+   [
+    "equal",
+    464,
+    467,
+    320,
+    323
+   ],
+   [
+    "replace",
+    467,
+    469,
+    323,
+    325,
+    [
+     "- **TypeORM** - PostgreSQL object relational mapping",
+     "- **PostgreSQL** - Relational database"
+    ]
+   ],
+   [
+    "equal",
+    469,
+    472,
+    325,
+    328
+   ],
+   [
+    "replace",
+    472,
+    475,
+    328,
+    331,
+    [
+     "- **@nestjs/terminus** - Health checks",
+     "- **Prometheus** - Metrics collection",
+     "- **Grafana** - Metrics visualization"
+    ]
+   ],
+   [
+    "equal",
+    475,
+    478,
+    331,
+    334
+   ],
+   [
+    "replace",
+    478,
+    480,
+    334,
+    336,
+    [
+     "- **Jest** - Testing framework",
+     "- **Supertest** - HTTP assertion library"
+    ]
+   ],
+   [
+    "equal",
+    480,
+    483,
+    336,
+    339
+   ],
+   [
+    "replace",
+    483,
+    485,
+    339,
+    341,
+    [
+     "- **Nodemon** - Development server",
+     "- **Docker** - Containerization"
+    ]
+   ],
+   [
+    "equal",
+    485,
+    506,
+    341,
+    362
+   ],
+   [
+    "replace",
+    506,
+    509,
+    362,
+    365,
+    [
+     " - Handles profile creation after auth user creation",
+     " - Implements compensating transactions for failures",
+     " - Supports both traditional and OAuth registration flows"
+    ]
+   ],
+   [
+    "equal",
+    509,
+    543,
+    365,
+    399
+   ],
+   [
+    "replace",
+    543,
+    544,
+    399,
+    400,
+    [
+     "1. **Clone the repository:**"
+    ]
+   ],
+   [
+    "equal",
+    544,
+    550,
+    400,
+    406
+   ],
+   [
+    "replace",
+    550,
+    551,
+    406,
+    407,
+    [
+     "2. **Create an environment file:**"
+    ]
+   ],
+   [
+    "equal",
+    551,
+    552,
+    407,
+    408
+   ],
+   [
+    "replace",
+    552,
+    553,
+    408,
+    409,
+    [
+     " Create a file named `.env` in the root of the project by copying the example file."
+    ]
+   ],
+   [
+    "equal",
+    553,
+    558,
+    409,
+    414
+   ],
+   [
+    "replace",
+    558,
+    559,
+    414,
+    415,
+    [
+     "3. **Generate Secrets:**"
+    ]
+   ],
+   [
+    "equal",
+    559,
+    560,
+    415,
+    416
+   ],
+   [
+    "replace",
+    560,
+    561,
+    416,
+    417,
+    [
+     " Your `.env` file requires several secret keys to run securely. Use the following command to generate a cryptographically strong secret:"
+    ]
+   ],
+   [
+    "equal",
+    561,
+    566,
+    417,
+    422
+   ],
+   [
+    "replace",
+    566,
+    567,
+    422,
+    423,
+    [
+     " Run this command for each of the following variables in your `.env` file and paste the result:"
+    ]
+   ],
+   [
+    "equal",
+    567,
+    568,
+    423,
+    424
+   ],
+   [
+    "replace",
+    568,
+    572,
+    424,
+    428,
+    [
+     " - `JWT_SECRET`",
+     " - `JWT_REFRESH_SECRET`",
+     " - `EMAIL_ENCRYPTION_KEY`",
+     " - `EMAIL_BLIND_INDEX_SECRET`"
+    ]
+   ],
+   [
+    "equal",
+    572,
+    573,
+    428,
+    429
+   ],
+   [
+    "replace",
+    573,
+    574,
+    429,
+    430,
+    [
+     " **Do not use the same value for different keys.**"
+    ]
+   ],
+   [
+    "equal",
+    574,
+    575,
+    430,
+    431
+   ],
+   [
+    "replace",
+    575,
+    576,
+    431,
+    432,
+    [
+     "4. **Configure Google OAuth2 (Optional):**"
+    ]
+   ],
+   [
+    "equal",
+    576,
+    577,
+    432,
+    433
+   ],
+   [
+    "replace",
+    577,
+    578,
+    433,
+    434,
+    [
+     " To enable Google login functionality for both web and mobile applications, you'll need to:"
+    ]
+   ],
+   [
+    "equal",
+    578,
+    579,
+    434,
+    435
+   ],
+   [
+    "replace",
+    579,
+    580,
+    435,
+    436,
+    [
+     " a. Go to the Google Cloud Console"
+    ]
+   ],
+   [
+    "equal",
+    580,
+    581,
+    436,
+    437
+   ],
+   [
+    "replace",
+    581,
+    582,
+    437,
+    438,
+    [
+     " b. Create a new project or select an existing one"
+    ]
+   ],
+   [
+    "equal",
+    582,
+    583,
+    438,
+    439
+   ],
+   [
+    "replace",
+    583,
+    584,
+    439,
+    440,
+    [
+     " c. Enable the Google+ API"
+    ]
+   ],
+   [
+    "equal",
+    584,
+    585,
+    440,
+    441
+   ],
+   [
+    "replace",
+    585,
+    586,
+    441,
+    442,
+    [
+     " d. Create OAuth 2.0 credentials:"
+    ]
+   ],
+   [
+    "equal",
+    586,
+    587,
+    442,
+    443
+   ],
+   [
+    "replace",
+    587,
+    589,
+    443,
+    445,
+    [
+     " - **Web application type** for web OAuth flow",
+     " - **Android/iOS application type** for mobile OAuth flow (if using native mobile apps)"
+    ]
+   ],
+   [
+    "equal",
+    589,
+    590,
+    445,
+    446
+   ],
+   [
+    "replace",
+    590,
+    591,
+    446,
+    447,
+    [
+     " e. For web OAuth, add your redirect URI: `http://localhost:4000/auth/google/oauth2redirect`"
+    ]
+   ],
+   [
+    "equal",
+    591,
+    592,
+    447,
+    448
+   ],
+   [
+    "replace",
+    592,
+    593,
+    448,
+    449,
+    [
+     " f. Add the following to your `.env` file:"
+    ]
+   ],
+   [
+    "equal",
+    593,
+    598,
+    449,
+    454
+   ],
+   [
+    "replace",
+    598,
+    605,
+    454,
+    455,
+    [
+     "…（7 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    605,
+    607,
+    455,
+    457
+   ],
+   [
+    "replace",
+    607,
+    608,
+    457,
+    458,
+    [
+     " **Note for Mobile Apps:**"
+    ]
+   ],
+   [
+    "equal",
+    608,
+    609,
+    458,
+    459
+   ],
+   [
+    "replace",
+    609,
+    613,
+    459,
+    463,
+    [
+     " - **iOS**: Use Google Sign-In SDK for iOS to obtain ID tokens, then send to `/auth/google/mobile/ios`",
+     " - **Android**: Use Google Sign-In SDK for Android to obtain ID tokens, then send to `/auth/google/mobile/android`",
+     " - The backend validates these ID tokens without requiring client secrets",
+     " - Platform-specific client IDs provide additional validation and security"
+    ]
+   ],
+   [
+    "equal",
+    613,
+    614,
+    463,
+    464
+   ],
+   [
+    "replace",
+    614,
+    615,
+    464,
+    465,
+    [
+     "5. **Configure Apple Sign In (Optional):**"
+    ]
+   ],
+   [
+    "equal",
+    615,
+    616,
+    465,
+    466
+   ],
+   [
+    "replace",
+    616,
+    617,
+    466,
+    467,
+    [
+     " To enable Sign in with Apple for your mobile applications:"
+    ]
+   ],
+   [
+    "equal",
+    617,
+    618,
+    467,
+    468
+   ],
+   [
+    "replace",
+    618,
+    619,
+    468,
+    469,
+    [
+     " a. Sign in to the Apple Developer portal"
+    ]
+   ],
+   [
+    "equal",
+    619,
+    620,
+    469,
+    470
+   ],
+   [
+    "replace",
+    620,
+    621,
+    470,
+    471,
+    [
+     " b. Create an App Identifier that supports Sign in with Apple for each platform bundle ID"
+    ]
+   ],
+   [
+    "equal",
+    621,
+    622,
+    471,
+    472
+   ],
+   [
+    "replace",
+    622,
+    623,
+    472,
+    473,
+    [
+     " c. Generate a Services ID for web/mobile authentication and enable Sign in with Apple"
+    ]
+   ],
+   [
+    "equal",
+    623,
+    624,
+    473,
+    474
+   ],
+   [
+    "replace",
+    624,
+    625,
+    474,
+    475,
+    [
+     " d. Create a private key (p8 file) associated with the Sign in with Apple service"
+    ]
+   ],
+   [
+    "equal",
+    625,
+    626,
+    475,
+    476
+   ],
+   [
+    "replace",
+    626,
+    627,
+    476,
+    477,
+    [
+     " e. Add the following variables to your `.env` file:"
+    ]
+   ],
+   [
+    "equal",
+    627,
+    632,
+    477,
+    482
+   ],
+   [
+    "replace",
+    632,
+    637,
+    482,
+    483,
+    [
+     "…（5 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    637,
+    639,
+    483,
+    485
+   ],
+   [
+    "replace",
+    639,
+    640,
+    485,
+    486,
+    [
+     " f. Provide the corresponding `platform` value (`ios` or `android`) and the Apple ID token from the client when calling `/auth/mobile/apple`."
+    ]
+   ],
+   [
+    "equal",
+    640,
+    648,
+    486,
+    494
+   ],
+   [
+    "replace",
+    648,
+    651,
+    494,
+    497,
+    [
+     " - **Web**: CSRF protection using state parameters in OAuth flows",
+     " - **Mobile**: Direct ID token validation for mobile applications",
+     " - **JWKS Validation**: All Google and Apple ID tokens are verified against their official JWKS endpoints before trust"
+    ]
+   ],
+   [
+    "equal",
+    651,
+    670,
+    497,
+    516
+   ],
+   [
+    "replace",
+    670,
+    671,
+    516,
+    517,
+    [
+     "- **Jerry Lucas** - _Current Maintainer_ - GitHub"
+    ]
+   ],
+   [
+    "equal",
+    671,
+    674,
+    517,
+    520
+   ],
+   [
+    "replace",
+    674,
+    675,
+    520,
+    521,
+    [
+     "This project is licensed under the MIT License - see the LICENSE file for details."
+    ]
+   ],
+   [
+    "equal",
+    675,
+    686,
+    521,
+    532
+   ],
+   [
+    "replace",
+    686,
+    694,
+    532,
+    540,
+    [
+     "- Clean Architecture",
+     "- Domain-Driven Design",
+     "- CQRS Pattern",
+     "- Event Sourcing",
+     "- NestJS Documentation",
+     "- OAuth 2.0 Security Best Practices",
+     "- Repository Pattern",
+     "- Dependency Inversion Principle"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "ade573ea5ad8+2": {
+  "fn": "Netcode-Hub/DemoMauiHybridJWTAuthenticationAndAuthorization",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "equal",
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    "replace",
+    1,
+    7,
+    1,
+    7,
+    [
+     "/*Follow Netcode-Hub*/ ",
+     "https://netcodehub.blogspot.com ",
+     "https://github.com/Netcode-Hub ",
+     "https://twitter.com/NetcodeHub | Twitter ",
+     "https://web.facebook.com/NetcodeHub | Facebook ",
+     "https://www.linkedin.com/in/netcode-hub-90b188258/ | LinkedIn "
+    ]
+   ],
+   [
+    "equal",
+    7,
+    8,
+    7,
+    8
+   ],
+   [
+    "replace",
+    8,
+    10,
+    8,
+    10,
+    [
+     "/*You can buy a coffee for me to support the channel*/ ☕️ ",
+     "https://www.buymeacoffee.com/NetcodeHub "
+    ]
+   ],
+   [
+    "equal",
+    10,
+    11,
+    10,
+    11
+   ],
+   [
+    "replace",
+    11,
+    12,
+    11,
+    12,
+    [
+     "PLEASE DO NOT FOGET TO STAR THIS REPOSITORY"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "d86d820de2dd+2": {
+  "fn": "ehsaniara/spring-boot-multi-data-source",
+  "clean_ver": "2",
+  "raw_lines": 8,
+  "ops": [
+   [
+    "equal",
+    0,
+    8,
+    0,
+    8
+   ],
+   [
+    "delete",
+    8,
+    9,
+    8,
+    8
+   ],
+   [
+    "equal",
+    9,
+    14,
+    8,
+    13
+   ],
+   [
+    "replace",
+    14,
+    18,
+    13,
+    14,
+    [
+     "…（4 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    18,
+    19,
+    14,
+    15
+   ],
+   [
+    "replace",
+    19,
+    20,
+    15,
+    16,
+    [
+     "curl -H \"Content-Type: application/json\" --request POST --data '{\"name\":\"Jay\"}' http://localhost:8080/customer"
+    ]
+   ],
+   [
+    "equal",
+    20,
+    23,
+    16,
+    19
+   ],
+   [
+    "replace",
+    23,
+    24,
+    19,
+    20,
+    [
+     "curl -H \"Content-Type: application/json\" --request PUT --data '{\"id\":1 , \"name\":\"Jay ehsaniara\"}' http://localhost:8080/customer"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    28,
+    20,
+    24
+   ],
+   [
+    "replace",
+    28,
+    29,
+    24,
+    25,
+    [
+     " curl --request GET http://localhost:8080/customer/1"
+    ]
+   ],
+   [
+    "equal",
+    29,
+    31,
+    25,
+    27
+   ],
+   [
+    "delete",
+    31,
+    32,
+    27,
+    27
+   ],
+   [
+    "equal",
+    32,
+    33,
+    27,
+    28
+   ],
+   [
+    "replace",
+    33,
+    39,
+    28,
+    29,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    39,
+    43,
+    29,
+    33
+   ],
+   [
+    "replace",
+    43,
+    47,
+    33,
+    37,
+    [
+     " <dependency>",
+     " <groupId>org.springframework.boot</groupId>",
+     " <artifactId>spring-boot-starter-web</artifactId>",
+     " </dependency>"
+    ]
+   ],
+   [
+    "equal",
+    47,
+    48,
+    37,
+    38
+   ],
+   [
+    "replace",
+    48,
+    52,
+    38,
+    42,
+    [
+     " <dependency>",
+     " <groupId>org.springframework.boot</groupId>",
+     " <artifactId>spring-boot-starter-data-jpa</artifactId>",
+     " </dependency>"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    53,
+    42,
+    43
+   ],
+   [
+    "replace",
+    53,
+    57,
+    43,
+    47,
+    [
+     " <dependency>",
+     " <groupId>org.springframework.boot</groupId>",
+     " <artifactId>spring-boot-configuration-processor</artifactId>",
+     " </dependency>"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    58,
+    47,
+    48
+   ],
+   [
+    "replace",
+    58,
+    63,
+    48,
+    53,
+    [
+     " <dependency>",
+     " <groupId>org.projectlombok</groupId>",
+     " <artifactId>lombok</artifactId>",
+     " <optional>true</optional>",
+     " </dependency>"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    64,
+    53,
+    54
+   ],
+   [
+    "replace",
+    64,
+    69,
+    54,
+    59,
+    [
+     " <dependency>",
+     " <groupId>org.postgresql</groupId>",
+     " <artifactId>postgresql</artifactId>",
+     " <scope>runtime</scope>",
+     " </dependency>"
+    ]
+   ],
+   [
+    "equal",
+    69,
+    70,
+    59,
+    60
+   ],
+   [
+    "delete",
+    70,
+    71,
+    60,
+    60
+   ],
+   [
+    "equal",
+    71,
+    81,
+    60,
+    70
+   ],
+   [
+    "replace",
+    81,
+    92,
+    70,
+    81,
+    [
+     " datasource-write:",
+     " driver-class-name: org.postgresql.Driver",
+     " jdbc-url: jdbc:postgresql://localhost:5432/demo",
+     " username: postgres",
+     " password: password",
+     " platform: postgresql",
+     " hikari:",
+     " idle-timeout: 10000",
+     " maximum-pool-size: 10",
+     " minimum-idle: 5",
+     " pool-name: WriteHikariPool"
+    ]
+   ],
+   [
+    "equal",
+    92,
+    93,
+    81,
+    82
+   ],
+   [
+    "replace",
+    93,
+    104,
+    82,
+    93,
+    [
+     " datasource-read:",
+     " driver-class-name: org.postgresql.Driver",
+     " jdbc-url: jdbc:postgresql://localhost:5433/demo",
+     " username: postgres",
+     " password: password",
+     " platform: postgresql",
+     " hikari:",
+     " idle-timeout: 10000",
+     " maximum-pool-size: 10",
+     " minimum-idle: 5",
+     " pool-name: ReadHikariPool"
+    ]
+   ],
+   [
+    "equal",
+    104,
+    114,
+    93,
+    103
+   ],
+   [
+    "replace",
+    114,
+    117,
+    103,
+    106,
+    [
+     " entityManagerFactoryRef = \"entityManagerFactoryWrite\",",
+     " transactionManagerRef = \"transactionManagerWrite\",",
+     " basePackages = {\"com.ehsaniara.multidatasource.repository.writeRepository\"}"
+    ]
+   ],
+   [
+    "equal",
+    117,
+    119,
+    106,
+    108
+   ],
+   [
+    "delete",
+    119,
+    124,
+    108,
+    108
+   ],
+   [
+    "equal",
+    124,
+    125,
+    108,
+    109
+   ],
+   [
+    "replace",
+    125,
+    128,
+    109,
+    113,
+    [
+     " @Bean",
+     " public HikariDataSource dataSourceWrite() {",
+     " return new HikariDataSource(this);",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    128,
+    129,
+    113,
+    114
+   ],
+   [
+    "replace",
+    129,
+    131,
+    114,
+    117,
+    [
+     " @Bean",
+     " public LocalContainerEntityManagerFactoryBean entityManagerFactoryWrite(",
+     " final HikariDataSource dataSourceWrite) {"
+    ]
+   ],
+   [
+    "equal",
+    131,
+    132,
+    117,
+    118
+   ],
+   [
+    "replace",
+    132,
+    140,
+    118,
+    120,
+    [
+     " LocalContainerEntityManagerFactoryBean entityManagerFactory",
+     " = new LocalContainerEntityManagerFactoryBean();"
+    ]
+   ],
+   [
+    "equal",
+    140,
+    141,
+    120,
+    121
+   ],
+   [
+    "replace",
+    141,
+    145,
+    121,
+    134,
+    [
+     " entityManagerFactory.setDataSource(dataSourceWrite);",
+     " entityManagerFactory.setDataSource(dataSourceWrite);",
+     " entityManagerFactory.setPersistenceProviderClass(HibernatePersistenceProvider.class);",
+     " entityManagerFactory.setPersistenceUnitName(\"write\");",
+     " entityManagerFactory.setPackagesToScan(MODEL_PACKAGE);",
+     " entityManagerFactory.setJpaProperties(JPA_PROPERTIES);",
+     " return entityManagerFactory;",
+     " }",
+     "",
+     " @Bean",
+     " public PlatformTransactionManager transactionManagerWrite(EntityManagerFactory entityManagerFactoryWrite) {",
+     " return new JpaTransactionManager(entityManagerFactoryWrite);",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    145,
+    155,
+    134,
+    144
+   ],
+   [
+    "replace",
+    155,
+    158,
+    144,
+    147,
+    [
+     " entityManagerFactoryRef = \"entityManagerFactoryRead\",",
+     " transactionManagerRef = \"transactionManagerRead\",",
+     " basePackages = {\"com.ehsaniara.multidatasource.repository.readRepository\"}"
+    ]
+   ],
+   [
+    "equal",
+    158,
+    161,
+    147,
+    150
+   ],
+   [
+    "replace",
+    161,
+    165,
+    150,
+    154,
+    [
+     " @Bean",
+     " public HikariDataSource dataSourceRead() {",
+     " return new HikariDataSource(this);",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    165,
+    166,
+    154,
+    155
+   ],
+   [
+    "replace",
+    166,
+    169,
+    155,
+    158,
+    [
+     " @Bean",
+     " public LocalContainerEntityManagerFactoryBean entityManagerFactoryRead(",
+     " final HikariDataSource dataSourceRead) {"
+    ]
+   ],
+   [
+    "equal",
+    169,
+    170,
+    158,
+    159
+   ],
+   [
+    "replace",
+    170,
+    177,
+    159,
+    166,
+    [
+     " LocalContainerEntityManagerFactoryBean factoryBean ",
+     " = new LocalContainerEntityManagerFactoryBean();",
+     " factoryBean.setDataSource(dataSourceRead);",
+     " factoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);",
+     " factoryBean.setPersistenceUnitName(\"read\");",
+     " factoryBean.setPackagesToScan(MODEL_PACKAGE);",
+     " factoryBean.setJpaProperties(JPA_PROPERTIES);"
+    ]
+   ],
+   [
+    "equal",
+    177,
+    178,
+    166,
+    167
+   ],
+   [
+    "replace",
+    178,
+    180,
+    167,
+    169,
+    [
+     " return factoryBean;",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    180,
+    181,
+    169,
+    170
+   ],
+   [
+    "replace",
+    181,
+    185,
+    170,
+    174,
+    [
+     " @Bean",
+     " public PlatformTransactionManager transactionManagerRead(EntityManagerFactory entityManagerFactoryRead) {",
+     " return new JpaTransactionManager(entityManagerFactoryRead);",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    185,
+    190,
+    174,
+    179
+   ],
+   [
+    "replace",
+    190,
+    196,
+    179,
+    180,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    196,
+    197,
+    180,
+    181
+   ],
+   [
+    "replace",
+    197,
+    202,
+    181,
+    186,
+    [
+     " Properties properties = new Properties();",
+     " properties.put(\"hibernate.dialect\", \"org.hibernate.dialect.PostgreSQL10Dialect\");",
+     " properties.put(\"hibernate.hbm2ddl.auto\", \"update\");",
+     " properties.put(\"hibernate.ddl-auto\", \"update\");",
+     " properties.put(\"show-sql\", \"true\");"
+    ]
+   ],
+   [
+    "equal",
+    202,
+    206,
+    186,
+    190
+   ],
+   [
+    "replace",
+    206,
+    209,
+    190,
+    193,
+    [
+     " Properties properties = new Properties();",
+     " properties.put(\"hibernate.dialect\", \"org.hibernate.dialect.PostgreSQL10Dialect\");",
+     " properties.put(\"show-sql\", \"true\");"
+    ]
+   ],
+   [
+    "equal",
+    209,
+    218,
+    193,
+    202
+   ],
+   [
+    "replace",
+    218,
+    220,
+    202,
+    204,
+    [
+     " private final CustomerReadRepository customerReadRepository;",
+     " private final CustomerWriteRepository customerWriteRepository;"
+    ]
+   ],
+   [
+    "equal",
+    220,
+    221,
+    204,
+    205
+   ],
+   [
+    "replace",
+    221,
+    225,
+    205,
+    209,
+    [
+     " public CustomerServiceImpl(CustomerReadRepository customerReadRepository, CustomerWriteRepository customerWriteRepository) {",
+     " this.customerReadRepository = customerReadRepository;",
+     " this.customerWriteRepository = customerWriteRepository;",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    225,
+    226,
+    209,
+    210
+   ],
+   [
+    "replace",
+    226,
+    229,
+    210,
+    213,
+    [
+     " public Optional<Customer> getCustomer(Long id) {",
+     " return customerReadRepository.findById(id);",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    229,
+    230,
+    213,
+    214
+   ],
+   [
+    "replace",
+    230,
+    231,
+    214,
+    215,
+    [
+     " public Customer createCustomer(Customer customer) {"
+    ]
+   ],
+   [
+    "equal",
+    231,
+    232,
+    215,
+    216
+   ],
+   [
+    "replace",
+    232,
+    234,
+    216,
+    218,
+    [
+     " return customerWriteRepository.save(customer);",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    234,
+    235,
+    218,
+    219
+   ],
+   [
+    "replace",
+    235,
+    236,
+    219,
+    220,
+    [
+     " public Customer updateCustomer(Customer customer) {"
+    ]
+   ],
+   [
+    "equal",
+    236,
+    237,
+    220,
+    221
+   ],
+   [
+    "replace",
+    237,
+    239,
+    221,
+    223,
+    [
+     " return customerWriteRepository.save(customer);",
+     " }"
+    ]
+   ],
+   [
+    "equal",
+    239,
+    241,
+    223,
+    225
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "59245b105e5b+2": {
+  "fn": "SaraRasoulian/WebAPI-Sample-DotNet-7",
+  "clean_ver": "2",
+  "raw_lines": 23,
+  "ops": [
+   [
+    "equal",
+    0,
+    23,
+    0,
+    23
+   ],
+   [
+    "replace",
+    23,
+    24,
+    23,
+    24,
+    [
+     "Make sure docker is installed on your machine."
+    ]
+   ],
+   [
+    "equal",
+    24,
+    39,
+    24,
+    39
+   ],
+   [
+    "delete",
+    39,
+    40,
+    39,
+    39
+   ],
+   [
+    "equal",
+    40,
+    51,
+    39,
+    50
+   ],
+   [
+    "delete",
+    51,
+    52,
+    50,
+    50
+   ],
+   [
+    "equal",
+    52,
+    65,
+    50,
+    63
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "ce8c60b8ed29+2": {
+  "fn": "n1kozor/Tree-Monk",
+  "clean_ver": "2",
+  "raw_lines": 3,
+  "ops": [
+   [
+    "replace",
+    0,
+    3,
+    0,
+    1,
+    [
+     "TreeMonk"
+    ]
+   ],
+   [
+    "equal",
+    3,
+    12,
+    1,
+    10
+   ],
+   [
+    "replace",
+    12,
+    13,
+    10,
+    11,
+    [
+     "🌐 treemonk.eu · ⬇️ Download · 🐛 Issues"
+    ]
+   ],
+   [
+    "equal",
+    13,
+    14,
+    11,
+    12
+   ],
+   [
+    "replace",
+    14,
+    19,
+    12,
+    17,
+    [
+     "Website",
+     "Microsoft Store",
+     "Latest release",
+     "License: PolyForm Noncommercial",
+     "Platforms"
+    ]
+   ],
+   [
+    "equal",
+    19,
+    21,
+    17,
+    19
+   ],
+   [
+    "delete",
+    21,
+    25,
+    19,
+    19
+   ],
+   [
+    "equal",
+    25,
+    29,
+    19,
+    23
+   ],
+   [
+    "replace",
+    29,
+    30,
+    23,
+    24,
+    [
+     " No cloud, no account, no telemetry — your family data stays with you."
+    ]
+   ],
+   [
+    "equal",
+    30,
+    31,
+    24,
+    25
+   ],
+   [
+    "replace",
+    31,
+    32,
+    25,
+    26,
+    [
+     " (see License)."
+    ]
+   ],
+   [
+    "equal",
+    32,
+    34,
+    26,
+    28
+   ],
+   [
+    "replace",
+    34,
+    35,
+    28,
+    29,
+    [
+     " being the obvious exception)."
+    ]
+   ],
+   [
+    "equal",
+    35,
+    36,
+    29,
+    30
+   ],
+   [
+    "replace",
+    36,
+    38,
+    30,
+    32,
+    [
+     " lets your own scripts — or an AI assistant you connect — read and (if you",
+     " allow it) edit your tree. Off by default."
+    ]
+   ],
+   [
+    "equal",
+    38,
+    42,
+    32,
+    36
+   ],
+   [
+    "replace",
+    42,
+    43,
+    36,
+    37,
+    [
+     " Download TreeMonk from the Microsoft Store"
+    ]
+   ],
+   [
+    "equal",
+    43,
+    46,
+    37,
+    40
+   ],
+   [
+    "replace",
+    46,
+    49,
+    40,
+    43,
+    [
+     " **Microsoft Store**",
+     " (verified install, automatic updates) — or grab `TreeMonk-Setup-x.y.z.exe`",
+     " from the **Releases page**"
+    ]
+   ],
+   [
+    "equal",
+    49,
+    50,
+    43,
+    44
+   ],
+   [
+    "replace",
+    50,
+    52,
+    44,
+    46,
+    [
+     " **Releases page** or",
+     " **treemonk.eu**"
+    ]
+   ],
+   [
+    "equal",
+    52,
+    62,
+    46,
+    56
+   ],
+   [
+    "replace",
+    62,
+    63,
+    56,
+    57,
+    [
+     "A full gallery and feature tour lives on **treemonk.eu**."
+    ]
+   ],
+   [
+    "equal",
+    63,
+    97,
+    57,
+    91
+   ],
+   [
+    "replace",
+    97,
+    98,
+    91,
+    92,
+    [
+     "> treemonk.eu."
+    ]
+   ],
+   [
+    "equal",
+    98,
+    114,
+    92,
+    108
+   ],
+   [
+    "replace",
+    114,
+    115,
+    108,
+    109,
+    [
+     " changes unless you turn it on."
+    ]
+   ],
+   [
+    "equal",
+    115,
+    116,
+    109,
+    110
+   ],
+   [
+    "replace",
+    116,
+    119,
+    110,
+    113,
+    [
+     " needs the Bearer token generated in Settings. Writes sit behind a second",
+     " toggle, go through the same repository layer as the UI (so the audit log and",
+     " undo history are kept), and open windows refresh live."
+    ]
+   ],
+   [
+    "equal",
+    119,
+    120,
+    113,
+    114
+   ],
+   [
+    "replace",
+    120,
+    123,
+    114,
+    117,
+    [
+     " `http://127.0.0.1:27007/docs` for the built-in offline documentation",
+     " (English · Deutsch · Magyar · Français) and `http://127.0.0.1:27007/api/v1/openapi.json`",
+     " for the OpenAPI 3.1 spec."
+    ]
+   ],
+   [
+    "equal",
+    123,
+    125,
+    117,
+    119
+   ],
+   [
+    "delete",
+    125,
+    127,
+    119,
+    119
+   ],
+   [
+    "equal",
+    127,
+    134,
+    119,
+    126
+   ],
+   [
+    "replace",
+    134,
+    135,
+    126,
+    127,
+    [
+     "local API is"
+    ]
+   ],
+   [
+    "equal",
+    135,
+    137,
+    127,
+    129
+   ],
+   [
+    "delete",
+    137,
+    139,
+    129,
+    129
+   ],
+   [
+    "equal",
+    139,
+    146,
+    129,
+    136
+   ],
+   [
+    "replace",
+    146,
+    150,
+    136,
+    140,
+    [
+     " `xcode-select -s /Applications/Xcode.app/Contents/Developer`). CommandLineTools",
+     " alone is not enough — `better-sqlite3`'s postinstall rebuilds against Electron",
+     " and its C++ headers are only on the full Xcode toolchain. Linux/Windows builds",
+     " work fine with just the OS package manager's toolchain."
+    ]
+   ],
+   [
+    "equal",
+    150,
+    155,
+    140,
+    145
+   ],
+   [
+    "replace",
+    155,
+    173,
+    145,
+    146,
+    [
+     "…（18 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    173,
+    189,
+    146,
+    162
+   ],
+   [
+    "delete",
+    189,
+    191,
+    162,
+    162
+   ],
+   [
+    "equal",
+    191,
+    199,
+    162,
+    170
+   ],
+   [
+    "replace",
+    199,
+    200,
+    170,
+    171,
+    [
+     " **Node 20+** — see Prerequisites above. Then:"
+    ]
+   ],
+   [
+    "equal",
+    200,
+    208,
+    171,
+    179
+   ],
+   [
+    "replace",
+    208,
+    212,
+    179,
+    183,
+    [
+     " Open the `.dmg`, drag `TreeMonk.app` to **Applications**. On the",
+     " **first launch**, right-click the app → **Open** → **Open** in the",
+     " dialog (one-time Gatekeeper bypass; subsequent launches are normal",
+     " double-click)."
+    ]
+   ],
+   [
+    "equal",
+    212,
+    213,
+    183,
+    184
+   ],
+   [
+    "replace",
+    213,
+    216,
+    184,
+    187,
+    [
+     " If `npm install`'s postinstall fails with `'climits' file not found`,",
+     " your toolchain isn't pointing at full Xcode —",
+     " `xcode-select -s /Applications/Xcode.app/Contents/Developer`."
+    ]
+   ],
+   [
+    "equal",
+    216,
+    218,
+    187,
+    189
+   ],
+   [
+    "replace",
+    218,
+    222,
+    189,
+    191,
+    [
+     " Watch → Custom → Releases) — if/when a paid Apple Developer ID is",
+     " set up, the build pipeline can sign and notarize automatically."
+    ]
+   ],
+   [
+    "equal",
+    222,
+    229,
+    191,
+    198
+   ],
+   [
+    "replace",
+    229,
+    235,
+    198,
+    199,
+    [
+     "…（6 行代码略）"
+    ]
+   ],
+   [
+    "equal",
+    235,
+    244,
+    199,
+    208
+   ],
+   [
+    "delete",
+    244,
+    246,
+    208,
+    208
+   ],
+   [
+    "equal",
+    246,
+    257,
+    208,
+    219
+   ],
+   [
+    "replace",
+    257,
+    258,
+    219,
+    220,
+    [
+     "free to read, build and modify, but the **PolyForm Noncommercial License 1.0.0**"
+    ]
+   ],
+   [
+    "equal",
+    258,
+    264,
+    220,
+    226
+   ],
+   [
+    "replace",
+    264,
+    265,
+    226,
+    227,
+    [
+     "For a commercial license, please get in touch via treemonk.eu."
+    ]
+   ],
+   [
+    "equal",
+    265,
+    267,
+    227,
+    229
+   ]
+  ],
+  "at": "2026-11-06"
+ },
+ "df31ab2b1fc4+2": {
+  "fn": "raymelon/tagalog-dictionary-scraper",
+  "clean_ver": "2",
+  "raw_lines": 1,
+  "ops": [
+   [
+    "replace",
+    0,
+    1,
+    0,
+    1,
+    [
+     "# Tagalog Dictionary Scraper :ledger: Tweet"
+    ]
+   ],
+   [
+    "equal",
+    1,
+    4,
+    1,
+    4
+   ],
+   [
+    "replace",
+    4,
+    5,
+    4,
+    5,
+    [
+     "Collects Tagalog words from tagalog.pinoydictionary.com, a database of Tagalog words powered by Cyberspace.ph Web Hosting. This script uses a common web scraping technique known as HTML parsing."
+    ]
+   ],
+   [
+    "equal",
+    5,
+    8,
+    5,
+    8
+   ],
+   [
+    "replace",
+    8,
+    9,
+    8,
+    9,
+    [
+     "**See the word list at `tagalog_dict.txt`**"
+    ]
+   ],
+   [
+    "equal",
+    9,
+    10,
+    9,
+    10
+   ],
+   [
+    "replace",
+    10,
+    14,
+    10,
+    13,
+    [
+     "License: GPL v3",
+     "Build Status",
+     "codecov"
+    ]
+   ],
+   [
+    "equal",
+    14,
+    15,
+    13,
+    14
+   ],
+   [
+    "replace",
+    15,
+    16,
+    14,
+    15,
+    [
+     "contributions welcome"
+    ]
+   ],
+   [
+    "equal",
+    16,
+    23,
+    15,
+    22
+   ],
+   [
+    "replace",
+    23,
+    24,
+    22,
+    23,
+    [
+     "https://raymelon.github.io/tagalog-dictionary-scraper/"
+    ]
+   ],
+   [
+    "equal",
+    24,
+    31,
+    23,
+    30
+   ],
+   [
+    "replace",
+    31,
+    38,
+    30,
+    37,
+    [
+     "|Resource|Display|Endpoint|",
+     "|--------|------------|---------------------------------------------------------------------------------------------------------|",
+     "|`csv`|`default`|/tagalog_dict.csv|",
+     "|`csv`|`with lines`|/tagalog_dict_lines.csv|",
+     "|`json`|`default`|/tagalog_dict.json|",
+     "|`json`|`with lines`|/tagalog_dict_lines.json|",
+     "|`txt`|`default`|/tagalog_dict.txt|"
+    ]
+   ],
+   [
+    "equal",
+    38,
+    41,
+    37,
+    40
+   ],
+   [
+    "replace",
+    41,
+    42,
+    40,
+    41,
+    [
+     "Each webpage is loaded and parsed, extracting the words enclosed in ` ` tag."
+    ]
+   ],
+   [
+    "equal",
+    42,
+    43,
+    41,
+    42
+   ],
+   [
+    "replace",
+    43,
+    45,
+    42,
+    44,
+    [
+     "Included is `tagalog.pinoydictionary.com` `html` snippet containing the source of",
+     "`http://tagalog.pinoydictionary.com/list/a/` to serve as point of reference on how dictionary words from the page are extracted."
+    ]
+   ],
+   [
+    "equal",
+    45,
+    47,
+    44,
+    46
+   ],
+   [
+    "replace",
+    47,
+    48,
+    46,
+    47,
+    [
+     "I do not own the `html` code cited above, it is owned by tagalog.pinoydictionary.com."
+    ]
+   ],
+   [
+    "equal",
+    48,
+    51,
+    47,
+    50
+   ],
+   [
+    "replace",
+    51,
+    52,
+    50,
+    51,
+    [
+     "The main purpose of this project is for a Scrabble ® Tagalog dictionary database, but other uses may vary."
+    ]
+   ],
+   [
+    "equal",
+    52,
+    55,
+    51,
+    54
+   ],
+   [
+    "replace",
+    55,
+    57,
+    54,
+    56,
+    [
+     "- Python3 v3.5+ :snake:",
+     "- beautifulsoup4 v4.5.1 :ramen: :package: for parsing html pages"
+    ]
+   ],
+   [
+    "equal",
+    57,
+    62,
+    56,
+    61
+   ],
+   [
+    "replace",
+    62,
+    63,
+    61,
+    62,
+    [
+     "- requests-futures v1.0.0 :zap: for request concurrency"
+    ]
+   ],
+   [
+    "equal",
+    63,
+    70,
+    62,
+    69
+   ],
+   [
+    "replace",
+    70,
+    73,
+    69,
+    72,
+    [
+     "- Run the scraper script `collect_tagalog.py`",
+     "- See the output of collected words at `tagalog_dict.txt`",
+     "- Match `max_workers` value with the CPU and network capacity of the environment. See the comment for estimated values and expected download rates."
+    ]
+   ],
+   [
+    "equal",
+    73,
+    74,
+    72,
+    73
+   ],
+   [
+    "replace",
+    74,
+    75,
+    73,
+    74,
+    [
+     "## License License: GPL v3"
+    ]
+   ],
+   [
+    "equal",
+    75,
+    76,
+    74,
+    75
+   ],
+   [
+    "replace",
+    76,
+    77,
+    75,
+    76,
+    [
+     "GNU General Public License 3.0"
+    ]
+   ]
+  ],
+  "at": "2026-11-06"
  }
 }
