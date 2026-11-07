@@ -1917,23 +1917,26 @@
   "v": 1,
   "epoch": "sweep-1",
   "status": "ok",
-  "collected_at": "2026-10-30T20:50:08Z",
+  "caps_v": 2,
+  "collected_at": "2026-11-07T18:37:45Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-17",
+  "pushed_at": "2026-11-07",
   "stars": 75,
   "tree": {
-   "sha": "cdc733438cc1b790547bf34475db00975ed6439b",
-   "etag": "W/\"4644c0e15e2d7eb7394f49b7d28119669ef5d86a457242cba470ce36a0c003f8\"",
+   "sha": "a3dde5b451bb0334bf18db6bcc4e1ff85086a05f",
+   "etag": "W/\"3c4ec4fc1c8724051b94d8138ebf9544e2ed15cb3eefe6543f66e68c1d20cd2c\"",
    "truncated": false,
-   "path_count": 778,
+   "path_count": 794,
    "matched": [
     "backend/go.mod",
     "web/package.json",
+    "backend/tools/go.mod",
     "compose.yaml",
     "web/Dockerfile",
     "backend/services/api/Dockerfile",
     "backend/services/discord-worker/Dockerfile",
     "backend/services/gameplay-node/Dockerfile",
+    "backend/services/gateway/Dockerfile",
     "backend/services/moderation-worker/Dockerfile",
     ".github/workflows/ci.yml",
     ".github/workflows/images.yml",
@@ -1944,18 +1947,21 @@
    {
     "path": "backend/go.mod",
     "kind": "dep",
-    "blob_sha": "ea41238674769d1bc1cc9f633588483d5304f04c",
+    "blob_sha": "9a7fdf0642896d0c88ec315eb006c791e1cfa958",
     "ecosystem": "go",
-    "bytes": 2093,
+    "bytes": 2548,
     "names": [
      "github.com/TwiN/go-away",
      "github.com/bwmarrin/discordgo",
      "github.com/coreos/go-oidc/v3",
      "github.com/golang-jwt/jwt/v5",
+     "github.com/google/uuid",
      "github.com/gorilla/websocket",
      "github.com/jackc/pgx/v5",
      "github.com/klauspost/compress",
      "github.com/labstack/echo/v4",
+     "github.com/nats-io/nats-server/v2",
+     "github.com/nats-io/nats.go",
      "github.com/pressly/goose/v3",
      "github.com/prometheus/client_golang",
      "github.com/riverqueue/river",
@@ -1964,9 +1970,11 @@
      "golang.org/x/oauth2"
     ],
     "dev": [
+     "github.com/antithesishq/antithesis-sdk-go",
      "github.com/beorn7/perks",
      "github.com/cespare/xxhash/v2",
      "github.com/go-jose/go-jose/v4",
+     "github.com/google/go-tpm",
      "github.com/jackc/pgpassfile",
      "github.com/jackc/pgservicefile",
      "github.com/jackc/puddle/v2",
@@ -1974,7 +1982,11 @@
      "github.com/mattn/go-colorable",
      "github.com/mattn/go-isatty",
      "github.com/mfridman/interpolate",
+     "github.com/minio/highwayhash",
      "github.com/munnerz/goautoneg",
+     "github.com/nats-io/jwt/v2",
+     "github.com/nats-io/nkeys",
+     "github.com/nats-io/nuid",
      "github.com/prometheus/client_model",
      "github.com/prometheus/common",
      "github.com/prometheus/procfs",
@@ -1993,6 +2005,7 @@
      "golang.org/x/sync",
      "golang.org/x/sys",
      "golang.org/x/text",
+     "golang.org/x/time",
      "google.golang.org/protobuf"
     ]
    },
@@ -2036,14 +2049,48 @@
     ]
    },
    {
+    "path": "backend/tools/go.mod",
+    "kind": "dep",
+    "blob_sha": "c5c32659518e5e9732aa66a87cbfe0fd6690bdca",
+    "ecosystem": "go",
+    "bytes": 1299,
+    "dev": [
+     "dario.cat/mergo",
+     "github.com/air-verse/air",
+     "github.com/andybalholm/brotli",
+     "github.com/bep/godartsass/v2",
+     "github.com/bep/golibsass",
+     "github.com/bits-and-blooms/bitset",
+     "github.com/cespare/xxhash/v2",
+     "github.com/fatih/color",
+     "github.com/fsnotify/fsnotify",
+     "github.com/gobwas/glob",
+     "github.com/gohugoio/hashstructure",
+     "github.com/gohugoio/hugo",
+     "github.com/joho/godotenv",
+     "github.com/mattn/go-colorable",
+     "github.com/mattn/go-isatty",
+     "github.com/pelletier/go-toml",
+     "github.com/pelletier/go-toml/v2",
+     "github.com/spf13/afero",
+     "github.com/spf13/cast",
+     "github.com/tdewolff/parse/v2",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "google.golang.org/protobuf"
+    ]
+   },
+   {
     "path": "compose.yaml",
     "kind": "image",
-    "blob_sha": "d069088fc993509e26b693a5f77f9fbbc6576c07",
-    "bytes": 5962,
+    "blob_sha": "a56fa3403603788b4791d2bfd7aa19ca8e9498e0",
+    "bytes": 6790,
     "images": [
      "postgres:18.6-alpine",
      "${REGISTRY:-ghcr.io/sourcelocation}/geoduels-api:${GEODUELS_VERSION:-dev}",
      "${REGISTRY:-ghcr.io/sourcelocation}/geoduels-gameplay-node:${GEODUELS_VERSION:-dev}",
+     "nats:2.11-alpine",
+     "${REGISTRY:-ghcr.io/sourcelocation}/geoduels-gateway:${GEODUELS_VERSION:-dev}",
      "${REGISTRY:-ghcr.io/sourcelocation}/geoduels-web:${GEODUELS_VERSION:-dev}",
      "caddy:2.11.7-alpine",
      "${REGISTRY:-ghcr.io/sourcelocation}/geoduels-moderation-worker:${GEODUELS_VERSION:-dev}",
@@ -2053,8 +2100,8 @@
    {
     "path": "web/Dockerfile",
     "kind": "image",
-    "blob_sha": "ee8abfdf8ad4871d351d38c8ae5b6198a8983a90",
-    "bytes": 746,
+    "blob_sha": "cdf7cbd1a6e68ce68ac68f74b20ec4401ef047c1",
+    "bytes": 901,
     "images": [
      "node:22.23.3-alpine"
     ]
@@ -2090,6 +2137,16 @@
     ]
    },
    {
+    "path": "backend/services/gateway/Dockerfile",
+    "kind": "image",
+    "blob_sha": "c4c1655f1bc26b992e8f3c4f28f6b0dfa068b77a",
+    "bytes": 732,
+    "images": [
+     "golang:1.26.9",
+     "gcr.io/distroless/static-debian12"
+    ]
+   },
+   {
     "path": "backend/services/moderation-worker/Dockerfile",
     "kind": "image",
     "blob_sha": "037b6c1e012d5414afb47f6590d5d5ef5e3a23bd",
@@ -2102,8 +2159,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "0fbe25fa64712f7eda2e5d35a5b9844d6c294d89",
-    "bytes": 2015
+    "blob_sha": "48687621f27418d04afca518295435ff102a72fa",
+    "bytes": 1961
    },
    {
     "path": ".github/workflows/images.yml",
@@ -5300,15 +5357,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-06T03:04:14Z",
+  "collected_at": "2026-11-07T18:26:18Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-05",
+  "pushed_at": "2026-11-07",
   "stars": 1282,
   "tree": {
-   "sha": "e70c557207c84884357a80fa2b9fcd6c4aece6ac",
-   "etag": "W/\"49b8845f5695c365af7ac7e3476ba504e732b8a8ed2a269fd7c6898b5eb2f80a\"",
+   "sha": "fb0760c8581f4169c9f5e3913936a34474d74c07",
+   "etag": "W/\"a825031ab8e07d185051338da0e1fabcc7b0fe15964a27e1c9c15aeacf12d949\"",
    "truncated": false,
-   "path_count": 1415,
+   "path_count": 1418,
    "matched": [
     "package.json",
     "backend/package.json",
@@ -6463,15 +6520,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:41:05Z",
+  "collected_at": "2026-11-07T18:28:11Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
-  "stars": 722,
+  "pushed_at": "2026-11-07",
+  "stars": 725,
   "tree": {
-   "sha": "6631855464695d9a9c8580a4cd608c8ce33eefd8",
-   "etag": "W/\"87fcc8a1115b1148ebc3162eca9309e429f1476ff0aceb40fc086bc9702e58d2\"",
+   "sha": "e625d993fbc0d35c28c5bd3cf5dd2957548d56cb",
+   "etag": "W/\"a24ef7dbc72c3a502e3869b3eb37750108da0e4fbf87418ed82e640ab03dd5b9\"",
    "truncated": false,
-   "path_count": 3247,
+   "path_count": 3284,
    "matched": [
     "package.json",
     "apps/busabase-cli/package.json",
@@ -6509,7 +6566,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "f81417415b3e16ffca34558fa1bbc912d34c9489",
+    "blob_sha": "213c82008a4b6ce1bb1956b3e004436a3de9e308",
     "ecosystem": "npm",
     "bytes": 1168,
     "dev": [
@@ -6521,7 +6578,7 @@
    {
     "path": "apps/busabase-cli/package.json",
     "kind": "dep",
-    "blob_sha": "222dcbdf2e31a0d5b3cbc1c438b5f6096b25e441",
+    "blob_sha": "1e7ace8e79d9b58e1621294ca9fb5f9f8f1a51f4",
     "ecosystem": "npm",
     "bytes": 2071,
     "names": [
@@ -6554,7 +6611,7 @@
    {
     "path": "apps/busabase-desktop/package.json",
     "kind": "dep",
-    "blob_sha": "e44cb50efba6514fbd031d044145bfa5e0462898",
+    "blob_sha": "335842b5bdbc67b3abe8b9ab7a7abc65c046ea1b",
     "ecosystem": "npm",
     "bytes": 1841,
     "names": [
@@ -6587,7 +6644,7 @@
    {
     "path": "apps/busabase-mobile/package.json",
     "kind": "dep",
-    "blob_sha": "2bd8f7bcf2515d170ef87f175f4b42bbd1effe58",
+    "blob_sha": "d92853df3bb2da71b39cd52bc08bb5ae7008838f",
     "ecosystem": "npm",
     "bytes": 3512,
     "names": [
@@ -6648,7 +6705,7 @@
    {
     "path": "apps/busabase-sdk/package.json",
     "kind": "dep",
-    "blob_sha": "cd76d482960d4d1b3bb18c02f9cd428660a5df86",
+    "blob_sha": "4f28ff69d3a118c68ef501770a5e496d14b97764",
     "ecosystem": "npm",
     "bytes": 2428,
     "names": [
@@ -6672,7 +6729,7 @@
    {
     "path": "apps/busabase/package.json",
     "kind": "dep",
-    "blob_sha": "107842c7a89d9f0a2988380ac0f5d9dbb6c42269",
+    "blob_sha": "0ccc457b1c5a2fc2cf267e7f5e72f9738f20ba0b",
     "ecosystem": "npm",
     "bytes": 5362,
     "names": [
@@ -6752,7 +6809,7 @@
    {
     "path": "packages/busabase-cms-sdk/package.json",
     "kind": "dep",
-    "blob_sha": "831a30dfd0050d16af9b36f1308cdfe498b39725",
+    "blob_sha": "1acce8ceb1e5627215a8e146ee4de5393aff477c",
     "ecosystem": "npm",
     "bytes": 2220,
     "names": [
@@ -6781,7 +6838,7 @@
    {
     "path": "packages/busabase-contract/package.json",
     "kind": "dep",
-    "blob_sha": "6b4f36ce6759a8d05b08ba7ace9d26582d55a648",
+    "blob_sha": "3e6326cbfac7a3661b3693cb86b67ac650615cd0",
     "ecosystem": "npm",
     "bytes": 10077,
     "names": [
@@ -6800,9 +6857,9 @@
    {
     "path": "packages/busabase-core/package.json",
     "kind": "dep",
-    "blob_sha": "d59260575bd66fbfb52ad64ff769802de5c06b02",
+    "blob_sha": "5a9be383d963142cc67d79ef915306446524eb3c",
     "ecosystem": "npm",
-    "bytes": 25393,
+    "bytes": 25778,
     "names": [
      "@acp-ui/core",
      "@acp-ui/web",
@@ -6913,7 +6970,7 @@
    {
     "path": "packages/busabase-package/package.json",
     "kind": "dep",
-    "blob_sha": "a47e7236b79d0808a12dc6139548f46685b2cd29",
+    "blob_sha": "6b9069a63a186b071112e39514e0d842e72e1c31",
     "ecosystem": "npm",
     "bytes": 4301,
     "names": [
@@ -7031,9 +7088,9 @@
    {
     "path": "packages/openlib/package.json",
     "kind": "dep",
-    "blob_sha": "a28fa4a2a49da0528afcdbd3fb4b2561f0db1c84",
+    "blob_sha": "66aa9d3c0fbf0d9daf9223df4be4ca5ee80e3ca1",
     "ecosystem": "npm",
-    "bytes": 5164,
+    "bytes": 5411,
     "names": [
      "@aws-sdk/client-s3",
      "@aws-sdk/s3-request-presigner",
@@ -7115,7 +7172,7 @@
    {
     "path": "apps/busabase-desktop/src-tauri/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "07992fcb4e02d155269d4f1d42f477dc220f5bad",
+    "blob_sha": "1e3b1a861727683a2df83cd85c7fdd7ff088b1bd",
     "ecosystem": "cargo",
     "bytes": 714,
     "names": [
@@ -7204,8 +7261,8 @@
    {
     "path": ".github/workflows/ci-checks.yml",
     "kind": "ci",
-    "blob_sha": "ee417cae4421d6c80ae4e03d516b19710c9c6571",
-    "bytes": 13559
+    "blob_sha": "62364918d8e5d821ff37cb1ce2ce72daac3085f3",
+    "bytes": 13827
    },
    {
     "path": ".github/workflows/ci-main.yml",
@@ -7554,15 +7611,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:44:31Z",
+  "collected_at": "2026-11-07T18:30:07Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-07",
   "stars": 458,
   "tree": {
-   "sha": "d5a0645b68c86f3ba8bf70c8b74c8b334d34d7bc",
-   "etag": "W/\"33fa4629f74de81fdb1ef5d4d7356137ff858900fd5121b008c7729094867d8d\"",
+   "sha": "79800eee26f829ce06f6c2805dde18aee872bed2",
+   "etag": "W/\"145075b0121e3ca54b17489d9641e8626c4b94c3bf556c5ed811a8a9e53f783b\"",
    "truncated": false,
-   "path_count": 4152,
+   "path_count": 4171,
    "matched": [
     "package.json",
     "backend/package.json",
@@ -7587,7 +7644,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "fe8a8cb187fc65f1544098c528e30ce2fae1a5af",
+    "blob_sha": "905d5ab47b8a8d8b14c853fa6b85c9aba282f088",
     "ecosystem": "npm",
     "bytes": 4101,
     "dev": [
@@ -8276,13 +8333,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:47:37Z",
+  "collected_at": "2026-11-07T18:31:36Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-07",
   "stars": 274,
   "tree": {
    "sha": "4668888b8ee59809c1a299173dfaad89d3ab7149",
-   "etag": "W/\"b2600efa1af313462247d09b70350970820632cce19dc5699e686058c206a7a3\"",
+   "etag": "W/\"a1a9ceefb433bf4cc88427e5d907dd0771b77e9cd68631b68c0a2fe980323aa2\"",
    "truncated": false,
    "path_count": 772,
    "matched": [
@@ -13256,15 +13313,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T03:09:50Z",
+  "collected_at": "2026-11-07T18:44:03Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-07",
   "stars": 25,
   "tree": {
-   "sha": "6e8aa7264778d766155bc0f7d9e8c018d5c2d617",
-   "etag": "W/\"f6cd2d644e627b1a6c156cc9e52dce25f5fcd964d4e295876ff696ea738dcd06\"",
+   "sha": "6cf8c69e7c9a609bedcbfe610bd65792fb1386d3",
+   "etag": "W/\"41b8d6fac2912dbd04fd2073c6134420730ebfe957fe691842ac53be13c55a3e\"",
    "truncated": false,
-   "path_count": 25721,
+   "path_count": 25897,
    "matched": [
     "package.json",
     "scripts/package.json",
@@ -13354,7 +13411,7 @@
    {
     "path": "scripts/package.json",
     "kind": "dep",
-    "blob_sha": "aadb38e470135c7740ed314528d1ec5457dc2504",
+    "blob_sha": "ebbe01cc5844b0d63f54b99ac5b359a757fb750d",
     "ecosystem": "npm",
     "bytes": 5305,
     "names": [
@@ -13400,7 +13457,7 @@
    {
     "path": "apps/functions/package.json",
     "kind": "dep",
-    "blob_sha": "47fdf2628cb8d7520e310b46bd43d9f647ccb86d",
+    "blob_sha": "8d068e5310ab1afba45dddf4d58a46fd7eeb1388",
     "ecosystem": "npm",
     "bytes": 5059,
     "names": [
@@ -13435,7 +13492,7 @@
    {
     "path": "apps/infra/package.json",
     "kind": "dep",
-    "blob_sha": "1c3696932290a914701d197c51367c2ec5366592",
+    "blob_sha": "9b97967df5616c190306ef059569cd66cdba71f4",
     "ecosystem": "npm",
     "bytes": 1751,
     "names": [
@@ -13455,7 +13512,7 @@
    {
     "path": "apps/web/package.json",
     "kind": "dep",
-    "blob_sha": "7fc7d7d49dbeaefe654b7bda27b11094cb586d9f",
+    "blob_sha": "2086165a2c77623468e3c90d631c51a777cc5b4e",
     "ecosystem": "npm",
     "bytes": 6932,
     "names": [
@@ -13591,7 +13648,7 @@
    {
     "path": "packages/azure-mock/package.json",
     "kind": "dep",
-    "blob_sha": "96402d71524e3e4e9c45356adc0081c0170418f4",
+    "blob_sha": "2bbe241da469203734b6d0b4d1a281fef991ffc2",
     "ecosystem": "npm",
     "bytes": 1880,
     "names": [
@@ -13615,7 +13672,7 @@
    {
     "path": "packages/azure/package.json",
     "kind": "dep",
-    "blob_sha": "c913ae15296d55b8f4414f4913b2328044866142",
+    "blob_sha": "87f8f2b1e80e770bbeeca2276c4e21a90d6c94d0",
     "ecosystem": "npm",
     "bytes": 1580,
     "names": [
@@ -13632,7 +13689,7 @@
    {
     "path": "packages/configuration/package.json",
     "kind": "dep",
-    "blob_sha": "987818714796dd94a999158ecb94fa82b31cc856",
+    "blob_sha": "902da94acced46ae5678862c10757b8067529b76",
     "ecosystem": "npm",
     "bytes": 2342,
     "dev": [
@@ -13668,7 +13725,7 @@
    {
     "path": "packages/db-mock/package.json",
     "kind": "dep",
-    "blob_sha": "fb2d3faa968c4fe68276628fb59387a885b5da62",
+    "blob_sha": "2387fab089ebf4a2a8ba7b753824da84ce9a9e77",
     "ecosystem": "npm",
     "bytes": 1662,
     "names": [
@@ -13686,7 +13743,7 @@
    {
     "path": "packages/db-schema/package.json",
     "kind": "dep",
-    "blob_sha": "ae4489290064581e23064bca5be5383075dac357",
+    "blob_sha": "21e076ba99058b7e259963a105cc1b5580f26fa1",
     "ecosystem": "npm",
     "bytes": 2333,
     "names": [
@@ -13708,7 +13765,7 @@
    {
     "path": "packages/db/package.json",
     "kind": "dep",
-    "blob_sha": "cf2819e8cf818a04f6c761fe40a6b6683afb0a07",
+    "blob_sha": "b8df3a8bc2f69517f02246319b2a5eb278f5cd18",
     "ecosystem": "npm",
     "bytes": 2727,
     "names": [
@@ -13740,14 +13797,14 @@
    {
     "path": "packages/follow-ups/package.json",
     "kind": "dep",
-    "blob_sha": "e2e69ccc08beed2e6b45d74513003f7f52fc48ca",
+    "blob_sha": "34e3435cee62ff2aa2737d5d7e0382d0737ff3cd",
     "ecosystem": "npm",
     "bytes": 968
    },
    {
     "path": "packages/genshin-engine/package.json",
     "kind": "dep",
-    "blob_sha": "73d0c29a1e480f80aedebc8ada80b0bc82fee390",
+    "blob_sha": "af1b3bc176e681b2d166e3fd2f7040df84d6586a",
     "ecosystem": "npm",
     "bytes": 1945,
     "names": [
@@ -13766,7 +13823,7 @@
    {
     "path": "packages/genshin-interface/package.json",
     "kind": "dep",
-    "blob_sha": "7dc27090eb6c33ac21adcc644e6029e5971148f5",
+    "blob_sha": "0f4def29a531232e2d480043503ed110a6ddf398",
     "ecosystem": "npm",
     "bytes": 2522,
     "names": [
@@ -13786,14 +13843,14 @@
    {
     "path": "packages/genshin-mods/package.json",
     "kind": "dep",
-    "blob_sha": "570c38bfaa17465d27123bb01548b751d93ed46f",
+    "blob_sha": "55bb1f73177f835af7f62e8ecccc158796e21296",
     "ecosystem": "npm",
     "bytes": 1356
    },
    {
     "path": "packages/genshin-persona/package.json",
     "kind": "dep",
-    "blob_sha": "3a48a61641d2a3ddefdb11db348e65719c07c6f6",
+    "blob_sha": "cee94f4107516eb7ad2d1d732ddc5e9df4ebd87b",
     "ecosystem": "npm",
     "bytes": 1721,
     "names": [
@@ -13807,7 +13864,7 @@
    {
     "path": "packages/genshin-text/package.json",
     "kind": "dep",
-    "blob_sha": "a36c8bc034679bff3f4bbc2dc617ce198c1060ed",
+    "blob_sha": "6b2f8823b3b87cc8d8290b94536699c79d7252dd",
     "ecosystem": "npm",
     "bytes": 1562,
     "names": [
@@ -13822,7 +13879,7 @@
    {
     "path": "packages/genshin-world/package.json",
     "kind": "dep",
-    "blob_sha": "7d9e274482543f37156fd5e3d2d9deb0768524ef",
+    "blob_sha": "ceaf6834e7748907929827d367518c1fd22eb976",
     "ecosystem": "npm",
     "bytes": 3267,
     "names": [
@@ -13856,7 +13913,7 @@
    {
     "path": "packages/keyframe-store/package.json",
     "kind": "dep",
-    "blob_sha": "3b1837f378226460a531d44c6a866b0c3434f828",
+    "blob_sha": "dd9db2bc5e7df1b27f2e5ac37ec5e4a1931bc080",
     "ecosystem": "npm",
     "bytes": 1633,
     "names": [
@@ -13873,7 +13930,7 @@
    {
     "path": "packages/math-expression-compiler/package.json",
     "kind": "dep",
-    "blob_sha": "3fcbb84971d416d911e79c4fa407995806c08a1f",
+    "blob_sha": "9a2a3d933c4ca3ff172f5ee8fd02cc65d4f38bbf",
     "ecosystem": "npm",
     "bytes": 1490,
     "names": [
@@ -13889,7 +13946,7 @@
    {
     "path": "packages/mjml-blocks/package.json",
     "kind": "dep",
-    "blob_sha": "2332b78e1778ecd77ac2c48793e7365a8ecfe8c4",
+    "blob_sha": "4d410d05f373988ecbd9e9ca8394d9a58ec453c4",
     "ecosystem": "npm",
     "bytes": 1719,
     "names": [
@@ -13910,7 +13967,7 @@
    {
     "path": "packages/nuxt-security-module/package.json",
     "kind": "dep",
-    "blob_sha": "76dacceb3488c004bcf9b0add5b8ea46900000b1",
+    "blob_sha": "1b321e89e5847d4083252aeb60c799d3bf6008f3",
     "ecosystem": "npm",
     "bytes": 2050,
     "names": [
@@ -13934,7 +13991,7 @@
    {
     "path": "packages/parse-tmx/package.json",
     "kind": "dep",
-    "blob_sha": "0e46d821197e7dcf84f84bf03bca8533ec812d38",
+    "blob_sha": "6b5258eac8c97d275097391f0ee497de4fec176f",
     "ecosystem": "npm",
     "bytes": 1509,
     "names": [
@@ -13952,7 +14009,7 @@
    {
     "path": "packages/pitch-transcription/package.json",
     "kind": "dep",
-    "blob_sha": "819c3715e6cea55096e86865ed10d9f34cfad5fa",
+    "blob_sha": "d10cb669bc99456ee1aca97eece6539d97eb4e0e",
     "ecosystem": "npm",
     "bytes": 1858,
     "names": [
@@ -13970,7 +14027,7 @@
    {
     "path": "packages/shared-node/package.json",
     "kind": "dep",
-    "blob_sha": "35b55ef421139376aea5f031169719f23254e8ee",
+    "blob_sha": "c2fab0ae2f2d6067e8b66a66af55e8ef8696bc79",
     "ecosystem": "npm",
     "bytes": 2097,
     "names": [
@@ -13986,7 +14043,7 @@
    {
     "path": "packages/shared/package.json",
     "kind": "dep",
-    "blob_sha": "437aff4fa18cafa25d2d4b3cd43eff0c4662e140",
+    "blob_sha": "37e483c929d73aa0c56f400f8eddd5092207a969",
     "ecosystem": "npm",
     "bytes": 1727,
     "names": [
@@ -14010,7 +14067,7 @@
    {
     "path": "packages/survey-expression/package.json",
     "kind": "dep",
-    "blob_sha": "4dd8a11c338718b8eb35aa6c4b57913f95cf3209",
+    "blob_sha": "469b9c2d7fa31d94a88766c812632f98be23c1b0",
     "ecosystem": "npm",
     "bytes": 1451,
     "names": [
@@ -14025,7 +14082,7 @@
    {
     "path": "packages/tresjs-nuxt/package.json",
     "kind": "dep",
-    "blob_sha": "251f460bc3bbe00b6fa5b73036b12dc1fffa5f7c",
+    "blob_sha": "9fa17c894f764cc9825e7235f57c1811160ca182",
     "ecosystem": "npm",
     "bytes": 1873,
     "names": [
@@ -14049,7 +14106,7 @@
    {
     "path": "packages/trpc-msw/package.json",
     "kind": "dep",
-    "blob_sha": "056ee15610b1928846e383c58ee9679f11abd7c8",
+    "blob_sha": "7fda83fb19de2b37d9e90166f01b287aace1fae3",
     "ecosystem": "npm",
     "bytes": 1821,
     "names": [
@@ -14072,7 +14129,7 @@
    {
     "path": "packages/trpc-nuxt-module/package.json",
     "kind": "dep",
-    "blob_sha": "d16f0dcb1b23d9880829ae7e91dfc36db914da6e",
+    "blob_sha": "d99d7c7123189c529129580615779d2a7a81e8d1",
     "ecosystem": "npm",
     "bytes": 5092,
     "names": [
@@ -14103,7 +14160,7 @@
    {
     "path": "packages/unplugin-pwa-nuxt/package.json",
     "kind": "dep",
-    "blob_sha": "cd0822a912d201a0301fb755f8b7e06646568979",
+    "blob_sha": "cd469bac88bf6e126c765c51a242ca26a409ad59",
     "ecosystem": "npm",
     "bytes": 2037,
     "names": [
@@ -14131,7 +14188,7 @@
    {
     "path": "packages/vue-block-editor-headless/package.json",
     "kind": "dep",
-    "blob_sha": "daa7cc257fb2bbab1d8ef0c4d261a9a6aa90e36d",
+    "blob_sha": "be381b94867265b00f4a62107df3cacadf94b9d0",
     "ecosystem": "npm",
     "bytes": 1546,
     "names": [
@@ -14148,7 +14205,7 @@
    {
     "path": "packages/vue-canvas-frame-headless/package.json",
     "kind": "dep",
-    "blob_sha": "4df45b072f291dc65f7c3f13cb4e4238a332d745",
+    "blob_sha": "927e242802e712b98efc7eade600c61a2489decd",
     "ecosystem": "npm",
     "bytes": 1553,
     "names": [
@@ -14165,7 +14222,7 @@
    {
     "path": "packages/vue-editor-layout-headless/package.json",
     "kind": "dep",
-    "blob_sha": "452a26d7f29913adc9ece3a1a19f0513a4a33b4e",
+    "blob_sha": "df3ff79148339e364c0c71a967ab4505b6931b2e",
     "ecosystem": "npm",
     "bytes": 1567,
     "names": [
@@ -14182,7 +14239,7 @@
    {
     "path": "packages/vue-grid-layout-headless/package.json",
     "kind": "dep",
-    "blob_sha": "4b433cc3d4d02766c292d9213569673a226b6225",
+    "blob_sha": "bee9507f4fd2be1c3ec281b93de218a8c16f3b15",
     "ecosystem": "npm",
     "bytes": 1539,
     "names": [
@@ -14199,7 +14256,7 @@
    {
     "path": "packages/vue-pdfjs-headless/package.json",
     "kind": "dep",
-    "blob_sha": "69f62b8b65c5b130acf4900b73da6d398588fb04",
+    "blob_sha": "27cd74af2fbf4f663b2da755c193619022b1550b",
     "ecosystem": "npm",
     "bytes": 1612,
     "names": [
@@ -14218,7 +14275,7 @@
    {
     "path": "packages/vue-phaserjs/package.json",
     "kind": "dep",
-    "blob_sha": "a6f2f34e4358013296336befe3012478c2bb0a5c",
+    "blob_sha": "0c2f046a3746dc675631706ef33ce7114fef526a",
     "ecosystem": "npm",
     "bytes": 1769,
     "names": [
@@ -14239,7 +14296,7 @@
    {
     "path": "packages/vue-survey-engine-headless/package.json",
     "kind": "dep",
-    "blob_sha": "19e072193fe697e2ebc958ac7a8cc1bda8be8d95",
+    "blob_sha": "d05703d81faf1ef7c0e369675dc9605cbef75941",
     "ecosystem": "npm",
     "bytes": 1649,
     "names": [
@@ -17786,13 +17843,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:38:38Z",
+  "collected_at": "2026-11-07T18:26:41Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-07",
   "stars": 1179,
   "tree": {
    "sha": "e3809603b3dd0b97521f9e84ee39bc6213be804c",
-   "etag": "W/\"9e77b08523ec6cf1794feeccab70e3b61e89ed3375dc9295dccb344938800ed4\"",
+   "etag": "W/\"eac318a3aa3e1b5ba2c8e52dfedfe1574afa432ccb56a60154636b0e55bf8174\"",
    "truncated": false,
    "path_count": 1510,
    "matched": [
@@ -18341,15 +18398,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-05T03:26:07Z",
+  "collected_at": "2026-11-07T18:43:33Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-04",
+  "pushed_at": "2026-11-07",
   "stars": 27,
   "tree": {
-   "sha": "988f8be195a28fa9cbcdefc7d0916eb59dcc290b",
-   "etag": "W/\"aeb4de820d48d4a6674d6c8bcbc965ac74c799692a2711ecb35c1920b827ad0d\"",
+   "sha": "9ed659983cd6e2f897e7aa460e11e9cbd37d9837",
+   "etag": "W/\"73877f88ea24df7fcf84250c7d91b952a00a9328e4b57eeb2114969efbad1403\"",
    "truncated": false,
-   "path_count": 2110,
+   "path_count": 2124,
    "matched": [
     "adapters/cursor/package.json",
     "adapters/jetbrains/package.json",
@@ -18381,42 +18438,42 @@
    {
     "path": "adapters/cursor/package.json",
     "kind": "dep",
-    "blob_sha": "25bafe04c9a162a943b6d9c3a24bd78149986db5",
+    "blob_sha": "919c5c7ec4f42815c041d8493fe68216e1c2925b",
     "ecosystem": "npm",
     "bytes": 765
    },
    {
     "path": "adapters/jetbrains/package.json",
     "kind": "dep",
-    "blob_sha": "4d52e25a0574d392e9f986c26923e297fe233699",
+    "blob_sha": "217587d12daa61c4d5bf89f0cbb9ce3f5b5a6e51",
     "ecosystem": "npm",
     "bytes": 789
    },
    {
     "path": "adapters/neovim/package.json",
     "kind": "dep",
-    "blob_sha": "e5c921ebc6c63466289e6097e67d500d21b1468c",
+    "blob_sha": "d0b582917a3a4a1b4a2eb8bea9e768dded7ff122",
     "ecosystem": "npm",
     "bytes": 765
    },
    {
     "path": "adapters/vscode/package.json",
     "kind": "dep",
-    "blob_sha": "a831b7b27b7e6177f8a5aa5d7cf6ae11b67c1034",
+    "blob_sha": "d7ec2099e7f9f54931902afe82abe828c21683d8",
     "ecosystem": "npm",
     "bytes": 767
    },
    {
     "path": "adapters/windsurf/package.json",
     "kind": "dep",
-    "blob_sha": "8f30db4e3b62514218877ec4c41eaf1ad22e70cb",
+    "blob_sha": "ba9c35b3dad44e39418c787ec6ec68368cf7a5a8",
     "ecosystem": "npm",
     "bytes": 775
    },
    {
     "path": "adapters/zed/package.json",
     "kind": "dep",
-    "blob_sha": "fbd07e13ff30c8fb1bf2d0cc4fdb46caa7891709",
+    "blob_sha": "d9e0cdec5e138df66112d6e70e2fc00f8a09fd69",
     "ecosystem": "npm",
     "bytes": 750
    },
@@ -18659,6 +18716,7 @@
     "adapters/codex/skills/cipher/THREAT_REVIEW_GUIDE.md",
     "adapters/codex/skills/cipher/WEB_API_SECURITY_CONTROLS_GUIDE.md",
     "adapters/codex/skills/cloak/ACCESSIBILITY_CHECKLIST.md",
+    "adapters/codex/skills/cloak/ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md",
     "adapters/codex/skills/cloak/CHECKLIST.md",
     "adapters/codex/skills/cloak/CUIR_PATTERN_INTELLIGENCE_GUIDE.md",
     "adapters/codex/skills/cloak/DESIGN_TOKENS_COMPONENT_STATES_GUIDE.md",
@@ -18674,6 +18732,7 @@
     "adapters/codex/skills/cloak/UI_FIDELITY_HANDOFF_GUIDE.md",
     "adapters/codex/skills/cloak/UI_UX_FOUNDATIONS_GUIDE.md",
     "adapters/codex/skills/cloak/UX_STANDARDS.md",
+    "adapters/codex/skills/cloak/VISUAL_REFINEMENT_8PT_GUIDE.md",
     "adapters/codex/skills/clockwork/ARCHITECTURE_COMPLEXITY_AND_SCALE_POSTURE_GUIDE.md",
     "adapters/codex/skills/clockwork/ARCHITECTURE_OOP_LAYERING_GUIDE.md",
     "adapters/codex/skills/clockwork/ARCHITECTURE_REVIEW_CHECKLIST.md",
@@ -18732,6 +18791,7 @@
     "adapters/codex/skills/ponytail/UPSTREAM_CONTRACT_ENFORCEMENT_GUIDE.md",
     "adapters/codex/skills/ponytail/UPSTREAM_REFERENCE.md",
     "adapters/codex/skills/scribe/API_VERSIONED_DOCUMENTATION_GUIDE.md",
+    "adapters/codex/skills/scribe/ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md",
     "adapters/codex/skills/scribe/AUDIT_CHECKLIST.md",
     "adapters/codex/skills/scribe/CHANGELOG_ADR_GUIDE.md",
     "adapters/codex/skills/scribe/DOCUMENTATION_STANDARDS.md",
@@ -18748,11 +18808,8 @@
     "adapters/codex/skills/scribe/SOURCE_BACKED_DOCUMENTATION_GUIDE.md",
     "adapters/codex/skills/scribe/TRUESHEET_REFERENCE.md",
     "adapters/codex/skills/the-governor/AUTHORITATIVE_SOURCE_VERIFICATION_GUIDE.md",
-    "adapters/codex/skills/the-governor/HUMAN_ESCALATION_BOUNDARIES_GUIDE.md",
-    "adapters/codex/skills/the-governor/LICENSE_PRIVACY_IP_COMPLIANCE_GUIDE.md",
-    "adapters/codex/skills/the-governor/OUTPUT_FORMATS.md",
-    "adapters/codex/skills/the-governor/REFERENCE_CONTEXT.md",
-    "adapters/codex/skills/the-governor/SKILL.md"
+    "adapters/codex/skills/the-governor/COVENANT_PROTECTED_OBLIGATION_JUDGMENT_GUIDE.md",
+    "adapters/codex/skills/the-governor/HUMAN_ESCALATION_BOUNDARIES_GUIDE.md"
    ],
    "matrix_urls": [
     "https://buymeacoffee.com/baelfyre"

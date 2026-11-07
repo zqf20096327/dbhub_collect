@@ -1461,15 +1461,15 @@
   "epoch": "sweep-1",
   "status": "partial",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:57:56Z",
+  "collected_at": "2026-11-07T18:37:26Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
-  "stars": 77,
+  "pushed_at": "2026-11-07",
+  "stars": 78,
   "tree": {
-   "sha": "235ed3790b02c555a3b68c307fbb2aadd5b132da",
-   "etag": "W/\"52cd3114b20007b8c906d53614520625e9a49a455fc8d0f7b927315910872c55\"",
+   "sha": "878d43b2a08d8097e767ef07f3a44997d833fda5",
+   "etag": "W/\"84ac9362a806092a4f67cbadcfbdc76c2bf9795bc4cfad04e8a7f2e225733a62\"",
    "truncated": true,
-   "path_count": 38603,
+   "path_count": 38611,
    "matched": [
     "package.json",
     "infra/package.json",
@@ -1527,11 +1527,12 @@
     "packages/drivers/ecfr/package.json",
     "packages/drivers/exiftool/package.json",
     "packages/drivers/ffmpeg/package.json",
+    "packages/drivers/firecrawl/package.json",
     "packages/drivers/freshbooks/package.json",
     "packages/drivers/git/package.json",
     "packages/drivers/github-actions/package.json",
-    "packages/drivers/github/package.json",
     "docker-compose.yml",
+    ".github/workflows/cache-local-observe.yml",
     ".github/workflows/cache-producer-inspect.yml",
     ".github/workflows/cache-producer-prepare.yml",
     ".github/workflows/cache-producer.yml",
@@ -1543,6 +1544,7 @@
     ".github/workflows/fleet-shadow-check.yml",
     ".github/workflows/heavy-admit.yml",
     ".github/workflows/heavy.yml",
+    ".github/workflows/history-notes-publish.yml",
     ".github/workflows/hub-pipe-security.yml",
     ".github/workflows/knowledge-baseline-mint.yml",
     ".github/workflows/property-laws-nightly.yml",
@@ -1556,9 +1558,9 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "78c6412d3afe9b864a60df3b2a0773e807c90b27",
+    "blob_sha": "44b4c8c6dacac13dd428aa2c31a3817c57968cb9",
     "ecosystem": "npm",
-    "bytes": 24898,
+    "bytes": 24932,
     "dev": [
      "@babel/cli",
      "@babel/core",
@@ -2637,15 +2639,17 @@
    {
     "path": "packages/documents/domain/package.json",
     "kind": "dep",
-    "blob_sha": "a28536a1dbc49ed3f7e4888a03cc129b9a1176be",
+    "blob_sha": "3a226a8e5c7193044d8badfdee6b6d8cd566d3a3",
     "ecosystem": "npm",
-    "bytes": 3158,
+    "bytes": 3230,
     "names": [
+     "@alchemy.run/domain",
      "@beep/identity",
      "@beep/rdf",
      "@beep/schema",
      "@beep/shared-domain",
      "@beep/utils",
+     "@noble/hashes",
      "effect"
     ],
     "dev": [
@@ -2661,10 +2665,12 @@
    {
     "path": "packages/documents/server/package.json",
     "kind": "dep",
-    "blob_sha": "17e2276a05d1ab3fd8fcbbd06bfa8306689c987e",
+    "blob_sha": "e6f021e9d620d78ad57bf96e4e60e0c72c5f6602",
     "ecosystem": "npm",
-    "bytes": 3283,
+    "bytes": 3402,
     "names": [
+     "@alchemy.run/domain",
+     "@beep/alchemy-postgres",
      "@beep/box",
      "@beep/documents-domain",
      "@beep/documents-tables",
@@ -2680,6 +2686,7 @@
      "effect"
     ],
     "dev": [
+     "@beep/pglite",
      "@beep/test-runner",
      "@beep/test-utils",
      "@effect/platform-bun",
@@ -2714,10 +2721,11 @@
    {
     "path": "packages/documents/use-cases/package.json",
     "kind": "dep",
-    "blob_sha": "eaccbd6888270fa23820d49562c7c35fb87607aa",
+    "blob_sha": "64d9e432a046744b618080b7ab1fca501a837df7",
     "ecosystem": "npm",
-    "bytes": 3099,
+    "bytes": 3218,
     "names": [
+     "@alchemy.run/domain",
      "@beep/documents-domain",
      "@beep/identity",
      "@beep/schema",
@@ -2725,6 +2733,8 @@
      "effect"
     ],
     "dev": [
+     "@beep/alchemy-postgres",
+     "@beep/pglite",
      "@beep/test-runner",
      "@beep/test-utils",
      "@effect/vitest",
@@ -2778,12 +2788,13 @@
    {
     "path": "packages/drivers/alchemy-postgres/package.json",
     "kind": "dep",
-    "blob_sha": "03714b60a1ba1da1dc0a75630324ee80c8272943",
+    "blob_sha": "e3a52830d742008aeeaefb8fa5637fc83a1c4ef1",
     "ecosystem": "npm",
-    "bytes": 2595,
+    "bytes": 2726,
     "names": [
      "@alchemy.run/domain",
      "@beep/identity",
+     "@beep/observability",
      "@beep/schema",
      "@beep/utils",
      "alchemy",
@@ -2791,6 +2802,8 @@
      "foldkit"
     ],
     "dev": [
+     "@beep/pglite",
+     "@beep/postgres",
      "@effect/vitest",
      "@types/node",
      "bun-types"
@@ -3064,6 +3077,23 @@
     ]
    },
    {
+    "path": "packages/drivers/firecrawl/package.json",
+    "kind": "dep",
+    "blob_sha": "1feba0e7731605a0f622021628a2828e2b118d1e",
+    "ecosystem": "npm",
+    "bytes": 2475,
+    "names": [
+     "@beep/identity",
+     "@beep/schema",
+     "effect"
+    ],
+    "dev": [
+     "@effect/vitest",
+     "@types/node",
+     "bun-types"
+    ]
+   },
+   {
     "path": "packages/drivers/freshbooks/package.json",
     "kind": "dep",
     "blob_sha": "cefb2955574205df430fc1fb732b025d34aa09c7",
@@ -3135,33 +3165,6 @@
     ]
    },
    {
-    "path": "packages/drivers/github/package.json",
-    "kind": "dep",
-    "blob_sha": "b62be6eb428ff0ab7004ffa7be98ed8719547ef1",
-    "ecosystem": "npm",
-    "bytes": 2915,
-    "names": [
-     "@beep/identity",
-     "@beep/schema",
-     "@beep/semver",
-     "@beep/utils",
-     "@noble/hashes",
-     "@octokit/core",
-     "@octokit/plugin-paginate-rest",
-     "@octokit/types",
-     "effect",
-     "tweetnacl",
-     "universal-github-app-jwt"
-    ],
-    "dev": [
-     "@beep/fc-runs",
-     "@effect/platform-node",
-     "@effect/vitest",
-     "@types/node",
-     "bun-types"
-    ]
-   },
-   {
     "path": "docker-compose.yml",
     "kind": "image",
     "blob_sha": "7cbb012836b7f412898847f4a2023a84f171da7c",
@@ -3171,6 +3174,12 @@
      "pgvector/pgvector:pg17",
      "grafana/otel-lgtm:0.40.0"
     ]
+   },
+   {
+    "path": ".github/workflows/cache-local-observe.yml",
+    "kind": "ci",
+    "blob_sha": "d23ea792f01ecc182f3ff9c342602e5271c4bfb1",
+    "bytes": 982
    },
    {
     "path": ".github/workflows/cache-producer-inspect.yml",
@@ -3193,14 +3202,14 @@
    {
     "path": ".github/workflows/cache-warm.yml",
     "kind": "ci",
-    "blob_sha": "ea4329e621fcafe5bf33664265fc2bd3488b657b",
-    "bytes": 3792
+    "blob_sha": "54dd45fc2f821ab0960aeec938975c57e238c1c1",
+    "bytes": 3946
    },
    {
     "path": ".github/workflows/check.yml",
     "kind": "ci",
-    "blob_sha": "bd838d8c0622d4608d11160ad7be121deb08208a",
-    "bytes": 78603
+    "blob_sha": "00afcc8eab42877ac9d7fe7fac73bfd2efce34c5",
+    "bytes": 79904
    },
    {
     "path": ".github/workflows/data-sync.yml",
@@ -3229,14 +3238,20 @@
    {
     "path": ".github/workflows/heavy-admit.yml",
     "kind": "ci",
-    "blob_sha": "66c02b62f8f20f05131c703afc4c57a899bcf801",
-    "bytes": 3260
+    "blob_sha": "c69068f8b56945f0ca15cdbc40a9294ef4e508da",
+    "bytes": 3658
    },
    {
     "path": ".github/workflows/heavy.yml",
     "kind": "ci",
-    "blob_sha": "16b9159c88cd7de6973bde37ae9e42183ef1ef37",
-    "bytes": 47867
+    "blob_sha": "131b15b77820fb919ff8ba1d90e6a40f26648b03",
+    "bytes": 44982
+   },
+   {
+    "path": ".github/workflows/history-notes-publish.yml",
+    "kind": "ci",
+    "blob_sha": "ee8f65597ce8257cb118ad92a1948b84118481f7",
+    "bytes": 1965
    },
    {
     "path": ".github/workflows/hub-pipe-security.yml",
@@ -3315,6 +3330,8 @@
     "packages/drivers/postgres/test/.gitkeep",
     "packages/drivers/postgres/test/Postgres.equivalence.test.ts",
     "packages/drivers/postgres/test/Postgres.errors.test.ts",
+    "packages/drivers/alchemy-postgres/test/conformance/postgres-suites.ts",
+    "packages/drivers/alchemy-postgres/test/integration/postgres.test.ts",
     "packages/drivers/postgres/src/internal/PostgresDiagnosticGuards.ts",
     "packages/drivers/postgres/test/integration/Postgres.pglite.test.ts",
     "goals/effect-vitest-canon/ops/inventory/timings/after/database-drivers/postgres-bun.json",
@@ -3413,6 +3430,8 @@
     "explorations/uspto-patent-driver-depth/reviews/2026-06-29-codex-research.md",
     "goals/alchemy-vault-sync-slice/decisions/2026-11-06-driver-package-location.md",
     "goals/alchemy-vault-sync-slice/decisions/2026-11-06-provenance-in-driver-rows.md",
+    "goals/alchemy-vault-sync-slice/decisions/2026-11-07-driver-coverage-floor-pr2b.md",
+    "goals/alchemy-vault-sync-slice/decisions/2026-11-07-pr-2b-driver-complete.md",
     "goals/boolean-creep/data/2026-09-22-drivers-stream-state-projection.json",
     "goals/boolean-creep/data/design-refresh-2026-09-08-stream-drivers.md",
     "goals/boolean-creep/data/design-refresh-2026-09-09-r27-drivers-a-f-carriers.md",
@@ -3489,11 +3508,7 @@
     "goals/freshbooks-driver/research/live-spike-harness.md",
     "goals/goal-portfolio-driver/history/.gitkeep",
     "goals/goal-portfolio-driver/ops/manifest.json",
-    "goals/goal-portfolio-driver/ops/queue.json",
-    "goals/goal-portfolio-driver/ops/status.md",
-    "goals/goal-portfolio-driver/research/.gitkeep",
-    "goals/goal-portfolio-driver/research/SOURCES.md",
-    "goals/goal-portfolio-driver/research/approved-plan-2026-07-14.md"
+    "goals/goal-portfolio-driver/ops/queue.json"
    ]
   },
   "fail_count": 0
@@ -8013,15 +8028,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:26:30Z",
+  "collected_at": "2026-11-07T18:19:43Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-06",
-  "stars": 14336,
+  "pushed_at": "2026-11-07",
+  "stars": 14337,
   "tree": {
-   "sha": "9a5c56e5a5d7dccab62f72f5e76a2d6d3d17c689",
-   "etag": "W/\"1745eec605a403e9d778a22e90973236a51a0b37bcb92933b7f79ef29addb119\"",
+   "sha": "ccc0eed2b4585cadb60d9626b50a89e93bfa1658",
+   "etag": "W/\"5cb5449d004e029fea4e281e7a7369214c63197ec781842d0dd765051395d3ca\"",
    "truncated": false,
-   "path_count": 863,
+   "path_count": 871,
    "matched": [
     "package.json",
     "example/package.json",
@@ -8047,7 +8062,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "c8c380a30f33611a3df41c6c235b069d3ebb6714",
+    "blob_sha": "0ed11a7ae0a1fb0e8003be6df0a00d9ee0014120",
     "ecosystem": "npm",
     "bytes": 5238,
     "dev": [
@@ -8125,7 +8140,7 @@
    {
     "path": "site/package.json",
     "kind": "dep",
-    "blob_sha": "05f6df6622bd0c050ddf5295c16abe8e727fd7d9",
+    "blob_sha": "f6b7834381ca33a36d71fe9770ffeca41cf9885b",
     "ecosystem": "npm",
     "bytes": 1947,
     "names": [
@@ -8254,43 +8269,43 @@
    {
     "path": ".github/workflows/afdocs.yml",
     "kind": "ci",
-    "blob_sha": "0d4a439276d79463143e7d3206581b54fba86b43",
+    "blob_sha": "9e7412d48ae93701cc7fb3c3ddf1ace75f24c514",
     "bytes": 3540
    },
    {
     "path": ".github/workflows/bench.yml",
     "kind": "ci",
-    "blob_sha": "67ed6df75566df419b0c80bdf7a6991ceeeac5dd",
+    "blob_sha": "1a479fab04ebeb50a721202f356e47160e9e7ab2",
     "bytes": 4037
    },
    {
     "path": ".github/workflows/preview.yml",
     "kind": "ci",
-    "blob_sha": "0380070a9c49022c03163889733ac784d6dcb0f8",
+    "blob_sha": "773096a10bf94e1517b7995e91cb7b02d2cf8068",
     "bytes": 1782
    },
    {
     "path": ".github/workflows/publish.yml",
     "kind": "ci",
-    "blob_sha": "267962ac8fb13445890ff6a9caebd00f05ecd9d2",
+    "blob_sha": "c898b9b91e7f7e677215919e408563b4b9c29eea",
     "bytes": 4792
    },
    {
     "path": ".github/workflows/scorecard.yml",
     "kind": "ci",
-    "blob_sha": "07dacee3a722da5c5fc4bbeb7b7d5147fca6a6e8",
+    "blob_sha": "acf71edb3d98e453c2c5802338c53eb08cf1f4e6",
     "bytes": 2396
    },
    {
     "path": ".github/workflows/secure.yml",
     "kind": "ci",
-    "blob_sha": "c3d24263ee40245c9ac8bb22aa38b68dd0540127",
+    "blob_sha": "08896dd446b835bf9b0ae9a663e52cbb90d8b572",
     "bytes": 1479
    },
    {
     "path": ".github/workflows/test.yml",
     "kind": "ci",
-    "blob_sha": "bb2779985251f9931f9d0e26fbcee4346d4a1298",
+    "blob_sha": "3f6d6e046d3f0012a1faf40036a1962d26f3de41",
     "bytes": 15085
    }
   ],
@@ -10620,13 +10635,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:55:53Z",
+  "collected_at": "2026-11-07T18:36:25Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-07",
   "stars": 103,
   "tree": {
    "sha": "d41a6e9b954811c6c826ea44d6aa3055b02f6f58",
-   "etag": "W/\"a424132012a2304ed393bdc397f29076c7cb6c62ac1e4a29286ef42da3eec09f\"",
+   "etag": "W/\"0e832bcc3395808fbdbfd5276afcec36e5ccca64f8e75dc875523f8ec1d032b7\"",
    "truncated": false,
    "path_count": 1364,
    "matched": [
@@ -14675,13 +14690,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T03:16:21Z",
+  "collected_at": "2026-11-07T18:47:40Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-07",
   "stars": 15,
   "tree": {
    "sha": "8b906821824c47d7cef8ae05b36768f7142e23f0",
-   "etag": "W/\"1b5ed01512e0f1294299a92c828f0f15d607c3983d3dcd90414703b8814a3017\"",
+   "etag": "W/\"7e6059fe5be71476b49c70343f03dadbab2f8762a29bd643e63a944f0b34e949\"",
    "truncated": false,
    "path_count": 105,
    "matched": [

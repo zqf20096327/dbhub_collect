@@ -3718,26 +3718,29 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T03:26:00Z",
+  "collected_at": "2026-11-07T18:53:40Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-07",
   "stars": 0,
   "tree": {
-   "sha": "3ee830a1f1e3ab7f79e8b060bd707434953c0346",
-   "etag": "W/\"01f413cd78aecaf52a3e17e3519eef0863b5c00d03aed24cf218b6eb413c8fbb\"",
+   "sha": "d3d3474c0f7d95cda60f0bd60f7426802a8f0336",
+   "etag": "W/\"af1a8462086b783c71ea04a32723258b2bf25a39185d1c199c26e97cabc6bd4d\"",
    "truncated": false,
-   "path_count": 400,
+   "path_count": 563,
    "matched": [
     "Cargo.toml",
+    "crates/base/Cargo.toml",
     "crates/distsql/Cargo.toml",
     "crates/domain/Cargo.toml",
     "crates/executor/Cargo.toml",
     "crates/kv/Cargo.toml",
+    "crates/memory/Cargo.toml",
     "crates/meta/Cargo.toml",
     "crates/metrics/Cargo.toml",
     "crates/mysql-protocol/Cargo.toml",
     "crates/parser/Cargo.toml",
     "crates/query-smoke/Cargo.toml",
+    "crates/runtime/Cargo.toml",
     "crates/server/Cargo.toml",
     "crates/session/Cargo.toml",
     "crates/sql/Cargo.toml",
@@ -3768,17 +3771,37 @@
    {
     "path": "Cargo.toml",
     "kind": "dep",
-    "blob_sha": "89470432b6ff6c4f4c31cfdca41612e1439bc54e",
+    "blob_sha": "67d50791f1899b865f9b880c7a39de6230b75223",
     "ecosystem": "cargo",
-    "bytes": 6290
+    "bytes": 6644
+   },
+   {
+    "path": "crates/base/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "abcbd531a1cb8f3fb8d635d6b0f721d022b8d440",
+    "ecosystem": "cargo",
+    "bytes": 949,
+    "names": [
+     "arc-swap",
+     "log",
+     "parking_lot",
+     "rustix"
+    ],
+    "dev": [
+     "criterion",
+     "flate2",
+     "serde",
+     "serde_json"
+    ]
    },
    {
     "path": "crates/distsql/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "55731d984d274dc42c61d4ca6347f58c773fe7c9",
+    "blob_sha": "ee822e3c26f1107713fc90d7b0f28c35be11fc21",
     "ecosystem": "cargo",
-    "bytes": 698,
+    "bytes": 816,
     "names": [
+     "tidb-runtime",
      "collections",
      "protobuf",
      "serde_json",
@@ -3820,10 +3843,11 @@
    {
     "path": "crates/executor/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "4565cea591223fd9d9416d35540a08ea6da058e9",
+    "blob_sha": "40a10a327f81fbcebfbdff81e1858cd450bc5e72",
     "ecosystem": "cargo",
-    "bytes": 575,
+    "bytes": 628,
     "names": [
+     "tidb-runtime",
      "tidb-distsql",
      "tidb-kv",
      "tidb-meta",
@@ -3843,6 +3867,30 @@
      "thiserror",
      "tikv-client",
      "tokio"
+    ]
+   },
+   {
+    "path": "crates/memory/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "ad17b8e7da2f69b08b62ba940e5e0c91f30867db",
+    "ecosystem": "cargo",
+    "bytes": 1515,
+    "names": [
+     "tidb-base",
+     "tidb-metrics",
+     "arc-swap",
+     "parking_lot",
+     "allocator-api2",
+     "tracing",
+     "tikv-jemalloc-ctl",
+     "nix"
+    ],
+    "dev": [
+     "flate2",
+     "serde",
+     "serde_json",
+     "criterion",
+     "tikv-jemallocator"
     ]
    },
    {
@@ -3877,14 +3925,15 @@
    {
     "path": "crates/mysql-protocol/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "9745a635fac924284a2df111f34ca46e2794c566",
+    "blob_sha": "b40dc17954716ddc5c4293f95d948dd8934a1d02",
     "ecosystem": "cargo",
-    "bytes": 930,
+    "bytes": 1042,
     "names": [
      "getrandom",
      "rcgen",
      "sha1",
      "tidb-metrics",
+     "tidb-runtime",
      "time",
      "tokio",
      "tokio-rustls",
@@ -3898,13 +3947,17 @@
    {
     "path": "crates/parser/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "d9f3be842e30e355dd1f33d66addb2e8ad9ebb3b",
+    "blob_sha": "692a15cff69601f24c62b2b592472ba886829c94",
     "ecosystem": "cargo",
-    "bytes": 486,
+    "bytes": 659,
+    "names": [
+     "tidb-base"
+    ],
     "dev": [
      "cfgrammar",
      "lrtable",
-     "serde_json"
+     "serde_json",
+     "flate2"
     ]
    },
    {
@@ -3921,11 +3974,31 @@
     ]
    },
    {
+    "path": "crates/runtime/Cargo.toml",
+    "kind": "dep",
+    "blob_sha": "b8298114660597b3bfc9b7bb4720787c0193308f",
+    "ecosystem": "cargo",
+    "bytes": 1666,
+    "names": [
+     "tidb-base",
+     "tokio",
+     "parking_lot",
+     "prometheus",
+     "tracing",
+     "nix"
+    ],
+    "dev": [
+     "tracing-subscriber",
+     "criterion",
+     "tokio"
+    ]
+   },
+   {
     "path": "crates/server/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "90c1de9796159a6748c49e20e42495ed3df9f37b",
+    "blob_sha": "1332287f6e6675e621e48d7d7b726c3929d149a4",
     "ecosystem": "cargo",
-    "bytes": 989,
+    "bytes": 1360,
     "names": [
      "bytes",
      "clap",
@@ -3940,6 +4013,7 @@
      "tidb-metrics",
      "tidb-mysql-protocol",
      "tidb-session",
+     "tidb-runtime",
      "tikv-jemallocator",
      "tokio",
      "tracing",
@@ -3985,10 +4059,12 @@
    {
     "path": "crates/types/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "e166a052078bc04cbd15c26ad60f0c80a514ecaa",
+    "blob_sha": "8efb77e79b482c05a9135b160723c3b62c1fcc24",
     "ecosystem": "cargo",
-    "bytes": 750,
+    "bytes": 943,
     "names": [
+     "log",
+     "tidb-base",
      "ryu",
      "serde",
      "serde_json"
@@ -4317,8 +4393,8 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "3bbe108e4d32ea7581bc75454962636003f89f06",
-    "bytes": 3567
+    "blob_sha": "6ea457f73b28813cdda78979c6d8fbf80dcb3bf0",
+    "bytes": 3814
    }
   ],
   "clues": {
@@ -4543,13 +4619,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T02:32:00Z",
+  "collected_at": "2026-11-07T18:23:07Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
-  "stars": 3752,
+  "pushed_at": "2026-11-07",
+  "stars": 3753,
   "tree": {
    "sha": "85ddd7c96135761111844f7b35b7ba485f25ff92",
-   "etag": "W/\"cdce5dfda5adcc5928d80c9547445b3db369dbda85536aba814015cb8b64345f\"",
+   "etag": "W/\"e12d864673a515175e58e16d5bcacde65482a021d3bcb6f75b832893d164925f\"",
    "truncated": false,
    "path_count": 1978,
    "matched": [
@@ -9930,15 +10006,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-07T03:04:31Z",
+  "collected_at": "2026-11-07T18:41:06Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-06",
+  "pushed_at": "2026-11-07",
   "stars": 41,
   "tree": {
-   "sha": "e3e376138c3708c003bcf06584070f8b002d232a",
-   "etag": "W/\"ec0eb30327dbf66dbaa9adc1b1798dc957062e1a81ba6c861f66b096bf09b68c\"",
+   "sha": "295eb99e1c841ab2d01f15ef9b39b292e4f32237",
+   "etag": "W/\"f7bfa8a8f4b665f39475f586937289e8f59d804d3fe0d97b347cae13d3417d16\"",
    "truncated": false,
-   "path_count": 2906,
+   "path_count": 2915,
    "matched": [
     "package.json",
     "adapters/mcp/package.json",
@@ -16004,6 +16080,270 @@
     "kind": "ci",
     "blob_sha": "8528f9f3be8261f3e5480e88a24d7db266cfba66",
     "bytes": 5327
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "IncridableAcuman/file-management": {
+  "fn": "IncridableAcuman/file-management",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-07T18:16:00Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-07",
+  "stars": 10,
+  "tree": {
+   "sha": "6624e7db949369073411b3109eff002692feb058",
+   "etag": "W/\"e22f95e438558af99a79828527434ef844dcefbd190de79c1d66cee26a26f382\"",
+   "truncated": false,
+   "path_count": 180,
+   "matched": [
+    "backend/build.gradle",
+    "frontend/package.json",
+    "docker-compose.yaml",
+    "backend/Dockerfile",
+    "frontend/Dockerfile"
+   ]
+  },
+  "files": [
+   {
+    "path": "backend/build.gradle",
+    "kind": "dep",
+    "blob_sha": "8a22c589ef41a9142082214cee621c9ebbfc719f",
+    "ecosystem": "gradle",
+    "bytes": 2319,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-web",
+     "org.springframework.boot:spring-boot-starter-data-jpa",
+     "org.springframework.boot:spring-boot-starter-security",
+     "org.springframework.boot:spring-boot-starter-validation",
+     "org.springframework.boot:spring-boot-starter-webclient",
+     "org.springframework.boot:spring-boot-starter-webmvc",
+     "org.springframework.boot:spring-boot-starter-thymeleaf",
+     "org.springdoc:springdoc-openapi-starter-webmvc-ui",
+     "org.springframework.boot:spring-boot-starter-mail",
+     "org.springframework.boot:spring-boot-starter-data-redis",
+     "org.springframework.boot:spring-boot-starter-amqp",
+     "org.apache.commons:commons-pool2",
+     "io.jsonwebtoken:jjwt-api",
+     "io.github.cdimascio:java-dotenv",
+     "org.projectlombok:lombok",
+     "org.springframework.boot:spring-boot-devtools",
+     "org.postgresql:postgresql",
+     "io.jsonwebtoken:jjwt-impl",
+     "io.jsonwebtoken:jjwt-jackson"
+    ],
+    "dev": [
+     "org.springframework.boot:spring-boot-starter-test",
+     "com.h2database:h2",
+     "org.springframework.boot:spring-boot-starter-data-jpa-test",
+     "org.springframework.boot:spring-boot-starter-security-test",
+     "org.springframework.boot:spring-boot-starter-validation-test",
+     "org.springframework.boot:spring-boot-starter-webclient-test",
+     "org.springframework.boot:spring-boot-starter-webmvc-test",
+     "org.springframework.amqp:spring-rabbit-test",
+     "org.projectlombok:lombok",
+     "org.junit.platform:junit-platform-launcher"
+    ]
+   },
+   {
+    "path": "frontend/package.json",
+    "kind": "dep",
+    "blob_sha": "0a627a332b0ca5ae981647ecf43c3f05efa199ce",
+    "ecosystem": "npm",
+    "bytes": 1098,
+    "names": [
+     "@base-ui/react",
+     "@fontsource-variable/geist",
+     "@tailwindcss/vite",
+     "axios",
+     "class-variance-authority",
+     "cn",
+     "embla-carousel-react",
+     "lucide-react",
+     "react",
+     "react-dom",
+     "react-router-dom",
+     "shadcn",
+     "tailwindcss",
+     "tw-animate-css"
+    ],
+    "dev": [
+     "@eslint/js",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "eslint",
+     "eslint-plugin-react-hooks",
+     "eslint-plugin-react-refresh",
+     "globals",
+     "typescript",
+     "typescript-eslint",
+     "vite"
+    ]
+   },
+   {
+    "path": "docker-compose.yaml",
+    "kind": "image",
+    "blob_sha": "48f44f629fe08e0bb59c87ea17eb8a0f75fb22f2",
+    "bytes": 2832,
+    "images": [
+     "postgres:16-alpine",
+     "redis:7-alpine",
+     "rabbitmq:3-management-alpine"
+    ]
+   },
+   {
+    "path": "backend/Dockerfile",
+    "kind": "image",
+    "blob_sha": "144806119eeaa3d16ae71a2a6bfa3e516c058afc",
+    "bytes": 943,
+    "images": [
+     "eclipse-temurin:21-jdk-alpine",
+     "eclipse-temurin:21-jre-alpine"
+    ]
+   },
+   {
+    "path": "frontend/Dockerfile",
+    "kind": "image",
+    "blob_sha": "a6c3486c4fb18a3b32d383031eac0dede9b47066",
+    "bytes": 546,
+    "images": [
+     "node:22-alpine",
+     "nginx:alpine"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
+  },
+  "fail_count": 0
+ },
+ "IncridableAcuman/quizplatform": {
+  "fn": "IncridableAcuman/quizplatform",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-07T18:16:01Z",
+  "default_branch": "main",
+  "pushed_at": "2026-10-29",
+  "stars": 10,
+  "tree": {
+   "sha": "8719719cf99814aa83415304530cdb6588a00f51",
+   "etag": "W/\"2cebaa05d71d34d2ac87649e989a90616ec0a44f02aab4517d584cf74467d249\"",
+   "truncated": false,
+   "path_count": 97,
+   "matched": [
+    "backend/build.gradle",
+    "quiz-frontend/package.json",
+    "docker-compose.yaml",
+    "backend/Dockerfile",
+    "quiz-frontend/Dockerfile"
+   ]
+  },
+  "files": [
+   {
+    "path": "backend/build.gradle",
+    "kind": "dep",
+    "blob_sha": "db997af0795b8b6a045f96d4a7db6f4fabffad52",
+    "ecosystem": "gradle",
+    "bytes": 1446,
+    "names": [
+     "org.springframework.boot:spring-boot-starter-data-jpa",
+     "org.springframework.boot:spring-boot-starter-security",
+     "org.springframework.boot:spring-boot-starter-validation",
+     "org.springframework.boot:spring-boot-starter-webmvc",
+     "io.jsonwebtoken:jjwt-api",
+     "com.itextpdf:itext7-core",
+     "org.projectlombok:lombok",
+     "io.jsonwebtoken:jjwt-impl",
+     "io.jsonwebtoken:jjwt-jackson",
+     "org.postgresql:postgresql"
+    ],
+    "dev": [
+     "org.springframework.boot:spring-boot-starter-data-jpa-test",
+     "org.springframework.boot:spring-boot-starter-security-test",
+     "org.springframework.boot:spring-boot-starter-validation-test",
+     "org.springframework.boot:spring-boot-starter-webmvc-test",
+     "org.projectlombok:lombok",
+     "org.junit.platform:junit-platform-launcher"
+    ]
+   },
+   {
+    "path": "quiz-frontend/package.json",
+    "kind": "dep",
+    "blob_sha": "59ac10a65c1446efc0bf98d4cc71cec5b7fb7f1e",
+    "ecosystem": "npm",
+    "bytes": 1084,
+    "names": [
+     "@tailwindcss/vite",
+     "axios",
+     "canvas-confetti",
+     "framer-motion",
+     "lucide-react",
+     "react",
+     "react-dom",
+     "react-router-dom",
+     "recharts",
+     "zustand"
+    ],
+    "dev": [
+     "@eslint/js",
+     "@types/canvas-confetti",
+     "@types/node",
+     "@types/react",
+     "@types/react-dom",
+     "@vitejs/plugin-react",
+     "autoprefixer",
+     "eslint",
+     "eslint-plugin-react-hooks",
+     "eslint-plugin-react-refresh",
+     "globals",
+     "postcss",
+     "tailwindcss",
+     "typescript",
+     "typescript-eslint",
+     "vite"
+    ]
+   },
+   {
+    "path": "docker-compose.yaml",
+    "kind": "image",
+    "blob_sha": "2827aba327de27a4e01d27a61f682d283df925bb",
+    "bytes": 720
+   },
+   {
+    "path": "backend/Dockerfile",
+    "kind": "image",
+    "blob_sha": "62a48c17be82e00c79427ba0fcaaca97aec3f3b3",
+    "bytes": 619,
+    "images": [
+     "eclipse-temurin:21-jdk-alpine",
+     "eclipse-temurin:21-jre-alpine"
+    ]
+   },
+   {
+    "path": "quiz-frontend/Dockerfile",
+    "kind": "image",
+    "blob_sha": "c2a2c0ad555217ac72c493c4286d8e9ae32c5025",
+    "bytes": 334,
+    "images": [
+     "node:20-alpine",
+     "nginx:alpine"
+    ]
    }
   ],
   "clues": {
