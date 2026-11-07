@@ -96,6 +96,7 @@ class GitHubClient:
         })
         self.budget = budget or Budget()
         self.etag_store: dict[str, str] = {}   # url -> etag（进程内；持久化由调用方管）
+        self.not_modified = 0                  # 304 次数（不计 GitHub 主配额，仍计本地预算）
 
     # ---------------- 底层请求 ----------------
     def _request(self, method: str, url: str, *, params=None, etag=None,
@@ -128,6 +129,7 @@ class GitHubClient:
             raise CoreReserveOut(f"Core 剩余配额触保底线（remaining={rem}）",
                                  int(reset) if reset and reset.isdigit() else None)
         if resp.status_code == 304:
+            self.not_modified += 1
             return resp
         if resp.status_code in (403, 429):
             self._respect_retry_after(resp)
@@ -221,6 +223,22 @@ class GitHubClient:
         return 200, r.json(), r.headers.get("ETag")
 
     # ---------------- 富集端点（Link header 计数：per_page=1 读 rel="last"） ----------------
+    def releases_conditional(self, full_name: str, etag: str | None, per_page: int = 30):
+        """ETag 条件请求 releases。返回 (status, rels|None, etag)。304 不计配额。"""
+        r = self._request("GET", f"{self.API}/repos/{full_name}/releases",
+                          params={"per_page": per_page}, etag=etag)
+        if r.status_code == 304:
+            return 304, None, etag
+        return 200, [x for x in r.json() if not x.get("draft")], r.headers.get("ETag")
+
+    def advisories_conditional(self, full_name: str, etag: str | None, per_page: int = 30):
+        """ETag 条件请求仓库安全通告。返回 (status, advs|None, etag)。304 不计配额。"""
+        r = self._request("GET", f"{self.API}/repos/{full_name}/security-advisories",
+                          params={"per_page": per_page}, etag=etag)
+        if r.status_code == 304:
+            return 304, None, etag
+        return 200, r.json(), r.headers.get("ETag")
+
     @staticmethod
     def _link_last_count(resp: requests.Response) -> int | None:
         """解析 Link header 的 rel="last" 页码作为总数；无 Link（单页）返回条数。"""
@@ -301,6 +319,7 @@ class GitHubClient:
 
     def stats_summary(self) -> dict:
         return {"calls": self.budget.calls,
+                "not_modified": self.not_modified,
                 "elapsed_min": round((time.time() - self.budget.started) / 60, 1)}
 
 

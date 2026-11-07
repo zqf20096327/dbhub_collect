@@ -12,6 +12,8 @@
   activity  活跃度：pool.pushed_at + enrich commit_7d/90d 三信号合成——
             active: commit_90d>0 或 pushed_at≤90d；maintenance: pushed_at≤365d
             （无近期提交仍在维护窗口）；stale: pushed_at>365d；unknown: 无 pool 记录。
+            滚动窗口兜底：commit_7d/90d 是采集时点的窗口计数，enrich 的 push 闸门
+            不会重采死仓，最后推送早于窗口时按真值 0 处理（防假活跃）。
   license   pool.license（SPDX 名，无则 None）。
   evidence  引句回查：行号（audit.evidence_lines）+ clean_ver（B1 落地后随写；
             存量条目无 clean_ver 时回查退回存量文本口径=audit.evidence，null 为
@@ -41,6 +43,9 @@ POOL_PATHS = [ROOT / "data/live/pool.ndjson",
 
 # fallback 组装收的 rel：support=明确支持；compat=兼容适配；mention=仅提及不进归属
 FALLBACK_RELS = {"support", "compat"}
+# pushed_at 最大滞后（org 周扫携带 7 天 + 池扫描 1 天，与 enrich.POOL_LAG_DAYS 同源）：
+# 推导"窗口内必无提交"必须让过这段滞后，否则活仓会被误判成 0
+POOL_LAG_DAYS = 8
 
 
 def _read_json(p: Path):
@@ -170,6 +175,14 @@ class InterpReader:
         pushed = _parse_day(pool.get("pushed_at"))
         enr = self._load_enrich().get(fn) or {}
         c7, c90 = enr.get("commit_7d"), enr.get("commit_90d")
+        # 滚动窗口衰减（enrich 的 push 闸门不重采死仓，这里兜底）：最后推送早于
+        # 窗口+池滞后 ⇒ 窗口内必无提交，计数真值为 0。日期粒度，保守判定。
+        if pushed is not None:
+            age = (today - pushed).days
+            if age > 7 + POOL_LAG_DAYS and c7:
+                c7 = 0
+            if age > 90 + POOL_LAG_DAYS and c90:
+                c90 = 0
         if pushed is None and c7 is None and c90 is None:
             return {"tier": "unknown", "pushed_at": None,
                     "commit_7d": c7, "commit_90d": c90}
@@ -257,14 +270,16 @@ def _selftest() -> int:
             "a/edge91":  {"full_name": "a/edge91", "pushed_at": mk(91)},      # 90d 边界外→maintenance
             "a/edge365": {"full_name": "a/edge365", "pushed_at": mk(365)},    # 365d 边界内
             "a/edge366": {"full_name": "a/edge366", "pushed_at": mk(366)},    # →stale
-            "a/commitonly": {"full_name": "a/commitonly", "pushed_at": mk(400)},  # 无近推但有 90d 提交→active
+            "a/commitonly": {"full_name": "a/commitonly", "pushed_at": mk(400)},  # 冻结的 90d 计数必须衰减
+            "a/commitonlynopush": {"full_name": "a/commitonlynopush"},       # 无 pushed_at：只剩 enrich 提交信号
             "a/ghost":   {"full_name": "a/ghost"},                            # 无 pool→unknown
         }
         pool_file = tmp / "pool.ndjson"
         pool_file.write_text("\n".join(json.dumps(r) for r in pool_recs.values()),
                              encoding="utf-8")
         (tmp / "enrich" / "00.json").write_text(json.dumps(
-            {"a/commitonly": {"commit_7d": 0, "commit_90d": 3}}), encoding="utf-8")
+            {"a/commitonly": {"commit_7d": 0, "commit_90d": 3},
+             "a/commitonlynopush": {"commit_7d": 0, "commit_90d": 3}}), encoding="utf-8")
         entry_tpl = {"fn": "", "classification": {"ai": {"kind": []}},
                      "audit": {"evidence_lines": [3]}}
         (tmp / "interp" / "00.json").write_text(json.dumps(
@@ -284,8 +299,12 @@ def _selftest() -> int:
             r.activity("a/edge365", as_of)["tier"] == "maintenance")
         chk("edge366 边界外（366d→stale）",
             r.activity("a/edge366", as_of)["tier"] == "stale")
-        chk("commitonly（pushed 400d 但 commit_90d=3→active）",
-            r.activity("a/commitonly", as_of)["tier"] == "active")
+        chk("commitonly（pushed 400d + 冻结 commit_90d=3→衰减 0→stale，防假活跃）",
+            r.activity("a/commitonly", as_of)["tier"] == "stale")
+        chk("commitonly 返回的 commit_90d 同步归零",
+            r.activity("a/commitonly", as_of)["commit_90d"] == 0)
+        chk("commitonlynopush（无 pushed_at 时 commit 是唯一信号→active）",
+            r.activity("a/commitonlynopush", as_of)["tier"] == "active")
         chk("ghost（无 pool→unknown）",
             r.activity("a/ghost", as_of)["tier"] == "unknown")
         # dbs fallback / ai_flag / evidence clean_ver 缺省

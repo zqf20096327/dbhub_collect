@@ -38,8 +38,9 @@ tools/     sync_from_main.py（只从主项目搬 interpret 层） + gc_states.p
 | 富集 | 按 star 分层 | **floor=mid**（识别：国产 topic ∪ 国产通道命中） |
 
 任何检索查询 total>1000 一律拆分抓取（旧版 keyword 在 1000 处静默截断，已修复）。
-富集维度按变化成因二分：push 依赖（commit/release/contrib/lang）仅在 pushed_at
-变化时刷；security 到期即刷（死仓豁免已修复）。
+富集维度按变化成因二分：状态量（release/contrib/lang）仅在 pushed_at 变化时刷；
+commit 是滚动窗口计数，无 push 超窗时按 pushed_at 推导归零（零调用）；
+security 到期即刷（死仓豁免已修复）。
 
 ## 采集数据布局
 
@@ -67,10 +68,12 @@ python collect/collect_intl.py --dry-run      # 只打印查询不联网
 python collect/readme_sweep.py --mode init    --pool data/snapshot_YYYYMMDD/pool.json
 python collect/readme_sweep.py --mode weekly  --pool data/snapshot_YYYYMMDD/pool.json
 
-# 富集（分层增量：head=star≥1000 每周 / mid=star≥100 每月 / tail 仅安全通告；
-#       国产仓 floor=mid；push 依赖维度仅 pushed_at 变化时刷）
+# 富集（分层增量：head=star≥1000 commit 3 天/release 每晚 / mid≥100 14 天 /
+#       tail 仅安全通告；国产仓 floor=mid；状态量维度仅 pushed_at 变化时刷；
+#       release/漏洞走 ETag，304 不计配额）
 python enrich/enrich.py --tier head
 python enrich/enrich.py --tier all
+python enrich/health.py            # staleness SLO 体检（零 API）
 
 # state 残渣 GC（出池仓的 state 条目清理，默认 dry-run）
 python tools/gc_states.py --apply

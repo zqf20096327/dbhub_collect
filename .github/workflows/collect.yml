@@ -37,13 +37,14 @@ jobs:
       # T5a 绿门（2026-11-04）：attribution 引擎各卡单测并入采集前置自检链——
       # 以前只有 evidence.yml 跑 evidence 自检，引擎坏了要等下次全池扫描才发现。
       # 全部离线零 API（合成宇宙），~1 分钟；红了当晚采集停（绿门语义）。
-      - name: 离线自检绿门（evidence + attribution 全家 + collect 两闸，零 API）
+      - name: 离线自检绿门（evidence + attribution 全家 + collect 两闸 + enrich，零 API）
         run: |
           for f in evidence/selftest_evidence.py attribution/selftest_*.py \
-                   collect/selftest_exit_gate.py collect/selftest_readme_relay.py; do
+                   collect/selftest_exit_gate.py collect/selftest_readme_relay.py \
+                   enrich/selftest_enrich.py; do
             python "$f" >/dev/null || { echo "::error::自检失败：$f"; exit 1; }
           done
-          echo "11 套自检全绿"
+          echo "12 套自检全绿"
 
       - name: 池采集·国际（stars>=10 + 新项目窗口，断点续采）
         if: ${{ (github.event.inputs.limit || '0') == '0' }}

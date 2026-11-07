@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import sys
 import tempfile
+from datetime import date
 from pathlib import Path
 
 import requests
@@ -414,24 +415,36 @@ def test_release_notes() -> None:
     """enrich._release_notes：适配变更史素材（字节截断 + 命中行优先，零新增调用）。"""
     sys.path.insert(0, str(ROOT / "enrich"))
     import enrich  # noqa: E402  顶部只有路径 bootstrap，无副作用
+    today = date(2026, 11, 7)
     rels = [
         {"tag_name": "v3.0", "published_at": "2026-10-20T00:00:00Z", "body": "removed MySQL support\nadded PostgreSQL"},
-        {"tag_name": "v2.1", "published_at": "2026-09-01T00:00:00Z", "body": ""},
-        {"tag_name": "v2.0", "published_at": "2026-08-01T00:00:00Z", "body": "x" * 900},
-        {"tag_name": "v1.0", "published_at": "2026-01-01T00:00:00Z", "body": "first"},
+        {"tag_name": "v2.1", "published_at": "2026-09-25T00:00:00Z", "body": ""},
+        {"tag_name": "v2.0", "published_at": "2026-09-20T00:00:00Z", "body": "x" * 900},
+        {"tag_name": "v1.0", "published_at": "2026-01-01T00:00:00Z", "body": "first"},   # 超 90 天窗
     ]
-    notes = enrich._release_notes(rels)
-    check("rel_notes：取前 3、跳过空正文", notes is not None
+    notes = enrich._release_notes(rels, today=today)
+    check("rel_notes：90 天窗内全收（超窗丢弃）、跳过空正文", notes is not None
           and [n["t"] for n in notes] == ["v3.0", "v2.0"], str(notes))
     check("rel_notes：512 字节截断 + 日期日粒度",
           len(notes[1]["n"].encode()) == 512 and notes[0]["d"] == "2026-10-20")
     check("rel_notes：全空正文返回 None", enrich._release_notes(
-        [{"tag_name": "v1", "published_at": "2026-01-01", "body": ""}]) is None)
+        [{"tag_name": "v1", "published_at": "2026-10-01", "body": ""}],
+        today=today) is None)
+    many = [{"tag_name": f"v{i}", "published_at": f"2026-10-{i:02d}", "body": "x"}
+            for i in range(1, 13)]
+    check("rel_notes：最多 10 条（时间窗内高发版仓不撑爆存储）",
+          len(enrich._release_notes(many, today=today)) == 10)
+    merged = enrich._merge_notes(
+        [{"t": "v1", "d": "2026-09-01", "n": "old"}],
+        [{"t": "v1", "d": "2026-09-01", "n": "new"}, {"t": "v2", "d": "2026-10-01", "n": "x"}])
+    check("rel_notes：按 tag 合并去重（新覆盖旧）、日期降序",
+          [m["t"] for m in merged] == ["v2", "v1"] and merged[1]["n"] == "new", str(merged))
 
     # 超长 changelog：DB 变更行在 512 字节之外，命中行优先应把它捞回来
     boiler = "What's Changed\n" + "\n".join(f"* Fix bug {i} by @user{i}" for i in range(40))
     body = boiler + "\n* Dropped MySQL 5.7 support\n* Added PostgreSQL 16 support"
-    n = enrich._release_notes([{"tag_name": "v9", "published_at": "2026-10-01", "body": body}])
+    n = enrich._release_notes([{"tag_name": "v9", "published_at": "2026-10-01", "body": body}],
+                              today=today)
     txt = n[0]["n"]
     check("rel_notes：命中行优先（超长正文末尾的 DB 变更、模板头部不占预算）",
           "MySQL 5.7" in txt and "PostgreSQL 16" in txt
@@ -440,7 +453,8 @@ def test_release_notes() -> None:
     # 弱信号行占满预算时，强信号（移除/弃用）必须优先保住
     weak = "\n".join(f"* SQLite driver compatibility fix {i}" for i in range(20))
     n = enrich._release_notes([{"tag_name": "v8", "published_at": "2026-10-01",
-                                "body": "What's Changed\n" + weak + "\n* Removed MySQL 5.7 support"}])
+                                "body": "What's Changed\n" + weak + "\n* Removed MySQL 5.7 support"}],
+                              today=today)
     txt = n[0]["n"]
     check("rel_notes：强度排序（弱信号占满预算时强信号优先）",
           "MySQL 5.7" in txt and "SQLite" in txt and len(txt.encode()) <= 512, txt)
@@ -454,13 +468,13 @@ def test_release_notes() -> None:
     filler = "\n".join(f"* Fix bug {i} by @user{i}" for i in range(30))
     n = enrich._release_notes([{"tag_name": "v7", "published_at": "2026-10-01",
                                 "body": "What's Changed\n" + filler
-                                + "\nMySQL 8.0 is the minimum version"}])
+                                + "\nMySQL 8.0 is the minimum version"}], today=today)
     check("rel_notes：超长正文里的纯库名行也收进摘要",
           "MySQL 8.0" in n[0]["n"] and len(n[0]["n"].encode()) <= 512)
 
     # 中文按字节截断：字符截会超预算（1 字 3 字节），且不能劈开半个字
     n = enrich._release_notes([{"tag_name": "v1", "published_at": "2026-10-01",
-                                "body": "新增功能说明" * 200}])
+                                "body": "新增功能说明" * 200}], today=today)
     check("rel_notes：中文按字节截断不劈字",
           len(n[0]["n"].encode("utf-8")) <= 512 and "新增" in n[0]["n"])
 
