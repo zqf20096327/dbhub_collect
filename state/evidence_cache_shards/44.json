@@ -5,15 +5,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T10:57:57Z",
+  "collected_at": "2026-11-07T02:26:52Z",
   "default_branch": "master",
-  "pushed_at": "2026-10-30",
-  "stars": 13108,
+  "pushed_at": "2026-11-06",
+  "stars": 13182,
   "tree": {
-   "sha": "6f31070d17f24c5476361e0858a47c0bb8b1dde7",
-   "etag": "W/\"60ba9e4fb80c8a6ed5e33a433bad72e7e7c6a8314d974699b63c7d5725ebb414\"",
+   "sha": "f5b949eea78dac6ee5e57eeb9366836e76c5dd16",
+   "etag": "W/\"384c9eb5cb31c46a18414a9fc9d70ea1b3421369f2aede895964036db3aaf72b\"",
    "truncated": false,
-   "path_count": 4093,
+   "path_count": 4394,
    "matched": [
     "CubeAPI/Cargo.toml",
     "CubeMaster/go.mod",
@@ -21,6 +21,7 @@
     "CubeShim/Cargo.toml",
     "CubeTemplateCenter/go.mod",
     "Cubelet/go.mod",
+    "OpsAgent/go.mod",
     "agent/Cargo.toml",
     "cube-lifecycle-manager/go.mod",
     "cubecow/Cargo.toml",
@@ -52,6 +53,7 @@
     "examples/openai-agents-example/requirements.txt",
     "examples/pi-agent-integration/requirements.txt",
     "examples/route-aware-egress/requirements.txt",
+    "examples/scheduler-plugin/go.mod",
     "examples/snapshot-rollback-clone/requirements.txt",
     "hypervisor/acpi_tables/Cargo.toml",
     "hypervisor/api_client/Cargo.toml",
@@ -73,8 +75,6 @@
     "hypervisor/rate_limiter/Cargo.toml",
     "hypervisor/serial_buffer/Cargo.toml",
     "hypervisor/test_infra/Cargo.toml",
-    "hypervisor/tpm/Cargo.toml",
-    "hypervisor/tracer/Cargo.toml",
     "CubeAPI/Dockerfile",
     "CubeEgress/Dockerfile",
     "CubeOps/Dockerfile",
@@ -84,6 +84,8 @@
     "CubeShim/Dockerfile.dockerignore",
     "Cubelet/Dockerfile",
     "Cubelet/Dockerfile.dockerignore",
+    "OpsAgent/Dockerfile",
+    "OpsAgent/Dockerfile.dockerignore",
     "cube-lifecycle-manager/Dockerfile",
     "docker/Dockerfile.builder",
     "docker/Dockerfile.cube-base",
@@ -97,8 +99,6 @@
     "deploy/guest-image/Dockerfile",
     "examples/cubesandbox-base-nginx/Dockerfile",
     "examples/langchain-integration/Dockerfile",
-    "examples/pi-agent-integration/Dockerfile",
-    "examples/pi-agent-integration/Dockerfile.warmup",
     ".github/workflows/build-builder-image.yml",
     ".github/workflows/build-check.yml",
     ".github/workflows/build-envd-base-image.yml",
@@ -134,9 +134,9 @@
    {
     "path": "CubeAPI/Cargo.toml",
     "kind": "dep",
-    "blob_sha": "96a084e29c1beabd9729fde831ea59cf73bca2a4",
+    "blob_sha": "434bfeeccc35cb8191178ce18a2746b165e06372",
     "ecosystem": "cargo",
-    "bytes": 5141,
+    "bytes": 5298,
     "names": [
      "axum",
      "axum-extra",
@@ -154,6 +154,7 @@
      "config",
      "dotenvy",
      "uuid",
+     "percent-encoding",
      "dashmap",
      "governor",
      "reqwest",
@@ -171,10 +172,11 @@
    {
     "path": "CubeMaster/go.mod",
     "kind": "dep",
-    "blob_sha": "02ab3a2bf8b7a7e15ba59fa3aa172abc2a7289ca",
+    "blob_sha": "6bf5586fecd87f6f398d22e6f53203151eca5768",
     "ecosystem": "go",
-    "bytes": 9095,
+    "bytes": 9665,
     "names": [
+     "github.com/tencentcloud/CubeSandbox/pkgs/redisx",
      "github.com/agiledragon/gomonkey/v2",
      "github.com/alicebob/miniredis/v2",
      "github.com/charmbracelet/bubbles",
@@ -186,6 +188,7 @@
      "github.com/glebarez/sqlite",
      "github.com/go-sql-driver/mysql",
      "github.com/gomodule/redigo",
+     "github.com/google/cel-go",
      "github.com/google/go-containerregistry",
      "github.com/google/uuid",
      "github.com/gorilla/websocket",
@@ -197,6 +200,7 @@
      "github.com/pkg/errors",
      "github.com/pressly/goose/v3",
      "github.com/prometheus/client_golang",
+     "github.com/prometheus/client_model",
      "github.com/rcrowley/go-metrics",
      "github.com/smallnest/weighted",
      "github.com/stretchr/testify",
@@ -205,6 +209,7 @@
      "github.com/tencentcloud/CubeSandbox/pkgs/cubedb",
      "github.com/tencentcloud/CubeSandbox/pkgs/proto",
      "github.com/tencentcloud/CubeSandbox/pkgs/sandboxrestart",
+     "github.com/tencentcloud/CubeSandbox/pkgs/snapshotmode",
      "github.com/urfave/cli",
      "golang.org/x/exp",
      "golang.org/x/sync",
@@ -217,9 +222,13 @@
      "gorm.io/gorm",
      "k8s.io/api",
      "k8s.io/apimachinery",
-     "k8s.io/component-helpers"
+     "k8s.io/component-helpers",
+     "google.golang.org/protobuf"
     ],
     "dev": [
+     "cel.dev/expr",
+     "github.com/antlr4-go/antlr/v4",
+     "google.golang.org/genproto/googleapis/api",
      "dario.cat/mergo",
      "filippo.io/edwards25519",
      "github.com/Azure/go-ansiterm",
@@ -273,6 +282,7 @@
      "github.com/klauspost/compress",
      "github.com/klauspost/cpuid/v2",
      "github.com/klauspost/crc32",
+     "github.com/kylelemons/godebug",
      "github.com/leodido/go-urn",
      "github.com/lucasb-eyer/go-colorful",
      "github.com/mattn/go-isatty",
@@ -282,6 +292,7 @@
      "github.com/minio/crc64nvme",
      "github.com/minio/md5-simd",
      "github.com/minio/minio-go/v7",
+     "github.com/mna/redisc",
      "github.com/moby/docker-image-spec",
      "github.com/moby/moby/api",
      "github.com/moby/moby/client",
@@ -294,21 +305,17 @@
      "github.com/muesli/termenv",
      "github.com/munnerz/goautoneg",
      "github.com/ncruces/go-strftime",
-     "github.com/opencontainers/go-digest",
-     "github.com/opencontainers/image-spec",
-     "github.com/opencontainers/runc",
-     "github.com/pelletier/go-toml/v2",
-     "github.com/philhofer/fwd",
-     "github.com/pmezard/go-difflib"
+     "github.com/opencontainers/go-digest"
     ]
    },
    {
     "path": "CubeOps/go.mod",
     "kind": "dep",
-    "blob_sha": "18cd08cbdba1a804f3258072729b553779f82b5a",
+    "blob_sha": "fcd38ff49c746dd2b479add19c75dcd7cea70314",
     "ecosystem": "go",
-    "bytes": 5720,
+    "bytes": 5893,
     "names": [
+     "github.com/tencentcloud/CubeSandbox/pkgs/redisx",
      "github.com/gin-gonic/gin",
      "github.com/goccy/go-yaml",
      "github.com/golang-jwt/jwt/v5",
@@ -375,6 +382,7 @@
      "github.com/minio/crc64nvme",
      "github.com/minio/md5-simd",
      "github.com/minio/minio-go/v7",
+     "github.com/mna/redisc",
      "github.com/moby/docker-image-spec",
      "github.com/moby/moby/api",
      "github.com/moby/moby/client",
@@ -404,8 +412,7 @@
      "github.com/zeebo/xxh3",
      "go.mongodb.org/mongo-driver/v2",
      "go.opentelemetry.io/auto/sdk",
-     "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp",
-     "go.opentelemetry.io/otel"
+     "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
     ]
    },
    {
@@ -418,9 +425,9 @@
    {
     "path": "CubeTemplateCenter/go.mod",
     "kind": "dep",
-    "blob_sha": "4451bfe42d03612e9925185d07d17ba06d85e426",
+    "blob_sha": "eec84a5c5d8fa80e368543c69df21992832b0f18",
     "ecosystem": "go",
-    "bytes": 7010,
+    "bytes": 7565,
     "names": [
      "github.com/agiledragon/gomonkey/v2",
      "github.com/containerd/containerd",
@@ -436,13 +443,16 @@
      "golang.org/x/oauth2",
      "golang.org/x/sync",
      "golang.org/x/sys",
+     "gorm.io/driver/mysql",
      "gorm.io/gorm"
     ],
     "dev": [
+     "cel.dev/expr",
      "cloud.google.com/go/compute/metadata",
      "filippo.io/edwards25519",
      "github.com/Microsoft/go-winio",
      "github.com/Microsoft/hcsshim",
+     "github.com/antlr4-go/antlr/v4",
      "github.com/beorn7/perks",
      "github.com/bytedance/sonic",
      "github.com/bytedance/sonic/loader",
@@ -471,6 +481,7 @@
      "github.com/gogo/protobuf",
      "github.com/golang/groupcache",
      "github.com/gomodule/redigo",
+     "github.com/google/cel-go",
      "github.com/google/uuid",
      "github.com/hashicorp/errwrap",
      "github.com/hashicorp/go-multierror",
@@ -491,6 +502,7 @@
      "github.com/minio/crc64nvme",
      "github.com/minio/md5-simd",
      "github.com/minio/minio-go/v7",
+     "github.com/mna/redisc",
      "github.com/moby/sys/sequential",
      "github.com/moby/sys/userns",
      "github.com/modern-go/concurrent",
@@ -514,19 +526,15 @@
      "github.com/smallnest/weighted",
      "github.com/tencentcloud/CubeSandbox/pkgs/proto",
      "github.com/tencentcloud/CubeSandbox/pkgs/sandboxrestart",
-     "github.com/tinylib/msgp",
-     "github.com/twitchyliquid64/golang-asm",
-     "github.com/ugorji/go/codec",
-     "github.com/x448/float16",
-     "github.com/zeebo/xxh3"
+     "github.com/tencentcloud/CubeSandbox/pkgs/redisx"
     ]
    },
    {
     "path": "Cubelet/go.mod",
     "kind": "dep",
-    "blob_sha": "ca80b80bc3c9eaa5c2dbb9362a6c7b7fb4d7bfad",
+    "blob_sha": "0542a7046a3c693d7ac0a618cfca0a43eaf9a87a",
     "ecosystem": "go",
-    "bytes": 10284,
+    "bytes": 10433,
     "names": [
      "github.com/cilium/ebpf",
      "github.com/containerd/console",
@@ -560,6 +568,7 @@
      "github.com/tencentcloud/CubeSandbox/pkgs/CubeLog",
      "github.com/tencentcloud/CubeSandbox/pkgs/proto",
      "github.com/tencentcloud/CubeSandbox/pkgs/sandboxrestart",
+     "github.com/tencentcloud/CubeSandbox/pkgs/snapshotmode",
      "github.com/vishvananda/netlink",
      "go.etcd.io/bbolt",
      "golang.org/x/mod",
@@ -687,6 +696,22 @@
      "github.com/mxk/go-flowrate",
      "github.com/onsi/ginkgo/v2",
      "github.com/onsi/gomega"
+    ]
+   },
+   {
+    "path": "OpsAgent/go.mod",
+    "kind": "dep",
+    "blob_sha": "559125f401bd316f3d56f630fd99608edeeba5b6",
+    "ecosystem": "go",
+    "bytes": 466,
+    "names": [
+     "github.com/goccy/go-yaml",
+     "github.com/tencentcloud/CubeSandbox/pkgs/CubeLog"
+    ],
+    "dev": [
+     "github.com/json-iterator/go",
+     "github.com/modern-go/concurrent",
+     "github.com/modern-go/reflect2"
     ]
    },
    {
@@ -1340,6 +1365,24 @@
     ]
    },
    {
+    "path": "examples/scheduler-plugin/go.mod",
+    "kind": "dep",
+    "blob_sha": "4ef7046aab902fab271edde049a2b41f4d4aabc8",
+    "ecosystem": "go",
+    "bytes": 523,
+    "names": [
+     "github.com/tencentcloud/CubeSandbox/pkgs/proto",
+     "google.golang.org/grpc"
+    ],
+    "dev": [
+     "golang.org/x/net",
+     "golang.org/x/sys",
+     "golang.org/x/text",
+     "google.golang.org/genproto/googleapis/rpc",
+     "google.golang.org/protobuf"
+    ]
+   },
+   {
     "path": "examples/snapshot-rollback-clone/requirements.txt",
     "kind": "dep",
     "blob_sha": "f6d065cd3cb48ab912890260b8a1db83d5e897ec",
@@ -1684,35 +1727,6 @@
     ]
    },
    {
-    "path": "hypervisor/tpm/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "6481d434c615673f0b5e180586966ddc49ed5a3d",
-    "ecosystem": "cargo",
-    "bytes": 244,
-    "names": [
-     "anyhow",
-     "byteorder",
-     "libc",
-     "log",
-     "thiserror",
-     "vmm-sys-util"
-    ]
-   },
-   {
-    "path": "hypervisor/tracer/Cargo.toml",
-    "kind": "dep",
-    "blob_sha": "8e2a2652ce84b237c60588c5116d0c7c5ae1c41c",
-    "ecosystem": "cargo",
-    "bytes": 278,
-    "names": [
-     "libc",
-     "log",
-     "once_cell",
-     "serde",
-     "serde_json"
-    ]
-   },
-   {
     "path": "CubeAPI/Dockerfile",
     "kind": "image",
     "blob_sha": "328a8c3e0e9fe0612140cd70079f2defd2358a43",
@@ -1734,8 +1748,8 @@
    {
     "path": "CubeOps/Dockerfile",
     "kind": "image",
-    "blob_sha": "7ed11cb3483f4f2954089ccd110283ad342efc90",
-    "bytes": 1688,
+    "blob_sha": "06c1e45d18d31fa66c05a1e6fbed6e8ce93058f8",
+    "bytes": 1724,
     "images": [
      "golang:1.25-alpine",
      "alpine:3.20"
@@ -1744,8 +1758,8 @@
    {
     "path": "CubeOps/Dockerfile.dockerignore",
     "kind": "image",
-    "blob_sha": "43f8d8d4156ae9f92a4681ca7534a934dc428e4d",
-    "bytes": 442
+    "blob_sha": "e4587e55d348f6238ab57babd3a62ee0c2750625",
+    "bytes": 471
    },
    {
     "path": "CubeProxy/Dockerfile",
@@ -1775,8 +1789,8 @@
    {
     "path": "Cubelet/Dockerfile",
     "kind": "image",
-    "blob_sha": "9e91ab67a833021024a38203ec6dabb78ee74d14",
-    "bytes": 6908,
+    "blob_sha": "f353165318b28ba99085c92dafb1343478387801",
+    "bytes": 6962,
     "images": [
      "${CUBE_BUILDER_IMAGE}",
      "ubuntu:22.04"
@@ -1787,6 +1801,22 @@
     "kind": "image",
     "blob_sha": "99c264f4fd728c3289469b20b43355b6c8ddf198",
     "bytes": 995
+   },
+   {
+    "path": "OpsAgent/Dockerfile",
+    "kind": "image",
+    "blob_sha": "2c6d223aa8b71753b980885f8d83c9e2100526e4",
+    "bytes": 1975,
+    "images": [
+     "golang:1.25-alpine",
+     "ubuntu:24.04"
+    ]
+   },
+   {
+    "path": "OpsAgent/Dockerfile.dockerignore",
+    "kind": "image",
+    "blob_sha": "d0807fddec2befe2f1403b225549c0042675605f",
+    "bytes": 382
    },
    {
     "path": "cube-lifecycle-manager/Dockerfile",
@@ -1830,8 +1860,8 @@
    {
     "path": "CubeMaster/docker/Dockerfile",
     "kind": "image",
-    "blob_sha": "3f764598cce86a5cf0522dda2e31101d990364ed",
-    "bytes": 5262,
+    "blob_sha": "8a5b7de78403f59ffab32d11e24c5fe5b2323877",
+    "bytes": 5445,
     "images": [
      "golang:1.25-bookworm",
      "ubuntu:24.04"
@@ -1840,8 +1870,8 @@
    {
     "path": "CubeMaster/docker/Dockerfile.cubemastercli",
     "kind": "image",
-    "blob_sha": "71d2e1465e6b794c7f122a71f1c155101ee0ab0d",
-    "bytes": 7716,
+    "blob_sha": "21c7878dc1cf2c8bad8acaa1c14551be55a6a207",
+    "bytes": 7988,
     "images": [
      "golang:1.25-bookworm",
      "ubuntu:24.04"
@@ -1850,20 +1880,20 @@
    {
     "path": "CubeMaster/docker/Dockerfile.cubemastercli.dockerignore",
     "kind": "image",
-    "blob_sha": "0296b004ab2a10174e88e6281def0fbb38a1a39c",
-    "bytes": 493
+    "blob_sha": "c880acbfd8a27e7ea870d4996a06908adb32a1ec",
+    "bytes": 522
    },
    {
     "path": "CubeMaster/docker/Dockerfile.dockerignore",
     "kind": "image",
-    "blob_sha": "f12c0b14a7a85156e6c5c28468827eb02dce2f9b",
-    "bytes": 1125
+    "blob_sha": "cf411220c3fa9aa4fa20b0bff4ed064c6911cf99",
+    "bytes": 1154
    },
    {
     "path": "CubeTemplateCenter/docker/Dockerfile",
     "kind": "image",
-    "blob_sha": "d1e44dd5a788690faa7adbc7227d79ea23082058",
-    "bytes": 4630,
+    "blob_sha": "0a5dcde44156545091e0b0ec0986528c2323b407",
+    "bytes": 4813,
     "images": [
      "golang:1.25-bookworm",
      "ubuntu:24.04"
@@ -1872,8 +1902,8 @@
    {
     "path": "CubeTemplateCenter/docker/Dockerfile.dockerignore",
     "kind": "image",
-    "blob_sha": "eeaee07710f9b45b4ea70da3735aa7cc57dd4cef",
-    "bytes": 632
+    "blob_sha": "632869d6368d39e15329de47b66366267d7290b4",
+    "bytes": 661
    },
    {
     "path": "deploy/guest-image/Dockerfile",
@@ -1903,24 +1933,6 @@
     ]
    },
    {
-    "path": "examples/pi-agent-integration/Dockerfile",
-    "kind": "image",
-    "blob_sha": "0d3b67c22c26726d05baec033af0b4d4a9b6f3e6",
-    "bytes": 2024,
-    "images": [
-     "${CUBE_BASE_IMAGE}"
-    ]
-   },
-   {
-    "path": "examples/pi-agent-integration/Dockerfile.warmup",
-    "kind": "image",
-    "blob_sha": "12cd717522cb74ab51baee3d65bb953417181c94",
-    "bytes": 1059,
-    "images": [
-     "${PI_AGENT_IMAGE}"
-    ]
-   },
-   {
     "path": ".github/workflows/build-builder-image.yml",
     "kind": "ci",
     "blob_sha": "b8e54b48c8f45f3cc680bb25e9d01da49212d34d",
@@ -1929,8 +1941,8 @@
    {
     "path": ".github/workflows/build-check.yml",
     "kind": "ci",
-    "blob_sha": "f672b71c95c5db2641a58c0a0c365b4c822c2804",
-    "bytes": 9164
+    "blob_sha": "df4a436054e127d856657f2e6a1ad039ea445cce",
+    "bytes": 9872
    },
    {
     "path": ".github/workflows/build-envd-base-image.yml",
@@ -1989,8 +2001,8 @@
    {
     "path": ".github/workflows/fmt-check.yml",
     "kind": "ci",
-    "blob_sha": "117fa62fb0a44544f8c429977261fb6c217ed9b3",
-    "bytes": 5863
+    "blob_sha": "abf1fc6f085ebe4e562c510d989f61af93269097",
+    "bytes": 5891
    },
    {
     "path": ".github/workflows/hypervisor-integration.yaml",
@@ -2031,8 +2043,8 @@
    {
     "path": ".github/workflows/release-docker-images.yml",
     "kind": "ci",
-    "blob_sha": "38d98772ff66f39f0ff295f70283e770980f8b7f",
-    "bytes": 39883,
+    "blob_sha": "e6027330edcd67fb00ca27f66f91dd60a9117af4",
+    "bytes": 40198,
     "images": [
      "ubuntu:24.04"
     ]
@@ -2062,8 +2074,8 @@
    {
     "path": ".github/workflows/sdk-compat-test-check.yml",
     "kind": "ci",
-    "blob_sha": "b440881f9254da8ba3c93bc66c2e2785652be432",
-    "bytes": 1345
+    "blob_sha": "710e122433b49ea5a07cd3d724c902454d8caa96",
+    "bytes": 3201
    },
    {
     "path": ".github/workflows/sdk-test-check.yml",
@@ -2083,8 +2095,8 @@
    {
     "path": ".github/workflows/terraform-validate.yml",
     "kind": "ci",
-    "blob_sha": "d76588e7a1540d0637427470d48f49648a7a7099",
-    "bytes": 3470
+    "blob_sha": "774d7b462ee87f50f43f4ac005973541e1a65966",
+    "bytes": 3408
    },
    {
     "path": ".github/workflows/test-arc-runer.yml",
@@ -2095,8 +2107,8 @@
    {
     "path": ".github/workflows/unit-test-check.yml",
     "kind": "ci",
-    "blob_sha": "5c7b5b5059fe48b251a1fadc522baed16d4b6fe7",
-    "bytes": 20840
+    "blob_sha": "4fea7579489b83eba55bcbcb5c803f96e22a093a",
+    "bytes": 21877
    },
    {
     "path": ".github/workflows/web-check.yml",
@@ -2116,7 +2128,9 @@
    ],
    "docs_matrix": [
     "docs/blog/posts/2026-07-08-cubesandbox-arm-support.md",
-    "docs/zh/blog/posts/2026-07-08-cubesandbox-arm-support.md"
+    "docs/guide/e2b-compatibility.md",
+    "docs/zh/blog/posts/2026-07-08-cubesandbox-arm-support.md",
+    "docs/zh/guide/e2b-compatibility.md"
    ],
    "paths": [
     "pkgs/cubedb/dao/driver/mysql/mysql.go",
@@ -2135,6 +2149,7 @@
     "Cubelet/storage/plugin.go",
     "Cubelet/storage/pluginvolume.go",
     "Cubelet/storage/pluginvolume_test.go",
+    "docs/guide/scheduler-plugin.md",
     "docs/guide/volume-plugin.md",
     "examples/opencode-plugin-sandbox/.env.example",
     "examples/opencode-plugin-sandbox/.gitignore",
@@ -2142,6 +2157,10 @@
     "examples/opencode-plugin-sandbox/README_zh.md",
     "examples/opencode-plugin-sandbox/exec_backend.py",
     "examples/pi-agent-integration/pi_warmup_adapter.mjs",
+    "examples/scheduler-plugin/go.mod",
+    "examples/scheduler-plugin/go.sum",
+    "examples/scheduler-plugin/main.go",
+    "CubeMaster/pkg/scheduler/plugin_duration_bench_test.go",
     "CubeOps/internal/config/daoconfig_driver_test.go",
     "CubeOps/internal/store/dialect.go",
     "CubeOps/internal/store/dialect_mysql_test.go",
@@ -2172,20 +2191,29 @@
     "Cubelet/plugins/workflow/engine.go",
     "Cubelet/plugins/workflow/metric.go",
     "Cubelet/plugins/workflow/request_param.go",
+    "Cubelet/plugins/workflow/request_param_qos_test.go",
     "Cubelet/plugins/workflow/restart.go",
     "Cubelet/plugins/workflow/workflow_test.go",
     "Cubelet/services/images/volumeplugin.go",
     "Cubelet/services/server/plugins_compat.go",
     "docs/guide/integrations/opencode-plugin.md",
+    "docs/zh/guide/scheduler-plugin.md",
     "docs/zh/guide/volume-plugin.md",
     "examples/opencode-plugin-sandbox/plugin/cubesandbox-bash.js",
     "examples/opencode-plugin-sandbox/plugin/install.sh",
     "examples/opencode-plugin-sandbox/tests/test_plugin.mjs",
     "pkgs/cubedb/dao/driver.go",
+    "tests/e2e/scheduler/test_cel_plugin.py",
+    "CubeMaster/pkg/selector/plugin/builtin.go",
+    "CubeMaster/pkg/selector/plugin/registry.go",
+    "CubeMaster/pkg/selector/plugin/registry_test.go",
+    "CubeMaster/pkg/selector/plugin/resource_fit_builtin_test.go",
     "CubeMaster/pkg/service/sandbox/plugin_volume_annotation_test.go",
     "CubeMaster/pkg/volume/plugin/plugin.go",
     "CubeMaster/pkg/volume/plugin/plugin_test.go",
     "Cubelet/plugins/cbri/cubeboxcbri/annotation_test.go",
+    "Cubelet/plugins/cbri/cubeboxcbri/coldboot.go",
+    "Cubelet/plugins/cbri/cubeboxcbri/coldboot_test.go",
     "Cubelet/plugins/cbri/cubeboxcbri/create_sandbox_kernel_test.go",
     "Cubelet/plugins/cbri/cubeboxcbri/cubebox.go",
     "Cubelet/plugins/cbri/cubeboxcbri/snapshot_restore_test.go",
@@ -2230,6 +2258,12 @@
     "tests/e2e/sdk_compat/adapters/cubesandbox_adapter.py",
     "tests/e2e/sdk_compat/adapters/e2b_adapter.py",
     "tests/e2e/sdk_compat/adapters/tracing_adapter.py",
+    "CubeMaster/pkg/selector/plugin/expr/expr.go",
+    "CubeMaster/pkg/selector/plugin/expr/expr_test.go",
+    "CubeMaster/pkg/selector/plugin/grpcplugin/client.go",
+    "CubeMaster/pkg/selector/plugin/grpcplugin/client_test.go",
+    "CubeMaster/pkg/selector/plugin/grpcplugin/metrics.go",
+    "CubeMaster/pkg/selector/plugin/grpcplugin/metrics_test.go",
     "CubeMaster/pkg/volume/plugin/binary/driver.go",
     "CubeMaster/pkg/volume/plugin/binary/driver_test.go",
     "CubeMaster/pkg/volume/plugin/rpc/driver.go",
@@ -2239,6 +2273,8 @@
     "Cubelet/plugins/cube/internals/cgroup/local.go",
     "Cubelet/plugins/cube/internals/cgroup/plugin.go",
     "Cubelet/plugins/cube/internals/cgroup/pool.go",
+    "Cubelet/plugins/cube/internals/cgroup/pool_baseline.go",
+    "Cubelet/plugins/cube/internals/cgroup/pool_baseline_test.go",
     "Cubelet/plugins/cube/internals/cgroup/pool_test.go",
     "Cubelet/plugins/cube/internals/cgroup/pool_v1.go",
     "Cubelet/plugins/cube/internals/cgroup/pool_v2.go",
@@ -2285,22 +2321,18 @@
     "docs/blog/posts/assets/2026-09-30-openclaw-dsh/11-openclaw-plugin.jpg",
     "docs/blog/posts/assets/2026-09-30-openclaw-dsh/12-dsh-plugin.jpg",
     "docs/blog/posts/assets/2026-09-30-openclaw-dsh/14-adapter-audit.jpg",
+    "pkgs/proto/services/schedulerplugin/v1/plugin.pb.go",
+    "pkgs/proto/services/schedulerplugin/v1/plugin.proto",
+    "pkgs/proto/services/schedulerplugin/v1/plugin_grpc.pb.go",
     "pkgs/proto/services/volumeplugin/v1/volumeplugin.pb.go",
     "pkgs/proto/services/volumeplugin/v1/volumeplugin.proto",
     "pkgs/proto/services/volumeplugin/v1/volumeplugin_grpc.pb.go",
     "Cubelet/plugins/cube/internals/cgroup/handle/interface.go",
+    "Cubelet/plugins/cube/internals/cgroup/handle/rawfile.go",
+    "Cubelet/plugins/cube/internals/cgroup/handle/rawfile_test.go",
     "Cubelet/plugins/cube/internals/cgroup/handle/usage.go",
     "Cubelet/plugins/cube/internals/metric/types/types.go",
-    "docs/zh/blog/posts/assets/2026-08-20-lenovo-cloud-agent/01-adapter-architecture.jpg",
-    "docs/zh/blog/posts/assets/2026-09-30-openclaw-dsh/11-openclaw-plugin.jpg",
-    "docs/zh/blog/posts/assets/2026-09-30-openclaw-dsh/12-dsh-plugin.jpg",
-    "docs/zh/blog/posts/assets/2026-09-30-openclaw-dsh/14-adapter-audit.jpg",
-    "Cubelet/plugins/cube/internals/cgroup/handle/v1/manager.go",
-    "Cubelet/plugins/cube/internals/cgroup/handle/v1/manager_test.go",
-    "Cubelet/plugins/cube/internals/cgroup/handle/v1/usage_snapshot_test.go",
-    "Cubelet/plugins/cube/internals/cgroup/handle/v2/manager.go",
-    "Cubelet/plugins/cube/internals/cgroup/handle/v2/manager_test.go",
-    "Cubelet/plugins/cube/internals/cgroup/handle/v2/usage_snapshot_test.go"
+    "docs/zh/blog/posts/assets/2026-08-20-lenovo-cloud-agent/01-adapter-architecture.jpg"
    ],
    "matrix_urls": [
     "https://img.shields.io/badge/🔌_API-E2B_Compatible-blueviolet"
@@ -6211,15 +6243,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-01T11:22:52Z",
+  "collected_at": "2026-11-07T02:35:57Z",
   "default_branch": "main",
-  "pushed_at": "2026-10-31",
+  "pushed_at": "2026-11-06",
   "stars": 1841,
   "tree": {
-   "sha": "bbce1bb7791054b93803319f30a40a28794bdfa0",
-   "etag": "W/\"bf107b6537d745f56613d1847132904bc292ad06e788b65c59371aed1f07b438\"",
+   "sha": "0681d3c48edf4e3005059016b3e2a560e07447fc",
+   "etag": "W/\"7bed515b92850ed899150b52b225b71b6599c612636c2704e42b45300dfaf92a\"",
    "truncated": false,
-   "path_count": 1423,
+   "path_count": 1424,
    "matched": [
     "pom.xml",
     "schemacrawler-commandline/pom.xml",
@@ -11285,13 +11317,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T02:54:44Z",
+  "collected_at": "2026-11-07T02:34:45Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-03",
-  "stars": 2360,
+  "pushed_at": "2026-11-06",
+  "stars": 2362,
   "tree": {
-   "sha": "e5e3247973d92e1cbb98554993162645c85aacb0",
-   "etag": "W/\"2ffa86ec229a5777d936e583eec2b2513a53cf9905870603724bea4e97f341d1\"",
+   "sha": "be6a45e53702dded13a76b989e2f9d36ada52941",
+   "etag": "W/\"002e355d8754d88e1f90488b5f36de779b6800b02b9775ca4b08d5bdab055cef\"",
    "truncated": false,
    "path_count": 559,
    "matched": [
@@ -12863,15 +12895,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-06T03:20:38Z",
+  "collected_at": "2026-11-07T02:55:43Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-05",
-  "stars": 103,
+  "pushed_at": "2026-11-06",
+  "stars": 104,
   "tree": {
-   "sha": "30431645c9d1a13f89667f9ef549c43854ec4f35",
-   "etag": "W/\"e278f3765d620abd6fb9afdd0b853428b4f1687ec1bb437971d1152477b3049d\"",
+   "sha": "cab9e8a0c5e6bab6208314d2c30b04b4ef686906",
+   "etag": "W/\"f74463f917abccfb425440902426b4b807f84bef5987e37248d429bba610d691\"",
    "truncated": false,
-   "path_count": 840,
+   "path_count": 848,
    "matched": [
     "package.json",
     "Dockerfile",
@@ -12984,6 +13016,7 @@
     "test/plugin-upgrade-diff.test.mjs",
     "test/plugin-upgrade-security.test.mjs",
     "test/plugin-v2.test.mjs",
+    "test/plugin-write-journal.test.mjs",
     "test/plugin-writes.test.mjs",
     "test/plugins-index-consistency.test.mjs",
     "test/plugins-install-edge.test.mjs",
@@ -19368,15 +19401,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-06T03:37:32Z",
+  "collected_at": "2026-11-07T03:11:51Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-05",
-  "stars": 20,
+  "pushed_at": "2026-11-06",
+  "stars": 22,
   "tree": {
-   "sha": "19b183f5907a9e1e05fc7e2d128897b30b52161c",
-   "etag": "W/\"9c11a4d6c6f09fe26d87c882205f53e8c382472c918c2d211867356ff11cedaa\"",
+   "sha": "c343f5d57cdd726f835a008165eb6203c671bcdf",
+   "etag": "W/\"badfbbd428ad225732736c12db02dd2e0fb7627471e2dd66323a72ebcb54849d\"",
    "truncated": false,
-   "path_count": 130,
+   "path_count": 166,
    "matched": [
     "requirements.txt",
     "plugins/dsh-whale-bridge/package.json"
@@ -19386,12 +19419,15 @@
    {
     "path": "requirements.txt",
     "kind": "dep",
-    "blob_sha": "2754c7ad16cecf9449a7ae626e763772cb53a885",
+    "blob_sha": "46332daa756c4e1eacfdeafec44613556dac9843",
     "ecosystem": "pypi",
-    "bytes": 258,
+    "bytes": 1826,
     "names": [
      "numpy",
-     "psutil"
+     "pillow",
+     "requests",
+     "psutil",
+     "edge_tts"
     ]
    },
    {
@@ -19411,11 +19447,55 @@
    "docs_matrix": [],
    "paths": [
     "plugins/dsh-whale-bridge/README.md",
+    "plugins/dsh-whale-bridge/install-to-profile.py",
     "plugins/dsh-whale-bridge/package.json",
+    "plugins/dsh-whale-bridge/sync-to-profile.ps1",
     "plugins/dsh-whale-bridge/lib/card.js",
     "plugins/dsh-whale-bridge/lib/client.js",
-    "plugins/dsh-whale-bridge/lib/index.js"
+    "plugins/dsh-whale-bridge/lib/index.js",
+    "plugins/dsh-whale-bridge/test/client.mjs",
+    "plugins/dsh-whale-bridge/test/plugin.mjs",
+    "plugins/dsh-whale-bridge/test/selftest.mjs"
    ]
+  },
+  "fail_count": 0
+ },
+ "likvp/AgeCMS": {
+  "fn": "likvp/AgeCMS",
+  "v": 1,
+  "epoch": "sweep-1",
+  "status": "ok",
+  "caps_v": 2,
+  "collected_at": "2026-11-07T02:20:32Z",
+  "default_branch": "main",
+  "pushed_at": "2026-11-06",
+  "stars": 24,
+  "tree": {
+   "sha": "796eed7f8759dde3f4e75848b94bc317af596c1e",
+   "etag": "W/\"aaabae96378e622c2e621bfc1363cfd653a4b16a67372295a93b2e64433bc45d\"",
+   "truncated": false,
+   "path_count": 362,
+   "matched": [
+    "tools/capture/package.json"
+   ]
+  },
+  "files": [
+   {
+    "path": "tools/capture/package.json",
+    "kind": "dep",
+    "blob_sha": "1b0dafad1e456b654f2b69645e8b68c3c961cf1e",
+    "ecosystem": "npm",
+    "bytes": 444,
+    "names": [
+     "playwright-core"
+    ]
+   }
+  ],
+  "clues": {
+   "changelog": [],
+   "readme_i18n": [],
+   "docs_matrix": [],
+   "paths": []
   },
   "fail_count": 0
  }

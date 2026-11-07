@@ -12444,20 +12444,23 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T03:12:48Z",
+  "collected_at": "2026-11-07T02:50:40Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-03",
-  "stars": 177,
+  "pushed_at": "2026-11-06",
+  "stars": 182,
   "tree": {
-   "sha": "461ce05e111a1b34f3f146cbddf09546a7ff1b96",
-   "etag": "W/\"433a1948075f2a3447ee766e874bf1bc228fd95da2ab12665f1b7deea22c22fa\"",
+   "sha": "623822529389d6919d86be07271e0ea94e20b514",
+   "etag": "W/\"69dfd3ebf1546b6ca3ce7c0845273c51dce221f69321f17a4f167a572ed38274\"",
    "truncated": false,
-   "path_count": 600,
+   "path_count": 626,
    "matched": [
     "backend/requirements.txt",
     "frontend/package.json",
+    "backend/cli_runner/requirements.txt",
     "Dockerfile.backend",
     "Dockerfile.frontend",
+    "Dockerfile.runner",
+    "Dockerfile.runner-manager",
     "docker-compose.yml",
     ".github/workflows/ci.yml",
     ".github/workflows/images.yml"
@@ -12529,10 +12532,23 @@
     ]
    },
    {
+    "path": "backend/cli_runner/requirements.txt",
+    "kind": "dep",
+    "blob_sha": "b1036dc22b549d673fe3271e7ff50875029c7115",
+    "ecosystem": "pypi",
+    "bytes": 67,
+    "names": [
+     "fastapi",
+     "uvicorn",
+     "pydantic",
+     "starlette"
+    ]
+   },
+   {
     "path": "Dockerfile.backend",
     "kind": "image",
-    "blob_sha": "4ad53c557982b8c3452989deae2522cf4bcbb7d6",
-    "bytes": 2911,
+    "blob_sha": "f6245de68c3ee744169a5ae43a0af184d36ba4c1",
+    "bytes": 1578,
     "images": [
      "python:3.12-slim"
     ]
@@ -12548,13 +12564,37 @@
     ]
    },
    {
+    "path": "Dockerfile.runner",
+    "kind": "image",
+    "blob_sha": "deca2c49b884e413d7c2a1680731426be3d142fc",
+    "bytes": 2045,
+    "images": [
+     "python:3.12-slim",
+     "runner-base",
+     "node-base"
+    ]
+   },
+   {
+    "path": "Dockerfile.runner-manager",
+    "kind": "image",
+    "blob_sha": "feb9d537e58aaf2c11795adfc1603dc9eb1a103e",
+    "bytes": 660,
+    "images": [
+     "python:3.12-slim"
+    ]
+   },
+   {
     "path": "docker-compose.yml",
     "kind": "image",
-    "blob_sha": "51e04f10e62b79d49a15547fd22869967b86466d",
-    "bytes": 2601,
+    "blob_sha": "ea27756209ba76d6a143d2b21059e188bfff1288",
+    "bytes": 5208,
     "images": [
      "postgres:16-alpine",
      "ghcr.io/vesaias/jobnavigator-backend:${JN_IMAGE_TAG:-latest}",
+     "ghcr.io/vesaias/jobnavigator-runner-manager:${JN_IMAGE_TAG:-latest}",
+     "ghcr.io/vesaias/jobnavigator-codex-runner:${JN_IMAGE_TAG:-latest}",
+     "ghcr.io/vesaias/jobnavigator-claude-runner:${JN_IMAGE_TAG:-latest}",
+     "ghcr.io/vesaias/jobnavigator-antigravity-runner:${JN_IMAGE_TAG:-latest}",
      "ghcr.io/vesaias/jobnavigator-frontend:${JN_IMAGE_TAG:-latest}",
      "caddy:2-alpine"
     ]
@@ -12562,14 +12602,14 @@
    {
     "path": ".github/workflows/ci.yml",
     "kind": "ci",
-    "blob_sha": "4771ffb0f860e42ab3f2ec97de54b193d88579d9",
-    "bytes": 3692
+    "blob_sha": "d2544c7b653d1d767c856d9fc4a1895bf8de1347",
+    "bytes": 4566
    },
    {
     "path": ".github/workflows/images.yml",
     "kind": "ci",
-    "blob_sha": "4d2c9dd828500ba93de7d934642ff52bd6608c01",
-    "bytes": 2093
+    "blob_sha": "22dd80901d9c2f9865538bd9587ddacad19eb3ee",
+    "bytes": 2547
    }
   ],
   "clues": {
@@ -12877,13 +12917,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-06T03:20:02Z",
+  "collected_at": "2026-11-07T02:55:11Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-05",
+  "pushed_at": "2026-11-06",
   "stars": 109,
   "tree": {
    "sha": "94a4a47ddc4d62c7a14c84eae4cf5f3dda6df325",
-   "etag": "W/\"058516a00b383571de886c97eae07180aac3f309067edbc4fce8732800015162\"",
+   "etag": "W/\"7d3c37c3aa652a42049b03fb179e19e74d5f8655fe43b53e6324bb444b2029a7\"",
    "truncated": false,
    "path_count": 1274,
    "matched": [
@@ -17263,13 +17303,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-06T03:36:00Z",
+  "collected_at": "2026-11-07T03:11:28Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-05",
+  "pushed_at": "2026-11-06",
   "stars": 22,
   "tree": {
-   "sha": "91dfcee18e2cb3ba56096fdcebbcc693fd0912af",
-   "etag": "W/\"d86fca83313570adc100b35f30e90170a6083fcd95f2b84eca0bc02f509bee93\"",
+   "sha": "0433ca12ac99a0ecfd74084f1e84cf67f598d1b1",
+   "etag": "W/\"970377c611df2b7665650e2c358e16fff7d46e01cb6f97cbc5db0b321818bf32\"",
    "truncated": false,
    "path_count": 471,
    "matched": [
@@ -17285,7 +17325,7 @@
    {
     "path": "package.json",
     "kind": "dep",
-    "blob_sha": "580209abd4201e7ce5449a1c52cf79d8cb38cbb9",
+    "blob_sha": "d89ac1899dbc9aa2644f3aa1bfbe39e2aedc74ca",
     "ecosystem": "npm",
     "bytes": 4426,
     "names": [
@@ -18337,13 +18377,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-06T03:38:22Z",
+  "collected_at": "2026-11-07T03:13:43Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-05",
+  "pushed_at": "2026-11-06",
   "stars": 18,
   "tree": {
-   "sha": "14c9471791916dfada6c7ab0b4ce73831e3fb285",
-   "etag": "W/\"fda23b96e78a4fd835db123cee925e712f4b1f1300b2664efcbb938e89df8a58\"",
+   "sha": "5dea561fbde08c840e3124a95e34788db2f06a27",
+   "etag": "W/\"58b0493911457db5e558f9206bd4c491f620dd98662d566ceb0c6101f23bea83\"",
    "truncated": false,
    "path_count": 23,
    "matched": [
@@ -18673,15 +18713,15 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-06T03:39:00Z",
+  "collected_at": "2026-11-07T03:14:27Z",
   "default_branch": "main",
-  "pushed_at": "2026-11-05",
+  "pushed_at": "2026-11-06",
   "stars": 17,
   "tree": {
-   "sha": "eaf970cc358f71607ac404da27ae631d639e76fa",
-   "etag": "W/\"c419b4dcb53fb8d5ed8f1b6dc57ef01ebfe1fbf6b271bbc6f33ecab8f095e6ea\"",
+   "sha": "4bf8b0f6b1db7f8f22f9fc06388b4d5ec12649a2",
+   "etag": "W/\"80a3e27427c055e1862259c063f5ae530976c831c30465d5d1bc1980d077f7c7\"",
    "truncated": false,
-   "path_count": 105,
+   "path_count": 109,
    "matched": [
     "requirements.txt",
     "Dockerfile",
@@ -22763,13 +22803,13 @@
   "epoch": "sweep-1",
   "status": "ok",
   "caps_v": 2,
-  "collected_at": "2026-11-04T03:40:24Z",
+  "collected_at": "2026-11-07T03:15:01Z",
   "default_branch": "master",
-  "pushed_at": "2026-11-02",
+  "pushed_at": "2026-11-05",
   "stars": 16,
   "tree": {
    "sha": "8101374a0d84461ebea3dd6e21093fb3fcf6d0c4",
-   "etag": "W/\"bc63d3f9f57abf7da0883430d71729c09d5d402f84d9765d0228a4f42720e004\"",
+   "etag": "W/\"511ebad9a582f5f25eb6396502efeb37e44e927a46846bafd2385a23598ab1d0\"",
    "truncated": false,
    "path_count": 369,
    "matched": []
